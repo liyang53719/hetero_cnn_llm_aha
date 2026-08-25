@@ -47,7 +47,13 @@ def emit_expected_output(declarations: list[str], assignments: list[str], name: 
     declarations.append(f"localparam int {name}_WORDS = {word_count};")
     declarations.append(f"logic [63:0] {name}_EXPECTED [0:{name}_WORDS-1];")
     for index in range(word_count):
-        word = int.from_bytes(payload[index * 8:(index + 1) * 8], byteorder="little")
+        # The official testbench `$fread`s the raw 16-bit golden into
+        # `bit [15:0]` entries: file bytes `00 70` become 16'h0070.  Proc
+        # readback returns four of those numeric lanes low-word first.
+        lane_bytes = payload[index * 8:(index + 1) * 8]
+        lanes = [int.from_bytes(lane_bytes[offset:offset + 2], byteorder="big")
+                 for offset in range(0, 8, 2)]
+        word = sum(lane << (16 * lane_index) for lane_index, lane in enumerate(lanes))
         assignments.append(f"  {name}_EXPECTED[{index}] = 64'h{word:016x};")
 
 

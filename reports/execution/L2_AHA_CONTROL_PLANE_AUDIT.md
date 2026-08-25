@@ -83,3 +83,9 @@ sample point. This is required because the generated Global Buffer gates its
 proc-read clock with delayed `rd_en`; isolated one-word pulses can stop the
 response pipeline before its data is sampled. Its full numerical rerun is
 pending the resource admission guard; no output-equivalence PASS is claimed.
+
+Golden output data is loaded with the same 16-bit big-endian file semantics as
+the upstream `$fread` into `bit [15:0]`: raw bytes `00 70` mean numeric
+`16'h0070`. Proc readback then packs four numeric lanes low-word first. This
+normalization is separate from input packet byte preservation and prevents a
+false byte-swapped mismatch in the L2 comparison.

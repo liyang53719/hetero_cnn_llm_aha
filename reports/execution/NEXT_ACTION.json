@@ -1,6 +1,6 @@
 {
-  "phase": "L2_AHA_RUN_FSM",
-  "command": "taskset -c 8-25 iverilog -g2012 -s tb_aha_garnet_proc_packet_writer -o work/results/l2_aha_proc_packet_writer.vvp rtl/integration/aha_garnet_proc_packet_writer.sv tb/tb_aha_garnet_proc_packet_writer.sv && taskset -c 8-25 vvp work/results/l2_aha_proc_packet_writer.vvp",
-  "success_condition": "One 512-bit beat becomes eight low-word-first consecutive proc-packet writes, with no invented Global Buffer address translation.",
-  "failure_policy": "If packing or addresses differ, compare against ProcDriver_write_data/ProcDriver_write_bs; preserve the caller-supplied packet base instead of deriving it from a CGRA lane ID."
+  "phase": "L2_AHA_GAUSSIAN_TRANSCRIPT",
+  "command": "taskset -c 8-25 iverilog -g2012 -s tb_aha_garnet_microsequencer -o work/results/l2_aha_microsequencer.vvp rtl/integration/aha_garnet_axi_config_loader.sv rtl/integration/aha_garnet_proc_packet_writer.sv rtl/integration/aha_garnet_microsequencer.sv tb/tb_aha_garnet_microsequencer.sv && taskset -c 8-25 vvp work/results/l2_aha_microsequencer.vvp",
+  "success_condition": "An already-lowered Gaussian control transcript executes packet write, AXI configuration, and interrupt wait in order through one sequencer, without direct nested-Interconnect driving.",
+  "failure_policy": "If ordering fails, locate the first sub-operation against ProcDriver/AxilDriver/Env_cgra_configure; do not synthesize a completion event before the official Garnet interrupt."
 }

@@ -31,3 +31,10 @@ The next wrapper piece connects both primitives into a command/run FSM and
 feeds it with `design_meta.json` IO tile addresses and the official packet
 address translation. It must not assume that a CGRA lane number is a physical
 Global Buffer address.
+
+`aha_garnet_microsequencer.sv` now provides that strictly ordered primitive
+composition. It accepts only three already-lowered operations: 512-bit packet
+write, AXI configuration write, and wait-for-official-Garnet-interrupt. Its
+test checks a packet operation, a `0x1c` parallel-configuration AXI write, and
+an interrupt wait in sequence. It is not yet a full Gaussian descriptor
+frontend or a macro numerical-equivalence result.

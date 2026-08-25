@@ -88,6 +88,7 @@ def main() -> int:
         "gemmini_rocc_command_adapter",
         "aha_garnet_axi_config_loader",
         "aha_garnet_proc_packet_writer",
+        "aha_garnet_microsequencer",
         "hetero_npu_gemmini_rocc_integration_v0",
         "shared_l2_fabric",
     }

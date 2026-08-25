@@ -45,6 +45,11 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
     "$ROOT/rtl/integration/aha_garnet_proc_packet_writer.sv" \
     --top-module aha_garnet_proc_packet_writer |& tee "$OUT/aha_garnet_proc_packet_writer_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
+    "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
+    "$ROOT/rtl/integration/aha_garnet_proc_packet_writer.sv" \
+    "$ROOT/rtl/integration/aha_garnet_microsequencer.sv" \
+    --top-module aha_garnet_microsequencer |& tee "$OUT/aha_garnet_microsequencer_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/common/rv_fifo.sv" "$ROOT/rtl/top/command_dispatch.sv" \
     "$ROOT/rtl/top/hetero_npu_shell.sv" "$ROOT/rtl/integration/command_event_scoreboard.sv" \
     "$ROOT/rtl/integration/engine_contract_adapter.sv" "$ROOT/rtl/integration/gemmini_rocc_command_adapter.sv" \
@@ -103,6 +108,12 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/integration/aha_garnet_proc_packet_writer.sv" \
     "$ROOT/tb/tb_aha_garnet_proc_packet_writer.sv"
   vvp "$OUT/tb_aha_garnet_proc_packet_writer" | tee "$OUT/tb_aha_garnet_proc_packet_writer.log"
+  iverilog -g2012 -s tb_aha_garnet_microsequencer -o "$OUT/tb_aha_garnet_microsequencer" \
+    "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
+    "$ROOT/rtl/integration/aha_garnet_proc_packet_writer.sv" \
+    "$ROOT/rtl/integration/aha_garnet_microsequencer.sv" \
+    "$ROOT/tb/tb_aha_garnet_microsequencer.sv"
+  vvp "$OUT/tb_aha_garnet_microsequencer" | tee "$OUT/tb_aha_garnet_microsequencer.log"
   iverilog -g2012 -s tb_hetero_npu_gemmini_rocc_integration_v0 -o "$OUT/tb_gemmini_rocc_integration" \
     "$ROOT/rtl/common/rv_fifo.sv" "$ROOT/rtl/top/command_dispatch.sv" "$ROOT/rtl/top/hetero_npu_shell.sv" \
     "$ROOT/rtl/integration/command_event_scoreboard.sv" "$ROOT/rtl/integration/engine_contract_adapter.sv" \

@@ -26,7 +26,14 @@ Blocking incompatibilities with the fixed L10 plan:
    combination for this shape, but the installed UHDE SP r1p0 delivery does;
    no SP corner relaxation is required.
 6. Actual UHDE SP Liberty and Verilog views are generated and validated, but
-   this delivery's `lef-fp` generator fails without a detailed diagnostic.
+   this delivery's `lef-fp` generator fails. A directory-wide audit found no
+   pre-generated memory-macro LEF or DB; only compiler-internal `std.db` files.
+   All ten installed memory compilers share the same `bifrun` binary (SHA256
+   `bb2cd8a8fab1e791eb6404ee4a10c6747efc19a566498380117f35a6b9245d68`).
+   File-level tracing proves the generated temporary BIF is opened and then
+   `bifrun` terminates with SIGSEGV. Older libstdc++, process-local no-ASLR,
+   Ubuntu 18/glibc 2.27, r1p0/r3p1 compilers, and `site_def` variants do not
+   fix it. This is a shared delivery/runtime defect, not a macro-shape error.
 
 Required decisions/dependencies:
 

@@ -147,7 +147,7 @@
   "known_blockers": [
     "BLOCKED_DECISION L2: descriptor fetch/storage RTL interface is undefined; recommended Shared-L2 24-bit-index to 128-bit-record ready/valid port awaits approval.",
     "BLOCKED_DEPENDENCY L10: Library Compiler is absent and DC Liberty conversion fails LCSH-3; licensed LC installation media is not present locally.",
-    "BLOCKED_DEPENDENCY L10: UHDE SP 6144x128 Liberty/Verilog generate successfully, but lef-fp fails without diagnostic in the installed compiler delivery.",
+    "BLOCKED_DEPENDENCY L10: UHDE SP 6144x128 Liberty/Verilog generate successfully, but the common ARM bifrun used by all installed memory compilers SIGSEGVs after opening generated BIF; no pre-generated memory LEF exists and Ubuntu18/compatibility probes also fail.",
     "BLOCKED_DECISION L10: installed ARM DP compiler rejects BASE and direct 2048/4096x128; validated LL0.8 decompositions are 2x2048x64 and 4x4096x32. UHDE SP BASE 6144x128 at 0.8V TT25 is validated."
   ]
 }

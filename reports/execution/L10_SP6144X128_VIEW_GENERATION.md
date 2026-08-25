@@ -14,7 +14,9 @@ views remain only under `work/generated` and are not committed.
 
 Status is PARTIAL, not PASS:
 
-- `lef-fp` fails with this compiler delivery without a detailed diagnostic.
+- `lef-fp` reaches the shared ARM `bifrun` utility, which SIGSEGVs after
+  opening a valid generated BIF. Every installed memory compiler contains the
+  identical binary; Ubuntu 18 and compatibility-library probes also fail.
 - Liberty-to-DB remains blocked by missing Synopsys Library Compiler (`LCSH-3`).
 
 Machine-readable evidence:

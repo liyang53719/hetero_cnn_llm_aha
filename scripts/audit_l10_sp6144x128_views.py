@@ -49,7 +49,7 @@ def main() -> int:
             "verilog": {"path": str(verilog), "sha256": digest(verilog)},
             "lef": [{"path": str(path), "sha256": digest(path)} for path in lef_files],
         },
-        "blocker": None if lef_files else "UHDE compiler lef-fp generator failed without diagnostic",
+        "blocker": None if lef_files else "shared ARM bifrun SIGSEGV after opening generated BIF",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n")

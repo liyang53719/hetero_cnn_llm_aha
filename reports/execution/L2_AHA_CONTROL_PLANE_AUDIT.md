@@ -67,5 +67,11 @@ receives 12,672 bytes (198 project packet beats) at packet bases `0x00000` and
 actual 33-port generated `Garnet` top and consumes this transcript. Verilator
 successfully elaborates all 644 modules and builds a 33 MiB executable with the
 system `ar` workaround for the isolated conda toolchain. The PCFG-only runtime
-probe is still diagnostic-only and has not yet reached a PASS/FAIL terminal;
-the testbench now emits flushed phase markers for the next run.
+probe PASSes in 2253 cycles: it completes the interrupt-enable writes, 65
+bitstream packets containing all 519 entries, BS/kernel configuration writes,
+PCFG start, and the official Garnet interrupt. The harness explicitly drives
+`reset_in` from 0 to 1 before deasserting it; declaration-time `1` did not
+trigger the generated asynchronous AXI-controller reset branch in Verilator,
+leaving `AWREADY` low. This establishes control-plane acceptance only. Proc
+readback and byte-for-byte comparison of Gaussian output against upstream
+golden data are still required for AHA L2 numerical equivalence.

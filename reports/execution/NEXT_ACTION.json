@@ -1,6 +1,6 @@
 {
-  "phase": "L2_AHA_PCFG_RUNTIME_PROBE",
-  "command": "taskset -c 8-25 work/generated/l2_aha_garnet_4x16/obj_gaussian_pcfg/Vtb_aha_garnet_gaussian_transcript +PCFG_ONLY",
-  "success_condition": "The full generated Garnet top accepts the official interrupt-enable, bitstream packets, bs_cfg/kernel_cfg, then reports the PCFG interrupt before the transcript issues the 0x38 clear.",
-  "failure_policy": "Use the flushed AHA_GARNET_STAGE markers to identify the first stalled phase. Do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values."
+  "phase": "L2_AHA_GAUSSIAN_OUTPUT_READBACK",
+  "command": "Implement proc_packet readback of the metadata-selected Gaussian output blocks, then run taskset -c 8-25 work/generated/l2_aha_garnet_4x16/obj_gaussian_resetedge/Vtb_aha_garnet_gaussian_transcript and compare the readback against the pinned upstream golden bytes.",
+  "success_condition": "The actual Garnet top accepts the post-PCFG input transcript, finishes the official stream sequence, and every output byte matches the upstream Gaussian golden without a timeout, protocol error, or dropped packet.",
+  "failure_policy": "Preserve the verified PCFG transcript. Locate the first divergent output block, control interrupt, or proc-packet transaction; do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values."
 }

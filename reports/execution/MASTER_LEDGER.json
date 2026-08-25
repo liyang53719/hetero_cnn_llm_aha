@@ -44,7 +44,8 @@
         "work/results/l2_aha_proc_packet_writer.log",
         "work/results/l2_aha_microsequencer.log",
         "work/results/l2_aha_gaussian_packet_transcript.json",
-        "work/generated/l2_aha_gaussian_trace/control_table.json"
+        "work/generated/l2_aha_gaussian_trace/control_table.json",
+        "work/results/l2_aha_garnet_pcfg_resetedge.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -57,6 +58,7 @@
         "Gaussian official parser/map bs_cfg and kernel_cfg AXI control-table extraction",
         "Gaussian default two-tile input deinterleave and packet transcript",
         "Full Garnet-top transcript elaboration and Verilator binary build",
+        "Full Garnet-top PCFG control transcript: interrupt-enable, 519-entry bitstream, bs_cfg/kernel_cfg, PCFG start and official interrupt PASS in 2253 cycles",
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test"
       ],
       "remaining_gates": [

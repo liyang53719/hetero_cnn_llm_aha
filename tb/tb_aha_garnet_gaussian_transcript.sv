@@ -8,7 +8,11 @@ module tb_aha_garnet_gaussian_transcript;
   localparam logic [1:0] OP_WAIT_INTERRUPT = 2'd2;
 
   logic clk = 0;
-  logic reset = 1;
+  // The generated GlobalController has asynchronous reset branches that set
+  // AXI AWREADY.  Start low and drive a real 0->1 transition below so the
+  // branches execute under Verilator, rather than relying on declaration-time
+  // initialization at time zero.
+  logic reset = 0;
   always #5 clk = ~clk;
 
   logic op_valid, op_ready;
@@ -75,34 +79,65 @@ module tb_aha_garnet_gaussian_transcript;
   always @(posedge clk) cycle_count <= cycle_count + 1;
 
   task automatic issue_axi(input logic [12:0] addr, input logic [31:0] data);
+    int guard;
     begin
       @(negedge clk);
       op_kind = OP_AXI; op_axi_addr = addr; op_axi_data = data; op_valid = 1'b1;
       do @(posedge clk); while (!op_ready);
       @(negedge clk); op_valid = 1'b0;
-      do @(posedge clk); while (!op_done);
+      guard = 0;
+      while (!op_done) begin
+        @(posedge clk);
+        guard++;
+        if (guard == 256) begin
+          $display("AHA_GARNET_AXI_TIMEOUT addr=%h aw_vr=%b%b w_vr=%b%b b_vr=%b%b reset=%b interrupt=%b", addr,
+                   axi_awvalid, axi_awready, axi_wvalid, axi_wready, axi_bvalid, axi_bready, reset, garnet_interrupt);
+          $fflush();
+          $fatal(1, "AXI micro-op timeout");
+        end
+      end
       if (op_error) $fatal(1, "AXI micro-op error addr=%h", addr);
     end
   endtask
 
   task automatic issue_packet(input logic [17:0] addr, input logic [511:0] data, input logic [63:0] strb);
+    int guard;
     begin
       @(negedge clk);
       op_kind = OP_PACKET; op_packet_addr = addr; op_packet_data = data; op_packet_strb = strb; op_valid = 1'b1;
       do @(posedge clk); while (!op_ready);
       @(negedge clk); op_valid = 1'b0;
-      do @(posedge clk); while (!op_done);
+      guard = 0;
+      while (!op_done) begin
+        @(posedge clk);
+        guard++;
+        if (guard == 256) begin
+          $display("AHA_GARNET_PACKET_TIMEOUT addr=%h wr_en=%b reset=%b", addr, proc_wr_en, reset);
+          $fflush();
+          $fatal(1, "proc-packet micro-op timeout");
+        end
+      end
       if (op_error) $fatal(1, "proc-packet micro-op error addr=%h", addr);
     end
   endtask
 
   task automatic wait_pcfg_interrupt;
+    int guard;
     begin
       @(negedge clk);
       op_kind = OP_WAIT_INTERRUPT; op_valid = 1'b1;
       do @(posedge clk); while (!op_ready);
       @(negedge clk); op_valid = 1'b0;
-      do @(posedge clk); while (!op_done);
+      guard = 0;
+      while (!op_done) begin
+        @(posedge clk);
+        guard++;
+        if (guard == 4096) begin
+          $display("AHA_GARNET_PCFG_TIMEOUT interrupt=%b", garnet_interrupt);
+          $fflush();
+          $fatal(1, "PCFG interrupt timeout");
+        end
+      end
       if (op_error) $fatal(1, "PCFG interrupt micro-op error");
     end
   endtask
@@ -111,11 +146,15 @@ module tb_aha_garnet_gaussian_transcript;
     op_valid = 0; op_kind = 0; op_axi_addr = 0; op_axi_data = 0;
     op_packet_addr = 0; op_packet_data = 0; op_packet_strb = 0;
     proc_rd_addr = 0; proc_rd_en = 0; cycle_count = 0;
+    reset = 1;
     $display("AHA_GARNET_STAGE stimulus_initializing");
     $fflush();
     wait (stimulus_ready);
     repeat (5) @(posedge clk);
     reset = 0;
+    // Pinned test_app waits twenty clocks after reset propagation before its
+    // first AXI transaction; Garnet's controller otherwise holds AWREADY low.
+    repeat (20) @(posedge clk);
     $display("AHA_GARNET_STAGE interrupt_enable");
     $fflush();
     for (int i = 0; i < INTERRUPT_ENABLE_COUNT; i++) issue_axi(INTERRUPT_ENABLE_ADDR[i], INTERRUPT_ENABLE_DATA[i]);

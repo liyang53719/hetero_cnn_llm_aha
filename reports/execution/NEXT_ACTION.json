@@ -1,6 +1,6 @@
 {
-  "phase": "L1_GEMMINI_WS_CLOSURE",
-  "command": "taskset -c 8-25 python3 scripts/audit_gemmini_ws_result.py work/results/l1_gemmini_ws_revalidation --output reports/execution/gemmini_ws_result_audit.json",
-  "success_condition": "The audit must provide a provenance-backed canonical N=2 matmul_ws Verilator PASS at the fixed budget. A historical log without command and binary identity is insufficient.",
-  "failure_policy": "If current evidence remains a timeout without a progress counter, preserve FAIL/BLOCKED truth and do not increase the cycle budget, change workload source, or use FAST=1 as a substitute."
+  "phase": "L1_GEMMINI_WS_BOOT_HANDOFF",
+  "command": "taskset -c 8-25 env PATH=$PWD/work/toolchain/conda/bin:$PWD/work/toolchain/riscv/bin:$PATH make -C work/upstream/chipyard_gemmini/sims/verilator CONFIG=GemminiRocketConfig BINARY=$PWD/work/upstream/chipyard_gemmini/generators/gemmini/software/gemmini-rocc-tests/build/bareMetalC/matmul_ws-baremetal TIMEOUT_CYCLES=1000000 EXTRA_SIM_OUT_NAME=ws_boot_probe run-binary",
+  "success_condition": "The WS trace must leave boot ROM WFI and enter firmware PC range 0x80000000 before any future full-budget rerun is considered.",
+  "failure_policy": "If WFI remains unreleased, retain L1 BLOCKED_BOOT_HANDOFF. Do not increase max cycles, replace the binary with FAST=1, or modify canonical workload source."
 }

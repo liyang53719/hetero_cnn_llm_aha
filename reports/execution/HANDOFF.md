@@ -11,5 +11,6 @@
 - Fresh Gemmini evidence: Spike mvin/mvout PASS, Spike OS-matmul PASS, Verilator mvin/mvout PASS (669 us), and Verilator OS-matmul PASS (10 ms, 577.7 s wall).
 - Spike ResNet50 also passes in explicit `os` mode: 3,053,813 cycles and final `PASS`. The previous `tohost=1337` was a default WS-mode run, not an architectural functional mismatch.
 - Gemmini OS Verilator evidence remains PASS. Canonical full WS has a fresh 10M-cycle timeout and its historical 20M `$finish` log has insufficient provenance; see `L1_GEMMINI_WS_AUDIT.md`.
+- WS root cause is pre-firmware boot-handoff: the standard trace remains in boot ROM WFI after 14 commits, while mvin control enters firmware and passes. Do not expand cycles; see `L1_GEMMINI_WS_BOOT_AUDIT.md`.
 - `lc_shell` was not found; it is only a future L10 SRAM-library dependency.
 - Do not close any stage using the existing clean-room-only evidence.

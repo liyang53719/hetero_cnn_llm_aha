@@ -30,11 +30,13 @@ It terminated at the unchanged TestDriver limit:
 *** FAILED *** (timeout) after 10000001 simulation cycles
 ```
 
-There was no numerical mismatch output. Because the canonical run emits no
-intermediate progress counter, the execution policy does not permit increasing
-the cycle budget. The earlier `verilator_matmul_ws_20m.log` records a `$finish`
-but has no captured invocation or binary hash; it is therefore historical,
-non-authoritative evidence and cannot close this gate.
+There was no numerical mismatch output. A subsequent standard-runner trace
+shows that the firmware stops committing immediately after boot ROM `wfi`, so
+this is not a workload still making progress. The execution policy therefore
+does not permit increasing the cycle budget. The earlier
+`verilator_matmul_ws_20m.log` records a `$finish` but has no captured invocation
+or binary hash; it is therefore historical, non-authoritative evidence and
+cannot close this gate. See `L1_GEMMINI_WS_BOOT_AUDIT.md`.
 
 ## Conclusion
 

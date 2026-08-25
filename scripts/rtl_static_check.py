@@ -92,6 +92,7 @@ def main() -> int:
         "aha_garnet_microsequencer",
         "hetero_npu_gemmini_rocc_integration_v0",
         "shared_l2_fabric",
+        "l2_sp6144x128_macro_wrapper",
     }
     missing = sorted(required.difference(modules))
     if missing:

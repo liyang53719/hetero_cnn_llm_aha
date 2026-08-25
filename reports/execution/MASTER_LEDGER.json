@@ -139,7 +139,10 @@
         "work/results/l10_tool_readiness/compiler_probe/uhde_sp_6144x128_base_mux8_tt0p8.log",
         "reports/execution/L10_SP6144X128_VIEW_GENERATION.md",
         "work/results/l10_tool_readiness/sp6144x128_views_result.json",
-        "work/results/l10_tool_readiness/lef_preserve_bif_fullargv/gdb_backtrace.log"
+        "work/results/l10_tool_readiness/lef_preserve_bif_fullargv/gdb_backtrace.log",
+        "reports/execution/L10_SP6144X128_WRAPPER.md",
+        "work/results/l10_sp_wrapper/tb.log",
+        "work/results/l10_sp_wrapper/verilator_lint.log"
       ],
       "readiness_status": "PARTIAL_BLOCKED_DEPENDENCY_AND_DECISION"
     },

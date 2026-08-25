@@ -25,7 +25,8 @@ Blocking incompatibilities with the fixed L10 plan:
 5. The HDE SP delivery does not provide the requested BASE 0.8 V TT25
    combination for this shape, but the installed UHDE SP r1p0 delivery does;
    no SP corner relaxation is required.
-6. Actual UHDE SP Liberty and Verilog views are generated and validated, but
+6. Actual bit-write UHDE SP Liberty, Verilog, and GDS2 views are generated and
+   validated, and the real macro model passes its production wrapper test, but
    this delivery's `lef-fp` generator fails. A directory-wide audit found no
    pre-generated memory-macro LEF or DB; only compiler-internal `std.db` files.
    All ten installed memory compilers share the same `bifrun` binary (SHA256

@@ -24,6 +24,12 @@ class GemminiFunct(IntEnum):
     COMPUTE_ACCUMULATE = 5
     PRELOAD = 6
     FLUSH = 7
+    LOOP_WS = 8
+    LOOP_WS_CONFIG_BOUNDS = 9
+    LOOP_WS_CONFIG_ADDRS_AB = 10
+    LOOP_WS_CONFIG_ADDRS_DC = 11
+    LOOP_WS_CONFIG_STRIDES_AB = 12
+    LOOP_WS_CONFIG_STRIDES_DC = 13
     MVIN3 = 14
     MVOUT_SPAD = 23
     COUNTER = 126
@@ -252,3 +258,69 @@ def lower_int8_single_tile(descriptor: Int8SingleTileDescriptor) -> tuple[RoCCMi
         mvout(descriptor.c_dram_addr, descriptor.c_local_addr, descriptor.n, descriptor.m),
     ))
     return tuple(ops)
+
+
+@dataclass(frozen=True)
+class LoopWsDescriptor:
+    """Exact retained-RocketTile view of the official six-command WS loop."""
+
+    i: int
+    j: int
+    k: int
+    pad_i: int
+    pad_j: int
+    pad_k: int
+    a_addr: int
+    b_addr: int
+    d_addr: int
+    c_addr: int
+    a_stride: int
+    b_stride: int
+    d_stride: int
+    c_stride: int
+    a_transpose: bool = False
+    b_transpose: bool = False
+    full_c: bool = False
+    low_d: bool = False
+    ex_accumulate: bool = True
+    activation: int = 0
+    a_spad_id: int = 0
+    b_spad_id: int = 0
+    is_resadd: bool = False
+
+
+def lower_loop_ws(descriptor: LoopWsDescriptor) -> tuple[RoCCMicroOp, ...]:
+    for name, value, bits in (
+        ("i", descriptor.i, 16), ("j", descriptor.j, 16), ("k", descriptor.k, 32),
+        ("pad_i", descriptor.pad_i, 16), ("pad_j", descriptor.pad_j, 16),
+        ("pad_k", descriptor.pad_k, 32), ("a_addr", descriptor.a_addr, 64),
+        ("b_addr", descriptor.b_addr, 64), ("d_addr", descriptor.d_addr, 64),
+        ("c_addr", descriptor.c_addr, 64), ("a_stride", descriptor.a_stride, 64),
+        ("b_stride", descriptor.b_stride, 64), ("d_stride", descriptor.d_stride, 64),
+        ("c_stride", descriptor.c_stride, 64), ("activation", descriptor.activation, 8),
+        ("a_spad_id", descriptor.a_spad_id, 2), ("b_spad_id", descriptor.b_spad_id, 2),
+    ):
+        _unsigned(name, value, bits)
+    bounds_rs1 = descriptor.pad_k << 32 | descriptor.pad_j << 16 | descriptor.pad_i
+    bounds_rs2 = descriptor.k << 32 | descriptor.j << 16 | descriptor.i
+    loop_rs1 = (
+        descriptor.a_spad_id << 18
+        | descriptor.b_spad_id << 16
+        | descriptor.activation << 8
+        | int(descriptor.low_d) << 2
+        | int(descriptor.full_c) << 1
+        | int(descriptor.ex_accumulate)
+    )
+    loop_rs2 = (
+        int(descriptor.is_resadd) << 2
+        | int(descriptor.b_transpose) << 1
+        | int(descriptor.a_transpose)
+    )
+    return (
+        RoCCMicroOp(GemminiFunct.LOOP_WS_CONFIG_BOUNDS, bounds_rs1, bounds_rs2),
+        RoCCMicroOp(GemminiFunct.LOOP_WS_CONFIG_ADDRS_AB, descriptor.a_addr, descriptor.b_addr),
+        RoCCMicroOp(GemminiFunct.LOOP_WS_CONFIG_ADDRS_DC, descriptor.d_addr, descriptor.c_addr),
+        RoCCMicroOp(GemminiFunct.LOOP_WS_CONFIG_STRIDES_AB, descriptor.a_stride, descriptor.b_stride),
+        RoCCMicroOp(GemminiFunct.LOOP_WS_CONFIG_STRIDES_DC, descriptor.d_stride, descriptor.c_stride),
+        RoCCMicroOp(GemminiFunct.LOOP_WS, loop_rs1, loop_rs2),
+    )

@@ -5,6 +5,7 @@ from heteronpu.gemmini_rocc_lowering import (
     GemminiDataflow,
     GemminiFunct,
     Int8SingleTileDescriptor,
+    LoopWsDescriptor,
     config_ex,
     config_load,
     config_store,
@@ -15,6 +16,7 @@ from heteronpu.gemmini_rocc_lowering import (
     pack_local_addr_rows_cols,
     preload,
     lower_int8_single_tile,
+    lower_loop_ws,
 )
 
 
@@ -96,3 +98,26 @@ def test_single_tile_lowerer_rejects_unsupported_or_incomplete_policy() -> None:
         lower_int8_single_tile(Int8SingleTileDescriptor(
             **base, dataflow=GemminiDataflow.WEIGHT_STATIONARY
         ))
+
+
+def test_loop_ws_lowering_matches_official_six_command_macro() -> None:
+    descriptor = LoopWsDescriptor(
+        i=2, j=2, k=2, pad_i=15, pad_j=14, pad_k=13,
+        a_addr=0x80002000, b_addr=0x80003000, d_addr=0x80004000, c_addr=0x80005000,
+        a_stride=19, b_stride=18, d_stride=18, c_stride=18,
+        b_transpose=True, full_c=True, low_d=True, ex_accumulate=True,
+        activation=1, a_spad_id=2, b_spad_id=1,
+    )
+    ops = lower_loop_ws(descriptor)
+    assert [op.funct for op in ops] == [
+        GemminiFunct.LOOP_WS_CONFIG_BOUNDS, GemminiFunct.LOOP_WS_CONFIG_ADDRS_AB,
+        GemminiFunct.LOOP_WS_CONFIG_ADDRS_DC, GemminiFunct.LOOP_WS_CONFIG_STRIDES_AB,
+        GemminiFunct.LOOP_WS_CONFIG_STRIDES_DC, GemminiFunct.LOOP_WS,
+    ]
+    assert ops[0].rs1 == (13 << 32) | (14 << 16) | 15
+    assert ops[0].rs2 == (2 << 32) | (2 << 16) | 2
+    assert (ops[1].rs1, ops[1].rs2) == (0x80002000, 0x80003000)
+    assert (ops[4].rs1, ops[4].rs2) == (18, 18)
+    assert ops[5].rs1 == (2 << 18) | (1 << 16) | (1 << 8) | 0b111
+    assert ops[5].rs2 == 0b10
+    assert all(op.funct3 == 3 for op in ops)

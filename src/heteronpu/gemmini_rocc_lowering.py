@@ -324,3 +324,127 @@ def lower_loop_ws(descriptor: LoopWsDescriptor) -> tuple[RoCCMicroOp, ...]:
         RoCCMicroOp(GemminiFunct.LOOP_WS_CONFIG_STRIDES_DC, descriptor.d_stride, descriptor.c_stride),
         RoCCMicroOp(GemminiFunct.LOOP_WS, loop_rs1, loop_rs2),
     )
+
+
+@dataclass(frozen=True)
+class Int8OsTilesDescriptor:
+    """One resolved upstream ``sp_tiled_matmul_os`` invocation.
+
+    This deliberately models one hardware-resident macro tile, not the outer
+    DRAM tiler. ``i_tiles/j_tiles/k_tiles`` are counts of 16x16 Gemmini tiles;
+    padding applies only to the final tile in each dimension. Bias is INT32
+    and output is INT8, matching the pinned L2 case.
+    """
+
+    a_addr: int
+    b_addr: int
+    d_addr: int
+    c_addr: int
+    i_tiles: int
+    j_tiles: int
+    k_tiles: int
+    pad_i: int
+    pad_j: int
+    pad_k: int
+    a_row_stride: int
+    b_row_stride: int
+    d_row_stride: int
+    c_row_stride: int
+
+
+def lower_int8_os_tiles(descriptor: Int8OsTilesDescriptor) -> tuple[RoCCMicroOp, ...]:
+    """Transcribe pinned upstream ``tiled_matmul_outer`` + OS inner ordering."""
+
+    dim = 16
+    bank_rows = 4 * 4096
+    garbage_addr = (1 << ADDR_LEN) - 1
+    for name, value in (
+        ("i_tiles", descriptor.i_tiles), ("j_tiles", descriptor.j_tiles),
+        ("k_tiles", descriptor.k_tiles),
+    ):
+        if not 1 <= value <= 0xFFFF:
+            raise ValueError(f"{name} must be in 1..65535")
+    for name, value in (
+        ("pad_i", descriptor.pad_i), ("pad_j", descriptor.pad_j),
+        ("pad_k", descriptor.pad_k),
+    ):
+        if not 0 <= value < dim:
+            raise ValueError(f"{name} must be in 0..15")
+    for name in ("a_addr", "b_addr", "d_addr", "c_addr"):
+        _unsigned(name, getattr(descriptor, name), 64)
+    for name in ("a_row_stride", "b_row_stride", "d_row_stride", "c_row_stride"):
+        if getattr(descriptor, name) <= 0:
+            raise ValueError(f"{name} must be positive")
+
+    i_tiles, j_tiles, k_tiles = (
+        descriptor.i_tiles, descriptor.j_tiles, descriptor.k_tiles
+    )
+    a_sp_start = 0
+    b_sp_start = bank_rows - k_tiles * j_tiles * dim
+    d_sp_start = 1 << (ADDR_LEN - 1)
+    c_sp_start = 3 << (ADDR_LEN - 2)
+
+    ops: list[RoCCMicroOp] = [
+        config_ex(dataflow=GemminiDataflow.OUTPUT_STATIONARY, c_stride=1, a_stride=1),
+        config_store(stride_bytes=descriptor.c_row_stride),
+        config_load(stride_bytes=descriptor.a_row_stride, channel=0),
+        config_load(stride_bytes=descriptor.b_row_stride, channel=1),
+        config_load(stride_bytes=descriptor.d_row_stride * 4, channel=2),
+        # sp_tiled_matmul_os reselects channel zero for each operand class.
+        config_load(stride_bytes=descriptor.d_row_stride * 4, channel=0),
+    ]
+
+    # MAX_BLOCK_LEN_ACC is one tile for this locked Gemmini configuration.
+    for i in range(i_tiles):
+        for j in range(j_tiles):
+            cols = dim - (descriptor.pad_j if j == j_tiles - 1 else 0)
+            rows = dim - (descriptor.pad_i if i == i_tiles - 1 else 0)
+            dram = descriptor.d_addr + (i * descriptor.d_row_stride + j) * dim * 4
+            local = d_sp_start + (i * j_tiles + j) * dim
+            ops.append(mvin(dram, local, cols, rows))
+
+    ops.append(config_load(stride_bytes=descriptor.b_row_stride, channel=0))
+    # MAX_BLOCK_LEN is four tiles, so J=2 is one block in the locked case.
+    if j_tiles > 4:
+        raise ValueError("pinned OS lowerer currently requires j_tiles <= MAX_BLOCK_LEN=4")
+    for k in range(k_tiles):
+        cols = j_tiles * dim - descriptor.pad_j
+        rows = dim - (descriptor.pad_k if k == k_tiles - 1 else 0)
+        dram = descriptor.b_addr + k * dim * descriptor.b_row_stride
+        local = b_sp_start + k * j_tiles * dim
+        ops.append(mvin(dram, local, cols, rows))
+
+    ops.append(config_load(stride_bytes=descriptor.a_row_stride, channel=0))
+    if k_tiles > 4:
+        raise ValueError("pinned OS lowerer currently requires k_tiles <= MAX_BLOCK_LEN=4")
+    for i in range(i_tiles):
+        cols = k_tiles * dim - descriptor.pad_k
+        rows = dim - (descriptor.pad_i if i == i_tiles - 1 else 0)
+        dram = descriptor.a_addr + i * dim * descriptor.a_row_stride
+        local = a_sp_start + i * k_tiles * dim
+        ops.append(mvin(dram, local, cols, rows))
+
+    for i in range(i_tiles):
+        for j in range(j_tiles):
+            c_local = c_sp_start + (i * j_tiles + j) * dim
+            c_cols = dim - (descriptor.pad_j if j == j_tiles - 1 else 0)
+            c_rows = dim - (descriptor.pad_i if i == i_tiles - 1 else 0)
+            for k in range(k_tiles):
+                a_local = a_sp_start + (i * k_tiles + k) * dim
+                b_local = b_sp_start + (k * j_tiles + j) * dim
+                a_cols = dim - (descriptor.pad_k if k == k_tiles - 1 else 0)
+                b_rows = a_cols
+                b_cols = c_cols
+                out_local = c_local if k == k_tiles - 1 else garbage_addr
+                ops.append(preload(garbage_addr, out_local, dim, dim, c_cols, c_rows))
+                ops.append(compute(a_local, b_local, a_cols, c_rows, b_cols, b_rows,
+                                   accumulate=k != 0))
+
+    for i in range(i_tiles):
+        for j in range(j_tiles):
+            cols = dim - (descriptor.pad_j if j == j_tiles - 1 else 0)
+            rows = dim - (descriptor.pad_i if i == i_tiles - 1 else 0)
+            dram = descriptor.c_addr + (i * descriptor.c_row_stride + j) * dim
+            local = c_sp_start + (i * j_tiles + j) * dim
+            ops.append(mvout(dram, local, cols, rows))
+    return tuple(ops)

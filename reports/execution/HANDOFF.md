@@ -8,7 +8,8 @@
 - Official test_app trace independently PASSes and its first output word matches wrapper/golden `0x00710070006d0070`.
 - Gemmini single-tile OS retained-RocketTile equivalence PASS: 11 commands/path, payload-equivalent, bit-exact checksum `6954858531263039530`.
 - Gemmini multi-tile WS PASS: 17x18x19, 2x2x2 tiles, official/raw payload-equivalent, checksum `14853676686976657775`, 285 MB.
-- L2 remains IN_PROGRESS for multi-tile OS/mvin-mvout edges/conv/bias/backpressure/event/illegal-descriptor coverage.
+- Gemmini multi-tile OS PASS: 36 commands/path; Python lowerer matches every raw Rocket commit; bit-exact checksum `14853676686976657775`.
+- L2 remains IN_PROGRESS for mvin-mvout edges/conv/bias-requant/backpressure/event/illegal-descriptor coverage.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

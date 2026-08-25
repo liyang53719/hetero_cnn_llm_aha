@@ -55,7 +55,10 @@
         "work/results/l2_gemmini_rocc_equiv/verilator.log",
         "reports/execution/L2_GEMMINI_MULTI_TILE_WS_EQUIVALENCE.md",
         "work/results/l2_gemmini_rocc_equiv/loop_ws_result.json",
-        "work/results/l2_gemmini_rocc_equiv/verilator_loop_ws.log"
+        "work/results/l2_gemmini_rocc_equiv/verilator_loop_ws.log",
+        "reports/execution/L2_GEMMINI_MULTI_TILE_OS_EQUIVALENCE.md",
+        "work/results/l2_gemmini_rocc_equiv/multi_tile_os_result.json",
+        "work/results/l2_gemmini_rocc_equiv/verilator_multi_tile_os.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -72,7 +75,8 @@
         "Full Garnet-top Gaussian wrapper equivalence: both input blocks read back exactly, G2F/F2G ISR masks equal 3, and both output blocks match golden in 19914 cycles on Verilator 5.028",
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test",
         "Gemmini retained-RocketTile single-tile OS equivalence: 11 commands per path, first 10 payloads identical, final mvout differs only by destination, outputs/checksum bit-exact",
-        "Gemmini retained-RocketTile multi-tile WS equivalence: 17x18x19 across 2x2x2 tiles, official/raw loop payloads and bit-exact outputs match except intentional destination address"
+        "Gemmini retained-RocketTile multi-tile WS equivalence: 17x18x19 across 2x2x2 tiles, official/raw loop payloads and bit-exact outputs match except intentional destination address",
+        "Gemmini retained-RocketTile multi-tile OS equivalence: 36 commands per path, Python lowerer matches every raw Rocket commit, and outputs are bit-exact"
       ],
       "remaining_gates": [
         "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs"

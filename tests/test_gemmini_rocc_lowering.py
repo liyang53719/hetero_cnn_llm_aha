@@ -5,6 +5,7 @@ from heteronpu.gemmini_rocc_lowering import (
     GemminiDataflow,
     GemminiFunct,
     Int8SingleTileDescriptor,
+    Int8OsTilesDescriptor,
     LoopWsDescriptor,
     config_ex,
     config_load,
@@ -16,6 +17,7 @@ from heteronpu.gemmini_rocc_lowering import (
     pack_local_addr_rows_cols,
     preload,
     lower_int8_single_tile,
+    lower_int8_os_tiles,
     lower_loop_ws,
 )
 
@@ -121,3 +123,40 @@ def test_loop_ws_lowering_matches_official_six_command_macro() -> None:
     assert ops[5].rs1 == (2 << 18) | (1 << 16) | (1 << 8) | 0b111
     assert ops[5].rs2 == 0b10
     assert all(op.funct3 == 3 for op in ops)
+
+
+def test_multi_tile_os_lowering_matches_pinned_upstream_order() -> None:
+    descriptor = Int8OsTilesDescriptor(
+        a_addr=0x80002B80, b_addr=0x800031D0,
+        d_addr=0x80002D00, c_addr=0x80003330,
+        i_tiles=2, j_tiles=2, k_tiles=2,
+        pad_i=15, pad_j=14, pad_k=13,
+        a_row_stride=19, b_row_stride=18,
+        d_row_stride=18, c_row_stride=18,
+    )
+    ops = lower_int8_os_tiles(descriptor)
+    assert len(ops) == 36
+    assert [op.funct for op in ops[:6]] == [GemminiFunct.CONFIG] * 6
+    assert [op.funct for op in ops[6:10]] == [GemminiFunct.MVIN] * 4
+    assert ops[6].rs1 == descriptor.d_addr
+    assert ops[9].rs1 == descriptor.d_addr + (18 + 1) * 16 * 4
+    assert [op.funct for op in ops[11:13]] == [GemminiFunct.MVIN] * 2
+    assert [op.funct for op in ops[14:16]] == [GemminiFunct.MVIN] * 2
+    assert [op.funct for op in ops[16:32:2]] == [GemminiFunct.PRELOAD] * 8
+    assert [op.funct for op in ops[17:32:2]] == [
+        GemminiFunct.COMPUTE_PRELOADED, GemminiFunct.COMPUTE_ACCUMULATE,
+    ] * 4
+    assert [op.funct for op in ops[-4:]] == [GemminiFunct.MVOUT] * 4
+    assert ops[-1].rs1 == descriptor.c_addr + (18 + 1) * 16
+
+
+def test_multi_tile_os_rejects_unimplemented_block_split() -> None:
+    descriptor = Int8OsTilesDescriptor(
+        a_addr=0, b_addr=0, d_addr=0, c_addr=0,
+        i_tiles=1, j_tiles=5, k_tiles=1,
+        pad_i=0, pad_j=0, pad_k=0,
+        a_row_stride=16, b_row_stride=80,
+        d_row_stride=80, c_row_stride=80,
+    )
+    with pytest.raises(ValueError, match="j_tiles"):
+        lower_int8_os_tiles(descriptor)

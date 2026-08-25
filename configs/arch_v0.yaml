@@ -1,0 +1,103 @@
+schema_version: 1
+name: hetero_cnn_llm_v0
+intent: "CNN + autoregressive LLM inference research architecture"
+clock_hz: 1000000000
+command_bits: 128
+event_bits: 16
+external_memory:
+  type: LPDDR4_or_LPDDR5
+  target_read_bandwidth_GBps: 100.0
+  target_write_bandwidth_GBps: 40.0
+  address_bits: 48
+  axi_data_bits: 512
+  read_ports: 2
+  write_ports: 1
+on_chip_sram:
+  total_KiB: 4096
+  shared_l2_KiB: 1536
+  matrix_spad_KiB: 768
+  matrix_acc_KiB: 512
+  cgra_local_KiB: 512
+  kv_staging_KiB: 512
+  control_trace_KiB: 256
+  shared_l2_banks: 16
+matrix_engine:
+  origin: "Gemmini-derived standalone engine"
+  array_rows: 32
+  array_cols: 64
+  dataflows: [weight_stationary, output_stationary]
+  modes: [gemm, gemv, conv_im2col, attention_qk, attention_pv]
+  activation_types: [int8, bf16]
+  weight_types: [int8, int4_grouped, bf16]
+  accumulation_types: [int32, fp32]
+  w4_group_sizes: [64, 128]
+  int8_macs_per_cycle: 2048
+  w4a8_storage_only_macs_per_cycle: 2048
+  w4a8_native_dual_dot_target_macs_per_cycle: 4096
+  bf16_macs_per_cycle: 512
+  command_queue_depth: 16
+  load_queue_depth: 16
+  store_queue_depth: 16
+cgra_sfu:
+  origin: "AHA Garnet/Lake/Canal-derived programmable sidecar"
+  tiles_x: 4
+  tiles_y: 4
+  vector_lanes_per_tile: 16
+  lane_bits: 16
+  fp32_reduction_lanes_per_tile: 4
+  local_sram_KiB_per_tile: 32
+  operations:
+    - add
+    - multiply
+    - minmax
+    - compare_select
+    - reduce_sum
+    - reduce_max
+    - relu
+    - pooling
+    - exp2_pwla
+    - reciprocal
+    - rsqrt_newton
+    - rmsnorm
+    - layernorm
+    - softmax_online
+    - rope
+    - silu
+    - gelu
+    - quantize
+    - dequantize
+    - layout_transform
+kv_engine:
+  origin: "new page/state engine using PagedAttention semantics and reusable AXI/iDMA transport"
+  page_tokens: 16
+  max_sequences: 64
+  max_layers: 64
+  max_kv_heads: 32
+  max_head_dim: 256
+  formats: [bf16, int8_per_token_head]
+  page_table_levels: 2
+  physical_pages: 4096
+  translation_pipeline_cycles: 2
+  supports:
+    - append
+    - paged_gather
+    - prefix_share
+    - copy_on_write
+    - free_sequence
+    - gqa
+    - mqa
+    - sliding_window
+    - kv_int8
+fabric:
+  tensor_stream_bits: 512
+  scalar_stream_bits: 128
+  topology: "shared-L2 crossbar plus direct Matrix<->SFU and Matrix<->KV streams"
+  flow_control: "ready/valid plus 16-bit completion events"
+  ordering: "per-engine in-order; cross-engine event dependencies"
+software_contract:
+  descriptor_bits: 128
+  required_frontends: [ONNX_or_StableHLO, llama_cpp_reference]
+  workloads:
+    cnn: [resnet50, mobilenet_v2, yolov5s_operator_subset]
+    llm: [qwen2_1_5b, qwen3_0_6b, llama3_2_1b]
+  quantization: [bf16_baseline, w8a8, w4a8_g64_g128, kv_int8]

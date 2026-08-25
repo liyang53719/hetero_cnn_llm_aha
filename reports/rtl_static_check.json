@@ -1,0 +1,123 @@
+{
+  "errors": [],
+  "file_count": 14,
+  "files": [
+    {
+      "lines": 57,
+      "modules": [
+        "rv_fifo"
+      ],
+      "path": "rtl/common/rv_fifo.sv"
+    },
+    {
+      "lines": 87,
+      "modules": [
+        "shared_l2_fabric"
+      ],
+      "path": "rtl/fabric/shared_l2_fabric.sv"
+    },
+    {
+      "lines": 38,
+      "modules": [
+        "command_event_scoreboard"
+      ],
+      "path": "rtl/integration/command_event_scoreboard.sv"
+    },
+    {
+      "lines": 61,
+      "modules": [
+        "engine_contract_adapter"
+      ],
+      "path": "rtl/integration/engine_contract_adapter.sv"
+    },
+    {
+      "lines": 129,
+      "modules": [
+        "gemmini_rocc_command_adapter"
+      ],
+      "path": "rtl/integration/gemmini_rocc_command_adapter.sv"
+    },
+    {
+      "lines": 109,
+      "modules": [
+        "hetero_npu_gemmini_rocc_integration_v0"
+      ],
+      "path": "rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv"
+    },
+    {
+      "lines": 108,
+      "modules": [
+        "hetero_npu_integrated_v0"
+      ],
+      "path": "rtl/integration/hetero_npu_integrated_v0.sv"
+    },
+    {
+      "lines": 135,
+      "modules": [
+        "hetero_npu_numerical_integration_v0"
+      ],
+      "path": "rtl/integration/hetero_npu_numerical_integration_v0.sv"
+    },
+    {
+      "lines": 25,
+      "modules": [
+        "official_gemmini_macunit_timing_wrap"
+      ],
+      "path": "rtl/integration/official_gemmini_macunit_timing_wrap.sv"
+    },
+    {
+      "lines": 166,
+      "modules": [
+        "kv_cache_engine"
+      ],
+      "path": "rtl/kv/kv_cache_engine.sv"
+    },
+    {
+      "lines": 151,
+      "modules": [
+        "matrix_engine_int8_tile"
+      ],
+      "path": "rtl/matrix/matrix_engine_int8_tile.sv"
+    },
+    {
+      "lines": 86,
+      "modules": [
+        "cgra_sfu_vector"
+      ],
+      "path": "rtl/sfu/cgra_sfu_vector.sv"
+    },
+    {
+      "lines": 66,
+      "modules": [
+        "command_dispatch"
+      ],
+      "path": "rtl/top/command_dispatch.sv"
+    },
+    {
+      "lines": 101,
+      "modules": [
+        "hetero_npu_shell"
+      ],
+      "path": "rtl/top/hetero_npu_shell.sv"
+    }
+  ],
+  "module_count": 14,
+  "modules": {
+    "cgra_sfu_vector": "rtl/sfu/cgra_sfu_vector.sv",
+    "command_dispatch": "rtl/top/command_dispatch.sv",
+    "command_event_scoreboard": "rtl/integration/command_event_scoreboard.sv",
+    "engine_contract_adapter": "rtl/integration/engine_contract_adapter.sv",
+    "gemmini_rocc_command_adapter": "rtl/integration/gemmini_rocc_command_adapter.sv",
+    "hetero_npu_gemmini_rocc_integration_v0": "rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv",
+    "hetero_npu_integrated_v0": "rtl/integration/hetero_npu_integrated_v0.sv",
+    "hetero_npu_numerical_integration_v0": "rtl/integration/hetero_npu_numerical_integration_v0.sv",
+    "hetero_npu_shell": "rtl/top/hetero_npu_shell.sv",
+    "kv_cache_engine": "rtl/kv/kv_cache_engine.sv",
+    "matrix_engine_int8_tile": "rtl/matrix/matrix_engine_int8_tile.sv",
+    "official_gemmini_macunit_timing_wrap": "rtl/integration/official_gemmini_macunit_timing_wrap.sv",
+    "rv_fifo": "rtl/common/rv_fifo.sv",
+    "shared_l2_fabric": "rtl/fabric/shared_l2_fabric.sv"
+  },
+  "note": "structural check only; run Verilator/Slang/Surelog locally",
+  "status": "PASS"
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
+  "cpu_affinity": "taskset -c 8-25",
+  "current_phase": "P0_foundation",
+  "stages": {
+    "L0": {"status": "PENDING_REVALIDATION", "depends_on": []},
+    "L1": {"status": "PENDING", "depends_on": ["L0"]},
+    "L2": {"status": "PENDING", "depends_on": ["L1"]},
+    "L3": {"status": "PENDING", "depends_on": ["L2"]},
+    "L4": {"status": "PENDING", "depends_on": ["L3"]},
+    "L5": {"status": "PENDING", "depends_on": ["L3"]},
+    "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},
+    "L7": {"status": "PENDING", "depends_on": ["L5"]},
+    "L8": {"status": "PENDING", "depends_on": ["L6"]},
+    "L9": {"status": "PENDING", "depends_on": ["L4", "L5", "L6", "L7", "L8"]},
+    "L10": {"status": "PENDING", "depends_on": ["L9"]},
+    "L11": {"status": "PENDING", "depends_on": ["L10"]}
+  },
+  "known_blockers": [
+    "Docker installation requires completion of the user-owned sudo command.",
+    "Storage must reach 250 GiB free before AHA image pull or multi-point synthesis."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "int8_conv_cases": 40,
+  "int8_gemm_cases": 100,
+  "kv": {
+    "bf16": {
+      "active_sequences": 24,
+      "allocations": 223,
+      "commands": 600,
+      "cow_copies": 18,
+      "max_abs_error_vs_independent_storage_reference": 0.0,
+      "pages_in_use": 135
+    },
+    "int8": {
+      "active_sequences": 23,
+      "allocations": 242,
+      "commands": 600,
+      "cow_copies": 20,
+      "max_abs_error_vs_independent_storage_reference": 0.0,
+      "pages_in_use": 137
+    }
+  },
+  "online_softmax_cases": 100,
+  "online_softmax_max_abs_error": 2.384185791015625e-07,
+  "seed": 20260824,
+  "status": "PASS"
+}

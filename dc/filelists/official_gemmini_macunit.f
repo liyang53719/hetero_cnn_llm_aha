@@ -1,0 +1,2 @@
+work/upstream/chipyard_gemmini/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral/MacUnit.sv
+rtl/integration/official_gemmini_macunit_timing_wrap.sv

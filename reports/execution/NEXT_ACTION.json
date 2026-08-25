@@ -1,0 +1,6 @@
+{
+  "phase": "P0_foundation",
+  "command": "taskset -c 8-25 docker version && taskset -c 8-25 docker run --rm --cpuset-cpus=8-23 hello-world",
+  "success_condition": "Docker daemon is reachable by user yang and the cpuset-constrained smoke exits zero.",
+  "failure_policy": "Wait for the user-owned sudo installation/group refresh. Do not use rootless Docker or pull AHA images before this check passes."
+}

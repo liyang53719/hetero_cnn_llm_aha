@@ -1,0 +1,353 @@
+{
+  "barrier_descriptors": [
+    {
+      "index": 15728640,
+      "wait_events": [
+        1,
+        2
+      ]
+    },
+    {
+      "index": 15728641,
+      "wait_events": [
+        5,
+        7
+      ]
+    },
+    {
+      "index": 15728642,
+      "wait_events": [
+        10,
+        7
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "bytes_le_hex": "32030000000100640000650000660000",
+      "dependencies": [],
+      "fields": {
+        "dst": 102,
+        "engine": "SFU_CGRA",
+        "event_signal": 1,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "SFU_RMSNORM",
+        "src0": 100,
+        "src1": 101
+      },
+      "name": "norm1",
+      "synthetic": false,
+      "word_hex": "0x00006600006500006400010000000332"
+    },
+    {
+      "bytes_le_hex": "11010000000200670000000000680000",
+      "dependencies": [],
+      "fields": {
+        "dst": 104,
+        "engine": "DMA",
+        "event_signal": 2,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "DMA_2D",
+        "src0": 103,
+        "src1": 0
+      },
+      "name": "qkv_weight_load",
+      "synthetic": false,
+      "word_hex": "0x00006800000000006700020000000111"
+    },
+    {
+      "bytes_le_hex": "500000000003000000f0000000000000",
+      "dependencies": [
+        "norm1",
+        "qkv_weight_load"
+      ],
+      "fields": {
+        "dst": 0,
+        "engine": "CONTROL",
+        "event_signal": 3,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "BARRIER",
+        "src0": 15728640,
+        "src1": 0
+      },
+      "name": "__join__qkv_projection",
+      "synthetic": true,
+      "word_hex": "0x000000000000f0000000030000000050"
+    },
+    {
+      "bytes_le_hex": "200200030004006900006a00006b0000",
+      "dependencies": [
+        "norm1",
+        "qkv_weight_load"
+      ],
+      "fields": {
+        "dst": 107,
+        "engine": "MATRIX",
+        "event_signal": 4,
+        "event_wait": 3,
+        "flags": 0,
+        "opcode": "MATRIX_GEMM",
+        "src0": 105,
+        "src1": 106
+      },
+      "name": "qkv_projection",
+      "synthetic": false,
+      "word_hex": "0x00006b00006a00006900040003000220"
+    },
+    {
+      "bytes_le_hex": "340300040005006c00000000006d0000",
+      "dependencies": [
+        "qkv_projection"
+      ],
+      "fields": {
+        "dst": 109,
+        "engine": "SFU_CGRA",
+        "event_signal": 5,
+        "event_wait": 4,
+        "flags": 0,
+        "opcode": "SFU_ROPE",
+        "src0": 108,
+        "src1": 0
+      },
+      "name": "rope",
+      "synthetic": false,
+      "word_hex": "0x00006d00000000006c00050004000334"
+    },
+    {
+      "bytes_le_hex": "410400050006006e00006f0000700000",
+      "dependencies": [
+        "rope"
+      ],
+      "fields": {
+        "dst": 112,
+        "engine": "KV",
+        "event_signal": 6,
+        "event_wait": 5,
+        "flags": 0,
+        "opcode": "KV_APPEND",
+        "src0": 110,
+        "src1": 111
+      },
+      "name": "kv_append",
+      "synthetic": false,
+      "word_hex": "0x00007000006f00006e00060005000441"
+    },
+    {
+      "bytes_le_hex": "42040006000700710000000000720000",
+      "dependencies": [
+        "kv_append"
+      ],
+      "fields": {
+        "dst": 114,
+        "engine": "KV",
+        "event_signal": 7,
+        "event_wait": 6,
+        "flags": 0,
+        "opcode": "KV_GATHER",
+        "src0": 113,
+        "src1": 0
+      },
+      "name": "kv_gather",
+      "synthetic": false,
+      "word_hex": "0x00007200000000007100070006000442"
+    },
+    {
+      "bytes_le_hex": "500000000008000100f0000000000000",
+      "dependencies": [
+        "rope",
+        "kv_gather"
+      ],
+      "fields": {
+        "dst": 0,
+        "engine": "CONTROL",
+        "event_signal": 8,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "BARRIER",
+        "src0": 15728641,
+        "src1": 0
+      },
+      "name": "__join__qk",
+      "synthetic": true,
+      "word_hex": "0x000000000000f0000100080000000050"
+    },
+    {
+      "bytes_le_hex": "23020008000900730000740000750000",
+      "dependencies": [
+        "rope",
+        "kv_gather"
+      ],
+      "fields": {
+        "dst": 117,
+        "engine": "MATRIX",
+        "event_signal": 9,
+        "event_wait": 8,
+        "flags": 0,
+        "opcode": "MATRIX_QK",
+        "src0": 115,
+        "src1": 116
+      },
+      "name": "qk",
+      "synthetic": false,
+      "word_hex": "0x00007500007400007300090008000223"
+    },
+    {
+      "bytes_le_hex": "33030009000a00760000000000770000",
+      "dependencies": [
+        "qk"
+      ],
+      "fields": {
+        "dst": 119,
+        "engine": "SFU_CGRA",
+        "event_signal": 10,
+        "event_wait": 9,
+        "flags": 0,
+        "opcode": "SFU_SOFTMAX",
+        "src0": 118,
+        "src1": 0
+      },
+      "name": "online_softmax",
+      "synthetic": false,
+      "word_hex": "0x000077000000000076000a0009000333"
+    },
+    {
+      "bytes_le_hex": "50000000000b000200f0000000000000",
+      "dependencies": [
+        "online_softmax",
+        "kv_gather"
+      ],
+      "fields": {
+        "dst": 0,
+        "engine": "CONTROL",
+        "event_signal": 11,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "BARRIER",
+        "src0": 15728642,
+        "src1": 0
+      },
+      "name": "__join__pv",
+      "synthetic": true,
+      "word_hex": "0x000000000000f00002000b0000000050"
+    },
+    {
+      "bytes_le_hex": "2402000b000c007800007900007a0000",
+      "dependencies": [
+        "online_softmax",
+        "kv_gather"
+      ],
+      "fields": {
+        "dst": 122,
+        "engine": "MATRIX",
+        "event_signal": 12,
+        "event_wait": 11,
+        "flags": 0,
+        "opcode": "MATRIX_PV",
+        "src0": 120,
+        "src1": 121
+      },
+      "name": "pv",
+      "synthetic": false,
+      "word_hex": "0x00007a000079000078000c000b000224"
+    },
+    {
+      "bytes_le_hex": "2002000c000d007b00007c00007d0000",
+      "dependencies": [
+        "pv"
+      ],
+      "fields": {
+        "dst": 125,
+        "engine": "MATRIX",
+        "event_signal": 13,
+        "event_wait": 12,
+        "flags": 0,
+        "opcode": "MATRIX_GEMM",
+        "src0": 123,
+        "src1": 124
+      },
+      "name": "o_projection",
+      "synthetic": false,
+      "word_hex": "0x00007d00007c00007b000d000c000220"
+    },
+    {
+      "bytes_le_hex": "3203000d000e007e00007f0000800000",
+      "dependencies": [
+        "o_projection"
+      ],
+      "fields": {
+        "dst": 128,
+        "engine": "SFU_CGRA",
+        "event_signal": 14,
+        "event_wait": 13,
+        "flags": 0,
+        "opcode": "SFU_RMSNORM",
+        "src0": 126,
+        "src1": 127
+      },
+      "name": "norm2",
+      "synthetic": false,
+      "word_hex": "0x00008000007f00007e000e000d000332"
+    },
+    {
+      "bytes_le_hex": "2002000e000f00810000820000830000",
+      "dependencies": [
+        "norm2"
+      ],
+      "fields": {
+        "dst": 131,
+        "engine": "MATRIX",
+        "event_signal": 15,
+        "event_wait": 14,
+        "flags": 0,
+        "opcode": "MATRIX_GEMM",
+        "src0": 129,
+        "src1": 130
+      },
+      "name": "gate_up",
+      "synthetic": false,
+      "word_hex": "0x000083000082000081000f000e000220"
+    },
+    {
+      "bytes_le_hex": "3503000f001000840000850000860000",
+      "dependencies": [
+        "gate_up"
+      ],
+      "fields": {
+        "dst": 134,
+        "engine": "SFU_CGRA",
+        "event_signal": 16,
+        "event_wait": 15,
+        "flags": 0,
+        "opcode": "SFU_ACTIVATION",
+        "src0": 132,
+        "src1": 133
+      },
+      "name": "silu_mul",
+      "synthetic": false,
+      "word_hex": "0x0000860000850000840010000f000335"
+    },
+    {
+      "bytes_le_hex": "20020010001100870000880000890000",
+      "dependencies": [
+        "silu_mul"
+      ],
+      "fields": {
+        "dst": 137,
+        "engine": "MATRIX",
+        "event_signal": 17,
+        "event_wait": 16,
+        "flags": 0,
+        "opcode": "MATRIX_GEMM",
+        "src0": 135,
+        "src1": 136
+      },
+      "name": "down_projection",
+      "synthetic": false,
+      "word_hex": "0x00008900008800008700110010000220"
+    }
+  ],
+  "name": "llm_prefill_transformer_block"
+}

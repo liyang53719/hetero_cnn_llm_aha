@@ -1,0 +1,152 @@
+{
+  "L0": {
+    "status": "PASS",
+    "evidence": "reports/final_validation.json"
+  },
+  "L1": {
+    "status": "BLOCKED_PARTIAL_RECURSIVE_CLONE",
+    "evidence": "reports/upstream_progress.json",
+    "details": "Chipyard commit is present, but recursive exact submodule lock is not clean or complete."
+  },
+  "L2": {
+    "status": "PARTIAL_OFFICIAL_GEMMINI_RTL_BASELINE",
+    "evidence": [
+      "work/results/gemmini_baseline_minimal_v3/chipyard_verilator_final_link.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_mvin_mvout.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_os.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_ws.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_ws_fast.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_ws_20m.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_fast.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_20m.log"
+    ],
+    "details": "Targeted Chipyard/Gemmini dependencies, FireSim targetutils, CIRCT firtool-1.75.0 and DRAMSim2 were installed in the isolated work tree. Official GemminiRocketConfig elaborated, firtool emitted split Verilog, Verilator built the simulator, mvin/mvout, FAST=1 matmul, FAST=1 matmul_ws, official N=2 matmul_os, and full N=2 matmul_ws with a 20M cycle budget completed. Full N=2 matmul reached the 20,000,001-cycle TestDriver timeout after several dataflow/transpose combinations; no numerical mismatch was reported. Full ResNet numerical RTL gate is still open."
+  },
+  "L3": {
+    "status": "BLOCKED_DOCKER",
+    "evidence": "scripts/reproduce_aha.sh",
+    "details": "Docker is not installed, so the official AHA Garnet/map/PnR/test flow cannot run."
+  },
+  "L4": {
+    "status": "PARTIAL",
+    "idma": {
+      "status": "PASS_SOURCE_ENUMERATION_BLOCKED_UPDATE_CONFLICT",
+      "evidence": "work/results/idma_baseline/result.json"
+    },
+    "imax3": {
+      "status": "PASS_SOURCE_AUDIT_BUILD_FAIL",
+      "evidence": "work/results/imax3_source_audit/result.json",
+      "build_failure": "get_show_nanosec is undeclared in ggml-cpu.c"
+    }
+  },
+  "toolchain_smokes": {
+    "riscv_gcc_spike": {
+      "status": "PASS",
+      "evidence": "work/results/riscv_spike_smoke.log"
+    },
+    "riscv_pk": {
+      "status": "BLOCKED_LIBGLOSS",
+      "evidence": "work/results/pk_build2/config.log"
+    },
+    "gemmini_software_compile": {
+      "status": "PASS",
+      "evidence": "work/upstream/chipyard_gemmini/generators/gemmini/software/gemmini-rocc-tests/build",
+      "details": "bare-metal Gemmini binaries and libgemmini.so were built with local RISC-V wrappers"
+    },
+    "gemmini_spike_extension": {
+      "status": "PASS_PRELOAD_EXTENSION",
+      "evidence": [
+        "work/results/gemmini_baseline_minimal_v3/spike_mvin_preload_full.log",
+        "work/results/gemmini_baseline_minimal_v3/spike_matmul_preload_full.log"
+      ],
+      "details": "Spike loaded libgemmini.so and libcustomext.so together via LD_PRELOAD; mvin and matmul completed. ResNet bare-metal remains a separate failure gate."
+    }
+  },
+  "official_gemmini_rtl": {
+    "status": "PASS_FIRST_OFFICIAL_RTL_AND_SIMULATOR",
+    "config": "GemminiRocketConfig",
+    "evidence": [
+      "reports/OFFICIAL_GEMMINI_INTERFACE_AUDIT.md",
+      "work/upstream/chipyard_gemmini/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral",
+      "work/upstream/chipyard_gemmini/sims/verilator/simulator-chipyard.harness-GemminiRocketConfig",
+      "work/results/gemmini_baseline_minimal_v3/verilator_mvin_mvout.log",
+    "work/results/gemmini_baseline_minimal_v3/verilator_matmul_fast.log"
+    ,"work/results/gemmini_baseline_minimal_v3/verilator_matmul_ws_fast.log"
+    ],
+    "details": "First official macro-level Gemmini RTL artifact was emitted at 2026-08-25 03:11:38 +0800 (`gen-collateral/ChipTop.sv`); the cycle-accurate Verilator simulator was linked at 03:17:10 +0800. This is not yet the hetero_npu integrated top or TSMC SRAM-macro implementation."
+  },
+  "official_gemmini_micro_regression": {
+    "status": "PASS_GENERATED_MACUNIT_EXHAUSTIVE",
+    "evidence": [
+      "reports/official_gemmini_micro_regression.json",
+      "work/results/official_gemmini_micro_regression/run.log",
+      "work/upstream/chipyard_gemmini/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral/MacUnit.sv"
+    ],
+    "details": "Pinned official generated MacUnit passed 327,680 exhaustive signed INT8 x INT8 plus five 20-bit accumulator cases. This closes a primitive-level official RTL functional gate, not full Gemmini/RocketTile equivalence."
+  },
+  "official_gemmini_micro_dc": {
+    "status": "PASS_TSMC_PRIMITIVE_TIMING_WRAPPER",
+    "evidence": [
+      "work/results/dc22_tsmc_svt/official_gemmini_macunit/status.txt",
+      "work/results/dc22_tsmc_svt/official_gemmini_macunit/official_gemmini_macunit_timing_wrap.mapped.v",
+      "work/results/dc22_tsmc_svt/official_gemmini_macunit/official_gemmini_macunit_timing_wrap.sdc",
+      "work/results/dc22_tsmc_svt/official_gemmini_macunit/qor.rpt"
+    ],
+    "details": "The pinned generated MacUnit behind a one-stage timing wrapper synthesized with the TSMC CLN22UL SVT .db at 1.0 ns: 0 unmapped cells, WNS=0.000536978 ns, 23 leaf cells. This is primitive-level evidence; no SRAM macro is involved."
+  },
+  "gemmini_rocc_adapter": {
+    "status": "PASS_WRAPPER_ONLY_CONTRACT_AND_TSMC_DC",
+    "evidence": [
+      "work/results/open_rtl/tb_gemmini_rocc_adapter.log",
+      "work/results/dc22_tsmc_svt/gemmini_rocc_adapter/status.txt",
+      "work/results/dc22_tsmc_svt/gemmini_rocc_adapter/gemmini_rocc_command_adapter.mapped.v",
+      "work/results/dc22_tsmc_svt/gemmini_rocc_adapter/gemmini_rocc_command_adapter.sdc"
+    ],
+    "details": "128-bit Matrix GEMM/GEMV/CONV command translation, RoCC response event, illegal command and ready/valid backpressure pass in 6 cycles. TSMC CLN22UL SVT DC at 1.0 ns reports 0 unmapped and WNS=0.0107245 ns. PTW/TileLink/Rocket status context remains external."
+  },
+  "gemmini_rocc_integration": {
+    "status": "PASS_SHELL_WRAPPER_AND_TSMC_DC",
+    "evidence": [
+      "work/results/open_rtl/tb_gemmini_rocc_integration.log",
+      "work/results/dc22_tsmc_svt/gemmini_rocc_integration/status.txt",
+      "work/results/dc22_tsmc_svt/gemmini_rocc_integration/hetero_npu_gemmini_rocc_integration_v0.mapped.v",
+      "work/results/dc22_tsmc_svt/gemmini_rocc_integration/hetero_npu_gemmini_rocc_integration_v0.sdc"
+    ],
+    "details": "The command scoreboard and hetero shell route a Matrix command through the RoCC adapter and a non-Matrix SFU command through the contract path; host events, response and illegal flags pass in 12 cycles. TSMC DC reports 0 unmapped and WNS=0.000330031 ns. Official PTW/TileLink context is still an external boundary."
+  },
+  "cleanroom_integrated_dc": {
+    "status": "PASS_CONTRACT_FLOP_ARRAY_SMOKE",
+    "evidence": [
+      "work/results/dc22_tsmc_svt/hetero_npu_numerical_integration_v0/status.txt",
+      "work/results/dc22_tsmc_svt/hetero_npu_numerical_integration_v0/qor.rpt",
+      "work/results/dc22_tsmc_svt/hetero_npu_numerical_integration_v0/hetero_npu_numerical_integration_v0.mapped.v",
+      "work/results/dc22_tsmc_svt/hetero_npu_numerical_integration_v0/hetero_npu_numerical_integration_v0.sdc"
+    ],
+    "details": "TSMC CLN22UL SVT typical/max .db, 1.0 ns clock, 0 unmapped cells, WNS=9.75132e-05 ns. Macro Count=0 because this is the clean-room flop-array contract, not production SRAM macro integration."
+  },
+  "L5_L6": {
+    "status": "PASS_CONTRACT_LEVEL",
+    "evidence": "reports/l56_contract_validation.json"
+  },
+  "L7_L10": {
+    "status": "PASS_MODEL_LEVEL",
+    "evidence": "reports/l7_l11_model_regression.json"
+  },
+  "L11": {
+    "status": "PARTIAL_CLEANROOM_INTEGRATED_RTL_MODEL_PASS",
+    "evidence": [
+      "reports/l56_contract_validation.json",
+      "reports/l7_l11_model_regression.json",
+      "reports/l11_integrated_rtl_model_regression.json",
+      "work/results/open_rtl/tb_gemmini_rocc_adapter.log",
+      "work/results/open_rtl/tb_gemmini_rocc_integration.log",
+      "work/results/l11_integrated_rtl_model_regression/iverilog_run.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_mvin_mvout.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul_fast.log",
+      "work/results/gemmini_baseline_minimal_v3/verilator_matmul.log"
+    ],
+    "details": "Clean-room integrated Matrix/SFU/KV RTL passes concurrent deterministic ready/valid numerical regression in 20 measured cycles. The same L11 report now includes shell/command-scoreboard to wrapper-only Gemmini RoCC integration in 12 measured cycles. Functional model cases pass q128/q384, decode context4096 and continuous requests with COW. Official Gemmini remains a separate generated/simulated baseline.",
+    "unclosed": "hetero_npu top integration with official Gemmini/AHA/iDMA macros, default-size Gemmini matmul completion, full numerical macro-RTL co-simulation, CNN/LLM all-engine overlap, SRAM macro replacement/linking, and architecture-sweep PPA/cycle evidence"
+  }
+}

@@ -1,0 +1,57 @@
+name: llm_decode_transformer_block
+operations:
+  - id: norm1
+    engine: sfu_cgra
+    opcode: sfu_rmsnorm
+    src0: 200
+    dst: 201
+  - id: weight_prefetch
+    engine: dma
+    opcode: dma_2d
+    src0: 202
+    dst: 203
+  - id: qkv_gemv
+    engine: matrix
+    opcode: matrix_gemv
+    src0: 204
+    src1: 205
+    dst: 206
+    depends_on: [norm1, weight_prefetch]
+  - id: rope
+    engine: sfu_cgra
+    opcode: sfu_rope
+    src0: 207
+    dst: 208
+    depends_on: [qkv_gemv]
+  - id: append
+    engine: kv
+    opcode: kv_append
+    src0: 209
+    dst: 210
+    depends_on: [rope]
+  - id: gather
+    engine: kv
+    opcode: kv_gather
+    src0: 211
+    dst: 212
+    depends_on: [append]
+  - id: qk
+    engine: matrix
+    opcode: matrix_qk
+    src0: 213
+    src1: 214
+    dst: 215
+    depends_on: [rope, gather]
+  - id: softmax
+    engine: sfu_cgra
+    opcode: sfu_softmax
+    src0: 216
+    dst: 217
+    depends_on: [qk]
+  - id: pv
+    engine: matrix
+    opcode: matrix_pv
+    src0: 218
+    src1: 219
+    dst: 220
+    depends_on: [softmax, gather]

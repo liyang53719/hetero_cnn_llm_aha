@@ -1,0 +1,11 @@
+{
+  "artifacts": {
+    "compile_log": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/official_gemmini_micro_regression/compile.log",
+    "run_log": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/official_gemmini_micro_regression/run.log"
+  },
+  "checks": 327680,
+  "dut": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/upstream/chipyard_gemmini/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral/MacUnit.sv",
+  "returncode": 0,
+  "scope": "official generated Gemmini MacUnit exhaustive int8/int8/20-bit accumulator smoke",
+  "status": "PASS"
+}

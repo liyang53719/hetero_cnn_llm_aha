@@ -1,0 +1,126 @@
+{
+  "barrier_descriptors": [
+    {
+      "index": 15728640,
+      "wait_events": [
+        1,
+        2
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "bytes_le_hex": "11010000000100010000000000020000",
+      "dependencies": [],
+      "fields": {
+        "dst": 2,
+        "engine": "DMA",
+        "event_signal": 1,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "DMA_2D",
+        "src0": 1,
+        "src1": 0
+      },
+      "name": "load_ifm",
+      "synthetic": false,
+      "word_hex": "0x00000200000000000100010000000111"
+    },
+    {
+      "bytes_le_hex": "11010000000200030000000000040000",
+      "dependencies": [],
+      "fields": {
+        "dst": 4,
+        "engine": "DMA",
+        "event_signal": 2,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "DMA_2D",
+        "src0": 3,
+        "src1": 0
+      },
+      "name": "load_weight",
+      "synthetic": false,
+      "word_hex": "0x00000400000000000300020000000111"
+    },
+    {
+      "bytes_le_hex": "500000000003000000f0000000000000",
+      "dependencies": [
+        "load_ifm",
+        "load_weight"
+      ],
+      "fields": {
+        "dst": 0,
+        "engine": "CONTROL",
+        "event_signal": 3,
+        "event_wait": 0,
+        "flags": 0,
+        "opcode": "BARRIER",
+        "src0": 15728640,
+        "src1": 0
+      },
+      "name": "__join__conv",
+      "synthetic": true,
+      "word_hex": "0x000000000000f0000000030000000050"
+    },
+    {
+      "bytes_le_hex": "22020003000400050000060000070000",
+      "dependencies": [
+        "load_ifm",
+        "load_weight"
+      ],
+      "fields": {
+        "dst": 7,
+        "engine": "MATRIX",
+        "event_signal": 4,
+        "event_wait": 3,
+        "flags": 0,
+        "opcode": "MATRIX_CONV",
+        "src0": 5,
+        "src1": 6
+      },
+      "name": "conv",
+      "synthetic": false,
+      "word_hex": "0x00000700000600000500040003000222"
+    },
+    {
+      "bytes_le_hex": "35030004000500080000000000090000",
+      "dependencies": [
+        "conv"
+      ],
+      "fields": {
+        "dst": 9,
+        "engine": "SFU_CGRA",
+        "event_signal": 5,
+        "event_wait": 4,
+        "flags": 0,
+        "opcode": "SFU_ACTIVATION",
+        "src0": 8,
+        "src1": 0
+      },
+      "name": "activation_pool",
+      "synthetic": false,
+      "word_hex": "0x00000900000000000800050004000335"
+    },
+    {
+      "bytes_le_hex": "110100050006000a00000000000b0000",
+      "dependencies": [
+        "activation_pool"
+      ],
+      "fields": {
+        "dst": 11,
+        "engine": "DMA",
+        "event_signal": 6,
+        "event_wait": 5,
+        "flags": 0,
+        "opcode": "DMA_2D",
+        "src0": 10,
+        "src1": 0
+      },
+      "name": "store_ofm",
+      "synthetic": false,
+      "word_hex": "0x00000b00000000000a00060005000111"
+    }
+  ],
+  "name": "cnn_conv_activation_pool"
+}

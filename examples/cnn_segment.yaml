@@ -1,0 +1,31 @@
+name: cnn_conv_activation_pool
+operations:
+  - id: load_ifm
+    engine: dma
+    opcode: dma_2d
+    src0: 1
+    dst: 2
+  - id: load_weight
+    engine: dma
+    opcode: dma_2d
+    src0: 3
+    dst: 4
+  - id: conv
+    engine: matrix
+    opcode: matrix_conv
+    src0: 5
+    src1: 6
+    dst: 7
+    depends_on: [load_ifm, load_weight]
+  - id: activation_pool
+    engine: sfu_cgra
+    opcode: sfu_activation
+    src0: 8
+    dst: 9
+    depends_on: [conv]
+  - id: store_ofm
+    engine: dma
+    opcode: dma_2d
+    src0: 10
+    dst: 11
+    depends_on: [activation_pool]

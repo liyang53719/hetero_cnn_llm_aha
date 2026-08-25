@@ -1,0 +1,92 @@
+{
+  "claims": {
+    "continuous_request_functional": true,
+    "decode_context4096_functional": true,
+    "full_official_gemmini_aha_equivalence": false,
+    "q128_prefill_functional": true,
+    "q384_prefill_functional": true
+  },
+  "cycle_accurate": {
+    "measured_cycles": {
+      "numerical_kernel": 20,
+      "rocc_wrapper": 12
+    },
+    "scope": "RTL kernel integration only; not a full-chip performance result",
+    "status": true
+  },
+  "functional": {
+    "model": {
+      "cases": {
+        "continuous_requests": {
+          "cow_source_unchanged": true,
+          "interleaved_steps": 24,
+          "pages_in_use_after_free": 0,
+          "status": "PASS"
+        },
+        "decode_context4096": {
+          "context_tokens": 4096,
+          "decode_tokens_checked": 2,
+          "max_abs_error": 0.0,
+          "pages_in_use": 1025,
+          "read_tokens": 8195,
+          "status": "PASS"
+        },
+        "q128_prefill": {
+          "max_abs_error": 0.0,
+          "mean_abs_error": 0.0,
+          "pages_in_use": 32,
+          "status": "PASS"
+        },
+        "q384_prefill": {
+          "max_abs_error": 0.0,
+          "mean_abs_error": 0.0,
+          "pages_in_use": 96,
+          "status": "PASS"
+        }
+      },
+      "scope": "functional Python model only",
+      "status": "PASS"
+    },
+    "rtl": {
+      "artifacts": {
+        "compile_log": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/l11_integrated_rtl_model_regression/iverilog_compile.log",
+        "run_log": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/l11_integrated_rtl_model_regression/iverilog_run.log"
+      },
+      "backpressure": "deterministic concurrent ready/valid stalls",
+      "cycle_accurate_pass": true,
+      "functional_pass": true,
+      "measured_cycles": 20,
+      "rocc_wrapper": {
+        "artifacts": {
+          "compile_log": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/l11_integrated_rtl_model_regression/rocc_wrapper_compile.log",
+          "run_log": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/l11_integrated_rtl_model_regression/rocc_wrapper_run.log"
+        },
+        "cycle_accurate_pass": true,
+        "functional_pass": true,
+        "measured_cycles": 12,
+        "scope": "hetero shell/command scoreboard to wrapper-only Gemmini RoCC boundary",
+        "status": "PASS"
+      },
+      "scope": "clean-room Matrix/SFU/KV integrated numerical kernel",
+      "status": "PASS",
+      "stdout_tail": [
+        "RTL_MATRIX_RESULT count=4 v0=12 v1=2 v2=2 v3=21",
+        "RTL_SFU_RESULT op=0 l0=6 l1=0 l2=4 l3=5",
+        "RTL_SFU_RESULT op=3 l0=1 l1=2 l2=0 l3=4",
+        "RTL_SFU_RESULT op=5 l0=4 l1=0 l2=0 l3=0",
+        "RTL_KV_RESULT op=1 status=0 length=5 k=0000000000000104 v=0000000000000204",
+        "RTL_KV_RESULT op=3 status=0 length=0 k=0000000000000000 v=0000000000000000",
+        "RTL_NUMERICAL_INTEGRATION_PASS cycles=20"
+      ]
+    }
+  },
+  "performance_estimate": {
+    "reason": "no full-chip measured workload",
+    "status": "NOT_CLAIMED"
+  },
+  "rtl_measured_performance": {
+    "cycles": 20,
+    "status": "PARTIAL"
+  },
+  "status": "PASS"
+}

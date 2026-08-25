@@ -1,0 +1,44 @@
+schema_version: 1
+word_bits: 128
+byte_order: little
+fields:
+  opcode:       {lsb: 0,   width: 8}
+  engine:       {lsb: 8,   width: 3}
+  flags:        {lsb: 11,  width: 13}
+  event_wait:   {lsb: 24,  width: 16}
+  event_signal: {lsb: 40,  width: 16}
+  src0:         {lsb: 56,  width: 24}
+  src1:         {lsb: 80,  width: 24}
+  dst:          {lsb: 104, width: 24}
+engines:
+  0: control
+  1: dma
+  2: matrix
+  3: sfu_cgra
+  4: kv
+  5: collective
+opcodes:
+  0x00: nop
+  0x10: dma_1d
+  0x11: dma_2d
+  0x20: matrix_gemm
+  0x21: matrix_gemv
+  0x22: matrix_conv
+  0x23: matrix_qk
+  0x24: matrix_pv
+  0x30: sfu_vector
+  0x31: sfu_reduce
+  0x32: sfu_rmsnorm
+  0x33: sfu_softmax
+  0x34: sfu_rope
+  0x35: sfu_activation
+  0x40: kv_alloc
+  0x41: kv_append
+  0x42: kv_gather
+  0x43: kv_share_prefix
+  0x44: kv_free
+  0x50: barrier
+notes:
+  - "The 24-bit src/dst fields address descriptor records, not raw DRAM bytes."
+  - "Shape, strides, datatype, scales and page-table metadata live in typed descriptors."
+  - "This keeps the command fixed at 128 bits while supporting CNN and LLM shapes."

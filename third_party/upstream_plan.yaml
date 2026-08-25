@@ -1,0 +1,68 @@
+version: 1
+policy: reproduce unchanged first; adapt through wrappers second; edit upstream only
+  after baseline gates pass
+repositories:
+  chipyard:
+    url: https://github.com/ucb-bar/chipyard.git
+    ref: main
+    role: official full-system harness used to reproduce the pinned Gemmini submodule,
+      RISC-V software, Spike and Verilator
+    reproduce:
+    - build_setup
+    - gemmini_software
+    - spike_tests
+    - verilator_tests
+    - generated_rtl
+  aha:
+    url: https://github.com/StanfordAHA/aha.git
+    ref: master
+    role: pinned umbrella environment for Garnet/Lake/Canal/Peak
+    reproduce:
+    - generate_4x2_rtl
+    - gaussian_map_pnr_test
+    known_submodule_snapshot_from_2026_08_24:
+      garnet: 6a8520c
+      lake: 66833db
+      canal: 4e6f931
+      peak: 7846f13
+      archipelago: db8a1a1
+  gemmini:
+    url: https://github.com/ucb-bar/gemmini.git
+    ref: master
+    role: matrix engine, scratchpad, accumulator, DMA/queue and CNN software baseline
+    reproduce:
+    - mvin_mvout
+    - matmul
+    - conv
+    - resnet50_functional
+  imax3_llm:
+    url: https://github.com/Takuto-Ando/IMAX3-LLM.git
+    ref: main
+    role: llama.cpp offload and quantized CGLA kernel mapping reference; not treated
+      as a complete RTL source
+    reproduce:
+    - host_build_or_source_audit
+    - kernel_inventory
+  idma:
+    url: https://github.com/pulp-platform/iDMA.git
+    ref: master
+    role: reusable AXI data movement backend for KV and shared L2
+    reproduce:
+    - source_elaboration
+    - lint
+    - simple_1d_transfer
+  pulp_axi:
+    url: https://github.com/pulp-platform/axi.git
+    ref: master
+    role: reusable AXI adapters, FIFOs and crossbar components
+  common_cells:
+    url: https://github.com/pulp-platform/common_cells.git
+    ref: master
+    role: reusable CDC/FIFO/stream primitives
+  vllm:
+    url: https://github.com/vllm-project/vllm.git
+    ref: main
+    role: executable software reference for block tables, slot mapping, prefix sharing
+      and paged attention
+license_rule: Do not copy third-party source into this delivery. Clone locally, preserve
+  licenses, and keep adapters/patches separate.

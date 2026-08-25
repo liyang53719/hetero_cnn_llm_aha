@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+TOOLROOT="$ROOT/work/toolchain/apt-riscv"
+exec "$TOOLROOT/usr/bin/riscv64-unknown-elf-gcc" \
+  -B"$TOOLROOT/usr/lib/riscv64-unknown-elf/bin" \
+  -isystem "$TOOLROOT/usr/lib/picolibc/riscv64-unknown-elf/include" \
+  -L"$TOOLROOT/usr/lib/picolibc/riscv64-unknown-elf/lib/rv64imafdc/lp64d" \
+  "$@"

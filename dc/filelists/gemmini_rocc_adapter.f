@@ -1,0 +1,1 @@
+rtl/integration/gemmini_rocc_command_adapter.sv

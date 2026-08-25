@@ -1,0 +1,379 @@
+{
+  "claims": {
+    "full_numerical_macro_rtl_cosimulation": false,
+    "model_level": true,
+    "official_gemmini_aha_equivalence": false
+  },
+  "l10_advanced_kv": {
+    "commands": 100000,
+    "cow_checks": 13132,
+    "free_pages_after_free": 32768,
+    "frees": 7934,
+    "pages_in_use_after_free": 0,
+    "reads": 7888,
+    "shares": 8936,
+    "status": "PASS"
+  },
+  "l11_integrated_trace": {
+    "scope": "command/event integrated trace; numerical macro RTL remains separate",
+    "segments": {
+      "cnn": {
+        "commands": 6,
+        "events": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "trace": [
+          {
+            "engine": "DMA",
+            "offset": 0,
+            "opcode": "DMA_2D",
+            "signal": 1,
+            "wait": 0
+          },
+          {
+            "engine": "DMA",
+            "offset": 16,
+            "opcode": "DMA_2D",
+            "signal": 2,
+            "wait": 0
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 32,
+            "opcode": "BARRIER",
+            "signal": 3,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 48,
+            "opcode": "MATRIX_CONV",
+            "signal": 4,
+            "wait": 3
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 64,
+            "opcode": "SFU_ACTIVATION",
+            "signal": 5,
+            "wait": 4
+          },
+          {
+            "engine": "DMA",
+            "offset": 80,
+            "opcode": "DMA_2D",
+            "signal": 6,
+            "wait": 5
+          }
+        ]
+      },
+      "llm_decode": {
+        "commands": 12,
+        "events": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trace": [
+          {
+            "engine": "SFU_CGRA",
+            "offset": 0,
+            "opcode": "SFU_RMSNORM",
+            "signal": 1,
+            "wait": 0
+          },
+          {
+            "engine": "DMA",
+            "offset": 16,
+            "opcode": "DMA_2D",
+            "signal": 2,
+            "wait": 0
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 32,
+            "opcode": "BARRIER",
+            "signal": 3,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 48,
+            "opcode": "MATRIX_GEMV",
+            "signal": 4,
+            "wait": 3
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 64,
+            "opcode": "SFU_ROPE",
+            "signal": 5,
+            "wait": 4
+          },
+          {
+            "engine": "KV",
+            "offset": 80,
+            "opcode": "KV_APPEND",
+            "signal": 6,
+            "wait": 5
+          },
+          {
+            "engine": "KV",
+            "offset": 96,
+            "opcode": "KV_GATHER",
+            "signal": 7,
+            "wait": 6
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 112,
+            "opcode": "BARRIER",
+            "signal": 8,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 128,
+            "opcode": "MATRIX_QK",
+            "signal": 9,
+            "wait": 8
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 144,
+            "opcode": "SFU_SOFTMAX",
+            "signal": 10,
+            "wait": 9
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 160,
+            "opcode": "BARRIER",
+            "signal": 11,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 176,
+            "opcode": "MATRIX_PV",
+            "signal": 12,
+            "wait": 11
+          }
+        ]
+      },
+      "llm_prefill": {
+        "commands": 17,
+        "events": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "trace": [
+          {
+            "engine": "SFU_CGRA",
+            "offset": 0,
+            "opcode": "SFU_RMSNORM",
+            "signal": 1,
+            "wait": 0
+          },
+          {
+            "engine": "DMA",
+            "offset": 16,
+            "opcode": "DMA_2D",
+            "signal": 2,
+            "wait": 0
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 32,
+            "opcode": "BARRIER",
+            "signal": 3,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 48,
+            "opcode": "MATRIX_GEMM",
+            "signal": 4,
+            "wait": 3
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 64,
+            "opcode": "SFU_ROPE",
+            "signal": 5,
+            "wait": 4
+          },
+          {
+            "engine": "KV",
+            "offset": 80,
+            "opcode": "KV_APPEND",
+            "signal": 6,
+            "wait": 5
+          },
+          {
+            "engine": "KV",
+            "offset": 96,
+            "opcode": "KV_GATHER",
+            "signal": 7,
+            "wait": 6
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 112,
+            "opcode": "BARRIER",
+            "signal": 8,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 128,
+            "opcode": "MATRIX_QK",
+            "signal": 9,
+            "wait": 8
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 144,
+            "opcode": "SFU_SOFTMAX",
+            "signal": 10,
+            "wait": 9
+          },
+          {
+            "engine": "CONTROL",
+            "offset": 160,
+            "opcode": "BARRIER",
+            "signal": 11,
+            "wait": 0
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 176,
+            "opcode": "MATRIX_PV",
+            "signal": 12,
+            "wait": 11
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 192,
+            "opcode": "MATRIX_GEMM",
+            "signal": 13,
+            "wait": 12
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 208,
+            "opcode": "SFU_RMSNORM",
+            "signal": 14,
+            "wait": 13
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 224,
+            "opcode": "MATRIX_GEMM",
+            "signal": 15,
+            "wait": 14
+          },
+          {
+            "engine": "SFU_CGRA",
+            "offset": 240,
+            "opcode": "SFU_ACTIVATION",
+            "signal": 16,
+            "wait": 15
+          },
+          {
+            "engine": "MATRIX",
+            "offset": 256,
+            "opcode": "MATRIX_GEMM",
+            "signal": 17,
+            "wait": 16
+          }
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  "l7_cnn": {
+    "matrix_stats": {
+      "input_bytes": 3192,
+      "invocations": 3,
+      "macs": 14448,
+      "output_bytes": 2352,
+      "weight_bytes": 344
+    },
+    "operator_max_abs_error": {
+      "conv1x1": 0,
+      "conv3x3": 0,
+      "depthwise_block_diagonal": 0,
+      "pool_relu": true
+    },
+    "status": "PASS",
+    "toy_cnn_max_abs_error": 0
+  },
+  "l8_l9_llm_quant": {
+    "llm_bf16": {
+      "bf16_tokens_128": {
+        "max_abs_error": 0.0,
+        "mean_abs_error": 0.0,
+        "pages_in_use": 32
+      },
+      "bf16_tokens_384": {
+        "max_abs_error": 0.0,
+        "mean_abs_error": 0.0,
+        "pages_in_use": 96
+      },
+      "bf16_tokens_7": {
+        "max_abs_error": 0.0,
+        "mean_abs_error": 0.0,
+        "pages_in_use": 2
+      }
+    },
+    "llm_int8_kv": {
+      "max_abs_error": 0.015625,
+      "mean_abs_error": 0.0012719035148620605
+    },
+    "native_w4_nibble_roundtrip": true,
+    "status": "PASS",
+    "w4_storage": {
+      "dense_weight_bytes": 5320,
+      "output_shape": [
+        8,
+        19
+      ],
+      "packed_weight_bytes": 1368,
+      "w8_output_shape": [
+        8,
+        19
+      ]
+    }
+  },
+  "status": "PASS"
+}

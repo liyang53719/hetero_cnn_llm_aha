@@ -1,0 +1,33 @@
+# Local build products and third-party sources
+work/
+artifacts/
+alib-*/
+*.pvl
+*.syn
+*.svf
+*.mr
+*.log
+command.log
+MANIFEST.sha256
+cksum_dir/
+
+# Local PDK, SRAM compiler output, model weights, and runtime caches
+pdks/
+memory_compiler_output/
+models/
+*.db
+*.ddc
+*.mapped.v
+*.saif
+*.vcd
+*.fst
+
+# Python and editor state
+.pytest_cache/
+__pycache__/
+*.py[cod]
+.venv/
+
+# Keep the concise execution contract, not generated evidence blobs
+reports/execution/preflight.json
+reports/execution/cleanup-*.json

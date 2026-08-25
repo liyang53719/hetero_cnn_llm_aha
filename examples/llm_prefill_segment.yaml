@@ -1,0 +1,94 @@
+name: llm_prefill_transformer_block
+operations:
+  - id: norm1
+    engine: sfu_cgra
+    opcode: sfu_rmsnorm
+    src0: 100
+    src1: 101
+    dst: 102
+  - id: qkv_weight_load
+    engine: dma
+    opcode: dma_2d
+    src0: 103
+    dst: 104
+  - id: qkv_projection
+    engine: matrix
+    opcode: matrix_gemm
+    src0: 105
+    src1: 106
+    dst: 107
+    depends_on: [norm1, qkv_weight_load]
+  - id: rope
+    engine: sfu_cgra
+    opcode: sfu_rope
+    src0: 108
+    dst: 109
+    depends_on: [qkv_projection]
+  - id: kv_append
+    engine: kv
+    opcode: kv_append
+    src0: 110
+    src1: 111
+    dst: 112
+    depends_on: [rope]
+  - id: kv_gather
+    engine: kv
+    opcode: kv_gather
+    src0: 113
+    dst: 114
+    depends_on: [kv_append]
+  - id: qk
+    engine: matrix
+    opcode: matrix_qk
+    src0: 115
+    src1: 116
+    dst: 117
+    depends_on: [rope, kv_gather]
+  - id: online_softmax
+    engine: sfu_cgra
+    opcode: sfu_softmax
+    src0: 118
+    dst: 119
+    depends_on: [qk]
+  - id: pv
+    engine: matrix
+    opcode: matrix_pv
+    src0: 120
+    src1: 121
+    dst: 122
+    depends_on: [online_softmax, kv_gather]
+  - id: o_projection
+    engine: matrix
+    opcode: matrix_gemm
+    src0: 123
+    src1: 124
+    dst: 125
+    depends_on: [pv]
+  - id: norm2
+    engine: sfu_cgra
+    opcode: sfu_rmsnorm
+    src0: 126
+    src1: 127
+    dst: 128
+    depends_on: [o_projection]
+  - id: gate_up
+    engine: matrix
+    opcode: matrix_gemm
+    src0: 129
+    src1: 130
+    dst: 131
+    depends_on: [norm2]
+  - id: silu_mul
+    engine: sfu_cgra
+    opcode: sfu_activation
+    src0: 132
+    src1: 133
+    dst: 134
+    depends_on: [gate_up]
+  - id: down_projection
+    engine: matrix
+    opcode: matrix_gemm
+    src0: 135
+    src1: 136
+    dst: 137
+    depends_on: [silu_mul]

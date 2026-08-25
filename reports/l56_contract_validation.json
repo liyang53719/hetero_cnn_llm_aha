@@ -1,0 +1,16 @@
+{
+  "artifacts": {
+    "integrated_v0": "work/results/open_rtl/tb_integrated_v0.log",
+    "shared_l2": "work/results/open_rtl/tb_shared_l2.log",
+    "shell": "work/results/open_rtl/tb_shell.log"
+  },
+  "checks": {
+    "integrated_event_wait_signal": true,
+    "required_logs_present": true,
+    "shared_l2_random_transactions_gte_10000": true,
+    "shell_dispatch_event_smoke": true
+  },
+  "scope": "L5/L6 contract integration; official Gemmini/AHA macro equivalence remains a separate gate",
+  "shared_l2_transactions": 10000,
+  "status": "PASS"
+}

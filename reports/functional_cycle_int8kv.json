@@ -1,0 +1,449 @@
+{
+  "architecture": "hetero_cnn_llm_v0",
+  "clock_hz": 1000000000,
+  "cycle_model": {
+    "cnn_layer": {
+      "cycles": 117674,
+      "engine_busy_cycles": {
+        "dma": 50444,
+        "matrix": 66444,
+        "sfu": 786
+      },
+      "engine_utilization": {
+        "dma": 0.4286758332341894,
+        "matrix": 0.5646446963645325,
+        "sfu": 0.006679470401278107
+      },
+      "latency_us": 117.67399999999999,
+      "tasks": [
+        {
+          "bytes": 1843200,
+          "cycles": 35134,
+          "end": 35134,
+          "engine": "dma",
+          "macs": 0,
+          "name": "resnet_stage.load",
+          "start": 0
+        },
+        {
+          "bytes": 0,
+          "cycles": 66444,
+          "end": 101578,
+          "engine": "matrix",
+          "macs": 115605504,
+          "name": "resnet_stage.matrix",
+          "start": 35134
+        },
+        {
+          "bytes": 0,
+          "cycles": 786,
+          "end": 102364,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "resnet_stage.activation",
+          "start": 101578
+        },
+        {
+          "bytes": 802816,
+          "cycles": 15310,
+          "end": 117674,
+          "engine": "dma",
+          "macs": 0,
+          "name": "resnet_stage.store",
+          "start": 102364
+        }
+      ]
+    },
+    "llm_decode_block_context4096": {
+      "cycles": 686528,
+      "engine_busy_cycles": {
+        "dma": 223028,
+        "kv": 37795,
+        "matrix": 425404,
+        "sfu": 325
+      },
+      "engine_utilization": {
+        "dma": 0.32486366178801157,
+        "kv": 0.05505237950964855,
+        "matrix": 0.61964552064883,
+        "sfu": 0.0004733965694043069
+      },
+      "latency_us": 686.528,
+      "tasks": [
+        {
+          "bytes": 6881280,
+          "cycles": 65573,
+          "end": 65573,
+          "engine": "dma",
+          "macs": 0,
+          "name": "mlp.down.load",
+          "start": 0
+        },
+        {
+          "bytes": 0,
+          "cycles": 24,
+          "end": 24,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "norm1",
+          "start": 0
+        },
+        {
+          "bytes": 13762560,
+          "cycles": 131134,
+          "end": 196707,
+          "engine": "dma",
+          "macs": 0,
+          "name": "mlp.gu.load",
+          "start": 65573
+        },
+        {
+          "bytes": 1179648,
+          "cycles": 11252,
+          "end": 207959,
+          "engine": "dma",
+          "macs": 0,
+          "name": "oproj.load",
+          "start": 196707
+        },
+        {
+          "bytes": 1572864,
+          "cycles": 14998,
+          "end": 222957,
+          "engine": "dma",
+          "macs": 0,
+          "name": "qkv.load",
+          "start": 207959
+        },
+        {
+          "bytes": 0,
+          "cycles": 27840,
+          "end": 250797,
+          "engine": "matrix",
+          "macs": 3145728,
+          "name": "qkv.matrix",
+          "start": 222957
+        },
+        {
+          "bytes": 0,
+          "cycles": 14,
+          "end": 250811,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "rope",
+          "start": 250797
+        },
+        {
+          "bytes": 0,
+          "cycles": 28,
+          "end": 250839,
+          "engine": "kv",
+          "macs": 0,
+          "name": "kv.append",
+          "start": 250811
+        },
+        {
+          "bytes": 0,
+          "cycles": 37767,
+          "end": 288606,
+          "engine": "kv",
+          "macs": 0,
+          "name": "kv.gather",
+          "start": 250839
+        },
+        {
+          "bytes": 0,
+          "cycles": 14720,
+          "end": 303326,
+          "engine": "matrix",
+          "macs": 6291456,
+          "name": "qk.matrix",
+          "start": 288606
+        },
+        {
+          "bytes": 0,
+          "cycles": 216,
+          "end": 303542,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "softmax",
+          "start": 303326
+        },
+        {
+          "bytes": 0,
+          "cycles": 8396,
+          "end": 311938,
+          "engine": "matrix",
+          "macs": 6291456,
+          "name": "pv.matrix",
+          "start": 303542
+        },
+        {
+          "bytes": 0,
+          "cycles": 20880,
+          "end": 332818,
+          "engine": "matrix",
+          "macs": 2359296,
+          "name": "oproj.matrix",
+          "start": 311938
+        },
+        {
+          "bytes": 0,
+          "cycles": 24,
+          "end": 332842,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "norm2",
+          "start": 332818
+        },
+        {
+          "bytes": 0,
+          "cycles": 243600,
+          "end": 576442,
+          "engine": "matrix",
+          "macs": 27525120,
+          "name": "mlp.gu.matrix",
+          "start": 332842
+        },
+        {
+          "bytes": 0,
+          "cycles": 47,
+          "end": 576489,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "mlp.silu",
+          "start": 576442
+        },
+        {
+          "bytes": 0,
+          "cycles": 109968,
+          "end": 686457,
+          "engine": "matrix",
+          "macs": 13762560,
+          "name": "mlp.down.matrix",
+          "start": 576489
+        },
+        {
+          "bytes": 3072,
+          "cycles": 71,
+          "end": 686528,
+          "engine": "dma",
+          "macs": 0,
+          "name": "block.store",
+          "start": 686457
+        }
+      ]
+    },
+    "llm_prefill_block": {
+      "cycles": 5443726,
+      "engine_busy_cycles": {
+        "dma": 245448,
+        "kv": 7112,
+        "matrix": 5166144,
+        "sfu": 27344
+      },
+      "engine_utilization": {
+        "dma": 0.04508823552103835,
+        "kv": 0.0013064581134318663,
+        "matrix": 0.9490088222662199,
+        "sfu": 0.005023030181901146
+      },
+      "latency_us": 5443.726000000001,
+      "tasks": [
+        {
+          "bytes": 6881280,
+          "cycles": 65573,
+          "end": 65573,
+          "engine": "dma",
+          "macs": 0,
+          "name": "mlp.down.load",
+          "start": 0
+        },
+        {
+          "bytes": 0,
+          "cycles": 2322,
+          "end": 2322,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "norm1",
+          "start": 0
+        },
+        {
+          "bytes": 13762560,
+          "cycles": 131134,
+          "end": 196707,
+          "engine": "dma",
+          "macs": 0,
+          "name": "mlp.gu.load",
+          "start": 65573
+        },
+        {
+          "bytes": 1179648,
+          "cycles": 11252,
+          "end": 207959,
+          "engine": "dma",
+          "macs": 0,
+          "name": "oproj.load",
+          "start": 196707
+        },
+        {
+          "bytes": 1572864,
+          "cycles": 14998,
+          "end": 222957,
+          "engine": "dma",
+          "macs": 0,
+          "name": "qkv.load",
+          "start": 207959
+        },
+        {
+          "bytes": 0,
+          "cycles": 334080,
+          "end": 557037,
+          "engine": "matrix",
+          "macs": 1207959552,
+          "name": "qkv.matrix",
+          "start": 222957
+        },
+        {
+          "bytes": 0,
+          "cycles": 2312,
+          "end": 559349,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "rope",
+          "start": 557037
+        },
+        {
+          "bytes": 0,
+          "cycles": 3555,
+          "end": 562904,
+          "engine": "kv",
+          "macs": 0,
+          "name": "kv.append",
+          "start": 559349
+        },
+        {
+          "bytes": 0,
+          "cycles": 3557,
+          "end": 566461,
+          "engine": "kv",
+          "macs": 0,
+          "name": "kv.gather",
+          "start": 562904
+        },
+        {
+          "bytes": 0,
+          "cycles": 198720,
+          "end": 765181,
+          "engine": "matrix",
+          "macs": 226492416,
+          "name": "qk.matrix",
+          "start": 566461
+        },
+        {
+          "bytes": 0,
+          "cycles": 6936,
+          "end": 772117,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "softmax",
+          "start": 765181
+        },
+        {
+          "bytes": 0,
+          "cycles": 139968,
+          "end": 912085,
+          "engine": "matrix",
+          "macs": 226492416,
+          "name": "pv.matrix",
+          "start": 772117
+        },
+        {
+          "bytes": 0,
+          "cycles": 250560,
+          "end": 1162645,
+          "engine": "matrix",
+          "macs": 905969664,
+          "name": "oproj.matrix",
+          "start": 912085
+        },
+        {
+          "bytes": 0,
+          "cycles": 2322,
+          "end": 1164967,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "norm2",
+          "start": 1162645
+        },
+        {
+          "bytes": 0,
+          "cycles": 2923200,
+          "end": 4088167,
+          "engine": "matrix",
+          "macs": 10569646080,
+          "name": "mlp.gu.matrix",
+          "start": 1164967
+        },
+        {
+          "bytes": 0,
+          "cycles": 13452,
+          "end": 4101619,
+          "engine": "sfu",
+          "macs": 0,
+          "name": "mlp.silu",
+          "start": 4088167
+        },
+        {
+          "bytes": 0,
+          "cycles": 1319616,
+          "end": 5421235,
+          "engine": "matrix",
+          "macs": 5284823040,
+          "name": "mlp.down.matrix",
+          "start": 4101619
+        },
+        {
+          "bytes": 1179648,
+          "cycles": 22491,
+          "end": 5443726,
+          "engine": "dma",
+          "macs": 0,
+          "name": "block.store",
+          "start": 5421235
+        }
+      ]
+    }
+  },
+  "functional": {
+    "cnn": {
+      "matrix_stats": {
+        "input_bytes": 2432,
+        "invocations": 2,
+        "macs": 19200,
+        "output_bytes": 2432,
+        "weight_bytes": 336
+      },
+      "max_abs_error": 0
+    },
+    "llm": {
+      "kv_stats": {
+        "allocations": 2,
+        "cow_copies": 0,
+        "free_pages": 30,
+        "pages_in_use": 2,
+        "read_tokens": 21,
+        "written_tokens": 6
+      },
+      "matrix_stats": {
+        "input_bytes": 1536,
+        "invocations": 7,
+        "macs": 13824,
+        "output_bytes": 3072,
+        "weight_bytes": 4608
+      },
+      "max_abs_error": 0.0078125,
+      "mean_abs_error": 0.0021750133018940687
+    }
+  }
+}

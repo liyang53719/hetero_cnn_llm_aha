@@ -2,14 +2,22 @@
 set -euo pipefail
 
 CHIPYARD_ROOT=${CHIPYARD_ROOT:?set CHIPYARD_ROOT to the cloned Chipyard directory}
+PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
 OUT=${OUT:-"$PWD/work/results/gemmini_baseline"}
 CONFIG=${GEMMINI_CONFIG:-GemminiRocketConfig}
 RUN_SETUP=${RUN_SETUP:-0}
 SPIKE_BIN=${SPIKE_BIN:-spike}
 SPIKE_LIB_DIR=${SPIKE_LIB_DIR:-}
 GEMMINI_CNN_ARGS=${GEMMINI_CNN_ARGS:-os}
+GEMMINI_LOADMEM=${GEMMINI_LOADMEM:-1}
 mkdir -p "$OUT"
 exec > >(tee "$OUT/reproduce.log") 2>&1
+
+[[ "$GEMMINI_LOADMEM" == 1 ]] || {
+  echo "GEMMINI_LOADMEM must remain 1 for the pinned full WS bare-metal path" >&2
+  exit 2
+}
+export PATH="$PROJECT_ROOT/work/toolchain/conda/bin:$PROJECT_ROOT/work/toolchain/riscv/bin:$PATH"
 
 run_spike() {
   if [[ -n "$SPIKE_LIB_DIR" ]]; then
@@ -50,14 +58,16 @@ make -C "$GEMMINI_ROOT/software/libgemmini" install
 )
 
 MVIN=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'mvin_mvout-baremetal' | head -n1)
-MATMUL=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'matmul_os-baremetal' | head -n1)
+MATMUL_OS=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'matmul_os-baremetal' | head -n1)
+MATMUL_WS=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'matmul_ws-baremetal' | head -n1)
 RESNET=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'resnet50-baremetal' | head -n1)
 test -n "$MVIN"
-test -n "$MATMUL"
+test -n "$MATMUL_OS"
+test -n "$MATMUL_WS"
 
 if command -v "$SPIKE_BIN" >/dev/null 2>&1; then
   run_spike "$MVIN" | tee "$OUT/spike_mvin.log"
-  run_spike "$MATMUL" | tee "$OUT/spike_matmul.log"
+  run_spike "$MATMUL_OS" | tee "$OUT/spike_matmul_os.log"
   if [[ -n "$RESNET" ]]; then
     read -r -a cnn_args <<< "$GEMMINI_CNN_ARGS"
     run_spike "$RESNET" "${cnn_args[@]}" | tee "$OUT/spike_resnet50.log"
@@ -70,8 +80,9 @@ fi
 (
   cd "$CHIPYARD_ROOT/sims/verilator"
   make CONFIG="$CONFIG"
-  make CONFIG="$CONFIG" run-binary BINARY="$MVIN" | tee "$OUT/verilator_mvin.log"
-  make CONFIG="$CONFIG" run-binary BINARY="$MATMUL" | tee "$OUT/verilator_matmul.log"
+  make CONFIG="$CONFIG" LOADMEM="$GEMMINI_LOADMEM" run-binary BINARY="$MVIN" | tee "$OUT/verilator_mvin.log"
+  make CONFIG="$CONFIG" LOADMEM="$GEMMINI_LOADMEM" run-binary BINARY="$MATMUL_OS" | tee "$OUT/verilator_matmul_os.log"
+  make CONFIG="$CONFIG" LOADMEM="$GEMMINI_LOADMEM" run-binary BINARY="$MATMUL_WS" | tee "$OUT/verilator_matmul_ws.log"
 )
 
 GEN_DIR="$CHIPYARD_ROOT/sims/verilator/generated-src"
@@ -81,7 +92,7 @@ find "$GEN_DIR" -type f \( -name '*.v' -o -name '*.sv' \) -print0 \
 python3 - "$OUT" <<'PY'
 import json, pathlib, sys
 out=pathlib.Path(sys.argv[1])
-required=["spike_mvin.log","spike_matmul.log","verilator_mvin.log","verilator_matmul.log","generated_rtl.sha256"]
+required=["spike_mvin.log","spike_matmul_os.log","verilator_mvin.log","verilator_matmul_os.log","verilator_matmul_ws.log","generated_rtl.sha256"]
 missing=[x for x in required if not (out/x).exists() or (out/x).stat().st_size == 0]
 status={"status":"PASS" if not missing else "FAIL","missing":missing}
 (out/"result.json").write_text(json.dumps(status,indent=2)+"\n")

@@ -18,8 +18,10 @@ Completed:
 - AHA 4x16 formal Verilator closure now passes with source-locked Verilator 5.028, GCC10 C++20 coroutine support, and the pinned image source. The full Gaussian Vtop run reports `PASSED`, and the final output comparison is integer bit-accurate; see `work/results/l1_aha_verilator_5028_cxx10_makeflags/result.json` and `reports/execution/aha_verilator_result_audit.json`.
 - The WS timeout is now localized before firmware execution: a 1M-cycle standard-runner trace executes 14 boot instructions then remains at boot ROM `wfi`; an mvin control run reaches 22,343 commits and PASSes in the same simulator. See `L1_GEMMINI_WS_BOOT_AUDIT.md`; no cycle-budget expansion is permitted.
 
-Open L1 gates:
+- Native `LOADMEM=1` releases the same canonical WS ELF from boot ROM, producing 301,775 commits in a 1M-cycle trace. The one allowed 20M-cycle-cap attempt reaches `$finish` at 10 ms (590.269 s wall), with no mismatch or timeout. This is a provenance-backed WS PASS.
 
-- Canonical N=2 Gemmini WS boot-handoff repair. The fixed 10M-cycle attempt has no firmware progress counter because it never leaves boot ROM WFI; policy prohibits increasing its budget. The combined default workload's historical 20M timeout remains a failure.
+Closeout:
+
+- L1 is PASS. See `L1_UPSTREAM_CLOSEOUT.md`.
 
 The Gemmini documentation explicitly notes that large DNN binaries are not practical for Verilator/VCS. The CNN functional baseline is therefore a Spike gate; RTL evidence is retained for mvin/mvout and matmul.

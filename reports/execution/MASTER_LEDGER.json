@@ -2,7 +2,7 @@
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "L1_upstream_reproduction",
+  "current_phase": "L2_wrapper_only_macro_integration",
   "stages": {
     "L0": {
       "status": "PASS",
@@ -14,7 +14,7 @@
       "summary": "27 Python tests, C++ reference, RTL contract tests, and five 1.0 ns CLN22UL contract tops passed with zero unmapped cells."
     },
     "L1": {
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "depends_on": ["L0"],
       "evidence": ["reports/execution/upstream_closure.json"],
       "completed_subgates": [
@@ -25,9 +25,7 @@
         "AHA 4x16 generated RTL, Gaussian map/PnR, bitstream and VCS numerical test",
         "AHA 4x16 generated RTL, Gaussian map/PnR, bitstream and upstream-required Verilator 5.028 numerical test"
       ],
-      "remaining_gates": [
-        "Gemmini canonical N=2 weight-stationary Verilator workload closure; fresh 10M-cycle evidence timed out and the old 20M PASS log lacks command/binary provenance"
-      ]
+      "remaining_gates": []
     },
     "L2": {"status": "PENDING", "depends_on": ["L1"]},
     "L3": {"status": "PENDING", "depends_on": ["L2"]},
@@ -41,7 +39,6 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "Gemmini canonical N=2 matmul_ws-baremetal stalls at boot ROM WFI after 14 commits and never reaches firmware, while an mvin control binary reaches 22,343 commits and passes. This is not a running workload, so the timeout policy forbids budget expansion; see reports/execution/L1_GEMMINI_WS_BOOT_AUDIT.md.",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

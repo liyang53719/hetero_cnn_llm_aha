@@ -1,6 +1,6 @@
 {
-  "phase": "L1_AHA_VERILATOR_CLOSURE",
-  "command": "taskset -c 8-25 sg docker -c 'docker pull verilator/verilator:v5.028'",
-  "success_condition": "The immutable v5.028 image is fully present locally; record its amd64 digest, then re-run scripts/reproduce_aha.sh with AHA_TOOL=VERILATOR and require result.json status PASS.",
-  "failure_policy": "Retry this exact pull at most three times per network incident. Keep the completed VCS result as equivalent evidence only; do not mark the Verilator gate or canonical L1 PASS."
+  "phase": "L1_AHA_VERILATOR_5028_RESULT",
+  "command": "jq . work/results/l1_aha_verilator_5028_cxx10_makeflags/result.json",
+  "success_condition": "The completed run reports status PASS, includes all four required artifacts, and gaussian_test.log contains the bit-accurate output comparison. Then update the L1 ledger; do not infer PASS from compilation alone.",
+  "failure_policy": "Read only the first root-cause slice from gaussian_test.log or docker.log. Do not alter AHA source, workload, width/height, numerical check, or timeout policy."
 }

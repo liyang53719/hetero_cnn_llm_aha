@@ -42,7 +42,7 @@
   },
   "known_blockers": [
     "Gemmini canonical N=2 matmul_ws-baremetal timed out at its unchanged 10,000,001-cycle TestDriver limit without mismatch. No progress counter was captured, so the timeout policy forbids a further budget increase; see reports/execution/L1_GEMMINI_WS_AUDIT.md.",
-    "The Docker daemon can now pull small images, but three attempts to pull the 446 MB official verilator/verilator:v5.028 image reached EOF through the configured proxy. Verilator 5.050 rejects the upstream program/interface testbench declaration. AHA has passed an equivalent VCS run but strict Verilator closure remains open.",
+    "AHA strict Verilator closure requires the completed result from the source-locked, ABI-compatible v5.028 toolchain. Host Verilator 5.050 rejects the upstream program/interface testbench declaration; the v5.028 Docker Hub image pull is no longer a required dependency. See reports/execution/AHA_VERILATOR_5028_TOOLCHAIN.md.",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "phase": "L2_AHA_PROC_PACKET_WRITER",
-  "command": "taskset -c 8-25 iverilog -g2012 -s tb_aha_garnet_axi_config_loader -o work/results/l2_aha_axi_loader.vvp rtl/integration/aha_garnet_axi_config_loader.sv tb/tb_aha_garnet_axi_config_loader.sv && taskset -c 8-25 vvp work/results/l2_aha_axi_loader.vvp",
-  "success_condition": "The AXI loader preserves official AW-to-W-to-B ordering under backpressure and reports a non-OKAY response; only then add the separate 512-bit-to-proc-packet writer.",
-  "failure_policy": "If AXI ordering fails, compare the first divergent phase with upstream axil_driver.sv; do not bypass Garnet Global Buffer/Controller by driving nested Interconnect ports."
+  "phase": "L2_AHA_RUN_FSM",
+  "command": "taskset -c 8-25 iverilog -g2012 -s tb_aha_garnet_proc_packet_writer -o work/results/l2_aha_proc_packet_writer.vvp rtl/integration/aha_garnet_proc_packet_writer.sv tb/tb_aha_garnet_proc_packet_writer.sv && taskset -c 8-25 vvp work/results/l2_aha_proc_packet_writer.vvp",
+  "success_condition": "One 512-bit beat becomes eight low-word-first consecutive proc-packet writes, with no invented Global Buffer address translation.",
+  "failure_policy": "If packing or addresses differ, compare against ProcDriver_write_data/ProcDriver_write_bs; preserve the caller-supplied packet base instead of deriving it from a CGRA lane ID."
 }

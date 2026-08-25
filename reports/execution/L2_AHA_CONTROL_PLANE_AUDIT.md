@@ -20,7 +20,14 @@ completion claim for the full application. Its directed randomized-ready test
 passes for a parallel-config pulse and a stream-start pulse, including a
 non-OKAY response path.
 
-The next wrapper piece is a 512-bit to 64-bit proc-packet writer. It must use
-the `design_meta.json` IO tile addresses and the official packet address
-translation, not assume that a CGRA lane number is a physical Global Buffer
-address.
+`aha_garnet_proc_packet_writer.sv` independently splits one project 512-bit
+beat into eight consecutive 64-bit packet writes, low 64-bit word first, with
+the matching eight byte-enable slices. It accepts a resolved 18-bit packet
+address; the higher-level descriptor/Gaussian metadata loader owns any Global
+Buffer address translation. Its eight-write ordering and byte enables pass a
+directed test.
+
+The next wrapper piece connects both primitives into a command/run FSM and
+feeds it with `design_meta.json` IO tile addresses and the official packet
+address translation. It must not assume that a CGRA lane number is a physical
+Global Buffer address.

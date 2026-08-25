@@ -1,6 +1,6 @@
 {
-  "phase": "P0_foundation",
-  "command": "taskset -c 8-25 docker version && taskset -c 8-25 docker run --rm --cpuset-cpus=8-23 hello-world",
-  "success_condition": "Docker daemon is reachable by user yang and the cpuset-constrained smoke exits zero.",
-  "failure_policy": "Wait for the user-owned sudo installation/group refresh. Do not use rootless Docker or pull AHA images before this check passes."
+  "phase": "L1_aha_docker_baseline",
+  "command": "taskset -c 8-25 sg docker -c 'docker pull hello-world:latest'",
+  "success_condition": "The daemon can reach Docker Hub through its configured HTTPS proxy.",
+  "failure_policy": "Run the sudo daemon proxy drop-in printed by scripts/check_docker_proxy.sh; do not substitute a mutable AHA image or rootless Docker."
 }

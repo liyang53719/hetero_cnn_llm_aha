@@ -11,6 +11,7 @@ Completed:
 - Gemmini official `mvin_mvout` passed on Spike and Verilator.
 - Gemmini official `matmul_os` passed on Spike and Verilator. The fresh Verilator run reached `$finish` at 10 ms in 577.680 s.
 - Gemmini official `resnet50-baremetal os` passed on Spike in 3,053,813 cycles with all four predictions reported and a final `PASS`.
+- A five-minute commit-trace diagnostic observed continuous Gemmini operations without a trap or mismatch; it timed out by design and is not used as pass evidence.
 
 Open L1 gates:
 

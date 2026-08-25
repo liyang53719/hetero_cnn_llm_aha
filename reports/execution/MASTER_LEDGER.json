@@ -17,6 +17,12 @@
       "status": "IN_PROGRESS",
       "depends_on": ["L0"],
       "evidence": ["reports/execution/upstream_closure.json"],
+      "completed_subgates": [
+        "license matrix",
+        "Gemmini Spike mvin/mvout, OS matmul, and ResNet50 OS",
+        "Gemmini Verilator mvin/mvout and OS matmul",
+        "iDMA committed-lock source enumeration"
+      ],
       "remaining_gates": [
         "Gemmini weight-stationary/default matmul budget closure",
         "AHA 4x16 Docker/Gaussian map/PnR/test",
@@ -36,7 +42,6 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "Docker daemon requires an HTTPS proxy drop-in before Docker Hub image pulls can succeed.",
     "Docker daemon requires an HTTPS proxy drop-in before Docker Hub image pulls can succeed.",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]

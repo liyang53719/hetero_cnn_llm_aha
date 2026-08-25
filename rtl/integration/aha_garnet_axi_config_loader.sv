@@ -24,10 +24,17 @@ module aha_garnet_axi_config_loader (
   output logic        write_done_o,
   output logic        write_error_o
 );
-  typedef enum logic [1:0] {S_IDLE, S_AW, S_W, S_B} state_e;
+  // The generated Garnet AXI controller is legal AXI-Lite, but its pinned
+  // test_app driver deliberately leaves an idle clock after AW and two clocks
+  // after B. Retain those phases so wrapper-side control traffic is cycle
+  // compatible with the official application flow, rather than merely
+  // handshake compatible.
+  typedef enum logic [2:0] {S_IDLE, S_AW, S_AW_TO_W_GAP, S_W, S_B,
+                            S_POST_B_1, S_POST_B_2} state_e;
   state_e state_q;
   logic [12:0] addr_q;
   logic [31:0] data_q;
+  logic response_error_q;
 
   assign cfg_ready_o   = (state_q == S_IDLE);
   assign axi_awaddr_o  = addr_q;
@@ -41,6 +48,7 @@ module aha_garnet_axi_config_loader (
       state_q       <= S_IDLE;
       addr_q        <= '0;
       data_q        <= '0;
+      response_error_q <= 1'b0;
       write_done_o  <= 1'b0;
       write_error_o <= 1'b0;
     end else begin
@@ -50,16 +58,23 @@ module aha_garnet_axi_config_loader (
         S_IDLE: if (cfg_valid_i && cfg_ready_o) begin
           addr_q  <= cfg_addr_i;
           data_q  <= cfg_data_i;
+          response_error_q <= 1'b0;
           state_q <= S_AW;
         end
         S_AW: if (axi_awvalid_o && axi_awready_i)
-          state_q <= S_W;
+          state_q <= S_AW_TO_W_GAP;
+        S_AW_TO_W_GAP: state_q <= S_W;
         S_W: if (axi_wvalid_o && axi_wready_i)
           state_q <= S_B;
         S_B: if (axi_bvalid_i && axi_bready_o) begin
-          write_done_o  <= 1'b1;
-          write_error_o <= (axi_bresp_i != 2'b00);
-          state_q       <= S_IDLE;
+          response_error_q <= (axi_bresp_i != 2'b00);
+          state_q       <= S_POST_B_1;
+        end
+        S_POST_B_1: state_q <= S_POST_B_2;
+        S_POST_B_2: begin
+          write_done_o <= 1'b1;
+          write_error_o <= response_error_q;
+          state_q <= S_IDLE;
         end
         default: state_q <= S_IDLE;
       endcase

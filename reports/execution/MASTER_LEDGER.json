@@ -21,12 +21,11 @@
         "license matrix",
         "Gemmini Spike mvin/mvout, OS matmul, and ResNet50 OS",
         "Gemmini Verilator mvin/mvout and OS matmul",
-        "iDMA committed-lock source enumeration"
+        "iDMA committed-lock source enumeration and VCS backend_rw_axi/simple"
       ],
       "remaining_gates": [
         "Gemmini weight-stationary/default matmul budget closure",
         "AHA 4x16 Docker/Gaussian map/PnR/test",
-        "iDMA Bender/VCS baseline",
         "license matrix"
       ]
     },

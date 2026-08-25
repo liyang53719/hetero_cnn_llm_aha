@@ -27,7 +27,7 @@
       ],
       "remaining_gates": []
     },
-    "L2": {"status": "PENDING", "depends_on": ["L1"]},
+    "L2": {"status": "IN_PROGRESS", "depends_on": ["L1"], "evidence": ["reports/execution/L2_GAP_AUDIT.md"]},
     "L3": {"status": "PENDING", "depends_on": ["L2"]},
     "L4": {"status": "PENDING", "depends_on": ["L3"]},
     "L5": {"status": "PENDING", "depends_on": ["L3"]},

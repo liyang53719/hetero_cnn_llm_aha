@@ -11,5 +11,8 @@
 - Fresh Gemmini evidence: Spike mvin/mvout PASS, Spike OS-matmul PASS, Verilator mvin/mvout PASS (669 us), and Verilator OS-matmul PASS (10 ms, 577.7 s wall).
 - Spike ResNet50 also passes in explicit `os` mode: 3,053,813 cycles and final `PASS`. The previous `tohost=1337` was a default WS-mode run, not an architectural functional mismatch.
 - L1 upstream reproduction PASS. Canonical full WS uses native `LOADMEM=1` and finishes at 10 ms within the one allowed 20M cap; see `L1_UPSTREAM_CLOSEOUT.md`. The default HTIF loader WFI limitation remains documented but does not alter binary/RTL semantics.
+- L2 macro boundaries are frozen, not closed: generated Gemmini is locked at 157 ports (SHA256 `8ae6fd2e...130ce66f0`) with retained RocketTile command router/PTW/TileLink context. `gemmini_rocc_command_adapter` remains a clean-room-only test adapter and must not be connected to the macro.
+- The pinned AHA 4x16 `Interconnect` macro was regenerated as SHA256 `4980ce62...0bf0ab354`; its 69 ports and 25-file generated simulator closure passed host Verilator 5.050 complete named-port lint. Native 17-bit data lanes and independent 1-bit EOS lanes must remain separate; do not map `last` into bit 16.
+- Current action: extend `src/heteronpu/gemmini_rocc_lowering.py` from exact primitive encoders to typed matrix descriptors and compare emitted sequence against the official C route. The primitive lowering tests pass under `PYTHONPATH=src`.
 - `lc_shell` was not found; it is only a future L10 SRAM-library dependency.
 - Do not close any stage using the existing clean-room-only evidence.

@@ -1,6 +1,6 @@
 {
-  "phase": "L2_WRAPPER_FREEZE",
-  "command": "taskset -c 8-25 python3 scripts/rtl_static_check.py",
-  "success_condition": "Current wrapper RTL structural checks pass before L2 interface-boundary implementation begins.",
-  "failure_policy": "If wrapper structure fails, identify the first module/line; do not hand-write a partial TileLink/PTW implementation."
+  "phase": "L2_GEMMINI_DESCRIPTOR_LOWERING",
+  "command": "PYTHONPATH=src taskset -c 8-25 python3 -m pytest -q tests/test_gemmini_rocc_lowering.py",
+  "success_condition": "Pinned official gemmini.h mvin/mvout/preload/compute/flush encodings and CUSTOM_3 selection remain bit-exact before a typed descriptor emits a sequence.",
+  "failure_policy": "If any encoding differs, compare the first field against the pinned gemmini.h macro; do not reuse the legacy clean-room CUSTOM_0 adapter as macro evidence."
 }

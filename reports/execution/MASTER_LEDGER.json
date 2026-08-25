@@ -27,7 +27,26 @@
       ],
       "remaining_gates": []
     },
-    "L2": {"status": "IN_PROGRESS", "depends_on": ["L1"], "evidence": ["reports/execution/L2_GAP_AUDIT.md"]},
+    "L2": {
+      "status": "IN_PROGRESS",
+      "depends_on": ["L1"],
+      "evidence": [
+        "reports/execution/L2_GAP_AUDIT.md",
+        "reports/execution/L2_MACRO_BOUNDARY_CONTRACT.md",
+        "reports/execution/gemmini_macro_contract_lock.json",
+        "work/results/l2_wrapper_freeze/gemmini_boundary_result.json",
+        "work/generated/l2_aha_garnet_4x16/port_contract_lint_result.json"
+      ],
+      "completed_subgates": [
+        "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
+        "AHA 4x16 Interconnect generated 69-port boundary and 25-file simulator closure lint"
+      ],
+      "remaining_gates": [
+        "typed descriptor to official Gemmini RoCC sequence equivalence",
+        "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs",
+        "AHA config/stream/reset wrapper versus upstream Gaussian trace equivalence"
+      ]
+    },
     "L3": {"status": "PENDING", "depends_on": ["L2"]},
     "L4": {"status": "PENDING", "depends_on": ["L3"]},
     "L5": {"status": "PENDING", "depends_on": ["L3"]},

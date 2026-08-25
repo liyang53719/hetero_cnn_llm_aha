@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "chipyard_commit": "e602d917dcc495c58cabe906535e411707096c9c",
+  "gemmini_commit": "8c3f9923a44a2fe2c7930587be297d6d4f8c09ca",
+  "config": "GemminiRocketConfig",
+  "generated_module": "Gemmini",
+  "gemmini_sv_sha256": "8ae6fd2e87ec2d22e51831565780bd36329fa595bface7bec6e9c5d130ce66f0",
+  "required_context": [
+    "RocketTile RoCC command router",
+    "RocketTile RoCC response arbiter",
+    "RocketTile PTW/PMP status context",
+    "RocketTile TileLink scratchpad/accumulator path"
+  ],
+  "prohibited": [
+    "Standalone Gemmini elaboration with locally tied-off PTW",
+    "Standalone Gemmini elaboration with locally hand-written TileLink responder",
+    "Treating io_resp as generic GEMM completion"
+  ]
+}

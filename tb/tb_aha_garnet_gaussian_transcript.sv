@@ -271,6 +271,8 @@ module tb_aha_garnet_gaussian_transcript;
     $display("AHA_GARNET_STAGE bitstream_packets");
     $fflush();
     for (int i = 0; i < BS_COUNT; i++) issue_packet(BS_ADDR[i], BS_DATA[i], BS_STRB[i]);
+    // Exact ProcDriver_write_bs post-write drain from test_app.
+    repeat (10) @(posedge clk);
     $display("AHA_GARNET_STAGE bs_cfg");
     $fflush();
     for (int i = 0; i < BS_CFG_COUNT; i++) issue_axi(BS_CFG_ADDR[i], BS_CFG_DATA[i]);
@@ -298,7 +300,10 @@ module tb_aha_garnet_gaussian_transcript;
     $display("AHA_GARNET_STAGE input_packets");
     $fflush();
     for (int i = 0; i < INPUT0_COUNT; i++) issue_packet(INPUT0_ADDR[i], INPUT0_DATA[i], INPUT0_STRB[i]);
+    // Exact ProcDriver_write_data drain between independently mapped IO tiles.
+    repeat (10) @(posedge clk);
     for (int i = 0; i < INPUT1_COUNT; i++) issue_packet(INPUT1_ADDR[i], INPUT1_DATA[i], INPUT1_STRB[i]);
+    repeat (10) @(posedge clk);
     // Exact test_app order: complete all host writes, then unstall immediately
     // before the stream-start transaction.
     read_axi(13'h008, cgra_stall_after);

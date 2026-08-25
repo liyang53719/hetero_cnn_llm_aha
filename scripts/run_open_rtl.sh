@@ -30,6 +30,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
     "$ROOT/rtl/fabric/shared_l2_fabric.sv" \
     --top-module shared_l2_fabric |& tee "$OUT/shared_l2_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
+    "$ROOT/rtl/fabric/shared_l2_descriptor_port.sv" \
+    --top-module shared_l2_descriptor_port |& tee "$OUT/shared_l2_descriptor_port_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/integration/hetero_npu_numerical_integration_v0.sv" \
     "$ROOT/rtl/matrix/matrix_engine_int8_tile.sv" \
     "$ROOT/rtl/sfu/cgra_sfu_vector.sv" \
@@ -87,6 +90,10 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/fabric/shared_l2_fabric.sv" \
     "$ROOT/tb/tb_shared_l2_fabric.sv"
   vvp "$OUT/tb_shared_l2" | tee "$OUT/tb_shared_l2.log"
+  iverilog -g2012 -s tb_shared_l2_descriptor_port -o "$OUT/tb_shared_l2_descriptor_port" \
+    "$ROOT/rtl/fabric/shared_l2_descriptor_port.sv" \
+    "$ROOT/tb/tb_shared_l2_descriptor_port.sv"
+  vvp "$OUT/tb_shared_l2_descriptor_port" | tee "$OUT/tb_shared_l2_descriptor_port.log"
   iverilog -g2012 -s tb_matrix_engine_int8_tile -o "$OUT/tb_matrix" \
     "$ROOT/rtl/matrix/matrix_engine_int8_tile.sv" "$ROOT/tb/tb_matrix_engine_int8_tile.sv"
   vvp "$OUT/tb_matrix" | tee "$OUT/tb_matrix.log"

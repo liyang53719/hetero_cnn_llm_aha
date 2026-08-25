@@ -124,7 +124,11 @@
         "work/results/l3_event_scoreboard/verilator_lint.log",
         "reports/execution/L3_EVENT_SCOREBOARD_SRAM.md",
         "work/results/l3_event_scoreboard_sram/tb.log",
-        "work/results/l3_event_scoreboard_sram/verilator_lint.log"
+        "work/results/l3_event_scoreboard_sram/verilator_lint.log",
+        "reports/execution/L3_DESCRIPTOR_MACRO_FABRIC.md",
+        "work/results/l3_descriptor_fabric/port.log",
+        "work/results/l3_descriptor_fabric/final/macro.log",
+        "work/results/l3_descriptor_fabric/final/verilator_lint.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
@@ -134,7 +138,8 @@
         "16 real ARM SRAM macros behind four-group round-robin arbitration pass 100000 transactions with zero mismatch, response ownership error, macro address error, or timeout",
         "four dedicated Matrix-SFU/KV bidirectional Tensor Stream skid channels pass 100000 ordered randomized-backpressure transfers",
         "full 16-bit persistent event scoreboard passes 100000 chained commands across two reset epochs and rejects 23 error completions as dependency signals",
-        "production event scoreboard maps one byte per Event ID into a real 4096x128 Control SRAM and passes the same 100000-command semantics with zero macro errors"
+        "production event scoreboard maps one byte per Event ID into a real 4096x128 Control SRAM and passes the same 100000-command semantics with zero macro errors",
+        "approved descriptor port is mapped to real 16-macro Shared L2 with exact 128-of-512 lane extraction and passes 100001 descriptor/normal-read/write contention transactions with zero mismatch or timeout"
       ],
       "remaining_gates": [
         "L2 dependency PASS",

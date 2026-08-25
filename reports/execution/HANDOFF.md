@@ -23,9 +23,10 @@
 - Control/trace 4096x128 bit-write views+wrapper PASS on real ARM model; four macros provide 256 KiB.
 - Real 4-macro 512-bit Shared-L2 bank group PASS; four groups implement the planned 16 banks after arbitration integration.
 - Full 16-ARM-macro Shared-L2 100k PASS: 47346 reads, 52654 writes, 146953 conflicts, 0 mismatch/error/timeout; still L3 readiness.
+- Descriptor port on real Shared-L2 PASS: 100001 descriptor/normal-read/write transactions, 45415 responses, 124022 conflicts, exact 128-of-512 lane mapping, 0 mismatch/error/timeout.
 - Matrix-SFU/KV four direct-stream skid channels PASS 100k with all six payload fields stable/in-order; endpoint connection remains.
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: connect descriptor lane extraction to real Shared-L2 macro fabric, then integrated contention regression; see `NEXT_ACTION.json`.
+- Next action: extend the production typed sequencer in fixed order multi-tile OS → LOOP_WS → Conv → bias → requant/ReLU; see `NEXT_ACTION.json`.
 - Do not close a stage with clean-room-only evidence.

@@ -9,6 +9,7 @@ module shared_l2_macro_fabric #(
   input logic[1:0] rd_valid_i,output logic[1:0] rd_ready_o,
   input logic[2*ADDR_W-1:0] rd_addr_i,
   output logic[1:0] rd_resp_valid_o,input logic[1:0] rd_resp_ready_i,
+  output logic[1:0] rd_resp_error_o,
   output logic[2*DATA_W-1:0] rd_data_o,
   input logic wr_valid_i,output logic wr_ready_o,input logic[ADDR_W-1:0] wr_addr_i,
   input logic[DATA_W-1:0] wr_data_i,input logic[DATA_W/8-1:0] wr_be_i,
@@ -26,6 +27,7 @@ module shared_l2_macro_fabric #(
   logic[GROUPS-1:0] group_rsp_valid,group_rsp_ready,group_rsp_error;
   logic[1:0] group_tag_q[0:GROUPS-1],rr_q[0:GROUPS-1];
   logic[1:0] rd_resp_valid_q,rd_outstanding_q;
+  logic[1:0] rd_resp_error_q;
   logic[2*DATA_W-1:0] rd_data_q;
   logic eligible0,eligible1;
   logic[GROUP_W-1:0] rd_group0,rd_group1,wr_group;
@@ -46,6 +48,7 @@ module shared_l2_macro_fabric #(
   assign eligible1=rd_valid_i[1]&&!rd_outstanding_q[1]&&
                    (!rd_resp_valid_q[1]||rd_resp_ready_i[1]);
   assign rd_resp_valid_o=rd_resp_valid_q;
+  assign rd_resp_error_o=rd_resp_error_q;
   assign rd_data_o=rd_data_q;
 
   always_comb begin
@@ -119,7 +122,7 @@ module shared_l2_macro_fabric #(
 
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if(!rst_ni) begin
-      rd_resp_valid_q<='0;rd_outstanding_q<='0;rd_data_q<='0;
+      rd_resp_valid_q<='0;rd_resp_error_q<='0;rd_outstanding_q<='0;rd_data_q<='0;
       cycle_count_o<='0;read_count_o<='0;write_count_o<='0;
       bank_conflict_count_o<='0;read_stall_count_o<='0;write_stall_count_o<='0;
       macro_error_count_o<='0;
@@ -153,10 +156,10 @@ module shared_l2_macro_fabric #(
             $fatal(1,"read1 response without outstanding group=%0d",seq_g);
 `endif
           if(group_tag_q[seq_g]==TAG_RD0)begin
-            rd_data_q[0 +: DATA_W]<=group_rsp_rdata[seq_g*512 +: 512];rd_resp_valid_q[0]<=1;rd_outstanding_q[0]<=0;
+            rd_data_q[0 +: DATA_W]<=group_rsp_rdata[seq_g*512 +: 512];rd_resp_error_q[0]<=group_rsp_error[seq_g];rd_resp_valid_q[0]<=1;rd_outstanding_q[0]<=0;
           end
           if(group_tag_q[seq_g]==TAG_RD1)begin
-            rd_data_q[DATA_W +: DATA_W]<=group_rsp_rdata[seq_g*512 +: 512];rd_resp_valid_q[1]<=1;rd_outstanding_q[1]<=0;
+            rd_data_q[DATA_W +: DATA_W]<=group_rsp_rdata[seq_g*512 +: 512];rd_resp_error_q[1]<=group_rsp_error[seq_g];rd_resp_valid_q[1]<=1;rd_outstanding_q[1]<=0;
           end
         end
       end

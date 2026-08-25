@@ -45,6 +45,28 @@ static void emit_interrupt_enable(void *kernel) {
   printf("{\"address\":32,\"data\":%u}]", f2g_mask);
 }
 
+static void emit_io_layout(const char *name, void *kernel, int output) {
+  const int count = output ? get_num_outputs(kernel) : get_num_inputs(kernel);
+  printf("\"%s\":[", name);
+  for (int index = 0; index < count; ++index) {
+    struct IOInfo *io = output ? (struct IOInfo *)get_output_info(kernel, index)
+                               : (struct IOInfo *)get_input_info(kernel, index);
+    if (index) printf(",");
+    printf("{\"file_size\":%d,\"tiles\":[", io->filesize);
+    for (int tile_index = 0; tile_index < io->num_io_tiles; ++tile_index) {
+      struct IOTileInfo *tile = &io->io_tiles[tile_index];
+      if (tile_index) printf(",");
+      printf("{\"map_tile\":%d,\"start_address\":%d,"
+             "\"gold_check_start_address\":%d,\"tb_write_start_address\":%d,"
+             "\"bank_toggle_mode\":%d,\"fake\":%d}",
+             tile->tile, tile->start_addr, tile->gold_check_start_addr,
+             tile->tb_write_start_addr, tile->bank_toggle_mode, tile->is_fake_io);
+    }
+    printf("]}");
+  }
+  printf("]");
+}
+
 int main(int argc, char **argv) {
   if (argc != 3) {
     fprintf(stderr, "usage: %s <design_meta.json> <cgra_columns>\n", argv[0]);
@@ -72,6 +94,10 @@ int main(int argc, char **argv) {
   emit_config("kernel_cfg", kernel_config);
   printf(",");
   emit_interrupt_enable(kernel);
+  printf(",");
+  emit_io_layout("inputs", kernel, 0);
+  printf(",");
+  emit_io_layout("outputs", kernel, 1);
   printf(",\"pcfg_start\":{\"address\":%u,\"data\":%u}",
          (unsigned)get_pcfg_pulse_addr(), (unsigned)get_pcfg_pulse_data(bitstream));
   printf(",\"stream_start\":{\"address\":%u,\"data\":%u}",

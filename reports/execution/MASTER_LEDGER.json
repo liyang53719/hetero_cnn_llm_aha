@@ -38,12 +38,15 @@
         "work/results/l2_wrapper_freeze/gemmini_boundary_result.json",
         "work/generated/l2_aha_garnet_4x16/port_contract_lint_result.json",
         "work/generated/l2_aha_gaussian_trace/result.json",
-        "work/results/l2_aha_gaussian_trace_audit/result.json"
+        "work/results/l2_aha_gaussian_trace_audit/result.json",
+        "reports/execution/L2_AHA_CONTROL_PLANE_AUDIT.md",
+        "work/results/l2_aha_axi_loader.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
         "AHA 4x16 Garnet generated 33-port top, nested 69-port Interconnect boundary, and 25-file simulator closure lint",
         "AHA Gaussian map/PnR artifact export and IO/bitstream trace audit",
+        "AHA Garnet AXI configuration loader AW/W/B directed randomized-ready test",
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test"
       ],
       "remaining_gates": [

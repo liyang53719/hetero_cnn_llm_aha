@@ -86,6 +86,7 @@ def main() -> int:
         "hetero_npu_integrated_v0",
         "hetero_npu_numerical_integration_v0",
         "gemmini_rocc_command_adapter",
+        "aha_garnet_axi_config_loader",
         "hetero_npu_gemmini_rocc_integration_v0",
         "shared_l2_fabric",
     }

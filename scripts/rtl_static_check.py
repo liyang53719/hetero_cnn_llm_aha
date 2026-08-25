@@ -94,6 +94,7 @@ def main() -> int:
         "shared_l2_fabric",
         "l2_sp6144x128_macro_wrapper",
         "ct_sp4096x128_macro_wrapper",
+        "l2_512b_macro_bank_group",
     }
     missing = sorted(required.difference(modules))
     if missing:

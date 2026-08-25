@@ -145,7 +145,10 @@
         "work/results/l10_sp_wrapper/verilator_lint.log",
         "reports/execution/L10_SP4096X128_VIEWS_AND_WRAPPER.md",
         "work/results/l10_tool_readiness/sp4096x128_views_result.json",
-        "work/results/l10_ct_sp_wrapper/tb.log"
+        "work/results/l10_ct_sp_wrapper/tb.log",
+        "reports/execution/L10_L2_512B_MACRO_BANK_GROUP.md",
+        "work/results/l10_l2_macro_bank_group/tb.log",
+        "work/results/l10_l2_macro_bank_group/verilator_lint.log"
       ],
       "readiness_status": "PARTIAL_BLOCKED_DEPENDENCY_AND_DECISION"
     },

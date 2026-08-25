@@ -215,28 +215,42 @@ module tb_aha_garnet_gaussian_transcript;
   endtask
 
   task automatic read_and_compare(input logic [17:0] base, input int words, input int block);
-    int guard;
     logic [63:0] expected;
     logic [63:0] observed;
     begin
-      for (int index = 0; index < words; index++) begin
-        expected = (block == 0) ? OUTPUT0_EXPECTED[index] : OUTPUT1_EXPECTED[index];
-        @(negedge clk); proc_rd_en = 1'b1; proc_rd_addr = base + index * 8;
-        @(negedge clk); proc_rd_en = 1'b0; proc_rd_addr = '0;
-        guard = 0;
-        while (!proc_rd_data_valid) begin
+      // This is the official ProcDriver_read_data protocol, not a sequence
+      // of isolated reads.  The generated global-buffer read clock is gated
+      // by the delayed rd_en, so requests must remain continuous while the
+      // response pipeline drains.
+      fork
+        begin
           @(posedge clk);
-          guard++;
-          if (guard == 256) $fatal(1, "Garnet proc read timeout block=%0d word=%0d", block, index);
+          for (int index = 0; index < words; index++) begin
+            proc_rd_en = 1'b1;
+            proc_rd_addr = base + index * 8;
+            @(posedge clk);
+          end
+          proc_rd_en = 1'b0;
+          proc_rd_addr = '0;
         end
-        // Match the official test_app Verilator accommodation: the data is
-        // sampled one clock after rd_data_valid.
-        @(posedge clk);
-        observed = proc_rd_data;
-        if (observed !== expected)
-          $fatal(1, "Garnet output mismatch block=%0d word=%0d addr=%h expected=%h observed=%h",
-                 block, index, base + index * 8, expected, observed);
-      end
+        begin
+          for (int index = 0; index < words; index++) begin
+            int guard = 0;
+            while (!proc_rd_data_valid) begin
+              @(posedge clk);
+              guard++;
+              if (guard == 256) $fatal(1, "Garnet proc read timeout block=%0d word=%0d", block, index);
+            end
+            // Match ProcDriver_read_data's Verilator-specific sample point.
+            @(posedge clk);
+            observed = proc_rd_data;
+            expected = (block == 0) ? OUTPUT0_EXPECTED[index] : OUTPUT1_EXPECTED[index];
+            if (observed !== expected)
+              $fatal(1, "Garnet output mismatch block=%0d word=%0d addr=%h expected=%h observed=%h",
+                     block, index, base + index * 8, expected, observed);
+          end
+        end
+      join
     end
   endtask
 
@@ -275,8 +289,6 @@ module tb_aha_garnet_gaussian_transcript;
     wait_interrupt("pcfg", 4096);
     // Official Env_clear_interrupt uses PCFG ISR address 0x38 and tile mask 1.
     issue_axi(13'h038, 32'h0000_0001);
-    read_axi(13'h008, cgra_stall_after);
-    issue_axi(13'h008, cgra_stall_after & ~CGRA_STALL_MASK);
     wait_interrupt_low("stream_start");
     if ($test$plusargs("PCFG_ONLY")) begin
       $display("AHA_GARNET_PCFG_TRANSCRIPT_PASS cycles=%0d", cycle_count);
@@ -287,6 +299,10 @@ module tb_aha_garnet_gaussian_transcript;
     $fflush();
     for (int i = 0; i < INPUT0_COUNT; i++) issue_packet(INPUT0_ADDR[i], INPUT0_DATA[i], INPUT0_STRB[i]);
     for (int i = 0; i < INPUT1_COUNT; i++) issue_packet(INPUT1_ADDR[i], INPUT1_DATA[i], INPUT1_STRB[i]);
+    // Exact test_app order: complete all host writes, then unstall immediately
+    // before the stream-start transaction.
+    read_axi(13'h008, cgra_stall_after);
+    issue_axi(13'h008, cgra_stall_after & ~CGRA_STALL_MASK);
     issue_axi(STREAM_ADDR, STREAM_DATA);
     $display("AHA_GARNET_STAGE stream_started");
     $fflush();

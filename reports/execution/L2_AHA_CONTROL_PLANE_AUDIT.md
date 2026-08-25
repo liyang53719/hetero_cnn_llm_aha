@@ -75,3 +75,11 @@ trigger the generated asynchronous AXI-controller reset branch in Verilator,
 leaving `AWREADY` low. This establishes control-plane acceptance only. Proc
 readback and byte-for-byte comparison of Gaussian output against upstream
 golden data are still required for AHA L2 numerical equivalence.
+
+The current numerical harness uses the exact upstream `ProcDriver_read_data`
+continuous-read pattern for each output block: 1,519 consecutive 64-bit
+addresses, `rd_data_valid` waiting, and the upstream Verilator one-clock-late
+sample point. This is required because the generated Global Buffer gates its
+proc-read clock with delayed `rd_en`; isolated one-word pulses can stop the
+response pipeline before its data is sampled. Its full numerical rerun is
+pending the resource admission guard; no output-equivalence PASS is claimed.

@@ -7,6 +7,7 @@ CONFIG=${GEMMINI_CONFIG:-GemminiRocketConfig}
 RUN_SETUP=${RUN_SETUP:-0}
 SPIKE_BIN=${SPIKE_BIN:-spike}
 SPIKE_LIB_DIR=${SPIKE_LIB_DIR:-}
+GEMMINI_CNN_ARGS=${GEMMINI_CNN_ARGS:-os}
 mkdir -p "$OUT"
 exec > >(tee "$OUT/reproduce.log") 2>&1
 
@@ -58,7 +59,8 @@ if command -v "$SPIKE_BIN" >/dev/null 2>&1; then
   run_spike "$MVIN" | tee "$OUT/spike_mvin.log"
   run_spike "$MATMUL" | tee "$OUT/spike_matmul.log"
   if [[ -n "$RESNET" ]]; then
-    run_spike "$RESNET" | tee "$OUT/spike_resnet50.log"
+    read -r -a cnn_args <<< "$GEMMINI_CNN_ARGS"
+    run_spike "$RESNET" "${cnn_args[@]}" | tee "$OUT/spike_resnet50.log"
   fi
 else
   echo "spike is unavailable; functional baseline gate is not closed" >&2

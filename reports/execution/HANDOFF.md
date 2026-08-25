@@ -8,6 +8,7 @@
 - Docker daemon currently lacks the shell HTTPS proxy; use `scripts/check_docker_proxy.sh` for the user-owned sudo drop-in, then pull a digest-pinned AHA image.
 - `scripts/write_used_upstream_lock.py` PASSed. It locks the actual Gemmini and AHA Gaussian/PnR dependency closure and intentionally excludes unrelated Chipyard/ Voyager LFS subtrees.
 - Fresh Gemmini evidence: Spike mvin/mvout PASS, Spike OS-matmul PASS, Verilator mvin/mvout PASS (669 us), and Verilator OS-matmul PASS (10 ms, 577.7 s wall).
-- Remaining Gemmini baseline failures: Spike ResNet50 exits `tohost=1337`; default matmul timeout is not a PASS.
+- Spike ResNet50 also passes in explicit `os` mode: 3,053,813 cycles and final `PASS`. The previous `tohost=1337` was a default WS-mode run, not an architectural functional mismatch.
+- The default combined matmul timeout remains a failure; standalone OS and WS variants have passing evidence.
 - `lc_shell` was not found; it is only a future L10 SRAM-library dependency.
 - Do not close any stage using the existing clean-room-only evidence.

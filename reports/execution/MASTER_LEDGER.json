@@ -18,7 +18,6 @@
       "depends_on": ["L0"],
       "evidence": ["reports/execution/upstream_closure.json"],
       "remaining_gates": [
-        "Gemmini official Spike ResNet50 functional closure",
         "Gemmini weight-stationary/default matmul budget closure",
         "AHA 4x16 Docker/Gaussian map/PnR/test",
         "iDMA Bender/VCS baseline",
@@ -38,7 +37,6 @@
   },
   "known_blockers": [
     "Docker daemon requires an HTTPS proxy drop-in before Docker Hub image pulls can succeed.",
-    "Gemmini Spike ResNet50 exits with tohost=1337 and needs root-cause localization.",
     "Docker daemon requires an HTTPS proxy drop-in before Docker Hub image pulls can succeed.",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]

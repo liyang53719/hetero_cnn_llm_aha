@@ -10,11 +10,11 @@ Completed:
 - iDMA source enumeration passed from its committed `Bender.lock` with 461 source lines; no `bender update` was performed.
 - Gemmini official `mvin_mvout` passed on Spike and Verilator.
 - Gemmini official `matmul_os` passed on Spike and Verilator. The fresh Verilator run reached `$finish` at 10 ms in 577.680 s.
+- Gemmini official `resnet50-baremetal os` passed on Spike in 3,053,813 cycles with all four predictions reported and a final `PASS`.
 
 Open L1 gates:
 
 - Docker daemon proxy configuration, then immutable AHA image pull and 4x16 Gaussian generation/map/PnR/test.
-- Gemmini ResNet50 Spike failure (`tohost=1337`) root-cause analysis.
 - Full default/weight-stationary Gemmini workload budget closure; existing 20M-cycle default timeout remains a failure.
 - iDMA upstream-equivalent VCS backend read/write job.
 

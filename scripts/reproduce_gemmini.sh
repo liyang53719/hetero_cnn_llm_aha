@@ -5,8 +5,22 @@ CHIPYARD_ROOT=${CHIPYARD_ROOT:?set CHIPYARD_ROOT to the cloned Chipyard director
 OUT=${OUT:-"$PWD/work/results/gemmini_baseline"}
 CONFIG=${GEMMINI_CONFIG:-GemminiRocketConfig}
 RUN_SETUP=${RUN_SETUP:-0}
+SPIKE_BIN=${SPIKE_BIN:-spike}
+SPIKE_LIB_DIR=${SPIKE_LIB_DIR:-}
 mkdir -p "$OUT"
 exec > >(tee "$OUT/reproduce.log") 2>&1
+
+run_spike() {
+  if [[ -n "$SPIKE_LIB_DIR" ]]; then
+    test -f "$SPIKE_LIB_DIR/libgemmini.so"
+    test -f "$SPIKE_LIB_DIR/libcustomext.so"
+    LD_LIBRARY_PATH="$SPIKE_LIB_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+      LD_PRELOAD="$SPIKE_LIB_DIR/libgemmini.so:$SPIKE_LIB_DIR/libcustomext.so${LD_PRELOAD:+:$LD_PRELOAD}" \
+      "$SPIKE_BIN" --extension=gemmini "$@"
+  else
+    "$SPIKE_BIN" --extension=gemmini "$@"
+  fi
+}
 
 if [[ ! -f "$CHIPYARD_ROOT/env.sh" ]]; then
   if [[ "$RUN_SETUP" != 1 ]]; then
@@ -35,16 +49,16 @@ make -C "$GEMMINI_ROOT/software/libgemmini" install
 )
 
 MVIN=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'mvin_mvout-baremetal' | head -n1)
-MATMUL=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f \( -name 'matmul-baremetal' -o -name 'matmul_os-baremetal' \) | head -n1)
+MATMUL=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'matmul_os-baremetal' | head -n1)
 RESNET=$(find "$GEMMINI_ROOT/software/gemmini-rocc-tests/build" -type f -name 'resnet50-baremetal' | head -n1)
 test -n "$MVIN"
 test -n "$MATMUL"
 
-if command -v spike >/dev/null 2>&1; then
-  spike --extension=gemmini "$MVIN" | tee "$OUT/spike_mvin.log"
-  spike --extension=gemmini "$MATMUL" | tee "$OUT/spike_matmul.log"
+if command -v "$SPIKE_BIN" >/dev/null 2>&1; then
+  run_spike "$MVIN" | tee "$OUT/spike_mvin.log"
+  run_spike "$MATMUL" | tee "$OUT/spike_matmul.log"
   if [[ -n "$RESNET" ]]; then
-    spike --extension=gemmini "$RESNET" | tee "$OUT/spike_resnet50.log"
+    run_spike "$RESNET" | tee "$OUT/spike_resnet50.log"
   fi
 else
   echo "spike is unavailable; functional baseline gate is not closed" >&2

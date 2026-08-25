@@ -20,6 +20,11 @@
   },
   "files": [
     {
+      "bytes": 496,
+      "path": ".gitignore",
+      "sha256": "840e13e43950b46b646367c8e40d11ba8b148942e5486fdeaf6e35ff2e1f168e"
+    },
+    {
       "bytes": 24,
       "path": "CGRA_SFU_VECTOR.mr",
       "sha256": "09fe10dc5e62db9cc098862b74d62baa41e8217686a55696cceebd8390e08a88"
@@ -375,9 +380,14 @@
       "sha256": "728d24450d5d587eccfc35bc080db00d88e01262f0329649ad0762da1106cf10"
     },
     {
-      "bytes": 6674,
+      "bytes": 512,
+      "path": "local_agent/CANONICAL_L0_L11.md",
+      "sha256": "ee9e1347b7b95ca24159bd19faa66a2c6065f0095b1eb4d3778f9ec23ab23a29"
+    },
+    {
+      "bytes": 7095,
       "path": "local_agent/stages.yaml",
-      "sha256": "81f5a4395eded2963880ff848f92eefad340fe1dba7127fa360fd92c67b2f859"
+      "sha256": "40df6e849a95bccf490e2f9f828dfe6e21d25ce0a7dc7bcb4621b995842d5fff"
     },
     {
       "bytes": 8944,
@@ -450,6 +460,26 @@
       "sha256": "d474cf52b93f73bc3fd714247e563ff18371d35eaa54c735b38b5b7bcecafbbb"
     },
     {
+      "bytes": 564,
+      "path": "reports/execution/HANDOFF.md",
+      "sha256": "677877722df861d5c24006b9caab915d1f7f5047d82e3cc7b3f3f682143ee47d"
+    },
+    {
+      "bytes": 1077,
+      "path": "reports/execution/MASTER_LEDGER.json",
+      "sha256": "c921daaaf8602b9c27a41655596c9fd4b9c6ea885147a77b4261c11b2fedd7d5"
+    },
+    {
+      "bytes": 407,
+      "path": "reports/execution/NEXT_ACTION.json",
+      "sha256": "63804ddff4908730c28a835053a13e1c061a9ed33d5915c253b4dbd4b1fdaebb"
+    },
+    {
+      "bytes": 270,
+      "path": "reports/execution/preflight.json",
+      "sha256": "9e3c623ae9c40d0c868f461c39cd6d6be74fa398f870cdd77597ad7cdf8ce8fa"
+    },
+    {
       "bytes": 10212,
       "path": "reports/functional_cycle_bf16kv.json",
       "sha256": "bf276972508ed439e7760cbd1cd121f4e5dc14675a445d8a2386e68a86e40419"
@@ -497,7 +527,7 @@
     {
       "bytes": 99,
       "path": "reports/pytest.log",
-      "sha256": "56ff4027d5513e94a3b946749c85aa7548dc35f1048a83e06906c7b21f3bbbf5"
+      "sha256": "5fab9f02b3bc3889d300293ca9ffddb70ea411d34e405e7dd61d962f753e2387"
     },
     {
       "bytes": 618,
@@ -515,9 +545,9 @@
       "sha256": "040038b56ebd082f49d3279c7600014156e3f0e95d2d6c709f0b9ed197277bc5"
     },
     {
-      "bytes": 860,
+      "bytes": 868,
       "path": "reports/sandbox_toolchain.txt",
-      "sha256": "c1845b68d6c7039d8c8f75f89083521b877a403092810d0f537330ac19935940"
+      "sha256": "122a44a73fd970412144c0c40a6187a43b9db2cd44239ca1be653e0b8db0cd7a"
     },
     {
       "bytes": 9271,
@@ -620,6 +650,11 @@
       "sha256": "db6f4a4b556405ac8937adb30ecd52a73d965688c5a3e52390e501f2759191ae"
     },
     {
+      "bytes": 1645,
+      "path": "scripts/cleanup_l11_rebuildable.sh",
+      "sha256": "b86b2bb85a80d8a9ca1ac6d139e46c3953868d1d067896402f3b199393687c96"
+    },
+    {
       "bytes": 1902,
       "path": "scripts/clone_upstreams.sh",
       "sha256": "3d380365e1a081ee556cb3649970ef7488bcb8865a23c7b84c7242643c394082"
@@ -655,6 +690,11 @@
       "sha256": "2d1e2ff776e180ed26e22f4bdd264bec0bc906f543c2ac140ad4a3244269a3fd"
     },
     {
+      "bytes": 1352,
+      "path": "scripts/preflight_l11.sh",
+      "sha256": "b5510b9e28085dc315223e14a1a1e8ff69a9872e491d12d6909821da23f2a50f"
+    },
+    {
       "bytes": 7633,
       "path": "scripts/randomized_reference_sweep.py",
       "sha256": "e38dcddddc62ca7dbd2411ac8c892b9f24cf4852f2a37340552e37ad066fd0c9"
@@ -688,6 +728,11 @@
       "bytes": 3922,
       "path": "scripts/rtl_static_check.py",
       "sha256": "72b005e843e2fa87402db404a59f7e9d4b9f1d9bd6c8f9ddd20d57aeb4deade6"
+    },
+    {
+      "bytes": 290,
+      "path": "scripts/run_bound.sh",
+      "sha256": "0ab73b7736e562d4467ad0093472f7864755c2370e5607260d52a178156ef88d"
     },
     {
       "bytes": 1023,

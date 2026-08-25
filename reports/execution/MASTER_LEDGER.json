@@ -47,7 +47,9 @@
         "work/generated/l2_aha_gaussian_trace/control_table.json",
         "work/results/l2_aha_garnet_pcfg_resetedge.log",
         "work/results/l2_aha_garnet_u16be_numerical.log",
-        "work/results/l2_aha_garnet_axi_timing_numerical.log"
+        "work/results/l2_aha_garnet_axi_timing_numerical.log",
+        "work/results/l2_aha_garnet_full_numerical.log",
+        "work/generated/l2_aha_official_proc_trace/docker_trace_serial.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -61,12 +63,12 @@
         "Gaussian default two-tile input deinterleave and packet transcript",
         "Full Garnet-top transcript elaboration and Verilator binary build",
         "Full Garnet-top PCFG control transcript: interrupt-enable, 519-entry bitstream, bs_cfg/kernel_cfg, PCFG start and official interrupt PASS in 2253 cycles",
+        "Full Garnet-top Gaussian wrapper equivalence: both input blocks read back exactly, G2F/F2G ISR masks equal 3, and both output blocks match golden in 19914 cycles on Verilator 5.028",
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test"
       ],
       "remaining_gates": [
         "typed descriptor to official Gemmini RoCC sequence equivalence",
-        "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs",
-        "AHA config/stream/reset wrapper versus upstream Gaussian trace equivalence"
+        "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs"
       ]
     },
     "L3": {"status": "PENDING", "depends_on": ["L2"]},
@@ -80,7 +82,6 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "AHA L2 numerical equivalence remains open: after official ISR sequencing, continuous proc reads, big-endian 16-bit input/output lane normalization, and packet drains, the first output word still differs (expected 0x00710070006d0070, observed 0x00700070006e0070).",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

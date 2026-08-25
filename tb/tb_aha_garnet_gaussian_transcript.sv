@@ -224,25 +224,32 @@ module tb_aha_garnet_gaussian_transcript;
       // response pipeline drains.
       fork
         begin
-          @(posedge clk);
           for (int index = 0; index < words; index++) begin
+            @(negedge clk);
             proc_rd_en = 1'b1;
             proc_rd_addr = base + index * 8;
-            @(posedge clk);
           end
+          @(negedge clk);
           proc_rd_en = 1'b0;
           proc_rd_addr = '0;
         end
         begin
           for (int index = 0; index < words; index++) begin
             int guard = 0;
-            while (!proc_rd_data_valid) begin
+            if (index == 0) begin
+              while (!proc_rd_data_valid) begin
+                @(posedge clk);
+                guard++;
+                if (guard == 256) $fatal(1, "Garnet proc read timeout block=%0d word=%0d", block, index);
+              end
+            end else begin
               @(posedge clk);
-              guard++;
-              if (guard == 256) $fatal(1, "Garnet proc read timeout block=%0d word=%0d", block, index);
             end
-            // Match ProcDriver_read_data's Verilator-specific sample point.
-            @(posedge clk);
+            // The first word is already stable when valid is observed. On
+            // later posedges, active-region sampling sees the prior NBA's
+            // stable next word; an added precision delay would skip ahead.
+            if (!proc_rd_data_valid)
+              $fatal(1, "Garnet proc read valid dropped block=%0d word=%0d", block, index);
             observed = proc_rd_data;
             expected = (block == 0) ? OUTPUT0_EXPECTED[index] : OUTPUT1_EXPECTED[index];
             if (observed !== expected)
@@ -251,6 +258,53 @@ module tb_aha_garnet_gaussian_transcript;
           end
         end
       join
+      // Match upstream ProcDriver_read_data: allow the final response valid
+      // to retire before starting a different output block. Without this
+      // drain, block 1 consumes block 0's final word as its first response.
+      repeat (10) @(posedge clk);
+    end
+  endtask
+
+  task automatic read_input_and_compare(input logic [17:0] base, input int words, input int block);
+    logic [63:0] expected;
+    logic [63:0] observed;
+    begin
+      fork
+        begin
+          for (int index = 0; index < words; index++) begin
+            @(negedge clk);
+            proc_rd_en = 1'b1;
+            proc_rd_addr = base + index * 8;
+          end
+          @(negedge clk);
+          proc_rd_en = 1'b0;
+          proc_rd_addr = '0;
+        end
+        begin
+          for (int index = 0; index < words; index++) begin
+            int guard = 0;
+            if (index == 0) begin
+              while (!proc_rd_data_valid) begin
+                @(posedge clk);
+                guard++;
+                if (guard == 256) $fatal(1, "Garnet input read timeout block=%0d word=%0d", block, index);
+              end
+            end else begin
+              @(posedge clk);
+            end
+            if (!proc_rd_data_valid)
+              $fatal(1, "Garnet input read valid dropped block=%0d word=%0d", block, index);
+            observed = proc_rd_data;
+            expected = (block == 0)
+              ? INPUT0_DATA[index / 8][(index % 8) * 64 +: 64]
+              : INPUT1_DATA[index / 8][(index % 8) * 64 +: 64];
+            if (observed !== expected)
+              $fatal(1, "Garnet input mismatch block=%0d word=%0d addr=%h expected=%h observed=%h",
+                     block, index, base + index * 8, expected, observed);
+          end
+        end
+      join
+      repeat (10) @(posedge clk);
     end
   endtask
 
@@ -304,6 +358,12 @@ module tb_aha_garnet_gaussian_transcript;
     repeat (10) @(posedge clk);
     for (int i = 0; i < INPUT1_COUNT; i++) issue_packet(INPUT1_ADDR[i], INPUT1_DATA[i], INPUT1_STRB[i]);
     repeat (10) @(posedge clk);
+    $display("AHA_GARNET_STAGE input_readback");
+    $fflush();
+    read_input_and_compare(INPUT0_ADDR[0], INPUT0_COUNT * 8, 0);
+    read_input_and_compare(INPUT1_ADDR[0], INPUT1_COUNT * 8, 1);
+    $display("AHA_GARNET_INPUT_READBACK_PASS");
+    $fflush();
     // Exact test_app order: complete all host writes, then unstall immediately
     // before the stream-start transaction.
     read_axi(13'h008, cgra_stall_after);

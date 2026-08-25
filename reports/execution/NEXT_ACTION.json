@@ -1,6 +1,6 @@
 {
-  "phase": "L2_AHA_GAUSSIAN_OUTPUT_READBACK",
-  "command": "After the 16-GiB admission guard passes, use scripts/run_memory_capped.sh with -j1 and a 9G/10G user-cgroup limit to rebuild the transcript that includes official packet drains and big-endian U16 input/output lane packing. Preserve the first true divergence at output block 0 word 0: expected 0x00710070006d0070, observed 0x00700070006e0070.",
-  "success_condition": "The actual Garnet top accepts the post-PCFG input transcript, finishes the official stream sequence, and every output byte matches the upstream Gaussian golden without a timeout, protocol error, or dropped packet.",
-  "failure_policy": "Preserve the verified PCFG transcript. Locate the first divergent output block, control interrupt, or proc-packet transaction; do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values. Do not start a heavy task below 16 GiB available memory; keep it at -j1 inside the user memory cgroup."
+  "phase": "L2_GEMMINI_RETAINED_ROCKET_EQUIVALENCE",
+  "command": "Run the pinned single-tile OS descriptor and the official padded.c macro sequence through the same retained RocketTile/GemminiRocketConfig harness; capture ordered funct3/funct7/rs1/rs2 commands, memory writes, completion/busy events, and output bytes. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
+  "success_condition": "Descriptor and official C paths produce identical ordered RoCC command payloads, memory-write trace, completion behavior, and bit-exact output bytes without changing upstream Gemmini.",
+  "failure_policy": "Stop at the first command/write/event divergence. Do not connect the clean-room gemmini_rocc_command_adapter to the official macro, invent PTW/TL behavior, relax numerical checks, or mark L2 PASS."
 }

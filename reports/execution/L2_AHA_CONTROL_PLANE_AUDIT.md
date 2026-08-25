@@ -72,17 +72,14 @@ bitstream packets containing all 519 entries, BS/kernel configuration writes,
 PCFG start, and the official Garnet interrupt. The harness explicitly drives
 `reset_in` from 0 to 1 before deasserting it; declaration-time `1` did not
 trigger the generated asynchronous AXI-controller reset branch in Verilator,
-leaving `AWREADY` low. This establishes control-plane acceptance only. Proc
-readback and byte-for-byte comparison of Gaussian output against upstream
-golden data are still required for AHA L2 numerical equivalence.
+leaving `AWREADY` low.
 
-The current numerical harness uses the exact upstream `ProcDriver_read_data`
-continuous-read pattern for each output block: 1,519 consecutive 64-bit
-addresses, `rd_data_valid` waiting, and the upstream Verilator one-clock-late
-sample point. This is required because the generated Global Buffer gates its
-proc-read clock with delayed `rd_en`; isolated one-word pulses can stop the
-response pipeline before its data is sampled. Its full numerical rerun is
-pending the resource admission guard; no output-equivalence PASS is claimed.
+The numerical harness uses continuous 1,519-address proc-read bursts because
+the generated Global Buffer gates its read clock with delayed `rd_en`.
+Module-testbench addresses are driven on negedges to avoid posedge races. The
+first valid word is sampled immediately; later words are sampled once per
+posedge in the active region. A ten-clock drain between blocks prevents stale
+valid/data from crossing block boundaries.
 
 Golden output data is loaded with the same 16-bit big-endian file semantics as
 the upstream `$fread` into `bit [15:0]`: raw bytes `00 70` mean numeric
@@ -96,3 +93,11 @@ as a numeric big-endian `bit [15:0]` value and then packed low-word first into
 proc packets, exactly as upstream `ProcDriver_write_data`. Direct raw-byte
 packing would reverse every input lane and produce a real but invalid CGRA
 result.
+
+Final result: PASS. On locked Verilator 5.028, both 12,672-byte input blocks
+read back exactly, G2F and F2G ISR masks are both `0x3`, and all 3,038 output
+64-bit words match the official Gaussian golden. The wrapper reports
+`AHA_GARNET_GAUSSIAN_NUMERICAL_PASS cycles=19914`. An independent official
+test_app trace also PASSes and returns first output word
+`0x00710070006d0070`, identical to wrapper and golden. This closes the AHA
+portion of L2 only; Gemmini retained-RocketTile equivalence remains open.

@@ -60,6 +60,16 @@ class RoCCMicroOp:
         if self.opcode != CUSTOM3_OPCODE:
             raise ValueError("locked GemminiRocketConfig accepts only CUSTOM_3")
 
+    @property
+    def funct3(self) -> int:
+        """RISC-V custom funct3 encoding used by pinned ROCC_INSTRUCTION_0_R_R.
+
+        `xcustom.h` emits `.insn r CUSTOM_3, 0x3, funct7, x0, rs1, rs2`.
+        In Rocket command terms those bits encode xd=0, xs1=1 and xs2=1.
+        """
+
+        return (int(self.xd) << 2) | (int(self.xs1) << 1) | int(self.xs2)
+
 
 def _unsigned(name: str, value: int, bits: int) -> int:
     if not 0 <= value < (1 << bits):

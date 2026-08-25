@@ -25,6 +25,7 @@ def test_official_mvin_and_mvout_packing() -> None:
         GemminiFunct.MVIN, 0x8000_1234, packed, CUSTOM3_OPCODE
     )
     assert not op.xd and op.xs1 and op.xs2 and op.rd == 0
+    assert op.funct3 == 0x3  # pinned ROCC_INSTRUCTION_0_R_R
     assert mvout(0x8000_5678, 0x1234, 0x56, 0x78).funct == GemminiFunct.MVOUT
 
 

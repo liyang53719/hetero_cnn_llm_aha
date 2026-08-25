@@ -20,16 +20,18 @@ strides, while tensor row strides are emitted only by subsequent `config_st`
 and `config_ld` operations. It retains literal local-address bits supplied by the
 descriptor allocator, and does not emit a fake RoCC response as completion.
 
+The resolved single-tile OS path now also passes a retained-RocketTile test:
+official macros and raw-lowered commands run in one GemminiRocketConfig ELF,
+commit matching payloads, and produce bit-exact equal outputs/checksum. See
+`L2_GEMMINI_RETAINED_ROCKET_EQUIVALENCE.md`.
+
 Scope deliberately remains limited:
 
 - logical dimensions above 16 and weight-stationary sequence construction are
   rejected until the descriptor allocator and official loop path run inside
   retained RocketTile context;
-- this is an encoding/unit-test result, not Gemmini macro numerical or memory
-  trace equivalence;
-- the next L2 test must execute both the official C sequence and the lowered
-  descriptor sequence in the same RocketTile harness and compare writes,
-  events, and output bytes.
+- multi-tile/WS, convolution, bias/requant, backpressure, event and illegal
+  descriptor coverage remains open.
 
 Verification: `PYTHONPATH=src taskset -c 8-25 python3 -m pytest -q
 tests/test_gemmini_rocc_lowering.py` (6 PASS).

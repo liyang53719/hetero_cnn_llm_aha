@@ -34,6 +34,7 @@
         "reports/execution/L2_GAP_AUDIT.md",
         "reports/execution/L2_MACRO_BOUNDARY_CONTRACT.md",
         "reports/execution/L2_GEMMINI_LOWERING_AUDIT.md",
+        "reports/execution/L2_GEMMINI_RETAINED_ROCKET_EQUIVALENCE.md",
         "reports/execution/gemmini_macro_contract_lock.json",
         "work/results/l2_wrapper_freeze/gemmini_boundary_result.json",
         "work/generated/l2_aha_garnet_4x16/port_contract_lint_result.json",
@@ -49,7 +50,9 @@
         "work/results/l2_aha_garnet_u16be_numerical.log",
         "work/results/l2_aha_garnet_axi_timing_numerical.log",
         "work/results/l2_aha_garnet_full_numerical.log",
-        "work/generated/l2_aha_official_proc_trace/docker_trace_serial.log"
+        "work/generated/l2_aha_official_proc_trace/docker_trace_serial.log",
+        "work/results/l2_gemmini_rocc_equiv/result.json",
+        "work/results/l2_gemmini_rocc_equiv/verilator.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -64,10 +67,10 @@
         "Full Garnet-top transcript elaboration and Verilator binary build",
         "Full Garnet-top PCFG control transcript: interrupt-enable, 519-entry bitstream, bs_cfg/kernel_cfg, PCFG start and official interrupt PASS in 2253 cycles",
         "Full Garnet-top Gaussian wrapper equivalence: both input blocks read back exactly, G2F/F2G ISR masks equal 3, and both output blocks match golden in 19914 cycles on Verilator 5.028",
-        "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test"
+        "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test",
+        "Gemmini retained-RocketTile single-tile OS equivalence: 11 commands per path, first 10 payloads identical, final mvout differs only by destination, outputs/checksum bit-exact"
       ],
       "remaining_gates": [
-        "typed descriptor to official Gemmini RoCC sequence equivalence",
         "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs"
       ]
     },

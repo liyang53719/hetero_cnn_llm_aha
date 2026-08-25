@@ -1,6 +1,6 @@
 {
-  "phase": "L2_GEMMINI_RETAINED_ROCKET_EQUIVALENCE",
-  "command": "Run the pinned single-tile OS descriptor and the official padded.c macro sequence through the same retained RocketTile/GemminiRocketConfig harness; capture ordered funct3/funct7/rs1/rs2 commands, memory writes, completion/busy events, and output bytes. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
-  "success_condition": "Descriptor and official C paths produce identical ordered RoCC command payloads, memory-write trace, completion behavior, and bit-exact output bytes without changing upstream Gemmini.",
-  "failure_policy": "Stop at the first command/write/event divergence. Do not connect the clean-room gemmini_rocc_command_adapter to the official macro, invent PTW/TL behavior, relax numerical checks, or mark L2 PASS."
+  "phase": "L2_GEMMINI_BROAD_WRAPPER_COVERAGE",
+  "command": "Extend the retained-RocketTile equivalence harness in fixed order: multi-tile OS, official loop WS, mvin/mvout edge shapes, conv, bias/requant, queue backpressure, completion/event, and illegal descriptor. Compare ordered RoCC payloads, memory writes, busy/completion behavior, and bit-exact bytes. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
+  "success_condition": "All required Gemmini L2 operations match their official C/RTL paths in retained RocketTile context with identical command/write/event traces and bit-exact outputs; upstream remains clean.",
+  "failure_policy": "Stop at the first command/write/event divergence. Do not connect the clean-room adapter to the official macro, hand-write TileLink/PTW behavior, skip WS/conv/event coverage, relax numerical checks, or mark L2 PASS."
 }

@@ -21,6 +21,7 @@
 - Production SP macro uses bit-write mask; ready/valid wrapper passes full/partial write, read stall, and invalid-address tests on the real ARM model.
 - Control/trace 4096x128 bit-write views+wrapper PASS on real ARM model; four macros provide 256 KiB.
 - Real 4-macro 512-bit Shared-L2 bank group PASS; four groups implement the planned 16 banks after arbitration integration.
+- Full 16-ARM-macro Shared-L2 100k PASS: 47346 reads, 52654 writes, 146953 conflicts, 0 mismatch/error/timeout; still L3 readiness.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

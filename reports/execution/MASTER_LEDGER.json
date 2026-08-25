@@ -106,13 +106,17 @@
       "readiness_evidence": [
         "reports/execution/L3_SHARED_L2_FABRIC_READINESS.md",
         "work/results/l3_fabric_readiness/tb_shared_l2_fabric.log",
-        "work/results/l3_fabric_readiness/verilator_lint_clean.log"
+        "work/results/l3_fabric_readiness/verilator_lint_clean.log",
+        "reports/execution/L3_SHARED_L2_MACRO_FABRIC.md",
+        "work/results/l3_macro_fabric/tb.log",
+        "work/results/l3_macro_fabric/verilator_lint.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
         "round-robin two-read one-write bank-group arbitration with byte enables and backpressure",
         "cycle/read/write/conflict/read-stall/write-stall counters",
-        "100001 accepted randomized transactions with zero mismatch or timeout"
+        "100001 accepted randomized transactions with zero mismatch or timeout",
+        "16 real ARM SRAM macros behind four-group round-robin arbitration pass 100000 transactions with zero mismatch, response ownership error, macro address error, or timeout"
       ],
       "remaining_gates": [
         "L2 dependency PASS",

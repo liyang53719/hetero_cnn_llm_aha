@@ -10,6 +10,7 @@ HEIGHT=${AHA_HEIGHT:-16}
 CPUSET=${AHA_CPUSET:-8-23}
 SIM_TOOL=${AHA_TOOL:-VERILATOR}
 VERILATOR_ROOT=${VERILATOR_ROOT:-"$PROJECT_ROOT/work/toolchain/conda"}
+VERILATOR_CXX=${AHA_VERILATOR_CXX:-}
 VCS_ROOT=${VCS_ROOT:-/home/yang/tools/synopsys/vcs/W-2024.09}
 VCS_LICENSE=${VCS_LICENSE:-2700@host.docker.internal}
 mkdir -p "$OUT"
@@ -19,6 +20,10 @@ command -v docker >/dev/null || { echo "Docker is required" >&2; exit 2; }
 case "$SIM_TOOL" in
   VERILATOR)
     test -x "$VERILATOR_ROOT/bin/verilator" || { echo "VERILATOR_ROOT must provide bin/verilator: $VERILATOR_ROOT" >&2; exit 2; }
+    if [[ -n "$VERILATOR_CXX" && "$VERILATOR_CXX" != g++-10 ]]; then
+      echo "AHA_VERILATOR_CXX currently supports only g++-10, got: $VERILATOR_CXX" >&2
+      exit 2
+    fi
     ;;
   VCS)
     test -x "$VCS_ROOT/bin/vcs" || { echo "VCS_ROOT must provide bin/vcs: $VCS_ROOT" >&2; exit 2; }
@@ -65,6 +70,13 @@ if [[ "$SIM_TOOL" == VERILATOR ]]; then
     -e "LD_LIBRARY_PATH=/host-verilator/lib"
     -v "$VERILATOR_ROOT:/host-verilator:ro"
   )
+  if [[ -n "$VERILATOR_CXX" ]]; then
+    docker_args+=(
+      -e "CXX=$VERILATOR_CXX"
+      -e "MAKEFLAGS=-j6 CXX=$VERILATOR_CXX"
+      -e 'VERILATOR_WARN=-CFLAGS "-std=gnu++2a -fcoroutines"'
+    )
+  fi
 else
   docker_args+=(
     --add-host=host.docker.internal:host-gateway
@@ -81,6 +93,10 @@ docker run "${docker_args[@]}" \
   "$IMAGE" bash -lc "
     set -euo pipefail
     export PATH=/aha/bin:\$PATH
+    if [[ \"$SIM_TOOL\" == VERILATOR && -n \"$VERILATOR_CXX\" ]]; then
+      apt-get update
+      DEBIAN_FRONTEND=noninteractive apt-get install -y g++-10
+    fi
     if [[ \"$SIM_TOOL\" == VCS ]]; then
       dpkg --add-architecture i386
       apt-get update

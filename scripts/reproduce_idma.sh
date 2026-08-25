@@ -13,13 +13,11 @@ if [[ -n "$(git -C "$IDMA_ROOT" status --porcelain)" ]]; then
 fi
 command -v bender >/dev/null || { echo "bender >=0.32 is required" >&2; exit 2; }
 
-if (cd "$IDMA_ROOT" && bender update) > "$OUT/bender_update.log" 2>&1; then
-  BENDER_UPDATE_STATUS=PASS
-else
-  BENDER_UPDATE_STATUS=BLOCKED_VERSION_CONFLICT
-  echo "Bender update did not resolve a single common_cells version; using the committed lockfile for source enumeration." \
-    | tee -a "$OUT/reproduce.log"
-fi
+# L1 is an unmodified upstream baseline. `bender update` rewrites dependency
+# resolution and is deliberately forbidden here; use the repository's committed
+# lock only. Any update is a later adapter/fork decision.
+test -f "$IDMA_ROOT/Bender.lock" || { echo "Committed Bender.lock is required for an unchanged baseline" >&2; exit 5; }
+BENDER_UPDATE_STATUS=NOT_RUN_BASELINE_LOCKED
 (cd "$IDMA_ROOT" && bender sources -f) > "$OUT/sources.txt"
 test -s "$OUT/sources.txt"
 
@@ -45,7 +43,7 @@ python3 - "$OUT" <<'PY'
 import json, pathlib, sys
 out=pathlib.Path(sys.argv[1])
 status={"status":"PASS" if (out/"sources.txt").stat().st_size else "FAIL",
-        "bender_update_status": "PASS" if (out/"bender_update.log").read_text(errors="ignore").find("Error:") < 0 else "BLOCKED_VERSION_CONFLICT",
+        "bender_update_status": "NOT_RUN_BASELINE_LOCKED",
         "scope":"dependency resolution/source enumeration; protocol simulation remains an integration gate"}
 (out/"result.json").write_text(json.dumps(status,indent=2)+"\n")
 PY

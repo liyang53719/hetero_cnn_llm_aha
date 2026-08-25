@@ -20,8 +20,9 @@ def main() -> int:
     args = parser.parse_args()
     lib = args.root / "l2sp6144x128_tt_typical_0p80v_0p80v_25c.lib"
     verilog = args.root / "l2sp6144x128.v"
-    if not lib.is_file() or not verilog.is_file():
-        raise SystemExit("required Liberty or Verilog view is missing")
+    gds2 = args.root / "l2sp6144x128.gds2"
+    if not lib.is_file() or not verilog.is_file() or not gds2.is_file():
+        raise SystemExit("required Liberty, Verilog, or GDS2 view is missing")
     lib_text = lib.read_text(errors="replace")
     verilog_text = verilog.read_text(errors="replace")
     checks = {
@@ -47,6 +48,7 @@ def main() -> int:
         "views": {
             "liberty": {"path": str(lib), "sha256": digest(lib)},
             "verilog": {"path": str(verilog), "sha256": digest(verilog)},
+            "gds2": {"path": str(gds2), "sha256": digest(gds2)},
             "lef": [{"path": str(path), "sha256": digest(path)} for path in lef_files],
         },
         "blocker": None if lef_files else "shared ARM bifrun SIGSEGV after opening generated BIF",

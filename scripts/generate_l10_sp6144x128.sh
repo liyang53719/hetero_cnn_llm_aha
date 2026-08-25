@@ -23,6 +23,13 @@ run_generator() {
 
 run_generator liberty -libertyviewstyle nldm -libname l2sp6144x128
 run_generator verilog
+# Physical views do not depend on the timing corner.
+(
+  cd "$OUT"
+  MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=2G MEMORY_MAX=3G \
+    "$ROOT/scripts/run_memory_capped.sh" "$COMPILER" gds2 \
+    -words 6144 -bits 128 -mux 8 -mvt BASE -instname "$NAME"
+) >"$OUT/gds2.log" 2>&1
 # LEF has no timing corner, but keeps the same BASE physical selection.
 (
   cd "$OUT"

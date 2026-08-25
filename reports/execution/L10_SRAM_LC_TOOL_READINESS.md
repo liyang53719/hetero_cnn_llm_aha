@@ -31,9 +31,12 @@ Blocking incompatibilities with the fixed L10 plan:
    All ten installed memory compilers share the same `bifrun` binary (SHA256
    `bb2cd8a8fab1e791eb6404ee4a10c6747efc19a566498380117f35a6b9245d68`).
    File-level tracing proves the generated temporary BIF is opened and then
-   `bifrun` terminates with SIGSEGV. Older libstdc++, process-local no-ASLR,
-   Ubuntu 18/glibc 2.27, r1p0/r3p1 compilers, and `site_def` variants do not
-   fix it. This is a shared delivery/runtime defect, not a macro-shape error.
+   `bifrun` terminates with SIGSEGV. GDB identifies
+   `Module::ReplaceDummyPinsWithObs()` as the failing frame. Older libstdc++,
+   process-local no-ASLR, Ubuntu 18/glibc 2.27, r1p0/r3p1 compilers, and
+   `site_def` variants do not fix it. This is a shared delivery/runtime
+   defect, not a macro-shape error. The independent GDS2 generator works and
+   has produced the real 6144x128 layout.
 
 Required decisions/dependencies:
 

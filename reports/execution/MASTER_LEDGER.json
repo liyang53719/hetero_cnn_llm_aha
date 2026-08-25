@@ -138,7 +138,8 @@
         "work/results/l10_tool_readiness/compiler_probe/dp_4096x32_ll_mux16.log",
         "work/results/l10_tool_readiness/compiler_probe/uhde_sp_6144x128_base_mux8_tt0p8.log",
         "reports/execution/L10_SP6144X128_VIEW_GENERATION.md",
-        "work/results/l10_tool_readiness/sp6144x128_views_result.json"
+        "work/results/l10_tool_readiness/sp6144x128_views_result.json",
+        "work/results/l10_tool_readiness/lef_preserve_bif_fullargv/gdb_backtrace.log"
       ],
       "readiness_status": "PARTIAL_BLOCKED_DEPENDENCY_AND_DECISION"
     },
@@ -147,7 +148,7 @@
   "known_blockers": [
     "BLOCKED_DECISION L2: descriptor fetch/storage RTL interface is undefined; recommended Shared-L2 24-bit-index to 128-bit-record ready/valid port awaits approval.",
     "BLOCKED_DEPENDENCY L10: Library Compiler is absent and DC Liberty conversion fails LCSH-3; licensed LC installation media is not present locally.",
-    "BLOCKED_DEPENDENCY L10: UHDE SP 6144x128 Liberty/Verilog generate successfully, but the common ARM bifrun used by all installed memory compilers SIGSEGVs after opening generated BIF; no pre-generated memory LEF exists and Ubuntu18/compatibility probes also fail.",
+    "BLOCKED_DEPENDENCY L10: UHDE SP 6144x128 Liberty/Verilog/GDS2 generate successfully, but common ARM bifrun SIGSEGVs in Module::ReplaceDummyPinsWithObs after opening generated BIF; no pre-generated memory LEF exists and Ubuntu18/compatibility probes also fail.",
     "BLOCKED_DECISION L10: installed ARM DP compiler rejects BASE and direct 2048/4096x128; validated LL0.8 decompositions are 2x2048x64 and 4x4096x32. UHDE SP BASE 6144x128 at 0.8V TT25 is validated."
   ]
 }

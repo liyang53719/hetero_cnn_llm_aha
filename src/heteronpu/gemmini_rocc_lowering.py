@@ -29,6 +29,13 @@ class GemminiFunct(IntEnum):
     COUNTER = 126
 
 
+class GemminiDataflow(IntEnum):
+    """Values used by the pinned official ``gemmini.h`` API."""
+
+    OUTPUT_STATIONARY = 0
+    WEIGHT_STATIONARY = 1
+
+
 @dataclass(frozen=True)
 class RoCCMicroOp:
     """One official CUSTOM_3 RoCC instruction as seen by RocketTile."""
@@ -107,3 +114,128 @@ def flush(*, skip: bool = False) -> RoCCMicroOp:
     """Encode the official TLB flush command; this is not a GEMM completion."""
 
     return RoCCMicroOp(GemminiFunct.FLUSH, int(skip), 0)
+
+
+def config_ex(*, dataflow: GemminiDataflow, c_stride: int, a_stride: int,
+              a_transpose: bool = False, b_transpose: bool = False,
+              sys_activation: int = 0, sys_shift: int = 0,
+              acc_scale_bits: int = 0x3F80_0000) -> RoCCMicroOp:
+    """Encode ``gemmini_extended3_config_ex`` with explicit frozen operands."""
+
+    rs1 = (
+        _unsigned("acc_scale_bits", acc_scale_bits, 32) << 32
+        | _unsigned("a_stride", a_stride, 16) << 16
+        | int(bool(b_transpose)) << 9
+        | int(bool(a_transpose)) << 8
+        | _unsigned("sys_activation", sys_activation, 2) << 3
+        | _unsigned("dataflow", int(dataflow), 1) << 2
+    )
+    rs2 = _unsigned("c_stride", c_stride, 16) << 48 | _unsigned("sys_shift", sys_shift, 32)
+    return RoCCMicroOp(GemminiFunct.CONFIG, rs1, rs2)
+
+
+def config_load(*, stride_bytes: int, scale_bits: int = 0x3F80_0000,
+                shrunk: bool = False, block_mvin_stride: int = 16,
+                pixel_repeats: int = 1, channel: int = 0) -> RoCCMicroOp:
+    """Encode ``gemmini_extended5_config_ld`` without hidden defaults."""
+
+    rs1 = (
+        _unsigned("scale_bits", scale_bits, 32) << 32
+        | _unsigned("block_mvin_stride", block_mvin_stride, 16) << 16
+        | _unsigned("pixel_repeats", pixel_repeats, 8) << 8
+        | _unsigned("channel", channel, 2) << 3
+        | int(bool(shrunk)) << 2
+        | 1  # CONFIG_LD
+    )
+    return RoCCMicroOp(GemminiFunct.CONFIG, rs1, _unsigned("stride_bytes", stride_bytes, 32))
+
+
+def config_store(*, stride_bytes: int, acc_scale_bits: int = 0x3F80_0000) -> RoCCMicroOp:
+    """Encode the non-pooling ``gemmini_config_st`` form."""
+
+    rs1 = 2  # CONFIG_ST, with all pooling/activation fields zero
+    rs2 = _unsigned("acc_scale_bits", acc_scale_bits, 32) << 32 | _unsigned("stride_bytes", stride_bytes, 32)
+    return RoCCMicroOp(GemminiFunct.CONFIG, rs1, rs2)
+
+
+@dataclass(frozen=True)
+class Int8SingleTileDescriptor:
+    """Typed L2 descriptor view for one official output-stationary Gemmini tile.
+
+    The architectural descriptor schema owns the logical M/N/K and tensor
+    bases.  This object is its resolved one-tile view: local addresses already
+    carry official scratchpad/accumulator address bits, so this lowerer never
+    invents a memory map.  It deliberately rejects tiles beyond DIM=16 and
+    weight-stationary sequencing until the project descriptor allocator and
+    official loop path are connected in RocketTile.
+    """
+
+    a_dram_addr: int
+    b_dram_addr: int
+    c_dram_addr: int
+    a_local_addr: int
+    b_local_addr: int
+    c_local_addr: int
+    m: int
+    n: int
+    k: int
+    a_stride_bytes: int
+    b_stride_bytes: int
+    c_stride_bytes: int
+    bias_dram_addr: int | None = None
+    bias_local_addr: int | None = None
+    bias_stride_bytes: int | None = None
+    dataflow: GemminiDataflow = GemminiDataflow.OUTPUT_STATIONARY
+    transpose_a: bool = False
+    transpose_b: bool = False
+
+
+def lower_int8_single_tile(descriptor: Int8SingleTileDescriptor) -> tuple[RoCCMicroOp, ...]:
+    """Lower one resolved OS INT8 tile using the official C macro ordering.
+
+    The returned program intentionally has no synthetic response or completion
+    command.  Completion remains a retained-RocketTile observation, because
+    normal Gemmini commands do not produce a generic ``io_resp`` transaction.
+    """
+
+    for name, value in (("m", descriptor.m), ("n", descriptor.n), ("k", descriptor.k)):
+        if not 1 <= value <= 16:
+            raise ValueError(f"{name} must be in 1..16 for the single-tile lowerer")
+    if descriptor.dataflow is not GemminiDataflow.OUTPUT_STATIONARY:
+        raise ValueError("weight-stationary lowering requires the retained official loop path")
+    if (descriptor.bias_dram_addr is None) != (descriptor.bias_local_addr is None):
+        raise ValueError("bias dram/local addresses must either both be present or both be absent")
+    if descriptor.bias_dram_addr is not None and descriptor.bias_stride_bytes is None:
+        raise ValueError("bias_stride_bytes is required with a bias descriptor")
+
+    ops = [
+        config_ex(
+            dataflow=descriptor.dataflow,
+            c_stride=descriptor.c_stride_bytes,
+            a_stride=descriptor.a_stride_bytes,
+            a_transpose=descriptor.transpose_a,
+            b_transpose=descriptor.transpose_b,
+        ),
+        config_store(stride_bytes=descriptor.c_stride_bytes),
+        config_load(stride_bytes=descriptor.a_stride_bytes),
+        mvin(descriptor.a_dram_addr, descriptor.a_local_addr, descriptor.k, descriptor.m),
+        config_load(stride_bytes=descriptor.b_stride_bytes),
+        mvin(descriptor.b_dram_addr, descriptor.b_local_addr, descriptor.n, descriptor.k),
+    ]
+    if descriptor.bias_dram_addr is not None:
+        assert descriptor.bias_local_addr is not None and descriptor.bias_stride_bytes is not None
+        ops.extend((
+            config_load(stride_bytes=descriptor.bias_stride_bytes),
+            mvin(descriptor.bias_dram_addr, descriptor.bias_local_addr, descriptor.n, descriptor.m),
+            preload(descriptor.bias_local_addr, descriptor.c_local_addr,
+                    descriptor.n, descriptor.m, descriptor.n, descriptor.m),
+        ))
+    else:
+        ops.append(preload((1 << 32) - 1, descriptor.c_local_addr,
+                           16, 16, descriptor.n, descriptor.m))
+    ops.extend((
+        compute(descriptor.a_local_addr, descriptor.b_local_addr,
+                descriptor.k, descriptor.m, descriptor.n, descriptor.k, accumulate=False),
+        mvout(descriptor.c_dram_addr, descriptor.c_local_addr, descriptor.n, descriptor.m),
+    ))
+    return tuple(ops)

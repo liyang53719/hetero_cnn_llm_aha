@@ -2,13 +2,19 @@ import pytest
 
 from heteronpu.gemmini_rocc_lowering import (
     CUSTOM3_OPCODE,
+    GemminiDataflow,
     GemminiFunct,
+    Int8SingleTileDescriptor,
+    config_ex,
+    config_load,
+    config_store,
     compute,
     flush,
     mvin,
     mvout,
     pack_local_addr_rows_cols,
     preload,
+    lower_int8_single_tile,
 )
 
 
@@ -33,6 +39,15 @@ def test_preload_and_compute_match_official_two_operand_shape_packing() -> None:
     assert compute(0x11, 0x22, 2, 3, 4, 5, accumulate=True).funct == GemminiFunct.COMPUTE_ACCUMULATE
 
 
+def test_config_encoders_match_pinned_gemmini_h_bit_layouts() -> None:
+    ex = config_ex(dataflow=GemminiDataflow.OUTPUT_STATIONARY, c_stride=5, a_stride=7)
+    assert (ex.funct, ex.rs1, ex.rs2) == (GemminiFunct.CONFIG, 0x3F80_0000_0007_0000, 5 << 48)
+    ld = config_load(stride_bytes=7)
+    assert (ld.funct, ld.rs1, ld.rs2) == (GemminiFunct.CONFIG, 0x3F80_0000_0010_0101, 7)
+    st = config_store(stride_bytes=5)
+    assert (st.funct, st.rs1, st.rs2) == (GemminiFunct.CONFIG, 2, 0x3F80_0000_0000_0005)
+
+
 def test_channel_and_width_validation() -> None:
     assert mvin(0, 0, 1, 1, channel=1).funct == GemminiFunct.MVIN2
     assert mvin(0, 0, 1, 1, channel=2).funct == GemminiFunct.MVIN3
@@ -41,3 +56,36 @@ def test_channel_and_width_validation() -> None:
         mvin(0, 0, 1, 1, channel=3)
     with pytest.raises(ValueError, match="cols"):
         pack_local_addr_rows_cols(0, 1 << 16, 1)
+
+
+def test_resolved_int8_descriptor_lowers_in_official_os_macro_order() -> None:
+    descriptor = Int8SingleTileDescriptor(
+        a_dram_addr=0x8000_0000, b_dram_addr=0x8000_1000, c_dram_addr=0x8000_2000,
+        a_local_addr=0x000, b_local_addr=0x010, c_local_addr=0x030,
+        m=3, n=5, k=7, a_stride_bytes=7, b_stride_bytes=5, c_stride_bytes=5,
+        bias_dram_addr=0x8000_3000, bias_local_addr=0x020, bias_stride_bytes=5,
+    )
+    program = lower_int8_single_tile(descriptor)
+    assert [op.funct for op in program] == [
+        GemminiFunct.CONFIG, GemminiFunct.CONFIG, GemminiFunct.CONFIG,
+        GemminiFunct.MVIN, GemminiFunct.CONFIG, GemminiFunct.MVIN,
+        GemminiFunct.CONFIG, GemminiFunct.MVIN, GemminiFunct.PRELOAD,
+        GemminiFunct.COMPUTE_PRELOADED, GemminiFunct.MVOUT,
+    ]
+    assert program[8].rs1 == pack_local_addr_rows_cols(0x020, 5, 3)
+    assert program[-1].rs2 == pack_local_addr_rows_cols(0x030, 5, 3)
+    assert all(op.opcode == CUSTOM3_OPCODE and not op.xd for op in program)
+
+
+def test_single_tile_lowerer_rejects_unsupported_or_incomplete_policy() -> None:
+    base = dict(
+        a_dram_addr=0, b_dram_addr=0, c_dram_addr=0,
+        a_local_addr=0, b_local_addr=0, c_local_addr=0,
+        m=1, n=1, k=1, a_stride_bytes=1, b_stride_bytes=1, c_stride_bytes=1,
+    )
+    with pytest.raises(ValueError, match="1..16"):
+        lower_int8_single_tile(Int8SingleTileDescriptor(**(base | {"m": 17})))
+    with pytest.raises(ValueError, match="weight-stationary"):
+        lower_int8_single_tile(Int8SingleTileDescriptor(
+            **base, dataflow=GemminiDataflow.WEIGHT_STATIONARY
+        ))

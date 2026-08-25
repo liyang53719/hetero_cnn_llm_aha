@@ -1,0 +1,1 @@
+rtl/integration/command_event_scoreboard.sv

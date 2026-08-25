@@ -82,6 +82,7 @@ def main() -> int:
         "command_dispatch",
         "hetero_npu_shell",
         "command_event_scoreboard",
+        "command_event_scoreboard_sram",
         "engine_contract_adapter",
         "hetero_npu_integrated_v0",
         "hetero_npu_numerical_integration_v0",

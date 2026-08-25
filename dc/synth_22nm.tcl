@@ -18,6 +18,7 @@ set STD_CELL_DBS [require_env STD_CELL_DBS]
 set CLOCK_PORT   [expr {[info exists ::env(CLOCK_PORT)] ? $::env(CLOCK_PORT) : "clk_i"}]
 set CLK_PERIOD   [expr {[info exists ::env(CLOCK_PERIOD_NS)] ? $::env(CLOCK_PERIOD_NS) : 1.0}]
 set OUT_DIR      [expr {[info exists ::env(OUT_DIR)] ? $::env(OUT_DIR) : "work/dc/$TOP"}]
+set MAX_CORES    [expr {[info exists ::env(DC_MAX_CORES)] ? $::env(DC_MAX_CORES) : 4}]
 file mkdir $OUT_DIR
 
 set dbs [split $STD_CELL_DBS ":"]
@@ -38,7 +39,7 @@ if {[llength $rtl_files] == 0} {
   exit 3
 }
 
-set_host_options -max_cores 8
+set_host_options -max_cores $MAX_CORES
 analyze -format sverilog $rtl_files
 elaborate $TOP
 current_design $TOP

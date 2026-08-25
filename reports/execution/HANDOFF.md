@@ -24,6 +24,8 @@
 - Full 16-ARM-macro Shared-L2 100k PASS: 47346 reads, 52654 writes, 146953 conflicts, 0 mismatch/error/timeout; still L3 readiness.
 - Matrix-SFU/KV four direct-stream skid channels PASS 100k with all six payload fields stable/in-order; endpoint connection remains.
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
+- Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
+- Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

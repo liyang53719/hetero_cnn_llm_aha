@@ -115,7 +115,10 @@
         "work/results/l3_direct_streams/verilator_lint.log",
         "reports/execution/L3_EVENT_SCOREBOARD_16BIT.md",
         "work/results/l3_event_scoreboard/tb.log",
-        "work/results/l3_event_scoreboard/verilator_lint.log"
+        "work/results/l3_event_scoreboard/verilator_lint.log",
+        "reports/execution/L3_EVENT_SCOREBOARD_SRAM.md",
+        "work/results/l3_event_scoreboard_sram/tb.log",
+        "work/results/l3_event_scoreboard_sram/verilator_lint.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
@@ -124,7 +127,8 @@
         "100001 accepted randomized transactions with zero mismatch or timeout",
         "16 real ARM SRAM macros behind four-group round-robin arbitration pass 100000 transactions with zero mismatch, response ownership error, macro address error, or timeout",
         "four dedicated Matrix-SFU/KV bidirectional Tensor Stream skid channels pass 100000 ordered randomized-backpressure transfers",
-        "full 16-bit persistent event scoreboard passes 100000 chained commands across two reset epochs and rejects 23 error completions as dependency signals"
+        "full 16-bit persistent event scoreboard passes 100000 chained commands across two reset epochs and rejects 23 error completions as dependency signals",
+        "production event scoreboard maps one byte per Event ID into a real 4096x128 Control SRAM and passes the same 100000-command semantics with zero macro errors"
       ],
       "remaining_gates": [
         "L2 dependency PASS",
@@ -160,7 +164,10 @@
         "work/results/l10_ct_sp_wrapper/tb.log",
         "reports/execution/L10_L2_512B_MACRO_BANK_GROUP.md",
         "work/results/l10_l2_macro_bank_group/tb.log",
-        "work/results/l10_l2_macro_bank_group/verilator_lint.log"
+        "work/results/l10_l2_macro_bank_group/verilator_lint.log",
+        "reports/execution/L10_L3_LOGIC_DC_READINESS.md",
+        "work/results/l10_dc_readiness/matrix_direct_streams/status.txt",
+        "work/results/l10_dc_readiness/command_event_scoreboard/status.txt"
       ],
       "readiness_status": "PARTIAL_BLOCKED_DEPENDENCY_AND_DECISION"
     },

@@ -1,0 +1,212 @@
+{
+  "closure_config": "third_party/used_upstream_closure.json",
+  "failures": [],
+  "repositories": {
+    "aha": {
+      "commit": "3b171e813bc5e399b22921c8df20fd4e889f1569",
+      "dirty": false,
+      "origin": "https://github.com/StanfordAHA/aha.git",
+      "path": "work/upstream/aha",
+      "required_submodules": {
+        "archipelago": {
+          "commit": "db8a1a1afc06d763f12a5f47f7aeb2ba4f2ff81b",
+          "marker": " "
+        },
+        "ast_tools": {
+          "commit": "c8d7f0dd41fb41b9fe35f80b45b26e633c213d0d",
+          "marker": " "
+        },
+        "canal": {
+          "commit": "4e6f931094cafb15aa2aa3e234d663b93af6c999",
+          "marker": " "
+        },
+        "cgra_pnr": {
+          "commit": "b3b5a1e52b7e7264f9606484ac99a66fd610ba06",
+          "marker": " "
+        },
+        "cgra_pnr/cyclone/extern/argparse": {
+          "commit": "ccf3920ce205b02f09325c8f454e2fe9ce4edfb5",
+          "marker": " "
+        },
+        "cgra_pnr/cyclone/python/pybind11": {
+          "commit": "8de7772cc72daca8e947b79b83fea46214931604",
+          "marker": " "
+        },
+        "cgra_pnr/thunder/lib/leidenalg": {
+          "commit": "1a4686404571c7184ce4d92a1ad6285dbbbd801c",
+          "marker": " "
+        },
+        "cgra_pnr/thunder/python/pybind11": {
+          "commit": "8de7772cc72daca8e947b79b83fea46214931604",
+          "marker": " "
+        },
+        "clockwork": {
+          "commit": "23540a0669dadcb6656e5fc9696183dbf2efca96",
+          "marker": " "
+        },
+        "coreir": {
+          "commit": "617e9f3cbf75be8d737f2fe9f5bef3511095f92d",
+          "marker": " "
+        },
+        "fault": {
+          "commit": "3c3028f2fbaaa4ecf5527d6290a9ce5cc61be99a",
+          "marker": " "
+        },
+        "garnet": {
+          "commit": "6a8520cf7361693e9fc1fb3906df6b4f37268a49",
+          "marker": " "
+        },
+        "gemstone": {
+          "commit": "072f1d67e6e6f0a654f429183e99b37c38f3eb08",
+          "marker": " "
+        },
+        "hwtypes": {
+          "commit": "aa051b31e330b44dcb67834af0e454b58d7aa2d8",
+          "marker": " "
+        },
+        "kratos": {
+          "commit": "83e05b81d301558073a5fbb8e41607c6dfbb1a15",
+          "marker": " "
+        },
+        "lake": {
+          "commit": "66833dbbd7f8f2ae62ac5968f618587fd5b5d71a",
+          "marker": " "
+        },
+        "lassen": {
+          "commit": "d2a44118b3d3e831c762cb321fce79da4cb387b8",
+          "marker": " "
+        },
+        "magma": {
+          "commit": "266aaee29d14238976e085ce69ef27f8aab3a81f",
+          "marker": " "
+        },
+        "mantle": {
+          "commit": "8193cf6df60f5be7f198e55d74d9a196abec8342",
+          "marker": " "
+        },
+        "peak": {
+          "commit": "7846f13c32877472e01bfbc5221fc19c041d207c",
+          "marker": " "
+        },
+        "peak_generator": {
+          "commit": "a00a468bc5940771c27bb9b62c8cc1f058b94760",
+          "marker": " "
+        },
+        "pycoreir": {
+          "commit": "775aeff8d59e827c45eb9512dd0b64e8aef554a7",
+          "marker": " "
+        }
+      }
+    },
+    "chipyard_gemmini": {
+      "commit": "e602d917dcc495c58cabe906535e411707096c9c",
+      "dirty": false,
+      "origin": "https://github.com/ucb-bar/chipyard.git",
+      "path": "work/upstream/chipyard_gemmini",
+      "required_submodules": {
+        "generators/diplomacy": {
+          "commit": "fe5e131d4fc8adec14a3ce4a4935bb5c0a269871",
+          "marker": " "
+        },
+        "generators/gemmini": {
+          "commit": "8c3f9923a44a2fe2c7930587be297d6d4f8c09ca",
+          "marker": " "
+        },
+        "generators/gemmini/software/gemmini-rocc-tests": {
+          "commit": "7c540b3adf1b86ad93d07f893abe3a73489b568e",
+          "marker": " "
+        },
+        "generators/gemmini/software/gemmini-rocc-tests/riscv-tests": {
+          "commit": "c84daca8824635b7d896003c78f9c6245997cf7a",
+          "marker": " "
+        },
+        "generators/gemmini/software/gemmini-rocc-tests/rocc-software": {
+          "commit": "fddb795a0b52e82f8f4ce9ead9b1428440a62ab0",
+          "marker": " "
+        },
+        "generators/gemmini/software/libgemmini": {
+          "commit": "ea8f7ed7afd68e001fb06ddccad9a023c990961d",
+          "marker": " "
+        },
+        "generators/hardfloat": {
+          "commit": "0ecaef097ce2accbd16a61613699450ed5533f29",
+          "marker": " "
+        },
+        "generators/rocket-chip": {
+          "commit": "55bcad0f59436de98ea510334121de8546b9e9d7",
+          "marker": " "
+        },
+        "generators/rocket-chip-blocks": {
+          "commit": "f8c7fddbd7639b15fefc968af59fcc4a8f7df73b",
+          "marker": " "
+        },
+        "generators/rocket-chip-inclusive-cache": {
+          "commit": "85420cf26f9abcebf685f0d68d14189598943c19",
+          "marker": " "
+        },
+        "generators/testchipip": {
+          "commit": "c807cad815069bd8779dd700239242a5891498b4",
+          "marker": " "
+        },
+        "tools/DRAMSim2": {
+          "commit": "44322e2f935d7dac83b7adf8dd270b41a54c6acb",
+          "marker": " "
+        },
+        "tools/cde": {
+          "commit": "2bcaeae2b9914bd25497ce3c6fa62dc5ca80e09f",
+          "marker": " "
+        },
+        "tools/dsptools": {
+          "commit": "a310a157cab6e569d30741eae4ca5592069cab7c",
+          "marker": " "
+        },
+        "tools/firrtl2": {
+          "commit": "09156cae09cb37c530322c6005649d2380c3eb0e",
+          "marker": " "
+        },
+        "tools/fixedpoint": {
+          "commit": "ef164009e40ce5a5abe61ebcc11c12ff82e34014",
+          "marker": " "
+        },
+        "tools/install-circt": {
+          "commit": "3f8dda6e1c1965537b5801a43c81c287bac4eae4",
+          "marker": " "
+        },
+        "tools/rocket-dsp-utils": {
+          "commit": "6ee2309f80a54b404795f227793d2a54e1dfadf8",
+          "marker": " "
+        }
+      }
+    },
+    "common_cells": {
+      "commit": "db42769334b4589b4b3fc671b34513bdb98be565",
+      "dirty": false,
+      "origin": "https://github.com/pulp-platform/common_cells.git",
+      "path": "work/upstream/common_cells",
+      "required_submodules": {}
+    },
+    "idma": {
+      "commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+      "dirty": false,
+      "origin": "https://github.com/pulp-platform/iDMA.git",
+      "path": "work/upstream/idma",
+      "required_submodules": {}
+    },
+    "imax3_llm": {
+      "commit": "ecf4b7590734b123d4004d16251979c66f6adcdf",
+      "dirty": false,
+      "origin": "https://github.com/Takuto-Ando/IMAX3-LLM.git",
+      "path": "work/upstream/imax3_llm",
+      "required_submodules": {}
+    },
+    "pulp_axi": {
+      "commit": "4da15979747f326bde2f9869c64e587ce599772c",
+      "dirty": false,
+      "origin": "https://github.com/pulp-platform/axi.git",
+      "path": "work/upstream/pulp_axi",
+      "required_submodules": {}
+    }
+  },
+  "schema_version": 1,
+  "status": "PASS"
+}

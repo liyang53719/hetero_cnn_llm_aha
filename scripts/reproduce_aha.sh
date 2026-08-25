@@ -3,13 +3,16 @@ set -euo pipefail
 
 AHA_ROOT=${AHA_ROOT:?set AHA_ROOT to the cloned StanfordAHA/aha directory}
 OUT=${OUT:-"$PWD/work/results/aha_baseline"}
-IMAGE=${AHA_IMAGE:-stanfordaha/garnet:latest}
+IMAGE=${AHA_IMAGE:?set AHA_IMAGE to an immutable stanfordaha/garnet@sha256 digest}
 WIDTH=${AHA_WIDTH:-4}
 HEIGHT=${AHA_HEIGHT:-16}
+CPUSET=${AHA_CPUSET:-8-23}
 mkdir -p "$OUT"
 
 command -v docker >/dev/null || { echo "Docker is required" >&2; exit 2; }
+[[ "$IMAGE" == *@sha256:* ]] || { echo "AHA_IMAGE must be pinned by digest, not a mutable tag: $IMAGE" >&2; exit 2; }
 docker pull "$IMAGE"
+docker image inspect "$IMAGE" --format '{{index .RepoDigests 0}}' | tee "$OUT/image.digest"
 git -C "$AHA_ROOT" rev-parse HEAD | tee "$OUT/aha.commit"
 git -C "$AHA_ROOT" submodule status --recursive | tee "$OUT/submodules.txt"
 if [[ -n "$(git -C "$AHA_ROOT" status --porcelain)" ]]; then
@@ -19,6 +22,7 @@ fi
 
 # Mount the pinned checkout over /aha so the Docker image supplies tools, not source.
 docker run --rm \
+  --cpuset-cpus "$CPUSET" \
   -e TOOL=VERILATOR \
   -v "$AHA_ROOT:/aha" \
   -v "$OUT:/out" \

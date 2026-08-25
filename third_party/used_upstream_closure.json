@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "repositories": {
+    "chipyard_gemmini": {
+      "path": "work/upstream/chipyard_gemmini",
+      "required_submodules": [
+        "generators/diplomacy",
+        "generators/gemmini",
+        "generators/gemmini/software/gemmini-rocc-tests",
+        "generators/gemmini/software/gemmini-rocc-tests/riscv-tests",
+        "generators/gemmini/software/gemmini-rocc-tests/rocc-software",
+        "generators/gemmini/software/libgemmini",
+        "generators/hardfloat",
+        "generators/rocket-chip",
+        "generators/rocket-chip-blocks",
+        "generators/rocket-chip-inclusive-cache",
+        "generators/testchipip",
+        "tools/DRAMSim2",
+        "tools/cde",
+        "tools/dsptools",
+        "tools/firrtl2",
+        "tools/fixedpoint",
+        "tools/install-circt",
+        "tools/rocket-dsp-utils"
+      ]
+    },
+    "aha": {
+      "path": "work/upstream/aha",
+      "required_submodules": [
+        "archipelago",
+        "ast_tools",
+        "canal",
+        "cgra_pnr",
+        "cgra_pnr/cyclone/extern/argparse",
+        "cgra_pnr/cyclone/python/pybind11",
+        "cgra_pnr/thunder/lib/leidenalg",
+        "cgra_pnr/thunder/python/pybind11",
+        "clockwork",
+        "coreir",
+        "fault",
+        "garnet",
+        "gemstone",
+        "hwtypes",
+        "kratos",
+        "lake",
+        "lassen",
+        "magma",
+        "mantle",
+        "peak",
+        "peak_generator",
+        "pycoreir"
+      ]
+    },
+    "idma": {"path": "work/upstream/idma", "required_submodules": []},
+    "pulp_axi": {"path": "work/upstream/pulp_axi", "required_submodules": []},
+    "common_cells": {"path": "work/upstream/common_cells", "required_submodules": []},
+    "imax3_llm": {"path": "work/upstream/imax3_llm", "required_submodules": []}
+  }
+}

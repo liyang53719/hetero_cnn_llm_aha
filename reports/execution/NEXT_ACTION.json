@@ -1,6 +1,6 @@
 {
   "phase": "L2_AHA_GAUSSIAN_OUTPUT_READBACK",
-  "command": "Implement proc_packet readback of the metadata-selected Gaussian output blocks, then run taskset -c 8-25 work/generated/l2_aha_garnet_4x16/obj_gaussian_resetedge/Vtb_aha_garnet_gaussian_transcript and compare the readback against the pinned upstream golden bytes.",
+  "command": "After the 16-GiB admission guard passes, use scripts/run_memory_capped.sh with -j2 and its 10G/14G user-cgroup limits to rebuild the exact Garnet transcript. Preserve the observed first divergence (block 0, word 0, 0x10000 reads zero) while diagnosing the missing upstream runtime behavior.",
   "success_condition": "The actual Garnet top accepts the post-PCFG input transcript, finishes the official stream sequence, and every output byte matches the upstream Gaussian golden without a timeout, protocol error, or dropped packet.",
-  "failure_policy": "Preserve the verified PCFG transcript. Locate the first divergent output block, control interrupt, or proc-packet transaction; do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values."
+  "failure_policy": "Preserve the verified PCFG transcript. Locate the first divergent output block, control interrupt, or proc-packet transaction; do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values. Do not start a heavy task below 16 GiB available memory; keep it at -j2 inside the user memory cgroup."
 }

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from heteronpu.aha_garnet_trace import (
@@ -37,6 +38,19 @@ def emit_axi_array(declarations: list[str], assignments: list[str], name: str, w
         assignments.append(f"  {name}_DATA[{index}] = 32'h{write.data:08x};")
 
 
+def emit_expected_output(declarations: list[str], assignments: list[str], name: str,
+                         base_address: int, payload: bytes) -> None:
+    if len(payload) % 8:
+        raise SystemExit(f"{name} output payload is not 64-bit aligned")
+    word_count = len(payload) // 8
+    declarations.append(f"localparam logic [17:0] {name}_BASE = 18'h{base_address:05x};")
+    declarations.append(f"localparam int {name}_WORDS = {word_count};")
+    declarations.append(f"logic [63:0] {name}_EXPECTED [0:{name}_WORDS-1];")
+    for index in range(word_count):
+        word = int.from_bytes(payload[index * 8:(index + 1) * 8], byteorder="little")
+        assignments.append(f"  {name}_EXPECTED[{index}] = 64'h{word:016x};")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--trace-dir", type=Path,
@@ -52,12 +66,28 @@ def main() -> int:
     blocks = split_interleaved_u16((args.trace_dir / "app_bin/hw_input_stencil.raw").read_bytes(), 2)
     input0 = pack_raw_packets(blocks[0], base_address=0x00000)
     input1 = pack_raw_packets(blocks[1], base_address=0x20000)
+    layout = json.loads((args.trace_dir / "control_table.json").read_text(encoding="utf-8"))
+    cgra_stall_mask = int(layout["cgra_stall_mask"])
+    if not 0 < cgra_stall_mask < (1 << 32):
+        raise SystemExit("official CGRA stall mask must be a nonzero 32-bit value")
+    output_layout = layout.get("outputs", [])
+    if len(output_layout) != 1 or len(output_layout[0].get("tiles", [])) != 2:
+        raise SystemExit("expected exactly one two-tile Gaussian output from official mapper")
+    gold = (args.trace_dir / "app_bin/hw_output.raw").read_bytes()
+    if len(gold) != int(output_layout[0]["file_size"]):
+        raise SystemExit("Gaussian golden byte count disagrees with official mapper")
+    output_blocks = split_interleaved_u16(gold, 2)
 
     declarations = ["// Generated from the pinned official Gaussian control transcript."]
+    declarations.append(f"localparam logic [31:0] CGRA_STALL_MASK = 32'h{cgra_stall_mask:08x};")
     assignments: list[str] = []
     emit_packet_array(declarations, assignments, "BS", bitstream)
     emit_packet_array(declarations, assignments, "INPUT0", input0)
     emit_packet_array(declarations, assignments, "INPUT1", input1)
+    emit_expected_output(declarations, assignments, "OUTPUT0",
+                         int(output_layout[0]["tiles"][0]["gold_check_start_address"]), output_blocks[0])
+    emit_expected_output(declarations, assignments, "OUTPUT1",
+                         int(output_layout[0]["tiles"][1]["gold_check_start_address"]), output_blocks[1])
     emit_axi_array(declarations, assignments, "INTERRUPT_ENABLE", control.interrupt_enable)
     emit_axi_array(declarations, assignments, "BS_CFG", control.bs_cfg)
     emit_axi_array(declarations, assignments, "KERNEL_CFG", control.kernel_cfg)

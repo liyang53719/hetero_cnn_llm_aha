@@ -85,10 +85,19 @@ int main(int argc, char **argv) {
   void *bitstream = get_bs_info(kernel);
   void *bs_config = get_pcfg_configuration(bitstream);
   void *kernel_config = get_kernel_configuration(kernel);
+  const unsigned group_start = (unsigned)get_group_start(kernel);
+  const unsigned num_groups = (unsigned)get_num_groups(kernel);
+  unsigned cgra_stall_mask = 0;
+  for (unsigned group = group_start; group < group_start + num_groups; ++group)
+    cgra_stall_mask |= 0xFu << (4u * group);
   printf("AHA_CONTROL_JSON={");
   printf("\"bitstream_tile\":%u,\"bitstream_start_address\":%u,\"bitstream_entries\":%u,",
          (unsigned)get_bs_tile(bitstream), (unsigned)get_bs_start_addr(bitstream),
          (unsigned)get_bs_size(bitstream));
+  // Match test_app's calculate_cgra_stall_mask after the official glb_map.
+  // This frozen flow has a four-column global-controller stall field.
+  printf("\"cgra_group_start\":%u,\"cgra_num_groups\":%u,\"cgra_stall_mask\":%u,",
+         group_start, num_groups, cgra_stall_mask);
   emit_config("bs_cfg", bs_config);
   printf(",");
   emit_config("kernel_cfg", kernel_config);

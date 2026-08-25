@@ -12,7 +12,9 @@
 - Gemmini mvin/mvout edges PASS: five edge shapes, unaligned DRAM, INT32-to-INT8/full-width paths; 60 commits audited.
 - Gemmini padded 3x3 conv PASS: bias+identity and bias+0.5 requant+ReLU, 36 commits audited, CPU bit-exact.
 - CUSTOM_3 program adapter contract PASS: randomized ready, 15 ordered issues, busy completion, 3 exact events, illegal program zero issue; scoreboard event decode fixed.
-- L2 remains IN_PROGRESS: production path still uses legacy adapter; descriptor sequencer + retained-Rocket busy co-sim required.
+- Retained Rocket busy monitor PASS: 36 real commands, four final-command→busy-clear observations, numerical checksum unchanged.
+- Descriptor-chain golden PASS: missing/cycle/>16/null-required rejected before lowering.
+- L2 `BLOCKED_DECISION`: approve Shared-L2 24-bit-index→128-bit-record ready/valid fetch port or provide intended interface.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

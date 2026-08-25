@@ -1,6 +1,6 @@
 {
-  "phase": "L2_GEMMINI_PRODUCTION_PROGRAM_INTEGRATION",
-  "command": "Replace the production matrix path's legacy CUSTOM_0/response adapter with descriptor sequencer -> gemmini_rocc_program_adapter -> retained RocketTile CUSTOM_3. Feed a frozen OS/WS/conv program, capture actual Gemmini busy assertion/deassertion, and prove ordered payloads plus one completion event. Reject invalid descriptor chains before the first RoCC commit. Do not tie off PTW/TileLink or use io_resp as generic completion. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
+  "phase": "BLOCKED_DECISION_L2_DESCRIPTOR_FETCH_INTERFACE",
+  "command": "Await approval for the recommended Shared-L2 read-only descriptor port: ready/valid 24-bit record-index request, ready/valid 128-bit record+error response, one outstanding request, byte_address=descriptor_base+index*16. After approval, implement descriptor sequencer -> gemmini_rocc_program_adapter -> retained RocketTile CUSTOM_3 and pre-issue chain rejection. Do not substitute a host-prelowered FIFO, tie off PTW/TileLink, or use io_resp as generic completion.",
   "success_condition": "All required Gemmini L2 operations match their official C/RTL paths in retained RocketTile context with identical command/write/event traces and bit-exact outputs; upstream remains clean.",
-  "failure_policy": "Stop at the first command/write/event divergence. Do not connect the clean-room adapter to the official macro, hand-write TileLink/PTW behavior, skip WS/conv/event coverage, relax numerical checks, or mark L2 PASS."
+  "failure_policy": "This is an architecture-interface decision explicitly left undefined by the plan. Do not implement a transport until approved; do not connect the clean-room adapter to the official macro, hand-write TileLink/PTW behavior, substitute a host-prelowered FIFO, relax numerical checks, or mark L2 PASS."
 }

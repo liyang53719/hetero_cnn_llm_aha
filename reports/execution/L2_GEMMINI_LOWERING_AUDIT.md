@@ -28,8 +28,9 @@ commit matching payloads, and produce bit-exact equal outputs/checksum. See
 The same retained RocketTile now covers single-tile OS, multi-tile OS/WS,
 mvin/mvout edges, padded convolution, bias and requant/ReLU. A dedicated
 CUSTOM_3 program adapter also passes randomized-ready, busy completion and
-illegal-first-packet RTL tests. Production descriptor-sequencer integration
-and actual Rocket busy waveform co-simulation remain open.
+illegal-first-packet RTL tests. A bind monitor proves actual generated Gemmini
+busy transitions for four retained-Rocket programs. Production
+descriptor-sequencer integration remains open.
 
 Verification: `PYTHONPATH=src taskset -c 8-25 python3 -m pytest -q
 tests/test_gemmini_rocc_lowering.py` (10 PASS).

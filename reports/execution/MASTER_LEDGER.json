@@ -68,7 +68,10 @@
         "reports/execution/L2_GEMMINI_PROGRAM_ADAPTER_CONTROL.md",
         "work/results/l2_gemmini_control/program_adapter.log",
         "work/results/l2_gemmini_control/scoreboard.log",
-        "work/results/l2_gemmini_control/macro_boundary_result.json"
+        "work/results/l2_gemmini_control/macro_boundary_result.json",
+        "work/results/l2_gemmini_control/retained_busy_result.json",
+        "work/results/l2_gemmini_control/retained_rocket_busy_conv.log",
+        "reports/execution/L2_DESCRIPTOR_FETCH_BLOCKED_DECISION.md"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -89,10 +92,12 @@
         "Gemmini retained-RocketTile multi-tile OS equivalence: 36 commands per path, Python lowerer matches every raw Rocket commit, and outputs are bit-exact",
         "Gemmini retained-RocketTile mvin/mvout edge equivalence: five edge shapes, unaligned DRAM offsets, and INT32-to-INT8/full-width accumulator paths pass with 60 commits audited",
         "Gemmini retained-RocketTile padded 3x3 convolution equivalence: bias identity and scale-0.5 ReLU modes match all 36 commands and CPU golden outputs",
-        "Gemmini CUSTOM_3 program-adapter contract: randomized backpressure preserves 15 ordered issues, busy completion produces exact events, illegal first packet issues zero commands, and scoreboard completion fields match frozen layout"
+        "Gemmini CUSTOM_3 program-adapter contract: randomized backpressure preserves 15 ordered issues, busy completion produces exact events, illegal first packet issues zero commands, and scoreboard completion fields match frozen layout",
+        "Retained RocketTile generated-Gemmini busy observation: 36 expected conv commands and four final-command-to-busy-clear intervals with unchanged numerical checksum",
+        "Descriptor-chain legality golden: 128-bit record parsing and pre-lowering rejection of null-required, missing, cyclic, over-16-record, and out-of-range chains"
       ],
       "remaining_gates": [
-        "Production descriptor sequencer -> CUSTOM_3 program adapter -> retained RocketTile integration, including actual Gemmini busy waveform completion and pre-issue descriptor-chain rejection"
+        "Production descriptor sequencer -> CUSTOM_3 program adapter -> retained RocketTile integration, including pre-issue invalid/cyclic/overlength descriptor-chain rejection"
       ]
     },
     "L3": {"status": "PENDING", "depends_on": ["L2"]},
@@ -106,6 +111,7 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
+    "BLOCKED_DECISION L2: descriptor fetch/storage RTL interface is undefined; recommended Shared-L2 24-bit-index to 128-bit-record ready/valid port awaits approval.",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

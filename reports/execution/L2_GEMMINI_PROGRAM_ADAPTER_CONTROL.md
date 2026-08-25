@@ -26,5 +26,12 @@ Evidence:
 - `work/results/l2_gemmini_control/macro_boundary_result.json`
 
 This is an adapter contract gate, not final L2 closure. The production
-integration still instantiates the legacy adapter; a descriptor sequencer and
-retained-RocketTile busy observation must connect the new program adapter.
+integration still instantiates the legacy adapter; a descriptor sequencer must
+connect the new program adapter.
+
+A simulation-only bind monitor was also compiled into an independent debug
+build of the unmodified retained RocketTile. Across the four conv programs it
+observed all 36 expected Gemmini commands and, after each final funct-15
+command, a real Gemmini busy-active interval ending in busy clear. Numerical
+checksum remained unchanged. Evidence is
+`work/results/l2_gemmini_control/retained_busy_result.json`.

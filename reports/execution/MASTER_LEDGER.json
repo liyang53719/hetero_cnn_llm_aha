@@ -25,8 +25,7 @@
       ],
       "remaining_gates": [
         "Gemmini weight-stationary/default matmul budget closure",
-        "AHA 4x16 Docker/Gaussian map/PnR/test",
-        "license matrix"
+        "AHA 4x16 Docker/Gaussian map/PnR/test"
       ]
     },
     "L2": {"status": "PENDING", "depends_on": ["L1"]},

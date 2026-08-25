@@ -33,15 +33,19 @@ invented TileLink responder, and their passing testbench is not L2 evidence.
 ## AHA/Garnet
 
 `scripts/generate_aha_l2_macro.sh` regenerates the pinned AHA image's 4x16
-`Interconnect` macro into `work/generated/l2_aha_garnet_4x16/`, records image
-digest/commit/hash, and extracts an ANSI port manifest.  The subsequent wrapper
-must consume that manifest and preserve every native config/stream/control port.
-It may add only project-side config loading, 512-bit stream gearboxes, skid
-buffers, reset/config/run sequencing, and completion observation.  It must not
-substitute `cgra_sfu_vector` for generated Garnet when claiming macro results.
+`Garnet` macro into `work/generated/l2_aha_garnet_4x16/`, records image
+digest/commit/hash, and extracts ANSI manifests for the 33-port `Garnet` top
+and its 69-port nested `Interconnect`. The project wrapper must target the
+official `Garnet` AXI/proc-packet boundary; it may not bypass the official
+Global Buffer/Controller by wiring bare `Interconnect` as the claimed macro.
+It may add only project-side AXI configuration loading, proc-packet/512-bit
+stream gearboxes, skid buffers, reset/config/run sequencing, and completion
+observation. It must not substitute `cgra_sfu_vector` for generated Garnet
+when claiming macro results.
 
-The locked 4x16 macro exposes four `glb2io_17` and four `io2glb_17` ready/valid
-lanes plus four independent 1-bit lanes.  A 17-bit lane is an AHA-native
+The nested 4x16 `Interconnect` exposes four `glb2io_17` and four `io2glb_17`
+ready/valid lanes plus four independent 1-bit lanes; `Garnet` transports those
+through its official Global Buffer/proc-packet boundary. A 17-bit lane is an AHA-native
 payload, while end-of-stream is represented by the separate 1-bit IO network;
 the high bit of a 17-bit value can encode sparse control tokens.  Project
 `last`/tag must therefore remain wrapper metadata until lowering has selected
@@ -58,6 +62,7 @@ the exported official dependency closure, not an Icarus fallback.
    micro-op sequence for mvin/mvout, WS/OS GEMM, and convolution.
 2. A retained-RocketTile harness proving baseline C commands and lowered
    descriptor commands have identical writes, events, and numerical outputs.
-3. A generated-Garnet wrapper harness proving Gaussian map data/config trace
+3. A generated-Garnet wrapper harness proving Gaussian AXI/proc-packet
+   data/config trace
    equivalence with upstream, including backpressure and reset/config/run.
 4. Clean upstream trees before and after every wrapper run.

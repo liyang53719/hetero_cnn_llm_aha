@@ -94,6 +94,8 @@ EOF
   " | tee "$OUT/docker.log"
 
 python3 "$PROJECT_ROOT/scripts/extract_sv_module_port_manifest.py" \
+  "$OUT/garnet.v" Garnet --output "$OUT/garnet_port_manifest.json"
+python3 "$PROJECT_ROOT/scripts/extract_sv_module_port_manifest.py" \
   "$OUT/garnet.v" Interconnect --output "$OUT/interconnect_port_manifest.json"
 
 python3 - "$OUT" <<'PY'
@@ -102,12 +104,14 @@ import pathlib
 import sys
 
 out = pathlib.Path(sys.argv[1])
-manifest = json.loads((out / "interconnect_port_manifest.json").read_text())
+manifest = json.loads((out / "garnet_port_manifest.json").read_text())
+interconnect = json.loads((out / "interconnect_port_manifest.json").read_text())
 result = {
     "status": "PASS",
     "scope": "generated 4x16 Garnet macro boundary only; no wrapper equivalence claimed",
     "module": manifest["module"],
     "port_count": manifest["port_count"],
+    "nested_interconnect_port_count": interconnect["port_count"],
     "rtl_sha256": (out / "garnet_rtl.sha256").read_text().split()[0],
     "collateral_file_count": len((out / "collateral.sha256").read_text().splitlines()),
 }

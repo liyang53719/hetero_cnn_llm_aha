@@ -36,11 +36,14 @@
         "reports/execution/L2_GEMMINI_LOWERING_AUDIT.md",
         "reports/execution/gemmini_macro_contract_lock.json",
         "work/results/l2_wrapper_freeze/gemmini_boundary_result.json",
-        "work/generated/l2_aha_garnet_4x16/port_contract_lint_result.json"
+        "work/generated/l2_aha_garnet_4x16/port_contract_lint_result.json",
+        "work/generated/l2_aha_gaussian_trace/result.json",
+        "work/results/l2_aha_gaussian_trace_audit/result.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
-        "AHA 4x16 Interconnect generated 69-port boundary and 25-file simulator closure lint",
+        "AHA 4x16 Garnet generated 33-port top, nested 69-port Interconnect boundary, and 25-file simulator closure lint",
+        "AHA Gaussian map/PnR artifact export and IO/bitstream trace audit",
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test"
       ],
       "remaining_gates": [

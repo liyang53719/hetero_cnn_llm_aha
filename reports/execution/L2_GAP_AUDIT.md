@@ -24,8 +24,9 @@ not the generated Garnet macro wrapper.
 1. **Complete:** freeze exact generated Gemmini wrapper boundary and
    RocketTile-provided context; preserve upstream source clean. Evidence:
    `gemmini_macro_contract_lock.json` and the boundary verifier result.
-2. **Complete:** regenerate the pinned 4x16 Garnet `Interconnect`, freeze its
-   69 native ports and 25-file simulator closure, and lint the complete named
-   binding with Verilator. Evidence: `work/generated/l2_aha_garnet_4x16/`.
+2. **Complete:** regenerate the pinned 4x16 `Garnet` top (33 ports) and its
+   nested 69-port `Interconnect`, freeze the 25-file simulator closure, and
+   lint the complete named binding with Verilator. Evidence:
+   `work/generated/l2_aha_garnet_4x16/`.
 3. **Open:** add unit tests proving original and adapter path output/memory/event
    equivalence before connecting them to shared fabric in L3.

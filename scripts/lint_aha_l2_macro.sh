@@ -6,7 +6,7 @@ PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
 OUT=${OUT:-"$PROJECT_ROOT/work/generated/l2_aha_garnet_4x16"}
 VERILATOR=${AHA_L2_VERILATOR:-"$PROJECT_ROOT/work/toolchain/conda/bin/verilator"}
 
-test -f "$OUT/interconnect_port_manifest.json" || {
+test -f "$OUT/garnet_port_manifest.json" || {
   echo "generate the AHA L2 macro before linting" >&2
   exit 2
 }
@@ -17,13 +17,14 @@ test -f "$OUT/upstream_compile_closure.f" || {
 test -x "$VERILATOR" || { echo "Verilator is missing: $VERILATOR" >&2; exit 2; }
 
 python3 "$PROJECT_ROOT/scripts/generate_sv_port_contract_tb.py" \
-  "$OUT/interconnect_port_manifest.json" --output "$OUT/tb_interconnect_port_contract.sv"
+  "$OUT/garnet_port_manifest.json" --output "$OUT/tb_garnet_port_contract.sv" \
+  --top tb_garnet_port_contract
 (
   cd "$OUT"
   "$VERILATOR" --lint-only --timing -Wno-fatal \
     -Wno-PINMISSING -Wno-TIMESCALEMOD -Wno-WIDTHTRUNC \
-    -f upstream_compile_closure.f tb_interconnect_port_contract.sv \
-    --top-module tb_generated_port_contract
+    -f upstream_compile_closure.f tb_garnet_port_contract.sv \
+    --top-module tb_garnet_port_contract
 ) > "$OUT/verilator_port_contract.log" 2>&1
 
 python3 - "$OUT" <<'PY'
@@ -33,11 +34,12 @@ import sys
 
 out = pathlib.Path(sys.argv[1])
 macro = json.loads((out / "result.json").read_text())
+manifest = json.loads((out / "garnet_port_manifest.json").read_text())
 result = {
     "status": "PASS",
-    "scope": "generated AHA Interconnect complete named-port and dependency-closure lint only",
-    "module": macro["module"],
-    "port_count": macro["port_count"],
+    "scope": "generated AHA Garnet complete named-port and dependency-closure lint only",
+    "module": manifest["module"],
+    "port_count": manifest["port_count"],
     "rtl_sha256": macro["rtl_sha256"],
     "collateral_file_count": macro["collateral_file_count"],
     "tool": "Verilator lint-only",

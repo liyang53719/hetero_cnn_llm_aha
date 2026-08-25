@@ -58,7 +58,10 @@
         "work/results/l2_gemmini_rocc_equiv/verilator_loop_ws.log",
         "reports/execution/L2_GEMMINI_MULTI_TILE_OS_EQUIVALENCE.md",
         "work/results/l2_gemmini_rocc_equiv/multi_tile_os_result.json",
-        "work/results/l2_gemmini_rocc_equiv/verilator_multi_tile_os.log"
+        "work/results/l2_gemmini_rocc_equiv/verilator_multi_tile_os.log",
+        "reports/execution/L2_GEMMINI_MVIN_MVOUT_EDGES.md",
+        "work/results/l2_gemmini_rocc_equiv/mvin_mvout_edges_result.json",
+        "work/results/l2_gemmini_rocc_equiv/verilator_mvin_mvout_edges.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -76,7 +79,8 @@
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test",
         "Gemmini retained-RocketTile single-tile OS equivalence: 11 commands per path, first 10 payloads identical, final mvout differs only by destination, outputs/checksum bit-exact",
         "Gemmini retained-RocketTile multi-tile WS equivalence: 17x18x19 across 2x2x2 tiles, official/raw loop payloads and bit-exact outputs match except intentional destination address",
-        "Gemmini retained-RocketTile multi-tile OS equivalence: 36 commands per path, Python lowerer matches every raw Rocket commit, and outputs are bit-exact"
+        "Gemmini retained-RocketTile multi-tile OS equivalence: 36 commands per path, Python lowerer matches every raw Rocket commit, and outputs are bit-exact",
+        "Gemmini retained-RocketTile mvin/mvout edge equivalence: five edge shapes, unaligned DRAM offsets, and INT32-to-INT8/full-width accumulator paths pass with 60 commits audited"
       ],
       "remaining_gates": [
         "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs"

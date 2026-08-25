@@ -1,6 +1,6 @@
 {
-  "phase": "L2_GEMMINI_MVIN_MVOUT_EDGES",
-  "command": "Run retained-RocketTile official/raw mvin/mvout equivalence for fixed edge matrix: 1x1, 1x16, 16x1, 15x16, 16x15, unaligned DRAM offsets, accumulator INT32 input, and INT8/INT32 output paths. Then continue conv, bias/requant, queue backpressure, completion/event, and illegal descriptor. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
+  "phase": "L2_GEMMINI_CONV_BIAS_REQUANT",
+  "command": "Implement retained-RocketTile official/raw equivalence for a fixed padded 3x3 INT8 convolution, then bias accumulation plus non-identity requant/ReLU. Audit ordered RoCC payloads, memory writes, completion, and bit-exact output before queue-backpressure/event/illegal-descriptor coverage. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
   "success_condition": "All required Gemmini L2 operations match their official C/RTL paths in retained RocketTile context with identical command/write/event traces and bit-exact outputs; upstream remains clean.",
   "failure_policy": "Stop at the first command/write/event divergence. Do not connect the clean-room adapter to the official macro, hand-write TileLink/PTW behavior, skip WS/conv/event coverage, relax numerical checks, or mark L2 PASS."
 }

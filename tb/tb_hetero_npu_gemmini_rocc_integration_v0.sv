@@ -2,7 +2,7 @@
 module tb_hetero_npu_gemmini_rocc_integration_v0;
   logic clk = 0, rst_n = 0;
   always #5 clk = ~clk;
-  integer cycles, event_count;
+  integer cycles, event_count, rocc_count, busy_countdown;
   logic host_valid, host_ready;
   logic [127:0] host_data;
   logic host_event_valid, host_event_ready;
@@ -17,6 +17,11 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
   logic [4:0] resp_rd;
   logic [63:0] resp_data;
   logic seen_matrix, seen_sfu;
+  logic descriptor_req_valid,descriptor_req_ready,descriptor_rsp_valid,descriptor_rsp_ready;
+  logic[23:0] descriptor_req_index,pending_descriptor_index;
+  logic[63:0] descriptor_req_byte_addr;
+  logic[127:0] descriptor_rsp_data;
+  logic descriptor_rsp_error,descriptor_pending;
   assign rocc_ready = (cycles % 3) != 0;
   assign host_event_ready = (cycles % 4) != 1;
 
@@ -24,6 +29,11 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
     .clk_i(clk), .rst_ni(rst_n), .host_cmd_valid_i(host_valid), .host_cmd_ready_o(host_ready),
     .host_cmd_data_i(host_data), .host_event_valid_o(host_event_valid), .host_event_ready_i(host_event_ready),
     .host_event_data_o(host_event_data), .illegal_engine_o(illegal_engine), .illegal_rocc_command_o(illegal_rocc),
+    .descriptor_base_i(64'h4000),.descriptor_req_valid_o(descriptor_req_valid),
+    .descriptor_req_ready_i(descriptor_req_ready),.descriptor_req_index_o(descriptor_req_index),
+    .descriptor_req_byte_addr_o(descriptor_req_byte_addr),.descriptor_rsp_valid_i(descriptor_rsp_valid),
+    .descriptor_rsp_ready_o(descriptor_rsp_ready),.descriptor_rsp_data_i(descriptor_rsp_data),
+    .descriptor_rsp_error_i(descriptor_rsp_error),
     .rocc_cmd_valid_o(rocc_valid), .rocc_cmd_ready_i(rocc_ready), .rocc_inst_funct_o(funct),
     .rocc_inst_rs2_o(rs2_idx), .rocc_inst_rs1_o(rs1_idx), .rocc_inst_xd_o(xd), .rocc_inst_xs1_o(xs1),
     .rocc_inst_xs2_o(xs2), .rocc_inst_rd_o(rd), .rocc_inst_opcode_o(opcode), .rocc_rs1_o(rs1), .rocc_rs2_o(rs2),
@@ -31,9 +41,52 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
     .rocc_resp_data_i(resp_data), .rocc_busy_i(rocc_busy)
   );
 
+  function automatic logic[127:0] descriptor_word(input logic[23:0] index);
+    logic[127:0] w;
+    begin
+      w='0;
+      case(index)
+        1: begin w[7:0]=8'h01;w[55:32]=2;w[103:56]=48'h80001000;w[111:108]=1;w[119:116]=2;end
+        2: begin w[7:0]=8'h02;w[55:32]=3;w[73:56]=3;w[91:74]=7;end
+        3: begin w[7:0]=8'h03;w[55:32]=4;w[79:56]=7;end
+        4: begin w[7:0]=8'h10;w[55:32]=24'hffffff;w[71:56]=3;w[87:72]=5;w[111:88]=7;end
+        5: begin w[7:0]=8'h01;w[55:32]=6;w[103:56]=48'h80002000;w[111:108]=1;w[119:116]=2;end
+        6: begin w[7:0]=8'h02;w[55:32]=7;w[73:56]=7;w[91:74]=5;end
+        7: begin w[7:0]=8'h03;w[55:32]=24'hffffff;w[79:56]=5;end
+        8: begin w[7:0]=8'h01;w[55:32]=9;w[103:56]=48'h80003000;w[111:108]=1;w[119:116]=2;end
+        9: begin w[7:0]=8'h02;w[55:32]=10;w[73:56]=3;w[91:74]=5;end
+        10:begin w[7:0]=8'h03;w[55:32]=24'hffffff;w[79:56]=5;end
+        default: w='0;
+      endcase
+      descriptor_word=w;
+    end
+  endfunction
+  assign descriptor_req_ready=(cycles%5)!=1&&!descriptor_pending;
+  assign descriptor_rsp_valid=descriptor_pending;
+  assign descriptor_rsp_data=descriptor_word(pending_descriptor_index);
+  assign descriptor_rsp_error=(pending_descriptor_index<1)||(pending_descriptor_index>10);
+
   always @(posedge clk) begin
-    if (!rst_n) cycles <= 0;
+    if (!rst_n) begin
+      cycles <= 0;rocc_count<=0;busy_countdown<=0;descriptor_pending<=0;
+      pending_descriptor_index<=0;rocc_busy<=0;
+    end
     else cycles <= cycles + 1;
+    if(rst_n)begin
+      if(descriptor_req_valid&&descriptor_req_ready)begin
+        if(descriptor_req_byte_addr!==64'h4000+{36'd0,descriptor_req_index,4'b0})$fatal(1,"descriptor address mismatch");
+        descriptor_pending<=1;pending_descriptor_index<=descriptor_req_index;
+      end
+      if(descriptor_rsp_valid&&descriptor_rsp_ready)descriptor_pending<=0;
+      if(rocc_valid&&rocc_ready)begin
+        rocc_count<=rocc_count+1;
+        if(opcode!=7'h7b||xd||!xs1||!xs2)$fatal(1,"not CUSTOM_3 envelope");
+        if(rocc_count==8)busy_countdown<=5;
+      end
+      if(busy_countdown>0)begin
+        busy_countdown<=busy_countdown-1;rocc_busy<=busy_countdown>1;
+      end
+    end
     if (rst_n && host_event_valid && host_event_ready) begin
       event_count <= event_count + 1;
       if (host_event_data[55:40] == 16'd1) seen_matrix <= 1'b1;
@@ -46,29 +99,24 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
     begin
       @(negedge clk);
       host_data = '0; host_data[7:0] = op; host_data[10:8] = engine;
-      host_data[55:40] = signal_id; host_data[79:56] = 24'h123456; host_data[103:80] = 24'h654321;
-      host_data[127:104] = 24'd3; host_valid = 1'b1;
+      host_data[55:40] = signal_id;
+      if(engine==3'd2)begin host_data[79:56]=1;host_data[103:80]=5;host_data[127:104]=8;end
+      else begin host_data[79:56]=24'h123456;host_data[103:80]=24'h654321;host_data[127:104]=3;end
+      host_valid = 1'b1;
       do @(posedge clk); while (!host_ready);
       @(negedge clk); host_valid = 1'b0;
     end
   endtask
 
   initial begin
-    host_valid = 0; host_data = 0; resp_valid = 0; resp_rd = 0; resp_data = 0; rocc_busy = 0;
+    host_valid = 0; host_data = 0; resp_valid = 0; resp_rd = 0; resp_data = 0;
     cycles = 0; event_count = 0; seen_matrix = 0; seen_sfu = 0;
     repeat (3) @(posedge clk); rst_n = 1;
     send_command(8'h20, 3'd2, 16'd1);
-    do @(posedge clk); while (!rocc_valid);
-    if (funct !== 7'h00 || rs1 !== 64'h123456 || rs2 !== 64'h654321)
-      $fatal(1, "integrated RoCC translation mismatch");
-    if (!rocc_ready) do @(posedge clk); while (!(rocc_valid && rocc_ready));
-    @(negedge clk); resp_rd = 5'd3; resp_data = 64'h55aa; resp_valid = 1'b1;
-    do @(posedge clk); while (!resp_ready);
-    @(negedge clk); resp_valid = 1'b0;
     wait (seen_matrix);
     send_command(8'h30, 3'd3, 16'd2);
     wait (seen_sfu);
-    if (event_count != 2 || illegal_engine || illegal_rocc)
+    if (event_count != 2 || rocc_count != 9 || illegal_engine || illegal_rocc || resp_ready)
       $fatal(1, "integrated event/illegal result mismatch");
     $display("GEMMINI_ROCC_INTEGRATION_PASS cycles=%0d", cycles);
     $finish;

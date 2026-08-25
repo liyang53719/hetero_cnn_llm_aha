@@ -88,6 +88,7 @@ def main() -> int:
         "hetero_npu_numerical_integration_v0",
         "gemmini_rocc_command_adapter",
         "gemmini_rocc_program_adapter",
+        "gemmini_descriptor_sequencer",
         "aha_garnet_axi_config_loader",
         "aha_garnet_proc_packet_writer",
         "aha_garnet_microsequencer",

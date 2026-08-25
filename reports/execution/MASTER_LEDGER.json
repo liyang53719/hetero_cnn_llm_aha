@@ -71,7 +71,11 @@
         "work/results/l2_gemmini_control/macro_boundary_result.json",
         "work/results/l2_gemmini_control/retained_busy_result.json",
         "work/results/l2_gemmini_control/retained_rocket_busy_conv.log",
-        "reports/execution/L2_DESCRIPTOR_FETCH_BLOCKED_DECISION.md"
+        "reports/execution/L2_DESCRIPTOR_FETCH_BLOCKED_DECISION.md",
+        "reports/execution/L2_DESCRIPTOR_FETCH_AND_GEMM_PATH.md",
+        "work/results/l2_descriptor_sequencer/tb.log",
+        "work/results/l2_descriptor_sequencer/integration.log",
+        "work/results/l2_descriptor_sequencer/integrated_rtl_model_regression.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -94,10 +98,12 @@
         "Gemmini retained-RocketTile padded 3x3 convolution equivalence: bias identity and scale-0.5 ReLU modes match all 36 commands and CPU golden outputs",
         "Gemmini CUSTOM_3 program-adapter contract: randomized backpressure preserves 15 ordered issues, busy completion produces exact events, illegal first packet issues zero commands, and scoreboard completion fields match frozen layout",
         "Retained RocketTile generated-Gemmini busy observation: 36 expected conv commands and four final-command-to-busy-clear intervals with unchanged numerical checksum",
-        "Descriptor-chain legality golden: 128-bit record parsing and pre-lowering rejection of null-required, missing, cyclic, over-16-record, and out-of-range chains"
+        "Descriptor-chain legality golden: 128-bit record parsing and pre-lowering rejection of null-required, missing, cyclic, over-16-record, and out-of-range chains",
+        "Approved production Shared-L2 descriptor path: three chains are fetched and rejected pre-issue on null/error/cycle/nontermination; single-tile INT8 OS GEMM emits nine official CUSTOM_3 commands and completes on busy clear"
       ],
       "remaining_gates": [
-        "Production descriptor sequencer -> CUSTOM_3 program adapter -> retained RocketTile integration, including pre-issue invalid/cyclic/overlength descriptor-chain rejection"
+        "Extend the production typed-descriptor sequencer through multi-tile OS/WS, convolution, bias and requant, preserving the already-passed retained-Rocket equivalence transcripts",
+        "Connect the approved descriptor read port to a real Shared-L2 read lane and rerun integrated randomized backpressure"
       ]
     },
     "L3": {
@@ -174,9 +180,8 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "BLOCKED_DECISION L2: descriptor fetch/storage RTL interface is undefined; recommended Shared-L2 24-bit-index to 128-bit-record ready/valid port awaits approval.",
-    "BLOCKED_DEPENDENCY L10: Library Compiler is absent and DC Liberty conversion fails LCSH-3; licensed LC installation media is not present locally.",
-    "BLOCKED_DEPENDENCY L10: UHDE SP 6144x128 Liberty/Verilog/GDS2 generate successfully, but common ARM bifrun SIGSEGVs in Module::ReplaceDummyPinsWithObs after opening generated BIF; no pre-generated memory LEF exists and Ubuntu18/compatibility probes also fail.",
+    "DEFERRED_BY_USER L10: Library Compiler is absent and SRAM .db generation is skipped until L10 is resumed.",
+    "DEFERRED_BY_USER L10: ARM bifrun LEF generation is skipped; existing Liberty/Verilog/GDS2 evidence is retained.",
     "BLOCKED_DECISION L10: installed ARM DP compiler rejects BASE and direct 2048/4096x128; validated LL0.8 decompositions are 2x2048x64 and 4x4096x32. UHDE SP BASE 6144x128 at 0.8V TT25 is validated."
   ]
 }

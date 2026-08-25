@@ -74,10 +74,22 @@ def main() -> int:
             fail(f"program adapter lost required macro-boundary behavior: {token}")
     if "rocc_resp" in program_adapter:
         fail("program adapter must not treat Gemmini response as generic completion")
+    production = (ROOT / "rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv").read_text(encoding="utf-8")
+    for token in ("gemmini_descriptor_sequencer", "gemmini_rocc_program_adapter",
+                  "descriptor_req_index_o", "descriptor_rsp_error_i"):
+        if token not in production:
+            fail(f"production integration lost approved descriptor path: {token}")
+    if "gemmini_rocc_command_adapter u_gemmini_rocc" in production:
+        fail("production integration regressed to the legacy CUSTOM_0 adapter")
+    sequencer = (ROOT / "rtl/integration/gemmini_descriptor_sequencer.sv").read_text(encoding="utf-8")
+    for token in ("NULL_INDEX", "MAX_RECORDS", "duplicate_index",
+                  "descriptor_req_byte_addr_o", "S_VALIDATE"):
+        if token not in sequencer:
+            fail(f"descriptor sequencer lost approved pre-issue behavior: {token}")
 
     result = {
         "status": "PASS",
-        "scope": "Gemmini macro boundary freeze plus CUSTOM_3 program-adapter contract",
+        "scope": "Gemmini macro boundary freeze plus approved typed-descriptor/CUSTOM_3 production path",
         "chipyard_commit": lock["chipyard_commit"],
         "gemmini_commit": lock["gemmini_commit"],
         "gemmini_sv_sha256": source_hash,

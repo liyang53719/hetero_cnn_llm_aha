@@ -14,9 +14,10 @@
 - CUSTOM_3 program adapter contract PASS: randomized ready, 15 ordered issues, busy completion, 3 exact events, illegal program zero issue; scoreboard event decode fixed.
 - Retained Rocket busy monitor PASS: 36 real commands, four final-command→busy-clear observations, numerical checksum unchanged.
 - Descriptor-chain golden PASS: missing/cycle/>16/null-required rejected before lowering.
-- L2 `BLOCKED_DECISION`: approve Shared-L2 24-bit-index→128-bit-record ready/valid fetch port or provide intended interface.
+- L2 descriptor fetch decision approved. Production path now uses three-chain Shared-L2 fetch → typed sequencer → CUSTOM_3 adapter; legacy CUSTOM_0 is removed from production integration.
+- Single-tile INT8 OS GEMM production subset PASS: 10 descriptor records, 9 CUSTOM_3 commands, busy-clear completion; missing/cycle/>16 reject before legal issue. L2 remains IN_PROGRESS for multi-tile OS/WS, Conv, bias and requant.
 - L3 readiness only: 16x128 bank fabric, 512-bit four-bank mapping, fair 2R+1W arbitration and 100,001-transaction regression PASS; not a stage PASS.
-- L10 readiness: LC missing (`LCSH-3`); installed DP rejects BASE and direct 2048/4096x128. Validated LL0.8 splits are 2x2048x64 and 4x4096x32; decision required later.
+- L10 `.db` and LEF generation are deferred by user; do not run LC/LEF now. Installed DP rejects BASE/direct 2048/4096x128; validated LL0.8 splits remain 2x2048x64 and 4x4096x32.
 - First real SRAM views: UHDE SP 6144x128 BASE0.8 TT25 Liberty+Verilog+GDS2 generated/audited; LEF blocked in shared ARM `bifrun::ReplaceDummyPinsWithObs`, including Ubuntu18 probe.
 - Production SP macro uses bit-write mask; ready/valid wrapper passes full/partial write, read stall, and invalid-address tests on the real ARM model.
 - Control/trace 4096x128 bit-write views+wrapper PASS on real ARM model; four macros provide 256 KiB.
@@ -26,6 +27,5 @@
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action is exactly `reports/execution/NEXT_ACTION.json`.
-- Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
+- Next action: connect descriptor lane extraction to real Shared-L2 macro fabric, then integrated contention regression; see `NEXT_ACTION.json`.
 - Do not close a stage with clean-room-only evidence.

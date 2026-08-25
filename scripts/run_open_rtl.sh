@@ -42,6 +42,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
     "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
     --top-module gemmini_rocc_program_adapter |& tee "$OUT/gemmini_rocc_program_adapter_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
+    "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" \
+    --top-module gemmini_descriptor_sequencer |& tee "$OUT/gemmini_descriptor_sequencer_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
     --top-module aha_garnet_axi_config_loader |& tee "$OUT/aha_garnet_axi_loader_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
@@ -55,7 +58,8 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/common/rv_fifo.sv" "$ROOT/rtl/top/command_dispatch.sv" \
     "$ROOT/rtl/top/hetero_npu_shell.sv" "$ROOT/rtl/integration/command_event_scoreboard.sv" \
-    "$ROOT/rtl/integration/engine_contract_adapter.sv" "$ROOT/rtl/integration/gemmini_rocc_command_adapter.sv" \
+    "$ROOT/rtl/integration/engine_contract_adapter.sv" "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" \
+    "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
     "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
     --top-module hetero_npu_gemmini_rocc_integration_v0 |& tee "$OUT/gemmini_rocc_integration_lint.log"
 else
@@ -107,6 +111,10 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
     "$ROOT/tb/tb_gemmini_rocc_program_adapter.sv"
   vvp "$OUT/tb_gemmini_rocc_program_adapter" | tee "$OUT/tb_gemmini_rocc_program_adapter.log"
+  iverilog -g2012 -s tb_gemmini_descriptor_sequencer -o "$OUT/tb_gemmini_descriptor_sequencer" \
+    "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" \
+    "$ROOT/tb/tb_gemmini_descriptor_sequencer.sv"
+  vvp "$OUT/tb_gemmini_descriptor_sequencer" | tee "$OUT/tb_gemmini_descriptor_sequencer.log"
   iverilog -g2012 -s tb_command_event_scoreboard -o "$OUT/tb_command_event_scoreboard" \
     "$ROOT/rtl/integration/command_event_scoreboard.sv" \
     "$ROOT/tb/tb_command_event_scoreboard.sv"
@@ -128,7 +136,8 @@ if command -v iverilog >/dev/null 2>&1; then
   iverilog -g2012 -s tb_hetero_npu_gemmini_rocc_integration_v0 -o "$OUT/tb_gemmini_rocc_integration" \
     "$ROOT/rtl/common/rv_fifo.sv" "$ROOT/rtl/top/command_dispatch.sv" "$ROOT/rtl/top/hetero_npu_shell.sv" \
     "$ROOT/rtl/integration/command_event_scoreboard.sv" "$ROOT/rtl/integration/engine_contract_adapter.sv" \
-    "$ROOT/rtl/integration/gemmini_rocc_command_adapter.sv" "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
+    "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
+    "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
     "$ROOT/tb/tb_hetero_npu_gemmini_rocc_integration_v0.sv"
   vvp "$OUT/tb_gemmini_rocc_integration" | tee "$OUT/tb_gemmini_rocc_integration.log"
 else

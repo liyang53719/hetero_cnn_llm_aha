@@ -1,0 +1,13 @@
+{
+  "result_dir": "work/results/l1_gemmini_ws_revalidation",
+  "runner_result": {
+    "affinity": "taskset -c 8-25; effective simulator cpuset 8-23",
+    "binary_sha256": "433566fdf0f6abd5a070dfd1315bc73227cc6de624b52385c1b8acf8943355c8",
+    "observed_terminal": "TestDriver timeout after 10000001 simulation cycles",
+    "simulated_cycle_limit": 10000000,
+    "source_sha256": "50e85f9988709b9d6f399766788b75aa875e1f0791bae37c7e8d4dbe4649cf63",
+    "status": "TIMEOUT"
+  },
+  "status": "TIMEOUT",
+  "terminal": "TestDriver timeout"
+}

@@ -1,6 +1,6 @@
 {
-  "phase": "L1_AHA_VERILATOR_5028_RESULT",
-  "command": "taskset -c 8-25 python3 scripts/audit_aha_result.py work/results/l1_aha_verilator_5028_cxx10_makeflags --output reports/execution/aha_verilator_result_audit.json",
-  "success_condition": "The completed run reports status PASS, includes all four required artifacts, and gaussian_test.log contains the bit-accurate output comparison. Then update the L1 ledger; do not infer PASS from compilation alone.",
-  "failure_policy": "Read only the first root-cause slice from gaussian_test.log or docker.log. Do not alter AHA source, workload, width/height, numerical check, or timeout policy."
+  "phase": "L1_GEMMINI_WS_CLOSURE",
+  "command": "taskset -c 8-25 python3 scripts/audit_gemmini_ws_result.py work/results/l1_gemmini_ws_revalidation --output reports/execution/gemmini_ws_result_audit.json",
+  "success_condition": "The audit must provide a provenance-backed canonical N=2 matmul_ws Verilator PASS at the fixed budget. A historical log without command and binary identity is insufficient.",
+  "failure_policy": "If current evidence remains a timeout without a progress counter, preserve FAIL/BLOCKED truth and do not increase the cycle budget, change workload source, or use FAST=1 as a substitute."
 }

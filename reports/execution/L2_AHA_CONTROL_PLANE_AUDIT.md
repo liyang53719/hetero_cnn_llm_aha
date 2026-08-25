@@ -54,6 +54,9 @@ same generated AHA closure. For the frozen 4x16 Gaussian app it yields five
 stream start `0x018=0x00030003`. The exported `control_table.json` is an input
 to the project transcript; it is not hand-authored configuration data.
 
+The same extractor emits the required pre-PCFG interrupt-enable sequence:
+`0x02c=7`, `0x028=1`, `0x024=3`, and `0x020=3`.
+
 The same transcript now reconstructs the official default Gaussian input split:
 the 25,344-byte 16-bit raw input is deinterleaved exactly as test_app does,
 with tile 0 taking source element `2*k` and tile 1 element `2*k+1`. Each tile

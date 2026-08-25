@@ -19,6 +19,32 @@ static void emit_config(const char *name, void *config) {
   printf("]");
 }
 
+static void emit_interrupt_enable(void *kernel) {
+  unsigned g2f_mask = 0;
+  unsigned f2g_mask = 0;
+  const int input_count = get_num_inputs(kernel);
+  const int output_count = get_num_outputs(kernel);
+  for (int index = 0; index < input_count; ++index) {
+    void *io = get_input_info(kernel, index);
+    for (int tile = 0; tile < get_num_io_tiles(io, index); ++tile) {
+      if (!get_io_tile_is_fake_io(io, tile))
+        g2f_mask |= 1u << get_io_tile_map_tile(io, tile);
+    }
+  }
+  for (int index = 0; index < output_count; ++index) {
+    void *io = get_output_info(kernel, index);
+    for (int tile = 0; tile < get_num_io_tiles(io, index); ++tile) {
+      if (!get_io_tile_is_fake_io(io, tile))
+        f2g_mask |= 1u << get_io_tile_map_tile(io, tile);
+    }
+  }
+  printf("\"interrupt_enable\":[");
+  printf("{\"address\":44,\"data\":7},");
+  printf("{\"address\":40,\"data\":1},");
+  printf("{\"address\":36,\"data\":%u},", g2f_mask);
+  printf("{\"address\":32,\"data\":%u}]", f2g_mask);
+}
+
 int main(int argc, char **argv) {
   if (argc != 3) {
     fprintf(stderr, "usage: %s <design_meta.json> <cgra_columns>\n", argv[0]);
@@ -44,6 +70,8 @@ int main(int argc, char **argv) {
   emit_config("bs_cfg", bs_config);
   printf(",");
   emit_config("kernel_cfg", kernel_config);
+  printf(",");
+  emit_interrupt_enable(kernel);
   printf(",\"pcfg_start\":{\"address\":%u,\"data\":%u}",
          (unsigned)get_pcfg_pulse_addr(), (unsigned)get_pcfg_pulse_data(bitstream));
   printf(",\"stream_start\":{\"address\":%u,\"data\":%u}",

@@ -43,6 +43,7 @@ class AhaControlTable:
     bitstream_entries: int
     bs_cfg: tuple[AhaAxiWrite, ...]
     kernel_cfg: tuple[AhaAxiWrite, ...]
+    interrupt_enable: tuple[AhaAxiWrite, ...]
     pcfg_start: AhaAxiWrite
     stream_start: AhaAxiWrite
 
@@ -101,7 +102,8 @@ def load_control_table(path: str | Path) -> AhaControlTable:
 
     bs_cfg = tuple(write(item) for item in raw["bs_cfg"])
     kernel_cfg = tuple(write(item) for item in raw["kernel_cfg"])
-    if not bs_cfg or not kernel_cfg:
+    interrupt_enable = tuple(write(item) for item in raw["interrupt_enable"])
+    if not bs_cfg or not kernel_cfg or not interrupt_enable:
         raise ValueError("official AHA control table has an empty configuration group")
     return AhaControlTable(
         bitstream_tile=int(raw["bitstream_tile"]),
@@ -109,6 +111,7 @@ def load_control_table(path: str | Path) -> AhaControlTable:
         bitstream_entries=int(raw["bitstream_entries"]),
         bs_cfg=bs_cfg,
         kernel_cfg=kernel_cfg,
+        interrupt_enable=interrupt_enable,
         pcfg_start=write(raw["pcfg_start"]),
         stream_start=write(raw["stream_start"]),
     )

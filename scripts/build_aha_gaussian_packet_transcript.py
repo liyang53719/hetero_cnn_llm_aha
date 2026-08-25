@@ -46,10 +46,12 @@ def main() -> int:
         "official_axi_control": {
             "bs_cfg_count": len(control.bs_cfg),
             "kernel_cfg_count": len(control.kernel_cfg),
+            "interrupt_enable_count": len(control.interrupt_enable),
             "pcfg_start": {"address": f"0x{control.pcfg_start.address:03x}", "data": f"0x{control.pcfg_start.data:08x}"},
             "stream_start": {"address": f"0x{control.stream_start.address:03x}", "data": f"0x{control.stream_start.data:08x}"},
         },
         "ordered_phases": [
+            "interrupt_enable_axi_writes",
             "bitstream_proc_packets",
             "bs_cfg_axi_writes",
             "kernel_cfg_axi_writes",

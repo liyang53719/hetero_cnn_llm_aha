@@ -28,11 +28,12 @@ def test_control_table_preserves_axi_limits_and_groups(tmp_path) -> None:
         "bitstream_tile": 0, "bitstream_start_address": 0, "bitstream_entries": 9,
         "bs_cfg": [{"address": 0x10, "data": 1}],
         "kernel_cfg": [{"address": 0x20, "data": 2}],
+        "interrupt_enable": [{"address": 0x2C, "data": 7}],
         "pcfg_start": {"address": 0x1C, "data": 1},
         "stream_start": {"address": 0x18, "data": 3},
     }))
     control = load_control_table(path)
-    assert (control.bitstream_entries, control.pcfg_start.address, control.stream_start.data) == (9, 0x1C, 3)
+    assert (control.bitstream_entries, control.pcfg_start.address, control.stream_start.data, control.interrupt_enable[0].data) == (9, 0x1C, 3, 7)
 
 
 def test_default_test_app_u16_interleave_and_packet_packing() -> None:

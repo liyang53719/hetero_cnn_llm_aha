@@ -46,3 +46,10 @@ beats at official bitstream base `0x00000`; the final beat has seven valid
 control facts independently confirmed by the L1 test log (`0x01c=1` parallel
 config start and `0x018=0x00030003` stream start). The remaining AXI BS/Kernel
 register table is explicitly not yet reconstructed.
+
+The table is now reconstructed by compiling and running the pinned upstream
+`parser.c`, `map.c`, and `gen.c` with mechanically converted headers from the
+same generated AHA closure. For the frozen 4x16 Gaussian app it yields five
+`bs_cfg` writes, 39 `kernel_cfg` writes, parallel-config start `0x01c=1`, and
+stream start `0x018=0x00030003`. The exported `control_table.json` is an input
+to the project transcript; it is not hand-authored configuration data.

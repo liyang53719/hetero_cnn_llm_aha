@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 from pathlib import Path
 import re
 
@@ -27,6 +28,23 @@ class AhaProcPacket512:
     data: int
     byte_enable: int
     valid_words: int
+
+
+@dataclass(frozen=True)
+class AhaAxiWrite:
+    address: int
+    data: int
+
+
+@dataclass(frozen=True)
+class AhaControlTable:
+    bitstream_tile: int
+    bitstream_start_address: int
+    bitstream_entries: int
+    bs_cfg: tuple[AhaAxiWrite, ...]
+    kernel_cfg: tuple[AhaAxiWrite, ...]
+    pcfg_start: AhaAxiWrite
+    stream_start: AhaAxiWrite
 
 
 def parse_bitstream(path: str | Path) -> tuple[AhaBitstreamEntry, ...]:
@@ -63,3 +81,34 @@ def pack_proc_packets(entries: tuple[AhaBitstreamEntry, ...], *, base_address: i
             valid_words=len(group),
         ))
     return tuple(packets)
+
+
+def load_control_table(path: str | Path) -> AhaControlTable:
+    """Load the exact official AHA parser/map AXI control table."""
+
+    raw = json.loads(Path(path).read_text(encoding="utf-8"))
+
+    def write(item: object) -> AhaAxiWrite:
+        if not isinstance(item, dict):
+            raise ValueError("control-table entry must be a mapping")
+        address = int(item["address"])
+        data = int(item["data"])
+        if not 0 <= address < (1 << 13):
+            raise ValueError(f"AXI address {address:#x} does not fit Garnet's 13-bit interface")
+        if not 0 <= data < (1 << 32):
+            raise ValueError(f"AXI data {data:#x} does not fit 32 bits")
+        return AhaAxiWrite(address, data)
+
+    bs_cfg = tuple(write(item) for item in raw["bs_cfg"])
+    kernel_cfg = tuple(write(item) for item in raw["kernel_cfg"])
+    if not bs_cfg or not kernel_cfg:
+        raise ValueError("official AHA control table has an empty configuration group")
+    return AhaControlTable(
+        bitstream_tile=int(raw["bitstream_tile"]),
+        bitstream_start_address=int(raw["bitstream_start_address"]),
+        bitstream_entries=int(raw["bitstream_entries"]),
+        bs_cfg=bs_cfg,
+        kernel_cfg=kernel_cfg,
+        pcfg_start=write(raw["pcfg_start"]),
+        stream_start=write(raw["stream_start"]),
+    )

@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from heteronpu.aha_garnet_trace import pack_proc_packets, parse_bitstream
+from heteronpu.aha_garnet_trace import load_control_table, pack_proc_packets, parse_bitstream
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,25 +20,37 @@ def main() -> int:
                         default=ROOT / "work/results/l2_aha_gaussian_packet_transcript.json")
     args = parser.parse_args()
     entries = parse_bitstream(args.trace_dir / "app_bin/gaussian.bs")
-    # Confirmed by pinned test_app map.c and the L1 Gaussian execution log.
-    packets = pack_proc_packets(entries, base_address=0)
+    control = load_control_table(args.trace_dir / "control_table.json")
+    if control.bitstream_entries != len(entries):
+        raise SystemExit("official control table bitstream count disagrees with gaussian.bs")
+    packets = pack_proc_packets(entries, base_address=control.bitstream_start_address)
     result = {
         "status": "PARTIAL_PASS",
-        "scope": "lossless Gaussian bitstream-to-proc-packet transcript only",
+        "scope": "official Gaussian bitstream packets plus AXI control transcript; data payload execution remains open",
         "bitstream_entry_count": len(entries),
         "packet_count": len(packets),
-        "packet_base_address": 0,
+        "packet_base_address": control.bitstream_start_address,
         "first_packet_words": [f"0x{entry.packed_word:016x}" for entry in entries[:8]],
         "last_packet_valid_words": packets[-1].valid_words,
         "last_packet_byte_enable": f"0x{packets[-1].byte_enable:016x}",
-        "known_control_writes": [
-            {"address": "0x01c", "data": "0x00000001", "meaning": "parallel config start, tile 0"},
-            {"address": "0x018", "data": "0x00030003", "meaning": "Gaussian stream start"},
+        "official_axi_control": {
+            "bs_cfg_count": len(control.bs_cfg),
+            "kernel_cfg_count": len(control.kernel_cfg),
+            "pcfg_start": {"address": f"0x{control.pcfg_start.address:03x}", "data": f"0x{control.pcfg_start.data:08x}"},
+            "stream_start": {"address": f"0x{control.stream_start.address:03x}", "data": f"0x{control.stream_start.data:08x}"},
+        },
+        "ordered_phases": [
+            "bitstream_proc_packets",
+            "bs_cfg_axi_writes",
+            "kernel_cfg_axi_writes",
+            "pcfg_start_axi_write",
+            "wait_official_garnet_interrupt",
+            "input_proc_packets",
+            "stream_start_axi_write",
         ],
         "known_packet_bases": {"bitstream": "0x00000", "input_tiles": ["0x00000", "0x20000"],
                                  "output_tiles": ["0x10000", "0x30000"]},
         "not_yet_proven": [
-            "full bs_cfg/kernel_cfg AXI register table extraction",
             "full Garnet numerical execution through the project wrapper",
         ],
     }

@@ -16,6 +16,9 @@ command -v docker >/dev/null || { echo "Docker is required" >&2; exit 2; }
 [[ -z "$(git -C "$AHA_ROOT" status --porcelain)" ]] || { echo "AHA tree is dirty" >&2; exit 3; }
 
 mkdir -p "$OUT"
+python3 "$PROJECT_ROOT/scripts/convert_aha_svh_to_h.py" \
+  --source-root "$PROJECT_ROOT/work/generated/l2_aha_garnet_4x16/collateral" \
+  --output-dir "$OUT/control_headers"
 host_commit=$(git -C "$AHA_ROOT" rev-parse HEAD)
 image_commit=$(docker run --rm --entrypoint /bin/bash "$AHA_IMAGE" -lc 'git -C /aha rev-parse HEAD')
 [[ "$host_commit" == "$image_commit" ]] || {
@@ -26,13 +29,22 @@ printf '%s\n' "$AHA_IMAGE" > "$OUT/image.ref"
 docker image inspect "$AHA_IMAGE" --format '{{index .RepoDigests 0}}' > "$OUT/image.digest"
 printf '%s\n' "$host_commit" > "$OUT/aha.commit"
 
-docker run --rm --cpuset-cpus "$AHA_CPUSET" -v "$OUT:/out" -w /aha "$AHA_IMAGE" bash -lc "
+docker run --rm --cpuset-cpus "$AHA_CPUSET" \
+  -v "$OUT:/out" -v "$OUT/control_headers:/control_headers:ro" \
+  -v "$PROJECT_ROOT/scripts/aha_dump_control.c:/aha_dump_control.c:ro" \
+  -w /aha "$AHA_IMAGE" bash -lc "
   set -euo pipefail
   export PATH=/aha/bin:\$PATH
   /aha/bin/python -m pip install --disable-pip-version-check psutil==7.2.2
   app=/aha/Halide-to-Hardware/apps/hardware_benchmarks/apps/gaussian
   /aha/bin/aha map apps/gaussian | tee /out/gaussian_map.log
   /aha/bin/aha pnr apps/gaussian --width $AHA_WIDTH --height $AHA_HEIGHT | tee /out/gaussian_pnr.log
+  gcc -std=c11 /aha_dump_control.c /aha/garnet/tests/test_app/lib/*.c \
+    -I/aha/garnet/tests/test_app/lib \
+    -I/control_headers -o /tmp/aha_dump_control 2>&1 | tee /out/control_compile.log
+  /tmp/aha_dump_control \$app/bin/design_meta.json $AHA_WIDTH 2>&1 | tee /out/control_dump.log
+  sed -n 's/^AHA_CONTROL_JSON=//p' /out/control_dump.log | tail -n 1 > /out/control_table.json
+  test -s /out/control_table.json
   test -d \$app/bin
   rm -rf /out/app_bin
   mkdir -p /out/app_bin
@@ -56,6 +68,7 @@ result = {
     "scope": "official Gaussian map/PnR artifact export only; wrapper equivalence remains open",
     "file_count": len(files),
     "interesting_files": interesting,
+    "control_table": json.loads((out / "control_table.json").read_text()),
 }
 (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
 print(json.dumps(result, sort_keys=True))

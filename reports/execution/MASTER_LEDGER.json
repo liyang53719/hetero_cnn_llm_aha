@@ -42,7 +42,8 @@
         "reports/execution/L2_AHA_CONTROL_PLANE_AUDIT.md",
         "work/results/l2_aha_axi_loader.log",
         "work/results/l2_aha_proc_packet_writer.log",
-        "work/results/l2_aha_microsequencer.log"
+        "work/results/l2_aha_microsequencer.log",
+        "work/results/l2_aha_gaussian_packet_transcript.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -51,6 +52,7 @@
         "AHA Garnet AXI configuration loader AW/W/B directed randomized-ready test",
         "AHA 512-bit to proc-packet 64-bit beat split directed test",
         "AHA packet/AXI/interrupt microsequencer directed ordering test",
+        "Gaussian 519-entry bitstream lossless 512-bit packet transcript",
         "Gemmini CUSTOM_3 primitive and resolved output-stationary single-tile descriptor lowering unit test"
       ],
       "remaining_gates": [

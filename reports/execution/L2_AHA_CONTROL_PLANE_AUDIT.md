@@ -38,3 +38,11 @@ write, AXI configuration write, and wait-for-official-Garnet-interrupt. Its
 test checks a packet operation, a `0x1c` parallel-configuration AXI write, and
 an interrupt wait in sequence. It is not yet a full Gaussian descriptor
 frontend or a macro numerical-equivalence result.
+
+The exported Gaussian `gaussian.bs` has 519 exact `{address,data}` entries.
+`aha_garnet_trace.py` packs them losslessly into 65 project-side 512-bit packet
+beats at official bitstream base `0x00000`; the final beat has seven valid
+64-bit words and byte-enable `0x00ffffffffffffff`. The script records only
+control facts independently confirmed by the L1 test log (`0x01c=1` parallel
+config start and `0x018=0x00030003` stream start). The remaining AXI BS/Kernel
+register table is explicitly not yet reconstructed.

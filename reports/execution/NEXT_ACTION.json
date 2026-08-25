@@ -1,6 +1,6 @@
 {
-  "phase": "L2_AHA_GAUSSIAN_TRANSCRIPT",
-  "command": "taskset -c 8-25 iverilog -g2012 -s tb_aha_garnet_microsequencer -o work/results/l2_aha_microsequencer.vvp rtl/integration/aha_garnet_axi_config_loader.sv rtl/integration/aha_garnet_proc_packet_writer.sv rtl/integration/aha_garnet_microsequencer.sv tb/tb_aha_garnet_microsequencer.sv && taskset -c 8-25 vvp work/results/l2_aha_microsequencer.vvp",
-  "success_condition": "An already-lowered Gaussian control transcript executes packet write, AXI configuration, and interrupt wait in order through one sequencer, without direct nested-Interconnect driving.",
-  "failure_policy": "If ordering fails, locate the first sub-operation against ProcDriver/AxilDriver/Env_cgra_configure; do not synthesize a completion event before the official Garnet interrupt."
+  "phase": "L2_AHA_GAUSSIAN_AXI_TABLE",
+  "command": "PYTHONPATH=src taskset -c 8-25 python3 scripts/build_aha_gaussian_packet_transcript.py",
+  "success_condition": "All 519 official Gaussian bitstream entries are preserved as 65 ordered proc-packet beats, with the final seven-word byte-enable and no fabricated AXI configuration table.",
+  "failure_policy": "If packing differs, compare each word against ProcDriver_write_bs and gaussian.bs. Keep the unresolved bs_cfg/kernel_cfg table explicitly open until extracted from the official runtime."
 }

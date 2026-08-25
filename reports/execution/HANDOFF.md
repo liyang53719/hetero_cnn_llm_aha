@@ -10,7 +10,8 @@
 - Gemmini multi-tile WS PASS: 17x18x19, 2x2x2 tiles, official/raw payload-equivalent, checksum `14853676686976657775`, 285 MB.
 - Gemmini multi-tile OS PASS: 36 commands/path; Python lowerer matches every raw Rocket commit; bit-exact checksum `14853676686976657775`.
 - Gemmini mvin/mvout edges PASS: five edge shapes, unaligned DRAM, INT32-to-INT8/full-width paths; 60 commits audited.
-- L2 remains IN_PROGRESS for conv/bias-requant/backpressure/event/illegal-descriptor coverage.
+- Gemmini padded 3x3 conv PASS: bias+identity and bias+0.5 requant+ReLU, 36 commits audited, CPU bit-exact.
+- L2 remains IN_PROGRESS for backpressure/completion-event/illegal-descriptor coverage.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

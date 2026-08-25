@@ -31,6 +31,13 @@ class GemminiFunct(IntEnum):
     LOOP_WS_CONFIG_STRIDES_AB = 12
     LOOP_WS_CONFIG_STRIDES_DC = 13
     MVIN3 = 14
+    LOOP_CONV_WS = 15
+    LOOP_CONV_WS_CONFIG_1 = 16
+    LOOP_CONV_WS_CONFIG_2 = 17
+    LOOP_CONV_WS_CONFIG_3 = 18
+    LOOP_CONV_WS_CONFIG_4 = 19
+    LOOP_CONV_WS_CONFIG_5 = 20
+    LOOP_CONV_WS_CONFIG_6 = 21
     MVOUT_SPAD = 23
     COUNTER = 126
 
@@ -166,10 +173,11 @@ def config_load(*, stride_bytes: int, scale_bits: int = 0x3F80_0000,
     return RoCCMicroOp(GemminiFunct.CONFIG, rs1, _unsigned("stride_bytes", stride_bytes, 32))
 
 
-def config_store(*, stride_bytes: int, acc_scale_bits: int = 0x3F80_0000) -> RoCCMicroOp:
+def config_store(*, stride_bytes: int, acc_scale_bits: int = 0x3F80_0000,
+                 activation: int = 0) -> RoCCMicroOp:
     """Encode the non-pooling ``gemmini_config_st`` form."""
 
-    rs1 = 2  # CONFIG_ST, with all pooling/activation fields zero
+    rs1 = _unsigned("activation", activation, 2) << 2 | 2
     rs2 = _unsigned("acc_scale_bits", acc_scale_bits, 32) << 32 | _unsigned("stride_bytes", stride_bytes, 32)
     return RoCCMicroOp(GemminiFunct.CONFIG, rs1, rs2)
 
@@ -448,3 +456,90 @@ def lower_int8_os_tiles(descriptor: Int8OsTilesDescriptor) -> tuple[RoCCMicroOp,
             local = c_sp_start + (i * j_tiles + j) * dim
             ops.append(mvout(dram, local, cols, rows))
     return tuple(ops)
+
+
+@dataclass(frozen=True)
+class ConvWsDescriptor:
+    """Exact argument view of pinned ``gemmini_loop_conv_ws``."""
+
+    batch_size: int; in_row_dim: int; in_col_dim: int; in_channels: int
+    out_channels: int; out_row_dim: int; out_col_dim: int
+    pool_out_row_dim: int; pool_out_col_dim: int
+    stride: int; padding: int; kernel_dim: int; kernel_dilation: int
+    pool_size: int; pool_stride: int; pool_padding: int
+    batches: int; porows: int; pocols: int; pochs: int
+    krows: int; kcols: int; kchs: int
+    lpad: int; rpad: int; upad: int; dpad: int
+    plpad: int; prpad: int; pupad: int; pdpad: int
+    orows: int; ocols: int
+    weights_addr: int; output_addr: int; bias_addr: int; input_addr: int
+    no_bias: bool = False; no_pool: bool = True; downsample: bool = False
+    wrot180: bool = False; input_dilated: bool = False; activation: int = 0
+    trans_output_1203: bool = False; trans_weight_1203: bool = False
+    trans_weight_0132: bool = False; trans_input_3120: bool = False
+    max_pixels_per_row: int = 1
+    in_stride: int = 1; weight_stride: int = 1; out_stride: int = 1
+    dw: bool = False; a_spad_id: int = 0; b_spad_id: int = 0
+
+
+def lower_loop_conv_ws(descriptor: ConvWsDescriptor) -> tuple[RoCCMicroOp, ...]:
+    widths = {
+        "batch_size": 16, "in_row_dim": 16, "in_col_dim": 16,
+        "in_channels": 16, "out_channels": 16, "out_row_dim": 16,
+        "out_col_dim": 16, "pool_out_row_dim": 16, "pool_out_col_dim": 16,
+        "stride": 8, "padding": 8, "kernel_dim": 16,
+        "kernel_dilation": 10, "pool_size": 16, "pool_stride": 8,
+        "pool_padding": 8, "batches": 16, "porows": 16, "pocols": 16,
+        "pochs": 16, "krows": 16, "kcols": 16, "kchs": 16,
+        "lpad": 16, "rpad": 16, "upad": 16, "dpad": 8,
+        "plpad": 8, "prpad": 16, "pupad": 11, "pdpad": 11,
+        "orows": 16, "ocols": 16, "activation": 8,
+        "max_pixels_per_row": 8, "in_stride": 16,
+        "weight_stride": 16, "out_stride": 16,
+        "a_spad_id": 2, "b_spad_id": 2,
+    }
+    for name, bits in widths.items():
+        _unsigned(name, getattr(descriptor, name), bits)
+    for name in ("weights_addr", "output_addr", "bias_addr", "input_addr"):
+        _unsigned(name, getattr(descriptor, name), 64)
+
+    c1_rs1 = (descriptor.out_channels << 48 | descriptor.in_channels << 32 |
+              descriptor.in_row_dim << 16 | descriptor.batch_size)
+    c1_rs2 = (descriptor.padding << 56 | descriptor.stride << 48 |
+              descriptor.out_col_dim << 32 | descriptor.pool_out_row_dim << 16 |
+              descriptor.out_row_dim)
+    c2_rs1 = (descriptor.kernel_dim << 48 | descriptor.pool_out_col_dim << 32 |
+              descriptor.pool_size << 16 | descriptor.pool_stride << 8 |
+              descriptor.pool_padding)
+    c2_rs2 = (descriptor.batches << 48 | descriptor.porows << 32 |
+              descriptor.pocols << 16 | descriptor.pochs)
+    c3_rs1 = (descriptor.krows << 48 | descriptor.kcols << 32 |
+              descriptor.kchs << 16 | descriptor.lpad)
+    c3_rs2 = (descriptor.rpad << 48 | descriptor.upad << 32 |
+              descriptor.dpad << 24 | descriptor.plpad << 16 |
+              descriptor.in_col_dim)
+    c4_rs1 = (descriptor.orows << 48 | descriptor.prpad << 32 |
+              descriptor.pupad << 21 | descriptor.pdpad << 10 |
+              descriptor.kernel_dilation)
+    c4_rs2 = (descriptor.in_stride << 48 | descriptor.weight_stride << 32 |
+              descriptor.out_stride << 16 | descriptor.ocols)
+    run_rs1 = (descriptor.a_spad_id << 18 | descriptor.b_spad_id << 16 |
+               descriptor.max_pixels_per_row << 8 | int(descriptor.dw) << 6 |
+               int(descriptor.trans_input_3120) << 5 |
+               int(descriptor.trans_weight_0132) << 4 |
+               int(descriptor.trans_weight_1203) << 3 |
+               int(descriptor.trans_output_1203) << 2 |
+               int(descriptor.wrot180) << 1 | int(descriptor.no_bias))
+    run_rs2 = (descriptor.activation << 3 | int(descriptor.input_dilated) << 2 |
+               int(descriptor.downsample) << 1 | int(descriptor.no_pool))
+    return (
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS_CONFIG_1, c1_rs1, c1_rs2),
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS_CONFIG_2, c2_rs1, c2_rs2),
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS_CONFIG_3, c3_rs1, c3_rs2),
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS_CONFIG_4, c4_rs1, c4_rs2),
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS_CONFIG_5,
+                    descriptor.weights_addr, descriptor.output_addr),
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS_CONFIG_6,
+                    descriptor.bias_addr, descriptor.input_addr),
+        RoCCMicroOp(GemminiFunct.LOOP_CONV_WS, run_rs1, run_rs2),
+    )

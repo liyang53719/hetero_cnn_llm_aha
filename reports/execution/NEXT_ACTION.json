@@ -1,6 +1,6 @@
 {
-  "phase": "L2_GEMMINI_CONV_BIAS_REQUANT",
-  "command": "Implement retained-RocketTile official/raw equivalence for a fixed padded 3x3 INT8 convolution, then bias accumulation plus non-identity requant/ReLU. Audit ordered RoCC payloads, memory writes, completion, and bit-exact output before queue-backpressure/event/illegal-descriptor coverage. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
+  "phase": "L2_GEMMINI_CONTROL_COMPLETION_NEGATIVE",
+  "command": "Add retained-RocketTile queue-pressure and completion observation around the frozen OS/WS/conv programs, then deterministic illegal-descriptor rejection before any RoCC issue. Prove no command loss/reorder, busy-to-idle completion, one completion event per accepted descriptor, and zero CUSTOM_3 commits for rejected descriptors. Use taskset -c 8-25, MemAvailable >10 GiB, at most -j4, and a memory cgroup.",
   "success_condition": "All required Gemmini L2 operations match their official C/RTL paths in retained RocketTile context with identical command/write/event traces and bit-exact outputs; upstream remains clean.",
   "failure_policy": "Stop at the first command/write/event divergence. Do not connect the clean-room adapter to the official macro, hand-write TileLink/PTW behavior, skip WS/conv/event coverage, relax numerical checks, or mark L2 PASS."
 }

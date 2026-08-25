@@ -6,6 +6,7 @@ from heteronpu.gemmini_rocc_lowering import (
     GemminiFunct,
     Int8SingleTileDescriptor,
     Int8OsTilesDescriptor,
+    ConvWsDescriptor,
     LoopWsDescriptor,
     config_ex,
     config_load,
@@ -18,6 +19,7 @@ from heteronpu.gemmini_rocc_lowering import (
     preload,
     lower_int8_single_tile,
     lower_int8_os_tiles,
+    lower_loop_conv_ws,
     lower_loop_ws,
 )
 
@@ -51,6 +53,8 @@ def test_config_encoders_match_pinned_gemmini_h_bit_layouts() -> None:
     assert (ld.funct, ld.rs1, ld.rs2) == (GemminiFunct.CONFIG, 0x3F80_0000_0010_0101, 7)
     st = config_store(stride_bytes=5)
     assert (st.funct, st.rs1, st.rs2) == (GemminiFunct.CONFIG, 2, 0x3F80_0000_0000_0005)
+    relu = config_store(stride_bytes=5, acc_scale_bits=0x3F00_0000, activation=1)
+    assert (relu.rs1, relu.rs2) == (6, 0x3F00_0000_0000_0005)
 
 
 def test_channel_and_width_validation() -> None:
@@ -160,3 +164,35 @@ def test_multi_tile_os_rejects_unimplemented_block_split() -> None:
     )
     with pytest.raises(ValueError, match="j_tiles"):
         lower_int8_os_tiles(descriptor)
+
+
+def test_conv_ws_lowering_matches_padded_3x3_macro_payloads() -> None:
+    descriptor = ConvWsDescriptor(
+        batch_size=1, in_row_dim=5, in_col_dim=5, in_channels=3,
+        out_channels=4, out_row_dim=5, out_col_dim=5,
+        pool_out_row_dim=5, pool_out_col_dim=5,
+        stride=1, padding=1, kernel_dim=3, kernel_dilation=1,
+        pool_size=1, pool_stride=1, pool_padding=0,
+        batches=1, porows=5, pocols=5, pochs=4,
+        krows=3, kcols=3, kchs=3,
+        lpad=1, rpad=1, upad=1, dpad=1,
+        plpad=0, prpad=0, pupad=0, pdpad=0,
+        orows=5, ocols=5,
+        weights_addr=0x80002000, output_addr=0x80003000,
+        bias_addr=0x80004000, input_addr=0x80005000,
+        activation=1, max_pixels_per_row=3,
+        in_stride=3, weight_stride=4, out_stride=4,
+    )
+    ops = lower_loop_conv_ws(descriptor)
+    assert [op.funct for op in ops] == [
+        GemminiFunct.LOOP_CONV_WS_CONFIG_1, GemminiFunct.LOOP_CONV_WS_CONFIG_2,
+        GemminiFunct.LOOP_CONV_WS_CONFIG_3, GemminiFunct.LOOP_CONV_WS_CONFIG_4,
+        GemminiFunct.LOOP_CONV_WS_CONFIG_5, GemminiFunct.LOOP_CONV_WS_CONFIG_6,
+        GemminiFunct.LOOP_CONV_WS,
+    ]
+    assert ops[0].rs1 == (4 << 48) | (3 << 32) | (5 << 16) | 1
+    assert ops[0].rs2 == (1 << 56) | (1 << 48) | (5 << 32) | (5 << 16) | 5
+    assert ops[4].rs1 == descriptor.weights_addr
+    assert ops[5].rs2 == descriptor.input_addr
+    assert ops[6].rs1 == 3 << 8
+    assert ops[6].rs2 == (1 << 3) | 1

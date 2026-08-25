@@ -21,7 +21,7 @@
       "work/results/gemmini_baseline_minimal_v3/verilator_matmul.log",
       "work/results/gemmini_baseline_minimal_v3/verilator_matmul_20m.log"
     ],
-    "details": "Targeted Chipyard/Gemmini dependencies, FireSim targetutils, CIRCT firtool-1.75.0 and DRAMSim2 were installed in the isolated work tree. Official GemminiRocketConfig elaborated, firtool emitted split Verilog, Verilator built the simulator, mvin/mvout, FAST=1 matmul, FAST=1 matmul_ws, official N=2 matmul_os, and full N=2 matmul_ws with a 20M cycle budget completed. Full N=2 matmul reached the 20,000,001-cycle TestDriver timeout after several dataflow/transpose combinations; no numerical mismatch was reported. Full ResNet numerical RTL gate is still open."
+    "details": "Targeted Chipyard/Gemmini dependencies, FireSim targetutils, CIRCT firtool-1.75.0 and DRAMSim2 were installed in the isolated work tree. Official GemminiRocketConfig elaborated, firtool emitted split Verilog, and Verilator built the simulator. mvin/mvout, FAST=1 matmul, FAST=1 matmul_ws, and official N=2 matmul_os have provenance-backed PASS evidence. Fresh canonical N=2 matmul_ws timed out at 10,000,001 cycles without a mismatch; its historical 20M $finish log has no captured invocation or binary hash and is not authoritative. Full N=2 default matmul reached the 20,000,001-cycle TestDriver timeout after several dataflow/transpose combinations; no numerical mismatch was reported. Full ResNet numerical RTL gate is still open."
   },
   "L3": {
     "status": "BLOCKED_DOCKER",

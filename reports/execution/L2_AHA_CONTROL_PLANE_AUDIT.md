@@ -53,3 +53,9 @@ same generated AHA closure. For the frozen 4x16 Gaussian app it yields five
 `bs_cfg` writes, 39 `kernel_cfg` writes, parallel-config start `0x01c=1`, and
 stream start `0x018=0x00030003`. The exported `control_table.json` is an input
 to the project transcript; it is not hand-authored configuration data.
+
+The same transcript now reconstructs the official default Gaussian input split:
+the 25,344-byte 16-bit raw input is deinterleaved exactly as test_app does,
+with tile 0 taking source element `2*k` and tile 1 element `2*k+1`. Each tile
+receives 12,672 bytes (198 project packet beats) at packet bases `0x00000` and
+`0x20000`, respectively.

@@ -112,3 +112,35 @@ def load_control_table(path: str | Path) -> AhaControlTable:
         pcfg_start=write(raw["pcfg_start"]),
         stream_start=write(raw["stream_start"]),
     )
+
+
+def pack_raw_packets(payload: bytes, *, base_address: int) -> tuple[AhaProcPacket512, ...]:
+    """Pack a byte stream into low-byte-first 512-bit proc-packet beats."""
+
+    if not payload:
+        raise ValueError("payload must not be empty")
+    if not 0 <= base_address < (1 << 18):
+        raise ValueError("base_address must fit the Garnet 18-bit proc-packet address")
+    packets: list[AhaProcPacket512] = []
+    for index, start in enumerate(range(0, len(payload), 64)):
+        chunk = payload[start:start + 64]
+        packets.append(AhaProcPacket512(
+            address=base_address + index * 64,
+            data=int.from_bytes(chunk, byteorder="little", signed=False),
+            byte_enable=(1 << len(chunk)) - 1,
+            valid_words=(len(chunk) + 7) // 8,
+        ))
+    return tuple(packets)
+
+
+def split_interleaved_u16(payload: bytes, tile_count: int) -> tuple[bytes, ...]:
+    """Match test_app's default ``input_data[j + num_tiles*k]`` distribution."""
+
+    if tile_count <= 0:
+        raise ValueError("tile_count must be positive")
+    if len(payload) % 2:
+        raise ValueError("16-bit input payload has an odd byte count")
+    words = [payload[index:index + 2] for index in range(0, len(payload), 2)]
+    if len(words) % tile_count:
+        raise ValueError("16-bit input word count is not divisible by tile_count")
+    return tuple(b"".join(words[tile::tile_count]) for tile in range(tile_count))

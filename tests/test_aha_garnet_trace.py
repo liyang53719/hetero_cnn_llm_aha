@@ -1,6 +1,12 @@
 import json
 
-from heteronpu.aha_garnet_trace import AhaBitstreamEntry, load_control_table, pack_proc_packets
+from heteronpu.aha_garnet_trace import (
+    AhaBitstreamEntry,
+    load_control_table,
+    pack_proc_packets,
+    pack_raw_packets,
+    split_interleaved_u16,
+)
 
 
 def test_proc_packet_packing_matches_packed_sv_bitstream_entry_order() -> None:
@@ -27,3 +33,14 @@ def test_control_table_preserves_axi_limits_and_groups(tmp_path) -> None:
     }))
     control = load_control_table(path)
     assert (control.bitstream_entries, control.pcfg_start.address, control.stream_start.data) == (9, 0x1C, 3)
+
+
+def test_default_test_app_u16_interleave_and_packet_packing() -> None:
+    payload = b"".join(value.to_bytes(2, "little") for value in range(8))
+    left, right = split_interleaved_u16(payload, 2)
+    assert left == b"\x00\x00\x02\x00\x04\x00\x06\x00"
+    assert right == b"\x01\x00\x03\x00\x05\x00\x07\x00"
+    packets = pack_raw_packets(left, base_address=0x200)
+    assert packets[0].address == 0x200
+    assert packets[0].data & 0xffff == 0
+    assert packets[0].byte_enable == 0xff

@@ -15,7 +15,9 @@ the locked `gemmini-rocc-tests/include/gemmini.h` macros:
 
 The lowerer has a resolved, typed single-tile INT8 output-stationary descriptor
 view.  It emits the same configuration/load/preload/compute/store ordering as
-the official C test pattern, retains literal local-address bits supplied by the
+the official basic OS C test pattern: `config_ex` uses literal unit C/A
+strides, while tensor row strides are emitted only by subsequent `config_st`
+and `config_ld` operations. It retains literal local-address bits supplied by the
 descriptor allocator, and does not emit a fake RoCC response as completion.
 
 Scope deliberately remains limited:

@@ -211,8 +211,11 @@ def lower_int8_single_tile(descriptor: Int8SingleTileDescriptor) -> tuple[RoCCMi
     ops = [
         config_ex(
             dataflow=descriptor.dataflow,
-            c_stride=descriptor.c_stride_bytes,
-            a_stride=descriptor.a_stride_bytes,
+            # Match gemmini_config_ex() in the pinned basic OS C path.  DMA
+            # row strides are owned by config_st/config_ld below; placing
+            # them here changes the official CUSTOM_3 transcript.
+            c_stride=1,
+            a_stride=1,
             a_transpose=descriptor.transpose_a,
             b_transpose=descriptor.transpose_b,
         ),

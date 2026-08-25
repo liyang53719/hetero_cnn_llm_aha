@@ -74,6 +74,12 @@ def test_resolved_int8_descriptor_lowers_in_official_os_macro_order() -> None:
     ]
     assert program[8].rs1 == pack_local_addr_rows_cols(0x020, 5, 3)
     assert program[-1].rs2 == pack_local_addr_rows_cols(0x030, 5, 3)
+    # gemmini_config_ex() in the pinned basic OS C path passes unit strides;
+    # tensor strides belong to the subsequent config_st/config_ld commands.
+    assert program[0].rs1 == 0x3F80_0000_0001_0000
+    assert program[0].rs2 == 1 << 48
+    assert program[1].rs2 == 0x3F80_0000_0000_0005
+    assert program[2].rs2 == 7
     assert all(op.opcode == CUSTOM3_OPCODE and not op.xd for op in program)
 
 

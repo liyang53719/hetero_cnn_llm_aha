@@ -1,8 +1,9 @@
 # L11 execution handoff
 
 - Canonical stages are L0-L11 from `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md`.
-- Current phase: P0 foundation.
+- Current phase: L1 upstream reproduction.
 - Every compile, simulation, synthesis, and Docker command uses `taskset -c 8-25`; Docker additionally uses `--cpuset-cpus=8-23`.
-- Preflight is complete: CPU 8-23, 458 GiB free, 26 GiB available memory; DC and VCS ready. Docker is installed but not ready; `lc_shell` was not found.
-- Next required check: Docker daemon and `hello-world` with cpuset 8-23.
+- L0 PASS: 27 Python tests, C++ reference, RTL contract simulation, and five 1.0 ns CLN22UL contract DC tops passed. The integrated contract top has WNS 9.75132e-05 ns and zero unmapped cells.
+- Docker package and group membership are present, but this login has not refreshed the `docker` group. Test Docker with `sg docker -c 'docker version'` or after a new login.
+- `lc_shell` was not found; it is only a future L10 SRAM-library dependency.
 - Do not close any stage using the existing clean-room-only evidence.

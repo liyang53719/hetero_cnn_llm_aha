@@ -2,9 +2,17 @@
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "P0_foundation",
+  "current_phase": "L1_upstream_reproduction",
   "stages": {
-    "L0": {"status": "PENDING_REVALIDATION", "depends_on": []},
+    "L0": {
+      "status": "PASS",
+      "depends_on": [],
+      "evidence": [
+        "reports/final_validation.json",
+        "work/results/dc22_l0_revalidation"
+      ],
+      "summary": "27 Python tests, C++ reference, RTL contract tests, and five 1.0 ns CLN22UL contract tops passed with zero unmapped cells."
+    },
     "L1": {"status": "PENDING", "depends_on": ["L0"]},
     "L2": {"status": "PENDING", "depends_on": ["L1"]},
     "L3": {"status": "PENDING", "depends_on": ["L2"]},
@@ -18,7 +26,7 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "Docker installation requires completion of the user-owned sudo command.",
-    "Storage must reach 250 GiB free before AHA image pull or multi-point synthesis."
+    "Docker user group membership is present but the current login has not refreshed its supplementary groups.",
+    "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

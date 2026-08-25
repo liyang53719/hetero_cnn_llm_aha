@@ -1,6 +1,6 @@
 {
-  "phase": "L1_aha_docker_baseline",
-  "command": "taskset -c 8-25 sg docker -c 'docker pull hello-world:latest'",
-  "success_condition": "The daemon can reach Docker Hub through its configured HTTPS proxy.",
-  "failure_policy": "Run the sudo daemon proxy drop-in printed by scripts/check_docker_proxy.sh; do not substitute a mutable AHA image or rootless Docker."
+  "phase": "BLOCKED_DOCKER_PROXY",
+  "command": "./scripts/check_docker_proxy.sh && sudo systemctl daemon-reload && sudo systemctl restart docker && sg docker -c 'docker pull hello-world:latest'",
+  "success_condition": "Docker Hub pull succeeds and systemctl shows a non-empty HTTP_PROXY/HTTPS_PROXY environment for docker.service.",
+  "failure_policy": "Do not continue to AHA or claim canonical L1 PASS until the user-owned sudo configuration is complete."
 }

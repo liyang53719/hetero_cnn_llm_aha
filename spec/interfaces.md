@@ -18,6 +18,10 @@ All block-to-block data movement uses ready/valid semantics. A transfer occurs o
 - Engine ID: 3 bits.
 - Optional counter payload: 32 bits.
 
+Event ID zero means no wait. A successful completion makes its Event ID visible
+until the next reset epoch; a nonzero status never releases a wait. Runtime
+software must not reuse a nonzero Event ID within one reset epoch.
+
 ## Matrix engine contract
 
 The matrix engine consumes typed descriptors for `A`, `B`, optional bias/scale and `C`. It must preserve Gemmini's access/execute decoupling but must not expose RoCC or TileLink at the heterogeneous top. The first integration uses generated Gemmini RTL behind an adapter; the final implementation may refactor the Chisel generator only after equivalence is established.

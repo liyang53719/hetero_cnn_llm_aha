@@ -36,7 +36,9 @@ module tb_command_event_scoreboard;
     pulse_completion(16'h0024,8'd1);
     @(posedge clk); if (host_ready || run_valid) $fatal(1,"error completion released wait");
     @(negedge clk); host_data[39:24]=16'h0123;
-    @(posedge clk); if (host_ready || run_valid) $fatal(1,"v0 accepted event ID above 255");
+    @(posedge clk); if (host_ready || run_valid) $fatal(1,"high event ID released before completion");
+    pulse_completion(16'h0123,8'd0);
+    @(posedge clk); if (!host_ready || !run_valid) $fatal(1,"16-bit event ID did not release wait");
     $display("COMMAND_EVENT_SCOREBOARD_PASS");
     $finish;
   end

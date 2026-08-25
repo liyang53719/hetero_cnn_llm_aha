@@ -68,16 +68,23 @@ def main() -> int:
         fail("legacy clean-room adapter lost its non-macro scope marker")
     if re.search(r"\bGemmini\s+[A-Za-z_][A-Za-z0-9_$]*\s*\(", legacy_adapter):
         fail("legacy adapter must not instantiate generated Gemmini without its RocketTile context")
+    program_adapter = (ROOT / "rtl/integration/gemmini_rocc_program_adapter.sv").read_text(encoding="utf-8")
+    for token in ("CUSTOM_3", "rocc_busy_i", "S_WAIT_BUSY_CLEAR", "op_legal_i"):
+        if token not in program_adapter:
+            fail(f"program adapter lost required macro-boundary behavior: {token}")
+    if "rocc_resp" in program_adapter:
+        fail("program adapter must not treat Gemmini response as generic completion")
 
     result = {
         "status": "PASS",
-        "scope": "Gemmini macro boundary freeze only; L2 macro equivalence remains open",
+        "scope": "Gemmini macro boundary freeze plus CUSTOM_3 program-adapter contract",
         "chipyard_commit": lock["chipyard_commit"],
         "gemmini_commit": lock["gemmini_commit"],
         "gemmini_sv_sha256": source_hash,
         "port_count": manifest["port_count"],
         "family_counts": manifest["family_counts"],
         "rocket_context": "cmdRouter + PTW + TileLink + response arbiter present",
+        "program_completion": "last command accepted, busy asserted, then busy cleared",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

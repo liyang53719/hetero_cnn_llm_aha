@@ -25,13 +25,11 @@ official macros and raw-lowered commands run in one GemminiRocketConfig ELF,
 commit matching payloads, and produce bit-exact equal outputs/checksum. See
 `L2_GEMMINI_RETAINED_ROCKET_EQUIVALENCE.md`.
 
-Scope deliberately remains limited:
-
-- logical dimensions above 16 and weight-stationary sequence construction are
-  rejected until the descriptor allocator and official loop path run inside
-  retained RocketTile context;
-- multi-tile/WS, convolution, bias/requant, backpressure, event and illegal
-  descriptor coverage remains open.
+The same retained RocketTile now covers single-tile OS, multi-tile OS/WS,
+mvin/mvout edges, padded convolution, bias and requant/ReLU. A dedicated
+CUSTOM_3 program adapter also passes randomized-ready, busy completion and
+illegal-first-packet RTL tests. Production descriptor-sequencer integration
+and actual Rocket busy waveform co-simulation remain open.
 
 Verification: `PYTHONPATH=src taskset -c 8-25 python3 -m pytest -q
-tests/test_gemmini_rocc_lowering.py` (6 PASS).
+tests/test_gemmini_rocc_lowering.py` (10 PASS).

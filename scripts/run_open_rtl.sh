@@ -39,6 +39,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
     "$ROOT/rtl/integration/gemmini_rocc_command_adapter.sv" \
     --top-module gemmini_rocc_command_adapter |& tee "$OUT/gemmini_rocc_adapter_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
+    "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
+    --top-module gemmini_rocc_program_adapter |& tee "$OUT/gemmini_rocc_program_adapter_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
     --top-module aha_garnet_axi_config_loader |& tee "$OUT/aha_garnet_axi_loader_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
@@ -100,6 +103,14 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/integration/gemmini_rocc_command_adapter.sv" \
     "$ROOT/tb/tb_gemmini_rocc_command_adapter.sv"
   vvp "$OUT/tb_gemmini_rocc_adapter" | tee "$OUT/tb_gemmini_rocc_adapter.log"
+  iverilog -g2012 -s tb_gemmini_rocc_program_adapter -o "$OUT/tb_gemmini_rocc_program_adapter" \
+    "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
+    "$ROOT/tb/tb_gemmini_rocc_program_adapter.sv"
+  vvp "$OUT/tb_gemmini_rocc_program_adapter" | tee "$OUT/tb_gemmini_rocc_program_adapter.log"
+  iverilog -g2012 -s tb_command_event_scoreboard -o "$OUT/tb_command_event_scoreboard" \
+    "$ROOT/rtl/integration/command_event_scoreboard.sv" \
+    "$ROOT/tb/tb_command_event_scoreboard.sv"
+  vvp "$OUT/tb_command_event_scoreboard" | tee "$OUT/tb_command_event_scoreboard.log"
   iverilog -g2012 -s tb_aha_garnet_axi_config_loader -o "$OUT/tb_aha_garnet_axi_loader" \
     "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
     "$ROOT/tb/tb_aha_garnet_axi_config_loader.sv"

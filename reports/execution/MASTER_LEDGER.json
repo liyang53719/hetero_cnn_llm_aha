@@ -64,7 +64,11 @@
         "work/results/l2_gemmini_rocc_equiv/verilator_mvin_mvout_edges.log",
         "reports/execution/L2_GEMMINI_CONV_REQUANT_EQUIVALENCE.md",
         "work/results/l2_gemmini_rocc_equiv/conv_requant_result.json",
-        "work/results/l2_gemmini_rocc_equiv/verilator_conv_requant.log"
+        "work/results/l2_gemmini_rocc_equiv/verilator_conv_requant.log",
+        "reports/execution/L2_GEMMINI_PROGRAM_ADAPTER_CONTROL.md",
+        "work/results/l2_gemmini_control/program_adapter.log",
+        "work/results/l2_gemmini_control/scoreboard.log",
+        "work/results/l2_gemmini_control/macro_boundary_result.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -84,10 +88,11 @@
         "Gemmini retained-RocketTile multi-tile WS equivalence: 17x18x19 across 2x2x2 tiles, official/raw loop payloads and bit-exact outputs match except intentional destination address",
         "Gemmini retained-RocketTile multi-tile OS equivalence: 36 commands per path, Python lowerer matches every raw Rocket commit, and outputs are bit-exact",
         "Gemmini retained-RocketTile mvin/mvout edge equivalence: five edge shapes, unaligned DRAM offsets, and INT32-to-INT8/full-width accumulator paths pass with 60 commits audited",
-        "Gemmini retained-RocketTile padded 3x3 convolution equivalence: bias identity and scale-0.5 ReLU modes match all 36 commands and CPU golden outputs"
+        "Gemmini retained-RocketTile padded 3x3 convolution equivalence: bias identity and scale-0.5 ReLU modes match all 36 commands and CPU golden outputs",
+        "Gemmini CUSTOM_3 program-adapter contract: randomized backpressure preserves 15 ordered issues, busy completion produces exact events, illegal first packet issues zero commands, and scoreboard completion fields match frozen layout"
       ],
       "remaining_gates": [
-        "Gemmini wrapper path versus official C/RTL writes, events, and numerical outputs"
+        "Production descriptor sequencer -> CUSTOM_3 program adapter -> retained RocketTile integration, including actual Gemmini busy waveform completion and pre-issue descriptor-chain rejection"
       ]
     },
     "L3": {"status": "PENDING", "depends_on": ["L2"]},

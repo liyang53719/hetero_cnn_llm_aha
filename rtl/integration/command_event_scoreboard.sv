@@ -2,6 +2,7 @@
 // Event wait gate for the frozen 128-bit command envelope.
 // v0 stores the low 8 bits of event IDs; the full 16-bit ID remains on the
 // interface and IDs above 255 are deliberately rejected by the gate.
+`timescale 1ns/1ps
 module command_event_scoreboard #(
   parameter integer EVENT_SLOTS = 256
 ) (
@@ -31,7 +32,9 @@ module command_event_scoreboard #(
     if (!rst_ni) begin
       event_seen_q <= '0;
     end else if (completion_valid_i && completion_ready_i) begin
-      if (completion_data_i[55:48] == 8'd0)
+      // Frozen completion layout is {event_id[15:0], status[7:0],
+      // engine_id[2:0], counter[28:0]}. v0 indexes the low event-ID byte.
+      if (completion_data_i[39:32] == 8'd0)
         event_seen_q[completion_data_i[47:40]] <= 1'b1;
     end
   end

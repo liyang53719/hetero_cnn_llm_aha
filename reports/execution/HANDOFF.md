@@ -16,6 +16,7 @@
 - Descriptor-chain golden PASS: missing/cycle/>16/null-required rejected before lowering.
 - L2 descriptor fetch decision approved. Production path now uses three-chain Shared-L2 fetch → typed sequencer → CUSTOM_3 adapter; legacy CUSTOM_0 is removed from production integration.
 - Single-tile INT8 OS GEMM production subset PASS: 10 descriptor records, 9 CUSTOM_3 commands, busy-clear completion; missing/cycle/>16 reject before legal issue. L2 remains IN_PROGRESS for multi-tile OS/WS, Conv, bias and requant.
+- L2 `BLOCKED_DECISION`: approve proposed typed `0x12 matrix_aux` record for bias-chain index and LOOP_WS/Conv policy; current subtype/flags semantics are undefined.
 - L3 readiness only: 16x128 bank fabric, 512-bit four-bank mapping, fair 2R+1W arbitration and 100,001-transaction regression PASS; not a stage PASS.
 - L10 `.db` and LEF generation are deferred by user; do not run LC/LEF now. Installed DP rejects BASE/direct 2048/4096x128; validated LL0.8 splits remain 2x2048x64 and 4x4096x32.
 - First real SRAM views: UHDE SP 6144x128 BASE0.8 TT25 Liberty+Verilog+GDS2 generated/audited; LEF blocked in shared ARM `bifrun::ReplaceDummyPinsWithObs`, including Ubuntu18 probe.
@@ -28,5 +29,5 @@
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: extend the production typed sequencer in fixed order multi-tile OS → LOOP_WS → Conv → bias → requant/ReLU; see `NEXT_ACTION.json`.
+- Next action: approve `L2_MATRIX_AUX_DESCRIPTOR_BLOCKED_DECISION.md`, then extend multi-tile OS → LOOP_WS → Conv → bias → requant/ReLU.
 - Do not close a stage with clean-room-only evidence.

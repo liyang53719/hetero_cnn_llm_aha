@@ -127,11 +127,23 @@
     "L7": {"status": "PENDING", "depends_on": ["L5"]},
     "L8": {"status": "PENDING", "depends_on": ["L6"]},
     "L9": {"status": "PENDING", "depends_on": ["L4", "L5", "L6", "L7", "L8"]},
-    "L10": {"status": "PENDING", "depends_on": ["L9"]},
+    "L10": {
+      "status": "PENDING",
+      "depends_on": ["L9"],
+      "readiness_evidence": [
+        "reports/execution/L10_SRAM_LC_TOOL_READINESS.md",
+        "work/results/l10_tool_readiness/dc_version.log",
+        "work/results/l10_tool_readiness/dc_liberty_to_db.log",
+        "work/results/l10_tool_readiness/compiler_probe/dp_2048x64_ll_mux8.log",
+        "work/results/l10_tool_readiness/compiler_probe/dp_4096x32_ll_mux16.log"
+      ],
+      "readiness_status": "BLOCKED_DEPENDENCY_AND_DECISION"
+    },
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
     "BLOCKED_DECISION L2: descriptor fetch/storage RTL interface is undefined; recommended Shared-L2 24-bit-index to 128-bit-record ready/valid port awaits approval.",
-    "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
+    "BLOCKED_DEPENDENCY L10: Library Compiler is absent and DC Liberty conversion fails LCSH-3; licensed LC installation media is not present locally.",
+    "BLOCKED_DECISION L10: installed ARM DP compiler rejects BASE and direct 2048/4096x128; validated LL0.8 decompositions are 2x2048x64 and 4x4096x32. SP BASE 6144x128 does not provide the requested 0.8V TT25 corner."
   ]
 }

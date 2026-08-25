@@ -16,6 +16,7 @@
 - Descriptor-chain golden PASS: missing/cycle/>16/null-required rejected before lowering.
 - L2 `BLOCKED_DECISION`: approve Shared-L2 24-bit-index→128-bit-record ready/valid fetch port or provide intended interface.
 - L3 readiness only: 16x128 bank fabric, 512-bit four-bank mapping, fair 2R+1W arbitration and 100,001-transaction regression PASS; not a stage PASS.
+- L10 readiness: LC missing (`LCSH-3`); installed DP rejects BASE and direct 2048/4096x128. Validated LL0.8 splits are 2x2048x64 and 4x4096x32; decision required later.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

@@ -109,18 +109,22 @@
         "work/results/l3_fabric_readiness/verilator_lint_clean.log",
         "reports/execution/L3_SHARED_L2_MACRO_FABRIC.md",
         "work/results/l3_macro_fabric/tb.log",
-        "work/results/l3_macro_fabric/verilator_lint.log"
+        "work/results/l3_macro_fabric/verilator_lint.log",
+        "reports/execution/L3_MATRIX_DIRECT_STREAMS.md",
+        "work/results/l3_direct_streams/tb.log",
+        "work/results/l3_direct_streams/verilator_lint.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
         "round-robin two-read one-write bank-group arbitration with byte enables and backpressure",
         "cycle/read/write/conflict/read-stall/write-stall counters",
         "100001 accepted randomized transactions with zero mismatch or timeout",
-        "16 real ARM SRAM macros behind four-group round-robin arbitration pass 100000 transactions with zero mismatch, response ownership error, macro address error, or timeout"
+        "16 real ARM SRAM macros behind four-group round-robin arbitration pass 100000 transactions with zero mismatch, response ownership error, macro address error, or timeout",
+        "four dedicated Matrix-SFU/KV bidirectional Tensor Stream skid channels pass 100000 ordered randomized-backpressure transfers"
       ],
       "remaining_gates": [
         "L2 dependency PASS",
-        "direct Matrix-SFU and Matrix-KV streams",
+        "connect verified Matrix-SFU and Matrix-KV direct streams to production engine wrappers",
         "integrated event dependency and timeout assertions",
         "100000 integrated command/event transactions"
       ]

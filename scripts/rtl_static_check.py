@@ -96,6 +96,8 @@ def main() -> int:
         "ct_sp4096x128_macro_wrapper",
         "l2_512b_macro_bank_group",
         "shared_l2_macro_fabric",
+        "tensor_stream_skid",
+        "matrix_direct_streams",
     }
     missing = sorted(required.difference(modules))
     if missing:

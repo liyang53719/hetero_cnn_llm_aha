@@ -25,6 +25,8 @@ Blocking incompatibilities with the fixed L10 plan:
 5. The HDE SP delivery does not provide the requested BASE 0.8 V TT25
    combination for this shape, but the installed UHDE SP r1p0 delivery does;
    no SP corner relaxation is required.
+6. Actual UHDE SP Liberty and Verilog views are generated and validated, but
+   this delivery's `lef-fp` generator fails without a detailed diagnostic.
 
 Required decisions/dependencies:
 

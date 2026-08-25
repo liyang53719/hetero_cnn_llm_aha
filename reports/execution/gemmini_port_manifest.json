@@ -1,0 +1,956 @@
+{
+  "family_counts": {
+    "lifecycle": 4,
+    "ptw": 80,
+    "rocc_cmd": 49,
+    "rocc_resp": 4,
+    "tilelink_spad": 20
+  },
+  "module": "Gemmini",
+  "port_count": 157,
+  "ports": [
+    {
+      "direction": "input",
+      "family": "lifecycle",
+      "name": "clock",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "lifecycle",
+      "name": "reset",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_ready",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_valid",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_opcode",
+      "width": "[2:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_param",
+      "width": "[2:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_size",
+      "width": "[3:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_source",
+      "width": "[4:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_address",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_mask",
+      "width": "[15:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_data",
+      "width": "[127:0]"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_a_bits_corrupt",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_ready",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_valid",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_opcode",
+      "width": "[2:0]"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_param",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_size",
+      "width": "[3:0]"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_source",
+      "width": "[4:0]"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_sink",
+      "width": "[3:0]"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_denied",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_data",
+      "width": "[127:0]"
+    },
+    {
+      "direction": "input",
+      "family": "tilelink_spad",
+      "name": "auto_spad_id_out_d_bits_corrupt",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "rocc_cmd",
+      "name": "io_cmd_ready",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_valid",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_funct",
+      "width": "[6:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_rs2",
+      "width": "[4:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_rs1",
+      "width": "[4:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_xd",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_xs1",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_xs2",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_rd",
+      "width": "[4:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_inst_opcode",
+      "width": "[6:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_rs1",
+      "width": "[63:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_rs2",
+      "width": "[63:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_debug",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_cease",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_wfi",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_isa",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_dprv",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_dv",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_prv",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_v",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_sd",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_zero2",
+      "width": "[22:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mpv",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_gva",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mbe",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_sbe",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_sxl",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_uxl",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_sd_rv32",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_zero1",
+      "width": "[7:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_tsr",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_tw",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_tvm",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mxr",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_sum",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mprv",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_xs",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_fs",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mpp",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_vs",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_spp",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mpie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_ube",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_spie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_upie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_mie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_hie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_sie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_cmd",
+      "name": "io_cmd_bits_status_uie",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "rocc_resp",
+      "name": "io_resp_ready",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "rocc_resp",
+      "name": "io_resp_valid",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "rocc_resp",
+      "name": "io_resp_bits_rd",
+      "width": "[4:0]"
+    },
+    {
+      "direction": "output",
+      "family": "rocc_resp",
+      "name": "io_resp_bits_data",
+      "width": "[63:0]"
+    },
+    {
+      "direction": "output",
+      "family": "lifecycle",
+      "name": "io_busy",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "lifecycle",
+      "name": "io_interrupt",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_req_ready",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "ptw",
+      "name": "io_ptw_0_req_valid",
+      "width": "1"
+    },
+    {
+      "direction": "output",
+      "family": "ptw",
+      "name": "io_ptw_0_req_bits_bits_addr",
+      "width": "[26:0]"
+    },
+    {
+      "direction": "output",
+      "family": "ptw",
+      "name": "io_ptw_0_req_bits_bits_need_gpa",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_valid",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_ae_ptw",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_ae_final",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pf",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_gf",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_hr",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_hw",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_hx",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_ppn",
+      "width": "[43:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_d",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_a",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_g",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_u",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_pte_v",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_level",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_resp_bits_homogeneous",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_ptbr_mode",
+      "width": "[3:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_0_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_1_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_2_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_3_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_4_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_5_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_6_mask",
+      "width": "[31:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_cfg_l",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_cfg_a",
+      "width": "[1:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_cfg_x",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_cfg_w",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_cfg_r",
+      "width": "1"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_addr",
+      "width": "[29:0]"
+    },
+    {
+      "direction": "input",
+      "family": "ptw",
+      "name": "io_ptw_0_pmp_7_mask",
+      "width": "[31:0]"
+    }
+  ],
+  "source": "work/upstream/chipyard_gemmini/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral/Gemmini.sv"
+}

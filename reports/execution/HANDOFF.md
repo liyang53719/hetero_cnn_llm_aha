@@ -15,6 +15,7 @@
 - Retained Rocket busy monitor PASS: 36 real commands, four final-command→busy-clear observations, numerical checksum unchanged.
 - Descriptor-chain golden PASS: missing/cycle/>16/null-required rejected before lowering.
 - L2 `BLOCKED_DECISION`: approve Shared-L2 24-bit-index→128-bit-record ready/valid fetch port or provide intended interface.
+- L3 readiness only: 16x128 bank fabric, 512-bit four-bank mapping, fair 2R+1W arbitration and 100,001-transaction regression PASS; not a stage PASS.
 - Next action is exactly `reports/execution/NEXT_ACTION.json`.
 - Future L10 blocker: `lc_shell` not yet found for SRAM `.lib` to `.db` conversion.
 - Do not close a stage with clean-room-only evidence.

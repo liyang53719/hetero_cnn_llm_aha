@@ -100,7 +100,27 @@
         "Production descriptor sequencer -> CUSTOM_3 program adapter -> retained RocketTile integration, including pre-issue invalid/cyclic/overlength descriptor-chain rejection"
       ]
     },
-    "L3": {"status": "PENDING", "depends_on": ["L2"]},
+    "L3": {
+      "status": "PENDING",
+      "depends_on": ["L2"],
+      "readiness_evidence": [
+        "reports/execution/L3_SHARED_L2_FABRIC_READINESS.md",
+        "work/results/l3_fabric_readiness/tb_shared_l2_fabric.log",
+        "work/results/l3_fabric_readiness/verilator_lint_clean.log"
+      ],
+      "completed_readiness_subgates": [
+        "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
+        "round-robin two-read one-write bank-group arbitration with byte enables and backpressure",
+        "cycle/read/write/conflict/read-stall/write-stall counters",
+        "100001 accepted randomized transactions with zero mismatch or timeout"
+      ],
+      "remaining_gates": [
+        "L2 dependency PASS",
+        "direct Matrix-SFU and Matrix-KV streams",
+        "integrated event dependency and timeout assertions",
+        "100000 integrated command/event transactions"
+      ]
+    },
     "L4": {"status": "PENDING", "depends_on": ["L3"]},
     "L5": {"status": "PENDING", "depends_on": ["L3"]},
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},

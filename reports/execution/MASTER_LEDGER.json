@@ -45,7 +45,8 @@
         "work/results/l2_aha_microsequencer.log",
         "work/results/l2_aha_gaussian_packet_transcript.json",
         "work/generated/l2_aha_gaussian_trace/control_table.json",
-        "work/results/l2_aha_garnet_pcfg_resetedge.log"
+        "work/results/l2_aha_garnet_pcfg_resetedge.log",
+        "work/results/l2_aha_garnet_u16be_numerical.log"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -78,6 +79,7 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
+    "AHA L2 numerical equivalence remains open: after official ISR sequencing, continuous proc reads, big-endian 16-bit input/output lane normalization, and packet drains, the first output word still differs (expected 0x00710070006d0070, observed 0x00700070006e0070).",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

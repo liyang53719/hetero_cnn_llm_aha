@@ -1,6 +1,6 @@
 {
   "phase": "L2_AHA_GAUSSIAN_OUTPUT_READBACK",
-  "command": "After the 16-GiB admission guard passes, use scripts/run_memory_capped.sh with -j2 and its 10G/14G user-cgroup limits to rebuild the exact Garnet transcript. Preserve the observed first divergence (block 0, word 0, 0x10000 reads zero) while diagnosing the missing upstream runtime behavior.",
+  "command": "After the 16-GiB admission guard passes, use scripts/run_memory_capped.sh with -j1 and a 9G/10G user-cgroup limit to rebuild the transcript that includes official packet drains and big-endian U16 input/output lane packing. Preserve the first true divergence at output block 0 word 0: expected 0x00710070006d0070, observed 0x00700070006e0070.",
   "success_condition": "The actual Garnet top accepts the post-PCFG input transcript, finishes the official stream sequence, and every output byte matches the upstream Gaussian golden without a timeout, protocol error, or dropped packet.",
-  "failure_policy": "Preserve the verified PCFG transcript. Locate the first divergent output block, control interrupt, or proc-packet transaction; do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values. Do not start a heavy task below 16 GiB available memory; keep it at -j2 inside the user memory cgroup."
+  "failure_policy": "Preserve the verified PCFG transcript. Locate the first divergent output block, control interrupt, or proc-packet transaction; do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values. Do not start a heavy task below 16 GiB available memory; keep it at -j1 inside the user memory cgroup."
 }

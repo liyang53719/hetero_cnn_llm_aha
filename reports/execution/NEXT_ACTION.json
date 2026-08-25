@@ -1,6 +1,6 @@
 {
-  "phase": "L2_AHA_GARNET_TOP_HARNESS",
-  "command": "PYTHONPATH=src taskset -c 8-25 python3 scripts/build_aha_gaussian_packet_transcript.py",
-  "success_condition": "The transcript uses the official 519-entry packet stream and parser/map-derived five bs_cfg plus 39 kernel_cfg AXI writes, followed by 0x01c/0x018 control writes in documented order.",
-  "failure_policy": "If a transcript field differs, regenerate control_table.json from the pinned parser/map flow; do not edit packet bases, AXI addresses, or control data manually."
+  "phase": "L2_AHA_PCFG_RUNTIME_PROBE",
+  "command": "taskset -c 8-25 work/generated/l2_aha_garnet_4x16/obj_gaussian_pcfg/Vtb_aha_garnet_gaussian_transcript +PCFG_ONLY",
+  "success_condition": "The full generated Garnet top accepts the official interrupt-enable, bitstream packets, bs_cfg/kernel_cfg, then reports the PCFG interrupt before the transcript issues the 0x38 clear.",
+  "failure_policy": "Use the flushed AHA_GARNET_STAGE markers to identify the first stalled phase. Do not bypass Garnet with nested Interconnect ports or alter official packet/AXI values."
 }

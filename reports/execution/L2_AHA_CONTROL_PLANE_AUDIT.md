@@ -62,3 +62,10 @@ the 25,344-byte 16-bit raw input is deinterleaved exactly as test_app does,
 with tile 0 taking source element `2*k` and tile 1 element `2*k+1`. Each tile
 receives 12,672 bytes (198 project packet beats) at packet bases `0x00000` and
 `0x20000`, respectively.
+
+`tb_aha_garnet_gaussian_transcript.sv` wires the project microsequencer to the
+actual 33-port generated `Garnet` top and consumes this transcript. Verilator
+successfully elaborates all 644 modules and builds a 33 MiB executable with the
+system `ar` workaround for the isolated conda toolchain. The PCFG-only runtime
+probe is still diagnostic-only and has not yet reached a PASS/FAIL terminal;
+the testbench now emits flushed phase markers for the next run.

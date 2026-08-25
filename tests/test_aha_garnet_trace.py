@@ -5,6 +5,7 @@ from heteronpu.aha_garnet_trace import (
     load_control_table,
     pack_proc_packets,
     pack_raw_packets,
+    pack_u16be_proc_packets,
     split_interleaved_u16,
 )
 
@@ -45,3 +46,10 @@ def test_default_test_app_u16_interleave_and_packet_packing() -> None:
     assert packets[0].address == 0x200
     assert packets[0].data & 0xffff == 0
     assert packets[0].byte_enable == 0xff
+
+
+def test_test_app_big_endian_u16_file_lanes_become_numeric_low_word_first() -> None:
+    payload = b"\x00\x01\x00\x02\x00\x03\x00\x04"
+    packet = pack_u16be_proc_packets(payload, base_address=0x200)[0]
+    assert packet.data == 0x0004_0003_0002_0001
+    assert packet.byte_enable == 0xff

@@ -9,7 +9,7 @@ from pathlib import Path
 from heteronpu.aha_garnet_trace import (
     load_control_table,
     pack_proc_packets,
-    pack_raw_packets,
+    pack_u16be_proc_packets,
     parse_bitstream,
     split_interleaved_u16,
 )
@@ -32,7 +32,7 @@ def main() -> int:
     packets = pack_proc_packets(entries, base_address=control.bitstream_start_address)
     input_blocks = split_interleaved_u16((args.trace_dir / "app_bin/hw_input_stencil.raw").read_bytes(), 2)
     input_bases = (0x00000, 0x20000)
-    input_packets = tuple(pack_raw_packets(block, base_address=base)
+    input_packets = tuple(pack_u16be_proc_packets(block, base_address=base)
                           for block, base in zip(input_blocks, input_bases, strict=True))
     result = {
         "status": "PARTIAL_PASS",

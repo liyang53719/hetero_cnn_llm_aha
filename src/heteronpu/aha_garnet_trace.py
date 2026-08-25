@@ -136,6 +136,34 @@ def pack_raw_packets(payload: bytes, *, base_address: int) -> tuple[AhaProcPacke
     return tuple(packets)
 
 
+def pack_u16be_proc_packets(payload: bytes, *, base_address: int) -> tuple[AhaProcPacket512, ...]:
+    """Pack a test_app 16-bit raw file as ProcDriver_write_data would.
+
+    The upstream testbench `$fread`s pairs of file bytes into ``bit [15:0]``
+    values, so ``00 70`` represents numeric ``16'h0070``.  It then emits four
+    numeric lanes per 64-bit proc word, with lane zero at bits [15:0].
+    """
+
+    if not payload or len(payload) % 2:
+        raise ValueError("16-bit raw payload must be nonempty and even-sized")
+    if not 0 <= base_address < (1 << 18):
+        raise ValueError("base_address must fit the Garnet 18-bit proc-packet address")
+    lanes = [int.from_bytes(payload[index:index + 2], byteorder="big")
+             for index in range(0, len(payload), 2)]
+    packets: list[AhaProcPacket512] = []
+    for index, start in enumerate(range(0, len(lanes), 32)):
+        group = lanes[start:start + 32]
+        data = sum(lane << (16 * lane_index) for lane_index, lane in enumerate(group))
+        byte_count = 2 * len(group)
+        packets.append(AhaProcPacket512(
+            address=base_address + index * 64,
+            data=data,
+            byte_enable=(1 << byte_count) - 1,
+            valid_words=(byte_count + 7) // 8,
+        ))
+    return tuple(packets)
+
+
 def split_interleaved_u16(payload: bytes, tile_count: int) -> tuple[bytes, ...]:
     """Match test_app's default ``input_data[j + num_tiles*k]`` distribution."""
 

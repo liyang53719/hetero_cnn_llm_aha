@@ -89,3 +89,10 @@ the upstream `$fread` into `bit [15:0]`: raw bytes `00 70` mean numeric
 `16'h0070`. Proc readback then packs four numeric lanes low-word first. This
 normalization is separate from input packet byte preservation and prevents a
 false byte-swapped mismatch in the L2 comparison.
+
+The Gaussian input transcript follows the same rule. Although the raw file is
+split across tiles by interleaved 16-bit elements, each element is first loaded
+as a numeric big-endian `bit [15:0]` value and then packed low-word first into
+proc packets, exactly as upstream `ProcDriver_write_data`. Direct raw-byte
+packing would reverse every input lane and produce a real but invalid CGRA
+result.

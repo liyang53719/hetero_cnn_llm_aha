@@ -9,7 +9,7 @@ from pathlib import Path
 from heteronpu.aha_garnet_trace import (
     load_control_table,
     pack_proc_packets,
-    pack_raw_packets,
+    pack_u16be_proc_packets,
     parse_bitstream,
     split_interleaved_u16,
 )
@@ -70,8 +70,8 @@ def main() -> int:
         raise SystemExit("bitstream entry count disagrees with official control table")
     bitstream = pack_proc_packets(entries, base_address=control.bitstream_start_address)
     blocks = split_interleaved_u16((args.trace_dir / "app_bin/hw_input_stencil.raw").read_bytes(), 2)
-    input0 = pack_raw_packets(blocks[0], base_address=0x00000)
-    input1 = pack_raw_packets(blocks[1], base_address=0x20000)
+    input0 = pack_u16be_proc_packets(blocks[0], base_address=0x00000)
+    input1 = pack_u16be_proc_packets(blocks[1], base_address=0x20000)
     layout = json.loads((args.trace_dir / "control_table.json").read_text(encoding="utf-8"))
     cgra_stall_mask = int(layout["cgra_stall_mask"])
     if not 0 < cgra_stall_mask < (1 << 32):

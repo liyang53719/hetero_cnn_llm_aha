@@ -1,6 +1,6 @@
 {
-  "phase": "BLOCKED_DOCKER_PROXY",
-  "command": "./scripts/check_docker_proxy.sh && sudo systemctl daemon-reload && sudo systemctl restart docker && sg docker -c 'docker pull hello-world:latest'",
-  "success_condition": "Docker Hub pull succeeds and systemctl shows a non-empty HTTP_PROXY/HTTPS_PROXY environment for docker.service.",
-  "failure_policy": "Do not continue to AHA or claim canonical L1 PASS until the user-owned sudo configuration is complete."
+  "phase": "L1_AHA_VERILATOR_CLOSURE",
+  "command": "taskset -c 8-25 sg docker -c 'docker pull verilator/verilator:v5.028'",
+  "success_condition": "The immutable v5.028 image is fully present locally; record its amd64 digest, then re-run scripts/reproduce_aha.sh with AHA_TOOL=VERILATOR and require result.json status PASS.",
+  "failure_policy": "Retry this exact pull at most three times per network incident. Keep the completed VCS result as equivalent evidence only; do not mark the Verilator gate or canonical L1 PASS."
 }

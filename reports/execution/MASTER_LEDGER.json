@@ -14,18 +14,19 @@
       "summary": "27 Python tests, C++ reference, RTL contract tests, and five 1.0 ns CLN22UL contract tops passed with zero unmapped cells."
     },
     "L1": {
-      "status": "BLOCKED_DOCKER_PROXY",
+      "status": "IN_PROGRESS",
       "depends_on": ["L0"],
       "evidence": ["reports/execution/upstream_closure.json"],
       "completed_subgates": [
         "license matrix",
         "Gemmini Spike mvin/mvout, OS matmul, and ResNet50 OS",
         "Gemmini Verilator mvin/mvout and OS matmul",
-        "iDMA committed-lock source enumeration and VCS backend_rw_axi/simple"
+        "iDMA committed-lock source enumeration and VCS backend_rw_axi/simple",
+        "AHA 4x16 generated RTL, Gaussian map/PnR, bitstream and VCS numerical test"
       ],
       "remaining_gates": [
         "Gemmini weight-stationary/default matmul budget closure",
-        "AHA 4x16 Docker/Gaussian map/PnR/test"
+        "AHA 4x16 Gaussian test with the upstream-required Verilator 5.028-compatible toolchain"
       ]
     },
     "L2": {"status": "PENDING", "depends_on": ["L1"]},
@@ -40,7 +41,7 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "Docker daemon has no proxy environment and cannot reach Docker Hub; AHA 4x16 official baseline is blocked until the user-owned sudo proxy drop-in is installed and docker is restarted.",
+    "The Docker daemon can now pull small images, but three attempts to pull the 446 MB official verilator/verilator:v5.028 image reached EOF through the configured proxy. Verilator 5.050 rejects the upstream program/interface testbench declaration. AHA has passed an equivalent VCS run but strict Verilator closure remains open.",
     "Library Compiler lc_shell was not found; L10 SRAM .lib-to-.db conversion remains a later toolchain dependency."
   ]
 }

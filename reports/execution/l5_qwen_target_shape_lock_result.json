@@ -1,0 +1,62 @@
+{
+  "stage": "L5",
+  "subgate": "Qwen target-shape lock",
+  "status": "PASS",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "license": "Apache-2.0",
+  "observed_hashes": {
+    "config_sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+    "license_sha256": "c156170b718ec29139d3653d40ed1986fd92fb7e0959b5c71f3c48f62e6636f4",
+    "modeling_sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+    "configuration_sha256": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b"
+  },
+  "shape": {
+    "hidden_size": 1536,
+    "intermediate_size": 8960,
+    "num_attention_heads": 12,
+    "num_key_value_heads": 2,
+    "num_key_value_groups": 6,
+    "head_dim": 128,
+    "query_width": 1536,
+    "key_value_width": 256,
+    "num_hidden_layers": 28,
+    "max_position_embeddings": 32768,
+    "sliding_window": 32768,
+    "use_sliding_window": false,
+    "rms_norm_epsilon": 1e-06,
+    "rope_theta": 1000000.0,
+    "attention_scale_fp32": 0.0883883461356163,
+    "attention_scale_fp32_bits": "0x3db504f3",
+    "activation": "silu",
+    "dtype": "bfloat16"
+  },
+  "bias_policy": {
+    "q_proj": true,
+    "k_proj": true,
+    "v_proj": true,
+    "o_proj": false,
+    "gate_proj": false,
+    "up_proj": false,
+    "down_proj": false
+  },
+  "gqa_query_to_kv_head": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "weights": 46792704,
+  "bf16_weight_bytes": 93585408,
+  "single_token_array_steps": 1462272,
+  "two_token_compact_array_steps": 1486848,
+  "rtl_cycles_measured": false
+}

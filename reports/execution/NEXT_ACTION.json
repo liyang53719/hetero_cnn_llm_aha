@@ -1,6 +1,6 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Consume exact attention hash 86c06c97e24153ce786b30f4e15fb7b76f48eacf2126adc33be94412837eb681 and exact current-token input hash b73d329b579d102621455e2b00d09f997021fa0b37a80f6f70e807a4539149e6. Generate and freeze one deterministic 1536x1536 BF16 OProj weight image with no bias, run all 73728 physical 16x32 array steps, compare all 1536 OProj outputs, then add the original current-token residual in 96 16-lane FP32 chunks. Freeze OProj and residual1 hashes and report measured Matrix/residual/total cycles separately. Do not begin post-attention RMSNorm until this receipt passes.",
+  "command": "Consume exact residual1 hash df2d5af8926229b7c3ea34aa7c0dfc1ad381fee5cd7149d86b5b01739f518671. Generate and freeze the post-attention RMSNorm1536 weight, run the proven global 96-chunk RMSNorm with epsilon 1e-6, and compare all 1536 outputs. Record reduction/rsqrt/output cycles and the norm2 hash. This receipt becomes the sole input authority for the target gate/up MLP projections; do not generate MLP weights or outputs before norm2 passes.",
   "fixed_order": [
     "global target RMSNorm1536",
     "restartable target RMSNorm and Q/K/V segment",

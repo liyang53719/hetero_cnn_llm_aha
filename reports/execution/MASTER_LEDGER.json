@@ -319,6 +319,9 @@
         ,"reports/execution/L5_TARGET_MLO.md"
         ,"reports/execution/l5_target_mlo_result.json"
         ,"work/results/l5_target_mlo/tb.log"
+        ,"reports/execution/L5_TARGET_OPROJ.md"
+        ,"reports/execution/l5_target_oproj_result.json"
+        ,"work/results/l5_target_oproj/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -344,6 +347,7 @@
         ,"two-token target RMSNorm/QKV segment passes 16 nodes and measures exactly 122880 physical array steps"
         ,"target split-half RoPE and post-RoPE K GQA pass 1024 pairs plus 192 mapped outputs with exact sidebands"
         ,"target 12-head two-token M/L/O and explicit O/L pass without score-matrix materialization"
+        ,"target 1536x1536 OProj plus first residual pass all lanes with exactly 73728 array steps"
       ],
       "remaining_gates": [
         "pinned Qwen target-shape block numerics",

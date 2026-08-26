@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Start q128 numerical payload with restartable row batch0 only (tokens0-15). Freeze one deterministic 128x1536 input image and reuse the exact target input-RMS weight plus Q/K/V matrices and biases. Run 16 global RMSNorm1536 operations, then use all 16 physical array rows for Q=73728, K=12288 and V=12288 steps, total98304 measured steps. Apply Q/K/V bias and freeze batch0 normalized/Q/K/V hashes. The generator must produce operation-order goldens; do not use NumPy matmul or scale single-token results. After batch0 PASS, repeat unchanged for batches1-7 and aggregate exactly786432 q128 QKV steps.",
+  "command": "Parameterize the proven q128 QKV batch0 TB with +BATCH=N while keeping one unchanged RTL binary. Generate operation-order goldens independently for batches1-7 from the same shared input hash 39917c9e6f887030091cb93e944b263f4966322f487d567a6c28881b615335e0 and exact target weights. Run batches1-7 sequentially with one resource admission check per batch; each must report 98304 Matrix steps and exact norm/Q/K/V hashes. Aggregate all eight receipts to 786432 measured QKV steps and freeze concatenated q128 Q/K/V hashes before starting RoPE.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

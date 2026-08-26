@@ -51,6 +51,7 @@
 - L5 TARGET SHAPE CLOSED: segmented numerical payload + separate controller trace, final hash `872ffcab...`. L5 remains IN_PROGRESS; next q128, then q384 and decode128/1024/4096.
 - L5 q128 contract PASS: batch1/seq128, 8 physical row batches, 11698176 Matrix steps, 99072 causal dot/online updates, no score matrix; cycle fields intentionally null. Next: q128 operation-count controller.
 - L5 q128 count controller PASS: 24 commands and all contract counts exact, score-matrix commands0, command FNV `c3b677...`; measured-latency-valid remains0. Next: numerical QKV row batch0, then batches1-7.
+- L5 q128 QKV batch0 PASS: tokens0-15, all16 rows active, 98304 measured steps, 401504 total/393216 Matrix/6240 RMS/2048 bias cycles; Q/K/V hashes `002082a1...`/`a7f3acfa...`/`42d0886d...`. Next: parameterize same binary and run batches1-7.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

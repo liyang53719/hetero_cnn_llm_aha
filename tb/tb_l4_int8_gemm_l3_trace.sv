@@ -1,5 +1,19 @@
 `timescale 1ns/1ps
-module tb_l4_int8_gemm_l3_trace;
+/* verilator lint_off DECLFILENAME */
+module tb_l4_matrix_l3_trace #(
+  parameter integer CASE_ID=0,
+  parameter logic[15:0] EVENT_ID=16'h0401,
+  parameter logic[7:0] OPCODE=8'h10,
+  parameter integer MACS=5814,
+  parameter integer DESCRIPTOR_READS=4,
+  parameter integer WEIGHT_READS=6,
+  parameter integer ACTIVATION_BIAS_READS=26,
+  parameter integer OUTPUT_WRITES=5,
+  parameter integer SEMANTIC_DMA_BYTES=2195,
+  parameter integer PHYSICAL_DMA_BYTES=2368,
+  parameter integer DESCRIPTOR_BYTES=256,
+  parameter bit REQUIRE_PROMOTION=1'b1
+);
   logic clk_i;/* verilator lint_off SYNCASYNCNET */logic rst_ni;/* verilator lint_on SYNCASYNCNET */
   always #5 clk_i=~clk_i;integer cycles,start_cycle,end_cycle;
   logic host_cmd_valid_i,host_cmd_ready_o;logic[127:0]host_cmd_data_i;
@@ -60,7 +74,7 @@ module tb_l4_int8_gemm_l3_trace;
   integer responses[0:2],writes_done;
   logic matrix_command_seen;
   always_comb begin engine_cmd_ready_i=0;engine_cmd_ready_i[2]=!matrix_command_seen;
-    engine_completion_data_i=0;engine_completion_data_i[2*56 +:56]={16'h0401,8'd0,3'd2,29'd5814};end
+    engine_completion_data_i=0;engine_completion_data_i[2*56 +:56]={EVENT_ID,8'd0,3'd2,29'(MACS)};end
   always @(posedge clk_i)begin
     if(!rst_ni)begin cycles<=0;matrix_command_seen<=0;end else begin cycles<=cycles+1;
       if(engine_cmd_valid_o[2]&&engine_cmd_ready_i[2])begin matrix_command_seen<=1;
@@ -78,11 +92,12 @@ module tb_l4_int8_gemm_l3_trace;
   task automatic write_client(input integer beats,input integer row_base);
     begin for(int beat=0;beat<beats;beat++)begin @(negedge clk_i);
       l2_wr_addr_i[0 +:15]=15'(((row_base+beat)<<2)|0);
-      l2_wr_data_i[0 +:512]={8{64'h0401_0000_0000_0000|64'(beat)}};l2_wr_be_i[0 +:64]='1;
+      l2_wr_data_i[0 +:512]={8{({EVENT_ID,48'd0}|64'(beat))}};l2_wr_be_i[0 +:64]='1;
       l2_wr_valid_i[0]=1;do @(posedge clk_i);while(!l2_wr_ready_o[0]);
       @(negedge clk_i);l2_wr_valid_i[0]=0;writes_done=writes_done+1;end end endtask
   initial begin wait(matrix_command_seen);fork
-      read_client(0,4,0);read_client(1,6,0);read_client(2,26,0);write_client(5,1000);
+      read_client(0,DESCRIPTOR_READS,0);read_client(1,WEIGHT_READS,0);
+      read_client(2,ACTIVATION_BIAS_READS,0);write_client(OUTPUT_WRITES,1000);
     join
     @(negedge clk_i);engine_completion_valid_i[2]=1;
     do @(posedge clk_i);while(!engine_completion_ready_o[2]);end_cycle=cycles;
@@ -107,12 +122,18 @@ module tb_l4_int8_gemm_l3_trace;
     kv_mem_read_req_ready_i=0;kv_mem_read_rsp_valid_i=0;kv_mem_read_rsp_data_i=0;
     kv_mem_read_rsp_error_i=0;repeat(3)@(posedge clk_i);rst_ni=1;wait(init_done_o);
     @(negedge clk_i);host_cmd_data_i=0;host_cmd_data_i[7:0]=8'h10;
-    host_cmd_data_i[10:8]=3'd2;host_cmd_data_i[55:40]=16'h0401;host_cmd_valid_i=1;
+    host_cmd_data_i[7:0]=OPCODE;host_cmd_data_i[10:8]=3'd2;
+    host_cmd_data_i[55:40]=EVENT_ID;host_cmd_valid_i=1;
     do @(posedge clk_i);while(!host_cmd_ready_o);@(negedge clk_i);host_cmd_valid_i=0;
     wait(completion_grants_o==1);wait(completion_level_o==0);repeat(3)@(posedge clk_i);
-    if(responses[0]!=4||responses[1]!=6||responses[2]!=26||writes_done!=5||
-       l2_read_grants_o!=36||l2_write_grants_o!=5||mem_reads!=36||mem_writes!=5||
-       descriptor_promotions_o==0||event_macro_error_count_o!=0||
+    if(responses[0]!=DESCRIPTOR_READS||responses[1]!=WEIGHT_READS||
+       responses[2]!=ACTIVATION_BIAS_READS||writes_done!=OUTPUT_WRITES||
+       l2_read_grants_o!=DESCRIPTOR_READS+WEIGHT_READS+ACTIVATION_BIAS_READS||
+       l2_write_grants_o!=OUTPUT_WRITES||
+       mem_reads!=64'(DESCRIPTOR_READS)+64'(WEIGHT_READS)+
+         64'(ACTIVATION_BIAS_READS)||
+       mem_writes!=64'(OUTPUT_WRITES)||(REQUIRE_PROMOTION&&descriptor_promotions_o==0)||
+       event_macro_error_count_o!=0||
        completion_protocol_error_count_o!=0||watchdog_lock_o||illegal_engine_o||
        command_level_o!=0||l2_wr_ready_o[1]||mem_cycle==0||
        engine_cmd_valid_o!=0||engine_completion_ready_o!=0||
@@ -129,8 +150,24 @@ module tb_l4_int8_gemm_l3_trace;
          kv_mem_write_addr_o,kv_mem_write_data_o,kv_mem_write_be_o,
          kv_mem_read_req_addr_o}))
       $fatal(1,"L4 trace accounting");
-    $display("L4_INT8_GEMM_L3_TRACE_PASS cycles=%0d semantic_dma_bytes=2195 physical_dma_bytes=2368 descriptor_bytes=256 reads=36 writes=5 conflicts=%0d rstall=%0d wstall=%0d promotions=%0d",
-      end_cycle-start_cycle,mem_conflicts,mem_rstall,mem_wstall,descriptor_promotions_o);$finish;
+    $display("L4_MATRIX_L3_TRACE_PASS case_id=%0d cycles=%0d semantic_dma_bytes=%0d physical_dma_bytes=%0d descriptor_bytes=%0d reads=%0d writes=%0d conflicts=%0d rstall=%0d wstall=%0d promotions=%0d",
+      CASE_ID,end_cycle-start_cycle,SEMANTIC_DMA_BYTES,PHYSICAL_DMA_BYTES,DESCRIPTOR_BYTES,
+      l2_read_grants_o,l2_write_grants_o,mem_conflicts,mem_rstall,mem_wstall,
+      descriptor_promotions_o);$finish;
   end
   initial begin repeat(200000)@(posedge clk_i);$fatal(1,"L4 trace timeout");end
 endmodule
+
+module tb_l4_int8_gemm_l3_trace;
+  tb_l4_matrix_l3_trace u_trace();
+endmodule
+
+module tb_l4_conv1x1_l3_trace;
+  tb_l4_matrix_l3_trace #(
+    .CASE_ID(1),.EVENT_ID(16'h0402),.OPCODE(8'h22),.MACS(192),
+    .DESCRIPTOR_READS(4),.WEIGHT_READS(1),.ACTIVATION_BIAS_READS(2),
+    .OUTPUT_WRITES(1),.SEMANTIC_DMA_BYTES(140),.PHYSICAL_DMA_BYTES(256),
+    .DESCRIPTOR_BYTES(256),.REQUIRE_PROMOTION(1'b0)
+  )u_trace();
+endmodule
+/* verilator lint_on DECLFILENAME */

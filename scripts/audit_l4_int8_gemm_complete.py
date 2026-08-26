@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 
 TRACE = re.compile(
-    r"L4_INT8_GEMM_L3_TRACE_PASS cycles=(\d+) semantic_dma_bytes=(\d+) "
+    r"L4_MATRIX_L3_TRACE_PASS case_id=0 cycles=(\d+) semantic_dma_bytes=(\d+) "
     r"physical_dma_bytes=(\d+) descriptor_bytes=(\d+) reads=(\d+) writes=(\d+) "
     r"conflicts=(\d+) rstall=(\d+) wstall=(\d+) promotions=(\d+)"
 )

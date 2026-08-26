@@ -1,6 +1,6 @@
 {
-  "phase": "L4_CNN_CONV1X1",
-  "command": "Close the existing pinned 1x4x4x3 to 4-channel 1x1 Conv production case as an L4 numerical/metric gate. Add retained-Gemmini mcycle measurement around the raw descriptor-lowered path, independently generate every output element and SHA256, verify all nine CUSTOM_3 payloads through current descriptor-v2 RTL, and replay its exact input/weight/bias/output traffic through hetero_l3_production_top for physical bytes, cycles, conflicts and stalls. Keep payload and transport metrics separate as in the INT8 GEMM result.",
+  "phase": "L4_CNN_CONV3X3_IDENTITY",
+  "command": "Measure and close the pinned 1x5x5x3 to four-channel padded 3x3 Conv identity case before the fused requant/ReLU case. Execute only the production raw nine-command path in retained Gemmini RTL, generate all 100 output elements independently, record mcycle/semantic DMA/SHA256, and use the parameterized canonical L3 trace replay for descriptor, input, 3x3 weights, bias and output traffic. Keep activation none and identity scale fixed for this subgate.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

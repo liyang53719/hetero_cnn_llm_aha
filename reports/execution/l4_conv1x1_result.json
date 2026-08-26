@@ -1,0 +1,33 @@
+{
+  "stage": "L4",
+  "subgate": "1x1 Conv",
+  "status": "PASS",
+  "shape": {
+    "n": 1,
+    "input_h": 4,
+    "input_w": 4,
+    "input_channels": 3,
+    "output_channels": 4,
+    "kernel": 1
+  },
+  "custom3_commands": 9,
+  "elementwise_bit_exact": true,
+  "output_sha256": "2ea021acf608471ed8b4195a49fb534ef3c879a3884e1300d8aa622afe6f8bd6",
+  "output_checksum_u64": 7716209159022866879,
+  "rtl_payload_cycles": 514,
+  "rtl_dma_bytes": 140,
+  "rtl_macs": 192,
+  "physical_array_peak_macs_per_cycle": 256,
+  "rtl_mac_utilization": 0.0014591439688715954,
+  "bank_conflicts": 4,
+  "bank_conflicts_status": "RTL_MEASURED",
+  "elf_sha256": "3a9e58b51fb631498231d0d007c827aff606deb8f189889686488adc6ad91ad4",
+  "canonical_l3_trace_cycles": 17,
+  "physical_dma_bytes": 256,
+  "descriptor_bytes": 256,
+  "canonical_l3_reads": 7,
+  "canonical_l3_writes": 1,
+  "read_stalls": 2,
+  "write_stalls": 2,
+  "descriptor_promotions": 0
+}

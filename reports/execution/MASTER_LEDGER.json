@@ -2,7 +2,7 @@
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "L2_wrapper_only_macro_integration",
+  "current_phase": "L2_descriptor_isa_v2_contract",
   "stages": {
     "L0": {
       "status": "PASS",
@@ -102,7 +102,7 @@
         "Approved production Shared-L2 descriptor path: three chains are fetched and rejected pre-issue on null/error/cycle/nontermination; single-tile INT8 OS GEMM emits nine official CUSTOM_3 commands and completes on busy clear"
       ],
       "remaining_gates": [
-        "BLOCKED_DECISION: approve the proposed 0x12 matrix_aux record that supplies bias-chain index and official LOOP_WS/Conv policy bits",
+        "Implement the approved descriptor/ISA v2 contract and freeze its generated expected vectors",
         "Extend the production typed-descriptor sequencer through multi-tile OS/WS, convolution, bias and requant, preserving the already-passed retained-Rocket equivalence transcripts",
         "Connect the approved descriptor read port to a real Shared-L2 read lane and rerun integrated randomized backpressure"
       ]
@@ -186,7 +186,6 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
-    "BLOCKED_DECISION L2: the frozen descriptor schema has no fourth tensor/bias role or LOOP_WS/Conv policy encoding; recommended 0x12 matrix_aux record awaits approval.",
     "DEFERRED_BY_USER L10: Library Compiler is absent and SRAM .db generation is skipped until L10 is resumed.",
     "DEFERRED_BY_USER L10: ARM bifrun LEF generation is skipped; existing Liberty/Verilog/GDS2 evidence is retained.",
     "BLOCKED_DECISION L10: installed ARM DP compiler rejects BASE and direct 2048/4096x128; validated LL0.8 decompositions are 2x2048x64 and 4x4096x32. UHDE SP BASE 6144x128 at 0.8V TT25 is validated."

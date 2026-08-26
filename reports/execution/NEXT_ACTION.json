@@ -1,6 +1,6 @@
 {
-  "phase": "BLOCKED_DECISION_L2_MATRIX_AUX_DESCRIPTOR",
-  "command": "Await approval for reports/execution/L2_MATRIX_AUX_DESCRIPTOR_BLOCKED_DECISION.md. Recommended: add typed record 0x12 matrix_aux carrying a 24-bit bias descriptor index plus the official LOOP_WS/Conv policy bits; keep quantization in existing record 0x40. After approval, freeze schema/tests and extend production lowering in order multi-tile OS, LOOP_WS, convolution, bias, requant/ReLU.",
-  "success_condition": "Every required production typed-descriptor case emits the same CUSTOM_3 funct/rs1/rs2 sequence as its pinned official path, rejects unsupported/incomplete records before issue, and preserves bit-exact retained-Rocket output/write/event traces. Then L2 can be audited for PASS and formal L3 integration can close.",
-  "failure_policy": "Do not assign ad-hoc meanings to subtype/common flags or infer a fourth tensor from chain order before approval. Do not bypass Shared L2, substitute pre-lowered host micro-ops, use io_resp as completion, or mark L2/L3 PASS. Do not run Library Compiler or LEF generation while deferred by the user."
+  "phase": "CONTRACT_DESCRIPTOR_ISA_V2",
+  "command": "Implement the approved descriptor/ISA v2 contract in schema, Python typed packers, Command128 root-role validation, segment compiler and examples. Generate frozen expected-vector JSON entrypoints. Run all contract/spec/example tests with taskset -c 8-25 after confirming MemAvailable >10 GiB, then commit and push the isolated contract checkpoint before modifying production sequencer RTL.",
+  "success_condition": "Schema v2 fields do not overlap; every new record round-trips and rejects illegal enums/reserved bits; unused roots are NULL_INDEX; every opcode enforces the frozen root roles; all existing and migrated Python/spec/segment regressions pass.",
+  "failure_policy": "Stop at the first contract mismatch. Do not weaken root roles, use zero for absent roots, assign ad-hoc subtype/common-flag meanings, change 128-bit command layout, or modify production sequencer RTL before the contract checkpoint passes."
 }

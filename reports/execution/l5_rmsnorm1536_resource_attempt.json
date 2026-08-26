@@ -1,0 +1,15 @@
+{
+  "stage": "L5",
+  "subgate": "global RMSNorm1536",
+  "attempt": 2,
+  "timestamp": "2026-08-26T15:02:47+08:00",
+  "status": "BLOCKED_RESOURCE",
+  "mem_available_kib": 8938648,
+  "required_strictly_greater_than_kib": 10485760,
+  "disk_available_kib": 412106348,
+  "heavy_task_started": false,
+  "project_processes_running": 0,
+  "oom_observed": false,
+  "external_memory_owner": "unrelated MATLAB processes",
+  "action": "No polling, no threshold reduction, and no unrelated-process termination."
+}

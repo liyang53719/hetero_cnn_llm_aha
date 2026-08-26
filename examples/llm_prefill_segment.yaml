@@ -10,6 +10,7 @@ operations:
     engine: dma
     opcode: dma_2d
     src0: 103
+    src1: 138
     dst: 104
   - id: qkv_projection
     engine: matrix

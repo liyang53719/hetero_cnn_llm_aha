@@ -2,6 +2,7 @@
 
 - Canonical plan: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md`; current stage L2.
 - Approved decision-complete continuation plan is frozen in `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
+- Descriptor/ISA v2 contract PASS: 128-bit command unchanged; NULL roots/root roles, matrix_aux/DMA policy/event-list, vectors and migrated segment reports; 57 Python tests.
 - CPU rule: all build/test/DC use `taskset -c 8-25`; Docker uses `--cpuset-cpus=8-23`.
 - Resource rule: `MemAvailable > 10 GiB`, at most `-j4`, user/Docker memory cap required.
 - L0 PASS; L1 upstream PASS.
@@ -30,5 +31,5 @@
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: finish schema/Python/example migration and contract tests, commit/push `contract/descriptor-v2`, then extend multi-tile OS → LOOP_WS → Conv → bias → requant/ReLU.
+- Next action: extend production sequencer in fixed order multi-tile OS → LOOP_WS → Conv → bias → requant/ReLU using committed expected vectors.
 - Do not close a stage with clean-room-only evidence.

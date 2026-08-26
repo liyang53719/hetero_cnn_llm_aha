@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 record_bits: 128
 index_bits: 24
 byte_order: little
@@ -67,6 +67,31 @@ record_types:
       pad_top: {lsb: 104, width: 6}
       pad_left: {lsb: 110, width: 6}
       groups: {lsb: 116, width: 12}
+  0x12:
+    name: matrix_aux
+    purpose: "Fourth-tensor reference and frozen Gemmini LOOP_WS/Conv policy"
+    payload:
+      bias_index: {lsb: 56, width: 24}
+      activation: {lsb: 80, width: 2}
+      full_c: {lsb: 82, width: 1}
+      low_d: {lsb: 83, width: 1}
+      repeating_bias: {lsb: 84, width: 1}
+      no_pool: {lsb: 85, width: 1}
+      downsample: {lsb: 86, width: 1}
+      input_dilated: {lsb: 87, width: 1}
+      wrot180: {lsb: 88, width: 1}
+      trans_output_1203: {lsb: 89, width: 1}
+      trans_weight_1203: {lsb: 90, width: 1}
+      trans_weight_0132: {lsb: 91, width: 1}
+      trans_input_3120: {lsb: 92, width: 1}
+      depthwise: {lsb: 93, width: 1}
+      a_spad_id: {lsb: 94, width: 2}
+      b_spad_id: {lsb: 96, width: 2}
+      max_pixels_per_row: {lsb: 98, width: 8}
+      pad_bottom: {lsb: 106, width: 6}
+      pad_right: {lsb: 112, width: 6}
+      subarray_mask: {lsb: 118, width: 8}
+      reserved: {lsb: 126, width: 2}
   0x20:
     name: sfu_program
     purpose: "CGRA bitstream/segment and vector-reduction parameters"
@@ -107,14 +132,47 @@ record_types:
       saturation_mode: {lsb: 112, width: 2}
       zero_point_bits: {lsb: 114, width: 8}
       reserved: {lsb: 122, width: 6}
+  0x50:
+    name: dma_policy
+    purpose: "DMA burst, outstanding and QoS policy"
+    payload:
+      max_burst_beats: {lsb: 56, width: 8}
+      max_outstanding: {lsb: 64, width: 8}
+      read_qos: {lsb: 72, width: 4}
+      write_qos: {lsb: 76, width: 4}
+      allow_unaligned: {lsb: 80, width: 1}
+      coalesce: {lsb: 81, width: 1}
+      ordered: {lsb: 82, width: 1}
+      reserved: {lsb: 83, width: 45}
+  0x60:
+    name: event_list4
+    purpose: "One to four event IDs for a chained control barrier"
+    payload:
+      count: {lsb: 56, width: 4}
+      event0: {lsb: 60, width: 16}
+      event1: {lsb: 76, width: 16}
+      event2: {lsb: 92, width: 16}
+      event3: {lsb: 108, width: 16}
+      reserved: {lsb: 124, width: 4}
 enums:
   memory_space: {0: external, 1: shared_l2, 2: matrix_spad, 3: matrix_acc, 4: cgra_local, 5: kv_staging}
   dtype: {0: int4, 1: int8, 2: bf16, 3: fp16, 4: int32, 5: fp32}
   layout: {0: row_major, 1: col_major, 2: nhwc, 3: nchw, 4: blocked_c32, 5: kv_page_head_major}
   kv_format: {0: bf16, 1: int8_per_token_head}
+  matrix_dataflow: {0: output_stationary, 1: weight_stationary}
+  matrix_activation: {0: none, 1: relu, 2: relu6}
+  quant_mode: {0: none, 1: w8_per_tensor, 2: w8_per_channel, 3: w4_storage_g64, 4: w4_storage_g128, 5: native_w4_g64, 6: native_w4_g128}
+  quant_rounding: {0: round_to_nearest_even, 1: toward_zero, 2: floor, 3: ceil}
+  quant_saturation: {0: signed_full_range, 1: signed_symmetric, 2: unsigned}
+  completion_status: {0: ok, 1: illegal_opcode_engine, 2: malformed_chain, 3: descriptor_fetch_error, 4: unsupported_policy, 5: range_resource_overflow, 6: watchdog_timeout, 7: macro_protocol_error, 8: kv_oom, 9: kv_stale_generation, 10: kv_refcount_cow_invariant}
 validation_rules:
   - "All field ranges must fit within 128 bits and must not overlap within a record type."
   - "Tensor address + shape + stride records are immutable while a command is in flight."
   - "Matrix M/N/K values are logical dimensions; physical tiling is selected by the engine."
   - "KV generation must match the sequence metadata entry to prevent stale page references."
   - "Descriptor chains must be acyclic and terminate within max_records_per_descriptor."
+  - "Common subtype and flags are zero in schema v2."
+  - "All referenced chains are cached and validated before any engine micro-operation issues."
+  - "Readonly chains may alias across roots; each chain independently obeys the 16-record limit."
+  - "Every Matrix command has exactly one matrix_aux; matrix_aux.subarray_mask is nonzero."
+  - "Unused command descriptor roots contain null_index, never record index zero."

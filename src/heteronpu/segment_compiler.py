@@ -6,7 +6,7 @@ from typing import Any
 
 import yaml
 
-from .command import Command128, Engine, Opcode
+from .command import Command128, Engine, Opcode, NULL_INDEX
 
 
 @dataclass(frozen=True)
@@ -139,9 +139,9 @@ def compile_segment(spec: dict[str, Any]) -> CompiledSegment:
             flags=int(raw.get("flags", 0)),
             event_wait=wait_event,
             event_signal=signal_event,
-            src0=int(raw.get("src0", 0)),
-            src1=int(raw.get("src1", 0)),
-            dst=int(raw.get("dst", 0)),
+            src0=int(raw.get("src0", NULL_INDEX)),
+            src1=int(raw.get("src1", NULL_INDEX)),
+            dst=int(raw.get("dst", NULL_INDEX)),
         )
         compiled.append(
             CompiledCommand(name=op_id, command=command, dependencies=deps)

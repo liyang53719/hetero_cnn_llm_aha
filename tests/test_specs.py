@@ -29,6 +29,7 @@ def test_command_layout_is_128_bits_and_non_overlapping() -> None:
 def test_descriptor_common_and_typed_payloads_fit_128_bits() -> None:
     spec = yaml.safe_load((ROOT / "spec/descriptor_schema.yaml").read_text())
     bits = int(spec["record_bits"])
+    assert spec["schema_version"] == 2
     assert bits == 128
     _assert_non_overlapping(spec["common_fields"], bits)
     for record in spec["record_types"].values():

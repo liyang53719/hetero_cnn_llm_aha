@@ -9,6 +9,7 @@ operations:
     engine: dma
     opcode: dma_2d
     src0: 202
+    src1: 221
     dst: 203
   - id: qkv_gemv
     engine: matrix
@@ -27,7 +28,8 @@ operations:
     engine: kv
     opcode: kv_append
     src0: 209
-    dst: 210
+    src1: 210
+    dst: 222
     depends_on: [rope]
   - id: gather
     engine: kv

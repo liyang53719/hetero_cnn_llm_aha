@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 word_bits: 128
 byte_order: little
 fields:
@@ -42,3 +42,16 @@ notes:
   - "The 24-bit src/dst fields address descriptor records, not raw DRAM bytes."
   - "Shape, strides, datatype, scales and page-table metadata live in typed descriptors."
   - "This keeps the command fixed at 128 bits while supporting CNN and LLM shapes."
+  - "Unused src0/src1/dst fields are 0xFFFFFF; index zero remains a valid descriptor."
+  - "Tensor stream tensor_id is the tensor root index low 12 bits; runtime prevents in-flight low-12 collisions."
+  - "Tensor stream tag[15:4] is event_signal[11:0] and tag[3:0] is stream role."
+root_roles:
+  nop: {src0: null, src1: null, dst: null}
+  dma: {src0: source_tensor, src1: dma_policy, dst: destination_tensor}
+  matrix: {src0: operand_a_and_operation, src1: operand_b, dst: output}
+  sfu: {src0: primary_and_program, src1: optional_secondary, dst: output}
+  kv_append: {src0: k_tensor, src1: v_tensor, dst: kv_metadata}
+  kv_gather: {src0: kv_metadata, src1: null, dst: interleaved_kv_output}
+  kv_share_prefix: {src0: source_kv_metadata, src1: null, dst: destination_kv_metadata}
+  kv_alloc_free: {src0: target_kv_metadata, src1: null, dst: null}
+  barrier: {src0: event_list, src1: null, dst: null}

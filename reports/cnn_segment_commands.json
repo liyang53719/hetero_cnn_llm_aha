@@ -10,7 +10,7 @@
   ],
   "commands": [
     {
-      "bytes_le_hex": "11010000000100010000000000020000",
+      "bytes_le_hex": "110100000001000100000c0000020000",
       "dependencies": [],
       "fields": {
         "dst": 2,
@@ -20,14 +20,14 @@
         "flags": 0,
         "opcode": "DMA_2D",
         "src0": 1,
-        "src1": 0
+        "src1": 12
       },
       "name": "load_ifm",
       "synthetic": false,
-      "word_hex": "0x00000200000000000100010000000111"
+      "word_hex": "0x00000200000c00000100010000000111"
     },
     {
-      "bytes_le_hex": "11010000000200030000000000040000",
+      "bytes_le_hex": "110100000002000300000d0000040000",
       "dependencies": [],
       "fields": {
         "dst": 4,
@@ -37,31 +37,31 @@
         "flags": 0,
         "opcode": "DMA_2D",
         "src0": 3,
-        "src1": 0
+        "src1": 13
       },
       "name": "load_weight",
       "synthetic": false,
-      "word_hex": "0x00000400000000000300020000000111"
+      "word_hex": "0x00000400000d00000300020000000111"
     },
     {
-      "bytes_le_hex": "500000000003000000f0000000000000",
+      "bytes_le_hex": "500000000003000000f0ffffffffffff",
       "dependencies": [
         "load_ifm",
         "load_weight"
       ],
       "fields": {
-        "dst": 0,
+        "dst": 16777215,
         "engine": "CONTROL",
         "event_signal": 3,
         "event_wait": 0,
         "flags": 0,
         "opcode": "BARRIER",
         "src0": 15728640,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "__join__conv",
       "synthetic": true,
-      "word_hex": "0x000000000000f0000000030000000050"
+      "word_hex": "0xfffffffffffff0000000030000000050"
     },
     {
       "bytes_le_hex": "22020003000400050000060000070000",
@@ -84,7 +84,7 @@
       "word_hex": "0x00000700000600000500040003000222"
     },
     {
-      "bytes_le_hex": "35030004000500080000000000090000",
+      "bytes_le_hex": "35030004000500080000ffffff090000",
       "dependencies": [
         "conv"
       ],
@@ -96,14 +96,14 @@
         "flags": 0,
         "opcode": "SFU_ACTIVATION",
         "src0": 8,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "activation_pool",
       "synthetic": false,
-      "word_hex": "0x00000900000000000800050004000335"
+      "word_hex": "0x000009ffffff00000800050004000335"
     },
     {
-      "bytes_le_hex": "110100050006000a00000000000b0000",
+      "bytes_le_hex": "110100050006000a00000e00000b0000",
       "dependencies": [
         "activation_pool"
       ],
@@ -115,11 +115,11 @@
         "flags": 0,
         "opcode": "DMA_2D",
         "src0": 10,
-        "src1": 0
+        "src1": 14
       },
       "name": "store_ofm",
       "synthetic": false,
-      "word_hex": "0x00000b00000000000a00060005000111"
+      "word_hex": "0x00000b00000e00000a00060005000111"
     }
   ],
   "name": "cnn_conv_activation_pool"

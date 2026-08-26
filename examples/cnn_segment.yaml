@@ -4,11 +4,13 @@ operations:
     engine: dma
     opcode: dma_2d
     src0: 1
+    src1: 12
     dst: 2
   - id: load_weight
     engine: dma
     opcode: dma_2d
     src0: 3
+    src1: 13
     dst: 4
   - id: conv
     engine: matrix
@@ -27,5 +29,6 @@ operations:
     engine: dma
     opcode: dma_2d
     src0: 10
+    src1: 14
     dst: 11
     depends_on: [activation_pool]

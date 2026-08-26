@@ -2,7 +2,7 @@
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "L2_descriptor_isa_v2_contract",
+  "current_phase": "L2_production_multi_op_sequencer",
   "stages": {
     "L0": {
       "status": "PASS",
@@ -76,6 +76,8 @@
         "work/results/l2_descriptor_sequencer/tb.log",
         "work/results/l2_descriptor_sequencer/integration.log",
         "work/results/l2_descriptor_sequencer/integrated_rtl_model_regression.json"
+        ,"reports/execution/DESCRIPTOR_ISA_V2_CONTRACT.md"
+        ,"reports/execution/descriptor_v2_contract_result.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -100,9 +102,9 @@
         "Retained RocketTile generated-Gemmini busy observation: 36 expected conv commands and four final-command-to-busy-clear intervals with unchanged numerical checksum",
         "Descriptor-chain legality golden: 128-bit record parsing and pre-lowering rejection of null-required, missing, cyclic, over-16-record, and out-of-range chains",
         "Approved production Shared-L2 descriptor path: three chains are fetched and rejected pre-issue on null/error/cycle/nontermination; single-tile INT8 OS GEMM emits nine official CUSTOM_3 commands and completes on busy clear"
+        ,"Descriptor/ISA v2 contract: NULL roots, opcode root roles, matrix_aux/DMA policy/event-list records, committed vectors and 57 Python tests PASS"
       ],
       "remaining_gates": [
-        "Implement the approved descriptor/ISA v2 contract and freeze its generated expected vectors",
         "Extend the production typed-descriptor sequencer through multi-tile OS/WS, convolution, bias and requant, preserving the already-passed retained-Rocket equivalence transcripts",
         "Connect the approved descriptor read port to a real Shared-L2 read lane and rerun integrated randomized backpressure"
       ]

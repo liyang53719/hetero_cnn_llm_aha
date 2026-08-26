@@ -41,7 +41,7 @@
       "word_hex": "0x00006600006500006400010000000332"
     },
     {
-      "bytes_le_hex": "11010000000200670000000000680000",
+      "bytes_le_hex": "110100000002006700008a0000680000",
       "dependencies": [],
       "fields": {
         "dst": 104,
@@ -51,31 +51,31 @@
         "flags": 0,
         "opcode": "DMA_2D",
         "src0": 103,
-        "src1": 0
+        "src1": 138
       },
       "name": "qkv_weight_load",
       "synthetic": false,
-      "word_hex": "0x00006800000000006700020000000111"
+      "word_hex": "0x00006800008a00006700020000000111"
     },
     {
-      "bytes_le_hex": "500000000003000000f0000000000000",
+      "bytes_le_hex": "500000000003000000f0ffffffffffff",
       "dependencies": [
         "norm1",
         "qkv_weight_load"
       ],
       "fields": {
-        "dst": 0,
+        "dst": 16777215,
         "engine": "CONTROL",
         "event_signal": 3,
         "event_wait": 0,
         "flags": 0,
         "opcode": "BARRIER",
         "src0": 15728640,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "__join__qkv_projection",
       "synthetic": true,
-      "word_hex": "0x000000000000f0000000030000000050"
+      "word_hex": "0xfffffffffffff0000000030000000050"
     },
     {
       "bytes_le_hex": "200200030004006900006a00006b0000",
@@ -98,7 +98,7 @@
       "word_hex": "0x00006b00006a00006900040003000220"
     },
     {
-      "bytes_le_hex": "340300040005006c00000000006d0000",
+      "bytes_le_hex": "340300040005006c0000ffffff6d0000",
       "dependencies": [
         "qkv_projection"
       ],
@@ -110,11 +110,11 @@
         "flags": 0,
         "opcode": "SFU_ROPE",
         "src0": 108,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "rope",
       "synthetic": false,
-      "word_hex": "0x00006d00000000006c00050004000334"
+      "word_hex": "0x00006dffffff00006c00050004000334"
     },
     {
       "bytes_le_hex": "410400050006006e00006f0000700000",
@@ -136,7 +136,7 @@
       "word_hex": "0x00007000006f00006e00060005000441"
     },
     {
-      "bytes_le_hex": "42040006000700710000000000720000",
+      "bytes_le_hex": "42040006000700710000ffffff720000",
       "dependencies": [
         "kv_append"
       ],
@@ -148,31 +148,31 @@
         "flags": 0,
         "opcode": "KV_GATHER",
         "src0": 113,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "kv_gather",
       "synthetic": false,
-      "word_hex": "0x00007200000000007100070006000442"
+      "word_hex": "0x000072ffffff00007100070006000442"
     },
     {
-      "bytes_le_hex": "500000000008000100f0000000000000",
+      "bytes_le_hex": "500000000008000100f0ffffffffffff",
       "dependencies": [
         "rope",
         "kv_gather"
       ],
       "fields": {
-        "dst": 0,
+        "dst": 16777215,
         "engine": "CONTROL",
         "event_signal": 8,
         "event_wait": 0,
         "flags": 0,
         "opcode": "BARRIER",
         "src0": 15728641,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "__join__qk",
       "synthetic": true,
-      "word_hex": "0x000000000000f0000100080000000050"
+      "word_hex": "0xfffffffffffff0000100080000000050"
     },
     {
       "bytes_le_hex": "23020008000900730000740000750000",
@@ -195,7 +195,7 @@
       "word_hex": "0x00007500007400007300090008000223"
     },
     {
-      "bytes_le_hex": "33030009000a00760000000000770000",
+      "bytes_le_hex": "33030009000a00760000ffffff770000",
       "dependencies": [
         "qk"
       ],
@@ -207,31 +207,31 @@
         "flags": 0,
         "opcode": "SFU_SOFTMAX",
         "src0": 118,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "online_softmax",
       "synthetic": false,
-      "word_hex": "0x000077000000000076000a0009000333"
+      "word_hex": "0x000077ffffff000076000a0009000333"
     },
     {
-      "bytes_le_hex": "50000000000b000200f0000000000000",
+      "bytes_le_hex": "50000000000b000200f0ffffffffffff",
       "dependencies": [
         "online_softmax",
         "kv_gather"
       ],
       "fields": {
-        "dst": 0,
+        "dst": 16777215,
         "engine": "CONTROL",
         "event_signal": 11,
         "event_wait": 0,
         "flags": 0,
         "opcode": "BARRIER",
         "src0": 15728642,
-        "src1": 0
+        "src1": 16777215
       },
       "name": "__join__pv",
       "synthetic": true,
-      "word_hex": "0x000000000000f00002000b0000000050"
+      "word_hex": "0xfffffffffffff00002000b0000000050"
     },
     {
       "bytes_le_hex": "2402000b000c007800007900007a0000",

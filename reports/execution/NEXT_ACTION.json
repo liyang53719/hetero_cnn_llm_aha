@@ -1,6 +1,6 @@
 {
-  "phase": "CONTRACT_DESCRIPTOR_ISA_V2",
-  "command": "Implement the approved descriptor/ISA v2 contract in schema, Python typed packers, Command128 root-role validation, segment compiler and examples. Generate frozen expected-vector JSON entrypoints. Run all contract/spec/example tests with taskset -c 8-25 after confirming MemAvailable >10 GiB, then commit and push the isolated contract checkpoint before modifying production sequencer RTL.",
-  "success_condition": "Schema v2 fields do not overlap; every new record round-trips and rejects illegal enums/reserved bits; unused roots are NULL_INDEX; every opcode enforces the frozen root roles; all existing and migrated Python/spec/segment regressions pass.",
-  "failure_policy": "Stop at the first contract mismatch. Do not weaken root roles, use zero for absent roots, assign ad-hoc subtype/common-flag meanings, change 128-bit command layout, or modify production sequencer RTL before the contract checkpoint passes."
+  "phase": "L2_PRODUCTION_MULTI_OP_SEQUENCER",
+  "command": "Extend gemmini_descriptor_sequencer using generated expected vectors in this fixed order: multi-tile OS, LOOP_WS, Conv 1x1/3x3, optional bias chain, then output requant and ReLU/ReLU6. Cache and validate src0/src1/dst/bias before issue; derive tiling and local addresses exactly from the pinned Gemmini C path. Bind every build/test to CPU 8-25 and start only above 10 GiB MemAvailable.",
+  "success_condition": "For every legal production descriptor, funct/rs1/rs2 and issue count equal the frozen Python/pinned-C transcript; all illegal or incomplete chains issue zero CUSTOM_3; busy completion, event, write trace and output hash remain exact under randomized backpressure.",
+  "failure_policy": "Stop at the first transcript or numerical mismatch. Do not expose local Gemmini addresses in the public ISA, bypass typed descriptors, pre-lower on the host, use io_resp as completion, weaken legality, or mark L2 PASS before retained-Rocket equivalence closes."
 }

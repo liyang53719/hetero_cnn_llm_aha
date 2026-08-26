@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
 
+NULL_INDEX = 0xFF_FFFF
+
 
 class Engine(IntEnum):
     CONTROL = 0
@@ -74,9 +76,9 @@ class Command128:
     flags: int = 0
     event_wait: int = 0
     event_signal: int = 0
-    src0: int = 0
-    src1: int = 0
-    dst: int = 0
+    src0: int = NULL_INDEX
+    src1: int = NULL_INDEX
+    dst: int = NULL_INDEX
 
     def __post_init__(self) -> None:
         limits = {
@@ -94,6 +96,15 @@ class Command128:
         if expected is not None and expected != self.engine:
             raise ValueError(
                 f"opcode {self.opcode.name} belongs to {expected.name}, not {self.engine.name}"
+            )
+        required, forbidden = _root_contract(self.opcode)
+        roots = {"src0": self.src0, "src1": self.src1, "dst": self.dst}
+        missing = sorted(name for name in required if roots[name] == NULL_INDEX)
+        unexpected = sorted(name for name in forbidden if roots[name] != NULL_INDEX)
+        if missing or unexpected:
+            raise ValueError(
+                f"opcode {self.opcode.name} descriptor roots invalid: "
+                f"missing={missing} unexpected={unexpected}"
             )
 
     def pack(self) -> int:
@@ -134,3 +145,21 @@ class Command128:
         if len(payload) != 16:
             raise ValueError("a command must contain exactly 16 bytes")
         return cls.unpack(int.from_bytes(payload, byteorder="little", signed=False))
+
+
+def _root_contract(opcode: Opcode) -> tuple[frozenset[str], frozenset[str]]:
+    all_roots = frozenset({"src0", "src1", "dst"})
+    if opcode is Opcode.NOP:
+        return frozenset(), all_roots
+    if opcode in {Opcode.DMA_1D, Opcode.DMA_2D, Opcode.MATRIX_GEMM,
+                  Opcode.MATRIX_GEMV, Opcode.MATRIX_CONV, Opcode.MATRIX_QK,
+                  Opcode.MATRIX_PV, Opcode.KV_APPEND}:
+        return all_roots, frozenset()
+    if opcode in {Opcode.SFU_VECTOR, Opcode.SFU_REDUCE, Opcode.SFU_RMSNORM,
+                  Opcode.SFU_SOFTMAX, Opcode.SFU_ROPE, Opcode.SFU_ACTIVATION}:
+        return frozenset({"src0", "dst"}), frozenset()
+    if opcode in {Opcode.KV_GATHER, Opcode.KV_SHARE_PREFIX}:
+        return frozenset({"src0", "dst"}), frozenset({"src1"})
+    if opcode in {Opcode.KV_ALLOC, Opcode.KV_FREE, Opcode.BARRIER}:
+        return frozenset({"src0"}), frozenset({"src1", "dst"})
+    raise ValueError(f"root contract is undefined for opcode {opcode!r}")

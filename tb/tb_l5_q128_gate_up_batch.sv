@@ -1,0 +1,12 @@
+`timescale 1ns/1ps
+module tb_l5_q128_gate_up_batch;
+ logic clk;/* verilator lint_off SYNCASYNCNET */logic rst_n;/* verilator lint_on SYNCASYNCNET */logic iv,ir,ov,orr;logic[255:0]a;logic[511:0]b;logic[16383:0]acc,out;logic[4:0]flags,forr;logic[31:0]accepted,completed;logic[15:0]weights[0:13762559];logic[31:0]inputv[0:24575],expected[0:143359];integer cycles,batch,mode;string dir,normpath;
+ always #5 clk=~clk;always@(posedge clk)if(!rst_n)cycles<=0;else cycles<=cycles+1;
+ bf16_outer_product_array#(.ROWS(16),.COLS(32))dut(.clk_i(clk),.rst_ni(rst_n),.in_valid_i(iv),.in_ready_o(ir),.a_i(a),.b_i(b),.acc_i(acc),.out_valid_o(ov),.out_ready_i(orr),.acc_o(out),.exception_flags_o(flags),.accepted_steps_o(accepted),.completed_steps_o(completed));
+ function automatic[15:0]bf(input[31:0]x);logic[31:0]r;begin r=x+32'h7fff+x[16];bf=r[31:16];end endfunction
+ task automatic clear(output[16383:0]x);for(int i=0;i<512;i++)x[i*32+:32]=0;endtask
+ initial begin logic[16383:0]cur;logic[63:0]hash;clk=0;rst_n=0;iv=0;orr=1;forr=0;clear(acc);hash=64'hcbf29ce484222325;if(!$value$plusargs("BATCH=%d",batch))batch=0;if(!$value$plusargs("MODE=%d",mode))mode=0;dir=$sformatf("work/results/l5_q128_gate_up/batch%0d",batch);normpath=$sformatf("work/results/l5_q128_oproj/batch%0d/norm2.memh",batch);$readmemh(normpath,inputv);if(mode==0)begin $readmemh("work/results/l5_target_gate_up/vectors/gate_weights_bf16.memh",weights);$readmemh({dir,"/gate.memh"},expected);end else begin $readmemh("work/results/l5_target_gate_up/vectors/up_weights_bf16.memh",weights);$readmemh({dir,"/up.memh"},expected);end repeat(3)@(posedge clk);rst_n=1;
+  for(int tile=0;tile<280;tile++)begin clear(cur);for(int k=0;k<1536;k++)begin for(int row=0;row<16;row++)a[row*16+:16]=bf(inputv[row*1536+k]);for(int c=0;c<32;c++)b[c*16+:16]=weights[k*8960+tile*32+c];acc=cur;@(negedge clk);iv=1;do@(posedge clk);while(!ir);@(negedge clk);iv=0;do@(posedge clk);while(!(ov&&orr));@(negedge clk);cur=out;forr|=flags;end for(int row=0;row<16;row++)for(int c=0;c<32;c++)begin if(cur[(row*32+c)*32+:32]!==expected[row*8960+tile*32+c])$fatal(1,"q128 gateup mismatch");hash=(hash^{32'd0,cur[(row*32+c)*32+:32]})*64'h100000001b3;end end
+  if(accepted!=430080||completed!=430080||forr[4:1]!=0)$fatal(1,"q128 gateup accounting");$display("L5_Q128_GATE_UP_BATCH_PASS batch=%0d mode=%0d array_steps=430080 cycles=%0d output_fnv64=%016h",batch,mode,cycles,hash);$finish;end
+ initial begin repeat(1800000)@(posedge clk);$fatal(1,"q128 gateup timeout");end
+endmodule

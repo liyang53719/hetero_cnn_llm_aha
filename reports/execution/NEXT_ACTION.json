@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Consume q128 norm2 hash 4f1d6a1032c407934b1d0562591af8d993f2efade95a1aa333de9822f5d73679 and reuse exact target gate/up weights. Build a restartable 16-token gate/up batch using all16 physical rows. Batch0 must run complete 1536x8960 gate and up projections, each430080 measured steps, and compare all16x8960 outputs. Use an exact fmaf-order C++ or equivalent golden generator bound to CPU8-25 and max j4; do not use NumPy matmul. After batch0 PASS, parameterize one binary for batches1-7 and aggregate gate/up to6881280 measured steps.",
+  "command": "Reuse the proven q128 gate/up C++ golden and unchanged RTL binary for batches1-7. For each batch, consume its exact norm2 receipt, generate16x8960 gate/up outputs with four k-ordered fmaf threads, then run gate and up phases sequentially under the10GiB cap. Each phase must report430080 steps. Preserve independent batch manifests/logs and aggregate all eight batches to6881280 measured gate/up steps; freeze concatenated gate/up hashes before SiLU/product.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

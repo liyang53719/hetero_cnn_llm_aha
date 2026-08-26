@@ -56,6 +56,7 @@
 - L5 q128 RoPE/GQA PASS: 114688 split-half pairs, 4096->24576 K/V multicast, 491520 cycles; Q/K/V hashes `1e259f27...`/`499da9e0...`/`5c3169a4...`. Next: 99072 causal streamed M/L/O updates, no score matrix.
 - L5 q128 causal M/L/O PASS: 99072 updates, no score matrix, 3283200 cycles, attention hash `b72c3a34...`, max true-softmax error `6.409e-4`. Next: OProj/residual/norm2 in eight 16-token batches.
 - L5 q128 OProj/residual/norm2 ALL PASS: 8x16-token batches, 589824 measured steps, 2421504 total/2359296 Matrix/12288 residual/49920 norm2 cycles; norm2 hash `4f1d6a10...`. Next: q128 gate/up batches.
+- L5 q128 gate/up batch0 PASS: tokens0-15, exact4-thread fmaf golden, each projection430080 steps/1720320 cycles; gate/up hashes `3f93989b...`/`836b4d07...`. Next: same binary batches1-7.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

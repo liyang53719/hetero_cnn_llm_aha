@@ -351,6 +351,10 @@
         ,"reports/execution/L5_Q128_QKV_BATCH0.md"
         ,"reports/execution/l5_q128_qkv_batch0_result.json"
         ,"work/results/l5_q128_qkv/batch0/tb.log"
+        ,"reports/execution/L5_Q128_QKV_ALL_BATCHES.md"
+        ,"reports/execution/l5_q128_qkv_all_batches_result.json"
+        ,"work/results/l5_q128_qkv/batch0/tb_all.log"
+        ,"work/results/l5_q128_qkv/batch7/tb_all.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -387,6 +391,7 @@
         ,"q128 prefill shape, 8-row-batch Matrix counts and 99072 causal head-token updates are frozen without cycle claims"
         ,"q128 synthesizable 24-command controller matches all operation counts and exposes no measured latency"
         ,"q128 numerical QKV row batch0 uses all 16 physical rows and passes 98304 measured Matrix steps"
+        ,"q128 all eight QKV row batches pass one unchanged RTL binary for 786432 measured Matrix steps"
       ],
       "remaining_gates": [
         "q128 q384 prefill and decode128/1024/4096 block numerics"

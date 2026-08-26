@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Parameterize the proven q128 QKV batch0 TB with +BATCH=N while keeping one unchanged RTL binary. Generate operation-order goldens independently for batches1-7 from the same shared input hash 39917c9e6f887030091cb93e944b263f4966322f487d567a6c28881b615335e0 and exact target weights. Run batches1-7 sequentially with one resource admission check per batch; each must report 98304 Matrix steps and exact norm/Q/K/V hashes. Aggregate all eight receipts to 786432 measured QKV steps and freeze concatenated q128 Q/K/V hashes before starting RoPE.",
+  "command": "Consume exact concatenated q128 Q/K/V hashes 90e5f377634d20a68bf411c4bc60cc874e228464e4483f8211ec685894559040, 59a0989dc8f85b01e8171d6d0a50c24a14c7d375332d90d77f0b08b650634f1f and 6f12dcc1104fb20781dee561bf06b5e72d9e5696b8d8fda29e3ce9f96cb3337f. Apply split-half D128 RoPE at positions0-127 to all Q and K: 98304 Q pairs plus16384 K pairs. Then post-RoPE multicast K and direct multicast V from two KV heads to12 query heads: 2048 inputs/12288 outputs each. Compare all lanes and sidebands, freeze q_rope/k_rope/k_gqa/v_gqa hashes, and report RoPE/K-GQA/V-GQA cycles separately. Do not begin causal M/L/O until this receipt passes.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

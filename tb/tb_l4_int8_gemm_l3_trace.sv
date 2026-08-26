@@ -170,4 +170,13 @@ module tb_l4_conv1x1_l3_trace;
     .DESCRIPTOR_BYTES(256),.REQUIRE_PROMOTION(1'b0)
   )u_trace();
 endmodule
+
+module tb_l4_conv3x3_identity_l3_trace;
+  tb_l4_matrix_l3_trace #(
+    .CASE_ID(2),.EVENT_ID(16'h0403),.OPCODE(8'h22),.MACS(2700),
+    .DESCRIPTOR_READS(4),.WEIGHT_READS(2),.ACTIVATION_BIAS_READS(3),
+    .OUTPUT_WRITES(2),.SEMANTIC_DMA_BYTES(299),.PHYSICAL_DMA_BYTES(448),
+    .DESCRIPTOR_BYTES(256),.REQUIRE_PROMOTION(1'b0)
+  )u_trace();
+endmodule
 /* verilator lint_on DECLFILENAME */

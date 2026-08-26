@@ -1,6 +1,6 @@
 {
-  "phase": "L4_CNN_CONV3X3_IDENTITY",
-  "command": "Measure and close the pinned 1x5x5x3 to four-channel padded 3x3 Conv identity case before the fused requant/ReLU case. Execute only the production raw nine-command path in retained Gemmini RTL, generate all 100 output elements independently, record mcycle/semantic DMA/SHA256, and use the parameterized canonical L3 trace replay for descriptor, input, 3x3 weights, bias and output traffic. Keep activation none and identity scale fixed for this subgate.",
+  "phase": "L4_CNN_BIAS_REQUANT_RELU",
+  "command": "Close the pinned padded 1x5x5x3 four-channel fused Conv bias plus scale0.5 plus ReLU mode. Execute only raw_loop_conv(mode=1), independently implement Gemmini RNE scale and ReLU for all 100 outputs, verify its nine CUSTOM_3 payloads against conv_relu_requant descriptor-v2 vectors, and reuse the case-2 transport geometry with the extra quant descriptor record reflected in descriptor-byte accounting. Record payload and canonical metrics separately.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

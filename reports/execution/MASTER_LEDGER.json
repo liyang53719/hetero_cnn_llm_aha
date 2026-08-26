@@ -376,6 +376,15 @@
         ,"reports/execution/L5_Q128_SILU_PRODUCT.md"
         ,"reports/execution/l5_q128_silu_product_result.json"
         ,"work/results/l5_q128_silu_product/tb.log"
+        ,"reports/execution/L5_Q128_DOWN_FINAL.md"
+        ,"reports/execution/l5_q128_down_final_result.json"
+        ,"work/results/l5_q128_down/batch0/tb.log"
+        ,"work/results/l5_q128_down/batch7/tb.log"
+        ,"reports/execution/L5_Q128_TRACE_CONTROLLER.md"
+        ,"reports/execution/l5_q128_trace_controller_result.json"
+        ,"work/results/l5_q128_trace_controller/tb.log"
+        ,"reports/execution/L5_Q128_CLOSEOUT.md"
+        ,"reports/execution/l5_q128_result.json"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -419,9 +428,12 @@
         ,"q128 gate/up numerical row batch0 passes 860160 measured Matrix steps with exact C++ fmaf goldens"
         ,"q128 all gate/up row batches pass 6881280 measured Matrix steps with four-thread equivalence proven"
         ,"q128 all SiLU and gate-times-up outputs pass 1146880 scalars plus71680 chunks"
+        ,"q128 all down/final batches pass3440640 measured Matrix steps and freeze the final hash"
+        ,"q128 measured-latency trace reproduces11698176 steps and61101824 active cycles with zero score commands"
+        ,"q128 prefill subgate closes with complete segmented numerical payload and separate controller trace"
       ],
       "remaining_gates": [
-        "q128 q384 prefill and decode128/1024/4096 block numerics"
+        "q384 prefill and decode128/1024/4096 block numerics"
       ]
     },
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},

@@ -1,0 +1,16 @@
+{
+  "stage": "L5",
+  "subgate": "q128 measured-latency trace controller",
+  "status": "PASS",
+  "evidence_class": "cycle_accurate_trace_replay",
+  "commands": 24,
+  "matrix_steps": 11698176,
+  "busy_cycles": 61101824,
+  "wall_cycles": 61101874,
+  "score_matrix_commands": 0,
+  "command_fnv1a64": "29012cbdbd1b3252",
+  "build_allocated_mb": 361.734,
+  "simulation_allocated_mb": 7,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

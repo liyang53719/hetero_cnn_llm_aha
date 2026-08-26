@@ -1,0 +1,21 @@
+{
+  "stage": "L5",
+  "subgate": "q128 down final batches0-7",
+  "status": "PASS",
+  "batches": 8,
+  "array_steps_per_batch": 430080,
+  "array_steps_total": 3440640,
+  "cycles_per_batch": 1721856,
+  "total_cycles": 13774848,
+  "matrix_cycles": 13762560,
+  "residual_cycles": 12288,
+  "down_sha256": "8efd5406ee19ce009eaba8928b882d9b379e0e65725517d0ccfd96144e1fe2f7",
+  "final_sha256": "39bb6930340ecc70a81e508f2ecde0006ba933dd9e175a051441ccd3e4004b8d",
+  "golden_threads": 8,
+  "verilator_threads": 4,
+  "node_mismatches": 0,
+  "build_allocated_mb": 1230.949,
+  "simulation_allocated_mb_each": 121,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

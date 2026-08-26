@@ -59,6 +59,9 @@
 - L5 q128 gate/up batch0 PASS: tokens0-15, exact4-thread fmaf golden, each projection430080 steps/1720320 cycles; gate/up hashes `3f93989b...`/`836b4d07...`. Next: same binary batches1-7.
 - L5 q128 gate/up ALL PASS: 8 batches,6881280 measured steps/27525120 cycles, concatenated hashes `6a2d13e4...`/`4852e5bc...`; Verilator threads4 batch0 hash-equivalent to single-thread. Next: q128 SiLU/product.
 - L5 q128 SiLU/product PASS:1146880 scalar lanes+71680 chunks exact,10393600 cycles, product hash `661f4f57...`, max error `5.320e-5`; completed under CPU8-23/30GiB cap. Next: down/final batches.
+- L5 q128 down/final ALL PASS:3440640 measured steps/13774848 cycles, final hash `39bb6930...`.
+- L5 q128 trace PASS:24 commands,11698176 steps,61101824 busy/61101874 wall cycles, score commands0.
+- L5 Q128 CLOSED: complete numerical hash chain + separate controller trace, no score matrix. L5 remains IN_PROGRESS for q384 and decode128/1024/4096.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-23`; default/average parallelism is 8, reviewed peak is 16; start only with `MemAvailable >10 GiB`; `MemoryHigh=24G`, `MemoryMax=30G`.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

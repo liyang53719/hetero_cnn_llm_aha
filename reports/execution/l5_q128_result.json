@@ -1,0 +1,18 @@
+{
+  "stage": "L5",
+  "subgate": "q128 prefill",
+  "status": "PASS",
+  "tokens": 128,
+  "matrix_steps": 11698176,
+  "matrix_cycles": 46792704,
+  "active_cycles": 61101824,
+  "controller_wall_cycles": 61101874,
+  "causal_updates": 99072,
+  "score_matrix_materialized": false,
+  "score_matrix_commands": 0,
+  "numerical_evidence": "segmented_rtl_payload_measured",
+  "sequence_evidence": "cycle_accurate_trace_replay",
+  "final_sha256": "39bb6930340ecc70a81e508f2ecde0006ba933dd9e175a051441ccd3e4004b8d",
+  "node_mismatches": 0,
+  "oom_events": 0
+}

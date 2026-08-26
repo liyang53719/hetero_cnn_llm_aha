@@ -1,6 +1,6 @@
 {
-  "phase": "L5_Q128_PREFILL",
-  "command": "Consume q128 product hash 661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc and residual1 hash e4e80035f671ff12b4d6d9d04d5e9db4aa8f02789f842cb186f0847983ecb65a. Reuse the exact target8960x1536 down weights. Build restartable16-token down/final batches: each must run430080 measured Matrix steps and1536 residual chunks with exact k-ordered fmaf goldens. Validate batch0 first, then one unchanged RTL binary for batches1-7. Aggregate down to3440640 steps and freeze concatenated final hash before q128 receipt closeout.",
+  "phase": "L5_Q384_PREFILL",
+  "command": "Freeze q384 before payload using batch1/sequence384 and the pinned target dimensions. The16-row array has24 row batches. Exact Matrix steps must be Q1769472,K294912,V294912,O1769472,gate/up/down10321920 each,total35094528. Causal head-token updates are887040; Q/K RoPE pairs are294912/49152,total344064; reciprocals4608; O/L chunks36864; SiLU scalars3440640; product chunks215040. Create a machine-readable contract and operation-count controller with measured latency null and zero score-matrix commands. Do not scale q128 measured cycles into q384 measured fields.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

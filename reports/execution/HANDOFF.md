@@ -1,7 +1,7 @@
 # L11 execution handoff
 
 - Canonical plans: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md` and `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
-- Gates: L0 PASS, L1 PASS, L2 PASS, L3 IN_PROGRESS, L4-L11 dependency-blocked.
+- Gates: L0 PASS, L1 PASS, L2 PASS, L3 PASS; L4 is next, L5-L11 dependency-blocked.
 - L2: Descriptor/ISA v2, Gemmini OS/WS/Conv/bias/requant production path, AHA Gaussian wrapper, and KV/iDMA basic path are closed by `gate/L2-pass` (`abe2c70`).
 - L3 Shared-L2: 16 real ARM macros, 4 logical reads to 2R, 2 logical writes to 1W, descriptor promotion, byte enables and 100k+ contention tests PASS.
 - L3 control: command FIFO 16, completion FIFO 16 and real 4096x128 event SRAM pass 100k commands; error completion never releases a wait event.
@@ -9,9 +9,9 @@
 - L3 AHA/KV endpoints: channels 0/1 use exact 8x64-bit proc-packet writes/reads and post-final-packet EOS; channels 2/3 use external 512-bit KV staging requests. Mixed 100k PASS, strict `-Wall` clean.
 - L3 completion: 7-input round-robin merge (6 engines + watchdog) saturated 100k PASS with no starvation; Event ID 0 no longer writes real SRAM and original event 100k re-PASSed.
 - L3 canonical top exists and strict-lint passes. Real-SRAM command fabric passes 100,003 commands; composed stream complex passes 100k transfers/150k Matrix completions.
-- Current limitation: command/event/Shared-L2/engine endpoints are not yet composed in one production top; combined L3 100k remains.
+- L3 CLOSED: canonical-top concurrent gate passes 100,003 commands, 100,002 L2 transactions and 10,000 stream operations; six engines/all clients/all channels progress, zero errors.
 - Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
-- Next: create `hetero_l3_production_top` from `command_event_frontend_sram`, `shared_l2_client_arbiter`, pinned Gemmini gateway, four stream skids and AHA/KV endpoints; add fixed dispatch/completion/watchdog wiring and run combined 100k.
+- Next: begin L4 with pinned torchvision/weights audit, INT8 GEMM then 1x1/3x3 Conv numerical-to-RTL cases; production 4x4 AHA/Lake depthwise remains a mandatory later L4 dependency.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

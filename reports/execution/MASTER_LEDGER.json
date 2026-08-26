@@ -129,7 +129,7 @@
       "remaining_gates": []
     },
     "L3": {
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "depends_on": ["L2"],
       "readiness_evidence": [
         "reports/execution/L3_SHARED_L2_FABRIC_READINESS.md",
@@ -173,6 +173,10 @@
         ,"reports/execution/l3_production_top_readiness_result.json"
         ,"work/results/l3_command_fabric/verilator_100k.log"
         ,"work/results/l3_stream_complex/verilator_100k.log"
+        ,"reports/execution/L3_CLOSEOUT.md"
+        ,"reports/execution/l3_closeout_result.json"
+        ,"work/results/l3_combined/verilator_lint.log"
+        ,"work/results/l3_combined/verilator_100k.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
@@ -191,11 +195,9 @@
         ,"production AHA and KV stream endpoints pass 100000 mixed transfers across all four channels, including 800000 official 64-bit proc-packet operations, external KV staging byte enables, native EOS ordering and strict Verilator -Wall lint"
         ,"seven-input round-robin completion merge passes 100000 saturated grants without reorder or starvation; successful Event ID 0 no longer writes the real SRAM scoreboard and the original 100000-command macro gate still passes"
         ,"canonical production top is structurally complete and strict-lint clean; real-SRAM command fabric passes 100003 commands/completions and composed Matrix/AHA/KV stream complex passes 100000 transfers"
+        ,"final canonical-top concurrent gate passes 100003 commands, 100002 L2 transactions and 10000 stream operations with six engines, all clients/channels, watchdog, Event 0, 1099 descriptor promotions and zero errors"
       ],
-      "remaining_gates": [
-        "connect verified event scoreboard to production engine completion paths and integrated timeout assertions",
-        "100000 integrated command/event transactions"
-      ]
+      "remaining_gates": []
     },
     "L4": {"status": "PENDING", "depends_on": ["L3"]},
     "L5": {"status": "PENDING", "depends_on": ["L3"]},

@@ -1,18 +1,16 @@
 {
-  "phase": "L3_COMBINED_PRODUCTION_TOP",
-  "command": "Create rtl/integration/hetero_l3_production_top.sv. Replace the old flop command_event_scoreboard path with command_event_frontend_sram; route runnable commands through the existing command_dispatch engine map 0 control, 1 DMA, 2 Matrix, 3 SFU, 4 KV, 5 collective; connect descriptor/control, weight DMA, activation/KV DMA and fallback as logical Shared-L2 read clients 0..3 of shared_l2_client_arbiter, and DMA/engine fallback as write clients 0..1. Instantiate matrix_direct_streams, gemmini_spad_tensor_gateway, aha_tensor_stream_endpoint and kv_tensor_stream_endpoint. Merge engine completions into the depth-16 completion FIFO, update the real event SRAM before releasing waits, and add a simulation-enabled watchdog that emits status 6 then locks new commands until reset.",
-  "fixed_parameters": {
-    "logical_read_clients": ["descriptor_control", "weight_dma", "activation_kv_dma", "engine_fallback"],
-    "logical_write_clients": ["dma", "engine_fallback"],
-    "command_fifo_depth": 16,
-    "completion_fifo_depth": 16,
-    "descriptor_promotion_cycles": 8,
-    "matrix_to_aha_channel": 0,
-    "aha_to_matrix_channel": 1,
-    "matrix_to_kv_channel": 2,
-    "kv_to_matrix_channel": 3,
-    "watchdog_status": 6
-  },
-  "success_condition": "A combined deterministic regression accepts at least 100000 commands and mixed descriptor/DMA/stream operations with all four read clients, both write clients, six engine IDs and all four direct channels progressing; zero loss, duplication, reorder, starvation, assertion, macro error or timeout; event 0 and nonzero-status semantics hold; completion never precedes final source-side stream acceptance; reset epoch and watchdog lock behavior pass; strict Verilator -Wall is clean.",
-  "failure_policy": "Do not use engine_contract_adapter as final Matrix/SFU/KV evidence, bypass command_event_frontend_sram or the real event macro, statically reserve a physical L2 read port, add a third read port, drop endpoint sideband, hide a timeout, weaken the 100000-command threshold, or mark L3 PASS from standalone subgates."
+  "phase": "L4_CNN_INT8_GEMM_BASELINE",
+  "command": "Audit the pinned Python environment for torchvision==0.24.1 and the exact ResNet50/MobileNetV2 IMAGENET1K_V2 weight artifacts. Install only missing pinned dependencies into the project environment and record URL/SHA256/version. Then generate deterministic INT8 GEMM operator-golden cases and lower them through the closed L2 descriptor-v2 Matrix path into the L3 canonical top, preserving separate golden, RTL cycles, DMA bytes, utilization, bank-conflict and output-hash fields.",
+  "fixed_order": [
+    "INT8 GEMM",
+    "1x1 Conv",
+    "3x3 Conv",
+    "bias requant ReLU",
+    "pool residual",
+    "production 4x4 AHA Lake depthwise",
+    "depthwise pointwise",
+    "ResNet50 and MobileNetV2 representative blocks"
+  ],
+  "success_condition": "Pinned dependency and weight hashes are recorded; deterministic INT8 GEMM cases are elementwise bit-exact from operator golden through production descriptor RTL and canonical L3 top; reported RTL cycles/DMA bytes/utilization/conflicts come from counters rather than analysis estimates; all builds/tests remain CPU 8-25, max j4 and under the 10 GiB cap.",
+  "failure_policy": "Do not skip ahead to model blocks, use analytical numbers in RTL-measured fields, substitute the 4x16 Gaussian baseline for the required production 4x4 AHA/Lake, relax integer equality, change the frozen descriptor/quantization contract, or mark L4 PASS before every ordered subgate is complete."
 }

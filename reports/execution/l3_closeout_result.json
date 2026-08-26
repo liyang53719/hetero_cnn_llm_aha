@@ -1,0 +1,47 @@
+{
+  "stage": "L3",
+  "status": "PASS",
+  "depends_on": {"L2": "PASS"},
+  "canonical_top": "rtl/integration/hetero_l3_production_top.sv",
+  "combined": {
+    "commands": 100003,
+    "completions": 100003,
+    "engine_ids_covered": 6,
+    "l2_transactions": 100002,
+    "l2_reads": 51313,
+    "l2_writes": 48689,
+    "l2_responses": 51313,
+    "descriptor_promotions": 1099,
+    "bank_conflicts": 8524,
+    "read_stalls": 4084,
+    "write_stalls": 4440,
+    "stream_operations": 10000,
+    "matrix_gateway_completions": 15000,
+    "aha_round_trips": 5000,
+    "kv_operations": 5000,
+    "illegal_engine_status1": 1,
+    "watchdog_status6": 1,
+    "mismatches": 0,
+    "protocol_errors": 0,
+    "macro_errors": 0,
+    "assertions": 0,
+    "timeouts": 0
+  },
+  "real_macro_support": {
+    "event_sram_in_combined_gate": true,
+    "shared_l2_16_macro_separate_100k_gate": true,
+    "shared_l2_macro_errors": 0
+  },
+  "verilator_wall_clean": true,
+  "cpu_affinity": "8-25",
+  "build_parallelism": 4,
+  "memory_limit_gib": 10,
+  "evidence": [
+    "work/results/l3_combined/verilator_lint.log",
+    "work/results/l3_combined/verilator_100k.log",
+    "work/results/l3_macro_fabric/tb.log",
+    "work/results/l3_event_scoreboard_sram/tb.log",
+    "work/results/l3_spad_gateway/pinned_100k.log",
+    "work/results/l3_aha_kv_endpoints/tb_100k.log"
+  ]
+}

@@ -30,3 +30,14 @@ score matrix. Its M/L/O/attention hashes are `ab9a5d50...`, `7598efac...`,
 `5a05bb37...` and `0aaf1c76...`. A refactored 8-worker legacy q128 run
 reproduces all four accepted hashes exactly. This validates the recommended
 algorithm but does not authorize or prove the production RTL change.
+
+RTL interface audit confirms this is a real architectural extension. The
+accepted `fp32_online_softmax` exposes only `clear`, score/value input and
+current M/L/O output; it cannot load or merge an external summary. The minimal
+implementation is therefore a sibling `fp32_online_softmax_merge128` micro-op,
+not a modification of the legacy token-update module. It would consume two
+130-word FP32 summaries, reuse two existing exp2 paths plus scalar/vector
+add-multiply logic, and emit one merged summary. Serial-head execution needs
+1,040 bytes of live state; a 12-head parallel implementation needs 12,480
+bytes. The runtime controller would invoke it only after block boundaries for
+sequence lengths above 384, preserving the q128/q384 datapath and hashes.

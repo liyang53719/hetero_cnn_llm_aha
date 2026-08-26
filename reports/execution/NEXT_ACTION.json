@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "BLOCKED_DECISION: after user approval, implement hierarchical online-softmax block128 for sequence lengths above384 in the existing runtime M/L/O RTL. First run a Python operation-order candidate and require max error<=0.002; then add the summary-merge micro-op, verify43008 q1024 merges with no score storage, and rerun q128/q384 legacy hashes plus q1024 in one binary.",
+  "command": "BLOCKED_DECISION: after user approval, add sibling fp32_online_softmax_merge128 without modifying the accepted legacy token-update module. Select it only at128-token block boundaries for sequence lengths above384 in the same runtime controller; verify43008 q1024 merges, no score storage, <=0.002 error, and unchanged q128/q384 hashes.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

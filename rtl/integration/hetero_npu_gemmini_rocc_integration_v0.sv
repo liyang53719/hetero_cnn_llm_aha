@@ -32,6 +32,24 @@ module hetero_npu_gemmini_rocc_integration_v0 (
   input  logic [31:0]  scale_rsp_data_i,
   input  logic         scale_rsp_error_i,
 
+  input  logic [63:0]  kv_descriptor_base_i,
+  output logic         kv_descriptor_req_valid_o,
+  input  logic         kv_descriptor_req_ready_i,
+  output logic [23:0]  kv_descriptor_req_index_o,
+  output logic [63:0]  kv_descriptor_req_byte_addr_o,
+  input  logic         kv_descriptor_rsp_valid_i,
+  output logic         kv_descriptor_rsp_ready_o,
+  input  logic [127:0] kv_descriptor_rsp_data_i,
+  input  logic         kv_descriptor_rsp_error_i,
+  output logic         kv_idma_req_valid_o,
+  input  logic         kv_idma_req_ready_i,
+  output logic [63:0]  kv_idma_src_addr_o,
+  output logic [63:0]  kv_idma_dst_addr_o,
+  output logic [31:0]  kv_idma_length_o,
+  input  logic         kv_idma_rsp_valid_i,
+  output logic         kv_idma_rsp_ready_o,
+  input  logic         kv_idma_rsp_error_i,
+
   output logic         rocc_cmd_valid_o,
   input  logic         rocc_cmd_ready_i,
   output logic [6:0]   rocc_inst_funct_o,
@@ -125,9 +143,23 @@ module hetero_npu_gemmini_rocc_integration_v0 (
     .clk_i, .rst_ni, .cmd_valid_i(sfu_valid), .cmd_ready_o(sfu_ready), .cmd_data_i(sfu_data),
     .event_valid_o(engine_event_valid[3]), .event_ready_i(engine_event_ready[3]), .event_data_o(engine_event_data[3*56 +: 56])
   );
-  engine_contract_adapter #(.ENGINE_ID(4), .LATENCY(2)) u_kv (
-    .clk_i, .rst_ni, .cmd_valid_i(kv_valid), .cmd_ready_o(kv_ready), .cmd_data_i(kv_data),
-    .event_valid_o(engine_event_valid[4]), .event_ready_i(engine_event_ready[4]), .event_data_o(engine_event_data[4*56 +: 56])
+  kv_descriptor_v2_idma_adapter u_kv (
+    .clk_i,.rst_ni,.cmd_valid_i(kv_valid),.cmd_ready_o(kv_ready),.cmd_data_i(kv_data),
+    .descriptor_base_i(kv_descriptor_base_i),
+    .descriptor_req_valid_o(kv_descriptor_req_valid_o),
+    .descriptor_req_ready_i(kv_descriptor_req_ready_i),
+    .descriptor_req_index_o(kv_descriptor_req_index_o),
+    .descriptor_req_byte_addr_o(kv_descriptor_req_byte_addr_o),
+    .descriptor_rsp_valid_i(kv_descriptor_rsp_valid_i),
+    .descriptor_rsp_ready_o(kv_descriptor_rsp_ready_o),
+    .descriptor_rsp_data_i(kv_descriptor_rsp_data_i),
+    .descriptor_rsp_error_i(kv_descriptor_rsp_error_i),
+    .idma_req_valid_o(kv_idma_req_valid_o),.idma_req_ready_i(kv_idma_req_ready_i),
+    .idma_src_addr_o(kv_idma_src_addr_o),.idma_dst_addr_o(kv_idma_dst_addr_o),
+    .idma_length_o(kv_idma_length_o),.idma_rsp_valid_i(kv_idma_rsp_valid_i),
+    .idma_rsp_ready_o(kv_idma_rsp_ready_o),.idma_rsp_error_i(kv_idma_rsp_error_i),
+    .event_valid_o(engine_event_valid[4]),.event_ready_i(engine_event_ready[4]),
+    .event_data_o(engine_event_data[4*56 +: 56])
   );
   engine_contract_adapter #(.ENGINE_ID(5), .LATENCY(1)) u_collective (
     .clk_i, .rst_ni, .cmd_valid_i(collective_valid), .cmd_ready_o(collective_ready), .cmd_data_i(collective_data),

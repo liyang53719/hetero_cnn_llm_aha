@@ -2,7 +2,7 @@
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "L2_kv_idma_basic_adapter",
+  "current_phase": "L3_production_fabric_event_integration",
   "stages": {
     "L0": {
       "status": "PASS",
@@ -28,7 +28,7 @@
       "remaining_gates": []
     },
     "L2": {
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "depends_on": ["L1"],
       "evidence": [
         "reports/execution/L2_GAP_AUDIT.md",
@@ -88,6 +88,11 @@
         ,"work/results/l2_descriptor_v2_pipeline/integrated_rtl_model.json"
         ,"reports/execution/L2_GEMMINI_V2_COVERAGE_CLOSEOUT.md"
         ,"work/results/l2_gemmini_v2_coverage/result.json"
+        ,"reports/execution/L2_KV_IDMA_BASIC.md"
+        ,"reports/execution/L2_CLOSEOUT.md"
+        ,"reports/execution/l2_closeout_result.json"
+        ,"work/results/l2_kv_idma_basic/vcs/result.json"
+        ,"work/results/l2_closeout/result.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -118,15 +123,13 @@
         ,"Descriptor-v2 semantic decode: root placement, required fields, singleton/reserved bits, replay first/last/root integrity and dual quant records produce resolved legal/error contexts; Verilator -Wall clean"
         ,"Production descriptor-v2 multi-op pipeline: 65 OS/WS/Conv operations match generated retained-Rocket oracles, three invalid/fetch cases issue zero legal CUSTOM_3, shell LOOP_WS busy/event path PASS"
         ,"Matrix L2 production closeout: 85 legal OS/biased and no-bias WS/1x1 and 3x3 Conv commands, four zero-issue rejects, retained-Rocket CPU-golden PASS, upstream clean, ReLU6 routes to SFU"
+        ,"Basic KV/iDMA production path: typed alloc/append/gather/free, BF16 staging, four real upstream iDMA requests and five events pass VCS with exact bytes"
+        ,"Consolidated L2 closeout: all 16 Matrix/AHA/KV-iDMA/open-RTL/upstream-clean checks and 62 Python tests PASS with zero upstream patches"
       ],
-      "remaining_gates": [
-        "Implement production KV append/read/free descriptor adapter with BF16 staging",
-        "Connect basic KV transfers to pinned iDMA/AXI and prove address/write/event traces under backpressure",
-        "Run consolidated Matrix+AHA+KV/iDMA L2 audit with all upstream worktrees clean"
-      ]
+      "remaining_gates": []
     },
     "L3": {
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "depends_on": ["L2"],
       "readiness_evidence": [
         "reports/execution/L3_SHARED_L2_FABRIC_READINESS.md",

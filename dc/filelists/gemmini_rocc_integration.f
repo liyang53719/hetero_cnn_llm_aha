@@ -8,4 +8,6 @@ rtl/integration/matrix_descriptor_v2_decode.sv
 rtl/integration/gemmini_descriptor_v2_emitter.sv
 rtl/integration/gemmini_rocc_program_adapter.sv
 rtl/integration/gemmini_descriptor_v2_pipeline.sv
+rtl/kv/kv_idma_basic_core.sv
+rtl/kv/kv_descriptor_v2_idma_adapter.sv
 rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv

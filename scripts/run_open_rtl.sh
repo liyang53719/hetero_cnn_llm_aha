@@ -18,6 +18,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
     "$ROOT/rtl/sfu/cgra_sfu_vector.sv" |& tee "$OUT/sfu_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/kv/kv_cache_engine.sv" |& tee "$OUT/kv_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall \
+    "$ROOT/rtl/kv/kv_idma_basic_core.sv" "$ROOT/rtl/kv/kv_descriptor_v2_idma_adapter.sv" \
+    --top-module kv_descriptor_v2_idma_adapter |& tee "$OUT/kv_idma_basic_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/common/rv_fifo.sv" \
     "$ROOT/rtl/top/command_dispatch.sv" \
@@ -73,6 +76,7 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
     "$ROOT/rtl/integration/engine_contract_adapter.sv" "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" \
     "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" \
     "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" "$ROOT/rtl/integration/gemmini_descriptor_v2_pipeline.sv" \
+    "$ROOT/rtl/kv/kv_idma_basic_core.sv" "$ROOT/rtl/kv/kv_descriptor_v2_idma_adapter.sv" \
     "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
     --top-module hetero_npu_gemmini_rocc_integration_v0 |& tee "$OUT/gemmini_rocc_integration_lint.log"
 else
@@ -113,6 +117,10 @@ if command -v iverilog >/dev/null 2>&1; then
   iverilog -g2012 -s tb_kv_cache_engine -o "$OUT/tb_kv" \
     "$ROOT/rtl/kv/kv_cache_engine.sv" "$ROOT/tb/tb_kv_cache_engine.sv"
   vvp "$OUT/tb_kv" | tee "$OUT/tb_kv.log"
+  iverilog -g2012 -s tb_kv_descriptor_v2_idma_adapter -o "$OUT/tb_kv_idma_basic" \
+    "$ROOT/rtl/kv/kv_idma_basic_core.sv" "$ROOT/rtl/kv/kv_descriptor_v2_idma_adapter.sv" \
+    "$ROOT/tb/tb_kv_descriptor_v2_idma_adapter.sv"
+  vvp "$OUT/tb_kv_idma_basic" | tee "$OUT/tb_kv_idma_basic.log"
   iverilog -g2012 -s tb_hetero_npu_numerical_integration_v0 -o "$OUT/tb_numerical_integration" \
     "$ROOT/rtl/integration/hetero_npu_numerical_integration_v0.sv" \
     "$ROOT/rtl/matrix/matrix_engine_int8_tile.sv" \
@@ -166,7 +174,8 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/integration/command_event_scoreboard.sv" "$ROOT/rtl/integration/engine_contract_adapter.sv" \
     "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" \
     "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
-    "$ROOT/rtl/integration/gemmini_descriptor_v2_pipeline.sv" "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
+    "$ROOT/rtl/integration/gemmini_descriptor_v2_pipeline.sv" "$ROOT/rtl/kv/kv_idma_basic_core.sv" \
+    "$ROOT/rtl/kv/kv_descriptor_v2_idma_adapter.sv" "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
     "$ROOT/tb/tb_hetero_npu_gemmini_rocc_integration_v0.sv"
   vvp "$OUT/tb_gemmini_rocc_integration" | tee "$OUT/tb_gemmini_rocc_integration.log"
 else

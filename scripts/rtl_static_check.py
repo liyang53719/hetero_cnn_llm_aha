@@ -93,6 +93,8 @@ def main() -> int:
         "matrix_descriptor_v2_decode",
         "gemmini_descriptor_v2_emitter",
         "gemmini_descriptor_v2_pipeline",
+        "kv_idma_basic_core",
+        "kv_descriptor_v2_idma_adapter",
         "aha_garnet_axi_config_loader",
         "aha_garnet_proc_packet_writer",
         "aha_garnet_microsequencer",

@@ -211,6 +211,8 @@ def run_rocc_wrapper_case() -> dict[str, object]:
         ROOT / "rtl/integration/gemmini_descriptor_v2_emitter.sv",
         ROOT / "rtl/integration/gemmini_rocc_program_adapter.sv",
         ROOT / "rtl/integration/gemmini_descriptor_v2_pipeline.sv",
+        ROOT / "rtl/kv/kv_idma_basic_core.sv",
+        ROOT / "rtl/kv/kv_descriptor_v2_idma_adapter.sv",
         ROOT / "rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv",
         ROOT / "tb/tb_hetero_npu_gemmini_rocc_integration_v0.sv",
     ]

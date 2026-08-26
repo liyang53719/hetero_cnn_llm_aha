@@ -1,0 +1,25 @@
+{
+  "canonical_stage": "L2",
+  "status": "PASS",
+  "scope": "Matrix+AHA+KV/iDMA wrapper-only macro integration",
+  "cpu_affinity": "taskset -c 8-25",
+  "upstream_patches": 0,
+  "checks": {
+    "python_62_pass": true,
+    "open_rtl": true,
+    "matrix_pipeline": true,
+    "matrix_shell_busy_event": true,
+    "matrix_retained_coverage": true,
+    "matrix_macro_boundary": true,
+    "aha_input_readback": true,
+    "aha_numerical": true,
+    "kv_open_rtl": true,
+    "kv_idma_vcs": true,
+    "kv_bf16_byte_exact": true,
+    "production_matrix": true,
+    "production_kv": true,
+    "chipyard_clean": true,
+    "aha_clean": true,
+    "idma_clean": true
+  }
+}

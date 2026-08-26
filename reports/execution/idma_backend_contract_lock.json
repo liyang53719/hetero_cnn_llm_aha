@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "idma_commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+  "pulp_axi_commit": "4da15979747f326bde2f9869c64e587ce599772c",
+  "common_cells_commit": "db42769334b4589b4b3fc671b34513bdb98be565",
+  "module": "idma_backend_rw_axi",
+  "module_sha256": "6913ac4c8ff41e96091a22d07c8c13d15b0fb3fc14c18f36cbb9aac065951fdc",
+  "typedef_sha256": "732786fd6d1fd76ca257ec36488dbf57b9179377abd3a3296fb9d118b77ad5b3",
+  "production_parameters": {
+    "DataWidth": 512,
+    "AddrWidth": 64,
+    "TFLenWidth": 32,
+    "AxiIdWidth": 4,
+    "UserWidth": 1,
+    "NumAxInFlight": 4,
+    "BufferDepth": 3,
+    "HardwareLegalizer": true,
+    "RejectZeroTransfers": true,
+    "EnableCompute": false
+  },
+  "flat_frontend": ["src_addr[63:0]", "dst_addr[63:0]", "length[31:0]", "valid/ready", "response valid/ready/error"],
+  "fixed_options": ["src_protocol=AXI", "dst_protocol=AXI", "burst=INCR", "last=1", "compute.enable=0"]
+}

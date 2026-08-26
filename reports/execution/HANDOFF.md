@@ -9,6 +9,8 @@
 - production v2 pipeline PASS: 65 exact OS/WS/Conv ops, 3 zero-issue rejects, shell LOOP_WS 11 CUSTOM_3 + busy/event in 99 cycles; integrated RTL/model PASS.
 - Pinned Gemmini activation 2 is LayerNorm, so architectural ReLU6 is rejected by Matrix and must route to SFU; never encode it as Gemmini activation 2.
 - Matrix L2 portion CLOSED: production emits 85 exact OS/WS/1x1/3x3 Conv ops; no-bias WS and 1x1 retained-Rocket CPU-golden PASS; ReLU6 routes Matrix→SFU; upstream clean.
+- Basic KV/iDMA PASS: typed alloc/append/gather/free, BF16 byte-exact staging, 4 real upstream iDMA transfers, 5 events, VCS W-2024.09, upstream clean.
+- Canonical L2 PASS: consolidated 16-check audit, 62 Python tests, open-RTL, Matrix/AHA/KV-iDMA production paths and zero upstream patches.
 - CPU rule: all build/test/DC use `taskset -c 8-25`; Docker uses `--cpuset-cpus=8-23`.
 - Resource rule: `MemAvailable > 10 GiB`, at most `-j4`, user/Docker memory cap required.
 - L0 PASS; L1 upstream PASS.
@@ -37,5 +39,5 @@
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: implement basic production KV descriptor adapter for append/read/free + BF16 staging, then connect pinned iDMA/AXI traces before canonical L2 audit.
+- Next action: L3 production 4-logical-read→2R and 2-logical-write→1W arbiter, depth-16 completion FIFO, real-SRAM scoreboard integration and 100k command/event regression.
 - Do not close a stage with clean-room-only evidence.

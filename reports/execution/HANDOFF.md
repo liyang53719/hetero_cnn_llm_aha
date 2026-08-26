@@ -3,6 +3,7 @@
 - Canonical plan: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md`; current stage L2.
 - Approved decision-complete continuation plan is frozen in `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
 - Descriptor/ISA v2 contract PASS: 128-bit command unchanged; NULL roots/root roles, matrix_aux/DMA policy/event-list, vectors and migrated segment reports; 57 Python tests.
+- Descriptor-v2 production oracle PASS: OS 36, LOOP_WS 11, Conv identity 9 and Conv requant+ReLU 9 ops match saved retained-Rocket funct/rs1/rs2 exactly; full suite 59 PASS.
 - CPU rule: all build/test/DC use `taskset -c 8-25`; Docker uses `--cpuset-cpus=8-23`.
 - Resource rule: `MemAvailable > 10 GiB`, at most `-j4`, user/Docker memory cap required.
 - L0 PASS; L1 upstream PASS.

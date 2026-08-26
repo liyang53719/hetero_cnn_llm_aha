@@ -78,6 +78,8 @@
         "work/results/l2_descriptor_sequencer/integrated_rtl_model_regression.json"
         ,"reports/execution/DESCRIPTOR_ISA_V2_CONTRACT.md"
         ,"reports/execution/descriptor_v2_contract_result.json"
+        ,"reports/execution/L2_DESCRIPTOR_V2_PROGRAM_VECTORS.md"
+        ,"tests/vectors/gemmini_descriptor_v2_programs.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -103,6 +105,7 @@
         "Descriptor-chain legality golden: 128-bit record parsing and pre-lowering rejection of null-required, missing, cyclic, over-16-record, and out-of-range chains",
         "Approved production Shared-L2 descriptor path: three chains are fetched and rejected pre-issue on null/error/cycle/nontermination; single-tile INT8 OS GEMM emits nine official CUSTOM_3 commands and completes on busy clear"
         ,"Descriptor/ISA v2 contract: NULL roots, opcode root roles, matrix_aux/DMA policy/event-list records, committed vectors and 57 Python tests PASS"
+        ,"Descriptor-v2 multi-op oracle: generated OS 36, LOOP_WS 11 and two Conv 9-command programs match all saved retained-Rocket funct/rs1/rs2 commits; 59 Python tests PASS"
       ],
       "remaining_gates": [
         "Extend the production typed-descriptor sequencer through multi-tile OS/WS, convolution, bias and requant, preserving the already-passed retained-Rocket equivalence transcripts",

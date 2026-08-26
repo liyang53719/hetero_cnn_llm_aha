@@ -1,6 +1,6 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Build the restartable target RMSNorm/QKV payload segment using the pinned hidden1536/12Q/2KV/D128 contract. Use two deterministic tokens: run both through the proven global RMSNorm1536; project current Q with a 1536x1536 BF16 matrix; project previous/current K and V with 1536x256 BF16 matrices on the unchanged physical 16x32 array; then apply the proven FP32 QKV bias/GQA endpoint. Freeze input, norm-weight, matrix-weight, bias, normalized-token, biased-Q/K/V and six-way expanded K/V hashes. The expected physical array count is 122880 steps, but report it as measured only after the RTL counter equals it. Split generator, build and simulation artifacts into one receipt so later RoPE consumes exact Q/K/V output hashes.",
+  "command": "Consume exactly the biased-Q/K/V hashes from reports/execution/l5_target_qkv_segment_result.json. Implement target Qwen split-half RoPE for head_dim128: pair lane i with lane i+64 inside each head, use theta=1e6 and positions 0/1, and process 12 Q heads plus two KV heads per token through the proven FP32 pair primitive. Do not use adjacent even/odd pairing. Add a separate post-RoPE 16-lane K GQA multicast endpoint; do not feed the diagnostic unrotated k_gqa into attention. V may use the existing bias/GQA result. Freeze Q-RoPE, K-RoPE and rotated-K-GQA hashes and verify all query-head/KV-head/chunk/last/tag sidebands under backpressure.",
   "fixed_order": [
     "global target RMSNorm1536",
     "restartable target RMSNorm and Q/K/V segment",

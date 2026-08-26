@@ -1,0 +1,18 @@
+{
+  "stage": "L5",
+  "subgate": "global RMSNorm1536",
+  "attempt": 3,
+  "timestamp": "2026-08-26T15:04:50+08:00",
+  "status": "BLOCKED_RESOURCE",
+  "mem_available_kib": 8434712,
+  "required_strictly_greater_than_kib": 10485760,
+  "disk_available_kib": 412113048,
+  "heavy_task_started": false,
+  "project_processes_running": 0,
+  "oom_observed": false,
+  "same_blocker_consecutive_goal_turns": 3,
+  "external_memory_owner": "unrelated MATLAB processes",
+  "resume_condition": "MemAvailable must be strictly greater than 10485760 KiB.",
+  "resume_command": "taskset -c 8-25 scripts/run_l5_rmsnorm1536.sh",
+  "action": "No polling, no threshold reduction, and no unrelated-process termination."
+}

@@ -1,6 +1,6 @@
 {
-  "phase": "L5_BF16_MATRIX_ARRAY_BASELINE",
-  "command": "Proceed on the L5 branch that depends only on L3. Audit existing HardFloat/Gemmini sources and implement the fixed independent 16x32 BF16-input/FP32-accumulator Matrix subarray with 512 BF16 MAC/cycle target. Freeze a simple ready/valid tile interface shared with the production command/DMA/scratchpad boundary, add BF16 special-value and FP32 accumulation golden tests, and report actual RTL cycles and output hash. Do not alter the INT8 PE, claim runtime-variable PE type, or use the blocked L4 4x4 AHA topology as an L5 dependency.",
+  "phase": "L5_BF16_16X32_ARRAY",
+  "command": "Build a logical 16x32 outer-product tile by instantiating 512 copies of the pinned HeteroBF16FmaLane behind one ready/valid step interface: 16 BF16 A values, 32 BF16 B values and 512 FP32 accumulators in, 512 FP32 accumulators out. Register inputs/outputs so stalled payload is stable. First elaborate/lint a 2x2 parameter smoke, then 16x32 under the 10 GiB cap; run multi-step K accumulation against a fused FP32 golden and report actual one-step throughput, output hash and exception aggregation. Do not share or modify INT8 PE logic.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

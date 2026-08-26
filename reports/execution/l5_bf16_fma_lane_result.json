@@ -1,0 +1,16 @@
+{
+  "stage": "L5",
+  "subgate": "BF16 FP32 FMA lane",
+  "status": "PASS",
+  "hardfloat_commit": "0ecaef097ce2accbd16a61613699450ed5533f29",
+  "generated_rtl_sha256": "69a8164bd1d6f29ce8770060b2c6a194b6b8a4a02d9322f91841ae76ef2ce6aa",
+  "vectors": 10000,
+  "vector_sha256": "4210d4cfd2d59b6be4611691a567d9d83370648708d7d986ceb063a41844376e",
+  "oracle": "libm.so.6 fmaf with exact BF16-to-FP32 expansion",
+  "output_fnv1a64": "ab56c8ee63a63aeb",
+  "invalid_special_case_flags": "0x10",
+  "mismatches": 0,
+  "upstream_clean": true,
+  "memory_limit_gib": 10,
+  "cpu_affinity": "8-25"
+}

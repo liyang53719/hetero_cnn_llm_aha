@@ -1,0 +1,15 @@
+{
+  "stage": "L5",
+  "subgate": "q128 SiLU and product",
+  "attempt": 1,
+  "timestamp": "2026-08-26T19:59:06+08:00",
+  "status": "BLOCKED_RESOURCE",
+  "mem_available_kib": 9548104,
+  "required_strictly_greater_than_kib": 10485760,
+  "golden_generated": true,
+  "golden_product_sha256": "661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc",
+  "lint_started": false,
+  "oom_observed": false,
+  "external_memory_owner": "unrelated MATLAB processes",
+  "action": "No polling, no threshold reduction, and no unrelated-process termination."
+}

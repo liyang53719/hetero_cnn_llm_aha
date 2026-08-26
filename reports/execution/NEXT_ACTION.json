@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Consume concatenated q128 gate/up hashes 6a2d13e4f49bd9705a6aa004c531333080503f62bd0f2c195a505b154a7b987d and 4852e5bcb1af0d90bcf743341dcd16495d7505f93458fb1b1e0d701b08b6e28b. Run all1146880 gate scalars through the proven FP32 SiLU, retain the0.002 error limit, then execute71680 16-lane gate-times-up chunks. Compare every output, freeze concatenated SiLU/product hashes, and report SiLU/product/total cycles. No down weights or outputs may be generated before this receipt passes.",
+  "command": "q128 SiLU/product RTL, generator and TB are prepared; the exact golden already passes with product hash 661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc and max SiLU error5.32029292e-5. Read MemAvailable once. If strictly greater than10485760 KiB, run exactly `taskset -c 8-25 scripts/run_l5_q128_silu_product.sh`; otherwise record another BLOCKED_RESOURCE attempt without polling or killing unrelated MATLAB. On PASS require1146880 SiLU lanes,71680 product chunks, exact outputs and separately measured cycle counters before starting down.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Reuse the proven q128 gate/up C++ golden and unchanged RTL binary for batches1-7. For each batch, consume its exact norm2 receipt, generate16x8960 gate/up outputs with four k-ordered fmaf threads, then run gate and up phases sequentially under the10GiB cap. Each phase must report430080 steps. Preserve independent batch manifests/logs and aggregate all eight batches to6881280 measured gate/up steps; freeze concatenated gate/up hashes before SiLU/product.",
+  "command": "Consume concatenated q128 gate/up hashes 6a2d13e4f49bd9705a6aa004c531333080503f62bd0f2c195a505b154a7b987d and 4852e5bcb1af0d90bcf743341dcd16495d7505f93458fb1b1e0d701b08b6e28b. Run all1146880 gate scalars through the proven FP32 SiLU, retain the0.002 error limit, then execute71680 16-lane gate-times-up chunks. Compare every output, freeze concatenated SiLU/product hashes, and report SiLU/product/total cycles. No down weights or outputs may be generated before this receipt passes.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

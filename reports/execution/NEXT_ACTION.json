@@ -1,6 +1,6 @@
 {
-  "phase": "L5_SFU_RMSNORM_SILU",
-  "command": "Implement a fixed 16-lane FP32 RMSNorm tile using the closed square/multiply, balanced reduction, rsqrt and per-lane weight multiply primitives, with epsilon supplied as FP32 config. Separately implement SiLU as x/(1+exp(-x)) using the closed exp2 and reciprocal primitives with log2(e) conversion. Freeze vector width, operation order and max error thresholds, validate 10000 vectors including small variance, large magnitude and negative saturation, and preserve ready/valid backpressure. Then begin the toy BF16 block integration.",
+  "phase": "L5_TOY_BF16_BLOCK_INTEGRATION",
+  "command": "Integrate a toy one-token, hidden16, four-head BF16 block using the closed 16x32 Matrix array and heterogeneous SFU primitives. Execute and save node traces in fixed order RMSNorm, Q/K/V projection, RoPE, online attention M/L/O without score matrix, O projection, residual, RMSNorm, gate/up, SiLU, down and final residual. Use deterministic BF16 weights/inputs and compare every node to the Python operation-order golden; report separate Matrix/SFU cycles and output hashes. Do not skip directly to hidden256 until every toy node passes.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

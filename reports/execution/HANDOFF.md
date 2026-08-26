@@ -26,7 +26,8 @@
 - L5 exp2 CLOSED: 10k RTL vectors, interval1, FNV64 `471eda...`; dense max abs/rel remain `2.29601e-4/2.35418e-4`.
 - L5 reciprocal CLOSED: 16-segment+1 Newton, 10k exact model vectors, max relative `9.194e-7`, interval1.
 - L5 rsqrt CLOSED: 32 segments+1 Newton, 10k exact model vectors, max relative `2.393e-7`, interval1.
-- L5 online softmax CLOSED: 10k M/L/O updates, 4.975 cycles/token, no score matrix, max normalized error `1.751e-4`. Next: RMSNorm and SiLU.
+- L5 online softmax CLOSED: 10k M/L/O updates, 4.975 cycles/token, no score matrix, max normalized error `1.751e-4`.
+- L5 RMSNorm/SiLU CLOSED: RMSNorm max abs `6.77e-7`, SiLU `1.685e-4`, 10k each. Heterogeneous SFU primitives complete; next toy BF16 block.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

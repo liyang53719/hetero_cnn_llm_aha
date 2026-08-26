@@ -1,0 +1,9 @@
+{
+  "stage": "L5",
+  "subgate": "RMSNorm and SiLU",
+  "status": "PASS",
+  "rmsnorm": {"lanes":16,"vectors":10000,"cycles":50001,"max_absolute_error":6.765536384456539e-07,"threshold":2e-05,"output_fnv1a64":"4bc51b06e7de8d31"},
+  "silu": {"range":[-16,16],"vectors":10000,"cycles":83334,"max_absolute_error":0.00016853994245623775,"threshold":0.002,"output_fnv1a64":"327f224f2976b9e0"},
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

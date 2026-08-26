@@ -275,7 +275,11 @@
         "work/results/l5_rsqrt/tb.log",
         "reports/execution/L5_ONLINE_SOFTMAX.md",
         "reports/execution/l5_online_softmax_result.json",
-        "work/results/l5_online_softmax/tb.log"
+        "work/results/l5_online_softmax/tb.log",
+        "reports/execution/L5_RMSNORM_SILU.md",
+        "reports/execution/l5_rmsnorm_silu_result.json",
+        "work/results/l5_rmsnorm/tb.log",
+        "work/results/l5_silu/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -287,9 +291,9 @@
         ,"FP32 reciprocal complete: 16-segment estimate plus one Newton iteration passes 10000 vectors below frozen 2e-6 relative error"
         ,"FP32 rsqrt complete: two mantissa banks plus one Newton iteration pass 10000 vectors below frozen 2e-6 relative error"
         ,"online softmax M/L/O complete: 100x100-token sequences pass without score-matrix materialization below frozen 0.002 normalized-output error"
+        ,"16-lane RMSNorm and stable SiLU pass 10000 vectors each below frozen error limits"
       ],
       "remaining_gates": [
-        "heterogeneous FP32 SFU tile",
         "toy hidden256 target q128 q384 decode128/1024/4096 block numerics"
       ]
     },

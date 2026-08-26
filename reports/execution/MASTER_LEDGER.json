@@ -342,6 +342,9 @@
         ,"work/results/l5_target_trace_controller/tb.log"
         ,"reports/execution/L5_TARGET_SHAPE_CLOSEOUT.md"
         ,"reports/execution/l5_target_shape_result.json"
+        ,"config/qwen_q128_prefill_contract.json"
+        ,"reports/execution/L5_Q128_PREFILL_CONTRACT.md"
+        ,"reports/execution/l5_q128_prefill_contract_result.json"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -375,6 +378,7 @@
         ,"target segmented payload hash chain sums to 1486848 measured array steps; integrated controller trace remains pending"
         ,"target 23-command trace controller reproduces 1486848 Matrix steps and 6036046 active cycles with zero score-matrix commands"
         ,"Qwen target-shape subgate closes with segmented numerical payload plus separate cycle-accurate controller trace"
+        ,"q128 prefill shape, 8-row-batch Matrix counts and 99072 causal head-token updates are frozen without cycle claims"
       ],
       "remaining_gates": [
         "q128 q384 prefill and decode128/1024/4096 block numerics"

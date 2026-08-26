@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Freeze a q128 prefill receipt before launching payload. Use batch1/sequence128, hidden1536, 12Q/2KV heads, D128, causal token order and the same deterministic target weights. The physical 16x32 array processes eight 16-row batches: Q=589824, K=98304, V=98304, O=589824, gate=3440640, up=3440640 and down=3440640 steps, total 11698176. Stream attention without score storage: 99072 causal head-token dot/online updates, 1536 reciprocals and 12288 O/L chunks. Create a machine-readable operation/step manifest and a synthesizable q128 trace controller first; then run restartable numerical payload phases that consume frozen hashes. Never multiply single-token cycles analytically into RTL-measured fields.",
+  "command": "Implement a synthesizable q128 operation-count controller from config/qwen_q128_prefill_contract.json. It must emit the exact ordered q128 work commands and count 11698176 Matrix steps, 99072 causal dot128 operations, 99072 online updates, 1536 reciprocals, 12288 O/L chunks, 114688 RoPE pairs, 1146880 SiLU scalars and 71680 product chunks, with zero score-matrix commands. Use ready/done handshakes but do not assign latency or measured-cycle fields yet. After this count gate passes, start q128 numerical payload in restartable 16-token row batches and use their measured latencies to upgrade the controller trace.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

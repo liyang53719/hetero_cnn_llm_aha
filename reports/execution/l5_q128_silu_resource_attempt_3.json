@@ -1,0 +1,18 @@
+{
+  "stage": "L5",
+  "subgate": "q128 SiLU and product",
+  "attempt": 3,
+  "timestamp": "2026-08-26T20:01:49+08:00",
+  "status": "BLOCKED_RESOURCE",
+  "mem_available_kib": 9723808,
+  "required_strictly_greater_than_kib": 10485760,
+  "golden_generated": true,
+  "golden_product_sha256": "661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc",
+  "lint_started": false,
+  "project_processes_running": 0,
+  "oom_observed": false,
+  "same_blocker_consecutive_goal_turns": 3,
+  "resume_condition": "MemAvailable must be strictly greater than 10485760 KiB.",
+  "resume_command": "taskset -c 8-25 scripts/run_l5_q128_silu_product.sh",
+  "action": "Goal blocked; no polling, threshold reduction, or unrelated-process termination."
+}

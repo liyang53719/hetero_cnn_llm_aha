@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.."&&pwd);CHIP=$ROOT/work/upstream/chipyard_gemmini;OUT=$ROOT/work/generated/l5_all_primitives;mkdir -p "$OUT";R=$ROOT/scripts/run_memory_capped.sh
+S0=$ROOT/integration/gemmini/EmitHeteroBF16Fma.scala;S1=$ROOT/integration/gemmini/EmitHeteroFP32Alu.scala;S2=$ROOT/integration/gemmini/EmitHeteroFP32Scale16Floor.scala;S3=$ROOT/integration/gemmini/EmitHeteroFP32Primitives.scala;S4=$ROOT/integration/gemmini/EmitHeteroAllPrimitives.scala
+test -z "$(git -C "$CHIP" status --porcelain)"||exit 3;CMD=";project chipyard;set Global / concurrentRestrictions := Seq(Tags.limitAll(4));set Compile / unmanagedSources ++= Seq(file(\"$S0\"),file(\"$S1\"),file(\"$S2\"),file(\"$S3\"),file(\"$S4\"));runMain gemmini.EmitHeteroAllPrimitives $OUT/HeteroAllPrimitives.sv"
+pushd "$CHIP">/dev/null;MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$R" "$ROOT/work/toolchain/conda/bin/java" -Xmx8G -jar "$CHIP/scripts/sbt-launch.jar" -Dsbt.ivy.home="$CHIP/.ivy2" -Dsbt.global.base="$CHIP/.sbt" -Dsbt.boot.directory="$CHIP/.sbt/boot" -Dsbt.color=never -Dsbt.supershell=false "$CMD" >"$OUT/generate.log" 2>&1;popd>/dev/null
+test -s "$OUT/HeteroAllPrimitives.sv";sha256sum "$OUT/HeteroAllPrimitives.sv">"$OUT/HeteroAllPrimitives.sv.sha256";git -C "$CHIP" status --porcelain>"$OUT/upstream.status";test ! -s "$OUT/upstream.status";echo L5_ALL_HARDFLOAT_PRIMITIVES_GENERATE_PASS

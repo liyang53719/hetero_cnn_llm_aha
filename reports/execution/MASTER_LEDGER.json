@@ -332,6 +332,11 @@
         ,"reports/execution/L5_TARGET_SILU_PRODUCT.md"
         ,"reports/execution/l5_target_silu_product_result.json"
         ,"work/results/l5_target_silu_product/tb.log"
+        ,"reports/execution/L5_TARGET_DOWN.md"
+        ,"reports/execution/l5_target_down_result.json"
+        ,"work/results/l5_target_down/tb.log"
+        ,"reports/execution/L5_TARGET_SHAPE_PAYLOAD.md"
+        ,"reports/execution/l5_target_shape_payload_result.json"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -361,6 +366,8 @@
         ,"target post-attention global RMSNorm1536 passes all lanes and freezes the norm2 MLP input hash"
         ,"target 1536x8960 gate and up projections pass all outputs with 430080 measured array steps each"
         ,"target 8960-lane SiLU and 560-chunk gate-times-up pass all outputs within frozen error limits"
+        ,"target 8960x1536 down plus final residual pass all outputs with 430080 measured array steps"
+        ,"target segmented payload hash chain sums to 1486848 measured array steps; integrated controller trace remains pending"
       ],
       "remaining_gates": [
         "pinned Qwen target-shape block numerics",

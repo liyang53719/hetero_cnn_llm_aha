@@ -1,0 +1,26 @@
+{
+  "stage": "L5",
+  "subgate": "target-shape segmented payload",
+  "status": "PASS",
+  "evidence_class": "segmented_rtl_payload_measured",
+  "integrated_controller_trace_status": "PENDING",
+  "tokens": 2,
+  "hidden": 1536,
+  "intermediate": 8960,
+  "array_steps": 1486848,
+  "matrix_cycles": 5947392,
+  "non_matrix_cycles": 88654,
+  "segmented_total_cycles": 6036046,
+  "score_matrix_materialized": false,
+  "final_sha256": "872ffcab7daf957e1e4caf3db5c8e063e95bfe760ec5060fcb4264f6c66deffe",
+  "receipts": [
+    "qkv_segment",
+    "rope_gqa",
+    "mlo",
+    "oproj",
+    "norm2",
+    "gate_up",
+    "silu_product",
+    "down"
+  ]
+}

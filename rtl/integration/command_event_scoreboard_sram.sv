@@ -5,7 +5,10 @@ module command_event_scoreboard_sram (
   input logic clk_i,input logic rst_ni,
   input logic host_cmd_valid_i,output logic host_cmd_ready_o,input logic[127:0] host_cmd_data_i,
   output logic runnable_cmd_valid_o,input logic runnable_cmd_ready_i,output logic[127:0] runnable_cmd_data_o,
-  input logic completion_valid_i,output logic completion_ready_o,input logic[55:0] completion_data_i,
+  input logic completion_valid_i,output logic completion_ready_o,
+  /* verilator lint_off UNUSEDSIGNAL */
+  input logic[55:0] completion_data_i,
+  /* verilator lint_on UNUSEDSIGNAL */
   output logic init_done_o,output logic[31:0] macro_error_count_o
 );
   typedef enum logic[3:0] {S_INIT_REQ,S_INIT_WAIT,S_IDLE,S_READ_REQ,S_READ_WAIT,

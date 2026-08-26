@@ -12,7 +12,7 @@ module ct_sp4096x128_macro_wrapper (
   typedef enum logic [2:0] {S_IDLE,S_ACCESS,S_CAPTURE,S_RESP} state_e;
   state_e state_q;
   logic write_q,error_q,macro_cen_n;
-  logic [12:0] addr_q;
+  logic [11:0] addr_q;
   logic [127:0] wdata_q,rdata_q,macro_q,macro_wen_n;
   logic [15:0] wstrb_q;
   integer byte_index;
@@ -30,7 +30,7 @@ module ct_sp4096x128_macro_wrapper (
 
   ctsp4096x128wm u_macro (
     .q(macro_q),.clk(clk_i),.cen(macro_cen_n),.gwen(write_q?1'b0:1'b1),
-    .a(addr_q[11:0]),.d(wdata_q),.wen(macro_wen_n),.stov(1'b0),
+    .a(addr_q),.d(wdata_q),.wen(macro_wen_n),.stov(1'b0),
     .ema(3'b100),.emaw(2'b00),.emas(1'b0),.ret1n(1'b1),
     .rawl(1'b1),.rawlm(2'b01),.wabl(1'b1),.wablm(2'b00));
 
@@ -41,7 +41,7 @@ module ct_sp4096x128_macro_wrapper (
     end else begin
       case(state_q)
         S_IDLE: if(req_valid_i&&req_ready_o) begin
-          write_q<=req_write_i;error_q<=req_addr_i>=WORDS;addr_q<=req_addr_i;
+          write_q<=req_write_i;error_q<=req_addr_i>=WORDS;addr_q<=req_addr_i[11:0];
           wdata_q<=req_wdata_i;wstrb_q<=req_wstrb_i;rdata_q<='0;
           state_q<=req_addr_i>=WORDS?S_RESP:S_ACCESS;
         end

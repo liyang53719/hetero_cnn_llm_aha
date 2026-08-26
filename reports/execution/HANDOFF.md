@@ -8,6 +8,7 @@
 - L3 streams: four skid channels and gateway pass 100k; four emitted pinned upstream `ScratchpadBank(4096x128)` instances then pass a second 100k through real write/read/fromDMA queues and ExtMemIO. Hash `c65a53d9...`, upstream clean.
 - L3 AHA/KV endpoints: channels 0/1 use exact 8x64-bit proc-packet writes/reads and post-final-packet EOS; channels 2/3 use external 512-bit KV staging requests. Mixed 100k PASS, strict `-Wall` clean.
 - L3 completion: 7-input round-robin merge (6 engines + watchdog) saturated 100k PASS with no starvation; Event ID 0 no longer writes real SRAM and original event 100k re-PASSed.
+- L3 canonical top exists and strict-lint passes. Real-SRAM command fabric passes 100,003 commands; composed stream complex passes 100k transfers/150k Matrix completions.
 - Current limitation: command/event/Shared-L2/engine endpoints are not yet composed in one production top; combined L3 100k remains.
 - Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
 - Next: create `hetero_l3_production_top` from `command_event_frontend_sram`, `shared_l2_client_arbiter`, pinned Gemmini gateway, four stream skids and AHA/KV endpoints; add fixed dispatch/completion/watchdog wiring and run combined 100k.

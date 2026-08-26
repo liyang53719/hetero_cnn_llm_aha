@@ -1,0 +1,26 @@
+{
+  "stage": "L3",
+  "subgate": "production_top_readiness",
+  "status": "PASS_READINESS",
+  "canonical_top": "rtl/integration/hetero_l3_production_top.sv",
+  "command_fabric": {
+    "commands": 100003,
+    "completions": 100003,
+    "engine_ids_covered": 6,
+    "illegal_engine_completions": 1,
+    "watchdog_completions": 1,
+    "macro_errors": 0
+  },
+  "stream_complex": {
+    "transfers": 100000,
+    "matrix_gateway_completions": 150000,
+    "aha_round_trips": 50000,
+    "kv_operations": 50000,
+    "protocol_errors": 0
+  },
+  "verilator_wall_clean": true,
+  "cpu_affinity": "8-25",
+  "build_parallelism": 4,
+  "memory_limit_gib": 10,
+  "remaining": "Run the canonical production top with command/event, Shared-L2 and direct-stream traffic concurrently for the final integrated 100000 gate."
+}

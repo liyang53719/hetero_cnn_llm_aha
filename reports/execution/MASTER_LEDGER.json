@@ -325,6 +325,10 @@
         ,"reports/execution/L5_TARGET_NORM2.md"
         ,"reports/execution/l5_target_norm2_result.json"
         ,"work/results/l5_target_norm2/tb.log"
+        ,"reports/execution/L5_TARGET_GATE_UP.md"
+        ,"reports/execution/l5_target_gate_up_result.json"
+        ,"work/results/l5_target_gate_up/gate.log"
+        ,"work/results/l5_target_gate_up/up.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -352,6 +356,7 @@
         ,"target 12-head two-token M/L/O and explicit O/L pass without score-matrix materialization"
         ,"target 1536x1536 OProj plus first residual pass all lanes with exactly 73728 array steps"
         ,"target post-attention global RMSNorm1536 passes all lanes and freezes the norm2 MLP input hash"
+        ,"target 1536x8960 gate and up projections pass all outputs with 430080 measured array steps each"
       ],
       "remaining_gates": [
         "pinned Qwen target-shape block numerics",

@@ -1,6 +1,6 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Consume exact norm2 hash bb884b8182e44eac53dc64f5c06cdbce752509a343fe9331e2ee8db433831385. Generate and freeze deterministic bias-free gate and up BF16 matrices, each shape 1536x8960. Run both complete projections on the unchanged physical 16x32 array, in separate restartable phases within one receipt, and compare all 8960 FP32 outputs per projection. Each projection must report exactly 430080 measured array steps; total must be 860160. Freeze both weight and output hashes. Do not start SiLU/product until both projections pass.",
+  "command": "Consume exact gate/up hashes ec204a74ad5bc7b68f34595ac7b24ffac5ca432de41077857476e92de6f1bcab and 581709c8d740185c32f457470a1965102e648ac0dacedf14191fbb836a7a98ac. Run all 8960 gate lanes through the proven stable FP32 SiLU, compare every output to the operation-order model and retain the frozen 0.002 error limit. Then multiply SiLU(gate) by up over exactly 560 16-lane FP32 chunks. Freeze SiLU and product hashes and report scalar-SiLU/product/total cycles separately. Do not start down projection until this receipt passes.",
   "fixed_order": [
     "global target RMSNorm1536",
     "restartable target RMSNorm and Q/K/V segment",

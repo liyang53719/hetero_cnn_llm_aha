@@ -1,0 +1,19 @@
+{
+  "segments": 32,
+  "mantissa_banks": [
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      4
+    ]
+  ],
+  "newton_iterations": 1,
+  "max_relative_error_dense": 2.6086989188533737e-07,
+  "max_absolute_error_dense": 2.464699777604551e-07,
+  "worst_x": 2.0659027099609375,
+  "relative_threshold": 2e-06,
+  "threshold_pass": true
+}

@@ -24,7 +24,8 @@
 - L5 FP32 add/mul/reduction CLOSED: 10k ALU + 10k reduce vectors exact, reduction interval1, FNV64 `eb1a...`.
 - L5 RoPE CLOSED: 10k FP32 operation-order vectors exact, interval1, FNV64 `69a2...`.
 - L5 exp2 CLOSED: 10k RTL vectors, interval1, FNV64 `471eda...`; dense max abs/rel remain `2.29601e-4/2.35418e-4`.
-- L5 reciprocal CLOSED: 16-segment+1 Newton, 10k exact model vectors, max relative `9.194e-7`, interval1. Next: rsqrt.
+- L5 reciprocal CLOSED: 16-segment+1 Newton, 10k exact model vectors, max relative `9.194e-7`, interval1.
+- L5 rsqrt CLOSED: 32 segments+1 Newton, 10k exact model vectors, max relative `2.393e-7`, interval1. Next: online softmax.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

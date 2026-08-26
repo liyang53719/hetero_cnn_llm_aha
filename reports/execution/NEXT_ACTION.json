@@ -1,6 +1,6 @@
 {
-  "phase": "L5_SFU_RSQRT",
-  "command": "Implement normalized FP32 reciprocal-square-root with an explicit mantissa LUT/linear estimate and a fixed Newton iteration y=y*(1.5-0.5*x*y*y). Handle odd exponents by mantissa/exponent normalization, freeze positive-normal input range, zero/Inf/negative/NaN behavior and a max relative error threshold before RTL results. Validate dense mantissa sweeps, random exponents and special values, then proceed to online softmax.",
+  "phase": "L5_SFU_ONLINE_SOFTMAX",
+  "command": "Implement the scalar online-softmax state update with FP32 M/L and a parameterized output-value lane: m_new=max(m,s), alpha=exp2((m-m_new)*log2e), beta=exp2((s-m_new)*log2e), l_new=l*alpha+beta, o_new=o*alpha+v*beta. Compose only the closed HardFloat ALU and exp2 primitives, register state under ready/valid, and validate deterministic token sequences including rising/falling maxima and long negative gaps against the same operation-order Python model. Do not materialize a score matrix. Then proceed to RMSNorm and SiLU.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

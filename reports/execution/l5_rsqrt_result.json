@@ -1,0 +1,18 @@
+{
+  "stage": "L5",
+  "subgate": "FP32 rsqrt",
+  "status": "PASS",
+  "segments": 32,
+  "mantissa_banks": [[1.0,2.0],[2.0,4.0]],
+  "newton_iterations": 1,
+  "dense_max_relative_error": 2.6086989188533737e-07,
+  "random_max_relative_error": 2.39253314e-07,
+  "relative_threshold": 2e-06,
+  "vectors": 10000,
+  "cycles": 12503,
+  "accept_interval": 1,
+  "output_fnv1a64": "a918b199b4b06b8a",
+  "flags_or": "0x01",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

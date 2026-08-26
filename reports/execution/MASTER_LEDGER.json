@@ -269,7 +269,10 @@
         "work/results/l5_exp2/tb.log",
         "reports/execution/L5_RECIPROCAL.md",
         "reports/execution/l5_reciprocal_result.json",
-        "work/results/l5_recip/tb.log"
+        "work/results/l5_recip/tb.log",
+        "reports/execution/L5_RSQRT.md",
+        "reports/execution/l5_rsqrt_result.json",
+        "work/results/l5_rsqrt/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -279,6 +282,7 @@
         ,"exp2 PWL coefficients frozen: 256 segments over [-16,0], dense max absolute/relative errors 2.29601e-4/2.35418e-4; RTL pending"
         ,"exp2 PWL RTL complete: 10000 exact vectors, interval1, frozen dense error limits pass"
         ,"FP32 reciprocal complete: 16-segment estimate plus one Newton iteration passes 10000 vectors below frozen 2e-6 relative error"
+        ,"FP32 rsqrt complete: two mantissa banks plus one Newton iteration pass 10000 vectors below frozen 2e-6 relative error"
       ],
       "remaining_gates": [
         "heterogeneous FP32 SFU tile",

@@ -66,6 +66,7 @@
 - L5 q384 count controller PASS:24 commands, all contract counts exact, score commands0, latency-valid0, command FNV `847780...`. Next:q384 QKV batches0-23.
 - L5 q384 QKV ALL PASS:24x16-token batches,2359296 measured steps/9636096 cycles; Q/K/V hashes `a5d2e31e...`/`69a7f29c...`/`71db3e37...`; q128 compatibility re-PASSed. Next:q384 RoPE/GQA.
 - L5 unified RTL PASS: q128/q384 QKV share binary SHA `363082ed...`; unified runtime sequence controller binary SHA `5972ba4d...` passes128+384 in one sim and rejects256. Old split controllers are historical only.
+- L5 q384 RoPE/GQA PASS on same q128/q384 binary SHA `deaaede1...`:344064 pairs,73728 outputs,1474560 cycles; q128 compatibility re-PASSed. Next:q384 causal M/L/O.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-23`; default/average parallelism is 8, reviewed peak is 16; start only with `MemAvailable >10 GiB`; `MemoryHigh=24G`, `MemoryMax=30G`.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

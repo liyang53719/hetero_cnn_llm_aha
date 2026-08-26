@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume exact q384 Q/K/V hashes a5d2e31e592db1f0ff65c8d36d6b4f14b96e0d7b6642818ca7e087c86882d88a,69a7f29c52ee6d74a6ef975ced7559c09d0334d19a746515892d289d595ec4dd and71db3e37fd43017994349e32fd9d653443db49db10b6b239543345a7fba6a158. Parameterize the proven split-half RoPE/GQA generator and RTL for positions0-383:294912 Q pairs,49152 K pairs and344064 total. Then multicast K/V with6144 inputs/36864 outputs each. Compare all lanes/sidebands, freeze q_rope/k_gqa/v_gqa hashes and measured cycles before causal M/L/O.",
+  "command": "Consume exact q384 Q/K/V-GQA hashes5081f41585327fc54bbfabbd25791dfc0de28739def6c5255e6d25b09034f8a8,1864dc6d35f94ec65423b527fc0279db338bf00c7fd684b99b4cf42e34813a8a andd073bb8552d70336aa0e78f0f155cc950c70924e7b2a727087fcf0ce9be00825. Parameterize the same q128/q384 M/L/O generator and one compiled RTL binary for runtime workload384. Stream exactly887040 causal dot/online updates,4608 reciprocals and36864 normalization chunks without score storage; compare all384x1536 attention outputs. Then rerun workload128 on the same binary to prove compatibility before accepting q384 M/L/O.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

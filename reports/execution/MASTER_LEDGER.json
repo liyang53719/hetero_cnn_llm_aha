@@ -301,6 +301,9 @@
         ,"config/qwen2_1p5b_target_shape.json"
         ,"reports/execution/L5_QWEN_TARGET_SHAPE_LOCK.md"
         ,"reports/execution/l5_qwen_target_shape_lock_result.json"
+        ,"reports/execution/L5_DOT128_SCALED.md"
+        ,"reports/execution/l5_dot128_result.json"
+        ,"work/results/l5_dot128/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -320,6 +323,7 @@
         ,"64-lane scaled dot reuses one 16-lane reduction and passes 10000 exact operation-order vectors"
         ,"complete hidden256 two-token block passes 22 nodes with 24576 physical array steps and no score-matrix materialization"
         ,"pinned Qwen target config, Transformers 4.40.1 projection bias policy, GQA mapping and exact 16x32 array-step counts are hash-locked"
+        ,"target head_dim128 scaled dot reuses one 16-lane reducer across eight chunks and passes 10000 exact vectors"
       ],
       "remaining_gates": [
         "pinned Qwen target-shape block numerics",

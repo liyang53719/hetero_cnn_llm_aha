@@ -35,6 +35,7 @@
 - L5 dot64 PASS: 16 physical lanes reused across 4 chunks, 10k exact, FNV64 `a8cdc6...`.
 - L5 complete hidden256 block PASS: 2-token streamed attention, 4x64 heads, MLP512, 22 nodes exact, 24576 array steps, 104902 total/98304 Matrix/6598 SFU cycles, FNV64 `92aa1c...`.
 - L5 Qwen target lock PASS: exact revision config SHA `a58e896d...`; hidden1536/intermediate8960, 12Q/2KV heads, D128, QKV bias, GQA groups6. Two-token target needs 1486848 array steps; 5947392 cycles is projection only, not measured. Next: target-shape payload/controller segmentation.
+- L5 target dot128 PASS: eight 16-lane chunks, pinned scale `0x3db504f3`, 10k exact, 262500 cycles, FNV64 `2da983...`. Next: QKV bias plus six-way GQA mapping RTL gate.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

@@ -1,0 +1,20 @@
+{
+  "stage": "L5",
+  "subgate": "target FP32 dot128 scaled",
+  "status": "PASS",
+  "lanes": 128,
+  "physical_lanes": 16,
+  "chunks": 8,
+  "scale_fp32_bits": "0x3db504f3",
+  "vectors": 10000,
+  "cycles": 262500,
+  "max_absolute_error": 7.323422828164894e-07,
+  "threshold": 0.0001,
+  "output_fnv1a64": "2da983ea0be13f0b",
+  "vectors_sha256": "68f4eaa4033ac36ce28223fdf15d81bd5da14b0fc826da48dcf69e8369333dab",
+  "mismatches": 0,
+  "verilator_wall_clean": true,
+  "build_allocated_mb": 323.387,
+  "simulation_allocated_mb": 17,
+  "memory_limit_gib": 10
+}

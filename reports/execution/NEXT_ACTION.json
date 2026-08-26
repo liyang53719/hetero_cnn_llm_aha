@@ -1,8 +1,7 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Use config/qwen2_1p5b_target_shape.json as the only shape and bias authority. Parameterize the proven schedule for hidden1536, intermediate8960, 12 query heads, two KV heads, head_dim128, QKV bias and six-way GQA. First add and independently verify a head_dim128 scaled dot that reuses the 16-lane reducer across eight chunks, then add QKV bias and GQA multicast tests. Build restartable target-node segments in fixed order: RMSNorm/QKV, RoPE/streamed M-L-O/O-L, OProj/residual, second RMSNorm/gate-up-SiLU-product/down/final. Each segment must consume the preceding frozen output hash. Only after every payload segment passes, run the unchanged controller in full trace/count mode and mark those cycles separately from payload numerics.",
+  "command": "Use config/qwen2_1p5b_target_shape.json as the only shape and bias authority. Add a reusable QKV post-projection path that applies FP32 Q/K/V bias to widths 1536/256/256 in 16-lane chunks, then maps each of 12 query heads to one of two 128-lane KV heads with fixed six-way GQA multicast. Independently verify chunk tails, head boundaries, query-to-KV mapping, backpressure and stable sideband tags. After this gate, build restartable target-node segments in fixed order: RMSNorm/QKV, RoPE/streamed M-L-O/O-L, OProj/residual, second RMSNorm/gate-up-SiLU-product/down/final. Each segment must consume the preceding frozen output hash. Only after every payload segment passes, run the unchanged controller in full trace/count mode and mark those cycles separately from payload numerics.",
   "fixed_order": [
-    "head_dim128 dot reduction",
     "QKV bias and six-way GQA mapping",
     "target RMSNorm and Q/K/V",
     "RoPE plus GQA head mapping",

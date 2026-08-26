@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.."&&pwd);BASE=$ROOT/work/results/l5_target_qkv_segment/vectors;OUT=$ROOT/work/results/l5_q1024_qkv;SHARED=$OUT/shared;R=$ROOT/scripts/run_memory_capped.sh;V=$ROOT/work/toolchain/conda/bin/verilator;PY=$ROOT/work/toolchain/cnn_py312/bin/python;mkdir -p "$BASE" "$SHARED"
+taskset -c 8-23 "$PY" "$ROOT/scripts/generate_l5_target_qkv_segment_vectors.py" --out "$BASE"
+mkdir -p "$OUT/batch0";taskset -c 8-23 "$PY" "$ROOT/scripts/generate_l5_q128_qkv_batch_vectors.py" --base-dir "$BASE" --tokens 1024 --batch-index 0 --shared-out "$SHARED" --out "$OUT/batch0"
+for first in $(seq 1 8 63);do pids=();for b in $(seq "$first" "$((first+7>63?63:first+7))");do mkdir -p "$OUT/batch$b";(taskset -c 8-23 "$PY" "$ROOT/scripts/generate_l5_q128_qkv_batch_vectors.py" --base-dir "$BASE" --tokens 1024 --batch-index "$b" --skip-shared-write --shared-out "$SHARED" --out "$OUT/batch$b")&pids+=("$!");done;for pid in "${pids[@]}";do wait "$pid";done;done
+S=("$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv" "$ROOT/rtl/matrix/bf16_outer_product_array.sv" "$ROOT/rtl/sfu/fp32_reduce16.sv" "$ROOT/rtl/sfu/fp32_rsqrt_nr.sv" "$ROOT/rtl/sfu/fp32_rmsnorm1536_chunked.sv" "$ROOT/rtl/sfu/fp32_vector_alu.sv" "$ROOT/tb/tb_l5_q128_qkv_batch0.sv")
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$V" --binary --threads 4 --timing -Wall -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL -j 8 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_l5_q128_qkv_batch0 --Mdir "$OUT/obj" -o tb "${S[@]}" >"$OUT/build.log" 2>&1
+cd "$ROOT";for first in $(seq 0 2 62);do pids=();for b in "$first" "$((first+1))";do (MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=1024 +BATCH="$b" >"$OUT/batch$b/tb.log" 2>&1)&pids+=("$!");done;for pid in "${pids[@]}";do wait "$pid";done;for b in "$first" "$((first+1))";do cat "$OUT/batch$b/tb.log";grep -q "L5_Q_PREFILL_QKV_BATCH_PASS workload=1024 batch=$b" "$OUT/batch$b/tb.log";done;done
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=128 +BATCH=0 | tee "$OUT/q128_compat.log";grep -q 'L5_Q_PREFILL_QKV_BATCH_PASS workload=128 batch=0' "$OUT/q128_compat.log"
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=384 +BATCH=0 | tee "$OUT/q384_compat.log";grep -q 'L5_Q_PREFILL_QKV_BATCH_PASS workload=384 batch=0' "$OUT/q384_compat.log"
+echo L5_Q1024_QKV_ALL_BATCHES_GATE_PASS

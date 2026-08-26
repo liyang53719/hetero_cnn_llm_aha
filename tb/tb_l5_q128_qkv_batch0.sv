@@ -212,7 +212,7 @@ module tb_l5_q128_qkv_batch0;
     vector_flags_or = '0;
     if (!$value$plusargs("BATCH=%d", batch_index)) batch_index = 0;
     if (!$value$plusargs("WORKLOAD=%d", workload_tokens)) workload_tokens = 128;
-    if ((workload_tokens != 128 && workload_tokens != 384) ||
+    if ((workload_tokens != 128 && workload_tokens != 384 && workload_tokens != 1024) ||
         batch_index < 0 || batch_index >= workload_tokens / 16)
       $fatal(1, "invalid prefill batch/workload");
     batch_dir = $sformatf("work/results/l5_q%0d_qkv/batch%0d", workload_tokens, batch_index);

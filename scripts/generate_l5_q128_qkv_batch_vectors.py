@@ -131,7 +131,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-dir", type=Path, required=True)
     parser.add_argument("--batch-index", type=int, required=True)
-    parser.add_argument("--tokens", type=int, choices=(128, 384), default=128)
+    parser.add_argument("--tokens", type=int, choices=(128, 384, 1024), default=128)
+    parser.add_argument("--skip-shared-write", action="store_true")
     parser.add_argument("--shared-out", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
@@ -145,13 +146,14 @@ def main():
 
     if args.batch_index < 0 or args.batch_index >= args.tokens // BATCH_ROWS:
         raise SystemExit("QKV_BATCH_INDEX_FAIL")
-    rng = random.Random(0x1281536 if args.tokens == 128 else 0x3841536)
+    rng = random.Random({128: 0x1281536, 384: 0x3841536, 1024: 0x10241536}[args.tokens])
     inputs = np.array(
         [[bf16_value(rng.uniform(-1, 1)) for _ in range(HIDDEN)] for _ in range(args.tokens)],
         dtype=np.float32,
     )
     input_path = args.shared_out / "inputs.memh"
-    write_fp32(input_path, inputs)
+    if not args.skip_shared_write:
+        write_fp32(input_path, inputs)
     start = args.batch_index * BATCH_ROWS
     batch = inputs[start:start + BATCH_ROWS]
     norm_weight = np.array(

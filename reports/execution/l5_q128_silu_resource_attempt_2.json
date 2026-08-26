@@ -1,0 +1,15 @@
+{
+  "stage": "L5",
+  "subgate": "q128 SiLU and product",
+  "attempt": 2,
+  "timestamp": "2026-08-26T20:00:41+08:00",
+  "status": "BLOCKED_RESOURCE",
+  "mem_available_kib": 9969720,
+  "required_strictly_greater_than_kib": 10485760,
+  "golden_generated": true,
+  "golden_product_sha256": "661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc",
+  "lint_started": false,
+  "project_processes_running": 0,
+  "oom_observed": false,
+  "action": "No polling, no threshold reduction, and no unrelated-process termination."
+}

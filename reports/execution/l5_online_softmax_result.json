@@ -1,0 +1,17 @@
+{
+  "stage": "L5",
+  "subgate": "online softmax M/L/O",
+  "status": "PASS",
+  "sequences": 100,
+  "tokens": 10000,
+  "value_lanes": 4,
+  "cycles": 49750,
+  "cycles_per_token": 4.975,
+  "max_normalized_output_absolute_error": 0.0001750850847766494,
+  "absolute_threshold": 0.002,
+  "output_fnv1a64": "07fbc6afceab5417",
+  "flags_or": "0x01",
+  "score_matrix_materialized": false,
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

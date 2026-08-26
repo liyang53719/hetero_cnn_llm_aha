@@ -1,6 +1,6 @@
 {
-  "phase": "L5_SFU_ONLINE_SOFTMAX",
-  "command": "Implement the scalar online-softmax state update with FP32 M/L and a parameterized output-value lane: m_new=max(m,s), alpha=exp2((m-m_new)*log2e), beta=exp2((s-m_new)*log2e), l_new=l*alpha+beta, o_new=o*alpha+v*beta. Compose only the closed HardFloat ALU and exp2 primitives, register state under ready/valid, and validate deterministic token sequences including rising/falling maxima and long negative gaps against the same operation-order Python model. Do not materialize a score matrix. Then proceed to RMSNorm and SiLU.",
+  "phase": "L5_SFU_RMSNORM_SILU",
+  "command": "Implement a fixed 16-lane FP32 RMSNorm tile using the closed square/multiply, balanced reduction, rsqrt and per-lane weight multiply primitives, with epsilon supplied as FP32 config. Separately implement SiLU as x/(1+exp(-x)) using the closed exp2 and reciprocal primitives with log2(e) conversion. Freeze vector width, operation order and max error thresholds, validate 10000 vectors including small variance, large magnitude and negative saturation, and preserve ready/valid backpressure. Then begin the toy BF16 block integration.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

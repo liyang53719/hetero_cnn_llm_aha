@@ -272,7 +272,10 @@
         "work/results/l5_recip/tb.log",
         "reports/execution/L5_RSQRT.md",
         "reports/execution/l5_rsqrt_result.json",
-        "work/results/l5_rsqrt/tb.log"
+        "work/results/l5_rsqrt/tb.log",
+        "reports/execution/L5_ONLINE_SOFTMAX.md",
+        "reports/execution/l5_online_softmax_result.json",
+        "work/results/l5_online_softmax/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -283,6 +286,7 @@
         ,"exp2 PWL RTL complete: 10000 exact vectors, interval1, frozen dense error limits pass"
         ,"FP32 reciprocal complete: 16-segment estimate plus one Newton iteration passes 10000 vectors below frozen 2e-6 relative error"
         ,"FP32 rsqrt complete: two mantissa banks plus one Newton iteration pass 10000 vectors below frozen 2e-6 relative error"
+        ,"online softmax M/L/O complete: 100x100-token sequences pass without score-matrix materialization below frozen 0.002 normalized-output error"
       ],
       "remaining_gates": [
         "heterogeneous FP32 SFU tile",

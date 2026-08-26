@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 H=1536;HEADS=12;D=128
 ALL_HASH={128:{'q':'1e259f274616e3137dd1762d1cfeb8dc005ada8d40a1bb80fce716c55e7b4c6f','k':'499da9e0b835ab6de33c2870b9e0b28b8b1206943a8d863dcd2b6d5586eeebc1','v':'5c3169a425c823d6e60d1a7f77d4ea7ea14436ec291199cac290f49ce2f01078'},384:{'q':'5081f41585327fc54bbfabbd25791dfc0de28739def6c5255e6d25b09034f8a8','k':'1864dc6d35f94ec65423b527fc0279db338bf00c7fd684b99b4cf42e34813a8a','v':'d073bb8552d70336aa0e78f0f155cc950c70924e7b2a727087fcf0ce9be00825'},1024:{'q':'68c1313d0decf4f4bad45bc16ff1dda8df8a0e4b0b8702aa3c2672ed43e20cbc','k':'901bab114b23005bee60303b6ebc10723a998789163972ae57d7d670b893a30c','v':'350e3167bf815d2c7a12895a953f4630054dc20a35f4ff1ba6d818f93c9de07a'}}
-GQ=GK=GV=None
+GQ=GK=GV=None;SEGMENTS=256
 def bits(x):return struct.unpack('<I',struct.pack('<f',float(np.float32(x))))[0]
 def val(s):return np.float32(struct.unpack('<f',struct.pack('<I',int(s,16)))[0])
 def add(a,b):return np.float32(np.float32(a)+np.float32(b))
@@ -21,7 +21,9 @@ def exp2p(x):
  x=np.float32(x)
  if x < -16:return np.float32(0)
  if x >= 0:return np.float32(1)
- i=max(0,min(255,math.floor(float(x)*16)+256));x0=np.float32(i/16-16);x1=np.float32(x0+np.float32(1/16));y0=np.float32(np.exp2(x0));y1=np.float32(np.exp2(x1));m=np.float32((np.float64(y1)-np.float64(y0))/(1/16));b=np.float32(np.float64(y0)-np.float64(m)*np.float64(x0));return add(mul(m,x),b)
+ if SEGMENTS==256:i=max(0,min(255,math.floor(float(x)*16)+256));x0=np.float32(i/16-16);step=np.float32(1/16)
+ else:step=np.float32(16/SEGMENTS);i=max(0,min(SEGMENTS-1,math.floor((float(x)+16)/float(step))));x0=np.float32(-16+i*float(step))
+ x1=np.float32(x0+step);y0=np.float32(np.exp2(x0));y1=np.float32(np.exp2(x1));m=np.float32((np.float64(y1)-np.float64(y0))/float(step));b=np.float32(np.float64(y0)-np.float64(m)*np.float64(x0));return add(mul(m,x),b)
 def recip(x):
  w=bits(x);e=(w>>23)&255;fr=w&0x7fffff;n=np.float32(struct.unpack('<f',struct.pack('<I',(127<<23)|fr))[0]);i=fr>>19;x0=1+i/16;x1=x0+1/16;m=np.float32(((1/x1)-(1/x0))/(1/16));b=np.float32(1/x0-float(m)*x0);y=add(mul(m,n),b);y=mul(y,add(np.float32(2),-mul(n,y)));return mul(y,np.float32(struct.unpack('<f',struct.pack('<I',(254-e)<<23))[0]))
 def load(path,name,tokens,hashes):
@@ -41,8 +43,8 @@ def compute_qt(qt):
   inv=recip(l);norm=np.array([mul(x,inv)for x in o],np.float32);truth=to/tl;maxerr=max(maxerr,float(np.max(np.abs(norm.astype(np.float64)-truth))));mr[h]=m;lr[h]=l;orr[sl]=o;ar[sl]=norm
  return qt,mr,lr,orr,ar,maxerr
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--rope-dir',type=Path,required=True);ap.add_argument('--tokens',type=int,choices=(128,384,1024),default=128);ap.add_argument('--workers',type=int,choices=range(1,9),default=1);ap.add_argument('--out',type=Path,required=True);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);hashes=ALL_HASH[a.tokens]
- global GQ,GK,GV;GQ=load(a.rope_dir/'q_rope.memh','q',a.tokens,hashes);GK=load(a.rope_dir/'k_gqa.memh','k',a.tokens,hashes);GV=load(a.rope_dir/'v_gqa.memh','v',a.tokens,hashes);mout=np.empty((a.tokens,HEADS),np.float32);lout=np.empty((a.tokens,HEADS),np.float32);oout=np.empty((a.tokens,H),np.float32);att=np.empty((a.tokens,H),np.float32);maxerr=0.
+ ap=argparse.ArgumentParser();ap.add_argument('--rope-dir',type=Path,required=True);ap.add_argument('--tokens',type=int,choices=(128,384,1024),default=128);ap.add_argument('--workers',type=int,choices=range(1,9),default=1);ap.add_argument('--pwl-segments',type=int,choices=(256,512,1024),default=256);ap.add_argument('--out',type=Path,required=True);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);hashes=ALL_HASH[a.tokens]
+ global GQ,GK,GV,SEGMENTS;SEGMENTS=a.pwl_segments;GQ=load(a.rope_dir/'q_rope.memh','q',a.tokens,hashes);GK=load(a.rope_dir/'k_gqa.memh','k',a.tokens,hashes);GV=load(a.rope_dir/'v_gqa.memh','v',a.tokens,hashes);mout=np.empty((a.tokens,HEADS),np.float32);lout=np.empty((a.tokens,HEADS),np.float32);oout=np.empty((a.tokens,H),np.float32);att=np.empty((a.tokens,H),np.float32);maxerr=0.
  if a.workers==1:results=map(compute_qt,range(a.tokens))
  else:
   pool=multiprocessing.get_context('fork').Pool(a.workers);results=pool.imap(compute_qt,range(a.tokens))

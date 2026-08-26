@@ -409,6 +409,10 @@
         ,"work/results/l5_q1024_rope_gqa/tb.log"
         ,"work/results/l5_q1024_rope_gqa/q128_compat.log"
         ,"work/results/l5_q1024_rope_gqa/q384_compat.log"
+        ,"reports/execution/L5_Q1024_MLO_BLOCKED_DECISION.md"
+        ,"reports/execution/l5_q1024_mlo_blocker_result.json"
+        ,"work/results/l5_q1024_mlo/vectors/manifest.json"
+        ,"work/results/l5_q1024_mlo_candidate_1024seg/vectors/manifest.json"
         ,"work/results/l5_q384_qkv/q128_compat.log"
         ,"reports/execution/L5_Q384_ROPE_GQA.md"
         ,"reports/execution/l5_q384_rope_gqa_result.json"
@@ -511,7 +515,8 @@
       ],
       "remaining_gates": [
         "q1024 prefill and decode128/1024/4096 block numerics"
-      ]
+      ],
+      "active_blocker": "BLOCKED_DECISION: q1024 single-chain FP32 online MLO error0.0053576 exceeds0.002; approve hierarchical block128 summary merge or choose FP64 state"
     },
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},
     "L7": {"status": "PENDING", "depends_on": ["L5"]},

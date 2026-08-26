@@ -1,0 +1,16 @@
+{
+  "stage": "L5",
+  "subgate": "q1024 causal MLO",
+  "status": "BLOCKED_DECISION",
+  "causal_updates": 6297600,
+  "score_matrix_materialized": false,
+  "threshold": 0.002,
+  "pwl256_max_attention_error": 0.005357584070179389,
+  "pwl1024_max_attention_error": 0.005435308526966498,
+  "pwl_segment_increase_passed": false,
+  "root_cause": "long-chain FP32 online MLO state accumulation",
+  "recommended_policy": "hierarchical_online_softmax_block128_for_sequence_gt384",
+  "q1024_head_block_merges": 43008,
+  "score_storage_required": false,
+  "threshold_relaxation_allowed": false
+}

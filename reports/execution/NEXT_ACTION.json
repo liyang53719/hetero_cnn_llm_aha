@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume q1024 RoPE/GQA hashes and extend the same streamed causal M/L/O binary to workload1024. Check6297600 dot and online updates without score storage,12288 reciprocals and98304 normalization chunks; require208263168 cycles and exact M/L/O/attention hashes, then rerun q128/q384 compatibility without recompilation.",
+  "command": "BLOCKED_DECISION: after user approval, implement hierarchical online-softmax block128 for sequence lengths above384 in the existing runtime M/L/O RTL. First run a Python operation-order candidate and require max error<=0.002; then add the summary-merge micro-op, verify43008 q1024 merges with no score storage, and rerun q128/q384 legacy hashes plus q1024 in one binary.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",
@@ -11,6 +11,6 @@
     "q128 gate/up/SiLU/product/down/final",
     "q128 receipt aggregate"
   ],
-  "success_condition": "One unchanged M/L/O binary passes q1024 and q128/q384 compatibility, stores no score matrix, matches every streamed update and final attention output, and remains under CPU8-23 and30GiB.",
-  "failure_policy": "Do not compile q1024-specific RTL, materialize scores, scale q384 outputs, relax first mismatches, or start OProj before all three runtime lengths pass."
+  "success_condition": "The approved same-binary hierarchical mode passes the frozen0.002 threshold and all operation-order/hash/counter checks while q128/q384 legacy receipts remain unchanged.",
+  "failure_policy": "Do not relax0.002, claim the1024-segment PWL candidate passed, compile q1024-specific RTL, materialize scores, or continue to OProj before this decision and numerical gate close."
 }

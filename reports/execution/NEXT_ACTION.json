@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume q1024 Q/K/V hashes4e67c4cc15bf3a72ea1f49b773832f411ff6b7445352887b9c60fe5ef0728e0f,7a1daa90c38a3d680827e1663984d7bb9b63ee2298a78226a94fe2c8014c85de,1853b21c3f348d347cf42adb5a996964c546fa5f88f01954769f45d6d5f7829f. Extend the same runtime RoPE/GQA binary to workload1024, check917504 split-half pairs and196608 mapped outputs in3932160 cycles, then rerun q128/q384 compatibility without recompilation.",
+  "command": "Consume q1024 RoPE/GQA hashes and extend the same streamed causal M/L/O binary to workload1024. Check6297600 dot and online updates without score storage,12288 reciprocals and98304 normalization chunks; require208263168 cycles and exact M/L/O/attention hashes, then rerun q128/q384 compatibility without recompilation.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",
@@ -11,6 +11,6 @@
     "q128 gate/up/SiLU/product/down/final",
     "q128 receipt aggregate"
   ],
-  "success_condition": "One unchanged RoPE/GQA binary passes q1024 and q128/q384 compatibility with exact split-half pairing, post-RoPE K multicast, V multicast, tags and cycles under CPU8-23 and30GiB.",
-  "failure_policy": "Do not compile q1024-specific RTL, apply GQA before K RoPE, scale q384 hashes, relax first mismatches, or start M/L/O before all three runtime lengths pass."
+  "success_condition": "One unchanged M/L/O binary passes q1024 and q128/q384 compatibility, stores no score matrix, matches every streamed update and final attention output, and remains under CPU8-23 and30GiB.",
+  "failure_policy": "Do not compile q1024-specific RTL, materialize scores, scale q384 outputs, relax first mismatches, or start OProj before all three runtime lengths pass."
 }

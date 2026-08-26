@@ -404,6 +404,11 @@
         ,"work/results/l5_q1024_qkv/batch63/tb.log"
         ,"work/results/l5_q1024_qkv/q128_compat.log"
         ,"work/results/l5_q1024_qkv/q384_compat.log"
+        ,"reports/execution/L5_Q1024_ROPE_GQA.md"
+        ,"reports/execution/l5_q1024_rope_gqa_result.json"
+        ,"work/results/l5_q1024_rope_gqa/tb.log"
+        ,"work/results/l5_q1024_rope_gqa/q128_compat.log"
+        ,"work/results/l5_q1024_rope_gqa/q384_compat.log"
         ,"work/results/l5_q384_qkv/q128_compat.log"
         ,"reports/execution/L5_Q384_ROPE_GQA.md"
         ,"reports/execution/l5_q384_rope_gqa_result.json"
@@ -502,6 +507,7 @@
         ,"q384 prefill closes with complete numerical hash chain,35094528 Matrix steps,202769664 active cycles and no score matrix"
         ,"q1024 operation contract and unified runtime count controller pass64 row batches,93585408 Matrix steps and6297600 causal updates; measured latency remains null"
         ,"q128/q384/q1024 QKV use one runtime-configured binary; q1024 passes64 batches and6291456 Matrix steps"
+        ,"q128/q384/q1024 RoPE/GQA use one runtime-configured binary; q1024 passes917504 pairs and196608 outputs"
       ],
       "remaining_gates": [
         "q1024 prefill and decode128/1024/4096 block numerics"

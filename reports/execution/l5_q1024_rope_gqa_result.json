@@ -1,0 +1,23 @@
+{
+  "stage": "L5",
+  "subgate": "q1024 RoPE GQA",
+  "status": "PASS",
+  "rope_pairs": 917504,
+  "gqa_inputs": 32768,
+  "gqa_outputs": 196608,
+  "total_cycles": 3932160,
+  "rope_cycles": 3670016,
+  "gqa_cycles": 262144,
+  "q_rope_sha256": "68c1313d0decf4f4bad45bc16ff1dda8df8a0e4b0b8702aa3c2672ed43e20cbc",
+  "k_rope_sha256": "f5c9918e25ab50007669410bcb98118ba4d996664a9c78ae1cfe64d4d1480c23",
+  "k_gqa_sha256": "901bab114b23005bee60303b6ebc10723a998789163972ae57d7d670b893a30c",
+  "v_gqa_sha256": "350e3167bf815d2c7a12895a953f4630054dc20a35f4ff1ba6d818f93c9de07a",
+  "same_binary_q128_q384_q1024": true,
+  "binary_sha256": "53558f8b05e43964ed14c24252b2a0c6b6db5121c7d80b6f282af9bee211dbfe",
+  "q128_q384_compatibility_repassed": true,
+  "node_mismatches": 0,
+  "build_allocated_mb": 433.160,
+  "simulation_allocated_mb": 34,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

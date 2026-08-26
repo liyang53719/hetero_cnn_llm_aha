@@ -313,6 +313,9 @@
         ,"reports/execution/L5_TARGET_QKV_SEGMENT.md"
         ,"reports/execution/l5_target_qkv_segment_result.json"
         ,"work/results/l5_target_qkv_segment/tb.log"
+        ,"reports/execution/L5_TARGET_ROPE_GQA.md"
+        ,"reports/execution/l5_target_rope_gqa_result.json"
+        ,"work/results/l5_target_rope_gqa/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -336,6 +339,7 @@
         ,"target QKV bias and six-way GQA endpoint passes 10000 inputs, 43000 outputs, illegal ranges and backpressure"
         ,"global RMSNorm1536 reuses one 16-lane reduction across 96 chunks and passes 1000 vectors with all outputs bit-exact"
         ,"two-token target RMSNorm/QKV segment passes 16 nodes and measures exactly 122880 physical array steps"
+        ,"target split-half RoPE and post-RoPE K GQA pass 1024 pairs plus 192 mapped outputs with exact sidebands"
       ],
       "remaining_gates": [
         "pinned Qwen target-shape block numerics",

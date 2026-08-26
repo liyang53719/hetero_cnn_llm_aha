@@ -11,5 +11,13 @@ Directed randomized-backpressure RTL fetched and replayed a legal four-chain,
 returned malformed status 2 and replayed zero records. Byte-address mapping
 remained `descriptor_base + index*16`, and held replay payload was stable.
 
-Icarus simulation PASS. Verilator 5.050 production-module `-Wall` lint has zero
-warnings. Evidence: `work/results/l2_descriptor_v2_snapshot/`.
+`matrix_descriptor_v2_decode` consumes replay only after the snapshot header,
+enforces root-specific record placement, required base/shape/stride/op/aux,
+Conv/bias rules, duplicate singleton and reserved-bit legality, and preserves
+two independent operand/output quant records. It also rechecks first/last,
+root index and common fields rather than trusting the transport frontend.
+
+The integrated snapshot/decode pipeline produced one legal resolved context
+and one malformed context for the cycle case. Icarus simulation PASS.
+Verilator 5.050 `-Wall` lint for both production modules has zero warnings.
+Evidence: `work/results/l2_descriptor_v2_snapshot/`.

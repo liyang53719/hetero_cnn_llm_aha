@@ -5,6 +5,7 @@
 - Descriptor/ISA v2 contract PASS: 128-bit command unchanged; NULL roots/root roles, matrix_aux/DMA policy/event-list, vectors and migrated segment reports; 57 Python tests.
 - Descriptor-v2 production oracle PASS: OS 36, LOOP_WS 11, Conv identity 9 and Conv requant+ReLU 9 ops match saved retained-Rocket funct/rs1/rs2 exactly; full suite 59 PASS.
 - v2 snapshot frontend PASS: src0/src1/dst/bias up to 64 cached records, full pre-issue structural validation, cyclic chain zero replay, Icarus PASS and Verilator -Wall clean.
+- v2 semantic decode PASS: root-role placement, required fields, replay integrity, Conv/bias and dual quant capture; legal/error contexts exact, Verilator -Wall clean.
 - CPU rule: all build/test/DC use `taskset -c 8-25`; Docker uses `--cpuset-cpus=8-23`.
 - Resource rule: `MemAvailable > 10 GiB`, at most `-j4`, user/Docker memory cap required.
 - L0 PASS; L1 upstream PASS.

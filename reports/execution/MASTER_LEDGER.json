@@ -109,6 +109,7 @@
         ,"Descriptor/ISA v2 contract: NULL roots, opcode root roles, matrix_aux/DMA policy/event-list records, committed vectors and 57 Python tests PASS"
         ,"Descriptor-v2 multi-op oracle: generated OS 36, LOOP_WS 11 and two Conv 9-command programs match all saved retained-Rocket funct/rs1/rs2 commits; 59 Python tests PASS"
         ,"Descriptor-v2 RTL snapshot frontend: legal four-chain snapshot replays 14 stable records only after full validation; cyclic chain returns status 2 with zero replay; Verilator -Wall clean"
+        ,"Descriptor-v2 semantic decode: root placement, required fields, singleton/reserved bits, replay first/last/root integrity and dual quant records produce resolved legal/error contexts; Verilator -Wall clean"
       ],
       "remaining_gates": [
         "Extend the production typed-descriptor sequencer through multi-tile OS/WS, convolution, bias and requant, preserving the already-passed retained-Rocket equivalence transcripts",

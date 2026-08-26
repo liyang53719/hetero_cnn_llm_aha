@@ -90,6 +90,7 @@ def main() -> int:
         "gemmini_rocc_program_adapter",
         "gemmini_descriptor_sequencer",
         "matrix_descriptor_v2_snapshot",
+        "matrix_descriptor_v2_decode",
         "aha_garnet_axi_config_loader",
         "aha_garnet_proc_packet_writer",
         "aha_garnet_microsequencer",

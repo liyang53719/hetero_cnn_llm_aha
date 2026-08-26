@@ -26,18 +26,18 @@ PROJECT=(
   "$ROOT/rtl/integration/hetero_l3_production_top.sv"
   "$ROOT/tb/tb_hetero_l3_production_top.sv"
 )
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --lint-only --timing -Wall \
   --top-module tb_hetero_l3_production_top \
   "$ROOT/tb/ctsp4096x128wm_lint_stub.sv" "${PROJECT[@]}" \
   >"$OUT/verilator_lint.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --binary --timing --assert -Wall -Wno-fatal \
-  -DARM_DISABLE_EMA_CHECK -j 4 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" \
+  -DARM_DISABLE_EMA_CHECK -j 8 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" \
   -GCMD_TARGET=100000 -GL2_TARGET=100000 -GSTREAM_TARGET=10000 \
   --top-module tb_hetero_l3_production_top --Mdir "$OUT/obj_100k" -o tb_100k \
   "$MACRO" "${PROJECT[@]}" >"$OUT/verilator_100k_build.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$OUT/obj_100k/tb_100k" | tee "$OUT/verilator_100k.log"
 grep -q "HETERO_L3_PRODUCTION_TOP_COMBINED_PASS commands=100003" \
   "$OUT/verilator_100k.log"

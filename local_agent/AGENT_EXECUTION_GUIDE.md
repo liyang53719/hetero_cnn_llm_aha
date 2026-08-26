@@ -3,7 +3,7 @@
 
 版本：2026-08-24 v0.1
 
-本文件是执行合同，不是建议清单。Agent 必须按 stage 顺序关闭门禁，不得在 upstream baseline 失败时继续修改第三方代码，不得把 analytical estimate 当成 RTL result，不得使用 Vivado 综合结果替代 22nm Synopsys DC 结果。此 checkout 的编译、仿真、测试和综合命令统一使用 `taskset -c 8-25`；当前主机若只有 CPU 0-23，实际生效集合为 8-23。
+本文件是执行合同，不是建议清单。Agent 必须按 stage 顺序关闭门禁，不得在 upstream baseline 失败时继续修改第三方代码，不得把 analytical estimate 当成 RTL result，不得使用 Vivado 综合结果替代 22nm Synopsys DC 结果。此 checkout 的编译、仿真、测试和综合命令统一使用 `taskset -c 8-23`；当前主机若只有 CPU 0-23，实际生效集合为 8-23。
 
 ## A. 目录和分支规则
 
@@ -63,7 +63,7 @@ integration/hetero-v0        顶层集成
 
 ```bash
 cd delivery/hetero_cnn_llm_aha
-taskset -c 8-25 ./scripts/toolchain_audit.sh | tee work/results/toolchain_audit.txt
+taskset -c 8-23 ./scripts/toolchain_audit.sh | tee work/results/toolchain_audit.txt
 ```
 
 门禁：所有本 stage 需要的工具必须可执行，版本写入报告。工具缺失时只允许标记 `BLOCKED_TOOLCHAIN`，不得生成虚假 PASS 文件。
@@ -72,7 +72,7 @@ taskset -c 8-25 ./scripts/toolchain_audit.sh | tee work/results/toolchain_audit.
 
 ```bash
 cd delivery/hetero_cnn_llm_aha
-taskset -c 8-25 ./scripts/sandbox_validate.sh
+taskset -c 8-23 ./scripts/sandbox_validate.sh
 ```
 
 预期输出：

@@ -8,4 +8,4 @@ fi
 
 # Keep the user-requested spelling. On this host the cgroup constrains it to
 # CPUs 8-23, which taskset resolves transparently.
-exec taskset -c "${L11_CPUSET:-8-25}" "$@"
+exec taskset -c "${L11_CPUSET:-8-23}" "$@"

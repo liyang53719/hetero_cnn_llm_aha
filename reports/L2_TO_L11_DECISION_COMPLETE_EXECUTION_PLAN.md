@@ -68,10 +68,11 @@ state.
 
 ## Resource, evidence and recovery rules
 
-- Every compile/test/generation/DC command is wrapped by `taskset -c 8-25`;
-  Docker additionally uses `--cpuset-cpus=8-23`. Parallelism is at most j4.
+- Every compile/test/generation/DC command is wrapped by `taskset -c 8-23`;
+  Docker additionally uses `--cpuset-cpus=8-23`. Default parallelism is j8
+  and an explicitly reviewed task may peak at j16.
 - Start heavy work only with `MemAvailable > 10 GiB` and disk free >50 GB;
-  simulations/synthesis use the 10 GiB capped runner.
+  simulations/synthesis use the 30 GiB capped runner (`MemoryHigh=24G`).
 - Long work records command, PID, cwd, affinity, start time and log, and uses
   blocking completion waits rather than periodic polling.
 - Every gate updates `result.json`, `MASTER_LEDGER.json`, `NEXT_ACTION.json`

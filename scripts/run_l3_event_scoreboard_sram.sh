@@ -7,7 +7,7 @@ OUT=${OUT:-$ROOT/work/results/l3_event_scoreboard_sram}
 VERILATOR=${VERILATOR:-$ROOT/work/toolchain/conda/bin/verilator}
 [[ -f "$MACRO" ]] || { echo "missing generated macro: $MACRO" >&2; exit 2; }
 mkdir -p "$OUT"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G \
   "$ROOT/scripts/run_memory_capped.sh" iverilog -g2012 \
   -DARM_DISABLE_EMA_CHECK -s tb_command_event_scoreboard_sram_100k -o "$OUT/tb" \
   "$MACRO" "$ROOT/rtl/memory/ct_sp4096x128_macro_wrapper.sv" \
@@ -15,9 +15,9 @@ MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G \
   "$ROOT/rtl/integration/command_event_scoreboard_sram.sv" \
   "$ROOT/rtl/integration/command_event_frontend_sram.sv" \
   "$ROOT/tb/tb_command_event_scoreboard_sram_100k.sv"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G \
   "$ROOT/scripts/run_memory_capped.sh" vvp "$OUT/tb" | tee "$OUT/tb.log"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G \
   "$ROOT/scripts/run_memory_capped.sh" "$VERILATOR" --lint-only --timing \
   -Wall -Wno-fatal -DARM_DISABLE_EMA_CHECK "$MACRO" \
   "$ROOT/rtl/memory/ct_sp4096x128_macro_wrapper.sv" \

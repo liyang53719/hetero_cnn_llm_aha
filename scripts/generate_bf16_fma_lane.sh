@@ -8,9 +8,9 @@ JAVA=$ROOT/work/toolchain/conda/bin/java
 SRC=$ROOT/integration/gemmini/EmitHeteroBF16Fma.scala
 mkdir -p "$OUT"
 test -z "$(git -C "$CHIP" status --porcelain)"||{ echo canonical Chipyard dirty >&2;exit 3;}
-CMD=";project chipyard;set Global / concurrentRestrictions := Seq(Tags.limitAll(4));set Compile / unmanagedSources += file(\"$SRC\");runMain gemmini.EmitHeteroBF16Fma $OUT/HeteroBF16FmaLane.sv"
+CMD=";project chipyard;set Global / concurrentRestrictions := Seq(Tags.limitAll(8));set Compile / unmanagedSources += file(\"$SRC\");runMain gemmini.EmitHeteroBF16Fma $OUT/HeteroBF16FmaLane.sv"
 pushd "$CHIP">/dev/null
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$JAVA" -Xmx8G -jar "$CHIP/scripts/sbt-launch.jar" \
   -Dsbt.ivy.home="$CHIP/.ivy2" -Dsbt.global.base="$CHIP/.sbt" \
   -Dsbt.boot.directory="$CHIP/.sbt/boot" -Dsbt.color=never \

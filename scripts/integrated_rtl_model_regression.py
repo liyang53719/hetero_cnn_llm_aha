@@ -142,7 +142,7 @@ def run_rtl_case() -> dict[str, object]:
     compile_cmd = [
         "taskset",
         "-c",
-        "8-25",
+        "8-23",
         "iverilog",
         "-g2012",
         "-s",
@@ -155,7 +155,7 @@ def run_rtl_case() -> dict[str, object]:
     compile_log.write_text(compiled.stdout, encoding="utf-8")
     if compiled.returncode != 0:
         return {"status": "FAIL", "phase": "compile", "returncode": compiled.returncode}
-    run_cmd = ["taskset", "-c", "8-25", "vvp", str(binary)]
+    run_cmd = ["taskset", "-c", "8-23", "vvp", str(binary)]
     ran = subprocess.run(run_cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     run_log.write_text(ran.stdout, encoding="utf-8")
     if ran.returncode != 0:
@@ -217,7 +217,7 @@ def run_rocc_wrapper_case() -> dict[str, object]:
         ROOT / "tb/tb_hetero_npu_gemmini_rocc_integration_v0.sv",
     ]
     compile_cmd = [
-        "taskset", "-c", "8-25", "iverilog", "-g2012", "-s",
+        "taskset", "-c", "8-23", "iverilog", "-g2012", "-s",
         "tb_hetero_npu_gemmini_rocc_integration_v0", "-o", str(binary),
         *(str(path) for path in sources),
     ]
@@ -225,7 +225,7 @@ def run_rocc_wrapper_case() -> dict[str, object]:
     compile_log.write_text(compiled.stdout, encoding="utf-8")
     if compiled.returncode != 0:
         return {"status": "FAIL_COMPILE", "returncode": compiled.returncode}
-    ran = subprocess.run(["taskset", "-c", "8-25", "vvp", str(binary)], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    ran = subprocess.run(["taskset", "-c", "8-23", "vvp", str(binary)], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     run_log.write_text(ran.stdout, encoding="utf-8")
     passed = ran.returncode == 0 and "GEMMINI_ROCC_INTEGRATION_PASS" in ran.stdout
     cycles = re.search(r"GEMMINI_ROCC_INTEGRATION_PASS cycles=(\d+)", ran.stdout)

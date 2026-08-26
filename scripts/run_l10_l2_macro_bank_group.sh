@@ -15,7 +15,7 @@ MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=6G MEMORY_MAX=8G \
   "$ROOT/tb/tb_l2_512b_macro_bank_group.sv"
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=6G MEMORY_MAX=8G \
   "$ROOT/scripts/run_memory_capped.sh" vvp "$OUT/tb" | tee "$OUT/tb.log"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G \
   "$ROOT/scripts/run_memory_capped.sh" "$VERILATOR" --lint-only --timing \
   -Wall -Wno-fatal -DARM_DISABLE_EMA_CHECK "$MACRO" \
   "$ROOT/rtl/memory/l2_sp6144x128_macro_wrapper.sv" \

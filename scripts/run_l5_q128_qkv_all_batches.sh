@@ -10,10 +10,10 @@ VERILATOR="$ROOT/work/toolchain/conda/bin/verilator"
 PYTHON="$ROOT/work/toolchain/cnn_py312/bin/python"
 mkdir -p "$BASE" "$SHARED" "$OUT"
 
-taskset -c 8-25 "$PYTHON" "$ROOT/scripts/generate_l5_target_qkv_segment_vectors.py" --out "$BASE"
+taskset -c 8-23 "$PYTHON" "$ROOT/scripts/generate_l5_target_qkv_segment_vectors.py" --out "$BASE"
 for batch in 0 1 2 3 4 5 6 7; do
   mkdir -p "$OUT/batch$batch"
-  taskset -c 8-25 "$PYTHON" "$ROOT/scripts/generate_l5_q128_qkv_batch_vectors.py" \
+  taskset -c 8-23 "$PYTHON" "$ROOT/scripts/generate_l5_q128_qkv_batch_vectors.py" \
     --base-dir "$BASE" --batch-index "$batch" --shared-out "$SHARED" \
     --out "$OUT/batch$batch"
 done
@@ -27,17 +27,17 @@ SOURCES=(
   "$ROOT/tb/tb_l5_q128_qkv_batch0.sv"
 )
 COMMON=(--timing -Wall -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL)
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --lint-only "${COMMON[@]}" --top-module tb_l5_q128_qkv_batch0 \
   "${SOURCES[@]}" >"$OUT/all_lint.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
-  "$VERILATOR" --binary "${COMMON[@]}" -j 4 \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
+  "$VERILATOR" --binary "${COMMON[@]}" -j 8 \
   -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" \
   --top-module tb_l5_q128_qkv_batch0 --Mdir "$OUT/all_obj" -o tb \
   "${SOURCES[@]}" >"$OUT/all_build.log" 2>&1
 cd "$ROOT"
 for batch in 0 1 2 3 4 5 6 7; do
-  MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+  MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
     "$OUT/all_obj/tb" +BATCH="$batch" | tee "$OUT/batch$batch/tb_all.log"
   grep -q "L5_Q128_QKV_BATCH_PASS batch=$batch" "$OUT/batch$batch/tb_all.log"
 done

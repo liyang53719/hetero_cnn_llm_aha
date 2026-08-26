@@ -11,7 +11,7 @@ run_top() {
   mkdir -p "$out_dir"
   TOP=$top RTL_FILELIST=$ROOT/$filelist STD_CELL_DBS=$DB \
   CLOCK_PERIOD_NS=1.0 CLOCK_PORT=clk_i OUT_DIR=$out_dir DC_MAX_CORES=4 \
-  MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=10G MEMORY_MAX=12G \
+  MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G \
     "$ROOT/scripts/run_memory_capped.sh" "$DC" -64bit -f "$ROOT/dc/synth_22nm.tcl" \
     >"$OUT/$top.dc.log" 2>&1
   grep -q '^UNMAPPED_CELLS=0$' "$out_dir/status.txt"

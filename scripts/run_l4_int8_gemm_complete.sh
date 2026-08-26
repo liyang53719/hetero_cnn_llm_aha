@@ -25,24 +25,24 @@ PROJECT=(
   "$ROOT/rtl/integration/hetero_l3_production_top.sv"
   "$ROOT/tb/tb_l4_int8_gemm_l3_trace.sv"
 )
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --lint-only --timing -Wall --top-module tb_l4_int8_gemm_l3_trace \
   "$ROOT/tb/ctsp4096x128wm_lint_stub.sv" "${PROJECT[@]}" >"$OUT/lint.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --binary --timing --assert -Wall -Wno-fatal -DARM_DISABLE_EMA_CHECK \
-  -j 4 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_l4_int8_gemm_l3_trace \
+  -j 8 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_l4_int8_gemm_l3_trace \
   --Mdir "$OUT/obj" -o tb "$MACRO" "${PROJECT[@]}" >"$OUT/build.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$OUT/obj/tb" | tee "$OUT/tb.log"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   iverilog -g2012 -s tb_gemmini_descriptor_v2_pipeline -o "$OUT/descriptor_tb" \
   "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" \
   "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" \
   "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" \
   "$ROOT/tb/tb_gemmini_descriptor_v2_pipeline.sv"
-(cd "$ROOT" && MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G \
+(cd "$ROOT" && MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G \
   "$RUN" vvp "$OUT/descriptor_tb") | tee "$OUT/descriptor.log"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$PYTHON" "$ROOT/scripts/audit_l4_int8_gemm_complete.py" \
   --payload "$ROOT/reports/execution/l4_int8_gemm_payload_result.json" \
   --trace-log "$OUT/tb.log" --descriptor-log "$OUT/descriptor.log" \

@@ -17,19 +17,19 @@ SOURCES=(
   "$ROOT/tb/tb_aha_kv_tensor_stream_endpoints.sv"
 )
 
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN_CAPPED" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN_CAPPED" \
   "$VERILATOR" --lint-only --timing -Wall \
   --top-module tb_aha_kv_tensor_stream_endpoints "${SOURCES[@]}" \
   >"$OUT/verilator_lint.log" 2>&1
 
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN_CAPPED" \
-  "$VERILATOR" --binary --timing -Wall -j 4 \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN_CAPPED" \
+  "$VERILATOR" --binary --timing -Wall -j 8 \
   -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" \
   -GTARGET=100000 --top-module tb_aha_kv_tensor_stream_endpoints \
   --Mdir "$OBJ" -o tb_100k "${SOURCES[@]}" \
   >"$OUT/verilator_build.log" 2>&1
 
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN_CAPPED" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN_CAPPED" \
   "$OBJ/tb_100k" | tee "$OUT/tb_100k.log"
 grep -q "AHA_KV_TENSOR_ENDPOINTS_100K_PASS transfers=100000" "$OUT/tb_100k.log"
 echo L3_AHA_KV_TENSOR_ENDPOINTS_GATE_PASS

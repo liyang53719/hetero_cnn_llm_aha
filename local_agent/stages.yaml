@@ -25,7 +25,7 @@ stages:
     name: delivery_self_validation
     depends_on: []
     commands:
-      - taskset -c 8-25 ./scripts/sandbox_validate.sh
+      - taskset -c 8-23 ./scripts/sandbox_validate.sh
     required_artifacts:
       - reports/final_validation.json
       - reports/architecture_results.json
@@ -45,7 +45,7 @@ stages:
     name: upstream_clone_lock_license
     depends_on: [L0]
     commands:
-      - taskset -c 8-25 ./scripts/clone_upstreams.sh work/upstream
+      - taskset -c 8-23 ./scripts/clone_upstreams.sh work/upstream
     required_artifacts:
       - work/upstream/UPSTREAM_LOCK.json
       - work/results/licenses/license_matrix.csv
@@ -59,7 +59,7 @@ stages:
     name: gemmini_unmodified_baseline
     depends_on: [L1]
     commands:
-      - taskset -c 8-25 env CHIPYARD_ROOT=work/upstream/chipyard RUN_SETUP=1 OUT=work/results/gemmini_baseline ./scripts/reproduce_gemmini.sh
+      - taskset -c 8-23 env CHIPYARD_ROOT=work/upstream/chipyard RUN_SETUP=1 OUT=work/results/gemmini_baseline ./scripts/reproduce_gemmini.sh
     required_artifacts:
       - work/results/gemmini_baseline/result.json
       - work/results/gemmini_baseline/generated_rtl.sha256
@@ -78,7 +78,7 @@ stages:
     name: aha_unmodified_baseline
     depends_on: [L1]
     commands:
-      - taskset -c 8-25 env AHA_ROOT=work/upstream/aha OUT=work/results/aha_baseline TOOL=VERILATOR ./scripts/reproduce_aha.sh
+      - taskset -c 8-23 env AHA_ROOT=work/upstream/aha OUT=work/results/aha_baseline TOOL=VERILATOR ./scripts/reproduce_aha.sh
     required_artifacts:
       - work/results/aha_baseline/result.json
       - work/results/aha_baseline/garnet_rtl.sha256
@@ -94,8 +94,8 @@ stages:
     name: transport_and_imax_baselines
     depends_on: [L1]
     commands:
-      - taskset -c 8-25 env IDMA_ROOT=work/upstream/idma OUT=work/results/idma_baseline ./scripts/reproduce_idma.sh
-      - taskset -c 8-25 env IMAX_ROOT=work/upstream/imax3_llm OUT=work/results/imax3_audit RUN_BUILD=1 ./scripts/audit_imax3.sh
+      - taskset -c 8-23 env IDMA_ROOT=work/upstream/idma OUT=work/results/idma_baseline ./scripts/reproduce_idma.sh
+      - taskset -c 8-23 env IMAX_ROOT=work/upstream/imax3_llm OUT=work/results/imax3_audit RUN_BUILD=1 ./scripts/audit_imax3.sh
     acceptance:
       - idma_dependencies_resolved
       - idma_source_list_generated
@@ -189,7 +189,7 @@ stages:
     name: dc_22nm_synthesis_sta
     depends_on: [L11]
     commands:
-      - taskset -c 8-25 env STD_CELL_DBS=<22nm_db_list> CLOCK_PERIOD_NS=1.0 ./scripts/run_dc22.sh
+      - taskset -c 8-23 env STD_CELL_DBS=<22nm_db_list> CLOCK_PERIOD_NS=1.0 ./scripts/run_dc22.sh
     acceptance:
       - unresolved_references_eq_0
       - unmapped_cells_eq_0

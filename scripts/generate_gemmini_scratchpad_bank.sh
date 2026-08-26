@@ -19,10 +19,10 @@ test -z "$(git -C "$CHIPYARD" status --porcelain)" || {
 }
 
 export PATH="$ROOT/work/toolchain/riscv/bin:$ROOT/work/toolchain/conda/bin:$PATH"
-SBT_COMMAND=";project chipyard;set Global / concurrentRestrictions := Seq(Tags.limitAll(4));set Compile / unmanagedSources += file(\"$SOURCE_FILE\");runMain gemmini.EmitHeteroScratchpadBank $OUT/ScratchpadBank.sv"
+SBT_COMMAND=";project chipyard;set Global / concurrentRestrictions := Seq(Tags.limitAll(8));set Compile / unmanagedSources += file(\"$SOURCE_FILE\");runMain gemmini.EmitHeteroScratchpadBank $OUT/ScratchpadBank.sv"
 
 pushd "$CHIPYARD" >/dev/null
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN_CAPPED" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN_CAPPED" \
   "$JAVA" -Xmx8G -jar "$SBT_LAUNCHER" \
   -Dsbt.ivy.home="$CHIPYARD/.ivy2" \
   -Dsbt.global.base="$CHIPYARD/.sbt" \

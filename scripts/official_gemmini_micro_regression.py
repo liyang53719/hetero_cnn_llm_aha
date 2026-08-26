@@ -39,7 +39,7 @@ def main() -> int:
         return 1
 
     compile_cmd = [
-        "taskset", "-c", "8-25", "iverilog", "-g2012", "-s",
+        "taskset", "-c", "8-23", "iverilog", "-g2012", "-s",
         "tb_official_gemmini_mac_unit", "-o", str(binary),
         str(ROOT / "tb/tb_official_gemmini_mac_unit.sv"), str(dut),
     ]
@@ -48,7 +48,7 @@ def main() -> int:
     if compiled.returncode != 0:
         result.update({"status": "FAIL_COMPILE", "returncode": compiled.returncode})
     else:
-        ran = subprocess.run(["taskset", "-c", "8-25", "vvp", str(binary)], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        ran = subprocess.run(["taskset", "-c", "8-23", "vvp", str(binary)], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         run_log.write_text(ran.stdout, encoding="utf-8")
         result.update({
             "status": "PASS" if ran.returncode == 0 and "OFFICIAL_GEMMINI_MACUNIT_PASS checks=327680" in ran.stdout else "FAIL_SIMULATION",

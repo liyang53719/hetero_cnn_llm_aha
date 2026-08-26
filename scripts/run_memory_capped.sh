@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Run one project task in a user cgroup so a compiler spike cannot trigger a
-# global OOM.  All project build/test/synthesis calls remain pinned to 8-25.
+# global OOM. All project build/test/synthesis calls are pinned to CPU 8-23.
 set -euo pipefail
 
 MIN_AVAILABLE_KIB=${MIN_AVAILABLE_KIB:-16777216} # 16 GiB admission floor
-MEMORY_HIGH=${MEMORY_HIGH:-10G}
-MEMORY_MAX=${MEMORY_MAX:-14G}
+MEMORY_HIGH=${MEMORY_HIGH:-24G}
+MEMORY_MAX=${MEMORY_MAX:-30G}
 
 if [[ $# -eq 0 ]]; then
   echo "usage: $0 <command> [args...]" >&2
@@ -21,4 +21,4 @@ fi
 exec systemd-run --user --scope --quiet \
   -p "MemoryHigh=${MEMORY_HIGH}" \
   -p "MemoryMax=${MEMORY_MAX}" \
-  taskset -c 8-25 "$@"
+  taskset -c 8-23 "$@"

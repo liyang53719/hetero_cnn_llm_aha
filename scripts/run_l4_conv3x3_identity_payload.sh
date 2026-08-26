@@ -5,12 +5,12 @@ G=$ROOT/work/upstream/chipyard_gemmini/generators/gemmini/software/gemmini-rocc-
 T=$ROOT/work/toolchain/apt-riscv/usr;D=$ROOT/work/toolchain/riscv/bin/spike-dasm;R=$ROOT/scripts/run_memory_capped.sh;P=$ROOT/work/toolchain/cnn_py312/bin/python
 E=$OUT/conv3x3-baremetal;X=$OUT/conv3x3.trace;L=$OUT/conv3x3.log;TMP=$(mktemp -d);trap 'rm -rf "$TMP"' EXIT
 ln -s "$T/bin/riscv64-unknown-elf-as" "$TMP/as";ln -s "$T/bin/riscv64-unknown-elf-ld" "$TMP/ld";C=$G/riscv-tests/benchmarks/common
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$R" "$T/bin/riscv64-unknown-elf-gcc" -B"$TMP/" -isystem "$T/lib/picolibc/riscv64-unknown-elf/include" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$T/bin/riscv64-unknown-elf-gcc" -B"$TMP/" -isystem "$T/lib/picolibc/riscv64-unknown-elf/include" \
  -DPREALLOCATE=1 -DMULTITHREAD=1 -mcmodel=medany -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -fno-tree-loop-distribute-patterns \
  -march=rv64gc -Wa,-march=rv64gc -I"$G/riscv-tests" -I"$G/riscv-tests/env" -I"$G" -I"$C" -I"$ROOT/tests" -DID_STRING=l4-conv3x3 -DPRINT_TILE=0 \
  -nostdlib -nostartfiles -static -T "$C/test.ld" -DBAREMETAL=1 "$ROOT/tests/gemmini_l4_conv3x3_identity.c" "$C"/*.c "$C"/*.S -lgcc -o "$E" >"$OUT/compile.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$R" "$S" +permissive +dramsim +dramsim_ini_dir="$ROOT/work/upstream/chipyard_gemmini/generators/testchipip/src/main/resources/dramsim2_ini" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$S" +permissive +dramsim +dramsim_ini_dir="$ROOT/work/upstream/chipyard_gemmini/generators/testchipip/src/main/resources/dramsim2_ini" \
  +max-cycles=10000000 +loadmem="$E" +verbose +permissive-off "$E" </dev/null 2> >("$D">"$X")|tee "$L"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$R" "$P" "$ROOT/scripts/audit_l4_conv3x3_identity_payload.py" --trace "$X" --run-log "$L" --elf "$E" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$P" "$ROOT/scripts/audit_l4_conv3x3_identity_payload.py" --trace "$X" --run-log "$L" --elf "$E" \
  --vectors "$ROOT/tests/vectors/gemmini_descriptor_v2_programs.json" --output "$OUT/payload_result.json"
 echo L4_CONV3X3_IDENTITY_PAYLOAD_GATE_PASS

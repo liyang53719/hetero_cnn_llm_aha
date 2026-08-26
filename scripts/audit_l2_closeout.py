@@ -33,7 +33,7 @@ def main()->int:
  }
  result={"status":"PASS" if all(checks.values()) else "FAIL","canonical_stage":"L2",
          "scope":"Matrix+AHA+KV/iDMA wrapper-only macro integration","checks":checks,
-         "cpu_affinity":"taskset -c 8-25","upstream_patches":0}
+         "cpu_affinity":"taskset -c 8-23","upstream_patches":0}
  a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
  print(json.dumps(result,sort_keys=True));return 0 if result["status"]=="PASS" else 1
 if __name__=="__main__":raise SystemExit(main())

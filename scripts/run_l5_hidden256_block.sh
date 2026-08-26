@@ -9,7 +9,7 @@ PYTHON="$ROOT/work/toolchain/cnn_py312/bin/python"
 mkdir -p "$OUT/vectors"
 
 "$ROOT/scripts/generate_all_hardfloat_primitives.sh"
-taskset -c 8-25 "$PYTHON" "$ROOT/scripts/generate_l5_hidden256_block_vectors.py" \
+taskset -c 8-23 "$PYTHON" "$ROOT/scripts/generate_l5_hidden256_block_vectors.py" \
   --out "$OUT/vectors"
 
 SOURCES=(
@@ -29,16 +29,16 @@ SOURCES=(
 )
 COMMON=(--timing -Wall -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL)
 
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --lint-only "${COMMON[@]}" --top-module tb_l5_hidden256_block \
   "${SOURCES[@]}" >"$OUT/lint.log" 2>&1
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
-  "$VERILATOR" --binary "${COMMON[@]}" -j 4 \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
+  "$VERILATOR" --binary "${COMMON[@]}" -j 8 \
   -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" \
   --top-module tb_l5_hidden256_block --Mdir "$OUT/obj" -o tb \
   "${SOURCES[@]}" >"$OUT/build.log" 2>&1
 cd "$ROOT"
-MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" \
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$OUT/obj/tb" | tee "$OUT/tb.log"
 grep -q 'L5_HIDDEN256_BLOCK_PASS hidden=256' "$OUT/tb.log"
 echo L5_HIDDEN256_BLOCK_GATE_PASS

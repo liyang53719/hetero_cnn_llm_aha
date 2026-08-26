@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume q384 product hash8e2484ecca62c93071ecd7c4f0c3ae9cf0933a6cd652124ba379c9b9b72f0f15 and the24 q384 residual1 batches. Parameterize the existing down/final golden and TB with runtime workload128/384, compile once, run24 q384 batches and then q128 batch0 compatibility. Require430080 Matrix steps,1720320 Matrix cycles and1536 residual cycles per batch; no workload-specific RTL is allowed.",
+  "command": "Wrap the unified runtime prefill count controller with measured per-operation latency selected by runtime sequence length. In one compiled binary run q128 and q384, require61101824 and202769664 active cycles,11698176 and35094528 Matrix steps,24 commands each, zero score-matrix commands, and reject sequence256. Then close q384 and begin q1024 runtime extension without forking RTL.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",
@@ -11,6 +11,6 @@
     "q128 gate/up/SiLU/product/down/final",
     "q128 receipt aggregate"
   ],
-  "success_condition": "One unchanged runtime-configured binary passes all24 q384 down/final batches plus q128 compatibility, measures10321920 Matrix steps and41324544 total cycles, freezes the q384 final hash, and remains within CPU8-23 and30GiB.",
-  "failure_policy": "Do not compile workload-specific RTL, scale q128 results, relax the first mismatch, or close q384 before all24 numerical batches and the unified measured trace pass."
+  "success_condition": "One unchanged runtime-configured controller reproduces every measured q128/q384 operation latency and aggregate cycle/count total with no score matrix; q384 closeout cites only passed payload and measured RTL evidence.",
+  "failure_policy": "Do not scale q128 totals to invent q384 latency, compile sequence-specific RTL, hide per-operation mismatches, or begin q1024 before q384 payload and trace receipts both pass."
 }

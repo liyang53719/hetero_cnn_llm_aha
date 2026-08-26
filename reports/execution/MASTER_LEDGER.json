@@ -421,6 +421,11 @@
         ,"reports/execution/l5_q384_silu_product_result.json"
         ,"work/results/l5_q384_silu_product/tb.log"
         ,"work/results/l5_q384_silu_product/q128_compat.log"
+        ,"reports/execution/L5_Q384_DOWN_FINAL.md"
+        ,"reports/execution/l5_q384_down_final_result.json"
+        ,"work/results/l5_q384_down/batch0/tb.log"
+        ,"work/results/l5_q384_down/batch23/tb.log"
+        ,"work/results/l5_q384_down/q128_compat.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -476,6 +481,7 @@
         ,"q128/q384 OProj/residual/norm2 use one runtime-configured binary; q384 passes24 batches"
         ,"q128/q384 gate/up use one runtime-configured binary; q384 passes48 projection phases and20643840 steps"
         ,"q128/q384 SiLU/product use one runtime-configured binary; q384 passes3440640 scalars and215040 product chunks"
+        ,"q128/q384 down/final use one runtime-configured binary; q384 passes24 batches and10321920 Matrix steps"
       ],
       "remaining_gates": [
         "q384 SiLU/product and down/final, q1024 prefill, and decode128/1024/4096 block numerics"

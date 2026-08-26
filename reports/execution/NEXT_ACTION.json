@@ -1,6 +1,6 @@
 {
-  "phase": "L4_INT8_GEMM_CANONICAL_L3_TRACE",
-  "command": "Replay the exact 17x18x19 OS descriptor and DMA request shapes through hetero_l3_production_top: descriptor/control reads use logical read client 0, six weight beats use client 1, activation plus bias beats use client 2, and five output writes use logical write client 0. Run the clients concurrently, complete the Matrix command only after all responses/writes, and record canonical-top cycles, physical bytes, bank conflicts/stalls and command completion ordering. Merge those measured fields with reports/execution/l4_int8_gemm_payload_result.json; do not rerun or reinterpret payload cycles as L3 cycles.",
+  "phase": "L4_CNN_CONV1X1",
+  "command": "Close the existing pinned 1x4x4x3 to 4-channel 1x1 Conv production case as an L4 numerical/metric gate. Add retained-Gemmini mcycle measurement around the raw descriptor-lowered path, independently generate every output element and SHA256, verify all nine CUSTOM_3 payloads through current descriptor-v2 RTL, and replay its exact input/weight/bias/output traffic through hetero_l3_production_top for physical bytes, cycles, conflicts and stalls. Keep payload and transport metrics separate as in the INT8 GEMM result.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

@@ -1,0 +1,44 @@
+{
+  "stage": "L4",
+  "subgate": "INT8_GEMM",
+  "status": "PASS",
+  "shape": {
+    "m": 17,
+    "n": 18,
+    "k": 19
+  },
+  "dataflow": "OS",
+  "tiles": [
+    2,
+    2,
+    2
+  ],
+  "custom3_commands": 36,
+  "elementwise_bit_exact": true,
+  "output_sha256": "1d3777b3d32a04238220dc560028765d13e1594e48548a658ac80b3e2c9930d5",
+  "output_checksum_u64": 14853676686976657775,
+  "rtl_payload_cycles": 955,
+  "rtl_dma_bytes": 2195,
+  "rtl_macs": 5814,
+  "physical_array_peak_macs_per_cycle": 256,
+  "rtl_mac_utilization": 0.023781086387434557,
+  "bank_conflicts": 5,
+  "bank_conflicts_status": "RTL_MEASURED",
+  "elf_sha256": "a478b30ecc15aa654d16ac84871b7c41d77ac94d0deb62858fb7c97ae308f0bd",
+  "measurement_scope": {
+    "cycles": "retained Gemmini RTL mcycle around production-lowered raw path",
+    "dma_bytes": "exact bytes requested by emitted mvin/mvout commands",
+    "utilization": "useful MACs divided by measured cycles and physical 16x16 peak",
+    "canonical_l3_trace_cycles": "host Matrix dispatch through concurrent L2 trace and accepted completion",
+    "bank_conflicts": "cycle-accurate physical Shared-L2 model behind canonical production arbiter",
+    "physical_dma_bytes": "512-bit physical beats for weight, activation/bias and output traffic"
+  },
+  "canonical_l3_trace_cycles": 87,
+  "physical_dma_bytes": 2368,
+  "descriptor_bytes": 256,
+  "canonical_l3_reads": 36,
+  "canonical_l3_writes": 5,
+  "read_stalls": 3,
+  "write_stalls": 2,
+  "descriptor_promotions": 1
+}

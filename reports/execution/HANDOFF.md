@@ -13,7 +13,7 @@
 - Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
 - Next: begin L4 with pinned torchvision/weights audit, INT8 GEMM then 1x1/3x3 Conv numerical-to-RTL cases; production 4x4 AHA/Lake depthwise remains a mandatory later L4 dependency.
 - L4 dependency lock PASS: Python 3.12.7, torch 2.9.1+cu128, torchvision 0.24.1+cu128, ResNet50/MobileNetV2 V2 weights full SHA256 verified. Current subgate: INT8 GEMM.
-- L4 INT8 GEMM payload partial PASS: 17x18x19, 36 CUSTOM_3, 306 outputs exact, 955 retained-Gemmini RTL cycles, 2195 DMA bytes, output SHA256 `1d3777...`; canonical L3 trace cycles/conflicts still required.
+- L4 INT8 GEMM CLOSED: canonical trace 87 cycles, 2368 physical DMA bytes, 5 conflicts, 3/2 stalls, 1 descriptor promotion; payload/trace scopes remain separate. Next: 1x1 Conv.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

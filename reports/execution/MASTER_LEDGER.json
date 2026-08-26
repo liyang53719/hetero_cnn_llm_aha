@@ -207,14 +207,17 @@
         "reports/execution/L4_CNN_DEPENDENCY_LOCK.md",
         "reports/execution/L4_INT8_GEMM_PAYLOAD.md",
         "reports/execution/l4_int8_gemm_payload_result.json",
-        "work/results/l4_int8_gemm/int8_gemm.log"
+        "work/results/l4_int8_gemm/int8_gemm.log",
+        "reports/execution/L4_INT8_GEMM_CLOSEOUT.md",
+        "reports/execution/l4_int8_gemm_result.json",
+        "work/results/l4_int8_gemm_l3_trace/tb.log"
       ],
       "completed_subgates": [
         "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock",
-        "INT8 GEMM payload RTL partial: 17x18x19 production-lowered OS path is elementwise bit-exact with 955 retained-Gemmini RTL cycles and 2195 requested DMA bytes; canonical L3 trace metrics pending"
+        "INT8 GEMM payload RTL partial: 17x18x19 production-lowered OS path is elementwise bit-exact with 955 retained-Gemmini RTL cycles and 2195 requested DMA bytes; canonical L3 trace metrics pending",
+        "INT8 GEMM complete: payload and canonical L3 trace separately pass with exact output hash, 87 trace cycles, 2368 physical DMA bytes, 5 bank conflicts and current descriptor-v2 RTL regression"
       ],
       "remaining_gates": [
-        "INT8 GEMM",
         "1x1 Conv",
         "3x3 Conv",
         "bias requant ReLU",

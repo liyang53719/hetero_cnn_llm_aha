@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
-  "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "L5_Qwen_target_shape",
+  "cpu_affinity": "taskset -c 8-23",
+  "current_phase": "L5_Q384_PREFILL",
   "stages": {
     "L0": {
       "status": "PASS",
@@ -412,6 +412,11 @@
         ,"work/results/l5_q384_oproj/batch0/tb.log"
         ,"work/results/l5_q384_oproj/batch23/tb.log"
         ,"work/results/l5_q384_oproj/q128_compat.log"
+        ,"reports/execution/L5_Q384_GATE_UP_ALL.md"
+        ,"reports/execution/l5_q384_gate_up_all_result.json"
+        ,"work/results/l5_q384_gate_up/batch0/mode0.log"
+        ,"work/results/l5_q384_gate_up/batch23/mode1.log"
+        ,"work/results/l5_q384_gate_up/q128_compat.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -465,9 +470,10 @@
         ,"q128/q384 split-half RoPE and K/V GQA use one runtime-configured binary and both lengths pass"
         ,"q128/q384 causal M/L/O use one runtime-configured binary; q384 passes887040 updates without score storage"
         ,"q128/q384 OProj/residual/norm2 use one runtime-configured binary; q384 passes24 batches"
+        ,"q128/q384 gate/up use one runtime-configured binary; q384 passes48 projection phases and20643840 steps"
       ],
       "remaining_gates": [
-        "q384 prefill and decode128/1024/4096 block numerics"
+        "q384 SiLU/product and down/final, q1024 prefill, and decode128/1024/4096 block numerics"
       ]
     },
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},

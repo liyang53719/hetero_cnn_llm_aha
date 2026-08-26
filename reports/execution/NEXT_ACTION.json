@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume q384 norm2 hash8f5aff5bca82fbe7352fb639926f60234aeecd74f3d08f2b437976248631a754. Parameterize the same q128/q384 gate/up C++ golden and RTL binary for runtime workload384. Run24 restartable16-token batches; every gate and up phase must measure430080 steps, aggregate to20643840 steps, and compare all outputs. Rerun q128 batch0 on the same binary before SiLU/product; no workload-specific gate/up RTL is allowed.",
+  "command": "Consume q384 gate/up hashes59f1899fbd871ed2f30c618649bd7b406deec3e03d91c110298ed9f83b397527 and3a4b0dbaa9cce3be612239521afc91500500c841ab5db0b59dd4baecf8e52ed9. Parameterize the existing q128 SiLU/product golden and RTL for runtime workload128/384 without recompiling between lengths. Run q384 3440640 scalars plus215040 product chunks, require30965760 SiLU cycles plus215040 product cycles, compare all outputs, then rerun q128 compatibility on the same binary.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",
@@ -11,6 +11,6 @@
     "q128 gate/up/SiLU/product/down/final",
     "q128 receipt aggregate"
   ],
-  "success_condition": "The q128 manifest and controller use exact causal counts; every numerical phase consumes and emits frozen hashes; no score matrix is materialized; measured Matrix/SFU/controller cycles remain separately classified; all 128 final-token vectors pass the operation-order model under CPU 8-23, default j8/reviewed peak j16 and 30 GiB cap.",
-  "failure_policy": "Do not derive q128 measurements by scaling target-token results, omit causal prefixes, replace 16-row physical batching with a software shortcut, materialize scores, relax first mismatches, or start q384 before q128 numerical and controller receipts both pass."
+  "success_condition": "One unchanged runtime-configured binary passes q384 and q128 compatibility, emits exact product hashes, measures31180800 q384 cycles, materializes no score matrix, and remains within CPU8-23 and30GiB.",
+  "failure_policy": "Do not compile workload-specific RTL, derive q384 measurements by scaling q128, relax the first mismatch, or start down/final until the shared-binary q384 and q128 receipts both pass."
 }

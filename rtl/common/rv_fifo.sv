@@ -21,7 +21,9 @@ module rv_fifo #(
   logic [CNT_W-1:0] count_q;
 
   logic push, pop;
-  assign in_ready_o  = (count_q < DEPTH);
+  localparam logic[CNT_W-1:0] DEPTH_COUNT=CNT_W'(DEPTH);
+  localparam logic[PTR_W-1:0] LAST_PTR=PTR_W'(DEPTH-1);
+  assign in_ready_o  = (count_q < DEPTH_COUNT);
   assign out_valid_o = (count_q != '0);
   assign out_data_o  = mem_q[rd_ptr_q];
   assign level_o     = count_q;
@@ -36,10 +38,10 @@ module rv_fifo #(
     end else begin
       if (push) begin
         mem_q[wr_ptr_q] <= in_data_i;
-        wr_ptr_q <= (wr_ptr_q == DEPTH-1) ? '0 : wr_ptr_q + 1'b1;
+        wr_ptr_q <= (wr_ptr_q == LAST_PTR) ? '0 : wr_ptr_q + 1'b1;
       end
       if (pop) begin
-        rd_ptr_q <= (rd_ptr_q == DEPTH-1) ? '0 : rd_ptr_q + 1'b1;
+        rd_ptr_q <= (rd_ptr_q == LAST_PTR) ? '0 : rd_ptr_q + 1'b1;
       end
       unique case ({push, pop})
         2'b10: count_q <= count_q + 1'b1;

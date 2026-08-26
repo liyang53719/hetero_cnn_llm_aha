@@ -6,13 +6,16 @@ module tb_command_event_scoreboard_sram_100k;
   logic[127:0] host_data,run_data;
   logic[55:0] completion_data;
   logic init_done;
+  logic[4:0]command_level,completion_level;
   logic[31:0] macro_errors;
   integer seed,cycles,accepted,success_events,error_events;
-  command_event_scoreboard_sram dut(.clk_i(clk),.rst_ni(rst_n),
+  command_event_frontend_sram dut(.clk_i(clk),.rst_ni(rst_n),
     .host_cmd_valid_i(host_valid),.host_cmd_ready_o(host_ready),.host_cmd_data_i(host_data),
     .runnable_cmd_valid_o(run_valid),.runnable_cmd_ready_i(run_ready),.runnable_cmd_data_o(run_data),
     .completion_valid_i(completion_valid),.completion_ready_o(completion_ready),
-    .completion_data_i(completion_data),.init_done_o(init_done),.macro_error_count_o(macro_errors));
+    .completion_data_i(completion_data),.init_done_o(init_done),
+    .command_level_o(command_level),.completion_level_o(completion_level),
+    .macro_error_count_o(macro_errors));
   always @(posedge clk)cycles<=cycles+1;
 
   task automatic pulse_completion(input logic[15:0] event_id,input logic[7:0] status);
@@ -35,11 +38,14 @@ module tb_command_event_scoreboard_sram_100k;
         current_event=index;
         @(negedge clk);host_data='0;host_data[39:24]=previous_event;
         host_data[55:40]=current_event;host_data[10:8]=index%6;host_valid=1;
+        fire=0;
+        while(!fire)begin #1;fire=host_valid&&host_ready;@(posedge clk);if(!fire)@(negedge clk);end
+        accepted=accepted+1;@(negedge clk);host_valid=0;
         if(previous_event!=0)begin
-          run_ready=1;#1;if(host_ready||run_valid)$fatal(1,"dependency released early");
+          run_ready=1;#1;if(run_valid)$fatal(1,"dependency released early");
           if((index%4096)==0)begin
             pulse_completion(previous_event,8'd1);#1;
-            if(host_ready||run_valid)$fatal(1,"error completion released dependency");
+            if(run_valid)$fatal(1,"error completion released dependency");
           end
           pulse_completion(previous_event,8'd0);
         end
@@ -47,10 +53,9 @@ module tb_command_event_scoreboard_sram_100k;
         while(!fire)begin
           run_ready=($urandom(seed)%4)!=0;#1;
           if(run_valid&&run_data!==host_data)$fatal(1,"payload mismatch");
-          fire=host_valid&&host_ready;@(posedge clk);if(!fire)@(negedge clk);
+          fire=run_valid&&run_ready;@(posedge clk);if(!fire)@(negedge clk);
         end
-        accepted=accepted+1;
-        @(negedge clk);host_valid=0;run_ready=0;previous_event=current_event;
+        @(negedge clk);run_ready=0;previous_event=current_event;
       end
       pulse_completion(previous_event,8'd0);
     end

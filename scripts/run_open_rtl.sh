@@ -32,6 +32,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/fabric/shared_l2_fabric.sv" \
     --top-module shared_l2_fabric |& tee "$OUT/shared_l2_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall \
+    "$ROOT/rtl/fabric/shared_l2_client_arbiter.sv" \
+    --top-module shared_l2_client_arbiter |& tee "$OUT/shared_l2_client_arbiter_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/fabric/shared_l2_descriptor_port.sv" \
     --top-module shared_l2_descriptor_port |& tee "$OUT/shared_l2_descriptor_port_lint.log"

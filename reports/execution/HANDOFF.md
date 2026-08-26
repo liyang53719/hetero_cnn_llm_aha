@@ -35,9 +35,11 @@
 - Real 4-macro 512-bit Shared-L2 bank group PASS; four groups implement the planned 16 banks after arbitration integration.
 - Full 16-ARM-macro Shared-L2 100k PASS: 47346 reads, 52654 writes, 146953 conflicts, 0 mismatch/error/timeout; still L3 readiness.
 - Descriptor port on real Shared-L2 PASS: 100001 descriptor/normal-read/write transactions, 45415 responses, 124022 conflicts, exact 128-of-512 lane mapping, 0 mismatch/error/timeout.
+- Production 4→2R/2→1W arbiter PASS: 100005 transactions, all clients progress, 650 descriptor promotions, ownership/counters/payload stability exact, Verilator -Wall clean.
+- Depth-16 command/completion FIFO + real Control SRAM scoreboard PASS: 100000 commands, 100000 success, 23 errors, 0 macro errors, host gated until init.
 - Matrix-SFU/KV four direct-stream skid channels PASS 100k with all six payload fields stable/in-order; endpoint connection remains.
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: L3 production 4-logical-read→2R and 2-logical-write→1W arbiter, depth-16 completion FIFO, real-SRAM scoreboard integration and 100k command/event regression.
+- Next action: connect four direct streams to production Matrix/SFU/KV endpoint wrappers and run combined 100k command/event/fabric/stream regression before L3 audit.
 - Do not close a stage with clean-room-only evidence.

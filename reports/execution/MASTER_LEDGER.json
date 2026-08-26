@@ -151,6 +151,9 @@
         "work/results/l3_descriptor_fabric/port.log",
         "work/results/l3_descriptor_fabric/final/macro.log",
         "work/results/l3_descriptor_fabric/final/verilator_lint.log"
+        ,"reports/execution/L3_CLIENT_ARBITER_EVENT_FIFO.md"
+        ,"work/results/l3_client_arbiter/tb.log"
+        ,"work/results/l3_event_frontend_sram/tb.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
@@ -162,6 +165,8 @@
         "full 16-bit persistent event scoreboard passes 100000 chained commands across two reset epochs and rejects 23 error completions as dependency signals",
         "production event scoreboard maps one byte per Event ID into a real 4096x128 Control SRAM and passes the same 100000-command semantics with zero macro errors",
         "approved descriptor port is mapped to real 16-macro Shared L2 with exact 128-of-512 lane extraction and passes 100001 descriptor/normal-read/write contention transactions with zero mismatch or timeout"
+        ,"production 4-logical-read to 2R and 2-logical-write to 1W arbiter passes 100005 transactions with all clients progressing, 650 descriptor promotions and stable stalled payload"
+        ,"depth-16 command/completion FIFO frontend plus real Control SRAM scoreboard passes 100000 commands, 100000 success and 23 error completions across two reset epochs"
       ],
       "remaining_gates": [
         "L2 dependency PASS",

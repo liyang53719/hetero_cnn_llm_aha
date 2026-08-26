@@ -1,6 +1,6 @@
 {
-  "phase": "L3_PRODUCTION_FABRIC_EVENT_INTEGRATION",
-  "command": "Implement four logical read clients to physical Shared-L2 2R and two logical write clients to 1W. Preserve response ownership, one outstanding per logical client, bank-group fairness and descriptor promotion after eight waiting cycles. Add depth-16 completion FIFO before the real 4096x128 event SRAM, gate host commands until init_done, connect Matrix/SFU/KV direct streams and run at least 100000 integrated transactions. Bind all builds/tests to CPU 8-25 and start only above 10 GiB MemAvailable.",
-  "success_condition": "100000+ integrated command/event/descriptor/DMA/stream transactions have zero loss, duplication, reorder, starvation, assertion, macro error or timeout; event zero and error completions obey the frozen contract; all clients make progress and L3 can close.",
+  "phase": "L3_PRODUCTION_ENDPOINT_INTEGRATION",
+  "command": "Connect the verified M->SFU, SFU->M, M->KV and KV->M skid channels to production Matrix/SFU/KV wrapper endpoints. Compose them with the 4-to-2R/2-to-1W arbiter and queued real-SRAM event frontend, then run at least 100000 integrated command/event/descriptor/DMA/stream transactions. Bind all builds/tests to CPU 8-25 and start only above 10 GiB MemAvailable.",
+  "success_condition": "100000+ combined transactions have zero loss, duplication, reorder, starvation, assertion, macro error or timeout; command completion cannot precede final stream acceptance, event zero/error semantics hold, all clients and all four direct channels make progress, and L3 can close.",
   "failure_policy": "Do not statically reserve one physical read port for descriptors, add a third physical read port, bypass the real SRAM scoreboard, hide timeout, weaken fairness, or mark L3 PASS from standalone readiness tests."
 }

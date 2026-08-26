@@ -106,6 +106,8 @@ def main() -> int:
         "shared_l2_macro_fabric",
         "shared_l2_descriptor_port",
         "shared_l2_macro_descriptor_fabric",
+        "shared_l2_client_arbiter",
+        "command_event_frontend_sram",
         "tensor_stream_skid",
         "matrix_direct_streams",
     }

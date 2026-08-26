@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "cpu_affinity": "taskset -c 8-25",
+  "client_arbiter": {
+    "transactions": 100005,
+    "reads": 55993,
+    "writes": 44012,
+    "responses": 55993,
+    "descriptor_promotions": 650,
+    "all_clients_progress": true,
+    "stalled_payload_stable": true,
+    "verilator_wall_clean": true
+  },
+  "event_frontend": {
+    "command_fifo_depth": 16,
+    "completion_fifo_depth": 16,
+    "commands": 100000,
+    "successful_completions": 100000,
+    "error_completions": 23,
+    "macro_errors": 0,
+    "cycles": 1257883,
+    "real_control_sram": true
+  }
+}

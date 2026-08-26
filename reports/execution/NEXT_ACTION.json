@@ -1,6 +1,6 @@
 {
   "phase": "L5_SFU_EXP2_PWL",
-  "command": "Implement FP32 exp2 for the online-softmax range with explicit range reduction x=n+f, n integer and f in [0,1), and a committed piecewise-linear coefficient table. Freeze the supported input range and saturation behavior, generate coefficients offline into tracked hex constants, evaluate with pinned HardFloat multiply/add, and validate dense sweeps plus random vectors against NumPy exp2. Record max absolute and relative error and do not loosen thresholds after observing results. Then proceed to reciprocal.",
+  "command": "When MemAvailable is safely above 10 GiB, emit HeteroFP32Scale16Floor from pinned HardFloat and compile fp32_exp2_pwl with HeteroFP32Alu and the committed 256-segment coefficient table. Run the existing 10000 exact-PWL vectors under backpressure, require bit-exact RTL agreement and preserve the frozen dense error limits max absolute 0.00025 and relative 0.0003. Record generated converter hash, output hash and flags; do not alter coefficients or thresholds after RTL results. Then proceed to reciprocal.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

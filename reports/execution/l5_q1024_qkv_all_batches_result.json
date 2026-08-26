@@ -1,0 +1,22 @@
+{
+  "stage": "L5",
+  "subgate": "q1024 QKV batches0-63",
+  "status": "PASS",
+  "batches": 64,
+  "array_steps_total": 6291456,
+  "total_cycles": 25696256,
+  "matrix_cycles": 25165824,
+  "rms_cycles": 399360,
+  "bias_cycles": 131072,
+  "q_sha256": "4e67c4cc15bf3a72ea1f49b773832f411ff6b7445352887b9c60fe5ef0728e0f",
+  "k_sha256": "7a1daa90c38a3d680827e1663984d7bb9b63ee2298a78226a94fe2c8014c85de",
+  "v_sha256": "1853b21c3f348d347cf42adb5a996964c546fa5f88f01954769f45d6d5f7829f",
+  "same_binary_q128_q384_q1024": true,
+  "binary_sha256": "8f9a561ea23cc2df9bcbe2da8dddf7740d830c4d2b80df0a81b960a48e2ce085",
+  "q128_q384_compatibility_repassed": true,
+  "node_mismatches": 0,
+  "build_allocated_mb": 1239.734,
+  "simulation_allocated_mb_each": 101,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

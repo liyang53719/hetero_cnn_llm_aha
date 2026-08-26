@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Consume exact q128 Q/K/V-GQA hashes 1e259f274616e3137dd1762d1cfeb8dc005ada8d40a1bb80fce716c55e7b4c6f, 499da9e0b835ab6de33c2870b9e0b28b8b1206943a8d863dcd2b6d5586eeebc1 and 5c3169a425c823d6e60d1a7f77d4ea7ea14436ec291199cac290f49ce2f01078. For query token q=0..127 and each of12 heads, stream KV tokens0..q through dot128 and online-softmax: exactly99072 updates. Save only final M/L/O per query/head, run1536 reciprocals and12288 normalization chunks, and compare all128x1536 attention outputs. Freeze attention hash, enforce no score file/matrix, and report dot/online/reciprocal/normalization cycles separately.",
+  "command": "Consume q128 attention hash b72c3a34951c84b29d20bd5be9ff58c1282cde5afe7cf9c4e800243ef2b60c76 and shared input hash 39917c9e6f887030091cb93e944b263f4966322f487d567a6c28881b615335e0. Reuse exact target OProj and norm2 weights. Start restartable batch0 tokens0-15: run the complete 1536x1536 OProj on all16 rows for73728 steps, add residual1 over1536 chunks, then run16 global norm2 operations. Freeze OProj/residual1/norm2 hashes and measured cycles. Parameterize the same binary for batches1-7 only after batch0 passes; aggregate OProj to589824 steps.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

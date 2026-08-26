@@ -1,0 +1,23 @@
+`timescale 1ns/1ps
+module tb_l5_q128_mlo;
+ logic clk;/* verilator lint_off SYNCASYNCNET */logic rst_n;/* verilator lint_on SYNCASYNCNET */integer cycles,dot_cycles,online_cycles,recip_cycles,norm_cycles;
+ logic div,dir,dov,dor;logic[4095:0]da,db;logic[31:0]ds,dr;logic[4:0]df,dfor;logic[31:0]dac,dcc;
+ fp32_dot128_scaled dot(.clk_i(clk),.rst_ni(rst_n),.in_valid_i(div),.in_ready_o(dir),.a_i(da),.b_i(db),.scale_i(ds),.out_valid_o(dov),.out_ready_i(dor),.result_o(dr),.exception_flags_o(df),.accepted_o(dac),.completed_o(dcc));
+ logic clr,siv,sir,sov,sor;logic[31:0]ss,sm,sl;logic[4095:0]sv,so;logic[4:0]sf,sfor;logic[31:0]sac,scc;
+ fp32_online_softmax#(.LANES(128))u_soft(.clk_i(clk),.rst_ni(rst_n),.clear_i(clr),.in_valid_i(siv),.in_ready_o(sir),.score_i(ss),.value_i(sv),.out_valid_o(sov),.out_ready_i(sor),.m_o(sm),.l_o(sl),.o_o(so),.exception_flags_o(sf),.accepted_tokens_o(sac),.completed_tokens_o(scc));
+ logic riv,rir,rov,ror;logic[31:0]rx,ry;logic[4:0]rf,rfor;logic rde;logic[31:0]rac,rcc;
+ fp32_reciprocal_nr rec(.clk_i(clk),.rst_ni(rst_n),.in_valid_i(riv),.in_ready_o(rir),.x_i(rx),.out_valid_o(rov),.out_ready_i(ror),.y_o(ry),.exception_flags_o(rf),.domain_error_o(rde),.accepted_o(rac),.completed_o(rcc));
+ logic[511:0]va,vb,vo;logic[4:0]vf,vfor;fp32_vector_alu#(.LANES(16))vm(.op_i(1'b1),.a_i(va),.b_i(vb),.out_o(vo),.exception_flags_o(vf));
+ logic[31:0]iq[0:196607],ik[0:196607],iv[0:196607],em[0:1535],el[0:1535],eo[0:196607],ea[0:196607];logic[63:0]ho,ha;
+ always #5 clk=~clk;always@(posedge clk)if(!rst_n)cycles<=0;else cycles<=cycles+1;
+ function automatic[63:0]hb(input[63:0]seed,input[4095:0]d);logic[63:0]h;begin h=seed;for(int i=0;i<128;i++)h=(h^{32'd0,d[i*32+:32]})*64'h100000001b3;hb=h;end endfunction
+ task automatic run_dot(input[4095:0]a,b,output[31:0]r);integer st;begin st=cycles;@(negedge clk);da=a;db=b;ds=32'h3db504f3;div=1;do@(posedge clk);while(!dir);@(negedge clk);div=0;do@(posedge clk);while(!(dov&&dor));@(negedge clk);r=dr;dfor|=df;dot_cycles+=cycles-st;end endtask
+ task automatic run_soft(input logic c,input[31:0]score,input[4095:0]value);integer st;begin st=cycles;@(negedge clk);clr=c;ss=score;sv=value;siv=1;do@(posedge clk);while(!sir);@(negedge clk);siv=0;clr=0;do@(posedge clk);while(!(sov&&sor));@(negedge clk);sfor|=sf;online_cycles+=cycles-st;end endtask
+ task automatic run_rec(input[31:0]x,output[31:0]y);integer st;begin st=cycles;@(negedge clk);rx=x;riv=1;do@(posedge clk);while(!rir);@(negedge clk);riv=0;do@(posedge clk);while(!(rov&&ror));@(negedge clk);y=ry;if(rde)$fatal(1,"q128 recip domain");rfor|=rf;recip_cycles+=cycles-st;end endtask
+ task automatic normalize(input[4095:0]o,input[31:0]inv,output[4095:0]y);integer st;begin st=cycles;y=0;for(int c=0;c<8;c++)begin @(negedge clk);va=o[c*512+:512];for(int i=0;i<16;i++)vb[i*32+:32]=inv;#1;y[c*512+:512]=vo;vfor|=vf;end norm_cycles+=cycles-st;end endtask
+ initial begin logic[4095:0]q,k,v,o,a;logic[31:0]score,inv;clk=0;rst_n=0;cycles=0;dot_cycles=0;online_cycles=0;recip_cycles=0;norm_cycles=0;div=0;dor=1;dfor=0;clr=0;siv=0;sor=1;sfor=0;riv=0;ror=1;rfor=0;va=0;vb=0;vfor=0;ho=64'hcbf29ce484222325;ha=ho;
+  $readmemh("work/results/l5_q128_rope_gqa/vectors/q_rope.memh",iq);$readmemh("work/results/l5_q128_rope_gqa/vectors/k_gqa.memh",ik);$readmemh("work/results/l5_q128_rope_gqa/vectors/v_gqa.memh",iv);$readmemh("work/results/l5_q128_mlo/vectors/m.memh",em);$readmemh("work/results/l5_q128_mlo/vectors/l.memh",el);$readmemh("work/results/l5_q128_mlo/vectors/o.memh",eo);$readmemh("work/results/l5_q128_mlo/vectors/attention.memh",ea);repeat(3)@(posedge clk);rst_n=1;
+  for(int qt=0;qt<128;qt++)for(int h=0;h<12;h++)begin for(int i=0;i<128;i++)q[i*32+:32]=iq[(qt*1536+h*128)+i];for(int kt=0;kt<=qt;kt++)begin for(int i=0;i<128;i++)begin k[i*32+:32]=ik[(kt*1536+h*128)+i];v[i*32+:32]=iv[(kt*1536+h*128)+i];end run_dot(q,k,score);run_soft(kt==0,score,v);end if(sm!==em[qt*12+h]||sl!==el[qt*12+h])$fatal(1,"q128 ML q=%0d h=%0d",qt,h);o=so;for(int i=0;i<128;i++)if(o[i*32+:32]!==eo[qt*1536+h*128+i])$fatal(1,"q128 O");run_rec(sl,inv);normalize(o,inv,a);for(int i=0;i<128;i++)if(a[i*32+:32]!==ea[qt*1536+h*128+i])$fatal(1,"q128 att");ho=hb(ho,o);ha=hb(ha,a);end
+  if(dac!=99072||dcc!=99072||sac!=99072||scc!=99072||rac!=1536||rcc!=1536||dfor[4:1]!=0||sfor[4:1]!=0||rfor[4:1]!=0||vfor[4:1]!=0)$fatal(1,"q128 MLO accounting");$display("L5_Q128_MLO_PASS updates=99072 reciprocals=1536 normalization_chunks=12288 score_matrix=0 total_cycles=%0d dot_cycles=%0d online_cycles=%0d reciprocal_cycles=%0d normalization_cycles=%0d o_fnv64=%016h attention_fnv64=%016h",cycles,dot_cycles,online_cycles,recip_cycles,norm_cycles,ho,ha);$finish;end
+ initial begin repeat(4000000)@(posedge clk);$fatal(1,"q128 MLO timeout");end
+endmodule

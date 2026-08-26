@@ -1,16 +1,16 @@
 {
-  "phase": "L5_HIDDEN256_FULL_BLOCK",
-  "command": "Compose one deterministic hidden256 BF16 block from the proven global RMSNorm256, 256x256 tiled GEMV, RoPE, online-softmax, OProj, residual, second RMSNorm, gate/up, SiLU, gate-times-up, down and final residual paths. Reuse the unchanged logical 16x32 BF16 array and existing heterogeneous FP32 SFUs. Freeze a compact hidden256 test shape that exercises every node without materializing a score matrix; generate operation-order node goldens and compare every saved Q/K/V, RoPE, M/L/O, OProj, MLP and residual node. Record Matrix/SFU/total cycles separately. Do not claim target-shape or q128 closure from this hidden256 gate.",
+  "phase": "L5_QWEN_TARGET_SHAPE",
+  "command": "First retrieve config.json from Qwen/Qwen2-1.5B-Instruct at exact revision ba1cf1846d7df0a0591d6c00649f57e798519da8, record URL/revision/SHA256/license and derive hidden/intermediate/head/KV-head/head-dim/RoPE fields only from that file. Freeze a shape manifest and calculate exact 16x32 array tile counts before coding. Then parameterize the proven hidden256 schedule for target hidden size, GQA KV width, head_dim and MLP width. Add a reusable head_dim reduction and GQA multicast only if required by the pinned config. Run deterministic operation-order payload numerics through every target-shape node, stream online softmax without a score matrix, and separately report full target-shape RTL cycle counters. Segment long simulation into restartable node checkpoints without changing weights or operation order.",
   "fixed_order": [
-    "INT8 GEMM",
-    "1x1 Conv",
-    "3x3 Conv",
-    "bias requant ReLU",
-    "pool residual",
-    "production 4x4 AHA Lake depthwise",
-    "depthwise pointwise",
-    "ResNet50 and MobileNetV2 representative blocks"
+    "pinned config retrieval and SHA256",
+    "shape and array-step manifest",
+    "target RMSNorm and Q/K/V",
+    "RoPE plus GQA head mapping",
+    "streamed M/L/O and O/L",
+    "OProj and first residual",
+    "second RMSNorm plus gate/up/SiLU/product/down",
+    "final residual and target-shape cycle report"
   ],
-  "success_condition": "All frozen hidden256 intermediate nodes and final output are bit-exact against the operation-order model; no complete attention score matrix is stored; RTL counters distinguish Matrix, SFU and total cycles; strict Verilator lint passes; all build/test commands remain CPU 8-25, max j4 and under the 10 GiB cap.",
-  "failure_policy": "Stop at the first mismatching node and preserve its exact input/output slice. Do not relax thresholds, replace global RMSNorm with per-chunk normalization, bypass the physical 16x32 array with a software result, materialize the complete score matrix, or label hidden256 evidence as target-shape/q128/q384/decode closure."
+  "success_condition": "Pinned config provenance is exact; every target-shape intermediate node is compared to the frozen operation-order model; the physical 16x32 RTL array and FP32 SFUs produce payload evidence; no score matrix is materialized; Matrix/SFU/total cycles are measured and distinguished; CPU 8-25, max j4 and 10 GiB cap remain enforced.",
+  "failure_policy": "Do not infer model dimensions from memory, switch revision, use hidden256 evidence as target-shape proof, replace payload outputs with a software bypass, report analytical tile counts as RTL-measured cycles, relax the first mismatch, materialize the score matrix, or start q128 before target-shape closure."
 }

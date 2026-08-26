@@ -1,0 +1,16 @@
+{
+  "stage": "L5",
+  "subgate": "FP32 dot64 scaled",
+  "status": "PASS",
+  "lanes": 64,
+  "physical_lanes": 16,
+  "chunks": 4,
+  "vectors": 10000,
+  "cycles": 140001,
+  "max_absolute_error": 4.048391808453289e-06,
+  "threshold": 5e-05,
+  "output_fnv1a64": "a8cdc6c17108168c",
+  "vectors_sha256": "34c0ea89b8cd0b525ee7f4a2ee99ada1bf23e303523acb60030154bbf02d99ef",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

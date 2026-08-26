@@ -31,7 +31,9 @@
 - L5 joint HardFloat emission PASS: BF16+FP32 generated hash `94d853...`, BF16 array/RMSNorm coexistence verified.
 - L5 toy hidden16 CLOSED: 18 nodes exact, 904 total/512 Matrix/364 SFU cycles, final FNV64 `e85158...`, no score matrix.
 - L5 hidden256 GEMV PASS: 256x256 on 8 column tiles, 2048 steps, 8601 cycles, FNV64 `a2406e...`.
-- L5 hidden256 global RMSNorm PASS: one 16-lane tile reused over 16 chunks, 1000x256 outputs exact, 69998 cycles, FNV64 `b99430...`; reduction 10k re-PASSed. Next: full hidden256 block composition.
+- L5 hidden256 global RMSNorm PASS: one 16-lane tile reused over 16 chunks, 1000x256 outputs exact, 69998 cycles, FNV64 `b99430...`; reduction 10k re-PASSed.
+- L5 dot64 PASS: 16 physical lanes reused across 4 chunks, 10k exact, FNV64 `a8cdc6...`.
+- L5 complete hidden256 block PASS: 2-token streamed attention, 4x64 heads, MLP512, 22 nodes exact, 24576 array steps, 104902 total/98304 Matrix/6598 SFU cycles, FNV64 `92aa1c...`. Next: retrieve and hash pinned Qwen config, then target-shape block.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

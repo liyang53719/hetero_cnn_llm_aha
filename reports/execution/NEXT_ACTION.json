@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Consume exact concatenated q128 Q/K/V hashes 90e5f377634d20a68bf411c4bc60cc874e228464e4483f8211ec685894559040, 59a0989dc8f85b01e8171d6d0a50c24a14c7d375332d90d77f0b08b650634f1f and 6f12dcc1104fb20781dee561bf06b5e72d9e5696b8d8fda29e3ce9f96cb3337f. Apply split-half D128 RoPE at positions0-127 to all Q and K: 98304 Q pairs plus16384 K pairs. Then post-RoPE multicast K and direct multicast V from two KV heads to12 query heads: 2048 inputs/12288 outputs each. Compare all lanes and sidebands, freeze q_rope/k_rope/k_gqa/v_gqa hashes, and report RoPE/K-GQA/V-GQA cycles separately. Do not begin causal M/L/O until this receipt passes.",
+  "command": "Consume exact q128 Q/K/V-GQA hashes 1e259f274616e3137dd1762d1cfeb8dc005ada8d40a1bb80fce716c55e7b4c6f, 499da9e0b835ab6de33c2870b9e0b28b8b1206943a8d863dcd2b6d5586eeebc1 and 5c3169a425c823d6e60d1a7f77d4ea7ea14436ec291199cac290f49ce2f01078. For query token q=0..127 and each of12 heads, stream KV tokens0..q through dot128 and online-softmax: exactly99072 updates. Save only final M/L/O per query/head, run1536 reciprocals and12288 normalization chunks, and compare all128x1536 attention outputs. Freeze attention hash, enforce no score file/matrix, and report dot/online/reciprocal/normalization cycles separately.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

@@ -1,6 +1,6 @@
 {
-  "phase": "L5_HIDDEN256_CHUNKED_RMSNORM",
-  "command": "Implement global hidden256 RMSNorm by reusing a 16-lane square/reduction tile across 16 chunks, accumulating 16 FP32 partial sums in fixed order, applying one global mean+epsilon+rsqrt, then streaming 16 weighted output chunks. Generate exact operation-order vectors and compare all 256 outputs. Report partial-reduction, scalar-rsqrt and output-pass cycles separately. Do not normalize each 16-lane chunk independently. After this gate, compose the hidden256 Q/K/V and remaining block nodes.",
+  "phase": "L5_HIDDEN256_FULL_BLOCK",
+  "command": "Compose one deterministic hidden256 BF16 block from the proven global RMSNorm256, 256x256 tiled GEMV, RoPE, online-softmax, OProj, residual, second RMSNorm, gate/up, SiLU, gate-times-up, down and final residual paths. Reuse the unchanged logical 16x32 BF16 array and existing heterogeneous FP32 SFUs. Freeze a compact hidden256 test shape that exercises every node without materializing a score matrix; generate operation-order node goldens and compare every saved Q/K/V, RoPE, M/L/O, OProj, MLP and residual node. Record Matrix/SFU/total cycles separately. Do not claim target-shape or q128 closure from this hidden256 gate.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",
@@ -11,6 +11,6 @@
     "depthwise pointwise",
     "ResNet50 and MobileNetV2 representative blocks"
   ],
-  "success_condition": "Pinned dependency and weight hashes are recorded; deterministic INT8 GEMM cases are elementwise bit-exact from operator golden through production descriptor RTL and canonical L3 top; reported RTL cycles/DMA bytes/utilization/conflicts come from counters rather than analysis estimates; all builds/tests remain CPU 8-25, max j4 and under the 10 GiB cap.",
-  "failure_policy": "Do not skip ahead to model blocks, use analytical numbers in RTL-measured fields, substitute the 4x16 Gaussian baseline for the required production 4x4 AHA/Lake, relax integer equality, change the frozen descriptor/quantization contract, or mark L4 PASS before every ordered subgate is complete."
+  "success_condition": "All frozen hidden256 intermediate nodes and final output are bit-exact against the operation-order model; no complete attention score matrix is stored; RTL counters distinguish Matrix, SFU and total cycles; strict Verilator lint passes; all build/test commands remain CPU 8-25, max j4 and under the 10 GiB cap.",
+  "failure_policy": "Stop at the first mismatching node and preserve its exact input/output slice. Do not relax thresholds, replace global RMSNorm with per-chunk normalization, bypass the physical 16x32 array with a software result, materialize the complete score matrix, or label hidden256 evidence as target-shape/q128/q384/decode closure."
 }

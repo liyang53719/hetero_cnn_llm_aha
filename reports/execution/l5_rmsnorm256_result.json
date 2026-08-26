@@ -1,0 +1,22 @@
+{
+  "stage": "L5",
+  "subgate": "hidden256 global chunked RMSNorm",
+  "status": "PASS",
+  "lanes": 256,
+  "physical_reduction_lanes": 16,
+  "chunks": 16,
+  "vectors": 1000,
+  "cycles": 69998,
+  "reduction_cycles": 48000,
+  "rsqrt_cycles": 3000,
+  "output_cycles": 16000,
+  "max_absolute_error": 5.769584618953161e-07,
+  "threshold": 2e-05,
+  "output_fnv1a64": "b9943043e156b835",
+  "vectors_sha256": "07459711c8d09628ad412c88141cd59cde0bfcbd3096857a458ccbb13825d63e",
+  "joint_primitives_sha256": "94d853130ed0f753de268033dabacaccd1e9b70877326a7d48ba2908b315fc73",
+  "reduction_regression_vectors": 10000,
+  "reduction_regression_fnv1a64": "eb1a9f9acb34f5b5",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

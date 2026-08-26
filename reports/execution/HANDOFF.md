@@ -50,6 +50,7 @@
 - L5 target trace PASS: synthesizable 23-command controller reproduces 1486848 steps/6036046 busy cycles, wall6036094, zero score-matrix commands, command FNV `8f1e56...`.
 - L5 TARGET SHAPE CLOSED: segmented numerical payload + separate controller trace, final hash `872ffcab...`. L5 remains IN_PROGRESS; next q128, then q384 and decode128/1024/4096.
 - L5 q128 contract PASS: batch1/seq128, 8 physical row batches, 11698176 Matrix steps, 99072 causal dot/online updates, no score matrix; cycle fields intentionally null. Next: q128 operation-count controller.
+- L5 q128 count controller PASS: 24 commands and all contract counts exact, score-matrix commands0, command FNV `c3b677...`; measured-latency-valid remains0. Next: numerical QKV row batch0, then batches1-7.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

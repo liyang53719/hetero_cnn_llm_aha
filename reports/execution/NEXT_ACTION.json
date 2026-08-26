@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Implement a synthesizable q128 operation-count controller from config/qwen_q128_prefill_contract.json. It must emit the exact ordered q128 work commands and count 11698176 Matrix steps, 99072 causal dot128 operations, 99072 online updates, 1536 reciprocals, 12288 O/L chunks, 114688 RoPE pairs, 1146880 SiLU scalars and 71680 product chunks, with zero score-matrix commands. Use ready/done handshakes but do not assign latency or measured-cycle fields yet. After this count gate passes, start q128 numerical payload in restartable 16-token row batches and use their measured latencies to upgrade the controller trace.",
+  "command": "Start q128 numerical payload with restartable row batch0 only (tokens0-15). Freeze one deterministic 128x1536 input image and reuse the exact target input-RMS weight plus Q/K/V matrices and biases. Run 16 global RMSNorm1536 operations, then use all 16 physical array rows for Q=73728, K=12288 and V=12288 steps, total98304 measured steps. Apply Q/K/V bias and freeze batch0 normalized/Q/K/V hashes. The generator must produce operation-order goldens; do not use NumPy matmul or scale single-token results. After batch0 PASS, repeat unchanged for batches1-7 and aggregate exactly786432 q128 QKV steps.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

@@ -1,0 +1,19 @@
+{
+  "stage": "L4",
+  "subgate": "pool residual",
+  "status": "PASS_RTL_PENDING_CANONICAL_ENDPOINT",
+  "operations": 100000,
+  "max_pool_operations": 50000,
+  "residual_add_operations": 50000,
+  "cycles": 750000,
+  "cycles_per_operation": 7.5,
+  "positive_saturations": 198349,
+  "negative_saturations": 201951,
+  "negative_pool_outputs": 49955,
+  "output_fnv1a64": "36668a808367d67f",
+  "mismatches": 0,
+  "protocol_errors": 0,
+  "timeouts": 0,
+  "verilator_wall_clean": true,
+  "canonical_endpoint_status": "PENDING"
+}

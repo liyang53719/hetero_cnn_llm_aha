@@ -1,6 +1,6 @@
 {
   "phase": "L4_CNN_POOL_RESIDUAL_SFU",
-  "command": "Implement and close production Tensor Stream SFU RTL for INT8 2x2 max-pool and saturating residual add, keeping Conv no_pool=1. Use explicit ready/valid sideband-preserving modules on the AHA/SFU stream boundary, deterministic elementwise golden cases including negative values, saturation and odd tails, and canonical-top transport/counter evidence. Do not use the Gemmini pooled-conv option or clean-room analytical cycles as the production result.",
+  "command": "Integrate rtl/sfu/int8_pool_residual_sfu.sv as a production SFU endpoint alongside the AHA endpoint in the canonical stream complex. Add explicit configuration and primary/secondary Tensor Stream ports without changing channel 0/1 AHA ownership; route the dedicated tile through an internal endpoint mux selected by the frozen SFU program registry. Run directed max-pool and residual cases through hetero_l3_production_top, record semantic/physical bytes, cycles, conflicts/stalls and output hash, then merge with reports/execution/l4_pool_residual_sfu_result.json.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

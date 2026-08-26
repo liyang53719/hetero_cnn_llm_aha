@@ -1,6 +1,12 @@
 {
-  "phase": "L3_PRODUCTION_ENDPOINT_INTEGRATION",
-  "command": "Connect the verified M->SFU, SFU->M, M->KV and KV->M skid channels to production Matrix/SFU/KV wrapper endpoints. Compose them with the 4-to-2R/2-to-1W arbiter and queued real-SRAM event frontend, then run at least 100000 integrated command/event/descriptor/DMA/stream transactions. Bind all builds/tests to CPU 8-25 and start only above 10 GiB MemAvailable.",
-  "success_condition": "100000+ combined transactions have zero loss, duplication, reorder, starvation, assertion, macro error or timeout; command completion cannot precede final stream acceptance, event zero/error semantics hold, all clients and all four direct channels make progress, and L3 can close.",
-  "failure_policy": "Do not statically reserve one physical read port for descriptors, add a third physical read port, bypass the real SRAM scoreboard, hide timeout, weaken fairness, or mark L3 PASS from standalone readiness tests."
+  "phase": "L3_PINNED_GEMMINI_ENDPOINT_BINDING",
+  "command": "Emit a lightweight Chisel harness around the pinned upstream ScratchpadBank(4096, 128, aligned_to=1, single_ported=false, use_shared_ext_mem=true, is_dummy=false), then connect its real ExtMemIO ready/valid ports to gemmini_spad_tensor_gateway and run directed plus randomized-backpressure equivalence. Do not invoke whole-Chipyard firtool.",
+  "expected_artifacts": [
+    "generated lightweight ScratchpadBank SystemVerilog and hash",
+    "upstream commit and clean-tree proof",
+    "ExtMemIO-to-gateway integration test log",
+    "Verilator -Wall clean log"
+  ],
+  "success_condition": "Pinned upstream scratchpad read/write requests and responses traverse the project gateway without loss, duplication, reorder or unstable payload under backpressure; generated widths are exactly 4 banks x 4096 rows x 128 bits with 16 byte masks; zero timeout and upstream remains clean.",
+  "failure_policy": "If lightweight Chisel emission still exceeds 10 GiB or fails in CIRCT, preserve the first root-cause slice and use the already generated FIRRTL module boundary for extraction; do not retry full-chip firtool, increase the memory cap, hand-write a substitute Gemmini endpoint, or mark L3 PASS."
 }

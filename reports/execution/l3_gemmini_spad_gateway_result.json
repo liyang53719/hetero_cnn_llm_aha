@@ -1,0 +1,21 @@
+{
+  "stage": "L3",
+  "subgate": "gemmini_spad_tensor_gateway",
+  "status": "PASS_READINESS",
+  "cpu_affinity": "8-25",
+  "memory_limit_gib": 10,
+  "transfers": 100000,
+  "matrix_to_engine_beats": 50000,
+  "engine_to_matrix_beats": 50000,
+  "gemmini_bank_responses": 200000,
+  "routes_covered": ["SFU", "KV"],
+  "mismatches": 0,
+  "protocol_errors": 0,
+  "timeouts": 0,
+  "verilator_wall_clean": true,
+  "evidence": [
+    "work/results/l3_spad_gateway/tb_100k.log",
+    "work/results/l3_spad_gateway/verilator_lint.log"
+  ],
+  "remaining": "Bind the gateway to an emitted pinned-Gemmini external scratchpad endpoint and complete combined L3 integration."
+}

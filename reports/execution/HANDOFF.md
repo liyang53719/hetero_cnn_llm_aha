@@ -1,45 +1,14 @@
 # L11 execution handoff
 
-- Canonical plan: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md`; current stage L2.
-- Approved decision-complete continuation plan is frozen in `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
-- Descriptor/ISA v2 contract PASS: 128-bit command unchanged; NULL roots/root roles, matrix_aux/DMA policy/event-list, vectors and migrated segment reports; 57 Python tests.
-- Descriptor-v2 production oracle PASS: OS 36, LOOP_WS 11, Conv identity 9 and Conv requant+ReLU 9 ops match saved retained-Rocket funct/rs1/rs2 exactly; full suite 59 PASS.
-- v2 snapshot frontend PASS: src0/src1/dst/bias up to 64 cached records, full pre-issue structural validation, cyclic chain zero replay, Icarus PASS and Verilator -Wall clean.
-- v2 semantic decode PASS: root-role placement, required fields, replay integrity, Conv/bias and dual quant capture; legal/error contexts exact, Verilator -Wall clean.
-- production v2 pipeline PASS: 65 exact OS/WS/Conv ops, 3 zero-issue rejects, shell LOOP_WS 11 CUSTOM_3 + busy/event in 99 cycles; integrated RTL/model PASS.
-- Pinned Gemmini activation 2 is LayerNorm, so architectural ReLU6 is rejected by Matrix and must route to SFU; never encode it as Gemmini activation 2.
-- Matrix L2 portion CLOSED: production emits 85 exact OS/WS/1x1/3x3 Conv ops; no-bias WS and 1x1 retained-Rocket CPU-golden PASS; ReLU6 routes Matrix→SFU; upstream clean.
-- Basic KV/iDMA PASS: typed alloc/append/gather/free, BF16 byte-exact staging, 4 real upstream iDMA transfers, 5 events, VCS W-2024.09, upstream clean.
-- Canonical L2 PASS: consolidated 16-check audit, 62 Python tests, open-RTL, Matrix/AHA/KV-iDMA production paths and zero upstream patches.
-- CPU rule: all build/test/DC use `taskset -c 8-25`; Docker uses `--cpuset-cpus=8-23`.
-- Resource rule: `MemAvailable > 10 GiB`, at most `-j4`, user/Docker memory cap required.
-- L0 PASS; L1 upstream PASS.
-- AHA L2 PASS: pinned 4x16 Garnet, official control/input transcript, full input readback, G2F/F2G ISR, and both output blocks bit-exact; 19,914 cycles on Verilator 5.028. Evidence: `work/results/l2_aha_garnet_full_numerical.log`.
-- Official test_app trace independently PASSes and its first output word matches wrapper/golden `0x00710070006d0070`.
-- Gemmini single-tile OS retained-RocketTile equivalence PASS: 11 commands/path, payload-equivalent, bit-exact checksum `6954858531263039530`.
-- Gemmini multi-tile WS PASS: 17x18x19, 2x2x2 tiles, official/raw payload-equivalent, checksum `14853676686976657775`, 285 MB.
-- Gemmini multi-tile OS PASS: 36 commands/path; Python lowerer matches every raw Rocket commit; bit-exact checksum `14853676686976657775`.
-- Gemmini mvin/mvout edges PASS: five edge shapes, unaligned DRAM, INT32-to-INT8/full-width paths; 60 commits audited.
-- Gemmini padded 3x3 conv PASS: bias+identity and bias+0.5 requant+ReLU, 36 commits audited, CPU bit-exact.
-- CUSTOM_3 program adapter contract PASS: randomized ready, 15 ordered issues, busy completion, 3 exact events, illegal program zero issue; scoreboard event decode fixed.
-- Retained Rocket busy monitor PASS: 36 real commands, four final-command→busy-clear observations, numerical checksum unchanged.
-- Descriptor-chain golden PASS: missing/cycle/>16/null-required rejected before lowering.
-- L2 descriptor fetch decision approved. Production path now uses three-chain Shared-L2 fetch → typed sequencer → CUSTOM_3 adapter; legacy CUSTOM_0 is removed from production integration.
-- Single-tile INT8 OS GEMM production subset PASS: 10 descriptor records, 9 CUSTOM_3 commands, busy-clear completion; missing/cycle/>16 reject before legal issue. L2 remains IN_PROGRESS for multi-tile OS/WS, Conv, bias and requant.
-- Descriptor/ISA v2, 4-to-2R L3 fabric and contract-first execution baseline are approved; implementation starts with the isolated descriptor-v2 checkpoint.
-- L3 readiness only: 16x128 bank fabric, 512-bit four-bank mapping, fair 2R+1W arbitration and 100,001-transaction regression PASS; not a stage PASS.
-- L10 `.db` and LEF generation are deferred by user; do not run LC/LEF now. Installed DP rejects BASE/direct 2048/4096x128; validated LL0.8 splits remain 2x2048x64 and 4x4096x32.
-- First real SRAM views: UHDE SP 6144x128 BASE0.8 TT25 Liberty+Verilog+GDS2 generated/audited; LEF blocked in shared ARM `bifrun::ReplaceDummyPinsWithObs`, including Ubuntu18 probe.
-- Production SP macro uses bit-write mask; ready/valid wrapper passes full/partial write, read stall, and invalid-address tests on the real ARM model.
-- Control/trace 4096x128 bit-write views+wrapper PASS on real ARM model; four macros provide 256 KiB.
-- Real 4-macro 512-bit Shared-L2 bank group PASS; four groups implement the planned 16 banks after arbitration integration.
-- Full 16-ARM-macro Shared-L2 100k PASS: 47346 reads, 52654 writes, 146953 conflicts, 0 mismatch/error/timeout; still L3 readiness.
-- Descriptor port on real Shared-L2 PASS: 100001 descriptor/normal-read/write transactions, 45415 responses, 124022 conflicts, exact 128-of-512 lane mapping, 0 mismatch/error/timeout.
-- Production 4→2R/2→1W arbiter PASS: 100005 transactions, all clients progress, 650 descriptor promotions, ownership/counters/payload stability exact, Verilator -Wall clean.
-- Depth-16 command/completion FIFO + real Control SRAM scoreboard PASS: 100000 commands, 100000 success, 23 errors, 0 macro errors, host gated until init.
-- Matrix-SFU/KV four direct-stream skid channels PASS 100k with all six payload fields stable/in-order; endpoint connection remains.
-- Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
-- Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
-- Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: connect four direct streams to production Matrix/SFU/KV endpoint wrappers and run combined 100k command/event/fabric/stream regression before L3 audit.
-- Do not close a stage with clean-room-only evidence.
+- Canonical plans: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md` and `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
+- Gates: L0 PASS, L1 PASS, L2 PASS, L3 IN_PROGRESS, L4-L11 dependency-blocked.
+- L2: Descriptor/ISA v2, Gemmini OS/WS/Conv/bias/requant production path, AHA Gaussian wrapper, and KV/iDMA basic path are closed by `gate/L2-pass` (`abe2c70`).
+- L3 Shared-L2: 16 real ARM macros, 4 logical reads to 2R, 2 logical writes to 1W, descriptor promotion, byte enables and 100k+ contention tests PASS.
+- L3 control: command FIFO 16, completion FIFO 16 and real 4096x128 event SRAM pass 100k commands; error completion never releases a wait event.
+- L3 streams: four skid channels and the four-bank Gemmini scratchpad to 512-bit stream gateway pass 100k transfers; both SFU/KV routes and backpressure covered, Verilator `-Wall` clean.
+- Current limitation: gateway is not yet bound to emitted pinned-Gemmini external-scratchpad RTL; AHA/KV production endpoints and combined L3 regression remain.
+- Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
+- Next: emit a lightweight pinned upstream `ScratchpadBank(4096,128,1,false,true,false)` harness, connect it to the gateway, and prove ready/valid behavior before endpoint composition.
+- L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
+- Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
+- Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

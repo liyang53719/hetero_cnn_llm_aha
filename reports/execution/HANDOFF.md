@@ -17,7 +17,7 @@
 - L4 1x1 Conv CLOSED: 64 outputs exact, 514 payload cycles, 17 canonical trace cycles, 256 physical bytes, 4 conflicts.
 - L4 3x3 Conv identity CLOSED: 100 outputs exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes, 4 conflicts.
 - L4 bias/requant/ReLU CLOSED: 100 RNE+ReLU outputs exact, 837 payload cycles, 20 canonical trace cycles, 4 conflicts.
-- L4 pool/residual RTL partial PASS: 100k ops, 7.5 cycles/op, saturation/negative-pool coverage, FNV64 `36668a...`; canonical endpoint/transport still required.
+- L4 pool/residual CLOSED: canonical dedicated endpoint 10k PASS; pool 6 cycles/128 physical bytes, residual 7 cycles/192 bytes, 3 conflicts each. Next: production 4x4 AHA/Lake depthwise.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

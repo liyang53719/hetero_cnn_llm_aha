@@ -9,7 +9,8 @@ P=("$ROOT/rtl/memory/ct_sp4096x128_macro_wrapper.sv" "$ROOT/rtl/common/rv_fifo.s
  "$ROOT/rtl/integration/command_event_frontend_sram.sv" "$ROOT/rtl/integration/engine_completion_rr_arbiter.sv"
  "$ROOT/rtl/fabric/shared_l2_client_arbiter.sv" "$ROOT/rtl/fabric/shared_l2_fabric.sv" "$ROOT/rtl/fabric/matrix_direct_streams.sv"
  "$ROOT/rtl/integration/gemmini_spad_tensor_gateway.sv" "$ROOT/rtl/integration/aha_garnet_proc_packet_writer.sv"
- "$ROOT/rtl/integration/aha_tensor_stream_endpoint.sv" "$ROOT/rtl/integration/kv_tensor_stream_endpoint.sv"
+ "$ROOT/rtl/integration/aha_tensor_stream_endpoint.sv" "$ROOT/rtl/sfu/int8_pool_residual_sfu.sv"
+ "$ROOT/rtl/integration/sfu_stream_endpoint_mux.sv" "$ROOT/rtl/integration/kv_tensor_stream_endpoint.sv"
  "$ROOT/rtl/integration/hetero_l3_command_fabric.sv" "$ROOT/rtl/integration/hetero_l3_stream_complex.sv"
  "$ROOT/rtl/integration/hetero_l3_production_top.sv" "$ROOT/tb/tb_l4_int8_gemm_l3_trace.sv")
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=8G MEMORY_MAX=10G "$RUN" "$V" --lint-only --timing -Wall \

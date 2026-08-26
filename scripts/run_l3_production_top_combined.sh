@@ -18,6 +18,8 @@ PROJECT=(
   "$ROOT/rtl/integration/gemmini_spad_tensor_gateway.sv"
   "$ROOT/rtl/integration/aha_garnet_proc_packet_writer.sv"
   "$ROOT/rtl/integration/aha_tensor_stream_endpoint.sv"
+  "$ROOT/rtl/sfu/int8_pool_residual_sfu.sv"
+  "$ROOT/rtl/integration/sfu_stream_endpoint_mux.sv"
   "$ROOT/rtl/integration/kv_tensor_stream_endpoint.sv"
   "$ROOT/rtl/integration/hetero_l3_command_fabric.sv"
   "$ROOT/rtl/integration/hetero_l3_stream_complex.sv"

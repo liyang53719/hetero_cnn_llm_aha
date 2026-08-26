@@ -48,6 +48,15 @@ module tb_hetero_l3_production_top;
   logic aha_proc_packet_rd_en_o;logic[17:0]aha_proc_packet_rd_addr_o;
   logic[63:0]aha_proc_packet_rd_data_i;logic aha_proc_packet_rd_data_valid_i;
   logic aha_native_eos_o,aha_transfer_done_o;logic[31:0]aha_protocol_error_count_o;
+  logic sfu_select_dedicated_i,dedicated_cfg_valid_i,dedicated_cfg_ready_o,dedicated_cfg_op_i;
+  logic[3:0]dedicated_cfg_h_i,dedicated_cfg_w_i;logic[4:0]dedicated_cfg_c_i;
+  logic[6:0]dedicated_cfg_bytes_i;logic[15:0]dedicated_cfg_tag_i;
+  logic[11:0]dedicated_cfg_tensor_id_i;logic[3:0]dedicated_cfg_format_i;
+  logic dedicated_secondary_valid_i,dedicated_secondary_ready_o;
+  logic[511:0]dedicated_secondary_data_i;logic[63:0]dedicated_secondary_be_i;
+  logic dedicated_secondary_last_i;logic[3:0]dedicated_secondary_format_i;
+  logic dedicated_transfer_done_o;logic[31:0]dedicated_protocol_error_count_o;
+  logic[31:0]sfu_mux_protocol_error_count_o;
   logic kv_cfg_valid_i,kv_cfg_ready_o,kv_cfg_direction_i;logic[18:0]kv_cfg_base_addr_i;
   logic[15:0]kv_cfg_beats_i,kv_cfg_tag_i;logic[11:0]kv_cfg_tensor_id_i;
   logic[3:0]kv_cfg_format_i;logic[63:0]kv_cfg_last_be_i;
@@ -242,7 +251,12 @@ module tb_hetero_l3_production_top;
     matrix_spad_read_req_valid_i=0;matrix_spad_read_req_addr_i=0;matrix_spad_read_resp_ready_i=0;
     aha_cfg_valid_i=0;aha_cfg_input_base_i=0;aha_cfg_output_base_i=0;aha_cfg_input_beats_i=0;
     aha_cfg_output_beats_i=0;aha_cfg_output_tag_i=0;aha_cfg_output_tensor_id_i=0;
-    aha_cfg_output_format_i=0;aha_cfg_output_last_be_i=0;kv_cfg_valid_i=0;kv_cfg_direction_i=0;
+    aha_cfg_output_format_i=0;aha_cfg_output_last_be_i=0;sfu_select_dedicated_i=0;
+    dedicated_cfg_valid_i=0;dedicated_cfg_op_i=0;dedicated_cfg_h_i=0;dedicated_cfg_w_i=0;
+    dedicated_cfg_c_i=0;dedicated_cfg_bytes_i=0;dedicated_cfg_tag_i=0;
+    dedicated_cfg_tensor_id_i=0;dedicated_cfg_format_i=0;dedicated_secondary_valid_i=0;
+    dedicated_secondary_data_i=0;dedicated_secondary_be_i=0;dedicated_secondary_last_i=1;
+    dedicated_secondary_format_i=1;kv_cfg_valid_i=0;kv_cfg_direction_i=0;
     kv_cfg_base_addr_i=0;kv_cfg_beats_i=0;kv_cfg_tag_i=0;kv_cfg_tensor_id_i=0;
     kv_cfg_format_i=0;kv_cfg_last_be_i=0;kv_pending=0;
     for(int i=0;i<32768;i++)aha_mem[i]=0;for(int i=0;i<8192;i++)kv_mem[i]=0;
@@ -253,7 +267,10 @@ module tb_hetero_l3_production_top;
        l2_accepted!=l2_read_grants_o+l2_write_grants_o||mem_reads!=64'(l2_read_grants_o)||
        mem_writes!=64'(l2_write_grants_o)||stream_completed!=STREAM_TARGET||
        matrix_protocol_error_count_o!=0||aha_protocol_error_count_o!=0||
-       kv_protocol_error_count_o!=0||descriptor_promotions_o==0||mem_cycle==0)
+       kv_protocol_error_count_o!=0||dedicated_protocol_error_count_o!=0||
+       sfu_mux_protocol_error_count_o!=0||dedicated_transfer_done_o||
+       dedicated_cfg_ready_o||dedicated_secondary_ready_o||
+       descriptor_promotions_o==0||mem_cycle==0)
       begin
         $display("COMBINED_DIAG host=%0d exp=%0d illegal=%0d macro=%0d cperr=%0d",
           host_accepted,CMD_TARGET+2,illegal_seen,event_macro_error_count_o,

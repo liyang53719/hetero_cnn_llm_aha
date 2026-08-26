@@ -1,6 +1,6 @@
 {
-  "phase": "L4_CNN_POOL_RESIDUAL_SFU",
-  "command": "Integrate rtl/sfu/int8_pool_residual_sfu.sv as a production SFU endpoint alongside the AHA endpoint in the canonical stream complex. Add explicit configuration and primary/secondary Tensor Stream ports without changing channel 0/1 AHA ownership; route the dedicated tile through an internal endpoint mux selected by the frozen SFU program registry. Run directed max-pool and residual cases through hetero_l3_production_top, record semantic/physical bytes, cycles, conflicts/stalls and output hash, then merge with reports/execution/l4_pool_residual_sfu_result.json.",
+  "phase": "L4_PRODUCTION_AHA_4X4_LAKE_DEPTHWISE",
+  "command": "Audit the pinned AHA/Garnet/Lake generator for the exact production geometry garnet_width=4, garnet_height=4 and lake_memory_tiles=16 while preserving the 512 KiB CGRA SRAM budget. Generate and hash the RTL/bitstream dependencies without modifying canonical upstream. Then map a deterministic INT8 3x3 depthwise tile, run official map/PnR/bitstream and Verilator numerical flow, wrap it with the existing config/proc-packet/sideband endpoint, and record elementwise output hash, RTL cycles, semantic/physical bytes and canonical conflicts. If this exact generator combination is unsupported, record BLOCKED_DEPENDENCY; do not substitute the L2 4x16 Gaussian baseline.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

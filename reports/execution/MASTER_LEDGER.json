@@ -222,7 +222,10 @@
         "work/results/l4_conv3x3_relu_requant_l3_trace/tb.log",
         "reports/execution/L4_POOL_RESIDUAL_SFU_RTL.md",
         "reports/execution/l4_pool_residual_sfu_result.json",
-        "work/results/l4_pool_residual/tb.log"
+        "work/results/l4_pool_residual/tb.log",
+        "reports/execution/L4_POOL_RESIDUAL_CLOSEOUT.md",
+        "reports/execution/l4_pool_residual_result.json",
+        "work/results/l4_pool_residual_canonical/tb.log"
       ],
       "completed_subgates": [
         "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock",
@@ -232,9 +235,9 @@
         ,"3x3 Conv identity complete: 100 outputs bit-exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes and 4 bank conflicts"
         ,"bias requant ReLU complete: 100 RNE plus ReLU outputs bit-exact, 837 payload cycles, 20 canonical trace cycles and 4 bank conflicts"
         ,"pool residual RTL partial: 100000 max-pool/saturating-add operations pass in 750000 cycles with strict lint; canonical endpoint metrics pending"
+        ,"pool residual complete: canonical dedicated SFU endpoint passes 10000 round trips; pool/residual traces measure 6/7 cycles and 3 conflicts each"
       ],
       "remaining_gates": [
-        "pool residual",
         "production 4x4 AHA Lake depthwise",
         "depthwise pointwise",
         "ResNet50 and MobileNetV2 representative blocks"

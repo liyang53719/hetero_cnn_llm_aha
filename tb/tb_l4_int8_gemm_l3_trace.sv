@@ -2,6 +2,7 @@
 /* verilator lint_off DECLFILENAME */
 module tb_l4_matrix_l3_trace #(
   parameter integer CASE_ID=0,
+  parameter integer ENGINE_ID=2,
   parameter logic[15:0] EVENT_ID=16'h0401,
   parameter logic[7:0] OPCODE=8'h10,
   parameter integer MACS=5814,
@@ -51,6 +52,15 @@ module tb_l4_matrix_l3_trace #(
   logic aha_proc_packet_rd_en_o;logic[17:0]aha_proc_packet_rd_addr_o;
   logic[63:0]aha_proc_packet_rd_data_i;logic aha_proc_packet_rd_data_valid_i;
   logic aha_native_eos_o,aha_transfer_done_o;logic[31:0]aha_protocol_error_count_o;
+  logic sfu_select_dedicated_i,dedicated_cfg_valid_i,dedicated_cfg_ready_o,dedicated_cfg_op_i;
+  logic[3:0]dedicated_cfg_h_i,dedicated_cfg_w_i;logic[4:0]dedicated_cfg_c_i;
+  logic[6:0]dedicated_cfg_bytes_i;logic[15:0]dedicated_cfg_tag_i;
+  logic[11:0]dedicated_cfg_tensor_id_i;logic[3:0]dedicated_cfg_format_i;
+  logic dedicated_secondary_valid_i,dedicated_secondary_ready_o;
+  logic[511:0]dedicated_secondary_data_i;logic[63:0]dedicated_secondary_be_i;
+  logic dedicated_secondary_last_i;logic[3:0]dedicated_secondary_format_i;
+  logic dedicated_transfer_done_o;logic[31:0]dedicated_protocol_error_count_o;
+  logic[31:0]sfu_mux_protocol_error_count_o;
   logic kv_cfg_valid_i,kv_cfg_ready_o,kv_cfg_direction_i;logic[18:0]kv_cfg_base_addr_i;
   logic[15:0]kv_cfg_beats_i,kv_cfg_tag_i;logic[11:0]kv_cfg_tensor_id_i;
   logic[3:0]kv_cfg_format_i;logic[63:0]kv_cfg_last_be_i;
@@ -73,11 +83,12 @@ module tb_l4_matrix_l3_trace #(
   assign phy_rsp_error_i=0;
   integer responses[0:2],writes_done;
   logic matrix_command_seen;
-  always_comb begin engine_cmd_ready_i=0;engine_cmd_ready_i[2]=!matrix_command_seen;
-    engine_completion_data_i=0;engine_completion_data_i[2*56 +:56]={EVENT_ID,8'd0,3'd2,29'(MACS)};end
+  always_comb begin engine_cmd_ready_i=0;engine_cmd_ready_i[ENGINE_ID]=!matrix_command_seen;
+    engine_completion_data_i=0;engine_completion_data_i[ENGINE_ID*56 +:56]=
+      {EVENT_ID,8'd0,3'(ENGINE_ID),29'(MACS)};end
   always @(posedge clk_i)begin
     if(!rst_ni)begin cycles<=0;matrix_command_seen<=0;end else begin cycles<=cycles+1;
-      if(engine_cmd_valid_o[2]&&engine_cmd_ready_i[2])begin matrix_command_seen<=1;
+      if(engine_cmd_valid_o[ENGINE_ID]&&engine_cmd_ready_i[ENGINE_ID])begin matrix_command_seen<=1;
         start_cycle<=cycles;end
       for(int c=0;c<3;c++)if(l2_rd_rsp_valid_o[c]&&l2_rd_rsp_ready_i[c])begin
         if(l2_rd_rsp_error_o[c]||l2_rd_rsp_data_o[c*512 +:512]!==0)$fatal(1,"trace read response");
@@ -99,9 +110,9 @@ module tb_l4_matrix_l3_trace #(
       read_client(0,DESCRIPTOR_READS,0);read_client(1,WEIGHT_READS,0);
       read_client(2,ACTIVATION_BIAS_READS,0);write_client(OUTPUT_WRITES,1000);
     join
-    @(negedge clk_i);engine_completion_valid_i[2]=1;
-    do @(posedge clk_i);while(!engine_completion_ready_o[2]);end_cycle=cycles;
-    @(negedge clk_i);engine_completion_valid_i[2]=0;
+    @(negedge clk_i);engine_completion_valid_i[ENGINE_ID]=1;
+    do @(posedge clk_i);while(!engine_completion_ready_o[ENGINE_ID]);end_cycle=cycles;
+    @(negedge clk_i);engine_completion_valid_i[ENGINE_ID]=0;
   end
   initial begin
     clk_i=0;rst_ni=0;start_cycle=0;end_cycle=0;host_cmd_valid_i=0;host_cmd_data_i=0;
@@ -116,13 +127,18 @@ module tb_l4_matrix_l3_trace #(
     aha_cfg_output_base_i=0;aha_cfg_input_beats_i=0;aha_cfg_output_beats_i=0;
     aha_cfg_output_tag_i=0;aha_cfg_output_tensor_id_i=0;aha_cfg_output_format_i=0;
     aha_cfg_output_last_be_i=0;aha_run_done_i=0;aha_proc_packet_rd_data_i=0;
+    sfu_select_dedicated_i=0;dedicated_cfg_valid_i=0;dedicated_cfg_op_i=0;
+    dedicated_cfg_h_i=0;dedicated_cfg_w_i=0;dedicated_cfg_c_i=0;dedicated_cfg_bytes_i=0;
+    dedicated_cfg_tag_i=0;dedicated_cfg_tensor_id_i=0;dedicated_cfg_format_i=0;
+    dedicated_secondary_valid_i=0;dedicated_secondary_data_i=0;dedicated_secondary_be_i=0;
+    dedicated_secondary_last_i=1;dedicated_secondary_format_i=1;
     aha_proc_packet_rd_data_valid_i=0;kv_cfg_valid_i=0;kv_cfg_direction_i=0;
     kv_cfg_base_addr_i=0;kv_cfg_beats_i=0;kv_cfg_tag_i=0;kv_cfg_tensor_id_i=0;
     kv_cfg_format_i=0;kv_cfg_last_be_i=0;kv_mem_write_ready_i=0;
     kv_mem_read_req_ready_i=0;kv_mem_read_rsp_valid_i=0;kv_mem_read_rsp_data_i=0;
     kv_mem_read_rsp_error_i=0;repeat(3)@(posedge clk_i);rst_ni=1;wait(init_done_o);
     @(negedge clk_i);host_cmd_data_i=0;host_cmd_data_i[7:0]=8'h10;
-    host_cmd_data_i[7:0]=OPCODE;host_cmd_data_i[10:8]=3'd2;
+    host_cmd_data_i[7:0]=OPCODE;host_cmd_data_i[10:8]=3'(ENGINE_ID);
     host_cmd_data_i[55:40]=EVENT_ID;host_cmd_valid_i=1;
     do @(posedge clk_i);while(!host_cmd_ready_o);@(negedge clk_i);host_cmd_valid_i=0;
     wait(completion_grants_o==1);wait(completion_level_o==0);repeat(3)@(posedge clk_i);
@@ -138,7 +154,10 @@ module tb_l4_matrix_l3_trace #(
        command_level_o!=0||l2_wr_ready_o[1]||mem_cycle==0||
        engine_cmd_valid_o!=0||engine_completion_ready_o!=0||
        matrix_protocol_error_count_o!=0||aha_protocol_error_count_o!=0||
-       kv_protocol_error_count_o!=0||matrix_transfer_done_o||aha_transfer_done_o||
+       kv_protocol_error_count_o!=0||dedicated_protocol_error_count_o!=0||
+       sfu_mux_protocol_error_count_o!=0||dedicated_transfer_done_o||
+       dedicated_cfg_ready_o||dedicated_secondary_ready_o||
+       matrix_transfer_done_o||aha_transfer_done_o||
        kv_transfer_done_o||aha_native_eos_o||aha_proc_packet_wr_en_o||aha_proc_packet_rd_en_o||
        kv_mem_write_valid_o||kv_mem_read_req_valid_o||kv_mem_read_rsp_ready_o||
        !matrix_cfg_ready_o||matrix_spad_write_ready_o!=0||
@@ -187,5 +206,19 @@ module tb_l4_conv3x3_requant_relu_l3_trace;
     .OUTPUT_WRITES(2),.SEMANTIC_DMA_BYTES(299),.PHYSICAL_DMA_BYTES(448),
     .DESCRIPTOR_BYTES(256),.REQUIRE_PROMOTION(1'b0)
   )u_trace();
+endmodule
+
+module tb_l4_pool_l3_trace;
+  tb_l4_matrix_l3_trace #(.CASE_ID(4),.ENGINE_ID(3),.EVENT_ID(16'h0405),
+    .OPCODE(8'h30),.MACS(0),.DESCRIPTOR_READS(1),.WEIGHT_READS(1),
+    .ACTIVATION_BIAS_READS(0),.OUTPUT_WRITES(1),.SEMANTIC_DMA_BYTES(80),
+    .PHYSICAL_DMA_BYTES(128),.DESCRIPTOR_BYTES(64),.REQUIRE_PROMOTION(1'b0))u_trace();
+endmodule
+
+module tb_l4_residual_l3_trace;
+  tb_l4_matrix_l3_trace #(.CASE_ID(5),.ENGINE_ID(3),.EVENT_ID(16'h0406),
+    .OPCODE(8'h30),.MACS(0),.DESCRIPTOR_READS(1),.WEIGHT_READS(1),
+    .ACTIVATION_BIAS_READS(1),.OUTPUT_WRITES(1),.SEMANTIC_DMA_BYTES(192),
+    .PHYSICAL_DMA_BYTES(192),.DESCRIPTOR_BYTES(64),.REQUIRE_PROMOTION(1'b0))u_trace();
 endmodule
 /* verilator lint_on DECLFILENAME */

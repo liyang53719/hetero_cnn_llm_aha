@@ -199,7 +199,27 @@
       ],
       "remaining_gates": []
     },
-    "L4": {"status": "PENDING", "depends_on": ["L3"]},
+    "L4": {
+      "status": "IN_PROGRESS",
+      "depends_on": ["L3"],
+      "readiness_evidence": [
+        "config/l4_cnn_python.lock.json",
+        "reports/execution/L4_CNN_DEPENDENCY_LOCK.md"
+      ],
+      "completed_subgates": [
+        "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock"
+      ],
+      "remaining_gates": [
+        "INT8 GEMM",
+        "1x1 Conv",
+        "3x3 Conv",
+        "bias requant ReLU",
+        "pool residual",
+        "production 4x4 AHA Lake depthwise",
+        "depthwise pointwise",
+        "ResNet50 and MobileNetV2 representative blocks"
+      ]
+    },
     "L5": {"status": "PENDING", "depends_on": ["L3"]},
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},
     "L7": {"status": "PENDING", "depends_on": ["L5"]},

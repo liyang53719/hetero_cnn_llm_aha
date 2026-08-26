@@ -12,6 +12,7 @@
 - L3 CLOSED: canonical-top concurrent gate passes 100,003 commands, 100,002 L2 transactions and 10,000 stream operations; six engines/all clients/all channels progress, zero errors.
 - Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
 - Next: begin L4 with pinned torchvision/weights audit, INT8 GEMM then 1x1/3x3 Conv numerical-to-RTL cases; production 4x4 AHA/Lake depthwise remains a mandatory later L4 dependency.
+- L4 dependency lock PASS: Python 3.12.7, torch 2.9.1+cu128, torchvision 0.24.1+cu128, ResNet50/MobileNetV2 V2 weights full SHA256 verified. Current subgate: INT8 GEMM.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

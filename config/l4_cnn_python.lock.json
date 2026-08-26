@@ -1,0 +1,26 @@
+{
+  "environment": "work/toolchain/cnn_py312",
+  "base_mode": "python3.12 venv with system-site-packages",
+  "python": "3.12.7",
+  "packages": {
+    "torch": "2.9.1+cu128",
+    "torchvision": "0.24.1+cu128",
+    "numpy": "1.26.4",
+    "pytest": "7.4.4"
+  },
+  "torchvision_requested_version": "0.24.1",
+  "weights": {
+    "resnet50_imagenet1k_v2": {
+      "url": "https://download.pytorch.org/models/resnet50-11ad3fa6.pth",
+      "cache_path": "/home/yang/.cache/torch/hub/checkpoints/resnet50-11ad3fa6.pth",
+      "bytes": 102540417,
+      "sha256": "11ad3fa62ca79e40addfd354a8ec4b7c75143b3038b8d2a807fbc68deab379ca"
+    },
+    "mobilenet_v2_imagenet1k_v2": {
+      "url": "https://download.pytorch.org/models/mobilenet_v2-7ebf99e0.pth",
+      "cache_path": "/home/yang/.cache/torch/hub/checkpoints/mobilenet_v2-7ebf99e0.pth",
+      "bytes": 14258573,
+      "sha256": "7ebf99e03e254b273379b23edca7ec0da9f48273b23a332b93c1c99d49e86e8f"
+    }
+  }
+}

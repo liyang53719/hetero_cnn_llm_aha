@@ -37,7 +37,7 @@
 - L5 Qwen target lock PASS: exact revision config SHA `a58e896d...`; hidden1536/intermediate8960, 12Q/2KV heads, D128, QKV bias, GQA groups6. Two-token target needs 1486848 array steps; 5947392 cycles is projection only, not measured. Next: target-shape payload/controller segmentation.
 - L5 target dot128 PASS: eight 16-lane chunks, pinned scale `0x3db504f3`, 10k exact, 262500 cycles, FNV64 `2da983...`. Next: QKV bias plus six-way GQA mapping RTL gate.
 - L5 target QKV bias/GQA PASS: 16-lane endpoint, 10000 inputs/43000 outputs/100 illegal, six-way multicast, tags/last/backpressure exact, 60465 cycles, FNV64 `adbdd9...`. Next: global RMSNorm1536 and first target segment.
-- L5 RMSNorm1536 WIP: RTL, 1000-vector operation-order generator, TB and runner exist; vectors generated with max abs `8.839e-7`. Admission attempt 3 at 2026-08-26 15:04 was `BLOCKED_RESOURCE`: 8434712 KiB available versus strict >10485760 KiB; same blocker reached three consecutive Goal turns, no heavy task/OOM. Goal blocked until memory recovers; then run `taskset -c 8-25 scripts/run_l5_rmsnorm1536.sh` once.
+- L5 RMSNorm1536 PASS after resource recovery: 96 chunks, 1000x1536 outputs exact, 389998 cycles (288000 reduction/3000 rsqrt/96000 output), FNV64 `75e7b0...`, max abs `8.839e-7`, no OOM. Next: restartable target RMSNorm/QKV segment.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

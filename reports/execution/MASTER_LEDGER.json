@@ -307,6 +307,9 @@
         ,"reports/execution/L5_QKV_BIAS_GQA.md"
         ,"reports/execution/l5_qkv_bias_gqa_result.json"
         ,"work/results/l5_qkv_bias_gqa/tb.log"
+        ,"reports/execution/L5_RMSNORM1536_CHUNKED.md"
+        ,"reports/execution/l5_rmsnorm1536_result.json"
+        ,"work/results/l5_rmsnorm1536/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -328,6 +331,7 @@
         ,"pinned Qwen target config, Transformers 4.40.1 projection bias policy, GQA mapping and exact 16x32 array-step counts are hash-locked"
         ,"target head_dim128 scaled dot reuses one 16-lane reducer across eight chunks and passes 10000 exact vectors"
         ,"target QKV bias and six-way GQA endpoint passes 10000 inputs, 43000 outputs, illegal ranges and backpressure"
+        ,"global RMSNorm1536 reuses one 16-lane reduction across 96 chunks and passes 1000 vectors with all outputs bit-exact"
       ],
       "remaining_gates": [
         "pinned Qwen target-shape block numerics",

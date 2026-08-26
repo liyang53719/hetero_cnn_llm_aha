@@ -42,6 +42,7 @@
 - L5 target split-half RoPE/GQA PASS: D128 lane i pairs with i+64, theta1e6, 1024 pairs and 32->192 post-RoPE K multicast exact; 4392 cycles. Q-RoPE/K-RoPE-GQA hashes `da6332ce...`/`ced3130a...`. Next: streamed target M/L/O and explicit O/L.
 - L5 target streamed M/L/O PASS: 12 heads x2 tokens, no score matrix, final M/L/O+attention exact; 900 cycles (648 dot/108 online/48 reciprocal/96 normalize), attention hash `86c06c97...`, max true-softmax error `3.111e-4`. Next: OProj and first residual.
 - L5 target OProj/residual PASS: full 1536x1536, 73728 measured array steps, 295008 total/294912 Matrix/96 residual cycles; residual1 hash `df2d5af8...`. Next: post-attention RMSNorm1536.
+- L5 target norm2 PASS: global 96-chunk RMSNorm1536, all outputs exact, 390 cycles; norm2 hash `bb884b81...`. Next: complete 1536x8960 gate/up projections.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

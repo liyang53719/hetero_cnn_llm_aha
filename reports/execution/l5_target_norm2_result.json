@@ -1,0 +1,22 @@
+{
+  "stage": "L5",
+  "subgate": "target post-attention RMSNorm1536",
+  "status": "PASS",
+  "lanes": 1536,
+  "chunks": 96,
+  "epsilon_fp32_bits": "0x358637bd",
+  "total_cycles": 390,
+  "reduction_cycles": 288,
+  "rsqrt_cycles": 3,
+  "output_cycles": 96,
+  "weight_sha256": "7785c762e20b178ddd03ae05f5b95d9edc81236f7d60015bd685738a142a5418",
+  "norm2_sha256": "bb884b8182e44eac53dc64f5c06cdbce752509a343fe9331e2ee8db433831385",
+  "norm2_fnv1a64": "44816bc1983da5ce",
+  "node_mismatches": 0,
+  "verilator_wall_clean": true,
+  "lint_allocated_mb": 102.504,
+  "build_allocated_mb": 366.082,
+  "simulation_allocated_mb": 7,
+  "memory_limit_gib": 10,
+  "oom_events": 0
+}

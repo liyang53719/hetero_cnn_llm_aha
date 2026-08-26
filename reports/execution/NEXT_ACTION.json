@@ -1,6 +1,6 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Consume exact residual1 hash df2d5af8926229b7c3ea34aa7c0dfc1ad381fee5cd7149d86b5b01739f518671. Generate and freeze the post-attention RMSNorm1536 weight, run the proven global 96-chunk RMSNorm with epsilon 1e-6, and compare all 1536 outputs. Record reduction/rsqrt/output cycles and the norm2 hash. This receipt becomes the sole input authority for the target gate/up MLP projections; do not generate MLP weights or outputs before norm2 passes.",
+  "command": "Consume exact norm2 hash bb884b8182e44eac53dc64f5c06cdbce752509a343fe9331e2ee8db433831385. Generate and freeze deterministic bias-free gate and up BF16 matrices, each shape 1536x8960. Run both complete projections on the unchanged physical 16x32 array, in separate restartable phases within one receipt, and compare all 8960 FP32 outputs per projection. Each projection must report exactly 430080 measured array steps; total must be 860160. Freeze both weight and output hashes. Do not start SiLU/product until both projections pass.",
   "fixed_order": [
     "global target RMSNorm1536",
     "restartable target RMSNorm and Q/K/V segment",

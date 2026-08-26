@@ -1,6 +1,6 @@
 {
-  "phase": "L5_HIDDEN256_TILED_BLOCK",
-  "command": "Scale the closed toy controller to hidden256 using the same physical 16x32 array and 16-lane SFU tiles; do not instantiate a larger array. Implement deterministic tiling schedules for 256x256 Q/K/V/O projections and a bounded MLP width selected by the hidden256 test profile, generate node hashes and tile command counts, and run at least one-token attention with saved Q/K/V, RoPE and M/L/O traces. First validate Matrix-only tiled GEMV and chunked RMSNorm, then compose the full hidden256 block. Preserve payload versus trace cycle labels and the no-score-matrix invariant.",
+  "phase": "L5_HIDDEN256_CHUNKED_RMSNORM",
+  "command": "Implement global hidden256 RMSNorm by reusing a 16-lane square/reduction tile across 16 chunks, accumulating 16 FP32 partial sums in fixed order, applying one global mean+epsilon+rsqrt, then streaming 16 weighted output chunks. Generate exact operation-order vectors and compare all 256 outputs. Report partial-reduction, scalar-rsqrt and output-pass cycles separately. Do not normalize each 16-lane chunk independently. After this gate, compose the hidden256 Q/K/V and remaining block nodes.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

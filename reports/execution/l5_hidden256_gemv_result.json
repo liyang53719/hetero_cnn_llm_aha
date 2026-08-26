@@ -1,0 +1,19 @@
+{
+  "stage": "L5",
+  "subgate": "hidden256 tiled GEMV",
+  "status": "PASS",
+  "shape": [1, 256, 256],
+  "physical_array": [16, 32],
+  "column_tiles": 8,
+  "k_steps_per_tile": 256,
+  "array_steps": 2048,
+  "useful_macs": 65536,
+  "cycles": 8601,
+  "useful_mac_per_cycle_utilization": 0.014882952214858737,
+  "active_lane_utilization": 0.0625,
+  "output_fnv1a64": "a2406e28b5b747eb",
+  "expected_memh_sha256": "a1b76ae45ca7b893d73e18615c271aacbadf661a5929eca6decca9c39a466f6c",
+  "flags_or": "0x01",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

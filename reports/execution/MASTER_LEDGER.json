@@ -286,6 +286,9 @@
         ,"reports/execution/L5_TOY_BF16_BLOCK.md"
         ,"reports/execution/l5_toy_block_result.json"
         ,"work/results/l5_toy_block/tb.log"
+        ,"reports/execution/L5_HIDDEN256_GEMV.md"
+        ,"reports/execution/l5_hidden256_gemv_result.json"
+        ,"work/results/l5_hidden256_gemv/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -300,6 +303,7 @@
         ,"16-lane RMSNorm and stable SiLU pass 10000 vectors each below frozen error limits"
         ,"joint BF16 and FP32 HardFloat elaboration passes BF16 array and RMSNorm smoke without duplicate helper modules"
         ,"toy hidden16 BF16 block passes all 18 saved nodes in 904 cycles without score-matrix materialization"
+        ,"hidden256 Matrix-only tiled GEMV passes 2048 physical array steps and 256 bit-exact outputs in 8601 cycles"
       ],
       "remaining_gates": [
         "hidden256 target q128 q384 decode128/1024/4096 block numerics"

@@ -1,6 +1,6 @@
 {
-  "phase": "L5_SFU_RECIPROCAL",
-  "command": "Implement normalized FP32 reciprocal with an explicit LUT/linear initial approximation and fixed Newton-Raphson iteration count using pinned HardFloat add/mul primitives. Freeze positive finite input range, zero/Inf/NaN behavior and error thresholds before RTL measurement. Validate dense mantissa sweeps, random exponents and directed special values, report exact iteration latency, accept interval and max relative error, then proceed to rsqrt.",
+  "phase": "L5_SFU_RSQRT",
+  "command": "Implement normalized FP32 reciprocal-square-root with an explicit mantissa LUT/linear estimate and a fixed Newton iteration y=y*(1.5-0.5*x*y*y). Handle odd exponents by mantissa/exponent normalization, freeze positive-normal input range, zero/Inf/negative/NaN behavior and a max relative error threshold before RTL results. Validate dense mantissa sweeps, random exponents and special values, then proceed to online softmax.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

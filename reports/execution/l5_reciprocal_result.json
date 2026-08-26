@@ -1,0 +1,18 @@
+{
+  "stage": "L5",
+  "subgate": "FP32 reciprocal",
+  "status": "PASS",
+  "segments": 16,
+  "newton_iterations": 1,
+  "supported_positive_exponents": [2, 253],
+  "dense_max_relative_error": 9.319044238057796e-07,
+  "random_max_relative_error": 9.19390807e-07,
+  "relative_threshold": 2e-06,
+  "vectors": 10000,
+  "cycles": 12503,
+  "accept_interval": 1,
+  "output_fnv1a64": "39c9a60dc4466b55",
+  "flags_or": "0x03",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

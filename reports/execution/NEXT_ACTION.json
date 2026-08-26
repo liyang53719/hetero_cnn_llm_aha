@@ -1,6 +1,6 @@
 {
-  "phase": "L5_HETEROGENEOUS_FP32_SFU",
-  "command": "Implement the fixed dedicated heterogeneous SFU primitives required before a BF16 block: FP32 reduction/add/mul, BF16 add/mul conversion, RoPE pair rotation, exp2 PWL, reciprocal, rsqrt, online-softmax M/L/O update, RMSNorm and SiLU. Start with a ready/valid scalar/vector primitive layer using pinned HardFloat for IEEE add/mul and explicit approximation coefficient tables; add per-primitive Python golden vectors and strict error thresholds without routing these operations through the blocked AHA 4x4 topology. Close primitives in the fixed order reduction, RoPE, exp2, reciprocal, rsqrt, online softmax, RMSNorm, SiLU.",
+  "phase": "L5_SFU_ROPE",
+  "command": "Implement a ready/valid FP32 RoPE pair primitive using four pinned HardFloat multiplies and two adds/subtracts: out_even=x_even*cos-x_odd*sin, out_odd=x_even*sin+x_odd*cos. Register input/output, aggregate IEEE flags, and validate at least 10000 vectors against a float32 operation-order golden plus directed 0, pi/2-like, negative and large-position cases. Keep trig coefficient generation outside RTL for now; the primitive consumes frozen FP32 sin/cos inputs. After RoPE, proceed to exp2 PWL.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

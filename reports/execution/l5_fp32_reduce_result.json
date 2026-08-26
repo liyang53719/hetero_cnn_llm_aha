@@ -1,0 +1,18 @@
+{
+  "stage": "L5",
+  "subgate": "FP32 add mul reduction",
+  "status": "PASS",
+  "hardfloat_commit": "0ecaef097ce2accbd16a61613699450ed5533f29",
+  "generated_alu_sha256": "5ebf571d028c02ebb21d892f13461ba81a36845b02a7671d6f7906ddd216eef0",
+  "alu_vectors": 10000,
+  "alu_vector_sha256": "d1bd44e27bba4eb2a9778a18c491842955f6b9851b171bc16a7af2e1adedb374",
+  "alu_output_fnv1a64": "bc08fc26bf864691",
+  "reduction_lanes": 16,
+  "reduction_vectors": 10000,
+  "reduction_cycles": 12503,
+  "reduction_accept_interval": 1,
+  "reduction_output_fnv1a64": "eb1a9f9acb34f5b5",
+  "reduction_flags_or": "0x01",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

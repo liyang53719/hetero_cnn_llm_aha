@@ -254,11 +254,15 @@
         "work/results/l5_bf16_fma/tb.log",
         "reports/execution/L5_BF16_16X32_ARRAY.md",
         "reports/execution/l5_bf16_array_result.json",
-        "work/results/l5_bf16_array/tb_16x32.log"
+        "work/results/l5_bf16_array/tb_16x32.log",
+        "reports/execution/L5_FP32_REDUCTION.md",
+        "reports/execution/l5_fp32_reduce_result.json",
+        "work/results/l5_fp32_reduce/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
         ,"independent logical 16x32 BF16/FP32 array passes four-step accumulation and eight consecutive accepted tiles at 512 MAC/step"
+        ,"pinned HardFloat FP32 add/mul and balanced 16-lane reduction pass 10000 vectors each with one-vector/cycle acceptance"
       ],
       "remaining_gates": [
         "heterogeneous FP32 SFU tile",

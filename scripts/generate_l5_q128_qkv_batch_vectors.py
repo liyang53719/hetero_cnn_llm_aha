@@ -10,7 +10,6 @@ from pathlib import Path
 
 import numpy as np
 
-TOKENS = 128
 BATCH_ROWS = 16
 HIDDEN = 1536
 KV_WIDTH = 256
@@ -131,7 +130,8 @@ def write_fp32(path, values):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-dir", type=Path, required=True)
-    parser.add_argument("--batch-index", type=int, required=True, choices=range(8))
+    parser.add_argument("--batch-index", type=int, required=True)
+    parser.add_argument("--tokens", type=int, choices=(128, 384), default=128)
     parser.add_argument("--shared-out", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
@@ -143,9 +143,11 @@ def main():
         if observed != expected:
             raise SystemExit(f"Q128_QKV_BASE_HASH_FAIL {name} {observed}")
 
-    rng = random.Random(0x1281536)
+    if args.batch_index < 0 or args.batch_index >= args.tokens // BATCH_ROWS:
+        raise SystemExit("QKV_BATCH_INDEX_FAIL")
+    rng = random.Random(0x1281536 if args.tokens == 128 else 0x3841536)
     inputs = np.array(
-        [[bf16_value(rng.uniform(-1, 1)) for _ in range(HIDDEN)] for _ in range(TOKENS)],
+        [[bf16_value(rng.uniform(-1, 1)) for _ in range(HIDDEN)] for _ in range(args.tokens)],
         dtype=np.float32,
     )
     input_path = args.shared_out / "inputs.memh"
@@ -178,6 +180,7 @@ def main():
         write_fp32(args.out / f"{name}.memh", values)
     manifest = {
         "batch_index": args.batch_index,
+        "workload_tokens": args.tokens,
         "token_range": [start, start + BATCH_ROWS - 1],
         "rows": BATCH_ROWS,
         "hidden": HIDDEN,
@@ -192,7 +195,7 @@ def main():
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print(
-        f"L5_Q128_QKV_BATCH_VECTORS_PASS batch={args.batch_index} tokens={start}-{start+15} "
+        f"L5_Q_PREFILL_QKV_BATCH_VECTORS_PASS workload={args.tokens} batch={args.batch_index} tokens={start}-{start+15} "
         f"steps=98304 q_sha256={manifest['node_sha256']['q']}"
     )
 

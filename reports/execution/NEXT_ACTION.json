@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Begin q384 numerical QKV as24 restartable16-token batches. Freeze one deterministic384x1536 input image and reuse exact target RMS/Q/K/V weights and biases. Use all16 physical rows; every batch must measure Q73728+K12288+V12288=98304 Matrix steps and compare all norm/Q/K/V outputs to exact k-ordered goldens. Validate batch0 first, then one unchanged RTL binary for batches1-23. Aggregate exactly2359296 QKV steps and freeze concatenated q384 Q/K/V hashes before RoPE.",
+  "command": "Consume exact q384 Q/K/V hashes a5d2e31e592db1f0ff65c8d36d6b4f14b96e0d7b6642818ca7e087c86882d88a,69a7f29c52ee6d74a6ef975ced7559c09d0334d19a746515892d289d595ec4dd and71db3e37fd43017994349e32fd9d653443db49db10b6b239543345a7fba6a158. Parameterize the proven split-half RoPE/GQA generator and RTL for positions0-383:294912 Q pairs,49152 K pairs and344064 total. Then multicast K/V with6144 inputs/36864 outputs each. Compare all lanes/sidebands, freeze q_rope/k_gqa/v_gqa hashes and measured cycles before causal M/L/O.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

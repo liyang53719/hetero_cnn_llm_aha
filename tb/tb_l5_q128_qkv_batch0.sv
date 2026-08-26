@@ -52,7 +52,7 @@ module tb_l5_q128_qkv_batch0;
   logic [31:0] ex_k [0:4095], ex_v [0:4095];
   logic [786431:0] input_bus, norm_bus, q_raw, q_result;
   logic [131071:0] k_raw, v_raw, k_result, v_result;
-  integer batch_index;
+  integer batch_index, workload_tokens;
   string batch_dir;
 
   always #5 clk = ~clk;
@@ -211,8 +211,11 @@ module tb_l5_q128_qkv_batch0;
     vector_b = '0;
     vector_flags_or = '0;
     if (!$value$plusargs("BATCH=%d", batch_index)) batch_index = 0;
-    if (batch_index < 0 || batch_index > 7) $fatal(1, "invalid q128 batch index");
-    batch_dir = $sformatf("work/results/l5_q128_qkv/batch%0d", batch_index);
+    if (!$value$plusargs("WORKLOAD=%d", workload_tokens)) workload_tokens = 128;
+    if ((workload_tokens != 128 && workload_tokens != 384) ||
+        batch_index < 0 || batch_index >= workload_tokens / 16)
+      $fatal(1, "invalid prefill batch/workload");
+    batch_dir = $sformatf("work/results/l5_q%0d_qkv/batch%0d", workload_tokens, batch_index);
     $readmemh("work/results/l5_target_qkv_segment/vectors/weights_bf16.memh", weights);
     $readmemh("work/results/l5_target_qkv_segment/vectors/norm_weight.memh", norm_weight_mem);
     $readmemh("work/results/l5_target_qkv_segment/vectors/q_bias.memh", q_bias);
@@ -255,8 +258,8 @@ module tb_l5_q128_qkv_batch0;
       $fatal(1, "q128 batch0 accounting array=%0d/%0d rms=%0d/%0d",
              array_accepted, array_completed, rms_accepted, rms_completed);
     $display(
-      "L5_Q128_QKV_BATCH_PASS batch=%0d tokens=%0d-%0d rows=16 array_steps=98304 total_cycles=%0d matrix_cycles=%0d rms_cycles=%0d bias_cycles=%0d q_fnv64=%016h k_fnv64=%016h v_fnv64=%016h",
-      batch_index, batch_index * 16, batch_index * 16 + 15,
+      "L5_Q_PREFILL_QKV_BATCH_PASS workload=%0d batch=%0d tokens=%0d-%0d rows=16 array_steps=98304 total_cycles=%0d matrix_cycles=%0d rms_cycles=%0d bias_cycles=%0d q_fnv64=%016h k_fnv64=%016h v_fnv64=%016h",
+      workload_tokens, batch_index, batch_index * 16, batch_index * 16 + 15,
       cycles, matrix_cycles, rms_cycles, bias_cycles,
       hash_q(q_result), hash_kv(k_result), hash_kv(v_result)
     );

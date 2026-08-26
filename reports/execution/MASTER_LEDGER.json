@@ -391,6 +391,14 @@
         ,"reports/execution/L5_Q384_COUNT_CONTROLLER.md"
         ,"reports/execution/l5_q384_count_controller_result.json"
         ,"work/results/l5_q384_count_controller/tb.log"
+        ,"reports/execution/L5_Q384_QKV_ALL_BATCHES.md"
+        ,"reports/execution/l5_q384_qkv_all_batches_result.json"
+        ,"work/results/l5_q384_qkv/batch0/tb.log"
+        ,"work/results/l5_q384_qkv/batch23/tb.log"
+        ,"reports/execution/L5_UNIFIED_PREFILL_RTL.md"
+        ,"reports/execution/l5_unified_prefill_rtl_result.json"
+        ,"work/results/l5_unified_prefill_count/tb.log"
+        ,"work/results/l5_q384_qkv/q128_compat.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -439,6 +447,8 @@
         ,"q128 prefill subgate closes with complete segmented numerical payload and separate controller trace"
         ,"q384 prefill shape,24 row batches,35094528 Matrix steps and887040 causal updates are frozen without cycle claims"
         ,"q384 synthesizable24-command controller matches all operation counts with measured latency disabled"
+        ,"q384 all24 QKV row batches pass2359296 measured Matrix steps on one parameterized binary"
+        ,"q128/q384 QKV and count control use one runtime-configured RTL binary per function; separate controllers are superseded"
       ],
       "remaining_gates": [
         "q384 prefill and decode128/1024/4096 block numerics"

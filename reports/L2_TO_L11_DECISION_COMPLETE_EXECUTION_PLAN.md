@@ -58,6 +58,9 @@ state.
 7. L5 BF16: independent 16x32 BF16/FP32 array and Qwen2-1.5B-Instruct revision
    `ba1cf1846d7df0a0591d6c00649f57e798519da8`; q128/q384 and decode
    128/1024/4096 with per-node traces and no score-matrix writeback.
+   q128/q384/decode configurations must use one runtime-configured RTL and one
+   compiled binary; workload length may select vectors/counts but never a
+   separately maintained datapath or controller implementation.
 8. L6 W8/W4-storage, L7 advanced paged KV, L8 native W4 dual-dot, then L9
    one-layer real-weight and four-layer executable integrated model closure.
 9. L10 readiness may continue, but strict L10 waits for official SRAM `.db`

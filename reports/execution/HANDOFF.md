@@ -19,7 +19,8 @@
 - L4 bias/requant/ReLU CLOSED: 100 RNE+ReLU outputs exact, 837 payload cycles, 20 canonical trace cycles, 4 conflicts.
 - L4 pool/residual CLOSED: canonical dedicated endpoint 10k PASS; pool 6 cycles/128 physical bytes, residual 7 cycles/192 bytes, 3 conflicts each. Next: production 4x4 AHA/Lake depthwise.
 - L4 topology blocker: pinned 4x4 ratio1 gives 16 Lake/0 PE; ratio2 gives 8/8; ratio4 gives 4/12. No legal 16-Lake compute topology; no 4x16 fallback.
-- L5 BF16 lane PASS: HardFloat FMA 10k vectors bit-exact, invalid flag checked, RTL hash `69a816...`. Next: logical 16x32/512-lane array.
+- L5 BF16 lane PASS: HardFloat FMA 10k vectors bit-exact, invalid flag checked, RTL hash `69a816...`.
+- L5 BF16 array CLOSED: independent logical 16x32, 512 HardFloat FMA lanes, 4-step accumulation exact, 8-cycle burst interval1, FNV64 `7da144...`. Next: heterogeneous FP32 SFU.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

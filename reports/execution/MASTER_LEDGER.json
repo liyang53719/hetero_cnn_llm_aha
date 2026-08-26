@@ -251,13 +251,16 @@
       "readiness_evidence": [
         "reports/execution/L5_BF16_FMA_LANE.md",
         "reports/execution/l5_bf16_fma_lane_result.json",
-        "work/results/l5_bf16_fma/tb.log"
+        "work/results/l5_bf16_fma/tb.log",
+        "reports/execution/L5_BF16_16X32_ARRAY.md",
+        "reports/execution/l5_bf16_array_result.json",
+        "work/results/l5_bf16_array/tb_16x32.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
+        ,"independent logical 16x32 BF16/FP32 array passes four-step accumulation and eight consecutive accepted tiles at 512 MAC/step"
       ],
       "remaining_gates": [
-        "independent logical 16x32 BF16/FP32 array at 512 MAC/cycle",
         "heterogeneous FP32 SFU tile",
         "toy hidden256 target q128 q384 decode128/1024/4096 block numerics"
       ]

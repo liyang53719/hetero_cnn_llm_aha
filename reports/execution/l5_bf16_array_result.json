@@ -1,0 +1,22 @@
+{
+  "stage": "L5",
+  "subgate": "independent BF16 matrix array",
+  "status": "PASS",
+  "logical_rows": 16,
+  "logical_columns": 32,
+  "hardfloat_fma_lanes": 512,
+  "bf16_macs_per_step": 512,
+  "fp32_accumulator_lanes": 512,
+  "accumulation_steps_tested": 4,
+  "independent_burst_tiles": 8,
+  "accept_interval_cycles": 1,
+  "total_test_cycles": 27,
+  "final_accumulator_fnv1a64": "7da144b97d054b25",
+  "exception_flags": 0,
+  "mismatches": 0,
+  "verilator_wall_clean": true,
+  "generated_lane_sha256": "69a8164bd1d6f29ce8770060b2c6a194b6b8a4a02d9322f91841ae76ef2ce6aa",
+  "memory_limit_gib": 10,
+  "build_parallelism": 4,
+  "cpu_affinity": "8-25"
+}

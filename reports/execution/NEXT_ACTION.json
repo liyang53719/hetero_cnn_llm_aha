@@ -1,6 +1,6 @@
 {
-  "phase": "L5_BF16_16X32_ARRAY",
-  "command": "Build a logical 16x32 outer-product tile by instantiating 512 copies of the pinned HeteroBF16FmaLane behind one ready/valid step interface: 16 BF16 A values, 32 BF16 B values and 512 FP32 accumulators in, 512 FP32 accumulators out. Register inputs/outputs so stalled payload is stable. First elaborate/lint a 2x2 parameter smoke, then 16x32 under the 10 GiB cap; run multi-step K accumulation against a fused FP32 golden and report actual one-step throughput, output hash and exception aggregation. Do not share or modify INT8 PE logic.",
+  "phase": "L5_HETEROGENEOUS_FP32_SFU",
+  "command": "Implement the fixed dedicated heterogeneous SFU primitives required before a BF16 block: FP32 reduction/add/mul, BF16 add/mul conversion, RoPE pair rotation, exp2 PWL, reciprocal, rsqrt, online-softmax M/L/O update, RMSNorm and SiLU. Start with a ready/valid scalar/vector primitive layer using pinned HardFloat for IEEE add/mul and explicit approximation coefficient tables; add per-primitive Python golden vectors and strict error thresholds without routing these operations through the blocked AHA 4x4 topology. Close primitives in the fixed order reduction, RoPE, exp2, reciprocal, rsqrt, online softmax, RMSNorm, SiLU.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

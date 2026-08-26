@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Freeze q384 before payload using batch1/sequence384 and the pinned target dimensions. The16-row array has24 row batches. Exact Matrix steps must be Q1769472,K294912,V294912,O1769472,gate/up/down10321920 each,total35094528. Causal head-token updates are887040; Q/K RoPE pairs are294912/49152,total344064; reciprocals4608; O/L chunks36864; SiLU scalars3440640; product chunks215040. Create a machine-readable contract and operation-count controller with measured latency null and zero score-matrix commands. Do not scale q128 measured cycles into q384 measured fields.",
+  "command": "Implement the synthesizable q384 operation-count controller from config/qwen_q384_prefill_contract.json. Emit the same24 ordered operation classes as q128 but with exact q384 work counts:35094528 Matrix steps,344064 RoPE pairs,887040 dot and online updates,4608 reciprocals,36864 normalization chunks,3440640 SiLU scalars and215040 product chunks. Keep measured-latency-valid low and score-matrix commands zero. After count PASS, begin numerical q384 QKV in24 restartable16-token batches; never scale q128 measured cycles into q384 fields.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

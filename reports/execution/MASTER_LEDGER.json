@@ -385,6 +385,9 @@
         ,"work/results/l5_q128_trace_controller/tb.log"
         ,"reports/execution/L5_Q128_CLOSEOUT.md"
         ,"reports/execution/l5_q128_result.json"
+        ,"config/qwen_q384_prefill_contract.json"
+        ,"reports/execution/L5_Q384_PREFILL_CONTRACT.md"
+        ,"reports/execution/l5_q384_prefill_contract_result.json"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -431,6 +434,7 @@
         ,"q128 all down/final batches pass3440640 measured Matrix steps and freeze the final hash"
         ,"q128 measured-latency trace reproduces11698176 steps and61101824 active cycles with zero score commands"
         ,"q128 prefill subgate closes with complete segmented numerical payload and separate controller trace"
+        ,"q384 prefill shape,24 row batches,35094528 Matrix steps and887040 causal updates are frozen without cycle claims"
       ],
       "remaining_gates": [
         "q384 prefill and decode128/1024/4096 block numerics"

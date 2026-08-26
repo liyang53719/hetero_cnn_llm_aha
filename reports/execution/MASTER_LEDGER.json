@@ -413,6 +413,7 @@
         ,"reports/execution/l5_q1024_mlo_blocker_result.json"
         ,"work/results/l5_q1024_mlo/vectors/manifest.json"
         ,"work/results/l5_q1024_mlo_candidate_1024seg/vectors/manifest.json"
+        ,"work/results/l5_q1024_mlo_candidate_block128/vectors/manifest.json"
         ,"work/results/l5_q384_qkv/q128_compat.log"
         ,"reports/execution/L5_Q384_ROPE_GQA.md"
         ,"reports/execution/l5_q384_rope_gqa_result.json"
@@ -516,7 +517,7 @@
       "remaining_gates": [
         "q1024 prefill and decode128/1024/4096 block numerics"
       ],
-      "active_blocker": "BLOCKED_DECISION: q1024 single-chain FP32 online MLO error0.0053576 exceeds0.002; approve hierarchical block128 summary merge or choose FP64 state"
+      "active_blocker": "DECISION_READY: q1024 block128 candidate passes0.000613 error with43008 merges and no score matrix; explicit production-RTL approval remains required"
     },
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},
     "L7": {"status": "PENDING", "depends_on": ["L5"]},

@@ -77,6 +77,7 @@
 - L5 q1024 QKV ALL PASS on same q128/q384/q1024 binary SHA `8f9a561e...`:64 batches,6291456 steps/25696256 cycles; Q/K/V hashes `4e67c4cc...`/`7a1daa90...`/`1853b21c...`. Next:q1024 RoPE/GQA.
 - L5 q1024 RoPE/GQA PASS on same three-length binary SHA `53558f8b...`:917504 pairs/196608 outputs/3932160 cycles; Q/K/KGQA/VGQA hashes frozen. Next:q1024 causal M/L/O.
 - L5 q1024 M/L/O BLOCKED_DECISION: single-chain FP32 error0.0053576>0.002;1024-segment exp2 gives0.0054353, so PWL is not root cause. Recommend hierarchical block128 M/L/O merge for seq>384 in same RTL; no score matrix,43008 merges. Await approval.
+- L5 q1024 block128 candidate PASS: error0.000613<0.002,43008 summary merges,no score matrix; q128 legacy hashes unchanged. Production RTL remains DECISION_READY pending explicit approval.
 - User priority: L5 now includes q1024 prefill measured cycles/token-s in addition to q128/q384. After L5 closes, run L10 early 1GHz logic timing/area before L6-L9; keep SRAM macro PPA/formal PASS blocked until official `.db`/LEF.
 - Qwen3.5 ordering frozen: do not implement it now. Finish current Qwen2 L5, then L10 early PPA, then create a separate descriptor/runtime extension plan without forking the Qwen2 canonical RTL.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.

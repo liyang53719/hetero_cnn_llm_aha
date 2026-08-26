@@ -75,15 +75,20 @@ def main() -> int:
     if "rocc_resp" in program_adapter:
         fail("program adapter must not treat Gemmini response as generic completion")
     production = (ROOT / "rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv").read_text(encoding="utf-8")
-    for token in ("gemmini_descriptor_sequencer", "gemmini_rocc_program_adapter",
+    for token in ("gemmini_descriptor_v2_pipeline",
                   "descriptor_req_index_o", "descriptor_rsp_error_i"):
         if token not in production:
             fail(f"production integration lost approved descriptor path: {token}")
     if "gemmini_rocc_command_adapter u_gemmini_rocc" in production:
         fail("production integration regressed to the legacy CUSTOM_0 adapter")
-    sequencer = (ROOT / "rtl/integration/gemmini_descriptor_sequencer.sv").read_text(encoding="utf-8")
-    for token in ("NULL_INDEX", "MAX_RECORDS", "duplicate_index",
-                  "descriptor_req_byte_addr_o", "S_VALIDATE"):
+    pipeline = (ROOT / "rtl/integration/gemmini_descriptor_v2_pipeline.sv").read_text(encoding="utf-8")
+    for token in ("matrix_descriptor_v2_snapshot", "matrix_descriptor_v2_decode",
+                  "gemmini_descriptor_v2_emitter", "gemmini_rocc_program_adapter"):
+        if token not in pipeline:
+            fail(f"descriptor-v2 pipeline lost required stage: {token}")
+    sequencer = (ROOT / "rtl/integration/matrix_descriptor_v2_snapshot.sv").read_text(encoding="utf-8")
+    for token in ("NULL_INDEX", "MAX_CHAIN_RECORDS", "duplicate_index",
+                  "descriptor_req_byte_addr_o", "S_REPLAY", "aux_seen_q"):
         if token not in sequencer:
             fail(f"descriptor sequencer lost approved pre-issue behavior: {token}")
 

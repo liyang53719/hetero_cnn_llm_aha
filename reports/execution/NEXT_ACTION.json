@@ -1,6 +1,6 @@
 {
-  "phase": "L2_PRODUCTION_MULTI_OP_SEQUENCER",
-  "command": "Extend gemmini_descriptor_sequencer using generated expected vectors in this fixed order: multi-tile OS, LOOP_WS, Conv 1x1/3x3, optional bias chain, then output requant and ReLU/ReLU6. Cache and validate src0/src1/dst/bias before issue; derive tiling and local addresses exactly from the pinned Gemmini C path. Bind every build/test to CPU 8-25 and start only above 10 GiB MemAvailable.",
-  "success_condition": "For every legal production descriptor, funct/rs1/rs2 and issue count equal the frozen Python/pinned-C transcript; all illegal or incomplete chains issue zero CUSTOM_3; busy completion, event, write trace and output hash remain exact under randomized backpressure.",
+  "phase": "L2_PRODUCTION_COVERAGE_AND_CLOSEOUT",
+  "command": "Add generated descriptor-v2 cases for 1x1 Conv and no-bias LOOP_WS, plus a compiler test proving matrix_aux activation=ReLU6 becomes Matrix raw output followed by SFU activation rather than Gemmini activation code 2. Then rerun retained-Rocket transcript/write/numerical evidence and upstream-clean checks for final L2 audit. Bind every build/test to CPU 8-25 and start only above 10 GiB MemAvailable.",
+  "success_condition": "1x1, 3x3, bias/no-bias, identity/requant/ReLU and ReLU6-to-SFU paths have explicit tests; production funct/rs1/rs2 equal pinned transcripts, invalid cases issue zero commands, busy/event/write/output evidence is exact and all upstream trees remain clean.",
   "failure_policy": "Stop at the first transcript or numerical mismatch. Do not expose local Gemmini addresses in the public ISA, bypass typed descriptors, pre-lower on the host, use io_resp as completion, weaken legality, or mark L2 PASS before retained-Rocket equivalence closes."
 }

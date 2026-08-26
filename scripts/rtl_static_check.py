@@ -91,6 +91,8 @@ def main() -> int:
         "gemmini_descriptor_sequencer",
         "matrix_descriptor_v2_snapshot",
         "matrix_descriptor_v2_decode",
+        "gemmini_descriptor_v2_emitter",
+        "gemmini_descriptor_v2_pipeline",
         "aha_garnet_axi_config_loader",
         "aha_garnet_proc_packet_writer",
         "aha_garnet_microsequencer",

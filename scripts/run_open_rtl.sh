@@ -53,6 +53,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
   "$HETERO_VERILATOR" --lint-only --timing -Wall \
     "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" \
     --top-module matrix_descriptor_v2_decode |& tee "$OUT/matrix_descriptor_v2_decode_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall \
+    "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" \
+    --top-module gemmini_descriptor_v2_emitter |& tee "$OUT/gemmini_descriptor_v2_emitter_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
     --top-module aha_garnet_axi_config_loader |& tee "$OUT/aha_garnet_axi_loader_lint.log"
@@ -67,8 +70,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/common/rv_fifo.sv" "$ROOT/rtl/top/command_dispatch.sv" \
     "$ROOT/rtl/top/hetero_npu_shell.sv" "$ROOT/rtl/integration/command_event_scoreboard.sv" \
-    "$ROOT/rtl/integration/engine_contract_adapter.sv" "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" \
-    "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
+    "$ROOT/rtl/integration/engine_contract_adapter.sv" "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" \
+    "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" \
+    "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" "$ROOT/rtl/integration/gemmini_descriptor_v2_pipeline.sv" \
     "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
     --top-module hetero_npu_gemmini_rocc_integration_v0 |& tee "$OUT/gemmini_rocc_integration_lint.log"
 else
@@ -133,6 +137,12 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" \
     "$ROOT/tb/tb_matrix_descriptor_v2_snapshot.sv"
   vvp "$OUT/tb_matrix_descriptor_v2_snapshot" | tee "$OUT/tb_matrix_descriptor_v2_snapshot.log"
+  iverilog -g2012 -s tb_gemmini_descriptor_v2_pipeline -o "$OUT/tb_gemmini_descriptor_v2_pipeline" \
+    "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" \
+    "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" \
+    "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" \
+    "$ROOT/tb/tb_gemmini_descriptor_v2_pipeline.sv"
+  (cd "$ROOT" && vvp "$OUT/tb_gemmini_descriptor_v2_pipeline") | tee "$OUT/tb_gemmini_descriptor_v2_pipeline.log"
   iverilog -g2012 -s tb_command_event_scoreboard -o "$OUT/tb_command_event_scoreboard" \
     "$ROOT/rtl/integration/command_event_scoreboard.sv" \
     "$ROOT/tb/tb_command_event_scoreboard.sv"
@@ -154,8 +164,9 @@ if command -v iverilog >/dev/null 2>&1; then
   iverilog -g2012 -s tb_hetero_npu_gemmini_rocc_integration_v0 -o "$OUT/tb_gemmini_rocc_integration" \
     "$ROOT/rtl/common/rv_fifo.sv" "$ROOT/rtl/top/command_dispatch.sv" "$ROOT/rtl/top/hetero_npu_shell.sv" \
     "$ROOT/rtl/integration/command_event_scoreboard.sv" "$ROOT/rtl/integration/engine_contract_adapter.sv" \
-    "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
-    "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
+    "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" "$ROOT/rtl/integration/matrix_descriptor_v2_decode.sv" \
+    "$ROOT/rtl/integration/gemmini_descriptor_v2_emitter.sv" "$ROOT/rtl/integration/gemmini_rocc_program_adapter.sv" \
+    "$ROOT/rtl/integration/gemmini_descriptor_v2_pipeline.sv" "$ROOT/rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv" \
     "$ROOT/tb/tb_hetero_npu_gemmini_rocc_integration_v0.sv"
   vvp "$OUT/tb_gemmini_rocc_integration" | tee "$OUT/tb_gemmini_rocc_integration.log"
 else

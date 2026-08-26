@@ -23,6 +23,7 @@ module tb_gemmini_rocc_program_adapter;
   gemmini_rocc_program_adapter dut (
     .clk_i(clk), .rst_ni(rst_n), .op_valid_i(op_valid), .op_ready_o(op_ready),
     .op_first_i(op_first), .op_last_i(op_last), .op_legal_i(op_legal),
+    .op_status_i(op_legal ? 8'd0 : 8'd1),
     .event_id_i(event_id), .op_funct_i(op_funct), .op_rs1_i(op_rs1), .op_rs2_i(op_rs2),
     .rocc_cmd_valid_o(rocc_valid), .rocc_cmd_ready_i(rocc_ready),
     .rocc_inst_funct_o(funct), .rocc_inst_rs2_o(rs2_idx), .rocc_inst_rs1_o(rs1_idx),

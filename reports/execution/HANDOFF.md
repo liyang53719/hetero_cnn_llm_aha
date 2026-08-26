@@ -6,6 +6,8 @@
 - Descriptor-v2 production oracle PASS: OS 36, LOOP_WS 11, Conv identity 9 and Conv requant+ReLU 9 ops match saved retained-Rocket funct/rs1/rs2 exactly; full suite 59 PASS.
 - v2 snapshot frontend PASS: src0/src1/dst/bias up to 64 cached records, full pre-issue structural validation, cyclic chain zero replay, Icarus PASS and Verilator -Wall clean.
 - v2 semantic decode PASS: root-role placement, required fields, replay integrity, Conv/bias and dual quant capture; legal/error contexts exact, Verilator -Wall clean.
+- production v2 pipeline PASS: 65 exact OS/WS/Conv ops, 3 zero-issue rejects, shell LOOP_WS 11 CUSTOM_3 + busy/event in 99 cycles; integrated RTL/model PASS.
+- Pinned Gemmini activation 2 is LayerNorm, so architectural ReLU6 is rejected by Matrix and must route to SFU; never encode it as Gemmini activation 2.
 - CPU rule: all build/test/DC use `taskset -c 8-25`; Docker uses `--cpuset-cpus=8-23`.
 - Resource rule: `MemAvailable > 10 GiB`, at most `-j4`, user/Docker memory cap required.
 - L0 PASS; L1 upstream PASS.
@@ -34,5 +36,5 @@
 - Full 16-bit event scoreboard PASS 100k across two reset epochs; 23 error completions correctly remain blocking.
 - Production event scoreboard moved to one real 4096x128 Control SRAM and passes the same 100k; flop reference DC area 177205.85 is rejected.
 - Direct streams DC: CLN22UL 1GHz WNS +0.0162122ns, 0 unmapped, area 5832.01.
-- Next action: extend production sequencer in fixed order multi-tile OS → LOOP_WS → Conv → bias → requant/ReLU using committed expected vectors.
+- Next action: add 1x1 Conv, no-bias WS and ReLU6-to-SFU compiler tests, then close retained-Rocket/write/event/upstream-clean L2 audit.
 - Do not close a stage with clean-room-only evidence.

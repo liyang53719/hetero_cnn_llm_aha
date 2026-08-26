@@ -10,6 +10,7 @@ module gemmini_rocc_program_adapter (
   input  logic        op_first_i,
   input  logic        op_last_i,
   input  logic        op_legal_i,
+  input  logic [7:0]  op_status_i,
   input  logic [15:0] event_id_i,
   input  logic [6:0]  op_funct_i,
   input  logic [63:0] op_rs1_i,
@@ -84,7 +85,7 @@ module gemmini_rocc_program_adapter (
             event_id_q <= event_id_i;
             accepted_q <= '0;
             if (!op_first_i || !op_legal_i) begin
-              status_q <= op_first_i ? STATUS_ILLEGAL : STATUS_MALFORMED;
+              status_q <= op_first_i ? (op_status_i == 0 ? STATUS_ILLEGAL : op_status_i) : STATUS_MALFORMED;
               state_q <= S_EVENT;
             end else begin
               last_q <= op_last_i;

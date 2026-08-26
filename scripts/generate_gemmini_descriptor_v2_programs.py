@@ -99,6 +99,15 @@ def render() -> tuple[str, dict[str, str]]:
             packed = int(op["funct"]) << 128 | int(op["rs1"], 16) << 64 | int(op["rs2"], 16)
             lines.append(f"{packed:034x}")
         memh[str(case["name"])] = "\n".join(lines) + "\n"
+        record_words = ["0" * 32 for _ in range(64)]
+        present = ["0" for _ in range(64)]
+        for index, word in case["records"].items():
+            slot = int(index, 16)
+            record_words[slot] = word[2:]
+            present[slot] = "1"
+        memh[f"{case['name']}_desc"] = "\n".join(record_words) + "\n"
+        memh[f"{case['name']}_present"] = "\n".join(present) + "\n"
+        memh[f"{case['name']}_command"] = case["command"][2:] + "\n"
     return json.dumps(payload, indent=2, sort_keys=True) + "\n", memh
 
 

@@ -22,6 +22,9 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
   logic[63:0] descriptor_req_byte_addr;
   logic[127:0] descriptor_rsp_data;
   logic descriptor_rsp_error,descriptor_pending;
+  logic[127:0] descriptor_mem[0:63],matrix_command_mem[0:0];logic descriptor_present[0:63];
+  logic scale_req_valid,scale_req_ready,scale_rsp_valid,scale_rsp_ready,scale_rsp_error;
+  logic[47:0]scale_req_addr;logic[31:0]scale_rsp_data;
   assign rocc_ready = (cycles % 3) != 0;
   assign host_event_ready = (cycles % 4) != 1;
 
@@ -34,6 +37,9 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
     .descriptor_req_byte_addr_o(descriptor_req_byte_addr),.descriptor_rsp_valid_i(descriptor_rsp_valid),
     .descriptor_rsp_ready_o(descriptor_rsp_ready),.descriptor_rsp_data_i(descriptor_rsp_data),
     .descriptor_rsp_error_i(descriptor_rsp_error),
+    .scale_req_valid_o(scale_req_valid),.scale_req_ready_i(scale_req_ready),.scale_req_addr_o(scale_req_addr),
+    .scale_rsp_valid_i(scale_rsp_valid),.scale_rsp_ready_o(scale_rsp_ready),
+    .scale_rsp_data_i(scale_rsp_data),.scale_rsp_error_i(scale_rsp_error),
     .rocc_cmd_valid_o(rocc_valid), .rocc_cmd_ready_i(rocc_ready), .rocc_inst_funct_o(funct),
     .rocc_inst_rs2_o(rs2_idx), .rocc_inst_rs1_o(rs1_idx), .rocc_inst_xd_o(xd), .rocc_inst_xs1_o(xs1),
     .rocc_inst_xs2_o(xs2), .rocc_inst_rd_o(rd), .rocc_inst_opcode_o(opcode), .rocc_rs1_o(rs1), .rocc_rs2_o(rs2),
@@ -41,30 +47,11 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
     .rocc_resp_data_i(resp_data), .rocc_busy_i(rocc_busy)
   );
 
-  function automatic logic[127:0] descriptor_word(input logic[23:0] index);
-    logic[127:0] w;
-    begin
-      w='0;
-      case(index)
-        1: begin w[7:0]=8'h01;w[55:32]=2;w[103:56]=48'h80001000;w[111:108]=1;w[119:116]=2;end
-        2: begin w[7:0]=8'h02;w[55:32]=3;w[73:56]=3;w[91:74]=7;end
-        3: begin w[7:0]=8'h03;w[55:32]=4;w[79:56]=7;end
-        4: begin w[7:0]=8'h10;w[55:32]=24'hffffff;w[71:56]=3;w[87:72]=5;w[111:88]=7;end
-        5: begin w[7:0]=8'h01;w[55:32]=6;w[103:56]=48'h80002000;w[111:108]=1;w[119:116]=2;end
-        6: begin w[7:0]=8'h02;w[55:32]=7;w[73:56]=7;w[91:74]=5;end
-        7: begin w[7:0]=8'h03;w[55:32]=24'hffffff;w[79:56]=5;end
-        8: begin w[7:0]=8'h01;w[55:32]=9;w[103:56]=48'h80003000;w[111:108]=1;w[119:116]=2;end
-        9: begin w[7:0]=8'h02;w[55:32]=10;w[73:56]=3;w[91:74]=5;end
-        10:begin w[7:0]=8'h03;w[55:32]=24'hffffff;w[79:56]=5;end
-        default: w='0;
-      endcase
-      descriptor_word=w;
-    end
-  endfunction
   assign descriptor_req_ready=(cycles%5)!=1&&!descriptor_pending;
   assign descriptor_rsp_valid=descriptor_pending;
-  assign descriptor_rsp_data=descriptor_word(pending_descriptor_index);
-  assign descriptor_rsp_error=(pending_descriptor_index<1)||(pending_descriptor_index>10);
+  assign descriptor_rsp_data=pending_descriptor_index<64?descriptor_mem[pending_descriptor_index[5:0]]:'0;
+  assign descriptor_rsp_error=pending_descriptor_index>=64||!descriptor_present[pending_descriptor_index[5:0]];
+  assign scale_req_ready=1;assign scale_rsp_valid=0;assign scale_rsp_data=0;assign scale_rsp_error=0;
 
   always @(posedge clk) begin
     if (!rst_n) begin
@@ -81,7 +68,7 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
       if(rocc_valid&&rocc_ready)begin
         rocc_count<=rocc_count+1;
         if(opcode!=7'h7b||xd||!xs1||!xs2)$fatal(1,"not CUSTOM_3 envelope");
-        if(rocc_count==8)busy_countdown<=5;
+        if(rocc_count==10)busy_countdown<=5;
       end
       if(busy_countdown>0)begin
         busy_countdown<=busy_countdown-1;rocc_busy<=busy_countdown>1;
@@ -89,7 +76,7 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
     end
     if (rst_n && host_event_valid && host_event_ready) begin
       event_count <= event_count + 1;
-      if (host_event_data[55:40] == 16'd1) seen_matrix <= 1'b1;
+      if (host_event_data[55:40] == 16'h1234) seen_matrix <= 1'b1;
       if (host_event_data[55:40] == 16'd2) seen_sfu <= 1'b1;
     end
   end
@@ -100,7 +87,7 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
       @(negedge clk);
       host_data = '0; host_data[7:0] = op; host_data[10:8] = engine;
       host_data[55:40] = signal_id;
-      if(engine==3'd2)begin host_data[79:56]=1;host_data[103:80]=5;host_data[127:104]=8;end
+      if(engine==3'd2)host_data=matrix_command_mem[0];
       else begin host_data[79:56]=24'h123456;host_data[103:80]=24'h654321;host_data[127:104]=3;end
       host_valid = 1'b1;
       do @(posedge clk); while (!host_ready);
@@ -111,12 +98,15 @@ module tb_hetero_npu_gemmini_rocc_integration_v0;
   initial begin
     host_valid = 0; host_data = 0; resp_valid = 0; resp_rd = 0; resp_data = 0;
     cycles = 0; event_count = 0; seen_matrix = 0; seen_sfu = 0;
+    $readmemh("tests/vectors/gemmini_loop_ws_desc.memh",descriptor_mem);
+    $readmemh("tests/vectors/gemmini_loop_ws_present.memh",descriptor_present);
+    $readmemh("tests/vectors/gemmini_loop_ws_command.memh",matrix_command_mem,0,0);
     repeat (3) @(posedge clk); rst_n = 1;
     send_command(8'h20, 3'd2, 16'd1);
     wait (seen_matrix);
     send_command(8'h30, 3'd3, 16'd2);
     wait (seen_sfu);
-    if (event_count != 2 || rocc_count != 9 || illegal_engine || illegal_rocc || resp_ready)
+    if (event_count != 2 || rocc_count != 11 || illegal_engine || illegal_rocc || resp_ready||scale_req_valid)
       $fatal(1, "integrated event/illegal result mismatch");
     $display("GEMMINI_ROCC_INTEGRATION_PASS cycles=%0d", cycles);
     $finish;

@@ -24,6 +24,14 @@ module hetero_npu_gemmini_rocc_integration_v0 (
   input  logic [127:0] descriptor_rsp_data_i,
   input  logic         descriptor_rsp_error_i,
 
+  output logic         scale_req_valid_o,
+  input  logic         scale_req_ready_i,
+  output logic [47:0]  scale_req_addr_o,
+  input  logic         scale_rsp_valid_i,
+  output logic         scale_rsp_ready_o,
+  input  logic [31:0]  scale_rsp_data_i,
+  input  logic         scale_rsp_error_i,
+
   output logic         rocc_cmd_valid_o,
   input  logic         rocc_cmd_ready_i,
   output logic [6:0]   rocc_inst_funct_o,
@@ -51,10 +59,6 @@ module hetero_npu_gemmini_rocc_integration_v0 (
   logic control_valid, dma_valid, matrix_valid, sfu_valid, kv_valid, collective_valid;
   logic control_ready, dma_ready, matrix_ready, sfu_ready, kv_ready, collective_ready;
   logic [127:0] control_data, dma_data, matrix_data, sfu_data, kv_data, collective_data;
-  logic matrix_op_valid, matrix_op_ready, matrix_op_first, matrix_op_last, matrix_op_legal;
-  logic [15:0] matrix_op_event_id;
-  logic [6:0] matrix_op_funct;
-  logic [63:0] matrix_op_rs1, matrix_op_rs2;
 
   command_event_scoreboard u_scoreboard (
     .clk_i, .rst_ni,
@@ -98,24 +102,15 @@ module hetero_npu_gemmini_rocc_integration_v0 (
     .clk_i, .rst_ni, .cmd_valid_i(dma_valid), .cmd_ready_o(dma_ready), .cmd_data_i(dma_data),
     .event_valid_o(engine_event_valid[1]), .event_ready_i(engine_event_ready[1]), .event_data_o(engine_event_data[1*56 +: 56])
   );
-  gemmini_descriptor_sequencer u_gemmini_descriptor_sequencer (
+  gemmini_descriptor_v2_pipeline u_gemmini_rocc (
     .clk_i, .rst_ni,
     .cmd_valid_i(matrix_valid), .cmd_ready_o(matrix_ready), .cmd_data_i(matrix_data),
     .descriptor_base_i,
     .descriptor_req_valid_o, .descriptor_req_ready_i, .descriptor_req_index_o,
     .descriptor_req_byte_addr_o, .descriptor_rsp_valid_i, .descriptor_rsp_ready_o,
     .descriptor_rsp_data_i, .descriptor_rsp_error_i,
-    .op_valid_o(matrix_op_valid), .op_ready_i(matrix_op_ready),
-    .op_first_o(matrix_op_first), .op_last_o(matrix_op_last), .op_legal_o(matrix_op_legal),
-    .op_event_id_o(matrix_op_event_id), .op_funct_o(matrix_op_funct),
-    .op_rs1_o(matrix_op_rs1), .op_rs2_o(matrix_op_rs2)
-  );
-  gemmini_rocc_program_adapter u_gemmini_rocc (
-    .clk_i, .rst_ni,
-    .op_valid_i(matrix_op_valid), .op_ready_o(matrix_op_ready),
-    .op_first_i(matrix_op_first), .op_last_i(matrix_op_last), .op_legal_i(matrix_op_legal),
-    .event_id_i(matrix_op_event_id), .op_funct_i(matrix_op_funct),
-    .op_rs1_i(matrix_op_rs1), .op_rs2_i(matrix_op_rs2),
+    .scale_req_valid_o,.scale_req_ready_i,.scale_req_addr_o,
+    .scale_rsp_valid_i,.scale_rsp_ready_o,.scale_rsp_data_i,.scale_rsp_error_i,
     .rocc_cmd_valid_o, .rocc_cmd_ready_i, .rocc_inst_funct_o, .rocc_inst_rs2_o, .rocc_inst_rs1_o,
     .rocc_inst_xd_o, .rocc_inst_xs1_o, .rocc_inst_xs2_o, .rocc_inst_rd_o, .rocc_inst_opcode_o,
     .rocc_rs1_o, .rocc_rs2_o,

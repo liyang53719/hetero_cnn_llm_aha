@@ -40,7 +40,8 @@ state.
    validation, example migration, committed expected-vector generator and all
    contract tests.
 2. `l2/multi-op-sequencer`: production multi-tile OS, LOOP_WS, 1x1/3x3 Conv,
-   optional bias and output requant/ReLU; exact pinned Gemmini tiling and no
+   optional bias and output requant/ReLU; ReLU6 is a following SFU operation
+   because pinned Gemmini code 2 means LayerNorm. Use exact Gemmini tiling and no
    locally invented address policy.
 3. `gate/L2-pass`: same retained RocketTile official-vs-descriptor command,
    write, busy, event and numerical equivalence; AHA baseline remains clean.

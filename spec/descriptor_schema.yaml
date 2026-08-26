@@ -175,4 +175,5 @@ validation_rules:
   - "All referenced chains are cached and validated before any engine micro-operation issues."
   - "Readonly chains may alias across roots; each chain independently obeys the 16-record limit."
   - "Every Matrix command has exactly one matrix_aux; matrix_aux.subarray_mask is nonzero."
+  - "Matrix activation 2 is architectural ReLU6 and lowers to SFU; it must not be encoded as pinned Gemmini activation 2 (LayerNorm)."
   - "Unused command descriptor roots contain null_index, never record index zero."

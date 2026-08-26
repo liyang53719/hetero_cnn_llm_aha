@@ -3,6 +3,9 @@ rtl/top/command_dispatch.sv
 rtl/top/hetero_npu_shell.sv
 rtl/integration/command_event_scoreboard.sv
 rtl/integration/engine_contract_adapter.sv
-rtl/integration/gemmini_descriptor_sequencer.sv
+rtl/integration/matrix_descriptor_v2_snapshot.sv
+rtl/integration/matrix_descriptor_v2_decode.sv
+rtl/integration/gemmini_descriptor_v2_emitter.sv
 rtl/integration/gemmini_rocc_program_adapter.sv
+rtl/integration/gemmini_descriptor_v2_pipeline.sv
 rtl/integration/hetero_npu_gemmini_rocc_integration_v0.sv

@@ -15,7 +15,8 @@
 - L4 dependency lock PASS: Python 3.12.7, torch 2.9.1+cu128, torchvision 0.24.1+cu128, ResNet50/MobileNetV2 V2 weights full SHA256 verified. Current subgate: INT8 GEMM.
 - L4 INT8 GEMM CLOSED: canonical trace 87 cycles, 2368 physical DMA bytes, 5 conflicts, 3/2 stalls, 1 descriptor promotion; payload/trace scopes remain separate.
 - L4 1x1 Conv CLOSED: 64 outputs exact, 514 payload cycles, 17 canonical trace cycles, 256 physical bytes, 4 conflicts.
-- L4 3x3 Conv identity CLOSED: 100 outputs exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes, 4 conflicts. Next: fused scale0.5+ReLU.
+- L4 3x3 Conv identity CLOSED: 100 outputs exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes, 4 conflicts.
+- L4 bias/requant/ReLU CLOSED: 100 RNE+ReLU outputs exact, 837 payload cycles, 20 canonical trace cycles, 4 conflicts. Next: pool/residual SFU.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

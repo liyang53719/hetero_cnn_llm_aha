@@ -216,7 +216,10 @@
         "work/results/l4_conv1x1_l3_trace/tb.log",
         "reports/execution/L4_CONV3X3_IDENTITY_CLOSEOUT.md",
         "reports/execution/l4_conv3x3_identity_result.json",
-        "work/results/l4_conv3x3_identity_l3_trace/tb.log"
+        "work/results/l4_conv3x3_identity_l3_trace/tb.log",
+        "reports/execution/L4_BIAS_REQUANT_RELU_CLOSEOUT.md",
+        "reports/execution/l4_conv3x3_relu_requant_result.json",
+        "work/results/l4_conv3x3_relu_requant_l3_trace/tb.log"
       ],
       "completed_subgates": [
         "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock",
@@ -224,9 +227,9 @@
         "INT8 GEMM complete: payload and canonical L3 trace separately pass with exact output hash, 87 trace cycles, 2368 physical DMA bytes, 5 bank conflicts and current descriptor-v2 RTL regression"
         ,"1x1 Conv complete: 64 outputs bit-exact, 514 payload cycles, 17 canonical trace cycles, 256 physical bytes and 4 bank conflicts"
         ,"3x3 Conv identity complete: 100 outputs bit-exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes and 4 bank conflicts"
+        ,"bias requant ReLU complete: 100 RNE plus ReLU outputs bit-exact, 837 payload cycles, 20 canonical trace cycles and 4 bank conflicts"
       ],
       "remaining_gates": [
-        "bias requant ReLU",
         "pool residual",
         "production 4x4 AHA Lake depthwise",
         "depthwise pointwise",

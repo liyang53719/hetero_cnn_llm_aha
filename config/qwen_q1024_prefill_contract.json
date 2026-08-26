@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "workload": "q1024_prefill_batch1",
+  "evidence_class": "operation_count_contract_not_measured",
+  "shape": {"batch":1,"sequence":1024,"hidden":1536,"intermediate":8960,"q_heads":12,"kv_heads":2,"head_dim":128,"causal":true},
+  "physical_array": {"rows":16,"columns":32,"row_batches":64,"bf16_mac_per_step":512},
+  "matrix_steps": {"q":4718592,"k":786432,"v":786432,"o":4718592,"gate":27525120,"up":27525120,"down":27525120,"total":93585408},
+  "stream_work": {"input_rms_chunks":98304,"post_attention_rms_chunks":98304,"q_bias_chunks":98304,"k_bias_chunks":16384,"v_bias_chunks":16384,"q_rope_pairs":786432,"k_rope_pairs":131072,"rope_pairs_total":917504,"k_gqa_outputs":98304,"v_gqa_outputs":98304,"causal_tokens_per_head_sum":524800,"causal_head_token_updates":6297600,"dot128_operations":6297600,"online_updates":6297600,"reciprocals":12288,"normalization_chunks":98304,"residual1_chunks":98304,"silu_scalars":9175040,"product_chunks":573440,"final_residual_chunks":98304},
+  "storage_policy": {"score_matrix_materialized":false,"stream_order":"query token, head, causal KV token","full_score_writeback_commands":0},
+  "cycle_policy": {"rtl_measured_cycles":null,"analytical_cycles_in_measured_fields":false,"required_next_evidence":"q1024 controller count gate followed by restartable RTL payload"}
+}

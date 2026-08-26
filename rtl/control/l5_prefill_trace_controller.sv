@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
 module l5_prefill_trace_controller(
- input logic clk_i,rst_ni,start_i,command_ready_i,engine_done_i,input logic[8:0]sequence_length_i,
+ input logic clk_i,rst_ni,start_i,command_ready_i,engine_done_i,input logic[10:0]sequence_length_i,
  output logic command_valid_o,measured_latency_valid_o,score_matrix_o,done_o,config_error_o,
- output logic[8:0]sequence_length_o,output logic[4:0]operation_o,output logic[2:0]engine_o,
+ output logic[10:0]sequence_length_o,output logic[4:0]operation_o,output logic[2:0]engine_o,
  output logic[31:0]work_items_o,matrix_steps_o,measured_latency_o,commands_issued_o,matrix_steps_total_o,rope_pairs_total_o,dot_operations_total_o,online_updates_total_o,reciprocals_total_o,normalization_chunks_total_o,silu_scalars_total_o,product_chunks_total_o,score_matrix_commands_o,
  output logic[63:0]busy_cycles_o);
  logic inflight,child_latency_valid;

@@ -1,0 +1,11 @@
+{
+  "stage": "L5",
+  "subgate": "q1024 prefill operation contract",
+  "status": "PASS",
+  "evidence_class": "operation_count_contract_not_measured",
+  "row_batches": 64,
+  "matrix_steps": 93585408,
+  "causal_head_token_updates": 6297600,
+  "score_matrix_materialized": false,
+  "rtl_measured_cycles": null
+}

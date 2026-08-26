@@ -431,6 +431,11 @@
         ,"work/results/l5_unified_prefill_trace/tb.log"
         ,"reports/execution/L5_Q384_CLOSEOUT.md"
         ,"reports/execution/l5_q384_result.json"
+        ,"config/qwen_q1024_prefill_contract.json"
+        ,"reports/execution/L5_Q1024_PREFILL_CONTRACT.md"
+        ,"reports/execution/l5_q1024_prefill_contract_result.json"
+        ,"reports/execution/l5_q1024_controller_result.json"
+        ,"work/results/l5_unified_prefill_count/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -489,6 +494,7 @@
         ,"q128/q384 down/final use one runtime-configured binary; q384 passes24 batches and10321920 Matrix steps"
         ,"unified q128/q384 measured trace uses one runtime controller binary and reproduces61101824/202769664 active cycles"
         ,"q384 prefill closes with complete numerical hash chain,35094528 Matrix steps,202769664 active cycles and no score matrix"
+        ,"q1024 operation contract and unified runtime count controller pass64 row batches,93585408 Matrix steps and6297600 causal updates; measured latency remains null"
       ],
       "remaining_gates": [
         "q1024 prefill and decode128/1024/4096 block numerics"

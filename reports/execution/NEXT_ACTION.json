@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Wrap the unified runtime prefill count controller with measured per-operation latency selected by runtime sequence length. In one compiled binary run q128 and q384, require61101824 and202769664 active cycles,11698176 and35094528 Matrix steps,24 commands each, zero score-matrix commands, and reject sequence256. Then close q384 and begin q1024 runtime extension without forking RTL.",
+  "command": "Extend the existing runtime QKV vector generator and TB path to workload1024 without adding or recompiling workload-specific RTL. Generate64 restartable16-token batches, run all64 on one binary, require98304 Matrix steps and401504 cycles per batch, aggregate6291456 steps and25696256 cycles, then rerun q128 and q384 compatibility on the same binary.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",
@@ -11,6 +11,6 @@
     "q128 gate/up/SiLU/product/down/final",
     "q128 receipt aggregate"
   ],
-  "success_condition": "One unchanged runtime-configured controller reproduces every measured q128/q384 operation latency and aggregate cycle/count total with no score matrix; q384 closeout cites only passed payload and measured RTL evidence.",
-  "failure_policy": "Do not scale q128 totals to invent q384 latency, compile sequence-specific RTL, hide per-operation mismatches, or begin q1024 before q384 payload and trace receipts both pass."
+  "success_condition": "One unchanged QKV RTL binary passes all64 q1024 batches and q128/q384 compatibility, emits exact Q/K/V hashes and measured cycles, and stays within CPU8-23 and30GiB.",
+  "failure_policy": "Do not compile q1024-specific RTL, scale q384 outputs, materialize attention scores, relax first mismatches, or start q1024 RoPE before all QKV batches and compatibility receipts pass."
 }

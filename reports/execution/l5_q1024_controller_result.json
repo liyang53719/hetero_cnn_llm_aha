@@ -1,0 +1,19 @@
+{
+  "stage": "L5",
+  "subgate": "q1024 prefill contract and unified count controller",
+  "status": "PASS",
+  "evidence_class": "operation_count_contract_not_measured",
+  "same_controller_binary_128_384_1024": true,
+  "controller_binary_sha256": "ccdeab98cb25acb54090ecbeddb1624b9e2881b343a027ffa8d4457a4327c172",
+  "row_batches": 64,
+  "matrix_steps": 93585408,
+  "rope_pairs": 917504,
+  "causal_updates": 6297600,
+  "reciprocals": 12288,
+  "normalization_chunks": 98304,
+  "silu_scalars": 9175040,
+  "product_chunks": 573440,
+  "score_matrix_commands": 0,
+  "rtl_measured_cycles": null,
+  "invalid_sequence_256_rejected": true
+}

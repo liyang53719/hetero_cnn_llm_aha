@@ -5,5 +5,13 @@ MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" /usr/bin/g++ -O2 
 for b in $(seq 0 23);do B=$BASE/batch$b;mkdir -p "$B";OMP_NUM_THREADS=8 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/golden" "$ROOT/work/results/l5_q384_oproj/batch$b/norm2.memh" "$ROOT/work/results/l5_target_gate_up/vectors/gate_weights_bf16.memh" "$ROOT/work/results/l5_target_gate_up/vectors/up_weights_bf16.memh" "$B/gate.memh" "$B/up.memh";taskset -c 8-23 "$PY" "$ROOT/scripts/manifest_l5_q128_gate_up_batch.py" --workload 384 --batch "$b" --norm2 "$ROOT/work/results/l5_q384_oproj/batch$b/norm2.memh" --gate "$B/gate.memh" --up "$B/up.memh" --output "$B/manifest.json";done
 S=("$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv" "$ROOT/rtl/matrix/bf16_outer_product_array.sv" "$ROOT/tb/tb_l5_q128_gate_up_batch.sv")
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$V" --binary --threads 4 --timing -Wall -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL -j 8 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_l5_q128_gate_up_batch --Mdir "$OUT/obj" -o tb "${S[@]}" >"$OUT/build.log" 2>&1
-cd "$ROOT";for b in $(seq 0 23);do for m in 0 1;do MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=384 +BATCH="$b" +MODE="$m"|tee "$BASE/batch$b/mode$m.log";grep -q "L5_Q_PREFILL_GATE_UP_BATCH_PASS workload=384 batch=$b mode=$m" "$BASE/batch$b/mode$m.log";done;done
+cd "$ROOT";for b in $(seq 0 23);do
+  pids=()
+  for m in 0 1;do
+    (MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=384 +BATCH="$b" +MODE="$m" >"$BASE/batch$b/mode$m.log" 2>&1)&
+    pids+=("$!")
+  done
+  for pid in "${pids[@]}";do wait "$pid";done
+  for m in 0 1;do cat "$BASE/batch$b/mode$m.log";grep -q "L5_Q_PREFILL_GATE_UP_BATCH_PASS workload=384 batch=$b mode=$m" "$BASE/batch$b/mode$m.log";done
+done
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=128 +BATCH=0 +MODE=0|tee "$BASE/q128_compat.log";grep -q 'L5_Q_PREFILL_GATE_UP_BATCH_PASS workload=128 batch=0 mode=0' "$BASE/q128_compat.log";echo L5_Q384_GATE_UP_ALL_BATCHES_GATE_PASS

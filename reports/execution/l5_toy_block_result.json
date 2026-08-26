@@ -1,0 +1,22 @@
+{
+  "stage": "L5",
+  "subgate": "toy BF16 block",
+  "status": "PASS",
+  "hidden": 16,
+  "heads": 4,
+  "head_dim": 4,
+  "mlp": 32,
+  "node_traces": 18,
+  "total_cycles": 904,
+  "matrix_cycles": 512,
+  "sfu_cycles": 364,
+  "controller_other_cycles": 28,
+  "final_fnv1a64": "e851583bdb646797",
+  "final_golden_memh_sha256": "489ac479686952e04482808b735c506d55e2a39a96a37a776e52ade413c97d68",
+  "score_matrix_materialized": false,
+  "node_mismatches": 0,
+  "verilator_wall_clean": true,
+  "lint_allocated_mb": 648.141,
+  "build_allocated_mb": 1029.066,
+  "memory_limit_gib": 10
+}

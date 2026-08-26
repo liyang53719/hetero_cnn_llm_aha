@@ -1,6 +1,6 @@
 {
-  "phase": "L5_TOY_BF16_BLOCK_INTEGRATION",
-  "command": "Integrate a toy one-token, hidden16, four-head BF16 block using the closed 16x32 Matrix array and heterogeneous SFU primitives. Execute and save node traces in fixed order RMSNorm, Q/K/V projection, RoPE, online attention M/L/O without score matrix, O projection, residual, RMSNorm, gate/up, SiLU, down and final residual. Use deterministic BF16 weights/inputs and compare every node to the Python operation-order golden; report separate Matrix/SFU cycles and output hashes. Do not skip directly to hidden256 until every toy node passes.",
+  "phase": "L5_HIDDEN256_TILED_BLOCK",
+  "command": "Scale the closed toy controller to hidden256 using the same physical 16x32 array and 16-lane SFU tiles; do not instantiate a larger array. Implement deterministic tiling schedules for 256x256 Q/K/V/O projections and a bounded MLP width selected by the hidden256 test profile, generate node hashes and tile command counts, and run at least one-token attention with saved Q/K/V, RoPE and M/L/O traces. First validate Matrix-only tiled GEMV and chunked RMSNorm, then compose the full hidden256 block. Preserve payload versus trace cycle labels and the no-score-matrix invariant.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

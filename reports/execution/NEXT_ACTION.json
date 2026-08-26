@@ -1,15 +1,16 @@
 {
-  "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Implement one synthesizable target-block trace controller that emits the exact frozen operation order for the two-token target receipt: RMS1 previous/current; Q/K0/K1/V0/V1; QKV bias; split-half Q/K RoPE; post-RoPE K and V GQA; 24 streamed dot/online updates; 12 reciprocal plus 96 O/L chunks; OProj/residual1; norm2; gate; up; 8960 SiLU; 560 product chunks; down; final residual. Drive it with ready/done engine endpoints and count busy cycles, Matrix steps and command completions in RTL. The trace harness may replay measured per-command latencies but must not perform payload arithmetic. Verify exact command order, counts, 1486848 Matrix steps, 6036046 active payload cycles and zero score-matrix commands. Label this cycle-accurate trace separately from segmented numerical payload. Only then close target shape and start q128.",
+  "phase": "L5_Q128_PREFILL",
+  "command": "Freeze a q128 prefill receipt before launching payload. Use batch1/sequence128, hidden1536, 12Q/2KV heads, D128, causal token order and the same deterministic target weights. The physical 16x32 array processes eight 16-row batches: Q=589824, K=98304, V=98304, O=589824, gate=3440640, up=3440640 and down=3440640 steps, total 11698176. Stream attention without score storage: 99072 causal head-token dot/online updates, 1536 reciprocals and 12288 O/L chunks. Create a machine-readable operation/step manifest and a synthesizable q128 trace controller first; then run restartable numerical payload phases that consume frozen hashes. Never multiply single-token cycles analytically into RTL-measured fields.",
   "fixed_order": [
-    "global target RMSNorm1536",
-    "restartable target RMSNorm and Q/K/V segment",
-    "RoPE plus GQA head mapping",
-    "streamed M/L/O and O/L",
-    "OProj and first residual",
-    "second RMSNorm plus gate/up/SiLU/product/down",
-    "final residual and target-shape cycle report"
+    "q128 shape and causal-operation manifest",
+    "q128 synthesizable trace controller",
+    "q128 RMSNorm/QKV payload batches",
+    "q128 split-half RoPE and post-RoPE GQA",
+    "q128 streamed causal M/L/O and O/L",
+    "q128 OProj/residual/norm2",
+    "q128 gate/up/SiLU/product/down/final",
+    "q128 receipt aggregate"
   ],
-  "success_condition": "Every target-shape payload segment consumes and emits frozen hashes, all intermediate nodes agree with the operation-order model, QKV bias and GQA mapping are exercised, no score matrix is materialized, and full trace/count cycles are explicitly separated from segmented payload numerics; CPU 8-25, max j4 and 10 GiB cap remain enforced.",
-  "failure_policy": "Do not infer model dimensions from memory, switch revision, use hidden256 evidence as target-shape proof, replace payload outputs with a software bypass, report analytical tile counts as RTL-measured cycles, relax the first mismatch, materialize the score matrix, or start q128 before target-shape closure."
+  "success_condition": "The q128 manifest and controller use exact causal counts; every numerical phase consumes and emits frozen hashes; no score matrix is materialized; measured Matrix/SFU/controller cycles remain separately classified; all 128 final-token vectors pass the operation-order model under CPU 8-25, max j4 and 10 GiB cap.",
+  "failure_policy": "Do not derive q128 measurements by scaling target-token results, omit causal prefixes, replace 16-row physical batching with a software shortcut, materialize scores, relax first mismatches, or start q384 before q128 numerical and controller receipts both pass."
 }

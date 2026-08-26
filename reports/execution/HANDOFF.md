@@ -46,7 +46,9 @@
 - L5 target gate/up PASS: two complete 1536x8960 projections, each 430080 measured steps/1720320 cycles; output hashes `ec204a74...`/`581709c8...`. Next: SiLU and gate-times-up.
 - L5 target SiLU/product PASS: 8960 scalar lanes +560 16-lane chunks exact, 81200 cycles, product hash `5076748a...`, max SiLU error `5.294e-5`. Next: full 8960x1536 down and final residual.
 - L5 target down/final PASS: full 8960x1536, 430080 measured steps/1720416 cycles, final hash `872ffcab...`.
-- L5 target segmented payload PASS: hash chain complete, 1486848 measured array steps, 5947392 Matrix and 6036046 segmented total cycles, no score matrix. Not yet target-shape closure: integrated controller trace/count remains pending.
+- L5 target segmented payload PASS: hash chain complete, 1486848 measured array steps, 5947392 Matrix and 6036046 segmented total cycles, no score matrix.
+- L5 target trace PASS: synthesizable 23-command controller reproduces 1486848 steps/6036046 busy cycles, wall6036094, zero score-matrix commands, command FNV `8f1e56...`.
+- L5 TARGET SHAPE CLOSED: segmented numerical payload + separate controller trace, final hash `872ffcab...`. L5 remains IN_PROGRESS; next q128, then q384 and decode128/1024/4096.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

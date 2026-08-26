@@ -1,0 +1,19 @@
+{
+  "stage": "L5",
+  "subgate": "target integrated trace controller",
+  "status": "PASS",
+  "evidence_class": "cycle_accurate_trace_replay",
+  "payload_arithmetic": false,
+  "commands": 23,
+  "matrix_steps": 1486848,
+  "busy_cycles": 6036046,
+  "wall_cycles": 6036094,
+  "score_matrix_commands": 0,
+  "command_fnv1a64": "8f1e5605d8f25e68",
+  "verilator_wall_clean": true,
+  "lint_allocated_mb": 25.945,
+  "build_allocated_mb": 353.965,
+  "simulation_allocated_mb": 7,
+  "memory_limit_gib": 10,
+  "oom_events": 0
+}

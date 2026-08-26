@@ -1,6 +1,6 @@
 {
-  "phase": "L5_SFU_ROPE",
-  "command": "Implement a ready/valid FP32 RoPE pair primitive using four pinned HardFloat multiplies and two adds/subtracts: out_even=x_even*cos-x_odd*sin, out_odd=x_even*sin+x_odd*cos. Register input/output, aggregate IEEE flags, and validate at least 10000 vectors against a float32 operation-order golden plus directed 0, pi/2-like, negative and large-position cases. Keep trig coefficient generation outside RTL for now; the primitive consumes frozen FP32 sin/cos inputs. After RoPE, proceed to exp2 PWL.",
+  "phase": "L5_SFU_EXP2_PWL",
+  "command": "Implement FP32 exp2 for the online-softmax range with explicit range reduction x=n+f, n integer and f in [0,1), and a committed piecewise-linear coefficient table. Freeze the supported input range and saturation behavior, generate coefficients offline into tracked hex constants, evaluate with pinned HardFloat multiply/add, and validate dense sweeps plus random vectors against NumPy exp2. Record max absolute and relative error and do not loosen thresholds after observing results. Then proceed to reciprocal.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

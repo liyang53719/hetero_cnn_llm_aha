@@ -21,7 +21,8 @@
 - L4 topology blocker: pinned 4x4 ratio1 gives 16 Lake/0 PE; ratio2 gives 8/8; ratio4 gives 4/12. No legal 16-Lake compute topology; no 4x16 fallback.
 - L5 BF16 lane PASS: HardFloat FMA 10k vectors bit-exact, invalid flag checked, RTL hash `69a816...`.
 - L5 BF16 array CLOSED: independent logical 16x32, 512 HardFloat FMA lanes, 4-step accumulation exact, 8-cycle burst interval1, FNV64 `7da144...`.
-- L5 FP32 add/mul/reduction CLOSED: 10k ALU + 10k reduce vectors exact, reduction interval1, FNV64 `eb1a...`. Next: RoPE.
+- L5 FP32 add/mul/reduction CLOSED: 10k ALU + 10k reduce vectors exact, reduction interval1, FNV64 `eb1a...`.
+- L5 RoPE CLOSED: 10k FP32 operation-order vectors exact, interval1, FNV64 `69a2...`. Next: exp2 PWL.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

@@ -1,0 +1,13 @@
+{
+  "stage": "L5",
+  "subgate": "RoPE pair",
+  "status": "PASS",
+  "vectors": 10000,
+  "operation_order": "four FP32 multiplies then two FP32 adds, no FMA",
+  "cycles": 12003,
+  "accept_interval": 1,
+  "output_fnv1a64": "69a2b272f40d4885",
+  "flags_or": "0x01",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

@@ -8,10 +8,10 @@ cd "$ROOT"
 for batch in 1 2 3 4 5 6 7;do
   B=$BASE/batch$batch;mkdir -p "$B"
   OMP_NUM_THREADS=8 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/golden" "$ROOT/work/results/l5_q128_oproj/batch$batch/norm2.memh" "$ROOT/work/results/l5_target_gate_up/vectors/gate_weights_bf16.memh" "$ROOT/work/results/l5_target_gate_up/vectors/up_weights_bf16.memh" "$B/gate.memh" "$B/up.memh"
-  taskset -c 8-23 "$PY" "$ROOT/scripts/manifest_l5_q128_gate_up_batch.py" --batch "$batch" --norm2 "$ROOT/work/results/l5_q128_oproj/batch$batch/norm2.memh" --gate "$B/gate.memh" --up "$B/up.memh" --output "$B/manifest.json"
+  taskset -c 8-23 "$PY" "$ROOT/scripts/manifest_l5_q128_gate_up_batch.py" --workload 128 --batch "$batch" --norm2 "$ROOT/work/results/l5_q128_oproj/batch$batch/norm2.memh" --gate "$B/gate.memh" --up "$B/up.memh" --output "$B/manifest.json"
   for mode in 0 1;do
-    MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +BATCH="$batch" +MODE="$mode"|tee "$B/mode$mode.log"
-    grep -q "L5_Q128_GATE_UP_BATCH_PASS batch=$batch mode=$mode" "$B/mode$mode.log"
+    MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" "$OUT/obj/tb" +WORKLOAD=128 +BATCH="$batch" +MODE="$mode"|tee "$B/mode$mode.log"
+    grep -q "L5_Q_PREFILL_GATE_UP_BATCH_PASS workload=128 batch=$batch mode=$mode" "$B/mode$mode.log"
   done
 done
 echo L5_Q128_GATE_UP_REMAINING_GATE_PASS

@@ -1,0 +1,23 @@
+{
+  "stage": "L5",
+  "subgate": "q384 SiLU product",
+  "status": "PASS",
+  "lanes": 3440640,
+  "product_chunks": 215040,
+  "total_cycles": 31180800,
+  "silu_cycles": 30965760,
+  "product_cycles": 215040,
+  "silu_sha256": "8fd5ff3f96e255ea246ecb5fc1c0bb94041a588c4d3307beb587f19e93a8fcb4",
+  "product_sha256": "8e2484ecca62c93071ecd7c4f0c3ae9cf0933a6cd652124ba379c9b9b72f0f15",
+  "silu_max_error": 0.00005325584108639703,
+  "error_threshold": 0.002,
+  "silu_fnv64": "235e299f53f32e24",
+  "product_fnv64": "0f730832ba0b1bf6",
+  "same_binary_q128_q384": true,
+  "binary_sha256": "7e651ef94b3fd496c0b400e9a9638cd2312c0f5270e3b5da0dddfeda61e25ce4",
+  "q128_compatibility_repassed": true,
+  "node_mismatches": 0,
+  "simulation_allocated_mb": 59,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume q384 gate/up hashes59f1899fbd871ed2f30c618649bd7b406deec3e03d91c110298ed9f83b397527 and3a4b0dbaa9cce3be612239521afc91500500c841ab5db0b59dd4baecf8e52ed9. Parameterize the existing q128 SiLU/product golden and RTL for runtime workload128/384 without recompiling between lengths. Run q384 3440640 scalars plus215040 product chunks, require30965760 SiLU cycles plus215040 product cycles, compare all outputs, then rerun q128 compatibility on the same binary.",
+  "command": "Consume q384 product hash8e2484ecca62c93071ecd7c4f0c3ae9cf0933a6cd652124ba379c9b9b72f0f15 and the24 q384 residual1 batches. Parameterize the existing down/final golden and TB with runtime workload128/384, compile once, run24 q384 batches and then q128 batch0 compatibility. Require430080 Matrix steps,1720320 Matrix cycles and1536 residual cycles per batch; no workload-specific RTL is allowed.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",
@@ -11,6 +11,6 @@
     "q128 gate/up/SiLU/product/down/final",
     "q128 receipt aggregate"
   ],
-  "success_condition": "One unchanged runtime-configured binary passes q384 and q128 compatibility, emits exact product hashes, measures31180800 q384 cycles, materializes no score matrix, and remains within CPU8-23 and30GiB.",
-  "failure_policy": "Do not compile workload-specific RTL, derive q384 measurements by scaling q128, relax the first mismatch, or start down/final until the shared-binary q384 and q128 receipts both pass."
+  "success_condition": "One unchanged runtime-configured binary passes all24 q384 down/final batches plus q128 compatibility, measures10321920 Matrix steps and41324544 total cycles, freezes the q384 final hash, and remains within CPU8-23 and30GiB.",
+  "failure_policy": "Do not compile workload-specific RTL, scale q128 results, relax the first mismatch, or close q384 before all24 numerical batches and the unified measured trace pass."
 }

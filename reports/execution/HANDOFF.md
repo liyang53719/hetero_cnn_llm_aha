@@ -58,7 +58,7 @@
 - L5 q128 OProj/residual/norm2 ALL PASS: 8x16-token batches, 589824 measured steps, 2421504 total/2359296 Matrix/12288 residual/49920 norm2 cycles; norm2 hash `4f1d6a10...`. Next: q128 gate/up batches.
 - L5 q128 gate/up batch0 PASS: tokens0-15, exact4-thread fmaf golden, each projection430080 steps/1720320 cycles; gate/up hashes `3f93989b...`/`836b4d07...`. Next: same binary batches1-7.
 - L5 q128 gate/up ALL PASS: 8 batches,6881280 measured steps/27525120 cycles, concatenated hashes `6a2d13e4...`/`4852e5bc...`; Verilator threads4 batch0 hash-equivalent to single-thread. Next: q128 SiLU/product.
-- L5 q128 SiLU/product WIP: 1146880-lane golden generated, max error `5.320e-5`, product hash `661f4f57...`; prior 10 GiB admission blocker is cleared by the hardware update. Resume with `taskset -c 8-23 scripts/run_l5_q128_silu_product.sh` under the new 30 GiB cap.
+- L5 q128 SiLU/product PASS:1146880 scalar lanes+71680 chunks exact,10393600 cycles, product hash `661f4f57...`, max error `5.320e-5`; completed under CPU8-23/30GiB cap. Next: down/final batches.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-23`; default/average parallelism is 8, reviewed peak is 16; start only with `MemAvailable >10 GiB`; `MemoryHigh=24G`, `MemoryMax=30G`.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

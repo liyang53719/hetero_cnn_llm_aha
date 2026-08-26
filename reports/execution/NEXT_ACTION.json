@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "q128 SiLU/product RTL, generator and TB are prepared; the exact golden already passes with product hash 661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc and max SiLU error5.32029292e-5. Read MemAvailable once. If strictly greater than10485760 KiB, run exactly `taskset -c 8-23 scripts/run_l5_q128_silu_product.sh`; otherwise record another BLOCKED_RESOURCE attempt without polling or killing unrelated MATLAB. On PASS require1146880 SiLU lanes,71680 product chunks, exact outputs and separately measured cycle counters before starting down.",
+  "command": "Consume q128 product hash 661f4f57181636d84868d986af2fb7c07b7c41cc177a0cda3bba987cd599f6dc and residual1 hash e4e80035f671ff12b4d6d9d04d5e9db4aa8f02789f842cb186f0847983ecb65a. Reuse the exact target8960x1536 down weights. Build restartable16-token down/final batches: each must run430080 measured Matrix steps and1536 residual chunks with exact k-ordered fmaf goldens. Validate batch0 first, then one unchanged RTL binary for batches1-7. Aggregate down to3440640 steps and freeze concatenated final hash before q128 receipt closeout.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

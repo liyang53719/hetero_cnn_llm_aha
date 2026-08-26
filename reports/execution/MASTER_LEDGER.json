@@ -162,6 +162,10 @@
         ,"work/generated/l3_gemmini_scratchpad_bank/ScratchpadBank.sv.sha256"
         ,"work/results/l3_spad_gateway/verilator_pinned_lint.log"
         ,"work/results/l3_spad_gateway/pinned_100k.log"
+        ,"reports/execution/L3_AHA_KV_STREAM_ENDPOINTS.md"
+        ,"reports/execution/l3_aha_kv_endpoints_result.json"
+        ,"work/results/l3_aha_kv_endpoints/verilator_lint.log"
+        ,"work/results/l3_aha_kv_endpoints/tb_100k.log"
       ],
       "completed_readiness_subgates": [
         "16 logical 128-bit banks with every 512-bit beat spanning four consecutive banks",
@@ -177,9 +181,9 @@
         ,"depth-16 command/completion FIFO frontend plus real Control SRAM scoreboard passes 100000 commands, 100000 success and 23 error completions across two reset epochs"
         ,"project Gemmini scratchpad endpoint gateway passes 100000 bidirectional SFU/KV-routed transfers, 200000 independently backpressured bank responses and Verilator -Wall lint"
         ,"four emitted pinned-upstream ScratchpadBank instances pass 100000 end-to-end transfers through real write/read/fromDMA queues, ExtMemIO, gateway and stream network; generated RTL hash locked and upstream clean"
+        ,"production AHA and KV stream endpoints pass 100000 mixed transfers across all four channels, including 800000 official 64-bit proc-packet operations, external KV staging byte enables, native EOS ordering and strict Verilator -Wall lint"
       ],
       "remaining_gates": [
-        "connect verified Matrix-SFU and Matrix-KV direct streams to production AHA/KV engine wrappers",
         "connect verified event scoreboard to production engine completion paths and integrated timeout assertions",
         "100000 integrated command/event transactions"
       ]

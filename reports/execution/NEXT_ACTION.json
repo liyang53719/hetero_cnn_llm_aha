@@ -1,16 +1,18 @@
 {
-  "phase": "L3_AHA_KV_PRODUCTION_STREAM_ENDPOINTS",
-  "command": "Implement two fixed wrappers. First, aha_tensor_stream_endpoint must accept channel-0 512-bit beats, preserve tag/tensor_id/last/format, feed each beat to the existing aha_garnet_proc_packet_writer as eight ordered 64-bit proc_packet writes, and assert the native 1-bit EOS only after packet_done for the final beat; its reverse packer must combine eight ordered 64-bit proc read words into one channel-1 beat. Second, kv_tensor_stream_endpoint must map channel-2 writes and channel-3 reads to 512 KiB KV staging as 512-bit beats with byte enables and stable sideband. Connect both wrappers to matrix_direct_streams and test randomized backpressure before composing the L3 top.",
+  "phase": "L3_COMBINED_PRODUCTION_TOP",
+  "command": "Create rtl/integration/hetero_l3_production_top.sv. Replace the old flop command_event_scoreboard path with command_event_frontend_sram; route runnable commands through the existing command_dispatch engine map 0 control, 1 DMA, 2 Matrix, 3 SFU, 4 KV, 5 collective; connect descriptor/control, weight DMA, activation/KV DMA and fallback as logical Shared-L2 read clients 0..3 of shared_l2_client_arbiter, and DMA/engine fallback as write clients 0..1. Instantiate matrix_direct_streams, gemmini_spad_tensor_gateway, aha_tensor_stream_endpoint and kv_tensor_stream_endpoint. Merge engine completions into the depth-16 completion FIFO, update the real event SRAM before releasing waits, and add a simulation-enabled watchdog that emits status 6 then locks new commands until reset.",
   "fixed_parameters": {
-    "aha_input_channel": 0,
-    "aha_output_channel": 1,
-    "kv_input_channel": 2,
-    "kv_output_channel": 3,
-    "aha_chunks_per_beat": 8,
-    "aha_chunk_bits": 64,
-    "kv_staging_bytes": 524288,
-    "tensor_beat_bits": 512
+    "logical_read_clients": ["descriptor_control", "weight_dma", "activation_kv_dma", "engine_fallback"],
+    "logical_write_clients": ["dma", "engine_fallback"],
+    "command_fifo_depth": 16,
+    "completion_fifo_depth": 16,
+    "descriptor_promotion_cycles": 8,
+    "matrix_to_aha_channel": 0,
+    "aha_to_matrix_channel": 1,
+    "matrix_to_kv_channel": 2,
+    "kv_to_matrix_channel": 3,
+    "watchdog_status": 6
   },
-  "success_condition": "At least 100000 mixed endpoint transfers have exact data, byte enable, tag, tensor_id, last and format; every AHA beat produces exactly eight ordered proc writes, EOS never precedes acceptance of the final chunk, KV read-after-write is byte exact, all four channels progress under randomized backpressure, zero loss/duplication/reorder/protocol error/timeout, and Verilator -Wall is clean.",
-  "failure_policy": "Do not reinterpret the 4x16 Gaussian baseline as the final 4x4 SFU, invent an AHA bank address mapping, drop Tensor Stream sideband, emit EOS from stream valid rather than final proc-packet completion, bypass the KV staging interface, weaken the 100000-transfer gate, or mark L3 PASS before combined command/event/fabric/stream closure."
+  "success_condition": "A combined deterministic regression accepts at least 100000 commands and mixed descriptor/DMA/stream operations with all four read clients, both write clients, six engine IDs and all four direct channels progressing; zero loss, duplication, reorder, starvation, assertion, macro error or timeout; event 0 and nonzero-status semantics hold; completion never precedes final source-side stream acceptance; reset epoch and watchdog lock behavior pass; strict Verilator -Wall is clean.",
+  "failure_policy": "Do not use engine_contract_adapter as final Matrix/SFU/KV evidence, bypass command_event_frontend_sram or the real event macro, statically reserve a physical L2 read port, add a third read port, drop endpoint sideband, hide a timeout, weaken the 100000-command threshold, or mark L3 PASS from standalone subgates."
 }

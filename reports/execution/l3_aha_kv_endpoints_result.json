@@ -1,0 +1,26 @@
+{
+  "stage": "L3",
+  "subgate": "aha_kv_production_stream_endpoints",
+  "status": "PASS_READINESS",
+  "cpu_affinity": "8-25",
+  "build_parallelism": 4,
+  "memory_limit_gib": 10,
+  "simulator": "Verilator 5.050",
+  "transfers": 100000,
+  "aha_transactions": 50000,
+  "aha_proc_writes_64bit": 400000,
+  "aha_proc_reads_64bit": 400000,
+  "kv_staging_writes_512bit": 25000,
+  "kv_staging_reads_512bit": 25000,
+  "channels_covered": [0, 1, 2, 3],
+  "mismatches": 0,
+  "protocol_errors": 0,
+  "timeouts": 0,
+  "verilator_wall_clean": true,
+  "evidence": [
+    "work/results/l3_aha_kv_endpoints/verilator_lint.log",
+    "work/results/l3_aha_kv_endpoints/verilator_build.log",
+    "work/results/l3_aha_kv_endpoints/tb_100k.log"
+  ],
+  "remaining": "Compose all production L3 fabric, event and engine endpoint blocks and execute the integrated 100000-command regression."
+}

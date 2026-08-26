@@ -6,9 +6,10 @@
 - L3 Shared-L2: 16 real ARM macros, 4 logical reads to 2R, 2 logical writes to 1W, descriptor promotion, byte enables and 100k+ contention tests PASS.
 - L3 control: command FIFO 16, completion FIFO 16 and real 4096x128 event SRAM pass 100k commands; error completion never releases a wait event.
 - L3 streams: four skid channels and gateway pass 100k; four emitted pinned upstream `ScratchpadBank(4096x128)` instances then pass a second 100k through real write/read/fromDMA queues and ExtMemIO. Hash `c65a53d9...`, upstream clean.
-- Current limitation: AHA/KV production stream endpoints and combined L3 regression remain.
+- L3 AHA/KV endpoints: channels 0/1 use exact 8x64-bit proc-packet writes/reads and post-final-packet EOS; channels 2/3 use external 512-bit KV staging requests. Mixed 100k PASS, strict `-Wall` clean.
+- Current limitation: command/event/Shared-L2/engine endpoints are not yet composed in one production top; combined L3 100k remains.
 - Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
-- Next: implement `aha_tensor_stream_endpoint` around the existing proc-packet writer and `kv_tensor_stream_endpoint` around 512 KiB staging, then connect channels 0/1 and 2/3 respectively.
+- Next: create `hetero_l3_production_top` from `command_event_frontend_sram`, `shared_l2_client_arbiter`, pinned Gemmini gateway, four stream skids and AHA/KV endpoints; add fixed dispatch/completion/watchdog wiring and run combined 100k.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

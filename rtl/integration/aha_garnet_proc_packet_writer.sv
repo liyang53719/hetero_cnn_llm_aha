@@ -2,6 +2,7 @@
 // Split one project 512-bit payload beat into eight official Garnet 64-bit
 // proc_packet writes.  The caller supplies an already resolved Global Buffer
 // packet address; this module deliberately does not invent AHA bank mapping.
+`timescale 1ns/1ps
 module aha_garnet_proc_packet_writer (
   input  logic          clk_i,
   input  logic          rst_ni,

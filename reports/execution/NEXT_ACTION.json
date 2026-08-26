@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Implement the synthesizable q384 operation-count controller from config/qwen_q384_prefill_contract.json. Emit the same24 ordered operation classes as q128 but with exact q384 work counts:35094528 Matrix steps,344064 RoPE pairs,887040 dot and online updates,4608 reciprocals,36864 normalization chunks,3440640 SiLU scalars and215040 product chunks. Keep measured-latency-valid low and score-matrix commands zero. After count PASS, begin numerical q384 QKV in24 restartable16-token batches; never scale q128 measured cycles into q384 fields.",
+  "command": "Begin q384 numerical QKV as24 restartable16-token batches. Freeze one deterministic384x1536 input image and reuse exact target RMS/Q/K/V weights and biases. Use all16 physical rows; every batch must measure Q73728+K12288+V12288=98304 Matrix steps and compare all norm/Q/K/V outputs to exact k-ordered goldens. Validate batch0 first, then one unchanged RTL binary for batches1-23. Aggregate exactly2359296 QKV steps and freeze concatenated q384 Q/K/V hashes before RoPE.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

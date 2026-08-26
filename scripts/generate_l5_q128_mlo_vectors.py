@@ -3,7 +3,7 @@ import argparse,hashlib,json,math,struct
 from pathlib import Path
 import numpy as np
 H=1536;HEADS=12;D=128
-ALL_HASH={128:{'q':'1e259f274616e3137dd1762d1cfeb8dc005ada8d40a1bb80fce716c55e7b4c6f','k':'499da9e0b835ab6de33c2870b9e0b28b8b1206943a8d863dcd2b6d5586eeebc1','v':'5c3169a425c823d6e60d1a7f77d4ea7ea14436ec291199cac290f49ce2f01078'},384:{'q':'5081f41585327fc54bbfabbd25791dfc0de28739def6c5255e6d25b09034f8a8','k':'1864dc6d35f94ec65423b527fc0279db338bf00c7fd684b99b4cf42e34813a8a','v':'d073bb8552d70336aa0e78f0f155cc950c70924e7b2a727087fcf0ce9be00825'}}
+ALL_HASH={128:{'q':'1e259f274616e3137dd1762d1cfeb8dc005ada8d40a1bb80fce716c55e7b4c6f','k':'499da9e0b835ab6de33c2870b9e0b28b8b1206943a8d863dcd2b6d5586eeebc1','v':'5c3169a425c823d6e60d1a7f77d4ea7ea14436ec291199cac290f49ce2f01078'},384:{'q':'5081f41585327fc54bbfabbd25791dfc0de28739def6c5255e6d25b09034f8a8','k':'1864dc6d35f94ec65423b527fc0279db338bf00c7fd684b99b4cf42e34813a8a','v':'d073bb8552d70336aa0e78f0f155cc950c70924e7b2a727087fcf0ce9be00825'},1024:{'q':'68c1313d0decf4f4bad45bc16ff1dda8df8a0e4b0b8702aa3c2672ed43e20cbc','k':'901bab114b23005bee60303b6ebc10723a998789163972ae57d7d670b893a30c','v':'350e3167bf815d2c7a12895a953f4630054dc20a35f4ff1ba6d818f93c9de07a'}}
 def bits(x):return struct.unpack('<I',struct.pack('<f',float(np.float32(x))))[0]
 def val(s):return np.float32(struct.unpack('<f',struct.pack('<I',int(s,16)))[0])
 def add(a,b):return np.float32(np.float32(a)+np.float32(b))
@@ -28,7 +28,7 @@ def load(path,name,tokens,hashes):
  return np.array([val(s)for s in path.read_text().splitlines()],dtype=np.float32).reshape(tokens,H)
 def write(p,x):p.write_text('\n'.join(f'{bits(v):08x}'for v in x.flat)+'\n')
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--rope-dir',type=Path,required=True);ap.add_argument('--tokens',type=int,choices=(128,384),default=128);ap.add_argument('--out',type=Path,required=True);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);hashes=ALL_HASH[a.tokens]
+ ap=argparse.ArgumentParser();ap.add_argument('--rope-dir',type=Path,required=True);ap.add_argument('--tokens',type=int,choices=(128,384,1024),default=128);ap.add_argument('--out',type=Path,required=True);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);hashes=ALL_HASH[a.tokens]
  q=load(a.rope_dir/'q_rope.memh','q',a.tokens,hashes);k=load(a.rope_dir/'k_gqa.memh','k',a.tokens,hashes);v=load(a.rope_dir/'v_gqa.memh','v',a.tokens,hashes);mout=np.empty((a.tokens,HEADS),np.float32);lout=np.empty((a.tokens,HEADS),np.float32);oout=np.empty((a.tokens,H),np.float32);att=np.empty((a.tokens,H),np.float32);maxerr=0.;log2e=np.float32(1.4426950408889634)
  for qt in range(a.tokens):
   for h in range(HEADS):

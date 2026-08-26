@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume exact q384 Q/K/V-GQA hashes5081f41585327fc54bbfabbd25791dfc0de28739def6c5255e6d25b09034f8a8,1864dc6d35f94ec65423b527fc0279db338bf00c7fd684b99b4cf42e34813a8a andd073bb8552d70336aa0e78f0f155cc950c70924e7b2a727087fcf0ce9be00825. Parameterize the same q128/q384 M/L/O generator and one compiled RTL binary for runtime workload384. Stream exactly887040 causal dot/online updates,4608 reciprocals and36864 normalization chunks without score storage; compare all384x1536 attention outputs. Then rerun workload128 on the same binary to prove compatibility before accepting q384 M/L/O.",
+  "command": "Consume q384 attention hash901a32a4ba05ffe8f8d3b44ddce18e86a9d251980f984dae41fcab7659e628e0 and q384 input hash6a372c487e0b138b0d7236a5f00321e831d08a0b44e23190236a706ff48fa030. Parameterize the same prefill OProj/residual/norm2 binary for runtime workload384. Run24 restartable16-token batches: each OProj73728 steps,1536 residual chunks and16 global norm2 operations. Aggregate OProj to1769472 measured steps, freeze concatenated residual/norm2 hashes, and rerun workload128 on the same binary before gate/up.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

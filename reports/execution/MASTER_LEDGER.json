@@ -403,6 +403,10 @@
         ,"reports/execution/l5_q384_rope_gqa_result.json"
         ,"work/results/l5_q384_rope_gqa/tb.log"
         ,"work/results/l5_q384_rope_gqa/q128_compat.log"
+        ,"reports/execution/L5_Q384_MLO.md"
+        ,"reports/execution/l5_q384_mlo_result.json"
+        ,"work/results/l5_q384_mlo/tb.log"
+        ,"work/results/l5_q384_mlo/q128_compat.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -454,6 +458,7 @@
         ,"q384 all24 QKV row batches pass2359296 measured Matrix steps on one parameterized binary"
         ,"q128/q384 QKV and count control use one runtime-configured RTL binary per function; separate controllers are superseded"
         ,"q128/q384 split-half RoPE and K/V GQA use one runtime-configured binary and both lengths pass"
+        ,"q128/q384 causal M/L/O use one runtime-configured binary; q384 passes887040 updates without score storage"
       ],
       "remaining_gates": [
         "q384 prefill and decode128/1024/4096 block numerics"

@@ -56,9 +56,9 @@ state.
    is logical 4x4/16 tiles and 16 Lake SRAMs. The existing 4x16 Garnet remains
    an immutable upstream baseline only.
 7. L5 BF16: independent 16x32 BF16/FP32 array and Qwen2-1.5B-Instruct revision
-   `ba1cf1846d7df0a0591d6c00649f57e798519da8`; q128/q384 and decode
-   128/1024/4096 with per-node traces and no score-matrix writeback.
-   q128/q384/decode configurations must use one runtime-configured RTL and one
+   `ba1cf1846d7df0a0591d6c00649f57e798519da8`; prefill q128/q384/q1024 and
+   decode 128/1024/4096 with per-node traces and no score-matrix writeback.
+   q128/q384/q1024/decode configurations must use one runtime-configured RTL and one
    compiled binary; workload length may select vectors/counts but never a
    separately maintained datapath or controller implementation.
 8. L6 W8/W4-storage, L7 advanced paged KV, L8 native W4 dual-dot, then L9
@@ -66,6 +66,11 @@ state.
 9. L10 readiness may continue, but strict L10 waits for official SRAM `.db`
    and LEF. DP mappings are 2x2048x64 and 4x4096x32. No black-box or handmade
    timing model may close L10.
+   After L5 closes, priority moves immediately to L10 early logic PPA: report
+   actual 1.0 ns WNS/TNS and standard-cell area for Matrix/SFU/KV/DMA/fabric
+   and integrated top before resuming L6-L9. This is readiness evidence only;
+   missing SRAM `.db`/LEF still prevents formal L10 PASS and SRAM macro area
+   must remain separately classified.
 10. L11 uses fixed A/B/C/D points, 1 GHz, 4 MiB, 100/40 GB/s and identical
     model/compiler/quantization. If no point meets every gate, report FAIL.
 

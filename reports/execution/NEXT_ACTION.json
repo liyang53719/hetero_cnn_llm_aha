@@ -1,6 +1,6 @@
 {
-  "phase": "L4_CNN_INT8_GEMM_BASELINE",
-  "command": "Audit the pinned Python environment for torchvision==0.24.1 and the exact ResNet50/MobileNetV2 IMAGENET1K_V2 weight artifacts. Install only missing pinned dependencies into the project environment and record URL/SHA256/version. Then generate deterministic INT8 GEMM operator-golden cases and lower them through the closed L2 descriptor-v2 Matrix path into the L3 canonical top, preserving separate golden, RTL cycles, DMA bytes, utilization, bank-conflict and output-hash fields.",
+  "phase": "L4_INT8_GEMM_CANONICAL_L3_TRACE",
+  "command": "Replay the exact 17x18x19 OS descriptor and DMA request shapes through hetero_l3_production_top: descriptor/control reads use logical read client 0, six weight beats use client 1, activation plus bias beats use client 2, and five output writes use logical write client 0. Run the clients concurrently, complete the Matrix command only after all responses/writes, and record canonical-top cycles, physical bytes, bank conflicts/stalls and command completion ordering. Merge those measured fields with reports/execution/l4_int8_gemm_payload_result.json; do not rerun or reinterpret payload cycles as L3 cycles.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

@@ -204,10 +204,14 @@
       "depends_on": ["L3"],
       "readiness_evidence": [
         "config/l4_cnn_python.lock.json",
-        "reports/execution/L4_CNN_DEPENDENCY_LOCK.md"
+        "reports/execution/L4_CNN_DEPENDENCY_LOCK.md",
+        "reports/execution/L4_INT8_GEMM_PAYLOAD.md",
+        "reports/execution/l4_int8_gemm_payload_result.json",
+        "work/results/l4_int8_gemm/int8_gemm.log"
       ],
       "completed_subgates": [
-        "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock"
+        "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock",
+        "INT8 GEMM payload RTL partial: 17x18x19 production-lowered OS path is elementwise bit-exact with 955 retained-Gemmini RTL cycles and 2195 requested DMA bytes; canonical L3 trace metrics pending"
       ],
       "remaining_gates": [
         "INT8 GEMM",

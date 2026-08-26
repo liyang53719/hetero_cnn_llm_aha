@@ -1,0 +1,22 @@
+{
+  "stage": "L3",
+  "subgate": "completion_rr_and_event0",
+  "status": "PASS_READINESS",
+  "completion_inputs": 7,
+  "completion_grants": 100000,
+  "minimum_grants_per_input": 14285,
+  "reorders": 0,
+  "starved_inputs": 0,
+  "stalled_payload_errors": 0,
+  "event0_writes": 0,
+  "real_sram_commands": 100000,
+  "real_sram_success_completions": 100000,
+  "real_sram_error_completions": 23,
+  "real_sram_macro_errors": 0,
+  "cpu_affinity": "8-25",
+  "memory_limit_gib": 10,
+  "evidence": [
+    "work/results/l3_completion_rr/verilator_100k.log",
+    "work/results/l3_event_scoreboard_sram/tb.log"
+  ]
+}

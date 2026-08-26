@@ -82,7 +82,7 @@ module command_event_scoreboard_sram (
         end
         S_IDLE: begin
           if(completion_valid_i&&completion_ready_o)begin
-            if(completion_status==0)begin
+            if(completion_status==0&&completion_data_i[55:40]!=0)begin
               event_id_q<=completion_data_i[55:40];event_matches_q<=0;state_q<=S_WRITE_REQ;
             end
           end else if(host_cmd_valid_i&&host_cmd_data_i[39:24]!=0)begin
@@ -96,7 +96,7 @@ module command_event_scoreboard_sram (
           else state_q<=S_WAIT_EVENT;
         end
         S_WAIT_EVENT: if(completion_valid_i&&completion_ready_o)begin
-          if(completion_status==0)begin
+          if(completion_status==0&&completion_data_i[55:40]!=0)begin
             event_id_q<=completion_data_i[55:40];
             event_matches_q<=completion_data_i[55:40]==wait_id_q;state_q<=S_WRITE_REQ;
           end

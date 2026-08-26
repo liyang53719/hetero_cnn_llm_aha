@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q384_PREFILL",
-  "command": "Consume q384 attention hash901a32a4ba05ffe8f8d3b44ddce18e86a9d251980f984dae41fcab7659e628e0 and q384 input hash6a372c487e0b138b0d7236a5f00321e831d08a0b44e23190236a706ff48fa030. Parameterize the same prefill OProj/residual/norm2 binary for runtime workload384. Run24 restartable16-token batches: each OProj73728 steps,1536 residual chunks and16 global norm2 operations. Aggregate OProj to1769472 measured steps, freeze concatenated residual/norm2 hashes, and rerun workload128 on the same binary before gate/up.",
+  "command": "Consume q384 norm2 hash8f5aff5bca82fbe7352fb639926f60234aeecd74f3d08f2b437976248631a754. Parameterize the same q128/q384 gate/up C++ golden and RTL binary for runtime workload384. Run24 restartable16-token batches; every gate and up phase must measure430080 steps, aggregate to20643840 steps, and compare all outputs. Rerun q128 batch0 on the same binary before SiLU/product; no workload-specific gate/up RTL is allowed.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

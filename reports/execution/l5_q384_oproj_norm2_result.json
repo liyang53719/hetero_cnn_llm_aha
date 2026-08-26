@@ -1,0 +1,22 @@
+{
+  "stage": "L5",
+  "subgate": "q384 OProj residual1 norm2 batches0-23",
+  "status": "PASS",
+  "batches": 24,
+  "array_steps_total": 1769472,
+  "total_cycles": 7264512,
+  "matrix_cycles": 7077888,
+  "residual_cycles": 36864,
+  "norm2_cycles": 149760,
+  "oproj_sha256": "0e288e7364ac58a31003d737baf0921546b78c67cbd61f7b186307eff21f1d4a",
+  "residual1_sha256": "1313dd03eddc8be68c2e31b47c7aa323fd31b1192d0bbd99df8cac595ddcc38a",
+  "norm2_sha256": "8f5aff5bca82fbe7352fb639926f60234aeecd74f3d08f2b437976248631a754",
+  "same_binary_q128_q384": true,
+  "binary_sha256": "61d09d58e386be5fab42c7bcfe61cb26e8b573d0e552a2fed50b5113d6b805b2",
+  "q128_compatibility_repassed": true,
+  "node_mismatches": 0,
+  "build_allocated_mb": 1287.777,
+  "simulation_allocated_mb_each": 99,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

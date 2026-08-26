@@ -2,8 +2,9 @@
 import argparse,ctypes,hashlib,json,math,struct
 from pathlib import Path
 import numpy as np
-T=128;B=16;H=1536
-HASH={'attention':'b72c3a34951c84b29d20bd5be9ff58c1282cde5afe7cf9c4e800243ef2b60c76','inputs':'39917c9e6f887030091cb93e944b263f4966322f487d567a6c28881b615335e0','weights':'27c1f27c834a25a28ff32d3956e5fff028c1a565e46f9013cb11c91ce55ed6b3','norm_weight':'7785c762e20b178ddd03ae05f5b95d9edc81236f7d60015bd685738a142a5418'}
+B=16;H=1536
+ALL_HASH={128:{'attention':'b72c3a34951c84b29d20bd5be9ff58c1282cde5afe7cf9c4e800243ef2b60c76','inputs':'39917c9e6f887030091cb93e944b263f4966322f487d567a6c28881b615335e0'},384:{'attention':'901a32a4ba05ffe8f8d3b44ddce18e86a9d251980f984dae41fcab7659e628e0','inputs':'6a372c487e0b138b0d7236a5f00321e831d08a0b44e23190236a706ff48fa030'}}
+STATIC_HASH={'weights':'27c1f27c834a25a28ff32d3956e5fff028c1a565e46f9013cb11c91ce55ed6b3','norm_weight':'7785c762e20b178ddd03ae05f5b95d9edc81236f7d60015bd685738a142a5418'}
 libm=ctypes.CDLL('libm.so.6');fmaf=libm.fmaf;fmaf.argtypes=[ctypes.c_float]*3;fmaf.restype=ctypes.c_float
 def bits(x):return struct.unpack('<I',struct.pack('<f',float(np.float32(x))))[0]
 def word(w):return np.float32(struct.unpack('<f',struct.pack('<I',int(w)))[0])
@@ -24,10 +25,11 @@ def norm(x,w):
  inv=rsqrt(add(mul(s,np.float32(1/H)),np.float32(1e-6)));return np.array([mul(mul(x[i],inv),w[i])for i in range(H)],np.float32)
 def write(p,x):p.write_text('\n'.join(f'{bits(v):08x}'for v in x.flat)+'\n')
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--attention',type=Path,required=True);ap.add_argument('--inputs',type=Path,required=True);ap.add_argument('--weights',type=Path,required=True);ap.add_argument('--norm-weight',type=Path,required=True);ap.add_argument('--batch-index',type=int,required=True,choices=range(8));ap.add_argument('--out',type=Path,required=True);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
+ ap=argparse.ArgumentParser();ap.add_argument('--attention',type=Path,required=True);ap.add_argument('--inputs',type=Path,required=True);ap.add_argument('--weights',type=Path,required=True);ap.add_argument('--norm-weight',type=Path,required=True);ap.add_argument('--tokens',type=int,choices=(128,384),default=128);ap.add_argument('--batch-index',type=int,required=True);ap.add_argument('--out',type=Path,required=True);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);hashes={**ALL_HASH[a.tokens],**STATIC_HASH}
+ if a.batch_index<0 or a.batch_index>=a.tokens//16:raise SystemExit('PREFILL_OPROJ_BATCH_FAIL')
  for p,n in[(a.attention,'attention'),(a.inputs,'inputs'),(a.weights,'weights'),(a.norm_weight,'norm_weight')]:
-  if hashlib.sha256(p.read_bytes()).hexdigest()!=HASH[n]:raise SystemExit(f'Q128_OPROJ_HASH_FAIL {n}')
- att=np.array([val(s)for s in a.attention.read_text().splitlines()],np.float32).reshape(T,H);inp=np.array([val(s)for s in a.inputs.read_text().splitlines()],np.float32).reshape(T,H);ww=np.array([int(s,16)for s in a.weights.read_text().splitlines()],np.uint16).reshape(H,H);nw=np.array([val(s)for s in a.norm_weight.read_text().splitlines()],np.float32);st=a.batch_index*B;x=att[st:st+B];orig=inp[st:st+B];xb=np.array([[bf(z)for z in row]for row in x],np.float32);op=np.empty((B,H),np.float32)
+  if hashlib.sha256(p.read_bytes()).hexdigest()!=hashes[n]:raise SystemExit(f'PREFILL_OPROJ_HASH_FAIL {n}')
+ att=np.array([val(s)for s in a.attention.read_text().splitlines()],np.float32).reshape(a.tokens,H);inp=np.array([val(s)for s in a.inputs.read_text().splitlines()],np.float32).reshape(a.tokens,H);ww=np.array([int(s,16)for s in a.weights.read_text().splitlines()],np.uint16).reshape(H,H);nw=np.array([val(s)for s in a.norm_weight.read_text().splitlines()],np.float32);st=a.batch_index*B;x=att[st:st+B];orig=inp[st:st+B];xb=np.array([[bf(z)for z in row]for row in x],np.float32);op=np.empty((B,H),np.float32)
  for col in range(H):
   acc=[np.float32(0)for _ in range(B)]
   for r in range(H):
@@ -36,6 +38,6 @@ def main():
   for t in range(B):op[t,col]=acc[t]
  res=np.array([[add(orig[t,i],op[t,i])for i in range(H)]for t in range(B)],np.float32);n2=np.array([norm(res[t],nw)for t in range(B)],np.float32);nodes={'attention':x,'current':orig,'oproj':op,'residual1':res,'norm2':n2}
  for n,z in nodes.items():write(a.out/f'{n}.memh',z)
- m={'batch_index':a.batch_index,'tokens':[st,st+15],'steps':73728,'residual_chunks':1536,'norm_operations':16,'node_sha256':{n:hashlib.sha256((a.out/f'{n}.memh').read_bytes()).hexdigest()for n in nodes}}
- (a.out/'manifest.json').write_text(json.dumps(m,indent=2)+'\n');print(f"L5_Q128_OPROJ_BATCH_VECTORS_PASS batch={a.batch_index} steps=73728 norm2_sha256={m['node_sha256']['norm2']}")
+ m={'workload_tokens':a.tokens,'batch_index':a.batch_index,'tokens':[st,st+15],'steps':73728,'residual_chunks':1536,'norm_operations':16,'node_sha256':{n:hashlib.sha256((a.out/f'{n}.memh').read_bytes()).hexdigest()for n in nodes}}
+ (a.out/'manifest.json').write_text(json.dumps(m,indent=2)+'\n');print(f"L5_Q_PREFILL_OPROJ_BATCH_VECTORS_PASS workload={a.tokens} batch={a.batch_index} steps=73728 norm2_sha256={m['node_sha256']['norm2']}")
 if __name__=='__main__':main()

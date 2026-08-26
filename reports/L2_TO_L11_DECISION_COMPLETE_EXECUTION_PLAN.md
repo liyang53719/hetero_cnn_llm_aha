@@ -71,6 +71,10 @@ state.
    and integrated top before resuming L6-L9. This is readiness evidence only;
    missing SRAM `.db`/LEF still prevents formal L10 PASS and SRAM macro area
    must remain separately classified.
+   Only after the current Qwen2 L5 closure and this L10 early-PPA report may a
+   separate Qwen3.5-35B-A3B descriptor/runtime extension plan be created.
+   Qwen3.5 work must not modify or fork the canonical Qwen2 datapath while the
+   current closure is active.
 10. L11 uses fixed A/B/C/D points, 1 GHz, 4 MiB, 100/40 GB/s and identical
     model/compiler/quantization. If no point meets every gate, report FAIL.
 

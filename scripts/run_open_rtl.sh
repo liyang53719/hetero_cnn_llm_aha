@@ -47,6 +47,9 @@ if [[ -n "$HETERO_VERILATOR" ]]; then
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" \
     --top-module gemmini_descriptor_sequencer |& tee "$OUT/gemmini_descriptor_sequencer_lint.log"
+  "$HETERO_VERILATOR" --lint-only --timing -Wall \
+    "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" \
+    --top-module matrix_descriptor_v2_snapshot |& tee "$OUT/matrix_descriptor_v2_snapshot_lint.log"
   "$HETERO_VERILATOR" --lint-only --timing -Wall -Wno-fatal \
     "$ROOT/rtl/integration/aha_garnet_axi_config_loader.sv" \
     --top-module aha_garnet_axi_config_loader |& tee "$OUT/aha_garnet_axi_loader_lint.log"
@@ -122,6 +125,10 @@ if command -v iverilog >/dev/null 2>&1; then
     "$ROOT/rtl/integration/gemmini_descriptor_sequencer.sv" \
     "$ROOT/tb/tb_gemmini_descriptor_sequencer.sv"
   vvp "$OUT/tb_gemmini_descriptor_sequencer" | tee "$OUT/tb_gemmini_descriptor_sequencer.log"
+  iverilog -g2012 -s tb_matrix_descriptor_v2_snapshot -o "$OUT/tb_matrix_descriptor_v2_snapshot" \
+    "$ROOT/rtl/integration/matrix_descriptor_v2_snapshot.sv" \
+    "$ROOT/tb/tb_matrix_descriptor_v2_snapshot.sv"
+  vvp "$OUT/tb_matrix_descriptor_v2_snapshot" | tee "$OUT/tb_matrix_descriptor_v2_snapshot.log"
   iverilog -g2012 -s tb_command_event_scoreboard -o "$OUT/tb_command_event_scoreboard" \
     "$ROOT/rtl/integration/command_event_scoreboard.sv" \
     "$ROOT/tb/tb_command_event_scoreboard.sv"

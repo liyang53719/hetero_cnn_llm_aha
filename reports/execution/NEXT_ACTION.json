@@ -1,6 +1,6 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Consume exact gate/up hashes ec204a74ad5bc7b68f34595ac7b24ffac5ca432de41077857476e92de6f1bcab and 581709c8d740185c32f457470a1965102e648ac0dacedf14191fbb836a7a98ac. Run all 8960 gate lanes through the proven stable FP32 SiLU, compare every output to the operation-order model and retain the frozen 0.002 error limit. Then multiply SiLU(gate) by up over exactly 560 16-lane FP32 chunks. Freeze SiLU and product hashes and report scalar-SiLU/product/total cycles separately. Do not start down projection until this receipt passes.",
+  "command": "Consume exact product hash 5076748a33e3b316acc2647554cea7d193b50099d6fa40ebdb1dec67a716fb1c and residual1 hash df2d5af8926229b7c3ea34aa7c0dfc1ad381fee5cd7149d86b5b01739f518671. Generate and freeze one deterministic bias-free 8960x1536 BF16 down matrix, run all 430080 physical 16x32 array steps, compare every down output, then add residual1 in exactly 96 16-lane FP32 chunks. Freeze down/final hashes and measured cycles. After PASS, aggregate all target receipts and verify the complete two-token target block has exactly 1486848 measured array steps with no score matrix before declaring target-shape closure.",
   "fixed_order": [
     "global target RMSNorm1536",
     "restartable target RMSNorm and Q/K/V segment",

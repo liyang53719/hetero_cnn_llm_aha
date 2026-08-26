@@ -44,6 +44,7 @@
 - L5 target OProj/residual PASS: full 1536x1536, 73728 measured array steps, 295008 total/294912 Matrix/96 residual cycles; residual1 hash `df2d5af8...`. Next: post-attention RMSNorm1536.
 - L5 target norm2 PASS: global 96-chunk RMSNorm1536, all outputs exact, 390 cycles; norm2 hash `bb884b81...`. Next: complete 1536x8960 gate/up projections.
 - L5 target gate/up PASS: two complete 1536x8960 projections, each 430080 measured steps/1720320 cycles; output hashes `ec204a74...`/`581709c8...`. Next: SiLU and gate-times-up.
+- L5 target SiLU/product PASS: 8960 scalar lanes +560 16-lane chunks exact, 81200 cycles, product hash `5076748a...`, max SiLU error `5.294e-5`. Next: full 8960x1536 down and final residual.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

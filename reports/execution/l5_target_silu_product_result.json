@@ -1,0 +1,23 @@
+{
+  "stage": "L5",
+  "subgate": "target SiLU and gate-times-up",
+  "status": "PASS",
+  "lanes": 8960,
+  "product_chunks": 560,
+  "total_cycles": 81200,
+  "silu_cycles": 80640,
+  "product_cycles": 560,
+  "silu_sha256": "bd6c5d5562a086545a0953721b0984420bff1ba909ff9a4ba3b78bfb732f932e",
+  "product_sha256": "5076748a33e3b316acc2647554cea7d193b50099d6fa40ebdb1dec67a716fb1c",
+  "silu_fnv1a64": "1b452878ca70ee00",
+  "product_fnv1a64": "c6999069e8808987",
+  "max_silu_error": 5.293639018688623e-05,
+  "silu_error_threshold": 0.002,
+  "node_mismatches": 0,
+  "verilator_wall_clean": true,
+  "lint_allocated_mb": 55.793,
+  "build_allocated_mb": 319.301,
+  "simulation_allocated_mb": 7,
+  "memory_limit_gib": 10,
+  "oom_events": 0
+}

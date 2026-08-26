@@ -1,6 +1,6 @@
 {
-  "phase": "L5_SFU_EXP2_PWL",
-  "command": "When MemAvailable is safely above 10 GiB, emit HeteroFP32Scale16Floor from pinned HardFloat and compile fp32_exp2_pwl with HeteroFP32Alu and the committed 256-segment coefficient table. Run the existing 10000 exact-PWL vectors under backpressure, require bit-exact RTL agreement and preserve the frozen dense error limits max absolute 0.00025 and relative 0.0003. Record generated converter hash, output hash and flags; do not alter coefficients or thresholds after RTL results. Then proceed to reciprocal.",
+  "phase": "L5_SFU_RECIPROCAL",
+  "command": "Implement normalized FP32 reciprocal with an explicit LUT/linear initial approximation and fixed Newton-Raphson iteration count using pinned HardFloat add/mul primitives. Freeze positive finite input range, zero/Inf/NaN behavior and error thresholds before RTL measurement. Validate dense mantissa sweeps, random exponents and directed special values, report exact iteration latency, accept interval and max relative error, then proceed to rsqrt.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

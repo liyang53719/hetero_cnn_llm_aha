@@ -263,7 +263,10 @@
         "work/results/l5_rope/tb.log",
         "reports/execution/L5_EXP2_PWL_COEFFICIENTS.md",
         "config/fp32_exp2_pwl_coeffs.json",
-        "rtl/sfu/fp32_exp2_coeffs.svh"
+        "rtl/sfu/fp32_exp2_coeffs.svh",
+        "reports/execution/L5_EXP2_PWL_CLOSEOUT.md",
+        "reports/execution/l5_exp2_result.json",
+        "work/results/l5_exp2/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -271,6 +274,7 @@
         ,"pinned HardFloat FP32 add/mul and balanced 16-lane reduction pass 10000 vectors each with one-vector/cycle acceptance"
         ,"FP32 RoPE pair passes 10000 operation-order vectors with one-pair/cycle acceptance"
         ,"exp2 PWL coefficients frozen: 256 segments over [-16,0], dense max absolute/relative errors 2.29601e-4/2.35418e-4; RTL pending"
+        ,"exp2 PWL RTL complete: 10000 exact vectors, interval1, frozen dense error limits pass"
       ],
       "remaining_gates": [
         "heterogeneous FP32 SFU tile",

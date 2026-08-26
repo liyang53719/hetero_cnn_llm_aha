@@ -9,12 +9,12 @@ module fp32_exp2_pwl(
  logic[15:0]scaled_floor;logic[7:0]convert_flags;logic signed[15:0]floor_signed;
  logic[7:0]index;logic[63:0]coeff;logic[31:0]m,b,mx,pwl;logic[4:0]mul_flags,add_flags;
  logic[31:0]result_comb;logic[12:0]flags_comb,flags_q;logic is_nan,is_inf;
- HeteroFP32Scale16Floor u_floor(.clock(clk_i),.reset(!rst_ni),.io_x(x_q),.io_out(scaled_floor),.io_exceptionFlags(convert_flags));
+ HeteroFP32Scale16Floor u_floor(.io_x(x_q),.io_out(scaled_floor),.io_exceptionFlags(convert_flags));
  assign floor_signed=$signed(scaled_floor);assign index=8'($signed(floor_signed)+16'sd256);
  assign coeff=exp2_pwl_coeff(index);assign m=coeff[63:32];assign b=coeff[31:0];
- HeteroFP32Alu u_mul(.clock(clk_i),.reset(!rst_ni),.io_op(1'b1),.io_x(m),.io_y(x_q),.io_out(mx),.io_exceptionFlags(mul_flags));
- HeteroFP32Alu u_add(.clock(clk_i),.reset(!rst_ni),.io_op(1'b0),.io_x(mx),.io_y(b),.io_out(pwl),.io_exceptionFlags(add_flags));
- assign is_nan=&x_q[30:23]&&|x_q[22:0];assign is_inf=&x_q[30:23]&&!|x_q[22:0];
+ HeteroFP32Alu u_mul(.io_op(1'b1),.io_x(m),.io_y(x_q),.io_out(mx),.io_exceptionFlags(mul_flags));
+ HeteroFP32Alu u_add(.io_op(1'b0),.io_x(mx),.io_y(b),.io_out(pwl),.io_exceptionFlags(add_flags));
+ assign is_nan=&x_q[30:23]&&|x_q[22:0];assign is_inf=&x_q[30:23]&&!(|x_q[22:0]);
  always_comb begin flags_comb={convert_flags,mul_flags|add_flags};
   if(is_nan)result_comb=0;else if(is_inf)result_comb=x_q[31]?32'd0:32'h3f800000;
   else if(floor_signed< -16'sd256)result_comb=0;

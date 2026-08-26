@@ -1,0 +1,20 @@
+{
+  "stage": "L5",
+  "subgate": "exp2 PWL",
+  "status": "PASS",
+  "input_range": [-16.0, 0.0],
+  "segments": 256,
+  "segment_width": 0.0625,
+  "max_absolute_error_dense": 0.00022960094658019958,
+  "max_relative_error_dense": 0.00023541793216897913,
+  "absolute_threshold": 0.00025,
+  "relative_threshold": 0.0003,
+  "vectors": 10000,
+  "cycles": 12503,
+  "accept_interval": 1,
+  "output_fnv1a64": "471eda2f98d404cb",
+  "flags_or": "0x00a1",
+  "combined_primitives_sha256": "2e818b2b26885b73c2475e7a66adaaa00361be27d3ea577a1e196bb1d0484c63",
+  "mismatches": 0,
+  "verilator_wall_clean": true
+}

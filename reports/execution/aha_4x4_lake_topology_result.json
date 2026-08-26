@@ -1,0 +1,69 @@
+{
+  "status": "BLOCKED_DEPENDENCY",
+  "reason": "pinned column-layout generator cannot produce width=4 height=4 with 16 Lake MemCore tiles and any PE tile",
+  "aha_commit": "3b171e813bc5e399b22921c8df20fd4e889f1569",
+  "garnet_commit": "6a8520cf7361693e9fc1fb3906df6b4f37268a49",
+  "image_digest": "sha256:a8784f2cfe96609a7e4403c29f6a82bd00c882c8564ef747541f78be75fa2b2b",
+  "source_sha256": {
+    "garnet.py": "a3f4cb83888cf48739e2aea360bd977543f6abdaa2db7ccbfc65f85f9b078c50",
+    "cgra/util_onyx.py": "e6c32105317e1e46d8572fbad78a0cb13e28e377558c0c94cf4269f895577ac1"
+  },
+  "baseline_4x16_mem_ratio4": {
+    "mem_ratio": 4,
+    "memory_columns": 1,
+    "lake_mem_tiles": 16,
+    "pe_tiles": 48
+  },
+  "target_4x4_enumeration": [
+    {
+      "mem_ratio": 1,
+      "memory_columns": 4,
+      "lake_mem_tiles": 16,
+      "pe_tiles": 0
+    },
+    {
+      "mem_ratio": 2,
+      "memory_columns": 2,
+      "lake_mem_tiles": 8,
+      "pe_tiles": 8
+    },
+    {
+      "mem_ratio": 3,
+      "memory_columns": 1,
+      "lake_mem_tiles": 4,
+      "pe_tiles": 12
+    },
+    {
+      "mem_ratio": 4,
+      "memory_columns": 1,
+      "lake_mem_tiles": 4,
+      "pe_tiles": 12
+    },
+    {
+      "mem_ratio": 5,
+      "memory_columns": 0,
+      "lake_mem_tiles": 0,
+      "pe_tiles": 16
+    },
+    {
+      "mem_ratio": 6,
+      "memory_columns": 0,
+      "lake_mem_tiles": 0,
+      "pe_tiles": 16
+    },
+    {
+      "mem_ratio": 7,
+      "memory_columns": 0,
+      "lake_mem_tiles": 0,
+      "pe_tiles": 16
+    },
+    {
+      "mem_ratio": 8,
+      "memory_columns": 0,
+      "lake_mem_tiles": 0,
+      "pe_tiles": 16
+    }
+  ],
+  "feasible_with_16_lake_and_compute": [],
+  "fixed_policy": "do not substitute 4x16 baseline or all-memory 4x4 for production 4x4 compute SFU"
+}

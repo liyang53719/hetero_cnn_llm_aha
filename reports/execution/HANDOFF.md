@@ -1,7 +1,7 @@
 # L11 execution handoff
 
 - Canonical plans: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md` and `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
-- Gates: L0 PASS, L1 PASS, L2 PASS, L3 PASS; L4 is next, L5-L11 dependency-blocked.
+- Gates: L0-L3 PASS; L4 BLOCKED_DEPENDENCY at production 4x4/16-Lake topology; L5 now active independently.
 - L2: Descriptor/ISA v2, Gemmini OS/WS/Conv/bias/requant production path, AHA Gaussian wrapper, and KV/iDMA basic path are closed by `gate/L2-pass` (`abe2c70`).
 - L3 Shared-L2: 16 real ARM macros, 4 logical reads to 2R, 2 logical writes to 1W, descriptor promotion, byte enables and 100k+ contention tests PASS.
 - L3 control: command FIFO 16, completion FIFO 16 and real 4096x128 event SRAM pass 100k commands; error completion never releases a wait event.
@@ -18,6 +18,7 @@
 - L4 3x3 Conv identity CLOSED: 100 outputs exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes, 4 conflicts.
 - L4 bias/requant/ReLU CLOSED: 100 RNE+ReLU outputs exact, 837 payload cycles, 20 canonical trace cycles, 4 conflicts.
 - L4 pool/residual CLOSED: canonical dedicated endpoint 10k PASS; pool 6 cycles/128 physical bytes, residual 7 cycles/192 bytes, 3 conflicts each. Next: production 4x4 AHA/Lake depthwise.
+- L4 topology blocker: pinned 4x4 ratio1 gives 16 Lake/0 PE; ratio2 gives 8/8; ratio4 gives 4/12. No legal 16-Lake compute topology; no 4x16 fallback.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
 - Resource contract: every build/test/DC uses `taskset -c 8-25`, max `-j4`, starts only with `MemAvailable >10 GiB`, and uses a 10 GiB cgroup cap.
 - Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.

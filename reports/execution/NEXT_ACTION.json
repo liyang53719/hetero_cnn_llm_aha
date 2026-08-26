@@ -1,6 +1,6 @@
 {
-  "phase": "L4_PRODUCTION_AHA_4X4_LAKE_DEPTHWISE",
-  "command": "Audit the pinned AHA/Garnet/Lake generator for the exact production geometry garnet_width=4, garnet_height=4 and lake_memory_tiles=16 while preserving the 512 KiB CGRA SRAM budget. Generate and hash the RTL/bitstream dependencies without modifying canonical upstream. Then map a deterministic INT8 3x3 depthwise tile, run official map/PnR/bitstream and Verilator numerical flow, wrap it with the existing config/proc-packet/sideband endpoint, and record elementwise output hash, RTL cycles, semantic/physical bytes and canonical conflicts. If this exact generator combination is unsupported, record BLOCKED_DEPENDENCY; do not substitute the L2 4x16 Gaussian baseline.",
+  "phase": "L5_BF16_MATRIX_ARRAY_BASELINE",
+  "command": "Proceed on the L5 branch that depends only on L3. Audit existing HardFloat/Gemmini sources and implement the fixed independent 16x32 BF16-input/FP32-accumulator Matrix subarray with 512 BF16 MAC/cycle target. Freeze a simple ready/valid tile interface shared with the production command/DMA/scratchpad boundary, add BF16 special-value and FP32 accumulation golden tests, and report actual RTL cycles and output hash. Do not alter the INT8 PE, claim runtime-variable PE type, or use the blocked L4 4x4 AHA topology as an L5 dependency.",
   "fixed_order": [
     "INT8 GEMM",
     "1x1 Conv",

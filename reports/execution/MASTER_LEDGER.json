@@ -200,7 +200,7 @@
       "remaining_gates": []
     },
     "L4": {
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED_DEPENDENCY",
       "depends_on": ["L3"],
       "readiness_evidence": [
         "config/l4_cnn_python.lock.json",
@@ -225,7 +225,9 @@
         "work/results/l4_pool_residual/tb.log",
         "reports/execution/L4_POOL_RESIDUAL_CLOSEOUT.md",
         "reports/execution/l4_pool_residual_result.json",
-        "work/results/l4_pool_residual_canonical/tb.log"
+        "work/results/l4_pool_residual_canonical/tb.log",
+        "reports/execution/L4_AHA_4X4_LAKE_BLOCKED_DEPENDENCY.md",
+        "reports/execution/aha_4x4_lake_topology_result.json"
       ],
       "completed_subgates": [
         "torchvision 0.24.1 compatible native ops and official ResNet50/MobileNetV2 IMAGENET1K_V2 weight URL/size/SHA256 lock",
@@ -243,7 +245,7 @@
         "ResNet50 and MobileNetV2 representative blocks"
       ]
     },
-    "L5": {"status": "PENDING", "depends_on": ["L3"]},
+    "L5": {"status": "IN_PROGRESS", "depends_on": ["L3"]},
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},
     "L7": {"status": "PENDING", "depends_on": ["L5"]},
     "L8": {"status": "PENDING", "depends_on": ["L6"]},
@@ -279,6 +281,7 @@
     "L11": {"status": "PENDING", "depends_on": ["L10"]}
   },
   "known_blockers": [
+    "BLOCKED_DEPENDENCY L4: pinned Garnet column layout cannot produce width=4 height=4 with 16 Lake MemCore tiles and any PE tile; 4x16 and all-memory 4x4 fallback are forbidden.",
     "DEFERRED_BY_USER L10: Library Compiler is absent and SRAM .db generation is skipped until L10 is resumed.",
     "DEFERRED_BY_USER L10: ARM bifrun LEF generation is skipped; existing Liberty/Verilog/GDS2 evidence is retained.",
     "BLOCKED_DECISION L10: installed ARM DP compiler rejects BASE and direct 2048/4096x128; validated LL0.8 decompositions are 2x2048x64 and 4x4096x32. UHDE SP BASE 6144x128 at 0.8V TT25 is validated."

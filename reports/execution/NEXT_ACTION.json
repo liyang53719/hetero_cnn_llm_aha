@@ -1,6 +1,6 @@
 {
-  "phase": "L2_PRODUCTION_COVERAGE_AND_CLOSEOUT",
-  "command": "Add generated descriptor-v2 cases for 1x1 Conv and no-bias LOOP_WS, plus a compiler test proving matrix_aux activation=ReLU6 becomes Matrix raw output followed by SFU activation rather than Gemmini activation code 2. Then rerun retained-Rocket transcript/write/numerical evidence and upstream-clean checks for final L2 audit. Bind every build/test to CPU 8-25 and start only above 10 GiB MemAvailable.",
-  "success_condition": "1x1, 3x3, bias/no-bias, identity/requant/ReLU and ReLU6-to-SFU paths have explicit tests; production funct/rs1/rs2 equal pinned transcripts, invalid cases issue zero commands, busy/event/write/output evidence is exact and all upstream trees remain clean.",
-  "failure_policy": "Stop at the first transcript or numerical mismatch. Do not expose local Gemmini addresses in the public ISA, bypass typed descriptors, pre-lower on the host, use io_resp as completion, weaken legality, or mark L2 PASS before retained-Rocket equivalence closes."
+  "phase": "L2_KV_IDMA_BASIC_ADAPTER",
+  "command": "Implement the production KV basic path: decode KV_ALLOC/KV_APPEND/KV_GATHER/KV_FREE roots, stage BF16 K/V, and emit pinned iDMA/AXI requests. First freeze the used iDMA backend boundary and exact KV descriptor/address trace, then add randomized-ready RTL append/read/free and completion tests. Bind all builds/tests to CPU 8-25 and start only above 10 GiB MemAvailable.",
+  "success_condition": "Single-sequence BF16 append/read/free matches the Python KV model bit-exactly; iDMA/AXI address, length, byte-enable, response and event traces are ordered and lossless under randomized backpressure; no leak/stale read/error completion releases a wait; upstream iDMA remains clean.",
+  "failure_policy": "Do not substitute the clean-room KV engine for pinned iDMA transport evidence, hand-write a partial AXI protocol, bypass typed descriptors, relax BF16 exactness, or mark L2 PASS before consolidated Matrix/AHA/KV-iDMA evidence closes."
 }

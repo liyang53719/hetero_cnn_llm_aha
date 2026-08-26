@@ -63,6 +63,16 @@ def matrix_case(*, dataflow: int) -> dict[str, object]:
                         Opcode.MATRIX_GEMM, records, (1, 10, 20))
 
 
+def no_bias_ws_case() -> dict[str, object]:
+    records: dict[int, object] = {}
+    aux = MatrixAux(bias_index=NULL_INDEX, no_pool=True, subarray_mask=1).to_record()
+    op = matrix_op_record(m=17, n=18, k=19, dataflow=1, accumulate=False)
+    add_tensor(records, 1, address=0x80002B80, shape=(17, 19), strides=(19,), tail=[op, aux])
+    add_tensor(records, 10, address=0x800031D0, shape=(19, 18), strides=(18,))
+    add_tensor(records, 20, address=0x80003470, shape=(17, 18), strides=(18,))
+    return case_program("loop_ws_no_bias", Opcode.MATRIX_GEMM, records, (1, 10, 20))
+
+
 def conv_case(*, relu_requant: bool) -> dict[str, object]:
     records: dict[int, object] = {}
     aux = MatrixAux(
@@ -88,9 +98,23 @@ def conv_case(*, relu_requant: bool) -> dict[str, object]:
                         {0x9000: 0x3F000000} if relu_requant else None)
 
 
+def conv1x1_case() -> dict[str, object]:
+    records: dict[int, object] = {}
+    aux = MatrixAux(bias_index=30, no_pool=True, max_pixels_per_row=1,
+                    subarray_mask=1).to_record()
+    op = matrix_op_record(m=16, n=4, k=3, dataflow=1)
+    conv = conv2d_record(kernel_h=1, kernel_w=1, stride_h=1, stride_w=1,
+                         dilation_h=1, dilation_w=1, pad_top=0, pad_left=0, groups=1)
+    add_tensor(records, 1, address=0x80006000, shape=(1, 4, 4, 3), strides=(3,), tail=[op, conv, aux])
+    add_tensor(records, 10, address=0x80006100, shape=(1, 1, 3, 4), strides=(4,))
+    add_tensor(records, 20, address=0x80006200, shape=(1, 4, 4, 4), strides=(4,))
+    add_tensor(records, 30, address=0x80006300, shape=(1, 4), strides=(16,), dtype=4)
+    return case_program("conv1x1", Opcode.MATRIX_CONV, records, (1, 10, 20))
+
+
 def render() -> tuple[str, dict[str, str]]:
-    cases = [matrix_case(dataflow=0), matrix_case(dataflow=1),
-             conv_case(relu_requant=False), conv_case(relu_requant=True)]
+    cases = [matrix_case(dataflow=0), matrix_case(dataflow=1), no_bias_ws_case(),
+             conv1x1_case(), conv_case(relu_requant=False), conv_case(relu_requant=True)]
     payload = {"schema_version": 2, "cases": cases}
     memh: dict[str, str] = {}
     for case in cases:

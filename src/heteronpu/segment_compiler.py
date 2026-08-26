@@ -72,6 +72,7 @@ def compile_segment(spec: dict[str, Any]) -> CompiledSegment:
     if not isinstance(operations, list) or not operations:
         raise ValueError("segment must contain a non-empty operations list")
 
+    operations = _expand_relu6_operations(operations)
     ids = [str(op["id"]) for op in operations]
     if len(set(ids)) != len(ids):
         raise ValueError("operation IDs must be unique")
@@ -149,6 +150,33 @@ def compile_segment(spec: dict[str, Any]) -> CompiledSegment:
         event_by_op[op_id] = signal_event
 
     return CompiledSegment(name=name, commands=tuple(compiled), barriers=tuple(barriers))
+
+
+def _expand_relu6_operations(operations: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Route architectural ReLU6 through SFU, never Gemmini activation code 2."""
+    expanded: list[dict[str, Any]] = []
+    for raw in operations:
+        if str(raw.get("activation", "")).lower() != "relu6":
+            expanded.append(dict(raw))
+            continue
+        if str(raw.get("engine", "")).lower() != "matrix":
+            raise ValueError("activation=relu6 expansion is defined only on Matrix operations")
+        missing = {key for key in ("matrix_dst", "relu6_src", "dst") if key not in raw}
+        if missing:
+            raise ValueError(f"Matrix ReLU6 expansion missing fields: {sorted(missing)}")
+        op_id = str(raw["id"])
+        matrix_id = f"{op_id}.__matrix_raw"
+        matrix = {key: value for key, value in raw.items()
+                  if key not in {"activation", "matrix_dst", "relu6_src"}}
+        matrix["id"] = matrix_id
+        matrix["dst"] = int(raw["matrix_dst"])
+        sfu = {
+            "id": op_id, "engine": "sfu_cgra", "opcode": "sfu_activation",
+            "src0": int(raw["relu6_src"]), "dst": int(raw["dst"]),
+            "depends_on": [matrix_id],
+        }
+        expanded.extend((matrix, sfu))
+    return expanded
 
 
 def load_and_compile(path: str | Path) -> CompiledSegment:

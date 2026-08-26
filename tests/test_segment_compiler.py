@@ -41,3 +41,19 @@ def test_committed_segment_reports_match_frozen_examples() -> None:
         expected = load_and_compile(root / "examples" / source).to_dict()
         actual = json.loads((root / "reports" / report).read_text(encoding="utf-8"))
         assert actual == expected
+
+
+def test_relu6_expands_to_matrix_raw_then_sfu() -> None:
+    from heteronpu.segment_compiler import compile_segment
+    segment = compile_segment({"name": "relu6_route", "operations": [{
+        "id": "conv_relu6", "engine": "matrix", "opcode": "matrix_conv",
+        "src0": 1, "src1": 2, "matrix_dst": 3, "relu6_src": 4, "dst": 5,
+        "activation": "relu6",
+    }]})
+    assert [item.name for item in segment.commands] == [
+        "conv_relu6.__matrix_raw", "conv_relu6"
+    ]
+    matrix, sfu = (item.command for item in segment.commands)
+    assert matrix.opcode is Opcode.MATRIX_CONV and matrix.dst == 3
+    assert sfu.opcode is Opcode.SFU_ACTIVATION and sfu.src0 == 4 and sfu.dst == 5
+    assert sfu.event_wait == matrix.event_signal

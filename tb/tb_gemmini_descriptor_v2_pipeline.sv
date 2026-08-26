@@ -108,6 +108,7 @@ module tb_gemmini_descriptor_v2_pipeline;
       $readmemh(desc_file,desc_mem);$readmemh(present_file,present_mem);$readmemh(command_file,cmd_mem,0,0);
       if(kind==0)desc_mem[5][125:118]=0;
       if(kind==1)present_mem[30]=0;
+      if(kind==3)desc_mem[5][81:80]=2;
       force_scale_error=kind==2;expect_reject=1;prior=rejects;
       wait(cmd_ready);@(negedge clk);cmd_data=cmd_mem[0];cmd_valid=1;
       do @(posedge clk);while(!cmd_ready);@(negedge clk);cmd_valid=0;
@@ -116,9 +117,10 @@ module tb_gemmini_descriptor_v2_pipeline;
   endtask
   initial begin
     cmd_valid=0;cmd_data=0;expect_reject=0;force_scale_error=0;repeat(3)@(posedge clk);rst_n=1;
-    run_case("multi_tile_os",36);run_case("loop_ws",11);
-    run_case("conv_identity",9);run_case("conv_relu_requant",9);
-    run_reject("multi_tile_os",0);run_reject("multi_tile_os",1);run_reject("conv_relu_requant",2);
+    run_case("multi_tile_os",36);run_case("loop_ws",11);run_case("loop_ws_no_bias",11);
+    run_case("conv1x1",9);run_case("conv_identity",9);run_case("conv_relu_requant",9);
+    run_reject("multi_tile_os",0);run_reject("multi_tile_os",1);
+    run_reject("conv_relu_requant",2);run_reject("multi_tile_os",3);
     $display("GEMMINI_DESCRIPTOR_V2_PIPELINE_PASS cycles=%0d issued=%0d rejects=%0d",cycles,issued,rejects);$finish;
   end
   initial begin repeat(10000)@(posedge clk);$fatal(1,"timeout");end

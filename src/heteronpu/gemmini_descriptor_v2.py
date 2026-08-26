@@ -165,6 +165,8 @@ def lower_matrix_v2(command: Command128, records: Mapping[int, int | DescriptorR
         raise ValueError("Matrix src0 chain requires exactly one matrix_op and matrix_aux")
     op = _parse_matrix_op(operation_records[0])
     aux = MatrixAux.from_record(aux_records[0])
+    if int(aux.activation) > 1:
+        raise ValueError("ReLU6 must lower to the SFU; pinned Gemmini activation 2 is LayerNorm")
     bias = None
     if aux.bias_index != NULL_INDEX:
         bias = _parse_tensor(validate_descriptor_chain(aux.bias_index, records))

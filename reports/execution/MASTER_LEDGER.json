@@ -2,7 +2,7 @@
   "schema_version": 1,
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "cpu_affinity": "taskset -c 8-25",
-  "current_phase": "L2_production_multi_op_sequencer",
+  "current_phase": "L2_kv_idma_basic_adapter",
   "stages": {
     "L0": {
       "status": "PASS",
@@ -86,6 +86,8 @@
         ,"work/results/l2_descriptor_v2_pipeline/tb.log"
         ,"work/results/l2_descriptor_v2_pipeline/top.log"
         ,"work/results/l2_descriptor_v2_pipeline/integrated_rtl_model.json"
+        ,"reports/execution/L2_GEMMINI_V2_COVERAGE_CLOSEOUT.md"
+        ,"work/results/l2_gemmini_v2_coverage/result.json"
       ],
       "completed_subgates": [
         "Gemmini generated 157-port hash/manifest and RocketTile RoCC/PTW/TileLink context freeze",
@@ -115,11 +117,12 @@
         ,"Descriptor-v2 RTL snapshot frontend: legal four-chain snapshot replays 14 stable records only after full validation; cyclic chain returns status 2 with zero replay; Verilator -Wall clean"
         ,"Descriptor-v2 semantic decode: root placement, required fields, singleton/reserved bits, replay first/last/root integrity and dual quant records produce resolved legal/error contexts; Verilator -Wall clean"
         ,"Production descriptor-v2 multi-op pipeline: 65 OS/WS/Conv operations match generated retained-Rocket oracles, three invalid/fetch cases issue zero legal CUSTOM_3, shell LOOP_WS busy/event path PASS"
+        ,"Matrix L2 production closeout: 85 legal OS/biased and no-bias WS/1x1 and 3x3 Conv commands, four zero-issue rejects, retained-Rocket CPU-golden PASS, upstream clean, ReLU6 routes to SFU"
       ],
       "remaining_gates": [
-        "Add explicit 1x1 Conv and no-bias WS production vectors plus ReLU6-to-SFU compiler routing",
-        "Close final production pipeline to retained-Rocket write/event/numerical transitive audit and upstream-clean proof",
-        "Connect the approved descriptor read port to a real Shared-L2 read lane and rerun integrated randomized backpressure"
+        "Implement production KV append/read/free descriptor adapter with BF16 staging",
+        "Connect basic KV transfers to pinned iDMA/AXI and prove address/write/event traces under backpressure",
+        "Run consolidated Matrix+AHA+KV/iDMA L2 audit with all upstream worktrees clean"
       ]
     },
     "L3": {

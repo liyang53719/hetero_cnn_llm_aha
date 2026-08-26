@@ -1,6 +1,6 @@
 {
   "phase": "L5_Q128_PREFILL",
-  "command": "Consume q128 attention hash b72c3a34951c84b29d20bd5be9ff58c1282cde5afe7cf9c4e800243ef2b60c76 and shared input hash 39917c9e6f887030091cb93e944b263f4966322f487d567a6c28881b615335e0. Reuse exact target OProj and norm2 weights. Start restartable batch0 tokens0-15: run the complete 1536x1536 OProj on all16 rows for73728 steps, add residual1 over1536 chunks, then run16 global norm2 operations. Freeze OProj/residual1/norm2 hashes and measured cycles. Parameterize the same binary for batches1-7 only after batch0 passes; aggregate OProj to589824 steps.",
+  "command": "Consume q128 norm2 hash 4f1d6a1032c407934b1d0562591af8d993f2efade95a1aa333de9822f5d73679 and reuse exact target gate/up weights. Build a restartable 16-token gate/up batch using all16 physical rows. Batch0 must run complete 1536x8960 gate and up projections, each430080 measured steps, and compare all16x8960 outputs. Use an exact fmaf-order C++ or equivalent golden generator bound to CPU8-25 and max j4; do not use NumPy matmul. After batch0 PASS, parameterize one binary for batches1-7 and aggregate gate/up to6881280 measured steps.",
   "fixed_order": [
     "q128 shape and causal-operation manifest",
     "q128 synthesizable trace controller",

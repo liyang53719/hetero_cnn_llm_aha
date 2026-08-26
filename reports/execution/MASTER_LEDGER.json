@@ -361,6 +361,10 @@
         ,"reports/execution/L5_Q128_MLO.md"
         ,"reports/execution/l5_q128_mlo_result.json"
         ,"work/results/l5_q128_mlo/tb.log"
+        ,"reports/execution/L5_Q128_OPROJ_NORM2.md"
+        ,"reports/execution/l5_q128_oproj_norm2_result.json"
+        ,"work/results/l5_q128_oproj/batch0/tb.log"
+        ,"work/results/l5_q128_oproj/batch7/tb.log"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -400,6 +404,7 @@
         ,"q128 all eight QKV row batches pass one unchanged RTL binary for 786432 measured Matrix steps"
         ,"q128 split-half RoPE and K/V GQA pass all 128 positions and 24576 mapped outputs"
         ,"q128 causal streamed M/L/O passes 99072 updates with no score-matrix materialization"
+        ,"q128 eight OProj/residual1/norm2 batches pass 589824 measured Matrix steps"
       ],
       "remaining_gates": [
         "q128 q384 prefill and decode128/1024/4096 block numerics"

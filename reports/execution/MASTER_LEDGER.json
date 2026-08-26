@@ -426,6 +426,11 @@
         ,"work/results/l5_q384_down/batch0/tb.log"
         ,"work/results/l5_q384_down/batch23/tb.log"
         ,"work/results/l5_q384_down/q128_compat.log"
+        ,"reports/execution/L5_UNIFIED_PREFILL_TRACE.md"
+        ,"reports/execution/l5_unified_prefill_trace_result.json"
+        ,"work/results/l5_unified_prefill_trace/tb.log"
+        ,"reports/execution/L5_Q384_CLOSEOUT.md"
+        ,"reports/execution/l5_q384_result.json"
       ],
       "completed_subgates": [
         "pinned HardFloat BF16xBF16+FP32 RNE FMA lane passes 10000 libm-fmaf vectors and invalid special-value flag"
@@ -482,9 +487,11 @@
         ,"q128/q384 gate/up use one runtime-configured binary; q384 passes48 projection phases and20643840 steps"
         ,"q128/q384 SiLU/product use one runtime-configured binary; q384 passes3440640 scalars and215040 product chunks"
         ,"q128/q384 down/final use one runtime-configured binary; q384 passes24 batches and10321920 Matrix steps"
+        ,"unified q128/q384 measured trace uses one runtime controller binary and reproduces61101824/202769664 active cycles"
+        ,"q384 prefill closes with complete numerical hash chain,35094528 Matrix steps,202769664 active cycles and no score matrix"
       ],
       "remaining_gates": [
-        "q384 SiLU/product and down/final, q1024 prefill, and decode128/1024/4096 block numerics"
+        "q1024 prefill and decode128/1024/4096 block numerics"
       ]
     },
     "L6": {"status": "PENDING", "depends_on": ["L4", "L5"]},

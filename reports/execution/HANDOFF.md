@@ -72,6 +72,7 @@
 - L5 q384 gate/up ALL PASS on same q128/q384 binary SHA `44be7241...`: 48 phases, 20643840 steps/82575360 cycles; gate/up hashes `59f1899f...`/`3a4b0dba...`, zero OOM. Next: q384 SiLU/product on one runtime binary.
 - L5 q384 SiLU/product PASS on same q128/q384 binary SHA `7e651ef9...`:3440640 scalars+215040 chunks,31180800 cycles, product hash `8e2484ec...`; q128 compatibility PASS. Next:q384 down/final24 batches.
 - L5 q384 down/final ALL PASS on same q128/q384 binary SHA `c1b36373...`:10321920 steps/41324544 cycles, final hash `bff9f576...`; q128 compatibility PASS. Next: unified q128/q384 measured trace.
+- L5 unified q128/q384 measured trace PASS on one binary:61101824/202769664 active cycles, zero score commands; q384 closes at1893.77 token/s/block and final hash `bff9f576...`. Next:q1024 on the same runtime RTL, then decode.
 - User priority: L5 now includes q1024 prefill measured cycles/token-s in addition to q128/q384. After L5 closes, run L10 early 1GHz logic timing/area before L6-L9; keep SRAM macro PPA/formal PASS blocked until official `.db`/LEF.
 - Qwen3.5 ordering frozen: do not implement it now. Finish current Qwen2 L5, then L10 early PPA, then create a separate descriptor/runtime extension plan without forking the Qwen2 canonical RTL.
 - L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.

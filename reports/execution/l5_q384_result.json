@@ -1,0 +1,16 @@
+{
+  "stage": "L5",
+  "subgate": "Qwen2 q384 prefill",
+  "status": "PASS",
+  "same_runtime_rtl_as_q128": true,
+  "matrix_steps": 35094528,
+  "matrix_cycles": 140378112,
+  "active_cycles": 202769664,
+  "wall_cycles": 202769714,
+  "latency_ms_at_1ghz": 202.769664,
+  "tokens_per_second_at_1ghz": 1893.77,
+  "final_sha256": "bff9f576c195042d3bb772a7ba39c727f4eab0bcfc041752aed24081f885b31c",
+  "score_matrix_materialized": false,
+  "node_mismatches": 0,
+  "oom_events": 0
+}

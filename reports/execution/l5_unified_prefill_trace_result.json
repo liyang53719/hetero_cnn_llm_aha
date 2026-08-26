@@ -1,0 +1,28 @@
+{
+  "stage": "L5",
+  "subgate": "unified q128 q384 measured prefill trace",
+  "status": "PASS",
+  "same_binary": true,
+  "commands_each": 24,
+  "score_matrix_commands": 0,
+  "q128": {
+    "matrix_steps": 11698176,
+    "active_cycles": 61101824,
+    "wall_cycles": 61101874,
+    "tokens_per_second_at_1ghz": 2094.86,
+    "command_fnv64": "29012cbdbd1b3252"
+  },
+  "q384": {
+    "matrix_steps": 35094528,
+    "active_cycles": 202769664,
+    "wall_cycles": 202769714,
+    "tokens_per_second_at_1ghz": 1893.77,
+    "command_fnv64": "f6753b21f668b852"
+  },
+  "invalid_sequence_256_rejected": true,
+  "binary_sha256": "bbbf19355c8793cd90a1f413cdcb82b740df55347b85cde3570472289761b979",
+  "build_allocated_mb": 233.934,
+  "simulation_allocated_mb": 7,
+  "memory_limit_gib": 30,
+  "oom_events": 0
+}

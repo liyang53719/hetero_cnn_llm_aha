@@ -1,0 +1,21 @@
+{
+  "stage": "L5",
+  "subgate": "target QKV bias and six-way GQA",
+  "status": "PASS",
+  "physical_lanes": 16,
+  "q_chunks": 96,
+  "kv_chunks": 16,
+  "gqa_replicas": 6,
+  "inputs": 10000,
+  "outputs": 43000,
+  "illegal_inputs": 100,
+  "cycles": 60465,
+  "output_data_fnv1a64": "adbdd99efd632cc8",
+  "inputs_sha256": "ac83615e538540110a881358b0e6099c3b1883bfa14c33f656d52e2990752d0b",
+  "expected_sha256": "dd0180d855468f0dd2e5da76ea15cfc037edfd09bb5819cc9fe687be9e082888",
+  "mismatches": 0,
+  "verilator_wall_clean": true,
+  "build_allocated_mb": 310.605,
+  "simulation_allocated_mb": 11,
+  "memory_limit_gib": 10
+}

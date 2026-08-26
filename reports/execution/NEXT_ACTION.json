@@ -1,9 +1,9 @@
 {
   "phase": "L5_QWEN_TARGET_PAYLOAD",
-  "command": "Use config/qwen2_1p5b_target_shape.json as the only shape and bias authority. Add a reusable QKV post-projection path that applies FP32 Q/K/V bias to widths 1536/256/256 in 16-lane chunks, then maps each of 12 query heads to one of two 128-lane KV heads with fixed six-way GQA multicast. Independently verify chunk tails, head boundaries, query-to-KV mapping, backpressure and stable sideband tags. After this gate, build restartable target-node segments in fixed order: RMSNorm/QKV, RoPE/streamed M-L-O/O-L, OProj/residual, second RMSNorm/gate-up-SiLU-product/down/final. Each segment must consume the preceding frozen output hash. Only after every payload segment passes, run the unchanged controller in full trace/count mode and mark those cycles separately from payload numerics.",
+  "command": "Use config/qwen2_1p5b_target_shape.json as the only shape authority. Implement global RMSNorm1536 by reusing the proven 16-lane square/reduction tile across 96 chunks, accumulating all partial sums in fixed FP32 order, applying epsilon 1e-6 and one global rsqrt, then emitting 96 weighted chunks. Generate deterministic operation-order vectors and compare all 1536 outputs; do not normalize chunks independently. Then define the restartable RMSNorm/QKV target segment receipt: frozen input/norm hashes, Q/K/V matrix shape and weight hashes, QKV bias hashes, exact physical array-step counters and output hashes. Payload and trace/count evidence must remain separately labeled.",
   "fixed_order": [
-    "QKV bias and six-way GQA mapping",
-    "target RMSNorm and Q/K/V",
+    "global target RMSNorm1536",
+    "restartable target RMSNorm and Q/K/V segment",
     "RoPE plus GQA head mapping",
     "streamed M/L/O and O/L",
     "OProj and first residual",

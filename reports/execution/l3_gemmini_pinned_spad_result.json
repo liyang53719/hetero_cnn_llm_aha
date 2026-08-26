@@ -1,0 +1,35 @@
+{
+  "stage": "L3",
+  "subgate": "pinned_gemmini_scratchpad_endpoint_binding",
+  "status": "PASS_READINESS",
+  "upstream_commit": "e602d917dcc495c58cabe906535e411707096c9c",
+  "generated_rtl": "work/generated/l3_gemmini_scratchpad_bank/ScratchpadBank.sv",
+  "generated_rtl_sha256": "c65a53d98b6029e22371061aa9330031240e9a775813f409707836f139213dad",
+  "geometry": {
+    "banks": 4,
+    "rows_per_bank": 4096,
+    "data_bits": 128,
+    "byte_mask_bits": 16
+  },
+  "cpu_affinity": "8-25",
+  "build_parallelism": 4,
+  "memory_limit_gib": 10,
+  "simulator": "Verilator 5.050",
+  "transfers": 100000,
+  "gemmini_to_engine_beats": 50000,
+  "engine_to_gemmini_beats": 50000,
+  "gemmini_read_responses": 200000,
+  "mismatches": 0,
+  "protocol_errors": 0,
+  "timeouts": 0,
+  "upstream_clean": true,
+  "evidence": [
+    "work/generated/l3_gemmini_scratchpad_bank/ScratchpadBank.sv.sha256",
+    "work/generated/l3_gemmini_scratchpad_bank/upstream.commit",
+    "work/generated/l3_gemmini_scratchpad_bank/upstream.status",
+    "work/results/l3_spad_gateway/verilator_pinned_lint.log",
+    "work/results/l3_spad_gateway/verilator_pinned_build.log",
+    "work/results/l3_spad_gateway/pinned_100k.log"
+  ],
+  "remaining": "Connect the verified stream network to production AHA and KV endpoint wrappers and run the combined L3 command/event/fabric/stream regression."
+}

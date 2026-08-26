@@ -25,7 +25,22 @@ Evidence:
 - `work/results/l3_spad_gateway/verilator_lint.log`
 - `reports/execution/l3_gemmini_spad_gateway_result.json`
 
-This proves the project-owned endpoint adapter, not final Gemmini integration.
-L3 still requires binding the adapter to an emitted Gemmini external-scratchpad
-port, AHA/KV production endpoints, and the combined command/event/fabric/stream
-100k regression.
+The pinned upstream `ScratchpadBank(4096,128,1,false,true,false)` was then
+emitted independently through Chisel/CIRCT, without elaborating Rocket or full
+Chipyard. Four instances were connected to the gateway and stream network. A
+second 100,000-transfer gate passed through the actual upstream write queue,
+external-memory ready/valid endpoint, gateway, stream skid, and upstream read
+response/fromDMA queue. Generated RTL SHA256 is
+`c65a53d98b6029e22371061aa9330031240e9a775813f409707836f139213dad` at upstream
+commit `e602d917dcc495c58cabe906535e411707096c9c`; the upstream tree remained clean.
+
+Additional evidence:
+
+- `integration/gemmini/EmitHeteroScratchpadBank.scala`
+- `scripts/generate_gemmini_scratchpad_bank.sh`
+- `scripts/run_l3_gemmini_pinned_spad_integration.sh`
+- `reports/execution/l3_gemmini_pinned_spad_result.json`
+
+This closes pinned Gemmini scratchpad endpoint binding. L3 still requires AHA
+and KV production stream endpoints plus the combined command/event/fabric/
+stream 100k regression.

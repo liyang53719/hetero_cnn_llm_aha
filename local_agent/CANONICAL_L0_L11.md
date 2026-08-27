@@ -1,20 +1,22 @@
-# Canonical stage reporting
+# Canonical L0-L11 stage namespace
 
-`reports/ARCHITECTURE_AND_EXECUTION_PLAN.md` owns the L0-L11 names. The
-longer `stages.yaml` list is an internal decomposition and must never be
-reported as if its L11 were the architecture-sweep L11.
+There is one stage namespace only; the former internal L0-L13 remapping is
+retired.
 
-| Canonical stage | Internal gates |
+| Stage | Scope |
 |---|---|
-| L0 | L0 |
-| L1 | L1-L4 |
-| L2 | L5 |
-| L3 | L6 |
-| L4 | L7 |
-| L5 | L8 |
-| L6 | L9 W8/W4-storage |
-| L7 | L10 |
-| L8 | L9 native-W4 dual-dot |
-| L9 | L11 integrated RTL/model |
-| L10 | L12 DC/SRAM |
-| L11 | L13 architecture sweep |
+| L0 | Control plane, provenance and sandbox regression |
+| L1 | Unmodified upstream baselines |
+| L2 | Wrapper-only integration |
+| L3 | Shared SRAM, streams, events and fabric |
+| L4 | CNN path and legal AHA sidecar |
+| L5 | Qwen2 BF16 long-context 300 token/s closure |
+| L6 | W8/W4/KV-INT8 quantified path |
+| L7 | Production paged KV and continuous batching |
+| L8 | Qwen3.5/Qwen3.8 hybrid text backends |
+| L9 | llama.cpp automatic backend |
+| L10 | SRAM/DC/STA/SAIF physical closure |
+| L11 | Fixed-environment architecture sweep and signoff |
+
+Current serial stage is L5. Sandbox L8 E0 work may proceed in parallel but
+cannot change the global next action or claim E1-E4 evidence.

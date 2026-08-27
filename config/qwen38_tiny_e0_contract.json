@@ -1,0 +1,27 @@
+{
+  "claim_boundary": "Text-only tiny E0. No official weights, vision, E1 RTL, E3 performance, or E4 PPA claim.",
+  "expected": {
+    "final_hidden_sha256": "a749de2863c50b39d2d1d741b2d58e9b0bad4cb4a5ad0a9b3ec8740246338364",
+    "final_hyper_sha256": "93a877905a1e64b445548b964a379f97433206743779d9d513847127b9ce59b0",
+    "operator_types": 21,
+    "prefill_incremental_max_abs_diff": 0.0,
+    "qsa_final_selected_count": 4
+  },
+  "name": "Qwen3.8-Flash-Next text-only tiny executable E0",
+  "official_architecture_repo_commit": "513aa6e18a335296fc13e538232a8735b230877d",
+  "official_model_id": "Qwen/Qwen3.8-Flash-Next",
+  "official_model_revision": "34567a4712bc9766c4449e2e98e4468bfa24d915",
+  "schema_version": 1,
+  "tiny_seed": 3801,
+  "tokens": [
+    1,
+    4,
+    7,
+    3,
+    9,
+    2,
+    11,
+    5
+  ],
+  "transformers_modeling_commit": "36deb0b53ed0863f4b4dfdea23dcaec7f3df3701"
+}

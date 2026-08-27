@@ -1,0 +1,150 @@
+{
+  "models": [
+    {
+      "claim_boundary": "E0/compiler only",
+      "descriptor_policies": {
+        "attention_op": "015040400020408001ffffff00000013",
+        "delta_policy": "004000a42008008010ffffff00000015",
+        "moe_policy": "000000102020012100ffffff00000014",
+        "mtp_policy": "000003ca0008000101ffffff00000019"
+      },
+      "model_id": "Qwen/Qwen3.5-35B-A3B",
+      "name": "Qwen3.5-35B-A3B",
+      "required_operators": [
+        "causal_conv1d",
+        "dense_bf16_gemm",
+        "gated_deltanet_prefill",
+        "gated_deltanet_recurrent",
+        "gqa",
+        "hierarchical_block128_attention",
+        "moe_dispatch_cache",
+        "moe_expert_batching",
+        "moe_expert_execution",
+        "moe_topk_router",
+        "mtp_verify_rollback",
+        "rms_norm",
+        "rope_partial",
+        "vision_encoder"
+      ],
+      "revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+      "runtime_schedule": null,
+      "state_footprint": {
+        "conv_state_bytes": 2949120,
+        "recurrent_state_bytes": 62914560,
+        "total_state_bytes": 65863680
+      },
+      "support": {
+        "causal_conv1d": "executable_e0_reference",
+        "dense_bf16_gemm": "rtl_primitive_not_integrated",
+        "gated_deltanet_prefill": "executable_e0_reference",
+        "gated_deltanet_recurrent": "executable_e0_reference",
+        "gqa": "rtl_primitive_not_integrated",
+        "hierarchical_block128_attention": "rtl_source_wait_local_sim_dc",
+        "moe_dispatch_cache": "compiler_analysis_only",
+        "moe_expert_batching": "executable_e0_reference",
+        "moe_expert_execution": "executable_e0_reference",
+        "moe_topk_router": "executable_e0_reference",
+        "mtp_verify_rollback": "executable_e0_reference",
+        "rms_norm": "rtl_primitive_not_integrated",
+        "rope_partial": "rtl_primitive_not_integrated",
+        "vision_encoder": "unsupported"
+      }
+    },
+    {
+      "claim_boundary": "Text-only executable tiny E0 plus compiler schedule; official-weight node trace and RTL backends remain local-agent gates.",
+      "descriptor_policies": {
+        "attention_op": "015040400020608001ffffff00000013",
+        "delta_policy": "004000a4200800c010ffffff00000015",
+        "gated_residual_policy": "000000a0001400a004ffffff00000017",
+        "moe_policy": "000000102028012a00ffffff00000014",
+        "mtp_policy": "000003ca000a000101ffffff00000019",
+        "ple_policy": "000000003040a00083ffffff00000018",
+        "qsa_policy": "000000004080020044ffffff00000016"
+      },
+      "model_id": "Qwen/Qwen3.8-Flash-Next",
+      "name": "Qwen3.8-Flash-Next",
+      "required_operators": [
+        "attention_output_gate",
+        "causal_conv1d",
+        "dense_bf16_gemm",
+        "gated_deltanet_prefill",
+        "gated_deltanet_recurrent",
+        "gated_residual",
+        "gqa",
+        "hierarchical_block128_attention",
+        "moe_dispatch_cache",
+        "moe_expert_batching",
+        "moe_expert_execution",
+        "moe_topk_router",
+        "mtp_verify_rollback",
+        "ple_hash_lookup_conv",
+        "qsa_indexer",
+        "qsa_sparse_attention",
+        "qwen38_text_tiny_e2e",
+        "rms_norm",
+        "rope_partial",
+        "vision_encoder"
+      ],
+      "revision": "34567a4712bc9766c4449e2e98e4468bfa24d915",
+      "runtime_schedule": {
+        "local_rtl_dependencies": 548,
+        "micro_ops": 548,
+        "operator_types": [
+          "ATTENTION_OUTPUT_GATE_PROJECTION",
+          "FINAL_HYPER_MERGE_RMSNORM",
+          "GDN_CAUSAL_CONV",
+          "GDN_GATED_NORM_OUT_PROJ",
+          "GDN_INPUT_PROJECTIONS",
+          "GDN_RECURRENT_STATE_UPDATE",
+          "GR_ATTN_READ",
+          "GR_ATTN_WRITE",
+          "GR_MOE_READ",
+          "GR_MOE_WRITE",
+          "MOE_ROUTED_EXPERT_GEMM",
+          "MOE_ROUTER_TOPK",
+          "MOE_SHARED_EXPERT",
+          "MTP_DRAFT_BLOCK",
+          "MTP_STATE_COMMIT_ROLLBACK",
+          "MTP_TARGET_VERIFY",
+          "PLE_GATE_DILATED_DWCONV",
+          "PLE_KEY_VALUE_PROJECTION",
+          "PLE_NGRAM_HASH_LOOKUP",
+          "QSA_COMPRESS_TOPK",
+          "QSA_INDEX_PROJECTION",
+          "SPARSE_QKV_PROJECTION",
+          "SPARSE_QK_ONLINE_SOFTMAX_PV",
+          "TOKEN_EMBED"
+        ]
+      },
+      "state_footprint": {
+        "conv_state_bytes": 4423680,
+        "recurrent_state_bytes": 113246208,
+        "total_state_bytes": 117669888
+      },
+      "support": {
+        "attention_output_gate": "executable_e0_reference",
+        "causal_conv1d": "executable_e0_reference",
+        "dense_bf16_gemm": "rtl_primitive_not_integrated",
+        "gated_deltanet_prefill": "executable_e0_reference",
+        "gated_deltanet_recurrent": "executable_e0_reference",
+        "gated_residual": "executable_e0_reference",
+        "gqa": "rtl_primitive_not_integrated",
+        "hierarchical_block128_attention": "rtl_source_wait_local_sim_dc",
+        "moe_dispatch_cache": "compiler_analysis_only",
+        "moe_expert_batching": "executable_e0_reference",
+        "moe_expert_execution": "executable_e0_reference",
+        "moe_topk_router": "executable_e0_reference",
+        "mtp_verify_rollback": "executable_e0_reference",
+        "ple_hash_lookup_conv": "executable_e0_reference",
+        "qsa_indexer": "executable_e0_reference",
+        "qsa_sparse_attention": "executable_e0_reference",
+        "qwen38_text_tiny_e2e": "executable_e0_reference",
+        "rms_norm": "rtl_primitive_not_integrated",
+        "rope_partial": "rtl_primitive_not_integrated",
+        "vision_encoder": "unsupported"
+      }
+    }
+  ],
+  "schema_version": 1,
+  "status": "PASS"
+}

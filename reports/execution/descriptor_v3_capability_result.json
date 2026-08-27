@@ -1,0 +1,11 @@
+{
+  "stage": "L8",
+  "subgate": "descriptor_v3_capability_decode",
+  "status": "STATIC_ONLY",
+  "tool": "unavailable",
+  "evidence_class": "E0_source_contract",
+  "rtl_sha256": "fb10999c301a24d2d69eca0ed9d2b57b7a7086e761cc72e2cd4df9b4fa0ff114",
+  "metadata_executable_types": ["0x04", "0x32", "0x33", "0x34", "0x35"],
+  "recognized_status4_types": ["0x13", "0x14", "0x15", "0x16", "0x17", "0x18", "0x19"],
+  "claim_boundary": "recognized status-4 policies are not executable RTL backends"
+}

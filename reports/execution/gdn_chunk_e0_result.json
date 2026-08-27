@@ -1,0 +1,23 @@
+{
+  "cases": 100,
+  "chunk_size_histogram": {
+    "1": 9,
+    "16": 15,
+    "2": 6,
+    "3": 12,
+    "4": 12,
+    "5": 14,
+    "64": 11,
+    "8": 21
+  },
+  "claim_boundary": "Tiny float32 reference only; no kernel throughput or RTL claim.",
+  "evidence_class": "E0_executable_algorithmic_reference",
+  "max_output_abs_error": 2.086162567138672e-07,
+  "max_state_abs_error": 1.564621925354004e-07,
+  "schema_version": 1,
+  "seed": 3508,
+  "stage": "L8",
+  "status": "PASS",
+  "subgate": "Gated DeltaNet chunk-prefill E0",
+  "threshold": 5e-05
+}

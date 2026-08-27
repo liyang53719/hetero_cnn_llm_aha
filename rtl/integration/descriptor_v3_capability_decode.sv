@@ -1,0 +1,2 @@
+// SPDX-License-Identifier: Apache-2.0
+module descriptor_v3_capability_decode(input logic[7:0]record_type_i,output logic recognized_o,executable_o,output logic[7:0]status_o);always_comb begin recognized_o=1;executable_o=0;status_o=8'd4;case(record_type_i)8'h04,8'h32,8'h33,8'h34,8'h35:begin executable_o=1;status_o=0;end 8'h13,8'h14,8'h15,8'h16,8'h17,8'h18,8'h19:begin end default:recognized_o=0;endcase end endmodule

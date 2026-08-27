@@ -1,0 +1,41 @@
+{
+  "schema_version": 4,
+  "plan_version": "2026-08-27-v4",
+  "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
+  "canonical_stages": "local_agent/stages.yaml",
+  "ledger": "reports/execution/MASTER_LEDGER.json",
+  "next_action": "reports/execution/NEXT_ACTION.json",
+  "handoff": "reports/execution/HANDOFF.md",
+  "local_waitlist": "reports/execution/LOCAL_AGENT_WAITLIST.json",
+  "archspec": "configs/arch_v1.yaml",
+  "descriptor_schema": "spec/descriptor_schema.yaml",
+  "current_stage": "L5",
+  "current_subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
+  "current_state": "WAIT_LOCAL_AGENT_E1_PUSH",
+  "stage_namespace": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"],
+  "parallel_sandbox_progress": {
+    "L8_QWEN38_TEXT_E0": "PASS",
+    "L8_GDN_CHUNK_E0": "PASS"
+  },
+  "evidence_classes": {
+    "E0": "functional_algorithmic_compiler_reference",
+    "E1": "real_kernel_rtl_simulation",
+    "E2": "sampled_numerical_engine_integration",
+    "E3": "integrated_queue_dma_sram_ddr_cycle_execution",
+    "E4": "post_synthesis_timing_area_power"
+  },
+  "obsolete_paths": [
+    "reports/QWEN2_300_TPS_LONG_CONTEXT_PERFORMANCE_PLAN.md",
+    "reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md",
+    "scripts/sandbox_validate_v3.sh",
+    "scripts/validate_progress_v3.py"
+  ],
+  "claim_rules": [
+    "sandbox source readiness is not E1 RTL evidence",
+    "recognized descriptor policy is not an executable RTL backend",
+    "a tiny executable E0 model is not official-weight end-to-end inference",
+    "service-time replay is not full numerical RTL execution",
+    "performance claims require E3 workload execution and E4 timing closure",
+    "vision remains outside the current accelerator scope"
+  ]
+}

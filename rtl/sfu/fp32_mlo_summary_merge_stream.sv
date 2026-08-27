@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+module fp32_mlo_summary_merge_stream #(parameter integer LANES=4)(input logic clk_i,rst_ni,header_valid_i,output logic header_ready_o,input logic[31:0]ma_i,la_i,mb_i,lb_i,input logic beat_valid_i,output logic beat_ready_o,input logic[LANES*32-1:0]oa_i,ob_i,input logic beat_last_i,output logic header_valid_o,input logic header_ready_i,output logic[31:0]m_o,l_o,output logic beat_valid_o,input logic beat_ready_i,output logic[LANES*32-1:0]o_o,output logic beat_last_o);
+ typedef enum logic[1:0]{IDLE,COEFF,HEADER,BEATS}st_t;st_t st;logic ci,cr,co,ce;logic[31:0]m,l,a,b;logic bi,br,bo,bl;
+ assign ci=st==IDLE&&header_valid_i;assign header_ready_o=st==IDLE&&cr;assign ce=st==COEFF;fp32_mlo_merge_coeff c(.clk_i,.rst_ni,.in_valid_i(ci),.in_ready_o(cr),.ma_i,.la_i,.mb_i,.lb_i,.out_valid_o(co),.out_ready_i(ce),.m_o(m),.l_o(l),.alpha_o(a),.beta_o(b),.flags_o());
+ assign header_valid_o=st==HEADER;assign m_o=m;assign l_o=l;assign bi=st==BEATS&&beat_valid_i;assign beat_ready_o=st==BEATS&&br;fp32_mlo_merge_beat #(.LANES(LANES)) v(.clk_i,.rst_ni,.in_valid_i(bi),.in_ready_o(br),.alpha_i(a),.beta_i(b),.oa_i,.ob_i,.last_i(beat_last_i),.out_valid_o(bo),.out_ready_i(beat_ready_i),.o_o,.last_o(bl));assign beat_valid_o=bo;assign beat_last_o=bl;
+ always_ff@(posedge clk_i or negedge rst_ni)if(!rst_ni)st<=IDLE;else case(st)IDLE:if(ci&&cr)st<=COEFF;COEFF:if(co)st<=HEADER;HEADER:if(header_ready_i)st<=BEATS;BEATS:if(bo&&beat_ready_i&&bl)st<=IDLE;default:st<=IDLE;endcase
+endmodule

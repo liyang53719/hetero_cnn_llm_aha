@@ -1,0 +1,69 @@
+{
+  "schema_version": 2,
+  "marker": "WAIT_LOCAL_AGENT_PUSH",
+  "items": [
+    {
+      "id": "L4",
+      "dependency": "AHA/Garnet/Verilator/DC",
+      "action": "Generate the legal 4x4 ratio-2 sidecar and close depthwise/layout/quant plus CNN subset.",
+      "acceptance": ["mapper_pnr_pass", "verilator_zero_mismatch", "1GHz_early_dc"]
+    },
+    {
+      "id": "L5.1",
+      "dependency": "Verilator or VCS, generated FP primitives, CLN22UL DC",
+      "action": "Simulate all 132 Block128 vectors with random backpressure and run early DC.",
+      "acceptance": ["zero_mismatch", "no_loss_dup_reorder", "WNS>=0", "unmapped=0"]
+    },
+    {
+      "id": "L5.2-L5.6",
+      "dependency": "real 512-lane BF16 array, iDMA/DDR model, Qwen2 weights and DC",
+      "action": "Context interleave, blocked attention, SiLU DSE, overlap and 28-layer performance closure."
+    },
+    {
+      "id": "L7",
+      "dependency": "iDMA/AXI simulation, SRAM macros and RTL tools",
+      "action": "Implement page walker, 64-entry 4-way TLB, leaf cache, atomic refcount/COW and continuous batching."
+    },
+    {
+      "id": "L8.1",
+      "dependency": "Official Qwen3.8 model files and Transformers or llama.cpp runtime",
+      "action": "Emit immutable official-weight node traces for GDN, QSA, GR, PLE, MoE and MTP.",
+      "acceptance": ["model_revision_match", "per_node_hashes", "state_layout_manifest", "no_RTL_claim"]
+    },
+    {
+      "id": "L8.2",
+      "dependency": "Generated FP RTL, Matrix stream, SRAM and Verilator/VCS",
+      "action": "Implement GDN recurrent and chunk-prefill state engine using the committed E0 contract."
+    },
+    {
+      "id": "L8.3",
+      "dependency": "KV gather, top-k hardware, Matrix/SFU stream and RTL tools",
+      "action": "Implement QSA index cache, compressed-block top-k and sparse attention/output gate."
+    },
+    {
+      "id": "L8.4",
+      "dependency": "Matrix/SFU, host embedding transport, state SRAM and RTL tools",
+      "action": "Implement four-branch GR and PLE hash/lookup/prefetch/dilated-conv path."
+    },
+    {
+      "id": "L8.5",
+      "dependency": "Expert weight cache, grouped GEMM, runtime scheduler and RTL tools",
+      "action": "Implement routed/shared MoE and MTP state commit/rollback."
+    },
+    {
+      "id": "L8.6",
+      "dependency": "L8.1-L8.5 plus official weights",
+      "action": "Close one-block, four-layer and 48-layer text traces before performance claims."
+    },
+    {
+      "id": "L9",
+      "dependency": "Local llama.cpp build and GGUF models",
+      "action": "Automatic graph-pattern lowering, segment cache and CPU fallback."
+    },
+    {
+      "id": "L10",
+      "dependency": "LC/DC/CLN22UL/SRAM DB+LEF/SAIF",
+      "action": "Physical closure and power evidence."
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+schema_version: 1
+arch_id: heteronpu_v1_long_context
+status: canonical_planning_archspec
+clock:
+  target_hz: 1000000000
+  setup_uncertainty_ns: 0.08
+  io_budget_ns: 0.10
+command:
+  bits: 128
+  descriptor_schema: 3
+  event_id_bits: 16
+  address_bits: 64
+  cycle_counter_bits: 64
+memory:
+  total_sram_kib: 4096
+  owners:
+    shared_l2: {kib: 1536, logical_banks: 16, beat_bits: 512}
+    matrix_scratchpad: {kib: 768}
+    matrix_accumulator: {kib: 512, dtype: fp32_int32}
+    aha_lake_local: {kib: 256, tiles: 8, kib_per_tile: 32}
+    aha_wrapper_local: {kib: 256, beat_bits: 512}
+    kv_staging: {kib: 512}
+    control_trace: {kib: 256}
+  ddr:
+    aggregate_read_gbps_max: 100
+    aggregate_write_gbps_max: 40
+    interface_beat_bits: 512
+matrix:
+  bf16:
+    rows: 16
+    columns: 32
+    macs_per_step: 512
+    accumulation: fp32
+    first_context_point: 4
+    contexts_parameterized: true
+    active_utilization_min: 0.85
+    wall_utilization_min: 0.79
+  int8:
+    backend: retained_gemmini
+    dataflows: [output_stationary, weight_stationary]
+  quantization:
+    modes: [bf16, w8a8, w4_storage_w8_compute_g64, w4_storage_w8_compute_g128, native_w4a8_dual_dot]
+fixed_sfu:
+  operators: [rms_norm, rope, reduce_sum, reduce_max, exp2_pwl, reciprocal_nr, rsqrt_nr, online_softmax_update, online_softmax_merge, silu_times_up]
+  stream_bits: 512
+attention:
+  algorithm: universal_hierarchical_block
+  block_tokens: 128
+  query_tile: [16, 128]
+  key_value_microtile: [32, 128]
+  score_tile_dtype: fp32
+  score_tile_bytes: 2048
+  score_ddr_materialization: false
+aha_sidecar:
+  upstream_topology: {width: 4, height: 4, mem_ratio: 2, pe_tiles: 8, lake_tiles: 8}
+  wrapper_owned_sram_kib: 256
+  role: [depthwise, layout_transform, quant_dequant, irregular_vector, experimental_operator]
+  forbidden_role: [performance_critical_attention, rms_norm, online_softmax, silu]
+kv:
+  page_tokens: 16
+  page_table_levels: 2
+  radix_bits_per_level: 10
+  pte_bits: 128
+  tlb: {entries: 64, ways: 4}
+  leaf_cache_entries: 4
+  state: phased_implementation
+performance_gates:
+  qwen2_bf16_q1024_prefill_tps_min: 300
+  qwen2_bf16_q1024_cycles_max: 3413333333
+  quantized_prefill_tps_target: 500
+  decode_ctx4096_tps_min: 10
+  sram_kib_max: 4096
+  setup_wns_ns_min: 0.0
+software:
+  frontend: llama_cpp_ggml
+  lowering: graph_segment_descriptor_v3
+  capability_fallback_status: 4
+  compiled_segment_cache_key: [model_revision, graph_signature, shape, quantization, arch_id]

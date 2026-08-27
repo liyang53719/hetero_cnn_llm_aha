@@ -1,214 +1,60 @@
-version: 1
-project: hetero_cnn_llm_aha
-policy:
-  order: [reproduce_unchanged, wrapper_only, minimal_upstream_patch, clean_room_new_rtl]
-  forbid_vivado_as_asic_evidence: true
-  final_asic_flow: synopsys_dc_22nm
-  performance_claim_requires: [rtl_cycle_measurement, workload_definition, source_commit, tool_version]
-canonical_stage_mapping:
-  authority: reports/ARCHITECTURE_AND_EXECUTION_PLAN.md
-  reporting_rule: "The IDs below are detailed internal gates only; all user-facing progress is reported with the canonical L0-L11 stage."
-  L0: [L0]
-  L1: [L1, L2, L3, L4]
-  L2: [L5]
-  L3: [L6]
-  L4: [L7]
-  L5: [L8]
-  L6: [L9.w8a8, L9.w4_storage_w8_compute]
-  L7: [L10]
-  L8: [L9.native_w4a8_dual_dot]
-  L9: [L11]
-  L10: [L12]
-  L11: [L13]
+schema_version: 4
+canonical_namespace: [L0, L1, L2, L3, L4, L5, L6, L7, L8, L9, L10, L11]
 stages:
-  - id: L0
-    name: delivery_self_validation
-    depends_on: []
-    commands:
-      - taskset -c 8-23 ./scripts/sandbox_validate.sh
-    required_artifacts:
-      - reports/final_validation.json
-      - reports/architecture_results.json
-      - reports/rtl_static_check.json
-      - reports/cpp_reference_smoke.json
-      - reports/randomized_reference_sweep.json
-    acceptance:
-      - python_tests_passed_gte_27
-      - cnn_max_abs_error_eq_0
-      - bf16_paged_kv_llm_max_abs_error_eq_0
-      - cpp_reference_pass
-      - rtl_structural_pass
-      - randomized_reference_sweep_pass
-      - sram_partition_sum_eq_4096_KiB
-
-  - id: L1
-    name: upstream_clone_lock_license
-    depends_on: [L0]
-    commands:
-      - taskset -c 8-23 ./scripts/clone_upstreams.sh work/upstream
-    required_artifacts:
-      - work/upstream/UPSTREAM_LOCK.json
-      - work/results/licenses/license_matrix.csv
-    acceptance:
-      - all_repositories_have_commit_hash
-      - all_recursive_submodules_initialized
-      - all_upstream_worktrees_clean
-      - licenses_reviewed
-
-  - id: L2
-    name: gemmini_unmodified_baseline
-    depends_on: [L1]
-    commands:
-      - taskset -c 8-23 env CHIPYARD_ROOT=work/upstream/chipyard RUN_SETUP=1 OUT=work/results/gemmini_baseline ./scripts/reproduce_gemmini.sh
-    required_artifacts:
-      - work/results/gemmini_baseline/result.json
-      - work/results/gemmini_baseline/generated_rtl.sha256
-      - work/results/gemmini_baseline/verilator_mvin.log
-      - work/results/gemmini_baseline/verilator_matmul.log
-    acceptance:
-      - spike_mvin_pass
-      - spike_matmul_pass
-      - spike_cnn_pass
-      - verilator_mvin_pass
-      - verilator_matmul_pass
-      - generated_rtl_nonempty
-      - upstream_tree_clean
-
-  - id: L3
-    name: aha_unmodified_baseline
-    depends_on: [L1]
-    commands:
-      - taskset -c 8-23 env AHA_ROOT=work/upstream/aha OUT=work/results/aha_baseline TOOL=VERILATOR ./scripts/reproduce_aha.sh
-    required_artifacts:
-      - work/results/aha_baseline/result.json
-      - work/results/aha_baseline/garnet_rtl.sha256
-      - work/results/aha_baseline/gaussian_test.log
-    acceptance:
-      - garnet_generate_pass
-      - gaussian_map_pass
-      - gaussian_pnr_pass
-      - gaussian_verilator_test_pass
-      - upstream_and_submodules_locked
-
+  - {id: L0, name: control_provenance_sandbox, status: PASS}
+  - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
+  - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
+  - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
   - id: L4
-    name: transport_and_imax_baselines
-    depends_on: [L1]
-    commands:
-      - taskset -c 8-23 env IDMA_ROOT=work/upstream/idma OUT=work/results/idma_baseline ./scripts/reproduce_idma.sh
-      - taskset -c 8-23 env IMAX_ROOT=work/upstream/imax3_llm OUT=work/results/imax3_audit RUN_BUILD=1 ./scripts/audit_imax3.sh
-    acceptance:
-      - idma_dependencies_resolved
-      - idma_source_list_generated
-      - imax_kernel_inventory_generated
-      - only_available_source_marked_reusable
-
+    name: cnn_and_aha_sidecar
+    status: WAIT_LOCAL_AGENT_E1_E4_PUSH
+    local_dependencies: [AHA_Docker, Garnet_mapper_PnR, Verilator, CLN22UL_DC]
+    acceptance: [legal_4x4_ratio2, depthwise_layout_quant_pass, cnn_subset_pass, early_dc_pass]
   - id: L5
-    name: wrapper_only_macro_integration
-    depends_on: [L2, L3, L4]
-    work_products:
-      - matrix_command_stream_event_adapter
-      - aha_tensor_stream_event_adapter
-      - kv_idma_basic_adapter
-    acceptance:
-      - no_upstream_source_modification
-      - matrix_official_vs_adapter_output_trace_equal
-      - aha_official_vs_wrapper_gaussian_equal
-      - randomized_ready_valid_no_loss_duplication_deadlock
-      - kv_append_read_free_matches_python
-
-  - id: L6
-    name: shared_fabric_event_scoreboard
-    depends_on: [L5]
-    acceptance:
-      - shared_l2_16_banks
-      - two_read_one_write_dma_clients
-      - direct_matrix_sfu_and_matrix_kv_streams
-      - random_transactions_gte_10000
-      - protocol_assertions_eq_0
-      - scoreboard_mismatches_eq_0
-      - timeouts_eq_0
-
+    name: qwen2_bf16_long_context_300tps
+    status: IN_PROGRESS
+    subgates:
+      L5.1:
+        status: SANDBOX_SOURCE_READY_WAIT_LOCAL_AGENT_E1_E4_PUSH
+        scope: Block128_MLO_merge
+        acceptance: [132_vectors_zero_mismatch, random_backpressure_pass, early_dc_1GHz]
+      L5.2:
+        status: SANDBOX_PROTOCOL_READY_WAIT_LOCAL_AGENT_E1_E4_PUSH
+        scope: Matrix_context_interleave
+        acceptance: [lane_local_context_bank, 1M_dependent_steps, II1, early_dc_1GHz]
+      L5.3: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: blocked_QK_softmax_PV}
+      L5.4: {status: WAIT_LOCAL_AGENT_E1_E4_PUSH, scope: pipelined_SiLU_times_up_DSE}
+      L5.5: {status: WAIT_LOCAL_AGENT_E3_PUSH, scope: queue_DMA_DDR_overlap}
+      L5.6: {status: WAIT_LOCAL_AGENT_E2_E3_E4_PUSH, scope: 28_layer_q1024_300tps}
+  - {id: L6, name: W8_W4_KV_INT8, status: PLANNED}
   - id: L7
-    name: cnn_functional_closure
-    depends_on: [L6]
-    workloads: [gemm, conv1x1, conv3x3, depthwise, pooling, residual, resnet50_subset, mobilenet_v2_subset]
-    acceptance:
-      - integer_operators_bit_exact
-      - bf16_errors_within_prefrozen_contract
-      - all_layout_and_quant_parameters_logged
-      - cycle_and_memory_metrics_recorded
-
+    name: production_paged_kv
+    status: SANDBOX_E0_READY_WAIT_LOCAL_AGENT_E1_E3_PUSH
+    sandbox_completed: [two_level_reference, prefix_share, partial_tail_copy, COW, generation_check, 1M_address_analysis]
+    local_dependencies: [iDMA_AXI_simulation, page_walker_RTL, TLB_leaf_cache_RTL, SRAM_macros]
   - id: L8
-    name: bf16_llm_single_block
-    depends_on: [L6]
-    workloads: [toy, hidden256, target_shape_q128, target_shape_q384, decode_ctx128, decode_ctx1024, decode_ctx4096]
-    acceptance:
-      - no_full_score_matrix_external_write
-      - online_softmax_M_L_O_fp32
-      - k_v_written_after_rope
-      - gqa_mapping_pass
-      - per_node_error_contract_pass
-      - no_timeout
-
-  - id: L9
-    name: quantization_modes
-    depends_on: [L7, L8]
-    modes: [w8a8, w4_storage_w8_compute_g64, w4_storage_w8_compute_g128, native_w4a8_dual_dot, kv_int8]
-    acceptance:
-      - w8a8_bit_exact
-      - storage_only_w4_not_claimed_as_double_compute
-      - native_w4_exhaustive_nibble_test
-      - native_w4_random_gemm_pass
-      - kv_int8_long_context_error_contract_pass
-
-  - id: L10
-    name: advanced_paged_kv
-    depends_on: [L8]
-    acceptance:
-      - two_level_page_table
-      - paged_gather_coalescing
-      - prefix_share_refcount_cow
-      - sliding_window_and_generation_id
-      - random_commands_gte_100000
-      - page_accounting_invariants_pass
-      - refcount_leaks_eq_0
-      - stale_reads_eq_0
-
-  - id: L11
-    name: integrated_rtl_model_regression
-    depends_on: [L9, L10]
-    acceptance:
-      - pytorch_or_llama_cpp_to_rtl_trace_pass
-      - q128_prefill_pass
-      - q384_prefill_pass
-      - decode_context4096_pass
-      - continuous_request_case_pass
-      - functional_and_cycle_results_labeled_separately
-
-  - id: L12
-    name: dc_22nm_synthesis_sta
-    depends_on: [L11]
-    commands:
-      - taskset -c 8-23 env STD_CELL_DBS=<22nm_db_list> CLOCK_PERIOD_NS=1.0 ./scripts/run_dc22.sh
-    acceptance:
-      - unresolved_references_eq_0
-      - unmapped_cells_eq_0
-      - unintended_latches_eq_0
-      - inferred_multimegabyte_flop_memories_eq_0
-      - all_sram_macros_linked
-      - setup_wns_ns_gte_0
-      - hierarchical_area_power_timing_reports_present
-
-  - id: L13
-    name: architecture_sweep_final_targets
-    depends_on: [L12]
-    points: [gemmini_16x16, cluster_4x16x16, matrix_32x32, logical_32x64, native_rectangular_32x64]
-    acceptance:
-      - fixed_process_clock_memory_workload_quant_compiler
-      - pareto_report_present
-      - prefill_q384_token_s_gte_500
-      - decode_token_s_gte_10
-      - external_read_bandwidth_GBps_lte_100
-      - total_sram_KiB_lte_4096
-      - all_numerical_regressions_pass
-      - dc_1GHz_setup_closed
+    name: qwen35_qwen38_hybrid_text
+    status: SANDBOX_EXECUTABLE_TEXT_E0_PASS_WAIT_LOCAL_AGENT_E1_E2_PUSH
+    sandbox_completed:
+      - qwen38_stateful_tiny_text_prefill_decode_exact
+      - GDN_recurrent
+      - GDN_chunk_prefill_100_random_cases
+      - causal_conv
+      - QSA_indexer_sparse_attention_output_gate
+      - four_branch_gated_residual
+      - PLE_hash_lookup_dilated_conv
+      - routed_and_shared_MoE_execution
+      - MTP_transaction_commit_rollback
+      - hardware_micro_op_schedule
+      - descriptor_0x13_to_0x19
+    subgates:
+      L8.1: {status: WAIT_LOCAL_AGENT_PUSH, scope: official_weight_node_trace}
+      L8.2: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: GDN_backend}
+      L8.3: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: QSA_backend}
+      L8.4: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: GR_PLE_backend}
+      L8.5: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: MoE_MTP_backend}
+      L8.6: {status: WAIT_LOCAL_AGENT_E2_E3_E4_PUSH, scope: official_text_closure}
+    excluded: [vision_encoder]
+  - {id: L9, name: llama_cpp_backend, status: WAIT_LOCAL_AGENT_PUSH}
+  - {id: L10, name: physical_closure, status: WAIT_LOCAL_AGENT_PUSH}
+  - {id: L11, name: architecture_sweep_signoff, status: PLANNED}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 4,
+  "status": "PASS",
+  "canonical_stage_namespace": "L0-L11",
+  "current_stage": "L5",
+  "current_subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
+  "parallel_sandbox_gate": "L8_QWEN38_TEXT_E0_PASS",
+  "obsolete_plan_files_present": 0,
+  "authority_chain": [
+    "config/control_plane.json",
+    "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
+    "local_agent/stages.yaml",
+    "reports/execution/MASTER_LEDGER.json",
+    "reports/execution/NEXT_ACTION.json",
+    "reports/execution/HANDOFF.md"
+  ]
+}

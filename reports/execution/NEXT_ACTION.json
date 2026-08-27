@@ -1,16 +1,26 @@
 {
-  "phase": "L5_Q384_PREFILL",
-  "command": "BLOCKED_DECISION: after user approval, add sibling fp32_online_softmax_merge128 without modifying the accepted legacy token-update module. Select it only at128-token block boundaries for sequence lengths above384 in the same runtime controller; verify43008 q1024 merges, no score storage, <=0.002 error, and unchanged q128/q384 hashes.",
-  "fixed_order": [
-    "q128 shape and causal-operation manifest",
-    "q128 synthesizable trace controller",
-    "q128 RMSNorm/QKV payload batches",
-    "q128 split-half RoPE and post-RoPE GQA",
-    "q128 streamed causal M/L/O and O/L",
-    "q128 OProj/residual/norm2",
-    "q128 gate/up/SiLU/product/down/final",
-    "q128 receipt aggregate"
+  "schema_version": 4,
+  "state": "WAIT_LOCAL_AGENT_E1_PUSH",
+  "stage": "L5",
+  "subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
+  "objective": "Run the committed Block128 M/L/O merge RTL against all 132 vectors, random backpressure and early 1GHz DC.",
+  "dependencies": [
+    "Verilator_5.028_or_VCS",
+    "generated_HeteroFP32Alu",
+    "fp32_exp2_pwl",
+    "Synopsys_DC_CLN22UL"
   ],
-  "success_condition": "The approved same-binary hierarchical mode passes the frozen0.002 threshold and all operation-order/hash/counter checks while q128/q384 legacy receipts remain unchanged.",
-  "failure_policy": "Do not relax0.002, claim the1024-segment PWL candidate passed, compile q1024-specific RTL, materialize scores, or continue to OProj before this decision and numerical gate close."
+  "acceptance": {
+    "vector_mismatches": 0,
+    "random_backpressure": "PASS",
+    "unmapped": 0,
+    "unresolved": 0,
+    "setup_wns_ns_min": 0.0
+  },
+  "parallel_allowed": {
+    "stage": "L8.1",
+    "objective": "Generate official Qwen3.8 text node traces without changing hardware support claims.",
+    "dependencies": ["official_weights", "Transformers_or_llama_cpp_runtime"]
+  },
+  "on_success": "L5.2_REAL_512_LANE_CONTEXT_INTEGRATION"
 }

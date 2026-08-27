@@ -1,0 +1,83 @@
+{
+  "profile_schema": 3,
+  "requested_name": "Qwen3.5-35B-A3B",
+  "model_id": "Qwen/Qwen3.5-35B-A3B",
+  "revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+  "source_status": "official_config_revision_frozen",
+  "hidden_size": 2048,
+  "vocab_size": 248320,
+  "num_hidden_layers": 40,
+  "layer_pattern": [
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention"
+  ],
+  "context_length": 262144,
+  "full_attention": {
+    "q_heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "rotary_dim": 64,
+    "block_tokens": 128
+  },
+  "gated_deltanet": {
+    "qk_heads": 16,
+    "v_heads": 32,
+    "key_dim": 128,
+    "value_dim": 128,
+    "conv_kernel": 4,
+    "chunk_size": 64
+  },
+  "moe": {
+    "num_experts": 256,
+    "top_k": 8,
+    "shared_experts": 1,
+    "intermediate_size": 512
+  },
+  "mtp": {
+    "layers": 1,
+    "prediction_steps": 1
+  },
+  "vision_encoder": {
+    "present": true,
+    "support": "unsupported"
+  },
+  "claim_boundary": "E0/compiler only"
+}

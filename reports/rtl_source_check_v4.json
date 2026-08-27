@@ -1,0 +1,20 @@
+{
+  "errors": [],
+  "evidence_class": "source_structural_not_compiler",
+  "module_count": 11,
+  "modules": [
+    "rv_fifo",
+    "hetero_npu_shell",
+    "command_dispatch",
+    "fp32_mlo_summary_merge_stream",
+    "fp32_mlo_merge_coeff",
+    "cgra_sfu_vector",
+    "fp32_mlo_merge_beat",
+    "matrix_context_scoreboard",
+    "matrix_engine_int8_tile",
+    "descriptor_v3_capability_decode",
+    "kv_cache_engine"
+  ],
+  "schema_version": 4,
+  "status": "PASS"
+}

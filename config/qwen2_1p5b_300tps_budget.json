@@ -1,0 +1,46 @@
+{
+  "schema_version": 2,
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "workload": {
+    "batch": 1,
+    "sequence": 1024,
+    "layers": 28,
+    "lm_head_tokens": 1
+  },
+  "clock_hz": 1000000000,
+  "hard_gate": {
+    "tokens_per_second_min": 300.0,
+    "integrated_cycles_max": 3413333333
+  },
+  "engineering_target": {
+    "integrated_cycles_max": 3200000000,
+    "wall_mac_utilization_min": 0.8
+  },
+  "compute": {
+    "linear_macs": 1341640409088,
+    "attention_qk_pv_macs": 45141196800,
+    "last_token_lm_head_macs": 233373696,
+    "useful_macs_total": 1387014979584,
+    "physical_macs_per_cycle": 512,
+    "ideal_cycles": 2709013632,
+    "hard_gate_wall_mac_utilization": 0.7936563375775055
+  },
+  "utilization_gates": {
+    "matrix_active_utilization_min": 0.85,
+    "wall_mac_utilization_hard_min": 0.79,
+    "wall_mac_utilization_engineering_min": 0.8
+  },
+  "memory_gates": {
+    "sram_bytes_max": 4194304,
+    "ddr_read_bytes_per_second_max": 100000000000,
+    "ddr_write_bytes_per_second_max": 40000000000,
+    "weight_fetches_per_layer_per_request_max": 1
+  },
+  "evidence_required": [
+    "E1_service_curves",
+    "E2_sampled_numerical",
+    "E3_integrated_cycle",
+    "E4_sta"
+  ]
+}

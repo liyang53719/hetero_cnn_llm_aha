@@ -1,0 +1,144 @@
+{
+  "profile_schema": 3,
+  "requested_name": "Qwen3.8-Flash-Next",
+  "model_id": "Qwen/Qwen3.8-Flash-Next",
+  "revision": "34567a4712bc9766c4449e2e98e4468bfa24d915",
+  "source_status": "official_config_revision_frozen",
+  "hidden_size": 2560,
+  "vocab_size": 248320,
+  "num_hidden_layers": 48,
+  "layer_pattern": [
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention",
+    "linear_attention",
+    "linear_attention",
+    "linear_attention",
+    "qwen_sparse_attention"
+  ],
+  "context_length": 262144,
+  "full_attention": {
+    "q_heads": 24,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "rotary_dim": 64,
+    "block_tokens": 128
+  },
+  "qsa": {
+    "index_q_heads": 4,
+    "index_kv_heads": 1,
+    "index_head_dim": 128,
+    "token_budget": 2048,
+    "compress_ratio": 4
+  },
+  "gated_deltanet": {
+    "qk_heads": 16,
+    "v_heads": 48,
+    "key_dim": 128,
+    "value_dim": 128,
+    "conv_kernel": 4,
+    "chunk_size": 64
+  },
+  "moe": {
+    "num_experts": 512,
+    "top_k": 10,
+    "shared_experts": 1,
+    "intermediate_size": 640
+  },
+  "gated_residual": {
+    "branches": 4,
+    "lowrank": 320
+  },
+  "ple": {
+    "layer_ids": [
+      2
+    ],
+    "ngram_size": 3,
+    "heads_per_ngram": 8,
+    "embed_dim": 2560,
+    "conv_kernel": 4,
+    "conv_dilation": 3
+  },
+  "mtp": {
+    "layers": 1,
+    "prediction_steps": 1
+  },
+  "vision_encoder": {
+    "present": true,
+    "support": "unsupported"
+  },
+  "claim_boundary": "Text-only executable tiny E0 plus compiler schedule; official-weight node trace and RTL backends remain local-agent gates.",
+  "architecture_repo": {
+    "repository": "QwenLM/Qwen3.8-Flash-Next",
+    "commit": "513aa6e18a335296fc13e538232a8735b230877d"
+  },
+  "transformers_source": {
+    "repository": "huggingface/transformers",
+    "commit": "36deb0b53ed0863f4b4dfdea23dcaec7f3df3701",
+    "module": "src/transformers/models/qwen4_exp/modeling_qwen4_exp.py"
+  },
+  "sandbox_execution": {
+    "text_tiny_e0": "PASS",
+    "evidence": "reports/execution/qwen38_text_e0_result.json",
+    "covered": [
+      "gated_residual",
+      "ple_ngram_hash_lookup",
+      "ple_dilated_depthwise_conv",
+      "gated_deltanet_recurrent",
+      "qsa_indexer",
+      "sparse_attention",
+      "attention_output_gate",
+      "moe_routed_experts",
+      "shared_expert",
+      "mtp_transaction"
+    ],
+    "excluded": [
+      "official_weights",
+      "vision_encoder",
+      "rtl_backend",
+      "performance",
+      "ppa"
+    ]
+  }
+}

@@ -1,86 +1,33 @@
-# L11 execution handoff
+# Local-agent handoff v4
 
-- Canonical plans: `reports/ARCHITECTURE_AND_EXECUTION_PLAN.md` and `reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md`.
-- Gates: L0-L3 PASS; L4 BLOCKED_DEPENDENCY at production 4x4/16-Lake topology; L5 now active independently.
-- L2: Descriptor/ISA v2, Gemmini OS/WS/Conv/bias/requant production path, AHA Gaussian wrapper, and KV/iDMA basic path are closed by `gate/L2-pass` (`abe2c70`).
-- L3 Shared-L2: 16 real ARM macros, 4 logical reads to 2R, 2 logical writes to 1W, descriptor promotion, byte enables and 100k+ contention tests PASS.
-- L3 control: command FIFO 16, completion FIFO 16 and real 4096x128 event SRAM pass 100k commands; error completion never releases a wait event.
-- L3 streams: four skid channels and gateway pass 100k; four emitted pinned upstream `ScratchpadBank(4096x128)` instances then pass a second 100k through real write/read/fromDMA queues and ExtMemIO. Hash `c65a53d9...`, upstream clean.
-- L3 AHA/KV endpoints: channels 0/1 use exact 8x64-bit proc-packet writes/reads and post-final-packet EOS; channels 2/3 use external 512-bit KV staging requests. Mixed 100k PASS, strict `-Wall` clean.
-- L3 completion: 7-input round-robin merge (6 engines + watchdog) saturated 100k PASS with no starvation; Event ID 0 no longer writes real SRAM and original event 100k re-PASSed.
-- L3 canonical top exists and strict-lint passes. Real-SRAM command fabric passes 100,003 commands; composed stream complex passes 100k transfers/150k Matrix completions.
-- L3 CLOSED: canonical-top concurrent gate passes 100,003 commands, 100,002 L2 transactions and 10,000 stream operations; six engines/all clients/all channels progress, zero errors.
-- Failed route retired: full-chip direct-extmem firtool exceeded the project 10 GiB cap once and later hit a CIRCT `SmallVector` fault. Do not retry or raise the cap.
-- Next: begin L4 with pinned torchvision/weights audit, INT8 GEMM then 1x1/3x3 Conv numerical-to-RTL cases; production 4x4 AHA/Lake depthwise remains a mandatory later L4 dependency.
-- L4 dependency lock PASS: Python 3.12.7, torch 2.9.1+cu128, torchvision 0.24.1+cu128, ResNet50/MobileNetV2 V2 weights full SHA256 verified. Current subgate: INT8 GEMM.
-- L4 INT8 GEMM CLOSED: canonical trace 87 cycles, 2368 physical DMA bytes, 5 conflicts, 3/2 stalls, 1 descriptor promotion; payload/trace scopes remain separate.
-- L4 1x1 Conv CLOSED: 64 outputs exact, 514 payload cycles, 17 canonical trace cycles, 256 physical bytes, 4 conflicts.
-- L4 3x3 Conv identity CLOSED: 100 outputs exact, 847 payload cycles, 20 canonical trace cycles, 448 physical bytes, 4 conflicts.
-- L4 bias/requant/ReLU CLOSED: 100 RNE+ReLU outputs exact, 837 payload cycles, 20 canonical trace cycles, 4 conflicts.
-- L4 pool/residual CLOSED: canonical dedicated endpoint 10k PASS; pool 6 cycles/128 physical bytes, residual 7 cycles/192 bytes, 3 conflicts each. Next: production 4x4 AHA/Lake depthwise.
-- L4 topology blocker: pinned 4x4 ratio1 gives 16 Lake/0 PE; ratio2 gives 8/8; ratio4 gives 4/12. No legal 16-Lake compute topology; no 4x16 fallback.
-- L5 BF16 lane PASS: HardFloat FMA 10k vectors bit-exact, invalid flag checked, RTL hash `69a816...`.
-- L5 BF16 array CLOSED: independent logical 16x32, 512 HardFloat FMA lanes, 4-step accumulation exact, 8-cycle burst interval1, FNV64 `7da144...`.
-- L5 FP32 add/mul/reduction CLOSED: 10k ALU + 10k reduce vectors exact, reduction interval1, FNV64 `eb1a...`.
-- L5 RoPE CLOSED: 10k FP32 operation-order vectors exact, interval1, FNV64 `69a2...`.
-- L5 exp2 CLOSED: 10k RTL vectors, interval1, FNV64 `471eda...`; dense max abs/rel remain `2.29601e-4/2.35418e-4`.
-- L5 reciprocal CLOSED: 16-segment+1 Newton, 10k exact model vectors, max relative `9.194e-7`, interval1.
-- L5 rsqrt CLOSED: 32 segments+1 Newton, 10k exact model vectors, max relative `2.393e-7`, interval1.
-- L5 online softmax CLOSED: 10k M/L/O updates, 4.975 cycles/token, no score matrix, max normalized error `1.751e-4`.
-- L5 RMSNorm/SiLU CLOSED: RMSNorm max abs `6.77e-7`, SiLU `1.685e-4`, 10k each. Heterogeneous SFU primitives complete; next toy BF16 block.
-- L5 joint HardFloat emission PASS: BF16+FP32 generated hash `94d853...`, BF16 array/RMSNorm coexistence verified.
-- L5 toy hidden16 CLOSED: 18 nodes exact, 904 total/512 Matrix/364 SFU cycles, final FNV64 `e85158...`, no score matrix.
-- L5 hidden256 GEMV PASS: 256x256 on 8 column tiles, 2048 steps, 8601 cycles, FNV64 `a2406e...`.
-- L5 hidden256 global RMSNorm PASS: one 16-lane tile reused over 16 chunks, 1000x256 outputs exact, 69998 cycles, FNV64 `b99430...`; reduction 10k re-PASSed.
-- L5 dot64 PASS: 16 physical lanes reused across 4 chunks, 10k exact, FNV64 `a8cdc6...`.
-- L5 complete hidden256 block PASS: 2-token streamed attention, 4x64 heads, MLP512, 22 nodes exact, 24576 array steps, 104902 total/98304 Matrix/6598 SFU cycles, FNV64 `92aa1c...`.
-- L5 Qwen target lock PASS: exact revision config SHA `a58e896d...`; hidden1536/intermediate8960, 12Q/2KV heads, D128, QKV bias, GQA groups6. Two-token target needs 1486848 array steps; 5947392 cycles is projection only, not measured. Next: target-shape payload/controller segmentation.
-- L5 target dot128 PASS: eight 16-lane chunks, pinned scale `0x3db504f3`, 10k exact, 262500 cycles, FNV64 `2da983...`. Next: QKV bias plus six-way GQA mapping RTL gate.
-- L5 target QKV bias/GQA PASS: 16-lane endpoint, 10000 inputs/43000 outputs/100 illegal, six-way multicast, tags/last/backpressure exact, 60465 cycles, FNV64 `adbdd9...`. Next: global RMSNorm1536 and first target segment.
-- L5 RMSNorm1536 PASS after resource recovery: 96 chunks, 1000x1536 outputs exact, 389998 cycles (288000 reduction/3000 rsqrt/96000 output), FNV64 `75e7b0...`, max abs `8.839e-7`, no OOM. Next: restartable target RMSNorm/QKV segment.
-- L5 target RMSNorm/QKV segment PASS: two tokens, 16 nodes exact, 122880 measured array steps, 493100 total/491520 Matrix/780 RMS/800 QKV cycles. Biased Q/K/V hashes `480793d5...`/`7d81d5a9...`/`f8c257ca...`. Unrotated `k_gqa` is diagnostic only; next must do Q/K RoPE before K multicast.
-- L5 target split-half RoPE/GQA PASS: D128 lane i pairs with i+64, theta1e6, 1024 pairs and 32->192 post-RoPE K multicast exact; 4392 cycles. Q-RoPE/K-RoPE-GQA hashes `da6332ce...`/`ced3130a...`. Next: streamed target M/L/O and explicit O/L.
-- L5 target streamed M/L/O PASS: 12 heads x2 tokens, no score matrix, final M/L/O+attention exact; 900 cycles (648 dot/108 online/48 reciprocal/96 normalize), attention hash `86c06c97...`, max true-softmax error `3.111e-4`. Next: OProj and first residual.
-- L5 target OProj/residual PASS: full 1536x1536, 73728 measured array steps, 295008 total/294912 Matrix/96 residual cycles; residual1 hash `df2d5af8...`. Next: post-attention RMSNorm1536.
-- L5 target norm2 PASS: global 96-chunk RMSNorm1536, all outputs exact, 390 cycles; norm2 hash `bb884b81...`. Next: complete 1536x8960 gate/up projections.
-- L5 target gate/up PASS: two complete 1536x8960 projections, each 430080 measured steps/1720320 cycles; output hashes `ec204a74...`/`581709c8...`. Next: SiLU and gate-times-up.
-- L5 target SiLU/product PASS: 8960 scalar lanes +560 16-lane chunks exact, 81200 cycles, product hash `5076748a...`, max SiLU error `5.294e-5`. Next: full 8960x1536 down and final residual.
-- L5 target down/final PASS: full 8960x1536, 430080 measured steps/1720416 cycles, final hash `872ffcab...`.
-- L5 target segmented payload PASS: hash chain complete, 1486848 measured array steps, 5947392 Matrix and 6036046 segmented total cycles, no score matrix.
-- L5 target trace PASS: synthesizable 23-command controller reproduces 1486848 steps/6036046 busy cycles, wall6036094, zero score-matrix commands, command FNV `8f1e56...`.
-- L5 TARGET SHAPE CLOSED: segmented numerical payload + separate controller trace, final hash `872ffcab...`. L5 remains IN_PROGRESS; next q128, then q384 and decode128/1024/4096.
-- L5 q128 contract PASS: batch1/seq128, 8 physical row batches, 11698176 Matrix steps, 99072 causal dot/online updates, no score matrix; cycle fields intentionally null. Next: q128 operation-count controller.
-- L5 q128 count controller PASS: 24 commands and all contract counts exact, score-matrix commands0, command FNV `c3b677...`; measured-latency-valid remains0. Next: numerical QKV row batch0, then batches1-7.
-- L5 q128 QKV batch0 PASS: tokens0-15, all16 rows active, 98304 measured steps, 401504 total/393216 Matrix/6240 RMS/2048 bias cycles; Q/K/V hashes `002082a1...`/`a7f3acfa...`/`42d0886d...`. Next: parameterize same binary and run batches1-7.
-- L5 q128 QKV ALL PASS: batches0-7 on one binary, 786432 measured steps, 3212032 total/3145728 Matrix/49920 RMS/16384 bias cycles; concatenated Q/K/V hashes `90e5f377...`/`59a0989d...`/`6f12dcc1...`. Next: q128 split-half RoPE and K/V GQA.
-- L5 q128 RoPE/GQA PASS: 114688 split-half pairs, 4096->24576 K/V multicast, 491520 cycles; Q/K/V hashes `1e259f27...`/`499da9e0...`/`5c3169a4...`. Next: 99072 causal streamed M/L/O updates, no score matrix.
-- L5 q128 causal M/L/O PASS: 99072 updates, no score matrix, 3283200 cycles, attention hash `b72c3a34...`, max true-softmax error `6.409e-4`. Next: OProj/residual/norm2 in eight 16-token batches.
-- L5 q128 OProj/residual/norm2 ALL PASS: 8x16-token batches, 589824 measured steps, 2421504 total/2359296 Matrix/12288 residual/49920 norm2 cycles; norm2 hash `4f1d6a10...`. Next: q128 gate/up batches.
-- L5 q128 gate/up batch0 PASS: tokens0-15, exact4-thread fmaf golden, each projection430080 steps/1720320 cycles; gate/up hashes `3f93989b...`/`836b4d07...`. Next: same binary batches1-7.
-- L5 q128 gate/up ALL PASS: 8 batches,6881280 measured steps/27525120 cycles, concatenated hashes `6a2d13e4...`/`4852e5bc...`; Verilator threads4 batch0 hash-equivalent to single-thread. Next: q128 SiLU/product.
-- L5 q128 SiLU/product PASS:1146880 scalar lanes+71680 chunks exact,10393600 cycles, product hash `661f4f57...`, max error `5.320e-5`; completed under CPU8-23/30GiB cap. Next: down/final batches.
-- L5 q128 down/final ALL PASS:3440640 measured steps/13774848 cycles, final hash `39bb6930...`.
-- L5 q128 trace PASS:24 commands,11698176 steps,61101824 busy/61101874 wall cycles, score commands0.
-- L5 Q128 CLOSED: complete numerical hash chain + separate controller trace, no score matrix. L5 remains IN_PROGRESS for q384 and decode128/1024/4096.
-- L5 q384 contract PASS:24 row batches,35094528 Matrix steps,887040 causal updates, no score matrix; cycle fields null. Next:q384 operation-count controller.
-- L5 q384 count controller PASS:24 commands, all contract counts exact, score commands0, latency-valid0, command FNV `847780...`. Next:q384 QKV batches0-23.
-- L5 q384 QKV ALL PASS:24x16-token batches,2359296 measured steps/9636096 cycles; Q/K/V hashes `a5d2e31e...`/`69a7f29c...`/`71db3e37...`; q128 compatibility re-PASSed. Next:q384 RoPE/GQA.
-- L5 unified RTL PASS: q128/q384 QKV share binary SHA `363082ed...`; unified runtime sequence controller binary SHA `5972ba4d...` passes128+384 in one sim and rejects256. Old split controllers are historical only.
-- L5 q384 RoPE/GQA PASS on same q128/q384 binary SHA `deaaede1...`:344064 pairs,73728 outputs,1474560 cycles; q128 compatibility re-PASSed. Next:q384 causal M/L/O.
-- L5 q384 causal M/L/O PASS on same binary SHA `3024a1e6...`:887040 updates,29313792 cycles, attention hash `901a32a4...`, max error `7.235e-4`; q128 compatibility re-PASSed. Next:q384 OProj/residual/norm2 batches.
-- L5 q384 OProj/residual/norm2 ALL PASS on same binary SHA `61d09d58...`:1769472 steps/7264512 cycles, norm2 hash `8f5aff5b...`; q128 compatibility re-PASSed. Next:q384 gate/up.
-- L5 q384 gate/up ALL PASS on same q128/q384 binary SHA `44be7241...`: 48 phases, 20643840 steps/82575360 cycles; gate/up hashes `59f1899f...`/`3a4b0dba...`, zero OOM. Next: q384 SiLU/product on one runtime binary.
-- L5 q384 SiLU/product PASS on same q128/q384 binary SHA `7e651ef9...`:3440640 scalars+215040 chunks,31180800 cycles, product hash `8e2484ec...`; q128 compatibility PASS. Next:q384 down/final24 batches.
-- L5 q384 down/final ALL PASS on same q128/q384 binary SHA `c1b36373...`:10321920 steps/41324544 cycles, final hash `bff9f576...`; q128 compatibility PASS. Next: unified q128/q384 measured trace.
-- L5 unified q128/q384 measured trace PASS on one binary:61101824/202769664 active cycles, zero score commands; q384 closes at1893.77 token/s/block and final hash `bff9f576...`. Next:q1024 on the same runtime RTL, then decode.
-- L5 q1024 contract/count PASS: same 11-bit runtime controller binary accepts128/384/1024, q1024=64 row batches/93585408 Matrix steps/6297600 causal updates; measured cycles remain null. Next:q1024 QKV64 batches on same datapath binary.
-- L5 q1024 QKV ALL PASS on same q128/q384/q1024 binary SHA `8f9a561e...`:64 batches,6291456 steps/25696256 cycles; Q/K/V hashes `4e67c4cc...`/`7a1daa90...`/`1853b21c...`. Next:q1024 RoPE/GQA.
-- L5 q1024 RoPE/GQA PASS on same three-length binary SHA `53558f8b...`:917504 pairs/196608 outputs/3932160 cycles; Q/K/KGQA/VGQA hashes frozen. Next:q1024 causal M/L/O.
-- L5 q1024 M/L/O BLOCKED_DECISION: single-chain FP32 error0.0053576>0.002;1024-segment exp2 gives0.0054353, so PWL is not root cause. Recommend hierarchical block128 M/L/O merge for seq>384 in same RTL; no score matrix,43008 merges. Await approval.
-- L5 q1024 block128 candidate PASS: error0.000613<0.002,43008 summary merges,no score matrix; q128 legacy hashes unchanged. Production RTL remains DECISION_READY pending explicit approval.
-- Interface audit: legacy online-softmax has no state-load/merge port; minimal production change is a sibling merge128 micro-op plus seq>384 controller policy, requiring1040B serial-head state (12480B if12-head parallel). No authorized implementation yet.
-- User priority: L5 now includes q1024 prefill measured cycles/token-s in addition to q128/q384. After L5 closes, run L10 early 1GHz logic timing/area before L6-L9; keep SRAM macro PPA/formal PASS blocked until official `.db`/LEF.
-- Qwen3.5 ordering frozen: do not implement it now. Finish current Qwen2 L5, then L10 early PPA, then create a separate descriptor/runtime extension plan without forking the Qwen2 canonical RTL.
-- L10 readiness only: ARM Liberty/Verilog/GDS2 and wrappers exist; official `.db/LEF` remain deferred, so L10/L11 cannot PASS.
-- Resource contract: every build/test/DC uses `taskset -c 8-23`; default/average parallelism is 8, reviewed peak is 16; start only with `MemAvailable >10 GiB`; `MemoryHigh=24G`, `MemoryMax=30G`.
-- Never add user files `scripts/prepare_aha_ast_tools_runtime.sh` or `scripts/prepare_aha_halide_runtime.sh`.
+The repository contains executable E0 references for the Qwen3.8 text path and
+remains globally blocked at L5.1 for real RTL/physical evidence.
+
+Sandbox gates:
+
+```text
+19 Python tests                               PASS
+132 Block128 M/L/O vectors                    PASS
+independent C++20 merge reference             PASS
+Qwen3.8 tiny stateful text prefill/decode     exact match
+GDN chunk vs recurrent, 100 random cases      PASS
+```
+
+Canonical local action:
+
+```bash
+PYTHONPATH=src pytest -q
+PYTHONPATH=src python3 scripts/run_qwen38_text_e0.py
+PYTHONPATH=src python3 scripts/run_gdn_chunk_e0.py
+PYTHONPATH=src python3 scripts/generate_block128_vectors.py
+HETERONPU_FP_FILELIST=<filelist> ./scripts/run_l5_block128_merge.sh
+```
+
+Attach actual RTL logs and early DC reports. Update the result JSON,
+`MASTER_LEDGER.json`, `NEXT_ACTION.json` and this handoff in one recoverable
+main-branch commit. Records 0x13-0x19 remain `status=4` until each backend has
+its own E1/E2 closure.
+
+Parallel L8.1 work is permitted: use the frozen Qwen3.8 revision to generate
+official tensor/node traces for GDN, QSA, GR, PLE, MoE and MTP. Trace generation
+must not be reported as RTL support.

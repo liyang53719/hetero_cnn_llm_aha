@@ -3,6 +3,12 @@
 The repository contains executable E0 references for the Qwen3.8 text path and
 remains globally blocked at L5.1 for real RTL/physical evidence.
 
+Local takeover: Block128 E1 now PASS (132 vectors plus a 32-beat 128-lane
+stream with deterministic backpressure). Early 1 GHz DC has 0 unmapped but
+WNS=-0.555804 ns after real outer pipeline stages; the remaining path is one
+combinational HardFloat FP32 multiply. Next implement raw/round internal
+pipeline, rerun E1 and DC, and do not mark L5.1 PASS until WNS>=0.
+
 Sandbox gates:
 
 ```text

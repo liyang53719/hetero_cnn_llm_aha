@@ -6,7 +6,7 @@
 |---|---|---|
 | Canonical architecture/control plane | PASS | `config/control_plane.json`, canonical plan/stages |
 | Descriptor v3 and explicit capability split | PASS | records 0x04, 0x13-0x19, 0x32-0x35 |
-| Universal block-128 M/L/O | PASS E0/source | 132 vectors, C++20 reference, RTL source |
+| Universal block-128 M/L/O | PASS E1 / E4 timing open | 132 vectors + 32-beat stream PASS; 1GHz WNS -0.555804 ns |
 | Matrix context protocol seed | PASS source | parameterized scoreboard; real array integration local |
 | Paged KV v3 | PASS E0 | prefix, COW, generation, one-million-token addressing |
 | Qwen3.5 common GDN/MoE/MTP operators | PASS E0 | executable references |

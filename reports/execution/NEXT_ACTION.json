@@ -1,26 +1,23 @@
 {
   "schema_version": 4,
-  "state": "WAIT_LOCAL_AGENT_E1_PUSH",
+  "state": "IN_PROGRESS_LOCAL_E4_TIMING",
   "stage": "L5",
   "subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
-  "objective": "Run the committed Block128 M/L/O merge RTL against all 132 vectors, random backpressure and early 1GHz DC.",
-  "dependencies": [
-    "Verilator_5.028_or_VCS",
-    "generated_HeteroFP32Alu",
-    "fp32_exp2_pwl",
-    "Synopsys_DC_CLN22UL"
-  ],
+  "objective": "Generate internally pipelined HardFloat FP32 multiply/add primitives at the raw/round boundary, replace the remaining combinational operators in Block128 merge, then rerun E1 and 1GHz DC.",
+  "root_cause": "A single combinational HeteroFP32Alu multiply is 1.43ns at CLN22UL 0.8V TT25 and leaves WNS=-0.555804ns.",
   "acceptance": {
     "vector_mismatches": 0,
+    "stream_beats": 32,
     "random_backpressure": "PASS",
     "unmapped": 0,
     "unresolved": 0,
     "setup_wns_ns_min": 0.0
   },
-  "parallel_allowed": {
-    "stage": "L8.1",
-    "objective": "Generate official Qwen3.8 text node traces without changing hardware support claims.",
-    "dependencies": ["official_weights", "Transformers_or_llama_cpp_runtime"]
-  },
+  "forbidden": [
+    "false_path_on_data",
+    "frequency_reduction",
+    "multicycle_exception_instead_of_pipeline",
+    "promote_E1_to_E4"
+  ],
   "on_success": "L5.2_REAL_512_LANE_CONTEXT_INTEGRATION"
 }

@@ -1,0 +1,27 @@
+{
+  "schema_version": 4,
+  "stage": "L5",
+  "subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
+  "status": "IN_PROGRESS",
+  "e1": {
+    "status": "PASS",
+    "vectors": 132,
+    "stream_beats": 32,
+    "random_backpressure": true,
+    "mismatches": 0,
+    "loss_dup_reorder": 0,
+    "binary_sha256": "3ef76de9dfb92d3de50a51f78a5bf724b39a8aaee0cab7596864e3564a30ba30"
+  },
+  "e4": {
+    "status": "FAIL_TIMING",
+    "clock_period_ns": 1.0,
+    "initial_wns_ns": -2.20967,
+    "latest_wns_ns": -0.555804,
+    "unmapped_cells": 0,
+    "cell_area": 40846.988515,
+    "leaf_cells": 82453,
+    "sequential_cells": 1305,
+    "critical_path": "registered exp result through one combinational HardFloat FP32 multiply"
+  },
+  "next": "internally pipeline HardFloat raw multiply and rounding"
+}

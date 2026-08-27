@@ -2,10 +2,17 @@
   "schema_version": 4,
   "current_stage": "L5",
   "current_subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
-  "current_state": "WAIT_LOCAL_AGENT_E1_PUSH",
+  "current_state": "IN_PROGRESS_LOCAL_E4_TIMING",
   "sandbox": {
     "python_tests": 81,
     "block128_vectors": 132,
+    "block128_local": {
+      "e1": "PASS",
+      "e4": "FAIL_TIMING",
+      "wns_ns": -0.555804,
+      "unmapped": 0,
+      "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
+    },
     "independent_cpp": "PASS",
     "q1024_merges": 43008,
     "paged_kv_1m_address": "PASS",

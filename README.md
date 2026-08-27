@@ -22,8 +22,8 @@ Sandbox v6 additionally closes the following E0/compiler prerequisites:
 ```text
 Archspec inheritance, validation and deterministic collateral generation
 Qwen3.8 48-layer full-shape prefill/decode program with MAC/byte accounting
-Qwen3.8 deterministic mock backend partition, descriptors and event program
-Sequence Memory TLB/leaf-cache/MSHR cycle model
+Qwen3.8 deterministic mock backend partition, policy bindings and event program
+Sequence Memory TLB/leaf-cache translation and COW-cost model
 control-plane cross-file consistency audit
 ```
 

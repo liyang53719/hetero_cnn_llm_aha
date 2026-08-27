@@ -29,7 +29,7 @@
     },
     {
       "id": "L7",
-      "sandbox_status": "paged functional model and TLB/leaf/MSHR cycle E0 ready",
+      "sandbox_status": "paged functional model and TLB/leaf translation plus COW-cost E0 ready",
       "local_gate": "iDMA/AXI, SRAM macros and production page-walker RTL",
       "acceptance": ["100k transactions", "zero leak", "COW atomicity", "stale response suppression", "E3 cycles"]
     },
@@ -53,7 +53,7 @@
     },
     {
       "id": "L9",
-      "sandbox_status": "mock partition, descriptor binding and deterministic event program ready",
+      "sandbox_status": "mock partition, policy binding and deterministic event program ready",
       "local_gate": "real llama.cpp/GGUF build and backend API",
       "acceptance": ["Qwen2/Qwen3.5/Qwen3.8 graph lowering", "fallback correctness", "real GGUF load"]
     },

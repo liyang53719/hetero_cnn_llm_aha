@@ -17,6 +17,6 @@ Promote `_rawpipe` only when 1024 primitive vectors, 132 Block128 vectors, 32 st
 
 After L5.1 passes, integrate `rtl/matrix/bf16_outer_product_context_array.sv` with the real 512-lane array and close 1,000,000 dependent steps, random backpressure, II=1 across four contexts and 1 GHz timing.
 
-Sandbox v6 has already closed the software prerequisites: Archspec collateral, 48-layer Qwen3.8 full-shape program, deterministic mock backend partition, and Sequence Memory TLB/leaf/MSHR cycle E0. Do not repeat these as local design work; use their generated contracts as test inputs.
+Sandbox v6 has already closed the software prerequisites: Archspec collateral, 48-layer Qwen3.8 full-shape program, deterministic mock backend partition, and Sequence Memory TLB/leaf translation plus COW-cost E0. Do not repeat these as local design work; use their generated contracts as test inputs.
 
 A local push must include raw logs, result JSON, `MASTER_LEDGER.json`, `NEXT_ACTION.json`, `HANDOFF.md`, `control_plane.json`, and `stages.yaml` atomically.

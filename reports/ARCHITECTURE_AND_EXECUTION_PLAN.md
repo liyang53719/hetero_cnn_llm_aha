@@ -16,8 +16,8 @@ At the v6 audit base, `main` is `7e18aa7b0c941c65cfa053d24d75757b99008511`; no n
 
 - Archspec inheritance, validation, SRAM map, capability manifest, SystemVerilog parameter package and local-gate matrix.
 - Qwen3.8 48-layer full-shape prefill/decode macro program with exact analytical MAC reconciliation.
-- Deterministic mock backend partition, descriptor binding and 16-bit event validation.
-- Sequence Memory two-level translation cycle model with TLB, leaf cache, MSHR coalescing, outstanding pressure and generation rejection.
+- Deterministic mock backend partition, policy binding and bounded event scheduling.
+- Sequence Memory two-level translation reference with TLB, leaf cache, generation rejection and COW-copy cost. MSHR and outstanding-request behavior remain a local E1/E3 item.
 
 These results remove software/planning dependencies from L7/L8/L9, but do not replace RTL E1, integrated E3, official-weight traces or E4 physical evidence.
 

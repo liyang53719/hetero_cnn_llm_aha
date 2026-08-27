@@ -43,7 +43,7 @@ result={
     'schema_version':4,
     'status':'PASS' if not errors else 'FAIL',
     'errors':errors,
-    'python_tests_expected':19,
+    'python_tests_expected':81,
     'block128_vectors':132,
     'qwen38_text_e0':'PASS' if q38_result.get('status')=='PASS' else 'FAIL',
     'gdn_chunk_cases':gdn_result.get('cases'),

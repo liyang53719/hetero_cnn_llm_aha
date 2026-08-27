@@ -6,7 +6,7 @@ remains globally blocked at L5.1 for real RTL/physical evidence.
 Sandbox gates:
 
 ```text
-19 Python tests                               PASS
+81 Python tests                               PASS
 132 Block128 M/L/O vectors                    PASS
 independent C++20 merge reference             PASS
 Qwen3.8 tiny stateful text prefill/decode     exact match

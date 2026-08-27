@@ -19,7 +19,7 @@
 | Qwen3.8 MTP state transaction | PASS E0 | accepted-prefix commit and rejected-state rollback |
 | Qwen3.8 reduced stateful text path | PASS E0 | prefill/decode exact, frozen hashes |
 | Hardware micro-op schedule | PASS E0 | all executed text ops have an owner |
-| Python regression | PASS | 19 tests |
+| Python regression | PASS | 81 tests |
 
 ## Local dependencies
 

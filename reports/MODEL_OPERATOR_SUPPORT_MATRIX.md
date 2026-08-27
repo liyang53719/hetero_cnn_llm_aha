@@ -1,26 +1,16 @@
-# Model/operator support matrix v4
+# Model/operator support matrix v5
 
-| Capability | Qwen3.5 | Qwen3.8-Flash-Next | Sandbox level | Local gate |
+| Capability | Qwen3.5 | Qwen3.8 | Evidence | Next gate |
 |---|---:|---:|---|---|
-| BF16 GEMM / RMSNorm / partial RoPE / GQA | yes | yes | RTL primitives, not integrated | E1/E2 stream integration |
-| Universal block-128 attention | 10 full-attn layers | sparse selected payload | RTL source + E0 vectors | L5.1/L8.3 |
-| Gated DeltaNet recurrent decode | 30 layers | 36 layers | **Executable E0** | L8.2 E1/E2 |
-| Gated DeltaNet chunk prefill | yes | yes | **Executable E0; 100 random parity cases PASS** | L8.2 E1/E2 |
-| Causal Conv1D state | conv4 | conv4 | **Executable E0** | L8.2 |
-| MoE top-k routing and expert batching | 256 / top-8 | 512 / top-10 | **Executable E0** | L8.5 |
-| Routed expert + shared expert numerical execution | yes | yes | **Executable E0** | L8.5 grouped GEMM/cache |
-| MoE dispatch/cache | yes | yes | compiler schedule only | L8.5 |
-| QSA compressed-block indexer | no | yes | **Executable E0** | L8.3 |
-| Sparse causal QK / online Softmax / PV | no | yes | **Executable E0 tiny text path** | L8.3 |
-| Attention sigmoid output gate | no | yes | **Executable E0** | L8.3 |
-| Four-branch Gated Residual low-rank read/write | no | yes | **Executable E0** | L8.4 |
-| PLE n-gram hash and lazy embedding lookup | no | yes | **Executable E0** | L8.4 transport/cache |
-| PLE signed-sqrt gate and dilated depthwise conv | no | yes | **Executable E0** | L8.4 |
-| MTP verify and transactional state rollback | yes | yes | **Executable E0** | L8.5 |
-| Stateful reduced text path | no | yes | **Executable E0, prefill/decode exact** | official trace + L8.2-L8.6 |
-| Official-weight text model | not yet | not yet | unsupported claim | L8.1-L8.6 |
-| Vision encoder | present | present | unsupported | outside current scope |
-
-`executable E0` means the numerical/state path runs in the sandbox. It does not
-mean that descriptor records 0x13-0x19 are executable RTL; the capability
-decoder continues to return `unsupported_policy` until each local backend closes.
+| Universal Block128 | full attention | sparse payload merge | canonical E1 PASS, E4 WNS -0.555804 | rawpipe E4 |
+| Four-context BF16 accumulation | useful | required | RTL source + 1M-step E0 | L5.2 E1/E4 |
+| Gated DeltaNet | 30 layers | 36 layers | recurrent/chunk E0 | L8.2 |
+| QSA append summaries/Top-512 | no | yes | 200-case exact E0 | L8.3 |
+| Sparse page coalesce/restore | no | yes | executable E0 | L7/L8.3 |
+| Four-branch Gated Residual | no | yes | executable tiny E0 + liveness | L8.4 |
+| PLE random rows/dilated conv | no | yes | E0 + synthetic cache DSE | L8.4 |
+| Routed/shared MoE | top-8/256 | top-10/512 | E0 + expert-cache DSE | L8.5 |
+| Full-state MTP transaction | yes | yes | 1000-case E0 | L7/L8.5 |
+| W4 expert path | target | required | analytical/synthetic DSE | L6/L8.5 |
+| Official-weight text | no | no | not claimed | L8.1-L8.6 |
+| Vision | present | present | unsupported | outside scope |

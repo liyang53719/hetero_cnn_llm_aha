@@ -1,0 +1,5 @@
+work/generated/l5_all_primitives/HeteroAllPrimitives.sv
+rtl/sfu/fp32_exp2_pwl.sv
+rtl/sfu/fp32_mlo_merge_coeff_rawpipe.sv
+rtl/sfu/fp32_mlo_merge_beat_rawpipe.sv
+rtl/sfu/fp32_mlo_summary_merge_stream_rawpipe.sv

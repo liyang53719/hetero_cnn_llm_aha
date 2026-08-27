@@ -1,0 +1,1 @@
+{"schema_version":1,"status":"PASS","evidence_class":"synthetic_format_screen_not_model_accuracy","formats":["fp32","bf16","fp16","fp8_e4m3fn","int8_per_vector"],"decision_rules":{"state_requires_official_trace":true,"qsa_requires_selected_token_stability":true,"mixed_dtype_gather_dequant_required":true}}

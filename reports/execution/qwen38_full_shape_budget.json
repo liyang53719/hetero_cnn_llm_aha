@@ -1,0 +1,1 @@
+{"schema_version":1,"status":"PASS","evidence_class":"analytical_shape_budget_not_RTL","fixed_macs_per_token":6147688448,"q1024_average_macs_per_token":6224044544,"q1024_required_wall_utilization":{"bf16_512":3.6469011004,"w8_2048":0.9117252751,"dual_w8_or_native_w4_4096":0.4558626375},"ctx262144":{"gdn_state_mib":108,"qsa_compressed_index_mib":192,"qsa_kv_bf16_gib":6}}

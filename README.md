@@ -1,44 +1,36 @@
 # Heterogeneous CNN/LLM accelerator
 
-Architecture:
-
 ```text
 retained Gemmini INT8/CNN Matrix
 + clean-room BF16/FP32 LLM Matrix
 + fixed-function Attention/Norm/SFU
-+ legal Stanford AHA programmable sidecar
-+ paged KV/iDMA state engine
++ legal Stanford AHA sidecar
++ paged KV / Sequence Memory Complex
 ```
 
-Canonical control files:
+Current audited L5.1 state:
 
 ```text
-config/control_plane.json
-reports/ARCHITECTURE_AND_EXECUTION_PLAN.md
-local_agent/stages.yaml
-reports/execution/MASTER_LEDGER.json
-reports/execution/NEXT_ACTION.json
-reports/execution/LOCAL_AGENT_WAITLIST.json
+Block128 Verilator E1        PASS: 132 vectors, 32 stream beats
+CLN22UL 1 GHz E4             FAIL_TIMING: WNS=-0.555804 ns, unmapped=0
+raw/round pipeline candidate source ready for local E1/E4
 ```
 
-Sandbox progress includes Descriptor v3, universal block-128 references and RTL
-source, Matrix-context protocol source, paged-KV E0, and an executable
-text-only Qwen3.8-Flash-Next tiny model covering GDN, QSA, Gated Residual, PLE,
-routed/shared MoE and MTP state transactions.
+Canonical control files are `config/control_plane.json`, `local_agent/stages.yaml`, `reports/execution/MASTER_LEDGER.json`, `NEXT_ACTION.json` and `HANDOFF.md`.
 
-Run the complete sandbox gate:
+Run sandbox architecture references:
 
 ```bash
-./scripts/sandbox_validate.sh
+PYTHONPATH=src python3 scripts/run_qwen38_architecture_e0.py
 ```
 
-Run the Qwen3.8 gates directly:
+Run the immediate local gates:
 
 ```bash
-PYTHONPATH=src python3 scripts/run_qwen38_text_e0.py
-PYTHONPATH=src python3 scripts/run_gdn_chunk_e0.py
+./scripts/run_l5_fp32_pipelines.sh
+./scripts/run_l5_fp32_pipeline_dc.sh
+./scripts/run_l5_block128_rawpipe_candidate.sh
+./scripts/run_l5_block128_rawpipe_dc.sh
 ```
 
-Anything requiring Verilator/VCS, generated FP primitives, AHA/Chipyard,
-official model weights, Synopsys DC or SRAM views is marked
-`WAIT_LOCAL_AGENT_PUSH`.
+`configs/arch_v2_qwen38_candidate.yaml` is E0-only. Official weights, new RTL E1/E2, integrated E3 cycles and E4 PPA remain explicit local gates.

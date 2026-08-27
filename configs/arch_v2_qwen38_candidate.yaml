@@ -1,0 +1,34 @@
+schema_version: 1
+arch_id: heteronpu_v2_qwen38_candidate
+status: candidate_sandbox_not_canonical
+inherits: configs/arch_v1.yaml
+clock: {target_hz: 1000000000}
+memory:
+  total_sram_kib: 4096
+  owners:
+    shared_l2: {kib: 1280, logical_banks: 16, beat_bits: 512}
+    matrix_scratchpad: {kib: 768}
+    matrix_accumulator: {kib: 512, dtype: fp32_int32}
+    sequence_state_staging: {kib: 768, beat_bits: 512}
+    expert_row_staging: {kib: 384, beat_bits: 512}
+    aha_sidecar: {kib: 256, topology: 4x4_ratio2}
+    control_trace: {kib: 128}
+  external: {aggregate_read_gbps_max: 100, aggregate_write_gbps_max: 40, address_bits: 64}
+matrix_candidates:
+  canonical_bf16_reference: {rows: 16, columns: 32, macs_per_cycle: 512, accumulation: fp32, contexts: 4}
+  qwen38_throughput_candidates:
+    - {name: dual_w8_cluster, macs_per_cycle: 4096, status: DSE_candidate}
+    - {name: native_w4a8_dual_dot, macs_per_cycle: 4096, status: DSE_candidate}
+  required_modes: [grouped_expert_gemm, skinny_decode_gemv, gdn_outer_product_state_update, qsa_index_scan, context_interleaved_accumulation]
+sequence_memory_complex:
+  gdn_state: {state_format_reference: fp32, staging_heads: 4, pingpong_kib: 512, persistent_storage: external_memory}
+  qsa_selection: {compress_ratio: 4, block_topk: 512, token_budget: 2048, score_materialization_bytes: 0, selected_page_sort_and_coalesce: true}
+  ple_row_fetch: {rows_per_token_max: 16, bf16_row_bytes: 320, minimum_outstanding_candidate: 32, deduplicate_requests: true, reorder_buffer: true}
+  expert_weight_path: {primary_decode_format: w4_grouped, complete_expert_resident_onchip: false, tiled_pingpong_kib: 320, route_aware_prefetch: true}
+  transaction_manager: {state_domains: [kv,gdn_recurrent,gdn_conv,qsa_index,qsa_kv,ple_history,ple_conv,hyper_stream], mechanisms: [epoch,dirty_bitmap,copy_on_write,atomic_commit,rollback_generation]}
+qwen38_budget:
+  fixed_macs_per_token: 6147688448
+  q1024_average_macs_per_token: 6224044544
+  q1024_300tps_required_wall_utilization: {bf16_512: 3.6469011004, w8_2048: 0.9117252751, dual_w8_or_native_w4_4096: 0.4558626375}
+  persistent_state_ctx262144: {gdn_fp32_mib: 108, qsa_compressed_index_mib: 192, qsa_kv_bf16_gib: 6}
+promotion_gates: [official_weight_node_trace,E1_per_backend,E2_one_block_and_four_layer,E3_integrated_cycles_and_bandwidth,E4_1GHz_area_power]

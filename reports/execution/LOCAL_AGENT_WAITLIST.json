@@ -1,69 +1,13 @@
 {
-  "schema_version": 2,
-  "marker": "WAIT_LOCAL_AGENT_PUSH",
-  "items": [
-    {
-      "id": "L4",
-      "dependency": "AHA/Garnet/Verilator/DC",
-      "action": "Generate the legal 4x4 ratio-2 sidecar and close depthwise/layout/quant plus CNN subset.",
-      "acceptance": ["mapper_pnr_pass", "verilator_zero_mismatch", "1GHz_early_dc"]
-    },
-    {
-      "id": "L5.1",
-      "dependency": "Verilator or VCS, generated FP primitives, CLN22UL DC",
-      "action": "Simulate all 132 Block128 vectors with random backpressure and run early DC.",
-      "acceptance": ["zero_mismatch", "no_loss_dup_reorder", "WNS>=0", "unmapped=0"]
-    },
-    {
-      "id": "L5.2-L5.6",
-      "dependency": "real 512-lane BF16 array, iDMA/DDR model, Qwen2 weights and DC",
-      "action": "Context interleave, blocked attention, SiLU DSE, overlap and 28-layer performance closure."
-    },
-    {
-      "id": "L7",
-      "dependency": "iDMA/AXI simulation, SRAM macros and RTL tools",
-      "action": "Implement page walker, 64-entry 4-way TLB, leaf cache, atomic refcount/COW and continuous batching."
-    },
-    {
-      "id": "L8.1",
-      "dependency": "Official Qwen3.8 model files and Transformers or llama.cpp runtime",
-      "action": "Emit immutable official-weight node traces for GDN, QSA, GR, PLE, MoE and MTP.",
-      "acceptance": ["model_revision_match", "per_node_hashes", "state_layout_manifest", "no_RTL_claim"]
-    },
-    {
-      "id": "L8.2",
-      "dependency": "Generated FP RTL, Matrix stream, SRAM and Verilator/VCS",
-      "action": "Implement GDN recurrent and chunk-prefill state engine using the committed E0 contract."
-    },
-    {
-      "id": "L8.3",
-      "dependency": "KV gather, top-k hardware, Matrix/SFU stream and RTL tools",
-      "action": "Implement QSA index cache, compressed-block top-k and sparse attention/output gate."
-    },
-    {
-      "id": "L8.4",
-      "dependency": "Matrix/SFU, host embedding transport, state SRAM and RTL tools",
-      "action": "Implement four-branch GR and PLE hash/lookup/prefetch/dilated-conv path."
-    },
-    {
-      "id": "L8.5",
-      "dependency": "Expert weight cache, grouped GEMM, runtime scheduler and RTL tools",
-      "action": "Implement routed/shared MoE and MTP state commit/rollback."
-    },
-    {
-      "id": "L8.6",
-      "dependency": "L8.1-L8.5 plus official weights",
-      "action": "Close one-block, four-layer and 48-layer text traces before performance claims."
-    },
-    {
-      "id": "L9",
-      "dependency": "Local llama.cpp build and GGUF models",
-      "action": "Automatic graph-pattern lowering, segment cache and CPU fallback."
-    },
-    {
-      "id": "L10",
-      "dependency": "LC/DC/CLN22UL/SRAM DB+LEF/SAIF",
-      "action": "Physical closure and power evidence."
-    }
+  "schema_version":4,"marker":"WAIT_LOCAL_AGENT_PUSH","items":[
+    {"id":"L4","dependency":"AHA/Garnet/Verilator/DC","action":"Close legal 4x4 ratio-2 sidecar and CNN subset."},
+    {"id":"L5.1","dependency":"Chipyard HardFloat, Verilator/VCS, CLN22UL DC","state":"canonical_E1_PASS_E4_FAIL_rawpipe_source_ready","commands":["./scripts/run_l5_fp32_pipelines.sh","./scripts/run_l5_fp32_pipeline_dc.sh","./scripts/run_l5_block128_rawpipe_candidate.sh","./scripts/run_l5_block128_rawpipe_dc.sh"]},
+    {"id":"L5.2","dependency":"real 512-lane array, Verilator/VCS, CLN22UL DC","action":"Close four-context recurrence, 1M steps, backpressure and 1GHz."},
+    {"id":"L5.3-L5.6","dependency":"Matrix/SFU streams, iDMA/DDR, Qwen2 weights","action":"Blocked attention, SiLU DSE, overlap and full q1024 performance."},
+    {"id":"L7","dependency":"iDMA/AXI, SRAM macros, RTL tools","action":"Page walker, TLB/leaf cache, atomic COW and shared state transaction manager."},
+    {"id":"L8.1","dependency":"official Qwen3.8 files and runtime","action":"Immutable official-weight node/state traces."},
+    {"id":"L8.2-L8.5","dependency":"generated FP RTL, Matrix/SFU/KV/state SRAM, W4 expert cache, RTL tools","action":"GDN, QSA, GR/PLE, MoE/MTP backends."},
+    {"id":"L8.6","dependency":"L8.1-L8.5 plus official weights","action":"One-block, four-layer and 48-layer text closure."},
+    {"id":"L9-L10","dependency":"llama.cpp/GGUF, LC/DC, CLN22UL, SRAM views, SAIF","action":"Automatic backend and physical closure."}
   ]
 }

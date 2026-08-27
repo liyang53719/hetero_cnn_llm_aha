@@ -1,41 +1,21 @@
 {
-  "schema_version": 4,
-  "plan_version": "2026-08-27-v4",
+  "schema_version": 5,
+  "plan_version": "2026-08-27-v5",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
   "ledger": "reports/execution/MASTER_LEDGER.json",
   "next_action": "reports/execution/NEXT_ACTION.json",
   "handoff": "reports/execution/HANDOFF.md",
   "local_waitlist": "reports/execution/LOCAL_AGENT_WAITLIST.json",
-  "archspec": "configs/arch_v1.yaml",
+  "canonical_archspec": "configs/arch_v1.yaml",
+  "candidate_archspecs": ["configs/arch_v2_qwen38_candidate.yaml"],
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
-  "current_subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
-  "current_state": "WAIT_LOCAL_AGENT_E1_PUSH",
-  "stage_namespace": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"],
-  "parallel_sandbox_progress": {
-    "L8_QWEN38_TEXT_E0": "PASS",
-    "L8_GDN_CHUNK_E0": "PASS"
-  },
-  "evidence_classes": {
-    "E0": "functional_algorithmic_compiler_reference",
-    "E1": "real_kernel_rtl_simulation",
-    "E2": "sampled_numerical_engine_integration",
-    "E3": "integrated_queue_dma_sram_ddr_cycle_execution",
-    "E4": "post_synthesis_timing_area_power"
-  },
-  "obsolete_paths": [
-    "reports/QWEN2_300_TPS_LONG_CONTEXT_PERFORMANCE_PLAN.md",
-    "reports/L2_TO_L11_DECISION_COMPLETE_EXECUTION_PLAN.md",
-    "scripts/sandbox_validate_v3.sh",
-    "scripts/validate_progress_v3.py"
-  ],
-  "claim_rules": [
-    "sandbox source readiness is not E1 RTL evidence",
-    "recognized descriptor policy is not an executable RTL backend",
-    "a tiny executable E0 model is not official-weight end-to-end inference",
-    "service-time replay is not full numerical RTL execution",
-    "performance claims require E3 workload execution and E4 timing closure",
-    "vision remains outside the current accelerator scope"
-  ]
+  "current_subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
+  "current_state": "E1_PASS_E4_FAIL_TIMING_CANDIDATE_SOURCE_READY",
+  "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
+  "evidence_classes": {"E0":"functional_algorithmic_compiler_or_architecture_reference","E1":"real_kernel_rtl_simulation","E2":"sampled_numerical_engine_integration","E3":"integrated_queue_dma_sram_ddr_cycle_execution","E4":"post_synthesis_timing_area_power"},
+  "retained_local_evidence": {"commit":"b8f8eaff6a323a6303a52b01db6a776ddbe9e406","block128_e1":"PASS","block128_e4":"FAIL_TIMING","block128_wns_ns":-0.555804,"unmapped_cells":0},
+  "parallel_sandbox_progress": {"L5_2_MATRIX_CONTEXT_E0_SOURCE":"PASS","L8_QWEN38_QSA_STREAMING_E0":"PASS","L8_QWEN38_STATE_TRANSACTION_E0":"PASS","L8_QWEN38_FULL_SHAPE_BUDGET":"PASS","L8_QWEN38_MEMORY_DSE":"PASS","L8_QWEN38_QUANTIZATION_SCREEN":"PASS","L8_QWEN38_LIVENESS_CANDIDATE":"PASS"},
+  "claim_rules": ["retained Block128 E1 applies to canonical RTL, not the rawpipe candidate","WNS below zero is E4 failure","source readiness is not E1","synthetic DSE is not an official-weight trace","performance claims require E3 and E4","vision remains outside scope"]
 }

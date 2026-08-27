@@ -1,11 +1,45 @@
 {
-  "schema_version":5,"state":"SOURCE_READY_WAIT_LOCAL_E1_E4","stage":"L5","subgate":"L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
-  "objective":"Validate the committed HardFloat raw/round pipelines, rerun the 132-vector/32-beat Block128 gate, then rerun CLN22UL 1GHz DC before replacing canonical modules.",
-  "retained_result":{"commit":"b8f8eaff6a323a6303a52b01db6a776ddbe9e406","e1":"PASS","e4":"FAIL_TIMING","wns_ns":-0.555804,"root_cause":"combinational HardFloat FP32 multiply on L-product path"},
-  "ordered_commands":["./scripts/run_l5_fp32_pipelines.sh","./scripts/run_l5_fp32_pipeline_dc.sh","./scripts/run_l5_block128_rawpipe_candidate.sh","./scripts/run_l5_block128_rawpipe_dc.sh"],
-  "acceptance":{"fp32_pipeline_vectors":1024,"fp32_pipeline_mismatches":0,"block128_vectors":132,"block128_mismatches":0,"stream_beats":32,"random_backpressure":"PASS","unmapped":0,"unresolved":0,"setup_wns_ns_min":0.0},
-  "promotion_rule":"Promote _rawpipe only after all acceptance fields pass and rerun canonical E1.",
-  "forbidden":["false_path_on_data","frequency_reduction","multicycle_exception_instead_of_pipeline","claim_candidate_source_as_E1","overwrite_retained_E1_evidence"],
-  "parallel_next":{"subgate":"L5.2_MATRIX_CONTEXT_INTERLEAVE","source":"rtl/matrix/bf16_outer_product_context_array.sv","sandbox_model":"src/heteronpu/matrix_context_pipeline.py","local_acceptance":["real_512_lane_array","1M_dependent_steps","random_backpressure","II1_across_4_contexts","WNS_nonnegative"]},
-  "on_success":"L5.2_REAL_512_LANE_CONTEXT_INTEGRATION"
+  "schema_version": 6,
+  "state": "WAIT_LOCAL_RAWPIPE_E1_E4_PUSH",
+  "stage": "L5",
+  "subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
+  "objective": "Run the committed HardFloat raw/round pipeline and Block128 candidate through real Verilator and CLN22UL DC; promote only after numerical, protocol and 1 GHz timing gates pass.",
+  "remote_audit": {
+    "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
+    "new_local_agent_commit_detected": false
+  },
+  "retained_result": {
+    "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
+    "e1": "PASS",
+    "e4": "FAIL_TIMING",
+    "wns_ns": -0.555804,
+    "root_cause": "combinational HardFloat FP32 multiply on L-product path"
+  },
+  "ordered_commands": [
+    "./scripts/run_l5_fp32_pipelines.sh",
+    "./scripts/run_l5_fp32_pipeline_dc.sh",
+    "./scripts/run_l5_block128_rawpipe_candidate.sh",
+    "./scripts/run_l5_block128_rawpipe_dc.sh"
+  ],
+  "acceptance": {
+    "fp32_pipeline_vectors": 1024,
+    "fp32_pipeline_mismatches": 0,
+    "block128_vectors": 132,
+    "block128_mismatches": 0,
+    "stream_beats": 32,
+    "random_backpressure": "PASS",
+    "unmapped": 0,
+    "unresolved": 0,
+    "setup_wns_ns_min": 0.0
+  },
+  "sandbox_prerequisites_now_closed": [
+    "control_plane_consistency",
+    "Archspec_collateral_generation",
+    "Qwen38_48_layer_shape_program",
+    "Qwen38_mock_backend_partition",
+    "SequenceMemory_translation_cycle_model"
+  ],
+  "promotion_rule": "Promote _rawpipe only after all acceptance fields pass and rerun canonical E1.",
+  "forbidden": ["false_path_on_data","frequency_reduction","multicycle_exception_instead_of_pipeline","claim_candidate_source_as_E1","overwrite_retained_E1_evidence"],
+  "on_success": "L5.2_REAL_512_LANE_CONTEXT_INTEGRATION"
 }

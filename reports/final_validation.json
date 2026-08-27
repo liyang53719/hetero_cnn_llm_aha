@@ -1,7 +1,39 @@
 {
-  "schema_version":5,"status":"PASS_WITH_LOCAL_E4_BLOCKER",
-  "retained_local_evidence":{"commit":"b8f8eaff6a323a6303a52b01db6a776ddbe9e406","block128_E1":"PASS","block128_E4":"FAIL_TIMING","wns_ns":-0.555804,"unmapped":0,"python_tests":81},
-  "new_sandbox_execution":{"qsa_streaming_cases":200,"state_transaction_cases":1000,"matrix_context_dependent_steps":1000000,"matrix_context_random_backpressure_cases":10000,"architecture_analysis":"PASS"},
-  "source_readiness":{"HardFloat_raw_round_pipeline":"READY_WAIT_LOCAL_COMPILE_E1_E4","Block128_rawpipe_candidate":"READY_WAIT_LOCAL_E1_E4","Matrix_context_wrapper":"READY_WAIT_LOCAL_E1_E4"},
-  "non_claims":["new_rawpipe_not_Verilator_tested","new_rawpipe_not_DC_tested","matrix_context_wrapper_not_RTL_tested","no_official_weight_Qwen3.8_inference","no_Qwen3.8_E3","no_Qwen3.8_PPA"]
+  "schema_version": 6,
+  "status": "PASS_SANDBOX_V6_WITH_RETAINED_LOCAL_E4_BLOCKER",
+  "remote_audit": {
+    "observed_base_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
+    "new_local_agent_commit_detected": false
+  },
+  "retained_local_evidence": {
+    "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
+    "block128_E1": "PASS",
+    "block128_E4": "FAIL_TIMING",
+    "wns_ns": -0.555804,
+    "unmapped": 0,
+    "previous_full_python_tests": 81
+  },
+  "new_sandbox_execution": {
+    "isolated_v6_tests": 3,
+    "control_plane_audit": "PASS",
+    "Archspec_collateral": "PASS",
+    "Qwen38_full_shape_program": "PASS",
+    "Qwen38_mock_backend": "PASS",
+    "SequenceMemory_cycle_E0": "PASS"
+  },
+  "source_readiness": {
+    "HardFloat_raw_round_pipeline": "READY_WAIT_LOCAL_COMPILE_E1_E4",
+    "Block128_rawpipe_candidate": "READY_WAIT_LOCAL_E1_E4",
+    "Matrix_context_wrapper": "READY_WAIT_LOCAL_E1_E4",
+    "Qwen38_backend_program_contracts": "READY_WAIT_LOCAL_E1_E2",
+    "SequenceMemory_RTL_contract": "READY_WAIT_LOCAL_E1_E3"
+  },
+  "non_claims": [
+    "no new local-agent push was present at audit time",
+    "merged full repository pytest was not executable in the network-isolated sandbox checkout",
+    "no official-weight Qwen3.8 inference",
+    "no new RTL E1",
+    "no E3",
+    "no E4 pass"
+  ]
 }

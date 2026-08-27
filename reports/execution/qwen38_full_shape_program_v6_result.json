@@ -1,0 +1,27 @@
+{
+  "decode": {
+    "analytical_cycles": 32250138,
+    "macs": 6852331520,
+    "mock_sha256": "dff96c38d25512079475d44d479920d8b471e8e505770d2eafcca5a7b0b02116",
+    "operations": 500,
+    "program_sha256": "fd2eb802593f59145e1f760c31a14fe8bce605af35edcc787c566f12408f8161",
+    "weight_bytes": 3204986880
+  },
+  "evidence_class": "full_shape_and_mock_backend_E0",
+  "non_claims": [
+    "no official-weight inference",
+    "no RTL E1",
+    "no integrated E3",
+    "no E4"
+  ],
+  "prefill": {
+    "analytical_cycles": 1556011237,
+    "macs": 6373421613056,
+    "mock_sha256": "1a6e1f7cca907f19d96016bdb441151baa575b2e027dd3b92d6c10bacd542a4d",
+    "operations": 500,
+    "program_sha256": "f13339735f5e738ddcc73270260fff96ba29367f3d2fe4850e0a22ed01feeeb1",
+    "weight_bytes": 3204986880
+  },
+  "schema_version": 1,
+  "status": "PASS"
+}

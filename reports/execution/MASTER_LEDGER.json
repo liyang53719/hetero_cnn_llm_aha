@@ -1,7 +1,43 @@
 {
-  "schema_version":5,"current_stage":"L5","current_subgate":"L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4","current_state":"E1_PASS_E4_FAIL_TIMING_CANDIDATE_SOURCE_READY",
-  "retained_local":{"commit":"b8f8eaff6a323a6303a52b01db6a776ddbe9e406","block128":{"e1":"PASS","vectors":132,"stream_beats":32,"random_backpressure":"PASS","e4":"FAIL_TIMING","wns_ns":-0.555804,"unmapped":0,"area_library_units":40846.988515,"leaf_cells":82453,"sequential_cells":1305,"evidence":"reports/execution/l5_block128_local_e1_e4_result.json"},"python_tests":81},
-  "new_sandbox":{"qsa_streaming":{"status":"PASS","cases":200,"score_materialization_bytes":0},"state_transaction":{"status":"PASS","cases":1000,"state_domains":10},"matrix_context":{"status":"PASS","dependent_steps":1000000,"contexts":4,"latency":4,"issue_utilization":0.9999970000089999,"random_backpressure_cases":10000},"full_shape_budget":"PASS","memory_dse":"PASS","quantization_screen":"PASS","liveness_candidate":"PASS"},
-  "source_ready_waiting_local":["HardFloat_raw_round_pipeline","Block128_rawpipe_E1_E4","Matrix_context_E1_E4"],
-  "waiting_local":["L4","L5.1_to_L5.6","L7","L8.1_to_L8.6","L9","L10"]
+  "schema_version": 6,
+  "current_stage": "L5",
+  "current_subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
+  "current_state": "E1_PASS_E4_FAIL_TIMING_WAIT_LOCAL_RAWPIPE_RESULTS",
+  "remote_audit": {
+    "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
+    "new_local_agent_commit_detected": false,
+    "latest_local_agent_evidence_commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406"
+  },
+  "accepted_local_evidence": {
+    "block128": {
+      "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
+      "e1": "PASS",
+      "vectors": 132,
+      "stream_beats": 32,
+      "random_backpressure": "PASS",
+      "e4": "FAIL_TIMING",
+      "wns_ns": -0.555804,
+      "unmapped": 0,
+      "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
+    }
+  },
+  "sandbox_closed": {
+    "control_plane_v6_audit": "PASS",
+    "archspec_inheritance_validation": "PASS",
+    "archspec_SRAM_map_generation": "PASS",
+    "archspec_SystemVerilog_package_generation": "PASS",
+    "qwen38_full_shape_prefill_program": "PASS",
+    "qwen38_full_shape_decode_program": "PASS",
+    "qwen38_mock_backend_partition": "PASS",
+    "sequence_memory_translation_cycle_model": "PASS",
+    "sequence_memory_generation_and_COW_contract": "PASS"
+  },
+  "source_ready_waiting_local": [
+    "HardFloat_raw_round_pipeline",
+    "Block128_rawpipe_E1_E4",
+    "Matrix_context_E1_E4",
+    "Qwen38_backend_program_contracts",
+    "SequenceMemory_RTL_contract"
+  ],
+  "waiting_local": ["L4","L5.1_to_L5.6","L7_E1_E3","L8_official_and_RTL","L9_real_llama_cpp","L10"]
 }

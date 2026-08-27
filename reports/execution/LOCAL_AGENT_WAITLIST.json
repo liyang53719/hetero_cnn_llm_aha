@@ -1,13 +1,67 @@
 {
-  "schema_version":4,"marker":"WAIT_LOCAL_AGENT_PUSH","items":[
-    {"id":"L4","dependency":"AHA/Garnet/Verilator/DC","action":"Close legal 4x4 ratio-2 sidecar and CNN subset."},
-    {"id":"L5.1","dependency":"Chipyard HardFloat, Verilator/VCS, CLN22UL DC","state":"canonical_E1_PASS_E4_FAIL_rawpipe_source_ready","commands":["./scripts/run_l5_fp32_pipelines.sh","./scripts/run_l5_fp32_pipeline_dc.sh","./scripts/run_l5_block128_rawpipe_candidate.sh","./scripts/run_l5_block128_rawpipe_dc.sh"]},
-    {"id":"L5.2","dependency":"real 512-lane array, Verilator/VCS, CLN22UL DC","action":"Close four-context recurrence, 1M steps, backpressure and 1GHz."},
-    {"id":"L5.3-L5.6","dependency":"Matrix/SFU streams, iDMA/DDR, Qwen2 weights","action":"Blocked attention, SiLU DSE, overlap and full q1024 performance."},
-    {"id":"L7","dependency":"iDMA/AXI, SRAM macros, RTL tools","action":"Page walker, TLB/leaf cache, atomic COW and shared state transaction manager."},
-    {"id":"L8.1","dependency":"official Qwen3.8 files and runtime","action":"Immutable official-weight node/state traces."},
-    {"id":"L8.2-L8.5","dependency":"generated FP RTL, Matrix/SFU/KV/state SRAM, W4 expert cache, RTL tools","action":"GDN, QSA, GR/PLE, MoE/MTP backends."},
-    {"id":"L8.6","dependency":"L8.1-L8.5 plus official weights","action":"One-block, four-layer and 48-layer text closure."},
-    {"id":"L9-L10","dependency":"llama.cpp/GGUF, LC/DC, CLN22UL, SRAM views, SAIF","action":"Automatic backend and physical closure."}
+  "schema_version": 6,
+  "marker": "WAIT_LOCAL_AGENT_PUSH",
+  "items": [
+    {
+      "id": "L4",
+      "sandbox_status": "contract and legal 4x4 ratio-2 topology frozen",
+      "local_gate": "AHA/Garnet generation, mapping, PnR, Verilator and DC",
+      "acceptance": ["legal topology", "CNN subset numerical pass", "WNS_nonnegative"]
+    },
+    {
+      "id": "L5.1",
+      "sandbox_status": "raw/round pipeline and Block128 candidate source ready; retained canonical E1 pass",
+      "local_gate": "Verilator/VCS plus CLN22UL DC",
+      "commands": ["./scripts/run_l5_fp32_pipelines.sh","./scripts/run_l5_fp32_pipeline_dc.sh","./scripts/run_l5_block128_rawpipe_candidate.sh","./scripts/run_l5_block128_rawpipe_dc.sh"],
+      "acceptance": ["1024 primitive vectors", "132 Block128 vectors", "random backpressure", "WNS_nonnegative"]
+    },
+    {
+      "id": "L5.2",
+      "sandbox_status": "four-context protocol/cycle E0 and RTL source ready",
+      "local_gate": "real 512-lane BF16 array Verilator and CLN22UL DC",
+      "acceptance": ["1M dependent steps", "II1", "random backpressure", "WNS_nonnegative"]
+    },
+    {
+      "id": "L5.3-L5.6",
+      "sandbox_status": "full-shape program, analytical MAC/memory contracts and mock schedule ready",
+      "local_gate": "Matrix/SFU/iDMA/DDR integration with Qwen2 weights",
+      "acceptance": ["blocked attention E1/E2", "overlap E3", "q1024 >=300 tps", "E4 closure"]
+    },
+    {
+      "id": "L7",
+      "sandbox_status": "paged functional model and TLB/leaf/MSHR cycle E0 ready",
+      "local_gate": "iDMA/AXI, SRAM macros and production page-walker RTL",
+      "acceptance": ["100k transactions", "zero leak", "COW atomicity", "stale response suppression", "E3 cycles"]
+    },
+    {
+      "id": "L8.1",
+      "sandbox_status": "trace schema and full-shape program ready",
+      "local_gate": "official Qwen3.8 model files and runtime",
+      "acceptance": ["immutable revision", "per-node hashes", "state manifest", "route and selection traces"]
+    },
+    {
+      "id": "L8.2-L8.5",
+      "sandbox_status": "GDN/QSA/GR/PLE/MoE/MTP macro programs and state ownership ready",
+      "local_gate": "generated FP RTL, Matrix/SFU/state SRAM, W4 expert path and RTL tools",
+      "acceptance": ["per-backend E1", "one-block E2", "four-layer E2"]
+    },
+    {
+      "id": "L8.6",
+      "sandbox_status": "48-layer full-shape compiler program ready",
+      "local_gate": "official weights plus completed L8.1-L8.5",
+      "acceptance": ["48-layer text closure", "E3 performance", "E4 PPA"]
+    },
+    {
+      "id": "L9",
+      "sandbox_status": "mock partition, descriptor binding and deterministic event program ready",
+      "local_gate": "real llama.cpp/GGUF build and backend API",
+      "acceptance": ["Qwen2/Qwen3.5/Qwen3.8 graph lowering", "fallback correctness", "real GGUF load"]
+    },
+    {
+      "id": "L10",
+      "sandbox_status": "candidate local-gate matrices generated from Archspec",
+      "local_gate": "LC/DC, CLN22UL, SRAM DB/LEF and SAIF",
+      "acceptance": ["unmapped 0", "unresolved 0", "WNS_nonnegative", "macro mapping", "power report"]
+    }
   ]
 }

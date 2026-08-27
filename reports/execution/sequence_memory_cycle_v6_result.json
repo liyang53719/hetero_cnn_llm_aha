@@ -1,0 +1,13 @@
+{
+  "cold_paths": {
+    "leaf_cache_hit": 31,
+    "page_walk": 1,
+    "tlb_hit": 0
+  },
+  "cow_copy_cycles_one_4KiB_page": 64,
+  "evidence_class": "cycle_structured_E0_not_AXI_iDMA_E3",
+  "schema_version": 1,
+  "stale_generation_rejected": true,
+  "status": "PASS",
+  "warm_tlb_hits": 32
+}

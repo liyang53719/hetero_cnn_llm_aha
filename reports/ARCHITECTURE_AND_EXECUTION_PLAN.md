@@ -1,49 +1,26 @@
-# Canonical architecture and execution plan v5
+# Canonical architecture and execution plan v6
 
-## Evidence boundary
+## Audited remote state
 
-E0 is functional/algorithmic/compiler/architecture execution; E1 is real kernel RTL simulation; E2 is sampled multi-engine numerical integration; E3 is integrated queue/DMA/SRAM/DDR cycle execution; E4 is post-synthesis timing/area/power. Source readiness is not E1, and a passing E1 with negative WNS is not E4.
+At the v6 audit base, `main` is `7e18aa7b0c941c65cfa053d24d75757b99008511`; no newer local-agent commit exists. The latest accepted local evidence is `b8f8eaff6a323a6303a52b01db6a776ddbe9e406`: Block128 E1 passes and E4 fails timing at WNS -0.555804 ns.
 
-## Audited local state
+## Serial local critical path
 
-Commit `b8f8eaff6a323a6303a52b01db6a776ddbe9e406` closes Block128 E1: 132 bit-exact vectors, 128-lane/32-beat stream and random backpressure pass. CLN22UL 1.0 ns has zero unmapped cells but WNS `-0.555804 ns`; L5.1 therefore remains E4 FAIL_TIMING.
+1. Validate FP32 raw/round pipelines.
+2. Validate the Block128 `_rawpipe` candidate against the retained 132-vector/32-beat gate.
+3. Require CLN22UL WNS >= 0 without timing exceptions.
+4. Integrate the real 512-lane four-context BF16 array.
+5. Continue blocked attention, fused SiLU, DMA overlap, and 28-layer q1024 closure.
 
-## L5 serial critical path
+## Sandbox work that is now closed at E0
 
-1. Validate HardFloat raw/round FP32 multiply/add pipelines with 1024 vectors.
-2. Run the `_rawpipe` Block128 candidate against the retained 132-vector/32-beat gate.
-3. Require CLN22UL WNS >= 0 before promotion; do not use false paths, lower frequency or multicycle exceptions.
-4. Compile `bf16_outer_product_context_array.sv` against the real 512-lane array and close 1M dependent steps, backpressure, II=1 and 1 GHz timing.
-5. Continue blocked QK/online-Softmax/PV, SiLU DSE, DMA overlap and 28-layer q1024 >=300 token/s.
+- Archspec inheritance, validation, SRAM map, capability manifest, SystemVerilog parameter package and local-gate matrix.
+- Qwen3.8 48-layer full-shape prefill/decode macro program with exact analytical MAC reconciliation.
+- Deterministic mock backend partition, descriptor binding and 16-bit event validation.
+- Sequence Memory two-level translation cycle model with TLB, leaf cache, MSHR coalescing, outstanding pressure and generation rejection.
 
-## Qwen3.8 E0 architecture closure
+These results remove software/planning dependencies from L7/L8/L9, but do not replace RTL E1, integrated E3, official-weight traces or E4 physical evidence.
 
-The sandbox now implements append-time 4-token QSA block summaries, bounded Top-512 without full score materialization, selected-page coalescing/restoration, a cross-state MTP transaction over KV/GDN/QSA/PLE/hyper streams, official-shape MAC/state/DDR budgets, synthetic PLE/MoE cache DSE, format screening and a 4 MiB liveness candidate.
+## Architecture boundary
 
-Planning results:
-
-```text
-fixed MAC/token                         6.147688448 G
-q1024 average MAC/token                 6.224044544 G
-BF16 512 MAC/cycle @300 t/s             infeasible
-W8 2048 MAC/cycle @300 t/s              91.17% wall utilization
-4096 MAC/cycle dual-W8/native-W4         45.59% wall utilization
-GDN FP32 state                          108 MiB/sequence
-QSA compressed index @262144            192 MiB
-QSA BF16 K/V @262144                    6 GiB
-```
-
-Thus Qwen3.8 retains the Matrix/SFU arithmetic core but adds a Sequence Memory Complex, QSA Selection Engine, PLE sparse-row fetch, route-aware W4 expert path and a cross-engine transaction manager. `arch_v2_qwen38_candidate.yaml` is not canonical until E3/E4.
-
-## Global order
-
-```text
-L4 legal AHA CNN sidecar
-L5 Qwen2 BF16 q1024 >=300 t/s
-L6 W8/W4/KV-INT8
-L7 production paged KV + Sequence Memory Complex
-L8 Qwen3.5/Qwen3.8 official traces and backends
-L9 llama.cpp backend
-L10 SRAM/DC/STA/SAIF
-L11 fixed-environment DSE/signoff
-```
+Canonical `arch_v1.yaml` remains the accepted planning architecture. `arch_v2_qwen38_candidate.yaml` remains a candidate until official traces, per-backend E1, one-block/four-layer E2, integrated E3 and 1 GHz E4 all pass.

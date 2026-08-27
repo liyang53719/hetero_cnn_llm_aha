@@ -1,35 +1,35 @@
-schema_version: 5
+schema_version: 6
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_AUDIT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
-  - {id: L4, name: cnn_and_aha_sidecar, status: WAIT_LOCAL_AGENT_E1_E4_PUSH}
+  - {id: L4, name: cnn_and_aha_sidecar, status: SANDBOX_CONTRACT_READY_WAIT_LOCAL_E1_E4}
   - id: L5
     name: qwen2_bf16_long_context_300tps
     status: IN_PROGRESS
     subgates:
-      L5.1: {status: E1_PASS_E4_FAIL_TIMING_RAWPIPE_SOURCE_READY_WAIT_LOCAL_AGENT, retained_wns_ns: -0.555804, acceptance: [pipeline_vectors_1024_zero_mismatch, block128_132_zero_mismatch, stream32_pass, random_backpressure_pass, WNS_nonnegative]}
-      L5.2: {status: SANDBOX_E0_AND_RTL_SOURCE_READY_WAIT_LOCAL_AGENT_E1_E4, scope: Matrix_context_interleave, evidence: reports/execution/matrix_context_source_model_result.json}
-      L5.3: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: blocked_QK_softmax_PV}
-      L5.4: {status: WAIT_LOCAL_AGENT_E1_E4_PUSH, scope: pipelined_SiLU_times_up_DSE}
-      L5.5: {status: WAIT_LOCAL_AGENT_E3_PUSH, scope: queue_DMA_DDR_overlap}
-      L5.6: {status: WAIT_LOCAL_AGENT_E2_E3_E4_PUSH, scope: 28_layer_q1024_300tps}
+      L5.1: {status: E1_PASS_E4_FAIL_TIMING_WAIT_LOCAL_RAWPIPE, retained_wns_ns: -0.555804, acceptance: [pipeline_vectors_1024_zero_mismatch, block128_132_zero_mismatch, stream32_pass, random_backpressure_pass, WNS_nonnegative]}
+      L5.2: {status: SANDBOX_E0_AND_RTL_SOURCE_READY_WAIT_LOCAL_E1_E4, scope: Matrix_context_interleave}
+      L5.3: {status: SANDBOX_PROGRAM_CONTRACT_READY_WAIT_LOCAL_E1_E2, scope: blocked_QK_softmax_PV}
+      L5.4: {status: SANDBOX_DSE_PENDING_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE}
+      L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}
+      L5.6: {status: WAIT_LOCAL_E2_E3_E4, scope: 28_layer_q1024_300tps}
   - {id: L6, name: W8_W4_KV_INT8, status: PLANNED_WITH_SYNTHETIC_FORMAT_SCREEN}
-  - {id: L7, name: production_paged_kv_and_sequence_memory, status: SANDBOX_E0_READY_WAIT_LOCAL_AGENT_E1_E3_PUSH}
+  - {id: L7, name: production_paged_kv_and_sequence_memory, status: SANDBOX_FUNCTIONAL_AND_CYCLE_E0_PASS_WAIT_LOCAL_E1_E3}
   - id: L8
     name: qwen35_qwen38_hybrid_text
-    status: SANDBOX_ARCHITECTURE_E0_PASS_WAIT_LOCAL_AGENT_E1_E2_PUSH
-    sandbox_completed: [QSA_append_summary_streaming_topk, QSA_page_coalesce_restore, full_state_MTP_transaction, full_shape_budget, PLE_MoE_memory_DSE, quantization_screen, 4MiB_liveness_candidate]
+    status: SANDBOX_FULL_SHAPE_COMPILER_E0_PASS_WAIT_LOCAL_E1_E2
+    sandbox_completed: [full_shape_program, exact_MAC_accounting, state_domains, tensor_shapes, descriptor_policy_bindings, QSA_append_summary_streaming_topk, QSA_page_coalesce_restore, full_state_MTP_transaction, PLE_MoE_memory_DSE, 4MiB_liveness_candidate]
     subgates:
-      L8.1: {status: WAIT_LOCAL_AGENT_PUSH, scope: official_weight_node_trace}
-      L8.2: {status: WAIT_LOCAL_AGENT_E1_E2_PUSH, scope: GDN_backend}
-      L8.3: {status: SANDBOX_SELECTION_E0_PASS_WAIT_LOCAL_AGENT_E1_E2, scope: QSA_backend}
-      L8.4: {status: SANDBOX_MEMORY_DSE_PASS_WAIT_LOCAL_AGENT_E1_E2, scope: GR_PLE_backend}
-      L8.5: {status: SANDBOX_TRANSACTION_DSE_PASS_WAIT_LOCAL_AGENT_E1_E2, scope: MoE_MTP_backend}
-      L8.6: {status: WAIT_LOCAL_AGENT_E2_E3_E4_PUSH, scope: official_text_closure}
+      L8.1: {status: WAIT_LOCAL_OFFICIAL_RUNTIME, scope: official_weight_node_trace}
+      L8.2: {status: SANDBOX_PROGRAM_E0_PASS_WAIT_LOCAL_E1_E2, scope: GDN_backend}
+      L8.3: {status: SANDBOX_PROGRAM_AND_SELECTION_E0_PASS_WAIT_LOCAL_E1_E2, scope: QSA_backend}
+      L8.4: {status: SANDBOX_PROGRAM_AND_MEMORY_DSE_PASS_WAIT_LOCAL_E1_E2, scope: GR_PLE_backend}
+      L8.5: {status: SANDBOX_PROGRAM_TRANSACTION_DSE_PASS_WAIT_LOCAL_E1_E2, scope: MoE_MTP_backend}
+      L8.6: {status: WAIT_LOCAL_E2_E3_E4, scope: official_text_closure}
     excluded: [vision_encoder]
-  - {id: L9, name: llama_cpp_backend, status: WAIT_LOCAL_AGENT_PUSH}
+  - {id: L9, name: llama_cpp_backend, status: SANDBOX_MOCK_BACKEND_E0_PASS_WAIT_LOCAL_LLAMA_CPP_GGUF_BUILD}
   - {id: L10, name: physical_closure, status: IN_PROGRESS_COMPONENT_LEVEL}
-  - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_E0_ONLY, candidate: configs/arch_v2_qwen38_candidate.yaml}
+  - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_PASS_E0_ONLY, candidate: configs/arch_v2_qwen38_candidate.yaml}

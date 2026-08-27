@@ -1,6 +1,6 @@
 {
-  "schema_version": 5,
-  "plan_version": "2026-08-27-v5",
+  "schema_version": 6,
+  "plan_version": "2026-08-28-v6",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
   "ledger": "reports/execution/MASTER_LEDGER.json",
@@ -12,10 +12,52 @@
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
   "current_subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
-  "current_state": "E1_PASS_E4_FAIL_TIMING_CANDIDATE_SOURCE_READY",
+  "current_state": "E1_PASS_E4_FAIL_TIMING_WAIT_LOCAL_RAWPIPE_RESULTS",
   "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
-  "evidence_classes": {"E0":"functional_algorithmic_compiler_or_architecture_reference","E1":"real_kernel_rtl_simulation","E2":"sampled_numerical_engine_integration","E3":"integrated_queue_dma_sram_ddr_cycle_execution","E4":"post_synthesis_timing_area_power"},
-  "retained_local_evidence": {"commit":"b8f8eaff6a323a6303a52b01db6a776ddbe9e406","block128_e1":"PASS","block128_e4":"FAIL_TIMING","block128_wns_ns":-0.555804,"unmapped_cells":0},
-  "parallel_sandbox_progress": {"L5_2_MATRIX_CONTEXT_E0_SOURCE":"PASS","L8_QWEN38_QSA_STREAMING_E0":"PASS","L8_QWEN38_STATE_TRANSACTION_E0":"PASS","L8_QWEN38_FULL_SHAPE_BUDGET":"PASS","L8_QWEN38_MEMORY_DSE":"PASS","L8_QWEN38_QUANTIZATION_SCREEN":"PASS","L8_QWEN38_LIVENESS_CANDIDATE":"PASS"},
-  "claim_rules": ["retained Block128 E1 applies to canonical RTL, not the rawpipe candidate","WNS below zero is E4 failure","source readiness is not E1","synthetic DSE is not an official-weight trace","performance claims require E3 and E4","vision remains outside scope"]
+  "evidence_classes": {
+    "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
+    "E1": "real_kernel_rtl_simulation",
+    "E2": "sampled_numerical_engine_integration",
+    "E3": "integrated_queue_dma_sram_ddr_cycle_execution",
+    "E4": "post_synthesis_timing_area_power"
+  },
+  "retained_local_evidence": {
+    "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
+    "block128_e1": "PASS",
+    "block128_vectors": 132,
+    "stream_beats": 32,
+    "random_backpressure": "PASS",
+    "block128_e4": "FAIL_TIMING",
+    "block128_wns_ns": -0.555804,
+    "unmapped_cells": 0
+  },
+  "remote_audit": {
+    "audited_at_utc": "2026-08-28T00:00:00Z",
+    "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
+    "latest_local_agent_evidence_commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
+    "new_local_agent_commit_detected": false,
+    "branch_count": 1
+  },
+  "parallel_sandbox_progress": {
+    "CONTROL_PLANE_V6_AUDIT": "PASS",
+    "ARCHSPEC_COLLATERAL_GENERATION": "PASS",
+    "L5_2_MATRIX_CONTEXT_E0_SOURCE": "PASS",
+    "L7_SEQUENCE_MEMORY_CYCLE_E0": "PASS",
+    "L8_QWEN38_FULL_SHAPE_PROGRAM_E0": "PASS",
+    "L8_QWEN38_QSA_STREAMING_E0": "PASS",
+    "L8_QWEN38_STATE_TRANSACTION_E0": "PASS",
+    "L8_QWEN38_MEMORY_DSE": "PASS",
+    "L9_MOCK_BACKEND_PARTITION_E0": "PASS",
+    "L11_CANDIDATE_ARCHSPEC_COLLATERAL": "PASS"
+  },
+  "claim_rules": [
+    "no new local-agent commit was present at the audited base head",
+    "retained Block128 E1 does not close Block128 E4",
+    "negative WNS is always E4 failure",
+    "shape-only lowering and mock backend are E0, not device execution",
+    "cycle-structured Sequence Memory is E0, not AXI/iDMA E3",
+    "candidate Archspec collateral does not promote it to canonical",
+    "official-weight accuracy and route locality remain local-runtime gates",
+    "vision remains outside scope"
+  ]
 }

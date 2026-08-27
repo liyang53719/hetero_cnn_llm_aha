@@ -1,0 +1,54 @@
+{
+  "arch_id": "heteronpu_v2_qwen38_candidate",
+  "archspec_sha256": "357b12c07ae1c6e9443a7b764cf78911886c57bc3d99883d59b64c9216f4f321",
+  "matrix_modes": [
+    "bf16",
+    "context_interleaved_accumulation",
+    "gdn_outer_product_state_update",
+    "grouped_expert_gemm",
+    "native_w4a8_dual_dot",
+    "qsa_index_scan",
+    "skinny_decode_gemv",
+    "w4_storage_w8_compute_g128",
+    "w4_storage_w8_compute_g64",
+    "w8a8"
+  ],
+  "promotion_gates": [
+    "official_weight_node_trace",
+    "E1_per_backend",
+    "E2_one_block_and_four_layer",
+    "E3_integrated_cycles_and_bandwidth",
+    "E4_1GHz_area_power"
+  ],
+  "schema_version": 1,
+  "sequence_memory": [
+    "expert_weight_path",
+    "gdn_state",
+    "ple_row_fetch",
+    "qsa_selection",
+    "transaction_manager"
+  ],
+  "sfu": [
+    "exp2_pwl",
+    "online_softmax_merge",
+    "online_softmax_update",
+    "reciprocal_nr",
+    "reduce_max",
+    "reduce_sum",
+    "rms_norm",
+    "rope",
+    "rsqrt_nr",
+    "silu_times_up"
+  ],
+  "sram_map": [
+    {"base": 0, "bytes": 1310720, "limit": 1310720, "owner": "shared_l2"},
+    {"base": 1310720, "bytes": 786432, "limit": 2097152, "owner": "matrix_scratchpad"},
+    {"base": 2097152, "bytes": 524288, "limit": 2621440, "owner": "matrix_accumulator"},
+    {"base": 2621440, "bytes": 786432, "limit": 3407872, "owner": "sequence_state_staging"},
+    {"base": 3407872, "bytes": 393216, "limit": 3801088, "owner": "expert_row_staging"},
+    {"base": 3801088, "bytes": 262144, "limit": 4063232, "owner": "aha_sidecar"},
+    {"base": 4063232, "bytes": 131072, "limit": 4194304, "owner": "control_trace"}
+  ],
+  "status": "candidate_sandbox_not_canonical",
+  "total_sram_bytes": 4194304
+}

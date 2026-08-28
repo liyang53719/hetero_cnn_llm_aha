@@ -1,29 +1,131 @@
 // SPDX-License-Identifier: Apache-2.0
+// Structural four-context, fixed 16x32 BF16 array with lane-local state.
 `timescale 1ns/1ps
-// Context-interleaved wrapper for the proven BF16 outer-product array.
 module bf16_outer_product_context_array #(
- parameter integer ROWS=16,COLS=32,CONTEXTS=4,FIFO_DEPTH=8,
- localparam integer LANES=ROWS*COLS,
- localparam integer CONTEXT_BITS=(CONTEXTS<=1)?1:$clog2(CONTEXTS),
- localparam integer FIFO_BITS=(FIFO_DEPTH<=1)?1:$clog2(FIFO_DEPTH)
-)(input logic clk_i,rst_ni,input logic in_valid_i,output logic in_ready_o,input logic [CONTEXT_BITS-1:0] context_i,input logic clear_i,last_i,input logic [ROWS*16-1:0] a_i,input logic [COLS*16-1:0] b_i,output logic out_valid_o,input logic out_ready_i,output logic [CONTEXT_BITS-1:0] context_o,output logic last_o,output logic [LANES*32-1:0] acc_o,output logic [4:0] exception_flags_o,output logic [CONTEXTS-1:0] busy_o,accumulator_valid_o,output logic [31:0] accepted_steps_o,completed_steps_o,output logic protocol_error_o);
- logic [LANES*32-1:0] accumulator_bank[0:CONTEXTS-1];logic [CONTEXTS-1:0] accumulator_valid_q,busy_q;logic [CONTEXT_BITS-1:0] context_fifo[0:FIFO_DEPTH-1];logic last_fifo[0:FIFO_DEPTH-1];logic [FIFO_BITS-1:0] write_pointer_q,read_pointer_q;logic [FIFO_BITS:0] fifo_count_q;
- logic context_legal;logic [CONTEXT_BITS-1:0] safe_context;logic fifo_not_full,fifo_not_empty;logic array_in_valid,array_in_ready,issue_fire,array_out_valid,array_out_ready,completion_fire;logic [LANES*32-1:0] array_accumulator,issue_accumulator;logic [4:0] array_flags;logic [31:0] array_accepted,array_completed;logic [CONTEXT_BITS-1:0] completion_context;logic completion_last,completion_same_context,context_available;
- generate if(CONTEXTS==(1<<CONTEXT_BITS))begin:g_all_contexts_legal assign context_legal=1'b1;end else begin:g_check_context assign context_legal=context_i<CONTEXT_BITS'(CONTEXTS);end endgenerate
- assign safe_context=context_legal?context_i:'0;assign fifo_not_full=fifo_count_q<(FIFO_BITS+1)'(FIFO_DEPTH);assign fifo_not_empty=fifo_count_q!=0;assign completion_context=fifo_not_empty?context_fifo[read_pointer_q]:'0;assign completion_last=fifo_not_empty?last_fifo[read_pointer_q]:1'b0;
- assign out_valid_o=array_out_valid&&fifo_not_empty;assign array_out_ready=out_ready_i&&fifo_not_empty;assign completion_fire=array_out_valid&&array_out_ready;assign completion_same_context=completion_fire&&completion_context==safe_context;assign context_available=!busy_q[safe_context]||completion_same_context;assign issue_accumulator=clear_i?'0:completion_same_context?array_accumulator:accumulator_valid_q[safe_context]?accumulator_bank[safe_context]:'0;
- assign array_in_valid=in_valid_i&&context_legal&&context_available&&fifo_not_full;assign in_ready_o=context_legal&&context_available&&fifo_not_full&&array_in_ready;assign issue_fire=array_in_valid&&array_in_ready;assign context_o=completion_context;assign last_o=completion_last;assign acc_o=array_accumulator;assign exception_flags_o=array_flags;assign busy_o=busy_q;assign accumulator_valid_o=accumulator_valid_q;
- bf16_outer_product_array #(.ROWS(ROWS),.COLS(COLS)) array(.clk_i,.rst_ni,.in_valid_i(array_in_valid),.in_ready_o(array_in_ready),.a_i,.b_i,.acc_i(issue_accumulator),.out_valid_o(array_out_valid),.out_ready_i(array_out_ready),.acc_o(array_accumulator),.exception_flags_o(array_flags),.accepted_steps_o(array_accepted),.completed_steps_o(array_completed));
- always_ff @(posedge clk_i or negedge rst_ni) begin
-  if(!rst_ni)begin accumulator_valid_q<='0;busy_q<='0;write_pointer_q<='0;read_pointer_q<='0;fifo_count_q<='0;accepted_steps_o<='0;completed_steps_o<='0;protocol_error_o<=1'b0;end
-  else begin
-   if(in_valid_i&&!context_legal)protocol_error_o<=1'b1;if(array_out_valid&&!fifo_not_empty)protocol_error_o<=1'b1;
-   if(completion_fire)begin accumulator_bank[completion_context]<=array_accumulator;accumulator_valid_q[completion_context]<=1'b1;busy_q[completion_context]<=1'b0;read_pointer_q<=(read_pointer_q==FIFO_BITS'(FIFO_DEPTH-1))?'0:read_pointer_q+1'b1;completed_steps_o<=completed_steps_o+1'b1;end
-   if(issue_fire)begin context_fifo[write_pointer_q]<=safe_context;last_fifo[write_pointer_q]<=last_i;write_pointer_q<=(write_pointer_q==FIFO_BITS'(FIFO_DEPTH-1))?'0:write_pointer_q+1'b1;busy_q[safe_context]<=1'b1;accepted_steps_o<=accepted_steps_o+1'b1;end
-   case({issue_fire,completion_fire})2'b10:fifo_count_q<=fifo_count_q+1'b1;2'b01:fifo_count_q<=fifo_count_q-1'b1;default:fifo_count_q<=fifo_count_q;endcase
-  end
- end
-`ifndef SYNTHESIS
- initial begin if(CONTEXTS<1)$fatal(1,"CONTEXTS");if(FIFO_DEPTH<2||(FIFO_DEPTH&(FIFO_DEPTH-1))!=0)$fatal(1,"FIFO_DEPTH");end
-`endif
+  parameter integer ROWS = 16,
+  parameter integer COLS = 32,
+  parameter integer CONTEXTS = 4,
+  parameter integer FIFO_DEPTH = 8,
+  localparam integer LANES = ROWS * COLS,
+  localparam integer CONTEXT_BITS = (CONTEXTS <= 1) ? 1 : $clog2(CONTEXTS)
+)(
+  input logic clk_i, rst_ni,
+  input logic in_valid_i, output logic in_ready_o,
+  input logic [CONTEXT_BITS-1:0] context_i,
+  input logic clear_i, last_i,
+  input logic [ROWS*16-1:0] a_i,
+  input logic [COLS*16-1:0] b_i,
+  output logic out_valid_o, input logic out_ready_i,
+  output logic [CONTEXT_BITS-1:0] context_o,
+  output logic last_o,
+  output logic [LANES*32-1:0] acc_o,
+  output logic [4:0] exception_flags_o,
+  output logic [CONTEXTS-1:0] busy_o, accumulator_valid_o,
+  output logic [31:0] accepted_steps_o, completed_steps_o,
+  output logic protocol_error_o
+);
+  logic scheduler_array_in_valid, scheduler_array_in_ready;
+  logic scheduler_array_out_valid, scheduler_array_out_ready;
+  logic [1:0] issue_context, completion_context;
+  logic issue_clear, issue_bypass, issue_use_bank, completion_fire;
+  logic [511:0] lane_pre_write, lane_mul_write, lane_post_write;
+  logic [511:0] lane_output_write, lane_rst_ni;
+  logic [1023:0] lane_issue_context, lane_completion_context;
+  logic [511:0] lane_issue_clear, lane_issue_bypass, lane_issue_use_bank;
+  logic [511:0] lane_completion_fire;
+  logic [LANES*32-1:0] lane_result;
+  logic [LANES*5-1:0] lane_flags;
+  logic [31:0] array_accepted_unused, array_completed_unused;
+
+  generate
+    if (ROWS == 16 && COLS == 32 && CONTEXTS == 4 && FIFO_DEPTH == 8) begin : g_production
+      bf16_context_scheduler4 scheduler (
+        .clk_i(clk_i), .rst_ni(rst_ni),
+        .in_valid_i(in_valid_i), .in_ready_o(in_ready_o),
+        .context_i(context_i), .clear_i(clear_i), .last_i(last_i),
+        .out_valid_o(out_valid_o), .out_ready_i(out_ready_i),
+        .context_o(context_o), .last_o(last_o),
+        .array_in_valid_o(scheduler_array_in_valid),
+        .array_in_ready_i(scheduler_array_in_ready),
+        .array_out_valid_i(scheduler_array_out_valid),
+        .array_out_ready_o(scheduler_array_out_ready),
+        .issue_context_o(issue_context), .issue_clear_o(issue_clear),
+        .issue_bypass_o(issue_bypass), .issue_use_bank_o(issue_use_bank),
+        .completion_fire_o(completion_fire),
+        .completion_context_o(completion_context),
+        .busy_o(busy_o), .accumulator_valid_o(accumulator_valid_o),
+        .accepted_steps_o(accepted_steps_o),
+        .completed_steps_o(completed_steps_o),
+        .protocol_error_o(protocol_error_o)
+      );
+
+      bf16_outer_product_array_control512 array_control (
+        .clk_i(clk_i), .rst_ni(rst_ni),
+        .in_valid_i(scheduler_array_in_valid),
+        .in_ready_o(scheduler_array_in_ready),
+        .out_valid_o(scheduler_array_out_valid),
+        .out_ready_i(scheduler_array_out_ready),
+        .lane_pre_write_o(lane_pre_write),
+        .lane_mul_write_o(lane_mul_write),
+        .lane_post_write_o(lane_post_write),
+        .lane_output_write_o(lane_output_write),
+        .accepted_steps_o(array_accepted_unused),
+        .completed_steps_o(array_completed_unused)
+      );
+
+      bf16_context_control_broadcast512 context_broadcast (
+        .issue_context_i(issue_context), .issue_clear_i(issue_clear),
+        .issue_bypass_i(issue_bypass), .issue_use_bank_i(issue_use_bank),
+        .completion_fire_i(completion_fire),
+        .completion_context_i(completion_context),
+        .lane_issue_context_o(lane_issue_context),
+        .lane_issue_clear_o(lane_issue_clear),
+        .lane_issue_bypass_o(lane_issue_bypass),
+        .lane_issue_use_bank_o(lane_issue_use_bank),
+        .lane_completion_fire_o(lane_completion_fire),
+        .lane_completion_context_o(lane_completion_context)
+      );
+
+      bf16_outer_product_array_glue512 glue (
+        .rst_ni(rst_ni), .lane_flags_i(lane_flags),
+        .lane_rst_ni_o(lane_rst_ni), .flags_o(exception_flags_o)
+      );
+
+      for (genvar row = 0; row < 16; row++) begin : g_row
+        for (genvar col = 0; col < 32; col++) begin : g_col
+          localparam integer LANE = row * 32 + col;
+          bf16_context_fma_pipeline_lane4 lane (
+            .clk_i(clk_i), .rst_ni(lane_rst_ni[LANE]),
+            .pre_write_i(lane_pre_write[LANE]),
+            .mul_write_i(lane_mul_write[LANE]),
+            .post_write_i(lane_post_write[LANE]),
+            .output_write_i(lane_output_write[LANE]),
+            .a_i(a_i[row*16 +: 16]), .b_i(b_i[col*16 +: 16]),
+            .issue_context_i(lane_issue_context[LANE*2 +: 2]),
+            .issue_clear_i(lane_issue_clear[LANE]),
+            .issue_bypass_i(lane_issue_bypass[LANE]),
+            .issue_use_bank_i(lane_issue_use_bank[LANE]),
+            .completion_fire_i(lane_completion_fire[LANE]),
+            .completion_context_i(lane_completion_context[LANE*2 +: 2]),
+            .out_o(lane_result[LANE*32 +: 32]),
+            .flags_o(lane_flags[LANE*5 +: 5])
+          );
+        end
+      end
+      assign acc_o = lane_result;
+    end else begin : g_unsupported
+      initial $fatal(1, "production context array requires 16x32, 4 contexts, FIFO 8");
+      assign in_ready_o = 1'b0;
+      assign out_valid_o = 1'b0;
+      assign context_o = '0;
+      assign last_o = 1'b0;
+      assign acc_o = '0;
+      assign exception_flags_o = '0;
+      assign busy_o = '0;
+      assign accumulator_valid_o = '0;
+      assign accepted_steps_o = '0;
+      assign completed_steps_o = '0;
+      assign protocol_error_o = 1'b1;
+    end
+  endgenerate
 endmodule

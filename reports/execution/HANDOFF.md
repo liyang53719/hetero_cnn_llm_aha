@@ -1,8 +1,8 @@
 # Local-agent handoff v6
 
-State: L5.2 hierarchical DC revision 6 frozen, ready for joint context-lane
-mapping. Structural array and scheduler/broadcast pass; preserving the base
-lane boundary caused context-lane WNS `-0.0739283 ns`.
+State: `BLOCKED_DECISION` at L5.2 context-lane timing. Structural array and
+scheduler/broadcast pass. Joint context-lane normal/high runs remain negative
+at `-0.034333 ns` and `-0.0371628 ns` with zero unmapped/unresolved.
 
 ## Closed locally
 
@@ -42,7 +42,8 @@ Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
 ## Next execution
 
 Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
-stage once, map control512, then jointly map the local four-context accumulator
-mux and base-lane registers around preserved generated arithmetic leaves. Full
-context H3 performs no top compile. Do not reduce array size/frequency or add
-false/multicycle paths.
+Recommended next decision: allow one context lane to be remapped directly from
+the committed emitter-generated SystemVerilog plus handwritten lane RTL, so DC
+can optimize through HardFloat Pre. This changes no RTL/cycle/interface and
+does not hand edit generated RTL. Do not run H3 until approved; the failed lane
+DDC has no acceptance marker.

@@ -1,9 +1,9 @@
 {
   "schema_version": 6,
-  "state": "READY_JOINT_MAP_CONTEXT_LANE",
+  "state": "BLOCKED_DECISION",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "objective": "Implement revision 6 synthesis boundary: jointly map local accumulator mux and base-lane registers while preserving only generated HardFloat leaf DDCs.",
+  "objective": "Obtain approval for a single context-lane remap directly from committed emitter-generated SystemVerilog so DC can optimize through HardFloat Pre without adding a cycle.",
   "current_evidence": {
     "l5_1": "PASS_E1_E4",
     "l5_2_e1": "PASS",
@@ -18,10 +18,11 @@
     "SequenceMemory_translation_cycle_model"
   ],
   "ordered_commands": [
-    "change context-lane Tcl to read four leaf DDCs and analyze base/context lane RTL",
-    "normal-effort map one context lane; retry high effort only on timing-only failure",
-    "if lane passes, structurally link/report the full context top"
+    "wait for explicit approval of full-source single-lane remap",
+    "if approved, freeze revision 7 before changing Tcl",
+    "do not run H3 or use the failed context-lane DDC"
   ],
+  "recommended_decision": "allow_full_source_single_context_lane_remap_no_RTL_change",
   "audit_questions": [
     "confirm bottom-up compile of generated pre/mul/post/round references",
     "confirm preservation of production 16x32 lanes and four-context interface",

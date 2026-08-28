@@ -97,6 +97,16 @@ stages. This changes no RTL. Normal effort runs first; one high-effort retry is
 allowed only for this single lane. If WNS remains negative, stop with
 `BLOCKED_DECISION`; a fifth context/cycle and timing exceptions are forbidden.
 
+Revision 6 result: normal effort improved WNS to `-0.034333 ns`; the one
+authorized high-effort retry produced `-0.0371628 ns`. Both had zero
+unmapped/unresolved references. L5.2 is now `BLOCKED_DECISION`. The recommended
+next option is to compile this single context lane directly from the committed
+Scala-generated SystemVerilog plus handwritten lane RTL, allowing optimization
+through HardFloat Pre while keeping every public interface and all four cycles.
+This requires explicit approval because it replaces leaf-DDC preservation for
+one local implementation boundary. Generated RTL remains emitter output and is
+not hand edited.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by

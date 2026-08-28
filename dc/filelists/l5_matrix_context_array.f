@@ -1,3 +1,9 @@
 work/generated/l5_all_primitives/HeteroAllPrimitives.sv
+rtl/matrix/bf16_fma_pipeline_lane.sv
+rtl/matrix/bf16_outer_product_array_control512.sv
+rtl/matrix/bf16_outer_product_array_glue512.sv
 rtl/matrix/bf16_outer_product_array.sv
+rtl/matrix/bf16_context_scheduler4.sv
+rtl/matrix/bf16_context_control_broadcast512.sv
+rtl/matrix/bf16_context_fma_pipeline_lane4.sv
 rtl/matrix/bf16_outer_product_context_array.sv

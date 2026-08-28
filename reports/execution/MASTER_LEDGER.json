@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_HIER_DC_REV6_FROZEN_READY_JOINT_CONTEXT_LANE",
+  "current_state": "L5_2_BLOCKED_DECISION_CONTEXT_PRE_REMAP",
   "remote_audit": {
     "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
     "new_local_agent_commit_detected": false,
@@ -23,7 +23,7 @@
       "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
     },
     "L5.2": {
-      "status": "E1_PASS_HIER_DC_REV6_READY_JOINT_CONTEXT_LANE",
+      "status": "BLOCKED_DECISION_CONTEXT_PRE_REMAP",
       "physical_array": "16x32_512_lane",
       "contexts": 4,
       "dependent_steps": 1000000,
@@ -45,6 +45,8 @@
       "context_incremental_compile": "BLOCKED_RUNTIME_1831S",
       "context_scheduler_broadcast": "PASS",
       "context_lane_preserved_base": "FAIL_TIMING_WNS_N0P0739283",
+      "context_lane_joint_normal": "FAIL_TIMING_WNS_N0P034333",
+      "context_lane_joint_high": "FAIL_TIMING_WNS_N0P0371628",
       "evidence": "reports/execution/l5_matrix_context_local_e1_e4_result.json"
     }
   },

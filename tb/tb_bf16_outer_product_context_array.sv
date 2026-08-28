@@ -101,8 +101,16 @@ module tb_bf16_outer_product_context_array;
           expected_context = completion_count & 3;
           if (context_out !== expected_context[1:0])
             $fatal(1, "context reorder completion=%0d got=%0d", completion_count, context_out);
-          expected_value = context_steps[context_out];
-          if (out_last) last_count = last_count + 1;
+          if (out_last) begin
+            last_count = last_count + 1;
+            expected_value = target_steps / 4;
+            for (integer lane = 0; lane < LANES; lane++) begin
+              if (acc[lane*32 +: 32] !== fp32_bits_from_small_int(expected_value))
+                $fatal(1, "final output mismatch c=%0d lane=%0d got=%08x expected=%08x",
+                  context_out, lane, acc[lane*32 +: 32],
+                  fp32_bits_from_small_int(expected_value));
+            end
+          end
           flags_or = flags_or | flags;
           completion_count = completion_count + 1;
         end
@@ -119,13 +127,6 @@ module tb_bf16_outer_product_context_array;
       for (integer c = 0; c < 4; c++) begin
         if (context_steps[c] != target_steps / 4)
           $fatal(1, "context steps c=%0d steps=%0d", c, context_steps[c]);
-        for (integer lane = 0; lane < LANES; lane++) begin
-          if (dut.accumulator_bank[c][lane*32 +: 32] !==
-              fp32_bits_from_small_int(context_steps[c]))
-            $fatal(1, "acc mismatch c=%0d lane=%0d got=%08x expected=%08x",
-              c, lane, dut.accumulator_bank[c][lane*32 +: 32],
-              fp32_bits_from_small_int(context_steps[c]));
-        end
       end
     end
   endtask

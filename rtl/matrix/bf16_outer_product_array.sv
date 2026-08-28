@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Four-stage elastic HardFloat BF16-input/FP32-accumulator outer-product tile.
+// Structural fixed-production BF16 outer-product array composition.
 `timescale 1ns/1ps
 module bf16_outer_product_array #(
   parameter integer ROWS = 16,
@@ -13,101 +13,58 @@ module bf16_outer_product_array #(
   output logic [LANES*32-1:0] acc_o, output logic [4:0] exception_flags_o,
   output logic [31:0] accepted_steps_o, completed_steps_o
 );
-  logic pre_valid_q, mul_valid_q, post_valid_q, output_valid_q;
-  logic pre_ready, mul_ready, post_ready, output_ready;
-  logic [LANES*24-1:0] pre_a_comb, pre_b_comb, pre_a_q, pre_b_q;
-  logic [LANES*48-1:0] pre_c_comb, pre_c_q;
-  logic [LANES*54-1:0] pre_meta_comb, pre_meta_q, mul_meta_q;
-  logic [LANES*49-1:0] mul_result_comb, mul_result_q;
-  logic [LANES*41-1:0] post_raw_comb, post_raw_q;
-  logic [LANES-1:0] post_invalid_comb, post_invalid_q;
-  logic [LANES*32-1:0] round_result, output_q;
-  logic [LANES*5-1:0] round_flags;
-  logic [4:0] flags_comb, flags_q;
-  logic issue_fire, completion_fire;
-  integer flag_lane;
+  logic [LANES*32-1:0] lane_result;
+  logic [LANES*5-1:0] lane_flags;
+  logic [511:0] lane_rst_ni, lane_pre_write, lane_mul_write;
+  logic [511:0] lane_post_write, lane_output_write;
 
-  assign output_ready = !output_valid_q || out_ready_i;
-  assign post_ready = !post_valid_q || output_ready;
-  assign mul_ready = !mul_valid_q || post_ready;
-  assign pre_ready = !pre_valid_q || mul_ready;
-  assign in_ready_o = pre_ready;
-  assign out_valid_o = output_valid_q;
-  assign acc_o = output_q;
-  assign exception_flags_o = flags_q;
-  assign issue_fire = in_valid_i && in_ready_o;
-  assign completion_fire = out_valid_o && out_ready_i;
+  bf16_outer_product_array_control512 control (
+    .clk_i(clk_i), .rst_ni(rst_ni),
+    .in_valid_i(in_valid_i), .in_ready_o(in_ready_o),
+    .out_valid_o(out_valid_o), .out_ready_i(out_ready_i),
+    .lane_pre_write_o(lane_pre_write), .lane_mul_write_o(lane_mul_write),
+    .lane_post_write_o(lane_post_write),
+    .lane_output_write_o(lane_output_write),
+    .accepted_steps_o(accepted_steps_o), .completed_steps_o(completed_steps_o)
+  );
 
-  always_comb begin
-    flags_comb = '0;
-    for (flag_lane = 0; flag_lane < LANES; flag_lane++)
-      flags_comb |= round_flags[flag_lane*5 +: 5];
-  end
+  generate
+    if (LANES == 512) begin : g_production_glue
+      bf16_outer_product_array_glue512 glue (
+        .rst_ni(rst_ni),
+        .lane_flags_i(lane_flags), .lane_rst_ni_o(lane_rst_ni),
+        .flags_o(exception_flags_o)
+      );
+    end else begin : g_unsupported_geometry
+      initial $fatal(1, "production bf16_outer_product_array requires 16x32");
+      assign lane_rst_ni = '0;
+      assign lane_pre_write = '0;
+      assign lane_mul_write = '0;
+      assign lane_post_write = '0;
+      assign lane_output_write = '0;
+      assign exception_flags_o = '0;
+    end
+  endgenerate
 
   genvar row, col;
   generate
     for (row = 0; row < ROWS; row++) begin : g_row
       for (col = 0; col < COLS; col++) begin : g_col
         localparam integer LANE = row * COLS + col;
-        HeteroBF16FmaPre u_pre (
-          .io_a(a_i[row*16 +: 16]), .io_b(b_i[col*16 +: 16]),
-          .io_c(acc_i[LANE*32 +: 32]),
-          .io_mulAddA(pre_a_comb[LANE*24 +: 24]),
-          .io_mulAddB(pre_b_comb[LANE*24 +: 24]),
-          .io_mulAddC(pre_c_comb[LANE*48 +: 48]),
-          .io_meta(pre_meta_comb[LANE*54 +: 54])
-        );
-        HeteroBF16FmaMul u_mul (
-          .io_mulAddA(pre_a_q[LANE*24 +: 24]),
-          .io_mulAddB(pre_b_q[LANE*24 +: 24]),
-          .io_mulAddC(pre_c_q[LANE*48 +: 48]),
-          .io_mulAddResult(mul_result_comb[LANE*49 +: 49])
-        );
-        HeteroBF16FmaPost u_post (
-          .io_meta(mul_meta_q[LANE*54 +: 54]),
-          .io_mulAddResult(mul_result_q[LANE*49 +: 49]),
-          .io_raw(post_raw_comb[LANE*41 +: 41]),
-          .io_invalid(post_invalid_comb[LANE])
-        );
-        HeteroBF16FmaRound u_round (
-          .io_raw(post_raw_q[LANE*41 +: 41]),
-          .io_invalid(post_invalid_q[LANE]),
-          .io_out(round_result[LANE*32 +: 32]),
-          .io_exceptionFlags(round_flags[LANE*5 +: 5])
+        bf16_fma_pipeline_lane lane (
+          .clk_i(clk_i), .rst_ni(lane_rst_ni[LANE]),
+          .pre_write_i(lane_pre_write[LANE]),
+          .mul_write_i(lane_mul_write[LANE]),
+          .post_write_i(lane_post_write[LANE]),
+          .output_write_i(lane_output_write[LANE]),
+          .a_i(a_i[row*16 +: 16]), .b_i(b_i[col*16 +: 16]),
+          .c_i(acc_i[LANE*32 +: 32]),
+          .out_o(lane_result[LANE*32 +: 32]),
+          .flags_o(lane_flags[LANE*5 +: 5])
         );
       end
     end
   endgenerate
 
-  always_ff @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      pre_valid_q <= 1'b0; mul_valid_q <= 1'b0; post_valid_q <= 1'b0;
-      output_valid_q <= 1'b0; pre_a_q <= '0; pre_b_q <= '0; pre_c_q <= '0;
-      pre_meta_q <= '0; mul_result_q <= '0; mul_meta_q <= '0;
-      post_raw_q <= '0; post_invalid_q <= '0; output_q <= '0; flags_q <= '0;
-      accepted_steps_o <= '0; completed_steps_o <= '0;
-    end else begin
-      if (issue_fire) accepted_steps_o <= accepted_steps_o + 1'b1;
-      if (completion_fire) completed_steps_o <= completed_steps_o + 1'b1;
-      if (output_ready) begin
-        output_valid_q <= post_valid_q;
-        if (post_valid_q) begin output_q <= round_result; flags_q <= flags_comb; end
-      end
-      if (post_ready) begin
-        post_valid_q <= mul_valid_q;
-        if (mul_valid_q) begin post_raw_q <= post_raw_comb; post_invalid_q <= post_invalid_comb; end
-      end
-      if (mul_ready) begin
-        mul_valid_q <= pre_valid_q;
-        if (pre_valid_q) begin mul_result_q <= mul_result_comb; mul_meta_q <= pre_meta_q; end
-      end
-      if (pre_ready) begin
-        pre_valid_q <= in_valid_i;
-        if (in_valid_i) begin
-          pre_a_q <= pre_a_comb; pre_b_q <= pre_b_comb; pre_c_q <= pre_c_comb;
-          pre_meta_q <= pre_meta_comb;
-        end
-      end
-    end
-  end
+  assign acc_o = lane_result;
 endmodule

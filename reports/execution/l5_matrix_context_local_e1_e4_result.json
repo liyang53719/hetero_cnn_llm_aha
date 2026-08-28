@@ -14,8 +14,8 @@
     "random_backpressure_steps": 10000,
     "random_backpressure_cycles": 14555,
     "numeric_tag_protocol": "PASS",
-    "binary_sha256": "a80361f99dc39fe70e8c16df20f556c623c69aa7a236f4a68505b18ad79b5efd",
-    "log_sha256": "83c26f843860d05c2f6f0325cd8be1561b7934d5d105357360654dc153b2f445",
+    "binary_sha256": "c5dc17beedc09ece35fe283916c7864deaddf2cd39704e4804da6c7dd3283bce",
+    "log_sha256": "fa268913f9bcac5104565747052b4fa5afaa81eae42e10d72a317072b0e0cd20",
     "production_lane_refactor_revalidated": true
   },
   "pipeline": {
@@ -155,9 +155,25 @@
         "critical_path": "issue_bypass input through local accumulator mux and HardFloat Pre to pre_c_q",
         "dc_log_sha256": "f6a57b6740e413f4d617456bf675d6cd80fd96563dd720bd87e9231d4feb47d9",
         "timing_report_sha256": "3bc41337ae86c9cbc9c3af712ec0caa549c5b57b378d94090d85e4bf953dc2b6"
+      },
+      "context_lane_joint_normal": {
+        "status": "FAIL_TIMING",
+        "wns_ns": -0.034333,
+        "unmapped": 0,
+        "unresolved": 0,
+        "dc_log_sha256": "c2b20d7cc83007ed4c7fe6ec7bc7f0cd965d1e9a8261d050c4a16848d6b93b3e",
+        "timing_report_sha256": "cee39b120d7c60a8e5235b1b8146d28cbb730770941f5dd2ccefb6ba9a39f2f3"
+      },
+      "context_lane_joint_high": {
+        "status": "FAIL_TIMING",
+        "wns_ns": -0.0371628,
+        "unmapped": 0,
+        "unresolved": 0,
+        "dc_log_sha256": "bca0121f51d21945e038922e1fee1b268923a146302838029ad79dd7f5418c31",
+        "timing_report_sha256": "78b0ec29e98cde6ebd1fc5be78814bf3b2b8cbdb47c5174c094edfe6c6df827d"
       }
     },
-    "next": "joint-map accumulator mux and base-lane registers around preserved arithmetic leaves"
+    "next": "BLOCKED_DECISION_allow_full_source_single_context_lane_remap"
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",
@@ -177,6 +193,6 @@
   "closure": {
     "l5_2_pass": false,
     "blocking_gate": "full_512_lane_CLN22UL_1GHz_E4",
-    "next_state": "WAIT_REMOTE_AUDIT"
+    "next_state": "BLOCKED_DECISION"
   }
 }

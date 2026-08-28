@@ -93,7 +93,24 @@
       "dc_log_sha256": "92b9fd89905424bcf5e0ad8c6ed66cfcc5f8d6f5c2b71a22ae1eaeb6c551ab1e",
       "retry_same_command": false
     },
-    "next": "map control/glue separately and compose without top compile"
+    "structural_array_rev3": {
+      "status": "FAIL_TIMING",
+      "elapsed_seconds": 150,
+      "wns_ns": -0.267833,
+      "tns_ns": -11347.69,
+      "violating_paths": 60416,
+      "unmapped": 0,
+      "unresolved": 0,
+      "lane_design_variants": 1,
+      "lane_instances": 512,
+      "cell_area": 1738117.950704,
+      "leaf_cells": 2931374,
+      "sequential_cells": 153156,
+      "critical_path": "control output_valid through ready chain and separate pre_write broadcast to lane input mux",
+      "dc_log_sha256": "87634a737ff5ca93815e91533b160aa87551adb60d1bdc2a8d1ba515ad4426d9",
+      "timing_report_sha256": "7a1e5e553c35e6e56d9c99d6b8250fb20e7b7a5281ec37136c18a4d370cdfe4a"
+    },
+    "next": "combine ready state and write-enable broadcast in control512"
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",

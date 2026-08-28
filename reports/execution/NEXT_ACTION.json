@@ -1,9 +1,9 @@
 {
   "schema_version": 6,
-  "state": "READY_IMPLEMENT_STRUCTURAL_ARRAY_COMPOSE",
+  "state": "READY_IMPLEMENT_CONTROL512_TIMING_BLOCK",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "objective": "Implement revision 3: map array control and wide glue independently, then compose the fixed array from only accepted mapped DDC references without a top compile.",
+  "objective": "Implement revision 4 control512 so the ready chain and 512-way write-enable tree are optimized in one mapped timing block without adding a cycle.",
   "current_evidence": {
     "l5_1": "PASS_E1_E4",
     "l5_2_e1": "PASS",
@@ -18,9 +18,9 @@
     "SequenceMemory_translation_cycle_model"
   ],
   "ordered_commands": [
-    "implement array_control and fixed glue512 hierarchy without public-port or cycle changes",
-    "rerun complete E1 and map control/glue DDCs",
-    "link/report/write the structural 16x32 array without compile"
+    "combine control state and four lane-enable broadcast trees in control512",
+    "rerun complete E1 and map control512 with the frozen lane-enable budget",
+    "relink/report the structural 16x32 array without compile"
   ],
   "audit_questions": [
     "confirm bottom-up compile of generated pre/mul/post/round references",

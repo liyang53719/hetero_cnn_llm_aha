@@ -54,6 +54,20 @@ This is not a black-box flow: lane, control, broadcast, reduction, and their
 leaf implementations are all mapped and retained for hierarchical timing and
 area accounting.
 
+Revision 4 evidence: structural H2 completed in 150 seconds with zero
+unmapped/unresolved references, one lane design variant and 512 instances, but
+WNS was `-0.267833 ns`. All top five paths start at the control
+`output_valid_q`, traverse the four-level ready chain, then cross the separate
+write-enable broadcast DDC and the lane input-enable mux. The BF16 arithmetic
+is not critical. The separate control/glue timing boundaries prevented DC from
+jointly sizing this synchronous control path.
+
+Revision 4 combines valid/ready state, counters, and all four 512-way write
+enable trees in one fixed `bf16_outer_product_array_control512` mapped block.
+It adds no state or cycle. Lane-enable outputs use a frozen 0.30 ns output
+budget so the accepted lane's measured enable-to-register path retains setup
+margin. Reset fanout and flag reduction remain in the cycle-neutral glue.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by
@@ -129,20 +143,21 @@ E1 before any array E4 claim.
 
 ## 6. Phase H1.6: map array control and wide glue
 
-Move the existing global valid/ready pipeline and counters into
-`bf16_outer_product_array_control`. Move the four 512-way write-enable nets,
-512-way asynchronous reset distribution, and 512-lane flag OR reduction into
-one fixed `bf16_outer_product_array_glue512` module. These are implementation
-hierarchies only; they add no cycle and expose no public port.
+Move the existing global valid/ready pipeline, counters, and four 512-way
+write-enable trees into `bf16_outer_product_array_control512`. Move 512-way
+asynchronous reset distribution and 512-lane flag OR reduction into one fixed
+`bf16_outer_product_array_glue512` module. These are implementation hierarchies
+only; they add no cycle and expose no public port.
 
-Map control and glue independently at the same 1.0 ns/I/O contract and write
-real DDCs. Each run is capped at 10 minutes and must pass WNS, mapping, link,
-latch, and loop checks. The complete million-step E1 is rerun after this RTL
-refactor.
+Map control512 and glue independently and write real DDCs. Control512 uses the
+normal 0.10 ns top-facing I/O budget and a 0.30 ns output delay on the four
+lane-enable buses; glue uses the normal combinational budget. Each run is
+capped at 10 minutes and must pass WNS, mapping, link, latch, and loop checks.
+The complete million-step E1 is rerun after this RTL refactor.
 
 ## 7. Phase H2: fixed 16x32 array hierarchy
 
-1. Read the accepted lane, control, and glue DDCs.
+1. Read the accepted lane, control512, and glue DDCs.
 2. Analyze only `rtl/matrix/bf16_outer_product_array.sv`.
 3. Elaborate with `ROWS=>16,COLS=>32`; require the specialized design name
    `bf16_outer_product_array_ROWS16_COLS32`.

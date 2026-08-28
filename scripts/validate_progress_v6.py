@@ -20,16 +20,16 @@ sequence = load("reports/execution/sequence_memory_cycle_v6_result.json")
 final = load("reports/final_validation.json")
 
 assert control["schema_version"] == 6
-assert control["current_state"] == "L5_2_HIER_DC_REV3_FROZEN_READY_STRUCTURAL_COMPOSE"
+assert control["current_state"] == "L5_2_HIER_DC_REV4_FROZEN_READY_CONTROL512"
 assert control["local_checkpoint"]["l5_1"] == "PASS_E1_E4"
 assert control["local_checkpoint"]["l5_2_e1"] == "PASS"
 assert control["local_checkpoint"]["l5_2_full_top_e4"] == "INTERRUPTED_NO_FINAL_TIMING"
 assert control["remote_audit"]["new_local_agent_commit_detected"] is False
 assert ledger["accepted_local_evidence"]["L5.1"]["status"] == "PASS_WAIT_REMOTE_AUDIT"
 assert ledger["accepted_local_evidence"]["L5.1"]["block128_wns_ns"] >= 0
-assert ledger["accepted_local_evidence"]["L5.2"]["status"] == "E1_PASS_HIER_DC_REV3_READY_STRUCTURAL_COMPOSE"
+assert ledger["accepted_local_evidence"]["L5.2"]["status"] == "E1_PASS_HIER_DC_REV4_READY_CONTROL512"
 assert ledger["accepted_local_evidence"]["L5.2"]["full_top_e4"] == "INTERRUPTED_NO_FINAL_TIMING"
-assert next_action["state"] == "READY_IMPLEMENT_STRUCTURAL_ARRAY_COMPOSE"
+assert next_action["state"] == "READY_IMPLEMENT_CONTROL512_TIMING_BLOCK"
 assert len(next_action["ordered_commands"]) == 3
 assert (ROOT / "reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md").is_file()
 assert final["status"] == "PASS_SANDBOX_V6_LOCAL_L5_1_CLOSED_L5_2_E4_OPEN"

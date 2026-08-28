@@ -1,0 +1,11 @@
+{
+  "cases": {
+    "1024": {"causal_tile_efficiency":0.9706439393939394,"four_head_pingpong_upper_bound_bytes":254976,"head_microtiles":12672,"kv_microtile_uses_after_GQA_reuse":2112,"matrix_issue_cycles":3244032,"matrix_pv_issue_cycles":1622016,"matrix_qk_issue_cycles":1622016,"matrix_wall_cycles":3244036,"not_an_E3_claim":true,"overlapped_lower_bound_cycles":3244036,"probability_DDR_materialization_bytes":0,"query_key_pairs":1056,"query_tiles":64,"score_DDR_materialization_bytes":0,"score_pipeline_cycles":202752,"sequence_length":1024,"serialized_cycles":4823044,"serialized_tokens_per_second":212314.04896990364,"sfu_cycles":1579008,"single_active_head_live_bytes":31872,"status":"PASS","summary_merge_cycles":1376256,"summary_merges":43008},
+    "128": {"causal_tile_efficiency":0.80625,"four_head_pingpong_upper_bound_bytes":254976,"head_microtiles":240,"kv_microtile_uses_after_GQA_reuse":40,"matrix_issue_cycles":61440,"matrix_pv_issue_cycles":30720,"matrix_qk_issue_cycles":30720,"matrix_wall_cycles":61444,"not_an_E3_claim":true,"overlapped_lower_bound_cycles":61444,"probability_DDR_materialization_bytes":0,"query_key_pairs":20,"query_tiles":8,"score_DDR_materialization_bytes":0,"score_pipeline_cycles":3840,"sequence_length":128,"serialized_cycles":65284,"serialized_tokens_per_second":1960664.1749892777,"sfu_cycles":3840,"single_active_head_live_bytes":31872,"status":"PASS","summary_merge_cycles":0,"summary_merges":0},
+    "384": {"causal_tile_efficiency":0.9254807692307693,"four_head_pingpong_upper_bound_bytes":254976,"head_microtiles":1872,"kv_microtile_uses_after_GQA_reuse":312,"matrix_issue_cycles":479232,"matrix_pv_issue_cycles":239616,"matrix_qk_issue_cycles":239616,"matrix_wall_cycles":479236,"not_an_E3_claim":true,"overlapped_lower_bound_cycles":479236,"probability_DDR_materialization_bytes":0,"query_key_pairs":156,"query_tiles":24,"score_DDR_materialization_bytes":0,"score_pipeline_cycles":29952,"sequence_length":384,"serialized_cycles":656644,"serialized_tokens_per_second":584791.7593094584,"sfu_cycles":177408,"single_active_head_live_bytes":31872,"status":"PASS","summary_merge_cycles":147456,"summary_merges":4608}
+  },
+  "evidence_class":"cycle_structured_E0_not_RTL_E1_or_integrated_E3",
+  "frozen_checks":{"all_score_DDR_materialization_zero":true,"q1024_summary_merges":43008},
+  "schema_version":1,
+  "status":"PASS"
+}

@@ -1,0 +1,39 @@
+{
+  "decision": "APPROVE_WITH_GATES",
+  "errors": [],
+  "recurrence_stress": {
+    "completed": 100000,
+    "contexts": 4,
+    "cycles": 124825,
+    "final_banks_sha256": "9c7bd5ff51c6e579f3095b18360c7bde5483e7dbe4a2b68d74b7db6d2452caaa",
+    "issue_per_cycle": 0.8011215701982776,
+    "issued": 100000,
+    "latency": 4,
+    "no_stall_ideal_issue_per_cycle": 1.0,
+    "operations": 100000,
+    "same_cycle_bypasses": 99996,
+    "schema_version": 1,
+    "status": "PASS"
+  },
+  "remaining_local_gates": [
+    "single_context_lane_CLN22UL_1GHz_E4",
+    "Formality_or_post_synthesis_equivalence",
+    "real_512_lane_E1_rerun",
+    "structural_512_lane_four_context_H3_E4"
+  ],
+  "revision": 7,
+  "schema_version": 1,
+  "source_contract": {
+    "contract": {"contexts": 4,"feedback_latency_cycles": 4,"generated_rtl_hand_edit_authorized": false,"same_cycle_bypass": true},
+    "errors": [],
+    "observed_sources": {
+      "integration/gemmini/EmitHeteroAllPrimitives.scala": {"bytes": 5378,"git_blob_sha1": "4007165e4e0d5853330e6bfff9745ab7d694beb4","sha256": "56df8812a360abb9d0e0697365bd18fc6b0da56763908537a1b9900fbd58a513"},
+      "integration/gemmini/EmitHeteroBF16Fma.scala": {"bytes": 3572,"git_blob_sha1": "ceea8307e92777c5fb3e52243a9b778940ce30c8","sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"},
+      "rtl/matrix/bf16_context_fma_pipeline_lane4.sv": {"bytes": 1479,"git_blob_sha1": "582d37e28f07d6ec6775b718f6e9925ef8bb16fa","sha256": "815f2861615f5ff1167e5ae84c115594f90778027a52eb10997d3839931c7159"},
+      "rtl/matrix/bf16_fma_pipeline_lane.sv": {"bytes": 2254,"git_blob_sha1": "74e3769a9de8e906317509e567d42576116b8352","sha256": "566d0c275b518d45bd981ea3d84a098221035363ad8f9eaf032fd43cb2acebf7"}
+    },
+    "revision": 7,"schema_version": 1,"status": "PASS"
+  },
+  "status": "PASS",
+  "tcl_contract": {"errors": [],"false_paths": ["set_false_path -from [get_ports rst_ni]"],"schema_version": 1,"status": "PASS"}
+}

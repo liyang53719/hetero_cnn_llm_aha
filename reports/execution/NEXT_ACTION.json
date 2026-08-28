@@ -1,40 +1,10 @@
 {
-  "schema_version": 6,
-  "state": "BLOCKED_DECISION",
-  "stage": "L5",
-  "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "objective": "Obtain approval for a single context-lane remap directly from committed emitter-generated SystemVerilog so DC can optimize through HardFloat Pre without adding a cycle.",
-  "current_evidence": {
-    "l5_1": "PASS_E1_E4",
-    "l5_2_e1": "PASS",
-    "l5_2_stage_probe_e4": "PASS_DIAGNOSTIC_ONLY",
-    "l5_2_full_top_e4": "INTERRUPTED_NO_FINAL_TIMING"
-  },
-  "sandbox_prerequisites_now_closed": [
-    "control_plane_v6_consistency",
-    "Archspec_collateral_generation",
-    "Qwen38_48_layer_shape_program",
-    "Qwen38_mock_backend_partition",
-    "SequenceMemory_translation_cycle_model"
-  ],
-  "ordered_commands": [
-    "wait for explicit approval of full-source single-lane remap",
-    "if approved, freeze revision 7 before changing Tcl",
-    "do not run H3 or use the failed context-lane DDC"
-  ],
-  "recommended_decision": "allow_full_source_single_context_lane_remap_no_RTL_change",
-  "audit_questions": [
-    "confirm bottom-up compile of generated pre/mul/post/round references",
-    "confirm preservation of production 16x32 lanes and four-context interface",
-    "confirm integrated top timing/link audit after hierarchical reuse",
-    "confirm runtime ceiling and checkpoint strategy"
-  ],
-  "resume_after_audit": [
-    "compile each generated HardFloat stage once to DDC",
-    "link 512 instances without boundary flattening",
-    "run full context top timing and zero-unmapped/unresolved checks",
-    "close L5.2 only if final WNS is nonnegative"
-  ],
-  "forbidden": ["reduce_array_size","reduce_frequency","false_path_on_synchronous_data","multicycle_exception_instead_of_pipeline","use_stage_probe_as_full_top_pass","use_stale_status_file"],
-  "on_success": "L5.3_BLOCKED_FLASHATTENTION"
+  "schema_version":6,"state":"APPROVED_WAIT_LOCAL_EXECUTION","stage":"L5","subgate":"L5.2_MATRIX_CONTEXT_FULL_TOP_E4","decision":"APPROVE_REVISION_7_WITH_GATES","objective":"Remap one reusable four-context lane from pinned emitter-generated SystemVerilog and unchanged lane RTL, prove mapped equivalence, rerun real E1, and compose the 512-lane structural H3 top.",
+  "approval_scope":{"source_remap_only":true,"single_context_lane":true,"contexts":4,"feedback_latency_cycles":4,"array":"16x32_512_lane","clock_period_ns":1.0,"rtl_change":false,"generated_file_edit":false,"retiming":false},
+  "ordered_commands":["python3 scripts/validate_l5_revision7_contract.py","./scripts/run_l5_matrix_context_revision7.sh lane","./scripts/run_l5_matrix_context_revision7.sh equiv","./scripts/run_l5_matrix_context_revision7.sh e1","./scripts/run_l5_matrix_context_revision7.sh top","./scripts/run_l5_matrix_context_revision7.sh e1","python3 scripts/summarize_l5_revision7.py"],
+  "hard_acceptance":{"generated_rtl_sha256":"d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268","single_lane_wns_ns_min":0.0,"single_lane_unmapped":0,"single_lane_unresolved":0,"equivalence":"PASS","e1_dependent_steps":1000000,"e1_random_backpressure_steps":10000,"e1_contexts":4,"e1_lanes":512,"h3_context_lane_instances":512,"h3_wns_ns_min":0.0,"h3_unmapped":0,"h3_unresolved":0},
+  "attempt_policy":{"normal_lane_attempts":1,"high_effort_lane_retries":1,"lane_timeout_seconds_each":600,"h3_timeout_seconds":600,"if_lane_still_negative":"STOP_BLOCKED_ARCHITECTURE_DECISION","if_equivalence_tool_missing":"STOP_BLOCKED_EQUIVALENCE_TOOL"},
+  "forbidden":["read_leaf_DDC_for_revision7_lane","hand_edit_generated_SystemVerilog","modify_RTL_or_Scala","add_pipeline_cycle_or_context","reduce_array_size_or_frequency","false_path_on_synchronous_data","multicycle_exception","retime","flat_512_lane_compile","use_stale_status"],
+  "parallel_sandbox_closed":{"revision7_static_and_cycle_contract":"PASS","blocked_attention_cycle_E0":"PASS_q384_656644_cycles_q1024_merges_43008"},
+  "on_success":"L5.3_BLOCKED_FLASHATTENTION_E1_E2"
 }

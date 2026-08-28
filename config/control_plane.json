@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "plan_version": "2026-08-28-v6",
+  "plan_version": "2026-08-28-v6.2",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
   "ledger": "reports/execution/MASTER_LEDGER.json",
@@ -12,60 +12,15 @@
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_BLOCKED_DECISION_CONTEXT_PRE_REMAP",
+  "current_state": "L5_2_REV7_APPROVED_WAIT_LOCAL_LANE_E4_EQUIV_H3",
   "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
-  "evidence_classes": {
-    "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
-    "E1": "real_kernel_rtl_simulation",
-    "E2": "sampled_numerical_engine_integration",
-    "E3": "integrated_queue_dma_sram_ddr_cycle_execution",
-    "E4": "post_synthesis_timing_area_power"
+  "evidence_classes": {"E0":"functional_algorithmic_compiler_architecture_or_cycle_reference","E1":"real_kernel_rtl_simulation","E2":"sampled_numerical_engine_integration","E3":"integrated_queue_dma_sram_ddr_cycle_execution","E4":"post_synthesis_timing_area_power"},
+  "remote_audit": {"audited_at_utc":"2026-08-28T08:00:00Z","observed_head":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","latest_local_agent_evidence_commit":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","new_local_agent_commit_detected":true,"branch_count":1,"decision":"ACCEPT_L5_1_AND_L5_2_E1_APPROVE_REV7_WITH_GATES"},
+  "accepted_local_evidence": {
+    "L5.1":{"status":"PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN","block128_wns_ns":0.0000136495,"unmapped_cells":0,"unresolved_references":0,"scope":"component_level_DC_not_post_route_signoff"},
+    "L5.2":{"status":"E1_PASS_ACCEPTED_E4_OPEN","lanes":512,"contexts":4,"dependent_steps":1000000,"random_backpressure_steps":10000,"structural_array_wns_ns":0.013487,"scheduler_wns_ns":0.00440788,"broadcast_wns_ns":0.196252,"revision6_normal_wns_ns":-0.034333,"revision6_high_wns_ns":-0.0371628}
   },
-  "remote_audit": {
-    "audited_at_utc": "2026-08-28T00:00:00Z",
-    "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
-    "latest_local_agent_evidence_commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
-    "new_local_agent_commit_detected": false,
-    "branch_count": 1
-  },
-  "retained_local_evidence": {
-    "block128_e1": "PASS",
-    "block128_vectors": 132,
-    "stream_beats": 32,
-    "random_backpressure": "PASS",
-    "block128_e4": "PASS",
-    "block128_wns_ns": 0.0000136495,
-    "unmapped_cells": 0,
-    "unresolved_references": 0
-  },
-  "local_checkpoint": {
-    "rebased_onto": "60f9ed0",
-    "l5_1": "PASS_E1_E4",
-    "l5_2_e1": "PASS",
-    "l5_2_stage_probe_e4": "PASS_DIAGNOSTIC_ONLY",
-    "l5_2_full_top_e4": "INTERRUPTED_NO_FINAL_TIMING"
-  },
-  "parallel_sandbox_progress": {
-    "CONTROL_PLANE_V6_AUDIT": "PASS",
-    "ARCHSPEC_COLLATERAL_GENERATION": "PASS",
-    "L5_2_MATRIX_CONTEXT_E0_SOURCE": "PASS",
-    "L7_SEQUENCE_MEMORY_CYCLE_E0": "PASS",
-    "L8_QWEN38_FULL_SHAPE_PROGRAM_E0": "PASS",
-    "L8_QWEN38_QSA_STREAMING_E0": "PASS",
-    "L8_QWEN38_STATE_TRANSACTION_E0": "PASS",
-    "L8_QWEN38_MEMORY_DSE": "PASS",
-    "L9_MOCK_BACKEND_PARTITION_E0": "PASS",
-    "L11_CANDIDATE_ARCHSPEC_COLLATERAL": "PASS"
-  },
-  "claim_rules": [
-    "L5.1 is locally closed and awaits remote audit",
-    "the one-lane timing probe does not close L5.2 E4",
-    "the stale pre-pipeline status file is not evidence for the pipelined array",
-    "L5.2 remains open until full 512-lane WNS is nonnegative with zero unmapped and unresolved",
-    "generated RTL is emitter output and is never hand edited",
-    "shape-only lowering and mock backend are E0, not device execution",
-    "candidate Archspec collateral does not promote it to canonical",
-    "official-weight accuracy and route locality remain local-runtime gates",
-    "vision remains outside scope"
-  ]
+  "revision7":{"decision":"APPROVE_WITH_GATES","policy":"config/l5_revision7_policy.json","approval":"reports/L5_2_REVISION7_APPROVAL.md","source_contract":"PASS","cycle_semantic_stress":"PASS_100000_OPERATIONS","remaining":["single_lane_E4","equivalence","real_512_lane_E1_rerun","structural_H3_E4"]},
+  "parallel_sandbox_progress":{"CONTROL_PLANE_V6_2_AUDIT":"PASS","ARCHSPEC_COLLATERAL_GENERATION":"PASS","L5_2_REV7_SOURCE_AND_TCL_CONTRACT":"PASS","L5_2_REV7_CONTEXT_RECURRENCE_E0":"PASS","L5_3_BLOCKED_ATTENTION_CYCLE_E0":"PASS","L7_SEQUENCE_MEMORY_CYCLE_E0":"PASS","L8_QWEN38_FULL_SHAPE_PROGRAM_E0":"PASS","L9_MOCK_BACKEND_PARTITION_E0":"PASS"},
+  "claim_rules":["Revision 7 approval permits a source remap of one reusable context lane only","Revision 7 does not authorize RTL, cycle, context, frequency or generated-file changes","source-contract PASS is not DC E4 or mapped-netlist equivalence","L5.2 remains open until lane E4, equivalence, 512-lane E1 and structural H3 E4 pass","L5.1 has effectively zero component timing margin and is not post-route signoff","cycle-structured Blocked Attention is E0, not E1 or E3","candidate Archspec collateral does not promote it to canonical","vision remains outside scope"]
 }

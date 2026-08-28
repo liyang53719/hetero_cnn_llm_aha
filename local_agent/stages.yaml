@@ -1,7 +1,7 @@
 schema_version: 6
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_AUDIT}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_2_AUDIT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
@@ -10,9 +10,9 @@ stages:
     name: qwen2_bf16_long_context_300tps
     status: IN_PROGRESS
     subgates:
-      L5.1: {status: PASS_WAIT_REMOTE_AUDIT, wns_ns: {mul: 0.000160873, add: 0.000159979, block128: 0.0000136495}, acceptance: [pipeline_vectors_1024_zero_mismatch, block128_132_zero_mismatch, stream32_pass, random_backpressure_pass, WNS_nonnegative, unmapped_zero, unresolved_zero], evidence: reports/execution/l5_block128_local_e1_e4_result.json}
-      L5.2: {status: BLOCKED_DECISION_CONTEXT_PRE_REMAP, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], structural_array: PASS_WNS_0P013487, scheduler_broadcast: PASS, context_lane_joint: FAIL_TIMING_NORMAL_N0P034333_HIGH_N0P0371628, full_top_e4: OPEN, plan: reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md, evidence: reports/execution/l5_matrix_context_local_e1_e4_result.json}
-      L5.3: {status: SANDBOX_PROGRAM_CONTRACT_READY_WAIT_LOCAL_E1_E2, scope: blocked_QK_softmax_PV}
+      L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495, evidence: reports/execution/l5_block128_local_e1_e4_result.json}
+      L5.2: {status: E1_PASS_REV7_APPROVED_WAIT_LANE_E4_EQUIV_H3, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], revision6: [normal_WNS_N0P034333, high_WNS_N0P0371628], revision7_policy: config/l5_revision7_policy.json, approval: reports/L5_2_REVISION7_APPROVAL.md}
+      L5.3: {status: CYCLE_E0_PASS_WAIT_REAL_STREAM_E1_E2, scope: blocked_QK_softmax_PV, q384_serial_cycles: 656644, q1024_summary_merges: 43008, evidence: reports/execution/l5_blocked_attention_cycle_e0_result.json}
       L5.4: {status: SANDBOX_DSE_PENDING_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE}
       L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}
       L5.6: {status: WAIT_LOCAL_E2_E3_E4, scope: 28_layer_q1024_300tps}
@@ -21,7 +21,6 @@ stages:
   - id: L8
     name: qwen35_qwen38_hybrid_text
     status: SANDBOX_FULL_SHAPE_COMPILER_E0_PASS_WAIT_LOCAL_E1_E2
-    sandbox_completed: [full_shape_program, exact_MAC_accounting, state_domains, tensor_shapes, descriptor_policy_bindings, QSA_append_summary_streaming_topk, QSA_page_coalesce_restore, full_state_MTP_transaction, PLE_MoE_memory_DSE, 4MiB_liveness_candidate]
     subgates:
       L8.1: {status: WAIT_LOCAL_OFFICIAL_RUNTIME, scope: official_weight_node_trace}
       L8.2: {status: SANDBOX_PROGRAM_E0_PASS_WAIT_LOCAL_E1_E2, scope: GDN_backend}

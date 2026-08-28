@@ -1,49 +1,37 @@
-# Local-agent handoff v6
+# Local-agent handoff v6.2
 
-State: `BLOCKED_DECISION` at L5.2 context-lane timing. Structural array and
-scheduler/broadcast pass. Joint context-lane normal/high runs remain negative
-at `-0.034333 ns` and `-0.0371628 ns` with zero unmapped/unresolved.
+State: `REVISION_7_APPROVED_WITH_GATES` at L5.2.
 
-## Closed locally
+## Accepted
 
-- L5.1 E1: 1,024 FP32 pipeline vectors; 132 Block128 vectors; 32 beats;
-  random backpressure; zero mismatch/loss/dup/reorder.
-- L5.1 E4 at CLN22UL 1.0 ns: Mul `+0.000160873 ns`, Add
-  `+0.000159979 ns`, canonical Block128 `+0.0000136495 ns`; zero unmapped
-  and unresolved.
-- L5.2 E1: real 16x32/512-lane array, four contexts, 1,000,000 dependent
-  steps in 1,000,000 issue cycles, 10,000 random-backpressure steps, numeric
-  and tag/protocol PASS.
-- L5.2 one-lane stage probe E4: WNS `+0.000159681 ns`, zero unmapped and
-  unresolved. Diagnostic only.
+- L5.1 E1/E4 is accepted under the frozen component gate. Block128 WNS is only `+0.0000136495 ns`, so this is not post-route or variation signoff.
+- L5.2 real 16x32/512-lane, four-context E1 is accepted: 1,000,000 dependent steps at II=1 and 10,000 random-backpressure steps pass.
+- Structural array, scheduler and broadcast pass component timing.
 
-## Still open
+## Revision-6 blocker
 
-- Full 512-lane L5.2 E4 was stopped after 9,611 seconds in Mapping
-  Optimization Phase 2. No final WNS, area, unmapped, or unresolved result.
-- `work/results/l5_matrix_context_array/dc/status.txt` is stale from the
-  pre-pipeline design (`-1.35148 ns`) and must not be used.
-- L5.2 is not PASS.
+The one context lane remains negative at `-0.034333 ns` normal and `-0.0371628 ns` high effort. The path is `issue_bypass_i` through the local accumulator mux and HardFloat Pre to `pre_c_q`. Mul/Post/Round are not critical.
 
-## Implementation boundary
+## Revision-7 approval
 
-- Production FMA stages: HardFloat preMul, 24x24+48, postMul, round.
-- Feedback latency is four cycles, matching four-context II=1.
-- Generated RTL SHA256:
-  `d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268`.
-- Generated RTL was not hand edited; upstream status is clean.
-- User runtime scripts remain untracked and must not be committed.
+Revision 7 may map one context lane directly from the pinned aggregate emitter-generated SystemVerilog plus unchanged base/context lane RTL. DC may optimize across the accumulator mux, base lane and HardFloat Pre. No RTL, cycle, context, frequency, generated file, or public interface change is permitted. Retiming, timing exceptions and a flat 512-lane compile are forbidden.
 
-## v6 sandbox prerequisites
+Run:
 
-Archspec collateral, Qwen3.8 full-shape program/mock partition, and Sequence
-Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
+```bash
+python3 scripts/validate_l5_revision7_contract.py
+./scripts/run_l5_matrix_context_revision7.sh lane
+./scripts/run_l5_matrix_context_revision7.sh equiv
+./scripts/run_l5_matrix_context_revision7.sh e1
+./scripts/run_l5_matrix_context_revision7.sh top
+./scripts/run_l5_matrix_context_revision7.sh e1
+python3 scripts/summarize_l5_revision7.py
+```
 
-## Next execution
+Use Formality when available. An approved post-synthesis gate comparison may be supplied through `REV7_EQUIVALENCE_EVIDENCE`; otherwise stop as `BLOCKED_EQUIVALENCE_TOOL`.
 
-Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
-Recommended next decision: allow one context lane to be remapped directly from
-the committed emitter-generated SystemVerilog plus handwritten lane RTL, so DC
-can optimize through HardFloat Pre. This changes no RTL/cycle/interface and
-does not hand edit generated RTL. Do not run H3 until approved; the failed lane
-DDC has no acceptance marker.
+L5.2 closes only when lane WNS, equivalence, the real E1 rerun, and structural H3 WNS all pass with zero unmapped/unresolved references. A lane WNS below `+0.02 ns` is marginal and may proceed to H3 but is not signoff.
+
+## Parallel progress
+
+Blocked Attention cycle E0 freezes q384 at 656,644 serialized cycles, q1024 at 4,823,044 cycles, 43,008 q1024 summary merges, and zero score/probability DDR materialization. Real stream E1/E2 remains local work.

@@ -1,71 +1,12 @@
 {
-  "schema_version": 6,
-  "current_stage": "L5",
-  "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_BLOCKED_DECISION_CONTEXT_PRE_REMAP",
-  "remote_audit": {
-    "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
-    "new_local_agent_commit_detected": false,
-    "latest_local_agent_evidence_commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406"
+  "schema_version":6,"current_stage":"L5","current_subgate":"L5.2_MATRIX_CONTEXT_FULL_TOP_E4","current_state":"L5_2_REV7_APPROVED_WAIT_LOCAL_LANE_E4_EQUIV_H3",
+  "remote_audit":{"observed_head":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","new_local_agent_commit_detected":true,"latest_local_agent_evidence_commit":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","decision":"ACCEPT_L5_1_AND_L5_2_E1_APPROVE_REV7_WITH_GATES"},
+  "accepted_local_evidence":{
+    "L5.1":{"status":"PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN","pipeline_vectors":1024,"block128_vectors":132,"stream_beats":32,"random_backpressure":"PASS","block128_wns_ns":0.0000136495,"unmapped":0,"unresolved":0,"evidence":"reports/execution/l5_block128_local_e1_e4_result.json"},
+    "L5.2":{"status":"E1_PASS_E4_OPEN_REV7_APPROVED","physical_array":"16x32_512_lane","contexts":4,"dependent_steps":1000000,"issue_utilization_ppm":1000000,"random_backpressure_steps":10000,"structural_array":"PASS_WNS_0P013487","context_scheduler":"PASS_WNS_0P00440788","context_broadcast":"PASS_WNS_0P196252","context_lane_preserved_base":"FAIL_TIMING_WNS_N0P0739283","context_lane_joint_normal":"FAIL_TIMING_WNS_N0P034333","context_lane_joint_high":"FAIL_TIMING_WNS_N0P0371628","full_top_e4":"OPEN","revision7":"APPROVED_WITH_GATES","evidence":"reports/execution/l5_matrix_context_local_e1_e4_result.json"}
   },
-  "accepted_local_evidence": {
-    "L5.1": {
-      "status": "PASS_WAIT_REMOTE_AUDIT",
-      "pipeline_vectors": 1024,
-      "block128_vectors": 132,
-      "stream_beats": 32,
-      "random_backpressure": "PASS",
-      "mul_wns_ns": 0.000160873,
-      "add_wns_ns": 0.000159979,
-      "block128_wns_ns": 0.0000136495,
-      "unmapped": 0,
-      "unresolved": 0,
-      "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
-    },
-    "L5.2": {
-      "status": "BLOCKED_DECISION_CONTEXT_PRE_REMAP",
-      "physical_array": "16x32_512_lane",
-      "contexts": 4,
-      "dependent_steps": 1000000,
-      "issue_utilization_ppm": 1000000,
-      "random_backpressure_steps": 10000,
-      "stage_probe_wns_ns": 0.000159681,
-      "stage_probe_scope": "diagnostic_not_full_top",
-      "full_top_e4": "INTERRUPTED_NO_FINAL_TIMING",
-      "full_top_elapsed_seconds": 9611,
-      "full_top_last_phase": "Mapping Optimization Phase 2",
-      "next_plan": "reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md",
-      "leaf_ddc": "PASS_4_OF_4",
-      "leaf_only_array_attempt": "BLOCKED_RUNTIME_2731S",
-      "production_lane_ddc": "PASS_WNS_0P0135558",
-      "production_lane_array_compile_ultra": "BLOCKED_RUNTIME_1230S",
-      "production_lane_array_incremental": "BLOCKED_RUNTIME_631S",
-      "structural_array": "FAIL_TIMING_WNS_N0P267833",
-      "structural_array_control512": "PASS_WNS_0P013487",
-      "context_incremental_compile": "BLOCKED_RUNTIME_1831S",
-      "context_scheduler_broadcast": "PASS",
-      "context_lane_preserved_base": "FAIL_TIMING_WNS_N0P0739283",
-      "context_lane_joint_normal": "FAIL_TIMING_WNS_N0P034333",
-      "context_lane_joint_high": "FAIL_TIMING_WNS_N0P0371628",
-      "evidence": "reports/execution/l5_matrix_context_local_e1_e4_result.json"
-    }
-  },
-  "sandbox_closed": {
-    "control_plane_v6_audit": "PASS",
-    "archspec_inheritance_validation": "PASS",
-    "archspec_SRAM_map_generation": "PASS",
-    "archspec_SystemVerilog_package_generation": "PASS",
-    "qwen38_full_shape_prefill_program": "PASS",
-    "qwen38_full_shape_decode_program": "PASS",
-    "qwen38_mock_backend_partition": "PASS",
-    "sequence_memory_translation_cycle_model": "PASS",
-    "sequence_memory_generation_and_COW_contract": "PASS"
-  },
-  "source_ready_waiting_local": [
-    "Matrix_context_full_top_E4",
-    "Qwen38_backend_program_contracts",
-    "SequenceMemory_RTL_contract"
-  ],
-  "waiting_local": ["L4","L5.2_full_top_E4","L5.3_to_L5.6","L7_E1_E3","L8_official_and_RTL","L9_real_llama_cpp","L10"],
-  "forbidden_claims": ["L5.2_PASS","full_512_lane_1GHz_timing_PASS","stale_status_as_current_E4","probe_as_full_top_E4"]
+  "sandbox_closed":{"revision7_source_blob_pins":"PASS","revision7_no_RTL_change_contract":"PASS","revision7_Tcl_no_exception_no_retime_contract":"PASS","revision7_four_context_recurrence_100k":"PASS","blocked_attention_q128_q384_q1024_cycle_E0":"PASS","blocked_attention_q1024_merge_count_43008":"PASS","blocked_attention_score_probability_DDR_zero":"PASS","archspec_collateral":"PASS","qwen38_full_shape_program":"PASS","sequence_memory_cycle_E0":"PASS"},
+  "source_ready_waiting_local":["Revision7_single_context_lane_E4","Revision7_Formality_or_post_synthesis_equivalence","Revision7_real_512_lane_E1_rerun","Revision7_structural_H3_E4","BlockedAttention_real_stream_E1_E2","Qwen38_backend_program_contracts","SequenceMemory_RTL_contract"],
+  "waiting_local":["L4","L5.2_revision7","L5.3_to_L5.6","L7_E1_E3","L8_official_and_RTL","L9_real_llama_cpp","L10"],
+  "forbidden_claims":["L5.2_PASS_before_lane_equivalence_E1_H3","Revision7_source_contract_as_E4","full_512_lane_1GHz_timing_PASS_before_H3","stale_status_as_current_E4","probe_as_full_top_E4"]
 }

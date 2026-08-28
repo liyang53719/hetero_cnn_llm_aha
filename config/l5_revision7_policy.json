@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "revision": 7,
+  "decision": "APPROVE_WITH_GATES",
+  "base_commit": "fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c",
+  "objective": "Remap one four-context BF16 lane from committed emitter-generated SystemVerilog plus unchanged handwritten lane RTL so DC can optimize through the accumulator mux and HardFloat Pre boundary.",
+  "scope": {
+    "physical_array": "16x32",
+    "lanes": 512,
+    "contexts": 4,
+    "feedback_latency_cycles": 4,
+    "clock_period_ns": 1.0,
+    "clock_uncertainty_ns": 0.08,
+    "io_budget_ns": 0.10,
+    "output_load": 0.02,
+    "single_reusable_context_lane_only": true,
+    "rtl_change_authorized": false,
+    "generated_sv_hand_edit_authorized": false,
+    "retiming_authorized": false
+  },
+  "pinned_sources": {
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "ceea8307e92777c5fb3e52243a9b778940ce30c8",
+    "integration/gemmini/EmitHeteroAllPrimitives.scala": "4007165e4e0d5853330e6bfff9745ab7d694beb4",
+    "rtl/matrix/bf16_fma_pipeline_lane.sv": "74e3769a9de8e906317509e567d42576116b8352",
+    "rtl/matrix/bf16_context_fma_pipeline_lane4.sv": "582d37e28f07d6ec6775b718f6e9925ef8bb16fa"
+  },
+  "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+  "prior_evidence": {
+    "revision6_normal_wns_ns": -0.034333,
+    "revision6_high_effort_wns_ns": -0.0371628,
+    "revision6_unmapped": 0,
+    "revision6_unresolved": 0,
+    "critical_path": "issue_bypass_i through accumulator mux and HardFloat Pre to pre_c_q"
+  },
+  "hard_acceptance": {
+    "single_lane_wns_ns_min": 0.0,
+    "full_context_top_wns_ns_min": 0.0,
+    "unmapped_cells": 0,
+    "unresolved_references": 0,
+    "contexts": 4,
+    "feedback_latency_cycles": 4,
+    "full_e1_dependent_steps": 1000000,
+    "random_backpressure_steps": 10000,
+    "equivalence_required": true
+  },
+  "engineering_margin": {
+    "preferred_single_lane_wns_ns": 0.02,
+    "classification_below_preferred": "PASS_MARGINAL_PROCEED_TO_H3_NOT_SIGNOFF"
+  },
+  "runtime": {
+    "normal_lane_timeout_seconds": 600,
+    "high_effort_retry_timeout_seconds": 600,
+    "full_structural_top_timeout_seconds": 600,
+    "normal_attempts": 1,
+    "high_effort_retries": 1
+  },
+  "area_guard": {
+    "review_delta_percent": 10.0,
+    "block_delta_percent": 20.0,
+    "reason": "Any per-lane increase is replicated 512 times."
+  },
+  "forbidden": [
+    "read_leaf_ddc_for_revision7_lane",
+    "hand_edit_generated_systemverilog",
+    "modify_rtl",
+    "add_pipeline_cycle",
+    "add_fifth_context",
+    "reduce_array_size",
+    "reduce_frequency",
+    "false_path_on_synchronous_data",
+    "multicycle_exception",
+    "compile_ultra_retime",
+    "use_stale_status",
+    "flat_512_lane_compile"
+  ]
+}

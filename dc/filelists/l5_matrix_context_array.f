@@ -1,0 +1,3 @@
+work/generated/l5_all_primitives/HeteroAllPrimitives.sv
+rtl/matrix/bf16_outer_product_array.sv
+rtl/matrix/bf16_outer_product_context_array.sv

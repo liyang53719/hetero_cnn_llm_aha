@@ -1,3 +1,0 @@
-// SPDX-License-Identifier: Apache-2.0
-// Test-only alias reusing the canonical Block128 testbench.
-module fp32_mlo_summary_merge_stream#(parameter integer LANES=4)(input logic clk_i,rst_ni,input logic header_valid_i,output logic header_ready_o,input logic[31:0]ma_i,la_i,mb_i,lb_i,input logic beat_valid_i,output logic beat_ready_o,input logic[LANES*32-1:0]oa_i,ob_i,input logic beat_last_i,output logic header_valid_o,input logic header_ready_i,output logic[31:0]m_o,l_o,output logic beat_valid_o,input logic beat_ready_i,output logic[LANES*32-1:0]o_o,output logic beat_last_o);fp32_mlo_summary_merge_stream_rawpipe#(.LANES(LANES))candidate(.*);endmodule

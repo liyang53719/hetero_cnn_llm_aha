@@ -1,1 +1,20 @@
-{"schema_version":1,"status":"PASS","evidence_class":"sandbox_E0_architecture_analysis","results":{"qsa_streaming":"PASS","state_transaction":"PASS","full_shape_budget":"PASS","memory_dse":"PASS","quantization_screen":"PASS","liveness":"PASS","matrix_context_model":"PASS"},"non_claims":["no_official_weight_accuracy","no_new_RTL_E1","no_E3","no_E4"]}
+{
+  "evidence_class": "sandbox_E0_architecture_analysis",
+  "non_claims": [
+    "no_official_weight_accuracy",
+    "no_new_RTL_E1",
+    "no_E3",
+    "no_E4"
+  ],
+  "results": {
+    "matrix_context_source_model_result.json": "PASS",
+    "qwen38_full_shape_budget.json": "PASS",
+    "qwen38_liveness_result.json": "PASS",
+    "qwen38_memory_dse.json": "PASS",
+    "qwen38_qsa_streaming_result.json": "PASS",
+    "qwen38_quantization_screen.json": "PASS",
+    "qwen38_state_transaction_result.json": "PASS"
+  },
+  "schema_version": 1,
+  "status": "PASS"
+}

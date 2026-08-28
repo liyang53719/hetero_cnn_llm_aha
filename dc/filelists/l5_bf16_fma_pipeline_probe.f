@@ -1,0 +1,2 @@
+work/generated/l5_all_primitives/HeteroAllPrimitives.sv
+rtl/matrix/bf16_fma_pipeline_probe.sv

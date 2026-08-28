@@ -12,9 +12,10 @@ taskset -c 8-23 env PYTHONPATH="$ROOT/src" "$PY" \
 
 SOURCES=(
   "$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv"
-  "$ROOT/rtl/sfu/fp32_exp2_pwl.sv"
-  "$ROOT/rtl/sfu/fp32_mlo_merge_coeff.sv"
-  "$ROOT/rtl/sfu/fp32_mlo_merge_beat.sv"
+  "$ROOT/rtl/sfu/fp32_exp2_pwl_rawpipe.sv"
+  "$ROOT/rtl/sfu/fp32_mlo_merge_coeff_rawpipe.sv"
+  "$ROOT/rtl/sfu/fp32_mlo_merge_beat_rawpipe.sv"
+  "$ROOT/rtl/sfu/fp32_mlo_summary_merge_stream_rawpipe.sv"
   "$ROOT/rtl/sfu/fp32_mlo_summary_merge_stream.sv"
   "$ROOT/tb/tb_fp32_mlo_summary_merge_stream.sv"
 )

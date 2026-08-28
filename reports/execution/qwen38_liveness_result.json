@@ -1,1 +1,198 @@
-{"schema_version":1,"status":"PASS","evidence_class":"candidate_liveness_not_integrated_SRAM","total_sram_kib":4096,"peak_live_kib":{"shared_l2":928,"state_staging":704,"expert_row_staging":368},"candidate_only":true}
+{
+  "architecture_delta": [
+    "split KV staging into Sequence State and Sparse Row/Expert staging",
+    "reserve 512 KiB for four-head GDN state ping-pong",
+    "make four-branch hyper tile a first-class tensor layout",
+    "do not assume a complete expert is resident on chip"
+  ],
+  "evidence_class": "candidate_liveness_not_integrated_SRAM_measurement",
+  "owner_budget_kib": {
+    "aha_sidecar": 256,
+    "control_trace": 128,
+    "expert_row_staging": 384,
+    "matrix_accumulator": 512,
+    "matrix_scratchpad": 768,
+    "shared_l2": 1280,
+    "state_staging": 768
+  },
+  "pools": {
+    "expert_row_staging": {
+      "allocations": [
+        {
+          "alignment": 4096,
+          "begin": 58,
+          "end": 92,
+          "limit": 376832,
+          "name": "expert_weight_tile_pingpong",
+          "offset": 49152,
+          "owner": "MoE",
+          "pool": "expert_row_staging",
+          "size": 327680
+        },
+        {
+          "alignment": 4096,
+          "begin": 0,
+          "end": 18,
+          "limit": 65536,
+          "name": "ple_rows_pingpong",
+          "offset": 49152,
+          "owner": "PLE",
+          "pool": "expert_row_staging",
+          "size": 16384
+        },
+        {
+          "alignment": 4096,
+          "begin": 0,
+          "end": 100,
+          "limit": 49152,
+          "name": "sparse_request_metadata",
+          "offset": 0,
+          "owner": "memory",
+          "pool": "expert_row_staging",
+          "size": 49152
+        }
+      ],
+      "capacity_bytes": 393216,
+      "headroom_bytes": 16384,
+      "peak_live_bytes": 376832
+    },
+    "shared_l2": {
+      "allocations": [
+        {
+          "alignment": 4096,
+          "begin": 4,
+          "end": 28,
+          "limit": 884736,
+          "name": "gdn_projection_tile",
+          "offset": 720896,
+          "owner": "GDN",
+          "pool": "shared_l2",
+          "size": 163840
+        },
+        {
+          "alignment": 4096,
+          "begin": 0,
+          "end": 100,
+          "limit": 655360,
+          "name": "hyper_tile_pingpong",
+          "offset": 0,
+          "owner": "GR",
+          "pool": "shared_l2",
+          "size": 655360
+        },
+        {
+          "alignment": 4096,
+          "begin": 60,
+          "end": 92,
+          "limit": 819200,
+          "name": "moe_activation_tile",
+          "offset": 655360,
+          "owner": "MoE",
+          "pool": "shared_l2",
+          "size": 163840
+        },
+        {
+          "alignment": 4096,
+          "begin": 0,
+          "end": 18,
+          "limit": 720896,
+          "name": "ple_projection_tile",
+          "offset": 655360,
+          "owner": "PLE",
+          "pool": "shared_l2",
+          "size": 65536
+        },
+        {
+          "alignment": 4096,
+          "begin": 38,
+          "end": 60,
+          "limit": 917504,
+          "name": "qsa_kv_microtile",
+          "offset": 851968,
+          "owner": "QSA",
+          "pool": "shared_l2",
+          "size": 65536
+        },
+        {
+          "alignment": 4096,
+          "begin": 38,
+          "end": 60,
+          "limit": 950272,
+          "name": "qsa_mlo_and_selected_list",
+          "offset": 917504,
+          "owner": "QSA",
+          "pool": "shared_l2",
+          "size": 32768
+        },
+        {
+          "alignment": 4096,
+          "begin": 30,
+          "end": 55,
+          "limit": 851968,
+          "name": "qsa_query_tile",
+          "offset": 655360,
+          "owner": "QSA",
+          "pool": "shared_l2",
+          "size": 196608
+        }
+      ],
+      "capacity_bytes": 1310720,
+      "headroom_bytes": 360448,
+      "peak_live_bytes": 950272
+    },
+    "state_staging": {
+      "allocations": [
+        {
+          "alignment": 4096,
+          "begin": 4,
+          "end": 30,
+          "limit": 196608,
+          "name": "gdn_conv_state",
+          "offset": 65536,
+          "owner": "GDN",
+          "pool": "state_staging",
+          "size": 131072
+        },
+        {
+          "alignment": 4096,
+          "begin": 8,
+          "end": 30,
+          "limit": 720896,
+          "name": "gdn_state_pingpong_4heads",
+          "offset": 196608,
+          "owner": "GDN",
+          "pool": "state_staging",
+          "size": 524288
+        },
+        {
+          "alignment": 4096,
+          "begin": 0,
+          "end": 100,
+          "limit": 65536,
+          "name": "mtp_shadow_metadata",
+          "offset": 0,
+          "owner": "MTP",
+          "pool": "state_staging",
+          "size": 65536
+        },
+        {
+          "alignment": 4096,
+          "begin": 30,
+          "end": 60,
+          "limit": 196608,
+          "name": "qsa_index_window",
+          "offset": 65536,
+          "owner": "QSA",
+          "pool": "state_staging",
+          "size": 131072
+        }
+      ],
+      "capacity_bytes": 786432,
+      "headroom_bytes": 65536,
+      "peak_live_bytes": 720896
+    }
+  },
+  "schema_version": 1,
+  "status": "PASS",
+  "total_sram_kib": 4096
+}

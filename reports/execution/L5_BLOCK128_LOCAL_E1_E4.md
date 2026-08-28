@@ -1,29 +1,19 @@
-# L5.1 Block128 local E1/E4
+# L5.1 Block128 raw/round pipeline closeout
 
-Status: IN_PROGRESS. E1 passes; E4 timing does not yet pass.
+Status: PASS locally; pushed for remote audit.
 
-The pulled v4 source initially failed RTL case 94 because its Python/C++ PWL
-tables differed from the committed RTL table by one ULP in 21 coefficients.
-The coefficient generator now emits the SystemVerilog, Python and C++ tables
-from one NumPy operation order. All three 256-entry tables match exactly.
+- HardFloat FP32 Mul/Add elastic pipelines pass 1,024 vectors total with tag
+  and stall checks (512 multiply and 512 add).
+- Canonical Block128 summary merge passes 132 vectors, one complete 32-beat
+  stream, and deterministic random header/beat backpressure.
+- CLN22UL at 1.0 ns: Mul WNS `+0.000160873 ns`, Add WNS
+  `+0.000159979 ns`, canonical Block128 WNS `+0.0000136495 ns`.
+- All three DC runs have zero unmapped cells and no unresolved references.
+- Canonical `fp32_mlo_summary_merge_stream` now wraps the raw/round
+  implementation; the temporary alias was removed.
+- Generated HardFloat RTL was emitted from Scala and was never hand edited.
+  Current generated RTL SHA256 is
+  `d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268`;
+  canonical upstream status is clean.
 
-Real Verilator E1 evidence:
-
-- 132/132 M/L/O arithmetic vectors pass bit-exactly.
-- Deterministic random header and beat backpressure passes.
-- One complete 128-lane summary passes as 32 ordered 4-lane beats.
-- Output payload and `last` remain stable under stall.
-- Binary SHA256: `3ef76de9dfb92d3de50a51f78a5bf724b39a8aaee0cab7596864e3564a30ba30`.
-
-Early CLN22UL DC at 1.0 ns links with zero unmapped cells. Real pipeline stages
-were added between O multiplies/add, exp2 floor/multiply/add, and M/L
-subtract/scale/multiply/add. WNS improved from `-2.20967 ns` to
-`-0.555804 ns`; the remaining critical path is one combinational HardFloat
-FP32 multiply from a registered exp result to a registered L product.
-
-Latest early PPA: 40,846.9885 square library units, 82,453 leaf cells, 1,305
-sequential cells, zero macros and zero unmapped cells. These numbers are early
-logic-only PPA, not final integrated PPA.
-
-Next action is an internally pipelined HardFloat raw-multiply/round primitive.
-No false path, frequency reduction or multicycle exception is authorized.
+This closes L5.1 only. It does not imply L5.2 or full Qwen2 performance closure.

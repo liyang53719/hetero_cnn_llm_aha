@@ -17,16 +17,39 @@ control_audit = load("reports/execution/control_plane_v6_audit.json")
 archspec = load("reports/execution/archspec_v6_collateral_result.json")
 program = load("reports/execution/qwen38_full_shape_program_v6_result.json")
 sequence = load("reports/execution/sequence_memory_cycle_v6_result.json")
+final = load("reports/final_validation.json")
 
 assert control["schema_version"] == 6
-assert control["current_state"] == "E1_PASS_E4_FAIL_TIMING_WAIT_LOCAL_RAWPIPE_RESULTS"
-assert control["retained_local_evidence"]["block128_e1"] == "PASS"
-assert control["retained_local_evidence"]["block128_e4"] == "FAIL_TIMING"
-assert control["retained_local_evidence"]["block128_wns_ns"] < 0
+assert control["current_state"] == "PARTIAL_CHECKPOINT_PUSH_WAIT_REMOTE_AUDIT"
+assert control["local_checkpoint"]["l5_1"] == "PASS_E1_E4"
+assert control["local_checkpoint"]["l5_2_e1"] == "PASS"
+assert control["local_checkpoint"]["l5_2_full_top_e4"] == "INTERRUPTED_NO_FINAL_TIMING"
 assert control["remote_audit"]["new_local_agent_commit_detected"] is False
-assert ledger["accepted_local_evidence"]["block128"]["e1"] == "PASS"
-assert ledger["accepted_local_evidence"]["block128"]["e4"] == "FAIL_TIMING"
-assert next_action["acceptance"]["setup_wns_ns_min"] == 0.0
+assert ledger["accepted_local_evidence"]["L5.1"]["status"] == "PASS_WAIT_REMOTE_AUDIT"
+assert ledger["accepted_local_evidence"]["L5.1"]["block128_wns_ns"] >= 0
+assert ledger["accepted_local_evidence"]["L5.2"]["status"] == "E1_PASS_E4_FULL_TOP_INTERRUPTED_WAIT_REMOTE_AUDIT"
+assert ledger["accepted_local_evidence"]["L5.2"]["full_top_e4"] == "INTERRUPTED_NO_FINAL_TIMING"
+assert next_action["state"] == "WAIT_REMOTE_AUDIT"
+assert next_action["ordered_commands"] == []
+assert final["status"] == "PASS_SANDBOX_V6_LOCAL_L5_1_CLOSED_L5_2_E4_OPEN"
+
+l51 = load("reports/execution/l5_block128_local_e1_e4_result.json")
+l52 = load("reports/execution/l5_matrix_context_local_e1_e4_result.json")
+assert l51["status"] == "PASS"
+assert l51["e1"]["fp32_pipeline_vectors"] == 1024
+assert l51["e1"]["block128_vectors"] == 132
+assert l51["e4"]["block128_wns_ns"] >= 0
+assert l51["e4"]["unmapped_cells"] == 0
+assert l51["e4"]["unresolved_references"] == 0
+assert l52["status"] == "E1_PASS_E4_FULL_TOP_INTERRUPTED_RUNTIME"
+assert l52["e1"]["lanes"] == 512
+assert l52["e1"]["dependent_steps"] == 1_000_000
+assert l52["e1"]["issue_utilization_ppm"] == 1_000_000
+assert l52["e4_stage_probe"]["status"] == "PASS_DIAGNOSTIC_NOT_FULL_TOP"
+assert l52["e4_stage_probe"]["wns_ns"] >= 0
+assert l52["e4_full_top"]["status"] == "INTERRUPTED_NO_FINAL_TIMING"
+assert l52["e4_full_top"]["final_wns_ns"] is None
+assert l52["closure"]["l5_2_pass"] is False
 assert control_audit["status"] == "PASS"
 assert archspec["status"] == "PASS" and archspec["total_sram_kib"] == 4096
 assert program["status"] == "PASS"
@@ -39,10 +62,11 @@ assert not (ROOT / "scripts/validate_progress_v5.py").exists()
 
 result = {
     "schema_version": 6,
-    "status": "PASS_WITH_RETAINED_LOCAL_E4_BLOCKER",
+    "status": "PASS_SANDBOX_V6_LOCAL_L5_1_CLOSED_L5_2_E4_OPEN",
     "remote_new_local_agent_commit": False,
-    "retained_block128_E1": "PASS",
-    "retained_block128_E4": "FAIL_TIMING",
+    "local_L5_1": "PASS_E1_E4_WAIT_REMOTE_AUDIT",
+    "local_L5_2_E1": "PASS_WAIT_REMOTE_AUDIT",
+    "local_L5_2_full_E4": "INTERRUPTED_NO_FINAL_TIMING",
     "new_sandbox_gates": [
         "control_plane_audit",
         "Archspec_collateral",

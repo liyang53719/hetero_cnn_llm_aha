@@ -1,39 +1,31 @@
 {
   "schema_version": 6,
-  "status": "PASS_SANDBOX_V6_WITH_RETAINED_LOCAL_E4_BLOCKER",
+  "status": "PASS_SANDBOX_V6_LOCAL_L5_1_CLOSED_L5_2_E4_OPEN",
   "remote_audit": {
     "observed_base_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
     "new_local_agent_commit_detected": false
   },
-  "retained_local_evidence": {
-    "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
-    "block128_E1": "PASS",
-    "block128_E4": "FAIL_TIMING",
-    "wns_ns": -0.555804,
-    "unmapped": 0,
-    "previous_full_python_tests": 81
+  "local_evidence": {
+    "l5_1_e1": "PASS",
+    "l5_1_e4": "PASS",
+    "l5_2_e1": "PASS",
+    "l5_2_stage_probe_e4": "PASS_DIAGNOSTIC_ONLY",
+    "l5_2_full_top_e4": "INTERRUPTED_NO_FINAL_TIMING"
   },
-  "new_sandbox_execution": {
-    "isolated_v6_tests": 3,
+  "sandbox_execution": {
     "control_plane_audit": "PASS",
     "Archspec_collateral": "PASS",
     "Qwen38_full_shape_program": "PASS",
     "Qwen38_mock_backend": "PASS",
     "SequenceMemory_cycle_E0": "PASS"
   },
-  "source_readiness": {
-    "HardFloat_raw_round_pipeline": "READY_WAIT_LOCAL_COMPILE_E1_E4",
-    "Block128_rawpipe_candidate": "READY_WAIT_LOCAL_E1_E4",
-    "Matrix_context_wrapper": "READY_WAIT_LOCAL_E1_E4",
-    "Qwen38_backend_program_contracts": "READY_WAIT_LOCAL_E1_E2",
-    "SequenceMemory_RTL_contract": "READY_WAIT_LOCAL_E1_E3"
-  },
   "non_claims": [
-    "no new local-agent push was present at audit time",
-    "merged full repository pytest was not executable in the network-isolated sandbox checkout",
-    "no official-weight Qwen3.8 inference",
-    "no new RTL E1",
-    "no E3",
-    "no E4 pass"
-  ]
+    "no_L5_2_pass",
+    "no_full_512_lane_timing_pass",
+    "no_use_of_stale_pre_pipeline_status",
+    "no_official_weight_Qwen3.8_inference",
+    "no_Qwen3.8_E3",
+    "no_Qwen3.8_PPA"
+  ],
+  "next_state": "WAIT_REMOTE_AUDIT"
 }

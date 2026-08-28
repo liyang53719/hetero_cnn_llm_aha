@@ -1,22 +1,45 @@
 # Local-agent handoff v6
 
-Remote audit of `main` found no commit newer than `7e18aa7b0c941c65cfa053d24d75757b99008511`; the latest accepted local-agent evidence remains commit `b8f8eaff6a323a6303a52b01db6a776ddbe9e406`.
+State: `WAIT_REMOTE_AUDIT` at L5.2 full-top E4. Local checkpoint is rebased
+onto remote v6 head `60f9ed0`.
 
-Retain the verified boundary: Block128 canonical E1 PASS (132 vectors, 32 stream beats, random backpressure), but CLN22UL 1.0 ns E4 FAIL_TIMING with WNS `-0.555804 ns` and unmapped cells 0.
+## Closed locally
 
-Run exactly in order:
+- L5.1 E1: 1,024 FP32 pipeline vectors; 132 Block128 vectors; 32 beats;
+  random backpressure; zero mismatch/loss/dup/reorder.
+- L5.1 E4 at CLN22UL 1.0 ns: Mul `+0.000160873 ns`, Add
+  `+0.000159979 ns`, canonical Block128 `+0.0000136495 ns`; zero unmapped
+  and unresolved.
+- L5.2 E1: real 16x32/512-lane array, four contexts, 1,000,000 dependent
+  steps in 1,000,000 issue cycles, 10,000 random-backpressure steps, numeric
+  and tag/protocol PASS.
+- L5.2 one-lane stage probe E4: WNS `+0.000159681 ns`, zero unmapped and
+  unresolved. Diagnostic only.
 
-```bash
-./scripts/run_l5_fp32_pipelines.sh
-./scripts/run_l5_fp32_pipeline_dc.sh
-./scripts/run_l5_block128_rawpipe_candidate.sh
-./scripts/run_l5_block128_rawpipe_dc.sh
-```
+## Still open
 
-Promote `_rawpipe` only when 1024 primitive vectors, 132 Block128 vectors, 32 stream beats, random backpressure, unmapped/unresolved=0 and WNS>=0 all pass. No false path, frequency reduction or multicycle exception is authorized.
+- Full 512-lane L5.2 E4 was stopped after 9,611 seconds in Mapping
+  Optimization Phase 2. No final WNS, area, unmapped, or unresolved result.
+- `work/results/l5_matrix_context_array/dc/status.txt` is stale from the
+  pre-pipeline design (`-1.35148 ns`) and must not be used.
+- L5.2 is not PASS.
 
-After L5.1 passes, integrate `rtl/matrix/bf16_outer_product_context_array.sv` with the real 512-lane array and close 1,000,000 dependent steps, random backpressure, II=1 across four contexts and 1 GHz timing.
+## Implementation boundary
 
-Sandbox v6 has already closed the software prerequisites: Archspec collateral, 48-layer Qwen3.8 full-shape program, deterministic mock backend partition, and Sequence Memory TLB/leaf translation plus COW-cost E0. Do not repeat these as local design work; use their generated contracts as test inputs.
+- Production FMA stages: HardFloat preMul, 24x24+48, postMul, round.
+- Feedback latency is four cycles, matching four-context II=1.
+- Generated RTL SHA256:
+  `d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268`.
+- Generated RTL was not hand edited; upstream status is clean.
+- User runtime scripts remain untracked and must not be committed.
 
-A local push must include raw logs, result JSON, `MASTER_LEDGER.json`, `NEXT_ACTION.json`, `HANDOFF.md`, `control_plane.json`, and `stages.yaml` atomically.
+## v6 sandbox prerequisites
+
+Archspec collateral, Qwen3.8 full-shape program/mock partition, and Sequence
+Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
+
+## Audit request
+
+Approve a hierarchy-preserving bottom-up DC flow that compiles each generated
+stage once and reuses it across 512 lanes, followed by full-top link/timing.
+Do not reduce array size/frequency or add false/multicycle paths.

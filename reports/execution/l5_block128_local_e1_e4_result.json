@@ -1,27 +1,46 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "stage": "L5",
-  "subgate": "L5.1_BLOCK128_LOCAL_E1_E4",
-  "status": "IN_PROGRESS",
+  "subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE",
+  "status": "PASS",
   "e1": {
     "status": "PASS",
-    "vectors": 132,
+    "fp32_pipeline_vectors": 1024,
+    "fp32_mul_vectors": 512,
+    "fp32_add_vectors": 512,
+    "block128_vectors": 132,
     "stream_beats": 32,
-    "random_backpressure": true,
+    "random_backpressure": "PASS",
     "mismatches": 0,
     "loss_dup_reorder": 0,
-    "binary_sha256": "3ef76de9dfb92d3de50a51f78a5bf724b39a8aaee0cab7596864e3564a30ba30"
+    "pipeline_binary_sha256": "3a37f6a520d8a77e1d7ce38454f2f2c7915a45a7905bf67ec8bb6281fcef3763",
+    "block128_binary_sha256": "fb37aedf4571e262c91e7521a0bcf23313889b52bf1c3ee5438fd4ede247635e"
   },
   "e4": {
-    "status": "FAIL_TIMING",
+    "status": "PASS",
     "clock_period_ns": 1.0,
-    "initial_wns_ns": -2.20967,
-    "latest_wns_ns": -0.555804,
+    "uncertainty_ns": 0.08,
+    "io_budget_ns": 0.10,
+    "fp32_mul_wns_ns": 0.000160873,
+    "fp32_add_wns_ns": 0.000159979,
+    "block128_wns_ns": 0.0000136495,
     "unmapped_cells": 0,
-    "cell_area": 40846.988515,
-    "leaf_cells": 82453,
-    "sequential_cells": 1305,
-    "critical_path": "registered exp result through one combinational HardFloat FP32 multiply"
+    "unresolved_references": 0,
+    "fp32_mul_cell_area": 1770.314025,
+    "fp32_add_cell_area": 1423.877005,
+    "block128_cell_area": 39004.420423
   },
-  "next": "internally pipeline HardFloat raw multiply and rounding"
+  "implementation": {
+    "canonical_module": "rtl/sfu/fp32_mlo_summary_merge_stream.sv",
+    "pipeline_generator": "integration/gemmini/EmitHeteroFP32Pipelines.scala",
+    "generator_sha256": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c",
+    "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+    "generated_rtl_hand_edited": false,
+    "upstream_status_bytes": 0
+  },
+  "tools": {
+    "verilator": "5.050",
+    "dc": "X-2025.06-SP3",
+    "library": "CLN22UL base SVT tt 0.8V 25C"
+  }
 }

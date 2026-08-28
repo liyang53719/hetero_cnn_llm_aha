@@ -11,8 +11,8 @@
   "candidate_archspecs": ["configs/arch_v2_qwen38_candidate.yaml"],
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
-  "current_subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
-  "current_state": "E1_PASS_E4_FAIL_TIMING_WAIT_LOCAL_RAWPIPE_RESULTS",
+  "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
+  "current_state": "PARTIAL_CHECKPOINT_PUSH_WAIT_REMOTE_AUDIT",
   "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
   "evidence_classes": {
     "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
@@ -21,22 +21,29 @@
     "E3": "integrated_queue_dma_sram_ddr_cycle_execution",
     "E4": "post_synthesis_timing_area_power"
   },
-  "retained_local_evidence": {
-    "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
-    "block128_e1": "PASS",
-    "block128_vectors": 132,
-    "stream_beats": 32,
-    "random_backpressure": "PASS",
-    "block128_e4": "FAIL_TIMING",
-    "block128_wns_ns": -0.555804,
-    "unmapped_cells": 0
-  },
   "remote_audit": {
     "audited_at_utc": "2026-08-28T00:00:00Z",
     "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
     "latest_local_agent_evidence_commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
     "new_local_agent_commit_detected": false,
     "branch_count": 1
+  },
+  "retained_local_evidence": {
+    "block128_e1": "PASS",
+    "block128_vectors": 132,
+    "stream_beats": 32,
+    "random_backpressure": "PASS",
+    "block128_e4": "PASS",
+    "block128_wns_ns": 0.0000136495,
+    "unmapped_cells": 0,
+    "unresolved_references": 0
+  },
+  "local_checkpoint": {
+    "rebased_onto": "60f9ed0",
+    "l5_1": "PASS_E1_E4",
+    "l5_2_e1": "PASS",
+    "l5_2_stage_probe_e4": "PASS_DIAGNOSTIC_ONLY",
+    "l5_2_full_top_e4": "INTERRUPTED_NO_FINAL_TIMING"
   },
   "parallel_sandbox_progress": {
     "CONTROL_PLANE_V6_AUDIT": "PASS",
@@ -51,11 +58,12 @@
     "L11_CANDIDATE_ARCHSPEC_COLLATERAL": "PASS"
   },
   "claim_rules": [
-    "no new local-agent commit was present at the audited base head",
-    "retained Block128 E1 does not close Block128 E4",
-    "negative WNS is always E4 failure",
+    "L5.1 is locally closed and awaits remote audit",
+    "the one-lane timing probe does not close L5.2 E4",
+    "the stale pre-pipeline status file is not evidence for the pipelined array",
+    "L5.2 remains open until full 512-lane WNS is nonnegative with zero unmapped and unresolved",
+    "generated RTL is emitter output and is never hand edited",
     "shape-only lowering and mock backend are E0, not device execution",
-    "cycle-structured Sequence Memory is E0, not AXI/iDMA E3",
     "candidate Archspec collateral does not promote it to canonical",
     "official-weight accuracy and route locality remain local-runtime gates",
     "vision remains outside scope"

@@ -1,1 +1,1202 @@
-{"schema_version":1,"status":"PASS","evidence_class":"synthetic_memory_DSE_not_official_trace","ple":{"rows_per_token_max":16,"bf16_row_bytes":320,"outstanding_candidate":32},"moe":{"w4_primary_decode_path":true,"route_aware_prefetch":true,"grouped_GEMM":true,"shared_expert_resident_policy":true}}
+{
+  "architecture_findings": {
+    "moe": {
+      "grouped_GEMM_batching": true,
+      "route_aware_prefetch": true,
+      "shared_expert_resident_policy": true,
+      "w4_primary_decode_path": true
+    },
+    "ple_random_row_engine": {
+      "minimum_outstanding_candidate": 32,
+      "request_dedup": true,
+      "row_reorder_buffer_required": true
+    }
+  },
+  "evidence_class": "synthetic_memory_DSE_not_official_trace",
+  "moe": {
+    "w16": {
+      "one_expert_bytes": 9830400,
+      "patterns": {
+        "adversarial": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 160.0,
+              "peak_unique_experts_per_window": 160,
+              "total_unique_expert_requests": 10240,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 40.0,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 10240,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 512.0,
+              "peak_unique_experts_per_window": 512,
+              "total_unique_expert_requests": 8192,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "128": {
+              "capacity_experts": 13,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "16": {
+              "capacity_experts": 1,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "256": {
+              "capacity_experts": 27,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "64": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            }
+          }
+        },
+        "clustered": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 59.609375,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 3815,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 31.4453125,
+              "peak_unique_experts_per_window": 38,
+              "total_unique_expert_requests": 8050,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 79.875,
+              "peak_unique_experts_per_window": 80,
+              "total_unique_expert_requests": 1278,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "128": {
+              "capacity_experts": 13,
+              "hit_rate": 0.141796875,
+              "loads": 8788,
+              "weight_bytes_read": 86389555200
+            },
+            "16": {
+              "capacity_experts": 1,
+              "hit_rate": 0.00166015625,
+              "loads": 10223,
+              "weight_bytes_read": 100496179200
+            },
+            "256": {
+              "capacity_experts": 27,
+              "hit_rate": 0.37294921875,
+              "loads": 6421,
+              "weight_bytes_read": 63120998400
+            },
+            "64": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0345703125,
+              "loads": 9886,
+              "weight_bytes_read": 97183334400
+            }
+          }
+        },
+        "hotset64": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 59.609375,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 3815,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 31.4453125,
+              "peak_unique_experts_per_window": 38,
+              "total_unique_expert_requests": 8050,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 64.0,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 1024,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "128": {
+              "capacity_experts": 13,
+              "hit_rate": 0.14345703125,
+              "loads": 8771,
+              "weight_bytes_read": 86222438400
+            },
+            "16": {
+              "capacity_experts": 1,
+              "hit_rate": 0.0017578125,
+              "loads": 10222,
+              "weight_bytes_read": 100486348800
+            },
+            "256": {
+              "capacity_experts": 27,
+              "hit_rate": 0.37890625,
+              "loads": 6360,
+              "weight_bytes_read": 62521344000
+            },
+            "64": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0349609375,
+              "loads": 9882,
+              "weight_bytes_read": 97144012800
+            }
+          }
+        },
+        "sticky": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 39.09375,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 2502,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 15.96875,
+              "peak_unique_experts_per_window": 16,
+              "total_unique_expert_requests": 4088,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 120.5,
+              "peak_unique_experts_per_window": 127,
+              "total_unique_expert_requests": 1928,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "128": {
+              "capacity_experts": 13,
+              "hit_rate": 0.8005859375,
+              "loads": 2042,
+              "weight_bytes_read": 20073676800
+            },
+            "16": {
+              "capacity_experts": 1,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "256": {
+              "capacity_experts": 27,
+              "hit_rate": 0.80556640625,
+              "loads": 1991,
+              "weight_bytes_read": 19572326400
+            },
+            "64": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            }
+          }
+        },
+        "uniform": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 139.203125,
+              "peak_unique_experts_per_window": 150,
+              "total_unique_expert_requests": 8909,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 38.8984375,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 9958,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 365.8125,
+              "peak_unique_experts_per_window": 378,
+              "total_unique_expert_requests": 5853,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 100663296000
+            },
+            "128": {
+              "capacity_experts": 13,
+              "hit_rate": 0.01572265625,
+              "loads": 10079,
+              "weight_bytes_read": 99080601600
+            },
+            "16": {
+              "capacity_experts": 1,
+              "hit_rate": 9.765625e-05,
+              "loads": 10239,
+              "weight_bytes_read": 100653465600
+            },
+            "256": {
+              "capacity_experts": 27,
+              "hit_rate": 0.04072265625,
+              "loads": 9823,
+              "weight_bytes_read": 96564019200
+            },
+            "64": {
+              "capacity_experts": 6,
+              "hit_rate": 0.00390625,
+              "loads": 10200,
+              "weight_bytes_read": 100270080000
+            }
+          }
+        }
+      }
+    },
+    "w4": {
+      "one_expert_bytes": 2611200,
+      "patterns": {
+        "adversarial": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 160.0,
+              "peak_unique_experts_per_window": 160,
+              "total_unique_expert_requests": 10240,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 40.0,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 10240,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 512.0,
+              "peak_unique_experts_per_window": 512,
+              "total_unique_expert_requests": 8192,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "128": {
+              "capacity_experts": 51,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "16": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "256": {
+              "capacity_experts": 102,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "64": {
+              "capacity_experts": 25,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            }
+          }
+        },
+        "clustered": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 59.609375,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 3815,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 31.4453125,
+              "peak_unique_experts_per_window": 38,
+              "total_unique_expert_requests": 8050,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 79.875,
+              "peak_unique_experts_per_window": 80,
+              "total_unique_expert_requests": 1278,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "128": {
+              "capacity_experts": 51,
+              "hit_rate": 0.7453125,
+              "loads": 2608,
+              "weight_bytes_read": 6810009600
+            },
+            "16": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0345703125,
+              "loads": 9886,
+              "weight_bytes_read": 25814323200
+            },
+            "256": {
+              "capacity_experts": 102,
+              "hit_rate": 0.9453125,
+              "loads": 560,
+              "weight_bytes_read": 1462272000
+            },
+            "64": {
+              "capacity_experts": 25,
+              "hit_rate": 0.3408203125,
+              "loads": 6750,
+              "weight_bytes_read": 17625600000
+            }
+          }
+        },
+        "hotset64": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 59.609375,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 3815,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 31.4453125,
+              "peak_unique_experts_per_window": 38,
+              "total_unique_expert_requests": 8050,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 64.0,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 1024,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "128": {
+              "capacity_experts": 51,
+              "hit_rate": 0.78291015625,
+              "loads": 2223,
+              "weight_bytes_read": 5804697600
+            },
+            "16": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0349609375,
+              "loads": 9882,
+              "weight_bytes_read": 25803878400
+            },
+            "256": {
+              "capacity_experts": 102,
+              "hit_rate": 0.99375,
+              "loads": 64,
+              "weight_bytes_read": 167116800
+            },
+            "64": {
+              "capacity_experts": 25,
+              "hit_rate": 0.34541015625,
+              "loads": 6703,
+              "weight_bytes_read": 17502873600
+            }
+          }
+        },
+        "sticky": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 39.09375,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 2502,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 15.96875,
+              "peak_unique_experts_per_window": 16,
+              "total_unique_expert_requests": 4088,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 120.5,
+              "peak_unique_experts_per_window": 127,
+              "total_unique_expert_requests": 1928,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "128": {
+              "capacity_experts": 51,
+              "hit_rate": 0.81640625,
+              "loads": 1880,
+              "weight_bytes_read": 4909056000
+            },
+            "16": {
+              "capacity_experts": 6,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "256": {
+              "capacity_experts": 102,
+              "hit_rate": 0.8361328125,
+              "loads": 1678,
+              "weight_bytes_read": 4381593600
+            },
+            "64": {
+              "capacity_experts": 25,
+              "hit_rate": 0.80498046875,
+              "loads": 1997,
+              "weight_bytes_read": 5214566400
+            }
+          }
+        },
+        "uniform": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 139.203125,
+              "peak_unique_experts_per_window": 150,
+              "total_unique_expert_requests": 8909,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 38.8984375,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 9958,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 365.8125,
+              "peak_unique_experts_per_window": 378,
+              "total_unique_expert_requests": 5853,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 26738688000
+            },
+            "128": {
+              "capacity_experts": 51,
+              "hit_rate": 0.08759765625,
+              "loads": 9343,
+              "weight_bytes_read": 24396441600
+            },
+            "16": {
+              "capacity_experts": 6,
+              "hit_rate": 0.00390625,
+              "loads": 10200,
+              "weight_bytes_read": 26634240000
+            },
+            "256": {
+              "capacity_experts": 102,
+              "hit_rate": 0.1859375,
+              "loads": 8336,
+              "weight_bytes_read": 21766963200
+            },
+            "64": {
+              "capacity_experts": 25,
+              "hit_rate": 0.0375,
+              "loads": 9856,
+              "weight_bytes_read": 25735987200
+            }
+          }
+        }
+      }
+    },
+    "w8": {
+      "one_expert_bytes": 5068800,
+      "patterns": {
+        "adversarial": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 160.0,
+              "peak_unique_experts_per_window": 160,
+              "total_unique_expert_requests": 10240,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 40.0,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 10240,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 512.0,
+              "peak_unique_experts_per_window": 512,
+              "total_unique_expert_requests": 8192,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "128": {
+              "capacity_experts": 26,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "16": {
+              "capacity_experts": 3,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "256": {
+              "capacity_experts": 52,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "64": {
+              "capacity_experts": 13,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            }
+          }
+        },
+        "clustered": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 59.609375,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 3815,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 31.4453125,
+              "peak_unique_experts_per_window": 38,
+              "total_unique_expert_requests": 8050,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 79.875,
+              "peak_unique_experts_per_window": 80,
+              "total_unique_expert_requests": 1278,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "128": {
+              "capacity_experts": 26,
+              "hit_rate": 0.356640625,
+              "loads": 6588,
+              "weight_bytes_read": 33393254400
+            },
+            "16": {
+              "capacity_experts": 3,
+              "hit_rate": 0.00966796875,
+              "loads": 10141,
+              "weight_bytes_read": 51402700800
+            },
+            "256": {
+              "capacity_experts": 52,
+              "hit_rate": 0.759375,
+              "loads": 2464,
+              "weight_bytes_read": 12489523200
+            },
+            "64": {
+              "capacity_experts": 13,
+              "hit_rate": 0.141796875,
+              "loads": 8788,
+              "weight_bytes_read": 44544614400
+            }
+          }
+        },
+        "hotset64": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 59.609375,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 3815,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 31.4453125,
+              "peak_unique_experts_per_window": 38,
+              "total_unique_expert_requests": 8050,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 64.0,
+              "peak_unique_experts_per_window": 64,
+              "total_unique_expert_requests": 1024,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "128": {
+              "capacity_experts": 26,
+              "hit_rate": 0.36201171875,
+              "loads": 6533,
+              "weight_bytes_read": 33114470400
+            },
+            "16": {
+              "capacity_experts": 3,
+              "hit_rate": 0.00986328125,
+              "loads": 10139,
+              "weight_bytes_read": 51392563200
+            },
+            "256": {
+              "capacity_experts": 52,
+              "hit_rate": 0.79873046875,
+              "loads": 2061,
+              "weight_bytes_read": 10446796800
+            },
+            "64": {
+              "capacity_experts": 13,
+              "hit_rate": 0.14345703125,
+              "loads": 8771,
+              "weight_bytes_read": 44458444800
+            }
+          }
+        },
+        "sticky": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 39.09375,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 2502,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 15.96875,
+              "peak_unique_experts_per_window": 16,
+              "total_unique_expert_requests": 4088,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 120.5,
+              "peak_unique_experts_per_window": 127,
+              "total_unique_expert_requests": 1928,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "128": {
+              "capacity_experts": 26,
+              "hit_rate": 0.80537109375,
+              "loads": 1993,
+              "weight_bytes_read": 10102118400
+            },
+            "16": {
+              "capacity_experts": 3,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "256": {
+              "capacity_experts": 52,
+              "hit_rate": 0.81650390625,
+              "loads": 1879,
+              "weight_bytes_read": 9524275200
+            },
+            "64": {
+              "capacity_experts": 13,
+              "hit_rate": 0.8005859375,
+              "loads": 2042,
+              "weight_bytes_read": 10350489600
+            }
+          }
+        },
+        "uniform": {
+          "batching": {
+            "1": {
+              "average_unique_experts_per_window": 10.0,
+              "peak_unique_experts_per_window": 10,
+              "total_unique_expert_requests": 10240,
+              "windows": 1024
+            },
+            "16": {
+              "average_unique_experts_per_window": 139.203125,
+              "peak_unique_experts_per_window": 150,
+              "total_unique_expert_requests": 8909,
+              "windows": 64
+            },
+            "4": {
+              "average_unique_experts_per_window": 38.8984375,
+              "peak_unique_experts_per_window": 40,
+              "total_unique_expert_requests": 9958,
+              "windows": 256
+            },
+            "64": {
+              "average_unique_experts_per_window": 365.8125,
+              "peak_unique_experts_per_window": 378,
+              "total_unique_expert_requests": 5853,
+              "windows": 16
+            }
+          },
+          "cache_mib": {
+            "0": {
+              "capacity_experts": 0,
+              "hit_rate": 0.0,
+              "loads": 10240,
+              "weight_bytes_read": 51904512000
+            },
+            "128": {
+              "capacity_experts": 26,
+              "hit_rate": 0.038671875,
+              "loads": 9844,
+              "weight_bytes_read": 49897267200
+            },
+            "16": {
+              "capacity_experts": 3,
+              "hit_rate": 0.00078125,
+              "loads": 10232,
+              "weight_bytes_read": 51863961600
+            },
+            "256": {
+              "capacity_experts": 52,
+              "hit_rate": 0.08916015625,
+              "loads": 9327,
+              "weight_bytes_read": 47276697600
+            },
+            "64": {
+              "capacity_experts": 13,
+              "hit_rate": 0.01572265625,
+              "loads": 10079,
+              "weight_bytes_read": 51088435200
+            }
+          }
+        }
+      }
+    }
+  },
+  "ple": {
+    "patterns": {
+      "adversarial": {
+        "0": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 0,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "1024": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 327680,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 15360,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "16384": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 5242880,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "256": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 81920,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 16128,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "4096": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 1310720,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 12288,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        }
+      },
+      "clustered": {
+        "0": {
+          "accesses": 16343,
+          "bytes_read": 5229760,
+          "capacity_bytes": 0,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16343
+        },
+        "1024": {
+          "accesses": 16343,
+          "bytes_read": 4633600,
+          "capacity_bytes": 327680,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 13456,
+          "hit_rate": 0.11399375879581472,
+          "hits": 1863,
+          "misses": 14480
+        },
+        "16384": {
+          "accesses": 16343,
+          "bytes_read": 4633600,
+          "capacity_bytes": 5242880,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.11399375879581472,
+          "hits": 1863,
+          "misses": 14480
+        },
+        "256": {
+          "accesses": 16343,
+          "bytes_read": 4954880,
+          "capacity_bytes": 81920,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 15228,
+          "hit_rate": 0.05256072936425381,
+          "hits": 859,
+          "misses": 15484
+        },
+        "4096": {
+          "accesses": 16343,
+          "bytes_read": 4633600,
+          "capacity_bytes": 1310720,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 10384,
+          "hit_rate": 0.11399375879581472,
+          "hits": 1863,
+          "misses": 14480
+        }
+      },
+      "repeated_prompt": {
+        "0": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 0,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "1024": {
+          "accesses": 16384,
+          "bytes_read": 5237760,
+          "capacity_bytes": 327680,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 15344,
+          "hit_rate": 0.0009765625,
+          "hits": 16,
+          "misses": 16368
+        },
+        "16384": {
+          "accesses": 16384,
+          "bytes_read": 2940160,
+          "capacity_bytes": 5242880,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.439208984375,
+          "hits": 7196,
+          "misses": 9188
+        },
+        "256": {
+          "accesses": 16384,
+          "bytes_read": 5240320,
+          "capacity_bytes": 81920,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 16120,
+          "hit_rate": 0.00048828125,
+          "hits": 8,
+          "misses": 16376
+        },
+        "4096": {
+          "accesses": 16384,
+          "bytes_read": 2943040,
+          "capacity_bytes": 1310720,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 5101,
+          "hit_rate": 0.43865966796875,
+          "hits": 7187,
+          "misses": 9197
+        }
+      },
+      "temporal": {
+        "0": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 0,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "1024": {
+          "accesses": 16384,
+          "bytes_read": 2623680,
+          "capacity_bytes": 327680,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 7175,
+          "hit_rate": 0.49957275390625,
+          "hits": 8185,
+          "misses": 8199
+        },
+        "16384": {
+          "accesses": 16384,
+          "bytes_read": 2622400,
+          "capacity_bytes": 5242880,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.49981689453125,
+          "hits": 8189,
+          "misses": 8195
+        },
+        "256": {
+          "accesses": 16384,
+          "bytes_read": 2624000,
+          "capacity_bytes": 81920,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 7944,
+          "hit_rate": 0.49951171875,
+          "hits": 8184,
+          "misses": 8200
+        },
+        "4096": {
+          "accesses": 16384,
+          "bytes_read": 2623040,
+          "capacity_bytes": 1310720,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 4101,
+          "hit_rate": 0.49969482421875,
+          "hits": 8187,
+          "misses": 8197
+        }
+      },
+      "uniform": {
+        "0": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 0,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "1024": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 327680,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 15360,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "16384": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 5242880,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 0,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "256": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 81920,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 16128,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        },
+        "4096": {
+          "accesses": 16384,
+          "bytes_read": 5242880,
+          "capacity_bytes": 1310720,
+          "effective_parallel_requests_candidate": 32,
+          "evictions": 12288,
+          "hit_rate": 0.0,
+          "hits": 0,
+          "misses": 16384
+        }
+      }
+    },
+    "row_bytes_bf16": 320,
+    "rows_per_token_max": 16
+  },
+  "schema_version": 1,
+  "status": "PASS",
+  "tokens": 1024
+}

@@ -19,6 +19,7 @@ set CLOCK_PORT   [expr {[info exists ::env(CLOCK_PORT)] ? $::env(CLOCK_PORT) : "
 set CLK_PERIOD   [expr {[info exists ::env(CLOCK_PERIOD_NS)] ? $::env(CLOCK_PERIOD_NS) : 1.0}]
 set OUT_DIR      [expr {[info exists ::env(OUT_DIR)] ? $::env(OUT_DIR) : "work/dc/$TOP"}]
 set MAX_CORES    [expr {[info exists ::env(DC_MAX_CORES)] ? $::env(DC_MAX_CORES) : 4}]
+set HIGH_EFFORT  [expr {[info exists ::env(DC_TIMING_HIGH_EFFORT)] ? $::env(DC_TIMING_HIGH_EFFORT) : 0}]
 file mkdir $OUT_DIR
 
 set dbs [split $STD_CELL_DBS ":"]
@@ -66,7 +67,12 @@ if {[sizeof_collection [get_ports -quiet $CLOCK_PORT]] > 0} {
 set_max_fanout 32 [current_design]
 set_fix_multiple_port_nets -all -buffer_constants
 
-compile_ultra -no_autoungroup
+if {$HIGH_EFFORT} {
+  set_critical_range 0.20 [current_design]
+  compile_ultra -no_autoungroup -timing_high_effort_script
+} else {
+  compile_ultra -no_autoungroup
+}
 
 report_qor                         > "$OUT_DIR/qor.rpt"
 report_area -hierarchy             > "$OUT_DIR/area_hier.rpt"

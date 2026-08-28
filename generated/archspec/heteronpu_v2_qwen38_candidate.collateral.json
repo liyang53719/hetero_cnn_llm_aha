@@ -41,13 +41,48 @@
     "silu_times_up"
   ],
   "sram_map": [
-    {"base": 0, "bytes": 1310720, "limit": 1310720, "owner": "shared_l2"},
-    {"base": 1310720, "bytes": 786432, "limit": 2097152, "owner": "matrix_scratchpad"},
-    {"base": 2097152, "bytes": 524288, "limit": 2621440, "owner": "matrix_accumulator"},
-    {"base": 2621440, "bytes": 786432, "limit": 3407872, "owner": "sequence_state_staging"},
-    {"base": 3407872, "bytes": 393216, "limit": 3801088, "owner": "expert_row_staging"},
-    {"base": 3801088, "bytes": 262144, "limit": 4063232, "owner": "aha_sidecar"},
-    {"base": 4063232, "bytes": 131072, "limit": 4194304, "owner": "control_trace"}
+    {
+      "base": 0,
+      "bytes": 1310720,
+      "limit": 1310720,
+      "owner": "shared_l2"
+    },
+    {
+      "base": 1310720,
+      "bytes": 786432,
+      "limit": 2097152,
+      "owner": "matrix_scratchpad"
+    },
+    {
+      "base": 2097152,
+      "bytes": 524288,
+      "limit": 2621440,
+      "owner": "matrix_accumulator"
+    },
+    {
+      "base": 2621440,
+      "bytes": 786432,
+      "limit": 3407872,
+      "owner": "sequence_state_staging"
+    },
+    {
+      "base": 3407872,
+      "bytes": 393216,
+      "limit": 3801088,
+      "owner": "expert_row_staging"
+    },
+    {
+      "base": 3801088,
+      "bytes": 262144,
+      "limit": 4063232,
+      "owner": "aha_sidecar"
+    },
+    {
+      "base": 4063232,
+      "bytes": 131072,
+      "limit": 4194304,
+      "owner": "control_trace"
+    }
   ],
   "status": "candidate_sandbox_not_canonical",
   "total_sram_bytes": 4194304

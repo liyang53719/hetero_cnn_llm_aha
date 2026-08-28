@@ -1,24 +1,40 @@
 {
   "schema_version": 6,
   "current_stage": "L5",
-  "current_subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
-  "current_state": "E1_PASS_E4_FAIL_TIMING_WAIT_LOCAL_RAWPIPE_RESULTS",
+  "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
+  "current_state": "PARTIAL_CHECKPOINT_PUSH_WAIT_REMOTE_AUDIT",
   "remote_audit": {
     "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
     "new_local_agent_commit_detected": false,
     "latest_local_agent_evidence_commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406"
   },
   "accepted_local_evidence": {
-    "block128": {
-      "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
-      "e1": "PASS",
-      "vectors": 132,
+    "L5.1": {
+      "status": "PASS_WAIT_REMOTE_AUDIT",
+      "pipeline_vectors": 1024,
+      "block128_vectors": 132,
       "stream_beats": 32,
       "random_backpressure": "PASS",
-      "e4": "FAIL_TIMING",
-      "wns_ns": -0.555804,
+      "mul_wns_ns": 0.000160873,
+      "add_wns_ns": 0.000159979,
+      "block128_wns_ns": 0.0000136495,
       "unmapped": 0,
+      "unresolved": 0,
       "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
+    },
+    "L5.2": {
+      "status": "E1_PASS_E4_FULL_TOP_INTERRUPTED_WAIT_REMOTE_AUDIT",
+      "physical_array": "16x32_512_lane",
+      "contexts": 4,
+      "dependent_steps": 1000000,
+      "issue_utilization_ppm": 1000000,
+      "random_backpressure_steps": 10000,
+      "stage_probe_wns_ns": 0.000159681,
+      "stage_probe_scope": "diagnostic_not_full_top",
+      "full_top_e4": "INTERRUPTED_NO_FINAL_TIMING",
+      "full_top_elapsed_seconds": 9611,
+      "full_top_last_phase": "Mapping Optimization Phase 2",
+      "evidence": "reports/execution/l5_matrix_context_local_e1_e4_result.json"
     }
   },
   "sandbox_closed": {
@@ -33,11 +49,10 @@
     "sequence_memory_generation_and_COW_contract": "PASS"
   },
   "source_ready_waiting_local": [
-    "HardFloat_raw_round_pipeline",
-    "Block128_rawpipe_E1_E4",
-    "Matrix_context_E1_E4",
+    "Matrix_context_full_top_E4",
     "Qwen38_backend_program_contracts",
     "SequenceMemory_RTL_contract"
   ],
-  "waiting_local": ["L4","L5.1_to_L5.6","L7_E1_E3","L8_official_and_RTL","L9_real_llama_cpp","L10"]
+  "waiting_local": ["L4","L5.2_full_top_E4","L5.3_to_L5.6","L7_E1_E3","L8_official_and_RTL","L9_real_llama_cpp","L10"],
+  "forbidden_claims": ["L5.2_PASS","full_512_lane_1GHz_timing_PASS","stale_status_as_current_E4","probe_as_full_top_E4"]
 }

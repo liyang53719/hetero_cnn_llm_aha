@@ -1,1 +1,37 @@
-{"schema_version":1,"status":"PASS","evidence_class":"E0_state_atomicity_reference","cases":1000,"state_domains":10,"production_contract":["epoch","dirty_bitmap","copy_on_write","atomic_commit_barrier","generation_rollback"]}
+{
+  "accepted_prefix_histogram": {
+    "0": 211,
+    "1": 250,
+    "2": 159,
+    "3": 113,
+    "4": 87,
+    "5": 72,
+    "6": 51,
+    "7": 39,
+    "8": 18
+  },
+  "cases": 1000,
+  "evidence_class": "E0_state_atomicity_reference",
+  "production_contract": [
+    "epoch",
+    "dirty_bitmap",
+    "copy_on_write",
+    "atomic_commit_barrier",
+    "generation_rollback"
+  ],
+  "schema_version": 1,
+  "state_domains": [
+    "token_index",
+    "gdn_recurrent",
+    "gdn_conv",
+    "qsa_index",
+    "qsa_kv",
+    "ple_history",
+    "ple_conv",
+    "hyper_stream",
+    "paged_kv_generation",
+    "sampling_counter"
+  ],
+  "status": "PASS",
+  "whole_state_copy_is_reference_only": true
+}

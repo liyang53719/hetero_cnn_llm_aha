@@ -17,14 +17,16 @@ class HeteroFP32MulPipe(val userBits: Int, val moduleName: String) extends Modul
     val outValid = Output(Bool()); val outReady = Input(Bool())
     val out = Output(UInt(32.W)); val exceptionFlags = Output(UInt(5.W)); val userOut = Output(UInt(userBits.W))
   })
+  val recValid = RegInit(false.B); val recX = Reg(UInt(33.W)); val recY = Reg(UInt(33.W)); val recUser = Reg(UInt(userBits.W))
   val raw = Module(new MulRawFN(8, 24))
-  raw.io.a := rawFloatFromRecFN(8, 24, recFNFromFN(8, 24, io.x)); raw.io.b := rawFloatFromRecFN(8, 24, recFNFromFN(8, 24, io.y))
+  raw.io.a := rawFloatFromRecFN(8, 24, recX); raw.io.b := rawFloatFromRecFN(8, 24, recY)
   val rawValid = RegInit(false.B); val rawValue = Reg(new RawFloat(8, 26)); val rawInvalid = Reg(Bool()); val rawUser = Reg(UInt(userBits.W))
   val round = Module(new RoundRawFNToRecFN(8, 24, 0)); round.io.invalidExc := rawInvalid; round.io.infiniteExc := false.B; round.io.in := rawValue; round.io.roundingMode := round_near_even; round.io.detectTininess := tininess_afterRounding
-  val outValid = RegInit(false.B); val outValue = Reg(UInt(32.W)); val outFlags = Reg(UInt(5.W)); val outUser = Reg(UInt(userBits.W)); val outStageReady = !outValid || io.outReady; val rawStageReady = !rawValid || outStageReady
-  io.inReady := rawStageReady; io.outValid := outValid; io.out := outValue; io.exceptionFlags := outFlags; io.userOut := outUser
+  val outValid = RegInit(false.B); val outValue = Reg(UInt(32.W)); val outFlags = Reg(UInt(5.W)); val outUser = Reg(UInt(userBits.W)); val outStageReady = !outValid || io.outReady; val rawStageReady = !rawValid || outStageReady; val recStageReady = !recValid || rawStageReady
+  io.inReady := recStageReady; io.outValid := outValid; io.out := outValue; io.exceptionFlags := outFlags; io.userOut := outUser
   when(outStageReady) { outValid := rawValid; when(rawValid) { outValue := fNFromRecFN(8, 24, round.io.out); outFlags := round.io.exceptionFlags; outUser := rawUser } }
-  when(rawStageReady) { rawValid := io.inValid; when(io.inValid) { rawValue := raw.io.rawOut; rawInvalid := raw.io.invalidExc; rawUser := io.userIn } }
+  when(rawStageReady) { rawValid := recValid; when(recValid) { rawValue := raw.io.rawOut; rawInvalid := raw.io.invalidExc; rawUser := recUser } }
+  when(recStageReady) { recValid := io.inValid; when(io.inValid) { recX := recFNFromFN(8, 24, io.x); recY := recFNFromFN(8, 24, io.y); recUser := io.userIn } }
 }
 
 /** Elastic IEEE-FP32 addition split at HardFloat's raw/round boundary. */
@@ -37,13 +39,15 @@ class HeteroFP32AddPipe(val userBits: Int, val moduleName: String) extends Modul
     val outValid = Output(Bool()); val outReady = Input(Bool())
     val out = Output(UInt(32.W)); val exceptionFlags = Output(UInt(5.W)); val userOut = Output(UInt(userBits.W))
   })
-  val raw = Module(new AddRawFN(8, 24)); raw.io.subOp := false.B; raw.io.a := rawFloatFromRecFN(8, 24, recFNFromFN(8, 24, io.x)); raw.io.b := rawFloatFromRecFN(8, 24, recFNFromFN(8, 24, io.y)); raw.io.roundingMode := round_near_even
+  val recValid = RegInit(false.B); val recX = Reg(UInt(33.W)); val recY = Reg(UInt(33.W)); val recUser = Reg(UInt(userBits.W))
+  val raw = Module(new AddRawFN(8, 24)); raw.io.subOp := false.B; raw.io.a := rawFloatFromRecFN(8, 24, recX); raw.io.b := rawFloatFromRecFN(8, 24, recY); raw.io.roundingMode := round_near_even
   val rawValid = RegInit(false.B); val rawValue = Reg(new RawFloat(8, 26)); val rawInvalid = Reg(Bool()); val rawUser = Reg(UInt(userBits.W))
   val round = Module(new RoundRawFNToRecFN(8, 24, 0)); round.io.invalidExc := rawInvalid; round.io.infiniteExc := false.B; round.io.in := rawValue; round.io.roundingMode := round_near_even; round.io.detectTininess := tininess_afterRounding
-  val outValid = RegInit(false.B); val outValue = Reg(UInt(32.W)); val outFlags = Reg(UInt(5.W)); val outUser = Reg(UInt(userBits.W)); val outStageReady = !outValid || io.outReady; val rawStageReady = !rawValid || outStageReady
-  io.inReady := rawStageReady; io.outValid := outValid; io.out := outValue; io.exceptionFlags := outFlags; io.userOut := outUser
+  val outValid = RegInit(false.B); val outValue = Reg(UInt(32.W)); val outFlags = Reg(UInt(5.W)); val outUser = Reg(UInt(userBits.W)); val outStageReady = !outValid || io.outReady; val rawStageReady = !rawValid || outStageReady; val recStageReady = !recValid || rawStageReady
+  io.inReady := recStageReady; io.outValid := outValid; io.out := outValue; io.exceptionFlags := outFlags; io.userOut := outUser
   when(outStageReady) { outValid := rawValid; when(rawValid) { outValue := fNFromRecFN(8, 24, round.io.out); outFlags := round.io.exceptionFlags; outUser := rawUser } }
-  when(rawStageReady) { rawValid := io.inValid; when(io.inValid) { rawValue := raw.io.rawOut; rawInvalid := raw.io.invalidExc; rawUser := io.userIn } }
+  when(rawStageReady) { rawValid := recValid; when(recValid) { rawValue := raw.io.rawOut; rawInvalid := raw.io.invalidExc; rawUser := recUser } }
+  when(recStageReady) { recValid := io.inValid; when(io.inValid) { recX := recFNFromFN(8, 24, io.x); recY := recFNFromFN(8, 24, io.y); recUser := io.userIn } }
 }
 
 class HeteroFP32PipelineEmitTop extends Module {

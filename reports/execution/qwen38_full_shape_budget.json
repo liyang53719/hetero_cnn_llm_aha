@@ -1,1 +1,350 @@
-{"schema_version":1,"status":"PASS","evidence_class":"analytical_shape_budget_not_RTL","fixed_macs_per_token":6147688448,"q1024_average_macs_per_token":6224044544,"q1024_required_wall_utilization":{"bf16_512":3.6469011004,"w8_2048":0.9117252751,"dual_w8_or_native_w4_4096":0.4558626375},"ctx262144":{"gdn_state_mib":108,"qsa_compressed_index_mib":192,"qsa_kv_bf16_gib":6}}
+{
+  "architecture_findings": {
+    "expert_weight_cache_required": true,
+    "gdn_state_engine_required": true,
+    "qsa_streaming_selection_required": true,
+    "recommended_compute_candidates": [
+      "dual_w8_cluster",
+      "native_w4_dual_dot"
+    ],
+    "single_bf16_512_mac_q1024_300tps": "infeasible",
+    "single_w8_2048_mac_q1024_300tps": "mathematically_feasible_but_margin_too_small"
+  },
+  "cases": {
+    "1024": {
+      "decode": {
+        "w16": {
+          "gbps_at_10_tps": 123.18282752,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 786432,
+          "qsa_selected_kv_read": 25165824,
+          "total": 12318282752,
+          "weights": 12065832960
+        },
+        "w4": {
+          "gbps_at_10_tps": 34.57436672,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 786432,
+          "qsa_selected_kv_read": 25165824,
+          "total": 3457436672,
+          "weights": 3204986880
+        },
+        "w8": {
+          "gbps_at_10_tps": 64.73894912,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 786432,
+          "qsa_selected_kv_read": 25165824,
+          "total": 6473894912,
+          "weights": 6221445120
+        }
+      },
+      "persistent_state": {
+        "gdn_causal_conv_state": 2211840,
+        "gdn_recurrent_state": 113246208,
+        "ple_token_and_conv_state": 184328,
+        "qsa_compressed_index": 786432,
+        "qsa_kv": 25165824,
+        "qsa_raw_index_alternative": 3145728,
+        "total_with_compressed_index": 141594632
+      },
+      "prefill": {
+        "average_macs_per_token": 6224044544.0,
+        "compute_points": {
+          "bf16_16x32": {
+            "ideal_cycles": 12448089088,
+            "macs_per_cycle": 512,
+            "required_wall_utilization": 3.6469011003561427,
+            "target_cycles": 3413333333,
+            "target_feasible_below_100pct": false
+          },
+          "dual_w8_cluster": {
+            "ideal_cycles": 1556011136,
+            "macs_per_cycle": 4096,
+            "required_wall_utilization": 0.45586263754451783,
+            "target_cycles": 3413333333,
+            "target_feasible_below_100pct": true
+          },
+          "native_w4_dual_dot": {
+            "ideal_cycles": 1556011136,
+            "macs_per_cycle": 4096,
+            "required_wall_utilization": 0.45586263754451783,
+            "target_cycles": 3413333333,
+            "target_feasible_below_100pct": true
+          },
+          "w8_32x64": {
+            "ideal_cycles": 3112022272,
+            "macs_per_cycle": 2048,
+            "required_wall_utilization": 0.9117252750890357,
+            "target_cycles": 3413333333,
+            "target_feasible_below_100pct": true
+          }
+        },
+        "dynamic": {
+          "complete_block_visits": 130816,
+          "index_macs": 803733504,
+          "selected_token_visits": 524800,
+          "sparse_qk_pv_macs": 77384908800,
+          "total_dynamic_macs": 78188642304
+        },
+        "fixed": {
+          "active_weight_parameters_per_token": 6032916480,
+          "final_hyper_mixer": 6553600,
+          "fixed_macs_per_token": 6147688448,
+          "gated_residual_per_layer": 13189120,
+          "gated_residual_per_sublayer": 6594560,
+          "gdn_causal_conv_per_layer": 40960,
+          "gdn_projection_per_layer": 57917440,
+          "gdn_state_decay_per_layer": 786432,
+          "gdn_state_matrix_per_layer": 2359296,
+          "moe_active_per_layer": 55377920,
+          "moe_one_expert_per_layer": 4915200,
+          "moe_router_per_layer": 1310720,
+          "ple_gate_and_conv": 51200,
+          "ple_projection": 32768000,
+          "qsa_projection_per_layer": 51445760
+        },
+        "sequence_length": 1024,
+        "target_tokens_per_second": 300,
+        "total_macs": 6373421613056
+      }
+    },
+    "262144": {
+      "decode": {
+        "w16": {
+          "gbps_at_10_tps": 125.43988736,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 201326592,
+          "qsa_selected_kv_read": 50331648,
+          "total": 12543988736,
+          "weights": 12065832960
+        },
+        "w4": {
+          "gbps_at_10_tps": 36.83142656,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 201326592,
+          "qsa_selected_kv_read": 50331648,
+          "total": 3683142656,
+          "weights": 3204986880
+        },
+        "w8": {
+          "gbps_at_10_tps": 66.99600896,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 201326592,
+          "qsa_selected_kv_read": 50331648,
+          "total": 6699600896,
+          "weights": 6221445120
+        }
+      },
+      "persistent_state": {
+        "gdn_causal_conv_state": 2211840,
+        "gdn_recurrent_state": 113246208,
+        "ple_token_and_conv_state": 184328,
+        "qsa_compressed_index": 201326592,
+        "qsa_kv": 6442450944,
+        "qsa_raw_index_alternative": 805306368,
+        "total_with_compressed_index": 6759419912
+      },
+      "prefill": {
+        "average_macs_per_token": 6650043776.0,
+        "compute_points": {
+          "bf16_16x32": {
+            "ideal_cycles": 3404822413312,
+            "macs_per_cycle": 512,
+            "required_wall_utilization": 3.8965100250014864,
+            "target_cycles": 873813333333,
+            "target_feasible_below_100pct": false
+          },
+          "dual_w8_cluster": {
+            "ideal_cycles": 425602801664,
+            "macs_per_cycle": 4096,
+            "required_wall_utilization": 0.4870637531251858,
+            "target_cycles": 873813333333,
+            "target_feasible_below_100pct": true
+          },
+          "native_w4_dual_dot": {
+            "ideal_cycles": 425602801664,
+            "macs_per_cycle": 4096,
+            "required_wall_utilization": 0.4870637531251858,
+            "target_cycles": 873813333333,
+            "target_feasible_below_100pct": true
+          },
+          "w8_32x64": {
+            "ideal_cycles": 851205603328,
+            "macs_per_cycle": 2048,
+            "required_wall_utilization": 0.9741275062503716,
+            "target_cycles": 873813333333,
+            "target_feasible_below_100pct": true
+          }
+        },
+        "dynamic": {
+          "complete_block_visits": 8589869056,
+          "index_macs": 52776155480064,
+          "selected_token_visits": 535164928,
+          "sparse_qk_pv_macs": 78913279623168,
+          "total_dynamic_macs": 131689435103232
+        },
+        "fixed": {
+          "active_weight_parameters_per_token": 6032916480,
+          "final_hyper_mixer": 6553600,
+          "fixed_macs_per_token": 6147688448,
+          "gated_residual_per_layer": 13189120,
+          "gated_residual_per_sublayer": 6594560,
+          "gdn_causal_conv_per_layer": 40960,
+          "gdn_projection_per_layer": 57917440,
+          "gdn_state_decay_per_layer": 786432,
+          "gdn_state_matrix_per_layer": 2359296,
+          "moe_active_per_layer": 55377920,
+          "moe_one_expert_per_layer": 4915200,
+          "moe_router_per_layer": 1310720,
+          "ple_gate_and_conv": 51200,
+          "ple_projection": 32768000,
+          "qsa_projection_per_layer": 51445760
+        },
+        "sequence_length": 262144,
+        "target_tokens_per_second": 300,
+        "total_macs": 1743269075615744
+      }
+    },
+    "4096": {
+      "decode": {
+        "w16": {
+          "gbps_at_10_tps": 123.45807872,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 3145728,
+          "qsa_selected_kv_read": 50331648,
+          "total": 12345807872,
+          "weights": 12065832960
+        },
+        "w4": {
+          "gbps_at_10_tps": 34.84961792,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 3145728,
+          "qsa_selected_kv_read": 50331648,
+          "total": 3484961792,
+          "weights": 3204986880
+        },
+        "w8": {
+          "gbps_at_10_tps": 65.01420032,
+          "gdn_state_read_write": 226492416,
+          "ple_row_payload": 5120,
+          "qsa_index_scan": 3145728,
+          "qsa_selected_kv_read": 50331648,
+          "total": 6501420032,
+          "weights": 6221445120
+        }
+      },
+      "persistent_state": {
+        "gdn_causal_conv_state": 2211840,
+        "gdn_recurrent_state": 113246208,
+        "ple_token_and_conv_state": 184328,
+        "qsa_compressed_index": 3145728,
+        "qsa_kv": 100663296,
+        "qsa_raw_index_alternative": 12582912,
+        "total_with_compressed_index": 219451400
+      },
+      "prefill": {
+        "average_macs_per_token": 6377472512.0,
+        "compute_points": {
+          "bf16_16x32": {
+            "ideal_cycles": 51019780096,
+            "macs_per_cycle": 512,
+            "required_wall_utilization": 3.7368003000912307,
+            "target_cycles": 13653333333,
+            "target_feasible_below_100pct": false
+          },
+          "dual_w8_cluster": {
+            "ideal_cycles": 6377472512,
+            "macs_per_cycle": 4096,
+            "required_wall_utilization": 0.46710003751140383,
+            "target_cycles": 13653333333,
+            "target_feasible_below_100pct": true
+          },
+          "native_w4_dual_dot": {
+            "ideal_cycles": 6377472512,
+            "macs_per_cycle": 4096,
+            "required_wall_utilization": 0.46710003751140383,
+            "target_cycles": 13653333333,
+            "target_feasible_below_100pct": true
+          },
+          "w8_32x64": {
+            "ideal_cycles": 12754945024,
+            "macs_per_cycle": 2048,
+            "required_wall_utilization": 0.9342000750228077,
+            "target_cycles": 13653333333,
+            "target_feasible_below_100pct": true
+          }
+        },
+        "dynamic": {
+          "complete_block_visits": 2096128,
+          "index_macs": 12878610432,
+          "selected_token_visits": 6295552,
+          "sparse_qk_pv_macs": 928316915712,
+          "total_dynamic_macs": 941195526144
+        },
+        "fixed": {
+          "active_weight_parameters_per_token": 6032916480,
+          "final_hyper_mixer": 6553600,
+          "fixed_macs_per_token": 6147688448,
+          "gated_residual_per_layer": 13189120,
+          "gated_residual_per_sublayer": 6594560,
+          "gdn_causal_conv_per_layer": 40960,
+          "gdn_projection_per_layer": 57917440,
+          "gdn_state_decay_per_layer": 786432,
+          "gdn_state_matrix_per_layer": 2359296,
+          "moe_active_per_layer": 55377920,
+          "moe_one_expert_per_layer": 4915200,
+          "moe_router_per_layer": 1310720,
+          "ple_gate_and_conv": 51200,
+          "ple_projection": 32768000,
+          "qsa_projection_per_layer": 51445760
+        },
+        "sequence_length": 4096,
+        "target_tokens_per_second": 300,
+        "total_macs": 26122127409152
+      }
+    }
+  },
+  "evidence_class": "analytical_shape_budget_not_rtl_measurement",
+  "ple_table_bf16_bytes_approx": 102400000000,
+  "schema_version": 1,
+  "shape": {
+    "active_routed_experts": 10,
+    "expert_intermediate": 640,
+    "experts": 512,
+    "gdn_conv_kernel": 4,
+    "gdn_key_dim": 128,
+    "gdn_layers": 36,
+    "gdn_qk_heads": 16,
+    "gdn_v_heads": 48,
+    "gdn_value_dim": 128,
+    "head_dim": 256,
+    "hidden_size": 2560,
+    "index_compress_ratio": 4,
+    "index_head_dim": 128,
+    "index_kv_heads": 1,
+    "index_query_heads": 4,
+    "index_token_budget": 2048,
+    "kv_heads": 2,
+    "layers": 48,
+    "ple_conv_kernel": 4,
+    "ple_embed_dim": 2560,
+    "ple_layers": 1,
+    "ple_ngram_heads": 16,
+    "ple_table_rows_approx": 320000000,
+    "q_heads": 24,
+    "qsa_layers": 12,
+    "residual_branches": 4,
+    "residual_lowrank": 320,
+    "shared_experts": 1,
+    "vocab_size": 248320
+  },
+  "status": "PASS"
+}

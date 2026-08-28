@@ -1,45 +1,35 @@
 {
   "schema_version": 6,
-  "state": "WAIT_LOCAL_RAWPIPE_E1_E4_PUSH",
+  "state": "WAIT_REMOTE_AUDIT",
   "stage": "L5",
-  "subgate": "L5.1_BLOCK128_RAW_ROUND_PIPELINE_E4",
-  "objective": "Run the committed HardFloat raw/round pipeline and Block128 candidate through real Verilator and CLN22UL DC; promote only after numerical, protocol and 1 GHz timing gates pass.",
-  "remote_audit": {
-    "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
-    "new_local_agent_commit_detected": false
-  },
-  "retained_result": {
-    "commit": "b8f8eaff6a323a6303a52b01db6a776ddbe9e406",
-    "e1": "PASS",
-    "e4": "FAIL_TIMING",
-    "wns_ns": -0.555804,
-    "root_cause": "combinational HardFloat FP32 multiply on L-product path"
-  },
-  "ordered_commands": [
-    "./scripts/run_l5_fp32_pipelines.sh",
-    "./scripts/run_l5_fp32_pipeline_dc.sh",
-    "./scripts/run_l5_block128_rawpipe_candidate.sh",
-    "./scripts/run_l5_block128_rawpipe_dc.sh"
-  ],
-  "acceptance": {
-    "fp32_pipeline_vectors": 1024,
-    "fp32_pipeline_mismatches": 0,
-    "block128_vectors": 132,
-    "block128_mismatches": 0,
-    "stream_beats": 32,
-    "random_backpressure": "PASS",
-    "unmapped": 0,
-    "unresolved": 0,
-    "setup_wns_ns_min": 0.0
+  "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
+  "objective": "Audit the abnormally long full 512-lane DC run and approve a hierarchy-preserving bottom-up E4 flow before rerun.",
+  "current_evidence": {
+    "l5_1": "PASS_E1_E4",
+    "l5_2_e1": "PASS",
+    "l5_2_stage_probe_e4": "PASS_DIAGNOSTIC_ONLY",
+    "l5_2_full_top_e4": "INTERRUPTED_NO_FINAL_TIMING"
   },
   "sandbox_prerequisites_now_closed": [
-    "control_plane_consistency",
+    "control_plane_v6_consistency",
     "Archspec_collateral_generation",
     "Qwen38_48_layer_shape_program",
     "Qwen38_mock_backend_partition",
     "SequenceMemory_translation_cycle_model"
   ],
-  "promotion_rule": "Promote _rawpipe only after all acceptance fields pass and rerun canonical E1.",
-  "forbidden": ["false_path_on_data","frequency_reduction","multicycle_exception_instead_of_pipeline","claim_candidate_source_as_E1","overwrite_retained_E1_evidence"],
-  "on_success": "L5.2_REAL_512_LANE_CONTEXT_INTEGRATION"
+  "ordered_commands": [],
+  "audit_questions": [
+    "confirm bottom-up compile of generated pre/mul/post/round references",
+    "confirm preservation of production 16x32 lanes and four-context interface",
+    "confirm integrated top timing/link audit after hierarchical reuse",
+    "confirm runtime ceiling and checkpoint strategy"
+  ],
+  "resume_after_audit": [
+    "compile each generated HardFloat stage once to DDC",
+    "link 512 instances without boundary flattening",
+    "run full context top timing and zero-unmapped/unresolved checks",
+    "close L5.2 only if final WNS is nonnegative"
+  ],
+  "forbidden": ["reduce_array_size","reduce_frequency","false_path_on_synchronous_data","multicycle_exception_instead_of_pipeline","use_stage_probe_as_full_top_pass","use_stale_status_file"],
+  "on_success": "L5.3_BLOCKED_FLASHATTENTION"
 }

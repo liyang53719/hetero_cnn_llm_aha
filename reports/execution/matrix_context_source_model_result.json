@@ -1,1 +1,20 @@
-{"schema_version":1,"status":"PASS","evidence_class":"E0_protocol_model_not_RTL","dependent_steps":1000000,"contexts":4,"feedback_latency":4,"cycles":1000003,"issue_utilization":0.9999970000089999,"random_backpressure_cases":10000}
+{
+  "dependent_1m": {
+    "accepted": 1000000,
+    "completed": 1000000,
+    "contexts": 4,
+    "cycles": 1000003,
+    "issue_utilization": 0.9999970000089999,
+    "latency": 4,
+    "status": "PASS",
+    "steps": 1000000
+  },
+  "evidence_class": "E0_protocol_model_not_RTL",
+  "random_backpressure": {
+    "cases": 10000,
+    "cycles": 19174,
+    "status": "PASS"
+  },
+  "schema_version": 1,
+  "status": "PASS"
+}

@@ -1,4 +1,4 @@
-# Implementation status v4
+# Implementation status v5 checkpoint
 
 ## Sandbox-completed
 
@@ -6,8 +6,8 @@
 |---|---|---|
 | Canonical architecture/control plane | PASS | `config/control_plane.json`, canonical plan/stages |
 | Descriptor v3 and explicit capability split | PASS | records 0x04, 0x13-0x19, 0x32-0x35 |
-| Universal block-128 M/L/O | PASS E1 / E4 timing open | 132 vectors + 32-beat stream PASS; 1GHz WNS -0.555804 ns |
-| Matrix context protocol seed | PASS source | parameterized scoreboard; real array integration local |
+| Universal block-128 M/L/O | PASS E1/E4, wait audit | 1024 primitive vectors; 132 Block128; 32 beats; canonical WNS +0.0000136495 ns |
+| Matrix context real array | PASS E1 / full E4 open | 16x32/512 lanes; 1M steps at II=1; 10k backpressure; full DC interrupted in Phase 2 |
 | Paged KV v3 | PASS E0 | prefix, COW, generation, one-million-token addressing |
 | Qwen3.5 common GDN/MoE/MTP operators | PASS E0 | executable references |
 | Qwen3.8 four-branch GR | PASS E0 | full low-rank read and injection write |
@@ -25,8 +25,9 @@
 
 | Evidence | State |
 |---|---|
-| Verilator/VCS Block128 E1 | WAIT_LOCAL_AGENT_PUSH |
-| 512-lane Matrix contexts E1/E4 | WAIT_LOCAL_AGENT_PUSH |
+| Verilator Block128 E1 and component E4 | PASS_WAIT_REMOTE_AUDIT |
+| 512-lane Matrix contexts E1 | PASS_WAIT_REMOTE_AUDIT |
+| 512-lane Matrix contexts full E4 | INTERRUPTED_NO_FINAL_TIMING_WAIT_REMOTE_AUDIT |
 | Qwen3.8 official-weight trace | WAIT_LOCAL_AGENT_PUSH |
 | GDN/QSA/GR/PLE/MoE/MTP RTL | WAIT_LOCAL_AGENT_PUSH |
 | llama.cpp backend | WAIT_LOCAL_AGENT_PUSH |
@@ -42,3 +43,7 @@
   engine completion drive the trace.
 - Vision remains unsupported.
 - No PPA or throughput claim is made from the sandbox.
+- The one-lane BF16 FMA stage probe is diagnostic and does not close the
+  required full 512-lane L5.2 E4 gate.
+- The old `-1.35148 ns` status predates the pipelined full-top attempt and is
+  not current timing evidence.

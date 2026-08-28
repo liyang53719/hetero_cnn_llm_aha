@@ -1,0 +1,57 @@
+{
+  "schema_version": 5,
+  "stage": "L5",
+  "subgate": "L5.2_MATRIX_CONTEXT_INTERLEAVE",
+  "status": "E1_PASS_E4_FULL_TOP_INTERRUPTED_RUNTIME",
+  "e1": {
+    "status": "PASS",
+    "physical_array": "16x32",
+    "lanes": 512,
+    "contexts": 4,
+    "dependent_steps": 1000000,
+    "issue_window_cycles": 1000000,
+    "issue_utilization_ppm": 1000000,
+    "random_backpressure_steps": 10000,
+    "random_backpressure_cycles": 14555,
+    "numeric_tag_protocol": "PASS",
+    "binary_sha256": "2460fc3452ea829693e8044bf35d3d0f266bd9e1ccbd84441a1d693e87049b56",
+    "log_sha256": "15e0d0a80f498a0f4dd5f6c27af334098a92e6ffc07d44c099e9e298294568c4"
+  },
+  "pipeline": {
+    "stages": ["HardFloat_preMul", "24x24_plus_48", "HardFloat_postMul", "HardFloat_round"],
+    "feedback_latency_cycles": 4,
+    "generated_stage_modules": ["HeteroBF16FmaPre", "HeteroBF16FmaMul", "HeteroBF16FmaPost", "HeteroBF16FmaRound"],
+    "generator_sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+    "generated_rtl_hand_edited": false,
+    "upstream_status_bytes": 0
+  },
+  "e4_stage_probe": {
+    "status": "PASS_DIAGNOSTIC_NOT_FULL_TOP",
+    "clock_period_ns": 1.0,
+    "wns_ns": 0.000159681,
+    "unmapped_cells": 0,
+    "unresolved_references": 0,
+    "cell_area": 1980.251010
+  },
+  "e4_full_top": {
+    "status": "INTERRUPTED_NO_FINAL_TIMING",
+    "clock_period_ns": 1.0,
+    "attempt_elapsed_seconds": 9611,
+    "last_phase": "Mapping Optimization Phase 2",
+    "reason": "user_requested_checkpoint_after_abnormally_long_runtime",
+    "final_wns_ns": null,
+    "unmapped_cells": null,
+    "unresolved_references": null,
+    "dc_log_sha256": "78aa43d0e069c4b8f1304a012fc4bd9602066ece1b4b0ba93513b3476d6595c8",
+    "stale_status_file_must_not_be_used": true,
+    "stale_status_mtime": "2026-08-28T05:47:26+08:00",
+    "interrupted_log_mtime": "2026-08-28T08:43:03+08:00",
+    "pre_pipeline_completed_attempt_wns_ns": -1.35148
+  },
+  "closure": {
+    "l5_2_pass": false,
+    "blocking_gate": "full_512_lane_CLN22UL_1GHz_E4",
+    "next_state": "WAIT_REMOTE_AUDIT"
+  }
+}

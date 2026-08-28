@@ -1,9 +1,9 @@
 {
   "schema_version": 6,
-  "state": "WAIT_REMOTE_AUDIT",
+  "state": "READY_IMPLEMENT_HIERARCHICAL_DC",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "objective": "Audit the abnormally long full 512-lane DC run and approve a hierarchy-preserving bottom-up E4 flow before rerun.",
+  "objective": "Implement the frozen hierarchy-preserving bottom-up E4 flow in reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md without rerunning the flat compile.",
   "current_evidence": {
     "l5_1": "PASS_E1_E4",
     "l5_2_e1": "PASS",
@@ -17,7 +17,11 @@
     "Qwen38_mock_backend_partition",
     "SequenceMemory_translation_cycle_model"
   ],
-  "ordered_commands": [],
+  "ordered_commands": [
+    "implement leaf/array/context hierarchical DC Tcl and one bounded runner",
+    "run source and Tcl syntax validation",
+    "execute H1 leaf mapping only after the plan commit is pushed"
+  ],
   "audit_questions": [
     "confirm bottom-up compile of generated pre/mul/post/round references",
     "confirm preservation of production 16x32 lanes and four-context interface",

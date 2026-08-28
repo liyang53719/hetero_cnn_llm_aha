@@ -1,7 +1,7 @@
 # Local-agent handoff v6
 
-State: `WAIT_REMOTE_AUDIT` at L5.2 full-top E4. Local checkpoint is rebased
-onto remote v6 head `60f9ed0`.
+State: L5.2 hierarchical DC plan frozen and ready for implementation. Git has
+no commit newer than `f632f35`; the prior flat compile must not be rerun.
 
 ## Closed locally
 
@@ -38,8 +38,10 @@ onto remote v6 head `60f9ed0`.
 Archspec collateral, Qwen3.8 full-shape program/mock partition, and Sequence
 Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
 
-## Audit request
+## Next execution
 
-Approve a hierarchy-preserving bottom-up DC flow that compiles each generated
-stage once and reuses it across 512 lanes, followed by full-top link/timing.
-Do not reduce array size/frequency or add false/multicycle paths.
+Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
+stage once, preserve and reuse the mapped DDC in a fixed 16x32 array, then
+compile only the four-context wrapper. Array and full-top runs are capped at
+45 and 30 minutes. Do not reduce array size/frequency or add false/multicycle
+paths.

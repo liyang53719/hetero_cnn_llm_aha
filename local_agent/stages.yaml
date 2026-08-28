@@ -1,7 +1,7 @@
 schema_version: 6
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_2_AUDIT}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_3_AUDIT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
@@ -11,7 +11,7 @@ stages:
     status: IN_PROGRESS
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495, evidence: reports/execution/l5_block128_local_e1_e4_result.json}
-      L5.2: {status: REV7_LANE_EQUIV_E1_PASS_H3_FAIL_WAIT_REV8_REVIEW, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], revision7_lane_wns_ns: 0.000141501, equivalence_cycles: 120032, revision7_h3_wns_ns: -0.926028, revision8_request: reports/L5_2_REVISION8_REVIEW_REQUEST.md}
+      L5.2: {status: REV7_H3_FAIL_REV8A_E0_PASS_SOURCE_READY_WAIT_LOCAL_E1_E4, scope: Matrix_context_interleave, revision7: [lane_WNS_0P000141501, gate_compare_120032_PASS, real_512_lane_E1_PASS, H3_WNS_N0P926028], revision8A: [early_context_bank_commit, four_contexts, four_cycle_feedback, cluster16_x32, source_contract_PASS, differential_1M_PASS, multiseed_500K_PASS], policy: config/l5_revision8a_policy.json, approval: reports/L5_2_REVISION8A_APPROVAL.md}
       L5.3: {status: CYCLE_E0_PASS_WAIT_REAL_STREAM_E1_E2, scope: blocked_QK_softmax_PV, q384_serial_cycles: 656644, q1024_summary_merges: 43008, evidence: reports/execution/l5_blocked_attention_cycle_e0_result.json}
       L5.4: {status: SANDBOX_DSE_PENDING_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE}
       L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}

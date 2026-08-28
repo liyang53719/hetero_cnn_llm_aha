@@ -1,9 +1,55 @@
 {
-  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH","items":[
-    {"id":"L5.2_REV7","sandbox_status":"APPROVED source/Tcl/control contract and 100k recurrence stress PASS","local_gate":"CLN22UL single-lane E4, equivalence, real 512-lane E1 rerun, structural H3 E4","commands":["./scripts/run_l5_matrix_context_revision7.sh lane","./scripts/run_l5_matrix_context_revision7.sh equiv","./scripts/run_l5_matrix_context_revision7.sh e1","./scripts/run_l5_matrix_context_revision7.sh top","./scripts/run_l5_matrix_context_revision7.sh e1","python3 scripts/summarize_l5_revision7.py"],"acceptance":["lane WNS>=0","equivalence PASS","1M E1 PASS","H3 WNS>=0","unmapped/unresolved 0"]},
-    {"id":"L5.3","sandbox_status":"Blocked Attention cycle E0 PASS; q384 656644 cycles, q1024 merges 43008","local_gate":"real QK to Block128 Softmax to PV stream E1 and q128/q384/q1024 E2","acceptance":["zero score/probability DDR","numeric threshold","backpressure","service curve"]},
-    {"id":"L4","sandbox_status":"legal AHA 4x4 ratio-2 topology contract frozen","local_gate":"Garnet mapping/PnR/Verilator/DC","acceptance":["CNN subset numerical pass","WNS>=0"]},
-    {"id":"L5.4-L5.6","sandbox_status":"analytical contracts ready","local_gate":"SiLU E1/E4, Matrix/SFU/iDMA/DDR E3, Qwen2 weights","acceptance":["q1024 >=300 tps","wall MAC utilization","E4"]},
-    {"id":"L7-L10","sandbox_status":"functional/compiler/cycle references ready","local_gate":"production RTL, official weights, llama.cpp/GGUF, SRAM/DC/SAIF","acceptance":["per-backend E1/E2","integrated E3","physical E4"]}
+  "schema_version": 6,
+  "marker": "WAIT_LOCAL_AGENT_PUSH",
+  "items": [
+    {
+      "id": "L5.2_REV8A",
+      "sandbox_status": "1M differential, 500K multiseed, source/Tcl contracts and candidate collateral PASS",
+      "local_gate": "Verilator/VCS, CLN22UL DC, mapped equivalence and structural H3",
+      "commands": [
+        "./scripts/run_l5_matrix_context_revision8a.sh compare",
+        "./scripts/run_l5_matrix_context_revision8a.sh e1",
+        "./scripts/run_l5_matrix_context_revision8a.sh adversarial",
+        "./scripts/run_l5_matrix_context_revision8a.sh lane",
+        "./scripts/run_l5_matrix_context_revision8a.sh equiv",
+        "./scripts/run_l5_matrix_context_revision8a.sh cluster",
+        "./scripts/run_l5_matrix_context_revision8a.sh front",
+        "./scripts/run_l5_matrix_context_revision8a.sh top",
+        "python3 scripts/summarize_l5_revision8a.py"
+      ],
+      "acceptance": [
+        "Rev7-vs-Rev8A 120k cycle compare",
+        "1M plus 10k backpressure E1",
+        "50k arbitrary-context E1",
+        "lane/cluster/front/H3 WNS nonnegative",
+        "mapped equivalence PASS",
+        "32 clusters and 512 lanes",
+        "unmapped/unresolved zero"
+      ]
+    },
+    {
+      "id": "L5.3",
+      "sandbox_status": "Blocked Attention cycle E0 PASS; q384 656644 cycles and q1024 43008 merges",
+      "local_gate": "real QK to Block128 Softmax to PV stream E1 and q128/q384/q1024 E2",
+      "acceptance": ["zero score/probability DDR", "numeric threshold", "random backpressure", "service curve"]
+    },
+    {
+      "id": "L4",
+      "sandbox_status": "legal AHA 4x4 ratio-2 topology contract frozen",
+      "local_gate": "Garnet mapping/PnR/Verilator/DC",
+      "acceptance": ["CNN subset numerical pass", "WNS nonnegative"]
+    },
+    {
+      "id": "L5.4-L5.6",
+      "sandbox_status": "analytical contracts ready",
+      "local_gate": "SiLU E1/E4, Matrix/SFU/iDMA/DDR E3 and Qwen2 weights",
+      "acceptance": ["q1024 at least 300 tps", "wall MAC utilization", "E4"]
+    },
+    {
+      "id": "L7-L10",
+      "sandbox_status": "functional/compiler/cycle references ready",
+      "local_gate": "production RTL, official weights, llama.cpp/GGUF, SRAM/DC/SAIF",
+      "acceptance": ["per-backend E1/E2", "integrated E3", "physical E4"]
+    }
   ]
 }

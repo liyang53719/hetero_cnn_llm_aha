@@ -1,31 +1,77 @@
-# Canonical architecture and execution plan v6.2
+# Canonical architecture and execution plan v6.3
 
-## Accepted evidence
+## Accepted state
 
-- L5.1 Block128 E1 and component E4 accepted. CLN22UL 1.0 ns WNS is `+0.0000136495 ns`; this has effectively zero engineering margin and is not post-route/variation signoff.
-- L5.2 Matrix context real 16x32/512-lane E1 accepted. Four contexts sustain 1,000,000 dependent issues in 1,000,000 issue cycles; 10,000 random-backpressure operations pass.
-- Structural array, scheduler and context broadcast pass component timing.
+- L5.1 Block128 E1/component E4 accepted. WNS is `+0.0000136495 ns`; the component has effectively zero engineering margin and is not post-route signoff.
+- L5.2 real 16x32/512-lane, four-context E1 accepted: 1,000,000 dependent issues at II=1 and 10,000 random-backpressure operations.
+- Revision-7 source-remapped lane passes marginally at `+0.000141501 ns`.
+- Revision-7 mapped functional comparison passes 120,032 cycles with zero mismatch/unknown.
+- Revision-7 structural H3 fails: WNS `-0.926028 ns`, TNS `-49161.85 ns`, zero unmapped/unresolved.
 
 ## Current critical path
 
-Revision 6 leaves the single context lane at `-0.034333 ns` normal and `-0.0371628 ns` high effort. The path crosses `issue_bypass_i`, the lane-local accumulator mux, and HardFloat Pre before `pre_c_q`. Preserving the generated Pre DDC prevents optimization across the only remaining critical boundary.
-
-## Revision 7 decision
-
-Revision 7 is approved with gates. One reusable four-context lane may be remapped directly from pinned emitter-generated SystemVerilog and unchanged handwritten lane RTL. DC may jointly optimize the accumulator mux, base lane, and HardFloat Pre. Mul/Post/Round stage boundaries remain explicit. No RTL, cycle, context, generated-file, array, frequency, or interface change is approved. Retiming and timing exceptions are forbidden.
-
-Formal approval and source pins:
+Revision-7 H3 exposes a true cross-hierarchy path:
 
 ```text
-reports/L5_2_REVISION7_APPROVAL.md
-config/l5_revision7_policy.json
+scheduler FIFO/completion state
+→ same-cycle completion/bypass decision
+→ global context-control fanout
+→ lane accumulator select
+→ HardFloat Pre
+→ pre_c register
 ```
 
-L5.2 closes only after single context-lane WNS >= 0 with zero unmapped/unresolved, mapped equivalence, real 512-lane E1 rerun, and structural H3 with 512 lane instances and WNS >= 0.
+The lane itself passes only when its inputs arrive under the local block budget.
+The global completion path consumes roughly another cycle before reaching that
+lane. No further Revision-7 synthesis-boundary retry is authorized.
+
+## Revision 8A candidate
+
+Revision 8A is approved as candidate source only. The four lane-local context
+banks become the output-stage registers. Post-to-Output advancement writes the
+rounded result into the aligned context bank; external completion/busy/valid
+state remains tied to the original output handshake. The next same-context
+issue reads the already-written local bank, removing completion/broadcast from
+the FMA data path.
+
+```text
+front control: scheduler + elastic valid chain + context tags
+32 × cluster16: 512 physical lanes, four banks/lane
+retained reset/flag glue
+```
+
+Frozen invariants:
+
+```text
+16x32 physical array
+4 contexts
+4-cycle feedback
+1 GHz
+unchanged public ports
+unchanged generated HardFloat
+no retiming or timing exceptions
+```
+
+Sandbox evidence is E0/source-ready only: 1,000,000-operation public-cycle
+differential, 500,000 additional multiseed operations, source/Tcl contracts,
+and local execution scripts all pass.
+
+L5.2 closes only after:
+
+```text
+Revision7-vs-Revision8A source compare
+candidate 512-lane E1
+candidate arbitrary-context E1
+lane mapped equivalence
+lane, cluster16, front-control and structural H3 WNS >= 0
+unmapped/unresolved = 0
+area/power recorded
+post-mapping E1 rerun
+```
 
 ## Parallel sandbox closure
 
-Blocked Attention cycle E0 covers q128/q384/q1024 with the accepted 16x32 Matrix geometry, four-context feedback, 16-query/32-key tiles, GQA 6:1 reuse, and Block128 M/L/O merges.
+Blocked Attention cycle E0 remains:
 
 ```text
 q128 serialized cycles   65,284
@@ -40,7 +86,7 @@ This is cycle-structured E0, not real stream E1/E2 or integrated E3.
 ## Global order
 
 ```text
-L5.2 Revision-7 lane E4/equivalence/H3
+L5.2 Revision 8A E1/equivalence/E4
 → L5.3 Blocked Attention E1/E2
 → L5.4 fused SiLU DSE
 → L5.5 queue/DMA/DDR E3

@@ -1,0 +1,78 @@
+{
+  "architecture": {
+    "architectural_completion_remains_output_handshake": true,
+    "clock_period_ns": 1.0,
+    "clusters": 32,
+    "contexts": 4,
+    "feedback_latency_cycles": 4,
+    "front_control_joint_mapping": true,
+    "generated_hardfloat_unchanged": true,
+    "lanes_per_cluster": 16,
+    "physical_array": "16x32",
+    "physical_lanes": 512,
+    "public_ports_unchanged": true,
+    "same_cycle_bypass_removed_from_data_path": true
+  },
+  "base_commit": "4dec4a8df6b246f01778925745b7ae21292f74a3",
+  "candidate_files": [
+    "rtl/matrix/candidates/rev8/bf16_context_tag_pipeline4_rev8_candidate.sv",
+    "rtl/matrix/candidates/rev8/bf16_context_fma_pipeline_lane4_rev8_candidate.sv",
+    "rtl/matrix/candidates/rev8/bf16_context_lane_cluster16_rev8_candidate.sv",
+    "rtl/matrix/candidates/rev8/bf16_outer_product_array_control_rev8_candidate.sv",
+    "rtl/matrix/candidates/rev8/bf16_context_front_control_rev8_candidate.sv",
+    "rtl/matrix/candidates/rev8/bf16_outer_product_context_array_rev8_candidate.sv"
+  ],
+  "decision": "APPROVE_CANDIDATE_E0_WITH_LOCAL_GATES",
+  "forbidden": [
+    "modify_generated_HardFloat",
+    "add_pipeline_cycle",
+    "add_fifth_context",
+    "change_public_interface",
+    "change_completion_handshake_semantics",
+    "reduce_array_size",
+    "reduce_frequency",
+    "false_path_on_synchronous_data",
+    "multicycle_exception",
+    "retiming",
+    "promote_candidate_before_E1_E4"
+  ],
+  "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+  "hard_acceptance": {
+    "adversarial_context_e1_steps": 50000,
+    "arbitrary_legal_context_trace": true,
+    "cluster16_wns_ns_min": 0.0,
+    "cluster_instances": 32,
+    "context_lane_instances": 512,
+    "cycle_exact_against_revision7_RTL": true,
+    "dependent_steps": 1000000,
+    "front_control_wns_ns_min": 0.0,
+    "h3_wns_ns_min": 0.0,
+    "lane_gate_compare": "PASS",
+    "lane_wns_ns_min": 0.0,
+    "mapped_equivalence": "PASS",
+    "random_backpressure_steps": 10000,
+    "rev7_vs_rev8a_cycle_compare": "PASS",
+    "unmapped_cells": 0,
+    "unresolved_references": 0
+  },
+  "objective": "Remove the completion-handshake-to-HardFloat-Pre combinational path by making the four context banks the output-stage registers and carrying context metadata through the existing four elastic stages.",
+  "revision": "8A",
+  "runtime": {
+    "cluster16_seconds": 600,
+    "front_control_seconds": 600,
+    "high_effort_retries": 1,
+    "lane_seconds": 600,
+    "normal_attempts": 1,
+    "structural_h3_seconds": 600
+  },
+  "schema_version": 1,
+  "stop_rules": [
+    "negative_lane_after_high_effort",
+    "negative_cluster_after_high_effort",
+    "negative_front_after_high_effort",
+    "negative_structural_h3",
+    "equivalence_failure",
+    "cycle_compare_failure",
+    "E1_failure"
+  ]
+}

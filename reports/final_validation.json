@@ -1,8 +1,42 @@
 {
-  "schema_version":6,"status":"PASS_SANDBOX_V6_2_REV7_H3_FAIL_WAIT_REV8_REVIEW",
-  "remote_audit":{"observed_head":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","new_local_agent_commit_detected":true,"decision":"ACCEPT_L5_1_AND_L5_2_E1_APPROVE_REV7_WITH_GATES"},
-  "local_evidence":{"l5_1_e1":"PASS_ACCEPTED","l5_1_e4":"PASS_ACCEPTED_ZERO_MARGIN","l5_2_e1":"PASS_ACCEPTED","l5_2_revision7_lane_e4":"PASS_MARGINAL_WNS_0P000141501","l5_2_equivalence":"PASS_GATE_COMPARE_120032","l5_2_real_E1":"PASS","l5_2_full_top_e4":"FAIL_TIMING_WNS_N0P926028"},
-  "sandbox_execution":{"revision7_source_blob_contract":"PASS","revision7_tcl_no_exception_no_retime":"PASS","revision7_recurrence_operations":100000,"revision7_same_cycle_bypasses":99996,"blocked_attention_cycle_E0":"PASS","blocked_attention_q384_serial_cycles":656644,"blocked_attention_q1024_serial_cycles":4823044,"blocked_attention_q1024_merges":43008,"new_tests":6},
-  "remaining_local_gates":["Revision8_scheduler_bypass_review","Revision8_structural_H3_E4","BlockedAttention_real_stream_E1_E2"],
-  "non_claims":["no_L5_2_pass","no_full_512_lane_timing_pass","no_Revision7_DC_execution_in_sandbox","no_mapped_netlist_equivalence_in_sandbox","no_official_weight_Qwen3.8_inference","no_Qwen3.8_E3_or_PPA"]
+  "schema_version": 6,
+  "status": "PASS_SANDBOX_V6_3_REV8A_E0_SOURCE_READY_L5_2_E4_OPEN",
+  "remote_audit": {
+    "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
+    "decision": "ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE"
+  },
+  "accepted_local_evidence": {
+    "l5_1": "PASS_E1_E4_ZERO_MARGIN",
+    "l5_2_revision7_lane": "PASS_MARGINAL_WNS_0P000141501",
+    "l5_2_revision7_equivalence": "PASS_GATE_COMPARE_120032",
+    "l5_2_revision7_real_E1": "PASS",
+    "l5_2_revision7_H3": "FAIL_TIMING_WNS_N0P926028"
+  },
+  "sandbox_execution": {
+    "revision8A_primary_differential_operations": 1000000,
+    "revision8A_primary_same_cycle_reuses": 500612,
+    "revision8A_additional_multiseed_operations": 500000,
+    "revision8A_source_contract": "PASS",
+    "revision8A_local_flow_static_contract": "PASS",
+    "revision8A_new_tests": 4,
+    "blocked_attention_cycle_E0": "PASS"
+  },
+  "remaining_local_gates": [
+    "Revision8A_rev7_vs_rev8a_cycle_compare",
+    "Revision8A_real_512_lane_E1",
+    "Revision8A_adversarial_E1",
+    "Revision8A_lane_E4_and_equivalence",
+    "Revision8A_cluster16_E4",
+    "Revision8A_front_control_E4",
+    "Revision8A_structural_H3_E4",
+    "BlockedAttention_real_stream_E1_E2"
+  ],
+  "non_claims": [
+    "no_L5_2_pass",
+    "no_Revision8A_RTL_E1_in_sandbox",
+    "no_Revision8A_DC_or_equivalence_in_sandbox",
+    "no_full_512_lane_timing_pass",
+    "no_post_route_or_variation_signoff",
+    "no_official_weight_Qwen3.8_inference"
+  ]
 }

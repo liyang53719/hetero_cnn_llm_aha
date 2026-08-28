@@ -1,8 +1,8 @@
 {
-  "schema_version":6,"status":"PASS_SANDBOX_V6_2_REV7_APPROVED_L5_2_E4_OPEN",
+  "schema_version":6,"status":"PASS_SANDBOX_V6_2_REV7_H3_FAIL_WAIT_REV8_REVIEW",
   "remote_audit":{"observed_head":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","new_local_agent_commit_detected":true,"decision":"ACCEPT_L5_1_AND_L5_2_E1_APPROVE_REV7_WITH_GATES"},
-  "local_evidence":{"l5_1_e1":"PASS_ACCEPTED","l5_1_e4":"PASS_ACCEPTED_ZERO_MARGIN","l5_2_e1":"PASS_ACCEPTED","l5_2_revision7_lane_e4":"PASS_MARGINAL_WNS_0P000141501","l5_2_equivalence":"OPEN_FORMALITY_MISSING","l5_2_full_top_e4":"OPEN"},
+  "local_evidence":{"l5_1_e1":"PASS_ACCEPTED","l5_1_e4":"PASS_ACCEPTED_ZERO_MARGIN","l5_2_e1":"PASS_ACCEPTED","l5_2_revision7_lane_e4":"PASS_MARGINAL_WNS_0P000141501","l5_2_equivalence":"PASS_GATE_COMPARE_120032","l5_2_real_E1":"PASS","l5_2_full_top_e4":"FAIL_TIMING_WNS_N0P926028"},
   "sandbox_execution":{"revision7_source_blob_contract":"PASS","revision7_tcl_no_exception_no_retime":"PASS","revision7_recurrence_operations":100000,"revision7_same_cycle_bypasses":99996,"blocked_attention_cycle_E0":"PASS","blocked_attention_q384_serial_cycles":656644,"blocked_attention_q1024_serial_cycles":4823044,"blocked_attention_q1024_merges":43008,"new_tests":6},
-  "remaining_local_gates":["Revision7_approved_post_synthesis_gate_compare","Revision7_real_512_lane_E1_rerun","Revision7_structural_H3_E4","BlockedAttention_real_stream_E1_E2"],
+  "remaining_local_gates":["Revision8_scheduler_bypass_review","Revision8_structural_H3_E4","BlockedAttention_real_stream_E1_E2"],
   "non_claims":["no_L5_2_pass","no_full_512_lane_timing_pass","no_Revision7_DC_execution_in_sandbox","no_mapped_netlist_equivalence_in_sandbox","no_official_weight_Qwen3.8_inference","no_Qwen3.8_E3_or_PPA"]
 }

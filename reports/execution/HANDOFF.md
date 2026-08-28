@@ -1,7 +1,7 @@
 # Local-agent handoff v6.2
 
-State: Revision-7 lane E4 `PASS_MARGINAL`; equivalence open because Formality
-is not installed. The approved post-synthesis gate comparison is next.
+State: Revision 7 lane/equivalence/real E1 PASS; structural H3 FAIL_TIMING.
+Wait for Revision 8 review before changing scheduler/bypass RTL.
 
 ## Accepted
 
@@ -41,6 +41,21 @@ L5.2 closes only when lane WNS, equivalence, the real E1 rerun, and structural H
 - Formality is absent. Follow
   `reports/L5_2_REVISION7_GATE_COMPARE_PLAN.md`; only a real trace-identical
   post-synthesis comparison may supply `REV7_EQUIVALENCE_EVIDENCE`.
+
+## Revision-7 final outcome
+
+- Approved post-synthesis comparison PASS: 120,032 cycle-exact RTL/gate
+  samples, 0 mismatch and 0 unknown output.
+- Post-equivalence real E1 PASS: 1,000,000 dependent steps and 10,000 random
+  backpressure steps on 512 lanes/four contexts.
+- Structural H3: WNS `-0.926028 ns`, TNS `-49161.85 ns`, area
+  `1379700.051722`, 0 unmapped/unresolved, 512 instances/one lane variant.
+- Critical path: scheduler `fifo_count_q` through completion/bypass generation,
+  context broadcast and lane mux/HardFloat Pre; arrival 1.80 ns.
+
+Do not retry Revision 7. Review
+`reports/L5_2_REVISION8_REVIEW_REQUEST.md`. Recommended scope is an early/local
+bypass-select control change with unchanged four-context/four-cycle semantics.
 
 ## Parallel progress
 

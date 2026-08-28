@@ -174,6 +174,21 @@
       }
     },
     "next": "BLOCKED_DECISION_allow_full_source_single_context_lane_remap"
+    ,"revision7": {
+      "lane_E4": "PASS_MARGINAL_WNS_0P000141501",
+      "equivalence": "PASS_POST_SYNTHESIS_GATE_COMPARE_120032",
+      "real_E1": "PASS",
+      "structural_H3": "FAIL_TIMING",
+      "h3_wns_ns": -0.926028,
+      "h3_tns_ns": -49161.85,
+      "h3_unmapped": 0,
+      "h3_unresolved": 0,
+      "h3_lane_instances": 512,
+      "h3_cell_area": 1379700.051722,
+      "h3_dc_log_sha256": "5e3aa698ab2a1161a3f3a11df0918c2282079d879875a6327eb0d2cb9d057e83",
+      "h3_timing_report_sha256": "d6fe482534c37a0e544329d20220ad5b99d604adf99d4771e2746863f4b5a576",
+      "critical_path": "scheduler fifo_count through completion bypass and broadcast to lane mux and HardFloat Pre"
+    }
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",
@@ -193,6 +208,6 @@
   "closure": {
     "l5_2_pass": false,
     "blocking_gate": "full_512_lane_CLN22UL_1GHz_E4",
-    "next_state": "BLOCKED_DECISION"
+    "next_state": "WAIT_REMOTE_REVISION8_REVIEW"
   }
 }

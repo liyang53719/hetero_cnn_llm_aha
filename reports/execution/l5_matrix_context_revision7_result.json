@@ -1,0 +1,59 @@
+{
+  "closure_rule": "L5.2 closes only when lane E4, equivalence, 512-lane E1 rerun, and structural H3 E4 all pass.",
+  "e1": {
+    "log_sha256": "220e5f69707ac9a41653043b97ff1f72250010fd373aaebf57a66b9fc1c79ef5",
+    "status": "PASS"
+  },
+  "equivalence": {
+    "compared_cycles": 120032,
+    "comparison_mode": "functional_zero_delay_no_SDF",
+    "drain_cycles": 16,
+    "evidence_class": "cycle_exact_RTL_vs_CLN22UL_mapped_gate",
+    "hashes": {
+      "base_lane_rtl_sha256": "566d0c275b518d45bd981ea3d84a098221035363ad8f9eaf032fd43cb2acebf7",
+      "context_lane_rtl_sha256": "815f2861615f5ff1167e5ae84c115594f90778027a52eb10997d3839931c7159",
+      "gate_binary_sha256": "7d4c1a175728f02550a583da0cf85fd4c960708b4b26139d9a00a56ed48fa3ff",
+      "gate_trace_sha256": "2d3df104b03a7e85723eca9cf6adcab094bf3b5954caff2e75e6e2f3ccb19458",
+      "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+      "mapped_netlist_sha256": "23abb9bddd9530e231fc617f59a67637c1e1f9d8ab5dcc867f7da6d804e05d72",
+      "rtl_binary_sha256": "8436d8217ce49a21b60f024d854c4df3d2fcb2fb1c42cfa156661eb85a4b78cc",
+      "rtl_trace_sha256": "2d3df104b03a7e85723eca9cf6adcab094bf3b5954caff2e75e6e2f3ccb19458",
+      "std_cell_verilog_sha256": "527f1fe8c867e975926a89478187effdf662ab32d87e286ad6d98267dc1a4d8f",
+      "testbench_sha256": "d8fb7dca1010ec5437522eca3d4c3bae0881a6d8b0b41ec56cde9b701e58ba39"
+    },
+    "limitations": [
+      "functional gate comparison is not SDF timing simulation",
+      "physical signoff remains outside L5.2"
+    ],
+    "method": "post_synthesis_gate_compare",
+    "mismatches": 0,
+    "randomized_control_cycles": 20000,
+    "revision": 7,
+    "same_cycle_bypass_recurrence_cycles": 100000,
+    "schema_version": 1,
+    "seed": "0x7a51c39d",
+    "simulator": "VCS W-2024.09",
+    "status": "PASS",
+    "unknown_outputs": 0,
+    "warmup_cycles": 16
+  },
+  "full_context_top": {
+    "context_lane_instances": "512",
+    "unmapped": "0",
+    "unresolved": "0",
+    "wns_ns": -0.926028
+  },
+  "lane": {
+    "area": null,
+    "leaf_ddcs_read": "0",
+    "retiming_authorized": "0",
+    "source_remap": "1",
+    "status_sha256": "90b30b0aabc83ca50140d748616875a29dbcb10572e7cea43c5f6ca9d7cfdb3c",
+    "unmapped": "0",
+    "unresolved": "0",
+    "wns_ns": 0.000141501
+  },
+  "revision": 7,
+  "schema_version": 1,
+  "status": "INCOMPLETE"
+}

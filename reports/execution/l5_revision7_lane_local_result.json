@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "revision": 7,
-  "status": "LANE_E4_PASS_MARGINAL_EQUIVALENCE_OPEN",
+  "status": "LANE_E4_PASS_MARGINAL_EQUIVALENCE_PASS_H3_FAIL",
   "effort": "normal",
   "wns_ns": 0.000141501,
   "classification": "PASS_MARGINAL_PROCEED_TO_H3_NOT_SIGNOFF",
@@ -17,5 +17,8 @@
   "mapped_netlist_sha256": "23abb9bddd9530e231fc617f59a67637c1e1f9d8ab5dcc867f7da6d804e05d72",
   "ddc_sha256": "7b190a1cf6ca9fb97beff45d6ca880c2f94a4007ad5fdf40a174b816e576bc12",
   "svf_sha256": "a76bb5d9c077d04b8217210dc6ccb906834afc01f2a7d549ff8695be6bd5aab3",
-  "remaining": ["equivalence", "real_512_lane_E1", "structural_H3_E4"]
+  "equivalence": "PASS_POST_SYNTHESIS_GATE_COMPARE_120032",
+  "real_512_lane_E1": "PASS",
+  "structural_H3_wns_ns": -0.926028,
+  "remaining": ["Revision8_review_and_H3_timing"]
 }

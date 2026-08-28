@@ -1,9 +1,9 @@
 {
   "schema_version": 6,
-  "state": "READY_IMPLEMENT_CONTEXT_AWARE_LANES",
+  "state": "READY_JOINT_MAP_CONTEXT_LANE",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "objective": "Implement revision 5: distribute the existing four accumulator contexts inside one reusable context-aware lane and structurally compose the full context top.",
+  "objective": "Implement revision 6 synthesis boundary: jointly map local accumulator mux and base-lane registers while preserving only generated HardFloat leaf DDCs.",
   "current_evidence": {
     "l5_1": "PASS_E1_E4",
     "l5_2_e1": "PASS",
@@ -18,9 +18,9 @@
     "SequenceMemory_translation_cycle_model"
   ],
   "ordered_commands": [
-    "implement context scheduler, context-aware lane4, and fixed control broadcast",
-    "rerun complete E1 with per-completion payload checks and map each component",
-    "link/report/write the full context top without compile"
+    "change context-lane Tcl to read four leaf DDCs and analyze base/context lane RTL",
+    "normal-effort map one context lane; retry high effort only on timing-only failure",
+    "if lane passes, structurally link/report the full context top"
   ],
   "audit_questions": [
     "confirm bottom-up compile of generated pre/mul/post/round references",

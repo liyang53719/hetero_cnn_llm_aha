@@ -136,7 +136,28 @@
       "dc_log_sha256": "d3483daa1be94b3291291633d23ed9046b7a42afa77fdb55c986c507bd328225",
       "retry_same_command": false
     },
-    "next": "map scheduler and one context-aware lane4, then structurally compose H3"
+    "context_components": {
+      "scheduler": {
+        "status": "PASS",
+        "wns_ns": 0.00440788,
+        "ddc_sha256": "16ce730f4799c858778997f12d534116ecafa5102e6fd291a032ea07c3768de6"
+      },
+      "broadcast": {
+        "status": "PASS",
+        "wns_ns": 0.196252,
+        "ddc_sha256": "05e553d1d1a72d473241b9b8fe71184a9cf15de376b79ce1ef8a96394163cf9c"
+      },
+      "context_lane_preserved_base": {
+        "status": "FAIL_TIMING",
+        "wns_ns": -0.0739283,
+        "unmapped": 0,
+        "unresolved": 0,
+        "critical_path": "issue_bypass input through local accumulator mux and HardFloat Pre to pre_c_q",
+        "dc_log_sha256": "f6a57b6740e413f4d617456bf675d6cd80fd96563dd720bd87e9231d4feb47d9",
+        "timing_report_sha256": "3bc41337ae86c9cbc9c3af712ec0caa549c5b57b378d94090d85e4bf953dc2b6"
+      }
+    },
+    "next": "joint-map accumulator mux and base-lane registers around preserved arithmetic leaves"
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",

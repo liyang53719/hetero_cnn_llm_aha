@@ -1,8 +1,8 @@
 # Local-agent handoff v6
 
-State: L5.2 hierarchical DC revision 5 frozen, ready for context-aware lanes.
-Structural 16x32 array passes at WNS `+0.013487 ns`; full context incremental
-compile timed out and must not be rerun.
+State: L5.2 hierarchical DC revision 6 frozen, ready for joint context-lane
+mapping. Structural array and scheduler/broadcast pass; preserving the base
+lane boundary caused context-lane WNS `-0.0739283 ns`.
 
 ## Closed locally
 
@@ -42,7 +42,7 @@ Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
 ## Next execution
 
 Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
-stage once, map one production lane and control512, then distribute the existing
-four accumulator contexts inside one context-aware lane reused 512 times.
-Full context H3 performs no top compile. Do not reduce array size/frequency or
-add false/multicycle paths.
+stage once, map control512, then jointly map the local four-context accumulator
+mux and base-lane registers around preserved generated arithmetic leaves. Full
+context H3 performs no top compile. Do not reduce array size/frequency or add
+false/multicycle paths.

@@ -83,6 +83,20 @@ control-broadcast block fans context IDs and enables to 512 lanes. The full
 context top is then structural link/report/write only. Total context state
 remains exactly 4 x 512 x 32 bits (8 KiB); no state, context, or cycle is added.
 
+Revision 6 evidence: scheduler and context-control broadcast map at WNS
+`+0.00440788 ns` and `+0.196252 ns`. The first context-lane mapping preserved
+the already-mapped base lane as `dont_touch` and failed at WNS
+`-0.0739283 ns`. Its critical path is exactly `issue_bypass_i` through the
+local accumulator mux and HardFloat Pre logic to `pre_c_q`; no arithmetic stage
+after Pre is involved.
+
+Revision 6 reads the four accepted generated leaf DDCs directly, analyzes both
+the base lane and context-aware lane RTL, preserves only generated arithmetic
+leaves, and jointly maps the local accumulator mux plus four lane register
+stages. This changes no RTL. Normal effort runs first; one high-effort retry is
+allowed only for this single lane. If WNS remains negative, stop with
+`BLOCKED_DECISION`; a fifth context/cycle and timing exceptions are forbidden.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by
@@ -204,9 +218,10 @@ followed by the complete E1 regression.
 
 1. Map `bf16_context_scheduler4`, preserving descriptor-facing ready/valid,
    FIFO, busy/valid, completion context/last, counters, and protocol error.
-2. Map one `bf16_context_fma_pipeline_lane4` after reading the accepted
-   production-lane DDC. It contains exactly four FP32 accumulator registers and
-   the local clear/bypass/bank-selection mux.
+2. Map one `bf16_context_fma_pipeline_lane4` after reading the four accepted
+   generated arithmetic leaf DDCs. Jointly optimize the handwritten local
+   clear/bypass/bank-selection mux and base-lane registers while preserving the
+   generated arithmetic leaves.
 3. Map one fixed 512-way context-control broadcast and reuse the accepted
    control512 and flag/reset glue DDCs.
 4. Refactor `bf16_outer_product_context_array` into a structural composition of

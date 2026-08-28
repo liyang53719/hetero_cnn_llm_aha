@@ -1,8 +1,8 @@
 # Local-agent handoff v6
 
-State: L5.2 hierarchical DC revision 1 frozen, ready for production-lane
-refactor. Four leaf DDCs pass; neither the flat compile nor leaf-only array
-compile may be rerun.
+State: L5.2 hierarchical DC revision 2 frozen, ready for incremental array
+mapping. Four leaf DDCs and one production-lane DDC pass; no prior
+`compile_ultra` array command may be rerun.
 
 ## Closed locally
 
@@ -44,5 +44,6 @@ Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
 Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
 stage once, map one production lane containing its four data-register stages,
 reuse that lane 512 times in the fixed 16x32 array, then compile only the
-four-context wrapper. Revised array and full-top runs are capped at 20 and 30
-minutes. Do not reduce array size/frequency or add false/multicycle paths.
+four-context wrapper. Use incremental mapping, not `compile_ultra`; revised
+array and full-top runs are capped at 10 and 30 minutes. Do not reduce array
+size/frequency or add false/multicycle paths.

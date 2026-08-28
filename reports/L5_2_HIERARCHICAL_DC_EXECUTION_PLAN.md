@@ -33,6 +33,18 @@ It reached the fixed 45-minute limit and was stopped after 2,731 seconds.
 Therefore the four stage-local register banks must also move below a reusable
 production lane boundary; the leaf-only array command must not be retried.
 
+Revision 2 evidence: the production-lane refactor preserved the complete E1
+gate and its mapped lane passed at WNS `+0.0135558 ns`. A 512-lane array using
+one preserved lane design still timed out after 1,230 seconds because
+`compile_ultra` entered global delay optimization over 2,929,236 expanded leaf
+cells and 153,156 sequential cells. There was no lane uniquification. The
+remaining issue is the compile command, not hierarchy correctness.
+
+DC X-2025.06-SP3 documents that `compile -incremental_mapping` exempts already
+mapped portions from logic-level optimization. H2 revision 2 therefore uses
+incremental mapping for only the unmapped array glue; `compile_ultra` is
+forbidden for H2 and H3.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by
@@ -114,10 +126,13 @@ E1 before any array E4 claim.
    `bf16_outer_product_array_ROWS16_COLS32`.
 4. Disable boundary optimization and constant propagation across the mapped
    lane boundary; set the mapped lane design `dont_touch`.
-5. Compile only array registers, valid/ready control, flag reduction, and
-   interconnect with `compile_ultra -no_autoungroup` at normal effort.
-6. Cap wall time at 20 minutes. The superseded leaf-only 45-minute attempt is
-   evidence, not an authorized retry path.
+5. Compile only global valid/ready control, counters, flag reduction, and
+   interconnect with `compile -incremental_mapping -map_effort medium
+   -area_effort none`. This preserves the already-mapped lane internals while
+   still performing design-rule fixing on the top glue.
+6. Cap wall time at 10 minutes. The superseded leaf-only 45-minute and
+   production-lane `compile_ultra` 20-minute attempts are evidence, not
+   authorized retry paths.
 
 H2 acceptance:
 
@@ -144,7 +159,8 @@ followed by the complete E1 regression.
 4. Disable boundary optimization and set the array instance/design
    `dont_touch`.
 5. Compile only context banks, FIFO, completion/busy control, accumulator
-   selection, and top-level I/O logic at normal effort.
+   selection, and top-level I/O logic using the same incremental-mapping
+   command; never globally optimize the accepted array DDC.
 6. Cap wall time at 30 minutes.
 
 H3 is the formal L5.2 E4 evidence and must report:

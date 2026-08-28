@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_HIER_DC_REV1_FROZEN_READY_LANE_REFACTOR",
+  "current_state": "L5_2_HIER_DC_REV2_FROZEN_READY_INCREMENTAL_MAP",
   "remote_audit": {
     "observed_head": "7e18aa7b0c941c65cfa053d24d75757b99008511",
     "new_local_agent_commit_detected": false,
@@ -23,7 +23,7 @@
       "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
     },
     "L5.2": {
-      "status": "E1_PASS_HIER_DC_REV1_READY_LANE_REFACTOR",
+      "status": "E1_PASS_HIER_DC_REV2_READY_INCREMENTAL_MAP",
       "physical_array": "16x32_512_lane",
       "contexts": 4,
       "dependent_steps": 1000000,
@@ -37,6 +37,8 @@
       "next_plan": "reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md",
       "leaf_ddc": "PASS_4_OF_4",
       "leaf_only_array_attempt": "BLOCKED_RUNTIME_2731S",
+      "production_lane_ddc": "PASS_WNS_0P0135558",
+      "production_lane_array_compile_ultra": "BLOCKED_RUNTIME_1230S",
       "evidence": "reports/execution/l5_matrix_context_local_e1_e4_result.json"
     }
   },

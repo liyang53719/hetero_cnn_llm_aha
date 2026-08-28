@@ -14,8 +14,9 @@
     "random_backpressure_steps": 10000,
     "random_backpressure_cycles": 14555,
     "numeric_tag_protocol": "PASS",
-    "binary_sha256": "2460fc3452ea829693e8044bf35d3d0f266bd9e1ccbd84441a1d693e87049b56",
-    "log_sha256": "15e0d0a80f498a0f4dd5f6c27af334098a92e6ffc07d44c099e9e298294568c4"
+    "binary_sha256": "a80361f99dc39fe70e8c16df20f556c623c69aa7a236f4a68505b18ad79b5efd",
+    "log_sha256": "83c26f843860d05c2f6f0325cd8be1561b7934d5d105357360654dc153b2f445",
+    "production_lane_refactor_revalidated": true
   },
   "pipeline": {
     "stages": ["HardFloat_preMul", "24x24_plus_48", "HardFloat_postMul", "HardFloat_round"],
@@ -59,7 +60,28 @@
       "dc_log_sha256": "baf31e790371af6e5695614b7dd52d4f5149f3cc72cf727ccb255a00a9c5dd40",
       "retry_same_command": false
     },
-    "next": "map one production lane including all four data-register stages"
+    "production_lane": {
+      "status": "PASS",
+      "wns_ns": 0.0135558,
+      "unmapped": 0,
+      "unresolved": 0,
+      "stage_design_variants": 1,
+      "stage_instances_each": 1,
+      "ddc_sha256": "e3b998d5b2c3228ffa347c4eb97bc43127fbd111047c566f6f5e77522be1312a"
+    },
+    "production_lane_array_compile_ultra": {
+      "status": "BLOCKED_RUNTIME",
+      "elapsed_seconds": 1230,
+      "runtime_limit_seconds": 1200,
+      "exit_code": 124,
+      "lane_uniquified_512": false,
+      "initial_leaf_cells": 2929236,
+      "initial_sequential_cells": 153156,
+      "last_phase": "Delay Optimization",
+      "dc_log_sha256": "a68712d56cc4ff067a7e19527890b519dac0bd95f6ab428b0e89085e98a85c09",
+      "retry_same_command": false
+    },
+    "next": "incremental-map only unmapped array glue"
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",

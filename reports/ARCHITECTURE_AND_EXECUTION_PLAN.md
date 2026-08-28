@@ -1,4 +1,4 @@
-# Canonical architecture and execution plan v6.3
+# Canonical architecture and execution plan v6.4
 
 ## Accepted state
 
@@ -69,6 +69,30 @@ area/power recorded
 post-mapping E1 rerun
 ```
 
+## Revision 8B-A approved physical distribution
+
+Revision 8A failed structural H3 after all component/E1/equivalence gates
+passed. Revision 8B-A is therefore approved as a cycle-neutral combinational
+fanout tree: one front output feeds a 1-to-4 level, then four 1-to-8 levels feed
+the 32 cluster-local leaves. It retains 4-stage/4-context/four-cycle feedback,
+16x32/512 lanes, 1 GHz, public command behavior and generated HardFloat.
+
+The tree is a mapped physical boundary, not a hierarchy of unproven `assign`
+statements. H3 must have zero max-transition/max-capacitance violations and
+zero unresolved/unmapped cells. Front and cluster boundaries remain retained;
+only broadcast/top glue may be compiled. All violating control/context and A/B
+operand-distribution roots found by H3 must be covered.
+
+Do not add an FMA stage during Revision 8B-A. After one normal and one
+high-effort attempt, if transition/capacitance violations are both zero and H3
+still has negative 1 GHz WNS on a non-fanout-dominated path, Revision 8B-B is
+authorized: stop tuning 4/4 and switch to 5-stage/5-context with a 3-bit
+internal context tag. The public 128-bit command remains unchanged, and all
+scheduler/tag/bank/equivalence/E1/H3 gates must be rerun.
+
+Binding policy: `config/l5_revision8b_a_policy.json`.
+Approval: `reports/L5_2_REVISION8B_A_APPROVAL.md`.
+
 ## Parallel sandbox closure
 
 Blocked Attention cycle E0 remains:
@@ -86,9 +110,11 @@ This is cycle-structured E0, not real stream E1/E2 or integrated E3.
 ## Global order
 
 ```text
-L5.2 Revision 8A E1/equivalence/E4
-→ L5.3 Blocked Attention E1/E2
-→ L5.4 fused SiLU DSE
+L5.1 PASS
+├→ L5.2 Revision 8B-A/B physical closure
+├→ L5.3 Blocked Attention E1/E2
+└→ L5.4 fused SiLU E1/E4
+{L5.2,L5.3,L5.4} PASS
 → L5.5 queue/DMA/DDR E3
 → L5.6 28-layer q1024 >=300 token/s
 → L6 quantized paths
@@ -97,3 +123,8 @@ L5.2 Revision 8A E1/equivalence/E4
 → L9 llama.cpp
 → L10/L11 physical closure and DSE
 ```
+
+L5.3 may use the frozen Matrix transaction contract and Revision 8A functional
+baseline without claiming canonical Matrix integration. L5.4 is independent.
+L5.5 is the mandatory convergence point and may not close until all three
+parallel branches pass.

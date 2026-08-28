@@ -17,18 +17,26 @@ control_audit=load('reports/execution/control_plane_v6_audit.json')
 archspec=load('reports/execution/archspec_v6_collateral_result.json')
 program=load('reports/execution/qwen38_full_shape_program_v6_result.json')
 sequence=load('reports/execution/sequence_memory_cycle_v6_result.json')
+rev8b=load('config/l5_revision8b_a_policy.json')
 
-assert control['schema_version']==6 and control['plan_version']=='2026-08-28-v6.3'
-assert control['current_state']=='L5_2_REV8A_H3_FAIL_WAIT_REV8B_REVIEW'
+assert control['schema_version']==6 and control['plan_version']=='2026-08-28-v6.4'
+assert control['current_state']=='L5_2_REV8B_A_APPROVED_WAIT_IMPLEMENTATION'
 assert control['remote_audit']['observed_head']=='4dec4a8df6b246f01778925745b7ae21292f74a3'
 assert control['remote_audit']['decision']=='ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE'
 assert control['revision8A']['decision']=='APPROVE_CANDIDATE_E0_WITH_LOCAL_GATES'
+assert control['revision8B']['decision']=='APPROVE_REVISION8B_A_WITH_AUTOMATIC_REVISION8B_B_FALLBACK'
 assert ledger['current_state']==control['current_state']
 assert ledger['accepted_local_evidence']['L5.2']['revision7_h3_wns_ns']<0
-assert next_action['state']=='WAIT_REMOTE_REVISION8B_REVIEW'
-assert next_action['decision']=='REVISION8A_H3_FAIL_TIMING_DRC'
-assert next_action['ordered_commands']==[]
-assert final['status']=='PASS_SANDBOX_V6_3_REV8A_H3_FAIL_WAIT_REV8B_REVIEW'
+assert next_action['state']=='APPROVED_WAIT_LOCAL_REVISION8B_A_IMPLEMENTATION'
+assert next_action['decision']=='APPROVE_REVISION8B_A_FANOUT_TREE_WITH_REVISION8B_B_FALLBACK'
+assert final['status']=='PASS_SANDBOX_V6_4_REV8B_A_APPROVED_WAIT_IMPLEMENTATION'
+assert rev8b['decision']=='APPROVED'
+assert rev8b['phase_a']['fma_stages']==4 and rev8b['phase_a']['contexts']==4
+assert rev8b['phase_a_gates']['h3_max_transition_violations']==0
+assert rev8b['phase_a_gates']['h3_max_cap_violations']==0
+assert rev8b['phase_b_fallback']['authorized'] is True
+assert rev8b['phase_b_fallback']['fma_stages']==5 and rev8b['phase_b_fallback']['contexts']==5
+assert rev8b['parallel_execution']['join_gate'].startswith('L5.2 plus L5.3 plus L5.4')
 
 assert l51['status']=='PASS' and l51['e4']['block128_wns_ns']>=0
 assert l52['e1']['lanes']==512 and l52['e1']['contexts']==4
@@ -60,6 +68,8 @@ for path in (
  'reports/L5_2_REVISION8A_APPROVAL.md',
  'reports/L5_LOCAL_AGENT_AUDIT_AFTER_REV7.md',
  'reports/L5_2_REVISION8B_REVIEW_REQUEST.md',
+ 'reports/L5_2_REVISION8B_A_APPROVAL.md',
+ 'config/l5_revision8b_a_policy.json',
  'src/heteronpu/revision8_early_commit.py',
  'scripts/run_l5_matrix_context_revision8a.sh',
  'scripts/run_l5_matrix_context_revision8a_compare.sh',
@@ -84,10 +94,12 @@ assert 'candidate_sandbox_not_canonical' in (ROOT/'configs/arch_v2_qwen38_candid
 
 result={
  'schema_version':6,
- 'status':'PASS_V6_3',
+ 'status':'PASS_V6_4',
  'L5_1':'PASS_ACCEPTED_ZERO_MARGIN',
  'L5_2_revision7':'LANE_EQUIV_E1_PASS_H3_FAIL',
- 'L5_2_revision8A':'COMPONENTS_E1_EQUIV_PASS_H3_FAIL_WAIT_REV8B_REVIEW',
+ 'L5_2_revision8A':'COMPONENTS_E1_EQUIV_PASS_H3_FAIL',
+ 'L5_2_revision8B_A':'APPROVED_WAIT_IMPLEMENTATION',
+ 'L5_3_L5_4':'PARALLEL_EXECUTION_AUTHORIZED',
  'blocked_attention_cycle_E0':'PASS',
  'retained_v6_gates':['control_plane_audit','Archspec_collateral','Qwen38_full_shape_program','SequenceMemory_cycle_E0'],
 }

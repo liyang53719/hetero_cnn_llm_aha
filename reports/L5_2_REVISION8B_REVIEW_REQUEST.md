@@ -1,5 +1,9 @@
 # L5.2 Revision 8B architecture review request
 
+Resolution: **APPROVED AS REVISION 8B-A**. The binding decision and fallback
+rules are in `reports/L5_2_REVISION8B_A_APPROVAL.md` and
+`config/l5_revision8b_a_policy.json`.
+
 ## Decision requested
 
 Revision 8A passes source/cycle comparison, real 512-lane E1, adversarial E1,
@@ -66,6 +70,6 @@ HardFloat RTL.
 6. Report area and power deltas against Revision 8A; do not claim post-route
    signoff from component-level DC.
 
-Until this request is reviewed, L5.2 state is
-`BLOCKED_ARCHITECTURE_DECISION`; L5.3 must not consume Revision 8A as canonical
-Matrix RTL.
+Revision 8B-A implementation is authorized. Revision 8A remains non-canonical.
+L5.3/L5.4 component development is parallelized, but L5.5 integrated E3 still
+waits for L5.2, L5.3 and L5.4 to pass.

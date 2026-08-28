@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "plan_version": "2026-08-28-v6.3",
+  "plan_version": "2026-08-28-v6.4",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
   "ledger": "reports/execution/MASTER_LEDGER.json",
@@ -12,7 +12,7 @@
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV8A_H3_FAIL_WAIT_REV8B_REVIEW",
+  "current_state": "L5_2_REV8B_A_APPROVED_WAIT_IMPLEMENTATION",
   "stage_namespace": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"],
   "evidence_classes": {
     "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
@@ -76,6 +76,16 @@
     "structural_h3_max_cap_violations": 10,
     "next_review": "reports/L5_2_REVISION8B_REVIEW_REQUEST.md"
   },
+  "revision8B": {
+    "decision": "APPROVE_REVISION8B_A_WITH_AUTOMATIC_REVISION8B_B_FALLBACK",
+    "policy": "config/l5_revision8b_a_policy.json",
+    "approval": "reports/L5_2_REVISION8B_A_APPROVAL.md",
+    "phase_a": "4stage_4context_cycle_neutral_mapped_fanout_tree",
+    "phase_b_trigger": "zero_transition_and_cap_but_negative_1GHz_WNS_after_normal_and_high",
+    "phase_b": "5stage_5context_3bit_internal_tag",
+    "parallel_branches": ["L5.2", "L5.3", "L5.4"],
+    "join_before": "L5.5"
+  },
   "parallel_sandbox_progress": {
     "CONTROL_PLANE_V6_3_AUDIT": "PASS",
     "L5_2_REV8A_CYCLE_DIFFERENTIAL_1M": "PASS",
@@ -94,7 +104,10 @@
     "early bank commit does not move architectural completion before output handshake",
     "sandbox differential and static source checks are E0, not RTL E1 or E4",
     "zero-delay mapped comparison is not SDF timing simulation or post-route signoff",
-    "L5.2 remains open until Revision 8A E1/equivalence/lane/cluster/front/H3 gates pass",
+    "Revision 8A remains rejected as canonical after structural H3 failure",
+    "Revision 8B-A must eliminate transition and capacitance violations before WNS can trigger Revision 8B-B",
+    "Revision 8B-B is authorized only by the conjunction frozen in its policy",
+    "L5.3 and L5.4 may execute in parallel but cannot bypass the L5.5 join gate",
     "candidate Archspec collateral does not promote it to canonical",
     "vision remains outside scope"
   ]

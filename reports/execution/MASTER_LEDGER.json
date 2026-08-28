@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV8A_H3_FAIL_WAIT_REV8B_REVIEW",
+  "current_state": "L5_2_REV8B_A_APPROVED_WAIT_IMPLEMENTATION",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "new_local_agent_commit_detected": true,
@@ -53,14 +53,26 @@
     "qwen38_full_shape_program": "PASS",
     "sequence_memory_cycle_E0": "PASS"
   },
+  "approved_next_architecture": {
+    "decision": "REVISION8B_A_FIRST_THEN_REVISION8B_B_IF_TRIGGERED",
+    "policy": "config/l5_revision8b_a_policy.json",
+    "approval": "reports/L5_2_REVISION8B_A_APPROVAL.md",
+    "revision8B_A": "4stage_4context_mapped_combinational_fanout_tree",
+    "revision8B_B": "5stage_5context_after_zero_DRC_negative_WNS",
+    "parallel_execution": ["L5.2", "L5.3", "L5.4"],
+    "join_gate": "L5.5"
+  },
   "source_ready_waiting_local": [
-    "Revision8B_architecture_review",
-    "BlockedAttention_real_stream_E1_E2_after_L5_2_unblocks"
+    "Revision8B_A_broadcast32_RTL_and_gates",
+    "BlockedAttention_real_stream_E1_E2",
+    "Fused_SiLU_E1_E4"
   ],
   "waiting_local": [
     "L4",
-    "L5.2_revision8B_review",
-    "L5.3_to_L5.6",
+    "L5.2_revision8B_A_implementation",
+    "L5.3_real_stream_E1_E2",
+    "L5.4_fused_SiLU_E1_E4",
+    "L5.5_to_L5.6",
     "L7_E1_E3",
     "L8_official_and_RTL",
     "L9_real_llama_cpp",
@@ -73,6 +85,8 @@
     "Revision7_H3_as_pass",
     "zero_delay_gate_compare_as_SDF_or_post_route_signoff",
     "candidate_RTL_as_canonical_before_promotion",
-    "Revision8A_H3_rerun_after_frozen_stop_rule"
+    "Revision8A_H3_rerun_after_frozen_stop_rule",
+    "L5.5_PASS_before_L5.2_L5.3_L5.4_join",
+    "Revision8B_B_before_zero_transition_and_capacitance"
   ]
 }

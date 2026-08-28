@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "PASS_SANDBOX_V6_3_REV8A_H3_FAIL_WAIT_REV8B_REVIEW",
+  "status": "PASS_SANDBOX_V6_4_REV8B_A_APPROVED_WAIT_IMPLEMENTATION",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "decision": "ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE"
@@ -24,9 +24,17 @@
     "blocked_attention_cycle_E0": "PASS"
   },
   "remaining_local_gates": [
-    "Revision8B_architecture_review",
-    "BlockedAttention_real_stream_E1_E2_after_L5_2_unblocks"
+    "Revision8B_A_implementation_and_gates",
+    "BlockedAttention_real_stream_E1_E2",
+    "Fused_SiLU_E1_E4"
   ],
+  "approved_architecture": {
+    "revision8B_A": "4stage_4context_mapped_combinational_fanout_tree",
+    "revision8B_B_trigger": "zero_transition_cap_then_negative_1GHz_WNS",
+    "revision8B_B": "5stage_5context_3bit_internal_tag",
+    "parallel_branches": ["L5.2", "L5.3", "L5.4"],
+    "join_gate": "L5.5"
+  },
   "non_claims": [
     "no_L5_2_pass",
     "no_Revision8A_RTL_E1_in_sandbox",

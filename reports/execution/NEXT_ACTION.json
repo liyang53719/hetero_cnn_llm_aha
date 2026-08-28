@@ -1,53 +1,53 @@
 {
   "schema_version": 6,
-  "state": "WAIT_REMOTE_REVISION8B_REVIEW",
+  "state": "APPROVED_WAIT_LOCAL_REVISION8B_A_IMPLEMENTATION",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "decision": "REVISION8A_H3_FAIL_TIMING_DRC",
-  "objective": "Obtain architecture review for a cycle-neutral source-mapped fanout distribution boundary before any Revision8B implementation.",
-  "ordered_commands": [],
-  "review_request": "reports/L5_2_REVISION8B_REVIEW_REQUEST.md",
-  "failure_evidence": "reports/execution/l5_revision8a_local_result.json",
-  "hard_acceptance": {
-    "rev7_vs_rev8a_cycle_compare": "PASS_120000",
-    "candidate_main_E1": "PASS_1000000_plus_10000_backpressure",
-    "candidate_adversarial_E1": "PASS_50000",
-    "candidate_lane_wns_ns_min": 0.0,
-    "candidate_lane_unmapped": 0,
-    "candidate_lane_unresolved": 0,
-    "candidate_lane_equivalence": "PASS",
-    "candidate_cluster16_wns_ns_min": 0.0,
-    "candidate_cluster_lane_instances": 16,
-    "candidate_front_control_wns_ns_min": 0.0,
-    "candidate_h3_wns_ns_min": 0.0,
-    "candidate_h3_cluster_instances": 32,
-    "candidate_h3_physical_lanes": 512,
-    "candidate_h3_unmapped": 0,
-    "candidate_h3_unresolved": 0,
-    "contexts": 4,
-    "feedback_latency_cycles": 4
+  "decision": "APPROVE_REVISION8B_A_FANOUT_TREE_WITH_REVISION8B_B_FALLBACK",
+  "objective": "Implement and validate a cycle-neutral mapped 1-to-4-to-32 front-to-cluster distribution tree without adding an FMA stage.",
+  "policy": "config/l5_revision8b_a_policy.json",
+  "approval": "reports/L5_2_REVISION8B_A_APPROVAL.md",
+  "next_code_action": "Add candidate-only Revision8B-A broadcast32 RTL, top integration, independent DC/mapped-equivalence flows and tests; do not edit generated or canonical RTL.",
+  "expected_artifacts": [
+    "rtl/matrix/candidates/rev8b_a/bf16_front_to_cluster_broadcast32_rev8b_a_candidate.sv",
+    "rtl/matrix/candidates/rev8b_a/bf16_outer_product_context_array_rev8b_a_candidate.sv",
+    "dc/synth_l5_bf16_broadcast32_rev8b_a.tcl",
+    "dc/synth_l5_bf16_context_top_rev8b_a.tcl",
+    "scripts/run_l5_matrix_context_revision8b_a.sh",
+    "reports/execution/l5_revision8b_a_local_result.json"
+  ],
+  "ordered_gates": [
+    "static_policy_and_source_contract",
+    "revision8A_vs_revision8B_A_120k_cycle_compare",
+    "broadcast32_component_DC_and_mapped_equivalence",
+    "main_1M_plus_10k_random_E1",
+    "50k_adversarial_E1",
+    "structural_H3_normal_then_high_if_needed",
+    "post_map_E1_if_H3_passes",
+    "summarize_and_apply_phase_B_trigger"
+  ],
+  "phase_a_success": {
+    "h3_wns_ns_min": 0.0,
+    "max_transition_violations": 0,
+    "max_cap_violations": 0,
+    "unmapped": 0,
+    "unresolved": 0,
+    "cluster16_instances": 32,
+    "physical_lanes": 512
   },
-  "attempt_policy": {
-    "normal_attempts_per_component": 1,
-    "high_effort_retries_per_component": 1,
-    "component_timeout_seconds": 600,
-    "structural_h3_timeout_seconds": 600,
-    "on_any_remaining_negative_wns": "STOP_BLOCKED_ARCHITECTURE_DECISION",
-    "on_equivalence_or_E1_failure": "STOP_REJECT_REVISION8A"
+  "phase_b_trigger": "After normal and high effort: transition=0, cap=0, unmapped=0, unresolved=0, non-fanout-dominated WNS<0",
+  "phase_b_action": "Stop 4/4 tuning and create Revision8B-B 5-stage/5-context candidate with 3-bit internal context tags.",
+  "parallel_actions": {
+    "L5.3": "real stream E1/E2 may proceed against frozen Matrix transaction contract",
+    "L5.4": "fused SiLU E1/E4 may proceed independently",
+    "join": "L5.5 waits for L5.2, L5.3 and L5.4 PASS"
   },
   "forbidden": [
     "modify_generated_HardFloat",
-    "modify_public_interface",
-    "add_pipeline_cycle_or_context",
-    "reduce_array_size_or_frequency",
-    "false_path_on_synchronous_data",
-    "multicycle_exception",
-    "retime",
-    "silent_cluster_size_DSE",
+    "modify_canonical_RTL_before_candidate_promotion",
+    "add_FMA_stage_in_Revision8B_A",
     "flat_512_lane_compile",
-    "promote_candidate_before_all_gates"
-  ],
-  "on_success": "L5.3_BLOCKED_FLASHATTENTION_E1_E2",
-  "on_failure": "RETURN_REVISION8A_EVIDENCE_AND_REQUEST_REVISION8B_ARCHITECTURE_DECISION",
-  "stop_rule_applied": true
+    "timing_exceptions_or_lower_frequency",
+    "claim_L5.2_PASS_before_all_gates"
+  ]
 }

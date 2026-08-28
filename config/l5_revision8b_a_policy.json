@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "decision": "APPROVED",
+  "approved_at": "2026-08-28",
+  "base_revision": "8A",
+  "phase_a": {
+    "name": "Revision8B-A",
+    "architecture": "cycle_neutral_combinational_fanout_tree",
+    "topology": "one_to_four_then_four_one_to_eight_for_32_cluster_leaves",
+    "fma_stages": 4,
+    "contexts": 4,
+    "feedback_cycles": 4,
+    "physical_array": "16x32_512_lanes",
+    "clock_period_ns": 1.0,
+    "public_command_interface": "unchanged",
+    "generated_hardfloat": "unchanged",
+    "required_distributed_control": [
+      "pre_write",
+      "mul_write",
+      "post_write",
+      "output_write",
+      "issue_context",
+      "issue_clear",
+      "early_commit_context",
+      "output_context"
+    ],
+    "operand_rule": "inventory all H3 max-transition/max-cap roots and include any violating A/B operand distribution nets",
+    "synthesis_rule": "map broadcast32 as a real DDC with max-fanout/max-transition/max-cap constraints; preserve front and cluster boundaries; permit compile only in broadcast/top glue",
+    "forbidden": [
+      "pure_assign_tree_without_mapped_buffer_evidence",
+      "flat_512_lane_compile",
+      "modify_generated_HardFloat",
+      "add_FMA_pipeline_stage",
+      "add_context",
+      "change_public_command_interface",
+      "lower_frequency",
+      "false_path_or_multicycle_on_synchronous_paths",
+      "suppress_transition_or_capacitance_checks",
+      "retime"
+    ]
+  },
+  "phase_a_gates": {
+    "source_compare_cycles_min": 120000,
+    "main_dependent_steps": 1000000,
+    "random_backpressure_steps": 10000,
+    "adversarial_steps": 50000,
+    "broadcast_mapped_equivalence": "zero_mismatch_zero_unknown",
+    "h3_cluster_instances": 32,
+    "h3_physical_lanes": 512,
+    "h3_unmapped": 0,
+    "h3_unresolved": 0,
+    "h3_max_transition_violations": 0,
+    "h3_max_cap_violations": 0,
+    "h3_wns_ns_min": 0.0,
+    "record_area_power_delta": true
+  },
+  "attempt_policy": {
+    "normal_attempts": 1,
+    "high_effort_attempts": 1,
+    "timeout_seconds_per_attempt": 600,
+    "no_unbounded_4_stage_tuning": true
+  },
+  "phase_b_fallback": {
+    "name": "Revision8B-B",
+    "authorized": true,
+    "trigger_all": [
+      "phase_a_h3_max_transition_violations_equal_0",
+      "phase_a_h3_max_cap_violations_equal_0",
+      "phase_a_h3_unmapped_equal_0",
+      "phase_a_h3_unresolved_equal_0",
+      "phase_a_normal_and_high_effort_attempts_complete",
+      "phase_a_h3_wns_ns_less_than_0",
+      "critical_path_not_dominated_by_unfixed_fanout_DRC"
+    ],
+    "fma_stages": 5,
+    "contexts": 5,
+    "internal_context_tag_bits": 3,
+    "public_128bit_command": "unchanged",
+    "required_revalidation": [
+      "scheduler_and_context_scoreboard",
+      "tag_pipeline",
+      "accumulator_banks",
+      "same_context_reuse",
+      "source_and_mapped_equivalence",
+      "one_million_dependent_steps_at_II1",
+      "structural_H3_1GHz"
+    ]
+  },
+  "parallel_execution": {
+    "L5.3": "may_execute real stream E1/E2 against the frozen Matrix transaction contract; cannot claim canonical Matrix integration",
+    "L5.4": "may execute fused SiLU E1/E4 independently",
+    "join_gate": "L5.2 plus L5.3 plus L5.4 must pass before L5.5 integrated E3",
+    "L5.6": "still requires the final canonical Matrix revision"
+  },
+  "resources": {
+    "cpu_affinity": "8-23",
+    "memory_high": "24G",
+    "memory_max": "30G"
+  }
+}

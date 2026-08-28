@@ -1,54 +1,54 @@
-# Local-agent handoff v6.3
+# Local-agent handoff v6.4
 
-State: L5.2 Revision 8A component/E1/equivalence gates PASS; structural H3
-FAIL_TIMING_DRC. Frozen stop rule applied. Wait for Revision 8B architecture
-review; do not rerun H3 or promote candidate RTL.
+State: Revision 8B-A approved; implementation not started. Revision 8A remains
+non-canonical after H3 WNS `-10537.7 ns`, 53,455 transition violations and 10
+capacitance violations.
 
-## Revision 8A passed evidence
+## Binding architecture decision
 
-- Contract: primary 100,000 and multi-seed 500,000 operations PASS.
-- Revision7-vs-Revision8A RTL compare: 120,000 cycles PASS.
-- Real 16x32/512-lane E1: 1,000,000 dependent steps at II=1 plus 10,000
-  random-backpressure steps PASS.
-- Adversarial E1: 50,000 operations PASS.
-- Lane DC: WNS `+0.000101686 ns`, area `2608.970004`, zero
-  unmapped/unresolved.
-- Mapped lane compare: 120,032 cycles, zero mismatch/unknown.
-- Cluster16 DC: WNS `+0.0000194907 ns`, 16 lane instances, area
-  `42268.863177`.
-- Front-control DC: WNS `+0.000527799 ns`, area `381.107998`.
+- Policy: `config/l5_revision8b_a_policy.json`.
+- Approval: `reports/L5_2_REVISION8B_A_APPROVAL.md`.
+- Revision 8B-A first: cycle-neutral mapped combinational fanout tree.
+- Topology: front -> 1-to-4 -> four 1-to-8 branches -> 32 cluster leaves.
+- Keep 4-stage FMA, four contexts, four-cycle feedback, 16x32/512 lanes,
+  1.0 ns, public command behavior and generated HardFloat.
+- Do not add an FMA stage during Revision 8B-A.
 
-## Frozen blocker
+The mapped tree must distribute all front-to-cluster control/context signals.
+Inventory every H3 transition/capacitance root and include violating A/B
+operand-distribution nets. Pure RTL `assign` hierarchy without mapped buffer
+and H3 DRC evidence is not accepted.
 
-Structural H3 contains exactly one front, 32 cluster16 instances, 512 physical
-lanes and one glue instance, with zero unmapped/unresolved, but fails:
+## Revision 8B-A gates
 
-```text
-WNS                 -10537.7 ns
-max-transition      53455
-max-capacitance     10
-cell area           1353676.511670
-```
+1. Static policy/source contract.
+2. Revision8A-vs-8B-A compare >=120,000 cycles.
+3. Broadcast component DC and mapped comparison.
+4. 1,000,000 dependent steps at II=1 plus 10,000 random steps.
+5. 50,000 adversarial operations.
+6. H3: 32 clusters/512 lanes, zero unresolved/unmapped, transition=0, cap=0,
+   WNS >=0 at 1.0 ns.
+7. Post-map E1 and area/power delta.
 
-The first path is scheduler/front control through top-level scalar fanout into
-32 retained clusters/512 lanes. Separate front and cluster mappings see small
-boundary loads; the retained H3 hierarchy has no mapped fanout distribution
-tree. This is an architecture-boundary failure, not permission to change wire
-loads, add exceptions, flatten 512 lanes, retime, lower frequency, or add a
-context/cycle.
+One normal and one high-effort attempt are allowed, each <=600 seconds.
 
-## Next action
+## Automatic Revision 8B-B fallback
 
-Review [L5_2_REVISION8B_REVIEW_REQUEST.md](../L5_2_REVISION8B_REVIEW_REQUEST.md).
-The recommendation is one cycle-neutral source-level
-`front_to_cluster_broadcast32` block, included in mapped equivalence and H3
-timing/DRC. No implementation starts before review.
+After both attempts, if transition/cap/unmapped/unresolved are all zero and a
+non-fanout-dominated H3 path still has WNS <0, stop tuning 4/4 and switch to
+5-stage/5-context with a 3-bit internal context tag. Public 128-bit commands
+remain unchanged. Revalidate scheduler, scoreboard, tags, banks, equivalence,
+one-million-step II=1 and H3.
 
-Canonical evidence:
+## Parallel branches
 
-- `reports/execution/l5_revision8a_local_result.json`
-- `reports/execution/l5_revision8a_gate_compare_result.json`
-- `config/l5_revision8a_policy.json`
+- L5.3 real stream E1/E2 may proceed against the frozen Matrix transaction
+  contract, without claiming canonical Matrix integration.
+- L5.4 fused SiLU E1/E4 may proceed independently.
+- L5.5 remains the join gate and waits for L5.2, L5.3 and L5.4 PASS.
 
-Candidate RTL under `rtl/matrix/candidates/rev8/` was not edited or promoted.
-The two user runtime setup scripts remain untracked and untouched.
+## Unique next action
+
+Create candidate-only Revision8B-A broadcast/top RTL and its independent
+test/DC flows. Do not modify generated RTL, canonical RTL, or the two untracked
+user runtime scripts.

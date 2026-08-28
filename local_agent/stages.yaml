@@ -11,7 +11,7 @@ stages:
     status: IN_PROGRESS
     subgates:
       L5.1: {status: PASS_WAIT_REMOTE_AUDIT, wns_ns: {mul: 0.000160873, add: 0.000159979, block128: 0.0000136495}, acceptance: [pipeline_vectors_1024_zero_mismatch, block128_132_zero_mismatch, stream32_pass, random_backpressure_pass, WNS_nonnegative, unmapped_zero, unresolved_zero], evidence: reports/execution/l5_block128_local_e1_e4_result.json}
-      L5.2: {status: E1_PASS_HIER_DC_PLAN_FROZEN_READY_IMPLEMENTATION, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], stage_probe_wns_ns: 0.000159681, full_top_e4: INTERRUPTED_NO_FINAL_TIMING, plan: reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md, evidence: reports/execution/l5_matrix_context_local_e1_e4_result.json}
+      L5.2: {status: E1_PASS_HIER_DC_REV1_READY_LANE_REFACTOR, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], leaf_ddc: PASS, leaf_only_array: BLOCKED_RUNTIME_2731S, full_top_e4: INTERRUPTED_NO_FINAL_TIMING, plan: reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md, evidence: reports/execution/l5_matrix_context_local_e1_e4_result.json}
       L5.3: {status: SANDBOX_PROGRAM_CONTRACT_READY_WAIT_LOCAL_E1_E2, scope: blocked_QK_softmax_PV}
       L5.4: {status: SANDBOX_DSE_PENDING_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE}
       L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}

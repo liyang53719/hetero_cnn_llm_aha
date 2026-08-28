@@ -34,6 +34,33 @@
     "unresolved_references": 0,
     "cell_area": 1980.251010
   },
+  "hierarchical_e4": {
+    "leaf_mapping": {
+      "status": "PASS",
+      "normal_effort_only": true,
+      "wns_ns": {
+        "HeteroBF16FmaPre": 0.0000536442,
+        "HeteroBF16FmaMul": 0.000109017,
+        "HeteroBF16FmaPost": 0.000122547,
+        "HeteroBF16FmaRound": 0.000511706
+      },
+      "unmapped": 0,
+      "unresolved": 0
+    },
+    "leaf_only_array_attempt": {
+      "status": "BLOCKED_RUNTIME",
+      "elapsed_seconds": 2731,
+      "runtime_limit_seconds": 2700,
+      "exit_code": 124,
+      "stage_uniquified_512": false,
+      "initial_leaf_cells": 2773602,
+      "initial_sequential_cells": 167497,
+      "last_phase": "Global Optimizations",
+      "dc_log_sha256": "baf31e790371af6e5695614b7dd52d4f5149f3cc72cf727ccb255a00a9c5dd40",
+      "retry_same_command": false
+    },
+    "next": "map one production lane including all four data-register stages"
+  },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",
     "clock_period_ns": 1.0,

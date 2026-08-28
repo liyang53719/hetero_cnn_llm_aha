@@ -26,6 +26,13 @@ The interrupted DC log proves the runtime root cause:
 Therefore the next flow must map each identical reference once and reuse the
 mapped DDC. Re-running the previous full-filelist `compile_ultra` is forbidden.
 
+Revision 1 evidence: mapping only the four combinational leaves removed the
+`Uniquified 512` messages, but the array compile still entered global
+optimization with 2,773,602 expanded leaf cells and 167,497 sequential cells.
+It reached the fixed 45-minute limit and was stopped after 2,731 seconds.
+Therefore the four stage-local register banks must also move below a reusable
+production lane boundary; the leaf-only array command must not be retried.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by
@@ -73,26 +80,53 @@ capped at 10 minutes.
 
 Any leaf failure stops H2; execution does not weaken constraints.
 
-## 5. Phase H2: fixed 16x32 array hierarchy
+## 5. Phase H1.5: map one production lane pipeline
 
-1. Read the four mapped leaf DDCs.
+Create `bf16_fma_pipeline_lane`, a handwritten internal hierarchy containing
+exactly one Pre/Mul/Post/Round chain and the same four data-register enables
+already controlled globally by the array. It has no command, context, or
+numerical policy of its own. The array retains the four global valid bits,
+ready chain, counters, and flag reduction, and instantiates 512 identical lane
+pipelines.
+
+The refactor must preserve:
+
+- the public array and context-wrapper ports;
+- four-cycle FMA feedback latency;
+- four-context II=1;
+- the exact generated HardFloat stages and RNE/exception semantics;
+- one physical 16x32 / 512-lane array.
+
+Map the lane once after reading the four accepted leaf DDCs. Disable boundary
+optimization for all generated leaf designs and write one mapped lane DDC.
+Runtime is capped at 10 minutes. Acceptance is WNS >= 0, zero
+unmapped/unresolved, one design variant per generated stage, and exactly one
+instance of each stage inside the lane.
+
+Because H1.5 changes handwritten RTL hierarchy, rerun the complete million-step
+E1 before any array E4 claim.
+
+## 6. Phase H2: fixed 16x32 array hierarchy
+
+1. Read the accepted mapped production-lane DDC.
 2. Analyze only `rtl/matrix/bf16_outer_product_array.sv`.
 3. Elaborate with `ROWS=>16,COLS=>32`; require the specialized design name
    `bf16_outer_product_array_ROWS16_COLS32`.
-4. Disable boundary optimization and constant propagation across each mapped
-   leaf boundary; set the mapped leaf designs `dont_touch`.
+4. Disable boundary optimization and constant propagation across the mapped
+   lane boundary; set the mapped lane design `dont_touch`.
 5. Compile only array registers, valid/ready control, flag reduction, and
    interconnect with `compile_ultra -no_autoungroup` at normal effort.
-6. Cap wall time at 45 minutes.
+6. Cap wall time at 20 minutes. The superseded leaf-only 45-minute attempt is
+   evidence, not an authorized retry path.
 
 H2 acceptance:
 
 - WNS >= 0 at 1.0 ns;
 - zero unmapped/unresolved, latch, and combinational loop;
 - the log contains no `Uniquified 512 instances of design
-  'HeteroBF16Fma...` message;
-- one mapped design exists per stage reference while `report_reference`
-  records 512 physical instances per stage;
+  'bf16_fma_pipeline_lane'` message;
+- one mapped lane design exists while `report_reference` records 512 physical
+  lane instances;
 - mapped area includes all 512 lanes;
 - mapped array DDC and reports are written and hashed.
 
@@ -101,7 +135,7 @@ If the parameterized DDC name does not link exactly, stop with
 wrapper. A fixed 16x32 wrapper may be added only as a handwritten RTL change,
 followed by the complete E1 regression.
 
-## 6. Phase H3: four-context full top
+## 7. Phase H3: four-context full top
 
 1. Read the accepted mapped array DDC.
 2. Analyze only `rtl/matrix/bf16_outer_product_context_array.sv`.
@@ -128,7 +162,7 @@ path is the accumulator feedback loop and requires latency greater than four
 cycles, stop with `BLOCKED_DECISION`; do not add a fifth context or falsify
 four-context II=1.
 
-## 7. Phase H4: functional revalidation and closeout
+## 8. Phase H4: functional revalidation and closeout
 
 After any synthesis-script-only change, regenerate RTL and rerun the existing
 full L5.2 E1 anyway:

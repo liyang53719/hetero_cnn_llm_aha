@@ -1,7 +1,8 @@
 # Local-agent handoff v6
 
-State: L5.2 hierarchical DC plan frozen and ready for implementation. Git has
-no commit newer than `f632f35`; the prior flat compile must not be rerun.
+State: L5.2 hierarchical DC revision 1 frozen, ready for production-lane
+refactor. Four leaf DDCs pass; neither the flat compile nor leaf-only array
+compile may be rerun.
 
 ## Closed locally
 
@@ -41,7 +42,7 @@ Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
 ## Next execution
 
 Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
-stage once, preserve and reuse the mapped DDC in a fixed 16x32 array, then
-compile only the four-context wrapper. Array and full-top runs are capped at
-45 and 30 minutes. Do not reduce array size/frequency or add false/multicycle
-paths.
+stage once, map one production lane containing its four data-register stages,
+reuse that lane 512 times in the fixed 16x32 array, then compile only the
+four-context wrapper. Revised array and full-top runs are capped at 20 and 30
+minutes. Do not reduce array size/frequency or add false/multicycle paths.

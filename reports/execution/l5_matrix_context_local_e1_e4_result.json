@@ -110,7 +110,33 @@
       "dc_log_sha256": "87634a737ff5ca93815e91533b160aa87551adb60d1bdc2a8d1ba515ad4426d9",
       "timing_report_sha256": "7a1e5e553c35e6e56d9c99d6b8250fb20e7b7a5281ec37136c18a4d370cdfe4a"
     },
-    "next": "combine ready state and write-enable broadcast in control512"
+    "structural_array_control512": {
+      "status": "PASS",
+      "elapsed_seconds": 163,
+      "wns_ns": 0.013487,
+      "unmapped": 0,
+      "unresolved": 0,
+      "lane_design_variants": 1,
+      "lane_instances": 512,
+      "cell_area": 1734208.226555,
+      "leaf_cells": 2931460,
+      "sequential_cells": 153156,
+      "array_ddc_sha256": "4da792eda558cb9a32e1573ea975ad05f94eb0cd68b931b5b8aa29acaa953d1b",
+      "dc_log_sha256": "56b0033590fc8eacb0557f3a769051ab2b92e954f94c7f2dee771dfc42091cc0",
+      "timing_report_sha256": "14699ca0e532e83933aee375ab2ae4c5b687b2fdc936149ad6c08b9e4de85b83"
+    },
+    "context_incremental_compile": {
+      "status": "BLOCKED_RUNTIME",
+      "elapsed_seconds": 1831,
+      "runtime_limit_seconds": 1800,
+      "exit_code": 124,
+      "initial_leaf_cells": 2999765,
+      "initial_sequential_cells": 218799,
+      "last_phase": "Delay Optimization",
+      "dc_log_sha256": "d3483daa1be94b3291291633d23ed9046b7a42afa77fdb55c986c507bd328225",
+      "retry_same_command": false
+    },
+    "next": "map scheduler and one context-aware lane4, then structurally compose H3"
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",

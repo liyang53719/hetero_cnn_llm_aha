@@ -68,6 +68,21 @@ It adds no state or cycle. Lane-enable outputs use a frozen 0.30 ns output
 budget so the accepted lane's measured enable-to-register path retains setup
 margin. Reset fanout and flag reduction remain in the cycle-neutral glue.
 
+Revision 5 evidence: control512 closed the structural array at WNS
+`+0.013487 ns`, zero unmapped/unresolved references, and 512 instances of one
+lane design. The full context compile then reached its 30-minute bound because
+the top expanded 2,999,765 leaf cells and 218,799 sequential cells. Context
+state and its wide issue mux must receive the same physical hierarchy treatment
+as the FMA pipeline.
+
+Revision 5 distributes the existing four 32-bit accumulator contexts inside
+each physical lane. One `bf16_context_fma_pipeline_lane4` contains the four
+registers, local issue/bypass mux, and one accepted FMA lane. A mapped global
+context scheduler preserves FIFO/busy/event semantics, and a mapped fixed
+control-broadcast block fans context IDs and enables to 512 lanes. The full
+context top is then structural link/report/write only. Total context state
+remains exactly 4 x 512 x 32 bits (8 KiB); no state, context, or cycle is added.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by
@@ -187,16 +202,19 @@ followed by the complete E1 regression.
 
 ## 8. Phase H3: four-context full top
 
-1. Read the accepted mapped array DDC.
-2. Analyze only `rtl/matrix/bf16_outer_product_context_array.sv`.
-3. Elaborate the default production parameters and prove that instance
-   `array` resolves to the specialized mapped 16x32 design.
-4. Disable boundary optimization and set the array instance/design
-   `dont_touch`.
-5. Compile only context banks, FIFO, completion/busy control, accumulator
-   selection, and top-level I/O logic using the same incremental-mapping
-   command; never globally optimize the accepted array DDC.
-6. Cap wall time at 30 minutes.
+1. Map `bf16_context_scheduler4`, preserving descriptor-facing ready/valid,
+   FIFO, busy/valid, completion context/last, counters, and protocol error.
+2. Map one `bf16_context_fma_pipeline_lane4` after reading the accepted
+   production-lane DDC. It contains exactly four FP32 accumulator registers and
+   the local clear/bypass/bank-selection mux.
+3. Map one fixed 512-way context-control broadcast and reuse the accepted
+   control512 and flag/reset glue DDCs.
+4. Refactor `bf16_outer_product_context_array` into a structural composition of
+   scheduler, control512, broadcast, glue, and 512 context-aware lanes.
+5. Re-run complete E1; compare every completion payload as well as final
+   per-context counts, avoiding dependence on an internal top-level bank name.
+6. Link/report/write the default production context top without any compile
+   command. Cap each component at 10 minutes and structural top at 10 minutes.
 
 H3 is the formal L5.2 E4 evidence and must report:
 
@@ -204,7 +222,8 @@ H3 is the formal L5.2 E4 evidence and must report:
 - cell area/count including the reused mapped array hierarchy;
 - zero unmapped and zero unresolved references;
 - zero inferred latches and combinational loops;
-- expected one array macro-hierarchy instance and 512 lane-stage instances;
+- expected one scheduler/control/broadcast/glue design and 512 instances of one
+  context-aware lane design;
 - no stale status file reuse.
 
 If a failing path is confined to wrapper counters or non-feedback control,

@@ -1,8 +1,8 @@
 # Local-agent handoff v6
 
-State: L5.2 hierarchical DC revision 4 frozen, ready for control512 timing
-block. Structural array links with 0 unmapped/unresolved but fails timing at
-WNS `-0.267833 ns`; no prior array compile command may be rerun.
+State: L5.2 hierarchical DC revision 5 frozen, ready for context-aware lanes.
+Structural 16x32 array passes at WNS `+0.013487 ns`; full context incremental
+compile timed out and must not be rerun.
 
 ## Closed locally
 
@@ -42,7 +42,7 @@ Memory cycle E0 are retained from v6. They are not RTL E1/E3/E4 evidence.
 ## Next execution
 
 Follow `reports/L5_2_HIERARCHICAL_DC_EXECUTION_PLAN.md`: map each generated
-stage once, map one production lane, combine the ready chain and write-enable
-broadcast into control512, and structurally compose the fixed 16x32 array from
-only mapped references. H2 performs no top compile. Do not reduce array
-size/frequency or add false/multicycle paths.
+stage once, map one production lane and control512, then distribute the existing
+four accumulator contexts inside one context-aware lane reused 512 times.
+Full context H3 performs no top compile. Do not reduce array size/frequency or
+add false/multicycle paths.

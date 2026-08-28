@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV8A_E0_PASS_SOURCE_READY_WAIT_LOCAL_E1_E4",
+  "current_state": "L5_2_REV8A_H3_FAIL_WAIT_REV8B_REVIEW",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "new_local_agent_commit_detected": true,
@@ -19,7 +19,7 @@
       "evidence": "reports/execution/l5_block128_local_e1_e4_result.json"
     },
     "L5.2": {
-      "status": "REV7_LANE_EQUIV_E1_PASS_H3_FAIL_TIMING",
+      "status": "REV8A_COMPONENTS_E1_EQUIV_PASS_H3_FAIL_TIMING_DRC",
       "physical_array": "16x32_512_lane",
       "contexts": 4,
       "dependent_steps": 1000000,
@@ -32,7 +32,13 @@
       "revision7_h3_tns_ns": -49161.85,
       "revision7_h3_unmapped": 0,
       "revision7_h3_unresolved": 0,
-      "evidence": "reports/execution/l5_matrix_context_local_e1_e4_result.json"
+      "revision8a_lane_wns_ns": 0.000101686,
+      "revision8a_cluster16_wns_ns": 0.0000194907,
+      "revision8a_front_control_wns_ns": 0.000527799,
+      "revision8a_h3_wns_ns": -10537.7,
+      "revision8a_h3_max_transition_violations": 53455,
+      "revision8a_h3_max_cap_violations": 10,
+      "evidence": "reports/execution/l5_revision8a_local_result.json"
     }
   },
   "sandbox_closed": {
@@ -48,18 +54,12 @@
     "sequence_memory_cycle_E0": "PASS"
   },
   "source_ready_waiting_local": [
-    "Revision8A_rev7_vs_rev8a_compare",
-    "Revision8A_512_lane_E1",
-    "Revision8A_adversarial_context_E1",
-    "Revision8A_lane_E4_and_equivalence",
-    "Revision8A_cluster16_E4",
-    "Revision8A_front_control_E4",
-    "Revision8A_structural_H3_E4",
-    "BlockedAttention_real_stream_E1_E2"
+    "Revision8B_architecture_review",
+    "BlockedAttention_real_stream_E1_E2_after_L5_2_unblocks"
   ],
   "waiting_local": [
     "L4",
-    "L5.2_revision8A",
+    "L5.2_revision8B_review",
     "L5.3_to_L5.6",
     "L7_E1_E3",
     "L8_official_and_RTL",
@@ -67,11 +67,12 @@
     "L10"
   ],
   "forbidden_claims": [
-    "L5.2_PASS_before_revision8A_all_gates",
+    "L5.2_PASS_after_revision8A_H3_failure",
     "Revision8A_sandbox_model_as_RTL_E1",
     "Revision8A_source_contract_as_E4",
     "Revision7_H3_as_pass",
     "zero_delay_gate_compare_as_SDF_or_post_route_signoff",
-    "candidate_RTL_as_canonical_before_promotion"
+    "candidate_RTL_as_canonical_before_promotion",
+    "Revision8A_H3_rerun_after_frozen_stop_rule"
   ]
 }

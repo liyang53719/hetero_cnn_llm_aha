@@ -14,6 +14,7 @@ SOURCES=(
   "$ROOT/rtl/matrix/candidates/rev8/bf16_context_fma_pipeline_lane4_rev8_candidate.sv"
   "$ROOT/rtl/matrix/candidates/rev8/bf16_context_lane_cluster16_rev8_candidate.sv"
   "$ROOT/rtl/matrix/candidates/rev8/bf16_outer_product_array_control_rev8_candidate.sv"
+  "$ROOT/rtl/matrix/candidates/rev8/bf16_context_front_control_rev8_candidate.sv"
   "$ROOT/rtl/matrix/candidates/rev8/bf16_outer_product_context_array_rev8_candidate.sv"
   "$ROOT/rtl/matrix/candidates/rev8/bf16_outer_product_context_array_rev8_test_alias.sv"
   "$ROOT/tb/tb_bf16_outer_product_context_array.sv"

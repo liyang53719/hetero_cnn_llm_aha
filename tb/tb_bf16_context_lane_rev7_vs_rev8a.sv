@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_bf16_context_lane_rev7_vs_rev8a;
   localparam integer TARGET = 120_000;
-  logic clk = 0, rst_n = 0;
+  logic clk, rst_n;
   logic in_valid, in_ready, clear, last, out_valid, out_ready, out_last;
   logic [1:0] context_in, context_out;
   logic [15:0] a, b;
@@ -107,6 +107,7 @@ module tb_bf16_context_lane_rev7_vs_rev8a;
   endfunction
 
   initial begin
+    clk = 0; rst_n = 0;
     in_valid = 0; out_ready = 0; context_in = 0; clear = 0; last = 0;
     a = 0; b = 0; lfsr = 32'h8a31_c0de; pending = 0;
     issues = 0; completions = 0; cycles = 0;

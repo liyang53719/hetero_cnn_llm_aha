@@ -11,6 +11,7 @@ final=load('reports/final_validation.json')
 l51=load('reports/execution/l5_block128_local_e1_e4_result.json')
 l52=load('reports/execution/l5_matrix_context_local_e1_e4_result.json')
 rev8=load('reports/execution/l5_revision8a_sandbox_result.json')
+rev8_local=load('reports/execution/l5_revision8a_local_result.json')
 attention=load('reports/execution/l5_blocked_attention_cycle_e0_result.json')
 control_audit=load('reports/execution/control_plane_v6_audit.json')
 archspec=load('reports/execution/archspec_v6_collateral_result.json')
@@ -18,15 +19,16 @@ program=load('reports/execution/qwen38_full_shape_program_v6_result.json')
 sequence=load('reports/execution/sequence_memory_cycle_v6_result.json')
 
 assert control['schema_version']==6 and control['plan_version']=='2026-08-28-v6.3'
-assert control['current_state']=='L5_2_REV8A_E0_PASS_SOURCE_READY_WAIT_LOCAL_E1_E4'
+assert control['current_state']=='L5_2_REV8A_H3_FAIL_WAIT_REV8B_REVIEW'
 assert control['remote_audit']['observed_head']=='4dec4a8df6b246f01778925745b7ae21292f74a3'
 assert control['remote_audit']['decision']=='ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE'
 assert control['revision8A']['decision']=='APPROVE_CANDIDATE_E0_WITH_LOCAL_GATES'
 assert ledger['current_state']==control['current_state']
 assert ledger['accepted_local_evidence']['L5.2']['revision7_h3_wns_ns']<0
-assert next_action['state']=='APPROVED_WAIT_LOCAL_EXECUTION'
-assert next_action['decision']=='APPROVE_REVISION8A_CANDIDATE_WITH_GATES'
-assert final['status']=='PASS_SANDBOX_V6_3_REV8A_E0_SOURCE_READY_L5_2_E4_OPEN'
+assert next_action['state']=='WAIT_REMOTE_REVISION8B_REVIEW'
+assert next_action['decision']=='REVISION8A_H3_FAIL_TIMING_DRC'
+assert next_action['ordered_commands']==[]
+assert final['status']=='PASS_SANDBOX_V6_3_REV8A_H3_FAIL_WAIT_REV8B_REVIEW'
 
 assert l51['status']=='PASS' and l51['e4']['block128_wns_ns']>=0
 assert l52['e1']['lanes']==512 and l52['e1']['contexts']==4
@@ -40,17 +42,24 @@ assert l52['closure']['l5_2_pass'] is False
 
 assert rev8['status']=='PASS'
 assert rev8['decision']=='APPROVE_REVISION8A_CANDIDATE_FOR_LOCAL_E1_E4'
-assert rev8['primary_differential']['accepted_operations']==1_000_000
+assert rev8['primary_differential']['accepted_operations']==100_000
 assert rev8['primary_differential']['public_cycle_exact'] is True
 assert rev8['primary_differential']['final_state_equal'] is True
 assert rev8['multi_seed']['accepted_operations']==500_000
 assert rev8['rtl_static_contract']['status']=='PASS'
 assert rev8['local_flow_static_contract']['status']=='PASS'
+assert rev8_local['status']=='INCOMPLETE_OR_FAIL'
+assert all(rev8_local['checks'][key] for key in ('rev7_vs_rev8a','main_e1','adversarial_e1','lane','equivalence','cluster16','front'))
+assert rev8_local['checks']['top'] is False
+assert rev8_local['structural_h3']['wns_ns']<0
+assert rev8_local['structural_h3']['max_transition_violations']==53455
+assert rev8_local['structural_h3']['max_cap_violations']==10
 
 for path in (
  'config/l5_revision8a_policy.json',
  'reports/L5_2_REVISION8A_APPROVAL.md',
  'reports/L5_LOCAL_AGENT_AUDIT_AFTER_REV7.md',
+ 'reports/L5_2_REVISION8B_REVIEW_REQUEST.md',
  'src/heteronpu/revision8_early_commit.py',
  'scripts/run_l5_matrix_context_revision8a.sh',
  'scripts/run_l5_matrix_context_revision8a_compare.sh',
@@ -78,7 +87,7 @@ result={
  'status':'PASS_V6_3',
  'L5_1':'PASS_ACCEPTED_ZERO_MARGIN',
  'L5_2_revision7':'LANE_EQUIV_E1_PASS_H3_FAIL',
- 'L5_2_revision8A':'E0_PASS_SOURCE_READY_WAIT_LOCAL_E1_E4',
+ 'L5_2_revision8A':'COMPONENTS_E1_EQUIV_PASS_H3_FAIL_WAIT_REV8B_REVIEW',
  'blocked_attention_cycle_E0':'PASS',
  'retained_v6_gates':['control_plane_audit','Archspec_collateral','Qwen38_full_shape_program','SequenceMemory_cycle_E0'],
 }

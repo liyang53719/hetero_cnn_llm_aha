@@ -1,26 +1,13 @@
 {
   "schema_version": 6,
-  "state": "APPROVED_WAIT_LOCAL_EXECUTION",
+  "state": "WAIT_REMOTE_REVISION8B_REVIEW",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "decision": "APPROVE_REVISION8A_CANDIDATE_WITH_GATES",
-  "objective": "Evaluate the early context-bank commit candidate that removes the global completion-to-HardFloat-Pre data path while preserving four contexts, four-cycle feedback and public behavior.",
-  "ordered_commands": [
-    "git pull --ff-only origin main",
-    "./scripts/sandbox_validate.sh",
-    "python3 scripts/validate_l5_revision8a_contract.py --operations 100000",
-    "./scripts/run_l5_matrix_context_revision8a.sh compare",
-    "./scripts/run_l5_matrix_context_revision8a.sh e1",
-    "./scripts/run_l5_matrix_context_revision8a.sh adversarial",
-    "./scripts/run_l5_matrix_context_revision8a.sh lane",
-    "./scripts/run_l5_matrix_context_revision8a.sh equiv",
-    "./scripts/run_l5_matrix_context_revision8a.sh cluster",
-    "./scripts/run_l5_matrix_context_revision8a.sh front",
-    "./scripts/run_l5_matrix_context_revision8a.sh top",
-    "./scripts/run_l5_matrix_context_revision8a.sh e1",
-    "./scripts/run_l5_matrix_context_revision8a.sh adversarial",
-    "python3 scripts/summarize_l5_revision8a.py"
-  ],
+  "decision": "REVISION8A_H3_FAIL_TIMING_DRC",
+  "objective": "Obtain architecture review for a cycle-neutral source-mapped fanout distribution boundary before any Revision8B implementation.",
+  "ordered_commands": [],
+  "review_request": "reports/L5_2_REVISION8B_REVIEW_REQUEST.md",
+  "failure_evidence": "reports/execution/l5_revision8a_local_result.json",
   "hard_acceptance": {
     "rev7_vs_rev8a_cycle_compare": "PASS_120000",
     "candidate_main_E1": "PASS_1000000_plus_10000_backpressure",
@@ -61,5 +48,6 @@
     "promote_candidate_before_all_gates"
   ],
   "on_success": "L5.3_BLOCKED_FLASHATTENTION_E1_E2",
-  "on_failure": "RETURN_REVISION8A_EVIDENCE_AND_REQUEST_REVISION8B_ARCHITECTURE_DECISION"
+  "on_failure": "RETURN_REVISION8A_EVIDENCE_AND_REQUEST_REVISION8B_ARCHITECTURE_DECISION",
+  "stop_rule_applied": true
 }

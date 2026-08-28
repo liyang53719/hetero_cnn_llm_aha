@@ -1,7 +1,7 @@
 {
-  "L5_1": "PASS_ACCEPTED",
-  "L5_2_E1": "PASS_ACCEPTED",
-  "L5_2_E4": "FAIL_TIMING_WAIT_REV8_REVIEW",
+  "L5_1": "PASS_ACCEPTED_ZERO_MARGIN",
+  "L5_2_revision7": "LANE_EQUIV_E1_PASS_H3_FAIL",
+  "L5_2_revision8A": "COMPONENTS_E1_EQUIV_PASS_H3_FAIL_WAIT_REV8B_REVIEW",
   "blocked_attention_cycle_E0": "PASS",
   "retained_v6_gates": [
     "control_plane_audit",
@@ -9,7 +9,6 @@
     "Qwen38_full_shape_program",
     "SequenceMemory_cycle_E0"
   ],
-  "revision7": "EXECUTED_H3_FAIL_TIMING",
   "schema_version": 6,
-  "status": "PASS_V6_2"
+  "status": "PASS_V6_3"
 }

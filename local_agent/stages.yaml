@@ -11,7 +11,7 @@ stages:
     status: IN_PROGRESS
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495, evidence: reports/execution/l5_block128_local_e1_e4_result.json}
-      L5.2: {status: REV7_H3_FAIL_REV8A_E0_PASS_SOURCE_READY_WAIT_LOCAL_E1_E4, scope: Matrix_context_interleave, revision7: [lane_WNS_0P000141501, gate_compare_120032_PASS, real_512_lane_E1_PASS, H3_WNS_N0P926028], revision8A: [early_context_bank_commit, four_contexts, four_cycle_feedback, cluster16_x32, source_contract_PASS, differential_1M_PASS, multiseed_500K_PASS], policy: config/l5_revision8a_policy.json, approval: reports/L5_2_REVISION8A_APPROVAL.md}
+      L5.2: {status: REV8A_COMPONENTS_E1_EQUIV_PASS_H3_FAIL_WAIT_REV8B_REVIEW, scope: Matrix_context_interleave, revision7: [lane_WNS_0P000141501, gate_compare_120032_PASS, real_512_lane_E1_PASS, H3_WNS_N0P926028], revision8A: [early_context_bank_commit, lane_WNS_0P000101686, cluster16_WNS_0P0000194907, front_WNS_0P000527799, source_compare_PASS, real_E1_PASS, adversarial_E1_PASS, gate_compare_PASS, H3_WNS_N10537P7, H3_MAX_TRANS_53455, H3_MAX_CAP_10], policy: config/l5_revision8a_policy.json, review_request: reports/L5_2_REVISION8B_REVIEW_REQUEST.md}
       L5.3: {status: CYCLE_E0_PASS_WAIT_REAL_STREAM_E1_E2, scope: blocked_QK_softmax_PV, q384_serial_cycles: 656644, q1024_summary_merges: 43008, evidence: reports/execution/l5_blocked_attention_cycle_e0_result.json}
       L5.4: {status: SANDBOX_DSE_PENDING_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE}
       L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}

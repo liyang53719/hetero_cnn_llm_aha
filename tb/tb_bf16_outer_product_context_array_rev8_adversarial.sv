@@ -2,7 +2,7 @@
 module tb_bf16_outer_product_context_array_rev8_adversarial;
   localparam integer ROWS=16, COLS=32, LANES=ROWS*COLS;
   localparam integer TARGET=50_000;
-  logic clk=0, rst_n=0;
+  logic clk, rst_n;
   logic in_valid,in_ready,clear,last,out_valid,out_ready,out_last;
   logic [1:0] context_in,context_out;
   logic [ROWS*16-1:0] a;
@@ -42,15 +42,16 @@ module tb_bf16_outer_product_context_array_rev8_adversarial;
       if(value==0) uint_to_fp32=32'h0;
       else begin
         msb=0;
-        for(i=30;i>=0;i=i-1) if(value&(1<<i)) begin msb=i;i=-1;end
+        for(i=30;i>=0;i=i-1) if((value&(1<<i)) != 0) begin msb=i;i=-1;end
         if(msb<=23) shifted=value<<(23-msb); else shifted=value>>(msb-23);
-        exponent=127+msb;
+        exponent=8'(127+msb);
         uint_to_fp32={1'b0,exponent,shifted[22:0]};
       end
     end
   endfunction
 
   initial begin
+    clk=0;rst_n=0;
     a={ROWS{16'h3f80}}; b={COLS{16'h3f80}};
     in_valid=0;context_in=0;clear=0;last=0;out_ready=0;
     lfsr=32'h8a17c0de;issued=0;received=0;cycles=0;pending=0;wp=0;rp=0;

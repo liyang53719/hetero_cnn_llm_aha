@@ -38,6 +38,20 @@ for name,(rel,needle) in markers.items():
 def number(d:dict[str,str],key:str):
     try:return float(d[key])
     except (KeyError,ValueError):return None
+def qor_path(name:str)->Path:
+    for effort in ('high','normal'):
+        p=RES/name/effort/'qor.rpt'
+        if p.is_file(): return p
+    return RES/name/'qor.rpt'
+def qor_number(path:Path,label:str):
+    if not path.is_file(): return None
+    for line in path.read_text(errors='replace').splitlines():
+        if label in line:
+            try:return float(line.split(':',1)[1].strip())
+            except (IndexError,ValueError):return None
+    return None
+def area(name:str,d:dict[str,str]):
+    return number(d,'CELL_AREA') if number(d,'CELL_AREA') is not None else qor_number(qor_path(name),'Cell Area:')
 checks={
  'lane': bool(lane) and number(lane,'WORST_SLACK_NS') is not None and number(lane,'WORST_SLACK_NS')>=0 and lane.get('UNMAPPED_CELLS')=='0' and lane.get('UNRESOLVED_REFERENCES')=='0',
  'cluster16': bool(cluster) and number(cluster,'WORST_SLACK_NS') is not None and number(cluster,'WORST_SLACK_NS')>=0 and cluster.get('LANE_INSTANCES')=='16' and cluster.get('UNMAPPED_CELLS')=='0',
@@ -50,10 +64,10 @@ status='PASS' if all(checks.values()) else 'INCOMPLETE_OR_FAIL'
 result={
  'schema_version':1,'revision':'8A','status':status,'checks':checks,
  'candidate':'early_context_bank_commit_cluster16_front_control',
- 'lane':{'status_path':str(lane_path.relative_to(ROOT)) if lane_path.exists() else None,'wns_ns':number(lane,'WORST_SLACK_NS'),'cell_area':number(lane,'CELL_AREA'),'status_sha256':sha(lane_path)},
- 'cluster16':{'status_path':str(cluster_path.relative_to(ROOT)) if cluster_path.exists() else None,'wns_ns':number(cluster,'WORST_SLACK_NS'),'cell_area':number(cluster,'CELL_AREA'),'lane_instances':cluster.get('LANE_INSTANCES'),'status_sha256':sha(cluster_path)},
- 'front_control':{'status_path':str(front_path.relative_to(ROOT)) if front_path.exists() else None,'wns_ns':number(front,'WORST_SLACK_NS'),'cell_area':number(front,'CELL_AREA'),'status_sha256':sha(front_path)},
- 'structural_h3':{'wns_ns':number(top,'WORST_SLACK_NS'),'cell_area':number(top,'CELL_AREA'),'cluster_instances':top.get('CLUSTER16_INSTANCES'),'physical_lanes':top.get('PHYSICAL_LANES'),'status_sha256':sha(top_path)},
+ 'lane':{'status_path':str(lane_path.relative_to(ROOT)) if lane_path.exists() else None,'wns_ns':number(lane,'WORST_SLACK_NS'),'cell_area':area('lane',lane),'status_sha256':sha(lane_path)},
+ 'cluster16':{'status_path':str(cluster_path.relative_to(ROOT)) if cluster_path.exists() else None,'wns_ns':number(cluster,'WORST_SLACK_NS'),'cell_area':area('cluster16',cluster),'lane_instances':cluster.get('LANE_INSTANCES'),'status_sha256':sha(cluster_path)},
+ 'front_control':{'status_path':str(front_path.relative_to(ROOT)) if front_path.exists() else None,'wns_ns':number(front,'WORST_SLACK_NS'),'cell_area':area('front',front),'status_sha256':sha(front_path)},
+ 'structural_h3':{'wns_ns':number(top,'WORST_SLACK_NS'),'cell_area':area('top',top),'cluster_instances':top.get('CLUSTER16_INSTANCES'),'physical_lanes':top.get('PHYSICAL_LANES'),'max_transition_violations':qor_number(qor_path('top'),'Max Trans Violations:'),'max_cap_violations':qor_number(qor_path('top'),'Max Cap Violations:'),'status_sha256':sha(top_path)},
  'equivalence':gate,'e1':marker_results,
  'closure_rule':'L5.2 closes only if all checks are true; this remains component-level DC, not post-route signoff.',
 }

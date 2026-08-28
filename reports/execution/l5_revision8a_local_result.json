@@ -1,0 +1,81 @@
+{
+  "candidate": "early_context_bank_commit_cluster16_front_control",
+  "checks": {
+    "adversarial_e1": true,
+    "cluster16": true,
+    "equivalence": true,
+    "front": true,
+    "lane": true,
+    "main_e1": true,
+    "rev7_vs_rev8a": true,
+    "top": false
+  },
+  "closure_rule": "L5.2 closes only if all checks are true; this remains component-level DC, not post-route signoff.",
+  "cluster16": {
+    "cell_area": 42268.863177,
+    "lane_instances": "16",
+    "status_path": "work/results/l5_matrix_rev8a/cluster16/accepted_status.txt",
+    "status_sha256": "f53b4e909a4b79a6ac53adbc7f665712ef55c98c5b535da138ddc03316c1b3b9",
+    "wns_ns": 1.94907e-05
+  },
+  "e1": {
+    "adversarial_e1": {
+      "log_sha256": "36eddb0e9fd0d83ab738cbbc58c825178abc27d3653709bd72df0f22f2882607",
+      "status": "PASS"
+    },
+    "main_e1": {
+      "log_sha256": "06da09ba516763307bf82bf7c983d95ade71b58eda52298f03e354ed898c8147",
+      "status": "PASS"
+    },
+    "rev7_vs_rev8a": {
+      "log_sha256": "7692594d9d9d226c2fbd21281c37ead4fbd66ba2354a0f7b182c171b8b34d14d",
+      "status": "PASS"
+    }
+  },
+  "equivalence": {
+    "compared_cycles": 120032,
+    "comparison_mode": "functional_zero_delay_no_SDF",
+    "hashes": {
+      "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+      "lane_rtl_sha256": "c73d4d5e910d5dddef7389d5b9a9888182169c06ccdf60bb9a86963cdae717fd",
+      "mapped_netlist_sha256": "ef1d8d38e54d7ead7f4f4883ce598dfd93968977f89e4536b10ba3436027df33",
+      "std_cell_verilog_sha256": "527f1fe8c867e975926a89478187effdf662ab32d87e286ad6d98267dc1a4d8f",
+      "testbench_sha256": "1c702dc969f83081b24a04adc575e0011fcda1d775ef19a169d22b2ffae70368",
+      "trace_sha256": "88387f11a958d3ddea136d7999b98328b1aebf89ca2bd6e8df45c6f05ccc45e0"
+    },
+    "limitations": [
+      "not SDF timing simulation",
+      "not full H3 equivalence"
+    ],
+    "method": "post_synthesis_gate_compare",
+    "mismatches": 0,
+    "revision": "8A",
+    "schema_version": 1,
+    "status": "PASS",
+    "unknown_outputs": 0
+  },
+  "front_control": {
+    "cell_area": 381.107998,
+    "status_path": "work/results/l5_matrix_rev8a/front/accepted_status.txt",
+    "status_sha256": "33f943c70e5123eeedbb82afcee453de6170ef0efa84ca917a6e6c2906fdf4c2",
+    "wns_ns": 0.000527799
+  },
+  "lane": {
+    "cell_area": 2608.970004,
+    "status_path": "work/results/l5_matrix_rev8a/lane/accepted_status.txt",
+    "status_sha256": "03a3262527556124caed56aeef4aacd9861d229aee46d9288561942d770d6be1",
+    "wns_ns": 0.000101686
+  },
+  "revision": "8A",
+  "schema_version": 1,
+  "status": "INCOMPLETE_OR_FAIL",
+  "structural_h3": {
+    "cell_area": 1353676.51167,
+    "cluster_instances": "32",
+    "max_cap_violations": 10.0,
+    "max_transition_violations": 53455.0,
+    "physical_lanes": "512",
+    "status_sha256": "67b7dc52b940481bee1f4d262912ce69a60c60c53b899f3c5a3b2cf009e58b86",
+    "wns_ns": -10537.7
+  }
+}

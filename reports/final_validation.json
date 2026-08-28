@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "PASS_SANDBOX_V6_3_REV8A_E0_SOURCE_READY_L5_2_E4_OPEN",
+  "status": "PASS_SANDBOX_V6_3_REV8A_H3_FAIL_WAIT_REV8B_REVIEW",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "decision": "ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE"
@@ -10,7 +10,9 @@
     "l5_2_revision7_lane": "PASS_MARGINAL_WNS_0P000141501",
     "l5_2_revision7_equivalence": "PASS_GATE_COMPARE_120032",
     "l5_2_revision7_real_E1": "PASS",
-    "l5_2_revision7_H3": "FAIL_TIMING_WNS_N0P926028"
+    "l5_2_revision7_H3": "FAIL_TIMING_WNS_N0P926028",
+    "l5_2_revision8A_components": "PASS_E1_EQUIV_LANE_CLUSTER_FRONT",
+    "l5_2_revision8A_H3": "FAIL_TIMING_WNS_N10537P7_DRC_53455_TRANS_10_CAP"
   },
   "sandbox_execution": {
     "revision8A_primary_differential_operations": 1000000,
@@ -22,14 +24,8 @@
     "blocked_attention_cycle_E0": "PASS"
   },
   "remaining_local_gates": [
-    "Revision8A_rev7_vs_rev8a_cycle_compare",
-    "Revision8A_real_512_lane_E1",
-    "Revision8A_adversarial_E1",
-    "Revision8A_lane_E4_and_equivalence",
-    "Revision8A_cluster16_E4",
-    "Revision8A_front_control_E4",
-    "Revision8A_structural_H3_E4",
-    "BlockedAttention_real_stream_E1_E2"
+    "Revision8B_architecture_review",
+    "BlockedAttention_real_stream_E1_E2_after_L5_2_unblocks"
   ],
   "non_claims": [
     "no_L5_2_pass",

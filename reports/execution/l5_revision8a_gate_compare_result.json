@@ -1,0 +1,22 @@
+{
+  "compared_cycles": 120032,
+  "comparison_mode": "functional_zero_delay_no_SDF",
+  "hashes": {
+    "generated_rtl_sha256": "d36c11122854248d01bcf4c5c8bc6f07d9517127b34f6c1b7c6d65e89c193268",
+    "lane_rtl_sha256": "c73d4d5e910d5dddef7389d5b9a9888182169c06ccdf60bb9a86963cdae717fd",
+    "mapped_netlist_sha256": "ef1d8d38e54d7ead7f4f4883ce598dfd93968977f89e4536b10ba3436027df33",
+    "std_cell_verilog_sha256": "527f1fe8c867e975926a89478187effdf662ab32d87e286ad6d98267dc1a4d8f",
+    "testbench_sha256": "1c702dc969f83081b24a04adc575e0011fcda1d775ef19a169d22b2ffae70368",
+    "trace_sha256": "88387f11a958d3ddea136d7999b98328b1aebf89ca2bd6e8df45c6f05ccc45e0"
+  },
+  "limitations": [
+    "not SDF timing simulation",
+    "not full H3 equivalence"
+  ],
+  "method": "post_synthesis_gate_compare",
+  "mismatches": 0,
+  "revision": "8A",
+  "schema_version": 1,
+  "status": "PASS",
+  "unknown_outputs": 0
+}

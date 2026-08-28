@@ -9,6 +9,7 @@ mkdir -p "$OUT"
 SOURCES=(
   "$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv"
   "$ROOT/rtl/matrix/bf16_context_scheduler4.sv"
+  "$ROOT/rtl/matrix/bf16_fma_pipeline_lane.sv"
   "$ROOT/rtl/matrix/bf16_context_fma_pipeline_lane4.sv"
   "$ROOT/rtl/matrix/candidates/rev8/bf16_context_tag_pipeline4_rev8_candidate.sv"
   "$ROOT/rtl/matrix/candidates/rev8/bf16_context_fma_pipeline_lane4_rev8_candidate.sv"

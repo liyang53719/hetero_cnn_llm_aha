@@ -1,95 +1,54 @@
 # Local-agent handoff v6.3
 
-State: Revision 7 lane/equivalence/real E1 PASS; structural H3 FAIL_TIMING.
-Revision 8A candidate is source-ready and approved for bounded local gates.
+State: L5.2 Revision 8A component/E1/equivalence gates PASS; structural H3
+FAIL_TIMING_DRC. Frozen stop rule applied. Wait for Revision 8B architecture
+review; do not rerun H3 or promote candidate RTL.
 
-## Accepted evidence
+## Revision 8A passed evidence
 
-- L5.1 Block128 E1/E4 accepted; WNS `+0.0000136495 ns`, component-level only.
-- L5.2 real 16x32/512-lane E1 accepted: 1,000,000 dependent issues at II=1 and 10,000 random-backpressure operations.
-- Revision-7 source-remapped lane WNS `+0.000141501 ns`, zero unmapped/unresolved.
-- Revision-7 zero-delay mapped gate comparison: 120,032 samples, zero mismatch/unknown.
+- Contract: primary 100,000 and multi-seed 500,000 operations PASS.
+- Revision7-vs-Revision8A RTL compare: 120,000 cycles PASS.
+- Real 16x32/512-lane E1: 1,000,000 dependent steps at II=1 plus 10,000
+  random-backpressure steps PASS.
+- Adversarial E1: 50,000 operations PASS.
+- Lane DC: WNS `+0.000101686 ns`, area `2608.970004`, zero
+  unmapped/unresolved.
+- Mapped lane compare: 120,032 cycles, zero mismatch/unknown.
+- Cluster16 DC: WNS `+0.0000194907 ns`, 16 lane instances, area
+  `42268.863177`.
+- Front-control DC: WNS `+0.000527799 ns`, area `381.107998`.
 
-## Revision-7 failure
+## Frozen blocker
 
-Structural H3 fails:
-
-```text
-WNS       -0.926028 ns
-TNS       -49161.85 ns
-unmapped  0
-unresolved 0
-lanes     512, one lane variant
-```
-
-The path is scheduler FIFO/completion state → same-cycle bypass → global
-broadcast → lane accumulator mux → HardFloat Pre. Do not retry Revision 7.
-
-## Revision 8A candidate
-
-Revision 8A writes each rounded result into its lane-local context bank when
-Post advances into Output. The four banks are therefore also the output-stage
-registers. Architectural completion, busy/valid and external visibility still
-occur only on output handshake. Same-context reissue reads the already-written
-local bank; no completion/broadcast signal enters the FMA data path.
-
-Implementation hierarchy:
+Structural H3 contains exactly one front, 32 cluster16 instances, 512 physical
+lanes and one glue instance, with zero unmapped/unresolved, but fails:
 
 ```text
-1 front-control DDC
-  scheduler + elastic control + context tags
-32 cluster16 DDC instances
-  16 lanes each = 512 lanes
-1 retained flag/reset glue DDC
+WNS                 -10537.7 ns
+max-transition      53455
+max-capacitance     10
+cell area           1353676.511670
 ```
 
-Candidate source is under `rtl/matrix/candidates/rev8/`; canonical production
-RTL is not replaced.
+The first path is scheduler/front control through top-level scalar fanout into
+32 retained clusters/512 lanes. Separate front and cluster mappings see small
+boundary loads; the retained H3 hierarchy has no mapped fanout distribution
+tree. This is an architecture-boundary failure, not permission to change wire
+loads, add exceptions, flatten 512 lanes, retime, lower frequency, or add a
+context/cycle.
 
-## Sandbox gates already passed
+## Next action
 
-- Revision7-vs-Revision8A cycle model: 1,000,000 operations, exact public trace.
-- 20 additional seeds / 500,000 operations: PASS.
-- 500,612 same-cycle reuses in primary run.
-- four contexts, four-cycle feedback, completion-to-Pre path absent by source check.
-- Tcl/static flow: no multicycle, no synchronous-data false path, no retime.
-- source-ready compare, E1, adversarial E1, lane/cluster/front/H3 and gate-compare scripts.
+Review [L5_2_REVISION8B_REVIEW_REQUEST.md](../L5_2_REVISION8B_REVIEW_REQUEST.md).
+The recommendation is one cycle-neutral source-level
+`front_to_cluster_broadcast32` block, included in mapped equivalence and H3
+timing/DRC. No implementation starts before review.
 
-## Execute locally
+Canonical evidence:
 
-```bash
-./scripts/sandbox_validate.sh
-python3 scripts/validate_l5_revision8a_contract.py --operations 100000
-./scripts/run_l5_matrix_context_revision8a.sh compare
-./scripts/run_l5_matrix_context_revision8a.sh e1
-./scripts/run_l5_matrix_context_revision8a.sh adversarial
-./scripts/run_l5_matrix_context_revision8a.sh lane
-./scripts/run_l5_matrix_context_revision8a.sh equiv
-./scripts/run_l5_matrix_context_revision8a.sh cluster
-./scripts/run_l5_matrix_context_revision8a.sh front
-./scripts/run_l5_matrix_context_revision8a.sh top
-./scripts/run_l5_matrix_context_revision8a.sh e1
-./scripts/run_l5_matrix_context_revision8a.sh adversarial
-python3 scripts/summarize_l5_revision8a.py
-```
+- `reports/execution/l5_revision8a_local_result.json`
+- `reports/execution/l5_revision8a_gate_compare_result.json`
+- `config/l5_revision8a_policy.json`
 
-A single `./scripts/run_l5_matrix_context_revision8a.sh all` performs the same
-ordered flow.
-
-## Stop rules
-
-Only one normal and one high-effort attempt are allowed for lane, cluster and
-front. Any negative component/H3 WNS, equivalence failure or E1 mismatch stops
-Revision 8A. Do not add a fifth context/cycle, timing exception, retiming,
-lower frequency, smaller array, or alternate cluster size without a new review.
-
-L5.2 closes only if every check in
-`reports/execution/l5_revision8a_local_result.json` is true. The result remains
-component-level DC; L10 post-route/variation signoff stays open.
-
-## Parallel work
-
-L5.3 Blocked Attention cycle E0 remains accepted: q384 656,644 serialized
-cycles, q1024 4,823,044 cycles and 43,008 summary merges, with no score or
-probability DDR materialization. Real stream E1/E2 may proceed after or in
-parallel with Revision 8A local execution.
+Candidate RTL under `rtl/matrix/candidates/rev8/` was not edited or promoted.
+The two user runtime setup scripts remain untracked and untouched.

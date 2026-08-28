@@ -81,7 +81,19 @@
       "dc_log_sha256": "a68712d56cc4ff067a7e19527890b519dac0bd95f6ab428b0e89085e98a85c09",
       "retry_same_command": false
     },
-    "next": "incremental-map only unmapped array glue"
+    "production_lane_array_incremental": {
+      "status": "BLOCKED_RUNTIME",
+      "elapsed_seconds": 631,
+      "runtime_limit_seconds": 600,
+      "exit_code": 124,
+      "lane_uniquified_512": false,
+      "initial_leaf_cells": 2929236,
+      "initial_sequential_cells": 153156,
+      "last_phase": "Incremental Implementation Selection",
+      "dc_log_sha256": "92b9fd89905424bcf5e0ad8c6ed66cfcc5f8d6f5c2b71a22ae1eaeb6c551ab1e",
+      "retry_same_command": false
+    },
+    "next": "map control/glue separately and compose without top compile"
   },
   "e4_full_top": {
     "status": "INTERRUPTED_NO_FINAL_TIMING",

@@ -1,9 +1,9 @@
 {
   "schema_version": 6,
-  "state": "READY_RUN_INCREMENTAL_ARRAY_MAP",
+  "state": "READY_IMPLEMENT_STRUCTURAL_ARRAY_COMPOSE",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "objective": "Run revision 2 H2 using DC incremental mapping so accepted lane internals are exempt from global logic optimization.",
+  "objective": "Implement revision 3: map array control and wide glue independently, then compose the fixed array from only accepted mapped DDC references without a top compile.",
   "current_evidence": {
     "l5_1": "PASS_E1_E4",
     "l5_2_e1": "PASS",
@@ -18,9 +18,9 @@
     "SequenceMemory_translation_cycle_model"
   ],
   "ordered_commands": [
-    "replace H2 compile_ultra with compile -incremental_mapping -map_effort medium -area_effort none",
-    "run static Tcl/scope validation",
-    "run the bounded 10-minute H2 array once"
+    "implement array_control and fixed glue512 hierarchy without public-port or cycle changes",
+    "rerun complete E1 and map control/glue DDCs",
+    "link/report/write the structural 16x32 array without compile"
   ],
   "audit_questions": [
     "confirm bottom-up compile of generated pre/mul/post/round references",

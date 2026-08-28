@@ -45,6 +45,15 @@ mapped portions from logic-level optimization. H2 revision 2 therefore uses
 incremental mapping for only the unmapped array glue; `compile_ultra` is
 forbidden for H2 and H3.
 
+Revision 3 evidence: incremental mapping still expanded 2,929,236 leaf cells
+and 153,156 sequential cells for implementation selection and reached the
+10-minute limit after 631 seconds. The top must contain no unmapped glue before
+hierarchical composition. Revision 3 therefore maps array control and wide
+glue as separate real DDCs, then performs link/report/write only at array top.
+This is not a black-box flow: lane, control, broadcast, reduction, and their
+leaf implementations are all mapped and retained for hierarchical timing and
+area accounting.
+
 ## 2. Fixed resource and timing contract
 
 - Every generate/compile/test/DC command is wrapped by
@@ -118,21 +127,32 @@ instance of each stage inside the lane.
 Because H1.5 changes handwritten RTL hierarchy, rerun the complete million-step
 E1 before any array E4 claim.
 
-## 6. Phase H2: fixed 16x32 array hierarchy
+## 6. Phase H1.6: map array control and wide glue
 
-1. Read the accepted mapped production-lane DDC.
+Move the existing global valid/ready pipeline and counters into
+`bf16_outer_product_array_control`. Move the four 512-way write-enable nets,
+512-way asynchronous reset distribution, and 512-lane flag OR reduction into
+one fixed `bf16_outer_product_array_glue512` module. These are implementation
+hierarchies only; they add no cycle and expose no public port.
+
+Map control and glue independently at the same 1.0 ns/I/O contract and write
+real DDCs. Each run is capped at 10 minutes and must pass WNS, mapping, link,
+latch, and loop checks. The complete million-step E1 is rerun after this RTL
+refactor.
+
+## 7. Phase H2: fixed 16x32 array hierarchy
+
+1. Read the accepted lane, control, and glue DDCs.
 2. Analyze only `rtl/matrix/bf16_outer_product_array.sv`.
 3. Elaborate with `ROWS=>16,COLS=>32`; require the specialized design name
    `bf16_outer_product_array_ROWS16_COLS32`.
-4. Disable boundary optimization and constant propagation across the mapped
-   lane boundary; set the mapped lane design `dont_touch`.
-5. Compile only global valid/ready control, counters, flag reduction, and
-   interconnect with `compile -incremental_mapping -map_effort medium
-   -area_effort none`. This preserves the already-mapped lane internals while
-   still performing design-rule fixing on the top glue.
-6. Cap wall time at 10 minutes. The superseded leaf-only 45-minute and
-   production-lane `compile_ultra` 20-minute attempts are evidence, not
-   authorized retry paths.
+4. Disable boundary optimization and set all three mapped designs
+   `dont_touch`.
+5. Prove the specialized array contains only mapped lane/control/glue
+   references and connectivity. Do not invoke `compile` or `compile_ultra`.
+6. Link, report full hierarchical timing/area/references, check mapping and
+   unresolved references, and write the array DDC. Cap wall time at 10 minutes.
+   All superseded array compile commands are evidence, not retry paths.
 
 H2 acceptance:
 
@@ -150,7 +170,7 @@ If the parameterized DDC name does not link exactly, stop with
 wrapper. A fixed 16x32 wrapper may be added only as a handwritten RTL change,
 followed by the complete E1 regression.
 
-## 7. Phase H3: four-context full top
+## 8. Phase H3: four-context full top
 
 1. Read the accepted mapped array DDC.
 2. Analyze only `rtl/matrix/bf16_outer_product_context_array.sv`.
@@ -178,7 +198,7 @@ path is the accumulator feedback loop and requires latency greater than four
 cycles, stop with `BLOCKED_DECISION`; do not add a fifth context or falsify
 four-context II=1.
 
-## 8. Phase H4: functional revalidation and closeout
+## 9. Phase H4: functional revalidation and closeout
 
 After any synthesis-script-only change, regenerate RTL and rerun the existing
 full L5.2 E1 anyway:

@@ -11,7 +11,7 @@ stages:
     status: IN_PROGRESS
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495, evidence: reports/execution/l5_block128_local_e1_e4_result.json}
-      L5.2: {status: E1_PASS_REV7_APPROVED_WAIT_LANE_E4_EQUIV_H3, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], revision6: [normal_WNS_N0P034333, high_WNS_N0P0371628], revision7_policy: config/l5_revision7_policy.json, approval: reports/L5_2_REVISION7_APPROVAL.md}
+      L5.2: {status: E1_PASS_REV7_LANE_PASS_MARGINAL_WAIT_GATE_COMPARE, scope: Matrix_context_interleave, e1: [real_16x32_512_lane, dependent_steps_1000000, contexts_4_II1, random_backpressure_10000, numeric_tag_protocol_pass], revision7_lane_wns_ns: 0.000141501, area_delta_percent: -32.64889950755055, revision7_policy: config/l5_revision7_policy.json, approval: reports/L5_2_REVISION7_APPROVAL.md}
       L5.3: {status: CYCLE_E0_PASS_WAIT_REAL_STREAM_E1_E2, scope: blocked_QK_softmax_PV, q384_serial_cycles: 656644, q1024_summary_merges: 43008, evidence: reports/execution/l5_blocked_attention_cycle_e0_result.json}
       L5.4: {status: SANDBOX_DSE_PENDING_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE}
       L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}

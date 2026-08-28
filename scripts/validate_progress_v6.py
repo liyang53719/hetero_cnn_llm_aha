@@ -6,13 +6,13 @@ ROOT=Path(__file__).resolve().parents[1]
 def load(path): return json.loads((ROOT/path).read_text(encoding='utf-8'))
 control=load('config/control_plane.json');ledger=load('reports/execution/MASTER_LEDGER.json');next_action=load('reports/execution/NEXT_ACTION.json');final=load('reports/final_validation.json');rev7=load('reports/execution/l5_revision7_sandbox_approval.json');attention=load('reports/execution/l5_blocked_attention_cycle_e0_result.json');control_audit=load('reports/execution/control_plane_v6_audit.json');archspec=load('reports/execution/archspec_v6_collateral_result.json');program=load('reports/execution/qwen38_full_shape_program_v6_result.json');sequence=load('reports/execution/sequence_memory_cycle_v6_result.json');l51=load('reports/execution/l5_block128_local_e1_e4_result.json');l52=load('reports/execution/l5_matrix_context_local_e1_e4_result.json')
 assert control['schema_version']==6
-assert control['current_state']=='L5_2_REV7_APPROVED_WAIT_LOCAL_LANE_E4_EQUIV_H3'
+assert control['current_state']=='L5_2_REV7_LANE_PASS_MARGINAL_WAIT_GATE_COMPARE'
 assert control['remote_audit']['observed_head']=='fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c'
 assert control['remote_audit']['new_local_agent_commit_detected'] is True
 assert control['revision7']['decision']=='APPROVE_WITH_GATES'
 assert ledger['accepted_local_evidence']['L5.1']['status']=='PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN'
-assert ledger['accepted_local_evidence']['L5.2']['status']=='E1_PASS_E4_OPEN_REV7_APPROVED'
-assert next_action['state']=='APPROVED_WAIT_LOCAL_EXECUTION' and next_action['decision']=='APPROVE_REVISION_7_WITH_GATES'
+assert ledger['accepted_local_evidence']['L5.2']['status']=='E1_PASS_REV7_LANE_PASS_MARGINAL_EQUIV_OPEN'
+assert next_action['state']=='REV7_LANE_PASS_WAIT_APPROVED_GATE_COMPARE' and next_action['decision']=='APPROVE_REVISION_7_WITH_GATES'
 assert final['status']=='PASS_SANDBOX_V6_2_REV7_APPROVED_L5_2_E4_OPEN'
 assert l51['status']=='PASS' and l51['e1']['fp32_pipeline_vectors']==1024 and l51['e1']['block128_vectors']==132
 assert l51['e4']['block128_wns_ns']>=0 and l51['e4']['unmapped_cells']==0 and l51['e4']['unresolved_references']==0
@@ -29,5 +29,8 @@ assert program['status']=='PASS' and program['prefill']['operations']==500 and p
 assert sequence['status']=='PASS' and sequence['stale_generation_rejected'] is True
 assert 'candidate_sandbox_not_canonical' in (ROOT/'configs/arch_v2_qwen38_candidate.yaml').read_text()
 for path in ('config/l5_revision7_policy.json','dc/synth_l5_bf16_context_lane_rev7.tcl','dc/formality_l5_context_lane_rev7.tcl','scripts/run_l5_matrix_context_revision7.sh','reports/L5_2_REVISION7_APPROVAL.md'): assert (ROOT/path).is_file(),path
+lane=load('reports/execution/l5_revision7_lane_local_result.json')
+assert lane['status']=='LANE_E4_PASS_MARGINAL_EQUIVALENCE_OPEN' and lane['wns_ns']>=0 and lane['area_delta_percent']<0
+assert (ROOT/'reports/L5_2_REVISION7_GATE_COMPARE_PLAN.md').is_file()
 result={'schema_version':6,'status':'PASS_V6_2','revision7':'APPROVE_WITH_GATES','L5_1':'PASS_ACCEPTED','L5_2_E1':'PASS_ACCEPTED','L5_2_E4':'OPEN','blocked_attention_cycle_E0':'PASS','retained_v6_gates':['control_plane_audit','Archspec_collateral','Qwen38_full_shape_program','SequenceMemory_cycle_E0']}
 (ROOT/'reports/progress_v6_validation.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n');print(json.dumps(result,indent=2,sort_keys=True))

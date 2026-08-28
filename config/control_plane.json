@@ -12,15 +12,15 @@
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV7_APPROVED_WAIT_LOCAL_LANE_E4_EQUIV_H3",
+  "current_state": "L5_2_REV7_LANE_PASS_MARGINAL_WAIT_GATE_COMPARE",
   "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
   "evidence_classes": {"E0":"functional_algorithmic_compiler_architecture_or_cycle_reference","E1":"real_kernel_rtl_simulation","E2":"sampled_numerical_engine_integration","E3":"integrated_queue_dma_sram_ddr_cycle_execution","E4":"post_synthesis_timing_area_power"},
   "remote_audit": {"audited_at_utc":"2026-08-28T08:00:00Z","observed_head":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","latest_local_agent_evidence_commit":"fdecb3bf6ba08b403a2b9c7c87f63f6725c6eb0c","new_local_agent_commit_detected":true,"branch_count":1,"decision":"ACCEPT_L5_1_AND_L5_2_E1_APPROVE_REV7_WITH_GATES"},
   "accepted_local_evidence": {
     "L5.1":{"status":"PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN","block128_wns_ns":0.0000136495,"unmapped_cells":0,"unresolved_references":0,"scope":"component_level_DC_not_post_route_signoff"},
-    "L5.2":{"status":"E1_PASS_ACCEPTED_E4_OPEN","lanes":512,"contexts":4,"dependent_steps":1000000,"random_backpressure_steps":10000,"structural_array_wns_ns":0.013487,"scheduler_wns_ns":0.00440788,"broadcast_wns_ns":0.196252,"revision6_normal_wns_ns":-0.034333,"revision6_high_wns_ns":-0.0371628}
+    "L5.2":{"status":"E1_PASS_ACCEPTED_REV7_LANE_PASS_MARGINAL_EQUIV_OPEN","lanes":512,"contexts":4,"dependent_steps":1000000,"random_backpressure_steps":10000,"structural_array_wns_ns":0.013487,"scheduler_wns_ns":0.00440788,"broadcast_wns_ns":0.196252,"revision7_lane_wns_ns":0.000141501,"revision7_lane_area":2674.490005,"revision7_area_delta_percent":-32.64889950755055}
   },
-  "revision7":{"decision":"APPROVE_WITH_GATES","policy":"config/l5_revision7_policy.json","approval":"reports/L5_2_REVISION7_APPROVAL.md","source_contract":"PASS","cycle_semantic_stress":"PASS_100000_OPERATIONS","remaining":["single_lane_E4","equivalence","real_512_lane_E1_rerun","structural_H3_E4"]},
+  "revision7":{"decision":"APPROVE_WITH_GATES","policy":"config/l5_revision7_policy.json","approval":"reports/L5_2_REVISION7_APPROVAL.md","source_contract":"PASS","cycle_semantic_stress":"PASS_100000_OPERATIONS","single_lane_E4":"PASS_MARGINAL","equivalence_tool":"FORMALITY_MISSING_USE_APPROVED_GATE_COMPARE","remaining":["equivalence","real_512_lane_E1_rerun","structural_H3_E4"]},
   "parallel_sandbox_progress":{"CONTROL_PLANE_V6_2_AUDIT":"PASS","ARCHSPEC_COLLATERAL_GENERATION":"PASS","L5_2_REV7_SOURCE_AND_TCL_CONTRACT":"PASS","L5_2_REV7_CONTEXT_RECURRENCE_E0":"PASS","L5_3_BLOCKED_ATTENTION_CYCLE_E0":"PASS","L7_SEQUENCE_MEMORY_CYCLE_E0":"PASS","L8_QWEN38_FULL_SHAPE_PROGRAM_E0":"PASS","L9_MOCK_BACKEND_PARTITION_E0":"PASS"},
   "claim_rules":["Revision 7 approval permits a source remap of one reusable context lane only","Revision 7 does not authorize RTL, cycle, context, frequency or generated-file changes","source-contract PASS is not DC E4 or mapped-netlist equivalence","L5.2 remains open until lane E4, equivalence, 512-lane E1 and structural H3 E4 pass","L5.1 has effectively zero component timing margin and is not post-route signoff","cycle-structured Blocked Attention is E0, not E1 or E3","candidate Archspec collateral does not promote it to canonical","vision remains outside scope"]
 }

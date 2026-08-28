@@ -1,6 +1,7 @@
 # Local-agent handoff v6.2
 
-State: `REVISION_7_APPROVED_WITH_GATES` at L5.2.
+State: Revision-7 lane E4 `PASS_MARGINAL`; equivalence open because Formality
+is not installed. The approved post-synthesis gate comparison is next.
 
 ## Accepted
 
@@ -31,6 +32,15 @@ python3 scripts/summarize_l5_revision7.py
 Use Formality when available. An approved post-synthesis gate comparison may be supplied through `REV7_EQUIVALENCE_EVIDENCE`; otherwise stop as `BLOCKED_EQUIVALENCE_TOOL`.
 
 L5.2 closes only when lane WNS, equivalence, the real E1 rerun, and structural H3 WNS all pass with zero unmapped/unresolved references. A lane WNS below `+0.02 ns` is marginal and may proceed to H3 but is not signoff.
+
+## Local Revision-7 lane result
+
+- Normal-effort WNS `+0.000141501 ns`; no high-effort retry ran.
+- 0 unmapped/unresolved; 5,029 leaf cells; 427 sequential cells.
+- Area 2,674.490005, which is 32.6489% below the Revision-6 high-effort lane.
+- Formality is absent. Follow
+  `reports/L5_2_REVISION7_GATE_COMPARE_PLAN.md`; only a real trace-identical
+  post-synthesis comparison may supply `REV7_EQUIVALENCE_EVIDENCE`.
 
 ## Parallel progress
 

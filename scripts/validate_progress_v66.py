@@ -16,6 +16,7 @@ assert ledger['accepted_local_evidence']['L5.2']['contexts']==5
 assert next_action['completed']['L5.2'].startswith('PASS')
 assert attn['status']=='PASS' and attn['analytic_q1024_summary_merges']==43008 and attn['maximum_error']['max_abs']<=2e-4
 assert stream['status']=='PASS' and stream['frozen_invariants']['q1024_summary_merges']==43008
+assert stream['frozen_invariants']['accepted_matrix_revision']=='Revision8B-B' and stream['frozen_invariants']['matrix_pipeline_stages']==5 and stream['cases']['384']['selected']['cycles']==479238
 assert silu['status']=='PASS' and silu['selected_source_candidate']['entries']==128
 assert seq['status']=='PASS' and seq['frozen_contract']['recommended_first_RTL_MSHR_entries']==8
 assert pol['status']=='PASS' and pol['model_layers']==48 and pol['segments']==48

@@ -12,7 +12,7 @@ stages:
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495, evidence: reports/execution/l5_block128_local_e1_e4_result.json}
       L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512, H3_WNS_ns: 0.00490451, DRC: 0, evidence: reports/execution/l5_revision8b_b_local_result.json, L10_risk: post_route_variation_open}
-      L5.3: {status: NUMERICAL_CYCLE_STREAM_E0_PASS_SOURCE_READY_WAIT_REAL_STREAM_E1_E2, q384_cycle_lower_bound: 479237, q1024_merges: 43008, score_fifo: 2, probability_fifo: 2, evidence: [reports/execution/l5_blocked_attention_cycle_e0_result.json,reports/execution/l5_blocked_attention_stream_e0_result.json,reports/execution/l5_blocked_attention_numeric_e0_result.json]}
+      L5.3: {status: NUMERICAL_CYCLE_STREAM_E0_PASS_SOURCE_READY_WAIT_REAL_STREAM_E1_E2, q384_stream_cycles: 479238, matrix_stages: 5, matrix_contexts: 5, q1024_merges: 43008, score_fifo: 2, probability_fifo: 2, evidence: [reports/execution/l5_blocked_attention_cycle_e0_result.json,reports/execution/l5_blocked_attention_stream_e0_result.json,reports/execution/l5_blocked_attention_numeric_e0_result.json]}
       L5.4: {status: NUMERICAL_THROUGHPUT_DSE_PASS_WAIT_1_2_LANE_E1_E4, selected_LUT_entries: 128, first_candidates: [1_lane_II1,2_lane_II1], evidence: reports/execution/l5_silu_dse_e0_result.json}
       L5.5: {status: WAIT_L5_3_L5_4_THEN_LOCAL_E3, scope: Matrix_SFU_iDMA_DDR_overlap}
       L5.6: {status: WAIT_L5_5_THEN_28_LAYER_E2_E3_E4, scope: q1024_300tps}

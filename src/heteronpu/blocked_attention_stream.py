@@ -4,7 +4,7 @@ from dataclasses import dataclass,asdict
 import math,random
 @dataclass(frozen=True)
 class Geometry:
- sequence:int;query_tile:int=16;kv_tile:int=32;head_dim:int=128;q_heads:int=12;kv_heads:int=2;block_tokens:int=128;matrix_macs_per_cycle:int=512
+ sequence:int;query_tile:int=16;kv_tile:int=32;head_dim:int=128;q_heads:int=12;kv_heads:int=2;block_tokens:int=128;matrix_macs_per_cycle:int=512;matrix_pipeline_stages:int=5
  @property
  def query_tiles(self):return math.ceil(self.sequence/self.query_tile)
  @property
@@ -28,7 +28,7 @@ def _merge_distribution(tasks,total):
  q,r=divmod(total,tasks);return [q+(i<r) for i in range(tasks)]
 def simulate_stream(g:Geometry,*,score_fifo_depth:int,probability_fifo_depth:int,seed:int=0xA771,matrix_stall_probability:float=0,sfu_stall_probability:float=0,max_cycles_factor:float=4):
  rng=random.Random(seed+g.sequence*17+score_fifo_depth*3+probability_fifo_depth);tasks=g.head_microtiles;merges=_merge_distribution(tasks,g.summary_merges)
- qki=qkc=pvc=0;score=[];prob=0;mk=None;mr=0;sr=0;mb=sb=cycles=0;maxs=maxp=0;fill=4;lower=max(g.matrix_issue_cycles,g.sfu_cycles)+fill;deadline=max(1000,int(lower*max_cycles_factor))
+ qki=qkc=pvc=0;score=[];prob=0;mk=None;mr=0;sr=0;mb=sb=cycles=0;maxs=maxp=0;fill=g.matrix_pipeline_stages;lower=max(g.matrix_issue_cycles,g.sfu_cycles)+fill;deadline=max(1000,int(lower*max_cycles_factor))
  while pvc<tasks and cycles<deadline:
   cycles+=1
   if mk is not None:
@@ -58,7 +58,7 @@ def depth_sweep(sequence:int):
   for pd in (1,2,4):cases.append(asdict(simulate_stream(g,score_fifo_depth=sd,probability_fifo_depth=pd)))
  passing=[x for x in cases if x['status']=='PASS' and x['overhead_fraction']<=.01];sel=min(passing,key=lambda x:(x['score_fifo_depth']+x['probability_fifo_depth'],x['cycles']))
  stalled=asdict(simulate_stream(g,score_fifo_depth=sel['score_fifo_depth'],probability_fifo_depth=sel['probability_fifo_depth'],seed=99,matrix_stall_probability=.01,sfu_stall_probability=.03,max_cycles_factor=6))
- return {'sequence':sequence,'geometry':{'query_tiles':g.query_tiles,'query_key_pairs':g.query_key_pairs,'head_microtiles':g.head_microtiles,'summary_merges':g.summary_merges,'matrix_service_cycles_per_microtile':g.matrix_service,'score_service_cycles_per_microtile':g.score_service,'matrix_issue_cycles':g.matrix_issue_cycles,'sfu_cycles':g.sfu_cycles},'selected':sel,'stalled_sensitivity':stalled}
+ return {'sequence':sequence,'geometry':{'query_tiles':g.query_tiles,'query_key_pairs':g.query_key_pairs,'head_microtiles':g.head_microtiles,'summary_merges':g.summary_merges,'matrix_service_cycles_per_microtile':g.matrix_service,'score_service_cycles_per_microtile':g.score_service,'matrix_issue_cycles':g.matrix_issue_cycles,'sfu_cycles':g.sfu_cycles,'matrix_pipeline_stages':g.matrix_pipeline_stages},'selected':sel,'stalled_sensitivity':stalled}
 def blocked_attention_stream_report():
  r={str(s):depth_sweep(s) for s in (128,384,1024)}
- return {'schema_version':1,'status':'PASS','evidence_class':'cycle_structured_stream_E0_not_RTL_E1_or_iDMA_E3','cases':r,'frozen_invariants':{'shared_matrix_for_QK_and_PV':True,'score_DDR_materialization_bytes':0,'probability_DDR_materialization_bytes':0,'GQA_KV_reuse':6,'q1024_summary_merges':43008},'local_gates':['real_stream_RTL_E1','q128_q384_q1024_numerical_E2','random_backpressure_E1','measured_service_curve','iDMA_E3']}
+ return {'schema_version':1,'status':'PASS','evidence_class':'cycle_structured_stream_E0_not_RTL_E1_or_iDMA_E3','cases':r,'frozen_invariants':{'shared_matrix_for_QK_and_PV':True,'score_DDR_materialization_bytes':0,'probability_DDR_materialization_bytes':0,'GQA_KV_reuse':6,'q1024_summary_merges':43008,'accepted_matrix_revision':'Revision8B-B','matrix_pipeline_stages':5,'matrix_contexts':5},'local_gates':['real_stream_RTL_E1','q128_q384_q1024_numerical_E2','random_backpressure_E1','measured_service_curve','iDMA_E3']}

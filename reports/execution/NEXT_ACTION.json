@@ -1,19 +1,21 @@
 {
   "schema_version": 6,
-  "state": "REVISION8B_B_FUNCTIONAL_E1_PASS_WAIT_COMPONENT_DC",
+  "state": "L5_2_PASS_L5_3_L5_4_PARALLEL_ACTIVE",
   "stage": "L5",
-  "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "decision": "CONTINUE_REVISION8B_B_PHYSICAL_GATES",
+  "subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
+  "decision": "REVISION8B_B_PROMOTABLE_AFTER_PASS_EVIDENCE",
   "completed": {
-    "source_contract": "PASS",
+    "L5.2": "PASS_REV8B_B_E1_E4_COMPONENT_H3",
+    "h3_wns_ns": 0.00490451,
+    "h3_drc_unmapped_unresolved": "0_0_0_0",
     "dependent_steps": 1000000,
-    "random_backpressure_steps": 10000,
+    "random_steps": 10000,
     "adversarial_steps": 50000,
-    "revision8B_A_compare_cycles": 120000,
-    "latency_shift_cycles": 1
+    "cross_revision_cycles": 120000,
+    "mapped_lane_cycles": 120032
   },
-  "unique_next_action": "Map the Revision8B-B five-stage single lane at 1.0 ns, then run RTL-vs-mapped equivalence.",
-  "ordered_gates": ["lane DC", "mapped lane equivalence", "cluster16 DC", "front5 DC", "broadcast15 DC", "structural H3", "post-map E1"],
-  "resources": {"cpu": "8-23", "memory_high": "24G", "memory_max": "30G", "timeout_seconds": 600},
-  "forbidden": ["return_to_4stage", "modify_generated_HardFloat", "lower_frequency", "timing_exception"]
+  "unique_next_action": "Run L5.3 blocked-Attention real-stream E1/E2 against the frozen Revision8B-B Matrix transaction boundary.",
+  "parallel_action": "L5.4 fused SiLU E1/E4 remains independently authorized.",
+  "join_gate": "L5.5 waits for L5.2, L5.3 and L5.4 PASS",
+  "forbidden": ["claim_L5_complete", "claim_post_route_signoff", "bypass_L5.5_join"]
 }

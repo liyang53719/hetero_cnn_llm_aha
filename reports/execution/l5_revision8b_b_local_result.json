@@ -1,6 +1,7 @@
 {
   "architecture": {
     "clock_period_ns": 1.0,
+    "completion_fifo_depth": 5,
     "contexts": 5,
     "fma_stages": 5,
     "internal_context_tag_bits": 3,
@@ -8,24 +9,99 @@
   },
   "checks": {
     "adversarial_e1": true,
-    "broadcast_dc": false,
-    "cluster_dc": false,
-    "front_dc": false,
-    "h3": false,
-    "lane_dc": false,
+    "broadcast_dc": true,
+    "cluster_dc": true,
+    "flags_dc": true,
+    "front_dc": true,
+    "h3": true,
+    "lane_dc": true,
     "main_e1": true,
-    "mapped_equivalence": false,
-    "postmap_e1": false,
+    "mapped_equivalence": true,
+    "postmap_e1": true,
     "rev8b_a_compare": true,
     "source_contract": true
   },
+  "components": {
+    "broadcast": {
+      "area": 151.423997,
+      "effort": "high",
+      "max_cap": 0,
+      "max_transition": 0,
+      "sha256": "9b0cac115b0797f267a64aa97f23dbd332d4f4ccf9dbc48a50d3dc4e8bb11993",
+      "status_path": "work/results/l5_matrix_rev8b_b/broadcast/accepted_status.txt",
+      "unmapped": 0,
+      "unresolved": 0,
+      "wns_ns": 0.379584
+    },
+    "cluster": {
+      "area": 51693.27806,
+      "effort": "high",
+      "max_cap": 0,
+      "max_transition": 0,
+      "sha256": "120bcbccc7a64dc4c458d0465bae6fbd1f664b01a0c7de7e8b03399e11fbfc53",
+      "status_path": "work/results/l5_matrix_rev8b_b/cluster/accepted_status.txt",
+      "unmapped": 0,
+      "unresolved": 0,
+      "wns_ns": 1.01328e-06
+    },
+    "flags": {
+      "area": 33.215,
+      "effort": "normal",
+      "max_cap": 0,
+      "max_transition": 0,
+      "sha256": "0db4add9045caff6a60ac036d6f1bd7c394e8a5e749cf07d37f0db11235b8e30",
+      "status_path": "work/results/l5_matrix_rev8b_b/flags/accepted_status.txt",
+      "unmapped": 0,
+      "unresolved": 0,
+      "wns_ns": 0.34046
+    },
+    "front": {
+      "area": 437.618998,
+      "effort": "high",
+      "max_cap": 0,
+      "max_transition": 0,
+      "sha256": "e7266723bb9dbb87ea8f032d3c50b19544e068e6eaafef6dc56a5fa6874c5f73",
+      "status_path": "work/results/l5_matrix_rev8b_b/front/accepted_status.txt",
+      "unmapped": 0,
+      "unresolved": 0,
+      "wns_ns": 0.000887126
+    },
+    "lane": {
+      "area": 3243.421998,
+      "effort": "normal",
+      "max_cap": 0,
+      "max_transition": 0,
+      "sha256": "b941bfb7a3a89832d83b95c2cae26f4e0f486c112aca4e6d34f0cca4c7816065",
+      "status_path": "work/results/l5_matrix_rev8b_b/lane/accepted_status.txt",
+      "unmapped": 0,
+      "unresolved": 0,
+      "wns_ns": 0.00020206
+    }
+  },
   "evidence_hashes": {
-    "adversarial_e1": "caac00cf7df01fbb8494c426f9e3fc2f15e8679e4c6640976c11fa48ec2ed721",
-    "compare": "409cc022e3b0fb7017f7bdfe1899d86779ba8b0ff7f26ce9eaee7fb9f7a7bb4a",
-    "main_e1": "121c6d1616dfaabb1777dc5fc132362a2139fc0b2b2aae84adad29ee466f912e",
-    "source": "aa928d7ef0628b94a4f05a0b69fc87b86300302880e5de7405ae852c947c0133"
+    "adversarial_e1": "c2e880b8fb285a14a8371cf2d7d5f0b0d3393fc01ac25e54fbb346f37df6fa0e",
+    "compare": "be843999cc92bce5f108308545ee4b3bc3a45b36d9980fb5105ea0fed60270c4",
+    "h3": "afcaed4f50f9092a7bc2a5d82df5651f9789a04f2eae36afed4bc8c865cc9818",
+    "lane_gate_compare": "d728424b2854677cd87462e4059e8b7ab54983900c3ad3e0bdd2c84f50c8ba01",
+    "main_e1": "6f2432711dfb7dd5a9d4ca6e9dbd9dfb24c4e08c9faa2e2c8ec0f1cdbe21b05e",
+    "postmap_adversarial": "30e03e237229fae459f6873727ac6cc8c2aa6125146b938bccb402459fd369bd",
+    "postmap_e1": "735fac0d69c77b7f749598aa2046bfe52a8185cbb69ba6359626286063a5ee83",
+    "source": "49065dd23e0a93853aaec55f40b795d20c37c163ad2baa000a19b2b5d61e521c"
+  },
+  "h3": {
+    "cell_area": 1661847.825806,
+    "clusters": 32,
+    "lanes": 512,
+    "max_cap": 0,
+    "max_transition": 0,
+    "revision": "8B-B",
+    "schema_version": 1,
+    "status": "PASS",
+    "unmapped": 0,
+    "unresolved": 0,
+    "wns_ns": 0.00490451
   },
   "revision": "8B-B",
   "schema_version": 1,
-  "status": "FUNCTIONAL_E1_PASS_WAIT_E4"
+  "status": "PASS"
 }

@@ -7,10 +7,33 @@ module bf16_context_lane_cluster16_rev8b_b_candidate (
   input logic [16*16-1:0] lane_a_i,lane_b_i,
   input logic [2:0] issue_context_i,
   input logic issue_clear_i,
-  input logic [2:0] early_commit_context_i,output_context_i,
+  input logic [2:0] early_commit_context_i,
+  input logic output_pop_i,
   output logic [16*32-1:0] lane_out_o,
-  output logic [16*5-1:0] lane_flags_o
+  output logic [4:0] cluster_flags_o
 );
+  logic [16*5-1:0] lane_round_flags;
+  logic [4:0] reduced_round_flags;
+  logic [4:0] cluster_flags_fifo [0:4];
+  logic [2:0] flags_write_pointer_q,flags_read_pointer_q;
+  always_comb begin
+    reduced_round_flags='0;
+    for(integer lane_index=0;lane_index<16;lane_index++)
+      reduced_round_flags|=lane_round_flags[lane_index*5+:5];
+  end
+  assign cluster_flags_o=cluster_flags_fifo[flags_read_pointer_q];
+  always_ff @(posedge clk_i or negedge lane_rst_ni_i[0])begin
+    if(!lane_rst_ni_i[0])begin
+      flags_write_pointer_q<='0;flags_read_pointer_q<='0;
+      for(integer context_index=0;context_index<5;context_index++)cluster_flags_fifo[context_index]<='0;
+    end else begin
+      if(output_write_i)begin
+        cluster_flags_fifo[flags_write_pointer_q]<=reduced_round_flags;
+        flags_write_pointer_q<=(flags_write_pointer_q==4)?0:flags_write_pointer_q+1'b1;
+      end
+      if(output_pop_i)flags_read_pointer_q<=(flags_read_pointer_q==4)?0:flags_read_pointer_q+1'b1;
+    end
+  end
   for(genvar lane=0;lane<16;lane++)begin:g_lane
     logic [4:0] bank_valid_unused;
     bf16_context_fma_pipeline_lane5_rev8b_b_candidate u_lane(
@@ -19,8 +42,8 @@ module bf16_context_lane_cluster16_rev8b_b_candidate (
       .post_write_i(post_write_i),.output_write_i(output_write_i),
       .a_i(lane_a_i[lane*16+:16]),.b_i(lane_b_i[lane*16+:16]),
       .issue_context_i(issue_context_i),.issue_clear_i(issue_clear_i),
-      .early_commit_context_i(early_commit_context_i),.output_context_i(output_context_i),
-      .out_o(lane_out_o[lane*32+:32]),.flags_o(lane_flags_o[lane*5+:5]),
+      .early_commit_context_i(early_commit_context_i),.output_pop_i(output_pop_i),
+      .out_o(lane_out_o[lane*32+:32]),.flags_o(lane_round_flags[lane*5+:5]),
       .bank_valid_o(bank_valid_unused));
   end
 endmodule

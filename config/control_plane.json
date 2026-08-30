@@ -11,8 +11,8 @@
   "candidate_archspecs": ["configs/arch_v2_qwen38_candidate.yaml"],
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
-  "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV8B_B_FUNCTIONAL_E1_PASS_WAIT_COMPONENT_DC",
+  "current_subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
+  "current_state": "L5_2_PASS_REV8B_B_L5_3_L5_4_PARALLEL_ACTIVE",
   "stage_namespace": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"],
   "evidence_classes": {
     "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
@@ -90,7 +90,11 @@
     "revision8B_A_h3_wns_ns": -1.3073,
     "revision8B_A_h3_max_transition": 0,
     "revision8B_A_h3_max_cap": 0,
-    "next_gate": "revision8B_B_lane_component_DC_and_mapped_equivalence"
+    "revision8B_B_result": "reports/execution/l5_revision8b_b_local_result.json",
+    "revision8B_B_status": "PASS_E1_E4_COMPONENT_H3",
+    "revision8B_B_h3_wns_ns": 0.00490451,
+    "revision8B_B_h3_area": 1661847.825806,
+    "next_gate": "L5.3_real_stream_E1_E2_in_parallel_with_L5.4"
   },
   "parallel_sandbox_progress": {
     "CONTROL_PLANE_V6_3_AUDIT": "PASS",

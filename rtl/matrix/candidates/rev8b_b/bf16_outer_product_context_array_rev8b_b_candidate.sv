@@ -2,7 +2,7 @@
 `timescale 1ns/1ps
 module bf16_outer_product_context_array_rev8b_b_candidate #(
   parameter integer ROWS=16,COLS=32,CONTEXTS=5,FIFO_DEPTH=8,
-  localparam integer LANES=ROWS*COLS,CONTEXT_BITS=3,CONTROL_WIDTH=15
+  localparam integer LANES=ROWS*COLS,CONTEXT_BITS=3,CONTROL_WIDTH=13
 )(
   input logic clk_i,rst_ni,in_valid_i,
   output logic in_ready_o,
@@ -20,14 +20,15 @@ module bf16_outer_product_context_array_rev8b_b_candidate #(
   output logic[31:0]accepted_steps_o,completed_steps_o,
   output logic protocol_error_o
 );
-  logic input_write,pre_write,mul_write,post_write,output_write,issue_clear;
+  logic input_write,pre_write,mul_write,post_write,output_write,issue_clear,completion_pop;
   logic[2:0]issue_context,early_commit_context,tag_output_context;
   logic[CONTROL_WIDTH-1:0]front_control_bundle;
   wire[32*CONTROL_WIDTH-1:0]cluster_control_bundle;
   logic[512*16-1:0]lane_a,lane_b;
   logic[512*32-1:0]lane_result;
-  logic[512*5-1:0]lane_flags;
+  logic[32*5-1:0]cluster_flags;
   logic[511:0]lane_rst_ni;
+  logic[4:0]reset_glue_flags_unused;
   generate
     if(ROWS==16&&COLS==32&&CONTEXTS==5&&FIFO_DEPTH==8)begin:g_production
       bf16_context_front_control5_rev8b_b_candidate front_control(
@@ -39,7 +40,7 @@ module bf16_outer_product_context_array_rev8b_b_candidate #(
         .input_write_o(input_write),.pre_write_o(pre_write),.mul_write_o(mul_write),
         .post_write_o(post_write),.output_write_o(output_write),.issue_context_o(issue_context),
         .issue_clear_o(issue_clear),.early_commit_context_o(early_commit_context),
-        .output_context_o(tag_output_context));
+        .output_context_o(tag_output_context),.completion_pop_o(completion_pop));
       assign front_control_bundle[0]=input_write;
       assign front_control_bundle[1]=pre_write;
       assign front_control_bundle[2]=mul_write;
@@ -48,12 +49,13 @@ module bf16_outer_product_context_array_rev8b_b_candidate #(
       assign front_control_bundle[7:5]=issue_context;
       assign front_control_bundle[8]=issue_clear;
       assign front_control_bundle[11:9]=early_commit_context;
-      assign front_control_bundle[14:12]=tag_output_context;
+      assign front_control_bundle[12]=completion_pop;
       bf16_front_to_cluster_broadcast32_rev8b_b_candidate broadcast32(
         .control_i(front_control_bundle),.cluster_control_o(cluster_control_bundle));
       bf16_operand_distribution512_rev8b_a_candidate operand_distribution(
         .a_i(a_i),.b_i(b_i),.lane_a_o(lane_a),.lane_b_o(lane_b));
-      bf16_outer_product_array_glue512 glue(.rst_ni(rst_ni),.lane_flags_i(lane_flags),.lane_rst_ni_o(lane_rst_ni),.flags_o(exception_flags_o));
+      bf16_outer_product_array_glue512 glue(.rst_ni(rst_ni),.lane_flags_i('0),.lane_rst_ni_o(lane_rst_ni),.flags_o(reset_glue_flags_unused));
+      bf16_cluster_flags_glue32_rev8b_b_candidate flags_glue(.cluster_flags_i(cluster_flags),.flags_o(exception_flags_o));
       for(genvar cluster=0;cluster<32;cluster++)begin:g_cluster
         localparam integer BASE=cluster*CONTROL_WIDTH;
         bf16_context_lane_cluster16_rev8b_b_candidate u_cluster(
@@ -64,8 +66,8 @@ module bf16_outer_product_context_array_rev8b_b_candidate #(
           .lane_a_i(lane_a[cluster*16*16+:16*16]),.lane_b_i(lane_b[cluster*16*16+:16*16]),
           .issue_context_i(cluster_control_bundle[BASE+5+:3]),.issue_clear_i(cluster_control_bundle[BASE+8]),
           .early_commit_context_i(cluster_control_bundle[BASE+9+:3]),
-          .output_context_i(cluster_control_bundle[BASE+12+:3]),
-          .lane_out_o(lane_result[cluster*16*32+:16*32]),.lane_flags_o(lane_flags[cluster*16*5+:16*5]));
+          .output_pop_i(cluster_control_bundle[BASE+12]),
+          .lane_out_o(lane_result[cluster*16*32+:16*32]),.cluster_flags_o(cluster_flags[cluster*5+:5]));
       end
       assign acc_o=lane_result;
     end else begin:g_unsupported

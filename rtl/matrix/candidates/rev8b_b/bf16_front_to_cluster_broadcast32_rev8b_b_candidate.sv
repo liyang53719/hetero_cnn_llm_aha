@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
 module bf16_front_to_cluster_broadcast32_rev8b_b_candidate #(
-  parameter integer BUNDLE_WIDTH=15,
+  parameter integer BUNDLE_WIDTH=13,
   localparam integer BRANCHES=4,LEAVES_PER_BRANCH=8,LEAVES=32
 )(input wire[BUNDLE_WIDTH-1:0]control_i,output wire[LEAVES*BUNDLE_WIDTH-1:0]cluster_control_o);
   wire[BUNDLE_WIDTH-1:0]branch_control[0:BRANCHES-1];

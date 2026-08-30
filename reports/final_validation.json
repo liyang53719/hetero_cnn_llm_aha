@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "PASS_V6_4_REV8B_B_FUNCTIONAL_E1_WAIT_E4",
+  "status": "PASS_V6_4_L5_2_REV8B_B_E1_E4_H3",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "decision": "ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE"
@@ -24,7 +24,6 @@
     "blocked_attention_cycle_E0": "PASS"
   },
   "remaining_local_gates": [
-    "Revision8B_A_implementation_and_gates",
     "BlockedAttention_real_stream_E1_E2",
     "Fused_SiLU_E1_E4"
   ],
@@ -53,7 +52,7 @@
     "h3_unmapped": 0,
     "h3_unresolved": 0
   },
-  "active_revision": "Revision8B_B_5stage_5context_FUNCTIONAL_E1_PASS",
+  "active_revision": "Revision8B_B_5stage_5context_PASS_L5_2",
   "revision8B_B_functional": {
     "source_contract": "PASS",
     "dependent_steps": 1000000,
@@ -62,11 +61,24 @@
     "revision8B_A_compare_cycles": 120000,
     "latency_shift_cycles": 1
   },
+  "revision8B_B_physical": {
+    "lane_wns_ns": 0.00020206,
+    "cluster16_wns_ns": 0.00000101328,
+    "front_wns_ns": 0.000887126,
+    "broadcast_wns_ns": 0.379584,
+    "flags_wns_ns": 0.34046,
+    "h3_wns_ns": 0.00490451,
+    "h3_area": 1661847.825806,
+    "h3_max_transition": 0,
+    "h3_max_cap": 0,
+    "h3_unmapped": 0,
+    "h3_unresolved": 0
+  },
   "non_claims": [
-    "no_L5_2_pass",
+    "no_full_L5_pass_before_L5_3_L5_4_L5_5_L5_6",
     "no_Revision8A_RTL_E1_in_sandbox",
     "no_Revision8A_DC_or_equivalence_in_sandbox",
-    "no_full_512_lane_timing_pass",
+    "no_post_route_full_512_lane_signoff_claim",
     "no_post_route_or_variation_signoff",
     "no_official_weight_Qwen3.8_inference"
   ]

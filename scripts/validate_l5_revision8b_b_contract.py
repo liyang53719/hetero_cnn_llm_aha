@@ -10,7 +10,7 @@ text='\n'.join(p.read_text() for p in files)
 assert policy['phase_b_fallback']['authorized'] is True
 assert policy['phase_b_fallback']['fma_stages']==5 and policy['phase_b_fallback']['contexts']==5
 assert 'Status: **ACTIVE**' in activation
-for token in ('bf16_context_scheduler5_rev8b_b_candidate','bf16_outer_product_array_control5_rev8b_b_candidate','bf16_context_tag_pipeline5_rev8b_b_candidate','bf16_context_fma_pipeline_lane5_rev8b_b_candidate','bf16_context_lane_cluster16_rev8b_b_candidate','bf16_context_front_control5_rev8b_b_candidate','bf16_outer_product_context_array_rev8b_b_candidate'):
+for token in ('bf16_context_scheduler5_rev8b_b_candidate','bf16_outer_product_array_control5_rev8b_b_candidate','bf16_context_tag_pipeline5_rev8b_b_candidate','bf16_context_fma_pipeline_lane5_rev8b_b_candidate','bf16_context_lane_cluster16_rev8b_b_candidate','bf16_cluster_flags_glue32_rev8b_b_candidate','bf16_context_front_control5_rev8b_b_candidate','bf16_outer_product_context_array_rev8b_b_candidate'):
  assert token in text,token
 assert 'logic [31:0] accumulator_bank[0:4]' in text
 assert 'logic [15:0] input_a_q,input_b_q' in text

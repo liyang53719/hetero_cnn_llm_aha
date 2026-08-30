@@ -108,6 +108,13 @@ The public 128-bit command and generated HardFloat remain unchanged.
 
 Activation: `reports/L5_2_REVISION8B_B_ACTIVATION.md`.
 
+Revision 8B-B subsequently closed with a five-token non-blocking completion
+queue and context-independent local result FIFOs. Final structural H3 WNS is
+`+0.00490451 ns` at 1.0 ns, with zero transition/capacitance violations and
+zero unmapped/unresolved cells. All 1M/10k/50k E1, 120k cross-revision compare,
+120,032-cycle mapped-lane compare and post-map regressions pass. L5.2 is PASS;
+see `reports/L5_2_REVISION8B_B_CLOSEOUT.md`.
+
 ## Parallel sandbox closure
 
 Blocked Attention cycle E0 remains:

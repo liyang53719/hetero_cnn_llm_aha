@@ -7,11 +7,14 @@ module bf16_context_fma_pipeline_lane5_rev8b_b_candidate (
   input logic [15:0] a_i,b_i,
   input logic [2:0] issue_context_i,
   input logic issue_clear_i,
-  input logic [2:0] early_commit_context_i,output_context_i,
+  input logic [2:0] early_commit_context_i,
+  input logic output_pop_i,
   output logic [31:0] out_o,
   output logic [4:0] flags_o,bank_valid_o
 );
   logic [31:0] accumulator_bank[0:4];
+  logic [31:0] result_fifo[0:4];
+  logic [2:0] result_write_pointer_q,result_read_pointer_q;
   logic [4:0] bank_valid_q;
   logic [15:0] input_a_q,input_b_q;
   logic [2:0] input_context_q;
@@ -24,7 +27,7 @@ module bf16_context_fma_pipeline_lane5_rev8b_b_candidate (
   logic [40:0] post_raw,post_raw_q;
   logic post_invalid,post_invalid_q;
   logic [31:0] round_out;
-  logic [4:0] round_flags,flags_q;
+  logic [4:0] round_flags;
 
   always_comb begin
     if(input_clear_q)issue_accumulator='0;
@@ -35,14 +38,15 @@ module bf16_context_fma_pipeline_lane5_rev8b_b_candidate (
   HeteroBF16FmaMul u_mul(.io_mulAddA(pre_a_q),.io_mulAddB(pre_b_q),.io_mulAddC(pre_c_q),.io_mulAddResult(mul_result));
   HeteroBF16FmaPost u_post(.io_meta(mul_meta_q),.io_mulAddResult(mul_result_q),.io_raw(post_raw),.io_invalid(post_invalid));
   HeteroBF16FmaRound u_round(.io_raw(post_raw_q),.io_invalid(post_invalid_q),.io_out(round_out),.io_exceptionFlags(round_flags));
-  assign out_o=(output_context_i<5&&bank_valid_q[output_context_i])?accumulator_bank[output_context_i]:'0;
-  assign flags_o=flags_q;
+  assign out_o=result_fifo[result_read_pointer_q];
+  assign flags_o=round_flags;
   assign bank_valid_o=bank_valid_q;
   always_ff @(posedge clk_i or negedge rst_ni)begin
     if(!rst_ni)begin
       input_a_q<='0;input_b_q<='0;input_context_q<='0;input_clear_q<=0;
       pre_a_q<='0;pre_b_q<='0;pre_c_q<='0;pre_meta_q<='0;mul_result_q<='0;mul_meta_q<='0;
-      post_raw_q<='0;post_invalid_q<=0;bank_valid_q<='0;flags_q<='0;
+      post_raw_q<='0;post_invalid_q<=0;bank_valid_q<='0;result_write_pointer_q<='0;result_read_pointer_q<='0;
+      for(integer result_index=0;result_index<5;result_index++)result_fifo[result_index]<='0;
     end else begin
       if(input_write_i)begin input_a_q<=a_i;input_b_q<=b_i;input_context_q<=issue_context_i;input_clear_q<=issue_clear_i;end
       if(pre_write_i)begin pre_a_q<=pre_a;pre_b_q<=pre_b;pre_c_q<=pre_c;pre_meta_q<=pre_meta;end
@@ -50,9 +54,11 @@ module bf16_context_fma_pipeline_lane5_rev8b_b_candidate (
       if(post_write_i)begin post_raw_q<=post_raw;post_invalid_q<=post_invalid;end
       if(output_write_i)begin
         accumulator_bank[early_commit_context_i]<=round_out;
+        result_fifo[result_write_pointer_q]<=round_out;
+        result_write_pointer_q<=(result_write_pointer_q==4)?0:result_write_pointer_q+1'b1;
         bank_valid_q[early_commit_context_i]<=1'b1;
-        flags_q<=round_flags;
       end
+      if(output_pop_i)result_read_pointer_q<=(result_read_pointer_q==4)?0:result_read_pointer_q+1'b1;
     end
   end
 endmodule

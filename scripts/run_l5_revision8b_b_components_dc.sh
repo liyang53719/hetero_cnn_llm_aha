@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.." && pwd);PHASE=${1:-all};[[ "$PHASE" =~ ^(cluster|front|broadcast|flags|all)$ ]]||exit 2
+R="$ROOT/scripts/run_memory_capped.sh";DC=${DC_SHELL:-/home/yang/tools/synopsys/syn/X-2025.06-SP3/bin/dc_shell}
+DB=${STD_CELL_DB:-/home/yang/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db}
+GENRTL="$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv";CAND="$ROOT/rtl/matrix/candidates/rev8b_b";GEN="$ROOT/work/generated/l5_matrix_rev8b_b";RES="$ROOT/work/results/l5_matrix_rev8b_b";mkdir -p "$GEN" "$RES"
+run_dc(){ local out=$1 tcl=$2 high=$3;shift 3;mkdir -p "$out";rm -f "$out/status.txt";MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s env "$@" STD_CELL_DB="$DB" OUT_DIR="$out" DC_TIMING_HIGH_EFFORT="$high" "$DC" -64bit -f "$tcl" >"$out/dc.log" 2>&1;[[ -s "$out/status.txt" ]]||{ tail -60 "$out/dc.log" >&2;return 4;};}
+audit(){ python3 - "$1" "$2" <<'PY'
+from pathlib import Path
+import re,sys
+d=Path(sys.argv[1]);kind=sys.argv[2];s=dict(x.split('=',1) for x in (d/'status.txt').read_text().splitlines() if '=' in x);q=(d/'qor.rpt').read_text(errors='replace')
+def m(x):
+ z=re.search(rf'{re.escape(x)}\s*:\s*([0-9]+)',q);return int(z.group(1)) if z else 0
+w=float(s['WORST_SLACK_NS']);print(f'REV8B_B_{kind.upper()} EFFORT={s["EFFORT"]} WNS={w} TRANS={m("Max Trans Violations")} CAP={m("Max Cap Violations")}')
+if s['UNMAPPED_CELLS']!='0' or (kind=='cluster' and s.get('LANE_INSTANCES')!='16'):raise SystemExit(4)
+raise SystemExit(0 if w>=0 and m('Max Trans Violations')==0 and m('Max Cap Violations')==0 else 10)
+PY
+}
+map_component(){ local kind=$1 tcl=$2 gen_dir=$3;shift 3;mkdir -p "$RES/$kind/normal" "$RES/$kind/high" "$gen_dir";run_dc "$RES/$kind/normal" "$tcl" 0 "$@";set +e;audit "$RES/$kind/normal" "$kind";rc=$?;set -e;if ((rc==0));then chosen="$RES/$kind/normal";elif ((rc==10));then run_dc "$RES/$kind/high" "$tcl" 1 "$@";audit "$RES/$kind/high" "$kind";chosen="$RES/$kind/high";else exit "$rc";fi;cp "$chosen/status.txt" "$RES/$kind/accepted_status.txt";cp "$chosen/qor.rpt" "$RES/$kind/accepted_qor.rpt";printf 'accepted=1\n' >"$gen_dir/accepted";}
+cluster(){ [[ -s "$GEN/lane/accepted" ]]||{ echo 'lane first' >&2;exit 4;};local kind=cluster gen_dir="$GEN/cluster16";mkdir -p "$RES/$kind/high" "$gen_dir";run_dc "$RES/$kind/high" "$ROOT/dc/synth_l5_bf16_context_cluster16_rev8b_b.tcl" 1 GENERATED_SV="$GENRTL" LANE_RTL="$CAND/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv" CLUSTER_RTL="$CAND/bf16_context_lane_cluster16_rev8b_b_candidate.sv" CLOCK_PERIOD_NS=0.995 DDC_OUT="$gen_dir/bf16_context_lane_cluster16_rev8b_b_candidate.ddc" NETLIST_OUT="$gen_dir/bf16_context_lane_cluster16_rev8b_b_candidate.mapped.v";audit "$RES/$kind/high" "$kind";cp "$RES/$kind/high/status.txt" "$RES/$kind/accepted_status.txt";cp "$RES/$kind/high/qor.rpt" "$RES/$kind/accepted_qor.rpt";printf 'accepted=1\n' >"$gen_dir/accepted";}
+front(){ local files="$CAND/bf16_context_scheduler5_rev8b_b_candidate.sv:$CAND/bf16_outer_product_array_control5_rev8b_b_candidate.sv:$CAND/bf16_context_tag_pipeline5_rev8b_b_candidate.sv:$CAND/bf16_context_front_control5_rev8b_b_candidate.sv" kind=front gen_dir="$GEN/front";mkdir -p "$RES/$kind/high" "$gen_dir";run_dc "$RES/$kind/high" "$ROOT/dc/synth_l5_bf16_front5_rev8b_b.tcl" 1 RTL_FILES="$files" DDC_OUT="$gen_dir/bf16_context_front_control5_rev8b_b_candidate.ddc" NETLIST_OUT="$gen_dir/bf16_context_front_control5_rev8b_b_candidate.mapped.v";audit "$RES/$kind/high" "$kind";cp "$RES/$kind/high/status.txt" "$RES/$kind/accepted_status.txt";cp "$RES/$kind/high/qor.rpt" "$RES/$kind/accepted_qor.rpt";printf 'accepted=1\n' >"$gen_dir/accepted";}
+broadcast(){ local kind=broadcast gen_dir="$GEN/broadcast32";mkdir -p "$RES/$kind/high" "$gen_dir";run_dc "$RES/$kind/high" "$ROOT/dc/synth_l5_bf16_broadcast32_rev8b_b.tcl" 1 BROADCAST_RTL="$CAND/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv" DDC_OUT="$gen_dir/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.ddc" NETLIST_OUT="$gen_dir/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.mapped.v";audit "$RES/$kind/high" "$kind";cp "$RES/$kind/high/status.txt" "$RES/$kind/accepted_status.txt";cp "$RES/$kind/high/qor.rpt" "$RES/$kind/accepted_qor.rpt";printf 'accepted=1\n' >"$gen_dir/accepted";}
+flags(){ map_component flags "$ROOT/dc/synth_l5_bf16_cluster_flags_glue32_rev8b_b.tcl" "$GEN/flags_glue32" FLAGS_RTL="$CAND/bf16_cluster_flags_glue32_rev8b_b_candidate.sv" DDC_OUT="$GEN/flags_glue32/bf16_cluster_flags_glue32_rev8b_b_candidate.ddc" NETLIST_OUT="$GEN/flags_glue32/bf16_cluster_flags_glue32_rev8b_b_candidate.mapped.v";}
+case "$PHASE" in cluster)cluster;;front)front;;broadcast)broadcast;;flags)flags;;all)cluster;front;broadcast;flags;;esac

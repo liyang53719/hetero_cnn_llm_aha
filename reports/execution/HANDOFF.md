@@ -1,36 +1,30 @@
 # Local-agent handoff v6.4
 
-State: Revision 8B-B 5-stage/5-context functional E1 PASS; component E4 next.
+State: **L5.2 PASS** with Revision 8B-B; L5.3/L5.4 parallel branches active.
 
-## Frozen reason
-
-Revision 8B-A H3: transition/cap/unmapped/unresolved `0/0/0/0`, WNS
-`-1.3073 ns`; therefore no return to 4/4.
-
-## Revision 8B-B implemented
-
-- Cluster-local registered A/B/context/clear input boundary before HardFloat Pre.
-- Five-stage elastic control and tag pipeline.
-- Five accumulator contexts, 3-bit internal tags.
-- 16x32/512 lanes, 1 GHz target.
-- Public 128-bit command and generated HardFloat unchanged.
-
-## Passing evidence
+## Revision 8B-B final
 
 ```text
-source contract                         PASS
-1M dependent, five contexts             II=1, window 1,000,000 PASS
-10k random backpressure                 PASS
-50k arbitrary legal contexts            PASS
-8B-A vs 8B-B full 512-lane compare      120,000 PASS
-required latency shift                  exactly +1 cycle
+architecture                 5-stage, 5-context, 3-bit internal tags
+completion                   non-blocking depth-5 local result/flags FIFOs
+1M dependent                 II=1, issue window 1,000,000 PASS
+10k random / 50k adversarial PASS / PASS
+8B-A comparison              120,000 exact, +1 cycle PASS
+lane mapped comparison       120,032, mismatch/unknown 0/0
+lane/cluster/front WNS       +0.00020206/+0.00000101328/+0.000887126 ns
+broadcast/flags WNS          +0.379584/+0.340460 ns
+H3 WNS                       +0.00490451 ns at 1.000ns
+H3 trans/cap/unmapped/unres  0/0/0/0
+H3 area                      1661847.825806
+post-map E1                  1M+10k and 50k PASS
 ```
 
-## Unique next action
+Evidence: `reports/execution/l5_revision8b_b_local_result.json` and
+`reports/L5_2_REVISION8B_B_CLOSEOUT.md`. This is component/H3 DC, not
+post-route signoff. Generated HardFloat and public 128-bit command are unchanged.
 
-Map `bf16_context_fma_pipeline_lane5_rev8b_b_candidate` at 1.0 ns, then run
-mapped equivalence. Continue cluster16/front5/broadcast15/H3 only after lane
-passes. CPU 8-23, 24/30G, 600 s per attempt.
+## Next
 
-L5.3/L5.4 remain parallel; L5.5 remains the join. Do not modify generated RTL
-or the two untracked user runtime scripts.
+Run L5.3 blocked-Attention real-stream E1/E2 against the frozen Matrix
+transaction boundary. L5.4 fused SiLU remains parallel. L5.5 waits for L5.2,
+L5.3 and L5.4 PASS. Do not add the two untracked user runtime scripts.

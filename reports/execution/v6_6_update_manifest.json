@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "base_commit": "eba24625350d14fe3f9d760929736dcf5872fabd",
+  "scope": [
+    "L5.2 local-agent closure audit",
+    "L5.3 blocked-Attention numerical Golden",
+    "L7 Sequence Memory concurrency/MSHR model",
+    "L8/L9 Qwen3.8 policy-to-Command128 lowering",
+    "v6.6 control-plane and final-gap update"
+  ],
+  "targeted_tests": 11,
+  "branch_created": false
+}

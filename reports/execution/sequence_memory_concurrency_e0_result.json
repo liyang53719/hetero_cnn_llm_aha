@@ -1,0 +1,123 @@
+{
+  "coalescing_case": {
+    "completion_sha256": "8b4dd07d0a413ffbfcf00b6d29d56699be0e055f24a3e49dde6423fd0d46f110",
+    "config": {
+      "data_latency_max": 128,
+      "data_latency_min": 48,
+      "issue_width": 2,
+      "leaf_cache_entries": 4,
+      "leaf_hit_walk_latency": 18,
+      "leaf_miss_walk_latency": 72,
+      "max_outstanding_data": 32,
+      "max_outstanding_walks": 8,
+      "mshr_entries": 8,
+      "tlb_entries": 64
+    },
+    "counters": {
+      "accepted": 1024,
+      "data_limit_stalls": 2666,
+      "leaf_hits": 24,
+      "leaf_misses": 8,
+      "max_data_outstanding": 32,
+      "max_mshr_used": 8,
+      "max_reorder_used": 39,
+      "mshr_coalesced": 224,
+      "mshr_full_stalls": 40,
+      "out_of_order_arrivals": 785,
+      "retired": 1024,
+      "stale_rejected": 0,
+      "tlb_hits": 768,
+      "tlb_misses": 296,
+      "walk_limit_stalls": 0,
+      "walks_issued": 32
+    },
+    "cycles": 3006,
+    "requests": 1024,
+    "requests_per_cycle": 0.3406520292747838,
+    "schema_version": 1,
+    "status": "PASS"
+  },
+  "evidence_class": "SequenceMemory_concurrent_cycle_E0_not_AXI_iDMA_E3",
+  "frozen_contract": {
+    "out_of_order_device_response": true,
+    "recommended_first_RTL_MSHR_entries": 8,
+    "recommended_first_RTL_data_outstanding": 16,
+    "request_order_retirement": true,
+    "same_page_miss_coalescing": true,
+    "stale_generation_suppression": true
+  },
+  "remaining_local_gates": [
+    "page_walker_TLB_MSHR_RTL_E1",
+    "out_of_order_iDMA_response_E1",
+    "COW_refcount_epoch_integration_E1",
+    "AXI_iDMA_integrated_E3"
+  ],
+  "schema_version": 1,
+  "selected_sandbox_point": {
+    "config": {
+      "data_latency_max": 128,
+      "data_latency_min": 48,
+      "issue_width": 2,
+      "leaf_cache_entries": 4,
+      "leaf_hit_walk_latency": 18,
+      "leaf_miss_walk_latency": 72,
+      "max_outstanding_data": 32,
+      "max_outstanding_walks": 8,
+      "mshr_entries": 8,
+      "tlb_entries": 64
+    },
+    "cycles": 36575,
+    "name": "random_m8_d32",
+    "requests_per_cycle": 0.11198906356801093
+  },
+  "stale_generation_case": {
+    "completion_sha256": "7225678195f247d62b54012f15a88f2bc50784fdc48320704a90bd53a38acfdb",
+    "config": {
+      "data_latency_max": 128,
+      "data_latency_min": 48,
+      "issue_width": 2,
+      "leaf_cache_entries": 4,
+      "leaf_hit_walk_latency": 18,
+      "leaf_miss_walk_latency": 72,
+      "max_outstanding_data": 16,
+      "max_outstanding_walks": 4,
+      "mshr_entries": 8,
+      "tlb_entries": 64
+    },
+    "counters": {
+      "accepted": 64,
+      "data_limit_stalls": 0,
+      "leaf_hits": 0,
+      "leaf_misses": 0,
+      "max_data_outstanding": 0,
+      "max_mshr_used": 0,
+      "max_reorder_used": 0,
+      "mshr_coalesced": 0,
+      "mshr_full_stalls": 0,
+      "out_of_order_arrivals": 0,
+      "retired": 64,
+      "stale_rejected": 64,
+      "tlb_hits": 0,
+      "tlb_misses": 0,
+      "walk_limit_stalls": 0,
+      "walks_issued": 0
+    },
+    "cycles": 33,
+    "requests": 64,
+    "requests_per_cycle": 1.9393939393939394,
+    "schema_version": 1,
+    "status": "PASS"
+  },
+  "status": "PASS",
+  "sweep": {
+    "random_m16_d16": {"cycles":36605,"requests_per_cycle":0.1118972817921049,"status":"PASS"},
+    "random_m16_d32": {"cycles":36609,"requests_per_cycle":0.11188505558742386,"status":"PASS"},
+    "random_m16_d8": {"cycles":45158,"requests_per_cycle":0.09070375127330706,"status":"PASS"},
+    "random_m4_d16": {"cycles":73001,"requests_per_cycle":0.056108820427117435,"status":"PASS"},
+    "random_m4_d32": {"cycles":73015,"requests_per_cycle":0.056098062042046155,"status":"PASS"},
+    "random_m4_d8": {"cycles":72985,"requests_per_cycle":0.056121120778242106,"status":"PASS"},
+    "random_m8_d16": {"cycles":36614,"requests_per_cycle":0.1118697765881903,"status":"PASS"},
+    "random_m8_d32": {"cycles":36575,"requests_per_cycle":0.11198906356801093,"status":"PASS"},
+    "random_m8_d8": {"cycles":44973,"requests_per_cycle":0.09107686834322816,"status":"PASS"}
+  }
+}

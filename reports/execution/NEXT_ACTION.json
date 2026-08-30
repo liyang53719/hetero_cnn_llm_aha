@@ -1,21 +1,7 @@
 {
-  "schema_version": 6,
-  "state": "L5_2_PASS_L5_3_L5_4_PARALLEL_ACTIVE",
-  "stage": "L5",
-  "subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
-  "decision": "REVISION8B_B_PROMOTABLE_AFTER_PASS_EVIDENCE",
-  "completed": {
-    "L5.2": "PASS_REV8B_B_E1_E4_COMPONENT_H3",
-    "h3_wns_ns": 0.00490451,
-    "h3_drc_unmapped_unresolved": "0_0_0_0",
-    "dependent_steps": 1000000,
-    "random_steps": 10000,
-    "adversarial_steps": 50000,
-    "cross_revision_cycles": 120000,
-    "mapped_lane_cycles": 120032
-  },
-  "unique_next_action": "Run L5.3 blocked-Attention real-stream E1/E2 against the frozen Revision8B-B Matrix transaction boundary.",
-  "parallel_action": "L5.4 fused SiLU E1/E4 remains independently authorized.",
-  "join_gate": "L5.5 waits for L5.2, L5.3 and L5.4 PASS",
-  "forbidden": ["claim_L5_complete", "claim_post_route_signoff", "bypass_L5.5_join"]
+  "L10_risk":"Do not reopen L5.2, but retain H3/lane/cluster/front ultra-low margins for post-route/PVT closure.",
+  "L5.3":{"cycle_reference":"reports/execution/l5_blocked_attention_stream_e0_result.json","frozen":{"GQA_ratio":6,"MLO":"FP32","block_tokens":128,"kv_tile":32,"probability_DDR_bytes":0,"probability_fifo_depth":2,"query_tile":16,"score_DDR_bytes":0,"score_fifo_depth":2},"golden":"reports/execution/l5_blocked_attention_numeric_e0_result.json","hard_acceptance":["q128 full numerical compare","q384 full or reviewed sampled-row compare","q1024 reviewed sampled rows and 43008 merges","random Matrix/SFU backpressure","no score/probability DDR writes","measured service curve for q128/q384/q1024","no loss duplicate reorder deadlock"],"required_first_artifacts":["rtl/attention/blocked_attention_stream_controller.sv","tb/tb_blocked_attention_stream.sv","scripts/run_l5_blocked_attention_stream_e1.sh"]},
+  "L5.4_parallel":{"frozen":{"II":1,"LUT_entries":128,"LUT_format":"FP16","candidate_lanes":[1,2],"input_output":"BF16","range":[-8,8]},"golden":"reports/execution/l5_silu_dse_e0_result.json","hard_acceptance":["numerical threshold","random ready/valid E1","1GHz WNS>=0","area/power comparison","no separate unfused product multiplier path"],"selection":"choose one lane if Matrix producer stall <=2%; otherwise choose two lanes"},
+  "completed":{"H3_DRC":"0_0_0_0","H3_WNS_ns":0.00490451,"L5.2":"PASS_REV8B_B_E1_E4_COMPONENT_H3","postmap_E1":"PASS"},
+  "decision":"START_L5_3_REAL_STREAM_AND_L5_4_FUSED_SILU_IN_PARALLEL","forbidden":["claim_L5_complete","claim_post_route_signoff","bypass_L5.5_join","change_Revision8B_B_without_new_architecture_review"],"join_gate":"L5.5 starts only after L5.3 and L5.4 PASS; L5.2 is already closed.","schema_version":6,"stage":"L5","state":"L5_2_CLOSED_L5_3_L5_4_SOURCE_READY_WAIT_LOCAL_E1_E4","subgate":"L5.3_BLOCKED_ATTENTION_E1_E2","unique_next_action":"Implement and verify the real QK -> Block128 M/L/O -> PV ready/valid stream against Revision8B-B."
 }

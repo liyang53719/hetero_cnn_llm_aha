@@ -1,152 +1,124 @@
-# Canonical architecture and execution plan v6.4
+# Canonical architecture and execution plan v6.6
 
-## Accepted state
-
-- L5.1 Block128 E1/component E4 accepted. WNS is `+0.0000136495 ns`; the component has effectively zero engineering margin and is not post-route signoff.
-- L5.2 real 16x32/512-lane, four-context E1 accepted: 1,000,000 dependent issues at II=1 and 10,000 random-backpressure operations.
-- Revision-7 source-remapped lane passes marginally at `+0.000141501 ns`.
-- Revision-7 mapped functional comparison passes 120,032 cycles with zero mismatch/unknown.
-- Revision-7 structural H3 fails: WNS `-0.926028 ns`, TNS `-49161.85 ns`, zero unmapped/unresolved.
-
-## Current critical path
-
-Revision-7 H3 exposes a true cross-hierarchy path:
+## 1. Frozen architecture
 
 ```text
-scheduler FIFO/completion state
-→ same-cycle completion/bypass decision
-→ global context-control fanout
-→ lane accumulator select
-→ HardFloat Pre
-→ pre_c register
+Retained Gemmini INT8/CNN Matrix path
++ Revision8B-B clean-room BF16/FP32 Matrix path
++ fixed-function Attention/Norm/SFU
++ legal Stanford AHA 4x4 ratio-2 sidecar
++ Sequence Memory Complex / iDMA
++ shared 4 MiB on-chip SRAM and Command128/event fabric
 ```
 
-The lane itself passes only when its inputs arrive under the local block budget.
-The global completion path consumes roughly another cycle before reaching that
-lane. No further Revision-7 synthesis-boundary retry is authorized.
-
-## Revision 8A candidate
-
-Revision 8A is approved as candidate source only. The four lane-local context
-banks become the output-stage registers. Post-to-Output advancement writes the
-rounded result into the aligned context bank; external completion/busy/valid
-state remains tied to the original output handshake. The next same-context
-issue reads the already-written local bank, removing completion/broadcast from
-the FMA data path.
+The current BF16 Matrix boundary is Revision8B-B:
 
 ```text
-front control: scheduler + elastic valid chain + context tags
-32 × cluster16: 512 physical lanes, four banks/lane
-retained reset/flag glue
+16x32 / 512 lanes
+5-stage FMA
+5 accumulator contexts
+3-bit internal tags
+5-entry completion/result buffering
+1 GHz component/H3 gate
 ```
 
-Frozen invariants:
+## 2. Accepted local closures
+
+### L5.1 Block128
+
+E1 and component E4 pass. WNS is only `+0.0000136495 ns`; retain as an L10
+post-route/variation risk.
+
+### L5.2 Matrix context interleave
+
+Revision8B-B passes source contract, 1M dependent II=1, 10k random, 50k
+adversarial, cross-revision compare, mapped lane compare, all component DC,
+structural H3 and post-map E1.
 
 ```text
-16x32 physical array
-4 contexts
-4-cycle feedback
-1 GHz
-unchanged public ports
-unchanged generated HardFloat
-no retiming or timing exceptions
+H3 WNS                     +0.00490451 ns
+H3 transition/cap          0/0
+H3 unmapped/unresolved     0/0
+H3 area                    1661847.825806 library units
 ```
 
-Sandbox evidence is E0/source-ready only: 1,000,000-operation public-cycle
-differential, 500,000 additional multiseed operations, source/Tcl contracts,
-and local execution scripts all pass.
+L5.2 is closed at the current component/H3 boundary. It is not post-route,
+PVT/OCV or power signoff.
 
-L5.2 closes only after:
+## 3. Active parallel branches
+
+### L5.3 Blocked Attention
+
+Frozen first implementation:
 
 ```text
-Revision7-vs-Revision8A source compare
-candidate 512-lane E1
-candidate arbitrary-context E1
-lane mapped equivalence
-lane, cluster16, front-control and structural H3 WNS >= 0
-unmapped/unresolved = 0
-area/power recorded
-post-mapping E1 rerun
+Q tile 16
+K/V tile 32
+Block128 hierarchical M/L/O
+GQA 6:1
+Score FIFO 2
+Probability FIFO 2
+M/L/O FP32
+QK and PV share Revision8B-B Matrix
+score/probability DDR bytes = 0
 ```
 
-## Revision 8B-A approved physical distribution
+Available E0 evidence:
 
-Revision 8A failed structural H3 after all component/E1/equivalence gates
-passed. Revision 8B-A is therefore approved as a cycle-neutral combinational
-fanout tree: one front output feeds a 1-to-4 level, then four 1-to-8 levels feed
-the 32 cluster-local leaves. It retains 4-stage/4-context/four-cycle feedback,
-16x32/512 lanes, 1 GHz, public command behavior and generated HardFloat.
+- cycle budget and queue-depth sweep;
+- BF16-input/FP32-state numerical Golden;
+- q1024 analytical merge count 43,008;
+- q128 full and q384/q1024 reviewed-row dense parity.
 
-The tree is a mapped physical boundary, not a hierarchy of unproven `assign`
-statements. H3 must have zero max-transition/max-capacitance violations and
-zero unresolved/unmapped cells. Front and cluster boundaries remain retained;
-only broadcast/top glue may be compiled. All violating control/context and A/B
-operand-distribution roots found by H3 must be covered.
+Local Agent closes real-stream E1/E2 and records the measured service curve.
 
-Do not add an FMA stage during Revision 8B-A. After one normal and one
-high-effort attempt, if transition/capacitance violations are both zero and H3
-still has negative 1 GHz WNS on a non-fanout-dominated path, Revision 8B-B is
-authorized: stop tuning 4/4 and switch to 5-stage/5-context with a 3-bit
-internal context tag. The public 128-bit command remains unchanged, and all
-scheduler/tag/bank/equivalence/E1/H3 gates must be rerun.
+### L5.4 fused SiLU(gate)*up
 
-Binding policy: `config/l5_revision8b_a_policy.json`.
-Approval: `reports/L5_2_REVISION8B_A_APPROVAL.md`.
-
-### Revision 8B-A measured outcome and 8B-B activation
-
-Revision 8B-A passed all functional/mapped-distribution gates and eliminated
-H3 DRC: broadcast WNS `+0.302272 ns`, operand-distribution WNS `+0.379584 ns`,
-H3 max-transition/max-capacitance/unmapped/unresolved all zero. Structural H3
-still has WNS `-1.3073 ns`. The remaining 2.08 ns path crosses the mapped
-distribution and HardFloat Pre before `pre_meta_q`; it is not an unfixed DRC.
-
-The frozen fallback has therefore triggered. Revision 8B-B is active: add one
-cluster-local registered input/Pre boundary, move to a 5-stage pipeline and
-five physical contexts with 3-bit internal tags. No more 4/4 tuning is allowed.
-The public 128-bit command and generated HardFloat remain unchanged.
-
-Activation: `reports/L5_2_REVISION8B_B_ACTIVATION.md`.
-
-Revision 8B-B subsequently closed with a five-token non-blocking completion
-queue and context-independent local result FIFOs. Final structural H3 WNS is
-`+0.00490451 ns` at 1.0 ns, with zero transition/capacitance violations and
-zero unmapped/unresolved cells. All 1M/10k/50k E1, 120k cross-revision compare,
-120,032-cycle mapped-lane compare and post-map regressions pass. L5.2 is PASS;
-see `reports/L5_2_REVISION8B_B_CLOSEOUT.md`.
-
-## Parallel sandbox closure
-
-Blocked Attention cycle E0 remains:
+Frozen first candidates:
 
 ```text
-q128 serialized cycles   65,284
-q384 serialized cycles   656,644
-q1024 serialized cycles  4,823,044
-q1024 summary merges     43,008
-score/probability DDR    0 bytes
+128-entry FP16 direct-SiLU LUT
+linear interpolation
+BF16 input/output
+II=1
+1-lane and 2-lane implementations
 ```
 
-This is cycle-structured E0, not real stream E1/E2 or integrated E3.
+Use producer-stall <=2% as the selection rule. Do not build 4/8 lanes unless
+measured evidence requires them.
 
-## Global order
+### L5.5 join
+
+L5.5 integrated Matrix/SFU/iDMA/DDR E3 begins only after L5.2, L5.3 and L5.4
+pass. L5.2 is now complete; L5.3 and L5.4 are open.
+
+## 4. Additional sandbox closures
+
+### Sequence Memory
+
+Concurrent E0 now includes TLB, leaf cache, bounded MSHRs, same-page miss
+coalescing, out-of-order device completion, in-order retirement and stale
+generation suppression. First RTL point: 8 MSHRs and 16 data requests
+outstanding. AXI/iDMA E3 remains local work.
+
+### Qwen3.8 compiler path
+
+The full 48-layer model is lowered deterministically into one Command128
+segment per layer. Current result: 48 segments, 1648 commands, 48 barriers,
+36 GDN layers and 12 QSA layers. Real GGML graph matching, GGUF tensor binding,
+device submission and CPU fallback remain L9 work.
+
+## 5. Remaining global order
 
 ```text
-L5.1 PASS
-├→ L5.2 Revision 8B-A/B physical closure
-├→ L5.3 Blocked Attention E1/E2
-└→ L5.4 fused SiLU E1/E4
-{L5.2,L5.3,L5.4} PASS
-→ L5.5 queue/DMA/DDR E3
-→ L5.6 28-layer q1024 >=300 token/s
-→ L6 quantized paths
-→ L7 production Sequence Memory
-→ L8 Qwen3.5/Qwen3.8 backends
-→ L9 llama.cpp
-→ L10/L11 physical closure and DSE
+L4 CNN/AHA E1/E4
+L5.3 Attention E1/E2 ┐
+L5.4 SiLU E1/E4      ├→ L5.5 integrated E3 → L5.6 q1024 >=300 t/s
+L5.2 PASS            ┘
+→ L6 exact GGML quant formats and low-bit RTL
+→ L7 production Sequence Memory E1/E3
+→ L8 Qwen3.5/Qwen3.8 official trace and backends
+→ L9 real llama.cpp/GGUF backend
+→ L10 SRAM/post-route/PVT/SAIF
+→ L11 final Archspec/Pareto signoff
 ```
-
-L5.3 may use the frozen Matrix transaction contract and Revision 8A functional
-baseline without claiming canonical Matrix integration. L5.4 is independent.
-L5.5 is the mandatory convergence point and may not close until all three
-parallel branches pass.

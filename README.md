@@ -1,57 +1,39 @@
 # Heterogeneous CNN/LLM accelerator
 
 ```text
-retained Gemmini INT8/CNN Matrix
-+ clean-room BF16/FP32 LLM Matrix
+Gemmini INT8/CNN Matrix
++ Revision8B-B BF16/FP32 Matrix
 + fixed-function Attention/Norm/SFU
-+ legal Stanford AHA sidecar
-+ paged KV / Sequence Memory Complex
++ Stanford AHA programmable sidecar
++ Sequence Memory Complex / iDMA
 ```
 
-Current audited L5 state:
+Current audited state:
 
 ```text
-L5.1 Block128 E1/E4       accepted; WNS +0.0000136495 ns, zero margin
-L5.2 512-lane E1          accepted; 4 contexts, 1M dependent steps, II=1
-Revision-7 lane/equiv     pass
-Revision-7 structural H3 fail: WNS -0.926028 ns
-Revision 8A candidate     sandbox E0/source-ready; local E1/E4 required
+L5.1 Block128       PASS; component timing has effectively zero margin
+L5.2 Matrix         PASS E1/E4 component/H3, 5-stage/5-context, H3 WNS +0.00490451 ns
+L5.3 Attention      numerical/cycle/queue E0 PASS; real-stream E1/E2 next
+L5.4 fused SiLU     numerical/throughput DSE PASS; 1/2-lane E1/E4 next
+L5.5 integrated E3 waits for L5.3 and L5.4
 ```
 
-Revision 8A removes the completion-handshake-to-HardFloat-Pre data path. The
-four context banks become the output-stage registers while architectural
-completion remains on the original output handshake. Candidate files remain
-under `rtl/matrix/candidates/rev8/` until all gates pass.
-
-Run sandbox gates:
+Run sandbox regression:
 
 ```bash
 ./scripts/sandbox_validate.sh
-python3 scripts/validate_l5_revision8a_contract.py --operations 100000
 ```
 
-Run local Revision 8A gates:
+Canonical control files:
 
-```bash
-./scripts/run_l5_matrix_context_revision8a.sh compare
-./scripts/run_l5_matrix_context_revision8a.sh e1
-./scripts/run_l5_matrix_context_revision8a.sh adversarial
-./scripts/run_l5_matrix_context_revision8a.sh lane
-./scripts/run_l5_matrix_context_revision8a.sh equiv
-./scripts/run_l5_matrix_context_revision8a.sh cluster
-./scripts/run_l5_matrix_context_revision8a.sh front
-./scripts/run_l5_matrix_context_revision8a.sh top
-./scripts/run_l5_matrix_context_revision8a.sh e1
-./scripts/run_l5_matrix_context_revision8a.sh adversarial
-python3 scripts/summarize_l5_revision8a.py
+```text
+config/control_plane.json
+reports/ARCHITECTURE_AND_EXECUTION_PLAN.md
+local_agent/stages.yaml
+reports/execution/MASTER_LEDGER.json
+reports/execution/NEXT_ACTION.json
+reports/execution/HANDOFF.md
 ```
 
-Or run the same ordered sequence with:
-
-```bash
-./scripts/run_l5_matrix_context_revision8a.sh all
-```
-
-L5.2 remains open until every Revision 8A E1/equivalence/E4 gate passes. The
-Qwen3.8 Archspec candidate remains non-canonical; shape/cycle models are not
-official-weight execution, integrated E3 or physical signoff.
+Component/H3 DC results are not post-route signoff. Qwen3.8 software references
+and policy lowering are not official-weight hardware execution.

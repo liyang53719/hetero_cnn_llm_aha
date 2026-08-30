@@ -1,17 +1,9 @@
 {
-  "L5_1": "PASS_ACCEPTED_ZERO_MARGIN",
-  "L5_2_revision7": "LANE_EQUIV_E1_PASS_H3_FAIL",
-  "L5_2_revision8A": "COMPONENTS_E1_EQUIV_PASS_H3_FAIL",
-  "L5_2_revision8B_A": "TRIGGER_REVISION8B_B",
-  "L5_2_revision8B_B": "PASS_E1_E4_COMPONENT_H3",
-  "L5_3_L5_4": "PARALLEL_EXECUTION_AUTHORIZED",
-  "blocked_attention_cycle_E0": "PASS",
-  "retained_v6_gates": [
-    "control_plane_audit",
-    "Archspec_collateral",
-    "Qwen38_full_shape_program",
-    "SequenceMemory_cycle_E0"
-  ],
+  "L5.2": "PASS_COMPONENT_H3_L10_RISK_OPEN",
+  "L5.3": "NUMERICAL_CYCLE_STREAM_E0_PASS",
+  "L5.4": "DSE_PASS",
+  "L7": "CONCURRENCY_E0_PASS",
+  "L8_L9": "POLICY_LOWERING_E0_PASS",
   "schema_version": 6,
-  "status": "PASS_V6_4"
+  "status": "PASS_V6_6"
 }

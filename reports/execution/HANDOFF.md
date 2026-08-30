@@ -1,30 +1,55 @@
-# Local-agent handoff v6.4
+# Local-agent handoff v6.6
 
-State: **L5.2 PASS** with Revision 8B-B; L5.3/L5.4 parallel branches active.
+State: **L5.2 is closed** at the frozen CLN22UL component/H3 gate. L5.3 is the
+primary branch and L5.4 runs in parallel.
 
-## Revision 8B-B final
+## Accepted Matrix boundary
 
 ```text
-architecture                 5-stage, 5-context, 3-bit internal tags
-completion                   non-blocking depth-5 local result/flags FIFOs
-1M dependent                 II=1, issue window 1,000,000 PASS
-10k random / 50k adversarial PASS / PASS
-8B-A comparison              120,000 exact, +1 cycle PASS
-lane mapped comparison       120,032, mismatch/unknown 0/0
-lane/cluster/front WNS       +0.00020206/+0.00000101328/+0.000887126 ns
-broadcast/flags WNS          +0.379584/+0.340460 ns
-H3 WNS                       +0.00490451 ns at 1.000ns
-H3 trans/cap/unmapped/unres  0/0/0/0
-H3 area                      1661847.825806
-post-map E1                  1M+10k and 50k PASS
+Revision                         8B-B
+Physical array                   16x32 / 512 BF16 MAC lanes
+FMA stages / contexts            5 / 5
+Internal context tag             3 bit
+Completion FIFO                  depth 5
+1M dependent issue window        1,000,000 cycles, II=1
+10k random / 50k adversarial     PASS / PASS
+Mapped lane comparison           120,032 cycles, mismatch/unknown 0/0
+H3 WNS                            +0.00490451 ns
+H3 transition/cap/unmapped/unres 0/0/0/0
+Post-map E1                       PASS
 ```
 
-Evidence: `reports/execution/l5_revision8b_b_local_result.json` and
-`reports/L5_2_REVISION8B_B_CLOSEOUT.md`. This is component/H3 DC, not
-post-route signoff. Generated HardFloat and public 128-bit command are unchanged.
+The above closes L5.2 only at component/H3 DC. Lane, cluster, front and H3
+margins remain extremely small, so post-route/PVT/variation closure stays open
+in L10.
 
-## Next
+## Unique next action: L5.3
 
-Run L5.3 blocked-Attention real-stream E1/E2 against the frozen Matrix
-transaction boundary. L5.4 fused SiLU remains parallel. L5.5 waits for L5.2,
-L5.3 and L5.4 PASS. Do not add the two untracked user runtime scripts.
+Implement real streaming `QK -> Block128 M/L/O -> PV` with:
+
+```text
+Q tile 16, K/V tile 32, block 128, GQA 6:1
+Score FIFO 2 entries, Probability FIFO 2 entries
+FP32 M/L/O
+Revision8B-B Matrix transaction boundary
+zero score/probability DDR materialization
+```
+
+Use `reports/execution/l5_blocked_attention_numeric_e0_result.json` as the
+numerical Golden and `l5_blocked_attention_stream_e0_result.json` as the service
+reference. Required E1/E2: q128, q384, reviewed q1024 rows, 43,008 q1024 merges,
+random backpressure, no loss/reorder/deadlock and measured cycles.
+
+## Parallel L5.4
+
+Implement 128-entry FP16 direct-SiLU LUT with linear interpolation and fused
+`SiLU(gate)*up`. Build 1-lane and 2-lane II=1 candidates. Select one lane when
+Matrix-producer stall is <=2%, otherwise two lanes. Run numerical E1 and 1 GHz
+DC/PPA. L5.5 remains the join.
+
+## Additional source-ready contracts
+
+- Sequence Memory: 8 MSHRs, first RTL point 16 outstanding data requests,
+  in-order retire, same-page miss coalescing, stale-generation suppression.
+- Qwen3.8: deterministic per-layer policy -> Command128 lowering is available;
+  bind it to the real GGML graph only after official graph/runtime setup.

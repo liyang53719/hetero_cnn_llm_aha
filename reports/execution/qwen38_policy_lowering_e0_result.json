@@ -1,0 +1,26 @@
+{
+  "barriers": 48,
+  "commands": 1648,
+  "evidence_class": "policy_to_Command128_compiler_E0_not_real_llama_backend",
+  "frozen": {
+    "descriptor_width_bits": 24,
+    "event_width_bits": 16,
+    "one_segment_per_layer": true,
+    "unsupported_policy_fallback_required": true
+  },
+  "gdn_layers": 36,
+  "max_commands_per_segment": 38,
+  "model_layers": 48,
+  "next_descriptor": 8018,
+  "program_sha256": "fe2e4fe210a7905e01bc7ed13c09d96cdbbc5642174e361535387b46adc09738",
+  "qsa_layers": 12,
+  "remaining_local_gates": [
+    "real_GGML_graph_pattern_match",
+    "real_GGUF_descriptor_binding",
+    "device_command_submission",
+    "CPU_fallback_execution"
+  ],
+  "schema_version": 1,
+  "segments": 48,
+  "status": "PASS"
+}

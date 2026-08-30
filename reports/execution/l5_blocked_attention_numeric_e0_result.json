@@ -1,0 +1,56 @@
+{
+  "analytic_q1024_summary_merges": 43008,
+  "cases": [
+    {
+      "blocked_sha256": "b041f40e360d5509c84ec7173cd9cbdf6f3b21e3d77e0b3baacefd8eaf17485c",
+      "counters": {
+        "block_merges": 0,
+        "probability_ddr_bytes": 0,
+        "score_ddr_bytes": 0,
+        "selected_rows": 128,
+        "tile_summaries": 3840
+      },
+      "dense_sha256": "cc42b3fde3cad375e72c06e7f10f03803cdca88851a75c35811e2ff74bc248c4",
+      "geometry": {
+        "block_tokens": 128,
+        "head_dim": 128,
+        "kv_heads": 2,
+        "kv_tile": 32,
+        "q_heads": 12,
+        "query_tile": 16,
+        "sequence": 128
+      },
+      "metrics": {
+        "max_abs": 2.384185791015625e-07,
+        "mean_abs": 8.937793485860301e-09,
+        "relative_l2": 1.1367033572237338e-07,
+        "rmse": 1.2986120167420095e-08
+      },
+      "rows": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127]
+    },
+    {
+      "blocked_sha256": "60ac255d4bd2e499439f85882b6526b95907922c7d2c904f16a420acefb0f2df",
+      "counters": {"block_merges": 48,"probability_ddr_bytes": 0,"score_ddr_bytes": 0,"selected_rows": 7,"tile_summaries": 384},
+      "dense_sha256": "855333f3a71d4c307f6f1972c8bca0c76cb90b680c34177f92858675d43b8e53",
+      "geometry": {"block_tokens": 128,"head_dim": 128,"kv_heads": 2,"kv_tile": 32,"q_heads": 12,"query_tile": 16,"sequence": 384},
+      "metrics": {"max_abs": 1.341104507446289e-07,"mean_abs": 6.429705149254719e-09,"relative_l2": 5.005092021519184e-08,"rmse": 1.054053855605237e-08},
+      "rows": [0,15,16,127,128,255,383]
+    },
+    {
+      "blocked_sha256": "1a797a9304dc400a4be7fa82ad0e349184ebf27bcd91080df0edbabeb7dc610d",
+      "counters": {"block_merges": 216,"probability_ddr_bytes": 0,"score_ddr_bytes": 0,"selected_rows": 8,"tile_summaries": 1140},
+      "dense_sha256": "fae32f91e7a860e2bc6c26e4b8623cea08641a877afeb7fd8ad2a4a0bc747fcc",
+      "geometry": {"block_tokens": 128,"head_dim": 128,"kv_heads": 2,"kv_tile": 32,"q_heads": 12,"query_tile": 16,"sequence": 1024},
+      "metrics": {"max_abs": 1.1920928955078125e-07,"mean_abs": 5.258478710338614e-09,"relative_l2": 4.594774070069827e-08,"rmse": 8.402365949816923e-09},
+      "rows": [0,31,127,128,383,511,767,1023]
+    }
+  ],
+  "evidence_class": "blocked_attention_numerical_E0_not_RTL_E2",
+  "frozen": {"GQA_ratio": 6,"block_tokens": 128,"first_RTL_probability_fifo_depth": 2,"first_RTL_score_fifo_depth": 2,"kv_tile": 32,"probability_DDR_bytes": 0,"score_DDR_bytes": 0},
+  "input_format": "BF16_RNE_in_FP32_container",
+  "maximum_error": {"max_abs": 2.384185791015625e-07,"relative_l2": 1.1367033572237338e-07},
+  "remaining_local_gates": ["real_QK_to_MLO_to_PV_ready_valid_E1","RTL_vs_this_reference_q128_q384_q1024_E2","Revision8B_B_measured_service_curve"],
+  "schema_version": 1,
+  "state_format": "FP32_M_L_O",
+  "status": "PASS"
+}

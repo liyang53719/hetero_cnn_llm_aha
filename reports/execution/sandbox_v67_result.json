@@ -1,0 +1,182 @@
+{
+  "evidence_class": "sandbox_v67_E0_not_local_E1_E3_E4",
+  "ggml_quant": {
+    "cpp_max_abs_error": 1.9326762412674725e-12,
+    "cpp_vectors": 384,
+    "formats": {
+      "FP16": {
+        "bytes_per_value": 2,
+        "values_per_word": 1
+      },
+      "Q3_K": {
+        "bits_per_weight": 3.4375,
+        "bytes": 110,
+        "groups": 16,
+        "values": 256
+      },
+      "Q6_K": {
+        "bits_per_weight": 6.5625,
+        "bytes": 210,
+        "groups": 16,
+        "values": 256
+      },
+      "Q8_0": {
+        "bits_per_weight": 8.5,
+        "bytes": 34,
+        "groups": 1,
+        "values": 32
+      }
+    },
+    "pinned_llama_cpp_commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+    "python_cases_per_format": 2000,
+    "python_max_grouped_dot_difference": 9.094947017729282e-13,
+    "sha256": "b1b1ef5d0b76954ede2515b84cbbac61ea3ca9de16c3ba0fccdd8953770c747e"
+  },
+  "graph_partition": {
+    "evidence_class": "GGML_like_graph_partition_E0_not_real_llama_cpp_backend",
+    "frozen_contract": {
+      "deterministic_partition_hash": true,
+      "explicit_CPU_fallback": true,
+      "longest_match_first": true,
+      "model_name_conditionals": false,
+      "unsupported_vision_fallback": true
+    },
+    "qwen2": {
+      "fallback": 0,
+      "policies": [
+        "rmsnorm_projection",
+        "attention_op",
+        "swi_glu"
+      ],
+      "segments": 3,
+      "sha256": "b1e7bd9db818490eb851aa62dda36f6ff31f829f7465fa0c4b7666f2bf9ea883"
+    },
+    "qwen38": {
+      "fallback": [
+        "unsupported_op:vision_patch_embed"
+      ],
+      "policies": [
+        "ple_policy",
+        "gated_residual_policy",
+        "qsa_policy",
+        "moe_policy",
+        "fallback"
+      ],
+      "segments": 5,
+      "sha256": "87db10ac280f992aa1f89b1c522e65ff17a0a44db2157d2b686ec035d29ee4df"
+    },
+    "remaining_local_gates": [
+      "real_GGML_node_adapter",
+      "real_llama_cpp_graph_capture",
+      "GGUF_tensor_binding",
+      "device_command_submission",
+      "CPU_fallback_execution"
+    ],
+    "schema_version": 1,
+    "status": "PASS"
+  },
+  "not_claimed": [
+    "official_llama_cpp_quant_parity",
+    "RTL_E1",
+    "integrated_iDMA_E3",
+    "post_route_E4"
+  ],
+  "sandbox_validation": {
+    "compileall": "PASS",
+    "cpp_Werror": "PASS",
+    "deterministic_rerun": "PASS",
+    "pytest": "15_passed"
+  },
+  "schema_version": 1,
+  "sequence_state_transactions": {
+    "accepted_steps": 2349,
+    "contract": {
+      "atomic_commit_barrier_required_in_RTL": true,
+      "epoch_generation": true,
+      "page_copy_on_write": true,
+      "partial_prefix_commit": true,
+      "recommended_dirty_granularity": "page_plus_word_mask",
+      "refcount_validation": true,
+      "stale_response_suppression": true,
+      "state_domains": [
+        "kv",
+        "gdn_matrix",
+        "gdn_conv",
+        "qsa_index",
+        "qsa_kv",
+        "ple_history",
+        "ple_conv",
+        "hyper_stream",
+        "sampler",
+        "runtime"
+      ]
+    },
+    "counters": {
+      "accepted_speculative_steps": 2349,
+      "committed_writes": 10649,
+      "copy_on_write": 24,
+      "copy_on_write_words": 96,
+      "page_alloc": 104,
+      "page_free": 104,
+      "rejected_speculative_words": 10189,
+      "responses_accepted": 1,
+      "sequences_deleted": 2,
+      "shared_pages": 24,
+      "stale_responses_suppressed": 1,
+      "transactions_committed": 1000,
+      "transactions_started": 1000
+    },
+    "final_logical_sha256": "66a60d5fef1b492ec4acc0589ce3bddeede78b5d1747409354c5708738036f53",
+    "speculative_steps": 4624,
+    "transactions": 1000,
+    "writes_generated": 20909
+  },
+  "status": "PASS",
+  "system_e3_preflight": {
+    "instrumentation": [
+      "per-engine queue occupancy",
+      "per-task accepted/start/finish cycles",
+      "DDR bytes and effective bandwidth",
+      "SRAM bank conflict cycles",
+      "Matrix active utilization and wall duty cycle",
+      "event wait/signal latency",
+      "score/probability DDR writes must remain zero"
+    ],
+    "remaining_local_gates": [
+      "replace analytical task durations with measured L5.3/L5.4 service curves",
+      "connect real iDMA and DDR latency model",
+      "execute same command trace in integrated RTL",
+      "close 28-layer numerical E2 and cycle E3"
+    ],
+    "selected": {
+      "analytical_tokens_per_second": 338.2517292888433,
+      "block_cycles": 108118970,
+      "critical_chain": [
+        "qkv_weight",
+        "qkv_matrix",
+        "rope",
+        "attention_qk",
+        "attention_softmax",
+        "attention_pv",
+        "oproj_matrix",
+        "residual_1",
+        "ffn_norm",
+        "gateup_matrix",
+        "silu_product",
+        "down_matrix",
+        "residual_2"
+      ],
+      "full_28_layer_cycles": 3027331160,
+      "matrix_duty_cycle": 0.895582560581182,
+      "max_concurrent_banks": 7,
+      "resource_busy_cycles": {
+        "control": 0,
+        "dma_read": 1871726,
+        "dma_write": 26219,
+        "matrix": 96829464,
+        "sfu": 11261980
+      },
+      "schedule_sha256": "a10a8d65b5a800f692aac00bcf190d8a3c52d11041ff4370206467e30ce1de80"
+    }
+  }
+}

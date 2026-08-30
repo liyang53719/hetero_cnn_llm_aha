@@ -1,8 +1,42 @@
 {
-  "accepted_local_evidence":{"H3_DRC":"0_0_0_0","H3_WNS_ns":0.00490451,"L5.2":"PASS_REV8B_B_E1_E4_COMPONENT_H3","postmap_E1":"PASS"},
-  "audited_head":"eba24625350d14fe3f9d760929736dcf5872fabd",
-  "non_claims":["targeted 11 tests are not a replacement for the local full-repository regression","L5.2 component/H3 pass is not post-route signoff","no blocked-Attention RTL E1/E2","no SequenceMemory AXI/iDMA E3","no real Qwen3.8 official-weight or llama.cpp execution"],
-  "remaining_local_gates":["L5.3 real-stream E1/E2","L5.4 fused SiLU E1/E4","L5.5 integrated E3","L5.6 full-model performance","L4 CNN/AHA","L7 production state RTL","L8 official model backends","L9 real llama.cpp/GGUF","L10 post-route/PVT/power"],
-  "schema_version":6,"status":"PASS_SANDBOX_V6_6_L5_2_CLOSED_L5_3_NUMERIC_E0_L7_CONCURRENCY_E0_L9_LOWERING_E0",
-  "targeted_sandbox_execution":{"blocked_attention_numeric":"PASS","compileall":"PASS","new_tests":11,"qwen38_policy_lowering":"PASS","sequence_memory_concurrency":"PASS"}
+  "accepted_local_evidence": {
+    "H3_DRC": "0_0_0_0",
+    "H3_WNS_ns": 0.00490451,
+    "L5.2": "PASS_REV8B_B_E1_E4_COMPONENT_H3",
+    "postmap_E1": "PASS"
+  },
+  "audited_head": "09c0b8e740c903603a6406b61f4a27d606c7c380",
+  "non_claims": [
+    "15 targeted tests are not a replacement for the local full-repository regression",
+    "L5.2 component/H3 pass is not post-route signoff",
+    "no blocked-Attention RTL E1/E2",
+    "no official pinned llama.cpp quant parity",
+    "no cross-engine state RTL E1 or SequenceMemory AXI/iDMA E3",
+    "no integrated E3; the 338.25 tps result is analytical preflight",
+    "no real Qwen3.8 official-weight or llama.cpp/GGUF execution"
+  ],
+  "remaining_local_gates": [
+    "L5.3 real-stream E1/E2",
+    "L5.4 fused SiLU E1/E4",
+    "L5.5 integrated E3",
+    "L5.6 full-model performance",
+    "L4 CNN/AHA",
+    "L6 pinned llama.cpp parity and quant RTL",
+    "L7 production state RTL",
+    "L8 official model backends",
+    "L9 real llama.cpp/GGUF",
+    "L10 post-route/PVT/power"
+  ],
+  "schema_version": 6,
+  "status": "PASS_SANDBOX_V6_7_QUANT_STATE_GRAPH_E3_PREFLIGHT",
+  "targeted_sandbox_execution": {
+    "compileall": "PASS",
+    "cpp_quant_vectors": 384,
+    "cross_engine_state_transactions": 1000,
+    "deterministic_rerun": "PASS",
+    "ggml_quant_layout_dequant_dot": "PASS",
+    "graph_partition": "PASS",
+    "pytest": 15,
+    "system_E3_preflight": "PASS_NOT_E3"
+  }
 }

@@ -1,107 +1,15 @@
 {
-  "closed": [
-    {
-      "id": "L5.2",
-      "risk": "L10 post-route/PVT margin",
-      "status": "PASS_REV8B_B_E1_E4_COMPONENT_H3"
-    }
-  ],
-  "items": [
-    {
-      "acceptance": [
-        "q128 full numerical compare",
-        "q384 full or reviewed sampled-row compare",
-        "q1024 reviewed sampled rows and 43008 merges",
-        "random Matrix/SFU backpressure",
-        "no score/probability DDR writes",
-        "measured service curve for q128/q384/q1024",
-        "no loss duplicate reorder deadlock"
-      ],
-      "id": "L5.3",
-      "local_gate": "real QK-MLO-PV stream E1/E2 against Revision8B-B",
-      "sandbox_status": "cycle, queue and numerical E0 PASS; first RTL FIFO depths frozen at 2/2"
-    },
-    {
-      "acceptance": [
-        "numerical threshold",
-        "random ready/valid E1",
-        "1GHz WNS>=0",
-        "area/power comparison",
-        "no separate unfused product multiplier path"
-      ],
-      "id": "L5.4",
-      "local_gate": "1/2-lane fused SiLU RTL E1/E4 and producer-stall selection",
-      "sandbox_status": "128-entry direct-SiLU LUT numerical/throughput DSE PASS"
-    },
-    {
-      "acceptance": [
-        "real per-engine queue and service counters",
-        "DDR byte/effective bandwidth accounting",
-        "SRAM bank-conflict accounting",
-        "score/probability DDR writes zero",
-        "q1024 >=300 tps",
-        "SRAM <=4MiB",
-        "DDR read/write <=100/40GB/s"
-      ],
-      "id": "L5.5-L5.6",
-      "local_gate": "replace analytical durations with measured L5.3/L5.4 curves; run Matrix/SFU/iDMA/DDR E3 and 28-layer q1024",
-      "sandbox_status": "discrete-event E3 preflight PASS; analytical q1024 338.25 tps at 100GB/s/16 banks, not E3"
-    },
-    {
-      "acceptance": [
-        "byte-exact upstream parity",
-        "dot parity",
-        "one shared multiplier/reduction array",
-        "format-specific unpack/sign/subscale only"
-      ],
-      "id": "L6",
-      "local_gate": "compile pinned llama.cpp commit and compare >=10000 blocks/format; implement unified operand frontend and mapped PPA",
-      "sandbox_status": "FP16/Q8_0/Q6_K/Q3_K byte layout, unpack, dequant and shared-dot E0 PASS; independent C++ vectors PASS"
-    },
-    {
-      "acceptance": [
-        "same-page miss coalescing",
-        "stale response suppression",
-        "partial-prefix commit",
-        "atomic COW/refcount",
-        "in-order retirement under OOO response",
-        "continuous batching"
-      ],
-      "id": "L7",
-      "local_gate": "page walker/TLB/MSHR/COW/refcount/epoch/commit RTL E1 and AXI/iDMA E3",
-      "sandbox_status": "translation, TLB/leaf/MSHR/OOO and 1000-transaction cross-engine state E0 PASS"
-    },
-    {
-      "acceptance": [
-        "official immutable-revision node trace",
-        "real graph partition without model-name hardcoding",
-        "GGUF tensor binding",
-        "end-to-end token generation"
-      ],
-      "id": "L8-L9",
-      "local_gate": "official traces, backend RTL, real GGML/GGUF adapter, command submission and CPU fallback",
-      "sandbox_status": "Qwen3.5/3.8 E0, full-shape program, policy->Command128, mock and longest-match partition PASS"
-    },
-    {
-      "acceptance": [
-        "CNN subset numerical pass",
-        "1GHz WNS nonnegative"
-      ],
-      "id": "L4",
-      "local_gate": "Garnet map/PnR/Verilator/DC and CNN subset",
-      "sandbox_status": "legal AHA 4x4 ratio-2 contract ready"
-    },
-    {
-      "acceptance": [
-        "nontrivial timing margin",
-        "power evidence",
-        "canonical Archspec promotion"
-      ],
-      "id": "L10-L11",
-      "local_gate": "SRAM macro, post-route STA, PVT/OCV, SAIF power and final Pareto",
-      "sandbox_status": "component/H3 Matrix pass and candidate Archspec collateral"
-    }
-  ],
+  "schema_version": 6,
   "marker": "WAIT_LOCAL_AGENT_PUSH",
-  "schema_version": 6
+  "closed": [{"id": "L5.2", "status": "PASS_REV8B_B_E1_E4_COMPONENT_H3", "risk": "L10 post-route/PVT margin"}],
+  "items": [
+    {"id": "L5.3", "sandbox_status": "numeric/cycle/queue E0 PASS, FIFO 2/2 frozen", "local_gate": "real QK-MLO-PV E1/E2", "acceptance": ["q128 full numerical compare", "q384 full or approved sampled compare", "q1024 reviewed rows and 43008 merges", "random Matrix/SFU backpressure", "zero score/probability DDR", "measured service curves", "no loss duplicate reorder deadlock"]},
+    {"id": "L5.4", "sandbox_status": "128-entry LUT and 1/2-lane DSE PASS", "local_gate": "RTL E1/E4 and producer-stall selection", "acceptance": ["numerical threshold", "random ready/valid E1", "1GHz WNS>=0", "area/power comparison", "queue high-water and producer stall"]},
+    {"id": "L5.5-L5.6", "sandbox_status": "32000-case sensitivity PASS, baseline 338.25 tps, review floor 315 tps", "local_gate": "measured service curves, real iDMA/DDR E3 and 28-layer q1024", "acceptance": ["mandatory counters present", "pre-route projection >=315 tps for normal continuation", "q1024 >=300 tps", "SRAM<=4MiB", "DDR<=100/40GB/s"]},
+    {"id": "L6", "sandbox_status": "exact formats and 16-value shared operand frontend E0/source ready", "local_gate": "pinned llama.cpp >=10000-block parity and decoder/shared-dot RTL E1/PPA", "acceptance": ["byte and dot parity", "no format-specific multiplier array", "1GHz PPA"]},
+    {"id": "L7", "sandbox_status": "commit barrier/epoch/filter/dirty-domain source ready", "local_gate": "atomic RTL E1 and OOO iDMA E3", "acceptance": ["8 transaction slots", "10 state domains", "partial-prefix commit", "stale suppression", "COW/refcount integration"]},
+    {"id": "L8", "sandbox_status": "official trace schema/replayer E0 PASS", "local_gate": "official immutable-revision capture and backend replay", "acceptance": ["per-node tensor/state hashes", "QSA/MoE/PLE/MTP metadata", "reviewed tolerance"]},
+    {"id": "L9", "sandbox_status": "versioned GGML node ABI adapter E0 PASS", "local_gate": "real llama.cpp graph capture/GGUF binding/CPU fallback", "acceptance": ["real graph regression", "descriptor binding", "device submission", "fallback execution"]},
+    {"id": "L4/L10/L11", "sandbox_status": "contracts and candidate collateral ready", "local_gate": "AHA/Garnet CNN and final physical/Pareto", "acceptance": ["CNN E1/E4", "SRAM macros", "post-route PVT/OCV", "SAIF", "Archspec promotion"]}
+  ]
 }

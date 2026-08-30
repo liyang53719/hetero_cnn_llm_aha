@@ -20,18 +20,20 @@ sequence=load('reports/execution/sequence_memory_cycle_v6_result.json')
 rev8b=load('config/l5_revision8b_a_policy.json')
 rev8b_source=load('reports/execution/l5_revision8b_a_source_contract_result.json')
 rev8b_local=load('reports/execution/l5_revision8b_a_local_result.json')
+rev8b_b_source=load('reports/execution/l5_revision8b_b_source_contract_result.json')
+rev8b_b_local=load('reports/execution/l5_revision8b_b_local_result.json')
 
 assert control['schema_version']==6 and control['plan_version']=='2026-08-28-v6.4'
-assert control['current_state']=='L5_2_REV8B_B_5STAGE_5CONTEXT_ACTIVE'
+assert control['current_state']=='L5_2_REV8B_B_FUNCTIONAL_E1_PASS_WAIT_COMPONENT_DC'
 assert control['remote_audit']['observed_head']=='4dec4a8df6b246f01778925745b7ae21292f74a3'
 assert control['remote_audit']['decision']=='ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE'
 assert control['revision8A']['decision']=='APPROVE_CANDIDATE_E0_WITH_LOCAL_GATES'
 assert control['revision8B']['decision']=='APPROVE_REVISION8B_A_WITH_AUTOMATIC_REVISION8B_B_FALLBACK'
 assert ledger['current_state']==control['current_state']
 assert ledger['accepted_local_evidence']['L5.2']['revision7_h3_wns_ns']<0
-assert next_action['state']=='REVISION8B_B_5STAGE_5CONTEXT_ACTIVE'
-assert next_action['decision']=='REVISION8B_A_DRC_CLEAN_WNS_FAIL_TRIGGER_REVISION8B_B'
-assert final['status']=='PASS_V6_4_REV8B_A_TRIGGER_REV8B_B_ACTIVE'
+assert next_action['state']=='REVISION8B_B_FUNCTIONAL_E1_PASS_WAIT_COMPONENT_DC'
+assert next_action['decision']=='CONTINUE_REVISION8B_B_PHYSICAL_GATES'
+assert final['status']=='PASS_V6_4_REV8B_B_FUNCTIONAL_E1_WAIT_E4'
 assert rev8b['decision']=='APPROVED'
 assert rev8b['phase_a']['fma_stages']==4 and rev8b['phase_a']['contexts']==4
 assert rev8b['phase_a_gates']['h3_max_transition_violations']==0
@@ -44,7 +46,10 @@ assert rev8b_local['status']=='TRIGGER_REVISION8B_B'
 assert all(rev8b_local['checks'][key] for key in ('source_contract','broadcast_e1','rev8a_vs_rev8b_a','main_e1','adversarial_e1','broadcast_dc','broadcast_gate_compare','operand_distribution','h3_drc_clean'))
 assert rev8b_local['checks']['h3'] is False
 assert rev8b_local['h3']['wns_ns']<0 and rev8b_local['h3']['max_transition']==0 and rev8b_local['h3']['max_cap']==0
-assert next_action['frozen']['fma_stages']==5 and next_action['frozen']['contexts']==5
+assert rev8b_b_source['status']=='PASS' and rev8b_b_source['fma_stages']==5 and rev8b_b_source['contexts']==5
+assert rev8b_b_local['status']=='FUNCTIONAL_E1_PASS_WAIT_E4'
+assert all(rev8b_b_local['checks'][key] for key in ('source_contract','main_e1','adversarial_e1','rev8b_a_compare'))
+assert not any(rev8b_b_local['checks'][key] for key in ('lane_dc','mapped_equivalence','cluster_dc','front_dc','broadcast_dc','h3','postmap_e1'))
 
 assert l51['status']=='PASS' and l51['e4']['block128_wns_ns']>=0
 assert l52['e1']['lanes']==512 and l52['e1']['contexts']==4
@@ -96,6 +101,14 @@ for path in (
  'rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv',
  'scripts/run_l5_revision8b_a_broadcast_dc.sh',
  'scripts/run_l5_revision8b_a_h3.sh',
+ 'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv',
+ 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv',
+ 'rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv',
+ 'rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv',
+ 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv',
+ 'scripts/run_l5_matrix_context_revision8b_b_e1.sh',
+ 'scripts/run_l5_matrix_context_revision8b_b_adversarial_e1.sh',
+ 'scripts/run_l5_matrix_context_revision8b_b_compare.sh',
 ): assert (ROOT/path).is_file(),path
 
 assert attention['status']=='PASS'
@@ -115,7 +128,7 @@ result={
  'L5_2_revision7':'LANE_EQUIV_E1_PASS_H3_FAIL',
  'L5_2_revision8A':'COMPONENTS_E1_EQUIV_PASS_H3_FAIL',
  'L5_2_revision8B_A':'TRIGGER_REVISION8B_B',
- 'L5_2_revision8B_B':'ACTIVE_5STAGE_5CONTEXT',
+ 'L5_2_revision8B_B':'FUNCTIONAL_E1_PASS_WAIT_E4',
  'L5_3_L5_4':'PARALLEL_EXECUTION_AUTHORIZED',
  'blocked_attention_cycle_E0':'PASS',
  'retained_v6_gates':['control_plane_audit','Archspec_collateral','Qwen38_full_shape_program','SequenceMemory_cycle_E0'],

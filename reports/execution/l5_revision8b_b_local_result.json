@@ -1,0 +1,31 @@
+{
+  "architecture": {
+    "clock_period_ns": 1.0,
+    "contexts": 5,
+    "fma_stages": 5,
+    "internal_context_tag_bits": 3,
+    "lanes": 512
+  },
+  "checks": {
+    "adversarial_e1": true,
+    "broadcast_dc": false,
+    "cluster_dc": false,
+    "front_dc": false,
+    "h3": false,
+    "lane_dc": false,
+    "main_e1": true,
+    "mapped_equivalence": false,
+    "postmap_e1": false,
+    "rev8b_a_compare": true,
+    "source_contract": true
+  },
+  "evidence_hashes": {
+    "adversarial_e1": "caac00cf7df01fbb8494c426f9e3fc2f15e8679e4c6640976c11fa48ec2ed721",
+    "compare": "409cc022e3b0fb7017f7bdfe1899d86779ba8b0ff7f26ce9eaee7fb9f7a7bb4a",
+    "main_e1": "121c6d1616dfaabb1777dc5fc132362a2139fc0b2b2aae84adad29ee466f912e",
+    "source": "aa928d7ef0628b94a4f05a0b69fc87b86300302880e5de7405ae852c947c0133"
+  },
+  "revision": "8B-B",
+  "schema_version": 1,
+  "status": "FUNCTIONAL_E1_PASS_WAIT_E4"
+}

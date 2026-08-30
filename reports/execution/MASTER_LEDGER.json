@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV8B_B_5STAGE_5CONTEXT_ACTIVE",
+  "current_state": "L5_2_REV8B_B_FUNCTIONAL_E1_PASS_WAIT_COMPONENT_DC",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "new_local_agent_commit_detected": true,
@@ -79,7 +79,15 @@
       "cell_area": 1360153.527546
     },
     "active_revision": "Revision8B_B_5stage_5context",
-    "next_gate": "Revision8B_B_source_compare_and_E1"
+    "revision8B_B_functional": {
+      "source_contract": "PASS",
+      "dependent_steps": 1000000,
+      "random_backpressure_steps": 10000,
+      "adversarial_steps": 50000,
+      "revision8B_A_compare_cycles": 120000,
+      "latency_shift_cycles": 1
+    },
+    "next_gate": "Revision8B_B_lane_component_DC_and_mapped_equivalence"
   },
   "source_ready_waiting_local": [
     "Revision8B_B_5stage_5context_source_and_physical_gates",

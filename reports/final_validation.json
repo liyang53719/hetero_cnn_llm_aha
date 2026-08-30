@@ -1,42 +1,10 @@
 {
-  "accepted_local_evidence": {
-    "H3_DRC": "0_0_0_0",
-    "H3_WNS_ns": 0.00490451,
-    "L5.2": "PASS_REV8B_B_E1_E4_COMPONENT_H3",
-    "postmap_E1": "PASS"
-  },
-  "audited_head": "09c0b8e740c903603a6406b61f4a27d606c7c380",
-  "non_claims": [
-    "15 targeted tests are not a replacement for the local full-repository regression",
-    "L5.2 component/H3 pass is not post-route signoff",
-    "no blocked-Attention RTL E1/E2",
-    "no official pinned llama.cpp quant parity",
-    "no cross-engine state RTL E1 or SequenceMemory AXI/iDMA E3",
-    "no integrated E3; the 338.25 tps result is analytical preflight",
-    "no real Qwen3.8 official-weight or llama.cpp/GGUF execution"
-  ],
-  "remaining_local_gates": [
-    "L5.3 real-stream E1/E2",
-    "L5.4 fused SiLU E1/E4",
-    "L5.5 integrated E3",
-    "L5.6 full-model performance",
-    "L4 CNN/AHA",
-    "L6 pinned llama.cpp parity and quant RTL",
-    "L7 production state RTL",
-    "L8 official model backends",
-    "L9 real llama.cpp/GGUF",
-    "L10 post-route/PVT/power"
-  ],
   "schema_version": 6,
-  "status": "PASS_SANDBOX_V6_7_QUANT_STATE_GRAPH_E3_PREFLIGHT",
-  "targeted_sandbox_execution": {
-    "compileall": "PASS",
-    "cpp_quant_vectors": 384,
-    "cross_engine_state_transactions": 1000,
-    "deterministic_rerun": "PASS",
-    "ggml_quant_layout_dequant_dot": "PASS",
-    "graph_partition": "PASS",
-    "pytest": 15,
-    "system_E3_preflight": "PASS_NOT_E3"
-  }
+  "status": "PASS_SANDBOX_V6_8_NO_NEW_LOCAL_PUSH_SOURCE_READY_EXTENSIONS",
+  "audited_head": "e87eb9763ddec26ed67a92980e7487452519103b",
+  "latest_local_agent_evidence": "eba24625350d14fe3f9d760929736dcf5872fabd",
+  "accepted_local_evidence": {"L5.1": "PASS_ZERO_MARGIN", "L5.2": "PASS_REV8B_B_COMPONENT_H3_ULTRA_LOW_MARGIN"},
+  "sandbox_execution": {"compileall": "PASS", "targeted_pytest": "15_passed", "quant_frontend": "PASS", "state_barrier": "PASS", "trace_replayer": "PASS", "GGML_adapter": "PASS", "L5_join_sensitivity": "PASS", "RTL_source_contract_check": "PASS"},
+  "non_claims": ["no new L5.3 or L5.4 local evidence", "targeted tests are not full repository regression", "no RTL elaboration in sandbox", "no pinned llama.cpp parity", "no official weight trace", "no integrated E3", "no post-route signoff"],
+  "remaining_local_gates": ["L5.3_real_stream_E1_E2", "L5.4_fused_SiLU_E1_E4", "L5.5_integrated_iDMA_DDR_E3", "pinned_llama_cpp_quant_parity", "state_transaction_RTL_E1", "official_weight_trace_capture", "real_llama_cpp_backend", "post_route_PVT_power"]
 }

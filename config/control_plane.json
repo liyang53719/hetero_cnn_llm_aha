@@ -1,118 +1,36 @@
 {
   "accepted_local_evidence": {
-    "L5.1": {
-      "block128_wns_ns": 1.36495e-05,
-      "scope": "component_level_DC_not_post_route_signoff",
-      "status": "PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN"
-    },
-    "L5.2": {
-      "adversarial_steps": 50000,
-      "broadcast_wns_ns": 0.379584,
-      "closeout": "reports/L5_2_REVISION8B_B_CLOSEOUT.md",
-      "cluster16_wns_ns": 1.01328e-06,
-      "completion_fifo_depth": 5,
-      "contexts": 5,
-      "cross_revision_compare_cycles": 120000,
-      "dependent_steps": 1000000,
-      "evidence": "reports/execution/l5_revision8b_b_local_result.json",
-      "flags_wns_ns": 0.34046,
-      "fma_stages": 5,
-      "front_wns_ns": 0.000887126,
-      "h3_area": 1661847.825806,
-      "h3_max_cap": 0,
-      "h3_max_transition": 0,
-      "h3_unmapped": 0,
-      "h3_unresolved": 0,
-      "h3_wns_ns": 0.00490451,
-      "internal_context_tag_bits": 3,
-      "lane_wns_ns": 0.00020206,
-      "mapped_lane_compare_cycles": 120032,
-      "physical_array": "16x32_512_lane",
-      "random_backpressure_steps": 10000,
-      "status": "PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN"
-    }
+    "L5.1": {"block128_wns_ns": 1.36495e-05, "scope": "component_level_DC_not_post_route_signoff", "status": "PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN"},
+    "L5.2": {"adversarial_steps": 50000, "completion_fifo_depth": 5, "contexts": 5, "dependent_steps": 1000000, "evidence": "reports/execution/l5_revision8b_b_local_result.json", "fma_stages": 5, "h3_area": 1661847.825806, "h3_max_cap": 0, "h3_max_transition": 0, "h3_unmapped": 0, "h3_unresolved": 0, "h3_wns_ns": 0.00490451, "internal_context_tag_bits": 3, "mapped_lane_compare_cycles": 120032, "physical_array": "16x32_512_lane", "random_backpressure_steps": 10000, "status": "PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN", "L10_risk": "post_route_PVT_OCV_margin_open"}
   },
-  "candidate_archspecs": [
-    "configs/arch_v2_qwen38_candidate.yaml"
-  ],
+  "candidate_archspecs": ["configs/arch_v2_qwen38_candidate.yaml"],
   "canonical_archspec": "configs/arch_v1.yaml",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
   "claim_rules": [
-    "L5.2 is closed only at the frozen component/H3 DC boundary; post-route and variation signoff remain L10",
-    "the H3 and arithmetic component margins are ultra-low and must remain on the physical risk register",
-    "blocked Attention numerical and cycle references are E0, not real-stream RTL E1/E2",
-    "GGML Q8_0/Q6_K/Q3_K/FP16 layout and dot references are E0 until parity against the pinned llama.cpp C implementation passes",
-    "cross-engine state transactions are E0 and do not replace atomic RTL/iDMA E1/E3",
-    "the discrete-event system result is an E3 preflight, not integrated RTL E3",
-    "GGML-like graph partition is compiler E0, not a real llama.cpp/GGUF backend",
-    "L5.5 may not close before L5.2, L5.3 and L5.4 pass",
-    "candidate Archspec collateral does not promote it to canonical",
-    "vision remains outside scope"
+    "No new local-agent evidence was present at the v6.8 audit; L5.3 and L5.4 remain open.",
+    "L5.2 is closed only at the component/H3 DC boundary; post-route/PVT/OCV remains L10.",
+    "Unified quant operand frontend is E0/source-ready, not RTL E1 or pinned llama.cpp parity.",
+    "State commit barrier and epoch/filter RTL are source-ready contracts, not atomic RTL E1 or iDMA E3.",
+    "Trace schema and GGML node adapter are E0 interfaces, not official-weight traces or a linked llama.cpp backend.",
+    "L5.5 sensitivity is an E3 preflight; measured service curves and real counters must replace analytical inputs.",
+    "If the measured pre-route full-model projection falls below 315 token/s, reopen the architecture/performance budget.",
+    "Candidate Archspec collateral does not promote it to canonical.",
+    "Vision remains outside current scope."
   ],
   "current_stage": "L5",
-  "current_state": "L5_2_CLOSED_L5_3_L5_4_SOURCE_READY_WAIT_LOCAL_E1_E4",
+  "current_state": "L5_2_CLOSED_L5_3_L5_4_WAIT_LOCAL_E1_E4_SANDBOX_V68_SOURCE_READY",
   "current_subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
   "descriptor_schema": "spec/descriptor_schema.yaml",
-  "evidence_classes": {
-    "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
-    "E1": "real_kernel_rtl_simulation",
-    "E2": "sampled_numerical_engine_integration",
-    "E3": "integrated_queue_dma_sram_ddr_cycle_execution",
-    "E4": "post_synthesis_timing_area_power"
-  },
+  "evidence_classes": {"E0": "functional_algorithmic_compiler_architecture_or_cycle_reference", "E1": "real_kernel_RTL_simulation", "E2": "sampled_numerical_engine_integration", "E3": "integrated_queue_DMA_SRAM_DDR_cycle_execution", "E4": "post_synthesis_timing_area_power"},
   "handoff": "reports/execution/HANDOFF.md",
-  "join_rules": {
-    "L5.5_requires": [
-      "L5.2_PASS",
-      "L5.3_PASS",
-      "L5.4_PASS"
-    ],
-    "L5.6_requires": [
-      "L5.5_PASS",
-      "28_layer_E2_E3",
-      "physical_E4"
-    ]
-  },
+  "join_rules": {"L5.5_requires": ["L5.2_PASS", "L5.3_PASS", "L5.4_PASS"], "L5.6_requires": ["L5.5_PASS", "28_layer_E2_E3", "physical_E4"], "performance_review_floor_tps_before_post_route": 315},
   "ledger": "reports/execution/MASTER_LEDGER.json",
   "local_waitlist": "reports/execution/LOCAL_AGENT_WAITLIST.json",
   "next_action": "reports/execution/NEXT_ACTION.json",
-  "plan_version": "2026-08-30-v6.7",
-  "remote_audit": {
-    "audited_at_utc": "2026-08-30T16:10:00Z",
-    "branch_count": 1,
-    "decision": "NO_NEW_LOCAL_AGENT_EVIDENCE_CONTINUE_SANDBOX_V67",
-    "latest_local_agent_evidence_commit": "eba24625350d14fe3f9d760929736dcf5872fabd",
-    "new_local_agent_commit_detected": false,
-    "observed_head": "09c0b8e740c903603a6406b61f4a27d606c7c380"
-  },
-  "sandbox_progress": {
-    "L5_3_BLOCKED_ATTENTION_CYCLE_E0": "PASS",
-    "L5_3_BLOCKED_ATTENTION_NUMERICAL_E0": "PASS",
-    "L5_3_BLOCKED_ATTENTION_STREAM_QUEUE_E0": "PASS",
-    "L5_4_FUSED_SILU_NUMERICAL_THROUGHPUT_DSE": "PASS",
-    "L5_5_DISCRETE_EVENT_E3_PREFLIGHT": "PASS_NOT_E3",
-    "L6_GGML_Q8_0_Q6_K_Q3_K_FP16_LAYOUT_DEQUANT_DOT_E0": "PASS",
-    "L7_CROSS_ENGINE_STATE_TRANSACTION_E0": "PASS",
-    "L7_SEQUENCE_MEMORY_CONCURRENCY_MSHR_OOO_E0": "PASS",
-    "L8_L9_QWEN38_POLICY_TO_COMMAND128_E0": "PASS",
-    "L8_QWEN38_FULL_SHAPE_PROGRAM_E0": "PASS",
-    "L9_LONGEST_MATCH_GRAPH_PARTITION_E0": "PASS",
-    "L9_MOCK_BACKEND_PARTITION_E0": "PASS"
-  },
+  "plan_version": "2026-08-31-v6.8",
+  "remote_audit": {"audited_at_utc": "2026-08-31T00:00:00Z", "branch_count": 1, "decision": "NO_NEW_LOCAL_AGENT_PUSH_RETAIN_L5_2_CLOSURE_CONTINUE_SANDBOX_V68", "latest_local_agent_evidence_commit": "eba24625350d14fe3f9d760929736dcf5872fabd", "new_local_agent_commit_detected": false, "observed_head": "e87eb9763ddec26ed67a92980e7487452519103b"},
+  "sandbox_progress": {"L5_3_BLOCKED_ATTENTION_NUMERICAL_CYCLE_STREAM_E0": "PASS", "L5_4_FUSED_SILU_NUMERICAL_THROUGHPUT_DSE": "PASS", "L5_5_JOIN_SENSITIVITY_32000_CASES_E0": "PASS", "L6_GGML_QUANT_LAYOUT_DEQUANT_DOT_E0": "PASS", "L6_UNIFIED_QUANT_OPERAND_FRONTEND_E0_SOURCE_READY": "PASS", "L7_SEQUENCE_MEMORY_CONCURRENCY_MSHR_OOO_E0": "PASS", "L7_STATE_COMMIT_BARRIER_E0_AND_RTL_CONTRACT_SOURCE_READY": "PASS", "L8_OFFICIAL_TRACE_SCHEMA_REPLAYER_E0": "PASS", "L9_GGML_NODE_ADAPTER_ABI_E0": "PASS", "L9_LONGEST_MATCH_GRAPH_PARTITION_E0": "PASS"},
   "schema_version": 6,
-  "stage_namespace": [
-    "L0",
-    "L1",
-    "L2",
-    "L3",
-    "L4",
-    "L5",
-    "L6",
-    "L7",
-    "L8",
-    "L9",
-    "L10",
-    "L11"
-  ]
+  "stage_namespace": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"]
 }

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "evidence_class": "cycle_structured_stream_E0_not_RTL_E1_or_iDMA_E3",
+  "cases": {
+    "128": {
+      "geometry": {"query_tiles": 8, "query_key_pairs": 20, "head_microtiles": 240, "summary_merges": 0, "matrix_service_cycles_per_microtile": 128, "score_service_cycles_per_microtile": 16, "matrix_issue_cycles": 61440, "sfu_cycles": 3840},
+      "selected": {"status": "PASS", "sequence": 128, "score_fifo_depth": 1, "probability_fifo_depth": 1, "cycles": 61445, "lower_bound_cycles": 61444, "matrix_busy_cycles": 61440, "sfu_busy_cycles": 3840, "qk_completed": 240, "pv_completed": 240, "max_score_occupancy": 1, "max_probability_occupancy": 1, "matrix_utilization": 0.9999186264146798, "overhead_fraction": 0.000016275633096803593, "deadlock": false, "score_ddr_bytes": 0, "probability_ddr_bytes": 0}
+    },
+    "384": {
+      "geometry": {"query_tiles": 24, "query_key_pairs": 156, "head_microtiles": 1872, "summary_merges": 4608, "matrix_service_cycles_per_microtile": 128, "score_service_cycles_per_microtile": 16, "matrix_issue_cycles": 479232, "sfu_cycles": 177408},
+      "selected": {"status": "PASS", "sequence": 384, "score_fifo_depth": 1, "probability_fifo_depth": 1, "cycles": 479237, "lower_bound_cycles": 479236, "matrix_busy_cycles": 479232, "sfu_busy_cycles": 177408, "qk_completed": 1872, "pv_completed": 1872, "max_score_occupancy": 1, "max_probability_occupancy": 1, "matrix_utilization": 0.9999895667488069, "overhead_fraction": 0.000002086654596901732, "deadlock": false, "score_ddr_bytes": 0, "probability_ddr_bytes": 0}
+    },
+    "1024": {
+      "geometry": {"query_tiles": 64, "query_key_pairs": 1056, "head_microtiles": 12672, "summary_merges": 43008, "matrix_service_cycles_per_microtile": 128, "score_service_cycles_per_microtile": 16, "matrix_issue_cycles": 3244032, "sfu_cycles": 1579008},
+      "selected": {"status": "PASS", "sequence": 1024, "score_fifo_depth": 1, "probability_fifo_depth": 1, "cycles": 3244165, "lower_bound_cycles": 3244036, "matrix_busy_cycles": 3244032, "sfu_busy_cycles": 1579008, "qk_completed": 12672, "pv_completed": 12672, "max_score_occupancy": 1, "max_probability_occupancy": 1, "matrix_utilization": 0.9999590033182657, "overhead_fraction": 0.00003976589717130266, "deadlock": false, "score_ddr_bytes": 0, "probability_ddr_bytes": 0}
+    }
+  },
+  "frozen_invariants": {"shared_matrix_for_QK_and_PV": true, "score_DDR_materialization_bytes": 0, "probability_DDR_materialization_bytes": 0, "GQA_KV_reuse": 6, "q1024_summary_merges": 43008},
+  "local_gates": ["real_stream_RTL_E1", "q128_q384_q1024_numerical_E2", "random_backpressure_E1", "measured_service_curve", "iDMA_E3"]
+}

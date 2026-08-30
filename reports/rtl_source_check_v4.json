@@ -1,7 +1,7 @@
 {
   "errors": [],
   "evidence_class": "source_structural_not_compiler",
-  "module_count": 93,
+  "module_count": 97,
   "modules": [
     "shared_l2_client_arbiter",
     "shared_l2_macro_descriptor_fabric",
@@ -89,6 +89,10 @@
     "ct_sp4096x128_macro_wrapper",
     "rv_fifo",
     "tensor_stream_skid",
+    "bf16_outer_product_context_array_rev8b_a_candidate",
+    "bf16_outer_product_context_array",
+    "bf16_operand_distribution512_rev8b_a_candidate",
+    "bf16_front_to_cluster_broadcast32_rev8b_a_candidate",
     "bf16_outer_product_array_control_rev8_candidate",
     "bf16_outer_product_context_array_rev8_candidate",
     "bf16_context_tag_pipeline4_rev8_candidate",

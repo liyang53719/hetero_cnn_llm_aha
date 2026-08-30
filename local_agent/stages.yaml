@@ -11,7 +11,7 @@ stages:
     status: IN_PROGRESS
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495, evidence: reports/execution/l5_block128_local_e1_e4_result.json}
-      L5.2: {status: REV8B_A_APPROVED_WAIT_IMPLEMENTATION, scope: Matrix_context_interleave, revision8A: [component_E1_equiv_PASS, H3_WNS_N10537P7, H3_MAX_TRANS_53455, H3_MAX_CAP_10], revision8B_A: [mapped_combinational_fanout_tree, four_stage, four_context, no_FMA_stage_addition], revision8B_B_trigger: [zero_transition, zero_cap, negative_1GHz_WNS_after_normal_high], revision8B_B: [five_stage, five_context, internal_tag_3bit], policy: config/l5_revision8b_a_policy.json, approval: reports/L5_2_REVISION8B_A_APPROVAL.md}
+      L5.2: {status: REV8B_B_5STAGE_5CONTEXT_ACTIVE, scope: Matrix_context_interleave, revision8B_A: [functional_all_PASS, broadcast_WNS_P0P302272, operand_WNS_P0P379584, H3_TRANS_0, H3_CAP_0, H3_UNMAPPED_0, H3_UNRESOLVED_0, H3_WNS_N1P3073, TRIGGER_REV8B_B], revision8B_B: [five_stage, five_context, internal_tag_3bit, cluster_local_input_Pre_boundary], policy: config/l5_revision8b_a_policy.json, activation: reports/L5_2_REVISION8B_B_ACTIVATION.md}
       L5.3: {status: PARALLEL_EXECUTION_AUTHORIZED_CYCLE_E0_PASS_WAIT_REAL_STREAM_E1_E2, scope: blocked_QK_softmax_PV, q384_serial_cycles: 656644, q1024_summary_merges: 43008, evidence: reports/execution/l5_blocked_attention_cycle_e0_result.json, join_before: L5.5}
       L5.4: {status: PARALLEL_EXECUTION_AUTHORIZED_WAIT_LOCAL_E1_E4_SELECTION, scope: pipelined_SiLU_times_up_DSE, join_before: L5.5}
       L5.5: {status: SANDBOX_ANALYTICAL_MODEL_READY_WAIT_LOCAL_E3, scope: queue_DMA_DDR_overlap}

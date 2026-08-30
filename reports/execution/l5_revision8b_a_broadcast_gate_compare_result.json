@@ -1,0 +1,21 @@
+{
+  "compared_vectors": 100000,
+  "comparison_mode": "functional_zero_delay_no_SDF",
+  "hashes": {
+    "mapped_netlist_sha256": "5e36775324055a3a9a0f8117d8c9a283f4cdb707c1fb5c457eedca988ff1b5bb",
+    "rtl_sha256": "1442e62fdc3702c01c7e3adf4020224358320d2f39fc9bf866552d6aa8458c5e",
+    "std_cell_verilog_sha256": "527f1fe8c867e975926a89478187effdf662ab32d87e286ad6d98267dc1a4d8f",
+    "testbench_sha256": "23efb38461eb81d61f7f9bce8a3783bb81e3f22a5160cb66a82782c649995199",
+    "trace_sha256": "e1eb9733139f2a19f1151f931c8abd8b94767415f578e298891531831455548c"
+  },
+  "limitations": [
+    "not SDF timing simulation",
+    "broadcast component only"
+  ],
+  "method": "broadcast_post_synthesis_gate_compare",
+  "mismatches": 0,
+  "revision": "8B-A",
+  "schema_version": 1,
+  "status": "PASS",
+  "unknown_outputs": 0
+}

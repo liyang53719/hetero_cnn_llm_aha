@@ -1,4 +1,7 @@
 `timescale 1ns/1ps
+`ifndef L5_CONTEXT_ARRAY_DUT
+`define L5_CONTEXT_ARRAY_DUT bf16_outer_product_context_array_rev8_candidate
+`endif
 module tb_bf16_outer_product_context_array_rev8_adversarial;
   localparam integer ROWS=16, COLS=32, LANES=ROWS*COLS;
   localparam integer TARGET=50_000;
@@ -25,7 +28,7 @@ module tb_bf16_outer_product_context_array_rev8_adversarial;
 
   always #0.5 clk=~clk;
 
-  bf16_outer_product_context_array_rev8_candidate dut(
+  `L5_CONTEXT_ARRAY_DUT dut(
     .clk_i(clk),.rst_ni(rst_n),.in_valid_i(in_valid),.in_ready_o(in_ready),
     .context_i(context_in),.clear_i(clear),.last_i(last),.a_i(a),.b_i(b),
     .out_valid_o(out_valid),.out_ready_i(out_ready),.context_o(context_out),

@@ -1,53 +1,45 @@
 {
   "schema_version": 6,
-  "state": "APPROVED_WAIT_LOCAL_REVISION8B_A_IMPLEMENTATION",
+  "state": "REVISION8B_B_5STAGE_5CONTEXT_ACTIVE",
   "stage": "L5",
   "subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "decision": "APPROVE_REVISION8B_A_FANOUT_TREE_WITH_REVISION8B_B_FALLBACK",
-  "objective": "Implement and validate a cycle-neutral mapped 1-to-4-to-32 front-to-cluster distribution tree without adding an FMA stage.",
-  "policy": "config/l5_revision8b_a_policy.json",
-  "approval": "reports/L5_2_REVISION8B_A_APPROVAL.md",
-  "next_code_action": "Add candidate-only Revision8B-A broadcast32 RTL, top integration, independent DC/mapped-equivalence flows and tests; do not edit generated or canonical RTL.",
-  "expected_artifacts": [
-    "rtl/matrix/candidates/rev8b_a/bf16_front_to_cluster_broadcast32_rev8b_a_candidate.sv",
-    "rtl/matrix/candidates/rev8b_a/bf16_outer_product_context_array_rev8b_a_candidate.sv",
-    "dc/synth_l5_bf16_broadcast32_rev8b_a.tcl",
-    "dc/synth_l5_bf16_context_top_rev8b_a.tcl",
-    "scripts/run_l5_matrix_context_revision8b_a.sh",
-    "reports/execution/l5_revision8b_a_local_result.json"
+  "decision": "REVISION8B_A_DRC_CLEAN_WNS_FAIL_TRIGGER_REVISION8B_B",
+  "revision8B_A_evidence": "reports/execution/l5_revision8b_a_local_result.json",
+  "activation": "reports/L5_2_REVISION8B_B_ACTIVATION.md",
+  "unique_next_action": "Implement candidate-only 5-stage/5-context scheduler, tag, lane and cluster-local registered input/Pre boundary; preserve generated HardFloat and public 128-bit command.",
+  "required_first_artifacts": [
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "tests for five contexts, five-cycle feedback and II=1"
   ],
-  "ordered_gates": [
-    "static_policy_and_source_contract",
-    "revision8A_vs_revision8B_A_120k_cycle_compare",
-    "broadcast32_component_DC_and_mapped_equivalence",
-    "main_1M_plus_10k_random_E1",
-    "50k_adversarial_E1",
-    "structural_H3_normal_then_high_if_needed",
-    "post_map_E1_if_H3_passes",
-    "summarize_and_apply_phase_B_trigger"
-  ],
-  "phase_a_success": {
-    "h3_wns_ns_min": 0.0,
-    "max_transition_violations": 0,
-    "max_cap_violations": 0,
-    "unmapped": 0,
-    "unresolved": 0,
-    "cluster16_instances": 32,
-    "physical_lanes": 512
+  "frozen": {
+    "fma_stages": 5,
+    "contexts": 5,
+    "internal_context_tag_bits": 3,
+    "physical_array": "16x32_512_lanes",
+    "clock_period_ns": 1.0,
+    "public_128bit_command": "unchanged",
+    "generated_HardFloat": "unchanged"
   },
-  "phase_b_trigger": "After normal and high effort: transition=0, cap=0, unmapped=0, unresolved=0, non-fanout-dominated WNS<0",
-  "phase_b_action": "Stop 4/4 tuning and create Revision8B-B 5-stage/5-context candidate with 3-bit internal context tags.",
+  "ordered_gates": [
+    "source/static contract",
+    "Revision8B-A-vs-Revision8B-B transaction/value compare with one-cycle latency shift",
+    "1M dependent II=1 with five contexts plus 10k random",
+    "50k adversarial",
+    "lane/cluster/front/distribution component DC and mapped equivalence",
+    "structural H3 1GHz with zero DRC/unmapped/unresolved",
+    "post-map E1"
+  ],
   "parallel_actions": {
-    "L5.3": "real stream E1/E2 may proceed against frozen Matrix transaction contract",
-    "L5.4": "fused SiLU E1/E4 may proceed independently",
-    "join": "L5.5 waits for L5.2, L5.3 and L5.4 PASS"
+    "L5.3": "authorized",
+    "L5.4": "authorized",
+    "join": "L5.5 waits for L5.2/L5.3/L5.4 PASS"
   },
   "forbidden": [
+    "further_4stage_4context_timing_tuning",
     "modify_generated_HardFloat",
-    "modify_canonical_RTL_before_candidate_promotion",
-    "add_FMA_stage_in_Revision8B_A",
-    "flat_512_lane_compile",
-    "timing_exceptions_or_lower_frequency",
-    "claim_L5.2_PASS_before_all_gates"
+    "lower_frequency_or_timing_exception",
+    "claim_L5.2_PASS_before_all_5stage_gates"
   ]
 }

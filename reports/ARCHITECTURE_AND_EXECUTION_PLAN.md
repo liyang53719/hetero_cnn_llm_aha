@@ -93,6 +93,21 @@ scheduler/tag/bank/equivalence/E1/H3 gates must be rerun.
 Binding policy: `config/l5_revision8b_a_policy.json`.
 Approval: `reports/L5_2_REVISION8B_A_APPROVAL.md`.
 
+### Revision 8B-A measured outcome and 8B-B activation
+
+Revision 8B-A passed all functional/mapped-distribution gates and eliminated
+H3 DRC: broadcast WNS `+0.302272 ns`, operand-distribution WNS `+0.379584 ns`,
+H3 max-transition/max-capacitance/unmapped/unresolved all zero. Structural H3
+still has WNS `-1.3073 ns`. The remaining 2.08 ns path crosses the mapped
+distribution and HardFloat Pre before `pre_meta_q`; it is not an unfixed DRC.
+
+The frozen fallback has therefore triggered. Revision 8B-B is active: add one
+cluster-local registered input/Pre boundary, move to a 5-stage pipeline and
+five physical contexts with 3-bit internal tags. No more 4/4 tuning is allowed.
+The public 128-bit command and generated HardFloat remain unchanged.
+
+Activation: `reports/L5_2_REVISION8B_B_ACTIVATION.md`.
+
 ## Parallel sandbox closure
 
 Blocked Attention cycle E0 remains:

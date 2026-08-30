@@ -12,7 +12,7 @@
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L5",
   "current_subgate": "L5.2_MATRIX_CONTEXT_FULL_TOP_E4",
-  "current_state": "L5_2_REV8B_A_APPROVED_WAIT_IMPLEMENTATION",
+  "current_state": "L5_2_REV8B_B_5STAGE_5CONTEXT_ACTIVE",
   "stage_namespace": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"],
   "evidence_classes": {
     "E0": "functional_algorithmic_compiler_architecture_or_cycle_reference",
@@ -84,7 +84,13 @@
     "phase_b_trigger": "zero_transition_and_cap_but_negative_1GHz_WNS_after_normal_and_high",
     "phase_b": "5stage_5context_3bit_internal_tag",
     "parallel_branches": ["L5.2", "L5.3", "L5.4"],
-    "join_before": "L5.5"
+    "join_before": "L5.5",
+    "implementation_state": "REV8B_A_FUNCTIONAL_AND_DRC_PASS_H3_TIMING_FAIL_TRIGGER_REV8B_B",
+    "revision8B_A_result": "reports/execution/l5_revision8b_a_local_result.json",
+    "revision8B_A_h3_wns_ns": -1.3073,
+    "revision8B_A_h3_max_transition": 0,
+    "revision8B_A_h3_max_cap": 0,
+    "next_gate": "revision8B_B_5stage_5context_source_and_E1"
   },
   "parallel_sandbox_progress": {
     "CONTROL_PLANE_V6_3_AUDIT": "PASS",

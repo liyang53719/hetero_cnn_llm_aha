@@ -1,0 +1,58 @@
+{
+  "broadcast": {
+    "mapped_cells": 352,
+    "max_cap": 0,
+    "max_transition": 0,
+    "wns_ns": 0.302272
+  },
+  "checks": {
+    "adversarial_e1": true,
+    "broadcast_dc": true,
+    "broadcast_e1": true,
+    "broadcast_gate_compare": true,
+    "h3": false,
+    "h3_drc_clean": true,
+    "main_e1": true,
+    "operand_distribution": true,
+    "rev8a_vs_rev8b_a": true,
+    "source_contract": true
+  },
+  "evidence_hashes": {
+    "adversarial_log": "36ac23d6d97b5ac075d24cf4db596ed595005e990e45adfb949e051bd4c2603c",
+    "broadcast_status": "132579873da1f5740838a044d94ba41b9a26ebe46036547bcb7365938fd84d0e",
+    "compare_log": "90a16a77c3b25d47840fc50873cd61b955683a1c8673e620bdb9cf7a191b0497",
+    "h3_status": "9bbc62c27f32e0a92875c5945705f8a43920ac03d2515b9c12deb1768c3c56c8",
+    "main_e1_log": "bb864b10e25bcab28948c11b3ea7e0a2990d2a6478e7bc9396b341bfd8b8e851",
+    "operand_status": "468689a8835eb18855711182921d4b4e4d3840724bf9797754c3f94b80260bd6",
+    "source_contract": "ff991a221922f081a4f24991654b595e080d9ef9bfca3eafc6de042f967f8bee"
+  },
+  "h3": {
+    "cell_area": 1360153.527546,
+    "max_cap": 0,
+    "max_transition": 0,
+    "unmapped": 0,
+    "unresolved": 0,
+    "wns_ns": -1.3073
+  },
+  "operand_distribution": {
+    "mapped_cells": 17988,
+    "max_cap": 0,
+    "max_transition": 0,
+    "wns_ns": 0.379584
+  },
+  "phase_decision": {
+    "decision": "TRIGGER_REVISION8B_B_5STAGE_5CONTEXT",
+    "effort": "high",
+    "max_cap_violations": 0,
+    "max_transition_violations": 0,
+    "revision": "8B-A",
+    "schema_version": 1,
+    "status": "FAIL",
+    "unmapped": 0,
+    "unresolved": 0,
+    "wns_ns": -1.3073
+  },
+  "revision": "8B-A",
+  "schema_version": 1,
+  "status": "TRIGGER_REVISION8B_B"
+}

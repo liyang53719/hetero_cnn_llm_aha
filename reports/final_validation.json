@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "PASS_SANDBOX_V6_4_REV8B_A_APPROVED_WAIT_IMPLEMENTATION",
+  "status": "PASS_V6_4_REV8B_A_TRIGGER_REV8B_B_ACTIVE",
   "remote_audit": {
     "observed_head": "4dec4a8df6b246f01778925745b7ae21292f74a3",
     "decision": "ACCEPT_REV7_LANE_EQUIV_E1_REJECT_H3_APPROVE_REV8A_CANDIDATE"
@@ -35,6 +35,25 @@
     "parallel_branches": ["L5.2", "L5.3", "L5.4"],
     "join_gate": "L5.5"
   },
+  "revision8B_A_functional": {
+    "source_contract": "PASS",
+    "broadcast_vectors": 100000,
+    "revision8a_compare_cycles": 120000,
+    "dependent_steps": 1000000,
+    "random_backpressure_steps": 10000,
+    "adversarial_steps": 50000,
+    "physical_status": "DRC_CLEAN_H3_WNS_N1P3073_TRIGGER_REV8B_B"
+  },
+  "revision8B_A_physical": {
+    "broadcast_wns_ns": 0.302272,
+    "operand_distribution_wns_ns": 0.379584,
+    "h3_wns_ns": -1.3073,
+    "h3_max_transition": 0,
+    "h3_max_cap": 0,
+    "h3_unmapped": 0,
+    "h3_unresolved": 0
+  },
+  "active_revision": "Revision8B_B_5stage_5context",
   "non_claims": [
     "no_L5_2_pass",
     "no_Revision8A_RTL_E1_in_sandbox",

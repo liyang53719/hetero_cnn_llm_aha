@@ -2,15 +2,16 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONPATH=src
+mkdir -p work/results/sandbox_v66
 python3 -m compileall -q src scripts
 python3 scripts/run_qwen38_text_e0.py >/dev/null
 python3 scripts/run_gdn_chunk_e0.py >/dev/null
 python3 scripts/run_qwen38_architecture_e0.py >/dev/null
 python3 scripts/generate_model_support_report.py >/dev/null
 python3 scripts/run_planning_v6.py >/dev/null
-python3 scripts/run_l5_blocked_attention_numeric_e0.py >/dev/null
-python3 scripts/run_sequence_memory_concurrency_e0.py >/dev/null
-python3 scripts/run_qwen38_policy_lowering_e0.py >/dev/null
+python3 scripts/run_l5_blocked_attention_numeric_e0.py --output work/results/sandbox_v66/l5_blocked_attention_numeric.json >/dev/null
+python3 scripts/run_sequence_memory_concurrency_e0.py --output work/results/sandbox_v66/sequence_memory_concurrency.json >/dev/null
+python3 scripts/run_qwen38_policy_lowering_e0.py --output work/results/sandbox_v66/qwen38_policy_lowering.json >/dev/null
 pytest -q
 python3 scripts/generate_block128_vectors.py >/dev/null
 python3 scripts/generate_fp32_pipeline_vectors.py >/dev/null

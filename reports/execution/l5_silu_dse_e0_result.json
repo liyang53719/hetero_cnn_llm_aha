@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "evidence_class": "numerical_and_throughput_DSE_not_RTL_E1_or_mapped_E4",
+  "fused_numerical_screen": {"relative_l2": 0.001, "mean_abs": 0.001, "max_abs": 0.125},
+  "selected_source_candidate": {
+    "entries": 128,
+    "limit": 8.0,
+    "rom_bits_fp16": 2048,
+    "fused_metrics": {"max_abs": 0.125, "mean_abs": 0.00033368093323893843, "rmse": 0.0018164989939753867, "relative_l2": 0.0008652095011758208}
+  },
+  "throughput": {
+    "pairs": 3440640,
+    "matrix_cycles": 20643840,
+    "producer_pairs_per_cycle": 0.16666666666666666,
+    "tile_pairs": 512,
+    "recommendation": "1_lane_II1_functionally_sufficient_2_lanes_preferred_for_integration_margin",
+    "lanes": [
+      {"lanes": 1, "average_utilization": 0.16666666666666666, "tile_drain_cycles": 512, "tile_period_cycles": 3072.0, "drains_before_next_tile": true, "minimum_pingpong_tile_storage_pairs": 1024},
+      {"lanes": 2, "average_utilization": 0.08333333333333333, "tile_drain_cycles": 256, "tile_period_cycles": 3072.0, "drains_before_next_tile": true, "minimum_pingpong_tile_storage_pairs": 1024},
+      {"lanes": 4, "average_utilization": 0.041666666666666664, "tile_drain_cycles": 128, "tile_period_cycles": 3072.0, "drains_before_next_tile": true, "minimum_pingpong_tile_storage_pairs": 1024},
+      {"lanes": 8, "average_utilization": 0.020833333333333332, "tile_drain_cycles": 64, "tile_period_cycles": 3072.0, "drains_before_next_tile": true, "minimum_pingpong_tile_storage_pairs": 1024}
+    ]
+  },
+  "local_gates": ["RTL_ready_valid_E1", "1_2_lane_mapped_PPA", "Matrix_producer_stall_measurement", "q384_numerical_E2"]
+}

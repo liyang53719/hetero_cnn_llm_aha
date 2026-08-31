@@ -1,0 +1,9 @@
+{
+  "schema_version":1,"generated_at_utc":"2026-08-31T10:15:16Z","status":"PASS_CANDIDATES_ULTRA_LOW_MARGIN_WAIT_E3","evidence_class":"RTL_E1_CLN22UL_1GHz_E4_and_measured_service_projection_not_E3",
+  "block32_tile16":{"rows":16,"scores":512,"cases":16,"stress_cycles":372,"stress_output_stalls":168,"nominal_cycles":357,"numerical_mismatches":0,"dc":{"wns_ns":0.00011009,"cell_area":185940.027,"unmapped":0,"blackboxes":0},"hashes":{"stress_log":"c3f12061502a7e43a8dc7b653cb5ca29fbdf0b5610c1836835b0bf8f5401444d","nominal_log":"ad601d015bb399eb7d0ed39e754d7e418e0fabbb18c392df31e1fb817666662f","dc_status":"04d963dcdd545b18ed3e1bda872bd7f32da0629fb576e86a70e5ea21747a9750"}},
+  "merge4":{"rows_parallel":4,"groups_per_16_rows":4,"beats":32,"stress_cycles_per_group":307,"nominal_cycles_per_group":289,"numerical_mismatches":0,"dc":{"wns_ns":0.00000864267,"cell_area":156217.152,"unmapped":0,"blackboxes":0},"hashes":{"stress_log":"881e477c9b8ed50246aa0bc8d461f1f8d86c993ae76797ea19cf1834be62226c","nominal_log":"6f9758a1cdd7a0e0ef1b33f3d1995df88b4a1b2862219b549589e8dfd6fd9e24","dc_status":"5a11cfd2785fba8595319d3947ea80568a94b17add479c29960caba771b41c18"}},
+  "q1024_projection":{"tasks":12672,"merge_rows":43008,"nominal_attention_sfu_cycles":7631232,"stress_attention_sfu_cycles":8014848,"nominal_tokens_per_second":315.48870639174635,"stress_tokens_per_second":314.44809739590767,"review_floor_tps":315,"nominal_floor_margin_fraction":0.0015514488626868387},
+  "decision":"Candidates pass numerical and 1GHz gates, but nominal margin is too small to close L5.5 before integrated queue/bank/event/DDR counters.",
+  "source_policy":{"generated_rtl_modified":false,"new_authored_candidates":true,"same_candidate_for_all_lengths":true},
+  "next_action":"Integrate candidate service latencies with the real q1024 controller/fabric counter path; if measured projection is below 315, continue SFU/merge overlap optimization."
+}

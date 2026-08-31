@@ -1,7 +1,7 @@
 {
   "errors": [],
   "evidence_class": "source_structural_not_compiler",
-  "module_count": 122,
+  "module_count": 128,
   "modules": [
     "shared_l2_client_arbiter",
     "shared_l2_macro_descriptor_fabric",
@@ -37,8 +37,14 @@
     "gemmini_spad_tensor_gateway",
     "gemmini_rocc_program_adapter",
     "hetero_npu_numerical_integration_v0",
+    "fp32_block32_softmax_tile_store",
+    "fp32_mlo_merge4_candidate",
     "fp32_probability_to_bf16_hilo",
+    "fp32_block32_softmax_tile16_candidate",
+    "fp32_block32_softmax_tile_math_lane",
     "fp32_block32_softmax_weights",
+    "fp32_block32_softmax_row_bank",
+    "fp32_exp2_pwl_i1_candidate",
     "blocked_attention_stream_controller",
     "bf16_outer_product_array_control512",
     "matrix_context_scoreboard",

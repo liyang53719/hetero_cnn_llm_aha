@@ -1,4 +1,4 @@
-# Local-agent handoff v7.7 — main only
+# Local-agent handoff v7.8 — main only
 
 ## Git gate
 
@@ -55,6 +55,13 @@ event penalty, projection is100.056 token/s. Do not claim E3/300tps.
 
 Next: implement a16-row pipelined Block32 tile SFU candidate, keep scores on
 chip, close numerical/service/1GHz gates, then rerun real L5.5 E3.
+
+New candidates PASS E1/E4: tile16 softmax has16 nonzero cases, nominal357/
+stress372 cycles, WNS+0.00011009ns, area185940.027. merge4 nominal289/
+stress307 cycles, WNS+0.00000864267ns, area156217.152. No blackbox/unmapped.
+
+Nominal q1024 projection315.489tps; stress314.448tps. Margin is only0.16%,
+so L5.5 remains OPEN. Next use real queue/bank/event/DDR counters.
 
 Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
 quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are

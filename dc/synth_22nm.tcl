@@ -20,6 +20,8 @@ set CLK_PERIOD   [expr {[info exists ::env(CLOCK_PERIOD_NS)] ? $::env(CLOCK_PERI
 set OUT_DIR      [expr {[info exists ::env(OUT_DIR)] ? $::env(OUT_DIR) : "work/dc/$TOP"}]
 set MAX_CORES    [expr {[info exists ::env(DC_MAX_CORES)] ? $::env(DC_MAX_CORES) : 4}]
 set HIGH_EFFORT  [expr {[info exists ::env(DC_TIMING_HIGH_EFFORT)] ? $::env(DC_TIMING_HIGH_EFFORT) : 0}]
+set QUICK_COMPILE [expr {[info exists ::env(DC_QUICK_COMPILE)] ? $::env(DC_QUICK_COMPILE) : 0}]
+set MAP_LOW [expr {[info exists ::env(DC_MAP_LOW)] ? $::env(DC_MAP_LOW) : 0}]
 file mkdir $OUT_DIR
 
 set dbs [split $STD_CELL_DBS ":"]
@@ -49,10 +51,33 @@ foreach rtl_file $rtl_files {
 set_app_var search_path [concat $search_path [lsort -unique $rtl_search_dirs]]
 
 set_host_options -max_cores $MAX_CORES
+if {[info exists ::env(PRECOMPILED_DDCS)] && $::env(PRECOMPILED_DDCS) ne ""} {
+  foreach ddc [split $::env(PRECOMPILED_DDCS) ":"] { read_ddc $ddc }
+}
 analyze -format sverilog $rtl_files
 elaborate $TOP
 current_design $TOP
 link
+if {[info exists ::env(DONT_TOUCH_REFS)] && $::env(DONT_TOUCH_REFS) ne ""} {
+  foreach ref [split $::env(DONT_TOUCH_REFS) ":"] {
+    set preserved_design [get_designs -quiet $ref]
+    if {[sizeof_collection $preserved_design] > 0} { set_dont_touch $preserved_design true }
+    set preserved [get_cells -hierarchical -quiet -filter "ref_name == $ref"]
+    if {[sizeof_collection $preserved] > 0} { set_dont_touch $preserved true }
+  }
+}
+if {[info exists ::env(DONT_TOUCH_CELL_PATTERNS)] && $::env(DONT_TOUCH_CELL_PATTERNS) ne ""} {
+  foreach pattern [split $::env(DONT_TOUCH_CELL_PATTERNS) ":"] {
+    set preserved_cells [get_cells -hierarchical -quiet $pattern]
+    if {[sizeof_collection $preserved_cells] > 0} { set_dont_touch $preserved_cells true }
+  }
+}
+if {[info exists ::env(DONT_TOUCH_FULLNAME_GLOBS)] && $::env(DONT_TOUCH_FULLNAME_GLOBS) ne ""} {
+  foreach pattern [split $::env(DONT_TOUCH_FULLNAME_GLOBS) ":"] {
+    set preserved_full [get_cells -hierarchical -quiet -filter "full_name =~ $pattern"]
+    if {[sizeof_collection $preserved_full] > 0} { set_dont_touch $preserved_full true }
+  }
+}
 check_design > "$OUT_DIR/check_design.rpt"
 
 if {[sizeof_collection [get_ports -quiet $CLOCK_PORT]] > 0} {
@@ -75,7 +100,11 @@ if {[sizeof_collection [get_ports -quiet $CLOCK_PORT]] > 0} {
 set_max_fanout 32 [current_design]
 set_fix_multiple_port_nets -all -buffer_constants
 
-if {$HIGH_EFFORT} {
+if {$MAP_LOW} {
+  compile -map_effort low -area_effort none
+} elseif {$QUICK_COMPILE} {
+  compile -map_effort high -area_effort high
+} elseif {$HIGH_EFFORT} {
   set_critical_range 0.20 [current_design]
   compile_ultra -no_autoungroup -timing_high_effort_script
 } else {

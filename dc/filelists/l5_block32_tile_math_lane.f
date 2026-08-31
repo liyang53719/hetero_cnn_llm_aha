@@ -1,0 +1,4 @@
+work/generated/l5_all_primitives/HeteroAllPrimitives.sv
+rtl/common/rv_fifo.sv
+rtl/attention/fp32_exp2_pwl_i1_candidate.sv
+rtl/attention/fp32_block32_softmax_tile_math_lane.sv

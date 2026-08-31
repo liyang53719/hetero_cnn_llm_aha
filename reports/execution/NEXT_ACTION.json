@@ -1,15 +1,55 @@
 {
-  "schema_version":6,"stage":"L10","subgate":"L10_EARLY_PPA","state":"L5_6_REDUCED_CROSS_RTL_PASS_READY_L10_EARLY_PPA","decision":"RUN_L10_EARLY_PPA",
-  "git_workflow":{"policy":"config/git_workflow_policy.json","first_commands":["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh"],"forbidden":["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]},
-  "completed":{"L5.2":"PASS_REV8B_B","L5.3":"PASS_NUMERICAL_AND_STRESS","L5.4":"PASS_SELECTED_ONE_LANE","L5.5_4x4_components":"PASS_E1_E4_STRESS_PROJECTION_FAIL"},
-  "sandbox_preflight":{"evidence":"reports/execution/l5_5_balanced_8x8_sfu_e0_result.json","recommended":"8_tile_math_lanes_plus_8_merge_rows","predicted_nominal_tps":323.7642049486616,"predicted_stress_tps":322.9441063007019,"hard_floor_tps":315,"preferred_floor_tps":320,"merge8_source":"rtl/attention/fp32_mlo_merge8_candidate.sv"},
-  "local_8x8":{"evidence":"reports/execution/l5_5_balanced_8x8_local_result.json","status":"PASS_E1_E4","tile_stress_cycles":252,"merge8_stress_cycles":365,"stress_tps":322.3734869673966},
-  "integrated_e3":{"evidence":"reports/execution/l5_5_q1024_e3_result.json","status":"PASS_REVIEW","evidence_class":"composed_real_RTL_E3","full_model_cycles":3181414628,"tokens_per_second":321.8693945101204,"score_probability_DDR_bytes":0},
-  "full_model_cycle_e3":{"evidence":"reports/execution/l5_qwen2_full_model_trace_result.json","status":"PASS","records":30,"blocks":28,"cycles":3192103543,"tokens_per_second":320.7915990837895},
-  "numerical_subset":{"evidence":"reports/execution/l5_qwen2_numerical_subset_result.json","cross_evidence":"reports/execution/l5_qwen2_four_layer_cross_replay_result.json","status":"PASS_REDUCED_FOUR_LAYER_CROSS_RTL","checkpoint_sha256":"302e327795994403cb1e3cb6a3345c76b246b894d14078c936b570c83a4e9057","cross_nodes":5,"cross_bit_exact":7840,"lm_head_samples":160,"max_error":0.0,"argmax_token":54387},
-  "unique_next_action":"Run L10 early PPA for refined RMSNorm plus accepted Matrix/Attention/SFU components, preserving the distinction between standalone/hierarchical timing and integrated/post-route signoff.",
-  "ordered_gates":["refined RMSNorm hierarchical DC","accepted Matrix/Attention/SFU area aggregation","integrated-top feasibility","L10 blocker and timing report"],
-  "component_targets":{"tile16_stress_cycles_max_for_320_with_merge323":336,"merge8_stress_cycles_max_for_320_with_tile254":516,"conservative_prediction":{"tile_stress_cycles":254,"merge_stress_cycles":323,"q1024_sfu_cycles":4955136}},
-  "model_family_parallel_work":{"qwen3_5_35b_a3b":"dense GQA/single residual/256-top8 only; 60MiB GDN state and 5GiB BF16 KV","qwen3_8_flash_next":"QSA/PLE/four-branch residual/512-top10; 108MiB GDN state, 6GiB KV and 192MiB index","rule":"Do not conflate qwen3_5_moe, qwen4_exp, or ordinary Qwen3.8."},
-  "forbidden_claims":["L5.5 pass from sandbox DSE","E3 before measured 8x8 service","Qwen3.5 through QSA","ordinary Qwen3.8 support inferred from Flash-Next","post-route signoff"]
+  "schema_version": 6,
+  "stage": "L10",
+  "subgate": "L10_EARLY_PPA",
+  "state": "L10_EARLY_PPA_IN_PARALLEL_WITH_L5_6_FULL_PAYLOAD_OPEN",
+  "decision": "RUN_BOUNDED_L10_EARLY_PPA_AND_PAYLOAD_GROUP_REPLAY",
+  "git_workflow": {
+    "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
+    "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
+  },
+  "completed": {
+    "L5.5_8x8": "PASS_E1_E4",
+    "L5.5_integrated_E3": "PASS_REVIEW_321_869TPS",
+    "L5.6a_cycle_trace": "PASS_320_792TPS",
+    "L5.6b_reference_lm_head": "PASS",
+    "L5.6c_reduced_cross_RTL": "PASS_7840_BIT_EXACT"
+  },
+  "open": {
+    "L5.6d_full_payload_RTL": "OPEN",
+    "L10_post_route_signoff": "OPEN"
+  },
+  "unique_next_action": "Run hierarchy-preserving L10 early synthesis and SRAM-macro feasibility while replaying the seven contiguous four-layer payload groups. Keep leaf, parent-inclusive and integrated area reports separate.",
+  "ordered_gates": [
+    "L10.1 integrated hierarchy synthesis with no area double-count",
+    "L10.2 SRAM macro replacement <=4 MiB with bank/port validation",
+    "L5.6d phase-1 all 168 checkpoints",
+    "L5.6d phase-2 seven continuous four-layer groups without hidden-state injection inside a group",
+    "L10 blocker/timing/area report",
+    "later post-route PVT/OCV and workload-derived SAIF"
+  ],
+  "hard_acceptance": {
+    "clock_ns": 1.0,
+    "WNS_ns_min": 0.0,
+    "unmapped_unresolved_blackbox": 0,
+    "non_reset_data_false_paths": 0,
+    "multicycle_exceptions": 0,
+    "SRAM_MiB_max": 4,
+    "area_double_count": 0,
+    "payload_layers": 28,
+    "payload_phases_per_layer": 6,
+    "payload_continuity_groups": 7
+  },
+  "stop_rules": [
+    "Any parent-inclusive and leaf area counted twice stops the PPA roll-up.",
+    "Negative WNS or unresolved/blackbox cells keeps L10.1 open.",
+    "Reference hidden-state injection inside a four-layer continuity group invalidates that payload result.",
+    "Do not claim post-route/PVT/SAIF or full-payload closure from early synthesis."
+  ],
+  "evidence": {
+    "sandbox_v78": "reports/execution/sandbox_v78_result.json",
+    "ppa_plan": "reports/SANDBOX_V78_L10_AND_PAYLOAD_PLAN.md",
+    "payload_plan": "reports/execution/qwen2_payload_closure_plan.json",
+    "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
+  }
 }

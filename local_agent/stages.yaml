@@ -2,31 +2,40 @@ schema_version: 6
 workflow_policy: MAIN_ONLY_FAST_FORWARD_NO_FORCE_PUSH
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V75_BALANCED_SFU_AND_MODEL_ENVELOPES}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V78_CONTROL_AND_PPA_PREFLIGHT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L4, name: cnn_and_aha_sidecar, status: SANDBOX_CONTRACT_READY_WAIT_LOCAL_E1_E4}
   - id: L5
     name: qwen2_bf16_long_context_300tps
-    status: IN_PROGRESS
+    status: PERFORMANCE_AND_REDUCED_NUMERICAL_PASS_FULL_PAYLOAD_OPEN
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN}
       L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512}
       L5.3: {status: PASS_NUMERICAL_E2_RANDOM_BACKPRESSURE_SERVICE, q1024_merges: 43008, stress_transactions: 354816}
       L5.4: {status: PASS_SELECTED_ONE_LANE, producer_stall_fraction: 0.0, queue_high_water: 7}
-      L5.5a: {status: TILE16_4LANE_MERGE4_COMPONENTS_PASS_STRESS_FAIL, nominal_tps: 315.48870639174635, stress_tps: 314.44809739590767}
-      L5.5b: {status: BALANCED_8X8_SANDBOX_PREFLIGHT_PASS_WAIT_LOCAL_E1_E4, predicted_stress_tps: 322.9441063007019, hard_floor: 315, preferred_floor: 320}
-      L5.5c: {status: WAIT_REAL_MATRIX_SFU_IDMA_DDR_E3}
-      L5.6: {status: WAIT_L5_5_THEN_28_LAYER_E2_E3_E4, target_tps: 300}
+      L5.5a: {status: BALANCED_8X8_PASS_E1_E4, stress_tps: 322.3734869673966}
+      L5.5b: {status: COMPOSED_REAL_RTL_E3_PASS_REVIEW, tokens_per_second: 321.8693945101204}
+      L5.6a: {status: Q1024_28_LAYER_COUNT_TRACE_E3_PASS, tokens_per_second: 320.7915990837895}
+      L5.6b: {status: OFFICIAL_REFERENCE_AND_160_LM_HEAD_SAMPLES_PASS}
+      L5.6c: {status: REDUCED_FOUR_LAYER_CROSS_RTL_PASS, bf16_bit_exact: 7840}
+      L5.6d: {status: FULL_28_LAYER_PAYLOAD_NUMERICAL_RTL_OPEN, plan: reports/execution/qwen2_payload_closure_plan.json}
   - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
   - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
   - id: L8
     name: qwen35_qwen38_flash_next_text
-    status: DISTINCT_FAMILY_RESOURCE_ENVELOPES_PASS_WAIT_OFFICIAL_E1_E2
+    status: DISTINCT_FAMILY_E0_PASS_WAIT_OFFICIAL_E1_E2_E3
     subgates:
-      L8.1: {model: Qwen3.5-35B-A3B, family: qwen3_5_moe, status: PROFILE_RESOURCE_ENVELOPE_E0_PASS, gdn_state_mib: 60, dense_kv_gib: 5}
-      L8.2: {model: Qwen3.8-Flash-Next, family: qwen4_exp, status: PROFILE_RESOURCE_ENVELOPE_AND_TRACE_E0_PASS, gdn_state_mib: 108, qsa_kv_gib: 6, qsa_index_mib: 192}
+      L8.1: {model: Qwen3.5-35B-A3B, family: qwen3_5_moe, status: PROFILE_RUNTIME_RESOURCE_DSE_E0_PASS_WAIT_OFFICIAL_BACKEND}
+      L8.2: {model: Qwen3.8-Flash-Next, family: qwen4_exp, status: PROFILE_TRACE_QSA_PLE_RESOURCE_DSE_E0_PASS_WAIT_OFFICIAL_BACKEND}
   - {id: L9, name: llama_cpp_backend, status: POLICY_PARTITION_NODE_ADAPTER_E0_PASS_WAIT_REAL_GGML_GGUF}
-  - {id: L10, name: physical_closure, status: COMPONENTS_ULTRA_LOW_MARGIN_POST_ROUTE_PVT_SAIF_OPEN}
+  - id: L10
+    name: physical_closure
+    status: EARLY_PPA_IN_PROGRESS_POST_ROUTE_PVT_SAIF_OPEN
+    subgates:
+      L10.1: {status: WAIT_HIERARCHY_PRESERVING_INTEGRATED_SYNTHESIS}
+      L10.2: {status: WAIT_SRAM_MACRO_REPLACEMENT_AND_BANK_VALIDATION}
+      L10.3: {status: WAIT_POST_ROUTE_SETUP_HOLD_PVT_OCV}
+      L10.4: {status: WAIT_WORKLOAD_SAIF_POWER}
   - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_E0_ONLY}

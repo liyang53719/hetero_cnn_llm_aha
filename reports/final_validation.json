@@ -1,56 +1,43 @@
 {
   "schema_version": 6,
-  "status": "L5_6_REDUCED_CROSS_RTL_PASS_READY_L10_EARLY_PPA",
-  "branch_audit": {
-    "remote_branches": ["main"],
-    "merge_required": false,
-    "branch_deletion_required": false
-  },
+  "status": "L10_EARLY_PPA_READY_L5_6_FULL_PAYLOAD_OPEN",
+  "branch_audit": {"remote_branches": ["main"], "merge_required": false, "branch_deletion_required": false},
   "accepted_local_evidence": {
     "L5.1": "PASS_ZERO_MARGIN",
     "L5.2": "PASS_REV8B_B_COMPONENT_H3",
     "L5.3": "PASS_NUMERICAL_E2_AND_STRESS",
     "L5.4": "PASS_SELECTED_ONE_LANE",
-    "L5.5_4x4_tile_merge": "PASS_COMPONENTS_FAIL_STRESS",
     "L5.5_balanced_8x8": "PASS_E1_E4",
     "L5.5_integrated_E3": "PASS_REVIEW_321_869TPS",
-    "L5.6_full_model_cycle_E3": "PASS_320_792TPS",
-    "L5.6_official_weight_reference_lm_head": "PASS_REFERENCE_PLUS_160_SAMPLED_RTL",
-    "L5.6_reduced_four_layer_cross_RTL": "PASS_7840_BIT_EXACT"
+    "L5.6a_full_model_cycle_trace": "PASS_320_792TPS",
+    "L5.6b_official_reference_lm_head": "PASS",
+    "L5.6c_reduced_four_layer_cross_RTL": "PASS_7840_BIT_EXACT",
+    "L5.6d_full_28_layer_payload_RTL": "OPEN"
   },
-  "sandbox_v75": {
+  "sandbox_v78": {
     "status": "PASS",
-    "pytest": 6,
-    "balanced_8x8_predicted_stress_tps": 322.9441063007019,
-    "balanced_8x8_preferred_floor_pass": true,
-    "merge8_source_ready": true,
-    "qwen3_5_gdn_state_mib": 60,
-    "qwen3_5_kv_gib": 5,
-    "flash_next_gdn_state_mib": 108,
-    "flash_next_kv_gib": 6,
-    "flash_next_index_mib": 192
-  },
-  "independent_recalculation": {
-    "status": "PASS_INDEPENDENT_V75_RECALCULATION",
-    "evidence": "reports/execution/sandbox_v75_independent_validation.json",
-    "base_commit": "d718f421df62d5ab031a2f167248ef1a3a845e60",
-    "sha256": "dec4eb82756fd9866f99e2b169f7415c4646d27ce07fd69258cf18318a2b3466",
-    "balanced_8x8_stress_tps": 322.9441063007019,
-    "numerical_max_error": 8.940696716308594e-08
+    "evidence": "reports/execution/sandbox_v78_result.json",
+    "minimum_component_margin_ps": 0.00864267,
+    "critical_components_sub_1ps": 6,
+    "payload_checkpoints": 168
   },
   "non_claims": [
-    "integrated E3 is composed at stable RTL boundaries, not one monolithic payload simulation",
-    "resource envelopes are not official-weight execution",
-    "vectorless DC power is not SAIF",
-    "no post-route signoff"
+    "composed E3 is not one monolithic payload numerical simulation",
+    "reduced four-layer replay is not continuous 28-layer payload closure",
+    "early/component synthesis is not post-route/PVT/OCV signoff",
+    "component area sum is not integrated top area",
+    "vectorless DC power is not SAIF"
   ],
   "remaining_local_gates": [
-    "L5.6_full_model",
+    "L5.6_full_payload_RTL",
+    "L10_hierarchical_synthesis",
+    "L10_SRAM_macro",
+    "L10_post_route_PVT_OCV_SAIF",
     "L4_CNN_AHA",
     "L6_quant_parity_RTL",
     "L7_state_RTL_E3",
     "L8_official_backends",
     "L9_real_llama_cpp",
-    "L10_post_route"
+    "L11_final_Archspec"
   ]
 }

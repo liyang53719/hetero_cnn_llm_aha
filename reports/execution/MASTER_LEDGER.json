@@ -1,16 +1,52 @@
 {
-  "schema_version":6,"current_stage":"L10","current_subgate":"L10_EARLY_PPA","current_state":"L5_6_REDUCED_CROSS_RTL_PASS_READY_L10_EARLY_PPA",
-  "git_workflow":{"status":"ENFORCED_MAIN_ONLY","policy":"config/git_workflow_policy.json","remote_branches":["main"],"merge_required":false,"force_push":false},
-  "upstream_integrity":{"status":"PASS","evidence":"reports/execution/local_upstream_integrity.json","canonical_clean":true,"upstream_source_edits":0,"generated_rtl_hand_edits":0,"excluded_noncanonical_checkout":"work/upstream/chipyard"},
-  "closed_tasks":["L0","L1","L2","L3","L5","L5.1","L5.2","L5.3","L5.4","L5.5","L5.6"],
-  "accepted_local_evidence":{"L5.3":{"status":"PASS","q128_rows":1536,"q384_rows":2304,"q1024_rows":1440,"q1024_merges":43008,"stress_transactions":354816,"errors":0,"score_probability_DDR_bytes":0},"L5.4":{"status":"PASS_SELECTED_ONE_LANE","producer_stall_fraction":0.0,"queue_high_water":7},"L5.5_4x4":{"status":"PASS_COMPONENTS_FAIL_STRESS","nominal_tps":315.48870639174635,"stress_tps":314.44809739590767}},
-  "sandbox_v75":{"balanced_sfu":{"status":"PASS_PREFLIGHT","predicted_nominal_tps":323.7642049486616,"predicted_stress_tps":322.9441063007019,"area_upper_bound":684314.358,"merge8_source_ready":true},"qwen3_5":{"status":"PASS_RESOURCE_ENVELOPE","gdn_state_mib":60,"dense_kv_gib":5,"minimum_staging_mib":0.875},"qwen3_8_flash_next":{"status":"PASS_RESOURCE_ENVELOPE","gdn_state_mib":108,"qsa_kv_gib":6,"qsa_index_mib":192,"minimum_staging_mib":1.40625}},
-  "l5_5_balanced_8x8_local":{"status":"PASS_E1_E4","evidence":"reports/execution/l5_5_balanced_8x8_local_result.json","tile_stress_cycles":252,"merge8_stress_cycles":365,"stress_tps":322.3734869673966,"tile_wns_ns":0.00011009,"merge8_wns_ns":0.00000864267,"unmapped_unresolved_blackbox":0},
-  "l5_5_integrated_e3":{"status":"PASS_REVIEW","evidence":"reports/execution/l5_5_q1024_e3_result.json","evidence_class":"composed_real_RTL_E3","full_model_cycles":3181414628,"tokens_per_second":321.8693945101204,"score_probability_DDR_bytes":0,"ddr_read_efficiency":0.64,"ddr_write_efficiency":1.0,"bank_conflict_cycles":126875},
-  "l5_6_full_model_trace":{"status":"PASS_CYCLE_E3","evidence":"reports/execution/l5_qwen2_full_model_trace_result.json","records":30,"blocks":28,"full_model_cycles":3192103543,"tokens_per_second":320.7915990837895,"final_rmsnorm":1,"last_token_lm_head":1},
-  "l5_6_numerical_subset":{"status":"PASS_REDUCED_FOUR_LAYER_CROSS_RTL","evidence":"reports/execution/l5_qwen2_numerical_subset_result.json","cross_evidence":"reports/execution/l5_qwen2_four_layer_cross_replay_result.json","checkpoint_sha256":"302e327795994403cb1e3cb6a3345c76b246b894d14078c936b570c83a4e9057","reference_layers":4,"sequence":1024,"cross_nodes":5,"cross_bit_exact":7840,"lm_head_rtl_samples":160,"lm_head_max_error":0.0,"argmax_token":54387,"refined_rsqrt_wns_ns":0.000101328},
-  "local_dependent_tasks":["L10_early_PPA","L4_AHA_CNN","L6_llama_parity_quant_RTL_PPA","L7_state_RTL_E1_E3","L8_official_traces_backends","L9_real_llama_GGUF","L10_post_route_PVT_power","L11_final_Archspec"],
-  "sandbox_independent_followups":{"qwen3_5":["tiny 3xGDN+1xdense-attention+MoE runtime","official-shape recurrent/chunk parity","dense attention output-gate adversarial vectors","40-layer Command128/liveness","top8 expert-cache DSE"],"qwen3_8_flash_next":["QSA index quantization and Top-k Jaccard","PLE row-cache/outstanding DSE","four-branch residual quantization","48-layer state trace","top10 expert-cache DSE"],"shared":["official trace importers","quant frontend/Matrix binding","MTP transaction regression"]},
-  "join_gate":{"closed":["L5.2","L5.3","L5.4","L5.5_8x8_SFU","L5.5_integrated_E3","L5.6_q1024_full_model","L5.6_reduced_four_layer_cross_RTL"],"failed_history":["L5.5_serial_SFU_precheck","L5.5_4x4_SFU_stress_projection"],"open":["L10_early_PPA"],"next":"L10_early_PPA"},
-  "forbidden_claims":["post-route signoff from component evidence","L5 complete before E3/L5.6","sandbox E0 as local E1/E4/E3","new branch without user approval"]
+  "schema_version": 6,
+  "current_stage": "L10",
+  "current_subgate": "L10_EARLY_PPA",
+  "current_state": "L10_EARLY_PPA_IN_PARALLEL_WITH_L5_6_FULL_PAYLOAD_OPEN",
+  "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
+  "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
+  "closed_tasks": ["L0","L1","L2","L3","L5.1","L5.2","L5.3","L5.4","L5.5","L5.6a","L5.6b","L5.6c"],
+  "open_tasks": ["L4","L5.6d","L6","L7","L8","L9","L10","L11"],
+  "accepted_local_evidence": {
+    "L5.5_balanced_8x8": {"status": "PASS_E1_E4", "stress_tps": 322.3734869673966, "tile_wns_ns": 0.00011009, "merge8_wns_ns": 0.00000864267},
+    "L5.5_integrated_E3": {"status": "PASS_REVIEW", "evidence_class": "composed_real_RTL_E3", "tokens_per_second": 321.8693945101204, "score_probability_DDR_bytes": 0},
+    "L5.6a": {"status": "PASS_CYCLE_E3", "records": 30, "blocks": 28, "tokens_per_second": 320.7915990837895},
+    "L5.6b": {"status": "PASS_REFERENCE_PLUS_SAMPLED_RTL", "lm_head_samples": 160, "max_error": 0.0},
+    "L5.6c": {"status": "PASS_REDUCED_FOUR_LAYER_CROSS_RTL", "cross_nodes": 5, "bf16_bit_exact": 7840},
+    "L5.6d": {"status": "OPEN_FULL_28_LAYER_PAYLOAD_NUMERICAL_RTL"}
+  },
+  "sandbox_v78": {
+    "status": "PASS",
+    "evidence": "reports/execution/sandbox_v78_result.json",
+    "minimum_component_margin_ps": 0.00864267,
+    "critical_components_sub_1ps": 6,
+    "payload_checkpoints": 168,
+    "continuity_groups": 7
+  },
+  "local_dependent_tasks": [
+    "L10_hierarchy_preserving_integrated_synthesis",
+    "L10_SRAM_macro_replacement",
+    "L10_post_route_PVT_OCV",
+    "L10_SAIF_power",
+    "L5.6d_continuous_payload_replay",
+    "L4_AHA_CNN",
+    "L6_llama_parity_quant_RTL_PPA",
+    "L7_state_RTL_E1_E3",
+    "L8_official_traces_backends",
+    "L9_real_llama_GGUF",
+    "L11_final_Archspec"
+  ],
+  "sandbox_independent_followups": [
+    "PPA manifest import and hierarchy double-count checks",
+    "payload checkpoint/trace schema extension",
+    "Qwen3.5 and Flash-Next official-trace import validation",
+    "quant and state source contracts"
+  ],
+  "forbidden_claims": [
+    "full L5 numerical closure from a reduced four-layer replay",
+    "post-route signoff from component DC",
+    "top-level area from unqualified component summation",
+    "vectorless power as SAIF",
+    "new branch without user approval"
+  ]
 }

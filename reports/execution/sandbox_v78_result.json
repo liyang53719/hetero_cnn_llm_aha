@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SANDBOX_V7_8",
+  "evidence_class": "sandbox_control_PPA_and_closure_planning_not_local_E4_or_post_route",
+  "l5_boundary": {
+    "status": "PASS_BOUNDARY_NORMALIZED",
+    "errors": [],
+    "subgates": {
+      "L5.6a_cycle_count_trace_E3": "PASS",
+      "L5.6b_official_reference_and_sampled_lm_head": "PASS",
+      "L5.6c_reduced_four_layer_cross_RTL": "PASS",
+      "L5.6d_full_28_layer_payload_numerical_RTL": "OPEN"
+    },
+    "current_parallel_stage": "L10_EARLY_PPA",
+    "accepted_claim": "Qwen2 q1024 cycle/count E3, official-reference checkpoints, sampled LM-head RTL, and a reduced four-layer cross-RTL replay pass.",
+    "forbidden_claim": "Full 28-layer q1024 payload numerical RTL is closed."
+  },
+  "l10_early_ppa": {
+    "status": "PASS_EARLY_PPA_PREFLIGHT_WITH_CRITICAL_MARGIN_RISK",
+    "evidence_class": "sandbox_manifest_and_sensitivity_not_local_synthesis_or_post_route",
+    "minimum_margin": {"component": "attention_merge8", "wns_ns": 0.00000864267, "margin_ps": 0.00864267},
+    "critical_sub_1ps": ["block128_mlo","block32_weight","attention_tile16_8lane","attention_merge8","silu_one_lane","refined_rsqrt"],
+    "route_scenarios": {
+      "one_ps": {"degradation_ps": 1.0, "failing_count": 6},
+      "five_ps": {"degradation_ps": 5.0, "failing_count": 8},
+      "ten_ps": {"degradation_ps": 10.0, "failing_count": 8},
+      "twenty_ps": {"degradation_ps": 20.0, "failing_count": 8}
+    },
+    "area_warning": "Group sums are screening estimates; they are not a top-level area claim.",
+    "decision": "Proceed to bounded L10 hierarchical synthesis, but do not claim 1 GHz signoff."
+  },
+  "qwen2_payload_closure": {
+    "status": "PASS_FULL_PAYLOAD_CLOSURE_PLAN",
+    "model": "Qwen/Qwen2-1.5B-Instruct",
+    "sequence": 1024,
+    "layers": 28,
+    "checkpoint_count": 168,
+    "sample_values": 10752,
+    "continuity_groups": [0,1,2,3,4,5,6],
+    "non_claim": "This plan is source/test collateral, not full-payload numerical evidence."
+  }
+}

@@ -1,14 +1,21 @@
 {
-  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH",
-  "closed":[{"id":"L5.2","status":"PASS_REV8B_B_E1_E4_COMPONENT_H3","risk":"L10 post-route/PVT margin"},{"id":"L5.3","status":"NUMERICAL_E2_AND_RANDOM_BACKPRESSURE_SERVICE_PASS"},{"id":"L5.4","status":"ONE_LANE_SELECTED_AND_INTEGRATED_RERUN_PASS"}],
-  "items":[
-    {"id":"L5.5_8x8_SFU","sandbox_status":"balanced DSE/vector PASS; merge8 source-ready; predicted stress 322.944 t/s","local_gate":"8-lane tile and 8-row merge RTL E1/E4 plus measured stress projection","acceptance":["numerical mismatch 0","random backpressure pass","WNS>=0","unmapped/unresolved=0","stress>=315 hard","stress>=320 preferred","zero score/probability DDR"]},
-    {"id":"L5.5-L5.6","sandbox_status":"service importer and minimum matrix ready, not E3","local_gate":"real Matrix/SFU/iDMA/DDR E3 and 28-layer q1024 >=300 t/s"},
-    {"id":"L4","sandbox_status":"legal AHA sidecar contract ready","local_gate":"Garnet map/PnR/Verilator/DC and CNN subset"},
-    {"id":"L6","sandbox_status":"exact layouts, integrated frontend and K-tail source-ready","local_gate":"pinned llama.cpp parity, RTL E1 and PPA"},
-    {"id":"L7","sandbox_status":"translation/concurrency/multislot COW dirty E0 pass","local_gate":"page walker/TLB/MSHR/COW state RTL E1 and AXI/iDMA E3"},
-    {"id":"L8.1","sandbox_status":"Qwen3.5 qwen3_5_moe profile/resource envelope pass","local_gate":"official trace, GDN/dense-attention/MoE backends and 40-layer E3"},
-    {"id":"L8.2","sandbox_status":"Flash-Next qwen4_exp profile/resource envelope and tiny trace pass","local_gate":"official trace, QSA/PLE/GR/GDN/MoE backends and 48-layer E3"},
-    {"id":"L9-L11","sandbox_status":"graph/descriptor/Archspec E0","local_gate":"real GGML/GGUF, SRAM macro, post-route STA, PVT/OCV, SAIF and final Pareto"}
+  "schema_version": 6,
+  "marker": "WAIT_LOCAL_AGENT_PUSH",
+  "closed": [
+    {"id": "L5.5", "status": "BALANCED_8X8_E1_E4_AND_COMPOSED_E3_PASS"},
+    {"id": "L5.6a", "status": "28_LAYER_COUNT_TRACE_E3_PASS"},
+    {"id": "L5.6b", "status": "OFFICIAL_REFERENCE_AND_SAMPLED_LM_HEAD_PASS"},
+    {"id": "L5.6c", "status": "REDUCED_FOUR_LAYER_CROSS_RTL_PASS"}
+  ],
+  "items": [
+    {"id": "L10.1", "sandbox_status": "component manifest and route-degradation screen PASS with critical margin risk", "local_gate": "hierarchy-preserving integrated synthesis", "acceptance": ["WNS>=0", "unmapped/unresolved/blackbox=0", "no area double-count", "no non-reset data false path or multicycle"]},
+    {"id": "L10.2", "sandbox_status": "4 MiB owner/liveness candidate exists", "local_gate": "SRAM macro replacement and bank/port validation", "acceptance": ["capacity<=4 MiB", "owner/address overlap=0", "macro timing linked", "bank-conflict counters present"]},
+    {"id": "L5.6d", "sandbox_status": "168-checkpoint and seven-group closure plan ready", "local_gate": "continuous payload numerical replay", "acceptance": ["all checkpoints captured", "seven four-layer groups without internal hidden-state injection", "continuous 28-layer or real-backend equivalent", "final RMSNorm/LM head close"]},
+    {"id": "L10.3-L10.4", "sandbox_status": "acceptance contracts ready", "local_gate": "post-route PVT/OCV plus workload-derived SAIF"},
+    {"id": "L4", "sandbox_status": "legal AHA sidecar contract ready", "local_gate": "Garnet map/PnR/Verilator/DC and CNN subset"},
+    {"id": "L6", "sandbox_status": "exact layouts, integrated frontend and K-tail source-ready", "local_gate": "pinned llama.cpp parity, RTL E1 and PPA"},
+    {"id": "L7", "sandbox_status": "translation/concurrency/multislot COW dirty E0 pass", "local_gate": "page walker/TLB/MSHR/COW RTL and AXI/iDMA E3"},
+    {"id": "L8-L9", "sandbox_status": "distinct Qwen3.5/Flash-Next E0, trace schema and graph adapter pass", "local_gate": "official traces, real backends, GGML/GGUF and token generation"},
+    {"id": "L11", "sandbox_status": "candidate Archspec collateral only", "local_gate": "measured PPA/performance Pareto and canonical promotion"}
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "evidence_class": "quant_K_tail_schedule_E0_not_RTL_E1",
+  "beat_values": 16,
+  "cases": 8192,
+  "cases_per_format": 2048,
+  "dot_cases_per_format": 512,
+  "maximum_dot_difference": 4.729372449219227e-11,
+  "formats": {
+    "FP16": {"block_beats": 1},
+    "Q8_0": {"block_beats": 2},
+    "Q6_K": {"block_beats": 16},
+    "Q3_K": {"block_beats": 16}
+  },
+  "sha256": "abe8e0a6bb05c428afd85486939a322896f7313562d89d1cc93aedeb4cb1292f",
+  "hardware_contract": {"shared_dot_lanes": true, "format_specific_multiplier_array": false, "tail_behavior": "zero_mask_invalid_values_and_accumulate_only_valid_count", "required_counters": ["beats_issued", "valid_values", "masked_values", "blocks_completed"]},
+  "remaining_local_gates": ["RTL sequencer E1", "shared dot-array integration", "pinned llama.cpp parity", "1GHz PPA"]
+}

@@ -10,7 +10,7 @@ python3 scripts/run_qwen38_architecture_e0.py >/dev/null
 python3 scripts/generate_model_support_report.py >/dev/null
 python3 scripts/run_planning_v6.py >/dev/null
 python3 scripts/validate_l5_revision8a_contract.py --operations 100000 --output work/results/l5_revision8a/sandbox_smoke.json >/dev/null
-mkdir -p work/results/sandbox_v610
+mkdir -p work/results/sandbox_v610 work/results/sandbox_v70
 python3 scripts/generate_ggml_quant_vectors.py --cases 128 --output work/results/sandbox_v610/ggml_quant_vectors.txt >/dev/null
 python3 scripts/run_sandbox_v67.py --quant-cases 200 --transactions 100 --vectors work/results/sandbox_v610/ggml_quant_vectors.txt --output work/results/sandbox_v610/v67_result.json >/dev/null
 python3 scripts/run_sandbox_v68.py --output work/results/sandbox_v610/v68_result.json >/dev/null
@@ -18,6 +18,8 @@ python3 scripts/run_l5_blocked_attention_controller_e0.py --output work/results/
 python3 scripts/run_l5_silu_lut_contract_e0.py --cases 20000 --output work/results/sandbox_v610/silu_contract.json >/dev/null
 python3 scripts/generate_silu_lut_vectors.py --cases 256 --output work/results/sandbox_v610/silu_vectors.txt >/dev/null
 python3 scripts/validate_v69_source_contracts.py --output work/results/sandbox_v610/source_contract.json >/dev/null
+python3 scripts/run_sandbox_v70.py --quant-cases 2048 --transactions 5000 --output work/results/sandbox_v70/result.json >/dev/null
+python3 scripts/validate_sandbox_v70.py --generated work/results/sandbox_v70/result.json --tracked-dir reports/execution >/dev/null
 pytest -q
 python3 scripts/generate_block128_vectors.py >/dev/null
 python3 scripts/generate_fp32_pipeline_vectors.py >/dev/null

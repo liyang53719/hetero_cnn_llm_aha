@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "evidence_class": "deterministic_Attention_E2_vector_pack_not_RTL_E2",
+  "geometry": {"q_heads": 12, "kv_heads": 2, "head_dim": 128, "query_tile": 16, "kv_tile": 32, "block_tokens": 128, "gqa_ratio": 6, "inputs": "deterministic_BF16", "state": "FP32_MLO"},
+  "seed": 42878,
+  "max_abs": 1.0728836059570312e-06,
+  "max_relative_l2": 2.542504046891292e-07,
+  "cases": {
+    "128": {"review": "full_all_rows_all_heads", "rows_compared": 1536, "controller_tasks": 240, "summary_merge_rows": 0},
+    "384": {"review": "fixed_boundary_rows_all_heads", "rows_compared": 180, "controller_tasks": 1872, "summary_merge_rows": 4608, "q_heads": [0,1,2,3,4,5,6,7,8,9,10,11], "rows": [0,1,15,16,31,32,63,64,127,128,191,255,256,319,383]},
+    "1024": {"review": "fixed_rows_boundary_heads", "rows_compared": 108, "controller_tasks": 12672, "summary_merge_rows": 43008, "q_heads": [0,1,5,6,10,11], "rows": [0,1,15,16,31,32,63,64,127,128,255,256,511,512,767,768,895,1023]}
+  },
+  "aggregate_sha256": "6d8246143202b212b68fa78f93b52040896efcf2aa3689cf7ba3601f25db8245",
+  "local_gate": "Regenerate this pack and compare integrated RTL q128 full, q384 reviewed/full and q1024 reviewed rows.",
+  "not_claimed": ["single_sim_Attention_E2", "RTL_service_curve", "integrated_E3"]
+}

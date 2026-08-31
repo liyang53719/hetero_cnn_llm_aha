@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "evidence_class": "minimum_E3_test_matrix_E0_not_integrated_E3",
+  "case_count": 11,
+  "cases": [
+    {"case_id":0,"label":"baseline","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.0,"silu_scale":1.0,"ddr_efficiency":1.0,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.0,"event_latency_cycles":0},"projected_tps":338.2517292888433,"passes_300tps":true},
+    {"case_id":1,"label":"review_scenario","point":{"attention_matrix_scale":1.05,"attention_sfu_scale":1.1,"silu_scale":1.1,"ddr_efficiency":0.8,"queue_bubble_fraction":0.01,"bank_conflict_fraction":0.005,"event_latency_cycles":16},"projected_tps":329.82895777578256,"passes_300tps":true},
+    {"case_id":2,"label":"closest_pass_300","point":{"attention_matrix_scale":1.05,"attention_sfu_scale":1.25,"silu_scale":1.1,"ddr_efficiency":0.4,"queue_bubble_fraction":0.07,"bank_conflict_fraction":0.05,"event_latency_cycles":16},"projected_tps":300.0098733718092,"passes_300tps":true},
+    {"case_id":3,"label":"closest_fail_300","point":{"attention_matrix_scale":1.05,"attention_sfu_scale":1.25,"silu_scale":1.1,"ddr_efficiency":0.4,"queue_bubble_fraction":0.07,"bank_conflict_fraction":0.05,"event_latency_cycles":256},"projected_tps":299.9992417987912,"passes_300tps":false},
+    {"case_id":4,"label":"individual_severe:attention_matrix_scale","point":{"attention_matrix_scale":1.25,"attention_sfu_scale":1.0,"silu_scale":1.0,"ddr_efficiency":1.0,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.0,"event_latency_cycles":0},"projected_tps":335.73336966458004,"passes_300tps":true},
+    {"case_id":5,"label":"individual_severe:attention_sfu_scale","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.25,"silu_scale":1.0,"ddr_efficiency":1.0,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.0,"event_latency_cycles":0},"projected_tps":337.02123471010026,"passes_300tps":true},
+    {"case_id":6,"label":"individual_severe:silu_scale","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.0,"silu_scale":1.5,"ddr_efficiency":1.0,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.0,"event_latency_cycles":0},"projected_tps":324.48378590645996,"passes_300tps":true},
+    {"case_id":7,"label":"individual_severe:ddr_efficiency","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.0,"silu_scale":1.0,"ddr_efficiency":0.4,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.0,"event_latency_cycles":0},"projected_tps":338.12875770594945,"passes_300tps":true},
+    {"case_id":8,"label":"individual_severe:queue_bubble_fraction","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.0,"silu_scale":1.0,"ddr_efficiency":1.0,"queue_bubble_fraction":0.07,"bank_conflict_fraction":0.0,"event_latency_cycles":0},"projected_tps":318.2974147942408,"passes_300tps":true},
+    {"case_id":9,"label":"individual_severe:bank_conflict_fraction","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.0,"silu_scale":1.0,"ddr_efficiency":1.0,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.05,"event_latency_cycles":0},"projected_tps":322.14840732577005,"passes_300tps":true},
+    {"case_id":10,"label":"individual_severe:event_latency_cycles","point":{"attention_matrix_scale":1.0,"attention_sfu_scale":1.0,"silu_scale":1.0,"ddr_efficiency":1.0,"queue_bubble_fraction":0.0,"bank_conflict_fraction":0.0,"event_latency_cycles":256},"projected_tps":338.237313709953,"passes_300tps":true}
+  ],
+  "sha256": "360f5e80a28c6d910792601fce4a29401442204d8acb92a726054ad68b8f4684",
+  "mandatory_counters": ["measured_attention_matrix_cycles", "measured_attention_sfu_cycles", "measured_silu_cycles", "matrix_producer_stall_cycles", "effective_DDR_read_efficiency", "effective_DDR_write_efficiency", "matrix_queue_bubble_cycles", "SRAM_bank_conflict_cycles", "event_wait_signal_cycles", "score_DDR_bytes", "probability_DDR_bytes"],
+  "acceptance": {"score_DDR_bytes": 0, "probability_DDR_bytes": 0, "pre_route_review_floor_tps": 315, "target_tps": 300, "sram_mib_max": 4, "ddr_read_GBps_max": 100, "ddr_write_GBps_max": 40},
+  "stop_rule": "If measured service curves project below 315 token/s before post-route, reopen architecture/performance budget."
+}

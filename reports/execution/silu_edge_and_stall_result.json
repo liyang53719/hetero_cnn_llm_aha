@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "special_vectors": {
+    "status": "PASS",
+    "evidence_class": "fused_SiLU_special_vector_E0_not_RTL_E1",
+    "vectors": 625,
+    "gate_values": 25,
+    "up_values": 25,
+    "finite_max_abs_vs_exact_silu_bf16": 0.125,
+    "nan_checked_by_class_not_payload": true,
+    "edge_policy_status": "REQUIRES_LOCAL_RTL_DECISION",
+    "open_special_class_cases": 6,
+    "tiny_zero_bin_bias_approx": 0.00099945068359375,
+    "required_decisions": [
+      "Define finite gate <= -8 behavior for infinite up operands; current zero clamp can produce NaN.",
+      "Define q12==0 nonzero BF16 behavior; the even-sized LUT midpoint produces about 1e-3 zero-bin bias.",
+      "Keep NaN comparison class-based rather than payload-bit-exact."
+    ],
+    "sha256": "187b880032b3a58937b7fefb5500d148bf402ea611c3cb40a613a74d38f7dfdf"
+  },
+  "stall_envelope": {
+    "status": "PASS",
+    "evidence_class": "producer_stall_envelope_E0_not_measured_integration",
+    "scenarios": 160,
+    "sha256": "4989e21db5bdf1a3a779d1a35f061d23c5fc4bd491624997f3d0eabc77381180",
+    "decision": "Do not select one versus two lanes from average rate alone; local integration must report burst width, queue high-water and producer stall.",
+    "local_required_counters": ["pairs_offered", "pairs_accepted", "producer_stall_cycles", "producer_stalled_pairs", "queue_high_water", "consumer_backpressure_cycles"]
+  }
+}

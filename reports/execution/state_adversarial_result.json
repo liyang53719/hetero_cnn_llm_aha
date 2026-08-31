@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "evidence_class": "state_adversarial_vector_E0_not_RTL_E1_or_iDMA_E3",
+  "transactions": 5000,
+  "state_domains": 10,
+  "counters": {"started": 5000, "committed": 3424, "rolled_back": 1576, "duplicate_ack": 6760, "stale_ack": 5023, "timeout_abort": 173, "oom_abort": 136, "pages_allocated": 9760, "pages_freed": 9760, "writes_committed": 16777},
+  "generation_wrap_exercised": true,
+  "page_leak": 0,
+  "sha256": "478bce097fbed74e6105edc374be148b4649023b73b2b25b1a11bdc9c05f0353",
+  "local_gate": "Drive the same missing/duplicate/stale acknowledgement, OOM, rollback and generation-wrap classes through epoch/dirty/COW/commit RTL and OOO iDMA responses."
+}

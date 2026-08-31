@@ -1,0 +1,78 @@
+{
+  "audit_decision": "ACCEPT_D718_SANDBOX_E0_RETAIN_L5_5_OPEN_WAIT_LOCAL_8X8_E1_E4",
+  "balanced_sfu": {
+    "balanced_8x8_nominal": {
+      "lanes": 8,
+      "merge_cycles": 305,
+      "rows": 8,
+      "sfu_cycles": 4668288,
+      "tile_cycles": 239,
+      "tps": 323.7642049486616
+    },
+    "balanced_8x8_stress": {
+      "lanes": 8,
+      "merge_cycles": 323,
+      "rows": 8,
+      "sfu_cycles": 4955136,
+      "tile_cycles": 254,
+      "tps": 322.9441063007019
+    },
+    "measured_4x4_nominal": {
+      "lanes": 4,
+      "merge_cycles": 289,
+      "rows": 4,
+      "sfu_cycles": 7631232,
+      "tile_cycles": 357,
+      "tps": 315.4887063917464
+    },
+    "measured_4x4_stress": {
+      "lanes": 4,
+      "merge_cycles": 307,
+      "rows": 4,
+      "sfu_cycles": 8014848,
+      "tile_cycles": 372,
+      "tps": 314.4480973959077
+    },
+    "preferred_gate_pass": true,
+    "stress_margin_over_315_percent": 2.521938508159338,
+    "stress_margin_over_320_percent": 0.9200332189693405
+  },
+  "base_commit": "d718f421df62d5ab031a2f167248ef1a3a845e60",
+  "evidence_class": "independent_sandbox_recalculation_not_RTL_E1_E4_or_E3",
+  "model_resources": {
+    "qwen3_5_35b_a3b": {
+      "dense_kv_gib": 5.0,
+      "gdn_state_mib": 60.0,
+      "minimum_staging_mib": 0.875
+    },
+    "qwen3_8_flash_next": {
+      "gdn_state_mib": 108.0,
+      "minimum_staging_mib": 1.40625,
+      "qsa_index_mib": 192.0,
+      "qsa_kv_gib": 6.0
+    }
+  },
+  "non_claims": [
+    "no RTL elaboration",
+    "no Verilator E1",
+    "no CLN22UL E4",
+    "no integrated E3",
+    "no official-weight execution"
+  ],
+  "numerical": {
+    "max_output_error": 8.940696716308594e-08,
+    "max_weight_sum_error": 5.960464477539063e-08,
+    "patterns": [
+      "random",
+      "identical",
+      "dominant_last",
+      "extreme_range",
+      "block_boundary"
+    ],
+    "rows_checked": 80,
+    "sha256": "81ac8efab8e13795d54c24f376b0ca8604fc3eec1498fc1f068211d21932fc59"
+  },
+  "schema_version": 1,
+  "sha256": "dec4eb82756fd9866f99e2b169f7415c4646d27ce07fd69258cf18318a2b3466",
+  "status": "PASS_INDEPENDENT_V75_RECALCULATION"
+}

@@ -27,24 +27,24 @@
   },
   "L5.4": {
     "one_lane": {
-      "cell_area": 10559.276031,
-      "dynamic_power_mw_estimate": 2.9174,
+      "cell_area": 10551.632033,
+      "dynamic_power_mw_estimate": 3.0885,
       "evidence_class": "DC_WLM_vectorless_power",
-      "leakage_power_mw_estimate": 0.0116722,
-      "status_sha256": "a4ada20a1c9a9a87bf3898203c96ba0d6f45d5233efa4bc16343c39ceaacefed",
+      "leakage_power_mw_estimate": 0.011752,
+      "status_sha256": "b9d4a1a5268738d4804924457a62d479c5d6cd2913515e32abadc428ffc471da",
       "unmapped": 0,
-      "wns_ns": 5.21541e-05
+      "wns_ns": 1.77622e-05
     },
     "selection": "WAIT_MEASURED_MATRIX_PRODUCER_STALL",
     "selection_rule": "one_lane_if_stall_le_2_percent_else_two_lane",
     "two_lane": {
-      "cell_area": 19747.364067,
-      "dynamic_power_mw_estimate": 5.2002,
+      "cell_area": 19747.364063,
+      "dynamic_power_mw_estimate": 5.5526,
       "evidence_class": "DC_WLM_vectorless_power",
-      "leakage_power_mw_estimate": 0.0215761,
-      "status_sha256": "6bb7de3db7538301f4cf354c0a526ad302c39dfdc1476a4ffb8a263ff6f20029",
+      "leakage_power_mw_estimate": 0.021869800000000002,
+      "status_sha256": "1e83b0714fffb0d295b1e4164d71d07afaa85141ba1c957707dc85809c7c9af5",
       "unmapped": 0,
-      "wns_ns": 2.20537e-05
+      "wns_ns": 3.83258e-05
     }
   },
   "checks": {
@@ -63,8 +63,8 @@
   "evidence_hashes": {
     "block32_weight_e1": "f12fa282ef1611e56ed9463ae8b7f708c1ca992e2dc3d4265d477f08b7e84d8f",
     "controller_e1": "a9970d92f92f1b557ddf7cbb79e673ebe18d7f18f24700482ac6d7339ad7cfad",
-    "silu1_e1": "4f784551bbc6b86f97a1fc25144264230c8b80793a3b01e87d40e5da0a41c515",
-    "silu2_e1": "d48fe8c0d81622ed511af96961070ace364fb45eeccc25977e6da47252593e20",
+    "silu1_e1": "0e366ec7f02ccdd49b54da718fe15d1d5e74ea636db6e3beb7a042cddea1bd56",
+    "silu2_e1": "83190139de50aef3b8e7b383852dfcbefd4fe765e7e85b86f395fb1bcb6e8ddd",
     "trace_bridge": "1dd9bce995f56d99f286c3bf5759120ef278e7883b4e3330325d16d625f9c367"
   },
   "schema_version": 1,

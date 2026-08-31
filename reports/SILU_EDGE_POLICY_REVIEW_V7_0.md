@@ -17,4 +17,15 @@ Do not select the final one/two-lane implementation until the edge contract is r
 - define the finite-clamped-gate times infinite-up class, or explicitly state that Inf is diagnostic-only and require deterministic NaN behavior;
 - add zero, subnormal, LUT-boundary, Inf and NaN-class vectors to the local RTL test.
 
-If production RTL changes, rerun both one- and two-lane E1/DC before lane selection. The sandbox result is `reports/execution/silu_edge_and_stall_result.json`.
+## Local decision and closure
+
+The policy review is now approved:
+
+- finite nonzero `gate` with `Q4.12 == 0` uses the local `gate/2` limit;
+- finite gate clamped at or below -8 times infinite `up` follows IEEE and
+  produces NaN class;
+- NaN comparison remains class-based.
+
+The q12-zero RTL correction removed the approximately `9.9945e-4` midpoint
+bias. One- and two-lane E1 and 1 GHz DC were rerun and pass. Final lane
+selection still requires measured producer stall.

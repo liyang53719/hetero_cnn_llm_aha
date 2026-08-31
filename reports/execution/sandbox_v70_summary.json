@@ -3,6 +3,6 @@
   "status": "PASS_SANDBOX_V7_0",
   "evidence_class": "sandbox_E0_not_local_E1_E2_E3_E4",
   "execution": {"pytest": 7, "compileall": "PASS", "attention_q128_rows": 1536, "attention_q384_review_rows": 180, "attention_q1024_review_rows": 108, "silu_special_vectors": 625, "silu_stall_scenarios": 160, "quant_tail_cases": 8192, "state_transactions": 5000, "e3_cases": 11},
-  "hashes": {"attention": "6d8246143202b212b68fa78f93b52040896efcf2aa3689cf7ba3601f25db8245", "silu_special": "187b880032b3a58937b7fefb5500d148bf402ea611c3cb40a613a74d38f7dfdf", "silu_stall": "4989e21db5bdf1a3a779d1a35f061d23c5fc4bd491624997f3d0eabc77381180", "quant_tail": "abe8e0a6bb05c428afd85486939a322896f7313562d89d1cc93aedeb4cb1292f", "state": "478bce097fbed74e6105edc374be148b4649023b73b2b25b1a11bdc9c05f0353", "e3_matrix": "360f5e80a28c6d910792601fce4a29401442204d8acb92a726054ad68b8f4684"},
+  "hashes": {"attention": "6c3a9f2cb3a26dd237129ee39893eb03e53c7b291ece203df140c5987deda7cf", "silu_special": "e6f610e7a7176132f1cdeda8f3da09362d030120e782ec60059555220b83d740", "silu_stall": "4989e21db5bdf1a3a779d1a35f061d23c5fc4bd491624997f3d0eabc77381180", "quant_tail": "abe8e0a6bb05c428afd85486939a322896f7313562d89d1cc93aedeb4cb1292f", "state": "478bce097fbed74e6105edc374be148b4649023b73b2b25b1a11bdc9c05f0353", "e3_matrix": "360f5e80a28c6d910792601fce4a29401442204d8acb92a726054ad68b8f4684"},
   "non_claims": ["not full Attention single-simulation E2", "not measured SiLU lane selection", "not integrated E3", "not quant RTL E1 or llama.cpp parity", "not state RTL E1", "not post-route signoff"]
 }

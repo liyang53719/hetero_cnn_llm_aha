@@ -45,6 +45,7 @@ def hardware_silu(gate_bits:int)->float:
  if exponent==0xff and fraction:return float('nan')
  q12=bf16_to_q12_sat(gate_bits)
  if (gate_bits&0x7fff)==0 or q12<=-32768:return 0.0
+ if q12==0:return gate*.5
  if q12>=32768:return gate
  shifted=q12+32768;position_q12=(shifted*127)>>4;index=(position_q12>>12)&0x7f
  if index>=127:index=126

@@ -9,15 +9,15 @@
     "up_values": 25,
     "finite_max_abs_vs_exact_silu_bf16": 0.125,
     "nan_checked_by_class_not_payload": true,
-    "edge_policy_status": "REQUIRES_LOCAL_RTL_DECISION",
-    "open_special_class_cases": 6,
-    "tiny_zero_bin_bias_approx": 0.00099945068359375,
+    "edge_policy_status": "APPROVED_LOCAL_RTL_RERUN_PASS",
+    "open_special_class_cases": 4,
+    "tiny_zero_bin_bias_approx": 0.0,
     "required_decisions": [
-      "Define finite gate <= -8 behavior for infinite up operands; current zero clamp can produce NaN.",
-      "Define q12==0 nonzero BF16 behavior; the even-sized LUT midpoint produces about 1e-3 zero-bin bias.",
-      "Keep NaN comparison class-based rather than payload-bit-exact."
+      "Finite gate <= -8 times infinite up follows IEEE and produces NaN class.",
+      "Finite nonzero gate with q12==0 uses the local gate/2 limit.",
+      "NaN comparison is class-based rather than payload-bit-exact."
     ],
-    "sha256": "187b880032b3a58937b7fefb5500d148bf402ea611c3cb40a613a74d38f7dfdf"
+    "sha256": "e6f610e7a7176132f1cdeda8f3da09362d030120e782ec60059555220b83d740"
   },
   "stall_envelope": {
     "status": "PASS",

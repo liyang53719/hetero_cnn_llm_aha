@@ -9,7 +9,7 @@ assert control['schema_version']==6 and control['plan_version']=='2026-08-31-v6.
 assert control['branch_inventory']['remote_branches']==['main'] and not control['branch_inventory']['merge_required']
 assert policy['status']=='ENFORCED_MAIN_ONLY' and policy['rules']['allowed_remote_branches']==['main']
 assert control['current_subgate']=='L5.3_BLOCKED_ATTENTION_NUMERICAL_E2'
-assert control['current_state']=='MAIN_ONLY_TRACE_BRIDGE_BLOCK32_WEIGHT_E1_E4_PASS_WAIT_SINGLE_INTEGRATED_SIM'
+assert control['current_state']=='MAIN_ONLY_TRACE_BRIDGE_BLOCK32_WEIGHT_AND_VECTOR_PACK_PASS_WAIT_SINGLE_SIM'
 assert l52['status']=='PASS' and l52['h3']['wns_ns']>=0
 assert local['status']=='BRIDGE_AND_COMPONENT_GATES_PASS_SINGLE_SIM_OPEN'
 assert all(local['checks'][key] for key in ('controller_e1','controller_dc','attention_trace_bridge','block32_weight_e1','block32_weight_dc','silu_1lane_e1','silu_1lane_dc','silu_2lane_e1','silu_2lane_dc'))

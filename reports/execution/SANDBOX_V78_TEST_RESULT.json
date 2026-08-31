@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "executed_in_sandbox": {
+    "pytest_tests": 4,
+    "python_compileall": "PASS",
+    "payload_checkpoints": 168,
+    "payload_continuity_groups": 7,
+    "critical_components_sub_1ps": 6,
+    "minimum_margin_ps": 0.00864267
+  },
+  "evidence_boundary": {
+    "L5.6a_cycle_count_trace_E3": "PASS",
+    "L5.6b_official_reference_and_sampled_lm_head": "PASS",
+    "L5.6c_reduced_four_layer_cross_RTL": "PASS",
+    "L5.6d_full_28_layer_payload_numerical_RTL": "OPEN"
+  },
+  "not_executed_in_sandbox": [
+    "Synopsys DC integrated synthesis",
+    "SRAM macro linkage",
+    "place and route",
+    "PVT/OCV STA",
+    "SAIF power",
+    "official-weight continuous 28-layer payload RTL"
+  ]
+}

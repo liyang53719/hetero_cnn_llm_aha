@@ -18,8 +18,9 @@ assert bridge['status']=='PASS_TRACE_COUPLED_BRIDGE' and bridge['cases']['1024']
 assert probability['status']=='PASS' and not probability['single_bf16_pass'] and probability['hilo_pass'] and probability['bf16_hi_plus_residual']['max_abs']<=0.002
 assert ledger['current_state']==control['current_state']
 assert next_action['decision']=='IMPLEMENT_BALANCED_8X8_ATTENTION_SFU'
-assert next_action['L5.5_review']['review_floor_tps']==315
-assert final['status']=='L5_5_STRESS_PROJECTION_FAIL_REOPEN_8X8_SFU'
+assert next_action['sandbox_preflight']['predicted_stress_tps']>=315
+assert next_action['component_targets']['tile16_stress_cycles_max_for_320_with_merge323']==336
+assert final['status']=='L5_5_STRESS_FAIL_BALANCED_8X8_SANDBOX_PREFLIGHT_INDEPENDENTLY_VALIDATED'
 assert attempt['status']=='PASS_Q128_SINGLE_PROCESS_E2' and attempt['observed_progress']['rows']==1536
 assert q384['status']=='PASS_Q384_SAMPLED_E2' and q384['actual_compared_rows']>=180 and q384['controller_merge_rows']==4608
 assert q1024['status']=='PASS_Q1024_REVIEWED_E2' and q1024['actual_compared_rows']>=108 and q1024['controller_merge_rows']==43008

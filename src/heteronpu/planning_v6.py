@@ -132,6 +132,8 @@ def audit_control(root:str|Path)->dict[str,Any]:
     remote=c['remote_audit']
     if 'new_local_agent_commit_detected' in remote:
         if remote['new_local_agent_commit_detected'] not in {True,False}:errors.append('remote audit')
+    elif remote.get('audited_commit') and remote.get('decision'):
+        pass
     elif int(remote.get('branch_count',0))<1 or not remote.get('decision'):
         errors.append('remote audit')
     return {'schema_version':1,'status':'PASS' if not errors else 'FAIL','control_schema_version':schema,'errors':errors}

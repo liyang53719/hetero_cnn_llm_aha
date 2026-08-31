@@ -1,19 +1,51 @@
-# Local-agent handoff v7.3 — main only
+# Local-agent handoff v7.4 — main only
 
-Pull `main`, run `check_main_only_workflow.sh` and `sandbox_validate.sh`; do not create branches or force-push.
+## Git gate
 
-## Active Qwen2 gate
+Fetch/pull main, run `check_main_only_workflow.sh` and sandbox before work. Before push fetch/rebase/rerun. No branch, PR branch or force-push.
 
-q128 single-process E2 PASS: 1,536 rows/240 tasks/3,222,082 cycles. q384 sampled E2 PASS: 2,304 compared rows containing all frozen 180 rows, 1,872 controller tasks/4,608 merges, 14,756,016 cycles. Next run q1024 frozen 108 rows with 12,672 tasks and exactly 43,008 merges, then random backpressure, zero score/probability DDR and service curves.
+## Accepted local boundary
 
-Use `scripts/import_service_curve.py` for measured Attention/SiLU/DDR/queue/bank/event JSON. Below 315 t/s reopens the budget.
+```text
+L5.2 Matrix H3                  PASS, WNS +0.00490451 ns
+L5.3 Controller                PASS, WNS +0.00191498 ns
+L5.3 Block32 weight            PASS, WNS +0.0000125766 ns
+L5.3 Probability hi+residual   PASS, WNS +0.000114202 ns, max error 0.00064075
+L5.4 one/two candidates        PASS, final selection OPEN
+```
 
-## v7.2 synchronized
+All margins are small. Power is vectorless DC, not SAIF.
 
-The repository now includes multi-seed Attention vectors, integrated low-bit frontend source, eight-slot state/COW source, tiny Qwen3.8 multilayer trace and service importer. These are E0/source-ready, not replacements for local RTL gates.
+## Latest q128 single-process result
 
-## Model identity
+The full harness contains Controller, Revision8B-B QK/PV, Block32 weights,
+BF16 hi+residual and Block128 M/L/O. q128 PASS: 1,536 rows, 240 tasks,
+3,222,082 cycles, Matrix/SFU stall 161/81, score/probability DDR bytes zero,
+max error zero. The timeout was a testbench ready race; no production/generated
+RTL changed. Evidence: `l5_q128_single_sim_attempt_result.json`.
 
-Qwen3.5-35B-A3B is `qwen3_5_moe`: 40 layers, 30 GDN + 10 dense full-attention, 256 experts top-8, standard residual.
+q384 sampled E2 PASS with identical RTL: all frozen180 rows are contained in
+2,304 compared rows, 756 payload tasks, 1,728 sampled merges, 14,756,016 cycles,
+zero error/DDR score/probability traffic. Full controller E1 remains 1,872 tasks
+and exactly 4,608 merges. Evidence: `l5_q384_sampled_e2_result.json`.
 
-Qwen3.8-Flash-Next is `qwen4_exp`: 48 layers, 36 GDN + 12 QSA, four-branch gated residual, PLE, 512 experts top-10. It is not Qwen3-8B or a dense Qwen3.8 architecture. See `reports/QWEN35_QWEN38_FLASH_NEXT_ARCHITECTURE_DELTA.md` and `reports/QWEN_MODEL_FAMILY_SANDBOX_PLAN_V7_3.md`.
+q1024 reviewed E2 PASS in two <=600s shards using identical RTL: all frozen108
+rows are contained in1,440 compared rows, 1,062 payload tasks, 3,360 sampled
+merges, zero error/DDR score/probability traffic. Full controller E1 remains
+12,672 tasks/exactly43,008 merges. Evidence: `l5_q1024_reviewed_e2_result.json`.
+
+## Unique next action
+
+Run deterministic random Matrix/SFU/output backpressure; prove no loss,
+duplicate, reorder or deadlock. Freeze q128/q384/q1024 service curves.
+
+Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
+quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are
+E0/source-ready only. Keep Qwen3.5 `qwen3_5_moe` distinct from Qwen3.8
+Flash-Next `qwen4_exp` (QSA/PLE/four-branch residual).
+
+Then random backpressure, zero score/probability DDR and service curves.
+Measure SiLU producer stall and select one lane only at <=2%; otherwise two.
+L5.5 waits; floor315 token/s. CPU8-23, 24/30G, 600s/task.
+
+Security: owner must review the ed06f4cf GitHub alert before dismissing; current audit says likely descriptive-prefix false positive.

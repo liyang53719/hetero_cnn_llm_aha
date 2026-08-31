@@ -176,7 +176,7 @@ def default_cases() -> tuple[CaseSpec, ...]:
     boundary_rows = (0, 1, 15, 16, 31, 32, 63, 64, 126, 127, 128, 129, 254, 255, 256)
     cases: list[CaseSpec] = []
     for seed in (1, 7, 38, 42878):
-        cases.append(CaseSpec(f"random_seed_{seed}", 128, seed, "random", tuple(range(128)), tuple(range(Q_HEADS)))
+        cases.append(CaseSpec(f"random_seed_{seed}", 128, seed, "random", tuple(range(128)), tuple(range(Q_HEADS))))
     adversarial = (
         ("identical_scores", 257),
         ("near_tie", 257),

@@ -189,7 +189,7 @@ def multilayer_trace_report() -> dict[str, object]:
     if _serialize(batch,state_a)!=_serialize(tuple(step),state_b):raise AssertionError("prefill/decode mismatch")
     payload=_serialize(batch,state_a);reloaded=json.loads(payload)
     if json.dumps(reloaded,sort_keys=True,separators=(",",":"))!=payload:raise AssertionError("replay")
-    partition=_partition(batch);partition2=_partion(tuple(step))
+    partition=_partition(batch);partition2=_partition(tuple(step))
     if partition!=partition2 or partition["fallback"]:raise AssertionError(partition)
     descriptor_payload=json.dumps({"partition":partition,"tokens":tokens,"generation":state_a.generation,"state_domains":["gdn","qsa","ple","hyper","moe","mtp"]},sort_keys=True,separators=(",",":")).encode()
     # Transactional MTP check: draft two tokens, accept one, compare with baseline one-token state.

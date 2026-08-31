@@ -32,6 +32,8 @@ module tb_l5_q128_attention_integrated;
  function automatic integer qidx(input integer head,input integer row,input integer dim);qidx=(head*seq_len+row)*128+dim;endfunction
  function automatic integer kidx(input integer head,input integer row,input integer dim);kidx=(head*seq_len+row)*128+dim;endfunction
  function automatic integer sampled_qtile(input integer index);begin case(index)0:sampled_qtile=0;1:sampled_qtile=1;2:sampled_qtile=2;3:sampled_qtile=3;4:sampled_qtile=4;5:sampled_qtile=7;6:sampled_qtile=8;7:sampled_qtile=11;8:sampled_qtile=15;9:sampled_qtile=16;10:sampled_qtile=19;default:sampled_qtile=23;endcase end endfunction
+ function automatic integer sampled_qtile1024(input integer index);begin case(index)0:sampled_qtile1024=0;1:sampled_qtile1024=1;2:sampled_qtile1024=2;3:sampled_qtile1024=3;4:sampled_qtile1024=4;5:sampled_qtile1024=7;6:sampled_qtile1024=8;7:sampled_qtile1024=15;8:sampled_qtile1024=16;9:sampled_qtile1024=31;10:sampled_qtile1024=32;11:sampled_qtile1024=47;12:sampled_qtile1024=48;13:sampled_qtile1024=55;default:sampled_qtile1024=63;endcase end endfunction
+ function automatic integer sampled_qhead1024(input integer index);begin case(index)0:sampled_qhead1024=0;1:sampled_qhead1024=1;2:sampled_qhead1024=5;3:sampled_qhead1024=6;4:sampled_qhead1024=10;default:sampled_qhead1024=11;endcase end endfunction
  function automatic[63:0]hash_word(input logic[63:0]seed,input logic[31:0]word);hash_word=(seed^{32'd0,word})*64'h100000001b3;endfunction
  function automatic real f32real(input logic[31:0]bits);shortreal value;begin value=$bitstoshortreal(bits);f32real=value;end endfunction
  function automatic real absreal(input real value);absreal=value<0?-value:value;endfunction
@@ -70,22 +72,33 @@ module tb_l5_q128_attention_integrated;
  task automatic check_direct_tile;real error,max_error;begin max_error=0;for(integer row=0;row<16;row++)begin error=absreal(f32real(tile_m[0][row])-f32real(expected_tile_m[row]));if(error>max_error)max_error=error;if(error>0.002)$fatal(1,"direct tile M row=%0d error=%f",row,error);error=absreal(f32real(tile_l[0][row])-f32real(expected_tile_l[row]));if(error>max_error)max_error=error;if(error>0.002)$fatal(1,"direct tile L row=%0d error=%f",row,error);for(integer dim=0;dim<128;dim++)begin error=absreal(f32real(tile_o[0][row*128+dim])-f32real(expected_tile_o[row*128+dim]));if(error>max_error)max_error=error;if(error>0.002)$fatal(1,"direct tile O row=%0d dim=%0d error=%f",row,dim,error);end end $display("L5_ONE_TASK_QK_SFU_PV_PASS rows=16 qk_steps=128 pv_steps=256 max_error=%f cycles=%0d",max_error,cycles);$finish;end endtask
  initial begin matrix_service_busy=0;mdv=0;mdk=0;mdt=0;wait(rst_n);forever begin @(posedge clk);if(mcv&&mcr)begin integer task_id,qt,kt,qh,kh,rows,close_block,merge_global,last_kv;task_id=mct;qt=mcq;kt=mckv;qh=mcqh;kh=mckh;rows=mcrows;close_block=mcclose;merge_global=mcmerge;last_kv=mclast;@(negedge clk);matrix_service_busy=1;matrix_commands++;if(!mck)do_qk(task_id,qt,kt,qh,kh,rows);else do_pv(task_id,qt,kt,qh,kh,rows,close_block,merge_global,last_kv);pulse_matrix_done(mck,task_id);matrix_service_busy=0;end end end
  initial begin sfu_service_busy=0;sdv=0;sdt=0;wait(rst_n);forever begin @(posedge clk);if(scv&&scr)begin integer task_id,qt,kt,qh,kh,rows;task_id=sct;qt=scq;kt=sckv;qh=scqh;kh=sckh;rows=scrows;@(negedge clk);sfu_service_busy=1;sfu_commands++;do_sfu(task_id,qt,kt,qh,kh,rows);pulse_sfu_done(task_id);sfu_service_busy=0;end end end
- initial begin string vectors;logic direct_diag,sampled_384;integer sample_task,qt,kvtiles,close_flag,merge_flag,last_flag;
-  clk=0;rst_n=0;start=0;direct_diag=$test$plusargs("DIRECT_DIAG");sampled_384=$test$plusargs("SAMPLED_384");seq_len=sampled_384?384:128;
+ initial begin string vectors;logic direct_diag,sampled_384,sampled_1024;integer sample_task,qt,qh,kvtiles,close_flag,merge_flag,last_flag,shard,sample_begin,sample_end;
+  clk=0;rst_n=0;start=0;direct_diag=$test$plusargs("DIRECT_DIAG");sampled_384=$test$plusargs("SAMPLED_384");sampled_1024=$test$plusargs("SAMPLED_1024");seq_len=sampled_1024?1024:(sampled_384?384:128);shard=0;void'($value$plusargs("SHARD=%d",shard));
   minv=0;mclear=0;mlast_i=0;mcontext_i=0;ma=0;mb=0;moutr=1;wstart=0;wsv=0;wscore=0;wmask=0;whr=0;hor=0;raw_score=0;mhiv=0;mhor=0;mbiv=0;mblast=0;mma=0;mla=0;mmb=0;mlb=0;moa=0;mob=0;riv=0;ror=1;rx=0;va=0;vb=0;attention_hash=64'hcbf29ce484222325;checked_rows=0;matrix_commands=0;sfu_commands=0;manual_merge_rows=0;
   if(!$value$plusargs("VECTORS=%s",vectors))vectors="work/results/l5_q128_attention_integrated/vectors";
   $readmemh({vectors,"/q_bf16.memh"},qmem);$readmemh({vectors,"/k_bf16.memh"},kmem);$readmemh({vectors,"/v_bf16.memh"},vmem);$readmemh({vectors,"/expected_fp32.memh"},expected);$readmemh({vectors,"/tile_m_fp32.memh"},expected_tile_m);$readmemh({vectors,"/tile_l_fp32.memh"},expected_tile_l);$readmemh({vectors,"/tile_o_fp32.memh"},expected_tile_o);
-  $display("INTEGRATED_PROGRESS phase=VECTORS_LOADED direct=%0d sampled384=%0d",direct_diag,sampled_384);$fflush();repeat(8)@(posedge clk);rst_n=1;
+  $display("INTEGRATED_PROGRESS phase=VECTORS_LOADED direct=%0d sampled384=%0d sampled1024=%0d shard=%0d",direct_diag,sampled_384,sampled_1024,shard);$fflush();repeat(8)@(posedge clk);rst_n=1;
   if(direct_diag)begin matrix_service_busy=1;do_qk(0,0,0,0,0,16);matrix_service_busy=0;do_sfu(0,0,0,0,0,16);matrix_service_busy=1;do_pv(0,0,0,0,0,16,0,0,0);matrix_service_busy=0;check_direct_tile();end
   if(sampled_384)begin
    sample_task=0;
    for(integer sample=0;sample<12;sample++)begin qt=sampled_qtile(sample);kvtiles=((qt+1)*16+31)/32;
-    for(integer qh=0;qh<12;qh++)for(integer kt=0;kt<kvtiles;kt++)begin close_flag=((kt&3)==3)||(kt==kvtiles-1);merge_flag=close_flag&&(kt>=4);last_flag=kt==kvtiles-1;
-     matrix_service_busy=1;do_qk(sample_task,qt,kt,qh,qh/6,16);matrix_service_busy=0;do_sfu(sample_task,qt,kt,qh,qh/6,16);matrix_service_busy=1;do_pv(sample_task,qt,kt,qh,qh/6,16,close_flag,merge_flag,last_flag);matrix_service_busy=0;sample_task++;
+    for(integer qh384=0;qh384<12;qh384++)for(integer kt=0;kt<kvtiles;kt++)begin close_flag=((kt&3)==3)||(kt==kvtiles-1);merge_flag=close_flag&&(kt>=4);last_flag=kt==kvtiles-1;
+     matrix_service_busy=1;do_qk(sample_task,qt,kt,qh384,qh384/6,16);matrix_service_busy=0;do_sfu(sample_task,qt,kt,qh384,qh384/6,16);matrix_service_busy=1;do_pv(sample_task,qt,kt,qh384,qh384/6,16,close_flag,merge_flag,last_flag);matrix_service_busy=0;sample_task++;
     end
    end
    if(checked_rows!=2304||sample_task!=756||manual_merge_rows!=1728)$fatal(1,"q384 sampled accounting rows=%0d tasks=%0d merges=%0d",checked_rows,sample_task,manual_merge_rows);
    $display("L5_Q384_SAMPLED_E2_PASS compared_rows=%0d frozen_rows_covered=180 tasks=%0d sampled_merge_rows=%0d controller_merge_rows=4608 cycles=%0d score_DDR=0 probability_DDR=0 attention_fnv64=%016h",checked_rows,sample_task,manual_merge_rows,cycles,attention_hash);$finish;
+  end
+  if(sampled_1024)begin
+   sample_task=0;if(shard==0)begin sample_begin=0;sample_end=10;end else begin sample_begin=10;sample_end=15;end
+   for(integer sample=sample_begin;sample<sample_end;sample++)begin qt=sampled_qtile1024(sample);kvtiles=((qt+1)*16+31)/32;
+    for(integer hi=0;hi<6;hi++)begin qh=sampled_qhead1024(hi);for(integer kt=0;kt<kvtiles;kt++)begin close_flag=((kt&3)==3)||(kt==kvtiles-1);merge_flag=close_flag&&(kt>=4);last_flag=kt==kvtiles-1;
+     matrix_service_busy=1;do_qk(sample_task,qt,kt,qh,qh/6,16);matrix_service_busy=0;do_sfu(sample_task,qt,kt,qh,qh/6,16);matrix_service_busy=1;do_pv(sample_task,qt,kt,qh,qh/6,16,close_flag,merge_flag,last_flag);matrix_service_busy=0;sample_task++;
+    end end
+   end
+   if(shard==0&&(checked_rows!=960||sample_task!=306||manual_merge_rows!=672))$fatal(1,"q1024 shard0 accounting rows=%0d tasks=%0d merges=%0d",checked_rows,sample_task,manual_merge_rows);
+   if(shard==1&&(checked_rows!=480||sample_task!=756||manual_merge_rows!=2688))$fatal(1,"q1024 shard1 accounting rows=%0d tasks=%0d merges=%0d",checked_rows,sample_task,manual_merge_rows);
+   $display("L5_Q1024_REVIEWED_SHARD_PASS shard=%0d compared_rows=%0d tasks=%0d sampled_merge_rows=%0d controller_tasks=12672 controller_merge_rows=43008 cycles=%0d score_DDR=0 probability_DDR=0 attention_fnv64=%016h",shard,checked_rows,sample_task,manual_merge_rows,cycles,attention_hash);$finish;
   end
   @(negedge clk);start=1;@(posedge clk);@(negedge clk);start=0;while(!ctrl_done&&cycles<20000000)@(posedge clk);if(!ctrl_done)$fatal(1,"integrated timeout");if(ctrl_error||merror)$fatal(1,"protocol");if(checked_rows!=1536||qki!=240||qkc!=240||sfc!=240||pvc!=240||merge_rows!=0)$fatal(1,"accounting rows=%0d qki=%0d",checked_rows,qki);$display("L5_Q128_SINGLE_SIM_E2_PASS rows=%0d tasks=%0d cycles=%0d matrix_stall=%0d sfu_stall=%0d score_DDR=0 probability_DDR=0 attention_fnv64=%016h",checked_rows,qki,cycles,matrix_stall_cycles,sfu_stall_cycles,attention_hash);$finish;
  end

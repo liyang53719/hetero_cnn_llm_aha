@@ -1,7 +1,7 @@
 {
   "models": [
     {
-      "claim_boundary": "E0/compiler only",
+      "claim_boundary": "Official-config operator/shape contract and compiler E0; no official-weight or RTL backend claim.",
       "descriptor_policies": {
         "attention_op": "015040400020408001ffffff00000013",
         "delta_policy": "004000a42008008010ffffff00000015",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "claim_boundary": "Text-only executable tiny E0 plus compiler schedule; official-weight node trace and RTL backends remain local-agent gates.",
+      "claim_boundary": "Qwen4-Exp text-only E0 and compiler schedule; official-weight trace and RTL backends remain local-agent gates.",
       "descriptor_policies": {
         "attention_op": "015040400020608001ffffff00000013",
         "delta_policy": "004000a4200800c010ffffff00000015",

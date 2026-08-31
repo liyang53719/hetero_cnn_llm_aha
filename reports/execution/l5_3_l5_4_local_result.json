@@ -18,7 +18,7 @@
       "unmapped": 0,
       "wns_ns": 0.00191498
     },
-    "full_numeric_status": "PASS_Q128_AND_Q384_NEXT_Q1024",
+    "full_numeric_status": "PASS_Q128_Q384_Q1024",
     "q1024_merge_rows": 43008,
     "q1024_tasks": 12672,
     "q128_tasks": 240,
@@ -53,7 +53,7 @@
     "block32_weight_e1": true,
     "controller_dc": true,
     "controller_e1": true,
-    "full_attention_numerical_e2": false,
+    "full_attention_numerical_e2": true,
     "silu_1lane_dc": true,
     "silu_1lane_e1": true,
     "silu_2lane_dc": true,
@@ -66,6 +66,13 @@
     "silu1_e1": "0e366ec7f02ccdd49b54da718fe15d1d5e74ea636db6e3beb7a042cddea1bd56",
     "silu2_e1": "83190139de50aef3b8e7b383852dfcbefd4fe765e7e85b86f395fb1bcb6e8ddd",
     "trace_bridge": "1dd9bce995f56d99f286c3bf5759120ef278e7883b4e3330325d16d625f9c367"
+  },
+  "q1024_reviewed_e2": {
+    "compared_rows": 1440,
+    "controller_merge_rows": 43008,
+    "evidence": "reports/execution/l5_q1024_reviewed_e2_result.json",
+    "rtl_cycles": 21331806,
+    "status": "PASS_Q1024_REVIEWED_E2"
   },
   "q128_single_sim": {
     "evidence": "reports/execution/l5_q128_single_sim_attempt_result.json",
@@ -82,5 +89,5 @@
     "status": "PASS_Q384_SAMPLED_E2"
   },
   "schema_version": 1,
-  "status": "BRIDGE_COMPONENT_Q128_Q384_E2_PASS_Q1024_OPEN"
+  "status": "L5_3_NUMERICAL_E2_PASS_STRESS_SERVICE_OPEN"
 }

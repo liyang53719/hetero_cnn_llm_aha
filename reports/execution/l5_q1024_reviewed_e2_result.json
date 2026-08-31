@@ -1,0 +1,8 @@
+{
+  "schema_version":1,"generated_at_utc":"2026-08-31T05:35:52Z","stage":"L5.3_BLOCKED_ATTENTION_NUMERICAL_E2","status":"PASS_Q1024_REVIEWED_E2","evidence_class":"E2_same_RTL_two_shards_plus_full_controller_E1",
+  "command":["MODE=sampled1024a taskset -c 8-23 ./scripts/run_l5_q128_attention_integrated_e2.sh","MODE=sampled1024b taskset -c 8-23 ./scripts/run_l5_q128_attention_integrated_e2.sh"],
+  "resource_contract":{"cpu_affinity":"8-23","threads":4,"memory_high":"24G","memory_max":"30G","timeout_seconds_per_shard":600},"rtl_configuration":"identical_to_q128_q384","sequence_tokens":1024,"frozen_reviewed_rows":108,"actual_compared_rows":1440,"payload_tasks":1062,"sampled_merge_rows":3360,"controller_tasks":12672,"controller_merge_rows":43008,
+  "shards":[{"id":0,"compared_rows":960,"tasks":306,"sampled_merge_rows":672,"rtl_cycles":5951784,"attention_fnv64":"00cf337f2b3d667e","log_sha256":"97f124488c26cf83e74139970522eab86e45710affed4f18c60f7cdf51f247a0"},{"id":1,"compared_rows":480,"tasks":756,"sampled_merge_rows":2688,"rtl_cycles":15380022,"attention_fnv64":"3d8248aacdbac1f6","log_sha256":"d288e01afa4445528b81cc3da01109b21cd340564c3d1c937ab6cbd5b1ac4a2b"}],
+  "aggregate_rtl_cycles":21331806,"max_error":0.0,"score_ddr_bytes":0,"probability_ddr_bytes":0,"protocol_errors":0,"vector_manifest_sha256":"72f91754f5b1422ba3e432178dbb24c2942d894c92d17f4fe5c27688c4fc8087","source_policy":{"generated_rtl_modified":false,"production_rtl_modified":false,"same_executable_harness":true},
+  "next_action":"Run random Matrix/SFU/output backpressure with loss/duplicate/reorder/deadlock checks and freeze measured q128/q384/q1024 service curves."
+}

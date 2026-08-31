@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "L5_5_INTEGRATED_E3_PASS_READY_L5_6",
+  "status": "L5_6_CYCLE_E3_PASS_NUMERICAL_OPEN",
   "branch_audit": {
     "remote_branches": ["main"],
     "merge_required": false,
@@ -13,7 +13,8 @@
     "L5.4": "PASS_SELECTED_ONE_LANE",
     "L5.5_4x4_tile_merge": "PASS_COMPONENTS_FAIL_STRESS",
     "L5.5_balanced_8x8": "PASS_E1_E4",
-    "L5.5_integrated_E3": "PASS_REVIEW_321_869TPS"
+    "L5.5_integrated_E3": "PASS_REVIEW_321_869TPS",
+    "L5.6_full_model_cycle_E3": "PASS_321_086TPS_NUMERICAL_OPEN"
   },
   "sandbox_v75": {
     "status": "PASS",

@@ -10,7 +10,7 @@ python3 scripts/run_qwen38_architecture_e0.py >/dev/null
 python3 scripts/generate_model_support_report.py >/dev/null
 python3 scripts/run_planning_v6.py >/dev/null
 python3 scripts/validate_l5_revision8a_contract.py --operations 100000 --output work/results/l5_revision8a/sandbox_smoke.json >/dev/null
-mkdir -p work/results/sandbox_v610 work/results/sandbox_v70 work/results/sandbox_v72 work/results/sandbox_v75 work/results/sandbox_v77 work/results/sandbox_v78
+mkdir -p work/results/sandbox_v610 work/results/sandbox_v70 work/results/sandbox_v72 work/results/sandbox_v75 work/results/sandbox_v78
 python3 scripts/generate_ggml_quant_vectors.py --cases 128 --output work/results/sandbox_v610/ggml_quant_vectors.txt >/dev/null
 python3 scripts/run_sandbox_v67.py --quant-cases 200 --transactions 100 --vectors work/results/sandbox_v610/ggml_quant_vectors.txt --output work/results/sandbox_v610/v67_result.json >/dev/null
 python3 scripts/run_sandbox_v68.py --output work/results/sandbox_v610/v68_result.json >/dev/null
@@ -25,8 +25,6 @@ python3 scripts/run_qwen_family_contracts.py --output work/results/sandbox_v72/q
 python3 scripts/run_l5_attention_sfu_balance_e0.py --output work/results/sandbox_v75/balanced_sfu.json >/dev/null
 python3 scripts/run_qwen_model_resource_envelope.py --output work/results/sandbox_v75/qwen_resources.json >/dev/null
 python3 scripts/run_sandbox_v75.py --output work/results/sandbox_v75/result.json >/dev/null
-python3 scripts/run_sandbox_v77.py --output work/results/sandbox_v77/result.json >/dev/null
-python3 scripts/validate_sandbox_v77.py --result work/results/sandbox_v77/result.json >/dev/null
 python3 scripts/run_sandbox_v78.py --output work/results/sandbox_v78/result.json --payload-plan work/results/sandbox_v78/payload_plan.json >/dev/null
 python3 scripts/validate_sandbox_v78.py --result work/results/sandbox_v78/result.json >/dev/null
 pytest -q

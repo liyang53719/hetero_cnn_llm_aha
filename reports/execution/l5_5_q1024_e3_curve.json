@@ -1,0 +1,20 @@
+{
+  "attention_matrix_cycles": 5018112,
+  "attention_sfu_cycles": 5168256,
+  "clock_hz": 1000000000,
+  "commit": "8532b3241041822d40cfcdb45709d0e4f4e20783",
+  "ddr_read_bytes": 93585408,
+  "ddr_read_efficiency": 0.64,
+  "ddr_write_bytes": 1048576,
+  "ddr_write_efficiency": 1.0,
+  "event_wait_signal_cycles": 4127,
+  "evidence_class": "E3_INTEGRATED",
+  "matrix_producer_stall_cycles": 0,
+  "matrix_queue_bubble_cycles": 8651,
+  "probability_ddr_bytes": 0,
+  "score_ddr_bytes": 0,
+  "sequence": 1024,
+  "silu_cycles": 9175040,
+  "source_sha256": "78b23a3a84fd96a7dde1ec719f345642735bb23fb8977767d6027d3a3708eac0",
+  "sram_bank_conflict_cycles": 126875
+}

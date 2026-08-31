@@ -1,0 +1,37 @@
+{
+  "calibration": {
+    "block_cycles": 113621951,
+    "full_model_cycles": 3181414628,
+    "producer_stall_fraction": 0.0,
+    "review_floor_pass": true,
+    "score_probability_ddr_zero": true,
+    "selected_silu_lanes": "one",
+    "sram_ddr_counters_present": true,
+    "target_pass": true,
+    "tokens_per_second": 321.8693945101204
+  },
+  "curve": {
+    "attention_matrix_cycles": 5018112,
+    "attention_sfu_cycles": 5168256,
+    "clock_hz": 1000000000,
+    "commit": "8532b3241041822d40cfcdb45709d0e4f4e20783",
+    "ddr_read_bytes": 93585408,
+    "ddr_read_efficiency": 0.64,
+    "ddr_write_bytes": 1048576,
+    "ddr_write_efficiency": 1.0,
+    "event_wait_signal_cycles": 4127,
+    "evidence_class": "E3_INTEGRATED",
+    "matrix_producer_stall_cycles": 0,
+    "matrix_queue_bubble_cycles": 8651,
+    "probability_ddr_bytes": 0,
+    "score_ddr_bytes": 0,
+    "sequence": 1024,
+    "silu_cycles": 9175040,
+    "source_sha256": "78b23a3a84fd96a7dde1ec719f345642735bb23fb8977767d6027d3a3708eac0",
+    "sram_bank_conflict_cycles": 126875
+  },
+  "schema_version": 1,
+  "sha256": "ddb44e9671e768fd4299034329b57cdfac407ab5069cf9ce2ca52aec3a8be5cf",
+  "status": "PASS_REVIEW",
+  "stop_rule": "Below 315 tps or nonzero score/probability DDR bytes reopens the architecture/performance budget."
+}

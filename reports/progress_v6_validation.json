@@ -2,8 +2,9 @@
   "L5_2": "PASS",
   "L5_3_full_E2": "PASS",
   "L5_4_selection": "PASS_ONE_LANE",
-  "L5_5": "BALANCED_8X8_PASS_WAIT_E3",
+  "L5_5": "PASS_E3_321_869TPS",
   "branch_policy": "MAIN_ONLY",
+  "next": "L5.6_Q1024_FULL_MODEL",
   "schema_version": 6,
-  "status": "PASS_V6_10_LOCAL_BRIDGE"
+  "status": "PASS_V6_11_L5_5_E3"
 }

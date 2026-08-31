@@ -1,11 +1,12 @@
 {
-  "schema_version":6,"stage":"L5","subgate":"L5.5_INTEGRATED_E3","state":"L5_5_BALANCED_8X8_PASS_READY_REAL_E3","decision":"RUN_REAL_MATRIX_SFU_IDMA_DDR_E3",
+  "schema_version":6,"stage":"L5","subgate":"L5.6_Q1024_FULL_MODEL","state":"L5_5_INTEGRATED_E3_PASS_READY_L5_6","decision":"RUN_Q1024_28_LAYER_FULL_MODEL",
   "git_workflow":{"policy":"config/git_workflow_policy.json","first_commands":["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/sandbox_validate.sh"],"forbidden":["new branch","PR work branch","force push"]},
   "completed":{"L5.2":"PASS_REV8B_B","L5.3":"PASS_NUMERICAL_AND_STRESS","L5.4":"PASS_SELECTED_ONE_LANE","L5.5_4x4_components":"PASS_E1_E4_STRESS_PROJECTION_FAIL"},
   "sandbox_preflight":{"evidence":"reports/execution/l5_5_balanced_8x8_sfu_e0_result.json","recommended":"8_tile_math_lanes_plus_8_merge_rows","predicted_nominal_tps":323.7642049486616,"predicted_stress_tps":322.9441063007019,"hard_floor_tps":315,"preferred_floor_tps":320,"merge8_source":"rtl/attention/fp32_mlo_merge8_candidate.sv"},
-  "local_8x8":{"evidence":"reports/execution/l5_5_balanced_8x8_local_result.json","status":"PASS_E1_E4_READY_E3","tile_stress_cycles":252,"merge8_stress_cycles":365,"stress_tps":322.3734869673966},
-  "unique_next_action":"Run the real q1024 Matrix/SFU/iDMA/DDR E3 counter path with measured 8x8 services, real queue/bank/event/DDR efficiency counters and score/probability DDR=0; apply the 315 token/s stop rule.",
-  "ordered_gates":["real q1024 integrated Matrix/SFU/iDMA/DDR counters","score_probability_DDR_bytes_zero","stress tokens/s >=315","L5.5 integrated E3"],
+  "local_8x8":{"evidence":"reports/execution/l5_5_balanced_8x8_local_result.json","status":"PASS_E1_E4","tile_stress_cycles":252,"merge8_stress_cycles":365,"stress_tps":322.3734869673966},
+  "integrated_e3":{"evidence":"reports/execution/l5_5_q1024_e3_result.json","status":"PASS_REVIEW","evidence_class":"composed_real_RTL_E3","full_model_cycles":3181414628,"tokens_per_second":321.8693945101204,"score_probability_DDR_bytes":0},
+  "unique_next_action":"Run the q1024 28-layer full-model controller trace using the frozen Qwen2 revision and the accepted L5.5 service counters; preserve the composed-E3 boundary and require >=300 token/s before L5 closure.",
+  "ordered_gates":["28-layer q1024 full-model trace","frozen Qwen2 revision and all 28 blocks","final RMSNorm and last-token LM head","tokens/s >=300","L5.6 closeout"],
   "component_targets":{"tile16_stress_cycles_max_for_320_with_merge323":336,"merge8_stress_cycles_max_for_320_with_tile254":516,"conservative_prediction":{"tile_stress_cycles":254,"merge_stress_cycles":323,"q1024_sfu_cycles":4955136}},
   "model_family_parallel_work":{"qwen3_5_35b_a3b":"dense GQA/single residual/256-top8 only; 60MiB GDN state and 5GiB BF16 KV","qwen3_8_flash_next":"QSA/PLE/four-branch residual/512-top10; 108MiB GDN state, 6GiB KV and 192MiB index","rule":"Do not conflate qwen3_5_moe, qwen4_exp, or ordinary Qwen3.8."},
   "forbidden_claims":["L5.5 pass from sandbox DSE","E3 before measured 8x8 service","Qwen3.5 through QSA","ordinary Qwen3.8 support inferred from Flash-Next","post-route signoff"]

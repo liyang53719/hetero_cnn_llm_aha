@@ -25,7 +25,6 @@ file mkdir $OUT_DIR
 set dbs [split $STD_CELL_DBS ":"]
 set_app_var target_library $dbs
 set_app_var link_library [concat "*" $dbs]
-set_app_var search_path [concat $search_path [list . [file dirname $RTL_FILELIST]]]
 
 set rtl_files {}
 set fp [open $RTL_FILELIST r]
@@ -39,6 +38,15 @@ if {[llength $rtl_files] == 0} {
   puts stderr "RTL file list is empty: $RTL_FILELIST"
   exit 3
 }
+
+# Include lookup must follow the source tree, not only the filelist directory.
+# This is required for generated coefficient and ROM .svh files while keeping
+# filelists portable and avoiding hand-copied include artifacts.
+set rtl_search_dirs [list . [file dirname $RTL_FILELIST]]
+foreach rtl_file $rtl_files {
+  lappend rtl_search_dirs [file dirname $rtl_file]
+}
+set_app_var search_path [concat $search_path [lsort -unique $rtl_search_dirs]]
 
 set_host_options -max_cores $MAX_CORES
 analyze -format sverilog $rtl_files
@@ -91,11 +99,13 @@ set paths [get_timing_paths -delay_type max -nworst 1 -max_paths 1]
 if {[sizeof_collection $paths] > 0} {
   set worst_slack [get_attribute [index_collection $paths 0] slack]
 }
+set cell_area [get_attribute [current_design] area]
 set status_fp [open "$OUT_DIR/status.txt" w]
 puts $status_fp "TOP=$TOP"
 puts $status_fp "CLOCK_PERIOD_NS=$CLK_PERIOD"
 puts $status_fp "UNMAPPED_CELLS=$unmapped_count"
 puts $status_fp "WORST_SLACK_NS=$worst_slack"
+puts $status_fp "CELL_AREA=$cell_area"
 close $status_fp
 
 write -format ddc -hierarchy -output "$OUT_DIR/$TOP.ddc"
@@ -106,5 +116,5 @@ if {$unmapped_count != 0} {
   puts stderr "DC gate failed: $unmapped_count unmapped cells"
   exit 4
 }
-puts "DC_SYNTHESIS_COMPLETED TOP=$TOP WNS=$worst_slack"
+puts "DC_SYNTHESIS_COMPLETED TOP=$TOP WNS=$worst_slack AREA=$cell_area"
 exit

@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+import argparse,json
+from pathlib import Path
+p=argparse.ArgumentParser();p.add_argument('--generated',type=Path,required=True);p.add_argument('--tracked-dir',type=Path,default=Path('reports/execution'));a=p.parse_args();g=json.loads(a.generated.read_text());t=a.tracked_dir
+attention=json.loads((t/'attention_e2_vector_pack_result.json').read_text());silu=json.loads((t/'silu_edge_and_stall_result.json').read_text());quant=json.loads((t/'quant_tail_result.json').read_text());state=json.loads((t/'state_adversarial_result.json').read_text());e3=json.loads((t/'e3_minimum_matrix.json').read_text())
+assert g['status']=='PASS';assert g['attention_e2_pack']['aggregate_sha256']==attention['aggregate_sha256'];assert g['attention_e2_pack']['cases']['1024']['summary_merge_rows']==43008;assert g['silu_edge_and_stall']['special_vectors']['sha256']==silu['special_vectors']['sha256'];assert g['silu_edge_and_stall']['stall_envelope']['sha256']==silu['stall_envelope']['sha256'];assert g['quant_tail']['sha256']==quant['sha256'];assert g['state_adversarial']['sha256']==state['sha256'];assert g['e3_minimum_matrix']['sha256']==e3['sha256'];assert e3['case_count']<=20 and e3['acceptance']['pre_route_review_floor_tps']==315
+for path in ('src/heteronpu/attention_e2_vectors.py','src/heteronpu/silu_edge_and_stall.py','src/heteronpu/quant_tail_scheduler.py','src/heteronpu/state_adversarial_vectors.py','src/heteronpu/e3_minimum_matrix.py','rtl/quant/ggml_quant_k_tail_sequencer.sv','reports/SILU_EDGE_POLICY_REVIEW_V7_0.md'):assert Path(path).is_file(),path
+print(json.dumps({'status':'PASS','attention_sha':attention['aggregate_sha256'],'silu_special_sha':silu['special_vectors']['sha256'],'quant_sha':quant['sha256'],'state_sha':state['sha256'],'e3_sha':e3['sha256']},indent=2))

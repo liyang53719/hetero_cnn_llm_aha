@@ -22,6 +22,7 @@ set MAX_CORES    [expr {[info exists ::env(DC_MAX_CORES)] ? $::env(DC_MAX_CORES)
 set HIGH_EFFORT  [expr {[info exists ::env(DC_TIMING_HIGH_EFFORT)] ? $::env(DC_TIMING_HIGH_EFFORT) : 0}]
 set QUICK_COMPILE [expr {[info exists ::env(DC_QUICK_COMPILE)] ? $::env(DC_QUICK_COMPILE) : 0}]
 set MAP_LOW [expr {[info exists ::env(DC_MAP_LOW)] ? $::env(DC_MAP_LOW) : 0}]
+set SKIP_POWER [expr {[info exists ::env(DC_SKIP_POWER)] ? $::env(DC_SKIP_POWER) : 0}]
 file mkdir $OUT_DIR
 
 set dbs [split $STD_CELL_DBS ":"]
@@ -117,7 +118,13 @@ report_timing -delay_type max -max_paths 50 -nworst 5 > "$OUT_DIR/timing_max.rpt
 report_timing -delay_type min -max_paths 20 -nworst 3 > "$OUT_DIR/timing_min.rpt"
 report_reference                   > "$OUT_DIR/references.rpt"
 report_resources                   > "$OUT_DIR/resources.rpt"
-report_power                       > "$OUT_DIR/power_estimate.rpt"
+if {$SKIP_POWER} {
+  set power_fp [open "$OUT_DIR/power_estimate.rpt" w]
+  puts $power_fp "POWER_SKIPPED_FOR_COMPONENT_TIMING_AREA_GATE"
+  close $power_fp
+} else {
+  report_power                     > "$OUT_DIR/power_estimate.rpt"
+}
 check_design                       > "$OUT_DIR/check_design_post.rpt"
 check_timing                       > "$OUT_DIR/check_timing.rpt"
 

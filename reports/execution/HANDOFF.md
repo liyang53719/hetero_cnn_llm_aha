@@ -1,4 +1,4 @@
-# Local-agent handoff v7.10 — main only
+# Local-agent handoff v7.11 — main only
 
 ## Git gate
 
@@ -24,21 +24,22 @@ L5.4 producer stall                  0%, queue high-water 7
 
 The 4-lane tile / 4-row merge SFU components pass E1/DC, but the stress projection is 314.448 t/s and therefore fails the 315-t/s review gate. Retain the component evidence; do not enter E3 with it.
 
-## Unique next action
-
-Implement balanced 8x8 Attention SFU:
+## Local balanced 8x8 result
 
 ```text
-8 elastic tile math lanes
-8 parallel M/L/O merge rows
-same 16x32 tile store
-same FP32 operation order
-scores and probabilities remain on chip
+tile16: nominal236, stress252 cycles, WNS +0.00011009 ns, area277390.659
+merge8: nominal353, stress365 cycles, WNS +0.00000864267 ns, area357614.803
+q1024 stress projection: 322.373487 t/s
+unmapped/unresolved/blackbox: 0
 ```
 
-Sandbox preflight: nominal 323.764 t/s, stress 322.944 t/s, conservative area upper bound 684,314 library units. Use `reports/execution/l5_5_balanced_8x8_sfu_e0_result.json`. A source-ready `rtl/attention/fp32_mlo_merge8_candidate.sv` is provided.
+Numerical/backpressure E1 and preferred>=320 projection pass. Evidence:
+`reports/execution/l5_5_balanced_8x8_local_result.json`.
 
-Local hard gates: numerical mismatch zero, deterministic random backpressure, WNS>=0, unmapped/unresolved=0, stress>=315. Preferred engineering gate is stress>=320. Then run real Matrix/SFU/iDMA/DDR E3.
+## Unique next action
+
+Run real q1024 Matrix/SFU/iDMA/DDR E3 with measured queue, bank, event and DDR
+counters. Require score/probability DDR=0 and >=315 t/s.
 
 ## Model-family boundary
 

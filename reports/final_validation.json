@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "L5_5_STRESS_FAIL_BALANCED_8X8_SANDBOX_PREFLIGHT_INDEPENDENTLY_VALIDATED",
+  "status": "L5_5_BALANCED_8X8_LOCAL_PASS_READY_REAL_E3",
   "branch_audit": {
     "remote_branches": ["main"],
     "merge_required": false,
@@ -11,7 +11,8 @@
     "L5.2": "PASS_REV8B_B_COMPONENT_H3",
     "L5.3": "PASS_NUMERICAL_E2_AND_STRESS",
     "L5.4": "PASS_SELECTED_ONE_LANE",
-    "L5.5_4x4_tile_merge": "PASS_COMPONENTS_FAIL_STRESS"
+    "L5.5_4x4_tile_merge": "PASS_COMPONENTS_FAIL_STRESS",
+    "L5.5_balanced_8x8": "PASS_E1_E4_READY_E3"
   },
   "sandbox_v75": {
     "status": "PASS",
@@ -34,14 +35,12 @@
     "numerical_max_error": 8.940696716308594e-08
   },
   "non_claims": [
-    "no 8x8 RTL E1/E4",
     "no integrated E3",
     "resource envelopes are not official-weight execution",
     "vectorless DC power is not SAIF",
     "no post-route signoff"
   ],
   "remaining_local_gates": [
-    "L5.5_8x8_SFU_E1_E4",
     "L5.5_integrated_E3",
     "L5.6_full_model",
     "L4_CNN_AHA",

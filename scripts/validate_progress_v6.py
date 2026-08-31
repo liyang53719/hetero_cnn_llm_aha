@@ -4,12 +4,12 @@ import json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def load(path):return json.loads((ROOT/path).read_text())
-control=load('config/control_plane.json');policy=load('config/git_workflow_policy.json');ledger=load('reports/execution/MASTER_LEDGER.json');next_action=load('reports/execution/NEXT_ACTION.json');final=load('reports/final_validation.json');local=load('reports/execution/l5_3_l5_4_local_result.json');attempt=load('reports/execution/l5_q128_single_sim_attempt_result.json');q384=load('reports/execution/l5_q384_sampled_e2_result.json');q1024=load('reports/execution/l5_q1024_reviewed_e2_result.json');stress=load('reports/execution/l5_attention_stress_service_result.json');selection=load('reports/execution/l5_silu_lane_selection_result.json');precheck=load('reports/execution/l5_5_measured_precheck_result.json');candidate=load('reports/execution/l5_5_pipelined_sfu_candidate_result.json');bridge=load('reports/execution/l5_attention_trace_bridge_result.json');probability=load('reports/execution/l5_probability_hilo_result.json');v69=load('reports/execution/sandbox_v69_result.json');l52=load('reports/execution/l5_revision8b_b_local_result.json')
+control=load('config/control_plane.json');policy=load('config/git_workflow_policy.json');ledger=load('reports/execution/MASTER_LEDGER.json');next_action=load('reports/execution/NEXT_ACTION.json');final=load('reports/final_validation.json');local=load('reports/execution/l5_3_l5_4_local_result.json');attempt=load('reports/execution/l5_q128_single_sim_attempt_result.json');q384=load('reports/execution/l5_q384_sampled_e2_result.json');q1024=load('reports/execution/l5_q1024_reviewed_e2_result.json');stress=load('reports/execution/l5_attention_stress_service_result.json');selection=load('reports/execution/l5_silu_lane_selection_result.json');precheck=load('reports/execution/l5_5_measured_precheck_result.json');candidate=load('reports/execution/l5_5_pipelined_sfu_candidate_result.json');balanced=load('reports/execution/l5_5_balanced_8x8_local_result.json');bridge=load('reports/execution/l5_attention_trace_bridge_result.json');probability=load('reports/execution/l5_probability_hilo_result.json');v69=load('reports/execution/sandbox_v69_result.json');l52=load('reports/execution/l5_revision8b_b_local_result.json')
 assert control['schema_version']==6 and control['plan_version']=='2026-08-31-v6.10'
 assert control['branch_inventory']['remote_branches']==['main'] and not control['branch_inventory']['merge_required']
 assert policy['status']=='ENFORCED_MAIN_ONLY' and policy['rules']['allowed_remote_branches']==['main']
-assert control['current_subgate']=='L5.5_PERFORMANCE_REOPEN'
-assert control['current_state']=='L5_5_STRESS_PROJECTION_FAIL_REOPEN_8X8_SFU'
+assert control['current_subgate']=='L5.5_INTEGRATED_E3'
+assert control['current_state']=='L5_5_BALANCED_8X8_PASS_READY_REAL_E3'
 assert l52['status']=='PASS' and l52['h3']['wns_ns']>=0
 assert local['status']=='L5_3_L5_4_PASS_L5_5_OPEN'
 assert all(local['checks'][key] for key in ('controller_e1','controller_dc','attention_trace_bridge','block32_weight_e1','block32_weight_dc','silu_1lane_e1','silu_1lane_dc','silu_2lane_e1','silu_2lane_dc'))
@@ -17,10 +17,10 @@ assert local['checks']['full_attention_numerical_e2'] and local['checks']['silu_
 assert bridge['status']=='PASS_TRACE_COUPLED_BRIDGE' and bridge['cases']['1024']['merge_rows']==43008
 assert probability['status']=='PASS' and not probability['single_bf16_pass'] and probability['hilo_pass'] and probability['bf16_hi_plus_residual']['max_abs']<=0.002
 assert ledger['current_state']==control['current_state']
-assert next_action['decision']=='IMPLEMENT_BALANCED_8X8_ATTENTION_SFU'
+assert next_action['decision']=='RUN_REAL_MATRIX_SFU_IDMA_DDR_E3'
 assert next_action['sandbox_preflight']['predicted_stress_tps']>=315
 assert next_action['component_targets']['tile16_stress_cycles_max_for_320_with_merge323']==336
-assert final['status']=='L5_5_STRESS_FAIL_BALANCED_8X8_SANDBOX_PREFLIGHT_INDEPENDENTLY_VALIDATED'
+assert final['status']=='L5_5_BALANCED_8X8_LOCAL_PASS_READY_REAL_E3'
 assert attempt['status']=='PASS_Q128_SINGLE_PROCESS_E2' and attempt['observed_progress']['rows']==1536
 assert q384['status']=='PASS_Q384_SAMPLED_E2' and q384['actual_compared_rows']>=180 and q384['controller_merge_rows']==4608
 assert q1024['status']=='PASS_Q1024_REVIEWED_E2' and q1024['actual_compared_rows']>=108 and q1024['controller_merge_rows']==43008
@@ -28,9 +28,10 @@ assert stress['status']=='PASS' and stress['controller_stress']['transactions_qk
 assert selection['status']=='PASS' and selection['selected_lanes']==1 and selection['candidates']['one']['producer_stall_fraction']<=0.02
 assert precheck['status']=='FAIL_REOPEN_ARCHITECTURE' and precheck['imported']['calibration']['tokens_per_second']<315
 assert candidate['status']=='PASS_COMPONENTS_FAIL_STRESS_REOPEN' and candidate['q1024_projection']['nominal_tokens_per_second']>=315 and candidate['q1024_projection']['stress_tokens_per_second']<315
+assert balanced['status']=='PASS_E1_E4_READY_E3' and balanced['q1024_projection']['stress_tokens_per_second']>=320 and balanced['score_ddr_bytes']==0 and balanced['probability_ddr_bytes']==0
 assert not attempt['source_policy']['generated_rtl_modified'] and not attempt['source_policy']['production_rtl_modified']
 assert v69['status']=='PASS'
 for path in ('config/git_workflow_policy.json','scripts/check_main_only_workflow.sh','rtl/attention/blocked_attention_stream_controller.sv','rtl/attention/fp32_block32_softmax_weights.sv','scripts/run_l5_blocked_attention_controller_e1.sh','scripts/run_l5_blocked_attention_controller_dc.sh','scripts/run_l5_block32_softmax_weight_e1.sh','scripts/run_l5_block32_softmax_weight_dc.sh','rtl/sfu/bf16_silu_mul_lut_lane.sv','scripts/run_l5_silu_lut_e1.sh','scripts/run_l5_silu_lut_dc.sh','reports/CURRENT_WORK_BREAKDOWN_MAIN_ONLY.md'):
  assert (ROOT/path).is_file(),path
-result={'schema_version':6,'status':'PASS_V6_10_LOCAL_BRIDGE','branch_policy':'MAIN_ONLY','L5_2':'PASS','L5_3_full_E2':'PASS','L5_4_selection':'PASS_ONE_LANE','L5_5':'FAIL_STRESS_REOPEN_8X8_SFU'}
+result={'schema_version':6,'status':'PASS_V6_10_LOCAL_BRIDGE','branch_policy':'MAIN_ONLY','L5_2':'PASS','L5_3_full_E2':'PASS','L5_4_selection':'PASS_ONE_LANE','L5_5':'BALANCED_8X8_PASS_WAIT_E3'}
 (ROOT/'reports/progress_v6_validation.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n');print(json.dumps(result,indent=2,sort_keys=True))

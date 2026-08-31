@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "ENFORCED_MAIN_ONLY",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "audited_at_utc": "2026-08-31T02:00:00Z",
+  "audit": {
+    "remote_branches": ["main"],
+    "second_page_empty": true,
+    "l5_2_closeout_commit": "eba24625350d14fe3f9d760929736dcf5872fabd",
+    "latest_local_gate_commit": "1ac26b273e94780ca0c38b4c636f8d8ca9027549",
+    "main_contains_l5_2_closeout": true,
+    "main_ahead_of_l5_2_closeout_at_audit": 34,
+    "merge_of_remote_branches_required": false,
+    "remote_branch_deletion_required": false
+  },
+  "rules": {
+    "allowed_local_branches": ["main"],
+    "allowed_remote_branches": ["main"],
+    "branch_creation": "FORBIDDEN_WITHOUT_EXPLICIT_USER_APPROVAL",
+    "pull_request_work_branches": "FORBIDDEN",
+    "force_push": false,
+    "history_rewrite": false,
+    "push_mode": "FAST_FORWARD_ONLY",
+    "atomic_evidence_commit": true,
+    "all_architecture_revisions_live_in_main_history": true
+  },
+  "local_agent_protocol": {
+    "before_work": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh"],
+    "before_push": ["git fetch origin","git rebase origin/main if origin/main advanced","rerun all affected gates","git push origin main"],
+    "forbidden": ["git checkout -b","git switch -c","git worktree add with a new branch","git push --force","leaving evidence only on a local branch","opening a PR branch without explicit user approval"]
+  },
+  "exception_process": "Only an explicit user instruction may authorize a temporary branch."
+}

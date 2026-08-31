@@ -1,17 +1,43 @@
-# Local-agent handoff v6.9
+# Local-agent handoff v6.10 — main only
 
-State: L5.3 controller E1/E4 and L5.4 one/two-lane E1/E4 PASS; full Attention numerical integration and SiLU selection remain open.
+## Git workflow hard gate
 
-```text
-L5.2 Revision8B-B H3          PASS, WNS +0.00490451 ns
-Attention controller E1      q128/q384/q1024 PASS, merges 0/4608/43008
-Attention controller DC      WNS +0.00191498 ns, area 1773.408002
-SiLU one-lane E1/DC          PASS, WNS +0.0000521541 ns, area 10559.276031
-SiLU two-lane E1/DC          PASS, WNS +0.0000220537 ns, area 19747.364067
+Remote audit found exactly one branch: `main`. Do not create another local or
+remote branch. Before work:
+
+```bash
+git fetch --prune origin
+git checkout main
+git pull --ff-only origin main
+./scripts/check_main_only_workflow.sh
 ```
 
-Power values in `l5_3_l5_4_local_result.json` are vectorless DC estimates, not SAIF. All timing margins are extremely small and remain L10 risks.
+Before push, fetch again; rebase local main if origin/main advanced, rerun all
+affected gates and push fast-forward. Force-push and PR branches are forbidden.
 
-Next: connect the controller to Revision8B-B QK/PV transactions and existing FP32 Block128 M/L/O. Close q128 full numerical E2 first, then q384 and reviewed q1024 rows with exactly 43,008 merges. Measure Matrix producer stall before selecting one vs two SiLU lanes. L5.5 still waits for L5.3 and L5.4 PASS; floor is 315 token/s.
+## Accepted closures
 
-CPU 8-23, MemoryHigh24G/Max30G, 600s/task. Do not add the two untracked runtime scripts.
+```text
+L5.1 Block128                   PASS, WNS +0.0000136495 ns
+L5.2 Matrix Revision8B-B        PASS, H3 WNS +0.00490451 ns
+L5.3 Controller E1/DC           PASS, WNS +0.00191498 ns, area 1773.408002
+L5.4 one-lane E1/DC             PASS, WNS +0.0000521541 ns, area 10559.276031
+L5.4 two-lane E1/DC             PASS, WNS +0.0000220537 ns, area 19747.364067
+```
+
+All margins are very small. Power numbers are vectorless DC estimates, not
+SAIF evidence.
+
+## Unique next action
+
+Connect `blocked_attention_stream_controller` to Revision8B-B QK/PV and the
+existing FP32 Block128 M/L/O path. Close q128 full numerical E2 first, then
+q384 and reviewed q1024 rows with exactly 43,008 merges. Measure q128/q384/q1024
+service curves under random Matrix/SFU/output backpressure and prove score and
+probability DDR writes remain zero.
+
+Use the same integration run to measure Matrix producer stall. Select the
+one-lane SiLU implementation when stall is <=2%; otherwise select two lanes.
+Rerun the selected integrated path before declaring L5.4 complete.
+
+L5.5 remains the mandatory join.

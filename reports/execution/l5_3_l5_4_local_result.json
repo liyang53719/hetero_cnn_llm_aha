@@ -18,7 +18,7 @@
       "unmapped": 0,
       "wns_ns": 0.00191498
     },
-    "full_numeric_status": "OPEN_SINGLE_INTEGRATED_SIM",
+    "full_numeric_status": "IN_PROGRESS_SINGLE_SIM_TIMEOUT_AFTER_FIRST_QK",
     "q1024_merge_rows": 43008,
     "q1024_tasks": 12672,
     "q128_tasks": 240,
@@ -68,5 +68,12 @@
     "trace_bridge": "1dd9bce995f56d99f286c3bf5759120ef278e7883b4e3330325d16d625f9c367"
   },
   "schema_version": 1,
-  "status": "BRIDGE_AND_COMPONENT_GATES_PASS_SINGLE_SIM_OPEN"
+  "single_sim_attempt": {
+    "evidence": "reports/execution/l5_q128_single_sim_attempt_result.json",
+    "generated_rtl_modified": false,
+    "qk_steps": 128,
+    "rtl_cycles": 899,
+    "status": "TIMEOUT_AFTER_FIRST_QK"
+  },
+  "status": "BRIDGE_AND_COMPONENT_GATES_PASS_SINGLE_SIM_DIAGNOSTIC_IN_PROGRESS"
 }

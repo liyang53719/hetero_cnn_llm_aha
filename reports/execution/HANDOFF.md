@@ -1,4 +1,4 @@
-# Local-agent handoff v7.0 — main only
+# Local-agent handoff v7.1 — main only
 
 ## Git gate
 
@@ -16,12 +16,19 @@ L5.4 one/two candidates        PASS, final selection OPEN
 
 All margins are small. Power is vectorless DC, not SAIF.
 
+## Latest q128 single-process attempt
+
+The full harness now contains Controller, Revision8B-B QK/PV, Block32 weights,
+BF16 hi+residual and Block128 M/L/O. No generated or production RTL was edited.
+Three 600 s attempts stopped after QK task0 completed all 128 steps at RTL cycle
+899; no mismatch/protocol error was observed. This is not PASS. Evidence:
+`reports/execution/l5_q128_single_sim_attempt_result.json`.
+
 ## Unique next action
 
-Build a single q128 simulation containing Controller, Revision8B-B QK/PV,
-Block32 weights, BF16_hi+residual 64-step PV and Block128 FP32 M/L/O. Trace
-bridge/vector packs are not single integrated E2. Use the frozen v7.0 pack:
-q128 1,536 rows; q384 180 rows; q1024 108 rows/43,008 merges.
+Run one bounded frozen q128 task through QK -> SFU -> PV with the same RTL;
+measure service wall time and close the first handshake. Then choose a reviewed
+full-q128 sharding strategy. Do not expand timeout or call the attempt PASS.
 
 Then random backpressure, zero score/probability DDR and service curves.
 Measure SiLU producer stall and select one lane only at <=2%; otherwise two.

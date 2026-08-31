@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-08-31T04:29:06Z",
+  "stage": "L5.3_BLOCKED_ATTENTION_NUMERICAL_E2",
+  "status": "IN_PROGRESS_TIMEOUT_AFTER_FIRST_QK",
+  "evidence_class": "E2_single_process_attempt_not_pass",
+  "command": "taskset -c 8-23 ./scripts/run_l5_q128_attention_integrated_e2.sh",
+  "resource_contract": {"cpu_affinity": "8-23", "threads": 4, "memory_high": "24G", "memory_max": "30G", "timeout_seconds": 600},
+  "integrated_modules": ["blocked_attention_stream_controller", "bf16_outer_product_context_array_rev8b_b_candidate", "fp32_block32_softmax_weights", "fp32_probability_to_bf16_hilo", "fp32_mlo_summary_merge_stream_rawpipe", "fp32_reciprocal_nr", "fp32_vector_alu"],
+  "frozen_workload": {"sequence_tokens": 128, "expected_tasks": 240, "expected_rows": 1536, "vector_manifest_sha256": "d7668d7fbcef3ec9bbcf56f0270e4f4ff90cb04e046f8cf1ee3f9fff195251c6"},
+  "observed_progress": {"phase": "QK", "task_id": 0, "steps_completed": 128, "rtl_cycles": 899, "mismatch": 0, "protocol_error": 0, "terminal": "wall_timeout_600s"},
+  "attempts": [
+    {"result": "timeout", "diagnostic": "initial unflushed log"},
+    {"result": "timeout", "diagnostic": "progress proved QK task0 complete; probability capture ready/valid testbench bug found"},
+    {"result": "timeout", "diagnostic": "ready/valid fixed and idle-Matrix testbench clock gate added; same first-QK boundary observed"}
+  ],
+  "source_policy": {"generated_rtl_modified": false, "production_rtl_modified": false, "testbench_only_changes": true},
+  "log_sha256": "c5e3f6e3dc4f2a0f218ba223b14eaacc95b32d47f46e101ee4dc1b6d2e5172bb",
+  "next_action": "Run a bounded one-task QK-to-SFU-to-PV diagnostic with the same RTL and frozen vector row, measure each service wall time and close the first handshake before choosing a reviewed full-q128 sharding strategy."
+}

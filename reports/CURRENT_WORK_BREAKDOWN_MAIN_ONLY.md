@@ -2,57 +2,28 @@
 
 ## Closed and accepted
 
-- L0 control/provenance.
-- L1 upstream Gemmini/AHA/iDMA baselines.
-- L2 wrapper-only integration.
-- L3 shared SRAM/fabric/event contracts.
-- L5.1 Block128 E1/component E4, with effectively zero timing margin.
-- L5.2 Revision8B-B 512-lane, five-stage/five-context Matrix E1, mapped compare,
-  component DC, structural H3 and post-map E1.
-- L5.3a Blocked Attention controller E1/DC: WNS `+0.00191498 ns`, area
-  `1773.408002` library units.
-- L5.4 one-lane and two-lane fused-SiLU candidates E1/DC/PPA:
-  - one lane WNS `+0.0000521541 ns`, area `10559.276031`;
-  - two lane WNS `+0.0000220537 ns`, area `19747.364067`.
-- Sandbox E0/source contracts for full Attention, exact GGML formats, unified
-  quant frontend, state transactions, trace capture and graph partition.
+- L0-L3 control/upstream/wrapper/shared-fabric baselines.
+- L5.1 Block128 component E1/E4, with effectively zero timing margin.
+- L5.2 Revision8B-B 512-lane, five-stage/five-context Matrix E1/H3.
+- L5.3 Controller and Block32-weight component E1/E4; the trace bridge is accepted only as non-single-simulation evidence.
+- L5.4 one- and two-lane fused-SiLU standalone E1/E4 candidates.
 
-Vectorless DC power numbers are screening estimates, not SAIF evidence.
+## Current local-agent critical path
 
-## Tasks that require local-agent output
+1. Build one integrated q128 QK -> Block32/Block128 M/L/O -> PV simulation using the deterministic vector pack.
+2. Extend to q384 and reviewed q1024 rows, exactly 43,008 merges and random backpressure.
+3. Freeze SiLU edge behavior, measure Matrix-producer stall and select one/two lanes.
+4. Execute the 11-case integrated E3 matrix.
+5. Run 28-layer q1024 >=300 token/s within SRAM and DDR limits.
 
-1. L5.3b: connect controller to real Revision8B-B QK/PV and Block128 FP32 M/L/O;
-   close q128/q384/q1024 numerical E2 and measured service curves.
-2. L5.4 selection: measure Matrix producer stall and choose one lane when
-   stall <=2%, otherwise two lanes; rerun the selected integrated path.
-3. L5.5: real Matrix/SFU/iDMA/DDR E3 with queue, bank, byte and event counters.
-4. L5.6: 28-layer q1024 >=300 token/s, <=4 MiB SRAM, <=100/40 GB/s DDR.
-5. L4: Garnet map/PnR/bitstream, CNN kernels, Gemmini/AHA integration and E4.
-6. L6: pinned llama.cpp parity, quant frontend/shared-dot RTL and PPA.
-7. L7: Page Walker/TLB/MSHR/COW/refcount/epoch RTL and AXI/iDMA E3.
-8. L8: official immutable traces and Qwen3.5/Qwen3.8 backend E1/E2/E3.
-9. L9: real llama.cpp/GGUF adapter, device submission, fallback and token run.
-10. L10/L11: SRAM macros, post-route STA, PVT/OCV, SAIF power and Archspec
-    promotion.
+## Sandbox v7.0 completed
 
-## Tasks that can continue without local-agent results
+- Attention pack: 1,536/180/108 q128/q384/q1024 rows, max error `1.0728836059570312e-06`.
+- SiLU: 625 special vectors and 160 stall scenarios; two edge policies require review.
+- Quant: 8,192 arbitrary K-tail schedules plus source-ready sequencer RTL.
+- State: 5,000 adversarial transactions, generation wrap and zero page leak.
+- E3: 11 coverage-driven cases and mandatory counter contract.
 
-- Generate larger q128/q384/q1024 Attention metadata and sampled numerical
-  vector packs for the integrated E2 harness.
-- Extend fused-SiLU vectors with zero, subnormal, boundary, infinity and NaN
-  class tests and refine producer-stall models.
-- Extend Q8_0/Q6_K/Q3_K/FP16 frontend K-tail and shared-dot scheduling vectors.
-- Expand State Commit Barrier assertions, COW/refcount/dirty-mask vectors and
-  stale-response adversarial cases.
-- Extend trace/replayer and model-agnostic GGML adapter regression using the
-  tiny executable Qwen3.8 model.
-- Refine L5.5 sensitivity sweeps and generate the minimum E3 test matrix.
-- Maintain Archspec collateral and evidence consistency on main.
+## Other local dependencies
 
-## Nearest milestone
-
-```text
-L5.3 full Attention E2 + L5.4 measured lane selection
-        -> L5.5 real integrated E3
-        -> L5.6 q1024 >=300 token/s
-```
+CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/iDMA E3; official Qwen3.5/Qwen3.8 backends; real llama.cpp/GGUF; SRAM/post-route/PVT/SAIF and final Archspec promotion.

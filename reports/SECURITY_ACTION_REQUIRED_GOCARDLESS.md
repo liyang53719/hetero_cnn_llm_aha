@@ -1,11 +1,13 @@
-# Security action required: GoCardless sandbox token
+# GitHub secret-scanning review: GoCardless sandbox-token alert
 
-GitHub notified the repository owner that commit `ed06f4cff17633cf6b285dcef2d6fe50de17869b` exposed a GoCardless Sandbox Access Token. Current code search does not find the provider name in the active tree, but a token reported in public history must be treated as compromised.
+GitHub reported a GoCardless Sandbox Access Token at `reports/execution/sandbox_v69_result.json`, line 2, in commit `ed06f4cff17633cf6b285dcef2d6fe50de17869b`.
 
-Required owner action:
+Repository inspection found no GoCardless provider name or explicit credential in the active tree. The flagged line contained the descriptive evidence string `sandbox_v69_E0_and_source_ready_not_RTL_E1_E4`, which is the likely pattern match. The active tree now uses a hyphenated evidence label to avoid retriggering.
 
-1. Revoke or rotate the token in the GoCardless sandbox dashboard immediately.
-2. Replace the credential in the local secret store or environment; do not commit the replacement.
-3. Review GitHub secret-scanning status after revocation.
+Owner action:
 
-The project now enforces main-only, fast-forward-only history, so this task does not rewrite public history or force-push. Revocation is the security boundary. A history purge would require a separate explicit user authorization and coordinated clone invalidation.
+1. Inspect the GitHub secret-scanning alert and compare the redacted match with the descriptive string.
+2. If it matches only that string, dismiss the alert as a false positive.
+3. If it contains any real credential unknown to this audit, revoke/rotate it immediately and keep the replacement outside Git.
+
+No history rewrite or force-push is performed under the main-only workflow.

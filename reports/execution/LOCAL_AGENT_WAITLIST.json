@@ -1,13 +1,12 @@
 {
-  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH","closed":[{"id":"L5.2","status":"PASS_REV8B_B_E1_E4_COMPONENT_H3","risk":"L10 post-route/PVT margin"}],
+  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH","closed":[{"id":"L5.2","status":"PASS_REV8B_B_E1_E4_COMPONENT_H3","risk":"L10 post-route/PVT margin"},{"id":"L5.3a","status":"CONTROLLER_E1_E4_PASS"},{"id":"L5.3_block32_weight","status":"E1_E4_PASS"},{"id":"L5.4_candidates","status":"ONE_TWO_LANE_E1_E4_PASS_SELECTION_OPEN"}],
   "items":[
-    {"id":"L5.3a","sandbox_status":"controller protocol E0 PASS and RTL/TB/DC scripts source-ready","local_gate":"Verilator controller protocol E1 and 1GHz controller DC","acceptance":["q128 240 tasks","q384 1872 tasks","q1024 12672 tasks","43008 merge rows","FIFO levels <=2","no protocol error"]},
-    {"id":"L5.3b","sandbox_status":"numerical/cycle/queue E0 PASS","local_gate":"real Revision8B-B QK -> FP32 M/L/O -> PV E1/E2","acceptance":["q128/q384/q1024 numerical","random backpressure","zero score/probability DDR","measured service curve"]},
-    {"id":"L5.4","sandbox_status":"bit-oriented 128-entry LUT Golden and one/two-lane RTL/TB/DC scripts source-ready","local_gate":"one/two-lane Verilator E1, 1GHz DC/PPA and producer-stall selection"},
-    {"id":"L5.5-L5.6","sandbox_status":"E3 preflight and sensitivity PASS, not E3","local_gate":"real Matrix/SFU/iDMA/DDR E3 and 28-layer q1024 >=300 tps"},
+    {"id":"L5.3b","sandbox_status":"dense-vs-blocked Golden and deterministic 1536/180/108-row vector pack PASS","local_gate":"one integrated Revision8B-B QK -> Block32/Block128 FP32 M/L/O -> PV simulation","acceptance":["q128 full 1536 rows","q384 full or reviewed 180 rows","q1024 reviewed 108 rows","43008 merge rows","random backpressure","zero score/probability DDR","measured service curves"]},
+    {"id":"L5.4b","sandbox_status":"625 special vectors and 160 stall scenarios PASS; two edge policies open","local_gate":"freeze edge policy, measure Matrix producer stall, select one/two lane and rerun selected integrated path"},
+    {"id":"L5.5-L5.6","sandbox_status":"11-case minimum E3 matrix ready, not E3","local_gate":"real Matrix/SFU/iDMA/DDR E3 and 28-layer q1024 >=300 tps"},
     {"id":"L4","sandbox_status":"legal AHA sidecar contract ready","local_gate":"Garnet map/PnR/Verilator/DC and CNN subset"},
-    {"id":"L6","sandbox_status":"exact layouts and unified frontend source-ready","local_gate":"pinned llama.cpp parity, RTL E1 and PPA"},
-    {"id":"L7","sandbox_status":"translation/concurrency/transaction E0 and source-ready state RTL","local_gate":"page walker/TLB/MSHR/COW state RTL E1 and AXI/iDMA E3"},
+    {"id":"L6","sandbox_status":"exact layouts, unified frontend and K-tail sequencer source-ready","local_gate":"pinned llama.cpp parity, RTL E1 and PPA"},
+    {"id":"L7","sandbox_status":"translation/concurrency plus 5000 adversarial transactions PASS","local_gate":"page walker/TLB/MSHR/COW state RTL E1 and AXI/iDMA E3"},
     {"id":"L8-L9","sandbox_status":"trace schema, policy lowering and GGML adapter E0 PASS","local_gate":"official traces, backend RTL, real GGML/GGUF and token generation"},
     {"id":"L10-L11","sandbox_status":"Matrix component/H3 pass and candidate Archspec","local_gate":"SRAM macro, post-route STA, PVT/OCV, SAIF and final Pareto"}
   ]

@@ -8,26 +8,14 @@ retained Gemmini INT8/CNN Matrix
 + Sequence Memory/iDMA complex
 ```
 
-Canonical controls:
+The repository is main-only: no work branches or force-pushes without explicit user approval.
 
-```text
-config/control_plane.json
-config/git_workflow_policy.json
-reports/BRANCH_CONSOLIDATION_MAIN_ONLY.md
-reports/CURRENT_WORK_BREAKDOWN_MAIN_ONLY.md
-local_agent/stages.yaml
-reports/execution/MASTER_LEDGER.json
-reports/execution/NEXT_ACTION.json
-```
+Closed at component/H3 scope: L5.1 Block128, L5.2 Matrix, L5.3 Controller/Block32 weight and standalone L5.4 one/two-lane candidates. Current critical work is the single-simulation full Attention E2 and measured SiLU lane selection.
 
-The repository is **main-only**. Agents must not create local/remote work
-branches, PR branches or force-push. Run `git fetch --prune origin` and
-`scripts/check_main_only_workflow.sh` before work.
-
-Closed: L5.1 Block128, L5.2 Matrix, L5.3a controller E1/DC and L5.4 one/two-lane
-candidate E1/DC. Current primary work is full Attention numerical E2; measured
-Matrix-producer stall selects the SiLU lane count. L5.5 is the mandatory join.
+Sandbox v7.0 adds deterministic Attention E2 packs, SiLU edge/stall coverage, quant K-tail scheduling RTL, 5,000 adversarial state transactions and an 11-case E3 matrix.
 
 ```bash
 ./scripts/sandbox_validate.sh
 ```
+
+Verilator/VCS, CLN22UL, real iDMA/DDR, official model weights, llama.cpp/GGUF and post-route signoff remain local-agent gates.

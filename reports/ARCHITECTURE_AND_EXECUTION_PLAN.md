@@ -1,59 +1,58 @@
-# Canonical architecture and execution plan v6.9
+# Canonical architecture and execution plan v6.10 + sandbox v7.0 extension
 
 ## Frozen architecture
 
 ```text
-Retained Gemmini INT8/CNN Matrix path
-+ Revision8B-B clean-room BF16/FP32 Matrix path
+Retained Gemmini INT8/CNN Matrix
++ Revision8B-B clean-room BF16/FP32 Matrix
 + fixed-function Attention/Norm/SFU
 + legal Stanford AHA 4x4 ratio-2 sidecar
 + Sequence Memory Complex / iDMA
 + shared 4 MiB SRAM and Command128/event fabric
 ```
 
-The BF16 Matrix boundary remains frozen at 16x32, 512 lanes, five FMA stages, five accumulator contexts and a depth-five completion FIFO. L5.2 is closed at component/H3 DC; it is not post-route signoff.
+The Matrix remains frozen at 16x32/512 lanes, five FMA stages and five accumulator contexts. L5.1/L5.2 are component/H3 closures, not post-route signoff.
 
-## Active L5 branches
+## Active L5 path
 
-### L5.3 Blocked Attention
+### L5.3 full Attention
 
-```text
-Q tile 16, K/V tile 32, Block128, GQA 6:1
-Score FIFO 2, Probability FIFO 2
-FP32 M/L/O
-QK and PV share Revision8B-B Matrix
-score/probability DDR materialization = 0
-```
-
-Available E0/source artifacts now include dense-vs-blocked numerical Golden, cycle and queue-depth models, a command-order/controller protocol model, and synthesizable controller RTL/TB/E1/DC scripts. The controller protocol is a subgate. L5.3 closes only after the real Matrix and Block128 SFU datapaths pass q128/q384/q1024 numerical E2 and measured service E1 under random backpressure.
-
-### L5.4 fused SiLU(gate)*up
+The Controller, trace bridge and Block32-weight component gates pass. The remaining gate is one integrated QK -> FP32 M/L/O -> PV simulation. The frozen vector pack is `reports/execution/attention_e2_vector_pack_result.json`:
 
 ```text
-128-entry FP16 direct-SiLU ROM over [-8,8]
-Q12 linear-interpolation fraction
-shared generated FP32 add/mul pipelines
-BF16 input/output, II=1
-one-lane and two-lane candidates
+q128  all 1,536 rows
+q384  180 fixed boundary rows
+q1024 108 fixed rows across boundary heads
+q1024 merge rows 43,008
 ```
 
-A bit-oriented Golden, ROM, synthesizable lane/array/tops, vector generator, testbench and E1/DC scripts are source-ready. Select one lane if the measured Matrix producer stall is <=2%; otherwise select two lanes.
+Score and probability DDR materialization remains forbidden.
+
+### L5.4 fused SiLU
+
+One- and two-lane standalone candidates pass E1/DC. Final selection requires measured Matrix-producer stall. Before selection, freeze the special-value policy in `reports/SILU_EDGE_POLICY_REVIEW_V7_0.md`; source changes require rerunning both candidates.
 
 ### L5.5 join
 
-L5.5 starts only after L5.2, full L5.3 and L5.4 pass. The analytical preflight is not E3. Replace all Attention/SiLU durations with measured service curves and collect DDR, queue, bank and event counters. Reopen the performance budget when the pre-route projection is below 315 token/s.
+Use the 11-case matrix in `reports/execution/e3_minimum_matrix.json`. Collect measured Attention/SiLU service, queue, bank, DDR and event counters. Below 315 token/s pre-route projection, reopen the budget rather than proceeding on a 300 token/s edge.
+
+## Parallel sandbox/source-ready work
+
+- FP16/Q8_0/Q6_K/Q3_K 16-value K-tail scheduler and source-ready RTL.
+- 5,000 adversarial state transactions with OOM, timeout, stale/duplicate acknowledgement and generation-wrap coverage.
+- Official trace schema and model-agnostic GGML adapter.
 
 ## Remaining order
 
 ```text
-L4 CNN/AHA E1/E4
-L5.3 full Attention E1/E2 ┐
-L5.4 fused SiLU E1/E4     ├→ L5.5 integrated E3 → L5.6 q1024 >=300 t/s
-L5.2 PASS                 ┘
+L5.3 single-sim Attention E2 + L5.4 selected SiLU
+  -> L5.5 real Matrix/SFU/iDMA/DDR E3
+  -> L5.6 28-layer q1024 >=300 t/s
+L4 CNN/AHA
 L6 pinned GGML parity and low-bit RTL
 L7 production Sequence Memory E1/E3
-L8 Qwen3.5/Qwen3.8 official traces and backends
-L9 real llama.cpp/GGUF backend
-L10 SRAM/post-route/PVT/SAIF
-L11 final Archspec/Pareto signoff
+L8 Qwen3.5/Qwen3.8 official traces/backends
+L9 real llama.cpp/GGUF
+L10 post-route/PVT/SAIF
+L11 final Archspec/Pareto
 ```

@@ -1,33 +1,53 @@
-# Local-agent handoff v6.10 — main only
+# Local-agent handoff v7.0 — main only
 
-## Git hard gate
+## Git gate
 
-Only `main` is allowed. Before work: fetch, pull `--ff-only`, run
-`scripts/check_main_only_workflow.sh`. Before push: fetch, rebase if advanced,
-rerun affected gates, and fast-forward push. No branch or force-push.
-
-## Accepted
-
-```text
-L5.2 Matrix H3                 PASS, WNS +0.00490451 ns
-Attention controller E1/DC    PASS, WNS +0.00191498 ns, area 1773.408002
-Trace-coupled q128/384/1024    PASS_NOT_SINGLE_SIM
-Block32 weight SFU E1/DC      PASS, WNS +0.0000125766 ns, area 13949.754056
-SiLU one-lane E1/DC           PASS, WNS +0.0000521541 ns, area 10559.276031
-SiLU two-lane E1/DC           PASS, WNS +0.0000220537 ns, area 19747.364067
+```bash
+git fetch --prune origin
+git checkout main
+git pull --ff-only origin main
+./scripts/check_main_only_workflow.sh
+./scripts/sandbox_validate.sh
 ```
 
-HardFloat cache reuse requires exact Scala-source, upstream-commit and output
-hash match. Power is vectorless DC, not SAIF. All timing margins are high-risk.
+Do not create a local/remote branch, PR branch or force-push.
+
+## Accepted local boundary
+
+```text
+L5.1 Block128                         PASS, WNS +0.0000136495 ns
+L5.2 Matrix Revision8B-B              PASS, H3 WNS +0.00490451 ns
+L5.3 Controller                       PASS, WNS +0.00191498 ns
+L5.3 Block32 weight                   PASS, WNS +0.0000125766 ns
+L5.4 one/two-lane candidates          PASS, final selection OPEN
+```
+
+All timing margins are small. Power evidence is vectorless DC, not SAIF.
 
 ## Unique next action
 
-Build one q128 simulation containing controller, Revision8B-B QK/PV service,
-`fp32_block32_softmax_weights` and Block128 M/L/O merge. The trace bridge and
-separate q128 numerical RTL cannot close E2. Then q384 and reviewed q1024 rows
-with exactly43,008 merges, random backpressure and zero score/probability DDR.
+Build a single q128 simulation containing Controller, Revision8B-B QK/PV, `fp32_block32_softmax_weights` and Block128 FP32 M/L/O. The previous trace bridge is useful but is not a single integrated E2 simulation.
 
-Measure Matrix producer stall in that run. Select one SiLU lane at <=2%, else
-two, and rerun selected path. L5.5 still waits; pre-route floor315 token/s.
+Use `reports/execution/attention_e2_vector_pack_result.json`:
 
-CPU8-23, MemoryHigh24G/Max30G, 600s/task. Keep two untracked runtime scripts out.
+```text
+q128:  1,536 full rows
+q384:    180 reviewed rows
+q1024:   108 reviewed rows
+q1024 merges: 43,008
+max sandbox dense-vs-blocked error: 1.0728836059570312e-06
+```
+
+After q128, run q384 and q1024 with random Matrix/SFU/output backpressure, zero score/probability DDR writes and measured service curves.
+
+## Parallel SiLU gate
+
+Review `reports/SILU_EDGE_POLICY_REVIEW_V7_0.md`. The standalone one/two-lane candidates pass ordinary finite vectors, but the special sweep found a Q4.12 zero-bin bias and a clamped-negative-gate times infinite-up class ambiguity. Freeze the policy before final selection. Measure offered/accepted pairs, producer stalls and queue high-water; choose one lane only when measured Matrix-producer stall is <=2%, then rerun the selected integrated path.
+
+## L5.5
+
+Execute the 11 cases in `reports/execution/e3_minimum_matrix.json` after L5.3/L5.4 close. Below 315 token/s pre-route projection, reopen the performance budget.
+
+## Security note
+
+GitHub flagged `sandbox_v69_result.json` in `ed06f4cf` as a GoCardless sandbox token. Inspection indicates the descriptive `sandbox_v69...` evidence string is the likely trigger; the current tree renames it. Confirm no actual token was copied before dismissing the alert as false positive.

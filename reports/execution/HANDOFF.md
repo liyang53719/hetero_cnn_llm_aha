@@ -1,4 +1,4 @@
-# Local-agent handoff v7.14 — main only
+# Local-agent handoff v7.15 — main only
 
 ## Gate
 
@@ -9,7 +9,7 @@ L5.4 fused SiLU                     PASS, one lane, producer stall 0%
 L5.5 balanced 8x8 SFU               PASS E1/E4
 L5.5 composed real-RTL E3            PASS_REVIEW, 321.869395 token/s
 L5.6 28-layer count/trace E3         PASS, 321.085777 token/s
-L5.6 numerical subset                OPEN
+L5.6 reduced four-layer cross RTL    PASS, 7,840/7,840 bit-exact
 ```
 
 ## L5.5 E3 evidence
@@ -48,9 +48,13 @@ The q1024 four-layer PyTorch reference passes; last-token logits hash is
 `20247ec3...e877822`. Revision8B-B replays 160 official LM-head columns:
 FP32 accumulator -> BF16 RNE is 160/160 bit-exact, max error 0, argmax 54387.
 
-Next freeze and replay a reduced official-weight four-layer node set through
-the project operator/RTL chain. L5.6 remains open; reference plus sampled
-LM-head RTL is not a full cross-layer RTL numerical closure.
+Reduced cross-layer RTL now covers layer0-3 input RMSNorm/Q samples and layer3
+post-attention RMSNorm/gate samples under random backpressure. RMS 7,680 values
+and Matrix 160 samples are bit-exact. Refined rsqrt is a 54-cycle FSM using the
+accepted 1 GHz FP32 pipelines; DC WNS is +0.000101328 ns, area 4,136.314.
+
+Adjusted q1024 full trace is 3,192,103,543 cycles = 320.791599 token/s.
+Next: L10 early PPA. This does not claim full q1024 payload RTL or post-route.
 
 ## Execution
 

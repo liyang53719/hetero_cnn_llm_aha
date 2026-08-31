@@ -16,4 +16,4 @@ run 600s "$V" --binary --timing --assert -Wall -Wno-DECLFILENAME \
   "$ROOT/tb/tb_l5_qwen2_full_model_trace_controller.sv" \
   >"$OUT/build.log" 2>&1
 run 600s "$OUT/obj/tb" | tee "$OUT/tb.log"
-grep -q 'L5_QWEN2_FULL_MODEL_TRACE_PASS records=30 blocks=28 final_rmsnorm=1 last_token_lm_head=1 total_cycles=3189178948' "$OUT/tb.log"
+grep -q 'L5_QWEN2_FULL_MODEL_TRACE_PASS records=30 blocks=28 final_rmsnorm=1 last_token_lm_head=1 total_cycles=3192103543' "$OUT/tb.log"

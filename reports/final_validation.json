@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "L5_6_REFERENCE_LM_HEAD_PASS_FOUR_LAYER_RTL_OPEN",
+  "status": "L5_6_REDUCED_CROSS_RTL_PASS_READY_L10_EARLY_PPA",
   "branch_audit": {
     "remote_branches": ["main"],
     "merge_required": false,
@@ -14,8 +14,9 @@
     "L5.5_4x4_tile_merge": "PASS_COMPONENTS_FAIL_STRESS",
     "L5.5_balanced_8x8": "PASS_E1_E4",
     "L5.5_integrated_E3": "PASS_REVIEW_321_869TPS",
-    "L5.6_full_model_cycle_E3": "PASS_321_086TPS_NUMERICAL_OPEN",
-    "L5.6_official_weight_reference_lm_head": "PASS_REFERENCE_PLUS_160_SAMPLED_RTL_FOUR_LAYER_RTL_OPEN"
+    "L5.6_full_model_cycle_E3": "PASS_320_792TPS",
+    "L5.6_official_weight_reference_lm_head": "PASS_REFERENCE_PLUS_160_SAMPLED_RTL",
+    "L5.6_reduced_four_layer_cross_RTL": "PASS_7840_BIT_EXACT"
   },
   "sandbox_v75": {
     "status": "PASS",

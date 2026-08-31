@@ -1,0 +1,72 @@
+{
+  "checks": {
+    "adjusted_full_trace": true,
+    "cross_rtl": true,
+    "four_layers": true,
+    "matrix_bf16_exact": true,
+    "matrix_operator_exact": true,
+    "random_backpressure": true,
+    "refined_rsqrt_dc": true,
+    "refined_rsqrt_latency": true,
+    "rms_bf16_exact": true,
+    "rms_fp32_threshold": true,
+    "upstream_immutable": true
+  },
+  "evidence_class": "official_weight_reference_anchored_reduced_cross_layer_RTL_E2_E4",
+  "full_model_adjustment": {
+    "cycles": 3192103543,
+    "delta_cycles_from_refined_rsqrt": 2924595,
+    "tokens_per_second": 320.7915990837895
+  },
+  "layers": 4,
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "nodes": [
+    "layer0.input_norm.q_sample",
+    "layer1.input_norm.q_sample",
+    "layer2.input_norm.q_sample",
+    "layer3.input_norm.q_sample",
+    "layer3.post_attention_norm.gate_sample"
+  ],
+  "non_claims": [
+    "reference hidden snapshots anchor each layer; this is not a full q1024 payload RTL simulation",
+    "refined rsqrt standalone E4 does not replace later integrated-top/post-route PPA"
+  ],
+  "provenance": {
+    "cross_log_sha256": "4e6d88f7838513734f702d1923d7dad07df614b23d44cd285f72aa81a3064519",
+    "cross_result_sha256": "02030edc4c34485bd8b369e20e23b78aa4e70f4a1bace2eff675b6e5fc178b5b",
+    "dc_status_sha256": "37a341efe50d9c887f77d42aa62738469e65bf467bc2ec8402ea69d4d61f5670",
+    "matrix_rtl_sha256": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "rms_rtl_sha256": "232bda2e9acde36617005f6f6bc1bcf611f50be84b2ee1612df7df603e97ce30",
+    "rsqrt_rtl_sha256": "018e114663c7790baf3e3897565374a1f6162e4b7c4e7c561c51ee4398ebb6f8"
+  },
+  "refined_rsqrt": {
+    "cycles_per_vector": 54,
+    "dc_area": 4136.31403,
+    "dc_wns_ns": 0.000101328,
+    "implementation": "13 operations through accepted 1GHz FP32 add/mul pipelines",
+    "unmapped": 0,
+    "unresolved": 0
+  },
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "rtl": {
+    "backpressure": "deterministic_random_ready",
+    "bf16_bit_exact": 7840,
+    "cycles": 12431,
+    "matrix_fp32_max_error": 0.0,
+    "matrix_samples": 160,
+    "matrix_steps": 7680,
+    "rms_fp32_max_error": 0.0,
+    "rms_values": 7680,
+    "rms_vectors": 5
+  },
+  "schema_version": 1,
+  "sequence": 1024,
+  "source_policy": {
+    "canonical_upstream_modified": false,
+    "generated_rtl_modified": false,
+    "project_authored_rtl_only": true
+  },
+  "stage": "L5",
+  "status": "PASS",
+  "subgate": "L5.6_REDUCED_FOUR_LAYER_CROSS_RTL"
+}

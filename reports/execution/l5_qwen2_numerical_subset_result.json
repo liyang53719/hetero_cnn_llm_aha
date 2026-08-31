@@ -6,7 +6,14 @@
     "four_layer_reference": true,
     "last_token_lm_head_shape": true,
     "model_hash": true,
+    "reduced_four_layer_cross_rtl": true,
     "sampled_revision8b_b_rtl": true
+  },
+  "cross_layer_rtl": {
+    "bf16_bit_exact": 7840,
+    "evidence": "reports/execution/l5_qwen2_four_layer_cross_replay_result.json",
+    "max_error": 0.0,
+    "nodes": 5
   },
   "lm_head_rtl": {
     "architecture": "Revision8B-B 5-stage/5-context 16x32",
@@ -17,9 +24,9 @@
     "samples": 160,
     "tensor_boundary": "FP32 accumulator to BF16 RNE output"
   },
-  "next_action": "Replay a reduced official-weight four-layer node set through the project operator/RTL chain; keep L5.6 open until that cross-layer RTL boundary passes.",
+  "next_action": "Run L10 early PPA with the refined RMSNorm timing and adjusted 320.792 token/s full-model trace; retain integrated/post-route claim boundaries.",
   "non_claims": [
-    "four-layer official-weight execution is PyTorch reference, not integrated RTL",
+    "four-layer cross replay is reference-snapshot anchored, not full q1024 payload RTL",
     "LM-head RTL E2 samples 160 of 151936 vocabulary columns",
     "full 28-layer payload numerical simulation not run"
   ],
@@ -27,7 +34,7 @@
     "config_sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
     "lm_head_rtl_result_sha256": "3aff4106db9ed7c41426664ed86e7bb46f66c723e334533cfa2aa466fb6e2f3a",
     "model_safetensors_sha256": "302e327795994403cb1e3cb6a3345c76b246b894d14078c936b570c83a4e9057",
-    "reference_result_sha256": "f3f199c332770ad5cf7d753c1fa4a61a4f76941d00a17d10f4fd1aa2d17748ad",
+    "reference_result_sha256": "8ef3d0f3e08c397342de61c6b370383eca928dce4f53f4a5d7708207b345b35e",
     "rtl_log_sha256": "07cdc59f6446faf60e1a2551ad40819be12b02c58dccc36ab85cdada368728c8"
   },
   "reference": {
@@ -42,11 +49,11 @@
     ],
     "last_token_logits_sha256": "20247ec3bd3b79db926181d3a6112c76d230daf368f9fbd838f5929e4e877822",
     "layers": 4,
-    "run_seconds": 0.7157274619676173,
+    "run_seconds": 0.6733795870095491,
     "sequence": 1024
   },
   "schema_version": 1,
   "stage": "L5",
-  "status": "PASS_REFERENCE_AND_LM_HEAD_SAMPLED_RTL_FOUR_LAYER_RTL_OPEN",
+  "status": "PASS_REDUCED_FOUR_LAYER_CROSS_RTL",
   "subgate": "L5.6_NUMERICAL_SUBSET"
 }

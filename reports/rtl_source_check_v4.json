@@ -1,7 +1,7 @@
 {
   "errors": [],
   "evidence_class": "source_structural_not_compiler",
-  "module_count": 130,
+  "module_count": 131,
   "modules": [
     "shared_l2_client_arbiter",
     "shared_l2_macro_descriptor_fabric",
@@ -63,6 +63,7 @@
     "bf16_silu_mul_lut_lane",
     "fp32_rmsnorm1536_chunked",
     "fp32_rsqrt_nr",
+    "fp32_rsqrt_nr2",
     "fp32_dot64_scaled",
     "fp32_rmsnorm256_chunked",
     "fp32_mlo_merge_coeff_rawpipe",

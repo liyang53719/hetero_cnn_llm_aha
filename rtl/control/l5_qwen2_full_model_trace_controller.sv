@@ -19,11 +19,11 @@ module l5_qwen2_full_model_trace_controller (
   output logic [63:0] total_read_bytes_o,
   output logic [63:0] total_write_bytes_o
 );
-  localparam logic [63:0] BLOCK_CYCLES = 64'd113621951;
+  localparam logic [63:0] BLOCK_CYCLES = 64'd113726399;
   localparam logic [63:0] BLOCK_MACS = 64'd49527914496;
   localparam logic [63:0] BLOCK_READ_BYTES = 64'd93585408;
   localparam logic [63:0] BLOCK_WRITE_BYTES = 64'd1048576;
-  localparam logic [63:0] FINAL_NORM_CYCLES = 64'd390;
+  localparam logic [63:0] FINAL_NORM_CYCLES = 64'd441;
   localparam logic [63:0] LM_HEAD_CYCLES = 64'd7763930;
   localparam logic [63:0] LM_HEAD_MACS = 64'd233373696;
   localparam logic [63:0] LM_HEAD_READ_BYTES = 64'd466747392;

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
-module fp32_rmsnorm1536_chunked(
+module fp32_rmsnorm1536_chunked #(
+  parameter bit REFINE_RSQRT = 1'b0
+)(
   input  logic clk_i,
   input  logic rst_ni,
   input  logic in_valid_i,
@@ -43,6 +45,15 @@ module fp32_rmsnorm1536_chunked(
   logic rsqrt_domain_error;
   /* verilator lint_on UNUSEDSIGNAL */
 
+  function automatic logic [31:0] bf16_rne_fp32(input logic [31:0] value);
+    logic [16:0] upper;
+    begin
+      upper = {1'b0, value[31:16]} +
+              (value[15] && ((|value[14:0]) || value[16]));
+      bf16_rne_fp32 = {upper[15:0], 16'd0};
+    end
+  endfunction
+
   genvar lane;
   generate
     for (lane = 0; lane < 16; lane++) begin : g_square
@@ -55,6 +66,7 @@ module fp32_rmsnorm1536_chunked(
       );
     end
     for (lane = 0; lane < 16; lane++) begin : g_output
+      logic [31:0] weight_input;
       HeteroFP32Alu scale_value(
         .io_op(1'b1),
         .io_x(x_q[(chunk_q * 16 + lane) * 32 +: 32]),
@@ -62,9 +74,12 @@ module fp32_rmsnorm1536_chunked(
         .io_out(scaled[lane * 32 +: 32]),
         .io_exceptionFlags(output_flags[lane * 10 +: 5])
       );
+      assign weight_input = REFINE_RSQRT ?
+        bf16_rne_fp32(scaled[lane * 32 +: 32]) :
+        scaled[lane * 32 +: 32];
       HeteroFP32Alu apply_weight(
         .io_op(1'b1),
-        .io_x(scaled[lane * 32 +: 32]),
+        .io_x(weight_input),
         .io_y(weight_q[(chunk_q * 16 + lane) * 32 +: 32]),
         .io_out(chunk_output[lane * 32 +: 32]),
         .io_exceptionFlags(output_flags[lane * 10 + 5 +: 5])
@@ -102,14 +117,25 @@ module fp32_rmsnorm1536_chunked(
     .io_op(1'b0), .io_x(mean), .io_y(epsilon_q),
     .io_out(mean_epsilon), .io_exceptionFlags(epsilon_flags)
   );
-  fp32_rsqrt_nr reciprocal_square_root(
-    .clk_i, .rst_ni,
-    .in_valid_i(rsqrt_in_valid), .in_ready_o(rsqrt_in_ready),
-    .x_i(mean_epsilon_q), .out_valid_o(rsqrt_out_valid),
-    .out_ready_i(rsqrt_out_ready), .y_o(rsqrt_y),
-    .exception_flags_o(rsqrt_flags), .domain_error_o(rsqrt_domain_error),
-    .accepted_o(rsqrt_accepted), .completed_o(rsqrt_completed)
-  );
+  generate
+    if (REFINE_RSQRT) begin : g_refined_rsqrt
+      fp32_rsqrt_nr2 reciprocal_square_root(
+        .clk_i, .rst_ni,
+        .in_valid_i(rsqrt_in_valid), .in_ready_o(rsqrt_in_ready),
+        .x_i(mean_epsilon_q), .out_valid_o(rsqrt_out_valid),
+        .out_ready_i(rsqrt_out_ready), .y_o(rsqrt_y),
+        .exception_flags_o(rsqrt_flags), .domain_error_o(rsqrt_domain_error),
+        .accepted_o(rsqrt_accepted), .completed_o(rsqrt_completed));
+    end else begin : g_base_rsqrt
+      fp32_rsqrt_nr reciprocal_square_root(
+        .clk_i, .rst_ni,
+        .in_valid_i(rsqrt_in_valid), .in_ready_o(rsqrt_in_ready),
+        .x_i(mean_epsilon_q), .out_valid_o(rsqrt_out_valid),
+        .out_ready_i(rsqrt_out_ready), .y_o(rsqrt_y),
+        .exception_flags_o(rsqrt_flags), .domain_error_o(rsqrt_domain_error),
+        .accepted_o(rsqrt_accepted), .completed_o(rsqrt_completed));
+    end
+  endgenerate
 
   assign reduce_in_valid = state_q == S_REDUCE_ISSUE;
   assign reduce_out_ready = state_q == S_REDUCE_WAIT && reduce_out_valid;

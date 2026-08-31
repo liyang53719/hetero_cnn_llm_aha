@@ -17,7 +17,7 @@
   "evidence_class": "RTL_count_trace_E3_plus_component_E2_E4_not_28_layer_payload",
   "layers": 28,
   "model": "Qwen/Qwen2-1.5B-Instruct",
-  "next_action": "Run the frozen Qwen2 four-layer executable numerical subset and official-weight last-token LM-head payload before closing L5.6.",
+  "next_action": "Run L10 early PPA; retain reduced-payload and post-route claim boundaries.",
   "non_claims": [
     "not a 28-layer payload numerical simulation",
     "LM-head cycle count is conservative serialized DDR-read plus Matrix plus logits-write service",
@@ -25,9 +25,9 @@
   ],
   "numerical_boundary": {
     "final_rmsnorm": "PASS_E1_1000_VECTORS",
-    "four_layer_executable_subset": "OPEN",
+    "four_layer_executable_subset": "PASS_REDUCED_CROSS_RTL",
     "full_28_layer_payload": "NOT_REQUIRED_BY_TRACE_MODE",
-    "last_token_lm_head_official_weight_payload": "OPEN",
+    "last_token_lm_head_official_weight_payload": "PASS_160_SAMPLED_RTL",
     "one_block_components": "PASS_EXISTING"
   },
   "physical": {
@@ -40,22 +40,22 @@
   },
   "provenance": {
     "budget_sha256": "e75e10fdbe3b304e0abec0908f97857c2dd64cae831a3c5fb02c4e5905151296",
-    "commit": "ae988c1a1d88e93ceeae85b1704025de3fdcf157",
+    "commit": "bc47a8ec8389048d22db2e693e8c642ce59fdf7d",
     "l5_5_e3_sha256": "a4b7fce83d9bf6edce008531a35c8ea8a0b8f00bd544d072f164618b6fdda3a4",
-    "rtl_sha256": "886cf5424d2e0137c49c8f3d6718899bd0504a84bedb8a379f6827368dca44fb",
+    "rtl_sha256": "bf1e69d60e3a3bc3694cdd74170151506289c68df52f546519b98ddc49c4824d",
     "shape_sha256": "bdf8fca40308a5e20edc37b47e9e10e873319df79f934f8edbd9702baa1ac3fd",
-    "testbench_sha256": "3ae75c263cf18f27f013e17b555d04287deecf6b5a723e875288bcc07ad6a5d4",
-    "trace_log_sha256": "261a4097070d15e23cc655237e661f588ef1f598b876d0600b7c1bb9b9d5ceef"
+    "testbench_sha256": "c5f57491d1da91fcf81eebd7f0696dfeb1abe99307700117a262cc2fdc8a75b0",
+    "trace_log_sha256": "e29a008741e056a2dee129599a1c2824fbcef9cc494890e57b9304230c278405"
   },
   "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
   "schema_version": 1,
   "sequence": 1024,
   "stage": "L5",
-  "status": "PASS_CYCLE_E3_L5_6_NUMERICAL_OPEN",
+  "status": "PASS_CYCLE_E3",
   "subgate": "L5.6_Q1024_FULL_MODEL",
   "trace": {
-    "average_ddr_read_GBps": 0.9680042626444679,
-    "average_ddr_write_GBps": 0.009396735802107772,
+    "average_ddr_read_GBps": 0.9671173802522233,
+    "average_ddr_write_GBps": 0.00938812654298664,
     "block_records": 28,
     "ddr_read_bytes": 3087138816,
     "ddr_write_bytes": 29967872,
@@ -64,9 +64,9 @@
     "probability_ddr_bytes": 0,
     "records": 30,
     "score_ddr_bytes": 0,
-    "tokens_per_second": 321.08577683988904,
-    "total_cycles": 3189178948,
+    "tokens_per_second": 320.7915990837895,
+    "total_cycles": 3192103543,
     "total_macs": 1387014979584,
-    "wall_mac_utilization": 0.8494392055669622
+    "wall_mac_utilization": 0.8486609520986957
   }
 }

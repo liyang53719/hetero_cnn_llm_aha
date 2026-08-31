@@ -28,15 +28,15 @@ checks={
 if not all(checks.values()):raise SystemExit(f'full-model trace checks failed:{checks}')
 result={
  'schema_version':1,'stage':'L5','subgate':'L5.6_Q1024_FULL_MODEL',
- 'status':'PASS_CYCLE_E3_L5_6_NUMERICAL_OPEN','evidence_class':'RTL_count_trace_E3_plus_component_E2_E4_not_28_layer_payload',
+ 'status':'PASS_CYCLE_E3','evidence_class':'RTL_count_trace_E3_plus_component_E2_E4_not_28_layer_payload',
  'model':shape['model'],'revision':shape['revision'],'batch':1,'sequence':1024,'layers':28,
  'trace':{'records':records,'block_records':blocks,'final_rmsnorm_records':norms,'last_token_lm_head_records':heads,'total_cycles':cycles,'total_macs':macs,'ddr_read_bytes':reads,'ddr_write_bytes':writes,'tokens_per_second':tps,'wall_mac_utilization':budget['compute']['ideal_cycles']/cycles,'average_ddr_read_GBps':reads/duration/1e9,'average_ddr_write_GBps':writes/duration/1e9,'score_ddr_bytes':0,'probability_ddr_bytes':0},
  'physical':{'revision':matrix['revision'],'clock_ns':matrix['architecture']['clock_period_ns'],'wns_ns':matrix['h3']['wns_ns'],'unmapped':matrix['h3']['unmapped'],'unresolved':matrix['h3']['unresolved'],'sram_bytes':4194304},
  'checks':checks,
- 'numerical_boundary':{'one_block_components':'PASS_EXISTING','final_rmsnorm':'PASS_E1_1000_VECTORS','four_layer_executable_subset':'OPEN','last_token_lm_head_official_weight_payload':'OPEN','full_28_layer_payload':'NOT_REQUIRED_BY_TRACE_MODE'},
+ 'numerical_boundary':{'one_block_components':'PASS_EXISTING','final_rmsnorm':'PASS_E1_1000_VECTORS','four_layer_executable_subset':'PASS_REDUCED_CROSS_RTL','last_token_lm_head_official_weight_payload':'PASS_160_SAMPLED_RTL','full_28_layer_payload':'NOT_REQUIRED_BY_TRACE_MODE'},
  'non_claims':['not a 28-layer payload numerical simulation','LM-head cycle count is conservative serialized DDR-read plus Matrix plus logits-write service','not post-route/PVT/SAIF signoff'],
  'provenance':{'commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'trace_log_sha256':hashlib.sha256(logp.read_bytes()).hexdigest(),'rtl_sha256':sha('rtl/control/l5_qwen2_full_model_trace_controller.sv'),'testbench_sha256':sha('tb/tb_l5_qwen2_full_model_trace_controller.sv'),'budget_sha256':sha('config/qwen2_1p5b_300tps_budget.json'),'shape_sha256':sha('config/qwen2_1p5b_target_shape.json'),'l5_5_e3_sha256':sha('reports/execution/l5_5_q1024_e3_result.json')},
- 'next_action':'Run the frozen Qwen2 four-layer executable numerical subset and official-weight last-token LM-head payload before closing L5.6.'
+ 'next_action':'Run L10 early PPA; retain reduced-payload and post-route claim boundaries.'
 }
 out=ROOT/'reports/execution/l5_qwen2_full_model_trace_result.json';out.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
 print(json.dumps({'status':result['status'],'cycles':cycles,'tokens_per_second':tps,'next_action':result['next_action']},sort_keys=True))

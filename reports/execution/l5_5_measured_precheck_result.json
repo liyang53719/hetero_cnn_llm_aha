@@ -1,0 +1,98 @@
+{
+  "curve": {
+    "attention_matrix_cycles": 4992768,
+    "attention_sfu_cycles": 257221093,
+    "clock_hz": 1000000000,
+    "commit": "6b8001095abbe864756c5fe9353f5db8c741f3a8",
+    "ddr_read_bytes": 93585408,
+    "ddr_read_efficiency": 1.0,
+    "ddr_write_bytes": 1048576,
+    "ddr_write_efficiency": 1.0,
+    "event_wait_signal_cycles": 0,
+    "evidence_class": "E2_INTEGRATED",
+    "matrix_producer_stall_cycles": 0,
+    "matrix_queue_bubble_cycles": 0,
+    "probability_ddr_bytes": 0,
+    "score_ddr_bytes": 0,
+    "sequence": 1024,
+    "silu_cycles": 9175040,
+    "source_sha256": "772d7fab08aa424129a9aae87cfd83a1f464e32147c68faebbc89eb620abad31",
+    "sram_bank_conflict_cycles": 0
+  },
+  "evidence_class": "measured_RTL_E2_extrapolation_precheck_not_L5_5_E3",
+  "fit": {
+    "coefficients_cycles": {
+      "base_task": 15164.032925478234,
+      "merge_row": 1628.8884906261162
+    },
+    "features": [
+      "payload_tasks",
+      "merge_rows"
+    ],
+    "fitted_cycles": [
+      3639367.902114776,
+      14278728.203463474,
+      21577268.295361634
+    ],
+    "full_q1024_attention_cycles": 262213861,
+    "observed_cycles": [
+      3222082,
+      14756016,
+      21331806
+    ],
+    "residual_cycles": [
+      -417285.90211477596,
+      477287.7965365257,
+      -245462.29536163434
+    ]
+  },
+  "imported": {
+    "calibration": {
+      "block_cycles": 365509791,
+      "full_model_cycles": 10234274148,
+      "producer_stall_fraction": 0.0,
+      "review_floor_pass": false,
+      "score_probability_ddr_zero": true,
+      "selected_silu_lanes": "one",
+      "sram_ddr_counters_present": true,
+      "target_pass": false,
+      "tokens_per_second": 100.0559478075064
+    },
+    "curve": {
+      "attention_matrix_cycles": 4992768,
+      "attention_sfu_cycles": 257221093,
+      "clock_hz": 1000000000,
+      "commit": "6b8001095abbe864756c5fe9353f5db8c741f3a8",
+      "ddr_read_bytes": 93585408,
+      "ddr_read_efficiency": 1.0,
+      "ddr_write_bytes": 1048576,
+      "ddr_write_efficiency": 1.0,
+      "event_wait_signal_cycles": 0,
+      "evidence_class": "E2_INTEGRATED",
+      "matrix_producer_stall_cycles": 0,
+      "matrix_queue_bubble_cycles": 0,
+      "probability_ddr_bytes": 0,
+      "score_ddr_bytes": 0,
+      "sequence": 1024,
+      "silu_cycles": 9175040,
+      "source_sha256": "772d7fab08aa424129a9aae87cfd83a1f464e32147c68faebbc89eb620abad31",
+      "sram_bank_conflict_cycles": 0
+    },
+    "schema_version": 1,
+    "sha256": "d855c20cee1b1bebd0a2c36b1747751acec84a6def7034243f4b6d07446988e4",
+    "status": "FAIL_REOPEN_ARCHITECTURE",
+    "stop_rule": "Below 315 tps or nonzero score/probability DDR bytes reopens the architecture/performance budget."
+  },
+  "next_action": "Pipeline/parallelize Block32 softmax and global merge service before L5.5 E3; do not claim 300 token/s.",
+  "optimistic_assumptions": [
+    "Revision8B-B II=1 Matrix bound",
+    "DDR efficiency=1",
+    "zero queue bubble",
+    "zero bank conflict",
+    "zero event wait",
+    "selected one-lane SiLU producer stall=0"
+  ],
+  "schema_version": 1,
+  "status": "FAIL_REOPEN_ARCHITECTURE",
+  "stop_rule_applied": true
+}

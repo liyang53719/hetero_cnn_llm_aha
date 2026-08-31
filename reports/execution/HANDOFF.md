@@ -1,4 +1,4 @@
-# Local-agent handoff v7.6 — main only
+# Local-agent handoff v7.7 — main only
 
 ## Git gate
 
@@ -48,6 +48,13 @@ Evidence: `l5_silu_lane_selection_result.json`.
 
 Build real q1024 E3 service JSON from measured Attention, selected SiLU, DDR,
 queue/bank/event counters. Import it and apply the315 token/s stop rule.
+
+L5.5 optimistic precheck FAIL_REOPEN: measured E2 fit predicts262.214M q1024
+Attention cycles (257.221M SFU). Even at DDR efficiency1 and zero queue/bank/
+event penalty, projection is100.056 token/s. Do not claim E3/300tps.
+
+Next: implement a16-row pipelined Block32 tile SFU candidate, keep scores on
+chip, close numerical/service/1GHz gates, then rerun real L5.5 E3.
 
 Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
 quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are

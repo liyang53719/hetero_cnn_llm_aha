@@ -1,10 +1,10 @@
 {
-  "schema_version":6,"stage":"L5","subgate":"L5.3_BLOCKED_ATTENTION_NUMERICAL_E2","state":"MAIN_ONLY_CONTROLLER_AND_SILU_CANDIDATES_PASS_WAIT_INTEGRATION_AND_SELECTION","decision":"INTEGRATE_REAL_QK_MLO_PV_AND_MEASURE_PRODUCER_STALL",
+  "schema_version":6,"stage":"L5","subgate":"L5.3_BLOCKED_ATTENTION_NUMERICAL_E2","state":"MAIN_ONLY_TRACE_BRIDGE_BLOCK32_WEIGHT_PASS_WAIT_SINGLE_SIM","decision":"BUILD_SINGLE_SIM_Q128_CONTROLLER_MATRIX_WEIGHT_PV_MERGE",
   "git_workflow":{"policy":"config/git_workflow_policy.json","first_commands":["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh"],"forbidden":["new branch","PR work branch","force push"]},
-  "completed":{"L5.2":"PASS_REV8B_B","L5.3_controller_E1_E4":"PASS","controller_WNS_ns":0.00191498,"L5.4_one_lane_E1_E4":"PASS","one_lane_WNS_ns":0.0000521541,"L5.4_two_lane_E1_E4":"PASS","two_lane_WNS_ns":0.0000220537},
-  "unique_next_action":"Connect the controller to Revision8B-B QK/PV transactions and FP32 Block128 M/L/O; close q128 numerical E2 first.",
+  "completed":{"L5.2":"PASS_REV8B_B","L5.3_controller_E1_E4":"PASS","L5.3_trace_bridge":"PASS_NOT_SINGLE_SIM","L5.3_block32_weight_E1_E4":"PASS","L5.4_one_lane_E1_E4":"PASS","L5.4_two_lane_E1_E4":"PASS"},
+  "unique_next_action":"Build one q128 simulation containing the controller, Revision8B-B QK/PV service, fp32_block32_softmax_weights and Block128 M/L/O merge; trace-coupled evidence alone is insufficient.",
   "ordered_gates":["q128 full numerical E2","q384 full or reviewed sampled E2","q1024 reviewed rows and exactly 43008 merges","random Matrix/SFU/output backpressure","score_probability_DDR_bytes_zero","measured service curves","SiLU lane selection from measured producer stall","rerun selected SiLU integrated path"],
   "L5.4_selection":"one lane if measured Matrix-producer stall <=2 percent, otherwise two lanes",
   "L5.5_review":{"review_floor_tps":315,"stop_rule":"Below 315 tps pre-route projection, reopen architecture/performance budget."},
-  "forbidden_claims":["L5 complete before L5.5/L5.6","controller protocol as full Attention E2","SiLU candidate pass as selected integrated path","vectorless power as SAIF","post-route signoff"]
+  "forbidden_claims":["L5 complete before L5.5/L5.6","trace bridge as full Attention E2","SiLU candidate pass as selected integrated path","vectorless power as SAIF","post-route signoff"]
 }

@@ -1,0 +1,39 @@
+{
+  "cases": {
+    "1024": {
+      "causal_updates": 6297600,
+      "controller_service_cycles": 215063,
+      "merge_rows": 43008,
+      "metadata_order": "PASS",
+      "tasks": 12672
+    },
+    "128": {
+      "causal_updates": 99072,
+      "controller_service_cycles": 4165,
+      "merge_rows": 0,
+      "metadata_order": "PASS",
+      "tasks": 240
+    },
+    "384": {
+      "causal_updates": 887040,
+      "controller_service_cycles": 31997,
+      "merge_rows": 4608,
+      "metadata_order": "PASS",
+      "tasks": 1872
+    }
+  },
+  "controller_trace_sha256": "1431668eaefb91ff72fc8a750c16fd5c54578e37a04831359c0271d1597fb4a9",
+  "evidence_class": "controller_RTL_trace_plus_q128_numerical_RTL_E2_bridge_not_single_integrated_sim",
+  "probability_DDR_bytes": 0,
+  "q128_numerical_RTL": {
+    "attention_fnv64": "8087088d974287e9",
+    "cycles": 3478272,
+    "o_fnv64": "a61c48b2c07823b1",
+    "status": "PASS",
+    "threshold": 0.002
+  },
+  "remaining_gate": "single_sim_controller_to_Revision8B_B_QK_Block32_weights_PV_Block128_merge",
+  "schema_version": 1,
+  "score_DDR_bytes": 0,
+  "status": "PASS_TRACE_COUPLED_BRIDGE"
+}

@@ -1,9 +1,9 @@
 {
-  "schema_version":6,"status":"PASS_V6_10_MAIN_ONLY_LOCAL_CANDIDATE_GATES_ACCEPTED",
+  "schema_version":6,"status":"PASS_V6_10_MAIN_ONLY_TRACE_BRIDGE_BLOCK32_WEIGHT_SINGLE_SIM_OPEN",
   "branch_audit":{"remote_branches":["main"],"second_page_empty":true,"l5_2_commit_in_main_ancestry":true,"merge_required":false,"branch_deletion_required":false},
-  "accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3","L5.3_controller":"PASS_E1_E4","L5.4_one_lane":"PASS_E1_E4","L5.4_two_lane":"PASS_E1_E4"},
-  "latest_local_result":"reports/execution/l5_3_l5_4_local_result.json",
-  "sandbox_execution":{"previous_v69_tests":"8_passed","attention_controller_protocol":"PASS","attention_q1024_merge_rows":43008,"silu_random_cases":200000,"RTL_source_structure":"PASS","shell_syntax":"PASS","main_only_policy_source":"PASS"},
-  "non_claims":["no full Attention numerical E2","no measured SiLU producer-stall selection","vectorless DC power is not SAIF","no integrated E3","no post-route signoff"],
-  "remaining_local_gates":["L5.3_full_stream_numerical_E2","L5.4_measured_lane_selection","L5.5_integrated_E3","L5.6_full_model","L4_CNN_AHA","L6_quant_parity_RTL","L7_state_RTL_E3","L8_official_backends","L9_real_llama_cpp","L10_post_route"]
+  "accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3","L5.3_controller":"PASS_E1_E4","L5.3_trace_bridge":"PASS_NOT_SINGLE_SIM","L5.3_block32_weight":"PASS_E1_E4","L5.4_one_lane":"PASS_E1_E4","L5.4_two_lane":"PASS_E1_E4"},
+  "local_result":"reports/execution/l5_3_l5_4_local_result.json",
+  "sandbox_execution":{"attention_controller_protocol":"PASS","attention_q1024_merge_rows":43008,"silu_random_cases":200000,"RTL_source_structure":"PASS","shell_syntax":"PASS","main_only_policy_source":"PASS"},
+  "non_claims":["no single-sim full Attention numerical E2","no measured SiLU producer-stall selection","vectorless DC power is not SAIF","no integrated E3","no post-route signoff"],
+  "remaining_local_gates":["L5.3_single_integrated_stream_numerical_E2","L5.4_measured_lane_selection","L5.5_integrated_E3","L5.6_full_model","L4_CNN_AHA","L6_quant_parity_RTL","L7_state_RTL_E3","L8_official_backends","L9_real_llama_cpp","L10_post_route"]
 }

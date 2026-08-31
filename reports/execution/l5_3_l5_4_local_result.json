@@ -1,5 +1,14 @@
 {
   "L5.3": {
+    "block32_weight_dc": {
+      "cell_area": 13949.754056,
+      "dynamic_power_mw_estimate": 2.9442,
+      "evidence_class": "DC_WLM_vectorless_power",
+      "leakage_power_mw_estimate": 0.0164226,
+      "status_sha256": "5bd0bbf337cc63b7f218d479fca0366cc91b77412581fe3e8754f71e12ee3f63",
+      "unmapped": 0,
+      "wns_ns": 1.25766e-05
+    },
     "controller_dc": {
       "cell_area": 1773.408002,
       "dynamic_power_mw_estimate": 0.6024064,
@@ -9,11 +18,12 @@
       "unmapped": 0,
       "wns_ns": 0.00191498
     },
-    "full_numeric_status": "OPEN",
+    "full_numeric_status": "OPEN_SINGLE_INTEGRATED_SIM",
     "q1024_merge_rows": 43008,
     "q1024_tasks": 12672,
     "q128_tasks": 240,
-    "q384_tasks": 1872
+    "q384_tasks": 1872,
+    "trace_bridge_status": "PASS_TRACE_COUPLED_BRIDGE"
   },
   "L5.4": {
     "one_lane": {
@@ -38,6 +48,9 @@
     }
   },
   "checks": {
+    "attention_trace_bridge": true,
+    "block32_weight_dc": true,
+    "block32_weight_e1": true,
     "controller_dc": true,
     "controller_e1": true,
     "full_attention_numerical_e2": false,
@@ -48,10 +61,12 @@
     "silu_lane_selection": false
   },
   "evidence_hashes": {
-    "controller_e1": "a3bef37270883a07a7a4e020b88392d13096368b53f0bd443e8a40614b6279a7",
+    "block32_weight_e1": "f12fa282ef1611e56ed9463ae8b7f708c1ca992e2dc3d4265d477f08b7e84d8f",
+    "controller_e1": "a9970d92f92f1b557ddf7cbb79e673ebe18d7f18f24700482ac6d7339ad7cfad",
     "silu1_e1": "4f784551bbc6b86f97a1fc25144264230c8b80793a3b01e87d40e5da0a41c515",
-    "silu2_e1": "d48fe8c0d81622ed511af96961070ace364fb45eeccc25977e6da47252593e20"
+    "silu2_e1": "d48fe8c0d81622ed511af96961070ace364fb45eeccc25977e6da47252593e20",
+    "trace_bridge": "1dd9bce995f56d99f286c3bf5759120ef278e7883b4e3330325d16d625f9c367"
   },
   "schema_version": 1,
-  "status": "SOURCE_LOCAL_GATES_PASS_INTEGRATION_OPEN"
+  "status": "BRIDGE_AND_COMPONENT_GATES_PASS_SINGLE_SIM_OPEN"
 }

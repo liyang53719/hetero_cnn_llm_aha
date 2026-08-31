@@ -1,7 +1,7 @@
 {
   "errors": [],
   "evidence_class": "source_structural_not_compiler",
-  "module_count": 116,
+  "module_count": 117,
   "modules": [
     "shared_l2_client_arbiter",
     "shared_l2_macro_descriptor_fabric",
@@ -37,6 +37,7 @@
     "gemmini_spad_tensor_gateway",
     "gemmini_rocc_program_adapter",
     "hetero_npu_numerical_integration_v0",
+    "fp32_block32_softmax_weights",
     "blocked_attention_stream_controller",
     "bf16_outer_product_array_control512",
     "matrix_context_scoreboard",

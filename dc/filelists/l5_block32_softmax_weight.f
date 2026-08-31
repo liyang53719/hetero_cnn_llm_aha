@@ -1,0 +1,3 @@
+work/generated/l5_all_primitives/HeteroAllPrimitives.sv
+rtl/sfu/fp32_exp2_pwl_rawpipe.sv
+rtl/attention/fp32_block32_softmax_weights.sv

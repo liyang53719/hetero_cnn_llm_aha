@@ -27,6 +27,14 @@ Evidence: `reports/execution/l5_5_q1024_e3_result.json`.
 Boundary: production controller + production L3 fabric + pinned upstream iDMA.
 This is composed real-RTL E3, not one monolithic payload numerical simulation.
 
+## Upstream integrity
+
+Canonical AHA, Chipyard/Gemmini, iDMA, AXI, common_cells and IMAX3 checkouts
+are clean and commit/submodule locked. `Gemmini.sv`, `garnet.v` and the iDMA
+backend match tracked SHA256 locks; no upstream or generated RTL was hand-edited.
+Run `./scripts/run_local_gate.sh` before local gates. The old non-canonical
+`work/upstream/chipyard` checkout is explicitly excluded.
+
 ## Unique next action
 
 Run L5.6 q1024 28-layer full-model trace with frozen Qwen2 revision, all blocks,

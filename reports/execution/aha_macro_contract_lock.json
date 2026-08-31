@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "aha_commit": "3b171e813bc5e399b22921c8df20fd4e889f1569",
+  "garnet_commit": "6a8520cf7361693e9fc1fb3906df6b4f37268a49",
+  "docker_image": "stanfordaha/garnet@sha256:a8784f2cfe96609a7e4403c29f6a82bd00c882c8564ef747541f78be75fa2b2b",
+  "generator": "scripts/generate_aha_l2_macro.sh",
+  "generated_module": "Garnet",
+  "generated_rtl": "work/generated/l2_aha_garnet_4x16/garnet.v",
+  "generated_rtl_sha256": "4980ce62b1004dc1b3c2b2de4c25387d89c3ec0240245d844a7e5e50bf0ab354",
+  "garnet_port_count": 33,
+  "interconnect_port_count": 69,
+  "policy": "generated RTL is immutable; regenerate from the pinned image and source, never hand-edit"
+}

@@ -1,6 +1,6 @@
 {
   "schema_version":6,"stage":"L5","subgate":"L5.6_Q1024_FULL_MODEL","state":"L5_5_INTEGRATED_E3_PASS_READY_L5_6","decision":"RUN_Q1024_28_LAYER_FULL_MODEL",
-  "git_workflow":{"policy":"config/git_workflow_policy.json","first_commands":["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/sandbox_validate.sh"],"forbidden":["new branch","PR work branch","force push"]},
+  "git_workflow":{"policy":"config/git_workflow_policy.json","first_commands":["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh"],"forbidden":["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]},
   "completed":{"L5.2":"PASS_REV8B_B","L5.3":"PASS_NUMERICAL_AND_STRESS","L5.4":"PASS_SELECTED_ONE_LANE","L5.5_4x4_components":"PASS_E1_E4_STRESS_PROJECTION_FAIL"},
   "sandbox_preflight":{"evidence":"reports/execution/l5_5_balanced_8x8_sfu_e0_result.json","recommended":"8_tile_math_lanes_plus_8_merge_rows","predicted_nominal_tps":323.7642049486616,"predicted_stress_tps":322.9441063007019,"hard_floor_tps":315,"preferred_floor_tps":320,"merge8_source":"rtl/attention/fp32_mlo_merge8_candidate.sv"},
   "local_8x8":{"evidence":"reports/execution/l5_5_balanced_8x8_local_result.json","status":"PASS_E1_E4","tile_stress_cycles":252,"merge8_stress_cycles":365,"stress_tps":322.3734869673966},

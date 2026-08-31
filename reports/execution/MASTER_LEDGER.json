@@ -1,6 +1,7 @@
 {
   "schema_version":6,"current_stage":"L5","current_subgate":"L5.6_Q1024_FULL_MODEL","current_state":"L5_5_INTEGRATED_E3_PASS_READY_L5_6",
   "git_workflow":{"status":"ENFORCED_MAIN_ONLY","policy":"config/git_workflow_policy.json","remote_branches":["main"],"merge_required":false,"force_push":false},
+  "upstream_integrity":{"status":"PASS","evidence":"reports/execution/local_upstream_integrity.json","canonical_clean":true,"upstream_source_edits":0,"generated_rtl_hand_edits":0,"excluded_noncanonical_checkout":"work/upstream/chipyard"},
   "closed_tasks":["L0","L1","L2","L3","L5.1","L5.2","L5.3","L5.4","L5.5"],
   "accepted_local_evidence":{"L5.3":{"status":"PASS","q128_rows":1536,"q384_rows":2304,"q1024_rows":1440,"q1024_merges":43008,"stress_transactions":354816,"errors":0,"score_probability_DDR_bytes":0},"L5.4":{"status":"PASS_SELECTED_ONE_LANE","producer_stall_fraction":0.0,"queue_high_water":7},"L5.5_4x4":{"status":"PASS_COMPONENTS_FAIL_STRESS","nominal_tps":315.48870639174635,"stress_tps":314.44809739590767}},
   "sandbox_v75":{"balanced_sfu":{"status":"PASS_PREFLIGHT","predicted_nominal_tps":323.7642049486616,"predicted_stress_tps":322.9441063007019,"area_upper_bound":684314.358,"merge8_source_ready":true},"qwen3_5":{"status":"PASS_RESOURCE_ENVELOPE","gdn_state_mib":60,"dense_kv_gib":5,"minimum_staging_mib":0.875},"qwen3_8_flash_next":{"status":"PASS_RESOURCE_ENVELOPE","gdn_state_mib":108,"qsa_kv_gib":6,"qsa_index_mib":192,"minimum_staging_mib":1.40625}},

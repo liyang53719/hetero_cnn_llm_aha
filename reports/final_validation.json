@@ -1,5 +1,5 @@
 {
-  "schema_version":6,"status":"PASS_V6_10_COMPONENTS_Q128_SINGLE_SIM_DIAGNOSTIC_IN_PROGRESS",
+  "schema_version":6,"status":"PASS_V6_10_Q128_SINGLE_SIM_Q384_OPEN",
   "branch_audit":{"remote_branches":["main"],"second_page_empty":true,"l5_2_commit_in_main_ancestry":true,"merge_required":false,"branch_deletion_required":false},
   "accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3","L5.3_controller":"PASS_E1_E4","L5.3_trace_bridge":"PASS_NOT_SINGLE_SIM","L5.3_block32_weight":"PASS_E1_E4","L5.3_probability_hilo":"PASS_E1_E4","L5.4_one_lane":"PASS_E1_E4","L5.4_two_lane":"PASS_E1_E4"},
   "local_result":"reports/execution/l5_3_l5_4_local_result.json",

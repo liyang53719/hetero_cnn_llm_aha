@@ -1,20 +1,11 @@
 {
-  "schema_version": 1,
-  "generated_at_utc": "2026-08-31T04:29:06Z",
-  "stage": "L5.3_BLOCKED_ATTENTION_NUMERICAL_E2",
-  "status": "IN_PROGRESS_TIMEOUT_AFTER_FIRST_QK",
-  "evidence_class": "E2_single_process_attempt_not_pass",
-  "command": "taskset -c 8-23 ./scripts/run_l5_q128_attention_integrated_e2.sh",
-  "resource_contract": {"cpu_affinity": "8-23", "threads": 4, "memory_high": "24G", "memory_max": "30G", "timeout_seconds": 600},
-  "integrated_modules": ["blocked_attention_stream_controller", "bf16_outer_product_context_array_rev8b_b_candidate", "fp32_block32_softmax_weights", "fp32_probability_to_bf16_hilo", "fp32_mlo_summary_merge_stream_rawpipe", "fp32_reciprocal_nr", "fp32_vector_alu"],
-  "frozen_workload": {"sequence_tokens": 128, "expected_tasks": 240, "expected_rows": 1536, "vector_manifest_sha256": "d7668d7fbcef3ec9bbcf56f0270e4f4ff90cb04e046f8cf1ee3f9fff195251c6"},
-  "observed_progress": {"phase": "QK", "task_id": 0, "steps_completed": 128, "rtl_cycles": 899, "mismatch": 0, "protocol_error": 0, "terminal": "wall_timeout_600s"},
-  "attempts": [
-    {"result": "timeout", "diagnostic": "initial unflushed log"},
-    {"result": "timeout", "diagnostic": "progress proved QK task0 complete; probability capture ready/valid testbench bug found"},
-    {"result": "timeout", "diagnostic": "ready/valid fixed and idle-Matrix testbench clock gate added; same first-QK boundary observed"}
-  ],
-  "source_policy": {"generated_rtl_modified": false, "production_rtl_modified": false, "testbench_only_changes": true},
-  "log_sha256": "c5e3f6e3dc4f2a0f218ba223b14eaacc95b32d47f46e101ee4dc1b6d2e5172bb",
-  "next_action": "Run a bounded one-task QK-to-SFU-to-PV diagnostic with the same RTL and frozen vector row, measure each service wall time and close the first handshake before choosing a reviewed full-q128 sharding strategy."
+  "schema_version":1,"generated_at_utc":"2026-08-31T04:51:34Z","stage":"L5.3_BLOCKED_ATTENTION_NUMERICAL_E2","status":"PASS_Q128_SINGLE_PROCESS_E2","evidence_class":"E2_single_process_full_q128",
+  "command":"taskset -c 8-23 ./scripts/run_l5_q128_attention_integrated_e2.sh","resource_contract":{"cpu_affinity":"8-23","threads":4,"memory_high":"24G","memory_max":"30G","timeout_seconds":600},
+  "integrated_modules":["blocked_attention_stream_controller","bf16_outer_product_context_array_rev8b_b_candidate","fp32_block32_softmax_weights","fp32_probability_to_bf16_hilo","fp32_mlo_summary_merge_stream_rawpipe","fp32_reciprocal_nr","fp32_vector_alu"],
+  "frozen_workload":{"sequence_tokens":128,"expected_tasks":240,"expected_rows":1536,"vector_manifest_sha256":"28b559d050e7227e1c545d695acbcf914e4a8049e7e6be8d80baf486c6cbbc05"},
+  "observed_progress":{"phase":"COMPLETE","tasks":240,"rows":1536,"rtl_cycles":3222082,"matrix_stall_cycles":161,"sfu_stall_cycles":81,"score_ddr_bytes":0,"probability_ddr_bytes":0,"attention_fnv64":"9410bc3f290f2f93","max_error":0.0,"protocol_error":0,"terminal":"PASS"},
+  "root_cause":"testbench posedge ready race; service busy now asserts at negedge after DUT acceptance",
+  "source_policy":{"generated_rtl_modified":false,"production_rtl_modified":false,"testbench_only_changes":true},
+  "log_sha256":"f18a5c284fadb0e8d46a5791947a55e66c1be52bfcd6832f1e10bbf36db7d7d8",
+  "next_action":"Extend the same single-RTL harness to q384 and close the frozen 180 reviewed rows plus 4608 merges before q1024."
 }

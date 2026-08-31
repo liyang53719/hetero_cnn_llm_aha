@@ -18,7 +18,7 @@
       "unmapped": 0,
       "wns_ns": 0.00191498
     },
-    "full_numeric_status": "IN_PROGRESS_SINGLE_SIM_TIMEOUT_AFTER_FIRST_QK",
+    "full_numeric_status": "PASS_Q128_SINGLE_PROCESS_NEXT_Q384",
     "q1024_merge_rows": 43008,
     "q1024_tasks": 12672,
     "q128_tasks": 240,
@@ -71,9 +71,10 @@
   "single_sim_attempt": {
     "evidence": "reports/execution/l5_q128_single_sim_attempt_result.json",
     "generated_rtl_modified": false,
-    "qk_steps": 128,
-    "rtl_cycles": 899,
-    "status": "TIMEOUT_AFTER_FIRST_QK"
+    "rows": 1536,
+    "rtl_cycles": 3222082,
+    "status": "PASS_Q128_SINGLE_PROCESS_E2",
+    "tasks": 240
   },
-  "status": "BRIDGE_AND_COMPONENT_GATES_PASS_SINGLE_SIM_DIAGNOSTIC_IN_PROGRESS"
+  "status": "BRIDGE_COMPONENT_AND_Q128_SINGLE_SIM_PASS_Q384_OPEN"
 }

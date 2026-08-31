@@ -1,15 +1,14 @@
 {
-  "schema_version": 6,
-  "marker": "WAIT_LOCAL_AGENT_PUSH",
-  "closed": [{"id": "L5.2", "status": "PASS_REV8B_B_E1_E4_COMPONENT_H3", "risk": "L10 post-route/PVT margin"}],
-  "items": [
-    {"id": "L5.3", "sandbox_status": "numeric/cycle/queue E0 PASS, FIFO 2/2 frozen", "local_gate": "real QK-MLO-PV E1/E2", "acceptance": ["q128 full numerical compare", "q384 full or approved sampled compare", "q1024 reviewed rows and 43008 merges", "random Matrix/SFU backpressure", "zero score/probability DDR", "measured service curves", "no loss duplicate reorder deadlock"]},
-    {"id": "L5.4", "sandbox_status": "128-entry LUT and 1/2-lane DSE PASS", "local_gate": "RTL E1/E4 and producer-stall selection", "acceptance": ["numerical threshold", "random ready/valid E1", "1GHz WNS>=0", "area/power comparison", "queue high-water and producer stall"]},
-    {"id": "L5.5-L5.6", "sandbox_status": "32000-case sensitivity PASS, baseline 338.25 tps, review floor 315 tps", "local_gate": "measured service curves, real iDMA/DDR E3 and 28-layer q1024", "acceptance": ["mandatory counters present", "pre-route projection >=315 tps for normal continuation", "q1024 >=300 tps", "SRAM<=4MiB", "DDR<=100/40GB/s"]},
-    {"id": "L6", "sandbox_status": "exact formats and 16-value shared operand frontend E0/source ready", "local_gate": "pinned llama.cpp >=10000-block parity and decoder/shared-dot RTL E1/PPA", "acceptance": ["byte and dot parity", "no format-specific multiplier array", "1GHz PPA"]},
-    {"id": "L7", "sandbox_status": "commit barrier/epoch/filter/dirty-domain source ready", "local_gate": "atomic RTL E1 and OOO iDMA E3", "acceptance": ["8 transaction slots", "10 state domains", "partial-prefix commit", "stale suppression", "COW/refcount integration"]},
-    {"id": "L8", "sandbox_status": "official trace schema/replayer E0 PASS", "local_gate": "official immutable-revision capture and backend replay", "acceptance": ["per-node tensor/state hashes", "QSA/MoE/PLE/MTP metadata", "reviewed tolerance"]},
-    {"id": "L9", "sandbox_status": "versioned GGML node ABI adapter E0 PASS", "local_gate": "real llama.cpp graph capture/GGUF binding/CPU fallback", "acceptance": ["real graph regression", "descriptor binding", "device submission", "fallback execution"]},
-    {"id": "L4/L10/L11", "sandbox_status": "contracts and candidate collateral ready", "local_gate": "AHA/Garnet CNN and final physical/Pareto", "acceptance": ["CNN E1/E4", "SRAM macros", "post-route PVT/OCV", "SAIF", "Archspec promotion"]}
+  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH","closed":[{"id":"L5.2","status":"PASS_REV8B_B_E1_E4_COMPONENT_H3","risk":"L10 post-route/PVT margin"}],
+  "items":[
+    {"id":"L5.3a","sandbox_status":"controller protocol E0 PASS and RTL/TB/DC scripts source-ready","local_gate":"Verilator controller protocol E1 and 1GHz controller DC","acceptance":["q128 240 tasks","q384 1872 tasks","q1024 12672 tasks","43008 merge rows","FIFO levels <=2","no protocol error"]},
+    {"id":"L5.3b","sandbox_status":"numerical/cycle/queue E0 PASS","local_gate":"real Revision8B-B QK -> FP32 M/L/O -> PV E1/E2","acceptance":["q128/q384/q1024 numerical","random backpressure","zero score/probability DDR","measured service curve"]},
+    {"id":"L5.4","sandbox_status":"bit-oriented 128-entry LUT Golden and one/two-lane RTL/TB/DC scripts source-ready","local_gate":"one/two-lane Verilator E1, 1GHz DC/PPA and producer-stall selection"},
+    {"id":"L5.5-L5.6","sandbox_status":"E3 preflight and sensitivity PASS, not E3","local_gate":"real Matrix/SFU/iDMA/DDR E3 and 28-layer q1024 >=300 tps"},
+    {"id":"L4","sandbox_status":"legal AHA sidecar contract ready","local_gate":"Garnet map/PnR/Verilator/DC and CNN subset"},
+    {"id":"L6","sandbox_status":"exact layouts and unified frontend source-ready","local_gate":"pinned llama.cpp parity, RTL E1 and PPA"},
+    {"id":"L7","sandbox_status":"translation/concurrency/transaction E0 and source-ready state RTL","local_gate":"page walker/TLB/MSHR/COW state RTL E1 and AXI/iDMA E3"},
+    {"id":"L8-L9","sandbox_status":"trace schema, policy lowering and GGML adapter E0 PASS","local_gate":"official traces, backend RTL, real GGML/GGUF and token generation"},
+    {"id":"L10-L11","sandbox_status":"Matrix component/H3 pass and candidate Archspec","local_gate":"SRAM macro, post-route STA, PVT/OCV, SAIF and final Pareto"}
   ]
 }

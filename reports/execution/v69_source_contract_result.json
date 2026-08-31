@@ -1,0 +1,6 @@
+{
+  "schema_version":1,"status":"PASS","evidence_class":"source_static_not_elaboration",
+  "checked_modules":["blocked_attention_stream_controller","bf16_silu_mul_lut_lane","bf16_silu_mul_lut_array","bf16_silu_mul_lut_1lane","bf16_silu_mul_lut_2lane"],
+  "checks":["module_endmodule","delimiter_balance","required_interface_tokens","no_multicycle_or_data_false_path_in_new_scripts"],
+  "remaining_local_gates":["Verilator_elaboration_and_E1","CLN22UL_1GHz_DC","full_Attention_numerical_E2","SiLU_1_vs_2_lane_PPA_and_producer_stall"]
+}

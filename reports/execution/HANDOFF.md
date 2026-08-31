@@ -1,35 +1,50 @@
-# Local-agent handoff v6.8
+# Local-agent handoff v6.9
 
-State: **no newer local-agent push was present at the v6.8 audit**. L5.2 remains
-closed at the Revision8B-B component/H3 boundary. L5.3 is still the primary
-local action; L5.4 runs in parallel.
+`eba24625350d14fe3f9d760929736dcf5872fabd` is accepted as the L5.2 Revision8B-B closure. The branch subsequently received sandbox-only commits; there is no branch divergence and only `main` exists.
 
-## Primary local action: L5.3
+## Closed boundary
 
-Implement real streaming `QK -> Block128 FP32 M/L/O -> PV` with Q tile 16,
-K/V tile 32, Block128, GQA 6:1, Score FIFO 2 and Probability FIFO 2. Use the
-existing numerical and cycle reports. Close q128, q384, reviewed q1024 rows,
-43,008 q1024 merges, random Matrix/SFU backpressure, zero score/probability DDR
-writes, no loss/reorder/deadlock, and measured service curves.
+```text
+L5.1 Block128                    PASS, component WNS +0.0000136495 ns
+L5.2 Matrix Revision8B-B         PASS at component/H3 boundary
+Array / stages / contexts       16x32 / 5 / 5
+H3 WNS                          +0.00490451 ns
+H3 DRC / unmapped / unresolved  0 / 0 / 0 / 0
+```
 
-## Parallel local action: L5.4
+Post-route, PVT/OCV and power remain L10 risks.
 
-Implement the 128-entry FP16 direct-SiLU LUT and fused `SiLU(gate)*up` as
-1-lane and 2-lane II=1 candidates. Select one lane only when measured Matrix
-producer stall is <=2%; otherwise select two. Record numerical E1, WNS,
-area/power, queue high-water and producer stall.
+## New source-ready L5.3 controller
 
-## New v6.8 source-ready contracts
+```text
+rtl/attention/blocked_attention_stream_controller.sv
+tb/tb_blocked_attention_stream_controller.sv
+scripts/run_l5_blocked_attention_controller_e1.sh
+scripts/run_l5_blocked_attention_controller_dc.sh
+```
 
-- Quant frontend: 16-value beats for FP16/Q8_0/Q6_K/Q3_K, shared dot lanes and
-  post-dot scale. No format-specific multiplier arrays.
-- State transaction: ten domains, out-of-order acknowledgements, atomic
-  accepted-prefix barrier, epoch/generation and stale-response filtering.
-- Official trace: deterministic tensor/state schema and offline replayer.
-- GGML adapter: versioned raw-node/tensor ABI into the existing model-agnostic
-  graph partitioner; unknown nodes remain explicit CPU fallback.
-- L5.5 review: baseline 338.25 t/s, review scenario 329.83 t/s. If measured
-  pre-route projection is below 315 t/s, stop and reopen the performance budget.
+The controller uses one shared Matrix command port for QK/PV, two-entry Score and Probability FIFOs, one SFU command port and exact task metadata. The E0 protocol model closes q128/q384/q1024 ordering and 43,008 q1024 merge rows under random command/service stalls. This is not the full numerical Attention E1/E2.
 
-These are E0/source contracts. They do not replace RTL E1, integrated E3,
-official-weight execution, real llama.cpp linkage or post-route signoff.
+```bash
+./scripts/sandbox_validate.sh
+./scripts/run_l5_blocked_attention_controller_e1.sh
+./scripts/run_l5_blocked_attention_controller_dc.sh
+```
+
+Then connect the controller to Revision8B-B Matrix and the existing Block128 FP32 M/L/O path and close the full numerical/service gate.
+
+## New source-ready L5.4 fused SiLU
+
+```text
+rtl/sfu/bf16_silu_lut_128.svh
+rtl/sfu/bf16_silu_mul_lut_lane.sv
+rtl/sfu/bf16_silu_mul_lut_array.sv
+rtl/sfu/bf16_silu_mul_lut_tops.sv
+tb/tb_bf16_silu_mul_lut_array.sv
+scripts/run_l5_silu_lut_e1.sh
+scripts/run_l5_silu_lut_dc.sh
+```
+
+The path uses the 128-entry FP16 direct-SiLU LUT, Q12 interpolation fraction, shared generated FP32 add/mul pipelines and a final BF16 RNE conversion. It contains no separate exponential path and no separate unfused product path. Run one- and two-lane E1/PPA, then select one lane if producer stall is <=2%.
+
+L5.5 remains the mandatory join after full L5.3 and L5.4 PASS.

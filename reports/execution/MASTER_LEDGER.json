@@ -1,24 +1,8 @@
 {
-  "schema_version": 6,
-  "current_stage": "L5",
-  "current_subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
-  "current_state": "L5_2_CLOSED_L5_3_L5_4_WAIT_LOCAL_E1_E4_SANDBOX_V68_SOURCE_READY",
-  "remote_audit": {"audited_at_utc": "2026-08-31T00:00:00Z", "observed_head": "e87eb9763ddec26ed67a92980e7487452519103b", "latest_local_agent_evidence_commit": "eba24625350d14fe3f9d760929736dcf5872fabd", "new_local_agent_commit_detected": false, "branch_count": 1, "decision": "NO_NEW_LOCAL_AGENT_PUSH_RETAIN_L5_2_CLOSURE_CONTINUE_SANDBOX_V68"},
-  "accepted_local_evidence": {
-    "L5.1": {"status": "PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN", "block128_wns_ns": 0.0000136495},
-    "L5.2": {"status": "PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN", "physical_array": "16x32_512_lane", "fma_stages": 5, "contexts": 5, "dependent_steps": 1000000, "random_backpressure_steps": 10000, "adversarial_steps": 50000, "mapped_lane_compare_cycles": 120032, "h3_wns_ns": 0.00490451, "h3_max_transition": 0, "h3_max_cap": 0, "h3_unmapped": 0, "h3_unresolved": 0, "h3_area": 1661847.825806, "L10_risk": "post_route_PVT_OCV_margin_open"}
-  },
-  "join_gate": {"closed": ["L5.2"], "open": ["L5.3", "L5.4"], "next": "L5.5", "review_floor_tps": 315},
-  "sandbox_closed": {
-    "L5.3_attention_E0": {"status": "PASS", "q1024_merges": 43008, "score_probability_DDR": 0},
-    "L5.4_silu_DSE_E0": {"status": "PASS", "LUT_entries": 128, "candidate_lanes": [1,2]},
-    "L5.5_join_sensitivity_E0": {"status": "PASS", "baseline_tps": 338.2517292888433, "review_scenario_tps": 329.82895777578256, "grid_cases": 32000, "review_floor_tps": 315},
-    "L6_quant_operand_frontend_E0": {"status": "PASS", "beat_values": 16, "formats": ["FP16","Q8_0","Q6_K","Q3_K"], "format_specific_multiplier_array": false, "maximum_dot_difference": 4.547473508864641e-13},
-    "L7_state_commit_barrier_E0": {"status": "PASS", "state_domains": 10, "transactions": 1000, "protocol_errors": 0, "RTL_contract_source_ready": true},
-    "L8_trace_schema_E0": {"status": "PASS", "trace_sha256": "255b532f043fc6e7229e057e3de5f1305309a8874bd2c72785d630423f091f6e"},
-    "L9_GGML_node_adapter_E0": {"status": "PASS", "model_name_conditionals": false, "explicit_fallback": true}
-  },
-  "source_ready_waiting_local": ["L5.3_blocked_attention_real_stream", "L5.4_fused_silu_1_2_lane", "L6_quant_group_decoder_and_shared_dot_frontend", "L7_state_epoch_commit_barrier_and_iDMA", "L8_official_trace_capture", "L9_real_llama_cpp_GGML_adapter"],
-  "waiting_local": ["L4_AHA_CNN", "L5.3_E1_E2", "L5.4_E1_E4", "L5.5_E3", "L5.6_full_model", "L6_parity_RTL_PPA", "L7_RTL_E1_E3", "L8_official_weights_and_backends", "L9_real_GGUF", "L10_post_route"],
-  "forbidden_claims": ["no_new_local_push_as_completed", "L5_complete_before_L5.3_L5.4_L5.5_L5.6", "quant_frontend_E0_as_RTL_or_llama_parity", "state_barrier_source_as_atomic_E1", "trace_schema_as_official_trace", "sensitivity_preflight_as_integrated_E3", "post_route_signoff_from_L5.2_H3"]
+  "schema_version":6,"current_stage":"L5","current_subgate":"L5.3_BLOCKED_ATTENTION_E1_E2","current_state":"L5_2_CLOSED_L5_3_CONTROLLER_AND_L5_4_DATAPATH_SOURCE_READY_WAIT_LOCAL_E1_E4",
+  "accepted_local_evidence":{"L5.1":{"status":"PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN","block128_wns_ns":0.0000136495},"L5.2":{"status":"PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN","stages":5,"contexts":5,"lanes":512,"h3_wns_ns":0.00490451,"h3_drc":"0_0_0_0","postmap_E1":"PASS"}},
+  "remote_audit":{"user_reported_commit":"eba24625350d14fe3f9d760929736dcf5872fabd","observed_head_before_v69":"c13b7469096f0100b8519bdc5d9a7288e38e7e15","decision":"EBA_ACCEPTED_AS_L5_2_EVIDENCE_CURRENT_MAIN_HAS_LATER_SANDBOX_COMMITS"},
+  "sandbox_closed":{"L5.3_controller_protocol_E0":{"status":"PASS","q128_tasks":240,"q384_tasks":1872,"q1024_tasks":12672,"q1024_merge_rows":43008,"FIFO":"2_2","DDR_score_probability":0},"L5.3_controller_RTL_source":"READY_WAIT_ELABORATION_E1_DC","L5.4_bit_oriented_LUT_E0":{"status":"PASS","cases":200000,"mean_abs":0.00032607861556112767,"relative_l2":0.0008630074007928277,"max_abs":0.125},"L5.4_one_two_lane_RTL_source":"READY_WAIT_ELABORATION_E1_DC_PPA","L5.5_sensitivity_E0":"PASS_NOT_E3","L6_quant_frontend_E0":"PASS_SOURCE_READY","L7_state_transaction_E0":"PASS_SOURCE_READY","L8_trace_schema_E0":"PASS","L9_GGML_adapter_E0":"PASS"},
+  "join_gate":{"closed":["L5.2"],"open":["L5.3","L5.4"],"next":"L5.5"},"source_ready_waiting_local":["L5.3_controller_and_full_stream","L5.4_fused_silu_1_2_lane","L6_quant_frontend","L7_state_transaction_RTL","L9_real_llama_cpp"],
+  "forbidden_claims":["L5_complete_before_L5.3_L5.4_L5.5_L5.6","controller_protocol_E1_as_numerical_Attention_E2","source_static_as_elaboration","post_route_signoff_from_component_H3"]
 }

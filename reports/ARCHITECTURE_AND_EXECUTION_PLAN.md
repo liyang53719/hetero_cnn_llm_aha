@@ -1,47 +1,59 @@
-# Canonical architecture and execution plan v6.8
+# Canonical architecture and execution plan v6.9
 
 ## Frozen architecture
 
 ```text
-Gemmini INT8/CNN Matrix
-+ Revision8B-B BF16/FP32 Matrix (16x32, five stage, five context)
+Retained Gemmini INT8/CNN Matrix path
++ Revision8B-B clean-room BF16/FP32 Matrix path
 + fixed-function Attention/Norm/SFU
-+ legal AHA 4x4 ratio-2 sidecar
++ legal Stanford AHA 4x4 ratio-2 sidecar
 + Sequence Memory Complex / iDMA
-+ 4 MiB SRAM and Command128/event fabric
++ shared 4 MiB SRAM and Command128/event fabric
 ```
 
-L5.1 and L5.2 are closed only at component/H3 DC. Their very small timing
-margins remain L10 post-route/PVT risks.
+The BF16 Matrix boundary remains frozen at 16x32, 512 lanes, five FMA stages, five accumulator contexts and a depth-five completion FIFO. L5.2 is closed at component/H3 DC; it is not post-route signoff.
 
 ## Active L5 branches
 
-- L5.3: Q16, KV32, Block128, GQA 6:1, Score/Probability FIFO 2/2, FP32 M/L/O,
-  zero score/probability DDR. Real E1/E2 remains local.
-- L5.4: 128-entry FP16 direct-SiLU LUT, BF16 I/O, 1/2 lane II=1 DSE. Real
-  numerical/ready-valid/DC/PPA remains local.
-- L5.5 starts only when L5.2/L5.3/L5.4 pass. The v6.8 sensitivity model freezes
-  the required counters and a 315 t/s pre-route review floor.
+### L5.3 Blocked Attention
 
-## Additional source contracts
+```text
+Q tile 16, K/V tile 32, Block128, GQA 6:1
+Score FIFO 2, Probability FIFO 2
+FP32 M/L/O
+QK and PV share Revision8B-B Matrix
+score/probability DDR materialization = 0
+```
 
-- L6: exact Q8_0/Q6_K/Q3_K/FP16 layouts and a shared 16-value operand frontend;
-  no per-format multiplier arrays.
-- L7: ten-domain commit barrier, epoch table, dirty-domain tracker and stale
-  response filter contracts.
-- L8: deterministic official node/state trace schema and offline replayer.
-- L9: versioned GGML node/tensor capture ABI into the existing longest-match
-  partitioner with explicit CPU fallback.
+Available E0/source artifacts now include dense-vs-blocked numerical Golden, cycle and queue-depth models, a command-order/controller protocol model, and synthesizable controller RTL/TB/E1/DC scripts. The controller protocol is a subgate. L5.3 closes only after the real Matrix and Block128 SFU datapaths pass q128/q384/q1024 numerical E2 and measured service E1 under random backpressure.
+
+### L5.4 fused SiLU(gate)*up
+
+```text
+128-entry FP16 direct-SiLU ROM over [-8,8]
+Q12 linear-interpolation fraction
+shared generated FP32 add/mul pipelines
+BF16 input/output, II=1
+one-lane and two-lane candidates
+```
+
+A bit-oriented Golden, ROM, synthesizable lane/array/tops, vector generator, testbench and E1/DC scripts are source-ready. Select one lane if the measured Matrix producer stall is <=2%; otherwise select two lanes.
+
+### L5.5 join
+
+L5.5 starts only after L5.2, full L5.3 and L5.4 pass. The analytical preflight is not E3. Replace all Attention/SiLU durations with measured service curves and collect DDR, queue, bank and event counters. Reopen the performance budget when the pre-route projection is below 315 token/s.
 
 ## Remaining order
 
 ```text
-L5.3 + L5.4 -> L5.5 real E3 -> L5.6 q1024 >=300 t/s
-L4 CNN/AHA
-L6 quant RTL/PPA
-L7 production Sequence Memory
-L8 official Qwen3.5/Qwen3.8 backends
-L9 real llama.cpp/GGUF
-L10 post-route/PVT/SAIF
-L11 final Archspec/Pareto
+L4 CNN/AHA E1/E4
+L5.3 full Attention E1/E2 ┐
+L5.4 fused SiLU E1/E4     ├→ L5.5 integrated E3 → L5.6 q1024 >=300 t/s
+L5.2 PASS                 ┘
+L6 pinned GGML parity and low-bit RTL
+L7 production Sequence Memory E1/E3
+L8 Qwen3.5/Qwen3.8 official traces and backends
+L9 real llama.cpp/GGUF backend
+L10 SRAM/post-route/PVT/SAIF
+L11 final Archspec/Pareto signoff
 ```

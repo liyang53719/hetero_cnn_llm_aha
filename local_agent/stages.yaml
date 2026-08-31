@@ -1,7 +1,7 @@
 schema_version: 6
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_8_AUDIT}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_9_AUDIT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
@@ -12,13 +12,13 @@ stages:
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495}
       L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512, H3_WNS_ns: 0.00490451, L10_risk: post_route_variation_open}
-      L5.3: {status: NUMERICAL_CYCLE_STREAM_E0_PASS_WAIT_REAL_STREAM_E1_E2, q384_stream_cycles: 479238, q1024_merges: 43008, score_fifo: 2, probability_fifo: 2}
-      L5.4: {status: NUMERICAL_THROUGHPUT_DSE_PASS_WAIT_1_2_LANE_E1_E4, LUT_entries: 128, candidates: [1_lane_II1,2_lane_II1]}
-      L5.5: {status: SENSITIVITY_PREFLIGHT_PASS_WAIT_L5_3_L5_4_AND_LOCAL_E3, baseline_tps: 338.2517292888433, review_floor_tps: 315, grid_cases: 32000}
+      L5.3: {status: CONTROLLER_PROTOCOL_E0_AND_RTL_SOURCE_READY_WAIT_FULL_STREAM_E1_E2, query_tile: 16, kv_tile: 32, block_tokens: 128, score_fifo: 2, probability_fifo: 2, q1024_merges: 43008}
+      L5.4: {status: BIT_CONTRACT_AND_ONE_TWO_LANE_RTL_SOURCE_READY_WAIT_E1_E4_SELECTION, LUT_entries: 128, fraction_bits: 12, candidates: [1_lane_II1,2_lane_II1]}
+      L5.5: {status: SANDBOX_PREFLIGHT_PASS_WAIT_L5_3_L5_4_AND_LOCAL_E3, analytical_tps: 338.2517292888433, review_floor_tps: 315}
       L5.6: {status: WAIT_L5_5_THEN_28_LAYER_E2_E3_E4, target_tps: 300}
-  - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: EXACT_LAYOUT_AND_UNIFIED_OPERAND_FRONTEND_E0_SOURCE_READY_WAIT_PARITY_RTL_PPA}
-  - {id: L7, name: production_paged_kv_and_sequence_memory, status: FUNCTIONAL_CONCURRENCY_TRANSACTION_E0_AND_COMMIT_RTL_CONTRACT_READY_WAIT_E1_E3}
-  - {id: L8, name: qwen35_qwen38_hybrid_text, status: FULL_SHAPE_OPERATOR_POLICY_AND_TRACE_SCHEMA_E0_PASS_WAIT_OFFICIAL_E1_E2, excluded: [vision_encoder]}
-  - {id: L9, name: llama_cpp_backend, status: GGML_NODE_ABI_PARTITION_AND_COMMAND_E0_PASS_WAIT_REAL_LLAMA_GGUF_BUILD}
-  - {id: L10, name: physical_closure, status: MATRIX_COMPONENT_H3_PASS_ULTRA_LOW_MARGIN_POST_ROUTE_PVT_SAIF_OPEN}
-  - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_PASS_E0_ONLY, candidate: configs/arch_v2_qwen38_candidate.yaml}
+  - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: EXACT_LAYOUT_AND_UNIFIED_FRONTEND_E0_SOURCE_READY_WAIT_PARITY_RTL_PPA}
+  - {id: L7, name: production_paged_kv_and_sequence_memory, status: TRANSLATION_CONCURRENCY_TRANSACTION_E0_SOURCE_READY_WAIT_RTL_E1_E3}
+  - {id: L8, name: qwen35_qwen38_hybrid_text, status: FULL_SHAPE_TRACE_SCHEMA_OPERATOR_E0_PASS_WAIT_OFFICIAL_E1_E2}
+  - {id: L9, name: llama_cpp_backend, status: POLICY_PARTITION_NODE_ADAPTER_E0_PASS_WAIT_REAL_GGML_GGUF}
+  - {id: L10, name: physical_closure, status: MATRIX_H3_PASS_ULTRA_LOW_MARGIN_POST_ROUTE_PVT_SAIF_OPEN}
+  - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_E0_ONLY}

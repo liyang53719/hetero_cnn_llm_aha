@@ -1,0 +1,40 @@
+// SPDX-License-Identifier: Apache-2.0
+function automatic logic [15:0] bf16_silu_lut_fp16(input logic [6:0] index);
+  begin
+    unique case(index)
+      0:bf16_silu_lut_fp16=16'h997f;1:bf16_silu_lut_fp16=16'h9a22;2:bf16_silu_lut_fp16=16'h9ad8;3:bf16_silu_lut_fp16=16'h9ba3;
+      4:bf16_silu_lut_fp16=16'h9c43;5:bf16_silu_lut_fp16=16'h9cc0;6:bf16_silu_lut_fp16=16'h9d4c;7:bf16_silu_lut_fp16=16'h9de7;
+      8:bf16_silu_lut_fp16=16'h9e93;9:bf16_silu_lut_fp16=16'h9f52;10:bf16_silu_lut_fp16=16'ha013;11:bf16_silu_lut_fp16=16'ha089;
+      12:bf16_silu_lut_fp16=16'ha10c;13:bf16_silu_lut_fp16=16'ha19c;14:bf16_silu_lut_fp16=16'ha23d;15:bf16_silu_lut_fp16=16'ha2ee;
+      16:bf16_silu_lut_fp16=16'ha3b2;17:bf16_silu_lut_fp16=16'ha445;18:bf16_silu_lut_fp16=16'ha4bd;19:bf16_silu_lut_fp16=16'ha541;
+      20:bf16_silu_lut_fp16=16'ha5d3;21:bf16_silu_lut_fp16=16'ha673;22:bf16_silu_lut_fp16=16'ha724;23:bf16_silu_lut_fp16=16'ha7e6;
+      24:bf16_silu_lut_fp16=16'ha85d;25:bf16_silu_lut_fp16=16'ha8d2;26:bf16_silu_lut_fp16=16'ha952;27:bf16_silu_lut_fp16=16'ha9de;
+      28:bf16_silu_lut_fp16=16'haa77;29:bf16_silu_lut_fp16=16'hab1d;30:bf16_silu_lut_fp16=16'habd2;31:bf16_silu_lut_fp16=16'hac4c;
+      32:bf16_silu_lut_fp16=16'hacb6;33:bf16_silu_lut_fp16=16'had29;34:bf16_silu_lut_fp16=16'hada6;35:bf16_silu_lut_fp16=16'hae2b;
+      36:bf16_silu_lut_fp16=16'haeba;37:bf16_silu_lut_fp16=16'haf53;38:bf16_silu_lut_fp16=16'haff5;39:bf16_silu_lut_fp16=16'hb050;
+      40:bf16_silu_lut_fp16=16'hb0aa;41:bf16_silu_lut_fp16=16'hb108;42:bf16_silu_lut_fp16=16'hb16a;43:bf16_silu_lut_fp16=16'hb1cf;
+      44:bf16_silu_lut_fp16=16'hb235;45:bf16_silu_lut_fp16=16'hb29c;46:bf16_silu_lut_fp16=16'hb302;47:bf16_silu_lut_fp16=16'hb365;
+      48:bf16_silu_lut_fp16=16'hb3c4;49:bf16_silu_lut_fp16=16'hb40d;50:bf16_silu_lut_fp16=16'hb433;51:bf16_silu_lut_fp16=16'hb452;
+      52:bf16_silu_lut_fp16=16'hb469;53:bf16_silu_lut_fp16=16'hb474;54:bf16_silu_lut_fp16=16'hb472;55:bf16_silu_lut_fp16=16'hb460;
+      56:bf16_silu_lut_fp16=16'hb43b;57:bf16_silu_lut_fp16=16'hb402;58:bf16_silu_lut_fp16=16'hb364;59:bf16_silu_lut_fp16=16'hb291;
+      60:bf16_silu_lut_fp16=16'hb186;61:bf16_silu_lut_fp16=16'hb041;62:bf16_silu_lut_fp16=16'had7a;63:bf16_silu_lut_fp16=16'ha7cf;
+      64:bf16_silu_lut_fp16=16'h2829;65:bf16_silu_lut_fp16=16'h2e9e;66:bf16_silu_lut_fp16=16'h31d4;67:bf16_silu_lut_fp16=16'h344b;
+      68:bf16_silu_lut_fp16=16'h35ca;69:bf16_silu_lut_fp16=16'h3764;70:bf16_silu_lut_fp16=16'h388c;71:bf16_silu_lut_fp16=16'h3971;
+      72:bf16_silu_lut_fp16=16'h3a61;73:bf16_silu_lut_fp16=16'h3b5a;74:bf16_silu_lut_fp16=16'h3c2e;75:bf16_silu_lut_fp16=16'h3cb1;
+      76:bf16_silu_lut_fp16=16'h3d38;77:bf16_silu_lut_fp16=16'h3dc1;78:bf16_silu_lut_fp16=16'h3e4b;79:bf16_silu_lut_fp16=16'h3ed7;
+      80:bf16_silu_lut_fp16=16'h3f64;81:bf16_silu_lut_fp16=16'h3ff1;82:bf16_silu_lut_fp16=16'h4040;83:bf16_silu_lut_fp16=16'h4087;
+      84:bf16_silu_lut_fp16=16'h40cd;85:bf16_silu_lut_fp16=16'h4114;86:bf16_silu_lut_fp16=16'h415b;87:bf16_silu_lut_fp16=16'h41a1;
+      88:bf16_silu_lut_fp16=16'h41e7;89:bf16_silu_lut_fp16=16'h422d;90:bf16_silu_lut_fp16=16'h4273;91:bf16_silu_lut_fp16=16'h42b8;
+      92:bf16_silu_lut_fp16=16'h42fd;93:bf16_silu_lut_fp16=16'h4342;94:bf16_silu_lut_fp16=16'h4386;95:bf16_silu_lut_fp16=16'h43ca;
+      96:bf16_silu_lut_fp16=16'h4407;97:bf16_silu_lut_fp16=16'h4429;98:bf16_silu_lut_fp16=16'h444a;99:bf16_silu_lut_fp16=16'h446c;
+      100:bf16_silu_lut_fp16=16'h448d;101:bf16_silu_lut_fp16=16'h44af;102:bf16_silu_lut_fp16=16'h44d0;103:bf16_silu_lut_fp16=16'h44f1;
+      104:bf16_silu_lut_fp16=16'h4512;105:bf16_silu_lut_fp16=16'h4533;106:bf16_silu_lut_fp16=16'h4554;107:bf16_silu_lut_fp16=16'h4575;
+      108:bf16_silu_lut_fp16=16'h4596;109:bf16_silu_lut_fp16=16'h45b7;110:bf16_silu_lut_fp16=16'h45d7;111:bf16_silu_lut_fp16=16'h45f8;
+      112:bf16_silu_lut_fp16=16'h4619;113:bf16_silu_lut_fp16=16'h4639;114:bf16_silu_lut_fp16=16'h465a;115:bf16_silu_lut_fp16=16'h467a;
+      116:bf16_silu_lut_fp16=16'h469b;117:bf16_silu_lut_fp16=16'h46bb;118:bf16_silu_lut_fp16=16'h46dc;119:bf16_silu_lut_fp16=16'h46fc;
+      120:bf16_silu_lut_fp16=16'h471d;121:bf16_silu_lut_fp16=16'h473d;122:bf16_silu_lut_fp16=16'h475e;123:bf16_silu_lut_fp16=16'h477e;
+      124:bf16_silu_lut_fp16=16'h479e;125:bf16_silu_lut_fp16=16'h47bf;126:bf16_silu_lut_fp16=16'h47df;127:bf16_silu_lut_fp16=16'h47ff;
+      default:bf16_silu_lut_fp16=16'h0000;
+    endcase
+  end
+endfunction

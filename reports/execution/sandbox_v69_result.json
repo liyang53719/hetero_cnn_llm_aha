@@ -1,0 +1,8 @@
+{
+  "schema_version":1,"status":"PASS","evidence_class":"sandbox_v69_E0_and_source_ready_not_RTL_E1_E4",
+  "attention_controller":{"status":"PASS","q128":{"tasks":240,"merge_rows":0},"q384":{"tasks":1872,"merge_rows":4608},"q1024":{"tasks":12672,"merge_rows":43008},"score_fifo_depth":2,"probability_fifo_depth":2,"score_DDR_bytes":0,"probability_DDR_bytes":0,"nominal_and_stressed_completion_order":"PASS","sha256":"d4bbaed6d02bbfb6bc0da5128ea3b81690e1dfb902ad14556539e0345aa8899c"},
+  "silu_lut":{"status":"PASS","rom_entries":128,"rom_bits":2048,"fraction_bits":12,"cases":200000,"max_abs":0.125,"mean_abs":0.00032607861556112767,"relative_l2":0.0008630074007928277,"rmse":0.0018112425047371117,"sha256":"a5bcd812be67cb9e789bcc217cebc57b6cde8220e6fd0457cba87aaeb8c58cc0"},
+  "source_contract":{"status":"PASS","evidence_class":"source_static_not_elaboration","checks":["module_endmodule","delimiter_balance","required_interface_tokens","no_multicycle_or_data_false_path_in_new_scripts"]},
+  "sandbox_execution":{"pytest":8,"compileall":"PASS","shell_syntax":"PASS","RTL_source_structure":"PASS"},
+  "remaining_local_gates":["SystemVerilog_elaboration","Verilator_E1","CLN22UL_1GHz_DC_PPA","full_Attention_numerical_E2","SiLU_producer_stall_selection","integrated_E3"]
+}

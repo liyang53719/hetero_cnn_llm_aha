@@ -1,58 +1,59 @@
-# Canonical architecture and execution plan v6.10 + sandbox v7.0 extension
+# Canonical architecture and execution plan v6.14
 
 ## Frozen architecture
 
 ```text
 Retained Gemmini INT8/CNN Matrix
-+ Revision8B-B clean-room BF16/FP32 Matrix
++ Revision8B-B 512-lane BF16/FP32 Matrix
 + fixed-function Attention/Norm/SFU
-+ legal Stanford AHA 4x4 ratio-2 sidecar
++ legal Stanford AHA 4×4 ratio-2 sidecar
 + Sequence Memory Complex / iDMA
 + shared 4 MiB SRAM and Command128/event fabric
 ```
 
-The Matrix remains frozen at 16x32/512 lanes, five FMA stages and five accumulator contexts. L5.1/L5.2 are component/H3 closures, not post-route signoff.
-
-## Active L5 path
-
-### L5.3 full Attention
-
-The Controller, trace bridge and Block32-weight component gates pass. The remaining gate is one integrated QK -> FP32 M/L/O -> PV simulation. The frozen vector pack is `reports/execution/attention_e2_vector_pack_result.json`:
+## Qwen2 accepted boundary
 
 ```text
-q128  all 1,536 rows
-q384  180 fixed boundary rows
-q1024 108 fixed rows across boundary heads
-q1024 merge rows 43,008
+L5.1 Block128                              PASS
+L5.2 Revision8B-B Matrix                   PASS component/H3
+L5.3 Attention numerical/stress            PASS
+L5.4 selected one-lane fused SiLU          PASS
+L5.5 balanced 8×8 component E1/E4          PASS
+L5.5 composed real-RTL E3                  PASS_REVIEW, 321.869395 token/s
+L5.6a 28-layer count/trace E3              PASS, 320.791599 token/s
+L5.6b official reference / LM-head sample  PASS
+L5.6c reduced four-layer cross RTL         PASS, 7,840 bit-exact
+L5.6d continuous 28-layer payload RTL      OPEN
 ```
 
-Score and probability DDR materialization remains forbidden.
+The reduced cross-layer replay uses reference hidden snapshots at layer boundaries. It is valuable E2/E4 evidence but does not close a continuous 28-layer payload replay.
 
-### L5.4 fused SiLU
+## L10 execution
 
-One- and two-lane standalone candidates pass E1/DC. Final selection requires measured Matrix-producer stall. Before selection, freeze the special-value policy in `reports/SILU_EDGE_POLICY_REVIEW_V7_0.md`; source changes require rerunning both candidates.
+L10 early PPA may run in parallel with L5.6d. The accepted pre-layout margins are extremely small; v7.8 finds six components below 1 ps and a minimum of 0.00864267 ps.
 
-### L5.5 join
+Order:
 
-Use the 11-case matrix in `reports/execution/e3_minimum_matrix.json`. Collect measured Attention/SiLU service, queue, bank, DDR and event counters. Below 315 token/s pre-route projection, reopen the budget rather than proceeding on a 300 token/s edge.
+1. hierarchy-preserving integrated synthesis with explicit leaf/frozen-parent ownership;
+2. reject any area roll-up that double counts a parent and its precompiled children;
+3. replace/integrate SRAM macros, capacity no greater than 4 MiB;
+4. measure bank/port conflicts and include macro timing arcs;
+5. post-route setup/hold, PVT/OCV and design-rule closure;
+6. workload-derived SAIF power.
 
-## Parallel sandbox/source-ready work
+## Full-payload numerical plan
 
-- FP16/Q8_0/Q6_K/Q3_K 16-value K-tail scheduler and source-ready RTL.
-- 5,000 adversarial state transactions with OOM, timeout, stale/duplicate acknowledgement and generation-wrap coverage.
-- Official trace schema and model-agnostic GGML adapter.
+The deterministic plan contains 168 checkpoints: six phases for each of 28 layers. Run all checkpoints, then seven continuous four-layer groups without hidden-state injection inside a group, then a continuous 28-layer replay or real-backend equivalent.
 
-## Remaining order
+## Remaining global order
 
 ```text
-L5.3 single-sim Attention E2 + L5.4 selected SiLU
-  -> L5.5 real Matrix/SFU/iDMA/DDR E3
-  -> L5.6 28-layer q1024 >=300 t/s
+L10 early PPA + L5.6d payload closure
 L4 CNN/AHA
-L6 pinned GGML parity and low-bit RTL
-L7 production Sequence Memory E1/E3
-L8 Qwen3.5/Qwen3.8 official traces/backends
+L6 low-bit parity/RTL/PPA
+L7 production Sequence Memory
+L8 official Qwen3.5 and Flash-Next backends
 L9 real llama.cpp/GGUF
 L10 post-route/PVT/SAIF
-L11 final Archspec/Pareto
+L11 final Archspec/Pareto/signoff
 ```

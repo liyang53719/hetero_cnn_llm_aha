@@ -10,12 +10,13 @@ retained Gemmini INT8/CNN Matrix
 
 The repository is main-only: no work branches or force-pushes without explicit user approval.
 
-Closed at component/H3 scope: L5.1 Block128, L5.2 Matrix, L5.3 Controller/Block32 weight and standalone L5.4 one/two-lane candidates. Current critical work is the single-simulation full Attention E2 and measured SiLU lane selection.
+Accepted on the Qwen2 path: Block128, Revision8B-B Matrix, full Attention E2/stress, selected one-lane SiLU, balanced 8×8 Attention SFU E1/E4, composed real-RTL E3 at 321.869395 token/s, and a 28-layer count/trace E3 at 320.791599 token/s. Official-reference checkpoints, 160 sampled LM-head columns and a reduced four-layer cross-RTL replay also pass.
 
-Sandbox v7.0 adds deterministic Attention E2 packs, SiLU edge/stall coverage, quant K-tail scheduling RTL, 5,000 adversarial state transactions and an 11-case E3 matrix.
+The continuous 28-layer payload numerical RTL gate remains open. L10 early PPA runs in parallel; component or hierarchical positive WNS is not post-route/PVT/OCV signoff.
 
 ```bash
 ./scripts/sandbox_validate.sh
+cat reports/execution/LOCAL_AGENT_HANDOFF_V78.md
 ```
 
-Verilator/VCS, CLN22UL, real iDMA/DDR, official model weights, llama.cpp/GGUF and post-route signoff remain local-agent gates.
+Local-only gates include hierarchy-preserving integrated synthesis, SRAM macro replacement, full-payload replay, post-route/PVT/SAIF, AHA/CNN, low-bit RTL, production Sequence Memory, official Qwen3.5/Flash-Next backends and real llama.cpp/GGUF.

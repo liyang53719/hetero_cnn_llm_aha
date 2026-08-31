@@ -1,13 +1,14 @@
 {
-  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH","closed":[{"id":"L5.2","status":"PASS_REV8B_B_E1_E4_COMPONENT_H3","risk":"L10 post-route/PVT margin"},{"id":"L5.3a","status":"CONTROLLER_E1_E4_PASS"},{"id":"L5.3_block32_weight","status":"E1_E4_PASS"},{"id":"L5.4_candidates","status":"ONE_TWO_LANE_E1_E4_PASS_SELECTION_OPEN"}],
+  "schema_version":6,"marker":"WAIT_LOCAL_AGENT_PUSH",
+  "closed":[{"id":"L5.2","status":"PASS_REV8B_B_E1_E4_COMPONENT_H3","risk":"L10 post-route/PVT margin"},{"id":"L5.3","status":"NUMERICAL_E2_AND_RANDOM_BACKPRESSURE_SERVICE_PASS"},{"id":"L5.4","status":"ONE_LANE_SELECTED_AND_INTEGRATED_RERUN_PASS"}],
   "items":[
-    {"id":"L5.3b","sandbox_status":"dense-vs-blocked Golden and deterministic 1536/180/108-row vector pack PASS","local_gate":"one integrated Revision8B-B QK -> Block32/Block128 FP32 M/L/O -> PV simulation","acceptance":["q128 full 1536 rows","q384 full or reviewed 180 rows","q1024 reviewed 108 rows","43008 merge rows","random backpressure","zero score/probability DDR","measured service curves"]},
-    {"id":"L5.4b","sandbox_status":"625 special vectors and 160 stall scenarios PASS; two edge policies open","local_gate":"freeze edge policy, measure Matrix producer stall, select one/two lane and rerun selected integrated path"},
-    {"id":"L5.5-L5.6","sandbox_status":"11-case minimum E3 matrix ready, not E3","local_gate":"real Matrix/SFU/iDMA/DDR E3 and 28-layer q1024 >=300 tps"},
+    {"id":"L5.5_8x8_SFU","sandbox_status":"balanced DSE/vector PASS; merge8 source-ready; predicted stress 322.944 t/s","local_gate":"8-lane tile and 8-row merge RTL E1/E4 plus measured stress projection","acceptance":["numerical mismatch 0","random backpressure pass","WNS>=0","unmapped/unresolved=0","stress>=315 hard","stress>=320 preferred","zero score/probability DDR"]},
+    {"id":"L5.5-L5.6","sandbox_status":"service importer and minimum matrix ready, not E3","local_gate":"real Matrix/SFU/iDMA/DDR E3 and 28-layer q1024 >=300 t/s"},
     {"id":"L4","sandbox_status":"legal AHA sidecar contract ready","local_gate":"Garnet map/PnR/Verilator/DC and CNN subset"},
-    {"id":"L6","sandbox_status":"exact layouts, unified frontend and K-tail sequencer source-ready","local_gate":"pinned llama.cpp parity, RTL E1 and PPA"},
-    {"id":"L7","sandbox_status":"translation/concurrency plus 5000 adversarial transactions PASS","local_gate":"page walker/TLB/MSHR/COW state RTL E1 and AXI/iDMA E3"},
-    {"id":"L8-L9","sandbox_status":"trace schema, policy lowering and GGML adapter E0 PASS","local_gate":"official traces, backend RTL, real GGML/GGUF and token generation"},
-    {"id":"L10-L11","sandbox_status":"Matrix component/H3 pass and candidate Archspec","local_gate":"SRAM macro, post-route STA, PVT/OCV, SAIF and final Pareto"}
+    {"id":"L6","sandbox_status":"exact layouts, integrated frontend and K-tail source-ready","local_gate":"pinned llama.cpp parity, RTL E1 and PPA"},
+    {"id":"L7","sandbox_status":"translation/concurrency/multislot COW dirty E0 pass","local_gate":"page walker/TLB/MSHR/COW state RTL E1 and AXI/iDMA E3"},
+    {"id":"L8.1","sandbox_status":"Qwen3.5 qwen3_5_moe profile/resource envelope pass","local_gate":"official trace, GDN/dense-attention/MoE backends and 40-layer E3"},
+    {"id":"L8.2","sandbox_status":"Flash-Next qwen4_exp profile/resource envelope and tiny trace pass","local_gate":"official trace, QSA/PLE/GR/GDN/MoE backends and 48-layer E3"},
+    {"id":"L9-L11","sandbox_status":"graph/descriptor/Archspec E0","local_gate":"real GGML/GGUF, SRAM macro, post-route STA, PVT/OCV, SAIF and final Pareto"}
   ]
 }

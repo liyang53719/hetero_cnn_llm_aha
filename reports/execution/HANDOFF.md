@@ -1,76 +1,47 @@
-# Local-agent handoff v7.9 — main only
+# Local-agent handoff v7.10 — main only
 
 ## Git gate
 
-Fetch/pull main, run `check_main_only_workflow.sh` and sandbox before work. Before push fetch/rebase/rerun. No branch, PR branch or force-push.
-
-## Accepted local boundary
-
-```text
-L5.2 Matrix H3                  PASS, WNS +0.00490451 ns
-L5.3 Controller                PASS, WNS +0.00191498 ns
-L5.3 Block32 weight            PASS, WNS +0.0000125766 ns
-L5.3 Probability hi+residual   PASS, WNS +0.000114202 ns, max error 0.00064075
-L5.4 one/two candidates        PASS, final selection OPEN
+```bash
+git fetch --prune origin
+git checkout main
+git pull --ff-only origin main
+./scripts/check_main_only_workflow.sh
+./scripts/sandbox_validate.sh
 ```
 
-All margins are small. Power is vectorless DC, not SAIF.
+No branch, PR branch or force-push.
 
-## Latest q128 single-process result
+## Accepted closure
 
-The full harness contains Controller, Revision8B-B QK/PV, Block32 weights,
-BF16 hi+residual and Block128 M/L/O. q128 PASS: 1,536 rows, 240 tasks,
-3,222,082 cycles, Matrix/SFU stall 161/81, score/probability DDR bytes zero,
-max error zero. The timeout was a testbench ready race; no production/generated
-RTL changed. Evidence: `l5_q128_single_sim_attempt_result.json`.
+```text
+L5.3 Attention numerical E2          PASS q128/q384/q1024
+L5.3 random-backpressure service     PASS, 354,816 transactions
+L5.3 score/probability DDR           0 / 0 bytes
+L5.4 fused SiLU                      PASS, one lane selected
+L5.4 producer stall                  0%, queue high-water 7
+```
 
-q384 sampled E2 PASS with identical RTL: all frozen180 rows are contained in
-2,304 compared rows, 756 payload tasks, 1,728 sampled merges, 14,756,016 cycles,
-zero error/DDR score/probability traffic. Full controller E1 remains 1,872 tasks
-and exactly 4,608 merges. Evidence: `l5_q384_sampled_e2_result.json`.
-
-q1024 reviewed E2 PASS in two <=600s shards using identical RTL: all frozen108
-rows are contained in1,440 compared rows, 1,062 payload tasks, 3,360 sampled
-merges, zero error/DDR score/probability traffic. Full controller E1 remains
-12,672 tasks/exactly43,008 merges. Evidence: `l5_q1024_reviewed_e2_result.json`.
-
-L5.3 stress PASS:8 deterministic seeds,118,272 tasks per QK/SFU/PV flow,
-354,816 total transactions; zero loss/duplicate/reorder/deadlock. Controller
-curves are frozen; Block128 output backpressure PASS; score/probability DDR=0.
-Evidence: `l5_attention_stress_service_result.json`.
-
-L5.4 PASS, selected one fused-SiLU lane: producer stall0/9,773 cycles,
-high-water7, real q384 Matrix gate+up rate0.04167 pair/cycle versus one-lane
-capacity1 (24x headroom). One-lane DC area10,551.632033, WNS+0.0000177622ns.
-Evidence: `l5_silu_lane_selection_result.json`.
+The 4-lane tile / 4-row merge SFU components pass E1/DC, but the stress projection is 314.448 t/s and therefore fails the 315-t/s review gate. Retain the component evidence; do not enter E3 with it.
 
 ## Unique next action
 
-Build real q1024 E3 service JSON from measured Attention, selected SiLU, DDR,
-queue/bank/event counters. Import it and apply the315 token/s stop rule.
+Implement balanced 8x8 Attention SFU:
 
-L5.5 optimistic precheck FAIL_REOPEN: measured E2 fit predicts262.214M q1024
-Attention cycles (257.221M SFU). Even at DDR efficiency1 and zero queue/bank/
-event penalty, projection is100.056 token/s. Do not claim E3/300tps.
+```text
+8 elastic tile math lanes
+8 parallel M/L/O merge rows
+same 16x32 tile store
+same FP32 operation order
+scores and probabilities remain on chip
+```
 
-Next: implement a16-row pipelined Block32 tile SFU candidate, keep scores on
-chip, close numerical/service/1GHz gates, then rerun real L5.5 E3.
+Sandbox preflight: nominal 323.764 t/s, stress 322.944 t/s, conservative area upper bound 684,314 library units. Use `reports/execution/l5_5_balanced_8x8_sfu_e0_result.json`. A source-ready `rtl/attention/fp32_mlo_merge8_candidate.sv` is provided.
 
-New candidates PASS E1/E4: tile16 softmax has16 nonzero cases, nominal357/
-stress372 cycles, WNS+0.00011009ns, area185940.027. merge4 nominal289/
-stress307 cycles, WNS+0.00000864267ns, area156217.152. No blackbox/unmapped.
+Local hard gates: numerical mismatch zero, deterministic random backpressure, WNS>=0, unmapped/unresolved=0, stress>=315. Preferred engineering gate is stress>=320. Then run real Matrix/SFU/iDMA/DDR E3.
 
-Nominal q1024 projection315.489tps; stress314.448tps. Stress is below315,
-so stop rule reopens L5.5. Next scale the same architecture to8 math lanes and
-8-row merge; require stress>=315 with explicit margin before E3.
+## Model-family boundary
 
-Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
-quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are
-E0/source-ready only. Keep Qwen3.5 `qwen3_5_moe` distinct from Qwen3.8
-Flash-Next `qwen4_exp` (QSA/PLE/four-branch residual).
+Qwen3.5-35B-A3B is `qwen3_5_moe`: 30 GDN + 10 dense GQA, standard residual, 256/top-8, 60 MiB GDN state and 5 GiB BF16 KV at 262k context.
 
-Then random backpressure, zero score/probability DDR and service curves.
-Measure SiLU producer stall and select one lane only at <=2%; otherwise two.
-L5.5 waits; floor315 token/s. CPU8-23, 24/30G, 600s/task.
-
-Security: owner must review the ed06f4cf GitHub alert before dismissing; current audit says likely descriptive-prefix false positive.
+Qwen3.8-Flash-Next is `qwen4_exp`: 36 GDN + 12 QSA, four-branch residual, PLE, 512/top-10, 108 MiB GDN state, 6 GiB QSA KV and 192 MiB compressed index. Do not infer ordinary Qwen3.8 support from this profile.

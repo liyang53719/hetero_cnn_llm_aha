@@ -1,6 +1,25 @@
 {
   "schema_version": 1,
-  "status": "GENERATE_WITH_scripts_run_sandbox_v78_py",
-  "description": "The canonical 168-checkpoint payload-closure plan is generated deterministically by src/heteronpu/qwen2_payload_closure.py.",
-  "local_gate": "Run scripts/run_sandbox_v78.py and consume qwen2_payload_closure from reports/execution/sandbox_v78_result.json."
+  "status": "PASS_FULL_PAYLOAD_CLOSURE_PLAN",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "sequence": 1024,
+  "layers": 28,
+  "phases_per_layer": 6,
+  "checkpoint_count": 168,
+  "sample_values": 10752,
+  "continuity_groups": [0,1,2,3,4,5,6],
+  "phases": [
+    {"phase": "input_norm", "tensor": "norm_out", "samples_per_layer": 64},
+    {"phase": "qkv_projection", "tensor": "qkv_out", "samples_per_layer": 64},
+    {"phase": "attention", "tensor": "attention_out", "samples_per_layer": 64},
+    {"phase": "post_attention_norm", "tensor": "post_norm_out", "samples_per_layer": 64},
+    {"phase": "mlp_gate_up", "tensor": "gate_up_out", "samples_per_layer": 64},
+    {"phase": "mlp_down", "tensor": "block_out", "samples_per_layer": 64}
+  ],
+  "execution_phases": [
+    {"id": "P1_all_layer_checkpoints", "acceptance": ["all 28 layers and six phases present", "shape/dtype/stride frozen", "BF16 bit-exact where required", "FP32 per-operator tolerance pass"]},
+    {"id": "P2_seven_contiguous_four_layer_groups", "acceptance": ["no hidden-state injection inside each group", "random backpressure", "state/counter closure", "group output matches exact checkpoint"]},
+    {"id": "P3_continuous_28_layer_or_real_backend", "acceptance": ["no intermediate reference-state injection", "all layer boundaries continuous", "final RMSNorm and LM-head close", "immutable revision-pinned trace hash"]}
+  ],
+  "non_claim": "This plan is deterministic test collateral, not full-payload numerical evidence."
 }

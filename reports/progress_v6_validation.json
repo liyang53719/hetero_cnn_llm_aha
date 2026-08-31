@@ -3,9 +3,9 @@
   "L5_3_full_E2": "PASS",
   "L5_4_selection": "PASS_ONE_LANE",
   "L5_5": "PASS_E3_321_869TPS",
-  "L5_6": "PASS_CYCLE_E3_321_086TPS_NUMERICAL_OPEN",
+  "L5_6": "PASS_CYCLE_E3_AND_LM_HEAD_SAMPLE_FOUR_LAYER_RTL_OPEN",
   "branch_policy": "MAIN_ONLY",
-  "next": "L5.6_NUMERICAL_SUBSET",
+  "next": "L5.6_REDUCED_FOUR_LAYER_RTL_REPLAY",
   "schema_version": 6,
-  "status": "PASS_V6_12_L5_6_CYCLE_E3"
+  "status": "PASS_V6_12_L5_6_REFERENCE_LM_HEAD"
 }

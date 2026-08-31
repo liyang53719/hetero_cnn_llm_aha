@@ -1,4 +1,4 @@
-# Local-agent handoff v7.13 — main only
+# Local-agent handoff v7.14 — main only
 
 ## Gate
 
@@ -43,8 +43,14 @@ The same RTL count/trace controller emitted 28 blocks, final RMSNorm and one
 last-token LM head: 3,189,178,948 cycles, 3,087,138,816 read bytes and
 29,967,872 write bytes. SRAM=4 MiB and Revision8B-B H3 WNS=+0.00490451 ns.
 
-Next run the exact-revision Qwen2 four-layer executable numerical subset and
-official-weight last-token LM-head payload. Do not close L5.6 from trace alone.
+Exact-revision Qwen2 weights are locally locked at SHA256 `302e3277...e9057`.
+The q1024 four-layer PyTorch reference passes; last-token logits hash is
+`20247ec3...e877822`. Revision8B-B replays 160 official LM-head columns:
+FP32 accumulator -> BF16 RNE is 160/160 bit-exact, max error 0, argmax 54387.
+
+Next freeze and replay a reduced official-weight four-layer node set through
+the project operator/RTL chain. L5.6 remains open; reference plus sampled
+LM-head RTL is not a full cross-layer RTL numerical closure.
 
 ## Execution
 

@@ -1,0 +1,9 @@
+{
+  "schema_version":1,"generated_at_utc":"2026-08-31T05:10:58Z","stage":"L5.3_BLOCKED_ATTENTION_NUMERICAL_E2","status":"PASS_Q384_SAMPLED_E2","evidence_class":"E2_same_RTL_sampled_payload_plus_full_controller_E1",
+  "command":"MODE=sampled384 taskset -c 8-23 ./scripts/run_l5_q128_attention_integrated_e2.sh","resource_contract":{"cpu_affinity":"8-23","threads":4,"memory_high":"24G","memory_max":"30G","timeout_seconds":600},
+  "rtl_configuration":"identical_to_q128","sequence_tokens":384,"frozen_reviewed_rows":180,"actual_compared_rows":2304,"sampled_query_tiles":[0,1,2,3,4,7,8,11,15,16,19,23],"payload_tasks":756,"sampled_merge_rows":1728,"controller_tasks":1872,"controller_merge_rows":4608,
+  "rtl_cycles":14756016,"walltime_seconds":486.040,"max_error":0.0,"score_ddr_bytes":0,"probability_ddr_bytes":0,"attention_fnv64":"333c8e9d1f6679a7","protocol_errors":0,
+  "vector_manifest_sha256":"cb7941b147c4f3e9a9751a50f0de1588b9a3abb9f2c794f35f4d1a709185c9ac","log_sha256":"73fc94ddcf3052c55b3804163fbc1fc9d63c4f15ec43277ae66253a212db99fd",
+  "source_policy":{"generated_rtl_modified":false,"production_rtl_modified":false,"same_executable_harness":true},
+  "next_action":"Run q1024 reviewed 108 rows with the same RTL and pair it with the full controller count of 12672 tasks and exactly 43008 merge rows."
+}

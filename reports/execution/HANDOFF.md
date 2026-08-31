@@ -1,4 +1,4 @@
-# Local-agent handoff v7.2 — main only
+# Local-agent handoff v7.3 — main only
 
 ## Git gate
 
@@ -24,10 +24,15 @@ BF16 hi+residual and Block128 M/L/O. q128 PASS: 1,536 rows, 240 tasks,
 max error zero. The timeout was a testbench ready race; no production/generated
 RTL changed. Evidence: `l5_q128_single_sim_attempt_result.json`.
 
+q384 sampled E2 PASS with identical RTL: all frozen180 rows are contained in
+2,304 compared rows, 756 payload tasks, 1,728 sampled merges, 14,756,016 cycles,
+zero error/DDR score/probability traffic. Full controller E1 remains 1,872 tasks
+and exactly 4,608 merges. Evidence: `l5_q384_sampled_e2_result.json`.
+
 ## Unique next action
 
-Extend the same RTL harness to q384, compare the frozen 180 reviewed rows and
-require exactly 4,608 Block128 merge rows. Then q1024 reviewed rows/43,008 merges.
+Run q1024 frozen108 reviewed rows with the same RTL and pair them with the full
+controller count of 12,672 tasks/exactly43,008 merges.
 
 Then random backpressure, zero score/probability DDR and service curves.
 Measure SiLU producer stall and select one lane only at <=2%; otherwise two.

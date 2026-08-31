@@ -1,4 +1,4 @@
-# Local-agent handoff v7.4 — main only
+# Local-agent handoff v7.5 — main only
 
 ## Git gate
 
@@ -34,10 +34,15 @@ rows are contained in1,440 compared rows, 1,062 payload tasks, 3,360 sampled
 merges, zero error/DDR score/probability traffic. Full controller E1 remains
 12,672 tasks/exactly43,008 merges. Evidence: `l5_q1024_reviewed_e2_result.json`.
 
+L5.3 stress PASS:8 deterministic seeds,118,272 tasks per QK/SFU/PV flow,
+354,816 total transactions; zero loss/duplicate/reorder/deadlock. Controller
+curves are frozen; Block128 output backpressure PASS; score/probability DDR=0.
+Evidence: `l5_attention_stress_service_result.json`.
+
 ## Unique next action
 
-Run deterministic random Matrix/SFU/output backpressure; prove no loss,
-duplicate, reorder or deadlock. Freeze q128/q384/q1024 service curves.
+Measure real Matrix-producer stalls into fused SiLU. Select one lane only at
+<=2%; otherwise two lanes. Rerun the selected integrated path, then L5.5.
 
 Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
 quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are

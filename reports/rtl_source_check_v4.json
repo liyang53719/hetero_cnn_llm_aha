@@ -1,7 +1,7 @@
 {
   "errors": [],
   "evidence_class": "source_structural_not_compiler",
-  "module_count": 129,
+  "module_count": 130,
   "modules": [
     "shared_l2_client_arbiter",
     "shared_l2_macro_descriptor_fabric",
@@ -90,6 +90,7 @@
     "l5_q128_count_controller",
     "l5_q384_count_controller",
     "l5_prefill_count_controller",
+    "l5_qwen2_full_model_trace_controller",
     "l5_q128_trace_controller",
     "l5_target_trace_controller",
     "l5_prefill_trace_controller",

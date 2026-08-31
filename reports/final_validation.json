@@ -1,7 +1,7 @@
 {
   "schema_version":6,"status":"PASS_V6_10_MAIN_ONLY_TRACE_BRIDGE_BLOCK32_WEIGHT_SINGLE_SIM_OPEN",
   "branch_audit":{"remote_branches":["main"],"second_page_empty":true,"l5_2_commit_in_main_ancestry":true,"merge_required":false,"branch_deletion_required":false},
-  "accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3","L5.3_controller":"PASS_E1_E4","L5.3_trace_bridge":"PASS_NOT_SINGLE_SIM","L5.3_block32_weight":"PASS_E1_E4","L5.4_one_lane":"PASS_E1_E4","L5.4_two_lane":"PASS_E1_E4"},
+  "accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3","L5.3_controller":"PASS_E1_E4","L5.3_trace_bridge":"PASS_NOT_SINGLE_SIM","L5.3_block32_weight":"PASS_E1_E4","L5.3_probability_hilo":"PASS_E1_E4","L5.4_one_lane":"PASS_E1_E4","L5.4_two_lane":"PASS_E1_E4"},
   "local_result":"reports/execution/l5_3_l5_4_local_result.json",
   "sandbox_v70":{"status":"PASS","python_tests":7,"attention_q128_rows":1536,"attention_q384_rows":180,"attention_q1024_rows":108,"attention_q1024_merges":43008,"attention_max_abs":1.0728836059570312e-06,"silu_special_vectors":625,"silu_stall_scenarios":160,"quant_tail_cases":8192,"state_transactions":5000,"e3_cases":11},
   "non_claims":["no single-sim full Attention numerical E2","no measured SiLU producer-stall selection","special-value SiLU policy remains open","vectorless DC power is not SAIF","no integrated E3","no post-route signoff"],

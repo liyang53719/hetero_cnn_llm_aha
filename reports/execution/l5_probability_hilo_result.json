@@ -1,0 +1,18 @@
+{
+  "bf16_hi_plus_residual": {
+    "max_abs": 0.0006407499313354492,
+    "mean_abs": 5.539233985003486e-05,
+    "relative_l2": 0.00011566030111308266
+  },
+  "decision": "USE_BF16_HI_PLUS_RESIDUAL_64_PV_STEPS",
+  "hilo_pass": true,
+  "schema_version": 1,
+  "single_bf16": {
+    "max_abs": 0.0054808855056762695,
+    "mean_abs": 0.0003052373153799781,
+    "relative_l2": 0.0006664832414526892
+  },
+  "single_bf16_pass": false,
+  "status": "PASS",
+  "threshold": 0.002
+}

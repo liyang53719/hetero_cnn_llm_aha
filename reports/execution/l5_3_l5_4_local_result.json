@@ -18,14 +18,12 @@
       "unmapped": 0,
       "wns_ns": 0.00191498
     },
-    "full_numeric_status": "PASS_Q128_Q384_Q1024",
     "q1024_merge_rows": 43008,
     "q1024_tasks": 12672,
     "q128_tasks": 240,
     "q384_tasks": 1872,
     "status": "PASS",
-    "stress_service_evidence": "reports/execution/l5_attention_stress_service_result.json",
-    "trace_bridge_status": "PASS_TRACE_COUPLED_BRIDGE"
+    "stress_service_evidence": "reports/execution/l5_attention_stress_service_result.json"
   },
   "L5.4": {
     "one_lane": {
@@ -37,8 +35,10 @@
       "unmapped": 0,
       "wns_ns": 1.77622e-05
     },
-    "selection": "WAIT_MEASURED_MATRIX_PRODUCER_STALL",
-    "selection_rule": "one_lane_if_stall_le_2_percent_else_two_lane",
+    "producer_stall_fraction": 0.0,
+    "selection": "ONE_LANE",
+    "selection_evidence": "reports/execution/l5_silu_lane_selection_result.json",
+    "status": "PASS",
     "two_lane": {
       "cell_area": 19747.364063,
       "dynamic_power_mw_estimate": 5.5526,
@@ -60,109 +60,14 @@
     "silu_1lane_e1": true,
     "silu_2lane_dc": true,
     "silu_2lane_e1": true,
-    "silu_lane_selection": false
+    "silu_lane_selection": true
   },
   "evidence_hashes": {
     "block32_weight_e1": "f12fa282ef1611e56ed9463ae8b7f708c1ca992e2dc3d4265d477f08b7e84d8f",
     "controller_e1": "b7f50e832ff9f908185a2fbfbd22844c56695f243c8211f6d6b533dda6a3967e",
-    "silu1_e1": "0e366ec7f02ccdd49b54da718fe15d1d5e74ea636db6e3beb7a042cddea1bd56",
-    "silu2_e1": "83190139de50aef3b8e7b383852dfcbefd4fe765e7e85b86f395fb1bcb6e8ddd",
-    "trace_bridge": "1dd9bce995f56d99f286c3bf5759120ef278e7883b4e3330325d16d625f9c367"
-  },
-  "q1024_reviewed_e2": {
-    "compared_rows": 1440,
-    "controller_merge_rows": 43008,
-    "evidence": "reports/execution/l5_q1024_reviewed_e2_result.json",
-    "rtl_cycles": 21331806,
-    "status": "PASS_Q1024_REVIEWED_E2"
-  },
-  "q128_single_sim": {
-    "evidence": "reports/execution/l5_q128_single_sim_attempt_result.json",
-    "rows": 1536,
-    "rtl_cycles": 3222082,
-    "status": "PASS_Q128_SINGLE_PROCESS_E2",
-    "tasks": 240
-  },
-  "q384_sampled_e2": {
-    "compared_rows": 2304,
-    "controller_merge_rows": 4608,
-    "evidence": "reports/execution/l5_q384_sampled_e2_result.json",
-    "rtl_cycles": 14756016,
-    "status": "PASS_Q384_SAMPLED_E2"
+    "silu1_e1": "c5de1ede83a61681af235c4c97e8f3b571e1bbac805aee407f1dbd3b04e621c3",
+    "silu2_e1": "838288169eafdfc88069725f1d6ab64f9124698443b8895e1352d32c1853a267"
   },
   "schema_version": 1,
-  "status": "L5_3_PASS_L5_4_SELECTION_OPEN",
-  "stress_service": {
-    "controller_stress": {
-      "curves": {
-        "1024": {
-          "max_cycles": 216808,
-          "mean_cycles": 215731.125,
-          "min_cycles": 215063,
-          "samples": 8,
-          "spread_fraction": 0.008088772540355501
-        },
-        "128": {
-          "max_cycles": 4165,
-          "mean_cycles": 4065,
-          "min_cycles": 3993,
-          "samples": 8,
-          "spread_fraction": 0.042312423124231245
-        },
-        "384": {
-          "max_cycles": 32058,
-          "mean_cycles": 31935.625,
-          "min_cycles": 31721,
-          "samples": 8,
-          "spread_fraction": 0.010552478619097012
-        }
-      },
-      "deadlock": 0,
-      "duplicate": 0,
-      "log_sha256": "b7f50e832ff9f908185a2fbfbd22844c56695f243c8211f6d6b533dda6a3967e",
-      "loss": 0,
-      "reorder": 0,
-      "seeds": 8,
-      "tasks_per_flow": 118272,
-      "transactions_qk_sfu_pv": 354816
-    },
-    "evidence_class": "controller_random_backpressure_E1_plus_payload_E2_service_curves",
-    "non_claims": [
-      "q384/q1024 payload curves are sampled, not full-sequence integrated E3",
-      "controller abstract service cycles are not physical Matrix/SFU latency",
-      "no SiLU producer-stall lane selection from this report"
-    ],
-    "output_backpressure": {
-      "evidence": "reports/execution/l5_block128_local_e1_e4_result.json",
-      "sha256": "00d9a1474fe32d349a088b495789237470402e7bc04f2c618de06daa28ef7645",
-      "status": "PASS_COMPONENT_E1"
-    },
-    "payload_service_curves": {
-      "1024": {
-        "coverage": "reviewed_two_shards",
-        "cycles_per_payload_task": 20086.446327683614,
-        "rows": 1440,
-        "rtl_cycles": 21331806,
-        "tasks": 1062
-      },
-      "128": {
-        "coverage": "full",
-        "cycles_per_payload_task": 13425.341666666667,
-        "rows": 1536,
-        "rtl_cycles": 3222082,
-        "tasks": 240
-      },
-      "384": {
-        "coverage": "sampled",
-        "cycles_per_payload_task": 19518.539682539682,
-        "rows": 2304,
-        "rtl_cycles": 14756016,
-        "tasks": 756
-      }
-    },
-    "probability_ddr_bytes": 0,
-    "schema_version": 1,
-    "score_ddr_bytes": 0,
-    "status": "PASS"
-  }
+  "status": "L5_3_L5_4_PASS_L5_5_OPEN"
 }

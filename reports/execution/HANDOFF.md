@@ -1,4 +1,4 @@
-# Local-agent handoff v7.5 — main only
+# Local-agent handoff v7.6 — main only
 
 ## Git gate
 
@@ -39,10 +39,15 @@ L5.3 stress PASS:8 deterministic seeds,118,272 tasks per QK/SFU/PV flow,
 curves are frozen; Block128 output backpressure PASS; score/probability DDR=0.
 Evidence: `l5_attention_stress_service_result.json`.
 
+L5.4 PASS, selected one fused-SiLU lane: producer stall0/9,773 cycles,
+high-water7, real q384 Matrix gate+up rate0.04167 pair/cycle versus one-lane
+capacity1 (24x headroom). One-lane DC area10,551.632033, WNS+0.0000177622ns.
+Evidence: `l5_silu_lane_selection_result.json`.
+
 ## Unique next action
 
-Measure real Matrix-producer stalls into fused SiLU. Select one lane only at
-<=2%; otherwise two lanes. Rerun the selected integrated path, then L5.5.
+Build real q1024 E3 service JSON from measured Attention, selected SiLU, DDR,
+queue/bank/event counters. Import it and apply the315 token/s stop rule.
 
 Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
 quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are

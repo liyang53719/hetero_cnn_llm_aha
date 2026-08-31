@@ -1,0 +1,78 @@
+{
+  "candidates": {
+    "one": {
+      "consumer_backpressure_cycles": 1497,
+      "dc": {
+        "cell_area": 10551.632033,
+        "dynamic_power_mw_estimate": 3.0885,
+        "evidence_class": "DC_WLM_vectorless_power",
+        "leakage_power_mw_estimate": 0.011752,
+        "status_sha256": "b9d4a1a5268738d4804924457a62d479c5d6cd2913515e32abadc428ffc471da",
+        "unmapped": 0,
+        "wns_ns": 1.77622e-05
+      },
+      "log_sha256": "c5de1ede83a61681af235c4c97e8f3b571e1bbac805aee407f1dbd3b04e621c3",
+      "pairs_accepted": 4096,
+      "pairs_offered": 4096,
+      "producer_stall_cycles": 0,
+      "producer_stall_fraction": 0.0,
+      "producer_stalled_pairs": 0,
+      "queue_high_water": 7,
+      "total_cycles": 9773
+    },
+    "two": {
+      "consumer_backpressure_cycles": 1497,
+      "dc": {
+        "cell_area": 19747.364063,
+        "dynamic_power_mw_estimate": 5.5526,
+        "evidence_class": "DC_WLM_vectorless_power",
+        "leakage_power_mw_estimate": 0.021869800000000002,
+        "status_sha256": "1e83b0714fffb0d295b1e4164d71d07afaa85141ba1c957707dc85809c7c9af5",
+        "unmapped": 0,
+        "wns_ns": 3.83258e-05
+      },
+      "log_sha256": "838288169eafdfc88069725f1d6ab64f9124698443b8895e1352d32c1853a267",
+      "pairs_accepted": 8192,
+      "pairs_offered": 8192,
+      "producer_stall_cycles": 0,
+      "producer_stall_fraction": 0.0,
+      "producer_stalled_pairs": 0,
+      "queue_high_water": 7,
+      "total_cycles": 9773
+    }
+  },
+  "evidence_class": "measured_RTL_producer_contract_E1_plus_real_Matrix_gate_up_receipts_and_DC_E4",
+  "matrix_producer": {
+    "combined_projection_cycles": 3440640,
+    "gate_projection_cycles": 1720320,
+    "measured_mean_pairs_per_cycle": 0.041666666666666664,
+    "one_lane_capacity_pairs_per_cycle": 1,
+    "one_lane_rate_headroom": 24.0,
+    "pairs_per_batch": 143360,
+    "receipts": [
+      "work/results/l5_q384_gate_up/batch0/mode0.log",
+      "work/results/l5_q384_gate_up/batch0/mode1.log"
+    ],
+    "tokens_per_batch": 16,
+    "up_projection_cycles": 1720320,
+    "workload": "q384"
+  },
+  "non_claims": [
+    "producer contract E1 is not full-model integrated E3",
+    "DC power is vectorless, not SAIF"
+  ],
+  "required_counters_present": [
+    "pairs_offered",
+    "pairs_accepted",
+    "producer_stall_cycles",
+    "producer_stalled_pairs",
+    "queue_high_water",
+    "consumer_backpressure_cycles"
+  ],
+  "schema_version": 1,
+  "selected": "one",
+  "selected_integrated_rerun": "PASS_4096_BEATS_NUMERICAL_AND_BACKPRESSURE",
+  "selected_lanes": 1,
+  "selection_rule": "one_lane_if_producer_stall_fraction_le_0.02_else_two_lane",
+  "status": "PASS"
+}

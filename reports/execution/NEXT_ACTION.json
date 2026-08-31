@@ -1,9 +1,32 @@
 {
-  "schema_version":6,"stage":"L5","subgate":"L5.3_BLOCKED_ATTENTION_E1_E2","state":"L5_2_CLOSED_L5_3_CONTROLLER_AND_L5_4_DATAPATH_SOURCE_READY_WAIT_LOCAL_E1_E4","decision":"KEEP_L5_3_PRIMARY_L5_4_PARALLEL","completed":{"L5.2":"PASS_REV8B_B_E1_E4_COMPONENT_H3","H3_WNS_ns":0.00490451},
-  "unique_next_action":"Elaborate and verify the controller, then integrate real Revision8B-B QK/PV and Block128 SFU datapaths.",
-  "L5.3_first_commands":["./scripts/sandbox_validate.sh","./scripts/run_l5_blocked_attention_controller_e1.sh","./scripts/run_l5_blocked_attention_controller_dc.sh"],
-  "L5.3_full_gate":{"source":["rtl/attention/blocked_attention_stream_controller.sv","tb/tb_blocked_attention_stream_controller.sv"],"frozen":{"query_tile":16,"kv_tile":32,"block_tokens":128,"GQA_ratio":6,"score_fifo_depth":2,"probability_fifo_depth":2,"MLO":"FP32","score_DDR_bytes":0,"probability_DDR_bytes":0},"acceptance":["q128 full numerical E2","q384 full or approved sampled E2","q1024 reviewed rows and exactly 43008 merges","random Matrix/SFU backpressure","no loss duplicate reorder deadlock","measured q128/q384/q1024 service curves"]},
-  "L5.4_parallel_commands":["./scripts/run_l5_silu_lut_e1.sh","./scripts/run_l5_silu_lut_dc.sh"],"L5.4_selection":"Select one lane when measured Matrix-producer stall is <=2%; otherwise select two lanes.",
-  "L5.5_review":{"review_floor_tps":315,"stop_rule":"Below 315 tps pre-route projection, reopen architecture/performance budget."},
-  "forbidden":["claim_L5_complete","bypass_L5.5_join","reopen_Revision8B_B_without_review","claim_controller_protocol_as_full_Attention_E1_E2","claim_source_ready_SiLU_as_E1_E4","claim_post_route_signoff"]
+  "schema_version": 6,
+  "stage": "L5",
+  "subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
+  "state": "MAIN_ONLY_ENFORCED_L5_2_CLOSED_L5_3_L5_4_WAIT_LOCAL_E1_E4",
+  "decision": "KEEP_L5_3_PRIMARY_L5_4_PARALLEL_MAIN_ONLY",
+  "git_workflow": {
+    "policy": "config/git_workflow_policy.json",
+    "first_commands": [
+      "git fetch --prune origin",
+      "git checkout main",
+      "git pull --ff-only origin main",
+      "./scripts/check_main_only_workflow.sh"
+    ],
+    "forbidden": ["new branch","PR work branch","force push"]
+  },
+  "completed": {"L5.2":"PASS_REV8B_B_E1_E4_COMPONENT_H3","H3_WNS_ns":0.00490451},
+  "unique_next_action": "Elaborate and verify the blocked-Attention controller, then integrate real Revision8B-B QK/PV and Block128 SFU datapaths.",
+  "L5.3_first_commands": [
+    "./scripts/sandbox_validate.sh",
+    "./scripts/run_l5_blocked_attention_controller_e1.sh",
+    "./scripts/run_l5_blocked_attention_controller_dc.sh"
+  ],
+  "L5.3_full_gate": {
+    "frozen": {"query_tile":16,"kv_tile":32,"block_tokens":128,"GQA_ratio":6,"score_fifo_depth":2,"probability_fifo_depth":2,"MLO":"FP32","score_DDR_bytes":0,"probability_DDR_bytes":0},
+    "acceptance": ["q128 full numerical E2","q384 full or approved sampled E2","q1024 reviewed rows and exactly 43008 merges","random Matrix/SFU backpressure","no loss duplicate reorder deadlock","measured q128/q384/q1024 service curves"]
+  },
+  "L5.4_parallel_commands": ["./scripts/run_l5_silu_lut_e1.sh","./scripts/run_l5_silu_lut_dc.sh"],
+  "L5.4_selection": "Select one lane when measured Matrix-producer stall is <=2%; otherwise select two lanes.",
+  "L5.5_review": {"review_floor_tps":315,"stop_rule":"Below 315 tps pre-route projection, reopen architecture/performance budget."},
+  "forbidden_claims": ["L5 complete before L5.3/L5.4/L5.5/L5.6","controller protocol as full Attention E1/E2","source-ready SiLU as E1/E4","post-route signoff"]
 }

@@ -1,7 +1,8 @@
 schema_version: 6
+workflow_policy: MAIN_ONLY_FAST_FORWARD_NO_FORCE_PUSH
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_9_AUDIT}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V6_10_MAIN_ONLY_AUDIT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}

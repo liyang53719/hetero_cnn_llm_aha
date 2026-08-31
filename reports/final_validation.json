@@ -1,6 +1,9 @@
 {
-  "schema_version":6,"status":"PASS_SANDBOX_V6_9_L5_3_CONTROLLER_L5_4_DATAPATH_SOURCE_READY","audited_user_commit":"eba24625350d14fe3f9d760929736dcf5872fabd","observed_head_before_v69":"c13b7469096f0100b8519bdc5d9a7288e38e7e15","accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3_ULTRA_LOW_MARGIN"},
-  "sandbox_execution":{"python_tests":"8_passed","compileall":"PASS","attention_controller_protocol":"PASS","attention_q1024_tasks":12672,"attention_q1024_merge_rows":43008,"silu_random_cases":200000,"silu_relative_l2":0.0008630074007928277,"silu_mean_abs":0.00032607861556112767,"RTL_source_structure":"PASS","shell_syntax":"PASS"},
-  "non_claims":["no SystemVerilog elaboration in sandbox","no full Attention numerical RTL E2","no SiLU Verilator E1 or DC","no integrated E3","no post-route signoff"],
-  "remaining_local_gates":["L5.3_controller_E1_DC","L5.3_full_stream_E1_E2","L5.4_one_two_lane_E1_E4","L5.5_integrated_E3","L5.6_full_model","L4_CNN_AHA","L6_quant_parity_RTL","L7_state_RTL_E3","L8_official_backends","L9_real_llama_cpp","L10_post_route"]
+  "schema_version": 6,
+  "status": "PASS_SANDBOX_V6_10_MAIN_ONLY_CONSOLIDATED",
+  "branch_audit": {"remote_branches":["main"],"second_page_empty":true,"local_agent_commit_in_main_ancestry":true,"merge_required":false,"branch_deletion_required":false},
+  "accepted_local_evidence": {"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3_ULTRA_LOW_MARGIN"},
+  "sandbox_execution": {"previous_v69_python_tests":"8_passed","compileall":"PASS","attention_controller_protocol":"PASS","attention_q1024_tasks":12672,"attention_q1024_merge_rows":43008,"silu_random_cases":200000,"silu_relative_l2":0.0008630074007928277,"RTL_source_structure":"PASS","shell_syntax":"PASS","main_only_policy_source":"PASS"},
+  "non_claims": ["no new local L5.3/L5.4 result","no SystemVerilog elaboration in sandbox","no full Attention numerical RTL E2","no SiLU Verilator E1 or DC","no integrated E3","no post-route signoff"],
+  "remaining_local_gates": ["L5.3_controller_E1_DC","L5.3_full_stream_E1_E2","L5.4_one_two_lane_E1_E4","L5.5_integrated_E3","L5.6_full_model","L4_CNN_AHA","L6_quant_parity_RTL","L7_state_RTL_E3","L8_official_backends","L9_real_llama_cpp","L10_post_route"]
 }

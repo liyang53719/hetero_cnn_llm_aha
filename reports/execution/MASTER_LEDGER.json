@@ -1,8 +1,17 @@
 {
-  "schema_version":6,"current_stage":"L5","current_subgate":"L5.3_BLOCKED_ATTENTION_E1_E2","current_state":"L5_2_CLOSED_L5_3_CONTROLLER_AND_L5_4_DATAPATH_SOURCE_READY_WAIT_LOCAL_E1_E4",
-  "accepted_local_evidence":{"L5.1":{"status":"PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN","block128_wns_ns":0.0000136495},"L5.2":{"status":"PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN","stages":5,"contexts":5,"lanes":512,"h3_wns_ns":0.00490451,"h3_drc":"0_0_0_0","postmap_E1":"PASS"}},
-  "remote_audit":{"user_reported_commit":"eba24625350d14fe3f9d760929736dcf5872fabd","observed_head_before_v69":"c13b7469096f0100b8519bdc5d9a7288e38e7e15","decision":"EBA_ACCEPTED_AS_L5_2_EVIDENCE_CURRENT_MAIN_HAS_LATER_SANDBOX_COMMITS"},
-  "sandbox_closed":{"L5.3_controller_protocol_E0":{"status":"PASS","q128_tasks":240,"q384_tasks":1872,"q1024_tasks":12672,"q1024_merge_rows":43008,"FIFO":"2_2","DDR_score_probability":0},"L5.3_controller_RTL_source":"READY_WAIT_ELABORATION_E1_DC","L5.4_bit_oriented_LUT_E0":{"status":"PASS","cases":200000,"mean_abs":0.00032607861556112767,"relative_l2":0.0008630074007928277,"max_abs":0.125},"L5.4_one_two_lane_RTL_source":"READY_WAIT_ELABORATION_E1_DC_PPA","L5.5_sensitivity_E0":"PASS_NOT_E3","L6_quant_frontend_E0":"PASS_SOURCE_READY","L7_state_transaction_E0":"PASS_SOURCE_READY","L8_trace_schema_E0":"PASS","L9_GGML_adapter_E0":"PASS"},
-  "join_gate":{"closed":["L5.2"],"open":["L5.3","L5.4"],"next":"L5.5"},"source_ready_waiting_local":["L5.3_controller_and_full_stream","L5.4_fused_silu_1_2_lane","L6_quant_frontend","L7_state_transaction_RTL","L9_real_llama_cpp"],
-  "forbidden_claims":["L5_complete_before_L5.3_L5.4_L5.5_L5.6","controller_protocol_E1_as_numerical_Attention_E2","source_static_as_elaboration","post_route_signoff_from_component_H3"]
+  "schema_version": 6,
+  "current_stage": "L5",
+  "current_subgate": "L5.3_BLOCKED_ATTENTION_E1_E2",
+  "current_state": "MAIN_ONLY_ENFORCED_L5_2_CLOSED_L5_3_L5_4_WAIT_LOCAL_E1_E4",
+  "git_workflow": {"status":"ENFORCED_MAIN_ONLY","policy":"config/git_workflow_policy.json","remote_branches":["main"],"merge_required":false,"force_push":false},
+  "accepted_local_evidence": {
+    "L5.1": {"status":"PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN","block128_wns_ns":0.0000136495},
+    "L5.2": {"status":"PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN","stages":5,"contexts":5,"lanes":512,"h3_wns_ns":0.00490451,"h3_drc":"0_0_0_0","postmap_E1":"PASS"}
+  },
+  "closed_tasks": ["L0","L1","L2","L3","L5.1","L5.2"],
+  "local_dependent_tasks": ["L4_AHA_CNN","L5.3_Attention_E1_E2","L5.4_SiLU_E1_E4","L5.5_integrated_E3","L5.6_q1024_full_model","L6_llama_parity_quant_RTL_PPA","L7_state_RTL_E1_E3","L8_official_traces_backends","L9_real_llama_GGUF","L10_post_route_PVT_power","L11_final_Archspec"],
+  "sandbox_independent_tasks": ["Attention_vector_and_metadata_generation","SiLU_special_value_vectors","quant_frontend_tail_and_schedule_contracts","state_transaction_assertions_and_adversarial_vectors","trace_replayer_and_GGML_adapter_regressions","L5.5_sensitivity_and_E3_test_matrix","Archspec_and_evidence_consistency"],
+  "sandbox_closed": {"L5.3_controller_protocol_E0":"PASS","L5.3_controller_RTL_source":"READY_WAIT_LOCAL","L5.4_bit_contract_E0":"PASS","L5.4_RTL_source":"READY_WAIT_LOCAL","L5.5_sensitivity_E0":"PASS_NOT_E3","L6_quant_frontend_E0":"PASS_SOURCE_READY","L7_state_transaction_E0":"PASS_SOURCE_READY","L8_trace_schema_E0":"PASS","L9_GGML_adapter_E0":"PASS"},
+  "join_gate": {"closed":["L5.2"],"open":["L5.3","L5.4"],"next":"L5.5"},
+  "forbidden_claims": ["post-route signoff from component H3","L5 complete before join gates","sandbox E0 as local E1/E2/E3/E4","additional branch without user approval"]
 }

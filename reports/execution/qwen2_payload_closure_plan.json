@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "status": "GENERATE_WITH_scripts_run_sandbox_v78_py",
+  "description": "The canonical 168-checkpoint payload-closure plan is generated deterministically by src/heteronpu/qwen2_payload_closure.py.",
+  "local_gate": "Run scripts/run_sandbox_v78.py and consume qwen2_payload_closure from reports/execution/sandbox_v78_result.json."
+}

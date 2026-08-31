@@ -1,4 +1,4 @@
-# Local-agent handoff v7.8 — main only
+# Local-agent handoff v7.9 — main only
 
 ## Git gate
 
@@ -60,8 +60,9 @@ New candidates PASS E1/E4: tile16 softmax has16 nonzero cases, nominal357/
 stress372 cycles, WNS+0.00011009ns, area185940.027. merge4 nominal289/
 stress307 cycles, WNS+0.00000864267ns, area156217.152. No blackbox/unmapped.
 
-Nominal q1024 projection315.489tps; stress314.448tps. Margin is only0.16%,
-so L5.5 remains OPEN. Next use real queue/bank/event/DDR counters.
+Nominal q1024 projection315.489tps; stress314.448tps. Stress is below315,
+so stop rule reopens L5.5. Next scale the same architecture to8 math lanes and
+8-row merge; require stress>=315 with explicit margin before E3.
 
 Remote v7.2 adds 11-case adversarial Attention, service importer, integrated
 quant source, 8-slot state/COW source and a 216-node Qwen3.8 trace. These are

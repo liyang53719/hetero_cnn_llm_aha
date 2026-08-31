@@ -1,5 +1,5 @@
 {
-  "schema_version":6,"status":"L5_5_SFU_CANDIDATES_PASS_ULTRA_LOW_MARGIN_WAIT_E3",
+  "schema_version":6,"status":"L5_5_STRESS_PROJECTION_FAIL_REOPEN_8X8_SFU",
   "branch_audit":{"remote_branches":["main"],"second_page_empty":true,"l5_2_commit_in_main_ancestry":true,"merge_required":false,"branch_deletion_required":false},
   "accepted_local_evidence":{"L5.1":"PASS_ZERO_MARGIN","L5.2":"PASS_REV8B_B_COMPONENT_H3","L5.3":"PASS","L5.3_q128":"PASS_SINGLE_PROCESS_E2","L5.3_q384":"PASS_SAMPLED_E2","L5.3_q1024":"PASS_REVIEWED_E2","L5.4":"PASS_SELECTED_ONE_LANE","L5.5_tile16_SFU":"PASS_E1_E4","L5.5_merge4":"PASS_E1_E4"},
   "local_result":"reports/execution/l5_3_l5_4_local_result.json",

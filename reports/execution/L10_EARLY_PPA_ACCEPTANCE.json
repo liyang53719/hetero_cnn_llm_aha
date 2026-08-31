@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "READY_FOR_LOCAL_EXECUTION",
+  "clock_ns": 1.0,
+  "prelayout_screen": {
+    "minimum_margin_ps": 0.00864267,
+    "critical_components_sub_1ps": 6,
+    "interpretation": "component/hierarchical positive WNS does not provide route/OCV margin"
+  },
+  "gates": [
+    {
+      "id": "L10.1",
+      "name": "hierarchy_preserving_integrated_synthesis",
+      "acceptance": {
+        "WNS_ns_min": 0.0,
+        "unmapped": 0,
+        "unresolved": 0,
+        "blackboxes": 0,
+        "non_reset_data_false_paths": 0,
+        "multicycle_exceptions": 0,
+        "area_double_count": 0
+      }
+    },
+    {
+      "id": "L10.2",
+      "name": "SRAM_macro_replacement",
+      "acceptance": {
+        "capacity_MiB_max": 4,
+        "owner_address_overlap": 0,
+        "macro_timing_arcs_linked": true,
+        "bank_conflict_counters_present": true
+      }
+    },
+    {
+      "id": "L10.3",
+      "name": "post_route_STA_PVT_OCV",
+      "acceptance": {
+        "setup_WNS_ns_min": 0.0,
+        "hold_violations": 0,
+        "transition_violations": 0,
+        "capacitance_violations": 0,
+        "clock_tree_and_extracted_interconnect": true
+      }
+    },
+    {
+      "id": "L10.4",
+      "name": "workload_SAIF_power",
+      "acceptance": {
+        "activity_source": "Qwen2_q1024_and_CNN_representative_workload",
+        "dynamic_and_leakage_separate": true,
+        "vectorless_power_not_signoff": true
+      }
+    }
+  ],
+  "required_result_files": [
+    "reports/execution/l10_hierarchical_synthesis_result.json",
+    "reports/execution/l10_sram_macro_result.json",
+    "reports/execution/l10_post_route_result.json",
+    "reports/execution/l10_saif_power_result.json"
+  ]
+}

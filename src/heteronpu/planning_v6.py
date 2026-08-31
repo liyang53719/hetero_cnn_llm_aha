@@ -122,8 +122,16 @@ def audit_control(root:str|Path)->dict[str,Any]:
     ids=[x['id'] for x in s['stages']]
     if ids!=c['stage_namespace'] or c['current_stage'] not in ids:errors.append('stage namespace')
     if l.get('current_stage')!=c['current_stage'] or l.get('current_subgate')!=c['current_subgate'] or n.get('stage')!=c['current_stage'] or n.get('subgate')!=c['current_subgate']:errors.append('current state drift')
-    e=c['retained_local_evidence']
-    if e['block128_e1']!='PASS' or e['block128_wns_ns']<0 and e['block128_e4']!='FAIL_TIMING':errors.append('evidence claim')
+    e=c.get('retained_local_evidence')
+    if e is not None:
+        if e['block128_e1']!='PASS' or e['block128_wns_ns']<0 and e['block128_e4']!='FAIL_TIMING':errors.append('evidence claim')
+    else:
+        l51=c.get('accepted_local_evidence',{}).get('L5.1',{})
+        if not str(l51.get('status','')).startswith('PASS_') or float(l51.get('block128_wns_ns',-1))<0:errors.append('evidence claim')
     if any('sandbox_status' not in x or 'local_gate' not in x for x in w['items']):errors.append('waitlist split')
-    if c['remote_audit'].get('new_local_agent_commit_detected') not in {True,False}:errors.append('remote audit')
+    remote=c['remote_audit']
+    if 'new_local_agent_commit_detected' in remote:
+        if remote['new_local_agent_commit_detected'] not in {True,False}:errors.append('remote audit')
+    elif int(remote.get('branch_count',0))<1 or not remote.get('decision'):
+        errors.append('remote audit')
     return {'schema_version':1,'status':'PASS' if not errors else 'FAIL','control_schema_version':schema,'errors':errors}

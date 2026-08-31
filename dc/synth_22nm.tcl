@@ -99,7 +99,11 @@ set paths [get_timing_paths -delay_type max -nworst 1 -max_paths 1]
 if {[sizeof_collection $paths] > 0} {
   set worst_slack [get_attribute [index_collection $paths 0] slack]
 }
-set cell_area [get_attribute [current_design] area]
+set cell_area 0.0
+foreach_in_collection leaf_cell [get_cells -hierarchical -filter "is_hierarchical == false"] {
+  set leaf_area [get_attribute -quiet $leaf_cell area]
+  if {$leaf_area ne ""} { set cell_area [expr {$cell_area + $leaf_area}] }
+}
 set status_fp [open "$OUT_DIR/status.txt" w]
 puts $status_fp "TOP=$TOP"
 puts $status_fp "CLOCK_PERIOD_NS=$CLK_PERIOD"

@@ -1,9 +1,10 @@
 {
-  "L5.2": "PASS_COMPONENT_H3_L10_RISK_OPEN",
-  "L5.3": "NUMERICAL_CYCLE_STREAM_E0_PASS",
-  "L5.4": "DSE_PASS",
-  "L7": "CONCURRENCY_E0_PASS",
-  "L8_L9": "POLICY_LOWERING_E0_PASS",
+  "L5_2": "PASS_RETAINED",
+  "L5_3_controller_E1_E4": "PASS",
+  "L5_3_full_stream": "OPEN",
+  "L5_4_one_two_lane_E1_E4": "PASS",
+  "L5_4_selection": "OPEN",
+  "L5_5": "WAIT_JOIN",
   "schema_version": 6,
-  "status": "PASS_V6_6"
+  "status": "PASS_V6_9_LOCAL_GATES"
 }

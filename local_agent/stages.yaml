@@ -12,8 +12,8 @@ stages:
     subgates:
       L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495}
       L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512, H3_WNS_ns: 0.00490451, L10_risk: post_route_variation_open}
-      L5.3: {status: CONTROLLER_PROTOCOL_E0_AND_RTL_SOURCE_READY_WAIT_FULL_STREAM_E1_E2, query_tile: 16, kv_tile: 32, block_tokens: 128, score_fifo: 2, probability_fifo: 2, q1024_merges: 43008}
-      L5.4: {status: BIT_CONTRACT_AND_ONE_TWO_LANE_RTL_SOURCE_READY_WAIT_E1_E4_SELECTION, LUT_entries: 128, fraction_bits: 12, candidates: [1_lane_II1,2_lane_II1]}
+      L5.3: {status: CONTROLLER_E1_E4_PASS_WAIT_FULL_NUMERICAL_STREAM_E1_E2, query_tile: 16, kv_tile: 32, block_tokens: 128, score_fifo: 2, probability_fifo: 2, q1024_merges: 43008, controller_WNS_ns: 0.00191498, controller_area: 1773.408002}
+      L5.4: {status: ONE_TWO_LANE_E1_E4_PASS_WAIT_MEASURED_PRODUCER_STALL_SELECTION, LUT_entries: 128, fraction_bits: 12, one_lane_WNS_ns: 0.0000521541, one_lane_area: 10559.276031, two_lane_WNS_ns: 0.0000220537, two_lane_area: 19747.364067}
       L5.5: {status: SANDBOX_PREFLIGHT_PASS_WAIT_L5_3_L5_4_AND_LOCAL_E3, analytical_tps: 338.2517292888433, review_floor_tps: 315}
       L5.6: {status: WAIT_L5_5_THEN_28_LAYER_E2_E3_E4, target_tps: 300}
   - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: EXACT_LAYOUT_AND_UNIFIED_FRONTEND_E0_SOURCE_READY_WAIT_PARITY_RTL_PPA}

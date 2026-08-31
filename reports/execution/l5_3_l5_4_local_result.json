@@ -1,0 +1,57 @@
+{
+  "L5.3": {
+    "controller_dc": {
+      "cell_area": 1773.408002,
+      "dynamic_power_mw_estimate": 0.6024064,
+      "evidence_class": "DC_WLM_vectorless_power",
+      "leakage_power_mw_estimate": 0.0018920999999999999,
+      "status_sha256": "ab93501ba2ceba6cfcb1f9c47a770dfa3daa53d1743c5720521eac51e105c344",
+      "unmapped": 0,
+      "wns_ns": 0.00191498
+    },
+    "full_numeric_status": "OPEN",
+    "q1024_merge_rows": 43008,
+    "q1024_tasks": 12672,
+    "q128_tasks": 240,
+    "q384_tasks": 1872
+  },
+  "L5.4": {
+    "one_lane": {
+      "cell_area": 10559.276031,
+      "dynamic_power_mw_estimate": 2.9174,
+      "evidence_class": "DC_WLM_vectorless_power",
+      "leakage_power_mw_estimate": 0.0116722,
+      "status_sha256": "a4ada20a1c9a9a87bf3898203c96ba0d6f45d5233efa4bc16343c39ceaacefed",
+      "unmapped": 0,
+      "wns_ns": 5.21541e-05
+    },
+    "selection": "WAIT_MEASURED_MATRIX_PRODUCER_STALL",
+    "selection_rule": "one_lane_if_stall_le_2_percent_else_two_lane",
+    "two_lane": {
+      "cell_area": 19747.364067,
+      "dynamic_power_mw_estimate": 5.2002,
+      "evidence_class": "DC_WLM_vectorless_power",
+      "leakage_power_mw_estimate": 0.0215761,
+      "status_sha256": "6bb7de3db7538301f4cf354c0a526ad302c39dfdc1476a4ffb8a263ff6f20029",
+      "unmapped": 0,
+      "wns_ns": 2.20537e-05
+    }
+  },
+  "checks": {
+    "controller_dc": true,
+    "controller_e1": true,
+    "full_attention_numerical_e2": false,
+    "silu_1lane_dc": true,
+    "silu_1lane_e1": true,
+    "silu_2lane_dc": true,
+    "silu_2lane_e1": true,
+    "silu_lane_selection": false
+  },
+  "evidence_hashes": {
+    "controller_e1": "a3bef37270883a07a7a4e020b88392d13096368b53f0bd443e8a40614b6279a7",
+    "silu1_e1": "4f784551bbc6b86f97a1fc25144264230c8b80793a3b01e87d40e5da0a41c515",
+    "silu2_e1": "d48fe8c0d81622ed511af96961070ace364fb45eeccc25977e6da47252593e20"
+  },
+  "schema_version": 1,
+  "status": "SOURCE_LOCAL_GATES_PASS_INTEGRATION_OPEN"
+}

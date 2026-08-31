@@ -113,7 +113,7 @@ class SequenceMeta:
 
 
 class SequenceStateStore:
-    def __init__(self, *, words_per_page: int = 1024) -> None:
+    def __init__(self, words_per_page: int = 1024) -> None:
         if words_per_page <= 0:
             raise ValueError("words_per_page")
         self.words_per_page = int(words_per_page)

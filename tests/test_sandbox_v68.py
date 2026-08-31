@@ -6,7 +6,10 @@ from heteronpu.state_commit_protocol import StateCommitModel,StateDomain,StateWr
 from heteronpu.trace_schema import TraceBundle,compare_traces,synthetic_trace,trace_schema_report
 from heteronpu.ggml_node_adapter import GGMLNodeAdapter,GGMLNodeView,GGMLTensorView,adapter_contract_report
 from heteronpu.l5_join_sensitivity import SensitivityPoint,evaluate,sensitivity_report
+from heteronpu.planning_v6 import audit_control
 ROOT=Path(__file__).resolve().parents[1]
+def test_v69_control_plane_compatibility():
+ r=audit_control(ROOT);assert r['status']=='PASS' and not r['errors']
 def test_quant_random():
  r=frontend_self_test(100);assert r['status']=='PASS' and r['maximum_dot_difference']<=1e-9 and not r['contract']['format_specific_multiplier_array']
 def test_q8_groups():

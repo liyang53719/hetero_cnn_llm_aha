@@ -1,0 +1,3 @@
+{
+  "schema_version":1,"status":"PASS","evidence_class":"integrated_quant_frontend_E0_source_contract_not_RTL_E1","formats":["FP16","Q8_0","Q6_K","Q3_K"],"cases":8000,"cases_per_format":2000,"block_fifo_depth":2,"beat_fifo_depth":2,"tag_scale_alignment":"PASS","response_order":"IN_ORDER_ASSERTED","sha256":"7945c63dd69a4902a98dcd5c12a74a443027dc2340e1e4d5190c26bb9755a0c5","remaining_local_gates":["SystemVerilog elaboration","Verilator E1","shared dot-array integration","pinned llama.cpp parity","1GHz PPA"]
+}

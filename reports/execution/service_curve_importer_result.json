@@ -1,0 +1,3 @@
+{
+  "schema_version":1,"status":"PASS_REVIEW","calibration":{"block_cycles":109526657,"full_model_cycles":3066746396,"tokens_per_second":333.90436240036587,"review_floor_pass":true,"target_pass":true,"selected_silu_lanes":"one","producer_stall_fraction":0.005105708694934089,"score_probability_ddr_zero":true},"degraded_case":{"tokens_per_second":266.43867370587515,"selected_silu_lanes":"two","status":"FAIL_REOPEN_ARCHITECTURE"},"sha256":"58a21a59fe4043bee9316737fe8b516605e90d6d0995ab3cc7c1275faceef5e1","stop_rule":"Below 315 tps or nonzero score/probability DDR bytes reopens the architecture/performance budget."
+}

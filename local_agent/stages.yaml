@@ -2,7 +2,7 @@ schema_version: 6
 workflow_policy: MAIN_ONLY_FAST_FORWARD_NO_FORCE_PUSH
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V7_0_MAIN_ONLY_AUDIT}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V72_MODEL_FAMILY_CONTRACTS}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
@@ -11,17 +11,22 @@ stages:
     name: qwen2_bf16_long_context_300tps
     status: IN_PROGRESS
     subgates:
-      L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN, block128_wns_ns: 0.0000136495}
-      L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512, H3_WNS_ns: 0.00490451}
-      L5.3a: {status: CONTROLLER_E1_E4_PASS, WNS_ns: 0.00191498, area: 1773.408002}
-      L5.3b: {status: TRACE_BRIDGE_BLOCK32_E1_E4_AND_VECTOR_PACK_PASS_WAIT_SINGLE_INTEGRATED_QK_MLO_PV_E2, q128_full_rows: 1536, q384_review_rows: 180, q1024_review_rows: 108, q1024_merges: 43008}
-      L5.4a: {status: ONE_TWO_LANE_E1_E4_PASS_EDGE_POLICY_APPROVED, one_lane_WNS_ns: 0.0000177622, two_lane_WNS_ns: 0.0000383258}
-      L5.4b: {status: WAIT_MEASURED_MATRIX_PRODUCER_STALL_AND_SPECIAL_VALUE_POLICY, selection: one_lane_if_stall_le_2_percent_else_two_lane}
-      L5.5: {status: MINIMUM_11_CASE_E3_MATRIX_READY_WAIT_L5_3B_L5_4B_AND_LOCAL_E3, analytical_tps: 338.2517292888433, review_floor_tps: 315}
+      L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN}
+      L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512}
+      L5.3a: {status: CONTROLLER_E1_E4_PASS}
+      L5.3b: {status: Q128_Q384_E2_PASS_NEXT_Q1024_REVIEWED_E2, q1024_review_rows: 108, q1024_merges: 43008}
+      L5.4a: {status: ONE_TWO_LANE_E1_E4_PASS_EDGE_POLICY_APPROVED}
+      L5.4b: {status: WAIT_MEASURED_MATRIX_PRODUCER_STALL, selection: one_lane_if_stall_le_2_percent_else_two_lane}
+      L5.5: {status: SERVICE_IMPORTER_AND_MINIMUM_MATRIX_READY_NOT_E3, review_floor_tps: 315}
       L5.6: {status: WAIT_L5_5_THEN_28_LAYER_E2_E3_E4, target_tps: 300}
-  - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: EXACT_LAYOUT_UNIFIED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
-  - {id: L7, name: production_paged_kv_and_sequence_memory, status: TRANSLATION_CONCURRENCY_TRANSACTION_AND_ADVERSARIAL_E0_PASS_WAIT_RTL_E1_E3}
-  - {id: L8, name: qwen35_qwen38_hybrid_text, status: FULL_SHAPE_TRACE_SCHEMA_OPERATOR_E0_PASS_WAIT_OFFICIAL_E1_E2}
+  - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
+  - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
+  - id: L8
+    name: qwen35_qwen38_flash_next_text
+    status: TWO_DISTINCT_FAMILY_CONTRACTS_PASS_WAIT_OFFICIAL_E1_E2
+    subgates:
+      L8.1: {model: Qwen3.5-35B-A3B, family: qwen3_5_moe, status: PROFILE_SCHEDULE_E0_PASS}
+      L8.2: {model: Qwen3.8-Flash-Next, family: qwen4_exp, status: PROFILE_MULTILAYER_TRACE_E0_PASS}
   - {id: L9, name: llama_cpp_backend, status: POLICY_PARTITION_NODE_ADAPTER_E0_PASS_WAIT_REAL_GGML_GGUF}
-  - {id: L10, name: physical_closure, status: MATRIX_H3_PASS_ULTRA_LOW_MARGIN_POST_ROUTE_PVT_SAIF_OPEN}
+  - {id: L10, name: physical_closure, status: COMPONENTS_ULTRA_LOW_MARGIN_POST_ROUTE_PVT_SAIF_OPEN}
   - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_E0_ONLY}

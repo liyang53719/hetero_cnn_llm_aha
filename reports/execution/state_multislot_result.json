@@ -1,0 +1,3 @@
+{
+  "schema_version":1,"status":"PASS","evidence_class":"multislot_state_COW_dirty_E0_not_RTL_E1_or_iDMA_E3","transactions":10000,"cycles":12622,"slots":8,"domains":10,"commits":8948,"rollbacks":1052,"cows":913,"same_cycle_refcount_COW":907,"dirty_mask_merges":33088,"max_active_slots":8,"generation_wraps":32,"page_leak":0,"sha256":"9bcce648cd27bbc54dd7f932fb0fedfd181418d958f91c3ceff941fa606c4871","remaining_local_gates":["multislot RTL E1","refcount/COW SRAM integration","OOO iDMA E3","continuous batching"]
+}

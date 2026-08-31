@@ -1,0 +1,3 @@
+{
+  "schema_version":1,"status":"PASS","evidence_class":"tiny_Qwen38_multilayer_trace_E0_not_official_weight_backend","tokens":8,"layers":4,"nodes":216,"prefill_decode_diff":0,"trace_sha256":"28946182f43323257cadd64d42fc14317175f557aa8eb618fa3b3f8964294094","descriptor_sha256":"8aaa3468b9fbcd3a832e70962d245aa78f80ffb3e6bc9292fbad803f812a9364","partition":{"segments":216,"fallback":0,"sha256":"430815b9c0cd8279fcfdf8328e9ad6b0240a28c1d637de227d162c0da6ca4f00"},"mtp_draft_steps":2,"mtp_accepted_steps":1,"state_domains":["gdn","qsa","ple","hyper","moe","mtp"],"remaining_local_gates":["official immutable trace","real GGML node capture","GGUF tensor binding","backend E1/E2/E3"]
+}

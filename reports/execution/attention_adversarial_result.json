@@ -1,0 +1,3 @@
+{
+  "schema_version":1,"status":"PASS","evidence_class":"multi_seed_adversarial_Attention_E0_not_RTL_E2","case_count":11,"random_seed_count":4,"adversarial_pattern_count":7,"random_q128_rows":6144,"adversarial_rows":630,"max_abs":4.76837158203125e-07,"max_relative_l2":7.909792131100462e-07,"reverse_merge_max_abs":2.9802322387695312e-08,"sha256":"1c191f07413ec322b4a02f10a023bcb0221ad0109f71f62c07630489554c1a76","patterns":["identical_scores","near_tie","dominant_boundary","extreme_range","alternating_extreme","underflow_tail","block_pulse"],"local_gate":"Replay all manifests through the single-simulation Controller+QK+MLO+PV E2 harness."
+}

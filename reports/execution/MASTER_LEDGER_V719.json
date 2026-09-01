@@ -1,0 +1,62 @@
+{
+  "schema_version": 6,
+  "current_stage": "L9",
+  "current_subgate": "L9.4_COMMAND128_DEVICE_TRANSPORT",
+  "current_state": "L5_6D_P3_LLAMA_BACKEND_FUNCTIONAL_PASS_DEVICE_RTL_AND_L10_PHYSICAL_OPEN",
+  "goal_status": "FUNCTIONAL_BACKEND_COMPLETE_HARDWARE_RELEASE_OPEN",
+  "legacy_detailed_ledger": "reports/execution/MASTER_LEDGER.json",
+  "closed_tasks": [
+    "L0", "L1", "L2", "L3", "L5.1", "L5.2", "L5.3", "L5.4", "L5.5",
+    "L5.6a", "L5.6b", "L5.6c", "L5.6d.P1", "L5.6d.P2_reference_and_RTL_anchors",
+    "L5.6d.P3_real_llama_backend_equivalent", "L9.1_original_graph", "L9.2_canonical_GGUF_binding",
+    "L9.3_continuous_backend_function", "L10.0a_frozen_DDC_inventory", "L10.0b_SRAM_DB_inventory"
+  ],
+  "open_tasks": [
+    "L4", "L6", "L7", "L8", "L9.4_Command128_RTL_transport", "L9.5_non_host_device_buffers",
+    "L9.6_full_logits_metrics", "L10.1_functional_owner_top", "L10.2_functional_SRAM_replacement",
+    "L10.3_post_route_PVT_OCV", "L10.4_SAIF", "L11"
+  ],
+  "accepted_evidence": {
+    "L5.6d.P3": {
+      "status": "PASS_REAL_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION",
+      "evidence": "reports/execution/l5_6d_p3_device_final_audit.json",
+      "audit": "reports/execution/REMOTE_AUDIT_11483E8.json",
+      "nodes": 958,
+      "splits": 1,
+      "layers": 28,
+      "groups": 7,
+      "manifest_commands": 588,
+      "canonical_GGUF_bindings": 338,
+      "raw_storage_byte_parity": 281,
+      "converted_norm_payload_parity": 57,
+      "scheduler_fallback": 0,
+      "argmax": 7559,
+      "top10_overlap": 10
+    },
+    "L10.0a": {
+      "status": "PASS_FROZEN_DDC_INVENTORY_LINK_STA",
+      "evidence": "reports/execution/l10_hierarchical_synthesis_result.json",
+      "functional_cross_owner_paths": 0
+    },
+    "L10.0b": {
+      "status": "PASS_STANDALONE_SRAM_DB_INVENTORY",
+      "evidence": "reports/execution/l10_sram_macro_result.json",
+      "capacity_kib": 4096,
+      "physical_macros": 124
+    }
+  },
+  "claim_boundaries": {
+    "P3_backend_functional": "PASS",
+    "P3_hardware_device": "OPEN",
+    "Command128_manifest_bound": "PASS",
+    "Command128_RTL_executed": "OPEN",
+    "scheduler_cpu_fallback": 0,
+    "backend_internal_CPU_execution": true,
+    "completion_callback_backpressure": "PASS",
+    "internal_engine_backpressure": "OPEN",
+    "all_row_integrated_RTL": "OPEN",
+    "full_logits_metrics": "OPEN",
+    "post_route_signoff": "OPEN"
+  },
+  "next_action": "reports/execution/NEXT_ACTION.json"
+}

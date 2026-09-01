@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "accepted_now": {
+    "original_llama_graph_nodes": 958,
+    "graph_splits": 1,
+    "scheduler_cpu_fallback": 0,
+    "continuous_layers": 28,
+    "four_layer_groups": 7,
+    "manifest_commands": 588,
+    "canonical_GGUF_payload_bindings": 338,
+    "raw_storage_byte_parity": 281,
+    "F32_to_BF16_RNE_canonical_parity": 57,
+    "argmax": 7559,
+    "top10_overlap": 10,
+    "layer_completion_stalls": 7,
+    "classification": "PASS_REAL_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION"
+  },
+  "not_closed": {
+    "Command128_RTL_execution": true,
+    "non_host_device_buffers": true,
+    "file_staging_eliminated": true,
+    "internal_Matrix_SFU_KV_backpressure": true,
+    "full_logits_metrics": true,
+    "all_row_integrated_RTL": true,
+    "summary_storage_macro_PPA": true,
+    "post_route_PVT_OCV_SAIF": true
+  },
+  "full_logits_acceptance": {
+    "required_metrics": ["max_abs", "mean_abs", "rmse", "relative_l2", "cosine", "argmax", "top10_overlap", "finite_mask_equal"],
+    "argmax_equal": true,
+    "top10_overlap_min": 10,
+    "relative_l2_max": 0.01,
+    "cosine_min": 0.9999
+  },
+  "command_transport_acceptance": {
+    "unique_commands": 588,
+    "engine_counts": {"matrix": 252, "sfu": 308, "kv": 28},
+    "accepted_commands": 588,
+    "completed_commands": 588,
+    "loss_duplicate_reorder": 0,
+    "event_dependency_errors": 0,
+    "software_stage_dispatch_allowed": false,
+    "host_file_payload_staging_allowed": false,
+    "internal_random_ready_valid_required": true
+  },
+  "claim_rules": [
+    "CPU fallback=0 means the GGML scheduler did not move nodes to another backend; it does not prove that the HETERO backend avoided host CPU execution.",
+    "The 958-node graph is received as one split, but the current graph_compute implementation invokes one monolithic software submission.",
+    "The 588 Command128 records are bound and validated; they are not yet executed one-by-one by the RTL command frontend in this path.",
+    "338 canonical payload files match; 57 are explicit F32-to-BF16 RNE conversions, so raw GGUF storage byte parity is 281.",
+    "The seven random stalls apply to layer completion callback acceptance, not internal engine ready/valid paths.",
+    "Top-10 and argmax agreement do not replace a full-logit metric report."
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "accepted_gate": "L5.6d.P3_real_llama_backend_equivalent",
+  "audit_decision": "ACCEPT_L5_6D_P3_REAL_LLAMA_BACKEND_EQUIVALENT_RECLASSIFY_NOT_HARDWARE_DEVICE",
+  "audited_commit": "11483e863b6d0f17885258aaab5e8cfd6e63b0dc",
+  "backpressure_scope": {
+    "completions": 28,
+    "not_internal_matrix_sfu_kv_ready_valid": true,
+    "scope": "layer_completion_callback",
+    "stalls": 7
+  },
+  "binding_semantics": {
+    "canonical_converted_parity": 57,
+    "conversion": "F32_to_BF16_RNE",
+    "raw_storage_byte_parity": 281,
+    "total_bindings": 338
+  },
+  "closed_checks": {
+    "canonical_GGUF_payload_bindings": true,
+    "continuous_28_layer_backend_function": true,
+    "final_argmax_match": true,
+    "final_top10_overlap": true,
+    "layer_completion_backpressure": true,
+    "original_llama_graph_received": true,
+    "scheduler_cpu_fallback_zero": true,
+    "single_backend_split": true
+  },
+  "errors": [],
+  "graph": {
+    "commands_executed_by_RTL_frontend": 0,
+    "manifest_commands": 588,
+    "nodes_received": 958,
+    "splits": 1
+  },
+  "not_accepted_as": [
+    "hardware_device_payload_execution",
+    "Command128_RTL_execution",
+    "all_row_integrated_RTL",
+    "post_route_signoff"
+  ],
+  "numerical_context": {
+    "argmax": 7559,
+    "continuous_layers": 28,
+    "four_layer_groups": 7,
+    "full_logits_metrics": "OPEN",
+    "layer27_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+    "maximum_attention_error": 0.000778775279,
+    "top10_overlap": 10
+  },
+  "open_gates": {
+    "Command128_RTL_execution": true,
+    "all_row_integrated_RTL": true,
+    "full_logits_metric_report": true,
+    "internal_engine_backpressure": true,
+    "non_host_device_buffer": true,
+    "post_route_PVT_OCV_SAIF": true
+  },
+  "output_scope": {
+    "argmax": 7559,
+    "full_logits_metrics_present": false,
+    "top10_overlap": 10,
+    "vocab": 151936
+  },
+  "provenance": {
+    "backend_source": "src/ggml_hetero_backend.cpp",
+    "backpressure": "reports/execution/qwen2_device_backpressure_result.json",
+    "device_api_source": "src/hetero_qwen2_device_api.cpp",
+    "direct_gguf": "reports/execution/llama_hetero_direct_gguf_result.json",
+    "final_audit": "reports/execution/l5_6d_p3_device_final_audit.json",
+    "software_payload_source": "src/qwen2_q1024_generic_layer_backend.cpp"
+  },
+  "schema_version": 1,
+  "source_semantics": {
+    "command_manifest_validation": true,
+    "command_rtl_interpreter": false,
+    "host_cpu_buffer_type": true,
+    "layer_completion_callback_backpressure": true,
+    "monolithic_submission": true,
+    "original_graph_guard": true,
+    "software_stage_backend": true
+  },
+  "status": "PASS_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION"
+}

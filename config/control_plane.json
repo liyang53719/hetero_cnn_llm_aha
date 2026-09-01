@@ -1,19 +1,19 @@
 {
   "schema_version": 6,
-  "plan_version": "2026-09-01-v6.15",
+  "plan_version": "2026-09-02-v6.16",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
-  "ledger": "reports/execution/MASTER_LEDGER.json",
+  "ledger": "reports/execution/MASTER_LEDGER_V719.json",
+  "legacy_detailed_ledger": "reports/execution/MASTER_LEDGER.json",
   "next_action": "reports/execution/NEXT_ACTION.json",
   "handoff": "reports/execution/HANDOFF.md",
   "local_waitlist": "reports/execution/LOCAL_AGENT_WAITLIST.json",
   "git_workflow_policy": "config/git_workflow_policy.json",
   "canonical_archspec": "configs/arch_v1.yaml",
   "candidate_archspecs": ["configs/arch_v2_qwen38_candidate.yaml"],
-  "descriptor_schema": "spec/descriptor_schema.yaml",
-  "current_stage": "L10",
-  "current_subgate": "L10_EARLY_PPA",
-  "current_state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_DATAPATH_OPEN_P3_OPEN",
+  "current_stage": "L9",
+  "current_subgate": "L9.4_COMMAND128_DEVICE_TRANSPORT",
+  "current_state": "L5_6D_P3_LLAMA_BACKEND_FUNCTIONAL_PASS_DEVICE_RTL_AND_L10_PHYSICAL_OPEN",
   "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
   "branch_inventory": {
     "remote_branches": ["main"],
@@ -23,55 +23,57 @@
     "force_push_forbidden": true
   },
   "accepted_local_evidence": {
-    "L5.1": {"status": "PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN", "block128_wns_ns": 0.0000136495},
-    "L5.2": {"status": "PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN", "physical_array": "16x32_512_lane", "fma_stages": 5, "contexts": 5, "h3_wns_ns": 0.00490451},
-    "L5.3": {"status": "PASS_NUMERICAL_E2_AND_RANDOM_BACKPRESSURE_SERVICE", "q1024_controller_merges": 43008, "stress_transactions": 354816, "score_probability_DDR_bytes": 0},
-    "L5.4": {"status": "PASS_SELECTED_ONE_LANE", "producer_stall_fraction": 0.0, "queue_high_water": 7, "one_lane_wns_ns": 0.0000177622, "one_lane_area": 10551.632033},
-    "L5.5_8x8": {"status": "PASS_E1_E4", "stress_tps": 322.3734869673966, "tile_wns_ns": 0.00011009, "merge8_wns_ns": 0.00000864267},
-    "L5.5_integrated_E3": {"status": "PASS_REVIEW", "tokens_per_second": 321.8693945101204},
-    "L5.6a_cycle_count_trace_E3": {"status": "PASS", "tokens_per_second": 320.7915990837895},
-    "L5.6b_reference_sampled_lm_head": {"status": "PASS", "samples": 160},
-    "L5.6c_reduced_four_layer_cross_RTL": {"status": "PASS", "bf16_bit_exact": 7840},
-    "L5.6d_full_28_layer_payload_numerical_RTL": {"status": "P1_PASS_P2_MIXED_CONTROL_PASS_REAL_DATAPATH_OPEN_P3_OPEN"},
-    "L10.1_owner_hierarchy": {"status": "PASS_FROZEN_DDC_LINK_STA", "wns_ns": 0.00000864267, "area": 2313314.648873, "area_double_count": 0},
-    "L10.2_sram_macro": {"status": "PASS_EARLY_MACRO_DB", "sram_kib": 4096, "physical_macros": 124}
+    "L5.1_to_L5.5": "PASS_RETAINED",
+    "L5.6a": {"status": "PASS_CYCLE_E3", "tokens_per_second": 320.7915990837895},
+    "L5.6b": {"status": "PASS_REFERENCE_PLUS_SAMPLED_RTL", "lm_head_samples": 160},
+    "L5.6c": {"status": "PASS_REDUCED_FOUR_LAYER_CROSS_RTL", "bf16_bit_exact": 7840},
+    "L5.6d.P3": {
+      "status": "PASS_REAL_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION",
+      "audit": "reports/execution/REMOTE_AUDIT_11483E8.json",
+      "original_graph_nodes": 958,
+      "graph_splits": 1,
+      "continuous_layers": 28,
+      "four_layer_groups": 7,
+      "manifest_commands": 588,
+      "canonical_GGUF_payload_bindings": 338,
+      "raw_storage_byte_parity": 281,
+      "converted_norm_payload_parity": 57,
+      "scheduler_cpu_fallback": 0,
+      "argmax": 7559,
+      "top10_overlap": 10
+    },
+    "L10.0a": {"status": "PASS_FROZEN_DDC_INVENTORY_LINK_STA", "functional_cross_owner_paths": 0},
+    "L10.0b": {"status": "PASS_STANDALONE_SRAM_DB_INVENTORY", "sram_kib": 4096, "physical_macros": 124}
   },
-  "sandbox_progress": {
-    "L10_EARLY_PPA_PREFLIGHT": "PASS_WITH_CRITICAL_MARGIN_RISK",
-    "L5_6_EVIDENCE_BOUNDARY": "PASS_NORMALIZED",
-    "L5_6_FULL_PAYLOAD_CLOSURE_PLAN": "PASS_168_CHECKPOINTS_7_GROUPS",
-    "L6_QUANT_FRONTEND_INTEGRATED": "PASS_SOURCE_READY",
-    "L7_STATE_MULTISLOT_COW_DIRTY": "PASS_SOURCE_READY",
-    "L8_QWEN3_5_RESOURCE_ENVELOPE": "PASS",
-    "L8_QWEN3_8_FLASH_NEXT_RESOURCE_ENVELOPE": "PASS"
+  "open_gates": {
+    "L9.4": "Command128 RTL/device transport",
+    "L9.5": "non-host device buffers and removal of host-file staging",
+    "L9.6": "full-logit metric report",
+    "L10.1": "functional cross-owner integrated top",
+    "L10.2": "100 percent logical-RAM to SRAM-macro replacement",
+    "L10.3": "post-route PVT/OCV",
+    "L10.4": "workload-derived SAIF",
+    "all_row_integrated_RTL": true,
+    "summary_storage_macro_PPA": true
   },
   "join_rules": {
-    "L5_performance_claim_requires": ["L5.5_integrated_E3_PASS", "L5.6a_cycle_trace_PASS"],
-    "L5_full_numerical_claim_requires": ["L5.6d_full_28_layer_payload_numerical_RTL_PASS"],
-    "L10_may_run_in_parallel_with_L5.6d": true,
-    "performance_review_floor_tps_before_post_route": 315,
-    "target_tps": 300
-  },
-  "local_execution": {
-    "l5_5_balanced_8x8": "reports/execution/l5_5_balanced_8x8_local_result.json",
-    "l5_5_integrated_e3": "reports/execution/l5_5_q1024_e3_result.json",
-    "l5_6_full_trace": "reports/execution/l5_qwen2_full_model_trace_result.json",
-    "l5_6_cross_rtl": "reports/execution/l5_qwen2_four_layer_cross_replay_result.json",
-    "sandbox_v78": "reports/execution/sandbox_v78_result.json",
-    "l10_early_ppa": "reports/execution/l10_hierarchical_synthesis_result.json",
-    "l10_sram": "reports/execution/l10_sram_macro_result.json",
-    "payload_checkpoints": "reports/execution/qwen2_payload_checkpoint_result.json",
-    "payload_groups": "reports/execution/qwen2_payload_group_result.json"
+    "L5_6d_backend_equivalent_claim": "PASS",
+    "hardware_device_claim_requires": ["L9.4_PASS", "L9.5_PASS"],
+    "hardware_release_requires": ["L9.4_PASS", "L9.5_PASS", "L10.1_PASS", "L10.2_PASS", "L10.3_PASS", "L10.4_PASS", "L11_PASS"]
   },
   "remote_audit": {
-    "audited_commit": "a1eab698fa0c37a54b22a503b0fcad15841c266e",
-    "decision": "ACCEPT_L5_PERFORMANCE_AND_REDUCED_CROSS_RTL_KEEP_FULL_PAYLOAD_OPEN_START_L10"
+    "audited_commit": "11483e863b6d0f17885258aaab5e8cfd6e63b0dc",
+    "decision": "ACCEPT_LLAMA_BACKEND_FUNCTIONAL_RECLASSIFY_NOT_HARDWARE_DEVICE",
+    "evidence": "reports/execution/REMOTE_AUDIT_11483E8.json"
   },
   "claim_rules": [
-    "Reduced four-layer cross RTL is not a continuous 28-layer payload replay.",
-    "Component and hierarchical DC are not post-route/PVT/OCV signoff.",
-    "Component areas may not be added unless ownership proves disjoint hierarchy.",
-    "Vectorless DC power is not SAIF power.",
+    "CPU fallback zero is a scheduler fact, not proof that the custom backend avoided host CPU execution.",
+    "The original 958-node graph is accepted as one backend split, but graph_compute invokes one monolithic software submission.",
+    "The 588 Command128 records are validated and bound; execution by the RTL command frontend remains open.",
+    "Of 338 canonical payload parity files, 281 preserve raw GGUF storage bytes and 57 use F32-to-BF16 RNE conversion.",
+    "Seven completion stalls do not prove internal Matrix/SFU/KV ready-valid backpressure.",
+    "Argmax and Top-10 parity do not replace full-logit metrics.",
+    "Frozen-DDC and standalone SRAM inventories are L10 preflight, not functional integration or post-route signoff.",
     "No new branch or force-push without explicit user approval."
   ]
 }

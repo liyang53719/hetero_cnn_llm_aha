@@ -2,20 +2,20 @@
   "schema_version": 6,
   "marker": "WAIT_LOCAL_AGENT_PUSH",
   "closed": [
-    {"id": "L5.5", "status": "BALANCED_8X8_E1_E4_AND_COMPOSED_E3_PASS"},
-    {"id": "L5.6a", "status": "28_LAYER_COUNT_TRACE_E3_PASS"},
-    {"id": "L5.6b", "status": "OFFICIAL_REFERENCE_AND_SAMPLED_LM_HEAD_PASS"},
-    {"id": "L5.6c", "status": "REDUCED_FOUR_LAYER_CROSS_RTL_PASS"},
-    {"id": "L5.6d", "status": "REAL_DEVICE_BACKEND_958_NODE_DIRECT_GGUF_7_GROUP_P3_PASS"}
+    {"id": "L5.6d.P3", "status": "PASS_REAL_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION"},
+    {"id": "L9.1", "status": "PASS_ORIGINAL_958_NODE_ONE_SPLIT"},
+    {"id": "L9.2", "status": "PASS_338_CANONICAL_PAYLOAD_BINDINGS_281_RAW_57_CONVERTED"},
+    {"id": "L9.3", "status": "PASS_CONTINUOUS_28_LAYER_BACKEND_FUNCTION"},
+    {"id": "L10.0a", "status": "PASS_FROZEN_DDC_INVENTORY"},
+    {"id": "L10.0b", "status": "PASS_SRAM_DB_INVENTORY"}
   ],
   "items": [
-    {"id": "L10.1", "sandbox_status": "component manifest and route-degradation screen PASS with critical margin risk", "local_gate": "hierarchy-preserving integrated synthesis", "acceptance": ["WNS>=0", "unmapped/unresolved/blackbox=0", "no area double-count", "no non-reset data false path or multicycle"]},
-    {"id": "L10.2", "sandbox_status": "4 MiB owner/liveness candidate exists", "local_gate": "SRAM macro replacement and bank/port validation", "acceptance": ["capacity<=4 MiB", "owner/address overlap=0", "macro timing linked", "bank-conflict counters present"]},
-    {"id": "L10.3-L10.4", "sandbox_status": "acceptance contracts ready", "local_gate": "post-route PVT/OCV plus workload-derived SAIF"},
-    {"id": "L4", "sandbox_status": "legal AHA sidecar contract ready", "local_gate": "Garnet map/PnR/Verilator/DC and CNN subset"},
-    {"id": "L6", "sandbox_status": "exact layouts, integrated frontend and K-tail source-ready", "local_gate": "pinned llama.cpp parity, RTL E1 and PPA"},
-    {"id": "L7", "sandbox_status": "translation/concurrency/multislot COW dirty E0 pass", "local_gate": "page walker/TLB/MSHR/COW RTL and AXI/iDMA E3"},
-    {"id": "L8-L9", "sandbox_status": "distinct Qwen3.5/Flash-Next E0, trace schema and graph adapter pass", "local_gate": "official traces, real backends, GGML/GGUF and token generation"},
-    {"id": "L11", "sandbox_status": "candidate Archspec collateral only", "local_gate": "measured PPA/performance Pareto and canonical promotion"}
+    {"id": "L9.6", "sandbox_status": "full-logit comparator source/tests PASS", "local_gate": "run on 151936 actual/reference logits", "acceptance": ["argmax equal", "Top-10 10/10", "relative L2 <=0.01", "cosine >=0.9999", "raw hashes committed"]},
+    {"id": "L9.4", "sandbox_status": "evidence classifier and acceptance contract ready", "local_gate": "one-layer then 588-command RTL transport", "acceptance": ["21-command canary", "588 accepted/completed", "Matrix/SFU/KV=252/308/28", "no software stage dispatch", "internal stalls"]},
+    {"id": "L9.5", "sandbox_status": "host-buffer/file-staging use detected", "local_gate": "device or explicit DMA-backed buffers", "acceptance": ["no ggml CPU buffer type for device payload", "no inter-stage host files", "byte counters and ownership"]},
+    {"id": "L10.1-L10.4", "sandbox_status": "inventories retained; functional/physical gates open", "local_gate": "functional top, SRAM replacement, post-route, SAIF"},
+    {"id": "L4", "sandbox_status": "AHA/CNN contracts ready", "local_gate": "mapping/PnR/bitstream/E1/E4"},
+    {"id": "L6-L8", "sandbox_status": "source/E0 contracts ready", "local_gate": "quant/state/Qwen3.5/Flash-Next real RTL and official traces"},
+    {"id": "L11", "sandbox_status": "candidate Archspec only", "local_gate": "measured final Pareto and canonical promotion"}
   ]
 }

@@ -2,40 +2,48 @@ schema_version: 6
 workflow_policy: MAIN_ONLY_FAST_FORWARD_NO_FORCE_PUSH
 canonical_namespace: [L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11]
 stages:
-  - {id: L0, name: control_provenance_sandbox, status: PASS_V78_CONTROL_AND_PPA_PREFLIGHT}
+  - {id: L0, name: control_provenance_sandbox, status: PASS_V719_P3_EVIDENCE_AUDIT}
   - {id: L1, name: upstream_baselines, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L2, name: wrapper_only_integration, status: PASS_FROM_RETAINED_EVIDENCE}
   - {id: L3, name: shared_sram_fabric_events, status: PASS_FROM_RETAINED_EVIDENCE}
-  - {id: L4, name: cnn_and_aha_sidecar, status: SANDBOX_CONTRACT_READY_WAIT_LOCAL_E1_E4}
+  - {id: L4, name: cnn_and_aha_sidecar, status: WAIT_LOCAL_E1_E4}
   - id: L5
     name: qwen2_bf16_long_context_300tps
-    status: PERFORMANCE_AND_REDUCED_NUMERICAL_PASS_FULL_PAYLOAD_OPEN
+    status: PERFORMANCE_AND_LLAMA_BACKEND_FUNCTIONAL_PASS_FULL_RTL_OPEN
     subgates:
-      L5.1: {status: PASS_E1_E4_ACCEPTED_ZERO_ENGINEERING_MARGIN}
-      L5.2: {status: PASS_REV8B_B_E1_E4_COMPONENT_H3_ULTRA_LOW_MARGIN, stages: 5, contexts: 5, lanes: 512}
-      L5.3: {status: PASS_NUMERICAL_E2_RANDOM_BACKPRESSURE_SERVICE, q1024_merges: 43008, stress_transactions: 354816}
-      L5.4: {status: PASS_SELECTED_ONE_LANE, producer_stall_fraction: 0.0, queue_high_water: 7}
-      L5.5a: {status: BALANCED_8X8_PASS_E1_E4, stress_tps: 322.3734869673966}
-      L5.5b: {status: COMPOSED_REAL_RTL_E3_PASS_REVIEW, tokens_per_second: 321.8693945101204}
+      L5.1-L5.5: {status: PASS_RETAINED}
       L5.6a: {status: Q1024_28_LAYER_COUNT_TRACE_E3_PASS, tokens_per_second: 320.7915990837895}
       L5.6b: {status: OFFICIAL_REFERENCE_AND_160_LM_HEAD_SAMPLES_PASS}
       L5.6c: {status: REDUCED_FOUR_LAYER_CROSS_RTL_PASS, bf16_bit_exact: 7840}
-      L5.6d: {status: P1_PASS_P2_Q1024_FIRST9_EXACT_BACKEND_KV_PASS_ATTENTION_LAYER_GROUPS_P3_OPEN, first9_tile16_bit_exact: 118784, q1024_first9_values: 7602176, q1024_group8_steps: 6291456, q1024_group8_weight_refetch: 0, q1024_rope_direct_error: 0.0, kv_byte_exact: 1048576, descriptor_records: 6188, plan: reports/execution/qwen2_payload_closure_plan.json}
-  - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
-  - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
+      L5.6d.P1: {status: PASS_168_OFFICIAL_CHECKPOINTS}
+      L5.6d.P2: {status: REFERENCE_CONTINUITY_AND_SAMPLED_RTL_ANCHORS_PASS_ALL_ROW_RTL_OPEN}
+      L5.6d.P3: {status: PASS_REAL_LLAMA_BACKEND_EQUIVALENT_SOFTWARE_EMULATION, nodes: 958, splits: 1, layers: 28, commands: 588, canonical_GGUF_bindings: 338, scheduler_fallback: 0, argmax: 7559, top10_overlap: 10}
+  - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: SOURCE_READY_WAIT_PARITY_RTL_PPA}
+  - {id: L7, name: production_paged_kv_and_sequence_memory, status: SOURCE_READY_WAIT_RTL_E1_E3}
   - id: L8
     name: qwen35_qwen38_flash_next_text
     status: DISTINCT_FAMILY_E0_PASS_WAIT_OFFICIAL_E1_E2_E3
     subgates:
-      L8.1: {model: Qwen3.5-35B-A3B, family: qwen3_5_moe, status: PROFILE_RUNTIME_RESOURCE_DSE_E0_PASS_WAIT_OFFICIAL_BACKEND}
-      L8.2: {model: Qwen3.8-Flash-Next, family: qwen4_exp, status: PROFILE_TRACE_QSA_PLE_RESOURCE_DSE_E0_PASS_WAIT_OFFICIAL_BACKEND}
-  - {id: L9, name: llama_cpp_backend, status: PINNED_GGUF_REAL_GRAPH_COMMAND_SUBMISSION_AND_OPERATOR_SLICE_PASS_WAIT_FULL_DEVICE_PAYLOAD}
+      L8.1: {model: Qwen3.5-35B-A3B, status: WAIT_OFFICIAL_BACKEND}
+      L8.2: {model: Qwen3.8-Flash-Next, status: WAIT_OFFICIAL_BACKEND}
+  - id: L9
+    name: llama_cpp_backend
+    status: FUNCTIONAL_BACKEND_PASS_REAL_DEVICE_TRANSPORT_OPEN
+    subgates:
+      L9.1: {status: PASS_ORIGINAL_958_NODE_SINGLE_SPLIT_GRAPH}
+      L9.2: {status: PASS_CANONICAL_GGUF_PAYLOAD_BINDING, total: 338, raw_storage_bytes: 281, converted_norm_payloads: 57}
+      L9.3: {status: PASS_CONTINUOUS_28_LAYER_MONOLITHIC_SOFTWARE_BACKEND}
+      L9.4: {status: OPEN_COMMAND128_RTL_DEVICE_TRANSPORT}
+      L9.5: {status: OPEN_NON_HOST_DEVICE_BUFFERS_NO_FILE_STAGING}
+      L9.6: {status: OPEN_FULL_LOGITS_METRICS}
   - id: L10
     name: physical_closure
-    status: EARLY_PPA_L10_1_L10_2_PASS_POST_ROUTE_PVT_SAIF_OPEN
+    status: PREFLIGHT_INVENTORIES_PASS_FUNCTIONAL_AND_PHYSICAL_GATES_OPEN
     subgates:
-      L10.1: {status: PASS_FROZEN_DDC_OWNER_HIERARCHY_LINK_STA, wns_ns: 0.00000864267, area_um2: 2313314.648873, area_double_count: 0}
-      L10.2: {status: PASS_EARLY_MACRO_DB, sram_kib: 4096, physical_macros: 124, address_overlap: 0}
-      L10.3: {status: WAIT_POST_ROUTE_SETUP_HOLD_PVT_OCV}
-      L10.4: {status: WAIT_WORKLOAD_SAIF_POWER}
-  - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_E0_ONLY}
+      L10.0a: {status: PASS_FROZEN_DDC_INVENTORY_LINK_STA}
+      L10.0b: {status: PASS_STANDALONE_SRAM_DB_INVENTORY, sram_kib: 4096, physical_macros: 124}
+      L10.1: {status: OPEN_FUNCTIONAL_CROSS_OWNER_TOP}
+      L10.2: {status: OPEN_FUNCTIONAL_SRAM_MACRO_REPLACEMENT}
+      L10.3: {status: OPEN_POST_ROUTE_SETUP_HOLD_PVT_OCV}
+      L10.4: {status: OPEN_WORKLOAD_SAIF_POWER}
+  - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_ONLY}

@@ -1,77 +1,54 @@
 {
   "schema_version": 6,
-  "stage": "L10",
-  "subgate": "L10_EARLY_PPA",
-  "state": "L5_6D_P3_REAL_DEVICE_BACKEND_FUNCTIONAL_PASS",
-  "decision": "GOAL_COMPLETE_NONBLOCKING_FOLLOWUPS_ONLY",
+  "stage": "L9",
+  "subgate": "L9.4_COMMAND128_DEVICE_TRANSPORT",
+  "state": "LLAMA_BACKEND_FUNCTIONAL_PASS_HARDWARE_DEVICE_TRANSPORT_OPEN",
+  "decision": "BUILD_REAL_COMMAND128_TRANSPORT_CANARY_AND_CAPTURE_FULL_LOGITS_METRICS",
   "git_workflow": {
-    "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
+    "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
   },
   "completed": {
-    "L5.5_8x8": "PASS_E1_E4",
-    "L5.5_integrated_E3": "PASS_REVIEW_321_869TPS",
-    "L5.6a_cycle_trace": "PASS_320_792TPS",
-    "L5.6b_reference_lm_head": "PASS",
-    "L5.6c_reduced_cross_RTL": "PASS_7840_BIT_EXACT"
+    "original_graph": "958 nodes / one split",
+    "continuous_backend": "28 layers / seven groups",
+    "canonical_GGUF_payload_bindings": 338,
+    "raw_storage_byte_parity": 281,
+    "converted_norm_payload_parity": 57,
+    "manifest_commands": 588,
+    "scheduler_cpu_fallback": 0,
+    "argmax": 7559,
+    "top10_overlap": 10,
+    "layer_completion_backpressure": "28 completions / seven stalls"
   },
   "open": {
-    "L5.6d_P2_real_payload_datapath": "OPEN",
-    "L5.6d_P3_full_payload_RTL": "OPEN",
-    "L10_post_route_signoff": "OPEN"
+    "full_logits_metrics": "OPEN",
+    "Command128_RTL_execution": "OPEN",
+    "non_host_device_buffers": "OPEN",
+    "host_file_staging_removal": "OPEN",
+    "internal_engine_backpressure": "OPEN",
+    "all_row_integrated_RTL": "OPEN",
+    "summary_storage_macro_PPA": "OPEN",
+    "L10_functional_and_physical_closure": "OPEN"
   },
-  "unique_next_action": "No remaining action for the L5.6d/P3 functional device-backend Goal. Nonblocking followups are summary SRAM/PPA, all-row integrated RTL, and L10/L11 physical closure; start them only under their separate stage goals.",
+  "unique_next_action": "First generate the complete full-logit metric report with scripts/compare_p3_logits.py. Then replace one complete layer of qwen2_generic_layer_embedded_main/file-staged execution with the RTL Command128/event/descriptor/iDMA/Shared-L2/Matrix/SFU path. Do not call it a hardware device until that canary passes.",
   "ordered_gates": [
-    "pack the completed symbolic descriptor/DDR plan after dtype approval",
-    "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
-    "one complete transformer layer on real payload RTL",
-    "seven four-layer groups on that datapath without hidden-state injection",
-    "L5.6d P3 continuous 28-layer or real backend equivalent",
-    "later L10.3 post-route PVT/OCV and L10.4 workload-derived SAIF"
+    "full 151936-logit metrics and raw-file hashes",
+    "21-command one-layer RTL transport canary",
+    "internal Matrix/SFU/KV random ready-valid backpressure",
+    "588-command expansion with engine counts 252/308/28",
+    "non-host or explicit DMA-backed device buffers without inter-stage files",
+    "summary-storage SRAM mapping and PPA",
+    "functional owner top and SRAM replacement",
+    "post-route PVT/OCV and workload-derived SAIF"
   ],
   "hard_acceptance": {
-    "clock_ns": 1.0,
-    "WNS_ns_min": 0.0,
-    "unmapped_unresolved_blackbox": 0,
-    "non_reset_data_false_paths": 0,
-    "multicycle_exceptions": 0,
-    "SRAM_MiB_max": 4,
-    "area_double_count": 0,
-    "payload_layers": 28,
-    "payload_phases_per_layer": 6,
-    "payload_continuity_groups": 7
+    "full_logits": {"argmax_equal": true, "top10_overlap_min": 10, "relative_l2_max": 0.01, "cosine_min": 0.9999},
+    "one_layer_canary": {"commands": 21, "accepted": 21, "completed": 21, "loss_duplicate_reorder": 0, "internal_stalls_min": 1, "reference_hidden_injection": 0},
+    "full_transport": {"commands": 588, "matrix": 252, "sfu": 308, "kv": 28, "accepted": 588, "completed": 588, "software_stage_dispatch": 0, "host_file_tensor_transport": 0}
   },
-  "stop_rules": [
-    "Any parent-inclusive and leaf area counted twice stops the PPA roll-up.",
-    "Negative WNS or unresolved/blackbox cells keeps L10.1 open.",
-    "Reference hidden-state injection inside a four-layer continuity group invalidates that payload result.",
-    "Do not claim post-route/PVT/SAIF or full-payload closure from early synthesis."
-  ],
   "evidence": {
-    "sandbox_v78": "reports/execution/sandbox_v78_result.json",
-    "ppa_plan": "reports/SANDBOX_V78_L10_AND_PAYLOAD_PLAN.md",
-    "payload_plan": "reports/execution/qwen2_payload_closure_plan.json",
-    "q1024_attention_backend": "reports/execution/qwen2_q1024_attention_backend_result.json",
-    "q1024_attention_sampled_RTL": "reports/execution/qwen2_q1024_model_attention_rtl_result.json",
-    "q1024_layer0_tail_backend": "reports/execution/qwen2_q1024_layer0_tail_backend_result.json",
-    "q1024_layer0_tail_sampled_RTL": "reports/execution/qwen2_q1024_layer0_tail_rtl_result.json",
-    "q1024_group0_backend": "reports/execution/qwen2_q1024_group0_backend_result.json",
-    "q1024_group0_tail_sampled_RTL": "reports/execution/qwen2_q1024_group0_rtl_result.json",
-    "q1024_group0_attention_sampled_RTL": "reports/execution/qwen2_q1024_group0_attention_rtl_result.json",
-    "q1024_group0_audit": "reports/execution/qwen2_q1024_group0_audit_result.json",
-    "q1024_full28_backend": "reports/execution/qwen2_q1024_full28_backend_result.json",
-    "q1024_final_head_backend": "reports/execution/qwen2_q1024_final_head_backend_result.json",
-    "q1024_ext32_policy": "reports/execution/qwen2_ext32_attention_policy_result.json",
-    "q1024_P3_backend_audit": "reports/execution/qwen2_q1024_p3_backend_audit_result.json",
-    "q1024_balanced_summary_RTL": "reports/execution/l5_balanced_summary_scheduler_result.json",
-    "q1024_layer5_critical_balanced_RTL": "reports/execution/qwen2_layer5_critical_summary_rtl_result.json",
-    "q1024_device_submission_C_ABI": "reports/execution/qwen2_device_submission_api_result.json",
-    "q1024_GGML_registered_shim": "reports/execution/ggml_hetero_backend_smoke_result.json",
-    "q1024_GGML_dynamic_plugin": "reports/execution/ggml_hetero_dynamic_result.json",
-    "q1024_llama_original_graph_device": "reports/execution/llama_hetero_full_graph_result.json",
-    "q1024_llama_direct_GGUF_device": "reports/execution/llama_hetero_direct_gguf_result.json",
-    "q1024_seven_group_backpressure": "reports/execution/qwen2_device_backpressure_result.json",
-    "L5_6d_P3_final_audit": "reports/execution/l5_6d_p3_device_final_audit.json",
-    "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
+    "audit": "reports/execution/REMOTE_AUDIT_11483E8.json",
+    "acceptance": "reports/execution/P3_BACKEND_ACCEPTANCE.json",
+    "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V719.md"
   }
 }

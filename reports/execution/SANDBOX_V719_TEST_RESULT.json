@@ -1,0 +1,58 @@
+{
+  "evidence_boundary": {
+    "Command128_RTL_execution": "OPEN",
+    "P3_real_llama_backend_equivalent": "PASS",
+    "full_logits_real_files": "OPEN",
+    "hardware_device_payload": "OPEN",
+    "post_route_PVT_OCV_SAIF": "OPEN"
+  },
+  "executed": {
+    "audit_fixture": "PASS_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION",
+    "json_yaml_parse": "PASS",
+    "progress_fixture": "PASS_V6_16_P3_BACKEND_FUNCTIONAL_BOUNDARY",
+    "python_compileall": "PASS",
+    "synthetic_full_logits": {
+      "checks": {
+        "argmax_equal": true,
+        "cosine": true,
+        "finite_mask_equal": true,
+        "relative_l2": true,
+        "topk_overlap": true
+      },
+      "metrics": {
+        "argmax_actual": 4095,
+        "argmax_reference": 4095,
+        "cosine": 0.9999999999988308,
+        "count": 4096,
+        "finite_mask_equal": true,
+        "max_abs": 1.0013580322265625e-05,
+        "mean_abs": 6.350756081019426e-06,
+        "relative_l2": 1.5294898073712695e-06,
+        "rmse": 7.066135856531283e-06,
+        "topk": 10,
+        "topk_overlap": 10
+      },
+      "schema_version": 1,
+      "status": "PASS_FULL_LOGITS_PARITY",
+      "thresholds": {
+        "cosine_min": 0.9999,
+        "relative_l2_max": 0.01,
+        "required_topk_overlap": 10,
+        "topk": 10
+      }
+    },
+    "targeted_pytest": {
+      "status": "PASS",
+      "tests": 6
+    }
+  },
+  "not_executed_in_sandbox": [
+    "llama.cpp build",
+    "official GGUF run",
+    "VCS/Verilator real transport",
+    "Synopsys DC/PnR",
+    "ARM SRAM physical-view generation"
+  ],
+  "schema_version": 1,
+  "status": "PASS_SANDBOX_V7_19"
+}

@@ -27,6 +27,7 @@ python3 scripts/run_qwen_model_resource_envelope.py --output work/results/sandbo
 python3 scripts/run_sandbox_v75.py --output work/results/sandbox_v75/result.json >/dev/null
 python3 scripts/run_sandbox_v78.py --output work/results/sandbox_v78/result.json --payload-plan work/results/sandbox_v78/payload_plan.json >/dev/null
 python3 scripts/validate_sandbox_v78.py --result work/results/sandbox_v78/result.json >/dev/null
+python3 scripts/audit_p3_backend_evidence.py >/dev/null
 pytest -q
 python3 scripts/generate_block128_vectors.py >/dev/null
 python3 scripts/generate_fp32_pipeline_vectors.py >/dev/null

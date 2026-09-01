@@ -33,6 +33,7 @@
   "descriptor_pack_test": {"status": "PASS_HISTORICAL_TEST_ONLY", "evidence": "reports/execution/qwen2_descriptor_pack_test_result.json", "records": 6188, "normal_mode_unapproved_guard": "PASS", "superseded_by_formal_image": true},
   "descriptor_formal_image": {"status": "PASS_COMPACT_SHARED_L2", "evidence": "reports/execution/qwen2_descriptor_image_result.json", "commands": 588, "chains": 1764, "records": 6188, "bytes": 164544, "sha256": "c8bc57cf869005d0aedba3065a970c4d05c97749c97355be1b2e6d34a8737eb3"},
   "descriptor_image_fabric": {"status": "PASS_FULL_PROTOCOL_PLUS_REAL_MACRO_SAMPLE", "evidence": "reports/execution/qwen2_descriptor_image_fabric_result.json", "full_records": 6188, "protocol_mismatches": 0, "real_macro_bank_groups": 4, "real_macro_descriptor_lanes": 4},
+  "descriptor_tile_context": {"status": "PASS", "evidence": "reports/execution/qwen2_descriptor_tile_context_result.json", "commands": 2, "roots": 6, "fetches": 12, "q1024": true, "invalid_preissue": true, "payload_bytes_moved": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

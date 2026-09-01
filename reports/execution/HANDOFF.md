@@ -1,4 +1,4 @@
-# Local-agent handoff v7.26 — main only
+# Local-agent handoff v7.27 — main only
 
 ## Closed in this checkpoint
 
@@ -27,6 +27,9 @@ Goal resumed after explicit user approval of dtype and SFU_PROGRAM encoding.
 Canonical config, software round-trip, 12-case RTL decoder, compact 164,544-byte
 formal image and production descriptor-port fetch all PASS. Descriptor-backed
 payload tensor movement remains open.
+The two-command RMSNorm-to-Q context now snapshots six roots/shapes from the
+formal image, validates q1024 BF16/FP32 and address continuity, and rejects a
+bad event dependency before any fetch. Payload bytes are not moved yet.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -51,7 +54,8 @@ shapes are row-major (`[1024,1536]`, Q `[1024,12,128]`), not GGML `ne[]` order.
 The parameterized packer passes all 6188 records in explicit test-only mode and
 hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
-bank groups/lanes, backed by retained L3 macro 100k. Next connect payload tensor
-reads/writes to that image, then extend one
+bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
+passes 12 descriptor fetches. Next issue DDR-to-Shared-L2 staging transfers and
+connect payload reads/writes, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

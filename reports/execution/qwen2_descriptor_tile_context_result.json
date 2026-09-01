@@ -1,0 +1,23 @@
+{
+  "address_continuity": true,
+  "commands": 2,
+  "descriptor_fetches": 12,
+  "evidence_class": "production_descriptor_port_and_qwen2_RMS_to_Q_context_RTL",
+  "formal_image_sha256": "c8bc57cf869005d0aedba3065a970c4d05c97749c97355be1b2e6d34a8737eb3",
+  "invalid_rejected_preissue": true,
+  "non_claims": [
+    "context snapshot does not move tensor payload bytes",
+    "two-command context does not close one full layer"
+  ],
+  "provenance": {
+    "context_rtl_sha256": "c361d1e6de1833bd73802a1efa4f21eac62b44337d2541763e535465db274f00",
+    "formal_image_report_sha256": "8f073221553a1c4478dd09b9401479ab52acb490a73513517c2dbd4faf3b82ca",
+    "rtl_log_sha256": "d67527a9b2b4f9277d8b834c1599258c3349c5402e426d5dce1cf180db540234"
+  },
+  "q1024": true,
+  "schema_version": 1,
+  "shapes": 6,
+  "stable_under_backpressure": true,
+  "status": "PASS_DESCRIPTOR_BACKED_TILE_CONTEXT",
+  "tensor_roots": 6
+}

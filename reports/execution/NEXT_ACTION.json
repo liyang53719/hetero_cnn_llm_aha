@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Embed the passing pinned-iDMA/AXI-to-Shared-L2 byte-exact chain into the monolithic descriptor compute top so the same run performs descriptor fetch, actual DMA, RMSNorm, Matrix and DDR store.",
+  "unique_next_action": "Extend the unified device path from Q columns0-31 to all 48 Q column tiles for token0: RMS once, stream each 1536x32 weight tile once through ping-pong staging, delay Matrix completion until tile47, and write 1536 BF16 outputs contiguously.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

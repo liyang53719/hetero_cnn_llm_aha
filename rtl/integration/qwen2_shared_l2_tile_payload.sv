@@ -25,7 +25,7 @@ module qwen2_shared_l2_tile_payload #(
   typedef enum logic[3:0]{S_IDLE,S_X_REQ,S_X_RSP,S_W_REQ,S_W_RSP,S_SFU_REQ,S_SFU_RSP,
     S_NORM_WR,S_Q_REQ,S_Q_RSP,S_M_REQ,S_M_WAIT,S_OUT_WR,S_DONE}state_e;
   state_e state_q;logic[6:0]beat_q;logic[10:0]k_q;logic[49151:0]x_q,w_q,y_q;
-  logic[511:0]q_weight_q;logic[16383:0]final_acc_q;logic final_seen_q;integer j;
+  logic[511:0]q_weight_q;logic[16383:0]final_acc_q;logic final_seen_q;integer comb_j,seq_j;
   function automatic[15:0]bf16(input logic[31:0]v);logic[31:0]r;begin r=v+32'h7fff+v[16];return r[31:16];end endfunction
   assign sfu_x_o=x_q;assign sfu_weight_o=w_q;
   assign l2_rd_valid_o=state_q==S_X_REQ||state_q==S_W_REQ||state_q==S_Q_REQ;
@@ -38,11 +38,11 @@ module qwen2_shared_l2_tile_payload #(
     l2_wr_valid_o=state_q==S_NORM_WR||state_q==S_OUT_WR;l2_wr_addr_o='0;l2_wr_data_o='0;l2_wr_be_o='1;
     if(state_q==S_NORM_WR)begin
       l2_wr_addr_o=ADDR_W'(norm_local_i[ADDR_W+5:6]+beat_q);
-      for(j=0;j<32;j++)l2_wr_data_o[j*16+:16]=bf16(y_q[(beat_q*32+j)*32+:32]);
+      for(comb_j=0;comb_j<32;comb_j++)l2_wr_data_o[comb_j*16+:16]=bf16(y_q[(beat_q*32+comb_j)*32+:32]);
     end
     if(state_q==S_OUT_WR)begin
       l2_wr_addr_o=ADDR_W'(q_output_local_i[ADDR_W+5:6]);
-      for(j=0;j<32;j++)l2_wr_data_o[j*16+:16]=bf16(final_acc_q[j*32+:32]);
+      for(comb_j=0;comb_j<32;comb_j++)l2_wr_data_o[comb_j*16+:16]=bf16(final_acc_q[comb_j*32+:32]);
     end
     sfu_payload_valid_o=state_q==S_SFU_REQ;sfu_out_ready_o=state_q==S_SFU_RSP;
     matrix_step_valid_o=state_q==S_M_REQ;matrix_context_o=0;matrix_clear_o=k_q==0;
@@ -58,12 +58,12 @@ module qwen2_shared_l2_tile_payload #(
         S_IDLE:if(start_i)begin beat_q<=0;k_q<=0;final_seen_q<=0;read_beats_o<=0;write_beats_o<=0;state_q<=S_X_REQ;end
         S_X_REQ:if(l2_rd_valid_o&&l2_rd_ready_i)state_q<=S_X_RSP;
         S_X_RSP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin
-          for(j=0;j<32;j++)x_q[(beat_q*32+j)*32+:32]<={l2_rsp_data_i[j*16+:16],16'd0};
+          for(seq_j=0;seq_j<32;seq_j++)x_q[(beat_q*32+seq_j)*32+:32]<={l2_rsp_data_i[seq_j*16+:16],16'd0};
           read_beats_o<=read_beats_o+1;if(beat_q==47)begin beat_q<=0;state_q<=S_W_REQ;end else begin beat_q<=beat_q+1;state_q<=S_X_REQ;end
         end
         S_W_REQ:if(l2_rd_valid_o&&l2_rd_ready_i)state_q<=S_W_RSP;
         S_W_RSP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin
-          for(j=0;j<16;j++)w_q[(beat_q*16+j)*32+:32]<=l2_rsp_data_i[j*32+:32];
+          for(seq_j=0;seq_j<16;seq_j++)w_q[(beat_q*16+seq_j)*32+:32]<=l2_rsp_data_i[seq_j*32+:32];
           read_beats_o<=read_beats_o+1;if(beat_q==95)begin beat_q<=0;state_q<=S_SFU_REQ;end else begin beat_q<=beat_q+1;state_q<=S_W_REQ;end
         end
         S_SFU_REQ:if(sfu_payload_valid_o&&sfu_payload_ready_i)state_q<=S_SFU_RSP;

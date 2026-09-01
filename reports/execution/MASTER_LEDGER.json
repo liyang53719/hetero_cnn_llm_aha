@@ -38,6 +38,7 @@
   "monolithic_real_tile_top": {"status": "PASS", "evidence": "reports/execution/qwen2_descriptor_shared_l2_tile_top_result.json", "commands": 2, "descriptor_fetches": 12, "dma_requests": 4, "shared_l2_reads": 1680, "shared_l2_writes": 49, "bf16_bit_exact": 1568, "pinned_idma_bound": false},
   "pinned_idma_tile": {"status": "PASS_SEPARATE_VCS", "evidence": "reports/execution/qwen2_pinned_idma_tile_result.json", "abstract_requests": 4, "flat_requests": 1539, "read_beats": 1681, "write_beats": 1681, "upstream_clean": true, "shared_l2_axi_bound": false},
   "pinned_idma_shared_l2_data": {"status": "PASS_BYTE_EXACT_VCS", "evidence": "reports/execution/qwen2_idma_shared_l2_data_result.json", "local_load_beats": 1680, "byte_exact_load_beats": 1680, "byte_exact_store_bytes": 64, "q_weight_rows": 1536, "monolithic_compute_bound": false},
+  "unified_real_tile_device_path": {"status": "PASS_SINGLE_VCS", "evidence": "reports/execution/qwen2_idma_descriptor_compute_top_result.json", "commands": 2, "descriptor_fetches": 12, "flat_idma_requests": 1539, "axi_beats": 1681, "bf16_bit_exact": 1568, "scope": "token0_Q_columns0_31"},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

@@ -1,0 +1,50 @@
+{
+  "abstract_dma_requests": 4,
+  "axi_beats_each_direction": 1681,
+  "bf16_bit_exact": 1568,
+  "checks": {
+    "DDR_writeback": true,
+    "byte_exact_DMA": true,
+    "formal_descriptor_fetch": true,
+    "pinned_idma": true,
+    "real_RMSNorm": true,
+    "real_Revision8B_B_Matrix": true,
+    "real_SharedL2": true,
+    "single_simulation": true,
+    "two_engine_completions": true,
+    "upstream_clean": true
+  },
+  "commands": 2,
+  "ddr_read_bytes": 107520,
+  "ddr_write_bytes": 64,
+  "descriptor_fetches": 12,
+  "engine_completions": 2,
+  "evidence_class": "single_VCS_descriptor_idma_SharedL2_SFU_Matrix_DDR",
+  "flat_idma_requests": 1539,
+  "matrix_outputs": 32,
+  "matrix_steps": 1536,
+  "non_claims": [
+    "only token0 and Q columns0_31 execute",
+    "does not close one complete Q projection, one layer, P2 seven groups or P3",
+    "VCS numerical tile is not q1024 full-payload simulation"
+  ],
+  "open": [
+    "complete_Q_projection_all_tokens_columns",
+    "remaining_layer0_operators",
+    "seven_four_layer_groups_without_injection",
+    "P3_continuous_28_layer"
+  ],
+  "provenance": {
+    "bridge_sha256": "1d41c7fa832d33a4b8b4f9981e5108c57addba56b8a1ee7fa90c665c7094ceb1",
+    "device_top_sha256": "9a977fc1d43fd408a38f9c2ab9f0cfdb6c0363e9b17ab9d5665bf9b2b4c1b2ab",
+    "formal_descriptor_image_sha256": "c8bc57cf869005d0aedba3065a970c4d05c97749c97355be1b2e6d34a8737eb3",
+    "idma_expand_sha256": "aad0b172163b4ec5ba79bf0c1b72665e0132809001780918366206bb68c61e37",
+    "log_sha256": "882b6aff98fd3895445464221e662f243ff76ffb5b38792a63cce18e5a2e6b9d"
+  },
+  "rms_values": 1536,
+  "schema_version": 1,
+  "scope": "layer0 token0 RMSNorm plus Q output columns0_31",
+  "shared_l2_read_beats": 1680,
+  "shared_l2_write_beats": 49,
+  "status": "PASS_UNIFIED_REAL_TILE_DEVICE_PATH"
+}

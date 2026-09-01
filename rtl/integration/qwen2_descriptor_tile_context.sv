@@ -21,7 +21,7 @@ module qwen2_descriptor_tile_context(
   logic[23:0]roots_q[0:5],shape_index_q;logic[55:0]addresses_q[0:5];
   logic[3:0]dtypes_q[0:5];logic[71:0]shapes_q[0:5];
   logic root_common_legal,root_dtype_legal,root_semantic_legal,shape_semantic_legal;
-  integer i;
+  integer comb_i,seq_i;
   assign descriptor_req_valid_o=state_q==S_ROOT_REQ||state_q==S_SHAPE_REQ;
   assign descriptor_req_index_o=state_q==S_ROOT_REQ?roots_q[slot_q]:shape_index_q;
   assign descriptor_rsp_ready_o=state_q==S_ROOT_RSP||state_q==S_SHAPE_RSP;
@@ -35,14 +35,14 @@ module qwen2_descriptor_tile_context(
       descriptor_rsp_data_i[119:116]>=1&&descriptor_rsp_data_i[119:116]<=4&&root_dtype_legal;
     shape_semantic_legal=descriptor_rsp_data_i[7:0]==8'h02&&descriptor_rsp_data_i[31:8]==0;
     tensor_address_o='0;tensor_dtype_o='0;tensor_shape_o='0;tensor_root_o='0;
-    for(i=0;i<6;i++)begin
-      tensor_address_o[i*56+:56]=addresses_q[i];tensor_dtype_o[i*4+:4]=dtypes_q[i];
-      tensor_shape_o[i*72+:72]=shapes_q[i];tensor_root_o[i*24+:24]=roots_q[i];
+    for(comb_i=0;comb_i<6;comb_i++)begin
+      tensor_address_o[comb_i*56+:56]=addresses_q[comb_i];tensor_dtype_o[comb_i*4+:4]=dtypes_q[comb_i];
+      tensor_shape_o[comb_i*72+:72]=shapes_q[comb_i];tensor_root_o[comb_i*24+:24]=roots_q[comb_i];
     end
   end
   always_ff@(posedge clk_i or negedge rst_ni)begin
     if(!rst_ni)begin state_q<=S_IDLE;slot_q<=0;status_q<=ST_OK;shape_index_q<=0;
-      for(i=0;i<6;i++)begin roots_q[i]<=24'hffffff;addresses_q[i]<=0;dtypes_q[i]<=0;shapes_q[i]<=0;end
+      for(seq_i=0;seq_i<6;seq_i++)begin roots_q[seq_i]<=24'hffffff;addresses_q[seq_i]<=0;dtypes_q[seq_i]<=0;shapes_q[seq_i]<=0;end
     end else case(state_q)
       S_IDLE:if(start_i)begin
         roots_q[0]<=rms_command_i[79:56];roots_q[1]<=rms_command_i[103:80];roots_q[2]<=rms_command_i[127:104];

@@ -1,4 +1,4 @@
-# Local-agent handoff v7.57 — main only
+# Local-agent handoff v7.59 — main only
 
 ## Closed in this checkpoint
 
@@ -142,18 +142,18 @@ The complete canonical batch16 first-nine sequence now passes in one production
 controller/VCS run:9 formal commands/completions,62 descriptor fetches,145 DMA
 requests, positions0..15,98,304 Matrix steps/50,331,648 MACs,1,920 RoPE steps
 and118,784 BF16 exact. RMS→Q→bias→RoPE→K→bias→RoPE→V→bias uses direct produced
-tensors with zero intermediate reference injection. DMA/DDR/L2 are modeled;
-pinned-iDMA replacement, KV append and remaining layer0 are open.
+tensors with zero intermediate reference injection. The modeled-DMA result is
+superseded by the pinned-iDMA result below; q1024 and remaining layer0 are open.
 Pinned-iDMA batch16 first-nine now PASS. Directional chunking uses max1024 B for
 DDR→local and64 B for local→DDR; dedicated gate has no AXI assertions. Full run
 binds clean upstream iDMA, AXI bridge and real Shared-L2 fabric:101,432 flat
 requests,104,162 read/write beats,9 completions and118,784 BF16 exact with zero
 intermediate injection. Descriptor words still use the formal-image responder;
 same-fabric descriptor storage remains a later composition detail.
-q1024 schedule is now frozen:64 batch16 groups, but projection loops weight-tile
-outside batch so every Q/K/V weight byte is fetched once, not64 times. RMS writes
-formal norm DDR first; expected first-nine work is6,291,456 Matrix steps and
-7,602,176 BF16 values. See `config/qwen2_q1024_tile16_schedule.json`.
+q1024 group8 mixed readiness now PASS: token_base16 RMS store/norm transpose are
+exact; Q batch2 payload is49,152 exact; same controller trace64 closes Q/K/V at
+6,291,456 Matrix steps,64 weight loads,512 norm loads and zero weight refetch.
+Trace64 is not numerical payload. Bias/RoPE64, KV and layer0 remain open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "CANONICAL_FIRST9_TILE16_PINNED_IDMA_PASS_Q1024_SCHEDULER_OPEN",
-  "decision": "IMPLEMENT_Q1024_WEIGHT_TILE_OUTER_SCHEDULER",
+  "state": "Q1024_GROUP8_TRACE64_PASS_BIAS_ROPE_KV_OPEN",
+  "decision": "CLOSE_Q1024_BIAS_ROPE_KV_TRACE",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Implement config/qwen2_q1024_tile16_schedule.json: RMS all64 batches to formal norm DDR, then projection weight-tile outer and batch16 inner so each Q/K/V weight byte is fetched once; preserve pinned iDMA and recurrence state, then connect complete K/V to formal token_count=1024 KV append.",
+  "unique_next_action": "Extend the same runtime trace/count contract through batch64 Q/K/V bias, positions0..1023 RoPE recurrence and formal token_count=1024 KV append; keep batch16 real payload and pinned-iDMA anchors separate from trace-only fields, then start remaining layer0 attention.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

@@ -1,0 +1,81 @@
+{
+  "RMS_store_anchor": {
+    "bf16_bit_exact": 24576,
+    "ddr_write_bytes": 49152,
+    "token_base": 16
+  },
+  "batches": 64,
+  "checks": {
+    "formal_descriptor_geometry": true,
+    "group8_768KiB": true,
+    "runtime_trace_mode": true,
+    "same_controller_source": true,
+    "weight_fetch_once": true
+  },
+  "evidence_class": "same_RTL_trace64_plus_batch2_real_payload_plus_token_base_RMS_store",
+  "non_claims": [
+    "trace64 does not execute Matrix numerical payload",
+    "batch2 payload duplicates rows0_15 for schedule validation",
+    "q1024 numerical payload is not closed"
+  ],
+  "open": [
+    "RMS_all64_payload_or_trace",
+    "bias_RoPE_batch64_trace",
+    "q1024_KV_append",
+    "remaining_layer0",
+    "seven_groups",
+    "P3"
+  ],
+  "payload_anchor": {
+    "Q_bf16_bit_exact": 49152,
+    "batches": 2,
+    "matrix_steps": 147456
+  },
+  "projection_trace": {
+    "K": {
+      "groups": 1,
+      "matrix_steps": 786432,
+      "norm_loads": 64,
+      "tiles": 8,
+      "values": 262144,
+      "weight_loads": 8
+    },
+    "Q": {
+      "groups": 6,
+      "matrix_steps": 4718592,
+      "norm_loads": 384,
+      "tiles": 48,
+      "values": 1572864,
+      "weight_loads": 48
+    },
+    "V": {
+      "groups": 1,
+      "matrix_steps": 786432,
+      "norm_loads": 64,
+      "tiles": 8,
+      "values": 262144,
+      "weight_loads": 8
+    }
+  },
+  "provenance": {
+    "K_trace_sha256": "91d05718acd7a52e1858a1339ac98f6885a14389e9222709f47ea54630d0dabd",
+    "Q_trace_sha256": "097bc3dc34065415acb75e67ee345088d54916373c9dc4d5043f8f2ab2743a63",
+    "V_trace_sha256": "a323a332167761a4d6fcd4742834ce692106e8a28b266f2ff05335f9b4123de3",
+    "batch2_payload_sha256": "12fa2e4fa08407f6d48cd7f017088ab3641b7b56817eb77a36134e2565e01db3",
+    "contract_sha256": "59ba3eb1fc2cfd3aebce06779e35746bd308dcd4074150d41e40be198d8be004",
+    "rms_store_sha256": "7a2a7c28f00beb28c8bbf166ff9a00cf89e1832fe4c3e254d986477848e5fc54",
+    "scheduler_rtl_sha256": "c90925b3dc4016ae2cbb0a1c9d836921d390dfd03c6c1a830f5ca27fba653bb8"
+  },
+  "schema_version": 1,
+  "sequence": 1024,
+  "status": "PASS_Q1024_GROUP8_CONTROL_TRACE_MIXED_EVIDENCE",
+  "totals": {
+    "QKV_values": 2097152,
+    "matrix_steps": 6291456,
+    "norm_loads": 512,
+    "projection_DDR_read_bytes": 31457280,
+    "projection_DDR_write_bytes": 4194304,
+    "weight_loads": 64,
+    "weight_refetch": 0
+  }
+}

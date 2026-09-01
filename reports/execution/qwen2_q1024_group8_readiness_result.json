@@ -1,0 +1,48 @@
+{
+  "checks": {
+    "random_backpressure": true,
+    "same_RTL_parameterized_batch_count": true,
+    "token_base_32bit": true,
+    "weight_fetch_once": true,
+    "weight_group_bytes": 786432
+  },
+  "evidence_class": "token_base_norm_loader_plus_real_group8_Matrix_batch2",
+  "group8_batch2": {
+    "batches": 2,
+    "bf16_bit_exact": 49152,
+    "effective_macs": 75497472,
+    "matrix_steps": 147456,
+    "norm_batch_loads": 12,
+    "projection": "Q",
+    "weight_groups": 6,
+    "weight_refetch": 0,
+    "weight_tile_loads": 48
+  },
+  "non_claims": [
+    "batch2 duplicates canonical rows0_15 payload to validate scheduling and is not rows16_31 model evidence",
+    "q1024 numerical payload is not run",
+    "only Q projection is tested in group8 mode"
+  ],
+  "norm_loader": {
+    "bf16_bit_exact": 24576,
+    "source_offset": 49152,
+    "token_base": 16,
+    "transpose_values": 24576
+  },
+  "open": [
+    "BATCH_COUNT64_control_trace",
+    "q1024_RMS_norm_DDR_store",
+    "QKV_group8_full_trace",
+    "batch64_bias_RoPE",
+    "KV_append"
+  ],
+  "provenance": {
+    "contract_sha256": "59ba3eb1fc2cfd3aebce06779e35746bd308dcd4074150d41e40be198d8be004",
+    "group_log_sha256": "12fa2e4fa08407f6d48cd7f017088ab3641b7b56817eb77a36134e2565e01db3",
+    "loader_rtl_sha256": "a8db350d50c33fa4f93205cd41c1abd7628e3cb034ca335c48daf787580739f7",
+    "norm_log_sha256": "147ca3d78ff265642d41426be336c9a6a4b6084da0130281b4bec163d47c1c8c",
+    "scheduler_rtl_sha256": "c90925b3dc4016ae2cbb0a1c9d836921d390dfd03c6c1a830f5ca27fba653bb8"
+  },
+  "schema_version": 1,
+  "status": "PASS_Q1024_GROUP8_SCHEDULER_READINESS"
+}

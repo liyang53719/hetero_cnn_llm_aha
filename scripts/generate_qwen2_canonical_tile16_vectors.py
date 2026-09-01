@@ -33,5 +33,5 @@ for t in range(16):
   acc=np.float32(0)
   for k in range(1536):acc=fma(from_word(int(norm_bits[t,k])<<16),from_word(int(qw[c,k])<<16),acc)
   expected.append(bf(acc))
-pack(OUT/'hidden_token_major.memh',emb_tensor.view(torch.uint16).flatten().tolist());pack(OUT/'rms_weight_fp32.memh',nw_tensor.view(torch.uint32).flatten().tolist(),32);pack(OUT/'activation_kmajor.memh',a);pack(OUT/'q_weight_tile0.memh',weights);pack(OUT/'expected_rows.memh',expected)
+pack(OUT/'hidden_token_major.memh',emb_tensor.view(torch.uint16).flatten().tolist());pack(OUT/'rms_weight_fp32.memh',nw_tensor.view(torch.uint32).flatten().tolist(),32);pack(OUT/'norm_token_major.memh',norm_bits.flatten().tolist());pack(OUT/'activation_kmajor.memh',a);pack(OUT/'q_weight_tile0.memh',weights);pack(OUT/'expected_rows.memh',expected)
 print('QWEN2_CANONICAL_TILE16_VECTORS_PASS rows=16 columns=32 k=1536 values=512 token_hash=e4151c23e259')

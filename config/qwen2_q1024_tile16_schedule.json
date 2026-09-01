@@ -28,9 +28,12 @@
     },
     "projection": {
       "k_major_transpose_source": "formal_DDR_norm_tensor",
-      "loop_order": ["projection", "weight_tile", "batch16"],
+      "loop_order": ["projection", "weight_group8", "batch16", "tile_in_group"],
       "weight_tile_loads": {"Q": 48, "K": 8, "V": 8},
-      "batches_per_loaded_weight_tile": 64,
+      "weight_tiles_resident": 8,
+      "weight_group_bytes": 786432,
+      "weight_groups": {"Q": 6, "K": 1, "V": 1},
+      "batches_per_loaded_weight_group": 64,
       "weight_fetches_per_layer_per_request": 1
     },
     "bias": {
@@ -55,20 +58,22 @@
     "bf16_values_total": 7602176
   },
   "expected_DDR_bytes": {
-    "read": 26761216,
+    "read": 42489856,
     "write": 15204352,
     "matrix_weight_read": 6291456,
+    "norm_activation_read": 25165824,
     "full_score_matrix": 0
   },
   "forbidden": [
     "batch_outer_projection_that_refetches_all_weights_64_times",
+    "single_weight_tile_outer_schedule_that_rereads_norm_64_times_per_projection",
     "different_RTL_for_q128_q384_q1024",
     "reference_activation_injection_between_batches",
     "full_attention_score_matrix_DDR_write"
   ],
   "next_RTL": [
     "batch16_norm_DDR_store_and_transpose_loader",
-    "weight_tile_outer_projection_scheduler",
+    "weight_group8_outer_projection_scheduler",
     "64_batch_RoPE_recurrence_controller",
     "q1024_first9_pinned_iDMA_gate"
   ]

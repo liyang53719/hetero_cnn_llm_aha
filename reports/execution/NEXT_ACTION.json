@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Turn the passing two-buffer full-Q token0 controller into true overlap: while Matrix consumes tile N, pinned iDMA fills the alternate buffer for N+1; prove identical 1536 outputs, Matrix completion once and overlapped/serialized cycle ratio.",
+  "unique_next_action": "Extend the passing overlapped full-Q controller to Q/K/V: freeze q1024 full-trace geometry and run representative real numerical token tiles; add K/V dimensions, bias and RoPE without rerunning RMS or writing intermediate Q/K/V unnecessarily.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

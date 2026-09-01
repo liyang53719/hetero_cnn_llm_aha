@@ -42,6 +42,7 @@
   "unified_real_tile_device_path": {"status": "PASS_SINGLE_VCS", "evidence": "reports/execution/qwen2_idma_descriptor_compute_top_result.json", "commands": 2, "descriptor_fetches": 12, "flat_idma_requests": 1539, "axi_beats": 1681, "bf16_bit_exact": 1568, "scope": "token0_physical_Q_columns0_31"},
   "full_q_token0_iterative": {"status": "PASS_SAME_RTL", "evidence": "reports/execution/qwen2_full_q_token_iterative_result.json", "physical_columns": 1536, "tiles": 48, "ddr_output_bytes": 3072, "bf16_bit_exact": 75264, "repeated_command_completion": 48},
   "full_q_token0_single_command": {"status": "PASS", "evidence": "reports/execution/qwen2_full_q_token_single_command_result.json", "physical_columns": 1536, "tiles": 48, "descriptor_fetches": 12, "rms_executions": 1, "matrix_completions": 1, "bf16_bit_exact": 3072, "supersedes_iterative": true},
+  "full_q_token0_pingpong": {"status": "PASS", "evidence": "reports/execution/qwen2_full_q_token_pingpong_result.json", "serial_cycles": 816115, "pingpong_cycles": 450911, "ratio": 0.5525091439319214, "overlap_cycles": 365859, "bf16_bit_exact": 3072},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

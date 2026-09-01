@@ -1,0 +1,32 @@
+{
+  "bf16_bit_exact": 3072,
+  "checks": {
+    "one_RMS_and_completion": true,
+    "pingpong_buffers_2": true,
+    "ratio_lte_0p65": true,
+    "real_overlap": true,
+    "same_outputs_and_traffic": true
+  },
+  "column_tiles": 48,
+  "cycle_reduction": 365204,
+  "cycle_reduction_fraction": 0.4474908560680786,
+  "ddr_read_bytes": 4727808,
+  "ddr_write_bytes": 3072,
+  "evidence_class": "single_VCS_real_pinned_idma_and_Matrix_concurrent",
+  "non_claims": [
+    "token0 exercises one Matrix output row and does not prove q1024 Matrix utilization >=85%",
+    "full q1024 payload, QKV, complete layer, P2 and P3 remain open"
+  ],
+  "overlap_cycles": 365859,
+  "overlapped_over_serialized_ratio": 0.5525091439319214,
+  "physical_Q_columns": 1536,
+  "pingpong_cycles": 450911,
+  "provenance": {
+    "pingpong_log_sha256": "d14f35e9605e45565ff7cd37f78679ebc9e63c47d6a98a766016ac9eacfdfb19",
+    "pingpong_top_sha256": "a23bf160fa5c524012c2323bc34a85a45d56127a0d5a5ab87fab941c132b1a7b",
+    "serial_log_sha256": "5381805f6280abdc0a34116eff49974651a10edbb45344e9ca9dc80ff3d19978"
+  },
+  "schema_version": 1,
+  "serial_cycles": 816115,
+  "status": "PASS_FULL_Q_TOKEN0_PINGPONG_OVERLAP"
+}

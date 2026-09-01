@@ -1,4 +1,4 @@
-# Local-agent handoff v7.35 — main only
+# Local-agent handoff v7.36 — main only
 
 ## Closed in this checkpoint
 
@@ -48,6 +48,9 @@ The production controller now executes all 48 physical Q column tiles for
 token0 in one command: descriptor/RMS/Matrix completion each occur once, 1536 Q
 outputs are bit-exact and contiguous in DDR. It uses two alternating 96 KiB
 weight buffers; DMA/Matrix overlap is not yet enabled.
+True ping-pong is now measured: 816,115 serialized cycles → 450,911 cycles,
+ratio 0.5525; DMA and payload overlap for 365,859 cycles with identical 1536 Q
+outputs and traffic. Token0 does not prove q1024 Matrix utilization.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -74,7 +77,7 @@ hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes; next bind its four
-full token0 Q single-command passes; next enable true DMA/Matrix ping-pong overlap
-and define q1024 trace/payload split, then extend one
+full token0 Q overlap passes; next define q1024 numerical-tile vs full-trace
+closure and expand Q/K/V, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

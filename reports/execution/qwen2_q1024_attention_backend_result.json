@@ -1,0 +1,51 @@
+{
+  "attention_values": 1572864,
+  "causal_updates": 6297600,
+  "checks": {
+    "GQA_12Q_2KV_mapping": true,
+    "approved_public_descriptor_encoding": true,
+    "causal_token0_equals_V_bit_exact": true,
+    "direct_BF16_probability_rejected_over_threshold": true,
+    "first13_Command128_consumed": true,
+    "first9_outputs_match_accepted_backend_hashes": true,
+    "independent_tokens_0_127_128_383_1023_heads_0_5_6_11": true,
+    "no_external_reference_tensor_injection_after_first9": true,
+    "no_score_matrix": true,
+    "universal_hierarchical_block128": true
+  },
+  "commands": 13,
+  "evidence_class": "chained_CXX_OpenMP_hardware_semantics_backend_not_RTL",
+  "hashes": {
+    "attention_bf16.bin": "bc425dbe43e3fb2b830d6a64a4aea4596e30507fe4f3ffd60e715bc1cc16bdcb",
+    "attention_fp32.bin": "3fa2b62ea532f07c4d4127dab0d694f3f2cb2625d5e035d9c8f3b5d139d552bc",
+    "attention_l_fp32.bin": "766a71f41cd0bcbd11cae73ed9e0908d3c9d5aecedaac609c9b77cca7bc1c5e4",
+    "attention_m_fp32.bin": "374ec3dd96263ba29402121667f645bbe323d83e25cd77712befe8e1b43d99f6",
+    "run.log": "60efd2943a89a5269607c835827db5aad0e9dfa09023e2b5f44c3222b373a115"
+  },
+  "hierarchical_block_tokens": 128,
+  "max_attention_error": {
+    "bf16_boundary": 0.00782783749,
+    "fp32_probability": 0.000256079523,
+    "independent_sample_fp64_reference": 0.00011495479050216417,
+    "required_fp32_threshold": 0.002
+  },
+  "non_claims": [
+    "attention payload is a chained hardware-semantics C++ backend rather than RTL simulation",
+    "the existing first16 RTL anchor ends at first-nine QKV bias RoPE",
+    "this does not close layer0 or L5.6d"
+  ],
+  "open": [
+    "real_Revision8B_QK_tile_RTL_anchor",
+    "real_softmax_merge128_PV_RTL_anchor",
+    "OProj_residual_postnorm_MLP",
+    "seven_groups",
+    "P3"
+  ],
+  "pv_probability_path": "FP32_probability_input_conversion_required",
+  "rows": 1024,
+  "schema_version": 1,
+  "score_matrix_bytes": 0,
+  "score_matrix_materialized": false,
+  "status": "PASS_Q1024_FIRST13_EXACT_ATTENTION_BACKEND",
+  "summary_merges": 43008
+}

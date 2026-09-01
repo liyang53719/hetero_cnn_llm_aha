@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_FIRST9_BACKEND_KV_PASS_ATTENTION_OPEN",
-  "decision": "IMPLEMENT_LAYER0_BLOCKED_ATTENTION_BACKEND",
+  "state": "Q1024_FIRST13_ATTENTION_BACKEND_AND_SAMPLED_RTL_PASS_LAYER0_TAIL_OPEN",
+  "decision": "IMPLEMENT_LAYER0_OPROJ_RESIDUAL_POSTNORM_MLP",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Extend the exact backend and RTL controller boundary through layer0 blocked FlashAttention QK→online-softmax/merge128→PV without score DDR; anchor canonical rows0..15 QK/PV tiles in RTL, run q1024 backend numerically, then continue OProj/residual/post-norm/MLP.",
+  "unique_next_action": "Extend the same q1024 exact backend from the passing first13 attention output through OProj, residual, post-attention RMSNorm, gate/up, 8-lane fused SiLU×up, down projection and final residual; retain FP32 probability hilo conversion, then add sampled real-RTL anchors without changing sequence-specific RTL.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -51,6 +51,8 @@
     "sandbox_v78": "reports/execution/sandbox_v78_result.json",
     "ppa_plan": "reports/SANDBOX_V78_L10_AND_PAYLOAD_PLAN.md",
     "payload_plan": "reports/execution/qwen2_payload_closure_plan.json",
+    "q1024_attention_backend": "reports/execution/qwen2_q1024_attention_backend_result.json",
+    "q1024_attention_sampled_RTL": "reports/execution/qwen2_q1024_model_attention_rtl_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "FP32_probability_hilo_conversion": true,
+    "QK_SFU_PV_payload": true,
+    "exact_revision_model_QKV": true,
+    "random_controller_backpressure": true,
+    "same_Revision8B_RTL_for_q1024": true,
+    "score_probability_DDR_zero": true
+  },
+  "controller_full_schedule": {
+    "summary_merge_rows": 43008,
+    "tasks": 12672
+  },
+  "evidence_class": "sampled_real_Revision8B_QK_SFU_merge128_PV_RTL_E2",
+  "non_claims": [
+    "1440 sampled rows do not constitute full q1024 numerical RTL",
+    "controller task counts are full-schedule control evidence rather than full payload execution",
+    "this does not close layer0 or L5.6d"
+  ],
+  "open": [
+    "all_12288_attention_rows_RTL",
+    "OProj_residual_postnorm_MLP",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "shard0_log_sha256": "ac5fb92ef9e0d25278231a215eed942906c17dbc5601c87aee343b544011d595",
+    "shard1_log_sha256": "6641b28eec8c1ec954b823cd4a10471503d484c9d0297cb08ecf070c6896d5be",
+    "testbench_sha256": "b05c34eede13b99e403b90f709ca4c180ff0328ab7612579b2c052c6862ef30d",
+    "vector_manifest_sha256": "c14078ffc5459e884369883d54d1d0c9337b4b305e89df43de64764d626bc239"
+  },
+  "sampled_rows": 1440,
+  "schema_version": 1,
+  "shards": [
+    {
+      "attention_fnv64": "c20acb7ba5ae55b5",
+      "compared_rows": 960,
+      "controller_merge_rows": 43008,
+      "controller_tasks": 12672,
+      "cycles": 5824578,
+      "probability_DDR_bytes": 0,
+      "sampled_merge_rows": 672,
+      "score_DDR_bytes": 0,
+      "shard": 0,
+      "tasks": 306
+    },
+    {
+      "attention_fnv64": "f0885b028f8613a1",
+      "compared_rows": 480,
+      "controller_merge_rows": 43008,
+      "controller_tasks": 12672,
+      "cycles": 15071349,
+      "probability_DDR_bytes": 0,
+      "sampled_merge_rows": 2688,
+      "score_DDR_bytes": 0,
+      "shard": 1,
+      "tasks": 756
+    }
+  ],
+  "status": "PASS_Q1024_EXACT_MODEL_SAMPLED_ATTENTION_RTL"
+}

@@ -13,7 +13,8 @@ module qwen2_tile_idma_expand(
  output logic[31:0]flat_requests_o,output logic local_source_o
 );
  typedef enum logic[1:0]{S_IDLE,S_REQ,S_RSP,S_OUT}state_e;state_e state_q;
- logic[1:0]kind_q;logic[63:0]src_q,dst_q;logic[31:0]bytes_q,rows_q,ss_q,ds_q,row_q;logic error_q;
+ logic[1:0]kind_q;logic[63:0]src_q,dst_q;logic[31:0]bytes_q,rows_q,ss_q,ds_q,row_q;logic error_q,coalesce;
+ assign coalesce=(req_kind_i==1||req_kind_i==3)&&rows_i>1&&src_stride_i==row_bytes_i&&dst_stride_i==row_bytes_i;
  assign req_ready_o=state_q==S_IDLE;assign idma_req_valid_o=state_q==S_REQ;
  assign idma_rsp_ready_o=state_q==S_RSP;assign rsp_valid_o=state_q==S_OUT;assign rsp_error_o=error_q;
  assign idma_src_addr_o=src_q+64'(row_q)*ss_q;assign idma_dst_addr_o=dst_q+64'(row_q)*ds_q;
@@ -23,7 +24,7 @@ module qwen2_tile_idma_expand(
   if(!rst_ni)begin state_q<=S_IDLE;kind_q<=0;src_q<=0;dst_q<=0;bytes_q<=0;rows_q<=0;ss_q<=0;ds_q<=0;row_q<=0;error_q<=0;flat_requests_o<=0;end
   else case(state_q)
    S_IDLE:if(req_valid_i&&req_ready_o)begin kind_q<=req_kind_i;src_q<=src_addr_i;dst_q<=dst_addr_i;
-    bytes_q<=row_bytes_i;rows_q<=(req_kind_i==1||req_kind_i==3)?rows_i:1;ss_q<=src_stride_i;ds_q<=dst_stride_i;
+    bytes_q<=coalesce?row_bytes_i*rows_i:row_bytes_i;rows_q<=coalesce?1:((req_kind_i==1||req_kind_i==3)?rows_i:1);ss_q<=src_stride_i;ds_q<=dst_stride_i;
     row_q<=0;error_q<=row_bytes_i==0||((req_kind_i==1||req_kind_i==3)&&rows_i==0);state_q<=row_bytes_i==0||((req_kind_i==1||req_kind_i==3)&&rows_i==0)?S_OUT:S_REQ;end
    S_REQ:if(idma_req_valid_o&&idma_req_ready_i)begin flat_requests_o<=flat_requests_o+1;state_q<=S_RSP;end
    S_RSP:if(idma_rsp_valid_i&&idma_rsp_ready_o)begin

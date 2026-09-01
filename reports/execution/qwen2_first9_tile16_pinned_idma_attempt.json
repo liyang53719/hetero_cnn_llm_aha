@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "IN_PROGRESS_COALESCE_FIX_UNVERIFIED_RESOURCE_GUARD",
+  "target": "canonical first-nine tile16 pinned iDMA AXI Shared-L2 bridge",
+  "last_failure": {
+    "operation_index": 0,
+    "flat_request": 2,
+    "expand_state": "S_RSP",
+    "expand_row": 1,
+    "idma_busy": "0x60",
+    "local_axi_aw": 6,
+    "local_axi_wlast": 5,
+    "local_axi_b": 5,
+    "interpretation": "second contiguous 3072-byte row stalled before final source-read burst completed"
+  },
+  "candidate_fix": {
+    "policy": "coalesce 2D request when both strides equal row_bytes",
+    "expected_abstract_dma": 145,
+    "expected_flat_idma": 99345,
+    "expected_axi_read_beats": 104162,
+    "expected_axi_write_beats": 104162,
+    "dedicated_regression_prepared": true,
+    "verified": false
+  },
+  "resource_stop": {
+    "MemAvailable_KiB": 9688596,
+    "required_minimum_KiB": 10485760,
+    "project_process_left_running": false,
+    "external_memory_users_not_terminated": true
+  },
+  "provenance": {
+    "failure_log_sha256": "d6edbb430584c1a69184696f4774180a5eef738bf676283fefc6b1fe2d16bc6a",
+    "candidate_expander_sha256": "c90c176f4fd06a79355e6a9dc851ce86de8bdd7ed6b52cd82fdb78a0223cd070",
+    "integration_tb_sha256": "d47c2bd77af01921dfc262393190b75be9afb67d09c3f5ed73380f0806702169",
+    "coalesce_tb_sha256": "97f600e54f47a50b130415bcf843e0b7b4dacdee35d6724c4ab7e33c178e290"
+  },
+  "next_action": "When MemAvailable exceeds 10 GiB, run the dedicated coalesce regression, then rerun the full pinned first-nine test without changing timeout or numerical gates.",
+  "non_claims": [
+    "candidate coalescing RTL is not PASS",
+    "pinned first-nine data movement is not closed",
+    "modeled-DMA first-nine PASS remains the latest accepted numerical boundary"
+  ]
+}

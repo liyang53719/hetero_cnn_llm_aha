@@ -1,0 +1,52 @@
+{
+  "axi_beats_each_direction": 98768,
+  "bf16_bit_exact": 5632,
+  "biased_values": 2048,
+  "checks": {
+    "bias_input_format_fp32_dtype7": true,
+    "formal_descriptor_fetch": true,
+    "generated_rtl_hand_edits": false,
+    "projection_output_feeds_bias_src0": true,
+    "reference_injection_between_stages": false,
+    "single_vcs_run": true
+  },
+  "commands": [
+    "l0.input_norm",
+    "l0.q",
+    "l0.q_bias",
+    "l0.k",
+    "l0.k_bias",
+    "l0.v",
+    "l0.v_bias"
+  ],
+  "ddr_read_bytes": 6312960,
+  "ddr_write_bytes": 8192,
+  "descriptor_fetches": 42,
+  "evidence_class": "single_VCS_formal_descriptor_pinned_iDMA_SharedL2_RMS_Revision8B_B_Matrix_HardFloat_bias",
+  "flat_idma_requests": 98440,
+  "matrix_completions": 3,
+  "non_claims": [
+    "seven of the first nine formal operations execute in this run",
+    "Q and K RoPE are not yet data-connected in this run",
+    "only token0 numerical payload executes"
+  ],
+  "open": [
+    "Q_K_RoPE_in_same_chain",
+    "first_nine_commands",
+    "complete_layer",
+    "seven_groups",
+    "continuous_28_layers"
+  ],
+  "provenance": {
+    "bias_top_sha256": "d9ac582de02b0f882b378b05a40a57af9fea04371167bbe6a04209c31d5ff8b0",
+    "log_sha256": "5991550bf639163aa90324bc7e6d942e202e1cc855b631b63794ef2cbd670b32",
+    "projection_top_sha256": "67229a444270c47010af67b462fb514201f1517a7a295ec00673db7456be6d49",
+    "testbench_sha256": "531b23c466323c06b60f9e1bfebee1357ad1e13155866082f237a6f398702637"
+  },
+  "raw_values": 3584,
+  "schema_version": 1,
+  "sfu_completions": 4,
+  "shared_l2_read_beats": 98784,
+  "shared_l2_write_beats": 176,
+  "status": "PASS_QKV_BIAS_CHAIN_NO_INJECTION"
+}

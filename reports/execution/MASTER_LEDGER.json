@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "RAW_QKV_NO_INJECTION_AND_DESCRIPTOR_BIAS_STAGE_PASS_FIRST9_OPEN",
+  "current_state": "QKV_BIAS_SAME_RUN_PASS_ROPE_FIRST9_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -47,7 +47,8 @@
   "kv_raw_projection_pingpong": {"status": "PASS", "evidence": "reports/execution/qwen2_kv_projection_pingpong_result.json", "K_bit_exact": 256, "V_bit_exact": 256, "K_V_overlap_cycles_each": 54515, "bias_rope": "OPEN"},
   "qkv_bias_rope_components": {"status": "PASS_SEPARATE_COMPONENTS", "evidence": "reports/execution/qwen2_qkv_bias_rope_result.json", "bias_input_format": "FP32_GGUF_dtype7", "bias_values_bit_exact": 2048, "rope_pairs": 896, "rope_values_bit_exact": 1792, "integrated_event_chain": false},
   "raw_qkv_chain": {"status": "PASS_NO_INJECTION", "evidence": "reports/execution/qwen2_raw_qkv_chain_result.json", "formal_commands": 4, "flat_idma_requests": 98370, "bf16_bit_exact": 3584, "same_matrix_instance": true, "bias_rope_integrated": false},
-  "descriptor_qkv_bias_stage": {"status": "PASS", "evidence": "reports/execution/qwen2_bias_stage_vcs_result.json", "formal_commands": 3, "flat_idma_requests": 70, "axi_beats": 256, "bf16_bit_exact": 2048, "same_run_with_raw_qkv": false},
+  "descriptor_qkv_bias_stage": {"status": "PASS", "evidence": "reports/execution/qwen2_bias_stage_vcs_result.json", "formal_commands": 3, "flat_idma_requests": 70, "axi_beats": 256, "bf16_bit_exact": 2048, "same_run_with_raw_qkv": true},
+  "qkv_bias_same_run_chain": {"status": "PASS_NO_INJECTION", "evidence": "reports/execution/qwen2_qkv_bias_chain_result.json", "formal_commands": 7, "descriptor_fetches": 42, "flat_idma_requests": 98440, "axi_beats": 98768, "bf16_bit_exact": 5632, "Q_K_RoPE": "OPEN"},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

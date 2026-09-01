@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "RAW_QKV_NO_INJECTION_AND_DESCRIPTOR_BIAS_STAGE_PASS_FIRST9_OPEN",
-  "decision": "INSERT_BIAS_AND_ROPE_STAGES_INTO_RAW_QKV_CHAIN",
+  "state": "QKV_BIAS_SAME_RUN_PASS_ROPE_FIRST9_OPEN",
+  "decision": "INSERT_Q_K_ROPE_INTO_QKV_BIAS_CHAIN",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Instantiate the passing descriptor-driven bias stage inside the raw-QKV VCS chain so projection DDR outputs feed bias without preload; then insert Q/K RoPE and close the first nine formal commands/events.",
+  "unique_next_action": "Build a descriptor-driven Q/K RoPE stage over the approved public encoding and insert it after q_bias/k_bias in the passing seven-command VCS chain; require nine formal commands, direct DDR data continuity, token0 Q/K bit-exact outputs and no reference injection.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

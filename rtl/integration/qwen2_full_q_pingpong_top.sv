@@ -37,7 +37,7 @@ module qwen2_full_q_pingpong_top #(
  assign pcv[0]=context_valid||prearm_q[0];assign pcv[1]=prearm_q[1];assign context_ready=pcr[0]&&!prearm_q[0];
  for(genvar g=0;g<2;g++)begin:g_plan
   qwen2_tile_dma_plan plan(.clk_i,.rst_ni,.context_valid_i(pcv[g]),.context_ready_o(pcr[g]),
-   .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(g==0?p0tile_q:p1tile_q),
+   .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(g==0?p0tile_q:p1tile_q),.weight_src_stride_i(32'd3072),
    .full_q_i(1'b1),.reuse_norm_i((g==0?p0tile_q:p1tile_q)!=0),.start_store_i(pstore_q[g]),
    .dma_req_valid_o(prv[g]),.dma_req_ready_i(prr[g]),.dma_req_kind_o(prkind[g]),
    .dma_src_addr_o(prsrc[g]),.dma_dst_addr_o(prdst[g]),.dma_row_bytes_o(prbytes[g]),
@@ -49,7 +49,7 @@ module qwen2_full_q_pingpong_top #(
  end
  assign current_loaded=owner_q?pload[1]:pload[0];assign current_done=owner_q?pdone[1]:pdone[0];
  qwen2_shared_l2_tile_payload #(.ADDR_W(ADDR_W))payload(.clk_i,.rst_ni,.start_i(payload_start_q),
-  .reuse_norm_i(tile_q!=0),.hidden_local_i(owner_q?phidden[1]:phidden[0]),
+  .reuse_norm_i(tile_q!=0),.load_norm_i(1'b0),.hidden_local_i(owner_q?phidden[1]:phidden[0]),
   .rms_weight_local_i(owner_q?prmsw[1]:prmsw[0]),.norm_local_i(owner_q?pnorm[1]:pnorm[0]),
   .q_weight_local_i(owner_q?pqweight[1]:pqweight[0]),.q_output_local_i(owner_q?pqout[1]:pqout[0]),
   .l2_rd_valid_o,.l2_rd_ready_i,.l2_rd_addr_o,.l2_rsp_valid_i,.l2_rsp_ready_o,.l2_rsp_data_i,

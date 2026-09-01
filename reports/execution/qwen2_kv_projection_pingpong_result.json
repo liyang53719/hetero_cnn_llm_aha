@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "exact_safetensors": true,
+    "one_completion_each": true,
+    "raw_projection_only": true,
+    "real_overlap": true,
+    "runtime_descriptor_geometry": true
+  },
+  "evidence_class": "formal_descriptor_pinned_idma_SharedL2_Revision8B_B",
+  "non_claims": [
+    "outputs exclude projection bias",
+    "K output excludes RoPE",
+    "Q/K/V have not yet run as one event chain"
+  ],
+  "open": [
+    "K_V_bias",
+    "K_RoPE",
+    "KV_append",
+    "QKV_combined_command_chain",
+    "complete_layer"
+  ],
+  "projections": {
+    "K": {
+      "axi_beats": 12296,
+      "bf16_bit_exact": 256,
+      "columns": 256,
+      "ddr_read_bytes": 786432,
+      "ddr_write_bytes": 512,
+      "flat_idma": 12296,
+      "log_sha256": "e24aef1746a7d7addbca4b7ef1080443a60031cc0039c376770b3442ef4401b1",
+      "overlap_cycles": 54515,
+      "tiles": 8
+    },
+    "V": {
+      "axi_beats": 12296,
+      "bf16_bit_exact": 256,
+      "columns": 256,
+      "ddr_read_bytes": 786432,
+      "ddr_write_bytes": 512,
+      "flat_idma": 12296,
+      "log_sha256": "43afc41f984ece73920e895f22dcaff2ebb4699f27b55d20fd60c0fc22b861bf",
+      "overlap_cycles": 54515,
+      "tiles": 8
+    }
+  },
+  "provenance": {
+    "top_sha256": "67229a444270c47010af67b462fb514201f1517a7a295ec00673db7456be6d49",
+    "vector_result_sha256": "1d4310b2686f109e8495e68e11b5deda471e8622bf8bde9ea18f40b5c43dcf4c"
+  },
+  "schema_version": 1,
+  "status": "PASS_KV_RAW_PROJECTION_PINGPONG",
+  "token": 0
+}

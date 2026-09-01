@@ -43,6 +43,8 @@
   "full_q_token0_iterative": {"status": "PASS_SAME_RTL", "evidence": "reports/execution/qwen2_full_q_token_iterative_result.json", "physical_columns": 1536, "tiles": 48, "ddr_output_bytes": 3072, "bf16_bit_exact": 75264, "repeated_command_completion": 48},
   "full_q_token0_single_command": {"status": "PASS", "evidence": "reports/execution/qwen2_full_q_token_single_command_result.json", "physical_columns": 1536, "tiles": 48, "descriptor_fetches": 12, "rms_executions": 1, "matrix_completions": 1, "bf16_bit_exact": 3072, "supersedes_iterative": true},
   "full_q_token0_pingpong": {"status": "PASS", "evidence": "reports/execution/qwen2_full_q_token_pingpong_result.json", "serial_cycles": 816115, "pingpong_cycles": 450911, "ratio": 0.5525091439319214, "overlap_cycles": 365859, "bf16_bit_exact": 3072},
+  "qkv_projection_context": {"status": "PASS", "evidence": "reports/execution/qwen2_projection_context_result.json", "columns": {"Q": 1536, "K": 256, "V": 256}, "tiles": {"Q": 48, "K": 8, "V": 8}},
+  "kv_raw_projection_pingpong": {"status": "PASS", "evidence": "reports/execution/qwen2_kv_projection_pingpong_result.json", "K_bit_exact": 256, "V_bit_exact": 256, "K_V_overlap_cycles_each": 54515, "bias_rope": "OPEN"},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

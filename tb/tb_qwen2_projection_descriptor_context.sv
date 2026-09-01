@@ -1,0 +1,20 @@
+`timescale 1ns/1ps
+module tb_qwen2_projection_descriptor_context;
+ localparam integer AW=15,BEAT_BASE=1024,BEATS=1547;logic clk=0,rst_n=0;always #0.5 clk=~clk;
+ logic start;logic[127:0]cmd[0:2],current;logic qv,qr,sv,sr,se;logic[23:0]qi;logic[127:0]sd;logic cv,cr,cl;logic[7:0]status;logic[167:0]addresses;logic[215:0]shapes;logic[17:0]cols;logic[31:0]stride;logic[5:0]tiles;
+ logic fqv,fqr,frv,frr;logic[AW-1:0]fqa;logic[511:0]frd;logic[1:0]rv,rr,rsv,rsr;logic[2*AW-1:0]ra;logic[1023:0]rd;logic wv,wr;logic[AW-1:0]wa;logic[511:0]wd;logic[63:0]wbe;logic[63:0]cy,reads,writes,conflicts,rstalls,wstalls;
+ logic[511:0]beats[0:BEATS-1];logic[55:0]ea[0:8];logic[71:0]esh[0:8];logic[17:0]ec[0:2];integer reqs;
+ shared_l2_descriptor_port #(.ADDR_W(AW),.SRAM_BYTES(64'd1572864))port(.clk_i(clk),.rst_ni(rst_n),.descriptor_base_i(0),.descriptor_req_valid_i(qv),.descriptor_req_ready_o(qr),.descriptor_req_index_i(qi),.descriptor_rsp_valid_o(sv),.descriptor_rsp_ready_i(sr),.descriptor_rsp_data_o(sd),.descriptor_rsp_error_o(se),.fabric_req_valid_o(fqv),.fabric_req_ready_i(fqr),.fabric_req_addr_o(fqa),.fabric_rsp_valid_i(frv),.fabric_rsp_ready_o(frr),.fabric_rsp_data_i(frd),.fabric_rsp_error_i(1'b0));
+ shared_l2_fabric #(.ADDR_W(AW),.ROWS_PER_BANK(6144))mem(.clk_i(clk),.rst_ni(rst_n),.rd_valid_i(rv),.rd_ready_o(rr),.rd_addr_i(ra),.rd_resp_valid_o(rsv),.rd_resp_ready_i(rsr),.rd_data_o(rd),.wr_valid_i(wv),.wr_ready_o(wr),.wr_addr_i(wa),.wr_data_i(wd),.wr_be_i(wbe),.cycle_count_o(cy),.read_count_o(reads),.write_count_o(writes),.bank_conflict_count_o(conflicts),.read_stall_count_o(rstalls),.write_stall_count_o(wstalls));
+ qwen2_projection_descriptor_context dut(.clk_i(clk),.rst_ni(rst_n),.start_i(start),.command_i(current),.descriptor_req_valid_o(qv),.descriptor_req_ready_i(qr),.descriptor_req_index_o(qi),.descriptor_rsp_valid_i(sv),.descriptor_rsp_ready_o(sr),.descriptor_rsp_data_i(sd),.descriptor_rsp_error_i(se),.context_valid_o(cv),.context_ready_i(cr),.context_legal_o(cl),.context_status_o(status),.tensor_address_o(addresses),.tensor_shape_o(shapes),.output_columns_o(cols),.weight_row_bytes_o(stride),.column_tiles_o(tiles));
+ assign rv={1'b0,fqv};assign ra={{AW{1'b0}},fqa};assign fqr=rr[0];assign frv=rsv[0];assign frd=rd[0+:512];assign rsr={1'b0,frr};
+ always_ff@(posedge clk or negedge rst_n)if(!rst_n)reqs<=0;else if(qv&&qr)reqs<=reqs+1;
+ task automatic hwrite(input integer i);begin @(negedge clk);wv=1;wa=AW'(BEAT_BASE+i);wd=beats[i];wbe='1;do@(posedge clk);while(!wr);@(negedge clk);wv=0;end endtask
+ task automatic launch(input[127:0]c);begin @(negedge clk);current=c;start=1;@(posedge clk);@(negedge clk);start=0;end endtask
+ initial begin start=0;current=0;cr=0;wv=0;wa=0;wd=0;wbe=0;$readmemh("work/results/qwen2_projection_descriptor_context/beats.memh",beats);$readmemh("work/results/qwen2_projection_descriptor_context/projection_commands.memh",cmd);$readmemh("work/results/qwen2_projection_descriptor_context/projection_addresses.memh",ea);$readmemh("work/results/qwen2_projection_descriptor_context/projection_shapes.memh",esh);$readmemh("work/results/qwen2_projection_descriptor_context/projection_columns.memh",ec);
+  repeat(6)@(posedge clk);rst_n=1;for(integer i=0;i<BEATS;i++)hwrite(i);
+  for(integer p=0;p<3;p++)begin launch(cmd[p]);wait(cv);repeat(3)@(posedge clk);if(!cv||!cl||status||cols!=ec[p]||stride!=ec[p]*2||tiles!=ec[p]/32)$fatal(1,"projection geometry p=%0d",p);for(integer s=0;s<3;s++)if(addresses[s*56+:56]!==ea[p*3+s]||shapes[s*72+:72]!==esh[p*3+s])$fatal(1,"projection context p=%0d s=%0d",p,s);@(negedge clk);cr=1;@(posedge clk);@(negedge clk);cr=0;end
+  current=cmd[1];current[103:80]=24'hffffff;launch(current);wait(cv);if(cl||status!=2||reqs!=18)$fatal(1,"invalid preissue");@(negedge clk);cr=1;@(posedge clk);
+  $display("QWEN2_PROJECTION_DESCRIPTOR_CONTEXT_PASS commands=3 Q_columns=1536 K_columns=256 V_columns=256 descriptor_fetches=18 runtime_strides=3 runtime_tiles=3 invalid_preissue=1");$finish;end
+ initial begin repeat(100000)@(posedge clk);$fatal(1,"timeout state=%0d reqs=%0d",dut.state_q,reqs);end
+endmodule

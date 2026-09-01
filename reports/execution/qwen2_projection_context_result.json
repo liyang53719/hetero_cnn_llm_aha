@@ -1,0 +1,27 @@
+{
+  "column_tiles": {
+    "K": 8,
+    "Q": 48,
+    "V": 8
+  },
+  "columns": {
+    "K": 256,
+    "Q": 1536,
+    "V": 256
+  },
+  "commands": 3,
+  "descriptor_fetches": 18,
+  "invalid_preissue": true,
+  "non_claim": "descriptor geometry does not execute projection payload",
+  "provenance": {
+    "log_sha256": "179c2294f822767dd74231d0709a0c4b0d5c776cf644aeca210ab19b0ede811c",
+    "rtl_sha256": "19bd52b29b787a80873478fb037e1eed3d29f434d95295755691fa18a81c3f3b"
+  },
+  "schema_version": 1,
+  "status": "PASS_QKV_PROJECTION_DESCRIPTOR_CONTEXT",
+  "weight_row_bytes": {
+    "K": 512,
+    "Q": 3072,
+    "V": 512
+  }
+}

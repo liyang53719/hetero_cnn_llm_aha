@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Extend the passing overlapped full-Q controller to Q/K/V: freeze q1024 full-trace geometry and run representative real numerical token tiles; add K/V dimensions, bias and RoPE without rerunning RMS or writing intermediate Q/K/V unnecessarily.",
+  "unique_next_action": "Add descriptor-driven BF16 projection bias and token0 Q/K RoPE SFU paths to the passing raw Q/K/V outputs, then run the first nine formal commands as one event-ordered chain without reference injection.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

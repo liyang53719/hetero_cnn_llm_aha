@@ -89,13 +89,24 @@ def main() -> None:
                 raise ValueError(f"unsupported exact GGUF storage type {tensor.tensor_type}: {binding['name']}")
             region = "DDR_READONLY"
         elif kind == "ggml_node":
-            shape = [int(value) for value in binding["shape"]]
-            dtype, byte_length, region = "FP32", product(shape) * 4, "DDR_WORKSPACE"
+            ggml_shape = [int(value) for value in binding["shape"]]
+            highest_nonunit = max((index for index, value in enumerate(ggml_shape) if value != 1),
+                                  default=0)
+            rank = max(2, highest_nonunit + 1)
+            shape = list(reversed(ggml_shape[:rank]))
+            # llama.cpp's CPU graph is F32, but the frozen device tensor boundary is BF16.
+            dtype, byte_length, region = "BF16", product(shape) * 2, "DDR_WORKSPACE"
         elif kind == "runtime_position":
             shape, dtype, byte_length, region = [1024], "INT32", 4096, "DDR_CONTROL"
         elif kind == "flash_intermediate":
             # A tile is materialized; a sequence-square score tensor is forbidden.
-            shape, dtype, byte_length, region = [16, 32], "FP32", 2048, "DDR_WORKSPACE"
+            shape, region = [16, 32], "DDR_WORKSPACE"
+            if binding["name"] == "qk_score_tile":
+                dtype, byte_length = "FP32", 2048
+            elif binding["name"] == "probability_tile":
+                dtype, byte_length = "BF16", 1024
+            else:
+                raise ValueError(f"unknown FlashAttention intermediate {binding['name']}")
         else:
             raise ValueError(f"binding {key} has no ordinary tensor allocation")
         address = align(cursors[region])
@@ -135,6 +146,7 @@ def main() -> None:
     tail = TAIL_BASE
     chains: dict[int, dict] = {}
     table_roots = {}
+    matrix_shape_errors = 0
 
     def append_chain(root: int, records: list[dict], binding: dict, operation: str, role: str) -> None:
         nonlocal tail
@@ -157,11 +169,7 @@ def main() -> None:
     def ordinary_records(entry: dict) -> list[dict]:
         shape = entry["shape"]
         padded = (shape + [1, 1, 1, 1])[:4]
-        strides = []
-        running = 1
-        for dim in reversed(padded[1:]):
-            strides.insert(0, running)
-            running *= dim
+        strides = [product(padded[index + 1:]) for index in range(3)]
         return [
             {"record_type": "tensor_base", "address": entry["address"],
              "dtype_symbol": entry["dtype_symbol"], "dtype_code": None,
@@ -200,7 +208,11 @@ def main() -> None:
                         src_shape = entry["shape"]
                         dst_binding = command["root_bindings"][str(command["roots"]["dst"])]
                         dst_shape = memory[binding_key(dst_binding)]["shape"]
-                        m, n, k = int(src_shape[1]), int(dst_shape[0]), int(src_shape[0])
+                        m, n, k = int(src_shape[0]), int(dst_shape[-1]), int(src_shape[-1])
+                        weight_binding = command["root_bindings"][str(command["roots"]["src1"])]
+                        weight_shape = memory[binding_key(weight_binding)]["shape"]
+                        if weight_shape[:2] != [k, n]:
+                            matrix_shape_errors += 1
                     records += [
                         {"record_type": "matrix_op", "m": m, "n": n, "k": k,
                          "dataflow": "OS", "quant_mode": "none"},
@@ -222,10 +234,10 @@ def main() -> None:
         binding = {"kind": "kv_page_table", "layer": layer}
         records = [
             {"record_type": "tensor_base", "address": info["table_address"],
-             "dtype_symbol": "PTE128", "dtype_code": None,
-             "layout": "radix2_10_10", "rank": 2},
-            {"record_type": "shape4", "dims": [2, 1024, 1, 1]},
-            {"record_type": "stride3", "strides_elements": [1024, 1, 1]},
+             "dtype_symbol": "INT32", "dtype_code": None,
+             "layout": "contiguous", "rank": 3},
+            {"record_type": "shape4", "dims": [2, 1024, 4, 1]},
+            {"record_type": "stride3", "strides_elements": [4096, 4, 1]},
         ]
         append_chain(root, records, binding, f"kv_table_l{layer}", "metadata")
 
@@ -236,7 +248,12 @@ def main() -> None:
         all_indices.extend(record["index"] for record in chain["records"])
     unique_indices = len(all_indices) == len(set(all_indices))
     max_chain = max(len(chain["records"]) for chain in chains.values())
-    dtype_symbols = sorted({entry["dtype_symbol"] for entry in memory.values()} | {"PTE128"})
+    dtype_symbols = sorted({entry["dtype_symbol"] for entry in memory.values()} | {"INT32"})
+    record_type_counts: dict[str, int] = {}
+    for chain in chains.values():
+        for record in chain["records"]:
+            record_type = record["record_type"]
+            record_type_counts[record_type] = record_type_counts.get(record_type, 0) + 1
 
     intervals = sorted((entry["address"], entry["address"] + align(entry["byte_length"]), key)
                        for key, entry in memory.items())
@@ -247,7 +264,13 @@ def main() -> None:
     intervals.sort()
     overlaps = sum(1 for left, right in zip(intervals, intervals[1:]) if left[1] > right[0])
     full_score_matrix = any(entry["kind"] == "flash_intermediate" and
-                            entry["byte_length"] > 2048 for entry in memory.values())
+                            ((entry["name"] == "qk_score_tile" and entry["byte_length"] > 2048) or
+                             (entry["name"] == "probability_tile" and entry["byte_length"] > 1024))
+                            for entry in memory.values())
+    first_embd = next(entry for entry in memory.values() if entry["kind"] == "ggml_node" and
+                      entry["name"] == "embd")
+    first_q_rope = next(entry for entry in memory.values() if entry["kind"] == "ggml_node" and
+                        entry["name"] == "Qcur-0" and entry["shape"] == [1024, 12, 128])
     checks = {
         "commands_588": len(commands) == 588,
         "all_command_roots_covered": root_coverage,
@@ -259,6 +282,17 @@ def main() -> None:
         "address_overlap_zero": overlaps == 0,
         "no_full_score_matrix": not full_score_matrix,
         "kv_layers_28": len(kv_tables) == 28,
+        "matrix_program_records_252": record_type_counts.get("matrix_op") == 252 and
+                                      record_type_counts.get("matrix_aux") == 252,
+        "sfu_program_records_308": record_type_counts.get("sfu_program_symbolic") == 308,
+        "attention_policy_records_56": record_type_counts.get("attention_op") == 56,
+        "matrix_gemm_shapes_consistent": matrix_shape_errors == 0,
+        "device_row_major_shapes": first_embd["shape"] == [1024, 1536] and
+                                   first_q_rope["shape"] == [1024, 12, 128],
+        "ggml_device_boundaries_bf16": all(entry["dtype_symbol"] == "BF16" for entry in
+                                            memory.values() if entry["kind"] == "ggml_node"),
+        "kv_record_sets_28": all(record_type_counts.get(name) == 28 for name in
+                                  ("kv_context32", "kv_range32", "kv_table", "kv_epoch32")),
         "dtype_codes_unassigned": all(entry["dtype_code"] is None for entry in memory.values()),
     }
     if not all(checks.values()):
@@ -287,9 +321,11 @@ def main() -> None:
         "commands": len(commands), "command_roots": len(command_roots),
         "descriptor_chains": len(chains), "descriptor_records": len(all_indices),
         "max_chain_records": max_chain, "memory_objects": len(intervals),
+        "record_type_counts": dict(sorted(record_type_counts.items())),
         "dtype_symbols": dtype_symbols, "dtype_codes_assigned": False,
         "kv_layers": len(kv_tables), "kv_page_tokens": 16,
-        "flash_score_tile_bytes": 2048, "address_overlaps": overlaps,
+        "flash_score_tile_bytes": 2048, "flash_probability_tile_bytes": 1024,
+        "address_overlaps": overlaps,
         "checks": checks,
         "generated": {
             "memory_map": str(memory_path), "memory_map_sha256": sha(memory_path),

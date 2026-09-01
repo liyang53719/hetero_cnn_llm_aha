@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "status": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_DTYPE_BLOCKED_DECISION",
+  "status": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_PUBLIC_ENCODING_BLOCKED_DECISION",
   "branch_audit": {"remote_branches": ["main"], "merge_required": false, "branch_deletion_required": false},
   "accepted_local_evidence": {
     "L5.1": "PASS_ZERO_MARGIN",
@@ -15,6 +15,7 @@
     "L5.6d_full_28_layer_payload_RTL": "P1_PASS_P2_MIXED_CONTROL_AND_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_OPEN_P3_OPEN",
     "L5.6d_real_payload_operator_slice": "PASS_2_COMMANDS_1568_BF16_BIT_EXACT",
     "L5.6d_symbolic_descriptor_plan": "PASS_588_COMMANDS_1764_CHAINS_6188_RECORDS_0_OVERLAP_DTYPE_CODES_OPEN",
+    "L5.6d_descriptor_pack": "PASS_TEST_ONLY_6188_RECORDS_UNAPPROVED_GUARD_PASS_FORMAL_IMAGE_OPEN",
     "L10.1_owner_hierarchy": "PASS_WNS_0P00000864267_AREA_2313314P648873_NO_DOUBLE_COUNT",
     "L10.2_sram_macro": "PASS_4096KIB_124_MACROS_DB_ARCS"
   },

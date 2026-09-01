@@ -1,7 +1,10 @@
 {
   "schema_version": 1,
   "status": "BLOCKED_DECISION",
-  "field": "tensor_base.dtype[3:0]",
+  "fields": [
+    "tensor_base.dtype[3:0]",
+    "sfu_program.payload[71:0]"
+  ],
   "confirmed_existing": {
     "1": "INT8",
     "4": "INT32_bias_convention"
@@ -12,9 +15,21 @@
     "6": "FP16_reserved",
     "7": "FP32"
   },
+  "recommended_sfu_program": {
+    "program_id": "bits15_0_command_opcode_for_dedicated_SFU",
+    "input_count": "bits23_16",
+    "output_count": "bits31_24",
+    "input_dtype": "bits35_32",
+    "output_dtype": "bits39_36",
+    "lane_width_bits": "bits47_40",
+    "vector_lanes": "bits55_48_zero_for_dedicated_path",
+    "program_flags": "bits63_56_zero",
+    "reserved": "bits71_64_zero"
+  },
   "impact": [
     "q1024 descriptor record image cannot be packed without BF16 and FP32 codes",
     "descriptor legality RTL cannot distinguish BF16 payload from GGUF storage type",
+    "SFU source chains cannot be packed while record type 0x20 has no payload definition",
     "descriptor-backed shared-L2 payload gate remains open"
   ],
   "non_claim": "the recommendation is not an approved public ISA assignment"

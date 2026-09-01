@@ -1,4 +1,4 @@
-# Local-agent handoff v7.21 — main only
+# Local-agent handoff v7.23 — main only
 
 ## Closed in this checkpoint
 
@@ -39,10 +39,14 @@ the final token required by the frozen LM-head contract.
 Real Matrix/SFU endpoint RTL now passes the first two graph-derived commands:
 2 completions, 1536 RMS outputs, 1536 Matrix steps, 32 Matrix outputs, 1568
 BF16 values bit-exact, event ordering and random backpressure PASS. Descriptor
-packing is BLOCKED_DECISION: public dtype only freezes INT8=1; approve the
-recommended additive BF16=5, FP16=6 reserved, FP32=7 mapping in
+packing is BLOCKED_DECISION: approve additive BF16=5, FP16=6 reserved, FP32=7
+and the proposed 0x20 SFU_PROGRAM payload in
 `L5_DESCRIPTOR_DTYPE_BLOCKED_DECISION.md`. Symbolic planning is complete:
 588 commands, 1764 chains/6188 records, max chain 6, 954 DDR objects, 0 overlap,
-28 KV layers and 2 KiB score tiles. After approval pack the image, then connect
+28 KV layers, FP32 score tile 2 KiB and BF16 probability tile 1 KiB. Device
+shapes are row-major (`[1024,1536]`, Q `[1024,12,128]`), not GGML `ne[]` order.
+The parameterized packer passes all 6188 records in explicit test-only mode and
+hard-rejects the unapproved proposal in normal mode. After approval rerun without
+the override to create the formal image, then connect
 shared-L2 payload, and extend one layer then seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

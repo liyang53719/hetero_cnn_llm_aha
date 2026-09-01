@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_DTYPE_BLOCKED_DECISION",
-  "decision": "BLOCKED_DECISION_APPROVE_BF16_FP32_DESCRIPTOR_DTYPE_CODES",
+  "state": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_PUBLIC_ENCODING_BLOCKED_DECISION",
+  "decision": "BLOCKED_DECISION_APPROVE_DESCRIPTOR_DTYPE_AND_SFU_PROGRAM_ENCODING",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Approve or replace the additive tensor_base.dtype assignment BF16=5, FP16=6 reserved, FP32=7 while preserving INT8=1 and INT32=4; then generate the schema-v2/v3 descriptor record image for all 588 traceable commands.",
+  "unique_next_action": "Approve or replace both proposals in L5_DESCRIPTOR_DTYPE_BLOCKED_DECISION.md; set l5_descriptor_public_encoding_proposal.json approval_status to APPROVED, rerun the validated packer without --allow-unapproved-test, then connect its formal image to Shared-L2 payload reads/writes.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "approval_status": "PROPOSED_NOT_APPROVED",
+  "tensor_base": {
+    "dtype_codes": {
+      "INVALID": 0,
+      "INT8": 1,
+      "INT32": 4,
+      "BF16": 5,
+      "FP16": 6,
+      "FP32": 7
+    },
+    "memory_space_codes": {
+      "GLOBAL_FLAT": 0
+    },
+    "layout_codes": {
+      "CONTIGUOUS_ROW_MAJOR": 0
+    }
+  },
+  "sfu_program": {
+    "record_type": 32,
+    "fields": {
+      "program_id": [0, 16],
+      "input_count": [16, 8],
+      "output_count": [24, 8],
+      "input_dtype": [32, 4],
+      "output_dtype": [36, 4],
+      "lane_width_bits": [40, 8],
+      "vector_lanes": [48, 8],
+      "program_flags": [56, 8],
+      "reserved": [64, 8]
+    },
+    "dedicated_program_id": "zero_extended_command_opcode",
+    "dedicated_vector_lanes": 0
+  },
+  "non_claim": "this proposal is not an approved public ISA encoding"
+}

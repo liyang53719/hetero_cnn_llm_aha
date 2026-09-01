@@ -6,13 +6,20 @@
     "addresses_64bit": true,
     "addresses_64byte_aligned": true,
     "all_command_roots_covered": true,
+    "attention_policy_records_56": true,
     "chain_length_lte_16": true,
     "commands_588": true,
     "descriptor_index_24bit": true,
     "descriptor_indices_unique": true,
+    "device_row_major_shapes": true,
     "dtype_codes_unassigned": true,
+    "ggml_device_boundaries_bf16": true,
     "kv_layers_28": true,
-    "no_full_score_matrix": true
+    "kv_record_sets_28": true,
+    "matrix_gemm_shapes_consistent": true,
+    "matrix_program_records_252": true,
+    "no_full_score_matrix": true,
+    "sfu_program_records_308": true
   },
   "command_roots": 1736,
   "commands": 588,
@@ -22,16 +29,16 @@
   "dtype_symbols": [
     "BF16",
     "FP32",
-    "INT32",
-    "PTE128"
+    "INT32"
   ],
   "evidence_class": "address_and_chain_complete_but_not_packed_or_executable",
+  "flash_probability_tile_bytes": 1024,
   "flash_score_tile_bytes": 2048,
   "generated": {
     "descriptor_chains": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_symbolic_descriptors/descriptor_chains.jsonl",
-    "descriptor_chains_sha256": "4cde1f8a22929e472806da3beefb9912a5539427afdc78646f9915604977133c",
+    "descriptor_chains_sha256": "4acc55ee6988ce1c3a1da470c564f7ac9fe2034833518122fb31691bce049a74",
     "memory_map": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_symbolic_descriptors/tensor_memory_map.json",
-    "memory_map_sha256": "d72974d18f5f1e85113517f04065493d9255950d00746dd2943fe8e14be969f5"
+    "memory_map_sha256": "ad2da62135da511ab731dae5566416318413c9732333b9a62af3eb9499a5fc28"
   },
   "kv_layers": 28,
   "kv_page_tokens": 16,
@@ -42,6 +49,19 @@
     "address planning does not execute payload RTL",
     "conservative DDR workspace allocation is not an on-chip SRAM allocation"
   ],
+  "record_type_counts": {
+    "attention_op": 56,
+    "kv_context32": 28,
+    "kv_epoch32": 28,
+    "kv_range32": 28,
+    "kv_table": 28,
+    "matrix_aux": 252,
+    "matrix_op": 252,
+    "sfu_program_symbolic": 308,
+    "shape4": 1736,
+    "stride3": 1736,
+    "tensor_base": 1736
+  },
   "schema_version": 1,
   "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY_BLOCKED_DTYPE_CODES"
 }

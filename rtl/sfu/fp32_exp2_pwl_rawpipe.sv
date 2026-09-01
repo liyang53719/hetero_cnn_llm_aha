@@ -10,8 +10,8 @@ module fp32_exp2_pwl_rawpipe(
   output logic [12:0] exception_flags_o,
   output logic [31:0] accepted_o, completed_o
 );
-  `include "rtl/sfu/fp32_exp2_coeffs.svh"
-  typedef enum logic [3:0] {IDLE, FLOOR, COEFF, MUL_ISSUE, MUL_WAIT,
+  `include "rtl/sfu/fp32_exp2_ext32_coeffs.svh"
+  typedef enum logic [3:0] {IDLE, FLOOR, INDEX, COEFF, MUL_ISSUE, MUL_WAIT,
     ADD_ISSUE, ADD_WAIT, OUT} state_t;
   state_t state_q;
   logic [31:0] x_q, m_q, b_q, mul_q, y_q;
@@ -22,7 +22,7 @@ module fp32_exp2_pwl_rawpipe(
   logic [7:0] floor_flags;
   logic signed [15:0] floor_signed;
   logic signed [15:0] floor_q;
-  logic [7:0] index;
+  logic [8:0] index,index_q;
   logic [63:0] coeff;
   logic mul_ready, mul_valid, mul_fire;
   logic [31:0] mul_out;
@@ -37,8 +37,8 @@ module fp32_exp2_pwl_rawpipe(
     .io_x(x_q), .io_out(scaled_floor), .io_exceptionFlags(floor_flags)
   );
   assign floor_signed = $signed(scaled_floor);
-  assign index = 8'($signed(floor_q) + 16'sd256);
-  assign coeff = exp2_pwl_coeff(index);
+  assign index = 9'($signed(floor_q) + 16'sd512);
+  assign coeff = exp2_pwl_ext32_coeff(index_q);
 
   assign mul_fire = state_q == MUL_ISSUE && mul_ready;
   HeteroFP32MulPipeTag12 mul_unit(
@@ -64,7 +64,7 @@ module fp32_exp2_pwl_rawpipe(
 
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      state_q <= IDLE; x_q <= '0; m_q <= '0; b_q <= '0; mul_q <= '0; floor_q <= '0;
+      state_q <= IDLE; x_q <= '0; m_q <= '0; b_q <= '0; mul_q <= '0; floor_q <= '0;index_q<='0;
       y_q <= '0; flags_q <= '0; special_q <= 1'b0;
       special_result_q <= '0; accepted_o <= '0; completed_o <= '0;
     end else begin
@@ -75,15 +75,16 @@ module fp32_exp2_pwl_rawpipe(
         FLOOR: begin
           floor_q <= floor_signed; flags_q <= {floor_flags, 5'd0};
           special_q <= (&x_q[30:23] && |x_q[22:0]) ||
-            (&x_q[30:23] && !(|x_q[22:0])) || floor_signed < -16'sd256 || floor_signed >= 0;
+            (&x_q[30:23] && !(|x_q[22:0])) || floor_signed < -16'sd512 || floor_signed >= 0;
           if (&x_q[30:23] && |x_q[22:0]) special_result_q <= 32'd0;
           else if (&x_q[30:23] && !(|x_q[22:0])) special_result_q <= x_q[31] ? 32'd0 : 32'h3f800000;
-          else if (floor_signed < -16'sd256) special_result_q <= 32'd0;
+          else if (floor_signed < -16'sd512) special_result_q <= 32'd0;
           else special_result_q <= 32'h3f800000;
-          if ((&x_q[30:23]) || floor_signed < -16'sd256 || floor_signed >= 0)
+          if ((&x_q[30:23]) || floor_signed < -16'sd512 || floor_signed >= 0)
             state_q <= OUT;
-          else state_q <= COEFF;
+          else state_q <= INDEX;
         end
+        INDEX: begin index_q <= index; state_q <= COEFF; end
         COEFF: begin m_q <= coeff[63:32]; b_q <= coeff[31:0]; state_q <= MUL_ISSUE; end
         MUL_ISSUE: if (mul_fire) state_q <= MUL_WAIT;
         MUL_WAIT: if (mul_valid) begin
@@ -96,10 +97,10 @@ module fp32_exp2_pwl_rawpipe(
         OUT: if (out_ready_i) begin completed_o <= completed_o + 1'b1; state_q <= IDLE; end
         default: state_q <= IDLE;
       endcase
-      if (state_q == FLOOR && ((&x_q[30:23]) || floor_signed < -16'sd256 || floor_signed >= 0)) begin
+      if (state_q == FLOOR && ((&x_q[30:23]) || floor_signed < -16'sd512 || floor_signed >= 0)) begin
         if (&x_q[30:23] && |x_q[22:0]) y_q <= 32'd0;
         else if (&x_q[30:23] && !(|x_q[22:0])) y_q <= x_q[31] ? 32'd0 : 32'h3f800000;
-        else if (floor_signed < -16'sd256) y_q <= 32'd0;
+        else if (floor_signed < -16'sd512) y_q <= 32'd0;
         else y_q <= 32'h3f800000;
       end
     end

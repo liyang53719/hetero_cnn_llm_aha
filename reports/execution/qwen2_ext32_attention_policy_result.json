@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "index_pipeline_repair": true,
+    "initial_flat_512_table_timing_fail_not_promoted": true,
+    "no_false_path": true,
+    "no_frequency_relaxation": true
+  },
+  "dc": {
+    "cell_area": 39600.106,
+    "clock_ns": 1.0,
+    "margin_class": "CRITICAL_SUB_1PS",
+    "unmapped": 0,
+    "wns_ns": 9.53674e-07
+  },
+  "functional": {
+    "block32_weights": 64,
+    "merge_cases": 132,
+    "q128_rows": 1536,
+    "q128_tasks": 240
+  },
+  "open": [
+    "q1024 exact-model sampled RTL with ext32 plus balanced scheduling",
+    "integrated attention DC margin",
+    "post-route PVT"
+  ],
+  "policy": {
+    "block_tokens": 128,
+    "data_width": "FP32",
+    "global_merge": "balanced_tree_max8",
+    "range_log2": [
+      -32,
+      0
+    ],
+    "segments": 512,
+    "step": 0.0625,
+    "tile_tokens": 32
+  },
+  "provenance": {
+    "block32_log": "1e6dc4c31ea0e26920cbcbd6ce42db57c4fbe78cc8ff8adffb025511a72f7da2",
+    "coeff": "0671b493ba6b688f752af3064381a5849ed9b6c2aced06b8f59df4097447604f",
+    "config": "7563f9e7efb324007ddc102328771410d47f91f519375cb4bce0266441c8a092",
+    "dc_status": "4c6fe6524f96ffe39eb38bac6071fb921936f14c5f7c5fdb1c6d2ac3ed389b6a",
+    "merge_log": "ab08af35598563dc90851b27e255b6facd50e64d97d8f22260f7e2a59f38d101",
+    "q128_log": "e1243473d2786cf577fa4ba1f12ceec3308539af9a14053565ac2438908317fb",
+    "rtl": "d58dc5cd5d0e2c7e4a051d039600e50d9001cb9bf70483fce2a5f375701344dc"
+  },
+  "schema_version": 1,
+  "status": "PASS_EXT32_EXP2_AND_INDEX_PIPELINE_E1_E4"
+}

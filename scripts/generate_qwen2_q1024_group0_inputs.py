@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Freeze exact-revision layers 1-3 and their real 21-command graph slices."""
+import argparse
 import hashlib
 import json
 import sys
@@ -13,8 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from heteronpu.silu_lut_rtl_contract import ROM
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--start-layer", type=int, choices=range(28), default=1)
+parser.add_argument("--end-layer", type=int, choices=range(28), default=3)
+parser.add_argument("--out", type=Path)
+args = parser.parse_args()
+assert args.start_layer <= args.end_layer
 MODEL = ROOT / "work/models/qwen2_1p5b_instruct_ba1cf184/model.safetensors"
-OUT = ROOT / "work/results/qwen2_q1024_group0_inputs"
+OUT = args.out or ROOT / "work/results/qwen2_q1024_group0_inputs"
 MANIFEST = [json.loads(line) for line in (ROOT / "reports/execution/llama_cpp_qwen2_graph_lowering_manifest.jsonl").read_text().splitlines()]
 SUFFIXES = [
     "input_norm", "q", "q_bias", "q_rope", "k", "k_bias", "k_rope", "v",
@@ -39,7 +46,15 @@ tensor_suffix = {
 
 summary = {"schema_version": 1, "status": "PASS", "layers": {}}
 with safe_open(MODEL, framework="pt", device="cpu") as model:
-    for layer in range(1, 4):
+    if args.start_layer == 0:
+        tokens = np.asarray([int(value) for value in (ROOT / "work/results/llama_cpp_qwen2_baseline/tokens.txt").read_text().splitlines()], np.int32)
+        assert tokens.size == 1024
+        embedding_dir = OUT / "embedding"
+        embedding_dir.mkdir(parents=True, exist_ok=True)
+        embedding = model.get_tensor("model.embed_tokens.weight")[torch.tensor(tokens, dtype=torch.long)].float().numpy().astype(np.float32)
+        embedding.tofile(embedding_dir / "final_fp32.bin")
+        summary["embedding_sha256"] = hashlib.sha256((embedding_dir / "final_fp32.bin").read_bytes()).hexdigest()
+    for layer in range(args.start_layer, args.end_layer + 1):
         directory = OUT / f"layer{layer}"
         directory.mkdir(parents=True, exist_ok=True)
         hashes = {}
@@ -64,4 +79,4 @@ with safe_open(MODEL, framework="pt", device="cpu") as model:
         summary["layers"][str(layer)] = {"manifest_sha256": hashlib.sha256((directory / "manifest.json").read_bytes()).hexdigest(), "commands": 21}
 
 (OUT / "manifest.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
-print("QWEN2_Q1024_GROUP0_INPUTS_PASS layers=1-3 commands=63 exact_revision=true")
+print(f"QWEN2_Q1024_LAYER_INPUTS_PASS layers={args.start_layer}-{args.end_layer} commands={(args.end_layer-args.start_layer+1)*21} exact_revision=true")

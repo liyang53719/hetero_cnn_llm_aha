@@ -150,19 +150,15 @@ binds clean upstream iDMA, AXI bridge and real Shared-L2 fabric:101,432 flat
 requests,104,162 read/write beats,9 completions and118,784 BF16 exact with zero
 intermediate injection. Descriptor words still use the formal-image responder;
 same-fabric descriptor storage remains a later composition detail.
-q1024 first13 exact backend covers first-nine/KV and block128 attention:
-6,297,600 causal updates,43,008 merges,no score matrix,FP32 error2.56e-4.
-Direct BF16 probability is rejected; PV uses the frozen FP32-hilo converter.
-Revision8B RTL samples1,440 exact-model attention rows with zero score/
-probability DDR. All21 layer0 commands run through final residual for1024 rows;
-tail RTL samples40,704 Matrix steps/6,144 BF16 plus8,192 8-lane SiLU exact.
-The same generic backend now chains layers1-3 from each predecessor final only:
-84 commands,25,190,400 attention updates,172,032 merges,zero hidden injection;
-layer3 final SHA is `ffc48b28...`. Group0 combined audit now passes the labeled
-backend-equivalent gate:5,760 sampled attention rows,162,816 tail Matrix steps/
-24,576 BF16 exact and32,768 8-lane SiLU exact across layers0-3,zero score/
-probability DDR. This is not all-row RTL and not a registered llama backend;
-groups1-6 and P3 remain OPEN. Existing1/2-lane regressions still pass.
+q1024 P3 backend-equivalent numerical now runs embedding→28 layers→final norm→
+full151,936-vocab LM head with588 commands/seven groups and zero hidden
+injection. tile32/PV-hilo/balanced-block128/ext32 exp2 keeps all layer errors
+≤0.0007788,no score matrix; layer27 SHA=`3268b56c...`. Argmax7559 and Top-10
+10/10 match PyTorch. ext32 E1 passes q128 full,block32 and132 merge cases;
+1GHz DC passes WNS+0.000000954 ns,area39,600.106,unmapped0 after an index
+pipeline repair. Margin is critical sub-1ps. This is continuous C++ hardware
+semantics,not all-row RTL or a registered llama device backend. ext32 balanced
+q1024 sampled RTL,device submission and formal L5.6d/P3 device gates stay OPEN.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -190,8 +186,8 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3/pinned-iDMA and group0 backend-equivalent audit pass. Next freeze and
-chain layers4-7 from layer3 final only, then apply the same sampled attention/
-tail RTL policy. Full attention RTL remains12,288 rows,not the sampled rows.
+KV v3/pinned-iDMA and P3 backend-equivalent numerical audit pass. Next close
+balanced ext32 q1024 sampled RTL,then register the same588-command backend at
+the llama graph/device submission boundary. Full all-row RTL remains OPEN.
 Preserve CPU 8-23,24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

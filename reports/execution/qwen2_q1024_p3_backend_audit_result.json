@@ -1,0 +1,56 @@
+{
+  "attention": {
+    "causal_updates": 176332800,
+    "maximum_error": 0.000778775279,
+    "policy": "tile32_PV_hilo_balanced_block128_ext32_exp2",
+    "score_matrix_bytes": 0,
+    "summary_merges": 1204224
+  },
+  "checks": {
+    "all_attention_error_le_0p002": true,
+    "all_groups_four_layers": true,
+    "embedding_to_logits_continuous": true,
+    "final_argmax_preserved": true,
+    "no_score_matrix": true,
+    "top10_overlap_10": true
+  },
+  "commands": 588,
+  "evidence_class": "continuous_embedding_28layers_final_norm_full_vocab_hardware_semantics_backend",
+  "ext32_E1_E4": {
+    "cell_area": 39600.106,
+    "clock_ns": 1.0,
+    "margin_class": "CRITICAL_SUB_1PS",
+    "unmapped": 0,
+    "wns_ns": 9.53674e-07
+  },
+  "final": {
+    "argmax": 7559,
+    "layer27_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+    "reference_argmax": 7559,
+    "top10_overlap": 10,
+    "vocab": 151936
+  },
+  "groups": 7,
+  "layers": 28,
+  "non_claims": [
+    "P3 backend-equivalent numerical PASS is not registered llama device execution",
+    "C++ hardware-semantics backend is not all-row RTL",
+    "ext32 standalone sub-1ps DC margin is not integrated or post-route signoff"
+  ],
+  "open": [
+    "registered_llama_device_backend_payload_submission",
+    "ext32_balanced_q1024_sampled_RTL",
+    "integrated_random_backpressure_all_groups",
+    "P3_device_gate",
+    "L5.6d_formal_close"
+  ],
+  "provenance": {
+    "ext32": "6d5b1554e70fee5995a1187aec6299d17ce0ab03e09111d81e2dcb21e421921a",
+    "full28": "720fd439b6ebe5e7aaf05f5cdf5ad8b901b53ca28acb939221d34abbee483cce",
+    "head": "c43470acef2eabaf3781da6588895f0fbfd39c843acb9ecf4afc60ea25ddf607"
+  },
+  "reference_hidden_injections": 0,
+  "schema_version": 1,
+  "sequence": 1024,
+  "status": "PASS_Q1024_P3_BACKEND_EQUIVALENT_NUMERICAL"
+}

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import math, struct
 from typing import Sequence
-from .fp32_exp2_pwl_table import EXP2_PWL_COEFF
+from .fp32_exp2_ext32_pwl_table import EXP2_PWL_COEFF
 
 def f32(x: float) -> float:return struct.unpack('<f',struct.pack('<f',float(x)))[0]
 LOG2E=f32(math.log2(math.e))
@@ -19,9 +19,9 @@ class Summary:
     def is_empty(self):return self.l==0.0
 def exp2_pwl_rtl(x):
     x=f32(x)
-    if math.isnan(x) or x<-16.0:return 0.0
+    if math.isnan(x) or x<-32.0:return 0.0
     if x>=0.0:return 1.0
-    idx=math.floor(x*16.0)+256;coeff=EXP2_PWL_COEFF[idx];m=struct.unpack('<f',struct.pack('<I',coeff>>32))[0];b=struct.unpack('<f',struct.pack('<I',coeff&0xffffffff))[0];return f32(f32(m*x)+b)
+    idx=math.floor(x*16.0)+512;coeff=EXP2_PWL_COEFF[idx];m=struct.unpack('<f',struct.pack('<I',coeff>>32))[0];b=struct.unpack('<f',struct.pack('<I',coeff&0xffffffff))[0];return f32(f32(m*x)+b)
 def exp_rtl(x):return exp2_pwl_rtl(f32(f32(x)*LOG2E))
 def _update(s,score,value,exp_fn):
     if len(value)!=len(s.o):raise ValueError('width')

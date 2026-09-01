@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_GROUP0_BACKEND_EQUIVALENT_PASS_GROUP1_OPEN",
-  "decision": "CHAIN_LAYERS4TO7_GROUP1",
+  "state": "Q1024_P3_BACKEND_EQUIVALENT_PASS_DEVICE_AND_RTL_POLICY_OPEN",
+  "decision": "CLOSE_EXT32_BALANCED_RTL_THEN_REGISTER_DEVICE_BACKEND",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Freeze exact-revision layers4-7 and their 84 real Command128 words, feed group0 layer3 final_fp32 directly into layer4, execute the same generic backend through layer7 with zero reference hidden injection and phase hashes, then apply the frozen sampled attention/tail RTL anchor policy before promoting group1.",
+  "unique_next_action": "Implement the balanced four-tile/eight-block summary schedule around the passing ext32 merge128 RTL without changing arithmetic width, rerun q1024 exact-model sampled layers0 and5 plus 1GHz component DC, then expose the accepted 588-command continuous backend through the existing llama.cpp graph/device submission boundary instead of standalone process invocation.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -59,6 +59,10 @@
     "q1024_group0_tail_sampled_RTL": "reports/execution/qwen2_q1024_group0_rtl_result.json",
     "q1024_group0_attention_sampled_RTL": "reports/execution/qwen2_q1024_group0_attention_rtl_result.json",
     "q1024_group0_audit": "reports/execution/qwen2_q1024_group0_audit_result.json",
+    "q1024_full28_backend": "reports/execution/qwen2_q1024_full28_backend_result.json",
+    "q1024_final_head_backend": "reports/execution/qwen2_q1024_final_head_backend_result.json",
+    "q1024_ext32_policy": "reports/execution/qwen2_ext32_attention_policy_result.json",
+    "q1024_P3_backend_audit": "reports/execution/qwen2_q1024_p3_backend_audit_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

@@ -38,7 +38,7 @@ module tb_qwen2_idma_shared_l2_data;
   repeat(8)@(posedge clk);rst_n=1;send(0,{8'd0,a[0]},64'h40000,3072,1,3072,3072);send(0,{8'd0,a[1]},64'h41000,6144,1,6144,6144);send(1,{8'd0,a[4]},64'h44000,64,1536,3072,64);
   for(integer i=0;i<48;i++)hread(4096+i,hidden[i]);for(integer i=0;i<96;i++)hread(4160+i,nw[i]);for(integer i=0;i<1536;i++)hread(4352+i,qw[i]);
   host_write=1;hwrite(5888,eq[0]);host_write=0;send(2,64'h5c000,{8'd0,a[5]},64,1,64,64);for(integer b=0;b<64;b++)if(ddr.mem[{8'd0,a[5]}+b]!==eq[0][b*8+:8])$fatal(1,"DDR store byte %0d",b);
-  repeat(10)@(posedge clk);if(abstract_req!=4||abstract_rsp!=4||flat_seen!=1539||flat!=1539||rbeats!=1681||wbeats!=1681||busy||bbusy)$fatal(1,"counts");
-  $display("QWEN2_IDMA_SHARED_L2_DATA_PASS abstract_requests=4 flat_requests=1539 axi_read_beats=1681 axi_write_beats=1681 local_load_beats=1680 local_store_beats=1 byte_exact_load_beats=1680 byte_exact_store_bytes=64 q_weight_rows=1536 errors=0");$finish;end
+  repeat(10)@(posedge clk);if(abstract_req!=4||abstract_rsp!=4||flat_seen!=1546||flat!=1546||rbeats!=1681||wbeats!=1681||busy||bbusy)$fatal(1,"counts");
+  $display("QWEN2_IDMA_SHARED_L2_DATA_PASS abstract_requests=4 flat_requests=1546 axi_read_beats=1681 axi_write_beats=1681 local_load_beats=1680 local_store_beats=1 byte_exact_load_beats=1680 byte_exact_store_bytes=64 q_weight_rows=1536 errors=0");$finish;end
  initial begin repeat(1000000)@(posedge clk);$fatal(1,"timeout flat=%0d abstract=%0d/%0d expand=%0d busy=%h cbusy=%0d l2=%0d/%0d beats=%0d/%0d awhs=%0d awlen=%0d wlast=%0d bhs=%0d memreq=%0d memwe=%0d gnt=%0d mrvalid=%0d axi_ar=%0d axi_r=%0d axi_aw=%0d axi_w=%0d axi_b=%0d",flat_seen,abstract_req,abstract_rsp,expand.state_q,busy,bridge.converter_busy,lreads,lwrites,rbeats,wbeats,local_awhs,last_aw_len,local_wlast,local_bhs,bridge.mem_req,bridge.mem_we,bridge.mem_gnt,bridge.mem_rvalid,read_req.ar_valid,read_rsp.r_valid,write_req.aw_valid,write_req.w_valid,write_rsp.b_valid);end
 endmodule

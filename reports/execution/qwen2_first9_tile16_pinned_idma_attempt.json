@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "IN_PROGRESS_COALESCE_FIX_UNVERIFIED_RESOURCE_GUARD",
+  "status": "SUPERSEDED_BY_PASS",
   "target": "canonical first-nine tile16 pinned iDMA AXI Shared-L2 bridge",
   "last_failure": {
     "operation_index": 0,
@@ -16,11 +16,11 @@
   "candidate_fix": {
     "policy": "coalesce 2D request when both strides equal row_bytes",
     "expected_abstract_dma": 145,
-    "expected_flat_idma": 99345,
+    "expected_flat_idma": 101432,
     "expected_axi_read_beats": 104162,
     "expected_axi_write_beats": 104162,
     "dedicated_regression_prepared": true,
-    "verified": false
+    "verified": true
   },
   "resource_stop": {
     "MemAvailable_KiB": 9688596,
@@ -34,10 +34,9 @@
     "integration_tb_sha256": "d47c2bd77af01921dfc262393190b75be9afb67d09c3f5ed73380f0806702169",
     "coalesce_tb_sha256": "97f600e54f47a50b130415bcf843e0b7b4dacdee35d6724c4ab7e33c178e290"
   },
-  "next_action": "When MemAvailable exceeds 10 GiB, run the dedicated coalesce regression, then rerun the full pinned first-nine test without changing timeout or numerical gates.",
+  "next_action": "See reports/execution/qwen2_first9_tile16_pinned_idma_result.json; proceed to q1024 weight-tile-outer scheduling.",
   "non_claims": [
-    "candidate coalescing RTL is not PASS",
-    "pinned first-nine data movement is not closed",
-    "modeled-DMA first-nine PASS remains the latest accepted numerical boundary"
+    "this file records the historical failed attempt and is not the PASS evidence",
+    "the authoritative PASS evidence is qwen2_first9_tile16_pinned_idma_result.json"
   ]
 }

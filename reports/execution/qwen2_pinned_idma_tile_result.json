@@ -1,5 +1,5 @@
 {
-  "abstract_requests": 4,
+  "abstract_requests": 6,
   "checks": {
     "2d_expansion_rows": true,
     "abstract_requests": true,
@@ -11,8 +11,9 @@
   "commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
   "errors": 0,
   "evidence_class": "actual_pinned_idma_backend_rw_axi_VCS",
-  "first_last_address_checked": true,
-  "flat_requests": 1539,
+  "flat_requests": 2362,
+  "max_load_flat_bytes": 1024,
+  "max_store_flat_bytes": 64,
   "non_claims": [
     "pinned iDMA VCS uses AXI simulation memory, not the Shared-L2 AXI slave",
     "monolithic tile top still connects through the abstract DMA interface",
@@ -20,13 +21,13 @@
   ],
   "provenance": {
     "contract_lock_sha256": "6bfa95591a911a80c0cfe373685dfdc725f2e3182ac510345deadfb37eafc9ca",
-    "expand_rtl_sha256": "ff498e2eba8edd2e44ef31ada3c912e3d9b2aebbff3f977db8ce90b7b9ef5260",
+    "expand_rtl_sha256": "a5564dae02f28f678626795510771316ce955892098a878333b2f0cb33211346",
     "flat_wrapper_sha256": "17a6f240d10d4b84b075490b22e54fe833bfe8bfaf35e2c3102574da8373f8d5",
-    "log_sha256": "d462cb01a1ed34c22c1c0776ff6a48b3891524891b9724a269ce6f6dccd98253"
+    "log_sha256": "61a4b42afa89e007d48220146c289bf157dc92ebdfbe9d6575964cd13d6f1b59"
   },
   "q_weight_rows": 1536,
-  "read_beats": 1681,
+  "read_beats": 3217,
   "schema_version": 1,
   "status": "PASS_PINNED_IDMA_TILE_TRANSFERS",
-  "write_beats": 1681
+  "write_beats": 3217
 }

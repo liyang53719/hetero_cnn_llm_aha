@@ -1,4 +1,4 @@
-# Local-agent handoff v7.56 — main only
+# Local-agent handoff v7.57 — main only
 
 ## Closed in this checkpoint
 
@@ -144,13 +144,12 @@ requests, positions0..15,98,304 Matrix steps/50,331,648 MACs,1,920 RoPE steps
 and118,784 BF16 exact. RMS→Q→bias→RoPE→K→bias→RoPE→V→bias uses direct produced
 tensors with zero intermediate reference injection. DMA/DDR/L2 are modeled;
 pinned-iDMA replacement, KV append and remaining layer0 are open.
-Pinned-iDMA binding is IN_PROGRESS, not PASS. The first attempt stalls on RMS
-hidden row1 after AW6/WLAST5/B5: repeated contiguous 3072-byte 2D rows were
-issued as separate long requests. A coalesce candidate now merges 2D transfers
-when both strides equal row_bytes; expected flat requests become99,345 while
-AXI beats remain104,162. Dedicated and full regressions are prepared but were
-not started because external DC/MATLAB jobs reduced MemAvailable below10 GiB.
-No external process was terminated; modeled-DMA first-nine remains accepted.
+Pinned-iDMA batch16 first-nine now PASS. Directional chunking uses max1024 B for
+DDR→local and64 B for local→DDR; dedicated gate has no AXI assertions. Full run
+binds clean upstream iDMA, AXI bridge and real Shared-L2 fabric:101,432 flat
+requests,104,162 read/write beats,9 completions and118,784 BF16 exact with zero
+intermediate injection. Descriptor words still use the formal-image responder;
+same-fabric descriptor storage remains a later composition detail.
 q1024 schedule is now frozen:64 batch16 groups, but projection loops weight-tile
 outside batch so every Q/K/V weight byte is fetched once, not64 times. RMS writes
 formal norm DDR first; expected first-nine work is6,291,456 Matrix steps and
@@ -182,9 +181,9 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3 command-to-page, pinned-iDMA DDR movement and canonical token0/1 first-nine
-pass, and the complete canonical batch16 first-nine same-run passes; next verify
-the prepared coalesce fix, close pinned iDMA/AXI and feed K/V to real KV append,
+KV v3 command-to-page, pinned-iDMA DDR movement and canonical batch16 first-nine
+all pass; next implement the frozen q1024 weight-tile-outer scheduler, then feed
+the complete1024-token K/V tensors to real KV append,
 then
 replace synthetic KV source while adding PTE DDR writes, then
 extend one

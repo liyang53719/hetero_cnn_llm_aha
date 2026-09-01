@@ -9,4 +9,5 @@ run(){ local limit=$1;shift;MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MA
 run 600s vlogan -sverilog -full64 +define+USE_UPSTREAM_IDMA +incdir+../../../src/include +incdir+"$AXI_INC" "$ROOT/rtl/integration/idma_backend_rw_axi_flat_wrap.sv" "$ROOT/rtl/integration/qwen2_tile_idma_expand.sv" "$ROOT/tb/tb_qwen2_tile_idma_expand.sv" >"$OUT/vlogan.log" 2>&1
 run 600s vcs -full64 -top tb_qwen2_tile_idma_expand -o simv_qwen2_tile >"$OUT/vcs.log" 2>&1
 run 600s ./simv_qwen2_tile +ADDR_MEM="$OUT/addresses.memh"|tee "$OUT/tb.log"
-grep -q 'QWEN2_PINNED_IDMA_TILE_PASS abstract_requests=4 flat_requests=1539' "$OUT/tb.log"
+! grep -q '^Error:' "$OUT/tb.log"
+grep -q 'QWEN2_PINNED_IDMA_TILE_PASS abstract_requests=6 flat_requests=2362 read_beats=3217 write_beats=3217 max_load_flat_bytes=1024 max_store_flat_bytes=64 coalesced_load16=48 coalesced_store16=768' "$OUT/tb.log"

@@ -11,4 +11,5 @@ run 600s vlogan -sverilog -full64 +define+USE_UPSTREAM_IDMA +define+SYNTHESIS +i
 run 600s vcs -full64 -top tb_qwen2_idma_shared_l2_data -o simv_qwen2_l2 >"$OUT/vcs.log" 2>&1
 VEC=$ROOT/work/results/qwen2_shared_l2_tile_payload
 run 600s ./simv_qwen2_l2 +ADDR_MEM="$OUT/addresses.memh" +HIDDEN="$VEC/hidden_beats.memh" +NORM_WEIGHT="$VEC/rms_weight_beats.memh" +Q_WEIGHT="$VEC/q_weight_beats.memh" +Q_OUT="$VEC/q_expected_beat.memh"|tee "$OUT/tb.log"
-grep -q 'QWEN2_IDMA_SHARED_L2_DATA_PASS abstract_requests=4 flat_requests=1539' "$OUT/tb.log"
+! grep -q '^Error:' "$OUT/tb.log"
+grep -q 'QWEN2_IDMA_SHARED_L2_DATA_PASS abstract_requests=4 flat_requests=1546' "$OUT/tb.log"

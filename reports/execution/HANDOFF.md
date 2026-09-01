@@ -1,4 +1,4 @@
-# Local-agent handoff v7.40 — main only
+# Local-agent handoff v7.41 — main only
 
 ## Closed in this checkpoint
 
@@ -63,6 +63,9 @@ Four formal commands, 98,370 flat iDMA requests and 3,584 values are bit-exact.
 Bias audit now matches formal descriptors: GGUF bias arrives as FP32 dtype7
 (two 512-bit beats per 32 values), HardFloat adds it after the Matrix BF16
 boundary, and Q/K/V 2048 outputs remain bit-exact.
+Descriptor-driven bias stage now fetches q/k/v bias commands and FP32 tensors,
+runs pinned iDMA → Shared-L2 → HardFloat → BF16 writeback: 3 commands, 70 flat
+requests, 256 AXI beats and 2048 values bit-exact. Same-run insertion is open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

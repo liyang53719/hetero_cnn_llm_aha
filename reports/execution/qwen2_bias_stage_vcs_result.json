@@ -1,0 +1,45 @@
+{
+  "K_values": 256,
+  "Q_values": 1536,
+  "V_values": 256,
+  "axi_beats_each_direction": 256,
+  "bf16_bit_exact": 2048,
+  "checks": {
+    "BF16_boundary_output": true,
+    "FP32_bias_dtype7": true,
+    "SharedL2_HardFloat": true,
+    "formal_descriptors": true,
+    "pinned_idma": true,
+    "upstream_clean": true
+  },
+  "commands": [
+    "l0.q_bias",
+    "l0.k_bias",
+    "l0.v_bias"
+  ],
+  "ddr_read_bytes": 12288,
+  "ddr_write_bytes": 4096,
+  "descriptor_fetches": 18,
+  "evidence_class": "formal_descriptor_pinned_iDMA_SharedL2_HardFloat",
+  "flat_idma_requests": 70,
+  "non_claims": [
+    "standalone stage preloads raw projection inputs",
+    "raw projection and bias are not yet one VCS run",
+    "RoPE remains separate"
+  ],
+  "open": [
+    "same_run_raw_QKV_to_bias",
+    "Q_K_RoPE",
+    "first_nine_event_chain"
+  ],
+  "provenance": {
+    "context_sha256": "b95ad988ac3249a34cee46fc972c9ac17151aed0bc2566d746775b18aa1c60b4",
+    "log_sha256": "1c2ce8402f0a41667264cdd8138fe297655d40eb0ffe0cf570e9948de9f36298",
+    "payload_sha256": "f3f760dad81eaaf305649b8e56d71f86661af2acb248309b1e74920e24de453c",
+    "top_sha256": "d9ac582de02b0f882b378b05a40a57af9fea04371167bbe6a04209c31d5ff8b0"
+  },
+  "schema_version": 1,
+  "shared_l2_read_beats": 192,
+  "shared_l2_write_beats": 64,
+  "status": "PASS_DESCRIPTOR_DRIVEN_QKV_BIAS_STAGE"
+}

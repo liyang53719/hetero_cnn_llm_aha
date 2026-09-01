@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.."&&pwd);OUT=${OUT:-$ROOT/work/results/qwen2_shared_l2_tile_payload}
+R=$ROOT/scripts/run_memory_capped.sh;V=${HETERO_VERILATOR:-$ROOT/work/toolchain/conda/bin/verilator};mkdir -p "$OUT"
+taskset -c 8-23 python3 "$ROOT/scripts/generate_qwen2_shared_l2_tile_vectors.py"
+C=$ROOT/rtl/matrix/candidates;S=("$ROOT/rtl/fabric/shared_l2_fabric.sv" "$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv" "$ROOT/rtl/sfu/fp32_reduce16.sv" "$ROOT/rtl/sfu/fp32_rsqrt_nr.sv" "$ROOT/rtl/sfu/fp32_rsqrt_nr2.sv" "$ROOT/rtl/sfu/fp32_rmsnorm1536_chunked.sv" "$ROOT/rtl/matrix/bf16_outer_product_array_glue512.sv" "$C/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv" "$C/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv" "$C/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv" "$ROOT/rtl/integration/qwen2_sfu_command_endpoint.sv" "$ROOT/rtl/integration/qwen2_matrix_command_endpoint.sv" "$ROOT/rtl/integration/qwen2_shared_l2_tile_payload.sv" "$ROOT/tb/tb_qwen2_shared_l2_tile_payload.sv")
+run(){ local limit=$1;shift;MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s "$limit" "$@";}
+run 600s "$V" --binary --timing --assert -Wall -Wno-fatal -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL -Wno-WIDTH -Wno-SYNCASYNCNET -Wno-PROCASSINIT -j 8 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_qwen2_shared_l2_tile_payload --Mdir "$OUT/obj" -o tb "${S[@]}" >"$OUT/build.log" 2>&1
+cd "$ROOT";run 600s "$OUT/obj/tb"|tee "$OUT/tb.log"
+grep -q 'QWEN2_SHARED_L2_TILE_PAYLOAD_PASS read_beats=1680 write_beats=49' "$OUT/tb.log"

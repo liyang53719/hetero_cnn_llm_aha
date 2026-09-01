@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Consume the passing six-root tile context to issue global DDR-to-local Shared-L2 staging transfers, then replace testbench-staged layer0 RMSNorm-to-Q-Matrix vectors with Shared-L2 reads/writeback while preserving 1568 BF16 bit-exact.",
+  "unique_next_action": "Compose the passing six-root context, four-op DMA plan and 1680R/49W real Shared-L2 payload into one command path; bind DMA requests to pinned iDMA AXI movement, preserving 1568 BF16 bit-exact and explicit tile-only scope.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

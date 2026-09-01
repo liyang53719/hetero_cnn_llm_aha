@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "descriptor_context": true,
+    "dma_shape": true,
+    "no_testbench_payload_injection_after_start": true,
+    "real_SFU_Matrix": true,
+    "shared_l2_read_writeback": true
+  },
+  "descriptor": {
+    "context_status": "PASS_DESCRIPTOR_BACKED_TILE_CONTEXT",
+    "fetches": 12,
+    "formal_records": 6188,
+    "image_sha256": "c8bc57cf869005d0aedba3065a970c4d05c97749c97355be1b2e6d34a8737eb3",
+    "roots": 6
+  },
+  "dma": {
+    "ddr_read_bytes": 107520,
+    "ddr_write_bytes": 64,
+    "dst_stride": 64,
+    "load1d": 2,
+    "load2d": 1,
+    "q_weight_rows": 1536,
+    "requests": 4,
+    "row_bytes": 64,
+    "src_stride": 3072,
+    "store1d": 1
+  },
+  "evidence_class": "separate_real_RTL_context_DMA_plan_and_payload_datapath_not_monolithic_command",
+  "non_claims": [
+    "descriptor context, DMA plan and payload execute in separate RTL tests, not one monolithic command path",
+    "only token0 and 32 Q output columns execute",
+    "does not close one layer, seven groups or P3",
+    "DMA plan is not yet connected to pinned iDMA AXI data movement in the payload test"
+  ],
+  "payload": {
+    "bf16_bit_exact": 1568,
+    "matrix_outputs": 32,
+    "matrix_steps": 1536,
+    "random_backpressure": true,
+    "rms_values": 1536,
+    "shared_l2_read_beats": 1680,
+    "shared_l2_write_beats": 49
+  },
+  "provenance": {
+    "dma_log_sha256": "8ba506d142b5d8b69bdf4d50c654e86382e086346e39146b10af9f192f28345f",
+    "dma_rtl_sha256": "e649ef118d04add5b300b8bc92dbd124fb195c556e65ee79a392cd0f3a54b7c8",
+    "payload_log_sha256": "017502d618b1a4e657dae1199fef23c54404d5825da5f3815dc72350a19ef412",
+    "payload_rtl_sha256": "09bab0a1f8b5c537b1dbfdb8a5318a60c9172479b967874ebc9ecd7dcb15b868"
+  },
+  "schema_version": 1,
+  "scope": "layer0 token0 RMSNorm plus Q output columns0_31",
+  "status": "PASS_COMPOSED_DESCRIPTOR_DMA_SHARED_L2_REAL_TILE_PAYLOAD"
+}

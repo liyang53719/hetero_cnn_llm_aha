@@ -36,6 +36,7 @@
   "descriptor_tile_context": {"status": "PASS", "evidence": "reports/execution/qwen2_descriptor_tile_context_result.json", "commands": 2, "roots": 6, "fetches": 12, "q1024": true, "invalid_preissue": true, "payload_bytes_moved": false},
   "shared_l2_real_tile_payload": {"status": "PASS_COMPOSED", "evidence": "reports/execution/qwen2_shared_l2_tile_payload_result.json", "dma_requests": 4, "ddr_read_bytes": 107520, "ddr_write_bytes": 64, "shared_l2_reads": 1680, "shared_l2_writes": 49, "bf16_bit_exact": 1568, "monolithic": false},
   "monolithic_real_tile_top": {"status": "PASS", "evidence": "reports/execution/qwen2_descriptor_shared_l2_tile_top_result.json", "commands": 2, "descriptor_fetches": 12, "dma_requests": 4, "shared_l2_reads": 1680, "shared_l2_writes": 49, "bf16_bit_exact": 1568, "pinned_idma_bound": false},
+  "pinned_idma_tile": {"status": "PASS_SEPARATE_VCS", "evidence": "reports/execution/qwen2_pinned_idma_tile_result.json", "abstract_requests": 4, "flat_requests": 1539, "read_beats": 1681, "write_beats": 1681, "upstream_clean": true, "shared_l2_axi_bound": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

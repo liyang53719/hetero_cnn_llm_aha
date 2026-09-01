@@ -1,4 +1,4 @@
-# Local-agent handoff v7.44 — main only
+# Local-agent handoff v7.45 — main only
 
 ## Closed in this checkpoint
 
@@ -77,6 +77,12 @@ planner: 32 KiB table + 1 MiB DDR data/layer, 64 logical 16-token pages and
 16 KiB combined K/V per page. Malformed commands and reserved table flags are
 rejected. This is context evidence only; PTE writes and KV payload movement are
 still open, and the legacy 512 KiB staging adapter is not production DDR KV.
+The v3 context is now composed with a 64-page DDR scheduler in one RTL stage.
+It emits one root plus 64 leaf PTE field updates and 128 exact 8 KiB K/V iDMA
+requests (1 MiB total) under random descriptor/PTE/DMA backpressure. Every K/V
+source and combined-page destination address is checked. PTE fields remain
+explicit because flags packing is not frozen; the iDMA requests are not yet
+bound to the pinned AXI backend, so this is command-to-schedule evidence.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -104,7 +110,8 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3 context also passes; next implement its DDR PTE/page payload core and
-multi-token RoPE/QKV source, then extend one
+KV v3 command-to-page scheduling also passes; next bind its 128 requests to
+the pinned AXI backend and real DDR data, while extending multi-token RoPE/QKV,
+then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

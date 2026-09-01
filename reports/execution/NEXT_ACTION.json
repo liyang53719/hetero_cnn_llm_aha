@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "TOKEN0_FIRST9_AND_KV_V3_CONTEXT_PASS_MULTITOKEN_PAYLOAD_OPEN",
-  "decision": "IMPLEMENT_KV_DDR_PAGE_PAYLOAD_AND_MULTITOKEN_ROPE",
+  "state": "KV_V3_COMMAND_TO_64_PAGE_SCHEDULE_PASS_PINNED_IDMA_AND_MULTITOKEN_OPEN",
+  "decision": "BIND_KV_PAGE_SCHEDULE_TO_PINNED_IDMA_AXI",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Implement the l0.kv_append payload core behind the passing v3 context: materialize canonical root/leaf PTEs and issue 64-page K/V DDR copies using config/qwen2_kv_ddr_layout.json; in parallel extend RoPE/QKV from token0 to sequential nonzero-position tiles so the formal 1024-token append is fed by real preceding outputs rather than preload.",
+  "unique_next_action": "Bind all 128 exact 8 KiB requests from qwen2_kv_append_ddr_stage_top to the pinned clean iDMA AXI backend and verify byte-exact 1 MiB DDR page placement; keep PTE packing separate until flags semantics are frozen, and do not call the result end-to-end until q1024 K/V come from real preceding multi-token RTL outputs.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

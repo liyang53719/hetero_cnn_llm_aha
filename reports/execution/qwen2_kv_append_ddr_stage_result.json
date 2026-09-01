@@ -1,0 +1,42 @@
+{
+  "K_bytes": 524288,
+  "V_bytes": 524288,
+  "checks": {
+    "K_and_V_page_addresses_exact": true,
+    "PTE_fields_explicit_not_packed": true,
+    "complete_v3_descriptor_context": true,
+    "formal_l0_kv_append_command": true,
+    "random_descriptor_PTE_iDMA_backpressure": true
+  },
+  "commands": 1,
+  "descriptor_fetches": 13,
+  "evidence_class": "single_RTL_stage_formal_descriptor_to_PTE_and_iDMA_schedule",
+  "idma_requests": 128,
+  "logical_pages": 64,
+  "non_claims": [
+    "iDMA requests are handshaken but not yet bound to the pinned AXI backend in this stage test",
+    "abstract PTE updates are not DDR PTE writes",
+    "source payload is not read in this schedule-only gate"
+  ],
+  "open": [
+    "PTE_flags_encoding_and_DDR_write",
+    "pinned_iDMA_AXl_payload_copy",
+    "real_q1024_preceding_KV_outputs",
+    "gather"
+  ],
+  "page_bytes": 16384,
+  "payload_bytes": 1048576,
+  "provenance": {
+    "core_log_sha256": "3548d1a94b805f01194d5ec9be2164430cb7ab1c16fc091476717b5bb507a68c",
+    "core_rtl_sha256": "69813ef8db24437516fc66e8dc9ffb186edb097bf09196ef3805a7c0596befbf",
+    "stage_log_sha256": "e68aff8c26e02500e44910b3861cfa79a369d4f73ddda5979ee8242d12e74ba2",
+    "stage_rtl_sha256": "c12b2fbd38c68b3017683c6fb24ae039a3917304c41e6a7c3088c0773208d184"
+  },
+  "pte_updates": {
+    "leaf": 64,
+    "root": 1,
+    "total": 65
+  },
+  "schema_version": 1,
+  "status": "PASS_KV_APPEND_COMMAND_TO_DDR_PAGE_SCHEDULE"
+}

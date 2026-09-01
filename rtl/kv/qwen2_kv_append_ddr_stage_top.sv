@@ -1,0 +1,15 @@
+// SPDX-License-Identifier: Apache-2.0
+`timescale 1ns/1ps
+module qwen2_kv_append_ddr_stage_top(
+ input logic clk_i,input logic rst_ni,input logic start_i,input logic[127:0]command_i,
+ output logic descriptor_req_valid_o,input logic descriptor_req_ready_i,output logic[23:0]descriptor_req_index_o,input logic descriptor_rsp_valid_i,output logic descriptor_rsp_ready_o,input logic[127:0]descriptor_rsp_data_i,input logic descriptor_rsp_error_i,
+ output logic pte_valid_o,input logic pte_ready_i,output logic pte_level_o,output logic[9:0]pte_index_o,output logic[31:0]pte_physical_page_o,pte_generation_o,pte_refcount_o,output logic pte_entry_valid_o,
+ output logic idma_req_valid_o,input logic idma_req_ready_i,output logic[63:0]idma_src_addr_o,idma_dst_addr_o,output logic[31:0]idma_length_o,input logic idma_rsp_valid_i,output logic idma_rsp_ready_o,input logic idma_rsp_error_i,
+ output logic done_o,output logic[7:0]status_o,output logic[31:0]pte_updates_o,idma_requests_o,output logic[63:0]payload_bytes_o,table_address_o,data_address_o
+);
+ typedef enum logic[2:0]{I,CW,CORE,D}st_e;st_e st;logic cs,cv,cr,cl,core_start,core_done;logic[7:0]cstatus,core_status;logic[63:0]ka,va;logic[31:0]seq,ts,tc,gen,lp;logic[11:0]layer;logic[9:0]heads,dim;logic[23:0]limit;logic[5:0]idbits;logic[4:0]ptlog;logic[3:0]ptelog;
+ qwen2_kv_append_descriptor_v3_context u_context(.clk_i,.rst_ni,.start_i(cs),.command_i,.descriptor_req_valid_o,.descriptor_req_ready_i,.descriptor_req_index_o,.descriptor_rsp_valid_i,.descriptor_rsp_ready_o,.descriptor_rsp_data_i,.descriptor_rsp_error_i,.context_valid_o(cv),.context_ready_i(cr),.context_legal_o(cl),.context_status_o(cstatus),.k_address_o(ka),.v_address_o(va),.table_address_o,.data_address_o,.sequence_id_o(seq),.token_start_o(ts),.token_count_o(tc),.generation_o(gen),.logical_page_count_o(lp),.layer_id_o(layer),.kv_heads_o(heads),.head_dim_o(dim),.physical_page_limit_o(limit),.page_id_bits_o(idbits),.page_tokens_log2_o(ptlog),.pte_bytes_log2_o(ptelog));assign cr=st==CW;
+ qwen2_kv_append_ddr_page_core u_core(.clk_i,.rst_ni,.start_i(core_start),.k_address_i(ka),.v_address_i(va),.data_address_i(data_address_o),.token_start_i(ts),.token_count_i(tc),.generation_i(gen),.logical_page_count_i(lp),.physical_page_limit_i(limit),.page_tokens_log2_i(ptlog),.pte_valid_o,.pte_ready_i,.pte_level_o,.pte_index_o,.pte_physical_page_o,.pte_generation_o,.pte_refcount_o,.pte_entry_valid_o,.idma_req_valid_o,.idma_req_ready_i,.idma_src_addr_o,.idma_dst_addr_o,.idma_length_o,.idma_rsp_valid_i,.idma_rsp_ready_o,.idma_rsp_error_i,.done_o(core_done),.status_o(core_status),.pte_updates_o,.idma_requests_o,.payload_bytes_o);
+ assign done_o=st==D;assign status_o=cstatus!=0?cstatus:core_status;
+ always_ff@(posedge clk_i or negedge rst_ni)begin if(!rst_ni)begin st<=I;cs<=0;core_start<=0;end else begin cs<=0;core_start<=0;case(st)I:if(start_i)begin cs<=1;st<=CW;end CW:if(cv&&cr)begin if(cl)begin core_start<=1;st<=CORE;end else st<=D;end CORE:if(core_done)st<=D;D:st<=I;default:st<=I;endcase end end
+endmodule

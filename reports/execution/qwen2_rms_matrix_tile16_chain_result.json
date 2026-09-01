@@ -1,0 +1,39 @@
+{
+  "bf16_bit_exact": 25088,
+  "checks": {
+    "K_major_transpose": true,
+    "activation_reference_injection": false,
+    "canonical_hidden_rows0_15": true,
+    "random_L2_backpressure": true,
+    "real_Revision8B_B": true,
+    "refined_RMS_NR2": true
+  },
+  "completion": 1,
+  "effective_macs": 786432,
+  "evidence_class": "single_VCS_canonical_hidden_refined_RMS_Kmajor_Revision8B_B",
+  "matrix_steps": 1536,
+  "matrix_values": 512,
+  "non_claims": [
+    "hidden and weights are testbench-preloaded into Shared-L2 rather than moved through pinned iDMA",
+    "only Q columns0..31 execute",
+    "does not yet issue all first-nine formal commands"
+  ],
+  "open": [
+    "all_Q_K_V_columns",
+    "batch16_bias",
+    "batch16_RoPE",
+    "formal_descriptor_and_iDMA_binding",
+    "16token_first9"
+  ],
+  "provenance": {
+    "chain_log_sha256": "18cced6cad2c4d9bf170b501809d918225b8c4734b65387570b4c019a060df42",
+    "matrix_payload_rtl_sha256": "fc58dd057fb62936941a601126a9996ca66ea80e0aadf25cf8c4dab7fad80eaf",
+    "rms_stager_rtl_sha256": "1882ddccfd3c2ab3078a8805cf1932cf639ce091470aca26a34a177a1b94addd",
+    "stager_log_sha256": "e1ba84273c4bb0b87186723de6dd8f8c00347cc48c94ec9e62915026f931bdf0",
+    "testbench_sha256": "00b7a4e52a1ff9921e656a79cd28094f33365f70949892e961ac28dae3699b09"
+  },
+  "rms_values": 24576,
+  "rows": 16,
+  "schema_version": 1,
+  "status": "PASS_CANONICAL_RMS_MATRIX_TILE16_CHAIN"
+}

@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "CANONICAL_MATRIX_TILE16_PASS_BATCH16_FIRST9_OPEN",
-  "decision": "INTEGRATE_BATCH16_RMS_QKV",
+  "state": "CANONICAL_RMS_MATRIX_TILE16_PASS_ALL_QKV_TILES_OPEN",
+  "decision": "EXPAND_BATCH16_ALL_QKV_TILES",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Build canonical rows0..15 RMS-to-K-major Shared-L2 staging, reuse qwen2_shared_l2_matrix_tile16_payload across all Q/K/V column tiles, then add batch16 bias and sequential RoPE before declaring one continuous first-nine run; do not fall back to sixteen serialized single-token Matrix invocations.",
+  "unique_next_action": "Wrap the passing RMS-to-K-major stager and Matrix tile16 payload with descriptor-derived Q/K/V column-tile loops and pinned iDMA weight/output movement; require 48 Q plus 8 K plus 8 V tiles, one Matrix completion per formal command, then add batch16 bias and RoPE.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

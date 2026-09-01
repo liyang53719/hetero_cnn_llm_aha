@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "CANONICAL_MATRIX_TILE16_PASS_BATCH16_FIRST9_OPEN",
+  "current_state": "CANONICAL_RMS_MATRIX_TILE16_PASS_ALL_QKV_TILES_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -58,6 +58,7 @@
   "canonical_token01_first9": {"status": "PASS_TWO_RUNS_SAME_RTL", "evidence": "reports/execution/qwen2_canonical_token01_first9_result.json", "token_ids": [48,16948], "token_indices": [0,1], "commands_per_token": 9, "bf16_bit_exact_total": 14848, "continuous_same_run": false},
   "first9_legacy_sample_audit": {"status": "SUPERSEDED_SEMANTIC_SCOPE", "artifact": "reports/execution/qwen2_first9_chain_result.json", "retained": "component_arithmetic_protocol", "revoked": "canonical_DDR_token0_continuity", "reason": "hs_last_position_labeled_token0"},
   "canonical_matrix_tile16": {"status": "PASS_REAL_ARRAY", "evidence": "reports/execution/qwen2_matrix_tile16_payload_result.json", "rows": 16, "columns": 32, "matrix_steps": 1536, "effective_macs": 786432, "bf16_bit_exact": 512, "all_QKV_tiles": false},
+  "canonical_rms_matrix_tile16_chain": {"status": "PASS_NO_ACTIVATION_INJECTION", "evidence": "reports/execution/qwen2_rms_matrix_tile16_chain_result.json", "rms_values": 24576, "matrix_values": 512, "bf16_bit_exact": 25088, "matrix_steps": 1536, "descriptor_idma_bound": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

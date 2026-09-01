@@ -1,4 +1,4 @@
-# Local-agent handoff v7.50 — main only
+# Local-agent handoff v7.51 — main only
 
 ## Closed in this checkpoint
 
@@ -112,6 +112,13 @@ rows0..15 × Q columns0..31 execute 1,536 K steps, 786,432 effective MACs,
 activation staging gives one 16-value A vector per step. This component gate
 preloads normalized activations; batch16 RMS staging, all Q/K/V tiles and
 bias/RoPE integration remain open.
+Batch16 RMS is now real and directly connected to Matrix in one VCS run. One
+refined RMS unit processes canonical hidden rows0..15, loads weight once, writes
+token-major norm, then transposes to 1,536 K-major beats. The Matrix consumes
+that produced data without activation reference injection: 24,576 RMS +512 Q
+tile values, 25,088 BF16 bit-exact, 1,536 Matrix steps and one completion.
+Hidden/weights are still preloaded into Shared-L2; descriptor/iDMA binding and
+all Q/K/V column tiles remain open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -140,7 +147,7 @@ bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
 KV v3 command-to-page, pinned-iDMA DDR movement and canonical token0/1 first-nine
-pass, and the real Matrix batch16 primitive passes; next integrate batch16 RMS,
+pass, and canonical RMS→Matrix batch16 passes; next bind descriptor/iDMA, expand
 all Q/K/V tiles and bias/RoPE into a continuous 16-token same-run controller,
 then
 replace synthetic KV source while adding PTE DDR writes, then

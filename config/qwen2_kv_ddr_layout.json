@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "ddr_kv_base": 21474836480,
+  "layers": 28,
+  "table_bytes_per_layer": 32768,
+  "data_bytes_per_layer": 1048576,
+  "layer_stride_bytes": 1081344,
+  "page_tokens": 16,
+  "logical_pages_per_layer": 64,
+  "physical_page_limit": 4096,
+  "pte_bytes": 16,
+  "page_bytes": 16384,
+  "page_layout": {
+    "order": "logical_page_then_K_then_V",
+    "k_bytes_per_page": 8192,
+    "v_bytes_per_page": 8192,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "dtype": "BF16"
+  },
+  "derivation": {
+    "table_base": "ddr_kv_base + layer * layer_stride_bytes",
+    "data_base": "table_base + table_bytes_per_layer",
+    "page_base": "data_base + physical_page_id * page_bytes"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "checks": {
+    "K_chain_complete": true,
+    "V_chain_complete": true,
+    "all_28_layer_layouts_match_planner": true,
+    "malformed_command_rejected_preissue": true,
+    "metadata_0x32_to_0x35_complete": true,
+    "random_backpressure": true,
+    "referenced_table_tensor_chain_complete": true,
+    "reserved_table_flags_rejected": true
+  },
+  "command": "l0.kv_append",
+  "data_base": "0x0000000500008000",
+  "descriptor_fetches": 13,
+  "evidence_class": "formal_6188_record_image_full_chain_RTL_context",
+  "logical_pages": 64,
+  "non_claims": [
+    "descriptor context does not move KV payload",
+    "legacy 512 KiB staging adapter is not production DDR KV",
+    "token0 first-nine chain still lacks q1024 KV append payload"
+  ],
+  "open": [
+    "DDR_PTE_writes",
+    "64_page_KV_payload_copy",
+    "same_run_after_q1024_QKV",
+    "gather"
+  ],
+  "page_bytes": 16384,
+  "page_tokens": 16,
+  "provenance": {
+    "layout_contract_sha256": "f3740179b21accc480d88ca3071d5bad1cdecd2be30da77aadfa00cdc2831648",
+    "layout_log_sha256": "50b1602d57ff870f0d1ae3bd53dc33dc84aae9068740a5a0505f889e9e7b8218",
+    "log_sha256": "7ee334025ad9a40de4bb0733ab66c28a1c3527044ee0343db7d20c3470738677",
+    "rtl_sha256": "c3b0acb6a9af33badda875b5cbf3b79f774e0525591a53bab5dd45a0f522a6aa"
+  },
+  "schema_version": 1,
+  "status": "PASS_KV_APPEND_DESCRIPTOR_V3_CONTEXT",
+  "table_base": "0x0000000500000000",
+  "tokens": 1024
+}

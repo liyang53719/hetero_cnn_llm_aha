@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "TOKEN0_FIRST9_NO_INJECTION_PASS_LAYER0_OPEN",
-  "decision": "EXTEND_ROPE_NONZERO_AND_KV_APPEND",
+  "state": "TOKEN0_FIRST9_AND_KV_V3_CONTEXT_PASS_MULTITOKEN_PAYLOAD_OPEN",
+  "decision": "IMPLEMENT_KV_DDR_PAGE_PAYLOAD_AND_MULTITOKEN_ROPE",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Extend the passing descriptor-driven RoPE stage with the frozen nonzero-position coefficient path and then connect formal l0.kv_append to DDR-resident KV storage; preserve the same public descriptor image and require direct first-nine outputs with no reference injection before advancing through the remaining layer0 commands.",
+  "unique_next_action": "Implement the l0.kv_append payload core behind the passing v3 context: materialize canonical root/leaf PTEs and issue 64-page K/V DDR copies using config/qwen2_kv_ddr_layout.json; in parallel extend RoPE/QKV from token0 to sequential nonzero-position tiles so the formal 1024-token append is fed by real preceding outputs rather than preload.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

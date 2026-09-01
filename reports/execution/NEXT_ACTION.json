@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Extend the unified device path from Q columns0-31 to all 48 Q column tiles for token0: RMS once, stream each 1536x32 weight tile once through ping-pong staging, delay Matrix completion until tile47, and write 1536 BF16 outputs contiguously.",
+  "unique_next_action": "Replace the passing 48-start full-Q token0 iteration with one command controller: snapshot descriptors once, run RMS once, alternate two 96KiB weight buffers, delay Matrix completion until tile47, and store one contiguous 3072B Q output.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

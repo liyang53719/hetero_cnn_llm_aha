@@ -5,7 +5,7 @@ module qwen2_descriptor_shared_l2_tile_top #(
   parameter integer ADDR_W=15
 )(
   input logic clk_i,input logic rst_ni,input logic start_i,
-  input logic[127:0]rms_command_i,input logic[127:0]matrix_command_i,
+  input logic[127:0]rms_command_i,input logic[127:0]matrix_command_i,input logic[5:0]q_column_tile_i,
   output logic descriptor_req_valid_o,input logic descriptor_req_ready_i,
   output logic[23:0]descriptor_req_index_o,input logic descriptor_rsp_valid_i,
   output logic descriptor_rsp_ready_o,input logic[127:0]descriptor_rsp_data_i,
@@ -38,7 +38,7 @@ module qwen2_descriptor_shared_l2_tile_top #(
     .context_status_o(context_status),.tensor_address_o(addresses),.tensor_dtype_o(dtypes),
     .tensor_shape_o(shapes),.tensor_root_o(roots));
   qwen2_tile_dma_plan plan(.clk_i,.rst_ni,.context_valid_i(context_valid),.context_ready_o(context_ready),
-    .context_legal_i(context_legal),.tensor_address_i(addresses),.start_store_i(store_start_q),
+    .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(q_column_tile_i),.start_store_i(store_start_q),
     .dma_req_valid_o,.dma_req_ready_i,.dma_req_kind_o,.dma_src_addr_o,.dma_dst_addr_o,
     .dma_row_bytes_o,.dma_rows_o,.dma_src_stride_o,.dma_dst_stride_o,.dma_rsp_valid_i,
     .dma_rsp_ready_o,.dma_rsp_error_i,.loads_done_o(loads_done),.done_o(plan_done),

@@ -1,0 +1,49 @@
+{
+  "abstract_dma_requests": 192,
+  "axi_beats_each_direction": 80688,
+  "bf16_bit_exact": 75264,
+  "checks": {
+    "all_physical_columns": true,
+    "contiguous_DDR_Q_output": true,
+    "exact_safetensors_weights": true,
+    "pinned_idma": true,
+    "same_RTL_instance": true
+  },
+  "ddr_read_bytes": 5160960,
+  "ddr_write_bytes": 3072,
+  "descriptor_fetches": 576,
+  "evidence_class": "single_VCS_same_RTL_48_sequential_physical_column_tiles",
+  "flat_idma_requests": 73872,
+  "known_inefficiency": {
+    "RMS_executions": 48,
+    "descriptor_snapshots": 48,
+    "matrix_command_completions": 48,
+    "production_target_each": 1
+  },
+  "non_claims": [
+    "iterative 48 starts are not one Matrix command",
+    "RMS and descriptor fetch repeat 48 times",
+    "does not close production full-Q scheduling, one layer, P2 or P3"
+  ],
+  "open": [
+    "single_command_48_tile_controller",
+    "RMS_once",
+    "weight_pingpong_overlap",
+    "complete_QKV",
+    "complete_layer",
+    "seven_groups",
+    "P3"
+  ],
+  "physical_Q_columns": 1536,
+  "provenance": {
+    "log_sha256": "62eebbd49f7ead6fbd4bb3fc5029124fdd028eee3cb0f25c11ddf5f2d729119b",
+    "top_sha256": "2487e81664b73d33acea4f8607c09df6462a2b27013c7cb42f6607fc5d334790",
+    "vector_result_sha256": "f2a1facb21e0164bacca4f7e941780d9236d40d3fcf0118709d35c9bd073e645"
+  },
+  "schema_version": 1,
+  "shared_l2_read_beats": 80640,
+  "shared_l2_write_beats": 2352,
+  "status": "PASS_FULL_Q_TOKEN0_ITERATIVE_SAME_RTL",
+  "tiles": 48,
+  "token": 0
+}

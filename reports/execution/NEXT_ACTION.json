@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_LAYER0_EXACT_BACKEND_AND_SAMPLED_REAL_RTL_PASS_GROUP0_OPEN",
-  "decision": "GENERALIZE_BACKEND_AND_CLOSE_CONTINUOUS_LAYERS0_TO3",
+  "state": "Q1024_GROUP0_BACKEND_PASS_LAYERS1TO3_RTL_ANCHORS_OPEN",
+  "decision": "ANCHOR_LAYERS1TO3_AND_CLOSE_GROUP0_DEVICE_PAYLOAD",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Generalize the accepted layer0 exact backend to a layer-indexed runner, feed layer0 final_fp32 directly into layer1 without reference hidden injection, execute commands21-83 and exact-revision weights through layers1-3, emit phase/checkpoint hashes and counters, then add first-middle-last Matrix plus 8-lane SiLU RTL anchors for the continuous four-layer group.",
+  "unique_next_action": "Generate exact-model layer1-3 first-middle-last OProj/gate/up/down tiles and 8-lane SiLU vectors from the passing continuous group0 backend, run them on the same Revision8B and parameterized SiLU RTL, verify the hidden FNV chain and checkpoint hashes, then promote group0 and proceed to layers4-7 without reference hidden injection.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -55,6 +55,7 @@
     "q1024_attention_sampled_RTL": "reports/execution/qwen2_q1024_model_attention_rtl_result.json",
     "q1024_layer0_tail_backend": "reports/execution/qwen2_q1024_layer0_tail_backend_result.json",
     "q1024_layer0_tail_sampled_RTL": "reports/execution/qwen2_q1024_layer0_tail_rtl_result.json",
+    "q1024_group0_backend": "reports/execution/qwen2_q1024_group0_backend_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

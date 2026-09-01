@@ -1,0 +1,74 @@
+{
+  "attention": {
+    "causal_updates": 25190400,
+    "score_matrix_bytes": 0,
+    "summary_merges": 172032
+  },
+  "checks": {
+    "all_attention_errors_le_0p002": true,
+    "all_final_outputs_finite": true,
+    "exact_revision_weights_all_layers": true,
+    "no_score_matrix": true,
+    "predecessor_final_is_only_next_hidden_input": true,
+    "real_Command128_slices": true,
+    "same_generic_backend_layers1to3": true
+  },
+  "commands": 84,
+  "continuity": {
+    "layer0_final_fnv": "c94c7f0d75d9673b",
+    "layer3_final_sha256": "ffc48b28552312852a0be5259ddce7cdefa8c8fd7c48c24c776d127e443c4d9c",
+    "layer_records": [
+      {
+        "attention_fnv": "488b5c24b6b54e2d",
+        "attention_max_error": 0.000188814953,
+        "final_fnv": "3932f1d1c4fc18ed",
+        "final_sha256": "b643c10021f3143f026135eb255228f8f8c194c9b20017a23401f85a37645ebe",
+        "hidden_input_fnv": "c94c7f0d75d9673b",
+        "layer": 1
+      },
+      {
+        "attention_fnv": "53c4d27e5f1c1f10",
+        "attention_max_error": 0.00134980762,
+        "final_fnv": "5e342444956447b0",
+        "final_sha256": "80b07e4c0b6cf965b3212baffbf8d0bdc9bddee39d112b33969ccb2fcab0397c",
+        "hidden_input_fnv": "3932f1d1c4fc18ed",
+        "layer": 2
+      },
+      {
+        "attention_fnv": "209aff1be6f0b823",
+        "attention_max_error": 0.000561809563,
+        "final_fnv": "ea3251b5f97d2933",
+        "final_sha256": "ffc48b28552312852a0be5259ddce7cdefa8c8fd7c48c24c776d127e443c4d9c",
+        "hidden_input_fnv": "5e342444956447b0",
+        "layer": 3
+      }
+    ],
+    "reference_hidden_injections_inside_group": 0
+  },
+  "evidence_class": "layer0_checkpoint_plus_same_generic_backend_layers1to3_not_full_RTL",
+  "layers": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "non_claims": [
+    "C++ hardware-semantics backend is not RTL simulation",
+    "only layer0 currently has exact-model sampled real RTL tail anchors",
+    "group0 formal device-payload gate remains open until layers1-3 RTL anchors pass"
+  ],
+  "open": [
+    "layers1to3_sampled_real_RTL_anchors",
+    "groups1to6",
+    "continuous_28_layer_P3",
+    "final_RMSNorm_LM_head"
+  ],
+  "provenance": {
+    "generic_backend_source_sha256": "b9727435c57d1e0e4ea104447ed4ac444f1dbe137d34ba231b902a00e314d883",
+    "group_input_manifest_sha256": "2ab5c77be1b014076ce4f3cb2a4f5dba74550f273734c05c421bf7ae43bd43b3",
+    "layer0_report_sha256": "941af09a65380e32dbcfbec7d18d3b0ebb2f083750049bccb50d34b0ca684b9e"
+  },
+  "rows_per_layer": 1024,
+  "schema_version": 1,
+  "status": "PASS_Q1024_GROUP0_CONTINUOUS_HARDWARE_SEMANTICS_BACKEND"
+}

@@ -22,7 +22,7 @@
   },
   "unique_next_action": "Approve or replace the additive tensor_base.dtype assignment BF16=5, FP16=6 reserved, FP32=7 while preserving INT8=1 and INT32=4; then generate the schema-v2/v3 descriptor record image for all 588 traceable commands.",
   "ordered_gates": [
-    "descriptor record image and deterministic DDR/shared-L2 tensor memory map",
+    "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
     "one complete transformer layer on real payload RTL",
     "seven four-layer groups on that datapath without hidden-state injection",

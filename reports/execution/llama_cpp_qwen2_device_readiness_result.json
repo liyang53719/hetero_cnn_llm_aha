@@ -1,6 +1,7 @@
 {
   "checks": {
     "cpu_baseline": true,
+    "decode_only_capture": true,
     "llama_commit": true,
     "real_q1024_graph": true,
     "submission": true,
@@ -43,7 +44,8 @@
   "provenance": {
     "cpu_result_sha256": "995a39a67e6081bc00e93de02443a4a846835dd7d8c22c0a8b66b4e7244e0d56",
     "graph_capture_sha256": "929d33f0fad2143173a23143fc82b8915a435cb35ed86aa457265362ea85d567",
-    "lowering_report_sha256": "36131b5358c1f0e202d3e167dea51175a0440e41db5c309f5c2bf119ac57c720",
+    "llama_log_sha256": "47d36504b4c7538bd87b6956d568cbbd0ff3a8baabf7546cce785f872692fdc4",
+    "lowering_report_sha256": "da3feedd35f8f58dc97cf5189786a8d96869d97e74e9cc760395626842242ca3",
     "submission_log_sha256": "6e995f394bcc763df7df83912148faf6fee6447f4975902a9146845de6273142"
   },
   "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",

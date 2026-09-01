@@ -21,6 +21,7 @@ cpu = load("work/results/llama_cpp_qwen2_baseline/result.json")
 graph = load("reports/execution/llama_cpp_qwen2_graph_lowering_result.json")
 closure = load("reports/execution/upstream_closure.json")
 log = (ROOT / "work/results/qwen2_real_command_submission/tb.log").read_text()
+llama_log = (ROOT / "work/results/llama_cpp_qwen2_baseline/llama.log").read_text()
 match = re.search(
     r"QWEN2_REAL_COMMAND_SUBMISSION_PASS commands=(\d+) completions=(\d+) "
     r"matrix=(\d+) sfu=(\d+) kv=(\d+) event_grants=(\d+) "
@@ -39,6 +40,7 @@ checks = {
                         "PASS_REAL_Q1024_GGML_NODE_TENSOR_COMMAND128_LOWERING" and
                         graph["graph"]["nodes"] == 930 and graph["graph"]["ubatch"] == 1024 and
                         graph["gguf"]["tensors"] == 338,
+    "decode_only_capture": "tokens=1024 ubatch=1024 capture=decode_only layers=28" in llama_log,
     "traceable_lowering": graph["lowering"]["commands"] == 588 and
                           graph["lowering"]["manifest_records"] == 588,
     "submission": commands == completions == grants == 588 and
@@ -72,6 +74,7 @@ result = {
     "provenance": {
         "cpu_result_sha256": sha("work/results/llama_cpp_qwen2_baseline/result.json"),
         "graph_capture_sha256": sha("work/results/llama_cpp_qwen2_baseline/graph.tsv"),
+        "llama_log_sha256": sha("work/results/llama_cpp_qwen2_baseline/llama.log"),
         "lowering_report_sha256": sha("reports/execution/llama_cpp_qwen2_graph_lowering_result.json"),
         "submission_log_sha256": sha("work/results/qwen2_real_command_submission/tb.log"),
     },

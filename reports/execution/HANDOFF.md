@@ -1,4 +1,4 @@
-# Local-agent handoff v7.20 — main only
+# Local-agent handoff v7.21 — main only
 
 ## Closed in this checkpoint
 
@@ -33,12 +33,16 @@ and llama argmax match and Top-10 overlap is 10/10. The 930-node/338-tensor
 capture lowers to 588 traceable commands: Matrix 252, SFU 308, KV 28. All pass
 production command/event submission under random backpressure. This supersedes
 the invalid 252-command nine-phase template that collapsed Q/K/V bindings.
+Capture is decode-only; layers 0-26 retain q1024 and layer27 legally narrows to
+the final token required by the frozen LM-head contract.
 
 Real Matrix/SFU endpoint RTL now passes the first two graph-derived commands:
 2 completions, 1536 RMS outputs, 1536 Matrix steps, 32 Matrix outputs, 1568
 BF16 values bit-exact, event ordering and random backpressure PASS. Descriptor
 packing is BLOCKED_DECISION: public dtype only freezes INT8=1; approve the
 recommended additive BF16=5, FP16=6 reserved, FP32=7 mapping in
-`L5_DESCRIPTOR_DTYPE_BLOCKED_DECISION.md`. Then emit the record image, connect
+`L5_DESCRIPTOR_DTYPE_BLOCKED_DECISION.md`. Symbolic planning is complete:
+588 commands, 1764 chains/6188 records, max chain 6, 954 DDR objects, 0 overlap,
+28 KV layers and 2 KiB score tiles. After approval pack the image, then connect
 shared-L2 payload, and extend one layer then seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

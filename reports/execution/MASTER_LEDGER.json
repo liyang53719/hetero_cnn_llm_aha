@@ -28,6 +28,7 @@
   "llama_cpp_device_readiness": {"status": "PASS_REAL_Q1024_TRACEABLE_COMMAND_SUBMISSION_PAYLOAD_MEMORY_OPEN", "evidence": "reports/execution/llama_cpp_qwen2_device_readiness_result.json", "nodes": 930, "gguf_tensors": 338, "commands": 588, "matrix_commands": 252, "sfu_commands": 308, "kv_commands": 28, "ubatch": 1024},
   "real_payload_operator_slice": {"status": "PASS", "evidence": "reports/execution/qwen2_real_payload_endpoint_result.json", "commands": 2, "completions": 2, "rms_values": 1536, "matrix_steps": 1536, "matrix_outputs": 32, "bf16_bit_exact": 1568, "descriptor_backed_payload": false},
   "descriptor_dtype_decision": {"status": "BLOCKED_DECISION", "evidence": "reports/execution/l5_descriptor_dtype_decision_result.json", "recommended": {"BF16": 5, "FP16_reserved": 6, "FP32": 7}},
+  "symbolic_descriptor_plan": {"status": "PASS_SYMBOLIC_TOPOLOGY_BLOCKED_DTYPE_CODES", "evidence": "reports/execution/qwen2_symbolic_descriptor_plan_result.json", "commands": 588, "chains": 1764, "records": 6188, "max_chain": 6, "memory_objects": 954, "address_overlaps": 0, "kv_layers": 28, "score_tile_bytes": 2048},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

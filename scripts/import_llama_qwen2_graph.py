@@ -204,6 +204,9 @@ def main() -> None:
                 layer_ops[layer].add(row["op"])
     checks = {
         "q1024_single_ubatch_graph": rows[0]["shape"][1] == 1024,
+        "q1024_hidden_through_layer26": all(node(f"l_out-{layer}", "ADD")["shape"][1] == 1024
+                                               for layer in range(27)),
+        "last_token_only_layer27_output": node("l_out-27", "ADD")["shape"][1] == 1,
         "nodes": len(rows) == 930,
         "op_inventory": op_counts["MUL_MAT"] == 197 and op_counts["FLASH_ATTN_EXT"] == 28,
         "layer_coverage": len(layer_ops) == 28 and all({"MUL_MAT", "RMS_NORM"} <= layer_ops[i] for i in range(28)),

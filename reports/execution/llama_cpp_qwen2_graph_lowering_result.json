@@ -5,10 +5,12 @@
     "descriptor_range": true,
     "engine_counts": true,
     "gguf_tensors": true,
+    "last_token_only_layer27_output": true,
     "layer_coverage": true,
     "no_qkv_bundle": true,
     "nodes": true,
     "op_inventory": true,
+    "q1024_hidden_through_layer26": true,
     "q1024_single_ubatch_graph": true
   },
   "evidence_class": "real_single_ubatch_q1024_graph_with_explicit_node_and_GGUF_tensor_bindings_not_device_execution",

@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "Q2p46_RoPE": true,
+    "Revision8B_K_order_std_fma": true,
+    "canonical_tokens": true,
+    "exact_revision_weights": true,
+    "first16_matches_RTL": true,
+    "refined_RMS_BF16_boundary": true
+  },
+  "evidence_class": "CXX_OpenMP_exact_FMA_order_refined_RMS_Q2p46_not_RTL",
+  "first16_RTL_anchor_bit_exact": 118784,
+  "full_values": {
+    "K_bias": 262144,
+    "K_raw": 262144,
+    "K_rope": 262144,
+    "Q_bias": 1572864,
+    "Q_raw": 1572864,
+    "Q_rope": 1572864,
+    "V_bias": 262144,
+    "V_raw": 262144,
+    "norm": 1572864
+  },
+  "hashes": {
+    "k_bias": "e05faa9ae4733f3ca3932cf8084286e9bba130214d2edb81dfb7f9dacffce4a1",
+    "k_raw": "01b70c0920c21a126d4f30be268e61bd0312d6a87ca8b9f8b1fb6f524cc2b25b",
+    "k_rope": "1e14f25853e21741403fac7cbe8674d258b0da38225280b05dd3da152d7d2b52",
+    "q_bias": "779179fd86dc214b3a869eb8527e00074264898d322548688ac85cb2aea7034b",
+    "q_raw": "d1f9e61b46fdb0198021f06a048eaf59361b84a2e2cabf68b112040b4cb35459",
+    "q_rope": "f97547acd5f20e60e510ce0ab19e4cfb1ae2cb9af01056cab858a37573841666",
+    "v_bias": "aa6a19f88cb5e356a86818c657b59af2afaa0e6e286f6c96523a8c2640869290",
+    "v_raw": "04006e29a720527c658dcc438205f43583aea1a0da917efa811f53d0c5de3629"
+  },
+  "non_claims": [
+    "C++ backend is not RTL simulation",
+    "only first16 rows are directly RTL anchored",
+    "does not execute attention or complete layer0"
+  ],
+  "open": [
+    "llama_cpp_device_submission_binding",
+    "attention_remaining_layer0",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "backend_source_sha256": "d78b814b5b14f21f0664904c3a5972b4941e61e35a6dcd3408ee4d544f55031a",
+    "input_generator_sha256": "4487d919e21512d9eae02ad841881ad0bcb56a2fea533a45a6bda3ce4635dd2b",
+    "run_log_sha256": "0922935ea865340cb2c07c2c40d9dd75c9b74a18ca6e315ab9afa09a9a9a0e35"
+  },
+  "rows": 1024,
+  "schema_version": 1,
+  "status": "PASS_Q1024_EXACT_HARDWARE_SEMANTICS_BACKEND"
+}

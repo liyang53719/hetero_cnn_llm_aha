@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "Q1024_POST_PROJECTION_STRESS_PASS_MODEL_NUMERICAL_OPEN",
+  "current_state": "Q1024_FIRST9_BACKEND_KV_PASS_ATTENTION_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -69,6 +69,8 @@
   "q1024_group8_readiness": {"status": "PASS_BATCH2", "evidence": "reports/execution/qwen2_q1024_group8_readiness_result.json", "weight_group_tiles": 8, "Q_weight_loads": 48, "batches": 2, "norm_loads": 12, "matrix_steps": 147456, "bf16_bit_exact": 49152, "weight_refetch": 0},
   "q1024_group8_trace": {"status": "PASS_MIXED_EVIDENCE", "evidence": "reports/execution/qwen2_q1024_group8_trace_result.json", "batches": 64, "weight_loads": 64, "norm_loads": 512, "matrix_steps": 6291456, "QKV_values": 2097152, "weight_refetch": 0, "q1024_numerical": false},
   "q1024_post_projection_stress": {"status": "PASS_REPEATED_PAYLOAD", "evidence": "reports/execution/qwen2_q1024_post_projection_stress_result.json", "bias_values": 2097152, "rope_values": 1835008, "rope_direct_error": 0.0, "KV_byte_exact": 1048576, "model_q1024_continuity": false},
+  "q1024_exact_backend": {"status": "PASS_FIRST9_MODEL_NUMERICAL", "evidence": "reports/execution/qwen2_q1024_exact_backend_result.json", "commands": 9, "rows": 1024, "first16_RTL_anchor": 118784, "hardware_semantics_CXX_not_RTL": true},
+  "q1024_first9_backend_KV": {"status": "PASS_MIXED_BACKEND_RTL", "evidence": "reports/execution/qwen2_q1024_first9_backend_kv_result.json", "bf16_values": 7602176, "KV_byte_exact": 1048576, "attention": "OPEN"},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

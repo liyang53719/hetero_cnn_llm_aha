@@ -1,0 +1,54 @@
+{
+  "bf16_values_total": 7602176,
+  "checks": {
+    "K_rope_and_V_bias_feed_KV": true,
+    "canonical_tokens": true,
+    "exact_revision_weights": true,
+    "formal_Command128_consumed_by_backend": true,
+    "model_rows_not_repeated": true,
+    "upstream_idma_clean": true
+  },
+  "commands": 9,
+  "evidence_class": "exact_hardware_semantics_backend_RTL_anchor_plus_pinned_KV_RTL",
+  "first16_RTL_anchor_bit_exact": 118784,
+  "full_output_hashes": {
+    "k_bias": "e05faa9ae4733f3ca3932cf8084286e9bba130214d2edb81dfb7f9dacffce4a1",
+    "k_raw": "01b70c0920c21a126d4f30be268e61bd0312d6a87ca8b9f8b1fb6f524cc2b25b",
+    "k_rope": "1e14f25853e21741403fac7cbe8674d258b0da38225280b05dd3da152d7d2b52",
+    "q_bias": "779179fd86dc214b3a869eb8527e00074264898d322548688ac85cb2aea7034b",
+    "q_raw": "d1f9e61b46fdb0198021f06a048eaf59361b84a2e2cabf68b112040b4cb35459",
+    "q_rope": "f97547acd5f20e60e510ce0ab19e4cfb1ae2cb9af01056cab858a37573841666",
+    "v_bias": "aa6a19f88cb5e356a86818c657b59af2afaa0e6e286f6c96523a8c2640869290",
+    "v_raw": "04006e29a720527c658dcc438205f43583aea1a0da917efa811f53d0c5de3629"
+  },
+  "kv_append": {
+    "axi_beats": 16384,
+    "byte_exact": 1048576,
+    "idma_requests": 128,
+    "pages": 64,
+    "pte_updates": 65,
+    "tokens": 1024
+  },
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "non_claims": [
+    "full q1024 Matrix/SFU payload is C++ hardware-semantics backend rather than RTL simulation",
+    "only first16 rows are RTL numerical payload anchored",
+    "KV PTE updates remain abstract fields rather than DDR PTE writes"
+  ],
+  "open": [
+    "attention_QK_softmax_PV",
+    "remaining_layer0",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "backend_report_sha256": "863ba391093c8b3d1240162717baee9ca24143b561ef3f7a11a07919ca37d6b7",
+    "backend_source_sha256": "d78b814b5b14f21f0664904c3a5972b4941e61e35a6dcd3408ee4d544f55031a",
+    "kv_log_sha256": "a023939659b3daddc93b1243d53da42f67bcb0490e3d46013af57f896dd51e5b",
+    "kv_testbench_sha256": "61acf3087b22dfb26a67d45e5d59460ef33d5d89a68cd52e0933c4309fd650d7"
+  },
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "rows": 1024,
+  "schema_version": 1,
+  "status": "PASS_Q1024_FIRST9_EXACT_BACKEND_AND_KV"
+}

@@ -1,4 +1,4 @@
-# Local-agent handoff v7.60 — main only
+# Local-agent handoff v7.61 — main only
 
 ## Closed in this checkpoint
 
@@ -150,10 +150,10 @@ binds clean upstream iDMA, AXI bridge and real Shared-L2 fabric:101,432 flat
 requests,104,162 read/write beats,9 completions and118,784 BF16 exact with zero
 intermediate injection. Descriptor words still use the formal-image responder;
 same-fabric descriptor storage remains a later composition detail.
-q1024 mixed readiness now includes post-projection stress: trace64 closes Q/K/V
-at6,291,456 steps with zero weight refetch; batch64 bias2,097,152 and RoPE
-1,835,008 values are exact across positions0..1023 using Q2.46 state (direct
-error0). Formal KV append places1 MiB byte-exact. Inputs repeat rows0..15.
+q1024 first-nine model numerical now closes as mixed backend evidence: exact
+hardware-semantics C++ consumes9 packed commands and computes7,602,176 values
+for real rows0..1023; first16 rows/118,784 values match RTL bit-exact. Its model
+K-RoPE/V-bias feed formal KV append:64 pages and1 MiB byte-exact. Attention open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

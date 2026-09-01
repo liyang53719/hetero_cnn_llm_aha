@@ -1,4 +1,4 @@
-# Local-agent handoff v7.28 — main only
+# Local-agent handoff v7.29 — main only
 
 ## Closed in this checkpoint
 
@@ -32,6 +32,9 @@ formal image, validates q1024 BF16/FP32 and address continuity, and rejects a
 bad event dependency before any fetch. Separate RTL gates now add the exact
 4-op DMA plan and real Shared-L2 payload: 1680 reads, 49 writes, RMS1536,
 Matrix1536 steps/32 outputs and 1568 BF16 bit-exact under random L2 backpressure.
+The same path now passes as one RTL top: 12 descriptor fetches → 4 DMA requests
+→ Shared-L2 → real engines → 2 completions → writeback. DMA responses are still
+modeled; pinned iDMA AXI movement is the next boundary.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -57,7 +60,7 @@ The parameterized packer passes all 6188 records in explicit test-only mode and
 hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
-passes 12 descriptor fetches. Next connect context + DMA plan + payload as one
-command path and bind the four transfers to pinned iDMA, then extend one
+passes 12 descriptor fetches. Monolithic tile top passes; next bind its four
+transfers to pinned iDMA, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

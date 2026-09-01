@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Compose the passing six-root context, four-op DMA plan and 1680R/49W real Shared-L2 payload into one command path; bind DMA requests to pinned iDMA AXI movement, preserving 1568 BF16 bit-exact and explicit tile-only scope.",
+  "unique_next_action": "Replace the monolithic tile top DMA response model with pinned idma_backend_rw_axi movement for its two 1D loads, one 1536x64B 2D gather and one 64B store; preserve the exact Shared-L2 payload/writeback receipt.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

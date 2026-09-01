@@ -1,0 +1,43 @@
+{
+  "bf16_bit_exact": 1568,
+  "checks": {
+    "DMA_load_before_payload": true,
+    "Shared_L2_writeback": true,
+    "formal_descriptor_image": true,
+    "payload_before_store": true,
+    "preissue_snapshot": true,
+    "real_RMSNorm": true,
+    "real_Revision8B_B_Matrix": true
+  },
+  "commands": 2,
+  "ddr_read_bytes": 107520,
+  "ddr_write_bytes": 64,
+  "descriptor_fetches": 12,
+  "dma_requests": 4,
+  "engine_completions": 2,
+  "evidence_class": "single_RTL_top_descriptor_context_DMA_plan_SharedL2_SFU_Matrix",
+  "non_claims": [
+    "DMA request/response is modeled in this top test; pinned iDMA AXI movement remains separate",
+    "only token0 and Q columns0_31 execute",
+    "does not close a full layer or L5.6d P2/P3"
+  ],
+  "open": [
+    "pinned_iDMA_binding_for_four_requests",
+    "complete_Q_projection",
+    "remaining_layer0_operators",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "descriptor_image_sha256": "c8bc57cf869005d0aedba3065a970c4d05c97749c97355be1b2e6d34a8737eb3",
+    "log_sha256": "87b23a0fa212b924ae69e6c07feee2f196a248f6c8347f77204f29846c6e8336",
+    "payload_rtl_sha256": "09bab0a1f8b5c537b1dbfdb8a5318a60c9172479b967874ebc9ecd7dcb15b868",
+    "top_rtl_sha256": "9a977fc1d43fd408a38f9c2ab9f0cfdb6c0363e9b17ab9d5665bf9b2b4c1b2ab"
+  },
+  "random_backpressure": true,
+  "schema_version": 1,
+  "scope": "layer0 token0 RMSNorm plus Q output columns0_31",
+  "shared_l2_read_beats": 1680,
+  "shared_l2_write_beats": 49,
+  "status": "PASS_MONOLITHIC_DESCRIPTOR_SHARED_L2_REAL_TILE_TOP"
+}

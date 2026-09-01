@@ -2,7 +2,7 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_GGML_REGISTERED_SHIM_PASS_ORIGINAL_GRAPH_GGUF_OPEN",
+  "state": "Q1024_GGML_DYNAMIC_PLUGIN_PASS_ORIGINAL_GRAPH_GGUF_OPEN",
   "decision": "PARTITION_ORIGINAL_LLAMA_GRAPH_AND_BIND_GGUF_BUFFERS",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
@@ -67,6 +67,7 @@
     "q1024_layer5_critical_balanced_RTL": "reports/execution/qwen2_layer5_critical_summary_rtl_result.json",
     "q1024_device_submission_C_ABI": "reports/execution/qwen2_device_submission_api_result.json",
     "q1024_GGML_registered_shim": "reports/execution/ggml_hetero_backend_smoke_result.json",
+    "q1024_GGML_dynamic_plugin": "reports/execution/ggml_hetero_dynamic_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

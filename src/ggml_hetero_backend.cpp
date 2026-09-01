@@ -20,3 +20,6 @@ static ggml_backend_buffer_type_t dev_buft(ggml_backend_dev_t){return ggml_backe
 static ggml_backend_device_i device_iface={dev_name,dev_desc,dev_mem,dev_type,dev_props,dev_init,dev_buft,nullptr,dev_from_ptr,dev_supports,dev_supports_buft,nullptr,nullptr,nullptr,nullptr};
 static const char * reg_name(ggml_backend_reg_t){return"HETERO";}static size_t reg_count(ggml_backend_reg_t){return 1;}static ggml_backend_dev_t reg_dev(ggml_backend_reg_t reg,size_t index){if(index)return nullptr;static ggml_backend_device dev{device_iface,nullptr,nullptr};dev.reg=reg;return&dev;}static void *reg_proc(ggml_backend_reg_t,const char *){return nullptr;}static ggml_backend_reg_i reg_iface={reg_name,reg_count,reg_dev,reg_proc};
 extern "C" ggml_backend_reg_t ggml_backend_hetero_reg(){static ggml_backend_reg reg{GGML_BACKEND_API_VERSION,reg_iface,nullptr};return&reg;}
+#ifdef GGML_BACKEND_DL
+GGML_BACKEND_DL_IMPL(ggml_backend_hetero_reg)
+#endif

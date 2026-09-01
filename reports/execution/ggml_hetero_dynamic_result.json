@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "GGML_tensor_written": true,
+    "device_init": true,
+    "dynamic_symbol_ggml_backend_init": true,
+    "graph_compute_invokes_C_ABI": true
+  },
+  "evidence_class": "pinned_ggml_backend_load_dynamic_plugin_graph_compute_to_588_command_C_ABI",
+  "graph_compute": {
+    "calls": 1,
+    "commands": 588,
+    "cpu_fallback": 0,
+    "layers": 28,
+    "output_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+    "output_values": 1572864
+  },
+  "llama_cpp_commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+  "non_claims": [
+    "dynamic plugin still accepts one custom submission node rather than the original llama graph",
+    "weights are exported exact safetensors inputs rather than GGUF backend buffers"
+  ],
+  "open": [
+    "original 930-node llama graph partition",
+    "direct GGUF backend buffers",
+    "stock llama automatic backend discovery/config",
+    "final norm/LM head through native graph"
+  ],
+  "plugin": {
+    "devices": 1,
+    "dynamic_unload": true,
+    "filename": "libggml-hetero.so",
+    "loader": "ggml_backend_load",
+    "registry": "HETERO"
+  },
+  "provenance": {
+    "backend_source": "338cc49cae6ab446b51776fb0bf7a6ef8a6ea98bb7cf8f57e7dbf0e971973db6",
+    "log": "de6347a3950d10acdb94324e652a6b508091dab4d76c0c2c424c50943ade4c00",
+    "plugin": "0ce104df2867b1a1d3eaa9731489ae09e7a24f68e4b72bfc7c185396a927d736",
+    "static_shim_report": "e4ff4847b054a8530bfece2043221218fb8c9d46e78c62cfc4c5ba097949dfe3"
+  },
+  "schema_version": 1,
+  "status": "PASS_GGML_DYNAMIC_HETERO_SUBMISSION_PLUGIN"
+}

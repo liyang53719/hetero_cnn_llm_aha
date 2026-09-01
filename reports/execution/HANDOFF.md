@@ -163,10 +163,10 @@ OPEN_STORAGE_MAPPING. Layer5 q848/head2 now feeds7 exact-model block summaries
 to RTL:6 balanced merges/32 beats bit-exact with16 stalls. QK/SFU/PV summary
 production is still hardware-semantics,not this RTL run. One in-process C ABI
 call now submits588 commands and receives28 ordered completions with zero stage
-subprocesses; final SHA matches P3. A pinned-ABI `HETERO` GGML registry/device/
-graph_compute shim now writes1,572,864 values with CPU fallback0. It accepts one
-custom submission node,not the original930-node graph,and still uses exported
-safetensors inputs,so native GGUF/device graph gates stay OPEN.
+subprocesses; final SHA matches P3. A pinned-ABI dynamic `libggml-hetero.so`
+loads via `ggml_backend_load`,runs graph_compute,writes1,572,864 values with CPU
+fallback0 and unloads cleanly. It accepts one custom node,not the original930-
+node graph,and uses exported safetensors,so native GGUF/device gates stay OPEN.
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
 

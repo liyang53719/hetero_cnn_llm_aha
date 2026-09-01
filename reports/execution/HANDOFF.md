@@ -1,4 +1,4 @@
-# Local-agent handoff v7.23 — main only
+# Local-agent handoff v7.24 — main only
 
 ## Closed in this checkpoint
 
@@ -22,6 +22,10 @@ P2 real command-to-payload operator slice  PASS, 1568 BF16 bit-exact
 P2 now has one real layer-0 RMSNorm-to-Q-Matrix operator slice, but payload is
 still testbench staged. A complete layer, descriptor-backed payload memory,
 seven continuous four-layer groups and P3 continuous 28-layer remain OPEN.
+
+Goal is formally BLOCKED after three consecutive audits on the same unapproved
+public encoding. Resume by approving or replacing both dtype and SFU_PROGRAM
+proposals; no compile, payload or generated-RTL failure is being hidden.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

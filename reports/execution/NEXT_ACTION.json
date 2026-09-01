@@ -2,7 +2,7 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_PUBLIC_ENCODING_BLOCKED_DECISION",
+  "state": "GOAL_FORMALLY_BLOCKED_DESCRIPTOR_PUBLIC_ENCODING_APPROVAL",
   "decision": "BLOCKED_DECISION_APPROVE_DESCRIPTOR_DTYPE_AND_SFU_PROGRAM_ENCODING",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],

@@ -1,4 +1,4 @@
-# Local-agent handoff v7.25 — main only
+# Local-agent handoff v7.26 — main only
 
 ## Closed in this checkpoint
 
@@ -24,8 +24,9 @@ still testbench staged. A complete layer, descriptor-backed payload memory,
 seven continuous four-layer groups and P3 continuous 28-layer remain OPEN.
 
 Goal resumed after explicit user approval of dtype and SFU_PROGRAM encoding.
-Canonical config, software round-trip, 12-case RTL decoder and the formal
-6188-record image all PASS. Descriptor-backed payload execution remains open.
+Canonical config, software round-trip, 12-case RTL decoder, compact 164,544-byte
+formal image and production descriptor-port fetch all PASS. Descriptor-backed
+payload tensor movement remains open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -48,7 +49,9 @@ encoding is approved and formal packing is complete:
 28 KV layers, FP32 score tile 2 KiB and BF16 probability tile 1 KiB. Device
 shapes are row-major (`[1024,1536]`, Q `[1024,12,128]`), not GGML `ne[]` order.
 The parameterized packer passes all 6188 records in explicit test-only mode and
-hard-rejects unapproved input; normal approved mode produces hash
-`172dfcb799b8...`. Next connect Shared-L2 payload to that image, then extend one
+hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
+All 6188 records pass production protocol fetch; real ARM macros sample all four
+bank groups/lanes, backed by retained L3 macro 100k. Next connect payload tensor
+reads/writes to that image, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

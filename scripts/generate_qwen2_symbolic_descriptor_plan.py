@@ -15,8 +15,6 @@ sys.path.insert(0, str(ROOT / "work/upstream/llama_cpp/gguf-py"))
 from gguf import GGUFReader
 
 NULL_INDEX = 0xFFFFFF
-TAIL_BASE = 0x200000
-TABLE_ROOT_BASE = 0x300000
 DDR_WEIGHT_BASE = 0x1_0000_0000
 DDR_ACTIVATION_BASE = 0x2_0000_0000
 DDR_CONTROL_BASE = 0x4_0000_0000
@@ -56,11 +54,14 @@ def main() -> None:
     parser.add_argument("--gguf", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--encoding", type=Path)
     args = parser.parse_args()
     args.out = args.out.resolve()
     args.report = args.report.resolve()
     args.out.mkdir(parents=True, exist_ok=True)
     args.report.parent.mkdir(parents=True, exist_ok=True)
+    encoding_approved = bool(args.encoding and
+                             json.loads(args.encoding.read_text())["approval_status"] == "APPROVED")
 
     commands = [json.loads(line) for line in args.manifest.read_text().splitlines()]
     reader = GGUFReader(args.gguf, "r")
@@ -143,9 +144,11 @@ def main() -> None:
             "page_tokens": 16, "logical_pages": 64, "pte_bytes": 16,
         }
 
-    tail = TAIL_BASE
+    command_roots = {int(root) for command in commands for root in command["roots"].values()}
+    tail = max(command_roots) + 1
     chains: dict[int, dict] = {}
-    table_roots = {}
+    table_roots = {layer: tail + layer for layer in range(28)}
+    tail += len(table_roots)
     matrix_shape_errors = 0
 
     def append_chain(root: int, records: list[dict], binding: dict, operation: str, role: str) -> None:
@@ -184,8 +187,7 @@ def main() -> None:
             binding = command["root_bindings"][str(root)]
             if binding["kind"] == "kv_context":
                 layer = int(binding["layer"])
-                table_root = TABLE_ROOT_BASE + layer
-                table_roots[layer] = table_root
+                table_root = table_roots[layer]
                 records = [
                     {"record_type": "kv_context32", "sequence_id": 0, "layer_id": layer,
                      "kv_head_id": 0},
@@ -241,7 +243,6 @@ def main() -> None:
         ]
         append_chain(root, records, binding, f"kv_table_l{layer}", "metadata")
 
-    command_roots = {int(root) for command in commands for root in command["roots"].values()}
     root_coverage = command_roots <= set(chains)
     all_indices = []
     for chain in chains.values():
@@ -277,6 +278,7 @@ def main() -> None:
         "descriptor_indices_unique": unique_indices,
         "chain_length_lte_16": max_chain <= 16,
         "descriptor_index_24bit": max(all_indices) < NULL_INDEX,
+        "descriptor_fits_shared_l2": (max(all_indices) + 1) * 16 <= 1536 * 1024,
         "addresses_64bit": all(end <= (1 << 64) for _, end, _ in intervals),
         "addresses_64byte_aligned": all(start % 64 == 0 for start, _, _ in intervals),
         "address_overlap_zero": overlaps == 0,
@@ -316,10 +318,12 @@ def main() -> None:
                                   for root in sorted(chains)))
     report = {
         "schema_version": 1,
-        "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY_BLOCKED_DTYPE_CODES",
+        "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY",
         "evidence_class": "address_and_chain_complete_but_not_packed_or_executable",
+        "public_encoding_approved": encoding_approved,
         "commands": len(commands), "command_roots": len(command_roots),
         "descriptor_chains": len(chains), "descriptor_records": len(all_indices),
+        "descriptor_storage_bytes": (max(all_indices) + 1) * 16,
         "max_chain_records": max_chain, "memory_objects": len(intervals),
         "record_type_counts": dict(sorted(record_type_counts.items())),
         "dtype_symbols": dtype_symbols, "dtype_codes_assigned": False,
@@ -331,7 +335,8 @@ def main() -> None:
             "memory_map": str(memory_path), "memory_map_sha256": sha(memory_path),
             "descriptor_chains": str(chain_path), "descriptor_chains_sha256": sha(chain_path),
         },
-        "blocker": "approve public tensor_base dtype codes for BF16 and FP32 before packing",
+        "blocker": None if encoding_approved else
+                   "approve public tensor_base dtype codes and SFU_PROGRAM before packing",
         "non_claims": [
             "symbolic records are not a packed descriptor image",
             "address planning does not execute payload RTL",

@@ -31,7 +31,8 @@
   "descriptor_public_encoding": {"status": "PASS_APPROVED", "evidence": "reports/execution/descriptor_public_encoding_result.json", "canonical": "config/descriptor_public_encoding.json", "dtype": {"BF16": 5, "FP16_reserved": 6, "FP32": 7}, "rtl_decode_cases": 12},
   "symbolic_descriptor_plan": {"status": "PASS_SYMBOLIC_TOPOLOGY_BLOCKED_DTYPE_CODES", "evidence": "reports/execution/qwen2_symbolic_descriptor_plan_result.json", "commands": 588, "chains": 1764, "records": 6188, "max_chain": 6, "memory_objects": 954, "address_overlaps": 0, "kv_layers": 28, "score_tile_bytes": 2048},
   "descriptor_pack_test": {"status": "PASS_HISTORICAL_TEST_ONLY", "evidence": "reports/execution/qwen2_descriptor_pack_test_result.json", "records": 6188, "normal_mode_unapproved_guard": "PASS", "superseded_by_formal_image": true},
-  "descriptor_formal_image": {"status": "PASS", "evidence": "reports/execution/qwen2_descriptor_image_result.json", "commands": 588, "chains": 1764, "records": 6188, "sha256": "172dfcb799b8a1b43dadf20e69e417d0102c37b66c3746d42de9d9c04db5ff72"},
+  "descriptor_formal_image": {"status": "PASS_COMPACT_SHARED_L2", "evidence": "reports/execution/qwen2_descriptor_image_result.json", "commands": 588, "chains": 1764, "records": 6188, "bytes": 164544, "sha256": "c8bc57cf869005d0aedba3065a970c4d05c97749c97355be1b2e6d34a8737eb3"},
+  "descriptor_image_fabric": {"status": "PASS_FULL_PROTOCOL_PLUS_REAL_MACRO_SAMPLE", "evidence": "reports/execution/qwen2_descriptor_image_fabric_result.json", "full_records": 6188, "protocol_mismatches": 0, "real_macro_bank_groups": 4, "real_macro_descriptor_lanes": 4},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

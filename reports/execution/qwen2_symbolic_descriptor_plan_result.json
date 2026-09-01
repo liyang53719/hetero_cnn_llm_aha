@@ -1,6 +1,6 @@
 {
   "address_overlaps": 0,
-  "blocker": "approve public tensor_base dtype codes for BF16 and FP32 before packing",
+  "blocker": null,
   "checks": {
     "address_overlap_zero": true,
     "addresses_64bit": true,
@@ -9,6 +9,7 @@
     "attention_policy_records_56": true,
     "chain_length_lte_16": true,
     "commands_588": true,
+    "descriptor_fits_shared_l2": true,
     "descriptor_index_24bit": true,
     "descriptor_indices_unique": true,
     "device_row_major_shapes": true,
@@ -25,6 +26,7 @@
   "commands": 588,
   "descriptor_chains": 1764,
   "descriptor_records": 6188,
+  "descriptor_storage_bytes": 164544,
   "dtype_codes_assigned": false,
   "dtype_symbols": [
     "BF16",
@@ -36,7 +38,7 @@
   "flash_score_tile_bytes": 2048,
   "generated": {
     "descriptor_chains": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_symbolic_descriptors/descriptor_chains.jsonl",
-    "descriptor_chains_sha256": "4acc55ee6988ce1c3a1da470c564f7ac9fe2034833518122fb31691bce049a74",
+    "descriptor_chains_sha256": "f16327f8643de5d6207dc16318a04e6ae885f0f72a706fa302532130d33c9a85",
     "memory_map": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_symbolic_descriptors/tensor_memory_map.json",
     "memory_map_sha256": "ad2da62135da511ab731dae5566416318413c9732333b9a62af3eb9499a5fc28"
   },
@@ -49,6 +51,7 @@
     "address planning does not execute payload RTL",
     "conservative DDR workspace allocation is not an on-chip SRAM allocation"
   ],
+  "public_encoding_approved": true,
   "record_type_counts": {
     "attention_op": 56,
     "kv_context32": 28,
@@ -63,5 +66,5 @@
     "tensor_base": 1736
   },
   "schema_version": 1,
-  "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY_BLOCKED_DTYPE_CODES"
+  "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY"
 }

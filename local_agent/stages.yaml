@@ -20,7 +20,7 @@ stages:
       L5.6a: {status: Q1024_28_LAYER_COUNT_TRACE_E3_PASS, tokens_per_second: 320.7915990837895}
       L5.6b: {status: OFFICIAL_REFERENCE_AND_160_LM_HEAD_SAMPLES_PASS}
       L5.6c: {status: REDUCED_FOUR_LAYER_CROSS_RTL_PASS, bf16_bit_exact: 7840}
-      L5.6d: {status: P1_PASS_P2_REAL_OPERATOR_SLICE_AND_APPROVED_6188_RECORD_FORMAL_IMAGE_PASS_SHARED_L2_FULL_LAYER_AND_P3_OPEN, real_payload_bf16_bit_exact: 1568, descriptor_records: 6188, plan: reports/execution/qwen2_payload_closure_plan.json}
+      L5.6d: {status: P1_PASS_P2_REAL_OPERATOR_SLICE_APPROVED_COMPACT_IMAGE_AND_PRODUCTION_FETCH_PASS_PAYLOAD_DATA_FULL_LAYER_AND_P3_OPEN, real_payload_bf16_bit_exact: 1568, descriptor_records: 6188, descriptor_bytes: 164544, plan: reports/execution/qwen2_payload_closure_plan.json}
   - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
   - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
   - id: L8

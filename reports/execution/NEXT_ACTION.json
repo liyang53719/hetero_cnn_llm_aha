@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Load the approved packed descriptor records into the production descriptor port and replace testbench-staged layer0 RMSNorm-to-Q-Matrix vectors with Shared-L2 payload reads/writes; preserve the 1568 BF16 bit-exact gate.",
+  "unique_next_action": "Use the passing production descriptor-port context to replace testbench-staged layer0 RMSNorm-to-Q-Matrix vectors with Shared-L2 payload reads/writes and writeback; preserve the 1568 BF16 bit-exact gate.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

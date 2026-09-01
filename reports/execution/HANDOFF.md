@@ -1,4 +1,4 @@
-# Local-agent handoff v7.32 — main only
+# Local-agent handoff v7.33 — main only
 
 ## Closed in this checkpoint
 
@@ -41,6 +41,9 @@ first/last addresses. The AXI-to-Shared-L2 bridge now also passes actual data:
 The unified VCS run now embeds that real DMA chain: formal descriptor fetch,
 pinned iDMA, byte-exact L2 staging, real RMSNorm/Matrix, two completions and DDR
 writeback all PASS in one simulation. Scope remains token0/Q columns0-31 only.
+Vector audit corrected an earlier mapping error: the old random sampled Q rows
+were replaced by exact safetensors physical output columns0-31 laid out as
+1536 rows × 64 B with 3072 B source stride. All four payload/DMA gates reran PASS.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

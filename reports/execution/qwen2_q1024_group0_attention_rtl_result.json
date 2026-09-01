@@ -1,0 +1,144 @@
+{
+  "aggregate": {
+    "controller_merge_rows_per_layer": 43008,
+    "controller_tasks_per_layer": 12672,
+    "sampled_merge_rows": 10080,
+    "sampled_rows": 4320,
+    "sampled_tasks": 3186,
+    "score_probability_DDR_bytes": 0
+  },
+  "checks": {
+    "FP32_probability_hilo_conversion": true,
+    "QK_SFU_merge128_PV_real_RTL": true,
+    "backend_hidden_injections_inside_group": 0,
+    "exact_revision_layer_QKV": true,
+    "reviewed_first_and_final_q1024_samples": true,
+    "same_binary_all_layers": true
+  },
+  "evidence_class": "same_Revision8B_QK_SFU_merge128_PV_binary_exact_layer_payload",
+  "layers": [
+    1,
+    2,
+    3
+  ],
+  "non_claims": [
+    "4320 sampled rows are not all 36864 layer1-3 attention rows",
+    "controller full-task counts are control evidence rather than full numerical RTL execution",
+    "formal group0 promotion requires combined backend, attention and tail audit"
+  ],
+  "open": [
+    "group0_backend_equivalence_audit",
+    "groups1to6",
+    "continuous_28_layer_P3",
+    "final_RMSNorm_LM_head"
+  ],
+  "provenance": {
+    "backend_report_sha256": "a75cfb1760a6d5edbe1115dab083f5a51b6c829ab68524d3a0ff462910fa2630",
+    "binary_sha256": "5716f9cf862f16df41bcc7675a9054b32683d9d22c458624358a721a6ddcc53f",
+    "tail_rtl_report_sha256": "a9094ab5d4804122c3fa6f22248e503482447539d5d22e54226bfd11d1da288a",
+    "testbench_sha256": "b05c34eede13b99e403b90f709ca4c180ff0328ab7612579b2c052c6862ef30d"
+  },
+  "records": [
+    {
+      "layer": 1,
+      "sampled_rows": 1440,
+      "shards": [
+        {
+          "attention_fnv64": "983802cdcbf94284",
+          "compared_rows": 960,
+          "controller_merge_rows": 43008,
+          "controller_tasks": 12672,
+          "cycles": 5950146,
+          "log_sha256": "b662e37e2627cf07a61ebc42eb90454d579a379bb17053ed7420791ab2be671f",
+          "probability_DDR_bytes": 0,
+          "sampled_merge_rows": 672,
+          "score_DDR_bytes": 0,
+          "shard": 0,
+          "tasks": 306
+        },
+        {
+          "attention_fnv64": "276c79f980906cc6",
+          "compared_rows": 480,
+          "controller_merge_rows": 43008,
+          "controller_tasks": 12672,
+          "cycles": 15377313,
+          "log_sha256": "fa7c5460ff247e3ce62b658b5b764970e9b66e76ef6c4080b352e53436078c50",
+          "probability_DDR_bytes": 0,
+          "sampled_merge_rows": 2688,
+          "score_DDR_bytes": 0,
+          "shard": 1,
+          "tasks": 756
+        }
+      ],
+      "vector_manifest_sha256": "900aedc7b0c8fe8c969b23020384951b679bf602a2dd7dc4f94c6ab1716e6257"
+    },
+    {
+      "layer": 2,
+      "sampled_rows": 1440,
+      "shards": [
+        {
+          "attention_fnv64": "2ed0ff1554a60895",
+          "compared_rows": 960,
+          "controller_merge_rows": 43008,
+          "controller_tasks": 12672,
+          "cycles": 5936619,
+          "log_sha256": "95ac81208d0cc59406a970c9b0b30d8cd7ab270c8610b5c0dd73647c2b24915f",
+          "probability_DDR_bytes": 0,
+          "sampled_merge_rows": 672,
+          "score_DDR_bytes": 0,
+          "shard": 0,
+          "tasks": 306
+        },
+        {
+          "attention_fnv64": "3758ca98c731c9f2",
+          "compared_rows": 480,
+          "controller_merge_rows": 43008,
+          "controller_tasks": 12672,
+          "cycles": 15350007,
+          "log_sha256": "2e8d094baa0965eaab0e77a665c691b46dca78e0288443f51cf2228640141bca",
+          "probability_DDR_bytes": 0,
+          "sampled_merge_rows": 2688,
+          "score_DDR_bytes": 0,
+          "shard": 1,
+          "tasks": 756
+        }
+      ],
+      "vector_manifest_sha256": "0ca363ecc3fe35fd355333abfb24413041a8fa111ebaddc3b859abcfc4db18d8"
+    },
+    {
+      "layer": 3,
+      "sampled_rows": 1440,
+      "shards": [
+        {
+          "attention_fnv64": "3702be61fe7687ce",
+          "compared_rows": 960,
+          "controller_merge_rows": 43008,
+          "controller_tasks": 12672,
+          "cycles": 5949435,
+          "log_sha256": "0dc9e46c2e25141db7306a5c122664eb6be50268b9a45dc7744dd0eb9c392511",
+          "probability_DDR_bytes": 0,
+          "sampled_merge_rows": 672,
+          "score_DDR_bytes": 0,
+          "shard": 0,
+          "tasks": 306
+        },
+        {
+          "attention_fnv64": "4559ddb14a132b1a",
+          "compared_rows": 480,
+          "controller_merge_rows": 43008,
+          "controller_tasks": 12672,
+          "cycles": 15373362,
+          "log_sha256": "669e1aea4d8af6d74b0538ecaf87ee64d46f0a119f75eb7f8ef87c6d43e5e06a",
+          "probability_DDR_bytes": 0,
+          "sampled_merge_rows": 2688,
+          "score_DDR_bytes": 0,
+          "shard": 1,
+          "tasks": 756
+        }
+      ],
+      "vector_manifest_sha256": "5e49bef38136899d38bc219ef6f10c6393288ceb85e2dc642cd4864578e0163b"
+    }
+  ],
+  "schema_version": 1,
+  "status": "PASS_Q1024_GROUP0_LAYERS1TO3_ATTENTION_SAMPLED_REAL_RTL"
+}

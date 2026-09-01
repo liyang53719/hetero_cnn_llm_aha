@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_GROUP0_BACKEND_AND_TAIL_RTL_PASS_ATTENTION_RTL_OPEN",
-  "decision": "ANCHOR_LAYERS1TO3_ATTENTION_AND_AUDIT_GROUP0",
+  "state": "Q1024_GROUP0_BACKEND_EQUIVALENT_PASS_GROUP1_OPEN",
+  "decision": "CHAIN_LAYERS4TO7_GROUP1",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Transpose each passing layer1-3 q_rope/k_rope/v_bias/attention tensor into the existing q1024 blocked-attention RTL layout, execute fixed reviewed query/head/tile samples on the same Revision8B QK-SFU-merge128-PV binary, then audit group0 backend-equivalent promotion before chaining layers4-7.",
+  "unique_next_action": "Freeze exact-revision layers4-7 and their 84 real Command128 words, feed group0 layer3 final_fp32 directly into layer4, execute the same generic backend through layer7 with zero reference hidden injection and phase hashes, then apply the frozen sampled attention/tail RTL anchor policy before promoting group1.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -57,6 +57,8 @@
     "q1024_layer0_tail_sampled_RTL": "reports/execution/qwen2_q1024_layer0_tail_rtl_result.json",
     "q1024_group0_backend": "reports/execution/qwen2_q1024_group0_backend_result.json",
     "q1024_group0_tail_sampled_RTL": "reports/execution/qwen2_q1024_group0_rtl_result.json",
+    "q1024_group0_attention_sampled_RTL": "reports/execution/qwen2_q1024_group0_attention_rtl_result.json",
+    "q1024_group0_audit": "reports/execution/qwen2_q1024_group0_audit_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

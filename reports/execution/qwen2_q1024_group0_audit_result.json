@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "Revision8B_QK_PV_and_tail_samples": true,
+    "all_rows_continuous_backend": true,
+    "checkpoint_hashes_each_layer": true,
+    "eight_lane_fused_SiLU_samples": true,
+    "exact_revision_weights": true,
+    "predecessor_only_hidden_chain": true,
+    "random_controller_and_SiLU_backpressure": true,
+    "real_Command128_slices": true,
+    "real_SFU_merge128_probability_hilo_samples": true
+  },
+  "commands": 84,
+  "evidence_class": "continuous_all_row_hardware_semantics_backend_plus_reviewed_real_RTL_samples",
+  "full_backend": {
+    "attention_updates": 25190400,
+    "layer3_final_sha256": "ffc48b28552312852a0be5259ddce7cdefa8c8fd7c48c24c776d127e443c4d9c",
+    "reference_hidden_injections": 0,
+    "rows_per_layer": 1024,
+    "summary_merges": 172032
+  },
+  "layers": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "non_claims": [
+    "sampled RTL is not all-row numerical RTL",
+    "the hardware-semantics C++ backend is not yet registered as a llama.cpp device backend",
+    "group0 passes the explicitly labeled backend-equivalent gate, not full integrated RTL"
+  ],
+  "open": [
+    "groups1to6",
+    "continuous_28_layer_P3",
+    "final_RMSNorm_LM_head",
+    "llama_device_backend_registration"
+  ],
+  "provenance": {
+    "backend": "a75cfb1760a6d5edbe1115dab083f5a51b6c829ab68524d3a0ff462910fa2630",
+    "layer0_attention": "0cb776cdb305c559cf97d288ab0115831742f12db0e6a431b4d5409d187f5d12",
+    "layer0_tail": "95e62d9fc0ecfe719b71c1220199b133b8568be885e45b9c7f64bdaf12374e0d",
+    "layers1to3_attention": "58c7aa4a0f7084fd1ca6206aadf43f76d54f547c9516df92df7fdf7403a16946",
+    "layers1to3_tail": "a9094ab5d4804122c3fa6f22248e503482447539d5d22e54226bfd11d1da288a"
+  },
+  "sampled_real_RTL": {
+    "attention_rows": 5760,
+    "score_probability_DDR_bytes": 0,
+    "silu_bit_exact": 32768,
+    "tail_matrix_bf16_bit_exact": 24576,
+    "tail_matrix_steps": 162816
+  },
+  "schema_version": 1,
+  "status": "PASS_Q1024_GROUP0_BACKEND_EQUIVALENT_WITH_SAMPLED_REAL_RTL"
+}

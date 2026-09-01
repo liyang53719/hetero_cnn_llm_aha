@@ -1,14 +1,26 @@
 #!/usr/bin/env python3
 """Transpose the exact-revision q1024 backend tensors into the reviewed RTL TB layout."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
 
 import numpy as np
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--layer", type=int, choices=range(4), default=0)
+parser.add_argument("--out", type=Path)
+args = parser.parse_args()
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "work/results/qwen2_q1024_attention_backend"
-OUT = ROOT / "work/results/qwen2_q1024_model_attention_rtl/vectors"
+if args.layer == 0:
+    SOURCE = ROOT / "work/results/qwen2_q1024_attention_backend"
+    SOURCE_REPORT = ROOT / "reports/execution/qwen2_q1024_attention_backend_result.json"
+    default_out = ROOT / "work/results/qwen2_q1024_model_attention_rtl/vectors"
+else:
+    SOURCE = ROOT / f"work/results/qwen2_q1024_group0_backend/layer{args.layer}"
+    SOURCE_REPORT = ROOT / "reports/execution/qwen2_q1024_group0_backend_result.json"
+    default_out = ROOT / f"work/results/qwen2_q1024_group0_attention_rtl/layer{args.layer}/vectors"
+OUT = args.out or default_out
 OUT.mkdir(parents=True, exist_ok=True)
 
 def write_hex(path: Path, values: np.ndarray, width: int) -> str:
@@ -47,10 +59,10 @@ manifest = {
     "summary_merge_rows": 43008,
     "direct_diagnostic_tile_vectors": False,
     "hashes": hashes,
-    "source_report": "reports/execution/qwen2_q1024_attention_backend_result.json",
-    "source_report_sha256": hashlib.sha256(
-        (ROOT / "reports/execution/qwen2_q1024_attention_backend_result.json").read_bytes()
-    ).hexdigest(),
+    "source_report": str(SOURCE_REPORT.relative_to(ROOT)),
+    "source_report_sha256": hashlib.sha256(SOURCE_REPORT.read_bytes()).hexdigest(),
 }
+if args.layer != 0:
+    manifest["layer"] = args.layer
 (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-print("QWEN2_Q1024_MODEL_ATTENTION_RTL_VECTORS_PASS rows=12288 tasks=12672 merges=43008")
+print(f"QWEN2_Q1024_MODEL_ATTENTION_RTL_VECTORS_PASS layer={args.layer} rows=12288 tasks=12672 merges=43008")

@@ -1,4 +1,4 @@
-# Local-agent handoff v7.45 — main only
+# Local-agent handoff v7.46 — main only
 
 ## Closed in this checkpoint
 
@@ -82,7 +82,10 @@ It emits one root plus 64 leaf PTE field updates and 128 exact 8 KiB K/V iDMA
 requests (1 MiB total) under random descriptor/PTE/DMA backpressure. Every K/V
 source and combined-page destination address is checked. PTE fields remain
 explicit because flags packing is not frozen; the iDMA requests are not yet
-bound to the pinned AXI backend, so this is command-to-schedule evidence.
+bound in that component gate. A subsequent VCS gate now binds all 128 requests
+to clean pinned iDMA and one joined AXI DDR: 16,384 read plus 16,384 write beats
+and all 1 MiB across 64 pages compare byte-exact. Its source is a deterministic
+synthetic preload, not preceding Matrix/SFU output; PTE DDR writes remain open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -110,8 +113,8 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3 command-to-page scheduling also passes; next bind its 128 requests to
-the pinned AXI backend and real DDR data, while extending multi-token RoPE/QKV,
-then extend one
+KV v3 command-to-page and pinned-iDMA DDR movement pass; next replace synthetic
+source preload with multi-token QKV/RoPE outputs and add PTE DDR writes, then
+extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

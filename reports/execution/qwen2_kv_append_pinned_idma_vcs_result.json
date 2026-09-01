@@ -1,0 +1,39 @@
+{
+  "axi_read_beats": 16384,
+  "axi_write_beats": 16384,
+  "byte_exact": 1048576,
+  "checks": {
+    "CPU_affinity_8_23": true,
+    "all_KV_page_bytes_checked": true,
+    "joined_read_write_AXI": true,
+    "memory_cap_30G": true,
+    "upstream_idma_exact_commit_clean": true
+  },
+  "commands": 1,
+  "descriptor_fetches": 13,
+  "evidence_class": "formal_descriptor_to_clean_upstream_iDMA_joined_AXI_DDR",
+  "idma_requests": 128,
+  "non_claims": [
+    "synthetic source preload is not preceding Matrix/SFU numerical continuity",
+    "abstract PTE updates are not DDR writes",
+    "this does not close a complete transformer layer"
+  ],
+  "open": [
+    "PTE_DDR_write",
+    "real_q1024_preceding_KV_outputs",
+    "nonzero_position_RoPE",
+    "same_run_layer0"
+  ],
+  "pages": 64,
+  "payload_bytes": 1048576,
+  "provenance": {
+    "idma_commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+    "log_sha256": "acce63f6cd4c85891ad1318cb1da889d137ddde50ea3b37f5ccab4a30abd6de4",
+    "runner_sha256": "ba4bb2d0b2a5775592eff0aa03d66a70222bab98962d007992119f3544b219d8",
+    "testbench_sha256": "928f50f2a71804fed73ec8ccb93223c2e71cab9abc1de045ed5022cd8530435c"
+  },
+  "pte_updates": 65,
+  "schema_version": 1,
+  "source_injection": "synthetic_preload",
+  "status": "PASS_KV_APPEND_PINNED_IDMA_BYTE_EXACT"
+}

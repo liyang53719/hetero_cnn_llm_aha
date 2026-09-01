@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "KV_V3_COMMAND_TO_64_PAGE_SCHEDULE_PASS_PINNED_IDMA_AND_MULTITOKEN_OPEN",
-  "decision": "BIND_KV_PAGE_SCHEDULE_TO_PINNED_IDMA_AXI",
+  "state": "KV_PINNED_IDMA_1MIB_BYTE_EXACT_PASS_REAL_MULTITOKEN_SOURCE_OPEN",
+  "decision": "BUILD_MULTITOKEN_QKV_ROPE_SOURCE",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Bind all 128 exact 8 KiB requests from qwen2_kv_append_ddr_stage_top to the pinned clean iDMA AXI backend and verify byte-exact 1 MiB DDR page placement; keep PTE packing separate until flags semantics are frozen, and do not call the result end-to-end until q1024 K/V come from real preceding multi-token RTL outputs.",
+  "unique_next_action": "Extend the production projection/bias/RoPE datapath from token0 to sequential nonzero-position tiles and feed its real q1024 K/V DDR outputs into the passing pinned-iDMA KV append stage; preserve one RTL configuration and keep the synthetic-preload gate explicitly component-only.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

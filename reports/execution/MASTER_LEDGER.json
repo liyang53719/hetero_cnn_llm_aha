@@ -2,18 +2,20 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "L10_EARLY_PPA_IN_PARALLEL_WITH_L5_6_FULL_PAYLOAD_OPEN",
+  "current_state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_DATAPATH_OPEN_P3_OPEN",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
-  "closed_tasks": ["L0","L1","L2","L3","L5.1","L5.2","L5.3","L5.4","L5.5","L5.6a","L5.6b","L5.6c"],
-  "open_tasks": ["L4","L5.6d","L6","L7","L8","L9","L10","L11"],
+  "closed_tasks": ["L0","L1","L2","L3","L5.1","L5.2","L5.3","L5.4","L5.5","L5.6a","L5.6b","L5.6c","L5.6d.P1","L10.1","L10.2"],
+  "open_tasks": ["L4","L5.6d.P2_REAL_PAYLOAD_DATAPATH","L5.6d.P3","L6","L7","L8","L9","L10.3","L10.4","L11"],
   "accepted_local_evidence": {
     "L5.5_balanced_8x8": {"status": "PASS_E1_E4", "stress_tps": 322.3734869673966, "tile_wns_ns": 0.00011009, "merge8_wns_ns": 0.00000864267},
     "L5.5_integrated_E3": {"status": "PASS_REVIEW", "evidence_class": "composed_real_RTL_E3", "tokens_per_second": 321.8693945101204, "score_probability_DDR_bytes": 0},
     "L5.6a": {"status": "PASS_CYCLE_E3", "records": 30, "blocks": 28, "tokens_per_second": 320.7915990837895},
     "L5.6b": {"status": "PASS_REFERENCE_PLUS_SAMPLED_RTL", "lm_head_samples": 160, "max_error": 0.0},
     "L5.6c": {"status": "PASS_REDUCED_FOUR_LAYER_CROSS_RTL", "cross_nodes": 5, "bf16_bit_exact": 7840},
-    "L5.6d": {"status": "OPEN_FULL_28_LAYER_PAYLOAD_NUMERICAL_RTL"}
+    "L5.6d": {"status": "P1_168_CHECKPOINTS_PASS_P2_REFERENCE_CONTINUITY_RTL_CONTROL_PASS_REAL_PAYLOAD_DATAPATH_OPEN_P3_OPEN"},
+    "L10.1": {"status": "PASS_FROZEN_DDC_OWNER_HIERARCHY_LINK_STA", "evidence": "reports/execution/l10_hierarchical_synthesis_result.json", "wns_ns": 0.00000864267, "area": 2313314.648873, "area_double_count": 0},
+    "L10.2": {"status": "PASS_EARLY_MACRO_DB", "evidence": "reports/execution/l10_sram_macro_result.json", "sram_kib": 4096, "physical_macros": 124, "address_overlap": 0}
   },
   "sandbox_v78": {
     "status": "PASS",
@@ -24,8 +26,7 @@
     "continuity_groups": 7
   },
   "local_dependent_tasks": [
-    "L10_hierarchy_preserving_integrated_synthesis",
-    "L10_SRAM_macro_replacement",
+    "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",
     "L10_SAIF_power",
     "L5.6d_continuous_payload_replay",

@@ -1,22 +1,31 @@
-# Local-agent handoff v7.16 — main only
+# Local-agent handoff v7.17 — main only
 
-## Accepted gate boundary
+## Closed in this checkpoint
 
 ```text
-L5.5 balanced 8×8 SFU E1/E4              PASS
-L5.5 composed real-RTL E3                  PASS, 321.869395 token/s
-L5.6 28-layer count/trace E3               PASS, 320.791599 token/s
-L5.6 official reference + LM-head samples  PASS
-L5.6 reduced four-layer cross RTL           PASS, 7,840 bit-exact
-L5.6 continuous 28-layer payload RTL        OPEN
+v7.8 sandbox baseline                       PASS
+L10.1 frozen-DDC owner hierarchy link/STA  PASS
+  WNS +0.00000864267 ns; area 2,313,314.648873 um2
+  6 owners; parent local area 0; double-count 0
+L10.2 SRAM macro DB inventory              PASS
+  4096 KiB; 124 physical macros; overlap 0
+  SP/DP Liberty->DB and timing arcs linked
+Payload P1                                PASS, 168/168 checkpoints
+Payload P2 reference continuity           PASS, 7/7 groups bit-exact
+Payload P2 RTL transaction control         PASS, 168/168, injection 0
 ```
 
-The project may execute L10 early PPA now. Reduced cross-layer evidence is not a full q1024 payload replay.
+## Open boundary
 
-## Next action
+P2 has no real Matrix/SFU payload datapath execution. Reference continuity and
+RTL control are separate evidence paths. L5.6d P2 real datapath and P3
+continuous 28-layer/device-backend remain OPEN.
 
-Follow `reports/execution/LOCAL_AGENT_HANDOFF_V78.md` and `reports/execution/NEXT_ACTION.json`.
+L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
+physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
 
-The current accepted component timing margins are extremely small. The sandbox screening minimum is 0.00864267 ps and six accepted components have less than 1 ps. Treat early integrated synthesis as a blocker-discovery step, not as post-route signoff.
+## Next
 
-Remain on `main`; do not force-push and do not modify canonical upstream or generated RTL.
+Implement/select a real payload datapath or device backend for P2/P3. Preserve
+CPU 8-23, 24/30 GiB memory caps, <=600 s tasks, main-only pushes, and the two
+untracked user runtime scripts.

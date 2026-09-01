@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.."&&pwd);OUT=${OUT:-$ROOT/work/results/l10_sram_macro_inventory};R=$ROOT/scripts/run_memory_capped.sh;DC=${DC_SHELL:-/home/yang/tools/synopsys/syn/X-2025.06-SP3/bin/dc_shell};STD=${STD_CELL_DB:-/home/yang/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db};mkdir -p "$OUT";rm -f "$OUT/status.txt";SP6144_LIB=$ROOT/work/generated/l10_sram/l2_sp_6144x128wm_base_0p8v_tt25/l2sp6144x128wm_tt_typical_0p80v_0p80v_25c.lib;SP4096_LIB=$ROOT/work/generated/l10_sram/ct_sp_4096x128wm_base_0p8v_tt25/ctsp4096x128wm_tt_typical_0p80v_0p80v_25c.lib;DP2048_LIB=$ROOT/work/generated/l10_sram/dp2048x64wm_ll_0p8v_tt25/dp2048x64wm_tt_typical_0p80v_0p80v_25c.lib;DP4096_LIB=$ROOT/work/generated/l10_sram/dp4096x32wm_ll_0p8v_tt25/dp4096x32wm_tt_typical_0p80v_0p80v_25c.lib
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s env OUT_DIR="$OUT" STD_CELL_DB="$STD" SP6144_DB="$ROOT/work/generated/l10_sram/l2_sp_6144x128wm_base_0p8v_tt25/l2sp6144x128wm_tt.db" SP4096_DB="$ROOT/work/generated/l10_sram/ct_sp_4096x128wm_base_0p8v_tt25/ctsp4096x128wm_tt.db" DP2048_DB="$ROOT/work/generated/l10_sram/dp2048x64wm_ll_0p8v_tt25/dp2048x64wm_tt.db" DP4096_DB="$ROOT/work/generated/l10_sram/dp4096x32wm_ll_0p8v_tt25/dp4096x32wm_tt.db" SP6144_ARCS="$(rg -c '^\s*timing\s*\(' "$SP6144_LIB")" SP4096_ARCS="$(rg -c '^\s*timing\s*\(' "$SP4096_LIB")" DP2048_ARCS="$(rg -c '^\s*timing\s*\(' "$DP2048_LIB")" DP4096_ARCS="$(rg -c '^\s*timing\s*\(' "$DP4096_LIB")" "$DC" -64bit -f "$ROOT/dc/l10_sram_macro_inventory.tcl" >"$OUT/dc.log" 2>&1
+taskset -c 8-23 python3 - "$OUT/status.txt" <<'PY'
+import sys
+s=dict(x.strip().split('=',1)for x in open(sys.argv[1])if'='in x)
+keys=('SP6144_TIMING_ARCS','SP4096_TIMING_ARCS','DP2048_TIMING_ARCS','DP4096_TIMING_ARCS');print({k:int(s[k])for k in keys}|{'physical_macros':int(s['PHYSICAL_MACROS'])})
+if s['LINK_STATUS']!='1'or s['UNMAPPED_CELLS']!='0'or any(int(s[k])<=0 for k in keys):raise SystemExit(1)
+PY

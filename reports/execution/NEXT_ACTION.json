@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "L10_EARLY_PPA_IN_PARALLEL_WITH_L5_6_FULL_PAYLOAD_OPEN",
-  "decision": "RUN_BOUNDED_L10_EARLY_PPA_AND_PAYLOAD_GROUP_REPLAY",
+  "state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_DATAPATH_OPEN_P3_OPEN",
+  "decision": "BUILD_OR_SELECT_REAL_PAYLOAD_DATAPATH_FOR_P2_P3",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -16,17 +16,16 @@
     "L5.6c_reduced_cross_RTL": "PASS_7840_BIT_EXACT"
   },
   "open": {
-    "L5.6d_full_payload_RTL": "OPEN",
+    "L5.6d_P2_real_payload_datapath": "OPEN",
+    "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Run hierarchy-preserving L10 early synthesis and SRAM-macro feasibility while replaying the seven contiguous four-layer payload groups. Keep leaf, parent-inclusive and integrated area reports separate.",
+  "unique_next_action": "Implement or select a real Matrix/SFU payload datapath or real device backend for the seven four-layer groups; reference continuity plus RTL transaction control is insufficient for L5.6d. In parallel retain L10.3/L10.4 behind physical views and workload SAIF.",
   "ordered_gates": [
-    "L10.1 integrated hierarchy synthesis with no area double-count",
-    "L10.2 SRAM macro replacement <=4 MiB with bank/port validation",
-    "L5.6d phase-1 all 168 checkpoints",
-    "L5.6d phase-2 seven continuous four-layer groups without hidden-state injection inside a group",
-    "L10 blocker/timing/area report",
-    "later post-route PVT/OCV and workload-derived SAIF"
+    "L5.6d P2 real payload datapath selection/implementation",
+    "seven four-layer groups on that datapath without hidden-state injection",
+    "L5.6d P3 continuous 28-layer or real backend equivalent",
+    "later L10.3 post-route PVT/OCV and L10.4 workload-derived SAIF"
   ],
   "hard_acceptance": {
     "clock_ns": 1.0,

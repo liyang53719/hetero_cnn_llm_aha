@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "plan_version": "2026-09-01-v6.14",
+  "plan_version": "2026-09-01-v6.15",
   "canonical_plan": "reports/ARCHITECTURE_AND_EXECUTION_PLAN.md",
   "canonical_stages": "local_agent/stages.yaml",
   "ledger": "reports/execution/MASTER_LEDGER.json",
@@ -13,7 +13,7 @@
   "descriptor_schema": "spec/descriptor_schema.yaml",
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "L10_EARLY_PPA_IN_PARALLEL_WITH_L5_6_FULL_PAYLOAD_OPEN",
+  "current_state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_DATAPATH_OPEN_P3_OPEN",
   "stage_namespace": ["L0","L1","L2","L3","L4","L5","L6","L7","L8","L9","L10","L11"],
   "branch_inventory": {
     "remote_branches": ["main"],
@@ -32,7 +32,9 @@
     "L5.6a_cycle_count_trace_E3": {"status": "PASS", "tokens_per_second": 320.7915990837895},
     "L5.6b_reference_sampled_lm_head": {"status": "PASS", "samples": 160},
     "L5.6c_reduced_four_layer_cross_RTL": {"status": "PASS", "bf16_bit_exact": 7840},
-    "L5.6d_full_28_layer_payload_numerical_RTL": {"status": "OPEN"}
+    "L5.6d_full_28_layer_payload_numerical_RTL": {"status": "P1_PASS_P2_MIXED_CONTROL_PASS_REAL_DATAPATH_OPEN_P3_OPEN"},
+    "L10.1_owner_hierarchy": {"status": "PASS_FROZEN_DDC_LINK_STA", "wns_ns": 0.00000864267, "area": 2313314.648873, "area_double_count": 0},
+    "L10.2_sram_macro": {"status": "PASS_EARLY_MACRO_DB", "sram_kib": 4096, "physical_macros": 124}
   },
   "sandbox_progress": {
     "L10_EARLY_PPA_PREFLIGHT": "PASS_WITH_CRITICAL_MARGIN_RISK",
@@ -55,7 +57,11 @@
     "l5_5_integrated_e3": "reports/execution/l5_5_q1024_e3_result.json",
     "l5_6_full_trace": "reports/execution/l5_qwen2_full_model_trace_result.json",
     "l5_6_cross_rtl": "reports/execution/l5_qwen2_four_layer_cross_replay_result.json",
-    "sandbox_v78": "reports/execution/sandbox_v78_result.json"
+    "sandbox_v78": "reports/execution/sandbox_v78_result.json",
+    "l10_early_ppa": "reports/execution/l10_hierarchical_synthesis_result.json",
+    "l10_sram": "reports/execution/l10_sram_macro_result.json",
+    "payload_checkpoints": "reports/execution/qwen2_payload_checkpoint_result.json",
+    "payload_groups": "reports/execution/qwen2_payload_group_result.json"
   },
   "remote_audit": {
     "audited_commit": "a1eab698fa0c37a54b22a503b0fcad15841c266e",

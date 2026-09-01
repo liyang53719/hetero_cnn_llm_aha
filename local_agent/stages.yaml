@@ -20,7 +20,7 @@ stages:
       L5.6a: {status: Q1024_28_LAYER_COUNT_TRACE_E3_PASS, tokens_per_second: 320.7915990837895}
       L5.6b: {status: OFFICIAL_REFERENCE_AND_160_LM_HEAD_SAMPLES_PASS}
       L5.6c: {status: REDUCED_FOUR_LAYER_CROSS_RTL_PASS, bf16_bit_exact: 7840}
-      L5.6d: {status: FULL_28_LAYER_PAYLOAD_NUMERICAL_RTL_OPEN, plan: reports/execution/qwen2_payload_closure_plan.json}
+      L5.6d: {status: P1_168_CHECKPOINTS_PASS_P2_REFERENCE_CONTINUITY_AND_RTL_CONTROL_PASS_REAL_PAYLOAD_DATAPATH_OPEN_P3_OPEN, plan: reports/execution/qwen2_payload_closure_plan.json}
   - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
   - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
   - id: L8
@@ -32,10 +32,10 @@ stages:
   - {id: L9, name: llama_cpp_backend, status: POLICY_PARTITION_NODE_ADAPTER_E0_PASS_WAIT_REAL_GGML_GGUF}
   - id: L10
     name: physical_closure
-    status: EARLY_PPA_IN_PROGRESS_POST_ROUTE_PVT_SAIF_OPEN
+    status: EARLY_PPA_L10_1_L10_2_PASS_POST_ROUTE_PVT_SAIF_OPEN
     subgates:
-      L10.1: {status: WAIT_HIERARCHY_PRESERVING_INTEGRATED_SYNTHESIS}
-      L10.2: {status: WAIT_SRAM_MACRO_REPLACEMENT_AND_BANK_VALIDATION}
+      L10.1: {status: PASS_FROZEN_DDC_OWNER_HIERARCHY_LINK_STA, wns_ns: 0.00000864267, area_um2: 2313314.648873, area_double_count: 0}
+      L10.2: {status: PASS_EARLY_MACRO_DB, sram_kib: 4096, physical_macros: 124, address_overlap: 0}
       L10.3: {status: WAIT_POST_ROUTE_SETUP_HOLD_PVT_OCV}
       L10.4: {status: WAIT_WORKLOAD_SAIF_POWER}
   - {id: L11, name: architecture_sweep_signoff, status: CANDIDATE_V2_COLLATERAL_E0_ONLY}

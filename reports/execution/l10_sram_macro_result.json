@@ -1,0 +1,115 @@
+{
+  "checks": {
+    "address_overlap": true,
+    "bank_conflict_counters": true,
+    "capacity": true,
+    "macro_count": true,
+    "macro_link": true,
+    "macro_timing_arcs": true
+  },
+  "physical_view_blockers": [
+    "DP GDS2 generation failed",
+    "all SRAM LEF generation remains blocked by ARM bifrun crash"
+  ],
+  "schema_version": 1,
+  "sram": {
+    "address_overlap": 0,
+    "address_ranges": [
+      {
+        "base": 0,
+        "bytes": 1572864,
+        "limit": 1572864,
+        "owner": "shared_l2"
+      },
+      {
+        "base": 1572864,
+        "bytes": 786432,
+        "limit": 2359296,
+        "owner": "matrix_scratchpad"
+      },
+      {
+        "base": 2359296,
+        "bytes": 524288,
+        "limit": 2883584,
+        "owner": "matrix_accumulator"
+      },
+      {
+        "base": 2883584,
+        "bytes": 262144,
+        "limit": 3145728,
+        "owner": "aha_lake_local"
+      },
+      {
+        "base": 3145728,
+        "bytes": 262144,
+        "limit": 3407872,
+        "owner": "aha_wrapper_local"
+      },
+      {
+        "base": 3407872,
+        "bytes": 524288,
+        "limit": 3932160,
+        "owner": "kv_staging"
+      },
+      {
+        "base": 3932160,
+        "bytes": 262144,
+        "limit": 4194304,
+        "owner": "control_trace"
+      }
+    ],
+    "bank_conflicts_measured": 8524,
+    "db_sha256": {
+      "dp2048": "5928c1a89cb8d2aaf43a7018ea14fddecf93bf75cb6792d04c62affff9bb48fb",
+      "dp4096": "947ed8ca4091861bf1accc867bcfc1de88d3ce0858e212117e06e82d76f30571",
+      "sp4096": "97b42c4be439e16e5b852af4e0ba5aa9e00bf5570c9b7aeeff358343d2709c1f",
+      "sp6144": "9fc6d2b5942b23488be5b88c3edd08f8c3e55e8c0e74eceb963640fac3b59e81"
+    },
+    "owner_map": {
+      "aha_lake_local": {
+        "kib": 256,
+        "macro": "2xDP2048x64/logical",
+        "physical_instances": 16
+      },
+      "aha_wrapper_local": {
+        "kib": 256,
+        "macro": "2xDP2048x64/logical",
+        "physical_instances": 16
+      },
+      "control_trace": {
+        "kib": 256,
+        "macro": "SP4096x128",
+        "physical_instances": 4
+      },
+      "kv_staging": {
+        "kib": 512,
+        "macro": "4xDP4096x32/logical",
+        "physical_instances": 32
+      },
+      "matrix_accumulator": {
+        "kib": 512,
+        "macro": "2xDP2048x64/logical",
+        "physical_instances": 32
+      },
+      "matrix_scratchpad": {
+        "kib": 768,
+        "macro": "SP6144x128",
+        "physical_instances": 8
+      },
+      "shared_l2": {
+        "kib": 1536,
+        "macro": "SP6144x128",
+        "physical_instances": 16
+      }
+    },
+    "physical_macros": 124,
+    "timing_arcs": {
+      "DP2048_TIMING_ARCS": 1160,
+      "DP4096_TIMING_ARCS": 780,
+      "SP4096_TIMING_ARCS": 306,
+      "SP6144_TIMING_ARCS": 306
+    },
+    "total_kib": 4096
+  },
+  "status": "PASS_L10_2_EARLY_MACRO_DB"
+}

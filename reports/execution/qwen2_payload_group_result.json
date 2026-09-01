@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "checkpoint_revision": true,
+    "checkpoints": true,
+    "group_outputs_exact": true,
+    "groups": true,
+    "no_internal_injection": true,
+    "rtl_transactions": true
+  },
+  "evidence_class": "official_reference_continuous_groups_plus_RTL_transaction_control_not_payload_datapath",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "non_claims": [
+    "reference group numerical execution and RTL transaction control are separate evidence paths",
+    "no real Matrix/SFU payload datapath executes all seven groups",
+    "does not close L5.6d full payload numerical RTL"
+  ],
+  "open": {
+    "P2_real_payload_RTL_datapath": "OPEN",
+    "P3_continuous_28_layer_payload_RTL_or_real_backend": "OPEN"
+  },
+  "phase1": {
+    "aggregate_sha256": "531a3253c93ad2d14646ad1962e2cdb792074cc1dd981bf2064d05b61574936c",
+    "checkpoint_count": 168,
+    "layers": 28,
+    "phases_per_layer": 6,
+    "sample_values": 10752,
+    "status": "PASS"
+  },
+  "phase2": {
+    "command_stalls": 62,
+    "event_wait_cycles": 654,
+    "group_outputs_bit_exact": 7,
+    "groups": 7,
+    "layers": 28,
+    "reference_hidden_injections_inside_groups": 0,
+    "rtl_commands": 168,
+    "rtl_completions": 168,
+    "status": "PASS_MIXED_EVIDENCE"
+  },
+  "provenance": {
+    "checkpoint_log_sha256": "dfee9aaa5aca3be47ee06d92394bd75e52a7c8c7751092b754d7ed5f717e7353",
+    "checkpoint_raw_sha256": "f9bbe965c027da6fabc1beb11dcdf6a186ae3da1962f0e886dfed9d64cd5962c",
+    "group_controller_log_sha256": "716a777a06b90c63965fcd87c5242524e87a196a2ae2613a2de51907b7ca6673",
+    "group_reference_log_sha256": "ffea8210c38499a23164ddb452c1d334274aa846539bd83020e4f58ef56a4634",
+    "group_reference_raw_sha256": "b6861a21707b9673bb41728ab0d678b265888de287f5fb5e8540953bb4092d1e",
+    "model_safetensors_sha256": "302e327795994403cb1e3cb6a3345c76b246b894d14078c936b570c83a4e9057"
+  },
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "schema_version": 1,
+  "sequence": 1024,
+  "status": "PASS_P1_CHECKPOINTS_AND_P2_REFERENCE_CONTINUITY_RTL_CONTROL"
+}

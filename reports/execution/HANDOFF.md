@@ -159,8 +159,10 @@ injection. tile32/PV-hilo/balanced-block128/ext32 exp2 keeps all layer errors
 pipeline repair. Margin is critical sub-1ps. A new2/3/4/8-summary balanced RTL
 scheduler passes17 inputs/13 merges and random backpressure bit-exact. Its
 4,160-byte register storage makes flat and bottom-up DC hit600s; PPA stays
-OPEN_STORAGE_MAPPING. P3 is continuous C++ semantics,not all-row RTL or a
-registered llama backend; q1024 critical RTL/device gates stay OPEN.
+OPEN_STORAGE_MAPPING. Layer5 q848/head2 now feeds7 exact-model block summaries
+to RTL:6 balanced merges/32 beats bit-exact with16 stalls. QK/SFU/PV summary
+production is still hardware-semantics,not this RTL run. P3 is continuous C++
+semantics,not all-row RTL or a registered llama backend; device gates stay OPEN.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -188,8 +190,8 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3/pinned-iDMA,P3 backend numerical and balanced scheduler E1 pass. Next map
-fixed summary storage,run layer5 critical RTL,then register the same588-command
-backend at llama device submission. Full all-row RTL remains OPEN.
+KV v3/pinned-iDMA,P3 backend and layer5 balanced-summary RTL pass. Next map fixed
+summary storage,connect real layer5 QK/PV,then register the588-command backend
+at llama device submission. Full all-row RTL remains OPEN.
 Preserve CPU 8-23,24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

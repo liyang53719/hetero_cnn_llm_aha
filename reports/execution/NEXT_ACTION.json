@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_P3_BACKEND_PASS_BALANCED_RTL_E1_STORAGE_PPA_AND_DEVICE_OPEN",
-  "decision": "MAP_SUMMARY_STORAGE_AND_RUN_Q1024_CRITICAL_RTL",
+  "state": "Q1024_P3_BACKEND_AND_LAYER5_BALANCED_RTL_PASS_STORAGE_DEVICE_OPEN",
+  "decision": "MAP_SUMMARY_STORAGE_AND_CONNECT_REAL_QK_PV",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Replace the balanced scheduler's 4160-byte register array with a fixed-capacity summary SRAM/register-file wrapper while preserving its streaming contract, rerun 2/3/4/8 random-backpressure E1 and 1GHz bottom-up DC, then execute the layer5 q848/head2 critical exact-model QK-SFU-PV-balanced sample before binding the 588-command backend to llama device submission.",
+  "unique_next_action": "Replace the balanced scheduler's O-state register array with a 256x128 dual-port summary-store abstraction mapped to the existing 2xDP2048x64 macro slice, preserve 2/3/4/8 E1, then feed layer5 q848/head2 summaries from real Revision8B QK-Block32-PV RTL rather than the hardware-semantics generator before binding the 588-command backend to llama device submission.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -64,6 +64,7 @@
     "q1024_ext32_policy": "reports/execution/qwen2_ext32_attention_policy_result.json",
     "q1024_P3_backend_audit": "reports/execution/qwen2_q1024_p3_backend_audit_result.json",
     "q1024_balanced_summary_RTL": "reports/execution/l5_balanced_summary_scheduler_result.json",
+    "q1024_layer5_critical_balanced_RTL": "reports/execution/qwen2_layer5_critical_summary_rtl_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

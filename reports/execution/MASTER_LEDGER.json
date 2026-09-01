@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "Q1024_FIRST13_ATTENTION_BACKEND_AND_SAMPLED_RTL_PASS_LAYER0_TAIL_OPEN",
+  "current_state": "Q1024_LAYER0_EXACT_BACKEND_AND_SAMPLED_REAL_RTL_PASS_GROUP0_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -73,6 +73,8 @@
   "q1024_first9_backend_KV": {"status": "PASS_MIXED_BACKEND_RTL", "evidence": "reports/execution/qwen2_q1024_first9_backend_kv_result.json", "bf16_values": 7602176, "KV_byte_exact": 1048576, "attention": "OPEN"},
   "q1024_first13_attention_backend": {"status": "PASS_HARDWARE_SEMANTICS_BACKEND", "evidence": "reports/execution/qwen2_q1024_attention_backend_result.json", "commands": 13, "causal_updates": 6297600, "summary_merges": 43008, "max_fp32_error": 0.000256079523, "score_matrix_bytes": 0, "direct_bf16_probability_rejected": true},
   "q1024_exact_model_attention_RTL": {"status": "PASS_SAMPLED_E2", "evidence": "reports/execution/qwen2_q1024_model_attention_rtl_result.json", "sampled_rows": 1440, "total_rows": 12288, "controller_tasks": 12672, "summary_merges": 43008, "score_probability_DDR_bytes": 0, "probability_path": "FP32_hilo_conversion"},
+  "q1024_layer0_tail_backend": {"status": "PASS_EXACT_HARDWARE_SEMANTICS", "evidence": "reports/execution/qwen2_q1024_layer0_tail_backend_result.json", "commands": 21, "rows": 1024, "final_sha256": "308f833eb62ed8dc46f630b79da5af9b25987a5963a36a606ce78956b4e47fcd", "reference_hidden_injection": 0},
+  "q1024_layer0_tail_RTL": {"status": "PASS_SAMPLED_E2", "evidence": "reports/execution/qwen2_q1024_layer0_tail_rtl_result.json", "matrix_steps": 40704, "matrix_bf16_bit_exact": 6144, "silu_lanes": 8, "silu_bit_exact": 8192, "all_tiles": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

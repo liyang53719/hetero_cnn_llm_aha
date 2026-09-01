@@ -150,15 +150,17 @@ binds clean upstream iDMA, AXI bridge and real Shared-L2 fabric:101,432 flat
 requests,104,162 read/write beats,9 completions and118,784 BF16 exact with zero
 intermediate injection. Descriptor words still use the formal-image responder;
 same-fabric descriptor storage remains a later composition detail.
-q1024 first-nine model numerical closes as mixed backend evidence: exact C++
-consumes9 commands and computes7,602,176 values; first16 rows/118,784 values
-match RTL bit-exact. K-RoPE/V-bias feed formal KV append:64 pages/1 MiB exact.
-The chained first13 backend now adds universal block128 attention:6,297,600
-causal updates,43,008 merges,no score matrix,FP32 error2.56e-4. Direct BF16
-probability error7.83e-3 is rejected; PV uses the frozen FP32-hilo converter.
-The same Revision8B RTL samples1,440 exact-model q1024 rows through QK/SFU/
-merge128/PV with zero displayed mismatch and zero score/probability DDR bytes.
-This is sampled RTL,not all12,288 rows; layer0 tail and L5.6d remain OPEN.
+q1024 first13 exact backend covers first-nine/KV and block128 attention:
+6,297,600 causal updates,43,008 merges,no score matrix,FP32 error2.56e-4.
+Direct BF16 probability is rejected; PV uses the frozen FP32-hilo converter.
+Revision8B RTL samples1,440 exact-model attention rows with zero displayed
+mismatch and zero score/probability DDR. The backend now consumes all21 layer0
+commands through OProj/residual/postnorm/gate/up/8-lane fused-SiLU/down/final
+residual for all1024 rows with no reference hidden injection; final hash is
+`308f833e...`. Exact-model tail RTL samples first/middle/last physical tiles:
+40,704 Matrix steps/6,144 BF16 exact plus8,192 8-lane SiLU exact. Existing
+1/2-lane regressions repass. These are sampled RTL anchors,not all layer0 RTL;
+seven continuous groups and P3 remain OPEN.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -186,9 +188,9 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3/pinned-iDMA, q1024 first13 backend and sampled exact-model attention RTL
-pass. Next extend the same backend through OProj/residual/postnorm/gate-up/
-fused-SiLU/down/final-residual, then add sampled RTL anchors and close one full
-layer before seven continuous four-layer groups. Full attention RTL remains
-12,288 rows,not the accepted1,440-row sample. Preserve CPU 8-23,24/30 GiB
+KV v3/pinned-iDMA and complete layer0 exact backend with sampled real RTL pass.
+Next parameterize the same backend by layer and feed layer0 final directly into
+layers1-3, closing the first continuous four-layer group without reference
+hidden injection. Full attention RTL remains12,288 rows,not the1,440 sample.
+Preserve CPU 8-23,24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

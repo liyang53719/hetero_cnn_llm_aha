@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "generated_or_upstream_RTL_modified": false,
+    "matrix_output_ready_held_high_as_in_existing_component_tests": true,
+    "no_sequence_specific_RTL": true,
+    "same_Revision8B_Matrix_source": true,
+    "same_parameterized_SiLU_source": true,
+    "silu_random_output_backpressure": true
+  },
+  "evidence_class": "exact_model_sampled_Revision8B_Matrix_and_8lane_SiLU_RTL_E2",
+  "matrix": {
+    "bf16_bit_exact_values": 6144,
+    "operations": [
+      "oproj",
+      "gate",
+      "up",
+      "down"
+    ],
+    "physical_tile_policy": "first_middle_last",
+    "physical_tiles_each": 3,
+    "steps": 40704
+  },
+  "non_claims": [
+    "first-middle-last Matrix tiles are sampled rather than all output tiles",
+    "rows0-15 do not constitute full q1024 tail RTL",
+    "this checkpoint does not add Matrix result-side random backpressure beyond existing Matrix protocol regressions",
+    "this anchor does not close L5.6d"
+  ],
+  "open": [
+    "all_layer0_tail_tiles_RTL",
+    "all_attention_rows_RTL",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "log_sha256": "440a5840a9e43856a26bd2e3e49d447b5e4aad141a8619f9187f74e4a35551ce",
+    "matrix_rtl_sha256": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "silu_rtl_sha256": "bf50a47f99a26bccd643c49073276cf730a75de7be30fa747c4e4654dbbc06fb",
+    "testbench_sha256": "1f587a6d3ba2e1f58e143901e3ae66eb89fc23d1e3d1c0ec9ebecc1c113cdada",
+    "vector_manifest_sha256": "f0faabff6222bffe92dd31185bb61a326703bf720e56661fe83814ba3eee2090"
+  },
+  "rows": 16,
+  "schema_version": 1,
+  "silu": {
+    "bit_exact": 8192,
+    "physical_lanes": 8,
+    "values": 8192
+  },
+  "status": "PASS_Q1024_LAYER0_TAIL_SAMPLED_REAL_RTL"
+}

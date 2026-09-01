@@ -1,0 +1,57 @@
+{
+  "checks": {
+    "Revision8B_K_order_std_fma": true,
+    "all_outputs_finite": true,
+    "eight_lane_source_semantics_fused_SiLU": true,
+    "exact_revision_weights": true,
+    "first21_Command128_validated_each_stage": true,
+    "predecessor_artifacts_only_no_reference_hidden_injection": true,
+    "refined_rsqrt_nr2_postnorm": true,
+    "residual_sample_bit_exact": true
+  },
+  "commands": 21,
+  "evidence_class": "four_stage_exact_revision_hardware_semantics_backend_not_RTL",
+  "hashes": {
+    "down_fp32.bin": "cd16d83faefdd5f72d4f81e18ce803c575b072730de9a33f901df3dc6b670353",
+    "final_fp32.bin": "308f833eb62ed8dc46f630b79da5af9b25987a5963a36a606ce78956b4e47fcd",
+    "gate_fp32.bin": "2994e1abfe92a7a081d88f62528128ec349ad808348e0207f8c6af60f003379d",
+    "oproj_fp32.bin": "6f9405acdf42c606bc3b984ab64d93292902879a46932349b9a7eae0bacb1623",
+    "postnorm_fp32.bin": "4dcca8a625f81e8ad7c9689b6ac75854cd98c82b086f22abf51a1d5d940a36d3",
+    "residual1_fp32.bin": "82400719382b544fc13bb90e1ffcd667525feac5f7fc2eca7057ee059b6636f6",
+    "silu_product_bf16.bin": "5d4eb5110856438d76d646b4bcca7efd143fb8951f5e509312fdaf5a61dbe812",
+    "up_fp32.bin": "2c81cf78c5a29c4b41a7664ab472a8fd8df23445b02bf45cc5ca4fc8d342d660"
+  },
+  "nodes": {
+    "down_final_values_each": 1572864,
+    "gate_up_product_values_each": 9175040,
+    "oproj_residual_postnorm_values_each": 1572864
+  },
+  "non_claims": [
+    "hardware-semantics backend is not RTL simulation",
+    "four process stages are recoverable predecessor checkpoints rather than one monolithic process",
+    "this does not close L5.6d before real RTL anchors and continuous group replay"
+  ],
+  "open": [
+    "sampled_layer0_tail_real_RTL",
+    "all_attention_rows_RTL",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "attention_report_sha256": "108cad340c6438e95b867b5942064de8ac5cee13eb546c550b4f0823faffd30e",
+    "backend_source_sha256": "27c0ae17c8b5cf09a2c67c40c0d5d620e92484a297f81156da981ab3a3f78cb6",
+    "input_manifest_sha256": "ee8b531c65f8c0047f4abd3bef0a5598b97f01a2e5874ce54646e183b666acaf"
+  },
+  "rows": 1024,
+  "schema_version": 1,
+  "silu_lut_vs_exact_sample": {
+    "acceptance": {
+      "max_max": 0.25,
+      "mean_max": 0.001
+    },
+    "max_absolute_error": 0.0010063380078573214,
+    "mean_absolute_error": 0.00012620609949922555,
+    "samples": 2242
+  },
+  "status": "PASS_Q1024_LAYER0_TAIL_EXACT_BACKEND"
+}

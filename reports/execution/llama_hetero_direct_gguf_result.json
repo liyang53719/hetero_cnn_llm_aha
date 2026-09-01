@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "direct_GGUF_weight_buffers": true,
+    "embedding_from_inp_tokens_and_GGUF": true,
+    "final_norm_LM_head_in_graph_compute": true,
+    "llama_decode_success": true,
+    "original_llama_graph": true
+  },
+  "evidence_class": "pinned_llama_decode_dynamic_HETERO_958node_direct_338_GGUF_buffers",
+  "gguf": {
+    "byte_parity_pass": 338,
+    "direct_buffer_bindings": 338,
+    "model_loaded": true,
+    "norm_f32_to_bf16_RNE": 57,
+    "tensors_assigned_HETERO0": 338
+  },
+  "graph": {
+    "commands": 588,
+    "cpu_fallback": 0,
+    "groups": 7,
+    "layers": 28,
+    "nodes": 958,
+    "splits": 1
+  },
+  "llama_cpp_commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+  "non_claims": [
+    "direct GGUF device functional PASS is not all-row RTL",
+    "summary scheduler PPA remains open outside this device functional gate"
+  ],
+  "open": [
+    "integrated random-backpressure stress for all seven groups",
+    "summary storage macro mapping and real layer5 QK/PV RTL",
+    "formal L5.6d final audit"
+  ],
+  "output": {
+    "argmax": 7559,
+    "logits_sha256": "05e99e8ac3a403033abf5a8b490919c7a40bf5b2ab90d8d312b3d424c92e86c0",
+    "top10_overlap": 10,
+    "vocab": 151936
+  },
+  "provenance": {
+    "exported_weight_reference_manifest": "cb9c603f5483147e287ab9dcca5abc68850398c7cf7d5e23d5a9fb666751337d",
+    "log": "d5327abcf7ce533deb490f86086ff26383d3d92603b448f9951fbb0b2565da41",
+    "plugin": "a2ae7138e8c1d8d606e95b3535c9ccc9605e4f91e15390fbec73ab7ead31b721",
+    "previous_full_graph_report": "614bdccb52e9e982995e19a9d923ac0bede794ec2f24dcda8f90f34d66e2ca63"
+  },
+  "schema_version": 1,
+  "status": "PASS_LLAMA_ORIGINAL_GRAPH_DIRECT_GGUF_HETERO_DEVICE"
+}

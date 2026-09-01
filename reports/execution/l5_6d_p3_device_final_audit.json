@@ -1,0 +1,52 @@
+{
+  "RTL_anchors": {
+    "balanced_layer5_critical": true,
+    "group0_attention_and_tail_sampled": true
+  },
+  "claim_boundary": "L5.6d/P3 real device backend functional PASS; not full all-row RTL or physical signoff",
+  "goal_complete": true,
+  "llama_cpp_commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "nonblocking_followups": [
+    "summary storage SRAM macro mapping and scheduler PPA",
+    "all-row integrated RTL beyond accepted sampled anchors",
+    "L10 post-route/PVT/SAIF and L11",
+    "Qwen3.5 phase2"
+  ],
+  "numerical": {
+    "layer27_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+    "maximum_attention_error": 0.000778775279,
+    "no_score_matrix": true,
+    "threshold": 0.002
+  },
+  "provenance": {
+    "backpressure": "e845f391ddede0c3a1c2ae569c5e7ba7ff2093d6e80a3dac8a63a7c932053516",
+    "balanced_rtl": "648bfae4fdfdc2fb7e9a6af5745a148992b8029b17f12c0da7ca642ce96b177e",
+    "direct_gguf": "d3f94c9763178dc506e1dda734a2e265127dec97d81be24f4b35f8764a56969e",
+    "dynamic_plugin": "95b6c51ae8fc7f4a2dd82f1fd2cbdeeb8bf9ca3881e9ae0505940701b1563a6a",
+    "p3": "b75dc1bfe159b126c9200f9e5622e77fdbdef4b455cbcf66d2205842902eb28f"
+  },
+  "requirements": {
+    "Command128_commands": 588,
+    "GGUF_direct_buffers": 338,
+    "argmax": 7559,
+    "checkpoints": 28,
+    "completions": 28,
+    "continuous_layers": 28,
+    "cpu_fallback": 0,
+    "dynamic_GGML_plugin": true,
+    "final_vocab": 151936,
+    "four_layer_groups": 7,
+    "graph_splits": 1,
+    "locked_exact_GGUF": true,
+    "original_llama_graph_nodes": 958,
+    "pinned_llama_upstream": true,
+    "random_backpressure_stalls": 7,
+    "reference_hidden_injections": 0,
+    "status_code": 0,
+    "top10_overlap": 10
+  },
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "schema_version": 1,
+  "status": "PASS_L5_6D_P3_REAL_DEVICE_BACKEND_FUNCTIONAL"
+}

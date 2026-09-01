@@ -1,0 +1,24 @@
+{
+  "checkpoints": 28,
+  "checks": {
+    "all_groups_continuous": true,
+    "completion_order": true,
+    "no_reference_injection": true,
+    "no_timeout": true,
+    "random_ready": true
+  },
+  "completions": 28,
+  "final_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+  "groups": 7,
+  "layers": 28,
+  "provenance": {
+    "api_header": "99cee4c1db8578767687fcd9818f4f1ccfa82b337d3578ea06c720d31156516d",
+    "harness": "3ec7da9dd085325f06e8a1f72439ea1c2735705e15da7e79d762caac80f12664",
+    "log": "d004918f03b292f371548d831c8af51d40b536773d299c0c905add42efa4abd5"
+  },
+  "schema_version": 1,
+  "stalls": 7,
+  "status": "PASS_Q1024_SEVEN_GROUP_RANDOM_COMPLETION_BACKPRESSURE",
+  "status_code": 0,
+  "watchdog": 64
+}

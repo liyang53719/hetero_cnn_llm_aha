@@ -1,4 +1,4 @@
-# Local-agent handoff v7.19 — main only
+# Local-agent handoff v7.20 — main only
 
 ## Closed in this checkpoint
 
@@ -36,7 +36,9 @@ the invalid 252-command nine-phase template that collapsed Q/K/V bindings.
 
 Real Matrix/SFU endpoint RTL now passes the first two graph-derived commands:
 2 completions, 1536 RMS outputs, 1536 Matrix steps, 32 Matrix outputs, 1568
-BF16 values bit-exact, event ordering and random backpressure PASS. Next emit
-the descriptor record image, connect shared-L2 payload storage, and extend one layer,
-then seven groups without hidden-state injection. Preserve CPU 8-23, 24/30 GiB
+BF16 values bit-exact, event ordering and random backpressure PASS. Descriptor
+packing is BLOCKED_DECISION: public dtype only freezes INT8=1; approve the
+recommended additive BF16=5, FP16=6 reserved, FP32=7 mapping in
+`L5_DESCRIPTOR_DTYPE_BLOCKED_DECISION.md`. Then emit the record image, connect
+shared-L2 payload, and extend one layer then seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

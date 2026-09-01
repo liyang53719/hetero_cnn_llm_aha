@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_OPEN_P3_OPEN",
+  "current_state": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_DTYPE_BLOCKED_DECISION",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
   "closed_tasks": ["L0","L1","L2","L3","L5.1","L5.2","L5.3","L5.4","L5.5","L5.6a","L5.6b","L5.6c","L5.6d.P1","L10.1","L10.2"],
@@ -27,6 +27,7 @@
   },
   "llama_cpp_device_readiness": {"status": "PASS_REAL_Q1024_TRACEABLE_COMMAND_SUBMISSION_PAYLOAD_MEMORY_OPEN", "evidence": "reports/execution/llama_cpp_qwen2_device_readiness_result.json", "nodes": 930, "gguf_tensors": 338, "commands": 588, "matrix_commands": 252, "sfu_commands": 308, "kv_commands": 28, "ubatch": 1024},
   "real_payload_operator_slice": {"status": "PASS", "evidence": "reports/execution/qwen2_real_payload_endpoint_result.json", "commands": 2, "completions": 2, "rms_values": 1536, "matrix_steps": 1536, "matrix_outputs": 32, "bf16_bit_exact": 1568, "descriptor_backed_payload": false},
+  "descriptor_dtype_decision": {"status": "BLOCKED_DECISION", "evidence": "reports/execution/l5_descriptor_dtype_decision_result.json", "recommended": {"BF16": 5, "FP16_reserved": 6, "FP32": 7}},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

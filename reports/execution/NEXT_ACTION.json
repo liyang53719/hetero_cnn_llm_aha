@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_OPEN_P3_OPEN",
-  "decision": "EMIT_DESCRIPTOR_IMAGE_THEN_CONNECT_PAYLOAD_AND_CLOSE_ONE_LAYER",
+  "state": "L10_1_2_PASS_PAYLOAD_REAL_OPERATOR_SLICE_PASS_DESCRIPTOR_DTYPE_BLOCKED_DECISION",
+  "decision": "BLOCKED_DECISION_APPROVE_BF16_FP32_DESCRIPTOR_DTYPE_CODES",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Generate and validate schema-v2/v3 descriptor record chains and a DDR/shared-L2 memory map for the 588 traceable node/tensor-bound commands; then replace testbench-staged vectors in the passing layer0 RMSNorm-to-Q-Matrix slice with descriptor-backed reads/writes.",
+  "unique_next_action": "Approve or replace the additive tensor_base.dtype assignment BF16=5, FP16=6 reserved, FP32=7 while preserving INT8=1 and INT32=4; then generate the schema-v2/v3 descriptor record image for all 588 traceable commands.",
   "ordered_gates": [
     "descriptor record image and deterministic DDR/shared-L2 tensor memory map",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

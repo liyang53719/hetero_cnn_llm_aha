@@ -20,7 +20,7 @@ stages:
       L5.6a: {status: Q1024_28_LAYER_COUNT_TRACE_E3_PASS, tokens_per_second: 320.7915990837895}
       L5.6b: {status: OFFICIAL_REFERENCE_AND_160_LM_HEAD_SAMPLES_PASS}
       L5.6c: {status: REDUCED_FOUR_LAYER_CROSS_RTL_PASS, bf16_bit_exact: 7840}
-      L5.6d: {status: P1_PASS_P2_CANONICAL_TOKEN01_FIRST9_AND_KV_PINNED_IDMA_PASS_16TOKEN_LAYER_GROUPS_P3_OPEN, canonical_token01_bit_exact: 14848, canonical_token_hash: e4151c23e259, kv_byte_exact: 1048576, token_index_bits: 32, descriptor_records: 6188, plan: reports/execution/qwen2_payload_closure_plan.json}
+      L5.6d: {status: P1_PASS_P2_CANONICAL_TOKEN01_FIRST9_KV_PINNED_IDMA_AND_MATRIX_TILE16_PASS_BATCH16_LAYER_GROUPS_P3_OPEN, canonical_token01_bit_exact: 14848, matrix_tile16_bit_exact: 512, matrix_tile16_macs: 786432, kv_byte_exact: 1048576, descriptor_records: 6188, plan: reports/execution/qwen2_payload_closure_plan.json}
   - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
   - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
   - id: L8

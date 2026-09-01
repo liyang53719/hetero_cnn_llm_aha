@@ -1,0 +1,38 @@
+{
+  "bf16_bit_exact": 512,
+  "canonical_token_hash": "e4151c23e259dda17d515c73f653031e8a2af9e7784dba297b454fe7cb4ba628",
+  "checks": {
+    "K_major_activation_staging": true,
+    "all_16_activation_rows_nonzero": true,
+    "one_completion": true,
+    "random_L2_backpressure": true,
+    "same_physical_16x32_array": true
+  },
+  "columns": 32,
+  "completion": 1,
+  "effective_macs": 786432,
+  "evidence_class": "real_Revision8B_B_16x32_all_rows_SharedL2_payload",
+  "k": 1536,
+  "matrix_steps": 1536,
+  "non_claims": [
+    "activation staging is preloaded from canonical golden in this component gate",
+    "only Q columns0..31 execute",
+    "does not yet replace the single-token first-nine controller"
+  ],
+  "open": [
+    "tile16_RMS_staging",
+    "all_Q_K_V_column_tiles",
+    "tile16_bias_RoPE",
+    "16token_first9_one_run",
+    "q1024_64_tiles"
+  ],
+  "provenance": {
+    "log_sha256": "9134038f046d8e978ad4bb21784831475b314c2d968d1682f155c84e5c85f8a4",
+    "payload_rtl_sha256": "fc58dd057fb62936941a601126a9996ca66ea80e0aadf25cf8c4dab7fad80eaf",
+    "testbench_sha256": "1a597ebee36633c5da80554536b15a6ec1596f1328e5f93903780b3989896b03",
+    "vector_generator_sha256": "3a8ad136ebbf7247f02acee78aaf99278ba9e8f1d1c83157e073a891a9f1dc63"
+  },
+  "rows": 16,
+  "schema_version": 1,
+  "status": "PASS_CANONICAL_MATRIX_TILE16"
+}

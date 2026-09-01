@@ -1,4 +1,4 @@
-# Local-agent handoff v7.17 — main only
+# Local-agent handoff v7.18 — main only
 
 ## Closed in this checkpoint
 
@@ -13,13 +13,15 @@ L10.2 SRAM macro DB inventory              PASS
 Payload P1                                PASS, 168/168 checkpoints
 Payload P2 reference continuity           PASS, 7/7 groups bit-exact
 Payload P2 RTL transaction control         PASS, 168/168, injection 0
+P2 real command-to-payload operator slice  PASS, 1568 BF16 bit-exact
+  graph Command128 -> fabric/event -> RMSNorm1536 -> Revision8B-B Matrix
 ```
 
 ## Open boundary
 
-P2 has no real Matrix/SFU payload datapath execution. Reference continuity and
-RTL control are separate evidence paths. L5.6d P2 real datapath and P3
-continuous 28-layer/device-backend remain OPEN.
+P2 now has one real layer-0 RMSNorm-to-Q-Matrix operator slice, but payload is
+still testbench staged. A complete layer, descriptor-backed payload memory,
+seven continuous four-layer groups and P3 continuous 28-layer remain OPEN.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -31,8 +33,9 @@ q1024/28 layers. PyTorch/llama argmax match and Top-10 overlap is 10/10. The
 real capture has 930 nodes and 338 bound tensors; 252 derived Command128 words
 pass production command/event submission under random backpressure.
 
-Matrix/SFU completions are still endpoint models, not payload execution.
-Connect descriptor-backed payload memory and real Matrix/SFU endpoints for
-P2/P3. Preserve
-CPU 8-23, 24/30 GiB memory caps, <=600 s tasks, main-only pushes, and the two
-untracked user runtime scripts.
+Real Matrix/SFU endpoint RTL now passes the first two graph-derived commands:
+2 completions, 1536 RMS outputs, 1536 Matrix steps, 32 Matrix outputs, 1568
+BF16 values bit-exact, event ordering and random backpressure PASS. Next connect
+descriptor-backed shared-L2 payload storage and extend to one complete layer,
+then seven groups without hidden-state injection. Preserve CPU 8-23, 24/30 GiB
+caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

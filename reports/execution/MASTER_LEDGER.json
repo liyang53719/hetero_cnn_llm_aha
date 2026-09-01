@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_DATAPATH_OPEN_P3_OPEN",
+  "current_state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_OPEN_P3_OPEN",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
   "closed_tasks": ["L0","L1","L2","L3","L5.1","L5.2","L5.3","L5.4","L5.5","L5.6a","L5.6b","L5.6c","L5.6d.P1","L10.1","L10.2"],
@@ -13,7 +13,7 @@
     "L5.6a": {"status": "PASS_CYCLE_E3", "records": 30, "blocks": 28, "tokens_per_second": 320.7915990837895},
     "L5.6b": {"status": "PASS_REFERENCE_PLUS_SAMPLED_RTL", "lm_head_samples": 160, "max_error": 0.0},
     "L5.6c": {"status": "PASS_REDUCED_FOUR_LAYER_CROSS_RTL", "cross_nodes": 5, "bf16_bit_exact": 7840},
-    "L5.6d": {"status": "P1_168_CHECKPOINTS_PASS_P2_REFERENCE_CONTINUITY_RTL_CONTROL_PASS_REAL_PAYLOAD_DATAPATH_OPEN_P3_OPEN"},
+    "L5.6d": {"status": "P1_PASS_P2_REFERENCE_AND_CONTROL_PASS_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_AND_P3_OPEN", "real_payload_slice": "reports/execution/qwen2_real_payload_endpoint_result.json", "bf16_bit_exact": 1568},
     "L10.1": {"status": "PASS_FROZEN_DDC_OWNER_HIERARCHY_LINK_STA", "evidence": "reports/execution/l10_hierarchical_synthesis_result.json", "wns_ns": 0.00000864267, "area": 2313314.648873, "area_double_count": 0},
     "L10.2": {"status": "PASS_EARLY_MACRO_DB", "evidence": "reports/execution/l10_sram_macro_result.json", "sram_kib": 4096, "physical_macros": 124, "address_overlap": 0}
   },
@@ -26,6 +26,7 @@
     "continuity_groups": 7
   },
   "llama_cpp_device_readiness": {"status": "PASS_REAL_GRAPH_COMMAND_SUBMISSION_PAYLOAD_ENDPOINTS_OPEN", "evidence": "reports/execution/llama_cpp_qwen2_device_readiness_result.json", "nodes": 930, "gguf_tensors": 338, "commands": 252, "matrix_commands": 140, "sfu_commands": 112},
+  "real_payload_operator_slice": {"status": "PASS", "evidence": "reports/execution/qwen2_real_payload_endpoint_result.json", "commands": 2, "completions": 2, "rms_values": 1536, "matrix_steps": 1536, "matrix_outputs": 32, "bf16_bit_exact": 1568, "descriptor_backed_payload": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

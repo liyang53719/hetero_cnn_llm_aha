@@ -20,7 +20,7 @@ stages:
       L5.6a: {status: Q1024_28_LAYER_COUNT_TRACE_E3_PASS, tokens_per_second: 320.7915990837895}
       L5.6b: {status: OFFICIAL_REFERENCE_AND_160_LM_HEAD_SAMPLES_PASS}
       L5.6c: {status: REDUCED_FOUR_LAYER_CROSS_RTL_PASS, bf16_bit_exact: 7840}
-      L5.6d: {status: P1_168_CHECKPOINTS_PASS_P2_REFERENCE_CONTINUITY_AND_RTL_CONTROL_PASS_REAL_PAYLOAD_DATAPATH_OPEN_P3_OPEN, plan: reports/execution/qwen2_payload_closure_plan.json}
+      L5.6d: {status: P1_PASS_P2_REFERENCE_CONTROL_AND_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_AND_P3_OPEN, real_payload_bf16_bit_exact: 1568, plan: reports/execution/qwen2_payload_closure_plan.json}
   - {id: L6, name: W8_W4_KV_INT8_GGML_formats, status: INTEGRATED_FRONTEND_AND_K_TAIL_SOURCE_READY_WAIT_PARITY_RTL_PPA}
   - {id: L7, name: production_paged_kv_and_sequence_memory, status: MULTISLOT_COW_DIRTY_E0_SOURCE_READY_WAIT_RTL_E1_E3}
   - id: L8
@@ -29,7 +29,7 @@ stages:
     subgates:
       L8.1: {model: Qwen3.5-35B-A3B, family: qwen3_5_moe, status: PROFILE_RUNTIME_RESOURCE_DSE_E0_PASS_WAIT_OFFICIAL_BACKEND}
       L8.2: {model: Qwen3.8-Flash-Next, family: qwen4_exp, status: PROFILE_TRACE_QSA_PLE_RESOURCE_DSE_E0_PASS_WAIT_OFFICIAL_BACKEND}
-  - {id: L9, name: llama_cpp_backend, status: POLICY_PARTITION_NODE_ADAPTER_E0_PASS_WAIT_REAL_GGML_GGUF}
+  - {id: L9, name: llama_cpp_backend, status: PINNED_GGUF_REAL_GRAPH_COMMAND_SUBMISSION_AND_OPERATOR_SLICE_PASS_WAIT_FULL_DEVICE_PAYLOAD}
   - id: L10
     name: physical_closure
     status: EARLY_PPA_L10_1_L10_2_PASS_POST_ROUTE_PVT_SAIF_OPEN

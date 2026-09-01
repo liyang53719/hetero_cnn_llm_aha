@@ -1,0 +1,47 @@
+{
+  "checks": {
+    "completion_protocol_errors": 0,
+    "exact_model_cross_vectors": true,
+    "fp32_rmsnorm1536_chunked": true,
+    "graph_derived_command128": true,
+    "macro_errors": 0,
+    "matrix_protocol_errors": 0,
+    "production_event_dependency": true,
+    "revision8b_b_matrix": true,
+    "watchdog_lock": 0
+  },
+  "evidence_class": "production_command_fabric_plus_real_SFU_and_Revision8B_B_Matrix_payload_RTL",
+  "metrics": {
+    "bf16_bit_exact": 1568,
+    "commands": 2,
+    "completions": 2,
+    "event_order": 1,
+    "matrix_outputs": 32,
+    "matrix_steps": 1536,
+    "random_backpressure": 1,
+    "rms_values": 1536
+  },
+  "non_claims": [
+    "this two-command layer0 slice is not one complete transformer layer",
+    "this slice does not close seven continuous four-layer groups",
+    "this slice does not close P3 continuous 28-layer device payload",
+    "payload vectors are staged by the testbench rather than descriptor-backed shared-L2 memory"
+  ],
+  "open": [
+    "descriptor_backed_payload_memory",
+    "complete_layer_operator_sequence",
+    "seven_group_device_payload_without_hidden_state_injection",
+    "P3_continuous_28_layer_device_payload"
+  ],
+  "provenance": {
+    "commands_sha256": "665d0fdd66aa3af883fa5ffa8dabb1c3d8b4498f4af762bc321f6d8d488d73e4",
+    "matrix_endpoint_sha256": "0b659db299bba3ff1c16c96d4fdd81ffa61b03507bf33ffb59636092a866f670",
+    "matrix_expected_sha256": "33372612b48fa74df21a87a858f08ba3191f38867c01b51a41b6282746942353",
+    "rms_expected_sha256": "8de658754f558e74acb8979579a12e30a51f0dfa0b9f544c090e5689b504840f",
+    "sfu_endpoint_sha256": "ca1d1ddeb5b4c992b6a32f3e5002c92dc66970b67a2984c8ca9022e617ef9b12",
+    "tb_log_sha256": "c37a7998d9f69c808822dbdcdea9a1194e4ffd8d1f2d9c4d6753448196152ee0"
+  },
+  "schema_version": 1,
+  "scope": "Qwen2 layer0 input RMSNorm followed by one Q projection output sample",
+  "status": "PASS_REAL_COMMAND_TO_PAYLOAD_OPERATOR_SLICE"
+}

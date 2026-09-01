@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Implement the 512-bit AXI slave bridge for the Shared-L2 staging window and connect the passing pinned iDMA expansion to the monolithic tile top, preserving 1681 AXI beats and 1680R/49W payload evidence.",
+  "unique_next_action": "Embed the passing pinned-iDMA/AXI-to-Shared-L2 byte-exact chain into the monolithic descriptor compute top so the same run performs descriptor fetch, actual DMA, RMSNorm, Matrix and DDR store.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

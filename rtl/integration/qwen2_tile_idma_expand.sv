@@ -10,7 +10,7 @@ module qwen2_tile_idma_expand(
  output logic idma_req_valid_o,input logic idma_req_ready_i,
  output logic[63:0]idma_src_addr_o,idma_dst_addr_o,output logic[31:0]idma_length_o,
  input logic idma_rsp_valid_i,output logic idma_rsp_ready_o,input logic idma_rsp_error_i,
- output logic[31:0]flat_requests_o
+ output logic[31:0]flat_requests_o,output logic local_source_o
 );
  typedef enum logic[1:0]{S_IDLE,S_REQ,S_RSP,S_OUT}state_e;state_e state_q;
  logic[1:0]kind_q;logic[63:0]src_q,dst_q;logic[31:0]bytes_q,rows_q,ss_q,ds_q,row_q;logic error_q;
@@ -18,6 +18,7 @@ module qwen2_tile_idma_expand(
  assign idma_rsp_ready_o=state_q==S_RSP;assign rsp_valid_o=state_q==S_OUT;assign rsp_error_o=error_q;
  assign idma_src_addr_o=src_q+64'(row_q)*ss_q;assign idma_dst_addr_o=dst_q+64'(row_q)*ds_q;
  assign idma_length_o=bytes_q;
+ assign local_source_o=kind_q==2&&state_q!=S_IDLE;
  always_ff@(posedge clk_i or negedge rst_ni)begin
   if(!rst_ni)begin state_q<=S_IDLE;kind_q<=0;src_q<=0;dst_q<=0;bytes_q<=0;rows_q<=0;ss_q<=0;ds_q<=0;row_q<=0;error_q<=0;flat_requests_o<=0;end
   else case(state_q)

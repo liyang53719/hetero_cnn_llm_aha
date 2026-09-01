@@ -1,4 +1,4 @@
-# Local-agent handoff v7.30 — main only
+# Local-agent handoff v7.31 — main only
 
 ## Closed in this checkpoint
 
@@ -36,7 +36,9 @@ The same path now passes as one RTL top: 12 descriptor fetches → 4 DMA request
 → Shared-L2 → real engines → 2 completions → writeback. DMA responses are still
 modeled in that top. Separately, pinned/clean iDMA VCS passes the exact plan:
 4 abstract → 1539 flat requests, 1681 read/write AXI beats, 1536 2D rows and
-first/last addresses. An AXI-to-Shared-L2 slave is still required to unite them.
+first/last addresses. The AXI-to-Shared-L2 bridge now also passes actual data:
+1680 load beats compare byte-exact in L2 and the 64-byte store compares in DDR.
+Embedding this real DMA chain into the monolithic compute top remains open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -63,6 +65,6 @@ hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes; next bind its four
-transfers through an AXI-to-Shared-L2 slave, then extend one
+transfers inside the monolithic top, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

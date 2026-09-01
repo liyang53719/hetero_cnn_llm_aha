@@ -1,4 +1,4 @@
-# Local-agent handoff v7.38 — main only
+# Local-agent handoff v7.39 — main only
 
 ## Closed in this checkpoint
 
@@ -57,6 +57,9 @@ Revision8B-B, 256 BF16 bit-exact and 54,515 overlap cycles. Bias/RoPE remain ope
 Real HardFloat bias add now passes Q/K/V 2048 values after the Matrix BF16
 boundary. Real fp32_rope_pair passes token0 Q/K split-half 896 pairs/1792 values.
 Projection, bias and RoPE are not yet one event/data chain.
+Raw QKV is now one no-injection VCS chain: DDR input/weights → real RMS →
+Shared-L2 norm → the same Matrix instance sequential Q/K/V → DDR outputs.
+Four formal commands, 98,370 flat iDMA requests and 3,584 values are bit-exact.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -83,7 +86,7 @@ hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes; next bind its four
-Q/K/V projection+bias+token0 RoPE components pass; next compose their formal
-first-nine-command event/data chain, then extend one
+raw QKV data chain and bias/RoPE components pass; next insert bias/RoPE into
+that same chain to close the first nine commands, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

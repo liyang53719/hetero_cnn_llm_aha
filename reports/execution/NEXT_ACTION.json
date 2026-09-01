@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Compose formal commands l0.input_norm through l0.v_bias into one event-ordered QKV run: real projection outputs must feed bias/RoPE without reference injection, with pinned-iDMA/Shared-L2 traces and nine completions.",
+  "unique_next_action": "Insert descriptor-driven bias and Q/K RoPE postprocess stages into the passing raw QKV chain so DDR raw outputs feed real SFU RTL and produce formal biased/rotated destinations without reference injection; close first nine commands/events.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

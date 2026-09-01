@@ -1,0 +1,51 @@
+{
+  "K_values": 256,
+  "Q_values": 1536,
+  "V_values": 256,
+  "axi_beats_each_direction": 98512,
+  "bf16_bit_exact": 3584,
+  "checks": {
+    "QKV_bit_exact": true,
+    "RMS_to_SharedL2_to_same_Matrix": true,
+    "formal_descriptors": true,
+    "no_reference_injection": true,
+    "pinned_idma": true,
+    "single_VCS": true,
+    "upstream_clean": true
+  },
+  "commands": [
+    "l0.input_norm",
+    "l0.q",
+    "l0.k",
+    "l0.v"
+  ],
+  "ddr_read_bytes": 6300672,
+  "ddr_write_bytes": 4096,
+  "descriptor_fetches": 24,
+  "evidence_class": "single_VCS_RMS_one_Matrix_QKV_pinned_iDMA_SharedL2",
+  "flat_idma_requests": 98370,
+  "matrix_completions": 3,
+  "non_claims": [
+    "chain currently executes four of the first nine formal operations",
+    "bias and RoPE are not yet data-connected in this run",
+    "only token0 numerical payload executes"
+  ],
+  "open": [
+    "Q_K_V_bias_in_same_chain",
+    "Q_K_RoPE_in_same_chain",
+    "KV_append",
+    "first_nine_commands",
+    "complete_layer"
+  ],
+  "provenance": {
+    "log_sha256": "b7a2fa9edef64cd9972166029b75d228c62103db33e89197665c9aede9759e62",
+    "projection_top_sha256": "67229a444270c47010af67b462fb514201f1517a7a295ec00673db7456be6d49",
+    "rms_top_sha256": "61627fd985c7e07d9e17fc5cd09a0d0519203ce9892abf1f61186e382f54f5a3"
+  },
+  "rms_values": 1536,
+  "schema_version": 1,
+  "sfu_completions": 1,
+  "shared_l2_read_beats": 98592,
+  "shared_l2_write_beats": 112,
+  "status": "PASS_RAW_QKV_CHAIN_NO_INJECTION"
+}

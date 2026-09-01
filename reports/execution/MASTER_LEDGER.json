@@ -46,6 +46,7 @@
   "qkv_projection_context": {"status": "PASS", "evidence": "reports/execution/qwen2_projection_context_result.json", "columns": {"Q": 1536, "K": 256, "V": 256}, "tiles": {"Q": 48, "K": 8, "V": 8}},
   "kv_raw_projection_pingpong": {"status": "PASS", "evidence": "reports/execution/qwen2_kv_projection_pingpong_result.json", "K_bit_exact": 256, "V_bit_exact": 256, "K_V_overlap_cycles_each": 54515, "bias_rope": "OPEN"},
   "qkv_bias_rope_components": {"status": "PASS_SEPARATE_COMPONENTS", "evidence": "reports/execution/qwen2_qkv_bias_rope_result.json", "bias_values_bit_exact": 2048, "rope_pairs": 896, "rope_values_bit_exact": 1792, "integrated_event_chain": false},
+  "raw_qkv_chain": {"status": "PASS_NO_INJECTION", "evidence": "reports/execution/qwen2_raw_qkv_chain_result.json", "formal_commands": 4, "flat_idma_requests": 98370, "bf16_bit_exact": 3584, "same_matrix_instance": true, "bias_rope_integrated": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

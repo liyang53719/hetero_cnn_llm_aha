@@ -1,6 +1,6 @@
 import numpy as np
 from heteronpu.p3_backend_evidence import audit_p3, classify_bindings, inspect_sources
-from heteronpu.logits_parity import compare_logits
+from heteronpu.logits_parity import compare_files, compare_logits
 
 BACKEND = '''
 if(graph->n_nodes==958){ hetero_qwen2_submit_588(&config); }
@@ -78,3 +78,16 @@ def test_small_logit_noise_passes_review_threshold():
     actual[np.argmax(ref)] = ref[np.argmax(ref)]
     r = compare_logits(actual, ref)
     assert r["status"] == "PASS_FULL_LOGITS_PARITY"
+
+
+def test_file_comparator_records_sha256(tmp_path):
+    actual = tmp_path / "actual.bin"
+    reference = tmp_path / "reference.bin"
+    values = np.linspace(-1, 1, 64, dtype=np.float32)
+    values.tofile(actual)
+    values.tofile(reference)
+    r = compare_files(actual, reference)
+    assert r["status"] == "PASS_FULL_LOGITS_PARITY"
+    assert r["inputs"]["actual"]["bytes"] == values.nbytes
+    assert len(r["inputs"]["actual"]["sha256"]) == 64
+    assert r["inputs"]["actual"]["sha256"] == r["inputs"]["reference"]["sha256"]

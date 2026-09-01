@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
+import hashlib
 import numpy as np
 
 
@@ -67,7 +68,23 @@ def compare_logits(actual: np.ndarray, reference: np.ndarray, thresholds: LogitT
     }
 
 
+def _file_provenance(path: str | Path) -> dict[str, Any]:
+    p = Path(path)
+    data = p.read_bytes()
+    return {
+        "path": str(p),
+        "bytes": len(data),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "dtype": "float32",
+    }
+
+
 def compare_files(actual_path: str | Path, reference_path: str | Path, thresholds: LogitThresholds | None = None) -> dict[str, Any]:
     actual = np.fromfile(actual_path, dtype=np.float32)
     reference = np.fromfile(reference_path, dtype=np.float32)
-    return compare_logits(actual, reference, thresholds)
+    report = compare_logits(actual, reference, thresholds)
+    report["inputs"] = {
+        "actual": _file_provenance(actual_path),
+        "reference": _file_provenance(reference_path),
+    }
+    return report

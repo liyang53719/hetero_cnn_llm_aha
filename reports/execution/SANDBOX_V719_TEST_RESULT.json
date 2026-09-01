@@ -8,6 +8,7 @@
   },
   "executed": {
     "audit_fixture": "PASS_LLAMA_BACKEND_FUNCTIONAL_SOFTWARE_EMULATION",
+    "full_logit_file_provenance": "PASS_SHA256_AND_BYTE_COUNT",
     "json_yaml_parse": "PASS",
     "progress_fixture": "PASS_V6_16_P3_BACKEND_FUNCTIONAL_BOUNDARY",
     "python_compileall": "PASS",
@@ -43,7 +44,7 @@
     },
     "targeted_pytest": {
       "status": "PASS",
-      "tests": 6
+      "tests": 7
     }
   },
   "not_executed_in_sandbox": [

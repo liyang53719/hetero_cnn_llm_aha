@@ -1,4 +1,4 @@
-# Local-agent handoff v7.47 — main only
+# Local-agent handoff v7.48 — main only
 
 ## Closed in this checkpoint
 
@@ -92,6 +92,13 @@ token1 dynamically proves hidden `+3072` and output `+token_bytes` addresses.
 RMS/bias/RoPE token offsets and 16-position position-beat lane selection compile
 and retain the complete token0 first-nine PASS. Nonzero RoPE coefficients and
 token1 numerical replay remain open; this is addressing evidence only.
+Nonzero RoPE is now real RTL, not an address stub. Q and K each retain 64 FP32
+coefficient pairs (fixed 1 KiB total state) and advance with theta=1e6 complex
+recurrence through the same `fp32_rope_pair` datapath. One payload instance runs
+Q0→Q1→K0→K1: 128 coefficient steps and 3,584 BF16 values are bit-exact under
+backpressure, with independent Q/K state. Generated 64 base-step constants are
+reproducible and marked do-not-hand-edit. Full token0 first-nine still passes.
+Token1 full RMS/Matrix/bias-to-RoPE continuity remains open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -119,8 +126,9 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3 command-to-page and pinned-iDMA DDR movement pass; next replace synthetic
-source preload with multi-token QKV/RoPE outputs and add PTE DDR writes, then
+KV v3 command-to-page, pinned-iDMA DDR movement and token1 RoPE pass; next run
+token1 full RMS/QKV/bias/RoPE in one chain, then form a 16-token tile and
+replace synthetic KV source while adding PTE DDR writes, then
 extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

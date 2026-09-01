@@ -1,0 +1,43 @@
+{
+  "K_pairs": 256,
+  "Q_pairs": 1536,
+  "bf16_bit_exact": 3584,
+  "checks": {
+    "Q_and_K_coefficient_state_independent": true,
+    "generated_base_coeff_RTL_reproducible": true,
+    "nonzero_position_numerical": true,
+    "random_backpressure": true,
+    "split_half_layout": true,
+    "token0_first9_compatibility_after_recurrence": true
+  },
+  "coefficient_steps": 128,
+  "evidence_class": "same_RTL_FP32_recurrence_and_split_half_payload",
+  "fixed_state_bytes": 1024,
+  "non_claims": [
+    "token1 RoPE uses accepted biased Q/K inputs rather than same-run token1 Matrix outputs",
+    "positions beyond one are structurally supported by recurrence but not yet numerically gated",
+    "this is not complete layer0 continuity"
+  ],
+  "open": [
+    "token1_full_RMS_QKV_bias_RoPE_chain",
+    "16_token_tile",
+    "q1024_sequential_recurrence",
+    "q1024_real_KV_source"
+  ],
+  "provenance": {
+    "base_coeff_generator_sha256": "d61331e57dde7a364b8702b48293d25b2d45d92574e89b8c2fc52371ea895c21",
+    "base_coeff_rtl_sha256": "c687bdc5cf199189f6568a379d937ce18c453459559c07c5c59ca8c53fc86439",
+    "chain_log_sha256": "086c99fe4f4d343b6f15fb9878c414b8ea0e835edd74b7aa3de90f60d8be5e3b",
+    "log_sha256": "56834016d5aef04048ca516b2d931266d5759129cbbf9a3eceac7e50c3dd42f1",
+    "payload_rtl_sha256": "34b6fa3429084d19432a20df31553bd360f0fc68a71792cfffe6f32341ebfb82"
+  },
+  "runs": [
+    "Q_position0",
+    "Q_position1",
+    "K_position0",
+    "K_position1"
+  ],
+  "schema_version": 1,
+  "status": "PASS_ROPE_TOKEN0_TOKEN1_RECURRENCE",
+  "theta": 1000000
+}

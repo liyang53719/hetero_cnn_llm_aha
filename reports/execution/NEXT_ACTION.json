@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "TOKEN_INDEX_ADDRESSING_PASS_NONZERO_ROPE_NUMERICAL_OPEN",
-  "decision": "IMPLEMENT_NONZERO_ROPE_AND_TOKEN1_REPLAY",
+  "state": "TOKEN1_ROPE_RECURRENCE_PASS_FULL_TOKEN1_CHAIN_OPEN",
+  "decision": "RUN_TOKEN1_FIRST9_CHAIN",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Implement the frozen Qwen2 theta=1e6 split-half nonzero-position coefficient path in the same RoPE stage, close token1 RMS/QKV/bias/RoPE numerically with formal descriptors, then form a 16-token tile controller before attempting q1024-to-KV continuity.",
+  "unique_next_action": "Generate exact token1 BF16 RMS/QKV/bias vectors from the pinned model inputs and execute formal first-nine RMS/projection/bias/RoPE stages in one VCS run with token_index=1; require direct DDR continuity and no intermediate reference injection before forming the 16-token tile controller.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

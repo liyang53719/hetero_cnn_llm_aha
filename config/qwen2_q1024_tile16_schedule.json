@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "FROZEN_EXECUTION_CONTRACT",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "sequence": 1024,
+  "batch_rows": 16,
+  "batch_count": 64,
+  "same_rtl": true,
+  "descriptor_fetches": 62,
+  "formal_completions": 9,
+  "operation_order": [
+    "input_norm",
+    "q",
+    "q_bias",
+    "q_rope",
+    "k",
+    "k_bias",
+    "k_rope",
+    "v",
+    "v_bias"
+  ],
+  "schedule": {
+    "input_norm": {
+      "load_weight_once": true,
+      "batch_loop": 64,
+      "store_token_major_norm_to_formal_DDR_dst": true
+    },
+    "projection": {
+      "k_major_transpose_source": "formal_DDR_norm_tensor",
+      "loop_order": ["projection", "weight_tile", "batch16"],
+      "weight_tile_loads": {"Q": 48, "K": 8, "V": 8},
+      "batches_per_loaded_weight_tile": 64,
+      "weight_fetches_per_layer_per_request": 1
+    },
+    "bias": {
+      "loop_order": ["operation", "batch16"],
+      "bias_tensor_loads_per_operation": 1
+    },
+    "rope": {
+      "loop_order": ["operation", "batch16"],
+      "positions": [0, 1023],
+      "state_reset_between_batches": false,
+      "fixed_coefficient_state_bytes": 1024
+    }
+  },
+  "expected_work": {
+    "matrix_steps": 6291456,
+    "effective_macs": 3221225472,
+    "rope_coefficient_steps": 130944,
+    "rms_values": 1572864,
+    "qkv_values": 2097152,
+    "bias_values": 2097152,
+    "rope_values": 1835008,
+    "bf16_values_total": 7602176
+  },
+  "expected_DDR_bytes": {
+    "read": 26761216,
+    "write": 15204352,
+    "matrix_weight_read": 6291456,
+    "full_score_matrix": 0
+  },
+  "forbidden": [
+    "batch_outer_projection_that_refetches_all_weights_64_times",
+    "different_RTL_for_q128_q384_q1024",
+    "reference_activation_injection_between_batches",
+    "full_attention_score_matrix_DDR_write"
+  ],
+  "next_RTL": [
+    "batch16_norm_DDR_store_and_transpose_loader",
+    "weight_tile_outer_projection_scheduler",
+    "64_batch_RoPE_recurrence_controller",
+    "q1024_first9_pinned_iDMA_gate"
+  ]
+}

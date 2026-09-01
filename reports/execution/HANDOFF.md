@@ -151,6 +151,10 @@ when both strides equal row_bytes; expected flat requests become99,345 while
 AXI beats remain104,162. Dedicated and full regressions are prepared but were
 not started because external DC/MATLAB jobs reduced MemAvailable below10 GiB.
 No external process was terminated; modeled-DMA first-nine remains accepted.
+q1024 schedule is now frozen:64 batch16 groups, but projection loops weight-tile
+outside batch so every Q/K/V weight byte is fetched once, not64 times. RMS writes
+formal norm DDR first; expected first-nine work is6,291,456 Matrix steps and
+7,602,176 BF16 values. See `config/qwen2_q1024_tile16_schedule.json`.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

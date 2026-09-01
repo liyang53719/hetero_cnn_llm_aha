@@ -64,6 +64,7 @@
   "canonical_bias_rope_tile16": {"status": "PASS_SEPARATE_RUNS", "evidence": "reports/execution/qwen2_bias_rope_tile16_result.json", "bias_values": 32768, "rope_values": 28672, "coefficient_steps": 1920, "completions": 5, "same_run_after_QKV": false},
   "canonical_first9_tile16": {"status": "PASS_SAME_RUN", "evidence": "reports/execution/qwen2_first9_tile16_controller_result.json", "commands": 9, "descriptor_fetches": 62, "dma_requests": 145, "completions": 9, "bf16_bit_exact": 118784, "matrix_steps": 98304, "rope_steps": 1920, "pinned_idma_bound": false},
   "first9_tile16_pinned_idma_attempt": {"status": "IN_PROGRESS_COALESCE_UNVERIFIED", "evidence": "reports/execution/qwen2_first9_tile16_pinned_idma_attempt.json", "last_flat_request": 2, "candidate_flat_requests": 99345, "resource_gate": "MemAvailable_below_10GiB"},
+  "q1024_tile16_schedule": {"status": "FROZEN", "evidence": "config/qwen2_q1024_tile16_schedule.json", "batches": 64, "loop_order": "projection_weight_tile_batch16", "weight_fetches_per_layer_per_request": 1, "matrix_steps": 6291456, "bf16_values": 7602176},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

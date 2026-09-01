@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "CANONICAL_RMS_MATRIX_TILE16_PASS_ALL_QKV_TILES_OPEN",
-  "decision": "EXPAND_BATCH16_ALL_QKV_TILES",
+  "state": "CANONICAL_QKV_TILE16_ALL_PASS_SAME_RUN_RMS_OPEN",
+  "decision": "COMPOSE_RMS_QKV_TILE16",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Wrap the passing RMS-to-K-major stager and Matrix tile16 payload with descriptor-derived Q/K/V column-tile loops and pinned iDMA weight/output movement; require 48 Q plus 8 K plus 8 V tiles, one Matrix completion per formal command, then add batch16 bias and RoPE.",
+  "unique_next_action": "Compose the passing canonical RMS stager with one reusable projection_tile16_controller invoked sequentially for formal Q, K and V commands in one VCS run; require no activation preload between stages, 18 descriptor fetches, three completions and 32,768 QKV values before pinned-iDMA binding.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

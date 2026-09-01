@@ -18,13 +18,13 @@ module qwen2_tile_idma_expand(
  assign idma_rsp_ready_o=state_q==S_RSP;assign rsp_valid_o=state_q==S_OUT;assign rsp_error_o=error_q;
  assign idma_src_addr_o=src_q+64'(row_q)*ss_q;assign idma_dst_addr_o=dst_q+64'(row_q)*ds_q;
  assign idma_length_o=bytes_q;
- assign local_source_o=kind_q==2&&state_q!=S_IDLE;
+ assign local_source_o=(kind_q==2||kind_q==3)&&state_q!=S_IDLE;
  always_ff@(posedge clk_i or negedge rst_ni)begin
   if(!rst_ni)begin state_q<=S_IDLE;kind_q<=0;src_q<=0;dst_q<=0;bytes_q<=0;rows_q<=0;ss_q<=0;ds_q<=0;row_q<=0;error_q<=0;flat_requests_o<=0;end
   else case(state_q)
    S_IDLE:if(req_valid_i&&req_ready_o)begin kind_q<=req_kind_i;src_q<=src_addr_i;dst_q<=dst_addr_i;
-    bytes_q<=row_bytes_i;rows_q<=req_kind_i==1?rows_i:1;ss_q<=src_stride_i;ds_q<=dst_stride_i;
-    row_q<=0;error_q<=row_bytes_i==0||(req_kind_i==1&&rows_i==0);state_q<=row_bytes_i==0||(req_kind_i==1&&rows_i==0)?S_OUT:S_REQ;end
+    bytes_q<=row_bytes_i;rows_q<=(req_kind_i==1||req_kind_i==3)?rows_i:1;ss_q<=src_stride_i;ds_q<=dst_stride_i;
+    row_q<=0;error_q<=row_bytes_i==0||((req_kind_i==1||req_kind_i==3)&&rows_i==0);state_q<=row_bytes_i==0||((req_kind_i==1||req_kind_i==3)&&rows_i==0)?S_OUT:S_REQ;end
    S_REQ:if(idma_req_valid_o&&idma_req_ready_i)begin flat_requests_o<=flat_requests_o+1;state_q<=S_RSP;end
    S_RSP:if(idma_rsp_valid_i&&idma_rsp_ready_o)begin
     if(idma_rsp_error_i)begin error_q<=1;state_q<=S_OUT;end

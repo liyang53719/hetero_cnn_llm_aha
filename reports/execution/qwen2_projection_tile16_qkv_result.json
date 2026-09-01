@@ -1,0 +1,68 @@
+{
+  "checks": {
+    "all_QKV_columns": true,
+    "formal_descriptor_geometry": true,
+    "random_backpressure": true,
+    "same_generic_controller": true
+  },
+  "evidence_class": "formal_descriptor_generic_controller_real_Revision8B_B",
+  "non_claims": [
+    "normalized K-major activation is preloaded in these three component runs",
+    "abstract DMA is modeled rather than pinned iDMA",
+    "Q K V execute in separate simulator processes"
+  ],
+  "open": [
+    "same_run_after_RMS",
+    "pinned_iDMA_binding",
+    "batch16_bias",
+    "batch16_RoPE",
+    "first9_batch16"
+  ],
+  "projections": {
+    "k": {
+      "bf16_bit_exact": 4096,
+      "columns": 256,
+      "completion": 1,
+      "dma_requests": 16,
+      "effective_macs": 6291456,
+      "matrix_steps": 12288,
+      "tiles": 8
+    },
+    "q": {
+      "bf16_bit_exact": 24576,
+      "columns": 1536,
+      "completion": 1,
+      "dma_requests": 96,
+      "effective_macs": 37748736,
+      "matrix_steps": 73728,
+      "tiles": 48
+    },
+    "v": {
+      "bf16_bit_exact": 4096,
+      "columns": 256,
+      "completion": 1,
+      "dma_requests": 16,
+      "effective_macs": 6291456,
+      "matrix_steps": 12288,
+      "tiles": 8
+    }
+  },
+  "provenance": {
+    "controller_rtl_sha256": "a62ccad793cf0160fd0fe941d7a9f787699586134f694fe1f6965a0403cebbca",
+    "k_log_sha256": "07a334d12d67593dc46095769d0a1caa5c65a60b787fa4e13e5fdeadf22f55d5",
+    "q_log_sha256": "4299f378beb1f3553c12e74ccaed465de51c9d0164533253c2320fa7f6bb0db7",
+    "v_log_sha256": "3909e12eba92069c0b880243a209ff8eb4c43cc51881825c87f52a494432ca06",
+    "vector_generator_sha256": "c51224874718e06fa281c3eb2b487e02f5f188dd7b6e828b9ab7138b8b49e73d"
+  },
+  "rows": 16,
+  "schema_version": 1,
+  "status": "PASS_CANONICAL_QKV_TILE16_CONTROLLERS",
+  "totals": {
+    "bf16_bit_exact": 32768,
+    "completions": 3,
+    "dma_requests": 128,
+    "effective_macs": 50331648,
+    "matrix_steps": 98304,
+    "tiles": 64
+  }
+}

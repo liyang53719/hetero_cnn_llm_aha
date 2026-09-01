@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+import hashlib,json,re
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1];D=Path('work/results/qwen2_projection_tile16_controller')
+pat=re.compile(r'QWEN2_PROJECTION_TILE16_CONTROLLER_PASS command=([qkv]) rows=16 columns=(\d+) tiles=(\d+) descriptor_fetches=6 dma_requests=(\d+) matrix_steps=(\d+) effective_macs=(\d+) bf16_bit_exact=(\d+) completion=1 random_backpressure=1');obs={}
+for i,k in enumerate('qkv'):
+ p=D/f'tb_p{i}.log';m=pat.search((ROOT/p).read_text());assert m and m[1]==k;obs[k]=tuple(map(int,m.groups()[1:]))
+assert obs=={'q':(1536,48,96,73728,37748736,24576),'k':(256,8,16,12288,6291456,4096),'v':(256,8,16,12288,6291456,4096)}
+def sha(p):return hashlib.sha256((ROOT/p).read_bytes()).hexdigest()
+r={'schema_version':1,'status':'PASS_CANONICAL_QKV_TILE16_CONTROLLERS','evidence_class':'formal_descriptor_generic_controller_real_Revision8B_B','rows':16,'projections':{k:{'columns':v[0],'tiles':v[1],'dma_requests':v[2],'matrix_steps':v[3],'effective_macs':v[4],'bf16_bit_exact':v[5],'completion':1}for k,v in obs.items()},'totals':{'tiles':64,'dma_requests':128,'matrix_steps':98304,'effective_macs':50331648,'bf16_bit_exact':32768,'completions':3},'checks':{'same_generic_controller':True,'formal_descriptor_geometry':True,'all_QKV_columns':True,'random_backpressure':True},'provenance':{'q_log_sha256':sha(D/'tb_p0.log'),'k_log_sha256':sha(D/'tb_p1.log'),'v_log_sha256':sha(D/'tb_p2.log'),'controller_rtl_sha256':sha('rtl/integration/qwen2_projection_tile16_controller.sv'),'vector_generator_sha256':sha('scripts/generate_qwen2_canonical_q_tile16_all.py')},'open':['same_run_after_RMS','pinned_iDMA_binding','batch16_bias','batch16_RoPE','first9_batch16'],'non_claims':['normalized K-major activation is preloaded in these three component runs','abstract DMA is modeled rather than pinned iDMA','Q K V execute in separate simulator processes']};(ROOT/'reports/execution/qwen2_projection_tile16_qkv_result.json').write_text(json.dumps(r,indent=2,sort_keys=True)+'\n');print(json.dumps({'status':r['status'],'bit_exact':32768,'steps':98304},sort_keys=True))

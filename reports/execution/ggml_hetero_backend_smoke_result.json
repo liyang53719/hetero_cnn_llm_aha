@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "GGML_output_buffer_written": true,
+    "device_init": true,
+    "graph_compute_invokes_device_C_ABI": true,
+    "registered_via_ggml_backend_register": true,
+    "supports_op": true,
+    "unsupported_graph_returns_failed": true
+  },
+  "evidence_class": "pinned_GGML_registry_device_graph_compute_to_588_command_C_ABI",
+  "graph_compute": {
+    "calls": 1,
+    "commands": 588,
+    "cpu_fallback": 0,
+    "layers": 28,
+    "nodes": 1,
+    "output_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+    "output_values": 1572864
+  },
+  "llama_cpp_commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+  "non_claims": [
+    "registered shim does not yet directly execute the original 930-node llama graph",
+    "weights still use exact exported safetensors directories rather than GGUF backend buffers",
+    "this is statically registered in the smoke harness rather than dynamically loaded by stock llama"
+  ],
+  "open": [
+    "replace single custom submission node with original llama 930-node graph partition",
+    "direct GGUF backend tensor buffers",
+    "final norm/LM head output tensor",
+    "dynamic backend plugin build/load"
+  ],
+  "provenance": {
+    "backend_source": "76a379ae7a4f2909733d30cdc0b4e16c9140cec72523124e629581a930dc4156",
+    "device_api_result": "f671abef7d082743100dedaa823d256efff1fb3f137334cda8fce5ee10a51935",
+    "harness": "87a6b4ab35e2578a1dfd2e3671fd4ab4e69b6326a04c4844adc6956e3c41bd69",
+    "log": "33e24c99c2b60d0681130b5b0d72fc8a72c5b0a1aa6fc5cd13b1e592b8b7a014"
+  },
+  "registration": {
+    "devices": 1,
+    "name": "HETERO",
+    "supports_op_custom_submission": true
+  },
+  "schema_version": 1,
+  "status": "PASS_GGML_REGISTERED_HETERO_SUBMISSION_SHIM"
+}

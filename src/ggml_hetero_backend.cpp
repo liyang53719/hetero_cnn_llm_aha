@@ -1,0 +1,22 @@
+#include "ggml-backend-impl.h"
+#include "ggml-cpu.h"
+#include "ggml-impl.h"
+#include "ggml.h"
+#include "hetero_qwen2_device_api.h"
+#include <cstring>
+#include <filesystem>
+#include <fstream>
+#include <string>
+struct hetero_ctx{std::string input_root,output_root;int submissions=0;};
+static ggml_guid_t hetero_guid(){static ggml_guid guid={0x48,0x45,0x54,0x45,0x52,0x4f,0x2d,0x51,0x57,0x45,0x4e,0x32,0x2d,0x50,0x33,0x01};return&guid;}
+static const char * backend_name(ggml_backend_t){return"HETERO";}
+static void backend_free(ggml_backend_t backend){delete static_cast<hetero_ctx *>(backend->context);delete backend;}
+static enum ggml_status graph_compute(ggml_backend_t backend,ggml_cgraph * graph){auto *ctx=static_cast<hetero_ctx *>(backend->context);if(graph->n_nodes!=1)return GGML_STATUS_FAILED;ggml_tensor *node=graph->nodes[0];if(node->op!=GGML_OP_MAP_CUSTOM1||std::strcmp(ggml_get_name(node),"hetero.layer27")||node->type!=GGML_TYPE_F32||ggml_nelements(node)!=1572864||!node->data)return GGML_STATUS_FAILED;hetero_qwen2_submit_config config{ctx->input_root.c_str(),ctx->output_root.c_str(),nullptr,nullptr};if(hetero_qwen2_submit_588(&config))return GGML_STATUS_FAILED;std::ifstream stream(ctx->output_root+"/layer27/final_fp32.bin",std::ios::binary);stream.read(static_cast<char *>(node->data),ggml_nbytes(node));if(!stream||size_t(stream.gcount())!=ggml_nbytes(node))return GGML_STATUS_FAILED;ctx->submissions++;return GGML_STATUS_SUCCESS;}
+static ggml_backend_i backend_iface={backend_name,backend_free,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,graph_compute,nullptr,nullptr,nullptr};
+static const char * dev_name(ggml_backend_dev_t){return"HETERO0";}static const char * dev_desc(ggml_backend_dev_t){return"Hetero Qwen2 Command128 device submission";}static void dev_mem(ggml_backend_dev_t,size_t *free,size_t *total){*free=0;*total=0;}static enum ggml_backend_dev_type dev_type(ggml_backend_dev_t){return GGML_BACKEND_DEVICE_TYPE_ACCEL;}
+static void dev_props(ggml_backend_dev_t dev,ggml_backend_dev_props *props){props->name=dev_name(dev);props->description=dev_desc(dev);props->memory_free=props->memory_total=0;props->type=dev_type(dev);props->device_id=nullptr;props->caps={false,false,true,false,true};}
+static ggml_backend_t dev_init(ggml_backend_dev_t dev,const char *params){if(!params)return nullptr;std::string p=params,key1="input=",key2=";output=";auto split=p.find(key2);if(p.rfind(key1,0)!=0||split==std::string::npos)return nullptr;auto *ctx=new hetero_ctx{p.substr(key1.size(),split-key1.size()),p.substr(split+key2.size()),0};return new ggml_backend{hetero_guid(),backend_iface,dev,ctx};}
+static ggml_backend_buffer_type_t dev_buft(ggml_backend_dev_t){return ggml_backend_cpu_buffer_type();}static ggml_backend_buffer_t dev_from_ptr(ggml_backend_dev_t,void *ptr,size_t size,size_t){return ggml_backend_cpu_buffer_from_ptr(ptr,size);}static bool dev_supports(ggml_backend_dev_t,const ggml_tensor *op){return op&&op->op==GGML_OP_MAP_CUSTOM1&&!std::strcmp(ggml_get_name(op),"hetero.layer27")&&op->type==GGML_TYPE_F32&&ggml_nelements(op)==1572864;}static bool dev_supports_buft(ggml_backend_dev_t,ggml_backend_buffer_type_t buft){return ggml_backend_buft_is_host(buft);}
+static ggml_backend_device_i device_iface={dev_name,dev_desc,dev_mem,dev_type,dev_props,dev_init,dev_buft,nullptr,dev_from_ptr,dev_supports,dev_supports_buft,nullptr,nullptr,nullptr,nullptr};
+static const char * reg_name(ggml_backend_reg_t){return"HETERO";}static size_t reg_count(ggml_backend_reg_t){return 1;}static ggml_backend_dev_t reg_dev(ggml_backend_reg_t reg,size_t index){if(index)return nullptr;static ggml_backend_device dev{device_iface,nullptr,nullptr};dev.reg=reg;return&dev;}static void *reg_proc(ggml_backend_reg_t,const char *){return nullptr;}static ggml_backend_reg_i reg_iface={reg_name,reg_count,reg_dev,reg_proc};
+extern "C" ggml_backend_reg_t ggml_backend_hetero_reg(){static ggml_backend_reg reg{GGML_BACKEND_API_VERSION,reg_iface,nullptr};return&reg;}

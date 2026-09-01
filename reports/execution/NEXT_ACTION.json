@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_P3_C_ABI_DEVICE_SUBMISSION_PASS_GGML_REGISTRATION_OPEN",
-  "decision": "REGISTER_GGML_BACKEND_AND_BIND_GGUF_BUFFERS",
+  "state": "Q1024_GGML_REGISTERED_SHIM_PASS_ORIGINAL_GRAPH_GGUF_OPEN",
+  "decision": "PARTITION_ORIGINAL_LLAMA_GRAPH_AND_BIND_GGUF_BUFFERS",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Implement a pinned-commit GGML backend registration shim whose graph_compute callback calls the passing hetero_qwen2_submit_588 C ABI, bind tensors from llama/GGUF backend buffers instead of pre-exported safetensors directories, and return final logits through GGML output buffers; retain CPU fallback only for explicitly unsupported graphs and do not count fallback as device PASS.",
+  "unique_next_action": "Replace the HETERO shim's single custom submission-node contract with recognition of the pinned llama Qwen2 graph partitions, map the captured 930 nodes and GGUF tensor buffers to the existing 588 Command128 package, execute supported partitions in graph_compute, and return final norm/logits through native GGML tensors; unsupported partitions must return FAILED or explicit CPU fallback that is excluded from device PASS.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -66,6 +66,7 @@
     "q1024_balanced_summary_RTL": "reports/execution/l5_balanced_summary_scheduler_result.json",
     "q1024_layer5_critical_balanced_RTL": "reports/execution/qwen2_layer5_critical_summary_rtl_result.json",
     "q1024_device_submission_C_ABI": "reports/execution/qwen2_device_submission_api_result.json",
+    "q1024_GGML_registered_shim": "reports/execution/ggml_hetero_backend_smoke_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "Q1024_P3_C_ABI_DEVICE_SUBMISSION_PASS_GGML_REGISTRATION_OPEN",
+  "current_state": "Q1024_GGML_REGISTERED_SHIM_PASS_ORIGINAL_GRAPH_GGUF_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -86,6 +86,7 @@
   "q1024_balanced_summary_RTL": {"status": "PASS_E1_PPA_OPEN_STORAGE_MAPPING", "evidence": "reports/execution/l5_balanced_summary_scheduler_result.json", "summary_counts": [2,3,4,8], "input_summaries": 17, "merges": 13, "random_backpressure": true, "logical_storage_bytes": 4160, "flat_dc": "TIMEOUT_600S", "bottomup_dc": "TIMEOUT_600S"},
   "q1024_layer5_critical_balanced_RTL": {"status": "PASS_SUMMARY_INPUT_E2_QK_PV_OPEN", "evidence": "reports/execution/qwen2_layer5_critical_summary_rtl_result.json", "layer": 5, "query": 848, "q_head": 2, "tiles_represented": 27, "block_summaries": 7, "rtl_merges": 6, "stream_beats": 32, "random_stalls": 16},
   "q1024_device_submission_C_ABI": {"status": "PASS_IN_PROCESS_GGML_REGISTRATION_OPEN", "evidence": "reports/execution/qwen2_device_submission_api_result.json", "commands": 588, "layers": 28, "completions": 28, "subprocess_stage_invocations": 0, "final_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60"},
+  "q1024_GGML_registered_shim": {"status": "PASS_CUSTOM_SUBMISSION_NODE_ORIGINAL_GRAPH_OPEN", "evidence": "reports/execution/ggml_hetero_backend_smoke_result.json", "registry": "HETERO", "devices": 1, "graph_compute_calls": 1, "nodes": 1, "commands": 588, "cpu_fallback": 0, "output_values": 1572864},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

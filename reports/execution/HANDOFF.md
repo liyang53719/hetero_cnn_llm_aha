@@ -1,4 +1,4 @@
-# Local-agent handoff v7.34 — main only
+# Local-agent handoff v7.35 — main only
 
 ## Closed in this checkpoint
 
@@ -44,9 +44,10 @@ writeback all PASS in one simulation. Scope remains token0/Q columns0-31 only.
 Vector audit corrected an earlier mapping error: the old random sampled Q rows
 were replaced by exact safetensors physical output columns0-31 laid out as
 1536 rows × 64 B with 3072 B source stride. All four payload/DMA gates reran PASS.
-The same unified RTL instance then executes all 48 physical Q column tiles for
-token0: 1536 Q outputs bit-exact, contiguous 3072 B DDR output, 73,872 flat
-iDMA requests. This is iterative evidence: RMS/descriptor/completion repeat 48×.
+The production controller now executes all 48 physical Q column tiles for
+token0 in one command: descriptor/RMS/Matrix completion each occur once, 1536 Q
+outputs are bit-exact and contiguous in DDR. It uses two alternating 96 KiB
+weight buffers; DMA/Matrix overlap is not yet enabled.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -73,7 +74,7 @@ hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes; next bind its four
-full token0 Q values pass; next make the 48 tiles one command with RMS/descriptor
-once and weight ping-pong, then extend one
+full token0 Q single-command passes; next enable true DMA/Matrix ping-pong overlap
+and define q1024 trace/payload split, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

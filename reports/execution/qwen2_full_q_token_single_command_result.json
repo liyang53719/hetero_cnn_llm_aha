@@ -1,0 +1,52 @@
+{
+  "abstract_dma_requests": 98,
+  "axi_beats_each_direction": 73920,
+  "bf16_bit_exact": 3072,
+  "checks": {
+    "all_physical_Q_columns": true,
+    "contiguous_Q_DDR_output": true,
+    "one_Matrix_completion": true,
+    "one_RMS": true,
+    "one_command": true,
+    "one_descriptor_snapshot": true,
+    "pinned_idma": true
+  },
+  "column_tiles": 48,
+  "ddr_read_bytes": 4727808,
+  "ddr_write_bytes": 3072,
+  "descriptor_fetches": 12,
+  "evidence_class": "single_VCS_one_descriptor_snapshot_one_RMS_one_Matrix_completion",
+  "flat_idma_requests": 73778,
+  "matrix_completions": 1,
+  "non_claims": [
+    "two weight buffers alternate but DMA and Matrix are not yet overlapped",
+    "only token0 is executed",
+    "Q bias and RoPE are separate later commands",
+    "does not close one layer, P2 or P3"
+  ],
+  "open": [
+    "true_DMA_Matrix_overlap",
+    "all_1024_query_tokens",
+    "Q_bias_and_RoPE",
+    "K_and_V",
+    "attention",
+    "complete_layer",
+    "seven_groups",
+    "P3"
+  ],
+  "physical_Q_columns": 1536,
+  "provenance": {
+    "log_sha256": "dff45334129cbbb1b8cfa7506e0085103517e61a88286b893ef5630ac0c377fe",
+    "matrix_endpoint_sha256": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "top_sha256": "7418698c6cd2480648c5f840dfe7b9b78361406f4440d9882a73e6e84e6c138b",
+    "vector_result_sha256": "f2a1facb21e0164bacca4f7e941780d9236d40d3fcf0118709d35c9bd073e645"
+  },
+  "rms_executions": 1,
+  "schema_version": 1,
+  "shared_l2_read_beats": 73872,
+  "shared_l2_write_beats": 96,
+  "status": "PASS_FULL_Q_TOKEN0_SINGLE_COMMAND",
+  "supersedes": "reports/execution/qwen2_full_q_token_iterative_result.json",
+  "token": 0,
+  "weight_buffers": 2
+}

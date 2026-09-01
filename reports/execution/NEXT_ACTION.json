@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Replace the passing 48-start full-Q token0 iteration with one command controller: snapshot descriptors once, run RMS once, alternate two 96KiB weight buffers, delay Matrix completion until tile47, and store one contiguous 3072B Q output.",
+  "unique_next_action": "Turn the passing two-buffer full-Q token0 controller into true overlap: while Matrix consumes tile N, pinned iDMA fills the alternate buffer for N+1; prove identical 1536 outputs, Matrix completion once and overlapped/serialized cycle ratio.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

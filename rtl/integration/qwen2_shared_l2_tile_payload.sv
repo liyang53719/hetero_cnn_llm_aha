@@ -4,7 +4,7 @@
 module qwen2_shared_l2_tile_payload #(
   parameter integer ADDR_W=15
 )(
-  input logic clk_i,input logic rst_ni,input logic start_i,
+  input logic clk_i,input logic rst_ni,input logic start_i,input logic reuse_norm_i,
   input logic[63:0] hidden_local_i,input logic[63:0] rms_weight_local_i,
   input logic[63:0] norm_local_i,input logic[63:0] q_weight_local_i,
   input logic[63:0] q_output_local_i,
@@ -55,7 +55,7 @@ module qwen2_shared_l2_tile_payload #(
     end else begin
       if(matrix_out_valid_i&&matrix_out_ready_o&&matrix_out_last_i)begin final_acc_q<=matrix_acc_i;final_seen_q<=1;end
       case(state_q)
-        S_IDLE:if(start_i)begin beat_q<=0;k_q<=0;final_seen_q<=0;read_beats_o<=0;write_beats_o<=0;state_q<=S_X_REQ;end
+        S_IDLE:if(start_i)begin beat_q<=0;k_q<=0;final_seen_q<=0;read_beats_o<=0;write_beats_o<=0;state_q<=reuse_norm_i?S_Q_REQ:S_X_REQ;end
         S_X_REQ:if(l2_rd_valid_o&&l2_rd_ready_i)state_q<=S_X_RSP;
         S_X_RSP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin
           for(seq_j=0;seq_j<32;seq_j++)x_q[(beat_q*32+seq_j)*32+:32]<={l2_rsp_data_i[seq_j*16+:16],16'd0};

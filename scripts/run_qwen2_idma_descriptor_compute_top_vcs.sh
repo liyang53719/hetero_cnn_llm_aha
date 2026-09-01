@@ -15,4 +15,4 @@ PARGS=();[[ "$FULL_Q" == 1 ]]&&PARGS+=("-pvalue+tb_qwen2_idma_descriptor_compute
 run 600s vcs -full64 -top tb_qwen2_idma_descriptor_compute_top "${PARGS[@]}" -o simv_qwen2_compute >"$OUT/vcs.log" 2>&1
 VEC=$ROOT/work/results/qwen2_shared_l2_tile_payload
 run 600s ./simv_qwen2_compute +ADDR_MEM="$OUT/addresses.memh" +HIDDEN="$VEC/hidden_beats.memh" +NORM_WEIGHT="$VEC/rms_weight_beats.memh" +Q_WEIGHT="$VEC/q_weight_beats.memh" +Q_WEIGHT_ALL="$VEC/q_weight_all_tiles.memh" +EXPECTED="$VEC/norm_expected_beats.memh" +DESCRIPTOR_BEATS="$OUT/beats.memh" +COMMANDS="$OUT/commands.memh" +Q_OUT="$VEC/q_expected_beat.memh" +Q_OUT_ALL="$VEC/q_expected_all_beats.memh"|tee "$OUT/tb.log"
-if [[ "$FULL_Q" == 1 ]];then grep -q 'QWEN2_FULL_Q_TOKEN_ITERATIVE_PASS iterations=48' "$OUT/tb.log";else grep -q 'QWEN2_IDMA_DESCRIPTOR_COMPUTE_TOP_PASS commands=2 descriptor_fetches=12' "$OUT/tb.log";fi
+if [[ "$FULL_Q" == 1 ]];then grep -q 'QWEN2_FULL_Q_TOKEN_SINGLE_COMMAND_PASS physical_columns=1536' "$OUT/tb.log";else grep -q 'QWEN2_IDMA_DESCRIPTOR_COMPUTE_TOP_PASS commands=2 descriptor_fetches=12' "$OUT/tb.log";fi

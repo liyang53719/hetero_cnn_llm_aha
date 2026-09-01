@@ -5,7 +5,7 @@ module tb_qwen2_tile_dma_plan;
  logic[31:0]row_bytes,rows,ss,ds;logic[7:0]status;logic[55:0]a[0:5];logic[31:0]lfsr;
  integer requests,responses,delay;logic pending;logic[1:0]ek[0:3];logic[63:0]es[0:3],ed[0:3];logic[31:0]erb[0:3],erows[0:3],ess[0:3],eds[0:3];
  qwen2_tile_dma_plan dut(.clk_i(clk),.rst_ni(rst_n),.context_valid_i(cv),.context_ready_o(cr),
-  .context_legal_i(cl),.tensor_address_i(addresses),.q_column_tile_i(6'd0),.start_store_i(store),.dma_req_valid_o(rv),
+  .context_legal_i(cl),.tensor_address_i(addresses),.q_column_tile_i(6'd0),.full_q_i(1'b0),.reuse_norm_i(1'b0),.start_store_i(store),.dma_req_valid_o(rv),
   .dma_req_ready_i(rr),.dma_req_kind_o(kind),.dma_src_addr_o(src),.dma_dst_addr_o(dst),
   .dma_row_bytes_o(row_bytes),.dma_rows_o(rows),.dma_src_stride_o(ss),.dma_dst_stride_o(ds),
   .dma_rsp_valid_i(sv),.dma_rsp_ready_o(sr),.dma_rsp_error_i(se),.loads_done_o(loads),

@@ -1,4 +1,4 @@
-# Local-agent handoff v7.52 — main only
+# Local-agent handoff v7.53 — main only
 
 ## Closed in this checkpoint
 
@@ -125,6 +125,13 @@ K and V each use8/12,288. Totals:64 tiles,128 abstract DMA requests,98,304
 Matrix steps,50,331,648 effective MACs,32,768 BF16 exact and three formal
 command completions. These three component runs preload the passing K-major
 activation and model DMA; RMS same-run and pinned-iDMA binding remain open.
+RMS→Q→K→V now executes as one canonical batch16 VCS chain. Hidden rows0..15
+flow through refined RMS/K-major staging and one reusable descriptor-derived
+projection controller invoked for formal Q/K/V commands. Result:57,344 BF16
+exact,18 descriptor fetches,128 modeled DMA requests,98,304 Matrix steps,
+50,331,648 effective MACs and three completions. Activation and intermediate
+reference injection are both zero. Hidden/weights and DMA remain modeled;
+batch16 bias/RoPE and pinned-iDMA binding are next.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -153,9 +160,8 @@ bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
 KV v3 command-to-page, pinned-iDMA DDR movement and canonical token0/1 first-nine
-pass, canonical RMS→Matrix and all Q/K/V batch16 controllers pass; next compose
-RMS→Q→K→V in one run, bind pinned iDMA, then add bias/RoPE into the continuous
-16-token controller,
+pass, and canonical RMS→Q→K→V batch16 same-run passes; next add batch16 bias
+and RoPE, then bind pinned iDMA into the continuous 16-token controller,
 then
 replace synthetic KV source while adding PTE DDR writes, then
 extend one

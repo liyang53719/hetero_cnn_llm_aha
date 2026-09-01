@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "CANONICAL_QKV_TILE16_ALL_PASS_SAME_RUN_RMS_OPEN",
-  "decision": "COMPOSE_RMS_QKV_TILE16",
+  "state": "CANONICAL_RMS_QKV_TILE16_SAME_RUN_PASS_BIAS_ROPE_OPEN",
+  "decision": "ADD_BATCH16_BIAS_ROPE",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Compose the passing canonical RMS stager with one reusable projection_tile16_controller invoked sequentially for formal Q, K and V commands in one VCS run; require no activation preload between stages, 18 descriptor fetches, three completions and 32,768 QKV values before pinned-iDMA binding.",
+  "unique_next_action": "Implement batch16 FP32-bias-to-BF16 stages over the produced Q/K/V DDR tensors and run sequential position0..15 Q/K RoPE recurrence without resetting state; append them to the passing RMS-QKV same-run before pinned-iDMA binding.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

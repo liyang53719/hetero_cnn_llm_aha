@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_P3_BACKEND_AND_LAYER5_BALANCED_RTL_PASS_STORAGE_DEVICE_OPEN",
-  "decision": "MAP_SUMMARY_STORAGE_AND_CONNECT_REAL_QK_PV",
+  "state": "Q1024_P3_C_ABI_DEVICE_SUBMISSION_PASS_GGML_REGISTRATION_OPEN",
+  "decision": "REGISTER_GGML_BACKEND_AND_BIND_GGUF_BUFFERS",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Replace the balanced scheduler's O-state register array with a 256x128 dual-port summary-store abstraction mapped to the existing 2xDP2048x64 macro slice, preserve 2/3/4/8 E1, then feed layer5 q848/head2 summaries from real Revision8B QK-Block32-PV RTL rather than the hardware-semantics generator before binding the 588-command backend to llama device submission.",
+  "unique_next_action": "Implement a pinned-commit GGML backend registration shim whose graph_compute callback calls the passing hetero_qwen2_submit_588 C ABI, bind tensors from llama/GGUF backend buffers instead of pre-exported safetensors directories, and return final logits through GGML output buffers; retain CPU fallback only for explicitly unsupported graphs and do not count fallback as device PASS.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -65,6 +65,7 @@
     "q1024_P3_backend_audit": "reports/execution/qwen2_q1024_p3_backend_audit_result.json",
     "q1024_balanced_summary_RTL": "reports/execution/l5_balanced_summary_scheduler_result.json",
     "q1024_layer5_critical_balanced_RTL": "reports/execution/qwen2_layer5_critical_summary_rtl_result.json",
+    "q1024_device_submission_C_ABI": "reports/execution/qwen2_device_submission_api_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

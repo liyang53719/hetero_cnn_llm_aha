@@ -113,7 +113,10 @@ static void run_attention_blocked_rtl(int layer,const std::string &output){
   std::printf("QWEN2_GENERIC_LAYER_BLOCKED_RTL_ATTENTION_PASS layer=%d commands=21 rows=1024 updates=6297600 tile32=1 merges=43008 score_matrix_bytes=0 max_error=%.9g attention_fnv=%016llx\n",layer,max_error,(unsigned long long)fnv32(attention));if(max_error>0.002)std::exit(5);
 }
 
-int main(int argc,char **argv){
+#ifndef QWEN2_GENERIC_MAIN
+#define QWEN2_GENERIC_MAIN main
+#endif
+int QWEN2_GENERIC_MAIN(int argc,char **argv){
   if(argc!=6){std::fprintf(stderr,"usage: stage layer input_dir predecessor_dir output_dir\n");return 2;}const std::string stage=argv[1],input=argv[3],predecessor=argv[4],output=argv[5];const int layer=std::stoi(argv[2]);validate_commands(input);constexpr int tokens=1024,hidden=1536,intermediate=8960;
   if(stage=="pre")run_pre(layer,input,predecessor,output);else if(stage=="attention"){
 #ifdef QWEN2_ATTENTION_BLOCKED_RTL

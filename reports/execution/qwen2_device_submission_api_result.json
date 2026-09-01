@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "completion_order_0_to_27": true,
+    "predecessor_only_hidden_chain": true,
+    "same_payload_hash_as_accepted_P3": true,
+    "single_API_call": true
+  },
+  "commands": 588,
+  "completions": 28,
+  "evidence_class": "single_C_ABI_call_588_commands_28_completions_hardware_semantics_payload",
+  "final_bytes": 6291456,
+  "final_sha256": "3268b56c87dec937b4fce30c17caa41351396ea1b242aafebabda15f215d5f60",
+  "in_process": true,
+  "layers": 28,
+  "non_claims": [
+    "C ABI device submission is not yet a registered llama.cpp/GGML backend",
+    "weight inputs are frozen from exact safetensors rather than read from GGUF backend buffers",
+    "final RMSNorm/LM head remains a separate accepted backend stage"
+  ],
+  "open": [
+    "GGML backend registration and graph_compute callback",
+    "direct GGUF buffer binding",
+    "final norm/LM head through same API",
+    "random transport backpressure"
+  ],
+  "provenance": {
+    "api_header": "6e46338cc6f41ca5b7c6e00a2af69eb653e2bff7c8bca94e123213897e784dce",
+    "api_source": "d6f76924da1b57510d4ccbaa97aa75898a42b9005bcbc11e3544d096a1a6c8b0",
+    "harness": "039b7eaadf652808c3773a2527c5b73d5a6a0d88014c59b10bda5ffa4e28af6b",
+    "log": "9297555d2f2fc98d0cf9102b3b6a6dc4076aec63b9798e424f373025b8f100f8"
+  },
+  "schema_version": 1,
+  "status": "PASS_Q1024_DEVICE_SUBMISSION_C_ABI_IN_PROCESS",
+  "subprocess_stage_invocations": 0
+}

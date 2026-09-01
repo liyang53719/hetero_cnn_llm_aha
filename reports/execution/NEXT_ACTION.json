@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "QKV_BIAS_SAME_RUN_PASS_ROPE_FIRST9_OPEN",
-  "decision": "INSERT_Q_K_ROPE_INTO_QKV_BIAS_CHAIN",
+  "state": "TOKEN0_FIRST9_NO_INJECTION_PASS_LAYER0_OPEN",
+  "decision": "EXTEND_ROPE_NONZERO_AND_KV_APPEND",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Build a descriptor-driven Q/K RoPE stage over the approved public encoding and insert it after q_bias/k_bias in the passing seven-command VCS chain; require nine formal commands, direct DDR data continuity, token0 Q/K bit-exact outputs and no reference injection.",
+  "unique_next_action": "Extend the passing descriptor-driven RoPE stage with the frozen nonzero-position coefficient path and then connect formal l0.kv_append to DDR-resident KV storage; preserve the same public descriptor image and require direct first-nine outputs with no reference injection before advancing through the remaining layer0 commands.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

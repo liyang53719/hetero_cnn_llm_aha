@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "QKV_BIAS_SAME_RUN_PASS_ROPE_FIRST9_OPEN",
+  "current_state": "TOKEN0_FIRST9_NO_INJECTION_PASS_LAYER0_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -49,6 +49,7 @@
   "raw_qkv_chain": {"status": "PASS_NO_INJECTION", "evidence": "reports/execution/qwen2_raw_qkv_chain_result.json", "formal_commands": 4, "flat_idma_requests": 98370, "bf16_bit_exact": 3584, "same_matrix_instance": true, "bias_rope_integrated": false},
   "descriptor_qkv_bias_stage": {"status": "PASS", "evidence": "reports/execution/qwen2_bias_stage_vcs_result.json", "formal_commands": 3, "flat_idma_requests": 70, "axi_beats": 256, "bf16_bit_exact": 2048, "same_run_with_raw_qkv": true},
   "qkv_bias_same_run_chain": {"status": "PASS_NO_INJECTION", "evidence": "reports/execution/qwen2_qkv_bias_chain_result.json", "formal_commands": 7, "descriptor_fetches": 42, "flat_idma_requests": 98440, "axi_beats": 98768, "bf16_bit_exact": 5632, "Q_K_RoPE": "OPEN"},
+  "token0_first9_chain": {"status": "PASS_NO_INJECTION", "evidence": "reports/execution/qwen2_first9_chain_result.json", "formal_commands": 9, "descriptor_fetches": 62, "flat_idma_requests": 98500, "axi_beats": 98882, "bf16_bit_exact": 7424, "rope_pairs": 896, "position": 0, "complete_layer": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

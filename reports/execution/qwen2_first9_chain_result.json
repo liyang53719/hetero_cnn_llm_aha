@@ -1,0 +1,55 @@
+{
+  "axi_beats_each_direction": 98882,
+  "bf16_bit_exact": 7424,
+  "checks": {
+    "approved_public_descriptor_encoding": true,
+    "complete_rope_descriptor_chains_fetched": true,
+    "generated_rtl_hand_edits": false,
+    "position0_split_half_identity": true,
+    "position_tensor_loaded_from_DDR": true,
+    "projection_to_bias_to_rope_DDR_continuity": true,
+    "reference_injection_between_stages": false
+  },
+  "commands": [
+    "l0.input_norm",
+    "l0.q",
+    "l0.q_bias",
+    "l0.q_rope",
+    "l0.k",
+    "l0.k_bias",
+    "l0.k_rope",
+    "l0.v",
+    "l0.v_bias"
+  ],
+  "ddr_read_bytes": 6316672,
+  "ddr_write_bytes": 11776,
+  "descriptor_fetches": 62,
+  "evidence_class": "single_VCS_descriptor_pinned_iDMA_SharedL2_RMS_Revision8B_B_Matrix_HardFloat_bias_RoPE",
+  "flat_idma_requests": 98500,
+  "matrix_completions": 3,
+  "non_claims": [
+    "only token0 numerical payload executes",
+    "position0 identity does not close nonzero-position RoPE",
+    "nine commands do not constitute one complete transformer layer"
+  ],
+  "open": [
+    "nonzero_position_RoPE_coefficients",
+    "remaining_layer0_commands",
+    "complete_layer",
+    "seven_groups",
+    "continuous_28_layers"
+  ],
+  "provenance": {
+    "log_sha256": "71042ac2fbbc42841c57d7547462b028c9acc00f9db663653dd403925c401873",
+    "rope_context_sha256": "4d4dc24d43873f9a556f2f89b833abbc7c740dc63c87e60c45bc0cbdc8f8ca05",
+    "rope_payload_sha256": "e1c1f5b7303fec46381eed1ad62516b8496243b3df5d8c47586cd58d1c22eb8b",
+    "rope_top_sha256": "97639872e94f82928103fbc305bd3fb7fc7d27b8a112a3d4b58996847d361aa1",
+    "testbench_sha256": "f032b2d9c0c0dee39595be4d6f9861be9e8374488661f624a047b05c9e764477"
+  },
+  "rope_pairs": 896,
+  "schema_version": 1,
+  "sfu_completions": 6,
+  "shared_l2_read_beats": 98842,
+  "shared_l2_write_beats": 232,
+  "status": "PASS_FIRST9_FORMAL_COMMANDS_NO_INJECTION"
+}

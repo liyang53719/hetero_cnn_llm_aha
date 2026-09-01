@@ -1,4 +1,4 @@
-# Local-agent handoff v7.42 — main only
+# Local-agent handoff v7.43 — main only
 
 ## Closed in this checkpoint
 
@@ -63,11 +63,13 @@ Four formal commands, 98,370 flat iDMA requests and 3,584 values are bit-exact.
 Bias audit now matches formal descriptors: GGUF bias arrives as FP32 dtype7
 (two 512-bit beats per 32 values), HardFloat adds it after the Matrix BF16
 boundary, and Q/K/V 2048 outputs remain bit-exact.
-Descriptor-driven Q/K/V bias is now inserted into the raw QKV run. One VCS
-chain executes seven formal commands with 42 descriptor fetches, 98,440 flat
-iDMA requests, 98,768 AXI beats each way and 5,632 BF16 values bit-exact.
-Projection DDR outputs feed bias src0 directly; no intermediate reference is
-injected. Q/K RoPE and the first-nine-command closure remain open.
+Descriptor-driven Q/K/V bias and Q/K RoPE are now inserted into the raw QKV
+run. One VCS chain executes the first nine formal commands with 62 descriptor
+fetches, 98,500 flat iDMA requests, 98,882 AXI beats each way and 7,424 BF16
+values bit-exact. Projection DDR outputs feed bias and RoPE directly; no
+intermediate reference is injected. RoPE fully traverses its three approved
+descriptor chains and loads runtime position from DDR. This closes token0
+position0 only; nonzero coefficients and the rest of layer0 remain open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -93,9 +95,8 @@ The parameterized packer passes all 6188 records in explicit test-only mode and
 hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
-passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV and
-descriptor-driven FP32 bias now execute as one seven-command no-injection data
-chain; next insert Q/K RoPE into that same chain to close the first nine
-commands, then extend one
+passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
+and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
+Next close nonzero-position RoPE and KV append, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

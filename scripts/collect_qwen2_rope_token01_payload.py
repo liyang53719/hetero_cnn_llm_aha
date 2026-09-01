@@ -25,7 +25,8 @@ result = {
     "coefficient_steps": 128,
     "bf16_bit_exact": 3584,
     "theta": 1000000,
-    "fixed_state_bytes": 1024,
+    "fixed_state_bytes": 1536,
+    "coefficient_state_format": "Q2.46",
     "checks": {
         "Q_and_K_coefficient_state_independent": True,
         "nonzero_position_numerical": True,
@@ -38,7 +39,7 @@ result = {
         "log_sha256": sha(LOG),
         "chain_log_sha256": sha(CHAIN),
         "payload_rtl_sha256": sha("rtl/integration/qwen2_shared_l2_rope_payload.sv"),
-        "base_coeff_rtl_sha256": sha("rtl/sfu/qwen2_rope_base_coeff64.sv"),
+        "base_coeff_rtl_sha256": sha("rtl/sfu/qwen2_rope_base_coeff_q46.sv"),
         "base_coeff_generator_sha256": sha("scripts/generate_qwen2_rope_base_coeff_rtl.py"),
     },
     "open": ["token1_full_RMS_QKV_bias_RoPE_chain", "16_token_tile", "q1024_sequential_recurrence", "q1024_real_KV_source"],

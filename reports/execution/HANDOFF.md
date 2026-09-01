@@ -1,4 +1,4 @@
-# Local-agent handoff v7.59 — main only
+# Local-agent handoff v7.60 — main only
 
 ## Closed in this checkpoint
 
@@ -150,10 +150,10 @@ binds clean upstream iDMA, AXI bridge and real Shared-L2 fabric:101,432 flat
 requests,104,162 read/write beats,9 completions and118,784 BF16 exact with zero
 intermediate injection. Descriptor words still use the formal-image responder;
 same-fabric descriptor storage remains a later composition detail.
-q1024 group8 mixed readiness now PASS: token_base16 RMS store/norm transpose are
-exact; Q batch2 payload is49,152 exact; same controller trace64 closes Q/K/V at
-6,291,456 Matrix steps,64 weight loads,512 norm loads and zero weight refetch.
-Trace64 is not numerical payload. Bias/RoPE64, KV and layer0 remain open.
+q1024 mixed readiness now includes post-projection stress: trace64 closes Q/K/V
+at6,291,456 steps with zero weight refetch; batch64 bias2,097,152 and RoPE
+1,835,008 values are exact across positions0..1023 using Q2.46 state (direct
+error0). Formal KV append places1 MiB byte-exact. Inputs repeat rows0..15.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

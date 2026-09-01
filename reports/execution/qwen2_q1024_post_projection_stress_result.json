@@ -1,0 +1,56 @@
+{
+  "bias": {
+    "bf16_bit_exact": 2097152,
+    "bias_loads": 3,
+    "values": 2097152
+  },
+  "checks": {
+    "K_rope_to_KV_source_format": true,
+    "V_bias_to_KV_source_format": true,
+    "fixed_state_context_scaling": true,
+    "formal_token_count1024": true,
+    "pinned_idma_clean": true
+  },
+  "evidence_class": "batch64_real_bias_RoPE_plus_formal_KV_append_repeated_payload_not_model_continuity",
+  "kv_append": {
+    "axi_beats": 16384,
+    "byte_exact": 1048576,
+    "descriptor_fetches": 13,
+    "idma_requests": 128,
+    "pages": 64,
+    "pte_updates": 65,
+    "tokens": 1024
+  },
+  "non_claims": [
+    "QKV input batches repeat canonical rows0_15",
+    "projection trace64 is non-numerical",
+    "this does not close model q1024 numerical continuity"
+  ],
+  "open": [
+    "model_q1024_projection_payload",
+    "full_PTE_DDR_writes",
+    "attention_and_remaining_layer0",
+    "seven_groups",
+    "P3"
+  ],
+  "provenance": {
+    "bias_Q_sha256": "e2d9214b28527ce10e83e755632149a095641b40eb8a979cb0d67af822b4d7ea",
+    "kv_log_sha256": "79308c10b657293c303d7177d3f8882a13242486f93e79ff7149ab9beb3c2292",
+    "kv_stage_sha256": "c12b2fbd38c68b3017683c6fb24ae039a3917304c41e6a7c3088c0773208d184",
+    "q46_rtl_sha256": "a256c8e05fac3b7fff6d16093e0712b2c13b55e208dd84043f4071fc49268aa8",
+    "rope_Q_sha256": "976e4a2cf1c64686e417e4fc5a9e86b9753d6a7e6b0bf9841e4e400057bb61c0"
+  },
+  "rope": {
+    "bf16_bit_exact": 1835008,
+    "coefficient_steps": 130944,
+    "direct_max_absolute_error": 0.0,
+    "positions": [
+      0,
+      1023
+    ],
+    "state_format": "Q2.46",
+    "values": 1835008
+  },
+  "schema_version": 1,
+  "status": "PASS_Q1024_POST_PROJECTION_REPEATED_PAYLOAD_STRESS"
+}

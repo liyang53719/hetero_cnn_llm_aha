@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_GROUP8_TRACE64_PASS_BIAS_ROPE_KV_OPEN",
-  "decision": "CLOSE_Q1024_BIAS_ROPE_KV_TRACE",
+  "state": "Q1024_POST_PROJECTION_STRESS_PASS_MODEL_NUMERICAL_OPEN",
+  "decision": "BUILD_REAL_Q1024_PAYLOAD_BACKEND",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Extend the same runtime trace/count contract through batch64 Q/K/V bias, positions0..1023 RoPE recurrence and formal token_count=1024 KV append; keep batch16 real payload and pinned-iDMA anchors separate from trace-only fields, then start remaining layer0 attention.",
+  "unique_next_action": "Build a real q1024 payload backend using the same refined RMS, exact Revision8B-B FMA order, group8 schedule, Q2.46 RoPE and KV layout; execute exact model rows0..1023 without repeated inputs, then enter layer0 blocked QK/softmax/PV attention.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

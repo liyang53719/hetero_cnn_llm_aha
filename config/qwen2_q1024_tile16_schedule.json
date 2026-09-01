@@ -44,7 +44,8 @@
       "loop_order": ["operation", "batch16"],
       "positions": [0, 1023],
       "state_reset_between_batches": false,
-      "fixed_coefficient_state_bytes": 1024
+      "fixed_coefficient_state_bytes": 1536,
+      "coefficient_state_format": "Q2.46"
     }
   },
   "expected_work": {

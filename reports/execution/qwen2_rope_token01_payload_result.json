@@ -10,9 +10,10 @@
     "split_half_layout": true,
     "token0_first9_compatibility_after_recurrence": true
   },
+  "coefficient_state_format": "Q2.46",
   "coefficient_steps": 128,
   "evidence_class": "same_RTL_FP32_recurrence_and_split_half_payload",
-  "fixed_state_bytes": 1024,
+  "fixed_state_bytes": 1536,
   "non_claims": [
     "token1 RoPE uses accepted biased Q/K inputs rather than same-run token1 Matrix outputs",
     "positions beyond one are structurally supported by recurrence but not yet numerically gated",
@@ -25,11 +26,11 @@
     "q1024_real_KV_source"
   ],
   "provenance": {
-    "base_coeff_generator_sha256": "d61331e57dde7a364b8702b48293d25b2d45d92574e89b8c2fc52371ea895c21",
-    "base_coeff_rtl_sha256": "c687bdc5cf199189f6568a379d937ce18c453459559c07c5c59ca8c53fc86439",
-    "chain_log_sha256": "086c99fe4f4d343b6f15fb9878c414b8ea0e835edd74b7aa3de90f60d8be5e3b",
-    "log_sha256": "56834016d5aef04048ca516b2d931266d5759129cbbf9a3eceac7e50c3dd42f1",
-    "payload_rtl_sha256": "34b6fa3429084d19432a20df31553bd360f0fc68a71792cfffe6f32341ebfb82"
+    "base_coeff_generator_sha256": "2369bc52ba94cc025c7af0bbdd0f701ddb1731ce71ba4388680ab1cfef9c601b",
+    "base_coeff_rtl_sha256": "a256c8e05fac3b7fff6d16093e0712b2c13b55e208dd84043f4071fc49268aa8",
+    "chain_log_sha256": "8d0f30be22bcd67fa099d15c0f995f87da3f1d04062135cd5b1caeb8369eed90",
+    "log_sha256": "2d46e4f9b01b5764c608ce359c2a10616677a6b6f07bc60ae88ab228c1c401f3",
+    "payload_rtl_sha256": "bc9e6bd5cb933e0663b93a2960efe2078886f1f0c743d5a63e327caf3a0289e9"
   },
   "runs": [
     "Q_position0",

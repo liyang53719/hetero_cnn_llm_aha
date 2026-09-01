@@ -32,6 +32,17 @@ class MatrixActivation(IntEnum):
     RELU6 = 2
 
 
+class TensorDType(IntEnum):
+    """Approved public tensor_base.dtype encoding."""
+
+    INVALID = 0
+    INT8 = 1
+    INT32 = 4
+    BF16 = 5
+    FP16 = 6
+    FP32 = 7
+
+
 class CompletionStatus(IntEnum):
     OK = 0
     ILLEGAL_OPCODE_ENGINE = 1
@@ -163,6 +174,65 @@ class MatrixAux:
             max_pixels_per_row=(p >> 42) & 0xFF,
             pad_bottom=(p >> 50) & 0x3F, pad_right=(p >> 56) & 0x3F,
             subarray_mask=(p >> 62) & 0xFF,
+        )
+
+
+@dataclass(frozen=True)
+class SfuProgram:
+    """Approved descriptor type 0x20 payload for dedicated or registry SFUs."""
+
+    program_id: int
+    input_count: int
+    output_count: int = 1
+    input_dtype: TensorDType = TensorDType.BF16
+    output_dtype: TensorDType = TensorDType.BF16
+    lane_width_bits: int = 16
+    vector_lanes: int = 0
+    program_flags: int = 0
+
+    def __post_init__(self) -> None:
+        for name, value, bits in (
+            ("program_id", self.program_id, 16), ("input_count", self.input_count, 8),
+            ("output_count", self.output_count, 8),
+            ("input_dtype", int(self.input_dtype), 4),
+            ("output_dtype", int(self.output_dtype), 4),
+            ("lane_width_bits", self.lane_width_bits, 8),
+            ("vector_lanes", self.vector_lanes, 8),
+            ("program_flags", self.program_flags, 8),
+        ):
+            if not 0 <= int(value) < (1 << bits):
+                raise ValueError(f"{name} does not fit in {bits} bits")
+        if self.input_count not in {1, 2}:
+            raise ValueError("SFU input_count must be one or two")
+        if self.output_count != 1:
+            raise ValueError("approved SFU output_count must be one")
+        if self.input_dtype == TensorDType.INVALID or self.output_dtype == TensorDType.INVALID:
+            raise ValueError("SFU dtype must not be invalid")
+
+    def payload(self) -> int:
+        return (self.program_id | self.input_count << 16 | self.output_count << 24 |
+                int(self.input_dtype) << 32 | int(self.output_dtype) << 36 |
+                self.lane_width_bits << 40 | self.vector_lanes << 48 |
+                self.program_flags << 56)
+
+    def to_record(self, next_index: int = NULL_INDEX) -> DescriptorRecord:
+        return DescriptorRecord(RecordType.SFU_PROGRAM, 0, 0, next_index, self.payload())
+
+    @classmethod
+    def from_record(cls, record: DescriptorRecord) -> "SfuProgram":
+        if record.record_type != RecordType.SFU_PROGRAM:
+            raise ValueError("record is not sfu_program")
+        p = record.payload
+        if p >> 64:
+            raise ValueError("sfu_program reserved bits must be zero")
+        return cls(
+            program_id=p & 0xFFFF, input_count=(p >> 16) & 0xFF,
+            output_count=(p >> 24) & 0xFF,
+            input_dtype=TensorDType((p >> 32) & 0xF),
+            output_dtype=TensorDType((p >> 36) & 0xF),
+            lane_width_bits=(p >> 40) & 0xFF,
+            vector_lanes=(p >> 48) & 0xFF,
+            program_flags=(p >> 56) & 0xFF,
         )
 
 

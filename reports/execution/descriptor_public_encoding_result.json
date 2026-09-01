@@ -1,0 +1,24 @@
+{
+  "approval_source": "user_explicit_2026-09-01",
+  "chains": 1764,
+  "checks": {
+    "dtype_codes": true,
+    "formal_image": true,
+    "records": true,
+    "rtl_decode": true,
+    "user_approved": true
+  },
+  "commands": 588,
+  "non_claim": "formal descriptor packing does not yet execute descriptor-backed payload RTL",
+  "packed_records_sha256": "172dfcb799b8a1b43dadf20e69e417d0102c37b66c3746d42de9d9c04db5ff72",
+  "provenance": {
+    "encoding_sha256": "f0d47596e10ae20796b1075dc471dc9208f3e8c8c0f04ebd8c3e6a44f110b70e",
+    "formal_image_report_sha256": "37ab4874781d3dec45a357456bc7b03e84be22d70823104331db61145aefcb8f",
+    "rtl_decoder_sha256": "0653e3e4bceb2ae13e410b518a53b1e696b637e2d010f362849b341005eff96c",
+    "rtl_log_sha256": "37b97275ca2aa3fbf9bd2d9d13ac0b5b1ac0fa8c975aa13c2ae5e173a98952e1",
+    "software_contract_sha256": "22a8cfbe020308375cc6a08139135aa519a38405da748faf56e3328e36b037d1"
+  },
+  "records": 6188,
+  "schema_version": 1,
+  "status": "PASS_APPROVED_DESCRIPTOR_PUBLIC_ENCODING_AND_FORMAL_IMAGE"
+}

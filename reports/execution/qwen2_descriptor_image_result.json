@@ -1,0 +1,39 @@
+{
+  "chains": 1764,
+  "checks": {
+    "attention_records_56": true,
+    "chains_1764": true,
+    "command_roots_present": true,
+    "commands_588": true,
+    "common_subtype_flags_zero": true,
+    "indices_unique": true,
+    "kv_record_sets_28": true,
+    "matrix_records_252": true,
+    "record_words_128bit": true,
+    "records_6188": true,
+    "sfu_program_records_308": true
+  },
+  "commands": 588,
+  "encoding_approved": true,
+  "encoding_sha256": "f0d47596e10ae20796b1075dc471dc9208f3e8c8c0f04ebd8c3e6a44f110b70e",
+  "non_claim": null,
+  "packed_records": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_descriptor_image/packed_records.jsonl",
+  "packed_records_sha256": "172dfcb799b8a1b43dadf20e69e417d0102c37b66c3746d42de9d9c04db5ff72",
+  "record_type_counts": {
+    "attention_op": 56,
+    "kv_context32": 28,
+    "kv_epoch32": 28,
+    "kv_range32": 28,
+    "kv_table": 28,
+    "matrix_aux": 252,
+    "matrix_op": 252,
+    "sfu_program_symbolic": 308,
+    "shape4": 1736,
+    "stride3": 1736,
+    "tensor_base": 1736
+  },
+  "records": 6188,
+  "schema_version": 1,
+  "status": "PASS_PACKED_DESCRIPTOR_IMAGE",
+  "test_only_override": false
+}

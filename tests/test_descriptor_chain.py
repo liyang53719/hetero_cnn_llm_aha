@@ -3,6 +3,7 @@ import pytest
 from heteronpu.descriptor_chain import (
     DescriptorChainError, DescriptorRecord, MAX_RECORDS, NULL_INDEX,
     MatrixAux, MatrixActivation, DmaPolicy, EventList4, RecordType,
+    SfuProgram, TensorDType,
     validate_descriptor_chain,
 )
 
@@ -65,3 +66,18 @@ def test_descriptor_v2_typed_records_round_trip_and_reserved_rejection() -> None
                                dma.payload() | (1 << 30))
     with pytest.raises(ValueError, match="reserved"):
         DmaPolicy.from_record(bad_dma)
+
+
+def test_approved_dtype_and_sfu_program_encoding() -> None:
+    assert {item.name: int(item) for item in TensorDType} == {
+        "INVALID": 0, "INT8": 1, "INT32": 4, "BF16": 5, "FP16": 6, "FP32": 7,
+    }
+    program = SfuProgram(0x32, 2, input_dtype=TensorDType.BF16,
+                         output_dtype=TensorDType.BF16, lane_width_bits=16)
+    assert program.payload() == 0x105501020032
+    assert SfuProgram.from_record(DescriptorRecord.unpack(program.to_record().pack())) == program
+    with pytest.raises(ValueError, match="one or two"):
+        SfuProgram(0x32, 3)
+    with pytest.raises(ValueError, match="reserved"):
+        SfuProgram.from_record(DescriptorRecord(RecordType.SFU_PROGRAM, 0, 0,
+                                                NULL_INDEX, program.payload() | (1 << 64)))

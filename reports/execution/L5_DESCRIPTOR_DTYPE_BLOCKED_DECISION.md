@@ -1,4 +1,7 @@
-# L5 descriptor public encoding decision — approval required
+# L5 descriptor public encoding decision — approved
+
+Approved explicitly by the user on 2026-09-01 without changes. The canonical
+machine-readable contract is `config/descriptor_public_encoding.json`.
 
 The q1024 graph and 588-command schedule are now traceable to GGML nodes and
 GGUF tensors. Packing the descriptor record image is blocked because the

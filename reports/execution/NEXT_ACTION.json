@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "GOAL_FORMALLY_BLOCKED_DESCRIPTOR_PUBLIC_ENCODING_APPROVAL",
-  "decision": "BLOCKED_DECISION_APPROVE_DESCRIPTOR_DTYPE_AND_SFU_PROGRAM_ENCODING",
+  "state": "DESCRIPTOR_PUBLIC_ENCODING_AND_FORMAL_IMAGE_PASS_SHARED_L2_PAYLOAD_OPEN",
+  "decision": "CONNECT_FORMAL_DESCRIPTOR_IMAGE_TO_SHARED_L2_PAYLOAD",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Approve or replace both proposals in L5_DESCRIPTOR_DTYPE_BLOCKED_DECISION.md; set l5_descriptor_public_encoding_proposal.json approval_status to APPROVED, rerun the validated packer without --allow-unapproved-test, then connect its formal image to Shared-L2 payload reads/writes.",
+  "unique_next_action": "Load the approved packed descriptor records into the production descriptor port and replace testbench-staged layer0 RMSNorm-to-Q-Matrix vectors with Shared-L2 payload reads/writes; preserve the 1568 BF16 bit-exact gate.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

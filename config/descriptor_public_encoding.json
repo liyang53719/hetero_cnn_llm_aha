@@ -2,7 +2,6 @@
   "schema_version": 1,
   "approval_status": "APPROVED",
   "approval_source": "user_explicit_2026-09-01",
-  "canonical_config": "config/descriptor_public_encoding.json",
   "tensor_base": {
     "dtype_codes": {
       "INVALID": 0,
@@ -34,6 +33,5 @@
     },
     "dedicated_program_id": "zero_extended_command_opcode",
     "dedicated_vector_lanes": 0
-  },
-  "status": "SUPERSEDED_BY_APPROVED_CANONICAL_CONFIG"
+  }
 }

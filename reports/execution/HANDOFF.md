@@ -1,4 +1,4 @@
-# Local-agent handoff v7.48 — main only
+# Local-agent handoff v7.49 — main only
 
 ## Closed in this checkpoint
 
@@ -99,6 +99,13 @@ Q0→Q1→K0→K1: 128 coefficient steps and 3,584 BF16 values are bit-exact und
 backpressure, with independent Q/K state. Generated 64 base-step constants are
 reproducible and marked do-not-hand-edit. Full token0 first-nine still passes.
 Token1 full RMS/Matrix/bias-to-RoPE continuity remains open.
+Audit corrected the earlier token label before extension: its vector came from
+`hs[0][0,-1]` but was called token0 and rotated at position0. That artifact now
+retains component arithmetic/protocol meaning only. Canonical llama.cpp tokens
+hash `e4151c...`; real DDR rows0/1 are token IDs48/16948. The same production
+RTL and descriptors now execute each row through all first nine commands:
+7,424 BF16 bit-exact/token, refined RMS NR2, Revision8B-B Matrix, bias and
+position0/1 RoPE, no intermediate injection. Total is14,848 exact values.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -126,8 +133,8 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3 command-to-page, pinned-iDMA DDR movement and token1 RoPE pass; next run
-token1 full RMS/QKV/bias/RoPE in one chain, then form a 16-token tile and
+KV v3 command-to-page, pinned-iDMA DDR movement and canonical token0/1 first-nine
+pass; next form a continuous 16-token same-run controller and
 replace synthetic KV source while adding PTE DDR writes, then
 extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB

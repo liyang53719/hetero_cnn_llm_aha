@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "TOKEN1_ROPE_RECURRENCE_PASS_FULL_TOKEN1_CHAIN_OPEN",
-  "decision": "RUN_TOKEN1_FIRST9_CHAIN",
+  "state": "CANONICAL_TOKEN0_TOKEN1_FIRST9_PASS_16TOKEN_CONTINUITY_OPEN",
+  "decision": "BUILD_16TOKEN_FIRST9_CONTROLLER",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Generate exact token1 BF16 RMS/QKV/bias vectors from the pinned model inputs and execute formal first-nine RMS/projection/bias/RoPE stages in one VCS run with token_index=1; require direct DDR continuity and no intermediate reference injection before forming the 16-token tile controller.",
+  "unique_next_action": "Wrap the passing same-RTL first-nine datapath with an internal token loop for canonical DDR rows0..15, keep RoPE Q/K recurrence state live across tokens, and execute one continuous VCS run with no per-token reset or reference injection; only then feed its K/V outputs to the pinned KV append backend.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

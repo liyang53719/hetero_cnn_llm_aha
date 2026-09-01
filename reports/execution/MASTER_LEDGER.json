@@ -25,6 +25,7 @@
     "payload_checkpoints": 168,
     "continuity_groups": 7
   },
+  "llama_cpp_device_readiness": {"status": "PASS_REAL_GRAPH_COMMAND_SUBMISSION_PAYLOAD_ENDPOINTS_OPEN", "evidence": "reports/execution/llama_cpp_qwen2_device_readiness_result.json", "nodes": 930, "gguf_tensors": 338, "commands": 252, "matrix_commands": 140, "sfu_commands": 112},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

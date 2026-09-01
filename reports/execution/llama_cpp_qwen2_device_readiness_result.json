@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "cpu_baseline": true,
+    "llama_commit": true,
+    "lowering": true,
+    "real_graph": true,
+    "submission": true
+  },
+  "evidence_class": "real_llama_CPU_graph_GGUF_Command128_and_production_fabric_not_device_payload",
+  "graph": {
+    "command_sha256": "33da7e0f4a04033cdb5ac55ef090d59f0fb9d306735be8ffb285758df13f20be",
+    "commands": 252,
+    "matrix_commands": 140,
+    "nodes": 930,
+    "sfu_commands": 112,
+    "tensors": 338
+  },
+  "llama_cpp": {
+    "commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+    "cpu_argmax": 7559,
+    "gguf_sha256": "c09d8d60cfeec8944e89bc15e29bab5929abc125e305eb69757431ed61055387",
+    "prompt_eval_tokens_per_second": 89.76,
+    "pytorch_argmax": 7559,
+    "top10_overlap": 10
+  },
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "non_claims": [
+    "stock llama.cpp CPU is not the project device backend",
+    "production command submission currently uses completion endpoint models",
+    "no Matrix/SFU payload numerical execution from the captured graph"
+  ],
+  "open": [
+    "real_Matrix_command_endpoint",
+    "real_SFU_command_endpoint",
+    "descriptor_backed_payload_memory",
+    "seven_group_device_payload",
+    "P3_continuous_device_payload"
+  ],
+  "provenance": {
+    "cpu_result_sha256": "995a39a67e6081bc00e93de02443a4a846835dd7d8c22c0a8b66b4e7244e0d56",
+    "graph_capture_sha256": "368f7d1db654b72f2df4b20c11e54926d61c1bdae8e4f2a7707df9eca0854dd4",
+    "lowering_report_sha256": "ea7b4e5f15016726a3b3fa93c3940a7999a04860aacea25c9128b5a7a5125aa2",
+    "submission_log_sha256": "e7506fb4a57c04ff160faf62e16ee6e13c9979e155cecbb3c6a1b20e98b9f77a"
+  },
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "schema_version": 1,
+  "status": "PASS_REAL_LLAMA_GRAPH_COMMAND_SUBMISSION_PAYLOAD_ENDPOINTS_OPEN",
+  "submission": {
+    "commands": 252,
+    "completions": 252,
+    "event_grants": 252,
+    "macro_errors": 0,
+    "protocol_errors": 0,
+    "random_backpressure": true
+  }
+}

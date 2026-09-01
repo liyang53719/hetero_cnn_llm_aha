@@ -199,6 +199,13 @@
       "path": "work/upstream/imax3_llm",
       "required_submodules": {}
     },
+    "llama_cpp": {
+      "commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+      "dirty": false,
+      "origin": "https://github.com/ggerganov/llama.cpp.git",
+      "path": "work/upstream/llama_cpp",
+      "required_submodules": {}
+    },
     "pulp_axi": {
       "commit": "4da15979747f326bde2f9869c64e587ce599772c",
       "dirty": false,

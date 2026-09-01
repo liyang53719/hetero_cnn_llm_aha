@@ -26,6 +26,13 @@ physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
 
 ## Next
 
-Implement/select a real payload datapath or device backend for P2/P3. Preserve
+Pinned llama.cpp `0b5be7e4` now converts the exact model to BF16 GGUF and runs
+q1024/28 layers. PyTorch/llama argmax match and Top-10 overlap is 10/10. The
+real capture has 930 nodes and 338 bound tensors; 252 derived Command128 words
+pass production command/event submission under random backpressure.
+
+Matrix/SFU completions are still endpoint models, not payload execution.
+Connect descriptor-backed payload memory and real Matrix/SFU endpoints for
+P2/P3. Preserve
 CPU 8-23, 24/30 GiB memory caps, <=600 s tasks, main-only pushes, and the two
 untracked user runtime scripts.

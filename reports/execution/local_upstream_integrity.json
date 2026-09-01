@@ -70,6 +70,10 @@
     "imax3_llm_commit": true,
     "imax3_llm_origin": true,
     "imax3_llm_present": true,
+    "llama_cpp_clean": true,
+    "llama_cpp_commit": true,
+    "llama_cpp_origin": true,
+    "llama_cpp_present": true,
     "pulp_axi_clean": true,
     "pulp_axi_commit": true,
     "pulp_axi_origin": true,
@@ -111,6 +115,12 @@
       "clean": true,
       "commit": "ecf4b7590734b123d4004d16251979c66f6adcdf",
       "origin": "https://github.com/Takuto-Ando/IMAX3-LLM.git",
+      "required_submodules": 0
+    },
+    "llama_cpp": {
+      "clean": true,
+      "commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+      "origin": "https://github.com/ggerganov/llama.cpp.git",
       "required_submodules": 0
     },
     "pulp_axi": {

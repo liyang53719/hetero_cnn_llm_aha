@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Implement or select a real Matrix/SFU payload datapath or real device backend for the seven four-layer groups; reference continuity plus RTL transaction control is insufficient for L5.6d. In parallel retain L10.3/L10.4 behind physical views and workload SAIF.",
+  "unique_next_action": "Connect the 252 real graph-derived Command128 words to descriptor-backed payload memory and real Matrix/SFU command endpoints; command submission is proven but endpoint completions are still models. Then execute the seven groups without hidden-state injection.",
   "ordered_gates": [
     "L5.6d P2 real payload datapath selection/implementation",
     "seven four-layer groups on that datapath without hidden-state injection",

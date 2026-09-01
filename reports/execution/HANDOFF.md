@@ -158,8 +158,9 @@ probability DDR. All21 layer0 commands run through final residual for1024 rows;
 tail RTL samples40,704 Matrix steps/6,144 BF16 plus8,192 8-lane SiLU exact.
 The same generic backend now chains layers1-3 from each predecessor final only:
 84 commands,25,190,400 attention updates,172,032 merges,zero hidden injection;
-layer3 final SHA is `ffc48b28...`. This closes continuous group0 backend
-numerical evidence,not formal device payload: layers1-3 sampled RTL anchors,
+layer3 final SHA is `ffc48b28...`. Layers1-3 tail anchors reuse one binary:
+122,112 Matrix steps/18,432 BF16 plus24,576 8-lane SiLU exact. Group0 remains
+backend numerical evidence,not formal device payload: layers1-3 attention RTL,
 groups1-6 and P3 remain OPEN. Existing1/2-lane regressions still pass.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
@@ -188,9 +189,9 @@ All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
-KV v3/pinned-iDMA, complete layer0 and continuous layers0-3 backend pass. Next
-anchor layers1-3 first/middle/last Matrix tiles and8-lane SiLU in the same RTL,
-then promote group0 and chain layers4-7. Full attention RTL remains12,288 rows,
-not the1,440 sample.
+KV v3/pinned-iDMA, continuous layers0-3 backend and tail RTL anchors pass. Next
+run reviewed attention samples for layers1-3 on the same QK/SFU/PV binary,
+then audit group0 and chain layers4-7. Full attention RTL remains12,288 rows,
+not the sampled rows.
 Preserve CPU 8-23,24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

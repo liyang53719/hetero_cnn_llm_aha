@@ -10,7 +10,7 @@
   "items": [
     {"id": "L10.1", "sandbox_status": "component manifest and route-degradation screen PASS with critical margin risk", "local_gate": "hierarchy-preserving integrated synthesis", "acceptance": ["WNS>=0", "unmapped/unresolved/blackbox=0", "no area double-count", "no non-reset data false path or multicycle"]},
     {"id": "L10.2", "sandbox_status": "4 MiB owner/liveness candidate exists", "local_gate": "SRAM macro replacement and bank/port validation", "acceptance": ["capacity<=4 MiB", "owner/address overlap=0", "macro timing linked", "bank-conflict counters present"]},
-    {"id": "L5.6d", "sandbox_status": "q1024 continuous layers0-3 backend pass; layers1-3 sampled RTL anchors open", "local_gate": "continuous payload numerical replay", "acceptance": ["all checkpoints captured", "seven four-layer groups without internal hidden-state injection", "continuous 28-layer or real-backend equivalent", "final RMSNorm/LM head close"]},
+    {"id": "L5.6d", "sandbox_status": "q1024 continuous layers0-3 backend and tail RTL anchors pass; layers1-3 attention RTL open", "local_gate": "continuous payload numerical replay", "acceptance": ["all checkpoints captured", "seven four-layer groups without internal hidden-state injection", "continuous 28-layer or real-backend equivalent", "final RMSNorm/LM head close"]},
     {"id": "L10.3-L10.4", "sandbox_status": "acceptance contracts ready", "local_gate": "post-route PVT/OCV plus workload-derived SAIF"},
     {"id": "L4", "sandbox_status": "legal AHA sidecar contract ready", "local_gate": "Garnet map/PnR/Verilator/DC and CNN subset"},
     {"id": "L6", "sandbox_status": "exact layouts, integrated frontend and K-tail source-ready", "local_gate": "pinned llama.cpp parity, RTL E1 and PPA"},

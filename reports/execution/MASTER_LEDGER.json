@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "Q1024_GROUP0_BACKEND_PASS_LAYERS1TO3_RTL_ANCHORS_OPEN",
+  "current_state": "Q1024_GROUP0_BACKEND_AND_TAIL_RTL_PASS_ATTENTION_RTL_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -76,6 +76,7 @@
   "q1024_layer0_tail_backend": {"status": "PASS_EXACT_HARDWARE_SEMANTICS", "evidence": "reports/execution/qwen2_q1024_layer0_tail_backend_result.json", "commands": 21, "rows": 1024, "final_sha256": "308f833eb62ed8dc46f630b79da5af9b25987a5963a36a606ce78956b4e47fcd", "reference_hidden_injection": 0},
   "q1024_layer0_tail_RTL": {"status": "PASS_SAMPLED_E2", "evidence": "reports/execution/qwen2_q1024_layer0_tail_rtl_result.json", "matrix_steps": 40704, "matrix_bf16_bit_exact": 6144, "silu_lanes": 8, "silu_bit_exact": 8192, "all_tiles": false},
   "q1024_group0_backend": {"status": "PASS_CONTINUOUS_HARDWARE_SEMANTICS_BACKEND_RTL_ANCHORS_OPEN", "evidence": "reports/execution/qwen2_q1024_group0_backend_result.json", "layers": 4, "commands": 84, "reference_hidden_injections": 0, "attention_updates": 25190400, "summary_merges": 172032, "layer3_final_sha256": "ffc48b28552312852a0be5259ddce7cdefa8c8fd7c48c24c776d127e443c4d9c"},
+  "q1024_group0_tail_RTL": {"status": "PASS_LAYERS1TO3_SAMPLED_E2_ATTENTION_ANCHORS_OPEN", "evidence": "reports/execution/qwen2_q1024_group0_rtl_result.json", "layers": [1,2,3], "same_binary": true, "matrix_steps": 122112, "matrix_bf16_bit_exact": 18432, "silu_lanes": 8, "silu_bit_exact": 24576},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

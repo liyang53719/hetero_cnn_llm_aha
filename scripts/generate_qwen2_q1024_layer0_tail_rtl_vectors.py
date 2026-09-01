@@ -1,16 +1,28 @@
 #!/usr/bin/env python3
-"""Pack exact-model layer-0 tail samples for the production Matrix and SiLU RTL."""
+"""Pack one exact-model layer tail sample for the production Matrix and SiLU RTL."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
 
 import numpy as np
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--layer", type=int, choices=range(4), default=0)
+parser.add_argument("--out", type=Path)
+args = parser.parse_args()
 ROOT = Path(__file__).resolve().parents[1]
-BACKEND = ROOT / "work/results/qwen2_q1024_layer0_tail_backend"
-ATTENTION = ROOT / "work/results/qwen2_q1024_attention_backend"
-INPUT = ROOT / "work/results/qwen2_q1024_layer0_tail_inputs"
-OUT = ROOT / "work/results/qwen2_q1024_layer0_tail_rtl/vectors"
+if args.layer == 0:
+    BACKEND = ROOT / "work/results/qwen2_q1024_layer0_tail_backend"
+    ATTENTION = ROOT / "work/results/qwen2_q1024_attention_backend"
+    INPUT = ROOT / "work/results/qwen2_q1024_layer0_tail_inputs"
+    default_out = ROOT / "work/results/qwen2_q1024_layer0_tail_rtl/vectors"
+else:
+    BACKEND = ROOT / f"work/results/qwen2_q1024_group0_backend/layer{args.layer}"
+    ATTENTION = BACKEND
+    INPUT = ROOT / f"work/results/qwen2_q1024_group0_inputs/layer{args.layer}"
+    default_out = ROOT / f"work/results/qwen2_q1024_group0_rtl/layer{args.layer}/vectors"
+OUT = args.out or default_out
 OUT.mkdir(parents=True, exist_ok=True)
 
 def bf16_bits(values):
@@ -86,5 +98,10 @@ manifest = {
     "physical_tiles": {name: item["tiles"] for name, item in spec.items()},
     "hashes": hashes,
 }
+if args.layer != 0:
+    manifest["layer"] = args.layer
 (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-print("QWEN2_Q1024_LAYER0_TAIL_RTL_VECTORS_PASS matrix_steps=40704 matrix_values=6144 silu_values=8192")
+if args.layer == 0:
+    print("QWEN2_Q1024_LAYER0_TAIL_RTL_VECTORS_PASS matrix_steps=40704 matrix_values=6144 silu_values=8192")
+else:
+    print(f"QWEN2_Q1024_GROUP0_RTL_VECTORS_PASS layer={args.layer} matrix_steps=40704 matrix_values=6144 silu_values=8192")

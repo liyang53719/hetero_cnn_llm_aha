@@ -1,0 +1,70 @@
+{
+  "aggregate": {
+    "matrix_bf16_bit_exact": 18432,
+    "matrix_steps": 122112,
+    "silu_bit_exact": 24576
+  },
+  "checks": {
+    "backend_hidden_injections_inside_group": true,
+    "eight_physical_SiLU_lanes": true,
+    "first_middle_last_physical_tiles": true,
+    "generated_or_upstream_RTL_modified": false,
+    "same_RTL_all_sequence_lengths": true,
+    "same_binary_all_layers": true,
+    "silu_random_backpressure": true
+  },
+  "evidence_class": "continuous_backend_anchored_by_same_Revision8B_and_8lane_SiLU_binary",
+  "layers": [
+    1,
+    2,
+    3
+  ],
+  "non_claims": [
+    "tail first-middle-last tiles are sampled rather than full payload RTL",
+    "layers1-3 QK-softmax-PV sampled RTL anchors remain open",
+    "this does not yet promote group0 to a formal full-device-payload PASS"
+  ],
+  "open": [
+    "layers1to3_attention_sampled_RTL",
+    "all_tail_tiles_RTL",
+    "groups1to6",
+    "P3"
+  ],
+  "provenance": {
+    "binary_sha256": "38e02d22fcc7db4e2c1db23117076ccee5b6e8fa727f110ee257b817c04852cc",
+    "group0_backend_report_sha256": "a75cfb1760a6d5edbe1115dab083f5a51b6c829ab68524d3a0ff462910fa2630",
+    "layer0_tail_rtl_report_sha256": "95e62d9fc0ecfe719b71c1220199b133b8568be885e45b9c7f64bdaf12374e0d",
+    "testbench_sha256": "81c1402f7a0a2bc3ae36dcebee1b8daaaf4418ce88db1f291aea4e51f2940319"
+  },
+  "records": [
+    {
+      "layer": 1,
+      "log_sha256": "a810e55fbac93f9de46b5c8ee45fddf8ee6c45c25fc3d329b0bf031ba3ad3d4a",
+      "matrix_bf16_bit_exact": 6144,
+      "matrix_steps": 40704,
+      "silu_bit_exact": 8192,
+      "silu_lanes": 8,
+      "vector_manifest_sha256": "49ec3c90d121e40e4b3fed4b79864de3945782eee0f1b5d2029dc6d2d5fb5137"
+    },
+    {
+      "layer": 2,
+      "log_sha256": "4be3eb9857910d56c32b7671fba8b6e8c595c80b8451084d9644c4eb8ddb35b6",
+      "matrix_bf16_bit_exact": 6144,
+      "matrix_steps": 40704,
+      "silu_bit_exact": 8192,
+      "silu_lanes": 8,
+      "vector_manifest_sha256": "b415d76b4eb6c169d57dda05a7ff11906a0b0b898a637630a11649f47e232bad"
+    },
+    {
+      "layer": 3,
+      "log_sha256": "027d6c8567c514f42f2edc9ea348c5a8d41b78e0b65366a034a71f35d5eabbc8",
+      "matrix_bf16_bit_exact": 6144,
+      "matrix_steps": 40704,
+      "silu_bit_exact": 8192,
+      "silu_lanes": 8,
+      "vector_manifest_sha256": "e5e8ad62b824a88f4aaf7e8c77acb90cc93775efb90162e1c25037ab0b926bcc"
+    }
+  ],
+  "schema_version": 1,
+  "status": "PASS_Q1024_GROUP0_LAYERS1TO3_TAIL_SAMPLED_REAL_RTL"
+}

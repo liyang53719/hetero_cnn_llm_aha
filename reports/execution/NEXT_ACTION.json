@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Add descriptor-driven BF16 projection bias and token0 Q/K RoPE SFU paths to the passing raw Q/K/V outputs, then run the first nine formal commands as one event-ordered chain without reference injection.",
+  "unique_next_action": "Compose formal commands l0.input_norm through l0.v_bias into one event-ordered QKV run: real projection outputs must feed bias/RoPE without reference injection, with pinned-iDMA/Shared-L2 traces and nine completions.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

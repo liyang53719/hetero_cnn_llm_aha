@@ -1,4 +1,4 @@
-# Local-agent handoff v7.37 — main only
+# Local-agent handoff v7.38 — main only
 
 ## Closed in this checkpoint
 
@@ -54,6 +54,9 @@ outputs and traffic. Token0 does not prove q1024 Matrix utilization.
 Generic projection context derives Q/K/V geometry from formal descriptors.
 Raw K and V each pass 256 physical columns/8 tiles with pinned iDMA, Shared-L2,
 Revision8B-B, 256 BF16 bit-exact and 54,515 overlap cycles. Bias/RoPE remain open.
+Real HardFloat bias add now passes Q/K/V 2048 values after the Matrix BF16
+boundary. Real fp32_rope_pair passes token0 Q/K split-half 896 pairs/1792 values.
+Projection, bias and RoPE are not yet one event/data chain.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -80,7 +83,7 @@ hard-rejects unapproved input; compact approved image hash is `c8bc57cf8690...`.
 All 6188 records pass production protocol fetch; real ARM macros sample all four
 bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes; next bind its four
-Q/K/V raw projections pass; next add BF16 bias, token0 K RoPE and event-chain
-composition, then extend one
+Q/K/V projection+bias+token0 RoPE components pass; next compose their formal
+first-nine-command event/data chain, then extend one
 layer and seven groups. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

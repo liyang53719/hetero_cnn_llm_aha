@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+import hashlib,json,re
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+def sha(p):return hashlib.sha256((ROOT/p).read_bytes()).hexdigest()
+b='work/results/qwen2_kv_bias_add/tb.log';r='work/results/qwen2_token0_qk_rope/tb.log';bm=re.search(r'QWEN2_QKV_BIAS_ADD_PASS Q_values=(\d+) K_values=(\d+) V_values=(\d+) beats=(\d+) bf16_bit_exact=(\d+) random_backpressure=1 accepted=(\d+) completed=(\d+)',(ROOT/b).read_text());rm=re.search(r'QWEN2_TOKEN0_QK_ROPE_PASS Q_pairs=(\d+) K_pairs=(\d+) pairs=(\d+) bf16_bit_exact=(\d+) position0_identity=1 split_half_layout=1 random_backpressure=1',(ROOT/r).read_text())
+if not bm or tuple(map(int,bm.groups()))!=(1536,256,256,64,2048,64,64):raise SystemExit('bias receipt');
+if not rm or tuple(map(int,rm.groups()))!=(768,128,896,1792):raise SystemExit('rope receipt')
+res={'schema_version':1,'status':'PASS_QKV_BIAS_AND_TOKEN0_QK_ROPE','evidence_class':'real_HardFloat_bias_and_fp32_RoPE_RTL','bias':{'Q_values':1536,'K_values':256,'V_values':256,'bf16_bit_exact':2048},'rope':{'Q_pairs':768,'K_pairs':128,'bf16_bit_exact':1792,'position':0,'split_half':True},'checks':{'Matrix_BF16_boundary_before_bias':True,'random_backpressure':True,'real_FP32_add':True,'real_FP32_RoPE_pair':True},'provenance':{'bias_log_sha256':sha(b),'rope_log_sha256':sha(r),'bias_rtl_sha256':sha('rtl/sfu/bf16_bias_add_tile32.sv'),'rope_rtl_sha256':sha('rtl/sfu/fp32_rope_pair.sv')},'open':['nonzero_position_RoPE_in_same_QKV_chain','descriptor_command_endpoints','KV_append','complete_layer'],'non_claims':['bias and RoPE run in separate component tests from projection','token0 RoPE coefficients are identity','formal QKV event chain remains open']};out=ROOT/'reports/execution/qwen2_qkv_bias_rope_result.json';out.write_text(json.dumps(res,indent=2,sort_keys=True)+'\n');print(json.dumps({'status':res['status'],'bias_values':2048,'rope_pairs':896},sort_keys=True))

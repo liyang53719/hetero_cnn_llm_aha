@@ -1,4 +1,4 @@
-# Local-agent handoff v7.54 — main only
+# Local-agent handoff v7.55 — main only
 
 ## Closed in this checkpoint
 
@@ -138,6 +138,12 @@ Q/K runs positions0..15 sequentially with independent state,1,920 total
 coefficient steps and28,672 exact values. Each formal command fetches context
 once and completes once. Component inputs are canonical preloads; same-run
 connection to produced QKV and pinned-iDMA remain open.
+The complete canonical batch16 first-nine sequence now passes in one production
+controller/VCS run:9 formal commands/completions,62 descriptor fetches,145 DMA
+requests, positions0..15,98,304 Matrix steps/50,331,648 MACs,1,920 RoPE steps
+and118,784 BF16 exact. RMS→Q→bias→RoPE→K→bias→RoPE→V→bias uses direct produced
+tensors with zero intermediate reference injection. DMA/DDR/L2 are modeled;
+pinned-iDMA replacement, KV append and remaining layer0 are open.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
@@ -166,8 +172,8 @@ bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
 KV v3 command-to-page, pinned-iDMA DDR movement and canonical token0/1 first-nine
-pass, canonical RMS→Q→K→V same-run and all batch16 bias/RoPE controllers pass;
-next compose the full first-nine chain, then bind pinned iDMA into it,
+pass, and the complete canonical batch16 first-nine same-run passes; next bind
+pinned iDMA/AXI and feed its K/V to real KV append,
 then
 replace synthetic KV source while adding PTE DDR writes, then
 extend one

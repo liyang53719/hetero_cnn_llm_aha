@@ -1,0 +1,53 @@
+{
+  "bf16_bit_exact": 118784,
+  "bias_values": 32768,
+  "canonical_token_hash": "e4151c23e259dda17d515c73f653031e8a2af9e7784dba297b454fe7cb4ba628",
+  "checks": {
+    "QKV_all_columns": true,
+    "QK_nonzero_RoPE": true,
+    "formal_operation_order": true,
+    "no_intermediate_reference_injection": true,
+    "one_shared_controller": true,
+    "random_backpressure": true,
+    "same_RTL_all_sequence_lengths": true
+  },
+  "commands": 9,
+  "completions": 9,
+  "descriptor_fetches": 62,
+  "dma_requests": 145,
+  "effective_macs": 50331648,
+  "evidence_class": "single_production_controller_single_VCS_formal_descriptor_batch16_payload",
+  "matrix_steps": 98304,
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "non_claims": [
+    "DDR and Shared-L2 behavior is modeled around real payload controllers",
+    "only rows0..15 and first-nine layer0 commands execute",
+    "does not close one transformer layer"
+  ],
+  "open": [
+    "replace_modeled_DMA_with_pinned_iDMA",
+    "KV_append_real_source",
+    "64_batch_tiles_q1024",
+    "remaining_layer0_commands",
+    "seven_groups",
+    "P3"
+  ],
+  "positions": [
+    0,
+    15
+  ],
+  "provenance": {
+    "log_sha256": "e17ffd34576fea3c6cacb994023cdd1edb1f66fbde60f47f5ef4da628f1808a0",
+    "testbench_sha256": "8d523ee238fb0b923d9944199dbde6dc6dbda17aac4836558266915e04e02104",
+    "top_rtl_sha256": "730c93911c7bf426328e15c9a979cd27407fc537cefaba9043d15ba937d32c6e",
+    "vector_generator_sha256": "67b691cf1fc473eecf0157fc9f12faf2142a530f0073e6ca0e442a6079bc408b"
+  },
+  "qkv_values": 32768,
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "rms_values": 24576,
+  "rope_steps": 1920,
+  "rope_values": 28672,
+  "rows": 16,
+  "schema_version": 1,
+  "status": "PASS_CANONICAL_FIRST9_TILE16_SAME_RUN"
+}

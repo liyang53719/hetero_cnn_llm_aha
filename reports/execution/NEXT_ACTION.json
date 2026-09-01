@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "BATCH16_BIAS_ROPE_PASS_FIRST9_SAME_RUN_OPEN",
-  "decision": "COMPOSE_BATCH16_FIRST9",
+  "state": "CANONICAL_FIRST9_TILE16_SAME_RUN_PASS_PINNED_IDMA_OPEN",
+  "decision": "BIND_FIRST9_TILE16_PINNED_IDMA",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Compose RMS, Q, Q-bias, Q-RoPE, K, K-bias, K-RoPE, V and V-bias batch16 controllers in formal order over one shared DDR/L2 model; require produced tensors to feed consumers directly, 9 completions and zero intermediate injection before pinned-iDMA replacement.",
+  "unique_next_action": "Replace the first-nine tile16 controller's 145 modeled DMA transactions with qwen2_tile_idma_expand plus the clean pinned iDMA AXI backend and real Shared-L2 bridge; preserve all 118,784 numerical checks, then feed produced K/V to the passing DDR KV append stage.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",

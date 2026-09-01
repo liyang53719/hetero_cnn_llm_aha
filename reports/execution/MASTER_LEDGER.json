@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "Q1024_P3_BACKEND_EQUIVALENT_PASS_DEVICE_AND_RTL_POLICY_OPEN",
+  "current_state": "Q1024_P3_BACKEND_PASS_BALANCED_RTL_E1_STORAGE_PPA_AND_DEVICE_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -83,6 +83,7 @@
   "q1024_final_head_backend": {"status": "PASS_FULL_VOCAB", "evidence": "reports/execution/qwen2_q1024_final_head_backend_result.json", "vocab": 151936, "argmax": 7559, "reference_argmax": 7559, "top10_overlap": 10},
   "q1024_ext32_policy": {"status": "PASS_E1_E4_CRITICAL_MARGIN", "evidence": "reports/execution/qwen2_ext32_attention_policy_result.json", "range": [-32,0], "segments": 512, "wns_ns": 0.000000953674, "area": 39600.106, "unmapped": 0},
   "q1024_P3_backend_audit": {"status": "PASS_BACKEND_EQUIVALENT_NUMERICAL_DEVICE_GATE_OPEN", "evidence": "reports/execution/qwen2_q1024_p3_backend_audit_result.json", "layers": 28, "groups": 7, "commands": 588, "argmax": 7559, "top10_overlap": 10, "llama_device_backend_registered": false},
+  "q1024_balanced_summary_RTL": {"status": "PASS_E1_PPA_OPEN_STORAGE_MAPPING", "evidence": "reports/execution/l5_balanced_summary_scheduler_result.json", "summary_counts": [2,3,4,8], "input_summaries": 17, "merges": 13, "random_backpressure": true, "logical_storage_bytes": 4160, "flat_dc": "TIMEOUT_600S", "bottomup_dc": "TIMEOUT_600S"},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

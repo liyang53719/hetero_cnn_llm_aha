@@ -1,0 +1,48 @@
+{
+  "checks": {
+    "bit_exact_ext32_merge": true,
+    "n_minus_1_merge_count": true,
+    "no_timeout_budget_extension": true,
+    "odd_count_copy": true,
+    "stable_stall_payload": true
+  },
+  "dc": {
+    "area_claim": null,
+    "bottomup_merge_DDC_status": "TIMEOUT_600S",
+    "flat_status": "TIMEOUT_600S",
+    "timing_claim": null
+  },
+  "evidence_class": "source_RTL_balanced_2to8_summary_scheduler_E1",
+  "input_summaries": 17,
+  "merges": 13,
+  "open": [
+    "summary storage macro mapping",
+    "1GHz scheduler DC",
+    "q1024 layer0/layer5 exact-model sampled RTL",
+    "integrated attention service"
+  ],
+  "provenance": {
+    "log": "82d4df01f8c5c1e77db318eec34c0d158c798450ce659904a742a9be81d40f2c",
+    "manifest": "c8cb2edc9db27cafec894259195bb79d1a4cedb934af460252599a0c10381e91",
+    "rtl": "f17fe3d369a853625df9322a5e167d11aee2b57f8e1f1c46b0c5d107ef28eae4",
+    "tb": "7093edf5e3e5e48aa86f300ae8ea3b3f0749d10f18884e7235af9ed0608181c3"
+  },
+  "random_backpressure": {
+    "beat_stalls": 48,
+    "header_stalls": 2
+  },
+  "schema_version": 1,
+  "status": "PASS_E1_PPA_OPEN_STORAGE_MAPPING",
+  "storage": {
+    "implementation": "register_array_current",
+    "logical_bytes": 4160,
+    "required_next": "fixed_capacity_SRAM_or_register_file_wrapper"
+  },
+  "stream_beats": 128,
+  "supported_summary_counts": [
+    2,
+    3,
+    4,
+    8
+  ]
+}

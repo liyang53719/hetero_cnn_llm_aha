@@ -1,4 +1,4 @@
-# Local-agent handoff v7.39 — main only
+# Local-agent handoff v7.40 — main only
 
 ## Closed in this checkpoint
 
@@ -60,6 +60,9 @@ Projection, bias and RoPE are not yet one event/data chain.
 Raw QKV is now one no-injection VCS chain: DDR input/weights → real RMS →
 Shared-L2 norm → the same Matrix instance sequential Q/K/V → DDR outputs.
 Four formal commands, 98,370 flat iDMA requests and 3,584 values are bit-exact.
+Bias audit now matches formal descriptors: GGUF bias arrives as FP32 dtype7
+(two 512-bit beats per 32 values), HardFloat adds it after the Matrix BF16
+boundary, and Q/K/V 2048 outputs remain bit-exact.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

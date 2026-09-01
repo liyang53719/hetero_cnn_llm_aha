@@ -3,10 +3,13 @@
     "K_values": 256,
     "Q_values": 1536,
     "V_values": 256,
-    "bf16_bit_exact": 2048
+    "bf16_bit_exact": 2048,
+    "input_format": "FP32_from_GGUF_dtype7",
+    "output_format": "BF16"
   },
   "checks": {
     "Matrix_BF16_boundary_before_bias": true,
+    "formal_GGUF_FP32_bias_format": true,
     "random_backpressure": true,
     "real_FP32_RoPE_pair": true,
     "real_FP32_add": true
@@ -24,8 +27,8 @@
     "complete_layer"
   ],
   "provenance": {
-    "bias_log_sha256": "be83abdd9269528bb94d29b1dacd5d4d0d732d3a899785c307c09b046b81aaaa",
-    "bias_rtl_sha256": "40ccd33ddb2117a738b140fc9d396a58b6538fa0216236022bce358a900d9846",
+    "bias_log_sha256": "0aa1d950918a5b1a9bfec106dbce4e07a57c9767c1fb9f46970c9ff65da34477",
+    "bias_rtl_sha256": "a4710ecc092f7f03fdc7c9e3015f2c2bd8134b24d13367b9b8e170af9b39ef45",
     "rope_log_sha256": "0e2256a8e2aa1cbbb9a73aed13dfe5e9ab76f3c437ad8b269374c52f6404b10c",
     "rope_rtl_sha256": "7d0f95f91ef8e1670e330007449737b31b91733796627bc21c9978d5d4deef6c"
   },

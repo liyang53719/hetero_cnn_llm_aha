@@ -3,7 +3,7 @@
 `timescale 1ns/1ps
 module bf16_bias_add_tile32(
  input logic clk_i,input logic rst_ni,input logic in_valid_i,output logic in_ready_o,
- input logic[511:0]data_i,bias_i,output logic out_valid_o,input logic out_ready_i,
+ input logic[511:0]data_i,input logic[1023:0]bias_i,output logic out_valid_o,input logic out_ready_i,
  output logic[511:0]data_o,output logic[4:0]exception_flags_o,
  output logic[31:0]accepted_o,output logic[31:0]completed_o
 );
@@ -15,7 +15,7 @@ module bf16_bias_add_tile32(
  always_comb begin data_o='0;exception_flags_o='0;for(c=0;c<32;c++)begin data_o[c*16+:16]=bf16(lane_out[c]);exception_flags_o|=lane_flags[c];end end
  for(genvar g=0;g<32;g++)begin:g_add
   HeteroFP32AddPipeBit1 add(.clock(clk_i),.reset(!rst_ni),.io_inValid(lane_valid[g]),
-   .io_inReady(lane_ready[g]),.io_x({data_i[g*16+:16],16'd0}),.io_y({bias_i[g*16+:16],16'd0}),
+   .io_inReady(lane_ready[g]),.io_x({data_i[g*16+:16],16'd0}),.io_y(bias_i[g*32+:32]),
    .io_userIn(1'b0),.io_outValid(lane_outvalid[g]),.io_outReady(lane_outready[g]),
    .io_out(lane_out[g]),.io_exceptionFlags(lane_flags[g]),.io_userOut(lane_user[g]));
  end

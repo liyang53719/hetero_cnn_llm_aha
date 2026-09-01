@@ -4,7 +4,7 @@
 module qwen2_projection_pingpong_top #(
  parameter integer ADDR_W=15
 )(
- input logic clk_i,input logic rst_ni,input logic start_i,input logic[127:0]matrix_command_i,
+ input logic clk_i,input logic rst_ni,input logic start_i,input logic[127:0]matrix_command_i,input logic[31:0]token_index_i,
  output logic descriptor_req_valid_o,input logic descriptor_req_ready_i,output logic[23:0]descriptor_req_index_o,
  input logic descriptor_rsp_valid_i,output logic descriptor_rsp_ready_o,input logic[127:0]descriptor_rsp_data_i,input logic descriptor_rsp_error_i,
  output logic dma_req_valid_o,input logic dma_req_ready_i,output logic[1:0]dma_req_kind_o,
@@ -18,7 +18,7 @@ module qwen2_projection_pingpong_top #(
  output logic[5:0]column_tiles_o,output logic[63:0]ddr_read_bytes_o,ddr_write_bytes_o,
  output logic[31:0]l2_read_beats_o,l2_write_beats_o,overlap_cycles_o
 );
- logic[127:0]command_q;logic context_start_q,context_valid,context_ready,context_legal;logic[7:0]context_status;
+ logic[127:0]command_q;logic context_start_q,context_valid,context_ready,context_legal;logic[7:0]context_status;logic[31:0]token_index_safe;
  logic[167:0]proj_addr;logic[215:0]proj_shape;logic[31:0]weight_stride;logic[335:0]plan_addr;
  logic[1:0]pcv,pcr,pload,pdone,pstore_q,prearm_q;logic[1:0][7:0]pstatus;
  logic[1:0]prv,prr,prsv,prsr,prse;logic[1:0][1:0]prkind;logic[1:0][63:0]prsrc,prdst;
@@ -27,6 +27,7 @@ module qwen2_projection_pingpong_top #(
  logic mpv,mpr,mov,mor,mlast,mcv,merr;logic[2:0]mpctx,moctx;logic mpclear,mplast;logic[255:0]mpa;logic[511:0]mpb;logic[16383:0]macc;logic[55:0]mcd;
  logic m_pending_q,mready,mseen_q,active_q,final_pending_q,dma_active_q,dma_owner_q,dma_select,current_done,current_loaded;
  logic[31:0]payload_reads,payload_writes;logic[63:0]agg_read_q,agg_write_q;logic[31:0]agg_l2r_q,agg_l2w_q;
+ always_comb token_index_safe=(^token_index_i===1'bx)?0:token_index_i;
  qwen2_projection_descriptor_context u_context(.clk_i,.rst_ni,.start_i(context_start_q),.command_i(command_q),
   .descriptor_req_valid_o,.descriptor_req_ready_i,.descriptor_req_index_o,.descriptor_rsp_valid_i,
   .descriptor_rsp_ready_o,.descriptor_rsp_data_i,.descriptor_rsp_error_i,.context_valid_o(context_valid),
@@ -38,7 +39,7 @@ module qwen2_projection_pingpong_top #(
  for(genvar g=0;g<2;g++)begin:g_plan
   qwen2_tile_dma_plan plan(.clk_i,.rst_ni,.context_valid_i(pcv[g]),.context_ready_o(pcr[g]),
    .context_legal_i(context_legal),.tensor_address_i(plan_addr),.q_column_tile_i(g==0?p0tile_q:p1tile_q),
-   .weight_src_stride_i(weight_stride),.full_q_i(1'b1),.reuse_norm_i(1'b1),.start_store_i(pstore_q[g]),
+   .weight_src_stride_i(weight_stride),.token_index_i(token_index_safe),.output_token_bytes_i({13'd0,output_columns_o,1'b0}),.full_q_i(1'b1),.reuse_norm_i(1'b1),.start_store_i(pstore_q[g]),
    .dma_req_valid_o(prv[g]),.dma_req_ready_i(prr[g]),.dma_req_kind_o(prkind[g]),
    .dma_src_addr_o(prsrc[g]),.dma_dst_addr_o(prdst[g]),.dma_row_bytes_o(prbytes[g]),
    .dma_rows_o(prrows[g]),.dma_src_stride_o(prss[g]),.dma_dst_stride_o(prds[g]),

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
 module qwen2_shared_l2_rope_payload #(parameter integer ADDR_W=15)(
- input logic clk_i,input logic rst_ni,input logic start_i,input logic[5:0]data_beats_i,input logic[9:0]heads_i,head_dim_i,
+ input logic clk_i,input logic rst_ni,input logic start_i,input logic[5:0]data_beats_i,input logic[9:0]heads_i,head_dim_i,input logic[3:0]position_lane_i,
  input logic[63:0]data_local_i,position_local_i,out_local_i,
  output logic l2_rd_valid_o,input logic l2_rd_ready_i,output logic[ADDR_W-1:0]l2_rd_addr_o,input logic l2_rsp_valid_i,output logic l2_rsp_ready_o,input logic[511:0]l2_rsp_data_i,
  output logic l2_wr_valid_o,input logic l2_wr_ready_i,output logic[ADDR_W-1:0]l2_wr_addr_o,output logic[511:0]l2_wr_data_o,output logic[63:0]l2_wr_be_o,
@@ -15,7 +15,7 @@ module qwen2_shared_l2_rope_payload #(parameter integer ADDR_W=15)(
  always_ff@(posedge clk_i or negedge rst_ni)begin if(!rst_ni)begin st<=I;idx<=0;data_beats<=0;heads<=0;head_dim<=0;pair_idx<=0;total_pairs<=0;unsupported_position_o<=0;read_beats_o<=0;write_beats_o<=0;end else case(st)
   I:if(start_i)begin idx<=0;data_beats<=data_beats_i;heads<=heads_i;head_dim<=head_dim_i;total_pairs<=heads_i*64;pair_idx<=0;unsupported_position_o<=0;read_beats_o<=0;write_beats_o<=0;st<=DRQ;end
   DRQ:if(l2_rd_valid_o&&l2_rd_ready_i)st<=DRP;DRP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin data_mem[idx]<=l2_rsp_data_i;read_beats_o<=read_beats_o+1;if(idx+1==data_beats)begin idx<=0;st<=PRQ;end else begin idx<=idx+1;st<=DRQ;end end
-  PRQ:if(l2_rd_valid_o&&l2_rd_ready_i)st<=PRP;PRP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin read_beats_o<=read_beats_o+1;if(l2_rsp_data_i[31:0]!=0)begin unsupported_position_o<=1;st<=D;end else begin pair_idx<=0;st<=FQ;end end
+  PRQ:if(l2_rd_valid_o&&l2_rd_ready_i)st<=PRP;PRP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin read_beats_o<=read_beats_o+1;if(l2_rsp_data_i[position_lane_i*32+:32]!=0)begin unsupported_position_o<=1;st<=D;end else begin pair_idx<=0;st<=FQ;end end
   FQ:if(riv&&rir)st<=FP;FP:if(rov&&ror)begin out_mem[element_even/32][(element_even%32)*16+:16]<=bf16(roe);out_mem[element_odd/32][(element_odd%32)*16+:16]<=bf16(roo);if(pair_idx+1==total_pairs)begin idx<=0;st<=OW;end else begin pair_idx<=pair_idx+1;st<=FQ;end end
   OW:if(l2_wr_valid_o&&l2_wr_ready_i)begin write_beats_o<=write_beats_o+1;if(idx+1==data_beats)st<=D;else begin idx<=idx+1;st<=OW;end end D:st<=I;default:st<=I;endcase end
 endmodule

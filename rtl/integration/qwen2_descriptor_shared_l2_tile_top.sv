@@ -46,7 +46,7 @@ module qwen2_descriptor_shared_l2_tile_top #(
     .context_status_o(context_status),.tensor_address_o(addresses),.tensor_dtype_o(dtypes),
     .tensor_shape_o(shapes),.tensor_root_o(roots));
   qwen2_tile_dma_plan plan(.clk_i,.rst_ni,.context_valid_i(plan_context_valid),.context_ready_o(plan_context_ready),
-    .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(tile_q),.weight_src_stride_i(32'd3072),.full_q_i(full_q_q),
+    .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(tile_q),.weight_src_stride_i(32'd3072),.token_index_i(0),.output_token_bytes_i(3072),.full_q_i(full_q_q),
     .reuse_norm_i(tile_q!=start_tile_q),.start_store_i(store_start_q),
     .dma_req_valid_o,.dma_req_ready_i,.dma_req_kind_o,.dma_src_addr_o,.dma_dst_addr_o,
     .dma_row_bytes_o,.dma_rows_o,.dma_src_stride_o,.dma_dst_stride_o,.dma_rsp_valid_i,

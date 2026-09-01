@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "different_RTL_per_sequence_length": false,
+    "token0_first9_regression_after_change": true,
+    "token1_projection_DMA_addresses": true
+  },
+  "evidence_class": "token1_DMA_dynamic_plus_token0_full_chain_regression",
+  "implemented_same_RTL_paths": [
+    "RMS hidden token offset",
+    "projection output token offset",
+    "bias source and destination token offsets",
+    "RoPE source and destination token offsets",
+    "RoPE 16-position DDR beat and lane selection"
+  ],
+  "non_claims": [
+    "only projection token1 addresses are dynamically checked",
+    "RMS bias and RoPE token1 numerical output is not yet checked",
+    "token0 compatibility is not multi-token continuity"
+  ],
+  "open": [
+    "token1_numerical_replay",
+    "nonzero_position_RoPE_coefficients",
+    "16_token_tile_controller",
+    "q1024_real_source_to_KV"
+  ],
+  "provenance": {
+    "bias_stage_sha256": "8695e173d3fecfe33ac611f65aea8dd125d4ec35f12ed1feea9275e3e7393d36",
+    "chain_log_sha256": "7046b8473365d57714b8ad755a9491c88f5016fbbf800f8c8d4e0d969d646d14",
+    "dma_plan_sha256": "1be13878a505e6cf63b140ef7750eddf6c324454cc0ae207c933ab40599d0a3c",
+    "plan_log_sha256": "15d07d123b5c2f25d06c0bbb601828ecf101f93c117cb18832ba4602bf4cae17",
+    "rms_stage_sha256": "0d235b1f274e33da61f6b49272e1691dc6c8f76395a34d531b12bf41e0e1501f",
+    "rope_stage_sha256": "a64dbf0b7ec472ec5dc9e539f26678c288a9109db0fc4dc0bc7006212b95cc2d"
+  },
+  "schema_version": 1,
+  "status": "PASS_MULTITOKEN_ADDRESSING_PRIMITIVE",
+  "token1_dynamic": {
+    "projection_hidden_offset_bytes": 3072,
+    "projection_output_offset": "output_columns * 2",
+    "random_backpressure": true
+  }
+}

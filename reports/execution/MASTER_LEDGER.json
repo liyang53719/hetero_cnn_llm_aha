@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "KV_PINNED_IDMA_1MIB_BYTE_EXACT_PASS_REAL_MULTITOKEN_SOURCE_OPEN",
+  "current_state": "TOKEN_INDEX_ADDRESSING_PASS_NONZERO_ROPE_NUMERICAL_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -53,6 +53,7 @@
   "kv_append_descriptor_v3_context": {"status": "PASS_CONTEXT_ONLY", "evidence": "reports/execution/qwen2_kv_append_descriptor_v3_context_result.json", "descriptor_fetches": 13, "tokens": 1024, "logical_pages": 64, "page_bytes": 16384, "all_28_layouts_match": true, "payload_copy": "OPEN"},
   "kv_append_ddr_page_schedule": {"status": "PASS_COMMAND_TO_SCHEDULE", "evidence": "reports/execution/qwen2_kv_append_ddr_stage_result.json", "descriptor_fetches": 13, "pte_updates": 65, "idma_requests": 128, "payload_bytes": 1048576, "pinned_idma_bound": false},
   "kv_append_pinned_idma": {"status": "PASS_BYTE_EXACT_SYNTHETIC_SOURCE", "evidence": "reports/execution/qwen2_kv_append_pinned_idma_vcs_result.json", "idma_requests": 128, "axi_read_beats": 16384, "axi_write_beats": 16384, "byte_exact": 1048576, "real_preceding_KV_source": false},
+  "multitoken_addressing": {"status": "PASS_PRIMITIVE", "evidence": "reports/execution/qwen2_multitoken_addressing_result.json", "token_index_bits": 32, "projection_token1_dynamic": true, "token0_first9_regression": true, "token1_numerical": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

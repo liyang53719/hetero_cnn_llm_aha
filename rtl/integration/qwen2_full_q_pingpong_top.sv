@@ -37,7 +37,7 @@ module qwen2_full_q_pingpong_top #(
  assign pcv[0]=context_valid||prearm_q[0];assign pcv[1]=prearm_q[1];assign context_ready=pcr[0]&&!prearm_q[0];
  for(genvar g=0;g<2;g++)begin:g_plan
   qwen2_tile_dma_plan plan(.clk_i,.rst_ni,.context_valid_i(pcv[g]),.context_ready_o(pcr[g]),
-   .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(g==0?p0tile_q:p1tile_q),.weight_src_stride_i(32'd3072),
+   .context_legal_i(context_legal),.tensor_address_i(addresses),.q_column_tile_i(g==0?p0tile_q:p1tile_q),.weight_src_stride_i(32'd3072),.token_index_i(0),.output_token_bytes_i(3072),
    .full_q_i(1'b1),.reuse_norm_i((g==0?p0tile_q:p1tile_q)!=0),.start_store_i(pstore_q[g]),
    .dma_req_valid_o(prv[g]),.dma_req_ready_i(prr[g]),.dma_req_kind_o(prkind[g]),
    .dma_src_addr_o(prsrc[g]),.dma_dst_addr_o(prdst[g]),.dma_row_bytes_o(prbytes[g]),

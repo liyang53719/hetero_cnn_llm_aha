@@ -1,4 +1,4 @@
-# Local-agent handoff v7.46 — main only
+# Local-agent handoff v7.47 — main only
 
 ## Closed in this checkpoint
 
@@ -86,6 +86,12 @@ bound in that component gate. A subsequent VCS gate now binds all 128 requests
 to clean pinned iDMA and one joined AXI DDR: 16,384 read plus 16,384 write beats
 and all 1 MiB across 64 pages compare byte-exact. Its source is a deterministic
 synthetic preload, not preceding Matrix/SFU output; PTE DDR writes remain open.
+The same production RMS/projection/bias/RoPE sources now accept an internal
+32-bit token index; no sequence length selects a different RTL. Projection
+token1 dynamically proves hidden `+3072` and output `+token_bytes` addresses.
+RMS/bias/RoPE token offsets and 16-position position-beat lane selection compile
+and retain the complete token0 first-nine PASS. Nonzero RoPE coefficients and
+token1 numerical replay remain open; this is addressing evidence only.
 
 L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.

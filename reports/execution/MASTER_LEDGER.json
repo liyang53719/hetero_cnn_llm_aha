@@ -2,7 +2,7 @@
   "schema_version": 6,
   "current_stage": "L10",
   "current_subgate": "L10_EARLY_PPA",
-  "current_state": "CANONICAL_RMS_QKV_TILE16_SAME_RUN_PASS_BIAS_ROPE_OPEN",
+  "current_state": "BATCH16_BIAS_ROPE_PASS_FIRST9_SAME_RUN_OPEN",
   "goal_status": "ACTIVE_RESUMED_AFTER_USER_APPROVAL",
   "git_workflow": {"status": "ENFORCED_MAIN_ONLY", "remote_branches": ["main"], "merge_required": false, "force_push": false},
   "upstream_integrity": {"status": "PASS", "evidence": "reports/execution/local_upstream_integrity.json", "canonical_clean": true, "upstream_source_edits": 0, "generated_rtl_hand_edits": 0},
@@ -61,6 +61,7 @@
   "canonical_rms_matrix_tile16_chain": {"status": "PASS_NO_ACTIVATION_INJECTION", "evidence": "reports/execution/qwen2_rms_matrix_tile16_chain_result.json", "rms_values": 24576, "matrix_values": 512, "bf16_bit_exact": 25088, "matrix_steps": 1536, "descriptor_idma_bound": false},
   "canonical_qkv_tile16_controllers": {"status": "PASS_SEPARATE_RUNS", "evidence": "reports/execution/qwen2_projection_tile16_qkv_result.json", "tiles": 64, "matrix_steps": 98304, "effective_macs": 50331648, "bf16_bit_exact": 32768, "completions": 3, "same_run_after_RMS": false},
   "canonical_rms_qkv_tile16_chain": {"status": "PASS_SAME_RUN", "evidence": "reports/execution/qwen2_rms_qkv_tile16_chain_result.json", "rms_values": 24576, "qkv_values": 32768, "bf16_bit_exact": 57344, "matrix_steps": 98304, "completions": 3, "intermediate_injection": 0},
+  "canonical_bias_rope_tile16": {"status": "PASS_SEPARATE_RUNS", "evidence": "reports/execution/qwen2_bias_rope_tile16_result.json", "bias_values": 32768, "rope_values": 28672, "coefficient_steps": 1920, "completions": 5, "same_run_after_QKV": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",
     "L10_post_route_PVT_OCV",

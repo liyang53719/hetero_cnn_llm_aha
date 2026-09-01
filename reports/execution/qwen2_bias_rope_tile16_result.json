@@ -1,0 +1,51 @@
+{
+  "bias": {
+    "K_values": 4096,
+    "Q_values": 24576,
+    "V_values": 4096,
+    "completions": 3,
+    "descriptor_fetches": 18,
+    "dma_requests": 9,
+    "total": 32768
+  },
+  "checks": {
+    "FP32_bias_boundary": true,
+    "Q_K_recurrence_state_sequential": true,
+    "formal_descriptor_context_once_per_command": true,
+    "random_backpressure": true
+  },
+  "non_claims": [
+    "biased and RoPE inputs are preloaded from canonical golden in these component runs",
+    "five commands execute in separate simulator processes"
+  ],
+  "open": [
+    "same_run_after_RMS_QKV",
+    "pinned_iDMA",
+    "KV_append_real_source"
+  ],
+  "provenance": {
+    "bias_k_log_sha256": "dcc2fcb176386580893b849ebaf8df4e1051c42248af9f1bd276a0cd878b6713",
+    "bias_q_log_sha256": "5c52b4b6af538516ba0f73df70470d3aa6f5eafd1c191ae9a5f4ccdd984bd358",
+    "bias_rtl_sha256": "f513e95c09e0344536ba36f190bea688d4ad3a42c2afdd95a0c2ed37228c819e",
+    "bias_v_log_sha256": "5432d8fec163f95a0e3ea14e0e14fdd7db62674eb1ae2ea2e000f17f649c59ae",
+    "rope_k_log_sha256": "99c8497de429b2a3d4f6737145c027e65ab517c74b494c9ad873d19de4d46348",
+    "rope_q_log_sha256": "db2aa7d808d71c17837a27d978e0e0e365e7154b4369ac52547fa180862e641d",
+    "rope_rtl_sha256": "5d4401088655a5def465020b1bf75b60c9df8e7bff5eceeae30c53641bfaa4f2"
+  },
+  "rope": {
+    "K_values": 4096,
+    "Q_values": 24576,
+    "coefficient_steps": 1920,
+    "completions": 2,
+    "descriptor_fetches": 20,
+    "dma_requests": 6,
+    "positions": [
+      0,
+      15
+    ],
+    "total": 28672
+  },
+  "rows": 16,
+  "schema_version": 1,
+  "status": "PASS_CANONICAL_BIAS_ROPE_TILE16_CONTROLLERS"
+}

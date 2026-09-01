@@ -3,7 +3,7 @@
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
   "state": "L10_1_2_PASS_PAYLOAD_P1_PASS_P2_REAL_OPERATOR_SLICE_PASS_FULL_LAYER_OPEN_P3_OPEN",
-  "decision": "CONNECT_DESCRIPTOR_BACKED_PAYLOAD_AND_CLOSE_ONE_COMPLETE_LAYER",
+  "decision": "EMIT_DESCRIPTOR_IMAGE_THEN_CONNECT_PAYLOAD_AND_CLOSE_ONE_LAYER",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,8 +20,9 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Replace testbench-staged vectors in the passing layer0 RMSNorm-to-Q-Matrix slice with descriptor-backed shared-L2 payload reads/writes, then extend the real endpoints through one complete layer before attempting seven groups without hidden-state injection.",
+  "unique_next_action": "Generate and validate schema-v2/v3 descriptor record chains and a DDR/shared-L2 memory map for the 588 traceable node/tensor-bound commands; then replace testbench-staged vectors in the passing layer0 RMSNorm-to-Q-Matrix slice with descriptor-backed reads/writes.",
   "ordered_gates": [
+    "descriptor record image and deterministic DDR/shared-L2 tensor memory map",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
     "one complete transformer layer on real payload RTL",
     "seven four-layer groups on that datapath without hidden-state injection",

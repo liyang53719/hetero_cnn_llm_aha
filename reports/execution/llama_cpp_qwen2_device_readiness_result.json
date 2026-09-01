@@ -2,53 +2,57 @@
   "checks": {
     "cpu_baseline": true,
     "llama_commit": true,
-    "lowering": true,
-    "real_graph": true,
-    "submission": true
+    "real_q1024_graph": true,
+    "submission": true,
+    "traceable_lowering": true
   },
-  "evidence_class": "real_llama_CPU_graph_GGUF_Command128_and_production_fabric_not_device_payload",
+  "evidence_class": "real_llama_CPU_q1024_graph_GGUF_traceable_Command128_and_production_fabric_not_full_device_payload",
   "graph": {
-    "command_sha256": "33da7e0f4a04033cdb5ac55ef090d59f0fb9d306735be8ffb285758df13f20be",
-    "commands": 252,
-    "matrix_commands": 140,
+    "command_sha256": "59a5589cd1d2d7f3150fe6a3a900fd10284138c630ec288f22c7620ba5817724",
+    "commands": 588,
+    "commands_per_layer": 21,
+    "kv_commands": 28,
+    "matrix_commands": 252,
+    "node_tensor_bindings": 588,
     "nodes": 930,
-    "sfu_commands": 112,
+    "sfu_commands": 308,
     "tensors": 338
   },
   "llama_cpp": {
     "commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
     "cpu_argmax": 7559,
     "gguf_sha256": "c09d8d60cfeec8944e89bc15e29bab5929abc125e305eb69757431ed61055387",
-    "prompt_eval_tokens_per_second": 89.76,
     "pytorch_argmax": 7559,
-    "top10_overlap": 10
+    "sequence": 1024,
+    "top10_overlap": 10,
+    "ubatch": 1024
   },
   "model": "Qwen/Qwen2-1.5B-Instruct",
   "non_claims": [
     "stock llama.cpp CPU is not the project device backend",
-    "production command submission currently uses completion endpoint models",
-    "no Matrix/SFU payload numerical execution from the captured graph"
+    "production command submission uses completion endpoint models",
+    "traceable command submission is not complete Matrix/SFU/KV payload execution"
   ],
   "open": [
-    "real_Matrix_command_endpoint",
-    "real_SFU_command_endpoint",
+    "descriptor_record_image",
     "descriptor_backed_payload_memory",
+    "complete_layer_device_payload",
     "seven_group_device_payload",
     "P3_continuous_device_payload"
   ],
   "provenance": {
     "cpu_result_sha256": "995a39a67e6081bc00e93de02443a4a846835dd7d8c22c0a8b66b4e7244e0d56",
-    "graph_capture_sha256": "368f7d1db654b72f2df4b20c11e54926d61c1bdae8e4f2a7707df9eca0854dd4",
-    "lowering_report_sha256": "ea7b4e5f15016726a3b3fa93c3940a7999a04860aacea25c9128b5a7a5125aa2",
-    "submission_log_sha256": "e7506fb4a57c04ff160faf62e16ee6e13c9979e155cecbb3c6a1b20e98b9f77a"
+    "graph_capture_sha256": "929d33f0fad2143173a23143fc82b8915a435cb35ed86aa457265362ea85d567",
+    "lowering_report_sha256": "36131b5358c1f0e202d3e167dea51175a0440e41db5c309f5c2bf119ac57c720",
+    "submission_log_sha256": "6e995f394bcc763df7df83912148faf6fee6447f4975902a9146845de6273142"
   },
   "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
-  "schema_version": 1,
-  "status": "PASS_REAL_LLAMA_GRAPH_COMMAND_SUBMISSION_PAYLOAD_ENDPOINTS_OPEN",
+  "schema_version": 2,
+  "status": "PASS_REAL_Q1024_GRAPH_TRACEABLE_COMMAND_SUBMISSION_PAYLOAD_MEMORY_OPEN",
   "submission": {
-    "commands": 252,
-    "completions": 252,
-    "event_grants": 252,
+    "commands": 588,
+    "completions": 588,
+    "event_grants": 588,
     "macro_errors": 0,
     "protocol_errors": 0,
     "random_backpressure": true

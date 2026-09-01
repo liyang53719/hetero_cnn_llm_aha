@@ -1,4 +1,4 @@
-# Local-agent handoff v7.18 — main only
+# Local-agent handoff v7.19 — main only
 
 ## Closed in this checkpoint
 
@@ -28,14 +28,15 @@ physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
 
 ## Next
 
-Pinned llama.cpp `0b5be7e4` now converts the exact model to BF16 GGUF and runs
-q1024/28 layers. PyTorch/llama argmax match and Top-10 overlap is 10/10. The
-real capture has 930 nodes and 338 bound tensors; 252 derived Command128 words
-pass production command/event submission under random backpressure.
+Pinned llama.cpp `0b5be7e4` now runs q1024 as one 1024-token ubatch; PyTorch
+and llama argmax match and Top-10 overlap is 10/10. The 930-node/338-tensor
+capture lowers to 588 traceable commands: Matrix 252, SFU 308, KV 28. All pass
+production command/event submission under random backpressure. This supersedes
+the invalid 252-command nine-phase template that collapsed Q/K/V bindings.
 
 Real Matrix/SFU endpoint RTL now passes the first two graph-derived commands:
 2 completions, 1536 RMS outputs, 1536 Matrix steps, 32 Matrix outputs, 1568
-BF16 values bit-exact, event ordering and random backpressure PASS. Next connect
-descriptor-backed shared-L2 payload storage and extend to one complete layer,
+BF16 values bit-exact, event ordering and random backpressure PASS. Next emit
+the descriptor record image, connect shared-L2 payload storage, and extend one layer,
 then seven groups without hidden-state injection. Preserve CPU 8-23, 24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

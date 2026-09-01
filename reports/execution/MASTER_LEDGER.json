@@ -25,7 +25,7 @@
     "payload_checkpoints": 168,
     "continuity_groups": 7
   },
-  "llama_cpp_device_readiness": {"status": "PASS_REAL_GRAPH_COMMAND_SUBMISSION_PAYLOAD_ENDPOINTS_OPEN", "evidence": "reports/execution/llama_cpp_qwen2_device_readiness_result.json", "nodes": 930, "gguf_tensors": 338, "commands": 252, "matrix_commands": 140, "sfu_commands": 112},
+  "llama_cpp_device_readiness": {"status": "PASS_REAL_Q1024_TRACEABLE_COMMAND_SUBMISSION_PAYLOAD_MEMORY_OPEN", "evidence": "reports/execution/llama_cpp_qwen2_device_readiness_result.json", "nodes": 930, "gguf_tensors": 338, "commands": 588, "matrix_commands": 252, "sfu_commands": 308, "kv_commands": 28, "ubatch": 1024},
   "real_payload_operator_slice": {"status": "PASS", "evidence": "reports/execution/qwen2_real_payload_endpoint_result.json", "commands": 2, "completions": 2, "rms_values": 1536, "matrix_steps": 1536, "matrix_outputs": 32, "bf16_bit_exact": 1568, "descriptor_backed_payload": false},
   "local_dependent_tasks": [
     "L5.6d_P2_real_payload_datapath",

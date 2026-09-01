@@ -34,12 +34,12 @@
     "P3_continuous_28_layer_device_payload"
   ],
   "provenance": {
-    "commands_sha256": "665d0fdd66aa3af883fa5ffa8dabb1c3d8b4498f4af762bc321f6d8d488d73e4",
+    "commands_sha256": "6b4f372ea42188ea8ea2a1c27d98f4549c50d3df6c7750d1682f99827af1b7b8",
     "matrix_endpoint_sha256": "0b659db299bba3ff1c16c96d4fdd81ffa61b03507bf33ffb59636092a866f670",
     "matrix_expected_sha256": "33372612b48fa74df21a87a858f08ba3191f38867c01b51a41b6282746942353",
     "rms_expected_sha256": "8de658754f558e74acb8979579a12e30a51f0dfa0b9f544c090e5689b504840f",
     "sfu_endpoint_sha256": "ca1d1ddeb5b4c992b6a32f3e5002c92dc66970b67a2984c8ca9022e617ef9b12",
-    "tb_log_sha256": "c37a7998d9f69c808822dbdcdea9a1194e4ffd8d1f2d9c4d6753448196152ee0"
+    "tb_log_sha256": "13b51951377d34634f33c5f77e0899ab082bfef910dbe079229371d425a18ffa"
   },
   "schema_version": 1,
   "scope": "Qwen2 layer0 input RMSNorm followed by one Q projection output sample",

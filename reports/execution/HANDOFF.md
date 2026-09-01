@@ -163,13 +163,13 @@ OPEN_STORAGE_MAPPING. Layer5 q848/head2 now feeds7 exact-model block summaries
 to RTL:6 balanced merges/32 beats bit-exact with16 stalls. QK/SFU/PV summary
 production is still hardware-semantics,not this RTL run. One in-process C ABI
 call now submits588 commands and receives28 ordered completions with zero stage
-subprocesses; final SHA matches P3. A pinned-ABI dynamic `libggml-hetero.so`
-loads via `ggml_backend_load`,runs graph_compute,writes1,572,864 values with CPU
-fallback0 and unloads cleanly. It accepts one custom node,not the original930-
-node graph,and uses exported safetensors,so native GGUF/device gates stay OPEN.
-L10.3/L10.4 remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
+subprocesses; final SHA matches P3. Dynamic `libggml-hetero.so` now receives the
+original958-node/one-split llama graph,executes588 commands plus final head,
+returns151,936 logits,argmax7559/Top-10 10/10 with CPU fallback0. llama loads
+338 GGUF tensors onto HETERO0,but payload still reads exported safetensors;
+direct GGUF buffer binding remains the final device-data gate. L10.3/L10.4
+remain OPEN. DP GDS2 and all SRAM LEF are blocked by the ARM
 physical-view generator; no post-route/PVT/OCV or SAIF claim is made.
-
 ## Next
 
 Pinned llama.cpp `0b5be7e4` now runs q1024 as one 1024-token ubatch; PyTorch
@@ -194,7 +194,7 @@ bank groups/lanes, backed by retained L3 macro 100k. Six-root tile context also
 passes 12 descriptor fetches. Monolithic tile top passes. Raw QKV, FP32 bias
 and split-half Q/K RoPE now execute as one nine-command no-injection data chain.
 KV v3/pinned-iDMA,P3 backend,layer5 balanced RTL and in-process submission pass.
-Next partition the original llama graph and bind native GGUF buffers; summary
-macro and real layer5 QK/PV remain parallel OPEN. Full all-row RTL remains OPEN.
+Next bind native GGUF tensor pointers/hashes; summary macro and real layer5 QK/
+PV remain parallel OPEN. Full all-row RTL remains OPEN.
 Preserve CPU 8-23,24/30 GiB
 caps, <=600 s tasks, main-only pushes, and the two untracked runtime scripts.

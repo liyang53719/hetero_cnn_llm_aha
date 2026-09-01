@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "CPU_fallback_zero": true,
+    "dynamic_plugin": true,
+    "final_norm_and_LM_head_in_graph_compute": true,
+    "llama_decode_success": true,
+    "original_llama_graph": true
+  },
+  "evidence_class": "pinned_llama_decode_958_node_single_split_dynamic_HETERO_graph_compute",
+  "graph": {
+    "commands": 588,
+    "cpu_fallback": 0,
+    "nodes": 958,
+    "splits": 1
+  },
+  "llama_cpp_commit": "0b5be7e4a25862bc2777d0c47eae18788a8c963a",
+  "model": {
+    "gguf_loaded": true,
+    "gguf_tensors": 338,
+    "weights_assigned_to_HETERO0": true
+  },
+  "non_claims": [
+    "although llama loaded GGUF and assigned tensors to HETERO0, the current payload backend reads exact exported safetensors files",
+    "this does not yet close the direct GGUF buffer-binding requirement"
+  ],
+  "open": [
+    "replace exported safetensors weight files with GGUF backend tensor buffers",
+    "validate tensor byte/hash parity at graph_compute boundary",
+    "summary storage macro mapping and real layer5 QK/PV RTL"
+  ],
+  "output": {
+    "argmax": 7559,
+    "logits_sha256": "05e99e8ac3a403033abf5a8b490919c7a40bf5b2ab90d8d312b3d424c92e86c0",
+    "reference_argmax": 7559,
+    "top10_overlap": 10,
+    "vocab": 151936
+  },
+  "provenance": {
+    "device_api": "371eb784241cc821e10b73b48158fa52903a47f6f10ff3a7d7c4abd8ada41f3c",
+    "log": "c6c71113d94e6ce7cbcaf1c0245e81cb1814fafbd0211f1aa8851b3d97658459",
+    "partition_probe": "478ec41f67f787c1596ab73e6e5807e5ff7a58d39f31ba9be48bd3afb2eec542",
+    "plugin": "b27c3593b768acd1ce67d2be7dda0a8363013ca563963bf2fc1910a61ec7969c"
+  },
+  "schema_version": 1,
+  "status": "PASS_LLAMA_ORIGINAL_GRAPH_HETERO_DEVICE_EXPORTED_WEIGHTS"
+}

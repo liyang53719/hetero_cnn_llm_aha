@@ -2,8 +2,8 @@
   "schema_version": 6,
   "stage": "L10",
   "subgate": "L10_EARLY_PPA",
-  "state": "Q1024_GGML_DYNAMIC_PLUGIN_PASS_ORIGINAL_GRAPH_GGUF_OPEN",
-  "decision": "PARTITION_ORIGINAL_LLAMA_GRAPH_AND_BIND_GGUF_BUFFERS",
+  "state": "Q1024_LLAMA_ORIGINAL_GRAPH_DEVICE_PASS_DIRECT_GGUF_BUFFERS_OPEN",
+  "decision": "BIND_DIRECT_GGUF_BACKEND_TENSORS",
   "git_workflow": {
     "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/run_local_gate.sh","./scripts/sandbox_validate.sh"],
     "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
@@ -20,7 +20,7 @@
     "L5.6d_P3_full_payload_RTL": "OPEN",
     "L10_post_route_signoff": "OPEN"
   },
-  "unique_next_action": "Replace the HETERO shim's single custom submission-node contract with recognition of the pinned llama Qwen2 graph partitions, map the captured 930 nodes and GGUF tensor buffers to the existing 588 Command128 package, execute supported partitions in graph_compute, and return final norm/logits through native GGML tensors; unsupported partitions must return FAILED or explicit CPU fallback that is excluded from device PASS.",
+  "unique_next_action": "At the passing 958-node graph_compute boundary, enumerate the 338 model tensors assigned to HETERO0, bind required Qwen2 weights by canonical GGUF tensor name and host-buffer pointer/stride, prove byte/hash parity against the current exported BF16 inputs, then switch the payload backend to those pointers and remove the safetensors-directory dependency without permitting CPU fallback.",
   "ordered_gates": [
     "pack the completed symbolic descriptor/DDR plan after dtype approval",
     "descriptor-backed payload memory on the passing real Matrix/SFU endpoints",
@@ -68,6 +68,7 @@
     "q1024_device_submission_C_ABI": "reports/execution/qwen2_device_submission_api_result.json",
     "q1024_GGML_registered_shim": "reports/execution/ggml_hetero_backend_smoke_result.json",
     "q1024_GGML_dynamic_plugin": "reports/execution/ggml_hetero_dynamic_result.json",
+    "q1024_llama_original_graph_device": "reports/execution/llama_hetero_full_graph_result.json",
     "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V78.md"
   }
 }

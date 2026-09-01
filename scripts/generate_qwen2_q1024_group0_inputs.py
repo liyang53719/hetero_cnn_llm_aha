@@ -54,6 +54,12 @@ with safe_open(MODEL, framework="pt", device="cpu") as model:
         embedding = model.get_tensor("model.embed_tokens.weight")[torch.tensor(tokens, dtype=torch.long)].float().numpy().astype(np.float32)
         embedding.tofile(embedding_dir / "final_fp32.bin")
         summary["embedding_sha256"] = hashlib.sha256((embedding_dir / "final_fp32.bin").read_bytes()).hexdigest()
+        final_dir = OUT / "final_head"
+        final_dir.mkdir(parents=True, exist_ok=True)
+        model.get_tensor("model.norm.weight").contiguous().view(torch.uint16).numpy().tofile(final_dir / "final_norm_weight_bf16.bin")
+        model.get_tensor("model.embed_tokens.weight").contiguous().view(torch.uint16).numpy().tofile(final_dir / "lm_head_weight_bf16.bin")
+        summary["final_norm_weight_sha256"] = hashlib.sha256((final_dir / "final_norm_weight_bf16.bin").read_bytes()).hexdigest()
+        summary["lm_head_weight_sha256"] = hashlib.sha256((final_dir / "lm_head_weight_bf16.bin").read_bytes()).hexdigest()
     for layer in range(args.start_layer, args.end_layer + 1):
         directory = OUT / f"layer{layer}"
         directory.mkdir(parents=True, exist_ok=True)

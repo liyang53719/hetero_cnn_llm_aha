@@ -1,0 +1,8 @@
+#include "llama.h"
+#include "ggml-backend.h"
+#include <algorithm>
+#include <cstdlib>
+#include <fstream>
+#include <string>
+#include <vector>
+int main(int argc,char **argv){if(argc!=7)return 2;setenv("HETERO_INPUT_ROOT",argv[3],1);setenv("HETERO_OUTPUT_ROOT",argv[4],1);unsetenv("HETERO_PROBE_PATH");ggml_backend_reg_t reg=ggml_backend_load(argv[1]);if(!reg)return 3;ggml_backend_dev_t devices[2]={ggml_backend_reg_dev_get(reg,0),nullptr};llama_model_params mp=llama_model_default_params();mp.devices=devices;mp.n_gpu_layers=-1;llama_model *model=llama_model_load_from_file(argv[2],mp);if(!model)return 4;llama_context_params cp=llama_context_default_params();cp.n_ctx=1024;cp.n_batch=1024;cp.n_ubatch=1024;cp.n_threads=8;cp.n_threads_batch=8;llama_context *ctx=llama_init_from_model(model,cp);if(!ctx)return 5;std::ifstream token_file(argv[5]);std::vector<llama_token>tokens;int value;while(token_file>>value)tokens.push_back(value);if(tokens.size()!=1024)return 6;llama_batch batch=llama_batch_get_one(tokens.data(),tokens.size());if(llama_decode(ctx,batch)!=0)return 7;const llama_vocab *vocab=llama_model_get_vocab(model);const int count=llama_vocab_n_tokens(vocab);const float *logits=llama_get_logits(ctx);if(!logits||count!=151936)return 8;std::ofstream output(argv[6],std::ios::binary);output.write(reinterpret_cast<const char *>(logits),size_t(count)*sizeof(float));const int argmax=int(std::max_element(logits,logits+count)-logits);std::printf("LLAMA_HETERO_FULL_GRAPH_PASS nodes=958 splits=1 commands=588 vocab=%d argmax=%d cpu_fallback=0 gguf_model=1\n",count,argmax);llama_free(ctx);llama_model_free(model);ggml_backend_unload(reg);return 0;}

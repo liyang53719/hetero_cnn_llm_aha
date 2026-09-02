@@ -1,0 +1,177 @@
+schema_version: 1
+plan_id: L9_4_LOCAL_AGENT_V720
+date: 2026-09-02
+repository: liyang53719/hetero_cnn_llm_aha
+branch_policy:
+  required_branch: main
+  create_branch: false
+  force_push: false
+  pull_policy: ff_only_or_rebase_before_push
+baseline:
+  claimed_completion: 11483e863b6d0f17885258aaab5e8cfd6e63b0dc
+  audited_head: a9ac2b1cdcc6bda27cb4be1dfc210d4edd43f11b
+accepted_gate: L5.6d_P3_llama_backend_functional_software_emulation
+target_gate: L9.4_descriptor_backed_21_command_layer0_real_payload
+
+facts_closed:
+  graph: {nodes: 958, splits: 1, layers: 28, groups: 7}
+  manifest:
+    commands: 588
+    engine_counts: {matrix: 252, sfu: 308, kv: 28}
+  gguf_bindings:
+    canonical_total: 338
+    raw_storage_bytes: 281
+    f32_to_bf16_rne: 57
+  scheduler_cpu_fallback: 0
+  software_completion_callbacks: {completions: 28, stalls: 7, checkpoints: 28}
+  endpoint_ranking: {argmax: 7559, top10_overlap: 10}
+  standalone_rtl_command_smoke:
+    commands: 588
+    completions: 588
+    engine_completion_model: delayed_echo_stub
+    descriptor_l2_payload: false
+  real_rtl_numeric_endpoint:
+    commands: 2
+    operations: [l0.input_norm, l0.q]
+    bf16_bit_exact_values: 1568
+    descriptor_l2_payload: false
+
+commands:
+  T0_tools:
+    run:
+      - PYTHONPATH=src pytest -q tests/test_p3_backend_evidence.py tests/test_l9_transport_contract.py tests/test_rtl_transport_evidence.py tests/test_l9_payload_coverage.py
+      - bash -n scripts/run_l9_4_evidence_audits.sh
+      - ./scripts/run_l9_4_evidence_audits.sh
+    acceptance:
+      pytest_failures: 0
+      manifest_records: 588
+      layer0_commands: 21
+      layer0_engine_counts: {matrix: 9, sfu: 11, kv: 1}
+      event_chain: wait_0_to_20_signal_1_to_21
+
+  T1_actual_full_logits:
+    depends_on: [T0_tools]
+    inputs:
+      actual: work/results/llama_hetero_full_graph/logits.bin
+      reference: work/results/llama_cpp_qwen2_baseline/pytorch_logits.bin
+    run:
+      - PYTHONPATH=src python3 scripts/compare_p3_logits.py --actual work/results/llama_hetero_full_graph/logits.bin --reference work/results/llama_cpp_qwen2_baseline/pytorch_logits.bin --expected-count 151936 --output reports/execution/L5_6D_P3_FULL_LOGITS_PARITY.json
+    acceptance:
+      status: PASS_FULL_LOGITS_PARITY
+      elements: 151936
+      bytes_each: 607744
+      all_finite: true
+      argmax_equal: true
+      expected_argmax: 7559
+      top10_overlap_min: 10
+      relative_l2_max: 0.01
+      cosine_min: 0.9999
+      sha256_each: present
+
+  T2_descriptor_backed_two_command_shell:
+    depends_on: [T0_tools]
+    reuse:
+      - rtl/integration/descriptor_public_record_decode.sv
+      - rtl/integration/qwen2_shared_l2_rms_payload.sv
+      - rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv
+      - rtl/integration/qwen2_tile_idma_expand.sv
+      - rtl/integration/hetero_l3_command_fabric.sv
+      - rtl/integration/qwen2_sfu_command_endpoint.sv
+      - rtl/integration/qwen2_matrix_command_endpoint.sv
+    acceptance:
+      commands_accepted: 2
+      commands_completed: 2
+      descriptor_reads_min: 1
+      l2_read_grants_min: 1
+      l2_write_grants_min: 1
+      host_payload_drive_after_start: 0
+      delayed_echo_stub_completions: 0
+      bf16_bit_exact_values: 1568
+      descriptor_stalls_min: 1
+      l2_stalls_min: 1
+      endpoint_stalls_min: 1
+      protocol_errors: 0
+
+  T3_complete_layer0:
+    depends_on: [T2_descriptor_backed_two_command_shell]
+    implementation_buckets:
+      common_descriptor_l2_shell: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+      reuse_rmsnorm: [16]
+      matrix_feeder_writeback: [5, 8, 11, 13, 14, 17, 18, 20]
+      vector_bias_residual: [3, 6, 9, 15, 21]
+      rope: [4, 7]
+      kv_append_adapter: [10]
+      softmax: [12]
+      silu_multiply: [19]
+    acceptance:
+      commands_accepted: 21
+      commands_completed: 21
+      engine_counts: {matrix: 9, sfu: 11, kv: 1}
+      loss: 0
+      duplicates: 0
+      reorder: 0
+      event_errors: 0
+      completion_status_errors: 0
+      hidden_reference_injections: 0
+      host_payload_drive_after_start: 0
+      descriptor_reads_min: 1
+      l2_reads_min: 1
+      l2_writes_min: 1
+      stalls_min_each: {descriptor: 1, l2: 1, matrix: 1, sfu: 1, kv: 1}
+      checkpoint_phases:
+        - input_norm
+        - qkv_projection_bias_rope
+        - kv_append
+        - attention_oproj_residual
+        - post_norm_mlp
+        - final_residual
+      full_score_matrix_materialized: false
+
+  T4_backend_to_device_transport:
+    depends_on: [T1_actual_full_logits, T3_complete_layer0]
+    acceptance:
+      original_graph_nodes: 958
+      graph_splits: 1
+      scheduler_cpu_fallback: 0
+      cpu_buffer_type_uses: 0
+      generic_cpp_layer_calls: 0
+      interstage_file_transport: 0
+      backend_to_rtl_commands_min: 21
+      actual_full_logits_status: PASS_FULL_LOGITS_PARITY
+
+  T5_full_588_real_payload:
+    depends_on: [T4_backend_to_device_transport]
+    acceptance:
+      commands_accepted: 588
+      commands_completed: 588
+      engine_counts: {matrix: 252, sfu: 308, kv: 28}
+      layers: 28
+      groups: 7
+      checkpoints: 28
+      software_stage_dispatch: 0
+      host_file_transport: 0
+      loss_dup_reorder_event_protocol_watchdog_errors: 0
+      stalls_min_each: {matrix: 1, sfu: 1, kv: 1}
+      actual_full_logits_status: PASS_FULL_LOGITS_PARITY
+
+  T6_physical:
+    environment_required:
+      - ARM_memory_compiler_or_delivered_SRAM_views
+      - bifrun
+      - synthesis_and_STA
+      - place_and_route
+      - PVT_OCV
+      - SAIF_or_VCD
+    acceptance:
+      sram_macro_mapping: complete
+      inferred_large_storage_registers: 0
+      setup_hold_all_required_corners: pass
+      reports_bind_commit_tool_version_library_corner_constraints_and_log_sha: true
+
+final_push:
+  branch: main
+  commands:
+    - git pull --rebase origin main
+    - rerun all closed-gate tests
+    - git push origin main
+    - test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"

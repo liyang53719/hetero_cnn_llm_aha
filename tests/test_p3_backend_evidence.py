@@ -91,3 +91,58 @@ def test_file_comparator_records_sha256(tmp_path):
     assert r["inputs"]["actual"]["bytes"] == values.nbytes
     assert len(r["inputs"]["actual"]["sha256"]) == 64
     assert r["inputs"]["actual"]["sha256"] == r["inputs"]["reference"]["sha256"]
+
+
+def test_zero_logit_vectors_have_unit_cosine():
+    values = np.zeros(64, dtype=np.float32)
+    report = compare_logits(values, values.copy())
+    assert report["status"] == "PASS_FULL_LOGITS_PARITY"
+    assert report["metrics"]["cosine"] == 1.0
+    assert report["metrics"]["relative_l2"] == 0.0
+
+
+def test_identical_nonfinite_masks_fail_strict_acceptance():
+    values = np.arange(32, dtype=np.float32)
+    values[3] = np.nan
+    report = compare_logits(values, values.copy())
+    assert report["metrics"]["finite_mask_equal"]
+    assert not report["metrics"]["all_finite"]
+    assert not report["checks"]["all_finite"]
+    assert report["status"] == "FAIL_FULL_LOGITS_PARITY"
+
+
+def test_stable_topk_uses_lower_index_for_ties():
+    values = np.ones(16, dtype=np.float32)
+    report = compare_logits(values, values.copy())
+    assert report["metrics"]["topk_actual_indices"] == list(range(10))
+    assert report["metrics"]["topk_reference_indices"] == list(range(10))
+
+
+def test_expected_vocab_count_is_a_hard_check():
+    from heteronpu.logits_parity import LogitThresholds
+
+    values = np.zeros(31, dtype=np.float32)
+    report = compare_logits(values, values, LogitThresholds(expected_count=32))
+    assert not report["checks"]["count"]
+    assert report["status"] == "FAIL_FULL_LOGITS_PARITY"
+
+
+def test_file_comparator_rejects_trailing_partial_float(tmp_path):
+    actual = tmp_path / "actual.bin"
+    reference = tmp_path / "reference.bin"
+    actual.write_bytes(b"\x00" * 5)
+    reference.write_bytes(b"\x00" * 4)
+    import pytest
+
+    with pytest.raises(ValueError, match="multiple of float32"):
+        compare_files(actual, reference)
+
+
+def test_nonzero_actual_against_zero_reference_has_json_safe_failed_relative_l2():
+    ref = np.zeros(16, dtype=np.float32)
+    actual = ref.copy()
+    actual[0] = 1.0
+    report = compare_logits(actual, ref)
+    assert report["metrics"]["relative_l2"] is None
+    assert not report["checks"]["relative_l2"]
+    assert report["status"] == "FAIL_FULL_LOGITS_PARITY"

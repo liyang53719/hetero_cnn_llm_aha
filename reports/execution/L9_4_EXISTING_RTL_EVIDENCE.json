@@ -1,0 +1,58 @@
+{
+  "accepted_as": [
+    "standalone_588_command_event_frontend_dispatch_with_stub_engine_completions",
+    "standalone_two_command_RMSNorm_then_Matrix_real_RTL_numeric_endpoint"
+  ],
+  "audited_remote_head": "a9ac2b1cdcc6bda27cb4be1dfc210d4edd43f11b",
+  "checks": {
+    "588_command_frontend_dispatch": true,
+    "complete_21_command_layer_payload": false,
+    "full_matrix_sfu_kv_internal_backpressure": false,
+    "submission_is_stub_endpoint_smoke": true,
+    "two_command_endpoint_output_backpressure": true,
+    "two_command_real_payload_endpoint": true
+  },
+  "evidence": {
+    "command_fabric_present": true,
+    "command_port_random_backpressure": true,
+    "completion_endpoint_model": "delayed_completion_echo_stub",
+    "descriptor_l2_activity_tied_off": true,
+    "full_layer_real_payload_commands": 0,
+    "full_matrix_sfu_kv_internal_backpressure_proven": false,
+    "real_payload_bf16_values": 1568,
+    "real_payload_descriptor_l2_activity_tied_off": true,
+    "real_payload_endpoint_commands": 2,
+    "real_payload_endpoint_completions": 2,
+    "real_payload_kv_endpoint_present": false,
+    "real_payload_modules_in_submission": false,
+    "real_payload_output_backpressure_proven": true,
+    "real_payload_uses_host_generated_vectors": true,
+    "standalone_frontend_commands": 588,
+    "standalone_frontend_completions": 588,
+    "standalone_kv_commands": 28,
+    "standalone_matrix_commands": 252,
+    "standalone_sfu_commands": 308
+  },
+  "local_simulator_rerun": false,
+  "next_gate": {
+    "commands": 21,
+    "name": "L9.4_21_command_layer0_real_payload_canary",
+    "remaining_real_payload_commands_after_existing_endpoint": 19,
+    "required_engine_counts": {
+      "kv": 1,
+      "matrix": 9,
+      "sfu": 11
+    }
+  },
+  "not_accepted_as": [
+    "llama_backend_to_RTL_transport",
+    "descriptor_backed_21_command_complete_layer_payload",
+    "full_21_command_Matrix_SFU_KV_ready_valid_backpressure",
+    "588_command_real_payload_execution",
+    "non_host_device_buffer_execution"
+  ],
+  "reason_local_simulator_rerun_open": "Verilator and ARM SRAM model are absent in this sandbox",
+  "sandbox_source_mode": "exact_relevant_source_markers_extracted_from_remote_files",
+  "schema_version": 1,
+  "status": "PASS_EXISTING_RTL_EVIDENCE_CLASSIFIED"
+}

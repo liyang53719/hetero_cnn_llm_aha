@@ -1,0 +1,90 @@
+{
+  "actual_llama_backend_logits_used": false,
+  "artifact": "Qwen2_q1024_full_logits",
+  "checks": {
+    "all_finite": true,
+    "argmax_equal": true,
+    "cosine": true,
+    "count": true,
+    "finite_mask_equal": true,
+    "relative_l2": true,
+    "topk_overlap": true
+  },
+  "execution_claim": "numerical_parity_only",
+  "fixture_generated": true,
+  "inputs": {
+    "actual": {
+      "bytes": 607744,
+      "dtype": "float32_le",
+      "elements": 151936,
+      "path": "/tmp/qwen2_actual_logits.bin",
+      "sha256": "4b54fa42504c989f320fe41e203cc5d9c57316384a377be1a6cd9e83f7bfe82e"
+    },
+    "reference": {
+      "bytes": 607744,
+      "dtype": "float32_le",
+      "elements": 151936,
+      "path": "/tmp/qwen2_reference_logits.bin",
+      "sha256": "e2dd6859c7fd79dd4c7bf0dba653fd6ee9342f6a4e8be1393cda085cae2c19c2"
+    }
+  },
+  "metrics": {
+    "all_finite": true,
+    "argmax_actual": 18830,
+    "argmax_reference": 18830,
+    "cosine": 0.9999999999501279,
+    "count": 151936,
+    "expected_count": 151936,
+    "finite_mask_equal": true,
+    "max_abs": 4.470348358154297e-05,
+    "mean_abs": 7.960101317742799e-06,
+    "nan_actual": 0,
+    "nan_reference": 0,
+    "negative_inf_actual": 0,
+    "negative_inf_reference": 0,
+    "nonfinite_actual": 0,
+    "nonfinite_reference": 0,
+    "positive_inf_actual": 0,
+    "positive_inf_reference": 0,
+    "relative_l2": 9.987403139115644e-06,
+    "rmse": 9.979935600994506e-06,
+    "topk": 10,
+    "topk_actual_indices": [
+      18830,
+      16353,
+      123237,
+      19303,
+      133547,
+      106887,
+      114210,
+      47619,
+      92824,
+      151705
+    ],
+    "topk_overlap": 10,
+    "topk_reference_indices": [
+      18830,
+      16353,
+      123237,
+      19303,
+      133547,
+      106887,
+      114210,
+      47619,
+      92824,
+      151705
+    ]
+  },
+  "purpose": "exercise complete-vocabulary parity, deterministic ranking, strict finite checks and file provenance",
+  "ranking_tie_break": "lower_index_first",
+  "schema_version": 2,
+  "status": "PASS_FULL_LOGITS_PARITY",
+  "thresholds": {
+    "cosine_min": 0.9999,
+    "expected_count": 151936,
+    "relative_l2_max": 0.01,
+    "require_all_finite": true,
+    "required_topk_overlap": 10,
+    "topk": 10
+  }
+}

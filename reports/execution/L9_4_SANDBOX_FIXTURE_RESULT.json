@@ -1,0 +1,200 @@
+{
+  "actual_repository_manifest_executed": false,
+  "checks": {
+    "command_count_21": true,
+    "command_words_decode": true,
+    "contiguous_layer_records": true,
+    "engine_counts_9_11_1": true,
+    "event_chain_0_to_21": true,
+    "manifest_total": true,
+    "no_contract_errors": true,
+    "ordered_operations": true,
+    "six_phase_static_coverage": true
+  },
+  "engine_counts": {
+    "kv": 1,
+    "matrix": 9,
+    "sfu": 11
+  },
+  "errors": [],
+  "evidence_scope": "static_manifest_and_Command128_encoding_only",
+  "expected_commands": [
+    {
+      "engine": "sfu",
+      "opcode": "sfu_rmsnorm",
+      "operation": "l0.input_norm",
+      "phase": "input_norm"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.q",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_vector",
+      "operation": "l0.q_bias",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_rope",
+      "operation": "l0.q_rope",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.k",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_vector",
+      "operation": "l0.k_bias",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_rope",
+      "operation": "l0.k_rope",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.v",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_vector",
+      "operation": "l0.v_bias",
+      "phase": "qkv_projection_rope"
+    },
+    {
+      "engine": "kv",
+      "opcode": "kv_append",
+      "operation": "l0.kv_append",
+      "phase": "kv_state"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_qk",
+      "operation": "l0.qk",
+      "phase": "attention"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_softmax",
+      "operation": "l0.softmax",
+      "phase": "attention"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_pv",
+      "operation": "l0.pv",
+      "phase": "attention"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.oproj",
+      "phase": "attention"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_vector",
+      "operation": "l0.attn_residual",
+      "phase": "attention"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_rmsnorm",
+      "operation": "l0.post_norm",
+      "phase": "post_norm_mlp"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.gate",
+      "phase": "post_norm_mlp"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.up",
+      "phase": "post_norm_mlp"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_activation",
+      "operation": "l0.silu_mul",
+      "phase": "post_norm_mlp"
+    },
+    {
+      "engine": "matrix",
+      "opcode": "matrix_gemm",
+      "operation": "l0.down",
+      "phase": "post_norm_mlp"
+    },
+    {
+      "engine": "sfu",
+      "opcode": "sfu_vector",
+      "operation": "l0.residual",
+      "phase": "residual_writeback"
+    }
+  ],
+  "expected_manifest_records_total": 588,
+  "fixture_generated": true,
+  "input": {
+    "bytes": 174230,
+    "path": "/tmp/l9_4_manifest_fixture.jsonl",
+    "sha256": "8743440ae29f0112726b2b186d2105a257a7e4939eb1c66ecd920e2eaa5f850c"
+  },
+  "layer": 0,
+  "layer_commands": 21,
+  "layer_record_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "manifest_records_total": 588,
+  "not_accepted_as": [
+    "RTL_command_acceptance",
+    "descriptor_fetch",
+    "DMA_or_Shared_L2_tensor_transport",
+    "Matrix_SFU_KV_payload_execution",
+    "numerical_checkpoint_parity"
+  ],
+  "phase_counts": {
+    "attention": 5,
+    "input_norm": 1,
+    "kv_state": 1,
+    "post_norm_mlp": 5,
+    "qkv_projection_rope": 8,
+    "residual_writeback": 1
+  },
+  "purpose": "exercise schema, parser, Command128 decoding, event chain and acceptance plumbing in the network-isolated sandbox",
+  "schema_version": 1,
+  "status": "PASS_L9_4_LAYER_MANIFEST_STATIC_CONTRACT"
+}

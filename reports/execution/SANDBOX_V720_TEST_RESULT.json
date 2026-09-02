@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-02",
+  "status": "PASS_SANDBOX_V720_TOOLING_TESTS",
+  "audited_remote_head": "a9ac2b1cdcc6bda27cb4be1dfc210d4edd43f11b",
+  "environment": {
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "verilator_available": false,
+    "iverilog_available": false,
+    "ARM_SRAM_model_available": false,
+    "actual_llama_model_artifacts_available": false
+  },
+  "tests": {
+    "pytest": {
+      "command": "PYTHONPATH=src pytest -q",
+      "passed": 23,
+      "failed": 0
+    },
+    "python_compileall": "PASS",
+    "shell_syntax_run_l9_4_evidence_audits": "PASS",
+    "json_reports_parse": "PASS",
+    "yaml_plan_parse": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "exercised_self_tests": {
+    "full_logits_elements": 151936,
+    "full_logits_status": "PASS_FULL_LOGITS_PARITY",
+    "layer0_manifest_fixture_records": 588,
+    "layer0_static_contract_status": "PASS_L9_4_LAYER_MANIFEST_STATIC_CONTRACT",
+    "fixture_only": true
+  },
+  "not_executed": [
+    "actual llama backend full-logit comparison",
+    "Verilator RTL simulation",
+    "ARM SRAM macro simulation",
+    "backend-to-RTL device transport",
+    "synthesis or physical signoff"
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "actual_repo_rerun_required": true,
+  "audited_remote_head": "a9ac2b1cdcc6bda27cb4be1dfc210d4edd43f11b",
+  "commands": [
+    {
+      "engine": "sfu",
+      "next_requirement": "retain as regression anchor",
+      "opcode": "sfu_rmsnorm",
+      "opcode_value": 50,
+      "operation": "l0.input_norm",
+      "ordinal": 1,
+      "state": "real_payload_numerically_tested"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "retain as regression anchor",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.q",
+      "ordinal": 2,
+      "state": "real_payload_numerically_tested"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_vector",
+      "opcode_value": 48,
+      "operation": "l0.q_bias",
+      "ordinal": 3,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_rope",
+      "opcode_value": 52,
+      "operation": "l0.q_rope",
+      "ordinal": 4,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.k",
+      "ordinal": 5,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_vector",
+      "opcode_value": 48,
+      "operation": "l0.k_bias",
+      "ordinal": 6,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_rope",
+      "opcode_value": 52,
+      "operation": "l0.k_rope",
+      "ordinal": 7,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.v",
+      "ordinal": 8,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_vector",
+      "opcode_value": 48,
+      "operation": "l0.v_bias",
+      "ordinal": 9,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "kv",
+      "next_requirement": "translate KV_APPEND command/descriptors into cfg/stream/memory handshake",
+      "opcode": "kv_append",
+      "opcode_value": 65,
+      "operation": "l0.kv_append",
+      "ordinal": 10,
+      "state": "kv_stream_primitive_present_command128_adapter_open"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_qk",
+      "opcode_value": 35,
+      "operation": "l0.qk",
+      "ordinal": 11,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_softmax",
+      "opcode_value": 51,
+      "operation": "l0.softmax",
+      "ordinal": 12,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_pv",
+      "opcode_value": 36,
+      "operation": "l0.pv",
+      "ordinal": 13,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.oproj",
+      "ordinal": 14,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_vector",
+      "opcode_value": 48,
+      "operation": "l0.attn_residual",
+      "ordinal": 15,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "reuse endpoint with descriptor-backed payload and add checkpoint",
+      "opcode": "sfu_rmsnorm",
+      "opcode_value": 50,
+      "operation": "l0.post_norm",
+      "ordinal": 16,
+      "state": "endpoint_opcode_supported_not_numerically_tested"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.gate",
+      "ordinal": 17,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.up",
+      "ordinal": 18,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_activation",
+      "opcode_value": 53,
+      "operation": "l0.silu_mul",
+      "ordinal": 19,
+      "state": "command_endpoint_opcode_unsupported"
+    },
+    {
+      "engine": "matrix",
+      "next_requirement": "bind descriptors, fetch Shared-L2 tiles, drive steps, store result and checkpoint",
+      "opcode": "matrix_gemm",
+      "opcode_value": 32,
+      "operation": "l0.down",
+      "ordinal": 20,
+      "state": "endpoint_opcode_supported_payload_feeder_open"
+    },
+    {
+      "engine": "sfu",
+      "next_requirement": "implement opcode-specific numerical endpoint and descriptor-backed payload path",
+      "opcode": "sfu_vector",
+      "opcode_value": 48,
+      "operation": "l0.residual",
+      "ordinal": 21,
+      "state": "command_endpoint_opcode_unsupported"
+    }
+  ],
+  "endpoint_opcode_sets": {
+    "kv": [],
+    "kv_command128_adapter_detected": false,
+    "matrix": [
+      32,
+      33,
+      35,
+      36
+    ],
+    "sfu": [
+      50
+    ]
+  },
+  "implementation_buckets": {
+    "A_common_descriptor_and_Shared_L2_payload_shell": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "B_reuse_existing_RMSNorm_endpoint": [
+      16
+    ],
+    "C_matrix_feeders_and_writeback": [
+      5,
+      8,
+      11,
+      13,
+      14,
+      17,
+      18,
+      20
+    ],
+    "D_SFU_vector_bias_residual": [
+      3,
+      6,
+      9,
+      15,
+      21
+    ],
+    "E_RoPE": [
+      4,
+      7
+    ],
+    "F_Softmax": [
+      12
+    ],
+    "G_SiLU_multiply": [
+      19
+    ],
+    "H_KV_APPEND_adapter": [
+      10
+    ]
+  },
+  "layer_commands": 21,
+  "non_claims": [
+    "opcode acceptance is not descriptor-backed tensor execution",
+    "the outer-product step interface is not a complete GEMM/QK/PV command implementation",
+    "the KV stream primitive is not a Command128 KV endpoint"
+  ],
+  "real_payload_numerically_tested": 2,
+  "remaining_real_payload_commands": 19,
+  "sandbox_source_mode": "exact_opcode_and_interface_markers_extracted_from_remote_endpoint_sources",
+  "schema_version": 1,
+  "source_paths": {
+    "kv": "rtl/integration/kv_tensor_stream_endpoint.sv",
+    "matrix": "rtl/integration/qwen2_matrix_command_endpoint.sv",
+    "sfu": "rtl/integration/qwen2_sfu_command_endpoint.sv"
+  },
+  "state_counts": {
+    "command_endpoint_opcode_unsupported": 9,
+    "endpoint_opcode_supported_not_numerically_tested": 1,
+    "endpoint_opcode_supported_payload_feeder_open": 8,
+    "kv_stream_primitive_present_command128_adapter_open": 1,
+    "real_payload_numerically_tested": 2
+  },
+  "status": "PASS_LAYER0_PAYLOAD_COVERAGE_CLASSIFIED"
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-02",
+  "stage": "L9",
+  "subgate": "L9.4",
+  "decision": "BUILD_DESCRIPTOR_BACKED_21_COMMAND_LAYER0_REAL_PAYLOAD_CANARY_AND_CLOSE_ACTUAL_FULL_LOGITS",
+  "prerequisites_closed": [
+    "958-node original llama graph assigned as one HETERO split",
+    "588-command manifest across 28 layers and seven groups",
+    "338 canonical GGUF bindings classified as 281 raw plus 57 converted",
+    "standalone 588-command RTL command/event fabric dispatch",
+    "two-command RMSNorm-to-Matrix real RTL numerical endpoint",
+    "strict full-logit comparator and layer-0 static contract tooling"
+  ],
+  "priority_order": [
+    "run strict complete-vocabulary comparator on actual backend and reference files",
+    "run static 21-command manifest contract on the real 588-record manifest",
+    "replace host-fed two-command endpoint with descriptor-backed Shared-L2 payload shell",
+    "extend the canary from two commands to all 21 layer-0 commands",
+    "wire the llama HETERO backend to that RTL/device transport",
+    "scale the proven path to all 588 commands"
+  ],
+  "layer0_current_coverage": {
+    "real_payload_tested": 2,
+    "remaining": 19,
+    "matrix_opcode_supported_but_payload_feeder_open": 8,
+    "RMSNorm_opcode_supported_but_second_use_untested": 1,
+    "SFU_opcode_endpoint_missing": 9,
+    "KV_Command128_adapter_missing": 1
+  },
+  "hard_acceptance": {
+    "full_logits": {
+      "elements": 151936,
+      "all_finite": true,
+      "argmax_equal": true,
+      "top10_overlap_min": 10,
+      "relative_l2_max": 0.01,
+      "cosine_min": 0.9999,
+      "both_input_SHA256_present": true
+    },
+    "layer0_static_contract": {
+      "manifest_records": 588,
+      "layer0_commands": 21,
+      "engine_counts": {"matrix": 9, "sfu": 11, "kv": 1},
+      "event_chain": "wait 0..20, signal 1..21",
+      "descriptor_roots_bound": true
+    },
+    "layer0_real_payload": {
+      "commands_accepted": 21,
+      "commands_completed": 21,
+      "loss": 0,
+      "duplicates": 0,
+      "reorder": 0,
+      "completion_status_errors": 0,
+      "descriptor_reads_min": 1,
+      "Shared_L2_payload_reads_min": 1,
+      "Shared_L2_payload_writes_min": 1,
+      "matrix_stalls_min": 1,
+      "sfu_stalls_min": 1,
+      "kv_stalls_min": 1,
+      "reference_hidden_injections": 0,
+      "delayed_echo_stub_completions": 0,
+      "host_payload_drive_after_start": 0,
+      "six_phase_checkpoints": 6
+    },
+    "full_588_real_payload": {
+      "commands_accepted": 588,
+      "commands_completed": 588,
+      "engine_counts": {"matrix": 252, "sfu": 308, "kv": 28},
+      "continuous_layers": 28,
+      "groups": 7,
+      "software_stage_dispatch": 0,
+      "host_file_transport": 0,
+      "full_logits_gate": "PASS_FULL_LOGITS_PARITY"
+    }
+  }
+}

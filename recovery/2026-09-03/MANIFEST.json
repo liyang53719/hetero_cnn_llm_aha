@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "status": "RECOVERED_UNTESTED",
+  "tested_current_session": false,
+  "warning": "Recovered code artifacts only. No Chisel compile, elaboration, emitted-RTL simulation, numerical regression, or Design Compiler synthesis was rerun in the current environment.",
+  "archive": {
+    "path": "recovered_operator_primitives_raw_20260903.tar.gz",
+    "bytes": 13461,
+    "sha256": "b9ce24b7b6a2aaf5c2a984905062b40c9fde33cd6bec8213581e72474129e9d8",
+    "contents": [
+      {"path": "HeteroOperatorPrimitiveCommon.scala", "bytes": 18320, "sha256": "9a4fb2722667dd6026cbf52dfea3c55b90a7e0fef3cc135833c8f75540ad3e11"},
+      {"path": "HeteroModelBlockPrimitives.scala", "bytes": 15749, "sha256": "ab9825a929d06889c88074f9ad5f6cd0ae0edcb2c9a312311efdc338f6accbe8"},
+      {"path": "HeteroQsaPleVisionPrimitives.scala", "bytes": 20559, "sha256": "76c2b2473f7e7c43c9c8bfcc1e650f4c8a628a092c1bdf5e9ca90db3d9c17ef6"},
+      {"path": "HeteroGdnMoePrimitives.scala", "bytes": 14285, "sha256": "72d4807bd6fc6b32e07ca81015a42400bd24b8c1e94b14b9c0e9381b5ec75c52"},
+      {"path": "EmitHeteroModelOperatorPrimitives.scala", "bytes": 2963, "sha256": "8fdfda3035abd7901e88cb172742b3122d5950b5104e0ecd6c06204fa1490f3c"}
+    ]
+  },
+  "split_snapshot": [
+    {"path": "HeteroDecoderAndBoundaryPrimitives.scala", "bytes": 7083, "sha256": "4dcaa01b93c25e89ca94c83ec64d8ce0abcba0c43d75b5db0eaf764e3579799b"},
+    {"path": "HeteroModelStateAndControllers.scala", "bytes": 8723, "sha256": "4afc3a05b65c0bf868ac29400ce5ea722dfc10136cfe234848e3dd77bc8f7b70"},
+    {"path": "HeteroNgramGatedResidualPrimitives.scala", "bytes": 5841, "sha256": "b76b518cb62092ca52581e5e91da56a61c09963e6dac82ba4c093d0cb6a9e0c5"},
+    {"path": "HeteroOperatorPrimitiveEngines.scala", "bytes": 9466, "sha256": "098f6dff0797b98dca1a03d972974a4ae50ab3881608b22c144501cdd366d7df"},
+    {"path": "HeteroOperatorPrimitiveTypes.scala", "bytes": 8911, "sha256": "67f045f7126af00d6689b7b416d1680740e726e4e29bef2dc70cc8b6db6a279d"},
+    {"path": "HeteroPleQsaPrimitives.scala", "bytes": 6862, "sha256": "ad3e8cc9a16e799016c9921da1235edb4e42aacc1a6c1c156bf1b61f650076ac"},
+    {"path": "HeteroVisionPrimitives.scala", "bytes": 7970, "sha256": "6179776c884b0dba9766b7f436e4b42622ab0d2745a1895641005b55dcc42152"}
+  ],
+  "base64_backups_verified_byte_identical": [
+    "HeteroOperatorPrimitiveCommon.scala",
+    "HeteroModelBlockPrimitives.scala",
+    "HeteroQsaPleVisionPrimitives.scala"
+  ]
+}

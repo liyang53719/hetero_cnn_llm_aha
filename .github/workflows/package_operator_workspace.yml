@@ -1,0 +1,44 @@
+name: Package operator workspace
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/package_operator_workspace.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Materialize delivery directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          export_dir="$RUNNER_TEMP/hetero_cnn_llm_aha_operator_20260903"
+          mkdir -p "$export_dir"
+          rsync -a --exclude='.git/' --exclude='.github/workflows/package_operator_workspace.yml' ./ "$export_dir/"
+          cat > "$export_dir/RECONSTRUCTED_FROM_GITHUB_MAIN.txt" <<EOF
+          The original /mnt/data/hetero_cnn_llm_aha_operator_20260903 directory was no longer mounted in the active sandbox.
+          This delivery was reconstructed from the committed GitHub main working tree.
+          source_repository=liyang53719/hetero_cnn_llm_aha
+          source_commit=${GITHUB_SHA}
+          generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          EOF
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hetero_cnn_llm_aha_operator_20260903
+          path: ${{ runner.temp }}/hetero_cnn_llm_aha_operator_20260903
+          include-hidden-files: true
+          compression-level: 6
+          retention-days: 7
+          if-no-files-found: error

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "PASS_ROOT_BRIDGE_8_OWNER_LINK_SETUP_CANARIES_OPEN",
+  "status": "SUPERSEDED_BY_SFU_SCRATCH_RERUN_REQUIRED",
   "top": "operator_endpoint_bound_owner_shell_v3",
   "terminal_bindings": 58,
   "owners": 8,
@@ -20,5 +20,5 @@
     "linked_dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2085711.541542, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4056, "max_fanout_violations": 47},
     "linked_dc_log_sha256": "d73af60994da029ffe1e270ceb94069aab22231e7bbfdda58f6dea851da0a028"
   },
-  "claim_boundary": "The root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean. Composite scratch numerical chaining, four model canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
+  "claim_boundary": "The recorded root/owner linked run predates composite scratch RTL. It remains provenance only until the generated owner shell and final linked DC are rerun; four model canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
 }

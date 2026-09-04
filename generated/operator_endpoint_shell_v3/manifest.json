@@ -1,6 +1,6 @@
 {
   "blackboxes": "dc/blackboxes/operator_owner_endpoints_v3_blackboxes.sv",
-  "blackboxes_sha256": "0a783f4f2cbda05a2e17519dc216c295d06ca6da87fcf76c1199d4d89c057780",
+  "blackboxes_sha256": "e8b2b94c95418c410a8bbba6baab73cc3e12653c197f8b9b48bb58cbd2591620",
   "generated_rtl_hand_edited": false,
   "owners": {
     "operator_control_endpoint_v3": {
@@ -31,7 +31,7 @@
     "operator_sfu_owner_endpoint_v3": {
       "index": 3,
       "source": "rtl/integration/operator_sfu_owner_endpoint_v3.sv",
-      "source_sha256": "a0740b046eba35b06ced59abd3ea6e8127fad24311911dbd28aa85b8ab12e313"
+      "source_sha256": "752aec5689f4595b9528ed56d33099fbb642fdcc2312e5bf5f5d411837dc12bc"
     },
     "operator_state_endpoint_v3": {
       "index": 5,
@@ -50,5 +50,5 @@
   "root_top_sha256": "69b1e0aa91405a248051a656c8e3537442da6bb8fcadc820e552b994a5cf1490",
   "schema_version": 1,
   "top": "generated/operator_endpoint_shell_v3/operator_endpoint_bound_owner_shell_v3.sv",
-  "top_sha256": "8e57f16bb3e3648c78147d3c1afb9d123ef2283fd74f7228535ee1b7c01a2cc5"
+  "top_sha256": "d28bbd070eb336fcf4e3a906a349d7a38bb6886354b5f44c691306199da56d1f"
 }

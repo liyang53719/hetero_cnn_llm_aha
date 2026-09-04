@@ -75,6 +75,7 @@ endmodule
 module operator_sfu_owner_endpoint_v3(
  input logic clk_i,rst_ni,input logic req_valid_i,output logic req_ready_o,input logic[7:0]req_opcode_i,req_variant_i,
  input logic[15:0]req_tag_i,input logic[7:0]req_parent_phase_i,req_terminal_phase_i,
+ input logic req_scratch_valid_i,input logic[3:0]req_scratch_src0_i,req_scratch_src1_i,req_scratch_dst_i,input logic req_first_i,req_last_i,
  input logic payload_valid_i,output logic payload_ready_o,input logic[511:0]payload_a_i,payload_b_i,payload_c_i,
  input logic[15:0]payload_mask_i,input logic[31:0]payload_epsilon_i,input logic payload_last_i,
  output logic result_valid_o,input logic result_ready_i,output logic[511:0]result_data_o,output logic result_last_o,

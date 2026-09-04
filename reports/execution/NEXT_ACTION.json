@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
   "state": "G0_G1_G2_PASS_G3_BRIDGE_SOURCE_PASS",
-  "unique_next_action": "Add transaction-local 10x512-bit scratch chaining to the SFU owner for Bridge composite leaves: first leaf loads Input/constants, intermediate results write scratchDst, later leaves source scratchSrc0/src1, and final output is externally consumed before completion; then run Sigmoid/SiLU/Softplus/GELU bridge numerical tests before four root canaries.",
+  "unique_next_action": "Flatten the passing scratch-enabled SFU owner DDC, regenerate and remap the endpoint-bound owner shell, relink the root Bridge shell with all real owner DDCs at 1.25 ns, then begin the four model root canaries.",
   "expected_outputs": [
     "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
     "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"

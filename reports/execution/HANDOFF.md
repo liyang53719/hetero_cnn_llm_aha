@@ -112,3 +112,7 @@
 - Root Bridge is now ahead of that shell: linked DC WNS +0.00000369549 ns,
   area 2085711.542, 0 error/unmapped. Canary blocker is internal composite
   scratch chaining in SFU; protocol-only leaf completion is not numerical PASS.
+- SFU now has fixed 10x512 scratch chaining. Bridge Softplus/GELU/Sigmoid/SiLU
+  numerical tests PASS (1/1/8/9 leaves); final result precedes completion.
+  Scratch SFU DC WNS +0.00000369549 ns, area 326007.318. Previous combined
+  report is superseded until owner shell is remapped and relinked.

@@ -2,6 +2,7 @@
 module tb_operator_sfu_owner_endpoint_v3;
  logic clk_i,rst_ni;initial begin clk_i=0;rst_ni=0;end always #1 clk_i=~clk_i;
  logic req_valid_i,req_ready_o;logic[7:0]req_opcode_i,req_variant_i;logic[15:0]req_tag_i;logic[7:0]req_parent_phase_i,req_terminal_phase_i;
+ logic req_scratch_valid_i,req_first_i,req_last_i;logic[3:0]req_scratch_src0_i,req_scratch_src1_i,req_scratch_dst_i;
  logic payload_valid_i,payload_ready_o;logic[511:0]payload_a_i,payload_b_i,payload_c_i;logic[15:0]payload_mask_i;logic[31:0]payload_epsilon_i;logic payload_last_i;
  logic result_valid_o,result_ready_i;logic[511:0]result_data_o;logic result_last_o;logic[12:0]exception_flags_o;logic domain_error_o;
  logic soft_score_valid_i,soft_score_ready_o;logic[31:0]soft_score_i;logic soft_score_mask_i;logic soft_merge_header_valid_i,soft_merge_header_ready_o;logic[31:0]soft_ma_i,soft_la_i,soft_mb_i,soft_lb_i;logic soft_merge_beat_valid_i,soft_merge_beat_ready_o;logic[127:0]soft_oa_i,soft_ob_i;logic soft_merge_beat_last_i;logic soft_header_valid_o,soft_header_ready_i;logic[31:0]soft_m_o,soft_l_o;logic soft_weight_valid_o,soft_weight_ready_i;logic[31:0]soft_weight_o;logic soft_weight_last_o;logic soft_beat_valid_o,soft_beat_ready_i;logic[127:0]soft_o_o;logic soft_beat_last_o;
@@ -12,7 +13,7 @@ module tb_operator_sfu_owner_endpoint_v3;
  initial begin repeat(500000)@(posedge clk_i);$fatal(1,"timeout");end
  initial begin
   ops='{8'h30,8'h31,8'h32,8'h33,8'h34,8'h35,8'h43,8'h44,8'h45,8'h46,8'h49,8'h4a,8'h36,8'h37,8'h48,8'h3d,8'h3e,8'h42,8'h4b,8'h3f,8'h41,8'h47};
-  req_valid_i=0;req_opcode_i=0;req_variant_i=0;req_tag_i=16'h1234;req_parent_phase_i=8'h56;req_terminal_phase_i=8'h78;payload_valid_i=0;payload_a_i=0;payload_b_i={16{32'h3f800000}};payload_c_i=0;payload_mask_i=16'hffff;payload_epsilon_i=32'h3727c5ac;payload_last_i=1;result_ready_i=0;
+  req_valid_i=0;req_opcode_i=0;req_variant_i=0;req_tag_i=16'h1234;req_parent_phase_i=8'h56;req_terminal_phase_i=8'h78;req_scratch_valid_i=0;req_scratch_src0_i=0;req_scratch_src1_i=0;req_scratch_dst_i=0;req_first_i=1;req_last_i=1;payload_valid_i=0;payload_a_i=0;payload_b_i={16{32'h3f800000}};payload_c_i=0;payload_mask_i=16'hffff;payload_epsilon_i=32'h3727c5ac;payload_last_i=1;result_ready_i=0;
   soft_score_valid_i=0;soft_score_i=0;soft_score_mask_i=0;soft_merge_header_valid_i=0;soft_ma_i=0;soft_la_i=0;soft_mb_i=0;soft_lb_i=0;soft_merge_beat_valid_i=0;soft_oa_i=0;soft_ob_i=0;soft_merge_beat_last_i=0;soft_header_ready_i=0;soft_weight_ready_i=0;soft_beat_ready_i=0;completion_ready_i=0;completed=0;
   for(int i=0;i<16;i++)payload_a_i[i*32+:32]=i[0]?32'h40400000:32'h3f800000;
   repeat(5)@(posedge clk_i);rst_ni=1;

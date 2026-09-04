@@ -254,15 +254,16 @@
   "sfu_owner_endpoint_evidence": {
     "status": "PASS_23_OF_23_PROTOCOL_AND_800MHZ_DC",
     "endpoint": "rtl/integration/operator_sfu_owner_endpoint_v3.sv",
-    "endpoint_sha256": "a0740b046eba35b06ced59abd3ea6e8127fad24311911dbd28aa85b8ab12e313",
+    "endpoint_sha256": "752aec5689f4595b9528ed56d33099fbb642fdcc2312e5bf5f5d411837dc12bc",
     "child_endpoints": 7,
     "terminal_opcodes": 23,
     "protocol_test": {"opcodes": 23, "invalid": 1, "checked_completions": 24, "log_sha256": "1fbf13f25f572bbd38517e0c9ee730c105a8287a335cf20e87ea056ea610d532"},
     "flatten_flow": {"children": 7, "hierarchical_cells_per_child": 0, "unmapped": 0, "tcl_sha256": "a8cd470c695e689262049decb79edf594cc994e715bfce3b7b453b6d6e2ca135", "script_sha256": "8347e398d7465358ecbba9fd486ad2892405ef44df474bb523654ee606c7b159"},
     "attempt1": {"status": "FAIL_DDC_INTERNAL_NAME_COLLISION", "wns_ns": -1.5716, "unmapped": 89, "dc_errors": 534, "log_sha256": "a153d8bdacc0ef1b4f376249929c28ce12eb897cb005dba0414207a4dc8abee9"},
     "attempt2": {"status": "FAIL_TIMING_GATE_INPUT_BOUNDARY", "wns_ns": -0.00129306, "unmapped": 0, "dc_errors": 0, "log_sha256": "c373e93b7a07dfadd07c7b55571b10b7e2c89f79ede04e78b9ecf871e307f4fa"},
-    "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 314488.628998, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 17},
-    "dc_log_sha256": "0ac4eb1e9fd5ff7e801731dfaeef6f6f29188414a2ab084fc94210de646ba0cd"
+    "composite_scratch": {"slots": 10, "slot_bits": 512, "fixed_capacity": true, "bridge_tests": ["Softplus", "GELU", "Sigmoid", "SiLU"], "leaf_counts": [1,1,8,9], "first_leaf_external_payload_only": true, "final_result_before_completion": true, "test_log_sha256": "d6d74a426ec7fc952b3bcac7feee962787395d4c4b3c658fa964cc64cc83c9d4"},
+    "dc": {"status": "PASS_SCRATCH_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 326007.317998, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 19},
+    "dc_log_sha256": "9cb7cea37f76a79eb5623a5ace578b342acfd6a76d60d625c9cd42c3717248fa"
   },
   "kv_memory_endpoint_evidence": {
     "status": "PASS_4_OF_4_DDR_PTE_IDMA_AND_DC",

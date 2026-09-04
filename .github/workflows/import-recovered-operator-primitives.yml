@@ -62,7 +62,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m pip install --disable-pip-version-check pytest
+          python3 -m pip install --disable-pip-version-check pytest pyyaml
           chmod +x integration/gemmini/operator_primitives/scripts/*.sh
           integration/gemmini/operator_primitives/scripts/run_sandbox_tests.sh
           python3 -m pytest -q integration/gemmini/operator_primitives/tests

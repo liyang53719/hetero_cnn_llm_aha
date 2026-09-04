@@ -18,7 +18,7 @@
   "owners": {
     "Control": "PASS_REAL_BARRIER_ACK_ENDPOINT",
     "Dma": "PASS_4_OF_4_PINNED_IDMA_AXI",
-    "Matrix": "PASS_COMPONENT_BOUND_7_OF_7_COMBINED_CANARY_OPEN",
+    "Matrix": "PASS_ATOMIC_7_OF_7_OWNER_PROTOCOL_AND_LINKED_DC",
     "Sfu": "PASS_23_OF_23_OWNER_PROTOCOL_AND_DC",
     "KvMemory": "PASS_4_OF_4_DDR_PTE_AND_IDMA_ENDPOINT",
     "State": "PASS_7_OF_7_TRANSACTIONAL_PAYLOAD_ENDPOINT",
@@ -88,6 +88,17 @@
     "retained_gemmini_result_sha256": "c581a4c6e9b30dfc4019c121dc194ef7857629679c495e6ad0e8c746381efda7",
     "retained_gemmini": {"conv1x1_custom3_per_path": 9, "upstream_clean": true, "numerical_marker": "PASS"},
     "nonclaim": "V3 adapter and retained pipeline are component-bound; same-run combined canary remains G4."
+  },
+  "matrix_owner_endpoint_evidence": {
+    "status": "PASS_ATOMIC_7_OF_7_PROTOCOL_AND_LINKED_DC",
+    "endpoint": "rtl/integration/operator_matrix_owner_endpoint_v3.sv",
+    "endpoint_sha256": "483a9833d5f1108d8a1014575db512eaf0e5aab675ec08c16390178984d84293",
+    "opcodes": ["MatrixGemm", "MatrixGemv", "MatrixQk", "MatrixPv", "MatrixOuter", "MatrixConv", "MatrixLowRank"],
+    "protocol_test": {"bf16_opcodes": 6, "conv_opcodes": 1, "physical_array": "Revision8B-B 16x32 five-context", "conv_path": "retained Gemmini Command128/event", "log_sha256": "7c2483d12c74706053e29b4e26c8adaa9f94780de9e421c8cada054989d87e90"},
+    "hierarchical_flow": {"blackbox_use": "intermediate wrapper mapping only", "final_real_array_ddc": "work/generated/l5_matrix_rev8b_b/top/bf16_outer_product_context_array_rev8b_b_candidate.ddc", "final_unresolved": 0, "final_unmapped": 0},
+    "attempts": [{"status": "TIMEOUT_600S_COMPILE_ULTRA_TRAVERSED_3M_LEAVES"}, {"status": "TIMEOUT_600S_LOW_EFFORT_STILL_TRAVERSED_3M_LEAVES"}, {"status": "FAIL_UNMAPPED_MISSING_CHILD_DEFINITIONS", "unmapped": 343}],
+    "dc": {"status": "PASS_LINKED_REAL_HIERARCHY", "period_ns": 1.25, "wns_ns": 0.256689, "area": 1662370.984805, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 3877, "max_fanout_violations": 46},
+    "dc_log_sha256": "e01d4a66d73c47593b0b5c924318f6e2c39057b31b9c5e674d3f5a32f20cb18a"
   },
   "sfu_vector_endpoint_evidence": {
     "status": "PASS_12_OF_23_SFU_OPCODES_OWNER_NOT_CLOSED",

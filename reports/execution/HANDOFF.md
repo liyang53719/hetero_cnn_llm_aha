@@ -35,6 +35,10 @@
 - Matrix is 7/7 component-bound: six BF16 opcodes use the same Revision8B-B
   16x32/5-context array; Conv adapter plus retained Rocket/Gemmini Conv1x1 PASS.
   Same-run adapter+pipeline canary remains G4.
+- Matrix now has one atomic owner: 7-op protocol PASS. Hierarchical final link
+  uses the real 3.1M-leaf Revision8B-B DDC and Conv adapter: WNS +0.256689 ns,
+  area 1662370.985, 0 error/unmapped. Existing 3877 transition/46 fanout
+  violations remain explicit and prevent a physical-clean claim.
 - SFU vector 12/23: 16-lane/13-case numerical PASS. The old DC result was
   invalidated by LINK-3 tag-width errors; corrected clean-log DC is WNS
   +0.000015974 ns, area 68156.816, 0 unmapped/error.

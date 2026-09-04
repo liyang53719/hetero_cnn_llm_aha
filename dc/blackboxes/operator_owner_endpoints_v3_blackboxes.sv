@@ -132,7 +132,7 @@ module operator_selection_endpoint_v3(
  input logic merge_result_valid_i,output logic merge_result_ready_o,input logic[3:0]merge_result_tag_i,input logic[511:0]merge_result_data_i,output logic merge_valid_o,input logic merge_ready_i,output logic[3:0]merge_tag_o,output logic[31:0]merge_weight_o,output logic[511:0]merge_data_o,output logic merge_first_o,merge_last_o,
  output logic pool_valid_o,input logic pool_ready_i,output logic[17:0]pool_block_o,output logic[21:0]pool_token_o,output logic[7:0]pool_dimension_o,output logic pool_first_token_o,pool_last_token_o,pool_last_dimension_o,pool_last_o,
  input logic mtp_valid_i,output logic mtp_ready_o,input logic[31:0]mtp_draft_i,mtp_target_i,input logic[5:0]mtp_step_i,input logic mtp_last_i,output logic mtp_result_valid_o,input logic mtp_result_ready_i,output logic[5:0]mtp_accepted_o,mtp_mismatch_step_o,output logic mtp_all_match_o,mtp_rollback_o,
- output logic completion_valid_o,input logic completion_ready_i,output logic[15:0]completion_tag_o,output logic[7:0]completion_parent_phase_o,completion_terminal_phase_o,completion_status_o);
+ output logic completion_valid_o,input logic completion_ready_i,output logic[15:0]completion_tag_o,output logic[7:0]completion_parent_phase_o,completion_terminal_phase_o,completion_status_o,output logic completion_predicate_o);
 endmodule
 
 module operator_vision_endpoint_v3(

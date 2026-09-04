@@ -50,65 +50,66 @@
   `endif // not def ENABLE_INITIAL_MEM_
 `endif // not def SYNTHESIS
 
-module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-  input         clock,	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-                reset,	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-  output        io_launch_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input         io_launch_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input  [23:0] io_launch_bits_descriptors_0,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_1,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_2,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_3,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_4,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_5,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_6,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_7,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_8,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_9,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_10,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_11,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_12,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_13,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_14,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_descriptors_15,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input  [15:0] io_launch_bits_dimensions_0,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_1,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_2,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_3,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_4,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_5,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_6,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_dimensions_7,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_launch_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input  [7:0]  io_launch_bits_mode,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input         io_microOp_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output        io_microOp_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [7:0]  io_microOp_bits_kind,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [15:0] io_microOp_bits_flags,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [7:0]  io_microOp_bits_phase,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [15:0] io_microOp_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [7:0]  io_microOp_bits_mode,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [23:0] io_microOp_bits_src0,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_src1,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_src2,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_dst,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [15:0] io_microOp_bits_m,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_n,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_k,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_index0,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_microOp_bits_index1,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output        io_completion_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input         io_completion_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input  [15:0] io_completion_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input  [7:0]  io_completion_bits_phase,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_completion_bits_status,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  input         io_result_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output        io_result_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [15:0] io_result_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output [7:0]  io_result_bits_status,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_result_bits_completedPhases,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-  output        io_busy,	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
-                io_protocolError	// src/main/scala/heteronpu/operator/Protocol.scala:199:14
+module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+  input         clock,	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+                reset,	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+  output        io_launch_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input         io_launch_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input  [23:0] io_launch_bits_descriptors_0,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_1,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_2,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_3,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_4,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_5,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_6,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_7,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_8,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_9,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_10,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_11,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_12,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_13,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_14,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_descriptors_15,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input  [15:0] io_launch_bits_dimensions_0,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_1,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_2,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_3,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_4,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_5,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_6,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_dimensions_7,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_launch_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input  [7:0]  io_launch_bits_mode,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input         io_microOp_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output        io_microOp_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [7:0]  io_microOp_bits_kind,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [15:0] io_microOp_bits_flags,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [7:0]  io_microOp_bits_phase,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [15:0] io_microOp_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [7:0]  io_microOp_bits_mode,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [23:0] io_microOp_bits_src0,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_src1,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_src2,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_dst,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [15:0] io_microOp_bits_m,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_n,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_k,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_index0,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_microOp_bits_index1,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output        io_completion_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input         io_completion_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input  [15:0] io_completion_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input  [7:0]  io_completion_bits_phase,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_completion_bits_status,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  input         io_completion_bits_predicate,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_result_ready,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output        io_result_valid,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [15:0] io_result_bits_tag,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output [7:0]  io_result_bits_status,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_result_bits_completedPhases,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+  output        io_busy,	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
+                io_protocolError	// src/main/scala/heteronpu/operator/Protocol.scala:210:14
 );
 
   wire [63:0][15:0] _GEN =
@@ -175,7 +176,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       16'h2,
       16'h1,
       16'h0,
-      16'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:250:26
+      16'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:268:26
   wire [63:0][2:0]  _GEN_0 =
     '{3'h7,
       3'h7,
@@ -240,7 +241,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       3'h1,
       3'h1,
       3'h1,
-      3'h7};	// src/main/scala/heteronpu/operator/Protocol.scala:249:21
+      3'h7};	// src/main/scala/heteronpu/operator/Protocol.scala:267:21
   wire [63:0][2:0]  _GEN_1 =
     '{3'h1,
       3'h1,
@@ -305,7 +306,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       3'h3,
       3'h3,
       3'h2,
-      3'h1};	// src/main/scala/heteronpu/operator/Protocol.scala:248:21
+      3'h1};	// src/main/scala/heteronpu/operator/Protocol.scala:266:21
   wire [63:0][2:0]  _GEN_2 =
     '{3'h0,
       3'h0,
@@ -370,7 +371,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       3'h0,
       3'h0,
       3'h0,
-      3'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:247:21
+      3'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:265:21
   wire [63:0][3:0]  _GEN_3 =
     '{4'h8,
       4'h8,
@@ -435,7 +436,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       4'h7,
       4'h7,
       4'h6,
-      4'h8};	// src/main/scala/heteronpu/operator/Protocol.scala:246:23
+      4'h8};	// src/main/scala/heteronpu/operator/Protocol.scala:264:23
   wire [63:0][3:0]  _GEN_4 =
     '{4'hF,
       4'hF,
@@ -500,7 +501,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       4'hF,
       4'hF,
       4'hF,
-      4'hF};	// src/main/scala/heteronpu/operator/Protocol.scala:245:24
+      4'hF};	// src/main/scala/heteronpu/operator/Protocol.scala:263:24
   wire [63:0][3:0]  _GEN_5 =
     '{4'h1,
       4'h1,
@@ -565,7 +566,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       4'h4,
       4'h3,
       4'h2,
-      4'h1};	// src/main/scala/heteronpu/operator/Protocol.scala:244:24
+      4'h1};	// src/main/scala/heteronpu/operator/Protocol.scala:262:24
   wire [63:0][3:0]  _GEN_6 =
     '{4'h0,
       4'h0,
@@ -630,7 +631,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       4'h8,
       4'h8,
       4'h8,
-      4'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:243:24
+      4'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:261:24
   wire [63:0][15:0] _GEN_7 =
     '{16'h0,
       16'h0,
@@ -695,7 +696,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       16'h0,
       16'h0,
       16'h0,
-      16'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:239:25
+      16'h0};	// src/main/scala/heteronpu/operator/Protocol.scala:257:31
   wire [63:0][7:0]  _GEN_8 =
     '{8'h40,
       8'h40,
@@ -760,41 +761,41 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
       8'h10,
       8'h10,
       8'h10,
-      8'h40};	// src/main/scala/heteronpu/operator/Protocol.scala:238:24
-  reg  [1:0]        state;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30
-  reg  [5:0]        pc;	// src/main/scala/heteronpu/operator/Protocol.scala:211:27
-  reg  [23:0]       launchReg_descriptors_0;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_1;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_2;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_3;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_4;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_5;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_6;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_7;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_8;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_9;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_10;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_11;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_12;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_13;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_14;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [23:0]       launchReg_descriptors_15;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_0;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_1;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_2;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_3;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_4;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_5;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_6;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_dimensions_7;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [15:0]       launchReg_tag;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [7:0]        launchReg_mode;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  reg  [7:0]        resultStatus;	// src/main/scala/heteronpu/operator/Protocol.scala:213:37
-  reg               protocolErrorReg;	// src/main/scala/heteronpu/operator/Protocol.scala:214:41
-  wire              io_launch_ready_0 = state == 2'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :231:28
-  wire              io_microOp_valid_0 = state == 2'h1;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :232:29
-  wire              io_completion_ready_0 = state == 2'h2;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :233:32
-  wire [7:0]        io_microOp_bits_phase_0 = {2'h0, pc};	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :211:27, :240:25
+      8'h40};	// src/main/scala/heteronpu/operator/Protocol.scala:250:24
+  reg  [1:0]        state;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30
+  reg  [5:0]        pc;	// src/main/scala/heteronpu/operator/Protocol.scala:222:27
+  reg  [23:0]       launchReg_descriptors_0;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_1;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_2;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_3;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_4;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_5;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_6;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_7;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_8;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_9;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_10;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_11;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_12;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_13;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_14;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [23:0]       launchReg_descriptors_15;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_0;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_1;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_2;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_3;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_4;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_5;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_6;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_dimensions_7;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [15:0]       launchReg_tag;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [7:0]        launchReg_mode;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  reg  [7:0]        resultStatus;	// src/main/scala/heteronpu/operator/Protocol.scala:224:37
+  reg               protocolErrorReg;	// src/main/scala/heteronpu/operator/Protocol.scala:225:41
+  wire              io_launch_ready_0 = state == 2'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :243:28
+  wire              io_microOp_valid_0 = state == 2'h1;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :244:29
+  wire              io_completion_ready_0 = state == 2'h2;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :245:32
+  wire [7:0]        io_microOp_bits_phase_0 = {2'h0, pc};	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :222:27, :258:25
   wire [15:0][23:0] _GEN_9 =
     {{launchReg_descriptors_15},
      {launchReg_descriptors_14},
@@ -811,7 +812,7 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
      {launchReg_descriptors_3},
      {launchReg_descriptors_2},
      {launchReg_descriptors_1},
-     {launchReg_descriptors_0}};	// src/main/scala/heteronpu/operator/Protocol.scala:212:30, :243:24
+     {launchReg_descriptors_0}};	// src/main/scala/heteronpu/operator/Protocol.scala:223:30, :261:24
   wire [7:0][15:0]  _GEN_10 =
     {{launchReg_dimensions_7},
      {launchReg_dimensions_6},
@@ -820,153 +821,153 @@ module HeteroGatedDeltaNetPrimitiveV3(	// src/main/scala/heteronpu/operator/Prog
      {launchReg_dimensions_3},
      {launchReg_dimensions_2},
      {launchReg_dimensions_1},
-     {launchReg_dimensions_0}};	// src/main/scala/heteronpu/operator/Protocol.scala:212:30, :247:21
-  wire [5:0]        _pc_T = pc + 6'h1;	// src/main/scala/heteronpu/operator/Protocol.scala:211:27, :255:84
-  always @(posedge clock) begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-    automatic logic _GEN_11;	// src/main/scala/heteronpu/operator/Protocol.scala:257:24
-    _GEN_11 = io_launch_ready_0 & io_launch_valid;	// src/main/scala/heteronpu/operator/Protocol.scala:231:28, :257:24
-    if (reset) begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-      state <= 2'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30
-      pc <= 6'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:211:27
-      resultStatus <= 8'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:213:37
-      protocolErrorReg <= 1'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:214:41
+     {launchReg_dimensions_0}};	// src/main/scala/heteronpu/operator/Protocol.scala:223:30, :265:21
+  wire [5:0]        _pc_T = pc + 6'h1;	// src/main/scala/heteronpu/operator/Protocol.scala:222:27, :273:84
+  always @(posedge clock) begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+    automatic logic _GEN_11;	// src/main/scala/heteronpu/operator/Protocol.scala:275:24
+    _GEN_11 = io_launch_ready_0 & io_launch_valid;	// src/main/scala/heteronpu/operator/Protocol.scala:243:28, :275:24
+    if (reset) begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+      state <= 2'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30
+      pc <= 6'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:222:27
+      resultStatus <= 8'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:224:37
+      protocolErrorReg <= 1'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:225:41
     end
-    else begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-      automatic logic _GEN_12;	// src/main/scala/heteronpu/operator/Protocol.scala:269:24
-      automatic logic _GEN_13;	// src/main/scala/heteronpu/operator/Protocol.scala:272:22
-      automatic logic _GEN_14;	// src/main/scala/heteronpu/operator/Protocol.scala:280:15
-      automatic logic _GEN_15;	// src/main/scala/heteronpu/operator/Protocol.scala:257:43, :272:40, :276:51, :280:43, :284:12
-      _GEN_12 = io_completion_ready_0 & io_completion_valid;	// src/main/scala/heteronpu/operator/Protocol.scala:233:32, :269:24
+    else begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+      automatic logic _GEN_12;	// src/main/scala/heteronpu/operator/Protocol.scala:288:24
+      automatic logic _GEN_13;	// src/main/scala/heteronpu/operator/Protocol.scala:291:22
+      automatic logic _GEN_14;	// src/main/scala/heteronpu/operator/Protocol.scala:304:15
+      automatic logic _GEN_15;	// src/main/scala/heteronpu/operator/Protocol.scala:275:43, :291:40, :295:51, :304:43, :308:12
+      _GEN_12 = io_completion_ready_0 & io_completion_valid;	// src/main/scala/heteronpu/operator/Protocol.scala:245:32, :288:24
       _GEN_13 =
         io_completion_bits_tag != launchReg_tag
-        | io_completion_bits_phase != io_microOp_bits_phase_0;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30, :240:25, :270:46, :271:50, :272:22
-      _GEN_14 = pc == 6'h21;	// src/main/scala/heteronpu/operator/Protocol.scala:211:27, :280:15
-      _GEN_15 = _GEN_13 | (|io_completion_bits_status) | _GEN_14;	// src/main/scala/heteronpu/operator/Protocol.scala:257:43, :272:{22,40}, :276:{42,51}, :280:{15,43}, :284:12
-      if ((&state) & io_result_ready)	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :234:28, :290:26
-        state <= 2'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30
-      else if (_GEN_12)	// src/main/scala/heteronpu/operator/Protocol.scala:269:24
-        state <= {_GEN_15, 1'h1};	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :255:84, :257:43, :272:40, :275:13, :276:51, :278:13, :280:43, :282:15, :284:12, :285:15
-      else if (io_microOp_valid_0 & io_microOp_ready)	// src/main/scala/heteronpu/operator/Protocol.scala:232:29, :265:25
-        state <= 2'h2;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :233:32
-      else if (_GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:257:24
-        state <= 2'h1;	// src/main/scala/heteronpu/operator/Protocol.scala:209:30, :232:29
-      if (~_GEN_12 | _GEN_15) begin	// src/main/scala/heteronpu/operator/Protocol.scala:257:43, :269:{24,47}, :272:40, :276:51, :280:43, :284:12
-        if (_GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:257:24
-          pc <= 6'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:211:27
+        | io_completion_bits_phase != io_microOp_bits_phase_0;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30, :258:25, :289:46, :290:50, :291:22
+      _GEN_14 = pc == 6'h21;	// src/main/scala/heteronpu/operator/Protocol.scala:222:27, :304:15
+      _GEN_15 = _GEN_13 | (|io_completion_bits_status) | _GEN_14;	// src/main/scala/heteronpu/operator/Protocol.scala:275:43, :291:{22,40}, :295:{42,51}, :304:{15,43}, :308:12
+      if ((&state) & io_result_ready)	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :246:28, :314:26
+        state <= 2'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30
+      else if (_GEN_12)	// src/main/scala/heteronpu/operator/Protocol.scala:288:24
+        state <= {_GEN_15, 1'h1};	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :273:84, :275:43, :291:40, :294:13, :295:51, :297:13, :304:43, :306:15, :308:12, :309:15
+      else if (io_microOp_valid_0 & io_microOp_ready)	// src/main/scala/heteronpu/operator/Protocol.scala:244:29, :284:25
+        state <= 2'h2;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :245:32
+      else if (_GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:275:24
+        state <= 2'h1;	// src/main/scala/heteronpu/operator/Protocol.scala:220:30, :244:29
+      if (~_GEN_12 | _GEN_15) begin	// src/main/scala/heteronpu/operator/Protocol.scala:275:43, :288:{24,47}, :291:40, :295:51, :304:43, :308:12
+        if (_GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:275:24
+          pc <= 6'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:222:27
       end
-      else	// src/main/scala/heteronpu/operator/Protocol.scala:257:43, :269:47, :272:40
-        pc <= _pc_T;	// src/main/scala/heteronpu/operator/Protocol.scala:211:27, :255:84
-      if (_GEN_12) begin	// src/main/scala/heteronpu/operator/Protocol.scala:269:24
-        if (_GEN_13)	// src/main/scala/heteronpu/operator/Protocol.scala:272:22
-          resultStatus <= io_completion_bits_tag == launchReg_tag ? 8'hE2 : 8'hE1;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30, :213:37, :270:46, :274:26
-        else if (|io_completion_bits_status)	// src/main/scala/heteronpu/operator/Protocol.scala:276:42
-          resultStatus <= io_completion_bits_status;	// src/main/scala/heteronpu/operator/Protocol.scala:213:37
-        else if (_GEN_14 | _GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:213:37, :257:{24,43}, :260:18, :280:{15,43}, :281:22
-          resultStatus <= 8'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:213:37
+      else	// src/main/scala/heteronpu/operator/Protocol.scala:275:43, :288:47, :291:40
+        pc <= _pc_T;	// src/main/scala/heteronpu/operator/Protocol.scala:222:27, :273:84
+      if (_GEN_12) begin	// src/main/scala/heteronpu/operator/Protocol.scala:288:24
+        if (_GEN_13)	// src/main/scala/heteronpu/operator/Protocol.scala:291:22
+          resultStatus <= io_completion_bits_tag == launchReg_tag ? 8'hE2 : 8'hE1;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30, :224:37, :289:46, :293:26
+        else if (|io_completion_bits_status)	// src/main/scala/heteronpu/operator/Protocol.scala:295:42
+          resultStatus <= io_completion_bits_status;	// src/main/scala/heteronpu/operator/Protocol.scala:224:37
+        else if (_GEN_14 | _GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:224:37, :275:{24,43}, :278:18, :304:{15,43}, :305:22
+          resultStatus <= 8'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:224:37
       end
-      else if (_GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:257:24
-        resultStatus <= 8'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:213:37
-      protocolErrorReg <= _GEN_12 & _GEN_13 | ~_GEN_11 & protocolErrorReg;	// src/main/scala/heteronpu/operator/Protocol.scala:214:41, :257:{24,43}, :261:22, :269:{24,47}, :272:{22,40}, :273:24
+      else if (_GEN_11)	// src/main/scala/heteronpu/operator/Protocol.scala:275:24
+        resultStatus <= 8'h0;	// src/main/scala/heteronpu/operator/Protocol.scala:224:37
+      protocolErrorReg <= _GEN_12 & _GEN_13 | ~_GEN_11 & protocolErrorReg;	// src/main/scala/heteronpu/operator/Protocol.scala:225:41, :275:{24,43}, :279:22, :288:{24,47}, :291:{22,40}, :292:24
     end
-    if (_GEN_11) begin	// src/main/scala/heteronpu/operator/Protocol.scala:257:24
-      launchReg_descriptors_0 <= io_launch_bits_descriptors_0;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_1 <= io_launch_bits_descriptors_1;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_2 <= io_launch_bits_descriptors_2;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_3 <= io_launch_bits_descriptors_3;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_4 <= io_launch_bits_descriptors_4;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_5 <= io_launch_bits_descriptors_5;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_6 <= io_launch_bits_descriptors_6;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_7 <= io_launch_bits_descriptors_7;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_8 <= io_launch_bits_descriptors_8;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_9 <= io_launch_bits_descriptors_9;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_10 <= io_launch_bits_descriptors_10;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_11 <= io_launch_bits_descriptors_11;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_12 <= io_launch_bits_descriptors_12;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_13 <= io_launch_bits_descriptors_13;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_14 <= io_launch_bits_descriptors_14;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_descriptors_15 <= io_launch_bits_descriptors_15;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_0 <= io_launch_bits_dimensions_0;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_1 <= io_launch_bits_dimensions_1;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_2 <= io_launch_bits_dimensions_2;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_3 <= io_launch_bits_dimensions_3;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_4 <= io_launch_bits_dimensions_4;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_5 <= io_launch_bits_dimensions_5;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_6 <= io_launch_bits_dimensions_6;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_dimensions_7 <= io_launch_bits_dimensions_7;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_tag <= io_launch_bits_tag;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
-      launchReg_mode <= io_launch_bits_mode;	// src/main/scala/heteronpu/operator/Protocol.scala:212:30
+    if (_GEN_11) begin	// src/main/scala/heteronpu/operator/Protocol.scala:275:24
+      launchReg_descriptors_0 <= io_launch_bits_descriptors_0;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_1 <= io_launch_bits_descriptors_1;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_2 <= io_launch_bits_descriptors_2;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_3 <= io_launch_bits_descriptors_3;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_4 <= io_launch_bits_descriptors_4;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_5 <= io_launch_bits_descriptors_5;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_6 <= io_launch_bits_descriptors_6;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_7 <= io_launch_bits_descriptors_7;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_8 <= io_launch_bits_descriptors_8;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_9 <= io_launch_bits_descriptors_9;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_10 <= io_launch_bits_descriptors_10;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_11 <= io_launch_bits_descriptors_11;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_12 <= io_launch_bits_descriptors_12;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_13 <= io_launch_bits_descriptors_13;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_14 <= io_launch_bits_descriptors_14;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_descriptors_15 <= io_launch_bits_descriptors_15;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_0 <= io_launch_bits_dimensions_0;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_1 <= io_launch_bits_dimensions_1;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_2 <= io_launch_bits_dimensions_2;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_3 <= io_launch_bits_dimensions_3;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_4 <= io_launch_bits_dimensions_4;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_5 <= io_launch_bits_dimensions_5;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_6 <= io_launch_bits_dimensions_6;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_dimensions_7 <= io_launch_bits_dimensions_7;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_tag <= io_launch_bits_tag;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
+      launchReg_mode <= io_launch_bits_mode;	// src/main/scala/heteronpu/operator/Protocol.scala:223:30
     end
   end // always @(posedge)
-  `ifdef ENABLE_INITIAL_REG_	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-    `ifdef FIRRTL_BEFORE_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-      `FIRRTL_BEFORE_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
+  `ifdef ENABLE_INITIAL_REG_	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+    `ifdef FIRRTL_BEFORE_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+      `FIRRTL_BEFORE_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-      automatic logic [31:0] _RANDOM[0:17];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-      `ifdef INIT_RANDOM_PROLOG_	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-        `INIT_RANDOM_PROLOG_	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
+    initial begin	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+      automatic logic [31:0] _RANDOM[0:17];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+      `ifdef INIT_RANDOM_PROLOG_	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+        `INIT_RANDOM_PROLOG_	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
+      `ifdef RANDOMIZE_REG_INIT	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
         for (logic [4:0] i = 5'h0; i < 5'h12; i += 5'h1) begin
-          _RANDOM[i] = `RANDOM;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-        end	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-        state = _RANDOM[5'h0][1:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:209:30
-        pc = _RANDOM[5'h0][7:2];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:209:30, :211:27
-        launchReg_descriptors_0 = _RANDOM[5'h0][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:209:30, :212:30
-        launchReg_descriptors_1 = _RANDOM[5'h1][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_2 = {_RANDOM[5'h1][31:24], _RANDOM[5'h2][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_3 = {_RANDOM[5'h2][31:16], _RANDOM[5'h3][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_4 = _RANDOM[5'h3][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_5 = _RANDOM[5'h4][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_6 = {_RANDOM[5'h4][31:24], _RANDOM[5'h5][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_7 = {_RANDOM[5'h5][31:16], _RANDOM[5'h6][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_8 = _RANDOM[5'h6][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_9 = _RANDOM[5'h7][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_10 = {_RANDOM[5'h7][31:24], _RANDOM[5'h8][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_11 = {_RANDOM[5'h8][31:16], _RANDOM[5'h9][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_12 = _RANDOM[5'h9][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_13 = _RANDOM[5'hA][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_14 = {_RANDOM[5'hA][31:24], _RANDOM[5'hB][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_descriptors_15 = {_RANDOM[5'hB][31:16], _RANDOM[5'hC][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_0 = _RANDOM[5'hC][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_1 = {_RANDOM[5'hC][31:24], _RANDOM[5'hD][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_2 = _RANDOM[5'hD][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_3 = {_RANDOM[5'hD][31:24], _RANDOM[5'hE][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_4 = _RANDOM[5'hE][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_5 = {_RANDOM[5'hE][31:24], _RANDOM[5'hF][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_6 = _RANDOM[5'hF][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_dimensions_7 = {_RANDOM[5'hF][31:24], _RANDOM[5'h10][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_tag = _RANDOM[5'h10][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        launchReg_mode = _RANDOM[5'h10][31:24];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-        resultStatus = _RANDOM[5'h11][7:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:213:37
-        protocolErrorReg = _RANDOM[5'h11][8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:213:37, :214:41
+          _RANDOM[i] = `RANDOM;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+        end	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+        state = _RANDOM[5'h0][1:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:220:30
+        pc = _RANDOM[5'h0][7:2];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:220:30, :222:27
+        launchReg_descriptors_0 = _RANDOM[5'h0][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:220:30, :223:30
+        launchReg_descriptors_1 = _RANDOM[5'h1][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_2 = {_RANDOM[5'h1][31:24], _RANDOM[5'h2][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_3 = {_RANDOM[5'h2][31:16], _RANDOM[5'h3][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_4 = _RANDOM[5'h3][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_5 = _RANDOM[5'h4][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_6 = {_RANDOM[5'h4][31:24], _RANDOM[5'h5][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_7 = {_RANDOM[5'h5][31:16], _RANDOM[5'h6][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_8 = _RANDOM[5'h6][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_9 = _RANDOM[5'h7][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_10 = {_RANDOM[5'h7][31:24], _RANDOM[5'h8][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_11 = {_RANDOM[5'h8][31:16], _RANDOM[5'h9][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_12 = _RANDOM[5'h9][31:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_13 = _RANDOM[5'hA][23:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_14 = {_RANDOM[5'hA][31:24], _RANDOM[5'hB][15:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_descriptors_15 = {_RANDOM[5'hB][31:16], _RANDOM[5'hC][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_0 = _RANDOM[5'hC][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_1 = {_RANDOM[5'hC][31:24], _RANDOM[5'hD][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_2 = _RANDOM[5'hD][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_3 = {_RANDOM[5'hD][31:24], _RANDOM[5'hE][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_4 = _RANDOM[5'hE][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_5 = {_RANDOM[5'hE][31:24], _RANDOM[5'hF][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_6 = _RANDOM[5'hF][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_dimensions_7 = {_RANDOM[5'hF][31:24], _RANDOM[5'h10][7:0]};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_tag = _RANDOM[5'h10][23:8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        launchReg_mode = _RANDOM[5'h10][31:24];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+        resultStatus = _RANDOM[5'h11][7:0];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:224:37
+        protocolErrorReg = _RANDOM[5'h11][8];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:224:37, :225:41
       `endif // RANDOMIZE_REG_INIT
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
-      `FIRRTL_AFTER_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7
+    `ifdef FIRRTL_AFTER_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
+      `FIRRTL_AFTER_INITIAL	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7
     `endif // FIRRTL_AFTER_INITIAL
   `endif // ENABLE_INITIAL_REG_
-  assign io_launch_ready = io_launch_ready_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:231:28
-  assign io_microOp_valid = io_microOp_valid_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:232:29
-  assign io_microOp_bits_kind = _GEN_8[pc];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :238:24
-  assign io_microOp_bits_flags = _GEN_7[pc];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :239:25
-  assign io_microOp_bits_phase = io_microOp_bits_phase_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:240:25
-  assign io_microOp_bits_tag = launchReg_tag;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  assign io_microOp_bits_mode = launchReg_mode;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  assign io_microOp_bits_src0 = _GEN_9[_GEN_6[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :243:24
-  assign io_microOp_bits_src1 = _GEN_9[_GEN_5[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :243:24, :244:24
-  assign io_microOp_bits_src2 = _GEN_9[_GEN_4[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :243:24, :245:24
-  assign io_microOp_bits_dst = _GEN_9[_GEN_3[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :243:24, :246:23
-  assign io_microOp_bits_m = _GEN_10[_GEN_2[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :247:21
-  assign io_microOp_bits_n = _GEN_10[_GEN_1[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :247:21, :248:21
-  assign io_microOp_bits_k = _GEN_10[_GEN_0[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :247:21, :249:21
-  assign io_microOp_bits_index0 = _GEN[pc];	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:211:27, :250:26
-  assign io_microOp_bits_index1 = 16'h0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:217:53
-  assign io_completion_ready = io_completion_ready_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:233:32
-  assign io_result_valid = &state;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:209:30, :234:28
-  assign io_result_bits_tag = launchReg_tag;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:212:30
-  assign io_result_bits_status = resultStatus;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:213:37
-  assign io_result_bits_completedPhases = {2'h0, resultStatus == 8'h0 ? 6'h22 : _pc_T};	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:209:30, :213:37, :255:{34,40,54,84}
-  assign io_busy = |state;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:209:30, :235:20
-  assign io_protocolError = protocolErrorReg;	// src/main/scala/heteronpu/operator/ProgramsText.scala:171:7, src/main/scala/heteronpu/operator/Protocol.scala:214:41
+  assign io_launch_ready = io_launch_ready_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:243:28
+  assign io_microOp_valid = io_microOp_valid_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:244:29
+  assign io_microOp_bits_kind = _GEN_8[pc];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :250:24
+  assign io_microOp_bits_flags = _GEN_7[pc];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :257:31
+  assign io_microOp_bits_phase = io_microOp_bits_phase_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:258:25
+  assign io_microOp_bits_tag = launchReg_tag;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  assign io_microOp_bits_mode = launchReg_mode;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  assign io_microOp_bits_src0 = _GEN_9[_GEN_6[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :261:24
+  assign io_microOp_bits_src1 = _GEN_9[_GEN_5[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :261:24, :262:24
+  assign io_microOp_bits_src2 = _GEN_9[_GEN_4[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :261:24, :263:24
+  assign io_microOp_bits_dst = _GEN_9[_GEN_3[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :261:24, :264:23
+  assign io_microOp_bits_m = _GEN_10[_GEN_2[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :265:21
+  assign io_microOp_bits_n = _GEN_10[_GEN_1[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :265:21, :266:21
+  assign io_microOp_bits_k = _GEN_10[_GEN_0[pc]];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :265:21, :267:21
+  assign io_microOp_bits_index0 = _GEN[pc];	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:222:27, :268:26
+  assign io_microOp_bits_index1 = 16'h0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:229:53
+  assign io_completion_ready = io_completion_ready_0;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:245:32
+  assign io_result_valid = &state;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:220:30, :246:28
+  assign io_result_bits_tag = launchReg_tag;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:223:30
+  assign io_result_bits_status = resultStatus;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:224:37
+  assign io_result_bits_completedPhases = {2'h0, resultStatus == 8'h0 ? 6'h22 : _pc_T};	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:220:30, :224:37, :273:{34,40,54,84}
+  assign io_busy = |state;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:220:30, :247:20
+  assign io_protocolError = protocolErrorReg;	// src/main/scala/heteronpu/operator/ProgramsText.scala:173:7, src/main/scala/heteronpu/operator/Protocol.scala:225:41
 endmodule

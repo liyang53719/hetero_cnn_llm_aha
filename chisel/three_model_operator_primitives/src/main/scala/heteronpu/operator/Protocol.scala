@@ -167,6 +167,9 @@ class PrimitiveCompletion(val tagBits: Int = 16) extends Bundle {
   val tag = UInt(tagBits.W)
   val phase = UInt(8.W)
   val status = UInt(8.W)
+  /** Internal successful-completion predicate. It is not part of Command128
+    * and is currently consumed only by the conditional MTP resolve root. */
+  val predicate = Bool()
 }
 
 class OperatorResult(val tagBits: Int = 16) extends Bundle {
@@ -187,13 +190,21 @@ class ProgramPrimitive(
     val moduleName: String,
     val descriptorBits: Int = 24,
     val dimensionBits: Int = 16,
-    val tagBits: Int = 16
+    val tagBits: Int = 16,
+    val conditionalResolvePhase: Option[Int] = None
 ) extends Module {
   require(program.nonEmpty, s"$moduleName program must not be empty")
   require(program.length <= 255, s"$moduleName exceeds 8-bit phase count")
   require((program.last.flags & PrimitiveFlags.Last) != 0, s"$moduleName final phase must carry Last")
   require(program.dropRight(1).forall(x => (x.flags & PrimitiveFlags.Last) == 0),
     s"$moduleName has an early Last phase")
+  conditionalResolvePhase.foreach { phase =>
+    require(phase >= 0 && phase < program.length, s"$moduleName conditional resolve phase overflow")
+    require(program(phase).kind == PrimitiveKind.StateResolve,
+      s"$moduleName conditional phase must be StateResolve")
+    require(program.take(phase).exists(_.kind == PrimitiveKind.MtpCompare),
+      s"$moduleName conditional resolve requires an earlier MtpCompare")
+  }
   override def desiredName: String = moduleName
 
   val io = IO(new Bundle {
@@ -212,6 +223,7 @@ class ProgramPrimitive(
   private val launchReg = Reg(new OperatorLaunch(descriptorBits, dimensionBits, tagBits))
   private val resultStatus = RegInit(0.U(8.W))
   private val protocolErrorReg = RegInit(false.B)
+  private val resolveRollback = RegInit(false.B)
 
   private def readRom(values: Seq[UInt]): UInt =
     if (values.length == 1) values.head else VecInit(values)(pc)
@@ -236,7 +248,13 @@ class ProgramPrimitive(
   io.protocolError := protocolErrorReg
 
   io.microOp.bits.kind := kindValue
-  io.microOp.bits.flags := flagsValue
+  private val conditionalResolve = conditionalResolvePhase
+    .map(phase => pc === phase.U)
+    .getOrElse(false.B)
+  private val resolveFlags = Mux(resolveRollback,
+    PrimitiveFlags.of(PrimitiveFlags.Stateful, PrimitiveFlags.Rollback, PrimitiveFlags.Last).U,
+    PrimitiveFlags.of(PrimitiveFlags.Stateful, PrimitiveFlags.Commit, PrimitiveFlags.Last).U)
+  io.microOp.bits.flags := Mux(conditionalResolve, resolveFlags, flagsValue)
   io.microOp.bits.phase := pc
   io.microOp.bits.tag := launchReg.tag
   io.microOp.bits.mode := launchReg.mode
@@ -259,6 +277,7 @@ class ProgramPrimitive(
     pc := 0.U
     resultStatus := 0.U
     protocolErrorReg := false.B
+    resolveRollback := false.B
     state := sIssue
   }
 
@@ -277,6 +296,11 @@ class ProgramPrimitive(
       resultStatus := io.completion.bits.status
       state := sReport
     }.otherwise {
+      conditionalResolvePhase.foreach { _ =>
+        when(kindValue === PrimitiveKind.MtpCompare.U) {
+          resolveRollback := io.completion.bits.predicate
+        }
+      }
       when(pc === (program.length - 1).U) {
         resultStatus := 0.U
         state := sReport

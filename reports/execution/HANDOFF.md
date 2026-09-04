@@ -119,7 +119,8 @@
 - Maintenance- and scratch-enabled full root shell linked DC PASS: WNS
   +0.00000369549 ns, area 2097406.589, 0 error/unmapped; 4058 transition/47
   fanout violations. The maintenance wrapper supersedes the prior root DDC.
-- Qwen2 decoder root canary PASS 26/26 phases through real Matrix/SFU/KV/State;
-  StateBegin uses the new Router maintenance path and no reference output is
-  injected. Qwen3.5 MTP root has an unconditional rollback-then-commit defect;
-  GDN/dense/MoE remain executable while conditional MTP control is repaired.
+- Qwen2 decoder root canary remains PASS 26/26 after protocol regeneration.
+  MTP now carries an internal successful-completion predicate and issues exactly
+  one commit or rollback; MoE RoutedExpert scatter now selects route dispatch.
+  Root tests 24/24 and Bridge/Router tests 6/6 PASS; Qwen3.5 integrated canary
+  and post-change Selection/root/combined DC are next.

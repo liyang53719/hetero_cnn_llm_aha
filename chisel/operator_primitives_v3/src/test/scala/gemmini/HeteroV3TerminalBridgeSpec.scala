@@ -2,7 +2,7 @@ package gemmini
 
 import chisel3._
 import chiseltest._
-import heteronpu.operator.{LeafCapabilities, PrimitiveKind}
+import heteronpu.operator.{LeafCapabilities, PrimitiveFlags, PrimitiveKind}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -21,7 +21,8 @@ class HeteroV3TerminalBridgeSpec extends AnyFlatSpec with ChiselScalatestTester 
 
   private def launch(dut: HeteroV3TerminalBridge, kind: Int, tag: Int, phase: Int, mode: Int = 0): Unit = {
     dut.io.in.bits.kind.poke(kind.U)
-    dut.io.in.bits.flags.poke("h5a5a".U)
+    val flags = if (kind == PrimitiveKind.StateResolve) PrimitiveFlags.Rollback else 0x5a5a
+    dut.io.in.bits.flags.poke(flags.U)
     dut.io.in.bits.phase.poke(phase.U)
     dut.io.in.bits.tag.poke(tag.U)
     dut.io.in.bits.mode.poke(mode.U)
@@ -58,6 +59,7 @@ class HeteroV3TerminalBridgeSpec extends AnyFlatSpec with ChiselScalatestTester 
     dut.io.terminalCompletion.bits.parentPhase.poke(parent.U)
     dut.io.terminalCompletion.bits.terminalPhase.poke(terminal.U)
     dut.io.terminalCompletion.bits.status.poke(0.U)
+    dut.io.terminalCompletion.bits.predicate.poke(false.B)
     dut.io.terminalCompletion.valid.poke(true.B)
     dut.io.terminalCompletion.ready.expect(true.B)
     dut.clock.step()
@@ -83,6 +85,7 @@ class HeteroV3TerminalBridgeSpec extends AnyFlatSpec with ChiselScalatestTester 
         dut.io.completion.bits.tag.expect((0x1200 + index).U)
         dut.io.completion.bits.phase.expect((index & 0xff).U)
         dut.io.completion.bits.status.expect(0.U)
+        dut.io.completion.bits.predicate.expect(false.B)
         dut.io.completion.ready.poke(true.B)
         dut.clock.step()
         dut.io.completion.ready.poke(false.B)
@@ -116,6 +119,54 @@ class HeteroV3TerminalBridgeSpec extends AnyFlatSpec with ChiselScalatestTester 
       dut.io.completion.valid.expect(true.B)
       dut.io.completion.bits.status.expect(4.U)
       dut.io.unsupported.expect(true.B)
+    }
+  }
+
+  it should "route MoE scatter and conditional state resolve without changing Command128" in {
+    test(new HeteroV3TerminalBridge) { dut =>
+      initialize(dut)
+      launch(dut, PrimitiveKind.VectorScatter, 0x6601, 3)
+      while (!dut.io.terminal.valid.peek().litToBoolean) dut.clock.step()
+      dut.io.terminal.valid.expect(true.B)
+      dut.io.terminal.bits.owner.expect(HeteroPrimitiveOwner.Dma)
+      dut.io.terminal.bits.opcode.expect(HeteroPrimitiveOpcode.DmaScatter)
+      retireOne(dut)
+      dut.io.completion.ready.poke(true.B)
+      dut.clock.step()
+      dut.io.completion.ready.poke(false.B)
+
+      dut.io.in.bits.kind.poke(PrimitiveKind.VectorScatter.U)
+      dut.io.in.bits.flags.poke(PrimitiveFlags.RoutedExpert.U)
+      dut.io.in.bits.tag.poke("h6602".U)
+      dut.io.in.bits.phase.poke(4.U)
+      dut.io.in.valid.poke(true.B)
+      dut.clock.step()
+      dut.io.in.valid.poke(false.B)
+      while (!dut.io.terminal.valid.peek().litToBoolean) dut.clock.step()
+      dut.io.terminal.bits.owner.expect(HeteroPrimitiveOwner.Selection)
+      dut.io.terminal.bits.opcode.expect(HeteroPrimitiveOpcode.SelectRoute)
+      retireOne(dut)
+      dut.io.completion.ready.poke(true.B)
+      dut.clock.step()
+      dut.io.completion.ready.poke(false.B)
+
+      Seq((PrimitiveFlags.Commit, HeteroPrimitiveOpcode.StateCommit),
+        (PrimitiveFlags.Rollback, HeteroPrimitiveOpcode.StateRollback)).foreach { case (flag, opcode) =>
+        dut.io.in.bits.kind.poke(PrimitiveKind.StateResolve.U)
+        dut.io.in.bits.flags.poke((PrimitiveFlags.Stateful | PrimitiveFlags.Last | flag).U)
+        dut.io.in.bits.tag.poke((0x6700 + flag).U)
+        dut.io.in.bits.phase.poke(3.U)
+        dut.io.in.valid.poke(true.B)
+        dut.clock.step()
+        dut.io.in.valid.poke(false.B)
+        while (!dut.io.terminal.valid.peek().litToBoolean) dut.clock.step()
+        dut.io.terminal.bits.owner.expect(HeteroPrimitiveOwner.State)
+        dut.io.terminal.bits.opcode.expect(opcode)
+        retireOne(dut)
+        dut.io.completion.ready.poke(true.B)
+        dut.clock.step()
+        dut.io.completion.ready.poke(false.B)
+      }
     }
   }
 }
@@ -179,11 +230,13 @@ class HeteroV3TerminalOwnerRouterSpec extends AnyFlatSpec with ChiselScalatestTe
         dut.io.ownerCompletion(owner).bits.parentPhase.poke(owner.U)
         dut.io.ownerCompletion(owner).bits.terminalPhase.poke((owner + 1).U)
         dut.io.ownerCompletion(owner).bits.status.poke(0.U)
+        dut.io.ownerCompletion(owner).bits.predicate.poke((owner == 6).B)
         dut.io.ownerCompletion(owner).valid.poke(true.B)
         dut.clock.step()
         dut.io.ownerCompletion(owner).valid.poke(false.B)
         dut.io.completion.valid.expect(true.B)
         dut.io.completion.bits.status.expect(0.U)
+        dut.io.completion.bits.predicate.expect((owner == 6).B)
         dut.io.completion.ready.poke(true.B)
         dut.clock.step()
         dut.io.completion.ready.poke(false.B)

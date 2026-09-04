@@ -21,7 +21,7 @@
     "VectorCompare": ["Sfu", "SfuCompareSelect"],
     "VectorSelect": ["Sfu", "SfuCompareSelect"],
     "VectorGather": ["Dma", "DmaGather"],
-    "VectorScatter": ["Dma", "DmaScatter"],
+    "VectorScatter": ["Dma_or_Selection", "DmaScatter_or_SelectRoute_from_RoutedExpert"],
     "VectorBroadcast": ["Sfu", "SfuBroadcast"],
     "LayoutTransform": ["Vision", "VisionWindow"],
     "ApplyMask": ["Sfu", "SfuCausalMask"],
@@ -51,7 +51,7 @@
     "StateRead": ["State", "StateRead"],
     "StateWrite": ["State", "StateWrite"],
     "StateCommit": ["State", "StateCommit"],
-    "StateResolve": ["State", "StateRollback"],
+    "StateResolve": ["State", "StateCommit_or_StateRollback_from_internal_predicate"],
     "MtpCompare": ["Selection", "SelectMtpVerify"]
   },
   "composite": {

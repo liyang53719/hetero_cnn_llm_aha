@@ -32,6 +32,7 @@ module operator_endpoint_bound_owner_shell_v3(
  output logic [7:0] completion_parent_phase_o,
  output logic [7:0] completion_terminal_phase_o,
  output logic [7:0] completion_status_o,
+ output logic completion_predicate_o,
  output logic router_busy_o,
  output logic router_protocol_error_o,
  input logic control_ack_valid_i,

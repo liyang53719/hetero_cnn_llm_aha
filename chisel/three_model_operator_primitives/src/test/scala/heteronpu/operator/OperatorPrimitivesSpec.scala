@@ -23,6 +23,7 @@ class OperatorPrimitivesSpec extends AnyFlatSpec with ChiselScalatestTester with
     dut.io.completion.bits.tag.poke(0.U)
     dut.io.completion.bits.phase.poke(0.U)
     dut.io.completion.bits.status.poke(0.U)
+    dut.io.completion.bits.predicate.poke(false.B)
     dut.io.result.ready.poke(false.B)
     for (i <- 0 until 16) dut.io.launch.bits.descriptors(i).poke((0x100 + i).U)
     for (i <- 0 until 8) dut.io.launch.bits.dimensions(i).poke((0x200 + i).U)
@@ -56,6 +57,7 @@ class OperatorPrimitivesSpec extends AnyFlatSpec with ChiselScalatestTester with
           dut.io.completion.bits.tag.poke(tag.U)
           dut.io.completion.bits.phase.poke(phase.U)
           dut.io.completion.bits.status.poke(0.U)
+          dut.io.completion.bits.predicate.poke(false.B)
         case None =>
           dut.io.completion.valid.poke(false.B)
       }
@@ -112,6 +114,40 @@ class OperatorPrimitivesSpec extends AnyFlatSpec with ChiselScalatestTester with
         initialize(dut)
         launch(dut)
         runToCompletion(dut, root.program)
+      }
+    }
+  }
+
+  Seq(false, true).foreach { rollback =>
+    it should s"issue only the ${if (rollback) "rollback" else "commit"} MTP resolve action" in {
+      test(new HeteroMtpVerifyResolvePrimitiveV3) { dut =>
+        initialize(dut)
+        launch(dut)
+        for (phase <- VisionAndBoundaryPrograms.MtpVerifyResolve.indices) {
+          while (!dut.io.microOp.valid.peek().litToBoolean) dut.clock.step()
+          dut.io.microOp.bits.phase.expect(phase.U)
+          if (phase == 3) {
+            val expected = PrimitiveFlags.of(PrimitiveFlags.Stateful,
+              if (rollback) PrimitiveFlags.Rollback else PrimitiveFlags.Commit,
+              PrimitiveFlags.Last)
+            dut.io.microOp.bits.kind.expect(PrimitiveKind.StateResolve.U)
+            dut.io.microOp.bits.flags.expect(expected.U)
+          }
+          dut.io.microOp.ready.poke(true.B)
+          dut.clock.step()
+          dut.io.microOp.ready.poke(false.B)
+          dut.io.completion.valid.poke(true.B)
+          dut.io.completion.bits.tag.poke("h5a3c".U)
+          dut.io.completion.bits.phase.poke(phase.U)
+          dut.io.completion.bits.status.poke(0.U)
+          dut.io.completion.bits.predicate.poke((phase == 0 && rollback).B)
+          while (!dut.io.completion.ready.peek().litToBoolean) dut.clock.step()
+          dut.clock.step()
+          dut.io.completion.valid.poke(false.B)
+        }
+        dut.io.result.valid.expect(true.B)
+        dut.io.result.bits.status.expect(0.U)
+        dut.io.result.bits.completedPhases.expect(4.U)
       }
     }
   }

@@ -122,10 +122,11 @@ object ProgramValidation {
       "vision attention must remain non-causal")
 
     require(ordered(VisionAndBoundaryPrograms.MtpVerifyResolve,
-      Seq(MtpCompare, VectorCompare, VectorSelect, StateResolve, StateCommit)),
-      "MTP verify/rollback transaction is incomplete")
-    require(VisionAndBoundaryPrograms.MtpVerifyResolve.exists(x => x.kind == StateResolve &&
-      (x.flags & PrimitiveFlags.Rollback) != 0), "MTP rollback path is absent")
+      Seq(MtpCompare, VectorCompare, VectorSelect, StateResolve)),
+      "MTP verify/conditional-resolve transaction is incomplete")
+    require(VisionAndBoundaryPrograms.MtpVerifyResolve.count(_.kind == StateResolve) == 1 &&
+      !VisionAndBoundaryPrograms.MtpVerifyResolve.exists(_.kind == StateCommit),
+      "MTP must issue exactly one dynamically selected commit/rollback phase")
 
     val tokenRoot = ThreeModelOperatorCatalog.all.find(_.operator == "token_embedding").map(_.root).get
     val headRoots = ThreeModelOperatorCatalog.all.filter(_.operator == "lm_head").map(_.root).toSet

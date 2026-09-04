@@ -92,8 +92,10 @@ object VisionAndBoundaryPrograms {
     MicroOpTemplate(MtpCompare, Stateful, src0 = 0, src1 = 1, dst = 4, m = 0),
     MicroOpTemplate(VectorCompare, src0 = 0, src1 = 1, dst = 5, m = 0, index0 = 0),
     MicroOpTemplate(VectorSelect, src0 = 5, src1 = 0, src2 = 1, dst = 6, m = 0),
-    MicroOpTemplate(StateResolve, of(Stateful, Rollback), src0 = 2, src1 = 4, dst = 2, m = 0),
-    MicroOpTemplate(StateCommit, of(Stateful, Commit, Last), src0 = 3, src1 = 4, dst = 3, m = 0)
+    // ProgramPrimitive replaces Commit/Rollback on this final phase with the
+    // successful MtpCompare completion predicate. Exactly one state action is
+    // issued; an unconditional rollback-then-commit is forbidden.
+    MicroOpTemplate(StateResolve, of(Stateful, Last), src0 = 2, src1 = 4, dst = 2, m = 0)
   )
 }
 
@@ -112,4 +114,5 @@ class HeteroLmHeadArgmaxPrimitiveV3
 class HeteroMtpDraftPrimitiveV3
   extends ProgramPrimitive(VisionAndBoundaryPrograms.MtpDraft, "HeteroMtpDraftPrimitiveV3")
 class HeteroMtpVerifyResolvePrimitiveV3
-  extends ProgramPrimitive(VisionAndBoundaryPrograms.MtpVerifyResolve, "HeteroMtpVerifyResolvePrimitiveV3")
+  extends ProgramPrimitive(VisionAndBoundaryPrograms.MtpVerifyResolve,
+    "HeteroMtpVerifyResolvePrimitiveV3", conditionalResolvePhase = Some(3))

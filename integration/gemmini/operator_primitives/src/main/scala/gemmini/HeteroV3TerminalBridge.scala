@@ -35,6 +35,7 @@ class HeteroV3TerminalCompletion extends Bundle {
   val parentPhase = UInt(8.W)
   val terminalPhase = UInt(8.W)
   val status = UInt(8.W)
+  val predicate = Bool()
 }
 
 /** Routes one checked terminal transaction to one of the eight hardware owner
@@ -86,6 +87,7 @@ class HeteroV3TerminalOwnerRouter extends Module {
         result.parentPhase := io.in.bits.parentPhase
         result.terminalPhase := io.in.bits.terminalPhase
         result.status := 4.U
+        result.predicate := false.B
         state := sReport
       }
     }
@@ -130,6 +132,7 @@ class HeteroV3TerminalBridge extends Module {
   val state = RegInit(sIdle)
   val base = Reg(new TensorMicroOp())
   val completionStatus = RegInit(0.U(8.W))
+  val completionPredicate = RegInit(false.B)
   val expectedTerminalPhase = RegInit(0.U(8.W))
   val acceptedLast = RegInit(false.B)
   val acceptedComposite = RegInit(false.B)
@@ -159,7 +162,10 @@ class HeteroV3TerminalBridge extends Module {
     is(PrimitiveKind.VectorCompare.U) { mappedOwner := HeteroPrimitiveOwner.Sfu; mappedOpcode := HeteroPrimitiveOpcode.SfuCompareSelect }
     is(PrimitiveKind.VectorSelect.U) { mappedOwner := HeteroPrimitiveOwner.Sfu; mappedOpcode := HeteroPrimitiveOpcode.SfuCompareSelect }
     is(PrimitiveKind.VectorGather.U) { mappedOwner := HeteroPrimitiveOwner.Dma; mappedOpcode := HeteroPrimitiveOpcode.DmaGather }
-    is(PrimitiveKind.VectorScatter.U) { mappedOwner := HeteroPrimitiveOwner.Dma; mappedOpcode := HeteroPrimitiveOpcode.DmaScatter }
+    is(PrimitiveKind.VectorScatter.U) {
+      mappedOwner := Mux(base.flags(7), HeteroPrimitiveOwner.Selection, HeteroPrimitiveOwner.Dma)
+      mappedOpcode := Mux(base.flags(7), HeteroPrimitiveOpcode.SelectRoute, HeteroPrimitiveOpcode.DmaScatter)
+    }
     is(PrimitiveKind.VectorBroadcast.U) { mappedOwner := HeteroPrimitiveOwner.Sfu; mappedOpcode := HeteroPrimitiveOpcode.SfuBroadcast }
     is(PrimitiveKind.LayoutTransform.U) { mappedOwner := HeteroPrimitiveOwner.Vision; mappedOpcode := HeteroPrimitiveOpcode.VisionWindow }
     is(PrimitiveKind.ApplyMask.U) { mappedOwner := HeteroPrimitiveOwner.Sfu; mappedOpcode := HeteroPrimitiveOpcode.SfuCausalMask }
@@ -198,7 +204,10 @@ class HeteroV3TerminalBridge extends Module {
     is(PrimitiveKind.StateRead.U) { mappedOwner := HeteroPrimitiveOwner.State; mappedOpcode := HeteroPrimitiveOpcode.StateRead }
     is(PrimitiveKind.StateWrite.U) { mappedOwner := HeteroPrimitiveOwner.State; mappedOpcode := HeteroPrimitiveOpcode.StateWrite }
     is(PrimitiveKind.StateCommit.U) { mappedOwner := HeteroPrimitiveOwner.State; mappedOpcode := HeteroPrimitiveOpcode.StateCommit }
-    is(PrimitiveKind.StateResolve.U) { mappedOwner := HeteroPrimitiveOwner.State; mappedOpcode := HeteroPrimitiveOpcode.StateRollback }
+    is(PrimitiveKind.StateResolve.U) {
+      mappedOwner := HeteroPrimitiveOwner.State
+      mappedOpcode := Mux(base.flags(14), HeteroPrimitiveOpcode.StateRollback, HeteroPrimitiveOpcode.StateCommit)
+    }
     is(PrimitiveKind.MtpCompare.U) { mappedOwner := HeteroPrimitiveOwner.Selection; mappedOpcode := HeteroPrimitiveOpcode.SelectMtpVerify }
   }
 
@@ -239,6 +248,7 @@ class HeteroV3TerminalBridge extends Module {
   io.completion.bits.tag := base.tag
   io.completion.bits.phase := base.phase
   io.completion.bits.status := completionStatus
+  io.completion.bits.predicate := completionPredicate
   io.busy := state =/= sIdle
   io.unsupported := unsupportedReg
   io.protocolError := protocolErrorReg
@@ -246,18 +256,21 @@ class HeteroV3TerminalBridge extends Module {
   when(io.clear) {
     state := sIdle
     completionStatus := 0.U
+    completionPredicate := false.B
     unsupportedReg := false.B
     protocolErrorReg := false.B
   }.otherwise {
     when(state === sIdle && io.in.fire) {
       base := io.in.bits
       completionStatus := 0.U
+      completionPredicate := false.B
       unsupportedReg := false.B
       protocolErrorReg := false.B
       state := sClassify
     }
     when(state === sClassify) {
-      when(!mappedValid) {
+      val resolveFlagsValid = base.kind =/= PrimitiveKind.StateResolve.U || base.flags(9) ^ base.flags(14)
+      when(!mappedValid || !resolveFlagsValid) {
         completionStatus := 4.U
         unsupportedReg := true.B
         state := sReport
@@ -282,15 +295,18 @@ class HeteroV3TerminalBridge extends Module {
         io.terminalCompletion.bits.terminalPhase =/= expectedTerminalPhase
       when(tagMismatch || phaseMismatch) {
         completionStatus := Mux(tagMismatch, "he1".U, "he2".U)
+        completionPredicate := false.B
         protocolErrorReg := true.B
         state := sReport
       }.elsewhen(io.terminalCompletion.bits.status =/= 0.U) {
         completionStatus := io.terminalCompletion.bits.status
+        completionPredicate := false.B
         state := sReport
       }.elsewhen(acceptedComposite && !acceptedLast) {
         state := sCompositeIssue
       }.otherwise {
         completionStatus := 0.U
+        completionPredicate := io.terminalCompletion.bits.predicate
         state := sReport
       }
     }

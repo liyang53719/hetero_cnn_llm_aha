@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "status": "IN_PROGRESS_BRIDGE_PROTOCOL_PASS_ENDPOINTS_OPEN",
+  "status": "IN_PROGRESS_CONDITIONAL_MTP_PROTOCOL_PASS_DC_RERUN_OPEN",
   "source_kinds": 53,
   "mapped_source_kinds": 53,
   "terminal_binding_contract": 58,
   "bridge": {
     "implementation": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala",
-    "chisel_tests": 5,
+    "chisel_tests": 6,
     "python_contract_tests": 3,
     "simple_completion_wait": "PASS",
     "composite_suboperation_serialization": "PASS",
@@ -27,17 +27,17 @@
   },
   "generated_bridge_rtl": {
     "status": "PASS_VERILATOR_LINT",
-    "source_git_sha": "8faaa7a",
+    "source_base_sha": "dc62923",
     "path": "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
-    "sha256": "43c0f8a94401e0b23c49dae49ba669c4422b5d65d1921e676d6616544458fc67",
-    "lint_log_sha256": "e94832c66a18ccd07ef6f0ed9c64d3806705ec35cfd8f032c2cac000887044a9"
+    "sha256": "0d631fba43990c10ad17af74730b324f42878853bd5bc8dcd0a5f33249a54e9f",
+    "lint_log_sha256": "c302215c00fb85932821803eb29761f62e394c367a815382c8e347ec0fc41490"
   },
   "generated_owner_router_rtl": {
     "status": "PASS_VERILATOR_LINT",
-    "source_git_sha": "8faaa7a",
+    "source_base_sha": "dc62923",
     "path": "generated/operator_primitives_v3/bridge/HeteroV3TerminalOwnerRouter.sv",
-    "sha256": "ad073d8709a1529ce787406ad20f5fe47eb4922a105272ae36bd7bced9ed0355",
-    "lint_log_sha256": "0834309728e3b4bd45c8cedbef8e768054cd2f0f9303bd80ae016f108dccbd74"
+    "sha256": "538affa4ad734e945da1379e48e7fc3f482500632c3d72e56c4a78cb8fb4b597",
+    "lint_log_sha256": "22ba5aea81cccc5cec13155377edc92583dfc9516faca1f378a0b32e9edf90f6"
   },
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
@@ -47,13 +47,13 @@
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "combined_owner_shell": {
-    "status": "PASS_LINK_AND_SETUP_CANARIES_OPEN",
+    "status": "RERUN_REQUIRED_AFTER_INTERNAL_PREDICATE_PORT",
     "evidence": "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json",
     "terminal_bindings": 58,
     "owners": 8,
     "period_ns": 1.25,
     "wns_ns": 0.00000369549,
-    "area": 2097230.230542,
+    "prior_area": 2097406.588548,
     "unmapped": 0,
     "dc_errors": 0,
     "composite_scratch_enabled": true
@@ -293,16 +293,16 @@
     "dc_log_sha256": "6978cef97d758fbf932c2c55431df0577cdd9125867e2e27b8aba0f595b8edb9"
   },
   "selection_endpoint_evidence": {
-    "status": "PASS_6_OF_6_EXTERNAL_SRAM_AND_DC",
+    "status": "PASS_6_OF_6_PROTOCOL_DC_RERUN_REQUIRED",
     "opcodes": ["SelectTopK", "SelectExpand", "SelectRoute", "SelectMerge", "SelectBlockPool", "SelectMtpVerify"],
     "topk_controller": "rtl/selection/selection_topk_sram_v3.sv",
     "endpoint": "rtl/integration/operator_selection_endpoint_v3.sv",
     "topk_controller_sha256": "e93537199e18149314bf8a782cabc49954836377a82b9cb8e4e9a1f363e7261b",
-    "endpoint_sha256": "e55cfe4ee9fa6c12841540d8548dc9cbfd590c71310ea55663af9fd3e8a0071e",
+    "endpoint_sha256": "4c30f8d0e84bcbe34eb54768900fb91d737bc4fb7c6220d5502fd0462a54ded7",
     "authoritative_generated_children": {"route_merge_sha256": "7ee834a60954b350e693af5c634072f730b8af8ccf716c4c45c6ad9e6a69412b", "block_pool_sha256": "aaf074514819ac9a132434bf01a4341ca3d4fb2c1df894cc886f6bd0c6759e36", "mtp_verify_sha256": "73b054326f811cd26714d6d22a5c0cfb429ab088ce4ba2f00fc7a284ec55247b"},
-    "test": {"successful_transactions": 100, "opcodes": 6, "stable_topk_ties": true, "route_results_out_of_order": true, "merge_output_in_order": true, "log_sha256": "840f85a2ee8cafb30d130243d7bb95d6e5d360dbecde559c8730a6e21623bee6"},
+    "test": {"successful_transactions": 100, "opcodes": 6, "stable_topk_ties": true, "route_results_out_of_order": true, "merge_output_in_order": true, "mtp_predicate_checked": true, "log_sha256": "21d0baa73de3d1ace78e942794226b07cedd56773cea44a232a34bc03a2c97f5"},
     "storage": {"topk_entries": 512, "entry_bits": 65, "implementation": "external SRAM request/response", "flattened_register_table_present": false},
-    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000525236, "area": 29113.357, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 0},
+    "dc": {"status": "SUPERSEDED_BY_PREDICATE_RERUN_REQUIRED", "prior_period_ns": 1.25, "prior_wns_ns": 0.000525236, "prior_area": 29113.357, "prior_unmapped": 0},
     "dc_log_sha256": "f1dd6a192736a50ae46c1ce5d92ff28080b952e758e493d058e35628cc5c0958"
   },
   "vision_endpoint_evidence": {
@@ -332,5 +332,5 @@
     "shared_scheduler_sha256": "c1e56c1b29590d09515c300a6931259cd722683aa0d07e5cc30cd2e6a5e156b1",
     "endpoint_test_log_sha256_final": "53bcdc04b02551851c2ba42099689414a54ec5c13fee10ab7e9ab079222e9a4c"
   },
-  "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
+  "claim_boundary": "All eight atomic owners have payload/protocol evidence. Conditional MTP and MoE route source semantics pass unit tests; Qwen3.5 integrated canary and post-change DC remain open."
 }

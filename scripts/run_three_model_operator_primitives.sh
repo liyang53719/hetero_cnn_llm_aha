@@ -7,7 +7,7 @@ OUT="$ROOT/work/generated/three_model_operator_primitives"
 RESULTS="$ROOT/work/results/three_model_operator_primitives"
 REPORT="$ROOT/reports/execution/OPERATOR_PRIMITIVE_COVERAGE_V3.json"
 SBT_LAUNCH_JAR=${SBT_LAUNCH_JAR:-"$ROOT/work/toolchain/sbt-launch-1.10.2.jar"}
-JAVA_BIN=${JAVA_BIN:-java}
+JAVA_BIN=${JAVA_BIN:-"$ROOT/work/toolchain/conda/bin/java"}
 PYTHON_BIN=${PYTHON_BIN:-python3}
 
 mkdir -p "$OUT" "$RESULTS" "$(dirname "$SBT_LAUNCH_JAR")" "$(dirname "$REPORT")"
@@ -24,12 +24,12 @@ fi
   > "$RESULTS/python_tests.log"
 
 pushd "$PROJECT" >/dev/null
-"$JAVA_BIN" -Xmx4g -jar "$SBT_LAUNCH_JAR" clean compile test \
+"$JAVA_BIN" -Xmx8g -XX:ActiveProcessorCount=8 -jar "$SBT_LAUNCH_JAR" clean compile test \
   > "$RESULTS/chisel_test.log" 2>&1
-"$JAVA_BIN" -Xmx4g -jar "$SBT_LAUNCH_JAR" \
+"$JAVA_BIN" -Xmx8g -XX:ActiveProcessorCount=8 -jar "$SBT_LAUNCH_JAR" \
   "runMain heteronpu.operator.OperatorProgramChecks" \
   > "$RESULTS/program_checks.log" 2>&1
-"$JAVA_BIN" -Xmx4g -jar "$SBT_LAUNCH_JAR" \
+"$JAVA_BIN" -Xmx8g -XX:ActiveProcessorCount=8 -jar "$SBT_LAUNCH_JAR" \
   "runMain heteronpu.operator.EmitOperatorPrimitives $OUT" \
   > "$RESULTS/emitter.log" 2>&1
 popd >/dev/null

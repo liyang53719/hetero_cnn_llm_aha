@@ -137,7 +137,9 @@ object TextPrograms {
     MicroOpTemplate(MatrixGemm, src0 = 6, src1 = 2, dst = 7, m = 0, n = 2, k = 1),
     MicroOpTemplate(StableTopK, src0 = 7, dst = 8, m = 0, n = 2, k = 3),
     MicroOpTemplate(OnlineSoftmax, src0 = 8, dst = 8, m = 0, n = 3),
-    MicroOpTemplate(VectorScatter, src0 = 6, src1 = 8, dst = 9, m = 0, n = 3, k = 1),
+    // RoutedExpert distinguishes MoE route dispatch from an ordinary tensor
+    // scatter without adding a public command field.
+    MicroOpTemplate(VectorScatter, RoutedExpert, src0 = 6, src1 = 8, dst = 9, m = 0, n = 3, k = 1),
     MicroOpTemplate(StateRead, Stateful, src0 = 14, dst = 14, n = 2),
     MicroOpTemplate(DmaRead, of(RoutedExpert), src0 = 3, src1 = 9, src2 = 14, dst = 10, m = 6, n = 4, k = 1),
     MicroOpTemplate(MatrixGemm, of(RoutedExpert), src0 = 9, src1 = 10, dst = 11, m = 6, n = 4, k = 1, index0 = 0),

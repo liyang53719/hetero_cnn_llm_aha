@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "canonical_active_clock_policy",
+  "effective_date": "2026-09-04",
+  "target_clock_hz": 800000000,
+  "target_clock_mhz": 800,
+  "target_period_ns": 1.25,
+  "setup_uncertainty_ns": 0.08,
+  "io_budget_ns": 0.10,
+  "scope": [
+    "new Chisel RTL generation",
+    "new RTL simulation timing parameters",
+    "new DC synthesis",
+    "new STA and PPA reports",
+    "active architecture performance projections"
+  ],
+  "historical_evidence_policy": "Do not rewrite old 1 GHz reports. They remain provenance-only and cannot be reused as 800 MHz signoff.",
+  "forbidden_new_claims": [
+    "1 GHz timing closure",
+    "1.0 ns active synthesis constraint",
+    "performance projections computed from 1 GHz after this policy date"
+  ],
+  "required_dc_source": "dc/common_clock_800mhz.tcl"
+}

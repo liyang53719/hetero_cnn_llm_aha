@@ -1,0 +1,213 @@
+schema_version: 3
+plan_id: THREE_MODEL_OPERATOR_PRIMITIVE_V3_800MHZ
+repository: liyang53719/hetero_cnn_llm_aha
+branch_policy:
+  branch: main
+  create_branch: false
+  force_push: false
+  remote_equality_required: true
+scope:
+  source_gate:
+    models:
+      - Qwen/Qwen2-1.5B-Instruct@ba1cf1846d7df0a0591d6c00649f57e798519da8
+      - Qwen/Qwen3.5-35B-A3B@62704185bd97ad488cfc404e7caea797396b74dc
+      - Qwen/Qwen3.8-Flash-Next@34567a4712bc9766c4449e2e98e4468bfa24d915
+    include: [text, vision, multimodal_injection, mtp_transaction, deterministic_argmax]
+    exclude: [tokenizer, host_sampling_policy]
+  evidence_boundary:
+    complete_now:
+      - granular_operator_inventory
+      - synthesizable_chisel_microprogram_roots
+      - descriptor_and_dimension_parameterization
+      - launch_issue_completion_result_ready_valid_protocol
+      - structural_semantic_checks
+      - ChiselTest_backpressure_and_error_tests
+      - CIRCT_emission_smoke
+      - active_800MHz_clock_policy
+    local_agent_next:
+      - authoritative_RTL_generation
+      - leaf_endpoint_binding
+      - numerical_RTL_simulation
+      - full_Command128_descriptor_L2_integration
+      - DC_synthesis_and_STA
+      - area_power_and_PVT_reports
+clock_policy:
+  target_hz: 800000000
+  target_mhz: 800
+  period_ns: 1.250
+  setup_uncertainty_ns: 0.080
+  io_budget_ns: 0.100
+  canonical_tcl: dc/common_clock_800mhz.tcl
+  historical_1GHz_reports: provenance_only
+architecture:
+  chisel_project: chisel/three_model_operator_primitives
+  inventory: config/model_operator_inventory_v3_complete.json
+  independent_roots: 18
+  root_names:
+    - HeteroTokenEmbeddingPrimitiveV3
+    - HeteroQwen2DecoderBlockPrimitiveV3
+    - HeteroQwen35DenseAttentionPrimitiveV3
+    - HeteroGatedDeltaNetPrimitiveV3
+    - HeteroMoePrimitiveV3
+    - HeteroQwen38GatedResidualReadPrimitiveV3
+    - HeteroQwen38GatedResidualWritePrimitiveV3
+    - HeteroPlePrimitiveV3
+    - HeteroQsaPrimitiveV3
+    - HeteroQwen38FinalHyperMergePrimitiveV3
+    - HeteroVisionPatchEmbedPrimitiveV3
+    - HeteroVisionTransformerBlockPrimitiveV3
+    - HeteroVisionPatchMergePrimitiveV3
+    - HeteroMultimodalInjectPrimitiveV3
+    - HeteroFinalNormPrimitiveV3
+    - HeteroLmHeadArgmaxPrimitiveV3
+    - HeteroMtpDraftPrimitiveV3
+    - HeteroMtpVerifyResolvePrimitiveV3
+  operator_counts:
+    qwen2_1p5b: 30
+    qwen3_5_35b_a3b: 93
+    qwen3_8_flash_next: 150
+  important_separations:
+    - token_embedding_vs_final_lm_head
+    - qwen38_hyper_read_vs_hyper_write
+    - mtp_draft_vs_verify_resolve
+    - vision_patch_vs_transformer_vs_merge_vs_injection
+  runtime_modes:
+    bit0: gdn_output_gate_sigmoid_else_silu
+    bit1: vision_merger_postshuffle_norm
+    bit2: recurrent_decode_else_prefill_chunk
+sandbox_gate:
+  command: ./scripts/run_three_model_operator_primitives.sh
+  acceptance:
+    python_tests_failed: 0
+    scala_compile_errors: 0
+    chisel_tests_failed: 0
+    pure_scala_semantic_checks: pass
+    emitted_sv_roots: 18
+    generated_source_gate: PASS_CHISEL_OPERATOR_SOURCE_GATE
+    target_clock_hz: 800000000
+    active_1GHz_constraints: 0
+local_agent_tasks:
+  - id: LA0_SYNC
+    priority: P0
+    action:
+      - git checkout main
+      - git pull --ff-only origin main
+      - verify local HEAD equals origin/main
+      - run ./scripts/run_three_model_operator_primitives.sh
+    acceptance:
+      branch: main
+      working_tree_before_generation: clean
+      source_gate_status: PASS_COMPLETE_THREE_MODEL_CHISEL_OPERATOR_PRIMITIVE_SOURCE_GATE
+      emitted_sv_roots: 18
+  - id: LA1_AUTHORITATIVE_RTL_GENERATION
+    priority: P0
+    depends_on: [LA0_SYNC]
+    action:
+      - run the standalone V3 emitter
+      - generate existing V2 irregular leaf modules used by stable TopK, index sort, run coalescing, ngram hash, vision address planning and MTP resolve
+      - freeze tool versions and SHA256 for every emitted RTL file
+      - reject duplicate module names and stale generated files
+    acceptance:
+      v3_root_sv_count: 18
+      module_name_collisions: 0
+      unresolved_blackboxes_at_leaf_binding: 0
+      manifest_contains_phase_count_per_root: true
+      hashes_present_for_all_sv: true
+  - id: LA2_RTL_PROTOCOL_SIM
+    priority: P0
+    depends_on: [LA1_AUTHORITATIVE_RTL_GENERATION]
+    action:
+      - compile each root with its leaf-command responder
+      - randomize launch, microOp, completion and result ready-valid independently
+      - inject tag mismatch, phase mismatch and leaf status errors
+      - compare emitted phase stream with MANIFEST and OPERATOR_COVERAGE
+    acceptance:
+      roots_tested: 18
+      random_seeds_min: 20
+      successful_transactions_per_root_min: 100
+      lost_duplicated_reordered_phases: 0
+      stable_output_under_backpressure: true
+      tag_mismatch_status: 0xe1
+      phase_mismatch_status: 0xe2
+      leaf_error_propagation: bit_exact
+      watchdog_errors: 0
+  - id: LA3_LEAF_NUMERICAL_SIM
+    priority: P0
+    depends_on: [LA1_AUTHORITATIVE_RTL_GENERATION]
+    action:
+      - retain existing Matrix, RMSNorm, RoPE, online-softmax and SiLU vectors
+      - add GDN recurrence, configured gate, hyper low-rank gate, MoE routing, PLE, QSA selection, vision and MTP leaf vectors
+      - compare against immutable Python or framework references
+    acceptance:
+      qwen2_leaf_operator_coverage: 30/30
+      qwen35_leaf_operator_coverage: 93/93
+      qwen38_leaf_operator_coverage: 150/150
+      stable_topk_tie_rule: lower_original_index_wins
+      qsa_selected_indices_exact: true
+      mtp_accept_prefix_and_rollback_exact: true
+      nan_inf_special_cases_documented: true
+      reference_hashes_present: true
+  - id: LA4_MODEL_CANARIES
+    priority: P1
+    depends_on: [LA2_RTL_PROTOCOL_SIM, LA3_LEAF_NUMERICAL_SIM]
+    action:
+      - Qwen2 one complete decoder block plus final norm/lm head
+      - Qwen3.5 three GDN layers plus one dense-attention layer plus MoE and MTP transaction
+      - Qwen3.8 one linear-attention layer, one QSA layer, PLE, all four hyper transactions, MoE, final merge and MTP
+      - one vision patch/block/merge/injection canary shared by Qwen3.5 and Qwen3.8
+    acceptance:
+      cpu_fallback: 0
+      reference_tensor_injection_after_start: 0
+      descriptor_reads_min: 1
+      l2_reads_min: 1
+      l2_writes_min: 1
+      matrix_sfu_kv_state_stalls_each_min: 1
+      numerical_checkpoints_all_pass: true
+  - id: LA5_DC_800MHZ
+    priority: P1
+    depends_on: [LA2_RTL_PROTOCOL_SIM]
+    environment_required:
+      - Synopsys_Design_Compiler
+      - licensed_std_cell_library
+      - SRAM_views_or_explicit_blackbox_policy
+    action:
+      - source dc/common_clock_800mhz.tcl
+      - call hetero_apply_primary_clock for every root top
+      - synthesize roots individually before combined shell
+      - report QoR, area, resources, clocks and all violating paths
+      - preserve hierarchy for root and expensive leaf attribution
+    acceptance:
+      active_clock_name: hetero_clk
+      requested_period_ns: 1.250
+      accidental_1GHz_clocks: 0
+      unresolved_references: 0
+      inferred_latches: 0
+      combinational_loops: 0
+      setup_wns_ns_min: 0.0
+      hold_violations: 0
+      tool_library_corner_constraint_git_sha_bound: true
+      report_log_sha256_present: true
+  - id: LA6_COMMIT_MAIN
+    priority: P0
+    depends_on: [LA1_AUTHORITATIVE_RTL_GENERATION, LA2_RTL_PROTOCOL_SIM, LA3_LEAF_NUMERICAL_SIM]
+    action:
+      - commit generated RTL manifests, tests and reports to main
+      - do not create a branch
+      - git pull --rebase origin main
+      - git push origin main
+      - compare local and remote SHA
+    acceptance:
+      branch: main
+      force_push: false
+      remote_sha_equals_local_sha: true
+final_gate:
+  operator_source_coverage:
+    qwen2_1p5b: complete
+    qwen3_5_35b_a3b: complete
+    qwen3_8_flash_next: complete
+  performance_nonclaim:
+    note: operator coverage does not imply target throughput
+    bf16_peak_at_800mhz: 409.6_GMAC_per_s_or_819.2_GFLOP_per_s
+    int8_peak_at_800mhz: 1.6384_TMAC_per_s_or_3.2768_TOPS
+    native_w4a8_candidate_at_800mhz: 3.2768_TMAC_per_s_or_6.5536_TOPS
+    qwen2_q1024_300tps_required_wall_mac_utilization: 0.992070422

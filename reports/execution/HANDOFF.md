@@ -62,11 +62,15 @@
   0 unmapped/error. LayerNorm includes real mean/variance/weight/bias. SFU 19/23.
 - RoPE pipeline matches 10k frozen vectors; 512-bit endpoint passes 100
   transactions/800 pairs. Clean-log DC WNS +0.0000354052 ns, area 14114.1.
-  SFU is 20/23; OnlineSoftmax, Gate and Pwl remain.
+  SFU reached 20/23.
+- OnlineSoftmax binds block32 local weights plus merge128 summary variants;
+  legacy token-chain is unused. Endpoint, 132 merge vectors and compliant j4
+  q128/q384/q1024 8-seed protocol PASS. DC WNS +0.0000165701 ns, area
+  51283.232, 0 unmapped/error. SFU is 21/23; Gate and Pwl remain.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
 - Endpoint total remains 12/58 until the SFU owner closes atomically; next bind
-  OnlineSoftmax, Gate and Pwl, then consolidate all 23 SFU opcodes.
+  Gate and Pwl, then consolidate all 23 SFU opcodes.

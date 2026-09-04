@@ -181,6 +181,20 @@
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000354052, "area": 14114.1, "unmapped": 0, "dc_errors": 0},
     "dc_log_sha256": "992230d3692d98a0c155fbe7195ffc075ef4c1374dcf268731836ff538e1519d"
   },
+  "sfu_online_softmax_endpoint_evidence": {
+    "status": "PASS_HIERARCHICAL_BLOCK128_ENDPOINT_DC",
+    "opcode": "SfuOnlineSoftmax",
+    "legacy_online_used": false,
+    "variants": {"block32_weights": 0, "merge128_summary": 1},
+    "endpoint": "rtl/integration/operator_sfu_online_softmax_endpoint_v3.sv",
+    "endpoint_sha256": "aecbfa43780b2469c17d3dd7d00314e49516f6ef086638381b827dc2a20dfbeb",
+    "endpoint_test_log_sha256": "eb9a8350c9f15f1c63bcffe721032a1aeb343b126d00c6eca97f3c50c34c08fb",
+    "block32_test": {"rows": 2, "weights": 64, "log_sha256": "d940a2f8dc9be78aa150c5a8fc34ca39e2b6f98d75606fcaef09d6932262e90f"},
+    "merge128_test": {"vectors": 132, "stream_beats": 32, "log_sha256": "3574ab8da0e790dc62a33a0149557d76d58a41f371a53b7b0c349b81011dbfc4"},
+    "controller_protocol": {"seeds": 8, "lengths": [128,384,1024], "tasks": 118272, "q1024_merges_per_seed": 43008, "loss": 0, "duplicate": 0, "reorder": 0, "deadlock": 0, "verilator_threads": 4, "log_sha256": "1a4ab822a97ab4f6da2f5c7fe2e43824b4cc9c435c471c479f92c9e6177a6f7a"},
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000165701, "area": 51283.2320001, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "062fccf65d6e29891e89137d8734340e05ea85e7f0046a5748ad881a53300418"
+  },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",
     "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",

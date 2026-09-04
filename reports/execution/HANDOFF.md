@@ -57,8 +57,8 @@
 - Shared Norm16 core now binds RMSNorm and L2Norm through one V3 endpoint;
   numerical smoke and DC PASS, WNS +0.000175953 ns, area 13539.162.
 - SFU numerical+endpoint+DC coverage 17/23; GroupRMS/LayerNorm remain open.
-- GroupRMS 4x4-lane functional candidate PASS, but current endpoint duplicates
-  the direct and group Norm cores. Do not count/DC until one-core consolidation.
+- RMS/GroupRMS/L2 now share exactly one physical Norm16 core. Three-mode test
+  PASS; DC WNS +0.0000663996 ns, area 18082.61, 0 unmapped. SFU 18/23.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

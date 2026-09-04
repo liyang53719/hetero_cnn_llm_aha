@@ -152,19 +152,20 @@
     "test_log_sha256": "8560cb2d31c9b5e4ced4bcb14807e45aa414da553df0d39e052208c64ca8f724"
   },
   "sfu_norm16_endpoint_evidence": {
-    "status": "PASS_RMS_AND_L2_GROUP_AND_LAYER_OPEN",
+    "status": "PASS_RMS_GROUP_RMS_L2_LAYER_OPEN",
     "core": "rtl/sfu/fp32_norm16_rms_l2_pipe.sv",
     "endpoint": "rtl/integration/operator_sfu_norm_endpoint_v3.sv",
     "core_sha256": "ec0185f60db3760bafff38aee48bfd8eaf76bb3f77cf75664191835cacd4b26e",
     "endpoint_sha256": "20e0cf135f6287979e854f4c45468ea69d002b03037ae60183d40ebbb7c779dd",
-    "opcodes": ["SfuRmsNorm", "SfuL2Norm"],
+    "opcodes": ["SfuRmsNorm", "SfuGroupRmsNorm", "SfuL2Norm"],
     "shared_arithmetic": "16 MulPipe lanes plus pipelined ReduceSum and Rsqrt NR2",
     "test_log_sha256": "a5a66d6a92bbe2da31bb791004c6adbe72e322f54549990bdf77013661ec21dc",
-    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.000175953, "area": 13539.162, "unmapped": 0},
-    "dc_log_sha256": "f95ef2886179d8fd220cf12334d34d7a9f46eb1f4607107269d05d23a097a488"
+    "single_arithmetic_core": true,
+    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0000663996, "area": 18082.61, "unmapped": 0},
+    "dc_log_sha256": "c4701cf24b7a7fe9bc51787f7f20a99c936ba81d8d8d07f09fc139837c62af56"
   },
   "sfu_group_rmsnorm_candidate": {
-    "status": "PASS_FUNCTIONAL_DUPLICATE_CORE_PPA_OPEN",
+    "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",
     "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",
     "rtl_sha256": "3e94ed38dd52f4fed75401d05492841ca57ee970d23e33b995d941f6d3aec9ed",
     "groups": 4,
@@ -172,7 +173,8 @@
     "mean_scale": 0.25,
     "shared_core_parameterization": true,
     "endpoint_test_log_sha256": "1bca808eaf9d1a610473a391b09c1bb59c201b7cdbbfda11f418c24840b8ac6b",
-    "blocking_issue": "current endpoint elaborates one direct core plus one core inside group wrapper; consolidate to one physical core before DC and formal coverage count"
+    "shared_scheduler_sha256": "d840a25b0664b12881e607f45fbb9726548136152d780b9ffd5972399e256734",
+    "endpoint_test_log_sha256_final": "bbab27e9b865276282133e8044c46a166ff7134cc21b70650e56da6e99628298"
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

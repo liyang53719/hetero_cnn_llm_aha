@@ -1,19 +1,19 @@
 {
   "schema_version": 7,
-  "stage": "G2_AUTHORITATIVE_RTL_GENERATION",
-  "state": "G0_G1_PASS_GENERATE_COMMITTED_RTL",
-  "unique_next_action": "Regenerate the passing 18 root and 25 primitive SystemVerilog files into generated/operator_primitives_v3, create collision and provenance manifests, and commit without hand editing generated RTL.",
+  "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
+  "state": "G0_G1_G2_PASS",
+  "unique_next_action": "Freeze the PrimitiveKind-to-owner/opcode translation manifest, implement the completion-aggregating bridge, and bind the eight owner classes to real endpoints without immediate-completion stubs.",
   "expected_outputs": [
-    "generated/operator_primitives_v3/MANIFEST.json",
-    "reports/execution/OPERATOR_RTL_GENERATION_V3.json"
+    "config/operator_terminal_bridge_v3.json",
+    "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"
   ],
   "success": {
     "branch": "main",
-    "root_sv": 18,
-    "primitive_sv": 25,
-    "module_name_collisions": 0,
-    "missing_hashes": 0,
-    "generated_rtl_hand_edits": 0
+    "terminal_bindings": "58/58",
+    "unsupported_owner_opcode": 0,
+    "immediate_completion_stubs": 0,
+    "cpu_fallback": 0,
+    "tag_phase_status_preserved": true
   },
   "failure_policy": {
     "dependency_or_network": "retry the same pinned version three times",

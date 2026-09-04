@@ -2,8 +2,8 @@
 
 - Branch: `main`; baseline: `b55ddcb`.
 - Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.
-- Stage: `G2_AUTHORITATIVE_RTL_GENERATION`.
-- State: `G0_G1_PASS`.
+- Stage: `G3_PROTOCOL_ENDPOINT_BINDING`.
+- State: `G0_G1_G2_PASS`.
 - Implementation origin: Chisel; no Catapult HLS source/report exists in main.
 - Frozen coverage: 18 model roots, 25 primitive modules, 58 terminal bindings.
 - Models: Qwen2 30/30, Qwen3.5 93/93, Qwen3.8 150/150, plus Vision canary.
@@ -15,4 +15,6 @@
 - G1 evidence: 18/18 roots, 4 Python tests, 22 ChiselTest; 25/25 modules,
   51 pytest; 58/58 bindings; canonical Gemmini clean.
 - Source fixes are confined to Chisel/build scripts; generated RTL hand edits: 0.
-- Next: regenerate 43 authoritative SV files, hash, collision-check and commit.
+- G2: 18 root + 25 primitive authoritative SV, one 30-module combined SV,
+  0 combined/cross-layer collision, 44/44 Verilator lint PASS, no hand edits.
+- Next: freeze kind-to-owner/opcode map and implement real completion bridge.

@@ -1,0 +1,222 @@
+{
+  "expected_count": 25,
+  "failures": [],
+  "modules": {
+    "block_pool_address": {
+      "bytes": 24532,
+      "declared_modules": [
+        "HeteroBlockPoolAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/block_pool_address.sv",
+      "sha256": "aaf074514819ac9a132434bf01a4341ca3d4fb2c1df894cc886f6bd0c6759e36"
+    },
+    "causal_conv_address": {
+      "bytes": 38871,
+      "declared_modules": [
+        "HeteroCausalConvAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/causal_conv_address.sv",
+      "sha256": "75ad463d38e8192d4e11af7c19a23cca542d4c5f705d2d61f5dfa6c4dfd2b0a8"
+    },
+    "composite_activation": {
+      "bytes": 26643,
+      "declared_modules": [
+        "HeteroCompositeActivationSequencer"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/composite_activation.sv",
+      "sha256": "af463a316fc909ade2f2df7281d7ea82e559cb680fbdde0a29d2d9fffe1582d4"
+    },
+    "fp32_pwl_segment_search": {
+      "bytes": 74252,
+      "declared_modules": [
+        "HeteroFp32PwlSegmentSearch"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/fp32_pwl_segment_search.sv",
+      "sha256": "7dc184f3236026b3d2f79eb1ef17ff5bd3d2fa81047785097ff9c90fb57c72ef"
+    },
+    "gated_residual_address": {
+      "bytes": 25522,
+      "declared_modules": [
+        "HeteroGatedResidualAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/gated_residual_address.sv",
+      "sha256": "f92c27be34552defbffeaefbdccf882282a6a2d1094516d30baf09126d9ee42b"
+    },
+    "gdn_state_address": {
+      "bytes": 33172,
+      "declared_modules": [
+        "HeteroGdnStateAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/gdn_state_address.sv",
+      "sha256": "2e28a481ab906a89e05447d98388665f68514563000ad417dd3f0d47a6cd4e2c"
+    },
+    "model_operator_sequencer": {
+      "bytes": 153568,
+      "declared_modules": [
+        "HeteroModelOperatorSequencer"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/model_operator_sequencer.sv",
+      "sha256": "2f3218407704d9a5a6beedc040d7bab5f694f92386258d5ba1e63e3aff4380f9"
+    },
+    "moe_route_dispatch": {
+      "bytes": 163699,
+      "declared_modules": [
+        "HeteroMoeRouteDispatch"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/moe_route_dispatch.sv",
+      "sha256": "7ee834a60954b350e693af5c634072f730b8af8ccf716c4c45c6ad9e6a69412b"
+    },
+    "mrope_section_map": {
+      "bytes": 21865,
+      "declared_modules": [
+        "HeteroMropeSectionMap"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/mrope_section_map.sv",
+      "sha256": "5ba9991a8a6fdc475dafa02b761ccabe84dea2005edf459bbe50c405db4dfa11"
+    },
+    "mtp_verify": {
+      "bytes": 27451,
+      "declared_modules": [
+        "HeteroMtpVerify"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/mtp_verify.sv",
+      "sha256": "73b054326f811cd26714d6d22a5c0cfb429ab088ce4ba2f00fc7a284ec55247b"
+    },
+    "norm_address": {
+      "bytes": 36018,
+      "declared_modules": [
+        "HeteroNormAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/norm_address.sv",
+      "sha256": "768e0c77385b18eef979a72c7ab382bcb334eb9a7f0364faca4e5380eb09351e"
+    },
+    "ple_ngram_hash": {
+      "bytes": 134462,
+      "declared_modules": [
+        "HeteroUnsignedMultiply",
+        "HeteroUnsignedDivide",
+        "HeteroPleNgramHash"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/ple_ngram_hash.sv",
+      "sha256": "c19bfe8678f4cab42c3c55d56483eb86a0c52ea6bca209b33ad91939163e6302"
+    },
+    "primitive_capability_decode": {
+      "bytes": 25561,
+      "declared_modules": [
+        "HeteroPrimitiveCapabilityDecode"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/primitive_capability_decode.sv",
+      "sha256": "58196b575f4f84502680ba7e01724dac932926c429ba861aede8b9b5c052078f"
+    },
+    "primitive_leaf_expander": {
+      "bytes": 76315,
+      "declared_modules": [
+        "HeteroCompositeActivationSequencer",
+        "HeteroPrimitiveLeafExpander"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/primitive_leaf_expander.sv",
+      "sha256": "002ba749ad7b72e85f85bbd0ab9fbb8d80f0efcd13995da1fb55448a5af66783"
+    },
+    "qsa_block_selector": {
+      "bytes": 127637,
+      "declared_modules": [
+        "table_512x53",
+        "HeteroStreamingTopK",
+        "HeteroUnsignedMultiply",
+        "HeteroQsaBlockSelector"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/qsa_block_selector.sv",
+      "sha256": "f2fa58098050fa82baa4461e1b5fa40923a2756ef706fb604fedef2942a9a40e"
+    },
+    "state_transaction": {
+      "bytes": 31938,
+      "declared_modules": [
+        "HeteroStateTransaction"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/state_transaction.sv",
+      "sha256": "dd04c02286b7f3e78bddfd71dd53abea6930cf09d56f0d66c9e785235a729ad3"
+    },
+    "streaming_topk": {
+      "bytes": 65234,
+      "declared_modules": [
+        "table_512x65",
+        "HeteroStreamingTopK"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/streaming_topk.sv",
+      "sha256": "dca07c6a3dd9fc9d9b2b31bae5546dcbe394fe555595c418acb8292ef4a16e0c"
+    },
+    "tagged_gather_reorder": {
+      "bytes": 286016,
+      "declared_modules": [
+        "HeteroTaggedGatherReorder"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/tagged_gather_reorder.sv",
+      "sha256": "76e239d4550791742acee722c3d9adf42790b67675522e3bab5b42fa867963ba"
+    },
+    "terminal_model_operator_frontend": {
+      "bytes": 264088,
+      "declared_modules": [
+        "HeteroModelOperatorSequencer",
+        "HeteroCompositeActivationSequencer",
+        "HeteroPrimitiveLeafExpander",
+        "HeteroTerminalModelOperatorFrontend"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/terminal_model_operator_frontend.sv",
+      "sha256": "f2c81b177b177dd92942089ed46e4128f0fb24a5eb7f1489b193a7cba61a4b61"
+    },
+    "unsigned_divide": {
+      "bytes": 29383,
+      "declared_modules": [
+        "HeteroUnsignedDivide"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/unsigned_divide.sv",
+      "sha256": "508c277e8662b8e4d406937296f373c09483e612e5a04d919a3023b49b65d339"
+    },
+    "unsigned_multiply": {
+      "bytes": 18819,
+      "declared_modules": [
+        "HeteroUnsignedMultiply"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/unsigned_multiply.sv",
+      "sha256": "6185850a0c76cee37238e38924255169139871532914ff8568e2cbbcee866192"
+    },
+    "vision_bilinear_index": {
+      "bytes": 78543,
+      "declared_modules": [
+        "HeteroUnsignedMultiply",
+        "HeteroUnsignedDivide",
+        "HeteroVisionBilinearIndex"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/vision_bilinear_index.sv",
+      "sha256": "922b1029b98108be2e7e92caab754683d9f692f92919aa921f9c52789d336d36"
+    },
+    "vision_patch3d_address": {
+      "bytes": 47943,
+      "declared_modules": [
+        "HeteroVisionPatch3dAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/vision_patch3d_address.sv",
+      "sha256": "bf08beb32b87852bb7b254e00cfe434978fbb4ec51b6bdf3ebea0e851573a03a"
+    },
+    "vision_patch_merge_address": {
+      "bytes": 32959,
+      "declared_modules": [
+        "HeteroVisionPatchMergeAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/vision_patch_merge_address.sv",
+      "sha256": "775c92e814d509699372a7eaf1ea890ad531f478a6886fda3e2c25829a315a73"
+    },
+    "vision_window_address": {
+      "bytes": 35395,
+      "declared_modules": [
+        "HeteroVisionWindowAddressGenerator"
+      ],
+      "path": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/generated/operator_primitives_v3/primitives/vision_window_address.sv",
+      "sha256": "013863e5f615cccb101844c85b0640b1a0b60876482696452e04f0a84ca0637e"
+    }
+  },
+  "schema_version": 1,
+  "status": "PASS_GENERATED_RTL_CATALOG",
+  "unexpected_sv_files": [],
+  "verified_count": 25
+}

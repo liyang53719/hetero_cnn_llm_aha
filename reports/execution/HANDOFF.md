@@ -48,7 +48,10 @@
   Original Reciprocal optimized empty and Exp2 WNS -0.140313 ns.
 - Reciprocal NR2 now passes the original 10k vectors and 1.25 ns DC: WNS
   +0.0000582933 ns, area 3664.843, 0 unmapped; scalar endpoint regression PASS.
-- Exp2 remains the only scalar timing failure.
+- Exp2 sequential MulPipe/AddPipe now passes original 10k vectors and DC:
+  WNS +0.0000697374 ns, area 4486.3. Scalar 3-op flat DC passes with common
+  HardFloat source: WNS +0.0000766516 ns, area 11890.515, 0 unmapped.
+- SFU numerical+endpoint+DC coverage is now 15/23; next four Norm operations.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

@@ -20,7 +20,7 @@
     "Dma": "PASS_4_OF_4_PINNED_IDMA_AXI",
     "Matrix": "PASS_COMPONENT_BOUND_7_OF_7_COMBINED_CANARY_OPEN",
     "Sfu": "PASS_23_OF_23_OWNER_PROTOCOL_AND_DC",
-    "KvMemory": "OPEN_REAL_ENDPOINT_BINDING",
+    "KvMemory": "PASS_4_OF_4_DDR_PTE_AND_IDMA_ENDPOINT",
     "State": "OPEN_REAL_ENDPOINT_BINDING",
     "Selection": "OPEN_REAL_ENDPOINT_BINDING",
     "Vision": "OPEN_REAL_ENDPOINT_BINDING"
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "35/58",
-    "owners_open": 4,
+    "real_v3_endpoint_bindings": "39/58",
+    "owners_open": 3,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -241,6 +241,19 @@
     "attempt2": {"status": "FAIL_TIMING_GATE_INPUT_BOUNDARY", "wns_ns": -0.00129306, "unmapped": 0, "dc_errors": 0, "log_sha256": "c373e93b7a07dfadd07c7b55571b10b7e2c89f79ede04e78b9ecf871e307f4fa"},
     "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 314488.628998, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 17},
     "dc_log_sha256": "0ac4eb1e9fd5ff7e801731dfaeef6f6f29188414a2ab084fc94210de646ba0cd"
+  },
+  "kv_memory_endpoint_evidence": {
+    "status": "PASS_4_OF_4_DDR_PTE_IDMA_AND_DC",
+    "opcodes": ["KvAppend", "KvGather", "KvAlloc", "KvFree"],
+    "pte_resolver": "rtl/kv/kv_ddr_pte_resolver_v3.sv",
+    "endpoint": "rtl/integration/operator_kv_memory_endpoint_v3.sv",
+    "pte_resolver_sha256": "933ad3993372dbf63bed386b264ca792ffe88f23d867154b3dc1b19ade358e01",
+    "endpoint_sha256": "72012dc4a6bb202e86379e53d9815191cdd52d8d16ba14dc439a66c0a06f9eed",
+    "contract": {"page_tokens": 16, "radix_levels": 2, "radix_bits_per_level": 10, "pte_bits": 128, "page_id_bits": 32, "generation_bits": 32, "refcount_bits": 32, "address_bits": 64, "data_residency": "DDR", "table_base_scope": "runtime supplies context-specific root base"},
+    "test": {"successful_commands": 101, "error_commands": 2, "q1024_pages": 64, "ddr_reads": 369, "ddr_writes": 145, "idma_requests": 248, "page_allocs": 105, "page_frees": 40, "stale_generation_status": 9, "log_sha256": "163abca8b6b500e3e330e16019590d663d7aab96188b323dece20e73f8f9fd7b"},
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000463724, "area": 7436.702, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 8},
+    "dc_log_sha256": "49456c6507dccffa42e7c515a07bcaf4118c877a3d762bf1f6606f7cad03ffab",
+    "nonclaims": ["prefix sharing COW and refcount greater than one remain L7", "TLB and leaf cache are not claimed by this G3 terminal endpoint", "iDMA is an external checked owner interface and payload bytes are not injected by the testbench"]
   },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",

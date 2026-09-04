@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
   "state": "G0_G1_G2_PASS_G3_BRIDGE_SOURCE_PASS",
-  "unique_next_action": "Close the four-op KvMemory owner: bind KvAppend/KvGather/KvAlloc/KvFree to the existing DDR-backed 32-bit page-table path and fixed staging, run deterministic payload/protocol tests without claiming the basic on-chip KV core, then perform clean-log 1.25 ns DC.",
+  "unique_next_action": "Close the seven-op State owner by combining the generated transaction controller and state/conv address generators with a real external SRAM/DDR read-write-decay-conv-window datapath; run begin/commit/rollback and error-path protocol tests before 1.25 ns DC.",
   "expected_outputs": [
     "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
     "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"

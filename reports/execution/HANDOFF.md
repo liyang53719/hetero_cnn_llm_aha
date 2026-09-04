@@ -79,10 +79,14 @@
   23-op + invalid regression PASS. Flattened-child DC after Gate boundary fix:
   WNS +0.00000369549 ns, area 314488.629, 0 error/unmapped; 17 near-zero
   transition violations remain reported. SFU owner is PASS.
+- KV owner binds append/gather/alloc/free to a two-level 10+10-bit DDR page
+  resolver, 128-bit PTE and external allocator/iDMA. 101 successful commands
+  include q1024/64 pages; stale generation and invalid opcode pass. DC WNS
+  +0.0000463724 ns, area 7436.702, 0 error/unmapped. Advanced L7 COW/TLB open.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total is 35/58; owners PASS are Control, DMA, Matrix component-bound,
-  and SFU. Next close the four-op DDR-backed KV owner.
+- Endpoint total is 39/58; owners PASS are Control, DMA, Matrix component-bound,
+  SFU and KV. Next close the seven-op State owner.

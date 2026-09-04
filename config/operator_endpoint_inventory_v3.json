@@ -29,8 +29,8 @@
     "KvMemory": {
       "opcodes": ["KvAppend", "KvGather", "KvAlloc", "KvFree"],
       "candidate_sources": ["rtl/kv/kv_cache_engine.sv", "rtl/kv/qwen2_kv_append_ddr_page_core.sv", "rtl/kv/kv_descriptor_v2_idma_adapter.sv"],
-      "v3_endpoint_adapter": null,
-      "readiness": "basic_contract_and_qwen2_append_exist_production_ddr_page_table_adapter_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_kv_memory_endpoint_v3.sv",
+      "readiness": "pass_ddr_pte_resolver_append_gather_alloc_free_idma_protocol_and_800mhz_dc"
     },
     "State": {
       "opcodes": ["StateRead", "StateWrite", "StateDecay", "StateConvWindow", "StateBegin", "StateCommit", "StateRollback"],

@@ -103,5 +103,13 @@
     "dc_log_sha256": "36f88cbc54ed94d13512cfd37517660df159262af09f4991a81d2c67947ab724",
     "remaining_sfu_opcodes": 13
   },
+  "sfu_reduce_max_primitive_evidence": {
+    "status": "PASS_NUMERICAL_E1_DC_E4_PENDING_OWNER_MUX",
+    "rtl": "rtl/sfu/fp32_reduce_max16.sv",
+    "rtl_sha256": "17637992d69deddb2c78a29a1f51f5f925f678c564cf064dd4dc020e0eaa21f7",
+    "tests": {"cases": 3, "stable_ties": true, "nan_last": true, "log_sha256": "c9bffd3472ce25d065b0e7077c20f896b82cb703f698589e868ac6f6ae7f4ee1"},
+    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.000338435, "area": 3579.849, "unmapped": 0},
+    "dc_log_sha256": "72285aa7b84084e101e7701d1b3d4a8ede0cdbd5e8cbba7b99ea16ece7c1a96f"
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

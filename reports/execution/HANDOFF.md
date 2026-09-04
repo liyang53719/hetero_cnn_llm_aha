@@ -38,6 +38,8 @@
 - SFU vector 10/23: 16-lane/11-case numerical PASS. Dedicated pipelined
   AddPipe/MulPipe fixes prior timing fail: DC WNS +0.150298 ns, area 5697.965,
   0 unmapped. SFU owner remains OPEN for 13 operations.
+- New ReduceMax16 primitive: stable FP32 max, NaN-last and low-index tie rule
+  PASS; DC WNS +0.000338435 ns, area 3579.849. Owner mux remains OPEN.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

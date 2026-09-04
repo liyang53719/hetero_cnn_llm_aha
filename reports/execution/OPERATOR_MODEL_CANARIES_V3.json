@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "IN_PROGRESS_1_OF_4",
+  "status": "IN_PROGRESS_2_OF_4",
   "claim_boundary": "Root-program canaries execute real owner endpoints with deterministic synthetic payload and memory services. They are not full checkpoint model inference or cross-operator tensor-memory continuity.",
   "qwen2": {
     "status": "PASS_ROOT_OWNER_CANARY",
@@ -12,9 +12,25 @@
     "hierarchical_softmax": true,
     "kv_ddr_pte_allocator_idma": true,
     "reference_output_injection": false,
-    "test_log_sha256": "626a566e7cbef6b34980db28e840d90f76d8b15223a015ccb54efc240883dd75"
+    "test_log_sha256": "3f54023e688bfd1f9d79d0c1b80d250a551bcc5624a943876293ecfe34f3a8a6"
   },
-  "qwen3_5": {"status": "OPEN", "mtp_source_fix": "PASS_UNIT: internal completion predicate selects exactly one commit or rollback; integrated owner canary pending"},
+  "qwen3_5": {
+    "status": "PASS_ROOT_OWNER_CANARY",
+    "roots": ["HeteroGatedDeltaNetPrimitiveV3", "HeteroQwen35DenseAttentionPrimitiveV3", "HeteroMoePrimitiveV3", "HeteroMtpVerifyResolvePrimitiveV3"],
+    "paths": 5,
+    "phases": {"gdn": 34, "dense_attention": 21, "moe": 26, "mtp_commit": 4, "mtp_rollback": 4},
+    "owners_exercised": ["Dma", "Matrix", "Sfu", "KvMemory", "State", "Selection"],
+    "conditional_mtp_exactly_one_state_action": true,
+    "moe_route_dispatch_and_merge": true,
+    "reference_output_injection": false,
+    "test_log_sha256": {
+      "gdn": "82a7fb5d3effe6a24b6b6a7202db3147ec141797564a46a74961132b469f78ca",
+      "dense_attention": "c85dd29b4c710e2901ba9802e642078c19bbb8325d31d5a75cae4a10e8fd0386",
+      "moe": "6334dd58fe9cf5a3320a714ad74a2ca3a4b4abbc74df496691defa0766aab8af",
+      "mtp_commit": "298f67d43ad54ba4d50f03d1138ba17a014f2dc26a7ee8034b5c7e05a02c9456",
+      "mtp_rollback": "0db98d9682194d3d49059fd1b42bf5e516647ef3a15006bb5df724bfc136c707"
+    }
+  },
   "qwen3_8": {"status": "OPEN"},
   "vision": {"status": "OPEN"}
 }

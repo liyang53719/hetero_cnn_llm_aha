@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
-  "state": "G0_G1_G2_PASS_G3_QWEN2_CANARY_AND_MAINTENANCE_COMBINED_DC_PASS",
-  "unique_next_action": "Run Qwen3.5 GatedDeltaNet, dense-attention, MoE and both MTP commit/rollback paths through the real owner service harness, then rerun Selection, root and combined 1.25 ns DC for the internal completion-predicate change.",
+  "state": "G0_G1_G2_PASS_G3_QWEN2_QWEN35_CANARIES_PASS",
+  "unique_next_action": "Run Qwen3.8 GDN/QSA/PLE/hyper/MoE/MTP and Vision patch/transformer/merge/injection through the same owner service harness; then rerun Selection, roots and combined 1.25 ns DC for the internal completion-predicate change.",
   "expected_outputs": [
     "generated/operator_primitives_v3/roots/HeteroMtpVerifyResolvePrimitiveV3.sv",
     "reports/execution/OPERATOR_MODEL_CANARIES_V3.json"

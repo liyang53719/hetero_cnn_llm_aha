@@ -122,5 +122,8 @@
 - Qwen2 decoder root canary remains PASS 26/26 after protocol regeneration.
   MTP now carries an internal successful-completion predicate and issues exactly
   one commit or rollback; MoE RoutedExpert scatter now selects route dispatch.
-  Root tests 24/24 and Bridge/Router tests 6/6 PASS; Qwen3.5 integrated canary
-  and post-change Selection/root/combined DC are next.
+  Root tests 24/24 and Bridge/Router tests 6/6 PASS.
+- Qwen3.5 root-owner canary PASS: GDN 34, dense attention 21, MoE 26, MTP
+  commit 4 and rollback 4 phases. The same endpoint shell exercised DMA,
+  Matrix, SFU, KV, State and Selection with no reference-output injection.
+  Qwen3.8 and Vision canaries are next; predicate-era DC remains superseded.

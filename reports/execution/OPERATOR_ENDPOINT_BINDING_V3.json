@@ -195,6 +195,22 @@
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000165701, "area": 51283.2320001, "unmapped": 0, "dc_errors": 0},
     "dc_log_sha256": "062fccf65d6e29891e89137d8734340e05ea85e7f0046a5748ad881a53300418"
   },
+  "sfu_gate_endpoint_evidence": {
+    "status": "PASS_8LANE_NUMERICAL_ENDPOINT_BOTTOM_UP_DC",
+    "opcode": "SfuGate",
+    "lanes": 8,
+    "datapath": "BF16 SiLU(gate) times up with fully elastic LUT/AddPipe/MulPipe lanes",
+    "fixed_array": "rtl/sfu/bf16_silu_mul_lut_array8_fixed.sv",
+    "endpoint": "rtl/integration/operator_sfu_gate_endpoint_v3.sv",
+    "fixed_array_sha256": "0b7461bfdd52a0ae84e645afd7efb7fe7a4d76d846e715e6ec38fabced5b2c7a",
+    "endpoint_sha256": "b9e4b7ff9ffe0fae7ec5d4ebae89f4465a40d522d33c9a735f35f06e8434493e",
+    "frozen_vectors": {"transactions": 4096, "lane_pairs": 32768, "producer_stall_cycles": 0, "consumer_backpressure_cycles": 1497, "log_sha256": "44bf681108f81e63e1a2228947bf4fec8827eeb0f019d5ab05b449f7be7a9e90"},
+    "endpoint_test": {"transactions": 100, "lane_pairs": 800, "tag_last_completion": "PASS", "log_sha256": "6c5542543b5364be7f47b2cc2e63441e2b161126b679b2d4bd664f0de12759c1"},
+    "lane_dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000166059, "area": 9931.103, "unmapped": 0, "dc_errors": 0, "log_sha256": "b548acafc65c49c49582d15d384a591d43b106804a50668721dac13a0dabe56e"},
+    "superseded_parameterized_ddc_attempt": {"status": "FAIL_LINK_REFERENCE_NAME", "log_sha256": "a0e4a633523a4b51ea8f077061f1bd0047362b47551d91fecbcca23937543df7"},
+    "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000166059, "area": 79574.3130001, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "bdb95b380f3b6f34079fd65e32d4b7e7679ff8621ec5e8d1a5942dd8662df019"
+  },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",
     "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",

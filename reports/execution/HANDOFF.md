@@ -116,9 +116,9 @@
   numerical tests PASS (1/1/8/9 leaves); final result precedes completion.
   Scratch SFU DC WNS +0.00000369549 ns, area 326007.318. Previous combined
   report was superseded and has now been rerun.
-- Scratch-enabled full root shell linked DC PASS: WNS +0.00000369549 ns,
-  area 2097230.231, 0 error/unmapped; 4058 transition/47 fanout violations.
-  Next gate is four-model root canary execution.
+- Maintenance- and scratch-enabled full root shell linked DC PASS: WNS
+  +0.00000369549 ns, area 2097406.589, 0 error/unmapped; 4058 transition/47
+  fanout violations. The maintenance wrapper supersedes the prior root DDC.
 - Qwen2 decoder root canary PASS 26/26 phases through real Matrix/SFU/KV/State;
   StateBegin uses the new Router maintenance path and no reference output is
   injected. Qwen3.5 MTP root has an unconditional rollback-then-commit defect;

@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "status": "PASS_SCRATCH_ROOT_LINK_SUPERSEDED_BY_MAINTENANCE_RERUN_REQUIRED",
+  "status": "PASS_MAINTENANCE_SCRATCH_ROOT_LINK_SETUP_CANARIES_OPEN",
   "top": "operator_endpoint_bound_owner_shell_v3",
   "terminal_bindings": 58,
   "owners": 8,
   "generated_shell": "generated/operator_endpoint_shell_v3/operator_endpoint_bound_owner_shell_v3.sv",
   "generated_shell_sha256": "d28bbd070eb336fcf4e3a906a349d7a38bb6886354b5f44c691306199da56d1f",
-  "generator_sha256": "864d8b0dddd34747e1e20038441faec140cb5d0d59bd0d631d9ef2811247b429",
+  "generator_sha256": "0a182cd17b8fb58cf0757e16ecc7f113c17b5f2d5bcb4160e393db7b83d6ebe9",
   "router": {"top": "HeteroV3TerminalOwnerRouter", "dc_wns_ns": 0.3192, "dc_area": 1196.195, "unmapped": 0, "dc_log_sha256": "2687fa45f8188be86cb31c22bc990c532ac0e248401021b019225aa53ae8bf63"},
   "dc": {"library": "CLN22UL base SVT TT 0.8V 25C", "period_ns": 1.25, "setup_uncertainty_ns": 0.08, "io_budget_ns": 0.10, "wns_ns": 0.00000369549, "area": 2085007.383544, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4056, "max_fanout_violations": 47},
   "dc_log_sha256": "0850013dca6c2e5fb42283a5b5eab00cdec56eb2dd579cbe8ec5dbd12cc58a7d",
@@ -14,11 +14,12 @@
   "attempts": [{"status": "FAIL_UNMAPPED_ROUTER_DEFINITION", "unmapped": 450}, {"status": "PASS_AFTER_STANDALONE_ROUTER_DDC", "unmapped": 0}],
   "root_bridge_shell": {
     "top": "operator_root_bridge_owner_shell_v3",
-    "generated_rtl_sha256": "69b1e0aa91405a248051a656c8e3537442da6bb8fcadc820e552b994a5cf1490",
+    "generated_rtl_sha256": "4fcfc2ec308b853368ab3a69a18fda8d8185a1f46dd53b5757c2589bc135860e",
+    "maintenance_wrapper_map": {"status": "PASS_WRAPPER_MAP", "unmapped_excluding_owner_child": 0, "dc_log_sha256": "46cc61496a74e393ea64fa62a74c4699f46ac198b6a838e447a1af041d2122b0"},
     "structural_lint_sha256": "58c8b60db8e4e05d17e6b589b2b1435f37a0d2f8195183df730caa127586a026",
     "terminal_bridge_dc": {"wns_ns": 0.551224, "area": 703.612, "unmapped": 0, "dc_log_sha256": "9990146802145d19cffbcdd43078d6452c48ee9e04e74aa333112e8ebb0803d7"},
-    "linked_dc": {"status": "PASS_SCRATCH_ENABLED", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2097230.230542, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
-    "linked_dc_log_sha256": "9586eedef7cd2894ca15e6fa5f1028a4c8f74eea29507575a6f59688e6e06618"
+    "linked_dc": {"status": "PASS_MAINTENANCE_SCRATCH_ENABLED", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2097406.588548, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
+    "linked_dc_log_sha256": "ebba599dab6768bb68f6442bf65d591e104693873c5d76b1f9e282e7ac9544f4"
   },
-  "claim_boundary": "The scratch-enabled root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean. Four model canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
+  "claim_boundary": "The maintenance- and scratch-enabled root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean. Qwen2 root canary passes; three model canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
 }

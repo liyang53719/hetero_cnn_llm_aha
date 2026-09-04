@@ -87,9 +87,12 @@
   journal and one shared FP32 mul/add for decay/conv4. All 7 opcodes pass 104
   commands including commit/rollback. DC WNS +0.0000886917 ns, area 48604.283,
   0 error/unmapped; 117 near-zero transition violations remain visible.
+- Selection owner closes TopK/Expand/Route/Merge/BlockPool/MTP over 100
+  transactions. TopK uses an external 512x65 SRAM port, so no flattened table
+  remains. DC WNS +0.000525236 ns, area 29113.357, 0 error/unmapped/DRC.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total is 46/58; only Selection 6 and Vision 6 remain open.
+- Endpoint total is 52/58; only Vision 6 remains open.

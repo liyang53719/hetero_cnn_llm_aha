@@ -22,7 +22,7 @@
     "Sfu": "PASS_23_OF_23_OWNER_PROTOCOL_AND_DC",
     "KvMemory": "PASS_4_OF_4_DDR_PTE_AND_IDMA_ENDPOINT",
     "State": "PASS_7_OF_7_TRANSACTIONAL_PAYLOAD_ENDPOINT",
-    "Selection": "OPEN_REAL_ENDPOINT_BINDING",
+    "Selection": "PASS_6_OF_6_EXTERNAL_SRAM_AND_GENERATED_CONTROLLERS",
     "Vision": "OPEN_REAL_ENDPOINT_BINDING"
   },
   "generated_bridge_rtl": {
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "46/58",
-    "owners_open": 2,
+    "real_v3_endpoint_bindings": "52/58",
+    "owners_open": 1,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -267,6 +267,19 @@
     "test": {"successful_commands": 104, "error_commands": 1, "external_writes": 60, "external_reads": 11, "generation": 11, "log_sha256": "146dc25313bb0028aa585fdd3d536856d5b249ced5c03b94e7bafbfd0a3104e8"},
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000886917, "area": 48604.2830001, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 117},
     "dc_log_sha256": "6978cef97d758fbf932c2c55431df0577cdd9125867e2e27b8aba0f595b8edb9"
+  },
+  "selection_endpoint_evidence": {
+    "status": "PASS_6_OF_6_EXTERNAL_SRAM_AND_DC",
+    "opcodes": ["SelectTopK", "SelectExpand", "SelectRoute", "SelectMerge", "SelectBlockPool", "SelectMtpVerify"],
+    "topk_controller": "rtl/selection/selection_topk_sram_v3.sv",
+    "endpoint": "rtl/integration/operator_selection_endpoint_v3.sv",
+    "topk_controller_sha256": "e93537199e18149314bf8a782cabc49954836377a82b9cb8e4e9a1f363e7261b",
+    "endpoint_sha256": "e55cfe4ee9fa6c12841540d8548dc9cbfd590c71310ea55663af9fd3e8a0071e",
+    "authoritative_generated_children": {"route_merge_sha256": "7ee834a60954b350e693af5c634072f730b8af8ccf716c4c45c6ad9e6a69412b", "block_pool_sha256": "aaf074514819ac9a132434bf01a4341ca3d4fb2c1df894cc886f6bd0c6759e36", "mtp_verify_sha256": "73b054326f811cd26714d6d22a5c0cfb429ab088ce4ba2f00fc7a284ec55247b"},
+    "test": {"successful_transactions": 100, "opcodes": 6, "stable_topk_ties": true, "route_results_out_of_order": true, "merge_output_in_order": true, "log_sha256": "840f85a2ee8cafb30d130243d7bb95d6e5d360dbecde559c8730a6e21623bee6"},
+    "storage": {"topk_entries": 512, "entry_bits": 65, "implementation": "external SRAM request/response", "flattened_register_table_present": false},
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000525236, "area": 29113.357, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 0},
+    "dc_log_sha256": "f1dd6a192736a50ae46c1ce5d92ff28080b952e758e493d058e35628cc5c0958"
   },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",

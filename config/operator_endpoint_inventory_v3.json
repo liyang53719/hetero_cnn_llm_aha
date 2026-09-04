@@ -41,8 +41,8 @@
     "Selection": {
       "opcodes": ["SelectTopK", "SelectExpand", "SelectRoute", "SelectMerge", "SelectBlockPool", "SelectMtpVerify"],
       "candidate_sources": ["integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala"],
-      "v3_endpoint_adapter": null,
-      "readiness": "selection_controllers_exist_payload_stream_adapter_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_selection_endpoint_v3.sv",
+      "readiness": "pass_external_sram_topk_generated_route_merge_blockpool_mtp_expand_and_800mhz_dc"
     },
     "Vision": {
       "opcodes": ["VisionWindow", "VisionPatchMerge", "VisionPosInterp", "PleHash", "VisionPatch3d", "VisionMropeMap"],

@@ -90,26 +90,33 @@
     "nonclaim": "V3 adapter and retained pipeline are component-bound; same-run combined canary remains G4."
   },
   "sfu_vector_endpoint_evidence": {
-    "status": "PASS_10_OF_23_SFU_OPCODES_OWNER_NOT_CLOSED",
+    "status": "PASS_12_OF_23_SFU_OPCODES_OWNER_NOT_CLOSED",
     "adapter": "rtl/integration/operator_sfu_vector_endpoint_v3.sv",
-    "rtl_sha256": "184e818d2d23b115db5c1c1a4247615242e5ef4786872dd09d575188a31a9075",
-    "opcodes_functional": 10,
+    "rtl_sha256": "208a74490805dfd47d4b938bfe8275d0450e838bf538e6601fa06b2a4b66351c",
+    "opcodes_functional": 12,
     "lanes": 16,
-    "numerical_cases": 11,
-    "test_log_sha256": "34fe55f34594bf945c04d2672416fe16c5e020f77361de1e382cc780b908bb41",
+    "numerical_cases": 13,
+    "test_log_sha256": "2dd2f7ddad178a2af0c768e51dd22f8b89093e3169999eb835d3af5993de6b0a",
     "dc_attempt1": {"status": "FAIL_TIMING", "wns_ns": -0.367541, "area": 52494.078},
     "dc_attempt2": {"status": "TIMEOUT_600S", "optimizer_snapshot_wns_ns_approx": -0.35},
-    "dc_final": {"status": "PASS", "implementation": "dedicated_pipelined_add_mul", "wns_ns": 0.150298, "area": 5697.965, "unmapped": 0},
-    "dc_log_sha256": "36f88cbc54ed94d13512cfd37517660df159262af09f4991a81d2c67947ab724",
-    "remaining_sfu_opcodes": 13
+    "dc_final": {"status": "PASS_BOTTOM_UP", "implementation": "dedicated_pipelined_add_mul_plus_pipelined_reduce_sum_and_reduce_max", "wns_ns": 0.000338435, "area": 10977.057, "unmapped": 0},
+    "dc_log_sha256": "36691898eef183626c1100ae1c4859ed9baafe74309632981daadd924527167a",
+    "remaining_sfu_opcodes": 11
   },
   "sfu_reduce_max_primitive_evidence": {
-    "status": "PASS_NUMERICAL_E1_DC_E4_PENDING_OWNER_MUX",
+    "status": "PASS_NUMERICAL_E1_DC_E4_AND_OWNER_MUX",
     "rtl": "rtl/sfu/fp32_reduce_max16.sv",
     "rtl_sha256": "17637992d69deddb2c78a29a1f51f5f925f678c564cf064dd4dc020e0eaa21f7",
     "tests": {"cases": 3, "stable_ties": true, "nan_last": true, "log_sha256": "c9bffd3472ce25d065b0e7077c20f896b82cb703f698589e868ac6f6ae7f4ee1"},
     "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.000338435, "area": 3579.849, "unmapped": 0},
     "dc_log_sha256": "72285aa7b84084e101e7701d1b3d4a8ede0cdbd5e8cbba7b99ea16ece7c1a96f"
+  },
+  "sfu_reduce_sum_primitive_evidence": {
+    "status": "PASS_NUMERICAL_E1_DC_E4_AND_OWNER_MUX",
+    "rtl": "rtl/sfu/fp32_reduce16.sv",
+    "rtl_sha256": "2c547b67abc761175630012921a653d9069e711b0a08582417e585fc21ea20df",
+    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0597758, "area": 1681.498, "unmapped": 0},
+    "dc_log_sha256": "fee4c8f15f718b36ee4aeaa1cdbefda912784b047a9e8ef7c0cc4bf986c0649c"
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

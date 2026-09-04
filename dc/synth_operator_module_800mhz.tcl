@@ -16,10 +16,19 @@ file mkdir $out_dir
 set_app_var target_library [list $std_cell_db]
 set_app_var link_library [list "*" $std_cell_db]
 set_host_options -max_cores 8
+if {[info exists ::env(PRECOMPILED_DDCS)] && $::env(PRECOMPILED_DDCS) ne ""} {
+  foreach ddc [split $::env(PRECOMPILED_DDCS) ":"] { read_ddc $ddc }
+}
 analyze -format sverilog -define SYNTHESIS $rtl_files
 elaborate $top
 current_design $top
 link
+if {[info exists ::env(DONT_TOUCH_REFS)] && $::env(DONT_TOUCH_REFS) ne ""} {
+  foreach ref [split $::env(DONT_TOUCH_REFS) ":"] {
+    set design [get_designs -quiet $ref]
+    if {[sizeof_collection $design] > 0} { set_dont_touch $design true }
+  }
+}
 check_design > "$out_dir/check_design_pre.rpt"
 
 source [file join [file dirname [info script]] common_clock_800mhz.tcl]

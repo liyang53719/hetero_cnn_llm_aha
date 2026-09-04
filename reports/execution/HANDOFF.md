@@ -105,3 +105,7 @@
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
 - Endpoint adapters are 58/58. This is not G3/model closure: connect all eight
   owners to the terminal router, run four model canaries, then combined-shell DC.
+- Generated endpoint-bound eight-owner shell lifts every payload/config/memory
+  port; structural lint PASS. Final linked DC includes Router, all owners and
+  real Revision8B-B: WNS +0.00000369549 ns, area 2085007.384, 0 error/unmapped.
+  4056 transition/47 fanout violations and four root canaries remain open.

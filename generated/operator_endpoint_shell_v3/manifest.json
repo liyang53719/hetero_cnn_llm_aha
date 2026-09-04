@@ -1,0 +1,50 @@
+{
+  "blackboxes": "dc/blackboxes/operator_owner_endpoints_v3_blackboxes.sv",
+  "blackboxes_sha256": "0a783f4f2cbda05a2e17519dc216c295d06ca6da87fcf76c1199d4d89c057780",
+  "generated_rtl_hand_edited": false,
+  "owners": {
+    "operator_control_endpoint_v3": {
+      "index": 0,
+      "source": "rtl/integration/operator_control_endpoint_v3.sv",
+      "source_sha256": "4777be525c2b1ba58081f26c8a488bd4cd7f5df6d8df0104bddfa218ec29052d"
+    },
+    "operator_dma_endpoint_v3": {
+      "index": 1,
+      "source": "rtl/integration/operator_dma_endpoint_v3.sv",
+      "source_sha256": "371928a108f15b5be62ca7cd5d91482a5ccd5a65ddda56ba57ebd6439353a5e0"
+    },
+    "operator_kv_memory_endpoint_v3": {
+      "index": 4,
+      "source": "rtl/integration/operator_kv_memory_endpoint_v3.sv",
+      "source_sha256": "72012dc4a6bb202e86379e53d9815191cdd52d8d16ba14dc439a66c0a06f9eed"
+    },
+    "operator_matrix_owner_endpoint_v3": {
+      "index": 2,
+      "source": "rtl/integration/operator_matrix_owner_endpoint_v3.sv",
+      "source_sha256": "483a9833d5f1108d8a1014575db512eaf0e5aab675ec08c16390178984d84293"
+    },
+    "operator_selection_endpoint_v3": {
+      "index": 6,
+      "source": "rtl/integration/operator_selection_endpoint_v3.sv",
+      "source_sha256": "e55cfe4ee9fa6c12841540d8548dc9cbfd590c71310ea55663af9fd3e8a0071e"
+    },
+    "operator_sfu_owner_endpoint_v3": {
+      "index": 3,
+      "source": "rtl/integration/operator_sfu_owner_endpoint_v3.sv",
+      "source_sha256": "a0740b046eba35b06ced59abd3ea6e8127fad24311911dbd28aa85b8ab12e313"
+    },
+    "operator_state_endpoint_v3": {
+      "index": 5,
+      "source": "rtl/integration/operator_state_endpoint_v3.sv",
+      "source_sha256": "9f8262168bfbe2cb35c858a7fee177aa3cf6d6867dfcfade651798e455ba2501"
+    },
+    "operator_vision_endpoint_v3": {
+      "index": 7,
+      "source": "rtl/integration/operator_vision_endpoint_v3.sv",
+      "source_sha256": "37731dcd16ea752dc9295b1e9ed5ee6d4411e13a97a862d491429e3ab144f2c6"
+    }
+  },
+  "schema_version": 1,
+  "top": "generated/operator_endpoint_shell_v3/operator_endpoint_bound_owner_shell_v3.sv",
+  "top_sha256": "8e57f16bb3e3648c78147d3c1afb9d123ef2283fd74f7228535ee1b7c01a2cc5"
+}

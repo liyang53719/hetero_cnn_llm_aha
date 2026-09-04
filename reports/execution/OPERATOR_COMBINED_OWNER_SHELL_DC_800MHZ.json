@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "PASS_8_OWNER_LINK_SETUP_CANARIES_OPEN",
+  "top": "operator_endpoint_bound_owner_shell_v3",
+  "terminal_bindings": 58,
+  "owners": 8,
+  "generated_shell": "generated/operator_endpoint_shell_v3/operator_endpoint_bound_owner_shell_v3.sv",
+  "generated_shell_sha256": "8e57f16bb3e3648c78147d3c1afb9d123ef2283fd74f7228535ee1b7c01a2cc5",
+  "generator_sha256": "864d8b0dddd34747e1e20038441faec140cb5d0d59bd0d631d9ef2811247b429",
+  "router": {"top": "HeteroV3TerminalOwnerRouter", "dc_wns_ns": 0.3192, "dc_area": 1196.195, "unmapped": 0, "dc_log_sha256": "2687fa45f8188be86cb31c22bc990c532ac0e248401021b019225aa53ae8bf63"},
+  "dc": {"library": "CLN22UL base SVT TT 0.8V 25C", "period_ns": 1.25, "setup_uncertainty_ns": 0.08, "io_budget_ns": 0.10, "wns_ns": 0.00000369549, "area": 2085007.383544, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4056, "max_fanout_violations": 47},
+  "dc_log_sha256": "0850013dca6c2e5fb42283a5b5eab00cdec56eb2dd579cbe8ec5dbd12cc58a7d",
+  "status_sha256": "3be259028ca6148890515b6cdc2379f2a607fe9b0cfff26523fed58a9e0fa617",
+  "attempts": [{"status": "FAIL_UNMAPPED_ROUTER_DEFINITION", "unmapped": 450}, {"status": "PASS_AFTER_STANDALONE_ROUTER_DDC", "unmapped": 0}],
+  "claim_boundary": "All eight real owners and the generated owner router are linked and setup-clean. Root bridge canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
+}

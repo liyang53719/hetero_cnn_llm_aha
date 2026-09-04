@@ -46,6 +46,17 @@
     "owners_open": 0,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
+  "combined_owner_shell": {
+    "status": "PASS_LINK_AND_SETUP_CANARIES_OPEN",
+    "evidence": "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json",
+    "terminal_bindings": 58,
+    "owners": 8,
+    "period_ns": 1.25,
+    "wns_ns": 0.00000369549,
+    "area": 2085007.383544,
+    "unmapped": 0,
+    "dc_errors": 0
+  },
   "control_endpoint_evidence": {
     "status": "PASS",
     "adapter": "rtl/integration/operator_control_endpoint_v3.sv",

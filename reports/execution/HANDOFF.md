@@ -149,4 +149,5 @@
 - Final machine audit PASS: 18/18 roots, 25/25 primitives, 58/58 endpoints,
   four current-RTL canaries, 36000 root stress transactions, combined WNS
   +0.00000154972 ns, logic area 2121880.311, and zero unresolved/unmapped/
-  latch/loop/unconstrained/transition/cap/fanout findings. Push and notice next.
+  latch/loop/unconstrained/transition/cap/fanout findings. Acceptance evidence
+  is pushed at `00a5cd2`; Goal is complete.

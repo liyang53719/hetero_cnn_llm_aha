@@ -1,7 +1,7 @@
 {
   "schema_version": 7,
   "goal": "THREE_MODEL_CHISEL_RTL_DC_800MHZ_CLOSURE",
-  "goal_status": "PASS_PENDING_FINAL_PUSH_AND_NOTICE",
+  "goal_status": "COMPLETE",
   "branch": "main",
   "baseline_sha": "b55ddcb6dbc890a2b1b832fdc5701c1a0a65da3b",
   "implementation_origin": "Chisel",
@@ -38,7 +38,7 @@
     "G2": {"status": "PASS", "depends_on": ["G1"], "evidence": ["reports/execution/OPERATOR_RTL_GENERATION_V3.json", "generated/operator_primitives_v3/MANIFEST.json"]},
     "G3": {"status": "PASS", "depends_on": ["G2"], "evidence": ["config/operator_terminal_bridge_v3.json", "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json", "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json", "reports/execution/OPERATOR_MODEL_CANARIES_V3.json", "reports/execution/OPERATOR_ROOT_STRESS_V3.json", "reports/execution/OPERATOR_EXTERNAL_TOPK_SRAM_V3.json", "reports/execution/OPERATOR_COMBINED_DRC_CLOSURE_800MHZ.json"]},
     "G4": {"status": "PASS_MACRO_AWARE_PPA_AGGREGATE", "depends_on": ["G3"], "evidence": ["reports/execution/L10_SRAM_MACRO_INVENTORY_RESULT.json", "reports/execution/OPERATOR_MACRO_INVENTORY_SHELL_800MHZ.json"]},
-    "G5": {"status": "PASS", "depends_on": ["G4"], "evidence": ["reports/execution/OPERATOR_THREE_MODEL_FINAL_ACCEPTANCE_800MHZ.json"]}
+    "G5": {"status": "PASS", "depends_on": ["G4"], "git_sha": "00a5cd21e128bee6eb9164f019f556cdbfe07de3", "evidence": ["reports/execution/OPERATOR_THREE_MODEL_FINAL_ACCEPTANCE_800MHZ.json"]}
   },
   "retained_project_state": {
     "L0_L3": "PASS_RETAINED",

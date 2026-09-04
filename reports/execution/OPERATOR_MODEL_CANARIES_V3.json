@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "PASS_4_OF_4_ROOT_OWNER_CANARIES",
+  "status": "PASS_PRIOR_GENERATION_RERUN_REQUIRED_AFTER_PRIMITIVE_REGENERATION",
   "claim_boundary": "Root-program canaries execute real owner endpoints with deterministic synthetic payload and memory services. They are not full checkpoint model inference or cross-operator tensor-memory continuity.",
   "qwen2": {
     "status": "PASS_ROOT_OWNER_CANARY",

@@ -106,7 +106,9 @@ def test_no_incomplete_markers_or_runtime_dividers() -> None:
 def test_topk_and_large_state_are_memory_or_external_state_based() -> None:
     selection = (SCALA / "HeteroSelectionMemoryPrimitives.scala").read_text()
     state = (SCALA / "HeteroStatePrimitives.scala").read_text()
-    assert "SyncReadMem(maxK" in selection
+    assert "val tableRequest = Decoupled" in selection
+    assert "val tableResponse = Flipped(Decoupled" in selection
+    assert "SyncReadMem(maxK" not in selection
     assert "maxK: Int = 512" in selection
     assert re.search(r"maxChannels:\s*Int\s*=\s*16384", state)
     assert "historyReadAddress" in state and "historyWriteAddress" in state

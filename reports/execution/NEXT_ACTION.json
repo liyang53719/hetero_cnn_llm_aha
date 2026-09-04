@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
-  "state": "G0_G1_G2_PASS_G3_FOUR_CANARIES_AND_18_ROOT_STRESS_PASS",
-  "unique_next_action": "Close the remaining 25-module DC gap by binding HeteroStreamingTopK and HeteroQsaBlockSelector storage to external SRAM in their canonical Chisel source, regenerate authoritative RTL, and rerun 25/25 per-module DC without flattening the 512x65 table.",
+  "state": "G0_G1_G2_PASS_G3_18_ROOT_STRESS_AND_25_PRIMITIVE_DC_PASS",
+  "unique_next_action": "Rerun four root-owner canaries and Selection/Vision/combined 1.25 ns DC against the regenerated primitive RTL, then fix the remaining 4058 max-transition and 47 max-fanout combined-shell violations.",
   "expected_outputs": [
     "generated/operator_primitives_v3/roots/HeteroMtpVerifyResolvePrimitiveV3.sv",
     "reports/execution/OPERATOR_MODEL_CANARIES_V3.json"

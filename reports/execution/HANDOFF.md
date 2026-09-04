@@ -138,5 +138,8 @@
   violations remain open.
 - Root protocol stress PASS: 18 roots x 20 seeds x 100 successful transactions
   = 36000. Random micro-op/result backpressure and completion latency pass;
-  MTP predicate/commit/rollback flags are checked. Next hard gap is primitive
-  DC 23/25: externalize StreamingTopK/QSA 512x65 storage, then address DRC.
+  MTP predicate/commit/rollback flags are checked.
+- Canonical TopK/QSA now expose a 512x65 external SRAM port; stable-tie and QSA
+  block/tail numerical Chisel tests pass. Authoritative primitive DC is 25/25:
+  TopK WNS +0.004297 ns/area 950.768, QSA +0.004169 ns/area 1596.959.
+  Regenerated child hashes require canary and combined-DC replay before DRC.

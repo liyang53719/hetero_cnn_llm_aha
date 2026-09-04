@@ -4,7 +4,9 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 DB=/home/yang/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db
 DC=/home/yang/tools/synopsys/syn/X-2025.06-SP3/bin/dc_shell
 GEN="$ROOT/generated/operator_primitives_v3/primitives"
-OUT="$ROOT/work/results/operator_dc_800mhz/primitives"
+# Keep the canonical 25-module gate isolated from historical exploratory FP32
+# subdirectories so the collector cannot silently widen the inventory.
+OUT="$ROOT/work/results/operator_dc_800mhz/primitives_authoritative"
 mkdir -p "$OUT"
 failed=0
 while IFS=$'\t' read -r key top; do

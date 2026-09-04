@@ -54,8 +54,15 @@ class HeteroUnsignedDivide(val width: Int = 64) extends Module {
 
 class HeteroTopKEntry(val indexBits: Int) extends Bundle { val valid = Bool(); val score = UInt(32.W); val index = UInt(indexBits.W) }
 
+class HeteroTopKMemoryRequest(val addrBits: Int, val indexBits: Int) extends Bundle {
+  val write = Bool()
+  val address = UInt(addrBits.W)
+  val data = new HeteroTopKEntry(indexBits)
+}
+
 /** Deterministic sequential Top-K for MoE (K<=10), QSA (K<=512), and logits.
-  * SyncReadMem plus one comparison/shift per cycle avoids a 512-way sort path.
+  * The 512x65 table is an explicit SRAM request/response port. It must never
+  * be flattened into registers by standalone or combined synthesis.
   */
 class HeteroStreamingTopK(val maxK: Int = 512, val indexBits: Int = 32, val itemCountBits: Int = 20) extends Module {
   require(maxK > 0)
@@ -65,51 +72,71 @@ class HeteroStreamingTopK(val maxK: Int = 512, val indexBits: Int = 32, val item
     val itemCount = Input(UInt(itemCountBits.W)); val k = Input(UInt(rankBits.W))
     val in = Flipped(Decoupled(new HeteroScoreIndex(32, indexBits)))
     val out = Decoupled(new HeteroRankedScore(32, indexBits, rankBits))
+    val tableRequest = Decoupled(new HeteroTopKMemoryRequest(addrBits, indexBits))
+    val tableResponse = Flipped(Decoupled(new HeteroTopKEntry(indexBits)))
     val busy = Output(Bool()); val done = Output(Bool()); val invalidConfig = Output(Bool())
   })
-  val sIdle :: sClear :: sInput :: sScanReq :: sScanResp :: sShiftReq :: sShiftResp :: sInsert :: sEmitReq :: sEmitResp :: Nil = Enum(10)
-  val state = RegInit(sIdle); val table = SyncReadMem(maxK, new HeteroTopKEntry(indexBits))
-  val readAddr = WireDefault(0.U(addrBits.W)); val readEnable = WireDefault(false.B); val readData = table.read(readAddr, readEnable)
+  val sIdle :: sClear :: sInput :: sScanReq :: sScanResp :: sShiftReq :: sShiftResp :: sShiftWrite :: sInsert :: sEmitReq :: sEmitResp :: sEmitOut :: Nil = Enum(12)
+  val state = RegInit(sIdle)
   val itemCount = Reg(UInt(itemCountBits.W)); val k = Reg(UInt(rankBits.W)); val accepted = RegInit(0.U(itemCountBits.W))
   val clearIndex = RegInit(0.U(rankBits.W)); val scanIndex = RegInit(0.U(rankBits.W)); val insertIndex = RegInit(0.U(rankBits.W))
   val shiftIndex = RegInit(0.U(rankBits.W)); val emitRank = RegInit(0.U(rankBits.W)); val candidate = Reg(new HeteroScoreIndex(32,indexBits))
-  val candidateLast = RegInit(false.B); val outputEntry = Reg(new HeteroTopKEntry(indexBits)); val outputValid = RegInit(false.B)
+  val candidateLast = RegInit(false.B); val shiftEntry = Reg(new HeteroTopKEntry(indexBits))
+  val outputEntry = Reg(new HeteroTopKEntry(indexBits)); val outputValid = RegInit(false.B)
   val cfgValid = io.itemCount =/= 0.U && io.k =/= 0.U && io.k <= maxK.U && io.k <= io.itemCount
   io.startReady := state === sIdle; io.busy := state =/= sIdle; io.done := false.B
   io.invalidConfig := io.start && io.startReady && !cfgValid; io.in.ready := state === sInput
   io.out.valid := outputValid; io.out.bits.score := outputEntry.score; io.out.bits.index := outputEntry.index
   io.out.bits.rank := emitRank; io.out.bits.last := emitRank + 1.U >= k
-  when(state === sScanReq) { readAddr := scanIndex(addrBits-1,0); readEnable := true.B }
-    .elsewhen(state === sShiftReq) { readAddr := (shiftIndex - 1.U)(addrBits-1,0); readEnable := true.B }
-    .elsewhen(state === sEmitReq) { readAddr := emitRank(addrBits-1,0); readEnable := true.B }
+  io.tableRequest.valid := state === sClear || state === sScanReq || state === sShiftReq ||
+    state === sShiftWrite || state === sInsert || state === sEmitReq
+  io.tableRequest.bits.write := state === sClear || state === sShiftWrite || state === sInsert
+  io.tableRequest.bits.address := MuxCase(0.U, Seq(
+    (state === sClear) -> clearIndex(addrBits-1,0),
+    (state === sScanReq) -> scanIndex(addrBits-1,0),
+    (state === sShiftReq) -> (shiftIndex - 1.U)(addrBits-1,0),
+    (state === sShiftWrite) -> shiftIndex(addrBits-1,0),
+    (state === sInsert) -> insertIndex(addrBits-1,0),
+    (state === sEmitReq) -> emitRank(addrBits-1,0)))
+  io.tableRequest.bits.data.valid := Mux(state === sInsert, true.B, Mux(state === sShiftWrite, shiftEntry.valid, false.B))
+  io.tableRequest.bits.data.score := Mux(state === sInsert, candidate.score, shiftEntry.score)
+  io.tableRequest.bits.data.index := Mux(state === sInsert, candidate.index, shiftEntry.index)
+  io.tableResponse.ready := state === sScanResp || state === sShiftResp || state === sEmitResp
   def finishCandidate(): Unit = { when(candidateLast) { emitRank := 0.U; state := sEmitReq }.otherwise { state := sInput } }
   when(io.clear) { state := sIdle; outputValid := false.B; accepted := 0.U }
   .otherwise { switch(state) {
     is(sIdle) { outputValid := false.B; accepted := 0.U; when(io.start && cfgValid) { itemCount := io.itemCount; k := io.k; clearIndex := 0.U; state := sClear } }
     is(sClear) {
-      val empty = Wire(new HeteroTopKEntry(indexBits)); empty.valid := false.B; empty.score := 0.U; empty.index := 0.U
-      table.write(clearIndex(addrBits-1,0), empty)
-      when(clearIndex + 1.U >= k) { state := sInput }.otherwise { clearIndex := clearIndex + 1.U }
+      when(io.tableRequest.fire) {
+        when(clearIndex + 1.U >= k) { state := sInput }.otherwise { clearIndex := clearIndex + 1.U }
+      }
     }
     is(sInput) { when(io.in.fire) { candidate := io.in.bits; candidateLast := accepted + 1.U >= itemCount; accepted := accepted + 1.U; scanIndex := 0.U; state := sScanReq } }
-    is(sScanReq) { state := sScanResp }
+    is(sScanReq) { when(io.tableRequest.fire) { state := sScanResp } }
     is(sScanResp) {
-      val insert = !readData.valid || HeteroFp32Order.better(candidate.score,candidate.index,readData.score,readData.index)
-      when(insert) { insertIndex := scanIndex; shiftIndex := k - 1.U; when(k - 1.U > scanIndex) { state := sShiftReq }.otherwise { state := sInsert } }
-      .elsewhen(scanIndex + 1.U < k) { scanIndex := scanIndex + 1.U; state := sScanReq }.otherwise { finishCandidate() }
+      when(io.tableResponse.fire) {
+        val insert = !io.tableResponse.bits.valid || HeteroFp32Order.better(candidate.score,candidate.index,io.tableResponse.bits.score,io.tableResponse.bits.index)
+        when(insert) { insertIndex := scanIndex; shiftIndex := k - 1.U; when(k - 1.U > scanIndex) { state := sShiftReq }.otherwise { state := sInsert } }
+        .elsewhen(scanIndex + 1.U < k) { scanIndex := scanIndex + 1.U; state := sScanReq }.otherwise { finishCandidate() }
+      }
     }
-    is(sShiftReq) { state := sShiftResp }
+    is(sShiftReq) { when(io.tableRequest.fire) { state := sShiftResp } }
     is(sShiftResp) {
-      table.write(shiftIndex(addrBits-1,0), readData)
-      when(shiftIndex - 1.U > insertIndex) { shiftIndex := shiftIndex - 1.U; state := sShiftReq }.otherwise { state := sInsert }
+      when(io.tableResponse.fire) { shiftEntry := io.tableResponse.bits; state := sShiftWrite }
+    }
+    is(sShiftWrite) {
+      when(io.tableRequest.fire) {
+        when(shiftIndex - 1.U > insertIndex) { shiftIndex := shiftIndex - 1.U; state := sShiftReq }.otherwise { state := sInsert }
+      }
     }
     is(sInsert) {
-      val entry = Wire(new HeteroTopKEntry(indexBits)); entry.valid := true.B; entry.score := candidate.score; entry.index := candidate.index
-      table.write(insertIndex(addrBits-1,0), entry); finishCandidate()
+      when(io.tableRequest.fire) { finishCandidate() }
     }
-    is(sEmitReq) { state := sEmitResp }
+    is(sEmitReq) { when(io.tableRequest.fire) { state := sEmitResp } }
     is(sEmitResp) {
-      when(!outputValid) { outputEntry := readData; outputValid := true.B }
+      when(io.tableResponse.fire) { outputEntry := io.tableResponse.bits; outputValid := true.B; state := sEmitOut }
+    }
+    is(sEmitOut) {
       when(outputValid && io.out.ready) {
         outputValid := false.B; assert(outputEntry.valid)
         when(io.out.bits.last) { state := sIdle; io.done := true.B }.otherwise { emitRank := emitRank + 1.U; state := sEmitReq }
@@ -412,6 +439,8 @@ class HeteroQsaBlockSelector(
     val tailCount = Input(UInt(ratioBits.W))
     val scoreIn = Flipped(Decoupled(new HeteroScoreIndex(32, blockCountBits)))
     val selectedOut = Decoupled(new HeteroSelectedToken(tokenBits, rankBits))
+    val topKTableRequest = Decoupled(new HeteroTopKMemoryRequest(log2Ceil(maxBlockTopK), blockCountBits))
+    val topKTableResponse = Flipped(Decoupled(new HeteroTopKEntry(blockCountBits)))
     val busy = Output(Bool())
     val done = Output(Bool())
     val invalidConfig = Output(Bool())
@@ -450,6 +479,12 @@ class HeteroQsaBlockSelector(
   topK.io.in.bits := io.scoreIn.bits
   io.scoreIn.ready := topK.io.in.ready && state === sCollect
   topK.io.out.ready := state === sCollect
+  io.topKTableRequest.valid := topK.io.tableRequest.valid
+  io.topKTableRequest.bits := topK.io.tableRequest.bits
+  topK.io.tableRequest.ready := io.topKTableRequest.ready
+  topK.io.tableResponse.valid := io.topKTableResponse.valid
+  topK.io.tableResponse.bits := io.topKTableResponse.bits
+  io.topKTableResponse.ready := topK.io.tableResponse.ready
 
   val multiplyTailBase = state === sTailBaseStart
   val multiplyBlockBase = state === sBlockBaseStart

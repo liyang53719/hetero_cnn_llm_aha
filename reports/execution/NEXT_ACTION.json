@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
-  "stage": "G5_FINAL_ACCEPTANCE_AUDIT",
-  "state": "G0_G1_G2_G3_G4_PASS",
-  "unique_next_action": "Run the final machine-readable acceptance audit over 18/25/58 coverage, four current-RTL canaries, 36000 root stress transactions, per-module/owner/combined DC, zero combined latch/loop/unconstrained-endpoint findings, and the 4 MiB macro PPA aggregate; then push and send the idempotent Feishu completion notice.",
+  "stage": "GOAL_FINAL_PUBLISH",
+  "state": "G0_G1_G2_G3_G4_G5_PASS",
+  "unique_next_action": "Commit and push the final acceptance audit, verify local main equals origin/main, then send the idempotent Feishu completion notice to user571625 with the final SHA and measured 18/25/58, WNS and area metrics.",
   "expected_outputs": [
     "reports/execution/OPERATOR_THREE_MODEL_FINAL_ACCEPTANCE_800MHZ.json",
     "reports/execution/HANDOFF.md"

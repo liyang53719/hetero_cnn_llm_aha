@@ -1,0 +1,55 @@
+{
+  "audit_base_sha": "1b2a2b2615a1b0f5a9b7fa268bdb8c13b4cfd996",
+  "coverage": {
+    "primitives": 25,
+    "qwen2": 30,
+    "qwen3_5": 93,
+    "qwen3_8": 150,
+    "roots": 18,
+    "terminal_bindings": 58,
+    "vision_canary": true
+  },
+  "dc": {
+    "combinational_loops": 0,
+    "combined_logic_area": 2121880.310699,
+    "combined_wns_ns": 1.54972e-06,
+    "latches": 0,
+    "max_capacitance_violations": 0,
+    "max_fanout_violations": 0,
+    "max_transition_violations": 0,
+    "period_ns": 1.25,
+    "primitive_pass": "25/25",
+    "root_pass": "18/18",
+    "unconstrained_endpoint_messages": 0,
+    "unmapped": 0,
+    "unresolved": 0
+  },
+  "evidence_sha256": {
+    "check_design": "2a4bbf643a40ac31a884a4b8bb4a621cd60abcef37eb2de6aafffcc67fcb5c9a",
+    "check_timing": "94bf7675a38cf2f7e109edbc8dc51e1112bf6d2b3427362c2e14197d434eaf38",
+    "combined_dc_log": "53101f26a77739ac71d79c9aa9a16473a755113e2b663a5be725b5b5ee6c5750",
+    "macro_dc_log": "a9d3346fc7261ad3d563a8207ecbc39f3a2dc34533a8f535a2ee00d40a6b4bd5"
+  },
+  "generated_rtl_hand_edited": false,
+  "implementation_origin": "Chisel",
+  "macro_ppa": {
+    "aggregate_area": 15210405.529449,
+    "aggregate_wns_ns": 1.54972e-06,
+    "capacity_mib": 4.0,
+    "macro_area": 13088525.21875,
+    "physical_macros": 124
+  },
+  "nonclaims": [
+    "macro PPA aggregate does not connect SRAM data pins to owners",
+    "no workload SAIF or energy claim",
+    "no post-route or extracted-interconnect signoff claim",
+    "canaries use deterministic synthetic payload and memory services, not full checkpoint inference"
+  ],
+  "schema_version": 1,
+  "simulation": {
+    "canaries": 4,
+    "reference_output_injection": false,
+    "root_stress_transactions": 36000
+  },
+  "status": "PASS_THREE_MODEL_CHISEL_RTL_800MHZ_ACCEPTANCE"
+}

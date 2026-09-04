@@ -145,4 +145,8 @@
 - 4 MiB ARM SRAM DB inventory PASS: 124 macros, macro area 13088525.219.
   Macro-aware PPA aggregate PASS at +0.00000154972 ns and total area
   15210405.529. SRAM data pins are not connected in this aggregate and no
-  SAIF/energy claim is made. Final acceptance audit is next.
+  SAIF/energy claim is made.
+- Final machine audit PASS: 18/18 roots, 25/25 primitives, 58/58 endpoints,
+  four current-RTL canaries, 36000 root stress transactions, combined WNS
+  +0.00000154972 ns, logic area 2121880.311, and zero unresolved/unmapped/
+  latch/loop/unconstrained/transition/cap/fanout findings. Push and notice next.

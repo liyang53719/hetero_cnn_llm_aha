@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "active_800mhz_performance_budget",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "sequence_tokens": 1024,
+  "target_tokens_per_second": 300,
+  "clock_hz": 800000000,
+  "clock_period_ns": 1.25,
+  "physical_bf16_macs_per_cycle": 512,
+  "peak_bf16_macs_per_second": 409600000000,
+  "useful_macs_total": 1387014979584,
+  "ideal_cycles": 2709013632,
+  "maximum_wall_cycles_for_300_tps": 2730666667,
+  "required_wall_mac_utilization": 0.992070422,
+  "interpretation": "The 300 token/s BF16 q1024 target remains mathematically possible only near perfect wall utilization. Operator-source coverage is independent of this performance-risk gate.",
+  "supersedes_for_active_planning": "config/qwen2_1p5b_300tps_budget.json",
+  "historical_budget_policy": "The earlier 1 GHz budget remains provenance only."
+}

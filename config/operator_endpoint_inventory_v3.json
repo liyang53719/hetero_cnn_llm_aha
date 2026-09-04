@@ -5,8 +5,8 @@
     "Control": {
       "opcodes": ["Barrier"],
       "candidate_sources": ["rtl/state/state_commit_barrier.sv", "rtl/integration/command_event_scoreboard_sram.sv"],
-      "v3_endpoint_adapter": null,
-      "readiness": "control_semantics_exist_adapter_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_control_endpoint_v3.sv",
+      "readiness": "pass_real_barrier_waits_for_required_domain_acknowledgements"
     },
     "Dma": {
       "opcodes": ["DmaRead", "DmaWrite", "DmaGather", "DmaScatter"],

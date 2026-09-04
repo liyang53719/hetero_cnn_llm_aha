@@ -16,7 +16,7 @@
     "eight_owner_router": "PASS_ALL_OWNERS_WAIT_FOR_OWNER_COMPLETION"
   },
   "owners": {
-    "Control": "OPEN_REAL_ENDPOINT_BINDING",
+    "Control": "PASS_REAL_BARRIER_ACK_ENDPOINT",
     "Dma": "OPEN_REAL_ENDPOINT_BINDING",
     "Matrix": "OPEN_REAL_ENDPOINT_BINDING",
     "Sfu": "OPEN_REAL_ENDPOINT_BINDING",
@@ -42,9 +42,18 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "0/58",
-    "owners_open": 8,
+    "real_v3_endpoint_bindings": "1/58",
+    "owners_open": 7,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
+  },
+  "control_endpoint_evidence": {
+    "status": "PASS",
+    "adapter": "rtl/integration/operator_control_endpoint_v3.sv",
+    "rtl_sha256": "4777be525c2b1ba58081f26c8a488bd4cd7f5df6d8df0104bddfa218ec29052d",
+    "test_log_sha256": "4d32d5d7c3013762593453c51b05f52a0c8c2cd3b3120af20ab1087500c6c7bb",
+    "verilator_lint_log_sha256": "5f6196401461e12382eecde2045a948e4e270189a23700b4e89b4481b391f8fc",
+    "early_success_completion": 0,
+    "illegal_cases": 2
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

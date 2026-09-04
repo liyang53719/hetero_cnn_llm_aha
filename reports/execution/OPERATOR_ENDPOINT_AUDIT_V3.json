@@ -1,12 +1,11 @@
 {
   "candidate_source_coverage": 58,
-  "claim_boundary": "All 58 opcodes have candidate source roots, but none has the canonical V3 request/completion adapter yet; candidate source coverage is not endpoint binding.",
+  "claim_boundary": "All 58 opcodes have candidate source roots; 1 have a canonical V3 request/completion adapter. Candidate source coverage is not endpoint binding.",
   "failures": [],
   "legacy_immediate_completion_patterns_for_manual_review": 0,
   "missing_candidate_sources": [],
-  "open_v3_endpoint_bindings": 58,
+  "open_v3_endpoint_bindings": 57,
   "owners_open": [
-    "Control",
     "Dma",
     "Matrix",
     "Sfu",
@@ -15,8 +14,10 @@
     "Selection",
     "Vision"
   ],
-  "owners_with_real_v3_adapter": [],
-  "real_v3_endpoint_bindings": 0,
+  "owners_with_real_v3_adapter": [
+    "Control"
+  ],
+  "real_v3_endpoint_bindings": 1,
   "schema_version": 1,
   "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
   "terminal_opcode_contract": 58

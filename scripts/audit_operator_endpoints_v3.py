@@ -63,7 +63,7 @@ report = {
     "missing_candidate_sources": missing_sources,
     "legacy_immediate_completion_patterns_for_manual_review": immediate_patterns,
     "failures": failures,
-    "claim_boundary": "All 58 opcodes have candidate source roots, but none has the canonical V3 request/completion adapter yet; candidate source coverage is not endpoint binding."
+    "claim_boundary": f"All {opcode_count} opcodes have candidate source roots; {bound} have a canonical V3 request/completion adapter. Candidate source coverage is not endpoint binding."
 }
 output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 print(json.dumps(report, indent=2, sort_keys=True))

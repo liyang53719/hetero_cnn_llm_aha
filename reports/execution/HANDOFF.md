@@ -25,6 +25,8 @@
   completion and invalid owners return status 4.
 - Eight real owner endpoints and 58/58 numerical bindings remain OPEN.
 - Endpoint audit: candidate source roots cover 58/58, but canonical V3 payload
-  adapters are 0/58; all 8 owners remain OPEN. This disproves remote hardware
+  adapters were 0/58. This disproves remote hardware
   closure without discarding the recovered source value.
-- Next: bind Control barrier first, then DMA/Matrix/SFU/KV/State/Selection/Vision.
+- Control is now 1/58 PASS: real barrier waits for all domain acknowledgements,
+  no early success completion; Icarus and Verilator PASS.
+- Next: bind DMA read/write/gather/scatter to pinned iDMA completion.

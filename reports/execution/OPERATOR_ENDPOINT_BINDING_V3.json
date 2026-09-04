@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "IN_PROGRESS_CONDITIONAL_MTP_PROTOCOL_PASS_DC_RERUN_OPEN",
+  "status": "PASS_58_ENDPOINTS_CANARIES_SETUP_AND_DRC",
   "source_kinds": 53,
   "mapped_source_kinds": 53,
   "terminal_binding_contract": 58,
@@ -47,13 +47,13 @@
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "combined_owner_shell": {
-    "status": "PASS_CURRENT_PRIMITIVE_LINK_AND_SETUP_CANARIES_PASS",
+    "status": "PASS_CURRENT_RTL_LINK_SETUP_DRC_AND_CANARIES",
     "evidence": "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json",
     "terminal_bindings": 58,
     "owners": 8,
     "period_ns": 1.25,
-    "wns_ns": 0.00000369549,
-    "area": 2097260.351548,
+    "wns_ns": 0.00000154972,
+    "area": 2121880.310699,
     "unmapped": 0,
     "dc_errors": 0,
     "composite_scratch_enabled": true
@@ -115,15 +115,15 @@
   "sfu_vector_endpoint_evidence": {
     "status": "PASS_12_OF_23_SFU_OPCODES_OWNER_NOT_CLOSED",
     "adapter": "rtl/integration/operator_sfu_vector_endpoint_v3.sv",
-    "rtl_sha256": "49083480d3aed9cde192c4c42352ffb20182f2f01464fb5058c39fd357b3ec90",
+    "rtl_sha256": "0a8e0970727b0dc9e0674e6d802f2e658ede5f7c911097eaa96bd35a7ad8dc93",
     "opcodes_functional": 12,
     "lanes": 16,
     "numerical_cases": 13,
-    "test_log_sha256": "5d88bc973b23b734ebe2cb23eb778105af336f8c46a59177d65ae906d3ae1208",
+    "test_log_sha256": "ae2a27a8c3e7c0a7f8b3af08d22e0df7ebf288ed2c702d8cfe1b7de8e94aab5f",
     "dc_attempt1": {"status": "FAIL_TIMING", "wns_ns": -0.367541, "area": 52494.078},
     "dc_attempt2": {"status": "TIMEOUT_600S", "optimizer_snapshot_wns_ns_approx": -0.35},
-    "dc_final": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "implementation": "dedicated_pipelined_add_mul_plus_pipelined_reduce_sum_and_reduce_max", "wns_ns": 0.000015974, "area": 68156.8160001, "unmapped": 0, "dc_errors": 0},
-    "dc_log_sha256": "ac679ef7201136caeec2bcf67be5bc7b7e496e7cd9c29e4f88e9c8ba3abd1712",
+    "dc_final": {"status": "PASS_REGISTERED_PAYLOAD_BOUNDARY", "implementation": "one-cycle payload capture plus dedicated pipelined add/mul/reductions", "wns_ns": 0.00000154972, "area": 68253.3670001, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "7c1ce7e6776b0856f65d32f860f49aa5ff796928a6c26d92c3ca5b30daf1c1f9",
     "remaining_sfu_opcodes": 11
   },
   "sfu_reduce_max_primitive_evidence": {
@@ -226,9 +226,9 @@
     "fixed_array": "rtl/sfu/bf16_silu_mul_lut_array8_fixed.sv",
     "endpoint": "rtl/integration/operator_sfu_gate_endpoint_v3.sv",
     "fixed_array_sha256": "0b7461bfdd52a0ae84e645afd7efb7fe7a4d76d846e715e6ec38fabced5b2c7a",
-    "endpoint_sha256": "a514ea64c3cbcf0035f723b8965f8cd5f88a41932b9cf4b5954b8c63ea2f70a0",
+    "endpoint_sha256": "ae4cb9612091e62f273e70d82828c8e098d7b37a7a634bea221ad51c9b11c08e",
     "frozen_vectors": {"transactions": 4096, "lane_pairs": 32768, "producer_stall_cycles": 0, "consumer_backpressure_cycles": 1497, "log_sha256": "44bf681108f81e63e1a2228947bf4fec8827eeb0f019d5ab05b449f7be7a9e90"},
-    "endpoint_test": {"transactions": 100, "lane_pairs": 800, "tag_last_completion": "PASS", "log_sha256": "a48583eabc69e04e3f3c79d290504c47bb3303e810910a6c2075ae4874189053"},
+    "endpoint_test": {"transactions": 100, "lane_pairs": 800, "tag_last_completion": "PASS", "request_queue_depth": 1, "log_sha256": "1cda5d37343501463671aae72674ea5910e92d97fbd1c251d85ee43eeabade59"},
     "lane_dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000166059, "area": 9931.103, "unmapped": 0, "dc_errors": 0, "log_sha256": "b548acafc65c49c49582d15d384a591d43b106804a50668721dac13a0dabe56e"},
     "superseded_parameterized_ddc_attempt": {"status": "FAIL_LINK_REFERENCE_NAME", "log_sha256": "a0e4a633523a4b51ea8f077061f1bd0047362b47551d91fecbcca23937543df7"},
     "dc": {"status": "PASS_INPUT_QUEUE_BOUNDARY_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00021565, "area": 80192.8400001, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 0},
@@ -255,16 +255,16 @@
   "sfu_owner_endpoint_evidence": {
     "status": "PASS_23_OF_23_PROTOCOL_AND_800MHZ_DC",
     "endpoint": "rtl/integration/operator_sfu_owner_endpoint_v3.sv",
-    "endpoint_sha256": "752aec5689f4595b9528ed56d33099fbb642fdcc2312e5bf5f5d411837dc12bc",
+    "endpoint_sha256": "017af794062c3a87f03bf14fed6e4aa2b55fc4a375797722aa8111e513ab95c3",
     "child_endpoints": 7,
     "terminal_opcodes": 23,
-    "protocol_test": {"opcodes": 23, "invalid": 1, "checked_completions": 24, "log_sha256": "1fbf13f25f572bbd38517e0c9ee730c105a8287a335cf20e87ea056ea610d532"},
+    "protocol_test": {"opcodes": 23, "invalid": 1, "checked_completions": 24, "request_queue_depth": 1, "log_sha256": "8ecc9442b55ac83befa355acb368bc651bdaf59145e8749774f4604610515a17"},
     "flatten_flow": {"children": 7, "hierarchical_cells_per_child": 0, "unmapped": 0, "tcl_sha256": "a8cd470c695e689262049decb79edf594cc994e715bfce3b7b453b6d6e2ca135", "script_sha256": "8347e398d7465358ecbba9fd486ad2892405ef44df474bb523654ee606c7b159"},
     "attempt1": {"status": "FAIL_DDC_INTERNAL_NAME_COLLISION", "wns_ns": -1.5716, "unmapped": 89, "dc_errors": 534, "log_sha256": "a153d8bdacc0ef1b4f376249929c28ce12eb897cb005dba0414207a4dc8abee9"},
     "attempt2": {"status": "FAIL_TIMING_GATE_INPUT_BOUNDARY", "wns_ns": -0.00129306, "unmapped": 0, "dc_errors": 0, "log_sha256": "c373e93b7a07dfadd07c7b55571b10b7e2c89f79ede04e78b9ecf871e307f4fa"},
-    "composite_scratch": {"slots": 10, "slot_bits": 512, "fixed_capacity": true, "bridge_tests": ["Softplus", "GELU", "Sigmoid", "SiLU"], "leaf_counts": [1,1,8,9], "first_leaf_external_payload_only": true, "final_result_before_completion": true, "test_log_sha256": "d6d74a426ec7fc952b3bcac7feee962787395d4c4b3c658fa964cc64cc83c9d4"},
-    "dc": {"status": "PASS_SCRATCH_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 326007.317998, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 19},
-    "dc_log_sha256": "9cb7cea37f76a79eb5623a5ace578b342acfd6a76d60d625c9cd42c3717248fa"
+    "composite_scratch": {"slots": 10, "slot_bits": 512, "fixed_capacity": true, "bridge_tests": ["Softplus", "GELU", "Sigmoid", "SiLU"], "leaf_counts": [1,1,8,9], "first_leaf_external_payload_only": true, "final_result_before_completion": true, "test_log_sha256": "2d2d0461bc6b85d2ff08a3cff70903e35bd12a99f128834cf2716b0ae29cf445"},
+    "dc": {"status": "PASS_REQUEST_QUEUE_BOTTOM_UP_DRC_CLEAN_IN_COMBINED", "period_ns": 1.25, "wns_ns": 0.00000154972, "area": 326600.819998, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "ba6b520b0ec05c17185ad1e0cf90be35793bfec9ae3b62fd5d749b7eb408a4fa"
   },
   "kv_memory_endpoint_evidence": {
     "status": "PASS_4_OF_4_DDR_PTE_IDMA_AND_DC",

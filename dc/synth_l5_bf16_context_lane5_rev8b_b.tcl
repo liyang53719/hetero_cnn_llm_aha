@@ -30,6 +30,7 @@ set_false_path -from [get_ports rst_ni]
 set_input_delay 0.10 -clock core_clk $inputs
 set_output_delay 0.10 -clock core_clk [all_outputs]
 set_load 0.02 [all_outputs]
+set_max_transition 0.23 [current_design]
 set_max_fanout 32 [current_design]
 set_fix_multiple_port_nets -all -buffer_constants
 if {$HIGH} {

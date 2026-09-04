@@ -12,7 +12,7 @@
     "hierarchical_softmax": true,
     "kv_ddr_pte_allocator_idma": true,
     "reference_output_injection": false,
-    "test_log_sha256": "7ddf29c6dac98589e18657f49e1117a6c298f2e3c54f75609f9de09725c13933"
+    "test_log_sha256": "1b4598e5af51fcc427cab50d23491df088a550c66e1973557c85eafa0b81711a"
   },
   "qwen3_5": {
     "status": "PASS_ROOT_OWNER_CANARY",
@@ -24,11 +24,11 @@
     "moe_route_dispatch_and_merge": true,
     "reference_output_injection": false,
     "test_log_sha256": {
-      "gdn": "292d0b33dd5c2b881491e3d4131898c3bf85d87fee83529cdea245e042f4cba1",
-      "dense_attention": "ce4416f003c24a277cddccc91c7b8a4e1851c1a4e4ae249c9469d3f017781c62",
-      "moe": "8ad1845b83348dda61a84246eb6f1aa8f189047a38b10e16f31a0fff48a7b185",
-      "mtp_commit": "334bd7b9e0a49deb28b0c7e1e8bf97565fddc7cd6f7f1b140b9d8cdff59e723f",
-      "mtp_rollback": "a6d5c2f5ced764fb37d900bdafcd811705528ddbebeeadd1f5b6a7a8d184d776"
+      "gdn": "63dc625b1411c3c93ba9ed3de59f4892be4868445e68eca2ae11eb2a0b671641",
+      "dense_attention": "480ae5fa0926a948412fd41745d963a75176efbd2e6c8e5904c926df7acf4981",
+      "moe": "1e49fe22d86dad9ae14c5d899bc4f0d204f41b63c910bef379a0180992025ffa",
+      "mtp_commit": "8f6056874f1d3bb58566a5501a6e4e032a168c4602e3f41ff55088011f1a61be",
+      "mtp_rollback": "df95bfe05a04f16e6780826fd3a5e104eb84317f7849413410731dcdf94d4912"
     }
   },
   "qwen3_8": {
@@ -40,15 +40,15 @@
     "owners_exercised": ["Dma", "Matrix", "Sfu", "KvMemory", "State", "Selection", "Vision"],
     "reference_output_injection": false,
     "test_log_sha256": {
-      "gdn": "d75dc9330efbcb8b33b692a2d00fdd035137a2ef026983344af09d5ed467f08e",
-      "qsa": "0963cfe5359c88fbb57651aa3182d894ad79016f2ea94d65d9d0a2fb439c85cf",
-      "ple": "8d47ea65271d5860a8dbc42229bfe16e6f5fb5dd754bb141ce4d7f3eb2f1f086",
-      "hyper_read": "7ae2e000bbc3e851964aa84d57a28ccf14601ff24b448741a7a2c344acf903f3",
-      "hyper_write": "b0d834f55806e365681c682f4883818f9408b8af73a8dca6b575192341d342be",
-      "final_hyper": "2511f71bb38a463bc575030bfac0c7178addebd5e2f5dde6fec0b719c41bb387",
-      "moe_top10": "8af7b48a4605e194074eee8553f22850f788d94e83cfad69ea670437f94733f2",
-      "mtp_commit": "9b760f1efaeda37f2a0163cc178d3c317e718a6fc7576579436106ff6aa7c96e",
-      "mtp_rollback": "bbd9c7019e1e4f845c6f7b666dcf4c93af666a70ad3280b30b94b29216cbc0a0"
+      "gdn": "6fb15eaaa9387c0d774eb5f8552b36b9357ebc2d65cb7e7afdc9ba1fb75fe4f4",
+      "qsa": "a1a5ea600e74967367b388cd0f973c345e7a6deea1aec93d7621eac53137e8c2",
+      "ple": "1f9b350f49ef23e011564dee1a231c7c03620daa53e8bbb00ae96f31a1ec5d24",
+      "hyper_read": "578bb953478791dd4328215bd2dcea289bf7bc08f0e38f3056727cc400e8cb70",
+      "hyper_write": "bdd5552b7aa9801c08994db2f3c1d838054e3bf239ec15b506258ccd4fa0347d",
+      "final_hyper": "226475a078c36d10c773ef5027bd68fd47c1cf5d883442e7e282462a66bfe735",
+      "moe_top10": "30f5b40aefdf54c5a7583a2d7a80e17033d2650d542445dcf00b7b3e0af1829b",
+      "mtp_commit": "7c1948b691f31666cdd0e64c5c0c5a139922311fa9d63c0ecf57f21e0def96bc",
+      "mtp_rollback": "a784a4a5aa6a3db9ef1da42dfcaa91e2bd4ed6b9df68a0747e719cb67ba1cdc4"
     }
   },
   "vision": {
@@ -59,10 +59,10 @@
     "owners_exercised": ["Dma", "Matrix", "Sfu", "Vision"],
     "reference_output_injection": false,
     "test_log_sha256": {
-      "patch": "4055c3cfd7d523c10a928d6867645f57d830c3fb41357be07eda58c57b77b942",
-      "transformer": "4a5b61818307f3597d795ac36c6259d7bb66553a250c70ba1ac36f4704a679f5",
-      "merge": "d7bd699a9b0e1c5fcd2ca442a92a624def29ee96e37e2a8ba516206835010052",
-      "multimodal_inject": "fffa18cf3337262ac180bf5c5040ee252ac2c85783b57ee848fcda7e244ee960"
+      "patch": "fdd00c33b438b2fca52e20a068931b6fb5cfcc3ec9c24847de13663d5c57d7fb",
+      "transformer": "85862f158d7fc1315351ab79393fb73afb88e8e7664b3ecc61882d0bbaa98ec6",
+      "merge": "fe28ffd08ef4bc0b7ee69d22d759e0a3c32f95816c92d42e9bb84dadae8d462a",
+      "multimodal_inject": "1dcd1fa51d2386693c29dc6f601ebd821912da2e07ac85960a84535617a26217"
     }
   }
 }

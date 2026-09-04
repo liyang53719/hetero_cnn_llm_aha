@@ -131,11 +131,6 @@
   9 paths. QSA uses a valid pre-existing sparse-KV DDR PTE fixture.
 - Vision canary PASS across patch, transformer, merge and multimodal injection.
   All four model classes now pass root-owner canaries.
-- Predicate-era DC PASS: Selection WNS +0.0000602007 ns/area 29110.172;
-  roots 18/18 min WNS +0.303001 ns/summed area 19534.606; Bridge WNS
-  +0.588299 ns; Router +0.321471 ns; combined WNS +0.00000369549 ns/area
-  2097416.781 with 0 unresolved/unmapped. The 4058 transition/47 fanout
-  violations remain open.
 - Root protocol stress PASS: 18 roots x 20 seeds x 100 successful transactions
   = 36000. Random micro-op/result backpressure and completion latency pass;
   MTP predicate/commit/rollback flags are checked.
@@ -143,7 +138,7 @@
   block/tail numerical Chisel tests pass. Authoritative primitive DC is 25/25:
   TopK WNS +0.004297 ns/area 950.768, QSA +0.004169 ns/area 1596.959.
   Regenerated child hashes were replayed before DRC work.
-- Current-generation replay PASS: all four canaries, Selection, Vision and
-  combined shell. Combined remains setup-clean at +0.00000369549 ns, area
-  2097260.352, 0 unresolved/unmapped; DRC improved to 4027 transition/47
-  fanout violations. Next is Matrix hierarchy DRC cleanup.
+- Current RTL setup/DRC closure PASS after SFU request/payload queues, Matrix
+  boundary budgets and 11 reset branches: combined WNS +0.00000154972 ns,
+  area 2121880.311, 0 unresolved/unmapped/transition/cap/fanout. All four
+  canaries pass this RTL. Next: macro-aware 4 MiB SRAM link and SAIF power.

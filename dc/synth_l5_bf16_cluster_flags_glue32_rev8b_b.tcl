@@ -23,7 +23,10 @@ set_clock_uncertainty 0.08 [get_clocks virtual_core]
 set_input_delay 0.10 -clock virtual_core [all_inputs]
 set_output_delay 0.10 -clock virtual_core [all_outputs]
 set_input_transition 0.05 [all_inputs]
-set_load 0.02 [all_outputs]
+set_load 0.10 [all_outputs]
+set_max_transition 0.23 [current_design]
+set_max_fanout 32 [current_design]
+set_fix_multiple_port_nets -all -buffer_constants
 compile_ultra -no_autoungroup
 report_qor > "$OUT/qor.rpt"
 report_area -hierarchy > "$OUT/area_hier.rpt"

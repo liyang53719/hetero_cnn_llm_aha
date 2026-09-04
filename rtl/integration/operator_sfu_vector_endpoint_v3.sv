@@ -8,7 +8,7 @@ module operator_sfu_vector_endpoint_v3 #(
   output logic result_valid_o,input logic result_ready_i,output logic[LANES*32-1:0]result_data_o,output logic[4:0]exception_flags_o,
   output logic completion_valid_o,input logic completion_ready_i,output logic[15:0]completion_tag_o,
   output logic[7:0]completion_parent_phase_o,completion_terminal_phase_o,completion_status_o);
-  localparam logic[2:0]S_IDLE=0,S_PAYLOAD=1,S_ARITH_WAIT=2,S_COMPUTE=3,S_RESULT=4,S_COMPLETE=5,S_REDUCE_WAIT=6;logic[2:0]state_q;
+  localparam logic[2:0]S_IDLE=0,S_PAYLOAD=1,S_ARITH_WAIT=2,S_COMPUTE=3,S_RESULT=4,S_COMPLETE=5,S_REDUCE_WAIT=6,S_PIPE_ISSUE=7;logic[2:0]state_q;
   logic[7:0]opcode_q,variant_q,status_q;logic[15:0]tag_q;logic[7:0]parent_q,terminal_q;
   logic[LANES*32-1:0]payload_a_q,payload_b_q,result_q,pipe_add,pipe_mul;logic[LANES-1:0]payload_mask_q;
   logic[LANES-1:0]add_in_ready,mul_in_ready,add_out_valid,mul_out_valid;
@@ -40,25 +40,25 @@ module operator_sfu_vector_endpoint_v3 #(
   genvar i;generate for(i=0;i<LANES;i++)begin:g
     localparam logic[11:0] LANE_TAG=i;
     HeteroFP32AddPipeTag12 add(.clock(clk_i),.reset(!rst_ni),
-      .io_inValid(state_q==S_PAYLOAD&&payload_valid_i&&arith_add),.io_inReady(add_in_ready[i]),
-      .io_x(payload_a_i[i*32+:32]),.io_y(opcode_q == 8'h31 ? {~payload_b_i[i*32+31],payload_b_i[i*32+:31]} : payload_b_i[i*32+:32]),.io_userIn(LANE_TAG),
+      .io_inValid(state_q==S_PIPE_ISSUE&&arith_add),.io_inReady(add_in_ready[i]),
+      .io_x(payload_a_q[i*32+:32]),.io_y(opcode_q == 8'h31 ? {~payload_b_q[i*32+31],payload_b_q[i*32+:31]} : payload_b_q[i*32+:32]),.io_userIn(LANE_TAG),
       .io_outValid(add_out_valid[i]),.io_outReady(consume_arith),.io_out(pipe_add[i*32+:32]),.io_exceptionFlags(add_flags[i*5+:5]),.io_userOut(add_user_unused[i*12+:12]));
     HeteroFP32MulPipeTag12 mul(.clock(clk_i),.reset(!rst_ni),
-      .io_inValid(state_q==S_PAYLOAD&&payload_valid_i&&arith_mul),.io_inReady(mul_in_ready[i]),
-      .io_x(payload_a_i[i*32+:32]),.io_y(payload_b_i[i*32+:32]),.io_userIn(LANE_TAG),
+      .io_inValid(state_q==S_PIPE_ISSUE&&arith_mul),.io_inReady(mul_in_ready[i]),
+      .io_x(payload_a_q[i*32+:32]),.io_y(payload_b_q[i*32+:32]),.io_userIn(LANE_TAG),
       .io_outValid(mul_out_valid[i]),.io_outReady(consume_arith),.io_out(pipe_mul[i*32+:32]),.io_exceptionFlags(mul_flags[i*5+:5]),.io_userOut(mul_user_unused[i*12+:12]));
   end endgenerate
-  fp32_reduce16 reduce_sum_unit(.clk_i,.rst_ni,.in_valid_i(state_q==S_PAYLOAD&&payload_valid_i&&reduce_sum),.in_ready_o(sum_in_ready),
-    .data_i(payload_a_i),.out_valid_o(sum_out_valid),.out_ready_i(sum_out_ready),.sum_o(sum_value),.exception_flags_o(sum_flags),
+  fp32_reduce16 reduce_sum_unit(.clk_i,.rst_ni,.in_valid_i(state_q==S_PIPE_ISSUE&&reduce_sum),.in_ready_o(sum_in_ready),
+    .data_i(payload_a_q),.out_valid_o(sum_out_valid),.out_ready_i(sum_out_ready),.sum_o(sum_value),.exception_flags_o(sum_flags),
     .accepted_vectors_o(sum_accepted_unused),.completed_vectors_o(sum_completed_unused));
-  fp32_reduce_max16 reduce_max_unit(.clk_i,.rst_ni,.in_valid_i(state_q==S_PAYLOAD&&payload_valid_i&&reduce_max),.in_ready_o(max_in_ready),
-    .data_i(payload_a_i),.out_valid_o(max_out_valid),.out_ready_i(max_out_ready),.max_o(max_value),.index_o(max_index));
+  fp32_reduce_max16 reduce_max_unit(.clk_i,.rst_ni,.in_valid_i(state_q==S_PIPE_ISSUE&&reduce_max),.in_ready_o(max_in_ready),
+    .data_i(payload_a_q),.out_valid_o(max_out_valid),.out_ready_i(max_out_ready),.max_o(max_value),.index_o(max_index));
   assign sum_out_ready=state_q==S_REDUCE_WAIT&&reduce_sum;assign max_out_ready=state_q==S_REDUCE_WAIT&&reduce_max;
   always_comb begin flags_comb=0;for(f=0;f<LANES;f++)begin
     if(opcode_q==8'h30||opcode_q==8'h31)flags_comb|=add_flags[f*5+:5];
     if(opcode_q==8'h32||opcode_q==8'h33)flags_comb|=mul_flags[f*5+:5];end end
   assign req_ready_o=state_q==S_IDLE;
-  assign payload_ready_o=state_q==S_PAYLOAD&&((arith_add&&(&add_in_ready))||(arith_mul&&(&mul_in_ready))||(reduce_sum&&sum_in_ready)||(reduce_max&&max_in_ready)||(!arith_add&&!arith_mul&&!reduce_sum&&!reduce_max));
+  assign payload_ready_o=state_q==S_PAYLOAD;
   assign result_valid_o=state_q==S_RESULT;assign result_data_o=result_q;assign exception_flags_o=flags_q;
   assign completion_valid_o=state_q==S_COMPLETE;assign completion_tag_o=tag_q;
   assign completion_parent_phase_o=parent_q;assign completion_terminal_phase_o=terminal_q;assign completion_status_o=status_q;
@@ -69,9 +69,13 @@ module operator_sfu_vector_endpoint_v3 #(
         if(req_opcode_i inside {8'h30,8'h31,8'h32,8'h33,8'h34,8'h35,8'h43,8'h44,8'h45,8'h46,8'h49,8'h4a})state_q<=S_PAYLOAD;
         else begin status_q<=8'd4;state_q<=S_COMPLETE;end end
       S_PAYLOAD:if(payload_valid_i&&payload_ready_o)begin
-        if(arith_add||arith_mul)state_q<=S_ARITH_WAIT;
-        else if(reduce_sum||reduce_max)state_q<=S_REDUCE_WAIT;
-        else begin payload_a_q<=payload_a_i;payload_b_q<=payload_b_i;payload_mask_q<=payload_mask_i;state_q<=S_COMPUTE;end end
+        payload_a_q<=payload_a_i;payload_b_q<=payload_b_i;payload_mask_q<=payload_mask_i;
+        if(arith_add||arith_mul||reduce_sum||reduce_max)state_q<=S_PIPE_ISSUE;
+        else state_q<=S_COMPUTE;end
+      S_PIPE_ISSUE:begin
+        if((arith_add&&(&add_in_ready))||(arith_mul&&(&mul_in_ready)))state_q<=S_ARITH_WAIT;
+        else if((reduce_sum&&sum_in_ready)||(reduce_max&&max_in_ready))state_q<=S_REDUCE_WAIT;
+      end
       S_ARITH_WAIT:if(consume_arith)begin for(j=0;j<LANES;j++)result_q[j*32+:32]<=arith_add?pipe_add[j*32+:32]:pipe_mul[j*32+:32];flags_q<=flags_comb;state_q<=S_RESULT;end
       S_REDUCE_WAIT:if((reduce_sum&&sum_out_valid)||(reduce_max&&max_out_valid))begin result_q<=0;result_q[31:0]<=reduce_sum?sum_value:max_value;result_q[35:32]<=reduce_sum?0:max_index;flags_q<=reduce_sum?sum_flags:0;state_q<=S_RESULT;end
       S_COMPUTE:begin for(j=0;j<LANES;j++)result_q[j*32+:32]<=lane_result(payload_a_q[j*32+:32],payload_b_q[j*32+:32],payload_mask_q[j],j);flags_q<=flags_comb;state_q<=S_RESULT;end

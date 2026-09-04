@@ -26,9 +26,10 @@ create_clock -name core_clk -period $PERIOD [get_ports clk_i]
 set_clock_uncertainty 0.08 [get_clocks core_clk]
 set_clock_transition 0.05 [get_clocks core_clk]
 set inputs [remove_from_collection [all_inputs] [get_ports clk_i]]
-if {$HIGH} {set_input_delay 0.50 -clock core_clk $inputs} else {set_input_delay 0.10 -clock core_clk $inputs}
+if {$HIGH} {set_input_delay 0.70 -clock core_clk $inputs} else {set_input_delay 0.10 -clock core_clk $inputs}
 set_output_delay 0.10 -clock core_clk [all_outputs]
-set_load 0.02 [all_outputs]
+set_load 0.10 [all_outputs]
+set_max_transition 0.23 [current_design]
 set_max_fanout 32 [current_design]
 set_fix_multiple_port_nets -all -buffer_constants
 if {$HIGH} {set_critical_range 0.20 [current_design];compile_ultra -no_autoungroup -timing_high_effort_script} else {compile_ultra -no_autoungroup}

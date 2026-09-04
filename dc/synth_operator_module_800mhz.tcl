@@ -33,7 +33,18 @@ check_design > "$out_dir/check_design_pre.rpt"
 
 source [file join [file dirname [info script]] common_clock_800mhz.tcl]
 hetero_apply_primary_clock $clock_port hetero_clk
-set_max_transition 0.25 [current_design]
+if {[info exists ::env(INPUT_DELAY_NS)] && $::env(INPUT_DELAY_NS) ne ""} {
+  set constrained_inputs [remove_from_collection [all_inputs] [get_ports $clock_port]]
+  set_input_delay $::env(INPUT_DELAY_NS) -clock [get_clocks hetero_clk] $constrained_inputs
+}
+if {[info exists ::env(TIGHT_REQUEST_INPUT_DELAY_NS)] && $::env(TIGHT_REQUEST_INPUT_DELAY_NS) ne ""} {
+  set request_inputs [get_ports -quiet req_*]
+  if {[sizeof_collection $request_inputs] > 0} {
+    set_input_delay $::env(TIGHT_REQUEST_INPUT_DELAY_NS) -clock [get_clocks hetero_clk] $request_inputs
+  }
+}
+set max_transition [expr {[info exists ::env(MAX_TRANSITION_NS)] ? $::env(MAX_TRANSITION_NS) : 0.25}]
+set_max_transition $max_transition [current_design]
 set_max_fanout 32 [current_design]
 set_fix_multiple_port_nets -all -buffer_constants
 compile_ultra -no_autoungroup

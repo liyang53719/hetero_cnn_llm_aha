@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SETUP_AND_DESIGN_RULES",
+  "library": "CLN22UL base SVT TT 0.8V 25C",
+  "period_ns": 1.25,
+  "setup_uncertainty_ns": 0.08,
+  "io_budget_ns": 0.10,
+  "wns_ns": 0.00000154972,
+  "area": 2121880.310699,
+  "unmapped": 0,
+  "unresolved": 0,
+  "dc_errors": 0,
+  "max_transition_violations": 0,
+  "max_capacitance_violations": 0,
+  "max_fanout_violations": 0,
+  "fixes": [
+    "Matrix 5-stage/5-context cluster input budget and stronger output drive; no new FMA stage",
+    "SFU vector payload capture/issue boundary",
+    "SFU owner one-entry terminal request queue",
+    "Gate one-entry request queue",
+    "0.23 ns child transition margin",
+    "two-inverter CLN22 reset branches with deterministic uniquified child DDCs"
+  ],
+  "matrix_h3": {
+    "period_ns": 1.0,
+    "wns_ns": 0.00500542,
+    "max_transition_violations": 0,
+    "max_capacitance_violations": 0,
+    "physical_lanes": 512,
+    "post_map_compared_cycles": 120032,
+    "post_map_mismatches": 0,
+    "dc_log_sha256": "235c5ccd21c40c72df3dca4d22037a475d3241a0d44dc93c04557009c1f3c4c5"
+  },
+  "sfu": {
+    "owner_wns_ns": 0.00000154972,
+    "owner_area": 326600.819998,
+    "owner_unmapped": 0,
+    "vector_added_cycles": 1,
+    "owner_request_queue_depth": 1,
+    "vector_test_log_sha256": "ae2a27a8c3e7c0a7f8b3af08d22e0df7ebf288ed2c702d8cfe1b7de8e94aab5f",
+    "gate_test_log_sha256": "1cda5d37343501463671aae72674ea5910e92d97fbd1c251d85ee43eeabade59",
+    "owner_test_log_sha256": "8ecc9442b55ac83befa355acb368bc651bdaf59145e8749774f4604610515a17",
+    "composite_test_log_sha256": "2d2d0461bc6b85d2ff08a3cff70903e35bd12a99f128834cf2716b0ae29cf445"
+  },
+  "reset_tree": {
+    "root_branches": 2,
+    "owner_branches": 9,
+    "branch_cell_area": 0.637,
+    "branch_ddc_sha256": "706f6f266470cdd14f6f5c48fd55484087eff906f3600b4bcca0b55be926d8e9",
+    "cloned_designs": 9
+  },
+  "dc_log_sha256": "53101f26a77739ac71d79c9aa9a16473a755113e2b663a5be725b5b5ee6c5750",
+  "status_sha256": "dd785389517cdbd56297c70c7ec91246a2b58d52a453ced0bfebd4857ce10b18",
+  "superseded_attempts": [
+    {"name": "current_primitive", "wns_ns": 0.00000369549, "transition": 4027, "fanout": 47},
+    {"name": "matrix_drc", "wns_ns": 0.00000154972, "transition": 154, "fanout": 1},
+    {"name": "owner_margin", "wns_ns": -0.0325897, "transition": 1, "fanout": 1},
+    {"name": "sfu_queued", "wns_ns": 0.00000154972, "transition": 0, "fanout": 1},
+    {"name": "reset_branch_unresolved", "wns_ns": 0.00000154972, "unmapped": 11}
+  ],
+  "claim_boundary": "Pre-layout Design Compiler setup and logic design-rule closure only. SRAM macro timing/area, SAIF power and post-route signoff remain separate gates."
+}

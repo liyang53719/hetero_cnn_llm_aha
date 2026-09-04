@@ -39,6 +39,8 @@ set_false_path -from [get_ports rst_ni]
 set_input_delay 0.10 -clock core_clk $inputs
 set_output_delay 0.10 -clock core_clk [all_outputs]
 set_load 0.02 [all_outputs]
+set_max_transition 0.25 [current_design]
+set_max_fanout 32 [current_design]
 report_qor > "$OUT/qor.rpt"
 report_area -hierarchy > "$OUT/area_hier.rpt"
 report_timing -delay_type max -max_paths 100 -nworst 10 > "$OUT/timing_max.rpt"

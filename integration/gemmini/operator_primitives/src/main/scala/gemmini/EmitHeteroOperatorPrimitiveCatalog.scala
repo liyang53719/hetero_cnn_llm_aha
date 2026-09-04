@@ -76,7 +76,7 @@ object EmitHeteroOperatorPrimitiveCatalog extends App {
     require(args.length == 2, "usage: <primitive-name> <output-systemverilog-path> or --list")
     require(HeteroOperatorPrimitiveCatalog.names.contains(args(0)), s"unknown primitive ${args(0)}")
     val output = Paths.get(args(1))
-    val systemVerilog = ChiselStage.emitSystemVerilog(HeteroOperatorPrimitiveCatalog.generator(args(0)))
+    val systemVerilog = ChiselStage.emitSystemVerilog(HeteroOperatorPrimitiveCatalog.generator(args(0))).stripTrailing + "\n"
     Option(output.getParent).foreach(parent => Files.createDirectories(parent))
     Files.writeString(output, systemVerilog, StandardCharsets.UTF_8)
   }
@@ -104,7 +104,7 @@ class HeteroOperatorPrimitiveCatalogCombined extends Module {
 object EmitHeteroOperatorPrimitiveCombined extends App {
   require(args.length == 1, "usage: <output-systemverilog-path>")
   val output = Paths.get(args(0))
-  val systemVerilog = ChiselStage.emitSystemVerilog(new HeteroOperatorPrimitiveCatalogCombined)
+  val systemVerilog = ChiselStage.emitSystemVerilog(new HeteroOperatorPrimitiveCatalogCombined).stripTrailing + "\n"
   Option(output.getParent).foreach(parent => Files.createDirectories(parent))
   Files.writeString(output, systemVerilog, StandardCharsets.UTF_8)
 }

@@ -173,7 +173,7 @@ object EmitOperatorPrimitives extends App {
   Files.createDirectories(outputDirectory)
 
   ThreeModelOperatorCatalog.roots.foreach { root =>
-    val sv = ChiselStage.emitSystemVerilog(root.generator())
+    val sv = ChiselStage.emitSystemVerilog(root.generator()).stripTrailing + "\n"
     Files.writeString(outputDirectory.resolve(s"${root.name}.sv"), sv, StandardCharsets.UTF_8)
   }
 

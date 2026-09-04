@@ -109,3 +109,6 @@
   port; structural lint PASS. Final linked DC includes Router, all owners and
   real Revision8B-B: WNS +0.00000369549 ns, area 2085007.384, 0 error/unmapped.
   4056 transition/47 fanout violations and four root canaries remain open.
+- Root Bridge is now ahead of that shell: linked DC WNS +0.00000369549 ns,
+  area 2085711.542, 0 error/unmapped. Canary blocker is internal composite
+  scratch chaining in SFU; protocol-only leaf completion is not numerical PASS.

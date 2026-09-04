@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "PASS_8_OWNER_LINK_SETUP_CANARIES_OPEN",
+  "status": "PASS_ROOT_BRIDGE_8_OWNER_LINK_SETUP_CANARIES_OPEN",
   "top": "operator_endpoint_bound_owner_shell_v3",
   "terminal_bindings": 58,
   "owners": 8,
@@ -12,5 +12,13 @@
   "dc_log_sha256": "0850013dca6c2e5fb42283a5b5eab00cdec56eb2dd579cbe8ec5dbd12cc58a7d",
   "status_sha256": "3be259028ca6148890515b6cdc2379f2a607fe9b0cfff26523fed58a9e0fa617",
   "attempts": [{"status": "FAIL_UNMAPPED_ROUTER_DEFINITION", "unmapped": 450}, {"status": "PASS_AFTER_STANDALONE_ROUTER_DDC", "unmapped": 0}],
-  "claim_boundary": "All eight real owners and the generated owner router are linked and setup-clean. Root bridge canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
+  "root_bridge_shell": {
+    "top": "operator_root_bridge_owner_shell_v3",
+    "generated_rtl_sha256": "69b1e0aa91405a248051a656c8e3537442da6bb8fcadc820e552b994a5cf1490",
+    "structural_lint_sha256": "58c8b60db8e4e05d17e6b589b2b1435f37a0d2f8195183df730caa127586a026",
+    "terminal_bridge_dc": {"wns_ns": 0.551224, "area": 703.612, "unmapped": 0, "dc_log_sha256": "9990146802145d19cffbcdd43078d6452c48ee9e04e74aa333112e8ebb0803d7"},
+    "linked_dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2085711.541542, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4056, "max_fanout_violations": 47},
+    "linked_dc_log_sha256": "d73af60994da029ffe1e270ceb94069aab22231e7bbfdda58f6dea851da0a028"
+  },
+  "claim_boundary": "The root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean. Composite scratch numerical chaining, four model canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
 }

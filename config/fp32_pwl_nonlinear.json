@@ -1,0 +1,32 @@
+{
+  "coefficient_format": "FP32 slope/intercept, FP32 mul then add",
+  "metrics": {
+    "1": {
+      "argmax": 0.12479999661445618,
+      "max_abs_error": 0.0019443035125732422,
+      "name": "softplus",
+      "range": [
+        -16,
+        16
+      ],
+      "segments": 128
+    },
+    "2": {
+      "argmax": -0.06239999830722809,
+      "max_abs_error": 0.0015512537211179733,
+      "name": "tanh_gelu",
+      "range": [
+        -8,
+        8
+      ],
+      "segments": 128
+    }
+  },
+  "schema_version": 1,
+  "total_vectors": 20000,
+  "variants": {
+    "1": "softplus",
+    "2": "tanh_gelu"
+  },
+  "vectors_per_variant": 10000
+}

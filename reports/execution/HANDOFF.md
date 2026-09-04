@@ -70,11 +70,15 @@
 - Gate binds the fixed 8-lane BF16 fused SiLU-times-up array: 4096 frozen
   vectors/32768 lane-pairs and 100 endpoint transactions PASS. Bottom-up DC
   uses one clean lane DDC x8: WNS +0.000166059 ns, area 79574.313, 0 error.
-  SFU is 22/23; only Pwl remains.
+  SFU reached 22/23.
+- Pwl variants are frozen to Softplus=1 and tanh-GELU=2. Generated 128-segment
+  tables pass 20k vectors at max error 0.0019444/0.0015513; endpoint PASS.
+  DC WNS +0.0000449419 ns, area 7439.978, 0 error/unmapped; five near-zero
+  transition violations remain visible. All 23 SFU component endpoints exist.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total remains 12/58 until the SFU owner closes atomically; next bind
-  Pwl, then consolidate all 23 SFU opcodes.
+- Endpoint total remains 12/58 until the SFU owner closes atomically; next
+  consolidate all 23 SFU opcodes and rerun owner protocol/DC.

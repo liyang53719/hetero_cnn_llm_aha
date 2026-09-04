@@ -211,6 +211,24 @@
     "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000166059, "area": 79574.3130001, "unmapped": 0, "dc_errors": 0},
     "dc_log_sha256": "bdb95b380f3b6f34079fd65e32d4b7e7679ff8621ec5e8d1a5942dd8662df019"
   },
+  "sfu_pwl_endpoint_evidence": {
+    "status": "PASS_SOFTPLUS_GELU_NUMERICAL_ENDPOINT_DC",
+    "opcode": "SfuPwl",
+    "variants": {"1": "Softplus", "2": "tanh-GELU"},
+    "unsupported_variant_status": 4,
+    "generator_sha256": "7f49ab23d15f72ca6c7e4d898fe13c5d811414ecc577ac19ba65601c2c226dd8",
+    "coefficients_sha256": "30ee60a1d0e45dc7d57475cf48a4c835ed1225adfcc2d536cf42728e0c00dd09",
+    "vectors_sha256": "da18545b3f71843354320465219aa13baa06781453e25ea759beb7fafff11598",
+    "core": "rtl/sfu/fp32_pwl_nonlinear_pipe.sv",
+    "endpoint": "rtl/integration/operator_sfu_pwl_endpoint_v3.sv",
+    "core_sha256": "18fb11c6036a775292026cec994bf31d32e9292a5577d69705122de683cf6c0e",
+    "endpoint_sha256": "08da1f7334884a4fba095ea18767eb325e148778efa13c55998106f17a527caf",
+    "numerical": {"vectors": 20000, "softplus_max_abs_error": 0.0019443035125732422, "gelu_max_abs_error": 0.0015512537211179733, "threshold": 0.002, "log_sha256": "3392b13c95062d95de3a99bddaa7d33d9380794927f558c4e40955aa2371be67"},
+    "endpoint_test": {"transactions": 100, "invalid_variants": 1, "log_sha256": "09f277046cc912cf773fe0076dc158b8624ca0044dff094a3d523466d2e56971"},
+    "core_dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000449419, "area": 4871.867, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 5, "log_sha256": "9e41c795348e74e3fbbbf05eb512d381801faaf26577dbba5e6f67e6586fcc85"},
+    "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000449419, "area": 7439.978, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 5},
+    "dc_log_sha256": "e70cff06140319179690fe816cebd02126d825e4d9437ae2682c78295a345317"
+  },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",
     "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",

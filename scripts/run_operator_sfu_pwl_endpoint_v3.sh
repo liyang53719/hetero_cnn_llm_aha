@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.."&&pwd);OUT=$ROOT/work/results/operator_sfu_pwl_endpoint_v3;R=$ROOT/scripts/run_memory_capped.sh;V=$ROOT/work/toolchain/conda/bin/verilator;mkdir -p "$OUT/core" "$OUT/endpoint"
+BASE=("$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv" "$ROOT/rtl/sfu/fp32_pwl_nonlinear_pipe.sv")
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s "$V" --binary --threads 4 --timing -Wall -I"$ROOT/rtl/sfu" -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL -Wno-UNOPTTHREADS -Wno-WIDTH -j 4 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_fp32_pwl_nonlinear_pipe --Mdir "$OUT/core/obj" -o tb "${BASE[@]}" "$ROOT/tb/tb_fp32_pwl_nonlinear_pipe.sv" >"$OUT/core/build.log" 2>&1
+cd "$ROOT";MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s "$OUT/core/obj/tb"|tee "$OUT/core/test.log"
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s "$V" --binary --threads 4 --timing -Wall -I"$ROOT/rtl/sfu" -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL -Wno-UNOPTTHREADS -Wno-WIDTH -j 4 -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module tb_operator_sfu_pwl_endpoint_v3 --Mdir "$OUT/endpoint/obj" -o tb "${BASE[@]}" "$ROOT/rtl/integration/operator_sfu_pwl_endpoint_v3.sv" "$ROOT/tb/tb_operator_sfu_pwl_endpoint_v3.sv" >"$OUT/endpoint/build.log" 2>&1
+MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s "$OUT/endpoint/obj/tb"|tee "$OUT/endpoint/test.log"
+grep -q 'FP32_PWL_NONLINEAR_PIPE_PASS vectors=20000 variants=2' "$OUT/core/test.log";grep -q 'OPERATOR_SFU_PWL_ENDPOINT_V3_PASS transactions=100 invalid=1 variants=2' "$OUT/endpoint/test.log"

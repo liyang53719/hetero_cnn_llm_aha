@@ -90,17 +90,18 @@
     "nonclaim": "V3 adapter and retained pipeline are component-bound; same-run combined canary remains G4."
   },
   "sfu_vector_endpoint_evidence": {
-    "status": "FUNCTIONAL_PASS_DC_FAIL_NOT_COUNTED",
+    "status": "PASS_10_OF_23_SFU_OPCODES_OWNER_NOT_CLOSED",
     "adapter": "rtl/integration/operator_sfu_vector_endpoint_v3.sv",
-    "rtl_sha256": "61c367ed1bd846a04c5d3a16498419d489d6c20ceb50d8217dcef87277489511",
+    "rtl_sha256": "184e818d2d23b115db5c1c1a4247615242e5ef4786872dd09d575188a31a9075",
     "opcodes_functional": 10,
     "lanes": 16,
     "numerical_cases": 11,
-    "test_log_sha256": "fe787bf3b04b58ec402ead250001cf0c0636c66ed2284e2fa3a4d27fe8f0d15f",
+    "test_log_sha256": "34fe55f34594bf945c04d2672416fe16c5e020f77361de1e382cc780b908bb41",
     "dc_attempt1": {"status": "FAIL_TIMING", "wns_ns": -0.367541, "area": 52494.078},
     "dc_attempt2": {"status": "TIMEOUT_600S", "optimizer_snapshot_wns_ns_approx": -0.35},
-    "dc_log_sha256": "4855cacd59d36946eede68ab36ecc4c637c79fed31f16b4e16eb901480546140",
-    "next_fix": "replace dual-function combinational ALUs with dedicated pipelined AddPipe and MulPipe lanes"
+    "dc_final": {"status": "PASS", "implementation": "dedicated_pipelined_add_mul", "wns_ns": 0.150298, "area": 5697.965, "unmapped": 0},
+    "dc_log_sha256": "36f88cbc54ed94d13512cfd37517660df159262af09f4991a81d2c67947ab724",
+    "remaining_sfu_opcodes": 13
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

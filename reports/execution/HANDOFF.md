@@ -35,9 +35,9 @@
 - Matrix is 7/7 component-bound: six BF16 opcodes use the same Revision8B-B
   16x32/5-context array; Conv adapter plus retained Rocket/Gemmini Conv1x1 PASS.
   Same-run adapter+pipeline canary remains G4.
-- SFU vector 10-op subset: 16-lane/11-case numerical RTL PASS but not counted;
-  DC attempt1 WNS -0.367541 ns, registered-input attempt2 timeout at 600 s with
-  ~-0.35 ns snapshot. Replace dual ALUs with dedicated AddPipe/MulPipe.
+- SFU vector 10/23: 16-lane/11-case numerical PASS. Dedicated pipelined
+  AddPipe/MulPipe fixes prior timing fail: DC WNS +0.150298 ns, area 5697.965,
+  0 unmapped. SFU owner remains OPEN for 13 operations.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

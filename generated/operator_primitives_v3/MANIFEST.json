@@ -294,150 +294,150 @@
   ],
   "roots": [
     {
-      "bytes": 22452,
+      "bytes": 22557,
       "modules": [
         "HeteroFinalNormPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroFinalNormPrimitiveV3.sv",
-      "sha256": "69411e74fdc0ab3aa5fd218932de96456b08c2ca8f61d6cd3659de14aca4baf2"
+      "sha256": "161a64ca5c6bcc3a0cc5a08d99d33d8c05aa962297ca596e64c2f1f7347f840d"
     },
     {
-      "bytes": 39336,
+      "bytes": 39441,
       "modules": [
         "HeteroGatedDeltaNetPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroGatedDeltaNetPrimitiveV3.sv",
-      "sha256": "7ede7d7a973c53dd2fb57f1ac9a5350b85d3a57ec95210ec4c8c8ea4ff82299f"
+      "sha256": "69eb6a7036e937e5080f055af205878a39718fc6c364383090ca00c538dadae0"
     },
     {
-      "bytes": 30832,
+      "bytes": 30937,
       "modules": [
         "HeteroLmHeadArgmaxPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroLmHeadArgmaxPrimitiveV3.sv",
-      "sha256": "fbd1205103eb09f44fc04ac89dfbb4f38d448dba6f12b89b96f799d424897487"
+      "sha256": "3593d8a7f28a6e6bcc8dcc9efebdffec1d1caf81e530f0f71a108dbd6b4efea4"
     },
     {
-      "bytes": 35712,
+      "bytes": 35818,
       "modules": [
         "HeteroMoePrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroMoePrimitiveV3.sv",
-      "sha256": "fb02580d6f9ff531cefdaf33ef59ae76e1659e269e87c5be9d08e63d329acc2e"
-    },
-    {
-      "bytes": 33009,
-      "modules": [
-        "HeteroMtpDraftPrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroMtpDraftPrimitiveV3.sv",
-      "sha256": "7d112fe2c000e6c8ac5feb262b87b2d634741468f4d2c88ad27d6032c6a70454"
-    },
-    {
-      "bytes": 29082,
-      "modules": [
-        "HeteroMtpVerifyResolvePrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroMtpVerifyResolvePrimitiveV3.sv",
-      "sha256": "315dfefb3c7d91b0749ee4e1252b7e6f197add9249ae0860245d8adb6371aaaf"
-    },
-    {
-      "bytes": 28444,
-      "modules": [
-        "HeteroMultimodalInjectPrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroMultimodalInjectPrimitiveV3.sv",
-      "sha256": "df0f85dc3593de52dfea5ce0253983c141b850f9ffdc5746eac1d948fa102cec"
-    },
-    {
-      "bytes": 35836,
-      "modules": [
-        "HeteroPlePrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroPlePrimitiveV3.sv",
-      "sha256": "dbbf6ce904094f0e3db2821e4805dd9baf607e76a975a8b3ae5346e111c06442"
-    },
-    {
-      "bytes": 39473,
-      "modules": [
-        "HeteroQsaPrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroQsaPrimitiveV3.sv",
-      "sha256": "a9339be4bdbd91b46daa0f5840edbdc551e92154c7f03a60aff3d6121fc20ea6"
-    },
-    {
-      "bytes": 35220,
-      "modules": [
-        "HeteroQwen2DecoderBlockPrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroQwen2DecoderBlockPrimitiveV3.sv",
-      "sha256": "57c2f1a7a62940db6f194f376c362003c829887391ae30c466ce8dcea3e912a1"
-    },
-    {
-      "bytes": 35225,
-      "modules": [
-        "HeteroQwen35DenseAttentionPrimitiveV3"
-      ],
-      "path": "generated/operator_primitives_v3/roots/HeteroQwen35DenseAttentionPrimitiveV3.sv",
-      "sha256": "91825f96e6a0d10b16399b2160c61b58f723b13e93a9957d9e66f3f00c98eda1"
+      "sha256": "d6fce0ce213584adb95318460060928d353d41e86a80d924efda48155f1f551b"
     },
     {
       "bytes": 33114,
       "modules": [
+        "HeteroMtpDraftPrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroMtpDraftPrimitiveV3.sv",
+      "sha256": "db16039350add9b0c0d155494a811cc3f5ca01055bf257ff40ea71248c649a4d"
+    },
+    {
+      "bytes": 30018,
+      "modules": [
+        "HeteroMtpVerifyResolvePrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroMtpVerifyResolvePrimitiveV3.sv",
+      "sha256": "3324248276778e0ab7f8f0f23dac5e1e2b919cfec02e0d0b67e648c3bf223e7a"
+    },
+    {
+      "bytes": 28549,
+      "modules": [
+        "HeteroMultimodalInjectPrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroMultimodalInjectPrimitiveV3.sv",
+      "sha256": "f6a5f232e09d20946329b884c04ef632666558c6c89d3742637cdc3a24c0d42a"
+    },
+    {
+      "bytes": 35941,
+      "modules": [
+        "HeteroPlePrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroPlePrimitiveV3.sv",
+      "sha256": "72904d43e4431ed30e9495129ba51c512abbbd28dc8a0856a9e66b5d50a9abaf"
+    },
+    {
+      "bytes": 39578,
+      "modules": [
+        "HeteroQsaPrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroQsaPrimitiveV3.sv",
+      "sha256": "b502e32903791ad9a47592758a87a58a532fe5b6e1d30c8dae7414d26265f5aa"
+    },
+    {
+      "bytes": 35325,
+      "modules": [
+        "HeteroQwen2DecoderBlockPrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroQwen2DecoderBlockPrimitiveV3.sv",
+      "sha256": "0a144145d1e1409903bbbd7de75c18046aa4d8f53340fa4bd985732eeb26fd79"
+    },
+    {
+      "bytes": 35330,
+      "modules": [
+        "HeteroQwen35DenseAttentionPrimitiveV3"
+      ],
+      "path": "generated/operator_primitives_v3/roots/HeteroQwen35DenseAttentionPrimitiveV3.sv",
+      "sha256": "b072299b167d50fff436c7e077012ea0aa62af51c061eeaf2c00a39b14537fef"
+    },
+    {
+      "bytes": 33219,
+      "modules": [
         "HeteroQwen38FinalHyperMergePrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroQwen38FinalHyperMergePrimitiveV3.sv",
-      "sha256": "8753737191d8ceb62cdc6b5058b93bb79220da89fd94a3cae1108c6cb6e6c4f3"
+      "sha256": "3d46d36f79e37afe9ef0369a499f314913541980a462e68b3ae6ac7235d653e2"
     },
     {
-      "bytes": 33410,
+      "bytes": 33515,
       "modules": [
         "HeteroQwen38GatedResidualReadPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroQwen38GatedResidualReadPrimitiveV3.sv",
-      "sha256": "3fed4bf423d5adeb6e76520cda9d88a500cd0042fdde8ae72fb41d3d4e376c31"
+      "sha256": "17107fd1b7979a5aa80e1fd53a56ceb2bdd6b168b86cfe745e0b3f6377c37ea4"
     },
     {
-      "bytes": 33432,
+      "bytes": 33537,
       "modules": [
         "HeteroQwen38GatedResidualWritePrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroQwen38GatedResidualWritePrimitiveV3.sv",
-      "sha256": "9159cf971315e91fe6a59dab1f6d8c22a02fad72e7008b97bf9a6e883cd0f2ff"
+      "sha256": "d7fd4c2d5ab128df3060ec5980048c5851b2110e07e7a066681c1ef4bf42f87b"
     },
     {
-      "bytes": 22187,
+      "bytes": 22292,
       "modules": [
         "HeteroTokenEmbeddingPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroTokenEmbeddingPrimitiveV3.sv",
-      "sha256": "614ce46f4fc97c5ec86a42478358e1f1f09f7b8d6805adeeb3d1156913c326d3"
+      "sha256": "4de764b4e15bbe0715ff917b88c36d1b5126cac4cb53f5490dbbfaba7ebe55a3"
     },
     {
-      "bytes": 31859,
+      "bytes": 31964,
       "modules": [
         "HeteroVisionPatchEmbedPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroVisionPatchEmbedPrimitiveV3.sv",
-      "sha256": "dce3950804f8cb9cea91ec1d579d08338ee42b028887e786ee58fbe9218d645f"
+      "sha256": "24243e1b4c82eb27bc51fdcce9f0b1a71f657ebf821c969949c5941ea6c9e071"
     },
     {
-      "bytes": 32237,
+      "bytes": 32342,
       "modules": [
         "HeteroVisionPatchMergePrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroVisionPatchMergePrimitiveV3.sv",
-      "sha256": "94d4aa3bdaca3d31a220a192760ecdb9a7d4471df4351413b2e6d799d6cb13d1"
+      "sha256": "72e2aed55c943c33614b9ead91ef48b2f766c85e369b83b43c0353f6ccc4eb24"
     },
     {
-      "bytes": 33645,
+      "bytes": 33750,
       "modules": [
         "HeteroVisionTransformerBlockPrimitiveV3"
       ],
       "path": "generated/operator_primitives_v3/roots/HeteroVisionTransformerBlockPrimitiveV3.sv",
-      "sha256": "416ad52dfc71830cf82a5832d4263dc5de60fc78cd7ae2d02b0e64fd73b012d0"
+      "sha256": "a0b2f74c2fc3020a9b9d206d7d521001f32c1e283a45a19025fafcecb8780379"
     }
   ],
   "schema_version": 1,
-  "source_git_sha": "e69bff3eeed6e7195e3c2ceb5af6ddc849033f9b"
+  "source_git_sha": "232fb59db65fd49d03cec802423bb36e107866a1"
 }

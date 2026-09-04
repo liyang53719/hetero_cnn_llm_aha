@@ -1,7 +1,10 @@
-schema_version: 1
+schema_version: 2
 name: hetero_cnn_llm_v0
 intent: "CNN + autoregressive LLM inference research architecture"
-clock_hz: 1000000000
+clock_hz: 800000000
+clock_mhz: 800
+clock_period_ns: 1.250
+clock_constraint: dc/common_clock_800mhz.tcl
 command_bits: 128
 event_bits: 16
 external_memory:
@@ -59,11 +62,16 @@ cgra_sfu:
     - reciprocal
     - rsqrt_newton
     - rmsnorm
+    - group_rmsnorm
     - layernorm
+    - l2norm
     - softmax_online
     - rope
+    - softplus
+    - sigmoid
     - silu
     - gelu
+    - signed_sqrt
     - quantize
     - dequantize
     - layout_transform
@@ -94,10 +102,14 @@ fabric:
   topology: "shared-L2 crossbar plus direct Matrix<->SFU and Matrix<->KV streams"
   flow_control: "ready/valid plus 16-bit completion events"
   ordering: "per-engine in-order; cross-engine event dependencies"
+operator_primitive_source:
+  project: chisel/three_model_operator_primitives
+  inventory: config/model_operator_inventory_v3_complete.json
+  roots: 18
 software_contract:
   descriptor_bits: 128
   required_frontends: [ONNX_or_StableHLO, llama_cpp_reference]
   workloads:
     cnn: [resnet50, mobilenet_v2, yolov5s_operator_subset]
-    llm: [qwen2_1_5b, qwen3_0_6b, llama3_2_1b]
+    llm: [qwen2_1_5b, qwen3_5_35b_a3b, qwen3_8_flash_next]
   quantization: [bf16_baseline, w8a8, w4a8_g64_g128, kv_int8]

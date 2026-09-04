@@ -24,4 +24,7 @@
 - Eight-owner router: 2 Chisel tests PASS; every owner requires a checked
   completion and invalid owners return status 4.
 - Eight real owner endpoints and 58/58 numerical bindings remain OPEN.
-- Next: audit concrete module/port/latency mapping for all 58 bindings.
+- Endpoint audit: candidate source roots cover 58/58, but canonical V3 payload
+  adapters are 0/58; all 8 owners remain OPEN. This disproves remote hardware
+  closure without discarding the recovered source value.
+- Next: bind Control barrier first, then DMA/Matrix/SFU/KV/State/Selection/Vision.

@@ -39,5 +39,12 @@
     "sha256": "ad073d8709a1529ce787406ad20f5fe47eb4922a105272ae36bd7bced9ed0355",
     "lint_log_sha256": "0834309728e3b4bd45c8cedbef8e768054cd2f0f9303bd80ae016f108dccbd74"
   },
+  "endpoint_audit": {
+    "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
+    "candidate_source_coverage": "58/58",
+    "real_v3_endpoint_bindings": "0/58",
+    "owners_open": 8,
+    "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

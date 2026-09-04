@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "candidate_sources_audited_real_v3_adapters_open",
+  "owners": {
+    "Control": {
+      "opcodes": ["Barrier"],
+      "candidate_sources": ["rtl/state/state_commit_barrier.sv", "rtl/integration/command_event_scoreboard_sram.sv"],
+      "v3_endpoint_adapter": null,
+      "readiness": "control_semantics_exist_adapter_open"
+    },
+    "Dma": {
+      "opcodes": ["DmaRead", "DmaWrite", "DmaGather", "DmaScatter"],
+      "candidate_sources": ["rtl/integration/idma_backend_rw_axi_flat_wrap.sv", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala"],
+      "v3_endpoint_adapter": null,
+      "readiness": "idma_read_write_and_gather_reorder_exist_scatter_and_v3_adapter_open"
+    },
+    "Matrix": {
+      "opcodes": ["MatrixGemm", "MatrixGemv", "MatrixQk", "MatrixPv", "MatrixOuter", "MatrixConv", "MatrixLowRank"],
+      "candidate_sources": ["rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv", "rtl/matrix/matrix_engine_int8_tile.sv", "rtl/attention/blocked_attention_stream_controller.sv", "rtl/integration/qwen2_matrix_command_endpoint.sv"],
+      "v3_endpoint_adapter": null,
+      "readiness": "bf16_int8_attention_datapaths_exist_v3_shape_and_completion_adapter_open"
+    },
+    "Sfu": {
+      "opcodes": ["SfuAdd", "SfuSub", "SfuMul", "SfuScale", "SfuReduceSum", "SfuReduceMax", "SfuRsqrt", "SfuReciprocal", "SfuExp2", "SfuRmsNorm", "SfuGroupRmsNorm", "SfuRope", "SfuOnlineSoftmax", "SfuGate", "SfuL2Norm", "SfuAbs", "SfuMax", "SfuCompareSelect", "SfuNegate", "SfuPwl", "SfuBroadcast", "SfuCausalMask", "SfuLayerNorm"],
+      "candidate_sources": ["rtl/sfu", "rtl/attention", "integration/gemmini/EmitHeteroFP32Pipelines.scala", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSfuControlPrimitives.scala"],
+      "v3_endpoint_adapter": null,
+      "readiness": "core_fp32_norm_rope_softmax_exist_reduce_max_group_norm_l2_layernorm_and_generic_v3_adapter_open"
+    },
+    "KvMemory": {
+      "opcodes": ["KvAppend", "KvGather", "KvAlloc", "KvFree"],
+      "candidate_sources": ["rtl/kv/kv_cache_engine.sv", "rtl/kv/qwen2_kv_append_ddr_page_core.sv", "rtl/kv/kv_descriptor_v2_idma_adapter.sv"],
+      "v3_endpoint_adapter": null,
+      "readiness": "basic_contract_and_qwen2_append_exist_production_ddr_page_table_adapter_open"
+    },
+    "State": {
+      "opcodes": ["StateRead", "StateWrite", "StateDecay", "StateConvWindow", "StateBegin", "StateCommit", "StateRollback"],
+      "candidate_sources": ["rtl/state", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroStatePrimitives.scala"],
+      "v3_endpoint_adapter": null,
+      "readiness": "transaction_and_address_controllers_exist_payload_state_engine_open"
+    },
+    "Selection": {
+      "opcodes": ["SelectTopK", "SelectExpand", "SelectRoute", "SelectMerge", "SelectBlockPool", "SelectMtpVerify"],
+      "candidate_sources": ["integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala"],
+      "v3_endpoint_adapter": null,
+      "readiness": "selection_controllers_exist_payload_stream_adapter_open"
+    },
+    "Vision": {
+      "opcodes": ["VisionWindow", "VisionPatchMerge", "VisionPosInterp", "PleHash", "VisionPatch3d", "VisionMropeMap"],
+      "candidate_sources": ["integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala"],
+      "v3_endpoint_adapter": null,
+      "readiness": "address_and_layout_controllers_exist_matrix_sfu_payload_adapter_open"
+    }
+  },
+  "acceptance": {
+    "terminal_opcode_count": 58,
+    "required_bound_adapters": 58,
+    "immediate_completion_allowed": false,
+    "cpu_fallback_allowed": false
+  }
+}

@@ -53,7 +53,9 @@
     "test_log_sha256": "4d32d5d7c3013762593453c51b05f52a0c8c2cd3b3120af20ab1087500c6c7bb",
     "verilator_lint_log_sha256": "5f6196401461e12382eecde2045a948e4e270189a23700b4e89b4481b391f8fc",
     "early_success_completion": 0,
-    "illegal_cases": 2
+    "illegal_cases": 2,
+    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.235109, "area": 646.191, "unmapped": 0},
+    "dc_log_sha256": "20a7ee702e0e55effa1709e613edc5993d72669021b9b846f9bd3f1614299442"
   },
   "dma_endpoint_evidence": {
     "status": "PASS",

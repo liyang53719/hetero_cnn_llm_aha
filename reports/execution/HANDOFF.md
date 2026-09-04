@@ -28,7 +28,8 @@
   adapters were 0/58. This disproves remote hardware
   closure without discarding the recovered source value.
 - Control is now 1/58 PASS: real barrier waits for all domain acknowledgements,
-  no early success completion; Icarus and Verilator PASS.
+  no early success completion; Icarus/Verilator PASS; DC WNS +0.235109 ns,
+  area 646.191.
 - DMA is 4/4 PASS with pinned iDMA `2e0b0fe`: 8 flat transfers and 512 bytes
   checked in VCS; 1.25 ns DC WNS +0.0000814199 ns, area 6292.65.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed

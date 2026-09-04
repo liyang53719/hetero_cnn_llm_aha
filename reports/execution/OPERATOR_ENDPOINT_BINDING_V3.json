@@ -118,5 +118,12 @@
     "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0597758, "area": 1681.498, "unmapped": 0},
     "dc_log_sha256": "fee4c8f15f718b36ee4aeaa1cdbefda912784b047a9e8ef7c0cc4bf986c0649c"
   },
+  "sfu_scalar_primitive_replay": {
+    "status": "PASS_3_PRIMITIVES_PENDING_OWNER_MUX",
+    "rsqrt": {"vectors": 10000, "max_relative_error": 2.39253314e-7, "log_sha256": "04ec3152f8c5ca800f4facb4e8363ec56458fe74e1f5712f4fd1554ca6b6b381"},
+    "reciprocal": {"vectors": 10000, "max_relative_error": 9.19390807e-7, "log_sha256": "1668aeeaf72fc5a379f90fc6ef4ff7d3c67096ecf1f86d7f73dd43d68ad35ee4"},
+    "exp2": {"vectors": 10000, "max_relative_error": 0.000235373915, "log_sha256": "24cb9f0a3e2fb30541873084274d3cb1a892e6688c45118b04f4bfdcaa69b15c"},
+    "resource_contract": {"verilator_threads": 4, "build_jobs": 4}
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

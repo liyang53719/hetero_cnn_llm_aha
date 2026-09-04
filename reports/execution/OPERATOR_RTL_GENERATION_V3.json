@@ -1,7 +1,7 @@
 {
   "combined_module_collisions": 0,
   "combined_sv_count": 1,
-  "combined_unique_module_count": 30,
+  "combined_unique_module_count": 28,
   "cross_layer_collisions": 0,
   "evidence_boundary": "Generated structural/provenance gate only; endpoint numerical RTL and DC remain open.",
   "failures": [],
@@ -13,16 +13,16 @@
     "HeteroUnsignedDivideW64",
     "HeteroUnsignedMultiplyW32"
   ],
-  "manifest_sha256": "784f664461e20d085547961be2965debb56079ef079bea8278a5717e898f65f6",
+  "manifest_sha256": "b58b825b318b2ec6dff1eca1b4faa8c1bf1711bc72bb89c4357f22f3c74d58a4",
   "missing_in_combined": 0,
   "primitive_sv_count": 25,
   "root_sv_count": 18,
   "schema_version": 1,
-  "source_git_sha": "232fb59db65fd49d03cec802423bb36e107866a1",
+  "source_git_sha": "fb7e2974f02192ea5fcc2427586bcf29ef93e36a",
   "status": "PASS_AUTHORITATIVE_CHISEL_RTL_GENERATION",
   "verilator_lint": {
     "errors": 0,
     "files": 47,
-    "log_hash_manifest_sha256": "8cfb06936ebd1a740c079067e39999ce09615ae66c60408497a7f96ae947820b"
+    "log_hash_manifest_sha256": "8ff12273aeffb6e08881185b59f64b7c9d313bce9a6e6a8e580012b79c6cad47"
   }
 }

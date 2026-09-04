@@ -1,5 +1,5 @@
-utc_started=2026-09-04T05:17:33Z
-repository_commit=1ccdbea88b78760031a91cfc1ad16fb978f91717
+utc_started=2026-09-04T15:13:33Z
+repository_commit=fb7e2974f02192ea5fcc2427586bcf29ef93e36a
 repository_branch=main
 generation_project=chisel/operator_primitives_v3
 gemmini_commit=8c3f9923a44a2fe2c7930587be297d6d4f8c09ca
@@ -7,16 +7,14 @@ catalog_modules=25
 clock_target_hz=800000000
 period_ns=1.25
 java_version_begin
-Picked up JAVA_TOOL_OPTIONS: -XX:ActiveProcessorCount=8
 openjdk version "17.0.18-internal" 2026-01-20
 OpenJDK Runtime Environment (build 17.0.18-internal+0-adhoc.conda.src)
 OpenJDK 64-Bit Server VM (build 17.0.18-internal+0-adhoc.conda.src, mixed mode, sharing)
 java_version_end
 sbt_version_begin
-Picked up JAVA_TOOL_OPTIONS: -XX:ActiveProcessorCount=8
 sbt runner version: 1.12.6
 
 [info] sbt runner (sbt-the-shell-script) is a runner to run any declared version of sbt.
 [info] Actual version of the sbt is declared using project/build.properties for each build.
 sbt_version_end
-utc_finished=2026-09-04T05:19:23Z
+utc_finished=2026-09-04T15:15:50Z

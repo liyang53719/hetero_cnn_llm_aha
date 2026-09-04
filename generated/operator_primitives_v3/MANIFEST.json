@@ -1,17 +1,15 @@
 {
   "combined": [
     {
-      "bytes": 220085,
+      "bytes": 226237,
       "modules": [
         "HeteroUnsignedDivideW64",
         "HeteroUnsignedMultiplyW32",
-        "table_512x65",
         "HeteroStreamingTopK",
         "HeteroTaggedGatherReorder",
         "HeteroMoeRouteDispatch",
         "HeteroUnsignedMultiplyW64",
         "HeteroPleNgramHash",
-        "table_512x53",
         "HeteroStreamingTopK_1",
         "HeteroQsaBlockSelector",
         "HeteroCausalConvAddressGenerator",
@@ -35,13 +33,13 @@
         "HeteroOperatorPrimitiveCatalogCombined"
       ],
       "path": "generated/operator_primitives_v3/combined/HeteroOperatorPrimitiveCatalogCombined.sv",
-      "sha256": "4ea5e1c0b2b64487697cb066cf8c443d1ba01620d451e1e9f7ada0adfcc86e9c"
+      "sha256": "6c3595a5ef0341713d5a49e41ceebee82c7bb6920e466a905f70edf74deeeebc"
     }
   ],
   "combined_module_collisions": [],
   "counts": {
     "combined_files": 1,
-    "combined_unique_modules": 30,
+    "combined_unique_modules": 28,
     "primitive_files": 25,
     "root_files": 18
   },
@@ -141,7 +139,7 @@
         "HeteroMoeRouteDispatch"
       ],
       "path": "generated/operator_primitives_v3/primitives/moe_route_dispatch.sv",
-      "sha256": "7ee834a60954b350e693af5c634072f730b8af8ccf716c4c45c6ad9e6a69412b"
+      "sha256": "8d9f8c4b182b0b13a99cca0f7a4848631e5bb1bac0cacb22bfd9a513fe92b95c"
     },
     {
       "bytes": 21865,
@@ -175,7 +173,7 @@
         "HeteroPleNgramHash"
       ],
       "path": "generated/operator_primitives_v3/primitives/ple_ngram_hash.sv",
-      "sha256": "766e5f29cc7f4533ba6d6d0db97881b50f2a3e1b898589a365145e1cc2b4fa46"
+      "sha256": "cc80b6df9dcdb17ae2dbf62f11cfe8acc63c1bf91350e3c3c8af1b6754dbc0ce"
     },
     {
       "bytes": 25561,
@@ -195,15 +193,14 @@
       "sha256": "002ba749ad7b72e85f85bbd0ab9fbb8d80f0efcd13995da1fb55448a5af66783"
     },
     {
-      "bytes": 128091,
+      "bytes": 131178,
       "modules": [
-        "table_512x53",
         "HeteroStreamingTopK",
         "HeteroUnsignedMultiplyW32",
         "HeteroQsaBlockSelector"
       ],
       "path": "generated/operator_primitives_v3/primitives/qsa_block_selector.sv",
-      "sha256": "3c60498f6769188aa3b1bf58d296f09ec7f1619a4032b2dfce8567fa37b0e71c"
+      "sha256": "f31df50614a80edd34cacb0f16ef3f7c680f3e88e8a499af23a8e02fde9efad2"
     },
     {
       "bytes": 31938,
@@ -214,13 +211,12 @@
       "sha256": "dd04c02286b7f3e78bddfd71dd53abea6930cf09d56f0d66c9e785235a729ad3"
     },
     {
-      "bytes": 65234,
+      "bytes": 64950,
       "modules": [
-        "table_512x65",
         "HeteroStreamingTopK"
       ],
       "path": "generated/operator_primitives_v3/primitives/streaming_topk.sv",
-      "sha256": "dca07c6a3dd9fc9d9b2b31bae5546dcbe394fe555595c418acb8292ef4a16e0c"
+      "sha256": "489c5cdbb0f0dd338660b13eecf750c455d97596c0a39a0dcdcee8620a062e5f"
     },
     {
       "bytes": 286016,
@@ -228,7 +224,7 @@
         "HeteroTaggedGatherReorder"
       ],
       "path": "generated/operator_primitives_v3/primitives/tagged_gather_reorder.sv",
-      "sha256": "76e239d4550791742acee722c3d9adf42790b67675522e3bab5b42fa867963ba"
+      "sha256": "810a6f225027b75830a42b9fccd6f19a66e987db485a90eede36be78ce2189d0"
     },
     {
       "bytes": 264088,
@@ -255,7 +251,7 @@
         "HeteroUnsignedMultiplyW32"
       ],
       "path": "generated/operator_primitives_v3/primitives/unsigned_multiply.sv",
-      "sha256": "883791c89887036a1e7eb7d145293a1edfda02bfb962a092fc4f73e72181042c"
+      "sha256": "5e0c9252bef6e20a8d6e09b4e4ba8c1abbec1173cab041993dd838c67350452b"
     },
     {
       "bytes": 82733,
@@ -265,7 +261,7 @@
         "HeteroVisionBilinearIndex"
       ],
       "path": "generated/operator_primitives_v3/primitives/vision_bilinear_index.sv",
-      "sha256": "d9cd0edc99fa6ef81b1ae7b172240ec7513c639b3671a30ebdbea95c4f56a2e7"
+      "sha256": "15691654a5a7b71ee5704d0d08d8ba0a5ba96dd2dccadaa0ec151d58306c61c0"
     },
     {
       "bytes": 53818,
@@ -439,5 +435,5 @@
     }
   ],
   "schema_version": 1,
-  "source_git_sha": "232fb59db65fd49d03cec802423bb36e107866a1"
+  "source_git_sha": "fb7e2974f02192ea5fcc2427586bcf29ef93e36a"
 }

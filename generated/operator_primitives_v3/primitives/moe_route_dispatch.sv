@@ -70,151 +70,151 @@
   `endif // STOP_COND
 `endif // not def STOP_COND_
 
-module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-  input          clock,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-                 reset,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-                 io_clear,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_start,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output         io_startReady,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input  [31:0]  io_token,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input  [4:0]   io_routeCount,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output         io_routeIn_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input          io_routeIn_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input  [9:0]   io_routeIn_bits_expert,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input  [31:0]  io_routeIn_bits_weight,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input          io_routeIn_bits_shared,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_dispatchOut_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output         io_dispatchOut_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [31:0]  io_dispatchOut_bits_token,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [9:0]   io_dispatchOut_bits_expert,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [31:0]  io_dispatchOut_bits_weight,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [3:0]   io_dispatchOut_bits_routeTag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output         io_dispatchOut_bits_shared,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_dispatchOut_bits_last,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_resultIn_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input          io_resultIn_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input  [3:0]   io_resultIn_bits_routeTag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input  [511:0] io_resultIn_bits_data,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  input          io_mergeOut_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output         io_mergeOut_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [3:0]   io_mergeOut_bits_routeTag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [31:0]  io_mergeOut_bits_weight,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output [511:0] io_mergeOut_bits_data,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-  output         io_mergeOut_bits_first,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_mergeOut_bits_last,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_busy,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_done,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_invalidConfig,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-                 io_protocolError	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
+module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+  input          clock,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+                 reset,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+                 io_clear,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_start,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output         io_startReady,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input  [31:0]  io_token,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input  [4:0]   io_routeCount,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output         io_routeIn_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input          io_routeIn_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input  [9:0]   io_routeIn_bits_expert,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input  [31:0]  io_routeIn_bits_weight,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input          io_routeIn_bits_shared,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_dispatchOut_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output         io_dispatchOut_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [31:0]  io_dispatchOut_bits_token,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [9:0]   io_dispatchOut_bits_expert,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [31:0]  io_dispatchOut_bits_weight,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [3:0]   io_dispatchOut_bits_routeTag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output         io_dispatchOut_bits_shared,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_dispatchOut_bits_last,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_resultIn_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input          io_resultIn_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input  [3:0]   io_resultIn_bits_routeTag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input  [511:0] io_resultIn_bits_data,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  input          io_mergeOut_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output         io_mergeOut_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [3:0]   io_mergeOut_bits_routeTag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [31:0]  io_mergeOut_bits_weight,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output [511:0] io_mergeOut_bits_data,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+  output         io_mergeOut_bits_first,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_mergeOut_bits_last,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_busy,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_done,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_invalidConfig,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+                 io_protocolError	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
 );
 
-  reg  [2:0]         state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76
-  reg  [31:0]        token;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:97
-  reg  [4:0]         routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:131
-  reg  [4:0]         load;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167
-  reg  [3:0]         dispatch;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206
-  reg  [3:0]         merge;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242
-  reg  [4:0]         returned;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:281
-  reg  [9:0]         experts_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [9:0]         experts_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-  reg  [31:0]        weights_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg  [31:0]        weights_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-  reg                shared_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                shared_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-  reg                issued_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                issued_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161
-  reg                resultValid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg                resultValid_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224
-  reg  [511:0]       resultData_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg  [511:0]       resultData_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-  reg                error;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:333
-  wire               cfg = (|io_routeCount) & io_routeCount < 5'h11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:160:{24,30,45}
-  wire               io_routeIn_ready_0 = state == 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :160:225
-  wire               io_dispatchOut_valid_0 = state == 3'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :161:30
+  reg  [2:0]         state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76
+  reg  [31:0]        token;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:97
+  reg  [4:0]         routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:131
+  reg  [4:0]         load;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167
+  reg  [3:0]         dispatch;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206
+  reg  [3:0]         merge;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242
+  reg  [4:0]         returned;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:281
+  reg  [9:0]         experts_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [9:0]         experts_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+  reg  [31:0]        weights_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg  [31:0]        weights_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+  reg                shared_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                shared_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+  reg                issued_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                issued_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161
+  reg                resultValid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg                resultValid_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224
+  reg  [511:0]       resultData_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg  [511:0]       resultData_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+  reg                error;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:333
+  wire               cfg = (|io_routeCount) & io_routeCount < 5'h11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:190:{24,30,45}
+  wire               io_routeIn_ready_0 = state == 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :190:225
+  wire               io_dispatchOut_valid_0 = state == 3'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :191:30
   wire [15:0][9:0]   _GEN =
     {{experts_15},
      {experts_14},
@@ -231,7 +231,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
      {experts_3},
      {experts_2},
      {experts_1},
-     {experts_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :161:102
+     {experts_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :191:102
   wire [15:0][31:0]  _GEN_0 =
     {{weights_15},
      {weights_14},
@@ -248,7 +248,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
      {weights_3},
      {weights_2},
      {weights_1},
-     {weights_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :161:148
+     {weights_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :191:148
   wire [15:0]        _GEN_1 =
     {{shared_15},
      {shared_14},
@@ -265,9 +265,9 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
      {shared_3},
      {shared_2},
      {shared_1},
-     {shared_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :161:233
-  wire [3:0]         _dispatch_T = dispatch + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206, :161:286, :166:101
-  wire               io_dispatchOut_bits_last_0 = {1'h0, _dispatch_T} >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:131, :159:169, :161:{286,290}
+     {shared_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :191:233
+  wire [3:0]         _dispatch_T = dispatch + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206, :191:286, :196:101
+  wire               io_dispatchOut_bits_last_0 = {1'h0, _dispatch_T} >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:131, :189:169, :191:{286,290}
   wire [15:0]        _GEN_2 =
     {{resultValid_15},
      {resultValid_14},
@@ -284,9 +284,9 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
      {resultValid_3},
      {resultValid_2},
      {resultValid_1},
-     {resultValid_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:224, :162:171
-  wire               io_resultIn_ready_0 = io_dispatchOut_valid_0 | state == 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :161:30, :162:{247,254}
-  wire               io_mergeOut_valid_0 = state == 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :163:27
+     {resultValid_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:224, :192:171
+  wire               io_resultIn_ready_0 = io_dispatchOut_valid_0 | state == 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :191:30, :192:{247,254}
+  wire               io_mergeOut_valid_0 = state == 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :193:27
   wire [15:0][511:0] _GEN_3 =
     {{resultData_15},
      {resultData_14},
@@ -303,71 +303,71 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
      {resultData_3},
      {resultData_2},
      {resultData_1},
-     {resultData_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :163:131
-  wire [3:0]         _merge_T = merge + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242, :163:215, :166:101
-  wire               io_mergeOut_bits_last_0 = {1'h0, _merge_T} >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:131, :159:169, :163:{215,219}
-  wire               _GEN_4 = state == 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :160:225, :167:18
-  wire               _GEN_5 = state == 3'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :161:30, :167:18
-  wire               _GEN_6 = state == 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :162:254, :167:18
-  wire               _GEN_7 = state == 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :163:27, :167:18
-  wire               _GEN_8 = io_mergeOut_ready & io_mergeOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:163:27, src/main/scala/chisel3/util/Decoupled.scala:51:35
+     {resultData_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :193:131
+  wire [3:0]         _merge_T = merge + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242, :193:215, :196:101
+  wire               io_mergeOut_bits_last_0 = {1'h0, _merge_T} >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:131, :189:169, :193:{215,219}
+  wire               _GEN_4 = state == 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :190:225, :197:18
+  wire               _GEN_5 = state == 3'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :191:30, :197:18
+  wire               _GEN_6 = state == 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :192:254, :197:18
+  wire               _GEN_7 = state == 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :193:27, :197:18
+  wire               _GEN_8 = io_mergeOut_ready & io_mergeOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:193:27, src/main/scala/chisel3/util/Decoupled.scala:51:35
   wire               _GEN_9 =
-    ~io_clear & (|state) & ~_GEN_4 & ~_GEN_5 & ~_GEN_6 & _GEN_7 & _GEN_8 & ~reset;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :160:79, :164:17, :167:18, :172:47, src/main/scala/chisel3/util/Decoupled.scala:51:35
-  wire               _GEN_10 = _GEN_2[merge];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242, :162:171, :172:47
-  `ifndef SYNTHESIS	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-    always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-      if (_GEN_9 & ~_GEN_10) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-        if (`ASSERT_VERBOSE_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-          $error("Assertion failed\n    at HeteroSelectionMemoryPrimitives.scala:172 is(sMerge){when(io.mergeOut.fire){assert(resultValid(merge));when(io.mergeOut.bits.last){state:=sIdle;io.done:=true.B}.otherwise{merge:=merge+1.U}}}\n");	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-        if (`STOP_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-          $fatal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
+    ~io_clear & (|state) & ~_GEN_4 & ~_GEN_5 & ~_GEN_6 & _GEN_7 & _GEN_8 & ~reset;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :190:79, :194:17, :197:18, :202:47, src/main/scala/chisel3/util/Decoupled.scala:51:35
+  wire               _GEN_10 = _GEN_2[merge];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242, :192:171, :202:47
+  `ifndef SYNTHESIS	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+    always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+      if (_GEN_9 & ~_GEN_10) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+        if (`ASSERT_VERBOSE_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+          $error("Assertion failed\n    at HeteroSelectionMemoryPrimitives.scala:202 is(sMerge){when(io.mergeOut.fire){assert(resultValid(merge));when(io.mergeOut.bits.last){state:=sIdle;io.done:=true.B}.otherwise{merge:=merge+1.U}}}\n");	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+        if (`STOP_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+          $fatal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
       end
     end // always @(posedge)
   `endif // not def SYNTHESIS
-  wire               _GEN_11 = _GEN_7 & _GEN_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:160:168, :167:18, :172:{40,95}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-  always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
+  wire               _GEN_11 = _GEN_7 & _GEN_8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:190:168, :197:18, :202:{40,95}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+  always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
     automatic logic        _justIssued_T;	// src/main/scala/chisel3/util/Decoupled.scala:51:35
-    automatic logic [15:0] _GEN_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:162:154
-    automatic logic        legal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:162:168
+    automatic logic [15:0] _GEN_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:192:154
+    automatic logic        legal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:192:168
     automatic logic        _resp_T;	// src/main/scala/chisel3/util/Decoupled.scala:51:35
-    automatic logic        resp;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:162:288
-    automatic logic        _GEN_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_16;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_17;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_18;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_19;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_20;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_21;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_22;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_23;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_24;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_25;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_26;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_27;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_28;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :166:{63,101}
-    automatic logic        _GEN_29;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:168:30
-    automatic logic        _GEN_30;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:97, :167:18, :168:{36,42}
+    automatic logic        resp;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:192:288
+    automatic logic        _GEN_13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_16;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_17;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_18;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_19;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_20;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_21;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_22;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_23;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_24;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_25;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_26;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_27;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_28;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :196:{63,101}
+    automatic logic        _GEN_29;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:198:30
+    automatic logic        _GEN_30;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:97, :197:18, :198:{36,42}
     automatic logic        _GEN_31;	// src/main/scala/chisel3/util/Decoupled.scala:51:35
-    automatic logic        _GEN_32;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_33;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_34;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_35;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_36;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_37;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_38;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_39;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_40;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_41;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_42;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_43;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_44;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_45;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_46;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_47;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    automatic logic        _GEN_48;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    _justIssued_T = io_dispatchOut_ready & io_dispatchOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:161:30, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    automatic logic        _GEN_32;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_33;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_34;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_35;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_36;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_37;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_38;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_39;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_40;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_41;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_42;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_43;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_44;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_45;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_46;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_47;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    automatic logic        _GEN_48;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    _justIssued_T = io_dispatchOut_ready & io_dispatchOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:191:30, src/main/scala/chisel3/util/Decoupled.scala:51:35
     _GEN_12 =
       {{issued_15},
        {issued_14},
@@ -384,607 +384,607 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
        {issued_3},
        {issued_2},
        {issued_1},
-       {issued_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:161, :162:154
+       {issued_0}};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:161, :192:154
     legal =
       {1'h0, io_resultIn_bits_routeTag} < routes
       & (_GEN_12[io_resultIn_bits_routeTag] | _justIssued_T
-         & io_resultIn_bits_routeTag == dispatch) & ~_GEN_2[io_resultIn_bits_routeTag];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{131,206}, :159:169, :162:{37,64,111,154,168,171}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _resp_T = io_resultIn_ready_0 & io_resultIn_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:162:247, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    resp = _resp_T & legal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:162:{168,288}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_13 = resp & io_resultIn_bits_routeTag == 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206, :159:282, :162:288, :166:{63,101}
-    _GEN_14 = resp & io_resultIn_bits_routeTag == 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_15 = resp & io_resultIn_bits_routeTag == 4'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_16 = resp & io_resultIn_bits_routeTag == 4'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_17 = resp & io_resultIn_bits_routeTag == 4'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_18 = resp & io_resultIn_bits_routeTag == 4'h5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_19 = resp & io_resultIn_bits_routeTag == 4'h6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_20 = resp & io_resultIn_bits_routeTag == 4'h7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_21 = resp & io_resultIn_bits_routeTag == 4'h8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_22 = resp & io_resultIn_bits_routeTag == 4'h9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_23 = resp & io_resultIn_bits_routeTag == 4'hA;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_24 = resp & io_resultIn_bits_routeTag == 4'hB;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_25 = resp & io_resultIn_bits_routeTag == 4'hC;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_26 = resp & io_resultIn_bits_routeTag == 4'hD;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_27 = resp & io_resultIn_bits_routeTag == 4'hE;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_28 = resp & (&io_resultIn_bits_routeTag);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :162:288, :166:{63,101}
-    _GEN_29 = io_start & cfg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:160:30, :168:30
-    _GEN_30 = ~(|state) & _GEN_29;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,97}, :160:79, :167:18, :168:{30,36,42}
-    _GEN_31 = io_routeIn_ready_0 & io_routeIn_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:160:225, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_32 = io_clear | ~(|state);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :159:18, :160:79, :164:17, :167:18
-    _GEN_33 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h0);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{167,206}, :159:18, :164:17, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_34 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h1);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_35 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h2);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_36 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h3);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_37 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h4);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_38 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h5);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_39 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h6);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_40 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h7);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_41 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h8);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_42 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h9);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_43 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hA);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_44 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hB);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_45 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hC);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_46 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hD);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_47 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hE);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :166:101, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    _GEN_48 = _GEN_32 | ~(_GEN_4 & _GEN_31 & (&(load[3:0])));	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :159:18, :164:17, :167:18, :169:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    if (_GEN_9)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-      assert__assert: assert(_GEN_10);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:172:47
-    if (reset) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-      state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76
-      load <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167
-      dispatch <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206
-      merge <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{206,242}
-      returned <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{167,281}
-      issued_0 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_1 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_2 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_3 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_4 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_5 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_6 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_7 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_8 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_9 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_10 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_11 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_12 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_13 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_14 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      issued_15 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{161,169}
-      resultValid_0 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_1 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_2 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_3 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_4 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_5 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_6 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_7 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_8 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_9 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_10 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_11 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_12 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_13 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_14 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      resultValid_15 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,224}
-      error <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{169,333}
+         & io_resultIn_bits_routeTag == dispatch) & ~_GEN_2[io_resultIn_bits_routeTag];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{131,206}, :189:169, :192:{37,64,111,154,168,171}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _resp_T = io_resultIn_ready_0 & io_resultIn_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:192:247, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    resp = _resp_T & legal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:192:{168,288}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_13 = resp & io_resultIn_bits_routeTag == 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206, :189:282, :192:288, :196:{63,101}
+    _GEN_14 = resp & io_resultIn_bits_routeTag == 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_15 = resp & io_resultIn_bits_routeTag == 4'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_16 = resp & io_resultIn_bits_routeTag == 4'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_17 = resp & io_resultIn_bits_routeTag == 4'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_18 = resp & io_resultIn_bits_routeTag == 4'h5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_19 = resp & io_resultIn_bits_routeTag == 4'h6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_20 = resp & io_resultIn_bits_routeTag == 4'h7;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_21 = resp & io_resultIn_bits_routeTag == 4'h8;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_22 = resp & io_resultIn_bits_routeTag == 4'h9;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_23 = resp & io_resultIn_bits_routeTag == 4'hA;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_24 = resp & io_resultIn_bits_routeTag == 4'hB;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_25 = resp & io_resultIn_bits_routeTag == 4'hC;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_26 = resp & io_resultIn_bits_routeTag == 4'hD;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_27 = resp & io_resultIn_bits_routeTag == 4'hE;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_28 = resp & (&io_resultIn_bits_routeTag);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :192:288, :196:{63,101}
+    _GEN_29 = io_start & cfg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:190:30, :198:30
+    _GEN_30 = ~(|state) & _GEN_29;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,97}, :190:79, :197:18, :198:{30,36,42}
+    _GEN_31 = io_routeIn_ready_0 & io_routeIn_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:190:225, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_32 = io_clear | ~(|state);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :189:18, :190:79, :194:17, :197:18
+    _GEN_33 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h0);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{167,206}, :189:18, :194:17, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_34 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h1);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_35 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h2);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_36 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h3);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_37 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h4);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_38 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h5);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_39 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h6);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_40 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h7);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_41 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h8);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_42 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'h9);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_43 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hA);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_44 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hB);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_45 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hC);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_46 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hD);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_47 = _GEN_32 | ~(_GEN_4 & _GEN_31 & load[3:0] == 4'hE);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :196:101, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    _GEN_48 = _GEN_32 | ~(_GEN_4 & _GEN_31 & (&(load[3:0])));	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :189:18, :194:17, :197:18, :199:{38,51,67}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    if (_GEN_9)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+      assert__assert: assert(_GEN_10);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:202:47
+    if (reset) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+      state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76
+      load <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167
+      dispatch <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206
+      merge <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{206,242}
+      returned <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{167,281}
+      issued_0 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_1 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_2 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_3 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_4 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_5 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_6 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_7 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_8 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_9 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_10 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_11 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_12 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_13 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_14 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      issued_15 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{161,169}
+      resultValid_0 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_1 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_2 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_3 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_4 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_5 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_6 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_7 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_8 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_9 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_10 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_11 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_12 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_13 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_14 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      resultValid_15 <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,224}
+      error <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{169,333}
     end
-    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-      automatic logic _GEN_49;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:164:{17,54}, :166:63, :167:18, :168:{36,118}
-      _GEN_49 = io_clear | _GEN_30;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:97, :164:{17,54}, :166:63, :167:18, :168:{36,42,118}
-      if (io_clear)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:157:12
-        state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76
-      else if (|state) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :160:79
-        automatic logic [4:0] _load_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:169:206
-        automatic logic       _GEN_50;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:169:210
-        automatic logic       _GEN_51;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:171:48
-        _load_T = load + 5'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :166:190, :169:206
-        _GEN_50 = _load_T >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:131, :169:{206,210}
-        _GEN_51 = returned + {4'h0, resp} >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{131,206,281}, :162:288, :171:{30,48}
-        if (_GEN_4) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:167:18
-          if (_GEN_31 & _GEN_50)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :169:{38,210,219,225}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-            state <= 3'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :161:30
+    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+      automatic logic _GEN_49;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:194:{17,54}, :196:63, :197:18, :198:{36,118}
+      _GEN_49 = io_clear | _GEN_30;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:97, :194:{17,54}, :196:63, :197:18, :198:{36,42,118}
+      if (io_clear)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:187:12
+        state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76
+      else if (|state) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :190:79
+        automatic logic [4:0] _load_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:199:206
+        automatic logic       _GEN_50;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:199:210
+        automatic logic       _GEN_51;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:201:48
+        _load_T = load + 5'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :196:190, :199:206
+        _GEN_50 = _load_T >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:131, :199:{206,210}
+        _GEN_51 = returned + {4'h0, resp} >= routes;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{131,206,281}, :192:288, :201:{30,48}
+        if (_GEN_4) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:197:18
+          if (_GEN_31 & _GEN_50)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :199:{38,210,219,225}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+            state <= 3'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :191:30
         end
-        else if (_GEN_5) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:167:18
-          if (_justIssued_T & io_dispatchOut_bits_last_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :161:290, :170:{46,102,108}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-            state <= 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :162:254
+        else if (_GEN_5) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:197:18
+          if (_justIssued_T & io_dispatchOut_bits_last_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :191:290, :200:{46,102,108}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+            state <= 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :192:254
         end
-        else if (_GEN_6) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:167:18
-          if (_GEN_51)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:171:48
-            state <= 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :163:27
+        else if (_GEN_6) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:197:18
+          if (_GEN_51)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:201:48
+            state <= 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :193:27
         end
-        else if (_GEN_7 & _GEN_8 & io_mergeOut_bits_last_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :163:219, :167:18, :172:{40,95,101}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-          state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76
-        if (~(_GEN_4 & _GEN_31) | _GEN_50) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :167:18, :169:{38,210,219}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+        else if (_GEN_7 & _GEN_8 & io_mergeOut_bits_last_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :193:219, :197:18, :202:{40,95,101}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+          state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76
+        if (~(_GEN_4 & _GEN_31) | _GEN_50) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :197:18, :199:{38,210,219}, src/main/scala/chisel3/util/Decoupled.scala:51:35
         end
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :167:18, :169:{38,219}
-          load <= _load_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167, :169:206
-        if (_GEN_4 | ~(_GEN_5 & _justIssued_T) | io_dispatchOut_bits_last_0) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206, :161:290, :167:18, :170:{46,102}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :197:18, :199:{38,219}
+          load <= _load_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167, :199:206
+        if (_GEN_4 | ~(_GEN_5 & _justIssued_T) | io_dispatchOut_bits_last_0) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206, :191:290, :197:18, :200:{46,102}, src/main/scala/chisel3/util/Decoupled.scala:51:35
         end
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206, :167:18
-          dispatch <= _dispatch_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206, :161:286
-        if (~(_GEN_4 | _GEN_5)) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242, :167:18
-          if (_GEN_6) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:167:18
-            if (_GEN_51)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:171:48
-              merge <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{206,242}
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206, :197:18
+          dispatch <= _dispatch_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206, :191:286
+        if (~(_GEN_4 | _GEN_5)) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242, :197:18
+          if (_GEN_6) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:197:18
+            if (_GEN_51)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:201:48
+              merge <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{206,242}
           end
-          else if (~_GEN_11 | io_mergeOut_bits_last_0) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242, :160:168, :163:219, :167:18, :172:{40,95}
+          else if (~_GEN_11 | io_mergeOut_bits_last_0) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242, :190:168, :193:219, :197:18, :202:{40,95}
           end
-          else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242, :167:18, :172:{40,95}
-            merge <= _merge_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:242, :163:215
+          else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242, :197:18, :202:{40,95}
+            merge <= _merge_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:242, :193:215
         end
       end
-      else if (_GEN_29) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:168:30
-        state <= 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:76, :160:225
-        load <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:167
-        dispatch <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:206
-        merge <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{206,242}
+      else if (_GEN_29) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:198:30
+        state <= 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:76, :190:225
+        load <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:167
+        dispatch <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:206
+        merge <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{206,242}
       end
-      if (_GEN_49)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:164:{17,54}, :166:63, :167:18, :168:{36,118}
-        returned <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{167,281}
-      else if (resp)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:162:288
-        returned <= returned + 5'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:281, :166:190
+      if (_GEN_49)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:194:{17,54}, :196:63, :197:18, :198:{36,118}
+        returned <= 5'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{167,281}
+      else if (resp)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:192:288
+        returned <= returned + 5'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:281, :196:190
       issued_0 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h0 | issued_0
-             : ~_GEN_29 & issued_0);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_0);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_1 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h1 | issued_1
-             : ~_GEN_29 & issued_1);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_1);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_2 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h2 | issued_2
-             : ~_GEN_29 & issued_2);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_2);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_3 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h3 | issued_3
-             : ~_GEN_29 & issued_3);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_3);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_4 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h4 | issued_4
-             : ~_GEN_29 & issued_4);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_4);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_5 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h5 | issued_5
-             : ~_GEN_29 & issued_5);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_5);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_6 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h6 | issued_6
-             : ~_GEN_29 & issued_6);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_6);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_7 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h7 | issued_7
-             : ~_GEN_29 & issued_7);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_7);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_8 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h8 | issued_8
-             : ~_GEN_29 & issued_8);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_8);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_9 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'h9 | issued_9
-             : ~_GEN_29 & issued_9);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_9);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_10 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'hA | issued_10
-             : ~_GEN_29 & issued_10);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_10);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_11 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'hB | issued_11
-             : ~_GEN_29 & issued_11);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_11);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_12 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'hC | issued_12
-             : ~_GEN_29 & issued_12);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_12);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_13 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'hD | issued_13
-             : ~_GEN_29 & issued_13);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_13);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_14 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & dispatch == 4'hE | issued_14
-             : ~_GEN_29 & issued_14);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :166:101, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+             : ~_GEN_29 & issued_14);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :196:101, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
       issued_15 <=
         ~io_clear
         & ((|state)
              ? ~_GEN_4 & _GEN_5 & _justIssued_T & (&dispatch) | issued_15
-             : ~_GEN_29 & issued_15);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{76,206}, :159:161, :160:79, :164:{17,95}, :167:18, :168:{30,36,174}, :170:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
-      resultValid_0 <= ~_GEN_49 & (_GEN_13 | resultValid_0);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_1 <= ~_GEN_49 & (_GEN_14 | resultValid_1);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_2 <= ~_GEN_49 & (_GEN_15 | resultValid_2);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_3 <= ~_GEN_49 & (_GEN_16 | resultValid_3);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_4 <= ~_GEN_49 & (_GEN_17 | resultValid_4);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_5 <= ~_GEN_49 & (_GEN_18 | resultValid_5);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_6 <= ~_GEN_49 & (_GEN_19 | resultValid_6);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_7 <= ~_GEN_49 & (_GEN_20 | resultValid_7);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_8 <= ~_GEN_49 & (_GEN_21 | resultValid_8);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_9 <= ~_GEN_49 & (_GEN_22 | resultValid_9);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_10 <= ~_GEN_49 & (_GEN_23 | resultValid_10);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_11 <= ~_GEN_49 & (_GEN_24 | resultValid_11);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_12 <= ~_GEN_49 & (_GEN_25 | resultValid_12);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_13 <= ~_GEN_49 & (_GEN_26 | resultValid_13);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_14 <= ~_GEN_49 & (_GEN_27 | resultValid_14);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      resultValid_15 <= ~_GEN_49 & (_GEN_28 | resultValid_15);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{224,282}, :164:{17,36,54,119}, :166:{37,63,101,163}, :167:18, :168:{36,118,129,198}
-      error <= ~_GEN_49 & (_resp_T & ~legal | error);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:333, :162:168, :164:{17,36,54}, :166:{27,30,37,43,63}, :167:18, :168:{36,118,129}, src/main/scala/chisel3/util/Decoupled.scala:51:35
-    end
-    if (io_clear | ~_GEN_30) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:{97,131}, :164:17, :167:18, :168:{36,42}
-    end
-    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:131, :164:17, :167:18
-      token <= io_token;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:97
-      routes <= io_routeCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:158:131
-    end
-    if (_GEN_33) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_0 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_34) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_1 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_35) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_2 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_36) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_3 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_37) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_4 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_38) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_5 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_39) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_6 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_40) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_7 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_41) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_8 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_42) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_9 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_43) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_10 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_44) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_11 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_45) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_12 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_46) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_13 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_47) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_14 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_48) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18, :164:17, :167:18
-      experts_15 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:18
-    if (_GEN_33) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_0 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_34) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_1 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_35) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_2 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_36) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_3 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_37) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_4 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_38) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_5 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_39) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_6 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_40) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_7 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_41) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_8 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_42) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_9 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_43) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_10 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_44) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_11 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_45) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_12 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_46) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_13 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_47) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_14 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_48) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,69}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69, :164:17, :167:18
-      weights_15 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:69
-    if (_GEN_33) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_0 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_34) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_1 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_35) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_2 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_36) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_3 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_37) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_4 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_38) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_5 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_39) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_6 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_40) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_7 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_41) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_8 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_42) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_9 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_43) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_10 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_44) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_11 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_45) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_12 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_46) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_13 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_47) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_14 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (_GEN_48) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:{18,119}, :164:17, :167:18
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119, :164:17, :167:18
-      shared_15 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:119
-    if (io_clear | ~_GEN_13) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_0 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_14) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_1 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_15) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_2 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_16) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_3 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_17) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_4 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_18) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_5 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_19) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_6 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_20) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_7 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_21) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_8 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_22) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_9 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_23) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_10 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_24) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_11 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_25) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_12 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_26) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_13 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_27) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_14 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
-    if (io_clear | ~_GEN_28) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:{63,101}
-    end
-    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282, :164:17, :166:63
-      resultData_15 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:159:282
+             : ~_GEN_29 & issued_15);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{76,206}, :189:161, :190:79, :194:{17,95}, :197:18, :198:{30,36,174}, :200:63, src/main/scala/chisel3/util/Decoupled.scala:51:35
+      resultValid_0 <= ~_GEN_49 & (_GEN_13 | resultValid_0);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_1 <= ~_GEN_49 & (_GEN_14 | resultValid_1);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_2 <= ~_GEN_49 & (_GEN_15 | resultValid_2);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_3 <= ~_GEN_49 & (_GEN_16 | resultValid_3);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_4 <= ~_GEN_49 & (_GEN_17 | resultValid_4);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_5 <= ~_GEN_49 & (_GEN_18 | resultValid_5);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_6 <= ~_GEN_49 & (_GEN_19 | resultValid_6);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_7 <= ~_GEN_49 & (_GEN_20 | resultValid_7);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_8 <= ~_GEN_49 & (_GEN_21 | resultValid_8);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_9 <= ~_GEN_49 & (_GEN_22 | resultValid_9);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_10 <= ~_GEN_49 & (_GEN_23 | resultValid_10);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_11 <= ~_GEN_49 & (_GEN_24 | resultValid_11);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_12 <= ~_GEN_49 & (_GEN_25 | resultValid_12);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_13 <= ~_GEN_49 & (_GEN_26 | resultValid_13);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_14 <= ~_GEN_49 & (_GEN_27 | resultValid_14);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      resultValid_15 <= ~_GEN_49 & (_GEN_28 | resultValid_15);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{224,282}, :194:{17,36,54,119}, :196:{37,63,101,163}, :197:18, :198:{36,118,129,198}
+      error <= ~_GEN_49 & (_resp_T & ~legal | error);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:333, :192:168, :194:{17,36,54}, :196:{27,30,37,43,63}, :197:18, :198:{36,118,129}, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    end
+    if (io_clear | ~_GEN_30) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:{97,131}, :194:17, :197:18, :198:{36,42}
+    end
+    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:131, :194:17, :197:18
+      token <= io_token;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:97
+      routes <= io_routeCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:188:131
+    end
+    if (_GEN_33) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_0 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_34) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_1 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_35) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_2 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_36) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_3 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_37) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_4 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_38) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_5 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_39) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_6 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_40) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_7 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_41) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_8 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_42) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_9 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_43) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_10 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_44) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_11 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_45) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_12 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_46) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_13 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_47) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_14 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_48) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18, :194:17, :197:18
+      experts_15 <= io_routeIn_bits_expert;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:18
+    if (_GEN_33) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_0 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_34) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_1 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_35) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_2 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_36) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_3 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_37) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_4 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_38) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_5 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_39) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_6 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_40) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_7 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_41) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_8 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_42) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_9 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_43) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_10 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_44) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_11 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_45) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_12 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_46) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_13 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_47) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_14 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_48) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,69}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69, :194:17, :197:18
+      weights_15 <= io_routeIn_bits_weight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:69
+    if (_GEN_33) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_0 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_34) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_1 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_35) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_2 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_36) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_3 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_37) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_4 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_38) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_5 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_39) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_6 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_40) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_7 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_41) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_8 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_42) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_9 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_43) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_10 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_44) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_11 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_45) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_12 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_46) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_13 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_47) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_14 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (_GEN_48) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:{18,119}, :194:17, :197:18
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119, :194:17, :197:18
+      shared_15 <= io_routeIn_bits_shared;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:119
+    if (io_clear | ~_GEN_13) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_0 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_14) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_1 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_15) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_2 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_16) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_3 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_17) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_4 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_18) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_5 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_19) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_6 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_20) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_7 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_21) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_8 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_22) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_9 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_23) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_10 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_24) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_11 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_25) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_12 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_26) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_13 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_27) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_14 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
+    if (io_clear | ~_GEN_28) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:{63,101}
+    end
+    else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282, :194:17, :196:63
+      resultData_15 <= io_resultIn_bits_data;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:189:282
   end // always @(posedge)
-  `ifdef ENABLE_INITIAL_REG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-    `ifdef FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-      `FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
+  `ifdef ENABLE_INITIAL_REG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+    `ifdef FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+      `FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-      automatic logic [31:0] _RANDOM[0:280];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-      `ifdef INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-        `INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
+    initial begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+      automatic logic [31:0] _RANDOM[0:280];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+      `ifdef INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+        `INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
+      `ifdef RANDOMIZE_REG_INIT	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
         for (logic [8:0] i = 9'h0; i < 9'h119; i += 9'h1) begin
-          _RANDOM[i] = `RANDOM;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-        end	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-        state = _RANDOM[9'h0][2:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:76
-        token = {_RANDOM[9'h0][31:3], _RANDOM[9'h1][2:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{76,97}
-        routes = _RANDOM[9'h1][7:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{97,131}
-        load = _RANDOM[9'h1][12:8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{97,167}
-        dispatch = _RANDOM[9'h1][16:13];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{97,206}
-        merge = _RANDOM[9'h1][20:17];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{97,242}
-        returned = _RANDOM[9'h1][25:21];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{97,281}
-        experts_0 = {_RANDOM[9'h1][31:26], _RANDOM[9'h2][3:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:97, :159:18
-        experts_1 = _RANDOM[9'h2][13:4];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_2 = _RANDOM[9'h2][23:14];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_3 = {_RANDOM[9'h2][31:24], _RANDOM[9'h3][1:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_4 = _RANDOM[9'h3][11:2];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_5 = _RANDOM[9'h3][21:12];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_6 = _RANDOM[9'h3][31:22];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_7 = _RANDOM[9'h4][9:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_8 = _RANDOM[9'h4][19:10];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_9 = _RANDOM[9'h4][29:20];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_10 = {_RANDOM[9'h4][31:30], _RANDOM[9'h5][7:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_11 = _RANDOM[9'h5][17:8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_12 = _RANDOM[9'h5][27:18];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_13 = {_RANDOM[9'h5][31:28], _RANDOM[9'h6][5:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_14 = _RANDOM[9'h6][15:6];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        experts_15 = _RANDOM[9'h6][25:16];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:18
-        weights_0 = {_RANDOM[9'h6][31:26], _RANDOM[9'h7][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{18,69}
-        weights_1 = {_RANDOM[9'h7][31:26], _RANDOM[9'h8][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_2 = {_RANDOM[9'h8][31:26], _RANDOM[9'h9][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_3 = {_RANDOM[9'h9][31:26], _RANDOM[9'hA][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_4 = {_RANDOM[9'hA][31:26], _RANDOM[9'hB][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_5 = {_RANDOM[9'hB][31:26], _RANDOM[9'hC][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_6 = {_RANDOM[9'hC][31:26], _RANDOM[9'hD][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_7 = {_RANDOM[9'hD][31:26], _RANDOM[9'hE][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_8 = {_RANDOM[9'hE][31:26], _RANDOM[9'hF][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_9 = {_RANDOM[9'hF][31:26], _RANDOM[9'h10][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_10 = {_RANDOM[9'h10][31:26], _RANDOM[9'h11][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_11 = {_RANDOM[9'h11][31:26], _RANDOM[9'h12][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_12 = {_RANDOM[9'h12][31:26], _RANDOM[9'h13][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_13 = {_RANDOM[9'h13][31:26], _RANDOM[9'h14][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_14 = {_RANDOM[9'h14][31:26], _RANDOM[9'h15][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        weights_15 = {_RANDOM[9'h15][31:26], _RANDOM[9'h16][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:69
-        shared_0 = _RANDOM[9'h16][26];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{69,119}
-        shared_1 = _RANDOM[9'h16][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{69,119}
-        shared_2 = _RANDOM[9'h16][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{69,119}
-        shared_3 = _RANDOM[9'h16][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{69,119}
-        shared_4 = _RANDOM[9'h16][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{69,119}
-        shared_5 = _RANDOM[9'h16][31];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{69,119}
-        shared_6 = _RANDOM[9'h17][0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_7 = _RANDOM[9'h17][1];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_8 = _RANDOM[9'h17][2];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_9 = _RANDOM[9'h17][3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_10 = _RANDOM[9'h17][4];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_11 = _RANDOM[9'h17][5];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_12 = _RANDOM[9'h17][6];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_13 = _RANDOM[9'h17][7];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_14 = _RANDOM[9'h17][8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        shared_15 = _RANDOM[9'h17][9];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:119
-        issued_0 = _RANDOM[9'h17][10];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_1 = _RANDOM[9'h17][11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_2 = _RANDOM[9'h17][12];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_3 = _RANDOM[9'h17][13];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_4 = _RANDOM[9'h17][14];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_5 = _RANDOM[9'h17][15];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_6 = _RANDOM[9'h17][16];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_7 = _RANDOM[9'h17][17];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_8 = _RANDOM[9'h17][18];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_9 = _RANDOM[9'h17][19];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_10 = _RANDOM[9'h17][20];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_11 = _RANDOM[9'h17][21];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_12 = _RANDOM[9'h17][22];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_13 = _RANDOM[9'h17][23];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_14 = _RANDOM[9'h17][24];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        issued_15 = _RANDOM[9'h17][25];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,161}
-        resultValid_0 = _RANDOM[9'h17][26];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,224}
-        resultValid_1 = _RANDOM[9'h17][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,224}
-        resultValid_2 = _RANDOM[9'h17][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,224}
-        resultValid_3 = _RANDOM[9'h17][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,224}
-        resultValid_4 = _RANDOM[9'h17][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,224}
-        resultValid_5 = _RANDOM[9'h17][31];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{119,224}
-        resultValid_6 = _RANDOM[9'h18][0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_7 = _RANDOM[9'h18][1];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_8 = _RANDOM[9'h18][2];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_9 = _RANDOM[9'h18][3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_10 = _RANDOM[9'h18][4];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_11 = _RANDOM[9'h18][5];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_12 = _RANDOM[9'h18][6];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_13 = _RANDOM[9'h18][7];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_14 = _RANDOM[9'h18][8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
-        resultValid_15 = _RANDOM[9'h18][9];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:224
+          _RANDOM[i] = `RANDOM;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+        end	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+        state = _RANDOM[9'h0][2:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:76
+        token = {_RANDOM[9'h0][31:3], _RANDOM[9'h1][2:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{76,97}
+        routes = _RANDOM[9'h1][7:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{97,131}
+        load = _RANDOM[9'h1][12:8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{97,167}
+        dispatch = _RANDOM[9'h1][16:13];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{97,206}
+        merge = _RANDOM[9'h1][20:17];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{97,242}
+        returned = _RANDOM[9'h1][25:21];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{97,281}
+        experts_0 = {_RANDOM[9'h1][31:26], _RANDOM[9'h2][3:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:97, :189:18
+        experts_1 = _RANDOM[9'h2][13:4];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_2 = _RANDOM[9'h2][23:14];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_3 = {_RANDOM[9'h2][31:24], _RANDOM[9'h3][1:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_4 = _RANDOM[9'h3][11:2];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_5 = _RANDOM[9'h3][21:12];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_6 = _RANDOM[9'h3][31:22];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_7 = _RANDOM[9'h4][9:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_8 = _RANDOM[9'h4][19:10];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_9 = _RANDOM[9'h4][29:20];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_10 = {_RANDOM[9'h4][31:30], _RANDOM[9'h5][7:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_11 = _RANDOM[9'h5][17:8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_12 = _RANDOM[9'h5][27:18];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_13 = {_RANDOM[9'h5][31:28], _RANDOM[9'h6][5:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_14 = _RANDOM[9'h6][15:6];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        experts_15 = _RANDOM[9'h6][25:16];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:18
+        weights_0 = {_RANDOM[9'h6][31:26], _RANDOM[9'h7][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{18,69}
+        weights_1 = {_RANDOM[9'h7][31:26], _RANDOM[9'h8][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_2 = {_RANDOM[9'h8][31:26], _RANDOM[9'h9][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_3 = {_RANDOM[9'h9][31:26], _RANDOM[9'hA][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_4 = {_RANDOM[9'hA][31:26], _RANDOM[9'hB][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_5 = {_RANDOM[9'hB][31:26], _RANDOM[9'hC][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_6 = {_RANDOM[9'hC][31:26], _RANDOM[9'hD][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_7 = {_RANDOM[9'hD][31:26], _RANDOM[9'hE][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_8 = {_RANDOM[9'hE][31:26], _RANDOM[9'hF][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_9 = {_RANDOM[9'hF][31:26], _RANDOM[9'h10][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_10 = {_RANDOM[9'h10][31:26], _RANDOM[9'h11][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_11 = {_RANDOM[9'h11][31:26], _RANDOM[9'h12][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_12 = {_RANDOM[9'h12][31:26], _RANDOM[9'h13][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_13 = {_RANDOM[9'h13][31:26], _RANDOM[9'h14][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_14 = {_RANDOM[9'h14][31:26], _RANDOM[9'h15][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        weights_15 = {_RANDOM[9'h15][31:26], _RANDOM[9'h16][25:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:69
+        shared_0 = _RANDOM[9'h16][26];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{69,119}
+        shared_1 = _RANDOM[9'h16][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{69,119}
+        shared_2 = _RANDOM[9'h16][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{69,119}
+        shared_3 = _RANDOM[9'h16][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{69,119}
+        shared_4 = _RANDOM[9'h16][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{69,119}
+        shared_5 = _RANDOM[9'h16][31];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{69,119}
+        shared_6 = _RANDOM[9'h17][0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_7 = _RANDOM[9'h17][1];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_8 = _RANDOM[9'h17][2];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_9 = _RANDOM[9'h17][3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_10 = _RANDOM[9'h17][4];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_11 = _RANDOM[9'h17][5];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_12 = _RANDOM[9'h17][6];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_13 = _RANDOM[9'h17][7];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_14 = _RANDOM[9'h17][8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        shared_15 = _RANDOM[9'h17][9];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:119
+        issued_0 = _RANDOM[9'h17][10];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_1 = _RANDOM[9'h17][11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_2 = _RANDOM[9'h17][12];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_3 = _RANDOM[9'h17][13];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_4 = _RANDOM[9'h17][14];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_5 = _RANDOM[9'h17][15];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_6 = _RANDOM[9'h17][16];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_7 = _RANDOM[9'h17][17];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_8 = _RANDOM[9'h17][18];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_9 = _RANDOM[9'h17][19];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_10 = _RANDOM[9'h17][20];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_11 = _RANDOM[9'h17][21];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_12 = _RANDOM[9'h17][22];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_13 = _RANDOM[9'h17][23];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_14 = _RANDOM[9'h17][24];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        issued_15 = _RANDOM[9'h17][25];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,161}
+        resultValid_0 = _RANDOM[9'h17][26];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,224}
+        resultValid_1 = _RANDOM[9'h17][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,224}
+        resultValid_2 = _RANDOM[9'h17][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,224}
+        resultValid_3 = _RANDOM[9'h17][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,224}
+        resultValid_4 = _RANDOM[9'h17][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,224}
+        resultValid_5 = _RANDOM[9'h17][31];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{119,224}
+        resultValid_6 = _RANDOM[9'h18][0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_7 = _RANDOM[9'h18][1];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_8 = _RANDOM[9'h18][2];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_9 = _RANDOM[9'h18][3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_10 = _RANDOM[9'h18][4];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_11 = _RANDOM[9'h18][5];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_12 = _RANDOM[9'h18][6];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_13 = _RANDOM[9'h18][7];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_14 = _RANDOM[9'h18][8];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
+        resultValid_15 = _RANDOM[9'h18][9];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:224
         resultData_0 =
           {_RANDOM[9'h18][31:10],
            _RANDOM[9'h19],
@@ -1002,7 +1002,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h25],
            _RANDOM[9'h26],
            _RANDOM[9'h27],
-           _RANDOM[9'h28][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{224,282}
+           _RANDOM[9'h28][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{224,282}
         resultData_1 =
           {_RANDOM[9'h28][31:10],
            _RANDOM[9'h29],
@@ -1020,7 +1020,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h35],
            _RANDOM[9'h36],
            _RANDOM[9'h37],
-           _RANDOM[9'h38][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h38][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_2 =
           {_RANDOM[9'h38][31:10],
            _RANDOM[9'h39],
@@ -1038,7 +1038,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h45],
            _RANDOM[9'h46],
            _RANDOM[9'h47],
-           _RANDOM[9'h48][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h48][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_3 =
           {_RANDOM[9'h48][31:10],
            _RANDOM[9'h49],
@@ -1056,7 +1056,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h55],
            _RANDOM[9'h56],
            _RANDOM[9'h57],
-           _RANDOM[9'h58][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h58][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_4 =
           {_RANDOM[9'h58][31:10],
            _RANDOM[9'h59],
@@ -1074,7 +1074,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h65],
            _RANDOM[9'h66],
            _RANDOM[9'h67],
-           _RANDOM[9'h68][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h68][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_5 =
           {_RANDOM[9'h68][31:10],
            _RANDOM[9'h69],
@@ -1092,7 +1092,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h75],
            _RANDOM[9'h76],
            _RANDOM[9'h77],
-           _RANDOM[9'h78][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h78][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_6 =
           {_RANDOM[9'h78][31:10],
            _RANDOM[9'h79],
@@ -1110,7 +1110,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h85],
            _RANDOM[9'h86],
            _RANDOM[9'h87],
-           _RANDOM[9'h88][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h88][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_7 =
           {_RANDOM[9'h88][31:10],
            _RANDOM[9'h89],
@@ -1128,7 +1128,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h95],
            _RANDOM[9'h96],
            _RANDOM[9'h97],
-           _RANDOM[9'h98][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h98][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_8 =
           {_RANDOM[9'h98][31:10],
            _RANDOM[9'h99],
@@ -1146,7 +1146,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'hA5],
            _RANDOM[9'hA6],
            _RANDOM[9'hA7],
-           _RANDOM[9'hA8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'hA8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_9 =
           {_RANDOM[9'hA8][31:10],
            _RANDOM[9'hA9],
@@ -1164,7 +1164,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'hB5],
            _RANDOM[9'hB6],
            _RANDOM[9'hB7],
-           _RANDOM[9'hB8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'hB8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_10 =
           {_RANDOM[9'hB8][31:10],
            _RANDOM[9'hB9],
@@ -1182,7 +1182,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'hC5],
            _RANDOM[9'hC6],
            _RANDOM[9'hC7],
-           _RANDOM[9'hC8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'hC8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_11 =
           {_RANDOM[9'hC8][31:10],
            _RANDOM[9'hC9],
@@ -1200,7 +1200,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'hD5],
            _RANDOM[9'hD6],
            _RANDOM[9'hD7],
-           _RANDOM[9'hD8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'hD8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_12 =
           {_RANDOM[9'hD8][31:10],
            _RANDOM[9'hD9],
@@ -1218,7 +1218,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'hE5],
            _RANDOM[9'hE6],
            _RANDOM[9'hE7],
-           _RANDOM[9'hE8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'hE8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_13 =
           {_RANDOM[9'hE8][31:10],
            _RANDOM[9'hE9],
@@ -1236,7 +1236,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'hF5],
            _RANDOM[9'hF6],
            _RANDOM[9'hF7],
-           _RANDOM[9'hF8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'hF8][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_14 =
           {_RANDOM[9'hF8][31:10],
            _RANDOM[9'hF9],
@@ -1254,7 +1254,7 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h105],
            _RANDOM[9'h106],
            _RANDOM[9'h107],
-           _RANDOM[9'h108][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
+           _RANDOM[9'h108][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
         resultData_15 =
           {_RANDOM[9'h108][31:10],
            _RANDOM[9'h109],
@@ -1272,34 +1272,34 @@ module HeteroMoeRouteDispatch(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
            _RANDOM[9'h115],
            _RANDOM[9'h116],
            _RANDOM[9'h117],
-           _RANDOM[9'h118][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:282
-        error = _RANDOM[9'h118][10];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:{282,333}
+           _RANDOM[9'h118][9:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:282
+        error = _RANDOM[9'h118][10];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:{282,333}
       `endif // RANDOMIZE_REG_INIT
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
-      `FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7
+    `ifdef FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
+      `FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7
     `endif // FIRRTL_AFTER_INITIAL
   `endif // ENABLE_INITIAL_REG_
-  assign io_startReady = ~(|state);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:76, :160:79
-  assign io_routeIn_ready = io_routeIn_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :160:225
-  assign io_dispatchOut_valid = io_dispatchOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :161:30
-  assign io_dispatchOut_bits_token = token;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:97
-  assign io_dispatchOut_bits_expert = _GEN[dispatch];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:206, :161:102
-  assign io_dispatchOut_bits_weight = _GEN_0[dispatch];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:206, :161:148
-  assign io_dispatchOut_bits_routeTag = dispatch;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:206
-  assign io_dispatchOut_bits_shared = _GEN_1[dispatch];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:206, :161:233
-  assign io_dispatchOut_bits_last = io_dispatchOut_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :161:290
-  assign io_resultIn_ready = io_resultIn_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :162:247
-  assign io_mergeOut_valid = io_mergeOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :163:27
-  assign io_mergeOut_bits_routeTag = merge;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:242
-  assign io_mergeOut_bits_weight = _GEN_0[merge];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:242, :161:148, :163:93
-  assign io_mergeOut_bits_data = _GEN_3[merge];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:242, :163:131
-  assign io_mergeOut_bits_first = merge == 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:{206,242}, :163:180
-  assign io_mergeOut_bits_last = io_mergeOut_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :163:219
-  assign io_busy = |state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:76, :160:152
+  assign io_startReady = ~(|state);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:76, :190:79
+  assign io_routeIn_ready = io_routeIn_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :190:225
+  assign io_dispatchOut_valid = io_dispatchOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :191:30
+  assign io_dispatchOut_bits_token = token;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:97
+  assign io_dispatchOut_bits_expert = _GEN[dispatch];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:206, :191:102
+  assign io_dispatchOut_bits_weight = _GEN_0[dispatch];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:206, :191:148
+  assign io_dispatchOut_bits_routeTag = dispatch;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:206
+  assign io_dispatchOut_bits_shared = _GEN_1[dispatch];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:206, :191:233
+  assign io_dispatchOut_bits_last = io_dispatchOut_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :191:290
+  assign io_resultIn_ready = io_resultIn_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :192:247
+  assign io_mergeOut_valid = io_mergeOut_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :193:27
+  assign io_mergeOut_bits_routeTag = merge;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:242
+  assign io_mergeOut_bits_weight = _GEN_0[merge];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:242, :191:148, :193:93
+  assign io_mergeOut_bits_data = _GEN_3[merge];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:242, :193:131
+  assign io_mergeOut_bits_first = merge == 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:{206,242}, :193:180
+  assign io_mergeOut_bits_last = io_mergeOut_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :193:219
+  assign io_busy = |state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:76, :190:152
   assign io_done =
     ~(io_clear | ~(|state) | _GEN_4 | _GEN_5 | _GEN_6) & _GEN_11
-    & io_mergeOut_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:76, :160:{79,168}, :163:219, :164:17, :167:18, :172:{40,95}
-  assign io_invalidConfig = io_start & ~(|state) & ~cfg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :158:76, :160:{30,79,130,133}
-  assign io_protocolError = error;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:155:7, :159:333
+    & io_mergeOut_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:76, :190:{79,168}, :193:219, :194:17, :197:18, :202:{40,95}
+  assign io_invalidConfig = io_start & ~(|state) & ~cfg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :188:76, :190:{30,79,130,133}
+  assign io_protocolError = error;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala:185:7, :189:333
 endmodule

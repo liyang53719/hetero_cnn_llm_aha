@@ -47,6 +47,15 @@
     "L10": "PREFLIGHT_ONLY",
     "L11": "OPEN"
   },
+  "early_dc_evidence": {
+    "root_modules": "PASS_18_OF_18",
+    "clock_period_ns": 1.25,
+    "minimum_wns_ns": 0.303001,
+    "summed_independent_cell_area": 19590.115996,
+    "unmapped": 0,
+    "evidence": "reports/execution/OPERATOR_ROOT_DC_800MHZ.json",
+    "nonclaim": "not endpoint-bound combined shell"
+  },
   "claim_rules": [
     "Source or inventory coverage is not numerical RTL closure.",
     "Generated RTL is never hand edited.",

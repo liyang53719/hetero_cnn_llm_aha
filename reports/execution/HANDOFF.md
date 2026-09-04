@@ -29,4 +29,6 @@
   closure without discarding the recovered source value.
 - Control is now 1/58 PASS: real barrier waits for all domain acknowledgements,
   no early success completion; Icarus and Verilator PASS.
+- Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
+  independent cell area 19590.115996; this is not combined endpoint PPA.
 - Next: bind DMA read/write/gather/scatter to pinned iDMA completion.

@@ -35,8 +35,8 @@
     "State": {
       "opcodes": ["StateRead", "StateWrite", "StateDecay", "StateConvWindow", "StateBegin", "StateCommit", "StateRollback"],
       "candidate_sources": ["rtl/state", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroStatePrimitives.scala"],
-      "v3_endpoint_adapter": null,
-      "readiness": "transaction_and_address_controllers_exist_payload_state_engine_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_state_endpoint_v3.sv",
+      "readiness": "pass_generated_transaction_fixed_journal_read_write_decay_conv4_commit_rollback_and_800mhz_dc"
     },
     "Selection": {
       "opcodes": ["SelectTopK", "SelectExpand", "SelectRoute", "SelectMerge", "SelectBlockPool", "SelectMtpVerify"],

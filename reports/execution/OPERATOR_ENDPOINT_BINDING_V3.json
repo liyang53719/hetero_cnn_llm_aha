@@ -21,7 +21,7 @@
     "Matrix": "PASS_COMPONENT_BOUND_7_OF_7_COMBINED_CANARY_OPEN",
     "Sfu": "PASS_23_OF_23_OWNER_PROTOCOL_AND_DC",
     "KvMemory": "PASS_4_OF_4_DDR_PTE_AND_IDMA_ENDPOINT",
-    "State": "OPEN_REAL_ENDPOINT_BINDING",
+    "State": "PASS_7_OF_7_TRANSACTIONAL_PAYLOAD_ENDPOINT",
     "Selection": "OPEN_REAL_ENDPOINT_BINDING",
     "Vision": "OPEN_REAL_ENDPOINT_BINDING"
   },
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "39/58",
-    "owners_open": 3,
+    "real_v3_endpoint_bindings": "46/58",
+    "owners_open": 2,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -254,6 +254,19 @@
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000463724, "area": 7436.702, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 8},
     "dc_log_sha256": "49456c6507dccffa42e7c515a07bcaf4118c877a3d762bf1f6606f7cad03ffab",
     "nonclaims": ["prefix sharing COW and refcount greater than one remain L7", "TLB and leaf cache are not claimed by this G3 terminal endpoint", "iDMA is an external checked owner interface and payload bytes are not injected by the testbench"]
+  },
+  "state_endpoint_evidence": {
+    "status": "PASS_7_OF_7_TRANSACTIONAL_PAYLOAD_AND_DC",
+    "opcodes": ["StateRead", "StateWrite", "StateDecay", "StateConvWindow", "StateBegin", "StateCommit", "StateRollback"],
+    "endpoint": "rtl/integration/operator_state_endpoint_v3.sv",
+    "endpoint_sha256": "9f8262168bfbe2cb35c858a7fee177aa3cf6d6867dfcfade651798e455ba2501",
+    "authoritative_transaction_rtl": "generated/operator_primitives_v3/primitives/state_transaction.sv",
+    "authoritative_transaction_sha256": "dd04c02286b7f3e78bddfd71dd53abea6930cf09d56f0d66c9e785235a729ad3",
+    "journal": {"entries": 16, "line_bits": 512, "fixed_capacity": true, "read_your_writes": true, "commit_flushes_external_memory": true, "rollback_discards": true},
+    "arithmetic": "one shared pipelined FP32 multiplier and adder for decay and conv4",
+    "test": {"successful_commands": 104, "error_commands": 1, "external_writes": 60, "external_reads": 11, "generation": 11, "log_sha256": "146dc25313bb0028aa585fdd3d536856d5b249ced5c03b94e7bafbfd0a3104e8"},
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000886917, "area": 48604.2830001, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 117},
+    "dc_log_sha256": "6978cef97d758fbf932c2c55431df0577cdd9125867e2e27b8aba0f595b8edb9"
   },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",

@@ -141,5 +141,15 @@
     "scalar_endpoint_dc": {"status": "PASS_FLAT_COMMON_HARDFLOAT", "period_ns": 1.25, "wns_ns": 0.0000766516, "area": 11890.515, "unmapped": 0, "dc_log_sha256": "8c1a4080dffe58a25597d156c8586157eec9c230e10e490250dc1bd8bbadce73"},
     "superseded_rsqrt_dc": {"status": "FAIL_TIMING", "wns_ns": -6.78428}
   },
+  "qwen2_rmsnorm1536_replay": {
+    "status": "PASS_AFTER_PIPELINED_REDUCE_SUM",
+    "vectors": 1000,
+    "cycles": 1829998,
+    "reduction_cycles": 1728000,
+    "rsqrt_cycles": 3000,
+    "output_cycles": 96000,
+    "max_reference_error": 8.83896267e-7,
+    "test_log_sha256": "8560cb2d31c9b5e4ced4bcb14807e45aa414da553df0d39e052208c64ca8f724"
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

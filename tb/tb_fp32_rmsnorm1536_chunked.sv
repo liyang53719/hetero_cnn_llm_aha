@@ -98,7 +98,7 @@ module tb_fp32_rmsnorm1536_chunked;
   end
 
   initial begin
-    repeat (1000000) @(posedge clk);
+    repeat (4000000) @(posedge clk);
     $fatal(1, "RMS1536 timeout");
   end
 endmodule

@@ -52,6 +52,8 @@
   WNS +0.0000697374 ns, area 4486.3. Scalar 3-op flat DC passes with common
   HardFloat source: WNS +0.0000766516 ns, area 11890.515, 0 unmapped.
 - SFU numerical+endpoint+DC coverage is now 15/23; next four Norm operations.
+- Qwen2 RMSNorm1536 revalidated after ReduceSum pipeline: 1000 vectors PASS,
+  1,829,998 cycles, max reference error 8.84e-7.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

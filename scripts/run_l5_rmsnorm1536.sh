@@ -22,7 +22,7 @@ MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
   "$VERILATOR" --lint-only "${COMMON[@]}" --top-module tb_fp32_rmsnorm1536_chunked \
   "${SOURCES[@]}" >"$OUT/lint.log" 2>&1
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$RUN" \
-  "$VERILATOR" --binary "${COMMON[@]}" -j 8 \
+  "$VERILATOR" --binary --threads 4 "${COMMON[@]}" -Wno-UNOPTTHREADS -j 4 \
   -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" \
   --top-module tb_fp32_rmsnorm1536_chunked --Mdir "$OUT/obj" -o tb \
   "${SOURCES[@]}" >"$OUT/build.log" 2>&1

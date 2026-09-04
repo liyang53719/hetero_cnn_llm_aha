@@ -130,5 +130,9 @@
 - Qwen3.8 canary PASS across GDN/QSA/PLE/hyper/MoE-top10/MTP: 7 roots and
   9 paths. QSA uses a valid pre-existing sparse-KV DDR PTE fixture.
 - Vision canary PASS across patch, transformer, merge and multimodal injection.
-  All four model classes now pass root-owner canaries. Next: predicate-era
-  Selection/root/combined DC, then 20-seed/100-transaction root stress.
+  All four model classes now pass root-owner canaries.
+- Predicate-era DC PASS: Selection WNS +0.0000602007 ns/area 29110.172;
+  roots 18/18 min WNS +0.303001 ns/summed area 19534.606; Bridge WNS
+  +0.588299 ns; Router +0.321471 ns; combined WNS +0.00000369549 ns/area
+  2097416.781 with 0 unresolved/unmapped. Root stress and 4058 transition/47
+  fanout cleanup remain open.

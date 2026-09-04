@@ -1,25 +1,26 @@
 {
   "schema_version": 1,
-  "status": "PASS_PRIOR_LINK_SUPERSEDED_BY_CONDITIONAL_COMPLETION_RERUN_REQUIRED",
-  "top": "operator_endpoint_bound_owner_shell_v3",
+  "status": "PASS_PREDICATE_ROOT_LINK_SETUP_STRESS_DRC_OPEN",
+  "top": "operator_root_bridge_owner_shell_v3",
   "terminal_bindings": 58,
   "owners": 8,
   "generated_shell": "generated/operator_endpoint_shell_v3/operator_endpoint_bound_owner_shell_v3.sv",
-  "generated_shell_sha256": "d28bbd070eb336fcf4e3a906a349d7a38bb6886354b5f44c691306199da56d1f",
-  "generator_sha256": "0a182cd17b8fb58cf0757e16ecc7f113c17b5f2d5bcb4160e393db7b83d6ebe9",
-  "router": {"top": "HeteroV3TerminalOwnerRouter", "dc_wns_ns": 0.3192, "dc_area": 1196.195, "unmapped": 0, "dc_log_sha256": "2687fa45f8188be86cb31c22bc990c532ac0e248401021b019225aa53ae8bf63"},
-  "dc": {"library": "CLN22UL base SVT TT 0.8V 25C", "period_ns": 1.25, "setup_uncertainty_ns": 0.08, "io_budget_ns": 0.10, "wns_ns": 0.00000369549, "area": 2085007.383544, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4056, "max_fanout_violations": 47},
-  "dc_log_sha256": "0850013dca6c2e5fb42283a5b5eab00cdec56eb2dd579cbe8ec5dbd12cc58a7d",
-  "status_sha256": "3be259028ca6148890515b6cdc2379f2a607fe9b0cfff26523fed58a9e0fa617",
+  "generated_shell_sha256": "0c0deac5aff4ebba2ea38b3cf3c62518332a17f571a41e94c5ca3257c76da9d5",
+  "generator_sha256": "d020ff14ee9087f637c4a1f7fadb962462280799506f4faad55bd2584daf6b15",
+  "router": {"top": "HeteroV3TerminalOwnerRouter", "dc_wns_ns": 0.321471, "dc_area": 1201.2, "unmapped": 0, "dc_log_sha256": "e7432daa1908b3d97e5d88a20e6ca21489e121e3b7bab8f9bc399d58f491e1f7"},
+  "dc": {"library": "CLN22UL base SVT TT 0.8V 25C", "period_ns": 1.25, "setup_uncertainty_ns": 0.08, "io_budget_ns": 0.10, "wns_ns": 0.00000369549, "area": 2097416.780547, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
+  "dc_log_sha256": "07def1213de641701575a90e5f5a08ff43644216ae06add88e6e07927f888bee",
+  "status_sha256": "5d1045c7249688901ea5e9a297148f98c5805a69115f113f6f4a9500e3bfff1d",
   "attempts": [{"status": "FAIL_UNMAPPED_ROUTER_DEFINITION", "unmapped": 450}, {"status": "PASS_AFTER_STANDALONE_ROUTER_DDC", "unmapped": 0}],
   "root_bridge_shell": {
     "top": "operator_root_bridge_owner_shell_v3",
-    "generated_rtl_sha256": "4fcfc2ec308b853368ab3a69a18fda8d8185a1f46dd53b5757c2589bc135860e",
-    "maintenance_wrapper_map": {"status": "PASS_WRAPPER_MAP", "unmapped_excluding_owner_child": 0, "dc_log_sha256": "46cc61496a74e393ea64fa62a74c4699f46ac198b6a838e447a1af041d2122b0"},
-    "structural_lint_sha256": "58c8b60db8e4e05d17e6b589b2b1435f37a0d2f8195183df730caa127586a026",
-    "terminal_bridge_dc": {"wns_ns": 0.551224, "area": 703.612, "unmapped": 0, "dc_log_sha256": "9990146802145d19cffbcdd43078d6452c48ee9e04e74aa333112e8ebb0803d7"},
-    "linked_dc": {"status": "PASS_MAINTENANCE_SCRATCH_ENABLED", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2097406.588548, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
-    "linked_dc_log_sha256": "ebba599dab6768bb68f6442bf65d591e104693873c5d76b1f9e282e7ac9544f4"
+    "generated_rtl_sha256": "af73af56207cc02b734d8a9c0bbfa77a0960bc660879c56fb1499f7550b6113b",
+    "owner_wrapper_map": {"status": "PASS_WRAPPER_MAP", "unexpected_unmapped": 0, "dc_log_sha256": "0164e6bad7ca5de3822284498468abd78bfac32fe86d64db0bf7bde350a7bfba"},
+    "maintenance_wrapper_map": {"status": "PASS_WRAPPER_MAP", "unmapped_excluding_owner_child": 0, "dc_log_sha256": "40a397da5324da61f8bb51e9223cc2946ca78416493ec49650d411b615f0d631"},
+    "verilator_build_log_sha256": "b206fb232f2023198e6eed6c32ae4b97f46bdea0fa786cf66fb2574158d1d112",
+    "terminal_bridge_dc": {"wns_ns": 0.588299, "area": 711.984, "unmapped": 0, "dc_log_sha256": "20b697b91122550a9ba85e6561cc7ac031110a7cddd459171a70b2dc861cbe4b"},
+    "linked_dc": {"status": "PASS_CONDITIONAL_PREDICATE_MAINTENANCE_SCRATCH_ENABLED", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2097416.780547, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
+    "linked_dc_log_sha256": "07def1213de641701575a90e5f5a08ff43644216ae06add88e6e07927f888bee"
   },
-  "claim_boundary": "The maintenance- and scratch-enabled root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean. Qwen2 root canary passes; three model canaries, transition/fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
+  "claim_boundary": "The conditional-predicate, maintenance- and scratch-enabled root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean after all four canaries pass. Root stress, 4058 transition/47 fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
 }

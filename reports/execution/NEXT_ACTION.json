@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
   "state": "G0_G1_G2_PASS_G3_BRIDGE_SOURCE_PASS",
-  "unique_next_action": "Run four root-program canaries in order: Qwen2 decoder plus final norm/LM head; Qwen3.5 GDN+dense attention+MoE+MTP; Qwen3.8 GDN/QSA/PLE/hyper/MoE/MTP; Vision patch+transformer+merge+multimodal injection. Each canary must drive real owner payload/memory services and reject reference tensor injection.",
+  "unique_next_action": "Run Qwen3.5 GatedDeltaNet, dense-attention and MoE roots through the real owner service harness; in parallel repair MtpVerifyResolve conditional commit/rollback in Chisel without changing public Command128, then regenerate the affected root and close the Qwen3.5 canary.",
   "expected_outputs": [
     "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
     "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"

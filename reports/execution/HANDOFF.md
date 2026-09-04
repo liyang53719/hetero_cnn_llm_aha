@@ -119,3 +119,7 @@
 - Scratch-enabled full root shell linked DC PASS: WNS +0.00000369549 ns,
   area 2097230.231, 0 error/unmapped; 4058 transition/47 fanout violations.
   Next gate is four-model root canary execution.
+- Qwen2 decoder root canary PASS 26/26 phases through real Matrix/SFU/KV/State;
+  StateBegin uses the new Router maintenance path and no reference output is
+  injected. Qwen3.5 MTP root has an unconditional rollback-then-commit defect;
+  GDN/dense/MoE remain executable while conditional MTP control is repaired.

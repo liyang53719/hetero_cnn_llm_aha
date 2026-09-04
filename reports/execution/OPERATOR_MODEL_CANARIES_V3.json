@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "IN_PROGRESS_1_OF_4",
+  "claim_boundary": "Root-program canaries execute real owner endpoints with deterministic synthetic payload and memory services. They are not full checkpoint model inference or cross-operator tensor-memory continuity.",
+  "qwen2": {
+    "status": "PASS_ROOT_OWNER_CANARY",
+    "roots": ["HeteroQwen2DecoderBlockPrimitiveV3"],
+    "phases": 26,
+    "owners_exercised": ["Matrix", "Sfu", "KvMemory", "State"],
+    "state_begin_via_router_maintenance": true,
+    "matrix_real_revision8b_b": true,
+    "hierarchical_softmax": true,
+    "kv_ddr_pte_allocator_idma": true,
+    "reference_output_injection": false,
+    "test_log_sha256": "dddfd4830400ad41521d275e624c8fd708ae2f1dfd50376cc0c5085baa2e3897"
+  },
+  "qwen3_5": {"status": "OPEN", "mtp_blocker": "MtpVerifyResolve root unconditionally emits rollback then commit without a result sideband for conditional selection"},
+  "qwen3_8": {"status": "OPEN"},
+  "vision": {"status": "OPEN"}
+}

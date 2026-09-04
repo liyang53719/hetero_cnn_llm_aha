@@ -1,0 +1,38 @@
+{
+  "coverage_sha256": "6a15d9c3718b236da0b9c91dbf0a13466cc006afd076b288e60c55218f7c0ff4",
+  "evidence_boundary": "Chisel source/compile/test/emission smoke; not numerical integrated RTL or DC",
+  "generated_sv": [
+    "HeteroFinalNormPrimitiveV3.sv",
+    "HeteroGatedDeltaNetPrimitiveV3.sv",
+    "HeteroLmHeadArgmaxPrimitiveV3.sv",
+    "HeteroMoePrimitiveV3.sv",
+    "HeteroMtpDraftPrimitiveV3.sv",
+    "HeteroMtpVerifyResolvePrimitiveV3.sv",
+    "HeteroMultimodalInjectPrimitiveV3.sv",
+    "HeteroPlePrimitiveV3.sv",
+    "HeteroQsaPrimitiveV3.sv",
+    "HeteroQwen2DecoderBlockPrimitiveV3.sv",
+    "HeteroQwen35DenseAttentionPrimitiveV3.sv",
+    "HeteroQwen38FinalHyperMergePrimitiveV3.sv",
+    "HeteroQwen38GatedResidualReadPrimitiveV3.sv",
+    "HeteroQwen38GatedResidualWritePrimitiveV3.sv",
+    "HeteroTokenEmbeddingPrimitiveV3.sv",
+    "HeteroVisionPatchEmbedPrimitiveV3.sv",
+    "HeteroVisionPatchMergePrimitiveV3.sv",
+    "HeteroVisionTransformerBlockPrimitiveV3.sv"
+  ],
+  "generated_sv_count": 18,
+  "manifest_sha256": "a31f7e80627101e1069f785a6991cad63d275bd112aaf9c185d951c8868d1ea6",
+  "operator_counts": {
+    "qwen2_1p5b": 30,
+    "qwen3_5_35b_a3b": 93,
+    "qwen3_8_flash_next": 150
+  },
+  "schema_version": 3,
+  "source_coverage_report": "reports/execution/OPERATOR_PRIMITIVE_COVERAGE_V3.json",
+  "status": "PASS_SANDBOX_CHISEL_COMPILE_TEST_EMIT",
+  "target_clock_hz": 800000000,
+  "target_period_ns": 1.25,
+  "tested_source_git_sha": "c4473dea88b4ec8880682fced20f709002aa4eaf",
+  "workflow": "three-model-operator-primitives-evidence"
+}

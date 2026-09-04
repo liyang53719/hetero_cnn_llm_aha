@@ -11,8 +11,8 @@
     "Dma": {
       "opcodes": ["DmaRead", "DmaWrite", "DmaGather", "DmaScatter"],
       "candidate_sources": ["rtl/integration/idma_backend_rw_axi_flat_wrap.sv", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala"],
-      "v3_endpoint_adapter": null,
-      "readiness": "idma_read_write_and_gather_reorder_exist_scatter_and_v3_adapter_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_dma_endpoint_v3.sv",
+      "readiness": "pass_read_write_gather_scatter_with_pinned_idma_and_axi_memory"
     },
     "Matrix": {
       "opcodes": ["MatrixGemm", "MatrixGemv", "MatrixQk", "MatrixPv", "MatrixOuter", "MatrixConv", "MatrixLowRank"],

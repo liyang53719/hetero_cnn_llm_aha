@@ -17,7 +17,7 @@
   },
   "owners": {
     "Control": "PASS_REAL_BARRIER_ACK_ENDPOINT",
-    "Dma": "OPEN_REAL_ENDPOINT_BINDING",
+    "Dma": "PASS_4_OF_4_PINNED_IDMA_AXI",
     "Matrix": "OPEN_REAL_ENDPOINT_BINDING",
     "Sfu": "OPEN_REAL_ENDPOINT_BINDING",
     "KvMemory": "OPEN_REAL_ENDPOINT_BINDING",
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "1/58",
-    "owners_open": 7,
+    "real_v3_endpoint_bindings": "5/58",
+    "owners_open": 6,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -54,6 +54,19 @@
     "verilator_lint_log_sha256": "5f6196401461e12382eecde2045a948e4e270189a23700b4e89b4481b391f8fc",
     "early_success_completion": 0,
     "illegal_cases": 2
+  },
+  "dma_endpoint_evidence": {
+    "status": "PASS",
+    "adapter": "rtl/integration/operator_dma_endpoint_v3.sv",
+    "rtl_sha256": "371928a108f15b5be62ca7cd5d91482a5ccd5a65ddda56ba57ebd6439353a5e0",
+    "idma_git_sha": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+    "opcodes": 4,
+    "flat_requests": 8,
+    "bytes_checked": 512,
+    "icarus_log_sha256": "793703c1d4716c76ccf963956899450bad0bea85b35b1569fc344e4676e6b5ff",
+    "vcs_pinned_idma_log_sha256": "37fb52670063a264cd4e0042145f715d2b1c2052623407506e015a0ec2854dd6",
+    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0000814199, "area": 6292.65, "unmapped": 0},
+    "dc_log_sha256": "11aa344073a7c388e39fa9238a7252d79e1c7f2c76d154df6f4e2841711f03e4"
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

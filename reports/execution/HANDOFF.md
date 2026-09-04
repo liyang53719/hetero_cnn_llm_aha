@@ -29,9 +29,11 @@
   closure without discarding the recovered source value.
 - Control is now 1/58 PASS: real barrier waits for all domain acknowledgements,
   no early success completion; Icarus and Verilator PASS.
+- DMA is 4/4 PASS with pinned iDMA `2e0b0fe`: 8 flat transfers and 512 bytes
+  checked in VCS; 1.25 ns DC WNS +0.0000814199 ns, area 6292.65.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Next: bind DMA read/write/gather/scatter to pinned iDMA completion.
+- Endpoint total: 5/58 real bindings; next bind seven Matrix opcodes.

@@ -54,6 +54,9 @@
 - SFU numerical+endpoint+DC coverage is now 15/23; next four Norm operations.
 - Qwen2 RMSNorm1536 revalidated after ReduceSum pipeline: 1000 vectors PASS,
   1,829,998 cycles, max reference error 8.84e-7.
+- Shared Norm16 core now binds RMSNorm and L2Norm through one V3 endpoint;
+  numerical smoke and DC PASS, WNS +0.000175953 ns, area 13539.162.
+- SFU numerical+endpoint+DC coverage 17/23; GroupRMS/LayerNorm remain open.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

@@ -151,5 +151,17 @@
     "max_reference_error": 8.83896267e-7,
     "test_log_sha256": "8560cb2d31c9b5e4ced4bcb14807e45aa414da553df0d39e052208c64ca8f724"
   },
+  "sfu_norm16_endpoint_evidence": {
+    "status": "PASS_RMS_AND_L2_GROUP_AND_LAYER_OPEN",
+    "core": "rtl/sfu/fp32_norm16_rms_l2_pipe.sv",
+    "endpoint": "rtl/integration/operator_sfu_norm_endpoint_v3.sv",
+    "core_sha256": "ec0185f60db3760bafff38aee48bfd8eaf76bb3f77cf75664191835cacd4b26e",
+    "endpoint_sha256": "20e0cf135f6287979e854f4c45468ea69d002b03037ae60183d40ebbb7c779dd",
+    "opcodes": ["SfuRmsNorm", "SfuL2Norm"],
+    "shared_arithmetic": "16 MulPipe lanes plus pipelined ReduceSum and Rsqrt NR2",
+    "test_log_sha256": "a5a66d6a92bbe2da31bb791004c6adbe72e322f54549990bdf77013661ec21dc",
+    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.000175953, "area": 13539.162, "unmapped": 0},
+    "dc_log_sha256": "f95ef2886179d8fd220cf12334d34d7a9f46eb1f4607107269d05d23a097a488"
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

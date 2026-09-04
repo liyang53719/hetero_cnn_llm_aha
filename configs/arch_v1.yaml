@@ -1,10 +1,13 @@
-schema_version: 1
+schema_version: 2
 arch_id: heteronpu_v1_long_context
 status: canonical_planning_archspec
 clock:
-  target_hz: 1000000000
+  target_hz: 800000000
+  target_mhz: 800
+  period_ns: 1.250
   setup_uncertainty_ns: 0.08
   io_budget_ns: 0.10
+  canonical_constraint: dc/common_clock_800mhz.tcl
 command:
   bits: 128
   descriptor_schema: 3
@@ -34,15 +37,45 @@ matrix:
     first_context_point: 4
     contexts_parameterized: true
     active_utilization_min: 0.85
-    wall_utilization_min: 0.79
+    wall_utilization_min_at_800mhz: 0.79
   int8:
     backend: retained_gemmini
     dataflows: [output_stationary, weight_stationary]
   quantization:
     modes: [bf16, w8a8, w4_storage_w8_compute_g64, w4_storage_w8_compute_g128, native_w4a8_dual_dot]
 fixed_sfu:
-  operators: [rms_norm, rope, reduce_sum, reduce_max, exp2_pwl, reciprocal_nr, rsqrt_nr, online_softmax_update, online_softmax_merge, silu_times_up]
+  operators:
+    - rms_norm
+    - group_rms_norm
+    - layer_norm
+    - l2_norm
+    - rope
+    - reduce_sum
+    - reduce_max
+    - exp2_pwl
+    - reciprocal_nr
+    - rsqrt_nr
+    - softplus
+    - sigmoid
+    - silu
+    - gelu
+    - signed_sqrt
+    - configured_gate_activation
+    - online_softmax_update
+    - online_softmax_merge
+    - silu_times_up
   stream_bits: 512
+selection_memory_state:
+  operators:
+    - stable_topk
+    - stable_sort
+    - sparse_gather_run_coalescing
+    - ngram_hash
+    - embedding_lookup
+    - multimodal_scatter
+    - depthwise_causal_conv
+    - state_read_write_commit_resolve
+    - mtp_compare_commit_rollback
 attention:
   algorithm: universal_hierarchical_block
   block_tokens: 128
@@ -64,9 +97,17 @@ kv:
   tlb: {entries: 64, ways: 4}
   leaf_cache_entries: 4
   state: phased_implementation
+operator_primitive_source:
+  project: chisel/three_model_operator_primitives
+  inventory: config/model_operator_inventory_v3_complete.json
+  roots: 18
+  models: [qwen2_1p5b, qwen3_5_35b_a3b, qwen3_8_flash_next]
+  source_gate: complete
+  rtl_generation_gate: local_agent_open
 performance_gates:
   qwen2_bf16_q1024_prefill_tps_min: 300
-  qwen2_bf16_q1024_cycles_max: 3413333333
+  qwen2_bf16_q1024_cycles_max_at_800mhz: 2730666667
+  qwen2_required_wall_mac_utilization_at_800mhz: 0.992070422
   quantized_prefill_tps_target: 500
   decode_ctx4096_tps_min: 10
   sram_kib_max: 4096

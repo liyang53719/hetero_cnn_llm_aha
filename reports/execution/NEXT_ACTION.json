@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
   "state": "G0_G1_G2_PASS_G3_BRIDGE_SOURCE_PASS",
-  "unique_next_action": "Add LayerNorm to the single shared Norm16 scheduler using mean reduction, subtract, variance reduction, Rsqrt and affine passes; preserve RMS/GroupRMS/L2 tests and rerun one four-op 1.25 ns DC.",
+  "unique_next_action": "Bind the four remaining SFU opcodes in order: Rope, OnlineSoftmax, Gate and Pwl; reuse existing numerical RTL, preserve checked completion/backpressure, then run one consolidated 23-op SFU owner regression and bottom-up 1.25 ns DC.",
   "expected_outputs": [
     "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
     "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"

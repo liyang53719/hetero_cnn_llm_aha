@@ -92,15 +92,15 @@
   "sfu_vector_endpoint_evidence": {
     "status": "PASS_12_OF_23_SFU_OPCODES_OWNER_NOT_CLOSED",
     "adapter": "rtl/integration/operator_sfu_vector_endpoint_v3.sv",
-    "rtl_sha256": "208a74490805dfd47d4b938bfe8275d0450e838bf538e6601fa06b2a4b66351c",
+    "rtl_sha256": "49083480d3aed9cde192c4c42352ffb20182f2f01464fb5058c39fd357b3ec90",
     "opcodes_functional": 12,
     "lanes": 16,
     "numerical_cases": 13,
-    "test_log_sha256": "2dd2f7ddad178a2af0c768e51dd22f8b89093e3169999eb835d3af5993de6b0a",
+    "test_log_sha256": "5d88bc973b23b734ebe2cb23eb778105af336f8c46a59177d65ae906d3ae1208",
     "dc_attempt1": {"status": "FAIL_TIMING", "wns_ns": -0.367541, "area": 52494.078},
     "dc_attempt2": {"status": "TIMEOUT_600S", "optimizer_snapshot_wns_ns_approx": -0.35},
-    "dc_final": {"status": "PASS_BOTTOM_UP", "implementation": "dedicated_pipelined_add_mul_plus_pipelined_reduce_sum_and_reduce_max", "wns_ns": 0.000338435, "area": 10977.057, "unmapped": 0},
-    "dc_log_sha256": "36691898eef183626c1100ae1c4859ed9baafe74309632981daadd924527167a",
+    "dc_final": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "implementation": "dedicated_pipelined_add_mul_plus_pipelined_reduce_sum_and_reduce_max", "wns_ns": 0.000015974, "area": 68156.8160001, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "ac679ef7201136caeec2bcf67be5bc7b7e496e7cd9c29e4f88e9c8ba3abd1712",
     "remaining_sfu_opcodes": 11
   },
   "sfu_reduce_max_primitive_evidence": {
@@ -114,9 +114,9 @@
   "sfu_reduce_sum_primitive_evidence": {
     "status": "PASS_NUMERICAL_E1_DC_E4_AND_OWNER_MUX",
     "rtl": "rtl/sfu/fp32_reduce16.sv",
-    "rtl_sha256": "2c547b67abc761175630012921a653d9069e711b0a08582417e585fc21ea20df",
-    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0597758, "area": 1681.498, "unmapped": 0},
-    "dc_log_sha256": "fee4c8f15f718b36ee4aeaa1cdbefda912784b047a9e8ef7c0cc4bf986c0649c"
+    "rtl_sha256": "3cbd06a58a30e3450ba895aa2b5fc851df230ec4a676911bbd3dddae25e3eb3c",
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000216961, "area": 11589.487, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "bdf6581b53cd3b1d1502b7b626b71d92e6b3f0fab6f11c6b3355307fbf72eeca"
   },
   "sfu_scalar_primitive_replay": {
     "status": "PASS_3_PRIMITIVES_PENDING_OWNER_MUX",
@@ -152,29 +152,30 @@
     "test_log_sha256": "8560cb2d31c9b5e4ced4bcb14807e45aa414da553df0d39e052208c64ca8f724"
   },
   "sfu_norm16_endpoint_evidence": {
-    "status": "PASS_RMS_GROUP_RMS_L2_LAYER_OPEN",
+    "status": "PASS_RMS_GROUP_RMS_L2_LAYER_NUMERICAL_ENDPOINT_DC",
     "core": "rtl/sfu/fp32_norm16_rms_l2_pipe.sv",
     "endpoint": "rtl/integration/operator_sfu_norm_endpoint_v3.sv",
-    "core_sha256": "ec0185f60db3760bafff38aee48bfd8eaf76bb3f77cf75664191835cacd4b26e",
-    "endpoint_sha256": "20e0cf135f6287979e854f4c45468ea69d002b03037ae60183d40ebbb7c779dd",
-    "opcodes": ["SfuRmsNorm", "SfuGroupRmsNorm", "SfuL2Norm"],
-    "shared_arithmetic": "16 MulPipe lanes plus pipelined ReduceSum and Rsqrt NR2",
-    "test_log_sha256": "a5a66d6a92bbe2da31bb791004c6adbe72e322f54549990bdf77013661ec21dc",
+    "core_sha256": "ae56bcb6d07809edec8ed7a1163fd66045c9f72df924fbe300180adc41bb0e97",
+    "scheduler_sha256": "c1e56c1b29590d09515c300a6931259cd722683aa0d07e5cc30cd2e6a5e156b1",
+    "endpoint_sha256": "39544422689868c0c2f3b7e95d08ec7c9e00861444b98b4cd8f04a5ab35e3d2f",
+    "opcodes": ["SfuRmsNorm", "SfuGroupRmsNorm", "SfuL2Norm", "SfuLayerNorm"],
+    "shared_arithmetic": "16 MulPipe lanes plus 16 AddPipe lanes, pipelined ReduceSum and Rsqrt NR2",
+    "test_log_sha256": "53bcdc04b02551851c2ba42099689414a54ec5c13fee10ab7e9ab079222e9a4c",
     "single_arithmetic_core": true,
-    "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0000663996, "area": 18082.61, "unmapped": 0},
-    "dc_log_sha256": "c4701cf24b7a7fe9bc51787f7f20a99c936ba81d8d8d07f09fc139837c62af56"
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000122786, "area": 23949.107, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "88d89b57c6ef3535a74f06cdfdd2a257fe7a0efd508913879db90223b5470b73"
   },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",
     "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",
-    "rtl_sha256": "3e94ed38dd52f4fed75401d05492841ca57ee970d23e33b995d941f6d3aec9ed",
+    "rtl_sha256": "c1e56c1b29590d09515c300a6931259cd722683aa0d07e5cc30cd2e6a5e156b1",
     "groups": 4,
     "lanes_per_group": 4,
     "mean_scale": 0.25,
     "shared_core_parameterization": true,
     "endpoint_test_log_sha256": "1bca808eaf9d1a610473a391b09c1bb59c201b7cdbbfda11f418c24840b8ac6b",
-    "shared_scheduler_sha256": "d840a25b0664b12881e607f45fbb9726548136152d780b9ffd5972399e256734",
-    "endpoint_test_log_sha256_final": "bbab27e9b865276282133e8044c46a166ff7134cc21b70650e56da6e99628298"
+    "shared_scheduler_sha256": "c1e56c1b29590d09515c300a6931259cd722683aa0d07e5cc30cd2e6a5e156b1",
+    "endpoint_test_log_sha256_final": "53bcdc04b02551851c2ba42099689414a54ec5c13fee10ab7e9ab079222e9a4c"
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

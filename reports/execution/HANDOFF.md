@@ -35,11 +35,11 @@
 - Matrix is 7/7 component-bound: six BF16 opcodes use the same Revision8B-B
   16x32/5-context array; Conv adapter plus retained Rocket/Gemmini Conv1x1 PASS.
   Same-run adapter+pipeline canary remains G4.
-- SFU unified 12/23: 16-lane/13-case numerical PASS. Add/Mul and iterative
-  ReduceSum are pipelined; bottom-up DC WNS +0.000338435 ns, area 10977.057,
-  0 unmapped. SFU owner remains OPEN for 11 operations.
+- SFU vector 12/23: 16-lane/13-case numerical PASS. The old DC result was
+  invalidated by LINK-3 tag-width errors; corrected clean-log DC is WNS
+  +0.000015974 ns, area 68156.816, 0 unmapped/error.
 - ReduceMax16 stable/NaN/tie and ReduceSum16 numerical+owner mux PASS;
-  ReduceSum DC WNS +0.0597758 ns, area 1681.498.
+  corrected clean-log ReduceSum DC WNS +0.0000216961 ns, area 11589.487.
 - Rsqrt/Reciprocal/Exp2 local replay: 10k vectors each PASS at Verilator j4;
   max relative errors 2.39e-7 / 9.19e-7 / 2.35e-4. V3 owner mux open.
 - Scalar V3 endpoint for Rsqrt/Reciprocal/Exp2 now waits for real module output
@@ -51,17 +51,19 @@
 - Exp2 sequential MulPipe/AddPipe now passes original 10k vectors and DC:
   WNS +0.0000697374 ns, area 4486.3. Scalar 3-op flat DC passes with common
   HardFloat source: WNS +0.0000766516 ns, area 11890.515, 0 unmapped.
-- SFU numerical+endpoint+DC coverage is now 15/23; next four Norm operations.
+- SFU scalar numerical+endpoint+DC coverage reached 15/23 before Norm.
 - Qwen2 RMSNorm1536 revalidated after ReduceSum pipeline: 1000 vectors PASS,
   1,829,998 cycles, max reference error 8.84e-7.
 - Shared Norm16 core now binds RMSNorm and L2Norm through one V3 endpoint;
   numerical smoke and DC PASS, WNS +0.000175953 ns, area 13539.162.
-- SFU numerical+endpoint+DC coverage 17/23; GroupRMS/LayerNorm remain open.
-- RMS/GroupRMS/L2 now share exactly one physical Norm16 core. Three-mode test
-  PASS; DC WNS +0.0000663996 ns, area 18082.61, 0 unmapped. SFU 18/23.
+- RMS/L2 were the initial two-mode checkpoint; superseded by four-mode Norm.
+- RMS/GroupRMS/L2/LayerNorm now share exactly one physical Norm16 core.
+  Four-mode test PASS; clean-log DC WNS +0.000122786 ns, area 23949.107,
+  0 unmapped/error. LayerNorm includes real mean/variance/weight/bias. SFU 19/23.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total 12/58 component-bound; next close 23 SFU opcodes.
+- Endpoint total remains 12/58 until the SFU owner closes atomically; next bind
+  Rope, OnlineSoftmax, Gate and Pwl, then consolidate all 23 SFU opcodes.

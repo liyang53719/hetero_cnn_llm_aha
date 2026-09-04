@@ -11,9 +11,10 @@ module fp32_reduce16(
   for(f=0;f<8;f++)if(f<pair_count)begin all_in_ready&=pipe_in_ready[f];all_out_valid&=pipe_out_valid[f];stage_flags|=pipe_flags[f*5+:5];end end
  assign consume=state_q==S_WAIT&&all_out_valid;
  genvar i;generate for(i=0;i<8;i++)begin:g
+  localparam logic[11:0] LANE_TAG=i;
   HeteroFP32AddPipeTag12 add(.clock(clk_i),.reset(!rst_ni),
    .io_inValid(state_q==S_ISSUE&&all_in_ready&&i<pair_count),.io_inReady(pipe_in_ready[i]),
-   .io_x(data_q[(2*i)*32+:32]),.io_y(data_q[(2*i+1)*32+:32]),.io_userIn(i),
+   .io_x(data_q[(2*i)*32+:32]),.io_y(data_q[(2*i+1)*32+:32]),.io_userIn(LANE_TAG),
    .io_outValid(pipe_out_valid[i]),.io_outReady(consume),.io_out(pipe_out[i*32+:32]),
    .io_exceptionFlags(pipe_flags[i*5+:5]),.io_userOut(user_unused[i*12+:12]));
  end endgenerate

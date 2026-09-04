@@ -38,13 +38,14 @@ module operator_sfu_vector_endpoint_v3 #(
   wire all_arith_valid=arith_add?&add_out_valid:&mul_out_valid;
   wire consume_arith=state_q==S_ARITH_WAIT&&all_arith_valid;
   genvar i;generate for(i=0;i<LANES;i++)begin:g
+    localparam logic[11:0] LANE_TAG=i;
     HeteroFP32AddPipeTag12 add(.clock(clk_i),.reset(!rst_ni),
       .io_inValid(state_q==S_PAYLOAD&&payload_valid_i&&arith_add),.io_inReady(add_in_ready[i]),
-      .io_x(payload_a_i[i*32+:32]),.io_y(opcode_q == 8'h31 ? {~payload_b_i[i*32+31],payload_b_i[i*32+:31]} : payload_b_i[i*32+:32]),.io_userIn(i),
+      .io_x(payload_a_i[i*32+:32]),.io_y(opcode_q == 8'h31 ? {~payload_b_i[i*32+31],payload_b_i[i*32+:31]} : payload_b_i[i*32+:32]),.io_userIn(LANE_TAG),
       .io_outValid(add_out_valid[i]),.io_outReady(consume_arith),.io_out(pipe_add[i*32+:32]),.io_exceptionFlags(add_flags[i*5+:5]),.io_userOut(add_user_unused[i*12+:12]));
     HeteroFP32MulPipeTag12 mul(.clock(clk_i),.reset(!rst_ni),
       .io_inValid(state_q==S_PAYLOAD&&payload_valid_i&&arith_mul),.io_inReady(mul_in_ready[i]),
-      .io_x(payload_a_i[i*32+:32]),.io_y(payload_b_i[i*32+:32]),.io_userIn(i),
+      .io_x(payload_a_i[i*32+:32]),.io_y(payload_b_i[i*32+:32]),.io_userIn(LANE_TAG),
       .io_outValid(mul_out_valid[i]),.io_outReady(consume_arith),.io_out(pipe_mul[i*32+:32]),.io_exceptionFlags(mul_flags[i*5+:5]),.io_userOut(mul_user_unused[i*12+:12]));
   end endgenerate
   fp32_reduce16 reduce_sum_unit(.clk_i,.rst_ni,.in_valid_i(state_q==S_PAYLOAD&&payload_valid_i&&reduce_sum),.in_ready_o(sum_in_ready),

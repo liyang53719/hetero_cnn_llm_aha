@@ -7,6 +7,8 @@ lazy val root = (project in file("."))
     name := "heteronpu-three-model-operator-primitives-v3",
     Compile / unmanagedSourceDirectories +=
       baseDirectory.value / "../../integration/gemmini/operator_primitives/src/main/scala",
+    Compile / unmanagedSourceDirectories +=
+      baseDirectory.value / "../three_model_operator_primitives/src/main/scala",
     libraryDependencies ++= Seq(
       "org.chipsalliance" %% "chisel" % "6.7.0",
       "edu.berkeley.cs" %% "chiseltest" % "6.0.0" % Test,

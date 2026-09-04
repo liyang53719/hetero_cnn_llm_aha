@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "status": "IN_PROGRESS_BRIDGE_PROTOCOL_PASS_ENDPOINTS_OPEN",
+  "source_kinds": 53,
+  "mapped_source_kinds": 53,
+  "terminal_binding_contract": 58,
+  "bridge": {
+    "implementation": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala",
+    "chisel_tests": 3,
+    "python_contract_tests": 3,
+    "simple_completion_wait": "PASS",
+    "composite_suboperation_serialization": "PASS",
+    "tag_phase_status_check": "PASS",
+    "unknown_kind_status4": "PASS",
+    "immediate_completion_stub": false
+  },
+  "owners": {
+    "Control": "OPEN_REAL_ENDPOINT_BINDING",
+    "Dma": "OPEN_REAL_ENDPOINT_BINDING",
+    "Matrix": "OPEN_REAL_ENDPOINT_BINDING",
+    "Sfu": "OPEN_REAL_ENDPOINT_BINDING",
+    "KvMemory": "OPEN_REAL_ENDPOINT_BINDING",
+    "State": "OPEN_REAL_ENDPOINT_BINDING",
+    "Selection": "OPEN_REAL_ENDPOINT_BINDING",
+    "Vision": "OPEN_REAL_ENDPOINT_BINDING"
+  },
+  "generated_bridge_rtl": "OPEN_AFTER_SOURCE_PUSH",
+  "claim_boundary": "The checked bridge waits for terminal completion; no claim is made yet that all eight owners execute numerical payloads."
+}

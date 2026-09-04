@@ -17,4 +17,7 @@
 - Source fixes are confined to Chisel/build scripts; generated RTL hand edits: 0.
 - G2: 18 root + 25 primitive authoritative SV, one 30-module combined SV,
   0 combined/cross-layer collision, 44/44 Verilator lint PASS, no hand edits.
-- Next: freeze kind-to-owner/opcode map and implement real completion bridge.
+- G3 bridge: 53/53 kind map, 3 Chisel + 3 contract tests PASS; composite
+  terminal sub-ops serialize and root completion waits for checked endpoint.
+- Eight real owner endpoints and 58/58 numerical bindings remain OPEN.
+- Next: push bridge source, emit/lint bridge RTL, audit concrete endpoint gaps.

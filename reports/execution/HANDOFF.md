@@ -115,4 +115,7 @@
 - SFU now has fixed 10x512 scratch chaining. Bridge Softplus/GELU/Sigmoid/SiLU
   numerical tests PASS (1/1/8/9 leaves); final result precedes completion.
   Scratch SFU DC WNS +0.00000369549 ns, area 326007.318. Previous combined
-  report is superseded until owner shell is remapped and relinked.
+  report was superseded and has now been rerun.
+- Scratch-enabled full root shell linked DC PASS: WNS +0.00000369549 ns,
+  area 2097230.231, 0 error/unmapped; 4058 transition/47 fanout violations.
+  Next gate is four-model root canary execution.

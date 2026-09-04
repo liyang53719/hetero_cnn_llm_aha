@@ -17,7 +17,7 @@
     "python_tests": 4,
     "chisel_tests": 22,
     "generated_smoke_sv": 18,
-    "chisel_test_log_sha256": "3cf5ff5a96f670a8765a1d4791faacc15679d439ca27a7da0606c98378dbb2b4",
+    "chisel_test_log_sha256": "3c32ee956e98302175883e3808e9e228bc8c79cd21f556939320ed66079db468",
     "python_test_log_sha256": "c4b808d34f4db00b333696dec1f3a43a2887d8bfe0cb7af07a3cb98ff43a7830"
   },
   "primitive_modules": {
@@ -38,8 +38,9 @@
   },
   "source_fixes": [
     "use a standalone Chisel 6.7 build instead of the unresolved RocketChip dynamic dependency",
-    "repair QSA Scala state-pattern and boolean tokenization",
-    "rename Vision width fields that collide with Chisel Aggregate.width"
+    "repair QSA Scala state-pattern, boolean tokenization and Vec index widths",
+    "rename Vision width fields that collide with Chisel Aggregate.width",
+    "statically select one-entry root program ROMs and add a collision-free combined catalog emitter"
   ],
   "upstream": {
     "canonical_gemmini_clean": true,

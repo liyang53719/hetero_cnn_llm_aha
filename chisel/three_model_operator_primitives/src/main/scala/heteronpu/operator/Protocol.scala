@@ -213,17 +213,20 @@ class ProgramPrimitive(
   private val resultStatus = RegInit(0.U(8.W))
   private val protocolErrorReg = RegInit(false.B)
 
-  private val kindRom = VecInit(program.map(x => x.kind.U(PrimitiveKind.Width.W)))
-  private val flagsRom = VecInit(program.map(x => x.flags.U(PrimitiveFlags.Width.W)))
-  private val src0Rom = VecInit(program.map(x => x.src0.U(4.W)))
-  private val src1Rom = VecInit(program.map(x => x.src1.U(4.W)))
-  private val src2Rom = VecInit(program.map(x => x.src2.U(4.W)))
-  private val dstRom = VecInit(program.map(x => x.dst.U(4.W)))
-  private val mRom = VecInit(program.map(x => x.m.U(3.W)))
-  private val nRom = VecInit(program.map(x => x.n.U(3.W)))
-  private val kRom = VecInit(program.map(x => x.k.U(3.W)))
-  private val index0Rom = VecInit(program.map(x => x.index0.U(16.W)))
-  private val index1Rom = VecInit(program.map(x => x.index1.U(16.W)))
+  private def readRom(values: Seq[UInt]): UInt =
+    if (values.length == 1) values.head else VecInit(values)(pc)
+
+  private val kindValue = readRom(program.map(x => x.kind.U(PrimitiveKind.Width.W)))
+  private val flagsValue = readRom(program.map(x => x.flags.U(PrimitiveFlags.Width.W)))
+  private val src0Value = readRom(program.map(x => x.src0.U(4.W)))
+  private val src1Value = readRom(program.map(x => x.src1.U(4.W)))
+  private val src2Value = readRom(program.map(x => x.src2.U(4.W)))
+  private val dstValue = readRom(program.map(x => x.dst.U(4.W)))
+  private val mValue = readRom(program.map(x => x.m.U(3.W)))
+  private val nValue = readRom(program.map(x => x.n.U(3.W)))
+  private val kValue = readRom(program.map(x => x.k.U(3.W)))
+  private val index0Value = readRom(program.map(x => x.index0.U(16.W)))
+  private val index1Value = readRom(program.map(x => x.index1.U(16.W)))
 
   io.launch.ready := state === sIdle
   io.microOp.valid := state === sIssue
@@ -232,20 +235,20 @@ class ProgramPrimitive(
   io.busy := state =/= sIdle
   io.protocolError := protocolErrorReg
 
-  io.microOp.bits.kind := kindRom(pc)
-  io.microOp.bits.flags := flagsRom(pc)
+  io.microOp.bits.kind := kindValue
+  io.microOp.bits.flags := flagsValue
   io.microOp.bits.phase := pc
   io.microOp.bits.tag := launchReg.tag
   io.microOp.bits.mode := launchReg.mode
-  io.microOp.bits.src0 := launchReg.descriptors(src0Rom(pc))
-  io.microOp.bits.src1 := launchReg.descriptors(src1Rom(pc))
-  io.microOp.bits.src2 := launchReg.descriptors(src2Rom(pc))
-  io.microOp.bits.dst := launchReg.descriptors(dstRom(pc))
-  io.microOp.bits.m := launchReg.dimensions(mRom(pc))
-  io.microOp.bits.n := launchReg.dimensions(nRom(pc))
-  io.microOp.bits.k := launchReg.dimensions(kRom(pc))
-  io.microOp.bits.index0 := index0Rom(pc)
-  io.microOp.bits.index1 := index1Rom(pc)
+  io.microOp.bits.src0 := launchReg.descriptors(src0Value)
+  io.microOp.bits.src1 := launchReg.descriptors(src1Value)
+  io.microOp.bits.src2 := launchReg.descriptors(src2Value)
+  io.microOp.bits.dst := launchReg.descriptors(dstValue)
+  io.microOp.bits.m := launchReg.dimensions(mValue)
+  io.microOp.bits.n := launchReg.dimensions(nValue)
+  io.microOp.bits.k := launchReg.dimensions(kValue)
+  io.microOp.bits.index0 := index0Value
+  io.microOp.bits.index1 := index1Value
 
   io.result.bits.tag := launchReg.tag
   io.result.bits.status := resultStatus

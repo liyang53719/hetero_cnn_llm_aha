@@ -1,7 +1,9 @@
 package gemmini
 
 import chisel3.RawModule
+import chisel3.{ActualDirection, DontCare, Module, dontTouch}
 import circt.stage.ChiselStage
+import chisel3.reflect.DataMirror
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
@@ -78,4 +80,31 @@ object EmitHeteroOperatorPrimitiveCatalog extends App {
     Option(output.getParent).foreach(parent => Files.createDirectories(parent))
     Files.writeString(output, systemVerilog, StandardCharsets.UTF_8)
   }
+}
+
+/** Emits the complete catalog in one hierarchy so shared helper modules are
+  * defined once. This top is a generation/collision target; the endpoint-bound
+  * functional shell is built after protocol binding.
+  */
+class HeteroOperatorPrimitiveCatalogCombined extends Module {
+  HeteroOperatorPrimitiveCatalog.names.foreach { name =>
+    val child = Module(HeteroOperatorPrimitiveCatalog.generator(name))
+    DataMirror.modulePorts(child).foreach { case (_, port) =>
+      DataMirror.getLeafs(port).foreach { leaf =>
+        DataMirror.directionOf(leaf) match {
+          case ActualDirection.Input => leaf := DontCare
+          case ActualDirection.Output => dontTouch(leaf)
+          case _ =>
+        }
+      }
+    }
+  }
+}
+
+object EmitHeteroOperatorPrimitiveCombined extends App {
+  require(args.length == 1, "usage: <output-systemverilog-path>")
+  val output = Paths.get(args(0))
+  val systemVerilog = ChiselStage.emitSystemVerilog(new HeteroOperatorPrimitiveCatalogCombined)
+  Option(output.getParent).foreach(parent => Files.createDirectories(parent))
+  Files.writeString(output, systemVerilog, StandardCharsets.UTF_8)
 }

@@ -166,7 +166,7 @@ class HeteroMoeRouteDispatch(val maxRoutes:Int=16,val tokenBits:Int=32,val exper
     when(io.resultIn.fire && !legal){error:=true.B};when(resp){resultData(io.resultIn.bits.routeTag):=io.resultIn.bits.data;resultValid(io.resultIn.bits.routeTag):=true.B;returned:=returned+1.U}
     switch(state){
       is(sIdle){when(io.start&&cfg){token:=io.token;routes:=io.routeCount;load:=0.U;dispatch:=0.U;merge:=0.U;returned:=0.U;error:=false.B;for(i<-0 until maxRoutes){issued(i):=false.B;resultValid(i):=false.B};state:=sLoad}}
-      is(sLoad){when(io.routeIn.fire){experts(load):=io.routeIn.bits.expert;weights(load):=io.routeIn.bits.weight;shared(load):=io.routeIn.bits.shared;when(load+1.U>=routes){state:=sDispatch}.otherwise{load:=load+1.U}}}
+      is(sLoad){when(io.routeIn.fire){experts(load(routeBits-1,0)):=io.routeIn.bits.expert;weights(load(routeBits-1,0)):=io.routeIn.bits.weight;shared(load(routeBits-1,0)):=io.routeIn.bits.shared;when(load+1.U>=routes){state:=sDispatch}.otherwise{load:=load+1.U}}}
       is(sDispatch){when(io.dispatchOut.fire){issued(dispatch):=true.B;when(io.dispatchOut.bits.last){state:=sWait}.otherwise{dispatch:=dispatch+1.U}}}
       is(sWait){when(returned+Mux(resp,1.U,0.U)>=routes){merge:=0.U;state:=sMerge}}
       is(sMerge){when(io.mergeOut.fire){assert(resultValid(merge));when(io.mergeOut.bits.last){state:=sIdle;io.done:=true.B}.otherwise{merge:=merge+1.U}}}
@@ -192,6 +192,7 @@ class HeteroPleNgramHash(
   private val headBits = math.max(1, log2Ceil(maxHeads))
   private val headCountBits = log2Ceil(maxHeads + 1)
   private val ngramBits = log2Ceil(maxNgram + 1)
+  private val groupBits = math.max(1, log2Ceil(maxNgram - 1))
 
   val io = IO(new Bundle {
     val clear = Input(Bool())
@@ -247,7 +248,7 @@ class HeteroPleNgramHash(
     activeSizesNonzero
 
   val previousIndex = Mux(term === 0.U, 0.U, term - 1.U)
-  val selectedTerm = Mux(term === 0.U, token, previous(previousIndex))
+  val selectedTerm = Mux(term === 0.U, token, previous(previousIndex(groupBits - 1, 0)))
   multiply.io.start := state === sMultiplyStart && multiply.io.startReady
   multiply.io.left := selectedTerm
   multiply.io.right := factors(term)
@@ -255,7 +256,7 @@ class HeteroPleNgramHash(
 
   val selectedSize = sizes(head)
   divide.io.start := state === sDivideStart && divide.io.startReady
-  divide.io.dividend := mixes(headGroup)
+  divide.io.dividend := mixes(headGroup(groupBits - 1, 0))
   divide.io.divisor := selectedSize.pad(64)
   divide.io.out.ready := state === sOutput && io.out.ready
 
@@ -323,7 +324,7 @@ class HeteroPleNgramHash(
           val termsInGroup = computeGroup + 2.U
           val lastTerm = term + 1.U >= termsInGroup
           when(lastTerm) {
-            mixes(computeGroup) := nextMix
+            mixes(computeGroup(groupBits - 1, 0)) := nextMix
             term := 0.U
             mixAccumulator := 0.U
             when(computeGroup + 2.U >= ngram) {

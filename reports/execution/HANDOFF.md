@@ -58,7 +58,7 @@
   numerical smoke and DC PASS, WNS +0.000175953 ns, area 13539.162.
 - RMS/L2 were the initial two-mode checkpoint; superseded by four-mode Norm.
 - RMS/GroupRMS/L2/LayerNorm now share exactly one physical Norm16 core.
-  Four-mode test PASS; clean-log DC WNS +0.000122786 ns, area 23949.107,
+  Four-mode test PASS; final clean-log DC WNS +0.00000369549 ns, area 80524.626,
   0 unmapped/error. LayerNorm includes real mean/variance/weight/bias. SFU 19/23.
 - RoPE pipeline matches 10k frozen vectors; 512-bit endpoint passes 100
   transactions/800 pairs. Clean-log DC WNS +0.0000354052 ns, area 14114.1.
@@ -68,17 +68,21 @@
   q128/q384/q1024 8-seed protocol PASS. DC WNS +0.0000165701 ns, area
   51283.232, 0 unmapped/error. SFU reached 21/23.
 - Gate binds the fixed 8-lane BF16 fused SiLU-times-up array: 4096 frozen
-  vectors/32768 lane-pairs and 100 endpoint transactions PASS. Bottom-up DC
-  uses one clean lane DDC x8: WNS +0.000166059 ns, area 79574.313, 0 error.
+  vectors/32768 lane-pairs and 100 endpoint transactions PASS. Registered input
+  boundary DC: WNS +0.00021565 ns, area 80192.84, 0 transition/error/unmapped.
   SFU reached 22/23.
 - Pwl variants are frozen to Softplus=1 and tanh-GELU=2. Generated 128-segment
   tables pass 20k vectors at max error 0.0019444/0.0015513; endpoint PASS.
   DC WNS +0.0000449419 ns, area 7439.978, 0 error/unmapped; five near-zero
   transition violations remain visible. All 23 SFU component endpoints exist.
+- SFU owner atomically dispatches all 23 opcodes to seven checked children.
+  23-op + invalid regression PASS. Flattened-child DC after Gate boundary fix:
+  WNS +0.00000369549 ns, area 314488.629, 0 error/unmapped; 17 near-zero
+  transition violations remain reported. SFU owner is PASS.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total remains 12/58 until the SFU owner closes atomically; next
-  consolidate all 23 SFU opcodes and rerun owner protocol/DC.
+- Endpoint total is 35/58; owners PASS are Control, DMA, Matrix component-bound,
+  and SFU. Next close the four-op DDR-backed KV owner.

@@ -23,8 +23,8 @@
     "Sfu": {
       "opcodes": ["SfuAdd", "SfuSub", "SfuMul", "SfuScale", "SfuReduceSum", "SfuReduceMax", "SfuRsqrt", "SfuReciprocal", "SfuExp2", "SfuRmsNorm", "SfuGroupRmsNorm", "SfuRope", "SfuOnlineSoftmax", "SfuGate", "SfuL2Norm", "SfuAbs", "SfuMax", "SfuCompareSelect", "SfuNegate", "SfuPwl", "SfuBroadcast", "SfuCausalMask", "SfuLayerNorm"],
       "candidate_sources": ["rtl/sfu", "rtl/attention", "integration/gemmini/EmitHeteroFP32Pipelines.scala", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSfuControlPrimitives.scala"],
-      "v3_endpoint_adapter": null,
-      "readiness": "core_fp32_norm_rope_softmax_exist_reduce_max_group_norm_l2_layernorm_and_generic_v3_adapter_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_sfu_owner_endpoint_v3.sv",
+      "readiness": "pass_23_of_23_real_child_endpoints_owner_protocol_and_800mhz_dc"
     },
     "KvMemory": {
       "opcodes": ["KvAppend", "KvGather", "KvAlloc", "KvFree"],

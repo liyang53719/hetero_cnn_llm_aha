@@ -19,7 +19,7 @@
     "Control": "PASS_REAL_BARRIER_ACK_ENDPOINT",
     "Dma": "PASS_4_OF_4_PINNED_IDMA_AXI",
     "Matrix": "PASS_COMPONENT_BOUND_7_OF_7_COMBINED_CANARY_OPEN",
-    "Sfu": "OPEN_REAL_ENDPOINT_BINDING",
+    "Sfu": "PASS_23_OF_23_OWNER_PROTOCOL_AND_DC",
     "KvMemory": "OPEN_REAL_ENDPOINT_BINDING",
     "State": "OPEN_REAL_ENDPOINT_BINDING",
     "Selection": "OPEN_REAL_ENDPOINT_BINDING",
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "12/58",
-    "owners_open": 5,
+    "real_v3_endpoint_bindings": "35/58",
+    "owners_open": 4,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -162,8 +162,8 @@
     "shared_arithmetic": "16 MulPipe lanes plus 16 AddPipe lanes, pipelined ReduceSum and Rsqrt NR2",
     "test_log_sha256": "53bcdc04b02551851c2ba42099689414a54ec5c13fee10ab7e9ab079222e9a4c",
     "single_arithmetic_core": true,
-    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000122786, "area": 23949.107, "unmapped": 0, "dc_errors": 0},
-    "dc_log_sha256": "88d89b57c6ef3535a74f06cdfdd2a257fe7a0efd508913879db90223b5470b73"
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 80524.6260002, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 1},
+    "dc_log_sha256": "6a60ccc04c8faa3b4ce532d3f6d9d9d78337e8844a64da9089e4acd7ad335867"
   },
   "sfu_rope_endpoint_evidence": {
     "status": "PASS_NUMERICAL_ENDPOINT_DC",
@@ -203,13 +203,13 @@
     "fixed_array": "rtl/sfu/bf16_silu_mul_lut_array8_fixed.sv",
     "endpoint": "rtl/integration/operator_sfu_gate_endpoint_v3.sv",
     "fixed_array_sha256": "0b7461bfdd52a0ae84e645afd7efb7fe7a4d76d846e715e6ec38fabced5b2c7a",
-    "endpoint_sha256": "b9e4b7ff9ffe0fae7ec5d4ebae89f4465a40d522d33c9a735f35f06e8434493e",
+    "endpoint_sha256": "a514ea64c3cbcf0035f723b8965f8cd5f88a41932b9cf4b5954b8c63ea2f70a0",
     "frozen_vectors": {"transactions": 4096, "lane_pairs": 32768, "producer_stall_cycles": 0, "consumer_backpressure_cycles": 1497, "log_sha256": "44bf681108f81e63e1a2228947bf4fec8827eeb0f019d5ab05b449f7be7a9e90"},
-    "endpoint_test": {"transactions": 100, "lane_pairs": 800, "tag_last_completion": "PASS", "log_sha256": "6c5542543b5364be7f47b2cc2e63441e2b161126b679b2d4bd664f0de12759c1"},
+    "endpoint_test": {"transactions": 100, "lane_pairs": 800, "tag_last_completion": "PASS", "log_sha256": "a48583eabc69e04e3f3c79d290504c47bb3303e810910a6c2075ae4874189053"},
     "lane_dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000166059, "area": 9931.103, "unmapped": 0, "dc_errors": 0, "log_sha256": "b548acafc65c49c49582d15d384a591d43b106804a50668721dac13a0dabe56e"},
     "superseded_parameterized_ddc_attempt": {"status": "FAIL_LINK_REFERENCE_NAME", "log_sha256": "a0e4a633523a4b51ea8f077061f1bd0047362b47551d91fecbcca23937543df7"},
-    "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000166059, "area": 79574.3130001, "unmapped": 0, "dc_errors": 0},
-    "dc_log_sha256": "bdb95b380f3b6f34079fd65e32d4b7e7679ff8621ec5e8d1a5942dd8662df019"
+    "dc": {"status": "PASS_INPUT_QUEUE_BOUNDARY_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00021565, "area": 80192.8400001, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 0},
+    "dc_log_sha256": "c20d726aac83622973d2fa76949b7b626b3b1a3c3ce7fe61f276f4c8233ed9b8"
   },
   "sfu_pwl_endpoint_evidence": {
     "status": "PASS_SOFTPLUS_GELU_NUMERICAL_ENDPOINT_DC",
@@ -228,6 +228,19 @@
     "core_dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000449419, "area": 4871.867, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 5, "log_sha256": "9e41c795348e74e3fbbbf05eb512d381801faaf26577dbba5e6f67e6586fcc85"},
     "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000449419, "area": 7439.978, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 5},
     "dc_log_sha256": "e70cff06140319179690fe816cebd02126d825e4d9437ae2682c78295a345317"
+  },
+  "sfu_owner_endpoint_evidence": {
+    "status": "PASS_23_OF_23_PROTOCOL_AND_800MHZ_DC",
+    "endpoint": "rtl/integration/operator_sfu_owner_endpoint_v3.sv",
+    "endpoint_sha256": "a0740b046eba35b06ced59abd3ea6e8127fad24311911dbd28aa85b8ab12e313",
+    "child_endpoints": 7,
+    "terminal_opcodes": 23,
+    "protocol_test": {"opcodes": 23, "invalid": 1, "checked_completions": 24, "log_sha256": "1fbf13f25f572bbd38517e0c9ee730c105a8287a335cf20e87ea056ea610d532"},
+    "flatten_flow": {"children": 7, "hierarchical_cells_per_child": 0, "unmapped": 0, "tcl_sha256": "a8cd470c695e689262049decb79edf594cc994e715bfce3b7b453b6d6e2ca135", "script_sha256": "8347e398d7465358ecbba9fd486ad2892405ef44df474bb523654ee606c7b159"},
+    "attempt1": {"status": "FAIL_DDC_INTERNAL_NAME_COLLISION", "wns_ns": -1.5716, "unmapped": 89, "dc_errors": 534, "log_sha256": "a153d8bdacc0ef1b4f376249929c28ce12eb897cb005dba0414207a4dc8abee9"},
+    "attempt2": {"status": "FAIL_TIMING_GATE_INPUT_BOUNDARY", "wns_ns": -0.00129306, "unmapped": 0, "dc_errors": 0, "log_sha256": "c373e93b7a07dfadd07c7b55571b10b7e2c89f79ede04e78b9ecf871e307f4fa"},
+    "dc": {"status": "PASS_BOTTOM_UP_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 314488.628998, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 17},
+    "dc_log_sha256": "0ac4eb1e9fd5ff7e801731dfaeef6f6f29188414a2ab084fc94210de646ba0cd"
   },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",

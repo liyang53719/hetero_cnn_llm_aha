@@ -27,10 +27,17 @@
   },
   "generated_bridge_rtl": {
     "status": "PASS_VERILATOR_LINT",
-    "source_git_sha": "edd8a1d",
+    "source_git_sha": "8faaa7a",
     "path": "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
-    "sha256": "a9d4317143950a4cee0aa3c2e7fb75faa25a4a3bee1a439a8367ec9618b8e96c",
+    "sha256": "43c0f8a94401e0b23c49dae49ba669c4422b5d65d1921e676d6616544458fc67",
     "lint_log_sha256": "e94832c66a18ccd07ef6f0ed9c64d3806705ec35cfd8f032c2cac000887044a9"
+  },
+  "generated_owner_router_rtl": {
+    "status": "PASS_VERILATOR_LINT",
+    "source_git_sha": "8faaa7a",
+    "path": "generated/operator_primitives_v3/bridge/HeteroV3TerminalOwnerRouter.sv",
+    "sha256": "ad073d8709a1529ce787406ad20f5fe47eb4922a105272ae36bd7bced9ed0355",
+    "lint_log_sha256": "0834309728e3b4bd45c8cedbef8e768054cd2f0f9303bd80ae016f108dccbd74"
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

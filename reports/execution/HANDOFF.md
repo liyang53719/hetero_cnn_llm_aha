@@ -19,7 +19,8 @@
   0 combined/cross-layer collision, 44/44 Verilator lint PASS, no hand edits.
 - G3 bridge: 53/53 kind map, 3 Chisel + 3 contract tests PASS; composite
   terminal sub-ops serialize and root completion waits for checked endpoint.
-- Generated bridge from `edd8a1d`: Verilator lint PASS, SHA `a9d4317`.
+- Generated bridge/router from `8faaa7a`: both Verilator lint PASS; SHA
+  `43c0f8a` / `ad073d8`.
 - Eight-owner router: 2 Chisel tests PASS; every owner requires a checked
   completion and invalid owners return status 4.
 - Eight real owner endpoints and 58/58 numerical bindings remain OPEN.

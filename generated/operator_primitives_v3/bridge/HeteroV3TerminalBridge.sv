@@ -284,162 +284,162 @@ module HeteroCompositeActivationSequencer(	// home/yang/Documents/prj/AHA/hetero
   assign io_out_bits_last = step_last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSfuControlPrimitives.scala:50:7, :93:28
 endmodule
 
-module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-  input         clock,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-                reset,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-                io_clear,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output        io_in_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input         io_in_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [7:0]  io_in_bits_kind,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [15:0] io_in_bits_flags,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [7:0]  io_in_bits_phase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [15:0] io_in_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [7:0]  io_in_bits_mode,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [23:0] io_in_bits_src0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_src1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_src2,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_dst,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [15:0] io_in_bits_m,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_n,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_k,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_index0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_in_bits_index1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input         io_terminal_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output        io_terminal_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [3:0]  io_terminal_bits_owner,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [7:0]  io_terminal_bits_opcode,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [15:0] io_terminal_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [7:0]  io_terminal_bits_parentPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_terminalPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [15:0] io_terminal_bits_flags,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [7:0]  io_terminal_bits_mode,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [23:0] io_terminal_bits_src0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_src1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_src2,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_dst,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [15:0] io_terminal_bits_rows,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_columns,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_depth,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_index0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_index1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output        io_terminal_bits_scratchValid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [3:0]  io_terminal_bits_scratchSrc0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_scratchSrc1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_scratchDst,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [7:0]  io_terminal_bits_variant,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output        io_terminal_bits_first,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminal_bits_last,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminalCompletion_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input         io_terminalCompletion_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [15:0] io_terminalCompletion_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input  [7:0]  io_terminalCompletion_bits_parentPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminalCompletion_bits_terminalPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_terminalCompletion_bits_status,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  input         io_completion_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output        io_completion_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [15:0] io_completion_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output [7:0]  io_completion_bits_phase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_completion_bits_status,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-  output        io_busy,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_unsupported,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-                io_protocolError	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
+module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+  input         clock,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+                reset,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+                io_clear,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output        io_in_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input         io_in_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [7:0]  io_in_bits_kind,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [15:0] io_in_bits_flags,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [7:0]  io_in_bits_phase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [15:0] io_in_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [7:0]  io_in_bits_mode,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [23:0] io_in_bits_src0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_src1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_src2,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_dst,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [15:0] io_in_bits_m,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_n,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_k,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_index0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_in_bits_index1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input         io_terminal_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output        io_terminal_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [3:0]  io_terminal_bits_owner,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [7:0]  io_terminal_bits_opcode,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [15:0] io_terminal_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [7:0]  io_terminal_bits_parentPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_terminalPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [15:0] io_terminal_bits_flags,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [7:0]  io_terminal_bits_mode,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [23:0] io_terminal_bits_src0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_src1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_src2,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_dst,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [15:0] io_terminal_bits_rows,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_columns,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_depth,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_index0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_index1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output        io_terminal_bits_scratchValid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [3:0]  io_terminal_bits_scratchSrc0,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_scratchSrc1,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_scratchDst,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [7:0]  io_terminal_bits_variant,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output        io_terminal_bits_first,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminal_bits_last,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminalCompletion_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input         io_terminalCompletion_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [15:0] io_terminalCompletion_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input  [7:0]  io_terminalCompletion_bits_parentPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminalCompletion_bits_terminalPhase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_terminalCompletion_bits_status,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  input         io_completion_ready,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output        io_completion_valid,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [15:0] io_completion_bits_tag,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output [7:0]  io_completion_bits_phase,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_completion_bits_status,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+  output        io_busy,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_unsupported,	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+                io_protocolError	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
 );
 
-  wire        _composite_io_startReady;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  wire        _composite_io_out_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  wire [7:0]  _composite_io_out_bits_opcode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  wire [4:0]  _composite_io_out_bits_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  wire [7:0]  _composite_io_out_bits_variant;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  wire        _composite_io_out_bits_first;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  wire        _composite_io_out_bits_last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
-  reg  [2:0]  state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:57:22
-  reg  [7:0]  base_kind;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_flags;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [7:0]  base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [7:0]  base_mode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [23:0] base_src0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [23:0] base_src1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [23:0] base_src2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [23:0] base_dst;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_m;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_n;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_k;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_index0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [15:0] base_index1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-  reg  [7:0]  completionStatus;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
-  reg  [7:0]  expectedTerminalPhase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:60:38
-  reg         acceptedLast;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29
-  reg         acceptedComposite;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:62:34
-  reg         unsupportedReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:63:31
-  reg         protocolErrorReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:64:33
-  wire        _GEN = base_kind == 8'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_0 = base_kind == 8'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_1 = base_kind == 8'h10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :74:89
-  wire        _GEN_2 = base_kind == 8'h11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :75:90
-  wire        _GEN_3 = base_kind == 8'h12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :88:94
-  wire        _GEN_4 = base_kind == 8'h13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :89:95
-  wire        _GEN_5 = base_kind == 8'h14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_6 = base_kind == 8'h15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_7 = base_kind == 8'h20;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :76:95
-  wire        _GEN_8 = base_kind == 8'h21;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :77:95
-  wire        _GEN_9 = base_kind == 8'h22;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :80:93
-  wire        _GEN_10 = base_kind == 8'h23;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :81:93
-  wire        _GEN_11 = base_kind == 8'h24;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :78:96
-  wire        _GEN_12 = base_kind == 8'h25;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :79:95
-  wire        _GEN_13 = base_kind == 8'h26;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_14 = base_kind == 8'h27;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_15 = base_kind == 8'h28;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_16 = base_kind == 8'h29;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_17 = base_kind == 8'h2A;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_18 = base_kind == 8'h30;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :82:91
-  wire        _GEN_19 = base_kind == 8'h31;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :83:91
-  wire        _GEN_20 = base_kind == 8'h32;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :84:91
-  wire        _GEN_21 = base_kind == 8'h33;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_22 = base_kind == 8'h34;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :93:91
-  wire        _GEN_23 = base_kind == 8'h35;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :94:91
-  wire        _GEN_24 = base_kind == 8'h40;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :104:95
-  wire        _GEN_25 = base_kind == 8'h41;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_26 = base_kind == 8'h42;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :102:88
-  wire        _GEN_27 = base_kind == 8'h43;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_28 = base_kind == 8'h50;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :123:95
-  wire        _GEN_29 = base_kind == 8'h51;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :124:95
-  wire        _GEN_30 = base_kind == 8'h52;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_31 = base_kind == 8'h53;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_32 = base_kind == 8'h54;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_33 = base_kind == 8'h55;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_34 = base_kind == 8'h56;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_35 = base_kind == 8'h57;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_36 = base_kind == 8'h58;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_37 = base_kind == 8'h59;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_38 = base_kind == 8'h5A;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
+  wire        _composite_io_startReady;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  wire        _composite_io_out_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  wire [7:0]  _composite_io_out_bits_opcode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  wire [4:0]  _composite_io_out_bits_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  wire [7:0]  _composite_io_out_bits_variant;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  wire        _composite_io_out_bits_first;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  wire        _composite_io_out_bits_last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
+  reg  [2:0]  state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:130:22
+  reg  [7:0]  base_kind;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_flags;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [7:0]  base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [7:0]  base_mode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [23:0] base_src0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [23:0] base_src1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [23:0] base_src2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [23:0] base_dst;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_m;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_n;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_k;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_index0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [15:0] base_index1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+  reg  [7:0]  completionStatus;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
+  reg  [7:0]  expectedTerminalPhase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:133:38
+  reg         acceptedLast;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29
+  reg         acceptedComposite;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:135:34
+  reg         unsupportedReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:136:31
+  reg         protocolErrorReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:137:33
+  wire        _GEN = base_kind == 8'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_0 = base_kind == 8'h2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_1 = base_kind == 8'h10;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :147:89
+  wire        _GEN_2 = base_kind == 8'h11;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :148:90
+  wire        _GEN_3 = base_kind == 8'h12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :161:94
+  wire        _GEN_4 = base_kind == 8'h13;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :162:95
+  wire        _GEN_5 = base_kind == 8'h14;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_6 = base_kind == 8'h15;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_7 = base_kind == 8'h20;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :149:95
+  wire        _GEN_8 = base_kind == 8'h21;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :150:95
+  wire        _GEN_9 = base_kind == 8'h22;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :153:93
+  wire        _GEN_10 = base_kind == 8'h23;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :154:93
+  wire        _GEN_11 = base_kind == 8'h24;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :151:96
+  wire        _GEN_12 = base_kind == 8'h25;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :152:95
+  wire        _GEN_13 = base_kind == 8'h26;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_14 = base_kind == 8'h27;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_15 = base_kind == 8'h28;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_16 = base_kind == 8'h29;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_17 = base_kind == 8'h2A;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_18 = base_kind == 8'h30;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :155:91
+  wire        _GEN_19 = base_kind == 8'h31;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :156:91
+  wire        _GEN_20 = base_kind == 8'h32;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :157:91
+  wire        _GEN_21 = base_kind == 8'h33;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_22 = base_kind == 8'h34;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :166:91
+  wire        _GEN_23 = base_kind == 8'h35;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :167:91
+  wire        _GEN_24 = base_kind == 8'h40;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :177:95
+  wire        _GEN_25 = base_kind == 8'h41;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_26 = base_kind == 8'h42;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :175:88
+  wire        _GEN_27 = base_kind == 8'h43;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_28 = base_kind == 8'h50;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :196:95
+  wire        _GEN_29 = base_kind == 8'h51;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :197:95
+  wire        _GEN_30 = base_kind == 8'h52;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_31 = base_kind == 8'h53;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_32 = base_kind == 8'h54;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_33 = base_kind == 8'h55;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_34 = base_kind == 8'h56;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_35 = base_kind == 8'h57;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_36 = base_kind == 8'h58;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_37 = base_kind == 8'h59;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_38 = base_kind == 8'h5A;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
   wire        _GEN_39 =
     _GEN_24 | _GEN_25 | _GEN_26 | _GEN_27 | _GEN_28 | _GEN_29 | _GEN_30 | _GEN_31
-    | _GEN_32;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:70:39, :73:21
+    | _GEN_32;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:143:39, :146:21
   wire        _GEN_40 =
     _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_3 | _GEN_4 | _GEN_5 | _GEN_6 | _GEN_7 | _GEN_8
     | _GEN_9 | _GEN_10 | _GEN_11 | _GEN_12 | _GEN_13 | _GEN_14 | _GEN_15 | _GEN_16
-    | _GEN_17 | _GEN_18 | _GEN_19 | _GEN_20 | _GEN_21 | _GEN_22 | _GEN_23 | _GEN_39;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:70:39, :73:21
-  wire        _GEN_41 = base_kind == 8'h60;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :125:93
-  wire        _GEN_42 = base_kind == 8'h61;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :126:94
-  wire        _GEN_43 = base_kind == 8'h62;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_44 = base_kind == 8'h63;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :117:97
-  wire        _GEN_45 = base_kind == 8'h64;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21
-  wire        _GEN_46 = base_kind == 8'h65;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :127:95
-  wire        _GEN_47 = base_kind == 8'h70;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :95:98
-  wire        _GEN_48 = base_kind == 8'h71;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :73:21, :96:98
-  wire        _GEN_49 = base_kind == 8'h80;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_50 = base_kind == 8'h81;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_51 = base_kind == 8'h82;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_52 = base_kind == 8'h83;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_53 = base_kind == 8'h84;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:15, :73:21
-  wire        _GEN_54 = _GEN_33 | _GEN_34 | _GEN_35 | _GEN_36 | _GEN_37 | _GEN_38;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:66:32, :73:21
-  wire        _GEN_55 = _GEN_11 | _GEN_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:73:21, :86:53, :87:52
-  wire        _composite_io_start_T = state == 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :134:31
-  wire        io_terminal_bits_scratchValid_0 = state == 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :136:35
-  wire        io_in_ready_0 = state == 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :138:24
+    | _GEN_17 | _GEN_18 | _GEN_19 | _GEN_20 | _GEN_21 | _GEN_22 | _GEN_23 | _GEN_39;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:143:39, :146:21
+  wire        _GEN_41 = base_kind == 8'h60;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :198:93
+  wire        _GEN_42 = base_kind == 8'h61;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :199:94
+  wire        _GEN_43 = base_kind == 8'h62;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_44 = base_kind == 8'h63;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :190:97
+  wire        _GEN_45 = base_kind == 8'h64;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21
+  wire        _GEN_46 = base_kind == 8'h65;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :200:95
+  wire        _GEN_47 = base_kind == 8'h70;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :168:98
+  wire        _GEN_48 = base_kind == 8'h71;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :146:21, :169:98
+  wire        _GEN_49 = base_kind == 8'h80;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_50 = base_kind == 8'h81;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_51 = base_kind == 8'h82;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_52 = base_kind == 8'h83;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_53 = base_kind == 8'h84;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:15, :146:21
+  wire        _GEN_54 = _GEN_33 | _GEN_34 | _GEN_35 | _GEN_36 | _GEN_37 | _GEN_38;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:139:32, :146:21
+  wire        _GEN_55 = _GEN_11 | _GEN_12;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:146:21, :159:53, :160:52
+  wire        _composite_io_start_T = state == 3'h3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :207:31
+  wire        io_terminal_bits_scratchValid_0 = state == 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :209:35
+  wire        io_in_ready_0 = state == 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :211:24
   wire        io_terminal_valid_0 =
-    state == 3'h2 | io_terminal_bits_scratchValid_0 & _composite_io_out_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :132:25, :136:35, :139:{30,47,77}
+    state == 3'h2 | io_terminal_bits_scratchValid_0 & _composite_io_out_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :205:25, :209:35, :212:{30,47,77}
   wire [3:0]  io_terminal_bits_owner_0 =
     io_terminal_bits_scratchValid_0
       ? 4'h3
@@ -490,7 +490,7 @@ module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
                                                                                       ? 4'h5
                                                                                       : _GEN_53
                                                                                           ? 4'h6
-                                                                                          : 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :66:32, :70:39, :73:21, :74:47, :75:48, :76:50, :77:50, :78:51, :79:50, :80:48, :81:48, :82:49, :83:49, :84:49, :85:49, :86:53, :87:52, :88:52, :89:53, :90:55, :91:55, :92:49, :93:49, :94:49, :95:50, :96:50, :97:55, :98:46, :99:47, :100:52, :101:49, :102:46, :103:44, :104:53, :105:44, :106:50, :107:45, :117:53, :118:55, :119:49, :120:56, :121:52, :122:57, :123:48, :124:48, :125:49, :126:50, :127:51, :128:52, :129:50, :136:35, :140:32
+                                                                                          : 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :139:32, :143:39, :146:21, :147:47, :148:48, :149:50, :150:50, :151:51, :152:50, :153:48, :154:48, :155:49, :156:49, :157:49, :158:49, :159:53, :160:52, :161:52, :162:53, :163:55, :164:55, :165:49, :166:49, :167:49, :168:50, :169:50, :170:55, :171:46, :172:47, :173:52, :174:49, :175:46, :176:44, :177:53, :178:44, :179:50, :180:45, :190:53, :191:55, :192:49, :193:56, :194:52, :195:57, :196:48, :197:48, :198:49, :199:50, :200:51, :201:52, :202:50, :209:35, :213:32
   wire [7:0]  io_terminal_bits_opcode_0 =
     io_terminal_bits_scratchValid_0
       ? _composite_io_out_bits_opcode
@@ -588,15 +588,15 @@ module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
                                                                                                                                                                                               ? 8'h66
                                                                                                                                                                                               : _GEN_53
                                                                                                                                                                                                   ? 8'h75
-                                                                                                                                                                                                  : 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33, :66:32, :67:33, :69:15, :73:21, :74:89, :75:90, :76:95, :77:95, :78:96, :79:95, :80:93, :81:93, :82:91, :83:91, :84:91, :85:97, :86:{53,95}, :87:{52,94}, :88:94, :89:95, :90:97, :91:100, :92:91, :93:91, :94:91, :95:98, :96:98, :97:97, :98:94, :99:89, :100:94, :101:91, :102:88, :103:86, :104:95, :105:86, :106:92, :107:87, :117:97, :118:97, :119:94, :120:101, :121:97, :122:99, :123:95, :124:95, :125:93, :126:94, :127:95, :128:96, :129:98, :132:25, :136:35, :141:33
+                                                                                                                                                                                                  : 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33, :139:32, :140:33, :142:15, :146:21, :147:89, :148:90, :149:95, :150:95, :151:96, :152:95, :153:93, :154:93, :155:91, :156:91, :157:91, :158:97, :159:{53,95}, :160:{52,94}, :161:94, :162:95, :163:97, :164:100, :165:91, :166:91, :167:91, :168:98, :169:98, :170:97, :171:94, :172:89, :173:94, :174:91, :175:88, :176:86, :177:95, :178:86, :179:92, :180:87, :190:97, :191:97, :192:94, :193:101, :194:97, :195:99, :196:95, :197:95, :198:93, :199:94, :200:95, :201:96, :202:98, :205:25, :209:35, :214:33
   wire [7:0]  io_terminal_bits_terminalPhase_0 =
-    io_terminal_bits_scratchValid_0 ? {3'h0, _composite_io_out_bits_phase} : base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :132:25, :136:35, :144:40
+    io_terminal_bits_scratchValid_0 ? {3'h0, _composite_io_out_bits_phase} : base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :205:25, :209:35, :217:40
   wire        io_terminal_bits_last_0 =
-    ~io_terminal_bits_scratchValid_0 | _composite_io_out_bits_last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25, :136:35, :161:32, :162:31
-  wire        io_terminalCompletion_ready_0 = state == 3'h5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :164:40
-  wire        io_completion_valid_0 = state == 3'h6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :165:32
-  `ifndef SYNTHESIS	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:230:11
-    always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:230:11
+    ~io_terminal_bits_scratchValid_0 | _composite_io_out_bits_last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25, :209:35, :234:32, :235:31
+  wire        io_terminalCompletion_ready_0 = state == 3'h5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :237:40
+  wire        io_completion_valid_0 = state == 3'h6;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :238:32
+  `ifndef SYNTHESIS	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:303:11
+    always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:303:11
       if (io_terminal_valid_0 & ~reset
           & ~(io_terminal_bits_owner_0 == 4'h0
               & (io_terminal_bits_opcode_0 == 8'h0 | io_terminal_bits_opcode_0 == 8'h1)
@@ -634,35 +634,35 @@ module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
               & (io_terminal_bits_opcode_0 == 8'h80 | io_terminal_bits_opcode_0 == 8'h81
                  | io_terminal_bits_opcode_0 == 8'h82 | io_terminal_bits_opcode_0 == 8'h83
                  | io_terminal_bits_opcode_0 == 8'h84
-                 | io_terminal_bits_opcode_0 == 8'h85))) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:{23,39}, :20:{25,58}, :24:{21,50}, :30:{24,56}, :39:{21,50}, :64:{20,54}, :70:{23,54}, :79:{27,62}, :87:{24,56}, :95:65, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :59:33, :69:15, :74:89, :75:90, :76:{50,95}, :77:95, :78:96, :79:95, :80:93, :81:93, :82:{49,91}, :83:91, :84:91, :85:{49,97}, :86:95, :88:94, :89:95, :90:97, :91:55, :92:91, :93:91, :94:91, :95:98, :96:98, :99:89, :100:94, :101:91, :102:88, :103:86, :104:95, :105:86, :106:92, :107:87, :117:{53,97}, :123:{48,95}, :124:95, :125:93, :126:94, :127:95, :128:96, :129:98, :139:47, :140:32, :141:33, :230:11
-        if (`ASSERT_VERBOSE_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:230:11
-          $error("Assertion failed\n    at HeteroV3TerminalBridge.scala:230 assert(HeteroPrimitiveCapability.terminal(io.terminal.bits.owner, io.terminal.bits.opcode))\n");	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:230:11
-        if (`STOP_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:230:11
-          $fatal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:230:11
+                 | io_terminal_bits_opcode_0 == 8'h85))) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:{23,39}, :20:{25,58}, :24:{21,50}, :30:{24,56}, :39:{21,50}, :64:{20,54}, :70:{23,54}, :79:{27,62}, :87:{24,56}, :95:65, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :132:33, :142:15, :147:89, :148:90, :149:{50,95}, :150:95, :151:96, :152:95, :153:93, :154:93, :155:{49,91}, :156:91, :157:91, :158:{49,97}, :159:95, :161:94, :162:95, :163:97, :164:55, :165:91, :166:91, :167:91, :168:98, :169:98, :172:89, :173:94, :174:91, :175:88, :176:86, :177:95, :178:86, :179:92, :180:87, :190:{53,97}, :196:{48,95}, :197:95, :198:93, :199:94, :200:95, :201:96, :202:98, :212:47, :213:32, :214:33, :303:11
+        if (`ASSERT_VERBOSE_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:303:11
+          $error("Assertion failed\n    at HeteroV3TerminalBridge.scala:303 assert(HeteroPrimitiveCapability.terminal(io.terminal.bits.owner, io.terminal.bits.opcode))\n");	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:303:11
+        if (`STOP_COND_)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:303:11
+          $fatal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:303:11
       end
     end // always @(posedge)
   `endif // not def SYNTHESIS
-  always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-    automatic logic _GEN_56;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:26
-    _GEN_56 = io_in_ready_0 & io_in_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:138:24, :179:26
-    if (reset) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-      state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22
-      completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
-      expectedTerminalPhase <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33, :60:38
-      acceptedLast <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29
-      acceptedComposite <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29, :62:34
-      unsupportedReg <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29, :63:31
-      protocolErrorReg <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29, :64:33
+  always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+    automatic logic _GEN_56;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:26
+    _GEN_56 = io_in_ready_0 & io_in_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:211:24, :252:26
+    if (reset) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+      state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22
+      completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
+      expectedTerminalPhase <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33, :133:38
+      acceptedLast <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29
+      acceptedComposite <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29, :135:34
+      unsupportedReg <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29, :136:31
+      protocolErrorReg <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29, :137:33
     end
-    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-      automatic logic _GEN_57;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:186:16
-      automatic logic _GEN_58;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:69:46
-      automatic logic _GEN_59;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:41, :186:31, :187:26, :188:26
+    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+      automatic logic _GEN_57;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:259:16
+      automatic logic _GEN_58;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:142:46
+      automatic logic _GEN_59;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:41, :259:31, :260:26, :261:26
       automatic logic _GEN_60;	// src/main/scala/chisel3/util/Decoupled.scala:51:35
-      automatic logic _GEN_61;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:206:36
-      automatic logic _GEN_62;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:210:24
-      automatic logic _GEN_63;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:217:36
-      _GEN_57 = state == 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :186:16
+      automatic logic _GEN_61;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:279:36
+      automatic logic _GEN_62;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:283:24
+      automatic logic _GEN_63;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:290:36
+      _GEN_57 = state == 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :259:16
       _GEN_58 =
         {base_kind == 8'h84,
          base_kind == 8'h83,
@@ -716,126 +716,126 @@ module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
          base_kind == 8'h11,
          base_kind == 8'h10,
          base_kind == 8'h2,
-         base_kind == 8'h1} == 53'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :69:{15,39,46}, :74:89, :75:90, :76:95, :77:95, :78:96, :79:95, :80:93, :81:93, :82:91, :83:91, :84:91, :88:94, :89:95, :93:91, :94:91, :95:98, :96:98, :102:88, :104:95, :117:97, :123:95, :124:95, :125:93, :126:94, :127:95
-      _GEN_59 = _GEN_57 & _GEN_58;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:69:46, :179:41, :186:{16,31}, :187:26, :188:26
-      _GEN_60 = io_terminal_ready & io_terminal_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:139:47, src/main/scala/chisel3/util/Decoupled.scala:51:35
-      _GEN_61 = io_terminalCompletion_ready_0 & io_terminalCompletion_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:164:40, :206:36
+         base_kind == 8'h1} == 53'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala:12:23, home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :142:{15,39,46}, :147:89, :148:90, :149:95, :150:95, :151:96, :152:95, :153:93, :154:93, :155:91, :156:91, :157:91, :161:94, :162:95, :166:91, :167:91, :168:98, :169:98, :175:88, :177:95, :190:97, :196:95, :197:95, :198:93, :199:94, :200:95
+      _GEN_59 = _GEN_57 & _GEN_58;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:142:46, :252:41, :259:{16,31}, :260:26, :261:26
+      _GEN_60 = io_terminal_ready & io_terminal_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:212:47, src/main/scala/chisel3/util/Decoupled.scala:51:35
+      _GEN_61 = io_terminalCompletion_ready_0 & io_terminalCompletion_valid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:237:40, :279:36
       _GEN_62 =
         io_terminalCompletion_bits_tag != base_tag
         | io_terminalCompletion_bits_parentPhase != base_phase
-        | io_terminalCompletion_bits_terminalPhase != expectedTerminalPhase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :60:38, :207:56, :208:66, :209:50, :210:24
-      _GEN_63 = acceptedComposite & ~acceptedLast;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29, :62:34, :217:{36,39}
-      if (io_clear | io_completion_valid_0 & io_completion_ready)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:165:32, :173:18, :174:11, :206:67, :224:{28,51}, :225:13
-        state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22
-      else if (_GEN_61)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:206:36
+        | io_terminalCompletion_bits_terminalPhase != expectedTerminalPhase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :133:38, :280:56, :281:66, :282:50, :283:24
+      _GEN_63 = acceptedComposite & ~acceptedLast;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29, :135:34, :290:{36,39}
+      if (io_clear | io_completion_valid_0 & io_completion_ready)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:238:32, :246:18, :247:11, :279:67, :297:{28,51}, :298:13
+        state <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22
+      else if (_GEN_61)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:279:36
         state <=
-          _GEN_62 | (|io_terminalCompletion_bits_status) ? 3'h6 : {1'h1, ~_GEN_63, 1'h0};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :61:29, :69:15, :210:{24,42}, :213:15, :214:{52,61}, :216:15, :217:{36,54}, :218:15, :221:15
+          _GEN_62 | (|io_terminalCompletion_bits_status) ? 3'h6 : {1'h1, ~_GEN_63, 1'h0};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :134:29, :142:15, :283:{24,42}, :286:15, :287:{52,61}, :289:15, :290:{36,54}, :291:15, :294:15
       else if (_GEN_60)	// src/main/scala/chisel3/util/Decoupled.scala:51:35
-        state <= 3'h5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22
-      else if (_composite_io_start_T & _composite_io_startReady)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25, :134:31, :197:58
-        state <= 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22
-      else if (_GEN_57)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:186:16
+        state <= 3'h5;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22
+      else if (_composite_io_start_T & _composite_io_startReady)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25, :207:31, :270:58
+        state <= 3'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22
+      else if (_GEN_57)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:259:16
         state <=
           _GEN_58
             ? 3'h6
             : {2'h1,
-               ~_GEN_40 & (_GEN_33 | _GEN_34 | _GEN_35 | _GEN_36 | _GEN_37 | _GEN_38)};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :69:46, :70:39, :73:21, :108:55, :109:54, :110:51, :111:51, :112:57, :187:26, :190:15, :191:38, :192:15, :194:15
-      else if (_GEN_56)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:26
-        state <= 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22
-      if (io_clear)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:45:14
-        completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
-      else if (_GEN_61) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:206:36
-        if (_GEN_62)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:210:24
-          completionStatus <= io_terminalCompletion_bits_tag == base_tag ? 8'hE2 : 8'hE1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :59:33, :207:56, :211:32
-        else if (|io_terminalCompletion_bits_status)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:214:52
-          completionStatus <= io_terminalCompletion_bits_status;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
-        else if (_GEN_63) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:217:36
-          if (_GEN_59)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:41, :186:31, :187:26, :188:26
-            completionStatus <= 8'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33, :188:26
-          else if (_GEN_56)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:26
-            completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
+               ~_GEN_40 & (_GEN_33 | _GEN_34 | _GEN_35 | _GEN_36 | _GEN_37 | _GEN_38)};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :142:46, :143:39, :146:21, :181:55, :182:54, :183:51, :184:51, :185:57, :260:26, :263:15, :264:38, :265:15, :267:15
+      else if (_GEN_56)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:26
+        state <= 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22
+      if (io_clear)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:118:14
+        completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
+      else if (_GEN_61) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:279:36
+        if (_GEN_62)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:283:24
+          completionStatus <= io_terminalCompletion_bits_tag == base_tag ? 8'hE2 : 8'hE1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :132:33, :280:56, :284:32
+        else if (|io_terminalCompletion_bits_status)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:287:52
+          completionStatus <= io_terminalCompletion_bits_status;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
+        else if (_GEN_63) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:290:36
+          if (_GEN_59)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:41, :259:31, :260:26, :261:26
+            completionStatus <= 8'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33, :261:26
+          else if (_GEN_56)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:26
+            completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
         end
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:217:36
-          completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:290:36
+          completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
       end
-      else if (_GEN_59)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:41, :186:31, :187:26, :188:26
-        completionStatus <= 8'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33, :188:26
-      else if (_GEN_56)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:179:26
-        completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:59:33
-      if (io_clear | ~_GEN_60) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:60:38, :62:34, :173:18, :200:28, src/main/scala/chisel3/util/Decoupled.scala:51:35
+      else if (_GEN_59)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:41, :259:31, :260:26, :261:26
+        completionStatus <= 8'h4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33, :261:26
+      else if (_GEN_56)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:252:26
+        completionStatus <= 8'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:33
+      if (io_clear | ~_GEN_60) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:133:38, :135:34, :246:18, :273:28, src/main/scala/chisel3/util/Decoupled.scala:51:35
       end
-      else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:62:34, :173:18, :200:28
-        expectedTerminalPhase <= io_terminal_bits_terminalPhase_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:60:38, :144:40
-        acceptedLast <= io_terminal_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:61:29, :162:31
-        acceptedComposite <= io_terminal_bits_scratchValid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:62:34, :136:35
+      else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:135:34, :246:18, :273:28
+        expectedTerminalPhase <= io_terminal_bits_terminalPhase_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:133:38, :217:40
+        acceptedLast <= io_terminal_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:29, :235:31
+        acceptedComposite <= io_terminal_bits_scratchValid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:135:34, :209:35
       end
-      unsupportedReg <= ~io_clear & (_GEN_59 | ~_GEN_56 & unsupportedReg);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :63:31, :173:18, :176:20, :179:{26,41}, :182:22, :186:31, :187:26, :188:26, :189:24
-      protocolErrorReg <= ~io_clear & (_GEN_61 & _GEN_62 | ~_GEN_56 & protocolErrorReg);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :64:33, :173:18, :176:20, :177:22, :179:{26,41}, :183:24, :186:31, :206:{36,67}, :210:{24,42}, :212:26
+      unsupportedReg <= ~io_clear & (_GEN_59 | ~_GEN_56 & unsupportedReg);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :136:31, :246:18, :249:20, :252:{26,41}, :255:22, :259:31, :260:26, :261:26, :262:24
+      protocolErrorReg <= ~io_clear & (_GEN_61 & _GEN_62 | ~_GEN_56 & protocolErrorReg);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :137:33, :246:18, :249:20, :250:22, :252:{26,41}, :256:24, :259:31, :279:{36,67}, :283:{24,42}, :285:26
     end
-    if (io_clear | ~_GEN_56) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :173:18, :179:{26,41}
+    if (io_clear | ~_GEN_56) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :246:18, :252:{26,41}
     end
-    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17, :173:18, :179:41
-      base_kind <= io_in_bits_kind;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_flags <= io_in_bits_flags;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_phase <= io_in_bits_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_tag <= io_in_bits_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_mode <= io_in_bits_mode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_src0 <= io_in_bits_src0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_src1 <= io_in_bits_src1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_src2 <= io_in_bits_src2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_dst <= io_in_bits_dst;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_m <= io_in_bits_m;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_n <= io_in_bits_n;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_k <= io_in_bits_k;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_index0 <= io_in_bits_index0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
-      base_index1 <= io_in_bits_index1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:58:17
+    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17, :246:18, :252:41
+      base_kind <= io_in_bits_kind;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_flags <= io_in_bits_flags;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_phase <= io_in_bits_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_tag <= io_in_bits_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_mode <= io_in_bits_mode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_src0 <= io_in_bits_src0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_src1 <= io_in_bits_src1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_src2 <= io_in_bits_src2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_dst <= io_in_bits_dst;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_m <= io_in_bits_m;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_n <= io_in_bits_n;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_k <= io_in_bits_k;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_index0 <= io_in_bits_index0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
+      base_index1 <= io_in_bits_index1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:131:17
     end
   end // always @(posedge)
-  `ifdef ENABLE_INITIAL_REG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-    `ifdef FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-      `FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
+  `ifdef ENABLE_INITIAL_REG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+    `ifdef FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+      `FIRRTL_BEFORE_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-      automatic logic [31:0] _RANDOM[0:7];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-      `ifdef INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-        `INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
+    initial begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+      automatic logic [31:0] _RANDOM[0:7];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+      `ifdef INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+        `INIT_RANDOM_PROLOG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
+      `ifdef RANDOMIZE_REG_INIT	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
         for (logic [3:0] i = 4'h0; i < 4'h8; i += 4'h1) begin
-          _RANDOM[i[2:0]] = `RANDOM;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-        end	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-        state = _RANDOM[3'h0][2:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22
-        base_kind = _RANDOM[3'h0][10:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :58:17
-        base_flags = _RANDOM[3'h0][26:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :58:17
-        base_phase = {_RANDOM[3'h0][31:27], _RANDOM[3'h1][2:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :58:17
-        base_tag = _RANDOM[3'h1][18:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_mode = _RANDOM[3'h1][26:19];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_src0 = {_RANDOM[3'h1][31:27], _RANDOM[3'h2][18:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_src1 = {_RANDOM[3'h2][31:19], _RANDOM[3'h3][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_src2 = {_RANDOM[3'h3][31:11], _RANDOM[3'h4][2:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_dst = _RANDOM[3'h4][26:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_m = {_RANDOM[3'h4][31:27], _RANDOM[3'h5][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_n = _RANDOM[3'h5][26:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_k = {_RANDOM[3'h5][31:27], _RANDOM[3'h6][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_index0 = _RANDOM[3'h6][26:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        base_index1 = {_RANDOM[3'h6][31:27], _RANDOM[3'h7][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-        completionStatus = _RANDOM[3'h7][18:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :59:33
-        expectedTerminalPhase = _RANDOM[3'h7][26:19];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :60:38
-        acceptedLast = _RANDOM[3'h7][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :61:29
-        acceptedComposite = _RANDOM[3'h7][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :62:34
-        unsupportedReg = _RANDOM[3'h7][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :63:31
-        protocolErrorReg = _RANDOM[3'h7][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :64:33
+          _RANDOM[i[2:0]] = `RANDOM;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+        end	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+        state = _RANDOM[3'h0][2:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22
+        base_kind = _RANDOM[3'h0][10:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :131:17
+        base_flags = _RANDOM[3'h0][26:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :131:17
+        base_phase = {_RANDOM[3'h0][31:27], _RANDOM[3'h1][2:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :131:17
+        base_tag = _RANDOM[3'h1][18:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_mode = _RANDOM[3'h1][26:19];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_src0 = {_RANDOM[3'h1][31:27], _RANDOM[3'h2][18:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_src1 = {_RANDOM[3'h2][31:19], _RANDOM[3'h3][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_src2 = {_RANDOM[3'h3][31:11], _RANDOM[3'h4][2:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_dst = _RANDOM[3'h4][26:3];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_m = {_RANDOM[3'h4][31:27], _RANDOM[3'h5][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_n = _RANDOM[3'h5][26:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_k = {_RANDOM[3'h5][31:27], _RANDOM[3'h6][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_index0 = _RANDOM[3'h6][26:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        base_index1 = {_RANDOM[3'h6][31:27], _RANDOM[3'h7][10:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+        completionStatus = _RANDOM[3'h7][18:11];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :132:33
+        expectedTerminalPhase = _RANDOM[3'h7][26:19];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :133:38
+        acceptedLast = _RANDOM[3'h7][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :134:29
+        acceptedComposite = _RANDOM[3'h7][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :135:34
+        unsupportedReg = _RANDOM[3'h7][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :136:31
+        protocolErrorReg = _RANDOM[3'h7][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :137:33
       `endif // RANDOMIZE_REG_INIT
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
-      `FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7
+    `ifdef FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
+      `FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7
     `endif // FIRRTL_AFTER_INITIAL
   `endif // ENABLE_INITIAL_REG_
-  HeteroCompositeActivationSequencer composite (	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:132:25
+  HeteroCompositeActivationSequencer composite (	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:205:25
     .clock               (clock),
     .reset               (reset),
     .io_clear            (io_clear),
-    .io_start            (_composite_io_start_T),	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:134:31
+    .io_start            (_composite_io_start_T),	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:207:31
     .io_startReady       (_composite_io_startReady),
     .io_function
       (_GEN_40
@@ -850,8 +850,8 @@ module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
                          ? 3'h4
                          : _GEN_37
                              ? 3'h5
-                             : _GEN_38 ? {1'h0, ~(base_mode[0]), 1'h1} : 3'h0),	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :61:29, :69:15, :70:39, :71:38, :73:21, :108:84, :109:83, :110:80, :111:80, :112:86, :115:{25,31,41}
-    .io_out_ready        (io_terminal_bits_scratchValid_0 & io_terminal_ready),	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:136:{35,55}
+                             : _GEN_38 ? {1'h0, ~(base_mode[0]), 1'h1} : 3'h0),	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :134:29, :142:15, :143:39, :144:38, :146:21, :181:84, :182:83, :183:80, :184:80, :185:86, :188:{25,31,41}
+    .io_out_ready        (io_terminal_bits_scratchValid_0 & io_terminal_ready),	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:209:{35,55}
     .io_out_valid        (_composite_io_out_valid),
     .io_out_bits_opcode  (_composite_io_out_bits_opcode),
     .io_out_bits_phase   (_composite_io_out_bits_phase),
@@ -862,36 +862,36 @@ module HeteroV3TerminalBridge(	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha
     .io_out_bits_first   (_composite_io_out_bits_first),
     .io_out_bits_last    (_composite_io_out_bits_last)
   );
-  assign io_in_ready = io_in_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :138:24
-  assign io_terminal_valid = io_terminal_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :139:47
-  assign io_terminal_bits_owner = io_terminal_bits_owner_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :140:32
-  assign io_terminal_bits_opcode = io_terminal_bits_opcode_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :141:33
-  assign io_terminal_bits_tag = base_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_parentPhase = base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_terminalPhase = io_terminal_bits_terminalPhase_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :144:40
-  assign io_terminal_bits_flags = base_flags;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_mode = base_mode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_src0 = base_src0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_src1 = base_src1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_src2 = base_src2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_dst = base_dst;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_rows = base_m;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_columns = base_n;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_depth = base_k;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_index0 = base_index0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_index1 = base_index1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_terminal_bits_scratchValid = io_terminal_bits_scratchValid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :136:35
+  assign io_in_ready = io_in_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :211:24
+  assign io_terminal_valid = io_terminal_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :212:47
+  assign io_terminal_bits_owner = io_terminal_bits_owner_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :213:32
+  assign io_terminal_bits_opcode = io_terminal_bits_opcode_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :214:33
+  assign io_terminal_bits_tag = base_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_parentPhase = base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_terminalPhase = io_terminal_bits_terminalPhase_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :217:40
+  assign io_terminal_bits_flags = base_flags;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_mode = base_mode;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_src0 = base_src0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_src1 = base_src1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_src2 = base_src2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_dst = base_dst;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_rows = base_m;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_columns = base_n;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_depth = base_k;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_index0 = base_index0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_index1 = base_index1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_terminal_bits_scratchValid = io_terminal_bits_scratchValid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :209:35
   assign io_terminal_bits_variant =
-    io_terminal_bits_scratchValid_0 ? _composite_io_out_bits_variant : base_index0[7:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17, :132:25, :136:35, :160:{34,104}
+    io_terminal_bits_scratchValid_0 ? _composite_io_out_bits_variant : base_index0[7:0];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17, :205:25, :209:35, :233:{34,104}
   assign io_terminal_bits_first =
-    ~io_terminal_bits_scratchValid_0 | _composite_io_out_bits_first;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :132:25, :136:35, :161:32
-  assign io_terminal_bits_last = io_terminal_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :162:31
-  assign io_terminalCompletion_ready = io_terminalCompletion_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :164:40
-  assign io_completion_valid = io_completion_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :165:32
-  assign io_completion_bits_tag = base_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_completion_bits_phase = base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :58:17
-  assign io_completion_bits_status = completionStatus;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :59:33
-  assign io_busy = |state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :57:22, :169:20
-  assign io_unsupported = unsupportedReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :63:31
-  assign io_protocolError = protocolErrorReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:44:7, :64:33
+    ~io_terminal_bits_scratchValid_0 | _composite_io_out_bits_first;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :205:25, :209:35, :234:32
+  assign io_terminal_bits_last = io_terminal_bits_last_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :235:31
+  assign io_terminalCompletion_ready = io_terminalCompletion_ready_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :237:40
+  assign io_completion_valid = io_completion_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :238:32
+  assign io_completion_bits_tag = base_tag;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_completion_bits_phase = base_phase;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :131:17
+  assign io_completion_bits_status = completionStatus;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :132:33
+  assign io_busy = |state;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :130:22, :242:20
+  assign io_unsupported = unsupportedReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :136:31
+  assign io_protocolError = protocolErrorReg;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala:117:7, :137:33
 endmodule

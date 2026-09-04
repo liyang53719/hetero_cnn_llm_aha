@@ -142,4 +142,8 @@
 - Canonical TopK/QSA now expose a 512x65 external SRAM port; stable-tie and QSA
   block/tail numerical Chisel tests pass. Authoritative primitive DC is 25/25:
   TopK WNS +0.004297 ns/area 950.768, QSA +0.004169 ns/area 1596.959.
-  Regenerated child hashes require canary and combined-DC replay before DRC.
+  Regenerated child hashes were replayed before DRC work.
+- Current-generation replay PASS: all four canaries, Selection, Vision and
+  combined shell. Combined remains setup-clean at +0.00000369549 ns, area
+  2097260.352, 0 unresolved/unmapped; DRC improved to 4027 transition/47
+  fanout violations. Next is Matrix hierarchy DRC cleanup.

@@ -47,13 +47,13 @@
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "combined_owner_shell": {
-    "status": "PASS_PREDICATE_LINK_AND_SETUP_CANARIES_PASS",
+    "status": "PASS_CURRENT_PRIMITIVE_LINK_AND_SETUP_CANARIES_PASS",
     "evidence": "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json",
     "terminal_bindings": 58,
     "owners": 8,
     "period_ns": 1.25,
     "wns_ns": 0.00000369549,
-    "area": 2097416.780547,
+    "area": 2097260.351548,
     "unmapped": 0,
     "dc_errors": 0,
     "composite_scratch_enabled": true
@@ -303,7 +303,7 @@
     "test": {"successful_transactions": 100, "opcodes": 6, "stable_topk_ties": true, "route_results_out_of_order": true, "merge_output_in_order": true, "mtp_predicate_checked": true, "log_sha256": "21d0baa73de3d1ace78e942794226b07cedd56773cea44a232a34bc03a2c97f5"},
     "storage": {"topk_entries": 512, "entry_bits": 65, "implementation": "external SRAM request/response", "flattened_register_table_present": false},
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000602007, "area": 29110.172203, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 0},
-    "dc_log_sha256": "66e8a79630752a6c3e85f04939bab82462e8ed6a591fd9af580ee84e4cbdefd0"
+    "dc_log_sha256": "f1f9529506d76f2f8ab262217675630c8bbb65697b3cb0663ba7aa8cfaf183a0"
   },
   "vision_endpoint_evidence": {
     "status": "PASS_6_OF_6_AUTHORITATIVE_CONTROLLERS_AND_DC",
@@ -312,12 +312,12 @@
     "endpoint_sha256": "37731dcd16ea752dc9295b1e9ed5ee6d4411e13a97a862d491429e3ab144f2c6",
     "test": {"successful_transactions": 100, "opcodes": 6, "random_backpressure": true, "log_sha256": "6542bf9920db1f52ef961e1b90ec9750a12092447bfc9bf41077d49f4332b999"},
     "chisel_repairs": {"width_specific_helper_names": true, "full_helper_ports_preserved": true, "patch3d_registered_carry_advance": true, "selection_source_sha256": "899878e7dd5260fa30452d1334d8d11474df671643e967ee179fd803ab82ae1c", "vision_source_sha256": "46a819d59ec32ca4a849f43d70b7de3055c89e85817b2361063ebba63e86c250"},
-    "regenerated_rtl": {"unsigned_divide_sha256": "89be7df2b19489ea8e56c4da12c29b3c1d33a0586ab27b9d3e932ac5cf697feb", "unsigned_multiply_sha256": "883791c89887036a1e7eb7d145293a1edfda02bfb962a092fc4f73e72181042c", "ple_hash_sha256": "766e5f29cc7f4533ba6d6d0db97881b50f2a3e1b898589a365145e1cc2b4fa46", "qsa_sha256": "3c60498f6769188aa3b1bf58d296f09ec7f1619a4032b2dfce8567fa37b0e71c", "bilinear_sha256": "d9cd0edc99fa6ef81b1ae7b172240ec7513c639b3671a30ebdbea95c4f56a2e7", "patch3d_sha256": "203c69ff1914bca42e7b4072f20648b6e2355a2c2f649fd1dd9d0e1a6a14725b", "generated_rtl_hand_edited": false},
+    "regenerated_rtl": {"unsigned_divide_sha256": "89be7df2b19489ea8e56c4da12c29b3c1d33a0586ab27b9d3e932ac5cf697feb", "unsigned_multiply_sha256": "5e0c9252bef6e20a8d6e09b4e4ba8c1abbec1173cab041993dd838c67350452b", "ple_hash_sha256": "cc80b6df9dcdb17ae2dbf62f11cfe8acc63c1bf91350e3c3c8af1b6754dbc0ce", "qsa_sha256": "f31df50614a80edd34cacb0f16ef3f7c680f3e88e8a499af23a8e02fde9efad2", "bilinear_sha256": "15691654a5a7b71ee5704d0d08d8ba0a5ba96dd2dccadaa0ec151d58306c61c0", "patch3d_sha256": "203c69ff1914bca42e7b4072f20648b6e2355a2c2f649fd1dd9d0e1a6a14725b", "generated_rtl_hand_edited": false},
     "patch3d_dc": {"status": "PASS", "wns_ns": 0.284273, "area": 615.524, "unmapped": 0, "dc_errors": 0},
     "dc_attempt1": {"status": "FAIL_OUTPUT_MUX_TIMING", "wns_ns": -0.0307224},
     "dc_attempt2": {"status": "FAIL_PATCH3D_CARRY_TIMING", "wns_ns": -0.000839829},
-    "dc": {"status": "PASS_REGISTERED_OUTPUT_AND_PATCH3D_CARRY", "period_ns": 1.25, "wns_ns": 0.000558019, "area": 14857.843, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 31},
-    "dc_log_sha256": "2884fdb167bc9844d6fc4cdcbc6b69e05bb337b14cd8373edb86d7d05734a770",
+    "dc": {"status": "PASS_CURRENT_PRIMITIVE_BOTTOM_UP", "period_ns": 1.25, "wns_ns": 0.000149369, "area": 14701.414, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "2b83bf2994b281b0cab78fa3bc439b6192c0b26a787244287aa6fcddeab55325",
     "nonclaim": "The catalog combined SV intentionally ties child inputs and is collision-only; functional Vision uses individually emitted authoritative modules with width-stable helpers."
   },
   "sfu_group_rmsnorm_candidate": {

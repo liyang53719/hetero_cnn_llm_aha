@@ -36,7 +36,7 @@
     "G0": {"status": "PASS", "evidence": ["reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md"], "git_sha": "1eb0923e3a1138896a4cc737e4362b04cb548d29"},
     "G1": {"status": "PASS", "depends_on": ["G0"], "evidence": ["reports/execution/OPERATOR_SOURCE_REPLAY_V3.json"]},
     "G2": {"status": "PASS", "depends_on": ["G1"], "evidence": ["reports/execution/OPERATOR_RTL_GENERATION_V3.json", "generated/operator_primitives_v3/MANIFEST.json"]},
-    "G3": {"status": "IN_PROGRESS_25_PRIMITIVE_DC_PASS_CANARY_COMBINED_RERUN_REQUIRED", "depends_on": ["G2"], "evidence": ["config/operator_terminal_bridge_v3.json", "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json", "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json", "reports/execution/OPERATOR_MODEL_CANARIES_V3.json", "reports/execution/OPERATOR_ROOT_STRESS_V3.json", "reports/execution/OPERATOR_EXTERNAL_TOPK_SRAM_V3.json"]},
+    "G3": {"status": "IN_PROGRESS_FUNCTIONAL_AND_SETUP_PASS_DRC_MACRO_SAIF_OPEN", "depends_on": ["G2"], "evidence": ["config/operator_terminal_bridge_v3.json", "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json", "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json", "reports/execution/OPERATOR_MODEL_CANARIES_V3.json", "reports/execution/OPERATOR_ROOT_STRESS_V3.json", "reports/execution/OPERATOR_EXTERNAL_TOPK_SRAM_V3.json"]},
     "G4": {"status": "PENDING", "depends_on": ["G3"]},
     "G5": {"status": "PENDING", "depends_on": ["G4"]}
   },
@@ -48,7 +48,7 @@
     "L11": "OPEN"
   },
   "early_dc_evidence": {
-    "combined_owner_shell": "PASS_PREDICATE_1P25NS_WNS_0P00000369549_AREA_2097416P780547_DRC_OPEN",
+    "combined_owner_shell": "PASS_CURRENT_1P25NS_WNS_0P00000369549_AREA_2097260P351548_DRC_OPEN",
     "root_modules": "PASS_18_OF_18",
     "clock_period_ns": 1.25,
     "minimum_wns_ns": 0.303001,
@@ -60,7 +60,7 @@
     "primitive_summed_passing_cell_area": 100762.571,
     "primitive_timeouts": [],
     "primitive_evidence": "reports/execution/OPERATOR_PRIMITIVE_DC_800MHZ.json",
-    "nonclaim": "not endpoint-bound combined shell; TopK/QSA require SRAM-aware bottom-up synthesis"
+    "nonclaim": "per-module totals exclude external TopK SRAM macro area and are not post-route signoff"
   },
   "claim_rules": [
     "Source or inventory coverage is not numerical RTL closure.",

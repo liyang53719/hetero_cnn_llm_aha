@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "PASS_PRIOR_LINK_RERUN_REQUIRED_AFTER_PRIMITIVE_REGENERATION",
+  "status": "PASS_CURRENT_PRIMITIVE_ROOT_LINK_SETUP_DRC_OPEN",
   "top": "operator_root_bridge_owner_shell_v3",
   "terminal_bindings": 58,
   "owners": 8,
@@ -8,9 +8,9 @@
   "generated_shell_sha256": "0c0deac5aff4ebba2ea38b3cf3c62518332a17f571a41e94c5ca3257c76da9d5",
   "generator_sha256": "d020ff14ee9087f637c4a1f7fadb962462280799506f4faad55bd2584daf6b15",
   "router": {"top": "HeteroV3TerminalOwnerRouter", "dc_wns_ns": 0.321471, "dc_area": 1201.2, "unmapped": 0, "dc_log_sha256": "e7432daa1908b3d97e5d88a20e6ca21489e121e3b7bab8f9bc399d58f491e1f7"},
-  "dc": {"library": "CLN22UL base SVT TT 0.8V 25C", "period_ns": 1.25, "setup_uncertainty_ns": 0.08, "io_budget_ns": 0.10, "wns_ns": 0.00000369549, "area": 2097416.780547, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
-  "dc_log_sha256": "07def1213de641701575a90e5f5a08ff43644216ae06add88e6e07927f888bee",
-  "status_sha256": "5d1045c7249688901ea5e9a297148f98c5805a69115f113f6f4a9500e3bfff1d",
+  "dc": {"library": "CLN22UL base SVT TT 0.8V 25C", "period_ns": 1.25, "setup_uncertainty_ns": 0.08, "io_budget_ns": 0.10, "wns_ns": 0.00000369549, "area": 2097260.351548, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4027, "max_fanout_violations": 47},
+  "dc_log_sha256": "bc974fcd4dccdb04250320387aac0b2c24609ddcec3920e6a5e960fb5302bb29",
+  "status_sha256": "15252a6c9d66773837b31051525eeb5081de03725635553984bd4142c64945a0",
   "attempts": [{"status": "FAIL_UNMAPPED_ROUTER_DEFINITION", "unmapped": 450}, {"status": "PASS_AFTER_STANDALONE_ROUTER_DDC", "unmapped": 0}],
   "root_bridge_shell": {
     "top": "operator_root_bridge_owner_shell_v3",
@@ -19,8 +19,8 @@
     "maintenance_wrapper_map": {"status": "PASS_WRAPPER_MAP", "unmapped_excluding_owner_child": 0, "dc_log_sha256": "40a397da5324da61f8bb51e9223cc2946ca78416493ec49650d411b615f0d631"},
     "verilator_build_log_sha256": "b206fb232f2023198e6eed6c32ae4b97f46bdea0fa786cf66fb2574158d1d112",
     "terminal_bridge_dc": {"wns_ns": 0.588299, "area": 711.984, "unmapped": 0, "dc_log_sha256": "20b697b91122550a9ba85e6561cc7ac031110a7cddd459171a70b2dc861cbe4b"},
-    "linked_dc": {"status": "PASS_CONDITIONAL_PREDICATE_MAINTENANCE_SCRATCH_ENABLED", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2097416.780547, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4058, "max_fanout_violations": 47},
-    "linked_dc_log_sha256": "07def1213de641701575a90e5f5a08ff43644216ae06add88e6e07927f888bee"
+    "linked_dc": {"status": "PASS_CURRENT_PRIMITIVE_GENERATION", "period_ns": 1.25, "wns_ns": 0.00000369549, "area": 2097260.351548, "unmapped": 0, "unresolved": 0, "dc_errors": 0, "max_transition_violations": 4027, "max_fanout_violations": 47},
+    "linked_dc_log_sha256": "bc974fcd4dccdb04250320387aac0b2c24609ddcec3920e6a5e960fb5302bb29"
   },
-  "claim_boundary": "The conditional-predicate, maintenance- and scratch-enabled root bridge, owner router, all eight real owners and real Matrix hierarchy are linked and setup-clean after all four canaries pass. Root stress, 4058 transition/47 fanout cleanup, SRAM macros, SAIF and post-route signoff remain open."
+  "claim_boundary": "The current authoritative primitive generation, conditional root bridge and all eight real owners are linked and setup-clean after all four canaries pass. The 4027 transition/47 fanout violations, macro-aware SRAM shell, SAIF and post-route signoff remain open."
 }

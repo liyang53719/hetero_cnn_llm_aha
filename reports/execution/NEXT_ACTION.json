@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
-  "state": "G0_G1_G2_PASS_G3_18_ROOT_STRESS_AND_25_PRIMITIVE_DC_PASS",
-  "unique_next_action": "Rerun four root-owner canaries and Selection/Vision/combined 1.25 ns DC against the regenerated primitive RTL, then fix the remaining 4058 max-transition and 47 max-fanout combined-shell violations.",
+  "state": "G0_G1_G2_PASS_G3_CURRENT_CANARIES_STRESS_18_ROOT_25_PRIMITIVE_AND_COMBINED_SETUP_PASS",
+  "unique_next_action": "Fix the remaining 4027 max-transition and 47 max-fanout combined-shell violations in the Matrix hierarchy using the approved fanout-tree/boundary order, then rerun current-generation combined DC before macro-aware SRAM and SAIF closure.",
   "expected_outputs": [
     "generated/operator_primitives_v3/roots/HeteroMtpVerifyResolvePrimitiveV3.sv",
     "reports/execution/OPERATOR_MODEL_CANARIES_V3.json"

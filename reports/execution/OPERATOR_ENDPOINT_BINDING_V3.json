@@ -136,7 +136,7 @@
     "test_log_sha256": "e6740b2ae1dfce52212d1602fba0bd93f04c818e28ed4de8e9d69f1811c2d5b3",
     "rsqrt_nr2_dc": {"period_ns": 1.0, "wns_ns": 0.000101328, "area": 4136.31403, "unmapped": 0},
     "rsqrt_nr2_dc_log_sha256": "249ae2ceffa17d4baa097bc04cdbd093a5ec687089029ac3b9c272d5624a7811",
-    "reciprocal_dc": {"status": "FAIL_NO_TIMING_PATH_OPTIMIZED_EMPTY"},
+    "reciprocal_dc": {"status": "PASS_NR2", "wns_ns": 0.0000582933, "area": 3664.843, "unmapped": 0, "rtl_sha256": "1e218c029bfbf2cd3d6c478c7a92b83eb08314360c01f5debf76bdcbafc6b431", "test_log_sha256": "f70c5ef417a2ed318e4a44f2594f40c75571db34e909a94069b8c57faf5ec85e", "dc_log_sha256": "1f7e379d724428c73503386a08bab13a71e53e37eb345fd305527426c4c495e6"},
     "exp2_dc": {"status": "FAIL_TIMING", "wns_ns": -0.140313},
     "superseded_rsqrt_dc": {"status": "FAIL_TIMING", "wns_ns": -6.78428}
   },

@@ -89,5 +89,18 @@
     "retained_gemmini": {"conv1x1_custom3_per_path": 9, "upstream_clean": true, "numerical_marker": "PASS"},
     "nonclaim": "V3 adapter and retained pipeline are component-bound; same-run combined canary remains G4."
   },
+  "sfu_vector_endpoint_evidence": {
+    "status": "FUNCTIONAL_PASS_DC_FAIL_NOT_COUNTED",
+    "adapter": "rtl/integration/operator_sfu_vector_endpoint_v3.sv",
+    "rtl_sha256": "61c367ed1bd846a04c5d3a16498419d489d6c20ceb50d8217dcef87277489511",
+    "opcodes_functional": 10,
+    "lanes": 16,
+    "numerical_cases": 11,
+    "test_log_sha256": "fe787bf3b04b58ec402ead250001cf0c0636c66ed2284e2fa3a4d27fe8f0d15f",
+    "dc_attempt1": {"status": "FAIL_TIMING", "wns_ns": -0.367541, "area": 52494.078},
+    "dc_attempt2": {"status": "TIMEOUT_600S", "optimizer_snapshot_wns_ns_approx": -0.35},
+    "dc_log_sha256": "4855cacd59d36946eede68ab36ecc4c637c79fed31f16b4e16eb901480546140",
+    "next_fix": "replace dual-function combinational ALUs with dedicated pipelined AddPipe and MulPipe lanes"
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

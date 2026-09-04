@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
   "state": "G0_G1_G2_PASS_G3_BRIDGE_SOURCE_PASS",
-  "unique_next_action": "Implement the 23-opcode SFU V3 endpoint over existing FP32/BF16 arithmetic, norm, RoPE, online-softmax and PWL units; add the missing reduce-max/group-norm/L2/layernorm primitives before claiming SFU closure.",
+  "unique_next_action": "Replace the SFU vector endpoint's dual-function combinational ALUs with the existing dedicated pipelined AddPipe/MulPipe lanes, preserve the 10-opcode numerical vectors, and rerun 1.25 ns DC before adding the remaining 13 SFU operations.",
   "expected_outputs": [
     "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
     "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"

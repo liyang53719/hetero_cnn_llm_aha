@@ -54,7 +54,12 @@
     "summed_independent_cell_area": 19590.115996,
     "unmapped": 0,
     "evidence": "reports/execution/OPERATOR_ROOT_DC_800MHZ.json",
-    "nonclaim": "not endpoint-bound combined shell"
+    "primitive_modules": "PARTIAL_23_OF_25_PASS",
+    "primitive_minimum_wns_ns": 0.0000342131,
+    "primitive_summed_passing_cell_area": 98171.164,
+    "primitive_timeouts": ["HeteroStreamingTopK", "HeteroQsaBlockSelector"],
+    "primitive_evidence": "reports/execution/OPERATOR_PRIMITIVE_DC_800MHZ.json",
+    "nonclaim": "not endpoint-bound combined shell; TopK/QSA require SRAM-aware bottom-up synthesis"
   },
   "claim_rules": [
     "Source or inventory coverage is not numerical RTL closure.",

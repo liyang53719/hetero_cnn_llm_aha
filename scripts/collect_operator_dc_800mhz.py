@@ -18,7 +18,7 @@ for status_path in sorted(source.glob("*/status.txt")):
     log = status_path.with_name("dc.log")
     if not fields.get("TOTAL_AREA"):
         area_report = status_path.with_name("area_hier.rpt")
-        match = re.search(r"^Total cell area:\s+([0-9.]+)", area_report.read_text(), re.MULTILINE)
+        match = re.search(r"^Total cell area:\s+([0-9.]+)", area_report.read_text(), re.MULTILINE) if area_report.exists() else None
         fields["TOTAL_AREA"] = match.group(1) if match else None
     fields["STATUS_SHA256"] = hashlib.sha256(status_path.read_bytes()).hexdigest()
     fields["LOG_SHA256"] = hashlib.sha256(log.read_bytes()).hexdigest() if log.exists() else None

@@ -31,4 +31,7 @@
   no early success completion; Icarus and Verilator PASS.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
+- Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
+  independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
+  the 512x65 table was flattened into ~33k registers; bind external SRAM next.
 - Next: bind DMA read/write/gather/scatter to pinned iDMA completion.

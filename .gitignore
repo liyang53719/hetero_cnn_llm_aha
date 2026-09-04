@@ -27,6 +27,8 @@ models/
 __pycache__/
 *.py[cod]
 .venv/
+target/
+test_run_dir/
 
 # Keep the concise execution contract, not generated evidence blobs
 reports/execution/preflight.json

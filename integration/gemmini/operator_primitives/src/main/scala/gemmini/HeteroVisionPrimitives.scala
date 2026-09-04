@@ -132,7 +132,7 @@ class HeteroVisionWindowAddressGenerator(
     val startReady = Output(Bool())
     val temporal = Input(UInt(ccb.W))
     val height = Input(UInt(ccb.W))
-    val width = Input(UInt(ccb.W))
+    val imageWidth = Input(UInt(ccb.W))
     val paddedHeight = Input(UInt(ccb.W))
     val paddedWidth = Input(UInt(ccb.W))
     val windowHeight = Input(UInt(ccb.W))
@@ -160,9 +160,9 @@ class HeteroVisionWindowAddressGenerator(
 
   val configValid = io.temporal =/= 0.U && io.temporal <= maxCoordinate.U &&
     io.height =/= 0.U && io.height <= maxCoordinate.U &&
-    io.width =/= 0.U && io.width <= maxCoordinate.U &&
+    io.imageWidth =/= 0.U && io.imageWidth <= maxCoordinate.U &&
     io.paddedHeight >= io.height && io.paddedHeight <= maxCoordinate.U &&
-    io.paddedWidth >= io.width && io.paddedWidth <= maxCoordinate.U &&
+    io.paddedWidth >= io.imageWidth && io.paddedWidth <= maxCoordinate.U &&
     io.windowHeight =/= 0.U && io.windowHeight <= io.paddedHeight &&
     io.windowWidth =/= 0.U && io.windowWidth <= io.paddedWidth
 
@@ -205,7 +205,7 @@ class HeteroVisionWindowAddressGenerator(
     when(io.start && io.startReady && configValid) {
       temporalCount := io.temporal
       height := io.height
-      width := io.width
+      width := io.imageWidth
       paddedHeight := io.paddedHeight
       paddedWidth := io.paddedWidth
       windowHeight := io.windowHeight
@@ -282,7 +282,7 @@ class HeteroVisionPatchMergeAddressGenerator(
     val startReady = Output(Bool())
     val temporal = Input(UInt(ccb.W))
     val height = Input(UInt(ccb.W))
-    val width = Input(UInt(ccb.W))
+    val imageWidth = Input(UInt(ccb.W))
     val mergeHeight = Input(UInt(log2Ceil(maxMerge + 1).W))
     val mergeWidth = Input(UInt(log2Ceil(maxMerge + 1).W))
     val out = Decoupled(new HeteroVisionPatchMergeEntry(cb, mb, ob))
@@ -306,7 +306,7 @@ class HeteroVisionPatchMergeAddressGenerator(
 
   val configValid = io.temporal =/= 0.U && io.temporal <= maxCoordinate.U &&
     io.height =/= 0.U && io.height <= maxCoordinate.U &&
-    io.width =/= 0.U && io.width <= maxCoordinate.U &&
+    io.imageWidth =/= 0.U && io.imageWidth <= maxCoordinate.U &&
     io.mergeHeight =/= 0.U && io.mergeHeight <= maxMerge.U &&
     io.mergeWidth =/= 0.U && io.mergeWidth <= maxMerge.U
   val sourceY = baseY + inY
@@ -345,7 +345,7 @@ class HeteroVisionPatchMergeAddressGenerator(
     when(io.start && io.startReady && configValid) {
       temporalCount := io.temporal
       height := io.height
-      width := io.width
+      width := io.imageWidth
       mergeHeight := io.mergeHeight
       mergeWidth := io.mergeWidth
       temporal := 0.U

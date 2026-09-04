@@ -3,7 +3,7 @@ package gemmini
 import chisel3._
 import chisel3.util._
 
-class HeteroDivideResult(val width: Int) extends Bundle { val quotient = UInt(width.W); val remainder = UInt(width.W) }
+class HeteroDivideResult(val dataBits: Int) extends Bundle { val quotient = UInt(dataBits.W); val remainder = UInt(dataBits.W) }
 
 /** One restoring-division bit per cycle; no inferred runtime divider or barrel shifter. */
 class HeteroUnsignedDivide(val width: Int = 64) extends Module {
@@ -129,15 +129,15 @@ class HeteroTaggedGatherReorder(val maxOutstanding:Int=32,val addrBits:Int=64,va
   val tags=Reg(Vec(maxOutstanding,UInt(tagBits.W)));val generations=Reg(Vec(maxOutstanding,UInt(generationBits.W)));val lasts=Reg(Vec(maxOutstanding,Bool()));val data=Reg(Vec(maxOutstanding,UInt(dataBits.W)))
   val alloc=RegInit(0.U(slotBits.W));val retire=RegInit(0.U(slotBits.W));val count=RegInit(0.U(countBits.W));val error=RegInit(false.B)
   def next(p:UInt)=Mux(p===(maxOutstanding-1).U,0.U,p+1.U)
-  val allocOk=count<maxOutstanding.U&&!valid(alloc);io.memReq.valid:=io.in.valid&&allocOk;io.memReq.bits.address:=io.in.bits.address;io.memReq.bits.slot:=alloc;io.in.ready:=io.memReq.ready&&allocOk
+  val allocOk=count<maxOutstanding.U && !valid(alloc);io.memReq.valid:=io.in.valid&&allocOk;io.memReq.bits.address:=io.in.bits.address;io.memReq.bits.slot:=alloc;io.in.ready:=io.memReq.ready&&allocOk
   val justAllocated=io.in.fire&&io.memResp.bits.slot===alloc
-  val legal=(valid(io.memResp.bits.slot)||justAllocated)&&!responseValid(io.memResp.bits.slot)
+  val legal=(valid(io.memResp.bits.slot)||justAllocated) && !responseValid(io.memResp.bits.slot)
   io.memResp.ready:=true.B;val respFire=io.memResp.fire&&legal
   io.out.valid:=count=/=0.U&&responseValid(retire);io.out.bits.data:=data(retire);io.out.bits.tag:=tags(retire);io.out.bits.generation:=generations(retire);io.out.bits.last:=lasts(retire)
   io.outstanding:=count;io.protocolError:=error
   when(io.clear){alloc:=0.U;retire:=0.U;count:=0.U;error:=false.B;for(i<-0 until maxOutstanding){valid(i):=false.B;responseValid(i):=false.B}}
   .otherwise{
-    when(io.memResp.fire&&!legal){error:=true.B}
+    when(io.memResp.fire && !legal){error:=true.B}
     when(io.in.fire){valid(alloc):=true.B;responseValid(alloc):=false.B;tags(alloc):=io.in.bits.tag;generations(alloc):=io.in.bits.generation;lasts(alloc):=io.in.bits.last;alloc:=next(alloc)}
     when(respFire){data(io.memResp.bits.slot):=io.memResp.bits.data;responseValid(io.memResp.bits.slot):=true.B}
     when(io.out.fire){valid(retire):=false.B;responseValid(retire):=false.B;retire:=next(retire)}
@@ -157,13 +157,13 @@ class HeteroMoeRouteDispatch(val maxRoutes:Int=16,val tokenBits:Int=32,val exper
   val io=IO(new Bundle{val clear=Input(Bool());val start=Input(Bool());val startReady=Output(Bool());val token=Input(UInt(tokenBits.W));val routeCount=Input(UInt(countBits.W));val routeIn=Flipped(Decoupled(new HeteroMoeRoute(expertBits,weightBits)));val dispatchOut=Decoupled(new HeteroMoeDispatchEntry(tokenBits,expertBits,weightBits,routeBits));val resultIn=Flipped(Decoupled(new HeteroMoeResult(dataBits,routeBits)));val mergeOut=Decoupled(new HeteroMoeMergeContribution(dataBits,weightBits,routeBits));val busy=Output(Bool());val done=Output(Bool());val invalidConfig=Output(Bool());val protocolError=Output(Bool())})
   val sIdle::sLoad::sDispatch::sWait::sMerge::Nil=Enum(5);val state=RegInit(sIdle);val token=Reg(UInt(tokenBits.W));val routes=Reg(UInt(countBits.W));val load=RegInit(0.U(countBits.W));val dispatch=RegInit(0.U(routeBits.W));val merge=RegInit(0.U(routeBits.W));val returned=RegInit(0.U(countBits.W))
   val experts=Reg(Vec(maxRoutes,UInt(expertBits.W)));val weights=Reg(Vec(maxRoutes,UInt(weightBits.W)));val shared=Reg(Vec(maxRoutes,Bool()));val issued=RegInit(VecInit(Seq.fill(maxRoutes)(false.B)));val resultValid=RegInit(VecInit(Seq.fill(maxRoutes)(false.B)));val resultData=Reg(Vec(maxRoutes,UInt(dataBits.W)));val error=RegInit(false.B)
-  val cfg=io.routeCount=/=0.U&&io.routeCount<=maxRoutes.U;io.startReady:=state===sIdle;io.invalidConfig:=io.start&&io.startReady&&!cfg;io.busy:=state=/=sIdle;io.done:=false.B;io.protocolError:=error;io.routeIn.ready:=state===sLoad
+  val cfg=io.routeCount=/=0.U&&io.routeCount<=maxRoutes.U;io.startReady:=state===sIdle;io.invalidConfig:=io.start&&io.startReady && !cfg;io.busy:=state=/=sIdle;io.done:=false.B;io.protocolError:=error;io.routeIn.ready:=state===sLoad
   io.dispatchOut.valid:=state===sDispatch;io.dispatchOut.bits.token:=token;io.dispatchOut.bits.expert:=experts(dispatch);io.dispatchOut.bits.weight:=weights(dispatch);io.dispatchOut.bits.routeTag:=dispatch;io.dispatchOut.bits.shared:=shared(dispatch);io.dispatchOut.bits.last:=dispatch+1.U>=routes
-  val justIssued=io.dispatchOut.fire&&io.resultIn.bits.routeTag===dispatch;val legal=io.resultIn.bits.routeTag<routes&&(issued(io.resultIn.bits.routeTag)||justIssued)&&!resultValid(io.resultIn.bits.routeTag);io.resultIn.ready:=state===sDispatch||state===sWait;val resp=io.resultIn.fire&&legal
+  val justIssued=io.dispatchOut.fire&&io.resultIn.bits.routeTag===dispatch;val legal=io.resultIn.bits.routeTag<routes&&(issued(io.resultIn.bits.routeTag)||justIssued) && !resultValid(io.resultIn.bits.routeTag);io.resultIn.ready:=state===sDispatch||state===sWait;val resp=io.resultIn.fire&&legal
   io.mergeOut.valid:=state===sMerge;io.mergeOut.bits.routeTag:=merge;io.mergeOut.bits.weight:=weights(merge);io.mergeOut.bits.data:=resultData(merge);io.mergeOut.bits.first:=merge===0.U;io.mergeOut.bits.last:=merge+1.U>=routes
   when(io.clear){state:=sIdle;error:=false.B;returned:=0.U;for(i<-0 until maxRoutes){issued(i):=false.B;resultValid(i):=false.B}}
   .otherwise{
-    when(io.resultIn.fire&&!legal){error:=true.B};when(resp){resultData(io.resultIn.bits.routeTag):=io.resultIn.bits.data;resultValid(io.resultIn.bits.routeTag):=true.B;returned:=returned+1.U}
+    when(io.resultIn.fire && !legal){error:=true.B};when(resp){resultData(io.resultIn.bits.routeTag):=io.resultIn.bits.data;resultValid(io.resultIn.bits.routeTag):=true.B;returned:=returned+1.U}
     switch(state){
       is(sIdle){when(io.start&&cfg){token:=io.token;routes:=io.routeCount;load:=0.U;dispatch:=0.U;merge:=0.U;returned:=0.U;error:=false.B;for(i<-0 until maxRoutes){issued(i):=false.B;resultValid(i):=false.B};state:=sLoad}}
       is(sLoad){when(io.routeIn.fire){experts(load):=io.routeIn.bits.expert;weights(load):=io.routeIn.bits.weight;shared(load):=io.routeIn.bits.shared;when(load+1.U>=routes){state:=sDispatch}.otherwise{load:=load+1.U}}}
@@ -418,8 +418,7 @@ class HeteroQsaBlockSelector(
   topK.io.clear := io.clear
   multiply.io.clear := io.clear
 
-  val sIdle :: sTailBaseStart :: sTailBaseWait :: sTopStart :: sCollect ::
-    sBlockBaseStart :: sBlockBaseWait :: sExpand :: sTail :: Nil = Enum(9)
+  val sIdle :: sTailBaseStart :: sTailBaseWait :: sTopStart :: sCollect :: sBlockBaseStart :: sBlockBaseWait :: sExpand :: sTail :: Nil = Enum(9)
   val state = RegInit(sIdle)
   val blocks = Reg(UInt(blockCountBits.W))
   val ratio = Reg(UInt(ratioBits.W))
@@ -565,8 +564,8 @@ class HeteroQsaBlockSelector(
   when(state === sTail) { assert(tail =/= 0.U && tailOffset < tail) }
 }
 
-class HeteroMultiplyResult(val width: Int) extends Bundle {
-  val product = UInt((2 * width).W)
+class HeteroMultiplyResult(val dataBits: Int) extends Bundle {
+  val product = UInt((2 * dataBits).W)
 }
 
 /** One shift/add bit per cycle.  Used in address-generation paths where a

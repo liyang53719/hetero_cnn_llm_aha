@@ -9,8 +9,8 @@
   "handoff": "reports/execution/HANDOFF.md",
   "git_workflow_policy": "config/git_workflow_policy.json",
   "canonical_archspec": "configs/arch_v1.yaml",
-  "current_stage": "G0_CONTROL_PLANE_FREEZE",
-  "current_state": "PLAN_LANDED_PENDING_LOCAL_SOURCE_REPLAY",
+  "current_stage": "G2_AUTHORITATIVE_RTL_GENERATION",
+  "current_state": "G0_G1_PASS",
   "active_clock": {
     "frequency_mhz": 800,
     "period_ns": 1.25,
@@ -32,7 +32,7 @@
     "remote_equality_required": true
   },
   "evidence_boundary": {
-    "source_gate": "OPEN_LOCAL_REPLAY",
+    "source_gate": "PASS_LOCAL_REPLAY_18_ROOTS_25_MODULES_58_BINDINGS",
     "authoritative_rtl": "OPEN",
     "endpoint_binding": "OPEN",
     "four_canaries": "OPEN",

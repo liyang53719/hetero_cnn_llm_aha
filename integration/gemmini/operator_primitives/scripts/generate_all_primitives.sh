@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Run in the local pinned Gemmini/Chisel/CIRCT environment. No branch is created,
-# no generated file is edited, and this script never removes build artifacts.
+# Run in the repository's pinned standalone Chisel/CIRCT project. No branch is
+# created, no generated file is edited, and canonical upstream stays read-only.
 REPO_ROOT=$(cd "$(dirname "$0")/../../../.." && pwd)
 PACKAGE="$REPO_ROOT/integration/gemmini/operator_primitives"
-: "${GEMMINI_DIR:?set GEMMINI_DIR to the pinned Gemmini checkout}"
+PROJECT_DIR=${PROJECT_DIR:-"$REPO_ROOT/chisel/operator_primitives_v3"}
+PINNED_GEMMINI_DIR=${PINNED_GEMMINI_DIR:-"$REPO_ROOT/work/upstream/chipyard_gemmini/generators/gemmini"}
 : "${SBT:=sbt}"
-DEST="$GEMMINI_DIR/src/main/scala/gemmini/hetero_operator_primitives"
 OUT="${1:-$REPO_ROOT/work/generated/operator_primitives_800mhz}"
 LOG_DIR="$OUT/logs"
-mkdir -p "$DEST" "$OUT" "$LOG_DIR"
+mkdir -p "$OUT" "$LOG_DIR"
 
-cp -p "$PACKAGE/src/main/scala/gemmini/"*.scala "$DEST/"
+test -f "$PROJECT_DIR/build.sbt"
+test -f "$PROJECT_DIR/project/build.properties"
+test -d "$PINNED_GEMMINI_DIR/.git" -o -f "$PINNED_GEMMINI_DIR/.git"
+test -z "$(git -C "$PINNED_GEMMINI_DIR" status --porcelain)"
 mapfile -t names < <(
   sed -n '/val names: Seq\[String\] = Seq(/,/^  )/s/^    "\([a-z0-9_]*\)",\{0,1\}$/\1/p' \
     "$PACKAGE/src/main/scala/gemmini/EmitHeteroOperatorPrimitiveCatalog.scala"
@@ -26,7 +29,8 @@ printf '%s\n' "${names[@]}" > "$OUT/catalog.txt"
   printf 'utc_started=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   printf 'repository_commit=%s\n' "$(git -C "$REPO_ROOT" rev-parse HEAD)"
   printf 'repository_branch=%s\n' "$(git -C "$REPO_ROOT" branch --show-current)"
-  printf 'gemmini_commit=%s\n' "$(git -C "$GEMMINI_DIR" rev-parse HEAD)"
+  printf 'generation_project=%s\n' "${PROJECT_DIR#$REPO_ROOT/}"
+  printf 'gemmini_commit=%s\n' "$(git -C "$PINNED_GEMMINI_DIR" rev-parse HEAD)"
   printf 'catalog_modules=%d\n' "${#names[@]}"
   printf 'clock_target_hz=800000000\nperiod_ns=1.25\n'
   printf 'java_version_begin\n'; java -version 2>&1; printf 'java_version_end\n'
@@ -43,7 +47,7 @@ sha256sum "$PACKAGE/operator_coverage_800mhz.yaml" \
 for name in "${names[@]}"; do
   log="$LOG_DIR/${name}.log"
   (
-    cd "$GEMMINI_DIR"
+    cd "$PROJECT_DIR"
     "$SBT" -batch \
       "runMain gemmini.EmitHeteroOperatorPrimitiveCatalog $name $OUT/${name}.sv"
   ) >"$log" 2>&1

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "PASS_LOCAL_CHISEL_SOURCE_REPLAY",
+  "baseline_git_sha": "1eb0923e3a1138896a4cc737e4362b04cb548d29",
+  "implementation_origin": "Chisel",
+  "catapult_hls_source_found": false,
+  "toolchain": {
+    "java": "17.0.18-internal",
+    "sbt_project_version": "1.10.2",
+    "verilator": "5.050",
+    "chipyard_git_sha": "e602d917dcc495c58cabe906535e411707096c9c",
+    "gemmini_git_sha": "8c3f9923a44a2fe2c7930587be297d6d4f8c09ca"
+  },
+  "model_roots": {
+    "status": "PASS",
+    "count": 18,
+    "python_tests": 4,
+    "chisel_tests": 22,
+    "generated_smoke_sv": 18,
+    "chisel_test_log_sha256": "3cf5ff5a96f670a8765a1d4791faacc15679d439ca27a7da0606c98378dbb2b4",
+    "python_test_log_sha256": "c4b808d34f4db00b333696dec1f3a43a2887d8bfe0cb7af07a3cb98ff43a7830"
+  },
+  "primitive_modules": {
+    "status": "PASS",
+    "pytest_tests": 51,
+    "catalog_count": 25,
+    "generated_smoke_sv": 25,
+    "rtl_generation_audit_sha256": "8e6a8e2fe06bfb1b49d682d511120d601da586c9b8c2c8ab8bad27cf61334a21",
+    "rtl_hash_manifest_sha256": "988fc8c2a8ef98e1807d0fac37d4c4d11462e4b4f05180ef6290d24dffa27b79"
+  },
+  "coverage": {
+    "qwen2": "30/30",
+    "qwen3_5": "93/93",
+    "qwen3_8": "150/150",
+    "terminal_bindings": "58/58",
+    "missing": 0,
+    "unbound": 0
+  },
+  "source_fixes": [
+    "use a standalone Chisel 6.7 build instead of the unresolved RocketChip dynamic dependency",
+    "repair QSA Scala state-pattern and boolean tokenization",
+    "rename Vision width fields that collide with Chisel Aggregate.width"
+  ],
+  "upstream": {
+    "canonical_gemmini_clean": true,
+    "canonical_source_edits": 0,
+    "generated_rtl_hand_edits": 0
+  },
+  "evidence_boundary": "Source compile, tests and emission smoke pass; authoritative committed RTL, numerical RTL, endpoint binding and DC remain open."
+}

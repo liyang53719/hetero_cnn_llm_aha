@@ -7,6 +7,8 @@ OUT="$ROOT/work/generated/three_model_operator_primitives"
 RESULTS="$ROOT/work/results/three_model_operator_primitives"
 REPORT="$ROOT/reports/execution/OPERATOR_PRIMITIVE_COVERAGE_V3.json"
 SBT_LAUNCH_JAR=${SBT_LAUNCH_JAR:-"$ROOT/work/toolchain/sbt-launch-1.10.2.jar"}
+JAVA_BIN=${JAVA_BIN:-java}
+PYTHON_BIN=${PYTHON_BIN:-python3}
 
 mkdir -p "$OUT" "$RESULTS" "$(dirname "$SBT_LAUNCH_JAR")" "$(dirname "$REPORT")"
 
@@ -16,23 +18,23 @@ if [[ ! -f "$SBT_LAUNCH_JAR" ]]; then
     -o "$SBT_LAUNCH_JAR"
 fi
 
-python3 "$ROOT/scripts/audit_three_model_operator_primitives.py" \
+"$PYTHON_BIN" "$ROOT/scripts/audit_three_model_operator_primitives.py" \
   > "$RESULTS/source_audit.log"
-python3 -m pytest -q "$ROOT/tests/test_three_model_operator_primitives.py" \
+"$PYTHON_BIN" -m pytest -q "$ROOT/tests/test_three_model_operator_primitives.py" \
   > "$RESULTS/python_tests.log"
 
 pushd "$PROJECT" >/dev/null
-java -Xmx4g -jar "$SBT_LAUNCH_JAR" clean compile test \
+"$JAVA_BIN" -Xmx4g -jar "$SBT_LAUNCH_JAR" clean compile test \
   > "$RESULTS/chisel_test.log" 2>&1
-java -Xmx4g -jar "$SBT_LAUNCH_JAR" \
+"$JAVA_BIN" -Xmx4g -jar "$SBT_LAUNCH_JAR" \
   "runMain heteronpu.operator.OperatorProgramChecks" \
   > "$RESULTS/program_checks.log" 2>&1
-java -Xmx4g -jar "$SBT_LAUNCH_JAR" \
+"$JAVA_BIN" -Xmx4g -jar "$SBT_LAUNCH_JAR" \
   "runMain heteronpu.operator.EmitOperatorPrimitives $OUT" \
   > "$RESULTS/emitter.log" 2>&1
 popd >/dev/null
 
-python3 "$ROOT/scripts/audit_three_model_operator_primitives.py" \
+"$PYTHON_BIN" "$ROOT/scripts/audit_three_model_operator_primitives.py" \
   --generated "$OUT" --output "$REPORT" \
   > "$RESULTS/generated_audit.log"
 
@@ -40,7 +42,7 @@ sv_count=$(find "$OUT" -maxdepth 1 -type f -name '*.sv' | wc -l | tr -d ' ')
 [[ "$sv_count" == "18" ]]
 
 git -C "$ROOT" diff --check
-python3 - <<'PY'
+"$PYTHON_BIN" - <<'PY'
 from pathlib import Path
 import hashlib, json, os
 root = Path(os.environ.get("ROOT_FOR_RESULT", ".")).resolve()

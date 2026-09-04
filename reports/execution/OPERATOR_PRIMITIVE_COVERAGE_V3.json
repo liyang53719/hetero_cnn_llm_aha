@@ -1,0 +1,57 @@
+{
+  "evidence_boundary": "Chisel source, elaboration, handshake and structural semantic gate; generated RTL, endpoint integration, numerical RTL and DC are subsequent local-agent gates",
+  "generated": {
+    "checked": true,
+    "coverage_sha256": "6a15d9c3718b236da0b9c91dbf0a13466cc006afd076b288e60c55218f7c0ff4",
+    "manifest_sha256": "a31f7e80627101e1069f785a6991cad63d275bd112aaf9c185d951c8868d1ea6",
+    "sv_count": 18,
+    "sv_files": [
+      "HeteroFinalNormPrimitiveV3.sv",
+      "HeteroGatedDeltaNetPrimitiveV3.sv",
+      "HeteroLmHeadArgmaxPrimitiveV3.sv",
+      "HeteroMoePrimitiveV3.sv",
+      "HeteroMtpDraftPrimitiveV3.sv",
+      "HeteroMtpVerifyResolvePrimitiveV3.sv",
+      "HeteroMultimodalInjectPrimitiveV3.sv",
+      "HeteroPlePrimitiveV3.sv",
+      "HeteroQsaPrimitiveV3.sv",
+      "HeteroQwen2DecoderBlockPrimitiveV3.sv",
+      "HeteroQwen35DenseAttentionPrimitiveV3.sv",
+      "HeteroQwen38FinalHyperMergePrimitiveV3.sv",
+      "HeteroQwen38GatedResidualReadPrimitiveV3.sv",
+      "HeteroQwen38GatedResidualWritePrimitiveV3.sv",
+      "HeteroTokenEmbeddingPrimitiveV3.sv",
+      "HeteroVisionPatchEmbedPrimitiveV3.sv",
+      "HeteroVisionPatchMergePrimitiveV3.sv",
+      "HeteroVisionTransformerBlockPrimitiveV3.sv"
+    ]
+  },
+  "missing_operators": {
+    "qwen2_1p5b": [],
+    "qwen3_5_35b_a3b": [],
+    "qwen3_8_flash_next": []
+  },
+  "non_claims": [
+    "no generated-RTL numerical closure is claimed by this source gate",
+    "no integrated Command128/descriptor/L2 payload closure is claimed",
+    "no DC timing, area or power closure is claimed"
+  ],
+  "operator_counts": {
+    "qwen2_1p5b": 30,
+    "qwen3_5_35b_a3b": 93,
+    "qwen3_8_flash_next": 150
+  },
+  "root_count": 18,
+  "schema_version": 3,
+  "source_sha256": {
+    "chisel/three_model_operator_primitives/src/main/scala/heteronpu/operator/Catalog.scala": "3cd3796890bf4963c1fe26e70750d674cac6746c1bb4339bfd2d37fda9575353",
+    "chisel/three_model_operator_primitives/src/main/scala/heteronpu/operator/EmitAndChecks.scala": "52e4a4bedfb2e424a1a18afd73c400080b232e079ef5721de3812b6f0d33eb77",
+    "chisel/three_model_operator_primitives/src/main/scala/heteronpu/operator/ProgramsQwen38.scala": "fa3f032e41016f57f3f939dd8108f384d1f6413426d1a782d3b04f9dd02a76b0",
+    "chisel/three_model_operator_primitives/src/main/scala/heteronpu/operator/ProgramsText.scala": "27fa2877b72c9dbb7089d779eae89cf26e557ecec8854bebb53d96f59d962df5",
+    "chisel/three_model_operator_primitives/src/main/scala/heteronpu/operator/ProgramsVisionMtp.scala": "45bb71ab4539543f43972ffc5c486562bf472b6909498009329e9ac8c400d112",
+    "chisel/three_model_operator_primitives/src/main/scala/heteronpu/operator/Protocol.scala": "7e06a56d925d4392e35144380840c0957f9afae0d9dc468ca956d335adb3cb4e"
+  },
+  "status": "PASS_COMPLETE_THREE_MODEL_CHISEL_OPERATOR_PRIMITIVE_SOURCE_GATE",
+  "target_clock_hz": 800000000,
+  "target_period_ns": 1.25
+}

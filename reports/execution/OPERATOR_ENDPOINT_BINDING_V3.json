@@ -165,6 +165,22 @@
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000122786, "area": 23949.107, "unmapped": 0, "dc_errors": 0},
     "dc_log_sha256": "88d89b57c6ef3535a74f06cdfdd2a257fe7a0efd508913879db90223b5470b73"
   },
+  "sfu_rope_endpoint_evidence": {
+    "status": "PASS_NUMERICAL_ENDPOINT_DC",
+    "opcode": "SfuRope",
+    "pair_core": "rtl/sfu/fp32_rope_pair_pipe.sv",
+    "endpoint": "rtl/integration/operator_sfu_rope_endpoint_v3.sv",
+    "pair_core_sha256": "459446eee0c0727f21c02df564aa35d0d60f5b71f0d71cfe7afdc0c2a817774b",
+    "endpoint_sha256": "7cb06ed244265c98d2a263ab4ca505e2783aaf0d0f68ad7d698601197f75a0d6",
+    "original_vectors": 10000,
+    "pipelined_vectors": 10000,
+    "endpoint_transactions": 100,
+    "endpoint_pairs": 800,
+    "pipelined_test_log_sha256": "4af73adcf33d26879118f59f757ca07c49b326fc3e8348a300d2b6fee28c605d",
+    "endpoint_test_log_sha256": "4344d09e5cb58252e2ef15e067ed85ecf2acf27151ec02d8d359f29308de5d43",
+    "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.0000354052, "area": 14114.1, "unmapped": 0, "dc_errors": 0},
+    "dc_log_sha256": "992230d3692d98a0c155fbe7195ffc075ef4c1374dcf268731836ff538e1519d"
+  },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",
     "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",

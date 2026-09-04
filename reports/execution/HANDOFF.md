@@ -141,4 +141,8 @@
 - Current RTL setup/DRC closure PASS after SFU request/payload queues, Matrix
   boundary budgets and 11 reset branches: combined WNS +0.00000154972 ns,
   area 2121880.311, 0 unresolved/unmapped/transition/cap/fanout. All four
-  canaries pass this RTL. Next: macro-aware 4 MiB SRAM link and SAIF power.
+  canaries pass this RTL.
+- 4 MiB ARM SRAM DB inventory PASS: 124 macros, macro area 13088525.219.
+  Macro-aware PPA aggregate PASS at +0.00000154972 ns and total area
+  15210405.529. SRAM data pins are not connected in this aggregate and no
+  SAIF/energy claim is made. Final acceptance audit is next.

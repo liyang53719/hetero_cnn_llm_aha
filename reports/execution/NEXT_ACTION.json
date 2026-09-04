@@ -1,11 +1,11 @@
 {
   "schema_version": 7,
-  "stage": "G4_MACRO_AWARE_DC_AND_POWER",
-  "state": "G0_G1_G2_G3_PASS_LOGIC_SETUP_AND_DRC_CLEAN",
-  "unique_next_action": "Link the current combined shell with the existing 4 MiB SRAM DB inventory, verify exact macro count/capacity and 1.25 ns timing, then generate valid current-RTL activity for power; do not report energy without SAIF annotation coverage.",
+  "stage": "G5_FINAL_ACCEPTANCE_AUDIT",
+  "state": "G0_G1_G2_G3_G4_PASS",
+  "unique_next_action": "Run the final machine-readable acceptance audit over 18/25/58 coverage, four current-RTL canaries, 36000 root stress transactions, per-module/owner/combined DC, zero combined latch/loop/unconstrained-endpoint findings, and the 4 MiB macro PPA aggregate; then push and send the idempotent Feishu completion notice.",
   "expected_outputs": [
-    "reports/execution/L10_SRAM_MACRO_INVENTORY_RESULT.json",
-    "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json"
+    "reports/execution/OPERATOR_THREE_MODEL_FINAL_ACCEPTANCE_800MHZ.json",
+    "reports/execution/HANDOFF.md"
   ],
   "success": {
     "branch": "main",

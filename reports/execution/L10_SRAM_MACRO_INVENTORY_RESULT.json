@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "PASS_4MIB_ARM_SRAM_DB_INVENTORY",
+  "clock_period_ns": 1.25,
+  "physical_macros": 124,
+  "capacity_bytes": 4194304,
+  "capacity_mib": 4.0,
+  "macro_area": 13088525.21875,
+  "instances": {
+    "sp6144x128": 24,
+    "sp4096x128": 4,
+    "dp2048x64": 64,
+    "dp4096x32": 32
+  },
+  "logical_allocation_mib": {
+    "shared_l2": 1.5,
+    "matrix_scratchpad": 0.75,
+    "matrix_accumulator": 0.5,
+    "cgra_lake_and_wrapper": 0.5,
+    "kv_staging": 0.5,
+    "control_trace": 0.25
+  },
+  "timing_arcs": {
+    "sp6144x128": 306,
+    "sp4096x128": 306,
+    "dp2048x64": 1160,
+    "dp4096x32": 780
+  },
+  "db_sha256": {
+    "sp6144x128": "9fc6d2b5942b23488be5b88c3edd08f8c3e55e8c0e74eceb963640fac3b59e81",
+    "sp4096x128": "97b42c4be439e16e5b852af4e0ba5aa9e00bf5570c9b7aeeff358343d2709c1f",
+    "dp2048x64": "5928c1a89cb8d2aaf43a7018ea14fddecf93bf75cb6792d04c62affff9bb48fb",
+    "dp4096x32": "947ed8ca4091861bf1accc867bcfc1de88d3ce0858e212117e06e82d76f30571"
+  },
+  "unmapped": 0,
+  "unresolved": 0,
+  "blackbox_cells_without_db": 0,
+  "dc_log_sha256": "24b67ecfbdeb8e2532ec2987a329cf09fc28bd8ff5575fb700c84c4102363ee1",
+  "status_sha256": "f02b951012137fa958a239d9de429f2d58877bc120ffeb97ed6d696cb730067c",
+  "claim_boundary": "All macros link to real ARM DB views and expose timing arcs. This clock-only inventory proves count, capacity and macro area; it does not claim functional owner-to-SRAM data connectivity or SRAM data-path timing."
+}

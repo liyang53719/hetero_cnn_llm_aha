@@ -134,5 +134,9 @@
 - Predicate-era DC PASS: Selection WNS +0.0000602007 ns/area 29110.172;
   roots 18/18 min WNS +0.303001 ns/summed area 19534.606; Bridge WNS
   +0.588299 ns; Router +0.321471 ns; combined WNS +0.00000369549 ns/area
-  2097416.781 with 0 unresolved/unmapped. Root stress and 4058 transition/47
-  fanout cleanup remain open.
+  2097416.781 with 0 unresolved/unmapped. The 4058 transition/47 fanout
+  violations remain open.
+- Root protocol stress PASS: 18 roots x 20 seeds x 100 successful transactions
+  = 36000. Random micro-op/result backpressure and completion latency pass;
+  MTP predicate/commit/rollback flags are checked. Next hard gap is primitive
+  DC 23/25: externalize StreamingTopK/QSA 512x65 storage, then address DRC.

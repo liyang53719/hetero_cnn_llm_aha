@@ -36,7 +36,7 @@
     "G0": {"status": "PASS", "evidence": ["reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md"], "git_sha": "1eb0923e3a1138896a4cc737e4362b04cb548d29"},
     "G1": {"status": "PASS", "depends_on": ["G0"], "evidence": ["reports/execution/OPERATOR_SOURCE_REPLAY_V3.json"]},
     "G2": {"status": "PASS", "depends_on": ["G1"], "evidence": ["reports/execution/OPERATOR_RTL_GENERATION_V3.json", "generated/operator_primitives_v3/MANIFEST.json"]},
-    "G3": {"status": "IN_PROGRESS_4_CANARIES_PASS_ROOT_STRESS_AND_DC_RERUN_OPEN", "depends_on": ["G2"], "evidence": ["config/operator_terminal_bridge_v3.json", "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json", "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json", "reports/execution/OPERATOR_MODEL_CANARIES_V3.json"]},
+    "G3": {"status": "IN_PROGRESS_CANARIES_AND_ROOT_STRESS_PASS_PRIMITIVE_DC_DRC_OPEN", "depends_on": ["G2"], "evidence": ["config/operator_terminal_bridge_v3.json", "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json", "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json", "reports/execution/OPERATOR_MODEL_CANARIES_V3.json", "reports/execution/OPERATOR_ROOT_STRESS_V3.json"]},
     "G4": {"status": "PENDING", "depends_on": ["G3"]},
     "G5": {"status": "PENDING", "depends_on": ["G4"]}
   },

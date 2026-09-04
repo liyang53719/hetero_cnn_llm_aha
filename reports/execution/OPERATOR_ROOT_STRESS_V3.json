@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "PASS_18_ROOT_RANDOM_PROTOCOL_STRESS",
+  "roots": 18,
+  "seeds_per_root": 20,
+  "successful_transactions_per_seed": 100,
+  "successful_transactions_total": 36000,
+  "checks": [
+    "random launch spacing",
+    "micro-op output stability under random backpressure",
+    "random completion latency",
+    "tag and phase identity",
+    "result stability under random backpressure",
+    "zero protocol errors",
+    "conditional MTP predicate selects exactly one commit or rollback flag"
+  ],
+  "testbench_sha256": "51e650b9d678365793c531cdfe1f7990b6b64b69ddbd14a702f5db239fa8d5f8",
+  "runner_sha256": "f7bd2a2b7ee3eb1707d4fa14d631f4d8b59d84419103e8fe760916e4d4544aeb",
+  "summary_log_sha256": "531679d5ae8b0bc4611a5a1ad2eb1d53a41a09c107ed7079b4194055aad7294c",
+  "root_test_log_sha256": {
+    "HeteroFinalNormPrimitiveV3": "0cbe37b2f03055dc20012df1e93a9a85a0933f27b6b99174bafce724fa95cc8d",
+    "HeteroGatedDeltaNetPrimitiveV3": "7d4cc3b98591c94db208712dc0c949c9deceb265b6fa7ce0acfa3049978cb45c",
+    "HeteroLmHeadArgmaxPrimitiveV3": "4ef8d6cbb062bdb5370b32d983d8f8b8e0b397a66f195b38369aaa7d3ee6a0ce",
+    "HeteroMoePrimitiveV3": "197875c9a0da70f242d0f6681a159ddabd312bdc9a0adbffe4b15a41709aaa62",
+    "HeteroMtpDraftPrimitiveV3": "eb9c0e3b75294abf6b02dd003fb9685fd93daf41d64d7b763d171e1d2b2bf86a",
+    "HeteroMtpVerifyResolvePrimitiveV3": "7b747545d64314f841f097784d1b1f413df0df6125bc0695128cfc74618c850a",
+    "HeteroMultimodalInjectPrimitiveV3": "3d19ddd9c1ca48841cb87df4da5323e0f80ad32c5866cbc70d2a862cc33c0d88",
+    "HeteroPlePrimitiveV3": "21903e50a40137de4e67d34c12fcb462485113f105434b067f67a95b5e2bd64c",
+    "HeteroQsaPrimitiveV3": "6aa758476f762a669a213acf2a9c2e7d80bf6b850eb3afd0ce35a6e4b9a79c92",
+    "HeteroQwen2DecoderBlockPrimitiveV3": "d91ed7cd872a6f7d966c1e32d4f6af9dc1dce7034505169c5614bf33581ac2a8",
+    "HeteroQwen35DenseAttentionPrimitiveV3": "6f7d71b6112ec8a2f427989da50f7fdcd510cb14c55b52017bbfeb119b050ffa",
+    "HeteroQwen38FinalHyperMergePrimitiveV3": "dd0b920a03fff8e4239a8b8feb62df5a26de973a36b48a7f0658c4d69ec2efa4",
+    "HeteroQwen38GatedResidualReadPrimitiveV3": "c9474ec932c852c5a05176b230570ce8d4001f244fe0e60c7a1ea31d36b9bf15",
+    "HeteroQwen38GatedResidualWritePrimitiveV3": "163d51013bdbb1527a3b3b1c85a2db6c7dd45846d2668c9b2901ae7e997cb15a",
+    "HeteroTokenEmbeddingPrimitiveV3": "6e120dd7482502ce6c3b0b5c4af3c721e0d7da860bccded951d086ffebadd5d6",
+    "HeteroVisionPatchEmbedPrimitiveV3": "a37e2e17efcfef28ea24059996c7ffa815073005891bbae5003abcce83a8db48",
+    "HeteroVisionPatchMergePrimitiveV3": "87f93f83f29a5c842b5c541667f7f5cfd0c207ba8e555e80f9a2d94754448b54",
+    "HeteroVisionTransformerBlockPrimitiveV3": "67ba637684e9f540d7794206408615f0cfe19f8af009a1b93f161dff4a82e048"
+  },
+  "claim_boundary": "Root protocol stress returns synthetic successful leaf completions. Numerical payload execution is evidenced separately by primitive differential tests and the four root-owner canaries."
+}

@@ -126,4 +126,9 @@
 - Qwen3.5 root-owner canary PASS: GDN 34, dense attention 21, MoE 26, MTP
   commit 4 and rollback 4 phases. The same endpoint shell exercised DMA,
   Matrix, SFU, KV, State and Selection with no reference-output injection.
-  Qwen3.8 and Vision canaries are next; predicate-era DC remains superseded.
+  Predicate-era DC remains superseded until the post-canary rerun.
+- Qwen3.8 canary PASS across GDN/QSA/PLE/hyper/MoE-top10/MTP: 7 roots and
+  9 paths. QSA uses a valid pre-existing sparse-KV DDR PTE fixture.
+- Vision canary PASS across patch, transformer, merge and multimodal injection.
+  All four model classes now pass root-owner canaries. Next: predicate-era
+  Selection/root/combined DC, then 20-seed/100-transaction root stress.

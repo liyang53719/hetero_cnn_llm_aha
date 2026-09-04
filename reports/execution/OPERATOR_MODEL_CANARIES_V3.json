@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "IN_PROGRESS_2_OF_4",
+  "status": "PASS_4_OF_4_ROOT_OWNER_CANARIES",
   "claim_boundary": "Root-program canaries execute real owner endpoints with deterministic synthetic payload and memory services. They are not full checkpoint model inference or cross-operator tensor-memory continuity.",
   "qwen2": {
     "status": "PASS_ROOT_OWNER_CANARY",
@@ -31,6 +31,38 @@
       "mtp_rollback": "0db98d9682194d3d49059fd1b42bf5e516647ef3a15006bb5df724bfc136c707"
     }
   },
-  "qwen3_8": {"status": "OPEN"},
-  "vision": {"status": "OPEN"}
+  "qwen3_8": {
+    "status": "PASS_ROOT_OWNER_CANARY",
+    "roots": ["HeteroGatedDeltaNetPrimitiveV3", "HeteroQsaPrimitiveV3", "HeteroPlePrimitiveV3", "HeteroQwen38GatedResidualReadPrimitiveV3", "HeteroQwen38GatedResidualWritePrimitiveV3", "HeteroQwen38FinalHyperMergePrimitiveV3", "HeteroMoePrimitiveV3", "HeteroMtpVerifyResolvePrimitiveV3"],
+    "paths": 9,
+    "phases": {"gdn": 34, "qsa": 40, "ple": 23, "hyper_read": 13, "hyper_write": 15, "final_hyper": 10, "moe_top10": 26, "mtp_commit": 4, "mtp_rollback": 4},
+    "qsa_existing_sparse_kv_fixture": "valid DDR root/leaf PTE, generation 1",
+    "owners_exercised": ["Dma", "Matrix", "Sfu", "KvMemory", "State", "Selection", "Vision"],
+    "reference_output_injection": false,
+    "test_log_sha256": {
+      "gdn": "793373fd62f4419bb73eaf7973ca9cdee1ce7fff3e7b0d55581c21d915df274d",
+      "qsa": "e6b35df62b744eee1108e27350682bb9aed4df65943ff1456e3cf839ef73410f",
+      "ple": "fa4f0f52249de8fc1a6d5bc371646e5942df9cd946d9d91f03b138c49533e25d",
+      "hyper_read": "64b0aeb238d8355f21e35c1897e28d4e8ce5c4cba6ae71fd823e4c8087bfda84",
+      "hyper_write": "c8790b29c6c7a09aebc18cf75944fb6bb46796f357b04229c2253c40c3dc8c9c",
+      "final_hyper": "7278d579f0779d5affae8819da00caafaa8aae346440313ae8658c983ed8dc3d",
+      "moe_top10": "a79a5d94402e021648c7525cf17c8e292a19ef4408f6fb9db3e9eb7802d33ff5",
+      "mtp_commit": "f33bdeea63c9109a4c0288c06ff117d3b9218a9376cefdb7b6aa3d60554a7236",
+      "mtp_rollback": "18861509fec830443cb8ad25c8b7e8963033222de0cfe49ead857ba510e6d1bb"
+    }
+  },
+  "vision": {
+    "status": "PASS_ROOT_OWNER_CANARY",
+    "roots": ["HeteroVisionPatchEmbedPrimitiveV3", "HeteroVisionTransformerBlockPrimitiveV3", "HeteroVisionPatchMergePrimitiveV3", "HeteroMultimodalInjectPrimitiveV3"],
+    "paths": 4,
+    "phases": {"patch": 3, "transformer": 15, "merge": 6, "multimodal_inject": 2},
+    "owners_exercised": ["Dma", "Matrix", "Sfu", "Vision"],
+    "reference_output_injection": false,
+    "test_log_sha256": {
+      "patch": "88e7f0804ee3656c4c88c2162febaba53617b8e276a09f763389962f32942192",
+      "transformer": "f0667d30b02c80c3040eb0070e9daa6a51ebb143478e056563755d28ecbb908e",
+      "merge": "37b6c1ac1054b1d7caa0308df580c10d2dfdb48d99ab87abfd81186f0ce45fa7",
+      "multimodal_inject": "75439cd8f6a6ea5efc150ea3953f361bb1c69ef02579b7e12741635bfc5cf127"
+    }
+  }
 }

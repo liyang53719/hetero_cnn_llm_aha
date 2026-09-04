@@ -3,40 +3,121 @@
  `define MODEL_ROOT HeteroGatedDeltaNetPrimitiveV3
  `define EXPECTED_PHASES 34
  `define CANARY_NAME "QWEN35_GDN"
+ `define ROOT_MODE 0
+`elsif ROOT_GDN38
+ `define MODEL_ROOT HeteroGatedDeltaNetPrimitiveV3
+ `define EXPECTED_PHASES 34
+ `define CANARY_NAME "QWEN38_GDN"
+ `define ROOT_MODE 1
 `elsif ROOT_DENSE
  `define MODEL_ROOT HeteroQwen35DenseAttentionPrimitiveV3
  `define EXPECTED_PHASES 21
  `define CANARY_NAME "QWEN35_DENSE"
+ `define ROOT_MODE 0
 `elsif ROOT_MOE
  `define MODEL_ROOT HeteroMoePrimitiveV3
  `define EXPECTED_PHASES 26
  `define CANARY_NAME "QWEN35_MOE"
+ `define ROOT_MODE 0
+`elsif ROOT_MOE38
+ `define MODEL_ROOT HeteroMoePrimitiveV3
+ `define EXPECTED_PHASES 26
+ `define CANARY_NAME "QWEN38_MOE"
+ `define ROOT_MODE 0
+`elsif ROOT_QSA
+ `define MODEL_ROOT HeteroQsaPrimitiveV3
+ `define EXPECTED_PHASES 40
+ `define CANARY_NAME "QWEN38_QSA"
+ `define ROOT_MODE 0
+`elsif ROOT_PLE
+ `define MODEL_ROOT HeteroPlePrimitiveV3
+ `define EXPECTED_PHASES 23
+ `define CANARY_NAME "QWEN38_PLE"
+ `define ROOT_MODE 0
+`elsif ROOT_HYPER_READ
+ `define MODEL_ROOT HeteroQwen38GatedResidualReadPrimitiveV3
+ `define EXPECTED_PHASES 13
+ `define CANARY_NAME "QWEN38_HYPER_READ"
+ `define ROOT_MODE 0
+`elsif ROOT_HYPER_WRITE
+ `define MODEL_ROOT HeteroQwen38GatedResidualWritePrimitiveV3
+ `define EXPECTED_PHASES 15
+ `define CANARY_NAME "QWEN38_HYPER_WRITE"
+ `define ROOT_MODE 0
+`elsif ROOT_FINAL_HYPER
+ `define MODEL_ROOT HeteroQwen38FinalHyperMergePrimitiveV3
+ `define EXPECTED_PHASES 10
+ `define CANARY_NAME "QWEN38_FINAL_HYPER"
+ `define ROOT_MODE 0
+`elsif ROOT_VISION_PATCH
+ `define MODEL_ROOT HeteroVisionPatchEmbedPrimitiveV3
+ `define EXPECTED_PHASES 3
+ `define CANARY_NAME "VISION_PATCH"
+ `define ROOT_MODE 0
+`elsif ROOT_VISION_TRANSFORMER
+ `define MODEL_ROOT HeteroVisionTransformerBlockPrimitiveV3
+ `define EXPECTED_PHASES 15
+ `define CANARY_NAME "VISION_TRANSFORMER"
+ `define ROOT_MODE 0
+`elsif ROOT_VISION_MERGE
+ `define MODEL_ROOT HeteroVisionPatchMergePrimitiveV3
+ `define EXPECTED_PHASES 6
+ `define CANARY_NAME "VISION_MERGE"
+ `define ROOT_MODE 0
+`elsif ROOT_VISION_INJECT
+ `define MODEL_ROOT HeteroMultimodalInjectPrimitiveV3
+ `define EXPECTED_PHASES 2
+ `define CANARY_NAME "VISION_INJECT"
+ `define ROOT_MODE 0
+`elsif ROOT_MTP38_COMMIT
+ `define MODEL_ROOT HeteroMtpVerifyResolvePrimitiveV3
+ `define EXPECTED_PHASES 4
+ `define CANARY_NAME "QWEN38_MTP_COMMIT"
+ `define ROOT_MODE 0
+`elsif ROOT_MTP38_ROLLBACK
+ `define MODEL_ROOT HeteroMtpVerifyResolvePrimitiveV3
+ `define EXPECTED_PHASES 4
+ `define CANARY_NAME "QWEN38_MTP_ROLLBACK"
+ `define ROOT_MODE 0
 `elsif ROOT_MTP_COMMIT
  `define MODEL_ROOT HeteroMtpVerifyResolvePrimitiveV3
  `define EXPECTED_PHASES 4
  `define CANARY_NAME "QWEN35_MTP_COMMIT"
+ `define ROOT_MODE 0
 `elsif ROOT_MTP_ROLLBACK
  `define MODEL_ROOT HeteroMtpVerifyResolvePrimitiveV3
  `define EXPECTED_PHASES 4
  `define CANARY_NAME "QWEN35_MTP_ROLLBACK"
+ `define ROOT_MODE 0
 `else
  `define MODEL_ROOT HeteroQwen2DecoderBlockPrimitiveV3
  `define EXPECTED_PHASES 26
  `define CANARY_NAME "QWEN2"
+ `define ROOT_MODE 0
+`endif
+`ifdef ROOT_MOE38
+ `define TOPK_ITEMS 12
+ `define TOPK_K 10
+ `define ROUTE_COUNT 10
+`else
+ `define TOPK_ITEMS 4
+ `define TOPK_K 2
+ `define ROUTE_COUNT 2
 `endif
 module tb_qwen2_root_owner_canary_v3;
  logic clk_i,rst_ni;initial begin clk_i=0;rst_ni=0;end always #1 clk_i=~clk_i;
  logic launch_valid,launch_ready,micro_valid,micro_ready,root_result_valid,root_result_ready,root_busy,root_error;
  logic[7:0]mk,mphase,mmode,root_status,root_phases;logic[15:0]mflags,mtag,md0,md1,md2,md3,md4,md5,md6,md7,mm,mn,mkdim,mi0,mi1,root_tag;logic[23:0]mr0,mr1,mr2,mr3,mr4,mr5,mr6,mr7,mr8,mr9,mr10,mr11,mr12,mr13,mr14,mr15,ms0,ms1,ms2,mdst;
  logic bridge_cv,bridge_cr,bridge_predicate;logic[15:0]bridge_tag;logic[7:0]bridge_phase,bridge_status;
- `MODEL_ROOT root(.clock(clk_i),.reset(!rst_ni),.io_launch_ready(launch_ready),.io_launch_valid(launch_valid),.io_launch_bits_descriptors_0(mr0),.io_launch_bits_descriptors_1(mr1),.io_launch_bits_descriptors_2(mr2),.io_launch_bits_descriptors_3(mr3),.io_launch_bits_descriptors_4(mr4),.io_launch_bits_descriptors_5(mr5),.io_launch_bits_descriptors_6(mr6),.io_launch_bits_descriptors_7(mr7),.io_launch_bits_descriptors_8(mr8),.io_launch_bits_descriptors_9(mr9),.io_launch_bits_descriptors_10(mr10),.io_launch_bits_descriptors_11(mr11),.io_launch_bits_descriptors_12(mr12),.io_launch_bits_descriptors_13(mr13),.io_launch_bits_descriptors_14(mr14),.io_launch_bits_descriptors_15(mr15),.io_launch_bits_dimensions_0(md0),.io_launch_bits_dimensions_1(md1),.io_launch_bits_dimensions_2(md2),.io_launch_bits_dimensions_3(md3),.io_launch_bits_dimensions_4(md4),.io_launch_bits_dimensions_5(md5),.io_launch_bits_dimensions_6(md6),.io_launch_bits_dimensions_7(md7),.io_launch_bits_tag(16'h1234),.io_launch_bits_mode(8'd0),.io_microOp_ready(micro_ready),.io_microOp_valid(micro_valid),.io_microOp_bits_kind(mk),.io_microOp_bits_flags(mflags),.io_microOp_bits_phase(mphase),.io_microOp_bits_tag(mtag),.io_microOp_bits_mode(mmode),.io_microOp_bits_src0(ms0),.io_microOp_bits_src1(ms1),.io_microOp_bits_src2(ms2),.io_microOp_bits_dst(mdst),.io_microOp_bits_m(mm),.io_microOp_bits_n(mn),.io_microOp_bits_k(mkdim),.io_microOp_bits_index0(mi0),.io_microOp_bits_index1(mi1),.io_completion_ready(bridge_cr),.io_completion_valid(bridge_cv),.io_completion_bits_tag(bridge_tag),.io_completion_bits_phase(bridge_phase),.io_completion_bits_status(bridge_status),.io_completion_bits_predicate(bridge_predicate),.io_result_ready(root_result_ready),.io_result_valid(root_result_valid),.io_result_bits_tag(root_tag),.io_result_bits_status(root_status),.io_result_bits_completedPhases(root_phases),.io_busy(root_busy),.io_protocolError(root_error));
+ `MODEL_ROOT root(.clock(clk_i),.reset(!rst_ni),.io_launch_ready(launch_ready),.io_launch_valid(launch_valid),.io_launch_bits_descriptors_0(mr0),.io_launch_bits_descriptors_1(mr1),.io_launch_bits_descriptors_2(mr2),.io_launch_bits_descriptors_3(mr3),.io_launch_bits_descriptors_4(mr4),.io_launch_bits_descriptors_5(mr5),.io_launch_bits_descriptors_6(mr6),.io_launch_bits_descriptors_7(mr7),.io_launch_bits_descriptors_8(mr8),.io_launch_bits_descriptors_9(mr9),.io_launch_bits_descriptors_10(mr10),.io_launch_bits_descriptors_11(mr11),.io_launch_bits_descriptors_12(mr12),.io_launch_bits_descriptors_13(mr13),.io_launch_bits_descriptors_14(mr14),.io_launch_bits_descriptors_15(mr15),.io_launch_bits_dimensions_0(md0),.io_launch_bits_dimensions_1(md1),.io_launch_bits_dimensions_2(md2),.io_launch_bits_dimensions_3(md3),.io_launch_bits_dimensions_4(md4),.io_launch_bits_dimensions_5(md5),.io_launch_bits_dimensions_6(md6),.io_launch_bits_dimensions_7(md7),.io_launch_bits_tag(16'h1234),.io_launch_bits_mode(`ROOT_MODE),.io_microOp_ready(micro_ready),.io_microOp_valid(micro_valid),.io_microOp_bits_kind(mk),.io_microOp_bits_flags(mflags),.io_microOp_bits_phase(mphase),.io_microOp_bits_tag(mtag),.io_microOp_bits_mode(mmode),.io_microOp_bits_src0(ms0),.io_microOp_bits_src1(ms1),.io_microOp_bits_src2(ms2),.io_microOp_bits_dst(mdst),.io_microOp_bits_m(mm),.io_microOp_bits_n(mn),.io_microOp_bits_k(mkdim),.io_microOp_bits_index0(mi0),.io_microOp_bits_index1(mi1),.io_completion_ready(bridge_cr),.io_completion_valid(bridge_cv),.io_completion_bits_tag(bridge_tag),.io_completion_bits_phase(bridge_phase),.io_completion_bits_status(bridge_status),.io_completion_bits_predicate(bridge_predicate),.io_result_ready(root_result_ready),.io_result_valid(root_result_valid),.io_result_bits_tag(root_tag),.io_result_bits_status(root_status),.io_result_bits_completedPhases(root_phases),.io_busy(root_busy),.io_protocolError(root_error));
  logic maint_valid,maint_ready,maint_cv,maint_cr;logic[15:0]maint_ctag;logic[7:0]maint_cs;
  logic matrix_step_valid,matrix_step_ready,matrix_out_valid;logic[16383:0]matrix_acc;logic[2:0]matrix_out_context;logic matrix_out_last;logic[4:0]matrix_flags;logic matrix_conv_cmd_valid,matrix_conv_cmd_ready,matrix_conv_event_valid,matrix_conv_event_ready;logic[127:0]matrix_conv_cmd;logic[55:0]matrix_conv_event;
  logic sfu_payload_valid,sfu_payload_ready,sfu_result_valid;logic[511:0]sfu_result;logic sfu_result_last;logic[12:0]sfu_flags;logic sfu_domain;logic sfu_soft_score_ready,sfu_soft_hvalid,sfu_soft_wvalid,sfu_soft_wlast,sfu_soft_bvalid,sfu_soft_blast;logic[31:0]sfu_soft_m,sfu_soft_l,sfu_soft_weight;logic[127:0]sfu_soft_o;
  logic kv_cfg_ready,kv_ddr_req_valid,kv_ddr_req_ready,kv_ddr_req_write,kv_ddr_rsp_valid,kv_ddr_rsp_ready,kv_page_req_valid,kv_page_req_ready,kv_page_req_free,kv_page_rsp_valid,kv_page_rsp_ready,kv_idma_req_valid,kv_idma_req_ready,kv_idma_rsp_valid,kv_idma_rsp_ready;logic[63:0]kv_ddr_addr,kv_idma_src,kv_idma_dst,kv_bytes;logic[127:0]kv_ddr_wdata,kv_ddr_rdata;logic[15:0]kv_ddr_wstrb;logic[31:0]kv_page_req_id,kv_page_rsp_id,kv_idma_len;
  logic state_cfg_ready,state_mem_req_valid,state_mem_req_ready,state_mem_req_write,state_mem_rsp_valid,state_mem_rsp_ready,state_result_valid;logic[63:0]state_mem_addr,state_mem_wstrb;logic[511:0]state_mem_wdata,state_mem_rdata,state_result;logic[4:0]state_flags;logic[15:0]state_gen;
  logic dma_desc_req_valid,dma_desc_req_ready,dma_desc_rsp_valid,dma_desc_rsp_ready,dma_idma_req_valid,dma_idma_req_ready,dma_idma_rsp_valid,dma_idma_rsp_ready;logic[23:0]dma_desc_index;logic dma_desc_dst;logic[63:0]dma_idma_src,dma_idma_dst;logic[31:0]dma_idma_len,dma_flat;
- logic selection_cfg_ready,selection_score_valid,selection_score_ready,selection_ranked_valid,selection_sram_req_valid,selection_sram_req_ready,selection_sram_req_write,selection_sram_rsp_valid,selection_sram_rsp_ready,selection_route_valid,selection_route_ready,selection_dispatch_valid,selection_merge_result_valid,selection_merge_result_ready,selection_merge_valid,selection_mtp_valid,selection_mtp_ready,selection_mtp_result_valid;logic[8:0]selection_sram_addr,selection_rank;logic[64:0]selection_sram_wdata,selection_sram_rdata,selection_sram[0:511];logic[31:0]selection_ranked_score,selection_ranked_index,selection_dispatch_token,selection_dispatch_weight,selection_merge_weight,selection_mtp_target;logic[9:0]selection_dispatch_expert;logic[3:0]selection_dispatch_tag,selection_merge_tag;logic[511:0]selection_merge_data;logic[5:0]selection_mtp_accepted,selection_mtp_mismatch;logic selection_dispatch_shared,selection_dispatch_last,selection_merge_first,selection_merge_last,selection_mtp_all,selection_mtp_rollback;integer score_count,route_count_sent,merge_count_sent,mtp_count_sent,state_commit_count,state_rollback_count;
+ logic selection_cfg_ready,selection_score_valid,selection_score_ready,selection_ranked_valid,selection_sram_req_valid,selection_sram_req_ready,selection_sram_req_write,selection_sram_rsp_valid,selection_sram_rsp_ready,selection_expand_valid,selection_expand_ready,selection_expand_out_valid,selection_route_valid,selection_route_ready,selection_dispatch_valid,selection_merge_result_valid,selection_merge_result_ready,selection_merge_valid,selection_mtp_valid,selection_mtp_ready,selection_mtp_result_valid;logic[8:0]selection_sram_addr,selection_rank,selection_expand_out_rank;logic[64:0]selection_sram_wdata,selection_sram_rdata,selection_sram[0:511],selection_expand_address;logic[31:0]selection_ranked_score,selection_ranked_index,selection_dispatch_token,selection_dispatch_weight,selection_merge_weight,selection_mtp_target;logic[9:0]selection_dispatch_expert;logic[3:0]selection_dispatch_tag,selection_merge_tag;logic[511:0]selection_merge_data;logic[5:0]selection_mtp_accepted,selection_mtp_mismatch;logic selection_expand_out_last,selection_dispatch_shared,selection_dispatch_last,selection_merge_first,selection_merge_last,selection_mtp_all,selection_mtp_rollback;integer score_count,expand_count_sent,route_count_sent,merge_count_sent,mtp_count_sent,state_commit_count,state_rollback_count;
+ logic vision_cfg_ready,vision_ple_valid,vision_ple_ready,vision_map_valid,vision_map_last;logic[7:0]vision_active_opcode;logic[31:0]vision_cfg0,vision_cfg1;logic[255:0]vision_map_data;integer vision_ple_count;
  operator_root_bridge_owner_shell_v3 dut(.clk_i,.rst_ni,.microop_valid_i(micro_valid),.microop_ready_o(micro_ready),.microop_kind_i(mk),.microop_flags_i(mflags),.microop_phase_i(mphase),.microop_tag_i(mtag),.microop_mode_i(mmode),.microop_src0_i(ms0),.microop_src1_i(ms1),.microop_src2_i(ms2),.microop_dst_i(mdst),.microop_m_i(mm),.microop_n_i(mn),.microop_k_i(mkdim),.microop_index0_i(mi0),.microop_index1_i(mi1),.root_completion_valid_o(bridge_cv),.root_completion_ready_i(bridge_cr),.root_completion_tag_o(bridge_tag),.root_completion_phase_o(bridge_phase),.root_completion_status_o(bridge_status),.root_completion_predicate_o(bridge_predicate),
   .maintenance_valid_i(maint_valid),.maintenance_ready_o(maint_ready),.maintenance_owner_i(4'd5),.maintenance_opcode_i(8'h64),.maintenance_tag_i(16'h1234),.maintenance_parent_phase_i(0),.maintenance_terminal_phase_i(0),.maintenance_flags_i(0),.maintenance_mode_i(0),.maintenance_src0_i(0),.maintenance_src1_i(0),.maintenance_src2_i(0),.maintenance_dst_i(0),.maintenance_rows_i(0),.maintenance_columns_i(0),.maintenance_depth_i(0),.maintenance_index0_i(0),.maintenance_index1_i(0),.maintenance_variant_i(0),.maintenance_completion_valid_o(maint_cv),.maintenance_completion_ready_i(maint_cr),.maintenance_completion_tag_o(maint_ctag),.maintenance_completion_status_o(maint_cs),
   .dma_descriptor_req_valid_o(dma_desc_req_valid),.dma_descriptor_req_ready_i(dma_desc_req_ready),.dma_descriptor_req_index_o(dma_desc_index),.dma_descriptor_req_destination_o(dma_desc_dst),.dma_descriptor_rsp_valid_i(dma_desc_rsp_valid),.dma_descriptor_rsp_ready_o(dma_desc_rsp_ready),.dma_descriptor_rsp_status_i(0),.dma_descriptor_rsp_address_i(64'h100000),.dma_descriptor_rsp_row_bytes_i(64),.dma_descriptor_rsp_rows_i(1),.dma_descriptor_rsp_stride_i(64),.dma_idma_req_valid_o(dma_idma_req_valid),.dma_idma_req_ready_i(dma_idma_req_ready),.dma_idma_src_addr_o(dma_idma_src),.dma_idma_dst_addr_o(dma_idma_dst),.dma_idma_length_o(dma_idma_len),.dma_idma_rsp_valid_i(dma_idma_rsp_valid),.dma_idma_rsp_ready_o(dma_idma_rsp_ready),.dma_idma_rsp_error_i(0),.dma_flat_requests_o(dma_flat),
@@ -44,24 +125,46 @@ module tb_qwen2_root_owner_canary_v3;
   .sfu_payload_valid_i(sfu_payload_valid),.sfu_payload_ready_o(sfu_payload_ready),.sfu_payload_a_i(0),.sfu_payload_b_i({16{32'h3f800000}}),.sfu_payload_c_i(0),.sfu_payload_mask_i(16'hffff),.sfu_payload_epsilon_i(32'h358637bd),.sfu_payload_last_i(1),.sfu_result_valid_o(sfu_result_valid),.sfu_result_ready_i(1),.sfu_result_data_o(sfu_result),.sfu_result_last_o(sfu_result_last),.sfu_exception_flags_o(sfu_flags),.sfu_domain_error_o(sfu_domain),.sfu_soft_score_valid_i(sfu_soft_score_ready),.sfu_soft_score_ready_o(sfu_soft_score_ready),.sfu_soft_score_i(0),.sfu_soft_score_mask_i(0),.sfu_soft_merge_header_valid_i(0),.sfu_soft_ma_i(0),.sfu_soft_la_i(0),.sfu_soft_mb_i(0),.sfu_soft_lb_i(0),.sfu_soft_merge_beat_valid_i(0),.sfu_soft_oa_i(0),.sfu_soft_ob_i(0),.sfu_soft_merge_beat_last_i(0),.sfu_soft_header_valid_o(sfu_soft_hvalid),.sfu_soft_header_ready_i(1),.sfu_soft_m_o(sfu_soft_m),.sfu_soft_l_o(sfu_soft_l),.sfu_soft_weight_valid_o(sfu_soft_wvalid),.sfu_soft_weight_ready_i(1),.sfu_soft_weight_o(sfu_soft_weight),.sfu_soft_weight_last_o(sfu_soft_wlast),.sfu_soft_beat_valid_o(sfu_soft_bvalid),.sfu_soft_beat_ready_i(1),.sfu_soft_o_o(sfu_soft_o),.sfu_soft_beat_last_o(sfu_soft_blast),
   .kv_config_valid_i(kv_cfg_ready),.kv_config_ready_o(kv_cfg_ready),.kv_sequence_id_i(0),.kv_layer_id_i(0),.kv_kv_head_id_i(0),.kv_token_start_i(0),.kv_token_count_i(16),.kv_generation_i(1),.kv_physical_page_limit_i(4096),.kv_bytes_per_token_i(512),.kv_table_base_i(0),.kv_data_base_i(64'h00100000),.kv_k_address_i(64'h00200000),.kv_v_address_i(64'h00300000),.kv_output_address_i(64'h00400000),.kv_format_i(0),.kv_ddr_req_valid_o(kv_ddr_req_valid),.kv_ddr_req_ready_i(kv_ddr_req_ready),.kv_ddr_req_write_o(kv_ddr_req_write),.kv_ddr_req_addr_o(kv_ddr_addr),.kv_ddr_req_wdata_o(kv_ddr_wdata),.kv_ddr_req_wstrb_o(kv_ddr_wstrb),.kv_ddr_rsp_valid_i(kv_ddr_rsp_valid),.kv_ddr_rsp_ready_o(kv_ddr_rsp_ready),.kv_ddr_rsp_rdata_i(kv_ddr_rdata),.kv_ddr_rsp_error_i(0),.kv_page_req_valid_o(kv_page_req_valid),.kv_page_req_ready_i(kv_page_req_ready),.kv_page_req_free_o(kv_page_req_free),.kv_page_req_id_o(kv_page_req_id),.kv_page_rsp_valid_i(kv_page_rsp_valid),.kv_page_rsp_ready_o(kv_page_rsp_ready),.kv_page_rsp_id_i(kv_page_rsp_id),.kv_page_rsp_error_i(0),.kv_idma_req_valid_o(kv_idma_req_valid),.kv_idma_req_ready_i(kv_idma_req_ready),.kv_idma_src_addr_o(kv_idma_src),.kv_idma_dst_addr_o(kv_idma_dst),.kv_idma_length_o(kv_idma_len),.kv_idma_rsp_valid_i(kv_idma_rsp_valid),.kv_idma_rsp_ready_o(kv_idma_rsp_ready),.kv_idma_rsp_error_i(0),.kv_bytes_moved_o(kv_bytes),
   .state_config_valid_i(state_cfg_ready),.state_config_ready_o(state_cfg_ready),.state_state_address_i(0),.state_window_base_i(0),.state_state_stride_i(64),.state_write_data_i(0),.state_decay_i(32'h3f800000),.state_conv_weights_i({32'd0,32'd0,32'd0,32'h3f800000}),.state_mem_req_valid_o(state_mem_req_valid),.state_mem_req_ready_i(state_mem_req_ready),.state_mem_req_write_o(state_mem_req_write),.state_mem_req_addr_o(state_mem_addr),.state_mem_req_wdata_o(state_mem_wdata),.state_mem_req_wstrb_o(state_mem_wstrb),.state_mem_rsp_valid_i(state_mem_rsp_valid),.state_mem_rsp_ready_o(state_mem_rsp_ready),.state_mem_rsp_rdata_i(state_mem_rdata),.state_mem_rsp_error_i(0),.state_result_valid_o(state_result_valid),.state_result_ready_i(1),.state_result_data_o(state_result),.state_exception_flags_o(state_flags),.state_generation_o(state_gen),
-  .selection_config_valid_i(selection_cfg_ready),.selection_config_ready_o(selection_cfg_ready),.selection_topk_item_count_i(4),.selection_topk_k_i(2),.selection_expand_base_i(0),.selection_expand_stride_i(64),.selection_route_token_i(9),.selection_route_count_i(2),.selection_pool_blocks_i(1),.selection_pool_ratio_i(1),.selection_pool_dimensions_i(1),.selection_mtp_step_count_i(3),.selection_score_valid_i(selection_score_valid),.selection_score_ready_o(selection_score_ready),.selection_score_i(score_count),.selection_score_index_i(score_count),.selection_ranked_valid_o(selection_ranked_valid),.selection_ranked_ready_i(1),.selection_ranked_score_o(selection_ranked_score),.selection_ranked_index_o(selection_ranked_index),.selection_ranked_rank_o(selection_rank),.selection_topk_sram_req_valid_o(selection_sram_req_valid),.selection_topk_sram_req_ready_i(selection_sram_req_ready),.selection_topk_sram_req_write_o(selection_sram_req_write),.selection_topk_sram_req_addr_o(selection_sram_addr),.selection_topk_sram_req_wdata_o(selection_sram_wdata),.selection_topk_sram_rsp_valid_i(selection_sram_rsp_valid),.selection_topk_sram_rsp_ready_o(selection_sram_rsp_ready),.selection_topk_sram_rsp_rdata_i(selection_sram_rdata),.selection_topk_sram_rsp_error_i(0),.selection_route_valid_i(selection_route_valid),.selection_route_ready_o(selection_route_ready),.selection_route_expert_i(route_count_sent),.selection_route_weight_i(32'h3f800000),.selection_route_shared_i(0),.selection_dispatch_valid_o(selection_dispatch_valid),.selection_dispatch_ready_i(1),.selection_dispatch_token_o(selection_dispatch_token),.selection_dispatch_expert_o(selection_dispatch_expert),.selection_dispatch_weight_o(selection_dispatch_weight),.selection_dispatch_tag_o(selection_dispatch_tag),.selection_dispatch_shared_o(selection_dispatch_shared),.selection_dispatch_last_o(selection_dispatch_last),.selection_merge_result_valid_i(selection_merge_result_valid),.selection_merge_result_ready_o(selection_merge_result_ready),.selection_merge_result_tag_i(merge_count_sent),.selection_merge_result_data_i(0),.selection_merge_valid_o(selection_merge_valid),.selection_merge_ready_i(1),.selection_merge_tag_o(selection_merge_tag),.selection_merge_weight_o(selection_merge_weight),.selection_merge_data_o(selection_merge_data),.selection_merge_first_o(selection_merge_first),.selection_merge_last_o(selection_merge_last),.selection_mtp_valid_i(selection_mtp_valid),.selection_mtp_ready_o(selection_mtp_ready),.selection_mtp_draft_i(mtp_count_sent),.selection_mtp_target_i(selection_mtp_target),.selection_mtp_step_i(mtp_count_sent),.selection_mtp_last_i(mtp_count_sent==2),.selection_mtp_result_valid_o(selection_mtp_result_valid),.selection_mtp_result_ready_i(1),.selection_mtp_accepted_o(selection_mtp_accepted),.selection_mtp_mismatch_step_o(selection_mtp_mismatch),.selection_mtp_all_match_o(selection_mtp_all),.selection_mtp_rollback_o(selection_mtp_rollback));
+  .selection_config_valid_i(selection_cfg_ready),.selection_config_ready_o(selection_cfg_ready),.selection_topk_item_count_i(`TOPK_ITEMS),.selection_topk_k_i(`TOPK_K),.selection_expand_base_i(0),.selection_expand_stride_i(64),.selection_route_token_i(9),.selection_route_count_i(`ROUTE_COUNT),.selection_pool_blocks_i(1),.selection_pool_ratio_i(1),.selection_pool_dimensions_i(1),.selection_mtp_step_count_i(3),.selection_score_valid_i(selection_score_valid),.selection_score_ready_o(selection_score_ready),.selection_score_i(score_count),.selection_score_index_i(score_count),.selection_ranked_valid_o(selection_ranked_valid),.selection_ranked_ready_i(1),.selection_ranked_score_o(selection_ranked_score),.selection_ranked_index_o(selection_ranked_index),.selection_ranked_rank_o(selection_rank),.selection_topk_sram_req_valid_o(selection_sram_req_valid),.selection_topk_sram_req_ready_i(selection_sram_req_ready),.selection_topk_sram_req_write_o(selection_sram_req_write),.selection_topk_sram_req_addr_o(selection_sram_addr),.selection_topk_sram_req_wdata_o(selection_sram_wdata),.selection_topk_sram_rsp_valid_i(selection_sram_rsp_valid),.selection_topk_sram_rsp_ready_o(selection_sram_rsp_ready),.selection_topk_sram_rsp_rdata_i(selection_sram_rdata),.selection_topk_sram_rsp_error_i(0),
+  .selection_expand_valid_i(selection_expand_valid),.selection_expand_ready_o(selection_expand_ready),.selection_expand_index_i(0),.selection_expand_rank_i(0),.selection_expand_last_i(1),.selection_expand_out_valid_o(selection_expand_out_valid),.selection_expand_out_ready_i(1),.selection_expand_address_o(selection_expand_address),.selection_expand_out_rank_o(selection_expand_out_rank),.selection_expand_out_last_o(selection_expand_out_last),.selection_route_valid_i(selection_route_valid),.selection_route_ready_o(selection_route_ready),.selection_route_expert_i(route_count_sent),.selection_route_weight_i(32'h3f800000),.selection_route_shared_i(0),.selection_dispatch_valid_o(selection_dispatch_valid),.selection_dispatch_ready_i(1),.selection_dispatch_token_o(selection_dispatch_token),.selection_dispatch_expert_o(selection_dispatch_expert),.selection_dispatch_weight_o(selection_dispatch_weight),.selection_dispatch_tag_o(selection_dispatch_tag),.selection_dispatch_shared_o(selection_dispatch_shared),.selection_dispatch_last_o(selection_dispatch_last),.selection_merge_result_valid_i(selection_merge_result_valid),.selection_merge_result_ready_o(selection_merge_result_ready),.selection_merge_result_tag_i(merge_count_sent),.selection_merge_result_data_i(0),.selection_merge_valid_o(selection_merge_valid),.selection_merge_ready_i(1),.selection_merge_tag_o(selection_merge_tag),.selection_merge_weight_o(selection_merge_weight),.selection_merge_data_o(selection_merge_data),.selection_merge_first_o(selection_merge_first),.selection_merge_last_o(selection_merge_last),.selection_mtp_valid_i(selection_mtp_valid),.selection_mtp_ready_o(selection_mtp_ready),.selection_mtp_draft_i(mtp_count_sent),.selection_mtp_target_i(selection_mtp_target),.selection_mtp_step_i(mtp_count_sent),.selection_mtp_last_i(mtp_count_sent==2),.selection_mtp_result_valid_o(selection_mtp_result_valid),.selection_mtp_result_ready_i(1),.selection_mtp_accepted_o(selection_mtp_accepted),.selection_mtp_mismatch_step_o(selection_mtp_mismatch),.selection_mtp_all_match_o(selection_mtp_all),.selection_mtp_rollback_o(selection_mtp_rollback),
+  .vision_config_valid_i(vision_cfg_ready),.vision_config_ready_o(vision_cfg_ready),.vision_cfg0_i(vision_cfg0),.vision_cfg1_i(vision_cfg1),.vision_cfg2_i(2),.vision_cfg3_i(2),.vision_cfg4_i(2),.vision_cfg5_i(2),.vision_cfg6_i(2),.vision_cfg7_i(2),.vision_cfg8_i(2),.vision_cfg9_i(2),.vision_cfg_multipliers_i({3{64'd1}}),.vision_cfg_head_sizes_i({16{32'd16}}),.vision_cfg_head_offsets_i(0),.vision_ple_valid_i(vision_ple_valid),.vision_ple_ready_o(vision_ple_ready),.vision_ple_token_i(7),.vision_ple_position_i(3),.vision_ple_last_i(1),.vision_map_valid_o(vision_map_valid),.vision_map_ready_i(1),.vision_map_data_o(vision_map_data),.vision_map_last_o(vision_map_last));
  logic matrix_active;always_ff@(posedge clk_i)begin if(!rst_ni)begin matrix_step_valid<=0;matrix_active<=0;end else begin if(!matrix_active&&matrix_step_ready)begin matrix_step_valid<=1;matrix_active<=1;end if(matrix_step_valid&&matrix_step_ready)matrix_step_valid<=0;if(matrix_out_valid)matrix_active<=0;end end
  assign sfu_payload_valid=sfu_payload_ready;assign matrix_conv_cmd_ready=1;always_ff@(posedge clk_i)begin if(!rst_ni)begin matrix_conv_event_valid<=0;matrix_conv_event<=0;end else begin if(matrix_conv_event_valid&&matrix_conv_event_ready)matrix_conv_event_valid<=0;if(matrix_conv_cmd_valid&&matrix_conv_cmd_ready)begin matrix_conv_event_valid<=1;matrix_conv_event<={matrix_conv_cmd[55:40],8'd0,3'd2,29'd1};end end end
- logic[127:0]kv_mem[0:4095];logic[31:0]next_page;assign kv_ddr_req_ready=!kv_ddr_rsp_valid;assign kv_page_req_ready=!kv_page_rsp_valid;assign kv_idma_req_ready=!kv_idma_rsp_valid;always_ff@(posedge clk_i)begin if(!rst_ni)begin kv_ddr_rsp_valid<=0;kv_ddr_rdata<=0;kv_page_rsp_valid<=0;kv_page_rsp_id<=0;kv_idma_rsp_valid<=0;next_page<=1;for(int i=0;i<4096;i++)kv_mem[i]<=0;end else begin if(kv_ddr_rsp_valid&&kv_ddr_rsp_ready)kv_ddr_rsp_valid<=0;if(kv_ddr_req_valid&&kv_ddr_req_ready)begin kv_ddr_rsp_valid<=1;if(kv_ddr_req_write)begin kv_mem[kv_ddr_addr[15:4]]<=kv_ddr_wdata;kv_ddr_rdata<=0;end else kv_ddr_rdata<=kv_mem[kv_ddr_addr[15:4]];end if(kv_page_rsp_valid&&kv_page_rsp_ready)kv_page_rsp_valid<=0;if(kv_page_req_valid&&kv_page_req_ready)begin kv_page_rsp_valid<=1;if(kv_page_req_free)kv_page_rsp_id<=kv_page_req_id;else begin kv_page_rsp_id<=next_page;next_page<=next_page+1;end end if(kv_idma_rsp_valid&&kv_idma_rsp_ready)kv_idma_rsp_valid<=0;if(kv_idma_req_valid&&kv_idma_req_ready)kv_idma_rsp_valid<=1;end end
+ logic[127:0]kv_mem[0:4095];logic[31:0]next_page;assign kv_ddr_req_ready=!kv_ddr_rsp_valid;assign kv_page_req_ready=!kv_page_rsp_valid;assign kv_idma_req_ready=!kv_idma_rsp_valid;
+ always_ff@(posedge clk_i)begin
+  if(!rst_ni)begin
+   kv_ddr_rsp_valid<=0;kv_ddr_rdata<=0;kv_page_rsp_valid<=0;kv_page_rsp_id<=0;kv_idma_rsp_valid<=0;next_page<=1;for(int i=0;i<4096;i++)kv_mem[i]<=0;
+`ifdef ROOT_QSA
+   // QSA gathers an already-existing sparse-KV page before its later append.
+   kv_mem[0]<={16'd0,16'h0001,32'd1,32'd1,32'd1};
+   kv_mem[2048]<={16'd0,16'h0001,32'd1,32'd1,32'd2};
+`endif
+  end else begin
+   if(kv_ddr_rsp_valid&&kv_ddr_rsp_ready)kv_ddr_rsp_valid<=0;if(kv_ddr_req_valid&&kv_ddr_req_ready)begin kv_ddr_rsp_valid<=1;if(kv_ddr_req_write)begin kv_mem[kv_ddr_addr[15:4]]<=kv_ddr_wdata;kv_ddr_rdata<=0;end else kv_ddr_rdata<=kv_mem[kv_ddr_addr[15:4]];end if(kv_page_rsp_valid&&kv_page_rsp_ready)kv_page_rsp_valid<=0;if(kv_page_req_valid&&kv_page_req_ready)begin kv_page_rsp_valid<=1;if(kv_page_req_free)kv_page_rsp_id<=kv_page_req_id;else begin kv_page_rsp_id<=next_page;next_page<=next_page+1;end end if(kv_idma_rsp_valid&&kv_idma_rsp_ready)kv_idma_rsp_valid<=0;if(kv_idma_req_valid&&kv_idma_req_ready)kv_idma_rsp_valid<=1;
+  end
+ end
  assign state_mem_req_ready=!state_mem_rsp_valid;always_ff@(posedge clk_i)begin if(!rst_ni)begin state_mem_rsp_valid<=0;state_mem_rdata<=0;end else begin if(state_mem_rsp_valid&&state_mem_rsp_ready)state_mem_rsp_valid<=0;if(state_mem_req_valid&&state_mem_req_ready)begin state_mem_rsp_valid<=1;state_mem_rdata<=0;end end end
  assign dma_desc_req_ready=!dma_desc_rsp_valid;assign dma_idma_req_ready=!dma_idma_rsp_valid;always_ff@(posedge clk_i)begin if(!rst_ni)begin dma_desc_rsp_valid<=0;dma_idma_rsp_valid<=0;end else begin if(dma_desc_rsp_valid&&dma_desc_rsp_ready)dma_desc_rsp_valid<=0;if(dma_desc_req_valid&&dma_desc_req_ready)dma_desc_rsp_valid<=1;if(dma_idma_rsp_valid&&dma_idma_rsp_ready)dma_idma_rsp_valid<=0;if(dma_idma_req_valid&&dma_idma_req_ready)dma_idma_rsp_valid<=1;end end
- assign selection_sram_req_ready=!selection_sram_rsp_valid;assign selection_score_valid=selection_score_ready&&score_count<4;assign selection_route_valid=selection_route_ready&&route_count_sent<2;assign selection_merge_result_valid=selection_merge_result_ready&&merge_count_sent<2;assign selection_mtp_valid=selection_mtp_ready&&mtp_count_sent<3;
+ assign selection_sram_req_ready=!selection_sram_rsp_valid;assign selection_score_valid=selection_score_ready&&score_count<`TOPK_ITEMS;assign selection_expand_valid=selection_expand_ready&&expand_count_sent<1;assign selection_route_valid=selection_route_ready&&route_count_sent<`ROUTE_COUNT;assign selection_merge_result_valid=selection_merge_result_ready&&merge_count_sent<`ROUTE_COUNT;assign selection_mtp_valid=selection_mtp_ready&&mtp_count_sent<3;
+ assign vision_ple_valid=vision_ple_ready&&vision_ple_count<1;
+ assign vision_active_opcode=dut.owners.oop[7*8+:8];assign vision_cfg0=vision_active_opcode==8'h82 ? 0:2;assign vision_cfg1=vision_active_opcode==8'h82 ? 0:2;
 `ifdef ROOT_MTP_ROLLBACK
+ assign selection_mtp_target=mtp_count_sent==2?32'hffff0000:mtp_count_sent;
+`elsif ROOT_MTP38_ROLLBACK
  assign selection_mtp_target=mtp_count_sent==2?32'hffff0000:mtp_count_sent;
 `else
  assign selection_mtp_target=mtp_count_sent;
 `endif
- always_ff@(posedge clk_i)begin if(!rst_ni)begin selection_sram_rsp_valid<=0;selection_sram_rdata<=0;score_count<=0;route_count_sent<=0;merge_count_sent<=0;mtp_count_sent<=0;state_commit_count<=0;state_rollback_count<=0;for(int i=0;i<512;i++)selection_sram[i]<=0;end else begin if(selection_sram_rsp_valid&&selection_sram_rsp_ready)selection_sram_rsp_valid<=0;if(selection_sram_req_valid&&selection_sram_req_ready)begin if(selection_sram_req_write)selection_sram[selection_sram_addr]<=selection_sram_wdata;else begin selection_sram_rsp_valid<=1;selection_sram_rdata<=selection_sram[selection_sram_addr];end end if(selection_score_valid&&selection_score_ready)score_count<=score_count+1;if(selection_route_valid&&selection_route_ready)route_count_sent<=route_count_sent+1;if(selection_merge_result_valid&&selection_merge_result_ready)merge_count_sent<=merge_count_sent+1;if(selection_mtp_valid&&selection_mtp_ready)mtp_count_sent<=mtp_count_sent+1;if(dut.owners.ov[5]&&dut.owners.ordy[5]&&dut.owners.oop[5*8+:8]==8'h65)state_commit_count<=state_commit_count+1;if(dut.owners.ov[5]&&dut.owners.ordy[5]&&dut.owners.oop[5*8+:8]==8'h66)state_rollback_count<=state_rollback_count+1;end end
+ always_ff@(posedge clk_i)begin if(!rst_ni)begin selection_sram_rsp_valid<=0;selection_sram_rdata<=0;score_count<=0;expand_count_sent<=0;route_count_sent<=0;merge_count_sent<=0;mtp_count_sent<=0;vision_ple_count<=0;state_commit_count<=0;state_rollback_count<=0;for(int i=0;i<512;i++)selection_sram[i]<=0;end else begin if(selection_sram_rsp_valid&&selection_sram_rsp_ready)selection_sram_rsp_valid<=0;if(selection_sram_req_valid&&selection_sram_req_ready)begin if(selection_sram_req_write)selection_sram[selection_sram_addr]<=selection_sram_wdata;else begin selection_sram_rsp_valid<=1;selection_sram_rdata<=selection_sram[selection_sram_addr];end end if(selection_score_valid&&selection_score_ready)score_count<=score_count+1;if(selection_expand_valid&&selection_expand_ready)expand_count_sent<=expand_count_sent+1;if(selection_route_valid&&selection_route_ready)route_count_sent<=route_count_sent+1;if(selection_merge_result_valid&&selection_merge_result_ready)merge_count_sent<=merge_count_sent+1;if(selection_mtp_valid&&selection_mtp_ready)mtp_count_sent<=mtp_count_sent+1;if(vision_ple_valid&&vision_ple_ready)vision_ple_count<=vision_ple_count+1;if(dut.owners.ov[5]&&dut.owners.ordy[5]&&dut.owners.oop[5*8+:8]==8'h65)state_commit_count<=state_commit_count+1;if(dut.owners.ov[5]&&dut.owners.ordy[5]&&dut.owners.oop[5*8+:8]==8'h66)state_rollback_count<=state_rollback_count+1;end end
  initial begin repeat(200000)@(posedge clk_i);$fatal(1,"timeout");end
  initial begin launch_valid=0;root_result_ready=0;maint_valid=0;maint_cr=0;mr0=0;mr1=1;mr2=2;mr3=3;mr4=4;mr5=5;mr6=6;mr7=7;mr8=8;mr9=9;mr10=10;mr11=11;mr12=12;mr13=13;mr14=14;mr15=15;md0=16;md1=16;md2=1;md3=1;md4=1;md5=16;md6=16;md7=1;repeat(5)@(posedge clk_i);rst_ni=1;@(negedge clk_i);maint_valid=1;do @(posedge clk_i);while(!maint_ready);@(negedge clk_i);maint_valid=0;wait(maint_cv);if(maint_cs)$fatal(1,"begin status");maint_cr=1;@(posedge clk_i);@(negedge clk_i);maint_cr=0;launch_valid=1;do @(posedge clk_i);while(!launch_ready);@(negedge clk_i);launch_valid=0;wait(root_result_valid);if(root_status||root_phases!=`EXPECTED_PHASES||root_tag!=16'h1234||root_error)$fatal(1,"root status=%0d phases=%0d error=%0d",root_status,root_phases,root_error);
 `ifdef ROOT_MTP_COMMIT
   if(state_commit_count!=1||state_rollback_count!=0||!selection_mtp_all)$fatal(1,"mtp commit path commit=%0d rollback=%0d all=%0d",state_commit_count,state_rollback_count,selection_mtp_all);
+`elsif ROOT_MTP38_COMMIT
+  if(state_commit_count!=1||state_rollback_count!=0||!selection_mtp_all)$fatal(1,"mtp commit path commit=%0d rollback=%0d all=%0d",state_commit_count,state_rollback_count,selection_mtp_all);
 `elsif ROOT_MTP_ROLLBACK
+  if(state_commit_count!=0||state_rollback_count!=1||!selection_mtp_rollback)$fatal(1,"mtp rollback path commit=%0d rollback=%0d rollback_bit=%0d",state_commit_count,state_rollback_count,selection_mtp_rollback);
+`elsif ROOT_MTP38_ROLLBACK
   if(state_commit_count!=0||state_rollback_count!=1||!selection_mtp_rollback)$fatal(1,"mtp rollback path commit=%0d rollback=%0d rollback_bit=%0d",state_commit_count,state_rollback_count,selection_mtp_rollback);
 `endif
   root_result_ready=1;@(posedge clk_i);$display("%s_ROOT_OWNER_CANARY_V3_PASS phases=%0d reference_injection=0",`CANARY_NAME,`EXPECTED_PHASES);$finish;end

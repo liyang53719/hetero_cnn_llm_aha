@@ -18,7 +18,7 @@
   "owners": {
     "Control": "PASS_REAL_BARRIER_ACK_ENDPOINT",
     "Dma": "PASS_4_OF_4_PINNED_IDMA_AXI",
-    "Matrix": "OPEN_REAL_ENDPOINT_BINDING",
+    "Matrix": "IN_PROGRESS_BF16_6_OF_6_PASS_CONV_GEMMINI_OPEN",
     "Sfu": "OPEN_REAL_ENDPOINT_BINDING",
     "KvMemory": "OPEN_REAL_ENDPOINT_BINDING",
     "State": "OPEN_REAL_ENDPOINT_BINDING",
@@ -69,6 +69,16 @@
     "vcs_pinned_idma_log_sha256": "37fb52670063a264cd4e0042145f715d2b1c2052623407506e015a0ec2854dd6",
     "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.0000814199, "area": 6292.65, "unmapped": 0},
     "dc_log_sha256": "11aa344073a7c388e39fa9238a7252d79e1c7f2c76d154df6f4e2841711f03e4"
+  },
+  "matrix_bf16_endpoint_evidence": {
+    "status": "PASS_6_OPCODES_MATRIX_OWNER_NOT_CLOSED",
+    "adapter": "rtl/integration/operator_matrix_bf16_endpoint_v3.sv",
+    "rtl_sha256": "3f744c6e294b5e7be4c393c15a245557cfeec18b533432bfaa60896570e982a2",
+    "verilator_build_log_sha256": "a3c8a35d4a0303d1de39dee62f822a28332219c796a0f45c71f1740c5e004760",
+    "test_log_sha256": "7a3153816fba96d5f2b06ea62c2f920dad9cb447ef470932a5e9b76b5265a410",
+    "opcodes": ["MatrixGemm", "MatrixGemv", "MatrixQk", "MatrixPv", "MatrixOuter", "MatrixLowRank"],
+    "physical_array": "Revision8B-B 16x32 512-lane 5-context",
+    "conv_status": "OPEN_RETAINED_GEMMINI"
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

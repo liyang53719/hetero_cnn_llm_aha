@@ -32,9 +32,12 @@
   area 646.191.
 - DMA is 4/4 PASS with pinned iDMA `2e0b0fe`: 8 flat transfers and 512 bytes
   checked in VCS; 1.25 ns DC WNS +0.0000814199 ns, area 6292.65.
+- Matrix BF16 is 6/6 adapter PASS on the same Revision8B-B 16x32/5-context
+  array; Conv retained-Gemmini binding remains OPEN, so Matrix is not closed.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total: 5/58 real bindings; next bind seven Matrix opcodes.
+- Endpoint total remains 5/58 closed; next bind MatrixConv through retained
+  descriptor-to-RoCC Gemmini, then close Matrix 7/7.

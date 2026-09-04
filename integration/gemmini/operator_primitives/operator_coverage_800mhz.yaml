@@ -1,0 +1,251 @@
+schema_version: 1
+coverage_id: QWEN_FAMILY_OPERATOR_PRIMITIVES_800MHZ_V1
+status: PASS_OPERATOR_PRIMITIVE_COVERAGE
+evidence_class: chisel_source_plus_terminal_leaf_binding_plus_executable_semantic_reference_plus_static_contract_tests
+clock:
+  target_hz: 800000000
+  period_ns: 1.25
+scope:
+  included:
+  - Qwen2-1.5B text
+  - Qwen3.5-35B-A3B text and vision
+  - Qwen3.8-Flash-Next text and vision
+  boundary: operator_primitive_layer
+  operator_count: 48
+  catalog_modules: 25
+  terminal_binding_count: 58
+  terminal_owner_counts:
+    Control: 1
+    Dma: 4
+    KvMemory: 4
+    Matrix: 7
+    Selection: 6
+    Sfu: 23
+    State: 7
+    Vision: 6
+existing_terminal_bindings:
+- BF16_FP32_matrix_GEMM_GEMV_outer_product
+- attention_QK_PV
+- FP32_reduction_exp2_reciprocal_rsqrt_online_softmax
+- RMSNorm_RoPE_SiLU_bias_residual
+- KV_append_gather
+- DMA_and_Command128_event_fabric
+- GGUF_Q8_0_Q6_K_Q3_K_decode
+new_chisel_controllers:
+- model_operator_sequencer
+- composite_activation_sequencer
+- streaming_stable_topk
+- tagged_sparse_gather_reorder
+- moe_route_dispatch_merge
+- PLE_ngram_hash
+- QSA_block_selection_and_expand
+- QSA_block_pool
+- external_GDN_state_walker
+- causal_and_dilated_conv_window
+- variable_RMS_GroupRMS_LayerNorm_L2Norm
+- four_branch_gated_residual
+- MTP_verify_and_state_transaction
+- MRoPE_axis_map
+- vision_window_layout
+- vision_patch_merge
+- vision_bilinear_position
+- vision_Conv3D_patch_coordinates
+- terminal_leaf_expander
+- primitive_capability_registry
+- terminal_owner_opcode_frontend
+- generated_RTL_auditor
+models:
+  qwen2_1p5b:
+    coverage: complete_at_chisel_operator_primitive_layer
+    required_model_operators:
+    - TokenEmbedding
+    - RmsNorm
+    - DenseProjection
+    - QkvBias
+    - PartialRope
+    - GqaBroadcast
+    - DenseAttention
+    - ResidualAdd
+    - SiluTimesUp
+    - KvAppend
+    - KvGather
+    - LmHead
+    - LogitsTopK
+    - PaddingMask
+    - TensorView
+    missing: []
+    micro_op_count_sum: 19
+    includes_vision: false
+    terminal_micro_op_count_sum: 27
+    unique_terminal_opcode_count: 22
+    unbound_terminal_opcodes: []
+  qwen3_5_35b_a3b:
+    coverage: complete_at_chisel_operator_primitive_layer
+    required_model_operators:
+    - TokenEmbedding
+    - RmsNorm
+    - DenseProjection
+    - PartialRope
+    - MultimodalRope
+    - GqaBroadcast
+    - DenseAttention
+    - AttentionOutputGate
+    - ResidualAdd
+    - SiluTimesUp
+    - KvAppend
+    - KvGather
+    - GdnProjection
+    - GdnCausalConv
+    - GdnRecurrentUpdate
+    - GdnGatedNormOutput
+    - MoeRouterTopK
+    - MoeDispatch
+    - MoeRoutedExperts
+    - MoeSharedExpert
+    - MoeRouteReduce
+    - MtpStateTransaction
+    - LmHead
+    - LogitsTopK
+    - PaddingMask
+    - TensorView
+    - VisionPatchEmbed
+    - VisionPosition
+    - VisionLayerNorm
+    - VisionAttention
+    - VisionMlpGelu
+    - VisionPatchMerge
+    - VisionProject
+    - VisionWindowLayout
+    - VisionDeepstackInject
+    - VisionTokenScatter
+    missing: []
+    micro_op_count_sum: 122
+    includes_vision: true
+    terminal_micro_op_count_sum: 186
+    unique_terminal_opcode_count: 46
+    unbound_terminal_opcodes: []
+  qwen3_8_flash_next:
+    coverage: complete_at_chisel_operator_primitive_layer
+    required_model_operators:
+    - TokenEmbedding
+    - RmsNorm
+    - DenseProjection
+    - PartialRope
+    - MultimodalRope
+    - GqaBroadcast
+    - AttentionOutputGate
+    - GdnProjection
+    - GdnCausalConv
+    - GdnRecurrentUpdate
+    - GdnGatedNormOutput
+    - GatedResidualRead
+    - GatedResidualWrite
+    - GroupRmsNorm
+    - PleNgramHash
+    - PleSparseRowFetch
+    - PleProjectionDwConv
+    - QsaIndexProjection
+    - QsaBlockSummary
+    - QsaStreamingTopK
+    - QsaSparseKvGather
+    - QsaSparseAttention
+    - MoeRouterTopK
+    - MoeDispatch
+    - MoeRoutedExperts
+    - MoeSharedExpert
+    - MoeRouteReduce
+    - MtpStateTransaction
+    - LmHead
+    - LogitsTopK
+    - PaddingMask
+    - TensorView
+    - VisionPatchEmbed
+    - VisionPosition
+    - VisionLayerNorm
+    - VisionAttention
+    - VisionMlpGelu
+    - VisionPatchMerge
+    - VisionProject
+    - VisionWindowLayout
+    - VisionDeepstackInject
+    - VisionTokenScatter
+    missing: []
+    micro_op_count_sum: 179
+    includes_vision: true
+    terminal_micro_op_count_sum: 279
+    unique_terminal_opcode_count: 53
+    unbound_terminal_opcodes: []
+phase_counts:
+  TokenEmbedding: 1
+  RmsNorm: 1
+  DenseProjection: 1
+  QkvBias: 1
+  PartialRope: 1
+  GqaBroadcast: 1
+  DenseAttention: 4
+  AttentionOutputGate: 2
+  ResidualAdd: 1
+  SiluTimesUp: 2
+  KvAppend: 1
+  KvGather: 1
+  LmHead: 1
+  MultimodalRope: 2
+  LogitsTopK: 1
+  PaddingMask: 1
+  TensorView: 1
+  GdnProjection: 1
+  GdnCausalConv: 4
+  GdnRecurrentUpdate: 20
+  GdnGatedNormOutput: 4
+  MoeRouterTopK: 12
+  MoeDispatch: 2
+  MoeRoutedExperts: 5
+  MoeSharedExpert: 7
+  MoeRouteReduce: 2
+  MtpStateTransaction: 4
+  GatedResidualRead: 13
+  GatedResidualWrite: 2
+  GroupRmsNorm: 1
+  PleNgramHash: 1
+  PleSparseRowFetch: 1
+  PleProjectionDwConv: 19
+  QsaIndexProjection: 1
+  QsaBlockSummary: 10
+  QsaStreamingTopK: 2
+  QsaSparseKvGather: 1
+  QsaSparseAttention: 15
+  VisionPatchEmbed: 3
+  VisionPosition: 7
+  VisionLayerNorm: 1
+  VisionAttention: 10
+  VisionMlpGelu: 5
+  VisionPatchMerge: 7
+  VisionProject: 2
+  VisionWindowLayout: 1
+  VisionDeepstackInject: 2
+  VisionTokenScatter: 1
+not_claimed:
+- sandbox_Chisel_elaboration
+- generated_RTL
+- RTL_simulation
+- DC_synthesis
+- integrated_Command128_descriptor_payload_execution
+- post_route_PVT_OCV
+- model_accuracy_with_official_weights
+next_owner: local_agent_for_elaboration_RTL_simulation_and_DC_only
+terminal_binding_contract:
+  manifest: terminal_primitive_bindings_800mhz.yaml
+  binding_count: 58
+  duplicate_bindings: 0
+  unbound_model_terminal_opcodes: 0
+  cpu_fallback_for_known_operator: false
+  unknown_operator_behavior: explicit_error
+sandbox_acceptance:
+  pytest_total: 51
+  pytest_failures: 0
+  coverage_status: PASS_OPERATOR_PRIMITIVE_COVERAGE
+  operator_ids: 48
+  catalog_modules: 25
+  terminal_bindings: 58
+  git_diff_check: PASS
+  chisel_elaboration: not_claimed_toolchain_absent

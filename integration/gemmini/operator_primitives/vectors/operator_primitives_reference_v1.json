@@ -1,0 +1,3077 @@
+{
+  "clock_independent": true,
+  "contract": "HeteroNPU Qwen-family terminal primitive differential vectors",
+  "integer": {
+    "divide_u16": [
+      {
+        "dividend": 0,
+        "divisor": 1,
+        "quotient": 0,
+        "remainder": 0
+      },
+      {
+        "dividend": 65535,
+        "divisor": 255,
+        "quotient": 257,
+        "remainder": 0
+      },
+      {
+        "dividend": 49153,
+        "divisor": 97,
+        "quotient": 506,
+        "remainder": 71
+      },
+      {
+        "dividend": 12345,
+        "divisor": 0,
+        "quotient": 65535,
+        "remainder": 12345
+      }
+    ],
+    "multiply_u16": [
+      {
+        "left": 0,
+        "product": 0,
+        "right": 0
+      },
+      {
+        "left": 1,
+        "product": 65535,
+        "right": 65535
+      },
+      {
+        "left": 257,
+        "product": 131841,
+        "right": 513
+      },
+      {
+        "left": 65535,
+        "product": 4294836225,
+        "right": 65535
+      }
+    ]
+  },
+  "model_terminal_sequences": {
+    "qwen2_1p5b": {
+      "DenseAttention": [
+        "MatrixQk",
+        "SfuCausalMask",
+        "SfuOnlineSoftmax",
+        "MatrixPv"
+      ],
+      "DenseProjection": [
+        "MatrixGemm"
+      ],
+      "GqaBroadcast": [
+        "SfuBroadcast"
+      ],
+      "KvAppend": [
+        "KvAppend"
+      ],
+      "KvGather": [
+        "KvGather"
+      ],
+      "LmHead": [
+        "MatrixGemv"
+      ],
+      "LogitsTopK": [
+        "SelectTopK"
+      ],
+      "PaddingMask": [
+        "SfuGate"
+      ],
+      "PartialRope": [
+        "SfuRope"
+      ],
+      "QkvBias": [
+        "SfuAdd"
+      ],
+      "ResidualAdd": [
+        "SfuAdd"
+      ],
+      "RmsNorm": [
+        "SfuRmsNorm"
+      ],
+      "SiluTimesUp": [
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul"
+      ],
+      "TensorView": [
+        "Barrier"
+      ],
+      "TokenEmbedding": [
+        "DmaGather"
+      ]
+    },
+    "qwen3_5_35b_a3b": {
+      "AttentionOutputGate": [
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul"
+      ],
+      "DenseAttention": [
+        "MatrixQk",
+        "SfuCausalMask",
+        "SfuOnlineSoftmax",
+        "MatrixPv"
+      ],
+      "DenseProjection": [
+        "MatrixGemm"
+      ],
+      "GdnCausalConv": [
+        "StateConvWindow",
+        "SfuMul",
+        "SfuReduceSum",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul"
+      ],
+      "GdnGatedNormOutput": [
+        "SfuRmsNorm",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul",
+        "MatrixGemm"
+      ],
+      "GdnProjection": [
+        "MatrixGemm"
+      ],
+      "GdnRecurrentUpdate": [
+        "SfuAdd",
+        "SfuPwl",
+        "SfuMul",
+        "SfuExp2",
+        "SfuMul",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuL2Norm",
+        "SfuScale",
+        "SfuL2Norm",
+        "StateRead",
+        "SfuMul",
+        "StateWrite",
+        "StateRead",
+        "MatrixGemv",
+        "SfuSub",
+        "SfuMul",
+        "MatrixOuter",
+        "StateWrite",
+        "StateRead",
+        "MatrixGemv"
+      ],
+      "GqaBroadcast": [
+        "SfuBroadcast"
+      ],
+      "KvAppend": [
+        "KvAppend"
+      ],
+      "KvGather": [
+        "KvGather"
+      ],
+      "LmHead": [
+        "MatrixGemv"
+      ],
+      "LogitsTopK": [
+        "SelectTopK"
+      ],
+      "MoeDispatch": [
+        "SelectRoute",
+        "DmaGather"
+      ],
+      "MoeRouteReduce": [
+        "SelectMerge",
+        "SfuAdd"
+      ],
+      "MoeRoutedExperts": [
+        "MatrixGemm",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul",
+        "MatrixGemm",
+        "SfuScale"
+      ],
+      "MoeRouterTopK": [
+        "MatrixGemv",
+        "SfuReduceMax",
+        "SfuSub",
+        "SfuScale",
+        "SfuExp2",
+        "SfuReduceSum",
+        "SfuReciprocal",
+        "SfuMul",
+        "SelectTopK",
+        "SfuReduceSum",
+        "SfuReciprocal",
+        "SfuMul"
+      ],
+      "MoeSharedExpert": [
+        "MatrixGemm",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul",
+        "MatrixGemm",
+        "MatrixGemv",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul"
+      ],
+      "MtpStateTransaction": [
+        "StateBegin",
+        "SelectMtpVerify",
+        "StateCommit",
+        "StateRollback",
+        "Barrier"
+      ],
+      "MultimodalRope": [
+        "VisionMropeMap",
+        "SfuRope"
+      ],
+      "PaddingMask": [
+        "SfuGate"
+      ],
+      "PartialRope": [
+        "SfuRope"
+      ],
+      "ResidualAdd": [
+        "SfuAdd"
+      ],
+      "RmsNorm": [
+        "SfuRmsNorm"
+      ],
+      "SiluTimesUp": [
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul"
+      ],
+      "TensorView": [
+        "Barrier"
+      ],
+      "TokenEmbedding": [
+        "DmaGather"
+      ],
+      "VisionAttention": [
+        "MatrixGemm",
+        "SfuAdd",
+        "VisionMropeMap",
+        "SfuRope",
+        "MatrixQk",
+        "SfuScale",
+        "SfuOnlineSoftmax",
+        "MatrixPv",
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionDeepstackInject": [
+        "DmaGather",
+        "SfuAdd"
+      ],
+      "VisionLayerNorm": [
+        "SfuLayerNorm"
+      ],
+      "VisionMlpGelu": [
+        "MatrixGemm",
+        "SfuAdd",
+        "SfuPwl",
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionPatchEmbed": [
+        "VisionPatch3d",
+        "MatrixConv",
+        "SfuAdd"
+      ],
+      "VisionPatchMerge": [
+        "VisionPatchMerge",
+        "SfuLayerNorm",
+        "MatrixGemm",
+        "SfuAdd",
+        "SfuPwl",
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionPosition": [
+        "VisionPosInterp",
+        "DmaGather",
+        "DmaGather",
+        "DmaGather",
+        "DmaGather",
+        "SfuMul",
+        "SfuReduceSum"
+      ],
+      "VisionProject": [
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionTokenScatter": [
+        "DmaScatter"
+      ],
+      "VisionWindowLayout": [
+        "VisionWindow"
+      ]
+    },
+    "qwen3_8_flash_next": {
+      "AttentionOutputGate": [
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul"
+      ],
+      "DenseProjection": [
+        "MatrixGemm"
+      ],
+      "GatedResidualRead": [
+        "SfuGroupRmsNorm",
+        "MatrixLowRank",
+        "SfuScale",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "MatrixLowRank",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuReduceSum",
+        "SfuScale",
+        "MatrixGemv",
+        "SfuScale",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuScale"
+      ],
+      "GatedResidualWrite": [
+        "SfuMul",
+        "SfuAdd"
+      ],
+      "GdnCausalConv": [
+        "StateConvWindow",
+        "SfuMul",
+        "SfuReduceSum",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul"
+      ],
+      "GdnGatedNormOutput": [
+        "SfuRmsNorm",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul",
+        "MatrixGemm"
+      ],
+      "GdnProjection": [
+        "MatrixGemm"
+      ],
+      "GdnRecurrentUpdate": [
+        "SfuAdd",
+        "SfuPwl",
+        "SfuMul",
+        "SfuExp2",
+        "SfuMul",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuL2Norm",
+        "SfuScale",
+        "SfuL2Norm",
+        "StateRead",
+        "SfuMul",
+        "StateWrite",
+        "StateRead",
+        "MatrixGemv",
+        "SfuSub",
+        "SfuMul",
+        "MatrixOuter",
+        "StateWrite",
+        "StateRead",
+        "MatrixGemv"
+      ],
+      "GqaBroadcast": [
+        "SfuBroadcast"
+      ],
+      "GroupRmsNorm": [
+        "SfuGroupRmsNorm"
+      ],
+      "LmHead": [
+        "MatrixGemv"
+      ],
+      "LogitsTopK": [
+        "SelectTopK"
+      ],
+      "MoeDispatch": [
+        "SelectRoute",
+        "DmaGather"
+      ],
+      "MoeRouteReduce": [
+        "SelectMerge",
+        "SfuAdd"
+      ],
+      "MoeRoutedExperts": [
+        "MatrixGemm",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul",
+        "MatrixGemm",
+        "SfuScale"
+      ],
+      "MoeRouterTopK": [
+        "MatrixGemv",
+        "SfuReduceMax",
+        "SfuSub",
+        "SfuScale",
+        "SfuExp2",
+        "SfuReduceSum",
+        "SfuReciprocal",
+        "SfuMul",
+        "SelectTopK",
+        "SfuReduceSum",
+        "SfuReciprocal",
+        "SfuMul"
+      ],
+      "MoeSharedExpert": [
+        "MatrixGemm",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuMul",
+        "MatrixGemm",
+        "MatrixGemv",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul"
+      ],
+      "MtpStateTransaction": [
+        "StateBegin",
+        "SelectMtpVerify",
+        "StateCommit",
+        "StateRollback",
+        "Barrier"
+      ],
+      "MultimodalRope": [
+        "VisionMropeMap",
+        "SfuRope"
+      ],
+      "PaddingMask": [
+        "SfuGate"
+      ],
+      "PartialRope": [
+        "SfuRope"
+      ],
+      "PleNgramHash": [
+        "PleHash"
+      ],
+      "PleProjectionDwConv": [
+        "MatrixGemm",
+        "MatrixGemm",
+        "SfuGroupRmsNorm",
+        "SfuGroupRmsNorm",
+        "MatrixQk",
+        "SfuScale",
+        "SfuAbs",
+        "SfuMax",
+        "SfuRsqrt",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuGroupRmsNorm",
+        "StateConvWindow",
+        "SfuMul",
+        "SfuReduceSum",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "SfuAdd"
+      ],
+      "PleSparseRowFetch": [
+        "DmaGather"
+      ],
+      "QsaBlockSummary": [
+        "SfuL2Norm",
+        "SelectBlockPool",
+        "SfuScale",
+        "SfuL2Norm",
+        "SfuRope",
+        "SfuRope",
+        "MatrixQk",
+        "SfuMax",
+        "SfuReduceSum",
+        "SfuScale"
+      ],
+      "QsaIndexProjection": [
+        "MatrixGemm"
+      ],
+      "QsaSparseAttention": [
+        "MatrixGemm",
+        "SfuRmsNorm",
+        "SfuRope",
+        "MatrixGemm",
+        "SfuRmsNorm",
+        "SfuRope",
+        "MatrixGemm",
+        "KvAppend",
+        "MatrixQk",
+        "SfuCausalMask",
+        "SfuOnlineSoftmax",
+        "MatrixPv",
+        "SfuAbs",
+        "SfuNegate",
+        "SfuMul",
+        "SfuExp2",
+        "SfuAdd",
+        "SfuReciprocal",
+        "SfuMul",
+        "SfuCompareSelect",
+        "SfuMul",
+        "MatrixGemm"
+      ],
+      "QsaSparseKvGather": [
+        "KvGather"
+      ],
+      "QsaStreamingTopK": [
+        "SelectTopK",
+        "SelectExpand"
+      ],
+      "RmsNorm": [
+        "SfuRmsNorm"
+      ],
+      "TensorView": [
+        "Barrier"
+      ],
+      "TokenEmbedding": [
+        "DmaGather"
+      ],
+      "VisionAttention": [
+        "MatrixGemm",
+        "SfuAdd",
+        "VisionMropeMap",
+        "SfuRope",
+        "MatrixQk",
+        "SfuScale",
+        "SfuOnlineSoftmax",
+        "MatrixPv",
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionDeepstackInject": [
+        "DmaGather",
+        "SfuAdd"
+      ],
+      "VisionLayerNorm": [
+        "SfuLayerNorm"
+      ],
+      "VisionMlpGelu": [
+        "MatrixGemm",
+        "SfuAdd",
+        "SfuPwl",
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionPatchEmbed": [
+        "VisionPatch3d",
+        "MatrixConv",
+        "SfuAdd"
+      ],
+      "VisionPatchMerge": [
+        "VisionPatchMerge",
+        "SfuLayerNorm",
+        "MatrixGemm",
+        "SfuAdd",
+        "SfuPwl",
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionPosition": [
+        "VisionPosInterp",
+        "DmaGather",
+        "DmaGather",
+        "DmaGather",
+        "DmaGather",
+        "SfuMul",
+        "SfuReduceSum"
+      ],
+      "VisionProject": [
+        "MatrixGemm",
+        "SfuAdd"
+      ],
+      "VisionTokenScatter": [
+        "DmaScatter"
+      ],
+      "VisionWindowLayout": [
+        "VisionWindow"
+      ]
+    }
+  },
+  "moe": {
+    "expected_fp32": [
+      "0x3fa40000",
+      "0x3fe80000",
+      "0x3fa00000"
+    ],
+    "response_order": [
+      3,
+      1,
+      0,
+      2
+    ],
+    "results_fp32": [
+      [
+        "0x3f800000",
+        "0x40000000",
+        "0x40400000"
+      ],
+      [
+        "0xbf800000",
+        "0x40800000",
+        "0x3f000000"
+      ],
+      [
+        "0x41000000",
+        "0xc0000000",
+        "0x3f800000"
+      ],
+      [
+        "0x3e800000",
+        "0x3f000000",
+        "0xc0800000"
+      ]
+    ],
+    "weights_fp32": [
+      "0x3f000000",
+      "0x3e800000",
+      "0x3e000000",
+      "0x3e000000"
+    ]
+  },
+  "payload_sha256": "77a984d5dd2d4cd46b5f6241bdc13b1ac343fd9e941f40a99f0416e4495e1900",
+  "schema_version": 1,
+  "selection": {
+    "qsa_tokens": {
+      "block_scores": [
+        "0x3f800000",
+        "0x40000000",
+        "0x3f000000",
+        "0x40000000"
+      ],
+      "block_topk": 2,
+      "compress_ratio": 4,
+      "expected": [
+        4,
+        5,
+        6,
+        7,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "tail_count": 3
+    },
+    "stable_topk_fp32": {
+      "expected": [
+        {
+          "index": 9,
+          "score": "0x7f800000"
+        },
+        {
+          "index": 2,
+          "score": "0x3f800000"
+        },
+        {
+          "index": 7,
+          "score": "0x3f800000"
+        },
+        {
+          "index": 3,
+          "score": "0x80000000"
+        },
+        {
+          "index": 5,
+          "score": "0x00000000"
+        }
+      ],
+      "items": [
+        {
+          "index": 9,
+          "score": "0x7f800000"
+        },
+        {
+          "index": 5,
+          "score": "0x00000000"
+        },
+        {
+          "index": 3,
+          "score": "0x80000000"
+        },
+        {
+          "index": 7,
+          "score": "0x3f800000"
+        },
+        {
+          "index": 2,
+          "score": "0x3f800000"
+        },
+        {
+          "index": 1,
+          "score": "0xff800000"
+        },
+        {
+          "index": 0,
+          "score": "0x7fc00001"
+        }
+      ],
+      "k": 5
+    }
+  },
+  "sparse_memory": {
+    "ple_hash": {
+      "expected": [
+        [
+          16,
+          31,
+          46,
+          63
+        ],
+        [
+          0,
+          32,
+          47,
+          64
+        ],
+        [
+          0,
+          24,
+          56,
+          73
+        ],
+        [
+          5,
+          27,
+          44,
+          78
+        ]
+      ],
+      "heads_per_ngram": 2,
+      "multipliers": [
+        3,
+        5,
+        7
+      ],
+      "ngram_size": 3,
+      "offsets": [
+        0,
+        17,
+        36,
+        59
+      ],
+      "sizes": [
+        17,
+        19,
+        23,
+        29
+      ],
+      "tokens": [
+        11,
+        7,
+        23,
+        5
+      ]
+    },
+    "tagged_gather": {
+      "expected": [
+        [
+          1515866714,
+          0,
+          8,
+          false
+        ],
+        [
+          1515866650,
+          1,
+          9,
+          false
+        ],
+        [
+          1515866842,
+          2,
+          10,
+          false
+        ],
+        [
+          1515866778,
+          0,
+          11,
+          false
+        ],
+        [
+          1515866970,
+          1,
+          12,
+          false
+        ],
+        [
+          1515866906,
+          2,
+          13,
+          true
+        ]
+      ],
+      "requests": [
+        [
+          4096,
+          0,
+          8,
+          false
+        ],
+        [
+          4160,
+          1,
+          9,
+          false
+        ],
+        [
+          4224,
+          2,
+          10,
+          false
+        ],
+        [
+          4288,
+          0,
+          11,
+          false
+        ],
+        [
+          4352,
+          1,
+          12,
+          false
+        ],
+        [
+          4416,
+          2,
+          13,
+          true
+        ]
+      ],
+      "response_order": [
+        5,
+        2,
+        0,
+        4,
+        1,
+        3
+      ]
+    }
+  },
+  "state": {
+    "causal_conv_k4_d1": [
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 1,
+        "tap": 0,
+        "token": 0,
+        "use_current": true,
+        "write_slot": 1
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 0,
+        "tap": 1,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 1
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 2,
+        "tap": 2,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 1
+      },
+      {
+        "channel": 0,
+        "history_valid": false,
+        "last": false,
+        "read_slot": 1,
+        "tap": 3,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 1
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 1,
+        "tap": 0,
+        "token": 0,
+        "use_current": true,
+        "write_slot": 1
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 0,
+        "tap": 1,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 1
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 2,
+        "tap": 2,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 1
+      },
+      {
+        "channel": 1,
+        "history_valid": false,
+        "last": false,
+        "read_slot": 1,
+        "tap": 3,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 1
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 2,
+        "tap": 0,
+        "token": 1,
+        "use_current": true,
+        "write_slot": 2
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 1,
+        "tap": 1,
+        "token": 1,
+        "use_current": false,
+        "write_slot": 2
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 0,
+        "tap": 2,
+        "token": 1,
+        "use_current": false,
+        "write_slot": 2
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 2,
+        "tap": 3,
+        "token": 1,
+        "use_current": false,
+        "write_slot": 2
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 2,
+        "tap": 0,
+        "token": 1,
+        "use_current": true,
+        "write_slot": 2
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 1,
+        "tap": 1,
+        "token": 1,
+        "use_current": false,
+        "write_slot": 2
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 0,
+        "tap": 2,
+        "token": 1,
+        "use_current": false,
+        "write_slot": 2
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": true,
+        "read_slot": 2,
+        "tap": 3,
+        "token": 1,
+        "use_current": false,
+        "write_slot": 2
+      }
+    ],
+    "dilated_conv_k4_d3": [
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 4,
+        "tap": 0,
+        "token": 0,
+        "use_current": true,
+        "write_slot": 4
+      },
+      {
+        "channel": 0,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 1,
+        "tap": 1,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 4
+      },
+      {
+        "channel": 0,
+        "history_valid": false,
+        "last": false,
+        "read_slot": 7,
+        "tap": 2,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 4
+      },
+      {
+        "channel": 0,
+        "history_valid": false,
+        "last": false,
+        "read_slot": 4,
+        "tap": 3,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 4
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 4,
+        "tap": 0,
+        "token": 0,
+        "use_current": true,
+        "write_slot": 4
+      },
+      {
+        "channel": 1,
+        "history_valid": true,
+        "last": false,
+        "read_slot": 1,
+        "tap": 1,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 4
+      },
+      {
+        "channel": 1,
+        "history_valid": false,
+        "last": false,
+        "read_slot": 7,
+        "tap": 2,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 4
+      },
+      {
+        "channel": 1,
+        "history_valid": false,
+        "last": true,
+        "read_slot": 4,
+        "tap": 3,
+        "token": 0,
+        "use_current": false,
+        "write_slot": 4
+      }
+    ],
+    "gated_residual_small": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ]
+    ],
+    "gdn_address_small": [
+      [
+        "decay",
+        0,
+        0,
+        0,
+        true
+      ],
+      [
+        "decay",
+        0,
+        0,
+        1,
+        true
+      ],
+      [
+        "decay",
+        0,
+        1,
+        0,
+        true
+      ],
+      [
+        "decay",
+        0,
+        1,
+        1,
+        true
+      ],
+      [
+        "decay",
+        0,
+        2,
+        0,
+        true
+      ],
+      [
+        "decay",
+        0,
+        2,
+        1,
+        true
+      ],
+      [
+        "decay",
+        1,
+        0,
+        0,
+        true
+      ],
+      [
+        "decay",
+        1,
+        0,
+        1,
+        true
+      ],
+      [
+        "decay",
+        1,
+        1,
+        0,
+        true
+      ],
+      [
+        "decay",
+        1,
+        1,
+        1,
+        true
+      ],
+      [
+        "decay",
+        1,
+        2,
+        0,
+        true
+      ],
+      [
+        "decay",
+        1,
+        2,
+        1,
+        true
+      ],
+      [
+        "key_readout",
+        0,
+        0,
+        0,
+        false
+      ],
+      [
+        "key_readout",
+        0,
+        0,
+        1,
+        false
+      ],
+      [
+        "key_readout",
+        0,
+        1,
+        0,
+        false
+      ],
+      [
+        "key_readout",
+        0,
+        1,
+        1,
+        false
+      ],
+      [
+        "key_readout",
+        0,
+        2,
+        0,
+        false
+      ],
+      [
+        "key_readout",
+        0,
+        2,
+        1,
+        false
+      ],
+      [
+        "key_readout",
+        1,
+        0,
+        0,
+        false
+      ],
+      [
+        "key_readout",
+        1,
+        0,
+        1,
+        false
+      ],
+      [
+        "key_readout",
+        1,
+        1,
+        0,
+        false
+      ],
+      [
+        "key_readout",
+        1,
+        1,
+        1,
+        false
+      ],
+      [
+        "key_readout",
+        1,
+        2,
+        0,
+        false
+      ],
+      [
+        "key_readout",
+        1,
+        2,
+        1,
+        false
+      ],
+      [
+        "outer_update",
+        0,
+        0,
+        0,
+        true
+      ],
+      [
+        "outer_update",
+        0,
+        0,
+        1,
+        true
+      ],
+      [
+        "outer_update",
+        0,
+        1,
+        0,
+        true
+      ],
+      [
+        "outer_update",
+        0,
+        1,
+        1,
+        true
+      ],
+      [
+        "outer_update",
+        0,
+        2,
+        0,
+        true
+      ],
+      [
+        "outer_update",
+        0,
+        2,
+        1,
+        true
+      ],
+      [
+        "outer_update",
+        1,
+        0,
+        0,
+        true
+      ],
+      [
+        "outer_update",
+        1,
+        0,
+        1,
+        true
+      ],
+      [
+        "outer_update",
+        1,
+        1,
+        0,
+        true
+      ],
+      [
+        "outer_update",
+        1,
+        1,
+        1,
+        true
+      ],
+      [
+        "outer_update",
+        1,
+        2,
+        0,
+        true
+      ],
+      [
+        "outer_update",
+        1,
+        2,
+        1,
+        true
+      ],
+      [
+        "query_readout",
+        0,
+        0,
+        0,
+        false
+      ],
+      [
+        "query_readout",
+        0,
+        0,
+        1,
+        false
+      ],
+      [
+        "query_readout",
+        0,
+        1,
+        0,
+        false
+      ],
+      [
+        "query_readout",
+        0,
+        1,
+        1,
+        false
+      ],
+      [
+        "query_readout",
+        0,
+        2,
+        0,
+        false
+      ],
+      [
+        "query_readout",
+        0,
+        2,
+        1,
+        false
+      ],
+      [
+        "query_readout",
+        1,
+        0,
+        0,
+        false
+      ],
+      [
+        "query_readout",
+        1,
+        0,
+        1,
+        false
+      ],
+      [
+        "query_readout",
+        1,
+        1,
+        0,
+        false
+      ],
+      [
+        "query_readout",
+        1,
+        1,
+        1,
+        false
+      ],
+      [
+        "query_readout",
+        1,
+        2,
+        0,
+        false
+      ],
+      [
+        "query_readout",
+        1,
+        2,
+        1,
+        false
+      ]
+    ],
+    "gdn_numeric": {
+      "output_fp32": [
+        "0xbe7a42c4",
+        "0xbe17ac82"
+      ],
+      "state_fp32": [
+        [
+          "0x3d5a07ca",
+          "0xbeb70907"
+        ],
+        [
+          "0x3ed379bb",
+          "0x3d632107"
+        ]
+      ]
+    },
+    "mtp_all_match": {
+      "accepted_count": 3,
+      "all_match": true,
+      "mismatch_step": 3,
+      "rollback": false
+    },
+    "mtp_first_mismatch": {
+      "accepted_count": 1,
+      "all_match": false,
+      "mismatch_step": 1,
+      "rollback": true
+    },
+    "norm_layer_small": [
+      [
+        "sum",
+        0,
+        0
+      ],
+      [
+        "sum",
+        0,
+        1
+      ],
+      [
+        "sum",
+        0,
+        2
+      ],
+      [
+        "sum",
+        0,
+        3
+      ],
+      [
+        "sum",
+        1,
+        0
+      ],
+      [
+        "sum",
+        1,
+        1
+      ],
+      [
+        "sum",
+        1,
+        2
+      ],
+      [
+        "sum",
+        1,
+        3
+      ],
+      [
+        "square_sum",
+        0,
+        0
+      ],
+      [
+        "square_sum",
+        0,
+        1
+      ],
+      [
+        "square_sum",
+        0,
+        2
+      ],
+      [
+        "square_sum",
+        0,
+        3
+      ],
+      [
+        "square_sum",
+        1,
+        0
+      ],
+      [
+        "square_sum",
+        1,
+        1
+      ],
+      [
+        "square_sum",
+        1,
+        2
+      ],
+      [
+        "square_sum",
+        1,
+        3
+      ],
+      [
+        "normalize",
+        0,
+        0
+      ],
+      [
+        "normalize",
+        0,
+        1
+      ],
+      [
+        "normalize",
+        0,
+        2
+      ],
+      [
+        "normalize",
+        0,
+        3
+      ],
+      [
+        "normalize",
+        1,
+        0
+      ],
+      [
+        "normalize",
+        1,
+        1
+      ],
+      [
+        "normalize",
+        1,
+        2
+      ],
+      [
+        "normalize",
+        1,
+        3
+      ]
+    ]
+  },
+  "vision": {
+    "bilinear_center": [
+      1,
+      2,
+      2,
+      3,
+      32768,
+      0
+    ],
+    "bilinear_single_dest": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0
+    ],
+    "block_pool_small": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        3,
+        2
+      ],
+      [
+        1,
+        4,
+        0
+      ],
+      [
+        1,
+        5,
+        0
+      ],
+      [
+        1,
+        6,
+        0
+      ],
+      [
+        1,
+        7,
+        0
+      ],
+      [
+        1,
+        4,
+        1
+      ],
+      [
+        1,
+        5,
+        1
+      ],
+      [
+        1,
+        6,
+        1
+      ],
+      [
+        1,
+        7,
+        1
+      ],
+      [
+        1,
+        4,
+        2
+      ],
+      [
+        1,
+        5,
+        2
+      ],
+      [
+        1,
+        6,
+        2
+      ],
+      [
+        1,
+        7,
+        2
+      ]
+    ],
+    "mrope": [
+      [
+        0,
+        "temporal",
+        0
+      ],
+      [
+        1,
+        "height",
+        0
+      ],
+      [
+        2,
+        "width",
+        0
+      ],
+      [
+        3,
+        "temporal",
+        3
+      ],
+      [
+        4,
+        "height",
+        1
+      ],
+      [
+        5,
+        "width",
+        1
+      ],
+      [
+        6,
+        "temporal",
+        6
+      ],
+      [
+        7,
+        "height",
+        2
+      ],
+      [
+        8,
+        "temporal",
+        8
+      ],
+      [
+        9,
+        "temporal",
+        9
+      ],
+      [
+        10,
+        "temporal",
+        10
+      ],
+      [
+        11,
+        "temporal",
+        11
+      ]
+    ],
+    "patch3d_small": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        1,
+        3,
+        0,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0,
+        3,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        1,
+        3,
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        3,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        1,
+        3,
+        1,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0,
+        3,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        1,
+        3,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        3,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        3,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        3,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        3,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        3,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        3,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        3,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        3,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        3,
+        3,
+        0,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        2,
+        3,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        3,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        3,
+        3,
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        2,
+        3,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        3,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        3,
+        3,
+        1,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        2,
+        3,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        3,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        3,
+        3,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "patch_merge_odd": [
+      [
+        0,
+        0,
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        true
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        2,
+        1,
+        true
+      ],
+      [
+        0,
+        0,
+        3,
+        1,
+        true
+      ],
+      [
+        0,
+        1,
+        2,
+        1,
+        true
+      ],
+      [
+        0,
+        1,
+        3,
+        1,
+        true
+      ],
+      [
+        0,
+        0,
+        4,
+        2,
+        true
+      ],
+      [
+        0,
+        0,
+        5,
+        2,
+        false
+      ],
+      [
+        0,
+        1,
+        4,
+        2,
+        true
+      ],
+      [
+        0,
+        1,
+        5,
+        2,
+        false
+      ],
+      [
+        0,
+        2,
+        0,
+        3,
+        true
+      ],
+      [
+        0,
+        2,
+        1,
+        3,
+        true
+      ],
+      [
+        0,
+        3,
+        0,
+        3,
+        false
+      ],
+      [
+        0,
+        3,
+        1,
+        3,
+        false
+      ],
+      [
+        0,
+        2,
+        2,
+        4,
+        true
+      ],
+      [
+        0,
+        2,
+        3,
+        4,
+        true
+      ],
+      [
+        0,
+        3,
+        2,
+        4,
+        false
+      ],
+      [
+        0,
+        3,
+        3,
+        4,
+        false
+      ],
+      [
+        0,
+        2,
+        4,
+        5,
+        true
+      ],
+      [
+        0,
+        2,
+        5,
+        5,
+        false
+      ],
+      [
+        0,
+        3,
+        4,
+        5,
+        false
+      ],
+      [
+        0,
+        3,
+        5,
+        5,
+        false
+      ]
+    ],
+    "window_odd": [
+      [
+        0,
+        0,
+        0,
+        false
+      ],
+      [
+        0,
+        0,
+        1,
+        false
+      ],
+      [
+        0,
+        0,
+        2,
+        false
+      ],
+      [
+        0,
+        1,
+        0,
+        false
+      ],
+      [
+        0,
+        1,
+        1,
+        false
+      ],
+      [
+        0,
+        1,
+        2,
+        false
+      ],
+      [
+        0,
+        0,
+        3,
+        false
+      ],
+      [
+        0,
+        0,
+        4,
+        false
+      ],
+      [
+        0,
+        0,
+        5,
+        true
+      ],
+      [
+        0,
+        1,
+        3,
+        false
+      ],
+      [
+        0,
+        1,
+        4,
+        false
+      ],
+      [
+        0,
+        1,
+        5,
+        true
+      ],
+      [
+        0,
+        2,
+        0,
+        false
+      ],
+      [
+        0,
+        2,
+        1,
+        false
+      ],
+      [
+        0,
+        2,
+        2,
+        false
+      ],
+      [
+        0,
+        3,
+        0,
+        true
+      ],
+      [
+        0,
+        3,
+        1,
+        true
+      ],
+      [
+        0,
+        3,
+        2,
+        true
+      ],
+      [
+        0,
+        2,
+        3,
+        false
+      ],
+      [
+        0,
+        2,
+        4,
+        false
+      ],
+      [
+        0,
+        2,
+        5,
+        true
+      ],
+      [
+        0,
+        3,
+        3,
+        true
+      ],
+      [
+        0,
+        3,
+        4,
+        true
+      ],
+      [
+        0,
+        3,
+        5,
+        true
+      ]
+    ]
+  }
+}

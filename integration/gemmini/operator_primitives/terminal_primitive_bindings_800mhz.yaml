@@ -1,0 +1,70 @@
+schema_version: 1
+binding_id: QWEN_FAMILY_TERMINAL_PRIMITIVES_800MHZ_V1
+clock: {target_hz: 800000000, period_ns: 1.25}
+claim_boundary: terminal_owner_opcode_binding_contract
+providers:
+  Control:
+    implementation: existing_rtl
+    source_roots: [rtl/control, rtl/integration, rtl/top]
+    opcodes: [Barrier]
+  Dma:
+    implementation: existing_rtl
+    source_roots: [rtl/memory, rtl/integration, rtl/kv]
+    opcodes: [DmaRead, DmaWrite, DmaGather, DmaScatter]
+  Matrix:
+    implementation: existing_rtl_and_generated_gemmini
+    source_roots: [rtl/matrix, integration/gemmini]
+    opcodes: [MatrixGemm, MatrixGemv, MatrixQk, MatrixPv, MatrixOuter, MatrixConv, MatrixLowRank]
+  Sfu:
+    implementation: existing_rtl_plus_chisel_control
+    source_roots: [rtl/sfu, rtl/attention, integration/gemmini/operator_primitives]
+    opcodes:
+      - SfuAdd
+      - SfuSub
+      - SfuMul
+      - SfuScale
+      - SfuReduceSum
+      - SfuReduceMax
+      - SfuRsqrt
+      - SfuReciprocal
+      - SfuExp2
+      - SfuRmsNorm
+      - SfuGroupRmsNorm
+      - SfuRope
+      - SfuOnlineSoftmax
+      - SfuGate
+      - SfuL2Norm
+      - SfuAbs
+      - SfuMax
+      - SfuCompareSelect
+      - SfuNegate
+      - SfuPwl
+      - SfuBroadcast
+      - SfuCausalMask
+      - SfuLayerNorm
+  KvMemory:
+    implementation: existing_rtl
+    source_roots: [rtl/kv, rtl/integration]
+    opcodes: [KvAppend, KvGather, KvAlloc, KvFree]
+  State:
+    implementation: new_chisel_controller_plus_external_sram_or_ddr
+    source_roots: [integration/gemmini/operator_primitives, rtl/state]
+    opcodes: [StateRead, StateWrite, StateDecay, StateConvWindow, StateBegin, StateCommit, StateRollback]
+  Selection:
+    implementation: new_chisel_controller
+    source_roots: [integration/gemmini/operator_primitives]
+    opcodes: [SelectTopK, SelectExpand, SelectRoute, SelectMerge, SelectBlockPool, SelectMtpVerify]
+  Vision:
+    implementation: new_chisel_controller_plus_existing_matrix_sfu
+    source_roots: [integration/gemmini/operator_primitives]
+    opcodes: [VisionWindow, VisionPatchMerge, VisionPosInterp, PleHash, VisionPatch3d, VisionMropeMap]
+constraints:
+  no_cpu_fallback_at_primitive_boundary: true
+  composite_activation_opcodes_must_be_leaf_expanded: true
+  unknown_owner_opcode_is_error: true
+  model_name_conditionals_in_primitive_hardware: forbidden
+local_agent_gates:
+  - elaborate_all_catalog_modules
+  - connect_every_terminal_owner_opcode_to_endpoint
+  - randomized_ready_valid_rtl_differential
+  - dc_synthesis_at_1p25ns

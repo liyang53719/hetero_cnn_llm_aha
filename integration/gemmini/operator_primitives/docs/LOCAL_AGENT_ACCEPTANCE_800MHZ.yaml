@@ -1,0 +1,71 @@
+schema_version: 2
+plan_id: QWEN_OPERATOR_PRIMITIVES_LOCAL_800MHZ
+branch_policy: {required: main, create_branch: false, force_push: false, preserve_artifacts: true}
+baseline:
+  coverage_manifest: integration/gemmini/operator_primitives/operator_coverage_800mhz.yaml
+  terminal_binding_manifest: integration/gemmini/operator_primitives/terminal_primitive_bindings_800mhz.yaml
+  clock_policy: configs/global_clock_800mhz.yaml
+  expected: {operator_ids: 48, catalog_modules: 25, terminal_bindings: 58}
+stages:
+  T0_source_replay:
+    command: integration/gemmini/operator_primitives/scripts/run_sandbox_tests.sh
+    acceptance:
+      pytest_tests_min: 51
+      pytest_failures: 0
+      coverage_status: PASS_OPERATOR_PRIMITIVE_COVERAGE
+      missing_per_model: 0
+      unbound_terminal_opcodes_per_model: 0
+      terminal_micro_ops: {qwen2_1p5b: 27, qwen3_5_35b_a3b: 186, qwen3_8_flash_next: 279}
+  T1_chisel_elaboration:
+    command: PINNED_GEMMINI_DIR=<path> OUT_DIR=work/generated/operator_primitives_800mhz integration/gemmini/operator_primitives/scripts/generate_all_primitives.sh
+    acceptance:
+      emitted_modules: 25
+      catalog_emit_failures: 0
+      empty_rtl_files: 0
+      generated_rtl_verifier: PASS
+      chisel_width_errors: 0
+      uninitialized_signals: 0
+      combinational_loops: 0
+      provenance: [repo_commit, gemmini_commit, java_version, sbt_version, source_sha256, rtl_sha256, logs]
+  T2_rtl_differential:
+    acceptance:
+      reference: integration/gemmini/operator_primitives/reference/operator_primitives_reference.py
+      vectors: integration/gemmini/operator_primitives/vectors/operator_primitives_reference_v1.json
+      vector_regeneration_match: true
+      randomized_backpressure: required
+      same_cycle_response: required
+      sequence_or_bit_mismatches: 0
+      lost_duplicate_reordered_transactions: 0
+      assertion_failures: 0
+      stalls_per_decoupled_interface_min: 1
+      qsa_topk_max_tested: 512
+      ple_heads_max_tested: 16
+      moe_topk_tested: [8, 10]
+      gdn_official_address_geometry: required
+      mtp_first_mismatch_all_positions: required
+      vision_odd_grid_and_tail_cases: required
+  T3_terminal_binding:
+    acceptance:
+      connected_bindings: 58
+      duplicate_bindings: 0
+      unsupported_owner_opcode: 0
+      composite_opcode_at_terminal: 0
+      cpu_fallback_operator_ids: 0
+      large_state_register_arrays: 0
+      descriptor_driven_shapes: true
+  T4_dc_800mhz:
+    constraint: dc/operator_primitives_800mhz.tcl
+    acceptance:
+      period_ns: 1.25
+      setup_wns_ns_min: 0.0
+      hold_wns_ns_min: 0.0
+      unconstrained_endpoints: 0
+      inferred_latches: 0
+      combinational_dividers: 0
+      combinational_topk_width_512: 0
+      provenance_fields: [commit, tool_version, std_cell_library, corner, constraint_sha256, log_sha256]
+  T5_main_push:
+    acceptance: {branch: main, force_push: false, local_equals_remote_main: true}
+final_gate:
+  name: PASS_QWEN_FAMILY_OPERATOR_PRIMITIVES_RTL_DC_800MHZ
+  requires: [T0_source_replay, T1_chisel_elaboration, T2_rtl_differential, T3_terminal_binding, T4_dc_800mhz, T5_main_push]

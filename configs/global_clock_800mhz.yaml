@@ -1,0 +1,27 @@
+schema_version: 1
+policy_id: HETERO_GLOBAL_CLOCK_800MHZ
+status: authoritative_for_new_and_active_synthesis
+scope:
+  - active_dc_synthesis
+  - active_sta
+  - generated_operator_primitives
+  - top_level_integration
+excluded_scope:
+  - immutable_historical_reports
+  - archived_1ghz_comparison_runs
+target_hz: 800000000
+period_ns: 1.25
+setup_uncertainty_ns: 0.08
+clock_transition_ns: 0.05
+input_delay_ns: 0.10
+output_delay_ns: 0.10
+rules:
+  hardcoded_period_1ns_allowed: false
+  generated_scripts_must_source: dc/operator_primitives_800mhz.tcl
+  setup_wns_ns_min: 0.0
+  hold_wns_ns_min: 0.0
+  no_unconstrained_endpoints: true
+migration:
+  previous_target_hz: 1GHz_historical_only
+  reason: local_std_cell_timing_convergence
+  preserve_previous_reports: true

@@ -1,0 +1,65 @@
+{
+  "catalog_modules": 25,
+  "claim_boundary": "Chisel operator primitive source/semantic/static closure; generated RTL, RTL simulation and DC remain local-agent gates.",
+  "clock": {
+    "period_ns": 1.25,
+    "target_hz": 800000000
+  },
+  "failures": [],
+  "manifest_sha256": "012c62c36b256c044274eaa8cd3b92618834b8294cd48c523c0a35fb6685dd10",
+  "models": {
+    "qwen2_1p5b": {
+      "coverage": "complete",
+      "missing": [],
+      "phase_micro_ops": 19,
+      "required": 15,
+      "terminal_micro_ops": 27,
+      "unbound_terminal_opcodes": [],
+      "unique_terminal_opcodes": 22
+    },
+    "qwen3_5_35b_a3b": {
+      "coverage": "complete",
+      "missing": [],
+      "phase_micro_ops": 122,
+      "required": 36,
+      "terminal_micro_ops": 186,
+      "unbound_terminal_opcodes": [],
+      "unique_terminal_opcodes": 46
+    },
+    "qwen3_8_flash_next": {
+      "coverage": "complete",
+      "missing": [],
+      "phase_micro_ops": 179,
+      "required": 42,
+      "terminal_micro_ops": 279,
+      "unbound_terminal_opcodes": [],
+      "unique_terminal_opcodes": 53
+    }
+  },
+  "operator_ids": 48,
+  "schema_version": 1,
+  "source_sha256": {
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/EmitHeteroOperatorPrimitiveCatalog.scala": "7d529d055729b2bfafef3b44e9952da7de0d67024bb14fcfe26a0f12cd6a6e18",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroModelOperatorSequencer.scala": "be7e2c547890f888fc7acbd22d474670f0afcffe985dd410edd60536dc3c55e0",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveCapability.scala": "c3e5e1e1f8f7f3f40297fa9a13f625e84665a6cacf8dfb75d2c6e8b1a4a876b4",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroPrimitiveLeafExpander.scala": "3339ddbed416a1755adb53e5cd1719adbc1482fbce7be3ec77514bbe5ae3109b",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala": "872506b1571efb7b4490b025e4b57cb370949e7775224432cd7f49fcb569853f",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSfuControlPrimitives.scala": "03c66fef99fd9b2150359cc61122bb35743dabf713aba3b068be7dcc0238acc8",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroStatePrimitives.scala": "368a0e281e728a74726a0e480849ce1e93bc90a45407fb76583f07fd7782af34",
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala": "e75211d07f7ae99c158da9a24667c23918c5254ba555874ab1bc2d25d4b2dacc"
+  },
+  "status": "PASS_OPERATOR_PRIMITIVE_COVERAGE",
+  "terminal_binding_count": 58,
+  "terminal_binding_manifest_sha256": "7ba903f00d37abd112ab01dc4f2b02271aec2e7b79b6007c79a2fcb1e0806180",
+  "terminal_owner_counts": {
+    "Control": 1,
+    "Dma": 4,
+    "KvMemory": 4,
+    "Matrix": 7,
+    "Selection": 6,
+    "Sfu": 23,
+    "State": 7,
+    "Vision": 6
+  }
+}

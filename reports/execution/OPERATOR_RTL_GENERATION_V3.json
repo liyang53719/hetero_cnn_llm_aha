@@ -10,15 +10,15 @@
     "HeteroModelOperatorSequencer",
     "HeteroPrimitiveLeafExpander",
     "HeteroStreamingTopK",
-    "HeteroUnsignedDivide",
-    "HeteroUnsignedMultiply"
+    "HeteroUnsignedDivideW64",
+    "HeteroUnsignedMultiplyW32"
   ],
-  "manifest_sha256": "13c9ebaab64f4a94f2e6012de6721ec3d3bac645d7b7c5a4cfcea70e3f0b3a4d",
+  "manifest_sha256": "9256ef705fd1737dfb384edb8b54af9d5e3c3eab64df4933ec1aa1a5aab3f88e",
   "missing_in_combined": 0,
   "primitive_sv_count": 25,
   "root_sv_count": 18,
   "schema_version": 1,
-  "source_git_sha": "1ccdbea88b78760031a91cfc1ad16fb978f91717",
+  "source_git_sha": "5e565acc03f185bcac3545bba4a870cdc5ffe711",
   "status": "PASS_AUTHORITATIVE_CHISEL_RTL_GENERATION",
   "verilator_lint": {
     "errors": 0,

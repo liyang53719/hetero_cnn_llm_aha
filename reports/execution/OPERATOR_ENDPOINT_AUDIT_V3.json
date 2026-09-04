@@ -1,13 +1,11 @@
 {
   "candidate_source_coverage": 58,
-  "claim_boundary": "All 58 opcodes have candidate source roots; 52 have a canonical V3 request/completion adapter. Candidate source coverage is not endpoint binding.",
+  "claim_boundary": "All 58 opcodes have canonical V3 request/completion adapters; combined-shell and model canary closure remain separate gates.",
   "failures": [],
   "legacy_immediate_completion_patterns_for_manual_review": 0,
   "missing_candidate_sources": [],
-  "open_v3_endpoint_bindings": 6,
-  "owners_open": [
-    "Vision"
-  ],
+  "open_v3_endpoint_bindings": 0,
+  "owners_open": [],
   "owners_with_real_v3_adapter": [
     "Control",
     "Dma",
@@ -15,10 +13,11 @@
     "Sfu",
     "KvMemory",
     "State",
-    "Selection"
+    "Selection",
+    "Vision"
   ],
-  "real_v3_endpoint_bindings": 52,
+  "real_v3_endpoint_bindings": 58,
   "schema_version": 1,
-  "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
+  "status": "PASS_ALL_REAL_ENDPOINT_BINDINGS",
   "terminal_opcode_contract": 58
 }

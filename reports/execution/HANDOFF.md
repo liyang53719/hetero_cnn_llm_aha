@@ -90,9 +90,14 @@
 - Selection owner closes TopK/Expand/Route/Merge/BlockPool/MTP over 100
   transactions. TopK uses an external 512x65 SRAM port, so no flattened table
   remains. DC WNS +0.000525236 ns, area 29113.357, 0 error/unmapped/DRC.
+- Vision owner closes six generated address/layout controllers over 100
+  transactions. Chisel fixes make helper names/ports stable and pipeline the
+  Patch3D carry chain; generated SV was regenerated, never edited. Owner DC
+  WNS +0.000558019 ns, area 14857.843, 0 error/unmapped.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing
   independent area 98171.164. StreamingTopK and QSA timeout at 600 s because
   the 512x65 table was flattened into ~33k registers; bind external SRAM next.
-- Endpoint total is 52/58; only Vision 6 remains open.
+- Endpoint adapters are 58/58. This is not G3/model closure: connect all eight
+  owners to the terminal router, run four model canaries, then combined-shell DC.

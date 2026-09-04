@@ -23,7 +23,7 @@
     "KvMemory": "PASS_4_OF_4_DDR_PTE_AND_IDMA_ENDPOINT",
     "State": "PASS_7_OF_7_TRANSACTIONAL_PAYLOAD_ENDPOINT",
     "Selection": "PASS_6_OF_6_EXTERNAL_SRAM_AND_GENERATED_CONTROLLERS",
-    "Vision": "OPEN_REAL_ENDPOINT_BINDING"
+    "Vision": "PASS_6_OF_6_AUTHORITATIVE_ADDRESS_LAYOUT_ENDPOINT"
   },
   "generated_bridge_rtl": {
     "status": "PASS_VERILATOR_LINT",
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "52/58",
-    "owners_open": 1,
+    "real_v3_endpoint_bindings": "58/58",
+    "owners_open": 0,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -280,6 +280,21 @@
     "storage": {"topk_entries": 512, "entry_bits": 65, "implementation": "external SRAM request/response", "flattened_register_table_present": false},
     "dc": {"status": "PASS_CLEAN_LOG", "period_ns": 1.25, "wns_ns": 0.000525236, "area": 29113.357, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 0},
     "dc_log_sha256": "f1dd6a192736a50ae46c1ce5d92ff28080b952e758e493d058e35628cc5c0958"
+  },
+  "vision_endpoint_evidence": {
+    "status": "PASS_6_OF_6_AUTHORITATIVE_CONTROLLERS_AND_DC",
+    "opcodes": ["VisionWindow", "VisionPatchMerge", "VisionPosInterp", "PleHash", "VisionPatch3d", "VisionMropeMap"],
+    "endpoint": "rtl/integration/operator_vision_endpoint_v3.sv",
+    "endpoint_sha256": "37731dcd16ea752dc9295b1e9ed5ee6d4411e13a97a862d491429e3ab144f2c6",
+    "test": {"successful_transactions": 100, "opcodes": 6, "random_backpressure": true, "log_sha256": "6542bf9920db1f52ef961e1b90ec9750a12092447bfc9bf41077d49f4332b999"},
+    "chisel_repairs": {"width_specific_helper_names": true, "full_helper_ports_preserved": true, "patch3d_registered_carry_advance": true, "selection_source_sha256": "899878e7dd5260fa30452d1334d8d11474df671643e967ee179fd803ab82ae1c", "vision_source_sha256": "46a819d59ec32ca4a849f43d70b7de3055c89e85817b2361063ebba63e86c250"},
+    "regenerated_rtl": {"unsigned_divide_sha256": "89be7df2b19489ea8e56c4da12c29b3c1d33a0586ab27b9d3e932ac5cf697feb", "unsigned_multiply_sha256": "883791c89887036a1e7eb7d145293a1edfda02bfb962a092fc4f73e72181042c", "ple_hash_sha256": "766e5f29cc7f4533ba6d6d0db97881b50f2a3e1b898589a365145e1cc2b4fa46", "qsa_sha256": "3c60498f6769188aa3b1bf58d296f09ec7f1619a4032b2dfce8567fa37b0e71c", "bilinear_sha256": "d9cd0edc99fa6ef81b1ae7b172240ec7513c639b3671a30ebdbea95c4f56a2e7", "patch3d_sha256": "203c69ff1914bca42e7b4072f20648b6e2355a2c2f649fd1dd9d0e1a6a14725b", "generated_rtl_hand_edited": false},
+    "patch3d_dc": {"status": "PASS", "wns_ns": 0.284273, "area": 615.524, "unmapped": 0, "dc_errors": 0},
+    "dc_attempt1": {"status": "FAIL_OUTPUT_MUX_TIMING", "wns_ns": -0.0307224},
+    "dc_attempt2": {"status": "FAIL_PATCH3D_CARRY_TIMING", "wns_ns": -0.000839829},
+    "dc": {"status": "PASS_REGISTERED_OUTPUT_AND_PATCH3D_CARRY", "period_ns": 1.25, "wns_ns": 0.000558019, "area": 14857.843, "unmapped": 0, "dc_errors": 0, "max_transition_violations": 31},
+    "dc_log_sha256": "2884fdb167bc9844d6fc4cdcbc6b69e05bb337b14cd8373edb86d7d05734a770",
+    "nonclaim": "The catalog combined SV intentionally ties child inputs and is collision-only; functional Vision uses individually emitted authoritative modules with width-stable helpers."
   },
   "sfu_group_rmsnorm_candidate": {
     "status": "PASS_FUNCTIONAL_SINGLE_SHARED_CORE_DC",

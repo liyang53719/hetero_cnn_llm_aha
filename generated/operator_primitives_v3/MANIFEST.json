@@ -1,15 +1,15 @@
 {
   "combined": [
     {
-      "bytes": 219599,
+      "bytes": 220085,
       "modules": [
-        "HeteroUnsignedDivide",
-        "HeteroUnsignedMultiply",
+        "HeteroUnsignedDivideW64",
+        "HeteroUnsignedMultiplyW32",
         "table_512x65",
         "HeteroStreamingTopK",
         "HeteroTaggedGatherReorder",
         "HeteroMoeRouteDispatch",
-        "HeteroUnsignedMultiply_1",
+        "HeteroUnsignedMultiplyW64",
         "HeteroPleNgramHash",
         "table_512x53",
         "HeteroStreamingTopK_1",
@@ -35,7 +35,7 @@
         "HeteroOperatorPrimitiveCatalogCombined"
       ],
       "path": "generated/operator_primitives_v3/combined/HeteroOperatorPrimitiveCatalogCombined.sv",
-      "sha256": "1f4262642343e2e4ddd9caf9a8d20bb1a75999b0b701920947825b97e79cb462"
+      "sha256": "4ea5e1c0b2b64487697cb066cf8c443d1ba01620d451e1e9f7ada0adfcc86e9c"
     }
   ],
   "combined_module_collisions": [],
@@ -66,13 +66,12 @@
       "generated/operator_primitives_v3/primitives/qsa_block_selector.sv",
       "generated/operator_primitives_v3/primitives/streaming_topk.sv"
     ],
-    "HeteroUnsignedDivide": [
+    "HeteroUnsignedDivideW64": [
       "generated/operator_primitives_v3/primitives/ple_ngram_hash.sv",
       "generated/operator_primitives_v3/primitives/unsigned_divide.sv",
       "generated/operator_primitives_v3/primitives/vision_bilinear_index.sv"
     ],
-    "HeteroUnsignedMultiply": [
-      "generated/operator_primitives_v3/primitives/ple_ngram_hash.sv",
+    "HeteroUnsignedMultiplyW32": [
       "generated/operator_primitives_v3/primitives/qsa_block_selector.sv",
       "generated/operator_primitives_v3/primitives/unsigned_multiply.sv",
       "generated/operator_primitives_v3/primitives/vision_bilinear_index.sv"
@@ -169,14 +168,14 @@
       "sha256": "768e0c77385b18eef979a72c7ab382bcb334eb9a7f0364faca4e5380eb09351e"
     },
     {
-      "bytes": 134462,
+      "bytes": 138318,
       "modules": [
-        "HeteroUnsignedMultiply",
-        "HeteroUnsignedDivide",
+        "HeteroUnsignedMultiplyW64",
+        "HeteroUnsignedDivideW64",
         "HeteroPleNgramHash"
       ],
       "path": "generated/operator_primitives_v3/primitives/ple_ngram_hash.sv",
-      "sha256": "c19bfe8678f4cab42c3c55d56483eb86a0c52ea6bca209b33ad91939163e6302"
+      "sha256": "766e5f29cc7f4533ba6d6d0db97881b50f2a3e1b898589a365145e1cc2b4fa46"
     },
     {
       "bytes": 25561,
@@ -196,15 +195,15 @@
       "sha256": "002ba749ad7b72e85f85bbd0ab9fbb8d80f0efcd13995da1fb55448a5af66783"
     },
     {
-      "bytes": 127637,
+      "bytes": 128091,
       "modules": [
         "table_512x53",
         "HeteroStreamingTopK",
-        "HeteroUnsignedMultiply",
+        "HeteroUnsignedMultiplyW32",
         "HeteroQsaBlockSelector"
       ],
       "path": "generated/operator_primitives_v3/primitives/qsa_block_selector.sv",
-      "sha256": "f2fa58098050fa82baa4461e1b5fa40923a2756ef706fb604fedef2942a9a40e"
+      "sha256": "3c60498f6769188aa3b1bf58d296f09ec7f1619a4032b2dfce8567fa37b0e71c"
     },
     {
       "bytes": 31938,
@@ -243,38 +242,38 @@
       "sha256": "f2c81b177b177dd92942089ed46e4128f0fb24a5eb7f1489b193a7cba61a4b61"
     },
     {
-      "bytes": 29383,
+      "bytes": 29386,
       "modules": [
-        "HeteroUnsignedDivide"
+        "HeteroUnsignedDivideW64"
       ],
       "path": "generated/operator_primitives_v3/primitives/unsigned_divide.sv",
-      "sha256": "508c277e8662b8e4d406937296f373c09483e612e5a04d919a3023b49b65d339"
+      "sha256": "89be7df2b19489ea8e56c4da12c29b3c1d33a0586ab27b9d3e932ac5cf697feb"
     },
     {
-      "bytes": 18819,
+      "bytes": 18822,
       "modules": [
-        "HeteroUnsignedMultiply"
+        "HeteroUnsignedMultiplyW32"
       ],
       "path": "generated/operator_primitives_v3/primitives/unsigned_multiply.sv",
-      "sha256": "6185850a0c76cee37238e38924255169139871532914ff8568e2cbbcee866192"
+      "sha256": "883791c89887036a1e7eb7d145293a1edfda02bfb962a092fc4f73e72181042c"
     },
     {
-      "bytes": 78543,
+      "bytes": 82733,
       "modules": [
-        "HeteroUnsignedMultiply",
-        "HeteroUnsignedDivide",
+        "HeteroUnsignedMultiplyW32",
+        "HeteroUnsignedDivideW64",
         "HeteroVisionBilinearIndex"
       ],
       "path": "generated/operator_primitives_v3/primitives/vision_bilinear_index.sv",
-      "sha256": "922b1029b98108be2e7e92caab754683d9f692f92919aa921f9c52789d336d36"
+      "sha256": "d9cd0edc99fa6ef81b1ae7b172240ec7513c639b3671a30ebdbea95c4f56a2e7"
     },
     {
-      "bytes": 47943,
+      "bytes": 53818,
       "modules": [
         "HeteroVisionPatch3dAddressGenerator"
       ],
       "path": "generated/operator_primitives_v3/primitives/vision_patch3d_address.sv",
-      "sha256": "bf08beb32b87852bb7b254e00cfe434978fbb4ec51b6bdf3ebea0e851573a03a"
+      "sha256": "203c69ff1914bca42e7b4072f20648b6e2355a2c2f649fd1dd9d0e1a6a14725b"
     },
     {
       "bytes": 32959,
@@ -440,5 +439,5 @@
     }
   ],
   "schema_version": 1,
-  "source_git_sha": "1ccdbea88b78760031a91cfc1ad16fb978f91717"
+  "source_git_sha": "5e565acc03f185bcac3545bba4a870cdc5ffe711"
 }

@@ -47,8 +47,8 @@
     "Vision": {
       "opcodes": ["VisionWindow", "VisionPatchMerge", "VisionPosInterp", "PleHash", "VisionPatch3d", "VisionMropeMap"],
       "candidate_sources": ["integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala", "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala"],
-      "v3_endpoint_adapter": null,
-      "readiness": "address_and_layout_controllers_exist_matrix_sfu_payload_adapter_open"
+      "v3_endpoint_adapter": "rtl/integration/operator_vision_endpoint_v3.sv",
+      "readiness": "pass_six_authoritative_address_layout_controllers_protocol_and_800mhz_dc"
     }
   },
   "acceptance": {

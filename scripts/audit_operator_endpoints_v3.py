@@ -47,7 +47,8 @@ source_text = "\n".join(
 immediate_patterns = len(re.findall(r"completion_valid[^\n]*=\s*(?:1'b1|cmd_valid)", source_text))
 report = {
     "schema_version": 1,
-    "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN" if not failures else "FAIL",
+    "status": ("PASS_ALL_REAL_ENDPOINT_BINDINGS" if bound == opcode_count else
+               "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN") if not failures else "FAIL",
     "terminal_opcode_contract": opcode_count,
     "candidate_source_coverage": opcode_count if not missing_sources else 0,
     "real_v3_endpoint_bindings": bound,
@@ -63,7 +64,9 @@ report = {
     "missing_candidate_sources": missing_sources,
     "legacy_immediate_completion_patterns_for_manual_review": immediate_patterns,
     "failures": failures,
-    "claim_boundary": f"All {opcode_count} opcodes have candidate source roots; {bound} have a canonical V3 request/completion adapter. Candidate source coverage is not endpoint binding."
+    "claim_boundary": (f"All {opcode_count} opcodes have canonical V3 request/completion adapters; "
+                       "combined-shell and model canary closure remain separate gates." if bound == opcode_count else
+                       f"All {opcode_count} opcodes have candidate source roots; {bound} have a canonical V3 request/completion adapter. Candidate source coverage is not endpoint binding.")
 }
 output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 print(json.dumps(report, indent=2, sort_keys=True))

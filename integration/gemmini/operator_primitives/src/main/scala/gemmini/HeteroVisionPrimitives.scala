@@ -595,6 +595,13 @@ class HeteroVisionPatch3dAddressGenerator(
   val baseT = RegInit(0.U(cb.W))
   val baseY = RegInit(0.U(cb.W))
   val baseX = RegInit(0.U(cb.W))
+  val advancePending = RegInit(false.B)
+  val advanceLastKw = Reg(Bool())
+  val advanceLastKh = Reg(Bool())
+  val advanceLastKt = Reg(Bool())
+  val advanceLastChannel = Reg(Bool())
+  val advanceLastOutX = Reg(Bool())
+  val advanceLastOutY = Reg(Bool())
 
   val configValid = io.outputTemporal =/= 0.U && io.outputTemporal <= maxCoordinate.U &&
     io.outputHeight =/= 0.U && io.outputHeight <= maxCoordinate.U &&
@@ -617,9 +624,9 @@ class HeteroVisionPatch3dAddressGenerator(
 
   io.startReady := !active
   io.invalidConfig := io.start && io.startReady && !configValid
-  io.busy := active
+  io.busy := active || advancePending
   io.done := false.B
-  io.out.valid := active
+  io.out.valid := active && !advancePending
   io.out.bits.outputTemporal := outT
   io.out.bits.outputY := outY
   io.out.bits.outputX := outX
@@ -639,6 +646,7 @@ class HeteroVisionPatch3dAddressGenerator(
     outT := 0.U; outY := 0.U; outX := 0.U
     channel := 0.U; kt := 0.U; kh := 0.U; kw := 0.U
     baseT := 0.U; baseY := 0.U; baseX := 0.U
+    advancePending := false.B
   }.otherwise {
     when(io.start && io.startReady && configValid) {
       outTCount := io.outputTemporal
@@ -654,35 +662,34 @@ class HeteroVisionPatch3dAddressGenerator(
       outT := 0.U; outY := 0.U; outX := 0.U
       channel := 0.U; kt := 0.U; kh := 0.U; kw := 0.U
       baseT := 0.U; baseY := 0.U; baseX := 0.U
+      advancePending := false.B
       active := true.B
     }
-    when(io.out.fire) {
-      when(last) {
-        active := false.B
-        io.done := true.B
-      }.elsewhen(!lastKw) {
+    when(advancePending) {
+      advancePending := false.B
+      when(!advanceLastKw) {
         kw := kw + 1.U
       }.otherwise {
         kw := 0.U
-        when(!lastKh) {
+        when(!advanceLastKh) {
           kh := kh + 1.U
         }.otherwise {
           kh := 0.U
-          when(!lastKt) {
+          when(!advanceLastKt) {
             kt := kt + 1.U
           }.otherwise {
             kt := 0.U
-            when(!lastChannel) {
+            when(!advanceLastChannel) {
               channel := channel + 1.U
             }.otherwise {
               channel := 0.U
-              when(!lastOutX) {
+              when(!advanceLastOutX) {
                 outX := outX + 1.U
                 baseX := baseX + strideW
               }.otherwise {
                 outX := 0.U
                 baseX := 0.U
-                when(!lastOutY) {
+                when(!advanceLastOutY) {
                   outY := outY + 1.U
                   baseY := baseY + strideH
                 }.otherwise {
@@ -695,6 +702,19 @@ class HeteroVisionPatch3dAddressGenerator(
             }
           }
         }
+      }
+    }.elsewhen(io.out.fire) {
+      when(last) {
+        active := false.B
+        io.done := true.B
+      }.otherwise {
+        advanceLastKw := lastKw
+        advanceLastKh := lastKh
+        advanceLastKt := lastKt
+        advanceLastChannel := lastChannel
+        advanceLastOutX := lastOutX
+        advanceLastOutY := lastOutY
+        advancePending := true.B
       }
     }
   }

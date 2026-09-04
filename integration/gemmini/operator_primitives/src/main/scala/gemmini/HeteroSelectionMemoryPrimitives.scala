@@ -8,6 +8,7 @@ class HeteroDivideResult(val dataBits: Int) extends Bundle { val quotient = UInt
 /** One restoring-division bit per cycle; no inferred runtime divider or barrel shifter. */
 class HeteroUnsignedDivide(val width: Int = 64) extends Module {
   require(width > 1)
+  override def desiredName: String = s"HeteroUnsignedDivideW${width}"
   private val countBits = math.max(1, log2Ceil(width + 1))
   val io = IO(new Bundle {
     val clear = Input(Bool()); val start = Input(Bool()); val startReady = Output(Bool())
@@ -20,6 +21,8 @@ class HeteroUnsignedDivide(val width: Int = 64) extends Module {
   val outBits = Reg(new HeteroDivideResult(width)); val div0 = RegInit(false.B)
   io.startReady := !active && !outValid; io.busy := active || outValid; io.divideByZero := div0
   io.out.valid := outValid; io.out.bits := outBits
+  dontTouch(io.startReady); dontTouch(io.busy); dontTouch(io.divideByZero)
+  dontTouch(io.out.valid); dontTouch(io.out.bits.quotient); dontTouch(io.out.bits.remainder)
   when(io.clear) {
     active := false.B; dividend := 0.U; divisor := 0.U; quotient := 0.U; remainder := 0.U
     remaining := 0.U; outValid := false.B; div0 := false.B
@@ -574,6 +577,7 @@ class HeteroMultiplyResult(val dataBits: Int) extends Bundle {
   */
 class HeteroUnsignedMultiply(val width: Int = 32) extends Module {
   require(width > 1)
+  override def desiredName: String = s"HeteroUnsignedMultiplyW${width}"
   private val countBits = math.max(1, log2Ceil(width + 1))
   val io = IO(new Bundle {
     val clear = Input(Bool())
@@ -597,6 +601,7 @@ class HeteroUnsignedMultiply(val width: Int = 32) extends Module {
   io.busy := active || outValid
   io.out.valid := outValid
   io.out.bits := result
+  dontTouch(io.startReady); dontTouch(io.busy); dontTouch(io.out.valid); dontTouch(io.out.bits.product)
 
   when(io.clear) {
     active := false.B

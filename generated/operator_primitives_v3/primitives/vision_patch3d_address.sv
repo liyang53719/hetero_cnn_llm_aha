@@ -107,33 +107,42 @@ module HeteroVisionPatch3dAddressGenerator(	// home/yang/Documents/prj/AHA/heter
   reg  [15:0] baseT;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:595:22
   reg  [15:0] baseY;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:596:22
   reg  [15:0] baseX;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:597:22
+  reg         advancePending;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31
+  reg         advanceLastKw;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:599:26
+  reg         advanceLastKh;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:600:26
+  reg         advanceLastKt;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:601:26
+  reg         advanceLastChannel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:602:31
+  reg         advanceLastOutX;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:603:28
+  reg         advanceLastOutY;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28
   wire        configValid =
     (|io_outputTemporal) & io_outputTemporal < 13'h1001 & (|io_outputHeight)
     & io_outputHeight < 13'h1001 & (|io_outputWidth) & io_outputWidth < 13'h1001
     & (|io_channels) & io_channels < 4'h9 & (|io_kernelTemporal)
     & io_kernelTemporal < 5'h11 & (|io_kernelHeight) & io_kernelHeight < 5'h11
     & (|io_kernelWidth) & io_kernelWidth < 5'h11 & (|io_strideTemporal)
-    & (|io_strideHeight) & (|io_strideWidth);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:599:{39,68}, :600:{21,48}, :601:{20,46}, :602:{17,40}, :603:{23,52}, :604:{21,48}, :605:{20,46}, :606:{23,50,58,76}
-  wire [3:0]  _kw_T = kw + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:594:19, :608:19, :611:29
-  wire        lastKw = {1'h0, _kw_T} >= kwCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :584:20, :608:{19,25}
-  wire [3:0]  _kh_T = kh + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:593:19, :609:19, :611:29
-  wire        lastKh = {1'h0, _kh_T} >= khCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :583:20, :609:{19,25}
-  wire [3:0]  _kt_T = kt + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :610:19, :611:29
-  wire        lastKt = {1'h0, _kt_T} >= ktCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :582:20, :610:{19,25}
-  wire [2:0]  _channel_T = channel + 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24, :611:29
-  wire        lastChannel = {1'h0, _channel_T} >= channelCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :581:25, :611:{29,35}
-  wire [15:0] _outX_T = outX + 16'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:590:21, :612:23
-  wire        lastOutX = _outX_T >= {3'h0, outWCount};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :580:22, :612:{23,29}
-  wire [15:0] _outY_T = outY + 16'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:589:21, :612:23, :613:23
-  wire        lastOutY = _outY_T >= {3'h0, outHCount};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :579:22, :613:{23,29}
-  wire [15:0] _outT_T = outT + 16'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :612:23, :614:23
-  wire        lastTap = lastKw & lastKh & lastKt & lastChannel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :609:25, :610:25, :611:35, :615:44
-  wire        last = lastTap & lastOutX & lastOutY & _outT_T >= {3'h0, outTCount};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :578:22, :612:29, :613:29, :614:{23,29}, :615:44, :616:46
-  wire        _io_invalidConfig_T = io_start & ~active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :618:20, :619:32
-  wire        _GEN = io_out_ready & active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    & (|io_strideHeight) & (|io_strideWidth);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:606:{39,68}, :607:{21,48}, :608:{20,46}, :609:{17,40}, :610:{23,52}, :611:{21,48}, :612:{20,46}, :613:{23,50,58,76}
+  wire [3:0]  _kw_T = kw + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:594:19, :615:19, :618:29
+  wire        lastKw = {1'h0, _kw_T} >= kwCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :584:20, :615:{19,25}
+  wire [3:0]  _kh_T = kh + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:593:19, :616:19, :618:29
+  wire        lastKh = {1'h0, _kh_T} >= khCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :583:20, :616:{19,25}
+  wire [3:0]  _kt_T = kt + 4'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :617:19, :618:29
+  wire        lastKt = {1'h0, _kt_T} >= ktCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :582:20, :617:{19,25}
+  wire [2:0]  _channel_T = channel + 3'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24, :618:29
+  wire        lastChannel = {1'h0, _channel_T} >= channelCount;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :581:25, :618:{29,35}
+  wire [15:0] _outX_T = outX + 16'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:590:21, :619:23
+  wire        lastOutX = _outX_T >= {3'h0, outWCount};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :580:22, :619:{23,29}
+  wire [15:0] _outY_T = outY + 16'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:589:21, :619:23, :620:23
+  wire        lastOutY = _outY_T >= {3'h0, outHCount};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :579:22, :620:{23,29}
+  wire [15:0] _outT_T = outT + 16'h1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :619:23, :621:23
+  wire        lastTap = lastKw & lastKh & lastKt & lastChannel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:615:25, :616:25, :617:25, :618:35, :622:44
+  wire        last = lastTap & lastOutX & lastOutY & _outT_T >= {3'h0, outTCount};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :578:22, :619:29, :620:29, :621:{23,29}, :622:44, :623:46
+  wire        _io_invalidConfig_T = io_start & ~active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :625:20, :626:32
+  wire        io_out_valid_0 = active & ~advancePending;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :598:31, :629:{26,29}
+  wire        _GEN = io_out_ready & io_out_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:629:26, src/main/scala/chisel3/util/Decoupled.scala:51:35
+  wire        _GEN_0 = io_clear | advancePending;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :628:11, :644:18, :668:26, :706:29
   always @(posedge clock) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7
-    automatic logic _GEN_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
-    _GEN_0 = _io_invalidConfig_T & configValid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:606:58, :619:32, :643:36
+    automatic logic _GEN_1;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
+    _GEN_1 = _io_invalidConfig_T & configValid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:613:58, :626:32, :651:36
     if (reset) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7
       active <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23
       outT <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21
@@ -146,9 +155,10 @@ module HeteroVisionPatch3dAddressGenerator(	// home/yang/Documents/prj/AHA/heter
       baseT <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :595:22
       baseY <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :596:22
       baseX <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :597:22
+      advancePending <= 1'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :598:31
     end
     else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7
-      active <= ~(io_clear | _GEN & last) & (_GEN_0 | active);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :616:46, :637:18, :638:12, :643:{36,52}, :657:14, :659:23, :660:18, :661:16, src/main/scala/chisel3/util/Decoupled.scala:51:35
+      active <= ~io_clear & (advancePending | ~(_GEN & last)) & (_GEN_1 | active);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:577:23, :598:31, :623:46, :644:18, :645:12, :651:{36,52}, :666:14, :668:26, :706:29, :707:18, :708:16, src/main/scala/chisel3/util/Decoupled.scala:51:35
       if (io_clear) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:557:14
         outT <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21
         outY <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :589:21
@@ -162,94 +172,100 @@ module HeteroVisionPatch3dAddressGenerator(	// home/yang/Documents/prj/AHA/heter
         baseX <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :597:22
       end
       else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:557:14
-        automatic logic _GEN_1 =
-          ~_GEN | last | ~lastKw | ~lastKh | ~lastKt | ~lastChannel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :609:25, :610:25, :611:35, :616:46, :643:52, :659:23, :660:18, :663:18, :667:14, :671:16, :675:18, src/main/scala/chisel3/util/Decoupled.scala:51:35
-        automatic logic _GEN_2 =
-          ~_GEN | last | ~lastKw | ~lastKh | ~lastKt | ~lastChannel | ~lastOutX;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :609:25, :610:25, :611:35, :612:29, :616:46, :643:52, :659:23, :660:18, :663:18, :667:14, :671:16, :675:18, :679:20, src/main/scala/chisel3/util/Decoupled.scala:51:35
-        automatic logic _GEN_3 =
-          ~_GEN | last | ~lastKw | ~lastKh | ~lastKt | ~lastChannel | ~lastOutX
-          | ~lastOutY;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :609:25, :610:25, :611:35, :612:29, :613:29, :616:46, :643:52, :659:23, :660:18, :663:18, :667:14, :671:16, :675:18, :679:20, :685:22, src/main/scala/chisel3/util/Decoupled.scala:51:35
-        if (_GEN_3) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        automatic logic _GEN_2;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+        automatic logic _GEN_3;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+        automatic logic _GEN_4;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+        _GEN_2 =
+          ~advancePending | ~advanceLastKw | ~advanceLastKh | ~advanceLastKt
+          | ~advanceLastChannel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :599:26, :600:26, :601:26, :602:31, :651:52, :668:26, :670:{12,28}, :674:14, :678:16, :682:18
+        _GEN_3 =
+          ~advancePending | ~advanceLastKw | ~advanceLastKh | ~advanceLastKt
+          | ~advanceLastChannel | ~advanceLastOutX;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :599:26, :600:26, :601:26, :602:31, :603:28, :651:52, :668:26, :670:{12,28}, :674:14, :678:16, :682:18, :686:20
+        _GEN_4 =
+          ~advancePending | ~advanceLastKw | ~advanceLastKh | ~advanceLastKt
+          | ~advanceLastChannel | ~advanceLastOutX | ~advanceLastOutY;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :599:26, :600:26, :601:26, :602:31, :603:28, :604:28, :651:52, :668:26, :670:{12,28}, :674:14, :678:16, :682:18, :686:20, :692:22
+        if (_GEN_4) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
             outT <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21
         end
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          outT <= _outT_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :614:23
-        if (_GEN_2) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          outT <= _outT_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :621:23
+        if (_GEN_3) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
             outY <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :589:21
         end
-        else if (lastOutY)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:613:29
+        else if (advanceLastOutY)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28
           outY <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :589:21
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:613:29
-          outY <= _outY_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:589:21, :613:23
-        if (_GEN_1) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28
+          outY <= _outY_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:589:21, :620:23
+        if (_GEN_2) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
             outX <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :590:21
         end
-        else if (lastOutX)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:612:29
+        else if (advanceLastOutX)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:603:28
           outX <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :590:21
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:612:29
-          outX <= _outX_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:590:21, :612:23
-        if (~_GEN | last | ~lastKw | ~lastKh | ~lastKt) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :609:25, :610:25, :616:46, :643:52, :659:23, :660:18, :663:18, :667:14, :671:16, src/main/scala/chisel3/util/Decoupled.scala:51:35
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:603:28
+          outX <= _outX_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:590:21, :619:23
+        if (advancePending & advanceLastKw & advanceLastKh & advanceLastKt) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :599:26, :600:26, :601:26, :651:52, :668:26, :670:28
+          if (advanceLastChannel)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:602:31
             channel <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24
+          else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:602:31
+            channel <= _channel_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:591:24, :618:29
         end
-        else if (lastChannel)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:611:35
+        else if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
           channel <= 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:611:35
-          channel <= _channel_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:591:24, :611:29
-        if (~_GEN | last | ~lastKw | ~lastKh) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :609:25, :616:46, :643:52, :659:23, :660:18, :663:18, :667:14, src/main/scala/chisel3/util/Decoupled.scala:51:35
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        if (advancePending & advanceLastKw & advanceLastKh) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :599:26, :600:26, :651:52, :668:26, :670:28
+          if (advanceLastKt)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:601:26
             kt <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19
+          else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:601:26
+            kt <= _kt_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :617:19
         end
-        else if (lastKt)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:610:25
+        else if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
           kt <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:610:25
-          kt <= _kt_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :610:19
-        if (~_GEN | last | ~lastKw) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25, :616:46, :643:52, :659:23, :660:18, :663:18, src/main/scala/chisel3/util/Decoupled.scala:51:35
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        if (advancePending & advanceLastKw) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31, :599:26, :651:52, :668:26, :670:28
+          if (advanceLastKh)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:600:26
             kh <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :593:19
+          else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:600:26
+            kh <= _kh_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:593:19, :616:19
         end
-        else if (lastKh)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:609:25
+        else if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
           kh <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :593:19
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:609:25
-          kh <= _kh_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:593:19, :609:19
-        if (~_GEN | last) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:616:46, :643:52, :659:23, :660:18, src/main/scala/chisel3/util/Decoupled.scala:51:35
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        if (advancePending) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:598:31
+          if (advanceLastKw)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:599:26
             kw <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :594:19
+          else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:599:26
+            kw <= _kw_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:594:19, :615:19
         end
-        else if (lastKw)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25
+        else if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
           kw <= 4'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:592:19, :594:19
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:608:25
-          kw <= _kw_T;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:594:19, :608:19
-        if (_GEN_3) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        if (_GEN_4) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
             baseT <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :595:22
         end
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          baseT <= baseT + {11'h0, strideT};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:585:20, :595:22, :681:32, :692:34
-        if (_GEN_2) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          baseT <= baseT + {11'h0, strideT};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:585:20, :595:22, :688:32, :699:34
+        if (_GEN_3) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
             baseY <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :596:22
         end
-        else if (lastOutY)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:613:29
+        else if (advanceLastOutY)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28
           baseY <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :596:22
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:613:29
-          baseY <= baseY + {11'h0, strideH};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:586:20, :596:22, :681:32, :687:34
-        if (_GEN_1) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:52, :659:23, :660:18
-          if (_GEN_0)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:643:36
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28
+          baseY <= baseY + {11'h0, strideH};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:586:20, :596:22, :688:32, :694:34
+        if (_GEN_2) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:52, :668:26, :670:28
+          if (_GEN_1)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:651:36
             baseX <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :597:22
         end
-        else if (lastOutX)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:612:29
+        else if (advanceLastOutX)	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:603:28
           baseX <= 16'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:588:21, :597:22
-        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:612:29
-          baseX <= baseX + {11'h0, strideW};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:587:20, :597:22, :681:32
+        else	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:603:28
+          baseX <= baseX + {11'h0, strideW};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:587:20, :597:22, :688:32
       end
+      advancePending <= ~_GEN_0 & (_GEN & ~last | ~_GEN_1 & advancePending);	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:578:22, :598:31, :623:46, :628:11, :644:18, :649:20, :651:{36,52}, :665:22, :668:26, :669:22, :706:29, :707:18, :717:24, src/main/scala/chisel3/util/Decoupled.scala:51:35
     end
-    if (io_clear | ~_GEN_0) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:578:22, :587:20, :637:18, :643:{36,52}
+    if (io_clear | ~_GEN_1) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:578:22, :587:20, :644:18, :651:{36,52}
     end
-    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:587:20, :637:18, :643:52
+    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:587:20, :644:18, :651:52
       outTCount <= io_outputTemporal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:578:22
       outHCount <= io_outputHeight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:579:22
       outWCount <= io_outputWidth;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:580:22
@@ -260,6 +276,16 @@ module HeteroVisionPatch3dAddressGenerator(	// home/yang/Documents/prj/AHA/heter
       strideT <= io_strideTemporal;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:585:20
       strideH <= io_strideHeight;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:586:20
       strideW <= io_strideWidth;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:587:20
+    end
+    if (_GEN_0 | ~_GEN | last) begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:599:26, :604:28, :623:46, :628:11, :644:18, :668:26, :706:29, :707:18, src/main/scala/chisel3/util/Decoupled.scala:51:35
+    end
+    else begin	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28, :644:18, :668:26, :706:29
+      advanceLastKw <= lastKw;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:599:26, :615:25
+      advanceLastKh <= lastKh;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:600:26, :616:25
+      advanceLastKt <= lastKt;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:601:26, :617:25
+      advanceLastChannel <= lastChannel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:602:31, :618:35
+      advanceLastOutX <= lastOutX;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:603:28, :619:29
+      advanceLastOutY <= lastOutY;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:604:28, :620:29
     end
   end // always @(posedge)
   `ifdef ENABLE_INITIAL_REG_	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7
@@ -296,28 +322,35 @@ module HeteroVisionPatch3dAddressGenerator(	// home/yang/Documents/prj/AHA/heter
         baseT = _RANDOM[3'h4][24:9];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :592:19, :595:22
         baseY = {_RANDOM[3'h4][31:25], _RANDOM[3'h5][8:0]};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :592:19, :596:22
         baseX = _RANDOM[3'h5][24:9];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :597:22
+        advancePending = _RANDOM[3'h5][25];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :598:31
+        advanceLastKw = _RANDOM[3'h5][26];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :599:26
+        advanceLastKh = _RANDOM[3'h5][27];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :600:26
+        advanceLastKt = _RANDOM[3'h5][28];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :601:26
+        advanceLastChannel = _RANDOM[3'h5][29];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :602:31
+        advanceLastOutX = _RANDOM[3'h5][30];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :603:28
+        advanceLastOutY = _RANDOM[3'h5][31];	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :596:22, :604:28
       `endif // RANDOMIZE_REG_INIT
     end // initial
     `ifdef FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7
       `FIRRTL_AFTER_INITIAL	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7
     `endif // FIRRTL_AFTER_INITIAL
   `endif // ENABLE_INITIAL_REG_
-  assign io_startReady = ~active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :577:23, :618:20
-  assign io_out_valid = active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :577:23
+  assign io_startReady = ~active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :577:23, :625:20
+  assign io_out_valid = io_out_valid_0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :629:26
   assign io_out_bits_outputTemporal = outT;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :588:21
   assign io_out_bits_outputY = outY;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :589:21
   assign io_out_bits_outputX = outX;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :590:21
-  assign io_out_bits_inputTemporal = baseT + {12'h0, kt};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :592:19, :595:22, :626:38, :681:32
-  assign io_out_bits_inputY = baseY + {12'h0, kh};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :593:19, :596:22, :627:31, :681:32
-  assign io_out_bits_inputX = baseX + {12'h0, kw};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :594:19, :597:22, :628:31, :681:32
+  assign io_out_bits_inputTemporal = baseT + {12'h0, kt};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :592:19, :595:22, :633:38, :688:32
+  assign io_out_bits_inputY = baseY + {12'h0, kh};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :593:19, :596:22, :634:31, :688:32
+  assign io_out_bits_inputX = baseX + {12'h0, kw};	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :594:19, :597:22, :635:31, :688:32
   assign io_out_bits_channel = channel;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24
   assign io_out_bits_kernelTemporal = kt;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :592:19
   assign io_out_bits_kernelY = kh;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :593:19
   assign io_out_bits_kernelX = kw;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :594:19
-  assign io_out_bits_firstTap = kt == 4'h0 & kh == 4'h0 & kw == 4'h0 & channel == 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24, :592:19, :593:19, :594:19, :633:{30,44,58,66,77}
-  assign io_out_bits_lastTap = lastTap;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :615:44
-  assign io_out_bits_last = last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :616:46
-  assign io_busy = active;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :577:23
-  assign io_done = ~io_clear & _GEN & last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :616:46, :621:11, :637:18, :659:23, src/main/scala/chisel3/util/Decoupled.scala:51:35
-  assign io_invalidConfig = _io_invalidConfig_T & ~configValid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :606:58, :619:{32,49,52}
+  assign io_out_bits_firstTap = kt == 4'h0 & kh == 4'h0 & kw == 4'h0 & channel == 3'h0;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :591:24, :592:19, :593:19, :594:19, :640:{30,44,58,66,77}
+  assign io_out_bits_lastTap = lastTap;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :622:44
+  assign io_out_bits_last = last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :623:46
+  assign io_busy = active | advancePending;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :577:23, :598:31, :627:21
+  assign io_done = ~_GEN_0 & _GEN & last;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :623:46, :628:11, :644:18, :668:26, :706:29, src/main/scala/chisel3/util/Decoupled.scala:51:35
+  assign io_invalidConfig = _io_invalidConfig_T & ~configValid;	// home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroVisionPrimitives.scala:544:7, :613:58, :626:{32,49,52}
 endmodule

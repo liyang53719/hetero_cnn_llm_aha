@@ -1,0 +1,17 @@
+`timescale 1ns/1ps
+module tb_operator_vision_endpoint_v3;
+ logic clk_i,rst_ni;initial begin clk_i=0;rst_ni=0;end always #1 clk_i=~clk_i;logic req_valid_i,req_ready_o;logic[7:0]req_opcode_i;logic[15:0]req_tag_i;logic[7:0]req_parent_phase_i,req_terminal_phase_i;logic config_valid_i,config_ready_o;logic[31:0]cfg0_i,cfg1_i,cfg2_i,cfg3_i,cfg4_i,cfg5_i,cfg6_i,cfg7_i,cfg8_i,cfg9_i;logic[191:0]cfg_multipliers_i;logic[511:0]cfg_head_sizes_i,cfg_head_offsets_i;logic ple_valid_i,ple_ready_o;logic[31:0]ple_token_i,ple_position_i;logic ple_last_i;logic map_valid_o,map_ready_i;logic[255:0]map_data_o;logic map_last_o;logic completion_valid_o,completion_ready_i;logic[15:0]completion_tag_o;logic[7:0]completion_parent_phase_o,completion_terminal_phase_o,completion_status_o;integer completed;
+ operator_vision_endpoint_v3 dut(.*);
+ task issue(input[7:0]op);begin @(negedge clk_i);req_opcode_i=op;req_valid_i=1;do @(posedge clk_i);while(!req_ready_o);@(negedge clk_i);req_valid_i=0;config_valid_i=1;do @(posedge clk_i);while(!config_ready_o);@(negedge clk_i);config_valid_i=0;end endtask
+ task consume(input integer expected_count);integer count,cycles;logic[255:0]held;logic stalled;begin count=0;cycles=0;stalled=0;held=0;while(count<expected_count)begin @(negedge clk_i);map_ready_i=(cycles%3)!=1;if(stalled&&(!map_valid_o||map_data_o!==held))$fatal(1,"map stall op=%h",req_opcode_i);if(map_valid_o&&!map_ready_i)begin held=map_data_o;stalled=1;end else stalled=0;@(posedge clk_i);if(map_valid_o&&map_ready_i)begin if(map_last_o!=(count+1==expected_count))$fatal(1,"last op=%h count=%0d",req_opcode_i,count);count=count+1;end cycles=cycles+1;end @(negedge clk_i);map_ready_i=0;end endtask
+ task finish;begin wait(completion_valid_o);if(completion_status_o||completion_tag_o!=16'h1234||completion_parent_phase_o!=8'h56||completion_terminal_phase_o!=8'h78)$fatal(1,"completion op=%h status=%0d",req_opcode_i,completion_status_o);repeat(2)@(posedge clk_i);if(!completion_valid_o)$fatal(1,"completion stall");completion_ready_i=1;@(posedge clk_i);@(negedge clk_i);completion_ready_i=0;completed=completed+1;end endtask
+ initial begin repeat(500000)@(posedge clk_i);$fatal(1,"timeout");end
+ initial begin req_valid_i=0;req_opcode_i=0;req_tag_i=16'h1234;req_parent_phase_i=8'h56;req_terminal_phase_i=8'h78;config_valid_i=0;cfg0_i=1;cfg1_i=0;cfg2_i=0;cfg3_i=0;cfg4_i=0;cfg5_i=0;cfg6_i=0;cfg7_i=0;cfg8_i=0;cfg9_i=0;cfg_multipliers_i={3{64'd1}};cfg_head_sizes_i=0;cfg_head_sizes_i[31:0]=16;cfg_head_offsets_i=0;ple_valid_i=0;ple_token_i=7;ple_position_i=3;ple_last_i=1;map_ready_i=0;completion_ready_i=0;completed=0;repeat(5)@(posedge clk_i);rst_ni=1;
+  for(int n=0;n<95;n++)begin cfg0_i=1;cfg1_i=0;cfg2_i=0;issue(8'h85);consume(1);if(map_data_o[9:8]!=0)$fatal(1,"mrope axis");finish();end
+  cfg0_i=1;cfg1_i=2;cfg2_i=2;cfg3_i=2;cfg4_i=2;cfg5_i=2;cfg6_i=2;issue(8'h80);consume(4);finish();
+  cfg0_i=1;cfg1_i=2;cfg2_i=2;cfg3_i=2;cfg4_i=2;issue(8'h81);consume(4);finish();
+  cfg0_i=0;cfg1_i=0;cfg2_i=2;cfg3_i=2;cfg4_i=2;cfg5_i=2;issue(8'h82);consume(1);finish();
+  cfg0_i=2;cfg1_i=1;cfg2_i=1;cfg3_i=32'hffffffff;issue(8'h83);@(negedge clk_i);ple_valid_i=1;do @(posedge clk_i);while(!ple_ready_o);@(negedge clk_i);ple_valid_i=0;consume(1);finish();
+  cfg0_i=1;cfg1_i=1;cfg2_i=1;cfg3_i=1;cfg4_i=1;cfg5_i=1;cfg6_i=1;cfg7_i=1;cfg8_i=1;cfg9_i=1;issue(8'h84);consume(1);finish();
+  if(completed!=100)$fatal(1,"completed=%0d",completed);$display("OPERATOR_VISION_ENDPOINT_V3_PASS successful=100 opcodes=6 generated_controllers=6");$finish;end
+endmodule

@@ -17,8 +17,8 @@
     "Matrix": {
       "opcodes": ["MatrixGemm", "MatrixGemv", "MatrixQk", "MatrixPv", "MatrixOuter", "MatrixConv", "MatrixLowRank"],
       "candidate_sources": ["rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv", "rtl/matrix/matrix_engine_int8_tile.sv", "rtl/attention/blocked_attention_stream_controller.sv", "rtl/integration/qwen2_matrix_command_endpoint.sv"],
-      "v3_endpoint_adapter": null,
-      "readiness": "bf16_int8_attention_datapaths_exist_v3_shape_and_completion_adapter_open"
+      "v3_endpoint_adapter": ["rtl/integration/operator_matrix_bf16_endpoint_v3.sv", "rtl/integration/operator_matrix_conv_gemmini_adapter_v3.sv"],
+      "readiness": "pass_component_bound_bf16_revision8b_b_and_conv_retained_gemmini_combined_canary_open"
     },
     "Sfu": {
       "opcodes": ["SfuAdd", "SfuSub", "SfuMul", "SfuScale", "SfuReduceSum", "SfuReduceMax", "SfuRsqrt", "SfuReciprocal", "SfuExp2", "SfuRmsNorm", "SfuGroupRmsNorm", "SfuRope", "SfuOnlineSoftmax", "SfuGate", "SfuL2Norm", "SfuAbs", "SfuMax", "SfuCompareSelect", "SfuNegate", "SfuPwl", "SfuBroadcast", "SfuCausalMask", "SfuLayerNorm"],

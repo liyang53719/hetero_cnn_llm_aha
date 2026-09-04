@@ -18,7 +18,7 @@
   "owners": {
     "Control": "PASS_REAL_BARRIER_ACK_ENDPOINT",
     "Dma": "PASS_4_OF_4_PINNED_IDMA_AXI",
-    "Matrix": "IN_PROGRESS_BF16_6_OF_6_PASS_CONV_GEMMINI_OPEN",
+    "Matrix": "PASS_COMPONENT_BOUND_7_OF_7_COMBINED_CANARY_OPEN",
     "Sfu": "OPEN_REAL_ENDPOINT_BINDING",
     "KvMemory": "OPEN_REAL_ENDPOINT_BINDING",
     "State": "OPEN_REAL_ENDPOINT_BINDING",
@@ -42,8 +42,8 @@
   "endpoint_audit": {
     "status": "PASS_AUDIT_REAL_ENDPOINT_BINDING_OPEN",
     "candidate_source_coverage": "58/58",
-    "real_v3_endpoint_bindings": "5/58",
-    "owners_open": 6,
+    "real_v3_endpoint_bindings": "12/58",
+    "owners_open": 5,
     "evidence": "reports/execution/OPERATOR_ENDPOINT_AUDIT_V3.json"
   },
   "control_endpoint_evidence": {
@@ -78,7 +78,16 @@
     "test_log_sha256": "7a3153816fba96d5f2b06ea62c2f920dad9cb447ef470932a5e9b76b5265a410",
     "opcodes": ["MatrixGemm", "MatrixGemv", "MatrixQk", "MatrixPv", "MatrixOuter", "MatrixLowRank"],
     "physical_array": "Revision8B-B 16x32 512-lane 5-context",
-    "conv_status": "OPEN_RETAINED_GEMMINI"
+    "conv_status": "PASS_SEPARATE_RETAINED_GEMMINI_COMPONENT"
+  },
+  "matrix_conv_endpoint_evidence": {
+    "status": "PASS_COMPONENT_BOUND_COMBINED_CANARY_OPEN",
+    "adapter": "rtl/integration/operator_matrix_conv_gemmini_adapter_v3.sv",
+    "rtl_sha256": "496945c04e8e47631f829a9253f4e66039cc7cfc26dd1f0ba0bd0ba3d5840cd5",
+    "adapter_test_log_sha256": "13211563de0c64ec3d899b3f1ea7ca1d4e10ed5c8c9a2bd2d529999f42167e4f",
+    "retained_gemmini_result_sha256": "c581a4c6e9b30dfc4019c121dc194ef7857629679c495e6ad0e8c746381efda7",
+    "retained_gemmini": {"conv1x1_custom3_per_path": 9, "upstream_clean": true, "numerical_marker": "PASS"},
+    "nonclaim": "V3 adapter and retained pipeline are component-bound; same-run combined canary remains G4."
   },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

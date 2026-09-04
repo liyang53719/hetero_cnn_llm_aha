@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "G3_PROTOCOL_ENDPOINT_BINDING",
   "state": "G0_G1_G2_PASS_G3_BRIDGE_SOURCE_PASS",
-  "unique_next_action": "Implement the Matrix V3 adapter for GEMM/GEMV/QK/PV/Outer/Conv/LowRank over the retained Revision8B-B BF16 array and Gemmini INT8 path, preserving terminal completion and descriptor-derived shapes.",
+  "unique_next_action": "Implement the 23-opcode SFU V3 endpoint over existing FP32/BF16 arithmetic, norm, RoPE, online-softmax and PWL units; add the missing reduce-max/group-norm/L2/layernorm primitives before claiming SFU closure.",
   "expected_outputs": [
     "generated/operator_primitives_v3/bridge/HeteroV3TerminalBridge.sv",
     "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json"

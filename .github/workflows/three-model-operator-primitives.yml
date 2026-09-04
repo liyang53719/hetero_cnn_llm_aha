@@ -1,0 +1,51 @@
+name: three-model-operator-primitives
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'chisel/three_model_operator_primitives/**'
+      - 'config/model_operator_inventory_v3_complete.json'
+      - 'config/clock_policy_800mhz.json'
+      - 'configs/arch_v0.yaml'
+      - 'configs/arch_v1.yaml'
+      - 'configs/arch_v2_qwen38_candidate.yaml'
+      - 'dc/common_clock_800mhz.tcl'
+      - 'scripts/audit_three_model_operator_primitives.py'
+      - 'scripts/run_three_model_operator_primitives.sh'
+      - 'tests/test_three_model_operator_primitives.py'
+      - '.github/workflows/three-model-operator-primitives.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  compile-test-emit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Python test dependency
+        run: python3 -m pip install --disable-pip-version-check pytest
+      - name: Run source audit, ChiselTest and CIRCT emission smoke
+        run: |
+          chmod +x scripts/run_three_model_operator_primitives.sh
+          ROOT_FOR_RESULT="$GITHUB_WORKSPACE" ./scripts/run_three_model_operator_primitives.sh
+      - name: Upload non-canonical emitted RTL and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: three-model-operator-primitives-${{ github.sha }}
+          path: |
+            work/generated/three_model_operator_primitives
+            work/results/three_model_operator_primitives
+            reports/execution/OPERATOR_PRIMITIVE_COVERAGE_V3.json
+          if-no-files-found: error
+          retention-days: 14

@@ -37,6 +37,79 @@ class HeteroV3TerminalCompletion extends Bundle {
   val status = UInt(8.W)
 }
 
+/** Routes one checked terminal transaction to one of the eight hardware owner
+  * endpoints. The selected owner must return a completion; the router never
+  * manufactures successful completion for an accepted request.
+  */
+class HeteroV3TerminalOwnerRouter extends Module {
+  val io = IO(new Bundle {
+    val clear = Input(Bool())
+    val in = Flipped(Decoupled(new HeteroV3TerminalRequest))
+    val owner = Vec(8, Decoupled(new HeteroV3TerminalRequest))
+    val ownerCompletion = Flipped(Vec(8, Decoupled(new HeteroV3TerminalCompletion)))
+    val completion = Decoupled(new HeteroV3TerminalCompletion)
+    val busy = Output(Bool())
+    val protocolError = Output(Bool())
+  })
+
+  val sIdle :: sIssue :: sWait :: sReport :: Nil = Enum(4)
+  val state = RegInit(sIdle)
+  val request = Reg(new HeteroV3TerminalRequest)
+  val selected = RegInit(0.U(3.W))
+  val result = RegInit(0.U.asTypeOf(new HeteroV3TerminalCompletion))
+  val protocolErrorReg = RegInit(false.B)
+
+  io.in.ready := state === sIdle
+  for (index <- 0 until 8) {
+    io.owner(index).valid := state === sIssue && selected === index.U
+    io.owner(index).bits := request
+    io.ownerCompletion(index).ready := state === sWait && selected === index.U
+  }
+  io.completion.valid := state === sReport
+  io.completion.bits := result
+  io.busy := state =/= sIdle
+  io.protocolError := protocolErrorReg
+
+  when(io.clear) {
+    state := sIdle
+    result := 0.U.asTypeOf(new HeteroV3TerminalCompletion)
+    protocolErrorReg := false.B
+  }.otherwise {
+    when(state === sIdle && io.in.fire) {
+      request := io.in.bits
+      protocolErrorReg := false.B
+      when(io.in.bits.owner <= HeteroPrimitiveOwner.Vision) {
+        selected := io.in.bits.owner(2, 0)
+        state := sIssue
+      }.otherwise {
+        result.tag := io.in.bits.tag
+        result.parentPhase := io.in.bits.parentPhase
+        result.terminalPhase := io.in.bits.terminalPhase
+        result.status := 4.U
+        state := sReport
+      }
+    }
+    when(state === sIssue && io.owner(selected).fire) {
+      state := sWait
+    }
+    when(state === sWait && io.ownerCompletion(selected).fire) {
+      val response = io.ownerCompletion(selected).bits
+      val tagMismatch = response.tag =/= request.tag
+      val phaseMismatch = response.parentPhase =/= request.parentPhase ||
+        response.terminalPhase =/= request.terminalPhase
+      result := response
+      when(tagMismatch || phaseMismatch) {
+        result.status := Mux(tagMismatch, "he1".U, "he2".U)
+        protocolErrorReg := true.B
+      }
+      state := sReport
+    }
+    when(state === sReport && io.completion.fire) {
+      state := sIdle
+    }
+  }
+}
+
 /** Bridges the canonical 18-root protocol to the terminal owner/opcode layer.
   * A root completion is emitted only after the accepted terminal request (or
   * every request of a composite expansion) has returned a checked completion.
@@ -235,6 +308,14 @@ object EmitHeteroV3TerminalBridge extends App {
   require(args.length == 1, "usage: <output-systemverilog-path>")
   val output = java.nio.file.Paths.get(args(0))
   val systemVerilog = _root_.circt.stage.ChiselStage.emitSystemVerilog(new HeteroV3TerminalBridge).stripTrailing + "\n"
+  Option(output.getParent).foreach(java.nio.file.Files.createDirectories(_))
+  java.nio.file.Files.writeString(output, systemVerilog, java.nio.charset.StandardCharsets.UTF_8)
+}
+
+object EmitHeteroV3TerminalOwnerRouter extends App {
+  require(args.length == 1, "usage: <output-systemverilog-path>")
+  val output = java.nio.file.Paths.get(args(0))
+  val systemVerilog = _root_.circt.stage.ChiselStage.emitSystemVerilog(new HeteroV3TerminalOwnerRouter).stripTrailing + "\n"
   Option(output.getParent).foreach(java.nio.file.Files.createDirectories(_))
   java.nio.file.Files.writeString(output, systemVerilog, java.nio.charset.StandardCharsets.UTF_8)
 }

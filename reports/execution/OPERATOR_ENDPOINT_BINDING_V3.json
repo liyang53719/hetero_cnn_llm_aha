@@ -6,13 +6,14 @@
   "terminal_binding_contract": 58,
   "bridge": {
     "implementation": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroV3TerminalBridge.scala",
-    "chisel_tests": 3,
+    "chisel_tests": 5,
     "python_contract_tests": 3,
     "simple_completion_wait": "PASS",
     "composite_suboperation_serialization": "PASS",
     "tag_phase_status_check": "PASS",
     "unknown_kind_status4": "PASS",
-    "immediate_completion_stub": false
+    "immediate_completion_stub": false,
+    "eight_owner_router": "PASS_ALL_OWNERS_WAIT_FOR_OWNER_COMPLETION"
   },
   "owners": {
     "Control": "OPEN_REAL_ENDPOINT_BINDING",
@@ -31,5 +32,5 @@
     "sha256": "a9d4317143950a4cee0aa3c2e7fb75faa25a4a3bee1a439a8367ec9618b8e96c",
     "lint_log_sha256": "e94832c66a18ccd07ef6f0ed9c64d3806705ec35cfd8f032c2cac000887044a9"
   },
-  "claim_boundary": "The checked bridge waits for terminal completion; no claim is made yet that all eight owners execute numerical payloads."
+  "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

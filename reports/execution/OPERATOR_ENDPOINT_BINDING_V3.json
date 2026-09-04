@@ -163,5 +163,16 @@
     "dc": {"status": "PASS", "period_ns": 1.25, "wns_ns": 0.000175953, "area": 13539.162, "unmapped": 0},
     "dc_log_sha256": "f95ef2886179d8fd220cf12334d34d7a9f46eb1f4607107269d05d23a097a488"
   },
+  "sfu_group_rmsnorm_candidate": {
+    "status": "PASS_FUNCTIONAL_DUPLICATE_CORE_PPA_OPEN",
+    "rtl": "rtl/sfu/fp32_group_rmsnorm16_pipe.sv",
+    "rtl_sha256": "3e94ed38dd52f4fed75401d05492841ca57ee970d23e33b995d941f6d3aec9ed",
+    "groups": 4,
+    "lanes_per_group": 4,
+    "mean_scale": 0.25,
+    "shared_core_parameterization": true,
+    "endpoint_test_log_sha256": "1bca808eaf9d1a610473a391b09c1bb59c201b7cdbbfda11f418c24840b8ac6b",
+    "blocking_issue": "current endpoint elaborates one direct core plus one core inside group wrapper; consolidate to one physical core before DC and formal coverage count"
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

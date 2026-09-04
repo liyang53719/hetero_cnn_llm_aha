@@ -43,7 +43,9 @@
 - Rsqrt/Reciprocal/Exp2 local replay: 10k vectors each PASS at Verilator j4;
   max relative errors 2.39e-7 / 9.19e-7 / 2.35e-4. V3 owner mux open.
 - Scalar V3 endpoint for Rsqrt/Reciprocal/Exp2 now waits for real module output
-  and passes protocol smoke; SFU functional coverage 15/23, scalar DC open.
+  and passes protocol smoke; SFU functional coverage 15/23. Rsqrt switched to
+  NR2 Add/Mul pipelines and passes 1.0 ns DC (+0.000101328 ns, area 4136.31403).
+  Reciprocal optimized empty and Exp2 WNS -0.140313 ns; pipeline both next.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

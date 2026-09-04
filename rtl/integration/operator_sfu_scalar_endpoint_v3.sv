@@ -16,7 +16,7 @@ module operator_sfu_scalar_endpoint_v3(
  assign pv=state_q==S_PAYLOAD&&payload_valid_i&&opcode_q==8'h37;
  assign ev=state_q==S_PAYLOAD&&payload_valid_i&&opcode_q==8'h48;
  assign ror=state_q==S_WAIT&&opcode_q==8'h36;assign por=state_q==S_WAIT&&opcode_q==8'h37;assign eor=state_q==S_WAIT&&opcode_q==8'h48;
- fp32_rsqrt_nr rsqrt(.clk_i,.rst_ni,.in_valid_i(rv),.in_ready_o(rr),.x_i(payload_x_i),.out_valid_o(rov),.out_ready_i(ror),.y_o(ry),.exception_flags_o(rf),.domain_error_o(rde),.accepted_o(ra),.completed_o(rc));
+ fp32_rsqrt_nr2 rsqrt(.clk_i,.rst_ni,.in_valid_i(rv),.in_ready_o(rr),.x_i(payload_x_i),.out_valid_o(rov),.out_ready_i(ror),.y_o(ry),.exception_flags_o(rf),.domain_error_o(rde),.accepted_o(ra),.completed_o(rc));
  fp32_reciprocal_nr recip(.clk_i,.rst_ni,.in_valid_i(pv),.in_ready_o(pr),.x_i(payload_x_i),.out_valid_o(pov),.out_ready_i(por),.y_o(py),.exception_flags_o(pf),.domain_error_o(pde),.accepted_o(pa),.completed_o(pc));
  fp32_exp2_pwl exp2(.clk_i,.rst_ni,.in_valid_i(ev),.in_ready_o(er),.x_i(payload_x_i),.out_valid_o(eov),.out_ready_i(eor),.y_o(ey),.exception_flags_o(ef),.accepted_o(ea),.completed_o(ec));
  assign req_ready_o=state_q==S_IDLE;assign payload_ready_o=state_q==S_PAYLOAD&&(opcode_q == 8'h36 ? rr : opcode_q == 8'h37 ? pr : er);

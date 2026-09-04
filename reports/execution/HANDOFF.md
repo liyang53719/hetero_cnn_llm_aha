@@ -42,6 +42,8 @@
   ReduceSum DC WNS +0.0597758 ns, area 1681.498.
 - Rsqrt/Reciprocal/Exp2 local replay: 10k vectors each PASS at Verilator j4;
   max relative errors 2.39e-7 / 9.19e-7 / 2.35e-4. V3 owner mux open.
+- Scalar V3 endpoint for Rsqrt/Reciprocal/Exp2 now waits for real module output
+  and passes protocol smoke; SFU functional coverage 15/23, scalar DC open.
 - Early root DC: 18/18 PASS at 1.250 ns, min WNS +0.303001 ns, summed
   independent cell area 19590.115996; this is not combined endpoint PPA.
 - Primitive DC: 23/25 PASS, min positive WNS +0.0000342131 ns, passing

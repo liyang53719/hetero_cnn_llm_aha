@@ -125,5 +125,13 @@
     "exp2": {"vectors": 10000, "max_relative_error": 0.000235373915, "log_sha256": "24cb9f0a3e2fb30541873084274d3cb1a892e6688c45118b04f4bfdcaa69b15c"},
     "resource_contract": {"verilator_threads": 4, "build_jobs": 4}
   },
+  "sfu_scalar_endpoint_evidence": {
+    "status": "PASS_3_OPCODES_FUNCTIONAL_DC_OPEN",
+    "adapter": "rtl/integration/operator_sfu_scalar_endpoint_v3.sv",
+    "opcodes": ["SfuRsqrt", "SfuReciprocal", "SfuExp2"],
+    "completion_after_real_result": true,
+    "golden_vectors_per_primitive": 10000,
+    "endpoint_smoke_cases": 3
+  },
   "claim_boundary": "The checked bridge and router wait for terminal/owner completion; no claim is made yet that all eight owners execute numerical payloads."
 }

@@ -76,4 +76,3 @@ class HeteroGatedResidualOperatorPrimitiveV2(
   "HeteroGatedResidualOperatorPrimitiveV2",
   descriptorBits, dimensionBits, tagBits
 )
-

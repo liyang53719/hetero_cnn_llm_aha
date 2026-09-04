@@ -1,54 +1,24 @@
 {
-  "schema_version": 6,
-  "stage": "L9",
-  "subgate": "L9.4_COMMAND128_DEVICE_TRANSPORT",
-  "state": "LLAMA_BACKEND_FUNCTIONAL_PASS_HARDWARE_DEVICE_TRANSPORT_OPEN",
-  "decision": "BUILD_REAL_COMMAND128_TRANSPORT_CANARY_AND_CAPTURE_FULL_LOGITS_METRICS",
-  "git_workflow": {
-    "first_commands": ["git fetch --prune origin","git checkout main","git pull --ff-only origin main","./scripts/check_main_only_workflow.sh","./scripts/sandbox_validate.sh"],
-    "forbidden": ["new branch","PR work branch","force push","hand-edit canonical upstream or generated RTL"]
-  },
-  "completed": {
-    "original_graph": "958 nodes / one split",
-    "continuous_backend": "28 layers / seven groups",
-    "canonical_GGUF_payload_bindings": 338,
-    "raw_storage_byte_parity": 281,
-    "converted_norm_payload_parity": 57,
-    "manifest_commands": 588,
-    "scheduler_cpu_fallback": 0,
-    "argmax": 7559,
-    "top10_overlap": 10,
-    "layer_completion_backpressure": "28 completions / seven stalls"
-  },
-  "open": {
-    "full_logits_metrics": "OPEN",
-    "Command128_RTL_execution": "OPEN",
-    "non_host_device_buffers": "OPEN",
-    "host_file_staging_removal": "OPEN",
-    "internal_engine_backpressure": "OPEN",
-    "all_row_integrated_RTL": "OPEN",
-    "summary_storage_macro_PPA": "OPEN",
-    "L10_functional_and_physical_closure": "OPEN"
-  },
-  "unique_next_action": "First generate the complete full-logit metric report with scripts/compare_p3_logits.py. Then replace one complete layer of qwen2_generic_layer_embedded_main/file-staged execution with the RTL Command128/event/descriptor/iDMA/Shared-L2/Matrix/SFU path. Do not call it a hardware device until that canary passes.",
-  "ordered_gates": [
-    "full 151936-logit metrics and raw-file hashes",
-    "21-command one-layer RTL transport canary",
-    "internal Matrix/SFU/KV random ready-valid backpressure",
-    "588-command expansion with engine counts 252/308/28",
-    "non-host or explicit DMA-backed device buffers without inter-stage files",
-    "summary-storage SRAM mapping and PPA",
-    "functional owner top and SRAM replacement",
-    "post-route PVT/OCV and workload-derived SAIF"
+  "schema_version": 7,
+  "stage": "G0_CONTROL_PLANE_FREEZE",
+  "state": "PLAN_LANDED_PENDING_PUSH_AND_GOAL",
+  "unique_next_action": "Commit and push the plan/control checkpoint, verify remote SHA equality, create the execution Goal, then run the two local Chisel source replay gates.",
+  "expected_outputs": [
+    "reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md",
+    "reports/execution/OPERATOR_SOURCE_REPLAY_V3.json"
   ],
-  "hard_acceptance": {
-    "full_logits": {"argmax_equal": true, "top10_overlap_min": 10, "relative_l2_max": 0.01, "cosine_min": 0.9999},
-    "one_layer_canary": {"commands": 21, "accepted": 21, "completed": 21, "loss_duplicate_reorder": 0, "internal_stalls_min": 1, "reference_hidden_injection": 0},
-    "full_transport": {"commands": 588, "matrix": 252, "sfu": 308, "kv": 28, "accepted": 588, "completed": 588, "software_stage_dispatch": 0, "host_file_tensor_transport": 0}
+  "success": {
+    "branch": "main",
+    "remote_sha_equals_local_sha": true,
+    "root_source_replay": "18/18",
+    "primitive_source_replay": "25/25",
+    "terminal_bindings": "58/58"
   },
-  "evidence": {
-    "audit": "reports/execution/REMOTE_AUDIT_11483E8.json",
-    "acceptance": "reports/execution/P3_BACKEND_ACCEPTANCE.json",
-    "handoff": "reports/execution/LOCAL_AGENT_HANDOFF_V719.md"
+  "failure_policy": {
+    "dependency_or_network": "retry the same pinned version three times",
+    "license": "retry checkout three times then terminal blocker",
+    "timeout": "split bottom-up without extending the 600-second command bound",
+    "generated_rtl_defect": "fix Chisel source and regenerate; never edit generated RTL",
+    "numeric_mismatch": "stop at the first failing node and keep the frozen tolerance"
   }
 }

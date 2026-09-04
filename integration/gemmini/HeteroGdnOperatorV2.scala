@@ -57,4 +57,3 @@ class HeteroGdnOperatorPrimitiveV2(
   "HeteroGdnOperatorPrimitiveV2",
   descriptorBits, dimensionBits, tagBits
 )
-

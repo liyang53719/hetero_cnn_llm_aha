@@ -53,7 +53,6 @@ abstract class HeteroCompositeOperatorPrimitiveV2(
   io.busy := sequencer.io.busy
   io.protocolError := sequencer.io.protocolError
 }
-
 /** Distinct leaf names avoid parameter-collision when all emitted RTL is linked. */
 class HeteroMoeStableTopKV2 extends HeteroStableTopK(maxK = 16, indexBits = 9) {
   override def desiredName: String = "HeteroMoeStableTopKV2"
@@ -138,4 +137,3 @@ class HeteroQwen35DenseAttentionOperatorPrimitiveV2(
   "HeteroQwen35DenseAttentionOperatorPrimitiveV2",
   descriptorBits, dimensionBits, tagBits
 )
-

@@ -1,38 +1,15 @@
-# Current handoff v7.19 — main only
+# Three-model operator closure handoff
 
-## Accepted
-
-`11483e8` closes the Qwen2 q1024 **real llama.cpp backend-equivalent functional path**:
-
-```text
-958-node original graph / one backend split
-28 continuous layers / seven groups
-588 Command128 manifest records
-338 canonical GGUF payload bindings
-281 raw-storage-preserving bindings
-57 F32-to-BF16 RNE norm conversions
-scheduler fallback 0
-argmax 7559 / Top-10 10 of 10
-28 layer completions / seven completion-ready stalls
-```
-
-## Evidence boundary
-
-The current HETERO plugin uses host CPU buffers. Its `graph_compute` recognizes the 958-node graph, invokes one `hetero_qwen2_submit_588` software submission, and copies final logits into the graph output. The submission runs C++/OpenMP payload functions and validates the 21-command manifest for each layer; it does not execute 588 commands through the RTL command frontend. Completion-ready backpressure is at layer boundaries.
-
-Therefore:
-
-```text
-L5.6d.P3 real llama backend equivalent     PASS
-L9 original graph and canonical GGUF bind  PASS
-Command128 RTL/device transport             OPEN
-non-host device buffers/no file staging     OPEN
-internal engine backpressure                OPEN
-full-logit metrics                          OPEN
-all-row integrated RTL                      OPEN
-post-route/PVT/SAIF                         OPEN
-```
-
-## Next
-
-Read `reports/execution/LOCAL_AGENT_HANDOFF_V719.md` and `reports/execution/P3_BACKEND_ACCEPTANCE.json`. First capture full-logit metrics, then build a one-layer 21-command real RTL transport canary. Continue to 588 commands only after the canary passes.
+- Branch: `main`; baseline: `b55ddcb`.
+- Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.
+- Stage: `G0_CONTROL_PLANE_FREEZE`.
+- State: `PLAN_LANDED_PENDING_LOCAL_SOURCE_REPLAY`.
+- Implementation origin: Chisel; no Catapult HLS source/report exists in main.
+- Frozen coverage: 18 model roots, 25 primitive modules, 58 terminal bindings.
+- Models: Qwen2 30/30, Qwen3.5 93/93, Qwen3.8 150/150, plus Vision canary.
+- Clock: 800 MHz / 1.250 ns, uncertainty 0.080 ns, I/O 0.100 ns.
+- Library: CLN22UL base SVT TT 0.8 V 25 C.
+- Resources: CPU 8-23, Java CPUs 8, Verilator j4, DC cores 8,
+  MemoryHigh 24G, MemoryMax 30G, MemAvailable >10 GiB, one heavy task.
+- Generated RTL must never be hand edited.
+- Next: push this checkpoint, create Goal, then run G1 source replay.

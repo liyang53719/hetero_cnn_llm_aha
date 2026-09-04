@@ -105,4 +105,3 @@ class HeteroMtpDraftTargetOperatorPrimitiveV2(
   "HeteroMtpDraftTargetOperatorPrimitiveV2",
   descriptorBits, dimensionBits, tagBits
 )
-

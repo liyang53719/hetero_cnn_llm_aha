@@ -92,4 +92,3 @@ class HeteroQsaOperatorPrimitiveV2(
   "HeteroQsaOperatorPrimitiveV2",
   descriptorBits, dimensionBits, tagBits
 )
-

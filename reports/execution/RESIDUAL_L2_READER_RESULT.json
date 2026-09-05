@@ -1,0 +1,11 @@
+{
+  "status": "PASS_LOCAL_READ_CONTROL_AND_DATA_FORMAT_UNIT",
+  "command": "taskset -c 8-23 bash scripts/run_residual_l2_reader_test.sh",
+  "data_cases":17,"range_errors":3,"read_errors":1,
+  "checks":["BF16 and FP32 source formats", "Lengths1/16/17/31/32/33/64/95", "BF16 reads=ceil(elements/32)", "FP32 reads=ceil(elements/16)", "Masked invalid output lanes zero", "32-bit chunk ordinal", "64-bit request/output counters", "Backpressure stability", "Snapshot geometry", "Completion held until accepted", "No read before valid address admission", "Recovery after read error"],
+  "source_sha256":"26ad34015dd7d745a1df56bde1f9f1ca6521f86dbd53462e803fa629aedab4eb",
+  "log_sha256":"9ef17fa1670c22fb812dedfce6218fd7f2d64b504b00ed933a679ef57680c0a3",
+  "implementation_note":"Explicit gearbox-valid wire avoids Icarus implicit-net creation for enum expressions in instance port connections; default_nettype none and warning check prevent recurrence",
+  "next":"Connect two operand readers to residual stream and Shared-L2 ports, then FP32 writer and descriptor/DDR frontend",
+  "nonclaims":["Memory responder is a unit-test model, not ARM macro/pinned DMA", "No addition arithmetic in this test", "No integrated residual or full-model performance/PPA PASS", "Queued OProj/residual simulation sources were not modified"]
+}

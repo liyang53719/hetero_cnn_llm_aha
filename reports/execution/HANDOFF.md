@@ -9,16 +9,16 @@
 - Qwen2 首层 K/V 投影：各1024行、262144个BF16输出逐位通过。
 - 各4272278周期；名义800MHz下5.340ms，MAC利用率18.41%。
 - 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
-- Q自动连续推进；即时进度以p0目录最新receipt为准，非最终数值通过。
-- Q自动连续执行器运行中（启动PID1861488）；勿重复启动，先核实PID。
-- Q receipts：work/results/q1024_continuous/p0/；后续段自动推进。
+- Q完整1024行、1572864个BF16输出逐位通过，25656608周期、利用率18.39%。
+- Q自动执行器已结束；17段连续状态/hash经收集器验证，不需重跑。
+- Q证据：reports/execution/Q1024_CONTINUOUS_Q_RESULT.json。
 - 单投影结果不等于完整decoder或模型prefill。
 
 ## 唯一下一动作
 
-等待现有连续执行器；核对receipt与进程，失败先诊断，不重启有效段。
+等待真实Matrix数值测试(session14037)，通过后接attention内存/SFU。
 
-- Q自动跑到底；真实Matrix数值测试已排队(session14037)，等coordinator锁释放。
+- 数值测试已获得锁并开始编译；进度见ATTENTION_ENDPOINT_PROGRESS.json。
 - 收集器：scripts/collect_q1024_projection_chain.py。
 
 ## 执行约束
@@ -34,7 +34,7 @@
 
 ## 未完成
 
-- Q及decoder其余部分、28层链、Qwen3.5/3.8、当前DC/PPA。
+- decoder其余部分、28层链、Qwen3.5/3.8、当前DC/PPA。
 - golden按token复用仅适用于首层norm/raw QKV，禁用于RoPE/attention/后续层。
 - DDR100/40GBps仅带宽上限模型；尚缺完整模型性能证据。
 - 已向用户询问Qwen3.8权重/参考路径，尚无答复。

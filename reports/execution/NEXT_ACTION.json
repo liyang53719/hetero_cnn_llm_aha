@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
-  "stage": "Q1024_P2_AUTOMATIC_Q_RUNNING_FULL_MODEL_OPEN",
+  "stage": "Q1024_P2_QKV_PROJECTIONS_PASS_FULL_MODEL_OPEN",
   "state": "ACTIVE_FULL_REQUEST_PERFORMANCE_OPEN",
-  "unique_next_action": "Q continuous coordinator is live (launch PID1861488, tool session72781). Do not launch another coordinator or manually advance segments. It automatically proceeds and collects on numerical completion. Inspect live process/receipts on interruption; prioritize full-model executable gaps per reports/THREE_MODEL_PREFILL_FAST_PATH_AUDIT.md",
+  "unique_next_action": "Q/K/V full1024 projections complete and collected. Real Matrix numerical attention test is running (session14037); wait for completion, then bind attention memory/SFU and complete decoder. Do not rerun finished Q chain or claim full model PASS.",
   "expected_outputs": [],
   "success": {
     "branch": "main",

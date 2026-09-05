@@ -5,7 +5,10 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_Q_CONTINUOUS_AUTOMATIC_RUNNING_FULL_MODEL_OPEN",
+    "stage": "P2_QKV_PROJECTIONS_PASS_ATTENTION_INTEGRATION_FULL_MODEL_OPEN",
+    "q1024_Q_final_segment": 16,
+    "q1024_Q_final_wall_cycles": 25656608,
+    "q1024_Q_checked_bf16_outputs": 1572864,
     "q1024_V_final_segment": 5,
     "q1024_V_final_wall_cycles": 4272278,
     "q1024_V_checked_bf16_outputs": 262144,
@@ -62,7 +65,7 @@
     "admission_unit_tests_passed": 12,
     "next": "Connect descriptor-driven complete Matrix tiling and tensor memory before full-model measurement",
     "q1024_Q_progress_directory": "work/results/q1024_continuous/p0",
-    "q1024_Q_execution": "automatic coordinator; inspect latest receipt and PID; no manual per-segment starts"
+    "q1024_Q_execution": "COMPLETE; collector verified 17 sequential receipts and all snapshot/fixture hashes; single projection only"
   },
   "branch": "main",
   "baseline_sha": "b55ddcb6dbc890a2b1b832fdc5701c1a0a65da3b",

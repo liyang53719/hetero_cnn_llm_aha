@@ -1,0 +1,75 @@
+{
+  "status": "REFERENCE_BOUNDARY_SENSITIVITY_ONLY",
+  "reference_report_sha256": "941af09a65380e32dbcfbec7d18d3b0ebb2f083750049bccb50d34b0ca684b9e",
+  "cases": {
+    "oproj_writeback_only": {
+      "values": 1572864,
+      "max_absolute_error": 0.007812023162841797,
+      "mean_absolute_error": 0.0001277434538134864,
+      "values_over_0p002": 2879,
+      "worst_query_channel": [
+        725,
+        1073
+      ]
+    },
+    "residual1_with_only_oproj_rounded": {
+      "values": 1572864,
+      "max_absolute_error": 0.007812023162841797,
+      "mean_absolute_error": 0.00012774345242895965,
+      "values_over_0p002": 2879,
+      "worst_query_channel": [
+        725,
+        1073
+      ]
+    },
+    "residual1_with_output_also_rounded": {
+      "values": 1572864,
+      "max_absolute_error": 0.014799118041992188,
+      "mean_absolute_error": 0.00017531736005517903,
+      "values_over_0p002": 11387,
+      "worst_query_channel": [
+        279,
+        1073
+      ]
+    },
+    "down_writeback_only": {
+      "values": 1572864,
+      "max_absolute_error": 0.007801055908203125,
+      "mean_absolute_error": 0.00013516273967471688,
+      "values_over_0p002": 475,
+      "worst_query_channel": [
+        672,
+        1073
+      ]
+    },
+    "final_with_only_down_rounded": {
+      "values": 1572864,
+      "max_absolute_error": 0.007801055908203125,
+      "mean_absolute_error": 0.00013516273107022636,
+      "values_over_0p002": 475,
+      "worst_query_channel": [
+        672,
+        1073
+      ]
+    },
+    "final_rounding_both_inputs_and_output": {
+      "values": 1572864,
+      "max_absolute_error": 0.029939651489257812,
+      "mean_absolute_error": 0.000298191739241301,
+      "values_over_0p002": 19025,
+      "worst_query_channel": [
+        139,
+        1073
+      ]
+    }
+  },
+  "threshold": 0.002,
+  "policy_changed": false,
+  "rtl_measured_cycles": null,
+  "nonclaims": [
+    "Archived CPU golden, not current captured-attention tensor",
+    "Perturb isolated rounding boundaries while holding other nodes fixed",
+    "No postnorm/MLP propagation replay: final rounding case is not a complete BF16 end-to-end alternative",
+    "Does not approve a dtype policy or close a numerical RTL gate"
+  ]
+}

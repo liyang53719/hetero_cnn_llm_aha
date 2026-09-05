@@ -1,5 +1,13 @@
 {
   "status": "PENDING_USER_DECISION",
+  "boundary_sensitivity_evidence": "reports/execution/Q1024_RESIDUAL_PRECISION_SENSITIVITY.json",
+  "observed_on_archived_reference": {
+    "oproj_bf16_only_max_error": 0.007812023162841797,
+    "oproj_bf16_only_values_over_0p002": 2879,
+    "down_bf16_only_max_error": 0.007801055908203125,
+    "down_bf16_only_values_over_0p002": 475,
+    "scope": "Isolated rounding analysis of archived CPU tensors, not new RTL or full BF16 propagation"
+  },
   "scope": "OProj/Down outputs and residual tensor boundaries, not currently running attention",
   "conflict": {
     "descriptor_generator": "scripts/generate_qwen2_symbolic_descriptor_plan.py explicitly freezes all ggml_node allocations as BF16 and2 bytes/element",

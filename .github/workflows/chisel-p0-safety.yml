@@ -8,7 +8,7 @@ on:
       - '.github/workflows/chisel-p0-safety.yml'
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: chisel-p0-safety-${{ github.ref }}
   cancel-in-progress: false
@@ -19,46 +19,24 @@ jobs:
     env:
       JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
       SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+      # chiseltest6 injects -include VTop.h; Verilator5.020 PCH rejects it.
+      # Upstream-supported single-unit C++ build avoids PCH without changing RTL.
+      MAKEFLAGS: 'VM_PARALLEL_BUILDS=0'
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
           sparse-checkout: |
-            integration/p0_chisel_delivery
             chisel/p0_safety
             .github/workflows/chisel-p0-safety.yml
-      - name: Materialize immutable source delivery on main
+      - name: Record immutable source identity
         run: |
           set -euo pipefail
-          if [ ! -f chisel/p0_safety/build.sbt ]; then
-            python3 - <<'PY'
-          import base64,gzip,hashlib,io,tarfile
-          from pathlib import Path,PurePosixPath
-          d=Path('integration/p0_chisel_delivery')
-          raw=base64.b64decode(''.join((d/f'part{i:02d}.b64').read_text().strip() for i in range(5)),validate=True)
-          if len(raw)!=22416 or hashlib.sha256(raw).hexdigest()!='3b7c9f4e921af78c80fb40fc0099feea644608901c23834a3e67b86766bfab79':
-              raise RuntimeError('source archive identity mismatch')
-          t=tarfile.open(fileobj=io.BytesIO(raw),mode='r:gz')
-          for member in t.getmembers():
-              p=PurePosixPath(member.name)
-              if not member.isfile() or '..' in p.parts or p.parts[:2]!=('chisel','p0_safety'):
-                  raise RuntimeError('invalid delivery member')
-              target=Path(member.name);target.parent.mkdir(parents=True,exist_ok=True)
-              if target.exists():raise RuntimeError('refuse partial overwrite')
-              target.write_bytes(t.extractfile(member).read())
-          print('SOURCE_ARCHIVE_VERIFIED files='+str(len(t.getmembers())))
-          PY
-            git config user.name 'heteronpu-chisel-ci'
-            git config user.email 'heteronpu-chisel-ci@users.noreply.github.com'
-            git add chisel/p0_safety
-            git commit -m 'chisel: materialize P0 source and DUT tests [skip ci]'
-            git fetch origin main
-            git rebase origin/main
-            git push origin HEAD:main
-          fi
+          test -s chisel/p0_safety/build.sbt
           mkdir -p chisel/p0_safety/evidence
           git rev-parse HEAD | tee chisel/p0_safety/evidence/source_commit.txt
           git status --porcelain > chisel/p0_safety/evidence/worktree_status.txt
+          printf '%s\n' "$MAKEFLAGS" > chisel/p0_safety/evidence/makeflags.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

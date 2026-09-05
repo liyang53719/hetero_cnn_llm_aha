@@ -19,6 +19,6 @@
   "recommended": "Approve FP32 OProj/Down/residual boundaries to preserve current reference; Matrix operands remain BF16; update typed descriptors, alias-consistent DDR sizes/addresses and writeback/load support; keep0.002",
   "alternative": "Keep frozen BF16 device boundaries and explicitly re-audit/re-freeze CPU golden at matching rounding points; do not merely quantize expected projection output and claim downstream residual equivalence",
   "execution_policy": "Do not release OProj integrated-chain build until user decision and matching implementation/reference update. Attention service continues unchanged",
-  "goal_blocked": false,
+  "goal_blocked": true,
   "request_sent": "Asynchronous precision decision question; no approval received at creation"
 }

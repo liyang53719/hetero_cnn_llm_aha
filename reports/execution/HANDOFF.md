@@ -14,7 +14,8 @@
 - Report Q1024_CONTINUOUS_K_RESULT.json validates six sequential receipts,
   immutable binary/data, checkpoint hashes and restored-cycle continuity.
 - Final receipt work/results/q1024_continuous/p1/segment_005.json.
-- No current simulation running at handoff.
+- V q1024 segments0/1 checkpointed; segment2 currently running. Inspect its
+  receipt/PID before starting another task; never restart on absent output.
 - Only layer0 norm inputs/weights preloaded; no L2/output injection.
 - Fixtures reproduce true1024-token ordering via exact token-ID golden reuse for
   position-independent layer0 norm/raw projections. Never use for RoPE/attention/later layers.
@@ -32,7 +33,7 @@
 
 ## Next action
 
-taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 2 --segment 0
+Wait for live V segment2, then continue --projection2 --segment3 and later.
 
 Continue V until actual PROJECTION_NUMERICAL_COMPLETE, then run
 scripts/collect_q1024_projection_chain.py --projection 2 under CPU8-23.

@@ -3,6 +3,7 @@
   "rtl": "rtl/sfu/fp32_residual_stream.sv",
   "protocol_command": "taskset -c 8-23 bash scripts/run_residual_stream_protocol_test.sh",
   "protocol_packets": 100,
+  "memory_gearbox_progress": "BF16_RESIDUAL_GEARBOX_RESULT.json:100 beats formatting/protocol unit PASS, actual L2 binding pending",
   "checks": ["Independent legal ready/valid input stalls", "FP32 A and BF16/FP32 B widening", "Masked lanes", "Pair correlation and last", "Output backpressure stability", "Mismatch status7 locks until reset"],
   "protocol_scope": "Uses a deliberately non-arithmetic XOR fixture; not an FP32 addition numerical gate",
   "numerical_service": "q1024-residual-fp32-20260905.service",

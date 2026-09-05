@@ -1,0 +1,12 @@
+{
+  "status": "PASS_FORMAT_PROTOCOL_UNIT_ONLY",
+  "command": "taskset -c 8-23 bash scripts/run_bf16_residual_gearbox_test.sh",
+  "input_beats":100,"output_chunks_including_error_frames":140,
+  "data_storage_bytes":64,
+  "checks":["Low/high16 BF16 elements preserved bitwise", "Low-only/high-only/sparse masks", "Last only on final emitted chunk", "32-bit chunk index", "Zero mask and index overflow status5", "Output backpressure stable", "Accept replacement on last chunk", "Reset ready low", "64-bit counters"],
+  "source_sha256":"b6cc129ccdffdab9fbefe9b9c3d26b11e28ce71119c5934e2b2bf0e8459f5e5d",
+  "log_sha256":"c9e00da742aec0945635603613122970385e2d0803c5503a203ff3528b2dae2c",
+  "consumer_contract":"Internal32-bit chunk ordinals; frontend correlates A/B and handles nonzero status before forwarding to residual. Not public stream-role tags",
+  "next":"Connect gearbox to Shared-L2 residual read path; verify one memory beat services two16-element chunks and retain FP32 output",
+  "nonclaims":["No FP arithmetic in this unit", "No actual DDR read savings measured yet", "Not connected to current queued numerical test", "No full-model/PPA PASS"]
+}

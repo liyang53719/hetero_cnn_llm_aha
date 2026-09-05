@@ -8,6 +8,6 @@ object EmitP0Safety extends App {
   Files.createDirectories(Paths.get(out))
   ChiselStage.emitSystemVerilogFile(new P0AllRoots(LocalSramConfig()),
     args = Array("--target-dir",out),
-    firtoolOpts = Array("--disable-all-randomization","--strip-debug-info","--split-verilog"))
+    firtoolOpts = Array("--disable-all-randomization","--strip-debug-info"))
   println("P0_CHISEL_EMISSION_DONE roots=4 local_sram_bytes=1572864 nominal_hz=800000000")
 }

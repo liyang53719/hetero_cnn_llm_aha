@@ -1,5 +1,15 @@
 # Three-model operator closure handoff
 
+## Current override: q1024 performance recovery
+
+- ACTIVE: reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md; prior notes below are history.
+- Full-request q1024 measured models: 0/3. Canary PASS is not model performance.
+- BF16 512 MAC/cycle at 800MHz = 409.6 GMAC/s. Actual wall utilization unknown.
+- P1 receipt admission tests: 12 PASS; no generated RTL modified.
+- Audit command: scripts/audit_three_model_q1024_performance.py (CPU8-23 wrapper).
+- Next: descriptor-driven complete tiling and nonzero cross-operator memory harness.
+- Never substitute historical 1GHz/service-curve cycles or one zero step/phase.
+
 - Branch: `main`; baseline: `b55ddcb`.
 - Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.
 - Stage: `G3_PROTOCOL_ENDPOINT_BINDING`.

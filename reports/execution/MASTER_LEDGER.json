@@ -1,7 +1,15 @@
 {
   "schema_version": 7,
   "goal": "THREE_MODEL_CHISEL_RTL_DC_800MHZ_CLOSURE",
-  "goal_status": "COMPLETE",
+  "goal_status": "COMPLETE_COMPONENT_SCOPE_ONLY",
+  "current_performance_goal": {
+    "status": "ACTIVE",
+    "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
+    "stage": "P1_COUNTER_ADMISSION",
+    "full_request_q1024_measured_models": 0,
+    "admission_unit_tests_passed": 12,
+    "next": "Connect descriptor-driven complete Matrix tiling and tensor memory before full-model measurement"
+  },
   "branch": "main",
   "baseline_sha": "b55ddcb6dbc890a2b1b832fdc5701c1a0a65da3b",
   "implementation_origin": "Chisel",

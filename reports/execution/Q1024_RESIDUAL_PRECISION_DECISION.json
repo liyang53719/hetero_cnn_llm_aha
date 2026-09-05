@@ -1,5 +1,15 @@
 {
-  "status": "PENDING_USER_DECISION",
+  "status": "APPROVED_POLICY_IMPLEMENTATION_PENDING",
+  "approved_policy": {
+    "matrix_operands_max": "BF16",
+    "matrix_accumulator": "FP32",
+    "sensitive_operations": "FP32 permitted; reductions, RoPE, norm, softmax and recurrent state require per-operation evidence",
+    "ordinary_tensor_default": "BF16",
+    "evidence_backed_fp32_boundaries": ["oproj", "down", "attn_residual", "residual"],
+    "absolute_error_threshold": 0.002,
+    "no_fp32_matrix_operand_array": true
+  },
+  "approval_basis": "User: 按你说的 矩阵乘法最高BF16，累加FP32；敏感层允许FP32；普通tensor尽量BF16，只有证据证明必要的边界保留FP32 继续",
   "boundary_sensitivity_evidence": "reports/execution/Q1024_RESIDUAL_PRECISION_SENSITIVITY.json",
   "observed_on_archived_reference": {
     "oproj_bf16_only_max_error": 0.007812023162841797,
@@ -19,6 +29,6 @@
   "recommended": "Approve FP32 OProj/Down/residual boundaries to preserve current reference; Matrix operands remain BF16; update typed descriptors, alias-consistent DDR sizes/addresses and writeback/load support; keep0.002",
   "alternative": "Keep frozen BF16 device boundaries and explicitly re-audit/re-freeze CPU golden at matching rounding points; do not merely quantize expected projection output and claim downstream residual equivalence",
   "execution_policy": "Do not release OProj integrated-chain build until user decision and matching implementation/reference update. Attention service continues unchanged",
-  "goal_blocked": true,
+  "goal_blocked": false,
   "request_sent": "Asynchronous precision decision question; no approval received at creation"
 }

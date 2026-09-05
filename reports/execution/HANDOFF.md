@@ -1,7 +1,7 @@
 # 交接：三模型 q1024 性能闭环
 
 - 本文件硬限制：不超过40行；历史证据留在阶段报告。
-- Goal BLOCKED_DECISION；main；待批准OProj/Down/residual精度，未完成三模型整网验收。
+- 精度策略已批准，实施中；main；矩阵BF16/累加FP32，必要边界FP32；三模型未验收。
 - 计划：reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md。
 
 ## 当前状态
@@ -16,7 +16,7 @@
 
 ## 唯一下一动作
 
-等待用户明确精度选择；已有q1024持久任务未停止/重启，不轮询其进度。
+实施Q1024_APPROVED_PRECISION_IMPLEMENTATION.md；不查询或改动等待任务。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
 - receipts/实际FP32：work/results/q1024_captured_attention_payload/；64分区自动运行。

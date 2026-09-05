@@ -60,14 +60,21 @@
 - Removed elaboration BATCH_COUNT; controller runtime input1..64. Same control
   binary tested1/2/64, rejected0/65, snapshot checked. Trace-only not numerical.
 - Evidence Q1024_PACKED_GROUP8_RESULT.json. Payload/scheduler DC stale.
+- Joint packed group8 + pinned-iDMA + AXI/L2 + Matrix + DDR now PASS:
+  49152 BF16 outputs exact, 11328flat requests, 917864ROI cycles,
+  75497472 usefulMACs (16.065% fragment utilization), DDR throttle0.
+- Only norm input/weights preloaded; no L2/output injection. Two runtime batches
+  still repeat canonical16 rows, so not true rows16_31 or full q1024.
+- Q1024_GROUP8_JOINT_PINNED_IDMA_RESULT.json holds source/log hashes and limits.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
 DDR ceiling, ROI attribution, fail-closed iDMA errors and packed group layout verified.
-Connect packed group8 scheduler to first9's real iDMA/AXI/L2 wiring and compare actual
-DDR projection values in the same run. Measure joint ROI before claiming speedup.
+Generate genuine token rows16_31 from the pinned checkpoint/token list and frozen
+norm/FMA golden, replace repeated-row fixture, revalidate the same runtime RTL.
+Then extend Q/K/V coverage and full q1024 scheduling; no fragment-to-model extrapolation.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

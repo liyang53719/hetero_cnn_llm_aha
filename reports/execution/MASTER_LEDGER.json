@@ -5,7 +5,10 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_PACKED_GROUP8_SEPARATE_GATES_PASS_JOINT_CHAIN_OPEN",
+    "stage": "P2_PACKED_GROUP8_JOINT_NUMERICAL_PASS_DISTINCT_ROWS_OPEN",
+    "packed_group8_joint_wall_cycles": 917864,
+    "packed_group8_joint_checked_values": 49152,
+    "packed_group8_joint_repeated_input_rows": true,
     "packed_group8_checked_matrix_values": 49152,
     "packed_group8_checked_DMA_bytes": 786432,
     "batch_count_contract": "runtime_1_to_64_no_elaboration_parameter",

@@ -1,21 +1,24 @@
 {
-  "status": "IN_PROGRESS_RETRY_SECOND_SEGMENT_AFTER_UI_RESTORE_FIX",
+  "status": "K_PROJECTION_COMPLETE_Q_V_AND_MODEL_OPEN",
+  "completed_projection_result": "Q1024_CONTINUOUS_K_RESULT.json",
+  "K_wall_cycles": 4272278,
+  "K_checked_bf16_outputs": 262144,
   "fixture_gate": "Q1024_PROJECTION_FIXTURES_RESULT.json",
   "fixture_rows": 1024,
   "golden_method": "Exact token-ID reuse for position-independent layer0 norm/raw QKV; all13 token IDs covered and76 duplicate-row checks passed. RTL still executes every row.",
   "full_fixture_first32_K_test": "PASS8192 outputs and149154cycles",
   "valid_checkpoint": {
-    "projection": "K", "segment": 0,
-    "cycle": 799993, "completed_matrix_steps": 144384,
-    "receipt": "work/results/q1024_continuous/p1/segment_000.json"
+    "projection": "K", "segment": 4,
+    "cycle": 3999993, "completed_matrix_steps": 735744,
+    "receipt": "work/results/q1024_continuous/p1/segment_004.json"
   },
   "invalid_resume_attempt": {
     "segment": 1,
     "hardware_cycle_observed": 1599993,
     "hardware_matrix_steps_observed": 291840,
-    "receipt": "work/results/q1024_continuous/p1/segment_001.json",
+    "receipt": "work/results/q1024_continuous/p1/segment_001.attempt0.failed.json",
     "status": "FAILED_NOT_A_VALID_RESUME_POINT",
-    "root_cause": "Nested Tcl restore skips remaining if body, restores old environment, and leads to saved UCLI internal read-only synopsys_root variable failing restoration",
+    "root_cause": "VCS clears its UI-global baseline on restore; next save captures readonly internals. Nested restore also skips trailing if-body commands. Fixed by refreshing the UI baseline and top-level restore; hardware state unchanged.",
     "preserved": "All original files retained; no simulator memory or generated checkpoint metadata edited"
   },
   "controller_changes": [
@@ -24,7 +27,7 @@
     "Load next output path from locked filesystem control after restore; reject overwriting checkpoints",
     "Design/data identity immutable; control recipe revision separately logged"
   ],
-  "next": "Add an explicit failed-attempt retry retaining original receipt/log/snapshot, verify top-level restore/save chaining on small test, then retry K segment1 from valid segment0",
-  "full_q1024_K_numerical_pass": false,
+  "next": "Run continuous full q1024 V projection, then Q, keeping the same immutable simulator and fixtures. Full decoder/model remains open.",
+  "full_q1024_K_numerical_pass": true,
   "full_model_q1024_tokens_per_second": null
 }

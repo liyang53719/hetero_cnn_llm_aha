@@ -1,0 +1,84 @@
+{
+  "chain": [
+    {
+      "attempt": 0,
+      "log_sha256": "88798d7844594f0267197a8646f884a5f1279a2dcb4eef3771963630c4145459",
+      "receipt_sha256": "4a38bf36faf002a657f97d3c94f4dccaef5fad4caeeb2550be4ae3cb3db60ee8",
+      "segment": 0,
+      "status": "CHECKPOINT"
+    },
+    {
+      "attempt": 1,
+      "log_sha256": "45d7979a5501a8405374768ec3d32367789c676fd4089f7a5aa28f951ac019a7",
+      "receipt_sha256": "ad7b7d1bffaaf876cb7e0d3fb1782bfbf32f8906ea87e897b69ee27428d2fa6c",
+      "segment": 1,
+      "status": "CHECKPOINT"
+    },
+    {
+      "attempt": 0,
+      "log_sha256": "9f9526825b0550812898539d6865c9f93e9d50ac797b571380a9ded2005571e7",
+      "receipt_sha256": "27e0a37ef835d135a65f969b568c2355c4fc8a758bffa120f7e7eaa8fa66480d",
+      "segment": 2,
+      "status": "CHECKPOINT"
+    },
+    {
+      "attempt": 0,
+      "log_sha256": "175537eeb591649ed092150dbb96ebf50c17696e3a6d8784ae595e3a595243b2",
+      "receipt_sha256": "155f84dafc8270c0cab560ae78602e3a851cce638f0dc4dad9f9a51c27e65b99",
+      "segment": 3,
+      "status": "CHECKPOINT"
+    },
+    {
+      "attempt": 0,
+      "log_sha256": "fa0e3eced570bd9f2b4355d46e0cf96d8e6869b2f01ba7ff5be0465803e1d1f6",
+      "receipt_sha256": "a5ea73ec88d1e67ac10f8487f14e678f7132a50a11d4cf776556552f7d015ca6",
+      "segment": 4,
+      "status": "CHECKPOINT"
+    },
+    {
+      "attempt": 0,
+      "log_sha256": "ec2ef0704ab56f4fb7ea2931be31c7f8e4c6c79b560c316cd9351db5e15990c4",
+      "receipt_sha256": "514fec55db3ee05d952f3a5aec5556921bcffe990b9353af992e771aac02808d",
+      "segment": 5,
+      "status": "PROJECTION_NUMERICAL_COMPLETE"
+    }
+  ],
+  "columns": 256,
+  "counters": {
+    "batches": 64,
+    "checked_bf16": 262144,
+    "distinct_token_rows": 1,
+    "flat_requests": 12032,
+    "full_fixture": 1,
+    "no_intermediate_injection": 1,
+    "projection": 1,
+    "read_bytes": 3932160,
+    "read_throttle": 0,
+    "useful_macs": 402653184,
+    "wall_cycles": 4272278,
+    "write_bytes": 524288,
+    "write_throttle": 0
+  },
+  "depth": 1536,
+  "full_model_prefill_tokens_per_second": null,
+  "identity": {
+    "work/results/qwen2_group8_pinned_idma/projection_addresses.memh": "66f95165a50fad1a24e7960d1a27766ea9daee989d7f70fe66cf839cbade0915",
+    "work/results/qwen2_group8_pinned_idma/projection_commands.memh": "bca051d00c6a815a44350ba4bdb584abda6a1f3e1167abd96a9e9a37fdacd247",
+    "work/results/qwen2_group8_pinned_idma/records.memh": "f1240f873a091d0fccd88f0a9156bb5f2e789663788647127fa8676fa7bff851",
+    "work/results/qwen2_q1024_projection_fixtures/result.json": "389614fe09581d0cc27ca53fdd3186fcdf33b9ed4b3955b0ab5478e79e1a91db",
+    "work/upstream/idma/target/sim/vcs/simv_group8_checkpoint": "f5f45d0107cd96d6562732d717c6ed7a4ac3b892ece482fec18abb14e8d2787c"
+  },
+  "nominal_clock_hz": 800000000,
+  "nominal_projection_latency_seconds": 0.0053403475,
+  "nonclaims": [
+    "Layer0 single projection only; no complete decoder/full model",
+    "Layer0 norm supplied as operator input; RMSNorm excluded from ROI",
+    "Golden row memoization valid only for position-independent layer0 norm/raw QKV; RTL computed all1024 rows",
+    "DDR bandwidth ceiling100/40GBps; not bank/refresh/latency calibration",
+    "Modified RTL timing/area still needs DC closure"
+  ],
+  "projection": "K",
+  "rows": 1024,
+  "status": "PASS_Q1024_SINGLE_PROJECTION_NUMERICAL",
+  "useful_mac_utilization": 0.18407790878777083
+}

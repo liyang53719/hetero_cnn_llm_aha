@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
-  "stage": "Q1024_P2_K_SEGMENT2_VALID_SEGMENT3_RUNNING",
+  "stage": "Q1024_P2_K_PROJECTION_NUMERICAL_COMPLETE",
   "state": "ACTIVE_FULL_REQUEST_PERFORMANCE_OPEN",
-  "unique_next_action": "Wait for live K segment3 (receipt work/results/q1024_continuous/p1/segment_003.json); do not restart it. Then continue --projection1 --segment4 and subsequent segments until actual numerical completion. Segment1 retry and segment2 valid; do not rebuild simulator or modify saved Tcl recipes",
+  "unique_next_action": "taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 2 --segment 0 ; then continue V segments until PROJECTION_NUMERICAL_COMPLETE and collect --projection2. K is complete (4272278cycles/262144 outputs). Do not rebuild simulator, alter fixtures or modify saved Tcl recipes; full-model metrics remain open",
   "expected_outputs": [],
   "success": {
     "branch": "main",

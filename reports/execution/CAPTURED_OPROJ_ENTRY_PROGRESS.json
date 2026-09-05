@@ -9,7 +9,15 @@
     "Require independent1572864-value attention gate, actual BF16 input hash and exact CPU reference linked to same captured FP32 input",
     "No preload of expected output into DDR/L2 and no hardware source change"
   ],
-  "validated_now": "Python fixture generator syntax only",
+  "validated_now": "Python generator syntax and read-only descriptor/packed-record consistency; no payload simulation yet",
+  "descriptor_readiness": {
+    "operation": "l0.oproj", "opcode": "0x20", "engine": 2,
+    "src0": {"root": 4134, "address": "0x201180c00", "dims": [1024,1536,1,1]},
+    "src1": {"root": 4135, "address": "0x100603800", "dims": [1536,1536,1,1]},
+    "dst": {"root": 4136, "address": "0x201480c00", "dims": [1024,1536,1,1]},
+    "packed_record_address_match": true,
+    "scope": "Current manifest/descriptor image only; not engine execution or full-model completion"
+  },
   "pending": ["Wait full captured attention and exact tail reference", "Generate OProj fixtures", "Compile extended TB after current heavy queue finishes", "Run bounded continuous full1024 pinned-iDMA/Matrix replay with actual DDR output retained"],
   "nonclaims": ["No OProj RTL PASS yet", "No new SRAM or Matrix datapath", "Frozen live attention sources and binary unchanged", "Previously completed QKV binary and evidence not overwritten"]
 }

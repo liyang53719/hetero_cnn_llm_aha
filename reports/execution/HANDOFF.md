@@ -9,14 +9,14 @@
 - Qwen2 首层 K/V 投影：各1024行、262144个BF16输出逐位通过。
 - 各4272278周期；名义800MHz下5.340ms，MAC利用率18.41%。
 - 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
-- Q 段0–2已保存；最新3999993周期、734208个完成的Matrix step。
+- Q 段0–3已保存；最新5599993周期、1026048个完成的Matrix step。
 - 当前无运行任务；Q尚未通过最终数值检查。
-- Q receipt：work/results/q1024_continuous/p0/segment_002.json。
+- Q receipt：work/results/q1024_continuous/p0/segment_003.json。
 - 单投影结果不等于完整decoder或模型prefill。
 
 ## 唯一下一动作
 
-taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 3
+taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 4
 
 - 继续Q至PROJECTION_NUMERICAL_COMPLETE，再运行收集器 --projection 0。
 - 收集器：scripts/collect_q1024_projection_chain.py。

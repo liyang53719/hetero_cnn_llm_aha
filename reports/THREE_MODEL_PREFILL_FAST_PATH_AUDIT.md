@@ -32,5 +32,6 @@
 
 - `hetero_npu_integrated_v0.sv`仍实例化固定LATENCY的contract adapter，不可作为整网性能入口。
 - attention的真实QK/PV迭代原先在testbench task中；现已新增可综合风格的`attention_matrix_tile_sequencer.sv`，支持128/256 head维度及既定hi/lo概率路径。
-- 顺序、反压、尾部掩码和错误状态协议测试通过；真实Matrix数值、内存适配及SFU连接仍待完成。
+- 顺序/反压/尾部掩码/错误协议、真实Matrix7168项FP32数值、完整q128 attention1536行头/240tasks均通过；后者3317900周期、hash cc0eaf553c59b9f6。
+- q128使用已有确定性算子向量，TB还提供tensor memory及SFU/merge服务；不是checkpoint整层或DDR整网性能。
 - 详见`reports/execution/ATTENTION_ENDPOINT_PROGRESS.json`。不得把这项控制器单测计为模型通过。

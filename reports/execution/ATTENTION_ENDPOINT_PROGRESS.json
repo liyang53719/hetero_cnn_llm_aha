@@ -1,5 +1,5 @@
 {
-  "status": "SOURCE_PROTOCOL_AND_REAL_MATRIX_DIRECTED_NUMERICAL_PASS_E2_RUNNING",
+  "status": "REAL_MATRIX_AND_Q128_ATTENTION_NUMERICAL_PASS_PRODUCTION_MEMORY_SFU_OPEN",
   "gap_found": "Existing QK/PV operand iteration is implemented in tb_l5_q128_attention_integrated.sv tasks do_qk/do_pv, not a synthesizable production endpoint",
   "source_added": "rtl/attention/attention_matrix_tile_sequencer.sv",
   "implemented": [
@@ -35,10 +35,18 @@
     "source_regeneration": false
   },
   "attention_e2": {
-    "status": "RUNNING_NOT_PASS",
+    "status": "PASS_DIRECT_AND_FULL_Q128_ATTENTION_OPERATOR",
+    "rows_times_heads": 1536,
+    "tasks": 240,
+    "cycles": 3317900,
+    "attention_fnv64": "cc0eaf553c59b9f6",
+    "q128_log_sha256": "b972e920ba30dd641ddeafc1ba6e80834ed1fd84702cab622134bd1768bcf1c6",
+    "direct_log_sha256": "a98bf867b8943c432d3430094bb3c10a8e50c8549feb3aae8778d28efaa6a189",
+    "source_manifest_sha256": "2387c2dcdf9ad350c5e544f0b78f42b95aefd659d3879e657b5c0cf0973297f6",
+    "input_boundary": "Existing deterministic operator vectors, not actual checkpoint-derived QKV; no full decoder timing claim",
     "command": "taskset -c 8-23 bash scripts/run_attention_sequencer_e2.sh",
     "change": "QK/PV testbench iteration replaced by production Matrix tile sequencer; TB supplies tensor memory only; SFU/merge tasks still pending migration",
     "scope": "Direct diagnostic then full q128 attention operator; not complete decoder or full model"
   },
-  "next": "Close attention numerical regression, then production operand/score/probability/MLO memory and SFU. Do not use contract-adapter integrated_v0 as a model backend"
+  "next": "Connect checkpoint-derived QKV through RoPE, production operand/score/probability/MLO memory and SFU; then full decoder. Do not use contract-adapter integrated_v0 as a model backend"
 }

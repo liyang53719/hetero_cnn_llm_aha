@@ -16,9 +16,9 @@
 
 ## 唯一下一动作
 
-真实Matrix7168项数值已通过；等待attention直接诊断+q128连跑(session60026)。
+连接真实QKV→RoPE→attention，迁移SFU/merge/内存；当前无运行任务。
 
-- QK/PV循环已从TB迁入RTL；SFU/merge和内存仍待生产化，不是整网PASS。
+- QK/PV循环已迁入RTL；q128 attention1536行头/240tasks通过，3317900周期。
 - 收集器：scripts/collect_q1024_projection_chain.py。
 
 ## 执行约束

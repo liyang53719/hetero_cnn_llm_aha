@@ -1,0 +1,19 @@
+{
+  "status": "CHECKPOINTED_NOT_NUMERICALLY_COMPLETE",
+  "projection": "Q",
+  "rows": 1024,
+  "completed_segments": [0, 1],
+  "latest_saved_cycle": 2399993,
+  "latest_completed_matrix_steps": 439296,
+  "latest_receipt": "work/results/q1024_continuous/p0/segment_001.json",
+  "segment_duration_policy": {
+    "initial_simulated_ms": 1,
+    "subsequent_simulated_ms": 2,
+    "measured_segment1_host_cpu_seconds": 284.41,
+    "per_command_timeout_seconds": 600,
+    "note": "Save interval only; hardware, fixtures and accumulated cycle semantics unchanged. Dedicated immutable Q resume recipe preserves earlier K/V recipes."
+  },
+  "next_command": "taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 2",
+  "full_q_projection_numeric_pass": false,
+  "full_model_prefill_tokens_per_second": null
+}

@@ -16,7 +16,10 @@
 - Final receipt work/results/q1024_continuous/p1/segment_005.json.
 - FULL q1024 layer0 V also PASS:262144 BF16 outputs,4272278cycles,
   402653184 usefulMACs,18.4078% utilization. Q1024_CONTINUOUS_V_RESULT.json.
-- No simulation running at handoff. K/V are single operators, not complete prefill.
+- Q segments0/1 checkpointed at2399993cycles/439296 completed Matrix steps;
+  not numerically complete. No simulation running at handoff.
+- Q resume recipe runs2ms per segment (observed284.41 host CPU seconds), with
+  unchanged600s timeout; K/V scripts remain unchanged. Freeze the new Q recipe too.
 - Only layer0 norm inputs/weights preloaded; no L2/output injection.
 - Fixtures reproduce true1024-token ordering via exact token-ID golden reuse for
   position-independent layer0 norm/raw projections. Never use for RoPE/attention/later layers.
@@ -34,7 +37,7 @@
 
 ## Next action
 
-taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 0
+taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 2
 
 Continue Q until actual PROJECTION_NUMERICAL_COMPLETE, then run
 scripts/collect_q1024_projection_chain.py --projection 0 under CPU8-23.

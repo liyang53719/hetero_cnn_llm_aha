@@ -70,6 +70,8 @@ def main():
     control.write_text('set qwen_checkpoint_target {'+str(checkpoint)+'}\n')
     env['QWEN_SAVE_PATH']=str(checkpoint);env['MIN_AVAILABLE_KIB']='10485760'
     recipe=ROOT/('scripts/q1024_projection_segment_v2.tcl' if previous else 'scripts/q1024_projection_start.tcl')
+    if previous and args.projection==0:
+        recipe=ROOT/'scripts/q1024_projection_q_segment.tcl'
     cmd=[str(ROOT/'scripts/run_memory_capped.sh'),'timeout','600',str(sim),f'+PROJECTION={args.projection}','+BATCHES=64','+FULL_Q1024',f'+COMMANDS={fixtures}/projection_commands.memh',f'+RECORDS={fixtures}/records.memh',f'+ADDR={fixtures}/projection_addresses.memh','-ucli','-do',str(recipe)]
     logfile=directory/f'segment_{args.segment:03d}{suffix}.log'
     result=dict(status='RUNNING',projection=args.projection,segment=args.segment,identity=identity,command=cmd,cwd=str(ROOT),started_unix=time.time(),log=str(logfile),cpu_affinity='8-23',memory_max='30G')

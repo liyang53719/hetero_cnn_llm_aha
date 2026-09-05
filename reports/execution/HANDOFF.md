@@ -16,10 +16,10 @@
 
 ## 唯一下一动作
 
-连接真实QKV→RoPE→attention，迁移SFU/merge/内存；当前无运行任务。
+等待q1024全query/head attention自动执行器(PID1882861/session76551)，勿重复启动。
 
-- QK/PV循环已迁入RTL；q128 attention1536行头/240tasks通过，3317900周期。
-- 收集器：scripts/collect_q1024_projection_chain.py。
+- 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
+- attention receipts：work/results/q1024_captured_attention/qtNN.json；64分区自动运行。
 
 ## 执行约束
 
@@ -27,9 +27,9 @@
 - MemoryHigh24G/Max30G；可用内存>10GiB、磁盘>50GiB。
 - 每条重命令≤600秒，阻塞等待；Q恢复段为2ms模拟时间。
 - 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
-- 中断后先查receipt/PID；仅显式 --retry-failed 可重试失败段。
+- 当前attention按query tile数值分区，不抽样；不得累加成完整controller性能。
 - 保留完整 .chk/.chk.FILES/.chk.ucli；快照不提交Git。
-- 恢复控制使用已验证的UI变量基线修复；不手改快照数据。
+- 检查首个失败，不放宽0.002；运行中禁止改attention源/夹具/二进制。
 - 保护两个被排除的用户runtime脚本；检查点及时commit/push。
 
 ## 未完成

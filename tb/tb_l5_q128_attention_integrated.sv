@@ -65,13 +65,29 @@ module tb_l5_q128_attention_integrated;
  task automatic check_direct_tile;real error,max_error;begin max_error=0;for(integer row=0;row<16;row++)begin error=absreal(f32real(tile_m[0][row])-f32real(expected_tile_m[row]));if(error>max_error)max_error=error;if(error>0.002)$fatal(1,"direct tile M row=%0d error=%f",row,error);error=absreal(f32real(tile_l[0][row])-f32real(expected_tile_l[row]));if(error>max_error)max_error=error;if(error>0.002)$fatal(1,"direct tile L row=%0d error=%f",row,error);for(integer dim=0;dim<128;dim++)begin error=absreal(f32real(tile_o[0][row*128+dim])-f32real(expected_tile_o[row*128+dim]));if(error>max_error)max_error=error;if(error>0.002)$fatal(1,"direct tile O row=%0d dim=%0d error=%f",row,dim,error);end end $display("L5_ONE_TASK_QK_SFU_PV_PASS rows=16 qk_steps=128 pv_steps=256 max_error=%f cycles=%0d",max_error,cycles);$finish;end endtask
  initial begin matrix_service_busy=0;mdv=0;mdk=0;mdt=0;wait(rst_n);forever begin @(posedge clk);if(mcv&&mcr)begin integer task_id,qt,kt,qh,kh,rows,close_block,merge_global,last_kv;task_id=mct;qt=mcq;kt=mckv;qh=mcqh;kh=mckh;rows=mcrows;close_block=mcclose;merge_global=mcmerge;last_kv=mclast;@(negedge clk);matrix_service_busy=1;matrix_commands++;if(!mck)do_qk(task_id,qt,kt,qh,kh,rows);else do_pv(task_id,qt,kt,qh,kh,rows,close_block,merge_global,last_kv);pulse_matrix_done(mck,task_id);matrix_service_busy=0;end end end
  initial begin sfu_service_busy=0;sdv=0;sdt=0;wait(rst_n);forever begin @(posedge clk);if(scv&&scr)begin integer task_id,qt,kt,qh,kh,rows;task_id=sct;qt=scq;kt=sckv;qh=scqh;kh=sckh;rows=scrows;@(negedge clk);sfu_service_busy=1;sfu_commands++;do_sfu(task_id,qt,kt,qh,kh,rows);pulse_sfu_done(task_id);sfu_service_busy=0;end end end
- initial begin string vectors;logic direct_diag,sampled_384,sampled_1024;integer sample_task,qt,qh,kvtiles,close_flag,merge_flag,last_flag,shard,sample_begin,sample_end;
+ initial begin string vectors;logic direct_diag,sampled_384,sampled_1024;logic full1024;integer full_qtile;integer sample_task,qt,qh,kvtiles,close_flag,merge_flag,last_flag,shard,sample_begin,sample_end;
   clk=0;rst_n=0;start=0;direct_diag=$test$plusargs("DIRECT_DIAG");sampled_384=$test$plusargs("SAMPLED_384");sampled_1024=$test$plusargs("SAMPLED_1024");seq_len=sampled_1024?1024:(sampled_384?384:128);shard=0;void'($value$plusargs("SHARD=%d",shard));
+  full1024=$test$plusargs("FULL_Q1024");full_qtile=0;
+  if(full1024)begin seq_len=1024;if(!$value$plusargs("QT=%d",full_qtile)||full_qtile<0||full_qtile>=64||direct_diag||sampled_384||sampled_1024)$fatal(1,"full1024 options");end
   wstart=0;wsv=0;wscore=0;wmask=0;whr=0;hor=0;raw_score=0;mhiv=0;mhor=0;mbiv=0;mblast=0;mma=0;mla=0;mmb=0;mlb=0;moa=0;mob=0;riv=0;ror=1;rx=0;va=0;vb=0;attention_hash=64'hcbf29ce484222325;checked_rows=0;matrix_commands=0;sfu_commands=0;manual_merge_rows=0;
   if(!$value$plusargs("VECTORS=%s",vectors))vectors="work/results/l5_q128_attention_integrated/vectors";
   $readmemh({vectors,"/q_bf16.memh"},qmem);$readmemh({vectors,"/k_bf16.memh"},kmem);$readmemh({vectors,"/v_bf16.memh"},vmem);$readmemh({vectors,"/expected_fp32.memh"},expected);$readmemh({vectors,"/tile_m_fp32.memh"},expected_tile_m);$readmemh({vectors,"/tile_l_fp32.memh"},expected_tile_l);$readmemh({vectors,"/tile_o_fp32.memh"},expected_tile_o);
   $display("INTEGRATED_PROGRESS phase=VECTORS_LOADED direct=%0d sampled384=%0d sampled1024=%0d shard=%0d",direct_diag,sampled_384,sampled_1024,shard);$fflush();repeat(8)@(posedge clk);rst_n=1;
   if(direct_diag)begin matrix_service_busy=1;do_qk(0,0,0,0,0,16);matrix_service_busy=0;do_sfu(0,0,0,0,0,16);matrix_service_busy=1;do_pv(0,0,0,0,0,16,0,0,0);matrix_service_busy=0;check_direct_tile();end
+  if(full1024)begin
+   // All heads for this independent query tile, all causal keys. The external
+   // coordinator covers every QT0..63, never samples heads/rows/keys.
+   // Per-QT jobs are numerical partitions, not uninterrupted controller cycles.
+   qt=full_qtile;sample_task=0;kvtiles=((qt+1)*16+31)/32;
+   for(integer head=0;head<12;head++)for(integer kt=0;kt<kvtiles;kt++)begin
+    close_flag=((kt&3)==3)||(kt==kvtiles-1);merge_flag=close_flag&&(kt>=4);last_flag=kt==kvtiles-1;
+    matrix_service_busy=1;do_qk(sample_task,qt,kt,head,head/6,16);matrix_service_busy=0;
+    do_sfu(sample_task,qt,kt,head,head/6,16);matrix_service_busy=1;
+    do_pv(sample_task,qt,kt,head,head/6,16,close_flag,merge_flag,last_flag);matrix_service_busy=0;sample_task++;
+   end
+   if(checked_rows!=192||sample_task!=12*kvtiles||manual_merge_rows!=192*(qt/8))$fatal(1,"full QT accounting");
+   $display("Q1024_CAPTURED_ATTENTION_QT_PASS qt=%0d rows_heads=%0d tasks=%0d merges=%0d cycles=%0d hash=%016h full_model=false",qt,checked_rows,sample_task,manual_merge_rows,cycles,attention_hash);$finish;
+  end
   if(sampled_384)begin
    sample_task=0;
    for(integer sample=0;sample<12;sample++)begin qt=sampled_qtile(sample);kvtiles=((qt+1)*16+31)/32;

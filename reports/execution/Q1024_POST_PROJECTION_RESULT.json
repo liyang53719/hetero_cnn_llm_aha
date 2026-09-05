@@ -1,0 +1,26 @@
+{
+  "status": "PASS_FULL1024_BIAS_ROPE_NUMERICAL_COMPOSITION",
+  "checked_bf16": 3932160,
+  "bias_values": 2097152,
+  "rope_values": 1835008,
+  "actual_files_sha256": {
+    "q_bias_actual.memh": "cf9c0277ea85315fe6e893f3351b2f1d802351cad38498dc38a4f9b76619c6e0",
+    "q_rope_actual.memh": "4a3ee5cc3621de6290ba805b26b22aaf1e2b56c64ae5384e8ba3777aef5ff180",
+    "k_bias_actual.memh": "588ebe734d790e066c22f7c23d3315363ce5a623e2d9c7e0ef8c64855dc54fb7",
+    "k_rope_actual.memh": "9a495c8a3aea49f91a9a06ddd62c4d28fe6082116fbab605e3c0c1e2bcea98e5",
+    "v_bias_actual.memh": "7faf0e8735db1b781459a14a5f20d4132d5efe1175cf2d12df65a6e15933251c"
+  },
+  "logs_sha256": {
+    "bias_p0.log": "8f8081ce3957eca694d2720fbacefc6c520542424e5fda3b7453598f88801c43",
+    "bias_p1.log": "04ed0e493573f505e265609ae74041324031f979794e04607f8a1ef445e39142",
+    "bias_p2.log": "0a8248574f9f725bc6f47655bd72a29d626bc516895613cede219182a1704814",
+    "rope_p0.log": "2727ab0ccba69a4f984c25acc4235baba96aedb8af21956a130ff17c5f2b0064",
+    "rope_p1.log": "6c5ad78148a9cc31daa289b686301b08743145a4eb8223689717dfc0bd845fde"
+  },
+  "reference_manifest_sha256": "10106cde19f271b1e92d8cb97b95bfc6a251cde5adb180951ee60ad743809647",
+  "nonclaims": [
+    "Raw input is independently golden but proven bit-exact by completed projections, not captured projection DDR",
+    "Actual bias output feeds RoPE through file boundary",
+    "DMA is testbench memory service, not pinned iDMA; not full-model uninterrupted timing"
+  ]
+}

@@ -29,6 +29,7 @@ run "${HETERO_VERILATOR:-$ROOT/work/toolchain/conda/bin/verilator}" --binary --t
  -Wno-fatal -Wno-SHORTREAL -I"$ROOT/tb" -j 4 -MAKEFLAGS 'AR=/usr/bin/ar CXX=/usr/bin/g++' \
  --top-module tb_l5_q128_attention_integrated --Mdir "$ROOT/$OUT/obj" -o tb \
  "${S[@]}" > "$OUT/build.log" 2>&1
+if [[ ${BUILD_ONLY:-0} == 1 ]];then exit 0;fi
 VECTORS=work/results/l5_q128_attention_integrated/vectors
 test -s "$VECTORS/q_bf16.memh"
 # Continuous direct diagnostic followed by full q128 operator numerical replay.

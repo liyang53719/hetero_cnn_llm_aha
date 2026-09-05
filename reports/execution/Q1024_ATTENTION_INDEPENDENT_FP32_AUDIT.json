@@ -174,9 +174,27 @@
       "max_error": 0.00010848045349121094,
       "output_sha256": "460682632bfe565a80c5361e97e72f4c21f58711463ce06b98c0854fc7bb530f",
       "receipt_sha256": "ed14ac51b9fb66113a05024b4db0547c2dd28dba55e63fec554a4eff4d3ba845"
+    },
+    {
+      "qt": 29,
+      "max_error": 9.295344352722168e-05,
+      "output_sha256": "76496415017cab97ee69eeefa5a0e8765c92ff5b37de744ec2f64ce6fb4754d4",
+      "receipt_sha256": "0849d8b7c68d441d0447ad0d5bda39ca1e2d34d5ba6194e88a3a7f4c0c0342a3"
+    },
+    {
+      "qt": 30,
+      "max_error": 0.00011056661605834961,
+      "output_sha256": "e2a358ae7e85574170a84c4704238420322ea161f551611028d0cc99a2f2e265",
+      "receipt_sha256": "14677131a3065a51c03af5c828e361440b028d7d99a0ea5d7e2359b042d3c452"
+    },
+    {
+      "qt": 31,
+      "max_error": 0.00010836124420166016,
+      "output_sha256": "3f2a4738c8549b03616bf3823464aa1e3af5e372289d84c1380db5f3d5de5ba3",
+      "receipt_sha256": "ed32f59f0601f58b558983f43eb6c4b69311e548e52588bf5e64c235fd051e6c"
     }
   ],
-  "compared_fp32": 712704,
+  "compared_fp32": 786432,
   "max_error": 0.00014653801918029785,
   "threshold": 0.002,
   "expected_sha256": "6eb88466039d3cde5696592247305facf22d0ca9a71a47c0e58a711f734a7807",

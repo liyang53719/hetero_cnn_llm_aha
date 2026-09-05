@@ -11,7 +11,7 @@
 - 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
 - Q完整1024行、1572864个BF16输出逐位通过，25656608周期、利用率18.39%。
 - Q自动执行器已结束；17段连续状态/hash经收集器验证，不需重跑。
-- Q证据：reports/execution/Q1024_CONTINUOUS_Q_RESULT.json。
+- attention前512 query独立FP32检查786432项通过，max error0.000146538；非整网PASS。
 - 撤回旧attention shortreal容差PASS；必须以独立FP32输出校验为准，非整网PASS。
 
 ## 唯一下一动作

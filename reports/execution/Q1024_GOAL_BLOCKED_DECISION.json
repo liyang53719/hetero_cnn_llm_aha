@@ -1,0 +1,14 @@
+{
+  "status": "BLOCKED_DECISION",
+  "objective_preserved": "Three-model q1024 full-request performance and numerical evidence; no scope reduction or completion claim",
+  "reason": "Cannot safely implement OProj/Down/residual chain while frozen BF16 descriptor boundaries contradict existing FP32 reference and user has not approved precision policy change",
+  "consecutive_goal_turns_confirmed_at_least": 3,
+  "evidence": [
+    {"checkpoint":"0d63079","finding":"Explicit frozen BF16 device policy and BF16 writeback conflict with FP32 residual reference"},
+    {"checkpoint":"9f6339b","finding":"Archived-reference boundary analysis:2879 OProj and475 Down values exceed0.002 after BF16 rounding; no threshold relaxation"},
+    {"finding":"Current decision record re-read and still PENDING_USER_DECISION after intervening goal turns; OProj build guard remains closed"}
+  ],
+  "resume_action": "User explicitly approves FP32 OProj/Down/residual (recommended), or chooses BF16 with a separate numerical-contract review; then align descriptor allocation, writeback, consumers and reference before build",
+  "existing_service": "q1024-captured-closure-20260905.service was submitted earlier; not stopped, restarted or polled when blocking Goal",
+  "nonclaims": ["Not a claim that existing service failed or finished", "Not L5/L10/L11 or three-model performance PASS", "Historical18/25/58 component coverage and shell PPA are not full-model measurements"]
+}

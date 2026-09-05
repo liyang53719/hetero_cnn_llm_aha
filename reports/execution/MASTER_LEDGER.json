@@ -3,7 +3,8 @@
   "goal": "THREE_MODEL_CHISEL_RTL_DC_800MHZ_CLOSURE",
   "goal_status": "COMPLETE_COMPONENT_SCOPE_ONLY",
   "current_performance_goal": {
-    "status": "ACTIVE",
+    "status": "BLOCKED_DECISION",
+    "blocking_record": "reports/execution/Q1024_GOAL_BLOCKED_DECISION.json",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
     "stage": "P2_QKV_BIAS_ROPE_PASS_CAPTURED_Q1024_ATTENTION_RUNNING",
     "q1024_true_bias_rope_checked_bf16": 3932160,

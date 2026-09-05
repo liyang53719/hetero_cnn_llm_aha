@@ -1,0 +1,17 @@
+{
+  "status": "PASS_DMA_LAYOUT_CONTROL_AND_PACKING_ONLY",
+  "command": "taskset -c 8-23 bash scripts/run_group8_output_precision_test.sh",
+  "cases": 4,
+  "checked_locations": 11264,
+  "coverage": ["BF16 and FP32 output", "two16-row batches", "9 column tiles crossing group8 boundary", "descriptor-selected format", "actual transpose/payload writeback", "random ready stalls", "destination row/tile offsets", "DMA row/source/destination stride", "unchanged read bytes and MAC steps", "FP32 write bytes doubled"],
+  "log_sha256": "f13d3ea6ba22bc1bb9bdbb317d05c1f18fd9b906524b499cb227b3b591184820",
+  "controller_sha256": "b3fcc8cdc960d9e764f04caa67d0eb4f009bc4814ddcce4160c8302a861c4bc0",
+  "limits": "Matrix endpoint is a tagged accumulator fixture, DMA is abstract memory service; not real FMA or pinned iDMA numerical coverage",
+  "descriptor_plan": "Q1024_FP32_BOUNDARY_DESCRIPTOR_PLAN.json",
+  "packed_descriptor": "Q1024_FP32_PACKED_DESCRIPTOR_RESULT.json",
+  "new_DDR_workspace_bytes": 2774169088,
+  "legacy_DDR_workspace_bytes": 2431275520,
+  "onchip_SRAM_added": 0,
+  "remaining": ["Repack captured OProj FP32 comparison/output files using new descriptor image", "Real pinned-iDMA/Matrix numerical replay", "FP32 residual consumers", "timing/area regression"],
+  "full_model_performance_pass": false
+}

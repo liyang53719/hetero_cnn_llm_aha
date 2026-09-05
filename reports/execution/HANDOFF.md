@@ -16,7 +16,7 @@
 
 ## 唯一下一动作
 
-attention实际输出/尾部参考已复核；继续新dtype镜像及grouped-controller/DMA精度贯通。
+新FP32镜像已打包、DMA布局4用例通过；下一步更新OProj FP32夹具并跑真实宏回归。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
 - receipts/实际FP32：work/results/q1024_captured_attention_payload/；64分区自动运行。
@@ -34,7 +34,7 @@ attention实际输出/尾部参考已复核；继续新dtype镜像及grouped-con
 
 ## 未完成
 
-- 策略3测试、写回10用例、dtype解码16用例通过；待DMA/FP32 residual贯通及整网/PPA。
+- 策略3/写回10/解码16/DMA布局4用例通过；真实FP32 OProj、residual及整网/PPA仍待验证。
 - golden按token复用仅适用于首层norm/raw QKV，禁用于RoPE/attention/后续层。
 - DDR100/40GBps仅带宽上限模型；尚缺完整模型性能证据。
 - 已向用户询问Qwen3.8权重/参考路径，尚无答复。

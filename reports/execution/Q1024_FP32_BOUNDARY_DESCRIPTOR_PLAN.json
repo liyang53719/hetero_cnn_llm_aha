@@ -1,0 +1,73 @@
+{
+  "address_overlaps": 0,
+  "blocker": null,
+  "checks": {
+    "address_overlap_zero": true,
+    "addresses_64bit": true,
+    "addresses_64byte_aligned": true,
+    "all_command_roots_covered": true,
+    "attention_policy_records_56": true,
+    "chain_length_lte_16": true,
+    "commands_588": true,
+    "descriptor_fits_shared_l2": true,
+    "descriptor_index_24bit": true,
+    "descriptor_indices_unique": true,
+    "device_row_major_shapes": true,
+    "dtype_codes_unassigned": true,
+    "ggml_device_precision_policy": true,
+    "kv_layers_28": true,
+    "kv_record_sets_28": true,
+    "matrix_gemm_shapes_consistent": true,
+    "matrix_program_records_252": true,
+    "no_full_score_matrix": true,
+    "sfu_program_records_308": true
+  },
+  "command_roots": 1736,
+  "commands": 588,
+  "descriptor_chains": 1764,
+  "descriptor_records": 6188,
+  "descriptor_storage_bytes": 164544,
+  "dtype_codes_assigned": false,
+  "dtype_symbols": [
+    "BF16",
+    "FP32",
+    "INT32"
+  ],
+  "evidence_class": "address_and_chain_complete_but_not_packed_or_executable",
+  "flash_probability_tile_bytes": 1024,
+  "flash_score_tile_bytes": 2048,
+  "fp32_boundary_node_count": 112,
+  "generated": {
+    "descriptor_chains": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_fp32_boundaries/descriptor_chains.jsonl",
+    "descriptor_chains_sha256": "e6946e17ab9121ebe500a92d87a3747dbe599145dc0aaffa4f36eca0e11dac2a",
+    "memory_map": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/generated/qwen2_q1024_fp32_boundaries/tensor_memory_map.json",
+    "memory_map_sha256": "43cc912e29e9a83e4a4ed75df3dc786982c5b76ea218f8d6aadd38a09e732d3a"
+  },
+  "kv_layers": 28,
+  "kv_page_tokens": 16,
+  "max_chain_records": 6,
+  "memory_objects": 954,
+  "non_claims": [
+    "symbolic records are not a packed descriptor image",
+    "address planning does not execute payload RTL",
+    "conservative DDR workspace allocation is not an on-chip SRAM allocation"
+  ],
+  "precision_policy": "bf16_matrix_fp32_evidence_boundaries",
+  "precision_policy_sha256": "a38149115a726255eb02f0b1d2b6137419a1ffc66808beeb515677bc725525d0",
+  "public_encoding_approved": true,
+  "record_type_counts": {
+    "attention_op": 56,
+    "kv_context32": 28,
+    "kv_epoch32": 28,
+    "kv_range32": 28,
+    "kv_table": 28,
+    "matrix_aux": 252,
+    "matrix_op": 252,
+    "sfu_program_symbolic": 308,
+    "shape4": 1736,
+    "stride3": 1736,
+    "tensor_base": 1736
+  },
+  "schema_version": 1,
+  "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY"
+}

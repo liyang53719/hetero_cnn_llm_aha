@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "Q1024_P2_QKV_PROJECTIONS_PASS_FULL_MODEL_OPEN",
   "state": "USER_APPROVED_PRECISION_IMPLEMENTATION_FULL_REQUEST_OPEN",
-  "unique_next_action": "Follow Q1024_APPROVED_PRECISION_IMPLEMENTATION.md: compiler policy and dual-format writeback unit pass; next generate isolated descriptor image and propagate destination dtype through grouped controller, DMA and FP32 residual loaders. Existing callers remain explicit BF16 until connected. Do not release build-aligned gate yet. Do not poll or mutate existing waiting task inputs.",
+  "unique_next_action": "FP32 policy image generated in isolated qwen2_q1024_fp32_boundaries / qwen2_q1024_fp32_descriptor_image; grouped controller propagates dtype and DMA bytes with4 control tests passing. Next adapt OProj actual-input fixtures and TB counters/export to FP32, then real pinned-iDMA/Matrix replay and FP32 residual consumers. Mocked control test is not numerical Matrix PASS. No polling.",
   "expected_outputs": [],
   "success": {
     "branch": "main",

@@ -11,12 +11,12 @@
 - 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
 - Q完整1024行、1572864个BF16输出逐位通过，25656608周期、利用率18.39%。
 - Q自动执行器已结束；17段连续状态/hash经收集器验证，不需重跑。
-- attention前512 query独立FP32检查786432项通过，max error0.000146538；非整网PASS。
+- q1024 attention全部1572864个FP32独立核验通过，max error0.000146687；非整网性能PASS。
 - 撤回旧attention shortreal容差PASS；必须以独立FP32输出校验为准，非整网PASS。
 
 ## 唯一下一动作
 
-实施Q1024_APPROVED_PRECISION_IMPLEMENTATION.md；不查询或改动等待任务。
+attention实际输出/尾部参考已复核；继续新dtype镜像及grouped-controller/DMA精度贯通。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
 - receipts/实际FP32：work/results/q1024_captured_attention_payload/；64分区自动运行。
@@ -34,7 +34,7 @@
 
 ## 未完成
 
-- 精度策略3测试、双格式写回10用例通过；待descriptor/DMA/FP32 residual贯通及整网/PPA。
+- 策略3测试、写回10用例、dtype解码16用例通过；待DMA/FP32 residual贯通及整网/PPA。
 - golden按token复用仅适用于首层norm/raw QKV，禁用于RoPE/attention/后续层。
 - DDR100/40GBps仅带宽上限模型；尚缺完整模型性能证据。
 - 已向用户询问Qwen3.8权重/参考路径，尚无答复。

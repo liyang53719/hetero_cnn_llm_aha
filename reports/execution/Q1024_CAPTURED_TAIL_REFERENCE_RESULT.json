@@ -1,0 +1,146 @@
+{
+  "status": "PASS_CPU_TAIL_REFERENCE_FROM_CAPTURED_RTL_ATTENTION",
+  "identity": {
+    "attention_sha256": "278da2ec4a92b3c503c239d378bb969dd6a2cb53d097436040c521638b5daf9a",
+    "input_manifest_sha256": "ee8b531c65f8c0047f4abd3bef0a5598b97f01a2e5874ce54646e183b666acaf",
+    "source_sha256": "27c0ae17c8b5cf09a2c67c40c0d5d620e92484a297f81156da981ab3a3f78cb6"
+  },
+  "output_sha256": {
+    "oproj_fp32.bin": "2e20d9d963f8247cbca174a625960e1eb69e2c202280f4a9fabc621dcb533c7c",
+    "residual1_fp32.bin": "cfcfd2fbf79f161b40f2ba7800de1fbaa6c7aad6d37188080fecdf5252808e24",
+    "postnorm_fp32.bin": "bbbe23ba72db31c3159cf6feb0a5ab490d9ddec5fd4a479a0e052be431c8caa5",
+    "gate_fp32.bin": "3d94cf94baa0617e164fafc5127d67a6752af9a5af36b72d2e843782d32e7a53",
+    "up_fp32.bin": "207a26d967446f7ef50cd22a821bb2546dc659f007e88547ffba378bb7e6bcb5",
+    "silu_product_bf16.bin": "785dda3fde99c138d8b6ca47d4b467001b7825a4923a3eb06621db86fe0a606b",
+    "down_fp32.bin": "5a50f82e2437883324fa20c6b4b21adb53b229ea43df6c0522404d590e481b66",
+    "final_fp32.bin": "7b4df03070c6aaeb66c684e99b8a2b3379e188900f10ae6f3491eb4a85a0fb68"
+  },
+  "jobs": [
+    {
+      "label": "build",
+      "command": [
+        "bash",
+        "scripts/run_memory_capped.sh",
+        "timeout",
+        "--signal=INT",
+        "--kill-after=30s",
+        "600",
+        "/usr/bin/g++",
+        "-std=c++20",
+        "-O3",
+        "-march=native",
+        "-fopenmp",
+        "-ffp-contract=off",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/src/qwen2_q1024_layer0_tail_backend.cpp",
+        "-o",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention/reference"
+      ],
+      "cwd": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha",
+      "start": 1788605410.5908468,
+      "status": "PASS_REFERENCE_ONLY",
+      "pid": 1950847,
+      "returncode": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "end": 1788605411.2827725
+    },
+    {
+      "label": "oproj",
+      "command": [
+        "bash",
+        "scripts/run_memory_capped.sh",
+        "timeout",
+        "--signal=INT",
+        "--kill-after=30s",
+        "600",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention/reference",
+        "oproj",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/qwen2_q1024_layer0_tail_inputs",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention"
+      ],
+      "cwd": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha",
+      "start": 1788605411.2830095,
+      "status": "PASS_REFERENCE_ONLY",
+      "pid": 1950855,
+      "returncode": 0,
+      "log_sha256": "c19d98f3c76f28356849d092b4490c6825b22572dfd868e9a737c90bc9de8ee6",
+      "end": 1788605411.6210458
+    },
+    {
+      "label": "gate",
+      "command": [
+        "bash",
+        "scripts/run_memory_capped.sh",
+        "timeout",
+        "--signal=INT",
+        "--kill-after=30s",
+        "600",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention/reference",
+        "gate",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/qwen2_q1024_layer0_tail_inputs",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention"
+      ],
+      "cwd": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha",
+      "start": 1788605411.6212971,
+      "status": "PASS_REFERENCE_ONLY",
+      "pid": 1950867,
+      "returncode": 0,
+      "log_sha256": "7e3f5d29dba81e8944b6256474a22e045a2b69a9d2c866be5237855d07995d6f",
+      "end": 1788605413.2787533
+    },
+    {
+      "label": "up",
+      "command": [
+        "bash",
+        "scripts/run_memory_capped.sh",
+        "timeout",
+        "--signal=INT",
+        "--kill-after=30s",
+        "600",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention/reference",
+        "up",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/qwen2_q1024_layer0_tail_inputs",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention"
+      ],
+      "cwd": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha",
+      "start": 1788605413.2790885,
+      "status": "PASS_REFERENCE_ONLY",
+      "pid": 1950880,
+      "returncode": 0,
+      "log_sha256": "9ee4b2be38f1ae0d71f0599bcc2ebd99e2f316822df64a58ce603ce0f4c20eb3",
+      "end": 1788605415.0142207
+    },
+    {
+      "label": "down",
+      "command": [
+        "bash",
+        "scripts/run_memory_capped.sh",
+        "timeout",
+        "--signal=INT",
+        "--kill-after=30s",
+        "600",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention/reference",
+        "down",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/qwen2_q1024_layer0_tail_inputs",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention",
+        "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/q1024_tail_from_captured_attention"
+      ],
+      "cwd": "/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha",
+      "start": 1788605415.0144758,
+      "status": "PASS_REFERENCE_ONLY",
+      "pid": 1950900,
+      "returncode": 0,
+      "log_sha256": "52ce0aaa02a59a903026f3edae434a6780b94a97eacd2fff1878f35f3a743347",
+      "end": 1788605416.6391
+    }
+  ],
+  "measured_rtl_cycles": null,
+  "full_model_tokens_per_second": null,
+  "nonclaims": [
+    "CPU golden only, not RTL execution or fallback in a hardware performance trace",
+    "OProj and MLP still need full RTL payload replay",
+    "No complete decoder/model PASS"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS_DESCRIPTOR_PRECISION_UNIT_ONLY",
+  "command": "taskset -c 8-23 bash scripts/run_projection_precision_decode_test.sh",
+  "cases": 16,
+  "legacy_mode": "Default rejects FP32 output until caller explicitly enables and connects dtype capability",
+  "enabled_mode": "BF16 A/B mandatory; C may BF16 code5 or FP32 code7; output format snapshot exported",
+  "checks": ["FP32 A/B rejected status4", "Unknown output dtype rejected", "Malformed reserved bits status2", "Fetch error status3", "Completion backpressure", "Legal next request after error"],
+  "legacy_log_sha256": "3545217e5ccdf70d8da8f4687f07bfe498772bc3cae4b3f1980e1e9f43fe1b97",
+  "enabled_log_sha256": "b2e9cf925dfbd9f0af6dec5d8fb99f6951c3b351ce7e338c20b6716610032697",
+  "pending": "Grouped controller capability/format wiring, DMA byte stride/count audit, real FP32 OProj replay",
+  "nonclaim": "Descriptor unit tests do not execute Matrix arithmetic or prove full model performance"
+}

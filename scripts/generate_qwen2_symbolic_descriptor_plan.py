@@ -12,7 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "work/upstream/llama_cpp/gguf-py"))
+sys.path.insert(0, str(ROOT / "src"))
 from gguf import GGUFReader
+from heteronpu.precision_policy import fp32_boundary_indices, node_dtype
 
 NULL_INDEX = 0xFFFFFF
 DDR_WEIGHT_BASE = 0x1_0000_0000
@@ -55,6 +57,7 @@ def main() -> None:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--encoding", type=Path)
+    parser.add_argument("--precision-policy", type=Path, help="Approved evidence-backed FP32 boundary policy; omit only to reproduce legacy BF16")
     args = parser.parse_args()
     args.out = args.out.resolve()
     args.report = args.report.resolve()
@@ -64,6 +67,15 @@ def main() -> None:
                              json.loads(args.encoding.read_text())["approval_status"] == "APPROVED")
 
     commands = [json.loads(line) for line in args.manifest.read_text().splitlines()]
+    fp32_indices = frozenset()
+    if args.precision_policy:
+        precision = json.loads(args.precision_policy.read_text())
+        assert precision['status'].startswith('APPROVED_')
+        assert precision['approved_policy']['matrix_operands_max'] == 'BF16'
+        assert precision['approved_policy']['matrix_accumulator'] == 'FP32'
+        assert precision['approved_policy']['absolute_error_threshold'] == 0.002
+        assert args.out != ROOT/'work/generated/qwen2_q1024_symbolic_descriptors', 'Preserve frozen legacy descriptor artifacts'
+        fp32_indices = fp32_boundary_indices(commands)
     reader = GGUFReader(args.gguf, "r")
     gguf = {tensor.name: tensor for tensor in reader.tensors}
 
@@ -95,8 +107,8 @@ def main() -> None:
                                   default=0)
             rank = max(2, highest_nonunit + 1)
             shape = list(reversed(ggml_shape[:rank]))
-            # llama.cpp's CPU graph is F32, but the frozen device tensor boundary is BF16.
-            dtype, byte_length, region = "BF16", product(shape) * 2, "DDR_WORKSPACE"
+            dtype = node_dtype(binding, fp32_indices)
+            byte_length, region = product(shape) * (4 if dtype == 'FP32' else 2), 'DDR_WORKSPACE'
         elif kind == "runtime_position":
             shape, dtype, byte_length, region = [1024], "INT32", 4096, "DDR_CONTROL"
         elif kind == "flash_intermediate":
@@ -291,8 +303,8 @@ def main() -> None:
         "matrix_gemm_shapes_consistent": matrix_shape_errors == 0,
         "device_row_major_shapes": first_embd["shape"] == [1024, 1536] and
                                    first_q_rope["shape"] == [1024, 12, 128],
-        "ggml_device_boundaries_bf16": all(entry["dtype_symbol"] == "BF16" for entry in
-                                            memory.values() if entry["kind"] == "ggml_node"),
+        ("ggml_device_precision_policy" if args.precision_policy else "ggml_device_boundaries_bf16"): all(entry['dtype_symbol'] == ('FP32' if int(entry['key'].split(':')[1]) in fp32_indices else 'BF16')
+                                            for entry in memory.values() if entry['kind'] == 'ggml_node'),
         "kv_record_sets_28": all(record_type_counts.get(name) == 28 for name in
                                   ("kv_context32", "kv_range32", "kv_table", "kv_epoch32")),
         "dtype_codes_unassigned": all(entry["dtype_code"] is None for entry in memory.values()),
@@ -321,6 +333,9 @@ def main() -> None:
         "status": "PASS_SYMBOLIC_DESCRIPTOR_TOPOLOGY",
         "evidence_class": "address_and_chain_complete_but_not_packed_or_executable",
         "public_encoding_approved": encoding_approved,
+        "precision_policy": "bf16_matrix_fp32_evidence_boundaries" if args.precision_policy else "legacy_all_bf16",
+        "precision_policy_sha256": sha(args.precision_policy) if args.precision_policy else None,
+        "fp32_boundary_node_count": len(fp32_indices),
         "commands": len(commands), "command_roots": len(command_roots),
         "descriptor_chains": len(chains), "descriptor_records": len(all_indices),
         "descriptor_storage_bytes": (max(all_indices) + 1) * 16,

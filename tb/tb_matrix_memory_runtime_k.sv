@@ -10,7 +10,7 @@ module tb_matrix_memory_runtime_k;
  logic[31:0]reads,writes,steps,lfsr;
  logic[511:0]mem[0:32767];logic pending;logic[511:0]pending_data;
  integer completions;longint unsigned cycles,begin_cycle;
- qwen2_shared_l2_matrix_tile16_payload payload(
+ qwen2_shared_l2_matrix_tile16_payload payload(.output_fp32_i(1'b0),
   .clk_i(clk),.rst_ni(rst),.start_i(start),.depth_i(depth),.weight_k_stride_i(weight_stride),
   .rows_i(rows),.columns_i(columns),.status_o(payload_status),
   .activation_local_i(ab),.weight_local_i(wb),.output_local_i(ob),

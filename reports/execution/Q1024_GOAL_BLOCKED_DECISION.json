@@ -1,5 +1,6 @@
 {
-  "status": "BLOCKED_DECISION",
+  "status": "SUPERSEDED_BY_USER_PRECISION_APPROVAL",
+  "resolution": "User approved BF16 Matrix operands, FP32 accumulation and evidence-backed FP32 boundaries; implementation tracked separately, not a completion claim",
   "objective_preserved": "Three-model q1024 full-request performance and numerical evidence; no scope reduction or completion claim",
   "reason": "Cannot safely implement OProj/Down/residual chain while frozen BF16 descriptor boundaries contradict existing FP32 reference and user has not approved precision policy change",
   "consecutive_goal_turns_confirmed_at_least": 3,

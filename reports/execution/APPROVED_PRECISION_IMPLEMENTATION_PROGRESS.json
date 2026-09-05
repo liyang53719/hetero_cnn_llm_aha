@@ -1,0 +1,15 @@
+{
+  "status": "POLICY_AND_WRITEBACK_UNIT_PASS_INTEGRATION_OPEN",
+  "policy_tests": {"command":"PYTHONPATH=src python3 -m pytest -q tests/test_precision_boundary_policy.py","passed":3,"real_manifest_fp32_producer_nodes":112,"matrix_inputs_remain_bf16":true,"alias_policy":"producer identity before allocation"},
+  "writeback_unit": {
+    "command":"taskset -c 8-23 bash scripts/run_matrix_writeback_precision_test.sh",
+    "cases":10,"checked_locations":15360,
+    "fp32_raw_bits":true,"bf16_rne":true,"tail_byte_enables":true,
+    "backpressure_stability":true,"accepted_parameter_snapshot":true,"fp32_capacity_rejection":true,
+    "payload_sha256":"1c8a7fda37a15018a545f4235c4ca3c188819cf066b473239d5c3a881c1cfcd7",
+    "log_sha256":"81684093d072b58a5b9dfe5dd1391ec1692f37c375e635f7f4c53b63dec7ce21",
+    "scope":"Injected accumulator words verify formatting/protocol only; no new FMA numerical gate claimed"
+  },
+  "pending":["Generate and audit new isolated descriptor allocation/image","Propagate destination dtype into grouped controller and DMA byte/stride counts","FP32 residual/SFU loader continuity","Actual OProj/Down payload and new PPA regression"],
+  "nonclaims":["Existing wrappers explicitly retain BF16 until dtype plumbing is verified","Current attention source manifest and input artifacts not modified or polled","No generated RTL manually edited","No full-model precision/performance PASS"]
+}

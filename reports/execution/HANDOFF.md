@@ -9,16 +9,16 @@
 - Qwen2 首层 K/V 投影：各1024行、262144个BF16输出逐位通过。
 - 各4272278周期；名义800MHz下5.340ms，MAC利用率18.41%。
 - 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
-- Q 段0–3已保存；最新5599993周期、1026048个完成的Matrix step。
-- 当前无运行任务；Q尚未通过最终数值检查。
-- Q receipt：work/results/q1024_continuous/p0/segment_003.json。
+- Q 段0–4已保存；最新7199993周期、1322496个完成的Matrix step。
+- Q自动连续执行器运行中（启动PID1861488）；勿重复启动，先核实PID。
+- Q receipts：work/results/q1024_continuous/p0/；后续段自动推进。
 - 单投影结果不等于完整decoder或模型prefill。
 
 ## 唯一下一动作
 
-taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 4
+等待现有连续执行器；核对receipt与进程，失败先诊断，不重启有效段。
 
-- 继续Q至PROJECTION_NUMERICAL_COMPLETE，再运行收集器 --projection 0。
+- 执行器自动完成Q及收集；整网缺口见THREE_MODEL_PREFILL_FAST_PATH_AUDIT.md。
 - 收集器：scripts/collect_q1024_projection_chain.py。
 
 ## 执行约束

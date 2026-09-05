@@ -32,6 +32,13 @@
 
 - `hetero_npu_integrated_v0.sv`仍实例化固定LATENCY的contract adapter，不可作为整网性能入口。
 - attention的真实QK/PV迭代原先在testbench task中；现已新增可综合风格的`attention_matrix_tile_sequencer.sv`，支持128/256 head维度及既定hi/lo概率路径。
-- 顺序/反压/尾部掩码/错误协议、真实Matrix7168项FP32数值、完整q128 attention1536行头/240tasks均通过；后者3317900周期、hash cc0eaf553c59b9f6。
+- 顺序/反压/尾部掩码/错误协议和真实Matrix7168项FP32逐位比较通过；q128 attention执行3317900周期，但浮点容差PASS因shortreal转换缺陷撤回，详见ATTENTION_SHORTREAL_AUDIT.json。
 - q128使用已有确定性算子向量，TB还提供tensor memory及SFU/merge服务；不是checkpoint整层或DDR整网性能。
 - 详见`reports/execution/ATTENTION_ENDPOINT_PROGRESS.json`。不得把这项控制器单测计为模型通过。
+
+## 真实tensor链与验收修正
+
+- 完整1024行Q/K/V bias及Q/K RoPE：3932160个BF16逐位通过，实际文件已接入attention。
+- 当前全query/head回放导出每个实际FP32结果；独立Python IEEE754校验后才组装OProj输入，禁止用golden替代。
+- 前128query/196608个FP32独立校验通过，max error0.000126541；全量尚在运行。
+- Qwen3.5固定62704185的公开metadata已锁定；14权重分片合计71903878016B，尚未下载权重，必须遵守30GiB分层/专家流式读取。

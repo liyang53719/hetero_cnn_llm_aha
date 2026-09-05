@@ -1,0 +1,32 @@
+{
+  "status": "PASS_AXI_ERROR_CAPTURE_RESPONSE_HOLD_AND_NUMERICAL_REPLAY",
+  "upstream_audit": {
+    "source": "work/upstream/idma/target/rtl/idma_backend_rw_axi.sv",
+    "commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+    "finding": "Default NO_ERROR_HANDLING drives rsp.error=0. Official ERROR_HANDLING has intermediate error and additional response semantics, so cannot be enabled transparently under flat one-request/one-response ABI.",
+    "upstream_modified": false
+  },
+  "canonical_wrapper_fix": {
+    "source": "rtl/integration/idma_backend_rw_axi_flat_wrap.sv",
+    "sha256": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+    "contract": "Single active flat request; capture AXI read/write error, drain current transfer normally, report failed response, reject subsequent requests until reset. Partially written destination is not rolled back.",
+    "response_buffer": "One fall-through response entry. Internal response readiness is decoupled from consumer backpressure; stalled result/error stable. No additional normal-path response cycle."
+  },
+  "error_test": {
+    "command": "taskset -c 8-23 bash scripts/run_idma_flat_error_vcs.sh",
+    "read_SLVERR": "PASS", "write_DECERR": "PASS",
+    "response_hold_cycles": 4, "reject_until_reset": "PASS",
+    "good_copies_including_recovery": 2, "bytes_checked": 192,
+    "log_sha256": "bf06f312a63597adacd655eb016860a954eccf6e3de8821a14f954f5f4fbba4d"
+  },
+  "normal_regressions": {
+    "pinned_idma_flat_requests": 2383,
+    "first9_numerical": "PASS",
+    "first9_wall_cycles_before": 1247233,
+    "registered_response_candidate_cycles": 1348674,
+    "final_fallthrough_response_cycles": 1247233,
+    "first9_bandwidth_throttle_cycles": 0
+  },
+  "nonclaims": ["No request pipelining enabled", "No full q1024/model performance closure", "Modified wrapper DC and aggregate PPA remain stale"],
+  "next": "Evaluate packed loading of existing eight-column-tile weight group to reduce tiny DMA transfers without changing the single-request error contract; continue generic tile payload integration"
+}

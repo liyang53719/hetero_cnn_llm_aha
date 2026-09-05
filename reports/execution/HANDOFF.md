@@ -47,14 +47,20 @@
   other311352 (includes SFU work). Q/K/V operation cycles total1089337.
 - Evidence Q1024_FIRST9_ATTRIBUTION_RESULT.json. Counts are priority occupancy
   buckets, not proof all waiting cycles can be eliminated.
+- iDMA audit found default rsp.error tied0. Wrapper now captures AXI SLVERR/
+  DECERR, drains current flat transfer, fails closed until reset. Error injection,
+  response hold4cycles and reset recovery192bytes PASS; upstream untouched.
+- Fall-through response buffer avoids consumer-ready deadlock without extra normal
+  cycles. First9 remains1247233cycles;2383-flat normal regression PASS.
+- Q1024_IDMA_ERROR_RESPONSE_RESULT.json; no multi-outstanding enabled; wrapper DC stale.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
-DDR ceiling and ROI attribution now verified. Inspect safe iDMA request pipelining
-with ordered response/error draining, and serial operand supply. Do not change FMA
-pipeline based on these results. Continue generic tile payload integration.
+DDR ceiling, ROI attribution and fail-closed iDMA errors now verified. Evaluate
+packed loading of existing8-tile weight group to reduce tiny transactions without
+changing single-request error contract. Continue generic tile payload integration.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

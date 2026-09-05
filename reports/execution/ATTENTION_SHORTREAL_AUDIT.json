@@ -7,6 +7,7 @@
   "unaffected": ["QKV projection BF16 bit equality", "bias/RoPE BF16 bit equality", "7168 directed real-Matrix FP32 bit equality", "Execution counters and output hashes"],
   "remediation": "Preserve running RTL and export actual outputs. Python struct.unpack('<f') independently checks every output, rejects nonfinite values, threshold0.002 unchanged, before OProj input publication",
   "current_independent_evidence": "reports/execution/Q1024_ATTENTION_INDEPENDENT_FP32_AUDIT.json",
-  "source_fix_pending": "After frozen all-row simulation ends, replace TB conversion with explicit IEEE754 decoder and add positive/negative sentinel tests; do not modify running source identity",
+  "replacement_helper_gate": "reports/execution/FP32_IEEE_REAL_HELPER_RESULT.json",
+  "source_fix_pending": "Standalone IEEE754 helper and positive/negative sentinel tests now PASS on Icarus/Verilator. After frozen all-row simulation ends, integrate helper into f32real; do not modify running source identity",
   "full_model_pass": false
 }

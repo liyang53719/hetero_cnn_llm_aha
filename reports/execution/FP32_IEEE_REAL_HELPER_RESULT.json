@@ -1,0 +1,10 @@
+{
+  "status": "PASS_STANDALONE_IEEE754_HELPER_NOT_YET_IN_FROZEN_ATTENTION_TB",
+  "command": "taskset -c 8-23 bash scripts/run_fp32_ieee_real_test.sh",
+  "helper_sha256": "10c62f933ecc53476f5291efca907317db41a2a323cb0fa1138859773d38f8d3",
+  "iverilog_log_sha256": "9649ad8dca150d05d3232c34d9d13255de17e623a7e6948b042a96be85f193fb",
+  "verilator_log_sha256": "d0a7e0c779d2986a6cbb9da9dfb14d43af7683844f8d86bb04fc90e5c45365fb",
+  "verification": "15 exact FP32-to-FP64 bit mappings including signed zero/subnormal/normal/extrema/Inf, NaN payload preservation, two nonzero-error rejection sentinels; same expected bits on Icarus and Verilator",
+  "pending": "Replace f32real body with helper only after frozen q1024 replay and source-identity verification finish, then rerun affected gates",
+  "nonclaims": ["Does not retroactively validate old shortreal tolerance PASS", "No running attention source or generated RTL changed", "Not full-model numerical or performance completion"]
+}

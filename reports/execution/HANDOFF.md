@@ -29,7 +29,7 @@
 - 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
 - CPU尾部参考已排队session36620，等组装器退出并核验门禁；不计RTL PASS。
 - 保留完整 .chk/.chk.FILES/.chk.ucli；快照不提交Git。
-- 检查首个失败，不放宽0.002；运行中禁止改attention源/夹具/二进制。
+- IEEE754替代helper两模拟器通过，待全量结束再接入；运行中不改冻结源/夹具。
 - 保护两个被排除的用户runtime脚本；检查点及时commit/push。
 
 ## 未完成

@@ -1,48 +1,40 @@
-# Current handoff: three-model q1024 performance recovery
+# 交接：三模型 q1024 性能闭环
 
-- Goal ACTIVE; plan reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md.
-- main only; full-model q1024 measured models still0/3.
-- No generated RTL hand edits. Preserve two excluded user runtime scripts.
-- CPU8-23, one heavy task, Verilator j4/DC8; MemoryHigh24G/Max30G,
-  MemAvailable>10GiB, disk>50GiB; commands<=600s, blocking waits.
+- 本文件硬限制：不超过40行；历史证据留在阶段报告。
+- Goal ACTIVE；main 分支；完整模型 q1024 性能仍为0/3。
+- 计划：reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md。
 
-## Current result
+## 当前状态
 
-- FULL q1024 layer0 K projection numerical PASS:262144 BF16 outputs exact,
-  4272278 ROI cycles,402653184 useful MACs,18.4078% utilization of512 MAC/cycle.
-- At nominal800MHz:5.3403475ms for this operator only. No full-model token/s claim.
-- Report Q1024_CONTINUOUS_K_RESULT.json validates six sequential receipts,
-  immutable binary/data, checkpoint hashes and restored-cycle continuity.
-- Final receipt work/results/q1024_continuous/p1/segment_005.json.
-- FULL q1024 layer0 V also PASS:262144 BF16 outputs,4272278cycles,
-  402653184 usefulMACs,18.4078% utilization. Q1024_CONTINUOUS_V_RESULT.json.
-- Q segments0/1 checkpointed at2399993cycles/439296 completed Matrix steps;
-  not numerically complete. No simulation running at handoff.
-- Q resume recipe runs2ms per segment (observed284.41 host CPU seconds), with
-  unchanged600s timeout; K/V scripts remain unchanged. Freeze the new Q recipe too.
-- Only layer0 norm inputs/weights preloaded; no L2/output injection.
-- Fixtures reproduce true1024-token ordering via exact token-ID golden reuse for
-  position-independent layer0 norm/raw projections. Never use for RoPE/attention/later layers.
+- Qwen2 首层 K/V 投影：各1024行、262144个BF16输出逐位通过。
+- 各4272278周期；名义800MHz下5.340ms，MAC利用率18.41%。
+- 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
+- Q 段0–2已保存；最新3999993周期、734208个完成的Matrix step。
+- 当前无运行任务；Q尚未通过最终数值检查。
+- Q receipt：work/results/q1024_continuous/p0/segment_002.json。
+- 单投影结果不等于完整decoder或模型prefill。
 
-## Recovery contract
+## 唯一下一动作
 
-- VCS debug_access+r; preserve simv_group8_checkpoint and its libraries.
-- Preserve .chk + .chk.FILES + .chk.ucli. Never push snapshots (process data).
-- VCS clears ucliCore::_vars_list on restore. Refresh UI baseline before save;
-  control is reloaded from locked external file, not restored environment.
-- Small chained235-state test and actual K checkpoints validated this workaround.
-- Original segment1 failure retained; successful retry is segment_001_attempt1.chk.
-- Do not edit saved Tcl recipes; original initial recipe hash24ea0b46 is retained.
-- Runner --retry-failed is explicit, rejects live PIDs, keeps failed files.
+taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 3
 
-## Next action
+- 继续Q至PROJECTION_NUMERICAL_COMPLETE，再运行收集器 --projection 0。
+- 收集器：scripts/collect_q1024_projection_chain.py。
 
-taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 2
+## 执行约束
 
-Continue Q until actual PROJECTION_NUMERICAL_COMPLETE, then run
-scripts/collect_q1024_projection_chain.py --projection 0 under CPU8-23.
-Do not regenerate fixtures or rebuild simulator.
-After projections: remaining decoder/28layers, Qwen3.5/3.8 and current DC/PPA
-are still open. 100/40GBps model is a bandwidth ceiling, not DRAM latency calibration.
-- Project work/models currently contains Qwen2 weights only. User was asked
-  asynchronously for a Qwen3.8 checkpoint/reference location; no answer yet.
+- CPU8-23；一次一个重任务；Verilator j4/DC8。
+- MemoryHigh24G/Max30G；可用内存>10GiB、磁盘>50GiB。
+- 每条重命令≤600秒，阻塞等待；Q恢复段为2ms模拟时间。
+- 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
+- 中断后先查receipt/PID；仅显式 --retry-failed 可重试失败段。
+- 保留完整 .chk/.chk.FILES/.chk.ucli；快照不提交Git。
+- 恢复控制使用已验证的UI变量基线修复；不手改快照数据。
+- 保护两个被排除的用户runtime脚本；检查点及时commit/push。
+
+## 未完成
+
+- Q及decoder其余部分、28层链、Qwen3.5/3.8、当前DC/PPA。
+- golden按token复用仅适用于首层norm/raw QKV，禁用于RoPE/attention/后续层。
+- DDR100/40GBps仅带宽上限模型；尚缺完整模型性能证据。
+- 已向用户询问Qwen3.8权重/参考路径，尚无答复。

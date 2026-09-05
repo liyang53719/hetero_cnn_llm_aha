@@ -5,10 +5,11 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_FIRST9_PINNED_IDMA_NUMERIC_ROI_PASS_GENERIC_CONNECTION_OPEN",
+    "stage": "P2_FIRST9_BANDWIDTH_ENVELOPE_PASS_GENERIC_CONNECTION_OPEN",
     "first9_fragment_measured_wall_cycles": 1247233,
     "first9_fragment_useful_matrix_macs": 50331648,
-    "first9_fragment_memory_model": "ideal_axi_sim_mem_not_calibrated_LPDDR",
+    "first9_fragment_memory_model": "axi_sim_mem_100_40GBps_envelope_no_DRAM_latency_model",
+    "first9_fragment_ddr_throttle_cycles": 0,
     "runtime_transpose_checked_locations": 338528,
     "revalidated_group8_matrix_values": 49152,
     "idma_strided_chunk_backend_test": "PASS_2383_FLAT_3373_READ_WRITE_BEATS",

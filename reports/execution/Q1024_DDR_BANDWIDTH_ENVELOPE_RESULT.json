@@ -1,0 +1,34 @@
+{
+  "status": "PASS_BANDWIDTH_ENVELOPE_AND_FIRST9_NUMERICAL_REPLAY",
+  "implementation_scope": "testbench models only; no accelerator datapath or generated RTL changed",
+  "clock_hz": 800000000,
+  "read_budget_bytes_per_cycle": 125,
+  "write_budget_bytes_per_cycle": 50,
+  "credit_cap_bytes": 128,
+  "charge": "64 physical bytes per AXI512 data beat, including partially strobed writes",
+  "unit": {
+    "command": "taskset -c 8-23 bash scripts/run_ddr_beat_credit_test.sh",
+    "saturated_cycles": 10000, "random_backpressure_cycles": 10000,
+    "prefix_bandwidth_bound_checked": true, "reset_checked": true
+  },
+  "first9_fragment": {
+    "command": "MIN_AVAILABLE_KIB=10485760 bash scripts/run_memory_capped.sh timeout 600 bash scripts/run_qwen2_first9_tile16_pinned_idma_vcs.sh",
+    "rows": 16, "operators": 9, "wall_cycles": 1247233,
+    "useful_matrix_macs": 50331648,
+    "ddr_read_bytes": 6477952, "ddr_write_bytes": 188416,
+    "ddr_read_throttle_cycles": 0, "ddr_write_throttle_cycles": 0,
+    "numerical_gate": "PASS unchanged DDR golden checks",
+    "interpretation": "The bandwidth ceiling adds no delay for this fragment. Low useful MAC utilization is not caused by hitting this bandwidth limit. Further stall attribution is required."
+  },
+  "sha256": {
+    "axi_wrapper": "12283d2a51e4c5a20161c029ce4e6c4c3db5b75f464b9b0c14a3968ba5acb993",
+    "beat_credit": "6646e4041925b39b13807c66ef521818c5ded19c15edd207f338da307c962d83",
+    "vcs_log": "76c6d98390db885db2f3af4047f3abbb36cffe50fcd8925d80f4194d78287d5b"
+  },
+  "nonclaims": [
+    "Bandwidth envelope only, not DDR bank/refresh/fixed-latency calibration",
+    "AXI512 at800MHz itself limits this port to51.2GB/s; 100GB/s is an upper bound, not achieved throughput",
+    "Not full layer, full q1024 or three-model performance closure",
+    "Does not establish current post-synthesis timing or area"
+  ]
+}

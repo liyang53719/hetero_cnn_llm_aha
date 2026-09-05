@@ -36,15 +36,19 @@
 - Recovered existing first9 same-run pinned-iDMA/AXI/L2/Matrix/SFU chain; current
   source revalidated, DDR intermediate outputs checked without injection.
 - Exact first9 rows16 ROI: 1247233cycles, 50331648 usefulMACs, ~7.88% wall
-  Matrix utilization; 6477952/188416 DDR read/write bytes. This is a fragment
-  on ideal axi_sim_mem, NOT calibrated LPDDR or complete-layer/model performance.
+  Matrix utilization; 6477952/188416 DDR read/write bytes.
+- Replayed at1.25ns with100/40GBps bandwidth envelope: numerical PASS, same
+  cycles, zero DDR throttle cycles. This is not a DRAM bank/refresh/latency model.
+- Bandwidth model unit:10k saturated+10k random cycles PASS; 128B credit cap.
+  AXI512 port max51.2GB/s at800MHz. Report Q1024_DDR_BANDWIDTH_ENVELOPE_RESULT.json.
 - Report qwen2_first9_tile16_pinned_idma_result.json now includes fragment metrics.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
-Add calibrated DDR bandwidth and attribution counters before full-request claims.
+DDR bandwidth ceiling now modeled; add per-engine/per-operation stall attribution
+and generic tile payload integration before full-request claims.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

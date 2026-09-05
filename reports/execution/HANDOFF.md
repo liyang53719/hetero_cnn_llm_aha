@@ -25,11 +25,19 @@
 - Report: Q1024_IDMA_STRIDED_CHUNK_RESULT.json. Backend test checks requests/beats;
   it does not establish destination byte equality.
 - Modified endpoint/payload/DMA and combined DC remain stale until rerun.
+- Runtime transpose: fixed1KiB buffer, K1/17/32/33/1536/8960 PASS, 338528
+  checked16-bit locations; bounds/overlap/read errors checked.
+- Replaced existing norm loader transpose: 24576 BF16 values exact.
+- Existing group8 batch2 Matrix chain revalidated: 147456steps, 75497472MACs,
+  49152 BF16 outputs exact; 48 weight tiles loaded once. DMA remains behavioral
+  in that harness, rows are repeated canonical16; not q1024 numerical closure.
+- K1536 transpose source reads reduced24576->768 with unchanged output layout.
+- Evidence Q1024_RUNTIME_TRANSPOSE_RESULT.json; latest readiness hashes updated.
 
 ## Unique next action
 
-Connect descriptor tile iterator to repaired strided DMA, generalize existing
-row-major-to-K-major staging, then real Matrix payload and output DMA.
+Connect descriptor tile iterator to repaired strided DMA, verified runtime
+row-major-to-K-major stager, then real Matrix payload and output DMA.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

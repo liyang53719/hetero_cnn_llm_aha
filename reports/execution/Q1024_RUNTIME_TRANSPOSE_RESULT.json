@@ -1,0 +1,37 @@
+{
+  "status": "PASS_RUNTIME_TRANSPOSE_AND_EXISTING_GROUP8_MATRIX_CHAIN",
+  "new_source": "rtl/integration/bf16_tile_transpose_stager.sv",
+  "source_sha256": "6d36a6f6fe2535161a600533676a2affa43b942f4eccbe68cb6e1decf5fb1c16",
+  "buffer_bytes": 1024,
+  "buffer_kind": "fixed 16x512-bit register buffer; count in SRAM/register resource audit, not a context-dependent allocation",
+  "unit_command": "taskset -c 8-23 bash scripts/run_bf16_tile_transpose_test.sh",
+  "unit_log_sha256": "6d724a86da89b357d1dbf63298ee48cf10f71c6569e48a1a93edf58e116752c8",
+  "unit": {
+    "cases": 6, "depths": [1, 17, 32, 33, 1536, 8960],
+    "checked_16bit_locations": 338528, "invalid_requests": 5,
+    "read_error_status": 3, "bounds_and_overlap_status": 5,
+    "random_memory_backpressure": true,
+    "k1536_rows16": {"cycles": 3895, "read_beats": 768, "write_beats": 1536},
+    "k8960_rows16": {"cycles": 22854, "read_beats": 4480, "write_beats": 8960}
+  },
+  "production_connection": "qwen2_norm_tile16_loader now uses the fixed-buffer runtime-K transpose instead of the RMS stager's per-element transpose branch",
+  "canonical_loader": {
+    "command": "taskset -c 8-23 bash scripts/run_qwen2_norm_tile16_loader_vcs.sh",
+    "bf16_bit_exact": 24576,
+    "log_sha256": "42aae66e3242d4cc430ac74fdada02406f5de20d1ba260adc405fa626ac96f76"
+  },
+  "group8_matrix_chain": {
+    "command": "taskset -c 8-23 bash scripts/run_qwen2_projection_group8_batch2_vcs.sh",
+    "matrix_steps": 147456, "effective_macs": 75497472,
+    "bf16_bit_exact": 49152, "weight_tile_loads": 48,
+    "norm_batch_loads": 12, "weight_refetch": 0,
+    "evidence": "reports/execution/qwen2_q1024_group8_readiness_result.json"
+  },
+  "nonclaims": [
+    "Group8 batch2 repeats canonical rows0_15; not true model rows16_31",
+    "Loader/group8 test DMA uses behavioral copying; pinned iDMA not in the same run",
+    "Generic descriptor iterator is not yet connected to this complete payload chain",
+    "No full q1024 model cycles, utilization or throughput",
+    "New register storage and changed datapaths need resource/DC rerun"
+  ]
+}

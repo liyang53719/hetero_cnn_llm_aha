@@ -1,0 +1,28 @@
+{
+  "status": "PASS_DESCRIPTOR_TILE_ENUMERATION_ONLY",
+  "command": "taskset -c 8-23 bash scripts/run_projection_tile_plan_tests.sh",
+  "source": "Existing qwen2_projection_descriptor_context -> new qwen2_descriptor_projection_tile_plan -> reusable bf16_projection_tile_iterator",
+  "public_descriptor_changed": false,
+  "qwen2_projection": {
+    "m": 1024, "n": 1536, "k": 1536,
+    "checked_tiles": 3072,
+    "planned_useful_macs": 2415919104,
+    "a_b_c_addresses_checked_per_tile": true,
+    "issue_and_completion_backpressure": true,
+    "advance_requires_tile_completion": true,
+    "tile_error_propagation": 7,
+    "malformed_command_status": 2
+  },
+  "generic_iterator": {
+    "shape": [17, 33, 4], "tail_tiles": 4, "planned_useful_macs": 2244,
+    "addresses_above_4g": true, "snapshot_inputs": true,
+    "invalid_cases": 5, "invalid_status": 5
+  },
+  "nonclaims": [
+    "Tile completion is supplied by the testbench, not actual payload in these tests",
+    "This does not establish numerical Matrix, DDR, full-model cycles or utilization",
+    "The preserved Qwen2 parser does not claim general Qwen3.5/Qwen3.8 descriptor coverage",
+    "No current RTL timing/area claim until DC rerun"
+  ],
+  "next": "Connect descriptor tile plans to actual strided DDR/L2 DMA staging, the runtime-K tail-aware payload, and output writeback; no early successful tile acknowledgement"
+}

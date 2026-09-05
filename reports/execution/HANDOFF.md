@@ -25,6 +25,12 @@
 - 65-bit range checks precede SRAM address narrowing; rows/columns are snapshotted.
 - Counter labels now distinguish executed/padded MACs from useful rows*cols*K;
   final log-label replay PASS. Next is descriptor-driven multi-tile adapter.
+- Descriptor tile plan PASS: existing Qwen2 parser -> generic iterator, 3072
+  addresses/tiles checked; generic 17x33 tails and >4GiB addresses PASS.
+- Important: tile acknowledgements in iterator tests are synthetic; payload=0.
+  No full-request measured-cycle or MAC-utilization claim follows from this.
+- Next: real DMA staging + runtime-K payload + output DMA before tile ack.
+  Report Q1024_DESCRIPTOR_TILE_PLAN_RESULT.json; tests run_projection_tile_plan_tests.sh.
 
 - Branch: `main`; baseline: `b55ddcb`.
 - Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.

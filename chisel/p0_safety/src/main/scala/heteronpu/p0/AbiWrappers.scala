@@ -43,6 +43,7 @@ class MatrixTilePayloadTop(val cfg: LocalSramConfig = LocalSramConfig()) extends
   val done_o = IO(Output(Bool()))
   val read_beats_o = IO(Output(UInt(32.W)))
   val write_beats_o = IO(Output(UInt(32.W)))
+  val matrix_steps_o = IO(Output(UInt(32.W)))
   val core = withClockAndReset(clk_i,(!rst_ni).asAsyncReset) { Module(new MatrixTilePayload(cfg)) }
   core.io.start_i := start_i
   core.io.activation_local_i := activation_local_i
@@ -79,6 +80,7 @@ class MatrixTilePayloadTop(val cfg: LocalSramConfig = LocalSramConfig()) extends
   done_o := core.io.done_o
   read_beats_o := core.io.read_beats_o
   write_beats_o := core.io.write_beats_o
+  matrix_steps_o := core.io.matrix_steps_o
 }
 
 class TileTransposeTop(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule {
@@ -108,6 +110,7 @@ class TileTransposeTop(val cfg: LocalSramConfig = LocalSramConfig()) extends Raw
   val completion_ready_i = IO(Input(Bool()))
   val status_o = IO(Output(UInt(8.W)))
   val read_beats_o = IO(Output(UInt(64.W)))
+  val write_beats_o = IO(Output(UInt(64.W)))
   val core = withClockAndReset(clk_i,(!rst_ni).asAsyncReset) { Module(new TileTranspose(cfg)) }
   core.io.request_valid_i := request_valid_i
   request_ready_o := core.io.request_ready_o
@@ -132,6 +135,7 @@ class TileTransposeTop(val cfg: LocalSramConfig = LocalSramConfig()) extends Raw
   core.io.completion_ready_i := completion_ready_i
   status_o := core.io.status_o
   read_beats_o := core.io.read_beats_o
+  write_beats_o := core.io.write_beats_o
 }
 
 class SharedL2FabricTop(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule {
@@ -155,6 +159,7 @@ class SharedL2FabricTop(val cfg: LocalSramConfig = LocalSramConfig()) extends Ra
   val bank_conflict_count_o = IO(Output(UInt(64.W)))
   val read_stall_count_o = IO(Output(UInt(64.W)))
   val write_stall_count_o = IO(Output(UInt(64.W)))
+  val address_error_o = IO(Output(UInt(3.W)))
   val core = withClockAndReset(clk_i,(!rst_ni).asAsyncReset) { Module(new SharedL2Fabric(cfg)) }
   core.io.rd_valid_i := rd_valid_i
   rd_ready_o := core.io.rd_ready_o
@@ -173,6 +178,7 @@ class SharedL2FabricTop(val cfg: LocalSramConfig = LocalSramConfig()) extends Ra
   bank_conflict_count_o := core.io.bank_conflict_count_o
   read_stall_count_o := core.io.read_stall_count_o
   write_stall_count_o := core.io.write_stall_count_o
+  address_error_o := core.io.address_error_o
 }
 
 class Group8IntegrationTop(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule {
@@ -221,6 +227,7 @@ class Group8IntegrationTop(val cfg: LocalSramConfig = LocalSramConfig()) extends
   val norm_batch_loads_o = IO(Output(UInt(32.W)))
   val ddr_read_bytes_o = IO(Output(UInt(64.W)))
   val ddr_write_bytes_o = IO(Output(UInt(64.W)))
+  val reset_required_o = IO(Output(Bool()))
   val core = withClockAndReset(clk_i,(!rst_ni).asAsyncReset) { Module(new Group8Integration(cfg)) }
   core.io.start_i := start_i
   core.io.command_i := command_i
@@ -264,6 +271,7 @@ class Group8IntegrationTop(val cfg: LocalSramConfig = LocalSramConfig()) extends
   norm_batch_loads_o := core.io.norm_batch_loads_o
   ddr_read_bytes_o := core.io.ddr_read_bytes_o
   ddr_write_bytes_o := core.io.ddr_write_bytes_o
+  reset_required_o := core.io.reset_required_o
 }
 
 class P0AllRoots(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule {
@@ -308,6 +316,7 @@ class P0AllRoots(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule
   port0.done_o := root0.done_o
   port0.read_beats_o := root0.read_beats_o
   port0.write_beats_o := root0.write_beats_o
+  port0.matrix_steps_o := root0.matrix_steps_o
   val port1 = IO(new TileTransposeIO(cfg.addressBits))
   val root1 = Module(new TileTransposeTop(cfg))
   root1.clk_i := clk_i
@@ -335,6 +344,7 @@ class P0AllRoots(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule
   root1.completion_ready_i := port1.completion_ready_i
   port1.status_o := root1.status_o
   port1.read_beats_o := root1.read_beats_o
+  port1.write_beats_o := root1.write_beats_o
   val port2 = IO(new SharedL2FabricIO(cfg.addressBits))
   val root2 = Module(new SharedL2FabricTop(cfg))
   root2.clk_i := clk_i
@@ -356,6 +366,7 @@ class P0AllRoots(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule
   port2.bank_conflict_count_o := root2.bank_conflict_count_o
   port2.read_stall_count_o := root2.read_stall_count_o
   port2.write_stall_count_o := root2.write_stall_count_o
+  port2.address_error_o := root2.address_error_o
   val port3 = IO(new Group8TopIO(cfg.addressBits))
   val root3 = Module(new Group8IntegrationTop(cfg))
   root3.clk_i := clk_i
@@ -402,4 +413,5 @@ class P0AllRoots(val cfg: LocalSramConfig = LocalSramConfig()) extends RawModule
   port3.norm_batch_loads_o := root3.norm_batch_loads_o
   port3.ddr_read_bytes_o := root3.ddr_read_bytes_o
   port3.ddr_write_bytes_o := root3.ddr_write_bytes_o
+  port3.reset_required_o := root3.reset_required_o
 }

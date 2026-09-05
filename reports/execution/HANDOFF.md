@@ -34,7 +34,7 @@
 
 ## 未完成
 
-- decoder其余部分、28层链、Qwen3.5/3.8、当前DC/PPA。
+- OProj/Down/residual的BF16-vs-FP32合同待用户选择；28层链、Qwen3.5/3.8及PPA未闭环。
 - golden按token复用仅适用于首层norm/raw QKV，禁用于RoPE/attention/后续层。
 - DDR100/40GBps仅带宽上限模型；尚缺完整模型性能证据。
 - 已向用户询问Qwen3.8权重/参考路径，尚无答复。

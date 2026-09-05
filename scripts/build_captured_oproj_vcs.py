@@ -20,6 +20,9 @@ def main():
     recipe,sources=source_list()
     if a.enumerate_only:
         print(json.dumps(dict(status='SOURCE_ENUMERATION_ONLY_NOT_BUILD_PASS',sources=len(sources),recipe_sha256=sha(recipe))));return
+    decision=ROOT/'reports/execution/Q1024_RESIDUAL_PRECISION_DECISION.json'
+    policy=json.loads(decision.read_text())
+    assert policy['status']=='APPROVED_IMPLEMENTATION_AND_REFERENCE_ALIGNED', 'Resolve OProj/residual BF16-vs-FP32 contract before build'
     fixture=ROOT/'work/results/q1024_captured_oproj'
     manifest=json.loads((fixture/'manifest.json').read_text())
     assert manifest['operation']=='l0.oproj' and manifest['dimensions']==[1024,1536,1536]

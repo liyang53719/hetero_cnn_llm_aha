@@ -1,0 +1,16 @@
+{
+  "status": "PENDING_USER_DECISION",
+  "scope": "OProj/Down outputs and residual tensor boundaries, not currently running attention",
+  "conflict": {
+    "descriptor_generator": "scripts/generate_qwen2_symbolic_descriptor_plan.py explicitly freezes all ggml_node allocations as BF16 and2 bytes/element",
+    "matrix_writeback": "qwen2_shared_l2_matrix_tile16_payload.sv rounds FP32 accumulation to BF16 before L2/DDR writeback",
+    "reference": "qwen2_q1024_layer0_tail_backend.cpp directly adds unrounded FP32 OProj/Down to residual and uses FP32 residual1 downstream",
+    "root_evidence": {"oproj_dst":4136,"attn_residual_dst":4139,"down_dst":4154,"final_residual_dst":4157},
+    "dtype_evidence": "All four descriptor roots currently BF16; graph binding dtype F32 does not override this frozen device conversion"
+  },
+  "recommended": "Approve FP32 OProj/Down/residual boundaries to preserve current reference; Matrix operands remain BF16; update typed descriptors, alias-consistent DDR sizes/addresses and writeback/load support; keep0.002",
+  "alternative": "Keep frozen BF16 device boundaries and explicitly re-audit/re-freeze CPU golden at matching rounding points; do not merely quantize expected projection output and claim downstream residual equivalence",
+  "execution_policy": "Do not release OProj integrated-chain build until user decision and matching implementation/reference update. Attention service continues unchanged",
+  "goal_blocked": false,
+  "request_sent": "Asynchronous precision decision question; no approval received at creation"
+}

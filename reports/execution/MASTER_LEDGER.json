@@ -11,6 +11,7 @@
     "q1024_captured_attention_coordinator_pid": null,
     "persistent_service": "q1024-captured-closure-20260905.service",
     "wait_policy": "systemd --wait and child wait only; no periodic state/log polling",
+    "oproj_residual_precision_decision": "PENDING_USER_DECISION; see Q1024_RESIDUAL_PRECISION_DECISION.json; current attention unchanged",
     "q1024_attention_payload_directory": "work/results/q1024_captured_attention_payload",
     "q1024_attention_output_policy": "Capture actual FP32 per QT, verify output FNV and file SHA; assemble token-major BF16_RNE for OProj after all64 pass",
     "captured_attention_tail_reference": "Persistent service sequential phase after complete independent FP32 assembly; prior agent-bound wait processes disappeared; not RTL PASS",

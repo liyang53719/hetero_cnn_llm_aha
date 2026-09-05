@@ -1,5 +1,6 @@
 {
-  "status": "IMPLEMENTED_FIXTURE_AND_CAPTURE_ENTRY_VALIDATION_PENDING",
+  "status": "ENTRY_IMPLEMENTED_PRECISION_CONTRACT_DECISION_PENDING",
+  "precision_blocker": "reports/execution/Q1024_RESIDUAL_PRECISION_DECISION.json; BF16 projection equality does not prove FP32 residual reference continuity",
   "testbench": "tb/tb_qwen2_group8_pinned_idma.sv",
   "fixture_script": "scripts/prepare_captured_oproj_fixtures.py",
   "build_script": "scripts/build_captured_oproj_vcs.py",

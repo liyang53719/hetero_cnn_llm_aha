@@ -1,0 +1,99 @@
+{
+  "forbidden_reuse": [
+    "RoPE",
+    "attention",
+    "later-layer hidden states"
+  ],
+  "golden_method": "exact token-ID memoization of position-independent layer0 norm and raw projections",
+  "output": {
+    "k": {
+      "beats": 8192,
+      "columns": 256,
+      "path": "work/results/qwen2_q1024_projection_fixtures/k_token_major.memh",
+      "rows": 1024,
+      "sha256": "3dd98d0b2bec00c80802542a4a77eec85232ce0707743cc65b25c7ffbcc2a4cb"
+    },
+    "norm": {
+      "beats": 49152,
+      "columns": 1536,
+      "path": "work/results/qwen2_q1024_projection_fixtures/norm_token_major.memh",
+      "rows": 1024,
+      "sha256": "0da148214694269a8541f342d99ec85350e06d09b2e165883ccd95a0faf134b9"
+    },
+    "q": {
+      "beats": 49152,
+      "columns": 1536,
+      "path": "work/results/qwen2_q1024_projection_fixtures/q_token_major.memh",
+      "rows": 1024,
+      "sha256": "e9c6de16bf36425a41c4868a826cdfe23483ee65b412a5b5654ecc52cbf688aa"
+    },
+    "v": {
+      "beats": 8192,
+      "columns": 256,
+      "path": "work/results/qwen2_q1024_projection_fixtures/v_token_major.memh",
+      "rows": 1024,
+      "sha256": "5e08ed05d1996514b97e008ec6e2e54898c378b83ea63b546ea73350cb284e1c"
+    }
+  },
+  "reference_token_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "repeated_row_consistency_checks": 76,
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "rows": 1024,
+  "rtl_q1024_numerical_pass": false,
+  "source_sha256": {
+    "work/results/qwen2_canonical_q_tile16_all/k_expected_token_major.memh": "672d780a74fff29181e51d0d9868d094359cd972b6ca299cc531b9a481d99d2e",
+    "work/results/qwen2_canonical_q_tile16_all/k_weight_ddr_beats.memh": "bf64f555645480f0cbcf2183c27fce72f00afbf1fe91fc5c67a9ed85daec6170",
+    "work/results/qwen2_canonical_q_tile16_all/q_expected_token_major.memh": "3e2ccc4174ecdb75b69a2d6d08fa89ead25489ae94b4b3e4ad0aac012d4bde9a",
+    "work/results/qwen2_canonical_q_tile16_all/q_weight_ddr_beats.memh": "03bb8bfb7ceff45105160fb54b171a879caaefa5f697125a7a4c98cf96a56076",
+    "work/results/qwen2_canonical_q_tile16_all/result.json": "4fc61d2107c9aec51e7e3b52235879895d473fe58c641a805fc368ee7231f4ef",
+    "work/results/qwen2_canonical_q_tile16_all/v_expected_token_major.memh": "d91b1e238075a0519995376999e2ca9f66f9f1eb063fbd540993c4dfc7209e6d",
+    "work/results/qwen2_canonical_q_tile16_all/v_weight_ddr_beats.memh": "be919aac26c6ea18ffc715525e04c919361696b7d78c52f866b1fa4fa8ceed03",
+    "work/results/qwen2_canonical_tile16_vectors/norm_token_major.memh": "1fe7121e6f79aaf68163c2b5ffd3b5527c363d78112dab82daa0616be44b1884",
+    "work/results/qwen2_canonical_tile16_vectors/result.json": "2298b98ff51831a7a879d4c8c15a4e04c0e55679529220d25a523aca4036bfcc",
+    "work/results/qwen2_true_rows16_31/norm_token_major.memh": "09a350b52fa43a3a072c560f9eae6bbdc734dc07297eae152ff68f7e8290e47a",
+    "work/results/qwen2_true_rows16_31/result.json": "9ca7e59f6a96ee65144d809a99cdc19e46bbe571db6e425f426aa0bcc2d8dc37",
+    "work/results/qwen2_true_rows16_31_projection/k_expected_token_major.memh": "bc606dee65da17a802e3aa3b990ed3891445f0d421aa3a37949bc20de652ea03",
+    "work/results/qwen2_true_rows16_31_projection/k_weight_ddr_beats.memh": "bf64f555645480f0cbcf2183c27fce72f00afbf1fe91fc5c67a9ed85daec6170",
+    "work/results/qwen2_true_rows16_31_projection/q_expected_token_major.memh": "2b9fa200df37e94d128508946462a0b72796914abd16f36babdb8433115abe08",
+    "work/results/qwen2_true_rows16_31_projection/q_weight_ddr_beats.memh": "03bb8bfb7ceff45105160fb54b171a879caaefa5f697125a7a4c98cf96a56076",
+    "work/results/qwen2_true_rows16_31_projection/result.json": "88dfd9b51dc02a41a72d8d17393eeaeec7af6a21618e800bd596decea183e985",
+    "work/results/qwen2_true_rows16_31_projection/v_expected_token_major.memh": "20b54c384e4178bfe5aecccd9d5f7cf7611d198351fdd388ef53c6174047354d",
+    "work/results/qwen2_true_rows16_31_projection/v_weight_ddr_beats.memh": "be919aac26c6ea18ffc715525e04c919361696b7d78c52f866b1fa4fa8ceed03"
+  },
+  "status": "PASS_Q1024_LAYER0_PROJECTION_FIXTURES_ONLY",
+  "tokens_sha256": "e4151c23e259dda17d515c73f653031e8a2af9e7784dba297b454fe7cb4ba628",
+  "unique_tokens": 13
+}

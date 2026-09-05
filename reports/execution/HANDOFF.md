@@ -86,9 +86,21 @@
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
 DDR ceiling, ROI attribution, fail-closed iDMA errors and packed group layout verified.
-Generate genuine q1024 projection fixtures in bounded token-range jobs; generalize
-fixture arrays beyond32, then replay one continuous RTL state via checkpoints with
-each command <=600s. Real DMA and partial-Matrix restore are now proven.
+q1024 fixtures COMPLETE: original1024 tokens have13 distinct IDs, all covered by
+verified layer0 norm/raw QKV rows. Exact token-keyed golden reuse only; forbidden
+for RoPE/attention/later layers. Full-fixture first32 K numerical PASS.
+
+Continuous K segment0 VALID atcycle799993/144384 Matrix steps. Do not rebuild
+simv_group8_checkpoint or regenerate fixture identity during this chain.
+Segment1 reached1599993 but is FAILED: nested Tcl restore corrupts UCLI variable
+restoration (readonly synopsys_root); do not resume from segment1.
+Original snapshots retained, not edited. Canonical initial Tcl restored to its
+saved hash24ea0b46. New resume script uses top-level restore and external locked
+next-path control. This fix still needs chained validation and explicit retry.
+
+Next: add failed-attempt retry preserving receipt/log/snapshot, test top-level
+restore/save chaining, then retry segment1 from valid segment0. Report
+Q1024_CONTINUOUS_REPLAY_PROGRESS.json. No full q1024 numerical PASS yet.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

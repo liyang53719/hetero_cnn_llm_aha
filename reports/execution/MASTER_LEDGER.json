@@ -5,10 +5,10 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_Q1024_FIXTURES_PASS_K_SEGMENT0_VALID_SEGMENT1_UI_FAILED",
+    "stage": "P2_Q1024_K_SEGMENT2_VALID_SEGMENT3_RUNNING",
     "q1024_projection_fixture_rows": 1024,
-    "q1024_K_valid_checkpoint_cycle": 799993,
-    "q1024_K_next_segment": 1,
+    "q1024_K_valid_checkpoint_cycle": 2399993,
+    "q1024_K_next_segment": 3,
     "real_checkpoint_cycles_verified": [15993, 47993],
     "checkpoint_small_exact_state_records": 235,
     "true_rows0_31_QKV_checked_values": 65536,

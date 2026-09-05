@@ -22,7 +22,7 @@ def sha(path):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--projection',type=int,choices=(0,1,2),required=True);parser.add_argument('--segment',type=int,required=True);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--projection',type=int,choices=(0,1,2),required=True);parser.add_argument('--segment',type=int,required=True);parser.add_argument('--retry-failed',action='store_true');args=parser.parse_args()
     assert args.segment>=0
     assert shutil.disk_usage(ROOT).free>50*1024**3
     directory=ROOT/f'work/results/q1024_continuous/p{args.projection}'
@@ -30,7 +30,18 @@ def main():
     lock=(directory.parent/'controller.lock').open('a')
     fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
     receipt=directory/f'segment_{args.segment:03d}.json'
-    if receipt.exists(): raise SystemExit('Receipt exists: inspect it; do not restart a completed or live segment')
+    old_receipt=None;attempt=0;archive=None
+    if receipt.exists():
+        old_receipt=json.loads(receipt.read_text())
+        if not args.retry_failed or old_receipt['status']!='FAILED':
+            raise SystemExit('Receipt exists: only an explicitly failed attempt may be retried')
+        if Path(f"/proc/{old_receipt.get('pid',0)}").exists():
+            raise SystemExit('Prior PID still exists; inspect before retrying')
+        attempt=old_receipt.get('attempt',0)+1
+        archive=directory/f'segment_{args.segment:03d}.attempt{attempt-1}.failed.json'
+        assert not archive.exists()
+    elif args.retry_failed:
+        raise SystemExit('No failed receipt to retry')
     sim=ROOT/'work/upstream/idma/target/sim/vcs/simv_group8_checkpoint'
     fixtures=ROOT/'work/results/qwen2_group8_pinned_idma'
     manifest_path=ROOT/'work/results/qwen2_q1024_projection_fixtures/result.json'
@@ -46,9 +57,13 @@ def main():
         # Migrate first receipt: recipe can change; executable and input identity cannot.
         previous_design={k:v for k,v in previous['identity'].items() if not k.startswith('scripts/')}
         assert previous['status']=='CHECKPOINT' and previous_design==identity
+        previous_recipe=Path(previous['command'][-1])
+        expected_recipe=previous.get('control_recipe_sha256') or previous['identity'].get(str(previous_recipe.relative_to(ROOT)))
+        assert expected_recipe and sha(previous_recipe)==expected_recipe, 'saved recipe changed'
         for path,expected in previous['checkpoint_files'].items(): assert sha(Path(path))==expected
         env['QWEN_RESTORE_PATH']=previous['checkpoint']
-    checkpoint=directory/f'segment_{args.segment:03d}.chk'
+    suffix=f'_attempt{attempt}' if attempt else ''
+    checkpoint=directory/f'segment_{args.segment:03d}{suffix}.chk'
     assert not checkpoint.exists()
     assert not any(c in str(checkpoint) for c in '{}\n\r')
     control=directory.parent/'next_control.tcl'
@@ -56,9 +71,13 @@ def main():
     env['QWEN_SAVE_PATH']=str(checkpoint);env['MIN_AVAILABLE_KIB']='10485760'
     recipe=ROOT/('scripts/q1024_projection_segment_v2.tcl' if previous else 'scripts/q1024_projection_start.tcl')
     cmd=[str(ROOT/'scripts/run_memory_capped.sh'),'timeout','600',str(sim),f'+PROJECTION={args.projection}','+BATCHES=64','+FULL_Q1024',f'+COMMANDS={fixtures}/projection_commands.memh',f'+RECORDS={fixtures}/records.memh',f'+ADDR={fixtures}/projection_addresses.memh','-ucli','-do',str(recipe)]
-    logfile=directory/f'segment_{args.segment:03d}.log'
+    logfile=directory/f'segment_{args.segment:03d}{suffix}.log'
     result=dict(status='RUNNING',projection=args.projection,segment=args.segment,identity=identity,command=cmd,cwd=str(ROOT),started_unix=time.time(),log=str(logfile),cpu_affinity='8-23',memory_max='30G')
     result['control_recipe_sha256']=sha(recipe)
+    result['attempt']=attempt
+    if archive:
+        archive.write_bytes(receipt.read_bytes())
+        result['prior_failed_receipt']=str(archive)
     result['next_control_sha256']=sha(control)
     with logfile.open('w') as output:
         proc=subprocess.Popen(cmd,cwd=ROOT,env=env,stdout=output,stderr=subprocess.STDOUT)

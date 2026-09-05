@@ -1,0 +1,20 @@
+{
+  "status": "PASS_SMALL_CHAIN_AND_REAL_K_RETRY",
+  "root_cause": "VCS W-2024.09 clears ucliCore::_vars_list on restore. A subsequent save then serializes internal Tcl globals including readonly synopsys_root as user variables. Top-level restore alone is insufficient.",
+  "observed_ui_globals": {"baseline_after_restore": 0, "current_globals": 59},
+  "workaround": "Refresh the UCLI initial-global-name list immediately after restore and before loading external replay control. No vendor file, HDL state or snapshot data is edited. Replay control is external; preexisting user Tcl globals are intentionally not relied on.",
+  "small_chain": {
+    "command": "taskset -c 8-23 bash scripts/run_checkpoint_chain_test.sh",
+    "cycles": [78, 158, 1000], "exact_state_records": 235,
+    "restore_error_lines": 0
+  },
+  "real_retry": {
+    "command": "taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 1 --segment 1 --retry-failed",
+    "source_checkpoint_cycle": 799993, "saved_cycle": 1599993,
+    "read_only_restore_verified": true, "matrix_steps": 291840,
+    "failed_attempt_preserved": "work/results/q1024_continuous/p1/segment_001.attempt0.failed.json",
+    "valid_checkpoint": "work/results/q1024_continuous/p1/segment_001_attempt1.chk"
+  },
+  "further_valid_checkpoint": {"segment": 2, "cycle": 2399993, "matrix_steps": 439296},
+  "nonclaims": ["Full K numerical result pending final DDR checks", "No full-model performance closure"]
+}

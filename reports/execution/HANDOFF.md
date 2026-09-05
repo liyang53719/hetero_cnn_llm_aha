@@ -92,15 +92,18 @@ for RoPE/attention/later layers. Full-fixture first32 K numerical PASS.
 
 Continuous K segment0 VALID atcycle799993/144384 Matrix steps. Do not rebuild
 simv_group8_checkpoint or regenerate fixture identity during this chain.
-Segment1 reached1599993 but is FAILED: nested Tcl restore corrupts UCLI variable
-restoration (readonly synopsys_root); do not resume from segment1.
-Original snapshots retained, not edited. Canonical initial Tcl restored to its
-saved hash24ea0b46. New resume script uses top-level restore and external locked
-next-path control. This fix still needs chained validation and explicit retry.
+Original segment1 attempt FAILED and retained. Root cause refined: VCS clears
+ucliCore::_vars_list; top-level restore alone does not fix readonly UI restoration.
+Refresh that UI baseline after restore, then load external control. Small chain235
+state records PASS; real segment1 retry now VALID at1599993/291840 steps.
+Segment2 VALID at2399993/439296 steps. Segment3 RUNNING: inspect its receipt/PID
+and existing tool handle before launching anything; do not restart on silence.
+Failed attempt archived; valid receipt uses segment_001_attempt1.chk.
+Initial Tcl hash24ea0b46 and saved resume scripts must remain unchanged during chain.
 
-Next: add failed-attempt retry preserving receipt/log/snapshot, test top-level
-restore/save chaining, then retry segment1 from valid segment0. Report
-Q1024_CONTINUOUS_REPLAY_PROGRESS.json. No full q1024 numerical PASS yet.
+Next: wait for live segment3, then continue K segments4+ until actual final
+numerical marker; update receipts/ledger and push. No full q1024 numerical PASS yet.
+Recovery evidence Q1024_CHAINED_RESTORE_FIX_RESULT.json.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

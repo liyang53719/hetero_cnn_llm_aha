@@ -1,0 +1,30 @@
+{
+  "status": "PASS_TAIL_ADMISSION_AND_USEFUL_MAC_ACCOUNTING",
+  "supersedes_current_payload_evidence": "Q1024_MATRIX_MEMORY_RUNTIME_K_RESULT.json (historical source/log hash; same work log path has been regenerated)",
+  "sha256": {
+    "simulation_log": "fac538c9b6bb0ca19394e5f308fc9fab6157ecab6d35879958eab4891e3617e7",
+    "payload_source": "2e5f7dcd8475e7c84c6b09267ba59c9a287a03c73a2ada908a643bd3e0dc96da"
+  },
+  "scope": "Memory-fed single-tile admission and tail handling on actual Revision8B-B array; not a full network",
+  "command": "taskset -c 8-23 env TOP=tb_matrix_memory_runtime_k bash scripts/run_operator_matrix_bf16_endpoint_v3.sh",
+  "verified": {
+    "legal_requests": 7,
+    "checked_bf16_locations_including_untouched_canaries": 3584,
+    "tail_shapes": [[3, 7, 4], [1, 1, 17], [1, 1, 1]],
+    "illegal_requests": 7,
+    "illegal_status": 5,
+    "illegal_memory_and_matrix_transactions": 0,
+    "recovery_after_rejected_request": true,
+    "random_memory_backpressure": true,
+    "latched_address_depth_and_tail_shape": true
+  },
+  "illegal_cases": ["K zero", "unaligned A", "B end out of range", "output end out of range", "64-bit address addition overflow", "rows exceed 16", "columns zero"],
+  "counter_semantics": "executed MACs = 512*K including masked lanes; useful MACs = rows*columns*K. Tail padding must not inflate useful utilization.",
+  "tail_counters": [
+    {"rows": 3, "columns": 7, "k": 4, "cycles": 34, "executed_macs": 2048, "useful_macs": 84},
+    {"rows": 1, "columns": 1, "k": 17, "cycles": 104, "executed_macs": 8704, "useful_macs": 17},
+    {"rows": 1, "columns": 1, "k": 1, "cycles": 16, "executed_macs": 512, "useful_macs": 1}
+  ],
+  "interface": "Existing Qwen2 callers explicitly supply 16x32. Production controllers propagate payload status and stop before output DMA on rejected local requests. Public descriptor encoding unchanged.",
+  "remaining": ["General descriptor-driven multi-tile adapter", "Upstream command cancellation/reset handling after a local request rejection", "Prefetch and multi-context scheduling", "Current endpoint/combined DC rerun", "Three full q1024 model requests"]
+}

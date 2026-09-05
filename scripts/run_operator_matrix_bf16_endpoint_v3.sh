@@ -26,7 +26,7 @@ MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foregro
  -MAKEFLAGS "AR=/usr/bin/ar CXX=/usr/bin/g++" --top-module "$TOP" --Mdir "$OUT/obj" -o tb "${S[@]}" >"$OUT/build.log" 2>&1
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s "$OUT/obj/tb"|tee "$OUT/test.log"
 if [[ "$TOP" == tb_matrix_memory_runtime_k ]]; then
- grep -q 'MATRIX_MEMORY_RUNTIME_K_PASS cases=4' "$OUT/test.log"
+ grep -q 'MATRIX_MEMORY_RUNTIME_K_PASS cases=7' "$OUT/test.log"
 else
  grep -q 'OPERATOR_MATRIX_BF16_ENDPOINT_V3_PASS opcodes=6' "$OUT/test.log"
 fi

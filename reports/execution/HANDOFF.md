@@ -20,6 +20,11 @@
   This is serialized local-memory tile evidence, not DDR/full-request performance.
 - Next: runtime admission, row/column tails and descriptor-driven multi-tile
   adapter; then prefetch/context overlap. Result Q1024_MATRIX_MEMORY_RUNTIME_K_RESULT.json.
+- Tail/admission numerical PASS: 7 legal requests, 3584 locations including
+  untouched sentinels; 7 invalid requests -> status5 and zero memory/Matrix IO.
+- 65-bit range checks precede SRAM address narrowing; rows/columns are snapshotted.
+- Counter labels now distinguish executed/padded MACs from useful rows*cols*K;
+  final log-label replay PASS. Next is descriptor-driven multi-tile adapter.
 
 - Branch: `main`; baseline: `b55ddcb`.
 - Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.

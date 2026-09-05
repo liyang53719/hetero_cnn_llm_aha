@@ -53,14 +53,21 @@
 - Fall-through response buffer avoids consumer-ready deadlock without extra normal
   cycles. First9 remains1247233cycles;2383-flat normal regression PASS.
 - Q1024_IDMA_ERROR_RESPONSE_RESULT.json; no multi-outstanding enabled; wrapper DC stale.
+- Packed group8 weight layout PASS: Matrix weight K-stride runtime; same768KiB.
+  Q group8 batch2:49152 BF16 outputs exact, weight DMA requests48->6, bytes unchanged.
+- Separate pinned DMA:786432 destination bytes exact; 1536flat requests/group
+  instead of12288 for8 independent column tiles. No joint speedup claim yet.
+- Removed elaboration BATCH_COUNT; controller runtime input1..64. Same control
+  binary tested1/2/64, rejected0/65, snapshot checked. Trace-only not numerical.
+- Evidence Q1024_PACKED_GROUP8_RESULT.json. Payload/scheduler DC stale.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
-DDR ceiling, ROI attribution and fail-closed iDMA errors now verified. Evaluate
-packed loading of existing8-tile weight group to reduce tiny transactions without
-changing single-request error contract. Continue generic tile payload integration.
+DDR ceiling, ROI attribution, fail-closed iDMA errors and packed group layout verified.
+Connect packed group8 scheduler to first9's real iDMA/AXI/L2 wiring and compare actual
+DDR projection values in the same run. Measure joint ROI before claiming speedup.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

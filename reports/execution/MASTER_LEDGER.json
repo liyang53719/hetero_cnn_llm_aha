@@ -5,7 +5,10 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_IDMA_ERROR_RESPONSE_PASS_GENERIC_CONNECTION_OPEN",
+    "stage": "P2_PACKED_GROUP8_SEPARATE_GATES_PASS_JOINT_CHAIN_OPEN",
+    "packed_group8_checked_matrix_values": 49152,
+    "packed_group8_checked_DMA_bytes": 786432,
+    "batch_count_contract": "runtime_1_to_64_no_elaboration_parameter",
     "idma_error_response_gate": "READ_SLVERR_WRITE_DECERR_HOLD_RESET_PASS",
     "first9_dma_pending_cycles": 611467,
     "first9_l2_read_pending_cycles": 226048,

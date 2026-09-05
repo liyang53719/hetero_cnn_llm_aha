@@ -1,0 +1,40 @@
+{
+  "status": "PASS_PACKED_LAYOUT_NUMERICAL_AND_SEPARATE_PINNED_DMA",
+  "layout": "K-major groups: each row holds group_count adjacent64B column tiles; Matrix tile slot reads base+slot*64 with weight K stride=group_count*64",
+  "capacity_bytes_unchanged": 786432,
+  "public_descriptor_changed": false,
+  "runtime_batch_count": {
+    "elaboration_BATCH_COUNT_parameter_removed": true,
+    "accepted_control_tests_same_binary": [1, 2, 64],
+    "rejected_control_tests": [0, 65], "snapshot_mutation_test": true,
+    "boundary": "Control-only traces; not numerical q1024"
+  },
+  "matrix_memory_regression": {"cases": 8, "checked_locations": 4096, "weight_K_stride512": "PASS"},
+  "group8_matrix_regression": {
+    "command": "MIN_AVAILABLE_KIB=10485760 bash scripts/run_memory_capped.sh timeout 600 bash scripts/run_qwen2_projection_group8_batch2_vcs.sh",
+    "logical_weight_tiles": 48, "weight_DMA_requests_before": 48,
+    "weight_DMA_requests_after": 6, "total_DMA_requests_after": 114,
+    "matrix_steps": 147456, "effective_macs": 75497472,
+    "bf16_outputs_bit_exact": 49152, "weight_refetch": 0,
+    "DMA_model": "behavioral copying, not pinned iDMA in this test"
+  },
+  "separate_pinned_DMA_regression": {
+    "command": "taskset -c 8-23 env PACKED_TEST=1 OUT=/home/yang/Documents/prj/AHA/hetero_cnn_llm_aha/work/results/qwen2_packed_weight_idma bash scripts/run_qwen2_pinned_idma_tile_vcs.sh",
+    "logical_tiles": 8, "K_rows": 1536, "row_bytes": 512,
+    "flat_requests_before_layout_change": 12288, "flat_requests_measured_after": 1536,
+    "destination_bytes_checked": 786432,
+    "error_contract": "unchanged single outstanding flat transfer, fail closed until reset"
+  },
+  "sha256": {
+    "scheduler": "16f5fe19de32d580b6f9c4adf2ec10fff0824e2ca73109c8203044b8c7c10633",
+    "matrix_payload": "de17cdd6a7945791fd632087878963d03aba511fd1f8cb27c8cee169cbb5fa0c",
+    "packed_DMA_log": "d57af94d1ab1465116600057c87aabe1feca9f36f463f26b06d7a765d9d48368"
+  },
+  "nonclaims": [
+    "Request reduction is not an8x throughput claim; bytes transferred are unchanged",
+    "Packed DMA and Matrix numerical tests still separate; same-run packed chain is next",
+    "Batch2 repeats canonical16rows, not new token rows16_31",
+    "All full-model q1024 performance remains open",
+    "Changed scheduler/payload require DC rerun"
+  ]
+}

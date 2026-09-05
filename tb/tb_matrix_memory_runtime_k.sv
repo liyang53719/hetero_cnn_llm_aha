@@ -1,17 +1,17 @@
 `timescale 1ns/1ps
 module tb_matrix_memory_runtime_k;
  logic clk,rst=0,start=0;initial clk=0;always #0.625 clk=~clk;
- logic[15:0]depth,rows,columns;logic[7:0]payload_status;logic matrix_start;
+ logic[15:0]depth,rows,columns;logic[31:0]weight_stride;logic[7:0]payload_status;logic matrix_start;
  logic[63:0]ab=0,wb=64'h20000,ob=64'h40000;
  logic rv,rr,rsv,rsr,wv,wr,sv,sr,clear,last,ov,ol,done,cv,cr,ready,err,mor;
  logic[14:0]ra,wa;logic[511:0]rd,wd,b;logic[255:0]a;
  logic[63:0]be;logic[2:0]ctx,octx;logic[16383:0]acc;
  logic[4:0]flags;logic[15:0]tag;logic[7:0]pp,tp,status;
  logic[31:0]reads,writes,steps,lfsr;
- logic[511:0]mem[0:8191];logic pending;logic[511:0]pending_data;
+ logic[511:0]mem[0:32767];logic pending;logic[511:0]pending_data;
  integer completions;longint unsigned cycles,begin_cycle;
  qwen2_shared_l2_matrix_tile16_payload payload(
-  .clk_i(clk),.rst_ni(rst),.start_i(start),.depth_i(depth),
+  .clk_i(clk),.rst_ni(rst),.start_i(start),.depth_i(depth),.weight_k_stride_i(weight_stride),
   .rows_i(rows),.columns_i(columns),.status_o(payload_status),
   .activation_local_i(ab),.weight_local_i(wb),.output_local_i(ob),
   .l2_rd_valid_o(rv),.l2_rd_ready_i(rr),.l2_rd_addr_o(ra),
@@ -50,16 +50,16 @@ module tb_matrix_memory_runtime_k;
   if(err)$fatal(1,"protocol");
  end
  task run_case(input integer k,input logic[15:0]expected,input integer count,
-               input integer nr=16,input integer nc=32);
-  @(negedge clk);depth=16'(k);rows=16'(nr);columns=16'(nc);ab=0;wb=64'h20000;ob=64'h40000;
+               input integer nr=16,input integer nc=32,input integer ws=64);
+  @(negedge clk);depth=16'(k);rows=16'(nr);columns=16'(nc);weight_stride=ws;ab=0;wb=64'h20000;ob=64'h40000;
   for(int i=0;i<k;i++)begin mem[i]={16{32'h00003f80}};
     // A is packed in the low 256 bits of each 512-bit beat.
-    mem[i][255:0]={16{16'h3f80}};mem[2048+i]={32{16'h4000}};end
+    mem[i][255:0]={16{16'h3f80}};mem[2048+i*(ws/64)]={32{16'h4000}};end
   for(int i=0;i<16;i++)mem[4096+i]='1;
   if(!ready)$fatal(1,"not ready");begin_cycle=cycles;start=1;matrix_start=1;
   @(posedge clk);@(negedge clk);start=0;matrix_start=0;
   // Descriptor snapshot: changes after acceptance must have no effect.
-  ab=64'h70000;wb=64'h70000;ob=64'h70000;depth=1;rows=1;columns=1;
+  ab=64'h70000;wb=64'h70000;ob=64'h70000;depth=1;rows=1;columns=1;weight_stride=1;
   wait(done);@(negedge clk);
   if(payload_status||reads!=2*k||steps!=k||writes!=nr||completions!=count)$fatal(1,"counts");
   for(int i=0;i<16;i++)for(int j=0;j<32;j++)
@@ -68,12 +68,12 @@ module tb_matrix_memory_runtime_k;
   repeat(3)@(negedge clk);
  endtask
  initial begin
-  depth=1;rows=16;columns=32;matrix_start=0;repeat(4)@(negedge clk);rst=1;
+  depth=1;rows=16;columns=32;weight_stride=64;matrix_start=0;repeat(4)@(negedge clk);rst=1;
   run_case(1,16'h4000,1);run_case(4,16'h4100,2);
   run_case(17,16'h4208,3);run_case(1536,16'h4540,4);
   run_case(4,16'h4100,5,3,7);run_case(17,16'h4208,6,1,1);
   for(int bad=0;bad<7;bad++)begin
-   @(negedge clk);depth=4;rows=16;columns=32;ab=0;wb=64'h20000;ob=64'h40000;
+   @(negedge clk);depth=4;rows=16;columns=32;weight_stride=64;ab=0;wb=64'h20000;ob=64'h40000;
    case(bad)
     0:depth=0;1:ab=1;2:wb=64'h1fffc0;3:ob=64'h1fffc0;
     4:ab=64'hffffffffffffffc0;5:rows=17;6:columns=0;
@@ -83,7 +83,8 @@ module tb_matrix_memory_runtime_k;
    repeat(2)@(negedge clk);
   end
   run_case(1,16'h4000,7,1,1);
-  $display("MATRIX_MEMORY_RUNTIME_K_PASS cases=7 checked_locations=3584 illegal=7 same_rtl=1");$finish;
+  run_case(17,16'h4208,8,16,32,512);
+  $display("MATRIX_MEMORY_RUNTIME_K_PASS cases=8 checked_locations=4096 illegal=7 strided_weight=1 same_rtl=1");$finish;
  end
  initial begin repeat(100000)@(posedge clk);$fatal(1,"watchdog");end
 endmodule

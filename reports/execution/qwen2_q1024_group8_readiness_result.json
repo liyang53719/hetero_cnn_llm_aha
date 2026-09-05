@@ -1,7 +1,8 @@
 {
   "checks": {
+    "packed_group_dma_requests": 6,
     "random_backpressure": true,
-    "same_RTL_parameterized_batch_count": true,
+    "same_RTL_runtime_batch_count": true,
     "token_base_32bit": true,
     "weight_fetch_once": true,
     "weight_group_bytes": 786432
@@ -38,10 +39,11 @@
   ],
   "provenance": {
     "contract_sha256": "d78f71a7cf000ac7991320c29617483fa971f50dbc712ad828e8e6d8df5f19b1",
-    "group_log_sha256": "c5211bc6cfed33d3fbc3ade363daa7f1fa950f21b901b8a01b5e57b64e1a0787",
+    "group_log_sha256": "83a2be1a48306a75deba8fc83893e4261d3948de737bc48de4bf9feefa5b2cb6",
     "loader_rtl_sha256": "5004c98a58de65af61aaab30534979f8b2984f725dffe21f54b67c13f6ff9b5b",
+    "matrix_payload_rtl_sha256": "de17cdd6a7945791fd632087878963d03aba511fd1f8cb27c8cee169cbb5fa0c",
     "norm_log_sha256": "42aae66e3242d4cc430ac74fdada02406f5de20d1ba260adc405fa626ac96f76",
-    "scheduler_rtl_sha256": "2f8734483da6356dd28362b2a953f479cdf693d09edf6d800ffa80d80b2f3882",
+    "scheduler_rtl_sha256": "16f5fe19de32d580b6f9c4adf2ec10fff0824e2ca73109c8203044b8c7c10633",
     "transpose_rtl_sha256": "6d36a6f6fe2535161a600533676a2affa43b942f4eccbe68cb6e1decf5fb1c16"
   },
   "schema_version": 1,

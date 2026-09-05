@@ -42,10 +42,14 @@ module tb_qwen2_tile_idma_expand;
        idst!=64'h75000000+64'((flat_seen-2362)/4)*8192+64'((flat_seen-2362)%4)*1024||
        ilen!=(((flat_seen-2362)%4==3)?1:1024))$fatal(1,"strided load chunk=%0d",flat_seen);
    end
-   if(flat_seen>=2374)begin
+   if(flat_seen>=2374&&flat_seen<2383)begin
     if(isrc!=64'h76000000+64'((flat_seen-2374)/3)*192+64'((flat_seen-2374)%3)*64||
        idst!=64'h77000000+64'((flat_seen-2374)/3)*256+64'((flat_seen-2374)%3)*64||
        ilen!=(((flat_seen-2374)%3==2)?1:64))$fatal(1,"strided store chunk=%0d",flat_seen);
+   end
+   if(flat_seen>=2383)begin
+    if(isrc!=64'h78000000+64'(flat_seen-2383)*3072||
+       idst!=64'h79000000+64'(flat_seen-2383)*512||ilen!=512)$fatal(1,"packed group request");
    end
    flat_seen<=flat_seen+1;end
   if(joined_rsp.r_valid&&joined_req.r_ready)rbeats<=rbeats+1;if(joined_req.w_valid&&joined_rsp.w_ready)wbeats<=wbeats+1;
@@ -60,6 +64,16 @@ module tb_qwen2_tile_idma_expand;
   send(1,64'h74000000,64'h75000000,3073,3,4096,8192);
   send(3,64'h76000000,64'h77000000,129,3,192,256);
   repeat(10)@(posedge clk);if(abstract_req!=8||abstract_rsp!=8||flat_seen!=2383||flat!=2383||rbeats!=3373||wbeats!=3373||busy!=0)$fatal(1,"counts abstract=%0d/%0d flat=%0d/%0d beats=%0d/%0d busy=%h",abstract_req,abstract_rsp,flat_seen,flat,rbeats,wbeats,busy);
-  $display("QWEN2_PINNED_IDMA_TILE_PASS abstract_requests=8 flat_requests=2383 read_beats=3373 write_beats=3373 max_load_flat_bytes=1024 max_store_flat_bytes=64 coalesced_load16=48 coalesced_store16=768 strided_chunk_cases=2 idma_errors=0");$finish;end
+  $display("QWEN2_PINNED_IDMA_TILE_PASS abstract_requests=8 flat_requests=2383 read_beats=3373 write_beats=3373 max_load_flat_bytes=1024 max_store_flat_bytes=64 coalesced_load16=48 coalesced_store16=768 strided_chunk_cases=2 idma_errors=0");
+  if($test$plusargs("PACKED"))begin
+   for(int r=0;r<1536;r++)for(int j=0;j<512;j++)mem.mem[64'h78000000+64'(r)*3072+j]=8'(r*7+j);
+   send(1,64'h78000000,64'h79000000,512,1536,3072,512);
+   repeat(10)@(posedge clk);
+   if(flat_seen!=3919||flat!=3919||rbeats!=15661||wbeats!=15661||busy!=0)$fatal(1,"packed counts");
+   for(int r=0;r<1536;r++)for(int j=0;j<512;j++)
+    if(mem.mem[64'h79000000+64'(r)*512+j]!==8'(r*7+j))$fatal(1,"packed byte row=%0d byte=%0d",r,j);
+   $display("PINNED_IDMA_PACKED_WEIGHT_PASS tiles=8 rows=1536 group_requests=1 flat_requests=1536 byte_exact=786432");
+  end
+  $finish;end
  initial begin repeat(500000)@(posedge clk);$fatal(1,"timeout flat=%0d abstract=%0d/%0d",flat_seen,abstract_req,abstract_rsp);end
 endmodule

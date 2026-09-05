@@ -1,0 +1,20 @@
+{
+  "status": "AUDITED_IMPLEMENTATION_GAPS_NOT_PASS",
+  "next_input": "work/results/q1024_captured_attention_payload/attention_actual_token_major_bf16.bin",
+  "input_gate": "Q1024_ATTENTION_OPROJ_INPUT_RESULT.json must prove all1572864 actual FP32 results finite and max_error<=0.002, then BF16_RNE; never substitute backend/golden attention",
+  "oproj": {
+    "shape": [1024,1536,1536],
+    "reuse": "Existing qwen2_projection_q1024_group8_controller supports these dimensions; same Matrix and pinned iDMA/Shared-L2 path",
+    "needed": ["Runtime fixture paths and actual destination export in testbench", "Use l0.oproj command/root addresses from pinned manifest, not relabeled l0.q command", "Exact std::fma reference generated from captured input and frozen OProj weights", "Bounded continuous replay with actual output retained for residual"]
+  },
+  "mlp_gaps": [
+    "qwen2_projection_descriptor_context currently requires input/weight K1536, output columns<=1536, column_tiles_o width6",
+    "gate/up columns8960 require280 tiles, at least9-bit tile enumeration",
+    "qwen2_projection_q1024_group8_controller hardcodes depth1536, activation loader shape and step/byte counters",
+    "down K8960 cannot load an8-column-tile weight group at once:8960*8*64=4587520 bytes, exceeding4MiB total and existing768KiB weight window",
+    "Need K windows fitting existing buffer, FP32 accumulators retained across windows, clear only at first window, last/writeback only at final window; no inter-window BF16 rounding"
+  ],
+  "sources": ["rtl/integration/qwen2_projection_descriptor_context.sv", "rtl/integration/qwen2_projection_q1024_group8_controller.sv", "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv", "tb/tb_qwen2_group8_pinned_idma.sv", "src/qwen2_q1024_layer0_tail_backend.cpp"],
+  "order": ["Complete live captured attention and independent FP32 verification", "OProj actual-input replay and actual output export", "residual/postnorm production continuity", "generic MLP column and K-window scheduling within fixed buffer budget", "gate/up/fusedSiLU/down/residual full1024", "cross-layer and complete request measurement"],
+  "nonclaims": ["Existing tail first/middle/last three-tile samples do not prove full MLP", "No additional SRAM, array replication, quantization or clock change authorized or performed", "Current captured attention binary and sources remain frozen during execution"]
+}

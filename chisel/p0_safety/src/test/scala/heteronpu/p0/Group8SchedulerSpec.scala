@@ -85,7 +85,7 @@ class Group8SchedulerSpec extends AnyFlatSpec with ChiselScalatestTester with Ma
   }
   it should "keep trace-only schedule enumeration separate from payload execution" in {
     test(new Group8Scheduler).withAnnotations(Seq(VerilatorBackendAnnotation)){d=>
-      init(d);d.io.batches.poke(64.U);d.io.tiles.poke(48.U);d.io.columns.poke(1536.U);d.io.traceOnly.poke(true.B);d.io.start.poke(true.B);d.clock.step();d.io.start.poke(false.B)
+      init(d);d.clock.setTimeout(5000);d.io.batches.poke(64.U);d.io.tiles.poke(48.U);d.io.columns.poke(1536.U);d.io.traceOnly.poke(true.B);d.io.start.poke(true.B);d.clock.step();d.io.start.poke(false.B)
       d.io.traceOnly.poke(false.B);d.io.contextValid.poke(true.B);d.clock.step();d.io.contextValid.poke(false.B)
       var n=0;while(!d.io.done.peek().litToBoolean && n<4000){d.io.matrixCmdValid.expect(false.B);d.io.dmaValid.expect(false.B);d.clock.step();n+=1}
       n should be < 4000;d.io.matrixSteps.expect((3072*1536).U);d.io.values.expect((1024*1536).U);d.io.status.expect(0.U)

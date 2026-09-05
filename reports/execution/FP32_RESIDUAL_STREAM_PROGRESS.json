@@ -1,0 +1,15 @@
+{
+  "status": "PROTOCOL_UNIT_PASS_REAL_NUMERICAL_SERVICE_QUEUED_NOT_PASS",
+  "rtl": "rtl/sfu/fp32_residual_stream.sv",
+  "protocol_command": "taskset -c 8-23 bash scripts/run_residual_stream_protocol_test.sh",
+  "protocol_packets": 100,
+  "checks": ["Independent legal ready/valid input stalls", "FP32 A and BF16/FP32 B widening", "Masked lanes", "Pair correlation and last", "Output backpressure stability", "Mismatch status7 locks until reset"],
+  "protocol_scope": "Uses a deliberately non-arithmetic XOR fixture; not an FP32 addition numerical gate",
+  "numerical_service": "q1024-residual-fp32-20260905.service",
+  "wait_handle": 77257,
+  "numerical_command": "taskset -c 8-23 /usr/bin/python3 scripts/run_captured_residual_fp32.py",
+  "dependency": "Blocking common heavy-task lock, then require completed verified actual FP32 OProj output; no polling or reference-input substitution",
+  "numerical_target": "Real HeteroFP32Alu addition,1024x1536 FP32 outputs bit-exact; actual residual exported for postnorm",
+  "open": ["Numerical job result", "Descriptor and Shared-L2/DDR residual frontend", "BF16 two-half memory gearbox", "Full decoder/model cycles and PPA"],
+  "nonclaim": "Even numerical stream PASS will not prove full descriptor/DDR integration or full-model prefill performance"
+}

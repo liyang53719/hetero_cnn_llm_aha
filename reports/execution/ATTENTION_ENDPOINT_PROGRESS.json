@@ -1,5 +1,5 @@
 {
-  "status": "SOURCE_PROTOCOL_PASS_NUMERICAL_AND_MEMORY_ADAPTER_OPEN",
+  "status": "SOURCE_PROTOCOL_AND_REAL_MATRIX_DIRECTED_NUMERICAL_PASS_E2_RUNNING",
   "gap_found": "Existing QK/PV operand iteration is implemented in tb_l5_q128_attention_integrated.sv tasks do_qk/do_pv, not a synthesizable production endpoint",
   "source_added": "rtl/attention/attention_matrix_tile_sequencer.sv",
   "implemented": [
@@ -20,17 +20,25 @@
     "context_error_status": 7, "protocol_fault_requires_reset": true
   },
   "nonclaims": [
-    "Unit test uses a response/latency model, not numerical FMA; this is not a numerical or model performance gate",
+    "Initial protocol test uses a latency model; additional directed numerical test uses real FMA but is not model performance",
     "Tile math MAC counter does not subtract causal pair masking; parent must compute full-model useful MACs",
-    "QK/PV still require production memory/SFU adapters and actual-array differential replay",
+    "QK/PV still require production memory/SFU adapters; directed actual-array differential replay passed",
     "No synthesis/timing PASS claimed",
     "Frozen running Q simulation sources and binary were not changed"
   ],
   "queued_numerical_test": {
     "command": "taskset -c 8-23 bash scripts/run_attention_matrix_tile_numerical.sh",
-    "status": "BUILDING_AFTER_Q_COMPLETION_NOT_PASS",
+    "status": "PASS_7168_FP32_COMPARISONS",
+    "log_sha256": "87269e38fca9933b92099542d3d81a5a826190875f68c335778e56901876e714",
+    "controller_sha256": "11088a99ec5ecec938f189f71a6a33cb2f1a5912f1ddf5ed7d3c8f9382e3ecbc",
     "scope": "Real Revision8B-B 512-lane FMA; directed QK/PV128/256 and 7168 FP32 output comparisons; not complete attention or model prefill",
     "source_regeneration": false
   },
-  "next": "Bind actual operand memories/Matrix, then score/probability/MLO storage and SFU. Replace testbench service tasks in full decoder execution; do not use contract-adapter integrated_v0 as a model backend"
+  "attention_e2": {
+    "status": "RUNNING_NOT_PASS",
+    "command": "taskset -c 8-23 bash scripts/run_attention_sequencer_e2.sh",
+    "change": "QK/PV testbench iteration replaced by production Matrix tile sequencer; TB supplies tensor memory only; SFU/merge tasks still pending migration",
+    "scope": "Direct diagnostic then full q128 attention operator; not complete decoder or full model"
+  },
+  "next": "Close attention numerical regression, then production operand/score/probability/MLO memory and SFU. Do not use contract-adapter integrated_v0 as a model backend"
 }

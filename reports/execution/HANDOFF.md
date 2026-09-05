@@ -16,9 +16,9 @@
 
 ## 唯一下一动作
 
-等待真实Matrix数值测试(session14037)，通过后接attention内存/SFU。
+真实Matrix7168项数值已通过；等待attention直接诊断+q128连跑(session60026)。
 
-- 数值测试已获得锁并开始编译；进度见ATTENTION_ENDPOINT_PROGRESS.json。
+- QK/PV循环已从TB迁入RTL；SFU/merge和内存仍待生产化，不是整网PASS。
 - 收集器：scripts/collect_q1024_projection_chain.py。
 
 ## 执行约束

@@ -2,7 +2,7 @@
   "schema_version": 7,
   "stage": "Q1024_P2_QKV_PROJECTIONS_PASS_FULL_MODEL_OPEN",
   "state": "ACTIVE_FULL_REQUEST_PERFORMANCE_OPEN",
-  "unique_next_action": "Q/K/V full1024 projections complete and collected. Real Matrix numerical attention test is running (session14037); wait for completion, then bind attention memory/SFU and complete decoder. Do not rerun finished Q chain or claim full model PASS.",
+  "unique_next_action": "Q/K/V full1024 projections and actual-Matrix7168 directed comparisons PASS. Attention direct+q128 continuous regression running (session60026); wait, then migrate SFU/merge/memory to production endpoint. Full model still OPEN.",
   "expected_outputs": [],
   "success": {
     "branch": "main",

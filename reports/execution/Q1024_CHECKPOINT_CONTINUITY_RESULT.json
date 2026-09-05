@@ -12,7 +12,8 @@
   "terminal_pipeline_valid_mask": 5,
   "exact_state_records_compared": 235,
   "state_coverage": ["cycle and LFSR", "32 static memory words", "64 associative DDR words above4GiB", "134 queued words", "4 pipeline registers and valid bits"],
-  "checkpoint_size_bytes": 53248,
+  "checkpoint_index_size_bytes": 53248,
+  "checkpoint_bundle_rule": "Index size is not total snapshot size; keep .chk, .chk.FILES and .chk.ucli together",
   "failure_found_and_fixed": "save rejected without -debug_access+r; terminal equality alone strengthened with restored-cycle check and full state-record equality",
   "nonclaims": [
     "Small synthetic infrastructure test only, not accelerator/model numerical evidence",

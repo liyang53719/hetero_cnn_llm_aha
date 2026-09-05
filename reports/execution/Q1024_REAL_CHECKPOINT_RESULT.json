@@ -1,0 +1,33 @@
+{
+  "status": "PASS_REAL_IDMA_AND_MATRIX_CHECKPOINT_CONTINUITY",
+  "command": "taskset -c 8-23 bash scripts/run_group8_checkpoint_test.sh",
+  "scope": "True token rows0_31 layer0 K projection; actual pinned iDMA, AXI/L2, BF16 Matrix, DDR bandwidth envelope",
+  "binary_sha256": "dfa116f7135be62ebf1c8bd3477aa78ebb013f5ffd73eacfd846ae2aa6f6abb1",
+  "compile_option": "-debug_access+r",
+  "checkpoints": [
+    {"time_us": 20, "saved_cycle": 15993, "restored_cycle": 15993, "idma_busy_mask": 224, "issued_flat_requests": 761},
+    {"time_us": 60, "saved_cycle": 47993, "restored_cycle": 47993, "partial_tile_K": 870, "restored_partial_K": 870}
+  ],
+  "baseline_and_both_restores": {
+    "checked_bf16_outputs": 8192,
+    "wall_cycles": 149154,
+    "useful_macs": 12582912,
+    "flat_requests": 1120,
+    "read_bytes": 884736, "write_bytes": 16384,
+    "DDR_throttle_cycles": 0,
+    "numerical_and_counter_markers_equal": true
+  },
+  "logs_sha256": {
+    "baseline": "eee91d2fa9fbfce5ac1f3929b0abe416c8db31c6935d40cd2c215fcccc8ad89c",
+    "DMA_restore": "43d58d5b78fe362e677662a21401ab71b85f5a825a45bd9902fea43db1c0c732",
+    "Matrix_restore": "1e81e3a9a6b08885bf26cd2de0645910b01f9fe4073f443bda6fefe2c57bf133"
+  },
+  "recovery_contract": [
+    "Keep .chk, .chk.FILES and .chk.ucli together; .chk alone is only an index",
+    "Do not rebuild simulator, change its shared libraries or modify source/fixture identity during a checkpoint chain",
+    "Each process uses CPU8-23, MemoryHigh24G/Max30G, timeout600s",
+    "Snapshots contain process/design data and remain ignored under work, never pushed"
+  ],
+  "nonclaims": ["Not full q1024/model numerical closure", "Does not provide current DC timing/area evidence"],
+  "next": "Generate genuine q1024 projection fixtures in bounded token-range jobs, generalize the testbench fixture arrays, and run one continuous RTL state across bounded checkpoint segments"
+}

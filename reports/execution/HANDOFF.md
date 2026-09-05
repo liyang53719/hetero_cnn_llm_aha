@@ -76,16 +76,19 @@
   starts atcycle78, ends1000;235 complete state records match baseline exactly.
 - Saves static/associative memory, dynamic queue, pipeline state. Evidence
   Q1024_CHECKPOINT_CONTINUITY_RESULT.json; this is not yet a real accelerator checkpoint.
+- Real K projection cross-process checkpoints now PASS atcycle15993 (DMA busy224,
+  flat761) and47993 (partial K870). Both restore8192 exact outputs/149154cycles.
+- Q1024_REAL_CHECKPOINT_RESULT.json. Keep .chk + .chk.FILES + .chk.ucli together;
+  never rebuild simulator/shared libraries during a chain; snapshots stay ignored.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
 DDR ceiling, ROI attribution, fail-closed iDMA errors and packed group layout verified.
-Validate checkpoint/save/restore on the actual pinned-iDMA/Matrix/DDR K projection,
-comparing saved-start state, full numerical outputs and ROI against uninterrupted run.
-Then use bounded chunks for full q1024 numerical projection runs under600s per command.
-Extend genuine token fixtures beyond32; never substitute control-only cycles.
+Generate genuine q1024 projection fixtures in bounded token-range jobs; generalize
+fixture arrays beyond32, then replay one continuous RTL state via checkpoints with
+each command <=600s. Real DMA and partial-Matrix restore are now proven.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

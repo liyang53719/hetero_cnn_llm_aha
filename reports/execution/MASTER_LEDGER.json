@@ -5,7 +5,8 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_SMALL_CHECKPOINT_CONTINUITY_PASS_REAL_CHAIN_OPEN",
+    "stage": "P2_REAL_CHECKPOINT_CONTINUITY_PASS_Q1024_FIXTURES_OPEN",
+    "real_checkpoint_cycles_verified": [15993, 47993],
     "checkpoint_small_exact_state_records": 235,
     "true_rows0_31_QKV_checked_values": 65536,
     "true_rows0_31_projection_cycles": {"Q": 917864, "K": 149154, "V": 149154},

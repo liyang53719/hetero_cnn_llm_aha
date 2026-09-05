@@ -54,20 +54,21 @@ jobs:
         run: |
           set -o pipefail
           sbt -batch compile Test/compile 2>&1 | tee evidence/compile.log
-      - name: ChiselTest actual DUT simulation
-        id: test
-        working-directory: chisel/p0_safety
-        run: |
-          set -o pipefail
-          sbt -batch test 2>&1 | tee evidence/test.log
-      - name: Emit four production ABI roots
+      - name: Emit and verify four scalar ABI roots
         id: emit
-        if: always() && steps.compile.outcome == 'success'
         working-directory: chisel/p0_safety
         run: |
           set -o pipefail
           sbt -batch 'runMain heteronpu.p0.EmitP0Safety emitted' 2>&1 | tee evidence/emit.log
           python3 scripts/check_emission.py emitted | tee evidence/emission_check.log
+          python3 scripts/verify_emitted_abi.py emitted | tee evidence/abi_check.log
+      - name: ChiselTest actual DUT simulation
+        id: test
+        if: always() && steps.compile.outcome == 'success'
+        working-directory: chisel/p0_safety
+        run: |
+          set -o pipefail
+          sbt -batch test 2>&1 | tee evidence/test.log
       - name: Record actual gate outcomes
         if: always()
         env:
@@ -88,6 +89,8 @@ jobs:
                  dc=False,full_model=False,retained_leaf_numeric_integration=False)
           (out/'RESULT.json').write_text(json.dumps(r,indent=2)+'\n')
           print(json.dumps(r,indent=2))
+          if r['test']=='success' and (len(suites)!=5 or sum(int(s['tests']) for s in suites)!=61 or any(int(s['failures'])+int(s['errors']) for s in suites)):
+              raise RuntimeError('JUnit test coverage missing or inconsistent')
           PY
       - uses: actions/upload-artifact@v4
         if: always()

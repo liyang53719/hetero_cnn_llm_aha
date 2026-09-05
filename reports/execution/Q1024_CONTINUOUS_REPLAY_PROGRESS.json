@@ -1,5 +1,8 @@
 {
-  "status": "K_PROJECTION_COMPLETE_Q_V_AND_MODEL_OPEN",
+  "status": "K_V_PROJECTIONS_COMPLETE_Q_AND_MODEL_OPEN",
+  "V_completed_projection_result": "Q1024_CONTINUOUS_V_RESULT.json",
+  "V_wall_cycles": 4272278,
+  "V_checked_bf16_outputs": 262144,
   "completed_projection_result": "Q1024_CONTINUOUS_K_RESULT.json",
   "K_wall_cycles": 4272278,
   "K_checked_bf16_outputs": 262144,
@@ -27,7 +30,8 @@
     "Load next output path from locked filesystem control after restore; reject overwriting checkpoints",
     "Design/data identity immutable; control recipe revision separately logged"
   ],
-  "next": "Run continuous full q1024 V projection, then Q, keeping the same immutable simulator and fixtures. Full decoder/model remains open.",
+  "next": "Run continuous full q1024 Q projection, keeping the same immutable simulator and fixtures. Full decoder/model remains open.",
+  "full_q1024_V_numerical_pass": true,
   "full_q1024_K_numerical_pass": true,
   "full_model_q1024_tokens_per_second": null
 }

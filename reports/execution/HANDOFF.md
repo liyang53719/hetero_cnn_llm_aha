@@ -14,8 +14,9 @@
 - Report Q1024_CONTINUOUS_K_RESULT.json validates six sequential receipts,
   immutable binary/data, checkpoint hashes and restored-cycle continuity.
 - Final receipt work/results/q1024_continuous/p1/segment_005.json.
-- V q1024 segments0/1 checkpointed; segment2 currently running. Inspect its
-  receipt/PID before starting another task; never restart on absent output.
+- FULL q1024 layer0 V also PASS:262144 BF16 outputs,4272278cycles,
+  402653184 usefulMACs,18.4078% utilization. Q1024_CONTINUOUS_V_RESULT.json.
+- No simulation running at handoff. K/V are single operators, not complete prefill.
 - Only layer0 norm inputs/weights preloaded; no L2/output injection.
 - Fixtures reproduce true1024-token ordering via exact token-ID golden reuse for
   position-independent layer0 norm/raw projections. Never use for RoPE/attention/later layers.
@@ -33,10 +34,12 @@
 
 ## Next action
 
-Wait for live V segment2, then continue --projection2 --segment3 and later.
+taskset -c 8-23 python3 scripts/run_q1024_projection_segment.py --projection 0 --segment 0
 
-Continue V until actual PROJECTION_NUMERICAL_COMPLETE, then run
-scripts/collect_q1024_projection_chain.py --projection 2 under CPU8-23.
-Then run Q (--projection0). Do not regenerate fixtures or rebuild simulator.
+Continue Q until actual PROJECTION_NUMERICAL_COMPLETE, then run
+scripts/collect_q1024_projection_chain.py --projection 0 under CPU8-23.
+Do not regenerate fixtures or rebuild simulator.
 After projections: remaining decoder/28layers, Qwen3.5/3.8 and current DC/PPA
 are still open. 100/40GBps model is a bandwidth ceiling, not DRAM latency calibration.
+- Project work/models currently contains Qwen2 weights only. User was asked
+  asynchronously for a Qwen3.8 checkpoint/reference location; no answer yet.

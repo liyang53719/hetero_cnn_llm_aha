@@ -1,0 +1,30 @@
+{
+  "status": "SOURCE_PROTOCOL_PASS_NUMERICAL_AND_MEMORY_ADAPTER_OPEN",
+  "gap_found": "Existing QK/PV operand iteration is implemented in tb_l5_q128_attention_integrated.sv tasks do_qk/do_pv, not a synthesizable production endpoint",
+  "source_added": "rtl/attention/attention_matrix_tile_sequencer.sv",
+  "implemented": [
+    "Runtime head_dim128/256; one fixed physical Matrix interface",
+    "QK128/256 steps, context4",
+    "PV256/512 steps using BF16 probability hi/lo terms",
+    "PV256-dimensional output uses two banks reusing contexts0..3, no FMA replication",
+    "Operand request/response, Matrix request/response and result/completion backpressure",
+    "Invalid rows/keys/head geometry, memory error and mismatched Matrix context handling",
+    "Separate active BF16 partial-product count and tile mathematical MAC count"
+  ],
+  "verification": {
+    "command": "taskset -c 8-23 bash scripts/run_attention_matrix_tile_sequencer_test.sh",
+    "qk_steps": [128, 256], "pv_steps": [256, 512],
+    "matrix_latency_test_model_cycles": 5,
+    "row_key_tail_masking": true, "result_stability": true,
+    "operand_error_status": 3, "malformed_shape_status": 5,
+    "context_error_status": 7, "protocol_fault_requires_reset": true
+  },
+  "nonclaims": [
+    "Unit test uses a response/latency model, not numerical FMA; this is not a numerical or model performance gate",
+    "Tile math MAC counter does not subtract causal pair masking; parent must compute full-model useful MACs",
+    "QK/PV still require production memory/SFU adapters and actual-array differential replay",
+    "No synthesis/timing PASS claimed",
+    "Frozen running Q simulation sources and binary were not changed"
+  ],
+  "next": "Bind actual operand memories/Matrix, then score/probability/MLO storage and SFU. Replace testbench service tasks in full decoder execution; do not use contract-adapter integrated_v0 as a model backend"
+}

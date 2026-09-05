@@ -18,7 +18,7 @@
 
 等待现有连续执行器；核对receipt与进程，失败先诊断，不重启有效段。
 
-- 执行器自动完成Q及收集；整网缺口见THREE_MODEL_PREFILL_FAST_PATH_AUDIT.md。
+- Q自动跑到底；attention连接进度见ATTENTION_ENDPOINT_PROGRESS.json。
 - 收集器：scripts/collect_q1024_projection_chain.py。
 
 ## 执行约束

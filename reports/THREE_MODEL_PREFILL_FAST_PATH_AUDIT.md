@@ -27,3 +27,10 @@
 3. 按既定计划区分数值RTL和整网cycle-accurate控制回放；后者必须证明真实握手/DDR/队列计时，不能用估算或直接累加算子周期冒充。
 4. 若需要更快的仿真执行方式，先验证周期和数值等价；不能因赶进度改变完成口径。
 5. 三个完整模型的q1024统计仍为OPEN，当前没有可诚信承诺的三模型完成时间。
+
+## 已落实的连接整改
+
+- `hetero_npu_integrated_v0.sv`仍实例化固定LATENCY的contract adapter，不可作为整网性能入口。
+- attention的真实QK/PV迭代原先在testbench task中；现已新增可综合风格的`attention_matrix_tile_sequencer.sv`，支持128/256 head维度及既定hi/lo概率路径。
+- 顺序、反压、尾部掩码和错误状态协议测试通过；真实Matrix数值、内存适配及SFU连接仍待完成。
+- 详见`reports/execution/ATTENTION_ENDPOINT_PROGRESS.json`。不得把这项控制器单测计为模型通过。

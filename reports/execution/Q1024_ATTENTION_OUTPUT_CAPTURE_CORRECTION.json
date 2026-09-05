@@ -1,0 +1,14 @@
+{
+  "status": "IMPLEMENTED_ALL_ROW_REPLAY_RUNNING_NOT_PASS",
+  "root_cause": "Initial all-row attention test compared outputs and saved only FNV hash, leaving no actual tensor for downstream OProj",
+  "old_run": "work/results/q1024_captured_attention",
+  "old_stop": "Paused coordinator PID1882861, event-waited for QT7 child PID1883760 to exit, then terminated coordinator; preserved prior evidence",
+  "new_run": "work/results/q1024_captured_attention_payload",
+  "changes": [
+    "Same attention/Matrix/SFU RTL; testbench writes actual normalized FP32 words",
+    "24576 output words per independent query tile; file hash and RTL output FNV checked",
+    "Resume validates frozen binary, vectors and source manifest without rebuilding",
+    "Assembler blocks on coordinator lock, requires all64 PASS, transposes actual data into token-major order and performs BF16 RNE for OProj"
+  ],
+  "nonclaims": ["No complete decoder/model performance", "Query partitions do not prove uninterrupted controller timing", "Output capture and full-row assembly are not PASS until actual receipts complete"]
+}

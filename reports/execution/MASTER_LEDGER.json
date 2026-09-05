@@ -5,7 +5,9 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P1_COUNTER_ADMISSION",
+    "stage": "P2_EXACT_DEPTH_ENDPOINT_PASS_FULL_TILER_OPEN",
+    "matrix_k4_numeric_comparisons_passed": 12288,
+    "modified_endpoint_dc_status": "STALE_REQUIRES_RERUN",
     "full_request_q1024_measured_models": 0,
     "admission_unit_tests_passed": 12,
     "next": "Connect descriptor-driven complete Matrix tiling and tensor memory before full-model measurement"

@@ -14,7 +14,7 @@ S=("$ROOT/work/generated/l5_all_primitives/HeteroAllPrimitives.sv"
  "$ROOT/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv"
  "$ROOT/rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv"
  "$ROOT/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv"
- "$ROOT/rtl/integration/operator_matrix_bf16_endpoint_v3.sv"
+ "$ROOT/rtl/integration/matrix_tile_step_guard.sv" "$ROOT/rtl/integration/operator_matrix_bf16_endpoint_v3.sv"
  "$ROOT/tb/tb_operator_matrix_bf16_endpoint_v3.sv")
 MIN_AVAILABLE_KIB=10485760 MEMORY_HIGH=24G MEMORY_MAX=30G "$R" timeout --foreground --signal=INT --kill-after=30s 600s \
  "$V" --binary --threads 4 --timing -Wall -Wno-DECLFILENAME -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL -Wno-UNOPTTHREADS -Wno-WIDTH -j 4 \

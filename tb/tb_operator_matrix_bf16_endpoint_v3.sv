@@ -10,15 +10,28 @@ module tb_operator_matrix_bf16_endpoint_v3;
  operator_matrix_bf16_endpoint_v3 dut(.*);
  task automatic run_op(input logic[7:0]op,input logic[15:0]tag);
   begin @(negedge clk_i);req_opcode_i=op;req_tag_i=tag;req_valid_i=1;do @(posedge clk_i);while(!req_ready_o);@(negedge clk_i);req_valid_i=0;
-   @(negedge clk_i);step_valid_i=1;do @(posedge clk_i);while(!step_ready_o);@(negedge clk_i);step_valid_i=0;
-   wait(out_valid_o);if(!out_last_o||out_context_o!=0||(|out_acc_o))$fatal(1,"bad matrix output");
+   for(int k=0;k<4;k++)begin
+     @(negedge clk_i);step_clear_i=k==0;step_last_i=k==3;
+     step_valid_i=1;do @(posedge clk_i);while(!step_ready_o);@(negedge clk_i);step_valid_i=0;
+     wait(out_valid_o);if(out_last_o!=(k==3)||out_context_o!=0)$fatal(1,"bad matrix tag");
+     for(int lane=0;lane<512;lane++)begin
+       case(k)
+         0:if(out_acc_o[lane*32+:32]!=32'h40000000)$fatal(1,"sum2");
+         1:if(out_acc_o[lane*32+:32]!=32'h40800000)$fatal(1,"sum4");
+         2:if(out_acc_o[lane*32+:32]!=32'h40c00000)$fatal(1,"sum6");
+         3:if(out_acc_o[lane*32+:32]!=32'h41000000)$fatal(1,"sum8");
+       endcase
+     end
+     if(completion_valid_o)$fatal(1,"early completion");
+     @(posedge clk_i);@(negedge clk_i);
+   end
    @(posedge clk_i);wait(completion_valid_o);if(completion_status_o!=0||completion_tag_o!=tag)$fatal(1,"bad completion");
    @(negedge clk_i);completion_ready_i=1;@(posedge clk_i);@(negedge clk_i);completion_ready_i=0;end
  endtask
  initial begin repeat(2000)@(posedge clk_i);$fatal(1,"watchdog");end
  initial begin rst_ni=0;req_valid_i=0;req_opcode_i=0;req_tag_i=0;req_parent_phase_i=8'h12;req_terminal_phase_i=8'h34;
-  req_rows_i=16;req_columns_i=32;req_depth_i=1;step_valid_i=0;step_context_i=0;step_clear_i=1;step_last_i=1;
-  step_a_i=0;step_b_i=0;out_ready_i=1;completion_ready_i=0;repeat(3)@(posedge clk_i);rst_ni=1;
+  req_rows_i=16;req_columns_i=32;req_depth_i=4;step_valid_i=0;step_context_i=0;step_clear_i=1;step_last_i=1;
+  step_a_i={16{16'h3f80}};step_b_i={32{16'h4000}};out_ready_i=1;completion_ready_i=0;repeat(3)@(posedge clk_i);rst_ni=1;
   run_op(8'h20,16'h2000);run_op(8'h21,16'h2001);run_op(8'h22,16'h2002);
   run_op(8'h23,16'h2003);run_op(8'h24,16'h2004);run_op(8'h26,16'h2006);
   if(protocol_error_o)$fatal(1,"protocol error");

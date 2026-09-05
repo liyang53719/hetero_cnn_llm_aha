@@ -9,6 +9,11 @@
 - Audit command: scripts/audit_three_model_q1024_performance.py (CPU8-23 wrapper).
 - Next: descriptor-driven complete tiling and nonzero cross-operator memory harness.
 - Never substitute historical 1GHz/service-curve cycles or one zero step/phase.
+- P2 defect fixed in canonical endpoint: req_depth now enforced by exact K-step
+  guard. Icarus unit PASS; 512-lane K4 nonzero six-op Verilator replay PASS
+  (12288 FP32 comparisons). Result: Q1024_MATRIX_STEP_GUARD_RESULT.json.
+- Changed endpoint/combined DC are stale until rerun. Old one-step canary is
+  not compatible with a depth>1 request and must gain a real tiler.
 
 - Branch: `main`; baseline: `b55ddcb`.
 - Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.

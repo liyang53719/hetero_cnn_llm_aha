@@ -1,0 +1,24 @@
+{
+  "status": "UNIT_AND_FULL_ARRAY_K4_REPLAY_PASS",
+  "root_cause": "BF16 endpoint accepted req_depth but completed on arbitrary last output without counting K steps",
+  "change": "Canonical handwritten endpoint now instantiates exact-depth clear/last/context/result guard; malformed stream returns status 7 and requires reset",
+  "generated_rtl_modified": false,
+  "unit_test": {
+    "tool": "Icarus",
+    "result": "MATRIX_TILE_STEP_GUARD_PASS legal_depth=4 fault_cases=4 backpressure=8",
+    "command": "iverilog -g2012 -s tb_matrix_tile_step_guard -o work/results/matrix_tile_step_guard/test rtl/integration/matrix_tile_step_guard.sv tb/tb_matrix_tile_step_guard.sv; vvp work/results/matrix_tile_step_guard/test"
+  },
+  "full_array_replay": "PASS: six opcodes, K=4, all 512 lanes compare FP32 sums 2/4/6/8 (12288 comparisons); Verilator 5.050, 4 threads, 388ns simulated time; this testbench time is not model performance",
+  "full_array_command": "taskset -c 8-23 bash scripts/run_operator_matrix_bf16_endpoint_v3.sh",
+  "full_array_log": "work/results/operator_matrix_bf16_endpoint_v3/test.log",
+  "sha256": {
+    "full_array_log": "e60660ae46e5c9ad37a8c526b5d0d2c24f8a65394c43be9c538a8dd1a59081b2",
+    "endpoint_source": "206d41a83da0326a9fe0cc6dae890080dd2b041425663b54bcfe9e615f7c5d1f",
+    "guard_source": "529ee4921a8a303313c526b588a5d4384380acdc89cdebefb65c475b1085befe"
+  },
+  "nonclaims": [
+    "Not a full matrix tiler, q1024 execution or performance measurement",
+    "Previous endpoint and combined DC apply to old source only; modified endpoint DC must be rerun",
+    "Prior synthetic one-step canary must be corrected rather than weakening depth checking"
+  ]
+}

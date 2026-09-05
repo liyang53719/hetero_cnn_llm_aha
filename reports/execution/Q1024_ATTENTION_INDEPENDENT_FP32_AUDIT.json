@@ -192,9 +192,33 @@
       "max_error": 0.00010836124420166016,
       "output_sha256": "3f2a4738c8549b03616bf3823464aa1e3af5e372289d84c1380db5f3d5de5ba3",
       "receipt_sha256": "ed32f59f0601f58b558983f43eb6c4b69311e548e52588bf5e64c235fd051e6c"
+    },
+    {
+      "qt": 32,
+      "max_error": 9.97781753540039e-05,
+      "output_sha256": "2af1cdf58d35a2a4221ddca6a08d7d9c9dac05837857e72c695e1b6cfa20fbbf",
+      "receipt_sha256": "a35713a2ee80b7ae39336e72963f4691f2297abeb999c55e494fe099713a2a2b"
+    },
+    {
+      "qt": 33,
+      "max_error": 0.00010448694229125977,
+      "output_sha256": "40947872c97c3ec0038dd7e4ae525a00f736e87ce0aa9e1796e24beb6c8e8e8c",
+      "receipt_sha256": "fd745b07f448160a8eb098ad2199d85b4350ea191f22b1defff231b2d3163bf9"
+    },
+    {
+      "qt": 34,
+      "max_error": 0.00012362003326416016,
+      "output_sha256": "339abc141841921ce3ce91963ef045a5db8ad5d67e97595fa919d8c48b9f3eee",
+      "receipt_sha256": "d48d3e4494ff3b15b5337715c9207ef95fc3e16eda6340df0091dd13b15b2de5"
+    },
+    {
+      "qt": 35,
+      "max_error": 0.00012576580047607422,
+      "output_sha256": "1feb0bb71293d3f74b10d9f0745942c6ff52c9e3fb175c39a8bfdc0168f4653f",
+      "receipt_sha256": "e7845fd3995662d622af227cd17a47739c6711d68b1686e5de3b84a448ee0e5b"
     }
   ],
-  "compared_fp32": 786432,
+  "compared_fp32": 884736,
   "max_error": 0.00014653801918029785,
   "threshold": 0.002,
   "expected_sha256": "6eb88466039d3cde5696592247305facf22d0ca9a71a47c0e58a711f734a7807",

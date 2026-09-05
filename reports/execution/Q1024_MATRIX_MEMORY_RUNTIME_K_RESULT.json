@@ -1,0 +1,35 @@
+{
+  "status": "PASS_MEMORY_FED_TILE_ONLY",
+  "sha256": {
+    "payload_source": "c1591a9e4249a9cd0cf803170ac3aa2c31a2eef921633f30996330c55cf85acd",
+    "testbench": "a371541c43289e0c540e4eacc25a8946456ab2d0d356c637f7edb59978a11d73",
+    "simulation_log": "73d072b83cb33d76109b786315cdd4cf9ec589505b9686254b314378cba58df1"
+  },
+  "command": "taskset -c 8-23 env TOP=tb_matrix_memory_runtime_k bash scripts/run_operator_matrix_bf16_endpoint_v3.sh",
+  "clock_period_ns": 1.25,
+  "implementation": "Same runtime-K Shared-L2 tile payload and exact-depth Revision8B-B 16x32 BF16 endpoint, one binary, no generated RTL edits",
+  "verification": {
+    "bf16_writeback_comparisons": 2048,
+    "completion_count": 4,
+    "random_l2_read_write_backpressure": true,
+    "depth_address_snapshot_mutation_after_launch": true,
+    "memory_data": "Nonzero deterministic BF16 A=1 B=2; all K steps use actual 512-lane FMA, outputs written to memory and checked",
+    "build_peak_allocated_mb_tool_report": 978.730,
+    "verilator_threads": 4
+  },
+  "cases": [
+    {"k": 1, "tile_cycles": 33, "useful_macs": 512, "read_beats": 2, "write_beats": 16},
+    {"k": 4, "tile_cycles": 52, "useful_macs": 2048, "read_beats": 8, "write_beats": 16},
+    {"k": 17, "tile_cycles": 127, "useful_macs": 8704, "read_beats": 34, "write_beats": 16},
+    {"k": 1536, "tile_cycles": 8663, "useful_macs": 786432, "read_beats": 3072, "write_beats": 16}
+  ],
+  "bottleneck": "Serialized ARQ/ARP/WRQ/WRP/MQ memory supply uses only one accumulator context; K1536 useful tile wall MAC utilization is 1536/8663=17.73%, not full-request utilization. Add bounded prefetch and context scheduling after complete multi-tile correctness.",
+  "remaining": [
+    "General descriptor-driven multi-tile execution and partial rows/columns",
+    "Runtime request admission for local range/alignment/zero depth before payload start",
+    "Real DDR and cross-operator/layer memory continuity",
+    "Current RTL endpoint and combined DC rerun",
+    "All three full-model q1024 measured cycles and useful MAC utilization remain unavailable"
+  ],
+  "logs": "work/results/matrix_memory_runtime_k/{build,test}.log"
+}

@@ -5,7 +5,9 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_EXACT_DEPTH_ENDPOINT_PASS_FULL_TILER_OPEN",
+    "stage": "P2_MEMORY_RUNTIME_K_PASS_FULL_TILER_OPEN",
+    "memory_runtime_k_cases_passed": [1, 4, 17, 1536],
+    "memory_runtime_k_writebacks_checked": 2048,
     "matrix_k4_numeric_comparisons_passed": 12288,
     "modified_endpoint_dc_status": "STALE_REQUIRES_RERUN",
     "full_request_q1024_measured_models": 0,

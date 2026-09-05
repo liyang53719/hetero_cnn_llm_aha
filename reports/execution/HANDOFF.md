@@ -14,6 +14,12 @@
   (12288 FP32 comparisons). Result: Q1024_MATRIX_STEP_GUARD_RESULT.json.
 - Changed endpoint/combined DC are stale until rerun. Old one-step canary is
   not compatible with a depth>1 request and must gain a real tiler.
+- Runtime-K Shared-L2 payload now PASS K=1/4/17/1536 in one real-array binary;
+  2048 BF16 writebacks checked, random memory backpressure, address/depth snapshot.
+- K1536 tile: 8663 cycles, 786432 useful MACs, 17.73% tile wall utilization.
+  This is serialized local-memory tile evidence, not DDR/full-request performance.
+- Next: runtime admission, row/column tails and descriptor-driven multi-tile
+  adapter; then prefetch/context overlap. Result Q1024_MATRIX_MEMORY_RUNTIME_K_RESULT.json.
 
 - Branch: `main`; baseline: `b55ddcb`.
 - Active plan: `reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md`.

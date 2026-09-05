@@ -5,6 +5,7 @@
   "protocol_packets": 100,
   "memory_gearbox_progress": "BF16_RESIDUAL_GEARBOX_RESULT.json:100 beats formatting/protocol unit PASS, actual L2 binding pending",
   "local_read_controller_progress": "RESIDUAL_L2_READER_RESULT.json:17 data cases,3 range errors,1 read error PASS; integration with actual fabric and residual stream pending",
+  "local_write_controller_progress": "RESIDUAL_L2_WRITER_RESULT.json:8 data cases,4 protocol errors,4 range errors PASS; paired endpoint integration pending",
   "checks": ["Independent legal ready/valid input stalls", "FP32 A and BF16/FP32 B widening", "Masked lanes", "Pair correlation and last", "Output backpressure stability", "Mismatch status7 locks until reset"],
   "protocol_scope": "Uses a deliberately non-arithmetic XOR fixture; not an FP32 addition numerical gate",
   "numerical_service": "q1024-residual-fp32-20260905.service",

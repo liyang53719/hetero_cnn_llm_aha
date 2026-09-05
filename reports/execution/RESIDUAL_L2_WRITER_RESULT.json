@@ -1,0 +1,10 @@
+{
+  "status": "PASS_FP32_LOCAL_WRITE_CONTROL_UNIT",
+  "command": "taskset -c 8-23 bash scripts/run_residual_l2_writer_test.sh",
+  "data_cases":8,"protocol_errors":4,"range_errors":4,
+  "checks":["Raw FP32 bits preserved", "Tail byte enables and untouched bytes", "Completion after final write grant", "Input packet snapshot", "Write backpressure stability", "Exact chunk index/keep/last validation", "Upstream error propagated without writing error packet", "65-bit end address including overflow guard", "Completion hold and next-request recovery", "64-bit write/payload counters"],
+  "source_sha256":"44382edf52c9109bb3b470b40e438c0e463dcac6354c104047c64339fe2cac84",
+  "log_sha256":"daf6dc95e6f8e066c56d15e45d748a8cc00bb085c5d4d3fb46863503968baf56",
+  "next":"Connect paired local readers, residual ALU stream and writer; parent must handle read errors, pending writes and nonzero-status event suppression",
+  "nonclaims":["Unit memory receiver only, not actual Shared-L2 macro or DDR", "No residual arithmetic tested here", "No combined endpoint, full-model timing or PPA PASS", "Queued numerical sources remain unchanged"]
+}

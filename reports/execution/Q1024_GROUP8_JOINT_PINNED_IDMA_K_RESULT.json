@@ -1,23 +1,23 @@
 {
-  "checked_bf16_outputs": 49152,
+  "checked_bf16_outputs": 8192,
   "clock_hz": 800000000,
-  "columns": 1536,
+  "columns": 256,
   "command": "MIN_AVAILABLE_KIB=10485760 bash scripts/run_memory_capped.sh timeout 600 bash scripts/run_qwen2_group8_pinned_idma_vcs.sh",
-  "converted_fragment_latency_seconds": 0.00114733,
-  "ddr_read_bytes": 5308416,
+  "converted_fragment_latency_seconds": 0.0001864425,
+  "ddr_read_bytes": 884736,
   "ddr_read_throttle_cycles": 0,
-  "ddr_write_bytes": 98304,
+  "ddr_write_bytes": 16384,
   "ddr_write_throttle_cycles": 0,
   "depth": 1536,
-  "flat_idma_requests": 11328,
+  "flat_idma_requests": 1120,
   "full_model_q1024_tokens_per_second": null,
   "golden_sha256": {
-    "work/results/qwen2_canonical_q_tile16_all/q_expected_token_major.memh": "3e2ccc4174ecdb75b69a2d6d08fa89ead25489ae94b4b3e4ad0aac012d4bde9a",
-    "work/results/qwen2_canonical_q_tile16_all/q_weight_ddr_beats.memh": "03bb8bfb7ceff45105160fb54b171a879caaefa5f697125a7a4c98cf96a56076",
-    "work/results/qwen2_true_rows16_31_projection/q_expected_token_major.memh": "2b9fa200df37e94d128508946462a0b72796914abd16f36babdb8433115abe08"
+    "work/results/qwen2_canonical_q_tile16_all/k_expected_token_major.memh": "672d780a74fff29181e51d0d9868d094359cd972b6ca299cc531b9a481d99d2e",
+    "work/results/qwen2_canonical_q_tile16_all/k_weight_ddr_beats.memh": "bf64f555645480f0cbcf2183c27fce72f00afbf1fe91fc5c67a9ed85daec6170",
+    "work/results/qwen2_true_rows16_31_projection/k_expected_token_major.memh": "bc606dee65da17a802e3aa3b990ed3891445f0d421aa3a37949bc20de652ea03"
   },
   "idma_commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
-  "log_sha256": "80dad35c96745f802e724f3e3951752371f144645185ad29129ccceaefe3643d",
+  "log_sha256": "35ae6b7572a8d9738c1223eeddb76b46f13c3d68eef7cd34caa993837a7f8aa2",
   "nonclaims": [
     "Projection input is canonical layer0 norm; RMSNorm is outside this ROI",
     "True token rows0_31 but only a layer0 projection, not a complete model execution",
@@ -26,7 +26,7 @@
     "100/40GBps bandwidth ceiling, not a DRAM bank/refresh/latency model",
     "Current modified RTL DC/PPA remains open"
   ],
-  "projection": "Q",
+  "projection": "K",
   "repeated_input_fixture": false,
   "row_manifest_sha256": {
     "work/results/qwen2_canonical_tile16_vectors/result.json": "2298b98ff51831a7a879d4c8c15a4e04c0e55679529220d25a523aca4036bfcc",
@@ -55,7 +55,7 @@
   },
   "status": "PASS_JOINT_PACKED_PROJECTION_FRAGMENT",
   "token_start": 0,
-  "useful_mac_utilization": 0.16065125116575005,
-  "useful_macs": 75497472,
-  "wall_cycles": 917864
+  "useful_mac_utilization": 0.16476929884548855,
+  "useful_macs": 12582912,
+  "wall_cycles": 149154
 }

@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
-  "stage": "Q1024_P2_DESCRIPTOR_TILE_PLAN_PASS",
+  "stage": "Q1024_P2_IDMA_STRIDED_CHUNKS_FIXED",
   "state": "ACTIVE_FULL_REQUEST_PERFORMANCE_OPEN",
-  "unique_next_action": "Connect verified descriptor tile iterator to actual strided DMA staging and runtime-K payload, acknowledging tiles only after output DMA/writeback succeeds. Existing plan tests supply synthetic tile acknowledgements and do not execute payload. Validate staging before Matrix command launch",
+  "unique_next_action": "Connect verified descriptor tile iterator to repaired strided DMA staging and runtime-K payload. Generalize token-major to K-major staging from the existing transpose path; acknowledge tile only after checked output DMA. Compare actual DDR output values, not just beat counts",
   "expected_outputs": [],
   "success": {
     "branch": "main",

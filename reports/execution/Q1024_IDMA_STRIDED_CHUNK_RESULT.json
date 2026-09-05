@@ -1,0 +1,32 @@
+{
+  "status": "PASS_REQUEST_EXPANSION_AND_PINNED_IDMA_PROTOCOL",
+  "sha256": {
+    "expander_source": "10cd154665f6145f42205098ba4ab13f6cc188f7ed636a3858759969925ae5b9",
+    "vcs_log": "74f68299ef89f3a65a08aae68ba161e73e73affdf6278ec208812e061ee61e77"
+  },
+  "root_cause": "Noncoalesced 2D rows only issued min(row_bytes,chunk_limit) bytes before advancing to next row, silently truncating wide rows",
+  "fix": "Track row and within-row offset independently; emit every chunk and final tail; coalesce contiguous rows only when total fits 32 bits, otherwise retain row iteration; validate 65-bit end addresses",
+  "unit": {
+    "source": "tb/tb_idma_strided_row_chunks.sv",
+    "cases": 6, "flat_requests": 841, "bytes": 109000,
+    "backpressure_and_snapshot": true, "address_overflow_rejected": true
+  },
+  "pinned_backend": {
+    "idma_commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+    "upstream_modified": false,
+    "command": "taskset -c 8-23 bash scripts/run_qwen2_pinned_idma_tile_vcs.sh",
+    "tool": "VCS W-2024.09",
+    "abstract_requests": 8, "flat_requests": 2383,
+    "read_beats": 3373, "write_beats": 3373,
+    "strided_load_row_bytes": 3073, "strided_store_row_bytes": 129,
+    "strided_rows_each": 3,
+    "flat_address_and_length_checked": true,
+    "backend_errors": 0
+  },
+  "nonclaims": [
+    "Backend test checks protocol/address/length/beat counts, not every destination data byte",
+    "No full projection numerical or full model performance claim",
+    "Changed DMA expansion control needs DC rerun before current PPA claim"
+  ],
+  "next": "Connect descriptor-driven DMA staging and transpose with runtime-K Matrix payload, and compare actual DDR output values"
+}

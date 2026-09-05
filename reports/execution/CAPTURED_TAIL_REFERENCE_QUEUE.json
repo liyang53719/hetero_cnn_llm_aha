@@ -1,0 +1,9 @@
+{
+  "status": "QUEUED_WAITING_FOR_INDEPENDENT_ATTENTION_ASSEMBLY_NOT_PASS",
+  "command": "taskset -c 8-23 /usr/bin/python3 scripts/run_captured_attention_tail_reference.py --wait-assembler 1885413",
+  "tool_session": 36620,
+  "dependency": "Assembler process termination plus PASS_CAPTURED_ATTENTION_TO_OPROJ_INPUT with1572864 independent FP32 checks; process termination alone is not success",
+  "purpose": "Generate exact OProj/residual/postnorm/gate/up/SiLU/down reference tensors from actual captured attention, for subsequent RTL differential replay",
+  "resources": "Blocking pidfd wait; after dependency passes, common heavy-task lock; CPU8-23, OMP8, each child<=600s, MemoryHigh24G/Max30G, disk>50GiB",
+  "nonclaims": ["Syntax checked only at launch; CPU reference not yet executed", "CPU reference is not hardware payload execution or measured RTL performance", "Complete decoder and three-model q1024 still OPEN"]
+}

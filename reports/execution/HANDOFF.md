@@ -27,7 +27,7 @@
 - MemoryHigh24G/Max30G；可用内存>10GiB、磁盘>50GiB。
 - 每条重命令≤600秒，阻塞等待；Q恢复段为2ms模拟时间。
 - 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
-- 旧hash-only回放在QT7结束后停止并保留；新回放导出实际tensor供OProj。
+- CPU尾部参考已排队session36620，等组装器退出并核验门禁；不计RTL PASS。
 - 保留完整 .chk/.chk.FILES/.chk.ucli；快照不提交Git。
 - 检查首个失败，不放宽0.002；运行中禁止改attention源/夹具/二进制。
 - 保护两个被排除的用户runtime脚本；检查点及时commit/push。

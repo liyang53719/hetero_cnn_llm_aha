@@ -11,6 +11,7 @@
     "q1024_captured_attention_coordinator_pid": 1884540,
     "q1024_attention_payload_directory": "work/results/q1024_captured_attention_payload",
     "q1024_attention_output_policy": "Capture actual FP32 per QT, verify output FNV and file SHA; assemble token-major BF16_RNE for OProj after all64 pass",
+    "captured_attention_tail_reference": "Queued session36620 waits on assembler PID1885413 via pidfd, then requires complete independent FP32 gate before compiling/running exact CPU OProj/MLP golden; not RTL PASS",
     "q1024_Q_final_segment": 16,
     "q1024_Q_final_wall_cycles": 25656608,
     "q1024_Q_checked_bf16_outputs": 1572864,

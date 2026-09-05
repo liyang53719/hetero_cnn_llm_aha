@@ -1,0 +1,117 @@
+schema_version: 1
+baseline: 02549039beda0c1c42b8375ace2dca1c0d8cd9e2
+scope: Chisel安全修复迁移；不是三模型整网完成
+source_root: chisel/p0_safety
+source_policy:
+  source_of_truth: Scala/Chisel
+  generated_sv_hand_edit_allowed: false
+  preserved_legacy_rtl: true
+  changed_core_blackboxes: 0
+  retained_unchanged_blackboxes:
+    - qwen2_projection_descriptor_context
+    - qwen2_matrix_command_endpoint
+  main_only: true
+  force_push: false
+  preserve_sandbox_and_checkpoints: true
+clock:
+  target_hz: 800000000
+  period_ns: 1.250
+  constraint: dc/common_clock_800mhz.tcl
+physical_sram:
+  address_bits: 15
+  logical_banks: 16
+  row_bits: 128
+  rows_per_bank: 6144
+  capacity_bytes: 1572864
+  first_illegal_byte: '0x180000'
+  first_illegal_512b_beat: 24576
+  inference: SyncReadMem；本包不等价于ARM宏连接或PPA签核
+local_tasks:
+  - id: C0
+    priority: P0
+    task: 复跑源码编译、五个DUT测试、生成四个公开ABI root
+    commands:
+      - cd chisel/p0_safety
+      - export MAKEFLAGS=VM_PARALLEL_BUILDS=0
+      - sbt compile Test/compile test
+      - sbt 'runMain heteronpu.p0.EmitP0Safety emitted'
+      - python3 scripts/check_emission.py emitted
+    acceptance:
+      - 无编译错误；DUT测试无失败；以JUnit实际用例数为准
+      - 新增/修复核心不使用BlackBox或inline SV
+      - 四个公开root恰好各有一个定义
+      - 记录Scala、生成SV、工具版本和命令SHA
+    tool_note: MAKEFLAGS避免chiseltest6预包含头与Verilator5.020的PCH冲突，不关闭任何DUT断言
+  - id: C1
+    priority: P0
+    task: 在全新build目录将生成root接入实际投影链，不覆盖在途仿真
+    keep_dependencies:
+      - 原descriptor decoder
+      - 原Matrix command endpoint及其Revision8B-B与HardFloat算术依赖
+      - pinned-iDMA与AXI/L2 bridge
+    remove_from_new_compile_filelist:
+      - rtl/integration/qwen2_projection_q1024_group8_controller.sv
+      - rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv
+      - rtl/integration/bf16_tile_transpose_stager.sv
+      - rtl/fabric/shared_l2_fabric.sv
+      - rtl/integration/qwen2_norm_tile16_loader.sv
+    acceptance:
+      - 不混编旧新同名模块
+      - Chisel参数在elaboration决定；移除TB实例上旧SV参数覆盖，不改生成SV
+      - 接入reset_required_o与address_error_o[2:0]，禁止只悬空诊断后宣称错误闭环
+      - P0AllRoots仅为生成聚合器，不作为芯片运行顶层
+      - 新build_id和chain_id；旧checkpoint保留但禁止恢复进新设计
+  - id: C2
+    priority: P0
+    task: 使用真实iDMA、descriptor与Matrix完成顶层故障注入和复位恢复
+    cases:
+      - 首笔/第二组权重读取错误
+      - 第一/中间/最后输出B响应错误
+      - Norm DMA错误、descriptor错误、Matrix协议错误
+      - 错误和回压同时出现、错误后再次请求、复位后合法请求
+    acceptance:
+      - 首个错误保留，错误completion一次且非零
+      - 错误后不启动后续tile，reset-required锁定直到复位
+      - 已发请求按leaf协议排空，不丢掉仍在途的DDR事务
+      - 对不再响应的leaf由外部watchdog终止；不伪造成功
+      - 复位处理必须包括保留的Matrix和iDMA；不能只复位调度器
+  - id: C3
+    priority: P0
+    task: 验证Shared-L2非法地址与supervisor联动
+    cases:
+      - '0x17ffc0最后合法beat，0x180000第一非法beat'
+      - 两读一写同时非法、随机回压、复位清除诊断
+      - wide地址carry、Matrix FP32第二beat跨界、transpose overlap
+    acceptance:
+      - 非法请求不grant不触碰未实现memory row
+      - 不用编码上限2MiB替代实际1.5MiB
+      - supervisor中止/复位而非永久静默等待
+      - 每个合法请求仍有正确数据与字节掩码
+  - id: C4
+    priority: P1
+    task: 用真实算术运行合法输入数值回归
+    sequence:
+      - 16/32token raw Q/K/V BF16与OProj FP32
+      - q1024 raw Q/K/V和OProj，新的运行链
+      - 连续短block，禁止Host/golden替换内部状态
+    acceptance:
+      - 保持原冻结数值规则；不因迁移放宽阈值
+      - 所有DDR输出由实际Matrix产生
+      - 对比旧版合法输入输出，不承诺周期数完全相同
+      - 本包Matrix单测的accumulator fixture不得作MAC数值证据
+  - id: C5
+    priority: P1
+    task: 当前生成版本800MHz物理复签
+    acceptance:
+      - 四root和集成层重新DC，不沿用旧版报告
+      - unresolved/unmapped/latch/comb-loop为0
+      - SRAM映射与端口互斥/延时/掩码合同一致
+      - 记录setup/hold/DRC/面积，目标周期1.250ns
+      - post-route/PVT/功耗独立门禁，不由单模块DC推断
+not_completed_by_this_package:
+  - 真实descriptor和Matrix leaf参与的完整group8数值仿真
+  - pinned-iDMA/DDR端到端故障注入
+  - 新错误端口与SoC supervisor集成
+  - SRAM宏替换与物理时序签核
+  - Matrix吞吐优化、多context并发喂数
+  - 三模型完整q1024或整网性能

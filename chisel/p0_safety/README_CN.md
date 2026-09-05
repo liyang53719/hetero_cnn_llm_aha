@@ -10,10 +10,14 @@
 
 ```sh
 cd chisel/p0_safety
-sbt test
-sbt 'runMain heteronpu.p0.EmitP0Safety generated'
+export MAKEFLAGS=VM_PARALLEL_BUILDS=0
+sbt -batch compile Test/compile test
+sbt -batch 'runMain heteronpu.p0.EmitP0Safety generated'
 python3 scripts/check_emission.py generated
+python3 scripts/verify_emitted_abi.py generated
 ```
+
+MAKEFLAGS 采用 Verilator 支持的单编译单元方式，避开 chiseltest6 预包含头与 Verilator5.020 的 PCH 冲突；不会关闭硬件断言。Emitter 对公开 root 的 scalar 端口添加 Chisel dontTouch 注解，避免常量输出被跨模块优化删除；不修改生成 SV，不禁用数据通路优化。
 
 测试强制使用 ChiselTest + Verilator，非 Python 模型替代。Matrix payload 测试由外部端口提供 accumulator fixture，仅验证喂数与写回，不宣称测试了 MAC 算术。Group8 测试在真实 Chisel 调度器的子模块边界注入响应，仅验证协议、状态与错误；不是 pinned-iDMA 整网数值。
 

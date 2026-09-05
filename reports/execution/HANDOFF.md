@@ -9,7 +9,7 @@
 - Qwen2 首层 K/V 投影：各1024行、262144个BF16输出逐位通过。
 - 各4272278周期；名义800MHz下5.340ms，MAC利用率18.41%。
 - 证据：reports/execution/Q1024_CONTINUOUS_{K,V}_RESULT.json。
-- Q 段0–4已保存；最新7199993周期、1322496个完成的Matrix step。
+- Q自动连续推进；即时进度以p0目录最新receipt为准，非最终数值通过。
 - Q自动连续执行器运行中（启动PID1861488）；勿重复启动，先核实PID。
 - Q receipts：work/results/q1024_continuous/p0/；后续段自动推进。
 - 单投影结果不等于完整decoder或模型prefill。

@@ -5,9 +5,7 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_Q1024_K_V_COMPLETE_Q_SEGMENT3_CHECKPOINTED",
-    "q1024_Q_latest_saved_cycle": 5599993,
-    "q1024_Q_next_segment": 4,
+    "stage": "P2_Q_CONTINUOUS_AUTOMATIC_RUNNING_FULL_MODEL_OPEN",
     "q1024_V_final_segment": 5,
     "q1024_V_final_wall_cycles": 4272278,
     "q1024_V_checked_bf16_outputs": 262144,
@@ -16,14 +14,24 @@
     "q1024_K_final_wall_cycles": 4272278,
     "q1024_K_checked_bf16_outputs": 262144,
     "q1024_K_final_segment": 5,
-    "real_checkpoint_cycles_verified": [15993, 47993],
+    "real_checkpoint_cycles_verified": [
+      15993,
+      47993
+    ],
     "checkpoint_small_exact_state_records": 235,
     "true_rows0_31_QKV_checked_values": 65536,
-    "true_rows0_31_projection_cycles": {"Q": 917864, "K": 149154, "V": 149154},
+    "true_rows0_31_projection_cycles": {
+      "Q": 917864,
+      "K": 149154,
+      "V": 149154
+    },
     "packed_group8_joint_wall_cycles": 917864,
     "packed_group8_joint_checked_values": 49152,
     "packed_group8_joint_repeated_input_rows": false,
-    "packed_group8_joint_true_token_range": [0, 31],
+    "packed_group8_joint_true_token_range": [
+      0,
+      31
+    ],
     "packed_group8_checked_matrix_values": 49152,
     "packed_group8_checked_DMA_bytes": 786432,
     "batch_count_contract": "runtime_1_to_64_no_elaboration_parameter",
@@ -41,13 +49,20 @@
     "descriptor_tile_plan_payload_executed": false,
     "tail_admission_legal_requests": 7,
     "tail_admission_rejections": 7,
-    "memory_runtime_k_cases_passed": [1, 4, 17, 1536],
+    "memory_runtime_k_cases_passed": [
+      1,
+      4,
+      17,
+      1536
+    ],
     "memory_runtime_k_writebacks_checked": 2048,
     "matrix_k4_numeric_comparisons_passed": 12288,
     "modified_endpoint_dc_status": "STALE_REQUIRES_RERUN",
     "full_request_q1024_measured_models": 0,
     "admission_unit_tests_passed": 12,
-    "next": "Connect descriptor-driven complete Matrix tiling and tensor memory before full-model measurement"
+    "next": "Connect descriptor-driven complete Matrix tiling and tensor memory before full-model measurement",
+    "q1024_Q_progress_directory": "work/results/q1024_continuous/p0",
+    "q1024_Q_execution": "automatic coordinator; inspect latest receipt and PID; no manual per-segment starts"
   },
   "branch": "main",
   "baseline_sha": "b55ddcb6dbc890a2b1b832fdc5701c1a0a65da3b",
@@ -72,20 +87,84 @@
     "model_roots": 18,
     "primitive_modules": 25,
     "terminal_bindings": 58,
-    "inventory": {"qwen2": 30, "qwen3_5": 93, "qwen3_8": 150},
-    "canaries": ["qwen2", "qwen3_5", "qwen3_8", "vision"],
+    "inventory": {
+      "qwen2": 30,
+      "qwen3_5": 93,
+      "qwen3_8": 150
+    },
+    "canaries": [
+      "qwen2",
+      "qwen3_5",
+      "qwen3_8",
+      "vision"
+    ],
     "clock_period_ns": 1.25,
     "setup_uncertainty_ns": 0.08,
-    "io_budget_ns": 0.10,
-    "setup_wns_ns_min": 0.0
+    "io_budget_ns": 0.1,
+    "setup_wns_ns_min": 0
   },
   "stages": {
-    "G0": {"status": "PASS", "evidence": ["reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md"], "git_sha": "1eb0923e3a1138896a4cc737e4362b04cb548d29"},
-    "G1": {"status": "PASS", "depends_on": ["G0"], "evidence": ["reports/execution/OPERATOR_SOURCE_REPLAY_V3.json"]},
-    "G2": {"status": "PASS", "depends_on": ["G1"], "evidence": ["reports/execution/OPERATOR_RTL_GENERATION_V3.json", "generated/operator_primitives_v3/MANIFEST.json"]},
-    "G3": {"status": "PASS", "depends_on": ["G2"], "evidence": ["config/operator_terminal_bridge_v3.json", "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json", "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json", "reports/execution/OPERATOR_MODEL_CANARIES_V3.json", "reports/execution/OPERATOR_ROOT_STRESS_V3.json", "reports/execution/OPERATOR_EXTERNAL_TOPK_SRAM_V3.json", "reports/execution/OPERATOR_COMBINED_DRC_CLOSURE_800MHZ.json"]},
-    "G4": {"status": "PASS_MACRO_AWARE_PPA_AGGREGATE", "depends_on": ["G3"], "evidence": ["reports/execution/L10_SRAM_MACRO_INVENTORY_RESULT.json", "reports/execution/OPERATOR_MACRO_INVENTORY_SHELL_800MHZ.json"]},
-    "G5": {"status": "PASS", "depends_on": ["G4"], "git_sha": "00a5cd21e128bee6eb9164f019f556cdbfe07de3", "evidence": ["reports/execution/OPERATOR_THREE_MODEL_FINAL_ACCEPTANCE_800MHZ.json"]}
+    "G0": {
+      "status": "PASS",
+      "evidence": [
+        "reports/THREE_MODEL_CHISEL_RTL_DC_800MHZ_EXECUTION_PLAN.md"
+      ],
+      "git_sha": "1eb0923e3a1138896a4cc737e4362b04cb548d29"
+    },
+    "G1": {
+      "status": "PASS",
+      "depends_on": [
+        "G0"
+      ],
+      "evidence": [
+        "reports/execution/OPERATOR_SOURCE_REPLAY_V3.json"
+      ]
+    },
+    "G2": {
+      "status": "PASS",
+      "depends_on": [
+        "G1"
+      ],
+      "evidence": [
+        "reports/execution/OPERATOR_RTL_GENERATION_V3.json",
+        "generated/operator_primitives_v3/MANIFEST.json"
+      ]
+    },
+    "G3": {
+      "status": "PASS",
+      "depends_on": [
+        "G2"
+      ],
+      "evidence": [
+        "config/operator_terminal_bridge_v3.json",
+        "reports/execution/OPERATOR_ENDPOINT_BINDING_V3.json",
+        "reports/execution/OPERATOR_COMBINED_OWNER_SHELL_DC_800MHZ.json",
+        "reports/execution/OPERATOR_MODEL_CANARIES_V3.json",
+        "reports/execution/OPERATOR_ROOT_STRESS_V3.json",
+        "reports/execution/OPERATOR_EXTERNAL_TOPK_SRAM_V3.json",
+        "reports/execution/OPERATOR_COMBINED_DRC_CLOSURE_800MHZ.json"
+      ]
+    },
+    "G4": {
+      "status": "PASS_MACRO_AWARE_PPA_AGGREGATE",
+      "depends_on": [
+        "G3"
+      ],
+      "evidence": [
+        "reports/execution/L10_SRAM_MACRO_INVENTORY_RESULT.json",
+        "reports/execution/OPERATOR_MACRO_INVENTORY_SHELL_800MHZ.json"
+      ]
+    },
+    "G5": {
+      "status": "PASS",
+      "depends_on": [
+        "G4"
+      ],
+      "git_sha": "00a5cd21e128bee6eb9164f019f556cdbfe07de3",
+      "evidence": [
+        "reports/execution/OPERATOR_THREE_MODEL_FINAL_ACCEPTANCE_800MHZ.json"
+      ]
+    }
   },
   "retained_project_state": {
     "L0_L3": "PASS_RETAINED",

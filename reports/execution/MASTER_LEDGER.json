@@ -5,7 +5,9 @@
   "current_performance_goal": {
     "status": "ACTIVE",
     "plan": "reports/THREE_MODEL_Q1024_PERFORMANCE_PLAN.md",
-    "stage": "P2_FIRST9_BANDWIDTH_ENVELOPE_PASS_GENERIC_CONNECTION_OPEN",
+    "stage": "P2_FIRST9_ATTRIBUTION_PASS_GENERIC_CONNECTION_OPEN",
+    "first9_dma_pending_cycles": 611467,
+    "first9_l2_read_pending_cycles": 226048,
     "first9_fragment_measured_wall_cycles": 1247233,
     "first9_fragment_useful_matrix_macs": 50331648,
     "first9_fragment_memory_model": "axi_sim_mem_100_40GBps_envelope_no_DRAM_latency_model",

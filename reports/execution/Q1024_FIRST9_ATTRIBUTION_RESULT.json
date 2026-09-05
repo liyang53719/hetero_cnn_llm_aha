@@ -1,0 +1,30 @@
+{
+  "status": "PASS_NUMERICAL_FRAGMENT_ROI_ATTRIBUTION",
+  "scope": "Qwen2 layer0 first9 operators rows0_15 only, pinned iDMA plus AXI100/40GBps ceiling at800MHz",
+  "command": "MIN_AVAILABLE_KIB=10485760 bash scripts/run_memory_capped.sh timeout 600 bash scripts/run_qwen2_first9_tile16_pinned_idma_vcs.sh",
+  "wall_cycles": 1247233,
+  "operation_cycles": {
+    "RMSNorm": 84427, "Q": 816978, "Q_bias": 14245, "Q_RoPE": 45850,
+    "K": 136178, "K_bias": 2424, "K_RoPE": 8526, "V": 136181, "V_bias": 2424
+  },
+  "priority_buckets": {
+    "matrix_accept": 98304, "matrix_backpressure": 0,
+    "l2_read_request_wait": 0, "l2_read_response_pending": 226048,
+    "l2_write_request_wait": 0, "dma_response_pending": 611467,
+    "descriptor_response_pending": 62, "other": 311352
+  },
+  "checks": {
+    "operation_sum_equals_ROI": true, "bucket_sum_equals_ROI": true,
+    "matrix_accept_equals_completed_payload_steps": true,
+    "existing_DDR_numerical_checks_pass": true,
+    "DDR_bandwidth_throttle_cycles": 0
+  },
+  "interpretation": "Investigate serialized tiny DMA requests and serial local operand supply before modifying FMA pipeline. This does not prove every DMA or memory-response cycle is avoidable.",
+  "nonclaims": [
+    "Buckets use a fixed priority; simultaneous causes are not additive",
+    "DMA pending includes useful transfer time; other includes active SFU computation",
+    "No full-layer or full-q1024 throughput/utilization claim",
+    "No change to datapath or current synthesis evidence"
+  ],
+  "next": "Inspect safe request pipelining of pinned-iDMA with ordered completion draining and unchanged error/alias semantics; integrate generic tile payload without reference copies"
+}

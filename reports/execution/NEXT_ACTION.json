@@ -1,8 +1,8 @@
 {
   "schema_version": 7,
-  "stage": "Q1024_P2_FIRST9_BANDWIDTH_ENVELOPE_PASS",
+  "stage": "Q1024_P2_FIRST9_ATTRIBUTION_PASS",
   "state": "ACTIVE_FULL_REQUEST_PERFORMANCE_OPEN",
-  "unique_next_action": "Reuse first9 same-run pinned-iDMA/AXI/L2/Matrix/SFU wiring for generic descriptor tile iterator and add per-engine/per-operation stall attribution. 100/40GBps envelope is active: first9 still1247233cycles with zero bandwidth-throttle cycles; do not extrapolate fragment into model throughput",
+  "unique_next_action": "Inspect safe pinned-iDMA request pipelining with ordered completion/error draining and preserved alias semantics: DMA pending611467cycles dominates this fragment. Then connect generic tile payload. Do not change FMA based on zero ready-backpressure or extrapolate fragment into full-model throughput",
   "expected_outputs": [],
   "success": {
     "branch": "main",

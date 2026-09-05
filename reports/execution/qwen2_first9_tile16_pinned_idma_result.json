@@ -19,6 +19,7 @@
   "evidence_class": "single_VCS_formal_descriptor_real_payload_clean_iDMA_AXI_bridge_SharedL2_fabric",
   "flat_idma_requests": 101432,
   "fragment_metrics": {
+    "attribution_boundary": "mutually exclusive priority buckets; overlapping causes are not additive and other includes active SFU work",
     "bandwidth_burst_allowance_bytes": 128,
     "clock_hz_for_conversion": 800000000,
     "converted_fragment_latency_seconds": 0.00155904125,
@@ -30,6 +31,27 @@
     "full_model_tokens_per_second": null,
     "full_q1024_mac_utilization": null,
     "memory_model": "axi_sim_mem with 100/40GBps bandwidth envelope at800MHz; no DRAM bank/refresh/latency model",
+    "operation_cycles": {
+      "K": 136178,
+      "K_RoPE": 8526,
+      "K_bias": 2424,
+      "Q": 816978,
+      "Q_RoPE": 45850,
+      "Q_bias": 14245,
+      "RMSNorm": 84427,
+      "V": 136181,
+      "V_bias": 2424
+    },
+    "priority_bucket_cycles": {
+      "descriptor_response_pending": 62,
+      "dma_response_pending": 611467,
+      "l2_read_request_wait": 0,
+      "l2_read_response_pending": 226048,
+      "l2_write_request_wait": 0,
+      "matrix_accept": 98304,
+      "matrix_backpressure": 0,
+      "other": 311352
+    },
     "read_port_ceiling_gbps": 51.2,
     "scope": "first layer first9 operators rows0_15 only; excludes attention and MLP",
     "useful_macs": 50331648,
@@ -54,8 +76,8 @@
     "coalesce_log_sha256": "74f68299ef89f3a65a08aae68ba161e73e73affdf6278ec208812e061ee61e77",
     "expander_rtl_sha256": "10cd154665f6145f42205098ba4ab13f6cc188f7ed636a3858759969925ae5b9",
     "idma_commit": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
-    "log_sha256": "76c6d98390db885db2f3af4047f3abbb36cffe50fcd8925d80f4194d78287d5b",
-    "testbench_sha256": "2990a8272da7ed79904b5f3ae491628d58aa5c4a2dd09f57c4782ab4e4ce738f",
+    "log_sha256": "3c43ca1782d2b3d54e69e7f58f8008f5d598d412c9659a319eb0cf78c6fadf37",
+    "testbench_sha256": "354a7d584e3db104ecfee9d17b0d6959a155d47012bcb775fd45536f103691e2",
     "top_rtl_sha256": "e98bc9be6ed9c0e23c19a68f37b47425fd7c2b94eadf912da95017e2567db925"
   },
   "rope_steps": 1920,

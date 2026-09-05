@@ -42,13 +42,19 @@
 - Bandwidth model unit:10k saturated+10k random cycles PASS; 128B credit cap.
   AXI512 port max51.2GB/s at800MHz. Report Q1024_DDR_BANDWIDTH_ENVELOPE_RESULT.json.
 - Report qwen2_first9_tile16_pinned_idma_result.json now includes fragment metrics.
+- First9 attribution conserved: DMA pending611467 (49.0%), local read response
+  pending226048 (18.1%), Matrix accepted98304 (7.88%), Matrix ready stall0,
+  other311352 (includes SFU work). Q/K/V operation cycles total1089337.
+- Evidence Q1024_FIRST9_ATTRIBUTION_RESULT.json. Counts are priority occupancy
+  buckets, not proof all waiting cycles can be eliminated.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
-DDR bandwidth ceiling now modeled; add per-engine/per-operation stall attribution
-and generic tile payload integration before full-request claims.
+DDR ceiling and ROI attribution now verified. Inspect safe iDMA request pipelining
+with ordered response/error draining, and serial operand supply. Do not change FMA
+pipeline based on these results. Continue generic tile payload integration.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

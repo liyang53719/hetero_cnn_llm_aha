@@ -1,0 +1,122 @@
+name: chisel-p0-safety
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'integration/p0_chisel_delivery/**'
+      - 'chisel/p0_safety/**'
+      - '.github/workflows/chisel-p0-safety.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: chisel-p0-safety-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  chisel-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            integration/p0_chisel_delivery
+            chisel/p0_safety
+            .github/workflows/chisel-p0-safety.yml
+      - name: Materialize immutable source delivery on main
+        run: |
+          set -euo pipefail
+          if [ ! -f chisel/p0_safety/build.sbt ]; then
+            python3 - <<'PY'
+          import base64,gzip,hashlib,io,tarfile
+          from pathlib import Path,PurePosixPath
+          d=Path('integration/p0_chisel_delivery')
+          raw=base64.b64decode(''.join((d/f'part{i:02d}.b64').read_text().strip() for i in range(5)),validate=True)
+          if len(raw)!=22416 or hashlib.sha256(raw).hexdigest()!='3b7c9f4e921af78c80fb40fc0099feea644608901c23834a3e67b86766bfab79':
+              raise RuntimeError('source archive identity mismatch')
+          t=tarfile.open(fileobj=io.BytesIO(raw),mode='r:gz')
+          for member in t.getmembers():
+              p=PurePosixPath(member.name)
+              if not member.isfile() or '..' in p.parts or p.parts[:2]!=('chisel','p0_safety'):
+                  raise RuntimeError('invalid delivery member')
+              target=Path(member.name);target.parent.mkdir(parents=True,exist_ok=True)
+              if target.exists():raise RuntimeError('refuse partial overwrite')
+              target.write_bytes(t.extractfile(member).read())
+          print('SOURCE_ARCHIVE_VERIFIED files='+str(len(t.getmembers())))
+          PY
+            git config user.name 'heteronpu-chisel-ci'
+            git config user.email 'heteronpu-chisel-ci@users.noreply.github.com'
+            git add chisel/p0_safety
+            git commit -m 'chisel: materialize P0 source and DUT tests [skip ci]'
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
+          mkdir -p chisel/p0_safety/evidence
+          git rev-parse HEAD | tee chisel/p0_safety/evidence/source_commit.txt
+          git status --porcelain > chisel/p0_safety/evidence/worktree_status.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Install Verilator
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+          verilator --version | tee chisel/p0_safety/evidence/verilator.txt
+          java -version 2> chisel/p0_safety/evidence/java.txt
+      - name: Compile actual Chisel and tests
+        id: compile
+        working-directory: chisel/p0_safety
+        run: |
+          set -o pipefail
+          sbt -batch compile Test/compile 2>&1 | tee evidence/compile.log
+      - name: ChiselTest actual DUT simulation
+        id: test
+        working-directory: chisel/p0_safety
+        run: |
+          set -o pipefail
+          sbt -batch test 2>&1 | tee evidence/test.log
+      - name: Emit four production ABI roots
+        id: emit
+        if: always() && steps.compile.outcome == 'success'
+        working-directory: chisel/p0_safety
+        run: |
+          set -o pipefail
+          sbt -batch 'runMain heteronpu.p0.EmitP0Safety emitted' 2>&1 | tee evidence/emit.log
+          python3 scripts/check_emission.py emitted | tee evidence/emission_check.log
+      - name: Record actual gate outcomes
+        if: always()
+        env:
+          COMPILE_OUTCOME: ${{ steps.compile.outcome }}
+          TEST_OUTCOME: ${{ steps.test.outcome }}
+          EMIT_OUTCOME: ${{ steps.emit.outcome }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,xml.etree.ElementTree as ET
+          from pathlib import Path
+          d=Path('chisel/p0_safety');out=d/'evidence';out.mkdir(parents=True,exist_ok=True)
+          suites=[]
+          for p in (d/'target/test-reports').glob('*.xml'):
+              x=ET.parse(p).getroot();suites.append(dict(file=p.name,tests=x.get('tests'),failures=x.get('failures'),errors=x.get('errors')))
+          r=dict(environment='GitHub Actions Ubuntu24.04, not ChatGPT sandbox',trigger_sha=os.getenv('GITHUB_SHA'),run_id=os.getenv('GITHUB_RUN_ID'),
+                 compile=os.getenv('COMPILE_OUTCOME'),test=os.getenv('TEST_OUTCOME'),emit=os.getenv('EMIT_OUTCOME'),suites=suites,
+                 source_sha256={str(p.relative_to(d)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (d/'src').rglob('*.scala')},
+                 dc=False,full_model=False,retained_leaf_numeric_integration=False)
+          (out/'RESULT.json').write_text(json.dumps(r,indent=2)+'\n')
+          print(json.dumps(r,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chisel-p0-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 30
+          path: |
+            chisel/p0_safety/evidence/
+            chisel/p0_safety/emitted/
+            chisel/p0_safety/target/test-reports/

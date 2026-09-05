@@ -63,8 +63,10 @@
 - Joint packed group8 + pinned-iDMA + AXI/L2 + Matrix + DDR now PASS:
   49152 BF16 outputs exact, 11328flat requests, 917864ROI cycles,
   75497472 usefulMACs (16.065% fragment utilization), DDR throttle0.
-- Only norm input/weights preloaded; no L2/output injection. Two runtime batches
-  still repeat canonical16 rows, so not true rows16_31 or full q1024.
+- Only norm input/weights preloaded; no L2/output injection. Joint test now uses
+  genuine token rows0_31, no repeated-row fixture.917864cycles/49152 outputs PASS.
+- Golden generators accept token offset and separate output directories; row
+  manifests pin token IDs/slice hashes, model revision and norm file hashes.
 - Q1024_GROUP8_JOINT_PINNED_IDMA_RESULT.json holds source/log hashes and limits.
 
 ## Unique next action
@@ -72,9 +74,9 @@
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
 DDR ceiling, ROI attribution, fail-closed iDMA errors and packed group layout verified.
-Generate genuine token rows16_31 from the pinned checkpoint/token list and frozen
-norm/FMA golden, replace repeated-row fixture, revalidate the same runtime RTL.
-Then extend Q/K/V coverage and full q1024 scheduling; no fragment-to-model extrapolation.
+Extend joint pinned-iDMA test to K/V as well as Q using already generated true
+rows0_31 goldens and the same runtime RTL. Then plan bounded/checkpointed full
+q1024 numerical runs; never substitute control-only cycles for execution.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.
 Keep useful MACs separate from executed/padded MACs.

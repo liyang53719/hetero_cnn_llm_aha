@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import hashlib
+import argparse
+import json
 import struct
 import sys
 from pathlib import Path
@@ -9,7 +11,9 @@ from safetensors import safe_open
 
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'scripts'))
 from generate_l5_q128_qkv_batch_vectors import add,bf16_value,fma,from_word,mul,reduce16,rsqrt_algorithm
-MODEL=ROOT/'work/models/qwen2_1p5b_instruct_ba1cf184/model.safetensors';TOKENS=ROOT/'work/results/llama_cpp_qwen2_baseline/tokens.txt';OUT=ROOT/'work/results/qwen2_canonical_tile16_vectors';OUT.mkdir(parents=True,exist_ok=True)
+parser=argparse.ArgumentParser();parser.add_argument('--token-start',type=int,default=0);parser.add_argument('--out',type=Path,default=ROOT/'work/results/qwen2_canonical_tile16_vectors');args=parser.parse_args()
+MODEL=ROOT/'work/models/qwen2_1p5b_instruct_ba1cf184/model.safetensors';TOKENS=ROOT/'work/results/llama_cpp_qwen2_baseline/tokens.txt';OUT=args.out;OUT.mkdir(parents=True,exist_ok=True)
+torch.set_num_threads(1)
 def bits(v):return struct.unpack('<I',struct.pack('<f',float(np.float32(v))))[0]
 def bf(v):
  w=bits(v);return ((w+0x7fff+((w>>16)&1))>>16)&0xffff
@@ -21,8 +25,10 @@ def refined(x,w):
 def pack(path,values,width=16):
  n=512//width;path.write_text(''.join(f'{sum(int(v)<<(width*i)for i,v in enumerate(values[j:j+n])):0128x}\n'for j in range(0,len(values),n)))
 ids=np.asarray([int(x)for x in TOKENS.read_text().splitlines()],dtype=np.int32);assert hashlib.sha256(ids.tobytes()).hexdigest()=='e4151c23e259dda17d515c73f653031e8a2af9e7784dba297b454fe7cb4ba628'
+assert 0<=args.token_start<=len(ids)-16
+selected_ids=ids[args.token_start:args.token_start+16]
 with safe_open(MODEL,framework='pt',device='cpu')as f:
- emb_tensor=f.get_tensor('model.embed_tokens.weight')[torch.tensor(ids[:16],dtype=torch.long)].contiguous();emb=emb_tensor.float().numpy();nw_tensor=f.get_tensor('model.layers.0.input_layernorm.weight').float().contiguous();nw=nw_tensor.numpy();qw=f.get_tensor('model.layers.0.self_attn.q_proj.weight')[:32].contiguous().view(torch.uint16).numpy()
+ emb_tensor=f.get_tensor('model.embed_tokens.weight')[torch.tensor(selected_ids,dtype=torch.long)].contiguous();emb=emb_tensor.float().numpy();nw_tensor=f.get_tensor('model.layers.0.input_layernorm.weight').float().contiguous();nw=nw_tensor.numpy();qw=f.get_tensor('model.layers.0.self_attn.q_proj.weight')[:32].contiguous().view(torch.uint16).numpy()
 norm=np.stack([refined(emb[t],nw)for t in range(16)]);norm_bits=np.asarray([[bf(v)for v in norm[t]]for t in range(16)],dtype=np.uint16);a=[]
 for k in range(1536):a.extend(int(norm_bits[t,k])for t in range(16));a.extend([0]*16)
 weights=[]
@@ -35,3 +41,5 @@ for t in range(16):
   expected.append(bf(acc))
 pack(OUT/'hidden_token_major.memh',emb_tensor.view(torch.uint16).flatten().tolist());pack(OUT/'rms_weight_fp32.memh',nw_tensor.view(torch.uint32).flatten().tolist(),32);pack(OUT/'norm_token_major.memh',norm_bits.flatten().tolist());pack(OUT/'activation_kmajor.memh',a);pack(OUT/'q_weight_tile0.memh',weights);pack(OUT/'expected_rows.memh',expected)
 print('QWEN2_CANONICAL_TILE16_VECTORS_PASS rows=16 columns=32 k=1536 values=512 token_hash=e4151c23e259')
+(OUT/'result.json').write_text(json.dumps(dict(token_start=args.token_start,rows=16,token_ids=selected_ids.tolist(),token_slice_sha256=hashlib.sha256(selected_ids.tobytes()).hexdigest(),revision='ba1cf1846d7df0a0591d6c00649f57e798519da8',files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in OUT.glob('*.memh')}),indent=2)+'\n')
+print(f'QWEN2_TOKEN_RANGE start={args.token_start} count=16')

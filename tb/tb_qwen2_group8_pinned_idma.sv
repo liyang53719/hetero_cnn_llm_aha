@@ -1,5 +1,6 @@
 `timescale 1ns/1ps
 module tb_qwen2_group8_pinned_idma;
+ logic[511:0]second_norm[0:767],second_expected[0:767];
  import hetero_idma_512_pkg::*;localparam integer RECORDS=6188,BASE=4096,AW=15;logic clk=0,rst_n=0,start;always #0.625 clk=~clk;logic[127:0]rmscmd[0:1],pcmd[0:2],bcmd[0:2],ocmd[0:1],records[0:RECORDS-1];logic[55:0]rarea[0:5],pa[0:8],ba[0:8],oa[0:5];logic dqv,dqr,dsv,dsr,av,ar,asv,asr,ase,iv,ir,ior,iordy,ioe,local_source;logic[23:0]dqi;logic[127:0]dsd;logic[1:0]ak;logic[63:0]as,ad,isrc,idst;logic[31:0]ab,an,ass,ads,ilen,flat;logic trv,trr,trsv,trsr,twv,twr,brv,brr,brsv,brsr,bwv,bwr,bbusy,done;logic[AW-1:0]tra,twa,bra,bwa;logic[511:0]trd,twd,brd,bwd;logic[63:0]tbe,bbe;logic[1:0]mrv,mrr,mrsv,mrsr;logic[2*AW-1:0]mra;logic[1023:0]mrd;logic mwv,mwr;logic[AW-1:0]mwa;logic[511:0]mwd;logic[63:0]mbe;logic[63:0]cycles,lreads,lwrites,conflicts,rstalls,wstalls;logic[7:0]status,ibusy;logic[3:0]op;logic[31:0]completions,msteps,rsteps,values,lfsr;logic[63:0]dr,dw,lastar;logic[7:0]lastlen;logic[2:0]lastsize;logic[1:0]lastburst;axi_req_t iread,iwrite,local_req,ddr_req;axi_rsp_t iread_rsp,iwrite_rsp,local_rsp,ddr_rsp;logic dpending,l2pending;logic[127:0]dpending_data;logic l2owner;logic[511:0]l2pending_data,l2[0:24575],hidden[0:767],rweight[0:95],qweights[0:73727],kweights[0:12287],vweights[0:12287],qbias[0:95],kbias[0:15],vbias[0:15],positions[0:0],qexp[0:767],kexp[0:127],vexp[0:127],qbexp[0:767],kbexp[0:127],vbexp[0:127],qrexp[0:767],krexp[0:127];integer fetches,abstracts,flats,rbeats,wbeats,law,lwlast,lb,rar,rrlast;
  integer runtime_batches;logic[31:0]weight_loads,norm_loads;
  logic[63:0]roi_start_cycle;
@@ -41,7 +42,7 @@ module tb_qwen2_group8_pinned_idma;
   end
  end
  initial begin
-  string cp,rp,ap;
+  string cp,rp,ap,np,ep;
   start=0;
   if(!$value$plusargs("COMMANDS=%s",cp)||!$value$plusargs("RECORDS=%s",rp)||!$value$plusargs("ADDR=%s",ap))$fatal(1,"plusargs");
   if(!$value$plusargs("BATCHES=%d",runtime_batches))runtime_batches=2;
@@ -50,9 +51,14 @@ module tb_qwen2_group8_pinned_idma;
   $readmemh("work/results/qwen2_canonical_tile16_vectors/norm_token_major.memh",hidden);
   $readmemh("work/results/qwen2_canonical_q_tile16_all/q_weight_ddr_beats.memh",qweights);
   $readmemh("work/results/qwen2_canonical_q_tile16_all/q_expected_token_major.memh",qexp);
+  if(runtime_batches==2)begin
+   if(!$value$plusargs("NEXT_NORM=%s",np)||!$value$plusargs("NEXT_EXPECTED=%s",ep))$fatal(1,"distinct row fixtures missing");
+   $readmemh(np,second_norm);$readmemh(ep,second_expected);
+   if(second_norm[0]===hidden[0]&&second_expected[0]===qexp[0])$fatal(1,"second batch repeats first row fixture");
+  end
   // Projection inputs only; never preload L2 or destination/reference outputs.
-  // Batch2 deliberately repeats canonical16 rows: not model rows16..31 evidence.
-  for(int b=0;b<runtime_batches;b++)for(int i=0;i<768;i++)put({8'd0,pa[0]}+64'(b)*49152,i,hidden[i]);
+  // Batch2 uses checkpoint/token-list rows16..31 from a separate frozen golden.
+  for(int b=0;b<runtime_batches;b++)for(int i=0;i<768;i++)put({8'd0,pa[0]}+64'(b)*49152,i,(b==0?hidden[i]:second_norm[i]));
   for(int k=0;k<1536;k++)for(int t=0;t<48;t++)put({8'd0,pa[1]}+64'(k)*3072,t,qweights[k*48+t]);
   repeat(8)@(posedge clk);rst_n=1;
   @(negedge clk);roi_start_cycle=cycles;start=1;@(posedge clk);@(negedge clk);start=0;
@@ -65,8 +71,8 @@ module tb_qwen2_group8_pinned_idma;
      dr!=4718592+294912*runtime_batches||dw!=49152*runtime_batches||
      budget_read_bytes!=dr||budget_write_bytes!=dw||ibusy!=0||bbusy)
      $fatal(1,"aggregate status=%0d fetch=%0d dma=%0d flat=%0d beats=%0d/%0d steps=%0d values=%0d bytes=%0d/%0d",status,fetches,abstracts,flats,rbeats,wbeats,msteps,values,dr,dw);
-  for(int b=0;b<runtime_batches;b++)for(int i=0;i<768;i++)chk({8'd0,pa[2]}+64'(b)*49152,i,qexp[i],0);
-  $display("GROUP8_PINNED_IDMA_NUMERICAL_PASS batches=%0d checked_bf16=%0d flat_requests=%0d wall_cycles=%0d useful_macs=%0d read_bytes=%0d write_bytes=%0d read_throttle=%0d write_throttle=%0d no_intermediate_injection=1",
+  for(int b=0;b<runtime_batches;b++)for(int i=0;i<768;i++)chk({8'd0,pa[2]}+64'(b)*49152,i,(b==0?qexp[i]:second_expected[i]),0);
+  $display("GROUP8_PINNED_IDMA_NUMERICAL_PASS batches=%0d checked_bf16=%0d flat_requests=%0d wall_cycles=%0d useful_macs=%0d read_bytes=%0d write_bytes=%0d read_throttle=%0d write_throttle=%0d no_intermediate_injection=1 distinct_token_rows=1",
    runtime_batches,24576*runtime_batches,flats,cycles-roi_start_cycle,64'(msteps)*512,dr,dw,budget_read_stall,budget_write_stall);
   $finish;
  end

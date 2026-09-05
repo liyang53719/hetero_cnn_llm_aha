@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 import hashlib,json,math,multiprocessing as mp,struct,sys
+import argparse
 from pathlib import Path
 import numpy as np,torch
 from safetensors import safe_open
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'scripts'))
 from generate_l5_q128_qkv_batch_vectors import fma,from_word
-SRC=ROOT/'work/results/qwen2_canonical_tile16_vectors';MODEL=ROOT/'work/models/qwen2_1p5b_instruct_ba1cf184/model.safetensors';OUT=ROOT/'work/results/qwen2_canonical_q_tile16_all';OUT.mkdir(parents=True,exist_ok=True)
+parser=argparse.ArgumentParser();parser.add_argument('--source',type=Path,default=ROOT/'work/results/qwen2_canonical_tile16_vectors');parser.add_argument('--out',type=Path,default=ROOT/'work/results/qwen2_canonical_q_tile16_all');args=parser.parse_args()
+SRC=args.source;MODEL=ROOT/'work/models/qwen2_1p5b_instruct_ba1cf184/model.safetensors';OUT=args.out;OUT.mkdir(parents=True,exist_ok=True)
+source_manifest=json.loads((SRC/'result.json').read_text());token_start=source_manifest['token_start'];assert source_manifest['rows']==16
+assert hashlib.sha256((SRC/'activation_kmajor.memh').read_bytes()).hexdigest()==source_manifest['files']['activation_kmajor.memh']
+torch.set_num_threads(1)
 def bf(v):
  w=struct.unpack('<I',struct.pack('<f',float(np.float32(v))))[0];return((w+0x7fff+((w>>16)&1))>>16)&0xffff
 def load_beats(path):
@@ -43,5 +48,5 @@ for kind in('q','k','v'):
  pack(OUT/f'{kind}_weight_ddr_beats.memh',weight);pack(OUT/f'{kind}_expected_token_major.memh',[v for row in rows[kind]for v in row]);summary[kind]={'columns':columns,'tiles':tiles,'values':16*columns}
  raw=torch.tensor([v for row in rows[kind]for v in row],dtype=torch.uint16).view(16,columns).view(torch.bfloat16);biased=(raw.float()+BIASES[kind]).to(torch.bfloat16).contiguous();pack(OUT/f'{kind}_bias_fp32.memh',BIASES[kind].view(torch.uint32).tolist(),32);pack(OUT/f'{kind}_biased_token_major.memh',biased.view(torch.uint16).flatten().tolist())
  if kind in('q','k'):
-  bbits=biased.view(torch.uint16).tolist();pack(OUT/f'{kind}_rope_token_major.memh',[v for t,row in enumerate(bbits)for v in rotate(row,12 if kind=='q'else 2,t)])
-r={'schema_version':1,'status':'PASS_CANONICAL_QKV_TILE16_ALL_VECTORS','rows':16,'k':1536,'projections':summary,'token_hash':'e4151c23e259dda17d515c73f653031e8a2af9e7784dba297b454fe7cb4ba628'};(OUT/'result.json').write_text(json.dumps(r,indent=2,sort_keys=True)+'\n');print('QWEN2_CANONICAL_QKV_TILE16_ALL_VECTORS_PASS Q_tiles=48 K_tiles=8 V_tiles=8 values=32768')
+  bbits=biased.view(torch.uint16).tolist();pack(OUT/f'{kind}_rope_token_major.memh',[v for t,row in enumerate(bbits)for v in rotate(row,12 if kind=='q'else 2,t+token_start)])
+r={'schema_version':1,'status':'PASS_CANONICAL_QKV_TILE16_ALL_VECTORS','rows':16,'token_start':token_start,'token_slice_sha256':source_manifest['token_slice_sha256'],'k':1536,'projections':summary,'token_hash':'e4151c23e259dda17d515c73f653031e8a2af9e7784dba297b454fe7cb4ba628'};(OUT/'result.json').write_text(json.dumps(r,indent=2,sort_keys=True)+'\n');print('QWEN2_CANONICAL_QKV_TILE16_ALL_VECTORS_PASS Q_tiles=48 K_tiles=8 V_tiles=8 values=32768')

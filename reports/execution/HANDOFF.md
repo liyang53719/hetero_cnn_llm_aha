@@ -16,10 +16,10 @@
 
 ## 唯一下一动作
 
-新FP32镜像已打包、DMA布局4用例通过；下一步更新OProj FP32夹具并跑真实宏回归。
+阻塞等待q1024-oproj-fp32-20260905.service（session66976）；不轮询，不重复启动。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
-- receipts/实际FP32：work/results/q1024_captured_attention_payload/；64分区自动运行。
+- OProj receipts/实际FP32：work/results/q1024_captured_oproj_replay/；构建通过，数值未关闭。
 
 ## 执行约束
 
@@ -27,7 +27,7 @@
 - MemoryHigh24G/Max30G；可用内存>10GiB、磁盘>50GiB。
 - 每条重命令≤600秒；systemd --wait/子进程wait阻塞等待，不循环查状态。
 - 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
-- 持久服务依次执行剩余attention→独立校验/组装→CPU参考→OProj夹具；非整网PASS。
+- OProj已使用独立FP32夹具/镜像；同一BF16 Matrix，输出FP32；原attention与CPU参考已复核。
 - QT42原父进程消失，子进程结束后独立24576项核验通过；退出码未知，未重跑。
 - IEEE754替代helper两模拟器通过，待全量结束再接入；运行中不改冻结源/夹具。
 - 保护两个被排除的用户runtime脚本；检查点及时commit/push。

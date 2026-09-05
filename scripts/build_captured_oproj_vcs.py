@@ -22,10 +22,12 @@ def main():
         print(json.dumps(dict(status='SOURCE_ENUMERATION_ONLY_NOT_BUILD_PASS',sources=len(sources),recipe_sha256=sha(recipe))));return
     decision=ROOT/'reports/execution/Q1024_RESIDUAL_PRECISION_DECISION.json'
     policy=json.loads(decision.read_text())
-    assert policy['status']=='APPROVED_IMPLEMENTATION_AND_REFERENCE_ALIGNED', 'Resolve OProj/residual BF16-vs-FP32 contract before build'
-    fixture=ROOT/'work/results/q1024_captured_oproj'
+    assert policy['status'].startswith('APPROVED_'), 'Explicit precision approval is required'
+    assert policy['approved_policy']['matrix_operands_max']=='BF16' and policy['approved_policy']['matrix_accumulator']=='FP32'
+    fixture=ROOT/'work/results/q1024_captured_oproj_fp32'
     manifest=json.loads((fixture/'manifest.json').read_text())
     assert manifest['operation']=='l0.oproj' and manifest['dimensions']==[1024,1536,1536]
+    assert manifest['operand_dtype']=='BF16' and manifest['output_dtype']=='FP32' and manifest['expected_fp32_words']==1572864
     for name,h in manifest['files'].items():assert sha(fixture/name)==h
     for name,h in manifest['source_sha256'].items():assert sha(ROOT/name)==h
     gate=ROOT/'reports/execution/Q1024_ATTENTION_OPROJ_INPUT_RESULT.json'

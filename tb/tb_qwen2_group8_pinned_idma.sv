@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 module tb_qwen2_group8_pinned_idma;
- logic full_fixture;logic[511:0]full_norm[0:49151],full_expected[0:49151];
+ logic full_fixture;logic[511:0]full_norm[0:49151],full_expected[0:98303];
  logic[511:0]second_norm[0:767],second_expected[0:767];
  import hetero_idma_512_pkg::*;localparam integer RECORDS=6188,BASE=4096,AW=15;logic clk=0,rst_n=0,start;always #0.625 clk=~clk;logic[127:0]rmscmd[0:1],pcmd[0:2],bcmd[0:2],ocmd[0:1],records[0:RECORDS-1];logic[55:0]rarea[0:5],pa[0:8],ba[0:8],oa[0:5];logic dqv,dqr,dsv,dsr,av,ar,asv,asr,ase,iv,ir,ior,iordy,ioe,local_source;logic[23:0]dqi;logic[127:0]dsd;logic[1:0]ak;logic[63:0]as,ad,isrc,idst;logic[31:0]ab,an,ass,ads,ilen,flat;logic trv,trr,trsv,trsr,twv,twr,brv,brr,brsv,brsr,bwv,bwr,bbusy,done;logic[AW-1:0]tra,twa,bra,bwa;logic[511:0]trd,twd,brd,bwd;logic[63:0]tbe,bbe;logic[1:0]mrv,mrr,mrsv,mrsr;logic[2*AW-1:0]mra;logic[1023:0]mrd;logic mwv,mwr;logic[AW-1:0]mwa;logic[511:0]mwd;logic[63:0]mbe;logic[63:0]cycles,lreads,lwrites,conflicts,rstalls,wstalls;logic[7:0]status,ibusy;logic[3:0]op;logic[31:0]completions,msteps,rsteps,values,lfsr;logic[63:0]dr,dw,lastar;logic[7:0]lastlen;logic[2:0]lastsize;logic[1:0]lastburst;axi_req_t iread,iwrite,local_req,ddr_req;axi_rsp_t iread_rsp,iwrite_rsp,local_rsp,ddr_rsp;logic dpending,l2pending;logic[127:0]dpending_data;logic l2owner;logic[511:0]l2pending_data,l2[0:24575],hidden[0:767],rweight[0:95],qweights[0:73727],kweights[0:12287],vweights[0:12287],qbias[0:95],kbias[0:15],vbias[0:15],positions[0:0],qexp[0:767],kexp[0:127],vexp[0:127],qbexp[0:767],kbexp[0:127],vbexp[0:127],qrexp[0:767],krexp[0:127];integer fetches,abstracts,flats,rbeats,wbeats,law,lwlast,lb,rar,rrlast;
  integer runtime_batches,projection_index,columns,tiles,groups,weight_flats;logic[31:0]weight_loads,norm_loads;
@@ -44,7 +44,7 @@ module tb_qwen2_group8_pinned_idma;
  end
  initial begin
   string cp,rp,ap,np,ep,kind,full_input_path,full_expected_path,weight_path,output_path,operator_name;
-  integer capture_fd;logic[511:0]captured_beat;
+  integer capture_fd,output_element_bytes;logic[511:0]captured_beat;
   start=0;
   if(!$value$plusargs("COMMANDS=%s",cp)||!$value$plusargs("RECORDS=%s",rp)||!$value$plusargs("ADDR=%s",ap))$fatal(1,"plusargs");
   if(!$value$plusargs("BATCHES=%d",runtime_batches))runtime_batches=2;
@@ -64,13 +64,14 @@ module tb_qwen2_group8_pinned_idma;
       !$value$plusargs("INPUT_TENSOR=%s",full_input_path)||!$value$plusargs("EXPECTED_TENSOR=%s",full_expected_path)||
       !$value$plusargs("WEIGHT_TENSOR=%s",weight_path)||!$value$plusargs("OUTPUT_TENSOR=%s",output_path))$fatal(1,"oproj requires complete captured-input fixture and output path");
   end else if(operator_name!=kind)$fatal(1,"unsupported operator label");
+  output_element_bytes=operator_name=="oproj"?4:2;
   $readmemh(cp,pcmd);$readmemh(rp,records);$readmemh(ap,pa);
   if(!full_fixture)$readmemh("work/results/qwen2_canonical_tile16_vectors/norm_token_major.memh",hidden);
   $readmemh(weight_path,qweights,0,1536*tiles-1);
   if(!full_fixture)$readmemh($sformatf("work/results/qwen2_canonical_q_tile16_all/%s_expected_token_major.memh",kind),qexp,0,columns/2-1);
   if(full_fixture)begin
    $readmemh(full_input_path,full_norm);
-   $readmemh(full_expected_path,full_expected,0,1024*columns/32-1);
+   $readmemh(full_expected_path,full_expected,0,1024*columns*output_element_bytes/64-1);
   end
   if(!full_fixture&&runtime_batches==2)begin
    if(!$value$plusargs("NEXT_NORM=%s",np)||!$value$plusargs("NEXT_EXPECTED=%s",ep))$fatal(1,"distinct row fixtures missing");
@@ -86,19 +87,20 @@ module tb_qwen2_group8_pinned_idma;
   wait(done);@(negedge clk);
   if(status||fetches!=6||abstracts!=groups+(groups+tiles)*runtime_batches||
      flats!=weight_flats+(48*groups+16*tiles)*runtime_batches||flat!=flats||
-     rbeats!=1536*tiles+(768*groups+16*tiles)*runtime_batches||wbeats!=rbeats||
+     rbeats!=1536*tiles+(768*groups+8*tiles*output_element_bytes)*runtime_batches||wbeats!=rbeats||
      msteps!=1536*tiles*runtime_batches||values!=16*columns*runtime_batches||
      weight_loads!=tiles||norm_loads!=groups*runtime_batches||
-     dr!=64'(1536)*columns*2+64'(groups)*49152*runtime_batches||dw!=32*columns*runtime_batches||
+     dr!=64'(1536)*columns*2+64'(groups)*49152*runtime_batches||dw!=16*columns*runtime_batches*output_element_bytes||
      budget_read_bytes!=dr||budget_write_bytes!=dw||ibusy!=0||bbusy)
      $fatal(1,"aggregate status=%0d fetch=%0d dma=%0d flat=%0d beats=%0d/%0d steps=%0d values=%0d bytes=%0d/%0d",status,fetches,abstracts,flats,rbeats,wbeats,msteps,values,dr,dw);
-  for(int b=0;b<runtime_batches;b++)for(int i=0;i<columns/2;i++)chk({8'd0,pa[projection_index*3+2]}+64'(b)*32*columns,i,(full_fixture?full_expected[b*(columns/2)+i]:(b==0?qexp[i]:second_expected[i])),0);
-  $display("GROUP8_PINNED_IDMA_NUMERICAL_PASS projection=%0d batches=%0d checked_bf16=%0d flat_requests=%0d wall_cycles=%0d useful_macs=%0d read_bytes=%0d write_bytes=%0d read_throttle=%0d write_throttle=%0d no_intermediate_injection=1 distinct_token_rows=1 full_fixture=%0d",
+  for(int b=0;b<runtime_batches;b++)for(int i=0;i<columns*output_element_bytes/4;i++)chk({8'd0,pa[projection_index*3+2]}+64'(b)*16*columns*output_element_bytes,i,(full_fixture?full_expected[b*(columns*output_element_bytes/4)+i]:(b==0?qexp[i]:second_expected[i])),0);
+  if(operator_name!="oproj")$display("GROUP8_PINNED_IDMA_NUMERICAL_PASS projection=%0d batches=%0d checked_bf16=%0d flat_requests=%0d wall_cycles=%0d useful_macs=%0d read_bytes=%0d write_bytes=%0d read_throttle=%0d write_throttle=%0d no_intermediate_injection=1 distinct_token_rows=1 full_fixture=%0d",
    projection_index,runtime_batches,16*columns*runtime_batches,flats,cycles-roi_start_cycle,64'(msteps)*512,dr,dw,budget_read_stall,budget_write_stall,full_fixture);
   if(operator_name=="oproj")begin
+   $display("GROUP8_PINNED_IDMA_FP32_NUMERICAL_PASS projection=oproj batches=%0d checked_fp32=%0d flat_requests=%0d wall_cycles=%0d useful_macs=%0d read_bytes=%0d write_bytes=%0d",runtime_batches,16*columns*runtime_batches,flats,cycles-roi_start_cycle,64'(msteps)*512,dr,dw);
    capture_fd=$fopen(output_path,"w");if(!capture_fd)$fatal(1,"capture open");
-   for(int row=0;row<1024;row++)for(int beat=0;beat<columns/32;beat++)begin
-    for(int byte_lane=0;byte_lane<64;byte_lane++)captured_beat[byte_lane*8+:8]=ddr.mem[{8'd0,pa[2]}+64'(row)*columns*2+64'(beat)*64+byte_lane];
+   for(int row=0;row<1024;row++)for(int beat=0;beat<columns*output_element_bytes/64;beat++)begin
+    for(int byte_lane=0;byte_lane<64;byte_lane++)captured_beat[byte_lane*8+:8]=ddr.mem[{8'd0,pa[2]}+64'(row)*columns*output_element_bytes+64'(beat)*64+byte_lane];
     $fdisplay(capture_fd,"%0128h",captured_beat);
    end
    $fclose(capture_fd);

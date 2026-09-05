@@ -1,0 +1,13 @@
+{
+  "status": "SIMULATOR_BUILD_PASS_REPLAY_SERVICE_SUBMITTED_NOT_NUMERICAL_PASS",
+  "unit": "q1024-oproj-fp32-20260905.service",
+  "wait_handle": 66976,
+  "driver": "scripts/run_captured_oproj_continuous.py",
+  "fixture_directory": "work/results/q1024_captured_oproj_fp32",
+  "build_result": "reports/execution/CAPTURED_OPROJ_BUILD_RESULT.json",
+  "binary_sha256": "cc0854d8884d4bd09c1c1cdb6a8eaa4cbf9a039d174d9c769d228fc667b04425",
+  "frozen_scope": "Actual attention BF16 input, BF16 weights, FP32 accumulator/output, pinned iDMA and Shared-L2,1024 rows1536 columns; no output injection",
+  "execution": "Persistent service, blocking child waits, <=600s each, immutable VCS checkpoints; no periodic status polling",
+  "acceptance": "1572864 FP32 words bit-exact; actual DDR output exported; counters and checkpoint continuity verified before projection PASS",
+  "nonclaims": ["Build PASS is not numerical PASS", "OProj projection cycles are not full-model prefill performance", "No new PPA closure", "Previous BF16 fixtures and QKV simulator preserved"]
+}

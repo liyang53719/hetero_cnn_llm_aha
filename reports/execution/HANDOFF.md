@@ -18,7 +18,7 @@
 
 等待现有连续执行器；核对receipt与进程，失败先诊断，不重启有效段。
 
-- Q自动跑到底；attention连接进度见ATTENTION_ENDPOINT_PROGRESS.json。
+- Q自动跑到底；真实Matrix数值测试已排队(session14037)，等coordinator锁释放。
 - 收集器：scripts/collect_q1024_projection_chain.py。
 
 ## 执行约束

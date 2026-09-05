@@ -26,5 +26,11 @@
     "No synthesis/timing PASS claimed",
     "Frozen running Q simulation sources and binary were not changed"
   ],
+  "queued_numerical_test": {
+    "command": "taskset -c 8-23 bash scripts/run_attention_matrix_tile_numerical.sh",
+    "status": "QUEUED_WAITING_FOR_Q_COORDINATOR_LOCK_NOT_PASS",
+    "scope": "Real Revision8B-B 512-lane FMA; directed QK/PV128/256 and 7168 FP32 output comparisons; not complete attention or model prefill",
+    "source_regeneration": false
+  },
   "next": "Bind actual operand memories/Matrix, then score/probability/MLO storage and SFU. Replace testbench service tasks in full decoder execution; do not use contract-adapter integrated_v0 as a model backend"
 }

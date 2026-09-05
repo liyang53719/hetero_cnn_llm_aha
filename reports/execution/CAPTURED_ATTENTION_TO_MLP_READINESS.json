@@ -12,9 +12,12 @@
     "gate/up columns8960 require280 tiles, at least9-bit tile enumeration",
     "qwen2_projection_q1024_group8_controller hardcodes depth1536, activation loader shape and step/byte counters",
     "down K8960 cannot load an8-column-tile weight group at once:8960*8*64=4587520 bytes, exceeding4MiB total and existing768KiB weight window",
-    "Need K windows fitting existing buffer, FP32 accumulators retained across windows, clear only at first window, last/writeback only at final window; no inter-window BF16 rounding"
+    "K-windowing is not necessarily required: one32-column weight tile at K8960 occupies573440 bytes and fits the existing768KiB window; first assess adaptive group count before changing accumulator semantics",
+    "Current raw0x60000/transposed0x80000/weight0xa0000 addresses overlap for K8960; transpose occupies8960*64=573440 bytes (upper16 BF16 lanes unused), not286720 bytes",
+    "Raw286720 + transposed573440 + one weight tile573440 + output1024 =1434624 bytes; below1536KiB Shared-L2 by138240 bytes only arithmetically. Must prove descriptor/other-live-buffer non-overlap and real fabric binding before accepting a new layout",
+    "If K windows are selected after that audit, FP32 accumulation must survive windows with clear only first and last/writeback only final; current clear-on-start behavior is insufficient"
   ],
   "sources": ["rtl/integration/qwen2_projection_descriptor_context.sv", "rtl/integration/qwen2_projection_q1024_group8_controller.sv", "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv", "tb/tb_qwen2_group8_pinned_idma.sv", "src/qwen2_q1024_layer0_tail_backend.cpp"],
-  "order": ["Complete live captured attention and independent FP32 verification", "OProj actual-input replay and actual output export", "residual/postnorm production continuity", "generic MLP column and K-window scheduling within fixed buffer budget", "gate/up/fusedSiLU/down/residual full1024", "cross-layer and complete request measurement"],
+  "order": ["Complete live captured attention and independent FP32 verification", "OProj actual-input replay and actual output export", "residual/postnorm production continuity", "generic MLP column/depth support; audit full-K/group1 layout before adding K-window accumulator changes", "gate/up/fusedSiLU/down/residual full1024", "cross-layer and complete request measurement"],
   "nonclaims": ["Existing tail first/middle/last three-tile samples do not prove full MLP", "No additional SRAM, array replication, quantization or clock change authorized or performed", "Current captured attention binary and sources remain frozen during execution"]
 }

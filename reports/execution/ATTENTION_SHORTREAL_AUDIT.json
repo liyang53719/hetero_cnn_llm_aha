@@ -1,0 +1,12 @@
+{
+  "status": "CONFIRMED_TESTBENCH_FLOAT_TOLERANCE_DEFECT_EXTERNAL_VALIDATOR_ADDED",
+  "source": "tb/tb_l5_q128_attention_integrated.sv function f32real uses shortreal and $bitstoshortreal",
+  "generated_evidence": "work/results/attention_sequencer_e2/obj/Vtb_l5_q128_attention_integrated___024root__1.cpp uses VL_CVT_D_Q((QData)((IData)(bits)))",
+  "cause": "32-bit FP32 bit pattern is zero-extended and reinterpreted as FP64 subnormal, rather than converted FP32 value; ordinary errors incorrectly compare below0.002",
+  "invalidated": ["Old direct/q128 attention max_error=0 and tolerance PASS", "Sampled/full-q1024 in-testbench floating tolerance PASS using same function"],
+  "unaffected": ["QKV projection BF16 bit equality", "bias/RoPE BF16 bit equality", "7168 directed real-Matrix FP32 bit equality", "Execution counters and output hashes"],
+  "remediation": "Preserve running RTL and export actual outputs. Python struct.unpack('<f') independently checks every output, rejects nonfinite values, threshold0.002 unchanged, before OProj input publication",
+  "current_independent_evidence": "reports/execution/Q1024_ATTENTION_INDEPENDENT_FP32_AUDIT.json",
+  "source_fix_pending": "After frozen all-row simulation ends, replace TB conversion with explicit IEEE754 decoder and add positive/negative sentinel tests; do not modify running source identity",
+  "full_model_pass": false
+}

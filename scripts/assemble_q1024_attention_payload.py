@@ -4,6 +4,7 @@ import array
 import fcntl
 import hashlib
 import json
+import math
 from pathlib import Path
 import struct
 import sys
@@ -16,6 +17,11 @@ def main():
         fcntl.flock(lock,fcntl.LOCK_EX)
         paths=sorted(directory.glob('qt[0-9][0-9].json'));assert len(paths)==64,'Incomplete replay; no output substitution'
         fp=array.array('I',[0])*(1024*1536);sources={};identity=None
+        expected_path=ROOT/'work/results/q1024_post_projection/attention_vectors/expected_fp32.memh'
+        expected=[int(s,16) for s in expected_path.read_text().splitlines()]
+        assert len(expected)==1024*1536
+        max_error=0.0;worst=None
+        def value(w):return struct.unpack('<f',struct.pack('<I',w))[0]
         for qt,path in enumerate(paths):
             r=json.loads(path.read_text());assert r['status']=='PASS' and r['qt']==qt
             if identity is None:identity=r['identity']
@@ -26,6 +32,18 @@ def main():
             fnv=0xcbf29ce484222325
             for w in words:fnv=((fnv^w)*0x100000001b3)&((1<<64)-1)
             assert f'{fnv:016x}'==r['output_hash']
+            # Independent IEEE754 FP32 decoding: never rely on Verilator's
+            # shortreal conversion, which reinterprets zero-extended32 as64.
+            for i,w in enumerate(words):
+                h=i//2048;row=(i//128)%16;d=i%128
+                ref=expected[(h*1024+qt*16+row)*128+d]
+                av=value(w);ev=value(ref);err=abs(av-ev)
+                assert math.isfinite(av) and math.isfinite(ev),('nonfinite',qt,i)
+                if err>max_error:max_error=err;worst=[qt*16+row,h,d]
+                if err>0.002:
+                    failure=dict(status='FAIL_INDEPENDENT_FP32_CHECK',query=qt*16+row,head=h,dim=d,error=err,threshold=0.002)
+                    (ROOT/'reports/execution/Q1024_ATTENTION_OPROJ_INPUT_RESULT.json').write_text(json.dumps(failure,indent=2)+'\n')
+                    raise AssertionError(failure)
             for h in range(12):
                 for row in range(16):
                     start=((qt*16+row)*12+h)*128
@@ -41,6 +59,8 @@ def main():
         result=dict(status='PASS_CAPTURED_ATTENTION_TO_OPROJ_INPUT',rows=1024,columns=1536,
                     fp32_sha256=sha(fpath),bf16_sha256=sha(bpath),rounding='BF16_RNE',
                     receipt_sha256=sources,source='Actual Matrix/SFU normalized outputs, not golden replacement',
+                    independent_fp32_comparisons=1572864,max_absolute_error=max_error,worst_query_head_dim=worst,
+                    expected_sha256=sha(expected_path),threshold=0.002,
                     full_decoder_pass=False,integrated_cycles=None)
         (ROOT/'reports/execution/Q1024_ATTENTION_OPROJ_INPUT_RESULT.json').write_text(json.dumps(result,indent=2)+'\n')
         print(result['status'],flush=True)

@@ -1,5 +1,5 @@
 {
-  "status": "REAL_MATRIX_AND_Q128_ATTENTION_NUMERICAL_PASS_PRODUCTION_MEMORY_SFU_OPEN",
+  "status": "REAL_MATRIX_BIT_EXACT_PASS_Q128_FLOAT_TOLERANCE_INVALIDATED_Q1024_INDEPENDENT_CHECK_RUNNING",
   "gap_found": "Existing QK/PV operand iteration is implemented in tb_l5_q128_attention_integrated.sv tasks do_qk/do_pv, not a synthesizable production endpoint",
   "source_added": "rtl/attention/attention_matrix_tile_sequencer.sv",
   "implemented": [
@@ -35,7 +35,8 @@
     "source_regeneration": false
   },
   "attention_e2": {
-    "status": "PASS_DIRECT_AND_FULL_Q128_ATTENTION_OPERATOR",
+    "status": "EXECUTION_COMPLETE_FLOAT_TOLERANCE_INVALIDATED_SHORTREAL",
+    "acceptance_correction": "Generated Verilator C++ uses VL_CVT_D_Q on zero-extended32 bits; reported max_error=0 is invalid. Revalidate captured outputs with independent IEEE754 FP32 decoder. Bit-exact Matrix directed tests are unaffected.",
     "rows_times_heads": 1536,
     "tasks": 240,
     "cycles": 3317900,

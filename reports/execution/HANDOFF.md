@@ -12,11 +12,11 @@
 - Q完整1024行、1572864个BF16输出逐位通过，25656608周期、利用率18.39%。
 - Q自动执行器已结束；17段连续状态/hash经收集器验证，不需重跑。
 - Q证据：reports/execution/Q1024_CONTINUOUS_Q_RESULT.json。
-- 单投影结果不等于完整decoder或模型prefill。
+- 撤回旧attention shortreal容差PASS；必须以独立FP32输出校验为准，非整网PASS。
 
 ## 唯一下一动作
 
-等待q1024全query/head attention(PID1884540/session68910)；自动组装器session13304。
+等待q1024 attention(PID1884540/session68910)；独立FP32校验/组装器session75376。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
 - receipts/实际FP32：work/results/q1024_captured_attention_payload/；64分区自动运行。

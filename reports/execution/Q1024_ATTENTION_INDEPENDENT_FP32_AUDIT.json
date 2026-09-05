@@ -1,0 +1,59 @@
+{
+  "status": "PASS_COMPLETED_PARTITIONS_ONLY",
+  "partitions": [
+    {
+      "qt": 0,
+      "max_error": 0.0001074075698852539,
+      "output_sha256": "f969136fff74b8374f87b8e60d0d8742c1f00a5fbee7b2682f1517e8e9d558bd",
+      "receipt_sha256": "80b71c4c674927f9ee91eac97d2d9540ad2c46264fb9dfe42938b2a74960802c"
+    },
+    {
+      "qt": 1,
+      "max_error": 0.0001265406608581543,
+      "output_sha256": "17b3336c5921b65ae40f3ac113158fe3ca65d1468f9a1638d2010df32b28450e",
+      "receipt_sha256": "23d24d2eb85451f6a7115ce782db6c27c4ce7fa99de39a8ba2a93d9716231cc9"
+    },
+    {
+      "qt": 2,
+      "max_error": 0.000102996826171875,
+      "output_sha256": "6495a12b6f57c918d06097ebf7664e0abdaddf9310d6e687e73e12fec2dcc200",
+      "receipt_sha256": "902f10c5a8eae440eea32c3fd1a858a0ed70ceb6378e893dca421e5a070b9088"
+    },
+    {
+      "qt": 3,
+      "max_error": 8.088350296020508e-05,
+      "output_sha256": "8cb420cbeb15bcf906e742f503f4662c215f787bb9dc6d7b49a463a15722ecb4",
+      "receipt_sha256": "be7afd5a31160adbf815d06f4f0da31308bbeba2e63ef20af98b25e94bbdea26"
+    },
+    {
+      "qt": 4,
+      "max_error": 9.751319885253906e-05,
+      "output_sha256": "6947db585659dbea8b97933d5a889a222e9f4d737e1788b04237ea02a7439111",
+      "receipt_sha256": "7128eaa1490f4dafd07520e9e162d3f989e290afaacf2097b8543b4f3c6fdead"
+    },
+    {
+      "qt": 5,
+      "max_error": 9.870529174804688e-05,
+      "output_sha256": "9544877a57de842d69938a441ff784623980057d725612fbef8898e08c1af97c",
+      "receipt_sha256": "9c5de3eaccdc2165b32639d85b3f83ee74b6993204d449956698dae1b32265ce"
+    },
+    {
+      "qt": 6,
+      "max_error": 0.0001049041748046875,
+      "output_sha256": "4e5a2edefe3424a0fa75ec708335a87bed2370481d9e853cd6fb44d79fab2a55",
+      "receipt_sha256": "8228656904bc53961641048d38b1293208d7fda71ef183ad97b5999857a99896"
+    },
+    {
+      "qt": 7,
+      "max_error": 0.00010606646537780762,
+      "output_sha256": "a0679fff4160b4c471b48c6681437113189f7bf675571c41ec545a6956fa9042",
+      "receipt_sha256": "1cbeff1b6a593c52bd48a5b4353b85e8e90ccf32d986636314ab30e35a6ecfd2"
+    }
+  ],
+  "compared_fp32": 196608,
+  "max_error": 0.0001265406608581543,
+  "threshold": 0.002,
+  "expected_sha256": "6eb88466039d3cde5696592247305facf22d0ca9a71a47c0e58a711f734a7807",
+  "full1024_complete": false,
+  "supersedes": "Verilator shortreal-based floating tolerance check is invalid; hashes and independent bit-exact checks unaffected"
+}

@@ -16,7 +16,7 @@
 
 ## 唯一下一动作
 
-等待q1024 attention(PID1884540/session68910)；独立FP32校验/组装器session75376。
+阻塞等待q1024-captured-closure-20260905.service（session67958）；禁止定时轮询。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
 - receipts/实际FP32：work/results/q1024_captured_attention_payload/；64分区自动运行。
@@ -25,10 +25,10 @@
 
 - CPU8-23；一次一个重任务；Verilator j4/DC8。
 - MemoryHigh24G/Max30G；可用内存>10GiB、磁盘>50GiB。
-- 每条重命令≤600秒，阻塞等待；Q恢复段为2ms模拟时间。
+- 每条重命令≤600秒；systemd --wait/子进程wait阻塞等待，不循环查状态。
 - 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
-- CPU尾部参考已排队session36620，等组装器退出并核验门禁；不计RTL PASS。
-- 保留完整 .chk/.chk.FILES/.chk.ucli；快照不提交Git。
+- 持久服务依次执行剩余attention→独立校验/组装→CPU参考→OProj夹具；非整网PASS。
+- QT42原父进程消失，子进程结束后独立24576项核验通过；退出码未知，未重跑。
 - IEEE754替代helper两模拟器通过，待全量结束再接入；运行中不改冻结源/夹具。
 - 保护两个被排除的用户runtime脚本；检查点及时commit/push。
 

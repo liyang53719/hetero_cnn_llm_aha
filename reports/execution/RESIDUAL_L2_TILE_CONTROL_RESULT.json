@@ -1,0 +1,13 @@
+{
+  "status": "PASS_COMPOSED_LOCAL_CONTROL_WITH_MOCK_ARITHMETIC",
+  "command": "taskset -c 8-23 bash scripts/run_residual_l2_tile_control_test.sh",
+  "cases":8,
+  "connected": ["two residual_l2_stream_reader ports", "bf16_residual_gearbox", "fp32_residual_stream", "residual_l2_stream_writer"],
+  "checks": ["BF16/FP32 B operand", "FP32 A/output", "Tail byte preservation", "Read/write counters", "Independent response delays and write backpressure", "Request snapshot", "Reject destination overlap before reads", "Read errors on either port including after first packet", "Drain readers and pending writes before completion", "Next successful command after error without global reset"],
+  "abort_policy": "Drain the finite remaining read streams (may issue remaining original-request reads), discard new arithmetic outputs, finish any pending write, inject nonzero writer status, then reset private pipeline only after all children complete",
+  "reset_policy": "Single registered child_active signal; no combinational decode of multi-bit FSM state drives child reset",
+  "source_sha256":"fb234020ed0337dfb093a318e726edef12bff183aff12ce90a434e15d57813e9",
+  "log_sha256":"10808e867cc5c80e1b68bfaeab863ea021030c42d961ea1c2e042e7d3d56ebf4",
+  "remaining":["Real FP32 arithmetic and actual Shared-L2 fabric numeric test", "Descriptor and DDR staging frontend", "Event suppression on nonzero completion status", "Full-model numerical/performance and PPA evidence"],
+  "nonclaims":["XOR arithmetic fixture validates wiring, not addition", "Model memory responders, not ARM SRAM/pinned DMA", "No complete model or PPA PASS", "Previously queued numerical sources were not edited or polled"]
+}

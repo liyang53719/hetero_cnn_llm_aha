@@ -72,14 +72,19 @@
   Q49152 outputs/917864cycles; K8192/149154; V8192/149154; DDR throttle0.
 - Separate projection results use Q1024_GROUP8_JOINT_PINNED_IDMA{,_K,_V}_RESULT.json.
   Do not sum independent ROI runs into a full decoder/model performance claim.
+- Small VCS cross-process save/restore PASS: debug_access+r required; restore
+  starts atcycle78, ends1000;235 complete state records match baseline exactly.
+- Saves static/associative memory, dynamic queue, pipeline state. Evidence
+  Q1024_CHECKPOINT_CONTINUITY_RESULT.json; this is not yet a real accelerator checkpoint.
 
 ## Unique next action
 
 Reuse first9's verified pinned-iDMA/AXI/L2 wiring to connect the generic descriptor
 tile iterator, runtime transpose, Matrix payload and checked output DMA.
 DDR ceiling, ROI attribution, fail-closed iDMA errors and packed group layout verified.
-Validate VCS checkpoint/save/restore on a small state-continuity test, then use
-bounded chunks for full q1024 numerical projection runs under600s per command.
+Validate checkpoint/save/restore on the actual pinned-iDMA/Matrix/DDR K projection,
+comparing saved-start state, full numerical outputs and ROI against uninterrupted run.
+Then use bounded chunks for full q1024 numerical projection runs under600s per command.
 Extend genuine token fixtures beyond32; never substitute control-only cycles.
 Tile ACK must follow checked output writeback. Compare DDR values.
 Do not report schedule enumeration cycles as measured Matrix/model cycles.

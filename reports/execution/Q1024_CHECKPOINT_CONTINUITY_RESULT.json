@@ -1,0 +1,23 @@
+{
+  "status": "PASS_SMALL_CROSS_PROCESS_STATE_CONTINUITY",
+  "command": "taskset -c 8-23 bash scripts/run_checkpoint_continuity.sh",
+  "tool": "VCS W-2024.09",
+  "required_compile_option": "-debug_access+r",
+  "verified_api": "UCLI save <file>; quit; new process restore <file>; run",
+  "checkpoint_time_ns": 103,
+  "restored_cycle_checked_before_run": 78,
+  "terminal_cycle": 1000,
+  "terminal_digest": "a80ddeb3",
+  "terminal_queue_length": 134,
+  "terminal_pipeline_valid_mask": 5,
+  "exact_state_records_compared": 235,
+  "state_coverage": ["cycle and LFSR", "32 static memory words", "64 associative DDR words above4GiB", "134 queued words", "4 pipeline registers and valid bits"],
+  "checkpoint_size_bytes": 53248,
+  "failure_found_and_fixed": "save rejected without -debug_access+r; terminal equality alone strengthened with restored-cycle check and full state-record equality",
+  "nonclaims": [
+    "Small synthetic infrastructure test only, not accelerator/model numerical evidence",
+    "Real iDMA/Matrix/DDR checkpoint continuity still requires validation",
+    "No q1024 full model performance claim"
+  ],
+  "next": "Compile existing joint projection harness with minimum debug support, save mid-transfer, restore in another bounded process, compare numerical outputs and ROI counters against an uninterrupted run"
+}

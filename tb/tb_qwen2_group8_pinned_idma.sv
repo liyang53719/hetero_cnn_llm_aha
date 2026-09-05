@@ -43,7 +43,8 @@ module tb_qwen2_group8_pinned_idma;
   end
  end
  initial begin
-  string cp,rp,ap,np,ep,kind;
+  string cp,rp,ap,np,ep,kind,full_input_path,full_expected_path,weight_path,output_path,operator_name;
+  integer capture_fd;logic[511:0]captured_beat;
   start=0;
   if(!$value$plusargs("COMMANDS=%s",cp)||!$value$plusargs("RECORDS=%s",rp)||!$value$plusargs("ADDR=%s",ap))$fatal(1,"plusargs");
   if(!$value$plusargs("BATCHES=%d",runtime_batches))runtime_batches=2;
@@ -54,13 +55,22 @@ module tb_qwen2_group8_pinned_idma;
   kind=projection_index==0?"q":projection_index==1?"k":"v";
   columns=projection_index==0?1536:256;tiles=columns/32;groups=(tiles+7)/8;
   weight_flats=tiles<=8?tiles*96:groups*1536;
+  operator_name=kind;void'($value$plusargs("OPERATOR=%s",operator_name));
+  full_input_path="work/results/qwen2_q1024_projection_fixtures/norm_token_major.memh";
+  full_expected_path=$sformatf("work/results/qwen2_q1024_projection_fixtures/%s_token_major.memh",kind);
+  weight_path=$sformatf("work/results/qwen2_canonical_q_tile16_all/%s_weight_ddr_beats.memh",kind);
+  if(operator_name=="oproj")begin
+   if(!full_fixture||projection_index!=0||runtime_batches!=64||
+      !$value$plusargs("INPUT_TENSOR=%s",full_input_path)||!$value$plusargs("EXPECTED_TENSOR=%s",full_expected_path)||
+      !$value$plusargs("WEIGHT_TENSOR=%s",weight_path)||!$value$plusargs("OUTPUT_TENSOR=%s",output_path))$fatal(1,"oproj requires complete captured-input fixture and output path");
+  end else if(operator_name!=kind)$fatal(1,"unsupported operator label");
   $readmemh(cp,pcmd);$readmemh(rp,records);$readmemh(ap,pa);
-  $readmemh("work/results/qwen2_canonical_tile16_vectors/norm_token_major.memh",hidden);
-  $readmemh($sformatf("work/results/qwen2_canonical_q_tile16_all/%s_weight_ddr_beats.memh",kind),qweights,0,1536*tiles-1);
-  $readmemh($sformatf("work/results/qwen2_canonical_q_tile16_all/%s_expected_token_major.memh",kind),qexp,0,columns/2-1);
+  if(!full_fixture)$readmemh("work/results/qwen2_canonical_tile16_vectors/norm_token_major.memh",hidden);
+  $readmemh(weight_path,qweights,0,1536*tiles-1);
+  if(!full_fixture)$readmemh($sformatf("work/results/qwen2_canonical_q_tile16_all/%s_expected_token_major.memh",kind),qexp,0,columns/2-1);
   if(full_fixture)begin
-   $readmemh("work/results/qwen2_q1024_projection_fixtures/norm_token_major.memh",full_norm);
-   $readmemh($sformatf("work/results/qwen2_q1024_projection_fixtures/%s_token_major.memh",kind),full_expected,0,1024*columns/32-1);
+   $readmemh(full_input_path,full_norm);
+   $readmemh(full_expected_path,full_expected,0,1024*columns/32-1);
   end
   if(!full_fixture&&runtime_batches==2)begin
    if(!$value$plusargs("NEXT_NORM=%s",np)||!$value$plusargs("NEXT_EXPECTED=%s",ep))$fatal(1,"distinct row fixtures missing");
@@ -85,6 +95,15 @@ module tb_qwen2_group8_pinned_idma;
   for(int b=0;b<runtime_batches;b++)for(int i=0;i<columns/2;i++)chk({8'd0,pa[projection_index*3+2]}+64'(b)*32*columns,i,(full_fixture?full_expected[b*(columns/2)+i]:(b==0?qexp[i]:second_expected[i])),0);
   $display("GROUP8_PINNED_IDMA_NUMERICAL_PASS projection=%0d batches=%0d checked_bf16=%0d flat_requests=%0d wall_cycles=%0d useful_macs=%0d read_bytes=%0d write_bytes=%0d read_throttle=%0d write_throttle=%0d no_intermediate_injection=1 distinct_token_rows=1 full_fixture=%0d",
    projection_index,runtime_batches,16*columns*runtime_batches,flats,cycles-roi_start_cycle,64'(msteps)*512,dr,dw,budget_read_stall,budget_write_stall,full_fixture);
+  if(operator_name=="oproj")begin
+   capture_fd=$fopen(output_path,"w");if(!capture_fd)$fatal(1,"capture open");
+   for(int row=0;row<1024;row++)for(int beat=0;beat<columns/32;beat++)begin
+    for(int byte_lane=0;byte_lane<64;byte_lane++)captured_beat[byte_lane*8+:8]=ddr.mem[{8'd0,pa[2]}+64'(row)*columns*2+64'(beat)*64+byte_lane];
+    $fdisplay(capture_fd,"%0128h",captured_beat);
+   end
+   $fclose(capture_fd);
+   $display("CAPTURED_ATTENTION_OPROJ_PINNED_IDMA_PASS rows=1024 columns=1536 actual_DDR_output_exported=1 full_model=false");
+  end
   $finish;
  end
  initial begin repeat(100000000)@(posedge clk);$fatal(1,"watchdog flat=%0d group=%0d batch=%0d state=%0d",flats,dut.group_base,dut.batch,dut.st);end

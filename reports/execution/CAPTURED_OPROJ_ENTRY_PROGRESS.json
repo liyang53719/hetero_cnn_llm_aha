@@ -1,0 +1,15 @@
+{
+  "status": "IMPLEMENTED_FIXTURE_AND_CAPTURE_ENTRY_VALIDATION_PENDING",
+  "testbench": "tb/tb_qwen2_group8_pinned_idma.sv",
+  "fixture_script": "scripts/prepare_captured_oproj_fixtures.py",
+  "implementation": [
+    "Runtime OPERATOR=oproj requires FULL_Q1024, projection slot0, all64 batches, explicit input/weight/expected/output paths",
+    "Export actual destination DDR bytes after all existing pinned-iDMA/Matrix checks and BF16 comparisons pass",
+    "Use approved l0.oproj command and root addresses from original manifest; validate addresses against packed descriptor records",
+    "Require independent1572864-value attention gate, actual BF16 input hash and exact CPU reference linked to same captured FP32 input",
+    "No preload of expected output into DDR/L2 and no hardware source change"
+  ],
+  "validated_now": "Python fixture generator syntax only",
+  "pending": ["Wait full captured attention and exact tail reference", "Generate OProj fixtures", "Compile extended TB after current heavy queue finishes", "Run bounded continuous full1024 pinned-iDMA/Matrix replay with actual DDR output retained"],
+  "nonclaims": ["No OProj RTL PASS yet", "No new SRAM or Matrix datapath", "Frozen live attention sources and binary unchanged", "Previously completed QKV binary and evidence not overwritten"]
+}

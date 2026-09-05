@@ -1,5 +1,6 @@
 {
   "status": "AUDITED_IMPLEMENTATION_GAPS_NOT_PASS",
+  "oproj_entry_progress": "reports/execution/CAPTURED_OPROJ_ENTRY_PROGRESS.json",
   "next_input": "work/results/q1024_captured_attention_payload/attention_actual_token_major_bf16.bin",
   "input_gate": "Q1024_ATTENTION_OPROJ_INPUT_RESULT.json must prove all1572864 actual FP32 results finite and max_error<=0.002, then BF16_RNE; never substitute backend/golden attention",
   "oproj": {

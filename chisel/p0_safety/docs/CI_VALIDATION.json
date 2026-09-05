@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "status": "PASS_CHISEL_DUT_AND_GENERATED_ABI_COMPONENT_SCOPE",
+  "baseline": "02549039beda0c1c42b8375ace2dca1c0d8cd9e2",
+  "tested_source_commit": "2ef25d004d058587d5218eec0017b59f440a2926",
+  "workflow_run": 33997408939,
+  "workflow_job": 101390237859,
+  "artifact_id": 9978530055,
+  "artifact_sha256": "c7b668fa6f28f1deb82948e04b1ff2d8997bfadc1c1b82ca38c4c0ee05c1098b",
+  "execution_environment": "GitHub Actions Ubuntu 24.04; not the ChatGPT sandbox",
+  "tools": {
+    "java": "Temurin17.0.20.1",
+    "sbt": "1.10.2",
+    "scala": "2.13.16",
+    "chisel": "6.7.0",
+    "chiseltest": "6.0.0",
+    "verilator": "5.020"
+  },
+  "compile": "PASS",
+  "dut_tests": {
+    "total": 61,
+    "passed": 61,
+    "failed": 0,
+    "suites": [
+      {"name": "heteronpu.p0.Group8SchedulerSpec", "tests": 15, "failures": 0, "errors": 0},
+      {"name": "heteronpu.p0.MatrixTilePayloadSpec", "tests": 22, "failures": 0, "errors": 0},
+      {"name": "heteronpu.p0.NormTileLoaderSpec", "tests": 3, "failures": 0, "errors": 0},
+      {"name": "heteronpu.p0.SharedL2FabricSpec", "tests": 7, "failures": 0, "errors": 0},
+      {"name": "heteronpu.p0.TileTransposeSpec", "tests": 14, "failures": 0, "errors": 0}
+    ]
+  },
+  "generated_roots": [
+    {"root": "qwen2_shared_l2_matrix_tile16_payload", "checked_ports": 38},
+    {"root": "bf16_tile_transpose_stager", "checked_ports": 26},
+    {"root": "shared_l2_fabric", "checked_ports": 20},
+    {"root": "qwen2_projection_q1024_group8_controller", "checked_ports": 45}
+  ],
+  "scalar_abi": "PASS_NAMES_DIRECTIONS_WIDTHS_129_PORTS",
+  "local_verification": {
+    "artifact_digest_matches_download_metadata": true,
+    "all_14_scala_hashes_match_ci": true,
+    "retained_scalar_abi_match": true
+  },
+  "generated_sv_sha256": {
+    "P0AllRoots.sv": "ac66bbbdf35bf910b1e212566a262f5806ff1358dead2e677474760f480c9677"
+  },
+  "source_sha256": {
+    "src/main/scala/heteronpu/p0/EmitP0Safety.scala": "07b6a35ba42d8902adf6624224bd398129e10f9ff1c3085ebe1c7d340ba7179c",
+    "src/main/scala/heteronpu/p0/MatrixTilePayload.scala": "511f6c1ec603b2c87721803f7f2cc941022a8073f7d619979450232b571717ba",
+    "src/main/scala/heteronpu/p0/Group8Scheduler.scala": "dd2387d41c8585a7c86759187fb1f0471ce0a43b15283e3c056e2aa2979751f3",
+    "src/main/scala/heteronpu/p0/TileTranspose.scala": "e8a0c965dfadfa833bcca892a4ab56c9323397475e5c28e531257691e3393b95",
+    "src/main/scala/heteronpu/p0/NormTileLoader.scala": "3d0a14a87fe8715da55b002537dee1a5e2204aaaa534abecf28a14cca4010035",
+    "src/main/scala/heteronpu/p0/AbiWrappers.scala": "d0ee8b92d8d7c98c58ccb5f58e95176cc8bd9015951eee983a4441ba0858f835",
+    "src/main/scala/heteronpu/p0/SharedL2Fabric.scala": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+    "src/main/scala/heteronpu/p0/LocalSramConfig.scala": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+    "src/main/scala/heteronpu/p0/Group8Integration.scala": "89924aef165b5206d86c6fec5171d03e16f0719d7fcf7b00e00f8eb16ad7cdf0",
+    "src/test/scala/heteronpu/p0/NormTileLoaderSpec.scala": "f632b405bada9404615ac0539ca082f5a72dad1d8f4eb953d043bd306f2a7d20",
+    "src/test/scala/heteronpu/p0/SharedL2FabricSpec.scala": "91b8cddad7fec9061b82dea1c74c9b518f35c70a62c8c151f501a245a1498ba7",
+    "src/test/scala/heteronpu/p0/Group8SchedulerSpec.scala": "c030fb757502b00f75b74d276dd8d3d482820404d35c8b222fcd7cd5320d5c88",
+    "src/test/scala/heteronpu/p0/TileTransposeSpec.scala": "a3c85260f53b8e678620fa09fb97b5101a5b7ef3e3a5b28bfe8e35c127101815",
+    "src/test/scala/heteronpu/p0/MatrixTilePayloadSpec.scala": "b3317fc7659f007b42f70774d8aa313f5828e9a60f9d946498a955a5702cc2c2"
+  },
+  "changed_core_blackboxes": 0,
+  "retained_blackboxes": ["qwen2_projection_descriptor_context", "qwen2_matrix_command_endpoint"],
+  "sram": {
+    "bytes": 1572864,
+    "banks": 16,
+    "rows_per_bank": 6144,
+    "bank_bits": 128,
+    "implementation": "Chisel SyncReadMem; macro mapping not signed off"
+  },
+  "target_clock": {"hz": 800000000, "period_ns": 1.25, "dc_run": false},
+  "history": [
+    {"run_id": 33996403945, "tests_passed": 53, "tests_failed": 8, "reason": "7 Verilator C++ precompiled-header build failures; 1 test-only default timeout; emission split-output option invalid"},
+    {"run_id": 33997045000, "tests_passed": 61, "tests_failed": 0, "reason": "DUT tests passed; additional strict ABI audit found 3 optimized-away constant ports; not final ABI acceptance"}
+  ],
+  "nonclaims": [
+    "No handwritten edits to generated SV or existing production RTL.",
+    "Production compile filelists have not been switched to this new Chisel project.",
+    "Matrix payload test accumulator results are input fixtures, not a MAC arithmetic validation.",
+    "Scheduler tests supply child responses at actual DUT boundary; not real pinned-iDMA/Matrix integration.",
+    "Shared-L2 DUT tests include reduced-depth parameterizations; full 1.5MiB configuration was emitted.",
+    "No old-vs-new formal equivalence, ARM SRAM macro closure, DC/PPA, full model or throughput result."
+  ]
+}

@@ -16,7 +16,7 @@
 
 ## 唯一下一动作
 
-OProj→residual已排队（session66976/77257）；阻塞等待，不轮询、不重复启动。
+OProj/residual流/residual-fabric服务已提交（66976/77257/45432）；阻塞等待、不轮询。
 
 - 真实1024行bias/RoPE共3932160个BF16值通过；实际输出已接attention输入。
 - OProj receipts/实际FP32：work/results/q1024_captured_oproj_replay/；构建通过，数值未关闭。
@@ -27,7 +27,7 @@ OProj→residual已排队（session66976/77257）；阻塞等待，不轮询、�
 - MemoryHigh24G/Max30G；可用内存>10GiB、磁盘>50GiB。
 - 每条重命令≤600秒；systemd --wait/子进程wait阻塞等待，不循环查状态。
 - 禁止重编模拟器、改夹具或已保存的Tcl脚本；禁止手改生成RTL。
-- residual双读/算术流/写回已组合，8个控制用例通过；真实算术+fabric及descriptor仍待验收。
+- residual控制8用例通过；真实加法+fabric全1024行回归已提交，descriptor/DDR仍待集成。
 - QT42原父进程消失，子进程结束后独立24576项核验通过；退出码未知，未重跑。
 - IEEE754替代helper两模拟器通过，待全量结束再接入；运行中不改冻结源/夹具。
 - 保护两个被排除的用户runtime脚本；检查点及时commit/push。

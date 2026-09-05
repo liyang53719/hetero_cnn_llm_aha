@@ -16,6 +16,8 @@
     "oproj_launch_record": "reports/execution/CAPTURED_OPROJ_FP32_LAUNCH.json",
     "residual_stream_progress": "reports/execution/FP32_RESIDUAL_STREAM_PROGRESS.json",
     "residual_service": "q1024-residual-fp32-20260905.service",
+    "residual_fabric_service":"q1024-residual-l2-numeric-20260905.service",
+    "residual_fabric_scope":"Full1024 real arithmetic/behavioral fabric numerical test submitted; not complete numerical or full-model performance PASS",
     "wait_policy": "systemd --wait and child wait only; no periodic state/log polling",
     "oproj_residual_precision_decision": "USER_APPROVED_BF16_MATRIX_FP32_ACCUMULATION_EVIDENCE_BACKED_FP32_BOUNDARIES; implementation in progress, current attention unchanged",
     "q1024_attention_payload_directory": "work/results/q1024_captured_attention_payload",

@@ -14,6 +14,7 @@ bash "$P/scripts/run_shared_frontend_unit.sh" "$OUT/unit" >"$OUT/unit_console.lo
 python3 "$P/tests/test_host_delivery_seal.py" >"$OUT/seal_tests.log" 2>&1
 python3 -O "$P/tests/test_host_delivery_seal.py" >"$OUT/seal_optimized_tests.log" 2>&1
 bash "$P/scripts/run_shared_command_gate.sh" commands "$OUT/commands" >"$OUT/commands_console.log" 2>&1
+bash "$P/scripts/run_host_partial_failure_gate.sh" "$OUT/partial_failure" "$OUT/commands" >"$OUT/partial_console.log" 2>&1
 bash "$P/scripts/run_shared_command_gate.sh" real "$OUT/real16" 16 >"$OUT/real16_console.log" 2>&1
 python3 "$P/scripts/seal_host_command_delivery.py" --unit "$OUT/unit" --commands "$OUT/commands" \
   --real "$OUT/real16" --repo "$ROOT" --source-base "$BASE" --output "$OUT/ACCEPTANCE.json" \

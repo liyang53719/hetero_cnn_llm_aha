@@ -1,0 +1,147 @@
+name: chisel-qwen2-developer-gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/chisel-qwen2-developer-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: chisel-qwen2-developer-gate-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: tiny4_t17
+            mode: tiny
+            tokens: 17
+            layers: 4
+          - name: real2_t1
+            mode: real
+            tokens: 1
+            layers: 2
+          - name: real1_t16
+            mode: real
+            tokens: 16
+            layers: 1
+    env:
+      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+      MAKEFLAGS: 'OPT_FAST=-O1 OPT_SLOW=-O1'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          sparse-checkout: |
+            chisel
+            integration/gemmini
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Prepare public toolchain
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+          python -m pip install numpy==2.2.6 pytest==8.3.5
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          mkdir -p work/developer_identity
+          git rev-parse HEAD > work/developer_identity/source_commit.txt
+          git -C "$HARDFLOAT_SOURCE" rev-parse HEAD > work/developer_identity/hardfloat_commit.txt
+          verilator --version > work/developer_identity/verilator.txt
+      - name: Compile Python and run packing tests
+        run: |
+          set -o pipefail
+          python -m py_compile chisel/continuous_prefill/scripts/pack_qwen2_stack.py chisel/continuous_prefill/scripts/run_packed_qwen2_stack.py chisel/continuous_prefill/scripts/generate_external_stack_harness.py chisel/continuous_prefill/scripts/compare_qwen2_stack_reference.py chisel/continuous_prefill/scripts/verify_external_stack_harness.py
+          python -m pytest -q chisel/continuous_prefill/tests/test_qwen2_stack_pack.py | tee work/developer_identity/packing_tests.log
+      - name: Chisel layer-control fault and boundary tests
+        working-directory: chisel/continuous_prefill
+        run: |
+          set -o pipefail
+          sbt -batch 'testOnly heteronpu.continuous.LayerStackGateSpec' | tee ../../work/developer_identity/chisel_tests.log
+      - name: Actual continuous numerical stack
+        run: |
+          bash chisel/continuous_prefill/scripts/run_qwen2_stack.sh '${{ matrix.mode }}' "$PWD/work/developer_numeric" '${{ matrix.tokens }}' '${{ matrix.layers }}'
+      - name: External arena path with poisoned synthetic intermediates
+        if: matrix.mode == 'tiny'
+        run: |
+          python chisel/continuous_prefill/scripts/verify_external_stack_harness.py --generated "$PWD/work/developer_numeric/generated" --out "$PWD/work/external_arena_gate" --tokens 17
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: developer-${{ matrix.name }}-${{ github.sha }}
+          retention-days: 30
+          path: |
+            work/developer_identity/
+            work/developer_numeric/*.log
+            work/developer_numeric/*.json
+            work/developer_numeric/*.txt
+            work/developer_numeric/*.sha256
+            work/developer_numeric/generated/
+            work/external_arena_gate/*.json
+            work/external_arena_gate/*.log
+            chisel/continuous_prefill/target/test-reports/
+  publish:
+    if: always()
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 1
+          sparse-checkout: reports/execution
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: developer-*-${{ github.sha }}
+          path: ${{ runner.temp }}/developer_artifacts
+      - name: Publish actual outcomes without upgrading their scope
+        env:
+          VERIFY_OUTCOME: ${{ needs.verify.result }}
+          ARTIFACT_ROOT: ${{ runner.temp }}/developer_artifacts
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ['ARTIFACT_ROOT']);sha=os.environ['GITHUB_SHA']
+          cases={}
+          for name in ['tiny4_t17','real2_t1','real1_t16']:
+              folder=root/f'developer-{name}-{sha}'
+              matches=list(folder.rglob('developer_numeric/RESULT.json'))
+              entry={'status':'NO_COMPLETED_NUMERICAL_RECEIPT','receipt':None}
+              if len(matches)==1:
+                  data=json.loads(matches[0].read_text())
+                  entry={'status':data.get('status'),'receipt':data,'receipt_sha256':hashlib.sha256(matches[0].read_bytes()).hexdigest()}
+              entry['preserved_logs']={str(p.relative_to(folder)):hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.rglob('*.log')}
+              cases[name]=entry
+          ext=list(root.rglob('external_arena_gate/RESULT.json'))
+          report={'schema':1,'tested_source_commit':sha,'workflow_run':os.environ['GITHUB_RUN_ID'],'job_outcome':os.environ['VERIFY_OUTCOME'],'cases':cases,'external_arena_fixture':json.loads(ext[0].read_text()) if len(ext)==1 else None,
+                  'scope':{'official_checkpoint_execution':False,'official_framework_forward':False,'production_512_useful_lanes':False,'pinned_idma':False,'full_model_q1024':False,'dc':False}}
+          report['all_requested_numeric_cases_passed']=all(c['status']=='PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU' for c in cases.values())
+          output=Path('reports/execution')/f'DEVELOPER_STACK_CI_{sha}.json';output.parent.mkdir(parents=True,exist_ok=True)
+          if output.exists():raise RuntimeError('refuse to overwrite earlier immutable report')
+          output.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+          PY
+          git config user.name heteronpu-developer-gate
+          git config user.email heteronpu-developer-gate@users.noreply.github.com
+          git add "reports/execution/DEVELOPER_STACK_CI_${GITHUB_SHA}.json"
+          git commit -m 'test: preserve scoped real-shape and multilayer DUT outcomes [skip ci]'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          echo 'Unable to publish report; workflow artifacts remain available' >&2
+          exit 1

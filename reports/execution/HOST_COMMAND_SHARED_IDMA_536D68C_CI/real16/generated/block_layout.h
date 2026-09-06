@@ -1,0 +1,41 @@
+// Generated from Chisel geometry. Do not edit.
+#pragma once
+#include <cstdint>
+static constexpr int H=1536;
+static constexpr int F=8960;
+static constexpr int HEADS=12;
+static constexpr int KVHEADS=2;
+static constexpr int HD=128;
+static constexpr int MAX_TOKENS=1024;
+static constexpr int PHYSICAL_MAC_LANES=512;
+static constexpr uint64_t ARENA_BYTES=363876352ULL, WRITABLE_START=194007040ULL;
+static constexpr uint64_t OFF_WQ=0ULL;
+static constexpr uint64_t OFF_WK=9437184ULL;
+static constexpr uint64_t OFF_WV=11010048ULL;
+static constexpr uint64_t OFF_WO=12582912ULL;
+static constexpr uint64_t OFF_WG=22020096ULL;
+static constexpr uint64_t OFF_WU=77070336ULL;
+static constexpr uint64_t OFF_WD=132120576ULL;
+static constexpr uint64_t OFF_GAMMA0=187170816ULL;
+static constexpr uint64_t OFF_GAMMA1=187176960ULL;
+static constexpr uint64_t OFF_BQ=187183104ULL;
+static constexpr uint64_t OFF_BK=187189248ULL;
+static constexpr uint64_t OFF_BV=187190272ULL;
+static constexpr uint64_t OFF_COS=187191296ULL;
+static constexpr uint64_t OFF_SIN=187453440ULL;
+static constexpr uint64_t OFF_X=187715584ULL;
+static constexpr uint64_t OFF_N0=194007040ULL;
+static constexpr uint64_t OFF_QR=200298496ULL;
+static constexpr uint64_t OFF_KR=206589952ULL;
+static constexpr uint64_t OFF_V=207638528ULL;
+static constexpr uint64_t OFF_Q=208687104ULL;
+static constexpr uint64_t OFF_K=214978560ULL;
+static constexpr uint64_t OFF_ATT=216027136ULL;
+static constexpr uint64_t OFF_O=222318592ULL;
+static constexpr uint64_t OFF_R=228610048ULL;
+static constexpr uint64_t OFF_N1=234901504ULL;
+static constexpr uint64_t OFF_GATE=241192960ULL;
+static constexpr uint64_t OFF_UP=277893120ULL;
+static constexpr uint64_t OFF_ACT=314593280ULL;
+static constexpr uint64_t OFF_DOWN=351293440ULL;
+static constexpr uint64_t OFF_Y=357584896ULL;

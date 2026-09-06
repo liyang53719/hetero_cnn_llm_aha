@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "PASS_SHARED_COMMAND_IDMA_SUITE",
+  "profile": "commands",
+  "tokens": null,
+  "details": {
+    "legal_cases": 22,
+    "error_cases": 8,
+    "commands_executed": 66,
+    "fp_values_checked": 166758
+  },
+  "block_receipt": null,
+  "host_receipt": null,
+  "tensor_sha256": {},
+  "files": {
+    "run.log": "ff2e7fcb975a5e1a6649d4b4d6552b5e773a55ed0f31633067b81faac42650cd",
+    "sources.sha256.json": "acb3999b20da679c30c9d0b286a35953efe82a86a0c0a1337087b7a282798a75",
+    "generated/HostResidualIdmaTop.sv": "6f418680e744bd69c9c8c345599517f3e3e3a5cfb26da38c0ad01e0786530abc"
+  },
+  "scope": {
+    "host_sfu_vector_add": true,
+    "typed_tensor_decode": true,
+    "single_original_idma": true,
+    "original_21_command_graph": false,
+    "official_weights": false,
+    "full_network_q1024": false,
+    "timing_800mhz_signed_off": false
+  }
+}

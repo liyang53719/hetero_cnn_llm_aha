@@ -1,0 +1,15 @@
+{
+  "status": "PASS_REAL_IDMA_PARTIAL_FAILURE_AND_RESET_RECOVERY",
+  "fault_cases": 12,
+  "reset_recoveries": 12,
+  "full_recovery_checked_fp32": 1188,
+  "failure_prefix_checked_fp32": 396,
+  "failed_tensor_published": false,
+  "dependent_command_started": false,
+  "input_manifest_sha256": "658c24180d565cb6ed987dd85f98e3f11fd86312acee1911478c7e3d9ea11707",
+  "run_log_sha256": "a5f1785d0094b3f174306db843b4dcdeb5dadef1e06f5d104b85f09683f6b57e",
+  "simulator_sha256": "b9c5e876270d954c3183757fcdafddea328d78c5c24c2b8406ed7ec61ab113da",
+  "original_idma": true,
+  "arithmetic_stub": false,
+  "full_model": false
+}

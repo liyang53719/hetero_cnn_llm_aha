@@ -1,0 +1,86 @@
+name: repair-host-proof-storage
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/repair-host-proof-storage.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  preserve:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 2
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-command-shared-idma-536d68cb8f903cbc0959da8b2345ae30ca57740d-1
+          path: artifact_proof
+          github-token: ${{ github.token }}
+          run-id: 34055833122
+      - name: Independently recheck and stage every exact manifest entry
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,subprocess,sys
+          repo=Path.cwd(); source=repo/'artifact_proof'
+          target=repo/'reports/execution/HOST_COMMAND_SHARED_IDMA_536D68C_CI'
+          manifest_path=target/'PUBLISHED_SHA256.json'
+          raw=manifest_path.read_bytes()
+          if hashlib.sha1(f'blob {len(raw)}\0'.encode()+raw).hexdigest()!='ebf06a353d989c9001429082083c7d9c526275ef':
+              raise RuntimeError('frozen published manifest drift')
+          manifest=json.loads(raw)
+          if len(manifest)!=104:raise RuntimeError('incomplete proof manifest')
+          sys.path.insert(0,str(repo/'chisel/continuous_prefill/scripts'))
+          from seal_host_command_delivery import seal
+          checked=seal(source/'unit',source/'commands',source/'real16',repo,'536d68cb8f903cbc0959da8b2345ae30ca57740d')
+          if checked!=json.loads((source/'ACCEPTANCE.json').read_text()):raise RuntimeError('proof numerical recheck changed')
+          staged=[];previously_untracked=[]
+          for relative,digest in sorted(manifest.items()):
+              rel=Path(relative)
+              if rel.is_absolute() or '..' in rel.parts:raise RuntimeError('unsafe manifest path')
+              src=target/rel if relative=='PUBLICATION_RECHECK.json' else source/rel
+              data=src.read_bytes()
+              if hashlib.sha256(data).hexdigest()!=digest:raise RuntimeError('artifact SHA mismatch: '+relative)
+              dst=target/rel
+              if dst.exists() and dst.read_bytes()!=data:raise RuntimeError('refuse to overwrite different existing evidence')
+              dst.parent.mkdir(parents=True,exist_ok=True)
+              if not dst.exists():dst.write_bytes(data)
+              path=str(dst.relative_to(repo)); staged.append(path)
+              if subprocess.run(['git','ls-files','--error-unmatch','--',path],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+                  previously_untracked.append(relative)
+          # Exact reviewed file list only. -f overcomes *.log/*.bin ignores; it
+          # does not stage arbitrary build outputs or change any DUT/RTL file.
+          for path in staged:subprocess.run(['git','add','-f','--',path],check=True)
+          for relative,digest in manifest.items():
+              path=str((target/relative).relative_to(repo))
+              data=subprocess.check_output(['git','show',':'+path])
+              if hashlib.sha256(data).hexdigest()!=digest:raise RuntimeError('Git INDEX missing/mismatched evidence: '+relative)
+          result={'status':'PASS_ALL_MANIFEST_BYTES_IN_GIT_INDEX','verified_files':len(manifest),
+                  'repaired_previously_untracked':previously_untracked,'source_commit':'536d68cb8f903cbc0959da8b2345ae30ca57740d',
+                  'original_workflow_run':34055833122,'checked_csv_values':checked['independently_rechecked_csv_values'],
+                  'dut_modified':False,'retained_rtl_modified':False,'full_block_host_graph':False,'q1024_full_model':False}
+          report=target/'DURABLE_PUBLICATION_RECHECK.json'
+          with report.open('x') as f:f.write(json.dumps(result,indent=2)+'\n')
+          subprocess.run(['git','add','--',str(report.relative_to(repo))],check=True)
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Fast-forward main with complete proof bytes
+        run: |
+          set -euo pipefail
+          git config user.name heteronpu-verified-evidence
+          git config user.email heteronpu-verified-evidence@users.noreply.github.com
+          git diff --cached --check
+          git commit -m 'test: durably store every Host command log and binary referenced by proof [skip ci]'
+          git push origin HEAD:main
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-proof-storage-recheck-${{ github.run_id }}
+          path: reports/execution/HOST_COMMAND_SHARED_IDMA_536D68C_CI/DURABLE_PUBLICATION_RECHECK.json
+          retention-days: 90

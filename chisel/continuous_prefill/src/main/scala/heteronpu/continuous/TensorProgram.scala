@@ -81,7 +81,7 @@ class TensorProgram(c:ChainConfig=ChainConfig()) extends Module {
         completed:=completed+1.U
         when(pc+1.U===count) {state:=finish}.otherwise {pc:=pc+1.U;state:=fetch}
       }
-    }
+    }}
     is(finish) {when(io.result.fire) {state:=Mux(poison,locked,idle)}}
     is(locked) {}
   }

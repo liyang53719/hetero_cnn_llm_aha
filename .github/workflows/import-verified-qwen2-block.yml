@@ -1,0 +1,127 @@
+name: import-verified-qwen2-block
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-verified-qwen2-block.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-verified-qwen2-block
+  cancel-in-progress: false
+jobs:
+  publish-and-verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      BUILD_JOBS: '2'
+      BLOCK_SMOKE_COUNTS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          clean: false
+          sparse-checkout: |
+            integration/block_verified_20260906
+            integration/gemmini
+            chisel/continuous_prefill
+            chisel/p0_safety
+            rtl
+            src/heteronpu
+            config
+            configs
+      - name: Verify and materialize exact tested sources
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64,hashlib,json,lzma
+          from pathlib import Path,PurePosixPath
+          directory=Path('integration/block_verified_20260906')
+          encoded=''.join((directory/f'part{i:02d}.b64').read_text().strip() for i in range(4))
+          raw=base64.b64decode(encoded,validate=True)
+          if len(raw)!=32196 or hashlib.sha256(raw).hexdigest()!='83e9c4a0452379c4ffe7677fe3b0aa0bf70ded9855ace84e839ac58a46aabef3':
+              raise RuntimeError('delivery archive identity mismatch')
+          payload=json.loads(lzma.decompress(raw))
+          if payload['schema']!=1 or payload['baseline']!='33ef6b4c9c48f16d26464eafc14804fe8d29dedc':
+              raise RuntimeError('unexpected baseline or schema')
+          entries=payload['entries']
+          if len(entries)!=31 or len({e['path'] for e in entries})!=31:
+              raise RuntimeError('invalid target inventory')
+          def safe(name):
+              p=PurePosixPath(name)
+              if p.is_absolute() or '..' in p.parts or p.parts[:2]!=('chisel','continuous_prefill') or p.suffix in ('.sv','.v'):
+                  raise RuntimeError('invalid source path: '+name)
+              q=Path(name)
+              if q.is_symlink() or any(a.is_symlink() for a in q.parents):raise RuntimeError('symlink forbidden')
+              return q
+          def digest(data):return hashlib.sha256(data).hexdigest()
+          already=all(safe(e['path']).is_file() and digest(safe(e['path']).read_bytes())==e['after'] for e in entries)
+          outputs={}
+          if not already:
+              # Snapshot every source before writing anything; source and target paths may overlap.
+              origins={}
+              for e in entries:
+                  target=safe(e['path'])
+                  before=digest(target.read_bytes()) if target.is_file() else None
+                  if before!=e['before']:raise RuntimeError('target baseline changed: '+e['path'])
+                  origin=safe(e['origin']).read_bytes() if e['origin'] else b''
+                  if digest(origin)!=e['origin_sha']:raise RuntimeError('origin changed: '+str(e['origin']))
+                  origins[e['path']]=origin
+              for e in entries:
+                  old=origins[e['path']];pieces=[]
+                  for op in e['ops']:
+                      if op[0]=='c' and len(op)==3:
+                          start,length=op[1:]
+                          if not isinstance(start,int) or not isinstance(length,int) or min(start,length)<0 or start+length>len(old):raise RuntimeError('invalid copy span')
+                          pieces.append(old[start:start+length])
+                      elif op[0]=='s' and len(op)==2:pieces.append(op[1].encode('utf-8'))
+                      else:raise RuntimeError('invalid delta operation')
+                  output=b''.join(pieces)
+                  if len(output)!=e['size'] or digest(output)!=e['after']:raise RuntimeError('reconstructed source mismatch: '+e['path'])
+                  outputs[e['path']]=output
+              for name,output in outputs.items():
+                  p=safe(name);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(output)
+          for e in entries:
+              if digest(safe(e['path']).read_bytes())!=e['after']:raise RuntimeError('post-write mismatch')
+          print('VERIFIED_MATERIALIZATION files=31 already_present='+str(already))
+          PY
+          git diff --check
+          git config user.name 'heteronpu-verified-source'
+          git config user.email 'heteronpu-verified-source@users.noreply.github.com'
+          git add chisel/continuous_prefill
+          if ! git diff --cached --quiet; then
+            git commit -m 'chisel: verify continuous Qwen2 block on retained Matrix and AXI [skip ci]'
+            git push origin HEAD:main
+          fi
+          mkdir -p work/results
+          git rev-parse HEAD | tee work/results/published_block_commit.txt
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare numerical verification tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+          python -m pip install numpy==2.1.3 pytest==8.3.5
+      - name: Replay actual retained Matrix and AXI block
+        run: bash chisel/continuous_prefill/scripts/run_block_gate.sh work/results/verified_block_ci tiny 2 retained
+      - name: Confirm repository sources were not modified by tests
+        if: always()
+        run: git diff --exit-code -- chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verified-qwen2-block-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            work/results/published_block_commit.txt
+            work/results/verified_block_ci/*.log
+            work/results/verified_block_ci/*.json
+            work/results/verified_block_ci/*.txt
+            work/results/verified_block_ci/*.sha256
+            work/results/verified_block_ci/generated/
+            chisel/continuous_prefill/target/test-reports/

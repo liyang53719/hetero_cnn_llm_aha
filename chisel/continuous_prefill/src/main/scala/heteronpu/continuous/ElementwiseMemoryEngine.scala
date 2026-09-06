@@ -26,14 +26,14 @@ class ElementwiseMemoryEngine(c:ChainConfig=ChainConfig(),sram:LocalSramConfig=L
   val a=Reg(UInt(512.W));val b=RegInit(0.U(512.W));val value=Reg(UInt(512.W));val packet=RegInit(0.U(512.W))
   val sent=RegInit(0.U(2.W));val got=RegInit(0.U(2.W))
   val seq=RegInit(0.U(32.W));val expectedTag=Reg(UInt(64.W))
-  val cycles=RegInit(0.U(64.W));val reads=RegInit(0.U(64.W));val writes=RegInit(0.U(64.W));val elements=RegInit(0.U(32.W))
+  val cycles=RegInit(0.U(64.W));val reads=RegInit(0.U(64.W));val writes=RegInit(0.U(64.W));val elementCount=RegInit(0.U(32.W))
   val fabric=Module(new SharedL2Fabric(sram));val f=fabric.io
   f.rd_valid_i:=0.U;f.rd_addr_i:=0.U;f.rd_resp_ready_i:=0.U
   f.wr_valid_i:=false.B;f.wr_addr_i:=0.U;f.wr_data_i:=0.U;f.wr_be_i:=0.U
   io.localAddressError:=f.address_error_o
   io.job.ready:=state===idle && !poison
   io.done.valid:=state===finish;io.done.bits.tag:=job.tag;io.done.bits.status:=status
-  io.done.bits.elements:=elements;io.done.bits.writeBytes:=writes
+  io.done.bits.elementCount:=elementCount;io.done.bits.writeBytes:=writes
   io.resetRequired:=poison;io.cycles:=cycles;io.readBytes:=reads;io.writeBytes:=writes
   io.memory.valid:=false.B;io.memory.bits:=0.U.asTypeOf(new MemoryRequest)
   io.memory.bits.tag:=Cat(job.tag,seq)
@@ -65,7 +65,7 @@ class ElementwiseMemoryEngine(c:ChainConfig=ChainConfig(),sram:LocalSramConfig=L
   def fail(code:UInt):Unit={status:=code;poison:=true.B;state:=finish}
   def nextTile():Unit={
     val next=base+tile
-    base:=next;tile:=Mux(job.elements-next>c.tileElements.U,c.tileElements.U,job.elements-next)
+    base:=next;tile:=Mux(job.elementCount-next>c.tileElements.U,c.tileElements.U,job.elementCount-next)
     loadIndex:=0.U;loadB:=false.B;state:=loadReq
   }
   when(state=/=idle && state=/=finish && state=/=locked) {cycles:=cycles+1.U}
@@ -74,12 +74,12 @@ class ElementwiseMemoryEngine(c:ChainConfig=ChainConfig(),sram:LocalSramConfig=L
   val rspCode=Mux(io.response.bits.tag=/=expectedTag,Status.Protocol.U,Status.Memory.U)
   switch(state) {
     is(idle) {when(io.job.fire) {
-      job:=io.job.bits;status:=0.U;cycles:=0.U;reads:=0.U;writes:=0.U;elements:=0.U;seq:=0.U
-      base:=0.U;tile:=Mux(io.job.bits.elements>c.tileElements.U,c.tileElements.U,io.job.bits.elements)
+      job:=io.job.bits;status:=0.U;cycles:=0.U;reads:=0.U;writes:=0.U;elementCount:=0.U;seq:=0.U
+      base:=0.U;tile:=Mux(io.job.bits.elementCount>c.tileElements.U,c.tileElements.U,io.job.bits.elementCount)
       loadIndex:=0.U;loadB:=false.B;state:=loadReq
       val j=io.job.bits
-      def end(addr:UInt,s:Bool):UInt=addr.pad(66)+(((j.elements.pad(66)<<Mux(s,1.U,2.U))+63.U)>>6<<6)
-      when(j.elements===0.U||j.op>ElemOp.Mul.U) {fail(Status.Unsupported.U)}
+      def end(addr:UInt,s:Bool):UInt=addr.pad(66)+(((j.elementCount.pad(66)<<Mux(s,1.U,2.U))+63.U)>>6<<6)
+      when(j.elementCount===0.U||j.op>ElemOp.Mul.U) {fail(Status.Unsupported.U)}
       .elsewhen(j.a(5,0)=/=0.U||j.dst(5,0)=/=0.U || (j.op=/=ElemOp.Copy.U&&j.b(5,0)=/=0.U) ||
         end(j.a,j.aBf16)>(BigInt(1)<<56).U || end(j.dst,j.dstBf16)>(BigInt(1)<<56).U ||
         (j.op=/=ElemOp.Copy.U&&end(j.b,j.bBf16)>(BigInt(1)<<56).U)) {fail(Status.Bounds.U)}
@@ -143,7 +143,7 @@ class ElementwiseMemoryEngine(c:ChainConfig=ChainConfig(),sram:LocalSramConfig=L
       when(rspBad) {fail(rspCode)}.otherwise {
         writes:=writes+outputBytes
         when(outIndex+outputStride>=tile) {
-          when(base+tile===job.elements) {elements:=job.elements;state:=finish}.otherwise {nextTile()}
+          when(base+tile===job.elementCount) {elementCount:=job.elementCount;state:=finish}.otherwise {nextTile()}
         }.otherwise {outIndex:=outIndex+outputStride;state:=outReq0}
       }
     }}
@@ -151,7 +151,7 @@ class ElementwiseMemoryEngine(c:ChainConfig=ChainConfig(),sram:LocalSramConfig=L
     is(locked) {}
   }
   when(state===calcRead||state===calcWait) {
-    f.rd_resp_ready_i:=~got
+    f.rd_resp_ready_i:= ~got
     val fires=f.rd_resp_valid_o & f.rd_resp_ready_i
     got:=got | fires
     when(fires(0)) {a:=f.rd_data_o(511,0)}

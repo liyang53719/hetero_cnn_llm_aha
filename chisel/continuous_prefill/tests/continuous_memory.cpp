@@ -85,7 +85,7 @@ class Test {
       d.io_regionWrite_valid=1;step();need(d.io_regionWrite_ready,"config blocked");
     }d.io_regionWrite_valid=0;
     for(int i=0;i<6;i++){
-      d.io_tensorWrite_bits_index=i;d.io_tensorWrite_bits_value_base=memory[i].base;d.io_tensorWrite_bits_value_elements=elements;
+      d.io_tensorWrite_bits_index=i;d.io_tensorWrite_bits_value_base=memory[i].base;d.io_tensorWrite_bits_value_elementCount=elements;
       d.io_tensorWrite_bits_value_bf16=i==1||i==2||i==5;d.io_tensorWrite_bits_value_region=i>=3;d.io_tensorWrite_bits_value_external=i<3;
       d.io_tensorWrite_valid=1;step();
     }d.io_tensorWrite_valid=0;

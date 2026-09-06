@@ -1,0 +1,79 @@
+name: export-pinned-idma
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/export-pinned-idma.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Resolve pinned public source and tools
+        run: |
+          set -euo pipefail
+          mkdir tools
+          curl -fL --retry 3 https://github.com/pulp-platform/bender/releases/download/v0.32.0/bender-x86_64-unknown-linux-gnu.tar.xz -o tools/bender.tar.xz
+          curl -fL --retry 3 https://github.com/pulp-platform/bender/releases/download/v0.32.0/bender-x86_64-unknown-linux-gnu.tar.xz.sha256 -o tools/bender.sha256
+          expected=$(cut -d' ' -f1 tools/bender.sha256)
+          echo "$expected  tools/bender.tar.xz" | sha256sum --check
+          tar -xJf tools/bender.tar.xz -C tools
+          export PATH="$(pwd)/tools/bender-x86_64-unknown-linux-gnu:$(pwd)/tools:$PATH"
+          BENDER=$(find "$(pwd)/tools" -type f -name bender | head -n1)
+          test -n "$BENDER"; chmod +x "$BENDER"; export BENDER
+          python3 -m pip install uv==0.8.17
+          git init idma
+          git -C idma remote add origin https://github.com/pulp-platform/iDMA.git
+          git -C idma fetch --depth=1 origin 2e0b0fe53b6f8823319e2428e2e9abc2db149b7d
+          git -C idma checkout --detach FETCH_HEAD
+          test "$(git -C idma rev-parse HEAD)" = 2e0b0fe53b6f8823319e2428e2e9abc2db149b7d
+          sha256sum idma/Bender.lock > lock.sha256
+          cd idma
+          "$BENDER" sources -f > ../all_sources.txt
+          mkdir -p target/rtl
+          make BENDER="$BENDER" target/rtl/idma_generated.sv target/rtl/include/idma/compute.svh > ../generate.log 2>&1
+          "$BENDER" script verilator -t rtl -t asic > ../idma.f
+          cd ..
+          sha256sum --check lock.sha256
+          test -z "$(git -C idma status --porcelain)"
+          mkdir -p idma_export/idma idma_export/deps
+          git -C idma archive HEAD | tar -x -C idma_export/idma
+          cp -a idma/target/rtl idma_export/idma/target/
+          python3 - <<'PY'
+          import subprocess,json,hashlib
+          from pathlib import Path
+          import yaml
+          root=Path.cwd();src=root/'idma';out=root/'idma_export'
+          lock=yaml.safe_load((src/'Bender.lock').read_text())['packages']
+          replacements={str(src):'@ROOT@/idma'};commits={'idma':'2e0b0fe53b6f8823319e2428e2e9abc2db149b7d'}
+          bender=next((root/'tools').rglob('bender'))
+          for name,entry in lock.items():
+              p=Path(subprocess.check_output([str(bender),'path',name],cwd=src,text=True).strip())
+              revision=subprocess.check_output(['git','-C',str(p),'rev-parse','HEAD'],text=True).strip()
+              if revision!=entry['revision']:raise RuntimeError('dependency revision mismatch '+name)
+              dest=out/'deps'/name;dest.mkdir()
+              archive=subprocess.Popen(['git','-C',str(p),'archive','HEAD'],stdout=subprocess.PIPE)
+              subprocess.run(['tar','-x','-C',str(dest)],stdin=archive.stdout,check=True)
+              archive.stdout.close()
+              if archive.wait():raise RuntimeError('archive failed')
+              replacements[str(p)]='@ROOT@/deps/'+name;commits[name]=revision
+          text=(root/'idma.f').read_text()
+          for old,new in sorted(replacements.items(),key=lambda x:-len(x[0])):text=text.replace(old,new)
+          (out/'idma.f.in').write_text(text)
+          (out/'COMMITS.json').write_text(json.dumps(commits,indent=2)+'\n')
+          (out/'SHA256SUMS.json').write_text(json.dumps({str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in out.rglob('*') if p.is_file()},indent=2)+'\n')
+          PY
+          tar -czf pinned_idma_sources.tar.gz idma_export
+          sha256sum pinned_idma_sources.tar.gz > pinned_idma_sources.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pinned-idma-source-${{ github.sha }}
+          retention-days: 30
+          path: |
+            pinned_idma_sources.tar.gz
+            pinned_idma_sources.sha256
+            generate.log
+            lock.sha256

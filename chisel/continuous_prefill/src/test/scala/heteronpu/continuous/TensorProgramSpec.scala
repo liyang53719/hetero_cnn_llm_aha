@@ -16,7 +16,7 @@ class TensorProgramSpec extends AnyFlatSpec with ChiselScalatestTester {
     for(i<-0 until 4){
       val t=d.io.tensorWrite.bits.value
       d.io.tensorWrite.bits.index.poke(i.U);t.base.poke((BigInt(if(i<2)"100000000" else "200000000",16)+(i%2)*0x1000).U)
-      t.elements.poke(32.U);t.bf16.poke(false.B);t.region.poke((if(i<2)0 else 1).U);t.external.poke((i<2).B)
+      t.elementCount.poke(32.U);t.bf16.poke(false.B);t.region.poke((if(i<2)0 else 1).U);t.external.poke((i<2).B)
       d.io.tensorWrite.valid.poke(true.B);d.clock.step()
     };d.io.tensorWrite.valid.poke(false.B)
   }
@@ -29,7 +29,7 @@ class TensorProgramSpec extends AnyFlatSpec with ChiselScalatestTester {
   def start(d:TensorProgram,n:Int=1):Unit={d.io.launch.bits.commands.poke(n.U);d.io.launch.bits.epoch.poke(1.U);d.io.launch.valid.poke(true.B);d.clock.step();d.io.launch.valid.poke(false.B)}
   def waitFor(d:TensorProgram,p: => Boolean):Unit={var n=0;while(!p&&n<30){d.clock.step();n+=1};assert(p)}
   def completion(d:TensorProgram,tag:BigInt,bytes:Int=128,status:Int=0):Unit={
-    d.io.done.bits.tag.poke(tag.U);d.io.done.bits.status.poke(status.U);d.io.done.bits.elements.poke(32.U);d.io.done.bits.writeBytes.poke(bytes.U)
+    d.io.done.bits.tag.poke(tag.U);d.io.done.bits.status.poke(status.U);d.io.done.bits.elementCount.poke(32.U);d.io.done.bits.writeBytes.poke(bytes.U)
     d.io.done.valid.poke(true.B);d.clock.step();d.io.done.valid.poke(false.B)
   }
   it should "publish only matched writeback, block config while active, and feed consumer the producer address" in {
@@ -58,7 +58,7 @@ class TensorProgramSpec extends AnyFlatSpec with ChiselScalatestTester {
   }
   it should "reject source/destination alias even under different tensor IDs" in {test(new TensorProgram(c)){d=>init(d)
     d.io.tensorWrite.bits.index.poke(3.U);d.io.tensorWrite.bits.value.base.poke(BigInt("100000000",16).U)
-    d.io.tensorWrite.bits.value.elements.poke(32.U);d.io.tensorWrite.bits.value.bf16.poke(false.B);d.io.tensorWrite.bits.value.region.poke(0.U);d.io.tensorWrite.bits.value.external.poke(false.B)
+    d.io.tensorWrite.bits.value.elementCount.poke(32.U);d.io.tensorWrite.bits.value.bf16.poke(false.B);d.io.tensorWrite.bits.value.region.poke(0.U);d.io.tensorWrite.bits.value.external.poke(false.B)
     d.io.tensorWrite.valid.poke(true.B);d.clock.step();d.io.tensorWrite.valid.poke(false.B);word(d,0,0,1,3);start(d)
     waitFor(d,d.io.result.valid.peek().litToBoolean);d.io.result.bits.status.expect(5.U)
   }}

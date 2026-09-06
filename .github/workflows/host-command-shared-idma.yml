@@ -10,7 +10,7 @@ permissions:
 jobs:
   actual-dut:
     runs-on: ubuntu-24.04
-    timeout-minutes: 100
+    timeout-minutes: 120
     env:
       JVM_OPTS: '-Xmx3G -Xss4M -XX:ActiveProcessorCount=3'
       BUILD_JOBS: '3'
@@ -44,6 +44,8 @@ jobs:
       - name: Execute real Chisel and retained RTL, not a software stub
         run: |
           set -euo pipefail
+          # The entrypoint prepares a user-owned Verilator runtime layout and
+          # exercises partial-write failure/reset without editing installed tools.
           bash chisel/continuous_prefill/scripts/run_host_command_acceptance.sh "$GITHUB_WORKSPACE/work/host_command_acceptance"
       - name: Preserve complete outputs and logs even on failure
         if: always()

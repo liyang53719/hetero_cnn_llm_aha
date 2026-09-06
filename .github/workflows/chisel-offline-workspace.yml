@@ -1,0 +1,71 @@
+name: chisel-offline-workspace
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/chisel-offline-workspace.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      JVM_OPTS: '-Xmx4G -XX:ActiveProcessorCount=4'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          sparse-checkout: |
+            chisel
+            integration/gemmini
+            rtl
+            tb
+            scripts
+            config
+            configs
+            src/heteronpu
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - name: Resolve and compile pinned source
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          cd chisel/continuous_prefill
+          sbt -batch compile Test/compile 'runMain heteronpu.continuous.EmitContinuous offline_emitted ci'
+          sbt -batch 'export Test / fullClasspath' > offline_classpath.log
+      - name: Export allowlisted source and public tools only
+        run: |
+          set -euo pipefail
+          mkdir -p offline_export/repo offline_export/tools/jars offline_export/tools/bin offline_export/tools/share
+          git archive HEAD chisel integration/gemmini rtl tb scripts config configs src/heteronpu | tar -x -C offline_export/repo
+          mkdir -p offline_export/repo/work/upstream/hardfloat_continuous
+          git -C "$HARDFLOAT_SOURCE" archive HEAD | tar -x -C offline_export/repo/work/upstream/hardfloat_continuous
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil,hashlib,json
+          root=Path('offline_export')
+          # Dependency artifacts only; never export credentials, git config or account caches.
+          for p in Path.home().joinpath('.cache/coursier').rglob('*.jar'):
+              if '/2.12.' in str(p) or '/org/scala-sbt/' in str(p): continue
+              target=root/'tools/jars'/p.name
+              if target.exists() and target.read_bytes()!=p.read_bytes(): raise RuntimeError('jar name collision')
+              shutil.copy2(p,target)
+          for p in Path.home().joinpath('.cache/llvm-firtool').rglob('firtool'):
+              if p.is_file(): shutil.copy2(p,root/'tools/bin/firtool')
+          shutil.copy2('/usr/bin/verilator',root/'tools/bin/verilator')
+          shutil.copy2('/usr/bin/verilator_bin',root/'tools/bin/verilator_bin')
+          shutil.copytree('/usr/share/verilator',root/'tools/share/verilator')
+          (root/'SHA256SUMS.json').write_text(json.dumps({str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()},indent=2))
+          PY
+          git rev-parse HEAD > offline_export/SOURCE_COMMIT
+          tar -czf chisel_offline_workspace.tar.gz offline_export
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chisel-offline-workspace-${{ github.sha }}
+          retention-days: 30
+          path: chisel_offline_workspace.tar.gz

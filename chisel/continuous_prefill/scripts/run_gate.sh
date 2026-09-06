@@ -7,7 +7,7 @@ mkdir -p "$OUT"
 export MAKEFLAGS="${MAKEFLAGS:-} CFG_CXXFLAGS_PCH_I=-include"
 sbt -batch compile Test/compile | tee "$OUT/compile.log"
 sbt -batch test | tee "$OUT/test.log"
-sbt -batch "runMain heteronpu.continuous.EmitContinuous $OUT/generated_ci" | tee "$OUT/emit.log"
+sbt -batch "runMain heteronpu.continuous.EmitContinuous $OUT/generated_ci --small-fabric" | tee "$OUT/emit.log"
 verilator --cc --exe --build --assert -Wno-fatal --top-module ContinuousElementwiseTop \
   -CFLAGS '-O2 -std=c++17 -ffp-contract=off' -j 4 --Mdir "$PWD/$OUT/obj" \
   "$OUT/generated_ci/ContinuousElementwiseTop.sv" "$PWD/tests/continuous_memory.cpp" > "$OUT/verilator_build.log" 2>&1

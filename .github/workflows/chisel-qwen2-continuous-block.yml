@@ -1,0 +1,74 @@
+name: chisel-qwen2-continuous-block
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala'
+      - 'chisel/continuous_prefill/tests/qwen2_block.cpp'
+      - 'chisel/continuous_prefill/scripts/run_qwen2_block_verified.sh'
+      - '.github/workflows/chisel-qwen2-continuous-block.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-continuous-block-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  block:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [tiny, real]
+    env:
+      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          sparse-checkout: |
+            chisel/p0_safety
+            chisel/continuous_prefill
+            integration/gemmini
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Install public simulator
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+      - name: Execute actual generated DUT
+        id: gate
+        run: |
+          bash chisel/continuous_prefill/scripts/run_qwen2_block_verified.sh '${{ matrix.mode }}' '${{ runner.temp }}/qwen2_block_${{ matrix.mode }}' 16
+      - name: Record gate status without upgrading evidence
+        if: always()
+        env:
+          GATE_OUTCOME: ${{ steps.gate.outcome }}
+          MODE: ${{ matrix.mode }}
+        run: |
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=Path(os.environ['RUNNER_TEMP'])/('qwen2_block_'+os.environ['MODE']);d.mkdir(parents=True,exist_ok=True)
+          r={'workflow_run':os.environ['GITHUB_RUN_ID'],'source_commit':os.environ['GITHUB_SHA'],'mode':os.environ['MODE'],'gate_outcome':os.environ['GATE_OUTCOME'],'full_network':False,'canonical_512_mac_integrated':False,'dc_pass':False}
+          (d/'CI_OUTCOME.json').write_text(json.dumps(r,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qwen2-continuous-block-${{ matrix.mode }}-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 30
+          path: |
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/*.log
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/*.json
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/*.txt
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/*.sha256
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/generated/
+            chisel/continuous_prefill/target/test-reports/

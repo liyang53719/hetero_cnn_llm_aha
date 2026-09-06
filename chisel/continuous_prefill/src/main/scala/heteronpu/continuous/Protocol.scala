@@ -21,7 +21,7 @@ class Region extends Bundle {
   val read=Bool(); val write=Bool()
 }
 class Tensor extends Bundle {
-  val base=UInt(64.W); val elements=UInt(32.W)
+  val base=UInt(64.W); val elementCount=UInt(32.W)
   val bf16=Bool(); val region=UInt(2.W); val external=Bool()
 }
 class ProgramWord(c:ChainConfig) extends Bundle {
@@ -32,11 +32,11 @@ class RegionWrite extends Bundle {val index=UInt(2.W);val value=new Region}
 class TensorWrite(c:ChainConfig) extends Bundle {val index=UInt(c.tensorBits.W);val value=new Tensor}
 class ProgramWrite(c:ChainConfig) extends Bundle {val index=UInt(c.pcBits.W);val value=new ProgramWord(c)}
 class BoundJob extends Bundle {
-  val op=UInt(3.W); val a=UInt(64.W); val b=UInt(64.W); val dst=UInt(64.W); val elements=UInt(32.W)
+  val op=UInt(3.W); val a=UInt(64.W); val b=UInt(64.W); val dst=UInt(64.W); val elementCount=UInt(32.W)
   val aBf16=Bool(); val bBf16=Bool(); val dstBf16=Bool()
   val tag=UInt(32.W) // {request epoch16, program counter16}
 }
-class JobResult extends Bundle { val tag=UInt(32.W); val status=UInt(8.W); val elements=UInt(32.W); val writeBytes=UInt(64.W) }
+class JobResult extends Bundle { val tag=UInt(32.W); val status=UInt(8.W); val elementCount=UInt(32.W); val writeBytes=UInt(64.W) }
 class MemoryRequest extends Bundle {
   val write=Bool(); val address=UInt(64.W); val data=UInt(512.W); val mask=UInt(64.W); val tag=UInt(64.W)
 }
@@ -44,7 +44,7 @@ class MemoryResponse extends Bundle { val data=UInt(512.W); val tag=UInt(64.W); 
 class Launch extends Bundle { val commands=UInt(16.W); val epoch=UInt(16.W) }
 class ChainResult extends Bundle { val status=UInt(8.W); val epoch=UInt(16.W); val completed=UInt(16.W); val failedPc=UInt(16.W) }
 object TensorMath {
-  def payloadBytes(t:Tensor):UInt = t.elements.pad(66) << Mux(t.bf16,1.U,2.U)
+  def payloadBytes(t:Tensor):UInt = t.elementCount.pad(66) << Mux(t.bf16,1.U,2.U)
   def span(t:Tensor):UInt = ((payloadBytes(t)+63.U)>>6)<<6
   def end(t:Tensor):UInt = t.base.pad(66)+span(t)
   def overlap(a:Tensor,b:Tensor):Bool = a.base.pad(66)<end(b) && b.base.pad(66)<end(a)

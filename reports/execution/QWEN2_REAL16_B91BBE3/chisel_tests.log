@@ -1,0 +1,56 @@
+[36mRun starting. Expected test count is: 38[0m
+[32mBlockWritebackFenceSpec:[0m
+[32mBlockWritebackFence[0m
+[32m- should wait for final successful write ACK rather than issued stores (5 seconds, 689 milliseconds)[0m
+[32m- should exclude reads and count the actual byte mask for a partial final beat (3 seconds, 766 milliseconds)[0m
+[32m- should reset per-stage counts but retain the request total and then allow another request (3 seconds, 906 milliseconds)[0m
+[32m- should poison write_error without publishing a tensor (3 seconds, 515 milliseconds)[0m
+[32m- should poison tag_error without publishing a tensor (3 seconds, 684 milliseconds)[0m
+[32m- should poison unsolicited without publishing a tensor (3 seconds, 323 milliseconds)[0m
+[32m- should poison duplicate_ack without publishing a tensor (3 seconds, 487 milliseconds)[0m
+[32m- should poison overrun without publishing a tensor (3 seconds, 478 milliseconds)[0m
+[32m- should poison zero_mask without publishing a tensor (3 seconds, 651 milliseconds)[0m
+[32m- should poison double_issue without publishing a tensor (3 seconds, 434 milliseconds)[0m
+[32m- should poison premature_stage without publishing a tensor (3 seconds, 467 milliseconds)[0m
+[32mTensorProgramSpec:[0m
+[32m- should publish only matched writeback, block config while active, and feed consumer the producer address (901 milliseconds)[0m
+[32m- should reject missing producer without issuing (386 milliseconds)[0m
+[32m- should reject stale source version without issuing (315 milliseconds)[0m
+[32m- should not publish after bad tag (299 milliseconds)[0m
+[32m- should not publish after short write (317 milliseconds)[0m
+[32m- should not publish after memory failure (295 milliseconds)[0m
+[32m- should reject source/destination alias even under different tensor IDs (268 milliseconds)[0m
+[32m- should invalidate non-external generations between request epochs (281 milliseconds)[0m
+[32mDenseTileCursorSpec:[0m
+[32m- should enumerate 1 x 1 x 1 with ordered K blocks and acknowledged stores (112 milliseconds)[0m
+[32m- should enumerate 17 x 33 x 129 with ordered K blocks and acknowledged stores (85 milliseconds)[0m
+[32m- should enumerate 32 x 256 x 1536 with ordered K blocks and acknowledged stores (329 milliseconds)[0m
+[32m- should enumerate 16 x 512 x 2048 with ordered K blocks and acknowledged stores (353 milliseconds)[0m
+[32m- should enumerate 16 x 640 x 2560 with ordered K blocks and acknowledged stores (539 milliseconds)[0m
+[32m- should enumerate 16 x 1536 x 8960 with ordered K blocks and acknowledged stores (3 seconds, 330 milliseconds)[0m
+[32m- should refuse a final K ack without writeback commitment (111 milliseconds)[0m
+[32m- should reject a zero M shape (87 milliseconds)[0m
+[32m- should reject a wrapped DDR footprint before the first tile (71 milliseconds)[0m
+[32m- should reject publishing an incomplete K accumulation (71 milliseconds)[0m
+[32mBlockScalarFloatSpec:[0m
+[32mBlockScalarFloat[0m
+BLOCK_SCALAR_VECTORS_PASS count=77 random_seed=807
+[32m- should match IEEE operations and bounded exp approximation while holding a stalled result (4 seconds, 556 milliseconds)[0m
+[32mBlockAxiAdapterSpec:[0m
+[32mBlockAxiMemoryAdapter[0m
+[32m- should hold split AW/W and commit only after B awFirst=true (3 seconds, 716 milliseconds)[0m
+[32mBlockAxiMemoryAdapter[0m
+[32m- should hold split AW/W and commit only after B awFirst=false (3 seconds, 396 milliseconds)[0m
+[32m- should check read response identity and quarantine failures fault=none (3 seconds, 302 milliseconds)[0m
+[32m- should check read response identity and quarantine failures fault=id (3 seconds, 220 milliseconds)[0m
+[32m- should check read response identity and quarantine failures fault=resp (3 seconds, 269 milliseconds)[0m
+[32m- should check read response identity and quarantine failures fault=last (3 seconds, 404 milliseconds)[0m
+[32mQwenBlockLayoutSpec:[0m
+[32mQwenBlockLayout[0m
+[32m- should reserve nonoverlapping DDR ranges for real Qwen2 shapes without a quadratic score tensor (6 milliseconds)[0m
+[32m- should refuse inconsistent or unsupported vector geometry (1 millisecond)[0m
+[36mRun completed in 1 minute, 14 seconds.[0m
+[36mTotal number of tests run: 38[0m
+[36mSuites: completed 6, aborted 0[0m
+[36mTests: succeeded 38, failed 0, canceled 0, ignored 0, pending 0[0m
+[32mAll tests passed.[0m

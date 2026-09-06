@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "status": "PASS_REAL16_CONTINUOUS_FUNCTIONAL_BLOCK",
+  "tested_source_commit": "b91bbe3eed98ccf47362fc9a5a6c3d26d002d552",
+  "source_origin": {
+    "artifact_id": 9987030028,
+    "archive_sha256": "8d185c01fbad7a2020c184e68f07c43626a7c2e9d426633228b444d9c9524780",
+    "export_zip_sha256": "28cf96fe04bae02d3253dd9d46f2d62ae7d92d112d5811766d6a551bd085b7b4"
+  },
+  "execution_environment": "ChatGPT sandbox; direct offline Scala compiler, CIRCT, Verilator; not local agent and not a copied CI result",
+  "seed": 20260906,
+  "shape": {
+    "hidden": 1536,
+    "ffn": 8960,
+    "heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "tokens": 16
+  },
+  "simulator_exit_code": 0,
+  "checks": {
+    "all_15_stages_in_one_request": true,
+    "source_immutability": {
+      "sources.sha256.json": {
+        "file_count": 34,
+        "unchanged": true,
+        "manifest_sha256": "f1b982b855016666202c8ac481ad7161596fbe9dcd83fa8499b3bcd8db12b8f5"
+      },
+      "hardfloat.sha256.json": {
+        "file_count": 20,
+        "unchanged": true,
+        "manifest_sha256": "b2c54cf1f12987744b8cabe4de6aed6c6fa393dfb0d82ff6ccc4c0d4f2c1d4e6"
+      }
+    },
+    "full_comparison_rows_rechecked": 663552,
+    "input_and_output_dump_files": 31,
+    "negative_file_probes": [
+      {
+        "probe": "one_bit_changed",
+        "rejected": true,
+        "reason": "n0: independently detected bit mismatch"
+      },
+      {
+        "probe": "missing_final_tensor",
+        "rejected": true,
+        "reason": "missing or unexpected tensor dump"
+      },
+      {
+        "probe": "short_down_tensor",
+        "rejected": true,
+        "reason": "down: byte length mismatch"
+      },
+      {
+        "probe": "matching_nan_payloads",
+        "rejected": true,
+        "reason": "n0: NaN/Inf"
+      }
+    ]
+  },
+  "dut_tests": {
+    "tests": 38,
+    "passed": 38,
+    "failed": 0,
+    "suites": [
+      {
+        "name": "heteronpu.continuous.BlockAxiAdapterSpec",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "heteronpu.continuous.BlockScalarFloatSpec",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "heteronpu.continuous.BlockWritebackFenceSpec",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "heteronpu.continuous.DenseTileCursorSpec",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "heteronpu.continuous.QwenBlockLayoutSpec",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "heteronpu.continuous.TensorProgramSpec",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "python_evidence_tests": {
+    "passed": 23,
+    "subtests_passed": 15,
+    "log_sha256": "94b5f982f4ce5542745f4aaa8c250bdbbd0b5a6a0e5ecfa535e806d347739de7"
+  },
+  "real_shape_fault_cases": {
+    "bad-base": {
+      "result": "BLOCK_BAD_LAUNCH_PASS kind=alignment",
+      "sha256": "38251bb778b2b1d2f56b460c36d4f3845130a0bd562bb09778c813cda0578224"
+    },
+    "bad-count": {
+      "result": "BLOCK_BAD_LAUNCH_PASS kind=tokens_zero",
+      "sha256": "1a3c0cf880b948fa6566575b23efbbadd1015cb728d21e122de0f9b5c065ef48"
+    },
+    "write-error": {
+      "result": "BLOCK_FAULT_PASS kind=write_error status=3",
+      "sha256": "728115836570d67fde3b9991920a4062aa3716af2a2071bf8338aa687175d6d1"
+    },
+    "tag-error": {
+      "result": "BLOCK_FAULT_PASS kind=tag status=7",
+      "sha256": "f23d0c8ec94b533aabfa42fc263505ededc435a4f36517cf0ab8f9e10aeeb3e6"
+    }
+  },
+  "generated_rtl_sha256": "56683b390b9a8f7acbcebd4f5aaa7d2202895e0e6ff86421a13892c20ad85bd3",
+  "simulator_executable_sha256": "ed652fa35a01c1177716ca6a2b6ff45c1087f3d67888421133b09cf91ae1c7bf",
+  "tools": {
+    "java": "openjdk version \"21.0.11\" 2026-04-21\nOpenJDK Runtime Environment (build 21.0.11+10-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.11+10-1-deb13u2-Debian, mixed mode, sharing)",
+    "verilator": "Verilator 5.020 2024-01-01 rev (Debian 5.020-1)",
+    "scala": "2.13.16",
+    "chisel": "6.7.0",
+    "chiseltest": "6.0.0",
+    "cxx": "g++ (Debian 14.2.0-19) 14.2.0"
+  },
+  "source_of_truth": "Chisel; generated SystemVerilog was not edited",
+  "scope_exclusions": [
+    "official GGUF/checkpoint weights",
+    "original 512-MAC execution path",
+    "Command128",
+    "pinned-iDMA",
+    "full model",
+    "q1024",
+    "DC/STA"
+  ]
+}

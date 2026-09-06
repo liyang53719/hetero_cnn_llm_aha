@@ -1,0 +1,50 @@
+SOURCE_IMMUTABILITY_PASS
+[info] [launcher] getting org.scala-sbt sbt 1.10.2  (this may take some time)...
+[info] [launcher] getting Scala 2.12.19 (for sbt)...
+[0m[[0m[0minfo[0m] [0m[0mwelcome to sbt 1.10.2 (Eclipse Adoptium Java 17.0.20.1)[0m
+[0m[[0m[0minfo[0m] [0m[0mloading project definition from /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/project[0m
+[0m[[0m[0minfo[0m] [0m[0mloading settings for project root from build.sbt ...[0m
+[0m[[0m[0minfo[0m] [0m[0mset current project to heteronpu-continuous-prefill (in build file:/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/)[0m
+[0m[[0m[0minfo[0m] [0m[0mExecuting in batch mode. For better performance use sbt's shell[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 55 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 28 s, completed Sep 6, 2026, 7:45:44 PM[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 12 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/test-classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 4 s, completed Sep 6, 2026, 7:45:47 PM[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mSharedMemoryArbiterSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mSharedMemoryArbiter[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should lock offers, preserve complete colliding client tags, and return only to the captured owner[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should grant continuously competing clients in bounded round-robin order[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should quarantine an error without misrouting or accepting another request wrongTag=false[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should quarantine an error without misrouting or accepting another request wrongTag=true[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mTypedTensorReaderSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mTypedTensorReader[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should decode public FP32 and BF16 tensors and preserve the linked policy index[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should reject malformed, unsupported, cyclic and incomplete descriptor prefixes[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should bound the whole padded beat range and enforce read versus write permissions[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should reject product overflow and response identity failures[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mHostResidualCommandsSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mHostResidualCommands[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should decode actual Command128 and all ten descriptor records before issuing the existing owner[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should reject unsupported envelopes and invalid event dependencies before any payload job[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should reject shape, program, reserved bits, tail and destination alias violations[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should never publish successful completion on failed, short or mistagged owner writeback[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should propagate real record-reader fetch errors and remain reset-required[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should reject writable command tables and overlapping regions at launch[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 1 minute, 12 seconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 14[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 3, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 14, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 73 s (01:13), completed Sep 6, 2026, 7:47:01 PM[0m
+[0J.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.008s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.008s
+
+OK

@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "status": "PASS_HOST_COMMAND_SHARED_IDMA_DELIVERY",
+  "tested_base_commit": "536d68cb8f903cbc0959da8b2345ae30ca57740d",
+  "chisel_frontend_tests": 14,
+  "standalone_command_suite": {
+    "legal_cases": 22,
+    "error_cases": 8,
+    "commands_executed": 66,
+    "fp_values_checked": 166758
+  },
+  "real_shape": {
+    "tokens": 16,
+    "hidden": 1536,
+    "ffn": 8960,
+    "heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128
+  },
+  "block": {
+    "tokens": "16",
+    "hidden": "1536",
+    "ffn": "8960",
+    "heads": "12",
+    "kv_heads": "2",
+    "phases": "15",
+    "checked_fp32": "663552",
+    "bit_diffs": "0",
+    "max_abs": "0",
+    "cycles": "68502384",
+    "macs": "749101056",
+    "read_bytes": "192274432",
+    "write_bytes": "2654208",
+    "request_stalls": "785710",
+    "response_delay_cycles": "4569896",
+    "hash": "fe9744aaa5c1c9ad",
+    "host_intermediate_writes": "0",
+    "full_model": "0",
+    "canonical_512_array": "1",
+    "executed_macs": "762052608"
+  },
+  "host": {
+    "commands": "3",
+    "values": "73728",
+    "dtype": "7",
+    "bit_diffs": "0",
+    "metadata_reads": "33",
+    "payload_reads": "9216",
+    "write_ack_bytes": "294912",
+    "idma_transfers": "13857",
+    "request_stalls": "6861",
+    "response_delay_cycles": "41472",
+    "host_intermediate_writes": "0"
+  },
+  "decoded_host_commands": [
+    {
+      "pc": 0,
+      "opcode": 48,
+      "engine": 3,
+      "wait_event": 0,
+      "signal_event": 1,
+      "a": "0x115505000",
+      "b": "0x10b305000",
+      "dst": "0x115b06000",
+      "shape": [
+        16,
+        1536
+      ],
+      "dtype": "FP32",
+      "input_root": 0,
+      "second_root": 4,
+      "output_root": 7
+    },
+    {
+      "pc": 1,
+      "opcode": 48,
+      "engine": 3,
+      "wait_event": 1,
+      "signal_event": 2,
+      "a": "0x115b06000",
+      "b": "0x10b305000",
+      "dst": "0x115b1e000",
+      "shape": [
+        16,
+        1536
+      ],
+      "dtype": "FP32",
+      "input_root": 10,
+      "second_root": 14,
+      "output_root": 17
+    },
+    {
+      "pc": 2,
+      "opcode": 48,
+      "engine": 3,
+      "wait_event": 2,
+      "signal_event": 3,
+      "a": "0x115b1e000",
+      "b": "0x10b305000",
+      "dst": "0x115b36000",
+      "shape": [
+        16,
+        1536
+      ],
+      "dtype": "FP32",
+      "input_root": 20,
+      "second_root": 24,
+      "output_root": 27
+    }
+  ],
+  "independently_rechecked_csv_values": 737280,
+  "predecessor_actual_sha256": "a15b94dd35223a7f8284dd76950ced9d0a5822239d10507560cc91c7435d8eee",
+  "comparison_sha256": "012a70335a892cfa3f649fb63a23a2abb591bf29e1971fa3917740e751b23b1a",
+  "sole_idma_total_transfers": 3059617,
+  "scope": {
+    "real_block_to_host_command_continuity": true,
+    "shared_original_idma": true,
+    "original_512_matrix_in_block": true,
+    "host_opcode": [
+      48
+    ],
+    "all_block_stages_host_command_driven": false,
+    "official_weights": false,
+    "full_network_q1024": false,
+    "timing_800mhz_signed_off": false
+  }
+}

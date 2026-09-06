@@ -1,0 +1,97 @@
+HOST_COMMAND_CHECK pc=0 values=1 bit_diffs=0 write_ack_bytes=2
+HOST_COMMAND_CHECK pc=1 values=1 bit_diffs=0 write_ack_bytes=2
+HOST_COMMAND_CHECK pc=2 values=1 bit_diffs=0 write_ack_bytes=2
+HOST_COMMAND_CHAIN_PASS commands=3 values=3 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=6 idma_transfers=42 request_stalls=14 response_delay_cycles=136 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=15 bit_diffs=0 write_ack_bytes=30
+HOST_COMMAND_CHECK pc=1 values=15 bit_diffs=0 write_ack_bytes=30
+HOST_COMMAND_CHECK pc=2 values=15 bit_diffs=0 write_ack_bytes=30
+HOST_COMMAND_CHAIN_PASS commands=3 values=45 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=90 idma_transfers=42 request_stalls=14 response_delay_cycles=136 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=16 bit_diffs=0 write_ack_bytes=32
+HOST_COMMAND_CHECK pc=1 values=16 bit_diffs=0 write_ack_bytes=32
+HOST_COMMAND_CHECK pc=2 values=16 bit_diffs=0 write_ack_bytes=32
+HOST_COMMAND_CHAIN_PASS commands=3 values=48 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=96 idma_transfers=42 request_stalls=14 response_delay_cycles=136 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=17 bit_diffs=0 write_ack_bytes=34
+HOST_COMMAND_CHECK pc=1 values=17 bit_diffs=0 write_ack_bytes=34
+HOST_COMMAND_CHECK pc=2 values=17 bit_diffs=0 write_ack_bytes=34
+HOST_COMMAND_CHAIN_PASS commands=3 values=51 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=102 idma_transfers=42 request_stalls=15 response_delay_cycles=133 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=31 bit_diffs=0 write_ack_bytes=62
+HOST_COMMAND_CHECK pc=1 values=31 bit_diffs=0 write_ack_bytes=62
+HOST_COMMAND_CHECK pc=2 values=31 bit_diffs=0 write_ack_bytes=62
+HOST_COMMAND_CHAIN_PASS commands=3 values=93 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=186 idma_transfers=42 request_stalls=15 response_delay_cycles=133 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=32 bit_diffs=0 write_ack_bytes=64
+HOST_COMMAND_CHECK pc=1 values=32 bit_diffs=0 write_ack_bytes=64
+HOST_COMMAND_CHECK pc=2 values=32 bit_diffs=0 write_ack_bytes=64
+HOST_COMMAND_CHAIN_PASS commands=3 values=96 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=192 idma_transfers=42 request_stalls=15 response_delay_cycles=133 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=66
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=66
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=66
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=12 write_ack_bytes=198 idma_transfers=51 request_stalls=23 response_delay_cycles=168 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1023 bit_diffs=0 write_ack_bytes=2046
+HOST_COMMAND_CHECK pc=1 values=1023 bit_diffs=0 write_ack_bytes=2046
+HOST_COMMAND_CHECK pc=2 values=1023 bit_diffs=0 write_ack_bytes=2046
+HOST_COMMAND_CHAIN_PASS commands=3 values=3069 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=192 write_ack_bytes=6138 idma_transfers=321 request_stalls=133 response_delay_cycles=995 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1024 bit_diffs=0 write_ack_bytes=2048
+HOST_COMMAND_CHECK pc=1 values=1024 bit_diffs=0 write_ack_bytes=2048
+HOST_COMMAND_CHECK pc=2 values=1024 bit_diffs=0 write_ack_bytes=2048
+HOST_COMMAND_CHAIN_PASS commands=3 values=3072 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=192 write_ack_bytes=6144 idma_transfers=321 request_stalls=133 response_delay_cycles=995 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1025 bit_diffs=0 write_ack_bytes=2050
+HOST_COMMAND_CHECK pc=1 values=1025 bit_diffs=0 write_ack_bytes=2050
+HOST_COMMAND_CHECK pc=2 values=1025 bit_diffs=0 write_ack_bytes=2050
+HOST_COMMAND_CHAIN_PASS commands=3 values=3075 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=198 write_ack_bytes=6150 idma_transfers=330 request_stalls=165 response_delay_cycles=1031 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=24576 bit_diffs=0 write_ack_bytes=49152
+HOST_COMMAND_CHECK pc=1 values=24576 bit_diffs=0 write_ack_bytes=49152
+HOST_COMMAND_CHECK pc=2 values=24576 bit_diffs=0 write_ack_bytes=49152
+HOST_COMMAND_CHAIN_PASS commands=3 values=73728 dtype=5 bit_diffs=0 metadata_reads=33 payload_reads=4608 write_ack_bytes=147456 idma_transfers=6945 request_stalls=3455 response_delay_cycles=20966 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1 bit_diffs=0 write_ack_bytes=4
+HOST_COMMAND_CHECK pc=1 values=1 bit_diffs=0 write_ack_bytes=4
+HOST_COMMAND_CHECK pc=2 values=1 bit_diffs=0 write_ack_bytes=4
+HOST_COMMAND_CHAIN_PASS commands=3 values=3 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=12 idma_transfers=42 request_stalls=14 response_delay_cycles=136 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=15 bit_diffs=0 write_ack_bytes=60
+HOST_COMMAND_CHECK pc=1 values=15 bit_diffs=0 write_ack_bytes=60
+HOST_COMMAND_CHECK pc=2 values=15 bit_diffs=0 write_ack_bytes=60
+HOST_COMMAND_CHAIN_PASS commands=3 values=45 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=180 idma_transfers=42 request_stalls=14 response_delay_cycles=136 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=16 bit_diffs=0 write_ack_bytes=64
+HOST_COMMAND_CHECK pc=1 values=16 bit_diffs=0 write_ack_bytes=64
+HOST_COMMAND_CHECK pc=2 values=16 bit_diffs=0 write_ack_bytes=64
+HOST_COMMAND_CHAIN_PASS commands=3 values=48 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=6 write_ack_bytes=192 idma_transfers=42 request_stalls=14 response_delay_cycles=136 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=17 bit_diffs=0 write_ack_bytes=68
+HOST_COMMAND_CHECK pc=1 values=17 bit_diffs=0 write_ack_bytes=68
+HOST_COMMAND_CHECK pc=2 values=17 bit_diffs=0 write_ack_bytes=68
+HOST_COMMAND_CHAIN_PASS commands=3 values=51 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=12 write_ack_bytes=204 idma_transfers=51 request_stalls=21 response_delay_cycles=161 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=31 bit_diffs=0 write_ack_bytes=124
+HOST_COMMAND_CHECK pc=1 values=31 bit_diffs=0 write_ack_bytes=124
+HOST_COMMAND_CHECK pc=2 values=31 bit_diffs=0 write_ack_bytes=124
+HOST_COMMAND_CHAIN_PASS commands=3 values=93 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=12 write_ack_bytes=372 idma_transfers=51 request_stalls=21 response_delay_cycles=161 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=32 bit_diffs=0 write_ack_bytes=128
+HOST_COMMAND_CHECK pc=1 values=32 bit_diffs=0 write_ack_bytes=128
+HOST_COMMAND_CHECK pc=2 values=32 bit_diffs=0 write_ack_bytes=128
+HOST_COMMAND_CHAIN_PASS commands=3 values=96 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=12 write_ack_bytes=384 idma_transfers=51 request_stalls=21 response_delay_cycles=161 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1023 bit_diffs=0 write_ack_bytes=4092
+HOST_COMMAND_CHECK pc=1 values=1023 bit_diffs=0 write_ack_bytes=4092
+HOST_COMMAND_CHECK pc=2 values=1023 bit_diffs=0 write_ack_bytes=4092
+HOST_COMMAND_CHAIN_PASS commands=3 values=3069 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=384 write_ack_bytes=12276 idma_transfers=609 request_stalls=297 response_delay_cycles=1821 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1024 bit_diffs=0 write_ack_bytes=4096
+HOST_COMMAND_CHECK pc=1 values=1024 bit_diffs=0 write_ack_bytes=4096
+HOST_COMMAND_CHECK pc=2 values=1024 bit_diffs=0 write_ack_bytes=4096
+HOST_COMMAND_CHAIN_PASS commands=3 values=3072 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=384 write_ack_bytes=12288 idma_transfers=609 request_stalls=297 response_delay_cycles=1821 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=1025 bit_diffs=0 write_ack_bytes=4100
+HOST_COMMAND_CHECK pc=1 values=1025 bit_diffs=0 write_ack_bytes=4100
+HOST_COMMAND_CHECK pc=2 values=1025 bit_diffs=0 write_ack_bytes=4100
+HOST_COMMAND_CHAIN_PASS commands=3 values=3075 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=390 write_ack_bytes=12300 idma_transfers=618 request_stalls=303 response_delay_cycles=1860 host_intermediate_writes=0
+HOST_COMMAND_CHECK pc=0 values=24576 bit_diffs=0 write_ack_bytes=98304
+HOST_COMMAND_CHECK pc=1 values=24576 bit_diffs=0 write_ack_bytes=98304
+HOST_COMMAND_CHECK pc=2 values=24576 bit_diffs=0 write_ack_bytes=98304
+HOST_COMMAND_CHAIN_PASS commands=3 values=73728 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=9216 write_ack_bytes=294912 idma_transfers=13857 request_stalls=6861 response_delay_cycles=41472 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=11 payload_reads=6 write_ack_bytes=0 idma_transfers=18 request_stalls=6 response_delay_cycles=53 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=1 payload_reads=0 write_ack_bytes=0 idma_transfers=1 request_stalls=0 response_delay_cycles=4 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=1 payload_reads=0 write_ack_bytes=0 idma_transfers=1 request_stalls=0 response_delay_cycles=4 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=1 payload_reads=0 write_ack_bytes=0 idma_transfers=1 request_stalls=0 response_delay_cycles=4 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=2 payload_reads=0 write_ack_bytes=0 idma_transfers=2 request_stalls=0 response_delay_cycles=6 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=2 payload_reads=0 write_ack_bytes=0 idma_transfers=2 request_stalls=0 response_delay_cycles=6 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=1 payload_reads=0 write_ack_bytes=0 idma_transfers=1 request_stalls=0 response_delay_cycles=4 host_intermediate_writes=0
+HOST_COMMAND_CHAIN_ERROR_REJECT_PASS commands=0 values=0 dtype=7 bit_diffs=0 metadata_reads=1 payload_reads=0 write_ack_bytes=0 idma_transfers=1 request_stalls=0 response_delay_cycles=4 host_intermediate_writes=0
+HOST_COMMAND_IDMA_SUITE_PASS cases=30 original_idma=1 command128=1 actual_sfu=1 arithmetic_stub=0

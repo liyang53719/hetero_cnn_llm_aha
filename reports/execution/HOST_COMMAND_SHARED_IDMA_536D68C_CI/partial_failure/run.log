@@ -1,0 +1,85 @@
+HOST_PARTIAL_FAILURE_PASS pc=0 fault=0 status=3 successful_commands=0 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=0 fault=0 checked_fp32=99 commands=3
+HOST_PARTIAL_FAILURE_PASS pc=0 fault=1 status=3 successful_commands=0 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=0 fault=1 checked_fp32=99 commands=3
+HOST_PARTIAL_FAILURE_PASS pc=0 fault=2 status=3 successful_commands=0 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=0 fault=2 checked_fp32=99 commands=3
+HOST_PARTIAL_FAILURE_PASS pc=0 fault=3 status=3 successful_commands=0 current_visible_bytes=128 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=0 fault=3 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=1 fault=0 status=3 successful_commands=1 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=1 fault=0 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=1 fault=1 status=3 successful_commands=1 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=1 fault=1 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=1 fault=2 status=3 successful_commands=1 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=1 fault=2 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=1 fault=3 status=3 successful_commands=1 current_visible_bytes=128 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=1 fault=3 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=2 fault=0 status=3 successful_commands=2 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=2 fault=0 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=2 fault=1 status=3 successful_commands=2 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=2 fault=1 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=2 fault=2 status=3 successful_commands=2 current_visible_bytes=0 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=2 fault=2 checked_fp32=99 commands=3
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_PARTIAL_FAILURE_PASS pc=2 fault=3 status=3 successful_commands=2 current_visible_bytes=128 dependent_commands=0 error_completions=1 original_idma=1
+HOST_COMMAND_CHECK pc=0 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=1 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHECK pc=2 values=33 bit_diffs=0 write_ack_bytes=132
+HOST_COMMAND_CHAIN_PASS commands=3 values=99 dtype=7 bit_diffs=0 metadata_reads=33 payload_reads=18 write_ack_bytes=396 idma_transfers=60 request_stalls=16 response_delay_cycles=188 host_intermediate_writes=0
+HOST_RESET_RECOVERY_PASS pc=2 fault=3 checked_fp32=99 commands=3
+HOST_PARTIAL_FAILURE_SUITE_PASS fault_cases=12 reset_recoveries=12 original_idma=1 arithmetic_stub=0

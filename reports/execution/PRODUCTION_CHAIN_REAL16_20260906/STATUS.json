@@ -1,0 +1,92 @@
+{
+  "status": "PASS_COMMON_DATA_PLANE_REAL16_RETAINED512_PINNED_IDMA",
+  "base_source_commit": "9e3b96cc4abf3a59558e8af4aa53fc42fa7787ea",
+  "additional_record_reader_commit": "245efb022a701c7c9a8f5af658a32738b7330473",
+  "execution_environment": "current sandbox, offline Scala/Chisel compiler + CIRCT + Verilator, actual original IP",
+  "geometry": {
+    "tokens": 16,
+    "hidden": 1536,
+    "ffn": 8960,
+    "q_heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128
+  },
+  "unique_array_instances": 1,
+  "unique_idma_instances": 1,
+  "real16_receipt": {
+    "tokens": "16",
+    "hidden": "1536",
+    "ffn": "8960",
+    "heads": "12",
+    "kv_heads": "2",
+    "phases": "15",
+    "checked_fp32": "663552",
+    "bit_diffs": "0",
+    "max_abs": "0",
+    "cycles": "62408919",
+    "macs": "749101056",
+    "read_bytes": "192274432",
+    "write_bytes": "2654208",
+    "request_stalls": "787724",
+    "response_delay_cycles": "4565906",
+    "hash": "fe9744aaa5c1c9ad",
+    "host_intermediate_writes": "0",
+    "full_model": "0",
+    "canonical_512_array": "1",
+    "executed_macs": "762052608"
+  },
+  "real16_idma_transfers": 3045760,
+  "real16_external_read_beats": 3004288,
+  "real16_external_write_beats": 41472,
+  "checks": {
+    "chisel_unique_tests": 48,
+    "record128_unit_tests_included_in_48": 10,
+    "record128_actual_idma_cases": 23,
+    "pinned_idma_transport_cases": 145,
+    "tiny17_fault_and_recovery_cases": 10,
+    "real16_admission_and_fault_cases": 4,
+    "python_evidence_tests": 13,
+    "python_subtests": 25
+  },
+  "build_diagnostics": {
+    "warning_occurrences_in_hierarchical_build": {
+      "PINMISSING": 4,
+      "TIMESCALEMOD": 1928,
+      "WIDTHEXPAND": 26,
+      "WIDTHTRUNC": 4,
+      "UNOPTFLAT": 4
+    },
+    "fatal_errors": 0,
+    "lint_clean_claim": false,
+    "note": "Preserved upstream warnings are not synthesis/timing signoff. No retained RTL was edited to suppress diagnostics."
+  },
+  "record_reader_scope": "Record128IdmaTop is a separate validation root. Integrate Record128Reader into a shared memory arbiter in the production top; do not add a second iDMA.",
+  "next_developer_gate": "Host Command128 + typed descriptor decode + same-iDMA arbitration + job/writeback event binding. No opaque new block opcode.",
+  "scope": {
+    "host_command128_graph": false,
+    "typed_descriptor_execution": false,
+    "official_weights": false,
+    "production_multilayer": false,
+    "full_network_q1024": false,
+    "dc_800mhz_signoff": false
+  },
+  "cross_backend_parity": {
+    "prior_actual_source_commit": "b91bbe3eed98ccf47362fc9a5a6c3d26d002d552",
+    "phases": 15,
+    "compared_fp32": 663552,
+    "bit_differences": 0
+  },
+  "source_provenance": {
+    "local_snapshot_sha": "afdaa09d7a2cea17c941a5e2859f267be7c18991",
+    "local_sha_is_not_remote_commit": true,
+    "project_files_rechecked": 178,
+    "hardfloat_files_rechecked": 20,
+    "source_manifest_sha256": "6c82cebf89d94f3496a3bbb820d126facfae14d5c8b341b9d90ee417ea17e293"
+  },
+  "evidence_sha256": {
+    "run.log": "90ae4b0f9d8a13e7206ee773f311c2903476dbbd528bfed6c38c27e5e4bdc12b",
+    "RESULT.json": "a8dc7150dcd3172dbcc560056d66afb95f1207fd1f67a99168a55efb9875c114",
+    "all_elements.csv.gz": "1ce7ed8fbcbf57d8a7e7fa8d35a2e7bb45787e1e98b17e4fbfb1dc24ca23d0c2",
+    "generated/Qwen2IdmaBlockTop.sv": "1f35179e22672e673e79a6f938a3cbf3d5509f1aca5626f6ca215127a2332a8a"
+  }
+}

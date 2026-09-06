@@ -1,0 +1,33 @@
+STAGE_CHECK phase=0 name=n0 values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=186130
+STAGE_MEMORY phase=0 reads=3072 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=1 name=qr values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=2771194
+STAGE_MEMORY phase=1 reads=149088 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=2 name=kr values=4096 max_abs=0 rel_l2=0 bit_diffs=0 cycle=3219850
+STAGE_MEMORY phase=2 reads=26128 write_acks=256 visible_bytes=16384
+STAGE_CHECK phase=3 name=v values=4096 max_abs=0 rel_l2=0 bit_diffs=0 cycle=3668445
+STAGE_MEMORY phase=3 reads=26128 write_acks=256 visible_bytes=16384
+STAGE_CHECK phase=4 name=q values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=3722911
+STAGE_MEMORY phase=4 reads=3072 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=5 name=k values=4096 max_abs=0 rel_l2=0 bit_diffs=0 cycle=3732016
+STAGE_MEMORY phase=5 reads=512 write_acks=256 visible_bytes=16384
+STAGE_CHECK phase=6 name=att values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=4557124
+STAGE_MEMORY phase=6 reads=27648 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=7 name=o values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=7140197
+STAGE_MEMORY phase=7 reads=148992 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=8 name=r values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=7200723
+STAGE_MEMORY phase=8 reads=3072 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=9 name=n1 values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=7386761
+STAGE_MEMORY phase=9 reads=3072 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=10 name=gate values=143360 max_abs=0 rel_l2=0 bit_diffs=0 cycle=22354048
+STAGE_MEMORY phase=10 reads=861696 write_acks=8960 visible_bytes=573440
+STAGE_CHECK phase=11 name=up values=143360 max_abs=0 rel_l2=0 bit_diffs=0 cycle=37319733
+STAGE_MEMORY phase=11 reads=861696 write_acks=8960 visible_bytes=573440
+STAGE_CHECK phase=12 name=act values=143360 max_abs=0 rel_l2=0 bit_diffs=0 cycle=47368198
+STAGE_MEMORY phase=12 reads=17920 write_acks=8960 visible_bytes=573440
+STAGE_CHECK phase=13 name=down values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=62348365
+STAGE_MEMORY phase=13 reads=869120 write_acks=1536 visible_bytes=98304
+STAGE_CHECK phase=14 name=y values=24576 max_abs=0 rel_l2=0 bit_diffs=0 cycle=62408925
+STAGE_MEMORY phase=14 reads=3072 write_acks=1536 visible_bytes=98304
+PINNED_IDMA_BLOCK transfers=3045760 external_read_beats=3004288 external_write_beats=41472 full_backend=1
+DDR_GUARD_PASS visible_write_bytes=2654208 host_intermediate_writes=0
+CONTINUOUS_QWEN2_BLOCK_PASS tokens=16 hidden=1536 ffn=8960 heads=12 kv_heads=2 phases=15 checked_fp32=663552 bit_diffs=0 max_abs=0 cycles=62408919 macs=749101056 read_bytes=192274432 write_bytes=2654208 request_stalls=787724 response_delay_cycles=4565906 hash=fe9744aaa5c1c9ad host_intermediate_writes=0 full_model=0 canonical_512_array=1 executed_macs=762052608

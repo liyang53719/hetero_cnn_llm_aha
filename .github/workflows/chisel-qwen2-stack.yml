@@ -1,0 +1,83 @@
+name: chisel-qwen2-stack
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/chisel-qwen2-stack.yml'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2LayerStack.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenStack.scala'
+      - 'chisel/continuous_prefill/src/test/scala/heteronpu/continuous/LayerStackGateSpec.scala'
+      - 'chisel/continuous_prefill/tests/qwen2_stack_driver.inc'
+      - 'chisel/continuous_prefill/tests/test_qwen2_stack_pack.py'
+      - 'chisel/continuous_prefill/scripts/generate_stack_harness.py'
+      - 'chisel/continuous_prefill/scripts/run_qwen2_stack.sh'
+      - 'chisel/continuous_prefill/scripts/pack_qwen2_stack.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: chisel-qwen2-stack-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: tiny
+            tokens: 17
+            layers: 4
+          - mode: real
+            tokens: 1
+            layers: 2
+    env:
+      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+      MAKEFLAGS: 'OPT_FAST=-O1 OPT_SLOW=-O1'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          sparse-checkout: |
+            chisel
+            integration/gemmini
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Prepare pinned numerical dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+          python -m pip install numpy==2.2.6 pytest==8.3.5
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          mkdir -p work/stack_evidence
+          git rev-parse HEAD > work/stack_evidence/source_commit.txt
+          verilator --version > work/stack_evidence/verilator.txt
+      - name: Weight-layout and Chisel control tests
+        run: |
+          set -o pipefail
+          python -m pytest -q chisel/continuous_prefill/tests/test_qwen2_stack_pack.py | tee work/stack_evidence/packer.log
+          cd chisel/continuous_prefill
+          sbt -batch 'testOnly heteronpu.continuous.LayerStackGateSpec' | tee ../../work/stack_evidence/control.log
+      - name: Complete numerical layer stack
+        run: |
+          bash chisel/continuous_prefill/scripts/run_qwen2_stack.sh '${{ matrix.mode }}' "$PWD/work/stack_numeric" '${{ matrix.tokens }}' '${{ matrix.layers }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qwen2-stack-${{ matrix.mode }}-${{ github.sha }}
+          retention-days: 30
+          path: |
+            work/stack_evidence/
+            work/stack_numeric/*.log
+            work/stack_numeric/*.txt
+            work/stack_numeric/*.json
+            work/stack_numeric/*.sha256
+            work/stack_numeric/generated/
+            chisel/continuous_prefill/target/test-reports/

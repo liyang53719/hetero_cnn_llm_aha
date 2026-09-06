@@ -1,0 +1,32 @@
+name: export-block-source
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/export-block-source.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          sparse-checkout: |
+            chisel/continuous_prefill
+            .github/workflows
+      - name: Archive immutable source
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > source_commit.txt
+          git archive HEAD chisel/continuous_prefill .github/workflows | gzip > current_block_source.tar.gz
+          sha256sum current_block_source.tar.gz > current_block_source.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: current-block-source-${{ github.sha }}
+          retention-days: 30
+          path: |
+            current_block_source.tar.gz
+            current_block_source.sha256
+            source_commit.txt

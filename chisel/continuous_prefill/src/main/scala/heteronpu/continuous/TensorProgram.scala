@@ -40,7 +40,7 @@ class TensorProgram(c:ChainConfig=ChainConfig()) extends Module {
   val ta=tensors(inst.a); val tb=tensors(inst.b); val td=tensors(inst.dst)
   def validView(t:Tensor,w:Boolean):Bool = {
     val r=regs(t.region)
-    regionSet(t.region) && t.elements=/=0.U && t.base(5,0)===0.U &&
+    regionSet(t.region) && t.elementCount=/=0.U && t.base(5,0)===0.U &&
       r.base<r.limit && r.limit<=(BigInt(1)<<56).U && t.base>=r.base &&
       TensorMath.end(t)<=r.limit.pad(66) && (if(w)r.write else r.read)
   }
@@ -51,7 +51,7 @@ class TensorProgram(c:ChainConfig=ChainConfig()) extends Module {
     (!binary || (tensorSet(inst.b)&&available(inst.b)&&versions(inst.b)===inst.bVersion))&&
     !td.external && versions(inst.dst)=/=65535.U && inst.dstVersion===versions(inst.dst)+1.U
   val aliases=(0 until c.tensorSlots).map(i=>available(i)&&i.U=/=inst.dst&&TensorMath.overlap(td,tensors(i))).reduce(_||_)
-  val views=validView(ta,false)&&validView(td,true)&&(!binary||validView(tb,false))&&ta.elements===td.elements&&(!binary||tb.elements===td.elements)
+  val views=validView(ta,false)&&validView(td,true)&&(!binary||validView(tb,false))&&ta.elementCount===td.elementCount&&(!binary||tb.elementCount===td.elementCount)
   def fail(s:UInt):Unit={status:=s; poison:=true.B; state:=finish}
   switch(state) {
     is(idle) {when(io.launch.fire) {
@@ -66,7 +66,7 @@ class TensorProgram(c:ChainConfig=ChainConfig()) extends Module {
       .elsewhen(!deps) {fail(Status.Dependency.U)}
       .elsewhen(!views||aliases||inst.a===inst.dst||(binary&&inst.b===inst.dst)) {fail(Status.Bounds.U)}
       .otherwise {
-        bound.op:=inst.op;bound.a:=ta.base;bound.b:=tb.base;bound.dst:=td.base;bound.elements:=td.elements
+        bound.op:=inst.op;bound.a:=ta.base;bound.b:=tb.base;bound.dst:=td.base;bound.elementCount:=td.elementCount
         bound.aBf16:=ta.bf16;bound.bBf16:=tb.bf16;bound.dstBf16:=td.bf16;bound.tag:=Cat(epoch,pc)
         available(inst.dst):=false.B;state:=issue
       }
@@ -75,13 +75,13 @@ class TensorProgram(c:ChainConfig=ChainConfig()) extends Module {
     is(waitDone) {when(io.done.fire) {
       when(io.done.bits.tag=/=bound.tag) {fail(Status.Protocol.U)}
       .elsewhen(io.done.bits.status=/=0.U) {fail(io.done.bits.status)}
-      .elsewhen(io.done.bits.elements=/=bound.elements||io.done.bits.writeBytes=/=TensorMath.payloadBytes(td)) {fail(Status.Protocol.U)}
+      .elsewhen(io.done.bits.elementCount=/=bound.elementCount||io.done.bits.writeBytes=/=TensorMath.payloadBytes(td)) {fail(Status.Protocol.U)}
       .otherwise {
         available(inst.dst):=true.B;versions(inst.dst):=inst.dstVersion;io.committed:=true.B
         completed:=completed+1.U
         when(pc+1.U===count) {state:=finish}.otherwise {pc:=pc+1.U;state:=fetch}
       }
-    }}
+    }
     is(finish) {when(io.result.fire) {state:=Mux(poison,locked,idle)}}
     is(locked) {}
   }

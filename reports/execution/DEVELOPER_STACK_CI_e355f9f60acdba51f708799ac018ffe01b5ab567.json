@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "tested_source_commit": "e355f9f60acdba51f708799ac018ffe01b5ab567",
+  "workflow_run": "34021476653",
+  "job_outcome": "success",
+  "cases": {
+    "tiny4_t17": {
+      "status": "PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU",
+      "receipt": {
+        "tokens": "17",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "4",
+        "stages": "60",
+        "checked_fp32": "71808",
+        "bit_diffs": "0",
+        "previous_layer_read_bytes": "26112",
+        "cycles": "2016334",
+        "macs": "2585088",
+        "executed_macs": "2585088",
+        "host_intermediate_writes": "0",
+        "synthetic_weights": "true",
+        "canonical_512_array": "0",
+        "status": "PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU",
+        "source_commit": "e355f9f60acdba51f708799ac018ffe01b5ab567",
+        "official_weights": false,
+        "official_forward": false,
+        "pinned_idma": false,
+        "dc": false,
+        "clock_target_hz": 800000000,
+        "artifacts": {
+          "simulation.log": "b0f2adf288a09f786b5ba41b159e93841afb73ede28dd05df7cb3a6e7cb25322",
+          "compile.log": "2e486255d9202e3004e909e3d3d931f4b3d2c90b8804e87655646df4c2abdf1d",
+          "generated/Qwen2LayerStack.sv": "c56258d70bd8c2520ce99005e571431296c08c60bc290618ee643315a4aedc9f",
+          "generated/block_layout.h": "cee4938be34a4ada6d4828f432b4e1685113f047d66dedb2b3a68f40cb9f7f02",
+          "qwen2_stack.cpp": "daa46626a199b54e9239073e7249d83ff15afd07fab15b2556dd83259616e4f7",
+          "sources.sha256": "b5b5c2d9ffa931282f11d0320b3ab8b27583057967e3a0832fb924ac8cc7308f"
+        }
+      },
+      "receipt_sha256": "ebb2912a109ab838f8fbf635834fe146e1a479124e008f037f690e2109ff276b",
+      "preserved_logs": {
+        "work/external_arena_gate/build.log": "66edc45dc75e8e85f1550887af8842e00908c44cbf3dba63480f3bad1998a55a",
+        "work/external_arena_gate/simulation.log": "912d98025fbe784a37b1db6a313ad612e5e8fa2d482ec4016a7b29f8d414c630",
+        "work/external_arena_gate/generate.log": "5dc3876f18e914b6972f6be0407de3766d679d557ec6a4bcb2553ff77bd4436e",
+        "work/external_arena_gate/fixture.log": "bc6ec8783abba955e5a5789870d045c2a85333608fc7ca4d7b15c9e8b04e5f62",
+        "work/developer_numeric/emit.log": "9a2a7c053199ac0415a69a057663e814c86321da0cdf9d66323154d8d1c6f21c",
+        "work/developer_numeric/build.log": "4027a968a95e4e357e699d93c44e2e0a7e3ed8ecd20ca2636cbf1f1521fc53ee",
+        "work/developer_numeric/simulation.log": "b0f2adf288a09f786b5ba41b159e93841afb73ede28dd05df7cb3a6e7cb25322",
+        "work/developer_numeric/compile.log": "2e486255d9202e3004e909e3d3d931f4b3d2c90b8804e87655646df4c2abdf1d",
+        "work/developer_numeric/source_recheck.log": "a4a76bacbfd3541c1b653db6b29906d71806cefe420ffe9949dbed666fcd02bd",
+        "work/developer_identity/chisel_tests.log": "d747bf2004d8e8afd06c62d9f602e97f9cd88dc81b5e46b5fff95f71451f5f1e",
+        "work/developer_identity/packing_tests.log": "511fb971caf59261241ec2a3919d9d10c7dcb9ec044ee07d50b2db465184f057"
+      }
+    },
+    "real2_t1": {
+      "status": "PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU",
+      "receipt": {
+        "tokens": "1",
+        "hidden": "1536",
+        "ffn": "8960",
+        "layers": "2",
+        "stages": "30",
+        "checked_fp32": "82944",
+        "bit_diffs": "0",
+        "previous_layer_read_bytes": "12288",
+        "cycles": "41918150",
+        "macs": "93591552",
+        "executed_macs": "93591552",
+        "host_intermediate_writes": "0",
+        "synthetic_weights": "true",
+        "canonical_512_array": "0",
+        "status": "PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU",
+        "source_commit": "e355f9f60acdba51f708799ac018ffe01b5ab567",
+        "official_weights": false,
+        "official_forward": false,
+        "pinned_idma": false,
+        "dc": false,
+        "clock_target_hz": 800000000,
+        "artifacts": {
+          "simulation.log": "c1d544fc2a457aca9a4916b74550c4946ba3eaebf77711f183b5563a668d6736",
+          "compile.log": "4cfae58142cb1140d8ae53dd69b825a86f663eec6698dc98c0814c472bebbf54",
+          "generated/Qwen2LayerStack.sv": "f3a9655ab6ea53b49470689f95883f108bfa7319348ba35fe85be8619063af72",
+          "generated/block_layout.h": "ed0c0b2665c6d4ce19f1951daec9de05de7734ec8384437fbc1e266a3bdb60d9",
+          "qwen2_stack.cpp": "daa46626a199b54e9239073e7249d83ff15afd07fab15b2556dd83259616e4f7",
+          "sources.sha256": "b5b5c2d9ffa931282f11d0320b3ab8b27583057967e3a0832fb924ac8cc7308f"
+        }
+      },
+      "receipt_sha256": "f6bb51ce06c501bff49c43f58c8bff2622ebcc744203dcf696ee92f91523a19c",
+      "preserved_logs": {
+        "work/developer_numeric/emit.log": "dfd0699b237cedbe56fdb4024c1992bd9d0aea0ec5d577e361f6229c469b9e81",
+        "work/developer_numeric/build.log": "3dad4d7ea53fa1ea8ff0e3def3d87b4f6c71d4bb2e85b2dd9d7d5be62e747bdd",
+        "work/developer_numeric/simulation.log": "c1d544fc2a457aca9a4916b74550c4946ba3eaebf77711f183b5563a668d6736",
+        "work/developer_numeric/compile.log": "4cfae58142cb1140d8ae53dd69b825a86f663eec6698dc98c0814c472bebbf54",
+        "work/developer_numeric/source_recheck.log": "a4a76bacbfd3541c1b653db6b29906d71806cefe420ffe9949dbed666fcd02bd",
+        "work/developer_identity/chisel_tests.log": "f99558e558c439333566400d94a8d5f75a028d16761bf234f1768d40edd9063e",
+        "work/developer_identity/packing_tests.log": "511fb971caf59261241ec2a3919d9d10c7dcb9ec044ee07d50b2db465184f057"
+      }
+    },
+    "real1_t16": {
+      "status": "PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU",
+      "receipt": {
+        "tokens": "16",
+        "hidden": "1536",
+        "ffn": "8960",
+        "layers": "1",
+        "stages": "15",
+        "checked_fp32": "663552",
+        "bit_diffs": "0",
+        "previous_layer_read_bytes": "0",
+        "cycles": "335787974",
+        "macs": "749101056",
+        "executed_macs": "749101056",
+        "host_intermediate_writes": "0",
+        "synthetic_weights": "true",
+        "canonical_512_array": "0",
+        "status": "PASS_CONTINUOUS_SYNTHETIC_STACK_NOT_PRODUCTION_NPU",
+        "source_commit": "e355f9f60acdba51f708799ac018ffe01b5ab567",
+        "official_weights": false,
+        "official_forward": false,
+        "pinned_idma": false,
+        "dc": false,
+        "clock_target_hz": 800000000,
+        "artifacts": {
+          "simulation.log": "694f55467e6421010e6bb7f46803fa934b13d1d82a28d80afb34a1e46a135e4b",
+          "compile.log": "14e11829a88741cfd8b1f7bcf757e6c11c7bfdcb1fd8d23afc88745e7875ff0f",
+          "generated/Qwen2LayerStack.sv": "bb23134a1e9e942289c167c3f88da6b277492021303244a0ca1e2c2c369e2d90",
+          "generated/block_layout.h": "37da43fe1443550a378bf50f8f9635937c18ddb99da6745b46acd116f08da424",
+          "qwen2_stack.cpp": "daa46626a199b54e9239073e7249d83ff15afd07fab15b2556dd83259616e4f7",
+          "sources.sha256": "b5b5c2d9ffa931282f11d0320b3ab8b27583057967e3a0832fb924ac8cc7308f"
+        }
+      },
+      "receipt_sha256": "3e9aeec1e1dafcd33a2621682a4b695f09df6874f55d2c01ea98b182419de11b",
+      "preserved_logs": {
+        "work/developer_numeric/emit.log": "afbb840d7279763585ae42c9bc9ee18e6af6edb29e39baf332af8955a145f0dc",
+        "work/developer_numeric/build.log": "3dad4d7ea53fa1ea8ff0e3def3d87b4f6c71d4bb2e85b2dd9d7d5be62e747bdd",
+        "work/developer_numeric/simulation.log": "694f55467e6421010e6bb7f46803fa934b13d1d82a28d80afb34a1e46a135e4b",
+        "work/developer_numeric/compile.log": "14e11829a88741cfd8b1f7bcf757e6c11c7bfdcb1fd8d23afc88745e7875ff0f",
+        "work/developer_numeric/source_recheck.log": "a4a76bacbfd3541c1b653db6b29906d71806cefe420ffe9949dbed666fcd02bd",
+        "work/developer_identity/chisel_tests.log": "e99955a19abff0ccb164c1b4d01f822325d21e79a3dcaa29fb8920e390dcfa90",
+        "work/developer_identity/packing_tests.log": "511fb971caf59261241ec2a3919d9d10c7dcb9ec044ee07d50b2db465184f057"
+      }
+    }
+  },
+  "external_arena_fixture": {
+    "status": "PASS_EXTERNAL_ARENA_PATH_WITH_SYNTHETIC_INPUTS",
+    "geometry": {
+      "H": 64,
+      "F": 128,
+      "MAX_TOKENS": 33,
+      "STACK_LAYERS": 4
+    },
+    "tokens": 17,
+    "counts": {
+      "tokens": "17",
+      "hidden": "64",
+      "ffn": "128",
+      "layers": "4",
+      "stages": "60",
+      "checked_fp32": "71808",
+      "bit_diffs": "0",
+      "previous_layer_read_bytes": "26112",
+      "cycles": "2016334",
+      "macs": "2585088",
+      "executed_macs": "2585088",
+      "host_intermediate_writes": "0",
+      "synthetic_weights": "false",
+      "canonical_512_array": "0",
+      "official_forward_validated": "false"
+    },
+    "synthetic_fixture": true,
+    "official_weights": false,
+    "source_arena_sha256": "3ecb166fcb2fa60226b63dbc8290938bbe468527bfcc87f9412c34cc51a9d723",
+    "actual_hidden_sha256": "a3b322ff7760f448a43ff7d5623cf8d2bd405d6f1a01ef12c3ebbeb71cb82716",
+    "hardware_identity": {
+      "rtl_sha256": "c56258d70bd8c2520ce99005e571431296c08c60bc290618ee643315a4aedc9f",
+      "layout_sha256": "cee4938be34a4ada6d4828f432b4e1685113f047d66dedb2b3a68f40cb9f7f02"
+    },
+    "production_rtl_edited": false
+  },
+  "scope": {
+    "official_checkpoint_execution": false,
+    "official_framework_forward": false,
+    "production_512_useful_lanes": false,
+    "pinned_idma": false,
+    "full_model_q1024": false,
+    "dc": false
+  },
+  "all_requested_numeric_cases_passed": true
+}

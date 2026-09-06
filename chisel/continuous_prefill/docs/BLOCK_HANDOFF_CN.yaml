@@ -1,0 +1,40 @@
+schema: 2
+mode: 本地agent只复核、执行、保存原始结果；不修改代码
+source_policy: 只改Chisel硬件源；生成RTL不手改；保留所有历史工件
+clock: {target_hz: 800000000, period_ns: 1.25, dc_sta_pass: false}
+implemented:
+  stages: 15
+  shape: {hidden: 1536, ffn: 8960, q_heads: 12, kv_heads: 2, head_dim: 128, max_tokens: 1024}
+  paths:
+    retained: Chisel控制器与AXI桥接到未修改的Revision8B-B_512lane_endpoint
+    functional: 同一控制及内存语义，16个原BF16_FMA用于快速功能回归
+  publication: 每个stage全量输出的最终写回ACK完成后再进入消费者
+  forbidden: [Host中间tensor注入, golden替换实际DDR, 采样代替全量比较, 虚报无效乘加为有用MAC]
+execute:
+  - id: REVIEW
+    command: git pull --ff-only origin main
+    accept: 核对docs/BLOCK_VALIDATION.json及源码hash；当前工作区修改必须先确认
+  - id: SMALL
+    command: bash chisel/continuous_prefill/scripts/run_block_gate.sh work/results/block_retained_tiny_001 tiny 2 retained
+    accept: Chisel与Python单测全过；15阶段全量数值；第二请求和错误复位恢复；retained_rtl哈希不变
+  - id: REAL
+    command: bash chisel/continuous_prefill/scripts/run_block_gate.sh work/results/block_retained_real_001 real 2 retained
+    subsequent_tokens: [16, 128, 1024]
+    accept: 每次使用新输出目录；15阶段所有元素比较；物理MAC计数来自原阵列step握手；不得改reference或阈值
+  - id: OFFICIAL_LAYER0
+    command: bash chisel/continuous_prefill/scripts/run_checkpoint_block.sh work/results/block_retained_real_001 /absolute/model.gguf /absolute/tokens.json work/results/block_checkpoint_001
+    accept: 原权重与设备打包hash、输入hash、DUT输出和全部stage比较保留；只预载readonly
+    supported_gguf: [F32, F16, BF16, Q8_0, Q6_K, Q3_K]
+    supported_safetensors: [F32, F16, BF16]
+    boundary: 这是layer0的硬件recipe比较，不是28层整网或官方模型质量签核
+on_failure:
+  action: 停止该验收项，保留完整目录、命令、退出码、stdout/stderr和hash，交回主coding端
+  prohibited: [修改Scala, 修改C++, 修改Python, 修改RTL, 放松误差阈值, 删除旧checkpoint, 缩小shape后仍沿用原完成标签]
+remaining_coding_owner: 主coding端，不是本地agent
+remaining_not_claimed:
+  - 原完整graph_Command128及pinned_iDMA系统接入
+  - 512lane高利用率调度与旧全局SRAM_arena整合
+  - 官方数值recipe对齐和模型质量签核
+  - 28层Qwen2连续控制、FinalNorm与LM_head
+  - Qwen3.5与Qwen3.8的完整硬件状态和稀疏路由链
+  - SRAM工艺宏绑定、流水切分、DC与STA收敛设计

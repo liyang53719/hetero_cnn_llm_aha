@@ -25,9 +25,10 @@ class Matrix16Result extends Bundle {val value=Vec(16,UInt(32.W));val error=Bool
   * 512-lane utilization or replace the canonical array's performance schedule.
   * The array owns all partial sums, clear/last and command completion. */
 class RetainedMatrix16Adapter extends Module {
-  val io=IO(new Bundle {val request=Flipped(Decoupled(new Matrix16Request));val result=Decoupled(new Matrix16Result)})
+  val io=IO(new Bundle {val request=Flipped(Decoupled(new Matrix16Request));val result=Decoupled(new Matrix16Result);val acceptedSteps=Output(UInt(64.W))})
   val idle::command::issue::output::completion::reply::locked::Nil=Enum(7)
   val state=RegInit(idle);val req=Reg(new Matrix16Request);val result=Reg(new Matrix16Result)
+  val issued=RegInit(0.U(64.W));io.acceptedSteps:=issued
   val active=RegInit(false.B);val poisoned=RegInit(false.B);val event=RegInit(0.U(16.W))
   val ep=Module(new RetainedMatrixEndpoint);val e=ep.io
   e.clk_i:=clock;e.rst_ni:= !reset.asBool
@@ -40,6 +41,7 @@ class RetainedMatrix16Adapter extends Module {
   e.out_ready_i:=state===output;e.completion_ready_i:=state===completion
   io.request.ready:=state===idle;io.result.valid:=state===reply;io.result.bits:=result
   def bad():Unit={result.error:=true.B;poisoned:=true.B;state:=reply}
+  when(e.step_valid_i && e.step_ready_o){issued:=issued+1.U}
   switch(state){
     is(idle){when(io.request.fire){req:=io.request.bits;result.error:=false.B
       when(io.request.bits.clear===active){bad()}.otherwise{
@@ -64,7 +66,7 @@ class RetainedMatrix16Adapter extends Module {
 /** One Chisel elaboration avoids duplicate HardFloat helper names. The four
   * ABI leaf roots are emitted unmodified for the retained array to instantiate. */
 class RetainedBlockCollection(s:QwenBlockShape,axi:Boolean) extends Module {
-  if(axi){val block=Module(new Qwen2BlockAxiTop(s));val port=IO(chiselTypeOf(block.io));port<>block.io;dontTouch(port)}
+  if(axi){val block=Module(new Qwen2AxiBlockTop(s));val port=IO(chiselTypeOf(block.io));port<>block.io;dontTouch(port)}
   else{val block=Module(new Qwen2ContinuousBlock(s));val port=IO(chiselTypeOf(block.io));port<>block.io;dontTouch(port)}
   val pre=Module(new HeteroBF16FmaPre);val prePort=IO(chiselTypeOf(pre.io));prePort<>pre.io;dontTouch(prePort)
   val mul=Module(new HeteroBF16FmaMul);val mulPort=IO(chiselTypeOf(mul.io));mulPort<>mul.io;dontTouch(mulPort)

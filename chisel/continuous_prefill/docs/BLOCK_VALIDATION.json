@@ -1,0 +1,124 @@
+{
+  "status": "PASS_CONTINUOUS_BLOCK_COMPONENT_SCOPE",
+  "merge_baseline": "33ef6b4c9c48f16d26464eafc14804fe8d29dedc",
+  "execution_environment": "ChatGPT sandbox; offline compiler and Verilator imported from pinned public CI artifact",
+  "tests": {
+    "python": {
+      "passed": 27,
+      "failed": 0
+    },
+    "chisel": {
+      "passed": 27,
+      "failed": 0,
+      "suites": 5,
+      "scalar_vectors": 77,
+      "environment": "sandbox Verilator5.020"
+    },
+    "retained_array": {
+      "geometry": "16x32/context5",
+      "whole_block_small_tokens": 2,
+      "compared_fp32": 2112,
+      "bit_differences": 0,
+      "real_dimensions_numeric_tested": false,
+      "negative_and_second_request_pass": true,
+      "accepted_steps_counter": true
+    }
+  },
+  "evidence": {
+    "functional_real_q1.log": {
+      "sha256": "98344a1153f96fce55e8623f28207fa8f7c40824ed377b11b619afcc2880c6ea",
+      "last_line": "CONTINUOUS_QWEN2_BLOCK_PASS tokens=1 hidden=1536 ffn=8960 heads=12 kv_heads=2 phases=15 checked_fp32=41472 bit_diffs=0 max_abs=0 cycles=18031846 macs=46795776 read_bytes=187405312 write_bytes=165888 request_stalls=734121 response_delay_cycles=4395771 hash=183a4f659dc7bdae host_intermediate_writes=0 full_model=0 canonical_512_array=0"
+    },
+    "functional_real_q2.log": {
+      "sha256": "937fe07fa1025049efd034872f3458cd1d5326fe4d74e1b28d87426b7dc1d055",
+      "last_line": "CONTINUOUS_QWEN2_BLOCK_PASS tokens=2 hidden=1536 ffn=8960 heads=12 kv_heads=2 phases=15 checked_fp32=82944 bit_diffs=0 max_abs=0 cycles=36067871 macs=93594624 read_bytes=374822912 write_bytes=331776 request_stalls=1467649 response_delay_cycles=8793493 hash=a78b73d9d909c162 host_intermediate_writes=0 full_model=0 canonical_512_array=0"
+    },
+    "axi_functional_real_q2.log": {
+      "sha256": "49a1ac0038306100229741b76f1c9b8b931d6fed8d62f7b27698c924fa0336cd",
+      "last_line": "CONTINUOUS_QWEN2_BLOCK_PASS tokens=2 hidden=1536 ffn=8960 heads=12 kv_heads=2 phases=15 checked_fp32=82944 bit_diffs=0 max_abs=0 cycles=47794947 macs=93594624 read_bytes=374822912 write_bytes=331776 request_stalls=1469223 response_delay_cycles=8795878 hash=a78b73d9d909c162 host_intermediate_writes=0 full_model=0 canonical_512_array=0"
+    },
+    "axi_retained_tiny_q2.log": {
+      "sha256": "dd4a19ae4ba3b7551f5d2b3d5cdb28f01bd22153cb6a4a1ce36a6a8c901720e9",
+      "last_line": "CONTINUOUS_QWEN2_BLOCK_PASS tokens=2 hidden=64 ffn=128 heads=2 kv_heads=1 phases=15 checked_fp32=2112 bit_diffs=0 max_abs=0 cycles=92215 macs=74112 read_bytes=309760 write_bytes=8448 request_stalls=1319 response_delay_cycles=7471 hash=47d4de46c1802d2f host_intermediate_writes=0 full_model=0 canonical_512_array=1 executed_macs=2371584"
+    },
+    "checkpoint_fixture_tiny.log": {
+      "sha256": "3cb729614e7fecbbda969795f143ce3f240084150c08fa68ac988e67ecf037d5",
+      "last_line": "CONTINUOUS_QWEN2_BLOCK_PASS tokens=2 hidden=64 ffn=128 heads=2 kv_heads=1 phases=15 checked_fp32=2112 bit_diffs=0 max_abs=0 cycles=59615 macs=74112 read_bytes=309760 write_bytes=8448 request_stalls=1290 response_delay_cycles=7482 hash=23a109735bff38f7 host_intermediate_writes=0 full_model=0 canonical_512_array=0"
+    },
+    "python_final.log": {
+      "sha256": "116808f7194f80d58d87ee2890089797a57568fd98becf27d736674b6bec98cb",
+      "last_line": "27 passed in 9.74s"
+    },
+    "chisel_final.log": {
+      "sha256": "7ebd463553163b5734ba70c95d6ffe820cd5c380c75f50f38a80984dd066ecef",
+      "last_line": "\u001b[32mAll tests passed.\u001b[0m"
+    },
+    "retained_recover-write.log": {
+      "sha256": "3c6e5c0bff38ea9e74ed26659c6ccb0547465bcacad4c681a5adfdcf79e33e1e",
+      "last_line": "BLOCK_SECOND_REQUEST_PASS reset=1 epoch=2"
+    },
+    "retained_recover-tag.log": {
+      "sha256": "9dea64f291c85564a4d589d30baef751a423948406c6247c9caebc1ee6391dbe",
+      "last_line": "BLOCK_SECOND_REQUEST_PASS reset=1 epoch=2"
+    },
+    "retained_bad-count.log": {
+      "sha256": "1a3c0cf880b948fa6566575b23efbbadd1015cb728d21e122de0f9b5c065ef48",
+      "last_line": "BLOCK_BAD_LAUNCH_PASS kind=tokens_zero"
+    },
+    "retained_bad-base.log": {
+      "sha256": "38251bb778b2b1d2f56b460c36d4f3845130a0bd562bb09778c813cda0578224",
+      "last_line": "BLOCK_BAD_LAUNCH_PASS kind=alignment"
+    },
+    "retained_repeat.log": {
+      "sha256": "4f3594a5743e8615c1c96b27eda1a084c5df6af9101e46ec6d06115b92191e4e",
+      "last_line": "BLOCK_SECOND_REQUEST_PASS reset=0 epoch=2"
+    }
+  },
+  "source_sha256": {
+    "src/main/scala/heteronpu/continuous/TensorProgram.scala": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+    "src/main/scala/heteronpu/continuous/EmitQwenBlock.scala": "c565fe6b3e3697e05b96a9699fb3ea10d7080fa08c854d05f28ac336416a08d9",
+    "src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "src/main/scala/heteronpu/continuous/EmitContinuous.scala": "a6455cef5248584db72c0775e4d7d11753b1e1d560d1e7b10145ca3b7cd330c7",
+    "src/main/scala/heteronpu/continuous/RetainedMatrix.scala": "ed261b5dc4a78c11169bd8928f69b75d855cd734fd8a43bd1457228c96619282",
+    "src/main/scala/heteronpu/continuous/Qwen2Block.scala": "d2a42aaf7c5672d45bc8f86684b31953d51775ed0465d002f5929ad7092a9ee2",
+    "src/main/scala/heteronpu/continuous/BlockFloat.scala": "b172fc70a2961bc9ca7da070c08ee0bba4d519e71a1b064765934bfd89aee183",
+    "src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+    "src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "src/main/scala/heteronpu/continuous/DenseTileCursor.scala": "dbcbd0187801b134f68ae2c18328bedd28790118bddf2e635c829faa906ceb9d",
+    "src/main/scala/heteronpu/continuous/MemoryToAxi.scala": "4449366177ddd07fb793b9b8204f5be06214574ab708ab7ed47537ccbc52e374",
+    "src/test/scala/heteronpu/continuous/BlockAxiAdapterSpec.scala": "56e557deb5d36e4babe75ba82ad3360d8bb7a08475c7ea1041eb9fd1ba672484",
+    "src/test/scala/heteronpu/continuous/DenseTileCursorSpec.scala": "2267b40f5282ff4eaade248ea1a827b0b71338e22b9452a33f8ee42f00b2fd03",
+    "src/test/scala/heteronpu/continuous/BlockScalarFloatSpec.scala": "ef0b4a9cbee7367c32102780add964532de526a01daaf8fa4577896e2491ac59",
+    "src/test/scala/heteronpu/continuous/QwenBlockLayoutSpec.scala": "6656354aa700cf3600c54827e3d02237091109f8694b2c41c8ad8e38e1fa3ffb",
+    "src/test/scala/heteronpu/continuous/TensorProgramSpec.scala": "fde227bedfe03933fa9cb23eff5238d849be28ab12dd51db1fb25dca7e77172b"
+  },
+  "generated_sv": {
+    "block_real_v2/Qwen2ContinuousBlock.sv": "fc8565013473570e3fede503bec1eaba8fd5bd4edc1eed7720b10d0a26cdc486",
+    "block_real_v5/Qwen2ContinuousBlock.sv": "fc8565013473570e3fede503bec1eaba8fd5bd4edc1eed7720b10d0a26cdc486",
+    "block_real_v5/Qwen2AxiBlockTop.sv": "63a9b9333160c272ed83ab3da58a553852913fd06bd41e7ffcd6ebaeb73ab306",
+    "block_retained_tiny_v3/Qwen2ContinuousBlock.sv": "cbd7f4201fa010c4988d3317568bda36f9ed0c82ec91e63db9eb7fe418119e9e",
+    "block_retained_tiny_v3/Qwen2AxiBlockTop.sv": "7602864bc395fac602bb150a57c3a39cdb36c0f7393dceeba95a7a62e5c59a16",
+    "block_retained_real_v3/Qwen2ContinuousBlock.sv": "702146d8f8f714dbdde2eadb1e32d6a6e0a1bf9091e3fea6ff5df3d207f58df7",
+    "block_retained_real_v3/Qwen2AxiBlockTop.sv": "85dc50434c2d80e563ed037f051f41420a9a4939f600e2b604660824a1646814"
+  },
+  "not_passed": [
+    "real_dimension_retained512_long_sequence",
+    "q1024_full_block",
+    "official_weights",
+    "28_layer_full_model",
+    "Qwen3.5_full_model",
+    "Qwen3.8_full_model",
+    "DC_STA_800MHz"
+  ],
+  "retained_rtl_unchanged": {
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2"
+  }
+}

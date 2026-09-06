@@ -37,8 +37,8 @@ jobs:
           manifest=json.loads(raw)
           if len(manifest)!=104:raise RuntimeError('incomplete proof manifest')
           sys.path.insert(0,str(repo/'chisel/continuous_prefill/scripts'))
-          from seal_host_command_delivery import seal
-          checked=seal(source/'unit',source/'commands',source/'real16',repo,'536d68cb8f903cbc0959da8b2345ae30ca57740d')
+          from seal_host_command_delivery import audit
+          checked=audit(source/'unit',source/'commands',source/'real16',repo,'536d68cb8f903cbc0959da8b2345ae30ca57740d')
           if checked!=json.loads((source/'ACCEPTANCE.json').read_text()):raise RuntimeError('proof numerical recheck changed')
           staged=[];previously_untracked=[]
           for relative,digest in sorted(manifest.items()):
@@ -75,7 +75,8 @@ jobs:
           set -euo pipefail
           git config user.name heteronpu-verified-evidence
           git config user.email heteronpu-verified-evidence@users.noreply.github.com
-          git diff --cached --check
+          # Raw logs are immutable evidence; keep their original whitespace.
+          git diff --cached --check -- .github chisel
           git commit -m 'test: durably store every Host command log and binary referenced by proof [skip ci]'
           git push origin HEAD:main
       - uses: actions/upload-artifact@v4

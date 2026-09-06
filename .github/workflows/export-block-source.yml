@@ -17,12 +17,14 @@ jobs:
             chisel/continuous_prefill
             chisel/p0_safety
             integration/gemmini
+            rtl/matrix
+            rtl/integration
             .github/workflows
       - name: Archive immutable source
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt
-          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini .github/workflows | gzip > current_block_source.tar.gz
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration .github/workflows | gzip > current_block_source.tar.gz
           sha256sum current_block_source.tar.gz > current_block_source.sha256
       - uses: actions/upload-artifact@v4
         with:

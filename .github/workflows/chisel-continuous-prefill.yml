@@ -1,0 +1,62 @@
+name: chisel-continuous-prefill
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'chisel/continuous_prefill/**'
+      - '.github/workflows/chisel-continuous-prefill.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: chisel-continuous-prefill-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  continuous:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          sparse-checkout: |
+            chisel/p0_safety
+            chisel/continuous_prefill
+            integration/gemmini
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare pinned tools and sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          mkdir -p chisel/continuous_prefill/ci_identity
+          git rev-parse HEAD > chisel/continuous_prefill/ci_identity/commit.txt
+          git -C "$HARDFLOAT_SOURCE" rev-parse HEAD > chisel/continuous_prefill/ci_identity/hardfloat.txt
+          verilator --version > chisel/continuous_prefill/ci_identity/verilator.txt
+          find chisel/continuous_prefill/src chisel/p0_safety/src/main/scala -type f -name '*.scala' -print0 | sort -z | xargs -0 sha256sum > chisel/continuous_prefill/ci_identity/sources.sha256
+          sha256sum integration/gemmini/EmitHeteroFP32Alu.scala >> chisel/continuous_prefill/ci_identity/sources.sha256
+      - name: Compile simulate and compare actual memory payload
+        id: gate
+        run: bash chisel/continuous_prefill/scripts/run_gate.sh evidence_ci
+      - name: Verify source immutability
+        if: always()
+        run: sha256sum --check chisel/continuous_prefill/ci_identity/sources.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: continuous-prefill-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 30
+          path: |
+            chisel/continuous_prefill/ci_identity/
+            chisel/continuous_prefill/evidence_ci/*.log
+            chisel/continuous_prefill/evidence_ci/generated_ci/
+            chisel/continuous_prefill/target/test-reports/

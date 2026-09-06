@@ -1,0 +1,171 @@
+schema: 1
+baseline: fdd8f95c9ffe9d49854f796f0daf4ec770d91e27
+source_policy: Chisel为自研硬件唯一修改入口；生成RTL不得手改
+clock: {target_hz: 800000000, period_ns: 1.25}
+scope:
+  request: batch1_1024token_text_prefill
+  models: [Qwen2-1.5B, Qwen3.5-35B-A3B, Qwen3.8-Flash-Next]
+  start: token_ids_and_locked_real_weights
+  end: last_token_full_vocabulary_logits_and_state_writeback
+  separately_gated: [vision_input_path, MTP_draft_verify, decode]
+  forbidden:
+    - golden中间张量注入，包括layer0_norm替代硬件InputNorm
+    - 以CPU计算结果代替未实现算子或回送假的completion
+    - 把不同仿真独立复位后文件拼接当成连续推理
+    - 把矩阵tile或trace周期拼成整网实测
+    - 在失败后调整误差阈值或删除旧工件
+    - 仅改变RTL而不改变Chisel源
+current_increment:
+  hardware: [TensorProgram, ElementwiseMemoryEngine, ContinuousElementwiseTop, DenseTileCursor]
+  arithmetic: 复用原gemmini.HeteroFP32Alu；本次增加了DDR和SRAM分块执行
+  implemented_opcodes: [Copy, Add, Mul]
+  not_implemented_here: [Norm, Attention, Matrix_payload_adapter, MoE, GDN, QSA, PLE, Command128_frontend]
+  proof_boundary: 连续三阶段elementwise子链；不是三个网络
+  memory_adapter: 内部512bit单outstanding接口；仍须接真实AXI或pinned_iDMA
+  active_tile_bytes: 12288
+  retained_sram_bytes: 1572864
+  unit_test_fabric: reduced_12KiB_explicit_option
+  final_test_evidence: docs/VALIDATION.json
+execution_rules:
+  worktree: 为每个新RTL创建新的构建目录和chain_id；不清理旧沙箱或checkpoint
+  branch: main
+  writes: 提交前复跑门禁；正常fast-forward；不得force_push
+  reusable_legacy: 第三方IP或尚未迁移leaf可通过显式Chisel_BlackBox绑定；必须记录源哈希
+  bind_existing_roots: 不允许新旧同名模块混编；避免重复实例化SharedL2
+  state_reset: 必须协调core_bridge_pending_response；epoch回绕前全系统排空和重新初始化
+steps:
+  - id: G0
+    priority: P0
+    task: 拉取本次Chisel源码并复跑原始门禁，确认硬件/软件/内存合同
+    commands:
+      - bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+      - bash chisel/continuous_prefill/scripts/run_gate.sh evidence_local_new
+      - python3 -m pytest -q chisel/continuous_prefill/tests/test_memory_plan.py
+    accept:
+      - 所有DUT测试和三种q1024张量尺寸数值测试通过
+      - 两级FP32中间结果及最终BF16逐元素bit_exact
+      - host_intermediate_writes为0；内存响应错误时未提交tensor
+      - 保存所有源码、工具、依赖、生成结果哈希和失败日志
+  - id: G1
+    priority: P0
+    depends: [G0]
+    task: 将新Chisel owner接入真实descriptor和iDMA或AXI，闭合写可见性
+    requirements:
+      - MemoryResponse写应答必须等待AXI_B成功且数据可供后续读取，不能在AW/W完成时伪造
+      - 保持tag、掩码、字节序，传播RRESP/BRESP，错误后不发布tensor版本
+      - active期间禁止Host改写tensor_program_region配置和中间张量
+      - SharedL2只保留一份，协商端口/分区；真实容量1.5MiB
+      - core超时由supervisor取消排空，不能只复位core留下旧响应
+    accept:
+      - 相同三阶段链经过真实bridge，所有中间值和最终值仍bit_exact
+      - AW_W_B独立随机回压；首/中/末读写故障；无丢失/重复/假成功
+      - 不复位运行第二请求；改变输入数据；隔离上一request版本
+      - reset后的旧tag或迟到响应不能变为新请求数据
+  - id: G2
+    priority: P0
+    depends: [G1]
+    task: 锁定三个模型reference和真实device_format权重，生成DDR/SRAM可执行布局
+    models:
+      Qwen2-1.5B: 当前repo的canonical_GGUF和tokenizer哈希必须重新核验
+      Qwen3.5-35B-A3B: 62704185bd97ad488cfc404e7caea797396b74dc
+      Qwen3.8-Flash-Next: 34567a4712bc9766c4449e2e98e4468bfa24d915
+    requirements:
+      - 权重下载/索引/尺寸/数据类型/sha256与冻结revision和模型实际源码对应
+      - loader按layer或expert以mmap/有界缓冲加载，不需要把全模型塞入Host_RAM
+      - DDR地址按实际repack或解量化输出长度分配，不按GGUF压缩bit_rate猜算
+      - 固定tensor_dtype_stride_alignment_rounding；落实FP32_OProj_Residual和BF16_Matrix_operand
+      - readonly_scratch_persistent_output四区域不重叠，哨兵不改变
+      - KV_GDN_PLE_QSA状态布局逐层逐head固定，初始化与请求隔离明确
+      - 只有原始输入常量权重可Host预载，hidden中间结果必须由硬件产生
+    accept:
+      - memory_plan.py输出与实际descriptor逐张量核对；56bit范围保护通过
+      - 精度策略和数值门槛在执行之前批准并哈希冻结
+      - 软件reference仅输出oracle，不向硬件活动内存写入oracle中间态
+  - id: G3
+    priority: P1
+    depends: [G2]
+    task: 实现通用Matrix payload adapter，连接DenseTileCursor到真实512MAC阵列
+    requirements:
+      - 配置M_N_K与leading_stride；不得仍硬编码K1536或N1536
+      - 16x32x128分块；每个输出沿原K顺序累加；FP32_partial保留到完整K结束
+      - clear只在首K块，writeCommitted只在末K完整写回；禁止中间BF16舍入
+      - 真实AXI加载A_B到分块SRAM，完成后实际FP32_C写回
+      - 新Chisel设计覆盖Q_K_V_OProj_Gate_Up_Down_LMHead尾块
+    accept:
+      - 覆盖K1_127_128_129_1536_2048_2560_8960，M/N尾块
+      - final_K写回前消费者不能读；坏tag错误K长度和越界均拒绝
+      - 与批准FMA或非FMA累加顺序oracle比对；不能暗中换数值合同
+  - id: G4
+    priority: P1
+    depends: [G3]
+    task: 在一个reset与memory_epoch内连接Qwen2完整真实block
+    sequence: InputEmbedding_InputNorm_QKV_Bias_RoPE_KV_Attention_OProj_Residual_PostNorm_GateUp_SiLU_Down_FinalResidual
+    requirements:
+      - RMSNorm必须从实际hidden算起；不得从golden_norm启动
+      - attention_memory_feeder_softmax_service_summary_state控制全部在Chisel硬件
+      - TB仅提供AXI存储响应和检查，不逐算子执行do_qk_do_sfu_do_pv任务
+      - 同一片DDR/SRAM上连续执行；无文件阶段交换或golden替换
+      - 每个producer写入与consumer读取有tensor_ID_version_address证明
+    progression: [16token, 32token, 128token, 1024token]
+    accept:
+      - 每级checkpoint只观测不注入；终点数值符合冻结oracle
+      - 不同输入的第二请求通过，随机回压和错误恢复通过
+      - q1024全部行全部head全部MLP维度，不得采样
+  - id: G5
+    priority: P1
+    depends: [G4]
+    task: Qwen2逐层扩到完整28层并完成FinalNorm与last_token_LMHead
+    progression: [4个不同layer权重, 28层真实权重]
+    accept:
+      - 上一层实际residual供下一层InputNorm
+      - KV_all_layers为实际计算数据；FinalNorm与151936个logits完整比较
+      - 同一运行链q1024，不得28次重复layer0
+  - id: G6
+    priority: P2
+    depends: [G3]
+    task: Qwen3.5真实GDN_DenseAttention_MoE分支及40层连续执行
+    requirements:
+      - GDN_conv_history_decay_beta_L2Norm矩阵状态读改写完全硬件
+      - Top8实际路由驱动expert权重读取；shared_expert与weighted_merge正确
+      - 先含GDN和dense的4层混合链，再完整40层
+      - 状态矩阵方向、gate精度和rope部分维度与固定源码一致
+    accept:
+      - 1024token完整hidden_states_KV_recurrent_state与248320词表logits符合冻结合同
+      - 不能由软件scheduler根据golden路由替硬件选择expert
+  - id: G7
+    priority: P2
+    depends: [G6]
+    task: Qwen3.8实际QSA_PLE_4路residual_Top10_MoE与48层连续执行
+    requirements:
+      - PLE实际token_history_hash_row_fetch_dilated_conv；不使用预设embedding替代
+      - QSA_index_summary选择列表和sparse_KV_gather由实际输入决定
+      - 4路hyper_state和final_hyper_merge完整保留，不能降成普通residual
+      - 先包含PLE_QSA_GDN_MoE的短混合链，再完整48层
+    accept:
+      - q1024全部算子实际执行，完整248320词表logits和持久状态比较
+      - sparse索引route_ids中间数据记录可追溯；无Host_oracle介入
+  - id: G8
+    priority: P2
+    depends: [G5, G6, G7]
+    task: 单请求周期和MAC利用率计数后进行800MHz物理签核
+    metrics:
+      roi: request首个输入读取到最终logits与持久状态写回成功
+      useful_mac_utilization: useful_matrix_macs_divided_by_512_wall_cycles
+      executed_utilization: executed_matrix_macs_divided_by_512_wall_cycles
+      tokens_per_second: 1024_times_clock_hz_divided_by_wall_cycles
+      count_separately: [padding, PV_hi_lo_extra_products, DDR_reads_writes, L2_conflicts, operand_starvation, SFU_wait, context_busy]
+    accept:
+      - 仅使用同一连续实际请求的计数，独立job周期和trace预算不可相加
+      - generated_RTL明确Chisel源哈希；与仿真版本一致；800MHz目标不是已达频率
+      - 不直接修改RTL；时序整改在Chisel插流水并重跑数值与协议回归
+      - SRAM宏映射，无大存储意外综合成寄存器；WNS_TNS_area与未约束路径报告齐全
+final_gate:
+  - 三模型分别拥有独立PASS收据，不从共同primitive清单推导
+  - 真实1024token和固定模型revision，所有层、所有必需算子真实执行
+  - 完整last_token词表logits_all_finite，argmax_top10_relativeL2_cosine_max_abs均记录
+  - 数值阈值来自执行前冻结合同；缺失合同返回BLOCKED，不临时放宽
+  - Host仅预置原始input_weight_constant；start后中间注入为0，CPU算子回退为0
+  - 28_40_48层与正确layer_pattern分别由独立profile核验
+  - DDR_SRAM_capacity_permission_lifetime和state_epoch检查无错
+  - 最后写回成功才发completion；失败不能返回成功或启动消费者
+  - 权重_ELF_or_sim_binary_source_generatedRTL_logs_outputs的哈希与版本可复现

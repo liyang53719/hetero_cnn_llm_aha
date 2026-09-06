@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // DDR service only: the device performs every operator and every intermediate write.
 // The independent CPU reference is comparison-only and never services DUT reads.
-#ifdef BLOCK_IDMA
+#ifdef BLOCK_COMMON
+#include "VQwen2SharedProductionTop.h"
+using BlockDut=VQwen2SharedProductionTop;
+#elif defined(BLOCK_IDMA)
 #include "VQwen2IdmaBlockTop.h"
 using BlockDut=VQwen2IdmaBlockTop;
 #elif defined(BLOCK_AXI)
@@ -72,6 +75,9 @@ public:
   }
   explicit BlockTest(unsigned t,uint32_t seed):memory(ARENA_BYTES/4,0x7fc00001u),reference(ARENA_BYTES/4,0.0f),initialized(ARENA_BYTES/4,0),tokens(t),rng(seed){
     d.clock=0;d.reset=1;d.io_launch_valid=0;d.io_result_ready=0;
+#ifdef BLOCK_COMMON
+    d.io_commandLaunch_valid=0;d.io_commandResult_ready=0;d.io_commandCompletion_ready=0;
+#endif
 #ifdef BLOCK_AXI
     d.io_axi_aw_ready=0;d.io_axi_w_ready=0;d.io_axi_ar_ready=0;d.io_axi_b_valid=0;d.io_axi_r_valid=0;
 #else

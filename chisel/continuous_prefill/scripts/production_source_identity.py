@@ -19,8 +19,8 @@ def main():
     mode,root,out,hf=sys.argv[1:5];root,out,hf=map(lambda x:Path(x).resolve(),(root,out,hf))
     if mode=='record':
         paths=[p for p in sources(root,hf) if p.is_relative_to(root) and not p.is_relative_to(hf)]
-        for d in ['chisel/continuous_prefill/scripts','chisel/continuous_prefill/tests','rtl/matrix','rtl/integration']:
-            paths += [p for p in (root/d).rglob('*') if p.is_file() and p.suffix in {'.scala','.sv','.cpp','.py','.sh','.vlt'}]
+        for d in ['chisel/continuous_prefill/src/test/scala','chisel/continuous_prefill/scripts','chisel/continuous_prefill/tests','rtl/matrix','rtl/integration']:
+            paths += [p for p in (root/d).rglob('*') if p.is_file() and p.suffix in {'.scala','.sv','.cpp','.py','.sh','.vlt','.h','.inc'}]
         (out/'sources.sha256.json').write_text(json.dumps({str(p.relative_to(root)):digest(p) for p in sorted(set(paths))},indent=2)+'\n')
         (out/'hardfloat.sha256.json').write_text(json.dumps({str(p.relative_to(hf)):digest(p) for p in (hf/'hardfloat/src/main/scala').glob('*.scala')},indent=2)+'\n')
     elif mode=='verify':

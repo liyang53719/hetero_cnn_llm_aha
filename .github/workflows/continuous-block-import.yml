@@ -1,0 +1,53 @@
+name: continuous-block-import
+on:
+  push:
+    branches: [main]
+    paths: ['integration/continuous_block_delivery/snapshot.b64']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: continuous-block-import
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 1
+      - name: Validate and materialize source snapshot
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import base64,gzip,hashlib,json
+          raw=base64.b64decode(Path('integration/continuous_block_delivery/snapshot.b64').read_text().strip(),validate=True)
+          if hashlib.sha256(raw).hexdigest()!='4b827d2261fc21dcc17f9c827d0b11c333f5982bc23b60bd63b858ce9c316b91':
+              raise RuntimeError('snapshot digest mismatch')
+          files=json.loads(gzip.decompress(raw))
+          allowed={
+            'chisel/continuous_prefill/src/test/scala/heteronpu/continuous/BlockScalarFloatSpec.scala',
+            'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala',
+            'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala',
+            'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala',
+            'chisel/continuous_prefill/build.sbt',
+            'chisel/continuous_prefill/tests/qwen2_block.cpp',
+            'chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala'}
+          if set(files)!=allowed: raise RuntimeError('source allowlist mismatch')
+          for name,text in files.items():
+              p=PurePosixPath(name)
+              if p.is_absolute() or '..' in p.parts or not isinstance(text,str): raise RuntimeError('invalid entry')
+              target=Path(name);target.parent.mkdir(parents=True,exist_ok=True);target.write_text(text)
+          print('SOURCE_SNAPSHOT_VERIFIED files=7 hardware_source=Chisel')
+          PY
+          git config user.name heteronpu-chisel-ci
+          git config user.email heteronpu-chisel-ci@users.noreply.github.com
+          git add chisel/continuous_prefill chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala
+          if ! git diff --cached --quiet; then
+            git commit -m 'chisel: add continuous Qwen2 functional block and DUT tests [skip ci]'
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi

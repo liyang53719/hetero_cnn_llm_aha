@@ -1,0 +1,23 @@
+{
+  "status": "PASS_HOST_BYTES_WITH_RETAINED_PUBLIC_ISA_PARSERS",
+  "commands": 3,
+  "descriptor_records": 30,
+  "tensor_chains": 9,
+  "command128_roundtrip": true,
+  "descriptor_roundtrip": true,
+  "decoded_commands": [
+    {"pc": 0, "opcode": "SFU_VECTOR", "engine": "SFU_CGRA", "wait": 0, "signal": 1, "a": "0x115505000", "b": "0x10b305000", "dst": "0x115b06000"},
+    {"pc": 1, "opcode": "SFU_VECTOR", "engine": "SFU_CGRA", "wait": 1, "signal": 2, "a": "0x115b06000", "b": "0x10b305000", "dst": "0x115b1e000"},
+    {"pc": 2, "opcode": "SFU_VECTOR", "engine": "SFU_CGRA", "wait": 2, "signal": 3, "a": "0x115b1e000", "b": "0x10b305000", "dst": "0x115b36000"}
+  ],
+  "source_sha256": {
+    "src/heteronpu/command.py": "151f71520e7ca7d328e91a2a7b4c5a0fa1199a14f85037a4a7214f5d43dfa175",
+    "src/heteronpu/descriptor_chain.py": "22a8cfbe020308375cc6a08139135aa519a38405da748faf56e3328e36b037d1",
+    "config/descriptor_public_encoding.json": "f0d47596e10ae20796b1075dc471dc9208f3e8c8c0f04ebd8c3e6a44f110b70e"
+  },
+  "table_sha256": {
+    "host_commands.bin": "2e6bd81e13cd750b1a5b9758c14e5f604a92c134f6b8c7a2e4745fb51f8c93f8",
+    "host_descriptors.bin": "b315919c40e51270494520a1db3e0f94c6be9a0d488f3995010b99c735978e8e"
+  },
+  "scope": "Read-only interoperability audit, not a new hardware execution claim."
+}

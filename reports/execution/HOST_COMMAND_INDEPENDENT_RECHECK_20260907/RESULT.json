@@ -1,0 +1,26 @@
+{
+  "status": "PASS_CI_FULL_PROOF_INDEPENDENTLY_RECHECKED_IN_SANDBOX",
+  "tested_ci_source": "536d68cb8f903cbc0959da8b2345ae30ca57740d",
+  "local_source_archive": "058ac96911bfc6c937ba6455a6c8e28a80a7b503",
+  "source_checks": {
+    "unit": {"count": 212, "mismatches": []},
+    "commands": {"count": 212, "mismatches": []},
+    "real16": {"count": 212, "mismatches": []}
+  },
+  "complete_binary_and_csv_rows_rechecked": 737280,
+  "ci_seal_recomputed_exactly": true,
+  "retained_public_abi": true,
+  "independent_sandbox_component_replay": {"commands": true, "partial_failure": true},
+  "sandbox_frontend_chisel_tests": 14,
+  "public_abi_negative_probes": 29,
+  "public_abi_auditor_test_methods": 2,
+  "public_abi_auditor_optimized_mode_pass": true,
+  "local_duplicate_full_block_status": "intentionally stopped after CI full proof became available; NOT counted as completed",
+  "local_duplicate_completed_stages_matching_ci": 10,
+  "complete_ci_gate_exit": 0,
+  "artifact_zip_sha256": "06f7b4917ce46a4cbfc63756309267e7535ba238a4df462c3922d537a095bb32",
+  "permanent_evidence_commit": "9854e6bc6e58b595f2513e520b828bc4f893976c",
+  "manifest_bytes_verified_in_git_index": 104,
+  "repaired_missing_raw_logs": 24,
+  "scope": {"full21commandgraph": false, "officialweights": false, "q1024fullmodel": false, "dc": false}
+}

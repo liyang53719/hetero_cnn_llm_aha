@@ -1,0 +1,66 @@
+name: host-command-shared-idma
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/host-command-shared-idma.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-dut:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    env:
+      JVM_OPTS: '-Xmx3G -Xss4M -XX:ActiveProcessorCount=3'
+      BUILD_JOBS: '3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - name: Install public simulator
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+      - name: Fetch existing pinned upstream iDMA artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: work/pinned_idma_archive
+      - name: Verify and extract pinned sources
+        run: |
+          set -euo pipefail
+          cd work/pinned_idma_archive
+          sha256sum -c pinned_idma_sources.sha256
+          mkdir unpacked
+          tar -xzf pinned_idma_sources.tar.gz -C unpacked
+          printf 'IDMA_EXPORT=%s\n' "$PWD/unpacked/idma_export" >> "$GITHUB_ENV"
+      - name: Execute real Chisel and retained RTL, not a software stub
+        run: |
+          set -euo pipefail
+          bash chisel/continuous_prefill/scripts/run_host_command_acceptance.sh "$GITHUB_WORKSPACE/work/host_command_acceptance"
+      - name: Preserve complete outputs and logs even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: host-command-shared-idma-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_command_acceptance/*.json
+            work/host_command_acceptance/*.log
+            work/host_command_acceptance/*.txt
+            work/host_command_acceptance/*.exit
+            work/host_command_acceptance/*/*.json
+            work/host_command_acceptance/*/*.log
+            work/host_command_acceptance/*/*.txt
+            work/host_command_acceptance/*/*.exit
+            work/host_command_acceptance/real16/all_shared_elements.csv.gz
+            work/host_command_acceptance/real16/tensors/**
+            work/host_command_acceptance/*/generated/**

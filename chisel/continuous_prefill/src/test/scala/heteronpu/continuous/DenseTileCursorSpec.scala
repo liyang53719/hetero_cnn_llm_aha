@@ -25,9 +25,9 @@ class DenseTileCursorSpec extends AnyFlatSpec with ChiselScalatestTester {
           t.dst.expect((BigInt("300000000",16)+mi*((n*4+63)/64*64)+ni*4).U)
           val rm=math.min(16,m-mi);val rn=math.min(32,n-ni);val rk=math.min(128,k-ki);mac+=BigInt(rm)*rn*rk
           t.rows.expect(rm.U);t.columns.expect(rn.U);t.depth.expect(rk.U);t.clear.expect((ki==0).B);t.lastK.expect((ki+rk==k).B)
-          d.clock.step(rng.nextInt(3));t.kBase.expect(ki.U)
+          for(_<-0 until rng.nextInt(3)){d.clock.step()};t.kBase.expect(ki.U)
           d.io.tile.ready.poke(true.B);d.clock.step();d.io.tile.ready.poke(false.B)
-          d.clock.step(rng.nextInt(3));d.io.tile.valid.expect(false.B)
+          for(_<-0 until rng.nextInt(3)){d.clock.step()};d.io.tile.valid.expect(false.B)
           d.io.ack.bits.tag.poke(tiles.U);d.io.ack.bits.status.poke(0.U);d.io.ack.bits.writeCommitted.poke((ki+rk==k).B)
           d.io.ack.valid.poke(true.B);d.clock.step();d.io.ack.valid.poke(false.B);tiles+=1
         }
@@ -40,5 +40,20 @@ class DenseTileCursorSpec extends AnyFlatSpec with ChiselScalatestTester {
     d.io.ack.bits.tag.poke(0.U);d.io.ack.bits.status.poke(0.U);d.io.ack.bits.writeCommitted.poke(false.B);d.io.ack.valid.poke(true.B);d.clock.step()
     d.io.done.bits.expect(7.U);d.io.resetRequired.expect(true.B);d.io.usefulMacs.expect(0.U)
   }}
-  it should "reject a wrapped DDR footprint" in {test(new DenseTileCursor()){d=>init(d,0,1,1);d.io.done.bits.expect(5.U);d.io.tile.valid.expect(false.B)}}
+  it should "reject a zero M shape" in {test(new DenseTileCursor()){d=>init(d,0,1,1);d.io.done.bits.expect(5.U);d.io.tile.valid.expect(false.B)}}
+  it should "reject a wrapped DDR footprint before the first tile" in {test(new DenseTileCursor()){d=>
+    d.io.request.valid.poke(false.B);d.io.tile.ready.poke(false.B);d.io.ack.valid.poke(false.B);d.io.done.ready.poke(false.B)
+    d.reset.poke(true.B);d.clock.step(2);d.reset.poke(false.B)
+    val x=d.io.request.bits;val limit=BigInt(1)<<56
+    x.a.poke((limit-64).U);x.b.poke(0.U);x.dst.poke(1024.U);x.m.poke(16.U);x.n.poke(32.U);x.k.poke(128.U)
+    x.aStride.poke(256.U);x.bStride.poke(64.U);x.dstStride.poke(128.U)
+    x.aLimit.poke(limit.U);x.bLimit.poke(limit.U);x.dstLimit.poke(limit.U)
+    d.io.request.valid.poke(true.B);d.clock.step();d.io.request.valid.poke(false.B)
+    d.io.done.bits.expect(5.U);d.io.tile.valid.expect(false.B)
+  }}
+  it should "reject publishing an incomplete K accumulation" in {test(new DenseTileCursor()){d=>init(d,1,1,129)
+    d.io.tile.ready.poke(true.B);d.clock.step();d.io.ack.bits.tag.poke(0.U);d.io.ack.bits.status.poke(0.U)
+    d.io.ack.bits.writeCommitted.poke(true.B);d.io.ack.valid.poke(true.B);d.clock.step()
+    d.io.done.bits.expect(7.U);d.io.resetRequired.expect(true.B)
+  }}
 }

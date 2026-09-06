@@ -42,11 +42,15 @@ jobs:
           git rev-parse HEAD > chisel/continuous_prefill/ci_identity/commit.txt
           git -C "$HARDFLOAT_SOURCE" rev-parse HEAD > chisel/continuous_prefill/ci_identity/hardfloat.txt
           verilator --version > chisel/continuous_prefill/ci_identity/verilator.txt
-          find chisel/continuous_prefill/src chisel/p0_safety/src/main/scala -type f -name '*.scala' -print0 | sort -z | xargs -0 sha256sum > chisel/continuous_prefill/ci_identity/sources.sha256
-          sha256sum integration/gemmini/EmitHeteroFP32Alu.scala >> chisel/continuous_prefill/ci_identity/sources.sha256
+          git ls-files -z chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroFP32Alu.scala | xargs -0 sha256sum > chisel/continuous_prefill/ci_identity/sources.sha256
       - name: Compile simulate and compare actual memory payload
         id: gate
         run: bash chisel/continuous_prefill/scripts/run_gate.sh evidence_ci
+      - name: Emit production SRAM geometry
+        working-directory: chisel/continuous_prefill
+        run: |
+          set -o pipefail
+          sbt -batch 'runMain heteronpu.continuous.EmitContinuous evidence_ci/generated_full' | tee evidence_ci/emit_full.log
       - name: Verify source immutability
         if: always()
         run: sha256sum --check chisel/continuous_prefill/ci_identity/sources.sha256
@@ -59,4 +63,5 @@ jobs:
             chisel/continuous_prefill/ci_identity/
             chisel/continuous_prefill/evidence_ci/*.log
             chisel/continuous_prefill/evidence_ci/generated_ci/
+            chisel/continuous_prefill/evidence_ci/generated_full/
             chisel/continuous_prefill/target/test-reports/

@@ -25,8 +25,9 @@ jobs:
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt
+          git ls-tree -r HEAD -- chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu .github/workflows > source_tree.txt
           git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu .github/workflows | gzip > current_block_source.tar.gz
-          sha256sum current_block_source.tar.gz > current_block_source.sha256
+          sha256sum current_block_source.tar.gz source_tree.txt > current_block_source.sha256
       - uses: actions/upload-artifact@v4
         with:
           name: current-block-source-${{ github.sha }}
@@ -35,3 +36,4 @@ jobs:
             current_block_source.tar.gz
             current_block_source.sha256
             source_commit.txt
+            source_tree.txt

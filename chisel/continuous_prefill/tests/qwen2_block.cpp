@@ -20,6 +20,8 @@ using BlockDut=VQwen2ContinuousBlock;
 #include <cstdint>
 #include <cstring>
 #include <fstream>
+#include <filesystem>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -47,6 +49,27 @@ public:
   unsigned tokens;uint32_t rng;uint64_t BASE=0x100000000ULL,cycles=0,reads=0,writes=0,acks=0,requestStalls=0,responseStalls=0,checked=0,bitDifferences=0;
   unsigned commits=0;Pending pending,held;bool heldValid=false,inject=false,corruptTag=false,injected=false;float globalMaxError=0;
   std::array<bool,15> published{};
+  std::array<uint64_t,15> phaseReadBeats{},phaseWriteAcks{};
+  bool running=false,readFault=false;unsigned faultPhase=0,phaseFaultCounter=0,faultOrdinal=4;
+  uint64_t successfulWriteBytes=0;
+  std::string evidenceDir=std::getenv("PRODUCTION_EVIDENCE_DIR")?std::getenv("PRODUCTION_EVIDENCE_DIR"):"";
+  void dump(const std::string& name,const void* data,size_t bytes){
+    if(evidenceDir.empty())return;
+    std::filesystem::create_directories(evidenceDir);auto path=std::filesystem::path(evidenceDir)/name;
+    need(!std::filesystem::exists(path),"refuse to overwrite evidence "+path.string());
+    std::ofstream f(path,std::ios::binary);need(bool(f),"cannot create evidence");f.write(reinterpret_cast<const char*>(data),bytes);need(bool(f),"short evidence write");
+  }
+  void checkWrite(const Pending& p){
+    need(commits<15,"write after final phase");const auto& x=STAGES[commits];const auto off=p.address-BASE;
+    need(p.mask==~0ULL,"block output must be one full FP32 packet");
+    need(off>=x.off && off+64<=x.off+size_t(tokens)*x.width*4,"write outside current phase tensor");
+    for(unsigned j=0;j<16;j++)need(!initialized[off/4+j],"duplicate/unexpected producer output write");
+  }
+  void maybeInject(Pending& p){
+    if(inject&&!injected&&commits==faultPhase&&p.write!=readFault&&++phaseFaultCounter==faultOrdinal){
+      p.error=!corruptTag;if(corruptTag)p.tag^=1;injected=true;
+    }
+  }
   explicit BlockTest(unsigned t,uint32_t seed):memory(ARENA_BYTES/4,0x7fc00001u),reference(ARENA_BYTES/4,0.0f),initialized(ARENA_BYTES/4,0),tokens(t),rng(seed){
     d.clock=0;d.reset=1;d.io_launch_valid=0;d.io_result_ready=0;
 #ifdef BLOCK_AXI
@@ -57,7 +80,7 @@ public:
     for(int i=0;i<5;i++)step();d.reset=0;step();
   }
   uint32_t random(){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
-  void set(uint64_t offset,size_t i,float x){memory[offset/4+i]=bits(x);reference[offset/4+i]=x;initialized[offset/4+i]=1;}
+  void set(uint64_t offset,size_t i,float x){need(!running,"host write during request");memory[offset/4+i]=bits(x);reference[offset/4+i]=x;initialized[offset/4+i]=1;}
   float get(uint64_t offset,size_t i)const{return reference[offset/4+i];}
   void put(uint64_t offset,size_t i,float x){reference[offset/4+i]=x;}
   void weight(uint64_t offset,int k,int n,unsigned salt){for(int i=0;i<k;i++)for(int j=0;j<n;j++){
@@ -116,7 +139,11 @@ public:
     for(size_t i=0;i<count;i++){need(initialized[s.off/4+i],"unwritten stage output");float a=fp(memory[s.off/4+i]),b=get(s.off,i);need(std::isfinite(a)&&std::isfinite(b),"nonfinite stage output");float e=std::abs(a-b);maxError=std::max(maxError,e);maxRef=std::max(maxRef,std::abs(b));err2+=double(e)*e;ref2+=double(b)*b;mismatch+=bits(a)!=bits(b);}
     double rel=std::sqrt(err2/std::max(ref2,1e-30));
     std::cout<<"STAGE_CHECK phase="<<stage<<" name="<<s.name<<" values="<<count<<" max_abs="<<maxError<<" rel_l2="<<rel<<" bit_diffs="<<mismatch<<" cycle="<<cycles<<std::endl;
-    need(maxError<=1e-5f+1e-5f*maxRef&&rel<=1e-5,"stage numerical mismatch "+std::string(s.name));
+    need(mismatch==0 && maxError==0.0f && rel==0.0,"ordered recipe bit mismatch "+std::string(s.name));
+    need(phaseWriteAcks[stage]*64==count*4,"phase published before every output B acknowledgement");
+    dump("phase_"+std::to_string(stage)+"_"+s.name+"_actual.f32le",memory.data()+s.off/4,count*4);
+    dump("phase_"+std::to_string(stage)+"_"+s.name+"_reference.f32le",reference.data()+s.off/4,count*4);
+    std::cout<<"STAGE_MEMORY phase="<<stage<<" reads="<<phaseReadBeats[stage]<<" write_acks="<<phaseWriteAcks[stage]<<" visible_bytes="<<phaseWriteAcks[stage]*64<<std::endl;
     checked+=count;bitDifferences+=mismatch;globalMaxError=std::max(globalMaxError,maxError);published[stage]=true;commits++;
   }
   void checkRead(uint64_t offset){for(int i=0;i<16;i++)need(initialized[offset/4+i],"read from poison/uninitialized DDR at "+std::to_string(offset));
@@ -143,11 +170,11 @@ public:
     Pending next;
     if(rf){need(!pending.valid,"more than one request in flight");next=offered();next.delay=random()%4;
       need((next.address&63)==0&&next.address>=BASE&&next.address-BASE+64<=ARENA_BYTES,"unaligned/out-of-arena address");uint64_t off=next.address-BASE;
-      if(next.write){need(off>=WRITABLE_START,"write into readonly region");writes++;if(inject&&!injected&&writes==4){next.error=!corruptTag;if(corruptTag)next.tag^=1;injected=true;}}
-      else{reads++;checkRead(off);for(int i=0;i<16;i++)next.data[i]=memory[off/4+i];}
+      if(next.write){need(off>=WRITABLE_START,"write into readonly region");writes++;checkWrite(next);if(!readFault)maybeInject(next);}
+      else{reads++;phaseReadBeats[commits]++;checkRead(off);for(int i=0;i<16;i++)next.data[i]=memory[off/4+i];if(readFault)maybeInject(next);}
     }
     d.clock=1;d.eval();cycles++;
-    if(af){if(pending.write&&!pending.error&&!(corruptTag&&injected)){
+    if(af){if(pending.write&&!pending.error&&!(corruptTag&&injected)){phaseWriteAcks[commits]++;successfulWriteBytes+=64;
         auto off=pending.address-BASE;for(int j=0;j<64;j++)if((pending.mask>>j)&1){auto i=(off+j)/4;unsigned sh=((off+j)%4)*8;memory[i]=(memory[i]&~(255u<<sh))|(((pending.data[j/4]>>(8*(j%4)))&255)<<sh);initialized[i]=1;}
       }acks++;pending.valid=false;}
     if(rf)pending=next;else if(pending.valid&&pending.delay)pending.delay--;d.clock=0;d.eval();
@@ -178,12 +205,12 @@ public:
     if(pending.valid&&pending.delay)responseStalls++;
     if(aw)awBuffer=a;if(w)wBuffer=b;Pending next;
     if(awBuffer.valid&&wBuffer.valid){need(!ar&&!pending.valid,"AXI overlap");next=wBuffer;next.address=awBuffer.address;next.tag=awBuffer.tag;awBuffer.valid=wBuffer.valid=false;writes++;
-      if(inject&&!injected&&writes==4){next.error=!corruptTag;if(corruptTag)next.tag^=1;injected=true;}
-    }else if(ar){need(!pending.valid,"AXI read overlap");next=c;reads++;}
+      checkWrite(next);if(!readFault)maybeInject(next);
+    }else if(ar){need(!pending.valid,"AXI read overlap");next=c;reads++;phaseReadBeats[commits]++;}
     if(next.valid){need((next.address&63)==0&&next.address>=BASE&&next.address-BASE+64<=ARENA_BYTES,"AXI out-of-arena address");next.delay=random()%4;auto off=next.address-BASE;
-      if(next.write)need(off>=WRITABLE_START,"AXI write into readonly");else{checkRead(off);for(int i=0;i<16;i++)next.data[i]=memory[off/4+i];}}
+      if(next.write)need(off>=WRITABLE_START,"AXI write into readonly");else{checkRead(off);for(int i=0;i<16;i++)next.data[i]=memory[off/4+i];if(readFault)maybeInject(next);}}
     d.clock=1;d.eval();cycles++;
-    if(ack){if(pending.write&&!pending.error&&!(corruptTag&&injected)){auto off=pending.address-BASE;for(int j=0;j<64;j++)if((pending.mask>>j)&1){auto i=(off+j)/4;unsigned sh=((off+j)%4)*8;memory[i]=(memory[i]&~(255u<<sh))|(((pending.data[j/4]>>(8*(j%4)))&255)<<sh);initialized[i]=1;}}
+    if(ack){if(pending.write&&!pending.error&&!(corruptTag&&injected)){phaseWriteAcks[commits]++;successfulWriteBytes+=64;auto off=pending.address-BASE;for(int j=0;j<64;j++)if((pending.mask>>j)&1){auto i=(off+j)/4;unsigned sh=((off+j)%4)*8;memory[i]=(memory[i]&~(255u<<sh))|(((pending.data[j/4]>>(8*(j%4)))&255)<<sh);initialized[i]=1;}}
       acks++;pending.valid=false;}
     if(next.valid)pending=next;else if(pending.valid&&pending.delay)pending.delay--;d.clock=0;d.eval();
   }
@@ -195,9 +222,9 @@ public:
     std::fill(memory.begin()+WRITABLE_START/4,memory.end(),0x7fc00001u);
     std::fill(initialized.begin()+WRITABLE_START/4,initialized.end(),0);
     published.fill(false);commits=0;checked=0;bitDifferences=0;globalMaxError=0;
-    reads=writes=acks=requestStalls=responseStalls=cycles=0;inject=false;corruptTag=false;injected=false;
+    reads=writes=acks=requestStalls=responseStalls=cycles=0;inject=false;corruptTag=false;injected=false;readFault=false;phaseFaultCounter=0;phaseReadBeats.fill(0);phaseWriteAcks.fill(0);successfulWriteBytes=0;
     for(unsigned t=0;t<tokens;t++)for(int i=0;i<H;i++)set(OFF_X,size_t(t)*H+i,float(int((i*37u+t*101u+epoch*73u)%1021)-510)*0.00390625f);
-    computeReference();run(epoch);
+    if(!evidenceDir.empty())evidenceDir+="/epoch_"+std::to_string(epoch);computeReference();run(epoch);
   }
   void rejectLaunch(bool badBase){
     d.io_launch_bits_base=BASE+(badBase?1:0);d.io_launch_bits_limit=BASE+ARENA_BYTES;
@@ -210,11 +237,12 @@ public:
 #ifdef BLOCK_IDMA
     const uint64_t dmaBase=d.io_idmaTransfers;
 #endif
+    running=true;dump("input_x.f32le",memory.data()+OFF_X/4,size_t(tokens)*H*4);
     d.io_launch_bits_base=BASE;d.io_launch_bits_limit=BASE+ARENA_BYTES;d.io_launch_bits_tokens=tokens;d.io_launch_bits_epoch=epoch;d.io_launch_valid=1;
     for(int i=0;!d.io_launch_ready&&i<100;i++)step();need(d.io_launch_ready,"launch timeout");step();d.io_launch_valid=0;
     uint64_t bound=2000000ULL+uint64_t(tokens)*(uint64_t(H)*H*2+uint64_t(H)*KV*2+uint64_t(H)*F*3)*2+uint64_t(tokens)*tokens*H*30;
     while(!d.io_result_valid&&cycles<bound)step();need(d.io_result_valid,"block watchdog timeout phase="+std::to_string(d.io_phase));
-    if(inject){need(injected&&d.io_result_bits_status!=0&&commits==0&&d.io_resetRequired,"failed write published output");std::cout<<"BLOCK_FAULT_PASS kind="<<(corruptTag?"tag":"write_error")<<" status="<<unsigned(d.io_result_bits_status)<<std::endl;}
+    if(inject){need(injected&&d.io_result_bits_status!=0&&commits==faultPhase&&d.io_resetRequired,"failed write published output");std::cout<<"BLOCK_FAULT_PASS kind="<<(corruptTag?"tag":"write_error")<<" phase="<<faultPhase<<" read_fault="<<readFault<<" status="<<unsigned(d.io_result_bits_status)<<std::endl;}
     else{
       need(d.io_result_bits_status==0&&commits==15,"block result failure status="+std::to_string(d.io_result_bits_status));
       uint64_t expectedMac=uint64_t(tokens)*(uint64_t(H)*H*2+uint64_t(H)*KV*2+uint64_t(H)*F*3)+uint64_t(tokens)*(tokens+1)*H;
@@ -229,10 +257,15 @@ public:
       need(d.io_idmaTransfers-dmaBase==reads+writes,"not every transaction passed the actual pinned iDMA");
       std::cout<<"PINNED_IDMA_BLOCK transfers="<<(d.io_idmaTransfers-dmaBase)<<" external_read_beats="<<reads<<" external_write_beats="<<writes<<" full_backend=1"<<std::endl;
 #endif
+      need(successfulWriteBytes==writes*64,"unacknowledged output bytes");
+      for(const auto& stage:STAGES)for(size_t i=size_t(tokens)*stage.width;i<size_t(MAX_TOKENS)*stage.width;i++)
+        need(memory[stage.off/4+i]==0x7fc00001u,"write beyond active token extent");
+      std::cout<<"DDR_GUARD_PASS visible_write_bytes="<<successfulWriteBytes<<" host_intermediate_writes=0"<<std::endl;
       uint64_t hash=1469598103934665603ULL;for(size_t i=0;i<size_t(tokens)*H;i++)hash=(hash^memory[OFF_Y/4+i])*1099511628211ULL;
       std::cout<<"CONTINUOUS_QWEN2_BLOCK_PASS tokens="<<tokens<<" hidden="<<H<<" ffn="<<F<<" heads="<<HEADS<<" kv_heads="<<KVHEADS<<" phases="<<commits<<" checked_fp32="<<checked<<" bit_diffs="<<bitDifferences<<" max_abs="<<globalMaxError<<" cycles="<<d.io_result_bits_cycles<<" macs="<<expectedMac<<" read_bytes="<<reads*64<<" write_bytes="<<writes*64<<" request_stalls="<<requestStalls<<" response_delay_cycles="<<responseStalls<<" hash="<<std::hex<<hash<<std::dec<<" host_intermediate_writes=0 full_model=0 canonical_512_array="<<(PHYSICAL_MAC_LANES==512)<<" executed_macs="<<d.io_result_bits_executedMacs<<std::endl;
     }
     auto resultStatus=d.io_result_bits_status;step();step();need(d.io_result_valid&&d.io_result_bits_status==resultStatus,"completion not held");d.io_result_ready=1;step();d.io_result_ready=0;
+    running=false;
     if(inject){d.io_launch_valid=1;for(int i=0;i<8;i++){need(!d.io_launch_ready&&!busOffered()&&!d.io_result_valid,"poisoned request escaped reset lockout");step();}d.io_launch_valid=0;}
   }
 };
@@ -241,8 +274,10 @@ int main(int argc,char**argv){try{
   unsigned n=std::stoul(argv[1]);need(n>0&&n<=MAX_TOKENS,"invalid tokens");unsigned seed=argc>3?std::stoul(argv[3]):20260906;
   auto t=std::make_unique<BlockTest>(n,seed);std::string mode=argc>2?argv[2]:"synthetic";
   if(mode=="bad-count"||mode=="bad-base"){t->rejectLaunch(mode=="bad-base");return 0;}
-  bool recover=mode=="recover-write"||mode=="recover-tag";
-  if(mode=="write-error"||mode=="tag-error"||recover){t->inject=true;t->corruptTag=mode=="tag-error"||mode=="recover-tag";t->initialize();}
+  if(const char* ord=std::getenv("PRODUCTION_FAULT_ORDINAL")){t->faultOrdinal=std::stoul(ord);need(t->faultOrdinal>0,"invalid fault ordinal");}
+  bool recover=mode=="recover-write"||mode=="recover-tag"||mode=="recover-read";
+  if(const char* ph=std::getenv("PRODUCTION_FAULT_PHASE")){t->faultPhase=std::stoul(ph);need(t->faultPhase<15,"invalid fault phase");}
+  if(mode=="write-error"||mode=="tag-error"||mode=="read-error"||recover){t->inject=true;t->readFault=mode=="read-error"||mode=="recover-read";t->corruptTag=mode=="tag-error"||mode=="recover-tag";t->initialize();}
   else if(mode=="synthetic"||mode=="repeat")t->initialize();else t->loadArena(mode);
   t->run();if(mode=="repeat"||recover){t->nextRequest(2,recover);std::cout<<"BLOCK_SECOND_REQUEST_PASS reset="<<recover<<" epoch=2"<<std::endl;}return 0;
 }catch(const std::exception&e){std::cerr<<"BLOCK_FAIL: "<<e.what()<<std::endl;return 1;}}

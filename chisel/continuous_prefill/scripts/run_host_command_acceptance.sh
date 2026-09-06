@@ -8,6 +8,7 @@ OUT=${1:?usage: run_host_command_acceptance.sh /absolute/new/output}
 [[ -n ${IDMA_EXPORT:-} && -f "$IDMA_EXPORT/idma.f.in" ]] || { echo BLOCKED_PINNED_IDMA >&2;exit 77; }
 mkdir -p "$OUT"
 trap 'code=$?; printf "%s\n" "$code" >"$OUT/acceptance.exit";exit "$code"' EXIT
+source "$P/scripts/prepare_verilator_runtime.sh" "$OUT"
 BASE=$(git -C "$ROOT" rev-parse HEAD)
 printf '%s\n' "$BASE" >"$OUT/source_commit.txt"
 bash "$P/scripts/run_shared_frontend_unit.sh" "$OUT/unit" >"$OUT/unit_console.log" 2>&1

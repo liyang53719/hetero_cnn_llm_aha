@@ -15,5 +15,5 @@ object EmitQwenBlock extends App {
   for(r<-l.regions)h.append(s"static constexpr uint64_t OFF_${r.name.toUpperCase}=${r.offset}ULL;\n")
   Files.writeString(out.resolve("block_layout.h"),h.toString)
   val e=l.regions.map(r=>s"{\"name\":\"${r.name}\",\"offset\":${r.offset},\"words\":${r.words},\"external\":${r.external}}")
-  Files.writeString(out.resolve("layout.json"),s"{\"schema\":1,\"hidden\":${s.hidden},\"ffn\":${s.ffn},\"heads\":${s.heads},\"kv_heads\":${s.kvHeads},\"head_dim\":${s.headDim},\"max_tokens\":${s.maxTokens},\"arena_bytes\":${l.total},\"mac_lanes\":${if(s.retainedMatrix)512 else 16},\"useful_mac_lanes\":16,\"retained_matrix\":${s.retainedMatrix},\"clock_target_hz\":800000000,\"performance_equivalent_to_revision8b\":false,\"regions\":[${e.mkString(",")}]}\n")
+  Files.writeString(out.resolve("layout.json"),s"{\"schema\":1,\"hidden\":${s.hidden},\"ffn\":${s.ffn},\"heads\":${s.heads},\"kv_heads\":${s.kvHeads},\"head_dim\":${s.headDim},\"max_tokens\":${s.maxTokens},\"arena_bytes\":${l.total},\"mac_lanes\":${if(s.retainedMatrix)512 else 16},\"useful_mac_lanes\":16,\"dense_token_tile\":${if(s.retainedMatrix)1 else 16},\"row_cache_bytes\":${s.maxRow*4*(if(s.retainedMatrix)1 else 16)},\"retained_matrix\":${s.retainedMatrix},\"clock_target_hz\":800000000,\"performance_equivalent_to_revision8b\":false,\"regions\":[${e.mkString(",")}]}\n")
 }

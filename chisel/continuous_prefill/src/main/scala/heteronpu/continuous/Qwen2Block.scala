@@ -37,14 +37,18 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   */
 class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   val layout=new QwenBlockLayout(s)
+  // Reuse each weight vector across up to sixteen token rows. No split-K:
+  // each output still receives the identical increasing-K sequence of FMAs.
+  val denseBatch = if(s.retainedMatrix) 1 else 16
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new BlockLaunch));val result=Decoupled(new BlockResult)
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
     val phase=Output(UInt(5.W));val stageCommit=Output(Bool());val committedPhase=Output(UInt(5.W))
     val resetRequired=Output(Bool());val readBytes=Output(UInt(64.W));val writeBytes=Output(UInt(64.W))
+    val acknowledgedWriteBytes=Output(UInt(64.W))
   })
   dontTouch(io) // Public ABI retained under the joint HardFloat elaboration.
-  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWeight","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked")
+  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked")
   private val codes=names.zipWithIndex.toMap;def st(n:String):UInt=codes(n).U(7.W)
   val state=RegInit(st("idle"));val resume=Reg(UInt(7.W));val scalarResume=Reg(UInt(7.W));val localResume=Reg(UInt(7.W))
   val phase=RegInit(0.U(5.W));val base=Reg(UInt(64.W));val tokens=Reg(UInt(16.W));val epoch=Reg(UInt(16.W))
@@ -57,7 +61,11 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   val acc=Reg(Vec(16,UInt(32.W)));val tmp=Reg(Vec(16,UInt(32.W)));val tmp2=Reg(Vec(16,UInt(32.W)))
   val scalarValue=Reg(UInt(32.W));val scalarRequest=Reg(new ScalarRequest)
   val scalar=Module(new BlockScalarFloat);scalar.io.request.valid:=state===st("scalarReq");scalar.io.request.bits:=scalarRequest;scalar.io.result.ready:=state===st("scalarRsp")
-  val localRows=(s.maxRow*4+255)/256
+  val denseBase=RegInit(0.U(16.W));val denseRows=RegInit(0.U(5.W))
+  val denseLoadRow=RegInit(0.U(5.W));val denseRow=RegInit(0.U(5.W));val denseWindowRow=RegInit(0.U(5.W))
+  val denseWindow=Reg(Vec(denseBatch,Vec(16,UInt(32.W))))
+  val denseAcc=Reg(Vec(denseBatch,Vec(16,UInt(32.W))))
+  val localRows=(s.maxRow*denseBatch*4+255)/256
   val fabric=Module(new SharedL2Fabric(LocalSramConfig(rowsPerBank=localRows)))
   val f=fabric.io;f.rd_valid_i:=0.U;f.rd_addr_i:=0.U;f.rd_resp_ready_i:=0.U;f.wr_valid_i:=false.B;f.wr_addr_i:=0.U;f.wr_data_i:=0.U;f.wr_be_i:=0.U
   val localIndex=Reg(UInt(15.W));val localData=Reg(UInt(512.W))
@@ -67,6 +75,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   vectorA:=av;vectorB:=bv
   val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})
   val fmA=Wire(Vec(16,UInt(32.W)));val fmB=Wire(Vec(16,UInt(32.W)));fmA:=av;fmB:=bv
+  val fmC=Wire(Vec(16,UInt(32.W)));fmC:=acc
+  if(denseBatch>1){when(state===st("denseCompute")){fmC:=denseAcc(denseRow(3,0))}}
   val fmOut=Wire(Vec(16,UInt(32.W)));val fmDone=WireDefault(true.B);val matrixFault=WireDefault(false.B);val physicalSteps=WireDefault(macs>>4);val physicalBase=RegInit(0.U(64.W))
   if(s.retainedMatrix){
     val adapter=Module(new RetainedMatrix16Adapter);val pending=RegInit(false.B)
@@ -85,7 +95,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
     fmOut:=adapter.io.result.bits.value;fmDone:=adapter.io.result.fire
     matrixFault:=fmDone && adapter.io.result.bits.error
   }else{
-    fmOut:=VecInit((0 until 16).map{i=>val a=Module(new HeteroBF16FmaLane);a.io.a:=TensorMath.bf16Rne(fmA(i));a.io.b:=TensorMath.bf16Rne(fmB(i));a.io.c:=acc(i);a.io.out})
+    fmOut:=VecInit((0 until 16).map{i=>val a=Module(new HeteroBF16FmaLane);a.io.a:=TensorMath.bf16Rne(fmA(i));a.io.b:=TensorMath.bf16Rne(fmB(i));a.io.c:=fmC(i);a.io.out})
   }
   val elemCfg=ChainConfig();val elem=Module(new ElementwiseMemoryEngine(elemCfg,LocalSramConfig(rowsPerBank=elemCfg.localBytes/256)))
   val resActive=state===st("resIssue")||state===st("resWait")
@@ -99,6 +109,19 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   io.launch.ready:=state===st("idle")&& !poisoned
   io.result.valid:=state===st("finish");io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired;io.readBytes:=reads;io.writeBytes:=writes
+  // Count memory visibility acknowledgements, not issued stores. The fence
+  // observes both the block engine and the shared residual elementwise engine.
+  val writeback = Module(new BlockWritebackFence)
+  writeback.io.startRequest := io.launch.fire
+  writeback.io.startStage := state === st("begin")
+  writeback.io.issue.valid := io.memory.fire
+  writeback.io.issue.bits := io.memory.bits
+  writeback.io.response.valid := io.response.fire
+  writeback.io.response.bits := io.response.bits
+  val phaseWidth = Mux(phase===2.U || phase===3.U || phase===5.U, s.kv.U,
+    Mux(phase===10.U || phase===11.U || phase===12.U, s.ffn.U, s.hidden.U))
+  writeback.io.expectedBytes := tokens.pad(64) * phaseWidth * 4.U
+  io.acknowledgedWriteBytes := writeback.io.totalBytes
   when(state=/=st("idle")&&state=/=st("finish")&&state=/=st("locked")){cycles:=cycles+1.U}
   when(io.memory.fire){when(io.memory.bits.write){writes:=writes+PopCount(io.memory.bits.mask)}.otherwise{reads:=reads+64.U}}
   def fail(code:UInt):Unit={status:=code;poisoned:=true.B;state:=st("finish")}
@@ -133,9 +156,17 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   when(state===st("scalarRsp")&&scalar.io.result.fire){when(scalar.io.error){fail(Status.Numerical.U)}.otherwise{scalarValue:=scalar.io.result.bits;state:=scalarResume}}
   when(state===st("idle")&&io.launch.fire){base:=io.launch.bits.base;tokens:=io.launch.bits.tokens;epoch:=io.launch.bits.epoch;phase:=0.U;seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
     when(io.launch.bits.tokens===0.U||io.launch.bits.tokens>s.maxTokens.U||io.launch.bits.base(5,0)=/=0.U||io.launch.bits.base.pad(66)+layout.total.U>io.launch.bits.limit.pad(66)||io.launch.bits.limit>(BigInt(1)<<56).U){fail(Status.Bounds.U)}.otherwise{state:=st("begin")}}
-  when(state===st("begin")){token:=0.U;head:=0.U;key:=0.U;depth:=0.U;col:=0.U;sum:=0.U;lane:=0.U;clearAcc()
+  when(state===st("begin")){
+    denseBase:=0.U;denseRows:=Mux(tokens>denseBatch.U,denseBatch.U,tokens)
+    denseLoadRow:=0.U;denseRow:=0.U;denseWindowRow:=0.U
+    token:=0.U;head:=0.U;key:=0.U;depth:=0.U;col:=0.U;sum:=0.U;lane:=0.U;clearAcc()
     when(phase===0.U||phase===9.U){state:=st("normLoad")}.elsewhen(phase===4.U||phase===5.U){state:=st("ropeStart")}.elsewhen(phase===6.U){state:=st("attQLoad")}.elsewhen(phase===8.U||phase===14.U){state:=st("resIssue")}.elsewhen(phase===12.U){state:=st("siluRead")}.otherwise{state:=st("denseLoad")}}
-  when(state===st("advance")){io.stageCommit:=true.B;when(phase===14.U){state:=st("finish")}.otherwise{phase:=phase+1.U;state:=st("begin")}}
+  when(state===st("advance")){
+    when(!writeback.io.canCommit){fail(Status.Protocol.U)}.otherwise{
+      io.stageCommit:=true.B
+      when(phase===14.U){state:=st("finish")}.otherwise{phase:=phase+1.U;state:=st("begin")}
+    }
+  }
   when(state===st("finish")&&io.result.fire){state:=Mux(poisoned,st("locked"),st("idle"))}
   // RMSNorm: row SRAM and fixed-order FP32 sum of squared FP32 products.
   when(state===st("normLoad")){read(base+nIn+((rowOffset(s.hidden.U)+col).pad(64)<<2),"normGot")}
@@ -153,6 +184,70 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   when(state===st("normScale")){vectorMul:=true.B;vectorB:=VecInit(Seq.fill(16)(scale));tmp:=vout;state:=st("normProduct")}
   when(state===st("normProduct")){vectorMul:=true.B;vectorA:=tmp;write(base+nOut+((rowOffset(s.hidden.U)+col).pad(64)<<2),VecInit(vout.map(F32.bf)).asUInt,"normWritten")}
   when(state===st("normWritten")){when(col+16.U<s.hidden.U){col:=col+16.U;localRead((col+16.U)>>4,"normLocal")}.elsewhen(token+1.U<tokens){token:=token+1.U;col:=0.U;sum:=0.U;state:=st("normLoad")}.otherwise{state:=st("advance")}}
+  // Dense: same BF16 operands and FP32 FMA recipe as the scalar schedule.
+  // Store a bounded token tile, then reuse weights with row-interleaved FMAs.
+  if(denseBatch>1){
+    def clearDense():Unit={denseAcc:=VecInit(Seq.fill(denseBatch)(VecInit(Seq.fill(16)(0.U(32.W)))))}
+    when(state===st("denseLoad")){
+      read(base+dIn+(((denseBase.pad(32)+denseLoadRow)*dK+col).pad(64)<<2),"denseGot")
+    }
+    when(state===st("denseGot")){
+      localWrite((denseLoadRow.pad(32)*dK+col)>>4,packet,"denseLoaded")
+    }
+    when(state===st("denseLoaded")){
+      when(col+16.U<dK){col:=col+16.U;state:=st("denseLoad")}
+      .elsewhen(denseLoadRow+1.U<denseRows){denseLoadRow:=denseLoadRow+1.U;col:=0.U;state:=st("denseLoad")}
+      .otherwise{col:=0.U;depth:=0.U;denseRow:=0.U;denseWindowRow:=0.U;clearDense();state:=st("denseWindowReq")}
+    }
+    when(state===st("denseWindowReq")){
+      localRead((denseWindowRow.pad(32)*dK+depth)>>4,"denseWindowGot")
+    }
+    when(state===st("denseWindowGot")){
+      denseWindow(denseWindowRow(3,0)):=av
+      when(denseWindowRow+1.U<denseRows){denseWindowRow:=denseWindowRow+1.U;state:=st("denseWindowReq")}
+      .otherwise{state:=st("denseWeight")}
+    }
+    when(state===st("denseWeight")){
+      read(base+dWeight+((depth.pad(32)*dN+col).pad(64)<<2),"denseCompute")
+    }
+    when(state===st("denseCompute")){
+      fmA:=VecInit(Seq.fill(16)(denseWindow(denseRow(3,0))(depth(3,0))))
+      fmB:=packet.asTypeOf(fmB)
+      when(fmDone){
+        denseAcc(denseRow(3,0)):=fmOut;macs:=macs+16.U
+        when(denseRow+1.U<denseRows){denseRow:=denseRow+1.U}
+        .otherwise{
+          denseRow:=0.U
+          when(depth+1.U===dK){
+            when(phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}
+          }.otherwise{
+            depth:=depth+1.U
+            when(depth(3,0)===15.U){denseWindowRow:=0.U;state:=st("denseWindowReq")}
+            .otherwise{state:=st("denseWeight")}
+          }
+        }
+      }
+    }
+    when(state===st("denseBias")){read(base+bias+(col.pad(64)<<2),"denseBiasGot")}
+    when(state===st("denseBiasGot")){
+      vectorA:=denseAcc(denseRow(3,0));vectorB:=packet.asTypeOf(vectorB);denseAcc(denseRow(3,0)):=vout
+      when(denseRow+1.U<denseRows){denseRow:=denseRow+1.U}
+      .otherwise{denseRow:=0.U;state:=st("denseWrite")}
+    }
+    when(state===st("denseWrite")){
+      write(base+dOut+(((denseBase.pad(32)+denseRow)*dN+col).pad(64)<<2),denseAcc(denseRow(3,0)).asUInt,"denseWritten")
+    }
+    when(state===st("denseWritten")){
+      when(denseRow+1.U<denseRows){denseRow:=denseRow+1.U;state:=st("denseWrite")}
+      .elsewhen(col+16.U<dN){
+        col:=col+16.U;depth:=0.U;denseRow:=0.U;denseWindowRow:=0.U;clearDense();state:=st("denseWindowReq")
+      }.elsewhen(denseBase+denseRows<tokens){
+        val next=denseBase+denseRows
+        denseBase:=next;denseRows:=Mux(tokens-next>denseBatch.U,denseBatch.U,tokens-next)
+        col:=0.U;denseLoadRow:=0.U;state:=st("denseLoad")
+      }.otherwise{state:=st("advance")}
+    }
+  }else{
   // Dense: BF16 operands, FP32 FMA accumulation, increasing K, bias after dot.
   when(state===st("denseLoad")){read(base+dIn+((rowOffset(dK)+col).pad(64)<<2),"denseGot")}
   when(state===st("denseGot")){localWrite(col>>4,packet,"denseLoaded")}
@@ -166,6 +261,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   when(state===st("denseBiasGot")){vectorA:=acc;vectorB:=packet.asTypeOf(vectorB);acc:=vout;state:=st("denseWrite")}
   when(state===st("denseWrite")){write(base+dOut+((rowOffset(dN)+col).pad(64)<<2),acc.asUInt,"denseWritten")}
   when(state===st("denseWritten")){when(col+16.U<dN){col:=col+16.U;depth:=0.U;clearAcc();localRead(0.U,"denseLocal")}.elsewhen(token+1.U<tokens){token:=token+1.U;col:=0.U;state:=st("denseLoad")}.otherwise{state:=st("advance")}}
+  }
   // Half-split RoPE: separate product/add rounding, no FMA substitution.
   when(state===st("ropeStart")){read(base+ropeInput+(ropeIndex.pad(64)<<2),"ropeEven")}
   when(state===st("ropeEven")){av:=packet.asTypeOf(av);read(base+ropeInput+((ropeIndex+(s.headDim/2).U).pad(64)<<2),"ropeOdd")}

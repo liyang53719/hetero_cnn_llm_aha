@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // DDR service only: the device performs every operator and every intermediate write.
 // The independent CPU reference is comparison-only and never services DUT reads.
-#ifdef BLOCK_AXI
+#ifdef BLOCK_IDMA
+#include "VQwen2IdmaBlockTop.h"
+using BlockDut=VQwen2IdmaBlockTop;
+#elif defined(BLOCK_AXI)
 #include "VQwen2AxiBlockTop.h"
 using BlockDut=VQwen2AxiBlockTop;
 #else
@@ -260,6 +263,9 @@ public:
     std::cout<<"BLOCK_BAD_LAUNCH_PASS kind="<<(badBase?"alignment":"tokens_zero")<<std::endl;
   }
   void run(unsigned epoch=1){
+#ifdef BLOCK_IDMA
+    const uint64_t dmaBase=d.io_idmaTransfers;
+#endif
     running=true;
     d.io_launch_bits_base=BASE;d.io_launch_bits_limit=BASE+ARENA_BYTES;d.io_launch_bits_tokens=tokens;d.io_launch_bits_epoch=epoch;d.io_launch_valid=1;
     for(int i=0;!d.io_launch_ready&&i<100;i++)step();need(d.io_launch_ready,"launch timeout");step();d.io_launch_valid=0;
@@ -269,10 +275,20 @@ public:
     else{
       need(d.io_result_bits_status==0&&commits==15,"block result failure status="+std::to_string(d.io_result_bits_status));
       uint64_t expectedMac=uint64_t(tokens)*(uint64_t(H)*H*2+uint64_t(H)*KV*2+uint64_t(H)*F*3)+uint64_t(tokens)*(tokens+1)*H;
-      need(d.io_result_bits_executedMacs==expectedMac*(PHYSICAL_MAC_LANES/16),"physical MAC accounting mismatch");need(d.io_result_bits_macs==expectedMac,"MAC accounting differs from independent shape equation");need(reads*64==d.io_readBytes&&writes*64==d.io_writeBytes,"DDR counters mismatch");
+      // Count padded full-array issues separately from useful model MACs.
+      const uint64_t denseSteps=((uint64_t(tokens)+15)/16)*
+        (uint64_t(H)*((H+31)/32)*2+uint64_t(H)*((KV+31)/32)*2+
+         uint64_t(H)*((F+31)/32)*2+uint64_t(F)*((H+31)/32));
+      const uint64_t attentionSteps=uint64_t(tokens)*(tokens+1)*H/16;
+      const uint64_t expectedExecuted=PHYSICAL_MAC_LANES==512?(denseSteps+attentionSteps)*512:expectedMac;
+      need(d.io_result_bits_executedMacs==expectedExecuted,"physical MAC accounting mismatch");need(d.io_result_bits_macs==expectedMac,"MAC accounting differs from independent shape equation");need(reads*64==d.io_readBytes&&writes*64==d.io_writeBytes,"DDR counters mismatch");
       guardCheck();
 #ifndef BLOCK_AXI
       need(d.io_acknowledgedWriteBytes==visibleWriteBytes,"hardware write-ACK counter mismatch");
+#endif
+      #ifdef BLOCK_IDMA
+      need(d.io_idmaTransfers-dmaBase==reads+writes,"not every transaction passed the actual pinned iDMA");
+      std::cout<<"PINNED_IDMA_BLOCK transfers="<<(d.io_idmaTransfers-dmaBase)<<" external_read_beats="<<reads<<" external_write_beats="<<writes<<" full_backend=1"<<std::endl;
 #endif
       uint64_t hash=1469598103934665603ULL;for(size_t i=0;i<size_t(tokens)*H;i++)hash=(hash^memory[OFF_Y/4+i])*1099511628211ULL;
       std::cout<<"CONTINUOUS_QWEN2_BLOCK_PASS tokens="<<tokens<<" hidden="<<H<<" ffn="<<F<<" heads="<<HEADS<<" kv_heads="<<KVHEADS<<" phases="<<commits<<" checked_fp32="<<checked<<" bit_diffs="<<bitDifferences<<" max_abs="<<globalMaxError<<" cycles="<<d.io_result_bits_cycles<<" macs="<<expectedMac<<" read_bytes="<<reads*64<<" write_bytes="<<writes*64<<" request_stalls="<<requestStalls<<" response_delay_cycles="<<responseStalls<<" hash="<<std::hex<<hash<<std::dec<<" host_intermediate_writes=0 full_model=0 canonical_512_array="<<(PHYSICAL_MAC_LANES==512)<<" executed_macs="<<d.io_result_bits_executedMacs<<std::endl;

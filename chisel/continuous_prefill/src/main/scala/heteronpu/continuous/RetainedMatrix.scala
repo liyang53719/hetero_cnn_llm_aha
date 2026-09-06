@@ -73,3 +73,86 @@ class RetainedBlockCollection(s:QwenBlockShape,axi:Boolean) extends Module {
   val post=Module(new HeteroBF16FmaPost);val postPort=IO(chiselTypeOf(post.io));postPort<>post.io;dontTouch(postPort)
   val round=Module(new HeteroBF16FmaRound);val roundPort=IO(chiselTypeOf(round.io));roundPort<>round.io;dontTouch(roundPort)
 }
+
+/** One accepted outer-product step of the retained 16x32 array.
+  * BF16 encoding is explicit. The producer owns clear/last and must not change
+  * the opcode during a dot product. All 512 accumulator values are returned.
+  */
+class MatrixTileStep extends Bundle {
+  val a=Vec(16,UInt(16.W)); val b=Vec(32,UInt(16.W))
+  val clear=Bool(); val last=Bool(); val opcode=UInt(8.W)
+}
+class MatrixTileResult extends Bundle {
+  val value=Vec(16,Vec(32,UInt(32.W))); val error=Bool()
+}
+/** Shared correctness-first adapter. A single retained endpoint serves Dense,
+  * QK and PV. This is NOT a replacement FMA implementation. Commands use the
+  * existing Command128 opcode/owner/event fields; descriptor lowering remains
+  * upstream. Only one step is outstanding; performance interleaving is separate.
+  */
+/** Pinned tech_cells_generic latch-based ICG. Never gate a clock with a raw
+  * combinational AND. Scan integration and technology ICG mapping are separate
+  * physical gates. Enabling only an active endpoint preserves its accumulator
+  * while the block executes memory/SFU work; no numerical lane is substituted.
+  */
+class RetainedMatrixClockGate extends BlackBox {
+  override def desiredName="tc_clk_gating"
+  val io=IO(new Bundle {val clk_i=Input(Clock());val en_i=Input(Bool());val test_en_i=Input(Bool());val clk_o=Output(Clock())})
+}
+class RetainedMatrixTileAdapter(gateClock:Boolean=true) extends Module {
+  val io=IO(new Bundle {
+    val request=Flipped(Decoupled(new MatrixTileStep)); val scanEnable=Input(Bool())
+    val result=Decoupled(new MatrixTileResult)
+    val acceptedSteps=Output(UInt(64.W)); val acceptedCommands=Output(UInt(64.W))
+    val completedCommands=Output(UInt(64.W)); val resetRequired=Output(Bool())
+  })
+  val idle::command::issue::output::completion::reply::locked::Nil=Enum(7)
+  val state=RegInit(idle); val req=Reg(new MatrixTileStep)
+  val result=Reg(new MatrixTileResult); val active=RegInit(false.B)
+  val poison=RegInit(false.B); val event=RegInit(0.U(16.W)); val opcode=Reg(UInt(8.W))
+  val steps=RegInit(0.U(64.W)); val commands=RegInit(0.U(64.W)); val completions=RegInit(0.U(64.W))
+  io.acceptedSteps:=steps;io.acceptedCommands:=commands;io.completedCommands:=completions;io.resetRequired:=poison
+  val ep=Module(new RetainedMatrixEndpoint); val e=ep.io
+  if(gateClock){
+    val gate=Module(new RetainedMatrixClockGate)
+    gate.io.clk_i:=clock;gate.io.test_en_i:=io.scanEnable
+    gate.io.en_i:=state===command||state===issue||state===output||state===completion
+    e.clk_i:=gate.io.clk_o
+  }else{e.clk_i:=clock}
+  e.rst_ni:= !reset.asBool
+  // Preserve the published envelope, without pretending roots were fetched.
+  // No host Command128 frontend is claimed by this internal array adapter.
+  e.cmd_i:=Cat(0.U(72.W),event,0.U(16.W),0.U(13.W),2.U(3.W),opcode)
+  e.cmd_valid_i:=state===command
+  e.step_valid_i:=state===issue;e.step_context_i:=0.U
+  e.step_clear_i:=req.clear;e.step_last_i:=req.last;e.command_last_tile_i:=true.B
+  e.step_a_i:=req.a.asUInt;e.step_b_i:=req.b.asUInt
+  e.out_ready_i:=state===output;e.completion_ready_i:=state===completion
+  io.request.ready:=state===idle && !poison
+  io.result.valid:=state===reply;io.result.bits:=result
+  def fail():Unit={result.error:=true.B;poison:=true.B;state:=reply}
+  when(io.request.fire){
+    req:=io.request.bits;result.error:=false.B
+    val op=io.request.bits.opcode
+    val validOp=op===0x20.U||op===0x21.U||op===0x23.U||op===0x24.U
+    when(!validOp || io.request.bits.clear===active || (active&&op=/=opcode)){fail()}
+    .otherwise{
+      when(io.request.bits.clear){event:=event+1.U;opcode:=op;state:=command}
+      .otherwise{state:=issue}
+    }
+  }
+  when(state===command&&e.cmd_ready_o){active:=true.B;commands:=commands+1.U;state:=issue}
+  when(state===issue&&e.step_ready_o){steps:=steps+1.U;state:=output}
+  when(state===output&&e.out_valid_o){
+    result.value:=e.out_acc_o.asTypeOf(result.value)
+    when(e.out_context_o=/=0.U||e.out_last_o=/=req.last){fail()}
+    .elsewhen(req.last){state:=completion}.otherwise{state:=reply}
+  }
+  when(state===completion&&e.completion_valid_o){
+    active:=false.B;completions:=completions+1.U
+    when(e.completion_data_o(55,40)=/=event||e.completion_data_o(39,32)=/=0.U||e.completion_data_o(31,29)=/=2.U){fail()}
+    .otherwise{state:=reply}
+  }
+  when(state===reply&&io.result.fire){state:=Mux(poison,locked,idle)}
+  when(e.protocol_error_o&&state=/=idle&&state=/=reply&&state=/=locked){fail()}
+}

@@ -10,3 +10,11 @@ for name in bf16_context_scheduler5 bf16_outer_product_array_control5 bf16_conte
  RETAINED_SOURCES+=("$ROOT/rtl/matrix/candidates/rev8b_b/${name}_rev8b_b_candidate.sv")
 done
 for source in "${RETAINED_SOURCES[@]}"; do [[ -s $source ]] || { echo "Missing retained RTL: $source" >&2; return 2; }; done
+# The full-tile Chisel adapter uses the unchanged latch-based tech-cells ICG.
+# Unified iDMA builds include it in idma.f and explicitly skip this duplicate.
+if [[ ${RETAINED_SKIP_CLOCK:-0} != 1 ]]; then
+ CLOCK_SOURCE=${RETAINED_CLOCK_SOURCE:-${IDMA_EXPORT:-$ROOT/work/upstream/pinned_idma_export}/deps/tech_cells_generic/src/rtl/tc_clk.sv}
+ [[ -s "$CLOCK_SOURCE" ]] || { echo 'BLOCKED: set IDMA_EXPORT or RETAINED_CLOCK_SOURCE for pinned tc_clk.sv' >&2; return 77; }
+ [[ $(sha256sum "$CLOCK_SOURCE" | cut -d' ' -f1) == 93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207 ]] || { echo 'Retained ICG source drift' >&2; return 2; }
+ RETAINED_SOURCES+=("$CLOCK_SOURCE")
+fi

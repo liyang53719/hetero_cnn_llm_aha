@@ -1,0 +1,81 @@
+name: publish-host-command-evidence
+on:
+  workflow_run:
+    workflows: ['host-command-shared-idma']
+    types: [completed]
+    branches: [main]
+permissions:
+  actions: read
+  contents: write
+jobs:
+  preserve-verified-proof:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.id == 34055833122 &&
+      github.event.workflow_run.head_sha == '536d68cb8f903cbc0959da8b2345ae30ca57740d' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          clean: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-command-shared-idma-536d68cb8f903cbc0959da8b2345ae30ca57740d-1
+          run-id: 34055833122
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/host_command_verified_artifact
+      - name: Independently recheck existing binary and CSV results
+        env:
+          PROOF: ${{ runner.temp }}/host_command_verified_artifact
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin main
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os,sys
+          repo=Path.cwd();proof=Path(os.environ['PROOF'])
+          if any(p.is_symlink() for p in proof.rglob('*')):raise SystemExit('unexpected artifact symlink')
+          if (proof/'acceptance.exit').read_text().strip()!='0':raise SystemExit('acceptance did not pass')
+          sys.path.insert(0,str(repo/'chisel/continuous_prefill/scripts'))
+          from seal_host_command_delivery import audit
+          result=audit(proof/'unit',proof/'commands',proof/'real16',repo,'536d68cb8f903cbc0959da8b2345ae30ca57740d')
+          prior=json.loads((proof/'ACCEPTANCE.json').read_text())
+          if result!=prior:raise SystemExit('independent seal differs from original acceptance')
+          partial=proof/'partial_failure';fault=json.loads((partial/'RESULT.json').read_text())
+          if (partial/'gate.exit').read_text().strip()!='0' or (partial/'simulation.exit').read_text().strip()!='0':raise SystemExit('fault gate failed')
+          if fault['status']!='PASS_REAL_IDMA_PARTIAL_FAILURE_AND_RESET_RECOVERY' or fault['fault_cases']!=12 or fault['reset_recoveries']!=12:raise SystemExit('fault scope mismatch')
+          if hashlib.sha256((partial/'run.log').read_bytes()).hexdigest()!=fault['run_log_sha256']:raise SystemExit('fault log changed')
+          recheck=dict(status='PASS_INDEPENDENT_ARTIFACT_RECHECK_BEFORE_MAIN_PUBLICATION',
+                       workflow_run=34055833122,tested_source_commit='536d68cb8f903cbc0959da8b2345ae30ca57740d',
+                       checked_csv_values=result['independently_rechecked_csv_values'],
+                       source_files_match_current_main=True,official_weights=False,full_21_command_graph=False,
+                       full_network_q1024=False,dc=False)
+          (proof/'PUBLICATION_RECHECK.json').write_text(json.dumps(recheck,indent=2)+'\n')
+          PY
+      - name: Commit complete allowlisted numerical evidence without overwriting prior results
+        env:
+          PROOF: ${{ runner.temp }}/host_command_verified_artifact
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os,shutil
+          src=Path(os.environ['PROOF']);dst=Path('reports/execution/HOST_COMMAND_SHARED_IDMA_536D68C_CI')
+          if dst.exists():raise SystemExit('preserve prior evidence directory; refusing overwrite')
+          allowed={'.json','.log','.txt','.exit','.gz','.f32le','.bin','.sv','.h'}
+          files=[p for p in src.rglob('*') if p.is_file()]
+          if any(p.suffix not in allowed for p in files):raise SystemExit('unexpected artifact file type')
+          if any(p.stat().st_size>25*1024*1024 for p in files):raise SystemExit('unexpected individual artifact size')
+          if sum(p.stat().st_size for p in files)>75*1024*1024:raise SystemExit('unexpected total artifact size')
+          shutil.copytree(src,dst)
+          manifest={str(p.relative_to(dst)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(dst.rglob('*')) if p.is_file()}
+          (dst/'PUBLISHED_SHA256.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+          git config user.name 'heteronpu-verified-evidence'
+          git config user.email 'heteronpu-verified-evidence@users.noreply.github.com'
+          git add -- reports/execution/HOST_COMMAND_SHARED_IDMA_536D68C_CI
+          git commit -m 'test: preserve complete Host command iDMA numerical tensors and CSV [skip ci]'
+          git push origin HEAD:main
+          git rev-parse HEAD

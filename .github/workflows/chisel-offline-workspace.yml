@@ -36,7 +36,7 @@ jobs:
           sudo apt-get install -y verilator
           bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
           cd chisel/continuous_prefill
-          sbt -batch compile Test/compile 'runMain heteronpu.continuous.EmitContinuous offline_emitted ci'
+          sbt -batch compile Test/compile 'runMain heteronpu.continuous.EmitContinuous offline_emitted --small-fabric'
           sbt -batch 'export Test / fullClasspath' > offline_classpath.log
       - name: Export allowlisted source and public tools only
         run: |

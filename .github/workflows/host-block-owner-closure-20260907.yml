@@ -1,0 +1,106 @@
+name: host-block-owner-closure-20260907
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/host-block-owner-closure-20260907.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: host-block-owner-closure-20260907
+  cancel-in-progress: false
+jobs:
+  actual-owners:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 2
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Install public RTL simulator
+        run: sudo apt-get update && sudo apt-get install -y verilator g++
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: upstream_idma_artifact
+      - name: Preserve and extract verified upstream sources
+        run: |
+          set -euo pipefail
+          mkdir -p work/host_owner_closure_20260907
+          cd upstream_idma_artifact
+          sha256sum -c pinned_idma_sources.sha256
+          mkdir -p ../work/host_owner_closure_20260907/upstream
+          tar -xzf pinned_idma_sources.tar.gz -C ../work/host_owner_closure_20260907/upstream
+      - name: Correct reserved Chisel signal spelling without editing RTL
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          path=Path('chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala')
+          if not path.is_file():raise SystemExit('BLOCKED_MISSING_IMPORTED_OWNER_SOURCE')
+          old=path.read_text();new=re.sub(r'\bsoft\b','isSoftmax',old)
+          if old!=new:path.write_text(new)
+          PY
+          if ! git diff --quiet; then
+            git diff --check
+            git config user.name heteronpu-owner-development
+            git config user.email heteronpu-owner-development@users.noreply.github.com
+            git add -- chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
+            git commit -m 'fix(chisel): avoid reserved SystemVerilog signal name in owner frontend [skip ci]'
+            git push origin HEAD:main
+          fi
+          git rev-parse HEAD > work/host_owner_closure_20260907/tested_source_commit.txt
+          git diff --exit-code
+      - name: Compile and run actual original-command tiny owner graph
+        env:
+          JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+          BUILD_JOBS: '3'
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/host_owner_closure_20260907/upstream/idma_export"
+          test -f "$IDMA_EXPORT/idma.f.in"
+          bash chisel/continuous_prefill/scripts/run_host_block_gate.sh tiny "$PWD/work/host_owner_closure_20260907/tiny16" 16
+      - name: Run real-dimension sixteen-token original-command owner graph
+        env:
+          JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+          BUILD_JOBS: '3'
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/host_owner_closure_20260907/upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_host_block_gate.sh real "$PWD/work/host_owner_closure_20260907/real16" 16
+      - name: Verify source identity and preserve source snapshot
+        if: always()
+        run: |
+          set -euo pipefail
+          OUT=work/host_owner_closure_20260907
+          mkdir -p "$OUT"
+          git rev-parse HEAD > "$OUT/checkout_commit.txt"
+          git status --porcelain > "$OUT/worktree_after.txt"
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config | gzip > "$OUT/source.tar.gz"
+          sha256sum "$OUT/source.tar.gz" > "$OUT/source.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-block-owner-closure-${{ github.run_id }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            work/host_owner_closure_20260907/tested_source_commit.txt
+            work/host_owner_closure_20260907/checkout_commit.txt
+            work/host_owner_closure_20260907/worktree_after.txt
+            work/host_owner_closure_20260907/source.tar.gz
+            work/host_owner_closure_20260907/source.tar.gz.sha256
+            work/host_owner_closure_20260907/tiny16/**
+            work/host_owner_closure_20260907/real16/**
+            !work/host_owner_closure_20260907/**/obj/**
+            !work/host_owner_closure_20260907/**/classes/**

@@ -1,0 +1,808 @@
+{
+  "schema": 1,
+  "shape": {
+    "H": 64,
+    "F": 128,
+    "HEADS": 2,
+    "KVHEADS": 1,
+    "HD": 32,
+    "MAX_TOKENS": 1024
+  },
+  "tokens": 32,
+  "base": 13762953216,
+  "commandBase": 13762953216,
+  "commandLimit": 13762953600,
+  "descriptorBase": 13762957312,
+  "descriptorLimit": 13762960768,
+  "metadataLimit": 13763018752,
+  "scratchBase": 13763307456,
+  "limit": 13763484992,
+  "commands": 21,
+  "descriptors": 215,
+  "tensors": {
+    "wq": {
+      "address": 13763018816,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "wk": {
+      "address": 13763035264,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "wv": {
+      "address": 13763043520,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "wo": {
+      "address": 13763051776,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "wg": {
+      "address": 13763068224,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "wu": {
+      "address": 13763101056,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "wd": {
+      "address": 13763133888,
+      "dims": [
+        128,
+        64
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "gamma0": {
+      "address": 13763166720,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "gamma1": {
+      "address": 13763167040,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "bq": {
+      "address": 13763167360,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "bk": {
+      "address": 13763167680,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "bv": {
+      "address": 13763167872,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "rope": {
+      "address": 13763168064,
+      "dims": [
+        2,
+        1024,
+        16
+      ],
+      "words": 32768,
+      "readonly": true,
+      "virtual": false
+    },
+    "x": {
+      "address": 13763299200,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "n0": {
+      "address": 13763307520,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "qraw": {
+      "address": 13763315776,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "qr": {
+      "address": 13763324032,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "q": {
+      "address": 13763332288,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "kraw": {
+      "address": 13763340544,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "kr": {
+      "address": 13763344704,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "k": {
+      "address": 13763348864,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "vraw": {
+      "address": 13763353024,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "v": {
+      "address": 13763357184,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "kv": {
+      "address": 13763361344,
+      "dims": [
+        2,
+        32,
+        32
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "cache_k": {
+      "address": 13763361344,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "cache_v": {
+      "address": 13763365440,
+      "dims": [
+        32,
+        32
+      ],
+      "words": 1024,
+      "readonly": false,
+      "virtual": false
+    },
+    "scores": {
+      "address": 13763369600,
+      "dims": [
+        2,
+        32,
+        32
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": true
+    },
+    "probabilities": {
+      "address": 13763377856,
+      "dims": [
+        2,
+        32,
+        32
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": true
+    },
+    "att": {
+      "address": 13763386112,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "o": {
+      "address": 13763394368,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "r": {
+      "address": 13763402624,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "n1": {
+      "address": 13763410880,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "gate": {
+      "address": 13763419136,
+      "dims": [
+        32,
+        128
+      ],
+      "words": 4096,
+      "readonly": false,
+      "virtual": false
+    },
+    "up": {
+      "address": 13763435584,
+      "dims": [
+        32,
+        128
+      ],
+      "words": 4096,
+      "readonly": false,
+      "virtual": false
+    },
+    "act": {
+      "address": 13763452032,
+      "dims": [
+        32,
+        128
+      ],
+      "words": 4096,
+      "readonly": false,
+      "virtual": false
+    },
+    "down": {
+      "address": 13763468480,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    },
+    "y": {
+      "address": 13763476736,
+      "dims": [
+        32,
+        64
+      ],
+      "words": 2048,
+      "readonly": false,
+      "virtual": false
+    }
+  },
+  "allocations": [
+    "wq",
+    "wk",
+    "wv",
+    "wo",
+    "wg",
+    "wu",
+    "wd",
+    "gamma0",
+    "gamma1",
+    "bq",
+    "bk",
+    "bv",
+    "rope",
+    "x",
+    "n0",
+    "qraw",
+    "qr",
+    "q",
+    "kraw",
+    "kr",
+    "k",
+    "vraw",
+    "v",
+    "kv",
+    "scores",
+    "probabilities",
+    "att",
+    "o",
+    "r",
+    "n1",
+    "gate",
+    "up",
+    "act",
+    "down",
+    "y"
+  ],
+  "schedule": [
+    {
+      "pc": 0,
+      "operation": "l0.input_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        0,
+        4,
+        7
+      ],
+      "a": "x",
+      "b": "gamma0",
+      "dst": "n0",
+      "outputs": [
+        "n0"
+      ]
+    },
+    {
+      "pc": 1,
+      "operation": "l0.q",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        10,
+        15,
+        18
+      ],
+      "a": "n0",
+      "b": "wq",
+      "dst": "qraw",
+      "outputs": [
+        "qraw"
+      ]
+    },
+    {
+      "pc": 2,
+      "operation": "l0.q_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        21,
+        25,
+        28
+      ],
+      "a": "qraw",
+      "b": "bq",
+      "dst": "qr",
+      "outputs": [
+        "qr"
+      ]
+    },
+    {
+      "pc": 3,
+      "operation": "l0.q_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        31,
+        35,
+        38
+      ],
+      "a": "qr",
+      "b": "rope",
+      "dst": "q",
+      "outputs": [
+        "q"
+      ]
+    },
+    {
+      "pc": 4,
+      "operation": "l0.k",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        41,
+        46,
+        49
+      ],
+      "a": "n0",
+      "b": "wk",
+      "dst": "kraw",
+      "outputs": [
+        "kraw"
+      ]
+    },
+    {
+      "pc": 5,
+      "operation": "l0.k_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        52,
+        56,
+        59
+      ],
+      "a": "kraw",
+      "b": "bk",
+      "dst": "kr",
+      "outputs": [
+        "kr"
+      ]
+    },
+    {
+      "pc": 6,
+      "operation": "l0.k_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        62,
+        66,
+        69
+      ],
+      "a": "kr",
+      "b": "rope",
+      "dst": "k",
+      "outputs": [
+        "k"
+      ]
+    },
+    {
+      "pc": 7,
+      "operation": "l0.v",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        72,
+        77,
+        80
+      ],
+      "a": "n0",
+      "b": "wv",
+      "dst": "vraw",
+      "outputs": [
+        "vraw"
+      ]
+    },
+    {
+      "pc": 8,
+      "operation": "l0.v_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        83,
+        87,
+        90
+      ],
+      "a": "vraw",
+      "b": "bv",
+      "dst": "v",
+      "outputs": [
+        "v"
+      ]
+    },
+    {
+      "pc": 9,
+      "operation": "l0.kv_append",
+      "opcode": "KV_APPEND",
+      "owner": "KV",
+      "roots": [
+        93,
+        96,
+        99
+      ],
+      "a": "k",
+      "b": "v",
+      "dst": "kv",
+      "outputs": [
+        "cache_k",
+        "cache_v"
+      ]
+    },
+    {
+      "pc": 10,
+      "operation": "l0.qk",
+      "opcode": "MATRIX_QK",
+      "owner": "MATRIX",
+      "roots": [
+        102,
+        107,
+        110
+      ],
+      "a": "q",
+      "b": "cache_k",
+      "dst": "scores",
+      "outputs": []
+    },
+    {
+      "pc": 11,
+      "operation": "l0.softmax",
+      "opcode": "SFU_SOFTMAX",
+      "owner": "SFU_CGRA",
+      "roots": [
+        113,
+        16777215,
+        117
+      ],
+      "a": "scores",
+      "b": null,
+      "dst": "probabilities",
+      "outputs": []
+    },
+    {
+      "pc": 12,
+      "operation": "l0.pv",
+      "opcode": "MATRIX_PV",
+      "owner": "MATRIX",
+      "roots": [
+        120,
+        125,
+        128
+      ],
+      "a": "probabilities",
+      "b": "cache_v",
+      "dst": "att",
+      "outputs": [
+        "att"
+      ]
+    },
+    {
+      "pc": 13,
+      "operation": "l0.oproj",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        131,
+        136,
+        139
+      ],
+      "a": "att",
+      "b": "wo",
+      "dst": "o",
+      "outputs": [
+        "o"
+      ]
+    },
+    {
+      "pc": 14,
+      "operation": "l0.attn_residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        142,
+        146,
+        149
+      ],
+      "a": "x",
+      "b": "o",
+      "dst": "r",
+      "outputs": [
+        "r"
+      ]
+    },
+    {
+      "pc": 15,
+      "operation": "l0.post_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        152,
+        156,
+        159
+      ],
+      "a": "r",
+      "b": "gamma1",
+      "dst": "n1",
+      "outputs": [
+        "n1"
+      ]
+    },
+    {
+      "pc": 16,
+      "operation": "l0.gate",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        162,
+        167,
+        170
+      ],
+      "a": "n1",
+      "b": "wg",
+      "dst": "gate",
+      "outputs": [
+        "gate"
+      ]
+    },
+    {
+      "pc": 17,
+      "operation": "l0.up",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        173,
+        178,
+        181
+      ],
+      "a": "n1",
+      "b": "wu",
+      "dst": "up",
+      "outputs": [
+        "up"
+      ]
+    },
+    {
+      "pc": 18,
+      "operation": "l0.silu_mul",
+      "opcode": "SFU_ACTIVATION",
+      "owner": "SFU_CGRA",
+      "roots": [
+        184,
+        188,
+        191
+      ],
+      "a": "gate",
+      "b": "up",
+      "dst": "act",
+      "outputs": [
+        "act"
+      ]
+    },
+    {
+      "pc": 19,
+      "operation": "l0.down",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        194,
+        199,
+        202
+      ],
+      "a": "act",
+      "b": "wd",
+      "dst": "down",
+      "outputs": [
+        "down"
+      ]
+    },
+    {
+      "pc": 20,
+      "operation": "l0.residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        205,
+        209,
+        212
+      ],
+      "a": "r",
+      "b": "down",
+      "dst": "y",
+      "outputs": [
+        "y"
+      ]
+    }
+  ],
+  "recipe": "qwen2-ordered-bf16-fp32-owner-v1",
+  "attention_fusion": [
+    10,
+    11,
+    12
+  ],
+  "scope": {
+    "synthetic_weights": true,
+    "gguf_descriptor_image": false,
+    "paged_kv": false,
+    "full_model": false,
+    "dc": false
+  },
+  "table_sha256": {
+    "host_commands.bin": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4",
+    "host_descriptors.bin": "10273d9ce2f75c64551f7b42a398d7d3e38a9af45803ce4aad31110245dbabf6"
+  }
+}

@@ -1,0 +1,20 @@
+test_accept_actual_completed_multi_layer_proof (__main__.EvidenceTests.test_accept_actual_completed_multi_layer_proof) ... ok
+test_bit_flip_actual (__main__.EvidenceTests.test_bit_flip_actual) ... ok
+test_both_outputs_nan (__main__.EvidenceTests.test_both_outputs_nan) ... ok
+test_corrupt_descriptor_padding (__main__.EvidenceTests.test_corrupt_descriptor_padding) ... ok
+test_missing_completion (__main__.EvidenceTests.test_missing_completion) ... ok
+test_missing_second_layer_output (__main__.EvidenceTests.test_missing_second_layer_output) ... ok
+test_reference_only_not_actual_handoff (__main__.EvidenceTests.test_reference_only_not_actual_handoff) ... ok
+test_repeated_weight_identity (__main__.EvidenceTests.test_repeated_weight_identity) ... ok
+test_short_output (__main__.EvidenceTests.test_short_output) ... ok
+test_duplicate_receipt_field_rejected (__main__.LayoutTests.test_duplicate_receipt_field_rejected) ... ok
+test_invalid_address (__main__.LayoutTests.test_invalid_address) ... ok
+test_invalid_layer_capacity (__main__.LayoutTests.test_invalid_layer_capacity) ... ok
+test_invalid_token_capacity (__main__.LayoutTests.test_invalid_token_capacity) ... ok
+test_no_overwrite (__main__.LayoutTests.test_no_overwrite) ... ok
+test_two_and_three_layers_retain_public_commands_and_actual_producer_alias (__main__.LayoutTests.test_two_and_three_layers_retain_public_commands_and_actual_producer_alias) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.886s
+
+OK

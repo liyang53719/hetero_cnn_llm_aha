@@ -1,0 +1,173 @@
+{
+  "status": "PASS_OWNER_PUBLIC_ABI_AND_NUMERICAL_RECHECK",
+  "commands": [
+    {
+      "pc": 0,
+      "opcode": "SFU_RMSNORM",
+      "engine": 3,
+      "wait": 0,
+      "signal": 1
+    },
+    {
+      "pc": 1,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 1,
+      "signal": 2
+    },
+    {
+      "pc": 2,
+      "opcode": "SFU_VECTOR",
+      "engine": 3,
+      "wait": 2,
+      "signal": 3
+    },
+    {
+      "pc": 3,
+      "opcode": "SFU_ROPE",
+      "engine": 3,
+      "wait": 3,
+      "signal": 4
+    },
+    {
+      "pc": 4,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 4,
+      "signal": 5
+    },
+    {
+      "pc": 5,
+      "opcode": "SFU_VECTOR",
+      "engine": 3,
+      "wait": 5,
+      "signal": 6
+    },
+    {
+      "pc": 6,
+      "opcode": "SFU_ROPE",
+      "engine": 3,
+      "wait": 6,
+      "signal": 7
+    },
+    {
+      "pc": 7,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 7,
+      "signal": 8
+    },
+    {
+      "pc": 8,
+      "opcode": "SFU_VECTOR",
+      "engine": 3,
+      "wait": 8,
+      "signal": 9
+    },
+    {
+      "pc": 9,
+      "opcode": "KV_APPEND",
+      "engine": 4,
+      "wait": 9,
+      "signal": 10
+    },
+    {
+      "pc": 10,
+      "opcode": "MATRIX_QK",
+      "engine": 2,
+      "wait": 10,
+      "signal": 11
+    },
+    {
+      "pc": 11,
+      "opcode": "SFU_SOFTMAX",
+      "engine": 3,
+      "wait": 11,
+      "signal": 12
+    },
+    {
+      "pc": 12,
+      "opcode": "MATRIX_PV",
+      "engine": 2,
+      "wait": 12,
+      "signal": 13
+    },
+    {
+      "pc": 13,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 13,
+      "signal": 14
+    },
+    {
+      "pc": 14,
+      "opcode": "SFU_VECTOR",
+      "engine": 3,
+      "wait": 14,
+      "signal": 15
+    },
+    {
+      "pc": 15,
+      "opcode": "SFU_RMSNORM",
+      "engine": 3,
+      "wait": 15,
+      "signal": 16
+    },
+    {
+      "pc": 16,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 16,
+      "signal": 17
+    },
+    {
+      "pc": 17,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 17,
+      "signal": 18
+    },
+    {
+      "pc": 18,
+      "opcode": "SFU_ACTIVATION",
+      "engine": 3,
+      "wait": 18,
+      "signal": 19
+    },
+    {
+      "pc": 19,
+      "opcode": "MATRIX_GEMM",
+      "engine": 2,
+      "wait": 19,
+      "signal": 20
+    },
+    {
+      "pc": 20,
+      "opcode": "SFU_VECTOR",
+      "engine": 3,
+      "wait": 20,
+      "signal": 21
+    }
+  ],
+  "descriptor_records": 215,
+  "checked_fp32": 41184,
+  "tokens": 33,
+  "hidden": 64,
+  "ffn": 128,
+  "all_tensor_bytes_rechecked": true,
+  "all_command_policy_fields_rechecked": true,
+  "layers": 1,
+  "attention_fusion": [
+    [
+      10,
+      11,
+      12
+    ]
+  ],
+  "official_weights": false,
+  "full_model_q1024": false,
+  "tables_sha256": {
+    "commands": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4",
+    "descriptors": "bdbff6fdb5e225faab23b2027b654cd22208085ea07ed410d3f6265ba6d24cc3"
+  }
+}

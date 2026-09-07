@@ -1,0 +1,2535 @@
+{
+  "schema": 1,
+  "shape": {
+    "H": 64,
+    "F": 128,
+    "HEADS": 2,
+    "KVHEADS": 1,
+    "HD": 32,
+    "MAX_TOKENS": 1024
+  },
+  "tokens": 33,
+  "base": 13762953216,
+  "commandBase": 13762953216,
+  "commandLimit": 13762954240,
+  "descriptorBase": 13762957312,
+  "descriptorLimit": 13762967680,
+  "metadataLimit": 13763018752,
+  "scratchBase": 13763868480,
+  "limit": 13764419392,
+  "commands": 63,
+  "descriptors": 645,
+  "tensors": {
+    "l0_wq": {
+      "address": 13763018816,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_wk": {
+      "address": 13763035264,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_wv": {
+      "address": 13763043520,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_wo": {
+      "address": 13763051776,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_wg": {
+      "address": 13763068224,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_wu": {
+      "address": 13763101056,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_wd": {
+      "address": 13763133888,
+      "dims": [
+        128,
+        64
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_gamma0": {
+      "address": 13763166720,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_gamma1": {
+      "address": 13763167040,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_bq": {
+      "address": 13763167360,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_bk": {
+      "address": 13763167680,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_bv": {
+      "address": 13763167872,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_rope": {
+      "address": 13763168064,
+      "dims": [
+        2,
+        1024,
+        16
+      ],
+      "words": 32768,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_x": {
+      "address": 13763299200,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wq": {
+      "address": 13763307712,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wk": {
+      "address": 13763324160,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wv": {
+      "address": 13763332416,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wo": {
+      "address": 13763340672,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wg": {
+      "address": 13763357120,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wu": {
+      "address": 13763389952,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_wd": {
+      "address": 13763422784,
+      "dims": [
+        128,
+        64
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_gamma0": {
+      "address": 13763455616,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_gamma1": {
+      "address": 13763455936,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_bq": {
+      "address": 13763456256,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_bk": {
+      "address": 13763456576,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_bv": {
+      "address": 13763456768,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "l1_rope": {
+      "address": 13763456960,
+      "dims": [
+        2,
+        1024,
+        16
+      ],
+      "words": 32768,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wq": {
+      "address": 13763588096,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wk": {
+      "address": 13763604544,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wv": {
+      "address": 13763612800,
+      "dims": [
+        64,
+        32
+      ],
+      "words": 2048,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wo": {
+      "address": 13763621056,
+      "dims": [
+        64,
+        64
+      ],
+      "words": 4096,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wg": {
+      "address": 13763637504,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wu": {
+      "address": 13763670336,
+      "dims": [
+        64,
+        128
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_wd": {
+      "address": 13763703168,
+      "dims": [
+        128,
+        64
+      ],
+      "words": 8192,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_gamma0": {
+      "address": 13763736000,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_gamma1": {
+      "address": 13763736320,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_bq": {
+      "address": 13763736640,
+      "dims": [
+        1,
+        64
+      ],
+      "words": 64,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_bk": {
+      "address": 13763736960,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_bv": {
+      "address": 13763737152,
+      "dims": [
+        1,
+        32
+      ],
+      "words": 32,
+      "readonly": true,
+      "virtual": false
+    },
+    "l2_rope": {
+      "address": 13763737344,
+      "dims": [
+        2,
+        1024,
+        16
+      ],
+      "words": 32768,
+      "readonly": true,
+      "virtual": false
+    },
+    "l0_n0": {
+      "address": 13763868544,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_qraw": {
+      "address": 13763877056,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_qr": {
+      "address": 13763885568,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_q": {
+      "address": 13763894080,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_kraw": {
+      "address": 13763902592,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_kr": {
+      "address": 13763906880,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_k": {
+      "address": 13763911168,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_vraw": {
+      "address": 13763915456,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_v": {
+      "address": 13763919744,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_kv": {
+      "address": 13763924032,
+      "dims": [
+        2,
+        33,
+        32
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_scores": {
+      "address": 13763932544,
+      "dims": [
+        2,
+        33,
+        33
+      ],
+      "words": 2178,
+      "readonly": false,
+      "virtual": true
+    },
+    "l0_probabilities": {
+      "address": 13763941376,
+      "dims": [
+        2,
+        33,
+        33
+      ],
+      "words": 2178,
+      "readonly": false,
+      "virtual": true
+    },
+    "l0_att": {
+      "address": 13763950208,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_o": {
+      "address": 13763958720,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_r": {
+      "address": 13763967232,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_n1": {
+      "address": 13763975744,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_gate": {
+      "address": 13763984256,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_up": {
+      "address": 13764001216,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_act": {
+      "address": 13764018176,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_down": {
+      "address": 13764035136,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_y": {
+      "address": 13764043648,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_cache_k": {
+      "address": 13763924032,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l0_cache_v": {
+      "address": 13763928256,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_n0": {
+      "address": 13764052160,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_qraw": {
+      "address": 13764060672,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_qr": {
+      "address": 13764069184,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_q": {
+      "address": 13764077696,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_kraw": {
+      "address": 13764086208,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_kr": {
+      "address": 13764090496,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_k": {
+      "address": 13764094784,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_vraw": {
+      "address": 13764099072,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_v": {
+      "address": 13764103360,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_kv": {
+      "address": 13764107648,
+      "dims": [
+        2,
+        33,
+        32
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_scores": {
+      "address": 13764116160,
+      "dims": [
+        2,
+        33,
+        33
+      ],
+      "words": 2178,
+      "readonly": false,
+      "virtual": true
+    },
+    "l1_probabilities": {
+      "address": 13764124992,
+      "dims": [
+        2,
+        33,
+        33
+      ],
+      "words": 2178,
+      "readonly": false,
+      "virtual": true
+    },
+    "l1_att": {
+      "address": 13764133824,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_o": {
+      "address": 13764142336,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_r": {
+      "address": 13764150848,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_n1": {
+      "address": 13764159360,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_gate": {
+      "address": 13764167872,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_up": {
+      "address": 13764184832,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_act": {
+      "address": 13764201792,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_down": {
+      "address": 13764218752,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_y": {
+      "address": 13764227264,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_cache_k": {
+      "address": 13764107648,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_cache_v": {
+      "address": 13764111872,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l1_x": {
+      "address": 13764043648,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_n0": {
+      "address": 13764235776,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_qraw": {
+      "address": 13764244288,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_qr": {
+      "address": 13764252800,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_q": {
+      "address": 13764261312,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_kraw": {
+      "address": 13764269824,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_kr": {
+      "address": 13764274112,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_k": {
+      "address": 13764278400,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_vraw": {
+      "address": 13764282688,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_v": {
+      "address": 13764286976,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_kv": {
+      "address": 13764291264,
+      "dims": [
+        2,
+        33,
+        32
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_scores": {
+      "address": 13764299776,
+      "dims": [
+        2,
+        33,
+        33
+      ],
+      "words": 2178,
+      "readonly": false,
+      "virtual": true
+    },
+    "l2_probabilities": {
+      "address": 13764308608,
+      "dims": [
+        2,
+        33,
+        33
+      ],
+      "words": 2178,
+      "readonly": false,
+      "virtual": true
+    },
+    "l2_att": {
+      "address": 13764317440,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_o": {
+      "address": 13764325952,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_r": {
+      "address": 13764334464,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_n1": {
+      "address": 13764342976,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_gate": {
+      "address": 13764351488,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_up": {
+      "address": 13764368448,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_act": {
+      "address": 13764385408,
+      "dims": [
+        33,
+        128
+      ],
+      "words": 4224,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_down": {
+      "address": 13764402368,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_y": {
+      "address": 13764410880,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_cache_k": {
+      "address": 13764291264,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_cache_v": {
+      "address": 13764295488,
+      "dims": [
+        33,
+        32
+      ],
+      "words": 1056,
+      "readonly": false,
+      "virtual": false
+    },
+    "l2_x": {
+      "address": 13764227264,
+      "dims": [
+        33,
+        64
+      ],
+      "words": 2112,
+      "readonly": false,
+      "virtual": false
+    }
+  },
+  "allocations": [
+    "l0_wq",
+    "l0_wk",
+    "l0_wv",
+    "l0_wo",
+    "l0_wg",
+    "l0_wu",
+    "l0_wd",
+    "l0_gamma0",
+    "l0_gamma1",
+    "l0_bq",
+    "l0_bk",
+    "l0_bv",
+    "l0_rope",
+    "l0_x",
+    "l1_wq",
+    "l1_wk",
+    "l1_wv",
+    "l1_wo",
+    "l1_wg",
+    "l1_wu",
+    "l1_wd",
+    "l1_gamma0",
+    "l1_gamma1",
+    "l1_bq",
+    "l1_bk",
+    "l1_bv",
+    "l1_rope",
+    "l2_wq",
+    "l2_wk",
+    "l2_wv",
+    "l2_wo",
+    "l2_wg",
+    "l2_wu",
+    "l2_wd",
+    "l2_gamma0",
+    "l2_gamma1",
+    "l2_bq",
+    "l2_bk",
+    "l2_bv",
+    "l2_rope",
+    "l0_n0",
+    "l0_qraw",
+    "l0_qr",
+    "l0_q",
+    "l0_kraw",
+    "l0_kr",
+    "l0_k",
+    "l0_vraw",
+    "l0_v",
+    "l0_kv",
+    "l0_scores",
+    "l0_probabilities",
+    "l0_att",
+    "l0_o",
+    "l0_r",
+    "l0_n1",
+    "l0_gate",
+    "l0_up",
+    "l0_act",
+    "l0_down",
+    "l0_y",
+    "l1_n0",
+    "l1_qraw",
+    "l1_qr",
+    "l1_q",
+    "l1_kraw",
+    "l1_kr",
+    "l1_k",
+    "l1_vraw",
+    "l1_v",
+    "l1_kv",
+    "l1_scores",
+    "l1_probabilities",
+    "l1_att",
+    "l1_o",
+    "l1_r",
+    "l1_n1",
+    "l1_gate",
+    "l1_up",
+    "l1_act",
+    "l1_down",
+    "l1_y",
+    "l2_n0",
+    "l2_qraw",
+    "l2_qr",
+    "l2_q",
+    "l2_kraw",
+    "l2_kr",
+    "l2_k",
+    "l2_vraw",
+    "l2_v",
+    "l2_kv",
+    "l2_scores",
+    "l2_probabilities",
+    "l2_att",
+    "l2_o",
+    "l2_r",
+    "l2_n1",
+    "l2_gate",
+    "l2_up",
+    "l2_act",
+    "l2_down",
+    "l2_y"
+  ],
+  "schedule": [
+    {
+      "pc": 0,
+      "operation": "l0.input_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        0,
+        4,
+        7
+      ],
+      "a": "l0_x",
+      "b": "l0_gamma0",
+      "dst": "l0_n0",
+      "outputs": [
+        "l0_n0"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 1,
+      "operation": "l0.q",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        10,
+        15,
+        18
+      ],
+      "a": "l0_n0",
+      "b": "l0_wq",
+      "dst": "l0_qraw",
+      "outputs": [
+        "l0_qraw"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 2,
+      "operation": "l0.q_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        21,
+        25,
+        28
+      ],
+      "a": "l0_qraw",
+      "b": "l0_bq",
+      "dst": "l0_qr",
+      "outputs": [
+        "l0_qr"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 3,
+      "operation": "l0.q_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        31,
+        35,
+        38
+      ],
+      "a": "l0_qr",
+      "b": "l0_rope",
+      "dst": "l0_q",
+      "outputs": [
+        "l0_q"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 4,
+      "operation": "l0.k",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        41,
+        46,
+        49
+      ],
+      "a": "l0_n0",
+      "b": "l0_wk",
+      "dst": "l0_kraw",
+      "outputs": [
+        "l0_kraw"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 5,
+      "operation": "l0.k_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        52,
+        56,
+        59
+      ],
+      "a": "l0_kraw",
+      "b": "l0_bk",
+      "dst": "l0_kr",
+      "outputs": [
+        "l0_kr"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 6,
+      "operation": "l0.k_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        62,
+        66,
+        69
+      ],
+      "a": "l0_kr",
+      "b": "l0_rope",
+      "dst": "l0_k",
+      "outputs": [
+        "l0_k"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 7,
+      "operation": "l0.v",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        72,
+        77,
+        80
+      ],
+      "a": "l0_n0",
+      "b": "l0_wv",
+      "dst": "l0_vraw",
+      "outputs": [
+        "l0_vraw"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 8,
+      "operation": "l0.v_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        83,
+        87,
+        90
+      ],
+      "a": "l0_vraw",
+      "b": "l0_bv",
+      "dst": "l0_v",
+      "outputs": [
+        "l0_v"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 9,
+      "operation": "l0.kv_append",
+      "opcode": "KV_APPEND",
+      "owner": "KV",
+      "roots": [
+        93,
+        96,
+        99
+      ],
+      "a": "l0_k",
+      "b": "l0_v",
+      "dst": "l0_kv",
+      "outputs": [
+        "l0_cache_k",
+        "l0_cache_v"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 10,
+      "operation": "l0.qk",
+      "opcode": "MATRIX_QK",
+      "owner": "MATRIX",
+      "roots": [
+        102,
+        107,
+        110
+      ],
+      "a": "l0_q",
+      "b": "l0_cache_k",
+      "dst": "l0_scores",
+      "outputs": [],
+      "layer": 0
+    },
+    {
+      "pc": 11,
+      "operation": "l0.softmax",
+      "opcode": "SFU_SOFTMAX",
+      "owner": "SFU_CGRA",
+      "roots": [
+        113,
+        16777215,
+        117
+      ],
+      "a": "l0_scores",
+      "b": null,
+      "dst": "l0_probabilities",
+      "outputs": [],
+      "layer": 0
+    },
+    {
+      "pc": 12,
+      "operation": "l0.pv",
+      "opcode": "MATRIX_PV",
+      "owner": "MATRIX",
+      "roots": [
+        120,
+        125,
+        128
+      ],
+      "a": "l0_probabilities",
+      "b": "l0_cache_v",
+      "dst": "l0_att",
+      "outputs": [
+        "l0_att"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 13,
+      "operation": "l0.oproj",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        131,
+        136,
+        139
+      ],
+      "a": "l0_att",
+      "b": "l0_wo",
+      "dst": "l0_o",
+      "outputs": [
+        "l0_o"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 14,
+      "operation": "l0.attn_residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        142,
+        146,
+        149
+      ],
+      "a": "l0_x",
+      "b": "l0_o",
+      "dst": "l0_r",
+      "outputs": [
+        "l0_r"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 15,
+      "operation": "l0.post_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        152,
+        156,
+        159
+      ],
+      "a": "l0_r",
+      "b": "l0_gamma1",
+      "dst": "l0_n1",
+      "outputs": [
+        "l0_n1"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 16,
+      "operation": "l0.gate",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        162,
+        167,
+        170
+      ],
+      "a": "l0_n1",
+      "b": "l0_wg",
+      "dst": "l0_gate",
+      "outputs": [
+        "l0_gate"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 17,
+      "operation": "l0.up",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        173,
+        178,
+        181
+      ],
+      "a": "l0_n1",
+      "b": "l0_wu",
+      "dst": "l0_up",
+      "outputs": [
+        "l0_up"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 18,
+      "operation": "l0.silu_mul",
+      "opcode": "SFU_ACTIVATION",
+      "owner": "SFU_CGRA",
+      "roots": [
+        184,
+        188,
+        191
+      ],
+      "a": "l0_gate",
+      "b": "l0_up",
+      "dst": "l0_act",
+      "outputs": [
+        "l0_act"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 19,
+      "operation": "l0.down",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        194,
+        199,
+        202
+      ],
+      "a": "l0_act",
+      "b": "l0_wd",
+      "dst": "l0_down",
+      "outputs": [
+        "l0_down"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 20,
+      "operation": "l0.residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        205,
+        209,
+        212
+      ],
+      "a": "l0_r",
+      "b": "l0_down",
+      "dst": "l0_y",
+      "outputs": [
+        "l0_y"
+      ],
+      "layer": 0
+    },
+    {
+      "pc": 21,
+      "operation": "l1.input_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        215,
+        219,
+        222
+      ],
+      "a": "l1_x",
+      "b": "l1_gamma0",
+      "dst": "l1_n0",
+      "outputs": [
+        "l1_n0"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 22,
+      "operation": "l1.q",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        225,
+        230,
+        233
+      ],
+      "a": "l1_n0",
+      "b": "l1_wq",
+      "dst": "l1_qraw",
+      "outputs": [
+        "l1_qraw"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 23,
+      "operation": "l1.q_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        236,
+        240,
+        243
+      ],
+      "a": "l1_qraw",
+      "b": "l1_bq",
+      "dst": "l1_qr",
+      "outputs": [
+        "l1_qr"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 24,
+      "operation": "l1.q_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        246,
+        250,
+        253
+      ],
+      "a": "l1_qr",
+      "b": "l1_rope",
+      "dst": "l1_q",
+      "outputs": [
+        "l1_q"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 25,
+      "operation": "l1.k",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        256,
+        261,
+        264
+      ],
+      "a": "l1_n0",
+      "b": "l1_wk",
+      "dst": "l1_kraw",
+      "outputs": [
+        "l1_kraw"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 26,
+      "operation": "l1.k_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        267,
+        271,
+        274
+      ],
+      "a": "l1_kraw",
+      "b": "l1_bk",
+      "dst": "l1_kr",
+      "outputs": [
+        "l1_kr"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 27,
+      "operation": "l1.k_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        277,
+        281,
+        284
+      ],
+      "a": "l1_kr",
+      "b": "l1_rope",
+      "dst": "l1_k",
+      "outputs": [
+        "l1_k"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 28,
+      "operation": "l1.v",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        287,
+        292,
+        295
+      ],
+      "a": "l1_n0",
+      "b": "l1_wv",
+      "dst": "l1_vraw",
+      "outputs": [
+        "l1_vraw"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 29,
+      "operation": "l1.v_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        298,
+        302,
+        305
+      ],
+      "a": "l1_vraw",
+      "b": "l1_bv",
+      "dst": "l1_v",
+      "outputs": [
+        "l1_v"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 30,
+      "operation": "l1.kv_append",
+      "opcode": "KV_APPEND",
+      "owner": "KV",
+      "roots": [
+        308,
+        311,
+        314
+      ],
+      "a": "l1_k",
+      "b": "l1_v",
+      "dst": "l1_kv",
+      "outputs": [
+        "l1_cache_k",
+        "l1_cache_v"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 31,
+      "operation": "l1.qk",
+      "opcode": "MATRIX_QK",
+      "owner": "MATRIX",
+      "roots": [
+        317,
+        322,
+        325
+      ],
+      "a": "l1_q",
+      "b": "l1_cache_k",
+      "dst": "l1_scores",
+      "outputs": [],
+      "layer": 1
+    },
+    {
+      "pc": 32,
+      "operation": "l1.softmax",
+      "opcode": "SFU_SOFTMAX",
+      "owner": "SFU_CGRA",
+      "roots": [
+        328,
+        16777215,
+        332
+      ],
+      "a": "l1_scores",
+      "b": null,
+      "dst": "l1_probabilities",
+      "outputs": [],
+      "layer": 1
+    },
+    {
+      "pc": 33,
+      "operation": "l1.pv",
+      "opcode": "MATRIX_PV",
+      "owner": "MATRIX",
+      "roots": [
+        335,
+        340,
+        343
+      ],
+      "a": "l1_probabilities",
+      "b": "l1_cache_v",
+      "dst": "l1_att",
+      "outputs": [
+        "l1_att"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 34,
+      "operation": "l1.oproj",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        346,
+        351,
+        354
+      ],
+      "a": "l1_att",
+      "b": "l1_wo",
+      "dst": "l1_o",
+      "outputs": [
+        "l1_o"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 35,
+      "operation": "l1.attn_residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        357,
+        361,
+        364
+      ],
+      "a": "l1_x",
+      "b": "l1_o",
+      "dst": "l1_r",
+      "outputs": [
+        "l1_r"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 36,
+      "operation": "l1.post_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        367,
+        371,
+        374
+      ],
+      "a": "l1_r",
+      "b": "l1_gamma1",
+      "dst": "l1_n1",
+      "outputs": [
+        "l1_n1"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 37,
+      "operation": "l1.gate",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        377,
+        382,
+        385
+      ],
+      "a": "l1_n1",
+      "b": "l1_wg",
+      "dst": "l1_gate",
+      "outputs": [
+        "l1_gate"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 38,
+      "operation": "l1.up",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        388,
+        393,
+        396
+      ],
+      "a": "l1_n1",
+      "b": "l1_wu",
+      "dst": "l1_up",
+      "outputs": [
+        "l1_up"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 39,
+      "operation": "l1.silu_mul",
+      "opcode": "SFU_ACTIVATION",
+      "owner": "SFU_CGRA",
+      "roots": [
+        399,
+        403,
+        406
+      ],
+      "a": "l1_gate",
+      "b": "l1_up",
+      "dst": "l1_act",
+      "outputs": [
+        "l1_act"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 40,
+      "operation": "l1.down",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        409,
+        414,
+        417
+      ],
+      "a": "l1_act",
+      "b": "l1_wd",
+      "dst": "l1_down",
+      "outputs": [
+        "l1_down"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 41,
+      "operation": "l1.residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        420,
+        424,
+        427
+      ],
+      "a": "l1_r",
+      "b": "l1_down",
+      "dst": "l1_y",
+      "outputs": [
+        "l1_y"
+      ],
+      "layer": 1
+    },
+    {
+      "pc": 42,
+      "operation": "l2.input_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        430,
+        434,
+        437
+      ],
+      "a": "l2_x",
+      "b": "l2_gamma0",
+      "dst": "l2_n0",
+      "outputs": [
+        "l2_n0"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 43,
+      "operation": "l2.q",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        440,
+        445,
+        448
+      ],
+      "a": "l2_n0",
+      "b": "l2_wq",
+      "dst": "l2_qraw",
+      "outputs": [
+        "l2_qraw"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 44,
+      "operation": "l2.q_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        451,
+        455,
+        458
+      ],
+      "a": "l2_qraw",
+      "b": "l2_bq",
+      "dst": "l2_qr",
+      "outputs": [
+        "l2_qr"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 45,
+      "operation": "l2.q_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        461,
+        465,
+        468
+      ],
+      "a": "l2_qr",
+      "b": "l2_rope",
+      "dst": "l2_q",
+      "outputs": [
+        "l2_q"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 46,
+      "operation": "l2.k",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        471,
+        476,
+        479
+      ],
+      "a": "l2_n0",
+      "b": "l2_wk",
+      "dst": "l2_kraw",
+      "outputs": [
+        "l2_kraw"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 47,
+      "operation": "l2.k_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        482,
+        486,
+        489
+      ],
+      "a": "l2_kraw",
+      "b": "l2_bk",
+      "dst": "l2_kr",
+      "outputs": [
+        "l2_kr"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 48,
+      "operation": "l2.k_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        492,
+        496,
+        499
+      ],
+      "a": "l2_kr",
+      "b": "l2_rope",
+      "dst": "l2_k",
+      "outputs": [
+        "l2_k"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 49,
+      "operation": "l2.v",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        502,
+        507,
+        510
+      ],
+      "a": "l2_n0",
+      "b": "l2_wv",
+      "dst": "l2_vraw",
+      "outputs": [
+        "l2_vraw"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 50,
+      "operation": "l2.v_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        513,
+        517,
+        520
+      ],
+      "a": "l2_vraw",
+      "b": "l2_bv",
+      "dst": "l2_v",
+      "outputs": [
+        "l2_v"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 51,
+      "operation": "l2.kv_append",
+      "opcode": "KV_APPEND",
+      "owner": "KV",
+      "roots": [
+        523,
+        526,
+        529
+      ],
+      "a": "l2_k",
+      "b": "l2_v",
+      "dst": "l2_kv",
+      "outputs": [
+        "l2_cache_k",
+        "l2_cache_v"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 52,
+      "operation": "l2.qk",
+      "opcode": "MATRIX_QK",
+      "owner": "MATRIX",
+      "roots": [
+        532,
+        537,
+        540
+      ],
+      "a": "l2_q",
+      "b": "l2_cache_k",
+      "dst": "l2_scores",
+      "outputs": [],
+      "layer": 2
+    },
+    {
+      "pc": 53,
+      "operation": "l2.softmax",
+      "opcode": "SFU_SOFTMAX",
+      "owner": "SFU_CGRA",
+      "roots": [
+        543,
+        16777215,
+        547
+      ],
+      "a": "l2_scores",
+      "b": null,
+      "dst": "l2_probabilities",
+      "outputs": [],
+      "layer": 2
+    },
+    {
+      "pc": 54,
+      "operation": "l2.pv",
+      "opcode": "MATRIX_PV",
+      "owner": "MATRIX",
+      "roots": [
+        550,
+        555,
+        558
+      ],
+      "a": "l2_probabilities",
+      "b": "l2_cache_v",
+      "dst": "l2_att",
+      "outputs": [
+        "l2_att"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 55,
+      "operation": "l2.oproj",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        561,
+        566,
+        569
+      ],
+      "a": "l2_att",
+      "b": "l2_wo",
+      "dst": "l2_o",
+      "outputs": [
+        "l2_o"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 56,
+      "operation": "l2.attn_residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        572,
+        576,
+        579
+      ],
+      "a": "l2_x",
+      "b": "l2_o",
+      "dst": "l2_r",
+      "outputs": [
+        "l2_r"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 57,
+      "operation": "l2.post_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        582,
+        586,
+        589
+      ],
+      "a": "l2_r",
+      "b": "l2_gamma1",
+      "dst": "l2_n1",
+      "outputs": [
+        "l2_n1"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 58,
+      "operation": "l2.gate",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        592,
+        597,
+        600
+      ],
+      "a": "l2_n1",
+      "b": "l2_wg",
+      "dst": "l2_gate",
+      "outputs": [
+        "l2_gate"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 59,
+      "operation": "l2.up",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        603,
+        608,
+        611
+      ],
+      "a": "l2_n1",
+      "b": "l2_wu",
+      "dst": "l2_up",
+      "outputs": [
+        "l2_up"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 60,
+      "operation": "l2.silu_mul",
+      "opcode": "SFU_ACTIVATION",
+      "owner": "SFU_CGRA",
+      "roots": [
+        614,
+        618,
+        621
+      ],
+      "a": "l2_gate",
+      "b": "l2_up",
+      "dst": "l2_act",
+      "outputs": [
+        "l2_act"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 61,
+      "operation": "l2.down",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        624,
+        629,
+        632
+      ],
+      "a": "l2_act",
+      "b": "l2_wd",
+      "dst": "l2_down",
+      "outputs": [
+        "l2_down"
+      ],
+      "layer": 2
+    },
+    {
+      "pc": 62,
+      "operation": "l2.residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        635,
+        639,
+        642
+      ],
+      "a": "l2_r",
+      "b": "l2_down",
+      "dst": "l2_y",
+      "outputs": [
+        "l2_y"
+      ],
+      "layer": 2
+    }
+  ],
+  "recipe": "qwen2-ordered-bf16-fp32-owner-v1",
+  "attention_fusion": [
+    [
+      10,
+      11,
+      12
+    ],
+    [
+      31,
+      32,
+      33
+    ],
+    [
+      52,
+      53,
+      54
+    ]
+  ],
+  "scope": {
+    "synthetic_weights": true,
+    "single_host_launch": true,
+    "multilayer": true,
+    "host_layer_copy": false,
+    "gguf_descriptor_image": false,
+    "paged_kv": false,
+    "full_model": false,
+    "dc": false
+  },
+  "table_sha256": {
+    "host_commands.bin": "3c98caedef02ac0b87ab82a2ad6184ad9b75fa2c29febb39e8d32c1181028d58",
+    "host_descriptors.bin": "3f73de4fef89a68835d3d1d680bddcda280333cf0dd553991123bd7dc9eda5ba"
+  },
+  "layers": 3,
+  "layer_names": [
+    {
+      "wq": "l0_wq",
+      "wk": "l0_wk",
+      "wv": "l0_wv",
+      "wo": "l0_wo",
+      "wg": "l0_wg",
+      "wu": "l0_wu",
+      "wd": "l0_wd",
+      "gamma0": "l0_gamma0",
+      "gamma1": "l0_gamma1",
+      "bq": "l0_bq",
+      "bk": "l0_bk",
+      "bv": "l0_bv",
+      "rope": "l0_rope",
+      "x": "l0_x",
+      "n0": "l0_n0",
+      "qraw": "l0_qraw",
+      "qr": "l0_qr",
+      "q": "l0_q",
+      "kraw": "l0_kraw",
+      "kr": "l0_kr",
+      "k": "l0_k",
+      "vraw": "l0_vraw",
+      "v": "l0_v",
+      "kv": "l0_kv",
+      "cache_k": "l0_cache_k",
+      "cache_v": "l0_cache_v",
+      "scores": "l0_scores",
+      "probabilities": "l0_probabilities",
+      "att": "l0_att",
+      "o": "l0_o",
+      "r": "l0_r",
+      "n1": "l0_n1",
+      "gate": "l0_gate",
+      "up": "l0_up",
+      "act": "l0_act",
+      "down": "l0_down",
+      "y": "l0_y"
+    },
+    {
+      "wq": "l1_wq",
+      "wk": "l1_wk",
+      "wv": "l1_wv",
+      "wo": "l1_wo",
+      "wg": "l1_wg",
+      "wu": "l1_wu",
+      "wd": "l1_wd",
+      "gamma0": "l1_gamma0",
+      "gamma1": "l1_gamma1",
+      "bq": "l1_bq",
+      "bk": "l1_bk",
+      "bv": "l1_bv",
+      "rope": "l1_rope",
+      "x": "l1_x",
+      "n0": "l1_n0",
+      "qraw": "l1_qraw",
+      "qr": "l1_qr",
+      "q": "l1_q",
+      "kraw": "l1_kraw",
+      "kr": "l1_kr",
+      "k": "l1_k",
+      "vraw": "l1_vraw",
+      "v": "l1_v",
+      "kv": "l1_kv",
+      "cache_k": "l1_cache_k",
+      "cache_v": "l1_cache_v",
+      "scores": "l1_scores",
+      "probabilities": "l1_probabilities",
+      "att": "l1_att",
+      "o": "l1_o",
+      "r": "l1_r",
+      "n1": "l1_n1",
+      "gate": "l1_gate",
+      "up": "l1_up",
+      "act": "l1_act",
+      "down": "l1_down",
+      "y": "l1_y"
+    },
+    {
+      "wq": "l2_wq",
+      "wk": "l2_wk",
+      "wv": "l2_wv",
+      "wo": "l2_wo",
+      "wg": "l2_wg",
+      "wu": "l2_wu",
+      "wd": "l2_wd",
+      "gamma0": "l2_gamma0",
+      "gamma1": "l2_gamma1",
+      "bq": "l2_bq",
+      "bk": "l2_bk",
+      "bv": "l2_bv",
+      "rope": "l2_rope",
+      "x": "l2_x",
+      "n0": "l2_n0",
+      "qraw": "l2_qraw",
+      "qr": "l2_qr",
+      "q": "l2_q",
+      "kraw": "l2_kraw",
+      "kr": "l2_kr",
+      "k": "l2_k",
+      "vraw": "l2_vraw",
+      "v": "l2_v",
+      "kv": "l2_kv",
+      "cache_k": "l2_cache_k",
+      "cache_v": "l2_cache_v",
+      "scores": "l2_scores",
+      "probabilities": "l2_probabilities",
+      "att": "l2_att",
+      "o": "l2_o",
+      "r": "l2_r",
+      "n1": "l2_n1",
+      "gate": "l2_gate",
+      "up": "l2_up",
+      "act": "l2_act",
+      "down": "l2_down",
+      "y": "l2_y"
+    }
+  ],
+  "layer_weight_salts": [
+    0,
+    17,
+    34
+  ]
+}

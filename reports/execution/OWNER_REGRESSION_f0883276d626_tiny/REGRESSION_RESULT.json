@@ -1,0 +1,1082 @@
+{
+  "schema": 1,
+  "status": "PASS_FIXED_HOST_OWNER_REGRESSION",
+  "profile": "tiny",
+  "source_commit": "f0883276d626e189fd04806521c830df11961a43",
+  "cases": {
+    "base17": {
+      "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+      "tokens": 17,
+      "layers": 1,
+      "hidden": 64,
+      "ffn": 128,
+      "checked_fp32": 21216,
+      "commands": 21,
+      "owner_jobs": 19,
+      "counters": {
+        "tokens": "17",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "1",
+        "host_commands": "21",
+        "completed": "21",
+        "owner_jobs": "19",
+        "matrix_commands": "9",
+        "sfu_commands": "11",
+        "kv_commands": "1",
+        "checked_fp32": "21216",
+        "bit_differences": "0",
+        "useful_macs": "646272",
+        "executed_macs": "1806336",
+        "cycles": "379063",
+        "metadata_reads": "236",
+        "read_bytes": "514560",
+        "write_ack_bytes": "84864",
+        "idma_transfers": "9366",
+        "request_stalls": "3748",
+        "response_delay_cycles": "28136",
+        "host_intermediate_writes": "0",
+        "legacy_block_launch": "0",
+        "original_matrix_instances": "1",
+        "original_idma_instances": "1",
+        "score_ddr_accesses": "0",
+        "output_fnv64": "1793abedcc5e5865"
+      },
+      "hardware_sources_verified": 150,
+      "generated_rtl_sha256": "f561dbf1f63a4912e934fead5ccd04402f8ec72d1bde675b8c861398786a4978",
+      "csv_sha256": "4395b3004299bef1010c378e8f0a7cd050046df68047625cdf6f50ffa86693dd",
+      "log_sha256": "f8a6344afe63dcc50ee629cf560d52588769947083885e5ab18e01a5507a4e84"
+    },
+    "relocated32": {
+      "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+      "tokens": 32,
+      "layers": 1,
+      "hidden": 64,
+      "ffn": 128,
+      "checked_fp32": 39936,
+      "commands": 21,
+      "owner_jobs": 19,
+      "counters": {
+        "tokens": "32",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "1",
+        "host_commands": "21",
+        "completed": "21",
+        "owner_jobs": "19",
+        "matrix_commands": "9",
+        "sfu_commands": "11",
+        "kv_commands": "1",
+        "checked_fp32": "39936",
+        "bit_differences": "0",
+        "useful_macs": "1247232",
+        "executed_macs": "3342336",
+        "cycles": "740086",
+        "metadata_reads": "236",
+        "read_bytes": "817920",
+        "write_ack_bytes": "159744",
+        "idma_transfers": "15276",
+        "request_stalls": "6296",
+        "response_delay_cycles": "45840",
+        "host_intermediate_writes": "0",
+        "legacy_block_launch": "0",
+        "original_matrix_instances": "1",
+        "original_idma_instances": "1",
+        "score_ddr_accesses": "0",
+        "output_fnv64": "9cfe71dec3da5c82"
+      },
+      "hardware_sources_verified": 150,
+      "generated_rtl_sha256": "f561dbf1f63a4912e934fead5ccd04402f8ec72d1bde675b8c861398786a4978",
+      "csv_sha256": "8ffec0e3571f26ebf81513198d79433473e03a7527f658db89abdccc98ce1594",
+      "log_sha256": "2508c9ab7139b00f20f3c4950ca39dc5624f8360d0b4710b4bc443635c12d1a9"
+    },
+    "relocated33": {
+      "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+      "tokens": 33,
+      "layers": 1,
+      "hidden": 64,
+      "ffn": 128,
+      "checked_fp32": 41184,
+      "commands": 21,
+      "owner_jobs": 19,
+      "counters": {
+        "tokens": "33",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "1",
+        "host_commands": "21",
+        "completed": "21",
+        "owner_jobs": "19",
+        "matrix_commands": "9",
+        "sfu_commands": "11",
+        "kv_commands": "1",
+        "checked_fp32": "41184",
+        "bit_differences": "0",
+        "useful_macs": "1288320",
+        "executed_macs": "4067328",
+        "cycles": "811098",
+        "metadata_reads": "236",
+        "read_bytes": "989696",
+        "write_ack_bytes": "164736",
+        "idma_transfers": "18038",
+        "request_stalls": "7273",
+        "response_delay_cycles": "54025",
+        "host_intermediate_writes": "0",
+        "legacy_block_launch": "0",
+        "original_matrix_instances": "1",
+        "original_idma_instances": "1",
+        "score_ddr_accesses": "0",
+        "output_fnv64": "f7319beade14de71"
+      },
+      "hardware_sources_verified": 150,
+      "generated_rtl_sha256": "f561dbf1f63a4912e934fead5ccd04402f8ec72d1bde675b8c861398786a4978",
+      "csv_sha256": "e9950841aa2e02a0cc89597e831fae882e7f145132d536d0c5958df27a4e1322",
+      "log_sha256": "46d7bbf2b8e7c0b4f137568b04f2c6e36f7f84a5531c68e1a11265ad02ccf966"
+    },
+    "high48_33": {
+      "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+      "tokens": 33,
+      "layers": 1,
+      "hidden": 64,
+      "ffn": 128,
+      "checked_fp32": 41184,
+      "commands": 21,
+      "owner_jobs": 19,
+      "counters": {
+        "tokens": "33",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "1",
+        "host_commands": "21",
+        "completed": "21",
+        "owner_jobs": "19",
+        "matrix_commands": "9",
+        "sfu_commands": "11",
+        "kv_commands": "1",
+        "checked_fp32": "41184",
+        "bit_differences": "0",
+        "useful_macs": "1288320",
+        "executed_macs": "4067328",
+        "cycles": "811194",
+        "metadata_reads": "236",
+        "read_bytes": "989696",
+        "write_ack_bytes": "164736",
+        "idma_transfers": "18038",
+        "request_stalls": "7358",
+        "response_delay_cycles": "54084",
+        "host_intermediate_writes": "0",
+        "legacy_block_launch": "0",
+        "original_matrix_instances": "1",
+        "original_idma_instances": "1",
+        "score_ddr_accesses": "0",
+        "output_fnv64": "f7319beade14de71"
+      },
+      "hardware_sources_verified": 150,
+      "generated_rtl_sha256": "f561dbf1f63a4912e934fead5ccd04402f8ec72d1bde675b8c861398786a4978",
+      "csv_sha256": "949b948cdaef5c8619a9da2d327bc72b077cfb79cde54ccf7116552e5c135774",
+      "log_sha256": "242439154b6ecc6164a2e9b918b29ac187d53f009e5b913eb60fb8d0cb818919"
+    },
+    "layers2_17": {
+      "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+      "tokens": 17,
+      "layers": 2,
+      "hidden": 64,
+      "ffn": 128,
+      "checked_fp32": 42432,
+      "commands": 42,
+      "owner_jobs": 38,
+      "counters": {
+        "tokens": "17",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "2",
+        "host_commands": "42",
+        "completed": "42",
+        "owner_jobs": "38",
+        "matrix_commands": "18",
+        "sfu_commands": "22",
+        "kv_commands": "2",
+        "checked_fp32": "42432",
+        "bit_differences": "0",
+        "useful_macs": "1292544",
+        "executed_macs": "3612672",
+        "cycles": "758181",
+        "metadata_reads": "472",
+        "read_bytes": "1029120",
+        "write_ack_bytes": "169728",
+        "idma_transfers": "18732",
+        "request_stalls": "7463",
+        "response_delay_cycles": "56395",
+        "host_intermediate_writes": "0",
+        "legacy_block_launch": "0",
+        "original_matrix_instances": "1",
+        "original_idma_instances": "1",
+        "score_ddr_accesses": "0",
+        "output_fnv64": "44c36180ddd70344"
+      },
+      "hardware_sources_verified": 150,
+      "generated_rtl_sha256": "f561dbf1f63a4912e934fead5ccd04402f8ec72d1bde675b8c861398786a4978",
+      "csv_sha256": "1b1a8f516571d0f64b1ef071369087f6b9ec47e28dffdf7abcdf7faf08baf606",
+      "log_sha256": "be6be38eb42b3f05c34ed2d885e2edc54ffcf12e6e4bdd8401e017cd63758068"
+    },
+    "layers3_33": {
+      "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+      "tokens": 33,
+      "layers": 3,
+      "hidden": 64,
+      "ffn": 128,
+      "checked_fp32": 123552,
+      "commands": 63,
+      "owner_jobs": 57,
+      "counters": {
+        "tokens": "33",
+        "hidden": "64",
+        "ffn": "128",
+        "layers": "3",
+        "host_commands": "63",
+        "completed": "63",
+        "owner_jobs": "57",
+        "matrix_commands": "27",
+        "sfu_commands": "33",
+        "kv_commands": "3",
+        "checked_fp32": "123552",
+        "bit_differences": "0",
+        "useful_macs": "3864960",
+        "executed_macs": "12201984",
+        "cycles": "2433412",
+        "metadata_reads": "708",
+        "read_bytes": "2969088",
+        "write_ack_bytes": "494208",
+        "idma_transfers": "54114",
+        "request_stalls": "22079",
+        "response_delay_cycles": "162156",
+        "host_intermediate_writes": "0",
+        "legacy_block_launch": "0",
+        "original_matrix_instances": "1",
+        "original_idma_instances": "1",
+        "score_ddr_accesses": "0",
+        "output_fnv64": "7a182eaf645d52ff"
+      },
+      "hardware_sources_verified": 150,
+      "generated_rtl_sha256": "f561dbf1f63a4912e934fead5ccd04402f8ec72d1bde675b8c861398786a4978",
+      "csv_sha256": "baa5aca3b781b651a6913a110de20f421304c89e437a84a199a10bfba54c4a4b",
+      "log_sha256": "7e9fe8d18586e0c14288706ef2102e8c9fdd3845ccd5fbdf31b07a89dbddc56c"
+    }
+  },
+  "fault_recoveries": [
+    {
+      "mode": "command-read-error",
+      "fault_pc": 0,
+      "checked_fp32": 21216,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "5da52010643fcc8b0a9251b57f00209bc3c5b20ec07c07b6142a60018cf8b704"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 1,
+      "checked_fp32": 22304,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b013ef7de75f84320c9c11874375c9dd608741a151d157836a23e7cd62baebb1"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 2,
+      "checked_fp32": 23392,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "f325c3c8c56830e20bdb5d2a55eced20379871f32376f8139cfa434cf6744fad"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 3,
+      "checked_fp32": 24480,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "bfba5788195bd58b170ba3867f5192177cfaebf55f045d91246fd5678e1520bb"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 4,
+      "checked_fp32": 25568,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "05ede08c377377bcc4ff81c491efbcc104e691f8f0a2d775724b251ab4d9e442"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 5,
+      "checked_fp32": 26112,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "c587f172413ef21bc7dee3c1590005f787f7f9326adc028653dc717c2933572c"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 6,
+      "checked_fp32": 26656,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "c7e0b2ae7e5197e645a5e22b9055068d5289ee62dd4b7aeda0ba915ebbb92c06"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 7,
+      "checked_fp32": 27200,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "7bab06a0b16923ff30a3ae0f3f8f3c2a57620cadf65a915538b2c6339bef54b9"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 8,
+      "checked_fp32": 27744,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "80a6bd12d8f902f3d8fba656128b519199fa891382930e4cb1ddd8c2474f5d02"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 9,
+      "checked_fp32": 28288,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "13d4039f52484bd403250838dab82f9c888c56c64ac12897eb5a9c2c3890de24"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 10,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "977e2422dd7a55dd00cab5284ad69f1febadd4f7fd820f6f8b076ccad8e54877"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 11,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "eae29c1296f511298f9b9a2d19bfba388d3d85b10d182cdac6c5b055e2d7339c"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 12,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "9c4b117fd0636a5dffda01b78badd4a59191895beb5eb0d472f1e5cf5cd0dbbe"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 13,
+      "checked_fp32": 30464,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "73178ea8189c86afe74f88cab83a116b0a4ad31190899f31047649db27d7761e"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 14,
+      "checked_fp32": 31552,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "0d72f3ecc309c68ca01b4092a7822ac6c9eb5c0a8338cd9f0b4675f036df0947"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 15,
+      "checked_fp32": 32640,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "7d6274e19263c674f18d78a3d04911dbbe05ff2994e85e2457e6a245b94a98ea"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 16,
+      "checked_fp32": 33728,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "93282d766279b553adecc562f06a65cb84d0a631a44ea7f34d40d08a1a24f1b5"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 17,
+      "checked_fp32": 35904,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "1b95c7b1161e28b375a2bdd7e11d008c3c8592dfe3c3db40c5d2971f41c63cf5"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 18,
+      "checked_fp32": 38080,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "35b5c5ef711446d65c4217294809c2435bb835bb53cc9c3ef9cc11f8c93c8c78"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 19,
+      "checked_fp32": 40256,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "1d4bda396610ad2f6cd0e516e9b7a35a415c834239df970ce5455fed8380a82a"
+    },
+    {
+      "mode": "command-read-error",
+      "fault_pc": 20,
+      "checked_fp32": 41344,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "189a00a0aee0889e3129b9efc0f7f5fef29fd396b229940a045bd2ffb5237e45"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 0,
+      "checked_fp32": 21216,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "eb883a1545e116ca826b033f251adc5fd38e5b07cd8f86cc74475b8547f679c3"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 1,
+      "checked_fp32": 22304,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "00e9b184f0246d6fb366e89f6fd21317e3d883b5bcc1e0b705a55e5585f5a272"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 2,
+      "checked_fp32": 23392,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "e30193002d35974a9e0ee2e1ef96d82fe2a4e157225f304ea9db6e6da8175468"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 3,
+      "checked_fp32": 24480,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "2840f15c6157353fe268ad604d2d29cde7871bd8ca99e837aed81dc2bbc58e4f"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 4,
+      "checked_fp32": 25568,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "90fed7d778ef7a3506aa71df6569a39a1589f6aa4f3f21363e023a0f6caa7df5"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 5,
+      "checked_fp32": 26112,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "38211bf03ae30dbffc0c601473b33f7b2a7d9a5fc9e77a4e283df158f1e750d8"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 6,
+      "checked_fp32": 26656,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "cfeb1a6e76a82579b0a556c8d863283b3ee8d785c78aa53c4013b76745807a64"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 7,
+      "checked_fp32": 27200,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "21720ed4492e59965a82d3565c67b87f1d001f1f449ef462783d7464c6180fef"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 8,
+      "checked_fp32": 27744,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "4aa7ea5807b184d700a19945fdd26a6e16b56c111dda87d772eca39d985e4243"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 9,
+      "checked_fp32": 28288,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b8aca7b4d147e6e1b7ce51527aee70898108d04f75adf8ef01f7b47304441f97"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 10,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "f75f284f9b0f26e3b89b6afb76a56e90ca1e0ca7c12754d03b30ffef84a96dcf"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 11,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "4433f33b0861c75c21dd0ca6fd2e2213b32daeda6bf6531437563dcda7d32a5b"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 12,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "106b3acd079bff0f3980b821d00c26063be7547ba5e7e10773484c7ca2db02fa"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 13,
+      "checked_fp32": 30464,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "abcdd9db6b4e880ac71e2ec13745de986b98606baf2343024b8ed2135c5a4fe4"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 14,
+      "checked_fp32": 31552,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "e0104fda064e2195e58ffaeaa2e2be4ed3b5cfe94c7c824c84540fcf9faa9ff4"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 15,
+      "checked_fp32": 32640,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "045430afc9174154ece8799c002979166c92a47244dc6724890f023a2688dd44"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 16,
+      "checked_fp32": 33728,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "0882df4d2070bb5aee44b94de7c9ed7f196ea063dfd044bf95d63aada0c8a46d"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 17,
+      "checked_fp32": 35904,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "dc3451dfab399f45a2b6445bce3f54e5aaf40ef7165306ef1b0bb443186f2eba"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 18,
+      "checked_fp32": 38080,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b60dcf65c6dca3592e55d8cd83f28502e032d5b1702413e83941decc862a261e"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 19,
+      "checked_fp32": 40256,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "3d63c11409999cd0d045801aae098551ac785be02585632a945fd34e41005960"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "fault_pc": 20,
+      "checked_fp32": 41344,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "9e37598e211d61f41a69a1fc50eb96319c08cbd3153a8e59a404f62bf9a04a76"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 0,
+      "checked_fp32": 21216,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "3a397d118450864d1d22628569d70a42c72a2550096e50874551aee605e20861"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 1,
+      "checked_fp32": 22304,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "ff68a84ae04f912a3e75bf37568464b89062094326192888a5a118ca6d0e57e3"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 2,
+      "checked_fp32": 23392,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "fb5c23e43dc56f0059c470abc8405c646ceb02cb378f9182c296098eb87b36a7"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 3,
+      "checked_fp32": 24480,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "9dbb242583ca96519c5b46493c097cbd51189fcef7a590ddbee0e5d0d535d0e0"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 4,
+      "checked_fp32": 25568,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "e4b4292691b91c7217942e8634e26e9dc984b6689f042812f54df85afc064f58"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 5,
+      "checked_fp32": 26112,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b8ec202b6d0f3b709c280c5735b17a39c4c45b86c06164e7a5179aae1f919c3b"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 6,
+      "checked_fp32": 26656,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "7972329189c143478430dfff87709d6b475304b232350e5cc0a480f0350beda9"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 7,
+      "checked_fp32": 27200,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "bb7dfa1cb7210134631c53572e8bf731bc289d4e00ed1bc4e354a97980c0ed63"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 8,
+      "checked_fp32": 27744,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "c4eccb3439b5dbbccd106a0c6a29f41d0e352edaf7573861761b17fb0256be31"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 9,
+      "checked_fp32": 28288,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "fcf0727615915f45748f68b4004bd9ef105a1e698b020037901c463934127224"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 12,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "53aa06372c459a1663188e3a75e7cd3ba16ccbe44d636a1c142890afb5cbbac3"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 13,
+      "checked_fp32": 30464,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "ccb98e00afee35447a5569058709c5acee3efc60da42f54623f5dd15540b71c9"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 14,
+      "checked_fp32": 31552,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "037785911fdc1da55612defb9754e77a3a97237d751349b5e0abc7838f8c72c0"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 15,
+      "checked_fp32": 32640,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b4e27ea0ecd7f3c5e1636cf5d810e6d4d3bc9f91a7a4f01775e919f5513ce97f"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 16,
+      "checked_fp32": 33728,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "d95c2bfe9f6a6488885f3b23f2b05d8b2b7da67f3491ab01e0075ace743ec054"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 17,
+      "checked_fp32": 35904,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "8d36abfb389a16cccefd662ed319508f3ab4d8c75e1fc70f060cf53b6d9cae6a"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 18,
+      "checked_fp32": 38080,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "8fb19c4836e272321173a61efb059a8aa66025492acf5f7a2ad8badae82aef00"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 19,
+      "checked_fp32": 40256,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "2e65df066a48e310894ccd60fe37ed9c0eeea1bc519ccac96195160a14b4e3d2"
+    },
+    {
+      "mode": "read-error",
+      "fault_pc": 20,
+      "checked_fp32": 41344,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "47e20b715c5ffde943fe188167d316d33f1ba216e385e782a225f7bafe166cf4"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 0,
+      "checked_fp32": 21216,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b2fde3002b91a52957e87ce518b358c1bb0504c1b108e2392442fb335062ad75"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 1,
+      "checked_fp32": 22304,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "664c89d8d7a12659e4c64e8c048649125c56d73e8b2b458c26c4721fa653d8ef"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 2,
+      "checked_fp32": 23392,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "6b46c8215f87651ace306aedac793b73c8b7f791df9f415e169fa6aed4155c16"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 3,
+      "checked_fp32": 24480,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "6a3936d8acfbb7a4f314da2057b7be626f622260992428eece42a0c39d6b8a8a"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 4,
+      "checked_fp32": 25568,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "4b3b591e64eec156615ad95f6bd4221d965e7bf24bf91f44c8cecade9edd87a2"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 5,
+      "checked_fp32": 26112,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "94ac3e1379ed3c98a1c0afe97f2367428a4f15f4577d242d2d2549c141c27ced"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 6,
+      "checked_fp32": 26656,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "1538aa9c6adc1da2a9ba4d811e1060304c89d486008b084db029a5a5a05ea1ec"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 7,
+      "checked_fp32": 27200,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "9f6a014f76069c3ac04608c45662c4f5d15566375617a9bc7966ff6bcbe1f0a1"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 8,
+      "checked_fp32": 27744,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "62ed10e16ea8580fbeca76a1cf71c33bd11d1966f9db54ad849c6c809729f757"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 9,
+      "checked_fp32": 28288,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "90fa82b6fcc38f2142c5f5c54ed83cf4629884e27e6844e0c7b95199df63f2ab"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 12,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "9ba0387806bcd3ee7efc3eaf7d601d36d36e4dc2bbc47008c9f019f11f359965"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 13,
+      "checked_fp32": 30464,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "be53a2760116a4760ea0a8eb97f10ab3b298acf988ee7a301384a7b3e9b56611"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 14,
+      "checked_fp32": 31552,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "b8b35a40e571493cdbc700c7317d68d3f1be108ab7ba18e2548834ea5c7e5a7c"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 15,
+      "checked_fp32": 32640,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "07721046a7188afc0deabfe906e5f57b682fd2d05ca10e7332bf4f2bc18d9386"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 16,
+      "checked_fp32": 33728,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "2a190203e962f84c79bd81f916fed566b597abc5a4f5b3e2764299770e7ad514"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 17,
+      "checked_fp32": 35904,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "81796a4eb98ce9c450819f4f176cea4d00c080c9c4565c965bf886ed6ba1b6f6"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 18,
+      "checked_fp32": 38080,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "253fd3f3b70df92bce02d8603a98e4c356494354e60ee539c5026a6039c4f956"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 19,
+      "checked_fp32": 40256,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "6c11e2041cd0ed944a683fe843128721b634a986b8231b66db92c485b28d4bdd"
+    },
+    {
+      "mode": "write-error",
+      "fault_pc": 20,
+      "checked_fp32": 41344,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "642efdecc49d2420a3dcd2bd78d608874a19f5e15607a87a31a6ea3ddbd9a79e"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 0,
+      "checked_fp32": 21216,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "16a1340172dc5b3a6cedd3d4a734716ec6cec7b7b434cbbfd47ff86b929ca3bd"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 1,
+      "checked_fp32": 22304,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "19c898b6fc7b50b4e2973248784c382c6f1a19d1987dc42f53207af7f5896413"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 2,
+      "checked_fp32": 23392,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "9a8a6259799098c3d50fe9882100e219b1b906c9f0bc742220b8bcd89b7c8abb"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 3,
+      "checked_fp32": 24480,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "e05b04c9e47dfe2564ce88b9210be38f7fd7b2e812acdf3f00e91adea71c2271"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 4,
+      "checked_fp32": 25568,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "d64a51f9819f44796fe19be5774d4c31c3ad4861da4b7d5d1137a3cd294d82ba"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 5,
+      "checked_fp32": 26112,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "908686d38354491980f7f149b1a52635c5c4196db93d87b7c0717f71c76a7678"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 6,
+      "checked_fp32": 26656,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "ad1e91a14943e8025208123197945997699cddc2f7410fd103e14554aca88f4f"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 7,
+      "checked_fp32": 27200,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "98cea8f345c6baf8014d36d1f6601a43b943f4d4f7506bccd0069eb01de72713"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 8,
+      "checked_fp32": 27744,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "89f3d71f8c33868457b673b0d9e703036605d40381c03083b36fa21c3f13d457"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 9,
+      "checked_fp32": 28288,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "3d6756f3d7634b46297e0e3927997f58a5b03a8f0a0a6fd56905a4684f4a9d33"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 12,
+      "checked_fp32": 29376,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "3ec9db8a3ba6fd4c829e5223b707aefd8dd267a16556c57b1dc9732ed97248e4"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 13,
+      "checked_fp32": 30464,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "5b362776d54c1b51e77207f3937f2f716296baa7df5ad9e80e879bb5b799b92e"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 14,
+      "checked_fp32": 31552,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "e4b89e71c21b4069d8393f1ea080402e05e16ffb05b0d72b7b90c289a711e01e"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 15,
+      "checked_fp32": 32640,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "8f250402d6904517a992ab8b94a1445ab51e329757978fdb89dc1a23c4d5d154"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 16,
+      "checked_fp32": 33728,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "5d0482cf62ed04981871a98fed212f572d689a5bd8f788b17462b663016b44c8"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 17,
+      "checked_fp32": 35904,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "c663d3884f4ec0992b0dfe21536b63c79e7a705d7d4e5b1a98ee80ed158eb83b"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 18,
+      "checked_fp32": 38080,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "0d8746d1f89998237a4f6ebdaa0841d0670b47668960f3d248f44cba66ab4377"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 19,
+      "checked_fp32": 40256,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "2c7804ea637e251e797200c9412508fb44f3a71329ae1261485eb49b71c2add0"
+    },
+    {
+      "mode": "last-write-error",
+      "fault_pc": 20,
+      "checked_fp32": 41344,
+      "same_dut": true,
+      "reset_between_requests": true,
+      "log_sha256": "ef3fe31859e14d3b18933320785ff66556d736e19e05284c1e0e172f6ad40c89"
+    }
+  ],
+  "no_reset_repeats": [
+    {
+      "mode": "repeat",
+      "fault_pc": null,
+      "checked_fp32": 42432,
+      "same_dut": true,
+      "reset_between_requests": false,
+      "log_sha256": "2c1effd2b2e88f626459f550fa66cc5398d4e1e550cc3471ab4a2c809a44d5ab"
+    }
+  ],
+  "scope": {
+    "synthetic_weights": true,
+    "retained_matrix": true,
+    "pinned_idma": true,
+    "block_launch": false,
+    "real17_cross_tile": false,
+    "tiny_multilayer": true,
+    "real_multilayer": false,
+    "official_weights": false,
+    "q1024_full_network": false,
+    "dc": false
+  }
+}

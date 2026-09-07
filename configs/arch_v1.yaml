@@ -1,5 +1,5 @@
 schema_version: 2
-arch_id: heteronpu_v1_long_context
+arch_id: heteronpu_v1_long_context_matrix4096
 status: canonical_planning_archspec
 clock:
   target_hz: 800000000
@@ -31,13 +31,22 @@ memory:
 matrix:
   bf16:
     rows: 16
-    columns: 32
-    macs_per_step: 512
+    columns: 256
+    macs_per_step: 4096
     accumulation: fp32
+    logical_engines: 1
+    arithmetic_slices: 8
+    slice_shape: [16, 32]
+    source: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/WideMatrix.scala
+    default_host_emitter_macs: 4096
+    retained_512_mode: explicit_regression_only
+    arithmetic_contexts_per_slice: 5
     first_context_point: 4
     contexts_parameterized: true
     active_utilization_min: 0.85
     wall_utilization_min_at_800mhz: 0.79
+    timing_signoff: open_for_new_4096_integration
+    note: Resource peak requires sustained operand supply and context interleaving; neither the target utilization nor timing is asserted by this specification.
   int8:
     backend: retained_gemmini
     dataflows: [output_stationary, weight_stationary]
@@ -85,7 +94,7 @@ attention:
   score_tile_bytes: 2048
   score_ddr_materialization: false
 aha_sidecar:
-  upstream_topology: {width: 4, height: 4, mem_ratio: 2, pe_tiles: 8, lake_tiles: 8}
+  upstream_topology: {width: 4, height: 4, mem_ratio: 2, pe_tiles: 8, lake_tiles: 8, kib_per_tile: 32}
   wrapper_owned_sram_kib: 256
   role: [depthwise, layout_transform, quant_dequant, irregular_vector, experimental_operator]
   forbidden_role: [performance_critical_attention, rms_norm, online_softmax, silu]
@@ -107,7 +116,8 @@ operator_primitive_source:
 performance_gates:
   qwen2_bf16_q1024_prefill_tps_min: 300
   qwen2_bf16_q1024_cycles_max_at_800mhz: 2730666667
-  qwen2_required_wall_mac_utilization_at_800mhz: 0.992070422
+  qwen2_required_wall_mac_utilization_at_800mhz: 0.12400880275
+  required_utilization_basis: Same historical q1024 workload count as the 512-MAC planning budget, divided by eight; analytical requirement, not a measured result.
   quantized_prefill_tps_target: 500
   decode_ctx4096_tps_min: 10
   sram_kib_max: 4096

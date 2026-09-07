@@ -1,0 +1,27 @@
+{
+  "status": "PASS_REAL2_INDEPENDENT_PRECHECK_NOT_NUMERICAL_CLOSURE",
+  "chisel_frontend_tests": 9,
+  "control_only": true,
+  "retained_hardware_and_scala_files_unchanged": 166,
+  "python_tests_normal": 12,
+  "python_tests_optimized": 12,
+  "peer_real16_inputnorm_recomputed": 24576,
+  "two_layer_full_numerical_result": "pending CI 34122096771 at time of precheck",
+  "uploaded_audit_commit": "e90e8d788865c75e5d80e7b08ca7d8d4ee32f103",
+  "source_identity": {
+    "scripts/audit_real2_boundary.py": {
+      "git_blob": "5873e212b70c7fd62a1d976e47bf3ae4aba1f16e",
+      "sha256": "f922fc0db0c5f6d4a603cedaea00ac1a8bb1bd65acd529c991bffefbc1357148"
+    },
+    "tests/test_real2_boundary_audit.py": {
+      "git_blob": "b84d00aebaa1d9844d987320d7e5086229c6b63a",
+      "sha256": "92d234083d9e55c8e18d386fb3fbe0d002c13b447021e06137f287df0f1fc2f4"
+    }
+  },
+  "logs_sha256": {
+    "frontend_attempt2_chisel_tests.log": "a82c8a328f63244b39ce789a9c755edecd0caed698db18619eaf41905a270091",
+    "boundary_tests.log": "cc02ff7fc6146b4228450778100be4931cfe8f7a0350557c4276e367cd5b2d0a",
+    "boundary_tests_optimized.log": "39a20164827a1af32f39b8b628fa8d12046938b71019a8dda3dda88408aab56e"
+  },
+  "scope": "Actual Chisel frontend control tests and Python auditor tests; not yet a two-layer full numerical closure."
+}

@@ -14,10 +14,11 @@ concurrency:
 jobs:
   continuous:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 75
     env:
-      JVM_OPTS: '-Xmx5G -Xss4M -XX:ActiveProcessorCount=4'
-      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=4'
+      JVM_OPTS: '-Xmx3G -Xss4M -XX:ActiveProcessorCount=3'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=3'
+      BUILD_JOBS: '3'
       HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
     steps:
       - uses: actions/checkout@v4
@@ -27,6 +28,11 @@ jobs:
             chisel/p0_safety
             chisel/continuous_prefill
             integration/gemmini
+            src/heteronpu
+            config
+            configs
+            rtl/matrix
+            rtl/integration
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -36,32 +42,44 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y verilator
+          sudo apt-get install -y verilator g++
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
           bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
-          mkdir -p chisel/continuous_prefill/ci_identity
-          git rev-parse HEAD > chisel/continuous_prefill/ci_identity/commit.txt
-          git -C "$HARDFLOAT_SOURCE" rev-parse HEAD > chisel/continuous_prefill/ci_identity/hardfloat.txt
-          verilator --version > chisel/continuous_prefill/ci_identity/verilator.txt
-          git ls-files -z chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroFP32Alu.scala | xargs -0 sha256sum > chisel/continuous_prefill/ci_identity/sources.sha256
-      - name: Compile simulate and compare actual memory payload
+          mkdir -p work/continuous_ci_identity
+          git rev-parse HEAD > work/continuous_ci_identity/commit.txt
+          git -C "$HARDFLOAT_SOURCE" rev-parse HEAD > work/continuous_ci_identity/hardfloat.txt
+          verilator --version > work/continuous_ci_identity/verilator.txt
+          git ls-files -z chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroFP32Alu.scala | xargs -0 sha256sum > work/continuous_ci_identity/sources.sha256
+      - name: Compile all control suites with their own fixtures and run actual payloads
         id: gate
-        run: bash chisel/continuous_prefill/scripts/run_gate.sh evidence_ci
+        run: |
+          set -euo pipefail
+          bash chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh "$PWD/work/continuous_ci"
       - name: Emit production SRAM geometry
         working-directory: chisel/continuous_prefill
         run: |
           set -o pipefail
-          sbt -batch 'runMain heteronpu.continuous.EmitContinuous evidence_ci/generated_full' | tee evidence_ci/emit_full.log
+          OUT="$GITHUB_WORKSPACE/work/continuous_ci"
+          sbt -batch "runMain heteronpu.continuous.EmitContinuous $OUT/generated_full" | tee "$OUT/emit_full.log"
       - name: Verify source immutability
         if: always()
-        run: sha256sum --check chisel/continuous_prefill/ci_identity/sources.sha256
+        run: sha256sum --check work/continuous_ci_identity/sources.sha256
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: continuous-prefill-${{ github.sha }}-${{ github.run_attempt }}
-          retention-days: 30
+          retention-days: 90
+          if-no-files-found: error
           path: |
-            chisel/continuous_prefill/ci_identity/
-            chisel/continuous_prefill/evidence_ci/*.log
-            chisel/continuous_prefill/evidence_ci/generated_ci/
-            chisel/continuous_prefill/evidence_ci/generated_full/
+            work/continuous_ci_identity/
+            work/continuous_ci/*.log
+            work/continuous_ci/*.json
+            work/continuous_ci/*.exit
+            work/continuous_ci/general/chisel_tests.log
+            work/continuous_ci/tiny/chisel_tests.log
+            work/continuous_ci/real/chisel_tests.log
+            work/continuous_ci/tiny_fixture/
+            work/continuous_ci/real_fixture/
+            work/continuous_ci/generated_ci/
+            work/continuous_ci/generated_full/
             chisel/continuous_prefill/target/test-reports/

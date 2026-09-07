@@ -1,0 +1,90 @@
+{
+  "status": "PASS_REAL16_TWO_LAYER_FINAL_RECHECK",
+  "tested_source": "9f06249ca11fcee35c0cd4d3e51c0b2fe0dfec30",
+  "verified_main_before_this_report": "39ef381ef49703d4a2a41fabd38f062ebfa145cd",
+  "ci_run": 34122096771,
+  "artifact_id": 10021357062,
+  "artifact_sha256": "a4dbd42feee45c020a49b66a310e52f7f7dbf78c017fafc036d65318332792a9",
+  "numerical": {
+    "tokens": 16,
+    "layers": 2,
+    "hidden": 1536,
+    "ffn": 8960,
+    "host_commands": 42,
+    "owner_jobs": 38,
+    "descriptor_records": 430,
+    "checked_fp32": 1409024,
+    "bit_differences": 0,
+    "counters": {
+      "tokens": "16",
+      "hidden": "1536",
+      "ffn": "8960",
+      "layers": "2",
+      "host_commands": "42",
+      "completed": "42",
+      "owner_jobs": "38",
+      "matrix_commands": "18",
+      "sfu_commands": "22",
+      "kv_commands": "2",
+      "checked_fp32": "1409024",
+      "bit_differences": "0",
+      "useful_macs": "1498202112",
+      "executed_macs": "1524105216",
+      "cycles": "146854495",
+      "metadata_reads": "472",
+      "read_bytes": "385152512",
+      "write_ack_bytes": "5636096",
+      "idma_transfers": "6106072",
+      "request_stalls": "2077533",
+      "response_delay_cycles": "18318028",
+      "host_intermediate_writes": "0",
+      "legacy_block_launch": "0",
+      "original_matrix_instances": "1",
+      "original_idma_instances": "1",
+      "score_ddr_accesses": "0",
+      "output_fnv64": "8401b1b4297c40b0"
+    },
+    "source_files_rechecked": 253
+  },
+  "independent": {
+    "first_layer_cross_run_actual_values": 704512,
+    "second_layer_norm_recomputed_from_actual_y": 24576,
+    "second_layer_gemms": 7,
+    "second_layer_gemm_actual_values": 368640,
+    "bit_differences": 0,
+    "reference_files_used_for_recomputation": false,
+    "rtl_rerun_in_this_readback": false
+  },
+  "git": {
+    "durable_proof_files": 134,
+    "durable_proof_tree": "2e736198eab6da77d0791f7cc1f49eb99dd80546",
+    "byte_verified_subtrees": {
+      "frontend": {
+        "git_tree": "e73e31d660e4792788d7de0cb05f7b006447e7bb",
+        "files": 18,
+        "all_original_bytes_match_remote": true
+      },
+      "numerical": {
+        "git_tree": "bf9e614a0180f8b87d976ff457948d7f83d60a83",
+        "files": 111,
+        "all_original_bytes_match_remote": true
+      }
+    }
+  },
+  "report_sha256": {
+    "FULL_NUMERICAL_RECHECK.json": "80b3ae7c84594d97f93b20461f4388041ffea7c76253cb6170581d40e059218e",
+    "BOUNDARY_RECHECK.json": "1960e6045085f3b4656ba22dd1921013d3808eae6cc29f0b904736bad40fd288",
+    "DENSE_RECHECK.json": "e77f6a544084a9c6b774161063c6daa45b281c6dd80ac1fbf2d62d58b62d0940",
+    "REMOTE_PROOF_BYTES_RECHECK.json": "2f7cc19a56c16d6fc880c2acb2bc1036c984c09c2439add77a9dc056aecfe117"
+  },
+  "scope": {
+    "actual_hardware_run": "GitHub Actions; original Matrix and pinned iDMA",
+    "host_driven": true,
+    "block_launch": false,
+    "host_layer_copy": false,
+    "synthetic_weights": true,
+    "official_model_quality": false,
+    "full_network_q1024": false,
+    "dc": false
+  }
+}

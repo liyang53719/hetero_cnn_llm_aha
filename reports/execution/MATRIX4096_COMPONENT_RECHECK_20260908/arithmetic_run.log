@@ -1,0 +1,7 @@
+ARITHMETIC_DOT_PASS mask=255 depth=4 checked=16384
+ARITHMETIC_DOT_PASS mask=1 depth=4 checked=32768
+ARITHMETIC_DOT_PASS mask=128 depth=4 checked=49152
+ARITHMETIC_DOT_PASS mask=85 depth=4 checked=65536
+ARITHMETIC_DOT_PASS mask=170 depth=4 checked=81920
+ARITHMETIC_DOT_PASS mask=15 depth=4 checked=98304
+MATRIX4096_ARITHMETIC_PASS checked_fp32=102400 bit_differences=0 physical_slices=8 all_columns=256 noncontiguous_masks=1 actual_slice_steps=96 same_dut_reset_recovery=1 cycles=465

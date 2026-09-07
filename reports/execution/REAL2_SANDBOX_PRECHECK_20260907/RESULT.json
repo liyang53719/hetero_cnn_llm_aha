@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "PASS_PRECHECKS_FULL_NUMERICAL_PENDING",
+  "code_checkpoint": "9f06249ca11fcee35c0cd4d3e51c0b2fe0dfec30",
+  "full_ci_run": 34122096771,
+  "local_base_source_export": "047d09a22999f23b6809a6ed04600ec850b9c29c",
+  "local_source_description": "Restored source export with the exact new frontend tests and gate scripts. Not represented as a full checkout of the CI commit. Per-file source hashes are preserved in the sandbox.",
+  "chisel_frontend": {
+    "status": "PASS_REAL16_TWO_LAYER_HOST_FRONTEND_CONTROL_ONLY",
+    "tests_passed": 9,
+    "tokens": 16,
+    "layers": 2,
+    "hidden": 1536,
+    "ffn": 8960,
+    "commands": 42,
+    "descriptors": 430,
+    "owner_jobs": 38,
+    "metadata_and_completion": "controlled test services",
+    "matrix_arithmetic": false,
+    "actual_idma": false,
+    "log_sha256": "3c1a9d2b645266dff37d9b3a77acbe2a757d088012d3b45245ff66713469a12f"
+  },
+  "verifier_tests": {
+    "normal_passed": 12,
+    "optimized_passed": 12,
+    "normal_log_sha256": "f6ec4aec3404ece3c0c999ad45517aad2f7f8bbab5e9e8a951725788257ed62d",
+    "optimized_log_sha256": "c97e2589c5f4ca1e1c96e9bbcf51968729b1e50dff985a78b565a6008e7456f0",
+    "numerical_dut_execution": false
+  },
+  "actual_real2_early_faults": {
+    "status": "PASS_FIVE_REAL2_EARLY_FAULT_REJECTIONS",
+    "original_matrix_and_idma": true,
+    "generated_rtl_sha256": "51457e24e3a40bdb5e476f69f51317388b7317ec053f090ff81975d8b5d2177a",
+    "dut_executable_sha256": "2b4c4282a3a2efcf58b5b84b0143477bd8384d54c934b38d7afe1a35fb860396",
+    "cases": [
+      {"mode": "bad-first-op", "failed_pc": 0, "prior_completions": 0, "error_status": 4, "log_sha256": "05510d94c563868de30bdd0fc75c11089a1af5af86414c8218d3854014cbc764"},
+      {"mode": "descriptor-shape", "failed_pc": 0, "prior_completions": 0, "error_status": 2, "log_sha256": "acd481e55c591d3a0445bcb7d6ccb512f466abbd71dd0ffcb2382fb882c6ba58"},
+      {"mode": "wrong-dependency", "failed_pc": 1, "prior_completions": 1, "error_status": 6, "log_sha256": "c36dd590cebcc52c919a3de42bf6d40adc4e28c576c397741444dd2d753be8db"},
+      {"mode": "command-read-error", "failed_pc": 1, "prior_completions": 1, "error_status": 3, "log_sha256": "51f69a844915b9bab9e90e685d6fe83ddbe49c2766d42fc120599f4f6dc4c834"},
+      {"mode": "descriptor-read-error", "failed_pc": 1, "prior_completions": 1, "error_status": 3, "log_sha256": "550944643fd09f3a99cdf1345259b3bd2bf1184ed5540141cf074a06bcc212af"}
+    ],
+    "reset_recovery_tested": false,
+    "full_numerical_execution": false
+  },
+  "full_two_layer_numerical_pass": false,
+  "official_weights": false,
+  "q1024_full_network": false,
+  "dc": false,
+  "retained_or_generated_rtl_edited": false
+}

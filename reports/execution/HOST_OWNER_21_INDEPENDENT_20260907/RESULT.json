@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "status": "PASS_INDEPENDENT_OWNER21_REAL16_ARTIFACT_AND_GIT_TREE_RECHECK",
+  "tested_source_commit": "6d39c76aa1420cb42564c530860f6c32cd8cc41d",
+  "hardware_workflow_run": 34082332510,
+  "publication_workflow_run": 34085959081,
+  "remote_proof_commit": "b8253133b3f2964775fe43e72d099c1edc567f05",
+  "hardware_execution_environment": "GitHub Actions; actual generated Chisel DUT, original Matrix endpoint and pinned iDMA",
+  "independent_recheck_environment": "ChatGPT sandbox; binary, CSV, original public ABI and Git object hashing; not another real16 RTL run",
+  "source_manifest_checks": {
+    "tiny16": {"files": 228, "missing": 0, "changed": 0},
+    "real16": {"files": 228, "missing": 0, "changed": 0}
+  },
+  "csv_binary_checks": {
+    "tiny16": {"rows": 19968, "complete_ordered_coverage": true, "bit_differences": 0},
+    "real16": {"rows": 704512, "complete_ordered_coverage": true, "bit_differences": 0}
+  },
+  "previous_actual_output_comparison": {
+    "previous_tested_source": "536d68cb8f903cbc0959da8b2345ae30ca57740d",
+    "previous_archive": "host_command_shared_idma_verified_536d68c.zip",
+    "previous_path": "real16/tensors/phase_<phase>_<tensor>_actual.f32le",
+    "current_path": "real16/tensors/<tensor>_actual.f32le",
+    "tensors": ["n0", "qr", "kr", "v", "q", "k", "att", "o", "r", "n1", "gate", "up", "act", "down", "y"],
+    "tensor_count": 15,
+    "values": 663552,
+    "bit_differences": 0,
+    "comparison_uses_actual_outputs_on_both_sides": true
+  },
+  "evidence_mutation_suite": {
+    "file": "chisel/continuous_prefill/tests/test_owner_evidence_audit.py",
+    "normal_python": {"tests": 15, "exit_code": 0},
+    "optimized_python": {"tests": 15, "exit_code": 0},
+    "distinct_cases": 15,
+    "note": "One valid artifact case and fourteen rejection cases; modes are not counted as distinct cases."
+  },
+  "remote_git_subtrees": {
+    "tiny16": {"files": 63, "computed_sha": "07a4fd37120af92b2a07b420883b005cf976e75b", "remote_sha": "07a4fd37120af92b2a07b420883b005cf976e75b"},
+    "real16": {"files": 63, "computed_sha": "0d1d3b4883cf0e18aa279354bafc119de0fa19dd", "remote_sha": "0d1d3b4883cf0e18aa279354bafc119de0fa19dd"},
+    "total_files_verified": 126,
+    "method": "Recompute Git blob and recursive tree objects from exact local CI bytes, paths and 100644 file modes; compare with remote published tree IDs."
+  },
+  "real16": {
+    "tokens": 16, "hidden": 1536, "ffn": 8960, "q_heads": 12, "kv_heads": 2, "head_dim": 128,
+    "commands_completed": 21, "owner_jobs": 19, "checked_fp32": 704512,
+    "useful_macs": 749101056, "executed_macs": 762052608,
+    "cycles": 73425016, "ddr_read_bytes": 192576256, "write_ack_bytes": 2818048,
+    "idma_transfers": 3053036, "metadata_read_beats": 236,
+    "host_intermediate_writes": 0, "legacy_block_launch": 0,
+    "output_fnv64": "fe9744aaa5c1c9ad"
+  },
+  "scope": {
+    "original_command128_opcode_sequence": true,
+    "typed_descriptors_drive_each_owner": true,
+    "attention_checked_streaming_fusion": [10, 11, 12],
+    "score_probability_ddr_materialization": false,
+    "cold_contiguous_kv_only": true,
+    "synthetic_weights": true,
+    "original_gguf_binary_image": false,
+    "official_model_quality": false,
+    "multilayer": false,
+    "full_network_q1024": false,
+    "dc_800mhz_signoff": false
+  }
+}

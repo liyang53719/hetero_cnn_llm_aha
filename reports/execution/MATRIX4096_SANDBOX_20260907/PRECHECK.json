@@ -1,0 +1,60 @@
+{
+  "status": "PASS_MATRIX4096_SANDBOX_COMPONENTS_AND_TINY_TWO_LAYER",
+  "exported_source_commit": "783c20a9104bd65654646179a33bc9f961192f0f",
+  "production_dut_from_main": true,
+  "join_dut_suites": 1,
+  "tiny_two_layer": {
+    "status": "PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK",
+    "tokens": 16,
+    "layers": 2,
+    "hidden": 64,
+    "ffn": 128,
+    "commands": 42,
+    "owner_jobs": 38,
+    "matrix_macs": 4096,
+    "checked_fp32": 39936,
+    "bit_differences": 0,
+    "cycles": 619881
+  },
+  "eight_slice_arithmetic": {
+    "status": "PASS_MATRIX4096_REAL_ARITHMETIC_PROBE",
+    "checked_fp32": 102400,
+    "bit_differences": 0,
+    "physical_512mac_slices": 8,
+    "logical_matrix_engines": 1,
+    "including_masked_zero_output_words": true,
+    "selected_slice_steps": 96,
+    "same_dut_reset_recovery": true,
+    "host_idma_test": false
+  },
+  "recovered_cases": [
+    {"mode": "descriptor-read-error", "pc": 21, "prior_completions": 21, "recovered_checked_fp32": 39936, "bit_differences": 0},
+    {"mode": "read-error", "pc": 33, "prior_completions": 31, "recovered_checked_fp32": 39936, "bit_differences": 0},
+    {"mode": "last-write-error", "pc": 41, "prior_completions": 41, "recovered_checked_fp32": 39936, "bit_differences": 0}
+  ],
+  "old_512_actual_tiny_layer0_compared_fp32": 19968,
+  "python_test_methods": {"topology": 5, "metrics": 5, "real_two_layer_contract": 12, "scaling_analysis": 7, "arithmetic_evidence": 7},
+  "normal_and_optimized_python": true,
+  "replay_workspaces_preserved": true,
+  "scope": {
+    "real_size_double_layer_complete_in_this_report": false,
+    "performance_comparison_complete_in_this_report": false,
+    "new_4096_target_hz": 800000000,
+    "no_handwritten_rtl_edits": true,
+    "no_block_launch_fallback": true,
+    "full_q1024": false,
+    "dc_signoff": false
+  },
+  "raw_logs_sha256": {
+    "join_chisel_tests.log": "0f23d5ec899d96489fd53b7a4bf818114448109283934ee690295d74cdc5bb13",
+    "tiny_run.log": "0ebdd38fe9b985168111b9e5e7febf505b32e3fb47e472247e7c512de7bb5846",
+    "arithmetic_run.log": "600199cb35dc8f48727c059e688e418589b821ca8ee8f58e9c5904a931ea7cd5"
+  },
+  "arithmetic_probe_source_sha256": {
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Matrix4096ArithmeticProbe.scala": "d9cc8d91e9924539d40c1bfbfe4238b4fb90755626d3269f34b9fdab5f56dc1b",
+    "chisel/continuous_prefill/tests/matrix4096_arithmetic.cpp": "d5a1a4bf5dc169e641f3ed8aab0abc9cc2c1ecd67fef4bd1968f9e75f1b55b3b",
+    "chisel/continuous_prefill/scripts/verify_matrix4096_arithmetic.py": "d011cbc534088a6054ab8b4947630c640ab31442742a6616db6a8a95b1850648",
+    "chisel/continuous_prefill/scripts/run_matrix4096_arithmetic_gate.sh": "38e75f6ef386103c92e5c44ce577651d97c819314fa7b1745ebc44ba822e90be"
+  },
+  "evidence_note": "Raw logs, generated circuits, all numerical outputs and comparison CSV are preserved in the sandbox delivery. This component precheck does not claim the pending full real16 numerical result."
+}

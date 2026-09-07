@@ -1,0 +1,3 @@
+MATRIX_SERVICE_CASE mask=255 depth=128 checked_fp32=524288 cycles=1282 steady_samples=126 steady_period_min=10 steady_period_max=10 active_macs_per_step=4096 explicit_result_hold_cycles=0 explicit_inter_request_delay=0
+MATRIX_SERVICE_CASE mask=1 depth=128 checked_fp32=524288 cycles=1282 steady_samples=126 steady_period_min=10 steady_period_max=10 active_macs_per_step=512 explicit_result_hold_cycles=0 explicit_inter_request_delay=0
+MATRIX_SERVICE_PASS checked_fp32=1048576 bit_differences=0 actual_slice_steps=1152 physical_slices=8 host_idma=0 full_model=0

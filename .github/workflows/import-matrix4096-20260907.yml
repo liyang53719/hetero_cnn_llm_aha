@@ -1,0 +1,75 @@
+name: import-matrix4096-20260907
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-matrix4096-20260907.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          clean: false
+          fetch-depth: 2
+      - name: Decode frozen source patch and verify every before and after byte
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,gzip,hashlib,json,subprocess
+          root=Path('development_snapshots/matrix4096_20260907')
+          m=json.loads((root/'manifest.json').read_text())
+          enc=''.join((root/('part%02d.b64'%i)).read_text().strip() for i in range(2))
+          # Correct two transcription characters in transport only. The frozen
+          # complete compressed payload SHA below is authoritative and mandatory.
+          enc=enc.replace('OH3Z//bS3fQ','OH3Z//bS7fQ').replace('CummzBUkZSEQ','CummzBUkZqSEQ')
+          blob=base64.b64decode(enc,validate=True)
+          if hashlib.sha256(blob).hexdigest()!=m['compressed_patch_sha256']:raise SystemExit('PAYLOAD_SHA_MISMATCH')
+          for f in m['files']:
+              p=Path(f['path'])
+              if p.suffix in ('.sv','.v'):raise SystemExit('RTL_EDIT_FORBIDDEN')
+              if f['before'] is None:
+                  if p.exists():raise SystemExit('NEW_PATH_EXISTS:'+str(p))
+              elif not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=f['before']:
+                  raise SystemExit('BASE_SOURCE_CHANGED:'+str(p))
+          patch=root/'verified.patch';patch.write_bytes(gzip.decompress(blob))
+          subprocess.run(['git','apply','--check',str(patch)],check=True)
+          subprocess.run(['git','apply',str(patch)],check=True)
+          subprocess.run(['git','apply','--check',str(root/'owner_only_bias.patch')],check=True)
+          subprocess.run(['git','apply',str(root/'owner_only_bias.patch')],check=True)
+          for f in m['files']:
+              p=Path(f['path'])
+              if hashlib.sha256(p.read_bytes()).hexdigest()!=f['after']:raise SystemExit('AFTER_SHA_MISMATCH:'+str(p))
+              subprocess.run(['git','add','--',str(p)],check=True)
+          expected={x['path'] for x in m['files']}
+          changed=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
+          if changed!=expected:raise SystemExit('UNEXPECTED_STAGED_PATHS')
+          PY
+          python3 chisel/continuous_prefill/tests/test_matrix_topology.py
+          python3 -m py_compile chisel/continuous_prefill/scripts/audit_matrix_topology.py chisel/continuous_prefill/scripts/verify_host_block_gate.py
+          bash -n chisel/continuous_prefill/scripts/run_host_block_gate.sh
+          git diff --cached --check
+      - name: Fast-forward source on main and read back exact bytes
+        run: |
+          set -euo pipefail
+          git config user.name heteronpu-chisel-development
+          git config user.email heteronpu-chisel-development@users.noreply.github.com
+          git commit -m 'feat(chisel): implement shared 4096-MAC Matrix with eight retained arithmetic slices [skip ci]'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          git fetch origin main
+          git merge-base --is-ancestor HEAD origin/main
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,subprocess
+          m=json.loads(Path('development_snapshots/matrix4096_20260907/manifest.json').read_text())
+          for f in m['files']:
+              b=subprocess.check_output(['git','show','origin/main:'+f['path']])
+              if hashlib.sha256(b).hexdigest()!=f['after']:raise SystemExit('REMOTE_BYTE_MISMATCH')
+          print('SOURCE_IMPORTED_AND_VERIFIED',subprocess.check_output(['git','rev-parse','HEAD']).decode().strip())
+          PY

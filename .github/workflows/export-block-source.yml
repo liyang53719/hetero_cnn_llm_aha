@@ -22,7 +22,7 @@ jobs:
             src/heteronpu
             config
             .github/workflows
-      - name: Archive immutable source
+      - name: Archive immutable Host-owner source and arithmetic dependencies
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt

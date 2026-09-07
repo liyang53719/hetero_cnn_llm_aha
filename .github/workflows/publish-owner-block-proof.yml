@@ -1,0 +1,100 @@
+name: publish-owner-block-proof
+on:
+  workflow_run:
+    workflows: [host-block-owner-closure-20260907]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.id == 34082332510 && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SOURCE: 6d39c76aa1420cb42564c530860f6c32cd8cc41d
+      RUN: '34082332510'
+      TARGET: reports/execution/HOST_OWNER_21_6D39C76_CI
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          clean: false
+          fetch-depth: 2
+      - name: Confirm the exact completed main-branch run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN" > owner_run_metadata.json
+          python3 - <<'PY'
+          import json,os
+          r=json.load(open('owner_run_metadata.json'))
+          if (r['id']!=int(os.environ['RUN']) or r['head_sha']!=os.environ['SOURCE'] or
+              r['head_branch']!='main' or r['status']!='completed' or r['conclusion']!='success' or
+              r['repository']['full_name']!=os.environ['GITHUB_REPOSITORY']):
+              raise SystemExit('BLOCKED_RUN_NOT_SUCCESSFUL_OR_SOURCE_MISMATCH')
+          PY
+          git fetch --no-tags --depth=1 origin "$SOURCE"
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-block-owner-closure-34082332510
+          run-id: 34082332510
+          github-token: ${{ github.token }}
+          path: verified_owner_artifact
+      - name: Recheck full binary outputs, CSV, public ABI, and exact tested source
+        run: |
+          set -euo pipefail
+          export OWNER_EVIDENCE="$PWD/verified_owner_artifact/tiny16" OWNER_REPO="$PWD"
+          python3 chisel/continuous_prefill/tests/test_owner_delivery_seal.py > owner_sealer_tests.log 2>&1
+          python3 -O chisel/continuous_prefill/tests/test_owner_delivery_seal.py > owner_sealer_tests_optimized.log 2>&1
+          python3 chisel/continuous_prefill/scripts/seal_owner_block_delivery.py \
+            --repo "$PWD" --artifact "$PWD/verified_owner_artifact" --output "$PWD/$TARGET" \
+            --source "$SOURCE" --run "$RUN" > owner_publication.log
+          cat owner_publication.log
+      - name: Verify staged bytes and fast-forward main without rewriting any DUT
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os,subprocess
+          root=Path(os.environ['TARGET']);manifest=json.loads((root/'PUBLISHED_SHA256.json').read_text())
+          for rel,digest in manifest.items():
+              path=str(root/rel)
+              subprocess.run(['git','add','-f','--',path],check=True)
+              raw=subprocess.check_output(['git','show',':'+path])
+              if hashlib.sha256(raw).hexdigest()!=digest:raise SystemExit('INDEX_BYTES_MISMATCH: '+rel)
+          subprocess.run(['git','add','-f','--',str(root/'PUBLISHED_SHA256.json')],check=True)
+          changed=subprocess.check_output(['git','diff','--cached','--name-only','-z']).decode().split('\0')
+          if any(p and not p.startswith(str(root)+'/') for p in changed):raise SystemExit('UNEXPECTED_STAGED_PATH')
+          PY
+          git diff --cached --check
+          git config user.name heteronpu-verified-owner-evidence
+          git config user.email heteronpu-verified-owner-evidence@users.noreply.github.com
+          git commit -m 'test: preserve complete 21-command tiny and real16 owner DUT proofs [skip ci]'
+          git fetch origin main
+          git rebase origin/main
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,sys
+          sys.path.insert(0,'chisel/continuous_prefill/scripts')
+          from seal_owner_block_delivery import source_identity
+          for case in ['tiny16','real16']:
+              source_identity(Path.cwd(),Path('verified_owner_artifact')/case,os.environ['SOURCE'])
+          PY
+          git push origin HEAD:main
+          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+          git rev-parse HEAD > owner_publication_commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owner-proof-publication-${{ github.run_id }}
+          retention-days: 90
+          path: |
+            owner_publication.log
+            owner_sealer_tests.log
+            owner_sealer_tests_optimized.log
+            owner_publication_commit.txt
+            owner_run_metadata.json

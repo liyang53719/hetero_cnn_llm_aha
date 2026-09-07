@@ -22,7 +22,7 @@ jobs:
             src/heteronpu
             config
             .github/workflows
-      - name: Archive immutable Host-owner source and arithmetic dependencies
+      - name: Archive immutable owner regression source for independent sandbox replay
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt

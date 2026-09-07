@@ -1,0 +1,102 @@
+name: owner-regression-20260907
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/owner-regression-20260907.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: owner-regression-20260907
+  cancel-in-progress: false
+jobs:
+  regression:
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [tiny, real-cross]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+      BUILD_JOBS: '3'
+      PROFILE: ${{ matrix.profile }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 2
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Install public compiler and fixture dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y verilator g++
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: upstream_idma_artifact
+      - name: Verify and preserve pinned iDMA
+        run: |
+          set -euo pipefail
+          mkdir -p work/owner_regression_upstream
+          (cd upstream_idma_artifact;sha256sum -c pinned_idma_sources.sha256)
+          tar -xzf upstream_idma_artifact/pinned_idma_sources.tar.gz -C work/owner_regression_upstream
+          test -f work/owner_regression_upstream/idma_export/idma.f.in
+          git rev-parse HEAD > owner_tested_source.txt
+          test "$(cat owner_tested_source.txt)" = "$GITHUB_SHA"
+          git diff --exit-code
+      - name: Test publication safety independently of DUT execution
+        run: |
+          set -euo pipefail
+          export OWNER_TEST_ARTIFACTS="$RUNNER_TEMP/owner_publication_${GITHUB_RUN_ID}_${PROFILE}"
+          python3 chisel/continuous_prefill/tests/test_owner_publication.py > owner_publisher_tests.log 2>&1
+          python3 -O chisel/continuous_prefill/tests/test_owner_publication.py > owner_publisher_optimized_tests.log 2>&1
+      - name: Execute fixed Chisel and original Matrix-iDMA regression
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/owner_regression_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_owner_regression_gate.sh "$PROFILE" "$PWD/work/owner_regression_${PROFILE}"
+      - name: Preserve exact successful bytes on main using an independent Git index
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          python3 chisel/continuous_prefill/scripts/publish_owner_regression.py \
+            --repo "$PWD" --root "$PWD/work/owner_regression_${PROFILE}" --source "$GITHUB_SHA" > owner_publication.log 2>&1
+          cat owner_publication.log
+          git diff --exit-code
+      - name: Preserve source and tool identity even after failure
+        if: always()
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > owner_checkout_commit.txt
+          git status --porcelain > owner_worktree_after.txt
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config .github/workflows | gzip > owner_source.tar.gz
+          sha256sum owner_source.tar.gz > owner_source.tar.gz.sha256
+          { java -version; verilator --version; g++ --version; python3 --version; } > owner_tools.log 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owner-regression-${{ matrix.profile }}-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            owner_*.txt
+            owner_*.log
+            owner_source.tar.gz
+            owner_source.tar.gz.sha256
+            work/owner_regression_${{ matrix.profile }}/**
+            !work/owner_regression_${{ matrix.profile }}/**/obj/**
+            !work/owner_regression_${{ matrix.profile }}/**/classes/**
+            !work/owner_regression_${{ matrix.profile }}/**/testclasses/**
+            !work/owner_regression_${{ matrix.profile }}/**/test_run_dir/**
+            !work/owner_regression_${{ matrix.profile }}/**/verilator-runtime/**
+            !work/owner_regression_${{ matrix.profile }}/**/__pycache__/**

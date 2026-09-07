@@ -23,7 +23,7 @@ jobs:
             config
             configs
             .github/workflows
-      - name: Archive immutable Matrix4096 source and architecture for independent sandbox replay
+      - name: Archive immutable Matrix4096 and bounded-weight-burst source for sandbox validation
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt

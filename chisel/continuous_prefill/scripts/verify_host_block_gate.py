@@ -65,7 +65,18 @@ def verify(out:Path,write_report:bool=True)->dict:
         checked_fp32=values,bit_differences=0,useful_macs=mac,executed_macs=executed,metadata_reads=C+f['descriptors'],write_ack_bytes=values*4,
         host_intermediate_writes=0,legacy_block_launch=0,original_matrix_instances=slices,original_idma_instances=1,score_ddr_accesses=0).items():
         require(int(end[k])==v,'counter mismatch '+k)
-    require(int(end['read_bytes'])//64+int(end['write_ack_bytes'])//64==int(end['idma_transfers']),'iDMA conservation')
+    burst_beats=scope.get('weight_read_burst_beats',1)
+    require(type(burst_beats) is int and burst_beats in (1,16),'unsupported read burst profile')
+    read_beats=int(end['read_bytes'])//64;write_beats=int(end['write_ack_bytes'])//64
+    require(int(end['read_bytes'])%64==0 and int(end['write_ack_bytes'])%64==0,'nonintegral AXI beat count')
+    if burst_beats==1:
+        require(read_beats+write_beats==int(end['idma_transfers']),'iDMA conservation')
+    else:
+        bursts=int(end['read_bursts']);hits=int(end['weight_cache_hits'])
+        require(int(end['weight_read_burst_beats'])==16 and bursts>0 and bursts<=read_beats<=16*bursts,'read burst capacity')
+        require(bursts+write_beats==int(end['idma_transfers']),'real iDMA burst/store conservation')
+        require(hits==read_beats-bursts and hits>0,'prefetch beat consumption conservation')
+        require(scope.get('weight_read_cache_bytes')==1024,'bounded mailbox footprint')
     require(int(end['request_stalls'])>0 and int(end['response_delay_cycles'])>0,'backpressure not covered')
     sv=(out/'generated/HostBlockTop.sv').read_text()
     if 'matrix_macs' in scope:

@@ -20,7 +20,12 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#ifndef OWNER_MATRIX_MACS
+#define OWNER_MATRIX_MACS 512
+#endif
+static_assert(OWNER_MATRIX_MACS==512 || OWNER_MATRIX_MACS==4096,"Matrix specification");
 constexpr unsigned KV=KVHEADS*HD;
+constexpr unsigned MATRIX_SLICES=OWNER_MATRIX_MACS/512;
 #ifndef OWNER_STACK_FIXTURE
 static constexpr unsigned LAYERS=1;
 static unsigned ORACLE_LAYER=0;
@@ -187,7 +192,7 @@ public:
      check(metadata==COMMANDS+DESCRIPTORS,"each command and descriptor fetched from DDR");
      check(hashRange(BASE,SCRATCH-BASE)==readOnlyHash,"readonly data modified");
      for(auto&t:ALLOCATIONS){for(unsigned i=0;i<16;i++)check(mem[pos(t.address)-16+i]==0x7fc00001,"guard overwritten");if(t.virtualValue)for(size_t i=0;i<t.words;i++)check(mem[pos(t.address)+i]==0x7fc00001,"virtual tensor materialized");}
-     std::cout<<"HOST_BLOCK_ALL_OWNERS_PASS tokens="<<TOKENS<<" hidden="<<H<<" ffn="<<F<<" layers="<<LAYERS<<" host_commands="<<COMMANDS<<" completed="<<COMMANDS<<" owner_jobs="<<19*LAYERS<<" matrix_commands="<<9*LAYERS<<" sfu_commands="<<11*LAYERS<<" kv_commands="<<LAYERS<<" checked_fp32="<<checked<<" bit_differences=0 useful_macs="<<mac<<" executed_macs="<<physical<<" cycles="<<cycles<<" metadata_reads="<<metadata<<" read_bytes="<<reads*64<<" write_ack_bytes="<<writes*64<<" idma_transfers="<<(d.io_idmaTransfers-dmaAtStart)<<" request_stalls="<<stalls<<" response_delay_cycles="<<delays<<" host_intermediate_writes=0 legacy_block_launch=0 original_matrix_instances=1 original_idma_instances=1 score_ddr_accesses=0 output_fnv64="<<std::hex<<hashRange(OUTPUTS.back().address,TOKENS*H*4)<<std::dec<<std::endl;
+     std::cout<<"HOST_BLOCK_ALL_OWNERS_PASS tokens="<<TOKENS<<" hidden="<<H<<" ffn="<<F<<" layers="<<LAYERS<<" host_commands="<<COMMANDS<<" completed="<<COMMANDS<<" owner_jobs="<<19*LAYERS<<" matrix_commands="<<9*LAYERS<<" sfu_commands="<<11*LAYERS<<" kv_commands="<<LAYERS<<" checked_fp32="<<checked<<" bit_differences=0 useful_macs="<<mac<<" executed_macs="<<physical<<" cycles="<<cycles<<" metadata_reads="<<metadata<<" read_bytes="<<reads*64<<" write_ack_bytes="<<writes*64<<" idma_transfers="<<(d.io_idmaTransfers-dmaAtStart)<<" request_stalls="<<stalls<<" response_delay_cycles="<<delays<<" host_intermediate_writes=0 legacy_block_launch=0 original_matrix_instances="<<MATRIX_SLICES<<" logical_matrix_engines=1 matrix_macs="<<OWNER_MATRIX_MACS<<" original_idma_instances=1 score_ddr_accesses=0 output_fnv64="<<std::hex<<hashRange(OUTPUTS.back().address,TOKENS*H*4)<<std::dec<<std::endl;
    }
    auto result=d.io_result_bits_status;for(unsigned i=0;i<5;i++){step();check(d.io_result_valid&&d.io_result_bits_status==result,"result not held");}d.io_result_ready=1;step();d.io_result_ready=0;
    if(errorPc>=0){const auto stoppedJobs=d.io_issuedJobs;const auto stoppedDma=d.io_idmaTransfers;

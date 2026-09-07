@@ -1,0 +1,5 @@
+`verilator_config
+// Compile one retained 512-MAC endpoint once, instantiate it eight times.
+// This changes only simulator compilation boundaries, not generated hardware.
+hier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"
+hier_block -module "qwen2_matrix_command_endpoint"

@@ -2,7 +2,8 @@
 # Full original 21-op sequence, not a block launch followed by test Adds.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"
-PROFILE=${1:?tiny|real};OUT=${2:?absolute new directory};TOKENS=${3:-16};RELOCATE=${4:-0};LAYERS=${5:-1}
+PROFILE=${1:?tiny|real};OUT=${2:?absolute new directory};TOKENS=${3:-16};RELOCATE=${4:-0};LAYERS=${5:-1};MATRIX_MACS=${MATRIX_MACS:-4096}
+[[ "$MATRIX_MACS" = 512 || "$MATRIX_MACS" = 4096 ]] || exit 2
 [[ "$PROFILE" = tiny || "$PROFILE" = real ]] || exit 2
 [[ "$LAYERS" =~ ^[123]$ && "$TOKENS" =~ ^[1-9][0-9]{0,3}$ && "$RELOCATE" =~ ^[0-9]{1,17}$ ]] || exit 2
 ((10#$TOKENS<=1024)) || exit 2
@@ -20,19 +21,21 @@ git -C "$ROOT" rev-parse HEAD >"$OUT/source_base_commit.txt"
 if [[ -n ${OFFLINE_TOOLS:-} ]];then
   export CHISEL_FIRTOOL_PATH="$OFFLINE_TOOLS/bin"
   python3 "$P/scripts/production_source_identity.py" compile "$ROOT" "$OUT" "$HARDFLOAT_SOURCE" "$OFFLINE_TOOLS"
-  java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/classes:$(cat "$OUT/classpath.txt")" heteronpu.continuous.EmitHostBlock "$OUT/generated" "$PROFILE" >"$OUT/emit.log" 2>&1
+  java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/classes:$(cat "$OUT/classpath.txt")" heteronpu.continuous.EmitHostBlock "$OUT/generated" "$PROFILE" "$MATRIX_MACS" >"$OUT/emit.log" 2>&1
 else
-  (cd "$P";sbt -batch compile "runMain heteronpu.continuous.EmitHostBlock $OUT/generated $PROFILE") >"$OUT/compile_emit.log" 2>&1
+  (cd "$P";sbt -batch compile "runMain heteronpu.continuous.EmitHostBlock $OUT/generated $PROFILE $MATRIX_MACS") >"$OUT/compile_emit.log" 2>&1
 fi
 if [[ "$LAYERS" = 1 ]];then
   python3 "$P/scripts/pack_owner_block_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --relocate "$RELOCATE" >"$OUT/packing.log"
 else
   python3 "$P/scripts/pack_owner_multilayer_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --layers "$LAYERS" --relocate "$RELOCATE" >"$OUT/packing.log"
 fi
+HIERARCHY="$P/tests/retained_hierarchy.vlt"
+if [[ "$MATRIX_MACS" = 4096 ]];then HIERARCHY="$P/tests/matrix4096_hierarchy.vlt";fi
 export RETAINED_SKIP_CLOCK=0;source "$P/scripts/retained_sources.sh"
 verilator --cc --exe --build --assert -Wno-fatal --top-module HostBlockTop \
  -CFLAGS "-O3 -std=c++17 -ffp-contract=off -fno-fast-math -I$OUT/generated -I$OUT/fixture" \
- -j "${BUILD_JOBS:-3}" --Mdir "$OUT/obj" --hierarchical "$P/tests/retained_hierarchy.vlt" \
+ -j "${BUILD_JOBS:-3}" --Mdir "$OUT/obj" --hierarchical "$HIERARCHY" \
  "${RETAINED_SOURCES[@]}" -f "$OUT/idma.f" "$OUT/generated/HostBlockTop.sv" \
  "$ROOT/rtl/integration/idma_backend_rw_axi_flat_wrap.sv" "$P/tests/host_block_commands.cpp" >"$OUT/build.log" 2>&1
 set +e

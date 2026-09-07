@@ -10,10 +10,11 @@ import scala.collection.mutable.ArrayBuffer
   * Sixteen shared FMA lanes use the repository BF16/FP32 arithmetic primitive.
   * DDR uses FP32 containers; matrix operands are rounded to BF16 at ingress.
   */
-case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false){
+case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32){
   require(hidden==heads*headDim && heads%kvHeads==0)
   require(headDim>=32 && headDim%32==0 && ffn%16==0 && hidden%16==0)
   require(maxTokens>0 && maxTokens<=1024)
+  require(matrixColumns==32||matrixColumns==256)
   val kv=kvHeads*headDim;val maxRow=math.max(hidden,ffn)
 }
 case class BlockRegion(name:String,offset:Long,words:Long,external:Boolean)
@@ -40,7 +41,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
   val denseBatch = 16
-  val denseColumns = if(s.retainedMatrix) 32 else 16
+  val denseColumns = if(s.retainedMatrix) s.matrixColumns else 16
+  val denseBeatBits = math.max(1,log2Ceil(denseColumns/16))
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new BlockLaunch));val result=Decoupled(new BlockResult)
     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
@@ -70,8 +72,9 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   val denseLoadRow=RegInit(0.U(5.W));val denseRow=RegInit(0.U(5.W));val denseWindowRow=RegInit(0.U(5.W))
   val denseWindow=Reg(Vec(denseBatch,Vec(16,UInt(32.W))))
   val denseAcc=Reg(Vec(denseBatch,Vec(denseColumns,UInt(32.W))))
-  val denseHalf=RegInit(false.B)
-  val denseWeights=Reg(Vec(32,UInt(32.W)))
+  val denseBeat=RegInit(0.U(denseBeatBits.W))
+  val weightBeat=RegInit(0.U(denseBeatBits.W))
+  val denseWeights=Reg(Vec(denseColumns,UInt(32.W)))
   val localRows=(s.maxRow*denseBatch*4+255)/256
   val fabric=Module(new SharedL2Fabric(LocalSramConfig(rowsPerBank=localRows)))
   val f=fabric.io;f.rd_valid_i:=0.U;f.rd_addr_i:=0.U;f.rd_resp_ready_i:=0.U;f.wr_valid_i:=false.B;f.wr_addr_i:=0.U;f.wr_data_i:=0.U;f.wr_be_i:=0.U
@@ -86,7 +89,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   if(!s.retainedMatrix){when(state===st("denseCompute")){fmC:=denseAcc(denseRow(3,0))}}
   val fmOut=Wire(Vec(16,UInt(32.W)));val fmDone=WireDefault(true.B);val matrixFault=WireDefault(false.B);val physicalSteps=WireDefault(macs>>4);val physicalBase=RegInit(0.U(64.W))
   if(s.retainedMatrix){
-    val adapter=Module(new RetainedMatrixTileAdapter);adapter.io.scanEnable:=false.B;val pending=RegInit(false.B)
+    val adapter=Module(new ScalableMatrixTileAdapter(s.matrixColumns));adapter.io.scanEnable:=false.B;val pending=RegInit(false.B)
     physicalSteps:=adapter.io.acceptedSteps
     when(start){physicalBase:=adapter.io.acceptedSteps}
     val isDense=state===st("denseCompute")
@@ -98,7 +101,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
         Mux(i.U<denseRows,denseWindow(i)(depth(3,0)),0.U),
         Mux(dot||(i==0).B,fmA(i),0.U)))
     }
-    for(i<-0 until 32){
+    adapter.io.request.bits.sliceMask:=Mux(isDense,VecInit((0 until s.matrixColumns/32).map(i=>(col+(32*i).U)<(if(ownerDriven)owner.n else Mux(phase===2.U||phase===3.U,s.kv.U,Mux(phase===10.U||phase===11.U,s.ffn.U,s.hidden.U))))).asUInt,1.U)
+    for(i<-0 until s.matrixColumns){
       adapter.io.request.bits.b(i):=TensorMath.bf16Rne(Mux(isDense,denseWeights(i),
         (if(i<16)fmB(i)else 0.U)))
     }
@@ -215,7 +219,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   }
   when(state===st("begin")){
     denseBase:=0.U;denseRows:=Mux(tokens>denseBatch.U,denseBatch.U,tokens)
-    denseLoadRow:=0.U;denseRow:=0.U;denseWindowRow:=0.U;denseHalf:=false.B
+    denseLoadRow:=0.U;denseRow:=0.U;denseWindowRow:=0.U;denseBeat:=0.U
     token:=0.U;head:=0.U;key:=0.U;depth:=0.U;col:=0.U;sum:=0.U;lane:=0.U;clearAcc()
     when(phase===0.U||phase===9.U){state:=st("normLoad")}.elsewhen(phase===4.U||phase===5.U){state:=st("ropeStart")}.elsewhen(phase===6.U){state:=st("attQLoad")}.elsewhen(phase===8.U||phase===14.U||phase===16.U){state:=st("resIssue")}.elsewhen(phase===12.U){state:=st("siluRead")}.elsewhen(phase===15.U){state:=st("biasRead")}.otherwise{state:=st("denseLoad")}}
   when(state===st("advance")){
@@ -266,21 +270,20 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     }
     if(s.retainedMatrix){
       when(state===st("denseWeight")){
-        read(base+dWeight+((depth.pad(32)*dN+col).pad(64)<<2),"denseWeightHi")
-      }
-      when(state===st("denseWeightHi")){
-        for(i<-0 until 16)denseWeights(i):=packet(32*i+31,32*i)
-        when(col+16.U<dN){
-          read(base+dWeight+((depth.pad(32)*dN+col+16.U).pad(64)<<2),"denseWeightReady")
-        }.otherwise{for(i<-16 until 32)denseWeights(i):=0.U;state:=st("denseCompute")}
+        weightBeat:=0.U;denseWeights:=0.U.asTypeOf(denseWeights)
+        read(base+dWeight+((depth.pad(32)*dN+col).pad(64)<<2),"denseWeightReady")
       }
       when(state===st("denseWeightReady")){
-        for(i<-0 until 16)denseWeights(i+16):=packet(32*i+31,32*i)
-        state:=st("denseCompute")
+        for(i<-0 until 16)denseWeights((weightBeat<<4)+i.U):=packet(32*i+31,32*i)
+        val next=(weightBeat.pad(16)+1.U)<<4
+        when(next<denseColumns.U && col+next<dN){
+          weightBeat:=weightBeat+1.U
+          read(base+dWeight+((depth.pad(32)*dN+col+next).pad(64)<<2),"denseWeightReady")
+        }.otherwise{state:=st("denseCompute")}
       }
       when(state===st("denseCompute")&&fmDone){
-        macs:=macs+denseRows*Mux(col+32.U<=dN,32.U,16.U)
-        denseRow:=0.U;denseHalf:=false.B
+        macs:=macs+denseRows*Mux(col+denseColumns.U<=dN,denseColumns.U,dN-col)
+        denseRow:=0.U;denseBeat:=0.U
         when(depth+1.U===dK){
           when((!ownerDriven).B && phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}
         }.otherwise{
@@ -313,36 +316,37 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
       }
     }
 
-    val halfOffset=if(s.retainedMatrix)Mux(denseHalf,16.U,0.U)else 0.U
+    val halfOffset=denseBeat.pad(16)<<4
     val selectedDense=Wire(Vec(16,UInt(32.W)))
-    for(i<-0 until 16)selectedDense(i):=(if(s.retainedMatrix)Mux(denseHalf,denseAcc(denseRow(3,0))(i+16),denseAcc(denseRow(3,0))(i))else denseAcc(denseRow(3,0))(i))
+    for(i<-0 until 16)selectedDense(i):=denseAcc(denseRow(3,0))((denseBeat<<4)+i.U)
+    // In owner mode Bias is a separate Host command. Do not elaborate its
+    // unreachable legacy multiwrite mux across the 4096 accumulator cells.
+    if(!ownerDriven){
     when(state===st("denseBias")){read(base+bias+((col+halfOffset).pad(64)<<2),"denseBiasGot")}
     when(state===st("denseBiasGot")){
       vectorA:=selectedDense;vectorB:=packet.asTypeOf(vectorB)
-      for(i<-0 until 16){
-        if(s.retainedMatrix){when(denseHalf){denseAcc(denseRow(3,0))(i+16):=vout(i)}.otherwise{denseAcc(denseRow(3,0))(i):=vout(i)}}
-        else{denseAcc(denseRow(3,0))(i):=vout(i)}
-      }
-      when(denseRow+1.U<denseRows){denseRow:=denseRow+1.U}
+      for(i<-0 until 16)denseAcc(denseRow(3,0))((denseBeat<<4)+i.U):=vout(i)
+      when(denseRow+1.U<denseRows){denseRow:=denseRow+1.U;state:=st("denseBias")}
       .otherwise{
         denseRow:=0.U
-        if(s.retainedMatrix){when(!denseHalf&&col+16.U<dN){denseHalf:=true.B;state:=st("denseBias")}.otherwise{denseHalf:=false.B;state:=st("denseWrite")}}
-        else{state:=st("denseWrite")}
+        when(halfOffset+16.U<denseColumns.U && col+halfOffset+16.U<dN){denseBeat:=denseBeat+1.U;state:=st("denseBias")}
+        .otherwise{denseBeat:=0.U;state:=st("denseWrite")}
       }
+    }
     }
     when(state===st("denseWrite")){
       write(base+dOut+(((denseBase.pad(32)+denseRow)*dN+col+halfOffset).pad(64)<<2),selectedDense.asUInt,"denseWritten")
     }
     when(state===st("denseWritten")){
-      val moreHalf=(if(s.retainedMatrix) !denseHalf&&col+16.U<dN else false.B)
-      when(moreHalf){denseHalf:=true.B;state:=st("denseWrite")}
-      .elsewhen(denseRow+1.U<denseRows){denseHalf:=false.B;denseRow:=denseRow+1.U;state:=st("denseWrite")}
+      val moreBeat=halfOffset+16.U<denseColumns.U && col+halfOffset+16.U<dN
+      when(moreBeat){denseBeat:=denseBeat+1.U;state:=st("denseWrite")}
+      .elsewhen(denseRow+1.U<denseRows){denseBeat:=0.U;denseRow:=denseRow+1.U;state:=st("denseWrite")}
       .elsewhen(col+denseColumns.U<dN){
-        col:=col+denseColumns.U;depth:=0.U;denseRow:=0.U;denseWindowRow:=0.U;denseHalf:=false.B;clearDense();state:=st("denseWindowReq")
+        col:=col+denseColumns.U;depth:=0.U;denseRow:=0.U;denseWindowRow:=0.U;denseBeat:=0.U;clearDense();state:=st("denseWindowReq")
       }.elsewhen(denseBase+denseRows<tokens){
         val next=denseBase+denseRows
         denseBase:=next;denseRows:=Mux(tokens-next>denseBatch.U,denseBatch.U,tokens-next)
-        col:=0.U;denseLoadRow:=0.U;denseHalf:=false.B;state:=st("denseLoad")
+        col:=0.U;denseLoadRow:=0.U;denseBeat:=0.U;state:=st("denseLoad")
       }.otherwise{state:=st("advance")}
     }
 

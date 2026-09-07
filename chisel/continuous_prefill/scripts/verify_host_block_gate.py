@@ -23,6 +23,8 @@ def verify(out:Path,write_report:bool=True)->dict:
     require((out/'simulation.exit').read_text().strip()=='0','nonzero simulator exit')
     log=(out/'run.log').read_text();require(not re.search(r'HOST_BLOCK_FAIL|EXPECTED_ERROR|%Error|\bFatal\b',log),'failed/negative run')
     scope=json.loads((out/'generated/SCOPE.json').read_text());require(scope['host_commands'] and not scope['block_launch'] and scope['retained_matrix'] and scope['pinned_idma'],'wrong root')
+    matrix_macs=scope.get('matrix_macs',512);require(type(matrix_macs) is int and matrix_macs in (512,4096),'Matrix specification')
+    slices=matrix_macs//512
     f=json.loads((out/'fixture/manifest.json').read_text());H,F,G,J,D=(f['shape'][x] for x in ['H','F','HEADS','KVHEADS','HD']);T=f['tokens'];K=J*D;L=f.get('layers',1)
     require(type(L) is int and 1<=L<=3,'layer capacity');C=21*L
     require(f['commands']==C and f['descriptors']==215*L,'independent command/descriptor count')
@@ -61,13 +63,18 @@ def verify(out:Path,write_report:bool=True)->dict:
     mac*=L;executed*=L
     for k,v in dict(tokens=T,hidden=H,ffn=F,host_commands=C,completed=C,owner_jobs=19*L,matrix_commands=9*L,sfu_commands=11*L,kv_commands=L,
         checked_fp32=values,bit_differences=0,useful_macs=mac,executed_macs=executed,metadata_reads=C+f['descriptors'],write_ack_bytes=values*4,
-        host_intermediate_writes=0,legacy_block_launch=0,original_matrix_instances=1,original_idma_instances=1,score_ddr_accesses=0).items():
+        host_intermediate_writes=0,legacy_block_launch=0,original_matrix_instances=slices,original_idma_instances=1,score_ddr_accesses=0).items():
         require(int(end[k])==v,'counter mismatch '+k)
     require(int(end['read_bytes'])//64+int(end['write_ack_bytes'])//64==int(end['idma_transfers']),'iDMA conservation')
     require(int(end['request_stalls'])>0 and int(end['response_delay_cycles'])>0,'backpressure not covered')
     sv=(out/'generated/HostBlockTop.sv').read_text()
-    for module in ['qwen2_matrix_command_endpoint','idma_backend_rw_axi_flat_wrap']:
-        require(len(re.findall(r'^\s+'+module+r'\s+\w+\s*\(',sv,re.M))==1,'wrong instance count '+module)
+    if 'matrix_macs' in scope:
+        from audit_matrix_topology import audit as topology_audit
+        topology_audit(out/'generated/HostBlockTop.sv',matrix_macs)
+        require(int(end['matrix_macs'])==matrix_macs and int(end['logical_matrix_engines'])==1,'peak/engine count mismatch')
+    else:
+        for module in ['qwen2_matrix_command_endpoint','idma_backend_rw_axi_flat_wrap']:
+            require(len(re.findall(r'^\s+'+module+r'\s+\w+\s*\(',sv,re.M))==1,'wrong instance count '+module)
     require('module HeteroBF16FmaLane' not in sv,'standalone fallback arithmetic')
     sources=json.loads((out/'sources.sha256.json').read_text());require(all(isinstance(x,str) and re.fullmatch('[a-f0-9]{64}',x) for x in sources.values()),'source identity')
     for n in ['HostBlockCommands','QwenOwnerProtocol','Qwen2Block','HostBlockTop']:
@@ -106,7 +113,7 @@ def verify(out:Path,write_report:bool=True)->dict:
             writer=csv.writer(stream);writer.writerow(['pc','tensor','index','actual_hex','reference_hex'])
             for pc,n in outputs:
                 for i,(u,) in enumerate(struct.iter_unpack('<I',data[n])):writer.writerow([pc,n,i,f'{u:08x}',f'{u:08x}'])
-    report={'schema':1,'status':'PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK','shape':f['shape'],'tokens':T,'commands':C,'owner_jobs':19*L,'outputs':details,
+    report={'schema':1,'status':'PASS_HOST_DRIVEN_QWEN2_OWNER_BLOCK','shape':f['shape'],'tokens':T,'matrix_macs':matrix_macs,'matrix_slices':slices,'logical_matrix_engines':1,'commands':C,'owner_jobs':19*L,'outputs':details,
         'checked_fp32':values,'bit_differences':0,'counters':end,'log_sha256':sha(out/'run.log'),'source_manifest_sha256':sha(out/'sources.sha256.json'),
         'generated_rtl_sha256':sha(out/'generated/HostBlockTop.sv'),'scope':{'all_original_opcode_sequence':True,'host_driven_each_owner':True,
         'full_21_record_original_gguf_image':False,'attention_streaming_fusion':([10,11,12] if L==1 else [[21*i+10,21*i+11,21*i+12] for i in range(L)]),'cold_contiguous_kv_only':True,'synthetic_weights':True,

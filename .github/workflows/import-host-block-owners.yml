@@ -1,0 +1,80 @@
+name: import-host-block-owners
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-host-block-owners.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          clean: false
+          fetch-depth: 2
+      - name: Validate entire immutable snapshot before writing any source
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import base64,hashlib,json,lzma,subprocess
+          root=Path.cwd()
+          parts=root/'development_snapshots/host_block_owner_20260907_v1'
+          encoded=''.join((parts/f'part{i:02d}.b64').read_text().strip() for i in range(8))
+          if len(encoded)!=47672:raise RuntimeError('snapshot length mismatch')
+          packed=base64.b64decode(encoded,validate=True)
+          if hashlib.sha256(packed).hexdigest()!='862054e4f52ada67dfe1473bcf6c65053631fe0eea48994c69a91e5841c7c8bb':raise RuntimeError('snapshot compressed SHA mismatch')
+          dec=lzma.LZMADecompressor(memlimit=128*1024*1024)
+          raw=dec.decompress(packed,max_length=1024*1024)
+          if not dec.eof or dec.unused_data:raise RuntimeError('invalid snapshot stream')
+          if hashlib.sha256(raw).hexdigest()!='f846b166aa7066a9c38ed40dbe1ae20a80d9f4e5b5ab21388b6cb7c542e37c82':raise RuntimeError('snapshot content SHA mismatch')
+          data=json.loads(raw)
+          if data['schema']!=1 or len(data['files'])!=14:raise RuntimeError('schema/file count mismatch')
+          checked=[]; seen=set()
+          def blob(b):return hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()
+          for entry in data['files']:
+              rel=PurePosixPath(entry['path']);p=root/str(rel)
+              if rel.is_absolute() or '..' in rel.parts or not str(rel).startswith('chisel/continuous_prefill/'):raise RuntimeError('unsafe source path')
+              if rel.suffix not in {'.scala','.cpp','.py','.sh','.md'} or str(rel) in seen:raise RuntimeError('unsupported or duplicate source path')
+              seen.add(str(rel));content=entry['content'].encode()
+              if blob(content)!=entry['blob'] or hashlib.sha256(content).hexdigest()!=entry['sha256']:raise RuntimeError('source checksum mismatch')
+              old=blob(p.read_bytes()) if p.exists() else None
+              if old not in (entry['old_blob'],entry['blob']):raise RuntimeError('concurrent source change: '+str(rel))
+              if entry['mode'] not in ('100644','100755'):raise RuntimeError('invalid mode')
+              checked.append((p,content,entry))
+          for p,content,entry in checked:
+              p.parent.mkdir(parents=True,exist_ok=True)
+              p.write_bytes(content);p.chmod(0o755 if entry['mode']=='100755' else 0o644)
+              subprocess.run(['git','add','-f','--',entry['path']],check=True)
+          report={'status':'PASS_EXACT_SOURCE_IMPORT_NOT_REAL16_VERIFICATION','snapshot_sha256':hashlib.sha256(packed).hexdigest(),'files':[{k:e[k] for k in ('path','blob','sha256','mode')} for _,_,e in checked]}
+          print(json.dumps(report,indent=2))
+          for p,_,e in checked:
+              staged=subprocess.check_output(['git','show',':'+e['path']])
+              if blob(staged)!=e['blob']:raise RuntimeError('index mismatch')
+          PY
+      - name: Check Python fixture and shell syntax
+        run: |
+          set -euo pipefail
+          export OWNER_TEST_ARTIFACTS="$RUNNER_TEMP/owner_fixture_tests_${GITHUB_RUN_ID}"
+          python3 chisel/continuous_prefill/tests/test_owner_block_fixture.py
+          python3 -O chisel/continuous_prefill/tests/test_owner_block_fixture.py
+          bash -n chisel/continuous_prefill/scripts/run_host_block_gate.sh
+          bash -n chisel/continuous_prefill/scripts/run_host_block_unit.sh
+          bash -n chisel/continuous_prefill/scripts/run_host_block_replay.sh
+      - name: Commit plain source files and fast-forward main
+        run: |
+          set -euo pipefail
+          git diff --cached --check
+          if git diff --cached --quiet; then echo 'Exact source snapshot already present'; exit 0; fi
+          git config user.name heteronpu-source-import
+          git config user.email heteronpu-source-import@users.noreply.github.com
+          git commit -m 'chisel: drive Qwen2 internal owners with original Host opcodes and typed tensors [skip ci]'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+          git log -1 --format='%H %s'

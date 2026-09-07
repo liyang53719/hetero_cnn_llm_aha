@@ -1,0 +1,19 @@
+{
+  "status": "PASS_REAL16_TWO_LAYER_HOST_FRONTEND_CONTROL_ONLY",
+  "tests_passed": 9,
+  "tokens": 16,
+  "layers": 2,
+  "hidden": 1536,
+  "ffn": 8960,
+  "commands": 42,
+  "descriptors": 430,
+  "successful_path_owner_jobs": 38,
+  "chisel_decoder_dut": true,
+  "metadata_service": "controlled_test_responses",
+  "owner_completions": "controlled_test_responses",
+  "actual_idma": false,
+  "matrix_arithmetic": false,
+  "numerical_multilayer_pass": false,
+  "source_identity_verified": true,
+  "log_sha256": "74068610ab3bdbabdaf70a30156a8de09a11e4b289839e5a73a8c15281ddb223"
+}

@@ -19,7 +19,7 @@ def require(ok,message):
 
 
 def sha(path):
-    h=hashlib.sha256sum() if False else hashlib.sha256()
+    h=hashlib.sha256()
     with path.open('rb') as f:
         for data in iter(lambda:f.read(1<<20),b''):h.update(data)
     return h.hexdigest()

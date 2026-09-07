@@ -1,0 +1,88 @@
+name: import-owner-regression-20260907
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-owner-regression-20260907.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-owner-regression-20260907
+  cancel-in-progress: false
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          clean: false
+          fetch-depth: 2
+      - name: Verify complete source patch and concurrent-change preconditions
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,lzma,os,re,subprocess
+          root=Path.cwd();parts=root/'development_snapshots/owner_regression_20260907_v1'
+          encoded=''.join((parts/f'part{i:02d}.b64').read_text().strip() for i in range(5))
+          if len(encoded)!=27336:raise RuntimeError('source patch encoding length')
+          packed=base64.b64decode(encoded,validate=True)
+          if hashlib.sha256(packed).hexdigest()!='b1c271be4678f3c02dbab36433bcc332134e7f1ada8b58b2a7b6a0de8c8948b1':raise RuntimeError('compressed patch identity')
+          dec=lzma.LZMADecompressor(memlimit=128*1024*1024)
+          raw=dec.decompress(packed,max_length=100000)
+          if not dec.eof or dec.unused_data or len(raw)!=73724:raise RuntimeError('invalid compressed patch')
+          if hashlib.sha256(raw).hexdigest()!='cde6db01b1f3baf470f00938bd6783619252636735cbeeb5e38458dc705b7c52':raise RuntimeError('patch identity')
+          prefix='chisel/continuous_prefill/'
+          identities={
+            'scripts/audit_owner_block_abi.py':('1acc29080da32e83728b6cf7833ec4a66342d0fc','28486d808ac0d79c89077aa287e2555227331924'),
+            'scripts/verify_host_block_gate.py':('88a46f497d7a5d82bee1ced779aca2a43e50a75d','ecb08f73332908020fb3cd291e4d6bdcf371a1d7'),
+            'scripts/pack_owner_multilayer_fixture.py':(None,'544d9a8d6f00f71bf45c2cadcba63d4ed58021c6'),
+            'scripts/run_owner_lifecycle_gate.py':(None,'1652db2c847a12f142c5ecefda0ea4fc2de00baf'),
+            'scripts/run_owner_replay_gate.py':(None,'c012172e519b13558ee7732dcc46ecef098a58ae'),
+            'tests/host_block_commands.cpp':('17031b63d85a84c7593b88ca2348e4439a94ecbb','7b8bd1ecfd894c14a62c70164177ea38673faf50'),
+            'tests/host_owner_lifecycle.cpp':(None,'c1dd01174c08dc2cc516709e774fd7c16b003259'),
+            'tests/test_owner_extended_regression.py':(None,'0785265d3128c504fd923ed9978ba751c083da3e'),
+            'src/test/scala/heteronpu/continuous/HostBlockCommandsSpec.scala':('3709ab8f31ddb2630394e1872cfad9133a74fd33','125e7a041ae32b47a89f4b8639d09b8b02717e2c')}
+          paths=re.findall(r'^\+\+\+ b/(.+)$',raw.decode(),re.M)
+          if len(paths)!=9 or set(paths)!={prefix+p for p in identities}:raise RuntimeError('unexpected source path')
+          def blob(data):return hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest()
+          states=[]
+          for rel,(before,after) in identities.items():
+              p=root/(prefix+rel);actual=blob(p.read_bytes()) if p.exists() else None
+              if actual not in (before,after):raise RuntimeError('concurrent source change: '+rel)
+              states.append(actual==after)
+          if all(states):print('Exact source already imported');raise SystemExit(0)
+          if any(states):raise RuntimeError('partial import requires explicit review')
+          patch=Path(os.environ['RUNNER_TEMP'])/'verified_owner_regression.patch';patch.write_bytes(raw)
+          subprocess.run(['git','apply','--check','--whitespace=error',str(patch)],check=True)
+          subprocess.run(['git','apply','--whitespace=error',str(patch)],check=True)
+          for rel,(_,after) in identities.items():
+              path=prefix+rel
+              if blob((root/path).read_bytes())!=after:raise RuntimeError('applied source identity: '+path)
+              subprocess.run(['git','add','--',path],check=True)
+              if blob(subprocess.check_output(['git','show',':'+path]))!=after:raise RuntimeError('index identity: '+path)
+          print('PASS_EXACT_NINE_SOURCE_FILES_IMPORTED; hardware main Scala and retained RTL unchanged')
+          PY
+      - name: Source syntax and public fixture validation
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+          export OWNER_TEST_ARTIFACTS="$RUNNER_TEMP/owner_layout_${GITHUB_RUN_ID}"
+          python3 chisel/continuous_prefill/tests/test_owner_extended_regression.py LayoutTests
+          python3 -O chisel/continuous_prefill/tests/test_owner_extended_regression.py LayoutTests
+          python3 -m py_compile chisel/continuous_prefill/scripts/pack_owner_multilayer_fixture.py chisel/continuous_prefill/scripts/run_owner_lifecycle_gate.py chisel/continuous_prefill/scripts/run_owner_replay_gate.py
+      - name: Commit plain sources and fast-forward main
+        run: |
+          set -euo pipefail
+          git diff --cached --check
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name heteronpu-regression-development
+          git config user.email heteronpu-regression-development@users.noreply.github.com
+          git commit -m 'test(chisel): extend Host owner tile, request, fault and multilayer regressions [skip ci]'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+          git log -1 --format='%H %s'

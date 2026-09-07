@@ -18,6 +18,7 @@ jobs:
       JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
       BUILD_JOBS: '2'
       MATRIX_MACS: '4096'
+      MAKEFLAGS: 'VK_PCH_I_FAST= VK_PCH_I_SLOW= OPT_FAST=-O3'
     steps:
       - uses: actions/checkout@v4
         with:

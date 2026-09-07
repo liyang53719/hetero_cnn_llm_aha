@@ -5,7 +5,7 @@ on:
     paths: ['.github/workflows/host-block-owner-closure-20260907.yml']
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
   actions: read
 concurrency:
   group: host-block-owner-closure-20260907
@@ -24,8 +24,12 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: sbt/setup-sbt@v1
-      - name: Install public RTL simulator
-        run: sudo apt-get update && sudo apt-get install -y verilator g++
+      - name: Install public simulator and fixture dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update && sudo apt-get install -y verilator g++
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+          PYTHONPATH="$PWD/src" python3 -c 'import numpy, yaml, heteronpu.command, heteronpu.descriptor_chain; print("OWNER_PYTHON_DEPENDENCIES", numpy.__version__, yaml.__version__)'
       - uses: actions/download-artifact@v4
         with:
           name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
@@ -40,27 +44,12 @@ jobs:
           sha256sum -c pinned_idma_sources.sha256
           mkdir -p ../work/host_owner_closure_20260907/upstream
           tar -xzf pinned_idma_sources.tar.gz -C ../work/host_owner_closure_20260907/upstream
-      - name: Correct reserved Chisel signal spelling without editing RTL
+      - name: Freeze source identity without changing the DUT
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          path=Path('chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala')
-          if not path.is_file():raise SystemExit('BLOCKED_MISSING_IMPORTED_OWNER_SOURCE')
-          old=path.read_text();new=re.sub(r'\bsoft\b','isSoftmax',old)
-          if old!=new:path.write_text(new)
-          PY
-          if ! git diff --quiet; then
-            git diff --check
-            git config user.name heteronpu-owner-development
-            git config user.email heteronpu-owner-development@users.noreply.github.com
-            git add -- chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
-            git commit -m 'fix(chisel): avoid reserved SystemVerilog signal name in owner frontend [skip ci]'
-            git push origin HEAD:main
-          fi
           git rev-parse HEAD > work/host_owner_closure_20260907/tested_source_commit.txt
           git diff --exit-code
+          git diff --cached --exit-code
       - name: Compile and run actual original-command tiny owner graph
         env:
           JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3

@@ -1,0 +1,22 @@
+[info] [launcher] getting org.scala-sbt sbt 1.10.2  (this may take some time)...
+[info] [launcher] getting Scala 2.12.19 (for sbt)...
+[0m[[0m[0minfo[0m] [0m[0mwelcome to sbt 1.10.2 (Eclipse Adoptium Java 17.0.20.1)[0m
+[0m[[0m[0minfo[0m] [0m[0mloading project definition from /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/project[0m
+[0m[[0m[0minfo[0m] [0m[0mloading settings for project root from build.sbt ...[0m
+[0m[[0m[0minfo[0m] [0m[0mset current project to heteronpu-continuous-prefill (in build file:/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/)[0m
+Warning: Tried to extract the base path for relative glob ../../work/upstream/hardfloat_continuous/hardfloat/src/main/scala/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+Warning: Tried to extract the base path for relative glob ../../work/upstream/hardfloat_continuous/hardfloat/src/main/scala/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+[0m[[0m[0minfo[0m] [0m[0mcompiling 59 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 15 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/test-classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mMatrixSliceJoinSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mMatrixSliceJoin[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cover eight-slice mapping, independent backpressure, tail gating, K ordering, drain-on-error and reset recovery[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 5 minutes, 16 seconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 1[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 355 s (05:55), completed Sep 7, 2026, 3:31:02 PM[0m
+[0J

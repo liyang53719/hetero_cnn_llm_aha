@@ -1,0 +1,139 @@
+name: idma-weight-burst-real2-20260908
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/idma-weight-burst-real2-20260908.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: idma-weight-burst-real2-20260908
+  cancel-in-progress: false
+jobs:
+  burst-real2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+      BUILD_JOBS: '3'
+      MAKEFLAGS: 'VK_PCH_I_FAST= VK_PCH_I_SLOW= OPT_FAST=-O3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 2
+      - name: Publish exactly the already tested burst-aware service files
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          git merge --ff-only origin/main
+          python3 development_snapshots/idma_weight_burst_20260908/install_services.py "$PWD"
+          git add -- chisel/continuous_prefill/tests/host_block_commands.cpp chisel/continuous_prefill/scripts/verify_host_block_gate.py
+          if ! git diff --cached --quiet; then
+            git -c user.name=heteronpu-weight-burst -c user.email=heteronpu-weight-burst@users.noreply.github.com commit -m 'test: install byte-verified burst-aware AXI service and exact conservation gate [skip ci]'
+            git push origin HEAD:main
+          fi
+          git diff --exit-code
+          git rev-parse HEAD > weight_burst_source_commit.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Install public tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: upstream_idma_artifact
+      - name: Freeze original arithmetic, iDMA and all test source
+        run: |
+          set -euo pipefail
+          mkdir -p work/weight_burst_upstream
+          (cd upstream_idma_artifact;sha256sum -c pinned_idma_sources.sha256)
+          tar -xzf upstream_idma_artifact/pinned_idma_sources.tar.gz -C work/weight_burst_upstream
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh > weight_burst_prepare.log 2>&1
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows development_snapshots/idma_weight_burst_20260908 | gzip > weight_burst_source.tar.gz
+          sha256sum weight_burst_source.tar.gz > weight_burst_source.sha256
+      - name: Execute real pinned-iDMA safety and complete real16 two-layer chain
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/weight_burst_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_weight_burst_real2_gate.sh "$PWD/work/weight_burst_real2" > weight_burst_gate.log 2>&1
+          git diff --exit-code
+      - name: Atomically preserve exact successful bytes on main
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess,sys,uuid
+          from pathlib import Path
+          repo=Path.cwd();sys.path.insert(0,str(repo/'chisel/continuous_prefill/scripts'))
+          from compare_weight_burst_real2 import compare
+          root=repo/'work/weight_burst_real2';numerical=root/'numerical'
+          source=(repo/'weight_burst_source_commit.txt').read_text().strip()
+          if (root/'gate.exit').read_text().strip()!='0':raise SystemExit('INCOMPLETE_GATE')
+          r=compare(numerical,repo/'reports/execution/MATRIX4096_REAL2_d3571eecf96f/numerical')
+          if r!=json.loads((root/'WEIGHT_BURST_COMPARISON.json').read_text()) or r['tested_source']!=source:raise SystemExit('UNVERIFIED_RESULT')
+          skip={'obj','classes','testclasses','test_run_dir','verilator-runtime','offline-tools-runtime','__pycache__'}
+          selected={}
+          suffix={'.json','.log','.gz','.f32le','.bin','.h','.sv','.txt','.exit','.sha256'}
+          for p in sorted(root.rglob('*')):
+              rel=p.relative_to(root)
+              if p.is_file() and not p.is_symlink() and p.suffix in suffix and not any(x in skip for x in rel.parts):selected[str(rel)]=p.read_bytes()
+          for name in ('weight_burst_source_commit.txt','weight_burst_prepare.log','weight_burst_gate.log'):
+              selected[name]=(repo/name).read_bytes()
+          selected['PUBLISHED_SHA256.json']=(json.dumps({p:hashlib.sha256(b).hexdigest() for p,b in selected.items()},indent=2)+'\n').encode()
+          identities=json.loads((numerical/'sources.sha256.json').read_text())
+          prefix='reports/execution/WEIGHT_BURST_REAL2_'+source[:12]
+          def git(*a,env=None):return subprocess.check_output(['git',*a],env=env)
+          blobs={p:subprocess.check_output(['git','hash-object','-w','--stdin'],input=b).decode().strip() for p,b in selected.items()}
+          for attempt in range(3):
+              subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+              parent=git('rev-parse','origin/main').decode().strip()
+              for p,h in identities.items():
+                  if hashlib.sha256(git('show',parent+':'+p)).hexdigest()!=h:raise SystemExit('TESTED_SOURCE_CHANGED:'+p)
+              env=dict(os.environ,GIT_INDEX_FILE=str(repo/('weight_burst_index_'+uuid.uuid4().hex)),GIT_AUTHOR_NAME='heteronpu-verified-weight-burst',GIT_AUTHOR_EMAIL='heteronpu-verified@users.noreply.github.com',GIT_COMMITTER_NAME='heteronpu-verified-weight-burst',GIT_COMMITTER_EMAIL='heteronpu-verified@users.noreply.github.com')
+              git('read-tree',parent,env=env)
+              for rel,b in blobs.items():
+                  path=prefix+'/'+rel;old=subprocess.run(['git','show',parent+':'+path],capture_output=True)
+                  if old.returncode==0 and old.stdout!=selected[rel]:raise SystemExit('REFUSE_OVERWRITE:'+path)
+                  git('update-index','--add','--cacheinfo','100644',b,path,env=env)
+                  if git('show',':'+path,env=env)!=selected[rel]:raise SystemExit('INDEX_MISMATCH')
+              tree=git('write-tree',env=env).decode().strip()
+              commit=git('commit-tree',tree,'-p',parent,'-m','test: preserve complete weight-burst real16 two-layer numerical and performance proof [skip ci]',env=env).decode().strip()
+              if subprocess.run(['git','push','origin',commit+':main']).returncode==0:
+                  subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+                  subprocess.run(['git','merge-base','--is-ancestor',commit,'origin/main'],check=True)
+                  for p,b in selected.items():
+                      if git('show','origin/main:'+prefix+'/'+p)!=b:raise SystemExit('REMOTE_MISMATCH')
+                  (repo/'weight_burst_publication.json').write_text(json.dumps({'commit':commit,'tested_source':source,'files':len(selected),'path':prefix,'remote_bytes_verified':True,'force_push':False},indent=2)+'\n')
+                  break
+          else:raise SystemExit('FAST_FORWARD_PUBLICATION_FAILED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: weight-burst-real2-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            weight_burst_*.log
+            weight_burst_*.txt
+            weight_burst_*.json
+            weight_burst_source.tar.gz
+            weight_burst_source.sha256
+            work/weight_burst_real2/**
+            !work/**/obj/**
+            !work/**/classes/**
+            !work/**/testclasses/**
+            !work/**/test_run_dir/**
+            !work/**/verilator-runtime/**
+            !work/**/offline-tools-runtime/**
+            !work/**/__pycache__/**

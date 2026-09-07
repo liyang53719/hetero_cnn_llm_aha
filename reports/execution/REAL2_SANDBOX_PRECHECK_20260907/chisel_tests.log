@@ -1,0 +1,17 @@
+[36mRun starting. Expected test count is: 9[0m
+[32mHostBlockCommandsRealLayersSpec:[0m
+[32mHostBlockCommands[0m
+[32m- should stay idle without Host launch, decode the complete supplied command graph and delay every completion until owner ACK[0m
+[32m- should reject an omitted Bias, wrong dependency and unknown opcode instead of running an implicit phase[0m
+[32m- should reject unsupported SFU and Matrix policy fields before starting that owner[0m
+[32m- should not publish a failed short or mistagged GEMM result or issue its consumer[0m
+[32m- should validate the Softmax and PV group before any attention arithmetic or QK event[0m
+[32m- should fail closed on metadata read errors without a payload owner[0m
+[32m- should clear previous-request producer visibility without requiring reset[0m
+[32m- should reject a failed second-layer InputNorm without publishing event 22[0m
+[32m- should reject a short final second-layer writeback without publishing event 42[0m
+[36mRun completed in 2 minutes, 4 seconds.[0m
+[36mTotal number of tests run: 9[0m
+[36mSuites: completed 1, aborted 0[0m
+[36mTests: succeeded 9, failed 0, canceled 0, ignored 0, pending 0[0m
+[32mAll tests passed.[0m

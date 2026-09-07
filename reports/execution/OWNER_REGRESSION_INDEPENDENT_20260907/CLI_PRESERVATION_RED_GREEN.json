@@ -1,0 +1,26 @@
+[
+  {
+    "script": "run_owner_lifecycle_gate.py",
+    "version": "before",
+    "exit": 1,
+    "old_gate_after_rejected_rerun": "1"
+  },
+  {
+    "script": "run_owner_lifecycle_gate.py",
+    "version": "after",
+    "exit": 1,
+    "old_gate_after_rejected_rerun": "0"
+  },
+  {
+    "script": "run_owner_replay_gate.py",
+    "version": "before",
+    "exit": 1,
+    "old_gate_after_rejected_rerun": "1"
+  },
+  {
+    "script": "run_owner_replay_gate.py",
+    "version": "after",
+    "exit": 1,
+    "old_gate_after_rejected_rerun": "0"
+  }
+]

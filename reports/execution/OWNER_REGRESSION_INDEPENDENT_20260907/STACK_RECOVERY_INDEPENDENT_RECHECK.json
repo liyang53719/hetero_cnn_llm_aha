@@ -1,0 +1,69 @@
+{
+  "status": "PASS_INDEPENDENT_SIX_LAYER_FAULT_RECHECK",
+  "cases": [
+    {
+      "mode": "descriptor-read-error",
+      "global_pc": 21,
+      "prior_completed": 21,
+      "recovered_fp32": 123552,
+      "total_checked_fp32": 164736,
+      "run_log_sha256": "9ce034a8e9f6f36c6e3c2bb2864b8b473afe2f86576cc66541785aac2ccf43f7",
+      "full_csv_sha256": "a92e6d4b014eea772a4fa12f0c16b371b7991b1835aeed52a3481d256c5496a8"
+    },
+    {
+      "mode": "descriptor-read-error",
+      "global_pc": 32,
+      "prior_completed": 31,
+      "recovered_fp32": 123552,
+      "total_checked_fp32": 180576,
+      "run_log_sha256": "a0425aab5c9fb587cdc66a62c52ec34052e6e54c809a3dbd54b8c338a852a235",
+      "full_csv_sha256": "c6f68c18f1888312c4da0456804644c9e27c8573cbcdad7a3c3c70e2e7cadc81"
+    },
+    {
+      "mode": "read-error",
+      "global_pc": 33,
+      "prior_completed": 31,
+      "recovered_fp32": 123552,
+      "total_checked_fp32": 180576,
+      "run_log_sha256": "71fb3ff4d87890ffb70286ac065baf9f376f9b0878823a2cde5737d4f75bc8c7",
+      "full_csv_sha256": "90d32e981bd24e4aa927365c3d551745b2f43edbff368415ddff67c5f4176f13"
+    },
+    {
+      "mode": "last-write-error",
+      "global_pc": 41,
+      "prior_completed": 41,
+      "recovered_fp32": 123552,
+      "total_checked_fp32": 203808,
+      "run_log_sha256": "da5c25fd1e28a2c0b4df1d951d298508b03219c3fa375e79941871d074a76c69",
+      "full_csv_sha256": "6de6a38d0cbc94542efaad04fb8cd6702207dbc2624467f090dbac0bd73ffa36"
+    },
+    {
+      "mode": "read-error",
+      "global_pc": 42,
+      "prior_completed": 42,
+      "recovered_fp32": 123552,
+      "total_checked_fp32": 205920,
+      "run_log_sha256": "771eadc532ff24e0b2ecc4b0eb495fa8af8b93ebaf90469f264aa9b8f01d9437",
+      "full_csv_sha256": "3cc7f61ba81969aefd9cff3940e50eea05da34e8c56a6d158a9e44940605043b"
+    },
+    {
+      "mode": "last-write-error",
+      "global_pc": 62,
+      "prior_completed": 62,
+      "recovered_fp32": 123552,
+      "total_checked_fp32": 244992,
+      "run_log_sha256": "562abf4e3e4a67df81cdea867da133da59d07fe25835157c3934bebe005a38d8",
+      "full_csv_sha256": "4ea8d9c7ea8a2e7407c90c45470b4ed58aa115f6e3b47f6e9f98e23eab4069c0"
+    }
+  ],
+  "total_fp32_rows": 1180608,
+  "recovery_actual_matches_ci_positive_graph": true,
+  "same_dut_reset_recovery": true,
+  "profile": {
+    "hidden": 64,
+    "ffn": 128,
+    "tokens": 33,
+    "layers": 3
+  },
+  "official_weights": false
+}

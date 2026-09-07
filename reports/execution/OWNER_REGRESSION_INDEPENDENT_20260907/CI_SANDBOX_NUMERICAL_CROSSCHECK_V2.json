@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "case_matching": "mode + fault_pc; scheduling indices intentionally differ between CI and sandbox",
+  "ci_source": "f0883276d626e189fd04806521c830df11961a43",
+  "cases": {
+    "base17": {
+      "actual_tensors": 20,
+      "float32_values": 21216,
+      "mismatches": []
+    },
+    "relocated32": {
+      "actual_tensors": 20,
+      "float32_values": 39936,
+      "mismatches": []
+    },
+    "relocated33": {
+      "actual_tensors": 20,
+      "float32_values": 41184,
+      "mismatches": []
+    },
+    "high48_33": {
+      "actual_tensors": 20,
+      "float32_values": 41184,
+      "mismatches": []
+    },
+    "layers2_17": {
+      "actual_tensors": 40,
+      "float32_values": 42432,
+      "mismatches": []
+    },
+    "layers3_33": {
+      "actual_tensors": 60,
+      "float32_values": 123552,
+      "mismatches": []
+    },
+    "repeat": {
+      "actual_tensors": 40,
+      "float32_values": 42432,
+      "mismatches": []
+    },
+    "fault_metadata": {
+      "actual_tensors": 1244,
+      "float32_values": 1250112,
+      "mismatches": []
+    },
+    "fault_payload": {
+      "actual_tensors": 1680,
+      "float32_values": 1698912,
+      "mismatches": []
+    }
+  },
+  "actual_tensors": 3144,
+  "float32_values": 3300960,
+  "scope": "Independent DUT executions, actual numerical bytes; not timing parity."
+}

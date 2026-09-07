@@ -131,5 +131,5 @@ if __name__=='__main__':
         require(all(p==0 if m=='repeat' else (p not in (10,11) if m in ('read-error','write-error','last-write-error') else True) for m,p in cases),'logical fused tensor has no independent payload transaction')
         run(a.repo.resolve(),a.build.resolve(),a.output.resolve(),cases,a.seed)
     except (ValueError,OSError,KeyError,TypeError,subprocess.CalledProcessError) as e:
-        if a.output.exists():(a.output/'gate.exit').write_text('1\n')
+        # Existing evidence is never changed on rejection; caller records exit status.
         raise SystemExit('LIFECYCLE_GATE_REJECTED: '+str(e))

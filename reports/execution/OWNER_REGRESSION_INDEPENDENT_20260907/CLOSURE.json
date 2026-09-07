@@ -1,0 +1,54 @@
+{
+  "status": "PASS_OWNER_REGRESSION_WITH_INDEPENDENT_SANDBOX_RECHECK",
+  "tested_ci_source": "f0883276d626e189fd04806521c830df11961a43",
+  "ci_run": 34105607211,
+  "core_evidence_commit": "0515b678d1cca3ff90e49e9003a263274d6fb5d5",
+  "ci_profiles": [
+    "tiny",
+    "real-cross"
+  ],
+  "real17_checked_fp32": 748544,
+  "tiny_positive_graphs": 6,
+  "no_reset_repeat_requests": 2,
+  "fault_recoveries": 99,
+  "chisel_dut_tests": 42,
+  "additional_decoder_parameterized_executions": [
+    7,
+    7
+  ],
+  "sandbox_vs_ci_actual_tensors": 3144,
+  "sandbox_vs_ci_fp32_values": 3300960,
+  "mismatches": 0,
+  "sandbox_cross_layer_faults": 6,
+  "sandbox_cross_layer_checked_fp32": 1180608,
+  "cli_output_preservation_tests": 10,
+  "portable_inventory_tests": 12,
+  "normal_and_optimized_python": true,
+  "hardware_source_modified_this_regression": false,
+  "retained_rtl_modified": false,
+  "legacy_block_launch": false,
+  "host_intermediate_copy": false,
+  "scope": {
+    "real_size_single_block_cross_tile": true,
+    "tiny_distinct_weight_multilayer": true,
+    "real_size_multilayer": false,
+    "official_weights": false,
+    "full_network_q1024": false,
+    "dc": false
+  },
+  "evidence_git_trees": {
+    "tiny": "e75684685a71932dc25f86c94bccc1ad846f47df",
+    "real-cross": "9cd15248b367a530cb955aadd3cdc9660aca85f5"
+  },
+  "local_report_sha256": {
+    "CI_SANDBOX_NUMERICAL_CROSSCHECK_V2.json": "d27a91b4f6b34e3d0746bc6a520a6a0362b7a7b52771350b8b255da0822c6786",
+    "STACK_RECOVERY_INDEPENDENT_RECHECK.json": "fcaa81352a66fac920d0a11be07c694a3262323d7247827cdb49f18f2c537328",
+    "CLI_PRESERVATION_RED_GREEN.json": "f16b6a401d5368777f4f9db5370794f1c2af4628fe85ace8d2ce392f0deec6c0",
+    "TINY_PORTABLE_RECHECK_CLI_FIXED.json": "236eb32887b188740a0bcea00e2e87d045fcd8893e46261e8117c9b64771f071",
+    "REAL17_PORTABLE_RECHECK_CLI_FIXED.json": "d5e43c1a30e290f51dd5af0aaf17f6a1c974bd3b5149faeeebbd1c336b72190d"
+  },
+  "core_published_files": {
+    "tiny": 7510,
+    "real-cross": 72
+  }
+}

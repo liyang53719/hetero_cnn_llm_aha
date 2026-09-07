@@ -73,5 +73,5 @@ if __name__=='__main__':
     ap.add_argument('--tokens',type=int,default=17);ap.add_argument('--layers',type=int,default=1);ap.add_argument('--relocate',type=int,default=9467985920);ap.add_argument('--swap',action='store_true');ap.add_argument('--seed',type=int,default=20260907);a=ap.parse_args()
     try:print(json.dumps(run(a.repo.resolve(),a.build.resolve(),a.output.resolve(),a.tokens,a.relocate,a.layers,a.swap,a.seed),indent=2))
     except (ValueError,OSError,KeyError,TypeError,subprocess.CalledProcessError) as e:
-        if a.output.exists():(a.output/'gate.exit').write_text('1\n')
+        # Existing evidence is never changed on rejection; caller records exit status.
         raise SystemExit('OWNER_REPLAY_FAILED: '+str(e))

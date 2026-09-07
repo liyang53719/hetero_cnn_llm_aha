@@ -1,0 +1,134 @@
+name: qwen2-real-two-layer-20260907
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/qwen2-real-two-layer-20260907.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: qwen2-real-two-layer-20260907
+  cancel-in-progress: false
+jobs:
+  real-two-layer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+      BUILD_JOBS: '3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 2
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - name: Install public tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y verilator g++
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: upstream_idma_artifact
+      - name: Pin dependencies and preserve source
+        run: |
+          set -euo pipefail
+          mkdir -p work/real2_upstream
+          (cd upstream_idma_artifact; sha256sum -c pinned_idma_sources.sha256)
+          tar -xzf upstream_idma_artifact/pinned_idma_sources.tar.gz -C work/real2_upstream
+          git rev-parse HEAD > real2_source_commit.txt
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config .github/workflows | gzip > real2_source.tar.gz
+          sha256sum real2_source.tar.gz > real2_source.tar.gz.sha256
+          git diff --exit-code
+      - name: Execute verifier rejection tests and Chisel two-layer frontend
+        run: |
+          set -euo pipefail
+          export OWNER_TEST_ARTIFACTS="$RUNNER_TEMP/real2_contract_$GITHUB_RUN_ID"
+          python3 chisel/continuous_prefill/tests/test_real_two_layer_contract.py > real2_contract.log 2>&1
+          python3 -O chisel/continuous_prefill/tests/test_real_two_layer_contract.py > real2_contract_optimized.log 2>&1
+          bash chisel/continuous_prefill/scripts/run_real_layers_frontend_gate.sh "$PWD/work/real2_frontend"
+      - name: Execute both real-dimensional layers through original Matrix and iDMA
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/real2_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_real_two_layer_gate.sh "$PWD/work/real2_numerical"
+          git diff --exit-code
+      - name: Atomically preserve exact successful proof on main
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess,sys,uuid
+          from pathlib import Path
+          repo=Path.cwd();sys.path.insert(0,str(repo/'chisel/continuous_prefill/scripts'))
+          from verify_real_two_layer import check
+          root=repo/'work/real2_numerical';source=os.environ['GITHUB_SHA']
+          report=check(repo,root)
+          if report['source_commit']!=source:raise SystemExit('SOURCE_MISMATCH')
+          def git(*a,env=None):return subprocess.check_output(['git',*a],env=env)
+          selected={};skip={'obj','classes','testclasses','test_run_dir','verilator-runtime','offline-tools-runtime','__pycache__'}
+          suffix={'.json','.log','.gz','.f32le','.bin','.h','.sv','.txt','.exit','.sha256'}
+          for label,base in [('numerical',root),('frontend',repo/'work/real2_frontend')]:
+            for p in sorted(base.rglob('*')):
+              rel=p.relative_to(base)
+              if p.is_file() and not p.is_symlink() and p.suffix in suffix and not any(x in skip for x in rel.parts):selected[label+'/'+str(rel)]=p.read_bytes()
+          for name in ['real2_source_commit.txt','real2_contract.log','real2_contract_optimized.log']:
+            selected[name]=(repo/name).read_bytes()
+          selected['VERIFIED_PUBLICATION.json']=(json.dumps(report,indent=2)+'\n').encode()
+          selected['PUBLISHED_SHA256.json']=(json.dumps({p:hashlib.sha256(b).hexdigest() for p,b in selected.items()},indent=2)+'\n').encode()
+          identities=json.loads((root/'sources.sha256.json').read_text())
+          prefix='reports/execution/REAL16_TWO_LAYER_'+source[:12]
+          blobs={p:subprocess.check_output(['git','hash-object','-w','--stdin'],input=b).decode().strip() for p,b in selected.items()}
+          for attempt in range(3):
+            subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+            parent=git('rev-parse','origin/main').decode().strip()
+            for p,digest in identities.items():
+              if hashlib.sha256(git('show',parent+':'+p)).hexdigest()!=digest:raise SystemExit('TESTED_SOURCE_CHANGED:'+p)
+            env=dict(os.environ,GIT_INDEX_FILE=str(repo/('real2_index_'+uuid.uuid4().hex)),GIT_AUTHOR_NAME='heteronpu-verified-real2',GIT_AUTHOR_EMAIL='heteronpu-verified-real2@users.noreply.github.com',GIT_COMMITTER_NAME='heteronpu-verified-real2',GIT_COMMITTER_EMAIL='heteronpu-verified-real2@users.noreply.github.com')
+            git('read-tree',parent,env=env)
+            for rel,blob in blobs.items():
+              path=prefix+'/'+rel
+              old=subprocess.run(['git','show',parent+':'+path],capture_output=True)
+              if old.returncode==0 and old.stdout!=selected[rel]:raise SystemExit('REFUSE_OVERWRITE:'+path)
+              git('update-index','--add','--cacheinfo','100644',blob,path,env=env)
+              if git('show',':'+path,env=env)!=selected[rel]:raise SystemExit('INDEX_MISMATCH')
+            tree=git('write-tree',env=env).decode().strip()
+            commit=git('commit-tree',tree,'-p',parent,'-m','test: preserve complete real16 two-layer Host numerical proof [skip ci]',env=env).decode().strip()
+            if subprocess.run(['git','push','origin',commit+':main']).returncode==0:
+              subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+              subprocess.run(['git','merge-base','--is-ancestor',commit,'origin/main'],check=True)
+              for rel,data in selected.items():
+                if git('show','origin/main:'+prefix+'/'+rel)!=data:raise SystemExit('REMOTE_BYTES_MISMATCH')
+              (repo/'real2_publication.json').write_text(json.dumps({'commit':commit,'tested_source':source,'files':len(selected),'path':prefix,'remote_bytes_verified':True,'force_push':False},indent=2)+'\n')
+              break
+          else:raise SystemExit('FAST_FORWARD_PUBLICATION_FAILED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qwen2-real-two-layer-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            real2_*.log
+            real2_*.txt
+            real2_*.json
+            real2_source.tar.gz
+            real2_source.tar.gz.sha256
+            work/real2_frontend/**
+            work/real2_numerical/**
+            !work/**/obj/**
+            !work/**/classes/**
+            !work/**/testclasses/**
+            !work/**/test_run_dir/**
+            !work/**/verilator-runtime/**
+            !work/**/offline-tools-runtime/**
+            !work/**/__pycache__/**

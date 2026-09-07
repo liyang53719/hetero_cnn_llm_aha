@@ -2,8 +2,10 @@
 # Full original 21-op sequence, not a block launch followed by test Adds.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"
-PROFILE=${1:?tiny|real};OUT=${2:?absolute new directory};TOKENS=${3:-16};RELOCATE=${4:-0}
+PROFILE=${1:?tiny|real};OUT=${2:?absolute new directory};TOKENS=${3:-16};RELOCATE=${4:-0};LAYERS=${5:-1}
 [[ "$PROFILE" = tiny || "$PROFILE" = real ]] || exit 2
+[[ "$LAYERS" =~ ^[123]$ && "$TOKENS" =~ ^[1-9][0-9]{0,3}$ && "$RELOCATE" =~ ^[0-9]{1,17}$ ]] || exit 2
+((10#$TOKENS<=1024)) || exit 2
 [[ "$OUT" = /* && ! -e "$OUT" ]] || exit 2
 for t in java g++ python3 git;do command -v "$t" >/dev/null || { echo "BLOCKED_MISSING_TOOL:$t";exit 77; };done
 [[ -n ${IDMA_EXPORT:-} && -f "$IDMA_EXPORT/idma.f.in" ]] || { echo BLOCKED_PINNED_IDMA;exit 77; }
@@ -22,7 +24,11 @@ if [[ -n ${OFFLINE_TOOLS:-} ]];then
 else
   (cd "$P";sbt -batch compile "runMain heteronpu.continuous.EmitHostBlock $OUT/generated $PROFILE") >"$OUT/compile_emit.log" 2>&1
 fi
-python3 "$P/scripts/pack_owner_block_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --relocate "$RELOCATE" >"$OUT/packing.log"
+if [[ "$LAYERS" = 1 ]];then
+  python3 "$P/scripts/pack_owner_block_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --relocate "$RELOCATE" >"$OUT/packing.log"
+else
+  python3 "$P/scripts/pack_owner_multilayer_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --layers "$LAYERS" --relocate "$RELOCATE" >"$OUT/packing.log"
+fi
 export RETAINED_SKIP_CLOCK=0;source "$P/scripts/retained_sources.sh"
 verilator --cc --exe --build --assert -Wno-fatal --top-module HostBlockTop \
  -CFLAGS "-O3 -std=c++17 -ffp-contract=off -fno-fast-math -I$OUT/generated -I$OUT/fixture" \

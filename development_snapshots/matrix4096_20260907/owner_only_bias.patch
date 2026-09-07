@@ -1,0 +1,20 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -319,6 +319,9 @@
+     val halfOffset=denseBeat.pad(16)<<4
+     val selectedDense=Wire(Vec(16,UInt(32.W)))
+     for(i<-0 until 16)selectedDense(i):=denseAcc(denseRow(3,0))((denseBeat<<4)+i.U)
++    // In owner mode Bias is a separate Host command. Do not elaborate its
++    // unreachable legacy multiwrite mux across the 4096 accumulator cells.
++    if(!ownerDriven){
+     when(state===st("denseBias")){read(base+bias+((col+halfOffset).pad(64)<<2),"denseBiasGot")}
+     when(state===st("denseBiasGot")){
+       vectorA:=selectedDense;vectorB:=packet.asTypeOf(vectorB)
+@@ -329,6 +332,7 @@
+         when(halfOffset+16.U<denseColumns.U && col+halfOffset+16.U<dN){denseBeat:=denseBeat+1.U;state:=st("denseBias")}
+         .otherwise{denseBeat:=0.U;state:=st("denseWrite")}
+       }
++    }
+     }
+     when(state===st("denseWrite")){
+       write(base+dOut+(((denseBase.pad(32)+denseRow)*dN+col+halfOffset).pad(64)<<2),selectedDense.asUInt,"denseWritten")

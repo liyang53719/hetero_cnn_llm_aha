@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "PASS_BOUNDED_WEIGHT_BURST_SANDBOX_REGRESSIONS",
+  "restored_source": "e1f94ced9c1a5eca5759e48f7790c968cdee7fb9",
+  "note": "New supplemental tests have their own committed sources. Production Chisel was unchanged after the frozen base builds. This report does not claim real-dimensional optimized performance.",
+  "direct_pinned_idma": {
+    "cases": 24,
+    "physical_read_beats": 256,
+    "single_beat_transfers": 256,
+    "burst_transfers": 16,
+    "cached_logical_beats": 240,
+    "supply_cycles_single": 3328,
+    "supply_cycles_burst": 2128,
+    "data_mismatches": 0,
+    "log_sha256": "ea2abd464f788f3da0b15fdfdec11afc066fff1ababb260bc48572a10ffd895e",
+    "generated_sha256": "77fa951a4af4f23af177973b52f0ed77dfe3584849e66cf80a0cbe08f1256e5c"
+  },
+  "production_shared_arbiter_probe": {
+    "cases": 24,
+    "supply_cycles_single": 3840,
+    "supply_cycles_burst": 2640,
+    "data_mismatches": 0,
+    "shared_arbiter_instances": 1,
+    "pinned_idma_instances": 1,
+    "log_sha256": "f9c908e4f31c833914a00d0ee59489785bf14d4def2fd2fdc5ed489847052839",
+    "generated_sha256": "9d5babbb0df69813931bb0f643ce3a1521b75ec805fa06fb4778d546b5928edd"
+  },
+  "alignment_and_masked_store_cases": 599,
+  "alignment_and_masked_store_checked_u32": 145984,
+  "tiny_two_layer": {
+    "commands": 42,
+    "owner_jobs": 38,
+    "checked_fp32": 39936,
+    "cycles": 594314,
+    "bit_differences": 0
+  },
+  "fixed_lifecycle": {
+    "cases": 7,
+    "checked_fp32": 319488,
+    "bit_differences": 0,
+    "same_dut_reset_recovery": true,
+    "no_reset_second_request": true
+  },
+  "all_second_layer_dense_faults": {
+    "cases": 14,
+    "checked_fp32": 559104,
+    "bit_differences": 0,
+    "global_pcs": [22, 25, 28, 34, 37, 38, 40],
+    "faults": ["weight-mid-error", "weight-last-error"]
+  },
+  "passive_profile": {
+    "commands": 42,
+    "checked_fp32": 39936,
+    "all_public_counters_and_completion_cycles_identical_to_uninstrumented": true
+  },
+  "optional_weight_alignment": {
+    "weight_alignment_bytes": 1024,
+    "checked_fp32": 39936,
+    "before_cycles": 594314,
+    "after_cycles": 592960,
+    "before_read_bursts": 6928,
+    "after_read_bursts": 6648,
+    "physical_read_bytes_unchanged": true,
+    "actual_outputs_identical": true,
+    "real_size_numerical_claim": false
+  },
+  "scope": {
+    "tiny_hidden": 64,
+    "tiny_ffn": 128,
+    "tokens": 16,
+    "layers": 2,
+    "retained_matrix_macs": 4096,
+    "one_pinned_idma": true,
+    "single_logical_matrix": true,
+    "no_block_launch": true,
+    "synthetic_weights": true,
+    "official_weights": false,
+    "full_model_q1024": false,
+    "dc": false
+  }
+}

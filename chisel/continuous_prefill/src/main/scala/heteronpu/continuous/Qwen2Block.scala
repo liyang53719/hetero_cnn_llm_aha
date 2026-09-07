@@ -35,7 +35,7 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
   * Each successor starts only after the previous stage's final write ACK.
   */
-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
+class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false) extends Module {
   val layout=new QwenBlockLayout(s)
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
@@ -43,15 +43,19 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   val denseColumns = if(s.retainedMatrix) 32 else 16
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new BlockLaunch));val result=Decoupled(new BlockResult)
+    val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
     val phase=Output(UInt(5.W));val stageCommit=Output(Bool());val committedPhase=Output(UInt(5.W))
     val resetRequired=Output(Bool());val readBytes=Output(UInt(64.W));val writeBytes=Output(UInt(64.W))
     val acknowledgedWriteBytes=Output(UInt(64.W))
   })
   dontTouch(io) // Public ABI retained under the joint HardFloat elaboration.
-  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked")
+  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked","biasRead","biasOperand","biasSum","biasWritten")
   private val codes=names.zipWithIndex.toMap;def st(n:String):UInt=codes(n).U(7.W)
   val state=RegInit(st("idle"));val resume=Reg(UInt(7.W));val scalarResume=Reg(UInt(7.W));val localResume=Reg(UInt(7.W))
+  val owner=Reg(new QwenOwnerJob)
+  val kvHalf=RegInit(false.B)
+  val start=if(ownerDriven)io.ownerJob.get.fire else io.launch.fire
   val phase=RegInit(0.U(5.W));val base=Reg(UInt(64.W));val tokens=Reg(UInt(16.W));val epoch=Reg(UInt(16.W))
   val status=RegInit(0.U(8.W));val poisoned=RegInit(false.B);val cycles=RegInit(0.U(64.W));val macs=RegInit(0.U(64.W))
   val reads=RegInit(0.U(64.W));val writes=RegInit(0.U(64.W));val seq=RegInit(0.U(32.W))
@@ -84,7 +88,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   if(s.retainedMatrix){
     val adapter=Module(new RetainedMatrixTileAdapter);adapter.io.scanEnable:=false.B;val pending=RegInit(false.B)
     physicalSteps:=adapter.io.acceptedSteps
-    when(io.launch.fire){physicalBase:=adapter.io.acceptedSteps}
+    when(start){physicalBase:=adapter.io.acceptedSteps}
     val isDense=state===st("denseCompute")
     val dot=state===st("attDot");val pv=state===st("attPVCompute")
     val computing=isDense||dot||pv
@@ -100,7 +104,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
     }
     adapter.io.request.bits.clear:=Mux(pv,key===0.U,depth===0.U)
     adapter.io.request.bits.last:=Mux(pv,key===token,
-      Mux(dot,depth+16.U===s.headDim.U,depth+1.U===Mux(phase===13.U,s.ffn.U,s.hidden.U)))
+      Mux(dot,depth+16.U===s.headDim.U,depth+1.U===(if(ownerDriven)owner.k else Mux(phase===13.U,s.ffn.U,s.hidden.U))))
     adapter.io.request.bits.opcode:=Mux(dot,0x23.U,Mux(pv,0x24.U,0x20.U))
     adapter.io.result.ready:=computing && pending
     when(adapter.io.request.fire){pending:=true.B}
@@ -119,16 +123,26 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   elem.io.job.bits.op:=ElemOp.Add.U;elem.io.job.bits.a:=base+Mux(phase===8.U,layout("x").U,layout("r").U)
   elem.io.job.bits.b:=base+Mux(phase===8.U,layout("o").U,layout("down").U);elem.io.job.bits.dst:=base+Mux(phase===8.U,layout("r").U,layout("y").U)
   elem.io.job.bits.elementCount:=tokens*s.hidden.U;elem.io.job.bits.tag:=Cat(epoch,phase.pad(16));elem.io.done.ready:=state===st("resWait")
+  if(ownerDriven){
+    val copy=owner.kind===QwenOwnerKind.KvAppend.U
+    val bytes=owner.m.pad(64)*owner.n*4.U
+    elem.io.job.bits.op:=Mux(copy,ElemOp.Copy.U,ElemOp.Add.U)
+    elem.io.job.bits.a:=Mux(copy&&kvHalf,owner.b,owner.a)
+    elem.io.job.bits.b:=owner.b
+    elem.io.job.bits.dst:=owner.dst+Mux(copy&&kvHalf,bytes,0.U)
+    elem.io.job.bits.elementCount:=owner.m*owner.n
+  }
   elem.io.memory.ready:=io.memory.ready&&resActive;elem.io.response.valid:=io.response.valid&&resActive;elem.io.response.bits:=io.response.bits
   io.memory.valid:=Mux(resActive,elem.io.memory.valid,state===st("memReq"));io.memory.bits:=Mux(resActive,elem.io.memory.bits,request)
   io.response.ready:=Mux(resActive,elem.io.response.ready,state===st("memRsp"))
-  io.launch.ready:=state===st("idle")&& !poisoned
+  io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned)
+  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned}
   io.result.valid:=state===st("finish");io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired;io.readBytes:=reads;io.writeBytes:=writes
   // Count memory visibility acknowledgements, not issued stores. The fence
   // observes both the block engine and the shared residual elementwise engine.
   val writeback = Module(new BlockWritebackFence)
-  writeback.io.startRequest := io.launch.fire
+  writeback.io.startRequest := start
   writeback.io.startStage := state === st("begin")
   writeback.io.issue.valid := io.memory.fire
   writeback.io.issue.bits := io.memory.bits
@@ -136,7 +150,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   writeback.io.response.bits := io.response.bits
   val phaseWidth = Mux(phase===2.U || phase===3.U || phase===5.U, s.kv.U,
     Mux(phase===10.U || phase===11.U || phase===12.U, s.ffn.U, s.hidden.U))
-  writeback.io.expectedBytes := tokens.pad(64) * phaseWidth * 4.U
+  writeback.io.expectedBytes := (if(ownerDriven)owner.writeBytes else tokens.pad(64) * phaseWidth * 4.U)
   io.acknowledgedWriteBytes := writeback.io.totalBytes
   when(state=/=st("idle")&&state=/=st("finish")&&state=/=st("locked")){cycles:=cycles+1.U}
   when(io.memory.fire){when(io.memory.bits.write){writes:=writes+PopCount(io.memory.bits.mask)}.otherwise{reads:=reads+64.U}}
@@ -151,17 +165,31 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   def localRead(index:UInt,next:String):Unit={localIndex:=index;localResume:=st(next);state:=st("localReq")}
   def localWrite(index:UInt,data:UInt,next:String):Unit={localIndex:=index;localData:=data;localResume:=st(next);state:=st("localWrite")}
   def calc(op:Int,a:UInt,b:UInt,next:String):Unit={scalarRequest.op:=op.U;scalarRequest.a:=a;scalarRequest.b:=b;scalarResume:=st(next);state:=st("scalarReq")}
-  def ptr(n:String,index:UInt=0.U):UInt=base+layout(n).U(64.W)+(index.pad(64)<<2)
+  def ptr(n:String,index:UInt=0.U):UInt={
+    val address=if(ownerDriven)n match {
+      case "q"|"gate"=>owner.a
+      case "k"|"up"|"cos"=>owner.b
+      case "v"|"sin"=>owner.c
+      case "att"|"act"=>owner.dst
+      case _=>throw new IllegalArgumentException("owner pointer "+n)
+    }else base+layout(n).U(64.W)
+    address+(index.pad(64)<<2)
+  }
   def clearAcc():Unit={acc:=VecInit(Seq.fill(16)(0.U(32.W)))}
   def rowOffset(width:UInt):UInt=token.pad(32)*width
-  val nIn=Mux(phase===0.U,layout("x").U,layout("r").U);val nOut=Mux(phase===0.U,layout("n0").U,layout("n1").U);val gamma=Mux(phase===0.U,layout("gamma0").U,layout("gamma1").U)
-  val dIn=MuxLookup(phase,layout("n0").U)(Seq(7.U->layout("att").U,10.U->layout("n1").U,11.U->layout("n1").U,13.U->layout("act").U))
-  val dOut=MuxLookup(phase,layout("qr").U)(Seq(2.U->layout("kr").U,3.U->layout("v").U,7.U->layout("o").U,10.U->layout("gate").U,11.U->layout("up").U,13.U->layout("down").U))
-  val dWeight=MuxLookup(phase,layout("wq").U)(Seq(2.U->layout("wk").U,3.U->layout("wv").U,7.U->layout("wo").U,10.U->layout("wg").U,11.U->layout("wu").U,13.U->layout("wd").U))
-  val dK=Mux(phase===13.U,s.ffn.U,s.hidden.U);val dN=Mux(phase===2.U||phase===3.U,s.kv.U,Mux(phase===10.U||phase===11.U,s.ffn.U,s.hidden.U))
+  val nIn=if(ownerDriven)owner.a else Mux(phase===0.U,layout("x").U,layout("r").U)
+  val nOut=if(ownerDriven)owner.dst else Mux(phase===0.U,layout("n0").U,layout("n1").U)
+  val gamma=if(ownerDriven)owner.b else Mux(phase===0.U,layout("gamma0").U,layout("gamma1").U)
+  val dIn=if(ownerDriven)owner.a else MuxLookup(phase,layout("n0").U)(Seq(7.U->layout("att").U,10.U->layout("n1").U,11.U->layout("n1").U,13.U->layout("act").U))
+  val dOut=if(ownerDriven)owner.dst else MuxLookup(phase,layout("qr").U)(Seq(2.U->layout("kr").U,3.U->layout("v").U,7.U->layout("o").U,10.U->layout("gate").U,11.U->layout("up").U,13.U->layout("down").U))
+  val dWeight=if(ownerDriven)owner.b else MuxLookup(phase,layout("wq").U)(Seq(2.U->layout("wk").U,3.U->layout("wv").U,7.U->layout("wo").U,10.U->layout("wg").U,11.U->layout("wu").U,13.U->layout("wd").U))
+  val dK=if(ownerDriven)owner.k else Mux(phase===13.U,s.ffn.U,s.hidden.U)
+  val dN=if(ownerDriven)owner.n else Mux(phase===2.U||phase===3.U,s.kv.U,Mux(phase===10.U||phase===11.U,s.ffn.U,s.hidden.U))
   val bias=MuxLookup(phase,layout("bq").U)(Seq(2.U->layout("bk").U,3.U->layout("bv").U))
-  val ropeWidth=Mux(phase===4.U,s.hidden.U,s.kv.U);val ropeHeads=Mux(phase===4.U,s.heads.U,s.kvHeads.U)
-  val ropeInput=Mux(phase===4.U,layout("qr").U,layout("kr").U);val ropeOutput=Mux(phase===4.U,layout("q").U,layout("k").U)
+  val ropeWidth=if(ownerDriven)owner.n else Mux(phase===4.U,s.hidden.U,s.kv.U)
+  val ropeHeads=if(ownerDriven)owner.n/s.headDim.U else Mux(phase===4.U,s.heads.U,s.kvHeads.U)
+  val ropeInput=if(ownerDriven)owner.a else Mux(phase===4.U,layout("qr").U,layout("kr").U)
+  val ropeOutput=if(ownerDriven)owner.dst else Mux(phase===4.U,layout("q").U,layout("k").U)
   val ropeIndex=token.pad(32)*ropeWidth+head*s.headDim.U+col;val kvHead=head/(s.heads/s.kvHeads).U
   when(state===st("memReq")&&io.memory.fire){state:=st("memRsp")}
   when(state===st("memRsp")&&io.response.fire){when(io.response.bits.tag=/=request.tag){fail(Status.Protocol.U)}.elsewhen(io.response.bits.error){fail(Status.Memory.U)}.otherwise{packet:=io.response.bits.data;state:=resume}}
@@ -170,17 +198,30 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   when(state===st("localWrite")){f.wr_valid_i:=true.B;f.wr_addr_i:=localIndex;f.wr_data_i:=localData;f.wr_be_i:=Fill(64,1.U(1.W));when(f.wr_ready_o){state:=localResume}}
   when(state===st("scalarReq")&&scalar.io.request.fire){state:=st("scalarRsp")}
   when(state===st("scalarRsp")&&scalar.io.result.fire){when(scalar.io.error){fail(Status.Numerical.U)}.otherwise{scalarValue:=scalar.io.result.bits;state:=scalarResume}}
+  if(ownerDriven){
+    when(start){
+      val j=io.ownerJob.get.bits;owner:=j;kvHalf:=false.B
+      base:=0.U;tokens:=j.m;epoch:=j.tag(31,16)
+      phase:=MuxLookup(j.kind,15.U)(Seq(QwenOwnerKind.Norm.U->0.U,QwenOwnerKind.Dense.U->7.U,
+        QwenOwnerKind.Rope.U->4.U,QwenOwnerKind.Attention.U->6.U,QwenOwnerKind.Add.U->8.U,
+        QwenOwnerKind.Activation.U->12.U,QwenOwnerKind.KvAppend.U->16.U))
+      seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
+      when(j.m===0.U||j.m>s.maxTokens.U||j.n===0.U||j.n>s.maxRow.U||j.n(3,0)=/=0.U||j.writeBytes===0.U){fail(Status.Bounds.U)}
+        .otherwise{state:=st("begin")}
+    }
+  }else{
   when(state===st("idle")&&io.launch.fire){base:=io.launch.bits.base;tokens:=io.launch.bits.tokens;epoch:=io.launch.bits.epoch;phase:=0.U;seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
     when(io.launch.bits.tokens===0.U||io.launch.bits.tokens>s.maxTokens.U||io.launch.bits.base(5,0)=/=0.U||io.launch.bits.base.pad(66)+layout.total.U>io.launch.bits.limit.pad(66)||io.launch.bits.limit>(BigInt(1)<<56).U){fail(Status.Bounds.U)}.otherwise{state:=st("begin")}}
+  }
   when(state===st("begin")){
     denseBase:=0.U;denseRows:=Mux(tokens>denseBatch.U,denseBatch.U,tokens)
     denseLoadRow:=0.U;denseRow:=0.U;denseWindowRow:=0.U;denseHalf:=false.B
     token:=0.U;head:=0.U;key:=0.U;depth:=0.U;col:=0.U;sum:=0.U;lane:=0.U;clearAcc()
-    when(phase===0.U||phase===9.U){state:=st("normLoad")}.elsewhen(phase===4.U||phase===5.U){state:=st("ropeStart")}.elsewhen(phase===6.U){state:=st("attQLoad")}.elsewhen(phase===8.U||phase===14.U){state:=st("resIssue")}.elsewhen(phase===12.U){state:=st("siluRead")}.otherwise{state:=st("denseLoad")}}
+    when(phase===0.U||phase===9.U){state:=st("normLoad")}.elsewhen(phase===4.U||phase===5.U){state:=st("ropeStart")}.elsewhen(phase===6.U){state:=st("attQLoad")}.elsewhen(phase===8.U||phase===14.U||phase===16.U){state:=st("resIssue")}.elsewhen(phase===12.U){state:=st("siluRead")}.elsewhen(phase===15.U){state:=st("biasRead")}.otherwise{state:=st("denseLoad")}}
   when(state===st("advance")){
     when(!writeback.io.canCommit){fail(Status.Protocol.U)}.otherwise{
       io.stageCommit:=true.B
-      when(phase===14.U){state:=st("finish")}.otherwise{phase:=phase+1.U;state:=st("begin")}
+      if(ownerDriven){state:=st("finish")}else{when(phase===14.U){state:=st("finish")}.otherwise{phase:=phase+1.U;state:=st("begin")}}
     }
   }
   when(state===st("finish")&&io.result.fire){state:=Mux(poisoned,st("locked"),st("idle"))}
@@ -241,7 +282,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
         macs:=macs+denseRows*Mux(col+32.U<=dN,32.U,16.U)
         denseRow:=0.U;denseHalf:=false.B
         when(depth+1.U===dK){
-          when(phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}
+          when((!ownerDriven).B && phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}
         }.otherwise{
           depth:=depth+1.U
           when(depth(3,0)===15.U){denseWindowRow:=0.U;state:=st("denseWindowReq")}
@@ -261,7 +302,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
           .otherwise{
             denseRow:=0.U
             when(depth+1.U===dK){
-              when(phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}
+              when((!ownerDriven).B && phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}
             }.otherwise{
               depth:=depth+1.U
               when(depth(3,0)===15.U){denseWindowRow:=0.U;state:=st("denseWindowReq")}
@@ -313,7 +354,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   when(state===st("denseLocal")){state:=st("denseWeight")}
   when(state===st("denseWeight")){read(base+dWeight+((depth.pad(32)*dN+col).pad(64)<<2),"denseCompute")}
   when(state===st("denseCompute")){fmA:=VecInit(Seq.fill(16)(av(depth(3,0))));fmB:=packet.asTypeOf(fmB);when(fmDone){acc:=fmOut;macs:=macs+16.U
-    when(depth+1.U===dK){when(phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}}
+    when(depth+1.U===dK){when((!ownerDriven).B && phase<=3.U){state:=st("denseBias")}.otherwise{state:=st("denseWrite")}}
     .otherwise{depth:=depth+1.U;when(depth(3,0)===15.U){localRead((depth+1.U)>>4,"denseLocal")}.otherwise{state:=st("denseWeight")}}}}
   when(state===st("denseBias")){read(base+bias+(col.pad(64)<<2),"denseBiasGot")}
   when(state===st("denseBiasGot")){vectorA:=acc;vectorB:=packet.asTypeOf(vectorB);acc:=vout;state:=st("denseWrite")}
@@ -372,7 +413,21 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape()) extends Module {
   when(state===st("siluNext")){tmp(lane):=scalarValue;when(lane===15.U){write(ptr("act",rowOffset(s.ffn.U)+col),Cat((0 until 16).reverse.map(i=>Mux(lane===i.U,scalarValue,tmp(i)))),"siluWritten")}.otherwise{lane:=lane+1.U;state:=st("siluExp")}}
   when(state===st("siluWritten")){when(col+16.U<s.ffn.U){col:=col+16.U;state:=st("siluRead")}.elsewhen(token+1.U<tokens){token:=token+1.U;col:=0.U;state:=st("siluRead")}.otherwise{state:=st("advance")}}
   when(state===st("resIssue")&&elem.io.job.fire){state:=st("resWait")}
-  when(state===st("resWait")&&elem.io.done.fire){when(elem.io.done.bits.status=/=0.U){fail(elem.io.done.bits.status)}.elsewhen(elem.io.done.bits.tag=/=Cat(epoch,phase.pad(16))||elem.io.done.bits.elementCount=/=tokens*s.hidden.U||elem.io.done.bits.writeBytes=/=tokens.pad(64)*s.hidden.U*4.U){fail(Status.Protocol.U)}.otherwise{state:=st("advance")}}
+  val elemCount=if(ownerDriven)owner.m*owner.n else tokens*s.hidden.U
+  when(state===st("resWait")&&elem.io.done.fire){
+    when(elem.io.done.bits.status=/=0.U){fail(elem.io.done.bits.status)}
+    .elsewhen(elem.io.done.bits.tag=/=Cat(epoch,phase.pad(16))||elem.io.done.bits.elementCount=/=elemCount||elem.io.done.bits.writeBytes=/=elemCount.pad(64)*4.U){fail(Status.Protocol.U)}
+    .otherwise{
+      if(ownerDriven){when(owner.kind===QwenOwnerKind.KvAppend.U && !kvHalf){kvHalf:=true.B;state:=st("resIssue")}.otherwise{state:=st("advance")}}
+      else{state:=st("advance")}
+    }
+  }
+  if(ownerDriven){
+    when(state===st("biasRead")){read(owner.a+((token.pad(32)*owner.n+col).pad(64)<<2),"biasOperand")}
+    when(state===st("biasOperand")){av:=packet.asTypeOf(av);read(owner.b+(col.pad(64)<<2),"biasSum")}
+    when(state===st("biasSum")){vectorA:=av;vectorB:=packet.asTypeOf(vectorB);write(owner.dst+((token.pad(32)*owner.n+col).pad(64)<<2),vout.asUInt,"biasWritten")}
+    when(state===st("biasWritten")){when(col+16.U<owner.n){col:=col+16.U;state:=st("biasRead")}.elsewhen(token+1.U<tokens){token:=token+1.U;col:=0.U;state:=st("biasRead")}.otherwise{state:=st("advance")}}
+  }
   // Last-connect safety checks override a compute transition, before a request.
   when(matrixFault){fail(Status.Protocol.U)}
   when((state===st("denseCompute")||state===st("attDot")||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}

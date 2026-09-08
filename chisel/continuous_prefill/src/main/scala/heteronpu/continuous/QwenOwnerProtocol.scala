@@ -18,13 +18,17 @@ class QwenOwnerResult extends Bundle {
 /** No block launch is exposed. One decoded owner operation per transaction;
   * the arithmetic implementation must return instead of advancing to a phase.
   */
-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false) extends Module {
+class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false) extends Module {
+  require(!burstWrites || pipelined)
   val io=IO(new Bundle {
     val job=Flipped(Decoupled(new QwenOwnerJob)); val done=Decoupled(new QwenOwnerResult)
     val memory=Decoupled(new MemoryRequest); val response=Flipped(Decoupled(new MemoryResponse))
     val resetRequired=Output(Bool())
     val burst=if(pipelined)Some(Decoupled(new BurstReadRequest))else None
     val burstResponse=if(pipelined)Some(Flipped(Decoupled(new BurstReadResponse)))else None
+    val writeRequest=if(burstWrites)Some(Decoupled(new BurstWriteRequest))else None
+    val writeData=if(burstWrites)Some(Decoupled(new BurstWriteBeat))else None
+    val writeResponse=if(burstWrites)Some(Flipped(Decoupled(new MemoryResponse)))else None
     val pipelineIssues=Output(UInt(64.W));val pipelineStalls=Output(UInt(64.W))
   })
   if(!pipelined){
@@ -43,7 +47,7 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false) extends Module {
     require(s.matrixColumns==256 && s.retainedMatrix)
     val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true))
     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
-    val dense=Module(new StreamingDenseOwner(s.maxRow))
+    val dense=Module(new StreamingDenseOwner(s.maxRow,burstWrites=burstWrites))
     val silu=Module(new VectorSiluOwner)
     val matrix=Module(new MatrixPipelineService)
     val legacy=Module(new LegacyMatrixStreamClient)
@@ -72,6 +76,7 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false) extends Module {
     io.response.ready:=active&&MuxLookup(mode,responses(0).ready)(Seq(1.U->responses(1).ready,2.U->responses(2).ready))
     for(i<-0 until 3){memories(i).ready:=active&&mode===i.U&&io.memory.ready
       responses(i).valid:=active&&mode===i.U&&io.response.valid;responses(i).bits:=io.response.bits}
+    if(burstWrites){io.writeRequest.get<>dense.io.writeRequest.get;io.writeData.get<>dense.io.writeData.get;dense.io.writeResponse.get<>io.writeResponse.get}
     io.burst.get<>dense.io.burst;dense.io.burstResponse<>io.burstResponse.get
     val useDense=active&&mode===1.U
     for((client,index)<-Seq(legacy.io.port,dense.io.matrix).zipWithIndex){

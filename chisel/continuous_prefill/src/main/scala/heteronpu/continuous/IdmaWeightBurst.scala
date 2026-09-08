@@ -29,7 +29,10 @@ class IdmaWeightWindow extends Bundle {
   * This is not a persistent object cache and never fetches a new tensor speculatively.
   */
 class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = false,
-                                    streamCutThrough: Boolean = true) extends Module {
+                                    streamCutThrough: Boolean = true, burstWrites: Boolean = false,
+                                    commitTailRead: Boolean = false) extends Module {
+  require(!commitTailRead || streaming, "commit-tail reads require a streamed consumer")
+  require(!burstWrites || streaming, "burst writes require the streamed owner contract")
   require(maxBeats >= 1 && maxBeats <= 16 && isPow2(maxBeats))
   val idxBits = math.max(1, log2Ceil(maxBeats))
   val countBits = log2Ceil(maxBeats + 1)
@@ -40,20 +43,30 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
     val flush = Input(Bool())
     val streamRequest = if(streaming) Some(Flipped(Decoupled(new BurstReadRequest))) else None
     val streamResponse = if(streaming) Some(Decoupled(new BurstReadResponse)) else None
+    val streamWriteRequest = if(burstWrites) Some(Flipped(Decoupled(new BurstWriteRequest))) else None
+    val streamWriteData = if(burstWrites) Some(Flipped(Decoupled(new BurstWriteBeat))) else None
+    val streamWriteResponse = if(burstWrites) Some(Decoupled(new MemoryResponse)) else None
+    val streamedWriteBeats = Output(UInt(64.W))
     val streamedBeats = Output(UInt(64.W))
     val axi = new BlockAxiMaster
     val resetRequired = Output(Bool())
     val transfers = Output(UInt(64.W))
+    val completedTransfers = Output(UInt(64.W))
     val readBeats = Output(UInt(64.W))
     val writeBeats = Output(UInt(64.W))
     val readBursts = Output(UInt(64.W))
     val cacheHits = Output(UInt(64.W))
   })
-  val idle :: issue :: waitDma :: reply :: locked :: Nil = Enum(5)
+  val idle :: issue :: waitDma :: reply :: locked :: collectWrite :: Nil = Enum(6)
   val state = RegInit(idle)
   val stream = RegInit(false.B)
+  val writeBurst = RegInit(false.B)
+  val fillCount = RegInit(0.U(countBits.W))
+  val writeReplyFire = WireDefault(false.B)
   val streamIndex = RegInit(0.U(countBits.W))
   val streamCount = RegInit(0.U(64.W))
+  val committedWriteBeats=RegInit(0.U(64.W))
+  io.streamedWriteBeats:=committedWriteBeats
   io.streamedBeats := streamCount
   val fromStream = WireDefault(false.B)
   val newStream = WireDefault(0.U.asTypeOf(new BurstReadRequest))
@@ -85,6 +98,8 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
   val extId = Reg(UInt(8.W))
   val arSeen = RegInit(false.B)
   val transfers = RegInit(0.U(64.W))
+  val completedTransfers=RegInit(0.U(64.W))
+  io.completedTransfers:=completedTransfers
   val reads = RegInit(0.U(64.W))
   val writes = RegInit(0.U(64.W))
   val bursts = RegInit(0.U(64.W))
@@ -102,27 +117,62 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
   d.req_valid_i := state === issue
   d.src_addr_i := Mux(req.write, 0.U, req.address)
   d.dst_addr_i := Mux(req.write, req.address, 0.U)
-  d.length_i := Mux(req.write, PopCount(req.mask), count.pad(32) << 6)
+  d.length_i := Mux(req.write && !writeBurst, PopCount(req.mask), count.pad(32) << 6)
   d.rsp_ready_i := state === waitDma && localDone && externalDone
   d.axi_read_rsp_i := rs.asUInt; d.axi_write_rsp_i := ws.asUInt
   io.request.ready := state === idle && !poison && !io.flush
-  io.response.valid := state === reply && !stream; io.response.bits := rsp
+  io.response.valid := state === reply && !stream && !writeBurst; io.response.bits := rsp
   if(streaming){
     io.streamRequest.get.ready := state === idle && !poison && !io.flush && !io.request.valid
+    // Only nonfinal payload beats may bypass the staging mailbox. The last
+    // beat is a commit barrier: it remains withheld until the real backend
+    // has drained the transfer and returned its final error status. Metadata
+    // and normal MemoryRequest reads NEVER use this speculative path.
+    val forwarding=commitTailRead.B && stream && !req.write &&
+      (state===issue||state===waitDma) && localAw && !localDone && localCount+1.U<count
     val finalBeat = streamIndex + 1.U === count
-    val prefixAvailable = (if(streamCutThrough) true.B else false.B) &&
+    val bufferedPrefix = streamCutThrough.B && !commitTailRead.B &&
       state === waitDma && stream && !finalBeat && streamIndex < localCount
-    io.streamResponse.get.valid := (state === reply && stream) || prefixAvailable
-    // A prefix offer must remain stable even if a later AXI beat fails while
-    // ready is low. Only LAST carries the transaction-wide verdict. The SRAM
-    // consumer buffers the prefix; no tensor/Matrix job is committed here.
-    val responseError = rsp.error && (finalBeat || !streamCutThrough.B)
-    io.streamResponse.get.bits.data := Mux(responseError,0.U,data(streamIndex(idxBits-1,0)))
+    io.streamResponse.get.valid := Mux(forwarding,wr.w_valid,(state === reply && stream)||bufferedPrefix)
+    val responseError = rsp.error && (finalBeat || (!streamCutThrough.B && !commitTailRead.B))
+    io.streamResponse.get.bits.data := Mux(forwarding,wr.w.data,Mux(responseError,0.U,data(streamIndex(idxBits-1,0))))
     io.streamResponse.get.bits.tag := rsp.tag
-    io.streamResponse.get.bits.error := responseError
+    io.streamResponse.get.bits.error := Mux(forwarding,wr.w.last || !wr.w.strb.andR,responseError)
     io.streamResponse.get.bits.last := finalBeat
     streamReplyFire := io.streamResponse.get.fire
     when(io.streamResponse.get.fire){streamCount:=streamCount+1.U;streamIndex:=streamIndex+1.U}
+  }
+  if(burstWrites){
+    val request=io.streamWriteRequest.get
+    request.ready:=state===idle && !poison && !io.flush && !io.request.valid && !io.streamRequest.get.valid
+    io.streamWriteData.get.ready:=state===collectWrite
+    io.streamWriteResponse.get.valid:=state===reply && writeBurst
+    io.streamWriteResponse.get.bits:=rsp
+    writeReplyFire:=io.streamWriteResponse.get.fire
+    when(request.fire){
+      val x=request.bits
+      req.write:=true.B;req.address:=x.address;req.mask:=Fill(64,1.U(1.W));req.tag:=x.tag;req.data:=0.U
+      rsp.tag:=x.tag;rsp.data:=0.U;rsp.error:=false.B
+      count:=x.beats;writeBurst:=true.B;stream:=false.B;fillCount:=0.U
+      fault:=false.B;localAw:=false.B;localR:=false.B;arSeen:=false.B
+      localCount:=0.U;externalCount:=0.U;localDone:=false.B;externalDone:=false.B
+      cacheable:=false.B;lineValid:=false.B
+      val end=x.address.pad(66)+(x.beats.pad(66)<<6)
+      when(x.beats===0.U || x.beats>maxBeats.U || x.address(5,0)=/=0.U ||
+           x.address(9,0).pad(16)+(x.beats.pad(16)<<6)>1024.U || end>(BigInt(1)<<56).U){
+        poison:=true.B;rsp.error:=true.B;state:=reply
+      }.otherwise{state:=collectWrite}
+    }
+    when(io.streamWriteData.get.fire){
+      val last=fillCount+1.U===count
+      data(fillCount(idxBits-1,0)):=io.streamWriteData.get.bits.data
+      fillCount:=fillCount+1.U
+      when(io.streamWriteData.get.bits.last=/=last){fault:=true.B}
+      when(last){
+        when(fault || !io.streamWriteData.get.bits.last){poison:=true.B;rsp.error:=true.B;state:=reply}
+        .otherwise{state:=issue}
+      }
+    }
   }
   io.axi.aw.valid := false.B; io.axi.aw.bits := 0.U.asTypeOf(new BlockAxiAddress)
   io.axi.ar.valid := false.B; io.axi.ar.bits := 0.U.asTypeOf(new BlockAxiAddress)
@@ -133,15 +183,18 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
   val active = state === issue || state === waitDma
   when(active) {
     when(req.write) {
-      // Unchanged one-beat source mailbox and actual external B completion.
+      // Normal single beat or collected full-beat source burst; no early store ACK.
       rs.ar_ready := !localR && !localDone
-      rs.r_valid := localR; rs.r.id := localId; rs.r.data := req.data
-      rs.r.last := true.B; rs.r.resp := Mux(fault, 3.U, 0.U)
+      rs.r_valid := localR; rs.r.id := localId; rs.r.data := Mux(writeBurst,data(localCount(idxBits-1,0)),req.data)
+      rs.r.last := localCount+1.U===count; rs.r.resp := Mux(fault, 3.U, 0.U)
       when(rr.ar_valid && rs.ar_ready) {
         localR := true.B; localId := rr.ar.id
-        when(rr.ar.addr =/= 0.U || rr.ar.len =/= 0.U || rr.ar.size > 6.U) { fault := true.B }
+        when(rr.ar.addr =/= 0.U || rr.ar.len +& 1.U =/= count || rr.ar.size > 6.U) { fault := true.B }
       }
-      when(rs.r_valid && rr.r_ready) { localR := false.B; localDone := true.B }
+      when(rs.r_valid && rr.r_ready) {
+        localCount:=localCount+1.U
+        when(localCount+1.U===count){localR:=false.B;localDone:=true.B}
+      }
       io.axi.aw.valid := wr.aw_valid
       io.axi.aw.bits.addr := wr.aw.addr; io.axi.aw.bits.id := wr.aw.id
       io.axi.aw.bits.len := wr.aw.len; io.axi.aw.bits.size := wr.aw.size; io.axi.aw.bits.burst := wr.aw.burst
@@ -151,8 +204,14 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
       ws.aw_ready := io.axi.aw.ready; ws.w_ready := io.axi.w.ready; ws.b_valid := io.axi.b.valid
       val bid = Mux(io.axi.aw.fire, io.axi.aw.bits.id, extId)
       ws.b.id := bid(3, 0); ws.b.resp := Mux(io.axi.b.bits.id =/= bid, 3.U, io.axi.b.bits.resp)
-      when(io.axi.aw.fire) { extId := io.axi.aw.bits.id }
-      when(io.axi.w.fire) { writes := writes + 1.U }
+      when(io.axi.aw.fire) {
+        extId:=io.axi.aw.bits.id
+        when(writeBurst && (wr.aw.addr=/=req.address || wr.aw.len+&1.U=/=count || wr.aw.size=/=6.U || wr.aw.burst=/=1.U)){fault:=true.B}
+      }
+      when(io.axi.w.fire) {
+        writes:=writes+1.U;externalCount:=externalCount+1.U
+        when(writeBurst && (wr.w.last=/=(externalCount+1.U===count) || !wr.w.strb.andR)){fault:=true.B}
+      }
       when(io.axi.b.fire) {
         externalDone := true.B
         when(io.axi.b.bits.resp =/= 0.U || io.axi.b.bits.id =/= bid) { fault := true.B }
@@ -182,6 +241,10 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
       // Destination mailbox accepts W only after AW; no circular dependency.
       ws.aw_ready := !localAw && !localDone
       ws.w_ready := localAw && localCount < count && !localDone
+      if(commitTailRead){
+        ws.w_ready:=localAw && localCount<count && !localDone &&
+          (!stream || localCount+1.U===count || io.streamResponse.get.ready)
+      }
       ws.b_valid := localAw && localCount === count && !localDone
       ws.b.id := localId; ws.b.resp := Mux(fault, 3.U, 0.U)
       when(wr.aw_valid && ws.aw_ready) {
@@ -200,7 +263,7 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
   when(io.request.fire || streamFire) {
     val x = WireDefault(io.request.bits)
     when(fromStream){x.write:=false.B;x.address:=newStream.address;x.data:=0.U;x.mask:=0.U;x.tag:=newStream.tag}
-    stream:=fromStream;streamIndex:=0.U
+    stream:=fromStream;writeBurst:=false.B;streamIndex:=0.U
     req := x; rsp.tag := x.tag; rsp.data := 0.U; rsp.error := false.B
     fault := false.B; localAw := false.B; localR := false.B; arSeen := false.B
     localCount := 0.U; externalCount := 0.U; localDone := false.B; externalDone := false.B
@@ -234,13 +297,15 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
   }
   when(state === issue && d.req_ready_o) { transfers := transfers + 1.U; state := waitDma }
   when(state === waitDma && d.rsp_valid_o && d.rsp_ready_i) {
+    completedTransfers:=completedTransfers+1.U
     val bad = fault || d.rsp_error_o
+    when(writeBurst && !bad){committedWriteBeats:=committedWriteBeats+count}
     rsp.error := bad; rsp.data := Mux(req.write || bad, 0.U, data(0))
     poison := bad; state := reply
     lineValid := !req.write && cacheable && !bad && !io.flush
     lineBase := req.address; lineCount := count
   }
-  when(state === reply && (io.response.fire || (streamReplyFire && streamIndex+1.U===count))) {
+  when(state === reply && (io.response.fire || writeReplyFire || (streamReplyFire && streamIndex+1.U===count))) {
     state := Mux(poison, locked, idle)
   }
 }

@@ -56,7 +56,10 @@ static const std::vector<Output> OUTPUTS={
 #else
 static const std::vector<Output> OUTPUTS={OWNER_OUTPUT_TABLE};
 #endif
-struct Beat {bool valid=false,write=false,error=false;uint64_t address=0,id=0,mask=0;unsigned delay=0,remaining=1,total=1;std::array<uint32_t,16> data{};};
+#ifndef OWNER_BURST_WRITE
+#define OWNER_BURST_WRITE 0
+#endif
+struct Beat {bool valid=false,write=false,error=false,last=true;uint64_t address=0,id=0,mask=0;unsigned delay=0,remaining=1,total=1;std::array<uint32_t,16> data{};};
 class Test {
 public:
  VHostBlockTop d;std::vector<uint32_t> mem;std::vector<float> oracle;std::vector<uint8_t> initialized;
@@ -68,6 +71,8 @@ public:
  // Request-local stimulus and fault knobs. These never write DUT internal state.
  unsigned requestEpoch=1,inputSalt=0,weightSalt=0,faultTargetPc=1;
  uint64_t dmaAtStart=0;std::array<uint64_t,2> acceptedAtStart{},returnedAtStart{};
+ uint64_t writeBursts=0,writeBurstsAtStart=0,streamedWriteAtStart=0;
+ std::vector<Beat> collectedWrites,committingWrites;
  Beat pending,aw,w,heldAr,heldAw,heldW;bool arHeld=false,awHeld=false,wHeld=false;
  bool running=false;int errorPc=-1;std::string mode;bool injected=false;uint64_t readOnlyHash=0;std::filesystem::path out;
  Test(std::string m,std::filesystem::path p):mem((LIMIT-BASE)/4,0x7fc00001),oracle(mem.size(),0),initialized(mem.size(),0),mode(m),out(p){
@@ -131,7 +136,7 @@ public:
  }
  uint64_t hashRange(uint64_t a,uint64_t bytes)const{uint64_t h=1469598103934665603ULL;for(size_t i=0;i<bytes/4;i++)h=(h^mem[pos(a)+i])*1099511628211ULL;return h;}
  unsigned random(){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
- static bool eq(const Beat&a,const Beat&b){return a.address==b.address&&a.id==b.id&&a.mask==b.mask&&a.data==b.data&&a.total==b.total;}
+ static bool eq(const Beat&a,const Beat&b){return a.address==b.address&&a.id==b.id&&a.mask==b.mask&&a.data==b.data&&a.total==b.total&&a.last==b.last;}
  void checkRead(uint64_t a){check(a>=BASE&&a+64<=LIMIT,"read bounds");for(unsigned i=0;i<16;i++)check(initialized[pos(a)+i],"read unwritten word "+std::to_string(a));
    for(auto&o:OUTPUTS)if(a>=o.address&&a<o.address+o.words*4)check(published[o.pc],"consumer before completion pc="+std::to_string(o.pc));
    for(auto&t:ALLOCATIONS)if(t.virtualValue)check(a<t.address||a>=t.address+t.words*4,"materialized virtual attention input");
@@ -152,13 +157,19 @@ public:
        bool match=(mode=="read-error"&&!next.write&&next.address>=META_LIMIT)||
          (mode=="command-read-error"&&!next.write&&next.address>=COMMAND_BASE&&next.address<COMMAND_LIMIT)||
          (mode=="descriptor-read-error"&&!next.write&&next.address>=DESC_BASE&&next.address<DESC_LIMIT)||
-         (mode=="write-error"&&next.write)||(mode=="last-write-error"&&next.write&&next.address==last)||
+         (mode=="write-error"&&next.write)||(mode=="last-write-error"&&next.write&&next.address+64*(next.total-1)==last)||
          (mode=="weight-mid-error"&&!next.write&&next.total>1&&next.total-next.remaining==next.total/2)||
          (mode=="weight-last-error"&&!next.write&&next.total>1&&next.remaining==1);
        if(match){next.error=true;injected=true;std::cout<<"FAULT_INJECT pc="<<faultTargetPc<<" mode="<<mode<<" address="<<next.address<<" prior_write_bytes="<<writeBytes[faultTargetPc]<<std::endl;}
      }
  }
+#if OWNER_BURST_WRITE
+#include "host_burst_write_step.inc"
+#endif
  void step(){
+#if OWNER_BURST_WRITE
+   stepBurst();return;
+#else
    d.clock=0;d.io_completion_ready=random()%4!=0;
    d.io_axi_ar_ready=!pending.valid&&!aw.valid&&!w.valid&&random()%4!=0;
    d.io_axi_aw_ready=!pending.valid&&!aw.valid&&random()%3!=0;d.io_axi_w_ready=!pending.valid&&!w.valid&&random()%4!=0;
@@ -196,9 +207,13 @@ public:
        checkRead(pending.address);for(unsigned i=0;i<16;i++)pending.data[i]=mem[pos(pending.address)+i];maybeFault(pending);
      }else pending={};}
    if(next.valid)pending=next;else if(pending.valid&&pending.delay)pending.delay--;d.clock=0;d.eval();
+#endif
  }
  void launch(){
-   burstAtStart=readBursts;
+   burstAtStart=readBursts;writeBurstsAtStart=writeBursts;
+#if OWNER_BURST_WRITE
+   streamedWriteAtStart=d.io_idmaStreamedWriteBeats;
+#endif
 #if OWNER_WEIGHT_READ_BEATS > 1
    deviceBurstAtStart=d.io_idmaReadBursts;deviceReadsAtStart=d.io_idmaReadBeats;cacheHitsAtStart=d.io_idmaCacheHits;
 #endif
@@ -228,7 +243,13 @@ public:
      uint64_t physical=(denseSteps+uint64_t(TOKENS)*(TOKENS+1)*H/16)*512;
      mac*=LAYERS;physical*=LAYERS;check(d.io_usefulMacs==mac&&d.io_executedMacs==physical,"MAC count");check(d.io_writeBytes==values*4,"write byte conservation");
      check(reads==ackReads&&writes==ackWrites,"read/write beat ACK balance");
-     check(readBursts-burstAtStart+writes==d.io_idmaTransfers-dmaAtStart,"every burst/store crossed iDMA");
+     const uint64_t writeTransactions=OWNER_BURST_WRITE?writeBursts-writeBurstsAtStart:writes;
+     uint64_t streamedWrites=0;
+#if OWNER_BURST_WRITE
+     streamedWrites=d.io_idmaStreamedWriteBeats-streamedWriteAtStart;
+     check(streamedWrites<=writes,"overcounted streamed write beats");
+#endif
+     check(readBursts-burstAtStart+writeTransactions==d.io_idmaTransfers-dmaAtStart,"every burst/store crossed iDMA");
      uint64_t cacheHits=0;
 #if OWNER_WEIGHT_READ_BEATS > 1
      check(d.io_idmaReadBursts-deviceBurstAtStart==readBursts-burstAtStart&&d.io_idmaReadBeats-deviceReadsAtStart==reads,"hardware/AXI read accounting");
@@ -241,11 +262,11 @@ public:
 #endif
 #endif
      check(d.io_memoryAccepted_0-acceptedAtStart[0]==d.io_memoryReturned_0-returnedAtStart[0]&&d.io_memoryAccepted_1-acceptedAtStart[1]==d.io_memoryReturned_1-returnedAtStart[1],"arbiter response balance");
-     check(d.io_memoryAccepted_0-acceptedAtStart[0]==metadata&&d.io_memoryAccepted_1-acceptedAtStart[1]==reads+writes-metadata-streamed,"metadata/payload ownership");
+     check(d.io_memoryAccepted_0-acceptedAtStart[0]==metadata&&d.io_memoryAccepted_1-acceptedAtStart[1]==reads+writes-metadata-streamed-streamedWrites,"metadata/payload ownership");
      check(metadata==COMMANDS+DESCRIPTORS,"each command and descriptor fetched from DDR");
      check(hashRange(BASE,SCRATCH-BASE)==readOnlyHash,"readonly data modified");
      for(auto&t:ALLOCATIONS){for(unsigned i=0;i<16;i++)check(mem[pos(t.address)-16+i]==0x7fc00001,"guard overwritten");if(t.virtualValue)for(size_t i=0;i<t.words;i++)check(mem[pos(t.address)+i]==0x7fc00001,"virtual tensor materialized");}
-     std::cout<<"HOST_BLOCK_ALL_OWNERS_PASS tokens="<<TOKENS<<" hidden="<<H<<" ffn="<<F<<" layers="<<LAYERS<<" host_commands="<<COMMANDS<<" completed="<<COMMANDS<<" owner_jobs="<<19*LAYERS<<" matrix_commands="<<9*LAYERS<<" sfu_commands="<<11*LAYERS<<" kv_commands="<<LAYERS<<" checked_fp32="<<checked<<" bit_differences=0 useful_macs="<<mac<<" executed_macs="<<physical<<" cycles="<<cycles<<" metadata_reads="<<metadata<<" read_bytes="<<reads*64<<" write_ack_bytes="<<writes*64<<" idma_transfers="<<(d.io_idmaTransfers-dmaAtStart)<<" read_bursts="<<(readBursts-burstAtStart)<<" weight_read_burst_beats="<<OWNER_WEIGHT_READ_BEATS<<" pipelined_owner="<<OWNER_PIPELINED<<" streamed_read_beats="<<streamed<<" weight_cache_hits="<<cacheHits<<" request_stalls="<<stalls<<" response_delay_cycles="<<delays<<" host_intermediate_writes=0 legacy_block_launch=0 original_matrix_instances="<<MATRIX_SLICES<<" logical_matrix_engines=1 matrix_macs="<<OWNER_MATRIX_MACS<<" original_idma_instances=1 score_ddr_accesses=0 output_fnv64="<<std::hex<<hashRange(OUTPUTS.back().address,TOKENS*H*4)<<std::dec<<std::endl;
+     std::cout<<"HOST_BLOCK_ALL_OWNERS_PASS tokens="<<TOKENS<<" hidden="<<H<<" ffn="<<F<<" layers="<<LAYERS<<" host_commands="<<COMMANDS<<" completed="<<COMMANDS<<" owner_jobs="<<19*LAYERS<<" matrix_commands="<<9*LAYERS<<" sfu_commands="<<11*LAYERS<<" kv_commands="<<LAYERS<<" checked_fp32="<<checked<<" bit_differences=0 useful_macs="<<mac<<" executed_macs="<<physical<<" cycles="<<cycles<<" metadata_reads="<<metadata<<" read_bytes="<<reads*64<<" write_ack_bytes="<<writes*64<<" idma_transfers="<<(d.io_idmaTransfers-dmaAtStart)<<" read_bursts="<<(readBursts-burstAtStart)<<" weight_read_burst_beats="<<OWNER_WEIGHT_READ_BEATS<<" pipelined_owner="<<OWNER_PIPELINED<<" streamed_read_beats="<<streamed<<" write_bursts="<<writeTransactions<<" streamed_write_beats="<<streamedWrites<<" burst_write_enabled="<<OWNER_BURST_WRITE<<" weight_cache_hits="<<cacheHits<<" request_stalls="<<stalls<<" response_delay_cycles="<<delays<<" host_intermediate_writes=0 legacy_block_launch=0 original_matrix_instances="<<MATRIX_SLICES<<" logical_matrix_engines=1 matrix_macs="<<OWNER_MATRIX_MACS<<" original_idma_instances=1 score_ddr_accesses=0 output_fnv64="<<std::hex<<hashRange(OUTPUTS.back().address,TOKENS*H*4)<<std::dec<<std::endl;
    }
    auto result=d.io_result_bits_status;for(unsigned i=0;i<5;i++){step();check(d.io_result_valid&&d.io_result_bits_status==result,"result not held");}d.io_result_ready=1;step();d.io_result_ready=0;
    if(errorPc>=0){const auto stoppedJobs=d.io_issuedJobs;const auto stoppedDma=d.io_idmaTransfers;

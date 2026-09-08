@@ -82,7 +82,13 @@ def verify(out:Path,write_report:bool=True)->dict:
     else:
         bursts=int(end['read_bursts']);hits=int(end['weight_cache_hits'])
         require(int(end['weight_read_burst_beats'])==16 and bursts>0 and bursts<=read_beats<=16*bursts,'read burst capacity')
-        require(bursts+write_beats==int(end['idma_transfers']),'real iDMA burst/store conservation')
+        write_transactions=write_beats
+        if scope.get('burst_writes',False):
+            require(type(scope['burst_writes']) is bool and end.get('burst_write_enabled')=='1','write burst identity')
+            write_transactions=int(end['write_bursts']);streamed_writes=int(end['streamed_write_beats'])
+            require(0<write_transactions<=write_beats and 0<streamed_writes<=write_beats,'write burst counters')
+            require(write_beats-write_transactions<=streamed_writes,'unaccounted stores')
+        require(bursts+write_transactions==int(end['idma_transfers']),'real iDMA burst/store conservation')
         if scope.get('pipelined',False):
             require(type(scope['pipelined']) is bool and int(end['pipelined_owner'])==1,'pipeline identity')
             streamed=int(end['streamed_read_beats'])

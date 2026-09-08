@@ -11,7 +11,7 @@ import chisel3.util._
   * current one. Each output context receives K=0,1,... without reassociation.
   * Host completion follows all final FP32 stores, never the last MAC issue.
   */
-class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5) extends Module {
+class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolean=false) extends Module {
   require(maxTokenTiles>=1 && maxTokenTiles<=5)
   // M contexts reuse one DDR weight tile across up to 80 tokens. The old
   // N-only context schedule remains exactly the real16 compatibility case.
@@ -21,6 +21,9 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5) extends Module {
     val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
     val burst=Decoupled(new BurstReadRequest);val burstResponse=Flipped(Decoupled(new BurstReadResponse))
+    val writeRequest=if(burstWrites)Some(Decoupled(new BurstWriteRequest))else None
+    val writeData=if(burstWrites)Some(Decoupled(new BurstWriteBeat))else None
+    val writeResponse=if(burstWrites)Some(Flipped(Decoupled(new MemoryResponse)))else None
     val matrix=new MatrixStreamPort;val physicalSteps=Input(UInt(64.W))
     val resetRequired=Output(Bool());val issueCycles=Output(UInt(64.W));val operandStalls=Output(UInt(64.W))
   })
@@ -42,8 +45,9 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5) extends Module {
   val loadContext=RegInit(0.U(3.W));val loadBeat=RegInit(0.U(5.W));val nextLoadK=RegInit(0.U(16.W))
   val issueSel=RegInit(false.B);val issueK=RegInit(0.U(16.W));val issueContext=RegInit(0.U(3.W));val allIssued=RegInit(false.B)
   val groupStarted=RegInit(false.B);val groupDone=RegInit(false.B)
-  val writeIdle::writeReq::writeWait::Nil=Enum(3)
+  val writeIdle::writeReq::writeWait::writeData::Nil=Enum(4)
   val writeState=RegInit(writeIdle);val writeContext=Reg(UInt(3.W));val writeRow=RegInit(0.U(5.W));val writeBeat=RegInit(0.U(5.W))
+  val writeCount=Reg(UInt(5.W));val writeIndex=RegInit(0.U(5.W))
   val written=RegInit(0.U(3.W));val finalValue=Reg(Vec(16,Vec(256,UInt(32.W))))
   val writeSequence=RegInit(0.U(32.W));val writeTag=Cat(job.tag,writeSequence)
   def fail(code:UInt):Unit={when(status===0.U){status:=code}}
@@ -124,23 +128,43 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5) extends Module {
     .elsewhen(!finite){fail(Status.Numerical.U)}
     .otherwise{finalValue:=r.value;writeContext:=r.context;writeRow:=0.U;writeBeat:=0.U;writeState:=writeReq}
   }
-  io.memory.valid:=state===execute&&writeState===writeReq&&status===0.U
-  io.memory.bits.write:=true.B
-  io.memory.bits.address:=job.dst+(((rowBase.pad(64)+(ctxM(writeContext).pad(64)<<4)+writeRow)*job.n+nBase+(ctxN(writeContext).pad(64)<<8)+(writeBeat.pad(64)<<4))<<2)
-  io.memory.bits.data:=VecInit((0 until 16).map(i=>finalValue(writeRow)(Cat(writeBeat(3,0),i.U(4.W))))).asUInt
-  io.memory.bits.mask:=Fill(64,1.U(1.W));io.memory.bits.tag:=writeTag
-  io.response.ready:=state===execute&&writeState===writeWait
-  when(io.memory.fire){writeState:=writeWait}
-  when(io.response.fire){
-    when(io.response.bits.error){fail(Status.Memory.U);writeState:=writeIdle}
-    .elsewhen(io.response.bits.tag=/=writeTag){fail(Status.Protocol.U);writeState:=writeIdle}
+  val outputAddress=job.dst+(((rowBase.pad(64)+(ctxM(writeContext).pad(64)<<4)+writeRow)*job.n+nBase+(ctxN(writeContext).pad(64)<<8)+(writeBeat.pad(64)<<4))<<2)
+  val responseFire=WireDefault(false.B);val responseBits=WireDefault(0.U.asTypeOf(new MemoryResponse))
+  val committedBeats=WireDefault(1.U(5.W))
+  io.memory.valid:=false.B;io.memory.bits:=0.U.asTypeOf(new MemoryRequest);io.response.ready:=false.B
+  if(burstWrites){
+    io.writeRequest.get.valid:=state===execute && writeState===writeReq && status===0.U
+    io.writeRequest.get.bits.address:=outputAddress
+    io.writeRequest.get.bits.beats:=countAt(outputAddress,(columns(writeContext)>>4)-writeBeat)
+    io.writeRequest.get.bits.tag:=writeTag
+    // Once a write batch is accepted, drain its data even if a concurrent
+    // operand read fails. The group never publishes that failed output.
+    io.writeData.get.valid:=state===execute && writeState===writeData
+    io.writeData.get.bits.data:=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))(Cat((writeBeat+writeIndex)(3,0),i.U(4.W))))).asUInt
+    io.writeData.get.bits.last:=writeIndex+1.U===writeCount
+    io.writeResponse.get.ready:=state===execute && writeState===writeWait
+    when(io.writeRequest.get.fire){writeCount:=io.writeRequest.get.bits.beats;writeIndex:=0.U;writeState:=writeData}
+    when(io.writeData.get.fire){writeIndex:=writeIndex+1.U;when(writeIndex+1.U===writeCount){writeState:=writeWait}}
+    responseFire:=io.writeResponse.get.fire;responseBits:=io.writeResponse.get.bits;committedBeats:=writeCount
+  }else{
+    io.memory.valid:=state===execute&&writeState===writeReq&&status===0.U
+    io.memory.bits.write:=true.B;io.memory.bits.address:=outputAddress
+    io.memory.bits.data:=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))(Cat(writeBeat(3,0),i.U(4.W))))).asUInt
+    io.memory.bits.mask:=Fill(64,1.U(1.W));io.memory.bits.tag:=writeTag
+    io.response.ready:=state===execute&&writeState===writeWait
+    when(io.memory.fire){writeState:=writeWait}
+    responseFire:=io.response.fire;responseBits:=io.response.bits
+  }
+  when(responseFire){
+    when(responseBits.error){fail(Status.Memory.U);writeState:=writeIdle}
+    .elsewhen(responseBits.tag=/=writeTag){fail(Status.Protocol.U);writeState:=writeIdle}
     .otherwise{
-      bytes:=bytes+64.U;writeSequence:=writeSequence+1.U
-      when(writeBeat+1.U===(columns(writeContext)>>4)){
+      bytes:=bytes+(committedBeats.pad(64)<<6);writeSequence:=writeSequence+1.U
+      when(writeBeat+&committedBeats===(columns(writeContext)>>4)){
         writeBeat:=0.U
         when(writeRow+1.U===rowsIn(writeContext)){written:=written+1.U;writeState:=writeIdle}
         .otherwise{writeRow:=writeRow+1.U;writeState:=writeReq}
-      }.otherwise{writeBeat:=writeBeat+1.U;writeState:=writeReq}
+      }.otherwise{writeBeat:=writeBeat+committedBeats;writeState:=writeReq}
     }
   }
 
@@ -229,7 +253,7 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5) extends Module {
   when(state===execute&&status=/=0.U){
     when(writeState===writeReq){writeState:=writeIdle}
     when(loadState===loadReq){loadState:=loadIdle}
-    when((!groupStarted||groupDone)&&loadState=/=loadWait&&writeState=/=writeWait && !pending && !operands.io.deq.valid){state:=finish}
+    when((!groupStarted||groupDone)&&loadState=/=loadWait&&writeState=/=writeWait && writeState=/=writeData && !pending && !operands.io.deq.valid){state:=finish}
   }
   when(io.done.fire){state:=Mux(status===0.U,idle,locked)}
 }

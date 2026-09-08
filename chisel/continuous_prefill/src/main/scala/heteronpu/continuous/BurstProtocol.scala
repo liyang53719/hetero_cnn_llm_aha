@@ -36,3 +36,14 @@ class MatrixStreamPort extends Bundle {
   val done=Flipped(Decoupled(new MatrixStreamDone))
   val abort=Output(Bool())
 }
+
+/** Internal whole-beat write batch. Accepted data is not a completion: the
+  * single response follows the real pinned-iDMA destination B response.
+  * The address/count is bounded to one 1-KiB window; all beats are 64 bytes.
+  */
+class BurstWriteRequest extends Bundle {
+  val address=UInt(64.W);val beats=UInt(5.W);val tag=UInt(64.W)
+}
+class BurstWriteBeat extends Bundle {
+  val data=UInt(512.W);val last=Bool()
+}

@@ -66,7 +66,7 @@ class MatrixPipelineService extends Module {
   val allCompletion=(0 until 8).map(i=> !selected(i)||leaves(i).io.completion_valid_o).reduce(_&&_)
   val x=io.port.step.bits
   val legalContext=x.context<5.U
-  val legalStep=legalContext && x.clear=== !seen(x.context) && !closed(x.context) && (!x.finish||x.last)
+  val legalStep=legalContext && x.clear=== !seen(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|UIntToOH(x.context,5)))))
   val work=state===running && !endIssued && !io.port.abort
   val consumeOutput=(state===running||state===ending||state===draining) && tags.io.deq.valid && allOutValid &&
     (state===draining|| !tags.io.deq.bits.emit||values.io.enq.ready)
@@ -151,7 +151,10 @@ class LegacyMatrixStreamClient extends Module {
   io.port.step.valid:=state===issue;io.port.step.bits.a:=req.a;io.port.step.bits.b:=req.b
   io.port.step.bits.context:=0.U;io.port.step.bits.clear:=req.clear;io.port.step.bits.last:=req.last
   io.port.step.bits.finish:=req.last;io.port.step.bits.emit:=true.B
-  io.port.result.ready:=state===waitResult;io.port.done.ready:=state===waitDone
+  io.port.result.ready:=state===waitResult
+  // An aborted group can return an error without a partial result. Consume
+  // that terminal error rather than waiting forever for a suppressed tensor.
+  io.port.done.ready:=state===waitDone || (state===waitResult && io.port.done.bits.error)
   io.port.abort:=false.B
   when(io.request.fire){
     req:=io.request.bits;result.error:=false.B

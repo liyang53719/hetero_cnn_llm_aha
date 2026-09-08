@@ -42,7 +42,11 @@ def audit(path: Path, macs: int) -> dict:
     raw = path.read_bytes(); found = counts(raw.decode())
     require(found['qwen2_matrix_command_endpoint'] == macs // 512, 'wrong physical 512-MAC slice count')
     require(found['idma_backend_rw_axi_flat_wrap'] == 1, 'iDMA duplicated or missing')
-    require(found['ScalableMatrixTileAdapter'] == 1, 'not one logical Matrix engine')
+    logical = found['ScalableMatrixTileAdapter'] + found['MatrixPipelineService']
+    require(logical == 1, 'not one logical Matrix engine')
+    if found['MatrixPipelineService']:
+        require(macs == 4096 and found['StreamingDenseOwner'] == 1 and found['VectorSiluOwner'] == 1,
+                'incomplete production pipeline topology')
     require(not any('HeteroBF16FmaLane' in n for n in found), 'fallback standalone MAC arithmetic')
     return {'status':'PASS_REACHABLE_MATRIX_TOPOLOGY','logical_matrix_engines':1,
             'physical_512mac_slices':macs//512,'rows':16,'columns':macs//16,

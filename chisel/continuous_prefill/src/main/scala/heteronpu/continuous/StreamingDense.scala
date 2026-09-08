@@ -73,7 +73,9 @@ class StreamingDenseOwner(maxK:Int=8960) extends Module {
     ready(issueSel)&&readyK(issueSel)===(issueK&"hfff0".U)&&operands.io.count+&pending.asUInt<4.U
   val readFire=canRead
   val aRead=aBanks.map(_.read(issueK>>4,readFire))
-  val wAddr=Mux(issueSel,80.U,0.U)+(issueK(3,0)*5.U)+issueContext
+  // 80 + 15*5 + 4 = 159: an explicit eight-bit sum is required.
+  // A seven-bit Mux(80,0) plus a four-bit K product would wrap at 128.
+  val wAddr=Mux(issueSel,80.U(8.W),0.U(8.W))+(issueK(3,0).pad(8)*5.U)(7,0)+issueContext.pad(8)
   val wRead=wBanks.map(_.read(wAddr,readFire))
   pending:=readFire
   when(readFire){pendingK:=issueK;pendingContext:=issueContext}
@@ -106,7 +108,7 @@ class StreamingDenseOwner(maxK:Int=8960) extends Module {
   when(io.matrix.result.fire && status===0.U){
     val r=io.matrix.result.bits
     val finite=(0 until 16).flatMap(i=>(0 until 256).map(j=>i.U>=rows||j.U>=columns(r.context)||TensorMath.finite(r.value(i)(j)))).reduce(_&&_)
-    when(r.error || !r.last || r.context>=contexts){fail(Status.Protocol.U)}
+    when(r.error || !r.last || r.context>=contexts || r.context=/=written){fail(Status.Protocol.U)}
     .elsewhen(!finite){fail(Status.Numerical.U)}
     .otherwise{finalValue:=r.value;writeContext:=r.context;writeRow:=0.U;writeBeat:=0.U;writeState:=writeReq}
   }
@@ -181,8 +183,10 @@ class StreamingDenseOwner(maxK:Int=8960) extends Module {
     }
   }
   when(state===setup){
-    val remaining=(job.n-nBase+255.U)>>8
-    contexts:=Mux(remaining>5.U,5.U,remaining)
+    val fullTiles=(job.n-nBase)>>8
+    // A partial-width last tile gets its own group and slice mask. Otherwise
+    // masked columns would inflate executed-MAC accounting for earlier tiles.
+    contexts:=Mux(fullTiles===0.U,1.U,Mux(fullTiles>5.U,5.U,fullTiles))
     ready:=VecInit(Seq.fill(2)(false.B));loadSel:=false.B;nextLoadK:=0.U;loadState:=loadIdle
     issueSel:=false.B;issueK:=0.U;issueContext:=0.U;allIssued:=false.B
     groupStarted:=false.B;groupDone:=false.B;written:=0.U;writeState:=writeIdle;state:=execute

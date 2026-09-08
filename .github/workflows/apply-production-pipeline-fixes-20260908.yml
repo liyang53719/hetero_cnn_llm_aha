@@ -1,0 +1,44 @@
+name: apply-production-pipeline-fixes-20260908
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-production-pipeline-fixes-20260908.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {clean: false, fetch-depth: 2}
+      - name: Apply only checksum-locked Chisel and audit corrections
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess,uuid
+          from pathlib import Path
+          packet=json.loads(Path('development_snapshots/pipeline_20260908/fixes_v2.json').read_text());files=packet['changes']
+          def git(*args,env=None,data=None):return subprocess.check_output(['git',*args],env=env,input=data)
+          expected=['chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala','chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala','chisel/continuous_prefill/scripts/audit_matrix_topology.py']
+          if [f['path'] for f in files]!=expected:raise SystemExit('UNEXPECTED_PATH_SET')
+          for attempt in range(3):
+              subprocess.run(['git','fetch','--no-tags','origin','main'],check=True);parent=git('rev-parse','origin/main').decode().strip()
+              current=[hashlib.sha256(git('show',parent+':'+f['path'])).hexdigest() for f in files]
+              if current==[f['sha256'] for f in files]:print('ALREADY_APPLIED',parent);break
+              if current!=[f['base_sha256'] for f in files]:raise SystemExit('BASE_CHANGED')
+              env=dict(os.environ,GIT_INDEX_FILE=str(Path.cwd()/('fix_index_'+uuid.uuid4().hex)),GIT_AUTHOR_NAME='heteronpu-pipeline',GIT_AUTHOR_EMAIL='heteronpu-pipeline@users.noreply.github.com',GIT_COMMITTER_NAME='heteronpu-pipeline',GIT_COMMITTER_EMAIL='heteronpu-pipeline@users.noreply.github.com')
+              git('read-tree',parent,env=env)
+              for f in files:git('apply','--cached','--whitespace=nowarn','-',env=env,data=f['patch'].encode())
+              if sorted(git('diff','--cached','--name-only',parent,env=env).decode().splitlines())!=sorted(expected):raise SystemExit('UNEXPECTED_DIFF')
+              for f in files:
+                  if hashlib.sha256(git('show',':'+f['path'],env=env)).hexdigest()!=f['sha256']:raise SystemExit('NEW_SOURCE_MISMATCH')
+              tree=git('write-tree',env=env).decode().strip()
+              commit=git('commit-tree',tree,'-p',parent,'-m','fix(chisel): prevent second weight-buffer wrap and enforce final context accounting [skip ci]',env=env).decode().strip()
+              if subprocess.run(['git','push','origin',commit+':main']).returncode==0:
+                  subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+                  for f in files:
+                      if hashlib.sha256(git('show','origin/main:'+f['path'])).hexdigest()!=f['sha256']:raise SystemExit('REMOTE_BYTE_MISMATCH')
+                  print('SOURCE_FIX_VERIFIED',commit);break
+          else:raise SystemExit('FAST_FORWARD_FAILED')
+          PY

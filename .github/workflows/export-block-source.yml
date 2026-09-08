@@ -26,14 +26,15 @@ jobs:
             reports/execution/REAL16_TWO_LAYER_9f06249ca11f
             reports/execution/MATRIX4096_REAL2_d3571eecf96f
             reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2
-      - name: Archive exact sources and previously completed numerical baselines
+            reports/execution/PRODUCTION_PIPELINE_REAL2_a3cb4a7307a6
+      - name: Freeze native-weight row-reuse sources and exact measured baselines
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt
           git ls-tree -r HEAD -- chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows > source_tree.txt
           git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows | gzip > current_block_source.tar.gz
-          git ls-tree -r HEAD -- reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 > baseline_tree.txt
-          git archive HEAD reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 | gzip > numerical_baselines.tar.gz
+          git ls-tree -r HEAD -- reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 reports/execution/PRODUCTION_PIPELINE_REAL2_a3cb4a7307a6 > baseline_tree.txt
+          git archive HEAD reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 reports/execution/PRODUCTION_PIPELINE_REAL2_a3cb4a7307a6 | gzip > numerical_baselines.tar.gz
           sha256sum current_block_source.tar.gz numerical_baselines.tar.gz source_tree.txt baseline_tree.txt > current_block_source.sha256
       - uses: actions/upload-artifact@v4
         with:

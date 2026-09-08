@@ -36,11 +36,17 @@ fi
 HIERARCHY="$P/tests/retained_hierarchy.vlt"
 if [[ "$MATRIX_MACS" = 4096 ]];then HIERARCHY="$P/tests/matrix4096_hierarchy.vlt";fi
 export RETAINED_SKIP_CLOCK=0;source "$P/scripts/retained_sources.sh"
-verilator --cc --exe --build --assert -Wno-fatal --top-module HostBlockTop \
+BUILD_ARGS=(--build)
+if [[ "$PIPELINED_OWNER" = 1 ]];then BUILD_ARGS=();fi
+verilator --cc --exe "${BUILD_ARGS[@]}" --assert -Wno-fatal --top-module HostBlockTop \
  -CFLAGS "-O3 -std=c++17 -ffp-contract=off -fno-fast-math -I$OUT/generated -I$OUT/fixture" \
  -j "${BUILD_JOBS:-3}" --Mdir "$OUT/obj" --hierarchical "$HIERARCHY" \
  "${RETAINED_SOURCES[@]}" -f "$OUT/idma.f" "$OUT/generated/HostBlockTop.sv" \
  "$ROOT/rtl/integration/idma_backend_rw_axi_flat_wrap.sv" "$P/tests/host_block_commands.cpp" >"$OUT/build.log" 2>&1
+if [[ "$PIPELINED_OWNER" = 1 ]];then
+  # Release the parent elaborator before submodule C++ builds to bound memory.
+  make -C "$OUT/obj" -f VHostBlockTop_hier.mk -j "${BUILD_JOBS:-2}" >"$OUT/hierarchical_build.log" 2>&1
+fi
 set +e
 "$OUT/obj/VHostBlockTop" "$OUT/fixture" "$OUT/tensors" >"$OUT/run.log" 2>&1
 code=$?;set -e;echo "$code" >"$OUT/simulation.exit";cat "$OUT/run.log";((code==0))||exit "$code"

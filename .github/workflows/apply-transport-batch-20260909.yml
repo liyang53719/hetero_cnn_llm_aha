@@ -1,0 +1,29 @@
+name: apply-transport-batch-20260909
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-transport-batch-20260909.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: apply-transport-batch-20260909
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 0
+      - name: Materialize exact Chisel and verification source, then verify main bytes
+        id: source
+        run: python3 development_snapshots/transport_batch_20260909/apply.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transport-source-publication-${{ github.sha }}
+          retention-days: 90
+          path: transport_publication.json
+          if-no-files-found: warn

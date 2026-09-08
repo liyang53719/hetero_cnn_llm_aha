@@ -4,8 +4,11 @@ import chisel3._
 import chisel3.util._
 /** Internal decoded-owner transfer, not a new Host opcode. Each transfer is
   * 1..16 aligned 64-byte beats inside a single physical 1KiB boundary.
-  * All beats are released only after the real backend has completed the burst.
-  * On error, consume through LAST before returning an owner failure.
+  * Non-LAST beats are provisional and may be forwarded during DMA. Successful
+  * LAST is the commit fence: it is released only after the real backend has
+  * completed and checked the entire burst. A consumer must stage the whole
+  * burst before using it and must drain through LAST on error. Early arrival
+  * is not permission to publish a tensor or complete a Host command.
   */
 class BurstReadRequest extends Bundle {
   val address=UInt(64.W);val beats=UInt(5.W);val tag=UInt(64.W)

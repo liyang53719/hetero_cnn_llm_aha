@@ -38,7 +38,7 @@ else
   "Test / runMain heteronpu.continuous.EmitMatrixPipelineProbe $OUT/MatrixPipeline/generated" \
   "Test / runMain heteronpu.continuous.EmitStreamingDenseProbe $OUT/StreamingDense/generated") >"$OUT/compile_emit_silu.log" 2>&1
 fi
-export RETAINED_SKIP_CLOCK=1;source "$P/scripts/retained_sources.sh"
+export RETAINED_SKIP_CLOCK=0;source "$P/scripts/retained_sources.sh"
 for kind in MatrixPipeline StreamingDense;do
  d="$OUT/$kind";top="${kind}Probe"
  cpp=matrix_pipeline.cpp;[[ "$kind" != StreamingDense ]] || cpp=streaming_dense.cpp

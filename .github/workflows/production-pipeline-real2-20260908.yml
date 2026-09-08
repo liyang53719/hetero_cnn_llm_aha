@@ -1,0 +1,131 @@
+name: production-pipeline-real2-20260908
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/production-pipeline-real2-20260908.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: production-pipeline-real2-20260908
+  cancel-in-progress: false
+jobs:
+  pipeline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+      BUILD_JOBS: '2'
+      MATRIX_MACS: '4096'
+      WEIGHT_READ_BEATS: '16'
+      PIPELINED_OWNER: '1'
+      MAKEFLAGS: 'VK_PCH_I_FAST= VK_PCH_I_SLOW= OPT_FAST=-O3'
+    steps:
+      - uses: actions/checkout@v4
+        with: {clean: false, fetch-depth: 2}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - name: Install public tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y verilator g++
+          python3 -m pip install numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: pipeline_upstream_artifact
+      - name: Freeze public sources and pinned iDMA
+        run: |
+          set -euo pipefail
+          mkdir -p work/pipeline_upstream
+          (cd pipeline_upstream_artifact;sha256sum -c pinned_idma_sources.sha256)
+          tar -xzf pipeline_upstream_artifact/pinned_idma_sources.tar.gz -C work/pipeline_upstream
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh > pipeline_prepare.log 2>&1
+          git rev-parse HEAD > pipeline_source_commit.txt
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows | gzip > pipeline_source.tar.gz
+          sha256sum pipeline_source.tar.gz > pipeline_source.sha256
+      - name: Actual vector SFU Chisel arithmetic and backpressure
+        run: |
+          set -euo pipefail
+          (cd chisel/continuous_prefill;sbt -batch 'testOnly heteronpu.continuous.VectorSiluSpec') > pipeline_silu_tests.log 2>&1
+      - name: Tiny complete two-layer Host and real-iDMA numerical regression
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/pipeline_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_host_block_gate.sh tiny "$PWD/work/pipeline_tiny" 16 0 2 > pipeline_tiny.log 2>&1
+      - name: Real16 complete two-layer execution and frozen actual-output comparison
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/pipeline_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_real_two_layer_gate.sh "$PWD/work/pipeline_real2" > pipeline_real2.log 2>&1
+          python3 chisel/continuous_prefill/scripts/compare_pipelined_real2.py \
+            --current "$PWD/work/pipeline_real2" \
+            --burst "$PWD/reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2/numerical" \
+            --baseline512 "$PWD/reports/execution/REAL16_TWO_LAYER_9f06249ca11f/numerical" \
+            --output "$PWD/work/pipeline_real2/PIPELINE_COMPARISON.json" > pipeline_comparison.log
+          git diff --exit-code
+      - name: Preserve exact successful source-linked numerical proof on main
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess,uuid
+          from pathlib import Path
+          root=Path('work/pipeline_real2');source=os.environ['GITHUB_SHA']
+          r=json.loads((root/'PIPELINE_COMPARISON.json').read_text())
+          if r['status']!='PASS_PIPELINED_REAL16_TWO_LAYER_ALL_OUTPUT_COMPARISON' or r['tested_source']!=source:raise SystemExit('UNVERIFIED_SOURCE')
+          selected={};skip={'obj','classes','testclasses','test_run_dir','verilator-runtime','offline-tools-runtime','__pycache__'}
+          for label,folder in [('numerical',root),('tiny',Path('work/pipeline_tiny'))]:
+              for p in sorted(folder.rglob('*')):
+                  rel=p.relative_to(folder)
+                  if p.is_file() and not p.is_symlink() and not any(x in skip for x in rel.parts) and p.suffix in {'.json','.log','.gz','.f32le','.bin','.h','.sv','.txt','.exit','.sha256'}:selected[label+'/'+str(rel)]=p.read_bytes()
+          for name in ['pipeline_silu_tests.log','pipeline_source_commit.txt']:selected[name]=Path(name).read_bytes()
+          selected['PUBLISHED_SHA256.json']=(json.dumps({p:hashlib.sha256(b).hexdigest() for p,b in selected.items()},indent=2)+'\n').encode()
+          identities=json.loads((root/'sources.sha256.json').read_text());prefix='reports/execution/PRODUCTION_PIPELINE_REAL2_'+source[:12]
+          def git(*args,env=None,data=None):return subprocess.check_output(['git',*args],env=env,input=data)
+          blobs={p:git('hash-object','-w','--stdin',data=b).decode().strip() for p,b in selected.items()}
+          for attempt in range(3):
+              subprocess.run(['git','fetch','--no-tags','origin','main'],check=True);parent=git('rev-parse','origin/main').decode().strip()
+              for p,digest in identities.items():
+                  if hashlib.sha256(git('show',parent+':'+p)).hexdigest()!=digest:raise SystemExit('TESTED_SOURCE_CHANGED:'+p)
+              env=dict(os.environ,GIT_INDEX_FILE=str(Path.cwd()/('pipeline_index_'+uuid.uuid4().hex)),GIT_AUTHOR_NAME='heteronpu-verified-pipeline',GIT_AUTHOR_EMAIL='heteronpu-verified@users.noreply.github.com',GIT_COMMITTER_NAME='heteronpu-verified-pipeline',GIT_COMMITTER_EMAIL='heteronpu-verified@users.noreply.github.com')
+              git('read-tree',parent,env=env)
+              for p,blob in blobs.items():
+                  path=prefix+'/'+p;old=subprocess.run(['git','show',parent+':'+path],capture_output=True)
+                  if old.returncode==0 and old.stdout!=selected[p]:raise SystemExit('REFUSE_OVERWRITE')
+                  git('update-index','--add','--cacheinfo','100644',blob,path,env=env)
+                  if git('show',':'+path,env=env)!=selected[p]:raise SystemExit('INDEX_BYTE_MISMATCH')
+              tree=git('write-tree',env=env).decode().strip()
+              commit=git('commit-tree',tree,'-p',parent,'-m','test: preserve verified production-pipeline real16 two-layer numerical and performance proof [skip ci]',env=env).decode().strip()
+              if subprocess.run(['git','push','origin',commit+':main']).returncode==0:
+                  subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+                  subprocess.run(['git','merge-base','--is-ancestor',commit,'origin/main'],check=True)
+                  for p,b in selected.items():
+                      if git('show','origin/main:'+prefix+'/'+p)!=b:raise SystemExit('REMOTE_BYTE_MISMATCH')
+                  Path('pipeline_publication.json').write_text(json.dumps({'commit':commit,'tested_source':source,'path':prefix,'files':len(selected),'remote_bytes_verified':True},indent=2)+'\n');break
+          else:raise SystemExit('FAST_FORWARD_PUBLICATION_FAILED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: production-pipeline-real2-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            pipeline_*.log
+            pipeline_*.txt
+            pipeline_*.json
+            pipeline_source.tar.gz
+            pipeline_source.sha256
+            work/pipeline_tiny/**
+            work/pipeline_real2/**
+            !work/**/obj/**
+            !work/**/classes/**
+            !work/**/testclasses/**
+            !work/**/test_run_dir/**
+            !work/**/verilator-runtime/**
+            !work/**/offline-tools-runtime/**
+            !work/**/__pycache__/**

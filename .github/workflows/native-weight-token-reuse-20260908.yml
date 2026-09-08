@@ -1,0 +1,114 @@
+name: native-weight-token-reuse-20260908
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/native-weight-token-reuse-20260908.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: native-weight-token-reuse-20260908
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    outputs:
+      commit: ${{ steps.install.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {clean: false, fetch-depth: 0}
+      - name: Apply exact source patch and verify remote bytes
+        id: install
+        run: python3 development_snapshots/native_bf16_macro80_20260908/apply.py
+  verify:
+    needs: apply
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=2
+      BUILD_JOBS: '1'
+      MATRIX_MACS: '4096'
+      WEIGHT_READ_BEATS: '16'
+      PIPELINED_OWNER: '1'
+      NATIVE_BF16_WEIGHTS: '1'
+      MAKEFLAGS: 'VK_PCH_I_FAST= VK_PCH_I_SLOW= OPT_FAST=-O3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.apply.outputs.commit }}
+          clean: false
+          fetch-depth: 1
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - name: Install public verification tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++
+          python3 -m pip install numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: native_idma_sources
+      - name: Freeze sources and prepare public arithmetic
+        run: |
+          set -euo pipefail
+          mkdir -p work/native_upstream
+          (cd native_idma_sources;sha256sum -c pinned_idma_sources.sha256)
+          tar -xzf native_idma_sources/pinned_idma_sources.tar.gz -C work/native_upstream
+          echo "IDMA_EXPORT=$PWD/work/native_upstream/idma_export" >> "$GITHUB_ENV"
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          git rev-parse HEAD > native_tested_source.txt
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs | gzip > native_source.tar.gz
+          sha256sum native_source.tar.gz > native_source.sha256
+      - name: Packing and unchanged command/numerical contract
+        run: |
+          set -euo pipefail
+          python3 chisel/continuous_prefill/tests/test_native_bf16_weights.py > native_packing_tests.log 2>&1
+          python3 -O chisel/continuous_prefill/tests/test_native_bf16_weights.py > native_packing_optimized_tests.log 2>&1
+      - name: Actual retained arithmetic and iDMA Dense regression
+        run: bash chisel/continuous_prefill/scripts/run_native_bf16_dense_gate.sh "$PWD/work/native_dense" > native_dense_gate.log 2>&1
+      - name: Full real16 two-layer Host graph and measured comparison
+        run: |
+          set -euo pipefail
+          set +e
+          bash chisel/continuous_prefill/scripts/run_native_bf16_real2_gate.sh "$PWD/work/native_real2" > native_real2_gate.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > native_real2_gate.exit
+          # Exit 3 means complete numerical proof but utilization remains below
+          # the required 50%; retain it as NOT accepted, never convert to PASS.
+          if [[ "$rc" != 0 && "$rc" != 3 ]];then exit "$rc";fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('work/native_real2')
+          if (p/'gate.exit').read_text().strip()!='0' or (p/'simulation.exit').read_text().strip()!='0':raise SystemExit('NUMERICAL_NOT_COMPLETE')
+          print((p/'PERFORMANCE.json').read_text())
+          PY
+          git diff --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-weight-token-reuse-${{ needs.apply.outputs.commit }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            native_*.log
+            native_*.txt
+            native_*.exit
+            native_source.tar.gz
+            native_source.sha256
+            work/native_dense/**
+            work/native_real2/**
+            !work/**/obj/**
+            !work/**/classes/**
+            !work/**/testclasses/**
+            !work/**/test_run_dir/**
+            !work/**/verilator-runtime/**
+            !work/**/offline-tools-runtime/**
+            !work/**/__pycache__/**

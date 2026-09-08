@@ -1,0 +1,9 @@
+`verilator_config
+// Simulator-only compilation boundaries. No RTL transformation or stub.
+hier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"
+hier_block -module "qwen2_matrix_command_endpoint"
+hier_block -module "StreamingDenseOwner"
+hier_block -module "VectorSiluOwner"
+hier_block -module "Qwen2ContinuousBlock"
+hier_block -module "MatrixPipelineService"
+hier_block -module "HeteroFP32Alu"

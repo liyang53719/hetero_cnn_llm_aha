@@ -1,0 +1,33 @@
+name: publish-native-real2-proof-20260909
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-native-real2-proof-20260909.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: publish-native-real2-proof-20260909
+  cancel-in-progress: false
+jobs:
+  preserve:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {clean: false, fetch-depth: 0}
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-weight-token-reuse-52adab91c89335f29eb8af49b5a04843662dc67e
+          run-id: 34246151274
+          github-token: ${{ github.token }}
+          path: frozen_native_proof
+      - name: Check every output and historical source; preserve numeric PASS and performance FAIL separately
+        run: python3 chisel/continuous_prefill/scripts/publish_native_real2_proof.py frozen_native_proof
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-real2-publication-${{ github.sha }}
+          retention-days: 90
+          path: native_real2_publication.json
+          if-no-files-found: warn

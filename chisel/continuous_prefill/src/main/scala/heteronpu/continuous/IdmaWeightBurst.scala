@@ -18,12 +18,18 @@ class IdmaWeightWindow extends Bundle {
   * At most 16 x 64B are fetched per real iDMA transfer. The transfer ends at
   * the tensor limit, a tensor-relative line or a physical 1KiB boundary.
   * The last bound honors pinned iDMA src/dst_max_llen=4 and implies AXI 4KiB.
-  * Only the final successful backend response validates a line. A failed beat
+  * Only the final successful backend response validates a line. Streaming reads
+  * may forward a provisional prefix while iDMA fills the mailbox; the LAST beat
+  * is the commit fence and is withheld until backend completion. Consumers must
+  * not publish or use a burst as valid before successful LAST. The selected
+  * production consumer stages each complete K block before issuing it.
+  * A failed beat
   * poisons the whole line; all requested beats are drained and no consumer is
   * given successful data. Writes remain one beat and return only after B.
   * This is not a persistent object cache and never fetches a new tensor speculatively.
   */
-class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = false) extends Module {
+class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = false,
+                                    streamCutThrough: Boolean = true) extends Module {
   require(maxBeats >= 1 && maxBeats <= 16 && isPow2(maxBeats))
   val idxBits = math.max(1, log2Ceil(maxBeats))
   val countBits = log2Ceil(maxBeats + 1)
@@ -103,11 +109,18 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = fa
   io.response.valid := state === reply && !stream; io.response.bits := rsp
   if(streaming){
     io.streamRequest.get.ready := state === idle && !poison && !io.flush && !io.request.valid
-    io.streamResponse.get.valid := state === reply && stream
-    io.streamResponse.get.bits.data := Mux(rsp.error,0.U,data(streamIndex(idxBits-1,0)))
+    val finalBeat = streamIndex + 1.U === count
+    val prefixAvailable = (if(streamCutThrough) true.B else false.B) &&
+      state === waitDma && stream && !finalBeat && streamIndex < localCount
+    io.streamResponse.get.valid := (state === reply && stream) || prefixAvailable
+    // A prefix offer must remain stable even if a later AXI beat fails while
+    // ready is low. Only LAST carries the transaction-wide verdict. The SRAM
+    // consumer buffers the prefix; no tensor/Matrix job is committed here.
+    val responseError = rsp.error && (finalBeat || !streamCutThrough.B)
+    io.streamResponse.get.bits.data := Mux(responseError,0.U,data(streamIndex(idxBits-1,0)))
     io.streamResponse.get.bits.tag := rsp.tag
-    io.streamResponse.get.bits.error := rsp.error
-    io.streamResponse.get.bits.last := streamIndex+1.U === count
+    io.streamResponse.get.bits.error := responseError
+    io.streamResponse.get.bits.last := finalBeat
     streamReplyFire := io.streamResponse.get.fire
     when(io.streamResponse.get.fire){streamCount:=streamCount+1.U;streamIndex:=streamIndex+1.U}
   }

@@ -1,0 +1,9 @@
+STREAM_DENSE_CASE_PASS m=16 n=1536 k=64 fault=0 checked_fp32=24576 cycles=44669 read_beats=6208 read_bursts=788 write_acks=1536
+STREAM_DENSE_CASE_PASS m=17 n=528 k=128 fault=0 checked_fp32=8976 cycles=45918 read_beats=8584 read_bursts=1273 write_acks=561
+STREAM_DENSE_CASE_PASS m=1 n=16 k=16 fault=0 checked_fp32=16 cycles=292 read_beats=17 read_bursts=17 write_acks=1
+STREAM_DENSE_CASE_PASS m=16 n=1280 k=32 fault=0 checked_fp32=20480 cycles=25610 read_beats=2592 read_bursts=338 write_acks=1280
+STREAM_DENSE_CASE_PASS m=16 n=1536 k=64 fault=1 checked_fp32=0 cycles=6063 read_beats=1359 read_bursts=181 write_acks=0
+STREAM_DENSE_CASE_PASS m=16 n=1536 k=64 fault=0 checked_fp32=24576 cycles=44291 read_beats=6208 read_bursts=788 write_acks=1536
+STREAM_DENSE_CASE_PASS m=16 n=528 k=32 fault=2 checked_fp32=0 cycles=11048 read_beats=1088 read_bursts=174 write_acks=527
+STREAM_DENSE_CASE_PASS m=16 n=528 k=32 fault=0 checked_fp32=8448 cycles=10987 read_beats=1088 read_bursts=174 write_acks=528
+STREAM_DENSE_NUMERIC_PASS cases=8 numeric_cases=6 fault_resets=2 checked_fp32=87072 bit_differences=0 real_idma=1 physical_mac=4096 same_dut=1

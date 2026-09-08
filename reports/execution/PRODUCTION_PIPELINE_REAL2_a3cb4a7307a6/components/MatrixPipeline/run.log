@@ -1,0 +1,4 @@
+PIPELINE_CASE_PASS mask=255 contexts=5 depth=64 requests=320 issue_span=320 checked=1310720
+PIPELINE_CASE_PASS mask=85 contexts=5 depth=17 requests=85 issue_span=131 checked=348160
+PIPELINE_CASE_PASS mask=1 contexts=1 depth=16 requests=16 issue_span=76 checked=65536
+MATRIX_PIPELINE_NUMERIC_PASS checked_fp32=1724416 bit_differences=0 physical_slices=8 wide_steps=421 original_arithmetic=1 ii_one_5contexts=1

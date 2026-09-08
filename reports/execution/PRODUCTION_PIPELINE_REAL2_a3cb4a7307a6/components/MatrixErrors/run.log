@@ -1,0 +1,11 @@
+PIPELINE_CASE_PASS mask=255 contexts=5 depth=4 requests=20 issue_span=20 checked=81920
+PIPELINE_ERROR_RECOVERY_PASS mode=0 previous_steps=0 recovered_fp32=81920 same_dut=1
+PIPELINE_CASE_PASS mask=255 contexts=5 depth=4 requests=20 issue_span=20 checked=81920
+PIPELINE_ERROR_RECOVERY_PASS mode=1 previous_steps=0 recovered_fp32=81920 same_dut=1
+PIPELINE_CASE_PASS mask=255 contexts=5 depth=4 requests=20 issue_span=20 checked=81920
+PIPELINE_ERROR_RECOVERY_PASS mode=2 previous_steps=8 recovered_fp32=81920 same_dut=1
+PIPELINE_CASE_PASS mask=255 contexts=5 depth=4 requests=20 issue_span=20 checked=81920
+PIPELINE_ERROR_RECOVERY_PASS mode=3 previous_steps=16 recovered_fp32=81920 same_dut=1
+PIPELINE_CASE_PASS mask=255 contexts=5 depth=4 requests=20 issue_span=20 checked=81920
+PIPELINE_ERROR_RECOVERY_PASS mode=4 previous_steps=104 recovered_fp32=81920 same_dut=1
+PIPELINE_FAILURE_GATE_PASS cases=5 reset_recoveries=5 recovered_fp32=409600 bit_differences=0

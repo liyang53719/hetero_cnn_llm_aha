@@ -1,0 +1,31 @@
+[info] [launcher] getting org.scala-sbt sbt 1.10.2  (this may take some time)...
+[info] [launcher] getting Scala 2.12.19 (for sbt)...
+[0m[[0m[0minfo[0m] [0m[0mwelcome to sbt 1.10.2 (Eclipse Adoptium Java 17.0.20.1)[0m
+[0m[[0m[0minfo[0m] [0m[0mloading project definition from /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/project[0m
+[0m[[0m[0minfo[0m] [0m[0mloading settings for project root from build.sbt ...[0m
+[0m[[0m[0minfo[0m] [0m[0mset current project to heteronpu-continuous-prefill (in build file:/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/)[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 64 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 21 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/test-classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 31 s, completed Sep 8, 2026, 2:40:08 AM[0m
+SILU_VECTOR_EXACT_PASS checked_fp32=192 lanes=16
+[0m[[0m[0minfo[0m] [0m[0m[32mVectorSiluSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mSiluVectorUnit[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should match the frozen scalar recipe across parallel lanes and retain stalled outputs[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should reject nonfinite input and accept a later valid vector[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 17 seconds, 388 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 2[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 18 s, completed Sep 8, 2026, 2:40:26 AM[0m
+[0m[[0m[0minfo[0m] [0m[0mrunning heteronpu.continuous.EmitMatrixPipelineProbe /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_components/MatrixPipeline/generated[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 6 s, completed Sep 8, 2026, 2:40:32 AM[0m
+[0m[[0m[0minfo[0m] [0m[0mrunning heteronpu.continuous.EmitStreamingDenseProbe /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_components/StreamingDense/generated[0m
+[warn] src/main/scala/heteronpu/continuous/StreamingDense.scala 118:62: [W004] Dynamic index with width 5 is too wide for Vec of size 16 (expected index width 4).
+[warn]   io.memory.bits.data:=VecInit((0 until 16).map(i=>finalValue(writeRow)(Cat(writeBeat(3,0),i.U(4.W))))).asUInt
+[warn]                                                              ^
+[warn] There were 1 warning(s) during hardware elaboration.
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 19 s, completed Sep 8, 2026, 2:40:51 AM[0m
+[0J

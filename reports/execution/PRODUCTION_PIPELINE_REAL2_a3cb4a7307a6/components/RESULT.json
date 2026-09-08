@@ -1,0 +1,53 @@
+{
+  "status": "PASS_PRODUCTION_PIPELINE_COMPONENT_ARITHMETIC_AND_RECOVERY",
+  "outputs": {
+    "MatrixPipeline": {
+      "checked_fp32": 1724416,
+      "bit_differences": 0,
+      "actual_sha256": "dceee7a99c509131b5e628b2eae458ec99a67b65cdf8ea5f0f294dd6ddf78134",
+      "reference_sha256": "dceee7a99c509131b5e628b2eae458ec99a67b65cdf8ea5f0f294dd6ddf78134",
+      "recomputed_sha256": "dceee7a99c509131b5e628b2eae458ec99a67b65cdf8ea5f0f294dd6ddf78134",
+      "log_sha256": "22a8f237e4b0b4c8fc4f03d27e8cfd80585ac69c8a23e31c1d88ab85980c9e00"
+    },
+    "MatrixErrors": {
+      "checked_fp32": 409600,
+      "bit_differences": 0,
+      "actual_sha256": "65587702a6e1bd17ce8af240ed411798daee35a305e843a37017f808d3286004",
+      "reference_sha256": "65587702a6e1bd17ce8af240ed411798daee35a305e843a37017f808d3286004",
+      "recomputed_sha256": "65587702a6e1bd17ce8af240ed411798daee35a305e843a37017f808d3286004",
+      "log_sha256": "acd016187c3448b86dc36c345a54791ddbec564811ad593fe9d64ddb20a07f56"
+    },
+    "StreamingDense": {
+      "checked_fp32": 87072,
+      "bit_differences": 0,
+      "actual_sha256": "ecdae1d75d2dabb153259dc34e0376c746a6d5c18ed31902d52898e1989b3497",
+      "reference_sha256": "ecdae1d75d2dabb153259dc34e0376c746a6d5c18ed31902d52898e1989b3497",
+      "recomputed_sha256": "ecdae1d75d2dabb153259dc34e0376c746a6d5c18ed31902d52898e1989b3497",
+      "log_sha256": "0481d86677288d5a37159da24ade856cb55677028e330115c2ec6f1dce3c8c16"
+    }
+  },
+  "topology": {
+    "MatrixPipeline": {
+      "physical_512mac_slices": 8,
+      "logical_matrix_engines": 1,
+      "idma_instances": 0,
+      "generated_sha256": "443a998ca2468b1f402c62c50b11694d308618886790136f378698c06ccffdfa"
+    },
+    "StreamingDense": {
+      "physical_512mac_slices": 8,
+      "logical_matrix_engines": 1,
+      "idma_instances": 1,
+      "generated_sha256": "1f64c8dd6b111dc9079853d7b4de1534892aa497f80771b8ba24ca57e81cf623"
+    }
+  },
+  "silu_lanes": 16,
+  "silu_checked_fp32": 192,
+  "matrix_full_width_issue_span": 320,
+  "matrix_full_width_accepted_steps": 320,
+  "matrix_reset_recoveries": 5,
+  "dense_reset_recoveries": 2,
+  "checker_runs_rtl": false,
+  "actual_simulation_required": true,
+  "full_block_acceptance": false,
+  "dc_signoff": false
+}

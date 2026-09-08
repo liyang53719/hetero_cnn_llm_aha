@@ -1,0 +1,540 @@
+%Warning-PINMISSING: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi_stream/src/axi_stream_cut.sv:41:5: Cell has missing pin: 'clr_i'
+   41 |   ) i_spill_register_stream (
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.020
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/integration/qwen2_matrix_command_endpoint.sv:2:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+    2 | module qwen2_matrix_command_endpoint(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/bf16_outer_product_array_glue512.sv:4:8: ... Location of module with timescale
+    4 | module bf16_outer_product_array_glue512 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8283:28: Operator VAR 'BurstLen' expects 32 bits on the Initial value, but Initial value's CONST '4'h8' generates 4 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend'
+ 8283 |     parameter int unsigned BurstLen = 4'd8,
+      |                            ^~~~~~~~
+make: Entering directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj'
+make[1]: Entering directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha'
+/usr/bin/verilator -f /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vbf16_context_lane_cluster16_rev8b_b_candidate__hierMkArgs.f
+%Warning-PINMISSING: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi_stream/src/axi_stream_cut.sv:41:5: Cell has missing pin: 'clr_i'
+   41 |   ) i_spill_register_stream (
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.020
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/integration/qwen2_matrix_command_endpoint.sv:2:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+    2 | module qwen2_matrix_command_endpoint(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/bf16_outer_product_array_glue512.sv:4:8: ... Location of module with timescale
+    4 | module bf16_outer_product_array_glue512 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi/src/axi_pkg.sv:203:77: Operator DIV expects 144 bits on the LHS, but LHS's VARREF '_addr' generates 128 bits.
+                                                                                                                                               : ... note: In instance 'bf16_context_lane_cluster16_rev8b_b_candidate.g_lane[15].u_lane.u_post.post'
+  203 |     return shortint'(($bits(_addr)  + $bits(strobe_width))'(_addr) - (_addr / largest_addr_t'(strobe_width)) * strobe_width);
+      |                                                                             ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi/src/axi_pkg.sv:203:77: Operator DIV expects 144 bits on the RHS, but RHS's CASTWRAP generates 128 bits.
+                                                                                                                                               : ... note: In instance 'bf16_context_lane_cluster16_rev8b_b_candidate.g_lane[15].u_lane.u_post.post'
+  203 |     return shortint'(($bits(_addr)  + $bits(strobe_width))'(_addr) - (_addr / largest_addr_t'(strobe_width)) * strobe_width);
+      |                                                                             ^
+make[1]: Leaving directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha'
+make[1]: Entering directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha'
+/usr/bin/verilator -f /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint__hierMkArgs.f
+%Warning-PINMISSING: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi_stream/src/axi_stream_cut.sv:41:5: Cell has missing pin: 'clr_i'
+   41 |   ) i_spill_register_stream (
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.020
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/integration/qwen2_matrix_command_endpoint.sv:2:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+    2 | module qwen2_matrix_command_endpoint(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vbf16_context_lane_cluster16_rev8b_b_candidate/bf16_context_lane_cluster16_rev8b_b_candidate.sv:6:8: ... Location of module with timescale
+    6 | module bf16_context_lane_cluster16_rev8b_b_candidate (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi/src/axi_pkg.sv:203:77: Operator DIV expects 144 bits on the LHS, but LHS's VARREF '_addr' generates 128 bits.
+                                                                                                                                               : ... note: In instance 'qwen2_matrix_command_endpoint.matrix.g_production.front_control.tags'
+  203 |     return shortint'(($bits(_addr)  + $bits(strobe_width))'(_addr) - (_addr / largest_addr_t'(strobe_width)) * strobe_width);
+      |                                                                             ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi/src/axi_pkg.sv:203:77: Operator DIV expects 144 bits on the RHS, but RHS's CASTWRAP generates 128 bits.
+                                                                                                                                               : ... note: In instance 'qwen2_matrix_command_endpoint.matrix.g_production.front_control.tags'
+  203 |     return shortint'(($bits(_addr)  + $bits(strobe_width))'(_addr) - (_addr / largest_addr_t'(strobe_width)) * strobe_width);
+      |                                                                             ^
+make[1]: Leaving directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha'
+make[1]: Entering directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha'
+/usr/bin/verilator -f /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/VHostBlockTop__hierMkArgs.f
+%Warning-PINMISSING: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi_stream/src/axi_stream_cut.sv:41:5: Cell has missing pin: 'clr_i'
+   41 |   ) i_spill_register_stream (
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.020
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8283:28: Operator VAR 'BurstLen' expects 32 bits on the Initial value, but Initial value's CONST '4'h8' generates 4 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend'
+ 8283 |     parameter int unsigned BurstLen = 4'd8,
+      |                            ^~~~~~~~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:81:50: Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 2 bits.
+                                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.gen_fifo_buffer[0].i_passthrough_stream_fifo'
+   81 |                 if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin
+      |                                                  ^~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:100:51: Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 2 bits.
+                                                                                                                                                                           : ... note: In instance 'HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.gen_fifo_buffer[0].i_passthrough_stream_fifo'
+  100 |                 if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin
+      |                                                   ^~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:125:44: Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 6 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write'
+  125 |     assign w_last_mask  = '1 >> (StrbWidth - w_dp_req_i.tailer);
+      |                                            ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_read.sv:101:44: Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 6 bits.
+                                                                                                                                                         : ... note: In instance 'HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_read'
+  101 |     assign r_last_mask  = '1 >> (StrbWidth - r_dp_req_i.tailer);
+      |                                            ^
+%Warning-WIDTHTRUNC: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv:34:29: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's VARREF 'OffsetWidth' generates 32 bits.
+                                                                                                                                                                      : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_read_page_splitter'
+   34 |             page_addr_width = OffsetWidth;
+      |                             ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv:38:59: Operator COND expects 32 bits on the Conditional True, but Conditional True's VARREF 'max_llen_i' generates 3 bits.
+                                                                                                                                                                       : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_read_page_splitter'
+   38 |             page_addr_width = OffsetWidth + (reduce_len_i ? max_llen_i : BurstLen);
+      |                                                           ^
+%Warning-WIDTHTRUNC: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv:38:29: Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                                                                                                                                      : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_read_page_splitter'
+   38 |             page_addr_width = OffsetWidth + (reduce_len_i ? max_llen_i : BurstLen);
+      |                             ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv:54:46: Operator GT expects 32 bits on the LHS, but LHS's VARREF 'page_addr_width' generates 4 bits.
+                                                                                                                                                                       : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_read_page_splitter'
+   54 |             page_offset[i] = page_addr_width > i ? addr_i[i] : 1'b0;
+      |                                              ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4111:43: Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'r_num_bytes_possible' generates 13 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4111 |             r_tf_d.length = r_tf_q.length - r_num_bytes_possible;
+      |                                           ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4113:39: Operator ADD expects 64 bits on the RHS, but RHS's VARREF 'r_num_bytes' generates 13 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4113 |             r_tf_d.addr = r_tf_q.addr + r_num_bytes;
+      |                                       ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4130:43: Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'w_num_bytes_possible' generates 13 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4130 |             w_tf_d.length = w_tf_q.length - w_num_bytes_possible;
+      |                                           ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4132:39: Operator ADD expects 64 bits on the RHS, but RHS's VARREF 'w_num_bytes' generates 13 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4132 |             w_tf_d.addr = w_tf_q.addr + w_num_bytes;
+      |                                       ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4241:32: Operator ADD expects 32 or 13 bits on the RHS, but RHS's VARREF 'r_addr_offset' generates 6 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4241 |             len: ((r_num_bytes + r_addr_offset - 'd1) >> OffsetWidth),
+      |                                ^
+%Warning-WIDTHTRUNC: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4241:13: Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's SHIFTR generates 32 or 13 bits.
+                                                                                                                                                         : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4241 |             len: ((r_num_bytes + r_addr_offset - 'd1) >> OffsetWidth),
+      |             ^~~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4258:48: Operator ADD expects 13 bits on the RHS, but RHS's VARREF 'r_addr_offset' generates 6 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4258 |         tailer:       OffsetWidth'(r_num_bytes + r_addr_offset),
+      |                                                ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4261:35: Operator LTE expects 32 bits on the LHS, but LHS's VARREF 'r_num_bytes' generates 13 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4261 |         is_single:    r_num_bytes <= StrbWidth
+      |                                   ^~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4269:32: Operator ADD expects 32 or 13 bits on the RHS, but RHS's VARREF 'w_addr_offset' generates 6 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4269 |             len: ((w_num_bytes + w_addr_offset - 'd1) >> OffsetWidth),
+      |                                ^
+%Warning-WIDTHTRUNC: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4269:13: Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's SHIFTR generates 32 or 13 bits.
+                                                                                                                                                         : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4269 |             len: ((w_num_bytes + w_addr_offset - 'd1) >> OffsetWidth),
+      |             ^~~
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4284:46: Operator ADD expects 13 bits on the RHS, but RHS's VARREF 'w_addr_offset' generates 6 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+ 4284 |             tailer: OffsetWidth'(w_num_bytes + w_addr_offset),
+      |                                              ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4380:387: Operator DIV expects 65 bits on the LHS, but LHS's EXTEND generates 64 bits.
+                                                                                                                                                           : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:4380:387: Operator DIV expects 65 bits on the RHS, but RHS's EXTEND generates 64 bits.
+                                                                                                                                                           : ... note: In instance 'HostBlockTop.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer'
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi/src/axi_pkg.sv:203:77: Operator DIV expects 144 bits on the LHS, but LHS's VARREF '_addr' generates 128 bits.
+                                                                                                                                               : ... note: In instance 'HostBlockTop.dma.backend.u_backend'
+  203 |     return shortint'(($bits(_addr)  + $bits(strobe_width))'(_addr) - (_addr / largest_addr_t'(strobe_width)) * strobe_width);
+      |                                                                             ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/axi/src/axi_pkg.sv:203:77: Operator DIV expects 144 bits on the RHS, but RHS's CASTWRAP generates 128 bits.
+                                                                                                                                               : ... note: In instance 'HostBlockTop.dma.backend.u_backend'
+  203 |     return shortint'(($bits(_addr)  + $bits(strobe_width))'(_addr) - (_addr / largest_addr_t'(strobe_width)) * strobe_width);
+      |                                                                             ^
+%Warning-WIDTHEXPAND: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8762:35: Operator ASSIGNW expects 68 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                                                                          : ... note: In instance 'HostBlockTop.dma.backend.u_backend'
+ 8762 |         assign idma_rsp.pld       = 1'b0;
+      |                                   ^
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2'
+260920 |   wire           _leaves_0_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:261219:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_0_io_completion_ready_i_T_2'
+261219 |   wire           _leaves_0_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:261219:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:262760:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_1_io_cmd_valid_i_T_2'
+262760 |   wire           _leaves_1_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:262760:18:      Example path: HostBlockTop.owner.matrix._leaves_1_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_1.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255839:18:      Example path: HostBlockTop.owner.matrix._leaves_1_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:262853:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_1_io_completion_ready_i_T_2'
+262853 |   wire           _leaves_1_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:262853:18:      Example path: HostBlockTop.owner.matrix._leaves_1_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_1.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255839:18:      Example path: HostBlockTop.owner.matrix._leaves_1_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:264394:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_2_io_cmd_valid_i_T_2'
+264394 |   wire           _leaves_2_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:264394:18:      Example path: HostBlockTop.owner.matrix._leaves_2_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_2.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255830:18:      Example path: HostBlockTop.owner.matrix._leaves_2_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:264487:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_2_io_completion_ready_i_T_2'
+264487 |   wire           _leaves_2_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:264487:18:      Example path: HostBlockTop.owner.matrix._leaves_2_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_2.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255830:18:      Example path: HostBlockTop.owner.matrix._leaves_2_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:266028:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_3_io_cmd_valid_i_T_2'
+266028 |   wire           _leaves_3_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:266028:18:      Example path: HostBlockTop.owner.matrix._leaves_3_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_3.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255821:18:      Example path: HostBlockTop.owner.matrix._leaves_3_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:266121:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_3_io_completion_ready_i_T_2'
+266121 |   wire           _leaves_3_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:266121:18:      Example path: HostBlockTop.owner.matrix._leaves_3_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_3.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255821:18:      Example path: HostBlockTop.owner.matrix._leaves_3_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:267662:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_4_io_cmd_valid_i_T_2'
+267662 |   wire           _leaves_4_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:267662:18:      Example path: HostBlockTop.owner.matrix._leaves_4_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_4.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255812:18:      Example path: HostBlockTop.owner.matrix._leaves_4_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:267755:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_4_io_completion_ready_i_T_2'
+267755 |   wire           _leaves_4_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:267755:18:      Example path: HostBlockTop.owner.matrix._leaves_4_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_4.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255812:18:      Example path: HostBlockTop.owner.matrix._leaves_4_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:269296:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_5_io_cmd_valid_i_T_2'
+269296 |   wire           _leaves_5_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:269296:18:      Example path: HostBlockTop.owner.matrix._leaves_5_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_5.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255803:18:      Example path: HostBlockTop.owner.matrix._leaves_5_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:269389:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_5_io_completion_ready_i_T_2'
+269389 |   wire           _leaves_5_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:269389:18:      Example path: HostBlockTop.owner.matrix._leaves_5_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_5.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255803:18:      Example path: HostBlockTop.owner.matrix._leaves_5_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:270930:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_6_io_cmd_valid_i_T_2'
+270930 |   wire           _leaves_6_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:270930:18:      Example path: HostBlockTop.owner.matrix._leaves_6_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_6.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255794:18:      Example path: HostBlockTop.owner.matrix._leaves_6_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:271023:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_6_io_completion_ready_i_T_2'
+271023 |   wire           _leaves_6_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:271023:18:      Example path: HostBlockTop.owner.matrix._leaves_6_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_6.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255794:18:      Example path: HostBlockTop.owner.matrix._leaves_6_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272564:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_7_io_cmd_valid_i_T_2'
+272564 |   wire           _leaves_7_io_cmd_valid_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272564:18:      Example path: HostBlockTop.owner.matrix._leaves_7_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_7.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255785:18:      Example path: HostBlockTop.owner.matrix._leaves_7_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272657:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_7_io_completion_ready_i_T_2'
+272657 |   wire           _leaves_7_io_completion_ready_i_T_2 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272657:18:      Example path: HostBlockTop.owner.matrix._leaves_7_io_completion_ready_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_7.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255785:18:      Example path: HostBlockTop.owner.matrix._leaves_7_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:43:34: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.__Vcellout__gen_fifo_buffer[0].i_passthrough_stream_fifo__valid_o'
+   43 |     output logic                 valid_o,
+      |                                  ^~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:43:34:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.__Vcellout__gen_fifo_buffer[0].i_passthrough_stream_fifo__valid_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:43:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_dataflow_element.sv:30:19:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_dataflow_element__valid_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:303:10:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:78:19:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellinp__i_idma_axi_write__buffer_out_valid_i
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:224:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:92:11:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.first_w
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:141:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:89:12:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.mask_out
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:191:9:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:132:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:83:11:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.aw_sent
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:48:10:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:36:19:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.__Vcellinp__i_fifo__push_i
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:62:29:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:32:13:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.fifo_empty
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8534:11:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_read.sv:168:62: Signal unoptimizable: Circular combinational logic: '__VdfgTmp_h349a38eb__0'
+  168 |     assign in_valid          = read_rsp_i.r_valid & in_ready & r_dp_ready_i;
+      |                                                              ^
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_read.sv:168:62:      Example path: __VdfgTmp_h349a38eb__0
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:64:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:43:34:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.__Vcellout__gen_fifo_buffer[0].i_passthrough_stream_fifo__valid_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv:43:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_dataflow_element.sv:30:19:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_dataflow_element__valid_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:303:10:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:78:19:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellinp__i_idma_axi_write__buffer_out_valid_i
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:224:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:92:11:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.first_w
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:141:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:89:12:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.mask_out
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:191:9:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:132:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:83:11:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.aw_sent
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:48:10:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:36:19:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.__Vcellinp__i_fifo__push_i
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:62:29:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:32:13:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.fifo_empty
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8534:11:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:103:11: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.write_happening'
+  103 |     logic write_happening;
+      |           ^~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:103:11:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.write_happening
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:224:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:92:11:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.first_w
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:141:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:89:12:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write.mask_out
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:191:9:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:132:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:83:11:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.aw_sent
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:48:10:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:36:19:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.__Vcellinp__i_fifo__push_i
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:62:29:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:32:13:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.fifo_empty
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8534:11:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:32:13: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.fifo_empty'
+   32 |     logic   fifo_empty,
+      |             ^~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:32:13:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.fifo_empty
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/target/rtl/idma_generated.sv:8534:11:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_axi_write.sv:67:24:      Example path: HostBlockTop.dma.backend.u_backend.i_idma_transport_layer.__Vcellout__i_idma_axi_write__write_req_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:132:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/idma/src/backend/idma_channel_coupler.sv:83:11:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.aw_sent
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:48:10:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:36:19:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.__Vcellinp__i_fifo__push_i
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fifo.sv:62:29:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_upstream/idma_export/deps/common_cells/src/cc_fall_through_register.sv:32:13:      Example path: HostBlockTop.dma.backend.u_backend.gen_r_aw_coupler.i_idma_channel_coupler.i_fall_through_register_decouple_aw_valid.fifo_empty
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260734:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix.consumeOutput'
+260734 |   wire           consumeOutput = _consumeOutput_T_6 & _consumeOutput_T_10;  
+       |                  ^~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260734:18:      Example path: HostBlockTop.owner.matrix.consumeOutput
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:206326:23:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255859:18:      Example path: HostBlockTop.owner.matrix._tags_io_enq_ready
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:274195:61:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:274195:61:      Example path: __VdfgTmp_hd947f14b__0
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272572:48:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272572:18:      Example path: HostBlockTop.owner.matrix._leaves_7_io_step_valid_i_T_3
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260964:48:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260964:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_step_valid_i_T_4
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+%Warning-UNOPTFLAT: /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272572:18: Signal unoptimizable: Circular combinational logic: 'HostBlockTop.owner.matrix._leaves_7_io_step_valid_i_T_3'
+272572 |   wire           _leaves_7_io_step_valid_i_T_3 =
+       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:272572:18:      Example path: HostBlockTop.owner.matrix._leaves_7_io_step_valid_i_T_3
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260964:48:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260964:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_step_valid_i_T_4
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:107:11:      Example path: HostBlockTop.owner.matrix.leaves_0.cmd_ready_o_combo__V
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:212:5:      Example path: ALWAYS
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:255848:18:      Example path: HostBlockTop.owner.matrix._leaves_0_cmd_ready_o
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:34:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260596:18:      Example path: HostBlockTop.owner.matrix.allCommandReady
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:47:      Example path: ASSIGNW
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/generated/HostBlockTop.sv:260920:18:      Example path: HostBlockTop.owner.matrix._leaves_0_io_cmd_valid_i_T_2
+                    /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj/Vqwen2_matrix_command_endpoint/qwen2_matrix_command_endpoint.sv:144:5:      Example path: ALWAYS
+make[1]: Leaving directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha'
+make: Leaving directory '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/pipeline_tiny/obj'

@@ -23,7 +23,7 @@ jobs:
             config
             configs
             .github/workflows
-      - name: Archive immutable Matrix4096 and bounded-weight-burst source for sandbox validation
+      - name: Archive immutable production-pipeline source for real16 two-layer closure
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt

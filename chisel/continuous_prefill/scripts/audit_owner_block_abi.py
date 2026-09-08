@@ -41,7 +41,7 @@ def audit(out:Path) -> dict:
                 require(r.pack().to_bytes(16,'little')==db[16*i:16*i+16],'record roundtrip')
                 seen.add(i)
             t=fixture['tensors'][name];a=t['address'];rank=len(t['dims']);shape=tuple(t['dims'])+(1,)*(4-rank)
-            base=(a&((1<<48)-1))|(7<<52)|(rank<<60)|((a>>48)<<64)
+            base=(a&((1<<48)-1))|(t.get('storage_dtype',7)<<52)|(rank<<60)|((a>>48)<<64)
             require(chain[0][1].payload==base,'tensor address/rank/space/layout/dtype')
             require(chain[1][1].payload==sum(v<<(18*i) for i,v in enumerate(shape)),'shape encoding')
             strides=(shape[1]*shape[2]*shape[3],shape[2]*shape[3],shape[3])

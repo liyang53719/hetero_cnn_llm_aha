@@ -45,7 +45,15 @@ def verify(out:Path,write_report:bool=True)->dict:
             p=chain[0][1].payload;address=(p&((1<<48)-1))|((p>>64)<<48)
             dims=tuple((chain[1][1].payload>>(18*j))&0x3ffff for j in range(4))
             expected=tuple(t['dims'])+(1,)*(4-len(t['dims']))
-            require(address==t['address'] and dims==expected and ((p>>52)&15)==7,'tensor binding mismatch')
+            require(address==t['address'] and dims==expected and ((p>>52)&15)==t.get('storage_dtype',7),'tensor binding mismatch')
+    if f.get('weight_storage') == 'bf16':
+        require(scope.get('pipelined') is True, 'native B requires the production streaming owner')
+        weights={x['b'] for x in f['schedule'] if x['opcode']=='MATRIX_GEMM'}
+        require(len(weights)==7*L,'native weight count')
+        for name,t in f['tensors'].items():
+            require(t.get('storage_dtype',7)==(5 if name in weights else 7),'unexpected precision change')
+            if name in weights:
+                require(t['readonly'] and not t['virtual'] and t['dims'][1]%32==0 and t['storage_bytes']==2*t['words'],'native storage extent')
     checks=tagged(log,'OWNER_TENSOR');ends=tagged(log,'HOST_BLOCK_ALL_OWNERS_PASS');completions=tagged(log,'OWNER_COMPLETION')
     require(len(ends)==1,'one full completion required');end=ends[0]
     require([int(x['pc']) for x in completions]==list(range(C)),'missing/duplicated/reordered completions')

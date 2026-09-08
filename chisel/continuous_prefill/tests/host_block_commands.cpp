@@ -29,6 +29,9 @@
 #ifndef OWNER_MATRIX_MACS
 #define OWNER_MATRIX_MACS 512
 #endif
+#ifndef OWNER_BF16_WEIGHTS
+#define OWNER_BF16_WEIGHTS 0
+#endif
 static_assert(OWNER_MATRIX_MACS==512 || OWNER_MATRIX_MACS==4096,"Matrix specification");
 constexpr unsigned KV=KVHEADS*HD;
 constexpr unsigned MATRIX_SLICES=OWNER_MATRIX_MACS/512;
@@ -77,7 +80,15 @@ public:
  void refput(uint64_t a,size_t i,float f){oracle[pos(a)+i]=f;}
  void dump(const std::string&name,const void*p,size_t n){auto file=out/name;check(!std::filesystem::exists(file),"refuse overwrite "+file.string());std::ofstream f(file,std::ios::binary);f.write((const char*)p,n);check(bool(f),"dump failure");}
  void load(std::filesystem::path path,uint64_t a,uint64_t bytes){std::ifstream f(path,std::ios::binary|std::ios::ate);check(bool(f)&&uint64_t(f.tellg())==bytes,"table size "+path.string());f.seekg(0);f.read((char*)(mem.data()+pos(a)),bytes);check(bool(f),"table read");for(size_t i=0;i<bytes/4;i++)initialized[pos(a)+i]=1;}
- void weight(uint64_t a,unsigned k,unsigned n,unsigned salt){salt+=weightSalt;for(unsigned i=0;i<k;i++)for(unsigned j=0;j<n;j++){uint32_t x=i*1664525u+j*1013904223u+salt*2654435761u;x^=x>>13;x*=2246822519u;put(a,size_t(i)*n+j,bf(float(int(x%31)-15)*(H>64?0.00390625f:0.015625f)));}}
+ void weight(uint64_t a,unsigned k,unsigned n,unsigned salt){salt+=weightSalt;for(unsigned i=0;i<k;i++)for(unsigned j=0;j<n;j++){uint32_t x=i*1664525u+j*1013904223u+salt*2654435761u;x^=x>>13;x*=2246822519u;put(a,size_t(i)*n+j,bf(float(int(x%31)-15)*(H>64?0.00390625f:0.015625f)));}
+#if OWNER_BF16_WEIGHTS
+   // Pack only readonly external weights before launch. Keep the independently
+   // computed FP32 oracle separate; it never services an AXI read.
+   check(n%32==0,"native BF16 row alignment");
+   for(size_t i=0;i<size_t(k)*n/2;i++)mem[pos(a)+i]=(mem[pos(a)+2*i]>>16)|(mem[pos(a)+2*i+1]&0xffff0000U);
+   for(size_t i=size_t(k)*n/2;i<size_t(k)*n;i++){mem[pos(a)+i]=0x7fc00001;initialized[pos(a)+i]=0;}
+#endif
+ }
  void norm(uint64_t a,uint64_t g,uint64_t dst){for(unsigned t=0;t<TOKENS;t++){float sum=0;for(unsigned i=0;i<H;i++){float x=get(a,size_t(t)*H+i);sum=add(sum,mul(x,x));}float inv=1.0f/std::sqrt(add(mul(sum,float(1.0/H)),1e-6f));for(unsigned i=0;i<H;i++)refput(dst,size_t(t)*H+i,bf(mul(mul(get(a,size_t(t)*H+i),inv),get(g,i))));}}
  void dense(uint64_t a,uint64_t w,uint64_t dst,unsigned K,unsigned N){std::vector<float>x(K);for(unsigned t=0;t<TOKENS;t++){for(unsigned k=0;k<K;k++)x[k]=bf(get(a,size_t(t)*K+k));for(unsigned n=0;n<N;n+=16){float sum[16]={};for(unsigned k=0;k<K;k++){const float*b=oracle.data()+pos(w)+size_t(k)*N+n;for(unsigned j=0;j<16;j++)sum[j]=std::fma(x[k],bf(b[j]),sum[j]);}for(unsigned j=0;j<16;j++)refput(dst,size_t(t)*N+n+j,sum[j]);}}}
  void bias(uint64_t a,uint64_t b,uint64_t dst,unsigned N){for(unsigned t=0;t<TOKENS;t++)for(unsigned n=0;n<N;n++)refput(dst,size_t(t)*N+n,add(get(a,size_t(t)*N+n),get(b,n)));}

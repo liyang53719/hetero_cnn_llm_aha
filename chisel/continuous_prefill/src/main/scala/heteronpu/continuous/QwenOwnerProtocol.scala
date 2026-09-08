@@ -8,6 +8,7 @@ object QwenOwnerKind { val Norm=0; val Dense=1; val Bias=2; val Rope=3; val Atte
 class QwenOwnerJob extends Bundle {
   val kind=UInt(3.W); val m=UInt(16.W); val n=UInt(16.W); val k=UInt(16.W)
   val a=UInt(64.W); val b=UInt(64.W); val c=UInt(64.W); val dst=UInt(64.W)
+  val weightBf16=Bool() // Dense B storage only; compute remains BF16 x BF16 + FP32.
   val writeBytes=UInt(64.W); val tag=UInt(32.W)
 }
 class QwenOwnerResult extends Bundle {

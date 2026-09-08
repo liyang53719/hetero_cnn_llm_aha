@@ -3,6 +3,9 @@
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"
 PROFILE=${1:?tiny|real};OUT=${2:?absolute new directory};TOKENS=${3:-16};RELOCATE=${4:-0};LAYERS=${5:-1};MATRIX_MACS=${MATRIX_MACS:-4096};WEIGHT_READ_BEATS=${WEIGHT_READ_BEATS:-1};PIPELINED_OWNER=${PIPELINED_OWNER:-0}
+NATIVE_BF16_WEIGHTS=${NATIVE_BF16_WEIGHTS:-0}
+[[ "$NATIVE_BF16_WEIGHTS" = 0 || "$NATIVE_BF16_WEIGHTS" = 1 ]] || exit 2
+[[ "$NATIVE_BF16_WEIGHTS" = 0 || "$PIPELINED_OWNER" = 1 ]] || exit 2
 [[ "$MATRIX_MACS" = 512 || "$MATRIX_MACS" = 4096 ]] || exit 2
 [[ "$WEIGHT_READ_BEATS" = 1 || "$WEIGHT_READ_BEATS" = 16 ]] || exit 2
 [[ "$PIPELINED_OWNER" = 0 || "$PIPELINED_OWNER" = 1 ]] || exit 2
@@ -32,6 +35,10 @@ if [[ "$LAYERS" = 1 ]];then
   python3 "$P/scripts/pack_owner_block_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --relocate "$RELOCATE" >"$OUT/packing.log"
 else
   python3 "$P/scripts/pack_owner_multilayer_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --layers "$LAYERS" --relocate "$RELOCATE" >"$OUT/packing.log"
+fi
+if [[ "$NATIVE_BF16_WEIGHTS" = 1 ]];then
+  mv "$OUT/fixture" "$OUT/fp32_fixture"
+  python3 "$P/scripts/pack_owner_bf16_weights.py" "$OUT/fp32_fixture" "$OUT/fixture" >"$OUT/native_weights.log"
 fi
 HIERARCHY="$P/tests/retained_hierarchy.vlt"
 if [[ "$MATRIX_MACS" = 4096 ]];then HIERARCHY="$P/tests/matrix4096_hierarchy.vlt";fi

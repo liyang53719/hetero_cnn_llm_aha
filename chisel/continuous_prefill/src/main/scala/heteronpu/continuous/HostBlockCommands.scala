@@ -14,7 +14,7 @@ import chisel3.util._
   * tensors are internal-only logical values, never DDR materializations.
   * Their completion events are conservatively delayed until PV writeback.
   */
-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64) extends Module {
+class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false) extends Module {
   require(eventSlots>=4 && isPow2(eventSlots) && maxCommands>=21 && maxCommands<=255)
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new HostCommandLaunch));val result=Decoupled(new HostCommandResult)
@@ -162,7 +162,8 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64) 
   when(state===validate){
     val a=tensors(0);val b=tensors(1);val d=tensors(2)
     val m=a.dims(0);val n=d.dims(1)
-    val allFP32=a.dtype===7.U&&d.dtype===7.U&&(isSoftmax||b.dtype===7.U)
+    val nativeWeight=bf16Weights.B && opcode===0x20.U && b.dtype===5.U && n(4,0)===0.U
+    val validDTypes=a.dtype===7.U&&d.dtype===7.U&&(isSoftmax||b.dtype===7.U||nativeWeight)
     val plainTails=(isSoftmax||b.tail===0xffffff.U)&&d.tail===0xffffff.U&&(kv=== (a.tail===0xffffff.U))
     val noAlias= !overlap(d.address,d.paddedEnd,a.address,a.paddedEnd) && (isSoftmax|| !overlap(d.address,d.paddedEnd,b.address,b.paddedEnd))
     val sourceLive=Mux(group===1.U,same(a,score),Mux(group===2.U,same(a,probability)&&live(b),live(a)&&live(b)))
@@ -181,7 +182,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64) 
     val sm=isSoftmax&&group===1.U&&same(a,score)&&shape3(d,s.heads.U,q.dims(0),q.dims(0))&&sfuPolicy(1)
     val pv=opcode===0x24.U&&group===2.U&&same(a,probability)&&shape2(b,q.dims(0),s.kv.U)&&
       shape2(d,q.dims(0),s.hidden.U)&&matrixPolicy(q.dims(0),s.headDim.U,q.dims(0),false.B)
-    when(!allFP32|| !plainTails|| !(norm||dense||vector||rope||activation||append||qk||sm||pv)){fail(Status.Unsupported.U)}
+    when(!validDTypes|| !plainTails|| !(norm||dense||vector||rope||activation||append||qk||sm||pv)){fail(Status.Unsupported.U)}
     .elsewhen(!sourceLive){fail(Status.Dependency.U)}
     .elsewhen(!noAlias|| !fresh(d)||producedCount>=maxCommands.U||virtualCount>=maxCommands.U){fail(Status.Permission.U)}
     .elsewhen(qk){q:=a;k:=b;score:=d;qkCommand:=cmd;group:=1.U
@@ -191,7 +192,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64) 
     }.otherwise{
       bound:=0.U.asTypeOf(new QwenOwnerJob)
       bound.tag:=Cat(cfg.epoch,pc);bound.a:=a.address;bound.b:=b.address;bound.dst:=d.address;bound.writeBytes:=d.payloadBytes
-      bound.m:=m;bound.n:=n;bound.k:=a.dims(1)
+      bound.m:=m;bound.n:=n;bound.k:=a.dims(1);bound.weightBf16:=nativeWeight
       bound.kind:=Mux(norm,QwenOwnerKind.Norm.U,Mux(dense,QwenOwnerKind.Dense.U,
         Mux(vector,Mux(b.dims(0)===1.U,QwenOwnerKind.Bias.U,QwenOwnerKind.Add.U),
         Mux(rope,QwenOwnerKind.Rope.U,Mux(activation,QwenOwnerKind.Activation.U,

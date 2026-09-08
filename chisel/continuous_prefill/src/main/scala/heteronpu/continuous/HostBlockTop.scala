@@ -25,7 +25,7 @@ class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=fal
     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
   })
   dontTouch(io)
-  val cmd=Module(new HostBlockCommands(s));val owner=Module(new QwenOwnerKernel(s,pipelined))
+  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined));val owner=Module(new QwenOwnerKernel(s,pipelined))
   val hub=Module(new SharedMemoryArbiter(2))
   val dmaPoison=Wire(Bool())
   cmd.io.launch<>io.launch;io.result<>cmd.io.result;io.completion<>cmd.io.completion
@@ -43,7 +43,8 @@ class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=fal
     when(io.launch.fire||owner.io.done.fire){window.enable:=false.B}
     when(owner.io.job.fire){
       val job=owner.io.job.bits
-      val end=job.b.pad(66)+((job.n.pad(66)*job.k.pad(66))<<2)
+      val weightBytes=Mux(job.weightBf16,2.U(3.W),4.U(3.W))
+      val end=job.b.pad(66)+(job.n.pad(66)*job.k.pad(66)*weightBytes)
       window.enable:=job.kind===QwenOwnerKind.Dense.U && end<=(BigInt(1)<<56).U
       window.base:=job.b;window.limit:=end(63,0)
     }

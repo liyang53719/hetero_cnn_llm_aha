@@ -8,7 +8,7 @@ permissions:
   contents: write
   actions: read
 concurrency:
-  group: production-pipeline-real2-20260908
+  group: production-pipeline-real2-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   pipeline:
@@ -29,6 +29,7 @@ jobs:
       - uses: sbt/setup-sbt@v1
       - name: Install public tools
         run: |
+          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y verilator g++
           python3 -m pip install numpy==2.3.5 PyYAML==6.0.3
@@ -48,10 +49,11 @@ jobs:
           git rev-parse HEAD > pipeline_source_commit.txt
           git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows | gzip > pipeline_source.tar.gz
           sha256sum pipeline_source.tar.gz > pipeline_source.sha256
-      - name: Actual vector SFU Chisel arithmetic and backpressure
+      - name: Actual pipelined Matrix, vector SFU, streamed Dense and error recovery
         run: |
           set -euo pipefail
-          (cd chisel/continuous_prefill;sbt -batch 'testOnly heteronpu.continuous.VectorSiluSpec') > pipeline_silu_tests.log 2>&1
+          export IDMA_EXPORT="$PWD/work/pipeline_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_pipeline_components.sh "$PWD/work/pipeline_components" > pipeline_components.log 2>&1
       - name: Tiny complete two-layer Host and real-iDMA numerical regression
         run: |
           set -euo pipefail
@@ -76,13 +78,15 @@ jobs:
           from pathlib import Path
           root=Path('work/pipeline_real2');source=os.environ['GITHUB_SHA']
           r=json.loads((root/'PIPELINE_COMPARISON.json').read_text())
+          c=json.loads(Path('work/pipeline_components/RESULT.json').read_text())
           if r['status']!='PASS_PIPELINED_REAL16_TWO_LAYER_ALL_OUTPUT_COMPARISON' or r['tested_source']!=source:raise SystemExit('UNVERIFIED_SOURCE')
+          if c['status']!='PASS_PRODUCTION_PIPELINE_COMPONENT_ARITHMETIC_AND_RECOVERY':raise SystemExit('UNVERIFIED_COMPONENTS')
           selected={};skip={'obj','classes','testclasses','test_run_dir','verilator-runtime','offline-tools-runtime','__pycache__'}
-          for label,folder in [('numerical',root),('tiny',Path('work/pipeline_tiny'))]:
+          for label,folder in [('numerical',root),('tiny',Path('work/pipeline_tiny')),('components',Path('work/pipeline_components'))]:
               for p in sorted(folder.rglob('*')):
                   rel=p.relative_to(folder)
                   if p.is_file() and not p.is_symlink() and not any(x in skip for x in rel.parts) and p.suffix in {'.json','.log','.gz','.f32le','.bin','.h','.sv','.txt','.exit','.sha256'}:selected[label+'/'+str(rel)]=p.read_bytes()
-          for name in ['pipeline_silu_tests.log','pipeline_source_commit.txt']:selected[name]=Path(name).read_bytes()
+          selected['pipeline_source_commit.txt']=Path('pipeline_source_commit.txt').read_bytes()
           selected['PUBLISHED_SHA256.json']=(json.dumps({p:hashlib.sha256(b).hexdigest() for p,b in selected.items()},indent=2)+'\n').encode()
           identities=json.loads((root/'sources.sha256.json').read_text());prefix='reports/execution/PRODUCTION_PIPELINE_REAL2_'+source[:12]
           def git(*args,env=None,data=None):return subprocess.check_output(['git',*args],env=env,input=data)
@@ -120,6 +124,7 @@ jobs:
             pipeline_*.json
             pipeline_source.tar.gz
             pipeline_source.sha256
+            work/pipeline_components/**
             work/pipeline_tiny/**
             work/pipeline_real2/**
             !work/**/obj/**

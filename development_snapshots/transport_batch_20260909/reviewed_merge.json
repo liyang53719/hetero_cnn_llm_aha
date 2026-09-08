@@ -1,0 +1,19 @@
+{
+  "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": {
+    "current_sha256": "4dd085f0e33db2a20438fe982dd093a252e4afc156dc1419ac1a55a13d745660",
+    "input_sha256": "decc8064352623036d4d4a756d72d3db7b7f302adb85b571e258eb1ef33a5d38",
+    "sha256": "55eb0b5d1d865ef9e3085013076cb577cbafa5322a2af00dbff185319cf5b33c",
+    "edits": [[6, 8, "  * Non-LAST beats are provisional and may be forwarded during DMA. Successful\n  * LAST is the commit fence: it is released only after the real backend has\n  * completed and checked the entire burst. A consumer must stage the whole\n  * burst before using it and must drain through LAST on error. Early arrival\n  * is not permission to publish a tensor or complete a Host command.\n"]]
+  },
+  "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+    "current_sha256": "e47dc107105563bd3804292fcff0e1af23688a05e06b09b44c9764665e1f8b3e",
+    "input_sha256": "bc29604665365d908277b48a4795def95166045e624e4b807a8bce5d4bbee8d7",
+    "sha256": "698e1206f991fb0aac7e2623fed34ccb5479549d907ebfadb93365842576ee2a",
+    "edits": [
+      [20, 21, "  * Only the final successful backend response validates a line. Streaming reads\n  * may forward a provisional prefix while iDMA fills the mailbox; the LAST beat\n  * is the commit fence and is withheld until backend completion. Consumers must\n  * not publish or use a burst as valid before successful LAST. The selected\n  * production consumer stages each complete K block before issuing it.\n  * A failed beat\n"],
+      [25, 26, "class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = false,\n                                    streamCutThrough: Boolean = true, burstWrites: Boolean = false,\n                                    commitTailRead: Boolean = false) extends Module {\n"],
+      [125, 127, "    val finalBeat = streamIndex + 1.U === count\n    val bufferedPrefix = streamCutThrough.B && !commitTailRead.B &&\n      state === waitDma && stream && !finalBeat && streamIndex < localCount\n    io.streamResponse.get.valid := Mux(forwarding,wr.w_valid,(state === reply && stream)||bufferedPrefix)\n    val responseError = rsp.error && (finalBeat || (!streamCutThrough.B && !commitTailRead.B))\n    io.streamResponse.get.bits.data := Mux(forwarding,wr.w.data,Mux(responseError,0.U,data(streamIndex(idxBits-1,0))))\n"],
+      [128, 130, "    io.streamResponse.get.bits.error := Mux(forwarding,wr.w.last || !wr.w.strb.andR,responseError)\n    io.streamResponse.get.bits.last := finalBeat\n"]
+    ]
+  }
+}

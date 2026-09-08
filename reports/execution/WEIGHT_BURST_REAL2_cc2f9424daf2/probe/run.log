@@ -1,0 +1,11 @@
+BURST_BENCH enabled=0 cycles=3328 beats=256 transfers=256 hits=0
+BURST_BENCH enabled=1 cycles=2128 beats=256 transfers=16 hits=240
+TAIL_CASE 1
+TAIL_CASE 2
+TAIL_CASE 7
+TAIL_CASE 15
+TAIL_CASE 16
+TAIL_CASE 17
+TAIL_CASE 31
+TAIL_CASE 33
+IDMA_WEIGHT_BURST_PASS cases=24 real_pinned_idma=1 max_beats=16 mailbox_bytes=1024 supply_cycles_single=3328 supply_cycles_burst=2128 data_mismatches=0

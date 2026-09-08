@@ -1,0 +1,356 @@
+{
+  "baseline4096": {
+    "matrix_macs_per_cycle": 4096,
+    "clock_target_hz": 800000000,
+    "cycles": 114418263,
+    "useful_macs": 1498202112,
+    "executed_macs": 1524105216,
+    "latency_ms_at_target_clock": 143.02282875,
+    "useful_wall_mac_utilization": 0.0031967973504369667,
+    "executed_wall_mac_utilization": 0.003252068247181833,
+    "useful_fraction_of_executed_macs": 0.9830043859649122,
+    "useful_gmac_per_s_at_target_clock": 10.475265557911852,
+    "peak_tmac_per_s_at_target_clock": 3.2768,
+    "ddr_read_bytes": 385152512,
+    "ddr_write_ack_bytes": 5636096
+  },
+  "burst4096": {
+    "matrix_macs_per_cycle": 4096,
+    "clock_target_hz": 800000000,
+    "cycles": 82001446,
+    "useful_macs": 1498202112,
+    "executed_macs": 1524105216,
+    "latency_ms_at_target_clock": 102.5018075,
+    "useful_wall_mac_utilization": 0.00446055548825322,
+    "executed_wall_mac_utilization": 0.004537676079516939,
+    "useful_fraction_of_executed_macs": 0.9830043859649122,
+    "useful_gmac_per_s_at_target_clock": 14.61634822390815,
+    "peak_tmac_per_s_at_target_clock": 3.2768,
+    "ddr_read_bytes": 385152512,
+    "ddr_write_ack_bytes": 5636096
+  },
+  "cycle_speedup": 1.3953200654534799,
+  "latency_reduction_fraction": 0.2833185555351422,
+  "idma_transfers": 986584,
+  "read_bursts": 898520,
+  "cached_logical_beats": 5119488,
+  "schema": 1,
+  "status": "PASS_WEIGHT_BURST_REAL16_TWO_LAYER_EXACT_COMPARISON",
+  "tested_source": "cc2f9424daf2e35ca7dd5940305de7e09bbf623b",
+  "baseline_source": "d3571eecf96f7c6e4578e7d8d478139e2189c3de",
+  "tokens": 16,
+  "layers": 2,
+  "host_commands": 42,
+  "checked_fp32": 1409024,
+  "bit_differences": 0,
+  "actual_files_sha256": {
+    "input_x.f32le": "469dcd810999cf817d2ce9589e0022c0094927f619e374066e3aa6ace484dffe",
+    "host_commands.bin": "a02c603311c88f32fe0abc7baad2583eff415829b1d392a68b2d8306b3240f69",
+    "host_descriptors.bin": "77662452fbc8d113d1224750f0785a3af20d3f28cc438d20e2e85e0e9c385a3b",
+    "l0_n0_actual.f32le": "dcd53a69980b29e4e0f8f2ecec12b248e0e31f9ab245c6cd3b6a929cef0fe3a1",
+    "l0_qraw_actual.f32le": "14b289d403350b14d8d55a9de563c2e758e2cbb0a3f9e471f6514744e7829a17",
+    "l0_qr_actual.f32le": "bd10ee07a3a44920d00b62cce3537a41c9eb3cdf4c3fadab0026f1af83453cf8",
+    "l0_q_actual.f32le": "41bded6c53f080fc1a54db5ccb1195a0cce2f3c1478bbb6401afd7eab08d4da5",
+    "l0_kraw_actual.f32le": "818c3cf8e42f06102904dc028fb820c0a9bfc1bec447f7a54cbe6d0d1bc188b3",
+    "l0_kr_actual.f32le": "65e22993f9d8a1da7a2547e9e15c5cf146b3be25b5c73e5965eb7407074979ac",
+    "l0_k_actual.f32le": "2f3dc1f18369747718227ad0aa8a75b2d45bcd97d4a7b5ad4a6035863fbcbb5c",
+    "l0_vraw_actual.f32le": "c075b035841900102ca80e292eb67d9e4aa88252acbfa85466ccb7387085eebc",
+    "l0_v_actual.f32le": "d0521e7fe1ab237403509f6eb0c550ff6f4ab80e7cf0ca6cca84a5bf15267a41",
+    "l0_cache_k_actual.f32le": "2f3dc1f18369747718227ad0aa8a75b2d45bcd97d4a7b5ad4a6035863fbcbb5c",
+    "l0_cache_v_actual.f32le": "d0521e7fe1ab237403509f6eb0c550ff6f4ab80e7cf0ca6cca84a5bf15267a41",
+    "l0_att_actual.f32le": "8071cc5684bf1861b0b33f45063bc6a33e6f98d7169c7c24598680f193bec870",
+    "l0_o_actual.f32le": "198bead61cf80729ae5354625cf5f54d1ac093be626f29118593d9763f7706c6",
+    "l0_r_actual.f32le": "2ac8604b99e42b3505c5759c32ca5614477ff28f0f844e06d346a468d9aeb764",
+    "l0_n1_actual.f32le": "7c8a2c064b87812eb78f035fe6dac2b40a96255bd17b58d6979d7aaaea41540a",
+    "l0_gate_actual.f32le": "a42afd6a219dbebc0adb925bb4a1d6f686e918fff37c72bfffd4822edc9a08dc",
+    "l0_up_actual.f32le": "d0fcfdb9cc1e341bfb2c36620a57d1f2190326f382ba46855340105a288121e2",
+    "l0_act_actual.f32le": "d784903f60194f15d5c613e6bbc1135c12b5007343a655d211dc320114844fac",
+    "l0_down_actual.f32le": "857501afe4483cd7cdb39aa3876ac30ff7a7c9592e5fbe18a5b76b8abe4c73ef",
+    "l0_y_actual.f32le": "a15b94dd35223a7f8284dd76950ced9d0a5822239d10507560cc91c7435d8eee",
+    "l1_n0_actual.f32le": "fd2a5c835cdf5d5b450a64fa18975de77b54cfebd6ffab65baa556e77cdd1186",
+    "l1_qraw_actual.f32le": "93b3b02633f77dedebfd6d94717fa2fb1dac917a8485110c5b4a982355620aa1",
+    "l1_qr_actual.f32le": "8f026bb2ce60e62b7ef75f28543df5a5b6523173ade2399cd59ab843bddeb9b2",
+    "l1_q_actual.f32le": "1eff10b3f2ad0b2c81e3b3a4391d4f361ea939b82988e08de10952faade03b35",
+    "l1_kraw_actual.f32le": "6700ca3631ee0a1c1a3f5abb2b7b1c2ab8d76341f582a8f9c043a74c25b73ec5",
+    "l1_kr_actual.f32le": "1b6c021890de43ed9e53b83fea77495a2b7ab9299978b78ecb915b4c2002008f",
+    "l1_k_actual.f32le": "cd1d353865acb2b99d13fcc64394c4cd628364f341468b3b0e20e165a34ca9b3",
+    "l1_vraw_actual.f32le": "b461643f0095849f64b273faa994575195d9d7117a37c33503d9f3628c89fe58",
+    "l1_v_actual.f32le": "ef4ab7f4c1ba6929f3804e5048e65b2a41e1361e491b7816432c78958aed0abd",
+    "l1_cache_k_actual.f32le": "cd1d353865acb2b99d13fcc64394c4cd628364f341468b3b0e20e165a34ca9b3",
+    "l1_cache_v_actual.f32le": "ef4ab7f4c1ba6929f3804e5048e65b2a41e1361e491b7816432c78958aed0abd",
+    "l1_att_actual.f32le": "3779929692003f431792a3827f395d0151647bde42010a8d1ad300ec10519484",
+    "l1_o_actual.f32le": "cd0b0ab99d52984e2e64866315478d2d1980866d352b9a4dd818628650a55140",
+    "l1_r_actual.f32le": "06b853ac86bcebc07df3d4fc93292e98d30e24246d2ce09182e83e7aee4baa1f",
+    "l1_n1_actual.f32le": "913d89edf571e56cc2ae22d0bf6f799fe6b2b6501ba1efefaa3f39e226fa5ac6",
+    "l1_gate_actual.f32le": "c7a0511cca37dfb0e58c67acde86e61c8a4af376cbed8358ff04b352c0ec37a4",
+    "l1_up_actual.f32le": "9e95324790d01b538715d318dbb197d81df30052397ad6a07c520ab994bbc09a",
+    "l1_act_actual.f32le": "026326203997cd1cf3c6a8042d21b5a277ca6fd9c64e0157c2f52d1199acc329",
+    "l1_down_actual.f32le": "1e778803cd7508b3bc499d19d7d6d2d670c8ea26708ff8a72033305cbcf62167",
+    "l1_y_actual.f32le": "9a6acfe42db5c591da645d3ad798b33f0975be3981906838ffcbb6fa90b4acf6"
+  },
+  "per_command_durations": [
+    {
+      "pc": 0,
+      "opcode": "SFU_RMSNORM",
+      "baseline4096_cycles": 202493,
+      "burst4096_cycles": 202493
+    },
+    {
+      "pc": 1,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 2302560,
+      "burst4096_cycles": 1485041
+    },
+    {
+      "pc": 2,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 67851,
+      "burst4096_cycles": 68062
+    },
+    {
+      "pc": 3,
+      "opcode": "SFU_ROPE",
+      "baseline4096_cycles": 71201,
+      "burst4096_cycles": 71154
+    },
+    {
+      "pc": 4,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 406033,
+      "burst4096_cycles": 269433
+    },
+    {
+      "pc": 5,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 11399,
+      "burst4096_cycles": 11532
+    },
+    {
+      "pc": 6,
+      "opcode": "SFU_ROPE",
+      "baseline4096_cycles": 11939,
+      "burst4096_cycles": 12101
+    },
+    {
+      "pc": 7,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 406212,
+      "burst4096_cycles": 269938
+    },
+    {
+      "pc": 8,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 11477,
+      "burst4096_cycles": 11486
+    },
+    {
+      "pc": 9,
+      "opcode": "KV_APPEND",
+      "baseline4096_cycles": 18064,
+      "burst4096_cycles": 17996
+    },
+    {
+      "pc": 10,
+      "opcode": "MATRIX_QK",
+      "baseline4096_cycles": 981901,
+      "burst4096_cycles": 982612
+    },
+    {
+      "pc": 11,
+      "opcode": "SFU_SOFTMAX",
+      "baseline4096_cycles": 2,
+      "burst4096_cycles": 1
+    },
+    {
+      "pc": 12,
+      "opcode": "MATRIX_PV",
+      "baseline4096_cycles": 1,
+      "burst4096_cycles": 1
+    },
+    {
+      "pc": 13,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 2302076,
+      "burst4096_cycles": 1485776
+    },
+    {
+      "pc": 14,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 77149,
+      "burst4096_cycles": 77242
+    },
+    {
+      "pc": 15,
+      "opcode": "SFU_RMSNORM",
+      "baseline4096_cycles": 202610,
+      "burst4096_cycles": 202749
+    },
+    {
+      "pc": 16,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 13300449,
+      "burst4096_cycles": 8534396
+    },
+    {
+      "pc": 17,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 13299836,
+      "burst4096_cycles": 8534989
+    },
+    {
+      "pc": 18,
+      "opcode": "SFU_ACTIVATION",
+      "baseline4096_cycles": 10144203,
+      "burst4096_cycles": 10144299
+    },
+    {
+      "pc": 19,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 13315110,
+      "burst4096_cycles": 8550054
+    },
+    {
+      "pc": 20,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 77226,
+      "burst4096_cycles": 77106
+    },
+    {
+      "pc": 21,
+      "opcode": "SFU_RMSNORM",
+      "baseline4096_cycles": 202686,
+      "burst4096_cycles": 202698
+    },
+    {
+      "pc": 22,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 2302543,
+      "burst4096_cycles": 1484918
+    },
+    {
+      "pc": 23,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 68025,
+      "burst4096_cycles": 67903
+    },
+    {
+      "pc": 24,
+      "opcode": "SFU_ROPE",
+      "baseline4096_cycles": 71085,
+      "burst4096_cycles": 71134
+    },
+    {
+      "pc": 25,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 406372,
+      "burst4096_cycles": 259904
+    },
+    {
+      "pc": 26,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 11515,
+      "burst4096_cycles": 11429
+    },
+    {
+      "pc": 27,
+      "opcode": "SFU_ROPE",
+      "baseline4096_cycles": 12054,
+      "burst4096_cycles": 11963
+    },
+    {
+      "pc": 28,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 405797,
+      "burst4096_cycles": 270003
+    },
+    {
+      "pc": 29,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 11545,
+      "burst4096_cycles": 11506
+    },
+    {
+      "pc": 30,
+      "opcode": "KV_APPEND",
+      "baseline4096_cycles": 18007,
+      "burst4096_cycles": 18051
+    },
+    {
+      "pc": 31,
+      "opcode": "MATRIX_QK",
+      "baseline4096_cycles": 982299,
+      "burst4096_cycles": 982295
+    },
+    {
+      "pc": 32,
+      "opcode": "SFU_SOFTMAX",
+      "baseline4096_cycles": 2,
+      "burst4096_cycles": 1
+    },
+    {
+      "pc": 33,
+      "opcode": "MATRIX_PV",
+      "baseline4096_cycles": 1,
+      "burst4096_cycles": 1
+    },
+    {
+      "pc": 34,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 2301400,
+      "burst4096_cycles": 1484882
+    },
+    {
+      "pc": 35,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 77077,
+      "burst4096_cycles": 77150
+    },
+    {
+      "pc": 36,
+      "opcode": "SFU_RMSNORM",
+      "baseline4096_cycles": 202814,
+      "burst4096_cycles": 202793
+    },
+    {
+      "pc": 37,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 13299762,
+      "burst4096_cycles": 8535429
+    },
+    {
+      "pc": 38,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 13300792,
+      "burst4096_cycles": 8533946
+    },
+    {
+      "pc": 39,
+      "opcode": "SFU_ACTIVATION",
+      "baseline4096_cycles": 10143667,
+      "burst4096_cycles": 10143421
+    },
+    {
+      "pc": 40,
+      "opcode": "MATRIX_GEMM",
+      "baseline4096_cycles": 13313901,
+      "burst4096_cycles": 8546529
+    },
+    {
+      "pc": 41,
+      "opcode": "SFU_VECTOR",
+      "baseline4096_cycles": 77126,
+      "burst4096_cycles": 77028
+    }
+  ],
+  "scope": {
+    "synthetic_weights": true,
+    "host_command_driven": true,
+    "physical_matrix_macs": 4096,
+    "idma_instances": 1,
+    "bounded_weight_mailbox_bytes": 1024,
+    "persistent_object_cache": false,
+    "full_q1024_network": false,
+    "official_quality": false,
+    "dc": false
+  }
+}

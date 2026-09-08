@@ -1,0 +1,16 @@
+{
+  "status": "PASS_REAL_IDMA_WEIGHT_BURST_PROBE",
+  "counters": {
+    "cases": "24",
+    "real_pinned_idma": "1",
+    "max_beats": "16",
+    "mailbox_bytes": "1024",
+    "supply_cycles_single": "3328",
+    "supply_cycles_burst": "2128",
+    "data_mismatches": "0"
+  },
+  "full_model": false,
+  "dc": false,
+  "log_sha256": "ea2abd464f788f3da0b15fdfdec11afc066fff1ababb260bc48572a10ffd895e",
+  "generated_sha256": "05f9edead4f10b8a86f218dd4053bde00b8fef2ca4a7255da38d029bf3edb638"
+}

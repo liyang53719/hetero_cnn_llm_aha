@@ -75,11 +75,18 @@ class MatrixPipelineService extends Module {
   val endpointError=(0 until 8).map(i=>selected(i)&&leaves(i).io.protocol_error_o).reduce(_||_)
   val completionBad=(0 until 8).map(i=>selected(i)&&
     (leaves(i).io.completion_data_o(55,40)=/=event||leaves(i).io.completion_data_o(39,32)=/=0.U||leaves(i).io.completion_data_o(31,29)=/=2.U)).reduce(_||_)
+  // Keep retained arithmetic clocks stopped while only DDR or output storage
+  // is waiting. A group may retain accumulator state indefinitely without
+  // toggling all 4096 MACs. Reopen for accepted input, in-flight pipeline drain,
+  // returned-output consumption, and command/completion handshakes.
+  val canIssue=work && legalStep && io.port.step.valid && tags.io.enq.ready && allStepReady
+  val needsClock=state===command || state===ending || state===draining ||
+    (state===running && (canIssue || (tags.io.deq.valid && (!allOutValid || consumeOutput))))
   for(i<-0 until 8){
     val e=leaves(i).io
     val gate=Module(new RetainedMatrixClockGate)
     gate.io.clk_i:=clock;gate.io.test_en_i:=false.B
-    gate.io.en_i:=selected(i) && state=/=idle && state=/=finish && state=/=locked
+    gate.io.en_i:=selected(i) && needsClock
     e.clk_i:=gate.io.clk_o;e.rst_ni:= !reset.asBool
     e.cmd_valid_i:=state===command && selected(i) && allCommandReady
     e.cmd_i:=Cat(0.U(72.W),event,0.U(16.W),0.U(13.W),2.U(3.W),group.opcode)
@@ -126,7 +133,8 @@ class MatrixPipelineService extends Module {
   }
   when(state===draining && !tags.io.deq.valid){state:=finish}
   when(io.port.done.fire){state:=Mux(poison,locked,idle)}
-  when((io.port.abort||endpointError||(consumeOutput&&outputBad)) && state=/=idle && state=/=finish && state=/=locked){
+  // A held abort must not override the draining -> finish transition.
+  when((io.port.abort||endpointError||(consumeOutput&&outputBad)) && state=/=idle && state=/=finish && state=/=locked && state=/=draining){
     poison:=true.B;state:=draining
   }
 }

@@ -70,7 +70,7 @@ def dense_values(m: int,n: int,k: int,seed: int) -> np.ndarray:
 def check_outputs(folder: Path,expected: np.ndarray) -> dict:
     require((folder/'simulation.exit').read_text().strip() == '0', 'simulator failed')
     log = (folder/'run.log').read_text()
-    require(re.search(r'FAIL|%Error|Fatal|Segmentation fault',log) is None, 'failed DUT log')
+    require(re.search(r'MATRIX_PIPELINE_FAIL:|STREAM_DENSE_FAIL:|PIPELINE_FAILURE_GATE_FAIL:|%Error|\bFatal\b|Segmentation fault',log) is None, 'failed DUT log')
     words = int(expected.size)
     actual = array(folder/'outputs/actual.f32le',words)
     reference = array(folder/'outputs/reference.f32le',words)

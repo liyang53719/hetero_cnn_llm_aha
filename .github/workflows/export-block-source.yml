@@ -23,19 +23,26 @@ jobs:
             config
             configs
             .github/workflows
-      - name: Archive immutable production-pipeline source for real16 two-layer closure
+            reports/execution/REAL16_TWO_LAYER_9f06249ca11f
+            reports/execution/MATRIX4096_REAL2_d3571eecf96f
+            reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2
+      - name: Archive exact sources and previously completed numerical baselines
         run: |
           set -euo pipefail
           git rev-parse HEAD > source_commit.txt
           git ls-tree -r HEAD -- chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows > source_tree.txt
           git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows | gzip > current_block_source.tar.gz
-          sha256sum current_block_source.tar.gz source_tree.txt > current_block_source.sha256
+          git ls-tree -r HEAD -- reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 > baseline_tree.txt
+          git archive HEAD reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 | gzip > numerical_baselines.tar.gz
+          sha256sum current_block_source.tar.gz numerical_baselines.tar.gz source_tree.txt baseline_tree.txt > current_block_source.sha256
       - uses: actions/upload-artifact@v4
         with:
           name: current-block-source-${{ github.sha }}
           retention-days: 30
           path: |
             current_block_source.tar.gz
+            numerical_baselines.tar.gz
             current_block_source.sha256
             source_commit.txt
             source_tree.txt
+            baseline_tree.txt

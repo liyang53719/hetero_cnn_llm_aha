@@ -52,6 +52,8 @@ jobs:
       - name: Actual pipelined Matrix, vector SFU, streamed Dense and error recovery
         run: |
           set -euo pipefail
+          python3 chisel/continuous_prefill/tests/test_pipeline_component_audit.py > pipeline_audit_tests.log 2>&1
+          python3 -O chisel/continuous_prefill/tests/test_pipeline_component_audit.py > pipeline_audit_optimized_tests.log 2>&1
           export IDMA_EXPORT="$PWD/work/pipeline_upstream/idma_export"
           bash chisel/continuous_prefill/scripts/run_pipeline_components.sh "$PWD/work/pipeline_components" > pipeline_components.log 2>&1
       - name: Tiny complete two-layer Host and real-iDMA numerical regression
@@ -86,7 +88,7 @@ jobs:
               for p in sorted(folder.rglob('*')):
                   rel=p.relative_to(folder)
                   if p.is_file() and not p.is_symlink() and not any(x in skip for x in rel.parts) and p.suffix in {'.json','.log','.gz','.f32le','.bin','.h','.sv','.txt','.exit','.sha256'}:selected[label+'/'+str(rel)]=p.read_bytes()
-          selected['pipeline_source_commit.txt']=Path('pipeline_source_commit.txt').read_bytes()
+          for name in ['pipeline_source_commit.txt','pipeline_audit_tests.log','pipeline_audit_optimized_tests.log']:selected[name]=Path(name).read_bytes()
           selected['PUBLISHED_SHA256.json']=(json.dumps({p:hashlib.sha256(b).hexdigest() for p,b in selected.items()},indent=2)+'\n').encode()
           identities=json.loads((root/'sources.sha256.json').read_text());prefix='reports/execution/PRODUCTION_PIPELINE_REAL2_'+source[:12]
           def git(*args,env=None,data=None):return subprocess.check_output(['git',*args],env=env,input=data)

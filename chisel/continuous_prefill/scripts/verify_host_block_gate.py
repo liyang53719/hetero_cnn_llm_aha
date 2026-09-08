@@ -75,7 +75,13 @@ def verify(out:Path,write_report:bool=True)->dict:
         bursts=int(end['read_bursts']);hits=int(end['weight_cache_hits'])
         require(int(end['weight_read_burst_beats'])==16 and bursts>0 and bursts<=read_beats<=16*bursts,'read burst capacity')
         require(bursts+write_beats==int(end['idma_transfers']),'real iDMA burst/store conservation')
-        require(hits==read_beats-bursts and hits>0,'prefetch beat consumption conservation')
+        if scope.get('pipelined',False):
+            require(type(scope['pipelined']) is bool and int(end['pipelined_owner'])==1,'pipeline identity')
+            streamed=int(end['streamed_read_beats'])
+            require(hits==0 and 0<streamed<=read_beats-int(end['metadata_reads']),'streamed-read conservation')
+            require(scope.get('dense_contexts')==5 and scope.get('silu_lanes')==16,'pipeline/SFU geometry')
+        else:
+            require(hits==read_beats-bursts and hits>0,'prefetch beat consumption conservation')
         require(scope.get('weight_read_cache_bytes')==1024,'bounded mailbox footprint')
     require(int(end['request_stalls'])>0 and int(end['response_delay_cycles'])>0,'backpressure not covered')
     sv=(out/'generated/HostBlockTop.sv').read_text()

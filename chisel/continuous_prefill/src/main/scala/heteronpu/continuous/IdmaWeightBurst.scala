@@ -23,7 +23,7 @@ class IdmaWeightWindow extends Bundle {
   * given successful data. Writes remain one beat and return only after B.
   * This is not a persistent object cache and never fetches a new tensor speculatively.
   */
-class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
+class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16, streaming: Boolean = false) extends Module {
   require(maxBeats >= 1 && maxBeats <= 16 && isPow2(maxBeats))
   val idxBits = math.max(1, log2Ceil(maxBeats))
   val countBits = log2Ceil(maxBeats + 1)
@@ -32,6 +32,9 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
     val response = Decoupled(new MemoryResponse)
     val window = Input(new IdmaWeightWindow)
     val flush = Input(Bool())
+    val streamRequest = if(streaming) Some(Flipped(Decoupled(new BurstReadRequest))) else None
+    val streamResponse = if(streaming) Some(Decoupled(new BurstReadResponse)) else None
+    val streamedBeats = Output(UInt(64.W))
     val axi = new BlockAxiMaster
     val resetRequired = Output(Bool())
     val transfers = Output(UInt(64.W))
@@ -42,6 +45,19 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
   })
   val idle :: issue :: waitDma :: reply :: locked :: Nil = Enum(5)
   val state = RegInit(idle)
+  val stream = RegInit(false.B)
+  val streamIndex = RegInit(0.U(countBits.W))
+  val streamCount = RegInit(0.U(64.W))
+  io.streamedBeats := streamCount
+  val fromStream = WireDefault(false.B)
+  val newStream = WireDefault(0.U.asTypeOf(new BurstReadRequest))
+  val streamFire = WireDefault(false.B)
+  val streamReplyFire = WireDefault(false.B)
+  if(streaming){
+    fromStream := io.streamRequest.get.fire
+    newStream := io.streamRequest.get.bits
+    streamFire := io.streamRequest.get.fire
+  }
   val req = Reg(new MemoryRequest)
   val rsp = Reg(new MemoryResponse)
   val fault = RegInit(false.B)
@@ -84,7 +100,17 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
   d.rsp_ready_i := state === waitDma && localDone && externalDone
   d.axi_read_rsp_i := rs.asUInt; d.axi_write_rsp_i := ws.asUInt
   io.request.ready := state === idle && !poison && !io.flush
-  io.response.valid := state === reply; io.response.bits := rsp
+  io.response.valid := state === reply && !stream; io.response.bits := rsp
+  if(streaming){
+    io.streamRequest.get.ready := state === idle && !poison && !io.flush && !io.request.valid
+    io.streamResponse.get.valid := state === reply && stream
+    io.streamResponse.get.bits.data := Mux(rsp.error,0.U,data(streamIndex(idxBits-1,0)))
+    io.streamResponse.get.bits.tag := rsp.tag
+    io.streamResponse.get.bits.error := rsp.error
+    io.streamResponse.get.bits.last := streamIndex+1.U === count
+    streamReplyFire := io.streamResponse.get.fire
+    when(io.streamResponse.get.fire){streamCount:=streamCount+1.U;streamIndex:=streamIndex+1.U}
+  }
   io.axi.aw.valid := false.B; io.axi.aw.bits := 0.U.asTypeOf(new BlockAxiAddress)
   io.axi.ar.valid := false.B; io.axi.ar.bits := 0.U.asTypeOf(new BlockAxiAddress)
   io.axi.w.valid := false.B; io.axi.w.bits := 0.U.asTypeOf(new BlockAxiWrite)
@@ -158,8 +184,10 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
     }
   }
 
-  when(io.request.fire) {
-    val x = io.request.bits
+  when(io.request.fire || streamFire) {
+    val x = WireDefault(io.request.bits)
+    when(fromStream){x.write:=false.B;x.address:=newStream.address;x.data:=0.U;x.mask:=0.U;x.tag:=newStream.tag}
+    stream:=fromStream;streamIndex:=0.U
     req := x; rsp.tag := x.tag; rsp.data := 0.U; rsp.error := false.B
     fault := false.B; localAw := false.B; localR := false.B; arSeen := false.B
     localCount := 0.U; externalCount := 0.U; localDone := false.B; externalDone := false.B
@@ -167,7 +195,7 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
     val end = x.address.pad(66) + 64.U
     val validWindow = io.window.enable && io.window.base(5, 0) === 0.U && io.window.limit(5, 0) === 0.U &&
       io.window.base < io.window.limit && io.window.limit.pad(66) <= (BigInt(1) << 56).U
-    val inWindow = !x.write && validWindow && x.address >= io.window.base && end <= io.window.limit.pad(66)
+    val inWindow = !fromStream && !x.write && validWindow && x.address >= io.window.base && end <= io.window.limit.pad(66)
     val offset = x.address - io.window.base
     val lineRemaining = maxBeats.U(7.W) - ((offset >> 6) & (maxBeats - 1).U)
     val pageRemaining = maxBeats.U(7.W) - ((x.address >> 6) & (maxBeats - 1).U)
@@ -176,9 +204,13 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
     val length = Mux(tensorRemaining < bounded, tensorRemaining, bounded)
     val hit = inWindow && lineValid && lineWindow.asUInt === io.window.asUInt &&
       x.address >= lineBase && end <= lineBase.pad(66) + (lineCount.pad(66) << 6)
-    count := Mux(inWindow, length, 1.U)
+    count := Mux(fromStream,newStream.beats,Mux(inWindow, length, 1.U))
+    val invalidStream = fromStream && (newStream.beats===0.U || newStream.beats>maxBeats.U ||
+      x.address.pad(66)+(newStream.beats.pad(66)<<6)>(BigInt(1)<<56).U ||
+      x.address(9,0).pad(16)+(newStream.beats.pad(16)<<6)>1024.U)
     cacheable := inWindow; lineWindow := io.window
-    when(x.address(5, 0) =/= 0.U || end > (BigInt(1) << 56).U || (x.write && !prefix)) {
+    when(x.address(5, 0) =/= 0.U || end > (BigInt(1) << 56).U || (x.write && !prefix) || invalidStream) {
+      count:=1.U
       lineValid := false.B; rsp.error := true.B; poison := true.B; state := reply
     }.elsewhen(hit) {
       rsp.data := data(((x.address - lineBase) >> 6)(idxBits - 1, 0))
@@ -195,5 +227,7 @@ class RetainedIdmaWeightBurstAdapter(maxBeats: Int = 16) extends Module {
     lineValid := !req.write && cacheable && !bad && !io.flush
     lineBase := req.address; lineCount := count
   }
-  when(state === reply && io.response.fire) { state := Mux(poison, locked, idle) }
+  when(state === reply && (io.response.fire || (streamReplyFire && streamIndex+1.U===count))) {
+    state := Mux(poison, locked, idle)
+  }
 }

@@ -23,6 +23,9 @@
 #ifndef OWNER_WEIGHT_READ_BEATS
 #define OWNER_WEIGHT_READ_BEATS 1
 #endif
+#ifndef OWNER_PIPELINED
+#define OWNER_PIPELINED 0
+#endif
 #ifndef OWNER_MATRIX_MACS
 #define OWNER_MATRIX_MACS 512
 #endif
@@ -56,6 +59,7 @@ public:
  VHostBlockTop d;std::vector<uint32_t> mem;std::vector<float> oracle;std::vector<uint8_t> initialized;
  std::array<bool,64> published{};std::array<uint64_t,64> writeBytes{},readBeats{};
  uint64_t cycles=0,reads=0,writes=0,ackReads=0,ackWrites=0,metadata=0,stalls=0,delays=0,checked=0;
+ uint64_t streamedAtStart=0,streamed=0;
  uint64_t readBursts=0,burstAtStart=0,deviceBurstAtStart=0,deviceReadsAtStart=0,cacheHitsAtStart=0;
  uint32_t rng=20260907;unsigned completions=0,successful=0;
  // Request-local stimulus and fault knobs. These never write DUT internal state.
@@ -157,8 +161,8 @@ public:
      check(c.total<=OWNER_WEIGHT_READ_BEATS&&d.io_axi_ar_bits_size==6&&d.io_axi_ar_bits_burst==1&&((c.address&4095)+64*c.total)<=4096,"bad AR");
      if(c.total>1){bool allowed=false;for(const auto&t:ALLOCATIONS){std::string n=t.name;const auto k=n.substr(n.size()-std::min(size_t(2),n.size()));
        bool matrix=k=="wq"||k=="wk"||k=="wv"||k=="wo"||k=="wg"||k=="wu"||k=="wd";
-       if(matrix&&t.readonly&&c.address>=t.address&&c.address+64*c.total<=t.address+4*t.words)allowed=true;}
-       check(allowed,"burst escaped readonly matrix weight tensor");}
+       if(((matrix&&t.readonly)||(OWNER_PIPELINED&&!t.virtualValue))&&c.address>=t.address&&c.address+64*c.total<=t.address+4*t.words)allowed=true;}
+       check(allowed,"burst escaped allowed tensor extent");}
      if(arHeld)check(eq(c,heldAr),"AR unstable");heldAr=c;arHeld=!ar;}else check(!arHeld,"AR withdrawn");
    if(d.io_axi_aw_valid){a.valid=true;a.address=d.io_axi_aw_bits_addr;a.id=d.io_axi_aw_bits_id;check(d.io_axi_aw_bits_len==0&&d.io_axi_aw_bits_size==6&&d.io_axi_aw_bits_burst==1,"bad AW");if(awHeld)check(eq(a,heldAw),"AW unstable");heldAw=a;awHeld=!af;}else check(!awHeld,"AW withdrawn");
    if(d.io_axi_w_valid){b.valid=true;b.write=true;b.mask=d.io_axi_w_bits_strb;for(unsigned i=0;i<16;i++)b.data[i]=d.io_axi_w_bits_data[i];check(d.io_axi_w_bits_last,"bad WLAST");if(wHeld)check(eq(b,heldW),"W unstable");heldW=b;wHeld=!wf;}else check(!wHeld,"W withdrawn");
@@ -186,6 +190,9 @@ public:
    burstAtStart=readBursts;
 #if OWNER_WEIGHT_READ_BEATS > 1
    deviceBurstAtStart=d.io_idmaReadBursts;deviceReadsAtStart=d.io_idmaReadBeats;cacheHitsAtStart=d.io_idmaCacheHits;
+#endif
+#if OWNER_PIPELINED
+   streamedAtStart=d.io_idmaStreamedBeats;
 #endif
    dmaAtStart=d.io_idmaTransfers;acceptedAtStart={d.io_memoryAccepted_0,d.io_memoryAccepted_1};returnedAtStart={d.io_memoryReturned_0,d.io_memoryReturned_1};
    const auto priorJobs=d.io_issuedJobs;
@@ -215,14 +222,19 @@ public:
 #if OWNER_WEIGHT_READ_BEATS > 1
      check(d.io_idmaReadBursts-deviceBurstAtStart==readBursts-burstAtStart&&d.io_idmaReadBeats-deviceReadsAtStart==reads,"hardware/AXI read accounting");
      cacheHits=d.io_idmaCacheHits-cacheHitsAtStart;
+#if OWNER_PIPELINED
+     streamed=d.io_idmaStreamedBeats-streamedAtStart;
+     check(cacheHits==0&&streamed>0&&streamed<=reads-metadata,"stream accounting");
+#else
      check(cacheHits==reads-(readBursts-burstAtStart),"unused or fabricated prefetched beat");
 #endif
+#endif
      check(d.io_memoryAccepted_0-acceptedAtStart[0]==d.io_memoryReturned_0-returnedAtStart[0]&&d.io_memoryAccepted_1-acceptedAtStart[1]==d.io_memoryReturned_1-returnedAtStart[1],"arbiter response balance");
-     check(d.io_memoryAccepted_0-acceptedAtStart[0]==metadata&&d.io_memoryAccepted_1-acceptedAtStart[1]==reads+writes-metadata,"metadata/payload ownership");
+     check(d.io_memoryAccepted_0-acceptedAtStart[0]==metadata&&d.io_memoryAccepted_1-acceptedAtStart[1]==reads+writes-metadata-streamed,"metadata/payload ownership");
      check(metadata==COMMANDS+DESCRIPTORS,"each command and descriptor fetched from DDR");
      check(hashRange(BASE,SCRATCH-BASE)==readOnlyHash,"readonly data modified");
      for(auto&t:ALLOCATIONS){for(unsigned i=0;i<16;i++)check(mem[pos(t.address)-16+i]==0x7fc00001,"guard overwritten");if(t.virtualValue)for(size_t i=0;i<t.words;i++)check(mem[pos(t.address)+i]==0x7fc00001,"virtual tensor materialized");}
-     std::cout<<"HOST_BLOCK_ALL_OWNERS_PASS tokens="<<TOKENS<<" hidden="<<H<<" ffn="<<F<<" layers="<<LAYERS<<" host_commands="<<COMMANDS<<" completed="<<COMMANDS<<" owner_jobs="<<19*LAYERS<<" matrix_commands="<<9*LAYERS<<" sfu_commands="<<11*LAYERS<<" kv_commands="<<LAYERS<<" checked_fp32="<<checked<<" bit_differences=0 useful_macs="<<mac<<" executed_macs="<<physical<<" cycles="<<cycles<<" metadata_reads="<<metadata<<" read_bytes="<<reads*64<<" write_ack_bytes="<<writes*64<<" idma_transfers="<<(d.io_idmaTransfers-dmaAtStart)<<" read_bursts="<<(readBursts-burstAtStart)<<" weight_read_burst_beats="<<OWNER_WEIGHT_READ_BEATS<<" weight_cache_hits="<<cacheHits<<" request_stalls="<<stalls<<" response_delay_cycles="<<delays<<" host_intermediate_writes=0 legacy_block_launch=0 original_matrix_instances="<<MATRIX_SLICES<<" logical_matrix_engines=1 matrix_macs="<<OWNER_MATRIX_MACS<<" original_idma_instances=1 score_ddr_accesses=0 output_fnv64="<<std::hex<<hashRange(OUTPUTS.back().address,TOKENS*H*4)<<std::dec<<std::endl;
+     std::cout<<"HOST_BLOCK_ALL_OWNERS_PASS tokens="<<TOKENS<<" hidden="<<H<<" ffn="<<F<<" layers="<<LAYERS<<" host_commands="<<COMMANDS<<" completed="<<COMMANDS<<" owner_jobs="<<19*LAYERS<<" matrix_commands="<<9*LAYERS<<" sfu_commands="<<11*LAYERS<<" kv_commands="<<LAYERS<<" checked_fp32="<<checked<<" bit_differences=0 useful_macs="<<mac<<" executed_macs="<<physical<<" cycles="<<cycles<<" metadata_reads="<<metadata<<" read_bytes="<<reads*64<<" write_ack_bytes="<<writes*64<<" idma_transfers="<<(d.io_idmaTransfers-dmaAtStart)<<" read_bursts="<<(readBursts-burstAtStart)<<" weight_read_burst_beats="<<OWNER_WEIGHT_READ_BEATS<<" pipelined_owner="<<OWNER_PIPELINED<<" streamed_read_beats="<<streamed<<" weight_cache_hits="<<cacheHits<<" request_stalls="<<stalls<<" response_delay_cycles="<<delays<<" host_intermediate_writes=0 legacy_block_launch=0 original_matrix_instances="<<MATRIX_SLICES<<" logical_matrix_engines=1 matrix_macs="<<OWNER_MATRIX_MACS<<" original_idma_instances=1 score_ddr_accesses=0 output_fnv64="<<std::hex<<hashRange(OUTPUTS.back().address,TOKENS*H*4)<<std::dec<<std::endl;
    }
    auto result=d.io_result_bits_status;for(unsigned i=0;i<5;i++){step();check(d.io_result_valid&&d.io_result_bits_status==result,"result not held");}d.io_result_ready=1;step();d.io_result_ready=0;
    if(errorPc>=0){const auto stoppedJobs=d.io_issuedJobs;const auto stoppedDma=d.io_idmaTransfers;

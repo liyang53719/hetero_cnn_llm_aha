@@ -36,7 +36,8 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
   * Each successor starts only after the previous stage's final write ACK.
   */
-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false) extends Module {
+class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false) extends Module {
+  require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
   val layout=new QwenBlockLayout(s)
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
@@ -45,6 +46,9 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   val denseBeatBits = math.max(1,log2Ceil(denseColumns/16))
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new BlockLaunch));val result=Decoupled(new BlockResult)
+    val matrixRequest=if(externalMatrix)Some(Decoupled(new WideMatrixStep(256)))else None
+    val matrixResult=if(externalMatrix)Some(Flipped(Decoupled(new WideMatrixResult(256))))else None
+    val matrixAcceptedSteps=if(externalMatrix)Some(Input(UInt(64.W)))else None
     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
     val phase=Output(UInt(5.W));val stageCommit=Output(Bool());val committedPhase=Output(UInt(5.W))
@@ -89,34 +93,49 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   if(!s.retainedMatrix){when(state===st("denseCompute")){fmC:=denseAcc(denseRow(3,0))}}
   val fmOut=Wire(Vec(16,UInt(32.W)));val fmDone=WireDefault(true.B);val matrixFault=WireDefault(false.B);val physicalSteps=WireDefault(macs>>4);val physicalBase=RegInit(0.U(64.W))
   if(s.retainedMatrix){
-    val adapter=Module(new ScalableMatrixTileAdapter(s.matrixColumns));adapter.io.scanEnable:=false.B;val pending=RegInit(false.B)
-    physicalSteps:=adapter.io.acceptedSteps
-    when(start){physicalBase:=adapter.io.acceptedSteps}
+    val matrixRequest=Wire(Decoupled(new WideMatrixStep(s.matrixColumns)))
+    val matrixResult=Wire(Decoupled(new WideMatrixResult(s.matrixColumns)))
+    val acceptedSteps=Wire(UInt(64.W))
+    if(externalMatrix){
+      io.matrixRequest.get.valid:=matrixRequest.valid;io.matrixRequest.get.bits:=matrixRequest.bits
+      matrixRequest.ready:=io.matrixRequest.get.ready
+      matrixResult.valid:=io.matrixResult.get.valid;matrixResult.bits:=io.matrixResult.get.bits
+      io.matrixResult.get.ready:=matrixResult.ready;acceptedSteps:=io.matrixAcceptedSteps.get
+    }else{
+      val adapter=Module(new ScalableMatrixTileAdapter(s.matrixColumns));adapter.io.scanEnable:=false.B
+      adapter.io.request.valid:=matrixRequest.valid;adapter.io.request.bits:=matrixRequest.bits
+      matrixRequest.ready:=adapter.io.request.ready
+      matrixResult.valid:=adapter.io.result.valid;matrixResult.bits:=adapter.io.result.bits
+      adapter.io.result.ready:=matrixResult.ready;acceptedSteps:=adapter.io.acceptedSteps
+    }
+    val pending=RegInit(false.B)
+    physicalSteps:=acceptedSteps
+    when(start){physicalBase:=acceptedSteps}
     val isDense=state===st("denseCompute")
     val dot=state===st("attDot");val pv=state===st("attPVCompute")
     val computing=isDense||dot||pv
-    adapter.io.request.valid:=computing && !pending
+    matrixRequest.valid:=computing && !pending
     for(i<-0 until 16){
-      adapter.io.request.bits.a(i):=TensorMath.bf16Rne(Mux(isDense,
+      matrixRequest.bits.a(i):=TensorMath.bf16Rne(Mux(isDense,
         Mux(i.U<denseRows,denseWindow(i)(depth(3,0)),0.U),
         Mux(dot||(i==0).B,fmA(i),0.U)))
     }
-    adapter.io.request.bits.sliceMask:=Mux(isDense,VecInit((0 until s.matrixColumns/32).map(i=>(col+(32*i).U)<(if(ownerDriven)owner.n else Mux(phase===2.U||phase===3.U,s.kv.U,Mux(phase===10.U||phase===11.U,s.ffn.U,s.hidden.U))))).asUInt,1.U)
+    matrixRequest.bits.sliceMask:=Mux(isDense,VecInit((0 until s.matrixColumns/32).map(i=>(col+(32*i).U)<(if(ownerDriven)owner.n else Mux(phase===2.U||phase===3.U,s.kv.U,Mux(phase===10.U||phase===11.U,s.ffn.U,s.hidden.U))))).asUInt,1.U)
     for(i<-0 until s.matrixColumns){
-      adapter.io.request.bits.b(i):=TensorMath.bf16Rne(Mux(isDense,denseWeights(i),
+      matrixRequest.bits.b(i):=TensorMath.bf16Rne(Mux(isDense,denseWeights(i),
         (if(i<16)fmB(i)else 0.U)))
     }
-    adapter.io.request.bits.clear:=Mux(pv,key===0.U,depth===0.U)
-    adapter.io.request.bits.last:=Mux(pv,key===token,
+    matrixRequest.bits.clear:=Mux(pv,key===0.U,depth===0.U)
+    matrixRequest.bits.last:=Mux(pv,key===token,
       Mux(dot,depth+16.U===s.headDim.U,depth+1.U===(if(ownerDriven)owner.k else Mux(phase===13.U,s.ffn.U,s.hidden.U))))
-    adapter.io.request.bits.opcode:=Mux(dot,0x23.U,Mux(pv,0x24.U,0x20.U))
-    adapter.io.result.ready:=computing && pending
-    when(adapter.io.request.fire){pending:=true.B}
-    when(adapter.io.result.fire){pending:=false.B}
-    for(i<-0 until 16){fmOut(i):=Mux(dot,adapter.io.result.bits.value(i)(i),adapter.io.result.bits.value(0)(i))}
-    fmDone:=adapter.io.result.fire
-    matrixFault:=fmDone && adapter.io.result.bits.error
-    when(isDense&&fmDone){denseAcc:=adapter.io.result.bits.value}
+    matrixRequest.bits.opcode:=Mux(dot,0x23.U,Mux(pv,0x24.U,0x20.U))
+    matrixResult.ready:=computing && pending
+    when(matrixRequest.fire){pending:=true.B}
+    when(matrixResult.fire){pending:=false.B}
+    for(i<-0 until 16){fmOut(i):=Mux(dot,matrixResult.bits.value(i)(i),matrixResult.bits.value(0)(i))}
+    fmDone:=matrixResult.fire
+    matrixFault:=fmDone && matrixResult.bits.error
+    when(isDense&&fmDone){denseAcc:=matrixResult.bits.value}
 
   }else{
     fmOut:=VecInit((0 until 16).map{i=>val a=Module(new HeteroBF16FmaLane);a.io.a:=TensorMath.bf16Rne(fmA(i));a.io.b:=TensorMath.bf16Rne(fmB(i));a.io.c:=fmC(i);a.io.out})

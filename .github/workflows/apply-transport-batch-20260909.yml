@@ -1,4 +1,5 @@
 name: apply-transport-batch-20260909
+# Preserve the concurrently committed buffered-prefix mode and its tests.
 on:
   push:
     branches: [main]

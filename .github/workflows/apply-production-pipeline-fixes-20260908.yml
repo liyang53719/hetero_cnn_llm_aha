@@ -12,15 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: {clean: false, fetch-depth: 2}
-      - name: Apply only checksum-locked Chisel and audit corrections
+      - name: Apply only checksum-locked Chisel corrections
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,subprocess,uuid
           from pathlib import Path
-          packet=json.loads(Path('development_snapshots/pipeline_20260908/fixes_v2.json').read_text());files=packet['changes']
+          packet=json.loads(Path('development_snapshots/pipeline_20260908/fixes_v3.json').read_text());files=packet['changes']
           def git(*args,env=None,data=None):return subprocess.check_output(['git',*args],env=env,input=data)
-          expected=['chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala','chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala','chisel/continuous_prefill/scripts/audit_matrix_topology.py']
+          expected=['chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala']
           if [f['path'] for f in files]!=expected:raise SystemExit('UNEXPECTED_PATH_SET')
           for attempt in range(3):
               subprocess.run(['git','fetch','--no-tags','origin','main'],check=True);parent=git('rev-parse','origin/main').decode().strip()
@@ -34,7 +34,7 @@ jobs:
               for f in files:
                   if hashlib.sha256(git('show',':'+f['path'],env=env)).hexdigest()!=f['sha256']:raise SystemExit('NEW_SOURCE_MISMATCH')
               tree=git('write-tree',env=env).decode().strip()
-              commit=git('commit-tree',tree,'-p',parent,'-m','fix(chisel): prevent second weight-buffer wrap and enforce final context accounting [skip ci]',env=env).decode().strip()
+              commit=git('commit-tree',tree,'-p',parent,'-m','fix(chisel): complete held-abort drain and clock idle Matrix slices only on work [skip ci]',env=env).decode().strip()
               if subprocess.run(['git','push','origin',commit+':main']).returncode==0:
                   subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
                   for f in files:

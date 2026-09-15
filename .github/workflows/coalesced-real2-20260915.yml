@@ -1,0 +1,140 @@
+name: coalesced-real2-20260915
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/coalesced-real2-20260915.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: coalesced-real2-20260915
+  cancel-in-progress: false
+jobs:
+  measure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      JVM_OPTS: -Xmx3G -Xss4M -XX:ActiveProcessorCount=3
+      BUILD_JOBS: '2'
+      MATRIX_MACS: '4096'
+      WEIGHT_READ_BEATS: '16'
+      PIPELINED_OWNER: '1'
+      NATIVE_BF16_WEIGHTS: '1'
+      BURST_WRITE: '1'
+      COMMIT_TAIL_READ: '1'
+      MAKEFLAGS: 'VK_PCH_I_FAST= VK_PCH_I_SLOW= OPT_FAST=-O3'
+    steps:
+      - uses: actions/checkout@v4
+        with: {clean: false, fetch-depth: 1}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare public tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y verilator g++
+          python3 -m pip install numpy==2.3.5 PyYAML==6.0.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: pinned-idma-source-dba1cac9576026fd987775e6e0db5aec96bb9b38
+          run-id: 34017420593
+          github-token: ${{ github.token }}
+          path: pinned_artifact
+      - name: Freeze source and pinned arithmetic
+        run: |
+          set -euo pipefail
+          mkdir -p work/coalesced_upstream
+          (cd pinned_artifact; sha256sum -c pinned_idma_sources.sha256)
+          tar -xzf pinned_artifact/pinned_idma_sources.tar.gz -C work/coalesced_upstream
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh > coalesced_prepare.log 2>&1
+          git rev-parse HEAD > coalesced_source_commit.txt
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows | gzip -n > coalesced_source.tar.gz
+          sha256sum coalesced_source.tar.gz > coalesced_source.sha256
+      - name: Actual Chisel read-planner and physical SRAM bounds
+        run: |
+          set -euo pipefail
+          (cd chisel/continuous_prefill; sbt -batch 'testOnly heteronpu.continuous.DenseReadPlannerSpec') > coalesced_planner_tests.log 2>&1
+      - name: Tiny two-layer original Host graph through actual Matrix and iDMA
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/coalesced_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_host_block_gate.sh tiny "$PWD/work/coalesced_tiny" 16 0 2 > coalesced_tiny.log 2>&1
+      - name: Full real16 different-weight two-layer numerical and performance measurement
+        run: |
+          set -euo pipefail
+          export IDMA_EXPORT="$PWD/work/coalesced_upstream/idma_export"
+          bash chisel/continuous_prefill/scripts/run_real_two_layer_gate.sh "$PWD/work/coalesced_real2" > coalesced_real2.log 2>&1
+          set +e
+          python3 chisel/continuous_prefill/scripts/compare_native_bf16_real2.py --current "$PWD/work/coalesced_real2" --baseline "$PWD/reports/execution/PRODUCTION_PIPELINE_REAL2_a3cb4a7307a6/numerical" --output "$PWD/work/coalesced_real2/PERFORMANCE.json" > coalesced_performance.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > work/coalesced_real2/performance.exit
+          test "$rc" = 0 || test "$rc" = 3
+          git diff --exit-code
+      - name: Preserve completed evidence without claiming the 50-percent gate passed
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess,uuid
+          from pathlib import Path
+          source=os.environ['GITHUB_SHA'];root=Path('work/coalesced_real2')
+          report=json.loads((root/'PERFORMANCE.json').read_text())
+          if report['status']!='PASS_NATIVE_BF16_REAL16_TWO_LAYER_NUMERICAL' or report['checked_fp32']!=1409024:raise SystemExit('INCOMPLETE_NUMERIC_RESULT')
+          target=report['optimized']['useful_wall_mac_utilization']>=0.5
+          if report['performance_accepted']!=target:raise SystemExit('WRONG_PERFORMANCE_FLAG')
+          def git(*args,data=None,env=None):return subprocess.check_output(['git',*args],input=data,env=env)
+          for p,digest in json.loads((root/'sources.sha256.json').read_text()).items():
+              if hashlib.sha256(git('show',source+':'+p)).hexdigest()!=digest:raise SystemExit('HISTORICAL_SOURCE_DRIFT:'+p)
+          selected={};skip={'obj','classes','testclasses','test_run_dir','verilator-runtime','offline-tools-runtime','__pycache__'}
+          for label,folder in [('numerical',root),('tiny',Path('work/coalesced_tiny'))]:
+              for p in folder.rglob('*'):
+                  rel=p.relative_to(folder)
+                  if p.is_file() and not p.is_symlink() and not any(s in skip for s in rel.parts) and p.suffix in {'.json','.log','.gz','.bin','.f32le','.sv','.h','.txt','.exit','.sha256'}:selected[label+'/'+str(rel)]=p.read_bytes()
+          for name in ['coalesced_source_commit.txt','coalesced_planner_tests.log','coalesced_performance.log']:selected[name]=Path(name).read_bytes()
+          selected['PUBLISHED_SHA256.json']=(json.dumps({p:hashlib.sha256(b).hexdigest() for p,b in selected.items()},indent=2)+'\n').encode()
+          blobs={p:git('hash-object','-w','--stdin',data=b).decode().strip() for p,b in selected.items()}
+          prefix='reports/execution/COALESCED_REAL2_'+source[:12]
+          for attempt in range(3):
+              subprocess.run(['git','fetch','--no-tags','origin','main'],check=True);parent=git('rev-parse','origin/main').decode().strip()
+              env=dict(os.environ,GIT_INDEX_FILE=str(Path.cwd()/('coalesced_index_'+uuid.uuid4().hex)),GIT_AUTHOR_NAME='heteronpu-verified-coalesced',GIT_AUTHOR_EMAIL='heteronpu-verified@users.noreply.github.com',GIT_COMMITTER_NAME='heteronpu-verified-coalesced',GIT_COMMITTER_EMAIL='heteronpu-verified@users.noreply.github.com')
+              git('read-tree',parent,env=env)
+              for p,b in blobs.items():
+                  path=prefix+'/'+p;old=subprocess.run(['git','show',parent+':'+path],capture_output=True)
+                  if old.returncode==0 and old.stdout!=selected[p]:raise SystemExit('REFUSE_OVERWRITE')
+                  git('update-index','--add','--cacheinfo','100644',b,path,env=env)
+              tree=git('write-tree',env=env).decode().strip()
+              message='test: preserve coalesced real16 two-layer numeric proof; perf50 '+('PASS' if target else 'FAIL')+' [skip ci]'
+              commit=git('commit-tree',tree,'-p',parent,'-m',message,env=env).decode().strip()
+              if subprocess.run(['git','push','origin',commit+':main']).returncode==0:
+                  subprocess.run(['git','fetch','--no-tags','origin','main'],check=True)
+                  for p,b in selected.items():
+                      if git('show','origin/main:'+prefix+'/'+p)!=b:raise SystemExit('REMOTE_BYTE_MISMATCH')
+                  Path('coalesced_publication.json').write_text(json.dumps({'commit':commit,'tested_source':source,'path':prefix,'files':len(selected),'performance_accepted':target,'remote_bytes_verified':True},indent=2)+'\n');break
+          else:raise SystemExit('PUBLICATION_FAILED_NO_FORCE')
+          PY
+      - name: Enforce whole-request 50 percent separately from numerical correctness
+        run: |
+          test "$(cat work/coalesced_real2/performance.exit)" = 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coalesced-real2-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: error
+          path: |
+            coalesced_*.log
+            coalesced_*.txt
+            coalesced_*.json
+            coalesced_source.tar.gz
+            coalesced_source.sha256
+            work/coalesced_tiny/**
+            work/coalesced_real2/**
+            !work/**/obj/**
+            !work/**/classes/**
+            !work/**/testclasses/**
+            !work/**/test_run_dir/**
+            !work/**/verilator-runtime/**
+            !work/**/offline-tools-runtime/**
+            !work/**/__pycache__/**

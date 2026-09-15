@@ -19,6 +19,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Resume measured Chisel optimization from the verified coalesced baseline.
+          # Exporting source is not a numerical or performance PASS.
           OUT="perf50_source_${GITHUB_SHA}"
           test ! -e "$OUT"
           mkdir "$OUT"

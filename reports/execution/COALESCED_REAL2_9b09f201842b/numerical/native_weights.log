@@ -1,0 +1,79 @@
+{
+  "recipe": "BF16_RNE_before_ordered_BF16_FP32_FMA",
+  "weights": {
+    "l0_wq": {
+      "address": 13763018816,
+      "elements": 2359296,
+      "bytes": 4718592
+    },
+    "l0_wk": {
+      "address": 13772456064,
+      "elements": 393216,
+      "bytes": 786432
+    },
+    "l0_wv": {
+      "address": 13774028992,
+      "elements": 393216,
+      "bytes": 786432
+    },
+    "l0_wo": {
+      "address": 13775601920,
+      "elements": 2359296,
+      "bytes": 4718592
+    },
+    "l0_wg": {
+      "address": 13785039168,
+      "elements": 13762560,
+      "bytes": 27525120
+    },
+    "l0_wu": {
+      "address": 13840089472,
+      "elements": 13762560,
+      "bytes": 27525120
+    },
+    "l0_wd": {
+      "address": 13895139776,
+      "elements": 13762560,
+      "bytes": 27525120
+    },
+    "l1_wq": {
+      "address": 13950833600,
+      "elements": 2359296,
+      "bytes": 4718592
+    },
+    "l1_wk": {
+      "address": 13960270848,
+      "elements": 393216,
+      "bytes": 786432
+    },
+    "l1_wv": {
+      "address": 13961843776,
+      "elements": 393216,
+      "bytes": 786432
+    },
+    "l1_wo": {
+      "address": 13963416704,
+      "elements": 2359296,
+      "bytes": 4718592
+    },
+    "l1_wg": {
+      "address": 13972853952,
+      "elements": 13762560,
+      "bytes": 27525120
+    },
+    "l1_wu": {
+      "address": 14027904256,
+      "elements": 13762560,
+      "bytes": 27525120
+    },
+    "l1_wd": {
+      "address": 14082954560,
+      "elements": 13762560,
+      "bytes": 27525120
+    }
+  },
+  "command_bytes_unchanged": true,
+  "addresses_unchanged": true,
+  "other_tensors_unchanged": true,
+  "original_descriptor_sha256": "77662452fbc8d113d1224750f0785a3af20d3f28cc438d20e2e85e0e9c385a3b"
+}

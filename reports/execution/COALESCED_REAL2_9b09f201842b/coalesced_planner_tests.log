@@ -1,0 +1,25 @@
+[info] [launcher] getting org.scala-sbt sbt 1.10.2  (this may take some time)...
+[info] [launcher] getting Scala 2.12.19 (for sbt)...
+[0m[[0m[0minfo[0m] [0m[0mwelcome to sbt 1.10.2 (Eclipse Adoptium Java 17.0.20.1)[0m
+[0m[[0m[0minfo[0m] [0m[0mloading project definition from /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/project[0m
+[0m[[0m[0minfo[0m] [0m[0mloading settings for project root from build.sbt ...[0m
+[0m[[0m[0minfo[0m] [0m[0mset current project to heteronpu-continuous-prefill (in build file:/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/)[0m
+Warning: Tried to extract the base path for relative glob ../../work/upstream/hardfloat_continuous/hardfloat/src/main/scala/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+Warning: Tried to extract the base path for relative glob ../../work/upstream/hardfloat_continuous/hardfloat/src/main/scala/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+[0m[[0m[0minfo[0m] [0m[0mcompiling 65 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 26 Scala sources to /home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/target/scala-2.13/test-classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+DENSE_READ_PLAN_PASS coalesce=false checked_beats=55584 bursts=7271
+DENSE_READ_PLAN_PASS coalesce=true checked_beats=55584 bursts=4328
+[0m[[0m[0minfo[0m] [0m[0m[32mDenseReadPlannerSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should preserve all ordered tensor beats without crossing holes coalesce=false[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should preserve all ordered tensor beats without crossing holes coalesce=true[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should fit actual maxK=8960 scratch in 768KiB and select legal per-K M reuse[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 11 seconds, 199 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 3[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 3, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 36 s, completed Sep 15, 2026, 2:51:58 AM[0m
+[0J

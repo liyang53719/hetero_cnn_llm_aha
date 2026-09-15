@@ -1,0 +1,79 @@
+{
+  "recipe": "BF16_RNE_before_ordered_BF16_FP32_FMA",
+  "weights": {
+    "l0_wq": {
+      "address": 4295032896,
+      "elements": 4096,
+      "bytes": 8192
+    },
+    "l0_wk": {
+      "address": 4295049344,
+      "elements": 2048,
+      "bytes": 4096
+    },
+    "l0_wv": {
+      "address": 4295057600,
+      "elements": 2048,
+      "bytes": 4096
+    },
+    "l0_wo": {
+      "address": 4295065856,
+      "elements": 4096,
+      "bytes": 8192
+    },
+    "l0_wg": {
+      "address": 4295082304,
+      "elements": 8192,
+      "bytes": 16384
+    },
+    "l0_wu": {
+      "address": 4295115136,
+      "elements": 8192,
+      "bytes": 16384
+    },
+    "l0_wd": {
+      "address": 4295147968,
+      "elements": 8192,
+      "bytes": 16384
+    },
+    "l1_wq": {
+      "address": 4295317440,
+      "elements": 4096,
+      "bytes": 8192
+    },
+    "l1_wk": {
+      "address": 4295333888,
+      "elements": 2048,
+      "bytes": 4096
+    },
+    "l1_wv": {
+      "address": 4295342144,
+      "elements": 2048,
+      "bytes": 4096
+    },
+    "l1_wo": {
+      "address": 4295350400,
+      "elements": 4096,
+      "bytes": 8192
+    },
+    "l1_wg": {
+      "address": 4295366848,
+      "elements": 8192,
+      "bytes": 16384
+    },
+    "l1_wu": {
+      "address": 4295399680,
+      "elements": 8192,
+      "bytes": 16384
+    },
+    "l1_wd": {
+      "address": 4295432512,
+      "elements": 8192,
+      "bytes": 16384
+    }
+  },
+  "command_bytes_unchanged": true,
+  "addresses_unchanged": true,
+  "other_tensors_unchanged": true,
+  "original_descriptor_sha256": "be1466a27c40c15f0bfd488156dabb8accad2f4a74b67b60ab6c8a0c8a642740"
+}

@@ -18,16 +18,10 @@ printf 'H=64 F=128 HEADS=2 KVHEADS=1 HD=32 MAX_TOKENS=1024\n' > "$OUT/tiny_shape
 printf 'H=1536 F=8960 HEADS=12 KVHEADS=2 HD=128 MAX_TOKENS=1024\n' > "$OUT/real_shape.h"
 python3 "$P/scripts/pack_owner_block_fixture.py" "$OUT/tiny_shape.h" "$OUT/tiny_fixture" >"$OUT/tiny_packing.log"
 python3 "$P/scripts/pack_owner_multilayer_fixture.py" "$OUT/real_shape.h" "$OUT/real_fixture" --tokens 16 --layers 2 --relocate 9467985920 >"$OUT/real_packing.log"
-# Explicit enumeration avoids constructing the real suite with tiny metadata.
-# Discover every *Spec source, then execute both fixture-dependent suites alone.
-python3 - "$P" "$OUT" <<'PY'
-from pathlib import Path
-import json,sys
-p,out=map(Path,sys.argv[1:]); names=sorted('heteronpu.continuous.'+f.stem for f in (p/'src/test/scala/heteronpu/continuous').glob('*Spec.scala'))
-required=['heteronpu.continuous.HostBlockCommandsSpec','heteronpu.continuous.HostBlockCommandsRealLayersSpec']
-if not all(x in names for x in required):raise SystemExit('MISSING_FIXTURE_SUITE')
-(out/'suite_plan.json').write_text(json.dumps({'general':[n for n in names if n not in required], 'tiny':[required[0]],'real':[required[1]]},indent=2)+'\n')
-PY
+# Native-weight suites need their own converted real-size metadata. They must
+# never be constructed in the general group with the tiny FP32 manifest.
+python3 "$P/scripts/pack_owner_bf16_weights.py" "$OUT/real_fixture" "$OUT/native_fixture" >"$OUT/native_packing.log"
+python3 "$P/scripts/plan_continuous_suites.py" "$P" "$OUT/suite_plan.json"
 if [[ -n ${OFFLINE_TOOLS:-} ]];then
  export CHISEL_FIRTOOL_PATH="$OFFLINE_TOOLS/bin"
  python3 "$P/scripts/production_source_identity.py" compile "$ROOT" "$OUT" "$HARDFLOAT_SOURCE" "$OFFLINE_TOOLS"
@@ -39,11 +33,12 @@ if [[ -n ${OFFLINE_TOOLS:-} ]];then
 else
  (cd "$P";sbt -batch compile Test/compile) >"$OUT/compile.log" 2>&1
 fi
-for group in general tiny real;do
+for group in general tiny real native;do
  mapfile -t SUITES < <(python3 -c 'import json,sys;print("\n".join(json.load(open(sys.argv[1]))[sys.argv[2]]))' "$OUT/suite_plan.json" "$group")
  [[ ${#SUITES[@]} -gt 0 ]] || { echo EMPTY_SUITE_GROUP >&2;exit 2; }
  export OWNER_FIXTURE="$OUT/tiny_fixture"
  [[ "$group" != real ]] || export OWNER_FIXTURE="$OUT/real_fixture"
+ [[ "$group" != native ]] || export OWNER_FIXTURE="$OUT/native_fixture"
  mkdir "$OUT/$group"
  if [[ -n ${OFFLINE_TOOLS:-} ]];then
   ARGS=();for suite in "${SUITES[@]}";do ARGS+=(-s "$suite");done
@@ -77,7 +72,7 @@ for name,suites in plan.items():
  if len(counts)!=1 or 'All tests passed.' not in text or '***' in text:raise SystemExit('INCOMPLETE_CONTROL_SUITE:'+name)
  if any(s.split('.')[-1]+':' not in text for s in suites):raise SystemExit('MISSING_SUITE:'+name)
  groups[name]={'tests':int(counts[0]),'suites':suites}
-if groups['tiny']['tests']!=7 or groups['real']['tests']!=9:raise SystemExit('INCOMPLETE_FIXTURE_TESTS')
+if groups['tiny']['tests']!=7 or groups['real']['tests']!=9 or groups['native']['tests']!=9:raise SystemExit('INCOMPLETE_FIXTURE_TESTS')
 if 'SOURCE_IMMUTABILITY_PASS' not in (out/'source_verify.log').read_text():raise SystemExit('SOURCE_DRIFT')
 report={'status':'PASS_CONTINUOUS_CONTROL_AND_ELEMENTWISE_REGRESSION','groups':groups,
  'total_tests':sum(x['tests'] for x in groups.values()),'elementwise_sizes':[1,17,33,1025,32768,1572864,2097152,2621440],

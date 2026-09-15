@@ -1,0 +1,23 @@
+COMMIT_TAIL_CASE_PASS beats=1 mode=0 cycles=12 checked_words=16 prefix_forwarded=0 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=2 mode=0 cycles=17 checked_words=32 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=15 mode=0 cycles=73 checked_words=240 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=16 mode=0 cycles=87 checked_words=256 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=17 mode=0 cycles=91 checked_words=272 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=31 mode=0 cycles=147 checked_words=496 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=32 mode=0 cycles=146 checked_words=512 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=33 mode=0 cycles=155 checked_words=528 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=48 mode=0 cycles=220 checked_words=768 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=63 mode=0 cycles=289 checked_words=1008 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=0 cycles=301 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=1 cycles=304 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=0 cycles=306 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=2 cycles=302 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=0 cycles=294 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=3 cycles=286 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=0 cycles=296 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=16 mode=0 cycles=83 checked_words=256 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=16 mode=0 cycles=81 checked_words=256 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=16 mode=0 cycles=77 checked_words=256 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=16 mode=0 cycles=76 checked_words=256 prefix_forwarded=1 last_after_backend_commit=1
+COMMIT_TAIL_CASE_PASS beats=64 mode=0 cycles=288 checked_words=1024 prefix_forwarded=1 last_after_backend_commit=1
+IDMA_READ_BATCH_PASS stream_cases=22 error_resets=3 legacy_cases=1 real_idma=1 old_transfers=4 batch_transfers=1 old_cycles=317 batch_cycles=288 final_commit_only=1

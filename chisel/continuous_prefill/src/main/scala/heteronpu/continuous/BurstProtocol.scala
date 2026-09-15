@@ -3,7 +3,9 @@ package heteronpu.continuous
 import chisel3._
 import chisel3.util._
 /** Internal decoded-owner transfer, not a new Host opcode. Each transfer is
-  * 1..16 aligned 64-byte beats inside a single physical 1KiB boundary.
+  * 1..64 aligned 64-byte beats. A 16-beat service uses 1 KiB windows;
+  * a batched 64-beat service uses 4 KiB windows. The unchanged pinned backend
+  * still legalizes every external AXI burst to at most 16 beats.
   * Non-LAST beats are provisional and may be forwarded during DMA. Successful
   * LAST is the commit fence: it is released only after the real backend has
   * completed and checked the entire burst. A consumer must stage the whole
@@ -11,7 +13,7 @@ import chisel3.util._
   * is not permission to publish a tensor or complete a Host command.
   */
 class BurstReadRequest extends Bundle {
-  val address=UInt(64.W);val beats=UInt(5.W);val tag=UInt(64.W)
+  val address=UInt(64.W);val beats=UInt(7.W);val tag=UInt(64.W)
 }
 class BurstReadResponse extends Bundle {
   val data=UInt(512.W);val tag=UInt(64.W);val last=Bool();val error=Bool()

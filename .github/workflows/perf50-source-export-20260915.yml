@@ -1,0 +1,34 @@
+name: perf50-source-export-20260915
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/perf50-source-export-20260915.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+          fetch-depth: 1
+      - name: Export immutable source without deleting existing work
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="perf50_source_${GITHUB_SHA}"
+          test ! -e "$OUT"
+          mkdir "$OUT"
+          git rev-parse HEAD > "$OUT/source_commit.txt"
+          git ls-tree -r HEAD -- chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows > "$OUT/source_tree.txt"
+          git archive HEAD chisel/continuous_prefill chisel/p0_safety integration/gemmini rtl/matrix rtl/integration src/heteronpu config configs .github/workflows | gzip -n > "$OUT/source.tar.gz"
+          (cd "$OUT"; sha256sum source.tar.gz source_tree.txt source_commit.txt > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: perf50-source-${{ github.sha }}
+          path: perf50_source_${{ github.sha }}/
+          retention-days: 90
+          if-no-files-found: error

@@ -1,0 +1,24 @@
+name: import-read-batch-20260915
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-read-batch-20260915.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {clean: false, fetch-depth: 1}
+      - name: Validate every source delta and publish one atomic fast-forward commit
+        run: python3 development_snapshots/read_batch_20260915/apply.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: read-batch-publication-${{ github.sha }}
+          path: READ_BATCH_PUBLICATION.json
+          if-no-files-found: warn
+          retention-days: 90

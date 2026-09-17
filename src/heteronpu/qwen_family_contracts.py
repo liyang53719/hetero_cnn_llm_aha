@@ -11,6 +11,7 @@ from collections import Counter
 from dataclasses import dataclass
 import hashlib,json
 from pathlib import Path
+from .model_geometry import ModelContractError, load_profile, validate_profile
 
 @dataclass(frozen=True)
 class OperatorContract:
@@ -49,26 +50,25 @@ Q38={
 "qsa_sparse_attention":OperatorContract("qsa_sparse_attention","matrix_sfu_kv",True,"e0_reference")}
 ALL=COMMON|Q35|Q38
 
-def load_profile(path):return json.loads(Path(path).read_text())
-def _pattern(p,layers,special):
-    assert len(p["layer_pattern"])==layers
-    assert tuple(i for i,x in enumerate(p["layer_pattern"]) if x==special)==tuple(range(3,layers,4))
 def validate(q35,q38):
-    assert q35["model_id"]=="Qwen/Qwen3.5-35B-A3B" and q35["hf_model_type"]=="qwen3_5_moe" and q35["text_model_type"]=="qwen3_5_moe_text"
-    assert q38["model_id"]=="Qwen/Qwen3.8-Flash-Next" and q38["hf_model_type"]=="qwen4_exp" and q38["text_model_type"]=="qwen4_exp_text"
-    assert q35["architecture_family"]!=q38["architecture_family"] and not q38.get("is_qwen3_dense_architecture",True)
-    _pattern(q35,40,"full_attention");_pattern(q38,48,"qwen_sparse_attention")
-    assert not any(q35.get(x) for x in ("qsa","gated_residual","ple"))
-    assert all(q38.get(x) for x in ("qsa","gated_residual","ple"))
+    validate_profile(q35)
+    validate_profile(q38)
+    if q35["architecture_family"] != "qwen3_5_hybrid_gdn_full_attention_moe" or q38["architecture_family"] != "qwen4_exp_flash_next":
+        raise ModelContractError("expected Qwen35 then Qwen38 profiles")
 def inventory(p):
+    validate_profile(p)
     family=p["architecture_family"];ops=COMMON|(Q35 if family=="qwen3_5_hybrid_gdn_full_attention_moe" else Q38 if family=="qwen4_exp_flash_next" else {})
     return tuple(ops[n] for n in sorted(ops))
 def states(p):
+    validate_profile(p)
     base={"gdn_recurrent_matrix","gdn_causal_conv_history","moe_weight_cache_metadata","mtp_speculative_generation","runtime_sampler_state","attention_output_gate_state"}
     if p["architecture_family"]=="qwen3_5_hybrid_gdn_full_attention_moe":base.add("dense_kv_cache")
     else:base|={"qsa_kv_cache","qsa_raw_or_block_index_keys","qsa_selected_token_list","four_branch_hyper_residual","ple_token_history","ple_dilated_conv_history","ple_row_cache_metadata"}
     return tuple(sorted(base))
 def layer_ops(p,i):
+    validate_profile(p)
+    if type(i) is not int or not 0 <= i < p["num_hidden_layers"]:
+        raise ModelContractError("layer index out of range")
     family=p["architecture_family"];kind=p["layer_pattern"][i];out=[]
     if family=="qwen4_exp_flash_next" and i+1 in p["ple"]["layer_ids"]:out += ["ple_ngram_hash","ple_sparse_row_fetch","ple_projection_dwconv"]
     out += ["gated_residual_read","group_rmsnorm"] if family=="qwen4_exp_flash_next" else ["rmsnorm"]
@@ -80,12 +80,14 @@ def layer_ops(p,i):
     out += ["moe_router_topk","moe_routed_experts","moe_shared_expert","moe_route_reduce",("gated_residual_write" if family=="qwen4_exp_flash_next" else "standard_residual_add")]
     return tuple(out)
 def schedule(p):
+    validate_profile(p)
     out=[]
     for layer in range(p["num_hidden_layers"]):
         for op in layer_ops(p,layer):out.append({"op_id":len(out),"layer":layer,"layer_type":p["layer_pattern"][layer],"operator":op,"owner":ALL[op].owner})
     if p.get("mtp"):out.append({"op_id":len(out),"layer":p["num_hidden_layers"],"layer_type":"mtp","operator":"mtp_state_transaction","owner":"control_state"})
     return tuple(out)
 def summary(p):
+    validate_profile(p)
     ops=inventory(p);s=schedule(p)
     return {"model_id":p["model_id"],"architecture_family":p["architecture_family"],"hf_model_type":p["hf_model_type"],"text_model_type":p["text_model_type"],"layers":p["num_hidden_layers"],"layer_type_counts":dict(Counter(p["layer_pattern"])),"operator_count":len(ops),"schedule_ops":len(s),"schedule_operator_counts":dict(sorted(Counter(x["operator"] for x in s).items())),"state_domains":states(p),"hardware_owner_counts":dict(sorted(Counter(x["owner"] for x in s).items())),"sandbox_ready":tuple(sorted(x.name for x in ops if x.support in {"rtl_primitive","source_ready","e0_reference"})),"local_only":tuple(sorted(x.name for x in ops if x.support in {"analysis","unsupported_project_scope"}))}
 def family_contract_report(q35_path,q38_path):

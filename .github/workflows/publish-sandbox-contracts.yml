@@ -1,0 +1,27 @@
+name: publish-sandbox-contracts
+on:
+  push:
+    branches: [main]
+    paths: ['reports/execution/BLOCK_CONTRACTS_20260917/publish.json']
+permissions:
+  contents: write
+concurrency:
+  group: publish-sandbox-contracts-main
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install PyYAML
+      - name: Apply exact sandbox bytes with preimage and postimage guards
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python scripts/apply_sandbox_contract_patch.py reports/execution/BLOCK_CONTRACTS_20260917/publish.json --commit
+          git push origin HEAD:main

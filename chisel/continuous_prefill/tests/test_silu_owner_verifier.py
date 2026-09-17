@@ -21,7 +21,6 @@ def valid_log() -> str:
              for mode in ("baseline", "overlap") for seed in range(1, 13)]
     cases += [(mode, 1024, 101, "none") for mode in ("baseline", "overlap")]
     cases += [("overlap", 32, seed, "none") for seed in range(220, 224)]
-    cases += [("overlap", 64, seed, "none") for seed in []]
     cases += [("overlap", 64, seed, fault) for seed, fault in
               ((201, "numerical-late-store"), (202, "numerical-stalled-store"),
                (210, "read-gate"), (211, "read-up"), (212, "last-store"), (213, "tag"))]

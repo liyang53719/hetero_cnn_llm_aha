@@ -1,0 +1,891 @@
+# 本文件是待执行规划，不是新的 RTL/模型 PASS 回执。保留旧证据，不覆盖旧规划。
+版本: 1
+规划编号: THREE_MODEL_TYPICAL_BLOCK_CLOSURE_20260917
+标题: Qwen2、Qwen3.5、Qwen3.8 典型完整 block 数值闭环执行规划
+日期: '2026-09-17'
+仓库: liyang53719/hetero_cnn_llm_aha
+审查基线: 8eff31b9083b2872f047bc70781c605229742f26
+文件路径: plans/three_model_typical_block_closure_20260917_zh.yaml
+交付状态: 仅规划与规划一致性检查；下列研发任务均未因本文件生成而通过
+范围:
+  首要目标: 官方权重、真实模型几何、完整数据路径的六类文本 decoder block，以及其状态延续
+  模型标识规则: 沿用旧批准规划中的精确 checkpoint；Qwen2 简称对应 Instruct，不混用 Base
+  排除项目: [voyager_vmap, transfrom_hdlcoder]
+  本轮不改动: [Chisel计算代码, 已生成RTL, 既有数值门限, 已冻结权重, 生产默认开关]
+  非本阶段完成条件: [完整28或40或48层网络, tokenizer, 最终LM_head, 视觉编码器, MTP推测解码, 板级驱动, 物理签核]
+  说明: 非本阶段完成条件不代表永久删除；整网、视觉、MTP和物理签核另列后续任务
+继承约束:
+  分支: main
+  允许创建分支: false
+  允许强制推送: false
+  设计修改入口: Chisel源与编译器源；由锁定工具重新生成RTL，禁止手工补丁生产SV
+  复用顺序: 已有通过组件接入、修改复用、确实缺失时新增；不平行复制一套Matrix或iDMA
+  目标时钟_Hz: 800000000
+  目标周期_ns: 1.25
+  时钟约束来源: dc/common_clock_800mhz.tcl
+  Matrix配置: 一个逻辑16x256引擎，八个16x32 BF16 slice，4096 MAC/cycle，FP32累加
+  禁止算力混算: 不将旧256-MAC CNN回执、512-MAC旧配置和W4A8候选并入该峰值
+  开关保护: OVERLAP_SILU默认0；64-beat读批处理、其他候选需完整集成A/B后才能切换默认
+  共享存储: 不以旧4MiB规划、1.5MiB公共fabric名义容量或tiny实例替代当前top实际RAM/寄存器账本
+  本地执行约束: 沿用已批准重任务单并发、CPU8-23、内存不超过30GiB；沙箱按实际资源下调
+  阻塞处理: 缺工具、授权库或权重时保存BLOCKED与复现命令；不得改用stub并写PASS
+  发布: 每个独立通过的小闭环提交main；冲突先核对差异，禁止覆盖他人提交；最终回读SHA和blob
+证据分级:
+  E0: 配置、软件参考、微程序清单或周期模型
+  E1: 真实RTL叶算子数值或协议测试，注明模拟memory service和实际iDMA是否存在
+  E2: 完整原始命令、共享owner/iDMA、真实几何、合成权重的block数值闭环
+  E3: 官方checkpoint及独立模型输入、完整block全量数值和状态闭环
+  E4: 同一DUT连续block及prefill到decode状态延续
+  E5: 固定工作负载下实际RTL周期、内外流量与利用率；与时钟签核分离
+  E6: 同一配置的综合、SRAM宏、STA、布线及功耗结果
+  禁止升级: source覆盖或owner canary不能升级为跨算子数值连续；软件backend无scheduler fallback不能升级为RTL执行
+现状:
+  Qwen2:
+    已有: 真实几何16-token两层合成权重E2归档；42命令、38作业、1409024个FP32值零差异
+    归档: reports/execution/COALESCED_REAL2_9b09f201842b/numerical/run.log
+    实测周期: 16639515
+    有效MAC: 1498202112
+    执行MAC: 1524105216
+    整请求有效利用率: 0.021982131089758324
+    读字节: 197981696
+    写确认字节: 5636096
+    未通过: 最新HEAD完整集成重跑、官方权重E3、q1024完整block、持久prefix/decode E4
+  SiLU:
+    已有: 修复晚到成功写ACK漏计；归档组件4项ScalaTest通过，30正常任务、6故障、7拒绝
+    归档: reports/execution/SILU_OWNER_OVERLAP_20260917/REPORT_CN.md
+    未通过: OVERLAP_SILU=1的完整Host与pinned-iDMA双层A/B；不得更新整机2.198%为组件收益
+  Qwen35和Qwen38:
+    已有: 配置、E0软件参考、18个Chisel root和root到真实owner端点的canary
+    覆盖条目: {Qwen2: 30, Qwen35: 93, Qwen38: 150}
+    边界: canary有确定性测试payload和memory service，但不证明跨算子tensor-memory连续或官方block数值
+    未通过: 模型专有算子真实payload接入当前Host执行链、官方完整block和持久状态验收
+  本轮审查方式: 回读主干及关键文件，审阅归档；未重新运行上述RTL或下载官方权重
+来源:
+  E00: README.md
+  E01: plans/three_model_operator_coverage_v3_800mhz.yaml
+  E02: reports/Q1024_APPROVED_PRECISION_IMPLEMENTATION.md
+  E03: config/model_profiles/qwen3_5_35b_a3b.json
+  E04: config/model_profiles/qwen3_8_flash_next.json
+  E05: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+  E06: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
+  E07: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+  E08: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+  E09: reports/execution/COALESCED_REAL2_9b09f201842b/numerical/run.log
+  E10: reports/execution/SILU_OWNER_OVERLAP_20260917/REPORT_CN.md
+  E11: reports/execution/OPERATOR_MODEL_CANARIES_V3.json
+  E12: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala
+  E13: src/heteronpu/qwen_family_contracts.py
+  E14: src/heteronpu/precision_policy.py
+  E15: chisel/continuous_prefill/docs/READ_BATCH_COMPONENT_20260915.md
+  E16: reports/OPERATOR_PRIMITIVE_COVERAGE_V3.md
+  E17: chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
+  W01: https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/blob/main/config.json
+  W02: https://huggingface.co/Qwen/Qwen3.5-35B-A3B/blob/main/config.json
+  W03: https://huggingface.co/collections/Qwen/qwen38-flash-next
+来源使用规则: E条目均相对审查基线；W条目只作官网交叉检查，不能代替固定revision原文件哈希
+外部复核限制: 本轮未成功重新取回Qwen35和Qwen38固定revision配置原字节；E03/E04的冻结声明待C01重新核验，不能擅自换成main
+模型合同:
+  Q2:
+    checkpoint: Qwen/Qwen2-1.5B-Instruct
+    revision: ba1cf1846d7df0a0591d6c00649f57e798519da8
+    hidden: 1536
+    q_heads: 12
+    kv_heads: 2
+    head_dim: 128
+    q_width: 1536
+    kv_width: 256
+    dense_ffn: 8960
+    层数: 28
+    标准层: 0
+    说明: 真实几何已测，但归档合成权重不证明此checkpoint已跑通
+    来源: [E01, E05, W01]
+  Q35:
+    checkpoint: Qwen/Qwen3.5-35B-A3B
+    revision: 62704185bd97ad488cfc404e7caea797396b74dc
+    hidden: 2048
+    q_heads: 16
+    kv_heads: 2
+    head_dim: 256
+    q_width: 4096
+    kv_width: 512
+    rotary_dim: 64
+    gdn_key_heads: 16
+    gdn_value_heads: 32
+    gdn_key_dim: 128
+    gdn_value_dim: 128
+    conv_kernel: 4
+    chunk_size: 64
+    experts: 256
+    top_k: 8
+    expert_ffn: 512
+    shared_experts: 1
+    层数: 40
+    标准层_零基: {GDN: 0, full_attention: 3}
+    周期组: 三层GDN加一层full_attention；每层均有MoE，不以dense MLP替代
+    来源: [E01, E03, W02]
+  Q38:
+    checkpoint: Qwen/Qwen3.8-Flash-Next
+    revision: 34567a4712bc9766c4449e2e98e4468bfa24d915
+    hidden: 2560
+    q_heads: 24
+    kv_heads: 2
+    head_dim: 256
+    q_width: 6144
+    kv_width: 512
+    rotary_dim: 64
+    gdn_key_heads: 16
+    gdn_value_heads: 48
+    gdn_key_dim: 128
+    gdn_value_dim: 128
+    conv_kernel: 4
+    chunk_size: 64
+    experts: 512
+    top_k: 10
+    expert_ffn: 640
+    shared_experts: 1
+    residual_branches: 4
+    residual_lowrank: 320
+    qsa_index_heads: 4
+    qsa_index_head_dim: 128
+    qsa_compress_ratio: 4
+    qsa_block_budget: 512
+    qsa_token_budget: 2048
+    ple_layer_ids_原配置: [2]
+    ple标准层_候选零基: 1
+    ple_layer_index规则: E13使用i+1匹配layer_ids；C01必须对照固定官方forward确认，不凭数字2猜零基
+    ple_ngram: 3
+    ple_total_heads: 16
+    ple_row_width: 160
+    ple_conv_kernel: 4
+    ple_conv_dilation: 3
+    层数: 48
+    标准层_零基: {普通GDN: 0, QSA: 3}
+    来源: [E01, E04, E13]
+典型block:
+  B2_DENSE:
+    模型: Q2
+    层: 0
+    完整范围: RMSNorm、七个dense投影、QKV bias、Q/K RoPE、GQA/Softmax/PV、两次残差、SwiGLU
+    输入: hidden[B,T,1536]、position_ids、该层权重、合法旧KV及有效长度
+    输出: hidden[B,T,1536]及提交后的该层KV；观察所有规范tensor，不仅最终hash
+    完成任务: [Q23, Q24]
+    发布门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  B35_ATTN_MOE:
+    模型: Q35
+    层: 3
+    完整范围: 输入Norm、Q与输出gate投影、K/V投影、每head QK-Norm、partial MRoPE、GQA、sigmoid输出gate、OProj、残差、后Norm、256选8 MoE与shared expert、残差
+    输入: hidden[B,T,2048]、position_ids、该层权重、旧KV
+    输出: hidden[B,T,2048]、KV、实际路由索引/权重；Attention输出宽4096经OProj回2048
+    完成任务: [Q35A, Q35C]
+    发布门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  B35_GDN_MOE:
+    模型: Q35
+    层: 0
+    完整范围: Norm、q/k/v/z及衰减/beta投影、因果卷积、QK-L2Norm、GDN状态递推、gated norm、OProj、残差、后Norm、256选8 MoE与shared expert、残差
+    输入: hidden[B,T,2048]、权重、旧conv history和GDN矩阵状态
+    输出: hidden[B,T,2048]、所有提交后的conv/GDN状态、实际路由
+    完成任务: [Q35B, Q35D]
+    发布门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  B38_GDN_MOE:
+    模型: Q38
+    层: 0
+    完整范围: Attention hyper-read、GDN、Attention hyper-write、MoE hyper-read、512选10及shared expert、MoE hyper-write
+    输入: residual[B,T,4,2560]、权重、conv/GDN状态
+    输出: 完整四分支residual、conv/GDN状态和路由；不能只验归并后的单hidden
+    完成任务: [Q38F]
+    发布门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  B38_QSA_MOE:
+    模型: Q38
+    层: 3
+    完整范围: 两组独立hyper读写、index投影/summary、Top512微块选择、排序与run合并、实际稀疏KV gather、稀疏Attention与输出gate、OProj、512选10 MoE
+    输入: 四分支residual、权重、position_ids、旧KV与index summary及尾部未满微块
+    输出: 四分支residual、KV/index新状态、精确selected microblock/token索引与scatter顺序
+    完成任务: [Q38G]
+    发布门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  B38_PLE_GDN_MOE:
+    模型: Q38
+    层: 由C01确认PLE层索引后冻结；候选零基1
+    完整范围: token ngram历史/hash、真实稀疏embedding行、PLE gate/projection/dilated conv及注入，再执行该层完整hyper-GDN-MoE路径
+    输入: 四分支residual、原始token_ids、权重、PLE行表、ngram/conv/GDN旧状态
+    输出: 四分支residual、全部PLE/GDN状态；跨EOS和跨chunk历史均需验证
+    完成任务: [Q38H]
+    发布门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+精度合同:
+  不变原则: BF16乘数、FP32累加；不以新增FP32乘数阵列掩盖误差
+  既有批准策略: 普通tensor BF16；OProj/Down结果、attention及末端残差保留FP32，敏感计算按证据保留FP32
+  当前差距: 当前Host多处限定A/D为FP32容器，且仅部分Dense B接受原生BF16；不得把当前路径称作普通tensor均BF16
+  双参考:
+    固定算术参考: 按批准的舍入点、累加顺序、exp/rsqrt配方独立实现；规定为exact的检查逐位一致
+    官方语义参考: 固定checkpoint和框架commit，关闭dropout；使用真实上游block输入，保留原生执行精度及全量checkpoint
+  阈值: 继承0.002，不放宽；C02必须追到原比较器的归一化公式、分母下限、适用tensor和聚合方式
+  禁止: 未确认公式就把0.002解释为任意max-abs或relative阈值；只检查cosine、均值、argmax或Top10
+  新模型门限: GDN状态、路由敏感量与QSA索引分别冻结精度和比较规则；有差异必须记录并阻塞对应官方门禁
+  离散结果: shape、地址、mask、token/expert索引、tie规则、commit版本、有效长度必须精确
+  数值异常: 覆盖正负零、极值、subnormal、NaN/Inf；语义兼容测试与错误检测测试分开
+  参考隔离: block起始hidden可从官方上游执行导出并在launch前装入；启动后不得用reference填内部结果、路由或state
+测试矩阵:
+  功能配置: batch=1；真实hidden/head/expert几何，不以tiny尺寸替代E3
+  基础token扫描: [1, 2, 15, 16, 17, 31, 32, 33, 63, 64, 65, 127, 128, 129]
+  完整block合成必测: [16, 33, 128, 1024]
+  完整block官方必测: [16, 33, 128, 1024]
+  模式: [冷prefill, 非空状态续算, prefill后逐token_decode, 两请求隔离, reset后重跑]
+  decode验证: 从至少16和128-token前缀各连续生成32个block输入步；检查每步输出及状态，不等同LM生成
+  GDN分块: [1, 16, 63, 64, 65, 128]
+  GDN状态: [全零, 随机非零有限值, 从前一chunk实际产生, reset后清理, 错版本拒绝]
+  QSA额外:
+    候选微块数: [0, 1, 511, 512, 513, 1024]
+    推荐真实前缀token数: [2047, 2048, 2049, 4096]
+    查询chunk: [1, 16, 33, 128]
+    说明: 每4 token汇总一个微块；q1024冷prefill仅约256微块，不足以验Top512截断；query长度与KV长度必须分离
+    特殊分支: [同分稳定选择, 未来位置mask, 无合法key, 未满微块, 非连续选择, 跨页与重复页请求, gather排序后输出恢复]
+  MoE额外: [零命中专家, 单热点专家, 所有token同一路由, 均匀路由, 相同score, K边界, 乱序专家返回, 最后专家写失败]
+  PLE额外: [首token及不足ngram, EOS清历史, 跨chunk, 哈希碰撞, 不同head同地址, shard边界, 缺失行, dilation历史9个间隔跨度]
+  随机协议最低覆盖: 叶组件20个种子各100事务；完整合成block至少5种子；官方每必测长度至少一组无抖动和一组有抖动
+  负例: [未知opcode, 错descriptor版本, 非法dtype, 非法stride, 64位地址溢出, 越界, 活跃tensor别名, 错tag, 旧epoch应答, 最后B响应错误]
+  随机比较公平性: A/B使用相同数据及按请求编号确定的延迟脚本；另测周期相关竞争，不能只比较不同随机流的最优结果
+资源与性能边界:
+  GDN状态_计算而非测量:
+    Q35_每层_FP32字节: 2097152
+    Q38_每层_FP32字节: 3145728
+    公式: value_heads乘key_dim乘value_dim乘4；不含conv/history、tile、tag、double-buffer
+    要求: 状态分tile从DDR读旧写新，建立提交代际；不得把全矩阵双缓冲硬塞进片上SRAM
+  Q38四分支_q1024_FP32字节: 41943040
+  Q38四分支说明: 4乘1024乘2560乘4；这是指定FP32存储假设的预算，不是已批准所有分支必须FP32
+  全专家BF16矩阵预算_计算:
+    Q35_每层路由专家三矩阵字节: 1610612736
+    Q38_每层路由专家三矩阵字节: 5033164800
+    公式: 3乘hidden乘expert_ffn乘experts乘2；不含router/shared、量化元数据、padding和其他权重
+    原则: 允许mmap/按需读取真实专家权重；不可将top8/top10只下载少数固定专家并伪造路由
+  利用率:
+    有效整请求: useful_macs除以physical_macs_per_cycle乘wall_cycles
+    执行整请求: executed_macs除以physical_macs_per_cycle乘wall_cycles
+    有效占执行: useful_macs除以executed_macs；归档98.3%不能代替2.198%时间利用率
+    wall范围: 命令被接受至最后输出和状态写确认完成；含descriptor、DMA、SFU、等待和尾块
+    另报: [Matrix发射窗口利用率, 各owner周期, 活跃lane与padding, DDR读写, L2读写, bank冲突, 队列反压, 状态流量, 实际权重复用]
+  N16归档读带宽上界:
+    假设: 单512-bit读通道每拍最多64字节，不改当前读流量，不计写与其他开销
+    最少读周期: 3093464
+    有效利用率理想上限: 0.11824026398884875
+    结论: 对该冷启动N16请求统一要求50%不合理；先冻结工作量和可达上界，不修改既有失败记录
+  目标分离: 数值通过不要求达到某一利用率；性能改善必须同工作负载同精度同流量口径；800MHz换算不等于STA签核
+门禁:
+  G0:
+    名称: 基线与来源锁定
+    判据: main/设计SHA/工具/官方revision/实际shape/权重清单全部可追溯；缺任一项为BLOCKED
+    必需工件: [source_manifest.json, model_contract.json, tool_versions.json, input_manifest.json]
+  G1:
+    名称: 独立参考与精度冻结
+    判据: 官方语义参考与固定算术参考均产生全量输出；精度门限及比较公式在DUT测试前冻结
+    必需工件: [precision_contract.json, reference_manifest.json, tolerance_contract.json]
+  G2:
+    名称: 描述符与调度合法性
+    判据: 编译器独立validator和实际RTL都检查能力/地址/依赖；不支持不得完成成功或静默fallback
+    必需工件: [commands.bin, descriptors.bin, semantic_to_command.json, rejection_results.json]
+  G3:
+    名称: 真实叶算子数值与协议
+    判据: 实际生成RTL驱动算术；所有shape/dtype/mask模式和负例通过；测试端只供原始输入及memory service
+    必需工件: [leaf_result.json, simulation.log, random_seeds.json, mismatch_report.json]
+  G4:
+    名称: 共享实际数据通路与资源
+    判据: descriptor到payload到实际Matrix/SFU/State再到DDR；一套选定Matrix/iDMA；写ACK与状态提交一致；RAM无重复实例或超预算
+    必需工件: [hierarchy_manifest.json, memory_ledger.json, transport_trace.json, state_commit_trace.json]
+  G5:
+    名称: 真实尺寸完整合成block
+    判据: 指定T集合全量数值/状态通过；无CPU算子和启动后reference注入；尾块/反压/最后写失败可复现
+    必需工件: [block_synthetic_result.json, actual_tensors_manifest.json, full_comparison.json]
+  G6:
+    名称: 官方权重完整block
+    判据: 精确checkpoint的所有参与权重与真实上游输入；完整算子链、全部输出与必要状态比较通过；不得只验抽样行或最终hash
+    必需工件: [official_weight_manifest.json, framework_trace.json, block_official_result.json, all_tensor_metrics.json]
+  G7:
+    名称: 持久状态与连续性
+    判据: 分块prefill和逐步decode与独立参考一致；旧状态由DUT产生；跨layer/request/epoch无串扰；失败不发布新状态
+    必需工件: [continuity_result.json, per_step_state_metrics.json, reset_recovery.json]
+  G8:
+    名称: 可解释周期与带宽账本
+    判据: 所有测量绑定同一DUT/数据集；互斥周期桶闭合；分清有用与执行MAC；不要求冷N16达到50%
+    必需工件: [performance.json, owner_cycles.csv, memory_bytes.json, roofline_bounds.json]
+  G9:
+    名称: 默认切换与集成防回退
+    判据: 优化A/B同数值/状态/命令，全部错误路径通过，完整请求有收益且没有隐藏资源增加；否则保持默认关闭
+    必需工件: [ab_comparison.json, default_switch_decision.json]
+  G10:
+    名称: 800MHz物理实现
+    判据: 全top无未解析引用/锁存/组合环；报告约束覆盖、SRAM宏和时序；综合/布线/功耗各自明确是否完成
+    必需工件: [dc_qor.rpt, timing_coverage.rpt, resource_area.rpt, sram_mapping.json, physical_scope.json]
+    功能block发布前置: false
+  G11:
+    名称: 六类block发布
+    判据: 六个block各自G0到G8全部通过；Q35和Q38周期组连续测试通过；官方测试和合成测试不得互相替代
+    必需工件: [six_block_release_matrix.json, evidence_sha256.json, remote_commit.json]
+优先级:
+  P0: 无条件前置的来源、精度、数据面、形状与状态正确性；不是追求峰值
+  P1: 先收口Qwen2官方block，再收口Qwen35两类block；共享GDN/MoE可并行开发
+  P2: Qwen38独有路径和整体发布；性能优化与物理工作独立分支门禁，不阻塞已正确的旧配置
+  P3: 典型block之外的整网、视觉、MTP及扩展量化
+执行规则:
+  状态枚举: [待执行, 执行中, 通过, 失败, 阻塞]
+  调度: 先满足依赖，再按P0/P1/P2/P3和任务编号选择；依赖未通过不能因优先级更高跳过
+  模型局部阻塞: C01/C02等共享任务按模型分别记录子门禁；Q38固定权重缺失只阻塞Q38官方验收，不阻塞已冻结Q2继续推进
+  任务门禁含义: 任务所列G编号表示该任务贡献或检查的门禁域；完整block仍需收集所有相关任务证据，不能由单任务满足整个G域
+  时间口径: 本规划不承诺工期；实际每任务记录开始结束时间、仿真wall-time、峰值RSS、失败重试；研发工时与RTL周期分开
+  开发侧: 完成源代码、独立参考、工具可用时真实Chisel/Verilator测试；不能只提交TODO让本地agent代写
+  本地agent: 仅承担沙箱缺失的权重资源、完整长仿真、授权工具与物理签核；不得放宽门限或改变设计凑PASS
+  并行: 合同冻结后，Norm/Attention、GDN、MoE独立开发；写main串行并核对HEAD；重型仿真不并发
+  泳道: 功能任务优先于同级P01到P04优化/物理任务；这些独立任务不在R00发布依赖闭包内
+  产物命名: 任务产物是待生成工件名而非已有文件；新增runner必须先实现再执行，不能只输出同名PASS文件
+  每任务通用交付: 源码差异、实际执行命令、退出码、原始日志、比较结果、来源SHA、明确证据等级
+  通用失败策略: 立即保留首差异tensor/元素/状态版本与波形窗口；只重跑受影响闭包；不覆盖旧PASS/FAIL
+任务:
+  - 编号: C00
+    名称: 重建最新源码与证据基线
+    优先级: P0
+    依赖: []
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E00, E09, E10, E17]
+    修改落点: 新增统一source/tool/运行配置manifest；不修改旧归档
+    执行动作: [核对main和工作区clean状态, 固定Chisel/HardFloat/iDMA/Matrix与完整filelist, 分离旧E2与新SiLU组件证据, 记录完整Host的实际SRAM与寄存器实例]
+    验收: [所有受测文件有SHA256与Git身份, 旧回执只标归档不标最新重跑, 工具缺失退出77或等价BLOCKED]
+    门禁: [G0]
+    产物: [baseline_manifest.json, evidence_inventory.json]
+  - 编号: C01
+    名称: 冻结三模型真实forward和层索引合同
+    优先级: P0
+    依赖: [C00]
+    状态: 待执行
+    执行侧: 开发侧；本地agent提供缺失checkpoint
+    来源: [E01, E03, E04, E13, W01, W02, W03]
+    修改落点: config/model_profiles及新增官方forward到block映射
+    执行动作: [取固定revision配置/权重index及框架源并哈希, 核对Q2 Instruct与Base区别, 分离hidden/Q宽度/gate宽度/GDN宽度, 核对PLE一基与零基索引及注入位置, 确认Norm是否使用1加weight和GDN输出gate模式]
+    验收: [六block每个算子和状态映射到官方forward位置, Q35无QSA/PLE/hyper路径, Q38非Qwen3-8B也非普通Qwen3.8 dense, 不能下载固定revision时阻塞官方门禁而非换模型]
+    门禁: [G0, G1]
+    产物: [model_contract.json, official_forward_map.json]
+  - 编号: C02
+    名称: 建立双参考和可执行精度合同
+    优先级: P0
+    依赖: [C01]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E02, E14, E05]
+    修改落点: src/heteronpu/precision_policy.py及新增独立reference导出/比较器
+    执行动作: [定位原0.002公式而非自行重定义, 固定每个producer的存储与计算精度, 保留OProj/Down/残差FP32, 固定BF16舍入和累加顺序及特殊值策略, 按官方输入生成正常和非零状态参考]
+    验收: [同输入重复导出哈希稳定, bit-exact域全部零差异, 官方语义域全量元素满足冻结规则, 比较器缺tensor或状态必须失败, 路由及QSA离散结果不允许误差带掩盖]
+    门禁: [G1]
+    产物: [precision_contract.json, tolerance_contract.json, reference_manifest.json]
+  - 编号: C03
+    名称: 解耦模型几何与矩阵tile
+    优先级: P0
+    依赖: [C01]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E05, E06]
+    修改落点: QwenBlockShape、QwenBlockLayout、HostBlockCommands和Dense shape描述
+    执行动作: [移除hidden等于q_heads乘head_dim的Qwen2专用假设但保留各自合法性检查, 独立描述Q/O宽度与qk/value头数, maxRow不再仅取hidden与ffn, query长度与KV长度分开, 确认16位维度字段和宽乘法地址计算无截断]
+    验收: [真实Q2/Q35/Q38几何均能生成合法作业, 覆盖Q35的2048到4096到2048及Q38的2560到6144到2560, 几何负例在发DMA前拒绝, Q2旧fixture回归不改变数值]
+    门禁: [G2, G3]
+    产物: [geometry_tests.json, tensor_layout_manifest.json]
+  - 编号: C04
+    名称: 统一typed tensor与多输入policy ABI
+    优先级: P0
+    依赖: [C02, C03]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E06, E07, E12]
+    修改落点: TypedTensorReader、HostBlockCommands、QwenOwnerJob和编译器descriptor lowering
+    执行动作: [贯通BF16/FP32存储dtype与byte mask/stride, 为Norm epsilon及weight约定、RoPE部分维度、gate模式、topK和状态句柄编码policy, 审计现有3位kind的8个取值已占满并用版本化扩展而非别名复用, 多输入算子通过typed descriptor链取参, 保留Command128外壳及旧格式兼容拒绝行为]
+    验收: [生产者dtype决定所有别名根的一致布局, 每个新字段有host到RTL回读测试, 非法dtype/stride/溢出/旧版本拒绝, 不以修改通用SFU一个opcode悄悄改变旧语义]
+    门禁: [G2, G4]
+    产物: [abi_delta.json, descriptor_roundtrip.json, rejection_results.json]
+  - 编号: C05
+    名称: 将root微程序接到真实数据owner
+    优先级: P0
+    依赖: [C04]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E07, E11, E16]
+    修改落点: 复用V3 root/terminal bridge；扩展QwenOwnerKernel的真实调度和payload adapter
+    执行动作: [逐leaf绑定源地址/目的地址/dtype/shape/policy, 每个消费者读取同一memory service的前驱实际写回, 不使用canary常量零payload作为完整block输入, 对每个logical command追踪leaf issue和写回completion, 所有owner共用实际Matrix与iDMA]
+    验收: [先以现有Matrix/SFU/KV组成跨owner真实短链验证公共adapter, 新增GDN/MoE/QSA/PLE端点可保持未绑定并显式Unsupported以避免任务循环依赖, 各模型完整绑定由后续专有任务验收, 输出改变能由输入扰动沿链追踪且无reference注入]
+    门禁: [G2, G4]
+    产物: [semantic_to_command.json, payload_binding_matrix.json, perturbation_trace.json]
+  - 编号: C06
+    名称: 超64命令与有限tensor存活集合
+    优先级: P0
+    依赖: [C04]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E06, E16]
+    修改落点: HostBlockCommands的pc/producedCount/virtualCount/events及新命令窗口管理
+    执行动作: [统计六block真实lowering命令数而非照抄26或34个root阶段数, 将总程序长度与同时活跃的tensor/event容量解耦, 支持descriptor命令窗口或有界可回收记录, 处理跨窗口依赖/版本/错误停止, 不只放大maxCommands且遗漏8位计数和event槽限制]
+    验收: [用63/64/65/255/256/588条控制程序测边界, 已完成但仍被后续读取的tensor不能回收, 跨窗口回压与中途错误无丢失重复, 588控制测试不称588数值RTL整网通过]
+    门禁: [G2, G4]
+    产物: [command_capacity_tests.json, liveness_proof.json]
+  - 编号: C07
+    名称: 有界片上状态tile与事务提交
+    优先级: P0
+    依赖: [C03, C04]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E07]
+    修改落点: 复用state transaction/commit组件并新增实际state-memory owner adapter
+    执行动作: [分离readonly权重/scratch/persistent/output, 按layer/request/epoch/state域读旧写新, GDN矩阵分tile存DDR且只缓存工作集, conv/KV/QSA/PLE状态和有效长度一并提交, 最后B错误不发布新generation；早期物理写需版本隔离或日志恢复]
+    验收: [资源账本计入所有Reg/SyncReadMem/队列/多context累加, 无重复SharedL2实例冒充共享, 非零旧状态实际参与输出, reset清请求和响应归属；旧epoch不得污染新任务, 写确认字节与物理成功ACK一致即使已poisoned]
+    门禁: [G4, G7]
+    产物: [memory_ledger.json, state_commit_trace.json, reset_recovery.json]
+  - 编号: C08
+    名称: 建立完整block公共测试与回执校验器
+    优先级: P0
+    依赖: [C00, C02]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E09, E10, E11]
+    修改落点: 复用host_block_commands.cpp与现有verify脚本；新增通用block manifest驱动入口
+    执行动作: [launch前仅装权重/输入/旧状态；中间区填哨兵, 检查每个tensor全部有效值和pad哨兵, 记录命令/owner/DMA/ACK/state counters, 独立扰动缺失或重复completion测试回执解析, 原始失败日志保留不可改写]
+    验收: [比较器拒绝缺输出和虚假PASS标记, 不靠assert实现Python关键门禁且python -O仍能拒绝, 区分合成/官方/组件/整请求scope, 每个计数都可追到DUT事件且周期桶不重复累计]
+    门禁: [G0, G1, G5, G8]
+    产物: [block_manifest_schema.json, verifier_negative_tests.json]
+  - 编号: Q20
+    名称: 重跑当前Qwen2双层主链保护基线
+    优先级: P1
+    依赖: [C00, C08]
+    状态: 待执行
+    执行侧: 开发侧优先；缺pinned-iDMA环境时本地agent
+    来源: [E09, E10, E17]
+    修改落点: 无设计修改；现有run_real_two_layer_gate.sh
+    执行动作: [固定4096MAC/16beat/pipelined/native_BF16/burst_write/commit_tail=0, 先以OVERLAP_SILU=0执行全量real16两层, 保存全部tensor和源身份, 与旧1409024值归档及实际计数交叉核对]
+    验收: [42个completion和38作业, 1409024值零差异, 18 Matrix/22 SFU/2 KV命令, host_intermediate_writes=0且一个iDMA, 新周期单独报告不覆盖旧16639515]
+    门禁: [G0, G4, G5, G8]
+    产物: [q2_head_regression.json, tensors_manifest.json]
+  - 编号: Q21
+    名称: 官方Qwen2 block权重与输入导出
+    优先级: P1
+    依赖: [C01, C02, C08]
+    状态: 待执行
+    执行侧: 开发侧；权重由本地agent按清单准备
+    来源: [E01, E05]
+    修改落点: 新增official block fixture loader；复用现有pack_owner_block_fixture布局逻辑但不使用合成recipe
+    执行动作: [读取固定checkpoint的七个矩阵与Norm/bias参数, 验证HF或GGUF转置/重排/去量化来源, 导出layer0及layer1真实上游hidden和position_ids, 生成原始张量和device-native packed字节双清单, 每个checkpoint参考不作为DUT中间输入]
+    验收: [参数名shape数量和字节哈希完整, 每个packed分块可回读到原tensor, 不混Base与Instruct, 不将GGUF容器整体大小当设备weight extent]
+    门禁: [G0, G1]
+    产物: [q2_official_fixture_manifest.json, weight_byte_parity.json]
+  - 编号: Q22
+    名称: Qwen2官方语义与批准混合精度闭环
+    优先级: P1
+    依赖: [Q20, Q21, C04]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E02, E05, E06, E14]
+    修改落点: Norm/RoPE/Attention/SwiGLU参数和存储转换，保持原MAC计算格式
+    执行动作: [核对epsilon与gamma解释、QKV bias和RoPE split-half布局, 实现producer驱动BF16/FP32 load/store并保持敏感FP32边界, 核对softmax概率入PV的精度而非隐含hi/lo补偿, 用官方输入定位首差异并最小化修复]
+    验收: [旧合成数值合同保留独立legacy配置, 新批准精度合同在所有中间边界生效, 逐位域和官方误差域均通过, 禁止放宽0.002或改reference跟随错误DUT]
+    门禁: [G1, G3, G4]
+    产物: [q2_precision_closure.json, first_difference_resolution.json]
+  - 编号: Q23
+    名称: Qwen2官方完整block长度扩展
+    优先级: P1
+    依赖: [Q22]
+    状态: 待执行
+    执行侧: 开发侧与本地agent按资源分工
+    来源: [E05, E09]
+    修改落点: 通用block runner与Qwen2 shape/位置测试
+    执行动作: [真实几何执行T16/33/128/1024合成及官方完整block, 对16/32/64/128边界做定向扫描, 检查跨K分块和所有输出行, 完整保存KV/Attention/MLP/最终hidden数值]
+    验收: [B2_DENSE全规范tensor比较通过, query尾mask正确且未越界写, 完整命令和实际payload均有证据, 不用采样q1024算子当完整q1024 block]
+    门禁: [G5, G6, G8]
+    产物: [B2_DENSE_official.json, q2_length_matrix.json]
+  - 编号: S00
+    名称: 通用Norm与非线性数值owner
+    优先级: P1
+    依赖: [C02, C04]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E07, E16]
+    修改落点: 复用既有SFU/HardFloat和scalar/vector算术；新增可配置head/group reduction adapter
+    执行动作: [支持head维RMSNorm和QK-L2Norm及query scale, 支持softplus/exp衰减、sigmoid/beta和输出gate, 明确weight或1加weight的mode及epsilon, 支持独立hidden/q_width/ffn和广播, 大负数稳定公式保持冻结舍入点]
+    验收: [官方参数与极端值全量对比, head128/256和hidden2048/2560分别通过, SiLU与sigmoid不得依模型名误选, 累加/reduction顺序或近似改变单独建精度合同]
+    门禁: [G1, G3]
+    产物: [norm_gate_leaf.json, nonlinear_modes.json]
+  - 编号: S01
+    名称: 有前缀GQA与partial MRoPE执行路径
+    优先级: P1
+    依赖: [C03, C04, C07, S00]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E05, E06]
+    修改落点: Qwen2ContinuousBlock Attention/RoPE或复用已验MLO组件，扩展真实KV owner
+    执行动作: [query_len与kv_len/absolute_position独立, 用旧KV加新KV而非每次重算正方形T乘T, Q/K head Norm、partial64和其余维度直通, 文本MRoPE仍遵守固定实现的轴映射, gate在正确投影/归一化之后应用, 为QSA保留selected-key接口但不混稀疏语义]
+    验收: [Q35的16Q/2KV/head256和Q2的12Q/2KV/head128数值通过, 非零position起点与跨chunk正确, mask全空和部分key处理明确, 不假称片上score数组为已验高吞吐online-softmax]
+    门禁: [G3, G4, G7]
+    产物: [attention_prefix_leaf.json, rope_layout_cases.json]
+  - 编号: Q24
+    名称: Qwen2真实状态续算与官方双层
+    优先级: P1
+    依赖: [Q23, S01]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E06, E09]
+    修改落点: 官方fixture连续runner与KV生命周期回归
+    执行动作: [16和128-token prefill后各连续32步decode, 比较整段一次prefill和分chunk接续, 两个不同官方layer单launch连续运行, 请求A/B复用同一DUT但状态隔离, 最后KV写错误后reset/recovery]
+    验收: [每步hidden和所有提交KV满足双参考, layer1输入仅来自layer0实际写回, 无层间reset和host中间态注入, 失败状态不被下一步消费]
+    门禁: [G6, G7, G8]
+    产物: [B2_DENSE_continuity.json, q2_official_two_layer.json]
+  - 编号: S02
+    名称: GDN因果深度卷积真实数据与history
+    优先级: P1
+    依赖: [C04, C07, S00]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E16]
+    修改落点: 复用state/causal-conv组件，新增qkv split/拼合及DDR history adapter
+    执行动作: [kernel4逐通道q/k/v卷积及规定激活, 正确处理非零旧3步history, 支持Q35与Q38不等qk/value头数量, 检查T1/3/4/5/63/64/65, 保存最后history而非整段常驻]
+    验收: [逐token和整段卷积对应值一致, chunk边界不补错误零值, 两层history不串扰, 非法history版本在运算前拒绝]
+    门禁: [G3, G4, G7]
+    产物: [gdn_conv_numeric.json, conv_history_trace.json]
+  - 编号: S03
+    名称: GDN单token矩阵状态递推
+    优先级: P1
+    依赖: [S02, C05]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E16]
+    修改落点: GDN实际state owner与Matrix/SFU复用接口；不复制新浮点阵列
+    执行动作: [明确S的key/value方向和转置, 按固定公式执行衰减、旧状态预测、delta、beta缩放rank1更新、状态读出, 规定输出使用更新前或后状态并与官方一致, qk头到value头广播映射参数化, 读旧状态tile、写新tile并等待最终ACK]
+    验收: [全零与随机非零状态分别逐元素核对, Q35的32和Q38的48 value-head完整验算, 并行tile不改变同一状态的因果token顺序, 注入最后state写失败不得提交generation]
+    门禁: [G3, G4, G7]
+    产物: [gdn_recurrent_numeric.json, gdn_state_all_elements.json]
+  - 编号: S04
+    名称: GDN prefill先正确递推再验chunk模式
+    优先级: P1
+    依赖: [S03]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E03, E04, E16]
+    修改落点: GDN token/chunk调度及参考
+    执行动作: [先用真实递推owner完整执行prefill作为功能基线, 扫描1/16/63/64/65/128分块, 对比输出和最终状态且保留每chunk checkpoint, chunk64并行公式作为单独优化模式验收, 状态不能每chunk重置]
+    验收: [所有规定chunk长度真实RTL通过, chunk算法改变reduction顺序时按已冻结容差而非虚构bit-exact, reference仅用于比较不执行DUT内核, 性能未达标不掩盖数值已通过]
+    门禁: [G3, G5, G7, G8]
+    产物: [gdn_prefill_chunk_matrix.json, gdn_mode_contract.json]
+  - 编号: S05
+    名称: MoE router与实际token路由
+    优先级: P1
+    依赖: [C04, C05, S00]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E16]
+    修改落点: 复用stable TopK/selection/route组件并接真实router矩阵输出
+    执行动作: [实现router投影、softmax或指定score及TopK归一化顺序, 覆盖256选8与512选10, 统计每expert token数并prefix-sum/scatter保留原token位置信息, 不以预先给定expert索引绕过router, 处理零expert与padding不计有效MAC]
+    验收: [选中expert/排序/route权重与冻结规则一致, 同分时索引规则稳定且near-tie差异明确阻塞, router输出变动会改变真实dispatch, 乱序及回压不丢token且无重复merge]
+    门禁: [G3, G4]
+    产物: [moe_router_numeric.json, route_scatter_manifest.json]
+  - 编号: S06
+    名称: routed与shared expert完整执行及加权合并
+    优先级: P1
+    依赖: [S05, C07]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E04, E08, E16]
+    修改落点: StreamingDenseOwner、SiLU及新增grouped expert调度/merge owner
+    执行动作: [实际读取所选expert gate/up/down BF16权重, expert_ffn支持512和640且不与hidden绑定, 同一Matrix按expert聚合token块执行, shared expert与其gate按官方顺序加入, 按原token顺序FP32累加route结果并等待全部参与专家写回]
+    验收: [不复制每expert一套Matrix, 冷权重访问计入wall和DDR, 256/512专家地址跨度不截断, 零路由/热点/乱序返回和最后expert失败通过, 无Host代算专家或预加载参考expert输出]
+    门禁: [G3, G4, G5, G8]
+    产物: [moe_expert_numeric.json, moe_merge_trace.json, expert_traffic.json]
+  - 编号: Q35A
+    名称: Qwen35完整Attention分支接入
+    优先级: P1
+    依赖: [S01, C05]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E06, E16]
+    修改落点: HeteroQwen35DenseAttentionPrimitiveV3对应真实owner程序
+    执行动作: [接实际q/gate、k/v权重和head Norm, 固定partial MRoPE及无bias/有gate等模型差异, Attention context宽4096及OProj回2048, 加入输入与Attention残差的正确精度边界]
+    验收: [不是将Qwen2 shape替换成2048, 每个中间tensor及KV全量比较, GQA与gate时序/广播正确, 保留未加MoE的分支测试标签而非完整block标签]
+    门禁: [G3, G4, G5]
+    产物: [q35_attention_branch.json]
+  - 编号: Q35B
+    名称: Qwen35完整GDN分支接入
+    优先级: P1
+    依赖: [S04, C05]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E03, E16]
+    修改落点: HeteroGatedDeltaNetPrimitiveV3对应实际qkv/z/beta/decay、state和output程序
+    执行动作: [连接所有投影而非只测rank1, 执行卷积/归一化/衰减/递推/gated norm/OProj, 读取真实conv及矩阵旧状态, Norm gamma语义与SiLU输出gate按C01冻结]
+    验收: [实际前驱输出成为后继输入, 全部q/k/v/z/beta/decay和state比较通过, 默认gate模式不与Qwen38混用, 无MoE时仅标GDN分支通过]
+    门禁: [G3, G4, G5, G7]
+    产物: [q35_gdn_branch.json]
+  - 编号: Q35C
+    名称: Qwen35官方Attention加MoE完整block
+    优先级: P1
+    依赖: [Q35A, S06, C06, Q21]
+    状态: 待执行
+    执行侧: 开发侧；本地agent提供真实权重及长仿真
+    来源: [E03]
+    修改落点: 官方fixture机制扩展至Q35 layer3，完整命令生成与测试
+    执行动作: [提取真实layer3输入和完整权重集合, 串接Attention残差/后Norm/router/expert/shared/merge/残差, 执行规定四种T的合成及官方用例, 非空KV续算和至少32步decode, 路由由DUT计算而非fixture固定]
+    验收: [B35_ATTN_MOE边界全部通过, selected experts与权重来源完整, 未参与专家仅按合法按需读取策略省带宽, 完整输出及KV/route逐项比较]
+    门禁: [G5, G6, G7, G8]
+    产物: [B35_ATTN_MOE_official.json]
+  - 编号: Q35D
+    名称: Qwen35官方GDN加MoE完整block
+    优先级: P1
+    依赖: [Q35B, S06, C06, Q21]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E03]
+    修改落点: 官方Q35 layer0 fixture与完整命令/状态runner
+    执行动作: [串接GDN分支和后Norm/MoE/残差, 执行规定四种T的合成及官方用例, 分块prefill后至少32步真实状态decode, 检查卷积与矩阵两个状态域同时提交, 故障后恢复使用旧已提交状态]
+    验收: [B35_GDN_MOE全部tensor及状态通过, 不能把单GDN核PASS当完整block, 无Host插入中间结果或重置state, 所有内外存流量和实际MAC闭账]
+    门禁: [G5, G6, G7, G8]
+    产物: [B35_GDN_MOE_official.json]
+  - 编号: Q35E
+    名称: Qwen35真实3GDN加1Attention周期组
+    优先级: P1
+    依赖: [Q35C, Q35D]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E03]
+    修改落点: 官方四层连续命令与分层state extent管理
+    执行动作: [真实layer0到3四套权重和各自state, 单launch连续T16再T128, layer间不reset不让Host填中间hidden, 分块运行与独立框架整组比较]
+    验收: [所有四层输出和状态通过, 3份GDN状态与1份KV不串扰, 命令数按实际lowering而不是Qwen2的21乘4猜测]
+    门禁: [G6, G7, G8]
+    产物: [q35_four_layer_group.json]
+  - 编号: Q38A
+    名称: 四分支gated residual真实读写
+    优先级: P2
+    依赖: [C05, C06, C07, S00]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E04, E16]
+    修改落点: 复用独立hyper-read/hyper-write roots，新增实际多分支tensor读写adapter
+    执行动作: [实现group RMSNorm、low-rank down、分支scale、SiLU、up、sigmoid和加权read, 实现官方逐元素read gate与每分支scalar write gate的准确维度, Attention和MoE读写分别执行各自权重/版本, 四分支大tensor按tile从DDR流式取用]
+    验收: [分支数4及lowrank320真实几何通过, 四分支分别检查不得只比较sum, Attention失败不能提交MoE的分支版本, 禁止用普通residual add代替hyper程序]
+    门禁: [G3, G4, G7]
+    产物: [hyper_read_write_numeric.json, branch_version_trace.json]
+  - 编号: Q38B
+    名称: Qwen38 GDN几何与gate模式复用
+    优先级: P2
+    依赖: [Q35B, C01]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E04, E16]
+    修改落点: 同一GDN owner的shape/policy和权重绑定
+    执行动作: [value_heads改为48、输出分支宽6144、hidden2560, 保持qk_heads16并核对3组映射, 按固定官方forward选择sigmoid或SiLU而非只信root mode注释, 完整投影/conv/state/gated norm/OProj数值回归]
+    验收: [不复制新Matrix且无3MiB全状态片上假设, 两模型gate模式交叉负例可检出, 单token和prefill state全量一致]
+    门禁: [G3, G4, G5, G7]
+    产物: [q38_gdn_branch.json]
+  - 编号: Q38C
+    名称: QSA index/summary及真正Top512
+    优先级: P2
+    依赖: [C05, C07, S00, S05]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E04, E16]
+    修改落点: QSA root、index投影、summary owner和stable selection实际存储路径
+    执行动作: [实现4个index query head和key/summary计算, 每4token微块压缩、非负score及head归约按官方次序, Top512输入来自实际summary非固定索引, 未满微块与causal mask状态化, 使用513和1024候选微块强制触发真实淘汰]
+    验收: [完整候选score和索引逐项核对, stable tie及513到512确实排除一个候选, T1024冷启动仅作小场景不作Top512闭环证据, query和prefix分别限界]
+    门禁: [G3, G4, G7]
+    产物: [qsa_index_selection.json, selected_indices.bin]
+  - 编号: Q38D
+    名称: QSA稀疏KV gather和Attention数值
+    优先级: P2
+    依赖: [Q38C, S01]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E04, E11, E16]
+    修改落点: 复用sparse/page/coalesce组件并接共享iDMA与Attention真实数据
+    执行动作: [selected微块扩展为合法token索引, 排序合并相邻run且保存逆映射, 实际读取非连续KV并执行online或有界稀疏Softmax/PV, 保留最后不满微块和位置mask, 输出gate和OProj回hidden2560]
+    验收: [不得用dense Attention冒充稀疏完成, DDR读取地址与selected集合逐项对应, 排序前后语义和输出正确, 跨页/重复请求/页fault/返回反压测试通过, 完整score不能物化到DDR以绕过容量约束]
+    门禁: [G3, G4, G5, G7]
+    产物: [qsa_sparse_attention.json, sparse_dma_trace.json]
+  - 编号: Q38E
+    名称: PLE ngram与稀疏行表及dilated conv
+    优先级: P2
+    依赖: [C01, C05, C07, S02]
+    状态: 待执行
+    执行侧: 开发侧；本地agent提供官方稀疏行数据
+    来源: [E04, E13, E16]
+    修改落点: 复用PLE/hash/稀疏lookup roots，新增完整行表到payload和history owner
+    执行动作: [确认官方token历史与EOS清理及hash/modulus, 按16个head与每行160维读取真实行, 处理512个shard的映射和合法稀疏访存, 实现projection/gate与kernel4 dilation3因果卷积, 按官方forward位置注入四分支路径]
+    验收: [哈希/索引/行字节精确；不能随机生成缺失官方行, mmap按需读允许但lookup地址必须由DUT产生, 跨EOS/边界/碰撞和历史9步跨度通过, 全部PLE输出与history全量比较]
+    门禁: [G3, G4, G5, G7]
+    产物: [ple_numeric.json, ple_row_manifest.json, ple_history_trace.json]
+  - 编号: Q38M
+    名称: Qwen38 512选10 MoE真实几何
+    优先级: P2
+    依赖: [S06, C01]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E04]
+    修改落点: 同一router/expert/merge owner的model policy和权重layout
+    执行动作: [使用hidden2560/expert_ffn640/512expert/Top10, 核对shared expert实际权重与gate, 测最后expert511及大于4GiB地址跨度, 验证10路合并计数宽度和原token顺序]
+    验收: [全router和实际命中expert输出通过, 不复用Top8截断或8路计数, 零路由/热点/乱序及故障通过, 真实按需读取不等于全量权重已驻片]
+    门禁: [G3, G4, G5]
+    产物: [q38_moe_numeric.json]
+  - 编号: Q38F
+    名称: Qwen38官方hyper-GDN-MoE完整block
+    优先级: P2
+    依赖: [Q38A, Q38B, Q38M, Q21]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E04]
+    修改落点: 官方layer0四分支fixture和完整命令runner
+    执行动作: [Attention hyper-read/GDN/hyper-write再MoE hyper-read/MoE/hyper-write, 四种规定T合成及官方测试, 非零conv/state续算和32步decode, 导出所有四分支中间及末态]
+    验收: [B38_GDN_MOE全量通过, 输入是官方真实四分支张量不是复制四份同一hidden, 每一事务只发布正确版本, gate投影和shared expert不得省略]
+    门禁: [G5, G6, G7, G8]
+    产物: [B38_GDN_MOE_official.json]
+  - 编号: Q38G
+    名称: Qwen38官方hyper-QSA-MoE完整block
+    优先级: P2
+    依赖: [Q38A, Q38D, Q38M, Q21]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E04]
+    修改落点: 官方layer3 fixture和真实长prefix的state生成
+    执行动作: [串接四分支读写、QSA全链、MoE, 四种规定T冷prefill及短query配长prefix, 由先前实际DUT请求生成4096-token prefix而非Host塞中间summary, 强制超过512候选并检查状态续算]
+    验收: [B38_QSA_MOE全部输出/selected索引/state通过, sparse真实地址集合与参考一致, 双次请求中summary尾微块正确续接, query_len不限制kv_len到1024]
+    门禁: [G5, G6, G7, G8]
+    产物: [B38_QSA_MOE_official.json]
+  - 编号: Q38H
+    名称: Qwen38官方PLE所在完整block
+    优先级: P2
+    依赖: [Q38E, Q38F]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E04, E13]
+    修改落点: 固定PLE层完整fixture、token_ids端口和state域
+    执行动作: [在C01冻结层执行PLE注入后完整hyper/GDN/MoE, 包含真实不同ngram和EOS的输入集合, 四种规定T及跨chunk/decode, 稀疏官方行校验与所有状态同步提交]
+    验收: [B38_PLE_GDN_MOE完整通过, 不能以独立PLE kernel或普通GDN block顶替, EOS前后history和层间输入可追溯, PLE页/行读取失败不发布任何新block状态]
+    门禁: [G5, G6, G7, G8]
+    产物: [B38_PLE_GDN_MOE_official.json]
+  - 编号: Q38I
+    名称: Qwen38含PLE与QSA四层周期组
+    优先级: P2
+    依赖: [Q38F, Q38G, Q38H]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E04, E13]
+    修改落点: 官方layer0到3连续runner和四分支/layer-state管理
+    执行动作: [执行普通GDN、PLE所在GDN、下一GDN、QSA，均包含MoE, 保持四分支跨layer不提前final merge, T16和128单launch且续接decode, 单独长prefix触发QSA截断]
+    验收: [四套真实权重且无Host中间态注入, PLE只在指定层执行一次, 状态按层和域区分不串扰, 全量官方参考通过]
+    门禁: [G6, G7, G8]
+    产物: [q38_four_layer_group.json]
+  - 编号: P00
+    名称: 先建立可达性能上界和实际周期账本
+    优先级: P1
+    依赖: [C08, Q20]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E08, E09]
+    修改落点: 性能收集器和新增带宽/算量上界校验；不更改旧失败日志
+    执行动作: [按实际Matrix握手计useful/executed MAC, 每个owner互斥cycle bins覆盖wall全部周期, 分别记录DDR读写与L2访问及descriptor开销, 将N16冷启动与N128/N1024复用分组, 先证明阈值可达再设性能门禁]
+    验收: [以归档数字复算约2.198%而非98.3%, 单512bit同频读通道每拍不超过64B, 当前N16不变流量理想上界约11.82%, 计数溢出/重复累计/工作量改变被拒绝]
+    门禁: [G8]
+    产物: [roofline_bounds.json, performance_schema.json]
+  - 编号: P01
+    名称: SiLU重叠Host集成A/B
+    优先级: P2
+    依赖: [Q20, P00]
+    状态: 待执行
+    执行侧: 开发侧优先；本地agent补完整长仿真
+    来源: [E10, E17]
+    修改落点: 已有OVERLAP_SILU开关与run_real_two_layer_gate.sh
+    执行动作: [同一配置开关0/1完整pinned-iDMA双层测试, 最后成功/失败ACK与数值poison并发验证, 检查恰好一套选中SiLU算术, 增加官方block集成回归后再考虑默认切换]
+    验收: [42completion/38job/1409024值全部一致, 写字节与状态一致, 完整请求而非组件周期有收益, 短任务退化保留记录；不通过保持0]
+    门禁: [G4, G5, G8, G9]
+    产物: [silu_host_ab.json, default_switch_decision.json]
+  - 编号: P02
+    名称: Dense权重跨token复用及64beat批处理
+    优先级: P2
+    依赖: [C03, C07, P00, Q23]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E08, E15]
+    修改落点: StreamingDenseOwner、DenseReadPlanner及IdmaWeightBurst候选接入
+    执行动作: [先量化现有5context/macro-M的真实权重复用与重复DDR读, 同expert聚合多token以提高MoE复用, 分别测试仅64beat、仅M复用、二者组合, 保持每output增加K顺序和实际iDMA<=16beat物理分段, SRAM预算和最后分段错误一并测]
+    验收: [真实N128/N1024完整block数值不变, 权重读流量减少可追到地址trace, 64beat不能只改参数忽略缓存/计数/boundary/commit, 不以预装全部权重后排除读时间宣称加速]
+    门禁: [G4, G5, G8, G9]
+    产物: [dense_reuse_ab.json, idma_batch_integrated.json]
+  - 编号: P03
+    名称: Attention与GDN调度性能优化
+    优先级: P2
+    依赖: [S01, S04, P00]
+    状态: 待执行
+    执行侧: 开发侧
+    来源: [E05, E08, E16]
+    修改落点: 部分slice/窄lane映射、在线归约与GDN chunk候选
+    执行动作: [量化QK/PV实际活跃lane而非以4096满阵列估算, 改善head/query并行与片上Q/KV复用, chunk/GDN优化与状态tile传输重叠分开开关, 减少无依据DDR落地但保留可观测debug检查点]
+    验收: [先功能基线通过再同工作负载A/B, 不用改变精度或K顺序伪造性能收益, 整请求cycle/DDR/SRAM同时报告, 所有故障与续算门禁不回退]
+    门禁: [G3, G7, G8, G9]
+    产物: [attention_gdn_perf_ab.json]
+  - 编号: P04
+    名称: 当前完整top的SRAM和800MHz实现检查
+    优先级: P2
+    依赖: [C07, Q35E]
+    状态: 待执行
+    执行侧: 本地agent使用授权工具；开发侧提供脚本
+    来源: [E02, E08, E17]
+    修改落点: 当前top生成manifest、memory映射及dc/common_clock_800mhz.tcl接入
+    执行动作: [统计多context累加/结果FIFO/状态tile全部资源, 替换功能等价SRAM宏后重跑相关数值, 单root及组合top综合和约束覆盖检查, 明确post-route/PVT/SAIF未做部分, 新增Q38 owner后增量重复该门禁]
+    验收: [完整top无黑盒残留或明确授权IP模型绑定, SRAM容量端口/延迟与功能模型一致, 当前800MHz约束而非旧1GHz报告, WNS/hold/未约束路径有完整回执；未通过不得报物理频率已达标]
+    门禁: [G10]
+    产物: [physical_scope.json, resource_area.rpt, timing_coverage.rpt]
+  - 编号: R00
+    名称: 六类典型block集中发布
+    优先级: P2
+    依赖: [Q24, Q35E, Q38I, P00]
+    状态: 待执行
+    执行侧: 开发侧复核、本地agent签收
+    来源: [E01, E11]
+    修改落点: 新增六block能力表和机器可读验收索引；不回写旧归档为新PASS
+    执行动作: [逐block汇总G0到G8, 检查官方权重/参考/RTL/实际输出属于同一配置, 同时保存成功与失败用例, git提交并回读remote与文件哈希, 未完成项不得标已支持]
+    验收: [六个block各自有官方完整prefill和decode/state证据, Q35及Q38周期组通过, 性能与物理状态独立字段, 总结不称完整模型或视觉MTP已完成]
+    门禁: [G11]
+    产物: [six_block_release_matrix.json, remote_commit.json]
+  - 编号: F00
+    名称: 典型block之后接完整模型与llama backend
+    优先级: P3
+    依赖: [R00]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E00, E01, E06]
+    修改落点: 模型embedding/final norm/LM head、长程序和真正设备buffer transport
+    执行动作: [Q2扩展28层真实588命令及外围算子；其他模型从实际图生成命令不套588, LM head大vocab按tile处理而非截断16位维度, 官方全词表logits、长程序liveness和跨请求state, 去除Host文件中转和语义核代算]
+    验收: [真实RTL或设备执行全图且无fallback, 输出所有logits及token序列质量通过, 完整prefill/decode周期独立测量, 不能用软件P3的958node或Top10证据代替]
+    门禁: [G0, G1, G2, G4, G6, G7, G8]
+    产物: [full_model_device_result.json]
+  - 编号: F01
+    名称: MTP状态分支与视觉多模态独立验收
+    优先级: P3
+    依赖: [R00]
+    状态: 待执行
+    执行侧: 开发侧与本地agent
+    来源: [E01, E16]
+    修改落点: 复用MTP draft/resolve、vision patch/block/merge/injection roots
+    执行动作: [MTP对所有KV/GDN/conv/PLE/QSA/branch状态做一致commit/rollback, vision用真实图像patch和官方权重完整执行, 文本与视觉位置轴/注入布局独立核对, 可选量化W8/W4/FP8另开精度与性能门禁]
+    验收: [MTP不能只回滚KV而遗留其他state, vision root canary不等于encoder数值, 量化不可污染BF16基线, 未完成不阻塞本规划纯文本block完成但不得宣称全模型feature完备]
+    门禁: [G0, G1, G3, G4, G6, G7, G8]
+    产物: [mtp_full_state_result.json, vision_official_result.json]
+里程碑:
+  M0: [C00, C01, C02, C03, C04, C05, C06, C07, C08]
+  M1_Qwen2: [Q20, Q21, Q22, Q23, S00, S01, Q24, P00]
+  M2_Qwen35: [S02, S03, S04, S05, S06, Q35A, Q35B, Q35C, Q35D, Q35E]
+  M3_Qwen38: [Q38A, Q38B, Q38C, Q38D, Q38E, Q38M, Q38F, Q38G, Q38H, Q38I, R00]
+  独立优化或物理: [P01, P02, P03, P04]
+  典型block之后: [F00, F01]
+可直接复用的现有命令:
+  组件SiLU:
+    命令: bash chisel/continuous_prefill/scripts/run_silu_owner_gate.sh "$PWD/work/silu_owner_new"
+    边界: 仅组件；不是Host与pinned-iDMA完整block
+  当前合成双层保护:
+    命令: MATRIX_MACS=4096 WEIGHT_READ_BEATS=16 PIPELINED_OWNER=1 NATIVE_BF16_WEIGHTS=1 BURST_WRITE=1 COMMIT_TAIL_READ=0 OVERLAP_SILU=0 bash chisel/continuous_prefill/scripts/run_real_two_layer_gate.sh "$PWD/work/q2_baseline_new"
+    前提: 已配置锁定HardFloat、Verilator和IDMA_EXPORT，输出目录必须不存在
+    边界: 仅合成real16两层；官方runner需要Q21开发
+  SiLU完整A_B:
+    命令: MATRIX_MACS=4096 WEIGHT_READ_BEATS=16 PIPELINED_OWNER=1 NATIVE_BF16_WEIGHTS=1 BURST_WRITE=1 COMMIT_TAIL_READ=0 OVERLAP_SILU=1 bash chisel/continuous_prefill/scripts/run_real_two_layer_gate.sh "$PWD/work/q2_overlap_new"
+    前提: 同上，先保留开关0结果，再对比全部tensor和state
+    边界: 不能复用组件1.705倍作为本次结果
+  未实现入口: Q35/Q38完整官方block runner均为本规划待开发项；本文不提供虚构的可执行命令
+每次任务回执字段:
+  必填: [任务编号, 状态, 设计GitSHA, 生成RTL哈希, 参考与输入哈希, 实际命令, 退出码, 证据等级, 运行环境, 全量比较统计, 流量与周期, 资源峰值, 失败原因, 远端提交]
+  日志策略: 数值失败保留首差异和全量差异摘要；大型二进制置artifact并给持久manifest及哈希；Git不上传token或授权IP/库
+  验收状态隔离: 计划校验PASS仅说明YAML结构/依赖/覆盖一致，不说明任何硬件任务已执行

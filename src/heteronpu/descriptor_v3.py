@@ -2,6 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
+from .abi_validation import enum_value, uint, word_bytes
 NULL_INDEX=0xFFFFFF
 class RecordType(IntEnum):
     SHAPE2_32=0x04; ATTENTION_OP=0x13; MOE_POLICY=0x14; DELTA_POLICY=0x15
@@ -11,22 +12,24 @@ class CompletionStatus(IntEnum): OK=0; UNSUPPORTED_POLICY=4
 @dataclass(frozen=True)
 class DescriptorRecord:
     record_type:int; subtype:int=0; flags:int=0; next_index:int=NULL_INDEX; payload:int=0
+    def __post_init__(self):
+        enum_value(self.record_type, RecordType, "record_type")
+        for n,v,w in [('record_type',self.record_type,8),('subtype',self.subtype,8),('flags',self.flags,16),('next_index',self.next_index,24),('payload',self.payload,72)]:
+            object.__setattr__(self,n,uint(v,w,n))
     def pack(self):
-        for n,v,w in [('type',self.record_type,8),('subtype',self.subtype,8),('flags',self.flags,16),('next',self.next_index,24),('payload',self.payload,72)]:
-            if not 0<=int(v)<1<<w:raise ValueError(n)
+        self.__post_init__()
         return self.record_type|(self.subtype<<8)|(self.flags<<16)|(self.next_index<<32)|(self.payload<<56)
     def to_bytes(self):return self.pack().to_bytes(16,'little')
     @classmethod
     def unpack(cls,x):
-        if isinstance(x,bytes):
-            if len(x)!=16:raise ValueError('length')
-            x=int.from_bytes(x,'little')
+        if isinstance(x,(bytes,bytearray,memoryview)):
+            x=int.from_bytes(word_bytes(x,'descriptor'),'little')
+        x=uint(x,128,'descriptor word')
         return cls(x&255,(x>>8)&255,(x>>16)&65535,(x>>32)&0xffffff,(x>>56)&((1<<72)-1))
 def _p(fields):
     x=o=0
     for n,v,w in fields:
-        if not 0<=int(v)<1<<w:raise ValueError(n)
-        x|=int(v)<<o;o+=w
+        x|=uint(v,w,n)<<o;o+=w
     if o!=72:raise AssertionError(o)
     return x
 def _r(t,fields,next_index=NULL_INDEX):return DescriptorRecord(t,next_index=next_index,payload=_p(fields))
@@ -45,11 +48,13 @@ def kv_epoch32(*,generation,logical_page_count,next_index=NULL_INDEX):return _r(
 _LAYOUT={0x04:[('dim0',32),('dim1',32),('reserved',8)],0x13:[('backend',3),('policy_flags',5),('block_tokens',10),('q_heads',10),('kv_heads',10),('head_dim',10),('rotary_dim',10),('query_tile_log2',4),('key_tile_log2',4),('reserved',6)],0x14:[('num_experts',10),('top_k',6),('shared_experts',4),('intermediate_size',16),('weight_format',4),('expert_group_size',8),('router_flags',8),('reserved',16)],0x15:[('qk_heads',10),('v_heads',10),('key_dim',10),('value_dim',10),('conv_kernel',5),('state_dtype',4),('policy_flags',7),('chunk_size',8),('reserved',8)],0x16:[('index_q_heads',6),('index_kv_heads',4),('index_head_dim',10),('token_budget',16),('compress_ratio',8),('qsa_flags',8),('reserved',20)],0x17:[('branch_count',4),('hidden_size',16),('lowrank',16),('norm_group_size',16),('gate_activation',4),('gr_flags',8),('reserved',8)],0x18:[('ngram_size',4),('heads_per_ngram',8),('embed_dim',16),('conv_kernel',8),('conv_dilation',8),('embedding_table_index',24),('ple_flags',4)],0x19:[('layers',8),('prediction_steps',8),('hidden_size',16),('vocab_size',24),('mtp_flags',8),('reserved',8)],0x32:[('sequence_id',32),('layer_id',12),('kv_head_id',12),('context_flags',8),('reserved',8)],0x33:[('token_start',32),('token_count',32),('range_flags',8)],0x34:[('page_table_tensor_index',24),('physical_page_limit',24),('page_id_bits',6),('levels',3),('page_tokens_log2',5),('pte_bytes_log2',4),('table_flags',6)],0x35:[('generation',32),('logical_page_count',32),('epoch_flags',8)]}
 def decode(record):
     if not isinstance(record,DescriptorRecord):record=DescriptorRecord.unpack(record)
+    record.__post_init__()
     layout=_LAYOUT.get(int(record.record_type));
     if layout is None:raise ValueError('type')
     out={};o=0
     for n,w in layout:out[n]=(record.payload>>o)&((1<<w)-1);o+=w
     out.update(record_type=int(record.record_type),subtype=record.subtype,flags=record.flags,next_index=record.next_index);return out
 def rtl_capability(t):
+    t=uint(t,8,'record_type')
     rec=int(t) in {int(x) for x in RecordType}; exe=int(t) in {0x04,0x32,0x33,0x34,0x35}
     return rec,exe,CompletionStatus.OK if exe else CompletionStatus.UNSUPPORTED_POLICY

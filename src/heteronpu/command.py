@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
 
+from .abi_validation import enum_value, uint, word_bytes
+
 NULL_INDEX = 0xFF_FFFF
 
 
@@ -81,6 +83,8 @@ class Command128:
     dst: int = NULL_INDEX
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "opcode", enum_value(self.opcode, Opcode, "opcode"))
+        object.__setattr__(self, "engine", enum_value(self.engine, Engine, "engine"))
         limits = {
             "flags": (self.flags, 13),
             "event_wait": (self.event_wait, 16),
@@ -90,8 +94,7 @@ class Command128:
             "dst": (self.dst, 24),
         }
         for name, (value, bits) in limits.items():
-            if not 0 <= int(value) < (1 << bits):
-                raise ValueError(f"{name} does not fit in {bits} bits")
+            object.__setattr__(self, name, uint(value, bits, name))
         expected = _EXPECTED_ENGINE.get(self.opcode)
         if expected is not None and expected != self.engine:
             raise ValueError(
@@ -108,6 +111,7 @@ class Command128:
             )
 
     def pack(self) -> int:
+        self.__post_init__()
         word = int(self.opcode)
         word |= int(self.engine) << 8
         word |= int(self.flags) << 11
@@ -125,8 +129,7 @@ class Command128:
 
     @classmethod
     def unpack(cls, word: int) -> "Command128":
-        if not 0 <= int(word) < (1 << 128):
-            raise ValueError("word must be an unsigned 128-bit integer")
+        word = uint(word, 128, "command word")
         opcode = Opcode(word & 0xFF)
         engine = Engine((word >> 8) & 0x7)
         return cls(
@@ -142,8 +145,7 @@ class Command128:
 
     @classmethod
     def from_bytes(cls, payload: bytes) -> "Command128":
-        if len(payload) != 16:
-            raise ValueError("a command must contain exactly 16 bytes")
+        payload = word_bytes(payload, "command")
         return cls.unpack(int.from_bytes(payload, byteorder="little", signed=False))
 
 

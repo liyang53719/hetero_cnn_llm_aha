@@ -1,0 +1,935 @@
+{
+  "source_commit": "ba4b645a2fcef0344962846f07d7b302d8f65315",
+  "vectors": [
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 0,
+        "engine": 0,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0
+      },
+      "hex": "00000000000000ffffffffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 0,
+        "engine": 0,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535
+      },
+      "hex": "00f8ffffffffffffffffffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 16,
+        "engine": 1,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "10010000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 16,
+        "engine": 1,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "10f9fffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 17,
+        "engine": 1,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "11010000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 17,
+        "engine": 1,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "11f9fffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 32,
+        "engine": 2,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "20020000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 32,
+        "engine": 2,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "20fafffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 33,
+        "engine": 2,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "21020000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 33,
+        "engine": 2,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "21fafffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 34,
+        "engine": 2,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "22020000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 34,
+        "engine": 2,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "22fafffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 35,
+        "engine": 2,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "23020000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 35,
+        "engine": 2,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "23fafffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 36,
+        "engine": 2,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "24020000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 36,
+        "engine": 2,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "24fafffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 48,
+        "engine": 3,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "30030000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 48,
+        "engine": 3,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "30fbfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 49,
+        "engine": 3,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "31030000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 49,
+        "engine": 3,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "31fbfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 50,
+        "engine": 3,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "32030000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 50,
+        "engine": 3,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "32fbfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 51,
+        "engine": 3,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "33030000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 51,
+        "engine": 3,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "33fbfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 52,
+        "engine": 3,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "34030000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 52,
+        "engine": 3,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "34fbfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 53,
+        "engine": 3,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "35030000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 53,
+        "engine": 3,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "35fbfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 64,
+        "engine": 4,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "src0": 0
+      },
+      "hex": "40040000000000000000ffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 64,
+        "engine": 4,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "src0": 16777214
+      },
+      "hex": "40fcfffffffffffeffffffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 65,
+        "engine": 4,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0,
+        "src1": 0
+      },
+      "hex": "41040000000000000000000000000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 65,
+        "engine": 4,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214,
+        "src1": 16777214
+      },
+      "hex": "41fcfffffffffffefffffefffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 66,
+        "engine": 4,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "42040000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 66,
+        "engine": 4,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "42fcfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 67,
+        "engine": 4,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "dst": 0,
+        "src0": 0
+      },
+      "hex": "43040000000000000000ffffff000000"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 67,
+        "engine": 4,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "dst": 16777214,
+        "src0": 16777214
+      },
+      "hex": "43fcfffffffffffefffffffffffeffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 68,
+        "engine": 4,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "src0": 0
+      },
+      "hex": "44040000000000000000ffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 68,
+        "engine": 4,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "src0": 16777214
+      },
+      "hex": "44fcfffffffffffeffffffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 80,
+        "engine": 0,
+        "flags": 0,
+        "event_wait": 0,
+        "event_signal": 0,
+        "src0": 0
+      },
+      "hex": "50000000000000000000ffffffffffff"
+    },
+    {
+      "family": "command",
+      "name": "Command128",
+      "args": [],
+      "kwargs": {
+        "opcode": 80,
+        "engine": 0,
+        "flags": 8191,
+        "event_wait": 65535,
+        "event_signal": 65535,
+        "src0": 16777214
+      },
+      "hex": "50f8fffffffffffeffffffffffffffff"
+    },
+    {
+      "family": "chain",
+      "name": "MatrixAux",
+      "args": [],
+      "kwargs": {
+        "bias_index": 7,
+        "activation": 1,
+        "full_c": true,
+        "pad_bottom": 63,
+        "pad_right": 63,
+        "subarray_mask": 255
+      },
+      "hex": "12000000ffffff070000250004fcff3f"
+    },
+    {
+      "family": "chain",
+      "name": "DmaPolicy",
+      "args": [
+        255,
+        255
+      ],
+      "kwargs": {
+        "read_qos": 15,
+        "write_qos": 15,
+        "allow_unaligned": true,
+        "coalesce": true,
+        "ordered": false
+      },
+      "hex": "50000000ffffffffffff030000000000"
+    },
+    {
+      "family": "chain",
+      "name": "SfuProgram",
+      "args": [
+        65535,
+        2
+      ],
+      "kwargs": {
+        "input_dtype": 5,
+        "output_dtype": 7,
+        "lane_width_bits": 32,
+        "vector_lanes": 255
+      },
+      "hex": "20000000ffffffffff02017520ff0000"
+    },
+    {
+      "family": "chain",
+      "name": "EventList4",
+      "args": [
+        [
+          1,
+          32768,
+          65535,
+          42
+        ]
+      ],
+      "kwargs": {},
+      "hex": "60000000ffffff14000000f8ffaf0200"
+    },
+    {
+      "family": "gemmini",
+      "name": "tensor_base_record",
+      "args": [
+        0
+      ],
+      "kwargs": {
+        "dtype": 5,
+        "memory_space": 15,
+        "rank": 4,
+        "layout": 15
+      },
+      "hex": "01000000ffffff0000000000005f4f00"
+    },
+    {
+      "family": "gemmini",
+      "name": "tensor_base_record",
+      "args": [
+        281474976710655
+      ],
+      "kwargs": {
+        "dtype": 5,
+        "memory_space": 15,
+        "rank": 4,
+        "layout": 15
+      },
+      "hex": "01000000ffffffffffffffffff5f4f00"
+    },
+    {
+      "family": "gemmini",
+      "name": "tensor_base_record",
+      "args": [
+        281474976710656
+      ],
+      "kwargs": {
+        "dtype": 5,
+        "memory_space": 15,
+        "rank": 4,
+        "layout": 15
+      },
+      "hex": "01000000ffffff0000000000005f4f01"
+    },
+    {
+      "family": "gemmini",
+      "name": "tensor_base_record",
+      "args": [
+        72057594037927935
+      ],
+      "kwargs": {
+        "dtype": 5,
+        "memory_space": 15,
+        "rank": 4,
+        "layout": 15
+      },
+      "hex": "01000000ffffffffffffffffff5f4fff"
+    },
+    {
+      "family": "gemmini",
+      "name": "shape4_record",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          262143
+        ]
+      ],
+      "kwargs": {},
+      "hex": "02000000ffffff010008003000c0ffff"
+    },
+    {
+      "family": "gemmini",
+      "name": "stride3_record",
+      "args": [
+        [
+          -8388608,
+          -1,
+          8388607
+        ]
+      ],
+      "kwargs": {},
+      "hex": "03000000ffffff000080ffffffffff7f"
+    },
+    {
+      "family": "gemmini",
+      "name": "matrix_op_record",
+      "args": [],
+      "kwargs": {
+        "m": 65535,
+        "n": 65535,
+        "k": 16777215,
+        "dataflow": 1,
+        "transpose_a": true,
+        "quant_mode": 7
+      },
+      "hex": "10000000ffffffffffffffffffffe500"
+    },
+    {
+      "family": "gemmini",
+      "name": "conv2d_record",
+      "args": [],
+      "kwargs": {
+        "kernel_h": 255,
+        "kernel_w": 255,
+        "stride_h": 255,
+        "stride_w": 255,
+        "dilation_h": 255,
+        "dilation_w": 255,
+        "pad_top": 63,
+        "pad_left": 63,
+        "groups": 4095
+      },
+      "hex": "11000000ffffffffffffffffffffffff"
+    },
+    {
+      "family": "gemmini",
+      "name": "quantization_record",
+      "args": [],
+      "kwargs": {
+        "scale_address": 281474976710655,
+        "group_size_log2": 31,
+        "rounding_mode": 7,
+        "saturation_mode": 3,
+        "zero_point_bits": 16383
+      },
+      "hex": "40000000ffffffffffffffffffffffff"
+    },
+    {
+      "family": "v3",
+      "name": "shape2_32",
+      "args": [
+        4294967295,
+        4294967295
+      ],
+      "kwargs": {},
+      "hex": "04000000ffffffffffffffffffffff00"
+    },
+    {
+      "family": "v3",
+      "name": "attention_op",
+      "args": [],
+      "kwargs": {
+        "q_heads": 32,
+        "kv_heads": 4,
+        "head_dim": 128,
+        "rotary_dim": 64
+      },
+      "hex": "13000000ffffff018080400020405001"
+    },
+    {
+      "family": "v3",
+      "name": "moe_policy",
+      "args": [],
+      "kwargs": {
+        "num_experts": 512,
+        "top_k": 10,
+        "shared_experts": 1,
+        "intermediate_size": 512
+      },
+      "hex": "14000000ffffff002a01202010000000"
+    },
+    {
+      "family": "v3",
+      "name": "delta_policy",
+      "args": [],
+      "kwargs": {
+        "qk_heads": 16,
+        "v_heads": 32,
+        "key_dim": 128,
+        "value_dim": 128,
+        "conv_kernel": 4
+      },
+      "hex": "15000000ffffff1080000820a4004000"
+    },
+    {
+      "family": "v3",
+      "name": "qsa_policy",
+      "args": [],
+      "kwargs": {
+        "index_q_heads": 16,
+        "index_kv_heads": 1,
+        "index_head_dim": 128,
+        "token_budget": 512,
+        "compress_ratio": 4
+      },
+      "hex": "16000000ffffff500002204000000000"
+    },
+    {
+      "family": "v3",
+      "name": "gated_residual_policy",
+      "args": [],
+      "kwargs": {
+        "branch_count": 4,
+        "hidden_size": 2048,
+        "lowrank": 64,
+        "norm_group_size": 128
+      },
+      "hex": "17000000ffffff048000040008000000"
+    },
+    {
+      "family": "v3",
+      "name": "ple_policy",
+      "args": [],
+      "kwargs": {
+        "ngram_size": 3,
+        "heads_per_ngram": 8,
+        "embed_dim": 128,
+        "conv_kernel": 4,
+        "conv_dilation": 3
+      },
+      "hex": "18000000ffffff830008403000000000"
+    },
+    {
+      "family": "v3",
+      "name": "mtp_policy",
+      "args": [],
+      "kwargs": {
+        "layers": 1,
+        "prediction_steps": 1,
+        "hidden_size": 2048,
+        "vocab_size": 248320
+      },
+      "hex": "19000000ffffff0101000800ca030000"
+    },
+    {
+      "family": "v3",
+      "name": "kv_context32",
+      "args": [],
+      "kwargs": {
+        "sequence_id": 4294967295,
+        "layer_id": 4095,
+        "kv_head_id": 4095
+      },
+      "hex": "32000000ffffffffffffffffffff0000"
+    },
+    {
+      "family": "v3",
+      "name": "kv_range32",
+      "args": [],
+      "kwargs": {
+        "token_start": 4294967295,
+        "token_count": 4294967295
+      },
+      "hex": "33000000ffffffffffffffffffffff00"
+    },
+    {
+      "family": "v3",
+      "name": "kv_table",
+      "args": [],
+      "kwargs": {
+        "page_table_tensor_index": 16777214,
+        "physical_page_limit": 16777215
+      },
+      "hex": "34000000fffffffeffffffffffa00801"
+    },
+    {
+      "family": "v3",
+      "name": "kv_epoch32",
+      "args": [],
+      "kwargs": {
+        "generation": 4294967295,
+        "logical_page_count": 4294967295
+      },
+      "hex": "35000000ffffffffffffffffffffff00"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________________________ test_exp2_pwl_bounds _____________________________
+
+    def test_exp2_pwl_bounds():
+>       assert exp2_pwl_rtl(-17)==0 and exp2_pwl_rtl(0)==1
+E       assert (7.62939453125e-06 == 0)
+E        +  where 7.62939453125e-06 = exp2_pwl_rtl(-17)
+
+tests/test_control_v4.py:25: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_control_v4.py::test_exp2_pwl_bounds - assert (7.62939453125e-06 == 0)
+ +  where 7.62939453125e-06 = exp2_pwl_rtl(-17)
+1 failed in 0.11s

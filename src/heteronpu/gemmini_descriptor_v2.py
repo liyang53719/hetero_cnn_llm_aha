@@ -5,9 +5,10 @@ from dataclasses import dataclass
 from math import ceil
 from collections.abc import Mapping
 
+from .abi_validation import bit, enum_value, sint, uint
 from .command import Command128, Opcode
 from .descriptor_chain import (
-    DescriptorRecord, MatrixAux, NULL_INDEX, RecordType, validate_descriptor_chain,
+    DescriptorRecord, MatrixAux, NULL_INDEX, RecordType, TensorDType, validate_descriptor_chain,
 )
 from .gemmini_rocc_lowering import (
     ConvWsDescriptor, GemminiDataflow, Int8OsTilesDescriptor, LoopWsDescriptor,
@@ -53,11 +54,26 @@ class Conv2dView:
     groups: int
 
 
+def _fields(fields: tuple[tuple[str, int, int], ...]) -> int:
+    payload = shift = 0
+    for name, value, width in fields:
+        payload |= uint(value, width, name) << shift
+        shift += width
+    if shift != 72:
+        raise ValueError("descriptor payload layout is not 72 bits")
+    return payload
+
+
 def tensor_base_record(address: int, *, dtype: int = 1, layout: int = 0,
                        rank: int = 2, memory_space: int = 0,
                        next_index: int = NULL_INDEX) -> DescriptorRecord:
-    if not 0 <= address < (1 << 56):
-        raise ValueError("tensor address does not fit in 56 bits")
+    address = uint(address, 56, "tensor address")
+    memory_space = uint(memory_space, 4, "memory_space")
+    layout = uint(layout, 4, "layout")
+    rank = uint(rank, 4, "rank")
+    dtype = enum_value(dtype, TensorDType, "dtype")
+    if dtype == TensorDType.INVALID:
+        raise ValueError("tensor dtype must not be INVALID")
     payload = ((address & ((1 << 48) - 1)) | memory_space << 48 |
                dtype << 52 | layout << 56 | rank << 60 |
                (address >> 48) << 64)
@@ -65,17 +81,17 @@ def tensor_base_record(address: int, *, dtype: int = 1, layout: int = 0,
 
 
 def shape4_record(shape: tuple[int, ...], *, next_index: int = NULL_INDEX) -> DescriptorRecord:
-    dims = (*shape, 0, 0, 0, 0)[:4]
-    if any(not 0 <= dim < (1 << 18) for dim in dims):
-        raise ValueError("shape dimension does not fit in 18 bits")
+    if not isinstance(shape, (tuple, list)) or not 1 <= len(shape) <= 4:
+        raise ValueError("shape must have one to four dimensions; truncation is forbidden")
+    dims = tuple(uint(dim, 18, "shape dimension") for dim in shape) + (0,) * (4 - len(shape))
     payload = sum(dim << (18 * index) for index, dim in enumerate(dims))
     return DescriptorRecord(RecordType.SHAPE4, 0, 0, next_index, payload)
 
 
 def stride3_record(strides: tuple[int, ...], *, next_index: int = NULL_INDEX) -> DescriptorRecord:
-    values = (*strides, 0, 0)[:3]
-    if any(not -(1 << 23) <= value < (1 << 23) for value in values):
-        raise ValueError("stride does not fit in signed 24 bits")
+    if not isinstance(strides, (tuple, list)) or not 1 <= len(strides) <= 3:
+        raise ValueError("strides must contain one to three values; truncation is forbidden")
+    values = tuple(sint(v, 24, "stride") for v in strides) + (0,) * (3 - len(strides))
     payload = sum((value & 0xFFFFFF) << (24 * index) for index, value in enumerate(values))
     return DescriptorRecord(RecordType.STRIDE3, 0, 0, next_index, payload)
 
@@ -84,6 +100,11 @@ def matrix_op_record(*, m: int, n: int, k: int, dataflow: int,
                      transpose_a: bool = False, transpose_b: bool = False,
                      accumulate: bool = False, quant_mode: int = 0,
                      next_index: int = NULL_INDEX) -> DescriptorRecord:
+    m, n, k = uint(m, 16, "m"), uint(n, 16, "n"), uint(k, 24, "k")
+    dataflow = enum_value(dataflow, GemminiDataflow, "dataflow")
+    quant_mode = uint(quant_mode, 3, "quant_mode")
+    transpose_a, transpose_b, accumulate = (bit(transpose_a, "transpose_a"),
+        bit(transpose_b, "transpose_b"), bit(accumulate, "accumulate"))
     payload = (m | n << 16 | k << 32 | dataflow << 56 |
                int(transpose_a) << 58 | int(transpose_b) << 59 |
                int(accumulate) << 60 | quant_mode << 61)
@@ -93,9 +114,11 @@ def matrix_op_record(*, m: int, n: int, k: int, dataflow: int,
 def conv2d_record(*, kernel_h: int, kernel_w: int, stride_h: int, stride_w: int,
                   dilation_h: int, dilation_w: int, pad_top: int, pad_left: int,
                   groups: int, next_index: int = NULL_INDEX) -> DescriptorRecord:
-    payload = (kernel_h | kernel_w << 8 | stride_h << 16 | stride_w << 24 |
-               dilation_h << 32 | dilation_w << 40 | pad_top << 48 |
-               pad_left << 54 | groups << 60)
+    payload = _fields((
+        ("kernel_h", kernel_h, 8), ("kernel_w", kernel_w, 8),
+        ("stride_h", stride_h, 8), ("stride_w", stride_w, 8),
+        ("dilation_h", dilation_h, 8), ("dilation_w", dilation_w, 8),
+        ("pad_top", pad_top, 6), ("pad_left", pad_left, 6), ("groups", groups, 12)))
     return DescriptorRecord(RecordType.CONV2D, 0, 0, next_index, payload)
 
 
@@ -103,8 +126,10 @@ def quantization_record(*, scale_address: int, group_size_log2: int = 0,
                         rounding_mode: int = 0, saturation_mode: int = 0,
                         zero_point_bits: int = 0,
                         next_index: int = NULL_INDEX) -> DescriptorRecord:
-    payload = (scale_address | group_size_log2 << 48 | rounding_mode << 53 |
-               saturation_mode << 56 | zero_point_bits << 58)
+    payload = _fields((
+        ("scale_address", scale_address, 48), ("group_size_log2", group_size_log2, 5),
+        ("rounding_mode", rounding_mode, 3), ("saturation_mode", saturation_mode, 2),
+        ("zero_point_bits", zero_point_bits, 14)))
     return DescriptorRecord(RecordType.QUANTIZATION, 0, 0, next_index, payload)
 
 

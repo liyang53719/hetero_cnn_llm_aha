@@ -1,0 +1,29 @@
+{
+  "task": "C04.1",
+  "scope": "E0 existing ABI integer and byte contracts only",
+  "source_base_commit": "5ebe337c7c0c3770aeda9065d4fcd490a3f739d5",
+  "python": "3.13.5",
+  "normal": {
+    "passed": 370,
+    "deselected": 1
+  },
+  "optimized": {
+    "passed": 370,
+    "deselected": 1
+  },
+  "deselected_reason": "test_control_v4.py::test_exp2_pwl_bounds reproduced as preexisting failure on ba4b645; not modified or counted as PASS",
+  "legacy_vector_count": 65,
+  "source_files": {
+    "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+    "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+    "src/heteronpu/descriptor_chain.py": "6e5ae1a811a503d7309e737eae5b089eaab3dea6a2db19e3c2a5e12a5696821b",
+    "src/heteronpu/descriptor_v3.py": "ea26a8081b30e064d882d885b26269c1be6ef28c4957fe06baab1a80ed42d3f9",
+    "src/heteronpu/gemmini_descriptor_v2.py": "6802790c4aa91406a289f3da2990b35acba25f2a3a096ccb071ece12fbd0ac60",
+    "tests/test_abi_integer_contract.py": "b7baf65c938bfdd3a39e271d8c7cb7e8898d3419515f756f7baaad86266f6b29",
+    "tests/fixtures/block_contracts/abi_legacy_vectors.json": "9e2835862260b0fa4c65e61d1cea57324d730aa2a3fa67169026eeab6c1c1403"
+  },
+  "hardware_execution_verified": false,
+  "public_abi_changed": false,
+  "new_3bit_kind_codes": false,
+  "log_normalization": "Trailing whitespace removed only; test counts and diagnostics unchanged."
+}

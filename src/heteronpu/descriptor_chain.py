@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from collections.abc import Mapping
 from enum import IntEnum
 
+from .abi_validation import bit, enum_value, uint
+
 
 NULL_INDEX = 0xFF_FFFF
 MAX_RECORDS = 16
@@ -75,23 +77,22 @@ class DescriptorRecord:
             ("flags", self.flags, 16), ("next_index", self.next_index, 24),
             ("payload", self.payload, 72),
         ):
-            if not 0 <= value < (1 << bits):
-                raise ValueError(f"{name} does not fit in {bits} bits")
+            object.__setattr__(self, name, uint(value, bits, name))
         if self.subtype != 0 or self.flags != 0:
             raise ValueError("descriptor v2 common subtype and flags must be zero")
         try:
-            RecordType(self.record_type)
+            enum_value(self.record_type, RecordType, "record_type")
         except ValueError as exc:
             raise ValueError(f"unknown descriptor record type 0x{self.record_type:02x}") from exc
 
     def pack(self) -> int:
+        self.__post_init__()
         return (self.record_type | self.subtype << 8 | self.flags << 16 |
                 self.next_index << 32 | self.payload << 56)
 
     @classmethod
     def unpack(cls, word: int) -> "DescriptorRecord":
-        if not 0 <= word < (1 << 128):
-            raise ValueError("descriptor word must be unsigned 128-bit")
+        word = uint(word, 128, "descriptor word")
         return cls(record_type=word & 0xFF, subtype=(word >> 8) & 0xFF,
                    flags=(word >> 16) & 0xFFFF,
                    next_index=(word >> 32) & 0xFF_FFFF,
@@ -129,14 +130,17 @@ class MatrixAux:
             ("pad_bottom", self.pad_bottom, 6), ("pad_right", self.pad_right, 6),
             ("subarray_mask", self.subarray_mask, 8),
         ):
-            if not 0 <= int(value) < (1 << bits):
-                raise ValueError(f"{name} does not fit in {bits} bits")
+            object.__setattr__(self, name, uint(value, bits, name))
         if self.subarray_mask == 0:
             raise ValueError("matrix_aux subarray_mask must be nonzero")
-        if int(self.activation) not in {0, 1, 2}:
-            raise ValueError("matrix_aux activation is reserved")
+        object.__setattr__(self, "activation", enum_value(self.activation, MatrixActivation, "activation"))
+        for name in ("full_c", "low_d", "repeating_bias", "no_pool", "downsample",
+                     "input_dilated", "wrot180", "trans_output_1203", "trans_weight_1203",
+                     "trans_weight_0132", "trans_input_3120", "depthwise"):
+            object.__setattr__(self, name, bit(getattr(self, name), name))
 
     def payload(self) -> int:
+        self.__post_init__()
         booleans = (
             self.full_c, self.low_d, self.repeating_bias, self.no_pool,
             self.downsample, self.input_dilated, self.wrot180,
@@ -194,14 +198,15 @@ class SfuProgram:
         for name, value, bits in (
             ("program_id", self.program_id, 16), ("input_count", self.input_count, 8),
             ("output_count", self.output_count, 8),
-            ("input_dtype", int(self.input_dtype), 4),
-            ("output_dtype", int(self.output_dtype), 4),
+            ("input_dtype", self.input_dtype, 4),
+            ("output_dtype", self.output_dtype, 4),
             ("lane_width_bits", self.lane_width_bits, 8),
             ("vector_lanes", self.vector_lanes, 8),
             ("program_flags", self.program_flags, 8),
         ):
-            if not 0 <= int(value) < (1 << bits):
-                raise ValueError(f"{name} does not fit in {bits} bits")
+            object.__setattr__(self, name, uint(value, bits, name))
+        for name in ("input_dtype", "output_dtype"):
+            object.__setattr__(self, name, enum_value(getattr(self, name), TensorDType, name))
         if self.input_count not in {1, 2}:
             raise ValueError("SFU input_count must be one or two")
         if self.output_count != 1:
@@ -210,6 +215,7 @@ class SfuProgram:
             raise ValueError("SFU dtype must not be invalid")
 
     def payload(self) -> int:
+        self.__post_init__()
         return (self.program_id | self.input_count << 16 | self.output_count << 24 |
                 int(self.input_dtype) << 32 | int(self.output_dtype) << 36 |
                 self.lane_width_bits << 40 | self.vector_lanes << 48 |
@@ -252,12 +258,14 @@ class DmaPolicy:
             ("max_outstanding", self.max_outstanding, 8),
             ("read_qos", self.read_qos, 4), ("write_qos", self.write_qos, 4),
         ):
-            if not 0 <= int(value) < (1 << bits):
-                raise ValueError(f"{name} does not fit in {bits} bits")
+            object.__setattr__(self, name, uint(value, bits, name))
+        for name in ("allow_unaligned", "coalesce", "ordered"):
+            object.__setattr__(self, name, bit(getattr(self, name), name))
         if self.max_burst_beats == 0 or self.max_outstanding == 0:
             raise ValueError("DMA burst and outstanding values must be nonzero")
 
     def payload(self) -> int:
+        self.__post_init__()
         return (self.max_burst_beats | self.max_outstanding << 8 |
                 self.read_qos << 16 | self.write_qos << 20 |
                 int(self.allow_unaligned) << 24 | int(self.coalesce) << 25 |
@@ -283,12 +291,16 @@ class EventList4:
     events: tuple[int, ...]
 
     def __post_init__(self) -> None:
+        if not isinstance(self.events, (tuple, list)):
+            raise ValueError("events must be a tuple/list of integer IDs")
         if not 1 <= len(self.events) <= 4:
             raise ValueError("event_list4 contains one to four events")
-        if any(not 1 <= int(event) < (1 << 16) for event in self.events):
+        object.__setattr__(self, "events", tuple(uint(x, 16, "event") for x in self.events))
+        if any(event == 0 for event in self.events):
             raise ValueError("barrier event IDs must be nonzero 16-bit values")
 
     def payload(self) -> int:
+        self.__post_init__()
         value = len(self.events)
         for offset, event in enumerate(self.events):
             value |= int(event) << (4 + offset * 16)
@@ -318,8 +330,15 @@ def validate_descriptor_chain(
 ) -> tuple[tuple[int, DescriptorRecord], ...]:
     """Return a validated chain or reject before any engine command is issued."""
 
-    if not 0 <= first_index <= NULL_INDEX:
-        raise DescriptorChainError("first descriptor index does not fit in 24 bits")
+    try:
+        first_index = uint(first_index, 24, "first descriptor index")
+        allow_null_first = bit(allow_null_first, "allow_null_first")
+        if not isinstance(records, Mapping):
+            raise ValueError("records must be a mapping")
+        for key in records:
+            uint(key, 24, "descriptor table key")
+    except ValueError as exc:
+        raise DescriptorChainError(str(exc)) from exc
     if first_index == NULL_INDEX:
         if allow_null_first:
             return ()
@@ -336,7 +355,11 @@ def validate_descriptor_chain(
         if index not in records:
             raise DescriptorChainError(f"descriptor record 0x{index:06x} is missing")
         value = records[index]
-        record = value if isinstance(value, DescriptorRecord) else DescriptorRecord.unpack(value)
+        try:
+            record = value if isinstance(value, DescriptorRecord) else DescriptorRecord.unpack(value)
+            record.__post_init__()
+        except ValueError as exc:
+            raise DescriptorChainError(f"invalid descriptor at {index}: {exc}") from exc
         visited.add(index)
         result.append((index, record))
         index = record.next_index

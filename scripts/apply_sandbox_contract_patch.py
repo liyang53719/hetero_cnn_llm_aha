@@ -36,7 +36,20 @@ def apply(bundle: Path) -> str:
         if not re.fullmatch(r"[0-9a-f]{64}", entry["after"]):
             raise ValueError("invalid postimage digest")
     decoder = zlib.decompressobj()
-    patch = decoder.decompress(base64.b64decode(data["patch_zlib_base64"], validate=True), 16_000_001)
+    encoded = data.get("patch_zlib_base64")
+    if encoded is None:
+        pieces = []
+        for item in data["patch_parts"]:
+            part = Path(item["path"])
+            if (not str(part).startswith("reports/execution/BLOCK_CONTRACTS_20260917/transport/")
+                    or ".." in part.parts or part.is_symlink()):
+                raise ValueError("invalid transport part")
+            raw = part.read_bytes()
+            if hashlib.sha256(raw).hexdigest() != item["sha256"]:
+                raise ValueError("transport part digest mismatch")
+            pieces.append(raw.decode("ascii").strip())
+        encoded = "".join(pieces)
+    patch = decoder.decompress(base64.b64decode(encoded, validate=True), 16_000_001)
     if len(patch) > 16_000_000 or not decoder.eof or decoder.unused_data:
         raise ValueError("invalid or oversized patch")
     subprocess.run(["git", "diff", "--cached", "--exit-code"], check=True)

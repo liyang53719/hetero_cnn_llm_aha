@@ -70,13 +70,18 @@ class OverlappedSiluOwner extends Module {
     val r=io.response.bits
     when(r.error){fail(Status.Memory.U)}
       .elsewhen(r.tag=/=request.tag){fail(Status.Protocol.U)}
-      .elsewhen(!poisoned){
-        when(requestKind===0.U){gate:=r.data.asTypeOf(gate);gateValid:=true.B}
-        when(requestKind===1.U){
-          assert(input.io.enq.ready,"reserved SiLU input queue entry lost")
-          input.io.enq.valid:=true.B;fetched:=fetched+16.U;gateValid:=false.B
-        }
+      .otherwise{
+        // Successful stores are physical side effects, even if a concurrent
+        // numerical error poisoned the owner while this request was in flight.
+        // Account their ACKs without publishing a successful tensor/result.
         when(requestKind===2.U){bytes:=bytes+64.U;stored:=stored+16.U}
+        when(!poisoned){
+          when(requestKind===0.U){gate:=r.data.asTypeOf(gate);gateValid:=true.B}
+          when(requestKind===1.U){
+            assert(input.io.enq.ready,"reserved SiLU input queue entry lost")
+            input.io.enq.valid:=true.B;fetched:=fetched+16.U;gateValid:=false.B
+          }
+        }
       }
   }
   when(state===active){

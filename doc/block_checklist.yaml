@@ -1,0 +1,191 @@
+版本: 1
+仓库: liyang53719/hetero_cnn_llm_aha
+计划: doc/three_model_typical_block_closure_20260917_zh.yaml
+计划SHA256: 0970da1a5326410375a6aeed9f6b0c045900cf2b690806522bdfe81d8cfb41ef
+设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
+状态集合:
+- to do
+- ongoing
+- done
+说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。
+任务:
+- 编号: C00
+  名称: 重建最新源码与证据基线
+  状态: ongoing
+  子项:
+  - 编号: C00.1
+    名称: 核对当前可用归档和关键源字节
+    状态: ongoing
+    执行侧: sandbox
+    负责人: sandbox
+    前置: []
+    先行依据: 归档/源身份检查不依赖官方权重或本地长仿真
+    完成边界: 只验证所列文件与归档来源；不冒称完整clone、完整RTL再生成或整机资源验收
+    证据: []
+  - 编号: C00.2
+    名称: 完整工作区工具与硬件资源基线
+    状态: to do
+    执行侧: local-agent
+    负责人: ''
+    前置:
+    - C00.1
+    先行依据: ''
+    完成边界: 完成C00剩余filelist/工具/SRAM账本与当前DUT来源检查
+    证据: []
+- 编号: C01
+  名称: 冻结三模型真实forward和层索引合同
+  状态: ongoing
+  子项:
+  - 编号: C01.1
+    名称: 现有模型合同入口fail-closed校验
+    状态: ongoing
+    执行侧: sandbox
+    负责人: sandbox
+    前置: []
+    先行依据: 仅加固已存在配置读取入口，不改变冻结model/revision或官方语义
+    完成边界: 修复python -O绕过及未知family回退；基于仓库冻结profile，不宣称官方forward复核完成
+    证据: []
+  - 编号: C01.2
+    名称: 固定官方revision、forward、权重index和层索引复核
+    状态: to do
+    执行侧: local-agent
+    负责人: ''
+    前置:
+    - C00
+    - C01.1
+    先行依据: ''
+    完成边界: 包括PLE一基/零基、Norm参数和gate语义，缺固定来源不可标done
+    证据: []
+- {编号: C02, 名称: 建立双参考和可执行精度合同, 状态: to do}
+- 编号: C03
+  名称: 解耦模型几何与矩阵tile
+  状态: to do
+  子项:
+  - 编号: C03.1
+    名称: 编译器派生几何和状态容量合同
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C01.1
+    先行依据: 仓库profile已可本地读取；仅E0输入合法性/预算，可在官方复核前先完成
+    完成边界: 从现有profile导出hidden/Q/KV/GDN宽度和合法维度；不替代Chisel数据通路解耦
+    证据: []
+  - 编号: C03.2
+    名称: 实际Chisel shape/layout/frontend解耦及回归
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C01
+    - C03.1
+    先行依据: ''
+    完成边界: 完成C03的真实top shape、地址、query/KV长度与旧Q2数值回归
+    证据: []
+- {编号: C04, 名称: 统一typed tensor与多输入policy ABI, 状态: to do}
+- {编号: C05, 名称: 将root微程序接到真实数据owner, 状态: to do}
+- {编号: C06, 名称: 超64命令与有限tensor存活集合, 状态: to do}
+- {编号: C07, 名称: 有界片上状态tile与事务提交, 状态: to do}
+- {编号: C08, 名称: 建立完整block公共测试与回执校验器, 状态: to do}
+- {编号: Q20, 名称: 重跑当前Qwen2双层主链保护基线, 状态: to do}
+- {编号: Q21, 名称: 官方Qwen2 block权重与输入导出, 状态: to do}
+- {编号: Q22, 名称: Qwen2官方语义与批准混合精度闭环, 状态: to do}
+- {编号: Q23, 名称: Qwen2官方完整block长度扩展, 状态: to do}
+- {编号: S00, 名称: 通用Norm与非线性数值owner, 状态: to do}
+- {编号: S01, 名称: 有前缀GQA与partial MRoPE执行路径, 状态: to do}
+- {编号: Q24, 名称: Qwen2真实状态续算与官方双层, 状态: to do}
+- {编号: S02, 名称: GDN因果深度卷积真实数据与history, 状态: to do}
+- {编号: S03, 名称: GDN单token矩阵状态递推, 状态: to do}
+- {编号: S04, 名称: GDN prefill先正确递推再验chunk模式, 状态: to do}
+- {编号: S05, 名称: MoE router与实际token路由, 状态: to do}
+- {编号: S06, 名称: routed与shared expert完整执行及加权合并, 状态: to do}
+- {编号: Q35A, 名称: Qwen35完整Attention分支接入, 状态: to do}
+- {编号: Q35B, 名称: Qwen35完整GDN分支接入, 状态: to do}
+- {编号: Q35C, 名称: Qwen35官方Attention加MoE完整block, 状态: to do}
+- {编号: Q35D, 名称: Qwen35官方GDN加MoE完整block, 状态: to do}
+- {编号: Q35E, 名称: Qwen35真实3GDN加1Attention周期组, 状态: to do}
+- {编号: Q38A, 名称: 四分支gated residual真实读写, 状态: to do}
+- {编号: Q38B, 名称: Qwen38 GDN几何与gate模式复用, 状态: to do}
+- {编号: Q38C, 名称: QSA index/summary及真正Top512, 状态: to do}
+- {编号: Q38D, 名称: QSA稀疏KV gather和Attention数值, 状态: to do}
+- {编号: Q38E, 名称: PLE ngram与稀疏行表及dilated conv, 状态: to do}
+- {编号: Q38M, 名称: Qwen38 512选10 MoE真实几何, 状态: to do}
+- {编号: Q38F, 名称: Qwen38官方hyper-GDN-MoE完整block, 状态: to do}
+- {编号: Q38G, 名称: Qwen38官方hyper-QSA-MoE完整block, 状态: to do}
+- {编号: Q38H, 名称: Qwen38官方PLE所在完整block, 状态: to do}
+- {编号: Q38I, 名称: Qwen38含PLE与QSA四层周期组, 状态: to do}
+- 编号: P00
+  名称: 先建立可达性能上界和实际周期账本
+  状态: ongoing
+  子项:
+  - 编号: P00.1
+    名称: 归档原始计数复算与带宽上界检查器
+    状态: ongoing
+    执行侧: sandbox
+    负责人: sandbox
+    前置: []
+    先行依据: 归档summary已可核对；无需Q20新长仿真即可编写和测试收集器
+    完成边界: 归档counter算术及非法回执拒绝；不是当前HEAD RTL测量
+    证据: []
+  - 编号: P00.2
+    名称: 当前DUT事件计数与互斥周期桶闭合
+    状态: to do
+    执行侧: local-agent
+    负责人: ''
+    前置:
+    - C08
+    - Q20
+    - P00.1
+    先行依据: ''
+    完成边界: 完成P00剩余全请求、DDR/L2、实际事件绑定和新回执采集
+    证据: []
+- 编号: P01
+  名称: SiLU重叠Host集成A/B
+  状态: ongoing
+  子项:
+  - 编号: P01.1
+    名称: 已归档SiLU组件修复与数值/异常门禁
+    状态: done
+    执行侧: sandbox
+    负责人: previous-sandbox
+    前置: []
+    先行依据: 继承已经发布的组件完成证据，不要求本地agent重写或重复组件开发
+    完成边界: 仅旧组件4/4测试、30正常/6故障/7拒绝；不替代Host和iDMA完整A/B
+    证据:
+    - 文件: reports/execution/SILU_OWNER_OVERLAP_20260917/tests.log
+      SHA256: c5230290a826b4ea22415b6d387b367e674a669419d2aa0b6dd06fbfd258384d
+      设计提交: 8eff31b9083b2872f047bc70781c605229742f26
+      范围: 归档组件Verilator日志；本轮只复核字节，不声称重跑
+  - 编号: P01.2
+    名称: 完整Host与实际iDMA双层及官方A/B
+    状态: to do
+    执行侧: local-agent
+    负责人: ''
+    前置:
+    - Q20
+    - P00
+    - P01.1
+    先行依据: ''
+    完成边界: 按P01验收；默认仍关闭，不用组件1.705倍替代整请求收益
+    证据: []
+- {编号: P02, 名称: Dense权重跨token复用及64beat批处理, 状态: to do}
+- {编号: P03, 名称: Attention与GDN调度性能优化, 状态: to do}
+- {编号: P04, 名称: 当前完整top的SRAM和800MHz实现检查, 状态: to do}
+- {编号: R00, 名称: 六类典型block集中发布, 状态: to do}
+- {编号: F00, 名称: 典型block之后接完整模型与llama backend, 状态: to do}
+- {编号: F01, 名称: MTP状态分支与视觉多模态独立验收, 状态: to do}
+默认执行侧: sandbox
+本地事项:
+- Q20
+- Q23
+- Q24
+- Q35C
+- Q35D
+- Q35E
+- Q38F
+- Q38G
+- Q38H
+- Q38I
+- P04
+- F00
+- F01

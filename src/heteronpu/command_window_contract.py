@@ -167,7 +167,7 @@ class WindowMachine:
         raise ControlError(message)
 
     def accept_window(self, epoch: int, start: int, end: int) -> None:
-        if self.window_request() != (epoch, start, end):
+        if any(type(x) is not int for x in (epoch, start, end)) or self.window_request() != (epoch, start, end):
             self._lock('stale/malformed window')
         self.loaded_end = end
         self.trace.append(('window', start, end))
@@ -195,7 +195,7 @@ class WindowMachine:
         return None
 
     def acknowledge(self, epoch: int, pc: int, write_bytes: int, error: bool = False) -> None:
-        if self.state != 'wait_ack' or epoch != self.epoch or pc != self.pc:
+        if type(epoch) is not int or type(pc) is not int or self.state != 'wait_ack' or epoch != self.epoch or pc != self.pc:
             self._lock('unexpected/stale/duplicate ACK')
         if type(error) is not bool or error or type(write_bytes) is not int or write_bytes != self.held.size:
             self._lock('failed/incomplete write ACK')

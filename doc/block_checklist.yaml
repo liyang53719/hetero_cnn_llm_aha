@@ -126,7 +126,7 @@
   子项:
   - 编号: C04.1
     名称: 现有Command128与descriptor整数边界及字节合同加固
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@contracts-20260917
     前置:
@@ -134,7 +134,30 @@
     - C06.1
     先行依据: 现有公共128bit编码已在仓库；严格类型、范围和旧合法字节不变可用纯软件验证，不依赖官方权重或新RTL。
     完成边界: 拒绝bool/float/负数/越界及非法枚举后再编码；覆盖56bit地址和descriptor链；合法旧字段和字节保持兼容；不擅自扩展3bit kind或改变公共ABI。
-    证据: []
+    证据:
+    - 文件: reports/execution/BLOCK_CONTRACTS_20260917/C04_result.json
+      SHA256: eb8884e34a8897a17aee4f471f66e0eb8e30be5ddd402c840e7b6a2e1d1cf5b1
+      设计提交: 06e8ecafa47d952c604699228b20c46e28ca1b75
+      范围: E0 existing ABI integer and byte contracts only
+      关联文件:
+      - 文件: src/heteronpu/abi_validation.py
+        SHA256: a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590
+      - 文件: src/heteronpu/command.py
+        SHA256: 7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b
+      - 文件: src/heteronpu/descriptor_chain.py
+        SHA256: 6e5ae1a811a503d7309e737eae5b089eaab3dea6a2db19e3c2a5e12a5696821b
+      - 文件: src/heteronpu/descriptor_v3.py
+        SHA256: ea26a8081b30e064d882d885b26269c1be6ef28c4957fe06baab1a80ed42d3f9
+      - 文件: src/heteronpu/gemmini_descriptor_v2.py
+        SHA256: 6802790c4aa91406a289f3da2990b35acba25f2a3a096ccb071ece12fbd0ac60
+      - 文件: tests/test_abi_integer_contract.py
+        SHA256: b7baf65c938bfdd3a39e271d8c7cb7e8898d3419515f756f7baaad86266f6b29
+      - 文件: tests/fixtures/block_contracts/abi_legacy_vectors.json
+        SHA256: 9e2835862260b0fa4c65e61d1cea57324d730aa2a3fa67169026eeab6c1c1403
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260917/C04_normal.log
+        SHA256: ee09a31b3728f6d02a75c2a55534067057e3f9ae624d8ff257e521e5114966c5
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260917/C04_optimized.log
+        SHA256: c70d83afe40257213b62aeaeb80f45a0cbb6dde81abab12ee88044fe0a8f5de9
   - 编号: C04.2
     名称: typed tensor与多输入policy完整Host到RTL接入
     状态: to do
@@ -424,3 +447,9 @@
   执行者: sandbox@contracts-20260917
   时间: '2026-09-17T09:10:19.030205+00:00'
   说明: 用户指定按C04.1→C02.1→C07.1独立推进；先认领防止本地重复，不升级父项或硬件验收。
+- 编号: C04.1
+  从: ongoing
+  到: done
+  执行者: sandbox@contracts-20260917
+  时间: '2026-09-17T09:33:02.846831+00:00'
+  说明: 沙箱普通与-O回归通过；仅关闭该软件合同子项，父项及硬件验收不变

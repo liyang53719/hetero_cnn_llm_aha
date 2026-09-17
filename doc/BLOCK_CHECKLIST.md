@@ -17,7 +17,7 @@
 | C03.1 | P0 | 编译器派生几何和状态容量合同 | done |
 | C03.2 | P0 | 实际Chisel shape/layout/frontend解耦及回归 | to do |
 | C04 | P0 | 统一typed tensor与多输入policy ABI | ongoing |
-| C04.1 | P0 | 现有Command128与descriptor整数边界及字节合同加固 | ongoing |
+| C04.1 | P0 | 现有Command128与descriptor整数边界及字节合同加固 | done |
 | C04.2 | P0 | typed tensor与多输入policy完整Host到RTL接入 | to do |
 | C05 | P0 | 将root微程序接到真实数据owner | to do |
 | C06 | P0 | 超64命令与有限tensor存活集合 | ongoing |

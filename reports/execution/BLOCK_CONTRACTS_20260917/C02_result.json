@@ -1,0 +1,30 @@
+{
+  "task": "C02.1",
+  "scope": "E0 formula registration and whole-file comparator only; C08.1 receipt v1 remains bit-exact",
+  "source_base_commit": "06e8ecafa47d952c604699228b20c46e28ca1b75",
+  "python": "3.13.5",
+  "normal": {
+    "passed": 90
+  },
+  "optimized": {
+    "passed": 90
+  },
+  "registered_formulas": [
+    "bit_exact",
+    "abs_rel_elementwise_v1"
+  ],
+  "default_tolerance": null,
+  "threshold_0_002_interpreted": false,
+  "full_stream_boundary_checked": true,
+  "official_model_accepted": false,
+  "hardware_execution_verified": false,
+  "source_files": {
+    "src/heteronpu/precision_comparison.py": "30fc8c3703b02b34f17e64ccda93ea4214bc6517bafb0cd0ceed725d3a7f4797",
+    "tests/test_precision_comparison.py": "41f6c4e842df0a46d80c4b1cd4a563f3d2e8236fa123dbdf9da2208562f6ccc1",
+    "src/heteronpu/block_receipt.py": "5b028ae777d16e18a69f58eb2c4ae7ea1703558cdc7b1042e01694d3e5237105",
+    "src/heteronpu/precision_policy.py": "0c40ebc8299390f9b7bf70bac2e3d2865c8fed181aabf181b5016a5b5285c54b"
+  },
+  "source_trust": "Caller must independently pin an authoritative source SHA. Synthetic source contracts do not become official acceptance.",
+  "coverage": "C08.1 inventory/completions unchanged, new comparator covers every element; it does not enable approximate receipt acceptance",
+  "log_normalization": "Trailing whitespace removed only"
+}

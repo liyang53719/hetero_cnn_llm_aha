@@ -18,8 +18,9 @@ class QwenOwnerResult extends Bundle {
 /** No block launch is exposed. One decoded owner operation per transaction;
   * the arithmetic implementation must return instead of advancing to a phase.
   */
-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false) extends Module {
+class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false) extends Module {
   require(!burstWrites || pipelined)
+  require(!overlapSilu || pipelined, "overlapped SiLU requires the pipelined owner path")
   val io=IO(new Bundle {
     val job=Flipped(Decoupled(new QwenOwnerJob)); val done=Decoupled(new QwenOwnerResult)
     val memory=Decoupled(new MemoryRequest); val response=Flipped(Decoupled(new MemoryResponse))
@@ -48,7 +49,7 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true))
     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
     val dense=Module(new StreamingDenseOwner(s.maxRow,burstWrites=burstWrites))
-    val silu=Module(new VectorSiluOwner)
+    val silu=Module(new ScheduledSiluOwner(overlapSilu))
     val matrix=Module(new MatrixPipelineService)
     val legacy=Module(new LegacyMatrixStreamClient)
     legacy.io.request<>core.io.matrixRequest.get;core.io.matrixResult.get<>legacy.io.result

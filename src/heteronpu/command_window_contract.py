@@ -6,6 +6,8 @@ never at a fetch-window boundary. The emitter/RTL integration is C06.2.
 """
 from __future__ import annotations
 from dataclasses import dataclass
+from collections.abc import Mapping
+from types import MappingProxyType
 
 
 class ControlError(ValueError):
@@ -58,9 +60,14 @@ class Program:
 @dataclass(frozen=True)
 class Compiled:
     program: Program
-    last_use: dict[str, int]
+    last_use: Mapping[str, int]
     peak_live: int
     windows: tuple[tuple[int, int], ...]
+
+    def __post_init__(self) -> None:
+        need(isinstance(self.last_use, Mapping), 'last_use mapping required')
+        # frozen=True alone does not freeze an embedded dict or its aliases.
+        object.__setattr__(self, 'last_use', MappingProxyType(dict(self.last_use)))
 
 
 def compile_program(program: Program) -> Compiled:
@@ -126,7 +133,15 @@ class WindowMachine:
     """
     def __init__(self, compiled: Compiled):
         need(isinstance(compiled, Compiled), 'compiled program required')
-        self.spec = compiled
+        checked = compile_program(compiled.program)
+        need(compiled.last_use == checked.last_use and compiled.peak_live == checked.peak_live
+             and compiled.windows == checked.windows and type(compiled.peak_live) is int
+             and all(type(v) is int for v in compiled.last_use.values())
+             and isinstance(compiled.windows, tuple)
+             and all(isinstance(w, tuple) and len(w) == 2
+                     and all(type(v) is int for v in w) for w in compiled.windows),
+             'compiled metadata drift')
+        self.spec = checked
         self.epoch = 0
         self.state = 'idle'
         self.pc = 0

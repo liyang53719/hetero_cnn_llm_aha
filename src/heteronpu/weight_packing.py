@@ -35,6 +35,13 @@ def digest(path: Path) -> str:
     return h.hexdigest()
 
 
+def file_stamp(path: Path) -> tuple[int, ...]:
+    """Observe path and target identity; not a filesystem snapshot or lock."""
+    link, target = path.lstat(), path.stat()
+    return tuple(v for st in (link, target) for v in
+                 (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns))
+
+
 @dataclass(frozen=True)
 class PackContract:
     source_rows: int
@@ -107,6 +114,7 @@ def _chunks(payload: Path, layout: dict, c: PackContract) -> list[dict]:
 def pack_file(source: Path, output: Path, contract: PackContract) -> dict:
     layout=contract.layout()
     need(not output.exists() and not output.is_symlink(), 'output must be a new directory')
+    source_stamp=file_stamp(source)
     raw=_source(source,contract,layout)
     before=digest(source)
     # Validate all source words before creating any apparently deliverable file.
@@ -125,7 +133,7 @@ def pack_file(source: Path, output: Path, contract: PackContract) -> dict:
                 for row in range(r1-r0):
                     f.seek(((r0+row)*pn+c0)*2)
                     f.write(tile[row].tobytes())
-    need(digest(source)==before, 'source changed during packing; partial directory preserved')
+    need(digest(source)==before and file_stamp(source)==source_stamp, 'source changed during packing; partial directory preserved')
     manifest=dict(schema=1,format='row_major_kn_bf16le',contract=asdict(contract),**layout,
                   source_sha256=before,payload_sha256=digest(payload),chunks=_chunks(payload,layout,contract),
                   rounding='RNE_finite_preserve_subnormal_reject_overflow',descriptor_patched=False)
@@ -159,6 +167,8 @@ def verify_package(source: Path, output: Path, expected: PackContract) -> dict:
         return result
     manifest_path=output/'manifest.json';payload=output/'weights.bf16le'
     need(not manifest_path.is_symlink() and not payload.is_symlink(),'symlink package member')
+    snapshots={p:file_stamp(p) for p in (source,manifest_path,payload)}
+    manifest_before=digest(manifest_path)
     m=json.loads(manifest_path.read_text(),object_pairs_hook=unique)
     fields={'schema','format','contract',*layout,'source_sha256','payload_sha256','chunks','rounding','descriptor_patched'}
     need(isinstance(m,dict) and set(m)==fields, 'manifest fields')
@@ -183,6 +193,9 @@ def verify_package(source: Path, output: Path, expected: PackContract) -> dict:
             checked+=(r1-r0)*(c1-c0)
         need(not np.any(packed[r0:r1,n:]!=0),'nonzero padding')
     need(digest(source)==before and digest(payload)==m['payload_sha256'],'file changed during readback')
+    need(digest(manifest_path)==manifest_before,'manifest changed during readback')
+    for p,stamp in snapshots.items():
+        need(file_stamp(p)==stamp,'artifact changed during readback: '+str(p))
     return dict(status='PASS_WEIGHT_PACK_READBACK',elements=checked,padding_elements=k*(layout['storage_kn'][1]-n),
                 payload_sha256=m['payload_sha256'],source_sha256=before,
                 official_weights_verified=False,rtl_execution=False,**layout)

@@ -53,6 +53,13 @@ def sha_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def file_stamp(path: Path) -> tuple[int, ...]:
+    """Observe path and target identity; not a filesystem snapshot or lock."""
+    link, target = path.lstat(), path.stat()
+    return tuple(v for st in (link, target) for v in
+                 (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns))
+
+
 def safe_file(root: Path, name: str) -> Path:
     need(isinstance(name, str) and name and '\\' not in name, 'invalid relative path')
     rel = Path(name)
@@ -164,7 +171,9 @@ def compare_files(actual: Path, reference: Path, dtype: str, size: int) -> dict:
 
 def verify(spec_path: Path, receipt_path: Path, root: Path) -> dict:
     # Contract must be frozen independently; receipt path is not an authority.
+    snapshots = {p: file_stamp(p) for p in (spec_path, receipt_path)}
     before = sha_file(spec_path)
+    receipt_before = sha_file(receipt_path)
     spec = read_json(spec_path)
     tensors = validate_manifest(spec)
     receipt = read_json(receipt_path)
@@ -202,6 +211,8 @@ def verify(spec_path: Path, receipt_path: Path, root: Path) -> dict:
     # No alias via path spelling, symlink or hardlink, even across different IDs.
     actual_paths = {n: safe_file(root, x['file']) for n, x in exports.items()}
     ref_paths = {n: safe_file(root, t['reference']) for n, t in tensors.items()}
+    for p in [*actual_paths.values(), *ref_paths.values()]:
+        snapshots.setdefault(p, file_stamp(p))
     def inode(p: Path) -> tuple[int, int]:
         st = p.stat(); return st.st_dev, st.st_ino
     ai = [inode(p) for p in actual_paths.values()]
@@ -214,7 +225,16 @@ def verify(spec_path: Path, receipt_path: Path, root: Path) -> dict:
         need(result['actual_sha256'] == exports[name]['sha256'], 'actual bytes/hash mismatch')
         need(result['different_elements'] == 0, f'numerical mismatch: {name} first={result["first_difference"]}')
         results[name] = result
+    # Recheck early exports after later exports: per-file hashes alone leave
+    # already-compared tensors and the receipt open to concurrent replacement.
+    for name, result in results.items():
+        need(sha_file(actual_paths[name]) == result['actual_sha256']
+             and sha_file(ref_paths[name]) == result['reference_sha256'],
+             'tensor bytes changed during verification: ' + name)
     need(sha_file(spec_path) == before, 'manifest changed during verification')
+    need(sha_file(receipt_path) == receipt_before, 'receipt changed during verification')
+    for p, stamp in snapshots.items():
+        need(file_stamp(p) == stamp, 'artifact changed during verification: ' + str(p))
     return {'status': 'PASS_FULL_EXPORT_CONTRACT', 'manifest_sha256': before,
             'tensor_count': sum(t['role'] == 'tensor' for t in tensors.values()),
             'state_count': sum(t['role'] == 'state' for t in tensors.values()),

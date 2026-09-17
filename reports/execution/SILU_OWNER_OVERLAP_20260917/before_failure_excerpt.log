@@ -1,0 +1,8 @@
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=numerical-late-store acknowledged_bytes=64 reported_bytes=0 late_ack=true
+[31m- should preserve numeric bits, memory ordering, and acknowledged completion *** FAILED ***[0m
+[31m  In step 9525: io_done_bits_writeBytes=0 (0x0) did not equal expected=64 (0x40) at (ScheduledSiluOwnerSpec.scala:157) (ScheduledSiluOwnerSpec.scala:157)[0m
+[36mRun completed in 28 seconds, 418 milliseconds.[0m
+[36mTotal number of tests run: 2[0m
+[36mSuites: completed 1, aborted 0[0m
+[36mTests: succeeded 1, failed 1, canceled 0, ignored 0, pending 0[0m
+[31m*** 1 TEST FAILED ***[0m

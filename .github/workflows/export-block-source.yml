@@ -28,6 +28,7 @@ jobs:
             .github/workflows
             reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917
             reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917
+            reports/execution/BLOCK_CONTRACTS_20260917
             reports/execution/REAL16_TWO_LAYER_9f06249ca11f
             reports/execution/MATRIX4096_REAL2_d3571eecf96f
             reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2
@@ -41,8 +42,8 @@ jobs:
           git ls-tree -r HEAD -- reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 reports/execution/PRODUCTION_PIPELINE_REAL2_a3cb4a7307a6 > baseline_tree.txt
           git archive HEAD reports/execution/REAL16_TWO_LAYER_9f06249ca11f reports/execution/MATRIX4096_REAL2_d3571eecf96f reports/execution/WEIGHT_BURST_REAL2_cc2f9424daf2 reports/execution/PRODUCTION_PIPELINE_REAL2_a3cb4a7307a6 | gzip > numerical_baselines.tar.gz
           # Source transport only. Acceptance tests run separately in the sandbox.
-          git ls-tree -r HEAD -- src/heteronpu tests scripts doc config configs pyproject.toml reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917 reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917 > sandbox_python_tree.txt
-          git archive HEAD src/heteronpu tests scripts doc config configs pyproject.toml reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917 reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917 | gzip -n > sandbox_python_source.tar.gz
+          git ls-tree -r HEAD -- src/heteronpu tests scripts doc config configs pyproject.toml reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917 reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917 reports/execution/BLOCK_CONTRACTS_20260917 > sandbox_python_tree.txt
+          git archive HEAD src/heteronpu tests scripts doc config configs pyproject.toml reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917 reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917 reports/execution/BLOCK_CONTRACTS_20260917 | gzip -n > sandbox_python_source.tar.gz
           sha256sum current_block_source.tar.gz numerical_baselines.tar.gz source_tree.txt baseline_tree.txt sandbox_python_source.tar.gz sandbox_python_tree.txt > current_block_source.sha256
       - uses: actions/upload-artifact@v4
         with:

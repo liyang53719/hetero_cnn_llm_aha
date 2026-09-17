@@ -65,7 +65,31 @@
     先行依据: ''
     完成边界: 包括PLE一基/零基、Norm参数和gate语义，缺固定来源不可标done
     证据: []
-- {编号: C02, 名称: 建立双参考和可执行精度合同, 状态: to do}
+- 编号: C02
+  名称: 建立双参考和可执行精度合同
+  状态: to do
+  子项:
+  - 编号: C02.1
+    名称: 精度比较器公式注册与缺失合同拒绝测试
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C08.1
+    先行依据: 只开发公式注册和全量统计机制，可用合成数组独立验证；官方公式及阈值仍由C02.2冻结，不跳过C01。
+    完成边界: 复用block_receipt和precision_policy，未注册公式/缺来源/离散路由近似比较必须拒绝；NaN、零参考、边界和全量覆盖测试；不得自行解释0.002或放宽bit-exact。
+    证据: []
+  - 编号: C02.2
+    名称: 官方双参考与每producer精度合同完整冻结
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C01
+    - C02.1
+    先行依据: ''
+    完成边界: 完成C02原plan全部官方双参考、原0.002公式来源、存储/计算/累加顺序和全量精度合同门禁；缺来源不可done。
+    证据: []
 - 编号: C03
   名称: 解耦模型几何与矩阵tile
   状态: ongoing
@@ -96,7 +120,33 @@
     先行依据: ''
     完成边界: 完成C03的真实top shape、地址、query/KV长度与旧Q2数值回归
     证据: []
-- {编号: C04, 名称: 统一typed tensor与多输入policy ABI, 状态: to do}
+- 编号: C04
+  名称: 统一typed tensor与多输入policy ABI
+  状态: to do
+  子项:
+  - 编号: C04.1
+    名称: 现有Command128与descriptor整数边界及字节合同加固
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C03.1
+    - C06.1
+    先行依据: 现有公共128bit编码已在仓库；严格类型、范围和旧合法字节不变可用纯软件验证，不依赖官方权重或新RTL。
+    完成边界: 拒绝bool/float/负数/越界及非法枚举后再编码；覆盖56bit地址和descriptor链；合法旧字段和字节保持兼容；不擅自扩展3bit kind或改变公共ABI。
+    证据: []
+  - 编号: C04.2
+    名称: typed tensor与多输入policy完整Host到RTL接入
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C02
+    - C03
+    - C04.1
+    先行依据: ''
+    完成边界: 完成C04原plan的dtype/stride/policy/版本化扩展、多输入参数和Host到RTL回读及拒绝门禁；软件字节测试不替代实际接入。
+    证据: []
 - {编号: C05, 名称: 将root微程序接到真实数据owner, 状态: to do}
 - 编号: C06
   名称: 超64命令与有限tensor存活集合
@@ -104,13 +154,30 @@
   子项:
   - 编号: C06.1
     名称: 长命令容量与生命周期控制专项测试设计
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@three-tasks-20260917
     前置: [C03.1]
     先行依据: 可先测试控制与计数边界，不需要官方权重或本地数值输出
     完成边界: 独立检查63/64/65/255/256/588边界和live-set，不能标为588条实际模型数值RTL通过
-    证据: []
+    证据:
+    - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/RESULT.json
+      SHA256: 18069d2344d339922cd8f5af01bd59cc9d550734e68a269fe385f1b4fd4442be
+      设计提交: 55949ec472e31aa00d910cd7fd3f53e90bb056d9
+      范围: E0控制合同：63/64/65/255/256/588窗口与live-set、65535上界、ACK/完成/epoch、不可变寿命表及伪造编译元数据拒绝；不含生产frontend或模型RTL。
+      关联文件:
+      - 文件: src/heteronpu/command_window_contract.py
+        SHA256: b025051a057a6aa33d7f1b43a8711a62a01091ba1b499459ee1bd85e11c1d08d
+      - 文件: tests/test_command_window_contract.py
+        SHA256: e5f9595a06428236166473e6b37dc3ed07add0f17446b922018963a5c813b04a
+      - 文件: tests/test_independent_block_hardening.py
+        SHA256: b6bc17559ccda92a1876f885bf799f0c5c9427ffaf0f0f51664c3676c5c97612
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/normal.log
+        SHA256: 3a9aac37fcc56fa03eabf5513ff679cb13c76cf2c9238ea963eee7370206a72c
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/optimized.log
+        SHA256: cc27757ad0317a0c8e848ca27de9aeab600620bfd09e1f86a45122766a8274f4
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/baseline_mutations.log.gz
+        SHA256: 0586ea0fc927573bf00cc6f37e5682193041d3f590d319787000b1f40c09eded
   - 编号: C06.2
     名称: 长命令实际frontend接入与全部门禁
     状态: to do
@@ -120,20 +187,63 @@
     先行依据: ''
     完成边界: 完成C06全部集成验收；保留公共ABI和旧程序正确性
     证据: []
-- {编号: C07, 名称: 有界片上状态tile与事务提交, 状态: to do}
+- 编号: C07
+  名称: 有界片上状态tile与事务提交
+  状态: to do
+  子项:
+  - 编号: C07.1
+    名称: 多状态域事务提交与失败恢复控制合同测试
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C06.1
+    - C08.1
+    先行依据: 复用既有state transaction/commit合同，用小尺寸合成状态和事件trace验证生命周期；不依赖真实模型数值或本地DUT输出。
+    完成边界: 覆盖layer/request/epoch/generation隔离、非零旧状态、最后ACK错误、poison后成功ACK计数、reset和迟到响应；失败不得发布新状态；不宣称DDR/SRAM或RTL闭环。
+    证据: []
+  - 编号: C07.2
+    名称: 实际state-memory owner与片上资源及状态续算集成
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C03
+    - C04
+    - C07.1
+    先行依据: ''
+    完成边界: 完成C07原plan全部真实state-memory owner、DDR分tile、资源账本和持久状态提交门禁；C07.1控制参考不替代实际数据路径。
+    证据: []
 - 编号: C08
   名称: 建立完整block公共测试与回执校验器
   状态: ongoing
   子项:
   - 编号: C08.1
     名称: 全量tensor/state回执schema与比较器框架
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@three-tasks-20260917
     前置: [C00.1]
     先行依据: 结构校验器和破坏测试无需官方模型数据；不得提前替代数值门禁
     完成边界: 先完成缺失/重复/来源/全量覆盖拒绝逻辑；实际精度阈值由C02冻结后接入
-    证据: []
+    证据:
+    - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/RESULT.json
+      SHA256: 18069d2344d339922cd8f5af01bd59cc9d550734e68a269fe385f1b4fd4442be
+      设计提交: 55949ec472e31aa00d910cd7fd3f53e90bb056d9
+      范围: E0回执框架：全量tensor/state、来源与完成顺序、逐元素bit-exact及破坏测试；验收期间文件变化拒绝；不证明生产者实际执行，不含C02近似门限。
+      关联文件:
+      - 文件: src/heteronpu/block_receipt.py
+        SHA256: 5b028ae777d16e18a69f58eb2c4ae7ea1703558cdc7b1042e01694d3e5237105
+      - 文件: tests/test_block_receipt.py
+        SHA256: b87b63e8a5767e85f2a1c0006b9b545629c18bbb91afdd529679949fa2c5aa60
+      - 文件: tests/test_independent_block_hardening.py
+        SHA256: b6bc17559ccda92a1876f885bf799f0c5c9427ffaf0f0f51664c3676c5c97612
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/normal.log
+        SHA256: 3a9aac37fcc56fa03eabf5513ff679cb13c76cf2c9238ea963eee7370206a72c
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/optimized.log
+        SHA256: cc27757ad0317a0c8e848ca27de9aeab600620bfd09e1f86a45122766a8274f4
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/baseline_mutations.log.gz
+        SHA256: 0586ea0fc927573bf00cc6f37e5682193041d3f590d319787000b1f40c09eded
   - 编号: C08.2
     名称: 真实block公共runner和全部比较域集成
     状态: to do
@@ -150,13 +260,30 @@
   子项:
   - 编号: Q21.1
     名称: 通用权重分块打包与BF16字节回读测试
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@three-tasks-20260917
     前置: [C00.1, C03.1]
     先行依据: 文件转换和byte-parity可用独立合成张量测试，不依赖本地权重输出
     完成边界: 通用转置/分块/哈希/边界测试，不宣称固定官方权重已完成导出
-    证据: []
+    证据:
+    - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/RESULT.json
+      SHA256: 18069d2344d339922cd8f5af01bd59cc9d550734e68a269fe385f1b4fd4442be
+      设计提交: 55949ec472e31aa00d910cd7fd3f53e90bb056d9
+      范围: E0合成权重工具：转置、行主序分块IO、BF16 RNE、零padding、独立全量回读和旧转换器parity；不含官方权重/descriptor/RTL验收。
+      关联文件:
+      - 文件: src/heteronpu/weight_packing.py
+        SHA256: 55222018b44bf4cd40f771f07918f417236a7d11f4aac0be007c2137b60f6756
+      - 文件: tests/test_weight_packing.py
+        SHA256: 49a97367f51539546573c9b15cc0e5ff172d7e9949cf0daf6196da39dcd26649
+      - 文件: tests/test_independent_block_hardening.py
+        SHA256: b6bc17559ccda92a1876f885bf799f0c5c9427ffaf0f0f51664c3676c5c97612
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/normal.log
+        SHA256: 3a9aac37fcc56fa03eabf5513ff679cb13c76cf2c9238ea963eee7370206a72c
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/optimized.log
+        SHA256: cc27757ad0317a0c8e848ca27de9aeab600620bfd09e1f86a45122766a8274f4
+      - 文件: reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/baseline_mutations.log.gz
+        SHA256: 0586ea0fc927573bf00cc6f37e5682193041d3f590d319787000b1f40c09eded
   - 编号: Q21.2
     名称: 官方Qwen2权重与真实输入导出验收
     状态: to do
@@ -261,3 +388,21 @@
 - {编号: C06.1, 从: to do, 到: ongoing, 执行者: sandbox@three-tasks-20260917, 时间: '2026-09-17T04:24:25.899108+00:00', 说明: 用户指定先行开发：独立控制/回执/打包子项，不重复历史done，不升级父项。}
 - {编号: C08.1, 从: to do, 到: ongoing, 执行者: sandbox@three-tasks-20260917, 时间: '2026-09-17T04:24:25.978870+00:00', 说明: 用户指定先行开发：独立控制/回执/打包子项，不重复历史done，不升级父项。}
 - {编号: Q21.1, 从: to do, 到: ongoing, 执行者: sandbox@three-tasks-20260917, 时间: '2026-09-17T04:24:26.103284+00:00', 说明: 用户指定先行开发：独立控制/回执/打包子项，不重复历史done，不升级父项。}
+- 编号: C06.1
+  从: ongoing
+  到: done
+  执行者: sandbox@three-tasks-20260917
+  时间: '2026-09-17T07:32:29.004018+00:00'
+  说明: 用户指定续作；固定源字节复跑及缺陷修复，290项普通/-O均通过；只关闭软件子项，父项不升级。
+- 编号: C08.1
+  从: ongoing
+  到: done
+  执行者: sandbox@three-tasks-20260917
+  时间: '2026-09-17T07:32:29.004018+00:00'
+  说明: 用户指定续作；固定源字节复跑及缺陷修复，290项普通/-O均通过；只关闭软件子项，父项不升级。
+- 编号: Q21.1
+  从: ongoing
+  到: done
+  执行者: sandbox@three-tasks-20260917
+  时间: '2026-09-17T07:32:29.004018+00:00'
+  说明: 用户指定续作；固定源字节复跑及缺陷修复，290项普通/-O均通过；只关闭软件子项，父项不升级。

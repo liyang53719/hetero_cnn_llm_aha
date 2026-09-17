@@ -1,0 +1,135 @@
+{
+  "scope": "C06.1/C08.1/Q21.1 selected software tests; not full repository tests",
+  "source_commit": "55949ec472e31aa00d910cd7fd3f53e90bb056d9",
+  "baseline_commit": "58aa2fb8a1c33b3507e778a983fd0c482891aa98",
+  "status": "PASS_SELECTED_SOFTWARE_SUBTASKS",
+  "workspace": "Selected files reconstructed from pinned GitHub contents; Git blob identities checked. Not a full clone.",
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "pytest": "9.0.2",
+    "PyYAML": "6.0.3"
+  },
+  "runs": [
+    {
+      "mode": "normal",
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_command_window_contract.py",
+        "tests/test_block_receipt.py",
+        "tests/test_weight_packing.py",
+        "tests/test_independent_block_hardening.py",
+        "--junitxml=/mnt/data/hetero_cnn_llm_aha/reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/normal.xml"
+      ],
+      "cwd": "/mnt/data/hetero_cnn_llm_aha",
+      "started": "2026-09-17T07:30:46.517229+00:00",
+      "finished": "2026-09-17T07:30:50.794859+00:00",
+      "exit_code": 0,
+      "tests": 290,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "by_module": {
+        "tests.test_command_window_contract": 145,
+        "tests.test_block_receipt": 48,
+        "tests.test_weight_packing": 73,
+        "tests.test_independent_block_hardening": 24
+      },
+      "log": "normal.log",
+      "log_sha256": "3a9aac37fcc56fa03eabf5513ff679cb13c76cf2c9238ea963eee7370206a72c"
+    },
+    {
+      "mode": "optimized",
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-O",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_command_window_contract.py",
+        "tests/test_block_receipt.py",
+        "tests/test_weight_packing.py",
+        "tests/test_independent_block_hardening.py",
+        "--junitxml=/mnt/data/hetero_cnn_llm_aha/reports/execution/INDEPENDENT_BLOCK_CLOSE_20260917/optimized.xml"
+      ],
+      "cwd": "/mnt/data/hetero_cnn_llm_aha",
+      "started": "2026-09-17T07:30:50.796591+00:00",
+      "finished": "2026-09-17T07:30:55.119322+00:00",
+      "exit_code": 0,
+      "tests": 290,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "by_module": {
+        "tests.test_command_window_contract": 145,
+        "tests.test_block_receipt": 48,
+        "tests.test_weight_packing": 73,
+        "tests.test_independent_block_hardening": 24
+      },
+      "log": "optimized.log",
+      "log_sha256": "cc27757ad0317a0c8e848ca27de9aeab600620bfd09e1f86a45122766a8274f4"
+    }
+  ],
+  "source_identity": {
+    "src/heteronpu/command_window_contract.py": {
+      "sha256": "b025051a057a6aa33d7f1b43a8711a62a01091ba1b499459ee1bd85e11c1d08d",
+      "git_blob": "1c295df0e8be009158ae038610992ddbfabea009"
+    },
+    "src/heteronpu/block_receipt.py": {
+      "sha256": "5b028ae777d16e18a69f58eb2c4ae7ea1703558cdc7b1042e01694d3e5237105",
+      "git_blob": "32086a74a92c883b829671641204ecf014f26dc0"
+    },
+    "src/heteronpu/weight_packing.py": {
+      "sha256": "55222018b44bf4cd40f771f07918f417236a7d11f4aac0be007c2137b60f6756",
+      "git_blob": "8e4250f64088769b07132d19a79019e235954c1f"
+    },
+    "src/heteronpu/command.py": {
+      "sha256": "151f71520e7ca7d328e91a2a7b4c5a0fa1199a14f85037a4a7214f5d43dfa175",
+      "git_blob": "e0cd40d3a7fd972882fb7739691ca96443db815e"
+    },
+    "src/heteronpu/descriptor_chain.py": {
+      "sha256": "22a8cfbe020308375cc6a08139135aa519a38405da748faf56e3328e36b037d1",
+      "git_blob": "063c543028cc150898ddd4f60d1d61409ee64102"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": {
+      "sha256": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692",
+      "git_blob": "457dd88371bd0d2ec02ec928e00c60f3e4738f30"
+    },
+    "tests/test_command_window_contract.py": {
+      "sha256": "e5f9595a06428236166473e6b37dc3ed07add0f17446b922018963a5c813b04a",
+      "git_blob": "d3c83d279d150cbf8ba0f7dc2df10947402f52ba"
+    },
+    "tests/test_block_receipt.py": {
+      "sha256": "b87b63e8a5767e85f2a1c0006b9b545629c18bbb91afdd529679949fa2c5aa60",
+      "git_blob": "b8124daee8da355626a0749ef7484cee291a0851"
+    },
+    "tests/test_weight_packing.py": {
+      "sha256": "49a97367f51539546573c9b15cc0e5ff172d7e9949cf0daf6196da39dcd26649",
+      "git_blob": "0efddf98f1647fe1e876458e991e11d3ace69ce9"
+    },
+    "tests/test_independent_block_hardening.py": {
+      "sha256": "b6bc17559ccda92a1876f885bf799f0c5c9427ffaf0f0f51664c3676c5c97612",
+      "git_blob": "c4bf6457a1e653e9f55d5d3834def76f72b99d62"
+    }
+  },
+  "baseline_new_tests": {
+    "failed": 21,
+    "passed": 3,
+    "raw_log_gzip": "baseline_mutations.log.gz",
+    "raw_log_sha256": "7bb4a82341d285dd207e2ad04c63766650fffb2304b941e1001e4b67005873af"
+  },
+  "rtl_executed": false,
+  "official_weights_verified": false,
+  "parent_tasks_complete": false,
+  "full_repository_suite_executed": false,
+  "historical_checklist_proofs_reverified": false,
+  "limits": [
+    "Receipt consistency and self-attestation are not producer execution proof.",
+    "Concurrent file mutation checks are observations, not an atomic filesystem snapshot or security boundary.",
+    "C02 approximate metrics and official tolerance formula remain unregistered.",
+    "Previously done checklist evidence is preserved unchanged, not recertified by this selected-file run."
+  ]
+}

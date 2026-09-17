@@ -11,21 +11,27 @@
 | C01.1 | P0 | 现有模型合同入口fail-closed校验 | done |
 | C01.2 | P0 | 固定官方revision、forward、权重index和层索引复核 | to do |
 | C02 | P0 | 建立双参考和可执行精度合同 | to do |
+| C02.1 | P0 | 精度比较器公式注册与缺失合同拒绝测试 | to do |
+| C02.2 | P0 | 官方双参考与每producer精度合同完整冻结 | to do |
 | C03 | P0 | 解耦模型几何与矩阵tile | ongoing |
 | C03.1 | P0 | 编译器派生几何和状态容量合同 | done |
 | C03.2 | P0 | 实际Chisel shape/layout/frontend解耦及回归 | to do |
 | C04 | P0 | 统一typed tensor与多输入policy ABI | to do |
+| C04.1 | P0 | 现有Command128与descriptor整数边界及字节合同加固 | to do |
+| C04.2 | P0 | typed tensor与多输入policy完整Host到RTL接入 | to do |
 | C05 | P0 | 将root微程序接到真实数据owner | to do |
-| C06 | P0 | 超64命令与有限tensor存活集合 | to do |
-| C06.1 | P0 | 长命令容量与生命周期控制专项测试设计 | to do |
+| C06 | P0 | 超64命令与有限tensor存活集合 | ongoing |
+| C06.1 | P0 | 长命令容量与生命周期控制专项测试设计 | done |
 | C06.2 | P0 | 长命令实际frontend接入与全部门禁 | to do |
 | C07 | P0 | 有界片上状态tile与事务提交 | to do |
-| C08 | P0 | 建立完整block公共测试与回执校验器 | to do |
-| C08.1 | P0 | 全量tensor/state回执schema与比较器框架 | to do |
+| C07.1 | P0 | 多状态域事务提交与失败恢复控制合同测试 | to do |
+| C07.2 | P0 | 实际state-memory owner与片上资源及状态续算集成 | to do |
+| C08 | P0 | 建立完整block公共测试与回执校验器 | ongoing |
+| C08.1 | P0 | 全量tensor/state回执schema与比较器框架 | done |
 | C08.2 | P0 | 真实block公共runner和全部比较域集成 | to do |
 | Q20 | P1 | 重跑当前Qwen2双层主链保护基线 | to do |
-| Q21 | P1 | 官方Qwen2 block权重与输入导出 | to do |
-| Q21.1 | P1 | 通用权重分块打包与BF16字节回读测试 | to do |
+| Q21 | P1 | 官方Qwen2 block权重与输入导出 | ongoing |
+| Q21.1 | P1 | 通用权重分块打包与BF16字节回读测试 | done |
 | Q21.2 | P1 | 官方Qwen2权重与真实输入导出验收 | to do |
 | Q22 | P1 | Qwen2官方语义与批准混合精度闭环 | to do |
 | Q23 | P1 | Qwen2官方完整block长度扩展 | to do |

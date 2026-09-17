@@ -1,0 +1,23 @@
+{
+  "scope": "Ledger delta, parent aggregation, unchanged old records, new proof byte hashes and full dependency metadata graph only; not full historical evidence validator.",
+  "parents": 44,
+  "leaves": 55,
+  "completed_in_this_turn": [
+    "C06.1",
+    "C08.1",
+    "Q21.1"
+  ],
+  "ready_sandbox": [
+    "C02.1",
+    "C04.1",
+    "C07.1"
+  ],
+  "recommendation_order": [
+    "C04.1",
+    "C02.1",
+    "C07.1"
+  ],
+  "historical_evidence_reverified": false,
+  "frozen_plan_modified": false,
+  "status": "PASS_DELTA_AND_DEPENDENCIES"
+}

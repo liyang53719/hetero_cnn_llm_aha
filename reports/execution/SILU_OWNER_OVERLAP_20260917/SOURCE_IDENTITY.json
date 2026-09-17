@@ -1,0 +1,85 @@
+{
+  "base_commit": "7d88efbac6be24fa8c7ecc68ce08933dbcd39ad2",
+  "fix_commit": "07619731ea10f35a943ac4a79b78e5381aa184dd",
+  "source_archive_base": "6fe37991d98402114689377a93dea7892e875ac3",
+  "source_archive_head_delta": "OverlappedSilu, BurstProtocol, IdmaWeightBurst restored to base commit before final validation; our SiLU fix and opt-in integration applied. Unrelated tests/scripts from the archive are not a claim of a full-HEAD regression.",
+  "toolchain": {
+    "scala": "2.13.16",
+    "chisel": "6.7.0",
+    "chiseltest": "6.0.0",
+    "verilator": "5.020",
+    "java": "21.0.11",
+    "tool_artifact_id": 9981560665,
+    "tool_archive_sha256": "46d11ac9c1875e68094f3c8604b8decd5daef4f0441336c628c5cbeaecd8d7ae",
+    "hardfloat_revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3"
+  },
+  "source_files": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": {
+      "sha256": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+      "git_blob_sha1": "30ee7ee68ea0195303ed10164c34a47717bdd33b"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": {
+      "sha256": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+      "git_blob_sha1": "f1be640f2267b6dd31e1f74e6171cf48401d4242"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "sha256": "b172fc70a2961bc9ca7da070c08ee0bba4d519e71a1b064765934bfd89aee183",
+      "git_blob_sha1": "1bf3fc746b9af0b438a3902bdbceff7eb09ca753"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "sha256": "5f357fba9b9e07cb507967f0f8a0ad9cfcafa1283909b121631c63b9d3497002",
+      "git_blob_sha1": "1107b0085663a6c184fa38c812752ab59d13c10e"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "sha256": "2bf3a680a0fa4f3d05eccd6f33f9eb5253b3c90451664af2d7f5455b3457a9c0",
+      "git_blob_sha1": "f2698775c7e0593631c0ca63f126b4e6cf4e3dae"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": {
+      "sha256": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+      "git_blob_sha1": "3fc287c9e9abd2a034add1f54777304f423b283d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+      "sha256": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+      "git_blob_sha1": "58ff9c14939d6b259b614cca9c6cd72040d5cfbf"
+    },
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/ScheduledSiluOwnerSpec.scala": {
+      "sha256": "afdb954899bb43e45b7ad58c47d157c6cd2117058fa19710c59a846cc340b4eb",
+      "git_blob_sha1": "b7a0ab017e925b8cd46eea7de5dd585ff48c4503"
+    },
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/VectorSiluSpec.scala": {
+      "sha256": "6d273450ce0d3e369d16f291a6c26912e78473b6d3e85b65995e2fc07c3f804f",
+      "git_blob_sha1": "95541404bb781a5f444ff2c881914974ed13e97c"
+    },
+    "chisel/continuous_prefill/scripts/run_host_block_gate.sh": {
+      "sha256": "9dafb5499dfaed92f6a7817db9b15157e626e03d2250a55c7c1a7a683d05d3f4",
+      "git_blob_sha1": "609f609e813dedef714e340ed7f94bacc853cf6e"
+    },
+    "chisel/continuous_prefill/scripts/run_silu_owner_gate.sh": {
+      "sha256": "bdfd916b9d6dcd8e6992df228dd14ec5f5a8449ff8d0f14cf337e34d360008b0",
+      "git_blob_sha1": "76221a1f1abb017c363dffb7724d7cd7c9aeb7a5"
+    },
+    "chisel/continuous_prefill/scripts/verify_silu_owner_gate.py": {
+      "sha256": "edc05719ccee45ac465492aac91fbbb8a464abfb0baf84b6708c9644906c3533",
+      "git_blob_sha1": "1d13bb4906872c4d97ad3139f68e6641c36c71c2"
+    },
+    "chisel/continuous_prefill/tests/test_silu_owner_verifier.py": {
+      "sha256": "176c8c4f7213270a1cf9f2a76e7c3e950b6f886257144b13a0fc4515d1d5b1b0",
+      "git_blob_sha1": "b36e072b3c13400d3c1d7f69106b9b75089453b3"
+    },
+    "chisel/continuous_prefill/tests/silu_overlap_hierarchy.vlt": {
+      "sha256": "ffd73957d47c9e7dc55b837e2e65a40a1f0151df1091448858a27df250281617",
+      "git_blob_sha1": "1e3d49e048df283336b06008a0b4630a20036809"
+    }
+  },
+  "full_source_snapshot_sha256": "4bd6afed1e165c7a8d1a61f73da4683137e80bb4b79b6428e3762422e6d5ba2f",
+  "hardfloat_snapshot_sha256": "6f6b32dbf6825c3bebcd738019f058648b1c256647b4d5e74121002a22fd5666",
+  "compiler_snapshot_sha256": "67fb95f3646230e4ec0097ec0897ba41c3699ad4ea06daff7d2a5415994761a5",
+  "evidence_files": {
+    "RESULT.json": "81c693265cc62ed561890e99462cbe7548511ad35a7a9a186b8ea36d0591f82f",
+    "gate.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "source_verify.log": "f458e0d24c1f8314c0fde69beb73bcdea11d068b1f123f1b067b550955fe479e",
+    "tests.log": "c5230290a826b4ea22415b6d387b367e674a669419d2aa0b6dd06fbfd258384d",
+    "before_failure_excerpt.log": "ff34a666f43f026b9702b8de639f15bfc0fe0257c557282972fd5f41c25b5fa6",
+    "HOST_ELABORATION.json": "fb6b601054f347b85d1031792c6e9f587112c6c3be8a90a9879d58950f8f935f"
+  }
+}

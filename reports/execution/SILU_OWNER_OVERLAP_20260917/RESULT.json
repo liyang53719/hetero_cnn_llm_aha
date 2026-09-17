@@ -1,0 +1,112 @@
+{
+  "status": "PASS_SILU_OWNER_COMPONENT",
+  "scalatest_tests": 4,
+  "numeric_owner_cases": 30,
+  "fault_cases": 6,
+  "rejected_jobs": 7,
+  "checked_owner_fp32": 4480,
+  "checked_vector_fp32": 192,
+  "comparison": [
+    {
+      "elements": 32,
+      "seed": 1,
+      "baseline_cycles": 227,
+      "overlap_cycles": 155,
+      "speedup": 1.4645161290322581
+    },
+    {
+      "elements": 64,
+      "seed": 2,
+      "baseline_cycles": 415,
+      "overlap_cycles": 309,
+      "speedup": 1.343042071197411
+    },
+    {
+      "elements": 256,
+      "seed": 3,
+      "baseline_cycles": 1671,
+      "overlap_cycles": 1041,
+      "speedup": 1.6051873198847262
+    },
+    {
+      "elements": 16,
+      "seed": 4,
+      "baseline_cycles": 97,
+      "overlap_cycles": 123,
+      "speedup": 0.7886178861788617
+    },
+    {
+      "elements": 32,
+      "seed": 5,
+      "baseline_cycles": 181,
+      "overlap_cycles": 184,
+      "speedup": 0.9836956521739131
+    },
+    {
+      "elements": 64,
+      "seed": 6,
+      "baseline_cycles": 428,
+      "overlap_cycles": 318,
+      "speedup": 1.3459119496855345
+    },
+    {
+      "elements": 256,
+      "seed": 7,
+      "baseline_cycles": 1673,
+      "overlap_cycles": 1066,
+      "speedup": 1.5694183864915572
+    },
+    {
+      "elements": 16,
+      "seed": 8,
+      "baseline_cycles": 99,
+      "overlap_cycles": 111,
+      "speedup": 0.8918918918918919
+    },
+    {
+      "elements": 32,
+      "seed": 9,
+      "baseline_cycles": 240,
+      "overlap_cycles": 177,
+      "speedup": 1.3559322033898304
+    },
+    {
+      "elements": 64,
+      "seed": 10,
+      "baseline_cycles": 439,
+      "overlap_cycles": 308,
+      "speedup": 1.4253246753246753
+    },
+    {
+      "elements": 256,
+      "seed": 11,
+      "baseline_cycles": 1797,
+      "overlap_cycles": 1058,
+      "speedup": 1.6984877126654063
+    },
+    {
+      "elements": 16,
+      "seed": 12,
+      "baseline_cycles": 111,
+      "overlap_cycles": 111,
+      "speedup": 1.0
+    },
+    {
+      "elements": 1024,
+      "seed": 101,
+      "baseline_cycles": 6935,
+      "overlap_cycles": 4068,
+      "speedup": 1.7047689282202556
+    }
+  ],
+  "scope": {
+    "actual_chisel_verilator": true,
+    "memory_service_test_model": true,
+    "pinned_idma_in_this_test": false,
+    "host_real16_two_layer": false,
+    "official_weights": false,
+    "physical_timing_signoff": false,
+    "jitter": "same seeded algorithm; not a cycle-identical DRAM replay"
+  },
+  "tests_log_sha256": "c5230290a826b4ea22415b6d387b367e674a669419d2aa0b6dd06fbfd258384d"
+}

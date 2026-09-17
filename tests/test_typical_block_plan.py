@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("plan_validator", ROOT / "scripts/validate_typical_block_plan.py")
 V = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(V)
-PLAN = ROOT / "plans/three_model_typical_block_closure_20260917_zh.yaml"
+PLAN = ROOT / "doc/three_model_typical_block_closure_20260917_zh.yaml"
 
 
 def base():

@@ -6,6 +6,9 @@ PROFILE=${1:?tiny|real};OUT=${2:?absolute new directory};TOKENS=${3:-16};RELOCAT
 NATIVE_BF16_WEIGHTS=${NATIVE_BF16_WEIGHTS:-0}
 BURST_WRITE=${BURST_WRITE:-0}
 COMMIT_TAIL_READ=${COMMIT_TAIL_READ:-0}
+OVERLAP_SILU=${OVERLAP_SILU:-0}
+[[ "$OVERLAP_SILU" = 0 || "$OVERLAP_SILU" = 1 ]] || exit 2
+[[ "$OVERLAP_SILU" = 0 || "$PIPELINED_OWNER" = 1 ]] || exit 2
 [[ "$COMMIT_TAIL_READ" = 0 || "$COMMIT_TAIL_READ" = 1 ]] || exit 2
 [[ "$COMMIT_TAIL_READ" = 0 || "$PIPELINED_OWNER" = 1 ]] || exit 2
 [[ "$BURST_WRITE" = 0 || "$BURST_WRITE" = 1 ]] || exit 2
@@ -33,9 +36,9 @@ git -C "$ROOT" rev-parse HEAD >"$OUT/source_base_commit.txt"
 if [[ -n ${OFFLINE_TOOLS:-} ]];then
   export CHISEL_FIRTOOL_PATH="$OFFLINE_TOOLS/bin"
   python3 "$P/scripts/production_source_identity.py" compile "$ROOT" "$OUT" "$HARDFLOAT_SOURCE" "$OFFLINE_TOOLS"
-  java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/classes:$(cat "$OUT/classpath.txt")" heteronpu.continuous.EmitHostBlock "$OUT/generated" "$PROFILE" "$MATRIX_MACS" "$WEIGHT_READ_BEATS" "$PIPELINED_OWNER" "$BURST_WRITE" "$COMMIT_TAIL_READ" >"$OUT/emit.log" 2>&1
+  java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/classes:$(cat "$OUT/classpath.txt")" heteronpu.continuous.EmitHostBlock "$OUT/generated" "$PROFILE" "$MATRIX_MACS" "$WEIGHT_READ_BEATS" "$PIPELINED_OWNER" "$BURST_WRITE" "$COMMIT_TAIL_READ" "$OVERLAP_SILU" >"$OUT/emit.log" 2>&1
 else
-  (cd "$P";sbt -batch compile "runMain heteronpu.continuous.EmitHostBlock $OUT/generated $PROFILE $MATRIX_MACS $WEIGHT_READ_BEATS $PIPELINED_OWNER $BURST_WRITE $COMMIT_TAIL_READ") >"$OUT/compile_emit.log" 2>&1
+  (cd "$P";sbt -batch compile "runMain heteronpu.continuous.EmitHostBlock $OUT/generated $PROFILE $MATRIX_MACS $WEIGHT_READ_BEATS $PIPELINED_OWNER $BURST_WRITE $COMMIT_TAIL_READ $OVERLAP_SILU") >"$OUT/compile_emit.log" 2>&1
 fi
 if [[ "$LAYERS" = 1 ]];then
   python3 "$P/scripts/pack_owner_block_fixture.py" "$OUT/generated/owner_shape.h" "$OUT/fixture" --tokens "$TOKENS" --relocate "$RELOCATE" >"$OUT/packing.log"
@@ -51,6 +54,7 @@ if [[ "$MATRIX_MACS" = 4096 ]];then HIERARCHY="$P/tests/matrix4096_hierarchy.vlt
 # Split only simulator compilation, not hardware: keep the full owner/DMA/FMA DUT.
 # The monolithic parent plus arithmetic child exceeded the sandbox memory limit.
 if [[ "$PIPELINED_OWNER" = 1 ]];then HIERARCHY="$P/tests/native_weight_hierarchy.vlt";fi
+if [[ "$OVERLAP_SILU" = 1 ]];then HIERARCHY="$P/tests/silu_overlap_hierarchy.vlt";fi
 export RETAINED_SKIP_CLOCK=0;source "$P/scripts/retained_sources.sh"
 BUILD_ARGS=(--build)
 if [[ "$PIPELINED_OWNER" = 1 ]];then BUILD_ARGS=();fi

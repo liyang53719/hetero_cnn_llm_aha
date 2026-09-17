@@ -15,13 +15,20 @@
   子项:
   - 编号: C00.1
     名称: 核对当前可用归档和关键源字节
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox
     前置: []
     先行依据: 归档/源身份检查不依赖官方权重或本地长仿真
     完成边界: 只验证所列文件与归档来源；不冒称完整clone、完整RTL再生成或整机资源验收
-    证据: []
+    证据:
+    - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/C00_1_source_audit.json
+      SHA256: 4d4ce80f0ad99d2e04846cc4abb6cca47d6785a3341a819bf3cd450e0010116d
+      设计提交: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
+      范围: 五个选定源文件Git字节身份及历史SiLU日志字节复核；不是完整工作区/资源/RTL基线。
+      关联文件:
+      - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/tests_execution.json
+        SHA256: bac7de18c565c13994d0c5ac2caa450692ae6bf0188b9e8af13d210af26ae254
   - 编号: C00.2
     名称: 完整工作区工具与硬件资源基线
     状态: to do
@@ -38,13 +45,26 @@
   子项:
   - 编号: C01.1
     名称: 现有模型合同入口fail-closed校验
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox
     前置: []
     先行依据: 仅加固已存在配置读取入口，不改变冻结model/revision或官方语义
     完成边界: 修复python -O绕过及未知family回退；基于仓库冻结profile，不宣称官方forward复核完成
-    证据: []
+    证据:
+    - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/C01_1_profile_validation.json
+      SHA256: 0ca51f01e91dafe481a4a9a041f3cfb74e109015a6b24a08783470adec17aae6
+      设计提交: a027e6f3d0d3956ebad09666b1bc530e08150965
+      范围: 真实Python正常/-O错误入口复现与修复，合法报告不变；不是官方forward或权重验收。
+      关联文件:
+      - 文件: src/heteronpu/model_geometry.py
+        SHA256: 0d15e36349b57cea94bede9231f49ba005271aafe2bf5265712c59b563891f3e
+      - 文件: src/heteronpu/qwen_family_contracts.py
+        SHA256: a98ee6e10ef87088f9dba83dfdf5d00243adf934856e7b74fc51a0632caddaee
+      - 文件: tests/test_model_geometry.py
+        SHA256: 093acf6300672dd963f2ba7600237f5e5f9905fdf38d5cd8dad47dc8b20a97ba
+      - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/tests_execution.json
+        SHA256: bac7de18c565c13994d0c5ac2caa450692ae6bf0188b9e8af13d210af26ae254
   - 编号: C01.2
     名称: 固定官方revision、forward、权重index和层索引复核
     状态: to do
@@ -59,18 +79,29 @@
 - {编号: C02, 名称: 建立双参考和可执行精度合同, 状态: to do}
 - 编号: C03
   名称: 解耦模型几何与矩阵tile
-  状态: to do
+  状态: ongoing
   子项:
   - 编号: C03.1
     名称: 编译器派生几何和状态容量合同
-    状态: to do
+    状态: done
     执行侧: sandbox
-    负责人: ''
+    负责人: sandbox
     前置:
     - C01.1
     先行依据: 仓库profile已可本地读取；仅E0输入合法性/预算，可在官方复核前先完成
     完成边界: 从现有profile导出hidden/Q/KV/GDN宽度和合法维度；不替代Chisel数据通路解耦
-    证据: []
+    证据:
+    - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/C03_1_geometry.json
+      SHA256: 0cd3a7373ee5f76d117760b85c8b869a9e48c01ff45e1910ba868ee36588e27d
+      设计提交: a027e6f3d0d3956ebad09666b1bc530e08150965
+      范围: 仓库profile派生几何/容量E0检查已实现测试；不代表Chisel shape及payload接入。
+      关联文件:
+      - 文件: src/heteronpu/model_geometry.py
+        SHA256: 0d15e36349b57cea94bede9231f49ba005271aafe2bf5265712c59b563891f3e
+      - 文件: tests/test_model_geometry.py
+        SHA256: 093acf6300672dd963f2ba7600237f5e5f9905fdf38d5cd8dad47dc8b20a97ba
+      - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/tests_execution.json
+        SHA256: bac7de18c565c13994d0c5ac2caa450692ae6bf0188b9e8af13d210af26ae254
   - 编号: C03.2
     名称: 实际Chisel shape/layout/frontend解耦及回归
     状态: to do
@@ -84,11 +115,87 @@
     证据: []
 - {编号: C04, 名称: 统一typed tensor与多输入policy ABI, 状态: to do}
 - {编号: C05, 名称: 将root微程序接到真实数据owner, 状态: to do}
-- {编号: C06, 名称: 超64命令与有限tensor存活集合, 状态: to do}
+- 编号: C06
+  名称: 超64命令与有限tensor存活集合
+  状态: to do
+  子项:
+  - 编号: C06.1
+    名称: 长命令容量与生命周期控制专项测试设计
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C03.1
+    先行依据: 可先测试控制与计数边界，不需要官方权重或本地数值输出
+    完成边界: 独立检查63/64/65/255/256/588边界和live-set，不能标为588条实际模型数值RTL通过
+    证据: []
+  - 编号: C06.2
+    名称: 长命令实际frontend接入与全部门禁
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C04
+    - C06.1
+    先行依据: ''
+    完成边界: 完成C06全部集成验收；保留公共ABI和旧程序正确性
+    证据: []
 - {编号: C07, 名称: 有界片上状态tile与事务提交, 状态: to do}
-- {编号: C08, 名称: 建立完整block公共测试与回执校验器, 状态: to do}
+- 编号: C08
+  名称: 建立完整block公共测试与回执校验器
+  状态: to do
+  子项:
+  - 编号: C08.1
+    名称: 全量tensor/state回执schema与比较器框架
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C00.1
+    先行依据: 结构校验器和破坏测试无需官方模型数据；不得提前替代数值门禁
+    完成边界: 先完成缺失/重复/来源/全量覆盖拒绝逻辑；实际精度阈值由C02冻结后接入
+    证据: []
+  - 编号: C08.2
+    名称: 真实block公共runner和全部比较域集成
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C00
+    - C02
+    - C08.1
+    先行依据: ''
+    完成边界: 完成C08剩余真实DUT事件计数、参考接入与全量数值验收
+    证据: []
 - {编号: Q20, 名称: 重跑当前Qwen2双层主链保护基线, 状态: to do}
-- {编号: Q21, 名称: 官方Qwen2 block权重与输入导出, 状态: to do}
+- 编号: Q21
+  名称: 官方Qwen2 block权重与输入导出
+  状态: to do
+  子项:
+  - 编号: Q21.1
+    名称: 通用权重分块打包与BF16字节回读测试
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C00.1
+    - C03.1
+    先行依据: 文件转换和byte-parity可用独立合成张量测试，不依赖本地权重输出
+    完成边界: 通用转置/分块/哈希/边界测试，不宣称固定官方权重已完成导出
+    证据: []
+  - 编号: Q21.2
+    名称: 官方Qwen2权重与真实输入导出验收
+    状态: to do
+    执行侧: local-agent
+    负责人: ''
+    前置:
+    - C01
+    - C02
+    - C08
+    - Q21.1
+    先行依据: ''
+    完成边界: 完成Q21完整官方fixture和设备字节清单
+    证据: []
 - {编号: Q22, 名称: Qwen2官方语义与批准混合精度闭环, 状态: to do}
 - {编号: Q23, 名称: Qwen2官方完整block长度扩展, 状态: to do}
 - {编号: S00, 名称: 通用Norm与非线性数值owner, 状态: to do}
@@ -120,13 +227,24 @@
   子项:
   - 编号: P00.1
     名称: 归档原始计数复算与带宽上界检查器
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox
     前置: []
     先行依据: 归档summary已可核对；无需Q20新长仿真即可编写和测试收集器
     完成边界: 归档counter算术及非法回执拒绝；不是当前HEAD RTL测量
-    证据: []
+    证据:
+    - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/P00_1_counter_audit.json
+      SHA256: 553f233353fac40fb10bc3c09f699975a7e3fd917b39cfdce161e46dfc168229
+      设计提交: a1265299b725ecff616d3ab751fcf9638d896d9a
+      范围: 归档Qwen2计数、非法回执拒绝及理想带宽上界检查器；不是新的RTL性能测量。
+      关联文件:
+      - 文件: src/heteronpu/block_performance.py
+        SHA256: 6bb9070eea3d8aba8186dc5cf11e0d8515b37d0b7bb2cf8ce0481f196fd3a050
+      - 文件: tests/test_block_performance.py
+        SHA256: da47462f08fc3872ac2972740ef462d3ba505e6c506bfb4b894d3219206c0d40
+      - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/tests_execution.json
+        SHA256: bac7de18c565c13994d0c5ac2caa450692ae6bf0188b9e8af13d210af26ae254
   - 编号: P00.2
     名称: 当前DUT事件计数与互斥周期桶闭合
     状态: to do
@@ -189,3 +307,9 @@
 - P04
 - F00
 - F01
+变更记录:
+- {编号: C00.1, 从: ongoing, 到: done, 执行者: sandbox, 时间: '2026-09-17T04:04:34.107251+00:00', 说明: 代码/报告与实际测试已完成；仅发布子项范围，不升级完整硬件门禁}
+- {编号: C01.1, 从: ongoing, 到: done, 执行者: sandbox, 时间: '2026-09-17T04:04:35.504486+00:00', 说明: 代码/报告与实际测试已完成；仅发布子项范围，不升级完整硬件门禁}
+- {编号: C03.1, 从: to do, 到: ongoing, 执行者: sandbox, 时间: '2026-09-17T04:04:36.495231+00:00', 说明: 独立几何子项依赖已完成，开始记录本轮已实现测试的结果}
+- {编号: C03.1, 从: ongoing, 到: done, 执行者: sandbox, 时间: '2026-09-17T04:04:37.622449+00:00', 说明: 代码/报告与实际测试已完成；仅发布子项范围，不升级完整硬件门禁}
+- {编号: P00.1, 从: ongoing, 到: done, 执行者: sandbox, 时间: '2026-09-17T04:04:39.118229+00:00', 说明: 代码/报告与实际测试已完成；仅发布子项范围，不升级完整硬件门禁}

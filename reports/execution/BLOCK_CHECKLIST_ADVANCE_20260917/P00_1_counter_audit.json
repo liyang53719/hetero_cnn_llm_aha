@@ -1,0 +1,72 @@
+{
+  "status": "PASS_COUNTER_AUDIT_ONLY",
+  "scope": {
+    "new_rtl_run": false,
+    "numeric_outputs_recompared": false,
+    "physical_timing_signoff": false,
+    "full_model_tokens_per_second": null,
+    "measurement": "supplied Qwen2 block log only",
+    "bound_assumption": "unchanged traffic/work; one 512-bit AXI channel per direction at compute clock"
+  },
+  "input_sha256": "0626b7408591e20a58d7154ead74fca2a30d55b670bed6e83333970c3d2ec172",
+  "counters": {
+    "bit_differences": 0,
+    "checked_fp32": 1409024,
+    "completed": 42,
+    "cycles": 16639515,
+    "executed_macs": 1524105216,
+    "ffn": 8960,
+    "hidden": 1536,
+    "host_commands": 42,
+    "host_intermediate_writes": 0,
+    "kv_commands": 2,
+    "layers": 2,
+    "legacy_block_launch": 0,
+    "logical_matrix_engines": 1,
+    "matrix_commands": 18,
+    "matrix_macs": 4096,
+    "original_idma_instances": 1,
+    "original_matrix_instances": 8,
+    "owner_jobs": 38,
+    "read_bytes": 197981696,
+    "score_ddr_accesses": 0,
+    "sfu_commands": 22,
+    "tokens": 16,
+    "useful_macs": 1498202112,
+    "write_ack_bytes": 5636096
+  },
+  "derived_work": {
+    "dense_macs": 1497366528,
+    "causal_attention_macs": 835584
+  },
+  "metrics": {
+    "useful_wall_mac_utilization": 0.021982131089758324,
+    "executed_wall_mac_utilization": 0.022362190244126706,
+    "useful_fraction_of_executed": 0.9830043859649122,
+    "nominal_clock_hz": 800000000,
+    "latency_ms_at_nominal_clock": 20.79939375,
+    "useful_gmac_s_at_nominal_clock": 72.03104715492007
+  },
+  "bounds": {
+    "read_min_cycles": 3093464,
+    "write_min_cycles": 88064,
+    "compute_min_cycles": 372096,
+    "optimistic_wall_min_cycles": 3093464,
+    "useful_wall_upper_bound": 0.11824026398884875,
+    "target_utilization": 0.5,
+    "target_cycles_budget": 731544.0,
+    "target_feasible_with_unchanged_traffic": false,
+    "read_gb_s_required_at_target": 216.508312281968,
+    "axi_read_peak_gb_s": 51.2
+  },
+  "design_commit": "a1265299b725ecff616d3ab751fcf9638d896d9a",
+  "provenance": {
+    "repository": "liyang53719/hetero_cnn_llm_aha",
+    "ref": "746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e",
+    "path": "reports/execution/COALESCED_REAL2_9b09f201842b/numerical/run.log",
+    "git_blob_sha1": "748448ecc4656b654362a41eb2df9614f7e5c8cd",
+    "selection": "terminal HOST_BLOCK_ALL_OWNERS_PASS line only, with trailing newline",
+    "new_rtl_run": false,
+    "scope": "Verbatim excerpt for counter-analysis regression; not a complete numerical evidence bundle."
+  }
+}

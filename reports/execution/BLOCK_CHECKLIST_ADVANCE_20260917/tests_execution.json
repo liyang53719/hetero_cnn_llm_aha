@@ -1,0 +1,23 @@
+{
+  "status": "PASS_PYTHON_REGRESSION_ONLY",
+  "tests_per_run": 164,
+  "runs": [
+    {
+      "command": "/opt/pyvenv/bin/python3 -m pytest -q tests/test_model_geometry.py tests/test_qwen_family_contracts.py tests/test_block_performance.py tests/test_block_checklist.py tests/test_typical_block_plan.py",
+      "exit_code": 0,
+      "log": "reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/regression_164.log",
+      "seconds": 14.613,
+      "SHA256": "86902732c5701db30116a5f9eb79aee023d4a83e40055a3d3b2f9c4df8274f88"
+    },
+    {
+      "command": "/opt/pyvenv/bin/python3 -O -m pytest -q tests/test_model_geometry.py tests/test_qwen_family_contracts.py tests/test_block_performance.py tests/test_block_checklist.py tests/test_typical_block_plan.py",
+      "exit_code": 0,
+      "log": "reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/regression_164_optimized.log",
+      "seconds": 14.571,
+      "SHA256": "c8aa88b7ac3f4bff92a105d92c8b92b121fd680deb9873f4c7d6221e7723fb23"
+    }
+  ],
+  "new_rtl_run": false,
+  "official_weight_inference": false,
+  "scope": "Selected compiler, geometry, counter, ledger and plan tests; not complete repository suite."
+}

@@ -1,0 +1,39 @@
+{
+  "status": "PASS_COMPILER_PROFILE_GUARDS_ONLY",
+  "design_commit": "a027e6f3d0d3956ebad09666b1bc530e08150965",
+  "actual_interpreter_results": [
+    {
+      "implementation": "before",
+      "optimized": false,
+      "wrong_model": "rejected",
+      "unknown_family": "accepted",
+      "returned_operators": 14
+    },
+    {
+      "implementation": "before",
+      "optimized": true,
+      "wrong_model": "accepted",
+      "unknown_family": "accepted",
+      "returned_operators": 14
+    },
+    {
+      "implementation": "after",
+      "optimized": false,
+      "wrong_model": "rejected",
+      "unknown_family": "rejected",
+      "returned_operators": null
+    },
+    {
+      "implementation": "after",
+      "optimized": true,
+      "wrong_model": "rejected",
+      "unknown_family": "rejected",
+      "returned_operators": null
+    }
+  ],
+  "legal_report_unchanged": true,
+  "legal_report_digest": "938da9c38720fea7cbf6632f04f1550013f5a38ce78ff70ba3f9a159af5e2dd0",
+  "official_source_reverified": false,
+  "new_rtl_run": false,
+  "scope": "Existing frozen repository profile validation; official forward and checkpoint verification remain C01.2."
+}

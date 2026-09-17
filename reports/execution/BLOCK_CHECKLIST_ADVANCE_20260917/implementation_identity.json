@@ -1,0 +1,52 @@
+{
+  "code_commit": "a1265299b725ecff616d3ab751fcf9638d896d9a",
+  "scope": "Only listed implemented/tested source files. Not full repository regression or RTL source closure.",
+  "python": "3.13.5",
+  "files": [
+    {
+      "file": "src/heteronpu/model_geometry.py",
+      "SHA256": "0d15e36349b57cea94bede9231f49ba005271aafe2bf5265712c59b563891f3e",
+      "git_blob_sha1": "2d4fe78202a11406f4470a0513033e9d7ee4f2da"
+    },
+    {
+      "file": "src/heteronpu/qwen_family_contracts.py",
+      "SHA256": "a98ee6e10ef87088f9dba83dfdf5d00243adf934856e7b74fc51a0632caddaee",
+      "git_blob_sha1": "fedaf1cdc3f2e2478fef3626135b9aab7b4bec7f"
+    },
+    {
+      "file": "tests/test_model_geometry.py",
+      "SHA256": "093acf6300672dd963f2ba7600237f5e5f9905fdf38d5cd8dad47dc8b20a97ba",
+      "git_blob_sha1": "b82b8fd6a7dad63105698fc410e76b244c5831ed"
+    },
+    {
+      "file": "src/heteronpu/block_performance.py",
+      "SHA256": "6bb9070eea3d8aba8186dc5cf11e0d8515b37d0b7bb2cf8ce0481f196fd3a050",
+      "git_blob_sha1": "5c8e6a9e68c200a4dc5c6eae801166ea535f1c8f"
+    },
+    {
+      "file": "scripts/audit_block_performance.py",
+      "SHA256": "211bb618546444c69080d4fd323bc0173084e3156f8d1b904b7111cab9f51b91",
+      "git_blob_sha1": "f31c6c78d13c4bb2cffe5f39ef14fd7be0da3384"
+    },
+    {
+      "file": "tests/test_block_performance.py",
+      "SHA256": "da47462f08fc3872ac2972740ef462d3ba505e6c506bfb4b894d3219206c0d40",
+      "git_blob_sha1": "e92140c4d6d78455428ee72f152a91ff8586701d"
+    },
+    {
+      "file": "scripts/block_checklist.py",
+      "SHA256": "bfab95c16e434847e731eaebf3d3b606b7d687d0ebf38a4c2e9a85bd1a5900e5",
+      "git_blob_sha1": "30b34257a101d96dbd5a32113e244afc9768b6fa"
+    },
+    {
+      "file": "tests/test_block_checklist.py",
+      "SHA256": "de7707d86f66174d2870cc6ad6baa5a9457ca8aa6c298cbe5651052cf61f169e",
+      "git_blob_sha1": "3439572664b177cf6fa5d916c752e1d91164b49d"
+    },
+    {
+      "file": "tests/test_typical_block_plan.py",
+      "SHA256": "08727541526e98f88ea8fb23368c60b60d0e2cbb0263c902ad5145402e43051a",
+      "git_blob_sha1": "73e0b6642d147444ca422c519f9b6c1b79c00917"
+    }
+  ]
+}

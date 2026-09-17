@@ -1,0 +1,138 @@
+{
+  "status": "PASS_DERIVED_GEOMETRY_ONLY",
+  "design_commit": "a027e6f3d0d3956ebad09666b1bc530e08150965",
+  "profiles": [
+    {
+      "evidence_class": "repository_profile_geometry_E0",
+      "rtl_execution": false,
+      "official_source_reverified": false,
+      "hidden": 2048,
+      "q_heads": 16,
+      "kv_heads": 2,
+      "head_dim": 256,
+      "key_heads": 16,
+      "value_heads": 32,
+      "key_dim": 128,
+      "value_dim": 128,
+      "expert_ffn": 512,
+      "experts": 256,
+      "top_k": 8,
+      "branches": 1,
+      "q_width": 4096,
+      "kv_width": 512,
+      "gdn_value_width": 4096,
+      "gdn_conv_channels": 8192,
+      "gdn_state_fp32_bytes": 2097152,
+      "routed_expert_three_matrices_bf16_bytes": 1610612736,
+      "residual_fp32_bytes_assuming_materialization": 8388608,
+      "query_tokens": 1024,
+      "kv_tokens": 4096,
+      "kv_bf16_bytes": 8388608,
+      "dense_shapes_MNK": {
+        "attention_q": [
+          1024,
+          4096,
+          2048
+        ],
+        "attention_kv_each": [
+          1024,
+          512,
+          2048
+        ],
+        "attention_output": [
+          1024,
+          2048,
+          4096
+        ],
+        "gdn_output": [
+          1024,
+          2048,
+          4096
+        ],
+        "router": [
+          1024,
+          256,
+          2048
+        ],
+        "one_expert_gate_up_each": [
+          1024,
+          512,
+          2048
+        ],
+        "one_expert_down": [
+          1024,
+          2048,
+          512
+        ]
+      },
+      "scope": "Shapes/budgets only; gate projection packing, RoPE semantics, SRAM mapping and actual routing remain separate gates."
+    },
+    {
+      "evidence_class": "repository_profile_geometry_E0",
+      "rtl_execution": false,
+      "official_source_reverified": false,
+      "hidden": 2560,
+      "q_heads": 24,
+      "kv_heads": 2,
+      "head_dim": 256,
+      "key_heads": 16,
+      "value_heads": 48,
+      "key_dim": 128,
+      "value_dim": 128,
+      "expert_ffn": 640,
+      "experts": 512,
+      "top_k": 10,
+      "branches": 4,
+      "q_width": 6144,
+      "kv_width": 512,
+      "gdn_value_width": 6144,
+      "gdn_conv_channels": 10240,
+      "gdn_state_fp32_bytes": 3145728,
+      "routed_expert_three_matrices_bf16_bytes": 5033164800,
+      "residual_fp32_bytes_assuming_materialization": 41943040,
+      "query_tokens": 1024,
+      "kv_tokens": 4096,
+      "kv_bf16_bytes": 8388608,
+      "dense_shapes_MNK": {
+        "attention_q": [
+          1024,
+          6144,
+          2560
+        ],
+        "attention_kv_each": [
+          1024,
+          512,
+          2560
+        ],
+        "attention_output": [
+          1024,
+          2560,
+          6144
+        ],
+        "gdn_output": [
+          1024,
+          2560,
+          6144
+        ],
+        "router": [
+          1024,
+          512,
+          2560
+        ],
+        "one_expert_gate_up_each": [
+          1024,
+          640,
+          2560
+        ],
+        "one_expert_down": [
+          1024,
+          2560,
+          640
+        ]
+      },
+      "scope": "Shapes/budgets only; gate projection packing, RoPE semantics, SRAM mapping and actual routing remain separate gates."
+    }
+  ],
+  "chisel_geometry_changed": false,
+  "scope": "Repository-profile E0 dimensions and budgets; C03.2 actual hardware geometry remains to do."
+}

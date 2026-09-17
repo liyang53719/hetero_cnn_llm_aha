@@ -1,0 +1,41 @@
+{
+  "status": "PASS_SELECTED_SOURCE_BYTES_ONLY",
+  "source_ref": "746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e",
+  "files": [
+    {
+      "file": "config/model_profiles/qwen3_5_35b_a3b.json",
+      "SHA256": "5aec6e83ca8f29d1a4a905790a196c7f003bf74faabbe0d6d2aae15141b2ef04",
+      "git_blob_sha1": "19a04b1d0b214513a8b2f9f74ef3c0cc696d569d",
+      "matches_remote_blob": true
+    },
+    {
+      "file": "config/model_profiles/qwen3_8_flash_next.json",
+      "SHA256": "bf0540d614a794c89285223f82617ca3dfb6ebab12e519dc787ecff7010a5238",
+      "git_blob_sha1": "5445192e395c6f7ac501269dd77531cd59efd4e1",
+      "matches_remote_blob": true
+    },
+    {
+      "file": "doc/three_model_typical_block_closure_20260917_zh.yaml",
+      "SHA256": "0970da1a5326410375a6aeed9f6b0c045900cf2b690806522bdfe81d8cfb41ef",
+      "git_blob_sha1": "b7551cff56db32e1c6392a2b825ec5896a3b0aba",
+      "matches_remote_blob": true
+    },
+    {
+      "file": "scripts/validate_typical_block_plan.py",
+      "SHA256": "8332e73215e548a83ede429c663d9efc193b0ad6fbf7d608e6d19198ccce05be",
+      "git_blob_sha1": "ab393836cd6b11310562c0697b5b4cdab2e9731e",
+      "matches_remote_blob": true
+    },
+    {
+      "file": "tests/test_qwen_family_contracts.py",
+      "SHA256": "cf9b56edaa99ad8e219fe4df5acb562dddc06bfd9bd7a0206daeda5714d67cc3",
+      "git_blob_sha1": "4d3076ee9662b4e3e16e3349c9084b342ce2b87d",
+      "matches_remote_blob": true
+    }
+  ],
+  "inherited_silu_log_sha256": "c5230290a826b4ea22415b6d387b367e674a669419d2aa0b6dd06fbfd258384d",
+  "full_checkout": false,
+  "whole_rtl_source_closure": false,
+  "new_rtl_run": false,
+  "scope": "Partial imported workspace; only listed Git blob identities and inherited SiLU log bytes verified. C00.2 remains to do."
+}

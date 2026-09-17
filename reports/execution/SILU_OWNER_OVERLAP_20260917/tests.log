@@ -1,0 +1,91 @@
+Run starting. Expected test count is: 4
+ScheduledSiluOwnerSpec:
+ScheduledSiluOwner(baseline)
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=32 seed=1 fault=none cycles=227 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=256 reported_bytes=256 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=64 seed=2 fault=none cycles=415 checked_fp32=64 read_beats=8 write_ack_bytes=256
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=1024 reported_bytes=1024 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=256 seed=3 fault=none cycles=1671 checked_fp32=256 read_beats=32 write_ack_bytes=1024
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=64 reported_bytes=64 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=16 seed=4 fault=none cycles=97 checked_fp32=16 read_beats=2 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=32 seed=5 fault=none cycles=181 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=256 reported_bytes=256 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=64 seed=6 fault=none cycles=428 checked_fp32=64 read_beats=8 write_ack_bytes=256
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=1024 reported_bytes=1024 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=256 seed=7 fault=none cycles=1673 checked_fp32=256 read_beats=32 write_ack_bytes=1024
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=64 reported_bytes=64 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=16 seed=8 fault=none cycles=99 checked_fp32=16 read_beats=2 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=32 seed=9 fault=none cycles=240 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=256 reported_bytes=256 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=64 seed=10 fault=none cycles=439 checked_fp32=64 read_beats=8 write_ack_bytes=256
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=1024 reported_bytes=1024 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=256 seed=11 fault=none cycles=1797 checked_fp32=256 read_beats=32 write_ack_bytes=1024
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=64 reported_bytes=64 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=16 seed=12 fault=none cycles=111 checked_fp32=16 read_beats=2 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=baseline fault=none acknowledged_bytes=4096 reported_bytes=4096 late_ack=false
+SILU_OWNER_CASE mode=baseline elements=1024 seed=101 fault=none cycles=6935 checked_fp32=1024 read_beats=128 write_ack_bytes=4096
+SILU_OWNER_SUITE_PASS mode=baseline numeric_cases=13 fault_cases=0
+- should preserve numeric bits, memory ordering, and acknowledged completion
+ScheduledSiluOwner(overlap)
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=1 fault=none cycles=155 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=256 reported_bytes=256 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=2 fault=none cycles=309 checked_fp32=64 read_beats=8 write_ack_bytes=256
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=1024 reported_bytes=1024 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=256 seed=3 fault=none cycles=1041 checked_fp32=256 read_beats=32 write_ack_bytes=1024
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=64 reported_bytes=64 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=16 seed=4 fault=none cycles=123 checked_fp32=16 read_beats=2 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=5 fault=none cycles=184 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=256 reported_bytes=256 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=6 fault=none cycles=318 checked_fp32=64 read_beats=8 write_ack_bytes=256
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=1024 reported_bytes=1024 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=256 seed=7 fault=none cycles=1066 checked_fp32=256 read_beats=32 write_ack_bytes=1024
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=64 reported_bytes=64 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=16 seed=8 fault=none cycles=111 checked_fp32=16 read_beats=2 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=9 fault=none cycles=177 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=256 reported_bytes=256 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=10 fault=none cycles=308 checked_fp32=64 read_beats=8 write_ack_bytes=256
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=1024 reported_bytes=1024 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=256 seed=11 fault=none cycles=1058 checked_fp32=256 read_beats=32 write_ack_bytes=1024
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=64 reported_bytes=64 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=16 seed=12 fault=none cycles=111 checked_fp32=16 read_beats=2 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=4096 reported_bytes=4096 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=1024 seed=101 fault=none cycles=4068 checked_fp32=1024 read_beats=128 write_ack_bytes=4096
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=numerical-late-store acknowledged_bytes=64 reported_bytes=64 late_ack=true
+SILU_OWNER_CASE mode=overlap elements=64 seed=201 fault=numerical-late-store cycles=322 checked_fp32=16 read_beats=6 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=numerical-stalled-store acknowledged_bytes=64 reported_bytes=64 late_ack=true
+SILU_OWNER_CASE mode=overlap elements=64 seed=202 fault=numerical-stalled-store cycles=323 checked_fp32=16 read_beats=6 write_ack_bytes=64
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=read-gate acknowledged_bytes=0 reported_bytes=0 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=210 fault=read-gate cycles=18 checked_fp32=0 read_beats=1 write_ack_bytes=0
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=220 fault=none cycles=178 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=read-up acknowledged_bytes=0 reported_bytes=0 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=211 fault=read-up cycles=58 checked_fp32=0 read_beats=2 write_ack_bytes=0
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=221 fault=none cycles=185 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=last-store acknowledged_bytes=192 reported_bytes=192 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=212 fault=last-store cycles=301 checked_fp32=64 read_beats=8 write_ack_bytes=192
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=222 fault=none cycles=153 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=tag acknowledged_bytes=0 reported_bytes=0 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=64 seed=213 fault=tag cycles=7 checked_fp32=0 read_beats=1 write_ack_bytes=0
+SILU_OWNER_ACK_OBSERVED mode=overlap fault=none acknowledged_bytes=128 reported_bytes=128 late_ack=false
+SILU_OWNER_CASE mode=overlap elements=32 seed=223 fault=none cycles=184 checked_fp32=32 read_beats=4 write_ack_bytes=128
+SILU_OWNER_REJECT_PASS cases=7 memory_requests=0
+SILU_OWNER_SUITE_PASS mode=overlap numeric_cases=17 fault_cases=6
+- should preserve numeric bits, memory ordering, and acknowledged completion
+VectorSiluSpec:
+SiluVectorUnit
+SILU_VECTOR_EXACT_PASS checked_fp32=192 lanes=16
+- should match the frozen scalar recipe across parallel lanes and retain stalled outputs
+- should reject nonfinite input and accept a later valid vector
+Run completed in 49 seconds, 284 milliseconds.
+Total number of tests run: 4
+Suites: completed 2, aborted 0
+Tests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0
+All tests passed.

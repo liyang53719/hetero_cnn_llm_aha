@@ -1,0 +1,24 @@
+{
+  "task": "C04.1",
+  "status": "PASS",
+  "action": "recheck_existing_done_no_reopen",
+  "source_base_commit": "c689eff314955534851848efc52545fa381c7c32",
+  "normal": {
+    "passed": 359,
+    "failed": 0
+  },
+  "optimized": {
+    "passed": 359,
+    "failed": 0
+  },
+  "commands": [
+    "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_abi_integer_contract.py tests/test_command.py tests/test_descriptor_chain.py tests/test_gemmini_descriptor_v2.py",
+    "PYTHONPATH=src python -O -m pytest -o addopts='' -q tests/test_abi_integer_contract.py tests/test_command.py tests/test_descriptor_chain.py tests/test_gemmini_descriptor_v2.py"
+  ],
+  "scope": "Existing command/descriptor integer boundaries and 65 frozen legacy byte vectors; no RTL or full C04 acceptance",
+  "logs": {
+    "reports/execution/BLOCK_CONTRACTS_20260918/C04_recheck.log": "073435405ffc375d3a6ce81ae487ff93715d1b2d4eb9890128086b8604706b0f",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C04_optimized.log": "7688ac932277dd98470ac11b7eec855584d43a6f55673bc5d35aff63d16601f4"
+  },
+  "hardware_execution_verified": false
+}

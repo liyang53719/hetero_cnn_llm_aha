@@ -11,7 +11,7 @@
 | C01.1 | P0 | 现有模型合同入口fail-closed校验 | done |
 | C01.2 | P0 | 固定官方revision、forward、权重index和层索引复核 | to do |
 | C02 | P0 | 建立双参考和可执行精度合同 | ongoing |
-| C02.1 | P0 | 精度比较器公式注册与缺失合同拒绝测试 | ongoing |
+| C02.1 | P0 | 精度比较器公式注册与缺失合同拒绝测试 | done |
 | C02.2 | P0 | 官方双参考与每producer精度合同完整冻结 | to do |
 | C03 | P0 | 解耦模型几何与矩阵tile | ongoing |
 | C03.1 | P0 | 编译器派生几何和状态容量合同 | done |

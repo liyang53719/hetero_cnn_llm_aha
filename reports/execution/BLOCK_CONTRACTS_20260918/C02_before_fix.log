@@ -1,0 +1,474 @@
+FFFFFFFFFFFFFFFFFF....................                                   [100%]
+=================================== FAILURES ===================================
+_________________ test_producer_identity_is_not_coerced[True] __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_0')
+index = True
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='producer index'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:24: Failed
+_________________ test_producer_identity_is_not_coerced[False] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_1')
+index = False
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='producer index'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:24: Failed
+__________________ test_producer_identity_is_not_coerced[7.0] __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_2')
+index = 7.0
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='producer index'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:24: Failed
+__________________ test_producer_identity_is_not_coerced[7.9] __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_3')
+index = 7.9
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='producer index'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:24: Failed
+___________________ test_producer_identity_is_not_coerced[7] ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_4')
+index = '7'
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='producer index'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:24: Failed
+__________________ test_producer_identity_is_not_coerced[-1] ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_5')
+index = -1
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='producer index'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:24: Failed
+_________________ test_producer_identity_is_not_coerced[None] __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_producer_identity_is_not_6')
+index = None
+
+    @pytest.mark.parametrize('index', [True, False, 7.0, 7.9, '7', -1, None])
+    def test_producer_identity_is_not_coerced(tmp_path, index):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError, match='producer index'):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer={'kind': 'ggml_node', 'index': index},
+                        fp32_indices=frozenset({0, 1, 7, -1}))
+
+tests/test_precision_comparison_boundaries.py:25:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:88: in compare
+    expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+binding = {'index': None, 'kind': 'ggml_node'}
+fp32_indices = frozenset({-1, 0, 1, 7})
+
+    def node_dtype(binding, fp32_indices):
+        if binding['kind'] != 'ggml_node':
+            raise ValueError('node_dtype only classifies graph node tensors')
+>       return 'FP32' if int(binding['index']) in fp32_indices else 'BF16'
+                         ^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+
+src/heteronpu/precision_policy.py:18: TypeError
+____________ test_precision_policy_identity_is_not_coerced[policy0] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity0')
+policy = frozenset({True})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError, match='FP32 policy'):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer={'kind': 'ggml_node', 'index': 7}, fp32_indices=policy)
+
+tests/test_precision_comparison_boundaries.py:36:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:89: in compare
+    br.need(dtype == expected, 'producer precision policy mismatch')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ok = False, why = 'producer precision policy mismatch'
+
+    def need(ok: bool, why: str) -> None:
+        if not ok:
+>           raise ReceiptError(why)
+E           heteronpu.block_receipt.ReceiptError: producer precision policy mismatch
+
+src/heteronpu/block_receipt.py:32: ReceiptError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity0')
+policy = frozenset({True})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='FP32 policy'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'FP32 policy'
+E         Actual message: 'producer precision policy mismatch'
+
+tests/test_precision_comparison_boundaries.py:35: AssertionError
+____________ test_precision_policy_identity_is_not_coerced[policy1] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity1')
+policy = frozenset({7.0})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='FP32 policy'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:35: Failed
+____________ test_precision_policy_identity_is_not_coerced[policy2] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity2')
+policy = frozenset({'7'})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError, match='FP32 policy'):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer={'kind': 'ggml_node', 'index': 7}, fp32_indices=policy)
+
+tests/test_precision_comparison_boundaries.py:36:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:89: in compare
+    br.need(dtype == expected, 'producer precision policy mismatch')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ok = False, why = 'producer precision policy mismatch'
+
+    def need(ok: bool, why: str) -> None:
+        if not ok:
+>           raise ReceiptError(why)
+E           heteronpu.block_receipt.ReceiptError: producer precision policy mismatch
+
+src/heteronpu/block_receipt.py:32: ReceiptError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity2')
+policy = frozenset({'7'})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='FP32 policy'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'FP32 policy'
+E         Actual message: 'producer precision policy mismatch'
+
+tests/test_precision_comparison_boundaries.py:35: AssertionError
+____________ test_precision_policy_identity_is_not_coerced[policy3] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity3')
+policy = frozenset({-1})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError, match='FP32 policy'):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer={'kind': 'ggml_node', 'index': 7}, fp32_indices=policy)
+
+tests/test_precision_comparison_boundaries.py:36:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:89: in compare
+    br.need(dtype == expected, 'producer precision policy mismatch')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ok = False, why = 'producer precision policy mismatch'
+
+    def need(ok: bool, why: str) -> None:
+        if not ok:
+>           raise ReceiptError(why)
+E           heteronpu.block_receipt.ReceiptError: producer precision policy mismatch
+
+src/heteronpu/block_receipt.py:32: ReceiptError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity3')
+policy = frozenset({-1})
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='FP32 policy'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'FP32 policy'
+E         Actual message: 'producer precision policy mismatch'
+
+tests/test_precision_comparison_boundaries.py:35: AssertionError
+____________ test_precision_policy_identity_is_not_coerced[policy4] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity4')
+policy = [7]
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='FP32 policy'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:35: Failed
+____________ test_precision_policy_identity_is_not_coerced[policy5] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_precision_policy_identity5')
+policy = {7}
+
+    @pytest.mark.parametrize('policy', [frozenset({True}), frozenset({7.0}),
+                                        frozenset({'7'}), frozenset({-1}), [7], {7}])
+    def test_precision_policy_identity_is_not_coerced(tmp_path, policy):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+>       with pytest.raises(br.ReceiptError, match='FP32 policy'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+
+tests/test_precision_comparison_boundaries.py:35: Failed
+______________ test_missing_malformed_producer_rejected[binding0] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_missing_malformed_produce0')
+binding = {}
+
+    @pytest.mark.parametrize('binding', [{}, {'kind': 'ggml_node'},
+                                        {'kind': 'gguf_tensor', 'index': 7}, [], '7'])
+    def test_missing_malformed_producer_rejected(tmp_path, binding):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer=binding, fp32_indices=frozenset({7}))
+
+tests/test_precision_comparison_boundaries.py:46:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:88: in compare
+    expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+binding = {}, fp32_indices = frozenset({7})
+
+    def node_dtype(binding, fp32_indices):
+>       if binding['kind'] != 'ggml_node':
+           ^^^^^^^^^^^^^^^
+E       KeyError: 'kind'
+
+src/heteronpu/precision_policy.py:16: KeyError
+______________ test_missing_malformed_producer_rejected[binding1] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_missing_malformed_produce1')
+binding = {'kind': 'ggml_node'}
+
+    @pytest.mark.parametrize('binding', [{}, {'kind': 'ggml_node'},
+                                        {'kind': 'gguf_tensor', 'index': 7}, [], '7'])
+    def test_missing_malformed_producer_rejected(tmp_path, binding):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer=binding, fp32_indices=frozenset({7}))
+
+tests/test_precision_comparison_boundaries.py:46:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:88: in compare
+    expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+binding = {'kind': 'ggml_node'}, fp32_indices = frozenset({7})
+
+    def node_dtype(binding, fp32_indices):
+        if binding['kind'] != 'ggml_node':
+            raise ValueError('node_dtype only classifies graph node tensors')
+>       return 'FP32' if int(binding['index']) in fp32_indices else 'BF16'
+                             ^^^^^^^^^^^^^^^^
+E       KeyError: 'index'
+
+src/heteronpu/precision_policy.py:18: KeyError
+______________ test_missing_malformed_producer_rejected[binding2] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_missing_malformed_produce2')
+binding = {'index': 7, 'kind': 'gguf_tensor'}
+
+    @pytest.mark.parametrize('binding', [{}, {'kind': 'ggml_node'},
+                                        {'kind': 'gguf_tensor', 'index': 7}, [], '7'])
+    def test_missing_malformed_producer_rejected(tmp_path, binding):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer=binding, fp32_indices=frozenset({7}))
+
+tests/test_precision_comparison_boundaries.py:46:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:88: in compare
+    expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+binding = {'index': 7, 'kind': 'gguf_tensor'}, fp32_indices = frozenset({7})
+
+    def node_dtype(binding, fp32_indices):
+        if binding['kind'] != 'ggml_node':
+>           raise ValueError('node_dtype only classifies graph node tensors')
+E           ValueError: node_dtype only classifies graph node tensors
+
+src/heteronpu/precision_policy.py:17: ValueError
+______________ test_missing_malformed_producer_rejected[binding3] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_missing_malformed_produce3')
+binding = []
+
+    @pytest.mark.parametrize('binding', [{}, {'kind': 'ggml_node'},
+                                        {'kind': 'gguf_tensor', 'index': 7}, [], '7'])
+    def test_missing_malformed_producer_rejected(tmp_path, binding):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer=binding, fp32_indices=frozenset({7}))
+
+tests/test_precision_comparison_boundaries.py:46:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:88: in compare
+    expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+binding = [], fp32_indices = frozenset({7})
+
+    def node_dtype(binding, fp32_indices):
+>       if binding['kind'] != 'ggml_node':
+           ^^^^^^^^^^^^^^^
+E       TypeError: list indices must be integers or slices, not str
+
+src/heteronpu/precision_policy.py:16: TypeError
+_________________ test_missing_malformed_producer_rejected[7] __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_missing_malformed_produce4')
+binding = '7'
+
+    @pytest.mark.parametrize('binding', [{}, {'kind': 'ggml_node'},
+                                        {'kind': 'gguf_tensor', 'index': 7}, [], '7'])
+    def test_missing_malformed_producer_rejected(tmp_path, binding):
+        reg = registered(tmp_path)
+        a, r, tensor = files(tmp_path)
+        with pytest.raises(br.ReceiptError):
+>           reg.compare('frozen', a, r, tensor, semantics='continuous',
+                        producer=binding, fp32_indices=frozenset({7}))
+
+tests/test_precision_comparison_boundaries.py:46:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/precision_comparison.py:88: in compare
+    expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+binding = '7', fp32_indices = frozenset({7})
+
+    def node_dtype(binding, fp32_indices):
+>       if binding['kind'] != 'ggml_node':
+           ^^^^^^^^^^^^^^^
+E       TypeError: string indices must be integers, not 'str'
+
+src/heteronpu/precision_policy.py:16: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[True] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[False] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[7.0] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[7.9] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[7] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[-1] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_producer_identity_is_not_coerced[None] - TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+FAILED tests/test_precision_comparison_boundaries.py::test_precision_policy_identity_is_not_coerced[policy0] - AssertionError: Regex pattern did not match.
+  Expected regex: 'FP32 policy'
+  Actual message: 'producer precision policy mismatch'
+FAILED tests/test_precision_comparison_boundaries.py::test_precision_policy_identity_is_not_coerced[policy1] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_precision_policy_identity_is_not_coerced[policy2] - AssertionError: Regex pattern did not match.
+  Expected regex: 'FP32 policy'
+  Actual message: 'producer precision policy mismatch'
+FAILED tests/test_precision_comparison_boundaries.py::test_precision_policy_identity_is_not_coerced[policy3] - AssertionError: Regex pattern did not match.
+  Expected regex: 'FP32 policy'
+  Actual message: 'producer precision policy mismatch'
+FAILED tests/test_precision_comparison_boundaries.py::test_precision_policy_identity_is_not_coerced[policy4] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_precision_policy_identity_is_not_coerced[policy5] - Failed: DID NOT RAISE <class 'heteronpu.block_receipt.ReceiptError'>
+FAILED tests/test_precision_comparison_boundaries.py::test_missing_malformed_producer_rejected[binding0] - KeyError: 'kind'
+FAILED tests/test_precision_comparison_boundaries.py::test_missing_malformed_producer_rejected[binding1] - KeyError: 'index'
+FAILED tests/test_precision_comparison_boundaries.py::test_missing_malformed_producer_rejected[binding2] - ValueError: node_dtype only classifies graph node tensors
+FAILED tests/test_precision_comparison_boundaries.py::test_missing_malformed_producer_rejected[binding3] - TypeError: list indices must be integers or slices, not str
+FAILED tests/test_precision_comparison_boundaries.py::test_missing_malformed_producer_rejected[7] - TypeError: string indices must be integers, not 'str'
+18 failed, 20 passed in 0.41s

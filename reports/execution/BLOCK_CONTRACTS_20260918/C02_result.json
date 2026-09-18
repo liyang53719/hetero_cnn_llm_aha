@@ -1,0 +1,66 @@
+{
+  "task": "C02.1",
+  "status": "PASS",
+  "evidence_class": "E0_software_contract_only",
+  "source_base_commit": "c689eff314955534851848efc52545fa381c7c32",
+  "python": "3.13.5",
+  "implementation": "Reuse source-bound FormulaRegistry + full-file block_receipt + producer precision_policy. Reject coercion of producer/policy IDs without changing old receipt or public ABI.",
+  "before_fix": {
+    "new_tests_failed": 18,
+    "new_tests_passed": 20,
+    "meaning": "negative policy-identity regression reproduced on source_base; failures include implicit acceptance and wrong exception class"
+  },
+  "normal": {
+    "passed": 128,
+    "failed": 0
+  },
+  "optimized": {
+    "passed": 128,
+    "failed": 0,
+    "warnings": 1,
+    "warning_reason": "standard pytest assertion optimization warning; runtime validation uses explicit exceptions"
+  },
+  "commands": [
+    "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_precision_comparison.py tests/test_precision_comparison_boundaries.py tests/test_block_receipt.py",
+    "PYTHONPATH=src python -O -m pytest -o addopts='' -q tests/test_precision_comparison.py tests/test_precision_comparison_boundaries.py tests/test_block_receipt.py"
+  ],
+  "coverage": [
+    "unregistered/missing/mutated formula and source hash",
+    "no implicit 0.002 meaning or default tolerance",
+    "producer-index and policy-index type validation",
+    "exact discrete routes/indices/counters including signed extremes",
+    "FP32/BF16 zero, signed zero, subnormal, maximum finite, NaN and infinity",
+    "all elements, multi-dimensional shape, late errors beyond 1MiB boundary",
+    "truncated/aliased/mutated buffers",
+    "no receipt-v1 tolerance relaxation"
+  ],
+  "unavailable_regressions": [
+    {
+      "test": "tests/test_precision_boundary_policy.py::test_real_28_layer_manifest",
+      "reason": "source export lacks reports/execution/llama_cpp_qwen2_graph_lowering_manifest.jsonl",
+      "counted_pass": false,
+      "observed_log": "reports/execution/BLOCK_CONTRACTS_20260918/C02_baseline.log"
+    }
+  ],
+  "source_files": {
+    "src/heteronpu/precision_comparison.py": "f7f0902e902a0e5d3a6f30eae58376e68b1e34aa714a88c7d8cf5899e2d3a08b",
+    "tests/test_precision_comparison_boundaries.py": "0cd77ec503d1881da125537fbcf0d85049a2844a2c8a6edd4e4ad5c76d6ac693",
+    "src/heteronpu/block_receipt.py": "5b028ae777d16e18a69f58eb2c4ae7ea1703558cdc7b1042e01694d3e5237105",
+    "src/heteronpu/precision_policy.py": "0c40ebc8299390f9b7bf70bac2e3d2865c8fed181aabf181b5016a5b5285c54b",
+    "tests/test_precision_comparison.py": "41f6c4e842df0a46d80c4b1cd4a563f3d2e8236fa123dbdf9da2208562f6ccc1",
+    "tests/test_block_receipt.py": "b87b63e8a5767e85f2a1c0006b9b545629c18bbb91afdd529679949fa2c5aa60"
+  },
+  "logs": {
+    "reports/execution/BLOCK_CONTRACTS_20260918/C02_before_fix.log": "efbadc5e6cff06a6983ecbbb96adaeff940988598cf2bbc68d3bb6bba6dfe311",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C02_normal.log": "baee6a33e2c035094c0152b6c7fefc89b7ae6cb95a7a30aee1fb05c99ca6457e",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C02_optimized.log": "4b80eddf646b9264f29b4b458545e9c48d2708e16e6a214d2d8f392f0ebea5e9",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C04_recheck.log": "073435405ffc375d3a6ce81ae487ff93715d1b2d4eb9890128086b8604706b0f",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C04_optimized.log": "7688ac932277dd98470ac11b7eec855584d43a6f55673bc5d35aff63d16601f4",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C02_baseline.log": "00cef2444d5e347ae1d19e8cbf3c3cd565b4c70f91a9f8b93f4d4d82f337cd3c"
+  },
+  "default_tolerance": null,
+  "official_0_002_formula_resolved": false,
+  "official_model_accepted": false,
+  "hardware_execution_verified": false,
+  "full_repository_regression": false
+}

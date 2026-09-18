@@ -1,0 +1,38 @@
+............................................F........................... [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_________________________ test_real_28_layer_manifest __________________________
+
+    def test_real_28_layer_manifest():
+        root=Path(__file__).resolve().parents[1]
+>       commands=[json.loads(s) for s in (root/'reports/execution/llama_cpp_qwen2_graph_lowering_manifest.jsonl').read_text().splitlines()]
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_precision_boundary_policy.py:19:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/lib/python3.13/pathlib/_local.py:548: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('/mnt/data/hetero_cnn_llm_aha/reports/execution/llama_cpp_qwen2_graph_lowering_manifest.jsonl')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/mnt/data/hetero_cnn_llm_aha/reports/execution/llama_cpp_qwen2_graph_lowering_manifest.jsonl'
+
+/usr/lib/python3.13/pathlib/_local.py:539: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_precision_boundary_policy.py::test_real_28_layer_manifest - FileNotFoundError: [Errno 2] No such file or directory: '/mnt/data/hetero_cnn_llm_aha/reports/execution/llama_cpp_qwen2_graph_lowering_manifest.jsonl'

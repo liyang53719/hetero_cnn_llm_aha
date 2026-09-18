@@ -84,7 +84,13 @@ class FormulaRegistry:
         if semantics in DISCRETE or dtype in ('u32le', 'i32le'):
             br.need(formula.name == 'bit_exact', 'discrete values require bit-exact comparison')
         else:
-            br.need(producer is not None, 'continuous tensor requires producer dtype policy')
+            br.need(isinstance(producer, dict) and producer.get('kind') == 'ggml_node',
+                    'continuous tensor requires producer dtype policy')
+            index = producer.get('index')
+            br.need(type(index) is int and index >= 0, 'invalid producer index')
+            br.need(type(fp32_indices) is frozenset and
+                    all(type(i) is int and i >= 0 for i in fp32_indices),
+                    'invalid FP32 policy indices')
             expected = {'FP32': 'f32le', 'BF16': 'bf16le'}[node_dtype(producer, fp32_indices)]
             br.need(dtype == expected, 'producer precision policy mismatch')
         br.need(not actual.is_symlink() and not reference.is_symlink(), 'symlink tensor')

@@ -1,0 +1,52 @@
+版本: 1
+审计基线: 842a67a9e2cac8f53d3c5923563a25a2ad7db70c
+状态唯一来源: doc/block_checklist.yaml
+说明: 以下是新增可独立认领的软件准备项，不是已完成结果；先用block_checklist mark认领并成功推送main再编码。父项及全部原.2集成门禁均未跳过。
+执行顺序:
+- C03.3
+- C04.3
+- C08.3
+旧队列说明: 关闭C02.1与C07.1后原sandbox可认领队列为空；其余原事项仍有官方合同/真实owner/本地资源门禁。
+可独立推进:
+- 编号: C03.3
+  名称: 跨语言shape/layout测试向量与宽地址oracle
+  优先级: P0
+  依赖:
+  - C03.1
+  先行依据: 以现有QwenBlockShape/Layout源码和固定合成几何生成独立整数oracle及可供Chisel消费的向量，不需要本地DUT或官方checkpoint；不重复C03.1几何容量计算。
+  验收边界: 交付query/KV长度分离、maxRow、16位维度边界、宽乘法地址/stride/span溢出向量与独立oracle；明确未执行的Chisel/RTL消费者，不能据此关闭C03.2或宣称官方真实shape通过。
+  工具: Python/pytest；向量可在沙箱生成，实际Chisel消费另记未执行
+- 编号: C04.3
+  名称: 版本化typed descriptor候选与Host序列化合同
+  优先级: P0
+  依赖:
+  - C02.1
+  - C03.1
+  - C04.1
+  先行依据: 旧ABI边界与精度比较器已冻结，可在CPU沙箱实现独立版本候选、Host序列化及负例；不等待本地数值owner，也不更改现有wire语义。
+  验收边界: 先审计3位kind全部8值占用；新版本候选明确dtype/stride/多输入/精度policy/状态句柄编码、unknown-version拒绝及roundtrip。保留旧65个字节向量；不将候选当作Host到RTL最终冻结，不关闭C04.2。
+  工具: Python/pytest；向量可在沙箱生成，实际Chisel消费另记未执行
+- 编号: C08.3
+  名称: E0状态事件trace到全量回执的独立交叉校验
+  优先级: P0
+  依赖:
+  - C07.1
+  - C08.1
+  先行依据: 复用已完成C07.1事件模型及C08.1全量比较器，新增外部trace解析/交叉校验边界；输入只标合成E0，不依赖本地DUT日志。
+  验收边界: 将owner/ACK/发布generation与完整状态字节绑定并校验；缺失、重复、跨owner/epoch、成功字节错计、未ACK却发布必须拒绝。不得把模型trace标成DUT证据，不放松receipt-v1、不关闭C08.2。
+  工具: Python/pytest；向量可在沙箱生成，实际Chisel消费另记未执行
+仍不能整体关闭:
+- 编号: C00.2
+  原因: 完整工作区、工具与硬件资源基线；执行侧local-agent。
+- 编号: C01.2
+  原因: 依赖C00及固定官方revision/forward/权重index；公开源可准备，但缺checkpoint不能替换模型。
+- 编号: C02.2
+  原因: 依赖C01官方语义和原0.002公式来源；公式注册并不等于来源已找到。
+- 编号: C03.2 / C04.2
+  原因: 需要官方几何和实际Host到RTL贯通；准备向量/版本候选不是集成通过。
+- 编号: C07.2 / C08.2
+  原因: 真实state-memory owner、实际block runner和DUT完整回执尚未验收。
+本地agent避免重复:
+- C04.1、C02.1、C07.1已完成软件合同，不应重复认领或重开。
+- 新增三个.3项当前均未认领，状态仅见唯一checklist；与现有.2项分工不同。
+- E0成功ACK字节是模型观测，不可填入硬件性能或DUT验收结论。

@@ -1,0 +1,73 @@
+{
+  "word_state_oracle": {
+    "transactions": 4000,
+    "seed": 49265,
+    "modes": {
+      "success": 1000,
+      "last_error": 1000,
+      "poison": 1000,
+      "reset": 1000
+    },
+    "counters": {
+      "started": 4000,
+      "committed": 1000,
+      "failed": 2000,
+      "resets": 1000,
+      "reset_discarded": 1000,
+      "successful_ack_bytes": 273320,
+      "error_acks": 1000,
+      "suppressed_acks": 10670,
+      "protocol_errors": 0
+    },
+    "oracle_sha256": "5ef6b95fe95e7d3d5ee26652ca226d017d1d35c9a99de6ede14d82b9ebc90e6d",
+    "status": "PASS",
+    "evidence_class": "E0_word_event_contract",
+    "hardware_execution_verified": false
+  },
+  "legacy_barrier": {
+    "schema_version": 1,
+    "status": "PASS",
+    "evidence_class": "state_commit_barrier_E0_not_atomic_RTL_or_iDMA_E3",
+    "transactions": 4000,
+    "accepted_steps": 7495,
+    "generated_writes": 53413,
+    "counters": {
+      "started": 4000,
+      "committed": 3393,
+      "rolled_back": 607,
+      "writes_recorded": 53413,
+      "writes_committed": 21370,
+      "stale_responses_suppressed": 4000,
+      "protocol_errors": 0
+    },
+    "sha256": "4f6881a584dfee578c9a73393bd8e5959503f3a1a2024088351bffcc9bacaff8",
+    "contract": {
+      "state_domains": [
+        "kv",
+        "gdn_matrix",
+        "gdn_conv",
+        "qsa_index",
+        "qsa_kv",
+        "ple_history",
+        "ple_conv",
+        "hyper_stream",
+        "sampler",
+        "runtime"
+      ],
+      "domain_acknowledgements_may_arrive_out_of_order": true,
+      "accepted_prefix_commit": true,
+      "last_write_wins_within_prefix": true,
+      "generation_advances_on_commit_and_rollback": true,
+      "stale_response_suppression": true,
+      "atomic_commit_barrier": true,
+      "first_RTL_transaction_slots": 8
+    },
+    "remaining_local_gates": [
+      "state_epoch_table_RTL_E1",
+      "commit_barrier_RTL_E1",
+      "COW_refcount_dirty_bitmap_integration_E1",
+      "out_of_order_iDMA_transaction_E3"
+    ]
+  },
+  "note": "random event ordering, not timing or RTL measurement"
+}

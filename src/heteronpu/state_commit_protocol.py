@@ -52,6 +52,11 @@ class StateCommitModel:
         t=self.active[txn_id]
         if not t.ready:raise RuntimeError('barrier')
         if not 0<=accepted_steps<=t.speculative_steps:raise ValueError('prefix')
+        # Validate BEFORE the first committed-state mutation. Concurrent older
+        # transactions must not corrupt a newer generation and then raise.
+        if self.generation(t.sequence_id)!=t.base_generation:
+            self.counters['protocol_errors']+=1
+            raise RuntimeError('stale txn')
         selected={}
         for w in t.writes:
             if w.step<accepted_steps:selected[(w.domain,w.key)]=w
@@ -61,6 +66,14 @@ class StateCommitModel:
     def rollback(self,txn_id:int)->CommitResult:
         t=self.active[txn_id];new=self._advance(t.sequence_id,t.base_generation);del self.active[txn_id];self.counters['rolled_back']+=1
         return CommitResult(txn_id,t.sequence_id,False,0,0,t.base_generation,new)
+    def discard(self,txn_id:int)->CommitResult:
+        """Drop an unpublished shadow without publishing a new generation.
+
+        Unlike legacy rollback(), this needs caller-owned ticket/epoch response
+        filtering. BlockStateTransactions provides that filtering explicitly.
+        """
+        t=self.active.pop(txn_id);self.counters['rolled_back']+=1
+        return CommitResult(txn_id,t.sequence_id,False,0,0,t.base_generation,self.generation(t.sequence_id))
     def response_is_current(self,sequence_id:int,generation:int)->bool:
         ok=self.generation(sequence_id)==generation
         if not ok:self.counters['stale_responses_suppressed']+=1

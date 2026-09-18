@@ -166,6 +166,16 @@
     先行依据: ''
     完成边界: 完成C03的真实top shape、地址、query/KV长度与旧Q2数值回归
     证据: []
+  - 编号: C03.3
+    名称: 跨语言shape/layout测试向量与宽地址oracle
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C03.1
+    先行依据: 以现有QwenBlockShape/Layout源码和固定合成几何生成独立整数oracle及可供Chisel消费的向量，不需要本地DUT或官方checkpoint；不重复C03.1几何容量计算。
+    完成边界: 交付query/KV长度分离、maxRow、16位维度边界、宽乘法地址/stride/span溢出向量与独立oracle；明确未执行的Chisel/RTL消费者，不能据此关闭C03.2或宣称官方真实shape通过。
+    证据: []
 - 编号: C04
   名称: 统一typed tensor与多输入policy ABI
   状态: ongoing
@@ -216,6 +226,18 @@
     先行依据: ''
     完成边界: 完成C04原plan的dtype/stride/policy/版本化扩展、多输入参数和Host到RTL回读及拒绝门禁；软件字节测试不替代实际接入。
     证据: []
+  - 编号: C04.3
+    名称: 版本化typed descriptor候选与Host序列化合同
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C02.1
+    - C03.1
+    - C04.1
+    先行依据: 旧ABI边界与精度比较器已冻结，可在CPU沙箱实现独立版本候选、Host序列化及负例；不等待本地数值owner，也不更改现有wire语义。
+    完成边界: 先审计3位kind全部8值占用；新版本候选明确dtype/stride/多输入/精度policy/状态句柄编码、unknown-version拒绝及roundtrip。保留旧65个字节向量；不将候选当作Host到RTL最终冻结，不关闭C04.2。
+    证据: []
 - {编号: C05, 名称: 将root微程序接到真实数据owner, 状态: to do}
 - 编号: C06
   名称: 超64命令与有限tensor存活集合
@@ -265,7 +287,7 @@
   子项:
   - 编号: C07.1
     名称: 多状态域事务提交与失败恢复控制合同测试
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@contracts-20260917
     前置:
@@ -273,7 +295,44 @@
     - C08.1
     先行依据: 复用既有state transaction/commit合同，用小尺寸合成状态和事件trace验证生命周期；不依赖真实模型数值或本地DUT输出。
     完成边界: 覆盖layer/request/epoch/generation隔离、非零旧状态、最后ACK错误、poison后成功ACK计数、reset和迟到响应；失败不得发布新状态；不宣称DDR/SRAM或RTL闭环。
-    证据: []
+    证据:
+    - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_result.json
+      SHA256: 7191989696ef6b50248ebc49f1c32639cd0da0382f5f218b577352246a06f406
+      设计提交: 842a67a9e2cac8f53d3c5923563a25a2ad7db70c
+      范围: C07.1 E0 word事件控制合同：修复stale先写后拒绝；十域隔离、旧状态/ACK/poison/reset/retry。136普通及136优化测试、4000状态事件与4000旧barrier事务通过；不宣称物理内存或数值owner闭环。
+      关联文件:
+      - 文件: src/heteronpu/state_commit_protocol.py
+        SHA256: e34df872cb94291db3d3f77ebc7f6223a33658082ed075684d4100ec20f1ee22
+      - 文件: src/heteronpu/block_state_transactions.py
+        SHA256: e9df72cad212c1d29bd66497cbabe7f93bbe944a73660dfe32ef1e3acec87d7c
+      - 文件: scripts/block_state_stress_oracle.py
+        SHA256: f5cd9b661f44187ad60533692cf1c7d031f69fa9bc1f45a549d82706e3c76ffa
+      - 文件: tests/test_state_commit_atomicity.py
+        SHA256: 1eccbf957fdae2b7d2a2a58b1ba0dee4601c07b6c82e034da86887e21577de5e
+      - 文件: tests/test_block_state_transactions.py
+        SHA256: feace69913df339046a9ea4cbdb7f55d69005d91e9b34a7182b56daa705c95b2
+      - 文件: tests/test_sequence_state_transactions.py
+        SHA256: 86d03c8a6c9dd0c37c9371d945a1df1f8e3739a6fd5a6d9f2ab6d9d947b22133
+      - 文件: tests/test_sandbox_v68.py
+        SHA256: 6ed125a43f75d2aa64c9de00004929a071a389d5735d87d66235b0a3650706c7
+      - 文件: src/heteronpu/sequence_state_transactions.py
+        SHA256: 35fbea33c3206cdea2831581ee02c44019a50e926cfc474e432b18b8bc463fb0
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_before_fix_raw.json
+        SHA256: cba16b5bc3916fe6a8cf5a7b07c7c3ddb0f4c30937e69f14eb9c927c85bafd19
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_normal.log
+        SHA256: a2b7c8733de5632de3c29190cbf9d560c6cdced6fb48646b5375220397326abc
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_optimized.log
+        SHA256: b196004103e59a5627bea34344fc97d41862ec9920ee2fae68a67332b0ca5a04
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_stress.json
+        SHA256: c8f7921613e7ad6965bf40c7674a4f99a91421bf80106e1fe6e576f71adaddf1
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_stress_optimized.json
+        SHA256: c8f7921613e7ad6965bf40c7674a4f99a91421bf80106e1fe6e576f71adaddf1
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_state_commit_trace.json
+        SHA256: 42a12d629fa0c4e91323e820bdda5cfaf2c31a656a3cb4fd78c70b30caf1c95c
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/C07_optimized_raw.json
+        SHA256: 910d74bd923759a029716cab9a5279c75a273eba324a018caa8569f620dad101
+      - 文件: reports/execution/BLOCK_CONTRACTS_20260918/combined_regression.json
+        SHA256: c9a30dcd97032b010e4b9a3f12dd4f06e88b2840892449c40981ce2f3880ae26
   - 编号: C07.2
     名称: 实际state-memory owner与片上资源及状态续算集成
     状态: to do
@@ -328,6 +387,17 @@
     - C08.1
     先行依据: ''
     完成边界: 完成C08剩余真实DUT事件计数、参考接入与全量数值验收
+    证据: []
+  - 编号: C08.3
+    名称: E0状态事件trace到全量回执的独立交叉校验
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - C07.1
+    - C08.1
+    先行依据: 复用已完成C07.1事件模型及C08.1全量比较器，新增外部trace解析/交叉校验边界；输入只标合成E0，不依赖本地DUT日志。
+    完成边界: 将owner/ACK/发布generation与完整状态字节绑定并校验；缺失、重复、跨owner/epoch、成功字节错计、未ACK却发布必须拒绝。不得把模型trace标成DUT证据，不放松receipt-v1、不关闭C08.2。
     证据: []
 - {编号: Q20, 名称: 重跑当前Qwen2双层主链保护基线, 状态: to do}
 - 编号: Q21
@@ -503,3 +573,8 @@
 - {编号: C07.1, 从: to do, 到: ongoing, 执行者: sandbox@contracts-20260917, 时间: '2026-09-17T09:10:19.030205+00:00', 说明: 用户指定按C04.1→C02.1→C07.1独立推进；先认领防止本地重复，不升级父项或硬件验收。}
 - {编号: C04.1, 从: ongoing, 到: done, 执行者: sandbox@contracts-20260917, 时间: '2026-09-17T09:33:02.846831+00:00', 说明: 沙箱普通与-O回归通过；仅关闭该软件合同子项，父项及硬件验收不变}
 - {编号: C02.1, 从: ongoing, 到: done, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:05:26.719870+00:00', 说明: 修复producer/policy索引隐式转换；普通与-O各128测试通过，C02.2及父项保留未完成。}
+- {编号: C07.1, 从: ongoing, 到: done, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:18:06.383704+00:00', 说明: 修复过期事务污染；仅关闭软件状态控制合同，C07.2仍待实际state-memory
+    owner集成。}
+- {编号: C03.3, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:18:06.580388+00:00', 说明: 新增独立准备子项，保持to do及未认领；完成不替代父项实际集成门禁。}
+- {编号: C04.3, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:18:06.580417+00:00', 说明: 新增独立准备子项，保持to do及未认领；完成不替代父项实际集成门禁。}
+- {编号: C08.3, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:18:06.580425+00:00', 说明: 新增独立准备子项，保持to do及未认领；完成不替代父项实际集成门禁。}

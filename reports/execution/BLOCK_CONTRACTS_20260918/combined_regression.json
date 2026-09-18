@@ -1,0 +1,43 @@
+{
+  "scope": "selected Python contract regression; not full repository or RTL",
+  "normal_passed": 891,
+  "optimized_passed": 891,
+  "failed": 0,
+  "runs": [
+    {
+      "mode": "normal",
+      "passed": 815,
+      "command": "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_abi_integer_contract.py tests/test_command.py tests/test_descriptor_chain.py tests/test_gemmini_descriptor_v2.py tests/test_precision_comparison.py tests/test_precision_comparison_boundaries.py tests/test_block_receipt.py tests/test_state_commit_atomicity.py tests/test_block_state_transactions.py tests/test_sequence_state_transactions.py tests/test_command_window_contract.py tests/test_block_checklist.py tests/test_block_contract_cli.py tests/test_independent_block_hardening.py",
+      "stdout_utf8": "........................................................................ [  8%]\n........................................................................ [ 17%]\n........................................................................ [ 26%]\n........................................................................ [ 35%]\n........................................................................ [ 44%]\n........................................................................ [ 53%]\n........................................................................ [ 61%]\n........................................................................ [ 70%]\n........................................................................ [ 79%]\n........................................................................ [ 88%]\n........................................................................ [ 97%]\n.......................                                                  [100%]\n815 passed in 28.00s\n",
+      "stdout_sha256": "2c4e1876b25b067dd8f24859ae3f820fb5d274a93bf013357d759695e763d250"
+    },
+    {
+      "mode": "normal",
+      "passed": 76,
+      "command": "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_block_performance.py tests/test_typical_block_plan.py",
+      "stdout_utf8": "........................................................................ [ 94%]\n....                                                                     [100%]\n76 passed in 8.46s\n",
+      "stdout_sha256": "5aa2b6f7eea8682b55d64e964240d7e4ca8167c0733c55a3e2e4b2ed3c38ec77"
+    },
+    {
+      "mode": "optimized",
+      "passed": 815,
+      "command": "PYTHONPATH=src python -O -m pytest -o addopts='' -q tests/test_abi_integer_contract.py tests/test_command.py tests/test_descriptor_chain.py tests/test_gemmini_descriptor_v2.py tests/test_precision_comparison.py tests/test_precision_comparison_boundaries.py tests/test_block_receipt.py tests/test_state_commit_atomicity.py tests/test_block_state_transactions.py tests/test_sequence_state_transactions.py tests/test_command_window_contract.py tests/test_block_checklist.py tests/test_block_contract_cli.py tests/test_independent_block_hardening.py",
+      "stdout_utf8": "........................................................................ [  8%]\n........................................................................ [ 17%]\n........................................................................ [ 26%]\n........................................................................ [ 35%]\n........................................................................ [ 44%]\n........................................................................ [ 53%]\n........................................................................ [ 61%]\n........................................................................ [ 70%]\n........................................................................ [ 79%]\n........................................................................ [ 88%]\n........................................................................ [ 97%]\n.......................                                                  [100%]\n=============================== warnings summary ===============================\n../../../opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1304\n  /opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1304: PytestConfigWarning: assertions not in test modules or plugins will be ignored because assert statements are not executed by the underlying Python interpreter (are you using python -O?)\n  \n    self._warn_about_missing_assertion(mode)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n815 passed, 1 warning in 27.34s\n",
+      "stdout_sha256": "440d7aba84ebb2dea0a50930fd00eb276c6a674d0db0e34f7caf8d332830c1b4"
+    },
+    {
+      "mode": "optimized",
+      "passed": 76,
+      "command": "PYTHONPATH=src python -O -m pytest -o addopts='' -q tests/test_block_performance.py tests/test_typical_block_plan.py",
+      "stdout_utf8": "........................................................................ [ 94%]\n....                                                                     [100%]\n=============================== warnings summary ===============================\n../../../opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1304\n  /opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1304: PytestConfigWarning: assertions not in test modules or plugins will be ignored because assert statements are not executed by the underlying Python interpreter (are you using python -O?)\n  \n    self._warn_about_missing_assertion(mode)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n76 passed, 1 warning in 8.28s\n",
+      "stdout_sha256": "d387ee2a2d730b5e059adbdcb262491993ae0568aef35bf82ee286556282a783"
+    }
+  ],
+  "interrupted_attempts": [
+    {
+      "reason": "Earlier unsplit run hit the sandbox command timeout; no pass was inferred. All 891 selected cases subsequently finished in two explicit invocations per mode.",
+      "stdout_utf8": "........................................................................ [  8%]\n........................................................................ [ 16%]\n........................................................................ [ 24%]\n........................................................................ [ 32%]\n........................................................................ [ 40%]\n........................................................................ [ 48%]\n........................................................................ [ 56%]\n........................................................................ [ 64%]\n........................................................................ [ 72%]\n........................................................................ [ 80%]\n........................................................................ [ 88%]\n................................................................",
+      "stdout_sha256": "47dba9ccb7f41c77bfb44d6b86f03197df068ae5bdb701c3828b250faef404b7"
+    }
+  ]
+}

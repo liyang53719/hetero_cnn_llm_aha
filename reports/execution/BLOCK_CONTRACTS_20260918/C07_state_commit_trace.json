@@ -1,0 +1,54 @@
+{
+  "source": "E0_synthetic_word_event_model",
+  "owner": {
+    "request": 1,
+    "layer": 0,
+    "epoch": 0,
+    "generation": 3,
+    "txn_id": 1,
+    "ticket": 0
+  },
+  "old_state": [
+    11,
+    22
+  ],
+  "events": [
+    {
+      "tag": 0,
+      "okay": true,
+      "success_bytes": 4,
+      "visible_state": [
+        11,
+        22
+      ],
+      "generation": 3
+    },
+    {
+      "tag": 1,
+      "okay": false,
+      "success_bytes": 0,
+      "visible_state": [
+        11,
+        22
+      ],
+      "generation": 3
+    }
+  ],
+  "result": {
+    "owner": {
+      "request": 1,
+      "layer": 0,
+      "epoch": 0,
+      "generation": 3,
+      "txn_id": 1,
+      "ticket": 0
+    },
+    "committed": false,
+    "reason": "poisoned",
+    "generation": 3,
+    "writes_committed": 0,
+    "successful_ack_bytes": 4,
+    "acknowledgements": 2
+  },
+  "hardware_execution_verified": false
+}

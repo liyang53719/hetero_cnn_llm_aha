@@ -1,0 +1,109 @@
+{
+  "task": "C07.1",
+  "status": "PASS",
+  "evidence_class": "E0_word_event_state_contract",
+  "source_base_commit": "842a67a9e2cac8f53d3c5923563a25a2ad7db70c",
+  "python": "3.13.5",
+  "regression": {
+    "bug": "StateCommitModel.commit used to mutate committed state before checking stale generation",
+    "before_fix_failed": 10,
+    "before_fix_domains": 10,
+    "example_before": 11,
+    "example_stale_write": 99,
+    "fix": "check current generation before first publication; retain legacy rollback semantics; use new discard with explicit owner ticket/epoch filtering for failed shadows"
+  },
+  "normal": {
+    "passed": 136,
+    "failed": 0,
+    "deselected": 3
+  },
+  "optimized": {
+    "passed": 136,
+    "failed": 0,
+    "deselected": 3,
+    "warnings": 1
+  },
+  "deselected": [
+    {
+      "test": "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+      "reason": "full repository control-plane audit depends on files outside the selected source export"
+    },
+    {
+      "test": "tests/test_sandbox_v68.py::test_quant_rtl_contract",
+      "reason": "rtl/quant not in selected source export"
+    },
+    {
+      "test": "tests/test_sandbox_v68.py::test_state_rtl_contracts",
+      "reason": "rtl/state not in selected source export"
+    }
+  ],
+  "commands": [
+    "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_state_commit_atomicity.py tests/test_block_state_transactions.py tests/test_sequence_state_transactions.py tests/test_sandbox_v68.py -k 'not v69_control_plane and not quant_rtl_contract and not state_rtl_contracts'",
+    "PYTHONPATH=src python -O -m pytest -o addopts='' -q tests/test_state_commit_atomicity.py tests/test_block_state_transactions.py tests/test_sequence_state_transactions.py tests/test_sandbox_v68.py -k 'not v69_control_plane and not quant_rtl_contract and not state_rtl_contracts'",
+    "python scripts/block_state_stress_oracle.py --transactions 4000",
+    "python -O scripts/block_state_stress_oracle.py --transactions 4000"
+  ],
+  "stress": {
+    "word_transactions": 4000,
+    "legacy_transactions": 4000,
+    "normal_optimized_identical": true,
+    "modes": {
+      "success": 1000,
+      "last_ack_error": 1000,
+      "poison": 1000,
+      "reset": 1000
+    }
+  },
+  "coverage": [
+    "ten StateDomain IDs",
+    "request/layer/epoch/generation/txn_id/ticket isolation",
+    "nonzero old-state preservation before publication and on failure",
+    "last error ACK cannot publish state or generation",
+    "successful ACK bytes counted after poison, never counted twice",
+    "reset invalidates all request layers and late responses; committed state remains",
+    "same external transaction ID retry protected by new ticket",
+    "concurrent stale-generation rejection",
+    "accepted-prefix program-order publication, out-of-order ACKs",
+    "strict integer/status/word validation under python -O",
+    "bounded active slots and generation exhaustion fail-closed"
+  ],
+  "boundaries": [
+    "word-only four-byte successful ACK model; not AXI burst or partial-error-byte semantics",
+    "shadow isolation is modeled, not implemented or proven for physical DDR/SRAM",
+    "non-wrapping Python epoch/ticket; RTL widths/wrap/reset protocol require separate review",
+    "legacy rollback advances generation; new discard does not, and must be paired with owner filtering",
+    "nonzero state preservation is checked; actual GDN/conv/KV numerical state consumption is not verified",
+    "three unavailable full-source tests not counted as passes; not a full repository regression"
+  ],
+  "source_files": {
+    "src/heteronpu/state_commit_protocol.py": "e34df872cb94291db3d3f77ebc7f6223a33658082ed075684d4100ec20f1ee22",
+    "src/heteronpu/block_state_transactions.py": "e9df72cad212c1d29bd66497cbabe7f93bbe944a73660dfe32ef1e3acec87d7c",
+    "scripts/block_state_stress_oracle.py": "f5cd9b661f44187ad60533692cf1c7d031f69fa9bc1f45a549d82706e3c76ffa",
+    "tests/test_state_commit_atomicity.py": "1eccbf957fdae2b7d2a2a58b1ba0dee4601c07b6c82e034da86887e21577de5e",
+    "tests/test_block_state_transactions.py": "feace69913df339046a9ea4cbdb7f55d69005d91e9b34a7182b56daa705c95b2",
+    "tests/test_sequence_state_transactions.py": "86d03c8a6c9dd0c37c9371d945a1df1f8e3739a6fd5a6d9f2ab6d9d947b22133",
+    "tests/test_sandbox_v68.py": "6ed125a43f75d2aa64c9de00004929a071a389d5735d87d66235b0a3650706c7",
+    "src/heteronpu/sequence_state_transactions.py": "35fbea33c3206cdea2831581ee02c44019a50e926cfc474e432b18b8bc463fb0"
+  },
+  "evidence_files": {
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_before_fix_raw.json": "cba16b5bc3916fe6a8cf5a7b07c7c3ddb0f4c30937e69f14eb9c927c85bafd19",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_normal.log": "a2b7c8733de5632de3c29190cbf9d560c6cdced6fb48646b5375220397326abc",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_optimized.log": "b196004103e59a5627bea34344fc97d41862ec9920ee2fae68a67332b0ca5a04",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_stress.json": "c8f7921613e7ad6965bf40c7674a4f99a91421bf80106e1fe6e576f71adaddf1",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_stress_optimized.json": "c8f7921613e7ad6965bf40c7674a4f99a91421bf80106e1fe6e576f71adaddf1",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_state_commit_trace.json": "42a12d629fa0c4e91323e820bdda5cfaf2c31a656a3cb4fd78c70b30caf1c95c",
+    "reports/execution/BLOCK_CONTRACTS_20260918/C07_optimized_raw.json": "910d74bd923759a029716cab9a5279c75a273eba324a018caa8569f620dad101",
+    "reports/execution/BLOCK_CONTRACTS_20260918/combined_regression.json": "c9a30dcd97032b010e4b9a3f12dd4f06e88b2840892449c40981ce2f3880ae26"
+  },
+  "hardware_execution_verified": false,
+  "official_model_accepted": false,
+  "additional_regression": {
+    "normal_passed": 891,
+    "optimized_passed": 891,
+    "partition_passed": [
+      815,
+      76
+    ],
+    "scope": "selected Python tests, no RTL/full repository acceptance; counts overlap with task-specific tests"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "api": {
+    "bytes": 21846,
+    "path": "config/upstream/weight_headers/qwen3_5_0p8b/model_api.json",
+    "sha256": "71607a12b9f0567a744563c4503777b493a5a0c45c1609d94e3f3b874bfe2bd8",
+    "url": "https://huggingface.co/api/models/Qwen/Qwen3.5-0.8B/revision/2fc06364715b967f1860aea9cf38778875588b17?blobs=true"
+  },
+  "claim_boundary": "Pinned HTTP safetensors headers and raw config/forward/index provenance only. LFS whole-file digests are advertised, not locally verified. No tensor payload bytes, official forward execution, actual RTL or utilization proof.",
+  "config": {
+    "bytes": 2907,
+    "path": "config/upstream/weight_headers/qwen3_5_0p8b/config.json",
+    "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/config.json"
+  },
+  "files": [
+    {
+      "bytes": 2907,
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/config.json",
+      "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/config.json"
+    },
+    {
+      "bytes": 21846,
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/model_api.json",
+      "sha256": "71607a12b9f0567a744563c4503777b493a5a0c45c1609d94e3f3b874bfe2bd8",
+      "url": "https://huggingface.co/api/models/Qwen/Qwen3.5-0.8B/revision/2fc06364715b967f1860aea9cf38778875588b17?blobs=true"
+    },
+    {
+      "bytes": 50900,
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/model.safetensors.index.json",
+      "sha256": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors.index.json"
+    },
+    {
+      "bytes": 59848,
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/model.safetensors-00001-of-00001.safetensors.header.bin",
+      "sha256": "b30e0e919db8a7d195d077a74673d1075e43bc55aece77656e075d95b5dcdf0d"
+    },
+    {
+      "bytes": 703,
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/model.safetensors-00001-of-00001.safetensors.http_receipt.json",
+      "sha256": "da56b4b0469461397d4b093229c46925d527cebec60e597ee4352c1ddd9e20b4"
+    },
+    {
+      "bytes": 88051,
+      "path": "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py",
+      "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/modeling_qwen3_5.py"
+    },
+    {
+      "bytes": 2910,
+      "path": "config/model_profiles/qwen3_5_0p8b.json",
+      "sha256": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769"
+    }
+  ],
+  "forward": {
+    "bytes": 88051,
+    "path": "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py",
+    "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/modeling_qwen3_5.py"
+  },
+  "forward_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "index": {
+    "bytes": 50900,
+    "path": "config/upstream/weight_headers/qwen3_5_0p8b/model.safetensors.index.json",
+    "sha256": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+    "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors.index.json"
+  },
+  "index_absence": null,
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "profile": {
+    "bytes": 2910,
+    "path": "config/model_profiles/qwen3_5_0p8b.json",
+    "sha256": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769"
+  },
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "schema_version": 1,
+  "shards": [
+    {
+      "advertised_lfs_sha256_unverified": "04b1c301231dd422b8860db31311ab2721511346a32cb1e079c4c4e5f1fe4696",
+      "file": "model.safetensors-00001-of-00001.safetensors",
+      "file_bytes": 1746942600,
+      "header": {
+        "bytes": 59848,
+        "path": "config/upstream/weight_headers/qwen3_5_0p8b/model.safetensors-00001-of-00001.safetensors.header.bin",
+        "sha256": "b30e0e919db8a7d195d077a74673d1075e43bc55aece77656e075d95b5dcdf0d"
+      },
+      "http_receipt": {
+        "bytes": 703,
+        "path": "config/upstream/weight_headers/qwen3_5_0p8b/model.safetensors-00001-of-00001.safetensors.http_receipt.json",
+        "sha256": "da56b4b0469461397d4b093229c46925d527cebec60e597ee4352c1ddd9e20b4"
+      },
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors"
+    }
+  ]
+}

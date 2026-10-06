@@ -38,7 +38,13 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 ## 计划与清单落点
 
 - `doc/three_model_typical_block_closure_20260917_zh.yaml` 的“当前统一验收目标”优先于历史六类发布范围，修正 G8/性能目标旧表述。
-- U00拆为U00.1“0.8B来源与dense-FFN几何”以及U00.2“全部三模型回放workload冻结”；本次只关闭U00.1。U00仍ongoing，U00.2及U01“三模型典型block数值及90%联合验收”仍to do。
+- U00拆为U00.1“0.8B来源与dense-FFN几何”以及U00.2“全部三模型回放workload冻结”；本次只关闭U00.1。U00仍ongoing，U00.2已ongoing，U01“三模型典型block数值及90%联合验收”仍to do。
 - `doc/block_checklist.yaml` 更新计划 SHA，保留所有已完成子项及原证据；当前队列排除历史 Q38/R00/F00/F01。
 - 计划校验器检查三模型、90%、实际RTL、固定资源/完整周期、Matrix/Vector分报、必需来源字段，以及U01不依赖历史Q38闭包。校验 PASS 仅代表文档合同一致，绝不代表硬件 PASS。
 - C03.3 仍仅为 synthetic E0 shape/layout 与宽地址向量完成。C03.2、官方模型真实接入、三模型数值与90%尚未关闭；Chisel CI另跟踪实际运行结果。
+
+## U00.2 本轮真实header证据（部分推进）
+
+三模型的16个权重分片已通过HTTP206只读取原始header，归档321,392字节、2,637项tensor。两个Qwen3.5的index和全部header完全对应；Qwen2为官方单文件且无index。全部1,350项主文本shape与来源/几何一致。GDN A_log及norm.weight实际为F32，dt_bias为BF16；35B routed experts为packed三维tensor。
+
+`config/workloads/three_model_m128_open.json` 将5个典型block绑定到精确header/config/forward，但仅继承batch1/M128；真实权重payload、输入、初态、逐producer精度、双参考、cache、MoE路由、实际Matrix/Vector资源及必需性能集合仍OPEN。严格模式必须退出2；不得从metadata PASS升级为U00.2完成、模型支持、数值RTL或90%。详见 `doc/U00_2_WEIGHT_HEADERS_WORKLOAD_20261006_CN.md`。

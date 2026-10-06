@@ -33,7 +33,7 @@
       来源: config/qwen2_1p5b_target_shape.json
       所需block:
       - B2_DENSE
-      门禁: 固定revision/配置/forward/权重/输入实际字节复核；保留既有Instruct与Base区分。
+      门禁: U00.2已固定338项真实header及官方config/forward原字节；Instruct身份不变。权重payload/输入/数值RTL与完整workload仍未冻结。
     Qwen3.5-0.8B:
       阶段: pinned_geometry_only_U00_1
       既有身份: Qwen/Qwen3.5-0.8B
@@ -48,14 +48,23 @@
       典型层索引: {B35_08_ATTN_DENSE: 3, B35_08_GDN_DENSE: 0}
       权重数值RTL通过: false
       性能workload已冻结: false
-      门禁: 仅固定config/forward/index原字节与E0几何；320个主文本tensor名称对齐，shape未读取权重header。两个真实block类型及0基层索引已核定，M128形状仅继承候选，不代表完整性能workload已冻结。U00.2与U01保持未完成。
+      门禁: U00.1为已完成的来源/E0几何阶段；U00.2新增全部488项真实header且320主文本shape对齐。两个block仍为0/3层，M128不变；payload/输入/状态/精度/完整性能集合未冻结，U00.2与U01未完成。
     Qwen3.5-35B-A3B:
       既有身份: Qwen/Qwen3.5-35B-A3B
       来源: config/model_profiles/qwen3_5_35b_a3b.json
       所需block:
       - B35_ATTN_MOE
       - B35_GDN_MOE
-      门禁: 已有profile及metadata归档不等于本轮官方字节/权重/RTL验收；完整包含routed/shared expert及state/route输出。
+      门禁: U00.2保留62704185固定revision，14分片1811项真实header及692主文本shape已核验；packed routed/shared expert几何明确。payload/真实route/状态/数值RTL仍未验收。
+  U00.2权重及workload进度:
+    状态: ongoing
+    原字节清单: config/upstream/weight_headers/
+    可复验workload入口: config/workloads/three_model_m128_open.json
+    报告: doc/U00_2_WEIGHT_HEADERS_WORKLOAD_20261006_CN.md
+    已核验: 三模型16个真实safetensors header，共321392字节和2637项tensor；完整index与header对应、offset/dtype字节范围及1350项主文本shape。
+    精度发现: Qwen3.5的GDN A_log和norm.weight实际F32，dt_bias实际BF16；存储类型不等于逐producer计算精度验收。
+    当前范围: batch1与M128继承不变，5个典型block入口可重验；无权重payload或官方forward执行，无实际RTL/90%结果。
+    门禁: required-performance-suite及全部真实payload/输入/初态/位置mask/双参考/精度/cache/路由/固定资源仍OPEN；require-complete必须拒绝。
   workload必填:
   - model_id
   - model_revision

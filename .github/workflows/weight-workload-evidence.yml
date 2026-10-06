@@ -1,0 +1,50 @@
+name: weight-workload-evidence
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/weight-workload-evidence.yml'
+      - 'src/heteronpu/weight_header_contract.py'
+      - 'src/heteronpu/workload_evidence.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/qwen35_dense_contract.py'
+      - 'config/upstream/**'
+      - 'config/model_profiles/**'
+      - 'config/qwen2_1p5b_target_shape.json'
+      - 'config/workloads/**'
+      - 'scripts/collect_weight_headers.py'
+      - 'scripts/validate_workload_evidence.py'
+      - 'tests/test_weight_workload_evidence.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-header-and-open-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest
+      - name: Validate actual header metadata without claiming replay readiness
+        run: |
+          python scripts/validate_workload_evidence.py --output work/weight_workload_evidence.json
+          python -m pytest -o addopts='' -q tests/test_weight_workload_evidence.py tests/test_qwen35_dense_geometry.py tests/test_typical_block_plan.py tests/test_block_checklist.py
+          python -O -m pytest -o addopts='' -q tests/test_weight_workload_evidence.py
+          python scripts/validate_typical_block_plan.py doc/three_model_typical_block_closure_20260917_zh.yaml
+          python scripts/block_checklist.py validate
+          set +e
+          python scripts/validate_workload_evidence.py --require-complete > work/replay_admission.log 2>&1
+          code=$?
+          set -e
+          test "$code" -eq 2
+          grep -q 'U00.2 OPEN' work/replay_admission.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pinned-weight-headers-open-workloads-${{ github.sha }}
+          path: |
+            work/weight_workload_evidence.json
+            work/replay_admission.log
+          if-no-files-found: error

@@ -1,0 +1,103 @@
+{
+  "api": {
+    "bytes": 5540,
+    "path": "config/upstream/weight_headers/qwen2_1p5b/model_api.json",
+    "sha256": "52375c74332daa8b40d40ed21879511b953b818e56d348406ade6348485699fc",
+    "url": "https://huggingface.co/api/models/Qwen/Qwen2-1.5B-Instruct/revision/ba1cf1846d7df0a0591d6c00649f57e798519da8?blobs=true"
+  },
+  "claim_boundary": "Pinned HTTP safetensors headers and raw config/forward/index provenance only. LFS whole-file digests are advertised, not locally verified. No tensor payload bytes, official forward execution, actual RTL or utilization proof.",
+  "config": {
+    "bytes": 660,
+    "path": "config/upstream/weight_headers/qwen2_1p5b/config.json",
+    "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+    "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/config.json"
+  },
+  "files": [
+    {
+      "bytes": 660,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/config.json",
+      "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/config.json"
+    },
+    {
+      "bytes": 5540,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/model_api.json",
+      "sha256": "52375c74332daa8b40d40ed21879511b953b818e56d348406ade6348485699fc",
+      "url": "https://huggingface.co/api/models/Qwen/Qwen2-1.5B-Instruct/revision/ba1cf1846d7df0a0591d6c00649f57e798519da8?blobs=true"
+    },
+    {
+      "bytes": 38536,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin",
+      "sha256": "124516afba769374e2b948e185dd3e9203e2412daaef3f2ccf7bdbaca0f88987"
+    },
+    {
+      "bytes": 683,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/model.safetensors.http_receipt.json",
+      "sha256": "d0bc2eefae42de0d0657e8fe86139cebf4200bb1c541919e64f8129a3780104c"
+    },
+    {
+      "bytes": 63883,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py",
+      "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/9fe3f585bb4ea29f209dc705d269fbe292e1128f/src/transformers/models/qwen2/modeling_qwen2.py"
+    },
+    {
+      "bytes": 6729,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/configuration_qwen2.py",
+      "sha256": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/9fe3f585bb4ea29f209dc705d269fbe292e1128f/src/transformers/models/qwen2/configuration_qwen2.py"
+    },
+    {
+      "bytes": 353,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_tag.json",
+      "sha256": "aa7df12a28514104aa8e81c8d1a2337fef5694fd3e61e097477456c24da0b2be",
+      "url": "https://api.github.com/repos/huggingface/transformers/git/ref/tags/v4.40.1"
+    },
+    {
+      "bytes": 693,
+      "path": "config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_annotated_tag.json",
+      "sha256": "02f0a75e79d5a0f42792eb3eaae10033529ce9786fa4d11bfe1f18062a0fd6d6",
+      "url": "https://api.github.com/repos/huggingface/transformers/git/tags/293a4eb2fd2d1c4eda956cdace02b64a13427bd0"
+    },
+    {
+      "bytes": 3103,
+      "path": "config/qwen2_1p5b_target_shape.json",
+      "sha256": "bdf8fca40308a5e20edc37b47e9e10e873319df79f934f8edbd9702baa1ac3fd"
+    }
+  ],
+  "forward": {
+    "bytes": 63883,
+    "path": "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py",
+    "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+    "url": "https://raw.githubusercontent.com/huggingface/transformers/9fe3f585bb4ea29f209dc705d269fbe292e1128f/src/transformers/models/qwen2/modeling_qwen2.py"
+  },
+  "forward_revision": "9fe3f585bb4ea29f209dc705d269fbe292e1128f",
+  "index": null,
+  "index_absence": "official single-file checkpoint; pinned index URL returned HTTP404",
+  "model_id": "Qwen/Qwen2-1.5B-Instruct",
+  "profile": {
+    "bytes": 3103,
+    "path": "config/qwen2_1p5b_target_shape.json",
+    "sha256": "bdf8fca40308a5e20edc37b47e9e10e873319df79f934f8edbd9702baa1ac3fd"
+  },
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "schema_version": 1,
+  "shards": [
+    {
+      "advertised_lfs_sha256_unverified": "302e327795994403cb1e3cb6a3345c76b246b894d14078c936b570c83a4e9057",
+      "file": "model.safetensors",
+      "file_bytes": 3087467144,
+      "header": {
+        "bytes": 38536,
+        "path": "config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin",
+        "sha256": "124516afba769374e2b948e185dd3e9203e2412daaef3f2ccf7bdbaca0f88987"
+      },
+      "http_receipt": {
+        "bytes": 683,
+        "path": "config/upstream/weight_headers/qwen2_1p5b/model.safetensors.http_receipt.json",
+        "sha256": "d0bc2eefae42de0d0657e8fe86139cebf4200bb1c541919e64f8129a3780104c"
+      },
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    }
+  ]
+}

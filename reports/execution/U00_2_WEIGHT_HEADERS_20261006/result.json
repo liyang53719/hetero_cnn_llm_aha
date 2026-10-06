@@ -1,0 +1,79 @@
+{
+  "U00_2_complete": false,
+  "actual_header_bytes": 321392,
+  "actual_rtl_executed": false,
+  "actual_shards": 16,
+  "all_header_tensor_count": 2637,
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "baseline_failures_unchanged": true,
+  "baseline_log_sha256": "65b21e13b4aa596c1f2d957b9d6b08f83dab4903e040d12e97b2947f0d5d279e",
+  "batch": 1,
+  "initial_collection_exit": 2,
+  "initial_test_environment_correction": "First full attempt omitted PYTHONPATH=src and failed collection; preserved separately, then rerun with required project environment.",
+  "mac_utilization_measured": false,
+  "main_text_shapes_verified": 1350,
+  "new_tests": 129,
+  "official_forward_executed": false,
+  "parent_commit": "72fce90f04c2a26ce95cfe8fe4b0c5cab4ef0411",
+  "query_tokens": 128,
+  "required_performance_suite_frozen": false,
+  "review_fixes": [
+    "Bind exact runtime profile bytes and raw config geometry",
+    "Reject nonempty acquisition output before network so failed retries cannot retain stale PASS"
+  ],
+  "schema_version": 1,
+  "scope": "Pinned config/forward/index/API/header geometry and reproducible OPEN three-model M128 preparation. No payload/official numerical/DUT/90% acceptance.",
+  "source_manifest": "reports/execution/U00_2_WEIGHT_HEADERS_20261006/source_sha256.json",
+  "source_sha256": "10bc8b41448a7ff63029c237901c6602624894e6a366cf629c858af04108be91",
+  "status": "PASS_PINNED_HEADER_PREPARATION_ONLY_U00_2_OPEN",
+  "tested_source_binding": "Local post-parent source bytes pinned by source_sha256.json; exact publication commit is checked separately in CI.",
+  "tests": [
+    {
+      "command": "PYTHONPATH=src python -m pytest -o addopts= -q tests/test_weight_workload_evidence.py tests/test_qwen35_dense_geometry.py tests/test_typical_block_plan.py tests/test_block_checklist.py",
+      "exit_code": 0,
+      "failed": 0,
+      "log_sha256": "2e483c762b6fcce3c5318592185b66029a7dbee49979f8a56a6e015f7e988864",
+      "name": "focused",
+      "passed": 411
+    },
+    {
+      "command": "PYTHONPATH=src python -O -m pytest -o addopts= -q tests/test_weight_workload_evidence.py",
+      "exit_code": 0,
+      "failed": 0,
+      "log_sha256": "fe7249e7cd713a137fc50078081bf5b3496fd9707beb070943b40dbfb97858f6",
+      "name": "optimized",
+      "passed": 129
+    },
+    {
+      "command": "PYTHONPATH=src python -m pytest -o addopts= -q",
+      "exit_code": 1,
+      "failed": 5,
+      "log_sha256": "92a23cf3d5b6c738b17e978190dac46e8dcee5a27c385b1d228d34705cd61a77",
+      "name": "pytest_full",
+      "passed": 1768
+    },
+    {
+      "command": "python scripts/validate_workload_evidence.py --require-complete",
+      "exit_code": 2,
+      "failed": null,
+      "log_sha256": "8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449",
+      "name": "replay_admission",
+      "passed": null
+    },
+    {
+      "command": "python scripts/collect_weight_headers.py --model qwen3_5_0p8b --output <new-empty-directory>",
+      "exit_code": 0,
+      "failed": null,
+      "log_sha256": "bf0868234d43435861698146601a3d168a11ecdd7560fd27a37d433dbd86a76e",
+      "name": "live_reacquisition",
+      "passed": null
+    }
+  ],
+  "weight_payload_content_verified": false
+}

@@ -9,7 +9,7 @@
 
 - Qwen2-1.5B：既有精确身份为 Qwen/Qwen2-1.5B-Instruct，保留 Instruct/Base 区分。固定 revision/config/framework 哈希记录在 `config/qwen2_1p5b_target_shape.json`。沿用 B2_DENSE 的完整 Attention/SwiGLU、Norm、bias、residual 与 KV 提交边界；现有合成几何通过不代表当前官方 checkpoint 或 90% 通过。
 - Qwen3.5-35B-A3B：已有 `config/model_profiles/qwen3_5_35b_a3b.json` 与 `reports/execution/QWEN35_REFERENCE_LOCK.json`。后者仅 metadata，明确没有权重和数值 RTL 通过。需要 B35_ATTN_MOE 与 B35_GDN_MOE，包含 routed/shared experts、route 与必要状态。固定原字节和当前权重来源仍需复核。
-- Qwen3.5-0.8B：U00.1现已新增 `config/model_profiles/qwen3_5_0p8b.json`、固定revision/config/forward/index原字节，以及显式dense-FFN的几何、算子/状态/调度入口。H1024、FFN3584、24层与3:1 GDN/full-attention已由官方来源核实；典型层0/3分别为GDN+dense-FFN、Attention+dense-FFN。只完成来源/几何E0，未加载checkpoint权重、未执行数值或RTL。具体来源、拒绝测试和剩余门禁见 `doc/U00_1_QWEN35_DENSE_GEOMETRY_20261006_CN.md`。
+- Qwen3.5-0.8B：U00.1现已新增 `config/model_profiles/qwen3_5_0p8b.json`、固定revision/config/forward/index原字节，以及显式dense-FFN的几何、算子/状态/调度入口。H1024、FFN3584、24层与3:1 GDN/full-attention已由官方来源核实；典型层0/3分别为GDN+dense-FFN、Attention+dense-FFN。U00.1当时仅完成来源/几何E0；后续层3真实payload及官方合成输入forward见文末，实际RTL仍未执行。最初来源、拒绝测试和剩余门禁见 `doc/U00_1_QWEN35_DENSE_GEOMETRY_20261006_CN.md`。
 - Qwen3.8：保留历史研发任务、六类 inventory 和原证据，已从当前必需三模型及派工队列排除。它不能替代 0.8B；旧 R00、整网/视觉/MTP 发布不代表当前 U01 通过。
 
 ## 利用率及同源门禁
@@ -48,3 +48,9 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 三模型的16个权重分片已通过HTTP206只读取原始header，归档321,392字节、2,637项tensor。两个Qwen3.5的index和全部header完全对应；Qwen2为官方单文件且无index。全部1,350项主文本shape与来源/几何一致。GDN A_log及norm.weight实际为F32，dt_bias为BF16；35B routed experts为packed三维tensor。
 
 `config/workloads/three_model_m128_open.json` 将5个典型block绑定到精确header/config/forward，但仅继承batch1/M128；真实权重payload、输入、初态、逐producer精度、双参考、cache、MoE路由、实际Matrix/Vector资源及必需性能集合仍OPEN。严格模式必须退出2；不得从metadata PASS升级为U00.2完成、模型支持、数值RTL或90%。详见 `doc/U00_2_WEIGHT_HEADERS_WORKLOAD_20261006_CN.md`。
+
+## U00.2 后续：真实payload与官方层数值已实跑
+
+已实际取得固定0.8B层3全部11项payload（36,705,280字节），在未修改的固定官方DecoderLayer运行FP32及BF16。batch1/M128的空KV及past128两组采用不同确定性合成hidden-state；FP32对独立NumPy FP64的全部output/K/V共655,360元素零不匹配，输出最大绝对误差约5.04e-7。BF16为实际运行及精度差异诊断，未冻结其逐producer双参考。
+
+合成输入不等于官方上游激活，逻辑KV空/已有不等于物理cache条件，软件层通过不等于RTL或90%。U00.2保持ongoing，U01不升级。来源、下载上限、完整运行数组、回归与剩余门禁见 `doc/U00_2_LAYER3_PAYLOAD_NUMERICAL_20261006_CN.md`。

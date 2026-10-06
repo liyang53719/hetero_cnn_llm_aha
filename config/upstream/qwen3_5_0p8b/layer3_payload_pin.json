@@ -1,0 +1,149 @@
+{
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "layer_id": 3,
+  "header_sha256": "b30e0e919db8a7d195d077a74673d1075e43bc55aece77656e075d95b5dcdf0d",
+  "payload_bytes": 36705280,
+  "origin": "Local SHA256 of bounded HTTP206 bytes from pinned official checkpoint; not full-file LFS verification",
+  "tensors": [
+    {
+      "name": "model.language_model.layers.3.input_layernorm.weight",
+      "local_name": "input_layernorm.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024
+      ],
+      "start": 1215886312,
+      "end": 1215888359,
+      "bytes": 2048,
+      "sha256": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b"
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "local_name": "mlp.down_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024,
+        3584
+      ],
+      "start": 1215888360,
+      "end": 1223228391,
+      "bytes": 7340032,
+      "sha256": "d3428ec277dd5195c9a42720be5b4068fcc51943670c62f57e61b5adebcae1da"
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "local_name": "mlp.gate_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        3584,
+        1024
+      ],
+      "start": 1223228392,
+      "end": 1230568423,
+      "bytes": 7340032,
+      "sha256": "50d2f4c60e786596e464958bb515ec5573c3ddb53604930e3e2244f107f71f11"
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "local_name": "mlp.up_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        3584,
+        1024
+      ],
+      "start": 1230568424,
+      "end": 1237908455,
+      "bytes": 7340032,
+      "sha256": "f141786356fc0b59f4e1aa8cc3afb084d283e384c98cd47dbd1812b6c9ac1f0f"
+    },
+    {
+      "name": "model.language_model.layers.3.post_attention_layernorm.weight",
+      "local_name": "post_attention_layernorm.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024
+      ],
+      "start": 1237908456,
+      "end": 1237910503,
+      "bytes": 2048,
+      "sha256": "480c483e9af2962e8213512464316402dd657d0dcfa37119a58409689330c7a2"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_norm.weight",
+      "local_name": "self_attn.k_norm.weight",
+      "dtype": "BF16",
+      "shape": [
+        256
+      ],
+      "start": 1237910504,
+      "end": 1237911015,
+      "bytes": 512,
+      "sha256": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "local_name": "self_attn.k_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        512,
+        1024
+      ],
+      "start": 1237911016,
+      "end": 1238959591,
+      "bytes": 1048576,
+      "sha256": "4c8cfc4b114917fd3067510ca34886f9bb2bac638a07c537a544e0b9494237fe"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "local_name": "self_attn.o_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024,
+        2048
+      ],
+      "start": 1238959592,
+      "end": 1243153895,
+      "bytes": 4194304,
+      "sha256": "4c92f1c5a423b022da52875dc21b31e0957110aefefc8826e0be5bcc875cc9cf"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_norm.weight",
+      "local_name": "self_attn.q_norm.weight",
+      "dtype": "BF16",
+      "shape": [
+        256
+      ],
+      "start": 1243153896,
+      "end": 1243154407,
+      "bytes": 512,
+      "sha256": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "local_name": "self_attn.q_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        4096,
+        1024
+      ],
+      "start": 1243154408,
+      "end": 1251543015,
+      "bytes": 8388608,
+      "sha256": "b0dde4ab3eee4dc2abdf2e2fe8cd6b474d52c4559e38bb8fc9c8589c1b0a7176"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "local_name": "self_attn.v_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        512,
+        1024
+      ],
+      "start": 1251543016,
+      "end": 1252591591,
+      "bytes": 1048576,
+      "sha256": "459514e89bd3142fca159b73b936cc0e444e6e9cb0dff082be0ecb8462d6a1b7"
+    }
+  ]
+}

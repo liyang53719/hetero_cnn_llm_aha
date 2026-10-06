@@ -1,0 +1,98 @@
+{
+  "schema": "heteronpu.c03.3.result.v1",
+  "date_utc": "2026-10-06",
+  "status": "PASS_SCOPED_SYNTHETIC_E0_ONLY",
+  "source_baseline_commit": "4ba43dce23e465796aa31cb9f1752516c7084ac8",
+  "tested_source_commit": "61bc2efb49154d70619368ed290aea6e2f5af7f3",
+  "tested_source_tree": "d9e6805efeca5d6fc8123f5852d52c5b5d497b75",
+  "tools": {
+    "python": "3.12.14",
+    "pytest": "9.1.1",
+    "g++": "14.2.0"
+  },
+  "scope": {
+    "synthetic_vectors": 64,
+    "independent_cpp_fixture_cases": 36,
+    "seeded_cpp_differential_cases": 1200,
+    "enumerated_small_span_cases": 80,
+    "legacy_layout_rows": 4,
+    "legacy_regions_per_row": 30,
+    "production_abi_changed": false,
+    "official_checkpoint_verified": false,
+    "local_chisel_consumer_executed": false,
+    "C03_2_completed": false,
+    "C03_RTL_execution_claimed": false
+  },
+  "tests": {
+    "focused": {
+      "tests": 633,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "optimized": {
+      "tests": 200,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full": {
+      "tests": 1429,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "commands": {
+    "focused": "PYTHONPATH=src python -m pytest -o addopts= -q tests/test_shape_layout_contract.py tests/test_abi_integer_contract.py tests/test_model_geometry.py tests/test_descriptor_chain.py tests/test_gemmini_descriptor_v2.py tests/test_block_checklist.py",
+    "optimized": "PYTHONPATH=src python -O -m pytest -o addopts= -q tests/test_shape_layout_contract.py",
+    "full": "PYTHONPATH=src python -m pytest -o addopts= -q",
+    "vector_check": "python scripts/generate_shape_layout_vectors.py --check",
+    "compileall": "PYTHONPATH=src python -m compileall -q src scripts",
+    "shell_check": "bash -n chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh"
+  },
+  "full_suite_passed": false,
+  "unchanged_baseline_failures": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "aggregate": {
+    "command": "bash scripts/sandbox_validate.sh",
+    "exit_status": 4,
+    "reason": "Existing origin/__DO_NOT_USE__ branch and origin/HEAD short-name are rejected by main-only guard; no remote refs changed; later aggregate stages were not run by this command."
+  },
+  "not_run": [
+    "Local QwenBlockLayoutVectorsSpec: no sbt/Scala tools in sandbox",
+    "New candidate shape/query-KV behavior in RTL",
+    "Official model/checkpoint numerics"
+  ],
+  "ci": {
+    "code_commit": "61bc2efb49154d70619368ed290aea6e2f5af7f3",
+    "shape_layout_contract": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37404860891",
+    "chisel_continuous_prefill": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37404860892",
+    "note": "Live CI outcomes are separate from this immutable local-test receipt; do not infer completion from a link."
+  },
+  "source_sha256": {
+    ".github/workflows/shape-layout-contract.yml": "1a43194d122ac2cc2283440809ceddb70f638186445dc556e30a7f0d060f4cfb",
+    "chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh": "36061a4810ef8490faa34aaf0de37355770e1082c46603f21cc91f4075a92855",
+    "chisel/continuous_prefill/src/test/resources/c03_3/legacy_layout_vectors.tsv": "f11bf773bb49caf78b106926b2413dcbeb1a328487df79ef841d06bf2f2f31ae",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/QwenBlockLayoutVectorsSpec.scala": "e9545fe9f29e4ba666a79d52c7ed682956800a8f53209a1368b3b9c93cff2f7e",
+    "cpp/shape_layout_oracle.cpp": "243978e4f2a7adaa7d43d598034ecf7a10efa7286e091751923963a5265c7214",
+    "doc/C03_3_SHAPE_LAYOUT_CONTRACT_CN.md": "5393ccb81a7c9e69a1f34e9740b737911fcc529fffde1e1d738f31e3830f6a31",
+    "scripts/generate_shape_layout_vectors.py": "d59a6305e2336f92500553fc187d3895d4caed39633045803996fc975fdfbae5",
+    "src/heteronpu/shape_layout_contract.py": "5a9cb330c0b786d9bf4465183e27334aa8090462ea16e8833d865d70097f7bec",
+    "tests/fixtures/block_contracts/legacy_layout_vectors.tsv": "f11bf773bb49caf78b106926b2413dcbeb1a328487df79ef841d06bf2f2f31ae",
+    "tests/fixtures/block_contracts/shape_layout_vectors.json": "1185c7462c38b1d59177986bc3811bff2bf7c8eda75dbde4f3956ac072ba567f",
+    "tests/test_shape_layout_contract.py": "3cddb2dffd3207ec4fd92e8324c88e427bc4919d1e0809b7e01581a01642bc93"
+  },
+  "logs_sha256": {
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/baseline_pytest.txt": "48eabaf90c8c4840b2cdb73bd8b93f6c5182d588f6b240c4fb9c88e4c036f5a7",
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/focused.txt": "d9b4e85db3d7d8baa58e62436305d687011d0af3f15901b62e61aa7d7c96af3c",
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/full_pytest.txt": "fe60385f73d92637ca79b4f28fd6ebdb5a2221c324b508c4cd9caaf419509c23",
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/optimized.txt": "6e609e0e29bdb239eced22e685bd102d9b0881bdc10666c24f252e01b2e092c3",
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/sandbox_validate.txt": "42ba0b6ce73ae89afbcba53bcaa2774e9367327ba44ff1b10cb39b24c565608a"
+  }
+}

@@ -1,21 +1,12 @@
 版本: 1
 审计基线: 842a67a9e2cac8f53d3c5923563a25a2ad7db70c
 状态唯一来源: doc/block_checklist.yaml
-说明: 以下是新增可独立认领的软件准备项，不是已完成结果；先用block_checklist mark认领并成功推送main再编码。父项及全部原.2集成门禁均未跳过。
+说明: 以下仅列尚可独立认领的软件准备项；C03.3已完成E0交付，精确状态与证据仅以block_checklist为准。先用block_checklist mark认领并成功推送main再编码；父项及原.2集成门禁均未跳过。
 执行顺序:
-- C03.3
 - C04.3
 - C08.3
 旧队列说明: 关闭C02.1与C07.1后原sandbox可认领队列为空；其余原事项仍有官方合同/真实owner/本地资源门禁。
 可独立推进:
-- 编号: C03.3
-  名称: 跨语言shape/layout测试向量与宽地址oracle
-  优先级: P0
-  依赖:
-  - C03.1
-  先行依据: 以现有QwenBlockShape/Layout源码和固定合成几何生成独立整数oracle及可供Chisel消费的向量，不需要本地DUT或官方checkpoint；不重复C03.1几何容量计算。
-  验收边界: 交付query/KV长度分离、maxRow、16位维度边界、宽乘法地址/stride/span溢出向量与独立oracle；明确未执行的Chisel/RTL消费者，不能据此关闭C03.2或宣称官方真实shape通过。
-  工具: Python/pytest；向量可在沙箱生成，实际Chisel消费另记未执行
 - 编号: C04.3
   名称: 版本化typed descriptor候选与Host序列化合同
   优先级: P0
@@ -47,6 +38,14 @@
 - 编号: C07.2 / C08.2
   原因: 真实state-memory owner、实际block runner和DUT完整回执尚未验收。
 本地agent避免重复:
-- C04.1、C02.1、C07.1已完成软件合同，不应重复认领或重开。
-- 新增三个.3项当前均未认领，状态仅见唯一checklist；与现有.2项分工不同。
+- C04.1、C02.1、C07.1、C03.3已完成各自软件合同，不应重复认领或重开。
+- C04.3与C08.3仍未认领，状态仅见唯一checklist；与现有.2项分工不同。
+- C03.3向量不是实际Host到RTL接入或官方真实shape验收；继续保留C03.2门禁。
 - E0成功ACK字节是模型观测，不可填入硬件性能或DUT验收结论。
+更新日期: '2026-10-06'
+已完成软件准备:
+- 编号: C03.3
+  名称: 跨语言shape/layout测试向量与宽地址oracle
+  代码提交: 61bc2efb49154d70619368ed290aea6e2f5af7f3
+  证据: reports/execution/C03_3_SHAPE_LAYOUT_20261006/RESULT.json
+  范围: 64条固定合成向量；633普通及200优化测试通过；全量1424通过及5个不变基线失败。Python/C++消费者通过，沙箱Scala/Chisel未执行；CI单独跟踪，不关闭C03.2。

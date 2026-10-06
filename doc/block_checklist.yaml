@@ -168,14 +168,51 @@
     证据: []
   - 编号: C03.3
     名称: 跨语言shape/layout测试向量与宽地址oracle
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@shape-contracts-20261006
     前置:
     - C03.1
     先行依据: 以现有QwenBlockShape/Layout源码和固定合成几何生成独立整数oracle及可供Chisel消费的向量，不需要本地DUT或官方checkpoint；不重复C03.1几何容量计算。
     完成边界: 交付query/KV长度分离、maxRow、16位维度边界、宽乘法地址/stride/span溢出向量与独立oracle；明确未执行的Chisel/RTL消费者，不能据此关闭C03.2或宣称官方真实shape通过。
-    证据: []
+    证据:
+    - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/RESULT.json
+      SHA256: e6490301d073a3394e8c2def0366ffb356be4222b20e7114b6a235cbbc82f882
+      设计提交: 61bc2efb49154d70619368ed290aea6e2f5af7f3
+      范围: C03.3 synthetic E0：64条shape/layout/宽地址向量，Python与C++独立整数oracle、legacy Scala消费者源码。633普通及200优化测试通过；全量1424通过及5个不变基线失败。沙箱Chisel/RTL与官方checkpoint未执行，不关闭C03.2。
+      关联文件:
+      - 文件: .github/workflows/shape-layout-contract.yml
+        SHA256: 1a43194d122ac2cc2283440809ceddb70f638186445dc556e30a7f0d060f4cfb
+      - 文件: chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh
+        SHA256: 36061a4810ef8490faa34aaf0de37355770e1082c46603f21cc91f4075a92855
+      - 文件: chisel/continuous_prefill/src/test/resources/c03_3/legacy_layout_vectors.tsv
+        SHA256: f11bf773bb49caf78b106926b2413dcbeb1a328487df79ef841d06bf2f2f31ae
+      - 文件: chisel/continuous_prefill/src/test/scala/heteronpu/continuous/QwenBlockLayoutVectorsSpec.scala
+        SHA256: e9545fe9f29e4ba666a79d52c7ed682956800a8f53209a1368b3b9c93cff2f7e
+      - 文件: cpp/shape_layout_oracle.cpp
+        SHA256: 243978e4f2a7adaa7d43d598034ecf7a10efa7286e091751923963a5265c7214
+      - 文件: doc/C03_3_SHAPE_LAYOUT_CONTRACT_CN.md
+        SHA256: 5393ccb81a7c9e69a1f34e9740b737911fcc529fffde1e1d738f31e3830f6a31
+      - 文件: scripts/generate_shape_layout_vectors.py
+        SHA256: d59a6305e2336f92500553fc187d3895d4caed39633045803996fc975fdfbae5
+      - 文件: src/heteronpu/shape_layout_contract.py
+        SHA256: 5a9cb330c0b786d9bf4465183e27334aa8090462ea16e8833d865d70097f7bec
+      - 文件: tests/fixtures/block_contracts/legacy_layout_vectors.tsv
+        SHA256: f11bf773bb49caf78b106926b2413dcbeb1a328487df79ef841d06bf2f2f31ae
+      - 文件: tests/fixtures/block_contracts/shape_layout_vectors.json
+        SHA256: 1185c7462c38b1d59177986bc3811bff2bf7c8eda75dbde4f3956ac072ba567f
+      - 文件: tests/test_shape_layout_contract.py
+        SHA256: 3cddb2dffd3207ec4fd92e8324c88e427bc4919d1e0809b7e01581a01642bc93
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/baseline_pytest.txt
+        SHA256: 48eabaf90c8c4840b2cdb73bd8b93f6c5182d588f6b240c4fb9c88e4c036f5a7
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/focused.txt
+        SHA256: d9b4e85db3d7d8baa58e62436305d687011d0af3f15901b62e61aa7d7c96af3c
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/full_pytest.txt
+        SHA256: fe60385f73d92637ca79b4f28fd6ebdb5a2221c324b508c4cd9caaf419509c23
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/optimized.txt
+        SHA256: 6e609e0e29bdb239eced22e685bd102d9b0881bdc10666c24f252e01b2e092c3
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/sandbox_validate.txt
+        SHA256: 42ba0b6ce73ae89afbcba53bcaa2774e9367327ba44ff1b10cb39b24c565608a
 - 编号: C04
   名称: 统一typed tensor与多输入policy ABI
   状态: ongoing
@@ -579,3 +616,4 @@
 - {编号: C04.3, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:18:06.580417+00:00', 说明: 新增独立准备子项，保持to do及未认领；完成不替代父项实际集成门禁。}
 - {编号: C08.3, 执行者: sandbox@contracts-20260917, 时间: '2026-09-18T00:18:06.580425+00:00', 说明: 新增独立准备子项，保持to do及未认领；完成不替代父项实际集成门禁。}
 - {编号: C03.3, 从: to do, 到: ongoing, 执行者: sandbox@shape-contracts-20261006, 时间: '2026-10-06T02:13:45.379678+00:00', 说明: 认领C03.3独立合成shape/layout及宽地址oracle；不改C03.2或官方/RTL门禁。}
+- {编号: C03.3, 从: ongoing, 到: done, 执行者: sandbox@shape-contracts-20261006, 时间: '2026-10-06T02:36:21.450980+00:00', 说明: 完成独立E0向量与宽地址oracle，保留C03.2、官方几何及真实RTL门禁；完整测试及既有失败均保存证据。}

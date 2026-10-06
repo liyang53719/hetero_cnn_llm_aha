@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@weight-workload-20261006
+    负责人: sandbox@payload-numerical-20261006
     前置:
     - U00.1
     先行依据: ''
@@ -784,6 +784,7 @@
     projection严格顺序；原证据源按字节归档，追加de8b719补正回归；U00.1范围不变，U00/U01不升级。}
 - {编号: U00.2, 从: to do, 到: ongoing, 执行者: sandbox@weight-workload-20261006, 时间: '2026-10-06T20:34:13.770271+00:00', 说明: 认领三模型固定checkpoint权重header与可复验workload证据；M128不变，缺输入/精度/状态/路由/实际资源保持OPEN，不升级RTL或90%。}
 - {编号: U00.2, 执行者: sandbox@weight-workload-20261006, 时间: '2026-10-06T20:51:04.868157+00:00', 说明: 完成三模型原始header与OPEN workload可复验证据；保持ongoing，M128/精度/路由/cache/90%口径不变，不升级U00/U01。}
+- {编号: U00.2, 执行者: sandbox@payload-numerical-20261006, 时间: '2026-10-06T21:37:33.309787+00:00', 说明: 前一轮header工作已完成且工作区干净；接续认领固定0.8B有界权重payload及真实官方算子数值试跑。M128不变，合成输入显式标注；不升级完整block/RTL/90%。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

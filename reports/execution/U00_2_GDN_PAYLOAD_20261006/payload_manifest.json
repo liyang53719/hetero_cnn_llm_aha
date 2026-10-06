@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "layer_id": 0,
+  "header_sha256": "b30e0e919db8a7d195d077a74673d1075e43bc55aece77656e075d95b5dcdf0d",
+  "status": "ACQUIRED_PINNED_LAYER_PAYLOAD_ONLY",
+  "payload_bytes": 43111008,
+  "tensors": [
+    {
+      "name": "model.language_model.layers.0.input_layernorm.weight",
+      "local_name": "input_layernorm.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024
+      ],
+      "start": 508629576,
+      "end": 508631623,
+      "bytes": 2048,
+      "file": "input_layernorm.weight.bin",
+      "sha256": "032420ad60956b0e62b5f4afbfc3a51a7148c79946f746ea4eb6b0ceb6c67e37",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:34:21.445444+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=508629576-508631623",
+          "status": 206,
+          "content_range": "bytes 508629576-508631623/1746942600",
+          "bytes": 2048,
+          "sha256": "032420ad60956b0e62b5f4afbfc3a51a7148c79946f746ea4eb6b0ceb6c67e37"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.A_log",
+      "local_name": "linear_attn.A_log",
+      "dtype": "F32",
+      "shape": [
+        16
+      ],
+      "start": 59848,
+      "end": 59911,
+      "bytes": 64,
+      "file": "linear_attn.A_log.bin",
+      "sha256": "ad78e0805c16a73f70c722e837d1d342df3d9714bea32d353d976e155dd73494",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:34:30.799875+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=59848-59911",
+          "status": 206,
+          "content_range": "bytes 59848-59911/1746942600",
+          "bytes": 64,
+          "sha256": "ad78e0805c16a73f70c722e837d1d342df3d9714bea32d353d976e155dd73494"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.conv1d.weight",
+      "local_name": "linear_attn.conv1d.weight",
+      "dtype": "BF16",
+      "shape": [
+        6144,
+        1,
+        4
+      ],
+      "start": 508631624,
+      "end": 508680775,
+      "bytes": 49152,
+      "file": "linear_attn.conv1d.weight.bin",
+      "sha256": "130344a7183ae52ad58fc5da96539f28071b64d452bb3acf0890a7947da44188",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:34:39.671737+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=508631624-508680775",
+          "status": 206,
+          "content_range": "bytes 508631624-508680775/1746942600",
+          "bytes": 49152,
+          "sha256": "130344a7183ae52ad58fc5da96539f28071b64d452bb3acf0890a7947da44188"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.dt_bias",
+      "local_name": "linear_attn.dt_bias",
+      "dtype": "BF16",
+      "shape": [
+        16
+      ],
+      "start": 508680776,
+      "end": 508680807,
+      "bytes": 32,
+      "file": "linear_attn.dt_bias.bin",
+      "sha256": "058cec20af625f4e3971da95b131af08db8f9ab26b1301b90c6f6401c5243388",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:34:52.614454+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=508680776-508680807",
+          "status": 206,
+          "content_range": "bytes 508680776-508680807/1746942600",
+          "bytes": 32,
+          "sha256": "058cec20af625f4e3971da95b131af08db8f9ab26b1301b90c6f6401c5243388"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "local_name": "linear_attn.in_proj_a.weight",
+      "dtype": "BF16",
+      "shape": [
+        16,
+        1024
+      ],
+      "start": 508680808,
+      "end": 508713575,
+      "bytes": 32768,
+      "file": "linear_attn.in_proj_a.weight.bin",
+      "sha256": "e5197a79fc1daa00d06a0c04fd11a97ac3c10a6bd6460e957fd8383700d5d87b",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:35:03.946205+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=508680808-508713575",
+          "status": 206,
+          "content_range": "bytes 508680808-508713575/1746942600",
+          "bytes": 32768,
+          "sha256": "e5197a79fc1daa00d06a0c04fd11a97ac3c10a6bd6460e957fd8383700d5d87b"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "local_name": "linear_attn.in_proj_b.weight",
+      "dtype": "BF16",
+      "shape": [
+        16,
+        1024
+      ],
+      "start": 508713576,
+      "end": 508746343,
+      "bytes": 32768,
+      "file": "linear_attn.in_proj_b.weight.bin",
+      "sha256": "02bab6a0eb77ad51435f77665d173876993d725ca3cd953f90c2b0754735db5e",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:35:14.190855+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=508713576-508746343",
+          "status": 206,
+          "content_range": "bytes 508713576-508746343/1746942600",
+          "bytes": 32768,
+          "sha256": "02bab6a0eb77ad51435f77665d173876993d725ca3cd953f90c2b0754735db5e"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "local_name": "linear_attn.in_proj_qkv.weight",
+      "dtype": "BF16",
+      "shape": [
+        6144,
+        1024
+      ],
+      "start": 508746344,
+      "end": 521329255,
+      "bytes": 12582912,
+      "file": "linear_attn.in_proj_qkv.weight.bin",
+      "sha256": "8904cdb2c2e3aa5fc158d074e3b84fb5165a6637f2bd38f67fb93b29406fe0dc",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:35:25.791694+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=508746344-517134951",
+          "status": 206,
+          "content_range": "bytes 508746344-517134951/1746942600",
+          "bytes": 8388608,
+          "sha256": "3b260dd93d7c5c8995af9b6b2b15367d3e52f83e1f20bf3602d982bc9dd36a64"
+        },
+        {
+          "acquired_at": "2026-10-06T22:35:35.491022+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=517134952-521329255",
+          "status": 206,
+          "content_range": "bytes 517134952-521329255/1746942600",
+          "bytes": 4194304,
+          "sha256": "c67217f5f307dda4ea2981080e6b02bab4e7ffb183888562d7b7b665b73be412"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "local_name": "linear_attn.in_proj_z.weight",
+      "dtype": "BF16",
+      "shape": [
+        2048,
+        1024
+      ],
+      "start": 521329256,
+      "end": 525523559,
+      "bytes": 4194304,
+      "file": "linear_attn.in_proj_z.weight.bin",
+      "sha256": "5a44325d73004f42dcd55558d357ceeccb54fafb9b7048071634ab1027e1c17d",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:35:45.004146+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=521329256-525523559",
+          "status": 206,
+          "content_range": "bytes 521329256-525523559/1746942600",
+          "bytes": 4194304,
+          "sha256": "5a44325d73004f42dcd55558d357ceeccb54fafb9b7048071634ab1027e1c17d"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.norm.weight",
+      "local_name": "linear_attn.norm.weight",
+      "dtype": "F32",
+      "shape": [
+        128
+      ],
+      "start": 59912,
+      "end": 60423,
+      "bytes": 512,
+      "file": "linear_attn.norm.weight.bin",
+      "sha256": "b92121af2866c2e156749dc12e27d5f873abb1595291be3a7465c8c65fd6e439",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:35:53.464752+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=59912-60423",
+          "status": 206,
+          "content_range": "bytes 59912-60423/1746942600",
+          "bytes": 512,
+          "sha256": "b92121af2866c2e156749dc12e27d5f873abb1595291be3a7465c8c65fd6e439"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "local_name": "linear_attn.out_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024,
+        2048
+      ],
+      "start": 525523560,
+      "end": 529717863,
+      "bytes": 4194304,
+      "file": "linear_attn.out_proj.weight.bin",
+      "sha256": "cbee28fc3b42e07e491fffd593b2ee9ec58ae952dc9133e178f8a80ea916d308",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:36:03.568079+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=525523560-529717863",
+          "status": 206,
+          "content_range": "bytes 525523560-529717863/1746942600",
+          "bytes": 4194304,
+          "sha256": "cbee28fc3b42e07e491fffd593b2ee9ec58ae952dc9133e178f8a80ea916d308"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.mlp.down_proj.weight",
+      "local_name": "mlp.down_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024,
+        3584
+      ],
+      "start": 529717864,
+      "end": 537057895,
+      "bytes": 7340032,
+      "file": "mlp.down_proj.weight.bin",
+      "sha256": "57c93b2a4452740b0b82386debc7c66df7774f98425a0253dd9d3e7006e989ac",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:36:14.158920+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=529717864-537057895",
+          "status": 206,
+          "content_range": "bytes 529717864-537057895/1746942600",
+          "bytes": 7340032,
+          "sha256": "57c93b2a4452740b0b82386debc7c66df7774f98425a0253dd9d3e7006e989ac"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "local_name": "mlp.gate_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        3584,
+        1024
+      ],
+      "start": 537057896,
+      "end": 544397927,
+      "bytes": 7340032,
+      "file": "mlp.gate_proj.weight.bin",
+      "sha256": "ac1e1d4df4f3adca7e0bc15ee7310ce093f9108baa712cfb86f57b03e6d6e140",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:36:24.860145+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=537057896-544397927",
+          "status": 206,
+          "content_range": "bytes 537057896-544397927/1746942600",
+          "bytes": 7340032,
+          "sha256": "ac1e1d4df4f3adca7e0bc15ee7310ce093f9108baa712cfb86f57b03e6d6e140"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.mlp.up_proj.weight",
+      "local_name": "mlp.up_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        3584,
+        1024
+      ],
+      "start": 544397928,
+      "end": 551737959,
+      "bytes": 7340032,
+      "file": "mlp.up_proj.weight.bin",
+      "sha256": "0317b5f7a4e522c75c5013a70f14c510262b79596ac298ef52b5e04740d76367",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:36:35.691231+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=544397928-551737959",
+          "status": 206,
+          "content_range": "bytes 544397928-551737959/1746942600",
+          "bytes": 7340032,
+          "sha256": "0317b5f7a4e522c75c5013a70f14c510262b79596ac298ef52b5e04740d76367"
+        }
+      ]
+    },
+    {
+      "name": "model.language_model.layers.0.post_attention_layernorm.weight",
+      "local_name": "post_attention_layernorm.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024
+      ],
+      "start": 551737960,
+      "end": 551740007,
+      "bytes": 2048,
+      "file": "post_attention_layernorm.weight.bin",
+      "sha256": "9c5f1eafa39cd5af93a2f9fadafd3362bc886938ab1a1db3954baea7887fe303",
+      "http_ranges": [
+        {
+          "acquired_at": "2026-10-06T22:36:45.190594+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+          "request_range": "bytes=551737960-551740007",
+          "status": 206,
+          "content_range": "bytes 551737960-551740007/1746942600",
+          "bytes": 2048,
+          "sha256": "9c5f1eafa39cd5af93a2f9fadafd3362bc886938ab1a1db3954baea7887fe303"
+        }
+      ]
+    }
+  ],
+  "full_checkpoint_sha256_verified": false,
+  "advertised_full_checkpoint_sha256_unverified": "04b1c301231dd422b8860db31311ab2721511346a32cb1e079c4c4e5f1fe4696",
+  "official_forward_executed": false,
+  "rtl_executed": false,
+  "U00_2_complete": false
+}

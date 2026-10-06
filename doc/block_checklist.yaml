@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: dd4d70b3af685a92f20471966143919a52700bad598823ede5ecba5ec6151f5c
+计划SHA256: 88e98c7e8e8221cd9e958177a70a319cd3d5708b34ba3c874bb0e57e6d9e7dd7
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@payload-numerical-20261006
+    负责人: sandbox@gdn-numerical-20261006
     前置:
     - U00.1
     先行依据: ''
@@ -751,6 +751,25 @@
         SHA256: 8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449
       - 文件: reports/execution/U00_2_LAYER3_PAYLOAD_20261006/source_sha256.json
         SHA256: 392b873cfffb9f82180e7c943e8a04882ee588d864a39bd67972d4fc2a08873a
+    - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/result.json
+      SHA256: 560fa50b717e0b88a33ec55be5888873e64584543850c1a5cf17f7a65317fbb8
+      设计提交: d53e31b752a4b18725bb90f1a160f917d82c4303
+      范围: U00.2部分推进：固定0.8B层0真实14项payload/43111008字节，官方完整GDN+denseFFN合成cold128/carried128/decode1实跑；FP32对独立NumPy输出/conv/SSM共1123328元素0不匹配，256对128+128续算548864元素通过。真实mixedBF16参数与FP32SSM已核验；496focused/48优化通过，全仓1853通过及同5既有失败。非官方上游输入、非BF16逐producer/RTL/90%验收，保持ongoing。
+      关联文件:
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/focused.log
+        SHA256: 27329af3475a9afb818c18c36d04a340b8b4099525bfab8156f2d2daa1cc7e29
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/numerical_result.json
+        SHA256: d0e77e0d50ec3480ac5c68c875ead818598a2c03b8fb898555fdda4af7717ea4
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/optimized.log
+        SHA256: a9f9720abe77f249c195189e44bc49e0b34e04642ab21227e027c4f82133d7bb
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/payload_manifest.json
+        SHA256: 6c47a66ee801740c3200203b6e18045cafd7e17f898660598119ab67e374e8e0
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/pytest_full.log
+        SHA256: 4c1b6f577119d2c267562101fb134747fa4ee68a1b54fc347257e8c0acc3c692
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/replay_admission.log
+        SHA256: 8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449
+      - 文件: reports/execution/U00_2_GDN_PAYLOAD_20261006/source_sha256.json
+        SHA256: 1b256058753310df4eb01e705978a48a9dc54e4b255be635c1fa9eef91ffa77b
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -806,6 +825,8 @@
 - {编号: U00.2, 执行者: sandbox@payload-numerical-20261006, 时间: '2026-10-06T21:37:33.309787+00:00', 说明: 前一轮header工作已完成且工作区干净；接续认领固定0.8B有界权重payload及真实官方算子数值试跑。M128不变，合成输入显式标注；不升级完整block/RTL/90%。}
 - {编号: U00.2, 执行者: sandbox@payload-numerical-20261006, 时间: '2026-10-06T21:50:54.596024+00:00', 说明: 完成真实0.8B层3payload与官方合成输入数值实跑；保留官方上游输入、GDN/MoE、逐producer精度、物理cache、资源与实际RTL/90%门禁。U00.2
     ongoing/U01 to do。}
+- {编号: U00.2, 执行者: sandbox@gdn-numerical-20261006, 时间: '2026-10-06T22:40:25.901313+00:00', 说明: 完成0.8B层0真实GDN payload及官方状态续算数值实跑，保留真实上游输入、三模型完整精度/route/cache、实际资源及RTL/90%门禁。U00.2
+    ongoing、C03.2/U01未关闭。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

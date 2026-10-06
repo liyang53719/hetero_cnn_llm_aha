@@ -48,7 +48,7 @@
       典型层索引: {B35_08_ATTN_DENSE: 3, B35_08_GDN_DENSE: 0}
       权重数值RTL通过: false
       性能workload已冻结: false
-      门禁: U00.1来源/E0已完成；U00.2已有488项真实header、320主文本shape。层3现取得36705280字节真实payload，官方FP32/BF16完整decoder layer已执行合成M128空/已有KV试验；FP32对独立NumPy参考655360元素匹配。层0GDN、官方上游输入、逐producer精度、完整性能集合与数值RTL仍未闭合，U00.2/U01不升级。
+      门禁: U00.1来源/E0已完成；U00.2已有488项真实header、320主文本shape。层3现取得36705280字节真实payload，官方FP32/BF16完整decoder layer已执行合成M128空/已有KV试验；FP32对独立NumPy参考655360元素匹配。层0GDN现也取得43111008字节14项真实payload，官方cold128/carried128/decode1与独立NumPy的1123328元素通过，SSM保持FP32；输入仍合成。官方上游输入、逐producer精度、完整性能集合与数值RTL仍未闭合，U00.2/U01不升级。
     Qwen3.5-35B-A3B:
       既有身份: Qwen/Qwen3.5-35B-A3B
       来源: config/model_profiles/qwen3_5_35b_a3b.json
@@ -63,7 +63,7 @@
     报告: doc/U00_2_WEIGHT_HEADERS_WORKLOAD_20261006_CN.md
     已核验: 三模型16个真实safetensors header，共321392字节和2637项tensor；完整index与header对应、offset/dtype字节范围及1350项主文本shape。
     精度发现: Qwen3.5的GDN A_log和norm.weight实际F32，dt_bias实际BF16；存储类型不等于逐producer计算精度验收。
-    当前范围: batch1与M128不变；新增固定0.8B层3全部11项payload及真实官方decoder的合成hidden-state数值试验，报告doc/U00_2_LAYER3_PAYLOAD_NUMERICAL_20261006_CN.md。逻辑KV空/已有状态不等于物理冷暖cache或性能workload；无实际RTL/90%结果。
+    当前范围: batch1与M128不变；新增固定0.8B层3全部11项payload及真实官方decoder的合成hidden-state数值试验，报告doc/U00_2_LAYER3_PAYLOAD_NUMERICAL_20261006_CN.md。后续层0GDN真实payload与状态数值见doc/U00_2_GDN_PAYLOAD_NUMERICAL_20261006_CN.md，14项43111008字节、cold/carried M128及补充分支decode1实跑。逻辑KV/conv/SSM空或已有状态不等于物理冷暖cache或性能workload；无实际RTL/90%结果。
     门禁: required-performance-suite及全部真实payload/输入/初态/位置mask/双参考/精度/cache/路由/固定资源仍OPEN；require-complete必须拒绝。
   workload必填:
   - model_id

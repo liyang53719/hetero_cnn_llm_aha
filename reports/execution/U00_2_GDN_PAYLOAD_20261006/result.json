@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "PASS_REAL_GDN_PAYLOAD_SYNTHETIC_LAYER_SMOKE_U00_2_OPEN",
+  "parent_commit": "d53e31b752a4b18725bb90f1a160f917d82c4303",
+  "created_at": "2026-10-06T22:40:25.755022+00:00",
+  "payload_bytes": 43111008,
+  "payload_tensors": 14,
+  "http_range_requests": 15,
+  "max_http_range_bytes": 8388608,
+  "checkpoint_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "actual_official_decoder_layer_executed": true,
+  "GDN_executed": true,
+  "input_origin": "deterministic_synthetic_hidden_state_not_official_upstream_activation",
+  "cases": [
+    {
+      "name": "cold_m128",
+      "past_tokens": 0,
+      "query_tokens": 128
+    },
+    {
+      "name": "carried_m128",
+      "past_tokens": 128,
+      "query_tokens": 128
+    },
+    {
+      "name": "carried_decode1",
+      "past_tokens": 256,
+      "query_tokens": 1
+    }
+  ],
+  "fp32_independent_comparison_elements": 1123328,
+  "fp32_mismatches": 0,
+  "partition_replay_comparison_elements": 548864,
+  "partition_replay_mismatches": 0,
+  "mixed_bf16_executed": true,
+  "mixed_bf16_preserves_source_storage_dtypes": true,
+  "actual_recurrent_state_dtype": "float32 in both official execution modes",
+  "bf16_dual_reference_accepted": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "actual_rtl_executed": false,
+  "mac_utilization_measured": false,
+  "full_model_upstream_input_provenance": false,
+  "physical_cache_conditions_frozen": false,
+  "full_checkpoint_sha256_verified": false,
+  "baseline_failures_unchanged": true,
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "tests": [
+    {
+      "name": "focused",
+      "command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_pinned_gdn_payload.py tests/test_qwen35_gdn_numpy_reference.py tests/test_pinned_block_payload.py tests/test_weight_workload_evidence.py tests/test_qwen35_dense_geometry.py tests/test_typical_block_plan.py tests/test_block_checklist.py",
+      "exit_code": 0,
+      "passed": 496
+    },
+    {
+      "name": "optimized",
+      "command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 PYTHONPATH=src python -O -m pytest -o addopts='' -q tests/test_pinned_gdn_payload.py tests/test_qwen35_gdn_numpy_reference.py",
+      "exit_code": 0,
+      "passed": 48
+    },
+    {
+      "name": "pytest_full",
+      "command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 PYTHONPATH=src python -m pytest -o addopts='' -q",
+      "exit_code": 1,
+      "passed": 1853,
+      "failed": 5
+    },
+    {
+      "name": "replay_admission",
+      "command": "python scripts/validate_workload_evidence.py --require-complete",
+      "exit_code": 2
+    }
+  ],
+  "numerical_command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 HF_HUB_OFFLINE=1 python scripts/run_qwen35_layer0_smoke.py --payload work/qwen35_layer0_payload --output work/qwen35_layer0_smoke_final",
+  "numerical_exit_code": 0,
+  "independent_review": "Separate reviewer independently reloaded all14payload tensors and NPZ, recomputed all9oracle and3partition comparisons plus stored statistics; verified mixed storage/actual state dtypes and official recurrence/conv source. Review includes48offline tests.",
+  "source_binding": "Exact local post-parent source bytes in source_sha256.json; remote exacthead publication and CI verified separately",
+  "artifacts": {
+    "focused.log": {
+      "sha256": "27329af3475a9afb818c18c36d04a340b8b4099525bfab8156f2d2daa1cc7e29",
+      "bytes": 581
+    },
+    "numerical_result.json": {
+      "sha256": "d0e77e0d50ec3480ac5c68c875ead818598a2c03b8fb898555fdda4af7717ea4",
+      "bytes": 22329
+    },
+    "optimized.log": {
+      "sha256": "a9f9720abe77f249c195189e44bc49e0b34e04642ab21227e027c4f82133d7bb",
+      "bytes": 688
+    },
+    "payload_manifest.json": {
+      "sha256": "6c47a66ee801740c3200203b6e18045cafd7e17f898660598119ab67e374e8e0",
+      "bytes": 14253
+    },
+    "pytest_full.log": {
+      "sha256": "4c1b6f577119d2c267562101fb134747fa4ee68a1b54fc347257e8c0acc3c692",
+      "bytes": 6529
+    },
+    "replay_admission.log": {
+      "sha256": "8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449",
+      "bytes": 137
+    },
+    "source_sha256.json": {
+      "sha256": "1b256058753310df4eb01e705978a48a9dc54e4b255be635c1fa9eef91ffa77b",
+      "bytes": 1165
+    }
+  },
+  "scope": "Actual official GDN+denseFFN CPU forward with real mixed-dtype weights and synthetic hidden-state input. Cold and carried M128 plus supplemental decode1. Not official embedding/upstream activations, BF16 producer comparator, RTL, physical cache or useful-wall MAC utilization acceptance."
+}

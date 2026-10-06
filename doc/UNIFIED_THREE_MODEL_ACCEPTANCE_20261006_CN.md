@@ -54,3 +54,9 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 已实际取得固定0.8B层3全部11项payload（36,705,280字节），在未修改的固定官方DecoderLayer运行FP32及BF16。batch1/M128的空KV及past128两组采用不同确定性合成hidden-state；FP32对独立NumPy FP64的全部output/K/V共655,360元素零不匹配，输出最大绝对误差约5.04e-7。BF16为实际运行及精度差异诊断，未冻结其逐producer双参考。
 
 合成输入不等于官方上游激活，逻辑KV空/已有不等于物理cache条件，软件层通过不等于RTL或90%。U00.2保持ongoing，U01不升级。来源、下载上限、完整运行数组、回归与剩余门禁见 `doc/U00_2_LAYER3_PAYLOAD_NUMERICAL_20261006_CN.md`。
+
+## U00.2 后续：真实GDN层0及状态续算已实跑
+
+新增固定层0的14项真实payload，共43,111,008字节。原始A_log/norm.weight保持F32、dt_bias等其余参数BF16；官方mixed-BF16执行时conv为BF16、SSM为FP32。官方FP32完整GDN+dense-FFN对独立NumPyFP64在cold128、carried128和补充decode1共1,123,328输出/状态元素零不匹配，整段256与128+128续算另有548,864元素通过；清零初态确实改变输出。
+
+输入仍是合成hidden-state，mixed-BF16只报告诊断差异，不是上游激活、逐producer精度、实际RTL或90%验收。U00.2 ongoing、C03.2/U01未闭合。详见 `doc/U00_2_GDN_PAYLOAD_NUMERICAL_20261006_CN.md`。

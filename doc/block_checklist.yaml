@@ -596,13 +596,64 @@
   子项:
   - 编号: U00.1
     名称: 固定0.8B官方配置与dense-FFN几何合同
-    状态: ongoing
+    状态: done
     执行侧: sandbox
     负责人: sandbox@dense-contracts-20261006
     前置: []
     先行依据: 官方公开配置/源码与E0形状、算子合同可独立验证；不依赖checkpoint权重、真实RTL或性能workload决策。
     完成边界: 固定原字节revision/hash，显式dense家族及无MoE状态/调度，正常/-O拒绝测试；只关闭0.8B几何/来源准备，不等于三模型workload冻结或数值RTL通过。
-    证据: []
+    证据:
+    - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/result.json
+      SHA256: c34a8053aa75a152970eab624e1ca1474b01611a3b044515a2e25f5567e076d2
+      设计提交: f71aafba5e76ed787378a1296f01e02c2a58eb37
+      范围: U00.1仅0.8B固定config/forward/index原字节、320主文本tensor名称及dense-FFN几何/算子/状态E0。345focused和190优化测试通过；全仓1638通过+5既有失败。无权重header/数值/RTL/90%验收。
+      关联文件:
+      - 文件: src/heteronpu/model_geometry.py
+        SHA256: 04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee
+      - 文件: src/heteronpu/qwen_family_contracts.py
+        SHA256: 7b62c88a0c43b28aeb1cc8fd5f79f01db6747385389cf1328796711a151e7e8b
+      - 文件: src/heteronpu/model_support.py
+        SHA256: 2d9a10bcbc03c8341c1fe7e01a5a0032e50d2fbe3dcb1e936b177c799a3d1ef7
+      - 文件: src/heteronpu/qwen35_dense_contract.py
+        SHA256: 28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa
+      - 文件: scripts/run_qwen35_dense_contract.py
+        SHA256: 035360fb774f58e953b575395307cd4dc571b981fd65b1fb9f06df070ec2ef1f
+      - 文件: scripts/validate_typical_block_plan.py
+        SHA256: e8917d3b13e8d3c326f209e7988eacec57500a51f4fe925fadbbe2c77c983f55
+      - 文件: tests/test_qwen35_dense_geometry.py
+        SHA256: 4cccbccf1d0efc041b5ebd47c99aa9eeb84f45e336332fd5b9e310b392edaabb
+      - 文件: tests/test_typical_block_plan.py
+        SHA256: 7a0bb3e1704b765b3397a20a95a07703a05bb263ab8da2453ec46492eed0037d
+      - 文件: tests/test_block_checklist.py
+        SHA256: 967352af01823c3be146e277424201334ae9ae330d7717daef2f1c25478af957
+      - 文件: config/model_profiles/qwen3_5_0p8b.json
+        SHA256: 55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769
+      - 文件: .github/workflows/current-model-goal-contract.yml
+        SHA256: f96d08947e4413d92c876ca1eeb8e4abda2ba548fb9bad470af30b2e4c80b9c9
+      - 文件: config/upstream/qwen3_5_0p8b/README.md
+        SHA256: 96e56e9d849100cc42fa6ca6d2bebdfb0b5cede6a6d4ae9d167d923cfd445d6c
+      - 文件: config/upstream/qwen3_5_0p8b/config.json
+        SHA256: b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204
+      - 文件: config/upstream/qwen3_5_0p8b/configuration_qwen3_5.py
+        SHA256: 2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e
+      - 文件: config/upstream/qwen3_5_0p8b/manifest.json
+        SHA256: ef61b656ac0ec16bceaaf219f0610153fe0b8f815f68e55a12f7ba3d3038e91a
+      - 文件: config/upstream/qwen3_5_0p8b/model.safetensors.index.json
+        SHA256: d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e
+      - 文件: config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py
+        SHA256: aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18
+      - 文件: config/upstream/qwen3_5_0p8b/modular_qwen3_5.py
+        SHA256: ba423e1400fc253dce1cdbb215463675ea09c96df5a379b43e985d36c9e675c7
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/geometry.json
+        SHA256: bb344182008f156ce1d372082bb05ec3ebf21b73e338b0b5a2dfcfe686ca69c6
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/focused.log
+        SHA256: f1352aa39a1c3853236d465c9046cd29fa9db4e7df55b98d05693f160d6c01db
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/optimized.log
+        SHA256: 0e1529296896d8345297f7075e191b4e2e6d26d9568314aa32df8b7aa7495495
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/pytest_full.log
+        SHA256: f8d4167744d16e7d927e76d8e47a7f7429d07da6adb1cb733551c56c0af63648
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/sandbox_validate.log
+        SHA256: 7ea0a536a47861b7056baafbd614db124b82f50b5da05aa1c926d30e0aef92ef
   - 编号: U00.2
     名称: 完成三模型官方回放与性能工作量冻结
     状态: to do
@@ -659,6 +710,8 @@
 - {编号: C03.3, 执行者: sandbox@shape-contracts-20261006, 时间: '2026-10-06T03:03:00+00:00', 说明: 补录61bc2ef的实际legacy Scala/既有control与elementwise
     CI成功；保留初始fixture路径失败。C03.3状态不变，不升级C03.2或三模型90%门禁。}
 - {编号: U00.1, 从: to do, 到: ongoing, 执行者: sandbox@dense-contracts-20261006, 时间: '2026-10-06T19:36:10.557002+00:00', 说明: 认领官方0.8B dense-FFN几何与可执行合同；保留U00.2/U01及实际RTL90%未完成。}
+- {编号: U00.1, 从: ongoing, 到: done, 执行者: sandbox@dense-contracts-20261006, 时间: '2026-10-06T19:55:13.266452+00:00', 说明: 完成固定0.8B官方来源与dense-FFN
+    E0合同；345focused/190优化通过，全仓1638通过及5既有失败。只关闭U00.1，U00.2/U01/C03.2及90%保持未完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

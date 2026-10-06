@@ -44,7 +44,7 @@ def test_metadata_and_exact_decimal_serialization():
     assert RAW["schema"] == "heteronpu.shape-layout-vectors.v1"
     assert RAW["evidence_class"] == "synthetic_E0"
     assert not any(RAW[k] for k in ("chisel_consumer_executed", "rtl_executed", "official_checkpoint_verified"))
-    assert len(BY_ID) == len(CASES) == 62
+    assert len(BY_ID) == len(CASES) == 64
 
     def no_numeric_json(value):
         assert type(value) not in (int, float)

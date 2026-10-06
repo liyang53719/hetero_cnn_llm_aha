@@ -218,6 +218,8 @@ std::vector<Wide> tensor_v2(const std::vector<std::string>& fields) {
     const Wide region_limit = unsigned_range(fields[7], 0, address_limit,
                                              "region_range");
 
+    need(region_base % 64 == 0 && region_limit % 64 == 0, "region_alignment");
+
     Wide elements = 1;
     bool owner_dimensions_fit_u16 = true;
     for (const Wide dimension : dimensions) {

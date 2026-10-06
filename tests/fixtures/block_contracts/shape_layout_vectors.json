@@ -2840,6 +2840,60 @@
       }
     },
     {
+      "id": "v2_region_base_unaligned",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "1",
+        "region_limit": "65536"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "region_alignment"
+      }
+    },
+    {
+      "id": "v2_region_limit_unaligned",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "65537"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "region_alignment"
+      }
+    },
+    {
       "id": "v2_u32_elements_max",
       "operation": "tensor_v2",
       "scope": "current_reader_arithmetic_not_rtl_execution",
@@ -3157,7 +3211,7 @@
       }
     },
     {
-      "id": "v2_padding_region_rejected",
+      "id": "v2_unaligned_payload_only_limit",
       "operation": "tensor_v2",
       "scope": "current_reader_arithmetic_not_rtl_execution",
       "inputs": {
@@ -3180,7 +3234,7 @@
       },
       "expected": {
         "accepted": false,
-        "error": "region_bounds"
+        "error": "region_alignment"
       }
     },
     {

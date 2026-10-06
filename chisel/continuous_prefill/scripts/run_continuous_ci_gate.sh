@@ -42,7 +42,7 @@ for group in general tiny real native;do
  mkdir "$OUT/$group"
  if [[ -n ${OFFLINE_TOOLS:-} ]];then
   ARGS=();for suite in "${SUITES[@]}";do ARGS+=(-s "$suite");done
-  (cd "$OUT/$group";java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/testclasses:$OUT/classes:$CP" org.scalatest.tools.Runner -R "$OUT/testclasses" -o "${ARGS[@]}") >"$OUT/$group/chisel_tests.log" 2>&1
+  (cd "$OUT/$group";java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/testclasses:$OUT/classes:$P/src/test/resources:$CP" org.scalatest.tools.Runner -R "$OUT/testclasses" -o "${ARGS[@]}") >"$OUT/$group/chisel_tests.log" 2>&1
  else
   (cd "$P";sbt -batch "testOnly ${SUITES[*]}") >"$OUT/$group/chisel_tests.log" 2>&1
  fi

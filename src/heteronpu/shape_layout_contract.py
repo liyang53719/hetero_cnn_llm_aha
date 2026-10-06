@@ -170,6 +170,7 @@ def tensor_v2(*, base: int, dims: list[int], rank: int, strides: list[int], dtyp
     need(type(dtype) is int and dtype in (5, 7), "dtype")
     rb = integer(region_base, 0, (1 << 56) - 1, "region_range")
     rl = integer(region_limit, 0, 1 << 56, "region_range")
+    need(rb % 64 == 0 and rl % 64 == 0, "region_alignment")
     elements = prod(ds)
     payload = elements * (2 if dtype == 5 else 4)
     end = b + align64(payload)

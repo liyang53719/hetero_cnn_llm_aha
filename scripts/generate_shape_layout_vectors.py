@@ -15,6 +15,7 @@ from heteronpu.shape_layout_contract import evaluate
 
 FIXTURE = Path("tests/fixtures/block_contracts/shape_layout_vectors.json")
 LEGACY = Path("tests/fixtures/block_contracts/legacy_layout_vectors.tsv")
+SCALA_RESOURCE = Path("chisel/continuous_prefill/src/test/resources/c03_3/legacy_layout_vectors.tsv")
 SOURCES = ["chisel/continuous_prefill/src/main/scala/heteronpu/continuous/" + name
            for name in ("Qwen2Block.scala", "HostBlockCommands.scala", "TypedTensorReader.scala", "QwenOwnerProtocol.scala")]
 
@@ -111,6 +112,8 @@ def cases():
                   dtype=7, region_base=0, region_limit=1 << 56)
     for name, change in (
         ("v2_fp32", {}), ("v2_bf16", {"dtype": 5}),
+        ("v2_region_base_unaligned", {"region_base": 1, "region_limit": 65536}),
+        ("v2_region_limit_unaligned", {"region_base": 0, "region_limit": 65537}),
         ("v2_u32_elements_max", {"dims": [65535, 65537, 1, 1], "strides": [65537, 1, 1]}),
         ("v2_u32_elements_overflow", {"dims": [65536, 65536, 1, 1], "strides": [65536, 1, 1]}),
         ("v2_s24_stride_max", {"dims": [1, 47, 178481, 1], "rank": 3, "strides": [8388607, 178481, 1]}),
@@ -122,7 +125,7 @@ def cases():
         ("v2_u18_dimension_overflow", {"dims": [1, 262144, 1, 1], "strides": [262144, 1, 1]}),
         ("v2_aperture_exact", {"base": (1 << 56) - 64}),
         ("v2_aperture_overflow", {"base": (1 << 56) - 64, "dims": [1, 17, 1, 1], "strides": [17, 1, 1]}),
-        ("v2_padding_region_rejected", {"dims": [1, 1, 1, 1], "strides": [1, 1, 1], "region_limit": 16388}),
+        ("v2_unaligned_payload_only_limit", {"dims": [1, 1, 1, 1], "strides": [1, 1, 1], "region_limit": 16388}),
         ("v2_padding_region_exact", {"dims": [1, 1, 1, 1], "strides": [1, 1, 1], "region_limit": 16448}),
     ):
         add(name, "tensor_v2", tensor, "current_reader_arithmetic_not_rtl_execution", **change)
@@ -147,7 +150,9 @@ def artifacts(root=ROOT):
         fields += [str(o[k]) for k in ("max_row", "kv_width", "writable_start", "total")]
         fields += [",".join(f'{r["name"]}:{r["offset"]}:{r["words"]}:{int(r["external"])}' for r in o["regions"])]
         lines.append("\t".join(fields))
-    return {FIXTURE: json.dumps(document, indent=2, ensure_ascii=False) + "\n", LEGACY: "\n".join(lines) + "\n"}
+    legacy_text = "\n".join(lines) + "\n"
+    return {FIXTURE: json.dumps(document, indent=2, ensure_ascii=False) + "\n",
+            LEGACY: legacy_text, SCALA_RESOURCE: legacy_text}
 
 
 def main():

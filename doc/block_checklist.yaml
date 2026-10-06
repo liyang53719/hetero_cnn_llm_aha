@@ -587,7 +587,32 @@
 - {编号: R00, 名称: 六类典型block集中发布, 状态: to do}
 - {编号: F00, 名称: 典型block之后接完整模型与llama backend, 状态: to do}
 - {编号: F01, 名称: MTP状态分支与视觉多模态独立验收, 状态: to do}
-- {编号: U00, 名称: 冻结当前三模型合同与回放工作量, 状态: to do, 执行侧: sandbox, 负责人: '', 证据: []}
+- 编号: U00
+  名称: 冻结当前三模型合同与回放工作量
+  状态: ongoing
+  执行侧: sandbox
+  负责人: ''
+  证据: []
+  子项:
+  - 编号: U00.1
+    名称: 固定0.8B官方配置与dense-FFN几何合同
+    状态: ongoing
+    执行侧: sandbox
+    负责人: sandbox@dense-contracts-20261006
+    前置: []
+    先行依据: 官方公开配置/源码与E0形状、算子合同可独立验证；不依赖checkpoint权重、真实RTL或性能workload决策。
+    完成边界: 固定原字节revision/hash，显式dense家族及无MoE状态/调度，正常/-O拒绝测试；只关闭0.8B几何/来源准备，不等于三模型workload冻结或数值RTL通过。
+    证据: []
+  - 编号: U00.2
+    名称: 完成三模型官方回放与性能工作量冻结
+    状态: to do
+    执行侧: sandbox
+    负责人: ''
+    前置:
+    - U00.1
+    先行依据: ''
+    完成边界: 完成U00原plan全部三模型checkpoint/forward/输入/初态/精度/路由/cache/资源分母及性能workload冻结；缺来源或待决项不可done。
+    证据: []
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -633,6 +658,7 @@
     do。保留C03.3 E0 done；Q38历史任务不再属于当前必需派工。}
 - {编号: C03.3, 执行者: sandbox@shape-contracts-20261006, 时间: '2026-10-06T03:03:00+00:00', 说明: 补录61bc2ef的实际legacy Scala/既有control与elementwise
     CI成功；保留初始fixture路径失败。C03.3状态不变，不升级C03.2或三模型90%门禁。}
+- {编号: U00.1, 从: to do, 到: ongoing, 执行者: sandbox@dense-contracts-20261006, 时间: '2026-10-06T19:36:10.557002+00:00', 说明: 认领官方0.8B dense-FFN几何与可执行合同；保留U00.2/U01及实际RTL90%未完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

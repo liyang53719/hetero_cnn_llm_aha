@@ -49,8 +49,6 @@ Q38={
 "qsa_sparse_kv_gather":OperatorContract("qsa_sparse_kv_gather","kv_memory",True,"e0_reference"),
 "qsa_sparse_attention":OperatorContract("qsa_sparse_attention","matrix_sfu_kv",True,"e0_reference")}
 DENSE={
-"attention_qk_norm":OperatorContract("attention_qk_norm","sfu",False,"analysis"),
-"dense_attention_output_projection":OperatorContract("dense_attention_output_projection","matrix",False,"analysis"),
 "dense_ffn_gate_up":OperatorContract("dense_ffn_gate_up","matrix",False,"analysis"),
 "dense_ffn_silu_product":OperatorContract("dense_ffn_silu_product","sfu",False,"analysis"),
 "dense_ffn_down":OperatorContract("dense_ffn_down","matrix",False,"analysis")}
@@ -85,11 +83,7 @@ def layer_ops(p,i):
     if family=="qwen4_exp_flash_next" and i+1 in p["ple"]["layer_ids"]:out += ["ple_ngram_hash","ple_sparse_row_fetch","ple_projection_dwconv"]
     out += ["gated_residual_read","group_rmsnorm"] if family=="qwen4_exp_flash_next" else ["rmsnorm"]
     if kind in ("gated_deltanet","linear_attention"):out += ["gdn_projection","gdn_causal_conv","gdn_recurrent_update","gdn_gated_norm_output"]
-    elif kind=="full_attention":
-        out += ["dense_full_attention_qkv"]
-        if family==DENSE_FAMILY:out += ["attention_qk_norm"]
-        out += ["partial_rope","dense_full_attention_mlo","attention_output_gate"]
-        if family==DENSE_FAMILY:out += ["dense_attention_output_projection"]
+    elif kind=="full_attention":out += ["dense_full_attention_qkv","partial_rope","dense_full_attention_mlo","attention_output_gate"]
     elif kind=="qwen_sparse_attention":out += ["qsa_index_projection","partial_rope","qsa_block_summary","qsa_streaming_topk","qsa_sparse_kv_gather","qsa_sparse_attention","attention_output_gate"]
     else:raise ValueError(kind)
     out += ["gated_residual_write","gated_residual_read","group_rmsnorm"] if family=="qwen4_exp_flash_next" else ["standard_residual_add","rmsnorm"]

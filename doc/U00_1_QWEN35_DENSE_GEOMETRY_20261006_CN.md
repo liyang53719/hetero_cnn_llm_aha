@@ -43,3 +43,7 @@
 U00.2仍需为三个模型固定官方weight字节/header、双参考与逐producer精度、输入/初始状态、batch/query/KV、冷暖cache、真实MoE路由及实际固定Matrix/Vector资源。沿用M128作为本轮形状示例，不据此捏造整个性能测试集合已经选定。
 
 随后将这些合同接入实际Chisel frontend/layout及完整owner状态路径，使用同源输入/权重/生成RTL，全量比较数值/状态，再对整个block从launch接受到最终输出/状态ACK（含stall、padding、drain）统计useful MAC。90%门限和固定资源分母保持不变。
+
+## 独立复核补正：full-attention 显式顺序
+
+独立复核发现初版 dense schedule 继承历史 coarse inventory，虽已列出真实 tensor shape，却没有显式列出 Q/K Norm 和 gate 后的 output projection。现仅对 dense 家族补齐：QKV → Q/K Norm → partial RoPE → attention MLO → sigmoid gate → output projection → residual，并添加严格顺序回归。旧35B/3.8报告digest保持不变。初版源证据保留为相同字节快照；补正测试与报告位于 `reports/execution/U00_1_QWEN35_DENSE_20261006/attention_schedule_followup/`，该处是当前dense schedule的最新E0报告。

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "milestone": "U00.1",
+  "status": "PASS_SCOPED_DENSE_ATTENTION_SCHEDULE_CORRECTION",
+  "implementation_base_commit": "99a0c8faf789fa6a952fc3628ca41830a39b3926",
+  "correction": "Dense full-attention schedule now explicitly includes Q/K RMSNorm before RoPE and Matrix output projection after sigmoid gate. Historical 35B/3.8 digest unchanged.",
+  "source_hashes": {
+    "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+    "src/heteronpu/qwen_family_contracts.py": "7cddcac095535e706ac31161303c94a8ad0a0ad6c4ece775f279190c5f283ab0",
+    "src/heteronpu/model_support.py": "2d9a10bcbc03c8341c1fe7e01a5a0032e50d2fbe3dcb1e936b177c799a3d1ef7",
+    "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+    "scripts/run_qwen35_dense_contract.py": "035360fb774f58e953b575395307cd4dc571b981fd65b1fb9f06df070ec2ef1f",
+    "scripts/validate_typical_block_plan.py": "e8917d3b13e8d3c326f209e7988eacec57500a51f4fe925fadbbe2c77c983f55",
+    "tests/test_qwen35_dense_geometry.py": "8756d353a026767cf900a319172516e8369fc41f1acfd575aea517a08813845c",
+    "tests/test_typical_block_plan.py": "7a0bb3e1704b765b3397a20a95a07703a05bb263ab8da2453ec46492eed0037d",
+    "tests/test_block_checklist.py": "967352af01823c3be146e277424201334ae9ae330d7717daef2f1c25478af957",
+    "config/model_profiles/qwen3_5_0p8b.json": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769",
+    ".github/workflows/current-model-goal-contract.yml": "f96d08947e4413d92c876ca1eeb8e4abda2ba548fb9bad470af30b2e4c80b9c9",
+    "config/upstream/qwen3_5_0p8b/README.md": "96e56e9d849100cc42fa6ca6d2bebdfb0b5cede6a6d4ae9d167d923cfd445d6c",
+    "config/upstream/qwen3_5_0p8b/config.json": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "config/upstream/qwen3_5_0p8b/configuration_qwen3_5.py": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e",
+    "config/upstream/qwen3_5_0p8b/manifest.json": "ef61b656ac0ec16bceaaf219f0610153fe0b8f815f68e55a12f7ba3d3038e91a",
+    "config/upstream/qwen3_5_0p8b/model.safetensors.index.json": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "config/upstream/qwen3_5_0p8b/modular_qwen3_5.py": "ba423e1400fc253dce1cdbb215463675ea09c96df5a379b43e985d36c9e675c7"
+  },
+  "tests": {
+    "focused": {
+      "exit_code": 0,
+      "passed": 346,
+      "log": "focused.log",
+      "command": "PYTHONPATH=src python -m pytest -o addopts= -q tests/test_typical_block_plan.py tests/test_block_checklist.py tests/test_model_geometry.py tests/test_qwen_family_contracts.py tests/test_qwen35_dense_geometry.py tests/test_control_v4.py::test_profiles_and_support tests/test_qwen38_runtime_e0.py"
+    },
+    "optimized": {
+      "exit_code": 0,
+      "passed": 191,
+      "warnings": 1,
+      "log": "optimized.log",
+      "command": "PYTHONPATH=src python -O -m pytest -o addopts= -q tests/test_qwen35_dense_geometry.py"
+    },
+    "full": {
+      "exit_code": 1,
+      "passed": 1639,
+      "failed": 5,
+      "failure_ids": [
+        "tests/test_control_v4.py::test_exp2_pwl_bounds",
+        "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+        "tests/test_planning_v6.py::test_arch_and_control",
+        "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+        "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+      ],
+      "same_five_preexisting_failures": true,
+      "command": "PYTHONPATH=src python -m pytest -o addopts= -q",
+      "log": "pytest_full.log"
+    }
+  },
+  "initial_implementation_ci": {
+    "head_sha": "99a0c8faf789fa6a952fc3628ca41830a39b3926",
+    "run_id": 37522561385,
+    "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37522561385",
+    "conclusion": "success",
+    "note": "Pre-correction CI only; final corrected head requires its own run."
+  },
+  "scope": {
+    "raw_config_forward_index_verified": true,
+    "main_text_index_names_verified": 320,
+    "weight_headers_verified": false,
+    "weights_loaded": false,
+    "numerical_execution": false,
+    "rtl_execution": false,
+    "mac_utilization_measured": false,
+    "full_U00_complete": false,
+    "U01_complete": false
+  },
+  "artifact_hashes": {
+    "optimized.log": "fb8b039fdd76138332844999c8e0151488e52b45424f85da7cd13ce7e1dd0bf3",
+    "geometry.json": "88cf67d07cc630d27ce71b77155ee692c54193f707e29b1e397517f973d6b1dd",
+    "focused.log": "6198b2f35472e86f80c1ca35193dbd952190bb392be8a5f8bb10465a2b619303",
+    "pytest_full.log": "65b21e13b4aa596c1f2d957b9d6b08f83dab4903e040d12e97b2947f0d5d279e"
+  }
+}

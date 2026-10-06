@@ -710,17 +710,3 @@ def test_source_manifest_rejects_ambiguous_json(copied_source_root, kind):
     path.write_text(raw)
     with pytest.raises(ModelContractError):
         dense_contract.source_bundle(copied_source_root)
-
-
-def test_dense_full_attention_schedule_matches_pinned_forward_order(dense_profile):
-    assert family.layer_ops(dense_profile, 3) == (
-        "rmsnorm", "dense_full_attention_qkv", "attention_qk_norm", "partial_rope",
-        "dense_full_attention_mlo", "attention_output_gate", "dense_attention_output_projection",
-        "standard_residual_add", "rmsnorm", "dense_ffn_gate_up", "dense_ffn_silu_product",
-        "dense_ffn_down", "standard_residual_add",
-    )
-    gdn = family.layer_ops(dense_profile, 0)
-    assert "attention_qk_norm" not in gdn
-    assert "dense_attention_output_projection" not in gdn
-    scheduled = family.summary(dense_profile)["schedule_operator_counts"]
-    assert scheduled["attention_qk_norm"] == scheduled["dense_attention_output_projection"] == 6

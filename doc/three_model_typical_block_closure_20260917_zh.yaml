@@ -35,12 +35,20 @@
       - B2_DENSE
       门禁: 固定revision/配置/forward/权重/输入实际字节复核；保留既有Instruct与Base区分。
     Qwen3.5-0.8B:
-      既有身份: null
-      revision: null
-      config_sha256: null
-      shape: null
-      所需block: null
-      门禁: 仓库未找到该型号profile；先固定官方revision、配置、forward和层索引，再核定Attention+dense-FFN及GDN+dense-FFN等实际block清单；不从名称推断架构，不复用35B MoE几何。
+      阶段: pinned_geometry_only_U00_1
+      既有身份: Qwen/Qwen3.5-0.8B
+      revision: 2fc06364715b967f1860aea9cf38778875588b17
+      config_sha256: b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204
+      forward_revision: 14e738b5d0cc69aa27a95dde272aea41fde44f2f
+      forward_sha256: aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18
+      来源: config/model_profiles/qwen3_5_0p8b.json
+      原字节清单: config/upstream/qwen3_5_0p8b/manifest.json
+      shape: {hidden: 1024, dense_ffn: 3584, layers: 24, q_heads: 8, kv_heads: 2, head_dim: 256, gdn_key_heads: 16, gdn_value_heads: 16, gdn_key_dim: 128, gdn_value_dim: 128, conv_kernel: 4}
+      所需block: [B35_08_ATTN_DENSE, B35_08_GDN_DENSE]
+      典型层索引: {B35_08_ATTN_DENSE: 3, B35_08_GDN_DENSE: 0}
+      权重数值RTL通过: false
+      性能workload已冻结: false
+      门禁: 仅固定config/forward/index原字节与E0几何；320个主文本tensor名称对齐，shape未读取权重header。两个真实block类型及0基层索引已核定，M128形状仅继承候选，不代表完整性能workload已冻结。U00.2与U01保持未完成。
     Qwen3.5-35B-A3B:
       既有身份: Qwen/Qwen3.5-35B-A3B
       来源: config/model_profiles/qwen3_5_35b_a3b.json
@@ -96,7 +104,7 @@
   历史保护: Q38不属于本次必需三模型，也不能替代0.8B。旧六类R00及整网/视觉/MTP仍保留历史任务；当前派工排除，未来需另行授权恢复。C03.3仅关闭合成E0向量准备。
 范围:
   首要目标: 当前统一验收目标的三个型号逐一通过典型block实际生成RTL数值与90% MAC利用率；下列六类定义为保留的历史研发清单。
-  模型标识规则: Qwen2沿用既有Instruct身份且不混用Base；Q35保留待复核固定来源；0.8B必须新增官方合同，Q38仅为历史后续。
+  模型标识规则: Qwen2沿用既有Instruct身份且不混用Base；Q35保留待复核固定来源；0.8B已有U00.1配置/代码/index几何合同，仍缺完整权重/精度/workload/RTL；Q38仅为历史后续。
   排除项目: [voyager_vmap, transfrom_hdlcoder]
   本轮不改动: [Chisel计算代码, 已生成RTL, 既有数值门限, 已冻结权重, 生产默认开关]
   非本阶段完成条件: [完整28或40或48层网络, tokenizer, 最终LM_head, 视觉编码器, MTP推测解码, 板级驱动, 物理签核]

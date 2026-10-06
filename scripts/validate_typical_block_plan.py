@@ -94,12 +94,28 @@ def validate_current_goal(doc: dict, tasks: dict) -> bool:
     need(entries["Qwen3.5-35B-A3B"].get("既有身份") == MODELS["Q35"]
          and entries["Qwen3.5-35B-A3B"].get("所需block") == ["B35_ATTN_MOE", "B35_GDN_MOE"],
          "current Q35 block scope changed")
-    # U00 must introduce a pinned, tested profile before a later plan revision
-    # can replace this explicit unresolved state with model-support claims.
+    # This dated update freezes only source-backed geometry, not complete U00
+    # workloads or model/RTL support. The offline dense gate verifies raw bytes.
     small = entries["Qwen3.5-0.8B"]
-    need(all(k in small and small[k] is None for k in
-             ("既有身份", "revision", "config_sha256", "shape", "所需block")),
-         "0.8B requires a separately validated provenance update")
+    expected_small = {
+        "阶段": "pinned_geometry_only_U00_1",
+        "既有身份": "Qwen/Qwen3.5-0.8B",
+        "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+        "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+        "forward_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+        "forward_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+        "来源": "config/model_profiles/qwen3_5_0p8b.json",
+        "原字节清单": "config/upstream/qwen3_5_0p8b/manifest.json",
+        "所需block": ["B35_08_ATTN_DENSE", "B35_08_GDN_DENSE"],
+        "典型层索引": {"B35_08_ATTN_DENSE": 3, "B35_08_GDN_DENSE": 0},
+        "shape": {"hidden": 1024, "dense_ffn": 3584, "layers": 24, "q_heads": 8, "kv_heads": 2,
+                  "head_dim": 256, "gdn_key_heads": 16, "gdn_value_heads": 16,
+                  "gdn_key_dim": 128, "gdn_value_dim": 128, "conv_kernel": 4},
+    }
+    for key, expected in expected_small.items():
+        need(small.get(key) == expected, "0.8B pinned provenance/geometry mismatch: " + key)
+    need(small.get("权重数值RTL通过") is False and small.get("性能workload已冻结") is False,
+         "0.8B geometry cannot be promoted to workload/RTL acceptance")
     need(goal.get("验收证据") == "actual_generated_rtl_replay", "current goal requires actual RTL replay")
     need(type(goal.get("最低MAC利用率")) in (int, float) and goal["最低MAC利用率"] == 0.9,
          "current utilization threshold must be 90 percent")

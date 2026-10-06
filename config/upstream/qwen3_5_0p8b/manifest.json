@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "retrieved_at_utc": "2026-10-06T19:37:00Z",
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "model_revision_resolution_url": "https://huggingface.co/api/models/Qwen/Qwen3.5-0.8B",
+  "modeling_repository": "huggingface/transformers",
+  "modeling_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "modeling_revision_resolution_url": "https://api.github.com/repos/huggingface/transformers/commits/main",
+  "files": [
+    {
+      "file": "config.json",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/config.json",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "bytes": 2907
+    },
+    {
+      "file": "model.safetensors.index.json",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors.index.json",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "sha256": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+      "bytes": 50900
+    },
+    {
+      "file": "configuration_qwen3_5.py",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/configuration_qwen3_5.py",
+      "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "sha256": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e",
+      "bytes": 8281
+    },
+    {
+      "file": "modeling_qwen3_5.py",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "bytes": 88051
+    },
+    {
+      "file": "modular_qwen3_5.py",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/modular_qwen3_5.py",
+      "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "sha256": "ba423e1400fc253dce1cdbb215463675ea09c96df5a379b43e985d36c9e675c7",
+      "bytes": 27194
+    }
+  ],
+  "scope": "Downloaded source/config/index metadata only. No checkpoint weight bytes, inference, quantization, RTL, synthesis, or QoR validation. Model and implementation revisions are independently pinned; implementation pin is not asserted to be the checkpoint training implementation."
+}

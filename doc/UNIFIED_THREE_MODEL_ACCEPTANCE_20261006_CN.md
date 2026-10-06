@@ -9,7 +9,7 @@
 
 - Qwen2-1.5B：既有精确身份为 Qwen/Qwen2-1.5B-Instruct，保留 Instruct/Base 区分。固定 revision/config/framework 哈希记录在 `config/qwen2_1p5b_target_shape.json`。沿用 B2_DENSE 的完整 Attention/SwiGLU、Norm、bias、residual 与 KV 提交边界；现有合成几何通过不代表当前官方 checkpoint 或 90% 通过。
 - Qwen3.5-35B-A3B：已有 `config/model_profiles/qwen3_5_35b_a3b.json` 与 `reports/execution/QWEN35_REFERENCE_LOCK.json`。后者仅 metadata，明确没有权重和数值 RTL 通过。需要 B35_ATTN_MOE 与 B35_GDN_MOE，包含 routed/shared experts、route 与必要状态。固定原字节和当前权重来源仍需复核。
-- Qwen3.5-0.8B：当前仓库没有该型号的 pinned profile、固定 revision/hash 或已接入 runner。本次不填猜测的 shape。官方可变 main 配置可作为 U00 的读取线索：https://huggingface.co/Qwen/Qwen3.5-0.8B/raw/main/config.json 。只有冻结官方配置/forward/层索引后，才能正式选择 Attention+dense-FFN、GDN+dense-FFN 等该型号真实存在的 block，不能从型号名或35B配置推断。
+- Qwen3.5-0.8B：U00.1现已新增 `config/model_profiles/qwen3_5_0p8b.json`、固定revision/config/forward/index原字节，以及显式dense-FFN的几何、算子/状态/调度入口。H1024、FFN3584、24层与3:1 GDN/full-attention已由官方来源核实；典型层0/3分别为GDN+dense-FFN、Attention+dense-FFN。只完成来源/几何E0，未加载checkpoint权重、未执行数值或RTL。具体来源、拒绝测试和剩余门禁见 `doc/U00_1_QWEN35_DENSE_GEOMETRY_20261006_CN.md`。
 - Qwen3.8：保留历史研发任务、六类 inventory 和原证据，已从当前必需三模型及派工队列排除。它不能替代 0.8B；旧 R00、整网/视觉/MTP 发布不代表当前 U01 通过。
 
 ## 利用率及同源门禁
@@ -38,7 +38,7 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 ## 计划与清单落点
 
 - `doc/three_model_typical_block_closure_20260917_zh.yaml` 的“当前统一验收目标”优先于历史六类发布范围，修正 G8/性能目标旧表述。
-- 新增 U00“冻结当前三模型合同与回放工作量”、U01“三模型典型block数值及90%联合验收”，均为 to do，未执行模型实现。
+- U00拆为U00.1“0.8B来源与dense-FFN几何”以及U00.2“全部三模型回放workload冻结”；本次只关闭U00.1。U00仍ongoing，U00.2及U01“三模型典型block数值及90%联合验收”仍to do。
 - `doc/block_checklist.yaml` 更新计划 SHA，保留所有已完成子项及原证据；当前队列排除历史 Q38/R00/F00/F01。
 - 计划校验器检查三模型、90%、实际RTL、固定资源/完整周期、Matrix/Vector分报、必需来源字段，以及U01不依赖历史Q38闭包。校验 PASS 仅代表文档合同一致，绝不代表硬件 PASS。
 - C03.3 仍仅为 synthetic E0 shape/layout 与宽地址向量完成。C03.2、官方模型真实接入、三模型数值与90%尚未关闭；Chisel CI另跟踪实际运行结果。

@@ -1,4 +1,4 @@
-"""Architecture separation for pinned Qwen3.5 dense/MoE and historical Qwen3.8.
+"""Authoritative architecture separation for Qwen3.5-35B-A3B and Qwen3.8-Flash-Next.
 
 Qwen3.5-35B-A3B is qwen3_5_moe: Gated-DeltaNet/full-attention MoE with a
 single residual stream. Qwen3.8-Flash-Next is qwen4_exp: QSA, four gated
@@ -48,12 +48,7 @@ Q38={
 "qsa_streaming_topk":OperatorContract("qsa_streaming_topk","selection",True,"e0_reference"),
 "qsa_sparse_kv_gather":OperatorContract("qsa_sparse_kv_gather","kv_memory",True,"e0_reference"),
 "qsa_sparse_attention":OperatorContract("qsa_sparse_attention","matrix_sfu_kv",True,"e0_reference")}
-DENSE={
-"dense_ffn_gate_up":OperatorContract("dense_ffn_gate_up","matrix",False,"analysis"),
-"dense_ffn_silu_product":OperatorContract("dense_ffn_silu_product","sfu",False,"analysis"),
-"dense_ffn_down":OperatorContract("dense_ffn_down","matrix",False,"analysis")}
-DENSE_FAMILY="qwen3_5_hybrid_gdn_full_attention_dense"
-ALL=COMMON|Q35|Q38|DENSE
+ALL=COMMON|Q35|Q38
 
 def validate(q35,q38):
     validate_profile(q35)
@@ -63,16 +58,11 @@ def validate(q35,q38):
 def inventory(p):
     validate_profile(p)
     family=p["architecture_family"];ops=COMMON|(Q35 if family=="qwen3_5_hybrid_gdn_full_attention_moe" else Q38 if family=="qwen4_exp_flash_next" else {})
-    if family==DENSE_FAMILY:
-        ops={n: op for n,op in COMMON.items() if not n.startswith("moe_") and n!="mtp_state_transaction"}|Q35|DENSE
     return tuple(ops[n] for n in sorted(ops))
 def states(p):
     validate_profile(p)
     base={"gdn_recurrent_matrix","gdn_causal_conv_history","moe_weight_cache_metadata","mtp_speculative_generation","runtime_sampler_state","attention_output_gate_state"}
-    if p["architecture_family"]==DENSE_FAMILY:
-        base-={"moe_weight_cache_metadata","mtp_speculative_generation"}
-        base.add("dense_kv_cache")
-    elif p["architecture_family"]=="qwen3_5_hybrid_gdn_full_attention_moe":base.add("dense_kv_cache")
+    if p["architecture_family"]=="qwen3_5_hybrid_gdn_full_attention_moe":base.add("dense_kv_cache")
     else:base|={"qsa_kv_cache","qsa_raw_or_block_index_keys","qsa_selected_token_list","four_branch_hyper_residual","ple_token_history","ple_dilated_conv_history","ple_row_cache_metadata"}
     return tuple(sorted(base))
 def layer_ops(p,i):
@@ -87,9 +77,7 @@ def layer_ops(p,i):
     elif kind=="qwen_sparse_attention":out += ["qsa_index_projection","partial_rope","qsa_block_summary","qsa_streaming_topk","qsa_sparse_kv_gather","qsa_sparse_attention","attention_output_gate"]
     else:raise ValueError(kind)
     out += ["gated_residual_write","gated_residual_read","group_rmsnorm"] if family=="qwen4_exp_flash_next" else ["standard_residual_add","rmsnorm"]
-    out += (["dense_ffn_gate_up","dense_ffn_silu_product","dense_ffn_down"] if family==DENSE_FAMILY
-            else ["moe_router_topk","moe_routed_experts","moe_shared_expert","moe_route_reduce"])
-    out += [("gated_residual_write" if family=="qwen4_exp_flash_next" else "standard_residual_add")]
+    out += ["moe_router_topk","moe_routed_experts","moe_shared_expert","moe_route_reduce",("gated_residual_write" if family=="qwen4_exp_flash_next" else "standard_residual_add")]
     return tuple(out)
 def schedule(p):
     validate_profile(p)

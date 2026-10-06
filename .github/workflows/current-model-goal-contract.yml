@@ -10,6 +10,14 @@ on:
       - 'scripts/block_checklist.py'
       - 'tests/test_typical_block_plan.py'
       - 'tests/test_block_checklist.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/qwen_family_contracts.py'
+      - 'src/heteronpu/qwen35_dense_contract.py'
+      - 'src/heteronpu/model_support.py'
+      - 'config/model_profiles/*.json'
+      - 'config/upstream/qwen3_5_0p8b/**'
+      - 'scripts/run_qwen35_dense_contract.py'
+      - 'tests/test_qwen35_dense_geometry.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,11 +30,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install PyYAML pytest
+      - run: python -m pip install -e . pytest
       - name: Check current goal and historical evidence without claiming hardware acceptance
         env:
           PYTHONPATH: src
         run: |
           python scripts/validate_typical_block_plan.py doc/three_model_typical_block_closure_20260917_zh.yaml
           python scripts/block_checklist.py validate
-          python -m pytest -q tests/test_typical_block_plan.py tests/test_block_checklist.py
+          python scripts/run_qwen35_dense_contract.py --output work/qwen35_dense_geometry.json
+          python -m pytest -q tests/test_typical_block_plan.py tests/test_block_checklist.py tests/test_model_geometry.py tests/test_qwen_family_contracts.py tests/test_qwen35_dense_geometry.py tests/test_control_v4.py::test_profiles_and_support
+          python -O -m pytest -q tests/test_qwen35_dense_geometry.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pinned-dense-geometry-${{ github.sha }}
+          path: work/qwen35_dense_geometry.json
+          if-no-files-found: error

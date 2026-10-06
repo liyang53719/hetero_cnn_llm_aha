@@ -1,0 +1,24 @@
+{
+  "model_id": "Qwen/Qwen3.5-35B-A3B",
+  "pinned_model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+  "observed_current_revision": "59d61f3ce65a6d9863b86d2e96597125219dc754",
+  "current_revision_differs": true,
+  "retrieved_at_utc": "2026-10-06T19:39:00Z",
+  "files": [
+    {
+      "file": "config.json",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/config.json",
+      "sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+      "bytes": 3544,
+      "revision": "62704185bd97ad488cfc404e7caea797396b74dc"
+    },
+    {
+      "file": "current_model_api.json",
+      "url": "https://huggingface.co/api/models/Qwen/Qwen3.5-35B-A3B",
+      "sha256": "f5b228a58c6ec8f1278a0ea144f22c8c4437f70121fe1d28b901168f34eb6ebb",
+      "bytes": 21298,
+      "revision": "59d61f3ce65a6d9863b86d2e96597125219dc754"
+    }
+  ],
+  "scope": "Pinned config reread only; current API revision noted for drift, not substituted. No model weights downloaded, no change to existing repository profile."
+}

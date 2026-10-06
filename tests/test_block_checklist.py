@@ -163,7 +163,7 @@ def test_current_goal_does_not_reoffer_historical_q38_tasks(repo):
     task = next(t for t in p['任务'] if t['编号'] == 'Q38A')
     task['依赖'] = []
     ids = {r['编号'] for r in ledger.queue(d, p, 'all')}
-    assert 'Q38A' not in ids and 'U00' in ids
+    assert 'Q38A' not in ids and 'U00.1' in ids and 'U00.2' not in ids
 
 
 def test_current_goal_exclusions_are_bound_to_plan(repo):

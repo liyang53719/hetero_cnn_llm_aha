@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "milestone": "U00.1",
+  "status": "PASS_SCOPED_PINNED_DENSE_GEOMETRY_ONLY",
+  "implementation_base_commit": "fb36e6178999df9d5c33dce215fc729f40143ccc",
+  "source_hashes": {
+    "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+    "src/heteronpu/qwen_family_contracts.py": "7b62c88a0c43b28aeb1cc8fd5f79f01db6747385389cf1328796711a151e7e8b",
+    "src/heteronpu/model_support.py": "2d9a10bcbc03c8341c1fe7e01a5a0032e50d2fbe3dcb1e936b177c799a3d1ef7",
+    "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+    "scripts/run_qwen35_dense_contract.py": "035360fb774f58e953b575395307cd4dc571b981fd65b1fb9f06df070ec2ef1f",
+    "scripts/validate_typical_block_plan.py": "e8917d3b13e8d3c326f209e7988eacec57500a51f4fe925fadbbe2c77c983f55",
+    "tests/test_qwen35_dense_geometry.py": "4cccbccf1d0efc041b5ebd47c99aa9eeb84f45e336332fd5b9e310b392edaabb",
+    "tests/test_typical_block_plan.py": "7a0bb3e1704b765b3397a20a95a07703a05bb263ab8da2453ec46492eed0037d",
+    "tests/test_block_checklist.py": "967352af01823c3be146e277424201334ae9ae330d7717daef2f1c25478af957",
+    "config/model_profiles/qwen3_5_0p8b.json": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769",
+    ".github/workflows/current-model-goal-contract.yml": "f96d08947e4413d92c876ca1eeb8e4abda2ba548fb9bad470af30b2e4c80b9c9",
+    "config/upstream/qwen3_5_0p8b/README.md": "96e56e9d849100cc42fa6ca6d2bebdfb0b5cede6a6d4ae9d167d923cfd445d6c",
+    "config/upstream/qwen3_5_0p8b/config.json": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "config/upstream/qwen3_5_0p8b/configuration_qwen3_5.py": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e",
+    "config/upstream/qwen3_5_0p8b/manifest.json": "ef61b656ac0ec16bceaaf219f0610153fe0b8f815f68e55a12f7ba3d3038e91a",
+    "config/upstream/qwen3_5_0p8b/model.safetensors.index.json": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "config/upstream/qwen3_5_0p8b/modular_qwen3_5.py": "ba423e1400fc253dce1cdbb215463675ea09c96df5a379b43e985d36c9e675c7"
+  },
+  "tests": {
+    "focused": {
+      "command": "PYTHONPATH=src python -m pytest -o addopts= -q tests/test_typical_block_plan.py tests/test_block_checklist.py tests/test_model_geometry.py tests/test_qwen_family_contracts.py tests/test_qwen35_dense_geometry.py tests/test_control_v4.py::test_profiles_and_support tests/test_qwen38_runtime_e0.py",
+      "exit_code": 0,
+      "passed": 345,
+      "log": "focused.log"
+    },
+    "optimized": {
+      "command": "PYTHONPATH=src python -O -m pytest -o addopts= -q tests/test_qwen35_dense_geometry.py",
+      "exit_code": 0,
+      "passed": 190,
+      "warnings": 1,
+      "warning_scope": "pytest notes optimization; actual normal/-O subprocess rejection checks included",
+      "log": "optimized.log"
+    },
+    "full": {
+      "command": "PYTHONPATH=src python -m pytest -o addopts= -q",
+      "exit_code": 1,
+      "passed": 1638,
+      "failed": 5,
+      "log": "pytest_full.log",
+      "failure_ids": [
+        "tests/test_control_v4.py::test_exp2_pwl_bounds",
+        "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+        "tests/test_planning_v6.py::test_arch_and_control",
+        "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+        "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+      ],
+      "same_failure_ids_as_prior_archived_baseline": true,
+      "comparison_file": "reports/execution/C03_3_SHAPE_LAYOUT_20261006/full_pytest.txt"
+    },
+    "sandbox_validate": {
+      "command": "bash scripts/sandbox_validate.sh",
+      "exit_code": 4,
+      "log": "sandbox_validate.log",
+      "blocker": "Existing main-only ref gate rejects origin and origin/__DO_NOT_USE__. No refs deleted and no gate bypass claimed."
+    },
+    "compileall": {
+      "command": "python -m compileall -q src scripts",
+      "exit_code": 0
+    },
+    "diff_check": {
+      "command": "git diff --cached --check -- . ':(exclude)*.log'",
+      "exit_code": 0,
+      "note": "Raw pytest logs retain their original trailing whitespace and are excluded from source whitespace lint."
+    }
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "pytest": "9.1.1",
+    "numpy": "2.5.3",
+    "PyYAML": "6.0.3"
+  },
+  "scope": {
+    "raw_config_forward_index_verified": true,
+    "main_text_index_names_verified": 320,
+    "weight_headers_verified": false,
+    "weights_loaded": false,
+    "numerical_execution": false,
+    "rtl_execution": false,
+    "mac_utilization_measured": false,
+    "full_U00_complete": false,
+    "U01_complete": false
+  },
+  "remaining_gates": [
+    "U00.2 three-model official weights/precision/inputs/initial states/workload/cache/resource counters",
+    "C03.2 actual Chisel shape/layout/frontend and owner integration",
+    "U01 same-source actual RTL numerical and >=90% whole-block useful MAC"
+  ],
+  "historical_source_snapshots": {
+    "original_commit": "fb36e6178999df9d5c33dce215fc729f40143ccc",
+    "original_paths": [
+      "src/heteronpu/model_geometry.py",
+      "src/heteronpu/qwen_family_contracts.py"
+    ],
+    "snapshot_directory": "reports/execution/U00_1_QWEN35_DENSE_20261006/historical_sources",
+    "note": "C01.1/C03.1 proof source associations retargeted to byte-identical snapshots, preserving all original hashes and scope."
+  },
+  "artifact_hashes": {
+    "focused.log": "f1352aa39a1c3853236d465c9046cd29fa9db4e7df55b98d05693f160d6c01db",
+    "geometry.json": "bb344182008f156ce1d372082bb05ec3ebf21b73e338b0b5a2dfcfe686ca69c6",
+    "optimized.log": "0e1529296896d8345297f7075e191b4e2e6d26d9568314aa32df8b7aa7495495",
+    "plan_validation.json": "911615a79278d0af6f044b00a06677646445ec57b856e2f249a05445de2c84d6",
+    "pytest_full.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "pytest_full.log": "f8d4167744d16e7d927e76d8e47a7f7429d07da6adb1cb733551c56c0af63648",
+    "related.log": "a227ef3fccd7b4639c2db645f497afb47e9017a5899b455b506b9c15885ca996",
+    "sandbox_validate.log": "7ea0a536a47861b7056baafbd614db124b82f50b5da05aa1c926d30e0aef92ef"
+  }
+}

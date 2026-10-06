@@ -1,4 +1,4 @@
-"""Fail-closed geometry of repository-pinned hybrid Qwen profiles.
+"""Fail-closed geometry of the two repository-pinned hybrid Qwen profiles.
 
 This validates repository configuration, NOT upstream authenticity or RTL
 support. Derived widths deliberately do not equate hidden size to Q width.
@@ -26,7 +26,7 @@ def positive(value: Any, name: str, maximum: int = 2**31 - 1) -> int:
     return value
 
 
-# Fixed compiler identities. Upstream raw-byte verification is a separate gate.
+# These are identities of already-committed inputs, not newly verified releases.
 PINNED = {
     "qwen3_5_hybrid_gdn_full_attention_moe": {
         "model_id": "Qwen/Qwen3.5-35B-A3B",
@@ -36,15 +36,6 @@ PINNED = {
         "residual_architecture": "single_stream_standard_residual",
         "normal": "gated_deltanet", "special": "full_attention",
         "q_heads": 16, "v_heads": 32, "experts": 256, "top_k": 8, "ffn": 512,
-    },
-    "qwen3_5_hybrid_gdn_full_attention_dense": {
-        "model_id": "Qwen/Qwen3.5-0.8B",
-        "revision": "2fc06364715b967f1860aea9cf38778875588b17",
-        "hf_model_type": "qwen3_5", "text_model_type": "qwen3_5_text",
-        "num_hidden_layers": 24, "hidden_size": 1024,
-        "residual_architecture": "single_stream_standard_residual",
-        "normal": "gated_deltanet", "special": "full_attention",
-        "q_heads": 8, "v_heads": 16, "ffn": 3584,
     },
     "qwen4_exp_flash_next": {
         "model_id": "Qwen/Qwen3.8-Flash-Next",
@@ -82,49 +73,15 @@ def validate_profile(p: Any) -> None:
     pattern = p.get("layer_pattern")
     require(isinstance(pattern, list) and pattern == [expected["special"] if i % 4 == 3 else expected["normal"]
                                                     for i in range(layers)], "invalid complete layer pattern")
-    a, g = (_section(p, key) for key in ("full_attention", "gated_deltanet"))
+    a, g, m = (_section(p, key) for key in ("full_attention", "gated_deltanet", "moe"))
     _exact_ints(a, {"q_heads": expected["q_heads"], "kv_heads": 2, "head_dim": 256, "rotary_dim": 64}, "attention.")
     _exact_ints(g, {"qk_heads": 16, "v_heads": expected["v_heads"], "key_dim": 128,
                     "value_dim": 128, "conv_kernel": 4, "chunk_size": 64}, "gdn.")
-    dense = family == "qwen3_5_hybrid_gdn_full_attention_dense"
-    if dense:
-        require("moe" not in p, "dense FFN cannot acquire an MoE section")
-        require(p.get("ffn_architecture") == "dense_swiglu", "missing dense FFN identity")
-        f = _section(p, "dense_ffn")
-        _exact_ints(f, {"intermediate_size": expected["ffn"]}, "dense_ffn.")
-        require(f.get("hidden_act") == "silu" and f.get("bias") is False, "invalid dense FFN semantics")
-        _exact_ints(p, {"vocab_size": 248320, "context_length": 262144, "profile_schema": 5}, "")
-        require(a.get("attention_kind") == "dense_causal_gqa", "invalid attention kind")
-        _exact_ints(a, {"block_tokens": 128}, "attention.")
-        require(p.get("normalization") == {"rms_norm_eps": 1e-6, "decoder_qk_weight": "1+weight",
-                    "gdn_gated_weight": "weight", "gdn_gate_activation": "silu"}, "frozen normalization mismatch")
-        require(p.get("rope") == {"partial_rotary_factor": 0.25, "theta": 10000000,
-                    "mrope_interleaved": True, "mrope_section": [11, 11, 10]}, "frozen RoPE mismatch")
-        require(p["rope"].get("mrope_interleaved") is True, "invalid RoPE interleaving")
-        require(p.get("transformers_source") == {"repository": "huggingface/transformers",
-                    "commit": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
-                    "module": "src/transformers/models/qwen3_5/modeling_qwen3_5.py",
-                    "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"},
-                "frozen forward source mismatch")
-        require(p.get("source_manifest") == "config/upstream/qwen3_5_0p8b/manifest.json",
-                "frozen source manifest mismatch")
-        require(g.get("state_dtype") == "float32", "GDN recurrent state must remain FP32")
-        require(a.get("q_projection_packing") == "per_head_query_gate" and a.get("bias") is False,
-                "invalid attention query/gate packing or bias")
-        require(p.get("config_sha256") == "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
-                "frozen config hash mismatch")
-        require(not any(k in p for k in ("qsa", "gated_residual", "ple", "mtp")),
-                "dense text-block profile cannot acquire Qwen38/MTP operators")
-    else:
-        require("dense_ffn" not in p and p.get("ffn_architecture", "moe") == "moe",
-                "MoE profile cannot acquire a dense FFN")
-        m = _section(p, "moe")
-        _exact_ints(m, {"num_experts": expected["experts"], "top_k": expected["top_k"],
-                        "intermediate_size": expected["ffn"], "shared_experts": 1}, "moe.")
-        require(m.get("norm_topk_prob") is True, "missing MoE normalization")
+    _exact_ints(m, {"num_experts": expected["experts"], "top_k": expected["top_k"],
+                    "intermediate_size": expected["ffn"], "shared_experts": 1}, "moe.")
     require(a["q_heads"] % a["kv_heads"] == 0 and g["v_heads"] % g["qk_heads"] == 0, "invalid head grouping")
-    require(p.get("attention_output_gate") is True, "missing attention gate")
-    if family in ("qwen3_5_hybrid_gdn_full_attention_moe", "qwen3_5_hybrid_gdn_full_attention_dense"):
+    require(m.get("norm_topk_prob") is True and p.get("attention_output_gate") is True, "missing normalization/gate")
+    if family == "qwen3_5_hybrid_gdn_full_attention_moe":
         require(not any(p.get(k) for k in ("qsa", "gated_residual", "ple")), "Qwen35 cannot acquire Qwen38 operators")
     else:
         qsa, hyper, ple = (_section(p, k) for k in ("qsa", "gated_residual", "ple"))
@@ -150,13 +107,8 @@ def _nonfinite(value: str) -> None:
     raise ModelContractError(f"non-finite JSON constant: {value}")
 
 
-def load_json(path: str | Path) -> Any:
-    """Read contract JSON without duplicate-key or non-finite ambiguity."""
-    return json.loads(Path(path).read_text(encoding="utf-8"), object_pairs_hook=_unique_pairs, parse_constant=_nonfinite)
-
-
 def load_profile(path: str | Path) -> dict:
-    p = load_json(path)
+    p = json.loads(Path(path).read_text(encoding="utf-8"), object_pairs_hook=_unique_pairs, parse_constant=_nonfinite)
     validate_profile(p)
     return p
 
@@ -175,35 +127,22 @@ class BlockGeometry:
     experts: int
     top_k: int
     branches: int
-    dense_ffn: int = 0
 
     @classmethod
     def from_profile(cls, p: Mapping[str, Any]) -> "BlockGeometry":
         validate_profile(p)
-        a, g, m = p["full_attention"], p["gated_deltanet"], p.get("moe", {})
+        a, g, m = p["full_attention"], p["gated_deltanet"], p["moe"]
         return cls(p["hidden_size"], a["q_heads"], a["kv_heads"], a["head_dim"],
                    g["qk_heads"], g["v_heads"], g["key_dim"], g["value_dim"],
-                   m.get("intermediate_size", 0), m.get("num_experts", 0), m.get("top_k", 0),
-                   p.get("gated_residual", {}).get("branches", 1),
-                   p.get("dense_ffn", {}).get("intermediate_size", 0))
+                   m["intermediate_size"], m["num_experts"], m["top_k"],
+                   p.get("gated_residual", {}).get("branches", 1))
 
     def __post_init__(self) -> None:
         for key, value in asdict(self).items():
-            if key not in {"expert_ffn", "experts", "top_k", "dense_ffn"}:
-                positive(value, key, 65535)
-        if type(self.dense_ffn) is int and self.dense_ffn == 0:
-            for key in ("expert_ffn", "experts", "top_k"):
-                positive(getattr(self, key), key, 65535)
-        else:
-            positive(self.dense_ffn, "dense_ffn", 65535)
-            require(all(type(getattr(self, k)) is int and getattr(self, k) == 0
-                        for k in ("expert_ffn", "experts", "top_k")),
-                    "dense FFN cannot have routed experts or top_k")
+            positive(value, key, 65535)
         require(self.q_heads % self.kv_heads == 0, "non-integral GQA grouping")
         require(self.value_heads % self.key_heads == 0, "non-integral GDN grouping")
         require(self.top_k <= self.experts, "top_k exceeds expert count")
-        if self.dense_ffn:
-            require(2 * self.q_width <= 65535, "packed query/gate dimension exceeds 16-bit owner contract")
         # Widths are not automatically truncated to the current 16-bit owner ABI.
         require(max(self.q_width, self.kv_width, self.gdn_value_width, self.gdn_conv_channels) <= 65535,
                 "derived dimension exceeds 16-bit owner contract")
@@ -228,24 +167,6 @@ class BlockGeometry:
         positive(tokens, "query_tokens", 1024)
         kv_tokens = tokens if kv_tokens is None else positive(kv_tokens, "kv_tokens", 2**32 - 1)
         require(kv_tokens >= tokens, "KV length cannot be shorter than this prefill chunk")
-        shapes = {
-            "attention_q": [tokens, self.q_width, self.hidden],
-            "attention_kv_each": [tokens, self.kv_width, self.hidden],
-            "attention_output": [tokens, self.hidden, self.q_width],
-            "gdn_output": [tokens, self.hidden, self.gdn_value_width],
-        }
-        if self.dense_ffn:
-            shapes.update({
-                "attention_query_and_gate": [tokens, 2 * self.q_width, self.hidden],
-                "dense_ffn_gate_up_each": [tokens, self.dense_ffn, self.hidden],
-                "dense_ffn_down": [tokens, self.hidden, self.dense_ffn],
-            })
-        else:
-            shapes.update({
-                "router": [tokens, self.experts, self.hidden],
-                "one_expert_gate_up_each": [tokens, self.expert_ffn, self.hidden],
-                "one_expert_down": [tokens, self.hidden, self.expert_ffn],
-            })
         return {
             "evidence_class": "repository_profile_geometry_E0", "rtl_execution": False,
             "official_source_reverified": False,
@@ -253,10 +174,17 @@ class BlockGeometry:
             "gdn_value_width": self.gdn_value_width, "gdn_conv_channels": self.gdn_conv_channels,
             "gdn_state_fp32_bytes": self.value_heads * self.key_dim * self.value_dim * 4,
             "routed_expert_three_matrices_bf16_bytes": 3 * self.hidden * self.expert_ffn * self.experts * 2,
-            "dense_ffn_three_matrices_bf16_bytes": 3 * self.hidden * self.dense_ffn * 2,
             "residual_fp32_bytes_assuming_materialization": tokens * self.branches * self.hidden * 4,
             "query_tokens": tokens, "kv_tokens": kv_tokens,
             "kv_bf16_bytes": 2 * kv_tokens * self.kv_width * 2,
-            "dense_shapes_MNK": shapes,
+            "dense_shapes_MNK": {
+                "attention_q": [tokens, self.q_width, self.hidden],
+                "attention_kv_each": [tokens, self.kv_width, self.hidden],
+                "attention_output": [tokens, self.hidden, self.q_width],
+                "gdn_output": [tokens, self.hidden, self.gdn_value_width],
+                "router": [tokens, self.experts, self.hidden],
+                "one_expert_gate_up_each": [tokens, self.expert_ffn, self.hidden],
+                "one_expert_down": [tokens, self.hidden, self.expert_ffn],
+            },
             "scope": "Shapes/budgets only; gate projection packing, RoPE semantics, SRAM mapping and actual routing remain separate gates.",
         }

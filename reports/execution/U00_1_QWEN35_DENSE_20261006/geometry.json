@@ -1,0 +1,1437 @@
+{
+  "schema_version": 1,
+  "status": "PASS_PINNED_GEOMETRY_E0_ONLY",
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "profile_sha256": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769",
+  "source_manifest": {
+    "schema_version": 1,
+    "retrieved_at_utc": "2026-10-06T19:37:00Z",
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "model_revision_resolution_url": "https://huggingface.co/api/models/Qwen/Qwen3.5-0.8B",
+    "modeling_repository": "huggingface/transformers",
+    "modeling_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "modeling_revision_resolution_url": "https://api.github.com/repos/huggingface/transformers/commits/main",
+    "files": [
+      {
+        "file": "config.json",
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/config.json",
+        "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+        "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+        "bytes": 2907
+      },
+      {
+        "file": "model.safetensors.index.json",
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors.index.json",
+        "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+        "sha256": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+        "bytes": 50900
+      },
+      {
+        "file": "configuration_qwen3_5.py",
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/configuration_qwen3_5.py",
+        "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+        "sha256": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e",
+        "bytes": 8281
+      },
+      {
+        "file": "modeling_qwen3_5.py",
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+        "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+        "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+        "bytes": 88051
+      },
+      {
+        "file": "modular_qwen3_5.py",
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/14e738b5d0cc69aa27a95dde272aea41fde44f2f/src/transformers/models/qwen3_5/modular_qwen3_5.py",
+        "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+        "sha256": "ba423e1400fc253dce1cdbb215463675ea09c96df5a379b43e985d36c9e675c7",
+        "bytes": 27194
+      }
+    ],
+    "scope": "Downloaded source/config/index metadata only. No checkpoint weight bytes, inference, quantization, RTL, synthesis, or QoR validation. Model and implementation revisions are independently pinned; implementation pin is not asserted to be the checkpoint training implementation."
+  },
+  "family": {
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "architecture_family": "qwen3_5_hybrid_gdn_full_attention_dense",
+    "hf_model_type": "qwen3_5",
+    "text_model_type": "qwen3_5_text",
+    "layers": 24,
+    "layer_type_counts": {
+      "gated_deltanet": 18,
+      "full_attention": 6
+    },
+    "operator_count": 15,
+    "schedule_ops": 264,
+    "schedule_operator_counts": {
+      "attention_output_gate": 6,
+      "dense_ffn_down": 24,
+      "dense_ffn_gate_up": 24,
+      "dense_ffn_silu_product": 24,
+      "dense_full_attention_mlo": 6,
+      "dense_full_attention_qkv": 6,
+      "gdn_causal_conv": 18,
+      "gdn_gated_norm_output": 18,
+      "gdn_projection": 18,
+      "gdn_recurrent_update": 18,
+      "partial_rope": 6,
+      "rmsnorm": 48,
+      "standard_residual_add": 48
+    },
+    "state_domains": [
+      "attention_output_gate_state",
+      "dense_kv_cache",
+      "gdn_causal_conv_history",
+      "gdn_recurrent_matrix",
+      "runtime_sampler_state"
+    ],
+    "hardware_owner_counts": {
+      "matrix": 72,
+      "matrix_sfu_kv": 6,
+      "matrix_state": 18,
+      "sfu": 132,
+      "sfu_matrix": 18,
+      "state": 18
+    },
+    "sandbox_ready": [
+      "attention_output_gate",
+      "dense_full_attention_mlo",
+      "dense_full_attention_qkv",
+      "gdn_causal_conv",
+      "gdn_gated_norm_output",
+      "gdn_projection",
+      "gdn_recurrent_update",
+      "partial_rope",
+      "rmsnorm"
+    ],
+    "local_only": [
+      "dense_ffn_down",
+      "dense_ffn_gate_up",
+      "dense_ffn_silu_product",
+      "standard_residual_add",
+      "token_embedding",
+      "vision_encoder"
+    ]
+  },
+  "geometry_M128": {
+    "evidence_class": "repository_profile_geometry_E0",
+    "rtl_execution": false,
+    "official_source_reverified": false,
+    "hidden": 1024,
+    "q_heads": 8,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "key_heads": 16,
+    "value_heads": 16,
+    "key_dim": 128,
+    "value_dim": 128,
+    "expert_ffn": 0,
+    "experts": 0,
+    "top_k": 0,
+    "branches": 1,
+    "dense_ffn": 3584,
+    "q_width": 2048,
+    "kv_width": 512,
+    "gdn_value_width": 2048,
+    "gdn_conv_channels": 6144,
+    "gdn_state_fp32_bytes": 1048576,
+    "routed_expert_three_matrices_bf16_bytes": 0,
+    "dense_ffn_three_matrices_bf16_bytes": 22020096,
+    "residual_fp32_bytes_assuming_materialization": 524288,
+    "query_tokens": 128,
+    "kv_tokens": 128,
+    "kv_bf16_bytes": 262144,
+    "dense_shapes_MNK": {
+      "attention_q": [
+        128,
+        2048,
+        1024
+      ],
+      "attention_kv_each": [
+        128,
+        512,
+        1024
+      ],
+      "attention_output": [
+        128,
+        1024,
+        2048
+      ],
+      "gdn_output": [
+        128,
+        1024,
+        2048
+      ],
+      "attention_query_and_gate": [
+        128,
+        4096,
+        1024
+      ],
+      "dense_ffn_gate_up_each": [
+        128,
+        3584,
+        1024
+      ],
+      "dense_ffn_down": [
+        128,
+        1024,
+        3584
+      ]
+    },
+    "scope": "Shapes/budgets only; gate projection packing, RoPE semantics, SRAM mapping and actual routing remain separate gates."
+  },
+  "index_names_verified": true,
+  "main_text_tensor_count": 320,
+  "index_total_tensor_count": 488,
+  "tensor_shapes_derived_not_weight_header_verified": {
+    "model.language_model.embed_tokens.weight": [
+      248320,
+      1024
+    ],
+    "model.language_model.layers.0.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.0.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.0.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.0.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.0.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.0.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.0.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.0.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.0.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.0.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.0.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.0.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.0.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.0.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.1.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.1.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.1.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.1.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.1.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.1.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.1.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.1.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.1.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.1.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.1.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.1.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.1.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.1.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.10.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.10.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.10.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.10.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.10.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.10.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.10.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.10.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.10.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.10.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.10.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.10.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.10.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.10.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.11.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.11.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.11.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.11.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.11.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.11.self_attn.k_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.11.self_attn.k_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.11.self_attn.o_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.11.self_attn.q_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.11.self_attn.q_proj.weight": [
+      4096,
+      1024
+    ],
+    "model.language_model.layers.11.self_attn.v_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.12.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.12.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.12.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.12.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.12.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.12.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.12.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.12.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.12.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.12.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.12.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.12.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.12.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.12.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.13.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.13.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.13.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.13.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.13.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.13.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.13.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.13.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.13.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.13.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.13.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.13.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.13.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.13.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.14.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.14.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.14.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.14.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.14.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.14.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.14.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.14.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.14.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.14.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.14.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.14.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.14.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.14.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.15.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.15.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.15.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.15.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.15.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.15.self_attn.k_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.15.self_attn.k_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.15.self_attn.o_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.15.self_attn.q_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.15.self_attn.q_proj.weight": [
+      4096,
+      1024
+    ],
+    "model.language_model.layers.15.self_attn.v_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.16.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.16.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.16.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.16.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.16.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.16.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.16.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.16.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.16.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.16.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.16.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.16.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.16.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.16.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.17.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.17.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.17.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.17.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.17.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.17.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.17.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.17.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.17.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.17.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.17.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.17.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.17.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.17.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.18.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.18.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.18.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.18.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.18.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.18.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.18.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.18.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.18.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.18.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.18.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.18.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.18.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.18.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.19.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.19.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.19.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.19.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.19.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.19.self_attn.k_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.19.self_attn.k_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.19.self_attn.o_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.19.self_attn.q_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.19.self_attn.q_proj.weight": [
+      4096,
+      1024
+    ],
+    "model.language_model.layers.19.self_attn.v_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.2.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.2.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.2.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.2.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.2.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.2.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.2.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.2.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.2.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.2.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.2.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.2.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.2.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.2.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.20.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.20.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.20.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.20.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.20.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.20.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.20.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.20.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.20.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.20.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.20.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.20.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.20.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.20.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.21.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.21.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.21.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.21.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.21.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.21.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.21.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.21.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.21.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.21.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.21.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.21.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.21.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.21.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.22.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.22.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.22.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.22.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.22.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.22.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.22.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.22.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.22.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.22.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.22.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.22.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.22.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.22.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.23.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.23.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.23.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.23.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.23.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.23.self_attn.k_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.23.self_attn.k_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.23.self_attn.o_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.23.self_attn.q_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.23.self_attn.q_proj.weight": [
+      4096,
+      1024
+    ],
+    "model.language_model.layers.23.self_attn.v_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.3.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.3.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.3.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.3.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.3.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.3.self_attn.k_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.3.self_attn.k_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.3.self_attn.o_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.3.self_attn.q_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.3.self_attn.q_proj.weight": [
+      4096,
+      1024
+    ],
+    "model.language_model.layers.3.self_attn.v_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.4.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.4.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.4.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.4.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.4.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.4.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.4.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.4.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.4.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.4.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.4.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.4.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.4.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.4.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.5.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.5.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.5.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.5.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.5.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.5.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.5.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.5.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.5.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.5.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.5.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.5.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.5.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.5.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.6.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.6.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.6.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.6.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.6.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.6.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.6.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.6.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.6.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.6.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.6.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.6.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.6.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.6.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.7.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.7.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.7.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.7.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.7.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.7.self_attn.k_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.7.self_attn.k_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.7.self_attn.o_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.7.self_attn.q_norm.weight": [
+      256
+    ],
+    "model.language_model.layers.7.self_attn.q_proj.weight": [
+      4096,
+      1024
+    ],
+    "model.language_model.layers.7.self_attn.v_proj.weight": [
+      512,
+      1024
+    ],
+    "model.language_model.layers.8.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.8.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.8.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.8.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.8.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.8.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.8.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.8.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.8.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.8.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.8.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.8.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.8.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.8.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.9.input_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.layers.9.linear_attn.A_log": [
+      16
+    ],
+    "model.language_model.layers.9.linear_attn.conv1d.weight": [
+      6144,
+      1,
+      4
+    ],
+    "model.language_model.layers.9.linear_attn.dt_bias": [
+      16
+    ],
+    "model.language_model.layers.9.linear_attn.in_proj_a.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.9.linear_attn.in_proj_b.weight": [
+      16,
+      1024
+    ],
+    "model.language_model.layers.9.linear_attn.in_proj_qkv.weight": [
+      6144,
+      1024
+    ],
+    "model.language_model.layers.9.linear_attn.in_proj_z.weight": [
+      2048,
+      1024
+    ],
+    "model.language_model.layers.9.linear_attn.norm.weight": [
+      128
+    ],
+    "model.language_model.layers.9.linear_attn.out_proj.weight": [
+      1024,
+      2048
+    ],
+    "model.language_model.layers.9.mlp.down_proj.weight": [
+      1024,
+      3584
+    ],
+    "model.language_model.layers.9.mlp.gate_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.9.mlp.up_proj.weight": [
+      3584,
+      1024
+    ],
+    "model.language_model.layers.9.post_attention_layernorm.weight": [
+      1024
+    ],
+    "model.language_model.norm.weight": [
+      1024
+    ]
+  },
+  "query_gate_packing": {
+    "projected_shape": [
+      128,
+      8,
+      512
+    ],
+    "query_slice_per_head": [
+      0,
+      256
+    ],
+    "gate_slice_per_head": [
+      256,
+      512
+    ],
+    "gate_activation_before_output_projection": "sigmoid"
+  },
+  "typical_block_geometry": [
+    {
+      "block_type": "B35_08_GDN_DENSE",
+      "layer_id_zero_based": 0,
+      "operators": [
+        "rmsnorm",
+        "gdn_projection",
+        "gdn_causal_conv",
+        "gdn_recurrent_update",
+        "gdn_gated_norm_output",
+        "standard_residual_add",
+        "rmsnorm",
+        "dense_ffn_gate_up",
+        "dense_ffn_silu_product",
+        "dense_ffn_down",
+        "standard_residual_add"
+      ]
+    },
+    {
+      "block_type": "B35_08_ATTN_DENSE",
+      "layer_id_zero_based": 3,
+      "operators": [
+        "rmsnorm",
+        "dense_full_attention_qkv",
+        "partial_rope",
+        "dense_full_attention_mlo",
+        "attention_output_gate",
+        "standard_residual_add",
+        "rmsnorm",
+        "dense_ffn_gate_up",
+        "dense_ffn_silu_product",
+        "dense_ffn_down",
+        "standard_residual_add"
+      ]
+    }
+  ],
+  "weights_loaded": false,
+  "numerical_execution": false,
+  "rtl_execution": false,
+  "mac_utilization_measured": false,
+  "full_U00_complete": false,
+  "unresolved_gates": [
+    "checkpoint weight bytes/shape headers",
+    "three-model precision and dual references",
+    "required batch/query/KV workload set and initial state/cache policy",
+    "actual MoE route histogram and fixed Matrix/Vector resource counters",
+    "generated RTL numerical replay and whole-block useful MAC >=90%"
+  ],
+  "scope": "Pinned raw-source integrity, tensor names, derived geometry and E0 inventory only; not official-weight, RTL or performance acceptance."
+}

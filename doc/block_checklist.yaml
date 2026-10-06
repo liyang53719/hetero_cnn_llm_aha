@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 7ba3c9b4d903b79b408c28d5397ce9aa6e0f1d7aab4655e6a5c84e7870cd1363
+计划SHA256: 0c06ef4ecf97153582f4da4b226dd37c395309557c92337b5e6600a5ab4f6c9e
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -57,9 +57,9 @@
       设计提交: a027e6f3d0d3956ebad09666b1bc530e08150965
       范围: 真实Python正常/-O错误入口复现与修复，合法报告不变；不是官方forward或权重验收。
       关联文件:
-      - 文件: src/heteronpu/model_geometry.py
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/historical_sources/model_geometry.py
         SHA256: 0d15e36349b57cea94bede9231f49ba005271aafe2bf5265712c59b563891f3e
-      - 文件: src/heteronpu/qwen_family_contracts.py
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/historical_sources/qwen_family_contracts.py
         SHA256: a98ee6e10ef87088f9dba83dfdf5d00243adf934856e7b74fc51a0632caddaee
       - 文件: tests/test_model_geometry.py
         SHA256: 093acf6300672dd963f2ba7600237f5e5f9905fdf38d5cd8dad47dc8b20a97ba
@@ -149,7 +149,7 @@
       设计提交: a027e6f3d0d3956ebad09666b1bc530e08150965
       范围: 仓库profile派生几何/容量E0检查已实现测试；不代表Chisel shape及payload接入。
       关联文件:
-      - 文件: src/heteronpu/model_geometry.py
+      - 文件: reports/execution/U00_1_QWEN35_DENSE_20261006/historical_sources/model_geometry.py
         SHA256: 0d15e36349b57cea94bede9231f49ba005271aafe2bf5265712c59b563891f3e
       - 文件: tests/test_model_geometry.py
         SHA256: 093acf6300672dd963f2ba7600237f5e5f9905fdf38d5cd8dad47dc8b20a97ba

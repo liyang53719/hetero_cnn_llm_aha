@@ -1,0 +1,101 @@
+{
+  "profile_schema": 5,
+  "requested_name": "Qwen3.5-0.8B",
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "source_status": "pinned_config_forward_index_geometry_only",
+  "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+  "architecture_family": "qwen3_5_hybrid_gdn_full_attention_dense",
+  "hf_model_type": "qwen3_5",
+  "text_model_type": "qwen3_5_text",
+  "is_qwen3_dense_architecture": false,
+  "ffn_architecture": "dense_swiglu",
+  "residual_architecture": "single_stream_standard_residual",
+  "hidden_size": 1024,
+  "vocab_size": 248320,
+  "num_hidden_layers": 24,
+  "context_length": 262144,
+  "layer_pattern": [
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention",
+    "gated_deltanet",
+    "gated_deltanet",
+    "gated_deltanet",
+    "full_attention"
+  ],
+  "full_attention": {
+    "attention_kind": "dense_causal_gqa",
+    "q_heads": 8,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "rotary_dim": 64,
+    "block_tokens": 128,
+    "q_projection_packing": "per_head_query_gate",
+    "bias": false
+  },
+  "gated_deltanet": {
+    "qk_heads": 16,
+    "v_heads": 16,
+    "key_dim": 128,
+    "value_dim": 128,
+    "conv_kernel": 4,
+    "chunk_size": 64,
+    "state_dtype": "float32"
+  },
+  "dense_ffn": {
+    "intermediate_size": 3584,
+    "hidden_act": "silu",
+    "bias": false
+  },
+  "attention_output_gate": true,
+  "rope": {
+    "partial_rotary_factor": 0.25,
+    "theta": 10000000,
+    "mrope_interleaved": true,
+    "mrope_section": [
+      11,
+      11,
+      10
+    ]
+  },
+  "normalization": {
+    "rms_norm_eps": 1e-06,
+    "decoder_qk_weight": "1+weight",
+    "gdn_gated_weight": "weight",
+    "gdn_gate_activation": "silu"
+  },
+  "vision_encoder": {
+    "present": true,
+    "support": "unsupported_project_scope"
+  },
+  "upstream_mtp": {
+    "layers": 1,
+    "scope": "excluded_from_typical_text_blocks"
+  },
+  "transformers_source": {
+    "repository": "huggingface/transformers",
+    "commit": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "module": "src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+    "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"
+  },
+  "source_manifest": "config/upstream/qwen3_5_0p8b/manifest.json",
+  "claim_boundary": "Pinned config/code/index geometry and compiler E0 only. Tensor shape/header/weight payload, official inference, complete precision/workload contract and generated RTL remain unverified. MTP and vision are excluded from typical text blocks."
+}

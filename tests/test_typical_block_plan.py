@@ -92,8 +92,8 @@ def test_current_goal_is_stricter_than_preserved_legacy_inventory():
     assert result["current_goal_contract_checked"] and result["current_models"] == 3
     goal = doc["当前统一验收目标"]
     assert goal["模型"] == ["Qwen2-1.5B", "Qwen3.5-0.8B", "Qwen3.5-35B-A3B"]
-    assert goal["模型入口"]["Qwen3.5-0.8B"]["shape"] is None
-    assert goal["模型入口"]["Qwen3.5-0.8B"]["revision"] is None
+    assert goal["模型入口"]["Qwen3.5-0.8B"]["shape"]["hidden"] == 1024
+    assert goal["模型入口"]["Qwen3.5-0.8B"]["revision"] == "2fc06364715b967f1860aea9cf38778875588b17"
     assert goal["最低MAC利用率"] == 0.9
     assert next(t for t in doc["任务"] if t["编号"] == "U01")["依赖"] == ["U00"]
 
@@ -116,4 +116,13 @@ def test_reject_current_goal_relaxation(kind):
     elif kind == "blocks": goal["模型入口"]["Qwen3.5-35B-A3B"]["所需block"] = []
     elif kind == "invented_08b": goal["模型入口"]["Qwen3.5-0.8B"]["shape"] = {"hidden": 2048}
     elif kind == "release_artifact": doc["门禁"]["G11"]["必需工件"] = ["six_block_release_matrix.json"]
+    with pytest.raises(V.PlanError): V.validate(doc)
+
+
+@pytest.mark.parametrize("field,value", [("revision", "main"), ("forward_sha256", "0" * 64),
+    ("阶段", "RTL_PASS"), ("权重数值RTL通过", True), ("性能workload已冻结", True),
+    ("典型层索引", {"B35_08_ATTN_DENSE": 0, "B35_08_GDN_DENSE": 3})])
+def test_small_model_provenance_cannot_drift_or_claim_hardware(field, value):
+    doc = base()
+    doc["当前统一验收目标"]["模型入口"]["Qwen3.5-0.8B"][field] = value
     with pytest.raises(V.PlanError): V.validate(doc)

@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "status": "PASS_REAL_EMBEDDING_OFFICIAL_PREFIX_CHAIN_U00_2_OPEN",
+  "parent_commit": "54776eab5c2d928cd1a9888cf17fd4bf98a44ef0",
+  "created_at": "2026-10-06T23:53:07.396898+00:00",
+  "additional_payload_bytes": 86746304,
+  "additional_tensor_slices": 29,
+  "successful_acquisition_http_ranges": 31,
+  "interrupted_attempt_redownload_bytes": 526400,
+  "max_http_range_bytes": 8388608,
+  "total_prefix_payload_bytes": 166562592,
+  "total_prefix_tensor_slices": 54,
+  "checkpoint_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "actual_official_TextModel_prefix_executed": true,
+  "official_full_model_executed": false,
+  "input_origin": "fixed_artificial_token_IDs_with_real_pinned_checkpoint_embedding_and_official_prefix_activations",
+  "fixture_sha256": "7aa77ba8b89001738c5b3a9a04b6f27a59118cbeebd01cffe82e42954b85f7b1",
+  "tokenizer_used": false,
+  "natural_language_representativeness_claimed": false,
+  "cases": [
+    {
+      "name": "cold_m128",
+      "past_tokens": 0
+    },
+    {
+      "name": "carried_m128",
+      "past_tokens": 128
+    }
+  ],
+  "fp32_independent_comparison_elements": 4210688,
+  "fp32_mismatches": 0,
+  "fp32_max_abs_error": 2.8536398238854233e-05,
+  "fp32_max_tolerance_ratio": 0.2782328551742997,
+  "partition_replay_comparison_elements": 3219456,
+  "partition_replay_mismatches": 0,
+  "isolated_state_influence": [
+    {
+      "reset_layer": 0,
+      "other_layer_initial_states_preserved": true,
+      "same_absolute_positions": true,
+      "max_abs_target_output_delta": 0.17450495064258575,
+      "max_abs_layer3_output_delta": 0.19147157669067383
+    },
+    {
+      "reset_layer": 1,
+      "other_layer_initial_states_preserved": true,
+      "same_absolute_positions": true,
+      "max_abs_target_output_delta": 1.209643840789795,
+      "max_abs_layer3_output_delta": 0.5166778564453125
+    },
+    {
+      "reset_layer": 2,
+      "other_layer_initial_states_preserved": true,
+      "same_absolute_positions": true,
+      "max_abs_target_output_delta": 0.6072057485580444,
+      "max_abs_layer3_output_delta": 0.5722599029541016
+    },
+    {
+      "reset_layer": 3,
+      "other_layer_initial_states_preserved": true,
+      "same_absolute_positions": true,
+      "max_abs_target_output_delta": 0.1472749263048172,
+      "max_abs_layer3_output_delta": 0.1472749263048172
+    }
+  ],
+  "mixed_bf16_executed": true,
+  "mixed_bf16_preserves_source_storage_dtypes": true,
+  "actual_recurrent_state_dtype": "float32 for all three GDN layers in both official modes",
+  "bf16_dual_reference_accepted": false,
+  "upstream_activation_provenance_verified_for_layers_0_to_3": true,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "actual_rtl_executed": false,
+  "mac_utilization_measured": false,
+  "physical_cache_conditions_frozen": false,
+  "full_checkpoint_sha256_verified": false,
+  "baseline_failures_unchanged": true,
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "tests": [
+    {
+      "name": "focused",
+      "command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -m pytest -o addopts='' -q tests/test_pinned_prefix_payload.py tests/test_qwen35_prefix_reference.py tests/test_pinned_gdn_payload.py tests/test_qwen35_gdn_numpy_reference.py tests/test_pinned_block_payload.py tests/test_weight_workload_evidence.py tests/test_qwen35_dense_geometry.py tests/test_typical_block_plan.py tests/test_block_checklist.py",
+      "exit_code": 0,
+      "passed": 542
+    },
+    {
+      "name": "optimized",
+      "command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -O -m pytest -o addopts='' -q tests/test_pinned_prefix_payload.py tests/test_qwen35_prefix_reference.py",
+      "exit_code": 0,
+      "passed": 46
+    },
+    {
+      "name": "pytest_full",
+      "command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -m pytest -o addopts='' -q",
+      "exit_code": 1,
+      "passed": 1899,
+      "failed": 5
+    },
+    {
+      "name": "replay_admission",
+      "command": "PYTHONPATH=src /tmp/hetero-reference-venv/bin/python scripts/validate_workload_evidence.py --require-complete",
+      "exit_code": 2
+    }
+  ],
+  "numerical_command": "OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 HF_HUB_OFFLINE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python scripts/run_qwen35_prefix_chain.py --payload-layer0 work/qwen35_layer0_payload --payload-layer3 work/qwen35_layer3_payload --payload-extra work/qwen35_prefix_payload --output work/qwen35_prefix_chain",
+  "numerical_exit_code": 0,
+  "independent_review": "Separate read-only reviewer verified all54 real payload slices, pin/receipt/source/fixture/NPZ hashes; recomputed all32 numerical and16 replay statistics, all official/NumPy links, original embedding lookup, absolute positions, mixed dtype reports, KV prefixes, and all isolated reset deltas. Earlier layers remain bit-identical for each isolated reset. No blocking issue.",
+  "source_binding": "Exact local post-parent source bytes in source_sha256.json; remote exacthead publication and CI verified separately",
+  "artifacts": {
+    "focused.log": {
+      "sha256": "c63dabc5b17a4aaf67fb8dbbffeadaeb623e1300b76870d51f2dfa42cf5c38fb",
+      "bytes": 661
+    },
+    "numerical_result.json": {
+      "sha256": "09fad67f85e413b7e00f5c5ccb6977dbd573e0d16b7ae853514dc0b41c59dfa4",
+      "bytes": 110314
+    },
+    "optimized.log": {
+      "sha256": "87793255af9da0d980c4d703177f16afb483ffb7152da463530c97579dff6aeb",
+      "bytes": 688
+    },
+    "payload_manifest.json": {
+      "sha256": "6595d55e070b17d61b6ae6566b4bccc61922966d2dce93567695b2d12b72965d",
+      "bytes": 29611
+    },
+    "pytest_full.log": {
+      "sha256": "df16b39a5da3f9cf4495503b9af336f04832c5429a1e71038132c8cc1a4c6086",
+      "bytes": 6609
+    },
+    "replay_admission.log": {
+      "sha256": "8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449",
+      "bytes": 137
+    },
+    "source_sha256.json": {
+      "sha256": "db0128420f915f267c6d706fc292752958973789ea67acdec59b75b1eefd91eb",
+      "bytes": 1407
+    }
+  },
+  "scope": "Original official TextModel prefix entry through real embedding/GDN0,1,2/attention3. Fixed artificial token IDs, cold and carried M128, independent full-chain FP64 reference. No full model/final norm/logits, representative language claim, BF16 producer comparator, RTL, physical cache or useful-wall MAC utilization acceptance."
+}

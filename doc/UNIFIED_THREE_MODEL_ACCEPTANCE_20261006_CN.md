@@ -60,3 +60,9 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 新增固定层0的14项真实payload，共43,111,008字节。原始A_log/norm.weight保持F32、dt_bias等其余参数BF16；官方mixed-BF16执行时conv为BF16、SSM为FP32。官方FP32完整GDN+dense-FFN对独立NumPyFP64在cold128、carried128和补充decode1共1,123,328输出/状态元素零不匹配，整段256与128+128续算另有548,864元素通过；清零初态确实改变输出。
 
 输入仍是合成hidden-state，mixed-BF16只报告诊断差异，不是上游激活、逐producer精度、实际RTL或90%验收。U00.2 ongoing、C03.2/U01未闭合。详见 `doc/U00_2_GDN_PAYLOAD_NUMERICAL_20261006_CN.md`。
+
+## U00.2 后续：真实embedding到层3的上游链已实跑
+
+新增0.8B真实embedding原0至255行和层1/2共86,746,304字节，复用层0/3固定payload。固定人工token ID经原官方TextModel前缀顺次运行embedding、GDN0/1/2、attention3，两组cold/carried M128对独立NumPy整链的4,210,688输入/输出/状态元素全部匹配；整段256重放另有3,219,456元素通过。逐层单独清空历史均实质影响结果。
+
+0.8B前四层的真实上游激活来源已验证；人工token ID不等于自然语言代表性，前缀不等于完整模型，mixed-BF16差异仍仅诊断。逐producer精度、其余模型/MoE路由、物理cache及资源、实际RTL/90%仍OPEN，U00.2保持ongoing。详见 `doc/U00_2_REAL_PREFIX_CHAIN_20261006_CN.md`。

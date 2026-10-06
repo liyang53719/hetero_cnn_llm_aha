@@ -1,0 +1,83 @@
+{
+  "status": "PASS_CONTINUOUS_CONTROL_AND_ELEMENTWISE_REGRESSION",
+  "groups": {
+    "general": {
+      "tests": 96,
+      "suites": [
+        "heteronpu.continuous.BlockAxiAdapterSpec",
+        "heteronpu.continuous.BlockScalarFloatSpec",
+        "heteronpu.continuous.BlockWritebackFenceSpec",
+        "heteronpu.continuous.DenseReadPlannerSpec",
+        "heteronpu.continuous.DenseTileCursorSpec",
+        "heteronpu.continuous.HostResidualCommandsSpec",
+        "heteronpu.continuous.LayerChainSpec",
+        "heteronpu.continuous.LayerStackGateSpec",
+        "heteronpu.continuous.MatrixSliceJoinSpec",
+        "heteronpu.continuous.QwenBlockLayoutSpec",
+        "heteronpu.continuous.QwenBlockLayoutVectorsSpec",
+        "heteronpu.continuous.Record128ReaderSpec",
+        "heteronpu.continuous.ScheduledSiluOwnerSpec",
+        "heteronpu.continuous.SharedMemoryArbiterSpec",
+        "heteronpu.continuous.TensorProgramSpec",
+        "heteronpu.continuous.TypedTensorReaderSpec",
+        "heteronpu.continuous.VectorSiluSpec"
+      ]
+    },
+    "tiny": {
+      "tests": 7,
+      "suites": [
+        "heteronpu.continuous.HostBlockCommandsSpec"
+      ]
+    },
+    "real": {
+      "tests": 9,
+      "suites": [
+        "heteronpu.continuous.HostBlockCommandsRealLayersSpec"
+      ]
+    },
+    "native": {
+      "tests": 9,
+      "suites": [
+        "heteronpu.continuous.HostBlockCommandsNativeWeightsSpec"
+      ]
+    }
+  },
+  "total_tests": 121,
+  "elementwise_sizes": [
+    1,
+    17,
+    33,
+    1025,
+    32768,
+    1572864,
+    2097152,
+    2621440
+  ],
+  "scope": {
+    "matrix4096_full_numerical": false,
+    "official_model": false,
+    "dc": false
+  },
+  "logs_sha256": {
+    "compile.log": "a65a041b3dffe3b69f6ea794b991748a26e30a6715bee109021264088beb58ee",
+    "emit.log": "811d2b36953bc5b00078503c3862f0c6797687a6bd68492438b740936f1e2a98",
+    "general/chisel_tests.log": "a3b35946823b465d97f5cddaea91d707e1b297f89a3912b6299aff99af0d1f62",
+    "memory_failure.log": "3948762b5069e1e1313057aea3bf3e536581181f6214fdc27af1e98d4ffed644",
+    "n1.log": "8d66477f714ff919171cd4ba37d14e27ab1bf9d47e7b1071f621810279beaec9",
+    "n1025.log": "83fd4f579e0bfda38107be170e048933423c47cebb74ed58f360bf4234edff26",
+    "n1572864.log": "0eee823d3ab8163269ae7281dc84ea25854a701ba102fa44bed91a8262eeab46",
+    "n17.log": "3122fa81a20ae6aa8c729a4c590664dea8d3156a14b6563188ed7cb495184493",
+    "n2097152.log": "65bebf31cf3834c1a0536dd88519028a8dcb79f7dacd38763d7f6a966d97165a",
+    "n2621440.log": "84a91fba8b64b35e89dae9da99c6c765a542c6c0c64c8fb689e7bdaf8957a795",
+    "n32768.log": "b237e46faeca72d3502252890e3104f6ab95580c6a340a09f9763c1ff6aed717",
+    "n33.log": "639800194a1075aa55afec87ca47c889940492cf548af0f4890cf207665977cd",
+    "native/chisel_tests.log": "4610ca35db7d1f46d7fa509b2b086ac7ab7d00b7e6f837afe5122f4e554cadcd",
+    "native_packing.log": "d31fdf6967bf1de00f26290d6875dc956c580d4a83965b68e101e1a2b05cc846",
+    "real/chisel_tests.log": "1134c549eacc68d78b73a185762fa921204879d87c11605e75c4140c6fe2da89",
+    "real_packing.log": "e1355bb3a9c8d6005713a71d1b134f50490ff7b30087a9dd3339339cfb39edb4",
+    "source_verify.log": "f458e0d24c1f8314c0fde69beb73bcdea11d068b1f123f1b067b550955fe479e",
+    "tiny/chisel_tests.log": "8e967e9fe8754380134eade6b6e9bf9ace4238176f56c8c5c5bb860c822aae44",
+    "tiny_packing.log": "2c1884051117be4e90ffcc2eb51106e0ad4979f2b08c21a2ac0ab98e4a9c6012",
+    "verilator_build.log": "4e643d886190b4cf6f377852fa592a58d45da8a493853e50c2f9d52da7dabcbd"
+  }
+}

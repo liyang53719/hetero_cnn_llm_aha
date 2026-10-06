@@ -1,0 +1,55 @@
+{
+  "schema": "heteronpu.c03.3.ci-receipt.v1",
+  "tested_source_commit": "61bc2efb49154d70619368ed290aea6e2f5af7f3",
+  "run_id": 37404860892,
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37404860892",
+  "conclusion": "success",
+  "focused_ci": {
+    "run_id": 37404860891,
+    "conclusion": "success",
+    "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37404860891"
+  },
+  "artifact": {
+    "id": 11386838269,
+    "sha256": "6f3e711381fbb54043b6c341dc52e91a7109dd3823500269c5a83b8a5297b811",
+    "expires_at": "2027-01-04T02:35:21Z"
+  },
+  "control_tests": 121,
+  "legacy_layout_consumer": {
+    "suite": "heteronpu.continuous.QwenBlockLayoutVectorsSpec",
+    "tests": 1,
+    "failures": 0,
+    "cases": 4,
+    "regions_per_case": 30
+  },
+  "elementwise_rtl_sizes": [
+    1,
+    17,
+    33,
+    1025,
+    32768,
+    1572864,
+    2097152,
+    2621440
+  ],
+  "scope": {
+    "actual_legacy_scala_consumer_executed": true,
+    "existing_control_and_elementwise_regression": true,
+    "new_decoupled_shape_frontend_rtl_verified": false,
+    "C03_2_closed": false,
+    "matrix4096_full_numerical": false,
+    "official_model_verified": false,
+    "three_model_90_percent_verified": false,
+    "physical_signoff": false
+  },
+  "previous_attempt": {
+    "commit": "6baa9848679c7bd66d0618329fc452b7787c03c3",
+    "run_id": 37404444939,
+    "conclusion": "failure",
+    "reason": "Legacy TSV missing from sparse checkout; fixed by classpath resources in tested commit; previous failure preserved."
+  },
+  "files_sha256": {
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/CI_RAW_RESULT.json": "78578fada95024d67e2dc141e1d56bafe7d41940415c4efa078b2abc84570f76",
+    "reports/execution/C03_3_SHAPE_LAYOUT_20261006/CI_LEGACY_LAYOUT_TEST.xml": "2bcb0e26f81a4db682234527dd518b638deda3d65f493a5fbfa5e97fb462ce1e"
+  }
+}

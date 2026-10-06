@@ -1,0 +1,70 @@
+{
+  "schema": "heteronpu.unified-goal-update.v1",
+  "date_utc": "2026-10-06",
+  "base_commit": "ac70d7ecea3fdfdc0db8046e302aa6bd90d083ef",
+  "status": "PASS_PLAN_AND_LEDGER_CONTRACT_ONLY",
+  "target_models": [
+    "Qwen2-1.5B",
+    "Qwen3.5-0.8B",
+    "Qwen3.5-35B-A3B"
+  ],
+  "target_mac_utilization": 0.9,
+  "target_metric": "Matrix useful MAC / fixed configured Matrix MAC per cycle / complete block wall cycles",
+  "actual_generated_rtl_required": true,
+  "matrix_vector_reported_separately": true,
+  "source_hls_are_separate_evidence": true,
+  "new_tasks": {
+    "U00": "to do",
+    "U01": "to do"
+  },
+  "qwen35_08b_pinned_profile_available": false,
+  "model_implementation_added": false,
+  "C03_3_status": "done synthetic E0 plus separately recorded legacy Scala CI; not C03.2 or final model goal",
+  "tests": {
+    "focused": {
+      "passed": 285,
+      "failed": 0
+    },
+    "optimized_goal": {
+      "passed": 85,
+      "failed": 0
+    },
+    "full": {
+      "tests": 1447,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0
+    },
+    "unchanged_baseline_failures": [
+      "tests/test_control_v4.py::test_exp2_pwl_bounds",
+      "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+      "tests/test_planning_v6.py::test_arch_and_control",
+      "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+      "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+    ]
+  },
+  "source_sha256": {
+    ".github/workflows/current-model-goal-contract.yml": "85ae1c2c90ebd79430de93aca9616438f26feb3cdb054ef001ca135f7c347838",
+    "doc/UNIFIED_THREE_MODEL_ACCEPTANCE_20261006_CN.md": "31c62f7846b7293709669b21e444e1827b03398a34431191b18601c9fdc4aa62",
+    "doc/three_model_typical_block_closure_20260917_zh.yaml": "7ba3c9b4d903b79b408c28d5397ce9aa6e0f1d7aab4655e6a5c84e7870cd1363",
+    "doc/block_checklist.yaml": "156545f897c444b6c79e4c98c15fc46736cd432e88b5a791390e5bd72a9de045",
+    "doc/BLOCK_CHECKLIST.md": "22c3a50f98951f11d414cc90b164111796a7d18c700cca1180cb1b4bb4df7e5b",
+    "doc/SANDBOX_NEXT_20260918_CN.yaml": "e8a943f0026b6c066dcb0d0e545f74cdc243557ccf9c2dd7bf0aa0185511d526",
+    "scripts/validate_typical_block_plan.py": "850e7f9fec8b9d3e5baa9cc21353f78e1dd76410362a14c9086d30515cada3ec",
+    "scripts/block_checklist.py": "cd406b4adc3a0db11096ffe00b6412d3d2ffcc399fb1c653bd26d916f76971d0",
+    "tests/test_typical_block_plan.py": "97129759e68141e38e9099d8eeb150675c527f9852fab523593e9e68169e98da",
+    "tests/test_block_checklist.py": "51b6badd72d7d05292d3890791958a42b6a5c94ec1c6e9465521d6448c44c28b"
+  },
+  "logs_sha256": {
+    "reports/execution/UNIFIED_GOAL_20261006/goal_focused.txt": "4ac7812391aca3b21f6be0745432c2d2b9bdace53ccf89a66a9281614f30f320",
+    "reports/execution/UNIFIED_GOAL_20261006/goal_full.txt": "c61fe21324c17172489fac4c038358214e3fd1402fecabed67f31a19713e19e6",
+    "reports/execution/UNIFIED_GOAL_20261006/goal_optimized.txt": "2d0cbd0f9c9f2d7a5a6c1a4801cc41371fe652f2eca51d720bafb650d0c6ab65"
+  },
+  "not_claimed": [
+    "0.8B local model support",
+    "C03.2 integration",
+    "three-model numerical RTL pass",
+    "90 percent performance achieved",
+    "physical timing signoff"
+  ]
+}

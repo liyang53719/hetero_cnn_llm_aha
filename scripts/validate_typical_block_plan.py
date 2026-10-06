@@ -69,6 +69,66 @@ def nonempty_list(value: Any, name: str) -> None:
     need(all(isinstance(v, str) and v.strip() for v in value), f"non-text entry: {name}")
 
 
+CURRENT_MODELS = ["Qwen2-1.5B", "Qwen3.5-0.8B", "Qwen3.5-35B-A3B"]
+WORKLOAD_FIELDS = {"model_id", "model_revision", "config_sha256", "forward_sha256",
+    "block_type", "layer_id", "batch", "query_tokens", "kv_tokens", "precision_policy_sha256",
+    "weights_sha256", "input_sha256", "initial_state_sha256", "generated_rtl_sha256",
+    "rtl_source_git_sha", "tool_versions_sha256", "memory_cache_policy_sha256",
+    "configured_matrix_macs_per_cycle", "configured_vector_units", "start_event", "end_event",
+    "expert_route_histogram_sha256", "matrix_tile_mapping_sha256"}
+
+
+def validate_current_goal(doc: dict, tasks: dict) -> bool:
+    # Historical plan snapshots remain readable; a dated goal revision cannot
+    # silently lose its stricter current-target contract.
+    if "目标修订日期" not in doc and "当前统一验收目标" not in doc:
+        return False
+    goal = doc.get("当前统一验收目标")
+    need(isinstance(goal, dict) and goal.get("版本") == 1, "missing current acceptance goal")
+    need(goal.get("模型") == CURRENT_MODELS, "wrong current acceptance models")
+    entries = goal.get("模型入口")
+    need(isinstance(entries, dict) and set(entries) == set(CURRENT_MODELS)
+         and all(isinstance(v, dict) for v in entries.values()), "current model entries incomplete")
+    need(entries["Qwen2-1.5B"].get("既有身份") == MODELS["Q2"]
+         and entries["Qwen2-1.5B"].get("所需block") == ["B2_DENSE"], "current Q2 block scope changed")
+    need(entries["Qwen3.5-35B-A3B"].get("既有身份") == MODELS["Q35"]
+         and entries["Qwen3.5-35B-A3B"].get("所需block") == ["B35_ATTN_MOE", "B35_GDN_MOE"],
+         "current Q35 block scope changed")
+    # U00 must introduce a pinned, tested profile before a later plan revision
+    # can replace this explicit unresolved state with model-support claims.
+    small = entries["Qwen3.5-0.8B"]
+    need(all(k in small and small[k] is None for k in
+             ("既有身份", "revision", "config_sha256", "shape", "所需block")),
+         "0.8B requires a separately validated provenance update")
+    need(goal.get("验收证据") == "actual_generated_rtl_replay", "current goal requires actual RTL replay")
+    need(type(goal.get("最低MAC利用率")) in (int, float) and goal["最低MAC利用率"] == 0.9,
+         "current utilization threshold must be 90 percent")
+    need(goal.get("性能主口径") == "matrix_useful_macs/(configured_matrix_macs_per_cycle*block_wall_cycles)",
+         "current utilization denominator changed")
+    for key in ("每模型数值通过", "固定配置资源分母", "包含block内停顿与阶段间隙", "Matrix与Vector分报",
+                "源码HLS不替代RTL", "每项目独立验收", "C03.3仅E0"):
+        need(goal.get(key) is True, "current acceptance safeguard missing: " + key)
+    fields = goal.get("workload必填", [])
+    need(isinstance(fields, list) and WORKLOAD_FIELDS <= set(fields), "current workload identity incomplete")
+    need(goal.get("最终完成任务") == "U01" and {"U00", "U01"} <= tasks.keys(), "current goal tasks missing")
+    historical = goal.get("历史后续任务", [])
+    need(isinstance(historical, list) and len(set(historical)) == len(historical)
+         and set(historical) <= tasks.keys(), "invalid historical task exclusions")
+    need({key for key in tasks if key.startswith("Q38")} | {"R00", "F00", "F01"} <= set(historical),
+         "historical Q38 scope reenabled in current goal")
+    # Current final acceptance must not inherit the old Q38 closure by accident.
+    pending = ["U01"]; ancestors = set()
+    while pending:
+        item = pending.pop()
+        if item not in ancestors:
+            ancestors.add(item); pending.extend(tasks[item]["依赖"])
+    need("U00" in ancestors, "current final goal bypasses workload/source freezing")
+    need("current_three_model_acceptance.json" in doc["门禁"]["G11"]["必需工件"],
+         "current release artifact missing")
+    need(not ancestors.intersection(historical), "current goal depends on historical Q38/release scope")
+    return True
+
+
 def validate(doc: Any) -> dict:
     need(isinstance(doc, dict), "plan must be a mapping")
     need(doc.get("版本") == 1, "unsupported plan version")
@@ -147,7 +207,10 @@ def validate(doc: Any) -> dict:
         m = models[model]
         count = m["gdn_value_heads"] * m["gdn_key_dim"] * m["gdn_value_dim"] * 4
         need(budget.get(field) == count, f"bad state budget: {model}")
+    current_goal = validate_current_goal(doc, tasks)
     return {
+        "current_goal_contract_checked": current_goal,
+        "current_models": len(CURRENT_MODELS) if current_goal else None,
         "status": "PASS_PLAN_CONSISTENCY_ONLY", "hardware_tests_executed": False,
         "tasks": len(tasks), "blocks": len(blocks), "gates": len(gates),
         "priorities": dict(sorted(Counter(r["优先级"] for r in rows).items())),

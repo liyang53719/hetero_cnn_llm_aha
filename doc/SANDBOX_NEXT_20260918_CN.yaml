@@ -3,10 +3,18 @@
 状态唯一来源: doc/block_checklist.yaml
 说明: 以下仅列尚可独立认领的软件准备项；C03.3已完成E0交付，精确状态与证据仅以block_checklist为准。先用block_checklist mark认领并成功推送main再编码；父项及原.2集成门禁均未跳过。
 执行顺序:
+- U00
 - C04.3
 - C08.3
 旧队列说明: 关闭C02.1与C07.1后原sandbox可认领队列为空；其余原事项仍有官方合同/真实owner/本地资源门禁。
 可独立推进:
+- 编号: U00
+  名称: 冻结当前三模型合同与回放工作量
+  优先级: P0
+  依赖: []
+  先行依据: 先固定0.8B缺失官方合同以及逐模型workload/计数来源，不猜shape，不需要先实现所有模型。
+  验收边界: 模型revision/config/forward/权重/输入与实际RTL来源、token/状态/路由/cache/固定资源和起止事件必须绑定；未冻结或未执行不得声称模型支持及90%通过。
+  工具: 公开官方metadata/仓库已有来源及校验；缺权重/真实DUT仍记录BLOCKED。
 - 编号: C04.3
   名称: 版本化typed descriptor候选与Host序列化合同
   优先级: P0
@@ -37,11 +45,14 @@
   原因: 需要官方几何和实际Host到RTL贯通；准备向量/版本候选不是集成通过。
 - 编号: C07.2 / C08.2
   原因: 真实state-memory owner、实际block runner和DUT完整回执尚未验收。
+- 编号: U01
+  原因: 当前三模型逐block数值与90%实际RTL联合门禁；0.8B未有仓库冻结profile，当前N16旧回执也不满足90%。
 本地agent避免重复:
 - C04.1、C02.1、C07.1、C03.3已完成各自软件合同，不应重复认领或重开。
 - C04.3与C08.3仍未认领，状态仅见唯一checklist；与现有.2项分工不同。
 - C03.3向量不是实际Host到RTL接入或官方真实shape验收；继续保留C03.2门禁。
 - E0成功ACK字节是模型观测，不可填入硬件性能或DUT验收结论。
+- Q38/R00/F00/F01保留历史状态并排除当前派工；不得拿Q38替代0.8B或把C03.3 E0当最终验收。
 更新日期: '2026-10-06'
 已完成软件准备:
 - 编号: C03.3
@@ -49,3 +60,5 @@
   代码提交: 61bc2efb49154d70619368ed290aea6e2f5af7f3
   证据: reports/execution/C03_3_SHAPE_LAYOUT_20261006/RESULT.json
   范围: 64条固定合成向量；633普通及200优化测试通过；全量1424通过及5个不变基线失败。Python/C++消费者通过，沙箱Scala/Chisel未执行；CI单独跟踪，不关闭C03.2。
+  CI补充: 61bc2ef的focused与chisel-continuous-prefill均success；只验证旧布局/控制及既有elementwise范围，不关闭C03.2或三模型目标。
+当前最终目标: Qwen2-1.5B、Qwen3.5-0.8B、Qwen3.5-35B-A3B典型完整block各自实际生成RTL数值PASS且Matrix整block有效MAC利用率>=90%；固定资源分母、Matrix/Vector分报。

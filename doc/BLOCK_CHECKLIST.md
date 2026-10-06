@@ -1,5 +1,8 @@
 # Block checklist（只读视图）
 
+当前最终目标：Qwen2-1.5B、Qwen3.5-0.8B、Qwen3.5-35B-A3B各自典型block实际生成RTL数值通过，Matrix整block有效MAC利用率≥90%；Matrix/Vector分报，固定配置资源分母。
+U00=to do；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史并排除当前派工。
+
 唯一状态源为 `block_checklist.yaml`；本表由 `scripts/block_checklist.py render` 生成。
 
 | 编号 | 优先级 | 事项 | 状态 |
@@ -16,7 +19,7 @@
 | C03 | P0 | 解耦模型几何与矩阵tile | ongoing |
 | C03.1 | P0 | 编译器派生几何和状态容量合同 | done |
 | C03.2 | P0 | 实际Chisel shape/layout/frontend解耦及回归 | to do |
-| C03.3 | P0 | 跨语言shape/layout测试向量与宽地址oracle | to do |
+| C03.3 | P0 | 跨语言shape/layout测试向量与宽地址oracle | done |
 | C04 | P0 | 统一typed tensor与多输入policy ABI | ongoing |
 | C04.1 | P0 | 现有Command128与descriptor整数边界及字节合同加固 | done |
 | C04.2 | P0 | typed tensor与多输入policy完整Host到RTL接入 | to do |
@@ -73,6 +76,8 @@
 | R00 | P2 | 六类典型block集中发布 | to do |
 | F00 | P3 | 典型block之后接完整模型与llama backend | to do |
 | F01 | P3 | MTP状态分支与视觉多模态独立验收 | to do |
+| U00 | P0 | 冻结当前三模型合同与回放工作量 | to do |
+| U01 | P1 | 三模型典型block数值及90%联合验收 | to do |
 
 部分子项 done 的父项仍为 ongoing；官方权重、真实RTL/状态连续性按各自完整门禁验收。
 队列默认跳过所有 done 和已有负责人正在执行的 ongoing 叶项，不自动重开历史任务。

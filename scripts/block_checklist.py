@@ -120,6 +120,11 @@ def validate(root: Path, doc: Any, plan: Any, verify_files: bool = True) -> dict
     locals_ = doc.get('本地事项', [])
     need(isinstance(locals_, list) and len(set(locals_)) == len(locals_) and set(locals_) <= parents.keys(), 'invalid local task map')
     deps = {i: dependencies(i, nodes, tasks, parent_of) for i in nodes}
+    excluded = doc.get('当前目标排除任务', [])
+    need(isinstance(excluded, list) and len(set(excluded)) == len(excluded)
+         and set(excluded) <= parents.keys(), 'invalid current-goal exclusions')
+    if '当前统一验收目标' in plan:
+        need(excluded == plan['当前统一验收目标']['历史后续任务'], 'current-goal exclusions drift')
     for ident, row in nodes.items():
         need(row.get('状态') in STATES, 'invalid task status: ' + ident)
         need(row.get('执行侧', doc['默认执行侧']) in {'sandbox', 'local-agent'}, 'invalid executor: ' + ident)
@@ -166,6 +171,8 @@ def queue(doc: dict, plan: dict, executor: str) -> list[dict]:
         if '子项' in row or row['状态'] != 'to do':
             continue
         p = parent_of.get(ident, ident)
+        if p in doc.get('当前目标排除任务', []):
+            continue
         assigned = row.get('执行侧', 'local-agent' if p in doc['本地事项'] else doc['默认执行侧'])
         unmet = [d for d in dependencies(ident, nodes, tasks, parent_of) if nodes[d]['状态'] != 'done']
         if not unmet and (executor == 'all' or assigned == executor):
@@ -242,6 +249,8 @@ def render(doc: dict, plan: dict) -> str:
     out = ['# Block checklist（只读视图）', '',
            '唯一状态源为 `block_checklist.yaml`；本表由 `scripts/block_checklist.py render` 生成。', '',
            '| 编号 | 优先级 | 事项 | 状态 |', '|---|---|---|---|']
+    if '当前统一验收目标' in plan:
+        out[2:2] = ['当前最终目标：Qwen2-1.5B、Qwen3.5-0.8B、Qwen3.5-35B-A3B各自典型block实际生成RTL数值通过，Matrix整block有效MAC利用率≥90%；Matrix/Vector分报，固定配置资源分母。', f"U00={nodes['U00']['状态']}；U01={nodes['U01']['状态']}。C03.3仅为E0，Q38及旧R00/整网任务保留历史并排除当前派工。", '']
     for task in plan['任务']:
         row = parents[task['编号']]
         for item in [row] + row.get('子项', []):

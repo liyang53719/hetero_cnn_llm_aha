@@ -1,15 +1,102 @@
 # 本文件是待执行规划，不是新的 RTL/模型 PASS 回执。保留旧证据，不覆盖旧规划。
 版本: 1
 规划编号: THREE_MODEL_TYPICAL_BLOCK_CLOSURE_20260917
-标题: Qwen2、Qwen3.5、Qwen3.8 典型完整 block 数值闭环执行规划
+标题: 当前三模型典型block数值与90%联合验收规划（保留历史Qwen3.8任务）
 日期: '2026-09-17'
 仓库: liyang53719/hetero_cnn_llm_aha
 审查基线: 8eff31b9083b2872f047bc70781c605229742f26
 文件路径: plans/three_model_typical_block_closure_20260917_zh.yaml
 交付状态: 仅规划与规划一致性检查；下列研发任务均未因本文件生成而通过
+目标修订日期: '2026-10-06'
+当前统一验收目标:
+  版本: 1
+  生效日期: '2026-10-06'
+  模型:
+  - Qwen2-1.5B
+  - Qwen3.5-0.8B
+  - Qwen3.5-35B-A3B
+  优先级: 本节取代旧Q2/Q35/Q38六类作为当前最终验收范围；旧模型合同/任务/证据保留，不代表0.8B受支持。
+  验收证据: actual_generated_rtl_replay
+  每模型数值通过: true
+  最低MAC利用率: 0.9
+  性能主口径: matrix_useful_macs/(configured_matrix_macs_per_cycle*block_wall_cycles)
+  固定配置资源分母: true
+  包含block内停顿与阶段间隙: true
+  Matrix与Vector分报: true
+  源码HLS不替代RTL: true
+  每项目独立验收: true
+  最终完成任务: U01
+  C03.3仅E0: true
+  模型入口:
+    Qwen2-1.5B:
+      既有身份: Qwen/Qwen2-1.5B-Instruct
+      来源: config/qwen2_1p5b_target_shape.json
+      所需block:
+      - B2_DENSE
+      门禁: 固定revision/配置/forward/权重/输入实际字节复核；保留既有Instruct与Base区分。
+    Qwen3.5-0.8B:
+      既有身份: null
+      revision: null
+      config_sha256: null
+      shape: null
+      所需block: null
+      门禁: 仓库未找到该型号profile；先固定官方revision、配置、forward和层索引，再核定Attention+dense-FFN及GDN+dense-FFN等实际block清单；不从名称推断架构，不复用35B MoE几何。
+    Qwen3.5-35B-A3B:
+      既有身份: Qwen/Qwen3.5-35B-A3B
+      来源: config/model_profiles/qwen3_5_35b_a3b.json
+      所需block:
+      - B35_ATTN_MOE
+      - B35_GDN_MOE
+      门禁: 已有profile及metadata归档不等于本轮官方字节/权重/RTL验收；完整包含routed/shared expert及state/route输出。
+  workload必填:
+  - model_id
+  - model_revision
+  - config_sha256
+  - forward_sha256
+  - block_type
+  - layer_id
+  - batch
+  - query_tokens
+  - kv_tokens
+  - precision_policy_sha256
+  - weights_sha256
+  - input_sha256
+  - initial_state_sha256
+  - generated_rtl_sha256
+  - rtl_source_git_sha
+  - tool_versions_sha256
+  - memory_cache_policy_sha256
+  - configured_matrix_macs_per_cycle
+  - configured_vector_units
+  - start_event
+  - end_event
+  - expert_route_histogram_sha256
+  - matrix_tile_mapping_sha256
+  workload冻结: 沿用已证实的功能测试定义；各模型性能用例集合、token/shape/状态/路由和冷暖cache条件必须执行前冻结。未冻结为BLOCKED，不能在结果出来后只挑有利长度或删掉失败用例。
+  wall起止: 实际block launch握手接受到全部最终输出和状态写ACK完成；含descriptor、DMA、内部stall、阶段间隙、padding和drain。已有带启动空拍的历史counter保持原值，新增回执必须有精确起止事件。
+  Matrix说明: 主门禁复用已有useful-wall口径；useful/executed、executed-wall、活跃窗口仅旁报。按该次生成RTL实际固定配置资源计算；4096/512等配置不得混用或按活跃lane缩小分母。
+  Vector说明: 与Matrix使用同一block wall范围，单列实际配置Vector单元、MAC/非MAC操作单位与计数来源；现有SiLU usefulMacs=0不能证明Vector利用率。未冻结的Vector计数标未测，不混加到Matrix分子或用其掩盖Matrix不足。
+  联合完成规则: 每模型每个必需典型block及冻结验收workload，实际生成RTL全量数值/状态PASS且Matrix useful-wall MAC利用率>=90%，同一输入/配置/RTL来源；缺任一项不能项目done。
+  不可达处理: 当前N16归档2.198%及不改流量理想上界11.824%均不能满足90%。保留FAIL/BLOCKED和瓶颈，不降低门限、不改分母、不把数值阶段PASS升级为最终验收。
+  MoE可达性: 必须核对真实路由histogram与实际tile映射；假设均匀M128/Top8/256experts仅平均4行每expert，假设64行tile则行占用6.25%，两项均非hetero实测配置。小M支持和padding有效工作须另验，不能仅靠调度重排承诺90%。
+  历史后续任务:
+  - Q38A
+  - Q38B
+  - Q38C
+  - Q38D
+  - Q38E
+  - Q38M
+  - Q38F
+  - Q38G
+  - Q38H
+  - Q38I
+  - R00
+  - F00
+  - F01
+  历史保护: Q38不属于本次必需三模型，也不能替代0.8B。旧六类R00及整网/视觉/MTP仍保留历史任务；当前派工排除，未来需另行授权恢复。C03.3仅关闭合成E0向量准备。
 范围:
-  首要目标: 官方权重、真实模型几何、完整数据路径的六类文本 decoder block，以及其状态延续
-  模型标识规则: 沿用旧批准规划中的精确 checkpoint；Qwen2 简称对应 Instruct，不混用 Base
+  首要目标: 当前统一验收目标的三个型号逐一通过典型block实际生成RTL数值与90% MAC利用率；下列六类定义为保留的历史研发清单。
+  模型标识规则: Qwen2沿用既有Instruct身份且不混用Base；Q35保留待复核固定来源；0.8B必须新增官方合同，Q38仅为历史后续。
   排除项目: [voyager_vmap, transfrom_hdlcoder]
   本轮不改动: [Chisel计算代码, 已生成RTL, 既有数值门限, 已冻结权重, 生产默认开关]
   非本阶段完成条件: [完整28或40或48层网络, tokenizer, 最终LM_head, 视觉编码器, MTP推测解码, 板级驱动, 物理签核]
@@ -61,6 +148,9 @@
     未通过: 模型专有算子真实payload接入当前Host执行链、官方完整block和持久状态验收
   本轮审查方式: 回读主干及关键文件，审阅归档；未重新运行上述RTL或下载官方权重
 来源:
+  E18: config/qwen2_1p5b_target_shape.json
+  E19: reports/execution/QWEN35_REFERENCE_LOCK.json
+  E20: doc/UNIFIED_THREE_MODEL_ACCEPTANCE_20261006_CN.md
   E00: README.md
   E01: plans/three_model_operator_coverage_v3_800mhz.yaml
   E02: reports/Q1024_APPROVED_PRECISION_IMPLEMENTATION.md
@@ -260,14 +350,14 @@
     有效整请求: useful_macs除以physical_macs_per_cycle乘wall_cycles
     执行整请求: executed_macs除以physical_macs_per_cycle乘wall_cycles
     有效占执行: useful_macs除以executed_macs；归档98.3%不能代替2.198%时间利用率
-    wall范围: 命令被接受至最后输出和状态写确认完成；含descriptor、DMA、SFU、等待和尾块
-    另报: [Matrix发射窗口利用率, 各owner周期, 活跃lane与padding, DDR读写, L2读写, bank冲突, 队列反压, 状态流量, 实际权重复用]
+    wall范围: block launch握手接受至最后输出和状态写确认完成；含descriptor、DMA、SFU、所有内部停顿、阶段间隙、尾块与drain，起止事件必须可追溯
+    另报: [Matrix与Vector独立计数及固定配置资源, Matrix发射窗口利用率, 各owner周期, 活跃lane与padding, DDR读写, L2读写, bank冲突, 队列反压, 状态流量, 实际权重复用]
   N16归档读带宽上界:
     假设: 单512-bit读通道每拍最多64字节，不改当前读流量，不计写与其他开销
     最少读周期: 3093464
     有效利用率理想上限: 0.11824026398884875
-    结论: 对该冷启动N16请求统一要求50%不合理；先冻结工作量和可达上界，不修改既有失败记录
-  目标分离: 数值通过不要求达到某一利用率；性能改善必须同工作负载同精度同流量口径；800MHz换算不等于STA签核
+    结论: 该历史冷启动N16在不改流量条件下达不到当前90%目标；保存失败及上界，不能降低新门限、切掉等待或用另一workload冒充通过。
+  目标分离: 数值与性能可分别记录阶段结果，但当前最终验收必须同工作负载实际RTL数值PASS且MAC利用率>=90%；源码/HLS/E0不替代RTL，800MHz换算不等于STA签核。
 门禁:
   G0:
     名称: 基线与来源锁定
@@ -303,7 +393,7 @@
     必需工件: [continuity_result.json, per_step_state_metrics.json, reset_recovery.json]
   G8:
     名称: 可解释周期与带宽账本
-    判据: 所有测量绑定同一DUT/数据集；互斥周期桶闭合；分清有用与执行MAC；不要求冷N16达到50%
+    判据: 当前三模型每个冻结必需block/workload以同一实际生成RTL全请求计数验收；互斥周期桶覆盖所有停顿和阶段间隙，固定配置资源分母，Matrix useful-wall>=90%，Vector独立报告；不可达保存FAIL/BLOCKED。
     必需工件: [performance.json, owner_cycles.csv, memory_bytes.json, roofline_bounds.json]
   G9:
     名称: 默认切换与集成防回退
@@ -315,9 +405,9 @@
     必需工件: [dc_qor.rpt, timing_coverage.rpt, resource_area.rpt, sram_mapping.json, physical_scope.json]
     功能block发布前置: false
   G11:
-    名称: 六类block发布
-    判据: 六个block各自G0到G8全部通过；Q35和Q38周期组连续测试通过；官方测试和合成测试不得互相替代
-    必需工件: [six_block_release_matrix.json, evidence_sha256.json, remote_commit.json]
+    名称: 当前三模型联合验收发布及历史六类发布隔离
+    判据: U01按当前统一目标逐模型收齐G0到G8与90%同源回执，0.8B缺合同不可通过；旧六类R00/Q38仅历史后续，不可代替当前目标；官方测试与合成测试不得互相替代
+    必需工件: [current_three_model_acceptance.json, evidence_sha256.json, remote_commit.json]
 优先级:
   P0: 无条件前置的来源、精度、数据面、形状与状态正确性；不是追求峰值
   P1: 先收口Qwen2官方block，再收口Qwen35两类block；共享GDN/MoE可并行开发
@@ -332,7 +422,7 @@
   开发侧: 完成源代码、独立参考、工具可用时真实Chisel/Verilator测试；不能只提交TODO让本地agent代写
   本地agent: 仅承担沙箱缺失的权重资源、完整长仿真、授权工具与物理签核；不得放宽门限或改变设计凑PASS
   并行: 合同冻结后，Norm/Attention、GDN、MoE独立开发；写main串行并核对HEAD；重型仿真不并发
-  泳道: 功能任务优先于同级P01到P04优化/物理任务；这些独立任务不在R00发布依赖闭包内
+  泳道: 当前U00/U01定义项目终点；历史Q38/R00/F00/F01从当前队列排除。数值阶段与优化可分工，但90%与真实RTL为最终前置；物理签核仍另报。
   产物命名: 任务产物是待生成工件名而非已有文件；新增runner必须先实现再执行，不能只输出同名PASS文件
   每任务通用交付: 源码差异、实际执行命令、退出码、原始日志、比较结果、来源SHA、明确证据等级
   通用失败策略: 立即保留首差异tensor/元素/状态版本与波形窗口；只重跑受影响闭包；不覆盖旧PASS/FAIL
@@ -777,7 +867,7 @@
     执行侧: 开发侧
     来源: [E08, E09]
     修改落点: 性能收集器和新增带宽/算量上界校验；不更改旧失败日志
-    执行动作: [按实际Matrix握手计useful/executed MAC, 每个owner互斥cycle bins覆盖wall全部周期, 分别记录DDR读写与L2访问及descriptor开销, 将N16冷启动与N128/N1024复用分组, 先证明阈值可达再设性能门禁]
+    执行动作: [按实际Matrix握手计useful/executed MAC, 每个owner互斥cycle bins覆盖wall全部周期, 分别记录DDR读写与L2访问及descriptor开销, 将N16冷启动与N128/N1024复用分组, 按用户固定90%目标先检查可达上界；不可达记录瓶颈而非降低门限]
     验收: [以归档数字复算约2.198%而非98.3%, 单512bit同频读通道每拍不超过64B, 当前N16不变流量理想上界约11.82%, 计数溢出/重复累计/工作量改变被拒绝]
     门禁: [G8]
     产物: [roofline_bounds.json, performance_schema.json]
@@ -865,7 +955,32 @@
     验收: [MTP不能只回滚KV而遗留其他state, vision root canary不等于encoder数值, 量化不可污染BF16基线, 未完成不阻塞本规划纯文本block完成但不得宣称全模型feature完备]
     门禁: [G0, G1, G3, G4, G6, G7, G8]
     产物: [mtp_full_state_result.json, vision_official_result.json]
+  - 编号: U00
+    名称: 冻结当前三模型合同与回放工作量
+    优先级: P0
+    依赖: []
+    状态: 待执行
+    执行侧: 开发侧；缺官方资源由本地agent补充
+    来源: [E03, E18, E19, E20]
+    修改落点: 新0.8B官方合同、逐模型典型block及workload manifest；不改已完成E0为模型支持
+    执行动作: [核定三个精确checkpoint和固定revision原字节, 补0.8B配置与forward及层索引来源且不猜shape, 按实际架构选择Attention与GDN及dense-FFN或MoE完整block, 冻结batch/query/KV/状态/路由/精度/cache与资源分母及全部来源哈希, 分开Matrix与Vector计数单位和起止事件]
+    验收: [0.8B缺任一官方来源保持BLOCKED, 保留Q2 Instruct与Base区分, Q38不得替代0.8B, 每个性能用例集合在运行前冻结而非挑选最好结果, 所有当前统一目标workload必填字段可追溯]
+    门禁: [G0, G1, G8]
+    产物: [current_three_model_contracts.json, current_block_workloads.json, resource_counter_contract.json]
+  - 编号: U01
+    名称: 三模型典型block数值及90%联合验收
+    优先级: P1
+    依赖: [U00]
+    状态: 待执行
+    执行侧: 开发侧完成集成，本地agent运行实际生成RTL
+    来源: [E03, E05, E06, E08, E18, E19, E20]
+    修改落点: 当前三模型实际RTL回放与同源数值/性能回执；按逐模型门禁复用已有组件，不要求历史Q38完成
+    执行动作: [为每个冻结典型block接通实际生成RTL完整数据与状态路径, 全量比较输出/中间边界/状态/路由并收齐G0到G8, 统计launch接受至最终输出及状态ACK全部block周期, 固定配置资源计Matrix useful-wall并分别报告Vector, 逐workload验证数值PASS且MAC利用率>=90并发布同源哈希证据]
+    验收: [三个型号各自全部必需block/workload数值PASS且Matrix useful-wall>=90%, 所有内部stall及阶段间隙进入分母, 不用active-window或useful/executed替代, 源码/HLS/E0/旧合成组件不能代替实际生成RTL回放, 0.8B未冻结或任一必需项未过不可项目done, 不改旧失败记录或减资源分母凑90%]
+    门禁: [G0, G1, G2, G3, G4, G5, G6, G7, G8, G11]
+    产物: [current_three_model_acceptance.json, generated_rtl_identity.json, all_tensor_metrics.json, matrix_vector_cycles.json, remote_commit.json]
 里程碑:
+  M_当前统一目标: [U00, U01]
   M0: [C00, C01, C02, C03, C04, C05, C06, C07, C08]
   M1_Qwen2: [Q20, Q21, Q22, Q23, S00, S01, Q24, P00]
   M2_Qwen35: [S02, S03, S04, S05, S06, Q35A, Q35B, Q35C, Q35D, Q35E]

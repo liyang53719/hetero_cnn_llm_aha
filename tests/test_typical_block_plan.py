@@ -20,7 +20,7 @@ def base():
 def test_actual_plan():
     result = V.validate(base())
     assert result["status"] == "PASS_PLAN_CONSISTENCY_ONLY"
-    assert result["tasks"] == 44 and result["blocks"] == 6 and result["gates"] == 12
+    assert result["tasks"] == 46 and result["blocks"] == 6 and result["gates"] == 12
     assert result["hardware_tests_executed"] is False
     doc = base()
     pos = {task: i for i, task in enumerate(result["topological_order"])}
@@ -85,3 +85,35 @@ def test_reject_duplicate_yaml_keys(text):
 def test_safe_yaml_rejects_python_objects():
     with pytest.raises(yaml.YAMLError):
         yaml.load("!!python/object/apply:os.system ['exit 0']", Loader=V.UniqueKeyLoader)
+
+
+def test_current_goal_is_stricter_than_preserved_legacy_inventory():
+    doc = base(); result = V.validate(doc)
+    assert result["current_goal_contract_checked"] and result["current_models"] == 3
+    goal = doc["当前统一验收目标"]
+    assert goal["模型"] == ["Qwen2-1.5B", "Qwen3.5-0.8B", "Qwen3.5-35B-A3B"]
+    assert goal["模型入口"]["Qwen3.5-0.8B"]["shape"] is None
+    assert goal["模型入口"]["Qwen3.5-0.8B"]["revision"] is None
+    assert goal["最低MAC利用率"] == 0.9
+    assert next(t for t in doc["任务"] if t["编号"] == "U01")["依赖"] == ["U00"]
+
+
+@pytest.mark.parametrize("kind", ["missing", "models", "source", "threshold", "denominator", "stalls", "fixed", "vector", "identity", "historical", "freeze_dependency", "entries", "blocks", "invented_08b", "release_artifact"])
+def test_reject_current_goal_relaxation(kind):
+    doc = base(); goal = doc["当前统一验收目标"]
+    if kind == "missing": del doc["当前统一验收目标"]
+    elif kind == "models": goal["模型"][1] = "Qwen3.8-Flash-Next"
+    elif kind == "source": goal["验收证据"] = "source_hls_only"
+    elif kind == "threshold": goal["最低MAC利用率"] = 0.5
+    elif kind == "denominator": goal["性能主口径"] = "useful_macs/executed_macs"
+    elif kind == "stalls": goal["包含block内停顿与阶段间隙"] = False
+    elif kind == "fixed": goal["固定配置资源分母"] = False
+    elif kind == "vector": goal["Matrix与Vector分报"] = False
+    elif kind == "identity": goal["workload必填"].remove("generated_rtl_sha256")
+    elif kind == "historical": next(t for t in doc["任务"] if t["编号"] == "U01")["依赖"].append("Q38I")
+    elif kind == "freeze_dependency": next(t for t in doc["任务"] if t["编号"] == "U01")["依赖"] = []
+    elif kind == "entries": del goal["模型入口"]
+    elif kind == "blocks": goal["模型入口"]["Qwen3.5-35B-A3B"]["所需block"] = []
+    elif kind == "invented_08b": goal["模型入口"]["Qwen3.5-0.8B"]["shape"] = {"hidden": 2048}
+    elif kind == "release_artifact": doc["门禁"]["G11"]["必需工件"] = ["six_block_release_matrix.json"]
+    with pytest.raises(V.PlanError): V.validate(doc)

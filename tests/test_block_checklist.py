@@ -53,7 +53,7 @@ def change(repo, ident, state, owner='sandbox', ev=None, reason='', expected=Non
 def test_actual_repository_checklist():
     d, p = ledger.read(ROOT)
     r = ledger.validate(ROOT, d, p)
-    assert r['parent_tasks'] == 44 and r['leaf_items'] >= 44
+    assert r['parent_tasks'] == 46 and r['leaf_items'] >= 44
     assert leaf(d, 'P01.1')['状态'] == 'done'
     assert all(x['编号'] != 'P01.1' for x in ledger.queue(d, p, 'all'))
 
@@ -156,3 +156,18 @@ def test_ongoing_not_in_queue_and_render_is_deterministic(repo):
     assert 'C01.1' not in {x['编号'] for x in ledger.queue(d, p, 'all')}
     assert ledger.render(d, p) == ledger.render(d, p)
     assert '| C01.1 | P0 |' in ledger.render(d, p)
+
+
+def test_current_goal_does_not_reoffer_historical_q38_tasks(repo):
+    d, p = load(repo)
+    task = next(t for t in p['任务'] if t['编号'] == 'Q38A')
+    task['依赖'] = []
+    ids = {r['编号'] for r in ledger.queue(d, p, 'all')}
+    assert 'Q38A' not in ids and 'U00' in ids
+
+
+def test_current_goal_exclusions_are_bound_to_plan(repo):
+    d, p = load(repo)
+    d['当前目标排除任务'].remove('Q38A')
+    with pytest.raises(ledger.ChecklistError, match='exclusions drift'):
+        ledger.validate(repo, d, p, verify_files=False)

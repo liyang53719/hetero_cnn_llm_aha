@@ -1,0 +1,32 @@
+name: current-model-goal-contract
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/current-model-goal-contract.yml'
+      - 'doc/three_model_typical_block_closure_20260917_zh.yaml'
+      - 'doc/block_checklist.yaml'
+      - 'scripts/validate_typical_block_plan.py'
+      - 'scripts/block_checklist.py'
+      - 'tests/test_typical_block_plan.py'
+      - 'tests/test_block_checklist.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  goal-and-ledger-consistency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install PyYAML pytest
+      - name: Check current goal and historical evidence without claiming hardware acceptance
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/validate_typical_block_plan.py doc/three_model_typical_block_closure_20260917_zh.yaml
+          python scripts/block_checklist.py validate
+          python -m pytest -q tests/test_typical_block_plan.py tests/test_block_checklist.py

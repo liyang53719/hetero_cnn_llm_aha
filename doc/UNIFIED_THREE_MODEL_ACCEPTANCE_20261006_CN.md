@@ -74,3 +74,7 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 ## 2026-10-07 独立 all-products-BF16 RoPE 硬件候选
 
 `doc/U00_2_ROPE_BF16_CANDIDATE_20261007_CN.md` 记录四产品/末端BF16的两个独立命名RTL候选、明确转换异常位和非有限值合同、实际HardFloat生成与两套冻结native逐节点验真。原生产FP32模块和0.0625源精度反例保持不变。候选组件通过不切换生产策略，BF16 memory packing/store、QK256 Norm与packed gate、partial64/位置/cache、三模型完整block数值及固定资源整block MAC90%仍OPEN。
+
+## 2026-10-07 后续：SharedL2 head事务候选
+
+`doc/U00_2_ROPE_BF16_L2_CANDIDATE_20261007_CN.md` 将候选接到已有SharedL2 payload的默认关闭分支：head256/partial64、192维原位旁路、真实16位packing、跨beat掩码及实际fabric写回/读回。该有界head门禁与generic SFU owner、Command128全tensor入口、系数生成/cache、DMA/DDR ACK分别记录，不升级完整block或生产策略。先完成真实Q/K Norm及packed gate的producer/布局合同，再按依赖接通全tensor owner。U00.2 ongoing、U01 to do及固定资源整block MAC90%目标不变。

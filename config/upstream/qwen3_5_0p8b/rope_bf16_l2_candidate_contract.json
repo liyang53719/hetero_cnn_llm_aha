@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "name": "experimental_BF16_RoPE_SharedL2_partial64_head256_v1",
+  "production_default": "qwen2_shared_l2_rope_payload.EXPERIMENTAL_BF16_ROPE=0 retains the original body; no precision-policy acceptance implied",
+  "opt_in": "EXPERIMENTAL_BF16_ROPE=1 AND captured candidate_policy_i=0xb1",
+  "geometry": "heads=1 or2, head_dim=256, rotary_dim=64; exact8 or16 source beats. Reject every other geometry before memory traffic",
+  "source": "Head-contiguous BF16. 32 BF16 words per512-bit beat, word0 in bits15:0. Source64-byte aligned",
+  "coefficients": "Explicit candidate_trig_local_i points to two64-byte-aligned BF16 beats: cos[0:31] then sin[0:31], shared across the accepted heads. No position generation/cache semantics",
+  "rotation": "Per head pairs(channel i,channel i+32), i=0..31. BF16 inputs exactly promote by appending16 zeros. Existing all-products-and-terminal-BF16 candidate arithmetic remains unchanged",
+  "bypass": "Channels64..255 copied bit-for-bit without conversion, NaN canonicalization, arithmetic, or exception flags",
+  "output": "Actual16-bit candidate outputs directly packed once. Destination may have any even byte offset. First/last partial64-byte beats use exact2-byte-paired enables; all other bytes preserved by SharedL2 fabric",
+  "address_admission": "Reject unaligned source/trig, odd destination, high-bit truncation and range overflow. Configured L2_BEATS is actualfabriccapacity, default min(2^ADDR_W,24576). AW15 default24576beats=1.5MiB; unused address encodings are rejected",
+  "ownership": "start accepted only in IDLE; all config/addresses captured. Ignore busy start pulses. Read complete tensor and both coefficient beats before any store, permitting overlapping source/trig/destination ranges. One outstanding L2 read; one transaction owner",
+  "counts": "Per accepted transaction, reads=8*heads+2 accepted requests; pairs=32*heads completed pair outputs; writes=8*heads+(destination byte offset!=0) accepted writes. Rejection counts all0",
+  "completion": "One done cycle only after last accepted SharedL2 store. No completion backpressure interface exists in the inherited payload API; caller must observe pulse. This is not DDR acknowledgement or generic SFU tagged completion",
+  "backpressure": "Read requests and registered output address/data/mask stay stable while blocked; arithmetic input and output handshake internal to endpoint",
+  "reset": "Consumer and no-ID fabric/pending response path reset together, low at least2 rising clocks. Flush all pending work and output validity. Already accepted stores remain; no atomic rollback or stale-response-after-uncoordinated-reset guarantee",
+  "fixture_scope": "All163840 unique immutable local/remote real rotarypairs and327680native outputs, plus explicitly supplemental grouped replays. Unrotated192-lane tails are synthetic adversarial raw BF16 payloads",
+  "non_goals": ["production arithmetic switch", "generic SFU owner/resultbuffer integration", "Command128 descriptor acceptance", "Q8 whole-tensor command", "coefficient generation/cache correctness", "full-block numerical acceptance", "physical frequency/area/power acceptance", "useful-wall MAC90% acceptance"]
+}

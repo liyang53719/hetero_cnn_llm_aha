@@ -1,0 +1,5 @@
+ROPE_BF16_L2_PASS mode=1 transactions=5184 successful=5194 main_pairs=167936 main_tail_bf16=1007616 rejects=38 resets=4 packets=47098 readback_bytes=8307264 rd_stalls=24477 wr_stalls=37830 rsp_stalls=42356 offsets=ffffffff actual_shared_l2=1 no_memory_pokes=1
+- /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/tb/tb_rope_bf16_l2_candidate.sv:613: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 28ms; walltime 6.089 s; speed 4.634 ms/s
+- Verilator: cpu 6.089 s on 1 threads; alloced 76 MB

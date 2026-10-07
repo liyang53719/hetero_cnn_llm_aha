@@ -1,12 +1,37 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
-module qwen2_shared_l2_rope_payload #(parameter integer ADDR_W=15)(
+// The experimental policy is opt-in. Existing instantiations elaborate only
+// the legacy implementation and do not evaluate the candidate-only inputs.
+module qwen2_shared_l2_rope_payload #(
+ parameter integer ADDR_W=15,
+ parameter bit EXPERIMENTAL_BF16_ROPE=1'b0,
+ // Candidate-only aperture must match the attached SharedL2 fabric capacity.
+ parameter longint unsigned CANDIDATE_L2_BEATS=
+  ADDR_W<15 ? (64'd1<<ADDR_W) : 64'd24576
+)(
  input logic clk_i,input logic rst_ni,input logic start_i,input logic[5:0]data_beats_i,input logic[9:0]heads_i,head_dim_i,input logic[3:0]position_lane_i,
  input logic[63:0]data_local_i,position_local_i,out_local_i,
  output logic l2_rd_valid_o,input logic l2_rd_ready_i,output logic[ADDR_W-1:0]l2_rd_addr_o,input logic l2_rsp_valid_i,output logic l2_rsp_ready_o,input logic[511:0]l2_rsp_data_i,
  output logic l2_wr_valid_o,input logic l2_wr_ready_i,output logic[ADDR_W-1:0]l2_wr_addr_o,output logic[511:0]l2_wr_data_o,output logic[63:0]l2_wr_be_o,
- output logic done_o,output logic unsupported_position_o,output logic[31:0]read_beats_o,write_beats_o,pairs_o,position_o,coefficient_steps_o,output logic[4:0]exception_flags_o
+ output logic done_o,output logic unsupported_position_o,output logic[31:0]read_beats_o,write_beats_o,pairs_o,position_o,coefficient_steps_o,output logic[4:0]exception_flags_o,
+ input logic[63:0]candidate_trig_local_i,
+ input logic[9:0]candidate_rotary_dim_i,
+ input logic[7:0]candidate_policy_i,
+ output logic ready_o
 );
+ generate
+ if (EXPERIMENTAL_BF16_ROPE) begin : g_candidate
+  rope_bf16_l2_candidate #(.ADDR_W(ADDR_W), .L2_BEATS(CANDIDATE_L2_BEATS)) candidate (
+   .clk_i, .rst_ni, .start_i, .data_beats_i, .heads_i, .head_dim_i,
+   .position_lane_i, .data_local_i, .position_local_i, .out_local_i,
+   .candidate_trig_local_i, .candidate_rotary_dim_i, .candidate_policy_i,
+   .ready_o, .l2_rd_valid_o, .l2_rd_ready_i, .l2_rd_addr_o,
+   .l2_rsp_valid_i, .l2_rsp_ready_o, .l2_rsp_data_i,
+   .l2_wr_valid_o, .l2_wr_ready_i, .l2_wr_addr_o, .l2_wr_data_o, .l2_wr_be_o,
+   .done_o, .unsupported_position_o, .read_beats_o, .write_beats_o, .pairs_o,
+   .position_o, .coefficient_steps_o, .exception_flags_o
+  );
+ end else begin : g_legacy
  typedef enum logic[3:0]{I,DRQ,DRP,PRQ,PRP,AQ,FQ,FP,OW,D}st_e;st_e st;logic[5:0]idx,data_beats,advance_idx;logic[9:0]heads,head_dim;logic bank_k;logic[15:0]pair_idx,total_pairs;logic[511:0]data_mem[0:47],out_mem[0:47];logic riv,rir,rov,ror;logic[31:0]re,ro,rcos,rsin,roe,roo,qposition,kposition,current_position,requested_position;logic signed[47:0]base_cos_q,base_sin_q,qcos[0:63],qsin[0:63],kcos[0:63],ksin[0:63],advance_cos,advance_sin;logic signed[95:0]cc_product,ss_product,cs_product,sc_product;logic[4:0]rflags,flags_or;logic[31:0]accepted,completed;integer element_even,element_odd,c;
  function automatic[15:0]bf16(input logic[31:0]v);logic[31:0]r;begin r=v+32'h7fff+v[16];return r[31:16];end endfunction
  function automatic logic signed[47:0]round_q46(input logic signed[95:0]v);logic sign;logic[95:0]mag,rounded;begin sign=v[95];mag=sign?$unsigned(-v):$unsigned(v);rounded=(mag+(96'd1<<45))>>46;round_q46=sign?-$signed(rounded[47:0]):$signed(rounded[47:0]);end endfunction
@@ -22,4 +47,7 @@ module qwen2_shared_l2_rope_payload #(parameter integer ADDR_W=15)(
   AQ:begin coefficient_steps_o<=coefficient_steps_o+1;if(bank_k)begin kcos[advance_idx]<=advance_cos;ksin[advance_idx]<=advance_sin;end else begin qcos[advance_idx]<=advance_cos;qsin[advance_idx]<=advance_sin;end if(advance_idx==63)begin if(bank_k)kposition<=kposition+1;else qposition<=qposition+1;if(current_position+1==requested_position)begin pair_idx<=0;st<=FQ;end else begin advance_idx<=0;st<=AQ;end end else advance_idx<=advance_idx+1;end
   FQ:if(riv&&rir)st<=FP;FP:if(rov&&ror)begin out_mem[element_even/32][(element_even%32)*16+:16]<=bf16(roe);out_mem[element_odd/32][(element_odd%32)*16+:16]<=bf16(roo);if(pair_idx+1==total_pairs)begin idx<=0;st<=OW;end else begin pair_idx<=pair_idx+1;st<=FQ;end end
   OW:if(l2_wr_valid_o&&l2_wr_ready_i)begin write_beats_o<=write_beats_o+1;if(idx+1==data_beats)st<=D;else begin idx<=idx+1;st<=OW;end end D:st<=I;default:st<=I;endcase end end
+ assign ready_o=st==I;
+ end
+ endgenerate
 endmodule

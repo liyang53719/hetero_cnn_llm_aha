@@ -1,0 +1,70 @@
+name: qwen35-experimental-BF16-rope-SharedL2-head-transport
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rope-bf16-l2-candidate.yml'
+      - 'rtl/integration/rope_bf16_l2_candidate.sv'
+      - 'rtl/integration/qwen2_shared_l2_rope_payload.sv'
+      - 'rtl/fabric/shared_l2_fabric.sv'
+      - 'rtl/sfu/*bf16*candidate.sv'
+      - 'tb/tb_rope_bf16_l2_candidate.sv'
+      - 'scripts/run_rope_bf16_l2_candidate.py'
+      - 'src/heteronpu/rope_bf16_l2_candidate.py'
+      - 'src/heteronpu/rope_bf16_candidate.py'
+      - 'tests/test_rope_bf16_l2_candidate.py'
+      - 'tests/fixtures/rope_rounding/**'
+      - 'config/upstream/qwen3_5_0p8b/rope_bf16_l2_candidate_contract.json'
+      - 'chisel/rope_hardware_oracle/**'
+      - 'scripts/generate_rope_hardware_primitives.sh'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  existing-consumer-and-actual-fabric-not-Command128:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest numpy==2.3.5
+      - name: Transport admission, exact masks, and old arithmetic policy regressions
+        run: |
+          python -m pytest -o addopts='' -q tests/test_rope_bf16_l2_candidate.py tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+          python -O -m pytest -o addopts='' -q tests/test_rope_bf16_l2_candidate.py tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+      - name: Regenerate HardFloat and replay actual SharedL2 head transactions
+        run: |
+          python scripts/run_rope_bf16_l2_candidate.py --output work/rope_bf16_l2_candidate_result
+          python - <<'PY'
+          import json,os
+          r=json.load(open('work/rope_bf16_l2_candidate_result/result.json'))
+          if r['status'] != 'PASS_EXPERIMENTAL_BF16_ROPE_SHARED_L2_HEAD_TRANSPORT' or len(r['rtl_runs']) != 2:
+              raise SystemExit('candidate transport gate incomplete')
+          if r['unique_real_pairs'] != 163840 or r['transactions'] != 5184:
+              raise SystemExit('frozen replay incomplete')
+          if any(r[k] for k in ('production_policy_changed','Command128_integrated','generic_SFU_owner_integrated','PPA_measured','mac_utilization_measured','U01_complete')):
+              raise SystemExit('transport scope inflated')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Default-off candidate in existing SharedL2 RoPE consumer; actual shared_l2_fabric writes and readback.\n\n')
+              f.write('163840 unique immutable rotary pairs, synthetic192-lane bypass tails, exact BF16 packing and masks.\n\n')
+              f.write('Production default, Command128, generic SFU owner, full block, coefficient generation/cache and MAC90% remain outside this gate.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: experimental-bf16-rope-shared-l2-${{ github.sha }}
+          path: |
+            work/rope_bf16_l2_candidate_result/*.json
+            work/rope_bf16_l2_candidate_result/*.log
+            work/rope_bf16_l2_candidate_result/*.txt
+            work/rope_bf16_l2_candidate_result/*.memh
+            work/rope_bf16_l2_candidate_result/*.npz
+            work/generated/rope_bf16_l2_candidate/*
+          retention-days: 30
+          if-no-files-found: error

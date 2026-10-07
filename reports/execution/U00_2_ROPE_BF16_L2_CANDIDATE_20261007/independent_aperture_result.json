@@ -1,0 +1,79 @@
+{
+  "status": "PASS_INDEPENDENT_APERTURE_ADMISSION",
+  "actual_payload_arithmetic_executed": false,
+  "real_generated_HardFloat_linked": true,
+  "limits": "Valid cases stop before first read acceptance. No full-tensor or memory-store completion is claimed by this auxiliary test.",
+  "runs": [
+    {
+      "capacity_beats": 24576,
+      "compile_command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-j",
+        "4",
+        "--top-module",
+        "tb_independent_aperture",
+        "-GAPERTURE_BEATS=24576",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_l2_independent/obj_default",
+        "-o",
+        "tb",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_to_bf16_rne_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/rope_bf16_l2_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_shared_l2_rope_payload.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/reports/execution/U00_2_ROPE_BF16_L2_CANDIDATE_20261007/tb_independent_aperture.sv"
+      ],
+      "run_command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_l2_independent/obj_default/tb"
+      ],
+      "invalid_rejected_before_io": 15,
+      "valid_first_request_checkpoints": 6,
+      "first_request_stall_cycles_per_valid_case": 9,
+      "capacity_parameter_omitted": true
+    },
+    {
+      "capacity_beats": 8192,
+      "compile_command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-j",
+        "4",
+        "--top-module",
+        "tb_independent_aperture",
+        "-GAPERTURE_BEATS=8192",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_l2_independent/obj_override",
+        "-o",
+        "tb",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_to_bf16_rne_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/rope_bf16_l2_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_shared_l2_rope_payload.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/reports/execution/U00_2_ROPE_BF16_L2_CANDIDATE_20261007/tb_independent_aperture.sv"
+      ],
+      "run_command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_l2_independent/obj_override/tb"
+      ],
+      "invalid_rejected_before_io": 15,
+      "valid_first_request_checkpoints": 6,
+      "first_request_stall_cycles_per_valid_case": 9,
+      "capacity_parameter_omitted": false
+    }
+  ],
+  "source_sha256": {
+    "work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv": "798b878ddaa910e279aa6739e737236f5dd0efb7803c46e2cedd7b8ad74e1fa1",
+    "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+    "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+    "rtl/integration/rope_bf16_l2_candidate.sv": "c2c5cb39d0b367768208032f40f8a68d3a1b95f27579c9a11ac4bc4cd7b9aac4",
+    "rtl/integration/qwen2_shared_l2_rope_payload.sv": "0b4dae2fee5ee40d57ba5b658344109d2f75a0887113e667226edb7adf2bb661",
+    "reports/execution/U00_2_ROPE_BF16_L2_CANDIDATE_20261007/tb_independent_aperture.sv": "acc893ed5c67eab8de8f303bfa62787f7ca081e9bbf8c71d18bd22f0105b04bc"
+  },
+  "review_script_sha256": "765d1df891db5638611d4e65c0eb20b617b0b4c9e5d32db94cb6c245aa76a30d"
+}

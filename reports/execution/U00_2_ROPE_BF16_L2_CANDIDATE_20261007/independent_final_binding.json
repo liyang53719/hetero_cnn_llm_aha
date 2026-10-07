@@ -1,0 +1,26 @@
+{
+  "status": "PASS_FINAL_SOURCE_AND_EVIDENCE_BINDING",
+  "primary_result_sha256": "1d995ea20b25a4ca148c8bc66c04bccc26da73b8e082496e71286dbb7a1693fa",
+  "primary_status": "PASS_EXPERIMENTAL_BF16_ROPE_SHARED_L2_HEAD_TRANSPORT",
+  "independent_aperture_result_sha256": "a7015822183373d5ac1ca411f9a10990178b0731ac7e60130a0dc5b122bc7f5e",
+  "independent_store_review_sha256": "6e40ac59d505b77f22f97d8d1266cb58662b107b68dc5536f01e4f440c835e74",
+  "generated_primitives_identical": true,
+  "legacy_body_byte_identical_to": "37df696",
+  "current_source_sha256": {
+    "config/upstream/qwen3_5_0p8b/rope_bf16_l2_candidate_contract.json": "16b836287e7e1832b65fbd5fc52e983dad32e4c623343bff492f741c90d88d39",
+    "scripts/run_rope_bf16_l2_candidate.py": "162a66204b879c34f98ee6ff19709b13ac0e20ad2660b7a69636664da76275d7",
+    "src/heteronpu/rope_bf16_l2_candidate.py": "68d3212ec07087b2659c510caea162de6b955059e89004fd89442f0813330d67",
+    "rtl/integration/rope_bf16_l2_candidate.sv": "c2c5cb39d0b367768208032f40f8a68d3a1b95f27579c9a11ac4bc4cd7b9aac4",
+    "rtl/integration/qwen2_shared_l2_rope_payload.sv": "0b4dae2fee5ee40d57ba5b658344109d2f75a0887113e667226edb7adf2bb661",
+    "rtl/integration/qwen2_rope_stage_top.sv": "c87755afa5b5878610ad3a2ec075b3fe740cfa069ad99e76709761142a42ec13",
+    "rtl/integration/qwen2_rope_tile16_controller.sv": "4730a6b1ea21dc4b0bdff7d7df3d0cd84d7b08b3044c426571eee7a3fead87d2",
+    "tb/tb_qwen2_rope_token01_payload.sv": "f0eb9d91265d1e9b1f3221b41bd87fa45bdee12aea5adbe2b7434f5f35595a12",
+    "rtl/fabric/shared_l2_fabric.sv": "2b1630ac27f2850f57dc2178cd95d7cff00f41eb6162f1cc5c7e857d3d027bcf",
+    "rtl/sfu/qwen2_rope_base_coeff_q46.sv": "a256c8e05fac3b7fff6d16093e0712b2c13b55e208dd84043f4071fc49268aa8",
+    "rtl/sfu/fp32_rope_pair.sv": "7d0f95f91ef8e1670e330007449737b31b91733796627bc21c9978d5d4deef6c",
+    "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+    "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+    "tb/tb_rope_bf16_l2_candidate.sv": "6c7272acb97e254892b684d5ed2c40a87f0f6801a8edc5fa4268731338cbc3ce"
+  }
+}

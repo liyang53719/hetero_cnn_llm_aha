@@ -1146,6 +1146,7 @@
     SFU/Command128/完整block/固定资源MAC90%未完成。独立复核修正1.5MiB实际容量准入；U00.2 ongoing、U01 to do。}
 - {编号: U00.2, 执行者: sandbox@qk-norm-producer-20261007, 时间: '2026-10-07T05:35:00+00:00', 说明: 前轮SharedL2候选已完成且main干净；接续认领真实Q/K每头256 Norm及packed Q/gate producer布局中的有界实际RTL门禁。先审计既有算术与来源，再选择完整可验组件；生产默认、整tensor owner、三模型完整block及固定资源MAC90%保持OPEN。}
 - {编号: U00.2, 执行者: sandbox@rebuildable-artifact-migration-20261007, 时间: '2026-10-07T21:03:15.641154+00:00', 说明: 按新交付范围移除当前树RoPE数值payload并保留本地缓存，以固定官方来源重新生成QK输入并通过新/历史实际RTL复验；Git只含源码、pins和摘要，保留全仓5基线失败及三模型完整block/90%未完成。}
+- {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T21:27:00+00:00', 说明: 前轮QK Norm与可重建payload迁移已完成且main干净；认领真实Matrix K1024到完整Q256+gate256/K256头、Norm与SharedL2 partial64 RoPE的有界候选链。先冻结顺序FMA及BF16边界并验真实owner和ACK，保留生产默认、全Q8/K2及三模型完整block/PPA/MAC90%未验收。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

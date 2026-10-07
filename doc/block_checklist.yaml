@@ -1131,6 +1131,7 @@
 - {编号: U00.2, 执行者: sandbox@rope-bf16-l2-candidate-20261007, 时间: '2026-10-07T04:38:00+00:00', 说明: 前轮独立候选已完成且main干净；认领真实SharedL2消费路径默认关闭的BF16候选head256/partial64搬运及掩码存储门禁，保留旧生产算术、Command128/完整block/90%未验收。}
 - {编号: U00.2, 执行者: sandbox@rope-bf16-l2-candidate-20261007, 时间: '2026-10-07T04:54:00+00:00', 说明: 完成真实SharedL2消费者显式候选的head256/partial64掩码存储及原位旁路门禁；保持旧生产默认和generic
     SFU/Command128/完整block/固定资源MAC90%未完成。独立复核修正1.5MiB实际容量准入；U00.2 ongoing、U01 to do。}
+- {编号: U00.2, 执行者: sandbox@qk-norm-producer-20261007, 时间: '2026-10-07T05:35:00+00:00', 说明: 前轮SharedL2候选已完成且main干净；接续认领真实Q/K每头256 Norm及packed Q/gate producer布局中的有界实际RTL门禁。先审计既有算术与来源，再选择完整可验组件；生产默认、整tensor owner、三模型完整block及固定资源MAC90%保持OPEN。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

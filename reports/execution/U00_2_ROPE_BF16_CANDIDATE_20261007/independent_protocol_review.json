@@ -1,0 +1,85 @@
+{
+  "status": "PASS_INDEPENDENT_RTL_PROTOCOL_REVIEW",
+  "source_sha256": {
+    "work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv": "798b878ddaa910e279aa6739e737236f5dd0efb7803c46e2cedd7b8ad74e1fa1",
+    "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+    "rtl/sfu/fp32_rope_pair_bf16_candidate.sv": "ee7b6b8e7d880764f4ac4228d95a1cf418aafff2121cf9a97ee69ef67f8b9666",
+    "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+    "reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/tb_independent_protocol.sv": "080ee472873fb4d8a329a9eda4190190e57349fc78d5cb830fb3eef5fbe64c3a"
+  },
+  "reviewer_script_sha256": "6d1e95fe788dbd1aee553cd9e8a2e78e29504c741530dad031498b1f98254aea",
+  "primitive_manifest_sha256": "99f136a6cf539d470a569a4598bf9fba2b51da8344b5af110527ce5d86bdbd1c",
+  "reset_assertion": "Asynchronous, 2ns after falling edge; outputs/counters/all trace checked after 1ns; held over three rising clocks",
+  "reset_coverage": "All four elastic occupancy states and all six registered-wrapper FSM states; drain after every reset",
+  "traffic": "1024 distinct exact BF16 values per implementation, deterministic bubbles and stalls; one-to-one ordering and full trace checked from an independent handshake queue",
+  "runs": [
+    {
+      "metrics": {
+        "pipe": 0,
+        "reset_cases": 19,
+        "reset_phase_mask": 15,
+        "ordered_transfers": 1024,
+        "full_trace_stall_checks": 620
+      },
+      "command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-j",
+        "4",
+        "--top-module",
+        "tb_independent_protocol",
+        "-GPIPE=0",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_independent_protocol_final/obj0",
+        "-o",
+        "tb",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_to_bf16_rne_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/tb_independent_protocol.sv"
+      ],
+      "build_log": "independent_protocol_pipe0_build.log",
+      "build_log_sha256": "e0e2855a271769d55be6bdde5d432b029efc19aff7463541d3e0e852e6e68c9a",
+      "run_log": "independent_protocol_pipe0_run.log",
+      "run_log_sha256": "8b4a5cd6ab789bb271da7c9ca52529ffa3c3c9494ba9455ea58c1b8fc7359ef7"
+    },
+    {
+      "metrics": {
+        "pipe": 1,
+        "reset_cases": 18,
+        "reset_phase_mask": 63,
+        "ordered_transfers": 1024,
+        "full_trace_stall_checks": 1467
+      },
+      "command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-j",
+        "4",
+        "--top-module",
+        "tb_independent_protocol",
+        "-GPIPE=1",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_independent_protocol_final/obj1",
+        "-o",
+        "tb",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_to_bf16_rne_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/tb_independent_protocol.sv"
+      ],
+      "build_log": "independent_protocol_pipe1_build.log",
+      "build_log_sha256": "78740edf66c737004522db6e3e399ddfc1711c477b45e46f334b21f5cd2a686e",
+      "run_log": "independent_protocol_pipe1_run.log",
+      "run_log_sha256": "79c3bd52f366e670e77253401341ad179129ce3e94081d3eeaaaed8f5bff5fd8"
+    }
+  ],
+  "PPA_measured": false,
+  "limitation": "Simulation proves these directed scenarios only, not formal universal protocol correctness or physical reset recovery/removal timing."
+}

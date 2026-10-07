@@ -1,0 +1,5 @@
+INDEPENDENT_PROTOCOL_PASS pipe=1 reset_cases=18 reset_phase_mask=3f transfers=1024 stall_checks=1467
+- /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/tb_independent_protocol.sv:95: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 125us; walltime 0.017 s; speed 7.208 ms/s
+- Verilator: cpu 0.017 s on 1 threads; alloced 65 MB

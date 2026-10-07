@@ -1038,3 +1038,10 @@
   必填: [任务编号, 状态, 设计GitSHA, 生成RTL哈希, 参考与输入哈希, 实际命令, 退出码, 证据等级, 运行环境, 全量比较统计, 流量与周期, 资源峰值, 失败原因, 远端提交]
   日志策略: 数值失败保留首差异和全量差异摘要；大型二进制置artifact并给持久manifest及哈希；Git不上传token或授权IP/库
   验收状态隔离: 计划校验PASS仅说明YAML结构/依赖/覆盖一致，不说明任何硬件任务已执行
+U00_2_RoPE候选推进_20261007:
+  报告: doc/U00_2_ROPE_BF16_CANDIDATE_20261007_CN.md
+  范围: 独立experimental all-products-BF16 RoPE pair；不切换生产默认策略
+  已实现: [四产品BF16转换与两末端16位输出, 独立特殊值及转换flags合同, 真实生成HardFloat两个wrapper, 两套冻结native中间值和输出逐位回放, converter边界及节点flags独立C核验, 背压与在途及满输出reset, 专门无阻塞握手周期和II测量]
+  不替代: [BF16 packing及memory store接入, partial64布局与cos_sin位置生成, QK256 Norm的1加weight与packed gate, 全block数值, 综合时序面积功耗, 固定资源整block useful-wall MAC90]
+  下一有界门禁: 评审独立producer策略后接入真实owner接口；联合验QK256 Norm、partial64布局和BF16存储，不把本组件通过当作完整源模型接受
+  状态: U00.2 ongoing；U01 to do；三个指定模型完整block数值及MAC90%目标不变

@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 02def9ff830e8b3789180319456f76c0a97bc7bd2b3a8e3ee5cd9feefc8c08f1
+计划SHA256: bd393a9a7f1364e52004f34c6cc382eb30818a852d8fe789eeeb853db5c40045
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@rope-hardware-oracle-20261007
+    负责人: sandbox@rope-bf16-candidate-20261007
     前置:
     - U00.1
     先行依据: ''
@@ -941,6 +941,74 @@
         SHA256: 128ff9b01a83ba281e125f23a317352a5baa5b6a6228c0346380700e3c28182b
       - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/source_sha256.json
         SHA256: b108b561f42993423897926a0cbff8f71d1afae155bc43335e6d615c29022529
+    - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/result.json
+      SHA256: a3bc4fd46734abb88a24cefb02a932f361b726db1def5257be6db08230ccf83a
+      设计提交: 27542342d546eae3e283463c25cc31211817bf16
+      范围: 独立experimental all-products-BF16实际RTL组件：两wrapper各163840真实pairs与13618全指数/特殊值pairs，655360native产品及327680输出逐位一致，独立converter331776通过；316
+        normal/-O，全仓2317通过及同5既有失败。明确转换flags/非有限值/背压/reset合同；组合latency2/II1、registered9/10仅仿真周期。生产默认、memory packing/store、PPA、完整block及MAC90%不升级。设计提交为实现基线，精确最终实现绑定源SHA并在发布后核对远端HEAD/CI。
+      关联文件:
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/INDEPENDENT_REVIEW.md
+        SHA256: 301d7a686f0499f5a5531a4a6bcc41368ab6b6f5ea1cb450f71a8a5d491e5dbc
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/c_self_test.txt
+        SHA256: f415f029b0b678f6a499c098f368498f7c276ae87cca03c3c86958436502af2a
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/converter_run.txt
+        SHA256: b5e5908b448213682a8476b53ebfc88327e3f1d770d53bcaf526d4f784e2e822
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/emission.txt
+        SHA256: 20173630e75218cc14302025b63a6c069bea7fed8e1572fd311cf906cc425af2
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/execution.txt
+        SHA256: e66869a478b31fa53f9d3272d1452a1b954b24b2a97aa3ff4fe8c7611b42ff07
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/full.txt
+        SHA256: 3303eb3b91f46ea62650436016af2bbb6a36e4519c7f8e493a35efb82651cbdc
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/generated_generate.txt
+        SHA256: 8986c50e8d9407ed0e1fedab9661f476950301b1901954b0c0b585264ffaf6ca
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/generated_lint.txt
+        SHA256: 6634f8325a338c8eee262d656a270b9b1bbc337886f3df47d05912e81ebf5a4a
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/generated_manifest.json
+        SHA256: 796ff0057c6af039d60df19bda6b938467f54be7180b6e953afea7525e21bbe9
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_c_alias_review.json
+        SHA256: 48b34ebaf0d51f4e24faf8df37917b920c841096b197b8eb03a4bbd7f15921f6
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_converter_review.json
+        SHA256: fc2d2957a593dbe5e908e880f307116967c5c828d765019d33ad4d46a34313f7
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_converter_review.py
+        SHA256: 1fca5a48e22c52697dada0197fdf9b81d61fcccc714fd90d47ab4b3f0b0c801a
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_protocol_pipe0_build.log
+        SHA256: e0e2855a271769d55be6bdde5d432b029efc19aff7463541d3e0e852e6e68c9a
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_protocol_pipe0_run.log
+        SHA256: 8b4a5cd6ab789bb271da7c9ca52529ffa3c3c9494ba9455ea58c1b8fc7359ef7
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_protocol_pipe1_build.log
+        SHA256: 78740edf66c737004522db6e3e399ddfc1711c477b45e46f334b21f5cd2a686e
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_protocol_pipe1_run.log
+        SHA256: 79c3bd52f366e670e77253401341ad179129ce3e94081d3eeaaaed8f5bff5fd8
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_protocol_review.json
+        SHA256: 4dc6d25e1a3e8bb64df41c16116f786a5a3ba8a2098a39bd805f2cefa12fad6c
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_protocol_review.py
+        SHA256: 6d1e95fe788dbd1aee553cd9e8a2e78e29504c741530dad031498b1f98254aea
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_result_review.json
+        SHA256: ee09021ba9708ef6dcb8c6c403d6fa9c7521ed10fa330f5b6780086926e05312
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/independent_result_review.py
+        SHA256: a611a633be0c1ee521ab32b4a2c2fa2282b9161ee3f53be589272f1a7601da4a
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/initial_venv_import_error.txt
+        SHA256: 736820b83565d46835f09fecb33a9eb1834271ae1e90fbdc2e881f9d19bbb40f
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/initial_venv_import_error_optimized.txt
+        SHA256: 1bd73c502b3be40eb3f521ab148ca3620ffa05dd8f6500870ea1f55c1b15756e
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/normal.txt
+        SHA256: 57e608c677da2a63a60af8f732f45699228978cc1b5879dc0b5cf0ebbbce2824
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/optimized.txt
+        SHA256: 894f9ff881fd8695061ca495269bd1b7945c630ec29500edf65759fecb991e68
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/pipe0_continuous_run.txt
+        SHA256: f908a323a9a2676bb076f1bcbe4e79c185d134209bbe468c6b85de1c021ef331
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/pipe0_stalled_run.txt
+        SHA256: 00a5347f67f4a502b04cd9e63da4b231776280820a9fe91c0345ffc2d396e1a6
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/pipe1_continuous_run.txt
+        SHA256: 32a45fcd980f60c9d27a5caa410d87404fcfa8a7cebe0a11867e8705fc0bfaff
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/pipe1_stalled_run.txt
+        SHA256: c3a8c475d3f8634a67822e163aa604d7b08798387ca7ac1b786b9c4c6226f405
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/rtl_result.json
+        SHA256: bfb4e153142fe0e4a805bc658da50a8b9fc3489ae42ae4912ef65151aace2961
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/source_sha256.json
+        SHA256: 785356bfa458e70c56508ea0c538a1d992e61bf5e87b74395eb5230009387275
+      - 文件: reports/execution/U00_2_ROPE_BF16_CANDIDATE_20261007/tb_independent_protocol.sv
+        SHA256: 080ee472873fb4d8a329a9eda4190190e57349fc78d5cb830fb3eef5fbe64c3a
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -1006,6 +1074,8 @@
     Norm/packed gate集成和三模型useful-wall MAC90%未完成。}
 - {编号: U00.2, 执行者: sandbox@rope-source-fidelity-20261007, 时间: '2026-10-07T02:14:47.648071+00:00', 说明: 追加远端真实输入的RoPE源模型精度拒绝反例；本地组件精度样例通过不得泛化，固定原阈值并保持生产算术不变。}
 - {编号: U00.2, 执行者: sandbox@rope-rounding-ablation-20261007, 时间: '2026-10-07T03:15:08.251657+00:00', 说明: 固定本地与远端真实输入和历史native/RTL原位，完成四路软件舍入消融与独立复核，推荐下个独立both-BF16候选；生产默认算术不变，实际候选RTL及完整block/90%未验收。}
+- {编号: U00.2, 执行者: sandbox@rope-bf16-candidate-20261007, 时间: '2026-10-07T03:47:00+00:00', 说明: 完成独立四产品及末端BF16候选实际HardFloat RTL、固定两套native逐节点/flags和全特殊值转换与协议review；保持生产默认及旧反例不变。候选无阻塞latency/II实测但无PPA/store/完整block/90%验收，U00.2
+    ongoing/U01 to do。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

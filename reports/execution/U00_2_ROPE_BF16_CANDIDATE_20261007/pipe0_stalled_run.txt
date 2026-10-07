@@ -1,0 +1,5 @@
+ROPE_BF16_CANDIDATE_PASS pipe=0 pairs=177458 stalls=73075 stall=1 cycles=271478 first_latency=3 min_accept_gap=1 max_accept_gap=5 min_complete_gap=1 max_complete_gap=7 acceptance_nonunit_gaps=31317 completion_nonunit_gaps=20881 first_accept_cycle=1 last_accept_cycle=271411 first_complete_cycle=4 last_complete_cycle=271413 transfer_cycles=271413 drain_cycles=64 input_stalls=73075 reset_checks=2 reset_inflight=1 reset_blocked=1 accepted=177458 completed=177458
+- /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/tb/tb_rope_bf16_candidate.sv:311: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 3ms; walltime 2.776 s; speed 980.357 us/s
+- Verilator: cpu 2.771 s on 1 threads; alloced 84 MB

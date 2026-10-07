@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "status": "PASS_EXPERIMENTAL_COMPONENT_WITH_FIVE_UNCHANGED_FULL_BASELINE_FAILURES",
+  "base_commit": "27542342d546eae3e283463c25cc31211817bf16",
+  "source_identity": "source_sha256.json and rtl_result.json; exact published head and artifact reverified after Git data fast-forward",
+  "candidate_modules": [
+    "fp32_rope_pair_bf16_candidate",
+    "fp32_rope_pair_bf16_pipe_candidate"
+  ],
+  "real_pairs_per_DUT": 163840,
+  "synthetic_pairs_per_DUT": 13618,
+  "native_products_per_DUT": 655360,
+  "native_outputs_per_DUT": 327680,
+  "all_arithmetic_conversion_and_flag_columns_bit_exact": 25,
+  "standalone_conversion_vectors": 331776,
+  "independent_converter_words": 1703936,
+  "independent_actual_DUT_node_conversions": 2129496,
+  "independent_review": "PASS",
+  "independent_reset_cases": {
+    "comb_all_four_occupancies": 19,
+    "pipe_all_six_states": 18
+  },
+  "independent_ordered_transfers_per_DUT": 1024,
+  "normal_focused_passed": 316,
+  "optimized_focused_passed": 316,
+  "full_passed": 2317,
+  "full_unchanged_failures": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "corrected_review_finding": "Optional C file CLI now rejects same-file aliases by input fstat/output stat inode+device before truncating; 6 preservation regressions; final complete gate rerun",
+  "continuous_measurements": [
+    {
+      "module": "fp32_rope_pair_bf16_candidate",
+      "metrics": {
+        "pipe": 0,
+        "pairs": 512,
+        "stalls": 0,
+        "stall": 0,
+        "cycles": 579,
+        "first_latency": 2,
+        "min_accept_gap": 1,
+        "max_accept_gap": 1,
+        "min_complete_gap": 1,
+        "max_complete_gap": 1,
+        "acceptance_nonunit_gaps": 0,
+        "completion_nonunit_gaps": 0,
+        "first_accept_cycle": 1,
+        "last_accept_cycle": 512,
+        "first_complete_cycle": 3,
+        "last_complete_cycle": 514,
+        "transfer_cycles": 514,
+        "drain_cycles": 64,
+        "input_stalls": 0,
+        "reset_checks": 2,
+        "reset_inflight": 1,
+        "reset_blocked": 1,
+        "accepted": 512,
+        "completed": 512
+      }
+    },
+    {
+      "module": "fp32_rope_pair_bf16_pipe_candidate",
+      "metrics": {
+        "pipe": 1,
+        "pairs": 512,
+        "stalls": 0,
+        "stall": 0,
+        "cycles": 5185,
+        "first_latency": 9,
+        "min_accept_gap": 10,
+        "max_accept_gap": 10,
+        "min_complete_gap": 10,
+        "max_complete_gap": 10,
+        "acceptance_nonunit_gaps": 511,
+        "completion_nonunit_gaps": 511,
+        "first_accept_cycle": 1,
+        "last_accept_cycle": 5111,
+        "first_complete_cycle": 10,
+        "last_complete_cycle": 5120,
+        "transfer_cycles": 5120,
+        "drain_cycles": 64,
+        "input_stalls": 4599,
+        "reset_checks": 2,
+        "reset_inflight": 1,
+        "reset_blocked": 1,
+        "accepted": 512,
+        "completed": 512
+      }
+    }
+  ],
+  "production_policy_changed": false,
+  "old_native_or_threshold_changed": false,
+  "memory_packing_or_store_tested": false,
+  "PPA_measured": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "full_block_or_MAC90_accepted": false,
+  "artifact_policy": "Large complete node/input/C/RTL arrays and texts are in exact-head GitHub CI artifacts; raw source fixtures remain committed and immutable",
+  "files": {
+    "INDEPENDENT_REVIEW.md": {
+      "bytes": 11006,
+      "sha256": "301d7a686f0499f5a5531a4a6bcc41368ab6b6f5ea1cb450f71a8a5d491e5dbc"
+    },
+    "c_self_test.txt": {
+      "bytes": 366,
+      "sha256": "f415f029b0b678f6a499c098f368498f7c276ae87cca03c3c86958436502af2a"
+    },
+    "converter_run.txt": {
+      "bytes": 323,
+      "sha256": "b5e5908b448213682a8476b53ebfc88327e3f1d770d53bcaf526d4f784e2e822"
+    },
+    "emission.txt": {
+      "bytes": 190,
+      "sha256": "20173630e75218cc14302025b63a6c069bea7fed8e1572fd311cf906cc425af2"
+    },
+    "execution.txt": {
+      "bytes": 252,
+      "sha256": "e66869a478b31fa53f9d3272d1452a1b954b24b2a97aa3ff4fe8c7611b42ff07"
+    },
+    "full.txt": {
+      "bytes": 7089,
+      "sha256": "3303eb3b91f46ea62650436016af2bbb6a36e4519c7f8e493a35efb82651cbdc"
+    },
+    "generated_generate.txt": {
+      "bytes": 996,
+      "sha256": "8986c50e8d9407ed0e1fedab9661f476950301b1901954b0c0b585264ffaf6ca"
+    },
+    "generated_lint.txt": {
+      "bytes": 300,
+      "sha256": "6634f8325a338c8eee262d656a270b9b1bbc337886f3df47d05912e81ebf5a4a"
+    },
+    "generated_manifest.json": {
+      "bytes": 53270,
+      "sha256": "796ff0057c6af039d60df19bda6b938467f54be7180b6e953afea7525e21bbe9"
+    },
+    "independent_c_alias_review.json": {
+      "bytes": 643,
+      "sha256": "48b34ebaf0d51f4e24faf8df37917b920c841096b197b8eb03a4bbd7f15921f6"
+    },
+    "independent_converter_review.json": {
+      "bytes": 1159,
+      "sha256": "fc2d2957a593dbe5e908e880f307116967c5c828d765019d33ad4d46a34313f7"
+    },
+    "independent_converter_review.py": {
+      "bytes": 4312,
+      "sha256": "1fca5a48e22c52697dada0197fdf9b81d61fcccc714fd90d47ab4b3f0b0c801a"
+    },
+    "independent_protocol_pipe0_build.log": {
+      "bytes": 12747,
+      "sha256": "e0e2855a271769d55be6bdde5d432b029efc19aff7463541d3e0e852e6e68c9a"
+    },
+    "independent_protocol_pipe0_run.log": {
+      "bytes": 434,
+      "sha256": "8b4a5cd6ab789bb271da7c9ca52529ffa3c3c9494ba9455ea58c1b8fc7359ef7"
+    },
+    "independent_protocol_pipe1_build.log": {
+      "bytes": 12493,
+      "sha256": "78740edf66c737004522db6e3e399ddfc1711c477b45e46f334b21f5cd2a686e"
+    },
+    "independent_protocol_pipe1_run.log": {
+      "bytes": 437,
+      "sha256": "79c3bd52f366e670e77253401341ad179129ce3e94081d3eeaaaed8f5bff5fd8"
+    },
+    "independent_protocol_review.json": {
+      "bytes": 4612,
+      "sha256": "4dc6d25e1a3e8bb64df41c16116f786a5a3ba8a2098a39bd805f2cefa12fad6c"
+    },
+    "independent_protocol_review.py": {
+      "bytes": 4256,
+      "sha256": "6d1e95fe788dbd1aee553cd9e8a2e78e29504c741530dad031498b1f98254aea"
+    },
+    "independent_result_review.json": {
+      "bytes": 931,
+      "sha256": "ee09021ba9708ef6dcb8c6c403d6fa9c7521ed10fa330f5b6780086926e05312"
+    },
+    "independent_result_review.py": {
+      "bytes": 6174,
+      "sha256": "a611a633be0c1ee521ab32b4a2c2fa2282b9161ee3f53be589272f1a7601da4a"
+    },
+    "initial_venv_import_error.txt": {
+      "bytes": 994,
+      "sha256": "736820b83565d46835f09fecb33a9eb1834271ae1e90fbdc2e881f9d19bbb40f"
+    },
+    "initial_venv_import_error_optimized.txt": {
+      "bytes": 1583,
+      "sha256": "1bd73c502b3be40eb3f521ab148ca3620ffa05dd8f6500870ea1f55c1b15756e"
+    },
+    "normal.txt": {
+      "bytes": 420,
+      "sha256": "57e608c677da2a63a60af8f732f45699228978cc1b5879dc0b5cf0ebbbce2824"
+    },
+    "optimized.txt": {
+      "bytes": 1022,
+      "sha256": "894f9ff881fd8695061ca495269bd1b7945c630ec29500edf65759fecb991e68"
+    },
+    "pipe0_continuous_run.txt": {
+      "bytes": 712,
+      "sha256": "f908a323a9a2676bb076f1bcbe4e79c185d134209bbe468c6b85de1c021ef331"
+    },
+    "pipe0_stalled_run.txt": {
+      "bytes": 749,
+      "sha256": "00a5347f67f4a502b04cd9e63da4b231776280820a9fe91c0345ffc2d396e1a6"
+    },
+    "pipe1_continuous_run.txt": {
+      "bytes": 727,
+      "sha256": "32a45fcd980f60c9d27a5caa410d87404fcfa8a7cebe0a11867e8705fc0bfaff"
+    },
+    "pipe1_stalled_run.txt": {
+      "bytes": 762,
+      "sha256": "c3a8c475d3f8634a67822e163aa604d7b08798387ca7ac1b786b9c4c6226f405"
+    },
+    "rtl_result.json": {
+      "bytes": 95740,
+      "sha256": "bfb4e153142fe0e4a805bc658da50a8b9fc3489ae42ae4912ef65151aace2961"
+    },
+    "source_sha256.json": {
+      "bytes": 1357,
+      "sha256": "785356bfa458e70c56508ea0c538a1d992e61bf5e87b74395eb5230009387275"
+    },
+    "tb_independent_protocol.sv": {
+      "bytes": 4764,
+      "sha256": "080ee472873fb4d8a329a9eda4190190e57349fc78d5cb830fb3eef5fbe64c3a"
+    }
+  }
+}

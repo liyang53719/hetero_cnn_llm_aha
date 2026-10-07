@@ -1,0 +1,11 @@
+[info] welcome to sbt 1.10.2 (Debian Java 21.0.12.1)
+[info] loading project definition from /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/chisel/rope_hardware_oracle/project
+[info] loading settings for project root from build.sbt ...
+[info] set current project to heteronpu-rope-hardware-oracle (in build file:/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/chisel/rope_hardware_oracle/)
+[info] Executing in batch mode. For better performance use sbt's shell
+[success] Total time: 0 s, completed Oct 7, 2026, 10:43:51 AM
+[info] compiling 23 Scala sources to /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/chisel/rope_hardware_oracle/target/scala-2.13/classes ...
+[info] done compiling
+[success] Total time: 11 s, completed Oct 7, 2026, 10:44:02 AM
+[info] running gemmini.EmitRoPEHardwarePrimitives /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_bf16_candidate/HeteroRoPEHardwarePrimitives.sv
+[success] Total time: 2 s, completed Oct 7, 2026, 10:44:03 AM

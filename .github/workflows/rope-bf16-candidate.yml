@@ -1,0 +1,72 @@
+name: qwen35-experimental-all-products-BF16-rope-RTL
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rope-bf16-candidate.yml'
+      - 'rtl/sfu/*bf16*candidate.sv'
+      - 'tb/tb_rope_bf16_candidate.sv'
+      - 'tb/tb_fp32_to_bf16_candidate.sv'
+      - 'scripts/*rope_bf16_candidate*'
+      - 'src/heteronpu/rope_bf16_candidate.py'
+      - 'tests/test_rope_bf16_candidate*.py'
+      - 'config/upstream/qwen3_5_0p8b/rope_bf16_candidate_contract.json'
+      - 'tests/fixtures/rope_rounding/**'
+      - 'chisel/rope_hardware_oracle/**'
+      - 'scripts/generate_rope_hardware_primitives.sh'
+      - 'scripts/run_rope_rounding_ablation.py'
+      - 'scripts/run_rope_hardware_oracle.py'
+      - 'src/heteronpu/rope_hardware_oracle.py'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'integration/gemmini/EmitHeteroFP32Pipelines.scala'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-candidate-component-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest numpy==2.3.5
+      - name: Normal and optimized candidate/old-policy tests
+        run: |
+          python -m pytest -o addopts='' -q tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+          python -O -m pytest -o addopts='' -q tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+      - name: Actual emitted HardFloat and separate conversion/product/terminal gates
+        run: |
+          python scripts/run_rope_bf16_candidate.py --output work/rope_bf16_candidate_result
+          python - <<'PY'
+          import json,os
+          r=json.load(open('work/rope_bf16_candidate_result/result.json'))
+          if r['status'] != 'PASS_EXPERIMENTAL_BF16_ROPE_RTL_COMPONENT_ONLY' or len(r['rtl_runs']) != 4:
+              raise SystemExit('candidate gate incomplete')
+          if r['production_policy_changed'] or r['PPA_measured'] or r['memory_packing_or_store_tested'] or r['U01_complete'] or r['mac_utilization_measured']:
+              raise SystemExit('candidate scope inflated')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Experimental all-products-BF16 RoPE RTL only. Production modules unchanged.\n\n')
+              f.write(f"Per stalled DUT: {r['real_pairs_per_stalled_DUT']} immutable real pairs; {r['native_products_per_DUT']} frozen native products and {r['native_outputs_per_DUT']} BF16 outputs bit exact.\n\n")
+              f.write(f"Standalone converter cases: {r['converter']['rows']}; all node values and flags checked independently.\n\n")
+              for x in r['rtl_runs']: f.write(f"{x['label']}: {x['metrics']}\n\n")
+              f.write('Testbench cycles are not MHz/PPA, memory-store integration, complete block or MAC90% acceptance.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: experimental-bf16-rope-component-${{ github.sha }}
+          path: |
+            work/rope_bf16_candidate_result/*.json
+            work/rope_bf16_candidate_result/*.log
+            work/rope_bf16_candidate_result/*.npy
+            work/rope_bf16_candidate_result/*.txt
+            work/rope_bf16_candidate_result/*.memh
+            work/generated/rope_bf16_candidate/*
+          retention-days: 30
+          if-no-files-found: error

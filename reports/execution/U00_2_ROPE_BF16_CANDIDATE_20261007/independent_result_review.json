@@ -1,0 +1,18 @@
+{
+  "status": "PASS_INDEPENDENT_FINAL_EVIDENCE_REVIEW",
+  "reviewed_result": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_bf16_candidate_result_final/result.json",
+  "reviewed_result_sha256": "bfb4e153142fe0e4a805bc658da50a8b9fc3489ae42ae4912ef65151aace2961",
+  "source_files_verified": 9,
+  "result_artifacts_verified": 40,
+  "immutable_fixtures_verified": 4,
+  "actual_DUT_node_conversions_compared_to_independent_nearest_neighbor": 2129496,
+  "standalone_DUT_conversions_compared_to_independent_nearest_neighbor": 331776,
+  "all_25_DUT_columns_match_integer_oracle_and_actual_C_observations": true,
+  "C_tininess_waivers_used": 0,
+  "real_pairs_per_DUT": 163840,
+  "synthetic_pairs_per_DUT": 13618,
+  "frozen_native_products_and_outputs_recompared": true,
+  "protected_baseline_changed_paths": [],
+  "PPA_measured": false,
+  "script_sha256": "a611a633be0c1ee521ab32b4a2c2fa2282b9161ee3f53be589272f1a7601da4a"
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "experimental_all_products_and_terminal_BF16_RNE_v1",
+  "production_policy_changed": false,
+  "input": "Four arbitrary binary32 bit patterns: even, odd, cos, sin; ready/valid transaction",
+  "operations": ["ec=RN32(e*c)", "os=RN32(o*s)", "es=RN32(e*s)", "oc=RN32(o*c)", "independent RNBF16 of all four products, then exact zero-extension to binary32", "even_sum=RN32(ec+signbit_invert(os)); odd_sum=RN32(es+oc), no FMA", "independent RNBF16 of each sum; actual 16-bit output ports"],
+  "FP32_arithmetic": "Pinned generated HardFloat, RNE, precision-p/unbounded-exponent tininess-after-rounding, canonical positive quiet NaN",
+  "BF16_conversion": {
+    "rounding": "RNE; finite overflow to signed infinity; preserve exact signed zeros and infinity",
+    "NaN": "Canonical positive quiet NaN 0x7fc0; invalid exactly for signaling NaN input",
+    "flags": "[invalid, divide_by_zero, overflow, underflow, inexact]; divide_by_zero is always zero",
+    "overflow": "Finite input rounds to infinity: overflow and inexact",
+    "underflow": "Inexact and rounded BF16 exponent field is zero; destination-encoding tininess. This is deliberately not HardFloat unbounded-exponent tininess",
+    "inexact": "Finite input discards nonzero low 16 bits"
+  },
+  "aggregate_flags": "OR of 4 multiply, 4 product conversion, 2 add, and 2 terminal conversion exception flags; per-node flags retained for experimental trace",
+  "protocol": "Input sampled only on valid and ready; output data, trace and flags remain stable while valid and not ready; active-low asynchronous wrapper reset flushes pending inputs/outputs and clears counters. Internal HardFloat pipelines receive synchronous reset on clock edges while reset is held. Reset is held over at least two rising clocks",
+  "counters": "accepted/completed transaction counters modulo 2^32; reset clears both; completed means output valid and ready",
+  "native_equivalence_scope": "Conditional same-input replay of the two immutable finite BF16 historical Q/K and cos/sin corpora. No universal framework NaN, overflow, arbitrary FP32 or full-model equivalence claim",
+  "non_goals": ["production default switch", "memory packing or store integration", "partial RoPE layout or coefficient generation", "full block numeric acceptance", "frequency/area/power acceptance", "MAC90% acceptance"],
+  "physical_status": "Not synthesized or placed; experimental trace ports add observable state; only defined simulation cycles and initiation intervals are measured"
+}

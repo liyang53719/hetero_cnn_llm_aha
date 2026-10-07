@@ -1,0 +1,14 @@
+{
+  "config/upstream/qwen3_5_0p8b/rope_bf16_candidate_contract.json": "5ad1dce1dd31b38ef995d69b932998ece1560d344998ec330a6eddd8727fb766",
+  "scripts/run_rope_bf16_candidate.py": "1ad7d3923ab8eb7cd0df6ed2a74b93389ec189f622b1667ee8767b9391e1a0ad",
+  "scripts/rope_bf16_candidate_reference.c": "045f69dcddafcfd834552009adf03734b39af8f79c7ec331347fa178e53946e2",
+  "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+  "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+  "rtl/sfu/fp32_rope_pair_bf16_candidate.sv": "ee7b6b8e7d880764f4ac4228d95a1cf418aafff2121cf9a97ee69ef67f8b9666",
+  "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+  "tb/tb_rope_bf16_candidate.sv": "099e974e89979bac23dc3baac55ce31dce23b926fd8bdb30af7d6c8ee35cffac",
+  "tb/tb_fp32_to_bf16_candidate.sv": "456c85a0c0f6bae4caf0d699acf9db5c55c12580aa19606cdf3ec550402bdfda",
+  ".github/workflows/rope-bf16-candidate.yml": "b4c83009158c54e478acbb160679b57180ca62047d9fe12abdf16702aa33c8cb",
+  "tests/test_rope_bf16_candidate.py": "e361f8925b5466f59fe6a08d2d0364ee7d32392707531f9f948df1fc76a192f1",
+  "tests/test_rope_bf16_candidate_runner.py": "b4cad33a3b24eda408d74a971e0fa9c5226f75ce213baa0dcbb57ada9f38a95a"
+}

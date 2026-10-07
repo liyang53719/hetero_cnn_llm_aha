@@ -1,0 +1,24 @@
+{
+  "status": "PASS_SAME_FILE_FIX_INDEPENDENT_RECHECK",
+  "source_sha256": "045f69dcddafcfd834552009adf03734b39af8f79c7ec331347fa178e53946e2",
+  "cases": [
+    {
+      "case": "absolute_alias",
+      "exit_code": 1,
+      "input_preserved": true,
+      "stderr": "Input and output must not refer to the same file"
+    },
+    {
+      "case": "symlink",
+      "exit_code": 1,
+      "input_preserved": true,
+      "stderr": "Input and output must not refer to the same file"
+    },
+    {
+      "case": "hardlink",
+      "exit_code": 1,
+      "input_preserved": true,
+      "stderr": "Input and output must not refer to the same file"
+    }
+  ]
+}

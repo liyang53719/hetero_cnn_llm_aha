@@ -76,3 +76,7 @@ HardFloat 的precision-p/unbounded-exponent tininess 和宿主 fenv 在min-norma
 新增CI名称明确为software-ablation-not-RTL，上传完整原始trace/独立C trace/全部mismatch索引和报告；绿色CI只接受这次冻结输入的软件消融。旧硬件gate与source-fidelity反例保持不变。
 
 下一有界实现：单独命名both-BF16候选，冻结FP32输入域/BF16输出域、overflow/nonfinite/转换flag合同与背压；实际Chisel/HardFloat生成和两个wrapper回放后，才评审接入Qwen3.5 owner。Q/K256 Norm的1+weight、packed Q/gate、partial64布局、表/位置/cache与FP32/BF16存储仍要集成。三模型完整block数值与固定资源整block useful-wall MAC≥90%继续OPEN。
+
+## 独立硬件候选后续
+
+四产品BF16策略已另建有实际16位输出与明确转换flags合同的实验RTL，详见 `doc/U00_2_ROPE_BF16_CANDIDATE_20261007_CN.md`。本软件消融记录及旧生产算术保持原样；硬件候选有自己的源哈希、独立参考、生成/回放和协议测试，不用软件表格代替实际RTL证据，也不自动升级为生产政策。

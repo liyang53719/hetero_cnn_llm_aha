@@ -1,0 +1,5 @@
+PASS: BF16 RNE conversion values/flags, signed zero, subnormals, NaNs,
+      infinities, FP32 flags, 25-word traces, and unfused operations.
+SOFTWARE reference: native binary32 FE_TONEAREST; separate volatile operations.
+Min-normal tie 00800000 * 3f7fffff -> 00800000: host flags=03
+Host UF is preserved; min-normal boundary differences must be reported separately.

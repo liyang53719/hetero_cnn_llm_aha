@@ -1,4 +1,38 @@
-# Immutable historical RoPE input and output corpora
+# Transient immutable historical RoPE input and output corpora
+
+Only this README and `provenance.json` belong in the current Git tree. The three
+NPZ/NPY files are ignored transient inputs. Recover them before running the
+ablation, BF16 candidate, or SharedL2 candidate tests/runners:
+
+```sh
+python scripts/materialize_rope_rounding_corpora.py
+python scripts/materialize_rope_rounding_corpora.py --verify-only
+```
+
+The downloader retrieves exact bytes from the already-public immutable commit
+`27542342d546eae3e283463c25cc31211817bf16`, checking both byte lengths and SHA256
+before exposing any downloaded payloads. The consumer independently retains all
+original SHA256 pins and numerical acceptance thresholds. It does not download
+model weights, run current CPU inference, or regenerate native expectations.
+Existing corrupt files are rejected, never silently replaced. A missing or
+unavailable source fails closed rather than generating a substitute corpus.
+
+A full local clone containing that commit can extract the same bytes offline:
+
+```sh
+python scripts/materialize_rope_rounding_corpora.py --from-git
+```
+
+`--output work/rope_fixture_recovery` can be used for a separate verified recovery;
+the existing consumers use the default directory above. CI performs an explicit
+materialization step before each of the three consumer gates. Tests do not
+silently skip missing evidence or initiate hidden network downloads.
+
+Removing these files from the current index preserves existing local files and
+prevents future additions. It does **not** erase already published Git history.
+The historical-commit recovery intentionally depends on that existing history;
+any future authorized history cleanup must first provide a durable, independently
+hash-pinned replacement archive. Do not upload the corpora as new Git objects.
 
 These are subsets of pre-existing real-prefix runs, not regenerated expected
 values. Each of `local.npz` and `remote.npz` stores 81,920 pairs from cold/carried
@@ -17,7 +51,13 @@ FP32 encodings; original native BF16 values retain zero low halves.
 `provenance.json` pins original full arrays, original native/RTL reports,
 original vectors and actual output text hashes, plus per-group mapping/runtime.
 `scripts/freeze_rope_rounding_corpora.py` reproduces this extraction after checking
-all historical source hashes. Its arithmetic recomputation count is zero.
+all historical source hashes. Its arithmetic recomputation count is zero. Prefer that extraction when all
+original pinned local and remote source evidence is available. No downloadable
+original local-native archive is currently documented; the remote Actions
+archives below are retention-limited (observed expiry 2026-11-06), so they cannot
+be the sole clean-checkout recovery source. The immutable-commit path recovers
+the exact previously extracted corpora without claiming to recover all original
+full arrays or rerun the historical machines.
 The ablation runner separately pins every compact corpus hash.
 
 Remote full native archive: GitHub Actions run 37559899983, artifact 11456093688,
@@ -38,3 +78,20 @@ differ. Both remain frozen and are never replaced by the current CPU's output.
 Scope: conditional RoPE pair only. This fixture does not validate coefficient
 generation, upstream Norm, nonrotating channels, packing/store, whole blocks,
 end-to-end native fidelity, or useful-wall MAC utilization.
+
+
+## Git payload guard
+
+```sh
+python scripts/check_git_payloads.py
+```
+
+The guard checks the Git index, including forced additions, and runs in its own
+push/PR workflow plus the RoPE workflows. It rejects this directory's NPZ/NPY
+corpora, exact historical payload blobs renamed elsewhere, transient model/build
+directories, full checkpoints, and converted weight tensor filenames. This is
+not a blanket ban on all NPZ/NPY/BIN files: small purpose-built fixtures,
+command/descriptor evidence, and validated safetensors header-only metadata
+remain allowed. Header exceptions inspect the indexed bytes and reject trailing
+tensor payloads. Store new model downloads and converted tensors under ignored
+`models/` or `work/`, never in tracked reports or fixtures.

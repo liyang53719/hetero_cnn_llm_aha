@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "status": "PASS_EXPERIMENTAL_QK_NORM256_BF16_COMPONENT_AND_LAYOUT",
+  "real_heads": 5120,
+  "real_normalized_values": 1310720,
+  "real_raw_gate_values": 1048576,
+  "synthetic_heads": 32,
+  "native_expectations_regenerated": false,
+  "corpus_mode": "historical_local_cache",
+  "historical_byte_identity_claimed": true,
+  "unique_input_count_claimed": false,
+  "official_executions_this_run": 0,
+  "cross_variant_input_arrays_identical": false,
+  "cross_variant_native_arrays_identical": false,
+  "materialized_manifest_sha256": null,
+  "same_native_projected_input_component_gate": true,
+  "production_policy_changed": false,
+  "Matrix_producer_integrated": false,
+  "SharedL2_integrated": false,
+  "RoPE_chain_integrated": false,
+  "whole_tensor_owner_integrated": false,
+  "Command128_integrated": false,
+  "full_block_numerical_complete": false,
+  "PPA_measured": false,
+  "mac_utilization_measured": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "source_sha256": {
+    "config/upstream/qwen3_5_0p8b/qk_norm256_candidate_contract.json": "484fe09b1def2b48d6abfe4f9076749db5d15cd51b453caec5cccb05b092aae6",
+    "tests/fixtures/qk_norm256_legacy/fp32_rmsnorm256_chunked.sv": "e866318664e96dcf1eb9f1a7bf6e544ead95096ec1114e4373077a7ba3e3df12",
+    "scripts/run_qk_norm256_candidate.py": "a88f99107355f4e1c85b81f952394ed94278fa4c4162a9a0817f31960fa7886b",
+    "scripts/qk_norm256_reference.c": "79db3d6fad3a43d2e1cde22702c3a0aa4237b1b9bc157bf286eeed3fabd411ab",
+    "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+    "src/heteronpu/qk_norm256_materialization.py": "da78c47d6b07aac43dcff04b4c9e1efe374fe50d3b5ff156e1040a83d947ae59",
+    "scripts/rebuild_qk_norm256_corpora.py": "a800f2f0613c1768a056ac178d289fb63d7acef04bae52984654fbcebb833765",
+    "rtl/sfu/fp32_rmsnorm256_chunked.sv": "aa86f362c4a82a3bce74b9c3e8466626b41c74b3af1691af117e5a9f63d95db4",
+    "rtl/sfu/qk_norm256_bf16_candidate.sv": "c87c8d1f6808d77a176adcba8b8fc4ed0cdd3ca5c3a9bc8b02e96acfc10a3362",
+    "rtl/sfu/fp32_reduce16.sv": "3cbd06a58a30e3450ba895aa2b5fc851df230ec4a676911bbd3dddae25e3eb3c",
+    "rtl/sfu/fp32_rsqrt_nr.sv": "b1347404ca85cee52841fe47635af5ada643a582209510f56e43c97ca03ac0e1",
+    "rtl/sfu/fp32_rsqrt_coeffs.svh": "e0c2357054ce255834a12a1baa8f2c2f0111b90696c49736a898c6b122590a11",
+    "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+    "tb/tb_qk_norm256_bf16_candidate.sv": "c238ca5bcea09953b29f98ae338b7b642f8e06e86be1b36c265bbb4d7f038204",
+    "tb/tb_qk_norm256_legacy_default.sv": "cfb1c83ed905691c0a038e42032a72ad4c9ab56ae8eb17b196c04618f939f040",
+    "tb/tb_fp32_rmsnorm256_chunked.sv": "900a1fb0a3ad6fbc77142ea9bc26f4945e10a287e4cebe3705e98ca43c2400a2",
+    "tb/tb_l5_hidden256_block.sv": "f6e1387a1038ab2da386c5bcf6ba421135e68ab061bd92d81f7b79eaf92dcbcd",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+    "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+  },
+  "arithmetic_debug": {
+    "heads": 5152,
+    "nodes": {
+      "C": 82432,
+      "S": 5152,
+      "O": 82432,
+      "Y": 5152
+    },
+    "exact_value_and_flag_mismatches": 0
+  },
+  "source_native_comparison": {
+    "groups": [
+      {
+        "source": "local",
+        "phase": 0,
+        "role": 0,
+        "heads": 1024,
+        "values": 262144,
+        "max_abs": 0.015625,
+        "mean_abs": 7.450580596923828e-08,
+        "different_bitpatterns": 2,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "local",
+        "phase": 0,
+        "role": 1,
+        "heads": 256,
+        "values": 65536,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_bitpatterns": 0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "local",
+        "phase": 1,
+        "role": 0,
+        "heads": 1024,
+        "values": 262144,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_bitpatterns": 0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "local",
+        "phase": 1,
+        "role": 1,
+        "heads": 256,
+        "values": 65536,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_bitpatterns": 0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "heads": 1024,
+        "values": 262144,
+        "max_abs": 0.015625,
+        "mean_abs": 1.601874828338623e-07,
+        "different_bitpatterns": 8,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 1,
+        "heads": 256,
+        "values": 65536,
+        "max_abs": 0.00390625,
+        "mean_abs": 1.1920928955078125e-07,
+        "different_bitpatterns": 2,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "remote",
+        "phase": 1,
+        "role": 0,
+        "heads": 1024,
+        "values": 262144,
+        "max_abs": 0.0078125,
+        "mean_abs": 2.9802322387695312e-08,
+        "different_bitpatterns": 1,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      {
+        "source": "remote",
+        "phase": 1,
+        "role": 1,
+        "heads": 256,
+        "values": 65536,
+        "max_abs": 0.03125,
+        "mean_abs": 7.152557373046875e-07,
+        "different_bitpatterns": 2,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      }
+    ],
+    "different_values": 15,
+    "all_differences": [
+      {
+        "source": "local",
+        "phase": 0,
+        "role": 0,
+        "token": 41,
+        "head": 1,
+        "channel": 247,
+        "native_bits": "402f0000",
+        "rtl_bits": "402e0000",
+        "abs_error": 0.015625
+      },
+      {
+        "source": "local",
+        "phase": 0,
+        "role": 0,
+        "token": 58,
+        "head": 1,
+        "channel": 255,
+        "native_bits": "bf780000",
+        "rtl_bits": "bf790000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 19,
+        "head": 5,
+        "channel": 128,
+        "native_bits": "3f350000",
+        "rtl_bits": "3f340000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 21,
+        "head": 1,
+        "channel": 189,
+        "native_bits": "bf1f0000",
+        "rtl_bits": "bf1e0000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 22,
+        "head": 4,
+        "channel": 242,
+        "native_bits": "bfbc0000",
+        "rtl_bits": "bfbb0000",
+        "abs_error": 0.0078125
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 22,
+        "head": 6,
+        "channel": 192,
+        "native_bits": "bf0d0000",
+        "rtl_bits": "bf0e0000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 34,
+        "head": 6,
+        "channel": 17,
+        "native_bits": "c0010000",
+        "rtl_bits": "c0000000",
+        "abs_error": 0.015625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 58,
+        "head": 0,
+        "channel": 47,
+        "native_bits": "3e840000",
+        "rtl_bits": "3e830000",
+        "abs_error": 0.001953125
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 118,
+        "head": 7,
+        "channel": 251,
+        "native_bits": "be7b0000",
+        "rtl_bits": "be7a0000",
+        "abs_error": 0.0009765625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 0,
+        "token": 122,
+        "head": 1,
+        "channel": 49,
+        "native_bits": "bf390000",
+        "rtl_bits": "bf3a0000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 1,
+        "token": 50,
+        "head": 1,
+        "channel": 152,
+        "native_bits": "3f690000",
+        "rtl_bits": "3f680000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 0,
+        "role": 1,
+        "token": 72,
+        "head": 0,
+        "channel": 198,
+        "native_bits": "bf400000",
+        "rtl_bits": "bf3f0000",
+        "abs_error": 0.00390625
+      },
+      {
+        "source": "remote",
+        "phase": 1,
+        "role": 0,
+        "token": 17,
+        "head": 3,
+        "channel": 211,
+        "native_bits": "bfd70000",
+        "rtl_bits": "bfd60000",
+        "abs_error": 0.0078125
+      },
+      {
+        "source": "remote",
+        "phase": 1,
+        "role": 1,
+        "token": 19,
+        "head": 1,
+        "channel": 103,
+        "native_bits": "400b0000",
+        "rtl_bits": "400a0000",
+        "abs_error": 0.015625
+      },
+      {
+        "source": "remote",
+        "phase": 1,
+        "role": 1,
+        "token": 45,
+        "head": 1,
+        "channel": 24,
+        "native_bits": "40ac0000",
+        "rtl_bits": "40ab0000",
+        "abs_error": 0.03125
+      }
+    ]
+  },
+  "rtl_metrics": {
+    "replay": 5152,
+    "directed": 60,
+    "rejected": 48,
+    "accepted": 5208,
+    "completed": 5208,
+    "stalls": 20880,
+    "busy_valid": 10424,
+    "mutations": 25997,
+    "reset_reduction": 1,
+    "reset_rsqrt": 1,
+    "reset_output": 1,
+    "reset_blocked": 1,
+    "cycles": 1640346
+  },
+  "supplemental_results": {
+    "results": 60,
+    "zero_data_rejections": 48,
+    "reset_recoveries": 4,
+    "Q_K_raw_gate_cases": 8
+  },
+  "independent_C": {
+    "heads": 5152,
+    "words_per_head": 3132,
+    "exact_value_and_flag_mismatches": 0
+  },
+  "legacy_default": {
+    "exact_old_source_sha256": "e866318664e96dcf1eb9f1a7bf6e544ead95096ec1114e4373077a7ba3e3df12",
+    "metrics": {
+      "vectors": 64,
+      "random": 54,
+      "cycles": 20668,
+      "stalls": 317,
+      "default_equals_explicit_zero": 1,
+      "original_rtl_bitexact": 1
+    }
+  },
+  "corpora": {
+    "local": {
+      "model_id": "Qwen/Qwen3.5-0.8B",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "layer_id": 3,
+      "policy": 193,
+      "array_sha256": {
+        "input_bf16_u32": "1a3c24bcc83ea84aa888122775e4b79e7e86359571788b221d33d9af1367909b",
+        "native_bf16_u32": "cf41e2131ec744f0b60babd332943f8b24d7ccc3d5847a88e47ea1033ea76e51",
+        "gate_bf16_u32": "140ccabbd061fccac2b8a929434e0d22d20a912e6f865f67885f3e659d443ef7",
+        "weight_bf16_u32": "cd010a0e1b09cbd08f088208d9f28261826126f9757d5943fcbb0af609e7248c",
+        "phase": "d84c294bcfaffd9fa6d419a11e0c199ee45d06998d32e57d4a8e18ec5bb565f4",
+        "token": "b33c492a473e169d1b0ae88e203d8e6bcbd7990bf145935ffc44fc792bc1d04e",
+        "head": "2b59d125ba81f18c974b7ae67860394637996b613d007a33bc64fb96fd7e19c5",
+        "role": "53aee31e88400328275843bcc5860c98ea273e45dd5f00844e3156a8addfd7b1",
+        "gate_index": "4acd672918f12509487971f1e73257e79e22aa79b0f94de1f4a42fe8a42552f6"
+      }
+    },
+    "remote": {
+      "model_id": "Qwen/Qwen3.5-0.8B",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "layer_id": 3,
+      "policy": 193,
+      "array_sha256": {
+        "input_bf16_u32": "0f5c969b2c8aa237cc4a98e82c16a1c32944c374abcfae079da3880870698187",
+        "native_bf16_u32": "b6ea87850f6c7ec19ca976ec78003d233d19e28af12c310936f6733296863045",
+        "gate_bf16_u32": "08847f2b18c159454f9f23c8d3773a69e80e146d1688b986f66ee2f8dce758c6",
+        "weight_bf16_u32": "cd010a0e1b09cbd08f088208d9f28261826126f9757d5943fcbb0af609e7248c",
+        "phase": "d84c294bcfaffd9fa6d419a11e0c199ee45d06998d32e57d4a8e18ec5bb565f4",
+        "token": "b33c492a473e169d1b0ae88e203d8e6bcbd7990bf145935ffc44fc792bc1d04e",
+        "head": "2b59d125ba81f18c974b7ae67860394637996b613d007a33bc64fb96fd7e19c5",
+        "role": "53aee31e88400328275843bcc5860c98ea273e45dd5f00844e3156a8addfd7b1",
+        "gate_index": "4acd672918f12509487971f1e73257e79e22aa79b0f94de1f4a42fe8a42552f6"
+      }
+    }
+  }
+}

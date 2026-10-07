@@ -33,3 +33,37 @@ test_run_dir/
 # Keep the concise execution contract, not generated evidence blobs
 reports/execution/preflight.json
 reports/execution/cleanup-*.json
+
+# Reacquire frozen RoPE evidence; never commit the compact tensor corpora again.
+/tests/fixtures/rope_rounding/*.npz
+/tests/fixtures/rope_rounding/*.npy
+/tests/fixtures/rope_rounding/.materialize-*/
+
+# Downloaded/converted model weights (header-only evidence remains tracked).
+/weights/
+/checkpoints/
+*.safetensors
+*.gguf
+*.ggml
+*.ckpt
+*.pt
+*.pth
+pytorch_model*.bin
+model*.bin
+!config/upstream/weight_headers/**/*.header.bin
+*weight*.npz
+*weight*.npy
+*weight*.bin
+*weight*.mem
+*weight*.memh
+*weight*.hex
+
+# Optional QK historical replay data and runtime reports are never source assets
+/tests/fixtures/qk_norm256/*.npz
+/tests/fixtures/qk_norm256/*.npy
+/tests/fixtures/qk_norm256/provenance.json
+/tests/fixtures/qk_norm256/*_original_report.json
+/tests/fixtures/qk_norm256/payload_manifest.json
+
+# Editable-install packaging metadata
+*.egg-info/

@@ -4,6 +4,8 @@
 Required source bytes are pinned below. The compact output preserves native
 products/output and both actual hardware results, rather than deriving expected
 values from the new ablation. Optional reproduction needs the original evidence.
+For normal CI/use, materialize_rope_rounding_corpora.py recovers the already frozen
+bytes from an immutable historical commit without needing expiring CI archives.
 """
 from __future__ import annotations
 import argparse

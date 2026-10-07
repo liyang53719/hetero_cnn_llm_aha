@@ -78,3 +78,10 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 ## 2026-10-07 后续：SharedL2 head事务候选
 
 `doc/U00_2_ROPE_BF16_L2_CANDIDATE_20261007_CN.md` 将候选接到已有SharedL2 payload的默认关闭分支：head256/partial64、192维原位旁路、真实16位packing、跨beat掩码及实际fabric写回/读回。该有界head门禁与generic SFU owner、Command128全tensor入口、系数生成/cache、DMA/DDR ACK分别记录，不升级完整block或生产策略。先完成真实Q/K Norm及packed gate的producer/布局合同，再按依赖接通全tensor owner。U00.2 ongoing、U01 to do及固定资源整block MAC90%目标不变。
+
+
+## 2026-10-07 后续：Q/K Norm256 与每头 packed gate 候选
+
+`doc/U00_2_QK_NORM256_CANDIDATE_20261007_CN.md` 记录默认关闭的 chunked 候选：实际 FP32 gamma=1+weight、每 head256 归约/一次 NR、末端 BF16 和原始 gate 保留。新默认路径从固定官方 checkpoint 重建 baseline/AVX2 两套 producer，5120 个 head 观察值通过实际 RTL/整数/C 核对；新 native 有 7 个 BF16 差异，最大 0.015625，门限不变。本地历史回放另行通过，仍保留 15 个差异及 0.03125 边界。旧默认 64 事务等价和独立对抗/reset 复验通过。
+
+权重及数值数组不进入 Git，CI 物化临时数据并只发布简短摘要；历史文件删除不清理 Git 历史。此同输入组件尚未接通 Matrix 真实 producer、Norm→RoPE、内存和全 tensor owner。完整 producer audit 的新 5/9 项拒绝仍保留，U00.2 ongoing、U01 to do，完整三模型 block / 固定资源 MAC90% 继续 OPEN。

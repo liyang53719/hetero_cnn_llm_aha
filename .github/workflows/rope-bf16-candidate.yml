@@ -4,6 +4,10 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/rope-bf16-candidate.yml'
+      - 'scripts/materialize_rope_rounding_corpora.py'
+      - 'scripts/check_git_payloads.py'
+      - 'tests/test_rope_fixture_materialization.py'
+      - 'tests/test_git_payload_guard.py'
       - 'rtl/sfu/*bf16*candidate.sv'
       - 'tb/tb_rope_bf16_candidate.sv'
       - 'tb/tb_fp32_to_bf16_candidate.sv'
@@ -36,16 +40,24 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -e . pytest numpy==2.3.5
+      - name: Reject tracked payloads and recover pinned historical bytes
+        run: |
+          python scripts/check_git_payloads.py
+          python scripts/materialize_rope_rounding_corpora.py
+          python scripts/materialize_rope_rounding_corpora.py --verify-only
       - name: Normal and optimized candidate/old-policy tests
         run: |
-          python -m pytest -o addopts='' -q tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
-          python -O -m pytest -o addopts='' -q tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+          python -m pytest -o addopts='' -q tests/test_rope_fixture_materialization.py tests/test_git_payload_guard.py tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+          python -O -m pytest -o addopts='' -q tests/test_rope_fixture_materialization.py tests/test_git_payload_guard.py tests/test_rope_bf16_candidate*.py tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
       - name: Actual emitted HardFloat and separate conversion/product/terminal gates
         run: |
           python scripts/run_rope_bf16_candidate.py --output work/rope_bf16_candidate_result
           python - <<'PY'
           import json,os
           r=json.load(open('work/rope_bf16_candidate_result/result.json'))
+          summary={k:r[k] for k in ('schema_version', 'status', 'production_policy_changed', 'U00_2_complete', 'U01_complete', 'mac_utilization_measured', 'candidate_RTL_executed', 'historical_hardware_baseline_only', 'model_native_expectations_regenerated', 'native_expectations_regenerated', 'native_model_expectations_regenerated', 'unique_real_pairs', 'unique_real_native_outputs', 'supplemental_real_pair_replays', 'transactions', 'real_pairs_per_stalled_DUT', 'synthetic_pairs_per_stalled_DUT', 'native_products_per_DUT', 'native_outputs_per_DUT', 'PPA_measured', 'memory_packing_or_store_tested', 'full_block_numerical_complete', 'full_block_hardware_oracle_complete', 'actual_shared_l2_fabric_tested', 'BF16_packing_and_byte_masks_tested', 'generic_SFU_owner_integrated', 'Command128_integrated', 'position_coefficient_generation_tested', 'Q8_whole_tensor_command_tested', 'source_sha256', 'fixture_sha256') if k in r}
+          summary['rtl_metrics']=[x['metrics'] for x in r['rtl_runs']]
+          with open('work/rope_bf16_candidate_result/summary.json','w') as f: json.dump(summary,f,indent=2)
           if r['status'] != 'PASS_EXPERIMENTAL_BF16_ROPE_RTL_COMPONENT_ONLY' or len(r['rtl_runs']) != 4:
               raise SystemExit('candidate gate incomplete')
           if r['production_policy_changed'] or r['PPA_measured'] or r['memory_packing_or_store_tested'] or r['U01_complete'] or r['mac_utilization_measured']:
@@ -61,12 +73,6 @@ jobs:
         if: always()
         with:
           name: experimental-bf16-rope-component-${{ github.sha }}
-          path: |
-            work/rope_bf16_candidate_result/*.json
-            work/rope_bf16_candidate_result/*.log
-            work/rope_bf16_candidate_result/*.npy
-            work/rope_bf16_candidate_result/*.txt
-            work/rope_bf16_candidate_result/*.memh
-            work/generated/rope_bf16_candidate/*
+          path: work/rope_bf16_candidate_result/summary.json
           retention-days: 30
           if-no-files-found: error

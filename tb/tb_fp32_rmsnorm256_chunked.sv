@@ -1,7 +1,9 @@
 `timescale 1ns/1ps
 module tb_fp32_rmsnorm256_chunked;parameter integer COUNT=1000;logic clk;/* verilator lint_off SYNCASYNCNET */logic rst_n;/* verilator lint_on SYNCASYNCNET */always #5 clk=~clk;
  logic iv,ir,ov,orr;logic[8191:0]x,w,y;logic[31:0]eps;logic[4:0]flags,flags_or;logic[31:0]accepted,completed,rc,qc,oc;logic[24607:0]v[0:COUNT-1];integer cycles,seen;logic[63:0]hash;logic stalled;logic[8191:0]held;
- fp32_rmsnorm256_chunked dut(.clk_i(clk),.rst_ni(rst_n),.in_valid_i(iv),.in_ready_o(ir),.x_i(x),.weight_i(w),.epsilon_i(eps),.out_valid_o(ov),.out_ready_i(orr),.y_o(y),.exception_flags_o(flags),.accepted_o(accepted),.completed_o(completed),.reduction_cycles_o(rc),.rsqrt_cycles_o(qc),.output_cycles_o(oc));
+ /* verilator lint_off PINCONNECTEMPTY */
+ fp32_rmsnorm256_chunked dut(.clk_i(clk),.rst_ni(rst_n),.in_valid_i(iv),.in_ready_o(ir),.x_i(x),.weight_i(w),.epsilon_i(eps),.out_valid_o(ov),.out_ready_i(orr),.y_o(y),.exception_flags_o(flags),.accepted_o(accepted),.completed_o(completed),.reduction_cycles_o(rc),.rsqrt_cycles_o(qc),.output_cycles_o(oc),.domain_error_o(),.mean_eps_o(),.inv_o());
+ /* verilator lint_on PINCONNECTEMPTY */
  function automatic[63:0]hv(input[63:0]seed,input[8191:0]d);reg[63:0]h;begin h=seed;for(int i=0;i<256;i++)h=(h^{32'd0,d[i*32+:32]})*64'h100000001b3;hv=h;end endfunction
  always_comb orr=(cycles%5)!=1;
  always @(posedge clk)begin if(!rst_n)begin cycles<=0;seen<=0;flags_or<=0;hash<=64'hcbf29ce484222325;stalled<=0;held<=0;end else begin cycles<=cycles+1;if(stalled&&(!ov||y!==held))$fatal(1,"rms256 stalled");stalled<=ov&&!orr;if(ov&&!orr)held<=y;

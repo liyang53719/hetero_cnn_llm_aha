@@ -1061,6 +1061,19 @@
         SHA256: 45c0d6af2f8fe1f0edeaf911148fce605fc7a4532921c37f241c2957d9d8c742
       - 文件: reports/execution/U00_2_ROPE_BF16_L2_CANDIDATE_20261007/tb_independent_aperture.sv
         SHA256: acc893ed5c67eab8de8f303bfa62787f7ca081e9bbf8c71d18bd22f0105b04bc
+    - 文件: reports/execution/U00_2_QK_NORM256_CANDIDATE_20261007/fresh_summary.json
+      SHA256: fc802af3495117adbc18163b96e94e22f0187503c2c17e0f0a173dccd169f132
+      设计提交: e9c2eae385954ec6a7d5dcbe644245ebd44d998b
+      范围: 修订交付基于该main起点，精确新源码由摘要source_sha256绑定；不提交可重建权重/NPZ。新官方baseline/AVX2共5120个head观察值通过实际RTL/整数/C，7处native差异，max0.015625且原阈值不变；本地历史重放仍15处差异及0.03125边界。669普通及优化通过，全仓2670通过和同5基线失败。U00.2 ongoing，完整block/owner/PPA/MAC90%仍OPEN。
+      关联文件:
+      - 文件: reports/execution/U00_2_QK_NORM256_CANDIDATE_20261007/historical_replay_summary.json
+        SHA256: 3595f2adafdb241eec22dbe580b50ca84720498db8267009b63c5e18b21897d0
+      - 文件: reports/execution/REBUILDABLE_ARTIFACT_MIGRATION_20261007/result.json
+        SHA256: d54c7ea37cd77167869e88beabba19b79e67014e7b33d875bfa31193b984f8ea
+      - 文件: doc/U00_2_QK_NORM256_CANDIDATE_20261007_CN.md
+        SHA256: 588362a8f210791bd2c09ead1223d9868874f545c82a5e937f8ed3bf5917a6e0
+      - 文件: doc/REBUILDABLE_ARTIFACT_POLICY_20261007_CN.md
+        SHA256: 82858092c7cfbf2bdb8fc24886075a14b801e2fbd3fb4da1f10b18545cae240b
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -1132,6 +1145,7 @@
 - {编号: U00.2, 执行者: sandbox@rope-bf16-l2-candidate-20261007, 时间: '2026-10-07T04:54:00+00:00', 说明: 完成真实SharedL2消费者显式候选的head256/partial64掩码存储及原位旁路门禁；保持旧生产默认和generic
     SFU/Command128/完整block/固定资源MAC90%未完成。独立复核修正1.5MiB实际容量准入；U00.2 ongoing、U01 to do。}
 - {编号: U00.2, 执行者: sandbox@qk-norm-producer-20261007, 时间: '2026-10-07T05:35:00+00:00', 说明: 前轮SharedL2候选已完成且main干净；接续认领真实Q/K每头256 Norm及packed Q/gate producer布局中的有界实际RTL门禁。先审计既有算术与来源，再选择完整可验组件；生产默认、整tensor owner、三模型完整block及固定资源MAC90%保持OPEN。}
+- {编号: U00.2, 执行者: sandbox@rebuildable-artifact-migration-20261007, 时间: '2026-10-07T21:03:15.641154+00:00', 说明: 按新交付范围移除当前树RoPE数值payload并保留本地缓存，以固定官方来源重新生成QK输入并通过新/历史实际RTL复验；Git只含源码、pins和摘要，保留全仓5基线失败及三模型完整block/90%未完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

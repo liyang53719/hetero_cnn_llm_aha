@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "base_commit": "e9c2eae385954ec6a7d5dcbe644245ebd44d998b",
+  "policy": "No reconstructed numerical corpora or downloaded/converted model weights in the current Git tree",
+  "removed_current_tree_payloads": [
+    {
+      "path": "tests/fixtures/rope_rounding/local.npz",
+      "bytes": 2786810,
+      "sha256": "36a68fd9573d5b9757283668cd635cce5bb2f9ed9a12ceb254ebde7e35140e32",
+      "local_copy_preserved": true
+    },
+    {
+      "path": "tests/fixtures/rope_rounding/remote.npz",
+      "bytes": 2787206,
+      "sha256": "e9526ac7b8084fadb200ab5c6d5b7bc909ec8f34408a4b63daa7af664c66ca6c",
+      "local_copy_preserved": true
+    },
+    {
+      "path": "tests/fixtures/rope_rounding/historical_arithmetic.npy",
+      "bytes": 33008,
+      "sha256": "39a0b80418759549d02691d879db80b6fa53d29855349eb0119d7790fc0c4f8b",
+      "local_copy_preserved": true
+    }
+  ],
+  "removed_current_tree_bytes": 5607024,
+  "history_rewritten": false,
+  "historical_git_objects_removed": false,
+  "header_only_evidence": {
+    "files": 16,
+    "bytes": 321392,
+    "tensor_payload_bytes": 0
+  },
+  "focused_normal_passed": 669,
+  "focused_optimized_passed": 669,
+  "full_suite_passed": 2670,
+  "full_suite_failed": 5,
+  "baseline_failure_names_identical": true,
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "historical_QK_actual_RTL": {
+    "heads": 5120,
+    "synthetic_heads": 32,
+    "native_different_values": 15,
+    "exact_value_and_flag_mismatches": 0
+  },
+  "independent_QK_actual_RTL": {
+    "checked_completions": 60,
+    "reset_flushes": 10,
+    "legacy_transactions": 64,
+    "legacy_cycles": 20573
+  },
+  "RoPE_actual_SharedL2_replay": {
+    "status": "PASS_EXPERIMENTAL_BF16_ROPE_SHARED_L2_HEAD_TRANSPORT",
+    "unique_real_pairs": 163840,
+    "transactions": 5184,
+    "rtl_metrics": [
+      {
+        "mode": 1,
+        "transactions": 5184,
+        "successful": 5194,
+        "main_pairs": 167936,
+        "main_tail_bf16": 1007616,
+        "rejects": 38,
+        "resets": 4,
+        "packets": 47098,
+        "readback_bytes": 8307264,
+        "rd_stalls": 24477,
+        "wr_stalls": 37830,
+        "rsp_stalls": 42356,
+        "actual_shared_l2": 1,
+        "no_memory_pokes": 1
+      },
+      {
+        "mode": 0,
+        "transactions": 2,
+        "pairs": 128,
+        "masked_packets": 8,
+        "readback_bytes": 1920
+      }
+    ]
+  },
+  "CI_artifact_policy": "Modified component workflows upload only allowlisted JSON summaries",
+  "production_policy_changed": false,
+  "full_block_numerical_complete": false,
+  "PPA_measured": false,
+  "mac_utilization_measured": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "fresh_QK_actual_RTL": {
+    "heads": 5120,
+    "synthetic_heads": 32,
+    "official_executions": 2,
+    "cpu_dispatches": [
+      "DEFAULT",
+      "AVX2"
+    ],
+    "native_different_values": 7,
+    "max_abs_error": 0.015625,
+    "cross_variant_input_arrays_identical": false,
+    "cross_variant_native_arrays_identical": false,
+    "unique_input_count_claimed": false,
+    "historical_byte_identity_claimed": false,
+    "exact_value_and_flag_mismatches": 0
+  },
+  "independent_review_source_sha256": {
+    "scripts/review_qk_norm256_candidate.sh": "71fe195be74c814d4d0bd4bce7b191f8792132a8fc346cab9bee932a309c9dfe",
+    "tb/qk_norm256_review/tb_independent_qk_adversarial.sv": "e431ab895c30526537f4e1a5930abe815e5803c6f1e87550804db5a639494966",
+    "tb/qk_norm256_review/tb_independent_legacy_miter.sv": "f20c0083e57e41bdf5834d18e92f7df83b66c5e7a6e573e8b4f75f8bf74b7039"
+  }
+}

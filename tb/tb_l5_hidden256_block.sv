@@ -27,6 +27,7 @@ module tb_l5_hidden256_block;
   logic [4:0] rms_flags;
   logic [31:0] rms_accepted, rms_completed, rms_reduce_cycles;
   logic [31:0] rms_rsqrt_cycles, rms_output_cycles;
+  /* verilator lint_off PINCONNECTEMPTY */
   fp32_rmsnorm256_chunked rms(
     .clk_i(clk), .rst_ni(rst_n),
     .in_valid_i(rms_in_valid), .in_ready_o(rms_in_ready),
@@ -35,8 +36,10 @@ module tb_l5_hidden256_block;
     .y_o(rms_y), .exception_flags_o(rms_flags),
     .accepted_o(rms_accepted), .completed_o(rms_completed),
     .reduction_cycles_o(rms_reduce_cycles),
-    .rsqrt_cycles_o(rms_rsqrt_cycles), .output_cycles_o(rms_output_cycles)
+    .rsqrt_cycles_o(rms_rsqrt_cycles), .output_cycles_o(rms_output_cycles),
+    .domain_error_o(), .mean_eps_o(), .inv_o()
   );
+  /* verilator lint_on PINCONNECTEMPTY */
 
   logic rope_in_valid, rope_in_ready, rope_out_valid, rope_out_ready;
   logic [31:0] rope_even, rope_odd, rope_cos, rope_sin;

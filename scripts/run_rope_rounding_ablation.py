@@ -33,6 +33,7 @@ def record(path):
 
 def verify_fixtures(directory=FIXTURES):
     for name,pin in FIXTURE_PINS.items():
+        require((directory/name).is_file(), 'missing frozen corpus: '+name+'; run python scripts/materialize_rope_rounding_corpora.py')
         require(record(directory/name)['sha256']==pin,'frozen corpus digest drift: '+name)
     return json.loads((directory/'provenance.json').read_text())
 
@@ -137,6 +138,7 @@ def group_metrics(traces, data, output, name, groups):
 
 
 def synthetic_inputs():
+    verify_fixtures()
     historical=np.load(FIXTURES/'historical_arithmetic.npy',allow_pickle=False)
     rng=random.Random(0x524E4246)
     random_bf16=np.array([[(rng.randrange(2)<<31)|(rng.randrange(60,191)<<23)|(rng.randrange(128)<<16) for _ in range(4)] for _ in range(4096)],dtype=np.uint32)

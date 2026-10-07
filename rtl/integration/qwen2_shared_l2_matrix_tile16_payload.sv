@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // One 16-token x 32-column BF16 Matrix tile from K-major Shared-L2 staging.
 `timescale 1ns/1ps
-module qwen2_shared_l2_matrix_tile16_payload #(parameter integer ADDR_W=15)(
+module qwen2_shared_l2_matrix_tile16_payload #(parameter integer ADDR_W=15,
+ parameter bit CANDIDATE_RNE_BF16=1'b0,
+ parameter longint unsigned L2_BEATS=(64'd1<<ADDR_W))(
  input logic clk_i,input logic rst_ni,input logic start_i,input logic[63:0]activation_local_i,weight_local_i,output_local_i,
  input logic[15:0]depth_i,
  input logic[31:0]weight_k_stride_i,
@@ -16,7 +18,7 @@ module qwen2_shared_l2_matrix_tile16_payload #(parameter integer ADDR_W=15)(
 );
  typedef enum logic[3:0]{I,ARQ,ARP,WRQ,WRP,MQ,MWAIT,OW,D}st_e;st_e st;logic[31:0]weight_stride_q;logic[15:0]k_q,depth_q,rows_q,columns_q;logic[63:0]activation_q,weight_q,output_q;logic[3:0]row_q;logic[511:0]a_q,w_q;logic[16383:0]acc_q;logic final_seen_q;integer c;
  // Validate wide byte addresses BEFORE narrowing to the local SRAM index.
- localparam logic[64:0]CAPACITY_BYTES=65'd1<<(ADDR_W+6);
+ localparam logic[64:0]CAPACITY_BYTES=65'(L2_BEATS)<<6;
  logic legal;
  logic fp32_q,half_q;logic[1:0]row_beats;
  assign row_beats=(fp32_q&&columns_q>16)?2:1;
@@ -37,17 +39,39 @@ module qwen2_shared_l2_matrix_tile16_payload #(parameter integer ADDR_W=15)(
   end
   if(fp32_q)for(integer lane=0;lane<16;lane++)if(16'(half_q)*16+lane<columns_q)l2_wr_be_o[lane*4+:4]=4'hf;
  end
+ logic[511:0]converted_row;
+ logic candidate_nonfinite;
+ always_comb begin
+  candidate_nonfinite=1'b0;
+  for(integer lane=0;lane<32;lane++)if(lane<columns_q)
+   candidate_nonfinite|=converted_row[lane*16+7+:8]==8'hff;
+ end
+ generate if(CANDIDATE_RNE_BF16)begin:g_candidate_conversion
+  for(genvar lane=0;lane<32;lane++)begin:g_lane
+   fp32_to_bf16_rne_candidate convert(
+    .fp32_i(acc_q[(row_q*32+lane)*32+:32]),
+    .bf16_o(converted_row[lane*16+:16]),.exception_flags_o());
+  end
+ end else begin:g_legacy_conversion
+  for(genvar lane=0;lane<32;lane++)begin:g_lane
+   assign converted_row[lane*16+:16]=bf16(acc_q[(row_q*32+lane)*32+:32]);
+  end
+ end endgenerate
  always_comb begin
   l2_wr_data_o=0;
   if(fp32_q)for(c=0;c<16;c++)l2_wr_data_o[c*32+:32]=acc_q[(row_q*32+16*half_q+c)*32+:32];
-  else for(c=0;c<32;c++)l2_wr_data_o[c*16+:16]=bf16(acc_q[(row_q*32+c)*32+:32]);
+  else l2_wr_data_o=converted_row;
  end
  always_ff@(posedge clk_i or negedge rst_ni)begin if(!rst_ni)begin st<=I;fp32_q<=0;half_q<=0;k_q<=0;weight_stride_q<=0;depth_q<=0;rows_q<=0;columns_q<=0;status_o<=0;activation_q<=0;weight_q<=0;output_q<=0;row_q<=0;a_q<=0;w_q<=0;acc_q<=0;final_seen_q<=0;read_beats_o<=0;write_beats_o<=0;matrix_steps_o<=0;end else begin if(matrix_out_valid_i&&matrix_out_ready_o&&matrix_out_last_i)begin acc_q<=matrix_acc_i;final_seen_q<=1;end case(st)
   I:if(start_i)begin fp32_q<=output_fp32_i;half_q<=0;k_q<=0;weight_stride_q<=weight_k_stride_i;depth_q<=depth_i;rows_q<=rows_i;columns_q<=columns_i;activation_q<=activation_local_i;weight_q<=weight_local_i;output_q<=output_local_i;row_q<=0;final_seen_q<=0;read_beats_o<=0;write_beats_o<=0;matrix_steps_o<=0;status_o<=legal?0:5;st<=legal?ARQ:D;end
   ARQ:if(l2_rd_valid_o&&l2_rd_ready_i)st<=ARP;ARP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin a_q<=l2_rsp_data_i;read_beats_o<=read_beats_o+1;st<=WRQ;end
   WRQ:if(l2_rd_valid_o&&l2_rd_ready_i)st<=WRP;WRP:if(l2_rsp_valid_i&&l2_rsp_ready_o)begin w_q<=l2_rsp_data_i;read_beats_o<=read_beats_o+1;st<=MQ;end
   MQ:if(matrix_step_valid_o&&matrix_step_ready_i)begin matrix_steps_o<=matrix_steps_o+1;if(k_q==depth_q-1)st<=MWAIT;else begin k_q<=k_q+1;st<=ARQ;end end
-  MWAIT:if(final_seen_q)begin row_q<=0;st<=OW;end
+  MWAIT:if(final_seen_q)begin
+   row_q<=0;
+   if(CANDIDATE_RNE_BF16&&!fp32_q&&candidate_nonfinite)begin status_o<=7;st<=D;end
+   else st<=OW;
+  end
   OW:if(l2_wr_valid_o&&l2_wr_ready_i)begin
    write_beats_o<=write_beats_o+1;
    if(fp32_q&&columns_q>16&&!half_q)half_q<=1;

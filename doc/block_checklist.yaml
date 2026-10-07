@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: bd393a9a7f1364e52004f34c6cc382eb30818a852d8fe789eeeb853db5c40045
+计划SHA256: 75f3a790f58974710d28ee54eb007759a254e7949c12d37aa96538ef11a50a30
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@rope-bf16-l2-candidate-20261007
+    负责人: sandbox@matrix-norm-rope-chain-20261007
     前置:
     - U00.1
     先行依据: ''
@@ -1074,6 +1074,13 @@
         SHA256: 588362a8f210791bd2c09ead1223d9868874f545c82a5e937f8ed3bf5917a6e0
       - 文件: doc/REBUILDABLE_ARTIFACT_POLICY_20261007_CN.md
         SHA256: 82858092c7cfbf2bdb8fc24886075a14b801e2fbd3fb4da1f10b18545cae240b
+    - 文件: reports/execution/U00_2_MATRIX_NORM_ROPE_CHAIN_20261007/result.json
+      SHA256: 249af2d0c89c48ce34271d2168d0a9a3f3be7c7546797fcbad2546e38bb6df6a
+      设计提交: 15229a56e9d7093d82a60979144f09d1c9e28d85
+      范围: 默认关闭selected-head实际Matrix512顺序K1024到Norm256及真实1.5MiB SharedL2 partial64 RoPE；baseline45事务与AVX2四头、独立trace和来源哈希通过。设计提交是本轮认领基线，实际实现绑定result内source_sha256及generated_rtl_sha256；最终main和CI另行精确核对。全tensor、完整Command128、三模型完整block与MAC90仍OPEN。
+      关联文件:
+      - 文件: reports/execution/U00_2_MATRIX_NORM_ROPE_CHAIN_20261007/independent_review.json
+        SHA256: 9cbc0b8d2809d2448bda1ad15baaf818dec34dd169ca86f8d37b41a282a09f8d
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -1147,6 +1154,7 @@
 - {编号: U00.2, 执行者: sandbox@qk-norm-producer-20261007, 时间: '2026-10-07T05:35:00+00:00', 说明: 前轮SharedL2候选已完成且main干净；接续认领真实Q/K每头256 Norm及packed Q/gate producer布局中的有界实际RTL门禁。先审计既有算术与来源，再选择完整可验组件；生产默认、整tensor owner、三模型完整block及固定资源MAC90%保持OPEN。}
 - {编号: U00.2, 执行者: sandbox@rebuildable-artifact-migration-20261007, 时间: '2026-10-07T21:03:15.641154+00:00', 说明: 按新交付范围移除当前树RoPE数值payload并保留本地缓存，以固定官方来源重新生成QK输入并通过新/历史实际RTL复验；Git只含源码、pins和摘要，保留全仓5基线失败及三模型完整block/90%未完成。}
 - {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T21:27:00+00:00', 说明: 前轮QK Norm与可重建payload迁移已完成且main干净；认领真实Matrix K1024到完整Q256+gate256/K256头、Norm与SharedL2 partial64 RoPE的有界候选链。先冻结顺序FMA及BF16边界并验真实owner和ACK，保留生产默认、全Q8/K2及三模型完整block/PPA/MAC90%未验收。}
+- {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T23:08:00+00:00', 说明: 完成已有projection controller默认关闭的实际Matrix K1024到Q256加gate256或K256到Norm和真实1.5MiB SharedL2 partial64 RoPE有界链；baseline45事务和AVX2四头及独立trace通过，197项normal和优化测试、全仓2867通过及同5既有失败。保留全Q8/K2和Command128完整owner、完整producer拒绝、三模型完整block与固定资源MAC90未完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

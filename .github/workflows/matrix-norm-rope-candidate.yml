@@ -1,0 +1,97 @@
+name: qwen35-bounded-actual-Matrix-Norm-RoPE-head-chain
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/matrix-norm-rope-candidate.yml'
+      - 'rtl/integration/qwen2_projection*'
+      - 'rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv'
+      - 'rtl/integration/qwen2_matrix_command_endpoint.sv'
+      - 'rtl/integration/*rope*'
+      - 'rtl/fabric/shared_l2_fabric.sv'
+      - 'rtl/matrix/**'
+      - 'rtl/sfu/fp32_*'
+      - 'rtl/sfu/qk_norm256_bf16_candidate.sv'
+      - 'tb/tb_qwen35_matrix_norm_rope_chain.sv'
+      - 'scripts/*matrix_norm_rope*'
+      - 'scripts/qk_norm256_reference.c'
+      - 'scripts/rope_bf16_candidate_reference.c'
+      - 'scripts/rebuild_qk_norm256_corpora.py'
+      - 'scripts/run_qwen35_bf16_audit.py'
+      - 'scripts/run_qwen35_prefix_chain.py'
+      - 'scripts/collect_qwen35*payload.py'
+      - 'scripts/check_git_payloads.py'
+      - 'src/heteronpu/matrix_norm_rope_candidate.py'
+      - 'src/heteronpu/qk_norm256*'
+      - 'src/heteronpu/rope_bf16_candidate.py'
+      - 'src/heteronpu/qwen35*reference.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/qwen35_dense_contract.py'
+      - 'src/heteronpu/qwen_family_contracts.py'
+      - 'src/heteronpu/weight_header_contract.py'
+      - 'src/heteronpu/pinned*payload.py'
+      - 'config/upstream/qwen3_5_0p8b/**'
+      - 'config/upstream/weight_headers/qwen3_5_0p8b/**'
+      - 'tests/test_matrix_norm_rope*'
+      - 'chisel/matrix_norm_rope_hardware/**'
+      - 'chisel/rope_hardware_oracle/maven-lock.json'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'integration/gemmini/EmitHeteroFP32Pipelines.scala'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  selected-real-heads-default-off-not-all-tensor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned official CPU runtime
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . pytest numpy==2.3.5 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - name: Reject Git payloads and download only transient pinned ranges
+        run: |
+          python scripts/check_git_payloads.py
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Independent oracle, source, admission and fail-closed tests
+        run: |
+          python -m pytest -o addopts='' -q tests/test_matrix_norm_rope*.py
+          python -O -m pytest -o addopts='' -q tests/test_matrix_norm_rope*.py
+      - name: Fresh native sources, actual Matrix512 and physical SharedL2 RTL
+        env:
+          HF_HUB_OFFLINE: '1'
+        run: |
+          python scripts/run_matrix_norm_rope_candidate.py --output work/matrix_norm_rope_candidate_result --jobs 2
+          python - <<'PY'
+          import json,os
+          r=json.load(open('work/matrix_norm_rope_candidate_result/summary.json'))
+          if r['status'] != 'PASS_BOUNDED_MATRIX_NORM_ROPE_RTL_CHAIN' or len(r['rtl_suites']) != 2:
+              raise SystemExit('bounded chain incomplete')
+          if any(r[k] for k in ('production_policy_changed','matrix_producer_injected','all_Q8_K2_tensor_owner_complete','Command128_complete','full_block_numerical_complete','PPA_measured','mac_utilization_measured','U00_2_complete','U01_complete')):
+              raise SystemExit('bounded scope inflated')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Actual Revision8B-B sequential K1024 Matrix → BF16 → selected Q/K Norm256 → real1.5MiB SharedL2 → partial64 RoPE.\n\n')
+              f.write('Fresh baseline/AVX2 cold token0 and carried token127, Qheads0/7 and Kheads0/1; these are selected heads, not allQ8/K2.\n\n')
+              f.write('Default production, Command128/fulltensor owner, complete block, PPA and useful-wall MAC90% remain OPEN.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bounded-matrix-norm-rope-${{ github.sha }}
+          path: work/matrix_norm_rope_candidate_result/summary.json
+          retention-days: 30
+          if-no-files-found: error

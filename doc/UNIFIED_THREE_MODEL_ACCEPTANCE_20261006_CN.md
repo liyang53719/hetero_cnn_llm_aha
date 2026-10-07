@@ -85,3 +85,16 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 `doc/U00_2_QK_NORM256_CANDIDATE_20261007_CN.md` 记录默认关闭的 chunked 候选：实际 FP32 gamma=1+weight、每 head256 归约/一次 NR、末端 BF16 和原始 gate 保留。新默认路径从固定官方 checkpoint 重建 baseline/AVX2 两套 producer，5120 个 head 观察值通过实际 RTL/整数/C 核对；新 native 有 7 个 BF16 差异，最大 0.015625，门限不变。本地历史回放另行通过，仍保留 15 个差异及 0.03125 边界。旧默认 64 事务等价和独立对抗/reset 复验通过。
 
 权重及数值数组不进入 Git，CI 物化临时数据并只发布简短摘要；历史文件删除不清理 Git 历史。此同输入组件尚未接通 Matrix 真实 producer、Norm→RoPE、内存和全 tensor owner。完整 producer audit 的新 5/9 项拒绝仍保留，U00.2 ongoing、U01 to do，完整三模型 block / 固定资源 MAC90% 继续 OPEN。
+
+
+## 2026-10-07 后续：实际 Matrix 到 Norm 与 SharedL2 RoPE 的有界头链
+
+`doc/U00_2_MATRIX_NORM_ROPE_CHAIN_20261007_CN.md` 记录已有 projection controller
+默认关闭分支中的真实 Revision8B-B Matrix512 → 顺序K1024 FMA末端BF16 →
+单Q256+gate256或K256 → Norm256 → 实际1.5MiB SharedL2 → partial64 RoPE。
+来源固定并每次重新生成；独立整数/C逐K参考不使用native projection作中间输入。
+验收要求包括快照、DDR/L2范围及重叠、真实故障、写ACK后完成、reset恢复和独立事件库存。
+最终运行结果见该报告，选定头通过不覆盖完整producer audit的既有拒绝。
+
+全Q8/K2及多token生命周期、完整Command128 owner、三模型完整block、PPA和固定资源
+整block MAC90%仍OPEN。U00.2 ongoing，U01 to do；Git和CI产物保持源码/pins/哈希摘要策略。

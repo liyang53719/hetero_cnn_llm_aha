@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Generic BF16 Matrix projection tensor/shape snapshot for Q, K, or V.
 `timescale 1ns/1ps
-module qwen2_projection_descriptor_context #(parameter bit ALLOW_FP32_OUTPUT=0)(
+module qwen2_projection_descriptor_context #(parameter bit ALLOW_FP32_OUTPUT=0, parameter bit CANDIDATE_QK_SHAPES=0)(
  input logic clk_i,input logic rst_ni,input logic start_i,input logic[127:0]command_i,
  output logic descriptor_req_valid_o,input logic descriptor_req_ready_i,output logic[23:0]descriptor_req_index_o,
  input logic descriptor_rsp_valid_i,output logic descriptor_rsp_ready_o,input logic[127:0]descriptor_rsp_data_i,input logic descriptor_rsp_error_i,
@@ -19,7 +19,9 @@ module qwen2_projection_descriptor_context #(parameter bit ALLOW_FP32_OUTPUT=0)(
  assign descriptor_rsp_ready_o=state_q==S_ROOT_RSP||state_q==S_SHAPE_RSP;
  assign context_valid_o=state_q==S_CONTEXT;assign context_legal_o=status_q==OK;assign context_status_o=status_q;
  assign output_columns_o=shape_q[2][35:18];assign weight_row_bytes_o={13'd0,shape_q[1][35:18],1'b0};
- assign column_tiles_o=6'((output_columns_o+31)/32);
+ // Candidate bridge reports the selected head's bounded tile count.
+ assign column_tiles_o=CANDIDATE_QK_SHAPES?
+  (output_columns_o==4096?6'd16:6'd8):6'((output_columns_o+31)/32);
  always_comb begin tensor_address_o='0;tensor_shape_o='0;for(comb_c=0;comb_c<3;comb_c++)begin tensor_address_o[comb_c*56+:56]=addr_q[comb_c];tensor_shape_o[comb_c*72+:72]=shape_q[comb_c];end end
  always_ff@(posedge clk_i or negedge rst_ni)begin
   if(!rst_ni)begin state_q<=S_IDLE;slot_q<=0;status_q<=OK;shape_index_q<=0;output_fp32_o<=0;for(seq_c=0;seq_c<3;seq_c++)begin roots_q[seq_c]<=24'hffffff;addr_q[seq_c]<=0;shape_q[seq_c]<=0;end end
@@ -43,9 +45,23 @@ module qwen2_projection_descriptor_context #(parameter bit ALLOW_FP32_OUTPUT=0)(
     else if(descriptor_rsp_data_i[7:0]!=8'h02)begin status_q<=UNSUPPORTED;state_q<=S_CONTEXT;end
     else begin shape_q[slot_q]<=descriptor_rsp_data_i[127:56];if(slot_q==2)state_q<=S_VALIDATE;else begin slot_q<=slot_q+1;state_q<=S_ROOT_REQ;end end end
    S_VALIDATE:begin
+    if(CANDIDATE_QK_SHAPES)begin
+     // Descriptor bridge for the bounded H1024 Q8/K2 experiment. The
+     // controller executes a selected head, not all output columns.
+     if(shape_q[0][17:0]==0||shape_q[0][17:0]>128||shape_q[0][35:18]!=1024||
+        shape_q[1][17:0]!=1024||
+        !(shape_q[1][35:18]==4096||shape_q[1][35:18]==512)||
+        shape_q[2][17:0]!=shape_q[0][17:0]||
+        shape_q[2][35:18]!=shape_q[1][35:18]||
+        shape_q[0][53:36]>1||shape_q[0][71:54]>1||
+        shape_q[1][53:36]>1||shape_q[1][71:54]>1||
+        shape_q[2][53:36]>1||shape_q[2][71:54]>1)
+      status_q<=UNSUPPORTED;
+    end else begin
     if(shape_q[0][17:0]!=1024||shape_q[0][35:18]!=1536||shape_q[1][17:0]!=1536||
        shape_q[1][35:18]==0||shape_q[1][35:18]>1536||shape_q[1][22:18]!=0||
        shape_q[2][17:0]!=1024||shape_q[2][35:18]!=shape_q[1][35:18])status_q<=UNSUPPORTED;
+    end
     state_q<=S_CONTEXT;end
    S_CONTEXT:if(context_valid_o&&context_ready_i)state_q<=S_IDLE;
    default:state_q<=S_IDLE;

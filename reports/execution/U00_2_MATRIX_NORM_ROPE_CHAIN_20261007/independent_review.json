@@ -1,0 +1,53 @@
+{
+  "status": "PASS_INDEPENDENT_BOUNDED_SELECTED_HEAD_REVIEW",
+  "summary_sha256": "aa7c8ee6e576a0ae13be0adb8a6e94a4884df3177ca2f6d1bf64d56a6a28d8ff",
+  "scope": "One selected token Q256+gate256 or K256, increasing-K1024 actual Matrix512 to Norm256 to physical SharedL2 partial64 RoPE; default-off candidate.",
+  "P0_P1_findings": [],
+  "functional": {
+    "baseline_all_transactions": 45,
+    "avx2_main_transactions": 4,
+    "baseline_checked_matrix_packets": 141319,
+    "avx2_checked_matrix_packets": 49152,
+    "fresh_selected_heads": 8,
+    "independent_c_accumulator_values": 3145728,
+    "native_comparison_bit_mismatches": 0
+  },
+  "protocol": {
+    "baseline_successes": 7,
+    "baseline_rejections": 21,
+    "baseline_faults": 10,
+    "baseline_resets": 7,
+    "baseline_actual_done_terminal_pairs": 38,
+    "avx2_actual_done_terminal_pairs": 4,
+    "normal_done_with_pending_owners": 0,
+    "minimum_observed_done_after_last_ack_clocks": 1,
+    "true_in_flight_norm_rope_reset_tb_probes_verified": true,
+    "one_matrix_input_aborted_by_reset_stage2": true,
+    "shared_l2_guard_readback_source": "source-bound RTL testbench; not JSONL"
+  },
+  "verification": {
+    "pytest_normal": 197,
+    "pytest_optimized": 197,
+    "trace_fail_closed_tests": 133,
+    "current_source_hashes_verified": 46,
+    "fixture_receipt_rechecked": true,
+    "hardware_manifest_rechecked": true,
+    "both_trace_and_log_hashes_rechecked": true,
+    "both_replay_results_match_final_summary": true,
+    "staged_git_payload_guard": "PASS",
+    "staged_whitespace_check": "PASS"
+  },
+  "physical": "Actual 4x6144x64-byte SharedL2 (1572864 bytes) exercised. No synthesis/PPA signoff.",
+  "open": [
+    "Same-cycle L2 write ACK directed test",
+    "Chain arithmetic nonfinite/overflow rejection injection",
+    "All Q8/K2 full tensor and multi-token ownership",
+    "Full Command128 integration",
+    "Fixed three-model complete-block numerical closure",
+    "Physical synthesis, timing, PPA, useful-wall MAC >=90%",
+    "U00.2 completion",
+    "U01 completion"
+  ],
+  "publication": "Only source, pinned identities/hashes and concise result summaries. Keep weights, NPZ/memh payloads, full traces, generated RTL and binaries in ignored work/.",
+  "source_edits_by_reviewer": false
+}

@@ -1045,3 +1045,13 @@ U00_2_RoPE候选推进_20261007:
   不替代: [BF16 packing及memory store接入, partial64布局与cos_sin位置生成, QK256 Norm的1加weight与packed gate, 全block数值, 综合时序面积功耗, 固定资源整block useful-wall MAC90]
   下一有界门禁: 评审独立producer策略后接入真实owner接口；联合验QK256 Norm、partial64布局和BF16存储，不把本组件通过当作完整源模型接受
   状态: U00.2 ongoing；U01 to do；三个指定模型完整block数值及MAC90%目标不变
+
+U00_2_Matrix_Norm_RoPE有界链_20261007:
+  报告: doc/U00_2_MATRIX_NORM_ROPE_CHAIN_20261007_CN.md
+  范围: 已有projection controller默认关闭分支；每次一个token的Q256加gate256或K256头
+  数据路径: 原始H1024及权重经DMA和真实SharedL2到Revision8B-B Matrix512，顺序FP32 FMA后BF16，Norm256写ACK后由partial64 RoPE读取
+  准入: [固定官方baseline与AVX2重新物化, 整数与独立C逐K累加器核对, 实际1.5MiB容量及边界, 命令快照, DMA和L2错误锁存, 最后store ACK后complete, 独立事件流与完整负例故障reset库存]
+  提交策略: 只含源码与来源pins及哈希摘要；NPZ和权重及memh和生成RTL均在work临时再生，CI只上传摘要
+  不替代: [生产默认策略切换, 全Q8和K2多token owner, 完整Command128端到端, 三模型完整block数值, PPA, 固定资源整block useful-wall MAC90]
+  下一有界门禁: 从该有界链扩展实际全tensor owner及多token生命周期；保留完整producer拒绝，不跳到性能完成
+  状态: U00.2 ongoing；U01 to do；三模型完整block数值及MAC90目标不变

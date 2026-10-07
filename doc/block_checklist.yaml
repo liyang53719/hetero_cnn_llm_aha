@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@rope-bf16-candidate-20261007
+    负责人: sandbox@rope-bf16-l2-candidate-20261007
     前置:
     - U00.1
     先行依据: ''
@@ -1095,3 +1095,5 @@
 - R00
 - F00
 - F01
+
+- {编号: U00.2, 执行者: sandbox@rope-bf16-l2-candidate-20261007, 时间: '2026-10-07T04:38:00+00:00', 说明: 前轮独立候选已完成且main干净；认领真实SharedL2消费路径默认关闭的BF16候选head256/partial64搬运及掩码存储门禁，保留旧生产算术、Command128/完整block/90%未验收。}

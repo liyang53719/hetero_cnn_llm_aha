@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "official_modeling_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+  "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+  "layer_id": 3,
+  "batch": 1,
+  "query_tokens": 128,
+  "past_tokens": [
+    0,
+    128
+  ],
+  "dtype": "bfloat16",
+  "device": "cpu",
+  "attention_backend": "eager",
+  "torch_version": "2.10.0",
+  "numpy_version": "2.3.5",
+  "checkpoint_parameter_storage": "all 11 layer3 tensors BF16; GDN F32 A_log/norm and FP32 SSM are outside this gate and remain unchanged",
+  "rounding": "finite float32 to BF16 round-nearest ties-even after each materialized BF16 producer; finite overflow is unsupported",
+  "gemm_accumulation": "BF16 operands decoded to FP32, NumPy matmul(dtype=float32), BF16 output; native torch CPU reduction order not canonicalized",
+  "norm_accumulation": "FP32 square/mean/add epsilon/rsqrt/multiply/1+weight/multiply; then BF16, weight converted to FP32 BEFORE +1",
+  "softmax_accumulation": "FP32 stable softmax then BF16 probability; native exp/reduction backend may differ",
+  "rope": "FP32 inverse-frequency pow, FP32 positions*frequency, FP32 cos/sin then BF16 tables; BOTH products rounded before BF16 addition; 64 of 256 channels; three identical text axes only",
+  "activation": "attention sigmoid FP32 internal then BF16; gated product separately BF16; MLP SiLU FP32 internal then ONE BF16 conversion, then separately BF16 up product",
+  "residual_cache": "both residual additions BF16; K/V retain BF16 exactly; oracle carried cache uses its OWN cold results",
+  "threshold_source": "spec/numerical_contract.md, existing v0; no threshold change",
+  "thresholds": {
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    }
+  },
+  "acceptance": "all 57 producers per case plus RoPE/output/K/V must pass; final-output-only PASS forbidden; all unavailable or unsupported numerical boundaries reject",
+  "non_guarantees": [
+    "no backend-independent bit-exact reduction tree",
+    "no formal native transcendental error proof",
+    "no GDN BF16 independent chain",
+    "no three-model typical block RTL or useful-wall MAC90% acceptance"
+  ],
+  "source_lines": {
+    "rope": [
+      139,
+      202
+    ],
+    "rope_pair": [
+      664,
+      700
+    ],
+    "attention": [
+      714,
+      811
+    ],
+    "mlp": [
+      814,
+      828
+    ],
+    "norm": [
+      831,
+      846
+    ],
+    "decoder_residual": [
+      864,
+      905
+    ]
+  },
+  "producer_sequence": [
+    {
+      "key": "input_layernorm|aten.pow.Tensor_Scalar|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|aten.mean.dim|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|aten.add.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|aten.rsqrt.default|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|aten.mul.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|aten.add.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|aten.mul.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "input_layernorm|cast_bf16|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn.q_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn.q_norm|aten.pow.Tensor_Scalar|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|aten.mean.dim|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|aten.add.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|aten.rsqrt.default|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|aten.mul.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|aten.add.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|aten.mul.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.q_norm|cast_bf16|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn.k_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn.k_norm|aten.pow.Tensor_Scalar|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|aten.mean.dim|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|aten.add.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|aten.rsqrt.default|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|aten.mul.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|aten.add.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|aten.mul.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn.k_norm|cast_bf16|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn.v_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.mul.Tensor|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.mul.Tensor|1",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.add.Tensor|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.mul.Tensor|2",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.mul.Tensor|3",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.add.Tensor|1",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.matmul.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.mul.Tensor|4",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.add.Tensor|2",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.softmax.int|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "self_attn|cast_bf16|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.matmul.default|1",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.sigmoid.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn|aten.mul.Tensor|5",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "self_attn.o_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "|aten.add.Tensor|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "post_attention_layernorm|aten.pow.Tensor_Scalar|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|aten.mean.dim|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|aten.add.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|aten.rsqrt.default|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|aten.mul.Tensor|0",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|aten.add.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|aten.mul.Tensor|1",
+      "storage_dtype": "float32"
+    },
+    {
+      "key": "post_attention_layernorm|cast_bf16|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "mlp.gate_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "mlp.act_fn|aten.silu.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "mlp.up_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "mlp|aten.mul.Tensor|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "mlp.down_proj|aten.linear.default|0",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "key": "|aten.add.Tensor|1",
+      "storage_dtype": "bfloat16"
+    }
+  ],
+  "scope": "source-native eager BF16 diagnostic only; not hardware-v0 semantic acceptance",
+  "hardware_v0_semantics_accepted": false,
+  "hardware_v0_rope_gap": "spec/numerical_contract.md uses FP32 pair rotation then BF16 output; official eager rounds both products separately before the BF16 add",
+  "saved_upstream_report_sha256": "09fad67f85e413b7e00f5c5ccb6977dbd573e0d16b7ae853514dc0b41c59dfa4",
+  "upstream_runner_source_sha256": {
+    "scripts/run_qwen35_prefix_chain.py": "d5a5594eb572960102d31e0caf7043a1d1ecfbaf6d3a4f7811498c3f5860d88b",
+    "src/heteronpu/pinned_prefix_payload.py": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+    "src/heteronpu/qwen35_prefix_reference.py": "4452e26d65569d4ab2160e2f9fee22c0b272fa63f4dcc012c708ee972c3d8787",
+    "src/heteronpu/qwen35_gdn_numpy_reference.py": "a4ed71c13f0c3938ad5cd09f685e88c5ee4b268f810384168a1f092a5dde3d7d",
+    "src/heteronpu/qwen35_numpy_reference.py": "5bb02fb33def33ff30494fb0780cff4827c33db66a5181fcc3fd0660138191ea",
+    "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+    "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30"
+  },
+  "softmax_row_sum_abs_limit": 2e-05,
+  "fresh_prefix_source_sha256": {
+    "scripts/run_qwen35_prefix_chain.py": "d5a5594eb572960102d31e0caf7043a1d1ecfbaf6d3a4f7811498c3f5860d88b",
+    "src/heteronpu/pinned_prefix_payload.py": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+    "src/heteronpu/qwen35_prefix_reference.py": "4452e26d65569d4ab2160e2f9fee22c0b272fa63f4dcc012c708ee972c3d8787",
+    "src/heteronpu/qwen35_gdn_numpy_reference.py": "a4ed71c13f0c3938ad5cd09f685e88c5ee4b268f810384168a1f092a5dde3d7d",
+    "src/heteronpu/qwen35_numpy_reference.py": "5bb02fb33def33ff30494fb0780cff4827c33db66a5181fcc3fd0660138191ea",
+    "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+    "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+    "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+    "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8",
+    "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+    "src/heteronpu/qwen_family_contracts.py": "7cddcac095535e706ac31161303c94a8ad0a0ad6c4ece775f279190c5f283ab0"
+  }
+}

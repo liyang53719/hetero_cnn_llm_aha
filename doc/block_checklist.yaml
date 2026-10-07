@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 56abfb6eb96022f7e87de2b7c157a53f376ee76072f2d287eb726508724b9f3e
+计划SHA256: 9b60a44300f659130e4030e3094c0fd1d49e2464224f895a3174e0525e5052bb
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@real-prefix-chain-20261006
+    负责人: sandbox@bf16-producer-audit-20261007
     前置:
     - U00.1
     先行依据: ''
@@ -789,6 +789,32 @@
         SHA256: 8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449
       - 文件: reports/execution/U00_2_PREFIX_CHAIN_20261006/source_sha256.json
         SHA256: db0128420f915f267c6d706fc292752958973789ea67acdec59b75b1eefd91eb
+    - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/result.json
+      SHA256: 492a84197433e3410f2443c15c881f8dfdce44f4e82e1e73404df63f1ab4947a
+      设计提交: ba06f1c4ab097c3de20f33e83e4840f49bbb17b7
+      范围: U00.2部分推进：真实官方上游输入的0.8B层3cold/carried M128各57处BF16/FP32producer，126项比较15529984元素，仍9项失败；最终output最大差0.00390625不能覆盖QK最大1.0及carried
+        norm。定位reduction及BF16中点分叉；固定原门限，明确官方eager与硬件v0 RoPE语义差别。保存夹具及同进程固定源码重建两路均实跑并拒绝，完整数组一致；102新增测试及优化测试通过，全仓2001通过及同5既有失败。无实际RTL或MAC90%验收，保持ongoing。
+      关联文件:
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/focused_bf16.txt
+        SHA256: 972206c62658a2620942ff5f36f2f3263a4adbe1dc4ad5493dbda800503e5b42
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/focused_final.txt
+        SHA256: efc2585c4ce7b729f7629f791181372c1876c2e769ca684e5ede4c0d5c6e4acb
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/independent_review.json
+        SHA256: 8050ed7ad5685e5fa989aeaa1865f6fd170e6fe8b9d2baf035c34afb64b335fc
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/numerical_result.json
+        SHA256: 8aa01bd0797ad572f68673c48e9388814b2f5eba64abbe7efbc295e5a6a84bb6
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/optimized.txt
+        SHA256: 0201e31b0c9ddd4d73da706fc2165ce836c8b1ad9e33589cc09a20dd4e942f52
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/prefix_rebuild_result.json
+        SHA256: ffb133486a45a4e7a3912a4fb32adeff777cdaf9d84ea14cbdfabd7f9bf33d62
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/pytest_full.txt
+        SHA256: 68b42d2d5290dc4bd68207ec5f28f0ce8d71749f0acc14bd9127b9988e1559ce
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/replay_admission.txt
+        SHA256: 8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/saved_fixture_result.json
+        SHA256: fece52d072ea997675a59865ed1e5ffb48ac28e41b7ae3e8e32552f8e9d0fda1
+      - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/source_sha256.json
+        SHA256: b57918383e7c28862930669a6707016a86c9e4d54880d82a93a1c211b039e0af
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -848,6 +874,8 @@
     ongoing、C03.2/U01未关闭。}
 - {编号: U00.2, 执行者: sandbox@real-prefix-chain-20261006, 时间: '2026-10-06T23:53:07.542281+00:00', 说明: 完成0.8B真实embedding至层3的官方上游链及独立FP64全链/状态续算验真。保留逐producer精度、其余三模型完整payload/route/cache、固定资源及RTL/90%门禁；U00.2
     ongoing、C03.2/U01不关闭。}
+- {编号: U00.2, 执行者: sandbox@bf16-producer-audit-20261007, 时间: '2026-10-07T01:28:18.102483+00:00', 说明: 恢复中断BF16任务，补齐逐producer完整拒绝证据与首处分叉诊断，修复来源准入/softmax/位比较/条件误差界诊断缺陷；不放宽门限，不关闭U00.2/U01。实际RTL与整block
+    useful-wall MAC90%目标不变。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

@@ -56,6 +56,12 @@
       - B35_ATTN_MOE
       - B35_GDN_MOE
       门禁: U00.2保留62704185固定revision，14分片1811项真实header及692主文本shape已核验；packed routed/shared expert几何明确。payload/真实route/状态/数值RTL仍未验收。
+  BF16逐producer诊断20261007:
+    报告: doc/U00_2_BF16_PRODUCER_AUDIT_20261007_CN.md
+    状态: BLOCKED_BF16_PRODUCER_GATE
+    结果: 0.8B真实官方层2输出进入attention层3，cold/carried M128各57处数值producer，126项比较中本机9项失败；output最大差0.00390625不能覆盖QK最大差1.0及carried norm失败。门限不变。
+    语义边界: 官方eager RoPE先舍入两个BF16乘积，硬件v0则FP32 pair完成后舍入；仅作source-native软件诊断，未验收硬件v0语义、RTL或MAC90%。
+    后续: 冻结累加树与source-native到硬件producer映射，保留所有隐藏节点门禁，继续GDN及其余模型真实典型block，不通过放宽阈值关闭U00.2。
   U00.2权重及workload进度:
     状态: ongoing
     原字节清单: config/upstream/weight_headers/

@@ -1,0 +1,14 @@
+{
+  "independent_review": "Separate read-only reviewer final signoff: no blocking defects found. All 126 comparisons and four softmax invariants independently recomputed; 13 source hashes, contract digest and NPZ size/hash verified against final files. Nine failures remain; hardware-v0/BF16-v0/RTL completion false.",
+  "reviewed_report_sha256": "8aa01bd0797ad572f68673c48e9388814b2f5eba64abbe7efbc295e5a6a84bb6",
+  "reviewed_arrays": {
+    "file": "all_bf16_producers.npz",
+    "bytes": 62873042,
+    "sha256": "836ce634c677f5b171c69c525a8d5cf6d018b30414f06427c236c8c08803bff7"
+  },
+  "reviewer_tests": {
+    "focused": 102,
+    "optimized": 102
+  },
+  "approval_scope": "Diagnostic implementation and truthful blocked evidence, not BF16 numerical or hardware acceptance"
+}

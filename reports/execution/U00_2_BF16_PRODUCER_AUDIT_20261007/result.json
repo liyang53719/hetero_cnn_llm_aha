@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "status": "BLOCKED_BF16_PRODUCER_GATE",
+  "created_at": "2026-10-07T01:28:17.937409+00:00",
+  "parent_commit": "ba06f1c4ab097c3de20f33e83e4840f49bbb17b7",
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "layer_id": 3,
+  "batch": 1,
+  "query_tokens": 128,
+  "cases": [
+    "cold_m128",
+    "carried_m128"
+  ],
+  "producer_boundaries_per_case": 57,
+  "comparison_count": 126,
+  "comparison_elements": 15529984,
+  "failed_comparisons": 9,
+  "max_qk_abs_error": 1.0,
+  "max_output_abs_error": 0.00390625,
+  "saved_and_fresh_arrays_bit_identical": true,
+  "arrays": {
+    "file": "all_bf16_producers.npz",
+    "bytes": 62873042,
+    "sha256": "836ce634c677f5b171c69c525a8d5cf6d018b30414f06427c236c8c08803bff7"
+  },
+  "both_admission_routes_executed": true,
+  "divergence_diagnoses": [
+    {
+      "case": "cold_m128",
+      "first_bit_difference": {
+        "index": 1,
+        "producer": "input_layernorm|aten.mean.dim|0",
+        "storage_dtype": "float32",
+        "max_abs_error": 9.313225746154785e-10,
+        "coordinate": [
+          0,
+          118,
+          0
+        ],
+        "native": 0.007913599722087383,
+        "numpy": 0.007913598790764809
+      },
+      "first_bf16_difference": {
+        "index": 8,
+        "producer": "self_attn.q_proj|aten.linear.default|0",
+        "storage_dtype": "bfloat16",
+        "max_abs_error": 0.03125,
+        "coordinate": [
+          0,
+          111,
+          3443
+        ],
+        "native": -4.03125,
+        "numpy": -4.0
+      },
+      "first_operator_failure": "self_attn|aten.matmul.default|0",
+      "changed_producers": 51,
+      "native_accumulation_tree_identified": false,
+      "first_projection_operands_bit_identical": true,
+      "first_projection_exact_dot_witness": {
+        "coordinate": [
+          0,
+          111,
+          3443
+        ],
+        "packed_role": "gate",
+        "exact_dot_numerator": "-137975819961",
+        "exact_dot_denominator": "34359738368",
+        "exact_dot": -4.015624871273758,
+        "midpoint_between_outputs": -4.015625,
+        "exact_dot_minus_midpoint": 1.2872624211013317e-07,
+        "scope": "selected_same_input_dot_only"
+      }
+    },
+    {
+      "case": "carried_m128",
+      "first_bit_difference": {
+        "index": 1,
+        "producer": "input_layernorm|aten.mean.dim|0",
+        "storage_dtype": "float32",
+        "max_abs_error": 9.313225746154785e-10,
+        "coordinate": [
+          0,
+          18,
+          0
+        ],
+        "native": 0.007920554839074612,
+        "numpy": 0.007920555770397186
+      },
+      "first_bf16_difference": {
+        "index": 7,
+        "producer": "input_layernorm|cast_bf16|0",
+        "storage_dtype": "bfloat16",
+        "max_abs_error": 0.0078125,
+        "coordinate": [
+          0,
+          22,
+          942
+        ],
+        "native": -1.9453125,
+        "numpy": -1.9375
+      },
+      "first_operator_failure": "self_attn.q_norm|aten.pow.Tensor_Scalar|0",
+      "changed_producers": 52,
+      "native_accumulation_tree_identified": false,
+      "first_cast_witness": {
+        "native_precast": -1.9414063692092896,
+        "numpy_precast": -1.9414061307907104,
+        "midpoint_between_outputs": -1.94140625,
+        "native_minus_midpoint": -1.1920928955078125e-07,
+        "numpy_minus_midpoint": 1.1920928955078125e-07,
+        "both_RNE_correct_for_own_input": true
+      }
+    }
+  ],
+  "thresholds_unchanged": true,
+  "threshold_source": "spec/numerical_contract.md",
+  "softmax_invariant_cases": 4,
+  "softmax_invariant_failures": 0,
+  "local_gemm_conditional_cases": 18,
+  "local_gemm_bound_violations": 0,
+  "local_gemm_bound_is_acceptance": false,
+  "formal_backend_error_bound_proved": false,
+  "hardware_v0_semantics_accepted": false,
+  "GDN_bf16_dual_reference_accepted": false,
+  "actual_rtl_executed": false,
+  "mac_utilization_measured": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "baseline_failures_unchanged": true,
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "test_log_normalization": "Only trailing whitespace removed in committed .txt logs; full raw logs retained locally.",
+  "tests": [
+    {
+      "name": "focused_related_final",
+      "passed": 644,
+      "exit_code": 0
+    },
+    {
+      "name": "focused_bf16",
+      "passed": 102,
+      "exit_code": 0
+    },
+    {
+      "name": "optimized_bf16",
+      "passed": 102,
+      "exit_code": 0
+    },
+    {
+      "name": "full_pytest",
+      "passed": 2001,
+      "failed": 5,
+      "exit_code": 1
+    },
+    {
+      "name": "saved_fixture_strict_gate",
+      "exit_code": 2
+    },
+    {
+      "name": "fresh_prefix_strict_gate",
+      "exit_code": 2
+    },
+    {
+      "name": "workload_admission",
+      "exit_code": 2
+    }
+  ],
+  "independent_review": "Separate read-only reviewer checked forward semantics against pinned official source, reproduced report-admission weakness and numerical diagnostic edge cases, authored 102 tests, recomputed all 126 array comparisons and four softmax invariants, and reviewed final scope. Final exact-source digest verification recorded separately.",
+  "scope": "Source-native eager BF16 diagnostic on two real-prefix M128 layer3 inputs with own independent NumPy intermediates/cache. Nine hidden-producer failures remain. Hardware-v0 RoPE semantic gap is explicit. No numerical RTL, resource, performance, other-model, or GDN BF16 acceptance.",
+  "source_binding": "Exact post-parent source bytes recorded in source_sha256.json; remote tested tree and CI verified separately.",
+  "artifacts": {
+    "focused_bf16.txt": {
+      "sha256": "972206c62658a2620942ff5f36f2f3263a4adbe1dc4ad5493dbda800503e5b42",
+      "bytes": 180
+    },
+    "focused_final.txt": {
+      "sha256": "efc2585c4ce7b729f7629f791181372c1876c2e769ca684e5ede4c0d5c6e4acb",
+      "bytes": 741
+    },
+    "independent_review.json": {
+      "sha256": "8050ed7ad5685e5fa989aeaa1865f6fd170e6fe8b9d2baf035c34afb64b335fc",
+      "bytes": 776
+    },
+    "numerical_result.json": {
+      "sha256": "8aa01bd0797ad572f68673c48e9388814b2f5eba64abbe7efbc295e5a6a84bb6",
+      "bytes": 83517
+    },
+    "optimized.txt": {
+      "sha256": "0201e31b0c9ddd4d73da706fc2165ce836c8b1ad9e33589cc09a20dd4e942f52",
+      "bytes": 767
+    },
+    "prefix_rebuild_result.json": {
+      "sha256": "ffb133486a45a4e7a3912a4fb32adeff777cdaf9d84ea14cbdfabd7f9bf33d62",
+      "bytes": 110314
+    },
+    "pytest_full.txt": {
+      "sha256": "68b42d2d5290dc4bd68207ec5f28f0ce8d71749f0acc14bd9127b9988e1559ce",
+      "bytes": 6684
+    },
+    "replay_admission.txt": {
+      "sha256": "8ed9300e8ab5d7d7cec814fb9ba74d025be4eaaf7cc60079446504e11ecbd449",
+      "bytes": 137
+    },
+    "saved_fixture_result.json": {
+      "sha256": "fece52d072ea997675a59865ed1e5ffb48ac28e41b7ae3e8e32552f8e9d0fda1",
+      "bytes": 83514
+    },
+    "source_sha256.json": {
+      "sha256": "b57918383e7c28862930669a6707016a86c9e4d54880d82a93a1c211b039e0af",
+      "bytes": 1040
+    }
+  }
+}

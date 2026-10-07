@@ -1,0 +1,11 @@
+{
+  "scripts/run_qwen35_bf16_audit.py": "13119e753f6003090d6b2582b545f42985a9fef3e84c585bde48a8bac17250eb",
+  "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9",
+  "config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97",
+  "tests/test_qwen35_bf16_reference.py": "00b07df61ec935e1a6607353adc2c4925a1616d9c033cb518e307bbdb97cbb6f",
+  ".github/workflows/qwen35-bf16-audit.yml": "d9c0c51723410270ed1ba1656c944c5b7bc234d8d459f76c9b6ed534fa248652",
+  "doc/U00_2_BF16_PRODUCER_AUDIT_20261007_CN.md": "aa89c7c1454cf08451c37fe51f2d392a28e849c819020bdb23f198476440c03c",
+  "doc/UNIFIED_THREE_MODEL_ACCEPTANCE_20261006_CN.md": "3e864c067b326e5a6985c75e14cfe4de318cfbe3903cb2cf380a272accddf387",
+  "doc/three_model_typical_block_closure_20260917_zh.yaml": "9b60a44300f659130e4030e3094c0fd1d49e2464224f895a3174e0525e5052bb",
+  "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+}

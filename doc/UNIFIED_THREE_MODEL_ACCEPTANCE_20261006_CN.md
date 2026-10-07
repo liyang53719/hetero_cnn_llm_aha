@@ -66,3 +66,7 @@ MoE 必须增加真实路由 histogram 与实际 tile 映射可达性检查。�
 新增0.8B真实embedding原0至255行和层1/2共86,746,304字节，复用层0/3固定payload。固定人工token ID经原官方TextModel前缀顺次运行embedding、GDN0/1/2、attention3，两组cold/carried M128对独立NumPy整链的4,210,688输入/输出/状态元素全部匹配；整段256重放另有3,219,456元素通过。逐层单独清空历史均实质影响结果。
 
 0.8B前四层的真实上游激活来源已验证；人工token ID不等于自然语言代表性，前缀不等于完整模型，mixed-BF16差异仍仅诊断。逐producer精度、其余模型/MoE路由、物理cache及资源、实际RTL/90%仍OPEN，U00.2保持ongoing。详见 `doc/U00_2_REAL_PREFIX_CHAIN_20261006_CN.md`。
+
+## 2026-10-07 BF16逐producer拒绝证据
+
+新增 `doc/U00_2_BF16_PRODUCER_AUDIT_20261007_CN.md`：真实官方层2输出进入0.8B attention层3，cold/carried M128各57个producer，126项比较中本机9项超出原门限。最终output仅0.00390625不能覆盖QK最大1.0及carried norm失败。首处分叉定位到FP32 reduction与BF16中点舍入；18个条件local GEMM上界检查仅作诊断。官方eager RoPE逐乘积舍入与硬件v0 FP32 pair后舍入不同，明确不宣称硬件语义验收。新增可信保存夹具/同进程固定源码重建准入、softmax不变量和拒绝测试；CI绿灯仅表示证据收集及测试成功。U00.2仍ongoing、U01仍to do，无实际RTL或90%结果。

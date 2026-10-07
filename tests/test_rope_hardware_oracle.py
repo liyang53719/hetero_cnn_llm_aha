@@ -173,3 +173,27 @@ def test_verilator_selection_consistent(tmp_path,monkeypatch,explicit):
     else:
         assert 'VERILATOR_BIN' not in env
         assert path==runner.ROOT/'work/rope_hardware_oracle/bin/verilator'
+
+
+def test_remote_real_prefix_source_fidelity_counterexample():
+    """GitHub real carried-Q token110/head4/channel50, absolute position238.
+
+    Actual RTL matches the hardware oracle, but source-native fidelity exceeds
+    the unchanged operator max. Never promote a local-only diagnostic PASS.
+    """
+    from heteronpu.qwen35_bf16_reference import producer_compare
+    inp=(0xBF920000,0xC1100000,0x3F800000,0x3CE10000)
+    hardware=pair_rne(*inp)
+    assert hardware[:2]==(0xBF64B800,0xC1108052)
+    projected=tuple(bf16_rne_word(v) for v in hardware[:2])
+    native=native_bf16_pair(*inp)
+    assert projected==(0xBF650000,0xC1110000)
+    assert native==(0xBF650000,0xC1100000)
+    # The small sine product moves the sum off the final BF16 midpoint.
+    assert mul_rne(inp[0],inp[3])[0]==0xBD005200
+    assert bf16_rne_word(0xBD005200)==0xBD000000
+    comparison=producer_compare(np.array(projected,dtype=np.uint32).view(np.float32),
+        np.array(native,dtype=np.uint32).view(np.float32))
+    assert comparison['max_abs_error']==0.0625
+    assert comparison['max_abs_limit']==0.03125
+    assert comparison['pass'] is False

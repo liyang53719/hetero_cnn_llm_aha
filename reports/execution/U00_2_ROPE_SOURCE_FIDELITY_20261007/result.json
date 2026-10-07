@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "status": "BLOCKED_SOURCE_NATIVE_ROPE_FIDELITY_PRESERVED",
+  "created_at": "2026-10-07T02:14:47.488661+00:00",
+  "parent_commit": "2cb5c6c439b38e361fc64ecdea70b18ee7156570",
+  "scope": "Permanent real-input rejection witness and test/documentation addendum; no production or reference arithmetic change",
+  "existing_hardware_RTL_to_oracle_bitwise_pass": true,
+  "source_native_fidelity_pass": false,
+  "counterexample_max_abs_error": 0.0625,
+  "unchanged_operator_max_abs_limit": 0.03125,
+  "remote_group_mismatches_over_max": 1,
+  "remote_total_bit_differences": 26348,
+  "location": {
+    "case": "carried_m128",
+    "producer": "q",
+    "token": 110,
+    "absolute_position": 238,
+    "head": 4,
+    "channel": 50
+  },
+  "local_prior_fixture_within_limits_is_not_universal": true,
+  "tests": {
+    "focused": 281,
+    "normal_and_optimized_rope_suite": 42,
+    "full_pass": 2043,
+    "unchanged_baseline_fail": 5
+  },
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "full_block_or_MAC_acceptance": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "production_arithmetic_changed": false,
+  "source_native_reference_changed": false,
+  "tolerances_widened": false,
+  "next_bounded_ablation": "Same fixed real Q/K and coefficients: compare no product rounding, only cosine products BF16, only sine products BF16, both products BF16; retain intermediates and native identity, no production change pending review.",
+  "artifacts": {
+    "component_exacthead_verification.json": {
+      "bytes": 6088,
+      "sha256": "fd81ac45ee0c24022a586e62844ba42edf2d1d99d120f741e901821ee705fd6f"
+    },
+    "counterexample.json": {
+      "bytes": 1209,
+      "sha256": "0d7c04ae1d6c7964f2617e0f179326e4279e97f72fffa90e5f3499a731f8f3f9"
+    },
+    "delta_review.json": {
+      "bytes": 5767,
+      "sha256": "d52f5cf1617d4f07229f9827fddb62507af06c5e80bc0d17cc076d82a3ff862d"
+    },
+    "delta_unit_normal.log": {
+      "bytes": 99,
+      "sha256": "414f62c22d4517fedbf781e853c4712b9dfd7554f00f0f6a220a75cb29bd2b3e"
+    },
+    "delta_unit_optimized.log": {
+      "bytes": 686,
+      "sha256": "1a7057392f9672462c262d31f3ebb108ba6eb7d409773166e52dcdfbed89b5e9"
+    },
+    "delta_witness_ablations.json": {
+      "bytes": 1106,
+      "sha256": "530c2f4c07bda900748f82117497b45baec3168b2da0855ee2509854f0b3663d"
+    },
+    "focused.txt": {
+      "bytes": 341,
+      "sha256": "2bb30133afbd63249d09ecd08a454172aef5841693ffdcc9edacae29024990f4"
+    },
+    "optimized.txt": {
+      "bytes": 686,
+      "sha256": "ba525db9c1ff9b8c45666cbc2b0e14bfad4d4abe19d23274bb1adbfb2f461f0c"
+    },
+    "pytest_full.txt": {
+      "bytes": 6764,
+      "sha256": "bf410ac157a1dacd4d8f9b44ebd265cef6ab7d4da27f553ec9167f8e777fa0b7"
+    },
+    "remote_component_result.json": {
+      "bytes": 61580,
+      "sha256": "73ce7a2336901b30b9fdaaf8f5c05098bf409a2d96252b93ff20aab382887608"
+    },
+    "source_sha256.json": {
+      "bytes": 1009,
+      "sha256": "6922727b7217cdf096dc6aa113d941a7a23f458b3fd7248cbe1c44aae8423dd0"
+    }
+  }
+}

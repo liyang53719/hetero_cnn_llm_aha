@@ -1,0 +1,153 @@
+{
+  "commit": "2cb5c6c439b38e361fc64ecdea70b18ee7156570",
+  "tree": "de4ca596e8bdc085591221ad3ec91a04b98861ac",
+  "runs": [
+    {
+      "id": 37559899944,
+      "name": "current-model-goal-contract",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899944",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    },
+    {
+      "id": 37559899883,
+      "name": "weight-workload-evidence",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899883",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    },
+    {
+      "id": 37559899847,
+      "name": "qwen35-payload-synthetic-smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899847",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    },
+    {
+      "id": 37559899887,
+      "name": "qwen35-gdn-payload-synthetic-smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899887",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    },
+    {
+      "id": 37559899841,
+      "name": "qwen35-real-embedding-prefix-chain",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899841",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    },
+    {
+      "id": 37559899983,
+      "name": "qwen35-source-native-bf16-diagnostic-not-acceptance",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899983",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    },
+    {
+      "id": 37559899826,
+      "name": "qwen35-existing-rope-rtl-component",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899826",
+      "head_sha": "2cb5c6c439b38e361fc64ecdea70b18ee7156570"
+    }
+  ],
+  "artifact_verification": {
+    "commit": "2cb5c6c439b38e361fc64ecdea70b18ee7156570",
+    "all_seven_exact_head_CI_success": true,
+    "rope_component_status": "PASS_EXISTING_FP32_ROPE_RTL_PAIR_ONLY",
+    "artifact_id": 11456566006,
+    "artifact_sha256": "a485c31f716c55f5dc8be87e87bf03f054bbd97209ce1a8f6467afcc47396378",
+    "artifact_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899826/artifacts/11456566006",
+    "retained_until": "2026-11-06T02:03:52Z",
+    "remote_emitted_RTL_sha256": "798b878ddaa910e279aa6739e737236f5dd0efb7803c46e2cedd7b8ad74e1fa1",
+    "same_emitted_RTL_as_local": true,
+    "remote_expected_vectors_recomputed": 83975,
+    "actual_outputs_per_DUT_verified": 83975,
+    "remote_output_bit_and_exception_mismatches": 0,
+    "remote_real_pairs": 81920,
+    "source_native_BF16_bit_differences": 26348,
+    "source_native_component_within_existing_limits": false,
+    "source_native_audit_status": "BLOCKED_BF16_PRODUCER_GATE",
+    "source_native_audit_failed_comparisons": 5,
+    "max_QK_abs_error": 1.0,
+    "full_block_or_MAC_acceptance": false,
+    "rtl_runs": [
+      {
+        "module": "fp32_rope_pair",
+        "pairs": 83975,
+        "output_words": 251925,
+        "bit_mismatches": 0,
+        "exception_mismatches": 0,
+        "cycles": 128459,
+        "output_stall_cycles": 34582,
+        "outputs": {
+          "file": "rtl_outputs0.txt",
+          "bytes": 1763475,
+          "sha256": "4a13f2e6dd2e2b1e2915d909ffb0ee9ddd862a6dcb824673752602dd2bf02443"
+        },
+        "compile_command": [
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "-j",
+          "4",
+          "--top-module",
+          "tb_rope_hardware_oracle",
+          "-GCOUNT=83975",
+          "-GPIPE=0",
+          "--Mdir",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/rope_result/obj0",
+          "-o",
+          "tb",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_pipe.sv",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/tb/tb_rope_hardware_oracle.sv"
+        ]
+      },
+      {
+        "module": "fp32_rope_pair_pipe",
+        "pairs": 83975,
+        "output_words": 251925,
+        "bit_mismatches": 0,
+        "exception_mismatches": 0,
+        "cycles": 1091686,
+        "output_stall_cycles": 251916,
+        "outputs": {
+          "file": "rtl_outputs1.txt",
+          "bytes": 1763475,
+          "sha256": "4a13f2e6dd2e2b1e2915d909ffb0ee9ddd862a6dcb824673752602dd2bf02443"
+        },
+        "compile_command": [
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "-j",
+          "4",
+          "--top-module",
+          "tb_rope_hardware_oracle",
+          "-GCOUNT=83975",
+          "-GPIPE=1",
+          "--Mdir",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/rope_result/obj1",
+          "-o",
+          "tb",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_pipe.sv",
+          "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/tb/tb_rope_hardware_oracle.sv"
+        ]
+      }
+    ]
+  }
+}

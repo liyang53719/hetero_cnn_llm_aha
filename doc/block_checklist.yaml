@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 682a24af82b890a6b5ad98a9f616c604e4ecdc171e02cfb9d6716086c052b918
+计划SHA256: 328cc6371cc8648810a993551bba713e3d3a5c208c17f9e6a05204005b1e099e
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -882,6 +882,34 @@
         SHA256: 42457029cd3abd9fe9a44ecbebb6ba43bed1c539078eb238123d0d177a21545a
       - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/source_sha256.json
         SHA256: 1e4622b4e59b7cbd6e896606bab92b19b4bdc639b188a858ec239456f086dca9
+    - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/result.json
+      SHA256: 6a3aec1f91a69e2dc7b8bf02a1c571eb04f9c44539a3580e8887b9a8e9607e9c
+      设计提交: 2cb5c6c439b38e361fc64ecdea70b18ee7156570
+      范围: 远端真实carried Q token110/head4/channel50固定反例：当前FP32 pair末端BF16为−9.0625，官方两个BF16产品为−9，误差0.0625超原0.03125，仅1项超限。实际RTL与自身oracle逐位一致仍PASS，但source
+        fidelity明确BLOCKED。新增永久拒绝回归；42项normal/-O、281focused、2043全仓通过及同5基线失败。未改生产/native算术或门限，U00.2/U01/90%不升级。
+      关联文件:
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/component_exacthead_verification.json
+        SHA256: fd81ac45ee0c24022a586e62844ba42edf2d1d99d120f741e901821ee705fd6f
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/counterexample.json
+        SHA256: 0d7c04ae1d6c7964f2617e0f179326e4279e97f72fffa90e5f3499a731f8f3f9
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/delta_review.json
+        SHA256: d52f5cf1617d4f07229f9827fddb62507af06c5e80bc0d17cc076d82a3ff862d
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/delta_unit_normal.log
+        SHA256: 414f62c22d4517fedbf781e853c4712b9dfd7554f00f0f6a220a75cb29bd2b3e
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/delta_unit_optimized.log
+        SHA256: 1a7057392f9672462c262d31f3ebb108ba6eb7d409773166e52dcdfbed89b5e9
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/delta_witness_ablations.json
+        SHA256: 530c2f4c07bda900748f82117497b45baec3168b2da0855ee2509854f0b3663d
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/focused.txt
+        SHA256: 2bb30133afbd63249d09ecd08a454172aef5841693ffdcc9edacae29024990f4
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/optimized.txt
+        SHA256: ba525db9c1ff9b8c45666cbc2b0e14bfad4d4abe19d23274bb1adbfb2f461f0c
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/pytest_full.txt
+        SHA256: bf410ac157a1dacd4d8f9b44ebd265cef6ab7d4da27f553ec9167f8e777fa0b7
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/remote_component_result.json
+        SHA256: 73ce7a2336901b30b9fdaaf8f5c05098bf409a2d96252b93ff20aab382887608
+      - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/source_sha256.json
+        SHA256: 6922727b7217cdf096dc6aa113d941a7a23f458b3fd7248cbe1c44aae8423dd0
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -945,6 +973,7 @@
     useful-wall MAC90%目标不变。}
 - {编号: U00.2, 执行者: sandbox@rope-hardware-oracle-20261007, 时间: '2026-10-07T01:59:22.123103+00:00', 说明: 按实际HardFloat算术完成首个真实前缀RoPE数值RTL组件门禁；原native/RTL算术/门限不变，保留完整block硬件oracle、QK
     Norm/packed gate集成和三模型useful-wall MAC90%未完成。}
+- {编号: U00.2, 执行者: sandbox@rope-source-fidelity-20261007, 时间: '2026-10-07T02:14:47.648071+00:00', 说明: 追加远端真实输入的RoPE源模型精度拒绝反例；本地组件精度样例通过不得泛化，固定原阈值并保持生产算术不变。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

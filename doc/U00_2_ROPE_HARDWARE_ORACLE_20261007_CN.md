@@ -1,5 +1,7 @@
 # U00.2：按实际算术建立独立 RoPE 硬件 oracle
 
+最新结论：已有RTL与独立硬件oracle逐位一致；source-native模型精度已发现远端真实输入反例（0.0625 > 原0.03125），保持BLOCKED。见文末反例与独立验真记录。
+
 ## 本轮边界
 
 本轮保持官方 native BF16 reference、原 RTL 算术、operator/block 门限不变。新增 oracle 只覆盖现有 `fp32_rope_pair` 和 `fp32_rope_pair_pipe` 的 FP32 输入输出算术。它不是完整 Qwen3.5 block golden，也不关闭 U00.2/U01 或整 block useful-wall MAC≥90%。
@@ -21,7 +23,7 @@
 
 新 `src/heteronpu/rope_hardware_oracle.py` 用整数dyadic数精确计算每一步，再在该步舍入到FP32。它不是直接用理想FP64 pair替换原算术，也不依赖NumPy BLAS、Torch后端或FMA。有限subnormal和signed-zero受支持；NaN/Inf输入及中间overflow明确拒绝，避免以有限域测试宣称全IEEE特殊值覆盖。
 
-官方 native 仍执行两个BF16产品舍入后再BF16相加。同一实际输入下，软件终端投影与native有26,091个输出位不同，四个Q/K分组最大绝对误差均0.03125，均值均小于0.000881，恰好仍在既有operator门限内。这只解释RoPE组件差异；先前126项source-native诊断的本机9项/GitHub CPU5项失败、QK最大差1.0并未被修复或替换。
+官方 native 仍执行两个BF16产品舍入后再BF16相加。本地CPU产生的夹具上，软件终端投影与native有26,091个输出位不同，四个Q/K分组最大绝对误差均0.03125，均值均小于0.000881，恰好仍在既有operator门限内。这只解释RoPE组件差异；先前126项source-native诊断的本机9项/GitHub CPU5项失败、QK最大差1.0并未被修复或替换。
 
 ## 实际结果与独立复核
 
@@ -71,3 +73,19 @@
 `scripts/run_rope_hardware_oracle.py` 每次内部调用 `scripts/generate_rope_hardware_primitives.sh`，从固定HardFloat源码clean/compile/emit真实Chisel RTL，然后仿真；不能用已有SV/manifest跳过重新生成。保存每个输出与异常位、RTL源/生成文件/依赖SHA、编译命令、完整仿真日志和backpressure计数。默认保存输入只接受固定已核验audit报告SHA；fresh模式内部运行固定audit并校验返回/报告一致性，CLI没有“信任任意报告”的开关。
 
 最终本机结果、测试和独立review见 `reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/`。绿色CI仅代表名称所列的现有RoPE pair组件门禁；不代表完整Qwen3.5语义或三模型/90%验收。
+
+
+## 远端真实输入反例：RTL一致性通过，source fidelity拒绝
+
+提交 `2cb5c6c439b38e361fc64ecdea70b18ee7156570` 的七项CI全部通过。实际RoPE产物已下载，83,975个expected由独立整数oracle重新计算，两个DUT的完整文本/NPY输出、异常位、source/manifest SHA均再次核验；远端生成RTL与本地逐字节一致。此结论只接受已有硬件算术的忠实重现。
+
+GitHub CPU产生的真实carried输入同时给出新的model-accuracy反例，不能继承本地四组诊断均通过的结论：carried Q的token110、head4、channel50（绝对position238），同一BF16输入e=bf92、o=c110、c=3f80、s=3ce1。
+
+- 当前硬件e×s为FP32 bd005200 = −0.03132820129394531，与o×c=−9相加得到c1108052，再投影BF16为c111 = −9.0625。
+- 官方先将e×s舍入BF16为bd00 = −0.03125，相加正好落在c1108000 = −9.03125的BF16中点，ties-to-even输出c110 = −9。
+- 绝对误差0.0625，超过原operator上限0.03125；carried Q中恰好1个输出超限。远端全部四组共26,348个位不同。
+- 完整source-native BF16诊断仍为BLOCKED，5项比较失败、QK最大差1.0。绿色组件CI不能升级source fidelity、完整block或MAC90%。
+
+反例原字节、远端完整component结果、七项exact-head CI记录及校验结论保存在 `reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/`；新增固定反例测试断言该精度门禁必须拒绝。未更改生产RTL、native实现、舍入合同或容差。
+
+下一有界实验：在固定Q/K输入及cos/sin下，独立记录两个乘积和最终和，对比四个软件候选（均不替换生产硬件）：两个乘积都保持FP32、仅cos乘积BF16、仅sin乘积BF16、两个乘积都BF16。先要求最后一种与官方逐位一致，并定位每种候选的误差/中点分叉；再单独评审是否引入明确版本的硬件producer策略。不能以BF16末端输出或本地样例通过代替对所有真实输入和下游producer的验收。

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SOURCE_FIDELITY_COUNTEREXAMPLE_DELTA_REVIEW",
+  "remaining_review_blockers": [],
+  "semantic_verdict": "Existing RTL matches its finite FP32 oracle; source-native BF16 fidelity is BLOCKED on this remote real-prefix input. This does not contradict the earlier local-only diagnostic result.",
+  "witness": {
+    "artifact_pair_index": 69266,
+    "case": "carried_m128",
+    "producer": "q",
+    "token": 110,
+    "head": 4,
+    "odd_channel": 50,
+    "absolute_position": 238,
+    "input_words": [
+      "bf920000",
+      "c1100000",
+      "3f800000",
+      "3ce10000"
+    ],
+    "FP32_output_words": [
+      "bf64b800",
+      "c1108052"
+    ],
+    "FP32_exception_flags": 0,
+    "projected_BF16_words": [
+      "bf65",
+      "c111"
+    ],
+    "native_BF16_words": [
+      "bf65",
+      "c110"
+    ],
+    "odd_projected_value": -9.0625,
+    "odd_native_value": -9.0,
+    "absolute_error": 0.0625,
+    "unchanged_limit": 0.03125,
+    "max_limit_failure_outputs_in_remote_carried_Q": 1
+  },
+  "verified": [
+    "Counterexample bytes and location match row 69266 of hash-bound downloaded remote vectors and both actual RTL output lines.",
+    "Independent exact Fraction arithmetic confirms the sine-product rounding and BF16 midpoint explanation.",
+    "Archived remote component result is byte-identical to downloaded result; vectors and both output text files match its recorded SHA.",
+    "Production arithmetic/native/reference files match the earlier independent review hashes; only test/report/workflow-summary/documentation delta reviewed.",
+    "Chinese addendum and plan distinguish local versus remote inputs, RTL consistency versus source fidelity, and leave full-block/MAC90% gates open.",
+    "Workflow summary explicitly reports the source-fidelity verdict separately from component PASS.",
+    "Checklist plan SHA matches the edited plan bytes."
+  ],
+  "tests": {
+    "normal": {
+      "passed": 42,
+      "log": "delta_unit_normal.log"
+    },
+    "python_optimized": {
+      "passed": 42,
+      "log": "delta_unit_optimized.log"
+    }
+  },
+  "recommended_software_only_ablation": {
+    "fixed_inputs": "Replay both trusted local and remote cold/carried real Q/K inputs with the same supplied cos/sin. Do not modify production arithmetic or tolerances.",
+    "variants": [
+      "Keep cosine and sine products FP32",
+      "Round only cosine products ec/oc to BF16",
+      "Round only sine products es/os to BF16",
+      "Round all cosine and sine products to BF16"
+    ],
+    "controls": "Hold add order, independent FP32 sum, terminal software BF16 projection, pair mapping and input bits fixed. Log each product and sum, per-group bit differences, max/mean error and midpoint witnesses. Require both-products-BF16 to replay native bitwise before interpreting other ablations.",
+    "witness_odd_output_values": {
+      "FP32_products": -9.0625,
+      "BF16_cos_only": -9.0625,
+      "BF16_sin_only": -9.0,
+      "BF16_both_products": -9.0
+    },
+    "subsequent_gate": "Only after this bounded experiment, review an explicitly versioned producer policy and separately rerun downstream producer/full-block gates before any production change."
+  },
+  "source_sha256": {
+    ".github/workflows/rope-hardware-oracle.yml": "45601dc50cf9667b7bcec93429fde7de01d15c67730d9fed45df242dec695c07",
+    "doc/U00_2_ROPE_HARDWARE_ORACLE_20261007_CN.md": "61629ca0fc8f06a7105ef0f200f8ba23293455673b5f27220d56430ae3db4487",
+    "doc/three_model_typical_block_closure_20260917_zh.yaml": "328cc6371cc8648810a993551bba713e3d3a5c208c17f9e6a05204005b1e099e",
+    "doc/block_checklist.yaml": "59f11d561c27d703ca1e24db06db7e21bce76b6fcbf5d1b5cf18cb509a05c082",
+    "tests/test_rope_hardware_oracle.py": "c2187d070441513ae85564ef71af4d78b1e7117e45316f88706ad8f779fdb16e",
+    "reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/component_exacthead_verification.json": "fd81ac45ee0c24022a586e62844ba42edf2d1d99d120f741e901821ee705fd6f",
+    "reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/counterexample.json": "0d7c04ae1d6c7964f2617e0f179326e4279e97f72fffa90e5f3499a731f8f3f9",
+    "reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/remote_component_result.json": "73ce7a2336901b30b9fdaaf8f5c05098bf409a2d96252b93ff20aab382887608"
+  },
+  "unchanged_arithmetic_sha256": {
+    "src/heteronpu/rope_hardware_oracle.py": "41b05e2247bbb4af70e2fc2eebf78120547029b7eb96791accef11c06bc1cdb7",
+    "rtl/sfu/fp32_rope_pair.sv": "7d0f95f91ef8e1670e330007449737b31b91733796627bc21c9978d5d4deef6c",
+    "rtl/sfu/fp32_rope_pair_pipe.sv": "459446eee0c0727f21c02df564aa35d0d60f5b71f0d71cfe7afdc0c2a817774b",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c"
+  },
+  "evidence_sha256": {
+    "delta_unit_normal.log": "414f62c22d4517fedbf781e853c4712b9dfd7554f00f0f6a220a75cb29bd2b3e",
+    "delta_unit_optimized.log": "1a7057392f9672462c262d31f3ebb108ba6eb7d409773166e52dcdfbed89b5e9",
+    "delta_witness_ablations.json": "530c2f4c07bda900748f82117497b45baec3168b2da0855ee2509854f0b3663d"
+  },
+  "prior_final_review_sha256_unchanged": "ca86dd2f39e4a473bdb8164f707a116d5a4a1a08f72cf4f64673a31767d6abbd",
+  "log_normalization": "Trailing whitespace only was stripped from these new delta unit-test logs before hashing; prior archived review was not modified.",
+  "limitations": [
+    "Remote CI status provenance is taken from the parent-verified exact-head artifact report; this review did not query GitHub again.",
+    "A single-witness ablation explains this failure and does not establish a full-corpus or downstream candidate acceptance."
+  ]
+}

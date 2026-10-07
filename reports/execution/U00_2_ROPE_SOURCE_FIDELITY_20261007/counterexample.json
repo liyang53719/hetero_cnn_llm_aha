@@ -1,0 +1,41 @@
+{
+  "status": "BLOCKED_SOURCE_NATIVE_FIDELITY_ON_GITHUB_REAL_PREFIX",
+  "hardware_oracle_bitwise_RTL_pass": true,
+  "native_model_equivalence_pass": false,
+  "changed_arithmetic": false,
+  "widened_tolerances": false,
+  "threshold": 0.03125,
+  "witnesses": [
+    {
+      "case": "carried_m128",
+      "producer": "q",
+      "flat_pair_index": 69266,
+      "token": 110,
+      "head": 4,
+      "channel": 50,
+      "inputs_hex": [
+        "bf920000",
+        "c1100000",
+        "3f800000",
+        "3ce10000"
+      ],
+      "fp32_hardware_outputs_hex": [
+        "bf64b800",
+        "c1108052"
+      ],
+      "hardware_BF16_hex": [
+        "bf65",
+        "c111"
+      ],
+      "native_BF16_hex": [
+        "bf65",
+        "c110"
+      ],
+      "max_abs_error": 0.0625,
+      "mismatches_over_existing_max": 1,
+      "within_unchanged_limits": false
+    }
+  ],
+  "artifact_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37559899826/artifacts/11456566006",
+  "next_gate": "Explicitly settle source-native versus selected hardware producer-rounding policy using these actual inputs; retain all downstream gates. Do not claim RoPE source-equivalence from local-only diagnostic success."
+}

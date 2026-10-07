@@ -65,6 +65,8 @@ jobs:
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
               f.write('Existing FP32 RoPE pair RTL: bitwise PASS for both implementations.\n\n')
               f.write(f"Real Q/K pairs per implementation: {r['real_QK_pairs']}. Native BF16 diagnostic remains {r['native_audit_status']}.\n\n")
+              f.write(f"Same-input source-native BF16 fidelity within unchanged operator limits: {r['source_native_BF16_within_existing_operator_limits']}.\n\n")
+              f.write('RTL component PASS is independent of that source-fidelity verdict.\n\n')
               f.write('Coefficient generation, BF16 store, full block and useful-wall MAC90% remain unaccepted.\n')
           PY
       - uses: actions/upload-artifact@v4

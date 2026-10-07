@@ -67,6 +67,9 @@
     范围: 既有FP32 pair算术条件门禁；81920个真实Q/K输入pair，保留原native和既有门限；不是完整block oracle。
     算术: 四次FP32乘法分别RNE后两次FP32加法RNE；无FMA。末端BF16仅软件投影，现有RTL端口为FP32。
     准入: 固定saved audit SHA或内部重新执行pinned真实前缀；不接受任意外部报告声明。
+    远端source_fidelity: BLOCKED；carried Q token110/head4/channel50绝对误差0.0625超过原0.03125，硬件RTL一致性PASS不得升级source模型精度。
+    反例证据: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/counterexample.json
+    下个有界实验: 固定真实Q/K及cos/sin，软件对比FP32两产品、仅cos产品BF16、仅sin产品BF16、两产品BF16的逐producer误差；未评审前不改生产算术。
     未实现: 0.8B独立head几何、packed Q/gate、1+weight的QK256 Norm、RoPE布局/表/存储集成、完整硬件图和整block性能。
     后续: 选择实际Matrix/Norm/Attention路径和写回精度，逐owner接入并测量；U00.2 ongoing、U01 to do。
   U00.2权重及workload进度:

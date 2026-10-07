@@ -1,0 +1,74 @@
+{
+  "FP32_products": {
+    "words": [
+      "bf650000",
+      "c1110000"
+    ],
+    "values": [
+      -0.89453125,
+      -9.0625
+    ],
+    "cos_product_words": [
+      "bf920000",
+      "c1100000"
+    ],
+    "sin_product_words": [
+      "be7d2000",
+      "bd005200"
+    ]
+  },
+  "BF16_cos_only": {
+    "words": [
+      "bf650000",
+      "c1110000"
+    ],
+    "values": [
+      -0.89453125,
+      -9.0625
+    ],
+    "cos_product_words": [
+      "bf920000",
+      "c1100000"
+    ],
+    "sin_product_words": [
+      "be7d2000",
+      "bd005200"
+    ]
+  },
+  "BF16_sin_only": {
+    "words": [
+      "bf650000",
+      "c1100000"
+    ],
+    "values": [
+      -0.89453125,
+      -9.0
+    ],
+    "cos_product_words": [
+      "bf920000",
+      "c1100000"
+    ],
+    "sin_product_words": [
+      "be7d0000",
+      "bd000000"
+    ]
+  },
+  "BF16_both_products": {
+    "words": [
+      "bf650000",
+      "c1100000"
+    ],
+    "values": [
+      -0.89453125,
+      -9.0
+    ],
+    "cos_product_words": [
+      "bf920000",
+      "c1100000"
+    ],
+    "sin_product_words": [
+      "be7d0000",
+      "bd000000"
+    ]
+  }
+}

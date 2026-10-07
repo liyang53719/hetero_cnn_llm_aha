@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "status": "PASS_INDEPENDENT_REVIEW_EXISTING_FP32_ROPE_COMPONENT_ONLY",
+  "remaining_blocking_findings": [],
+  "review_scope": [
+    "Exact per-operation finite FP32 RNE arithmetic and exception flags, signed zero, subnormal tininess, overflow rejection, no FMA",
+    "Immutable saved audit admission and pinned fresh producer path",
+    "Native Q/K half-pair mapping and 200-bit vector layout",
+    "Both unchanged RTL wrappers, input handshake, output stalls/stability, ordered comparison and extra-output drain",
+    "Fresh actual Chisel/HardFloat emission, closed build-source/dependency inventory, manifest verification and consistent simulator selection",
+    "Conditional component claim and explicit exclusions of full-block, coefficient generator, packing-owner, BF16 cast RTL and MAC utilization acceptance"
+  ],
+  "fixed_findings": [
+    {
+      "issue": "Tininess based on final normal encoding misreported the min-normal boundary",
+      "resolution": "Unbounded-exponent p24 rounding matches actual HardFloat; 00800000*3f7fffff ->00800000 flags03, 00800001*3f7ffffe ->00800000 flags01."
+    },
+    {
+      "issue": "Arbitrary preexisting emitted RTL/manifest could be admitted",
+      "resolution": "Runner always invokes pinned fresh generator and verifies the manifest before and after simulation."
+    },
+    {
+      "issue": "Extra sbt/project or HardFloat compiler sources were not closed",
+      "resolution": "Exact project inventory and archive-byte-equal HardFloat compiler inventory reject extra .sbt/.scala/.java files and source symlinks."
+    },
+    {
+      "issue": "Generated pyc was temporarily included in source pins",
+      "resolution": "Only exact source/build/dependency files are pinned; generated Python cache excluded."
+    },
+    {
+      "issue": "Inherited VERILATOR_BIN could select a different lint tool from simulation",
+      "resolution": "One helper chooses explicit tool consistently or clears inherited override for pinned default; both choices tested."
+    }
+  ],
+  "tests": {
+    "focused_normal": {
+      "passed": 41,
+      "log": "final_unit_normal.log"
+    },
+    "focused_python_optimized": {
+      "passed": 41,
+      "log": "final_unit_optimized.log"
+    },
+    "extra_hardfloat_java_rejection": "PASS with independent copied /tmp fixture",
+    "independent_C_fenv_per_primitive": {
+      "seed": 20260143,
+      "counts": {
+        "add": 99177,
+        "mul": 86704,
+        "overflow_rejected": 12483
+      },
+      "mismatches": 0
+    },
+    "independent_C_fenv_and_both_RTL_wrappers": {
+      "pairs_per_wrapper": 10000,
+      "oracle_mismatches": 0,
+      "RTL_mismatches": 0,
+      "flag_histogram": {
+        "3": 4306,
+        "0": 2,
+        "1": 5692
+      },
+      "cycles": 130021,
+      "reproducer": "run_review.py",
+      "evidence": "review.json"
+    }
+  },
+  "final_saved_gate": {
+    "path": "work/rope_hardware_oracle/final_gate_saved",
+    "result_sha256": "42457029cd3abd9fe9a44ecbebb6ba43bed1c539078eb238123d0d177a21545a",
+    "status": "PASS_EXISTING_FP32_ROPE_RTL_PAIR_ONLY",
+    "real_pairs_per_wrapper": 81920,
+    "synthetic_pairs_per_wrapper": 2055,
+    "output_lines_independently_verified_per_wrapper": 83975,
+    "modules": [
+      {
+        "name": "fp32_rope_pair",
+        "cycles": 128459,
+        "stall_cycles": 34582,
+        "bit_mismatches": 0,
+        "exception_mismatches": 0,
+        "outputs_sha256": "4abc890e59b49c38618a94c7b65a3fe4e7f1d136b67a82f98e396c02b6ff8a50"
+      },
+      {
+        "name": "fp32_rope_pair_pipe",
+        "cycles": 1091686,
+        "stall_cycles": 251916,
+        "bit_mismatches": 0,
+        "exception_mismatches": 0,
+        "outputs_sha256": "4abc890e59b49c38618a94c7b65a3fe4e7f1d136b67a82f98e396c02b6ff8a50"
+      }
+    ]
+  },
+  "native_semantic_diagnostic": {
+    "bit_different_outputs": 26091,
+    "within_existing_operator_limits": true,
+    "bit_equivalent": false
+  },
+  "source_sha256": {
+    "src/heteronpu/rope_hardware_oracle.py": "41b05e2247bbb4af70e2fc2eebf78120547029b7eb96791accef11c06bc1cdb7",
+    "scripts/run_rope_hardware_oracle.py": "b3eb8c6fda7dc6ebc8fcceef74b8f390d536ace21b26d081360c3176f3c86bdb",
+    "tb/tb_rope_hardware_oracle.sv": "942e3ddf6976ba8e7ec5a6ad554a74f8e45c831162d0937bc28ace3021c6220d",
+    "tests/test_rope_hardware_oracle.py": "19fa3b8ed09707cebc8d57572575df46cd3b9bca68f77bc414cd00ef89306c97",
+    "config/upstream/qwen3_5_0p8b/rope_hardware_contract.json": "72236329a48a1e6ab9e9bb419c560c455cdcbcc61ab5cbb0060db4ef5f671132",
+    "rtl/sfu/fp32_rope_pair.sv": "7d0f95f91ef8e1670e330007449737b31b91733796627bc21c9978d5d4deef6c",
+    "rtl/sfu/fp32_rope_pair_pipe.sv": "459446eee0c0727f21c02df564aa35d0d60f5b71f0d71cfe7afdc0c2a817774b",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c",
+    "scripts/generate_rope_hardware_primitives.sh": "4137bf188f4a323a55907f06e95e6ae88d5d77f0ef0d1e0342f63447786da255",
+    "chisel/rope_hardware_oracle/README.md": "4472bb48eb692bf868ce991e1d2c01df5425a166d43ac02f6153c14d50a7173b",
+    "chisel/rope_hardware_oracle/manifest.py": "774ede46742a6dc065dd276c4a24d0bf0deccb5deea08264f110cd239373beab",
+    "chisel/rope_hardware_oracle/build.sbt": "97203410f7c955334079c088e5039c36497f0843f909ff8a57875f94fb5ed8c6",
+    "chisel/rope_hardware_oracle/repositories": "e5b455eae2debe0d031194347c324649c2ab215485ad67dfc487c69102325c8e",
+    "chisel/rope_hardware_oracle/maven-lock.json": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+    "chisel/rope_hardware_oracle/project/build.properties": "97e9b0adc044c92dbf8dc1e671a268242449320b6911d1623cc93427f0bb1b61",
+    "chisel/rope_hardware_oracle/src/main/scala/EmitRoPEHardwarePrimitives.scala": "ce9e6b8e7359f3ecbe3988840c5e90655eb373262ad944307486d286b034298a"
+  },
+  "review_artifact_sha256": {
+    "review.json": "65625a4e581d868bfb1ad293a93365d3732e1b576e376b84346cc1c6421abc20",
+    "run_review.py": "6c0f8bafbc0ceed676ff80f15ff79e3655145b776a5abc4c869446a4e52c6bc9",
+    "fenv_reference.c": "76ea00e2035e2dcff050a6c8ad85c17869c90c271f142f6daee0f618551324c8",
+    "tb_rawbits.sv": "1a0d4fc11d274b1c342d8a29b26c0b5873ba41dd770680878e6017cd8495379a",
+    "rawrun.log": "6137a9f9ff0f2a231ccf62aa2825452df3f027500d096ad91053e0c53d17ef41",
+    "final_unit_normal.log": "f0c01b771d4132ac9df2bcf1819965720246f49f9e91316a9256b62b86a93eed",
+    "final_unit_optimized.log": "0a9ec1052ec9b542650b82b54b25941fe3e28585e41b8a7e2966b87ba5258902",
+    "primitive_fenv_counts.json": "37801b08cd0ae29a90ffeb20b7d7a8abc0245f59df16e606f1cf418ab1d45f87"
+  },
+  "limits": [
+    "Finite-domain sampled numerical evidence, not a formal all-input IEEE-754 proof. NaN/infinity and intermediate overflow are outside the admitted component oracle.",
+    "No full Qwen3.5 block, BF16 conversion RTL, coefficient generation RTL, partial-RoPE layout owner or useful-wall MAC90% acceptance."
+  ],
+  "log_normalization": "Only trailing whitespace was stripped from the two archived unit-test logs; test outcomes and all substantive log content are unchanged.",
+  "final_fresh_optimized_gate": {
+    "path": "work/rope_hardware_oracle/final_gate_fresh",
+    "result_sha256": "3b5710a7cec3d37fcb064c76fe6093f1ac0cae335c1e6edb3ea21b4b46efbf44",
+    "status": "PASS_EXISTING_FP32_ROPE_RTL_PAIR_ONLY",
+    "audit_admission": "fresh_pinned_producer",
+    "real_pairs_per_wrapper": 81920,
+    "synthetic_pairs_per_wrapper": 2055,
+    "output_lines_independently_verified_per_wrapper": 83975,
+    "vectors_identical_to_saved": true,
+    "vectors_sha256": "608c3af56307038ed4255a698e589db8cbc095fcefb3999519a75126fe91ce28",
+    "outputs_sha256": [
+      "4abc890e59b49c38618a94c7b65a3fe4e7f1d136b67a82f98e396c02b6ff8a50",
+      "4abc890e59b49c38618a94c7b65a3fe4e7f1d136b67a82f98e396c02b6ff8a50"
+    ]
+  }
+}

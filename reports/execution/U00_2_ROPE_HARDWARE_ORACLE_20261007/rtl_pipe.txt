@@ -1,0 +1,5 @@
+ROPE_HARDWARE_ORACLE_PASS pipe=1 pairs=83975 cycles=1091686 stalls=251916
+- /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/tb/tb_rope_hardware_oracle.sv:74: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 11ms; walltime 2.074 s; speed 5.263 ms/s
+- Verilator: cpu 2.074 s on 1 threads; alloced 67 MB

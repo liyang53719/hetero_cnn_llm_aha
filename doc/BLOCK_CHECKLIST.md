@@ -1,7 +1,7 @@
 # Block checklist（只读视图）
 
 当前最终目标：Qwen2-1.5B、Qwen3.5-0.8B、Qwen3.5-35B-A3B各自典型block实际生成RTL数值通过，Matrix整block有效MAC利用率≥90%；Matrix/Vector分报，固定配置资源分母。
-U00=to do；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史并排除当前派工。
+U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史并排除当前派工。
 
 唯一状态源为 `block_checklist.yaml`；本表由 `scripts/block_checklist.py render` 生成。
 
@@ -76,7 +76,9 @@ U00=to do；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史并
 | R00 | P2 | 六类典型block集中发布 | to do |
 | F00 | P3 | 典型block之后接完整模型与llama backend | to do |
 | F01 | P3 | MTP状态分支与视觉多模态独立验收 | to do |
-| U00 | P0 | 冻结当前三模型合同与回放工作量 | to do |
+| U00 | P0 | 冻结当前三模型合同与回放工作量 | ongoing |
+| U00.1 | P0 | 固定0.8B官方配置与dense-FFN几何合同 | done |
+| U00.2 | P0 | 完成三模型官方回放与性能工作量冻结 | ongoing |
 | U01 | P1 | 三模型典型block数值及90%联合验收 | to do |
 
 部分子项 done 的父项仍为 ongoing；官方权重、真实RTL/状态连续性按各自完整门禁验收。

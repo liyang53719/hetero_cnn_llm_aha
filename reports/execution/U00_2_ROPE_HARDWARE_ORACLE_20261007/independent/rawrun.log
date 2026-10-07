@@ -1,0 +1,5 @@
+REVIEW RAWBITS PASS both_wrappers=10000 cycles=130021
+- /tmp/rope_review_rtl/tb_rawbits.sv:34: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 1ms; walltime 0.348 s; speed 3.736 ms/s
+- Verilator: cpu 0.348 s on 1 threads; alloced 65 MB

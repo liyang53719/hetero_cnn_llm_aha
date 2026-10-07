@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "scope": "existing_FP32_RoPE_pair_conditional_component_only",
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "layer_id": 3,
+  "cases": [
+    "cold_m128",
+    "carried_m128"
+  ],
+  "pair_mapping": "half-split channels i and i+32, i=0..31; 64 of 256 channels; Q8/K2 heads, M128",
+  "arithmetic": "four independent FP32 RNE products followed by two independent FP32 RNE sums; no FMA; after-rounding tininess",
+  "rounding_domain": "finite FP32 including subnormals; rejects nonfinite inputs and intermediate overflow",
+  "ports": "FP32 in/out, no BF16 output cast inside existing tested RTL",
+  "coefficient_origin": "official native BF16 cos/sin from verified real-prefix audit, decoded losslessly to FP32; coefficient generation NOT under RTL test",
+  "operand_origin": "official native BF16 q_norm/k_norm producer outputs; conditional same-input component test, NOT independent end-to-end hardware block",
+  "source_native_rope": "two separately BF16-rounded products and BF16 addition; unchanged reference",
+  "saved_audit_report_sha256": "fece52d072ea997675a59865ed1e5ffb48ac28e41b7ae3e8e32552f8e9d0fda1",
+  "fresh_audit_source_sha256": {
+    "scripts/run_qwen35_bf16_audit.py": "13119e753f6003090d6b2582b545f42985a9fef3e84c585bde48a8bac17250eb",
+    "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9"
+  },
+  "rtl_source_sha256": {
+    "rtl/sfu/fp32_rope_pair.sv": "7d0f95f91ef8e1670e330007449737b31b91733796627bc21c9978d5d4deef6c",
+    "rtl/sfu/fp32_rope_pair_pipe.sv": "459446eee0c0727f21c02df564aa35d0d60f5b71f0d71cfe7afdc0c2a817774b",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c"
+  },
+  "missing_for_qwen35_block": [
+    "Q/K Norm 1+weight and 256-wide ownership integration",
+    "actual selected Matrix/Attention reduction and FP32-to-BF16 boundaries",
+    "partial-RoPE packing/coefficients/cache producer integration",
+    "independent complete hardware-order graph",
+    "actual full-block RTL and fixed-resource useful-wall MAC90%"
+  ],
+  "emitter_source_sha256": {
+    "scripts/generate_rope_hardware_primitives.sh": "4137bf188f4a323a55907f06e95e6ae88d5d77f0ef0d1e0342f63447786da255",
+    "chisel/rope_hardware_oracle/README.md": "4472bb48eb692bf868ce991e1d2c01df5425a166d43ac02f6153c14d50a7173b",
+    "chisel/rope_hardware_oracle/manifest.py": "774ede46742a6dc065dd276c4a24d0bf0deccb5deea08264f110cd239373beab",
+    "chisel/rope_hardware_oracle/build.sbt": "97203410f7c955334079c088e5039c36497f0843f909ff8a57875f94fb5ed8c6",
+    "chisel/rope_hardware_oracle/repositories": "e5b455eae2debe0d031194347c324649c2ab215485ad67dfc487c69102325c8e",
+    "chisel/rope_hardware_oracle/maven-lock.json": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+    "chisel/rope_hardware_oracle/project/build.properties": "97e9b0adc044c92dbf8dc1e671a268242449320b6911d1623cc93427f0bb1b61",
+    "chisel/rope_hardware_oracle/src/main/scala/EmitRoPEHardwarePrimitives.scala": "ce9e6b8e7359f3ecbe3988840c5e90655eb373262ad944307486d286b034298a"
+  }
+}

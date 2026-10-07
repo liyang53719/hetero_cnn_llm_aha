@@ -1,0 +1,93 @@
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:2:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    2 | module AddRawFN(
+      |        ^~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032
+                       ... Use "/* verilator lint_off TIMESCALEMOD */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:127:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  127 | module RoundAnyRawFNToRecFN_ie8_is26_oe8_os24(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:214:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  214 | module RoundRawFNToRecFN_e8_s24(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:239:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  239 | module AddRecFN(
+      |        ^~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:287:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  287 | module MulFullRawFN(
+      |        ^~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:320:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  320 | module MulRawFN(
+      |        ^~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:368:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  368 | module MulRecFN(
+      |        ^~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:416:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  416 | module HeteroFP32Alu(
+      |        ^~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:573:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  573 | module HeteroFP32MulPipeTag12(
+      |        ^~~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:826:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+  826 | module HeteroFP32AddPipeTag12(
+      |        ^~~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:1079:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+ 1079 | module HeteroFP32MulPipeBit1(
+      |        ^~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:1332:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+ 1332 | module HeteroFP32AddPipeBit1(
+      |        ^~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv:1585:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+ 1585 | module RoPEHardwarePrimitives(
+      |        ^~~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair.sv:3:8: ... Location of module with timescale
+    3 | module fp32_rope_pair(
+      |        ^~~~~~~~~~~~~~
+make: Entering directory '/tmp/rope_review_rtl/rawobj'
+g++ -Os  -I.  -MMD -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/verilated_timing.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/verilated_threads.cpp
+python3 /workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vrope_review_rawbits.cpp Vrope_review_rawbits___024root__DepSet_h22aedde9__0.cpp Vrope_review_rawbits___024root__DepSet_h99bd3232__0.cpp Vrope_review_rawbits_HeteroFP32Alu__DepSet_h7b3abdd3__0.cpp Vrope_review_rawbits__main.cpp Vrope_review_rawbits___024root__Slow.cpp Vrope_review_rawbits___024root__DepSet_h22aedde9__0__Slow.cpp Vrope_review_rawbits___024root__DepSet_h99bd3232__0__Slow.cpp Vrope_review_rawbits_HeteroFP32Alu__Slow.cpp Vrope_review_rawbits_HeteroFP32Alu__DepSet_h5ac097c7__0__Slow.cpp Vrope_review_rawbits_HeteroFP32Alu__DepSet_h7b3abdd3__0__Slow.cpp Vrope_review_rawbits__Syms.cpp > Vrope_review_rawbits__ALL.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include -I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vrope_review_rawbits__ALL.o Vrope_review_rawbits__ALL.cpp
+echo "" > Vrope_review_rawbits__ALL.verilator_deplist.tmp
+g++    verilated.o verilated_timing.o verilated_threads.o Vrope_review_rawbits__ALL.a    -pthread -lpthread -latomic   -o tb
+rm Vrope_review_rawbits__ALL.verilator_deplist.tmp
+make: Leaving directory '/tmp/rope_review_rtl/rawobj'
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 0.383 MB sources in 17 modules, into 1.751 MB in 12 C++ files needing 0.030 MB
+- Verilator: Walltime 4.606 s (elab=0.011, cvt=0.154, bld=4.417); cpu 0.215 s on 4 threads; alloced 40.973 MB

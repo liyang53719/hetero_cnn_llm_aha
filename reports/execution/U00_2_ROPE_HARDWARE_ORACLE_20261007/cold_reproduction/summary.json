@@ -1,0 +1,33 @@
+{
+  "bootstrap_archives_reused_and_sha256_verified": true,
+  "cold_generated_sha256": "798b878ddaa910e279aa6739e737236f5dd0efb7803c46e2cedd7b8ad74e1fa1",
+  "cold_project_root": "/tmp/rope-cold-verify.OtfQ8w",
+  "compiled_scala_source_count": 23,
+  "emission_harness_scala_source_count": 1,
+  "evidence_sha256": {
+    "cold_generate.log": "10e0b6c9b202249323624e320daa474aab44414a841933d9e31d97aaca73f4ee",
+    "cold_lint.log": "1b35d7c68e215c0f50101bb727690bbdd0544d7c24ff85db462416f046df1b97",
+    "cold_manifest.json": "ea2cce4b28be6002993859d37ad5b85e578b1aedfb77b6706c236b063ba67437",
+    "cold_run.log": "ee790c6e91f519eba2f51721d1e24656e41b37e32b16e7a0a9dd30d580f02489",
+    "cold_start.json": "26249a7f9c4cf3e63e12635fd5261708b9b4d77e17f187e774bf6a8e98e75110",
+    "final_inventory_rerun.log": "ee790c6e91f519eba2f51721d1e24656e41b37e32b16e7a0a9dd30d580f02489",
+    "generate.log": "3f9502afe5fb8161c0a3f6cc5b3951f614465bceb59a9f04f6cbc2e902d6bec4",
+    "manifest.json": "f94dd736cf8238fe1f4f946b98916a21b06cfa458fb9b047f7f68eb2c5b848c1"
+  },
+  "final_inventory_replay_matches_current_sources": true,
+  "generated_rtl_byte_identical": true,
+  "hardfloat_scala_source_count": 20,
+  "integration_scala_source_count": 2,
+  "maven_artifact_count": 339,
+  "maven_cache_existed_before": false,
+  "maven_jar_count": 148,
+  "maven_pom_count": 191,
+  "notes": [
+    "Cold bootstrap re-downloaded the complete Maven graph into empty Maven and sbt caches. The four pinned bootstrap archives were reused after checksum validation.",
+    "The stricter HardFloat compile-root inventory was added after the cold run. A separate clean-compile replay with those final controls passed and emitted identical RTL; both manifests and logs are retained."
+  ],
+  "sbt_cache_existed_before": false,
+  "schema_version": 1,
+  "shared_generated_sha256": "798b878ddaa910e279aa6739e737236f5dd0efb7803c46e2cedd7b8ad74e1fa1",
+  "status": "PASS_COLD_CACHE_REPRODUCTION_AND_FINAL_INVENTORY_REPLAY"
+}

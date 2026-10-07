@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 9b60a44300f659130e4030e3094c0fd1d49e2464224f895a3174e0525e5052bb
+计划SHA256: 682a24af82b890a6b5ad98a9f616c604e4ecdc171e02cfb9d6716086c052b918
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -707,7 +707,7 @@
     名称: 完成三模型官方回放与性能工作量冻结
     状态: ongoing
     执行侧: sandbox
-    负责人: sandbox@bf16-producer-audit-20261007
+    负责人: sandbox@rope-hardware-oracle-20261007
     前置:
     - U00.1
     先行依据: ''
@@ -815,6 +815,73 @@
         SHA256: fece52d072ea997675a59865ed1e5ffb48ac28e41b7ae3e8e32552f8e9d0fda1
       - 文件: reports/execution/U00_2_BF16_PRODUCER_AUDIT_20261007/source_sha256.json
         SHA256: b57918383e7c28862930669a6707016a86c9e4d54880d82a93a1c211b039e0af
+    - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/result.json
+      SHA256: d82c4d742a73615ee0cd43ba3c9e59595ec9268751d2cc2a93ad6e64b8c63650
+      设计提交: 52cd52410c7d52897c78b4f899f38cf3889a331a
+      范围: U00.2部分推进：原FP32 RoPE pair及pipeline实际生成RTL各83975对、全部数据位和异常位一致，其中81920对来自真实0.8B前缀Q/K；独立10000组全指数raw-bit/C fenv复核通过。保存/重建前缀两路同数组，41新测试normal/-O、280focused、全仓2042通过及同5基线失败。仅组件条件门禁，不关闭source-native逐producer拒绝、完整硬件golden/布局/表/BF16存储/三模型/90%。
+      关联文件:
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/cold_generate.log
+        SHA256: 10e0b6c9b202249323624e320daa474aab44414a841933d9e31d97aaca73f4ee
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/cold_lint.log
+        SHA256: 1b35d7c68e215c0f50101bb727690bbdd0544d7c24ff85db462416f046df1b97
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/cold_manifest.json
+        SHA256: ea2cce4b28be6002993859d37ad5b85e578b1aedfb77b6706c236b063ba67437
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/cold_run.log
+        SHA256: ee790c6e91f519eba2f51721d1e24656e41b37e32b16e7a0a9dd30d580f02489
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/cold_start.json
+        SHA256: 26249a7f9c4cf3e63e12635fd5261708b9b4d77e17f187e774bf6a8e98e75110
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/final_inventory_rerun.log
+        SHA256: ee790c6e91f519eba2f51721d1e24656e41b37e32b16e7a0a9dd30d580f02489
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/generate.log
+        SHA256: 3f9502afe5fb8161c0a3f6cc5b3951f614465bceb59a9f04f6cbc2e902d6bec4
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/manifest.json
+        SHA256: f94dd736cf8238fe1f4f946b98916a21b06cfa458fb9b047f7f68eb2c5b848c1
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/cold_reproduction/summary.json
+        SHA256: 9b42d9c7b6069d8c31c8da9e4bc35ed79430f53a64eb35d295f488108c47829a
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/emission.txt
+        SHA256: 2dfe6a778837e035b348c7b91a384d40ac82767688feba426a99ebbe93701fc6
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/focused.txt
+        SHA256: ca822cc5351d42b16641a4eb2c1c1a123cc5413031b449e0816fbc3e9ef958f8
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/fresh_result.json
+        SHA256: 3b5710a7cec3d37fcb064c76fe6093f1ac0cae335c1e6edb3ea21b4b46efbf44
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/c_build.log
+        SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/fenv_reference.c
+        SHA256: 76ea00e2035e2dcff050a6c8ad85c17869c90c271f142f6daee0f618551324c8
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/final_review.json
+        SHA256: ca86dd2f39e4a473bdb8164f707a116d5a4a1a08f72cf4f64673a31767d6abbd
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/final_unit_normal.log
+        SHA256: f0c01b771d4132ac9df2bcf1819965720246f49f9e91316a9256b62b86a93eed
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/final_unit_optimized.log
+        SHA256: 0a9ec1052ec9b542650b82b54b25941fe3e28585e41b8a7e2966b87ba5258902
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/primitive_fenv_counts.json
+        SHA256: 37801b08cd0ae29a90ffeb20b7d7a8abc0245f59df16e606f1cf418ab1d45f87
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/rawbuild.log
+        SHA256: 56eb63da386e39ebeb865e02d1be9dead43b4bd6336fc0a3085498506da6172e
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/rawrun.log
+        SHA256: 6137a9f9ff0f2a231ccf62aa2825452df3f027500d096ad91053e0c53d17ef41
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/review.json
+        SHA256: 65625a4e581d868bfb1ad293a93365d3732e1b576e376b84346cc1c6421abc20
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/run_review.py
+        SHA256: 6c0f8bafbc0ceed676ff80f15ff79e3655145b776a5abc4c869446a4e52c6bc9
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/independent/tb_rawbits.sv
+        SHA256: 1a0d4fc11d274b1c342d8a29b26c0b5873ba41dd770680878e6017cd8495379a
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/native_diagnostic_result.json
+        SHA256: 524a85fad7eef47714b6f67003340f3cfe5b76168deee8ec2e43deec75094b22
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/optimized.txt
+        SHA256: a9d23023d92d0c972b1674817d792339d2ce63d5c68e4d3dbebb8610aa962237
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/prefix_rebuild_result.json
+        SHA256: 602e172da1b52f16e218ddf9afcd9a70a24e2b73bf07317d1431248e0adb7daf
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/pytest_full.txt
+        SHA256: e17f3837b9c545bae56b8efb9a0393d47e67fb9e9a7142819b7305964349738d
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/rtl_comb.txt
+        SHA256: 42f35b27ea52a5c7e69f735aeed6a225db2bedd9455eb326b0f2525d89c031f4
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/rtl_pipe.txt
+        SHA256: 7dc01ae7fc3fdb9fce4ca8eee947b1289136954a4192a225112864fc09b6ceb6
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/saved_result.json
+        SHA256: 42457029cd3abd9fe9a44ecbebb6ba43bed1c539078eb238123d0d177a21545a
+      - 文件: reports/execution/U00_2_ROPE_HARDWARE_ORACLE_20261007/source_sha256.json
+        SHA256: 1e4622b4e59b7cbd6e896606bab92b19b4bdc639b188a858ec239456f086dca9
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -876,6 +943,8 @@
     ongoing、C03.2/U01不关闭。}
 - {编号: U00.2, 执行者: sandbox@bf16-producer-audit-20261007, 时间: '2026-10-07T01:28:18.102483+00:00', 说明: 恢复中断BF16任务，补齐逐producer完整拒绝证据与首处分叉诊断，修复来源准入/softmax/位比较/条件误差界诊断缺陷；不放宽门限，不关闭U00.2/U01。实际RTL与整block
     useful-wall MAC90%目标不变。}
+- {编号: U00.2, 执行者: sandbox@rope-hardware-oracle-20261007, 时间: '2026-10-07T01:59:22.123103+00:00', 说明: 按实际HardFloat算术完成首个真实前缀RoPE数值RTL组件门禁；原native/RTL算术/门限不变，保留完整block硬件oracle、QK
+    Norm/packed gate集成和三模型useful-wall MAC90%未完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

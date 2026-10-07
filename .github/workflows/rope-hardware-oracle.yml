@@ -1,0 +1,84 @@
+name: qwen35-existing-rope-rtl-component
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rope-hardware-oracle.yml'
+      - 'chisel/rope_hardware_oracle/**'
+      - 'scripts/generate_rope_hardware_primitives.sh'
+      - 'scripts/run_rope_hardware_oracle.py'
+      - 'src/heteronpu/rope_hardware_oracle.py'
+      - 'tests/test_rope_hardware_oracle.py'
+      - 'tb/tb_rope_hardware_oracle.sv'
+      - 'rtl/sfu/fp32_rope_pair*.sv'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'integration/gemmini/EmitHeteroFP32Pipelines.scala'
+      - 'config/upstream/**'
+      - 'src/heteronpu/qwen35*reference.py'
+      - 'src/heteronpu/pinned*payload.py'
+      - 'scripts/run_qwen35_bf16_audit.py'
+      - 'scripts/run_qwen35_prefix_chain.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  existing-pair-component-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned official CPU producer runtime
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . pytest numpy==2.3.5 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - name: Verify exact arithmetic and fail-closed admission
+        run: |
+          python -m pytest -o addopts='' -q tests/test_rope_hardware_oracle.py
+          python -O -m pytest -o addopts='' -q tests/test_rope_hardware_oracle.py
+      - name: Acquire pinned real prefix payloads
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/layer0
+          python scripts/collect_qwen35_layer3_payload.py --output work/layer3
+          python scripts/collect_qwen35_prefix_payload.py --output work/prefix
+      - name: Fresh prefix then actual Chisel and Verilator component replay
+        env:
+          HF_HUB_OFFLINE: '1'
+        run: |
+          python scripts/run_rope_hardware_oracle.py --audit work/audit --output work/rope_result --rebuild-layer0 work/layer0 --rebuild-layer3 work/layer3 --rebuild-extra work/prefix --upstream work/chain
+          python - <<'PY'
+          import json,os
+          r=json.load(open('work/rope_result/result.json'))
+          if r['rtl_component_bitwise_pass'] is not True or len(r['rtl_runs']) != 2 or r['real_QK_pairs'] != 81920:
+              raise SystemExit('incomplete component acceptance')
+          if r['full_block_hardware_oracle_complete'] or r['U01_complete'] or r['mac_utilization_measured']:
+              raise SystemExit('component scope inflated')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Existing FP32 RoPE pair RTL: bitwise PASS for both implementations.\n\n')
+              f.write(f"Real Q/K pairs per implementation: {r['real_QK_pairs']}. Native BF16 diagnostic remains {r['native_audit_status']}.\n\n")
+              f.write('Coefficient generation, BF16 store, full block and useful-wall MAC90% remain unaccepted.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: existing-rope-rtl-component-${{ github.sha }}
+          path: |
+            work/rope_result/*.json
+            work/rope_result/*.log
+            work/rope_result/*.npy
+            work/rope_result/*.txt
+            work/rope_result/*.memh
+            work/generated/rope_hardware_oracle/*
+            work/audit/result.json
+            work/chain/result.json
+          retention-days: 30
+          if-no-files-found: warn

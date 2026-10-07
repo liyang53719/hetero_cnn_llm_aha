@@ -1,0 +1,107 @@
+........................................................................ [  3%]
+........................................................................ [  7%]
+........................................................................ [ 10%]
+........................................................................ [ 14%]
+........................................................................ [ 17%]
+........................................................................ [ 21%]
+........................................................................ [ 24%]
+........................................................................ [ 28%]
+........................................................................ [ 31%]
+........................................................................ [ 35%]
+...............................F........................................ [ 38%]
+........................................................................ [ 42%]
+.....................................F.................................. [ 45%]
+...........................................................F............ [ 49%]
+........................................................................ [ 52%]
+........................................................................ [ 56%]
+........................................................................ [ 59%]
+........................................................................ [ 63%]
+........................................................................ [ 66%]
+........................................................................ [ 70%]
+.................................................................F...... [ 73%]
+........................................................................ [ 77%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+..................................F..................................... [ 87%]
+........................................................................ [ 91%]
+........................................................................ [ 94%]
+........................................................................ [ 98%]
+...............................                                          [100%]
+=================================== FAILURES ===================================
+_____________________________ test_exp2_pwl_bounds _____________________________
+
+    def test_exp2_pwl_bounds():
+>       assert exp2_pwl_rtl(-17)==0 and exp2_pwl_rtl(0)==1
+E       assert (7.62939453125e-06 == 0)
+E        +  where 7.62939453125e-06 = exp2_pwl_rtl(-17)
+
+tests/test_control_v4.py:25: AssertionError
+_____________ test_every_simple_target_exists_in_terminal_protocol _____________
+
+    def test_every_simple_target_exists_in_terminal_protocol():
+        owners = names_in_object(TERMINAL_PROTOCOL, "HeteroPrimitiveOwner") - {"width"}
+        opcodes = names_in_object(TERMINAL_PROTOCOL, "HeteroPrimitiveOpcode") - {"width"}
+        for owner, opcode in CONFIG["simple"].values():
+>           assert owner in owners
+E           AssertionError: assert 'Dma_or_Selection' in {'Control', 'Dma', 'KvMemory', 'Matrix', 'Selection', 'Sfu', ...}
+
+tests/test_operator_terminal_bridge_v3.py:31: AssertionError
+____________________________ test_arch_and_control _____________________________
+
+    def test_arch_and_control():
+>       a=load_arch('configs/arch_v2_qwen38_candidate.yaml',ROOT);c=arch_collateral(a)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_planning_v6.py:8:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/heteronpu/planning_v6.py:29: in load_arch
+    if raw.get('inherits'):base=load_arch(raw['inherits'],root)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/heteronpu/planning_v6.py:32: in load_arch
+    validate_arch(out);return out
+    ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = {'schema_version': 2, 'arch_id': 'heteronpu_v1_long_context_matrix4096', 'status': 'canonical_planning_archspec', 'clock': {'target_hz': 800000000, 'target_mhz': 800, 'period_ns': 1.25, 'setup_uncertainty_ns': 0.08, ...}, ...}
+
+    def validate_arch(a:dict[str,Any])->None:
+>       if a.get('schema_version')!=1:raise ValueError('arch schema')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: arch schema
+
+src/heteronpu/planning_v6.py:34: ValueError
+_____________________ test_v69_control_plane_compatibility _____________________
+
+    def test_v69_control_plane_compatibility():
+>    r=audit_control(ROOT);assert r['status']=='PASS' and not r['errors']
+       ^^^^^^^^^^^^^^^^^^^
+
+tests/test_sandbox_v68.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = PosixPath('/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha')
+
+    def audit_control(root:str|Path)->dict[str,Any]:
+>       r=Path(root);c=json.loads((r/'config/control_plane.json').read_text());s=yaml.safe_load((r/c['canonical_stages']).read_text());l=json.loads((r/c['ledger']).read_text());n=json.loads((r/c['next_action']).read_text());w=json.loads((r/c['local_waitlist']).read_text());errors=[];schema=c['schema_version']
+                                                                                                                                                                                                                                                ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'local_waitlist'
+
+src/heteronpu/planning_v6.py:119: KeyError
+________________ test_sram_budget_and_frozen_top_level_contract ________________
+
+    def test_sram_budget_and_frozen_top_level_contract() -> None:
+        arch = yaml.safe_load((ROOT / "configs/arch_v0.yaml").read_text())
+        sram = arch["on_chip_sram"]
+        partition = sum(value for key, value in sram.items() if key.endswith("_KiB") and key != "total_KiB")
+        assert partition == sram["total_KiB"] == 4096
+>       assert arch["clock_hz"] == 1_000_000_000
+E       assert 800000000 == 1000000000
+
+tests/test_specs.py:49: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_control_v4.py::test_exp2_pwl_bounds - assert (7.62939453125...
+FAILED tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol
+FAILED tests/test_planning_v6.py::test_arch_and_control - ValueError: arch sc...
+FAILED tests/test_sandbox_v68.py::test_v69_control_plane_compatibility - KeyE...
+FAILED tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract - ...
+5 failed, 2042 passed in 79.95s (0:01:19)

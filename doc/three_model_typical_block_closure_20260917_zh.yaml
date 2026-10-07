@@ -62,6 +62,13 @@
     结果: 0.8B真实官方层2输出进入attention层3，cold/carried M128各57处数值producer，126项比较中本机9项失败；output最大差0.00390625不能覆盖QK最大差1.0及carried norm失败。门限不变。
     语义边界: 官方eager RoPE先舍入两个BF16乘积，硬件v0则FP32 pair完成后舍入；仅作source-native软件诊断，未验收硬件v0语义、RTL或MAC90%。
     后续: 冻结累加树与source-native到硬件producer映射，保留所有隐藏节点门禁，继续GDN及其余模型真实典型block，不通过放宽阈值关闭U00.2。
+  RoPE实际硬件oracle20261007:
+    报告: doc/U00_2_ROPE_HARDWARE_ORACLE_20261007_CN.md
+    范围: 既有FP32 pair算术条件门禁；81920个真实Q/K输入pair，保留原native和既有门限；不是完整block oracle。
+    算术: 四次FP32乘法分别RNE后两次FP32加法RNE；无FMA。末端BF16仅软件投影，现有RTL端口为FP32。
+    准入: 固定saved audit SHA或内部重新执行pinned真实前缀；不接受任意外部报告声明。
+    未实现: 0.8B独立head几何、packed Q/gate、1+weight的QK256 Norm、RoPE布局/表/存储集成、完整硬件图和整block性能。
+    后续: 选择实际Matrix/Norm/Attention路径和写回精度，逐owner接入并测量；U00.2 ongoing、U01 to do。
   U00.2权重及workload进度:
     状态: ongoing
     原字节清单: config/upstream/weight_headers/

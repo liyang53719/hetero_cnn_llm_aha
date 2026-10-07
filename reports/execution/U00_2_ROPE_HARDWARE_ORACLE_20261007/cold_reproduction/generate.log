@@ -1,0 +1,11 @@
+[info] welcome to sbt 1.10.2 (Debian Java 21.0.12.1)
+[info] loading project definition from /tmp/rope-cold-verify.OtfQ8w/chisel/rope_hardware_oracle/project
+[info] loading settings for project root from build.sbt ...
+[info] set current project to heteronpu-rope-hardware-oracle (in build file:/tmp/rope-cold-verify.OtfQ8w/chisel/rope_hardware_oracle/)
+[info] Executing in batch mode. For better performance use sbt's shell
+[success] Total time: 0 s, completed Oct 7, 2026, 8:53:49 AM
+[info] compiling 23 Scala sources to /tmp/rope-cold-verify.OtfQ8w/chisel/rope_hardware_oracle/target/scala-2.13/classes ...
+[info] done compiling
+[success] Total time: 11 s, completed Oct 7, 2026, 8:54:00 AM
+[info] running gemmini.EmitRoPEHardwarePrimitives /tmp/rope-cold-verify.OtfQ8w/work/generated/rope_hardware_oracle/HeteroRoPEHardwarePrimitives.sv
+[success] Total time: 2 s, completed Oct 7, 2026, 8:54:02 AM

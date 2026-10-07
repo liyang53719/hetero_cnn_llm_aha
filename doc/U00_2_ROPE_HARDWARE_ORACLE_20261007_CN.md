@@ -89,3 +89,7 @@ GitHub CPU产生的真实carried输入同时给出新的model-accuracy反例，�
 反例原字节、远端完整component结果、七项exact-head CI记录及校验结论保存在 `reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/`；新增固定反例测试断言该精度门禁必须拒绝。未更改生产RTL、native实现、舍入合同或容差。
 
 下一有界实验：在固定Q/K输入及cos/sin下，独立记录两个乘积和最终和，对比四个软件候选（均不替换生产硬件）：两个乘积都保持FP32、仅cos乘积BF16、仅sin乘积BF16、两个乘积都BF16。先要求最后一种与官方逐位一致，并定位每种候选的误差/中点分叉；再单独评审是否引入明确版本的硬件producer策略。不能以BF16末端输出或本地样例通过代替对所有真实输入和下游producer的验收。
+
+## 四路软件消融后续
+
+两套历史真实输入的四路软件消融已完成，见 `doc/U00_2_ROPE_ROUNDING_ABLATION_20261007_CN.md`。全部产品BF16候选逐位匹配保存的native products/output；sine-only仅修复现有超限且仍有38,880个输出元素的位模式不同。生产FP32算术与原反例不变，本轮未执行候选RTL，不升级U00.2/U01或MAC90%。

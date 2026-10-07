@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "checks": 2589,
+  "summary": {
+    "local": {
+      "fp32_all": {
+        "bit_different": 26091,
+        "max_abs_error": 0.03125,
+        "mismatches_over_max": 0,
+        "pass": true
+      },
+      "cos_bf16_only": {
+        "bit_different": 17448,
+        "max_abs_error": 0.03125,
+        "mismatches_over_max": 0,
+        "pass": true
+      },
+      "sin_bf16_only": {
+        "bit_different": 19438,
+        "max_abs_error": 0.03125,
+        "mismatches_over_max": 0,
+        "pass": true
+      },
+      "both_bf16": {
+        "bit_different": 0,
+        "max_abs_error": 0.0,
+        "mismatches_over_max": 0,
+        "pass": true
+      }
+    },
+    "remote": {
+      "fp32_all": {
+        "bit_different": 26348,
+        "max_abs_error": 0.0625,
+        "mismatches_over_max": 1,
+        "pass": false
+      },
+      "cos_bf16_only": {
+        "bit_different": 17524,
+        "max_abs_error": 0.0625,
+        "mismatches_over_max": 1,
+        "pass": false
+      },
+      "sin_bf16_only": {
+        "bit_different": 19442,
+        "max_abs_error": 0.03125,
+        "mismatches_over_max": 0,
+        "pass": true
+      },
+      "both_bf16": {
+        "bit_different": 0,
+        "max_abs_error": 0.0,
+        "mismatches_over_max": 0,
+        "pass": true
+      }
+    }
+  }
+}

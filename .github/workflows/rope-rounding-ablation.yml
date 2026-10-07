@@ -1,0 +1,54 @@
+name: qwen35-frozen-rope-software-ablation-not-RTL
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rope-rounding-ablation.yml'
+      - 'scripts/*rope*rounding*'
+      - 'src/heteronpu/rope_rounding_ablation.py'
+      - 'src/heteronpu/rope_hardware_oracle.py'
+      - 'src/heteronpu/qwen35_bf16_reference.py'
+      - 'tests/test_rope_rounding_ablation.py'
+      - 'tests/fixtures/rope_rounding/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  immutable-two-corpus-software-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest numpy==2.3.5
+      - name: Normal and optimized fail-closed tests
+        run: |
+          python -m pytest -o addopts='' -q tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+          python -O -m pytest -o addopts='' -q tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py
+      - name: Replay unchanged historical inputs and saved native outputs
+        run: |
+          python scripts/run_rope_rounding_ablation.py --output work/rope_rounding_result
+          python - <<'PY'
+          import json,os
+          r=json.load(open('work/rope_rounding_result/result.json'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Four software rounding ablations on both immutable historical corpora. No candidate RTL or full-block acceptance.\n\n')
+              for corpus,c in r['corpora'].items():
+                  for variant,rows in c['metrics'].items():
+                      m=rows[0]['terminal_BF16_vs_frozen_native']
+                      f.write(f"{corpus} / {variant}: bit differences={m['bit_different']}, max error={m['max_abs_error']}, within unchanged limits={m['pass']}.\n\n")
+              f.write('Production arithmetic unchanged; original remote FP32 source-fidelity counterexample still rejected.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-rope-software-ablation-${{ github.sha }}
+          path: |
+            work/rope_rounding_result/*.json
+            work/rope_rounding_result/*.txt
+            work/rope_rounding_result/*.npy
+            work/rope_rounding_result/*.npz
+          retention-days: 30
+          if-no-files-found: error

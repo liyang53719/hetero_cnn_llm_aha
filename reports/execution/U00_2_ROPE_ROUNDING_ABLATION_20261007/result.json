@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SOFTWARE_ABLATION_WITH_NATIVE_COMPATIBLE_CANDIDATE_IDENTIFIED",
+  "created_at": "2026-10-07T03:15:08.106020+00:00",
+  "parent_commit": "786db515ad828c47487e860188184d378ccf7fd6",
+  "scope": "four software product-rounding variants on two immutable historical conditional RoPE corpora; no candidate RTL",
+  "real_pairs": 163840,
+  "native_product_words_verified": 655360,
+  "native_output_words_verified": 327680,
+  "synthetic_pairs": 7207,
+  "software_both_BF16_native_products_and_outputs_bitwise_pass": true,
+  "independent_C_every_intermediate_pass": true,
+  "original_FP32_remote_source_fidelity_rejection_retained": true,
+  "unchanged_operator_limits": {
+    "max_abs": 0.03125,
+    "mean_abs": 0.005
+  },
+  "recommended_next_candidate": "separately_named_all_four_products_BF16_RNE_with_explicit_conversion_flags_and_terminal_interface",
+  "sin_only_not_source_equivalent_bit_different_elements": 38880,
+  "summary": {
+    "local": {
+      "fp32_all": {
+        "elements": 163840,
+        "bit_different": 26091,
+        "mismatches_over_max": 0,
+        "max_abs_error": 0.03125,
+        "mean_abs_error": 0.0007908934101578779,
+        "max_ulp": 15316,
+        "mean_ulp": 3.565692138671875,
+        "pass": true
+      },
+      "cos_bf16_only": {
+        "elements": 163840,
+        "bit_different": 17448,
+        "mismatches_over_max": 0,
+        "max_abs_error": 0.03125,
+        "mean_abs_error": 0.00046262881078291685,
+        "max_ulp": 15216,
+        "mean_ulp": 3.459661865234375,
+        "pass": true
+      },
+      "sin_bf16_only": {
+        "elements": 163840,
+        "bit_different": 19438,
+        "mismatches_over_max": 0,
+        "max_abs_error": 0.03125,
+        "mean_abs_error": 0.0005733792480896227,
+        "max_ulp": 15232,
+        "mean_ulp": 3.478717041015625,
+        "pass": true
+      },
+      "both_bf16": {
+        "elements": 163840,
+        "bit_different": 0,
+        "mismatches_over_max": 0,
+        "max_abs_error": 0.0,
+        "mean_abs_error": 0.0,
+        "max_ulp": 0,
+        "mean_ulp": 0.0,
+        "pass": true
+      }
+    },
+    "remote": {
+      "fp32_all": {
+        "elements": 163840,
+        "bit_different": 26348,
+        "mismatches_over_max": 1,
+        "max_abs_error": 0.0625,
+        "mean_abs_error": 0.0008017605505301617,
+        "max_ulp": 15274,
+        "mean_ulp": 3.40018310546875,
+        "pass": false
+      },
+      "cos_bf16_only": {
+        "elements": 163840,
+        "bit_different": 17524,
+        "mismatches_over_max": 1,
+        "max_abs_error": 0.0625,
+        "mean_abs_error": 0.0004706225925474428,
+        "max_ulp": 15168,
+        "mean_ulp": 3.38414306640625,
+        "pass": false
+      },
+      "sin_bf16_only": {
+        "elements": 163840,
+        "bit_different": 19442,
+        "mismatches_over_max": 0,
+        "max_abs_error": 0.03125,
+        "mean_abs_error": 0.0005778731545433402,
+        "max_ulp": 15222,
+        "mean_ulp": 3.4829833984375,
+        "pass": true
+      },
+      "both_bf16": {
+        "elements": 163840,
+        "bit_different": 0,
+        "mismatches_over_max": 0,
+        "max_abs_error": 0.0,
+        "mean_abs_error": 0.0,
+        "max_ulp": 0,
+        "mean_ulp": 0.0,
+        "pass": true
+      }
+    }
+  },
+  "tests": {
+    "new_normal_and_optimized": 47,
+    "combined_normal_and_optimized": 89,
+    "postledger": 338,
+    "full_pass": 2090,
+    "unchanged_baseline_fail": 5,
+    "independent_explicit_checks_each_mode": 174,
+    "independent_report_checks": 2589
+  },
+  "baseline_failure_names": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "full_ablation_ran_under_python_optimized": true,
+  "production_arithmetic_changed": false,
+  "source_native_reference_changed": false,
+  "tolerances_widened": false,
+  "model_expected_regenerated": false,
+  "candidate_RTL_executed": false,
+  "full_block_accepted": false,
+  "mac_utilization_measured": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "unchanged_production_source_sha256": {
+    "src/heteronpu/rope_hardware_oracle.py": "41b05e2247bbb4af70e2fc2eebf78120547029b7eb96791accef11c06bc1cdb7",
+    "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9",
+    "scripts/run_rope_hardware_oracle.py": "b3eb8c6fda7dc6ebc8fcceef74b8f390d536ace21b26d081360c3176f3c86bdb",
+    "rtl/sfu/fp32_rope_pair.sv": "7d0f95f91ef8e1670e330007449737b31b91733796627bc21c9978d5d4deef6c",
+    "rtl/sfu/fp32_rope_pair_pipe.sv": "459446eee0c0727f21c02df564aa35d0d60f5b71f0d71cfe7afdc0c2a817774b",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c",
+    "config/upstream/qwen3_5_0p8b/rope_hardware_contract.json": "72236329a48a1e6ab9e9bb419c560c455cdcbcc61ab5cbb0060db4ef5f671132",
+    "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+  },
+  "raw_intermediates": "Each execution retains all traces, independent C traces and full mismatch indices in its output directory; CI uploads complete arrays. Immutable source/native/hardware fixtures are committed for reproducibility.",
+  "artifacts": {
+    "ablation.json": {
+      "bytes": 279948,
+      "sha256": "4b5ee101bb5549f05398a5c8028997fc6f1945cc2cdddd47f83ffd1662ac6efd"
+    },
+    "execution.txt": {
+      "bytes": 201,
+      "sha256": "7c913ceed6600d987b2acdfaa816943586e58aaf0a2680a41c8a8cdbf2ea2b60"
+    },
+    "full.txt": {
+      "bytes": 6844,
+      "sha256": "9208c8393c0b607d454f7da69754f82c03c8099417fe84b18885a096ec1e101c"
+    },
+    "independent_checks.json": {
+      "bytes": 129,
+      "sha256": "ce595bbdbfb325f4fc3446e577692912d744c2caa04f598c3ad9c7758779d71f"
+    },
+    "independent_checks.py": {
+      "bytes": 4718,
+      "sha256": "63f5d09bdba8b847c5f448bb69cc1db665ccfb8b59a84798ab05b0e69bf910c0"
+    },
+    "independent_checks_optimized.json": {
+      "bytes": 128,
+      "sha256": "3cb9b23859e1144f914154d7ea71e1ba8a2e8f2f7513771fec7265204b6834a1"
+    },
+    "independent_report_checks.json": {
+      "bytes": 1309,
+      "sha256": "6add20e8187446552865b22c71aa3d1e33e50e60eff34fa52631540a989bd1b3"
+    },
+    "independent_report_checks.py": {
+      "bytes": 4089,
+      "sha256": "cf2d67de94324fd38b26536306f8ad73bd4fbe2afdd0316ecc677765fd20464d"
+    },
+    "independent_review.json": {
+      "bytes": 7552,
+      "sha256": "07dc892bb19de793351892711486ebc646cf82f74d4cc13ddee65c0e3fb0f902"
+    },
+    "normal.txt": {
+      "bytes": 179,
+      "sha256": "3f496dcd82c7a07063f7a068c493e755b236f4cd4d82369adbf7672f4f232890"
+    },
+    "optimized.txt": {
+      "bytes": 766,
+      "sha256": "65445eafe5f256b001a7b345d7b52884469514c317a2de919a1a9d268e1963a9"
+    },
+    "postledger.txt": {
+      "bytes": 421,
+      "sha256": "128ff9b01a83ba281e125f23a317352a5baa5b6a6228c0346380700e3c28182b"
+    },
+    "source_sha256.json": {
+      "bytes": 1854,
+      "sha256": "b108b561f42993423897926a0cbff8f71d1afae155bc43335e6d615c29022529"
+    }
+  }
+}

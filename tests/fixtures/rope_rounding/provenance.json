@@ -1,0 +1,202 @@
+{
+  "local": {
+    "bundle": {
+      "file": "local.npz",
+      "bytes": 2786810,
+      "sha256": "36a68fd9573d5b9757283668cd635cce5bb2f9ed9a12ceb254ebde7e35140e32"
+    },
+    "groups": [
+      {
+        "case": "cold_m128",
+        "producer": "q",
+        "heads": 8,
+        "start": 0,
+        "pairs": 32768
+      },
+      {
+        "case": "cold_m128",
+        "producer": "k",
+        "heads": 2,
+        "start": 32768,
+        "pairs": 8192
+      },
+      {
+        "case": "carried_m128",
+        "producer": "q",
+        "heads": 8,
+        "start": 40960,
+        "pairs": 32768
+      },
+      {
+        "case": "carried_m128",
+        "producer": "k",
+        "heads": 2,
+        "start": 73728,
+        "pairs": 8192
+      }
+    ],
+    "original_audit_report": {
+      "file": "result.json",
+      "bytes": 83514,
+      "sha256": "fece52d072ea997675a59865ed1e5ffb48ac28e41b7ae3e8e32552f8e9d0fda1"
+    },
+    "original_audit_arrays": {
+      "file": "all_bf16_producers.npz",
+      "bytes": 62873042,
+      "sha256": "836ce634c677f5b171c69c525a8d5cf6d018b30414f06427c236c8c08803bff7"
+    },
+    "original_component_report": {
+      "file": "result.json",
+      "bytes": 61551,
+      "sha256": "42457029cd3abd9fe9a44ecbebb6ba43bed1c539078eb238123d0d177a21545a"
+    },
+    "original_vectors": {
+      "file": "oracle_vectors.npy",
+      "bytes": 2351428,
+      "sha256": "608c3af56307038ed4255a698e589db8cbc095fcefb3999519a75126fe91ce28"
+    },
+    "original_actual_RTL_outputs": [
+      {
+        "file": "rtl_outputs0.txt",
+        "bytes": 1763475,
+        "sha256": "4abc890e59b49c38618a94c7b65a3fe4e7f1d136b67a82f98e396c02b6ff8a50"
+      },
+      {
+        "file": "rtl_outputs1.txt",
+        "bytes": 1763475,
+        "sha256": "4abc890e59b49c38618a94c7b65a3fe4e7f1d136b67a82f98e396c02b6ff8a50"
+      }
+    ],
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "historical_native_audit_status": "BLOCKED_BF16_PRODUCER_GATE",
+    "historical_native_failed_comparisons": 9,
+    "environment": {
+      "python": "3.12.14",
+      "torch": "2.10.0+cpu",
+      "torch_git_version": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+      "numpy": "2.3.5",
+      "torch_threads": 2,
+      "torch_cpu_capability": "AVX512",
+      "torch_config": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+      "numpy_config": "Build Dependencies:\n  blas:\n    detection method: pkgconfig\n    found: true\n    include directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include\n    lib directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib\n    name: scipy-openblas\n    openblas configuration: OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY\n      Haswell MAX_THREADS=64\n    pc file directory: /project/.openblas\n    version: 0.3.30\n  lapack:\n    detection method: pkgconfig\n    found: true\n    include directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include\n    lib directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib\n    name: scipy-openblas\n    openblas configuration: OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY\n      Haswell MAX_THREADS=64\n    pc file directory: /project/.openblas\n    version: 0.3.30\nCompilers:\n  c:\n    commands: cc\n    linker: ld.bfd\n    name: gcc\n    version: 14.2.1\n  c++:\n    commands: c++\n    linker: ld.bfd\n    name: gcc\n    version: 14.2.1\n  cython:\n    commands: cython\n    linker: cython\n    name: cython\n    version: 3.2.1\nMachine Information:\n  build:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\n  host:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\nPython Information:\n  path: /tmp/build-env-aw1mwcap/bin/python\n  version: '3.12'\nSIMD Extensions:\n  baseline:\n  - SSE\n  - SSE2\n  - SSE3\n  found:\n  - SSSE3\n  - SSE41\n  - POPCNT\n  - SSE42\n  - AVX\n  - F16C\n  - FMA3\n  - AVX2\n  - AVX512F\n  - AVX512CD\n  - AVX512_SKX\n  - AVX512_CLX\n  - AVX512_CNL\n  - AVX512_ICL\n  not found:\n  - AVX512_KNL\n  - AVX512_KNM\n  - AVX512_SPR\n\n",
+      "transformers_direct_url": {
+        "archive_info": {
+          "hash": "sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d",
+          "hashes": {
+            "sha256": "15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d"
+          }
+        },
+        "url": "https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip"
+      },
+      "official_source_sha256": {
+        "modeling": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+        "cache": "abdcb0ae88aa5b924ef7d76879db680e9af8f3ec1dafbba7ce446ecb521a944b",
+        "activations": "5b20c0a3625edc0001a98f09ce3c6b5baa1100e1d7ad8dee649e4d45c8468665",
+        "configuration": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e"
+      }
+    },
+    "arithmetic_recomputed_when_freezing": false
+  },
+  "remote": {
+    "bundle": {
+      "file": "remote.npz",
+      "bytes": 2787206,
+      "sha256": "e9526ac7b8084fadb200ab5c6d5b7bc909ec8f34408a4b63daa7af664c66ca6c"
+    },
+    "groups": [
+      {
+        "case": "cold_m128",
+        "producer": "q",
+        "heads": 8,
+        "start": 0,
+        "pairs": 32768
+      },
+      {
+        "case": "cold_m128",
+        "producer": "k",
+        "heads": 2,
+        "start": 32768,
+        "pairs": 8192
+      },
+      {
+        "case": "carried_m128",
+        "producer": "q",
+        "heads": 8,
+        "start": 40960,
+        "pairs": 32768
+      },
+      {
+        "case": "carried_m128",
+        "producer": "k",
+        "heads": 2,
+        "start": 73728,
+        "pairs": 8192
+      }
+    ],
+    "original_audit_report": {
+      "file": "result.json",
+      "bytes": 81727,
+      "sha256": "d04f72678b8347bcf872f5a33c5948a0fc66e14a4f98d1a60d0976a611523d25"
+    },
+    "original_audit_arrays": {
+      "file": "all_bf16_producers.npz",
+      "bytes": 62877082,
+      "sha256": "81f51be898714b17602eaa63e51d945c7a7552cf0e0e25648fbe863948f4fe48"
+    },
+    "original_component_report": {
+      "file": "result.json",
+      "bytes": 61580,
+      "sha256": "73ce7a2336901b30b9fdaaf8f5c05098bf409a2d96252b93ff20aab382887608"
+    },
+    "original_vectors": {
+      "file": "oracle_vectors.npy",
+      "bytes": 2351428,
+      "sha256": "030bc8e8e129587d49ab0f09ad98a8c985baa929f3910657f7bb98d9a095c531"
+    },
+    "original_actual_RTL_outputs": [
+      {
+        "file": "rtl_outputs0.txt",
+        "bytes": 1763475,
+        "sha256": "4a13f2e6dd2e2b1e2915d909ffb0ee9ddd862a6dcb824673752602dd2bf02443"
+      },
+      {
+        "file": "rtl_outputs1.txt",
+        "bytes": 1763475,
+        "sha256": "4a13f2e6dd2e2b1e2915d909ffb0ee9ddd862a6dcb824673752602dd2bf02443"
+      }
+    ],
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "historical_native_audit_status": "BLOCKED_BF16_PRODUCER_GATE",
+    "historical_native_failed_comparisons": 5,
+    "environment": {
+      "python": "3.12.14",
+      "torch": "2.10.0+cpu",
+      "torch_git_version": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+      "numpy": "2.3.5",
+      "torch_threads": 2,
+      "torch_cpu_capability": "AVX2",
+      "torch_config": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX2\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+      "numpy_config": "Build Dependencies:\n  blas:\n    detection method: pkgconfig\n    found: true\n    include directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include\n    lib directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib\n    name: scipy-openblas\n    openblas configuration: OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY\n      Haswell MAX_THREADS=64\n    pc file directory: /project/.openblas\n    version: 0.3.30\n  lapack:\n    detection method: pkgconfig\n    found: true\n    include directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include\n    lib directory: /opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib\n    name: scipy-openblas\n    openblas configuration: OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY\n      Haswell MAX_THREADS=64\n    pc file directory: /project/.openblas\n    version: 0.3.30\nCompilers:\n  c:\n    commands: cc\n    linker: ld.bfd\n    name: gcc\n    version: 14.2.1\n  c++:\n    commands: c++\n    linker: ld.bfd\n    name: gcc\n    version: 14.2.1\n  cython:\n    commands: cython\n    linker: cython\n    name: cython\n    version: 3.2.1\nMachine Information:\n  build:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\n  host:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\nPython Information:\n  path: /tmp/build-env-aw1mwcap/bin/python\n  version: '3.12'\nSIMD Extensions:\n  baseline:\n  - SSE\n  - SSE2\n  - SSE3\n  found:\n  - SSSE3\n  - SSE41\n  - POPCNT\n  - SSE42\n  - AVX\n  - F16C\n  - FMA3\n  - AVX2\n  not found:\n  - AVX512F\n  - AVX512CD\n  - AVX512_KNL\n  - AVX512_KNM\n  - AVX512_SKX\n  - AVX512_CLX\n  - AVX512_CNL\n  - AVX512_ICL\n  - AVX512_SPR\n\n",
+      "transformers_direct_url": {
+        "archive_info": {
+          "hash": "sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d",
+          "hashes": {
+            "sha256": "15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d"
+          }
+        },
+        "url": "https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip"
+      },
+      "official_source_sha256": {
+        "modeling": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+        "cache": "abdcb0ae88aa5b924ef7d76879db680e9af8f3ec1dafbba7ce446ecb521a944b",
+        "activations": "5b20c0a3625edc0001a98f09ce3c6b5baa1100e1d7ad8dee649e4d45c8468665",
+        "configuration": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e"
+      }
+    },
+    "arithmetic_recomputed_when_freezing": false
+  }
+}

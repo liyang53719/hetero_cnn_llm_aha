@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SCOPED_SOFTWARE_ABLATION_REVIEW",
+  "open_blockers": [],
+  "reviewed_result": "work/rope_rounding_ablation/verified_final/result.json",
+  "reviewed_result_sha256": "4b5ee101bb5549f05398a5c8028997fc6f1945cc2cdddd47f83ffd1662ac6efd",
+  "reviewed_source_sha256": {
+    "scripts/run_rope_rounding_ablation.py": "b4e09b4e24a7f4fc169d51863ca97d2b36a4b98b10daddf2de4cf7f446e0e2f0",
+    "scripts/freeze_rope_rounding_corpora.py": "6c0376da1ed2d53f642fad328b46b5e510557c157d077ed4023b3c263fecc69a",
+    "scripts/rope_rounding_fenv_reference.c": "ce8a6887eeac1e6a46331c84704980b957f6d5ed51563e4ab51157ffcf6d7a0b",
+    "src/heteronpu/rope_rounding_ablation.py": "374512d8fe925e22e6d5327ee564a6d36ccd093a32665de92a69e7c0987513c1",
+    "src/heteronpu/rope_hardware_oracle.py": "41b05e2247bbb4af70e2fc2eebf78120547029b7eb96791accef11c06bc1cdb7",
+    "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9"
+  },
+  "conclusions": {
+    "functional": "All four policies implement separate FP32 RNE products, optional chosen product BF16 RNE, separate FP32 sums and terminal BF16 RNE; both-BF16 reproduces all 655360 retained native product values and 327680 native outputs across two frozen corpora.",
+    "provenance": "Pinned original reports, full native arrays, oracle vectors, actual RTL text and NPY bind both compact corpora. Independent re-extraction is byte-identical, and independently vectorized producer/transpose/sign mappings match all real pairs. Official local source hash agrees with historical pin. No model-native expectations regenerated.",
+    "independence": "C volatile binary32/fenv operations and comparison/parity BF16 conversion are algorithmically independent of Python integer dyadics. All 18 trace words per variant match for 163840 real and 7207 synthetic pairs on this host.",
+    "fail_closed": "Normal and optimized admissions preserve require gates. Direct checks reject every corrupted fixture, invalid input type/nonfinite input in all operand positions, malformed C rows, overflows and the repaired invalid UF waiver.",
+    "metrics": "All four comparison families over all five groups per corpus/variant independently recomputed, including differences, absolute errors, unchanged thresholds, direction, signed zero, ULP histogram/quantiles and terminal max witnesses.",
+    "protocol": "Not newly tested; historical original RTL outputs/flags retained and replayed only.",
+    "physical_implementation": "Candidate RTL, coefficient generation, packing/storage integration, timing and synthesis untested; no production arithmetic changed.",
+    "qor": "No candidate PPA, performance or useful-wall MAC utilization conclusion is supported."
+  },
+  "resolved_findings": [
+    {
+      "id": "R1",
+      "severity": "P2",
+      "issue": "Synthetic min-normal tininess waiver initially admitted UF-only flag injection for an exact operation (flags 2 versus host 0).",
+      "reproduction": "00800000 00000000 3f800000 00000000; flip traces[0,0,4] ^= 2; allow_tininess_difference=True.",
+      "resolution": "Require NX on both references before admitting UF disagreement; regression and direct normal/-O checks pass. Existing real/synthetic results had no waived differences, so numerical conclusions unchanged."
+    },
+    {
+      "id": "R2",
+      "severity": "P3",
+      "issue": "Preliminary run1 C source digest was stale after C hardening.",
+      "resolution": "verified_final and independent_final freshly replay final source; all hashes verified. Runner now checks source/fixture stability across execution."
+    }
+  ],
+  "scope_limits": [
+    "Finite-only arithmetic; NaN/Inf and FP32/BF16 overflow deliberately rejected.",
+    "BF16 conversion exception flag behavior is not a defined candidate RTL policy.",
+    "Host fenv underflow may differ at min-normal inexact boundaries; no differences observed here.",
+    "Real corpora cover cold/carried M128 Q8/K2 and 64 rotated dimensions, conditional on saved native input/coefficient bits.",
+    "Sine-only passes existing limits on these corpora but differs at 38880 output elements; it is not source-native equivalent.",
+    "Full-block native fidelity, U00.2/U01 closure and MAC90% remain open."
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -m pytest -o addopts='' -q -p no:cacheprovider --basetemp=work/rope_rounding_ablation/review/final_pytest_tmp tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py",
+      "result": "89 passed in 0.58s",
+      "log": "final_pytest.txt"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -O -m pytest -o addopts='' -q -p no:cacheprovider --basetemp=work/rope_rounding_ablation/review/final_pytest_O_tmp tests/test_rope_rounding_ablation.py tests/test_rope_hardware_oracle.py",
+      "result": "89 passed, 1 expected optimization warning in 0.83s",
+      "log": "final_pytest_O.txt"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python work/rope_rounding_ablation/review/review_checks.py",
+      "result": "174 explicit no-assert checks passed",
+      "log": "checks.json"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -O work/rope_rounding_ablation/review/review_checks.py",
+      "result": "174 explicit no-assert checks passed",
+      "log": "checks_O.json"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python scripts/freeze_rope_rounding_corpora.py --local-audit work/bf16_recovery/final_saved --local-component work/rope_hardware_oracle/final_gate_saved --remote-audit work/rope_rounding_ablation/remote_native/bf16 --remote-component work/rope_hardware_oracle/exacthead_artifact/rope_result --output work/rope_rounding_ablation/review/refrozen",
+      "result": "All four compact fixtures byte-identical to frozen source pins",
+      "log": "refreeze.log"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python -O scripts/run_rope_rounding_ablation.py --output work/rope_rounding_ablation/review/independent_final",
+      "result": "PASS_FROZEN_CORPUS_SOFTWARE_ABLATION_ONLY; independent complete final replay agrees with verified_final in source/fixture hashes, corpora, synthetic checks and witness",
+      "log": "independent_final.log"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /tmp/hetero-reference-venv/bin/python work/rope_rounding_ablation/review/check_final_report.py",
+      "result": "2589 report/hash/metric/witness checks passed",
+      "log": "final_report_checks.json"
+    }
+  ],
+  "reviewer_writes": "Only work/rope_rounding_ablation/review/ reports, test scripts and outputs; no main code edits.",
+  "additional_reviewed_files": [
+    ".github/workflows/rope-rounding-ablation.yml",
+    "tests/fixtures/rope_rounding/README.md",
+    "doc/U00_2_ROPE_ROUNDING_ABLATION_20261007_CN.md",
+    "doc/U00_2_ROPE_HARDWARE_ORACLE_20261007_CN.md",
+    "doc/three_model_typical_block_closure_20260917_zh.yaml"
+  ],
+  "documentation_and_workflow": "Scope and CI naming distinguish software replay from candidate RTL, full block and performance. Hardware cost statements are expressly conditional and are not synthesis claims. Suggested clearer Chinese output-element bit-pattern wording is editorial only."
+}

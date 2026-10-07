@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 328cc6371cc8648810a993551bba713e3d3a5c208c17f9e6a05204005b1e099e
+计划SHA256: 02def9ff830e8b3789180319456f76c0a97bc7bd2b3a8e3ee5cd9feefc8c08f1
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -910,6 +910,37 @@
         SHA256: 73ce7a2336901b30b9fdaaf8f5c05098bf409a2d96252b93ff20aab382887608
       - 文件: reports/execution/U00_2_ROPE_SOURCE_FIDELITY_20261007/source_sha256.json
         SHA256: 6922727b7217cdf096dc6aa113d941a7a23f458b3fd7248cbe1c44aae8423dd0
+    - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/result.json
+      SHA256: 4334ff4c1e1df7209602f06cc46e0d2b8287848c4b03cdf07ffe457b4522c4b4
+      设计提交: 786db515ad828c47487e860188184d378ccf7fd6
+      范围: 两套冻结历史真实输入共163840 pairs的软件四路舍入消融：all-products BF16与655360个保存native产品及327680个输出逐位一致；sin-only仍差38880输出，cos-only及原FP32保留远端0.0625>0.03125反例。每个中间值独立C复核；89项normal/-O、全仓2090通过及原5失败。未执行候选RTL，不改生产/native/门限，不升级U00.2/U01/MAC90%。
+      关联文件:
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/ablation.json
+        SHA256: 4b5ee101bb5549f05398a5c8028997fc6f1945cc2cdddd47f83ffd1662ac6efd
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/execution.txt
+        SHA256: 7c913ceed6600d987b2acdfaa816943586e58aaf0a2680a41c8a8cdbf2ea2b60
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/full.txt
+        SHA256: 9208c8393c0b607d454f7da69754f82c03c8099417fe84b18885a096ec1e101c
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/independent_checks.json
+        SHA256: ce595bbdbfb325f4fc3446e577692912d744c2caa04f598c3ad9c7758779d71f
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/independent_checks.py
+        SHA256: 63f5d09bdba8b847c5f448bb69cc1db665ccfb8b59a84798ab05b0e69bf910c0
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/independent_checks_optimized.json
+        SHA256: 3cb9b23859e1144f914154d7ea71e1ba8a2e8f2f7513771fec7265204b6834a1
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/independent_report_checks.json
+        SHA256: 6add20e8187446552865b22c71aa3d1e33e50e60eff34fa52631540a989bd1b3
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/independent_report_checks.py
+        SHA256: cf2d67de94324fd38b26536306f8ad73bd4fbe2afdd0316ecc677765fd20464d
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/independent_review.json
+        SHA256: 07dc892bb19de793351892711486ebc646cf82f74d4cc13ddee65c0e3fb0f902
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/normal.txt
+        SHA256: 3f496dcd82c7a07063f7a068c493e755b236f4cd4d82369adbf7672f4f232890
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/optimized.txt
+        SHA256: 65445eafe5f256b001a7b345d7b52884469514c317a2de919a1a9d268e1963a9
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/postledger.txt
+        SHA256: 128ff9b01a83ba281e125f23a317352a5baa5b6a6228c0346380700e3c28182b
+      - 文件: reports/execution/U00_2_ROPE_ROUNDING_ABLATION_20261007/source_sha256.json
+        SHA256: b108b561f42993423897926a0cbff8f71d1afae155bc43335e6d615c29022529
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -974,6 +1005,7 @@
 - {编号: U00.2, 执行者: sandbox@rope-hardware-oracle-20261007, 时间: '2026-10-07T01:59:22.123103+00:00', 说明: 按实际HardFloat算术完成首个真实前缀RoPE数值RTL组件门禁；原native/RTL算术/门限不变，保留完整block硬件oracle、QK
     Norm/packed gate集成和三模型useful-wall MAC90%未完成。}
 - {编号: U00.2, 执行者: sandbox@rope-source-fidelity-20261007, 时间: '2026-10-07T02:14:47.648071+00:00', 说明: 追加远端真实输入的RoPE源模型精度拒绝反例；本地组件精度样例通过不得泛化，固定原阈值并保持生产算术不变。}
+- {编号: U00.2, 执行者: sandbox@rope-rounding-ablation-20261007, 时间: '2026-10-07T03:15:08.251657+00:00', 说明: 固定本地与远端真实输入和历史native/RTL原位，完成四路软件舍入消融与独立复核，推荐下个独立both-BF16候选；生产默认算术不变，实际候选RTL及完整block/90%未验收。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

@@ -1,0 +1,18 @@
+{
+  "scripts/run_rope_rounding_ablation.py": "b4e09b4e24a7f4fc169d51863ca97d2b36a4b98b10daddf2de4cf7f446e0e2f0",
+  "scripts/freeze_rope_rounding_corpora.py": "6c0376da1ed2d53f642fad328b46b5e510557c157d077ed4023b3c263fecc69a",
+  "scripts/rope_rounding_fenv_reference.c": "ce8a6887eeac1e6a46331c84704980b957f6d5ed51563e4ab51157ffcf6d7a0b",
+  "src/heteronpu/rope_rounding_ablation.py": "374512d8fe925e22e6d5327ee564a6d36ccd093a32665de92a69e7c0987513c1",
+  "src/heteronpu/rope_hardware_oracle.py": "41b05e2247bbb4af70e2fc2eebf78120547029b7eb96791accef11c06bc1cdb7",
+  "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9",
+  "tests/test_rope_rounding_ablation.py": "dd77da0f02d29d90fab9c8f97da8a1606dcfdbeb74144efb2044b0404645a149",
+  ".github/workflows/rope-rounding-ablation.yml": "eb0fa36e3777a355a3cd9ab905195dff0b9534b66aacc08444f75b2eed4c2da6",
+  "doc/U00_2_ROPE_ROUNDING_ABLATION_20261007_CN.md": "21c99717c41c86eeb6c51253f64fb3f6787106b0323f36f2744742b2a258dbdb",
+  "doc/U00_2_ROPE_HARDWARE_ORACLE_20261007_CN.md": "c44f33d2dff9ba7ee17c327e64297556898c02659dd50bc06671d81a0f8ab3b9",
+  "doc/three_model_typical_block_closure_20260917_zh.yaml": "02def9ff830e8b3789180319456f76c0a97bc7bd2b3a8e3ee5cd9feefc8c08f1",
+  "tests/fixtures/rope_rounding/README.md": "df324fe6fdf0b91ce64c91df68d00353e9d057e9e2de5d2b05afa2ce567878d8",
+  "tests/fixtures/rope_rounding/provenance.json": "3573898549e7bae16d2c191b99c14e492dd94f38c9097513485747c26d4e6b4a",
+  "tests/fixtures/rope_rounding/historical_arithmetic.npy": "39a0b80418759549d02691d879db80b6fa53d29855349eb0119d7790fc0c4f8b",
+  "tests/fixtures/rope_rounding/remote.npz": "e9526ac7b8084fadb200ab5c6d5b7bc909ec8f34408a4b63daa7af664c66ca6c",
+  "tests/fixtures/rope_rounding/local.npz": "36a68fd9573d5b9757283668cd635cce5bb2f9ed9a12ceb254ebde7e35140e32"
+}

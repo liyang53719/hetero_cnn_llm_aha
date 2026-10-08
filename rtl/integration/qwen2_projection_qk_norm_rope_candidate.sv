@@ -9,7 +9,10 @@
 //
 // The seven working regions must be disjoint. In selected-head mode local
 // packed/Norm/RoPE bases denote whole tensors and gamma/trig are direct.
-// Tensor mode instead reuses fixed local single-head packed/Norm/RoPE staging;
+// Tensor mode instead reuses bounded local packed/Norm/RoPE staging;
+// explicit tile16 mode reserves sixteen packed rows in the same SharedL2,
+// reuses each weight tile across active rows, then drains Norm/RoPE perrow.
+// completed_tokens advances only after a fully ACKed batch in tile16 mode;
 // trig is an explicit128-byte-per-token table indexed by absolute source token.
 // All full-mode outputs commit to DDR before staging reuse. Token extent is
 // 1..128; Q has8 packed heads,K has2. done waits for every DMA and L2 ACK.
@@ -61,7 +64,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
  output logic[3:0]candidate_norm_status_o,
  output logic[31:0]candidate_mean_eps_o,candidate_inv_o,
  // Tensor mode is explicit; omitted ports preserve the selected-head mode.
- input logic candidate_tensor_i,input logic[7:0]candidate_token_count_i,
+ input logic candidate_tensor_i,input logic candidate_tile16_i,input logic[7:0]candidate_token_count_i,
  input logic[63:0]candidate_norm_output_ddr_i,candidate_rope_output_ddr_i,
  output logic[7:0]candidate_total_column_tiles_o,
  output logic[15:0]candidate_completed_heads_o,
@@ -80,7 +83,12 @@ module qwen2_projection_qk_norm_rope_candidate #(
  localparam logic[64:0]DDR_LIMIT=65'd1<<56;
  logic[127:0]command_q;
  logic[31:0]token_q,token_start_q;
- logic tensor_q;
+ logic tensor_q,tile16_q;
+ logic[31:0]batch_start_q;
+ logic[4:0]batch_rows_q;
+ logic[3:0]row_q,act_row_q;
+ logic[32:0]batch_remaining;
+ logic[63:0]packed_tile_address;
  logic[7:0]token_count_q;
  logic[32:0]token_end;
  logic[63:0]norm_ddr_base_q,rope_ddr_base_q,trig_head_q;
@@ -129,6 +137,8 @@ module qwen2_projection_qk_norm_rope_candidate #(
  assign engine_rst_n=rst_ni&&state_q!=IDLE&&state_q!=DONE&&state_q!=FLUSH&&
   state_q!=HEAD_FLUSH1&&state_q!=HEAD_FLUSH2;
  assign token_end={1'b0,token_start_q}+{25'd0,token_count_q};
+ assign batch_remaining=token_end-{1'b0,batch_start_q};
+ assign packed_tile_address=packed_q+64'(tile_q)*(tile16_q?64'd1024:64'd64);
  assign head_count=role_q==0?16'd8:16'd2;
  assign packed_stride=role_q==0?32'd8192:32'd1024;
  assign normalized_stride=role_q==0?32'd4096:32'd1024;
@@ -145,7 +155,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
  always_comb begin
   region_base[0]={1'b0,activation_q};region_bytes[0]=65536;
   region_base[1]={1'b0,weight_q};region_bytes[1]=65536;
-  region_base[2]=packed_address;region_bytes[2]=65'(head_packed_bytes);
+  region_base[2]=packed_address;region_bytes[2]=65'(head_packed_bytes)*(tile16_q?65'd16:65'd1);
   region_base[3]={1'b0,gamma_q};region_bytes[3]=512;
   region_base[4]=norm_address;region_bytes[4]=512;
   region_base[5]={1'b0,trig_q}+(tensor_q?65'(token_start_q)*128:65'd0);
@@ -196,6 +206,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
   !(packed_ddr_address<weight_ddr_address+65'd1023*packed_stride+65'(head_packed_bytes)&&
     weight_ddr_address<packed_ddr_address+65'(head_packed_bytes));
  assign shape_legal=(role_q==0||role_q==1)&&policy_q==8'hc1&&
+  (!tile16_q||tensor_q)&&
   head_q<head_count&&token_q<{14'd0,tensor_shape[17:0]}&&
   (!tensor_q||(token_count_q!=0&&token_count_q<=128&&
    token_end<={15'd0,tensor_shape[17:0]}))&&
@@ -214,8 +225,8 @@ module qwen2_projection_qk_norm_rope_candidate #(
   .CANDIDATE_RNE_BF16(1'b1),.L2_BEATS(L2_BEATS)) payload(
   .clk_i,.rst_ni(engine_rst_n),.start_i(state_q==PAYLOAD_START),
   .activation_local_i(activation_q),.weight_local_i(weight_q),
-  .output_local_i(packed_q+64'(tile_q)*64),.depth_i(16'd1024),
-  .weight_k_stride_i(32'd64),.rows_i(16'd1),.columns_i(16'd32),
+  .output_local_i(packed_tile_address),.depth_i(16'd1024),
+  .weight_k_stride_i(32'd64),.rows_i(tile16_q?{11'd0,batch_rows_q}:16'd1),.columns_i(16'd32),
   .output_fp32_i(1'b0),.status_o(pstatus),
   .l2_rd_valid_o(prv),.l2_rd_ready_i(prr),.l2_rd_addr_o(pra),
   .l2_rsp_valid_i(prsv),.l2_rsp_ready_o(prsr),.l2_rsp_data_i,
@@ -264,18 +275,18 @@ module qwen2_projection_qk_norm_rope_candidate #(
  assign dma_req_valid_o=state_q==ACT_REQ||state_q==WEIGHT_REQ||state_q==STORE_REQ||
   state_q==NORM_STORE_REQ||state_q==ROPE_STORE_REQ;
  assign dma_req_kind_o=(state_q==STORE_REQ||state_q==NORM_STORE_REQ||state_q==ROPE_STORE_REQ)?2'd3:2'd1;
- assign dma_src_addr_o=state_q==ACT_REQ?act_ddr_q:
+ assign dma_src_addr_o=state_q==ACT_REQ?act_ddr_q+(tile16_q?64'(act_row_q)*2048:64'd0):
   state_q==WEIGHT_REQ?weight_ddr_q+64'(tile_q)*64:
-  state_q==NORM_STORE_REQ?norm_q:state_q==ROPE_STORE_REQ?rope_q:packed_q+64'(tile_q)*64;
- assign dma_dst_addr_o=state_q==ACT_REQ?activation_q:
+  state_q==NORM_STORE_REQ?norm_q:state_q==ROPE_STORE_REQ?rope_q:packed_tile_address;
+ assign dma_dst_addr_o=state_q==ACT_REQ?activation_q+(tile16_q?64'(act_row_q)*2:64'd0):
   state_q==WEIGHT_REQ?weight_q:state_q==NORM_STORE_REQ?norm_ddr_address[63:0]:
   state_q==ROPE_STORE_REQ?rope_ddr_address[63:0]:packed_ddr_q+64'(tile_q)*64;
  assign dma_row_bytes_o=state_q==ACT_REQ?32'd2:32'd64;
- assign dma_rows_o=state_q==STORE_REQ?32'd1:
+ assign dma_rows_o=state_q==STORE_REQ?(tile16_q?{27'd0,batch_rows_q}:32'd1):
   (state_q==NORM_STORE_REQ||state_q==ROPE_STORE_REQ)?32'd8:32'd1024;
  assign dma_src_stride_o=state_q==ACT_REQ?32'd2:
   state_q==WEIGHT_REQ?packed_stride:32'd64;
- assign dma_dst_stride_o=32'd64;
+ assign dma_dst_stride_o=state_q==STORE_REQ&&tile16_q?packed_stride:32'd64;
  assign dma_rsp_ready_o=state_q==ACT_RSP||state_q==WEIGHT_RSP||state_q==STORE_RSP||
   state_q==NORM_STORE_RSP||state_q==ROPE_STORE_RSP;
 
@@ -292,7 +303,8 @@ module qwen2_projection_qk_norm_rope_candidate #(
    pwr=leaf_wr;
   end else if(state_q==HEAD_REQ||state_q==GAMMA_REQ)begin
    l2_rd_valid_o=1'b1;
-   l2_rd_addr_o=ADDR_W'(((state_q==HEAD_REQ?packed_q:gamma_q)>>6)+64'(beat_q));
+   l2_rd_addr_o=ADDR_W'(((state_q==HEAD_REQ?packed_q:gamma_q)>>6)+
+    ((state_q==HEAD_REQ&&tile16_q)?64'(beat_q)*16+64'(row_q):64'(beat_q)));
   end else if(state_q==HEAD_RSP||state_q==GAMMA_RSP)begin
    l2_rsp_ready_o=1'b1;
   end else if(state_q==NORM_WRITE)begin
@@ -318,7 +330,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
  always_ff@(posedge clk_i or negedge rst_ni)begin
   if(!rst_ni)begin
    state_q<=IDLE;command_q<=0;token_q<=0;role_q<=0;head_q<=0;policy_q<=0;
-   tensor_q<=0;token_start_q<=0;token_count_q<=0;
+   tensor_q<=0;tile16_q<=0;batch_start_q<=0;batch_rows_q<=0;row_q<=0;act_row_q<=0;token_start_q<=0;token_count_q<=0;
    norm_ddr_base_q<=0;rope_ddr_base_q<=0;trig_head_q<=0;
    candidate_total_column_tiles_o<=0;candidate_completed_heads_o<=0;candidate_completed_tokens_o<=0;
    activation_q<=0;weight_q<=0;packed_base_q<=0;gamma_q<=0;
@@ -337,7 +349,9 @@ module qwen2_projection_qk_norm_rope_candidate #(
    case(state_q)
     IDLE:if(start_i&&ready_o)begin
      command_q<=command_i;token_q<=token_base_i;role_q<=candidate_role_i;
-     tensor_q<=candidate_tensor_i===1'b1;token_start_q<=token_base_i;
+     tensor_q<=candidate_tensor_i===1'b1;tile16_q<=candidate_tile16_i===1'b1;token_start_q<=token_base_i;
+     batch_start_q<=token_base_i;batch_rows_q<=candidate_token_count_i>16?5'd16:candidate_token_count_i[4:0];
+     row_q<=0;act_row_q<=0;
      token_count_q<=candidate_token_count_i;
      norm_ddr_base_q<=candidate_norm_output_ddr_i;rope_ddr_base_q<=candidate_rope_output_ddr_i;
      candidate_total_column_tiles_o<=0;candidate_completed_heads_o<=0;candidate_completed_tokens_o<=0;
@@ -366,13 +380,18 @@ module qwen2_projection_qk_norm_rope_candidate #(
       trig_head_q<=trig_address[63:0];
       packed_q<=packed_address[63:0];norm_q<=norm_address[63:0];rope_q<=rope_address[63:0];
       act_ddr_q<=act_ddr_address[63:0];weight_ddr_q<=weight_ddr_address[63:0];
-      packed_ddr_q<=packed_ddr_address[63:0];state_q<=ACT_REQ;
+      packed_ddr_q<=packed_ddr_address[63:0];
+      state_q<=tile16_q&&head_q!=0?MATRIX_CMD:ACT_REQ;
      end
     end
     ACT_REQ:if(dma_req_valid_o&&dma_req_ready_i)state_q<=ACT_RSP;
     ACT_RSP:if(dma_rsp_valid_i&&dma_rsp_ready_o)begin
      if(dma_rsp_error_i)begin status_o<=6;state_q<=DONE;end
-     else begin ddr_read_bytes_o<=ddr_read_bytes_o+2048;state_q<=MATRIX_CMD;end
+     else begin
+      ddr_read_bytes_o<=ddr_read_bytes_o+2048;
+      if(tile16_q&&{1'b0,act_row_q}+5'd1<batch_rows_q)begin act_row_q<=act_row_q+1'b1;state_q<=ACT_REQ;end
+      else state_q<=MATRIX_CMD;
+     end
     end
     MATRIX_CMD:if(mready)state_q<=WEIGHT_REQ;
     WEIGHT_REQ:if(dma_req_valid_o&&dma_req_ready_i)state_q<=WEIGHT_RSP;
@@ -389,7 +408,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
     STORE_RSP:if(dma_rsp_valid_i&&dma_rsp_ready_o)begin
      if(dma_rsp_error_i)begin status_o<=6;state_q<=DONE;end
      else begin
-      ddr_write_bytes_o<=ddr_write_bytes_o+64;
+      ddr_write_bytes_o<=ddr_write_bytes_o+64*(tile16_q?64'(batch_rows_q):64'd1);
       if({1'b0,tile_q}+6'd1==column_tiles_o)begin beat_q<=0;state_q<=HEAD_REQ;end
       else begin tile_q<=tile_q+1'b1;state_q<=WEIGHT_REQ;end
      end
@@ -439,13 +458,33 @@ module qwen2_projection_qk_norm_rope_candidate #(
     end
     NEXT_HEAD:begin
      candidate_completed_heads_o<=candidate_completed_heads_o+1'b1;
-     if(head_q+16'd1==head_count)begin
-      candidate_completed_tokens_o<=candidate_completed_tokens_o+1'b1;
-      if({1'b0,token_q}+33'd1==token_end)state_q<=DONE;
-      else begin token_q<=token_q+1'b1;head_q<=0;state_q<=HEAD_FLUSH1;end
-     end else begin head_q<=head_q+1'b1;state_q<=HEAD_FLUSH1;end
-     tile_q<=0;beat_q<=0;mseen_q<=0;
-     packed_head_q<=0;gamma_head_q<=0;norm_head_q<=0;
+     if(tile16_q)begin
+      if({1'b0,row_q}+5'd1<batch_rows_q)begin
+       // Matrix and packed tile stay owned until every row has drained.
+       row_q<=row_q+1'b1;token_q<=token_q+1'b1;
+       trig_head_q<=trig_q+(64'(token_q)+1)*128;
+       state_q<=HEAD_REQ;
+      end else begin
+       row_q<=0;tile_q<=0;mseen_q<=0;act_row_q<=0;
+       if(head_q+16'd1==head_count)begin
+        candidate_completed_tokens_o<=candidate_completed_tokens_o+{3'd0,batch_rows_q};
+        if({1'b0,batch_start_q}+{28'd0,batch_rows_q}==token_end)state_q<=DONE;
+        else begin
+         token_q<=batch_start_q+32'(batch_rows_q);batch_start_q<=batch_start_q+32'(batch_rows_q);
+         batch_rows_q<=batch_remaining-{28'd0,batch_rows_q}>16?5'd16:5'(batch_remaining-{28'd0,batch_rows_q});
+         head_q<=0;state_q<=HEAD_FLUSH1;
+        end
+       end else begin token_q<=batch_start_q;head_q<=head_q+1'b1;state_q<=HEAD_FLUSH1;end
+      end
+     end else begin
+      if(head_q+16'd1==head_count)begin
+       candidate_completed_tokens_o<=candidate_completed_tokens_o+1'b1;
+       if({1'b0,token_q}+33'd1==token_end)state_q<=DONE;
+       else begin token_q<=token_q+1'b1;head_q<=0;state_q<=HEAD_FLUSH1;end
+      end else begin head_q<=head_q+1'b1;state_q<=HEAD_FLUSH1;end
+      tile_q<=0;mseen_q<=0;
+     end
+     beat_q<=0;packed_head_q<=0;gamma_head_q<=0;norm_head_q<=0;
     end
     HEAD_FLUSH1:state_q<=HEAD_FLUSH2;
     HEAD_FLUSH2:state_q<=CHECK_ADDRESS;

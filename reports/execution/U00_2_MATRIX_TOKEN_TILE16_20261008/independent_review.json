@@ -1,0 +1,494 @@
+{
+  "CI_reviewed": false,
+  "all_raw_events_freshly_scanned_by_independent_reviewer": true,
+  "arithmetic_evidence": "Frozen final runner separately completed both full512-lane bit-exact integer/C trace consumers; reviewer verified its exact source/fixture/RTL/trace bindings and freshly rescanned every raw event, without repeating arithmetic comparison.",
+  "coverage_limits": [
+    "All Q8/K2 heads in cold tokens0..15 and carried tokens112..127 (positions240..255), baseline and AVX2;640 primary head transactions total.",
+    "Baseline supplemental K tails1/3/17, latter crosses16-row batch boundary;35 admission rejects,2 DMA faults,2 reset cases and recoveries.",
+    "128-token window is admission/fault coverage, not fullM128 numericalRTL.",
+    "Candidate useful-wall fraction uses fixed512 lanes and complete command intervals in randomized test fabric; not wholeblock or physical DDR/PPA measurement.",
+    "Weight and Matrix packet16x savings are equal-N structural equations, not measured wall-speedup against the earlier2-token gate.",
+    "No CI, publication or remote-commit outcome is claimed by this report."
+  ],
+  "final_runner_status": "PASS_Q8_K2_TOKEN_TILE16_RTL",
+  "final_summary_sha256": "f8c52f75be3c778e828ed2fb9cc4ba40acd62f43fcb50653c36004026286ae7d",
+  "fixture_receipt_sha256": "045bf413457edea83fa23036f46330d3cdcd07ad9303ce1e0d6c717eea17bd70",
+  "fresh_arithmetic_trace_replay_by_reviewer": false,
+  "full_compressed_trace_and_log_bytes_independently_hashed": true,
+  "full_fixture_byte_inventory_reverified": true,
+  "generated_manifest_rebuilt_and_verified": true,
+  "generated_rtl_sha256": {
+    "HeteroMatrixNormRoPEHardwarePrimitives.sv": "5d4cf714637a579a50b9fd79eed3569c7e2a2bf39de9ba27775f0eb41d31aaf6"
+  },
+  "hardware_manifest_sha256": "49eec362fbb35dcfe43122a53fe9622879bc38912af03a9f365aa0d5c99b07cf",
+  "independent_raw_event_scan_script_sha256": "e5c96a99fbf905c26c0e438761e010ceae600466db300d390d27a874bc9840ce",
+  "model_identity": {
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "layer_id": 3,
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "scope": "All Q8/K2 heads in cold tokens0..15 and carried tokens112..127 (positions240..255); sequential FMA then Norm256 and partial64 RoPE, every Q gate unchanged; no full block claim"
+  },
+  "native_full_block_gate_pass": {
+    "avx2": false,
+    "baseline": false
+  },
+  "native_primary_case_failures": [],
+  "native_primary_command_failures": [],
+  "native_selected_gate_pass": true,
+  "native_supplemental_gate_pass": true,
+  "native_thresholds_unchanged": {
+    "max_abs": 0.03125,
+    "mean_abs": 0.005
+  },
+  "native_worst_head_errors": {
+    "avx2": {
+      "norm": {
+        "worst_head_max_abs": 0.015625,
+        "worst_head_mean_abs": 0.00025284290313720703
+      },
+      "projected_content": {
+        "worst_head_max_abs": 0.0078125,
+        "worst_head_mean_abs": 3.0994415283203125e-05
+      },
+      "projected_gate": {
+        "worst_head_max_abs": 0.015625,
+        "worst_head_mean_abs": 6.103515625e-05
+      },
+      "rope_full256": {
+        "worst_head_max_abs": 0.03125,
+        "worst_head_mean_abs": 0.00037097930908203125
+      },
+      "rope_passthrough192": {
+        "worst_head_max_abs": 0.015625,
+        "worst_head_mean_abs": 0.00021505355834960938
+      },
+      "rope_rotated64": {
+        "worst_head_max_abs": 0.03125,
+        "worst_head_mean_abs": 0.00140380859375
+      }
+    },
+    "baseline": {
+      "norm": {
+        "worst_head_max_abs": 0.015625,
+        "worst_head_mean_abs": 0.00015926361083984375
+      },
+      "projected_content": {
+        "worst_head_max_abs": 0.0078125,
+        "worst_head_mean_abs": 3.0994415283203125e-05
+      },
+      "projected_gate": {
+        "worst_head_max_abs": 0.015625,
+        "worst_head_mean_abs": 6.103515625e-05
+      },
+      "rope_full256": {
+        "worst_head_max_abs": 0.03125,
+        "worst_head_mean_abs": 0.00037097930908203125
+      },
+      "rope_passthrough192": {
+        "worst_head_max_abs": 0.0078125,
+        "worst_head_mean_abs": 5.0862630208333336e-05
+      },
+      "rope_rotated64": {
+        "worst_head_max_abs": 0.03125,
+        "worst_head_mean_abs": 0.00140380859375
+      }
+    }
+  },
+  "open_P0_P1": [],
+  "raw_event_checks": [
+    "complete event inventories and command ordering",
+    "one outstanding service owner and matching response/ACK",
+    "accepted Matrix outputs and active/inactive row extent counts",
+    "successful DMA read/write bytes at ACK",
+    "head completions and whole-batch token completions",
+    "same-cycle producer ACK totals",
+    "accepted_start through done inclusive cycle count",
+    "terminal counters vs actual events"
+  ],
+  "scope_flags": {
+    "PPA_measured": false,
+    "U00_2_complete": false,
+    "U01_complete": false,
+    "all_M128_tokens_rtl_verified": false,
+    "full_block_numerical_complete": false,
+    "generic_Command128_complete": false,
+    "matrix_producer_injected": false,
+    "production_policy_changed": false,
+    "whole_block_MAC90_measured": false
+  },
+  "source_files_match_after_review": true,
+  "source_files_verified": 53,
+  "source_sha256": {
+    "chisel/matrix_norm_rope_hardware/build.sbt": "8bf7baef36e5556f64be168041fc6ca307c723ed7267f47ba93288982a4e1cfe",
+    "chisel/matrix_norm_rope_hardware/manifest.py": "45743ffee091719b86c8a2070aab127deee1649d1b2c68bbec55e9de79af69ee",
+    "chisel/matrix_norm_rope_hardware/src/main/scala/EmitMatrixNormRoPEHardwarePrimitives.scala": "90e648d9ed023da6d77385e3a3530d7d884fd9e0718618fc4ad51cfcf900f055",
+    "chisel/rope_hardware_oracle/maven-lock.json": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+    "config/upstream/qwen3_5_0p8b/matrix_norm_rope_tile16_contract.json": "ea76a125965f35a4007bec9e7a5dca52cce37a40b8f907d37ee62f773799f7e2",
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c",
+    "rtl/fabric/shared_l2_fabric.sv": "2b1630ac27f2850f57dc2178cd95d7cff00f41eb6162f1cc5c7e857d3d027bcf",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "rtl/integration/qwen2_projection_descriptor_context.sv": "15f8569664146a63bf1fe0407fa66de4414422279fb81c1e0eacc078188eac3d",
+    "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv": "99b6be27527546bbcaf767cedeb50d6f70b41800ad68c33c005c0ed775c85028",
+    "rtl/integration/qwen2_projection_tile16_controller.sv": "a9c6af2ab7cc8df8e3637f7678a504270893e651c75fae1cb074bc949fc5a02f",
+    "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv": "deb15093979c30b7fa5188757ac8712e6a5e8e2699fefa915edfc02056d137dd",
+    "rtl/integration/qwen2_shared_l2_rope_payload.sv": "0b4dae2fee5ee40d57ba5b658344109d2f75a0887113e667226edb7adf2bb661",
+    "rtl/integration/rope_bf16_l2_candidate.sv": "c2c5cb39d0b367768208032f40f8a68d3a1b95f27579c9a11ac4bc4cd7b9aac4",
+    "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "rtl/sfu/fp32_reduce16.sv": "3cbd06a58a30e3450ba895aa2b5fc851df230ec4a676911bbd3dddae25e3eb3c",
+    "rtl/sfu/fp32_rmsnorm256_chunked.sv": "aa86f362c4a82a3bce74b9c3e8466626b41c74b3af1691af117e5a9f63d95db4",
+    "rtl/sfu/fp32_rope_pair_bf16_candidate.sv": "ee7b6b8e7d880764f4ac4228d95a1cf418aafff2121cf9a97ee69ef67f8b9666",
+    "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+    "rtl/sfu/fp32_rsqrt_coeffs.svh": "e0c2357054ce255834a12a1baa8f2c2f0111b90696c49736a898c6b122590a11",
+    "rtl/sfu/fp32_rsqrt_nr.sv": "b1347404ca85cee52841fe47635af5ada643a582209510f56e43c97ca03ac0e1",
+    "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+    "rtl/sfu/qk_norm256_bf16_candidate.sv": "c87c8d1f6808d77a176adcba8b8fc4ed0cdd3ca5c3a9bc8b02e96acfc10a3362",
+    "scripts/generate_matrix_norm_rope_primitives.sh": "5399636757adf28ea480dfb9e5b3d7b413a17a8673fe05dad56d73e5a9794586",
+    "scripts/materialize_matrix_norm_rope_tile16_vectors.py": "0e2d8e47b5dd5ff1ecc93552111d55f851d646285e7c9af46a770357d895ebec",
+    "scripts/materialize_matrix_norm_rope_vectors.py": "44fa28ad259ea68fe8ff7782e7d6653bd0b74fba491961983d5a5b34f746c29d",
+    "scripts/matrix_norm_rope_reference.c": "90ac528864881602ca22bd552f3bd18c75ebab11b7d3d881fc8016918573dc3d",
+    "scripts/qk_norm256_reference.c": "79db3d6fad3a43d2e1cde22702c3a0aa4237b1b9bc157bf286eeed3fabd411ab",
+    "scripts/rope_bf16_candidate_reference.c": "045f69dcddafcfd834552009adf03734b39af8f79c7ec331347fa178e53946e2",
+    "scripts/run_matrix_norm_rope_candidate.py": "319fdb7eb85479a44f5687a2eaa177779da0032543c3c78ad1fcea8d21118513",
+    "scripts/run_matrix_norm_rope_tensor_candidate.py": "0dd0cf69a3e0ac0ce8d7f81fdf7ac6b28cf2c9bda70867b31d816c56b44a9be6",
+    "scripts/run_matrix_norm_rope_tile16_candidate.py": "12976bb581d74feffc8384b90f0b569abd057184238a06b71dd7fc1dd58e1bac",
+    "scripts/verify_matrix_norm_rope_tensor_trace.py": "cd3111df40d219af7a90ab5fc77dcbd04bcd272ef80902f4dd48677b84d1d5e4",
+    "scripts/verify_matrix_norm_rope_tile16_trace.py": "e01b00c9f3fcbf22915c50a762bdb46084f065d924b35a6aad4627e7bd2777bc",
+    "scripts/verify_matrix_norm_rope_trace.py": "093a8cee9d63c6afe176435a8d3239c0b09cc9cc0b241a7a0f3fa9a3157fc732",
+    "src/heteronpu/matrix_norm_rope_candidate.py": "41a4a25575de2f1b7323582b1b79553417ce99f90a38b2ee5a54948da111e764",
+    "src/heteronpu/matrix_norm_rope_tile16_candidate.py": "fea712fae5e834fc607a71669158b87ad92d8166a7d347a3e70b3c38efeaa0a3",
+    "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+    "src/heteronpu/qk_norm256_materialization.py": "da78c47d6b07aac43dcff04b4c9e1efe374fe50d3b5ff156e1040a83d947ae59",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+    "tb/tb_qwen35_matrix_norm_rope_tile16.sv": "9decddf2007b1b60fd718d83bd5b41e19faf3581351121ed65b953f6786d95b5"
+  },
+  "status": "PASS_INDEPENDENT_FINAL_ACTUAL_REVIEW",
+  "suites": {
+    "avx2_main": {
+      "actual_matrix_packets": 294912,
+      "actual_producer_write_ACKs": 9728,
+      "all_active_FP32_accumulator_observations": 150994944,
+      "all_event_counts": {
+        "accepted_start": 4,
+        "begin": 4,
+        "descriptor": 24,
+        "descriptor_request": 24,
+        "dma": 1280,
+        "dma_ack": 1280,
+        "dma_data": 9728,
+        "done": 4,
+        "head_begin": 320,
+        "head_done": 320,
+        "l2_ack": 9728,
+        "l2_read": 600192,
+        "l2_response": 600192,
+        "l2_write": 9728,
+        "matrix": 294912,
+        "norm": 320,
+        "projection_begin": 20,
+        "projection_done": 20,
+        "terminal": 4
+      },
+      "all_physical_FP32_lane_observations": 150994944,
+      "fault_and_reset_results": [],
+      "faults": 0,
+      "log_sha256": "2ff18023137a5aba5aac63c0aec0f083477520e2834615e80893a66fd234a372",
+      "primary": {
+        "accepted_to_done_cycles": 5241165,
+        "active_FP32_accumulator_observations": 150994944,
+        "candidate_useful_wall_fraction": 0.056268405974625874,
+        "commands": 4,
+        "fixed_matrix_lanes": 512,
+        "head_transactions": 320,
+        "matrix_packets": 294912,
+        "token_phase_observations": 32,
+        "useful_FMA": 150994944,
+        "whole_block_metric": false
+      },
+      "rejects": 0,
+      "resets": 0,
+      "same_cycle_producer_ACKs": 4726,
+      "successes": 4,
+      "successful_commands": [
+        {
+          "command": 0,
+          "cycles": 2294959,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "cold_Q",
+          "tokens": 16
+        },
+        {
+          "command": 1,
+          "cycles": 325595,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "cold_K",
+          "tokens": 16
+        },
+        {
+          "command": 2,
+          "cycles": 2295722,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "carried_Q",
+          "tokens": 16
+        },
+        {
+          "command": 3,
+          "cycles": 324889,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "carried_K",
+          "tokens": 16
+        }
+      ],
+      "trace_sha256": "96110f7879eee86e230c5cddbcc6ecbaebeacf40d15a95e6a692a596447a8a8c",
+      "transactions": 4
+    },
+    "baseline_all": {
+      "actual_matrix_packets": 450560,
+      "actual_producer_write_ACKs": 12800,
+      "all_active_FP32_accumulator_observations": 184549376,
+      "all_event_counts": {
+        "accepted_start": 49,
+        "begin": 49,
+        "descriptor": 282,
+        "descriptor_request": 282,
+        "dma": 1913,
+        "dma_ack": 1911,
+        "dma_data": 12784,
+        "done": 47,
+        "head_begin": 448,
+        "head_done": 445,
+        "l2_ack": 12800,
+        "l2_read": 914816,
+        "l2_response": 914816,
+        "l2_write": 12800,
+        "matrix": 450560,
+        "norm": 448,
+        "projection_begin": 39,
+        "projection_done": 36,
+        "reset_flush": 2,
+        "terminal": 47
+      },
+      "all_physical_FP32_lane_observations": 230686720,
+      "fault_and_reset_results": [
+        {
+          "accepted_to_done_cycles": 325113,
+          "active_fp32_accumulator_observations": 8388608,
+          "case": 8,
+          "completed_heads": 31,
+          "completed_tokens": 0,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 48640,
+          "kind": "fault",
+          "matrix_packets": 16384,
+          "name": "last_row_last_head_DMA_error",
+          "same_cycle_acks": 374,
+          "status": 6
+        },
+        {
+          "accepted_to_done_cycles": 1079,
+          "active_fp32_accumulator_observations": 0,
+          "case": 8,
+          "completed_heads": 0,
+          "completed_tokens": 0,
+          "ddr_read_bytes": 0,
+          "ddr_write_bytes": 0,
+          "kind": "fault",
+          "matrix_packets": 0,
+          "name": "token_count128_admitted",
+          "same_cycle_acks": 0,
+          "status": 6
+        },
+        {
+          "active_fp32_accumulator_observations": 4194304,
+          "case": 8,
+          "completed_heads": 15,
+          "completed_tokens": 0,
+          "ddr_read_bytes": 557056,
+          "ddr_write_bytes": 24064,
+          "kind": "reset",
+          "matrix_packets": 8192,
+          "name": "reset_late_row",
+          "same_cycle_acks": 172,
+          "status": null
+        },
+        {
+          "active_fp32_accumulator_observations": 8388608,
+          "case": 8,
+          "completed_heads": 31,
+          "completed_tokens": 0,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 48640,
+          "kind": "reset",
+          "matrix_packets": 16384,
+          "name": "reset_late_head",
+          "same_cycle_acks": 349,
+          "status": null
+        }
+      ],
+      "faults": 2,
+      "log_sha256": "911c09412d69316a7a170acf14a05ecd357d35af75395bd67d7daec052c8a856",
+      "primary": {
+        "accepted_to_done_cycles": 5241165,
+        "active_FP32_accumulator_observations": 150994944,
+        "candidate_useful_wall_fraction": 0.056268405974625874,
+        "commands": 4,
+        "fixed_matrix_lanes": 512,
+        "head_transactions": 320,
+        "matrix_packets": 294912,
+        "token_phase_observations": 32,
+        "useful_FMA": 150994944,
+        "whole_block_metric": false
+      },
+      "rejects": 35,
+      "resets": 2,
+      "same_cycle_producer_ACKs": 6178,
+      "successes": 10,
+      "successful_commands": [
+        {
+          "command": 0,
+          "cycles": 2294959,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "cold_Q",
+          "tokens": 16
+        },
+        {
+          "command": 1,
+          "cycles": 325595,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "cold_K",
+          "tokens": 16
+        },
+        {
+          "command": 2,
+          "cycles": 2295722,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "carried_Q",
+          "tokens": 16
+        },
+        {
+          "command": 3,
+          "cycles": 324889,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "carried_K",
+          "tokens": 16
+        },
+        {
+          "command": 1,
+          "cycles": 259261,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "recovery_after_fault_or_reset",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 260061,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "recovery_after_fault_or_reset",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 260409,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "legal_exact_1p5MiB_end",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 260885,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "tail_1",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 268839,
+          "ddr_read_bytes": 1054720,
+          "ddr_write_bytes": 9216,
+          "dma_requests": 47,
+          "heads": 6,
+          "matrix_steps": 16384,
+          "name": "tail_3",
+          "tokens": 3
+        },
+        {
+          "command": 1,
+          "cycles": 586233,
+          "ddr_read_bytes": 2131968,
+          "ddr_write_bytes": 52224,
+          "dma_requests": 149,
+          "heads": 34,
+          "matrix_steps": 32768,
+          "name": "tail_17",
+          "tokens": 17
+        }
+      ],
+      "trace_sha256": "1aa8f77ecf0fefbb4621ae9c97cd7a84f4e8ee2168fedd98af0d33fe5df00bb2",
+      "transactions": 49
+    }
+  },
+  "supporting_review_logs": {
+    "independent_raw_event_scan": "work/matrix_tile16_review/independent_event_counters.log",
+    "integrity": "work/matrix_tile16_review/final_integrity_checks.log"
+  }
+}

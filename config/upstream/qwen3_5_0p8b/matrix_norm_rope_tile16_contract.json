@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "name": "experimental_qwen35_matrix_norm_rope_token_tile16_v1",
+  "default_enabled": false,
+  "architecture": "Explicit snapshotted candidate_tile16_i in existing default-off candidate; requires candidate_tensor_i. Same Revision8B-B Matrix512, same 1572864-byte SharedL2; no new arithmetic arrays or replacement top",
+  "arithmetic": "Raw BF16 H1024 and checkpoint weights; ascending K0..1023 sequential FP32 FMA; terminal BF16-RNE; Norm2560xc1; partial64 all-products-BF16 RoPE0xb1. Q256gate remains raw",
+  "iteration": "batch of min(16,remaining), ascending head, ascending32-column tile for Matrix; then ascending active row for Norm/RoPE; all stores ACK before batch/head staging reuse",
+  "activation_gather": "Each source token one DMA1024x2bytes, srcstride2,dststride64,dstbase+2row. Preserve other byte lanes. Gather once perbatch; reuse across all heads",
+  "staging": "Existing activation64KiB and weight64KiB. SharedL2 packed reserve fixed16*head_packed_bytes (Q16384,K8192), tile-major packed_base+tile*1024+row*64. Norm/RoPE each512bytes; gamma512; explicit trig128bytes/token. No whole-tensor cache",
+  "weights": "One64KiB weight DMA per32column tile perbatch, shared by all active Matrix rows; retain complete56bit DDR weight-range preflight",
+  "stores": "Packed per32column tile DMA64bytes x active_rows, localstride64, DDRstrideQ8192/K1024. Perrow Norm/RoPE each8x64byte DMA to token/head whole-tensor DDR bases. Terminal completed_heads perrow only after last ACK; completed_tokens counts fully completed batches, advancing active_rows only after lastrow of lasthead ACK",
+  "admission": "1<=count<=128;33bit token_start+count<=descriptorM<=128. Explicit mode requires tensor,head0. Seven local regions pairwise disjoint within actual1.5MiB, packed fixed16row reserve also for tails; allselected DDR windows pairwise disjoint. No address truncation before checks",
+  "failure": "Every active Matrix output row must pass nonfinite check before any tile writes; inactive rows ignored. First fatal status terminates, acknowledged outputs not rolled back. Reset simultaneously flushes external fabric and owner. Samecycle and delayed ACK, held requests/sideband snapshots tested",
+  "frozen_gate": {
+    "variants": ["baseline", "avx2"],
+    "commands_per_variant": [
+      {"phase": "cold", "role": "q", "start": 0, "count": 16, "heads": 8},
+      {"phase": "cold", "role": "k", "start": 0, "count": 16, "heads": 2},
+      {"phase": "carried", "role": "q", "start": 112, "count": 16, "heads": 8},
+      {"phase": "carried", "role": "k", "start": 112, "count": 16, "heads": 2}
+    ],
+    "primary_heads_per_variant": 320,
+    "primary_matrix_packets_per_variant": 294912,
+    "primary_active_fp32_accumulator_values_per_variant": 150994944,
+    "supplemental": "Baseline tails1/3 and successful17-token K two-batch gate uses separate coldtoken16 K0/K1 realsource cases320/321; complete negatives,faults,reset and recovery inventories frozen in runner/tests",
+    "full_M128_rtl_coverage": false
+  },
+  "references": "Every active K accumulator bitwise independent integer dyadic and separate C fmaf; eachhead and command native max_abs<=0.03125,mean_abs<=0.005 unchanged. Native failures preserved separately from RTL match",
+  "counters": "For N tokens,B=ceil(N/16),H heads,T32column tiles: Matrix packets=B*H*T*1024; active observations=N*H*T*1024*32; readbytes=2048*N+65536*B*H*T; writebytes=N*H*(64*T+1024). All cycles from accepted command through final ACK/done remain in fixed512lane denominator; report candidate scope, never wholeblock90%",
+  "artifact_policy": "Git/CI summaries only source,pins,hashes and small results; full source payloads,NPZ,memh,binary reference/trace,generatedRTL rebuilt transiently",
+  "open": ["allM128 numericalRTL", "genericCommand128 integration", "position coefficients generation/cache", "KV/Attention/FFN", "three-modelcompleteblock", "PPA", "fixed-resourcewholeblockMAC90%"]
+}

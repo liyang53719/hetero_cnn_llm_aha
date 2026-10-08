@@ -16,7 +16,7 @@ module qwen2_shared_l2_matrix_tile16_payload #(parameter integer ADDR_W=15,
  input logic matrix_out_valid_i,output logic matrix_out_ready_o,input logic matrix_out_last_i,input logic[16383:0]matrix_acc_i,
  output logic done_o,output logic[31:0]read_beats_o,write_beats_o,matrix_steps_o
 );
- typedef enum logic[3:0]{I,ARQ,ARP,WRQ,WRP,MQ,MWAIT,OW,D}st_e;st_e st;logic[31:0]weight_stride_q;logic[15:0]k_q,depth_q,rows_q,columns_q;logic[63:0]activation_q,weight_q,output_q;logic[3:0]row_q;logic[511:0]a_q,w_q;logic[16383:0]acc_q;logic final_seen_q;integer c;
+ typedef enum logic[3:0]{I,ARQ,ARP,WRQ,WRP,MQ,MWAIT,OW,D,CHECK_ROWS}st_e;st_e st;logic[31:0]weight_stride_q;logic[15:0]k_q,depth_q,rows_q,columns_q;logic[63:0]activation_q,weight_q,output_q;logic[3:0]row_q;logic[511:0]a_q,w_q;logic[16383:0]acc_q;logic final_seen_q;integer c;
  // Validate wide byte addresses BEFORE narrowing to the local SRAM index.
  localparam logic[64:0]CAPACITY_BYTES=65'(L2_BEATS)<<6;
  logic legal;
@@ -70,7 +70,17 @@ module qwen2_shared_l2_matrix_tile16_payload #(parameter integer ADDR_W=15,
   MWAIT:if(final_seen_q)begin
    row_q<=0;
    if(CANDIDATE_RNE_BF16&&!fp32_q&&candidate_nonfinite)begin status_o<=7;st<=D;end
+   else if(CANDIDATE_RNE_BF16&&!fp32_q&&rows_q>1)begin row_q<=1;st<=CHECK_ROWS;end
    else st<=OW;
+  end
+  // Reuse the existing32 converters to check every active row before any
+  // candidate BF16 tile write. A late-row NaN/Inf (including RNE overflow)
+  // must not publish a partial tile. Inactive rows/columns are not checked.
+  // The legacy/FP32 paths and single-row candidate keep their old timing.
+  CHECK_ROWS:begin
+   if(candidate_nonfinite)begin status_o<=7;st<=D;end
+   else if({12'd0,row_q}+16'd1==rows_q)begin row_q<=0;st<=OW;end
+   else row_q<=row_q+1'b1;
   end
   OW:if(l2_wr_valid_o&&l2_wr_ready_i)begin
    write_beats_o<=write_beats_o+1;

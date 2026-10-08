@@ -1075,6 +1075,9 @@ U00_2_Matrix_token_tile16门禁_20261008:
   冻结门禁: baseline及AVX2各cold0到15与carried112到127全部Q8和K2，32选定token及320头每来源
   数据路径: 最多16行H1024 gather至既有activation区，共享每32列权重tile；片上tile-major packed经逐row Norm和RoPE且全部storeACK后复用
   必须复验: [真实生成RTL, 独立整数与C逐K参考, 原native门限, tail及跨tile, active行非有限拒绝, capacity及alias, 背压和ACK, reset及fault, 旧默认和全仓回归]
-  当前状态: 执行前冻结；不得提前标为通过
+  当前状态: 有界16行门禁本地PASS；两来源实际RTL、全部512lane与独立逐K参考、源及manifest复核通过；不扩为全M128
+  结果摘要: reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/result.json
+  实测边界: 每来源32选定token及320头，共5241165命令周期；固定512lane候选commandwall为5.6268406%，不是完整block90%
+  回归: 1218项normal及-O；全仓3888通过和同5既有失败；旧单行及默认关闭RTL回归通过
   保留未完成: [全M128实际数值RTL, generic Command128完整接入, 系数生成cache, KV和Attention及FFN, 三模型完整block, PPA, 固定资源整blockMAC90]
   状态: U00.2 ongoing；U01 to do

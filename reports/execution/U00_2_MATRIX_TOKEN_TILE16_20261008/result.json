@@ -1,0 +1,2903 @@
+{
+  "PPA_measured": false,
+  "U00_2_complete": false,
+  "U01_complete": false,
+  "actual_Matrix16x32_rows_verified": true,
+  "all_M128_tokens_rtl_verified": false,
+  "artifact_policy": "Only source, pins, hashes and short result summaries in Git/CI; all checkpoint, NPZ, memh, binary steps, full traces, generated RTL and executables remain transient.",
+  "equal_workload_counter_change": {
+    "comparison_is_counter_equation_not_measured_wall_speedup": true,
+    "full16_token_batch": {
+      "Matrix_packets_and_weight_payload_vs_serial_tokens": "1/16",
+      "activation_payload_vs_reloading_each_head": {
+        "K": "1/2",
+        "Q": "1/8"
+      }
+    }
+  },
+  "fixture_summary_sha256": "045bf413457edea83fa23036f46330d3cdcd07ad9303ce1e0d6c717eea17bd70",
+  "fixture_totals": {
+    "head_transactions": 640,
+    "k_head_transactions": 128,
+    "matrix_accumulator_steps": 301989888,
+    "matrix_bf16_columns": 294912,
+    "matrix_fma_flags": 294912,
+    "matrix_fp32_columns": 294912,
+    "norm_bf16_words": 163840,
+    "norm_trace_words": 2004480,
+    "owner_commands": 8,
+    "projected_steps_bytes": 1207959552,
+    "q_gate_bf16_words": 131072,
+    "q_head_transactions": 512,
+    "rope_bf16_words": 163840,
+    "rope_trace_words": 512000,
+    "selected_phase_tokens": 64,
+    "unique_trig_bf16_words": 4096,
+    "unique_weight_files": 10,
+    "unique_weight_memh_bytes": 23592960,
+    "variants": 2
+  },
+  "full_block_numerical_complete": false,
+  "generated_rtl_sha256": {
+    "HeteroMatrixNormRoPEHardwarePrimitives.sv": "5d4cf714637a579a50b9fd79eed3569c7e2a2bf39de9ba27775f0eb41d31aaf6"
+  },
+  "generic_Command128_complete": false,
+  "hardware_manifest_sha256": "49eec362fbb35dcfe43122a53fe9622879bc38912af03a9f365aa0d5c99b07cf",
+  "independent_review": {
+    "file": "reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/independent_review.json",
+    "sha256": "de88642f20b92c25c9b1ecee00c32bb9f27d7c83007595f70ce5ef594f238cb1"
+  },
+  "matrix_producer_injected": false,
+  "native_command_comparisons": [
+    {
+      "command_id": 0,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 0,
+      "heads": 8,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 16,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 2.1458145056385547e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 8,
+          "elements": 32768,
+          "max_abs": 0.0078125,
+          "mean_abs": 4.2470855987630785e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_gate": {
+          "bit_mismatches": 1,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 4.76837158203125e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 18,
+          "elements": 32768,
+          "max_abs": 0.03125,
+          "mean_abs": 3.7998433981556445e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 11,
+          "elements": 24576,
+          "max_abs": 0.0078125,
+          "mean_abs": 7.749234403794011e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 7,
+          "elements": 8192,
+          "max_abs": 0.03125,
+          "mean_abs": 1.2874603271484375e-05,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "cold",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "role": "q",
+      "token_count": 16,
+      "token_start": 0,
+      "trig_order": "token_cos32_sin32",
+      "variant": "baseline"
+    },
+    {
+      "command_id": 1,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 0,
+      "heads": 2,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 0,
+          "elements": 6144,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "cold",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "role": "k",
+      "token_count": 16,
+      "token_start": 0,
+      "trig_order": "token_cos32_sin32",
+      "variant": "baseline"
+    },
+    {
+      "command_id": 2,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 112,
+      "heads": 8,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 2,
+          "elements": 32768,
+          "max_abs": 7.62939453125e-06,
+          "mean_abs": 2.346496330574155e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 2,
+          "elements": 32768,
+          "max_abs": 3.814697265625e-06,
+          "mean_abs": 1.1732481652870774e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_gate": {
+          "bit_mismatches": 2,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 9.5367431640625e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 2,
+          "elements": 32768,
+          "max_abs": 7.62939453125e-06,
+          "mean_abs": 2.346496330574155e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 2,
+          "elements": 24576,
+          "max_abs": 7.62939453125e-06,
+          "mean_abs": 3.128661774098873e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "carried",
+      "positions": [
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255
+      ],
+      "role": "q",
+      "token_count": 16,
+      "token_start": 112,
+      "trig_order": "token_cos32_sin32",
+      "variant": "baseline"
+    },
+    {
+      "command_id": 3,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 112,
+      "heads": 2,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 2,
+          "elements": 8192,
+          "max_abs": 0.00390625,
+          "mean_abs": 4.777684807777405e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 2,
+          "elements": 8192,
+          "max_abs": 0.0009765625,
+          "mean_abs": 1.19674950838089e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 2,
+          "elements": 8192,
+          "max_abs": 0.00390625,
+          "mean_abs": 4.777684807777405e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 0.00390625,
+          "mean_abs": 6.370246410369873e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "carried",
+      "positions": [
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255
+      ],
+      "role": "k",
+      "token_count": 16,
+      "token_start": 112,
+      "trig_order": "token_cos32_sin32",
+      "variant": "baseline"
+    },
+    {
+      "command_id": 0,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 0,
+      "heads": 8,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 16,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 2.1458145056385547e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 8,
+          "elements": 32768,
+          "max_abs": 0.0078125,
+          "mean_abs": 4.2470855987630785e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_gate": {
+          "bit_mismatches": 1,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 4.76837158203125e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 18,
+          "elements": 32768,
+          "max_abs": 0.03125,
+          "mean_abs": 3.7998433981556445e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 11,
+          "elements": 24576,
+          "max_abs": 0.0078125,
+          "mean_abs": 7.749234403794011e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 7,
+          "elements": 8192,
+          "max_abs": 0.03125,
+          "mean_abs": 1.2874603271484375e-05,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "cold",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "role": "q",
+      "token_count": 16,
+      "token_start": 0,
+      "trig_order": "token_cos32_sin32",
+      "variant": "avx2"
+    },
+    {
+      "command_id": 1,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 0,
+      "heads": 2,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 0,
+          "elements": 8192,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 0,
+          "elements": 6144,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "cold",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "role": "k",
+      "token_count": 16,
+      "token_start": 0,
+      "trig_order": "token_cos32_sin32",
+      "variant": "avx2"
+    },
+    {
+      "command_id": 2,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 112,
+      "heads": 8,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 13,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 2.690620021894574e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 3,
+          "elements": 32768,
+          "max_abs": 0.0078125,
+          "mean_abs": 3.576424205675721e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_gate": {
+          "bit_mismatches": 1,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 4.76837158203125e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 13,
+          "elements": 32768,
+          "max_abs": 0.015625,
+          "mean_abs": 2.690620021894574e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 11,
+          "elements": 24576,
+          "max_abs": 0.015625,
+          "mean_abs": 2.6338190461198487e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 2,
+          "elements": 8192,
+          "max_abs": 0.015625,
+          "mean_abs": 2.86102294921875e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "carried",
+      "positions": [
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255
+      ],
+      "role": "q",
+      "token_count": 16,
+      "token_start": 112,
+      "trig_order": "token_cos32_sin32",
+      "variant": "avx2"
+    },
+    {
+      "command_id": 3,
+      "ddr_tensor_origin_token": 0,
+      "file_tensor_origin_token": 112,
+      "heads": 2,
+      "native_comparisons": {
+        "norm": {
+          "bit_mismatches": 1,
+          "elements": 8192,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.4901161193847656e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "projected_content": {
+          "bit_mismatches": 1,
+          "elements": 8192,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 7.450580596923828e-09,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_full256": {
+          "bit_mismatches": 1,
+          "elements": 8192,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.4901161193847656e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_passthrough192": {
+          "bit_mismatches": 1,
+          "elements": 6144,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.9868214925130207e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "rope_rotated64": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "native_gate_pass": true,
+      "order": "token_head_dimension",
+      "packed_q_order": "token_head_content256_gate256",
+      "phase": "carried",
+      "positions": [
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255
+      ],
+      "role": "k",
+      "token_count": 16,
+      "token_start": 112,
+      "trig_order": "token_cos32_sin32",
+      "variant": "avx2"
+    }
+  ],
+  "native_failed_comparisons": [],
+  "native_full_block_gate_pass": {
+    "avx2": false,
+    "baseline": false
+  },
+  "native_selected_tile16_gate_pass": true,
+  "native_thresholds": {
+    "max_abs": 0.03125,
+    "mean_abs": 0.005
+  },
+  "phase_report": {
+    "file": "reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/cycle_phases.json",
+    "sha256": "2ddc06e140db0abc977868199297f31339485bf656381b43f097d1c94deb8c92"
+  },
+  "primary_heads_per_source": 320,
+  "primary_tokens_per_source": 32,
+  "production_policy_changed": false,
+  "regression": {
+    "affected_normal": {
+      "exit_code": 0,
+      "log_sha256": "1c7ab2d230b5e327498c07313fa3a887911e52a862d31dabe7f6cd7215e1e039",
+      "passed": 1218
+    },
+    "affected_optimized": {
+      "exit_code": 0,
+      "log_sha256": "ed78edd6f0f1c45e9a22f83ac32450ba5e5f34c757e3cbc01c3f5eaab7088b93",
+      "passed": 1218
+    },
+    "default_off_RTL": {
+      "closure_sources": [
+        "work/generated/matrix_norm_rope_candidate/HeteroMatrixNormRoPEHardwarePrimitives.sv",
+        "rtl/matrix/bf16_outer_product_array_glue512.sv",
+        "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+        "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+        "rtl/integration/qwen2_matrix_command_endpoint.sv",
+        "rtl/integration/qwen2_projection_descriptor_context.sv",
+        "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv",
+        "rtl/integration/qwen2_projection_tile16_controller.sv"
+      ],
+      "default_parameter_zero": true,
+      "existing_generated_rtl_matches_saved_manifest": true,
+      "existing_generated_rtl_sha256": "5d4cf714637a579a50b9fd79eed3569c7e2a2bf39de9ba27775f0eb41d31aaf6",
+      "legacy_branch_identical_to_HEAD": true,
+      "limitations": [
+        "Existing pinned generated HardFloat RTL reused read-only; no new hardware emission.",
+        "Default controller and existing legacy testbench elaborated/linted, not fully dynamically replayed.",
+        "Five bounded simulations exercise actual decode/writeback/iterator/planner RTL; writeback injects synthetic Matrix result words and planner does not execute arithmetic payload.",
+        "Warning-tolerant Verilator flags match prior baseline; warnings are counted in each result.",
+        "No synthesis/PPA or full model/block numerical or utilization claim.",
+        "Canonical tensor-owner and legacy Matrix/Norm/RoPE chain acceptance runs belong to parent and were not launched here."
+      ],
+      "optional_qk_norm_rope_sources_omitted": true,
+      "results": [
+        {
+          "command": [
+            "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+            "--binary",
+            "--timing",
+            "--assert",
+            "-Wno-fatal",
+            "-j",
+            "2",
+            "--top-module",
+            "tb_projection_precision_decode",
+            "-GENABLE=0",
+            "--Mdir",
+            "/tmp/tile16_default_regression/obj_precision_0",
+            "-o",
+            "tb",
+            "rtl/integration/qwen2_projection_descriptor_context.sv",
+            "tb/tb_projection_precision_decode.sv"
+          ],
+          "log": "/tmp/tile16_default_regression/precision_0_build.log",
+          "log_sha256": "b2a25fa38ba220f77ff3b296cfeb3e7a7074d7bb4c03127273612cb04c356c87",
+          "name": "precision_0_build",
+          "pass": true,
+          "returncode": 0,
+          "seconds": 3.525,
+          "warning_counts": {
+            "WIDTHEXPAND": 3,
+            "WIDTHTRUNC": 1
+          }
+        },
+        {
+          "command": [
+            "/tmp/tile16_default_regression/obj_precision_0/tb"
+          ],
+          "expected_marker": "PROJECTION_PRECISION_DECODE_PASS enable=0 cases=8",
+          "log": "/tmp/tile16_default_regression/precision_0_run.log",
+          "log_sha256": "71a702dc56f287836b3a429de64a85979c31d4ebefbac9497a6c905a3ce6fd38",
+          "name": "precision_0_run",
+          "pass": true,
+          "pass_markers": [
+            "PROJECTION_PRECISION_DECODE_PASS enable=0 cases=8 fp32_matrix_inputs_rejected=1"
+          ],
+          "returncode": 0,
+          "seconds": 0.004,
+          "warning_counts": {}
+        },
+        {
+          "command": [
+            "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+            "--binary",
+            "--timing",
+            "--assert",
+            "-Wno-fatal",
+            "-j",
+            "2",
+            "--top-module",
+            "tb_projection_precision_decode",
+            "-GENABLE=1",
+            "--Mdir",
+            "/tmp/tile16_default_regression/obj_precision_1",
+            "-o",
+            "tb",
+            "rtl/integration/qwen2_projection_descriptor_context.sv",
+            "tb/tb_projection_precision_decode.sv"
+          ],
+          "log": "/tmp/tile16_default_regression/precision_1_build.log",
+          "log_sha256": "40cad3f97170b15efe526a92755988bc65f8a24ec53c01bdccca12a851416592",
+          "name": "precision_1_build",
+          "pass": true,
+          "returncode": 0,
+          "seconds": 3.48,
+          "warning_counts": {
+            "WIDTHEXPAND": 3,
+            "WIDTHTRUNC": 2
+          }
+        },
+        {
+          "command": [
+            "/tmp/tile16_default_regression/obj_precision_1/tb"
+          ],
+          "expected_marker": "PROJECTION_PRECISION_DECODE_PASS enable=1 cases=8",
+          "log": "/tmp/tile16_default_regression/precision_1_run.log",
+          "log_sha256": "68f13110b998ea8c90931b1b89c4e28a8f9a1dc7f44942611aaeb7626889f1ec",
+          "name": "precision_1_run",
+          "pass": true,
+          "pass_markers": [
+            "PROJECTION_PRECISION_DECODE_PASS enable=1 cases=8 fp32_matrix_inputs_rejected=1"
+          ],
+          "returncode": 0,
+          "seconds": 0.004,
+          "warning_counts": {}
+        },
+        {
+          "command": [
+            "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+            "--binary",
+            "--timing",
+            "--assert",
+            "-Wno-fatal",
+            "-j",
+            "2",
+            "--top-module",
+            "tb_matrix_writeback_precision",
+            "--Mdir",
+            "/tmp/tile16_default_regression/obj_writeback",
+            "-o",
+            "tb",
+            "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv",
+            "tb/tb_matrix_writeback_precision.sv"
+          ],
+          "log": "/tmp/tile16_default_regression/writeback_build.log",
+          "log_sha256": "e7d11d521c0be532662a2d973d8363e230decd1593f7ba5349c5559f9ff64004",
+          "name": "writeback_build",
+          "pass": true,
+          "returncode": 0,
+          "seconds": 24.466,
+          "warning_counts": {
+            "WIDTHEXPAND": 3,
+            "WIDTHTRUNC": 4
+          }
+        },
+        {
+          "command": [
+            "/tmp/tile16_default_regression/obj_writeback/tb"
+          ],
+          "expected_marker": "MATRIX_WRITEBACK_PRECISION_PASS cases=10 checked=15360",
+          "log": "/tmp/tile16_default_regression/writeback_run.log",
+          "log_sha256": "a0846f6ac0183cab27c0e2af8e593f3a771ead0c1d23b7e335b615f2d8caadd4",
+          "name": "writeback_run",
+          "pass": true,
+          "pass_markers": [
+            "MATRIX_WRITEBACK_PRECISION_PASS cases=10 checked=15360 fp32_bits_preserved=1 bf16_rne=1 bounds=1 snapshot=1"
+          ],
+          "returncode": 0,
+          "seconds": 0.008,
+          "warning_counts": {}
+        },
+        {
+          "command": [
+            "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+            "--binary",
+            "--timing",
+            "--assert",
+            "-Wno-fatal",
+            "-j",
+            "2",
+            "--top-module",
+            "tb_bf16_projection_tile_iterator",
+            "--Mdir",
+            "/tmp/tile16_default_regression/obj_iterator",
+            "-o",
+            "tb",
+            "rtl/integration/qwen2_projection_descriptor_context.sv",
+            "rtl/integration/bf16_projection_tile_iterator.sv",
+            "rtl/integration/qwen2_descriptor_projection_tile_plan.sv",
+            "tb/tb_bf16_projection_tile_iterator.sv"
+          ],
+          "log": "/tmp/tile16_default_regression/iterator_build.log",
+          "log_sha256": "dd598c00ef576127d4f59200e3456fb1ebd5be43923e1fa7d8b93e558856e35a",
+          "name": "iterator_build",
+          "pass": true,
+          "returncode": 0,
+          "seconds": 3.326,
+          "warning_counts": {
+            "PINMISSING": 1,
+            "WIDTHTRUNC": 3
+          }
+        },
+        {
+          "command": [
+            "/tmp/tile16_default_regression/obj_iterator/tb"
+          ],
+          "expected_marker": "BF16_TILE_ITERATOR_PASS tails=4 rejected=5 useful_macs=2244",
+          "log": "/tmp/tile16_default_regression/iterator_run.log",
+          "log_sha256": "337819445ae1579a57139992fbbb25f8055c0a231cc7528833e2c8bc2eac27cc",
+          "name": "iterator_run",
+          "pass": true,
+          "pass_markers": [
+            "BF16_TILE_ITERATOR_PASS tails=4 rejected=5 useful_macs=2244 addresses_above_4g=1 payload_executed=0"
+          ],
+          "returncode": 0,
+          "seconds": 0.004,
+          "warning_counts": {}
+        },
+        {
+          "command": [
+            "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+            "--binary",
+            "--timing",
+            "--assert",
+            "-Wno-fatal",
+            "-j",
+            "2",
+            "--top-module",
+            "tb_qwen2_descriptor_projection_tile_plan",
+            "--Mdir",
+            "/tmp/tile16_default_regression/obj_descriptor_planner",
+            "-o",
+            "tb",
+            "rtl/integration/qwen2_projection_descriptor_context.sv",
+            "rtl/integration/bf16_projection_tile_iterator.sv",
+            "rtl/integration/qwen2_descriptor_projection_tile_plan.sv",
+            "tb/tb_qwen2_descriptor_projection_tile_plan.sv"
+          ],
+          "log": "/tmp/tile16_default_regression/descriptor_planner_build.log",
+          "log_sha256": "dbd7c0aa3a505260dd2818c974baa240528cb9025f704bf152ba9728fc89f4ec",
+          "name": "descriptor_planner_build",
+          "pass": true,
+          "returncode": 0,
+          "seconds": 3.022,
+          "warning_counts": {
+            "PINMISSING": 1,
+            "WIDTHEXPAND": 1,
+            "WIDTHTRUNC": 4
+          }
+        },
+        {
+          "command": [
+            "/tmp/tile16_default_regression/obj_descriptor_planner/tb"
+          ],
+          "expected_marker": "QWEN2_DESCRIPTOR_TILE_PLAN_PASS tiles=3072 useful_macs=2415919104 payload_executed=0",
+          "log": "/tmp/tile16_default_regression/descriptor_planner_run.log",
+          "log_sha256": "51bc740e88609eb50f3375ea426dbcea444198e86f1e71d535266c8e303e7b45",
+          "name": "descriptor_planner_run",
+          "pass": true,
+          "pass_markers": [
+            "QWEN2_DESCRIPTOR_TILE_PLAN_PASS tiles=3072 useful_macs=2415919104 payload_executed=0"
+          ],
+          "returncode": 0,
+          "seconds": 0.032,
+          "warning_counts": {}
+        },
+        {
+          "command": [
+            "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+            "--lint-only",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "qwen2_projection_tile16_controller",
+            "--Mdir",
+            "/tmp/tile16_default_regression/lint_default_off",
+            "work/generated/matrix_norm_rope_candidate/HeteroMatrixNormRoPEHardwarePrimitives.sv",
+            "rtl/matrix/bf16_outer_product_array_glue512.sv",
+            "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+            "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+            "rtl/integration/qwen2_matrix_command_endpoint.sv",
+            "rtl/integration/qwen2_projection_descriptor_context.sv",
+            "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv",
+            "rtl/integration/qwen2_projection_tile16_controller.sv"
+          ],
+          "log": "/tmp/tile16_default_regression/default_source_closure_lint.log",
+          "log_sha256": "e1b2756df31af349802a855c986d7d0b61a2b3cce1d17a7d3fed18fe77c56e18",
+          "name": "default_source_closure_lint",
+          "pass": true,
+          "returncode": 0,
+          "seconds": 23.232,
+          "warning_counts": {
+            "PINMISSING": 1,
+            "TIMESCALEMOD": 19,
+            "WIDTHEXPAND": 3
+          }
+        }
+      ],
+      "source_sha256": {
+        "rtl/integration/bf16_projection_tile_iterator.sv": "d09be1f9f20279133582eff973e4de9421173d6a88bf4a0edf29c05b95988bd3",
+        "rtl/integration/qwen2_descriptor_projection_tile_plan.sv": "884c387c8aca72748bb33ddb84af480ccab17a48602d50caff9e8f7b428f2c12",
+        "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+        "rtl/integration/qwen2_projection_descriptor_context.sv": "15f8569664146a63bf1fe0407fa66de4414422279fb81c1e0eacc078188eac3d",
+        "rtl/integration/qwen2_projection_tile16_controller.sv": "a9c6af2ab7cc8df8e3637f7678a504270893e651c75fae1cb074bc949fc5a02f",
+        "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv": "deb15093979c30b7fa5188757ac8712e6a5e8e2699fefa915edfc02056d137dd",
+        "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+        "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+        "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+        "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+        "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+        "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+        "tb/tb_bf16_projection_tile_iterator.sv": "d458911a7cff12293e693247966d7ed35851dd1d87979eb4f08d696cea16bd48",
+        "tb/tb_matrix_writeback_precision.sv": "b607356c516a4e9d53383ffbe02d8c386d3ca01bae453315bbc2e2c3159b73cb",
+        "tb/tb_projection_precision_decode.sv": "b16ee2a7fa26b087b6f3c56225536a17fffa867814730e2fd1959b435143e8d1",
+        "tb/tb_qwen2_descriptor_projection_tile_plan.sv": "97ac6f7804f97ab647e39decb52f84bb1773343a04555848225b409eda1de1e8",
+        "tb/tb_qwen2_projection_tile16_controller.sv": "f02fbcbc92f89fcc4360e19b1a2f67e44a48be62f2bd3b0f183a1a24e3b02cb0",
+        "work/generated/matrix_norm_rope_candidate/HeteroMatrixNormRoPEHardwarePrimitives.sv": "5d4cf714637a579a50b9fd79eed3569c7e2a2bf39de9ba27775f0eb41d31aaf6"
+      },
+      "source_unchanged": true,
+      "status": "PASS_DEFAULT_OFF_PROJECTION_REGRESSION",
+      "tool": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+    },
+    "full_python": {
+      "exit_code": 1,
+      "failed": 5,
+      "full_suite_all_green": false,
+      "known_baseline_failures_unchanged": [
+        "tests/test_control_v4.py::test_exp2_pwl_bounds",
+        "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+        "tests/test_planning_v6.py::test_arch_and_control",
+        "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+        "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+      ],
+      "log_sha256": "135365187388f01ab882304a0e1bf9c3e67fe48a94d7324f1697ac3aca8a51f3",
+      "passed": 3888
+    },
+    "independent_source_review": {
+      "PPA_or_synthesis_signoff": false,
+      "actual_payload_rtl": {
+        "candidate_cases": 32,
+        "candidate_resets": 2,
+        "candidate_whole_tile_nonfinite_rejections": 18,
+        "legacy_cases": 31,
+        "legacy_rejections": 0,
+        "legacy_resets": 1,
+        "matrix_arithmetic_claimed": false,
+        "pre_fix_actual_rtl_reproduced": true,
+        "pre_fix_failure": "row1 nonfinite; status0; all16 rows published",
+        "source_bound_result": "work/tile16_nonfinite_review/final/review_summary.json"
+      },
+      "frozen_review_scope": true,
+      "full_chain_actual_RTL_result_reviewed": false,
+      "git_diff_check_passed": true,
+      "logs_sha256": {
+        "payload_rtl.log": "8eed2914d616f403fe3419f5ae9c20aba668de7697d9807353e6d3b9f319cb60",
+        "pre_fix_mutation.log": "465bb8ee16ae6fba5e6a0937a776b137c11ce35c687b99d0bb762024d99489eb",
+        "python_normal.log": "0caf379acbcb845c31b98bf4efeffb865a66d527d27d5bb4f34018bea0099078",
+        "python_optimized.log": "c59aa6c5f6f70be50365a58f620d0c05d016bf66880cc332732acf8ac2a38f16",
+        "runner_normal.log": "e9755e389aace1cd755b2ca44cb6cf8968d4a6ca42eb2723d93a708f888d0fd5",
+        "runner_optimized.log": "b5222e9fe268442b01fcc04de37649c63fd8c4f7a25f398851fe9d5a0b6d2150",
+        "trace_normal.log": "3ca63df1dde3ba9e2d2084a8facf905367fe65246c76bc33b3d06e0024ecdfa9",
+        "trace_optimized.log": "98ca59ee82817c447ec000ea5f9b1e25e03928c9c6e62cdfcd5e21aeedb88e36"
+      },
+      "open_P0_P1_in_reviewed_diff": [],
+      "performance_scope": {
+        "DDR_read_bytes": "2048*N+65536*ceil(N/16)*H*T",
+        "DDR_write_bytes": "N*H*(64*T+1024)",
+        "DMA_requests": "N+2*ceil(N/16)*H*T+2*N*H",
+        "equal_N_matrix_packets": "ceil(N/16)*H*T*1024 vs old N*H*T*1024",
+        "full16_active_window_upper_bound": 0.2,
+        "full16_weight_stage_inclusive_upper_bound_strictly_less_than": 0.16666666666666666,
+        "measured_wall_speedup_claimed": false,
+        "minimum_serial_payload_issue_II": 5,
+        "owner_L2_reads": "2*ceil(N/16)*H*T*1024+N*H*(T+18)",
+        "producer_writes_ACKs": "N*H*(T+16)",
+        "whole_block_metric_claimed": false
+      },
+      "pre_fix_actual_payload_proof": {
+        "bench_change_for_baseline": "only expected successful output latency changed to2; nonfinite assertions unchanged",
+        "log": "pre_fix_mutation.log",
+        "observed_failure": "candidate=1 rows=16 badrow=1 status=0 writes=16",
+        "unmodified_baseline_payload_sha256": "b4be974233dc14dc8413fd90114c30939f5e91f801bcd9819810224b43e892f9"
+      },
+      "python_tests": {
+        "payload_normal": 19,
+        "payload_optimized": 19,
+        "runner_normal": 178,
+        "runner_optimized": 178,
+        "trace_normal": 140,
+        "trace_optimized": 140
+      },
+      "resolved_findings": [
+        "late active-row nonfinite bypass in payload",
+        "collapsed hardware cycle trace could forge useful-wall fraction",
+        "runner accepted case/counter inventory and duplicate-recovery binding drift"
+      ],
+      "source_only_trace_coverage": [
+        "complete K token1,3,17 (second batch/tail)",
+        "complete cold Q16 and carried K16",
+        "all512 active/inactive matrix lanes; row swap/repetition",
+        "tile-major L2 gather and strided multirow DDR data",
+        "35 exact preflight rejections",
+        "last-row-last-head DMA failure; 128-token admission error",
+        "late-row/head reset with outstanding final DMA",
+        "missing/duplicate/reordered events; early owner completion",
+        "flags, byte counters, canonical JSON, cyclic denominator forgery",
+        "memh/binary extent/endian and arithmetic-link corruption; bounded cache"
+      ],
+      "source_sha256": {
+        "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv": "99b6be27527546bbcaf767cedeb50d6f70b41800ad68c33c005c0ed775c85028",
+        "rtl/integration/qwen2_projection_tile16_controller.sv": "a9c6af2ab7cc8df8e3637f7678a504270893e651c75fae1cb074bc949fc5a02f",
+        "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv": "deb15093979c30b7fa5188757ac8712e6a5e8e2699fefa915edfc02056d137dd",
+        "scripts/run_matrix_norm_rope_tile16_candidate.py": "12976bb581d74feffc8384b90f0b569abd057184238a06b71dd7fc1dd58e1bac",
+        "scripts/run_matrix_tile16_nonfinite.py": "1f4ce5d9b655e5748efd37a7f80e02ed9fab1d5f379d0e59629454eebedb1912",
+        "scripts/verify_matrix_norm_rope_tile16_trace.py": "e01b00c9f3fcbf22915c50a762bdb46084f065d924b35a6aad4627e7bd2777bc",
+        "tb/tb_qwen2_matrix_tile16_nonfinite.sv": "ca471100c25eba22dc81608491129dd897f46f966686806cec4c0b4ad25a3e3a",
+        "tests/test_matrix_norm_rope_tile16_runner.py": "db2b28d7cb87bb4d13c24f9efad7ba59c9452647de41054293045933713237bb",
+        "tests/test_matrix_norm_rope_tile16_trace.py": "99d7b0d168024c8272b205e71f5734b4d8c35ee0b0ad10a6c74c1f5bd98a99a8",
+        "tests/test_matrix_tile16_nonfinite.py": "0e6210f71227fb2f3a7ce0db6a781258b6f04f10c617e398cc0472bbb2bf2eb4"
+      },
+      "status": "PASS_REVIEWED_SOURCE_AND_DIRECTED_TESTS_FULL_GATE_SEPARATE"
+    },
+    "legacy_single_row_RTL": {
+      "build_command": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/bin/verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-j",
+        "2",
+        "--output-split",
+        "12000",
+        "--output-split-cfuncs",
+        "300",
+        "--top-module",
+        "tb_qwen35_matrix_norm_rope_chain",
+        "--Mdir",
+        "/tmp/tile16_legacy_chain/obj_chain",
+        "-o",
+        "tb",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/generated/matrix_norm_rope_candidate/HeteroMatrixNormRoPEHardwarePrimitives.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/fabric/shared_l2_fabric.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/bf16_outer_product_array_glue512.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_matrix_command_endpoint.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_projection_descriptor_context.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_projection_tile16_controller.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_to_bf16_rne_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_reduce16.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rsqrt_nr.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rmsnorm256_chunked.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/qk_norm256_bf16_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/rope_bf16_l2_candidate.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/rtl/integration/qwen2_shared_l2_rope_payload.sv",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/tb/tb_qwen35_matrix_norm_rope_chain.sv"
+      ],
+      "fixture_summary_sha256": "95ec914790f9697ca0442aee15b440bfce509f6d9d8b0091a0268563cd6c19d0",
+      "independent_trace": {
+        "actual_done_before_ack_checked": true,
+        "bitexact_matrix_steps": 141319,
+        "events": {
+          "begin": 45,
+          "descriptor": 247,
+          "descriptor_request": 248,
+          "dma": 300,
+          "dma_ack": 299,
+          "done": 38,
+          "l2_ack": 291,
+          "l2_read": 282999,
+          "l2_response": 282999,
+          "l2_write": 293,
+          "matrix": 141319,
+          "norm": 13,
+          "reset_flush": 7,
+          "terminal": 38
+        },
+        "fabric_guard_readback_in_trace": false,
+        "main_cases": 4,
+        "missing_extra_reordered_oracle_values": 0,
+        "suite": "all",
+        "terminals": [
+          {
+            "case": 0,
+            "kind": "main",
+            "matrix_outputs": 16384,
+            "name": "source_case0",
+            "status": 0
+          },
+          {
+            "case": 1,
+            "kind": "main",
+            "matrix_outputs": 8192,
+            "name": "source_case1",
+            "status": 0
+          },
+          {
+            "case": 2,
+            "kind": "main",
+            "matrix_outputs": 16384,
+            "name": "source_case2",
+            "status": 0
+          },
+          {
+            "case": 3,
+            "kind": "main",
+            "matrix_outputs": 8192,
+            "name": "source_case3",
+            "status": 0
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "bad_command",
+            "status": 2
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "bad_depth_shape",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "unsupported_role",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "head_out_of_bounds",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "token_out_of_bounds",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "unsupported_policy",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "activation_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "weight_high_wrap",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "packed_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "norm_high_wrap",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "rope_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "trig_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "gamma_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "packed_alignment",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "active_region_overlap",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "DDR_extent_overflow",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "malformed_descriptor",
+            "status": 2
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "unsupported_FP32_output",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "selected_address_add_carry",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "token_extent_over128",
+            "status": 4
+          },
+          {
+            "case": 1,
+            "kind": "reject",
+            "matrix_outputs": 0,
+            "name": "DDR_output_weight_alias",
+            "status": 5
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 0,
+            "name": "descriptor_fetch_error",
+            "status": 3
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 0,
+            "name": "activation_DMA_error",
+            "status": 6
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 0,
+            "name": "weight_DMA_error",
+            "status": 6
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 1024,
+            "name": "packed_store_DMA_error",
+            "status": 6
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 0,
+            "name": "Matrix_L2_read_error",
+            "status": 8
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 8192,
+            "name": "Norm_L2_read_error",
+            "status": 8
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 8192,
+            "name": "RoPE_L2_read_error",
+            "status": 8
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 1024,
+            "name": "Matrix_L2_write_error",
+            "status": 8
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 8192,
+            "name": "Norm_L2_write_error",
+            "status": 8
+          },
+          {
+            "case": 1,
+            "kind": "fault",
+            "matrix_outputs": 8192,
+            "name": "RoPE_L2_write_error",
+            "status": 8
+          },
+          {
+            "case": 1,
+            "kind": "recovery",
+            "matrix_outputs": 8192,
+            "name": "recovery_after_fault_or_reset",
+            "status": 0
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 0,
+            "name": "reset_stage0",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 0,
+            "name": "reset_stage1",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 7,
+            "name": "reset_stage2",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 8192,
+            "name": "reset_stage3",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 8192,
+            "name": "reset_stage4",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 8192,
+            "name": "reset_stage5",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "reset",
+            "matrix_outputs": 8192,
+            "name": "reset_stage6",
+            "status": null
+          },
+          {
+            "case": 1,
+            "kind": "recovery",
+            "matrix_outputs": 8192,
+            "name": "recovery_after_fault_or_reset",
+            "status": 0
+          },
+          {
+            "case": 1,
+            "kind": "boundary",
+            "matrix_outputs": 8192,
+            "name": "legal_exact_1p5MiB_end",
+            "status": 0
+          }
+        ],
+        "transactions": 45
+      },
+      "log_sha256": "f24922590640cfd12af0cec7d43f6416166bab3fec525df5ea4aa2f53b472abd",
+      "metrics": {
+        "actual_matrix_inputs": 141320,
+        "actual_matrix_outputs": 141319,
+        "capacity_bytes": 1572864,
+        "delayed_ACK_cycles": 5322,
+        "dma_stall_cycles": 80,
+        "explicit_write_acks": 291,
+        "faults": 10,
+        "read_stall_cycles": 92392,
+        "rejects": 21,
+        "resets": 7,
+        "source_injection": 0,
+        "successes": 7,
+        "write_stall_cycles": 102
+      },
+      "simulation_tool_wall_seconds": 541.6655192159997,
+      "source_sha256": {
+        "chisel/matrix_norm_rope_hardware/build.sbt": "8bf7baef36e5556f64be168041fc6ca307c723ed7267f47ba93288982a4e1cfe",
+        "chisel/matrix_norm_rope_hardware/manifest.py": "45743ffee091719b86c8a2070aab127deee1649d1b2c68bbec55e9de79af69ee",
+        "chisel/matrix_norm_rope_hardware/src/main/scala/EmitMatrixNormRoPEHardwarePrimitives.scala": "90e648d9ed023da6d77385e3a3530d7d884fd9e0718618fc4ad51cfcf900f055",
+        "chisel/rope_hardware_oracle/maven-lock.json": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+        "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+        "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+        "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c",
+        "rtl/fabric/shared_l2_fabric.sv": "2b1630ac27f2850f57dc2178cd95d7cff00f41eb6162f1cc5c7e857d3d027bcf",
+        "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+        "rtl/integration/qwen2_projection_descriptor_context.sv": "15f8569664146a63bf1fe0407fa66de4414422279fb81c1e0eacc078188eac3d",
+        "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv": "99b6be27527546bbcaf767cedeb50d6f70b41800ad68c33c005c0ed775c85028",
+        "rtl/integration/qwen2_projection_tile16_controller.sv": "a9c6af2ab7cc8df8e3637f7678a504270893e651c75fae1cb074bc949fc5a02f",
+        "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv": "deb15093979c30b7fa5188757ac8712e6a5e8e2699fefa915edfc02056d137dd",
+        "rtl/integration/qwen2_shared_l2_rope_payload.sv": "0b4dae2fee5ee40d57ba5b658344109d2f75a0887113e667226edb7adf2bb661",
+        "rtl/integration/rope_bf16_l2_candidate.sv": "c2c5cb39d0b367768208032f40f8a68d3a1b95f27579c9a11ac4bc4cd7b9aac4",
+        "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+        "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+        "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+        "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+        "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+        "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+        "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+        "rtl/sfu/fp32_reduce16.sv": "3cbd06a58a30e3450ba895aa2b5fc851df230ec4a676911bbd3dddae25e3eb3c",
+        "rtl/sfu/fp32_rmsnorm256_chunked.sv": "aa86f362c4a82a3bce74b9c3e8466626b41c74b3af1691af117e5a9f63d95db4",
+        "rtl/sfu/fp32_rope_pair_bf16_candidate.sv": "ee7b6b8e7d880764f4ac4228d95a1cf418aafff2121cf9a97ee69ef67f8b9666",
+        "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+        "rtl/sfu/fp32_rsqrt_coeffs.svh": "e0c2357054ce255834a12a1baa8f2c2f0111b90696c49736a898c6b122590a11",
+        "rtl/sfu/fp32_rsqrt_nr.sv": "b1347404ca85cee52841fe47635af5ada643a582209510f56e43c97ca03ac0e1",
+        "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+        "rtl/sfu/qk_norm256_bf16_candidate.sv": "c87c8d1f6808d77a176adcba8b8fc4ed0cdd3ca5c3a9bc8b02e96acfc10a3362",
+        "scripts/generate_matrix_norm_rope_primitives.sh": "5399636757adf28ea480dfb9e5b3d7b413a17a8673fe05dad56d73e5a9794586",
+        "scripts/materialize_matrix_norm_rope_vectors.py": "44fa28ad259ea68fe8ff7782e7d6653bd0b74fba491961983d5a5b34f746c29d",
+        "scripts/matrix_norm_rope_reference.c": "90ac528864881602ca22bd552f3bd18c75ebab11b7d3d881fc8016918573dc3d",
+        "scripts/run_matrix_norm_rope_candidate.py": "319fdb7eb85479a44f5687a2eaa177779da0032543c3c78ad1fcea8d21118513",
+        "scripts/verify_matrix_norm_rope_trace.py": "093a8cee9d63c6afe176435a8d3239c0b09cc9cc0b241a7a0f3fa9a3157fc732",
+        "src/heteronpu/matrix_norm_rope_candidate.py": "41a4a25575de2f1b7323582b1b79553417ce99f90a38b2ee5a54948da111e764",
+        "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+        "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+        "tb/tb_qwen35_matrix_norm_rope_chain.sv": "57d3ac79d426e3ec5c77b444a883e43ff4892625d8ef17153acbf4e40fb335f0"
+      },
+      "status": "PASS_LEGACY_SINGLE_ROW_CHAIN_UNCHANGED",
+      "trace_sha256": "3d886d0b34965b8f3ef4e1ae8f9a51567a2e9b982e27db81e16c785bb10262e9"
+    },
+    "phase_accounting_independent_review": {
+      "checked": [
+        "accepted_start and done included exactly once",
+        "gap attribution to observed service owner or prior residual phase",
+        "read request separated from owner wait",
+        "same-cycle write ACK and owner-boundary priority avoid double counting",
+        "observable envelopes and Matrix output counts are not added to exclusive cycle denominator",
+        "fixed512 denominator",
+        "primary Q/K, auxiliary, failed and reset commands separated",
+        "completed runner status and exact suite trace SHA",
+        "independent verifier event/terminal/cycle/count binding",
+        "imported verifier hashes equal frozen runner source_sha256",
+        "analyzer/imported-source hashes checked before/after and across suites",
+        "full trace post-read SHA and final summary stability"
+      ],
+      "frozen_core_modified_by_reviewer": false,
+      "limitations": [
+        "Final full-run phase report not yet reviewed; AVX2 still executing.",
+        "Matrix input-fire timestamps unavailable; only accepted input counts and observed output handshakes retained.",
+        "Norm/RoPE boundaries include admission/control/backpressure residuals; no isolated arithmetic latency claim.",
+        "No valid&&!ready stall waveform counts, physical DDR bandwidth, PPA, full-block or90percent claim.",
+        "Sidecar is accounting of independently verified trace, not a replacement numerical/RTL gate."
+      ],
+      "open_P0_P1": [],
+      "resolved_findings": [
+        {
+          "finding": "Frozen reset_flush has no cycle; original analyzer rejected final baseline/all reset records and unit fixture invented a timestamp.",
+          "resolution": "Flush preceding cycle group for timeless reset, exclude reset commands from complete denominators, expose last_observed_cycle and reset_flush_timestamp_available=false, schema-parsed compressed real-shape test.",
+          "severity": "P1"
+        }
+      ],
+      "source_sha256": {
+        "scripts/analyze_matrix_norm_rope_tile16_phases.py": "5e07377d7d6380d987c124d0dc18de298358186cad66f9cb60068236a3507c18",
+        "tests/test_matrix_norm_rope_tile16_phases.py": "e8f66a13893c939fb5496d83c14de34a7e81cca922a45805c47edafb4f23a0bb"
+      },
+      "status": "PASS_PHASE_ACCOUNTING_SOURCE_REVIEW",
+      "tests": {
+        "normal_passed": 31,
+        "optimized_passed": 31
+      }
+    }
+  },
+  "resource_bounds": {
+    "Norm_staging_bytes": 512,
+    "RoPE_staging_bytes": 512,
+    "activation_staging_bytes": 65536,
+    "arithmetic_array_widened": false,
+    "matrix_lanes": 512,
+    "packed_K_staging_bytes": 8192,
+    "packed_Q_staging_bytes": 16384,
+    "shared_L2_bytes": 1572864,
+    "weight_staging_bytes": 65536
+  },
+  "rtl_suites": [
+    {
+      "command_counters": [
+        {
+          "command": 0,
+          "cycles": 2294959,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "cold_Q",
+          "tokens": 16
+        },
+        {
+          "command": 1,
+          "cycles": 325595,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "cold_K",
+          "tokens": 16
+        },
+        {
+          "command": 2,
+          "cycles": 2295722,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "carried_Q",
+          "tokens": 16
+        },
+        {
+          "command": 3,
+          "cycles": 324889,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "carried_K",
+          "tokens": 16
+        },
+        {
+          "command": 1,
+          "cycles": 259261,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "recovery_after_fault_or_reset",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 260061,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "recovery_after_fault_or_reset",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 260409,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "legal_exact_1p5MiB_end",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 260885,
+          "ddr_read_bytes": 1050624,
+          "ddr_write_bytes": 3072,
+          "dma_requests": 37,
+          "heads": 2,
+          "matrix_steps": 16384,
+          "name": "tail_1",
+          "tokens": 1
+        },
+        {
+          "command": 1,
+          "cycles": 268839,
+          "ddr_read_bytes": 1054720,
+          "ddr_write_bytes": 9216,
+          "dma_requests": 47,
+          "heads": 6,
+          "matrix_steps": 16384,
+          "name": "tail_3",
+          "tokens": 3
+        },
+        {
+          "command": 1,
+          "cycles": 586233,
+          "ddr_read_bytes": 2131968,
+          "ddr_write_bytes": 52224,
+          "dma_requests": 149,
+          "heads": 34,
+          "matrix_steps": 32768,
+          "name": "tail_17",
+          "tokens": 17
+        }
+      ],
+      "independent_trace": {
+        "actual_done_before_ack_checked": true,
+        "bitexact_matrix_packets": 450560,
+        "cumulative_arithmetic_flags_checked": true,
+        "events": {
+          "accepted_start": 49,
+          "begin": 49,
+          "descriptor": 282,
+          "descriptor_request": 282,
+          "dma": 1913,
+          "dma_ack": 1911,
+          "dma_data": 12784,
+          "done": 47,
+          "head_begin": 448,
+          "head_done": 445,
+          "l2_ack": 12800,
+          "l2_read": 914816,
+          "l2_response": 914816,
+          "l2_write": 12800,
+          "matrix": 450560,
+          "norm": 448,
+          "projection_begin": 39,
+          "projection_done": 36,
+          "reset_flush": 2,
+          "terminal": 47
+        },
+        "fabric_guard_readback_in_trace": false,
+        "matrix_lanes_checked_per_packet": 512,
+        "missing_extra_reordered_oracle_values": 0,
+        "primary_commands": 4,
+        "raw_fabric_ddr_store_data_checked": true,
+        "suite": "all",
+        "terminals": [
+          {
+            "accepted_to_done_cycles": 2294959,
+            "candidate_useful_wall_fraction": 0.05711300289024771,
+            "case": 0,
+            "completed_heads": 128,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 8421376,
+            "ddr_write_bytes": 262144,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 131072,
+            "name": "cold_Q",
+            "status": 0,
+            "useful_fma": 67108864,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 325595,
+            "candidate_useful_wall_fraction": 0.050320183049494004,
+            "case": 8,
+            "completed_heads": 32,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 1081344,
+            "ddr_write_bytes": 49152,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 16384,
+            "name": "cold_K",
+            "status": 0,
+            "useful_fma": 8388608,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 2295722,
+            "candidate_useful_wall_fraction": 0.057094020965953195,
+            "case": 160,
+            "completed_heads": 128,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 8421376,
+            "ddr_write_bytes": 262144,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 131072,
+            "name": "carried_Q",
+            "status": 0,
+            "useful_fma": 67108864,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 324889,
+            "candidate_useful_wall_fraction": 0.050429531316849754,
+            "case": 168,
+            "completed_heads": 32,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 1081344,
+            "ddr_write_bytes": 49152,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 16384,
+            "name": "carried_K",
+            "status": 0,
+            "useful_fma": 8388608,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 4,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "bad_command",
+            "status": 2
+          },
+          {
+            "accepted_to_done_cycles": 48,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "bad_depth_shape",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 52,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "unsupported_role",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 48,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "tensor_nonzero_head",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 46,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "token_out_of_bounds",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 50,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "unsupported_policy",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 64,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "activation_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 40,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "weight_high_wrap",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 57,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "packed_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 43,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "norm_high_wrap",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 55,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "rope_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 46,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "trig_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 50,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "gamma_1p5MiB_bounds",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 45,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "packed_alignment",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 44,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "active_region_overlap",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 43,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_extent_overflow",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 9,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "malformed_descriptor",
+            "status": 2
+          },
+          {
+            "accepted_to_done_cycles": 39,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "unsupported_FP32_output",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 51,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "token_end_overflow",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 46,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "token_extent_over128",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 42,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_output_weight_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 47,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "zero_token_count",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 51,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "token_count_over128",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 47,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_norm_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 57,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_rope_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 47,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_norm_wrap",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 50,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_rope_wrap",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 49,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_norm_alignment",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 45,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_norm_future_head_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 55,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "DDR_rope_future_token_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 37,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "tile16_requires_tensor_mode",
+            "status": 4
+          },
+          {
+            "accepted_to_done_cycles": 48,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "tile16_packed_full_stride_bounds",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 50,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "tile16_packed_tail_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 49,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "tile16_future_trig_activation_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 48,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "reject",
+            "matrix_packets": 0,
+            "name": "tile16_last_row_norm_alias",
+            "status": 5
+          },
+          {
+            "accepted_to_done_cycles": 325113,
+            "case": 8,
+            "completed_heads": 31,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 1081344,
+            "ddr_write_bytes": 48640,
+            "fixed_matrix_lanes": 512,
+            "kind": "fault",
+            "matrix_packets": 16384,
+            "name": "last_row_last_head_DMA_error",
+            "status": 6
+          },
+          {
+            "accepted_to_done_cycles": 1079,
+            "case": 8,
+            "completed_heads": 0,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 0,
+            "ddr_write_bytes": 0,
+            "fixed_matrix_lanes": 512,
+            "kind": "fault",
+            "matrix_packets": 0,
+            "name": "token_count128_admitted",
+            "status": 6
+          },
+          {
+            "accepted_to_done_cycles": 259261,
+            "candidate_useful_wall_fraction": 0.00394968776638214,
+            "case": 8,
+            "completed_heads": 2,
+            "completed_tokens": 1,
+            "ddr_read_bytes": 1050624,
+            "ddr_write_bytes": 3072,
+            "fixed_matrix_lanes": 512,
+            "kind": "recovery",
+            "matrix_packets": 16384,
+            "name": "recovery_after_fault_or_reset",
+            "status": 0,
+            "useful_fma": 524288,
+            "whole_block_metric": false
+          },
+          {
+            "case": 8,
+            "completed_heads": 15,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 557056,
+            "ddr_write_bytes": 24064,
+            "kind": "reset",
+            "matrix_packets": 8192,
+            "name": "reset_late_row",
+            "status": null
+          },
+          {
+            "case": 8,
+            "completed_heads": 31,
+            "completed_tokens": 0,
+            "ddr_read_bytes": 1081344,
+            "ddr_write_bytes": 48640,
+            "kind": "reset",
+            "matrix_packets": 16384,
+            "name": "reset_late_head",
+            "status": null
+          },
+          {
+            "accepted_to_done_cycles": 260061,
+            "candidate_useful_wall_fraction": 0.003937537731532217,
+            "case": 8,
+            "completed_heads": 2,
+            "completed_tokens": 1,
+            "ddr_read_bytes": 1050624,
+            "ddr_write_bytes": 3072,
+            "fixed_matrix_lanes": 512,
+            "kind": "recovery",
+            "matrix_packets": 16384,
+            "name": "recovery_after_fault_or_reset",
+            "status": 0,
+            "useful_fma": 524288,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 260409,
+            "candidate_useful_wall_fraction": 0.003932275766198557,
+            "case": 8,
+            "completed_heads": 2,
+            "completed_tokens": 1,
+            "ddr_read_bytes": 1050624,
+            "ddr_write_bytes": 3072,
+            "fixed_matrix_lanes": 512,
+            "kind": "boundary",
+            "matrix_packets": 16384,
+            "name": "legal_exact_1p5MiB_end",
+            "status": 0,
+            "useful_fma": 524288,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 260885,
+            "candidate_useful_wall_fraction": 0.003925101098185024,
+            "case": 8,
+            "completed_heads": 2,
+            "completed_tokens": 1,
+            "ddr_read_bytes": 1050624,
+            "ddr_write_bytes": 3072,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 16384,
+            "name": "tail_1",
+            "status": 0,
+            "useful_fma": 524288,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 268839,
+            "candidate_useful_wall_fraction": 0.011426913505852945,
+            "case": 8,
+            "completed_heads": 6,
+            "completed_tokens": 3,
+            "ddr_read_bytes": 1054720,
+            "ddr_write_bytes": 9216,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 16384,
+            "name": "tail_3",
+            "status": 0,
+            "useful_fma": 1572864,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 586233,
+            "candidate_useful_wall_fraction": 0.029694677713468877,
+            "case": 8,
+            "completed_heads": 34,
+            "completed_tokens": 17,
+            "ddr_read_bytes": 2131968,
+            "ddr_write_bytes": 52224,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 32768,
+            "name": "tail_17",
+            "status": 0,
+            "useful_fma": 8912896,
+            "whole_block_metric": false
+          }
+        ],
+        "transactions": 49,
+        "whole_block_MAC90_claimed": false
+      },
+      "log_sha256": "911c09412d69316a7a170acf14a05ecd357d35af75395bd67d7daec052c8a856",
+      "metrics": {
+        "actual_matrix_inputs": 450560,
+        "actual_matrix_outputs": 450560,
+        "capacity_bytes": 1572864,
+        "delayed_ACK_cycles": 121867,
+        "dma_stall_cycles": 505,
+        "explicit_write_acks": 12800,
+        "faults": 2,
+        "matrix_lanes_per_output": 512,
+        "read_stall_cycles": 300025,
+        "rejects": 35,
+        "resets": 2,
+        "same_cycle_ACKs": 6178,
+        "source_injection": 0,
+        "successes": 10,
+        "write_stall_cycles": 4066
+      },
+      "simulation_tool_wall_seconds": 1873.1344268569992,
+      "source": "baseline",
+      "suite": "all",
+      "trace_sha256": "1aa8f77ecf0fefbb4621ae9c97cd7a84f4e8ee2168fedd98af0d33fe5df00bb2"
+    },
+    {
+      "command_counters": [
+        {
+          "command": 0,
+          "cycles": 2294959,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "cold_Q",
+          "tokens": 16
+        },
+        {
+          "command": 1,
+          "cycles": 325595,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "cold_K",
+          "tokens": 16
+        },
+        {
+          "command": 2,
+          "cycles": 2295722,
+          "ddr_read_bytes": 8421376,
+          "ddr_write_bytes": 262144,
+          "dma_requests": 528,
+          "heads": 128,
+          "matrix_steps": 131072,
+          "name": "carried_Q",
+          "tokens": 16
+        },
+        {
+          "command": 3,
+          "cycles": 324889,
+          "ddr_read_bytes": 1081344,
+          "ddr_write_bytes": 49152,
+          "dma_requests": 112,
+          "heads": 32,
+          "matrix_steps": 16384,
+          "name": "carried_K",
+          "tokens": 16
+        }
+      ],
+      "independent_trace": {
+        "actual_done_before_ack_checked": true,
+        "bitexact_matrix_packets": 294912,
+        "cumulative_arithmetic_flags_checked": true,
+        "events": {
+          "accepted_start": 4,
+          "begin": 4,
+          "descriptor": 24,
+          "descriptor_request": 24,
+          "dma": 1280,
+          "dma_ack": 1280,
+          "dma_data": 9728,
+          "done": 4,
+          "head_begin": 320,
+          "head_done": 320,
+          "l2_ack": 9728,
+          "l2_read": 600192,
+          "l2_response": 600192,
+          "l2_write": 9728,
+          "matrix": 294912,
+          "norm": 320,
+          "projection_begin": 20,
+          "projection_done": 20,
+          "terminal": 4
+        },
+        "fabric_guard_readback_in_trace": false,
+        "matrix_lanes_checked_per_packet": 512,
+        "missing_extra_reordered_oracle_values": 0,
+        "primary_commands": 4,
+        "raw_fabric_ddr_store_data_checked": true,
+        "suite": "main",
+        "terminals": [
+          {
+            "accepted_to_done_cycles": 2294959,
+            "candidate_useful_wall_fraction": 0.05711300289024771,
+            "case": 0,
+            "completed_heads": 128,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 8421376,
+            "ddr_write_bytes": 262144,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 131072,
+            "name": "cold_Q",
+            "status": 0,
+            "useful_fma": 67108864,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 325595,
+            "candidate_useful_wall_fraction": 0.050320183049494004,
+            "case": 8,
+            "completed_heads": 32,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 1081344,
+            "ddr_write_bytes": 49152,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 16384,
+            "name": "cold_K",
+            "status": 0,
+            "useful_fma": 8388608,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 2295722,
+            "candidate_useful_wall_fraction": 0.057094020965953195,
+            "case": 160,
+            "completed_heads": 128,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 8421376,
+            "ddr_write_bytes": 262144,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 131072,
+            "name": "carried_Q",
+            "status": 0,
+            "useful_fma": 67108864,
+            "whole_block_metric": false
+          },
+          {
+            "accepted_to_done_cycles": 324889,
+            "candidate_useful_wall_fraction": 0.050429531316849754,
+            "case": 168,
+            "completed_heads": 32,
+            "completed_tokens": 16,
+            "ddr_read_bytes": 1081344,
+            "ddr_write_bytes": 49152,
+            "fixed_matrix_lanes": 512,
+            "kind": "main",
+            "matrix_packets": 16384,
+            "name": "carried_K",
+            "status": 0,
+            "useful_fma": 8388608,
+            "whole_block_metric": false
+          }
+        ],
+        "transactions": 4,
+        "whole_block_MAC90_claimed": false
+      },
+      "log_sha256": "2ff18023137a5aba5aac63c0aec0f083477520e2834615e80893a66fd234a372",
+      "metrics": {
+        "actual_matrix_inputs": 294912,
+        "actual_matrix_outputs": 294912,
+        "capacity_bytes": 1572864,
+        "delayed_ACK_cycles": 92079,
+        "dma_stall_cycles": 304,
+        "explicit_write_acks": 9728,
+        "faults": 0,
+        "matrix_lanes_per_output": 512,
+        "read_stall_cycles": 196702,
+        "rejects": 0,
+        "resets": 0,
+        "same_cycle_ACKs": 4726,
+        "source_injection": 0,
+        "successes": 4,
+        "write_stall_cycles": 3096
+      },
+      "simulation_tool_wall_seconds": 1176.957466890999,
+      "source": "avx2",
+      "suite": "main",
+      "trace_sha256": "96110f7879eee86e230c5cddbcc6ecbaebeacf40d15a95e6a692a596447a8a8c"
+    }
+  ],
+  "schema_version": 1,
+  "scope_limits": [
+    "Selected32tokens per source, not fullM128 or whole block.",
+    "Fixed synthetic token-ID source sequence remains explicit; not a natural-language representativeness claim.",
+    "Cycle ledger includes randomized test-fabric request/service/ACK delays and explicit512-cycle RoPE-store delay.",
+    "DMA byte counters count successfully acknowledged payload bytes, not measured physical DDR bus traffic.",
+    "Matrix input-fire timestamps and isolated valid&&!ready stalls are unavailable; observed output fires overlap service ownership.",
+    "No default policy change, new architecture top, PPA or whole-blockMAC90 signoff."
+  ],
+  "source_pins": {
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "layer_id": 3,
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "weight_sha256": {
+      "self_attn.k_norm.weight": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+      "self_attn.k_proj.weight": "4c8cfc4b114917fd3067510ca34886f9bb2bac638a07c537a544e0b9494237fe",
+      "self_attn.q_norm.weight": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+      "self_attn.q_proj.weight": "b0dde4ab3eee4dc2abdf2e2fe8cd6b474d52c4559e38bb8fc9c8589c1b0a7176"
+    }
+  },
+  "source_sha256": {
+    "chisel/matrix_norm_rope_hardware/build.sbt": "8bf7baef36e5556f64be168041fc6ca307c723ed7267f47ba93288982a4e1cfe",
+    "chisel/matrix_norm_rope_hardware/manifest.py": "45743ffee091719b86c8a2070aab127deee1649d1b2c68bbec55e9de79af69ee",
+    "chisel/matrix_norm_rope_hardware/src/main/scala/EmitMatrixNormRoPEHardwarePrimitives.scala": "90e648d9ed023da6d77385e3a3530d7d884fd9e0718618fc4ad51cfcf900f055",
+    "chisel/rope_hardware_oracle/maven-lock.json": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+    "config/upstream/qwen3_5_0p8b/matrix_norm_rope_tile16_contract.json": "ea76a125965f35a4007bec9e7a5dca52cce37a40b8f907d37ee62f773799f7e2",
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "integration/gemmini/EmitHeteroFP32Pipelines.scala": "665a58c3933c209dfc052c2c9f014f261501252cd9f9c79e9f18c3fb8640122c",
+    "rtl/fabric/shared_l2_fabric.sv": "2b1630ac27f2850f57dc2178cd95d7cff00f41eb6162f1cc5c7e857d3d027bcf",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "rtl/integration/qwen2_projection_descriptor_context.sv": "15f8569664146a63bf1fe0407fa66de4414422279fb81c1e0eacc078188eac3d",
+    "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv": "99b6be27527546bbcaf767cedeb50d6f70b41800ad68c33c005c0ed775c85028",
+    "rtl/integration/qwen2_projection_tile16_controller.sv": "a9c6af2ab7cc8df8e3637f7678a504270893e651c75fae1cb074bc949fc5a02f",
+    "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv": "deb15093979c30b7fa5188757ac8712e6a5e8e2699fefa915edfc02056d137dd",
+    "rtl/integration/qwen2_shared_l2_rope_payload.sv": "0b4dae2fee5ee40d57ba5b658344109d2f75a0887113e667226edb7adf2bb661",
+    "rtl/integration/rope_bf16_l2_candidate.sv": "c2c5cb39d0b367768208032f40f8a68d3a1b95f27579c9a11ac4bc4cd7b9aac4",
+    "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "rtl/sfu/fp32_reduce16.sv": "3cbd06a58a30e3450ba895aa2b5fc851df230ec4a676911bbd3dddae25e3eb3c",
+    "rtl/sfu/fp32_rmsnorm256_chunked.sv": "aa86f362c4a82a3bce74b9c3e8466626b41c74b3af1691af117e5a9f63d95db4",
+    "rtl/sfu/fp32_rope_pair_bf16_candidate.sv": "ee7b6b8e7d880764f4ac4228d95a1cf418aafff2121cf9a97ee69ef67f8b9666",
+    "rtl/sfu/fp32_rope_pair_bf16_pipe_candidate.sv": "dd73ae0939434d87ae939e4847c4c153fac2bddc3ecbd15321f316b1f470cfec",
+    "rtl/sfu/fp32_rsqrt_coeffs.svh": "e0c2357054ce255834a12a1baa8f2c2f0111b90696c49736a898c6b122590a11",
+    "rtl/sfu/fp32_rsqrt_nr.sv": "b1347404ca85cee52841fe47635af5ada643a582209510f56e43c97ca03ac0e1",
+    "rtl/sfu/fp32_to_bf16_rne_candidate.sv": "75181d86bcd107dbba2cdf4b611ff1c4cb9271d742962f14ad9dd0af3a0cf9e7",
+    "rtl/sfu/qk_norm256_bf16_candidate.sv": "c87c8d1f6808d77a176adcba8b8fc4ed0cdd3ca5c3a9bc8b02e96acfc10a3362",
+    "scripts/generate_matrix_norm_rope_primitives.sh": "5399636757adf28ea480dfb9e5b3d7b413a17a8673fe05dad56d73e5a9794586",
+    "scripts/materialize_matrix_norm_rope_tile16_vectors.py": "0e2d8e47b5dd5ff1ecc93552111d55f851d646285e7c9af46a770357d895ebec",
+    "scripts/materialize_matrix_norm_rope_vectors.py": "44fa28ad259ea68fe8ff7782e7d6653bd0b74fba491961983d5a5b34f746c29d",
+    "scripts/matrix_norm_rope_reference.c": "90ac528864881602ca22bd552f3bd18c75ebab11b7d3d881fc8016918573dc3d",
+    "scripts/qk_norm256_reference.c": "79db3d6fad3a43d2e1cde22702c3a0aa4237b1b9bc157bf286eeed3fabd411ab",
+    "scripts/rope_bf16_candidate_reference.c": "045f69dcddafcfd834552009adf03734b39af8f79c7ec331347fa178e53946e2",
+    "scripts/run_matrix_norm_rope_candidate.py": "319fdb7eb85479a44f5687a2eaa177779da0032543c3c78ad1fcea8d21118513",
+    "scripts/run_matrix_norm_rope_tensor_candidate.py": "0dd0cf69a3e0ac0ce8d7f81fdf7ac6b28cf2c9bda70867b31d816c56b44a9be6",
+    "scripts/run_matrix_norm_rope_tile16_candidate.py": "12976bb581d74feffc8384b90f0b569abd057184238a06b71dd7fc1dd58e1bac",
+    "scripts/verify_matrix_norm_rope_tensor_trace.py": "cd3111df40d219af7a90ab5fc77dcbd04bcd272ef80902f4dd48677b84d1d5e4",
+    "scripts/verify_matrix_norm_rope_tile16_trace.py": "e01b00c9f3fcbf22915c50a762bdb46084f065d924b35a6aad4627e7bd2777bc",
+    "scripts/verify_matrix_norm_rope_trace.py": "093a8cee9d63c6afe176435a8d3239c0b09cc9cc0b241a7a0f3fa9a3157fc732",
+    "src/heteronpu/matrix_norm_rope_candidate.py": "41a4a25575de2f1b7323582b1b79553417ce99f90a38b2ee5a54948da111e764",
+    "src/heteronpu/matrix_norm_rope_tile16_candidate.py": "fea712fae5e834fc607a71669158b87ad92d8166a7d347a3e70b3c38efeaa0a3",
+    "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+    "src/heteronpu/qk_norm256_materialization.py": "da78c47d6b07aac43dcff04b4c9e1efe374fe50d3b5ff156e1040a83d947ae59",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+    "tb/tb_qwen35_matrix_norm_rope_tile16.sv": "9decddf2007b1b60fd718d83bd5b41e19faf3581351121ed65b953f6786d95b5"
+  },
+  "status": "PASS_Q8_K2_TOKEN_TILE16_RTL",
+  "summary_origin_sha256": "f8c52f75be3c778e828ed2fb9cc4ba40acd62f43fcb50653c36004026286ae7d",
+  "supplemental": {
+    "supplemental_cases_per_variant": 2,
+    "supplemental_native_failed_comparisons": [],
+    "supplemental_native_gate_pass": true,
+    "supplemental_totals": {
+      "head_transactions": 4,
+      "matrix_accumulator_steps": 1048576,
+      "matrix_bf16_columns": 1024,
+      "matrix_fma_flags": 1024,
+      "matrix_fp32_columns": 1024,
+      "norm_bf16_words": 1024,
+      "norm_trace_words": 12528,
+      "projected_steps_bytes": 4194304,
+      "rope_bf16_words": 1024,
+      "rope_trace_words": 3200,
+      "selected_phase_tokens": 2,
+      "variants": 2
+    }
+  },
+  "tool_versions": {
+    "chisel": "6.7.0",
+    "firtool": "LLVM (http://llvm.org/):\n  LLVM version 18.0.0git\n  Optimized build.\nCIRCT firtool-1.62.1",
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)",
+    "python": "3.12.14",
+    "sbt": "1.10.2",
+    "scala": "2.13.16",
+    "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+  },
+  "total_tool_wall_seconds": 3340.854235802999,
+  "whole_block_MAC90_measured": false
+}

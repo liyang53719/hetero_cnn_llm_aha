@@ -23,7 +23,7 @@ module qwen2_projection_tile16_controller #(
  output logic[4:0]candidate_exception_flags_o,
  output logic[3:0]candidate_norm_status_o,
  output logic[31:0]candidate_mean_eps_o,candidate_inv_o,
- input logic candidate_tensor_i,input logic[7:0]candidate_token_count_i,
+ input logic candidate_tensor_i,input logic candidate_tile16_i,input logic[7:0]candidate_token_count_i,
  input logic[63:0]candidate_norm_output_ddr_i,candidate_rope_output_ddr_i,
  output logic[7:0]candidate_total_column_tiles_o,
  output logic[15:0]candidate_completed_heads_o,

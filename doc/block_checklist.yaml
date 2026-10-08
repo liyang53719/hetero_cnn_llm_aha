@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 54e97482685e1117b46e6e9a4c065143edae3001f1936b91cc98ca02bb5a8ef7
+计划SHA256: 096242f584bed14fef9fbc89bdac30159eafc71e4f06e91d48c5c65ce8c6bc90
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1064,7 +1064,8 @@
     - 文件: reports/execution/U00_2_QK_NORM256_CANDIDATE_20261007/fresh_summary.json
       SHA256: fc802af3495117adbc18163b96e94e22f0187503c2c17e0f0a173dccd169f132
       设计提交: e9c2eae385954ec6a7d5dcbe644245ebd44d998b
-      范围: 修订交付基于该main起点，精确新源码由摘要source_sha256绑定；不提交可重建权重/NPZ。新官方baseline/AVX2共5120个head观察值通过实际RTL/整数/C，7处native差异，max0.015625且原阈值不变；本地历史重放仍15处差异及0.03125边界。669普通及优化通过，全仓2670通过和同5基线失败。U00.2 ongoing，完整block/owner/PPA/MAC90%仍OPEN。
+      范围: 修订交付基于该main起点，精确新源码由摘要source_sha256绑定；不提交可重建权重/NPZ。新官方baseline/AVX2共5120个head观察值通过实际RTL/整数/C，7处native差异，max0.015625且原阈值不变；本地历史重放仍15处差异及0.03125边界。669普通及优化通过，全仓2670通过和同5基线失败。U00.2
+        ongoing，完整block/owner/PPA/MAC90%仍OPEN。
       关联文件:
       - 文件: reports/execution/U00_2_QK_NORM256_CANDIDATE_20261007/historical_replay_summary.json
         SHA256: 3595f2adafdb241eec22dbe580b50ca84720498db8267009b63c5e18b21897d0
@@ -1081,6 +1082,15 @@
       关联文件:
       - 文件: reports/execution/U00_2_MATRIX_NORM_ROPE_CHAIN_20261007/independent_review.json
         SHA256: 9cbc0b8d2809d2448bda1ad15baaf818dec34dd169ca86f8d37b41a282a09f8d
+    - 文件: reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/result.json
+      SHA256: 1d4f748aad245c6552ab8170fceac12c11f7712370390b2ae464cf81db9e1c22
+      设计提交: 2a8b11723301b7c25676877e0c97b6720a341eb3
+      范围: 已有默认关闭候选的实际Matrix16x32 token批处理；两来源32选定token每来源及640主head，301989888有效逐K累加器独立整数及C和RTL一致。baseline49事务与AVX2四主命令、tail17跨批、ACK和故障及reset通过；固定512lane候选command-wall5.6268406%，不替代M128或完整block90%。设计提交为认领基线，最终实现由sourceSHA及实际发布后精确远端提交绑定。
+      关联文件:
+      - 文件: reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/independent_review.json
+        SHA256: de88642f20b92c25c9b1ecee00c32bb9f27d7c83007595f70ce5ef594f238cb1
+      - 文件: reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/cycle_phases.json
+        SHA256: 2ddc06e140db0abc977868199297f31339485bf656381b43f097d1c94deb8c92
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -1151,13 +1161,19 @@
 - {编号: U00.2, 执行者: sandbox@rope-bf16-l2-candidate-20261007, 时间: '2026-10-07T04:38:00+00:00', 说明: 前轮独立候选已完成且main干净；认领真实SharedL2消费路径默认关闭的BF16候选head256/partial64搬运及掩码存储门禁，保留旧生产算术、Command128/完整block/90%未验收。}
 - {编号: U00.2, 执行者: sandbox@rope-bf16-l2-candidate-20261007, 时间: '2026-10-07T04:54:00+00:00', 说明: 完成真实SharedL2消费者显式候选的head256/partial64掩码存储及原位旁路门禁；保持旧生产默认和generic
     SFU/Command128/完整block/固定资源MAC90%未完成。独立复核修正1.5MiB实际容量准入；U00.2 ongoing、U01 to do。}
-- {编号: U00.2, 执行者: sandbox@qk-norm-producer-20261007, 时间: '2026-10-07T05:35:00+00:00', 说明: 前轮SharedL2候选已完成且main干净；接续认领真实Q/K每头256 Norm及packed Q/gate producer布局中的有界实际RTL门禁。先审计既有算术与来源，再选择完整可验组件；生产默认、整tensor owner、三模型完整block及固定资源MAC90%保持OPEN。}
+- {编号: U00.2, 执行者: sandbox@qk-norm-producer-20261007, 时间: '2026-10-07T05:35:00+00:00', 说明: 前轮SharedL2候选已完成且main干净；接续认领真实Q/K每头256 Norm及packed
+    Q/gate producer布局中的有界实际RTL门禁。先审计既有算术与来源，再选择完整可验组件；生产默认、整tensor owner、三模型完整block及固定资源MAC90%保持OPEN。}
 - {编号: U00.2, 执行者: sandbox@rebuildable-artifact-migration-20261007, 时间: '2026-10-07T21:03:15.641154+00:00', 说明: 按新交付范围移除当前树RoPE数值payload并保留本地缓存，以固定官方来源重新生成QK输入并通过新/历史实际RTL复验；Git只含源码、pins和摘要，保留全仓5基线失败及三模型完整block/90%未完成。}
-- {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T21:27:00+00:00', 说明: 前轮QK Norm与可重建payload迁移已完成且main干净；认领真实Matrix K1024到完整Q256+gate256/K256头、Norm与SharedL2 partial64 RoPE的有界候选链。先冻结顺序FMA及BF16边界并验真实owner和ACK，保留生产默认、全Q8/K2及三模型完整block/PPA/MAC90%未验收。}
-- {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T23:08:00+00:00', 说明: 完成已有projection controller默认关闭的实际Matrix K1024到Q256加gate256或K256到Norm和真实1.5MiB SharedL2 partial64 RoPE有界链；baseline45事务和AVX2四头及独立trace通过，197项normal和优化测试、全仓2867通过及同5既有失败。保留全Q8/K2和Command128完整owner、完整producer拒绝、三模型完整block与固定资源MAC90未完成。}
-- {编号: U00.2, 执行者: sandbox@q8-k2-token-owner-20261008, 时间: '2026-10-07T23:52:00+00:00', 说明: 接续认领已有默认关闭Matrix到Norm到SharedL2 RoPE链的全Q8和K2及token窗口owner；执行前冻结cold0和1、carried126和127两来源全头实际RTL门禁；单头固定staging复用和全写ACK生命周期。实现及复验进行中，不提前声明M128、generic Command128或三模型完整block及MAC90完成。}
+- {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T21:27:00+00:00', 说明: 前轮QK Norm与可重建payload迁移已完成且main干净；认领真实Matrix
+    K1024到完整Q256+gate256/K256头、Norm与SharedL2 partial64 RoPE的有界候选链。先冻结顺序FMA及BF16边界并验真实owner和ACK，保留生产默认、全Q8/K2及三模型完整block/PPA/MAC90%未验收。}
+- {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T23:08:00+00:00', 说明: 完成已有projection controller默认关闭的实际Matrix
+    K1024到Q256加gate256或K256到Norm和真实1.5MiB SharedL2 partial64 RoPE有界链；baseline45事务和AVX2四头及独立trace通过，197项normal和优化测试、全仓2867通过及同5既有失败。保留全Q8/K2和Command128完整owner、完整producer拒绝、三模型完整block与固定资源MAC90未完成。}
+- {编号: U00.2, 执行者: sandbox@q8-k2-token-owner-20261008, 时间: '2026-10-07T23:52:00+00:00', 说明: 接续认领已有默认关闭Matrix到Norm到SharedL2 RoPE链的全Q8和K2及token窗口owner；执行前冻结cold0和1、carried126和127两来源全头实际RTL门禁；单头固定staging复用和全写ACK生命周期。实现及复验进行中，不提前声明M128、generic
+    Command128或三模型完整block及MAC90完成。}
 - {编号: U00.2, 执行者: sandbox@q8-k2-token-owner-20261008, 时间: '2026-10-08T02:04:00+00:00', 说明: 完成已有默认关闭分支的Q8和K2全头两token窗口owner；baseline和AVX2共80个primary头真实RTL、整数及C参考、独立trace和末端来源复核通过。baseline另验30拒绝和2故障及2reset，旧单头和默认关闭路径回归通过。全仓3116通过及同5既有失败；不扩大为M128或M1024，三模型完整block及MAC90仍未完成。}
-- {编号: U00.2, 执行者: sandbox@matrix-token-tile16-20261008, 时间: '2026-10-08T04:35:00+00:00', 说明: 接续认领既有默认关闭Q8及K2 owner的实际16行Matrix token tile门禁；固定cold0至15和carried112至127两来源全头及tail和ACK及reset及fault，保留独立双参考及native原门限。未声明M128或完整block及90%完成。}
+- {编号: U00.2, 执行者: sandbox@matrix-token-tile16-20261008, 时间: '2026-10-08T04:35:00+00:00', 说明: 接续认领既有默认关闭Q8及K2 owner的实际16行Matrix token
+    tile门禁；固定cold0至15和carried112至127两来源全头及tail和ACK及reset及fault，保留独立双参考及native原门限。未声明M128或完整block及90%完成。}
+- {编号: U00.2, 执行者: sandbox@matrix-token-tile16-20261008, 时间: '2026-10-08T06:10:00+00:00', 说明: 完成默认关闭候选实际16行Matrix token批处理，复用固定512lane及1.5MiB；640主head、两来源独立逐K和RTL、tail17跨批、ACK及fault及reset验真通过。候选commandwall5.6268406%；1218相关normal及-O、全仓3888通过及同5既有失败。保留全M128、三模型完整block和90%未完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

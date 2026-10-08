@@ -1,0 +1,220 @@
+{
+  "status": "PASS_PRODUCTION_HOST_V_WINDOWS_AND_FULL128",
+  "cases": [
+    {
+      "name": "baseline_cold_base1_count17",
+      "source": {
+        "status": "PASS_CODE_PINNED_HOST_V_FIXTURE",
+        "variant": "baseline",
+        "phase": "cold",
+        "token_base": 1,
+        "token_count": 17,
+        "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+        "native_full_block_gate_pass": {
+          "baseline": false,
+          "avx2": false
+        }
+      },
+      "fixture_sha256": "5dc1cd268c2d5ef7a5f5503b7dcd2b153d3422bc132597f7dfcb1c38308c7a7c",
+      "metrics": {
+        "tokens": "17",
+        "token_base": "1",
+        "checked_bf16": "8704",
+        "canonical_bit_differences": "0",
+        "native_bit_differences": "0",
+        "native_max_abs": "0",
+        "native_mean_abs": "0",
+        "native_operator_gate": "PASS",
+        "cycles": "81093",
+        "write_ack_bytes": "17408",
+        "metadata_reads": "22",
+        "logical_matrix_engines": "1",
+        "physical_matrix_slices": "8",
+        "idma_instances": "1",
+        "unchanged_guards": "1"
+      },
+      "actual_sha256": "5ad13aae1c26804e2dd328afa65fdd425e2b74d338b325bb94ba80375da5b82a",
+      "log_sha256": "4146f47508133ca22a35d15d3729a107c5999a2074b901fdcd9b474b40f56184"
+    },
+    {
+      "name": "avx2_carried_base47_count81",
+      "source": {
+        "status": "PASS_CODE_PINNED_HOST_V_FIXTURE",
+        "variant": "avx2",
+        "phase": "carried",
+        "token_base": 47,
+        "token_count": 81,
+        "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+        "native_full_block_gate_pass": {
+          "baseline": false,
+          "avx2": false
+        }
+      },
+      "fixture_sha256": "e1a99b120da8dbb08142f3ce0a6b94beb2b1a9768c3a28b69e862cad112f3568",
+      "metrics": {
+        "tokens": "81",
+        "token_base": "47",
+        "checked_bf16": "41472",
+        "canonical_bit_differences": "0",
+        "native_bit_differences": "8",
+        "native_max_abs": "0.00390625",
+        "native_mean_abs": "9.91011e-08",
+        "native_operator_gate": "PASS",
+        "cycles": "188865",
+        "write_ack_bytes": "82944",
+        "metadata_reads": "22",
+        "logical_matrix_engines": "1",
+        "physical_matrix_slices": "8",
+        "idma_instances": "1",
+        "unchanged_guards": "1"
+      },
+      "actual_sha256": "f3f8ce9bf5b30dc0f80e3a32350bc853208fe908cba82a504894103b961c6db4",
+      "log_sha256": "d0d04392d10b3eae1fe2978735d58da1f91c17858a0a00ac9d4b83dfcb26abef"
+    },
+    {
+      "name": "baseline_cold_base0_count128",
+      "source": {
+        "status": "PASS_CODE_PINNED_HOST_V_FIXTURE",
+        "variant": "baseline",
+        "phase": "cold",
+        "token_base": 0,
+        "token_count": 128,
+        "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+        "native_full_block_gate_pass": {
+          "baseline": false,
+          "avx2": false
+        }
+      },
+      "fixture_sha256": "fa37400358ccfc77c2b27e8bb1e02ac092564ae4da80de5e926450f13d914473",
+      "metrics": {
+        "tokens": "128",
+        "token_base": "0",
+        "checked_bf16": "65536",
+        "canonical_bit_differences": "0",
+        "native_bit_differences": "11",
+        "native_max_abs": "0.00195312",
+        "native_mean_abs": "6.72067e-08",
+        "native_operator_gate": "PASS",
+        "cycles": "215261",
+        "write_ack_bytes": "131072",
+        "metadata_reads": "22",
+        "logical_matrix_engines": "1",
+        "physical_matrix_slices": "8",
+        "idma_instances": "1",
+        "unchanged_guards": "1"
+      },
+      "actual_sha256": "cd8ea73b7a910ab8a753b270a048020040b082ce6fb774bad36061e960bb4c4e",
+      "log_sha256": "5a639712bc4bc03c039eaafd060c10b2001004d780a40e5b9b4623959591ac01"
+    },
+    {
+      "name": "baseline_carried_base0_count128",
+      "source": {
+        "status": "PASS_CODE_PINNED_HOST_V_FIXTURE",
+        "variant": "baseline",
+        "phase": "carried",
+        "token_base": 0,
+        "token_count": 128,
+        "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+        "native_full_block_gate_pass": {
+          "baseline": false,
+          "avx2": false
+        }
+      },
+      "fixture_sha256": "084138fe3ad5edb3352d7503ea264feb40ddaba05d709ded41511617ba042401",
+      "metrics": {
+        "tokens": "128",
+        "token_base": "0",
+        "checked_bf16": "65536",
+        "canonical_bit_differences": "0",
+        "native_bit_differences": "11",
+        "native_max_abs": "0.0078125",
+        "native_mean_abs": "1.46238e-07",
+        "native_operator_gate": "PASS",
+        "cycles": "215261",
+        "write_ack_bytes": "131072",
+        "metadata_reads": "22",
+        "logical_matrix_engines": "1",
+        "physical_matrix_slices": "8",
+        "idma_instances": "1",
+        "unchanged_guards": "1"
+      },
+      "actual_sha256": "3f9c2a3d24efe9edbcf3ff4b2aa6e2bc3f566e86256196da724527f6fc331ada",
+      "log_sha256": "cad2ea148797387fde09793dca4f7dd670a238165179d0dc7e959743bf5a3417"
+    },
+    {
+      "name": "avx2_cold_base0_count128",
+      "source": {
+        "status": "PASS_CODE_PINNED_HOST_V_FIXTURE",
+        "variant": "avx2",
+        "phase": "cold",
+        "token_base": 0,
+        "token_count": 128,
+        "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+        "native_full_block_gate_pass": {
+          "baseline": false,
+          "avx2": false
+        }
+      },
+      "fixture_sha256": "05adef60cd745b02d9cf2b4ed0a975d2b5a06e2c0011548fc28d07104f27458f",
+      "metrics": {
+        "tokens": "128",
+        "token_base": "0",
+        "checked_bf16": "65536",
+        "canonical_bit_differences": "0",
+        "native_bit_differences": "6",
+        "native_max_abs": "0.00195312",
+        "native_mean_abs": "3.53923e-08",
+        "native_operator_gate": "PASS",
+        "cycles": "215261",
+        "write_ack_bytes": "131072",
+        "metadata_reads": "22",
+        "logical_matrix_engines": "1",
+        "physical_matrix_slices": "8",
+        "idma_instances": "1",
+        "unchanged_guards": "1"
+      },
+      "actual_sha256": "78e834f3ff2fea5ca5c6b7671774adcd5a6aeac47305e759bbfc3c1c9c9fa349",
+      "log_sha256": "4a89ee51056e2af052ab201314429a5eaf4b08f8006bbe426c82250ac9502066"
+    },
+    {
+      "name": "avx2_carried_base0_count128",
+      "source": {
+        "status": "PASS_CODE_PINNED_HOST_V_FIXTURE",
+        "variant": "avx2",
+        "phase": "carried",
+        "token_base": 0,
+        "token_count": 128,
+        "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+        "native_full_block_gate_pass": {
+          "baseline": false,
+          "avx2": false
+        }
+      },
+      "fixture_sha256": "580fc364980dc6036de3a05803c38acbb24049704232846a74e8ce0756c40c57",
+      "metrics": {
+        "tokens": "128",
+        "token_base": "0",
+        "checked_bf16": "65536",
+        "canonical_bit_differences": "0",
+        "native_bit_differences": "15",
+        "native_max_abs": "0.015625",
+        "native_mean_abs": "4.2093e-07",
+        "native_operator_gate": "PASS",
+        "cycles": "215261",
+        "write_ack_bytes": "131072",
+        "metadata_reads": "22",
+        "logical_matrix_engines": "1",
+        "physical_matrix_slices": "8",
+        "idma_instances": "1",
+        "unchanged_guards": "1"
+      },
+      "actual_sha256": "155f8de8ae0383a57a8591ee20034a7c0b4601ce771884901cff19367a1a58f8",
+      "log_sha256": "227ed1adc226e804cda50b15e7cb71f47353775c60dedaa6c65ca3b96125ee6c"
+    }
+  ],
+  "immutable_dut": {
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_bf16_v_actual3/obj/VHostBlockTop": "e9cb6a9736dd3e76633cae227aa0c4c63c99940a3d77bd271c32ccc184572a1f",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_bf16_v_actual3/generated/HostBlockTop.sv": "a49bb313d5e1c3fbaf6661b7cf54ce4389196e319429acb43a2e193d8f9957d7"
+  },
+  "scope": "V-only Host route; native full-block failures remain open; no Q/K or performance acceptance"
+}

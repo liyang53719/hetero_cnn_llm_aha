@@ -1,0 +1,3273 @@
+{
+  "schema": "heteronpu.shape-layout-vectors.v1",
+  "evidence_class": "synthetic_E0",
+  "integer_encoding": "decimal_strings_no_float_conversion",
+  "source_baseline_commit": "4ba43dce23e465796aa31cb9f1752516c7084ac8",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "259a303b07209d8d8cec2cb943cb47398ef5b7c58bc06593150be38eb16319a0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "6cf275fd7cc0ba1538a00cfcfc3f21afd9dd192862f07352bc94ca8d1836eea4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": "f6ad43a74fbaade2b1455d2b0d911f22b6d16f2dbc88e134f2c59e8bde2dd033",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "5f357fba9b9e07cb507967f0f8a0ad9cfcafa1283909b121631c63b9d3497002"
+  },
+  "chisel_consumer_executed": false,
+  "rtl_executed": false,
+  "official_checkpoint_verified": false,
+  "vectors": [
+    {
+      "id": "decoupled_query_kv",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "128",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "128"
+            ],
+            "k_new": [
+              "3",
+              "32"
+            ],
+            "v_new": [
+              "3",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "128"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "3",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "synthetic_2048_4096_2048",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "2048",
+        "ffn": "512",
+        "q_heads": "16",
+        "kv_heads": "2",
+        "head_dim": "256",
+        "value_dim": "256",
+        "query_tokens": "3",
+        "kv_tokens": "1025",
+        "extra_rows": {
+          "gdn_conv": "8192",
+          "gdn_value": "4096"
+        }
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "2048",
+            "ffn": "512",
+            "q": "4096",
+            "k": "512",
+            "v": "512",
+            "context": "4096",
+            "gdn_conv": "8192",
+            "gdn_value": "4096"
+          },
+          "max_row": "8192",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "8",
+          "tensors": {
+            "q": [
+              "3",
+              "4096"
+            ],
+            "k_new": [
+              "3",
+              "512"
+            ],
+            "v_new": [
+              "3",
+              "512"
+            ],
+            "k_cache": [
+              "1025",
+              "512"
+            ],
+            "v_cache": [
+              "1025",
+              "512"
+            ],
+            "score": [
+              "16",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "16",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "4096"
+            ],
+            "output": [
+              "3",
+              "2048"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "4096",
+              "2048"
+            ],
+            "o_proj": [
+              "3",
+              "2048",
+              "4096"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "256"
+          ],
+          "pv_mnk": [
+            "3",
+            "256",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "synthetic_2560_6144_2560",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "2560",
+        "ffn": "640",
+        "q_heads": "24",
+        "kv_heads": "2",
+        "head_dim": "256",
+        "value_dim": "256",
+        "query_tokens": "3",
+        "kv_tokens": "1025",
+        "extra_rows": {
+          "gdn_conv": "10240",
+          "gdn_value": "6144"
+        }
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "2560",
+            "ffn": "640",
+            "q": "6144",
+            "k": "512",
+            "v": "512",
+            "context": "6144",
+            "gdn_conv": "10240",
+            "gdn_value": "6144"
+          },
+          "max_row": "10240",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "12",
+          "tensors": {
+            "q": [
+              "3",
+              "6144"
+            ],
+            "k_new": [
+              "3",
+              "512"
+            ],
+            "v_new": [
+              "3",
+              "512"
+            ],
+            "k_cache": [
+              "1025",
+              "512"
+            ],
+            "v_cache": [
+              "1025",
+              "512"
+            ],
+            "score": [
+              "24",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "24",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "6144"
+            ],
+            "output": [
+              "3",
+              "2560"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "6144",
+              "2560"
+            ],
+            "o_proj": [
+              "3",
+              "2560",
+              "6144"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "256"
+          ],
+          "pv_mnk": [
+            "3",
+            "256",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "distinct_value_width",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "64",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "128",
+            "k": "32",
+            "v": "64",
+            "context": "256"
+          },
+          "max_row": "256",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "128"
+            ],
+            "k_new": [
+              "3",
+              "32"
+            ],
+            "v_new": [
+              "3",
+              "64"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "64"
+            ],
+            "score": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "256"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "256"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "3",
+            "64",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "explicit_extra_max_row",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025",
+        "extra_rows": {
+          "gdn_conv": "12288",
+          "gate": "256"
+        }
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128",
+            "gdn_conv": "12288",
+            "gate": "256"
+          },
+          "max_row": "12288",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "128"
+            ],
+            "k_new": [
+              "3",
+              "32"
+            ],
+            "v_new": [
+              "3",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "128"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "3",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "query_one",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "1",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "128",
+          "query_tokens": "1",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "1",
+              "128"
+            ],
+            "k_new": [
+              "1",
+              "32"
+            ],
+            "v_new": [
+              "1",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "1",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "1",
+              "1025"
+            ],
+            "context": [
+              "1",
+              "128"
+            ],
+            "output": [
+              "1",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "1",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "1",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "1",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "1",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "query_1024",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "1024",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "128",
+          "query_tokens": "1024",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "1024",
+              "128"
+            ],
+            "k_new": [
+              "1024",
+              "32"
+            ],
+            "v_new": [
+              "1024",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "1024",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "1024",
+              "1025"
+            ],
+            "context": [
+              "1024",
+              "128"
+            ],
+            "output": [
+              "1024",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "1024",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "1024",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "1024",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "1024",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "query_capacity_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "1025",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "token_capacity"
+      }
+    },
+    {
+      "id": "kv_u16_max",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "65535"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "128",
+          "query_tokens": "3",
+          "kv_tokens": "65535",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "128"
+            ],
+            "k_new": [
+              "3",
+              "32"
+            ],
+            "v_new": [
+              "3",
+              "32"
+            ],
+            "k_cache": [
+              "65535",
+              "32"
+            ],
+            "v_cache": [
+              "65535",
+              "32"
+            ],
+            "score": [
+              "4",
+              "3",
+              "65535"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "65535"
+            ],
+            "context": [
+              "3",
+              "128"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "65535",
+            "32"
+          ],
+          "pv_mnk": [
+            "3",
+            "32",
+            "65535"
+          ]
+        }
+      }
+    },
+    {
+      "id": "kv_u16_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "65536"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "kv_capacity_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025",
+        "max_kv_tokens": "1024"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "token_capacity"
+      }
+    },
+    {
+      "id": "kv_shorter",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "2"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "kv_shorter_than_query"
+      }
+    },
+    {
+      "id": "row_u16_max",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "65535",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "65535",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "65535",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "128"
+            ],
+            "k_new": [
+              "3",
+              "32"
+            ],
+            "v_new": [
+              "3",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "128"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "3",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "row_u16_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "65536",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "aligned16_max",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "65520",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "65520",
+            "q": "128",
+            "k": "32",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "65520",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "128"
+            ],
+            "k_new": [
+              "3",
+              "32"
+            ],
+            "v_new": [
+              "3",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "32"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "128"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "128",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "32"
+          ],
+          "pv_mnk": [
+            "3",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "aligned32_max",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "16376",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "widths": {
+            "hidden": "64",
+            "ffn": "80",
+            "q": "65504",
+            "k": "16376",
+            "v": "32",
+            "context": "128"
+          },
+          "max_row": "65504",
+          "query_tokens": "3",
+          "kv_tokens": "1025",
+          "max_query_tokens": "1024",
+          "max_kv_tokens": "65535",
+          "gqa_group_size": "4",
+          "tensors": {
+            "q": [
+              "3",
+              "65504"
+            ],
+            "k_new": [
+              "3",
+              "16376"
+            ],
+            "v_new": [
+              "3",
+              "32"
+            ],
+            "k_cache": [
+              "1025",
+              "16376"
+            ],
+            "v_cache": [
+              "1025",
+              "32"
+            ],
+            "score": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "probability": [
+              "4",
+              "3",
+              "1025"
+            ],
+            "context": [
+              "3",
+              "128"
+            ],
+            "output": [
+              "3",
+              "64"
+            ]
+          },
+          "virtual_tensors": [
+            "score",
+            "probability"
+          ],
+          "dense_mnk": {
+            "q_proj": [
+              "3",
+              "65504",
+              "64"
+            ],
+            "o_proj": [
+              "3",
+              "64",
+              "128"
+            ]
+          },
+          "qk_mnk": [
+            "3",
+            "1025",
+            "16376"
+          ],
+          "pv_mnk": [
+            "3",
+            "32",
+            "1025"
+          ]
+        }
+      }
+    },
+    {
+      "id": "derived_q_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "16384",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "derived_context_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "16384",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "extra_row_overflow",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025",
+        "extra_rows": {
+          "gate": "65536"
+        }
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "invalid_group",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "3",
+        "kv_heads": "2",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "gqa_grouping"
+      }
+    },
+    {
+      "id": "zero_heads",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "0",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "zero_tokens",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "0",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "negative_ffn",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "-16",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "boolean_dimension",
+      "operation": "shape",
+      "scope": "candidate_only_not_current_frontend_acceptance",
+      "inputs": {
+        "hidden": true,
+        "ffn": "80",
+        "q_heads": "4",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "value_dim": "32",
+        "query_tokens": "3",
+        "kv_tokens": "1025"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u16"
+      }
+    },
+    {
+      "id": "legacy_tail",
+      "operation": "legacy_layout",
+      "scope": "safe_legacy_layout_arithmetic_only",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "80",
+        "heads": "2",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "max_tokens": "33"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "max_row": "80",
+          "kv_width": "32",
+          "writable_start": "124288",
+          "total": "244672",
+          "regions": [
+            {
+              "name": "wq",
+              "offset": "0",
+              "words": "4096",
+              "external": true
+            },
+            {
+              "name": "wk",
+              "offset": "16384",
+              "words": "2048",
+              "external": true
+            },
+            {
+              "name": "wv",
+              "offset": "24576",
+              "words": "2048",
+              "external": true
+            },
+            {
+              "name": "wo",
+              "offset": "32768",
+              "words": "4096",
+              "external": true
+            },
+            {
+              "name": "wg",
+              "offset": "49152",
+              "words": "5120",
+              "external": true
+            },
+            {
+              "name": "wu",
+              "offset": "69632",
+              "words": "5120",
+              "external": true
+            },
+            {
+              "name": "wd",
+              "offset": "90112",
+              "words": "5120",
+              "external": true
+            },
+            {
+              "name": "gamma0",
+              "offset": "110592",
+              "words": "64",
+              "external": true
+            },
+            {
+              "name": "gamma1",
+              "offset": "110848",
+              "words": "64",
+              "external": true
+            },
+            {
+              "name": "bq",
+              "offset": "111104",
+              "words": "64",
+              "external": true
+            },
+            {
+              "name": "bk",
+              "offset": "111360",
+              "words": "32",
+              "external": true
+            },
+            {
+              "name": "bv",
+              "offset": "111488",
+              "words": "32",
+              "external": true
+            },
+            {
+              "name": "cos",
+              "offset": "111616",
+              "words": "528",
+              "external": true
+            },
+            {
+              "name": "sin",
+              "offset": "113728",
+              "words": "528",
+              "external": true
+            },
+            {
+              "name": "x",
+              "offset": "115840",
+              "words": "2112",
+              "external": true
+            },
+            {
+              "name": "n0",
+              "offset": "124288",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "qr",
+              "offset": "132736",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "kr",
+              "offset": "141184",
+              "words": "1056",
+              "external": false
+            },
+            {
+              "name": "v",
+              "offset": "145408",
+              "words": "1056",
+              "external": false
+            },
+            {
+              "name": "q",
+              "offset": "149632",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "k",
+              "offset": "158080",
+              "words": "1056",
+              "external": false
+            },
+            {
+              "name": "att",
+              "offset": "162304",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "o",
+              "offset": "170752",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "r",
+              "offset": "179200",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "n1",
+              "offset": "187648",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "gate",
+              "offset": "196096",
+              "words": "2640",
+              "external": false
+            },
+            {
+              "name": "up",
+              "offset": "206656",
+              "words": "2640",
+              "external": false
+            },
+            {
+              "name": "act",
+              "offset": "217216",
+              "words": "2640",
+              "external": false
+            },
+            {
+              "name": "down",
+              "offset": "227776",
+              "words": "2112",
+              "external": false
+            },
+            {
+              "name": "y",
+              "offset": "236224",
+              "words": "2112",
+              "external": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "legacy_tiny",
+      "operation": "legacy_layout",
+      "scope": "safe_legacy_layout_arithmetic_only",
+      "inputs": {
+        "hidden": "64",
+        "ffn": "128",
+        "heads": "2",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "max_tokens": "1024"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "max_row": "128",
+          "kv_width": "32",
+          "writable_start": "541696",
+          "total": "4867072",
+          "regions": [
+            {
+              "name": "wq",
+              "offset": "0",
+              "words": "4096",
+              "external": true
+            },
+            {
+              "name": "wk",
+              "offset": "16384",
+              "words": "2048",
+              "external": true
+            },
+            {
+              "name": "wv",
+              "offset": "24576",
+              "words": "2048",
+              "external": true
+            },
+            {
+              "name": "wo",
+              "offset": "32768",
+              "words": "4096",
+              "external": true
+            },
+            {
+              "name": "wg",
+              "offset": "49152",
+              "words": "8192",
+              "external": true
+            },
+            {
+              "name": "wu",
+              "offset": "81920",
+              "words": "8192",
+              "external": true
+            },
+            {
+              "name": "wd",
+              "offset": "114688",
+              "words": "8192",
+              "external": true
+            },
+            {
+              "name": "gamma0",
+              "offset": "147456",
+              "words": "64",
+              "external": true
+            },
+            {
+              "name": "gamma1",
+              "offset": "147712",
+              "words": "64",
+              "external": true
+            },
+            {
+              "name": "bq",
+              "offset": "147968",
+              "words": "64",
+              "external": true
+            },
+            {
+              "name": "bk",
+              "offset": "148224",
+              "words": "32",
+              "external": true
+            },
+            {
+              "name": "bv",
+              "offset": "148352",
+              "words": "32",
+              "external": true
+            },
+            {
+              "name": "cos",
+              "offset": "148480",
+              "words": "16384",
+              "external": true
+            },
+            {
+              "name": "sin",
+              "offset": "214016",
+              "words": "16384",
+              "external": true
+            },
+            {
+              "name": "x",
+              "offset": "279552",
+              "words": "65536",
+              "external": true
+            },
+            {
+              "name": "n0",
+              "offset": "541696",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "qr",
+              "offset": "803840",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "kr",
+              "offset": "1065984",
+              "words": "32768",
+              "external": false
+            },
+            {
+              "name": "v",
+              "offset": "1197056",
+              "words": "32768",
+              "external": false
+            },
+            {
+              "name": "q",
+              "offset": "1328128",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "k",
+              "offset": "1590272",
+              "words": "32768",
+              "external": false
+            },
+            {
+              "name": "att",
+              "offset": "1721344",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "o",
+              "offset": "1983488",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "r",
+              "offset": "2245632",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "n1",
+              "offset": "2507776",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "gate",
+              "offset": "2769920",
+              "words": "131072",
+              "external": false
+            },
+            {
+              "name": "up",
+              "offset": "3294208",
+              "words": "131072",
+              "external": false
+            },
+            {
+              "name": "act",
+              "offset": "3818496",
+              "words": "131072",
+              "external": false
+            },
+            {
+              "name": "down",
+              "offset": "4342784",
+              "words": "65536",
+              "external": false
+            },
+            {
+              "name": "y",
+              "offset": "4604928",
+              "words": "65536",
+              "external": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "legacy_qwen2",
+      "operation": "legacy_layout",
+      "scope": "safe_legacy_layout_arithmetic_only",
+      "inputs": {
+        "hidden": "1536",
+        "ffn": "8960",
+        "heads": "12",
+        "kv_heads": "2",
+        "head_dim": "128",
+        "max_tokens": "1024"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "max_row": "8960",
+          "kv_width": "256",
+          "writable_start": "194007040",
+          "total": "363876352",
+          "regions": [
+            {
+              "name": "wq",
+              "offset": "0",
+              "words": "2359296",
+              "external": true
+            },
+            {
+              "name": "wk",
+              "offset": "9437184",
+              "words": "393216",
+              "external": true
+            },
+            {
+              "name": "wv",
+              "offset": "11010048",
+              "words": "393216",
+              "external": true
+            },
+            {
+              "name": "wo",
+              "offset": "12582912",
+              "words": "2359296",
+              "external": true
+            },
+            {
+              "name": "wg",
+              "offset": "22020096",
+              "words": "13762560",
+              "external": true
+            },
+            {
+              "name": "wu",
+              "offset": "77070336",
+              "words": "13762560",
+              "external": true
+            },
+            {
+              "name": "wd",
+              "offset": "132120576",
+              "words": "13762560",
+              "external": true
+            },
+            {
+              "name": "gamma0",
+              "offset": "187170816",
+              "words": "1536",
+              "external": true
+            },
+            {
+              "name": "gamma1",
+              "offset": "187176960",
+              "words": "1536",
+              "external": true
+            },
+            {
+              "name": "bq",
+              "offset": "187183104",
+              "words": "1536",
+              "external": true
+            },
+            {
+              "name": "bk",
+              "offset": "187189248",
+              "words": "256",
+              "external": true
+            },
+            {
+              "name": "bv",
+              "offset": "187190272",
+              "words": "256",
+              "external": true
+            },
+            {
+              "name": "cos",
+              "offset": "187191296",
+              "words": "65536",
+              "external": true
+            },
+            {
+              "name": "sin",
+              "offset": "187453440",
+              "words": "65536",
+              "external": true
+            },
+            {
+              "name": "x",
+              "offset": "187715584",
+              "words": "1572864",
+              "external": true
+            },
+            {
+              "name": "n0",
+              "offset": "194007040",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "qr",
+              "offset": "200298496",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "kr",
+              "offset": "206589952",
+              "words": "262144",
+              "external": false
+            },
+            {
+              "name": "v",
+              "offset": "207638528",
+              "words": "262144",
+              "external": false
+            },
+            {
+              "name": "q",
+              "offset": "208687104",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "k",
+              "offset": "214978560",
+              "words": "262144",
+              "external": false
+            },
+            {
+              "name": "att",
+              "offset": "216027136",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "o",
+              "offset": "222318592",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "r",
+              "offset": "228610048",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "n1",
+              "offset": "234901504",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "gate",
+              "offset": "241192960",
+              "words": "9175040",
+              "external": false
+            },
+            {
+              "name": "up",
+              "offset": "277893120",
+              "words": "9175040",
+              "external": false
+            },
+            {
+              "name": "act",
+              "offset": "314593280",
+              "words": "9175040",
+              "external": false
+            },
+            {
+              "name": "down",
+              "offset": "351293440",
+              "words": "1572864",
+              "external": false
+            },
+            {
+              "name": "y",
+              "offset": "357584896",
+              "words": "1572864",
+              "external": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "legacy_wide_product",
+      "operation": "legacy_layout",
+      "scope": "safe_legacy_layout_arithmetic_only",
+      "inputs": {
+        "hidden": "65504",
+        "ffn": "65520",
+        "heads": "2047",
+        "kv_heads": "1",
+        "head_dim": "32",
+        "max_tokens": "1"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "max_row": "65520",
+          "kv_width": "32",
+          "writable_start": "85845874560",
+          "total": "85849019328",
+          "regions": [
+            {
+              "name": "wq",
+              "offset": "0",
+              "words": "4290774016",
+              "external": true
+            },
+            {
+              "name": "wk",
+              "offset": "17163096064",
+              "words": "2096128",
+              "external": true
+            },
+            {
+              "name": "wv",
+              "offset": "17171480576",
+              "words": "2096128",
+              "external": true
+            },
+            {
+              "name": "wo",
+              "offset": "17179865088",
+              "words": "4290774016",
+              "external": true
+            },
+            {
+              "name": "wg",
+              "offset": "34342961152",
+              "words": "4291822080",
+              "external": true
+            },
+            {
+              "name": "wu",
+              "offset": "51510249472",
+              "words": "4291822080",
+              "external": true
+            },
+            {
+              "name": "wd",
+              "offset": "68677537792",
+              "words": "4291822080",
+              "external": true
+            },
+            {
+              "name": "gamma0",
+              "offset": "85844826112",
+              "words": "65504",
+              "external": true
+            },
+            {
+              "name": "gamma1",
+              "offset": "85845088128",
+              "words": "65504",
+              "external": true
+            },
+            {
+              "name": "bq",
+              "offset": "85845350144",
+              "words": "65504",
+              "external": true
+            },
+            {
+              "name": "bk",
+              "offset": "85845612160",
+              "words": "32",
+              "external": true
+            },
+            {
+              "name": "bv",
+              "offset": "85845612288",
+              "words": "32",
+              "external": true
+            },
+            {
+              "name": "cos",
+              "offset": "85845612416",
+              "words": "16",
+              "external": true
+            },
+            {
+              "name": "sin",
+              "offset": "85845612480",
+              "words": "16",
+              "external": true
+            },
+            {
+              "name": "x",
+              "offset": "85845612544",
+              "words": "65504",
+              "external": true
+            },
+            {
+              "name": "n0",
+              "offset": "85845874560",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "qr",
+              "offset": "85846136576",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "kr",
+              "offset": "85846398592",
+              "words": "32",
+              "external": false
+            },
+            {
+              "name": "v",
+              "offset": "85846398720",
+              "words": "32",
+              "external": false
+            },
+            {
+              "name": "q",
+              "offset": "85846398848",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "k",
+              "offset": "85846660864",
+              "words": "32",
+              "external": false
+            },
+            {
+              "name": "att",
+              "offset": "85846660992",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "o",
+              "offset": "85846923008",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "r",
+              "offset": "85847185024",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "n1",
+              "offset": "85847447040",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "gate",
+              "offset": "85847709056",
+              "words": "65520",
+              "external": false
+            },
+            {
+              "name": "up",
+              "offset": "85847971136",
+              "words": "65520",
+              "external": false
+            },
+            {
+              "name": "act",
+              "offset": "85848233216",
+              "words": "65520",
+              "external": false
+            },
+            {
+              "name": "down",
+              "offset": "85848495296",
+              "words": "65504",
+              "external": false
+            },
+            {
+              "name": "y",
+              "offset": "85848757312",
+              "words": "65504",
+              "external": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "wide_multiply_above_u32",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "4294836225",
+          "payload_bytes": "17179344900",
+          "span_bytes": "17179344900",
+          "offset": "17179344896",
+          "address": "17179344896",
+          "end": "17179344900",
+          "padded_end": "17179344960"
+        }
+      }
+    },
+    {
+      "id": "wide_high_base_above_exact_double",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "36028797018964032",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "4294836225",
+          "payload_bytes": "17179344900",
+          "span_bytes": "17179344900",
+          "offset": "17179344896",
+          "address": "36028814198308928",
+          "end": "36028814198308932",
+          "padded_end": "36028814198308992"
+        }
+      }
+    },
+    {
+      "id": "wide_u32_span_rejected",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "32"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "span_overflow"
+      }
+    },
+    {
+      "id": "wide_byte_stride_above_u32",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "3",
+          "16"
+        ],
+        "byte_strides": [
+          "8589934592",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "2",
+          "15"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "48",
+          "payload_bytes": "192",
+          "span_bytes": "17179869248",
+          "offset": "17179869244",
+          "address": "17179869244",
+          "end": "17179869248",
+          "padded_end": "17179869248"
+        }
+      }
+    },
+    {
+      "id": "wide_stride_field_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "3",
+          "16"
+        ],
+        "byte_strides": [
+          "4294967296",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "2",
+          "15"
+        ],
+        "address_bits": "56",
+        "stride_bits": "32",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "stride_range"
+      }
+    },
+    {
+      "id": "wide_span_multiply_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "1"
+        ],
+        "byte_strides": [
+          "9223372036854775808",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "0"
+        ],
+        "address_bits": "64",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "span_overflow"
+      }
+    },
+    {
+      "id": "wide_span_sum_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "3",
+          "1"
+        ],
+        "byte_strides": [
+          "9223372036854775807",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "2",
+          "0"
+        ],
+        "address_bits": "64",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "span_overflow"
+      }
+    },
+    {
+      "id": "wide_payload_u64_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "65535",
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "2251696736043000",
+          "34358689800",
+          "524280",
+          "8"
+        ],
+        "element_bytes": "8",
+        "indices": [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "address_bits": "64",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "span_overflow"
+      }
+    },
+    {
+      "id": "wide_end_u64_exact",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "18446744073709551552",
+        "dims": [
+          "16"
+        ],
+        "byte_strides": [
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "15"
+        ],
+        "address_bits": "64",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "16",
+          "payload_bytes": "64",
+          "span_bytes": "64",
+          "offset": "60",
+          "address": "18446744073709551612",
+          "end": "18446744073709551616",
+          "padded_end": "18446744073709551616"
+        }
+      }
+    },
+    {
+      "id": "wide_end_u64_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "18446744073709551552",
+        "dims": [
+          "17"
+        ],
+        "byte_strides": [
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "16"
+        ],
+        "address_bits": "64",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "address_overflow"
+      }
+    },
+    {
+      "id": "wide_padding_only_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "17"
+        ],
+        "byte_strides": [
+          "1"
+        ],
+        "element_bytes": "1",
+        "indices": [
+          "16"
+        ],
+        "address_bits": "5",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "address_overflow"
+      }
+    },
+    {
+      "id": "wide_aperture_exact",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "72057594037927872",
+        "dims": [
+          "16"
+        ],
+        "byte_strides": [
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "15"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "16",
+          "payload_bytes": "64",
+          "span_bytes": "64",
+          "offset": "60",
+          "address": "72057594037927932",
+          "end": "72057594037927936",
+          "padded_end": "72057594037927936"
+        }
+      }
+    },
+    {
+      "id": "wide_aperture_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "72057594037927872",
+        "dims": [
+          "17"
+        ],
+        "byte_strides": [
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "16"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "address_overflow"
+      }
+    },
+    {
+      "id": "wide_base_overflow",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "72057594037927936",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "base_range"
+      }
+    },
+    {
+      "id": "wide_unaligned_base",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "4",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "base_alignment"
+      }
+    },
+    {
+      "id": "wide_last_index_rejected",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65535",
+          "0"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "index_range"
+      }
+    },
+    {
+      "id": "wide_overlap_rejected",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "4",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "stride_overlap"
+      }
+    },
+    {
+      "id": "wide_negative_stride",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "65535",
+          "65535"
+        ],
+        "byte_strides": [
+          "-262140",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "65534",
+          "65534"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "stride_range"
+      }
+    },
+    {
+      "id": "wide_rank4",
+      "operation": "wide_address",
+      "scope": "generic_byte_stride_stress_not_v2_wire",
+      "inputs": {
+        "base": "0",
+        "dims": [
+          "3",
+          "5",
+          "7",
+          "11"
+        ],
+        "byte_strides": [
+          "2240",
+          "448",
+          "64",
+          "4"
+        ],
+        "element_bytes": "4",
+        "indices": [
+          "2",
+          "4",
+          "6",
+          "10"
+        ],
+        "address_bits": "56",
+        "stride_bits": "64",
+        "span_bits": "64"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "1155",
+          "payload_bytes": "4620",
+          "span_bytes": "6700",
+          "offset": "6696",
+          "address": "6696",
+          "end": "6700",
+          "padded_end": "6720"
+        }
+      }
+    },
+    {
+      "id": "v2_fp32",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "16",
+          "payload_bytes": "64",
+          "padded_end": "16448",
+          "owner_dimensions_fit_u16": true
+        }
+      }
+    },
+    {
+      "id": "v2_bf16",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "5",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "16",
+          "payload_bytes": "32",
+          "padded_end": "16448",
+          "owner_dimensions_fit_u16": true
+        }
+      }
+    },
+    {
+      "id": "v2_region_base_unaligned",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "1",
+        "region_limit": "65536"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "region_alignment"
+      }
+    },
+    {
+      "id": "v2_region_limit_unaligned",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "65537"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "region_alignment"
+      }
+    },
+    {
+      "id": "v2_u32_elements_max",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "65535",
+          "65537",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "65537",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "4294967295",
+          "payload_bytes": "17179869180",
+          "padded_end": "17179885568",
+          "owner_dimensions_fit_u16": false
+        }
+      }
+    },
+    {
+      "id": "v2_u32_elements_overflow",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "65536",
+          "65536",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "65536",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "bounds"
+      }
+    },
+    {
+      "id": "v2_s24_stride_max",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "47",
+          "178481",
+          "1"
+        ],
+        "rank": "3",
+        "strides": [
+          "8388607",
+          "178481",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "8388607",
+          "payload_bytes": "33554428",
+          "padded_end": "33570816",
+          "owner_dimensions_fit_u16": false
+        }
+      }
+    },
+    {
+      "id": "v2_s24_stride_overflow",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "2048",
+          "4096",
+          "1"
+        ],
+        "rank": "3",
+        "strides": [
+          "8388608",
+          "4096",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "stride_s24"
+      }
+    },
+    {
+      "id": "v2_negative_stride",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "-16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "stride_unsupported"
+      }
+    },
+    {
+      "id": "v2_malformed_stride",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "15",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "stride_unsupported"
+      }
+    },
+    {
+      "id": "v2_inactive_dimension",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "16",
+          "2",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "inactive_dimension"
+      }
+    },
+    {
+      "id": "v2_u18_dimension_max",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "262143",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "262143",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "262143",
+          "payload_bytes": "1048572",
+          "padded_end": "1064960",
+          "owner_dimensions_fit_u16": false
+        }
+      }
+    },
+    {
+      "id": "v2_u18_dimension_overflow",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "262144",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "262144",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "dimension_u18"
+      }
+    },
+    {
+      "id": "v2_aperture_exact",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "72057594037927872",
+        "dims": [
+          "1",
+          "16",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "16",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "16",
+          "payload_bytes": "64",
+          "padded_end": "72057594037927936",
+          "owner_dimensions_fit_u16": true
+        }
+      }
+    },
+    {
+      "id": "v2_aperture_overflow",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "72057594037927872",
+        "dims": [
+          "1",
+          "17",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "17",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "72057594037927936"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "bounds"
+      }
+    },
+    {
+      "id": "v2_unaligned_payload_only_limit",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "1",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "16388"
+      },
+      "expected": {
+        "accepted": false,
+        "error": "region_alignment"
+      }
+    },
+    {
+      "id": "v2_padding_region_exact",
+      "operation": "tensor_v2",
+      "scope": "current_reader_arithmetic_not_rtl_execution",
+      "inputs": {
+        "base": "16384",
+        "dims": [
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "rank": "2",
+        "strides": [
+          "1",
+          "1",
+          "1"
+        ],
+        "dtype": "7",
+        "region_base": "0",
+        "region_limit": "16448"
+      },
+      "expected": {
+        "accepted": true,
+        "result": {
+          "elements": "1",
+          "payload_bytes": "4",
+          "padded_end": "16448",
+          "owner_dimensions_fit_u16": true
+        }
+      }
+    }
+  ]
+}

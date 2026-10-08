@@ -1,0 +1,17 @@
+{
+  "status": "EXPERIMENTAL_DEFAULT_OFF",
+  "scope": "HostBlockTop V-only native BF16 storage through existing StreamingDenseOwner, retained Matrix and single iDMA",
+  "enable_parameter": "bf16V",
+  "default_enabled": false,
+  "command": {"opcode": 32, "engine": 2, "flags": 0},
+  "tensor": {"dtype": 5, "rank": 2, "shape_padding": [1, 1], "strides_elements": ["N", 1, 1], "alignment_bytes": 64, "A": ["M", 1024], "B": [1024, 512], "D": ["M", 512], "M_range": [1, 128]},
+  "matrix_aux_payload_hex": "004000040020ffffff",
+  "policy": {"record_type": 26, "version": 2, "role": 2, "tensor": 1, "tile16": 1, "norm_policy": 0, "reserved": 0, "token_base_bits": [12, 32], "token_count_bits": [44, 8]},
+  "policy_meaning": "Owner-managed staging: tensor=1 selects native BF16 tensor storage; tile16=1 describes retained arithmetic tile granularity only, not a 16-token limit or a fixed staging batch. The existing owner chooses SRAM tiling and contexts. No norm/RoPE stages are executed.",
+  "address_extension": {"record_type": 27, "kinds": [0, 1, 2, 3, 4, 5, 6, 7, 8], "all_addresses": 0, "reserved": 0, "meaning": "All local and extra-output address fields are zero sentinels. Host private SRAM is never addressed by these fields."},
+  "chain": {"src0_types": [1, 2, 3, 16, 18, 26, 27, 27, 27, 27, 27, 27, 27, 27, 27], "src1_types": [1, 2, 3], "dst_types": [1, 2, 3], "all_indices_distinct": true, "exact_termination": true},
+  "window": "1 <= count <= 128, base + count <= M without wrap. Full tensor allocation and permissions are checked first; A active window and full B must be readonly or actually published within this launch. D active window must be fresh.",
+  "binding": {"m": "count", "n": 512, "k": 1024, "a": "A + base*2048", "b": "B", "dst": "D + base*1024", "writeBytes": "count*1024", "activationBf16": true, "weightBf16": true, "outputBf16": true},
+  "publication": "Publish exactly the active D interval only after matching successful owner completion with exact acknowledged byte count and acceptance of the Host completion. Untouched prefix and suffix are never published.",
+  "compatibility": "The separately proposed version-1 SharedL2 candidate policy is outside this Host release and rejected by this route. Q/K, all other Qwen3.5 operations, and a full Qwen3.5 block remain unsupported. Existing FP32 Host operations retain their full_c MatrixAux encoding and false A/D BF16 flags."
+}

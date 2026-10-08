@@ -1,0 +1,107 @@
+{
+  "compressed_bytes": 4246388,
+  "execution_eligible": false,
+  "files": {
+    "build_receipt.json": {
+      "bytes": 3101,
+      "sha256": "c7083a698a4be9066f61934676294ced7b89fb3c47fc9cbb419acdbbb819abe8"
+    },
+    "compiler_jars.sha256.json": {
+      "bytes": 12332,
+      "sha256": "45002025f08c4958605ab2e05fa1604a98f1fdfdde951f6f6d05a26ba3fc4489"
+    },
+    "fixture/host_commands.bin": {
+      "bytes": 704,
+      "sha256": "a02c603311c88f32fe0abc7baad2583eff415829b1d392a68b2d8306b3240f69"
+    },
+    "fixture/host_descriptors.bin": {
+      "bytes": 6912,
+      "sha256": "d920198a8ca2543baecdf0f35383937c602f6a89b8d01213c9b60fd495e8230c"
+    },
+    "fixture/manifest.json": {
+      "bytes": 32283,
+      "sha256": "928d7b49f2d0e48815a58a63e93d42bd8471ffb2ddf891bb4a488da9e1c85019"
+    },
+    "fixture/owner_fixture.h": {
+      "bytes": 9016,
+      "sha256": "b0b9ed668b41c737d336c5d4ba9caaf4b88f2b80851d7ce11e6d0fa30614975d"
+    },
+    "fixture/single_layer_template/host_commands.bin": {
+      "bytes": 384,
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+    },
+    "fixture/single_layer_template/host_descriptors.bin": {
+      "bytes": 3456,
+      "sha256": "164a3e3427d3213ade010135bbf94f9c28939b3f9c7e8434668bd75f9315d759"
+    },
+    "fixture/single_layer_template/manifest.json": {
+      "bytes": 13371,
+      "sha256": "1b4930006cab76022754fb57cc69d8014ca5801e43d695ada916bd69335345b2"
+    },
+    "fixture/single_layer_template/owner_fixture.h": {
+      "bytes": 3998,
+      "sha256": "5688d92576baf3b0983359824e5a8c1a6b9b5f333bcefc12ddba84c5fc6cb3b1"
+    },
+    "generated/HostBlockTop.sv": {
+      "bytes": 69513790,
+      "sha256": "af89925914dbb747a53102040ed4f2b2a443eff192f850242d9540a789690239"
+    },
+    "generated/SCOPE.json": {
+      "bytes": 549,
+      "sha256": "316319fb026bdf2604a19580d05ad29ce94d61c15fc5cb8091eb60abeab33d42"
+    },
+    "generated/owner_shape.h": {
+      "bytes": 315,
+      "sha256": "14f43f95a4c3ad6ab06588180780fa98a7c430b70603bbdcedec4a962140c7a4"
+    },
+    "hardfloat.sha256.json": {
+      "bytes": 2356,
+      "sha256": "27d18303cad34f031dad8f5889d3e0c8ea538ac5ec037cacc00b2278dce022cf"
+    },
+    "idma_commits.json": {
+      "bytes": 475,
+      "sha256": "41b092ed490aca4bedfd4602fc93e7f6890d25aa918df4fa0e0721fe1f0c7d6e"
+    },
+    "idma_identity.json": {
+      "bytes": 631,
+      "sha256": "2e00844e3c267b00fb936786ea08cc351414ed9c35f9ceb57caad27866100932"
+    },
+    "idma_sources.sha256.json": {
+      "bytes": 103973,
+      "sha256": "7ed54b0e149defee1c81fd0dcb1f6005f58773338c2be4a41111a93d2bc77248"
+    },
+    "obj/VHostBlockTop": {
+      "bytes": 6183768,
+      "sha256": "c370e657d2b1a8bec214a489c9ef87c929f8dee5128dddd2ad27f441e6fae9b6"
+    },
+    "source_base_commit.txt": {
+      "bytes": 41,
+      "sha256": "d55aa632f7532c5a81e2065dc1f82904a87c4f1d1f5ad621e108c74457acb31d"
+    },
+    "source_scope.json": {
+      "bytes": 70,
+      "sha256": "fb9640363decd38e08b2940f040b9702bc64219aa6d9640a9c810b954fe36e46"
+    },
+    "sources.sha256.json": {
+      "bytes": 24916,
+      "sha256": "7491d24503f625a84f5d22e39c300aa68f467ea38e230e276c068a22532643e1"
+    }
+  },
+  "new_source_hashes": {
+    "chisel/continuous_prefill/scripts/production_source_identity.py": "3340fec5e14e6db52ee9db76921fe6be1fcd7f079f7f70f0097d0b944e35b5fc",
+    "chisel/continuous_prefill/scripts/real2_ci.py": "28f6948949470dee0e288a878751208f6cd8f93f7305d23a7e5de1fbd4ec4bb5",
+    "chisel/continuous_prefill/scripts/run_host_block_gate.sh": "9008c962d61071caedc05c8a57490d7c8b17091412e1d09d0b171abc755fb5f4",
+    "chisel/continuous_prefill/tests/test_real2_ci.py": "7cf6e6ca3eb5d292feb47cac6623a395d68ce7b7d9b7107fbc2ab629c989544a"
+  },
+  "original_binary_sha256": "c370e657d2b1a8bec214a489c9ef87c929f8dee5128dddd2ad27f441e6fae9b6",
+  "original_build_receipt_unmodified": true,
+  "original_sources_sha256": "7491d24503f625a84f5d22e39c300aa68f467ea38e230e276c068a22532643e1",
+  "package_sha256": "783e7aecb20d47268d9c8f7c5d75482c7ac706ec321a8809d2e0fa28ec5e7412",
+  "payload_bytes": 75916441,
+  "preserved_binary_sha256": "c370e657d2b1a8bec214a489c9ef87c929f8dee5128dddd2ad27f441e6fae9b6",
+  "preserved_sources_sha256": "7491d24503f625a84f5d22e39c300aa68f467ea38e230e276c068a22532643e1",
+  "rejected_execution_admission": "inspection packages cannot execute",
+  "simulation_invoked": false,
+  "source_commit": "6c0daf8a5be7576492f697f9fbec9aa0e1e10db2",
+  "status": "PASS_PACKAGE_TRANSPORT_INSPECTION_ONLY_NOT_NUMERICAL_PASS"
+}

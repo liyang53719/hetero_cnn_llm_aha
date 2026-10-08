@@ -7,6 +7,8 @@ NATIVE_BF16_WEIGHTS=${NATIVE_BF16_WEIGHTS:-0}
 BURST_WRITE=${BURST_WRITE:-0}
 COMMIT_TAIL_READ=${COMMIT_TAIL_READ:-0}
 OVERLAP_SILU=${OVERLAP_SILU:-0}
+HOST_BLOCK_BUILD_ONLY=${HOST_BLOCK_BUILD_ONLY:-0}
+[[ "$HOST_BLOCK_BUILD_ONLY" = 0 || "$HOST_BLOCK_BUILD_ONLY" = 1 ]] || exit 2
 [[ "$OVERLAP_SILU" = 0 || "$OVERLAP_SILU" = 1 ]] || exit 2
 [[ "$OVERLAP_SILU" = 0 || "$PIPELINED_OWNER" = 1 ]] || exit 2
 [[ "$COMMIT_TAIL_READ" = 0 || "$COMMIT_TAIL_READ" = 1 ]] || exit 2
@@ -25,7 +27,11 @@ OVERLAP_SILU=${OVERLAP_SILU:-0}
 [[ "$OUT" = /* && ! -e "$OUT" ]] || exit 2
 for t in java g++ python3 git;do command -v "$t" >/dev/null || { echo "BLOCKED_MISSING_TOOL:$t";exit 77; };done
 [[ -n ${IDMA_EXPORT:-} && -f "$IDMA_EXPORT/idma.f.in" ]] || { echo BLOCKED_PINNED_IDMA;exit 77; }
-mkdir -p "$OUT";trap 'code=$?;echo "$code" >"$OUT/gate.exit";exit "$code"' EXIT
+mkdir -p "$OUT"
+# A successful compilation is not a numerical gate. Keep separate exit files.
+EXIT_RECORD=gate.exit
+if [[ "$HOST_BLOCK_BUILD_ONLY" = 1 ]];then EXIT_RECORD=build.exit;fi
+trap 'code=$?;echo "$code" >"$OUT/$EXIT_RECORD";exit "$code"' EXIT
 source "$P/scripts/prepare_verilator_runtime.sh" "$OUT"
 export MAKEFLAGS="${MAKEFLAGS:-} VK_PCH_I_FAST= VK_PCH_I_SLOW= OPT_FAST=-O3"
 export HARDFLOAT_SOURCE=${HARDFLOAT_SOURCE:-$ROOT/work/upstream/hardfloat_continuous}
@@ -36,8 +42,11 @@ git -C "$ROOT" rev-parse HEAD >"$OUT/source_base_commit.txt"
 if [[ -n ${OFFLINE_TOOLS:-} ]];then
   export CHISEL_FIRTOOL_PATH="$OFFLINE_TOOLS/bin"
   python3 "$P/scripts/production_source_identity.py" compile "$ROOT" "$OUT" "$HARDFLOAT_SOURCE" "$OFFLINE_TOOLS"
-  java -Xmx3G -XX:ActiveProcessorCount=3 -cp "$OUT/classes:$(cat "$OUT/classpath.txt")" heteronpu.continuous.EmitHostBlock "$OUT/generated" "$PROFILE" "$MATRIX_MACS" "$WEIGHT_READ_BEATS" "$PIPELINED_OWNER" "$BURST_WRITE" "$COMMIT_TAIL_READ" "$OVERLAP_SILU" >"$OUT/emit.log" 2>&1
+  java "-Xmx${SCALA_HEAP:-3G}" "-XX:ActiveProcessorCount=${SCALA_CPUS:-3}" -cp "$OUT/classes:$(cat "$OUT/classpath.txt")" heteronpu.continuous.EmitHostBlock "$OUT/generated" "$PROFILE" "$MATRIX_MACS" "$WEIGHT_READ_BEATS" "$PIPELINED_OWNER" "$BURST_WRITE" "$COMMIT_TAIL_READ" "$OVERLAP_SILU" >"$OUT/emit.log" 2>&1
 else
+  # A fresh, build-only CI artifact records the resolved compiler dependencies
+  # without transferring those rebuildable jars to the simulation job.
+  if [[ "$HOST_BLOCK_BUILD_ONLY" = 1 ]];then export COURSIER_CACHE="$OUT/maven";fi
   (cd "$P";sbt -batch compile "runMain heteronpu.continuous.EmitHostBlock $OUT/generated $PROFILE $MATRIX_MACS $WEIGHT_READ_BEATS $PIPELINED_OWNER $BURST_WRITE $COMMIT_TAIL_READ $OVERLAP_SILU") >"$OUT/compile_emit.log" 2>&1
 fi
 if [[ "$LAYERS" = 1 ]];then
@@ -56,16 +65,38 @@ if [[ "$MATRIX_MACS" = 4096 ]];then HIERARCHY="$P/tests/matrix4096_hierarchy.vlt
 if [[ "$PIPELINED_OWNER" = 1 ]];then HIERARCHY="$P/tests/native_weight_hierarchy.vlt";fi
 if [[ "$OVERLAP_SILU" = 1 ]];then HIERARCHY="$P/tests/silu_overlap_hierarchy.vlt";fi
 export RETAINED_SKIP_CLOCK=0;source "$P/scripts/retained_sources.sh"
+# Older hierarchical Verilator versions omit nested filelist options in child
+# invocations. Carry the verified include/define options explicitly as well.
+mapfile -t IDMA_OPTIONS < <(grep -E '^\+(incdir|define)\+' "$OUT/idma.f" | sort -u)
+HIER_ARGS=()
+if [[ "$PIPELINED_OWNER" = 1 ]];then HIER_ARGS=(--comp-limit-parens 16 --output-split 3000 --output-split-cfuncs 200);fi
 BUILD_ARGS=(--build)
 if [[ "$PIPELINED_OWNER" = 1 ]];then BUILD_ARGS=();fi
-verilator --cc --exe "${BUILD_ARGS[@]}" --assert -Wno-fatal --top-module HostBlockTop \
+set +e
+verilator --cc --exe "${BUILD_ARGS[@]}" "${HIER_ARGS[@]}" --assert -Wno-fatal --top-module HostBlockTop \
  -CFLAGS "-O3 -std=c++17 -ffp-contract=off -fno-fast-math -I$OUT/generated -I$OUT/fixture" \
  -j "${BUILD_JOBS:-3}" --Mdir "$OUT/obj" --hierarchical "$HIERARCHY" \
- "${RETAINED_SOURCES[@]}" -f "$OUT/idma.f" "$OUT/generated/HostBlockTop.sv" \
+ "${RETAINED_SOURCES[@]}" "${IDMA_OPTIONS[@]}" -f "$OUT/idma.f" "$OUT/generated/HostBlockTop.sv" \
  "$ROOT/rtl/integration/idma_backend_rw_axi_flat_wrap.sv" "$P/tests/host_block_commands.cpp" >"$OUT/build.log" 2>&1
+code=$?;set -e;echo "$code" >"$OUT/initial_verilation.exit"
+if ((code));then
+  if [[ "$PIPELINED_OWNER" = 1 && -s "$OUT/obj/VHostBlockTop_hier.mk" ]] && grep -q 'Verilator threw signal 9' "$OUT/build.log";then
+    make -C "$OUT/obj" -f VHostBlockTop_hier.mk -j1 hier_verilation >"$OUT/recovery_verilation.log" 2>&1
+  else exit "$code";fi
+fi
 if [[ "$PIPELINED_OWNER" = 1 ]];then
   # Release the parent elaborator before submodule C++ builds to bound memory.
-  make -C "$OUT/obj" -f VHostBlockTop_hier.mk -j "${BUILD_JOBS:-2}" >"$OUT/hierarchical_build.log" 2>&1
+  if [[ ${BOUNDED_HIER_BUILD:-0} = 1 ]];then
+    python3 "$P/scripts/build_host_hierarchy_bounded.py" "$OUT" --reserve-bytes "${BUILD_RESERVE_BYTES:-1073741824}" >"$OUT/hierarchical_build.log" 2>&1
+  else
+    make -C "$OUT/obj" -f VHostBlockTop_hier.mk -j "${BUILD_JOBS:-2}" >"$OUT/hierarchical_build.log" 2>&1
+  fi
+fi
+if [[ "$HOST_BLOCK_BUILD_ONLY" = 1 ]];then
+  python3 "$P/scripts/real2_ci.py" seal-build --repo "$ROOT" --build "$OUT" \
+    --hardfloat "$HARDFLOAT_SOURCE" --idma-export "$IDMA_EXPORT"
+  echo BUILT_NOT_NUMERICAL_PASS
+  exit 0
 fi
 set +e
 "$OUT/obj/VHostBlockTop" "$OUT/fixture" "$OUT/tensors" >"$OUT/run.log" 2>&1

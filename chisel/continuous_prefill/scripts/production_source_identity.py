@@ -4,7 +4,7 @@
 Offline tools contain public compiler dependencies only. No credentials or
 account caches are copied. Source files are never patched during a build.
 """
-import hashlib,json,subprocess,sys
+import hashlib,json,os,subprocess,sys
 from pathlib import Path
 
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -19,8 +19,28 @@ def main():
     mode,root,out,hf=sys.argv[1:5];root,out,hf=map(lambda x:Path(x).resolve(),(root,out,hf))
     if mode=='record':
         paths=[p for p in sources(root,hf) if p.is_relative_to(root) and not p.is_relative_to(hf)]
-        for d in ['chisel/continuous_prefill/src/test/scala','chisel/continuous_prefill/scripts','chisel/continuous_prefill/tests','rtl/matrix','rtl/integration']:
+        scope=os.environ.get('SOURCE_IDENTITY_SCOPE','full')
+        if scope not in ('full','legacy_host_gate'):raise ValueError('unknown source identity scope')
+        directories=['rtl/matrix','rtl/integration']
+        if scope=='full':directories+=['chisel/continuous_prefill/src/test/scala','chisel/continuous_prefill/scripts','chisel/continuous_prefill/tests']
+        for d in directories:
             paths += [p for p in (root/d).rglob('*') if p.is_file() and p.suffix in {'.scala','.sv','.cpp','.py','.sh','.vlt','.h','.inc'}]
+        if scope=='legacy_host_gate':
+            # Bind the actual legacy compiler/driver/fixture/verifier closure.
+            # Unrelated Host-V authoring helpers can change without claiming
+            # they participated in this long-running numeric regression.
+            scripts=['run_real_two_layer_gate.sh','run_host_block_gate.sh','production_source_identity.py',
+              'prepare_idma_export.py','prepare_hardfloat.sh','retained_sources.sh','prepare_verilator_runtime.sh',
+              'build_host_hierarchy_bounded.py','pack_owner_block_fixture.py','pack_owner_multilayer_fixture.py',
+              'pack_owner_bf16_weights.py','verify_host_block_gate.py','verify_real_two_layer.py',
+              'audit_owner_block_abi.py','audit_matrix_topology.py','real2_ci.py']
+            tests=['host_block_commands.cpp','host_burst_write_step.inc','retained_hierarchy.vlt',
+              'matrix4096_hierarchy.vlt','native_weight_hierarchy.vlt','silu_overlap_hierarchy.vlt']
+            paths += [root/'chisel/continuous_prefill/scripts'/n for n in scripts]
+            paths += [root/'chisel/continuous_prefill/tests'/n for n in tests]
+            paths += [root/'src/heteronpu'/n for n in ['abi_validation.py','command.py','descriptor_chain.py',
+              'gemmini_descriptor_v2.py','l9_transport_contract.py']]
+        (out/'source_scope.json').write_text(json.dumps({'scope':scope,'unrelated_helpers_bound':scope=='full'},indent=2)+'\n')
         (out/'sources.sha256.json').write_text(json.dumps({str(p.relative_to(root)):digest(p) for p in sorted(set(paths))},indent=2)+'\n')
         (out/'hardfloat.sha256.json').write_text(json.dumps({str(p.relative_to(hf)):digest(p) for p in (hf/'hardfloat/src/main/scala').glob('*.scala')},indent=2)+'\n')
     elif mode=='verify':
@@ -37,7 +57,7 @@ def main():
         (out/'compiler_jars.sha256.json').write_text(json.dumps({p.name:digest(p) for p in jars},indent=2)+'\n')
         files=sources(root,hf);(out/'main_sources.txt').write_text(''.join(str(p)+'\n' for p in files))
         (out/'classes').mkdir()
-        cmd=['java','-Xmx3G','-XX:ActiveProcessorCount=3','-cp',cp,'scala.tools.nsc.Main','-classpath',cp,
+        cmd=['java','-Xmx'+os.environ.get('SCALA_HEAP','3G'),'-XX:ActiveProcessorCount='+os.environ.get('SCALA_CPUS','3'),'-cp',cp,'scala.tools.nsc.Main','-classpath',cp,
              '-Xplugin:'+str(tools/'jars/chisel-plugin_2.13.16-6.7.0.jar'),'-language:reflectiveCalls','-d',str(out/'classes'),'@'+str(out/'main_sources.txt')]
         with (out/'compile.log').open('w') as f:code=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT).returncode
         (out/'compile.exit').write_text(str(code)+'\n')

@@ -33,12 +33,18 @@ def test_descriptor_common_and_typed_payloads_fit_128_bits() -> None:
     assert bits == 128
     assert spec["payload_bits"] == 72
     assert set(spec["records"]) == {
-        0x04, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,
+        0x04, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B,
         0x32, 0x33, 0x34, 0x35,
     }
     assert all("name" in record and "executable" in record
                for record in spec["records"].values())
     assert "v2 encodings remain unchanged" in spec["validation"]
+    for kind in (0x1A, 0x1B):
+        extension = spec["records"][kind]
+        assert not extension["executable"] and not extension["default_enabled"]
+        assert extension["experimental"] and extension["supported_host_policy"] == 2
+        assert extension["host_parameter"] == "bf16V"
+        assert (ROOT / extension["contract"]).is_file()
 
 
 def test_sram_budget_and_frozen_top_level_contract() -> None:

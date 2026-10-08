@@ -20,6 +20,9 @@ class RecordType(IntEnum):
     MATRIX_OP = 0x10
     CONV2D = 0x11
     MATRIX_AUX = 0x12
+    # Explicit experimental/default-off QKV extension; v3 0x13..0x19 stay reserved.
+    QKV_POLICY = 0x1A
+    QKV_ADDRESS = 0x1B
     SFU_PROGRAM = 0x20
     KV_ADDRESS = 0x30
     KV_FORMAT = 0x31

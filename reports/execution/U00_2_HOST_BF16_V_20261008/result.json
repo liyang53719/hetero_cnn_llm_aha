@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "status": "PASS_LOCAL_PRODUCTION_HOST_V_ONLY",
+  "scope": "Qwen3.5-0.8B layer3 V projection; actual existing Host, retained MatrixPipelineService and one pinned iDMA",
+  "base_commit": "6c0daf8a5be7576492f697f9fbec9aa0e1e10db2",
+  "source_binding": "Actual compile-input SHA map; source-only new commit and exact remote CI remain pending",
+  "experimental_default_off": true,
+  "full_block_accepted": false,
+  "q_k_supported": false,
+  "mac_optimization_acceptance": false,
+  "full128": {
+    "variants": [
+      "baseline",
+      "avx2"
+    ],
+    "phases": [
+      "cold",
+      "carried"
+    ],
+    "cases": 4,
+    "rows_per_case": 128,
+    "outputs_per_case": 65536,
+    "total_bf16_values": 262144,
+    "canonical_bit_differences": 0,
+    "write_ack_bytes_per_case": 131072
+  },
+  "representative": {
+    "token1_faults": true,
+    "nonzero_windows": [
+      {
+        "variant": "baseline",
+        "phase": "cold",
+        "base": 1,
+        "count": 17
+      },
+      {
+        "variant": "avx2",
+        "phase": "carried",
+        "base": 47,
+        "count": 81
+      }
+    ],
+    "window_and_full128_bf16_values": 312320
+  },
+  "source_capture": {
+    "mode": "code-pinned complete official prefix reuse",
+    "fresh_official_executions": 0,
+    "reused_official_executions": 2,
+    "manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+    "fresh_attempt_sigkill_preserved": true,
+    "cross_host_byte_equivalence_claimed": false
+  },
+  "native_gate": {
+    "V_operator_pass": true,
+    "max_abs_limit": 0.03125,
+    "mean_abs_limit": 0.005,
+    "observed_max_abs": 0.015625,
+    "full_block_gate_pass": {
+      "baseline": false,
+      "avx2": false
+    }
+  },
+  "build_recovery": {
+    "initial_exit": 255,
+    "reason": "Verilator hierarchy resource SIGKILL",
+    "recovered_on_identical_generated_rtl": true,
+    "dut_or_generated_rtl_edits": false
+  },
+  "actual_instances": {
+    "logical_matrix_engines": 1,
+    "retained_512_lane_slices": 8,
+    "idma_backends": 1,
+    "qkv_candidate_instances": 0
+  },
+  "regression": {
+    "host_descriptor_typed_reader_arbiter_fence_tests": 27,
+    "host_v_suite_tests": 5,
+    "real_layers_frontend_tests": 10,
+    "native_weights_frontend_tests": 10,
+    "storage_probe_cases": 92,
+    "storage_probe_arithmetic_signoff": false,
+    "old_qwen2_actual_two_layer": "INCOMPLETE_TWO_INTERRUPTED_LOCAL_ATTEMPTS_CI_PENDING",
+    "interruption_receipt_sha256": "f4a9843a49bfcaca9e8e721926d934db9923db0757ffde2e67270dcf30580f8f"
+  },
+  "workflow_fresh_entrypoint": "IMPLEMENTED_BUT_NOT_YET_RUN_ON_REAL_CAPTURE_OR_BUILD",
+  "remote_commit": "PENDING",
+  "exact_commit_ci": "PENDING",
+  "receipts": {
+    "representative": {
+      "local_path": "work/host_bf16_v_actual3/result.json",
+      "sha256": "fcc882460a32d1f8cfdf9284965060844ff3c97dace86e6dab9038c951e8120c"
+    },
+    "windows": {
+      "local_path": "work/host_bf16_v_windows/result.json",
+      "sha256": "ac22a94af4d802614e7816f50fcd765b892c6c3b992f94c760cade0764a44cc4"
+    },
+    "independent_review": {
+      "local_path": "work/host_bf16_v_review/summary.json",
+      "sha256": "2d9a5825bb94a3ab21ceb0ef2aea7cd7170c0c97fb7f94986f2c44d8685f90cd"
+    },
+    "compiled_sources": {
+      "local_path": "work/host_bf16_v_review/compiled_sources.sha256.json",
+      "sha256": "1f237444c094c8ae8f6dd6397d16d5db9d8732b1cfa8202f6a2c162be0a4204a"
+    },
+    "input_pin_decoupling": {
+      "local_path": "work/host_bf16_v_standalone_inputs/source_pin_decoupling_equivalence.json",
+      "sha256": "609dbea23edac0214e9e9829d26cc0e59250132464265347a8cad87b53233c31"
+    }
+  },
+  "final_packer_refactor": {
+    "real_pinned_reuse_selections": 7,
+    "byte_identical_files": 42,
+    "byte_identical_total": 10096629,
+    "actual_fresh_capture": false,
+    "actual_rtl_rerun": false,
+    "receipt_sha256": "a267209b487c2d170d2f36b3d985d518b3a44f2d792c3f5dc308af0ba2415768"
+  },
+  "legacy_ci_execution": {
+    "status": "IMPLEMENTED_NOT_EXECUTED",
+    "build_job_timeout_minutes": 120,
+    "continuous_run_job_timeout_minutes": 350,
+    "simulator_timeout_seconds": 19500,
+    "continuous_simulator_processes": 1,
+    "commands": 42,
+    "layers": 2,
+    "synthetic_weights": true,
+    "reference_tensor_input_injected": false,
+    "local_third_replay_started": false,
+    "estimated_local_based_runtime_hours": [
+      4.3,
+      4.9
+    ],
+    "estimate_is_completion_guarantee": false,
+    "package_scope": [
+      "binary",
+      "generated Host RTL",
+      "synthetic command/descriptor fixture",
+      "source, tool and dependency hashes"
+    ],
+    "package_excludes": [
+      "model weights",
+      "NPZ",
+      "actual tensor outputs",
+      "reference tensor outputs",
+      "compiler objects"
+    ],
+    "historical_transport_inspection": {
+      "files": 21,
+      "payload_bytes": 75916441,
+      "gzip_bytes": 4246388,
+      "execution_eligible": false,
+      "simulator_invoked": false
+    }
+  }
+}

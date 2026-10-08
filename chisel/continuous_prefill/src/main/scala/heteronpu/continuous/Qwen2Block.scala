@@ -10,23 +10,32 @@ import scala.collection.mutable.ArrayBuffer
   * Sixteen shared FMA lanes use the repository BF16/FP32 arithmetic primitive.
   * DDR uses FP32 containers; matrix operands are rounded to BF16 at ingress.
   */
-case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32){
-  require(hidden==heads*headDim && heads%kvHeads==0)
+case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32,qWidth:Int=0,packedQWidth:Int=0,qwen35VOnly:Boolean=false){
+  val q=if(qWidth==0)hidden else qWidth
+  val packedQ=if(packedQWidth==0)q else packedQWidth
+  require(q==heads*headDim && heads%kvHeads==0)
+  require(!qwen35VOnly || (hidden==1024 && q==2048 && packedQ==4096 && ffn==3584 && heads==8 && kvHeads==2 && headDim==256),
+    "Qwen3.5 profile currently admits only H1024 V projection")
+  require(qwen35VOnly || (q==hidden && packedQ==hidden), "independent projection widths require an explicit profile")
   require(headDim>=32 && headDim%32==0 && ffn%16==0 && hidden%16==0)
   require(maxTokens>0 && maxTokens<=1024)
   require(matrixColumns==32||matrixColumns==256)
-  val kv=kvHeads*headDim;val maxRow=math.max(hidden,ffn)
+  val kv=kvHeads*headDim;val maxRow=Seq(hidden,ffn,q,packedQ).max
+}
+object QwenBlockShape {
+  def qwen35V(maxTokens:Int=128):QwenBlockShape=QwenBlockShape(1024,3584,8,2,256,maxTokens,true,256,2048,4096,true)
 }
 case class BlockRegion(name:String,offset:Long,words:Long,external:Boolean)
 class QwenBlockLayout(s:QwenBlockShape){
   private val list=ArrayBuffer.empty[BlockRegion];private var cursor=0L
   private def add(n:String,w:Long,e:Boolean):Unit={cursor=(cursor+63)& ~63L;list+=BlockRegion(n,cursor,w,e);cursor+=w*4}
-  for((n,k,v)<-Seq(("wq",s.hidden,s.hidden),("wk",s.hidden,s.kv),("wv",s.hidden,s.kv),("wo",s.hidden,s.hidden),("wg",s.hidden,s.ffn),("wu",s.hidden,s.ffn),("wd",s.ffn,s.hidden)))add(n,k.toLong*v,true)
-  for(n<-Seq("gamma0","gamma1","bq"))add(n,s.hidden,true)
+  for((n,k,v)<-Seq(("wq",s.hidden,s.packedQ),("wk",s.hidden,s.kv),("wv",s.hidden,s.kv),("wo",s.q,s.hidden),("wg",s.hidden,s.ffn),("wu",s.hidden,s.ffn),("wd",s.ffn,s.hidden)))add(n,k.toLong*v,true)
+  for(n<-Seq("gamma0","gamma1"))add(n,s.hidden,true)
+  add("bq",s.packedQ,true)
   for(n<-Seq("bk","bv"))add(n,s.kv,true)
   add("cos",s.maxTokens.toLong*s.headDim/2,true);add("sin",s.maxTokens.toLong*s.headDim/2,true);add("x",s.maxTokens.toLong*s.hidden,true)
   val writableStart=(cursor+63)& ~63L
-  for((n,w)<-Seq(("n0",s.hidden),("qr",s.hidden),("kr",s.kv),("v",s.kv),("q",s.hidden),("k",s.kv),("att",s.hidden),("o",s.hidden),("r",s.hidden),("n1",s.hidden),("gate",s.ffn),("up",s.ffn),("act",s.ffn),("down",s.hidden),("y",s.hidden)))add(n,s.maxTokens.toLong*w,false)
+  for((n,w)<-Seq(("n0",s.hidden),("qr",s.packedQ),("kr",s.kv),("v",s.kv),("q",s.q),("k",s.kv),("att",s.q),("o",s.hidden),("r",s.hidden),("n1",s.hidden),("gate",s.ffn),("up",s.ffn),("act",s.ffn),("down",s.hidden),("y",s.hidden)))add(n,s.maxTokens.toLong*w,false)
   val total=(cursor+63)& ~63L;val regions=list.toSeq
   def apply(n:String):Long=regions.find(_.name==n).get.offset
 }
@@ -38,6 +47,7 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   */
 class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false) extends Module {
   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
+  require(!s.qwen35VOnly || ownerDriven, "Qwen3.5 V-only profile has no autonomous block route")
   val layout=new QwenBlockLayout(s)
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
@@ -229,7 +239,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
         QwenOwnerKind.Rope.U->4.U,QwenOwnerKind.Attention.U->6.U,QwenOwnerKind.Add.U->8.U,
         QwenOwnerKind.Activation.U->12.U,QwenOwnerKind.KvAppend.U->16.U))
       seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
-      when(j.m===0.U||j.m>s.maxTokens.U||j.n===0.U||j.n>s.maxRow.U||j.n(3,0)=/=0.U||j.writeBytes===0.U){fail(Status.Bounds.U)}
+      when(s.qwen35VOnly.B || j.activationBf16 || j.outputBf16 || j.weightBf16){fail(Status.Unsupported.U)}
+      .elsewhen(j.m===0.U||j.m>s.maxTokens.U||j.n===0.U||j.n>s.maxRow.U||j.n(3,0)=/=0.U||j.writeBytes===0.U){fail(Status.Bounds.U)}
         .otherwise{state:=st("begin")}
     }
   }else{

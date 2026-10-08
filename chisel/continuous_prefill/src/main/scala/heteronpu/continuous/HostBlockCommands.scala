@@ -14,7 +14,8 @@ import chisel3.util._
   * tensors are internal-only logical values, never DDR materializations.
   * Their completion events are conservatively delayed until PV writeback.
   */
-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false) extends Module {
+class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false) extends Module {
+  require(!bf16V || s.qwen35VOnly, "native V requires the explicit Qwen3.5 V-only profile")
   require(eventSlots>=4 && isPow2(eventSlots) && maxCommands>=21 && maxCommands<=255)
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new HostCommandLaunch));val result=Decoupled(new HostCommandResult)
@@ -29,7 +30,8 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val pc=RegInit(0.U(16.W));val completed=RegInit(0.U(16.W));val status=RegInit(0.U(8.W));val poison=RegInit(false.B)
   val events=RegInit(VecInit(Seq.fill(eventSlots)(false.B)))
   val tensors=Reg(Vec(3,new DecodedTensor));val slot=RegInit(0.U(2.W))
-  val policy=Reg(Vec(2,UInt(128.W)));val policySlot=RegInit(false.B);val policyIndex=Reg(UInt(24.W))
+  val policy=Reg(Vec(12,UInt(128.W)));val policySlot=RegInit(0.U(4.W));val policyIndex=Reg(UInt(24.W))
+  val policyIndices=Reg(Vec(12,UInt(24.W)));val extendedV=RegInit(false.B)
   val bound=Reg(new QwenOwnerJob)
   val group=RegInit(0.U(2.W));val qkCommand=Reg(UInt(128.W));val softCommand=Reg(UInt(128.W))
   val q=Reg(new DecodedTensor);val k=Reg(new DecodedTensor);val score=Reg(new DecodedTensor);val probability=Reg(new DecodedTensor)
@@ -73,11 +75,16 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   def fail(code:UInt):Unit={status:=code;poison:=true.B;completingGroup:=false.B;state:=complete}
   def overlap(a:UInt,e:UInt,b:UInt,f:UInt):Bool=a<f && b<e
   def intersectsVirtual(t:DecodedTensor):Bool=(0 until maxCommands).map(i=>i.U<virtualCount && overlap(t.address,t.paddedEnd,vStarts(i),vEnds(i))).reduce(_||_)
-  def live(t:DecodedTensor):Bool={
-    val initial=cfg.regions.map(r=>r.read && !r.write && r.base<=t.address && t.paddedEnd<=r.limit).reduce(_||_)
-    val published=(0 until maxCommands).map(i=>i.U<producedCount && starts(i)<=t.address && t.paddedEnd<=ends(i)).reduce(_||_)
-    (initial||published) && !intersectsVirtual(t)
+  def liveSpan(address:UInt,end:UInt):Bool={
+    val initial=cfg.regions.map(r=>r.read && !r.write && r.base<=address && end<=r.limit).reduce(_||_)
+    val published=(0 until maxCommands).map(i=>i.U<producedCount && starts(i)<=address && end<=ends(i)).reduce(_||_)
+    val virtual=(0 until maxCommands).map(i=>i.U<virtualCount && overlap(address,end,vStarts(i),vEnds(i))).reduce(_||_)
+    (initial||published) && !virtual
   }
+  def live(t:DecodedTensor):Bool=liveSpan(t.address,t.paddedEnd)
+  def freshSpan(address:UInt,end:UInt):Bool= !(0 until maxCommands).map(i=>
+    (i.U<producedCount && overlap(address,end,starts(i),ends(i))) ||
+    (i.U<virtualCount && overlap(address,end,vStarts(i),vEnds(i)))).reduce(_||_)
   def fresh(t:DecodedTensor):Bool= !intersectsVirtual(t) && !(0 until maxCommands).map(i=>i.U<producedCount && overlap(t.address,t.paddedEnd,starts(i),ends(i))).reduce(_||_)
   def same(a:DecodedTensor,b:DecodedTensor):Bool=a.address===b.address && a.rank===b.rank && a.dtype===b.dtype && a.dims.asUInt===b.dims.asUInt
   def shape2(t:DecodedTensor,m:UInt,n:UInt):Bool=t.rank===2.U && t.dims(0)===m && t.dims(1)===n && t.dims(2)===1.U && t.dims(3)===1.U
@@ -134,14 +141,14 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     .elsewhen(waitEvent>=eventSlots.U||signalEvent===0.U||signalEvent>=eventSlots.U|| !dependency||
       events(signalEvent(log2Ceil(eventSlots)-1,0))||signalEvent===waitEvent||
       (group=/=0.U && signalEvent===qkCommand(55,40))){fail(Status.Dependency.U)}
-    .otherwise{slot:=0.U;policy:=VecInit(Seq.fill(2)(0.U(128.W)));state:=tensorIssue}
+    .otherwise{slot:=0.U;policy:=VecInit(Seq.fill(12)(0.U(128.W)));extendedV:=false.B;state:=tensorIssue}
   }
   when(state===tensorIssue&&tensor.io.request.fire){state:=tensorGet}
   when(state===tensorGet&&tensor.io.result.fire){
     when(tensor.io.result.bits.status=/=0.U){fail(tensor.io.result.bits.status)}
     .otherwise{tensors(slot):=tensor.io.result.bits.tensor
       when(slot===2.U){
-        policyIndex:=tensors(0).tail;policySlot:=false.B
+        policyIndex:=tensors(0).tail;policySlot:=0.U
         state:=Mux(kv,validate,policyIssue)
       }.otherwise{
         when(slot===0.U&&isSoftmax){tensors(1):=0.U.asTypeOf(new DecodedTensor);slot:=2.U}.otherwise{slot:=slot+1.U}
@@ -151,22 +158,55 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   }
   when(state===policyIssue&&reader.io.request.fire){state:=policyGet}
   when(state===policyGet&&reader.io.result.fire){
-    val r=reader.io.result.bits;policy(policySlot):=r.data
+    val r=reader.io.result.bits;policy(policySlot):=r.data;policyIndices(policySlot):=policyIndex
+    val next=r.data(55,32)
+    val prefixRevisit=(for(t<-0 until 3;i<-0 until 3)yield
+      (t.U=/=1.U || !isSoftmax) && tensors(t).prefixIndices(i)===policyIndex).reduce(_||_)
+    val policyRevisit=(0 until 12).map(i=>i.U<policySlot && policyIndices(i)===policyIndex).reduce(_||_)
     when(r.status=/=0.U){fail(r.status)}
     .elsewhen(r.requestTag=/=Cat(cfg.epoch,pc,0.U(32.W))){fail(Status.Protocol.U)}
-    .elsewhen(isMatrix && !policySlot){
-      when(r.data(7,0)=/=0x10.U||r.data(31,8)=/=0.U||r.data(55,32)===tensors(0).tail){fail(Status.Malformed.U)}
-      .otherwise{policyIndex:=r.data(55,32);policySlot:=true.B;state:=policyIssue}
+    .elsewhen(r.data(31,8)=/=0.U || prefixRevisit || policyRevisit){fail(Status.Malformed.U)}
+    .elsewhen(isMatrix && policySlot===0.U){
+      when(r.data(7,0)=/=0x10.U||next===0xffffff.U){fail(Status.Malformed.U)}
+      .otherwise{policyIndex:=next;policySlot:=1.U;state:=policyIssue}
+    }.elsewhen(isMatrix && policySlot===1.U && next=/=0xffffff.U){
+      when(!bf16V.B || opcode=/=0x20.U || r.data(7,0)=/=0x12.U){fail(Status.Unsupported.U)}
+      .otherwise{extendedV:=true.B;policyIndex:=next;policySlot:=2.U;state:=policyIssue}
+    }.elsewhen(extendedV){
+      val expectedKind=Mux(policySlot===2.U,0x1a.U,0x1b.U)
+      when(r.data(7,0)=/=expectedKind || (policySlot===11.U)=/=(next===0xffffff.U)) {fail(Status.Malformed.U)}
+      .elsewhen(policySlot===11.U){state:=validate}
+      .otherwise{policyIndex:=next;policySlot:=policySlot+1.U;state:=policyIssue}
     }.otherwise{state:=validate}
   }
   when(state===validate){
     val a=tensors(0);val b=tensors(1);val d=tensors(2)
     val m=a.dims(0);val n=d.dims(1)
+    val vp=policy(2)
+    val tokenBase=vp(99,68);val tokenCount=vp(107,100)
+    val activeA=a.address+(tokenBase.pad(64)<<11)
+    val activeD=d.address+(tokenBase.pad(64)<<10)
+    val activeAEnd=activeA+(tokenCount.pad(64)<<11)
+    val activeDEnd=activeD+(tokenCount.pad(64)<<10)
+    val prefixes=tensors.flatMap(_.prefixIndices)
+    val distinctPrefixes=(for(i<-0 until 9;j<-i+1 until 9)yield prefixes(i)=/=prefixes(j)).reduce(_&&_)
+    // Version 2 is owner-managed staging. tile16 describes arithmetic tile
+    // granularity, not a fixed token batch; the private SRAM chooses contexts.
+    val ownerPolicy=extendedV && vp(7,0)===0x1a.U && vp(63,56)===2.U && vp(65,64)===2.U &&
+      vp(67,66)===3.U && vp(127,108)===0.U && tokenCount>0.U && tokenCount<=128.U &&
+      tokenBase.pad(34)+&tokenCount<=m &&
+      (0 until 9).map(i=>policy(i+3)(7,0)===0x1b.U && policy(i+3)(127,120)===0.U &&
+        policy(i+3)(119,112)===i.U && policy(i+3)(111,56)===0.U).reduce(_&&_)
+    val vMatrix=policy(0)(127,56)===(m.pad(72)|(512.U(72.W)<<16)|(1024.U(72.W)<<32)) &&
+      policy(1)(7,0)===0x12.U && policy(1)(127,56)==="h004000040020ffffff".U(72.W)
+    val nativeV=bf16V.B && opcode===0x20.U && m>0.U && m<=128.U && m<=s.maxTokens.U &&
+      shape2(a,m,1024.U)&&shape2(b,1024.U,512.U)&&shape2(d,m,512.U)&&
+      Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && ownerPolicy && vMatrix && distinctPrefixes
     val nativeWeight=bf16Weights.B && opcode===0x20.U && b.dtype===5.U && n(4,0)===0.U
-    val validDTypes=a.dtype===7.U&&d.dtype===7.U&&(isSoftmax||b.dtype===7.U||nativeWeight)
+    val validDTypes=nativeV || (a.dtype===7.U&&d.dtype===7.U&&(isSoftmax||b.dtype===7.U||nativeWeight))
     val plainTails=(isSoftmax||b.tail===0xffffff.U)&&d.tail===0xffffff.U&&(kv=== (a.tail===0xffffff.U))
     val noAlias= !overlap(d.address,d.paddedEnd,a.address,a.paddedEnd) && (isSoftmax|| !overlap(d.address,d.paddedEnd,b.address,b.paddedEnd))
-    val sourceLive=Mux(group===1.U,same(a,score),Mux(group===2.U,same(a,probability)&&live(b),live(a)&&live(b)))
+    val sourceLive=Mux(nativeV,liveSpan(activeA,activeAEnd)&&live(b),Mux(group===1.U,same(a,score),Mux(group===2.U,same(a,probability)&&live(b),live(a)&&live(b))))
     val shapeBase=m>0.U&&m<=s.maxTokens.U&&n>0.U&&n<=s.maxRow.U&&n(3,0)===0.U
     val shapeSame=shape2(a,m,n)&&shape2(d,m,n)
     val norm=opcode===0x32.U&&shapeBase&&n===s.hidden.U&&shapeSame&&shape2(b,1.U,n)&&sfuPolicy(2)
@@ -182,9 +222,9 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val sm=isSoftmax&&group===1.U&&same(a,score)&&shape3(d,s.heads.U,q.dims(0),q.dims(0))&&sfuPolicy(1)
     val pv=opcode===0x24.U&&group===2.U&&same(a,probability)&&shape2(b,q.dims(0),s.kv.U)&&
       shape2(d,q.dims(0),s.hidden.U)&&matrixPolicy(q.dims(0),s.headDim.U,q.dims(0),false.B)
-    when(!validDTypes|| !plainTails|| !(norm||dense||vector||rope||activation||append||qk||sm||pv)){fail(Status.Unsupported.U)}
+    when(!validDTypes|| !plainTails|| (s.qwen35VOnly.B && !nativeV)|| (extendedV && !nativeV)|| !(nativeV||norm||dense||vector||rope||activation||append||qk||sm||pv)){fail(Status.Unsupported.U)}
     .elsewhen(!sourceLive){fail(Status.Dependency.U)}
-    .elsewhen(!noAlias|| !fresh(d)||producedCount>=maxCommands.U||virtualCount>=maxCommands.U){fail(Status.Permission.U)}
+    .elsewhen(!noAlias|| !Mux(nativeV,freshSpan(activeD,activeDEnd),fresh(d))||producedCount>=maxCommands.U||virtualCount>=maxCommands.U){fail(Status.Permission.U)}
     .elsewhen(qk){q:=a;k:=b;score:=d;qkCommand:=cmd;group:=1.U
       vStarts(virtualCount(log2Ceil(maxCommands)-1,0)):=d.address;vEnds(virtualCount(log2Ceil(maxCommands)-1,0)):=d.paddedEnd;virtualCount:=virtualCount+1.U;nextCommand()
     }.elsewhen(sm){probability:=d;softCommand:=cmd;group:=2.U
@@ -193,10 +233,15 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       bound:=0.U.asTypeOf(new QwenOwnerJob)
       bound.tag:=Cat(cfg.epoch,pc);bound.a:=a.address;bound.b:=b.address;bound.dst:=d.address;bound.writeBytes:=d.payloadBytes
       bound.m:=m;bound.n:=n;bound.k:=a.dims(1);bound.weightBf16:=nativeWeight
-      bound.kind:=Mux(norm,QwenOwnerKind.Norm.U,Mux(dense,QwenOwnerKind.Dense.U,
+      bound.kind:=Mux(norm,QwenOwnerKind.Norm.U,Mux(dense||nativeV,QwenOwnerKind.Dense.U,
         Mux(vector,Mux(b.dims(0)===1.U,QwenOwnerKind.Bias.U,QwenOwnerKind.Add.U),
         Mux(rope,QwenOwnerKind.Rope.U,Mux(activation,QwenOwnerKind.Activation.U,
         Mux(append,QwenOwnerKind.KvAppend.U,QwenOwnerKind.Attention.U))))))
+      when(nativeV){
+        bound.a:=activeA;bound.dst:=activeD;bound.m:=tokenCount;bound.n:=512.U;bound.k:=1024.U
+        bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
+        bound.writeBytes:=tokenCount.pad(64)<<10
+      }
       when(rope){bound.c:=b.address+(s.maxTokens.toLong*s.headDim/2*4).U}
       when(append){bound.n:=s.kv.U}
       when(pv){bound.a:=q.address;bound.b:=k.address;bound.c:=b.address;bound.m:=q.dims(0);bound.n:=s.hidden.U;bound.k:=s.headDim.U}
@@ -219,7 +264,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       events(completionCommand(55,40)(log2Ceil(eventSlots)-1,0)):=true.B;completed:=completed+1.U
       when(completingGroup && completionIndex<2.U){completionIndex:=completionIndex+1.U}
       .otherwise{
-        starts(producedCount(log2Ceil(maxCommands)-1,0)):=tensors(2).address;ends(producedCount(log2Ceil(maxCommands)-1,0)):=tensors(2).paddedEnd;producedCount:=producedCount+1.U
+        starts(producedCount(log2Ceil(maxCommands)-1,0)):=bound.dst;ends(producedCount(log2Ceil(maxCommands)-1,0)):=bound.dst+bound.writeBytes;producedCount:=producedCount+1.U
         group:=0.U;completingGroup:=false.B
         when(pc+1.U===cfg.commands){state:=finish}.otherwise{pc:=pc+1.U;state:=fetch}
       }

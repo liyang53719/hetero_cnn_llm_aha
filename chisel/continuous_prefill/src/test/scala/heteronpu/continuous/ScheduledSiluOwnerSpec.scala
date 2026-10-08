@@ -48,7 +48,7 @@ class ScheduledSiluOwnerSpec extends AnyFlatSpec with ChiselScalatestTester with
     val j = d.io.job.bits
     j.kind.poke(QwenOwnerKind.Activation.U); j.m.poke(1.U); j.n.poke(count.U); j.k.poke(0.U)
     j.a.poke(aBase.U); j.b.poke(bBase.U); j.c.poke(0.U); j.dst.poke(cBase.U)
-    j.weightBf16.poke(false.B); j.writeBytes.poke((count.toLong * 4).U); j.tag.poke(tag.U)
+    j.weightBf16.poke(false.B); j.activationBf16.poke(false.B); j.outputBf16.poke(false.B); j.writeBytes.poke((count.toLong * 4).U); j.tag.poke(tag.U)
   }
   private def snapshot(d: ScheduledSiluOwner): Request = {
     val r = d.io.memory.bits

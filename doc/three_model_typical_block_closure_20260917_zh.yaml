@@ -1095,3 +1095,21 @@ U00_2_Matrix_read_lookahead门禁_20261008:
   证据策略: 每个完整trace记录和全部512lane流式独立核验到EOF，留SHA和紧凑结果；原始流不留存，重放需再生成
   保留未完成: [全M128实际数值RTL, generic Command128完整接入, 系数生成cache, KV和Attention及FFN, 三模型完整block, PPA, 固定资源整blockMAC90]
   状态: U00.2 ongoing；U01 to do
+
+Qwen35候选QKV命令子链_20261008:
+  用户优先级: 先完成Qwen3.5实际模型数值路径，再开展新的MAC利用率优化；已运行的旧CI仅核验收尾
+  关联任务: [C03.2, C04.2, C05, S01, Q35A]
+  当前状态: 实现中；先16token调试，再执行cold128与carried128的全部Q8、K2、V2及原样gate
+  接入边界: 既有projection controller默认关闭分支的候选QKV命令子链；不是通用Chisel Host或whole-block owner已接通
+  来源: 固定Qwen3.5-0.8B层3全部11项真实权重与embedding经GDN0至2的真实上游激活；不混称Qwen2数值来源
+  命令: 保持标准Command128的MATRIX_GEMM、engine2、flags0及tensor_base/shape4/stride3/MatrixOp/MatrixAux；显式版本化候选扩展绑定role、窗口和全部staging及DDR地址
+  数据路径: 同一个实际Matrix512与1.5MiB SharedL2；顺序K1024的FP32 FMA末端BF16-RNE；Q每头query256/gate256交织，QK Norm256后partial64 RoPE；V直接实际Matrix写回且不读Norm或RoPE系数
+  生命周期: 中间区仅预置哨兵；下游只读实际前驱写入；全部描述符及地址在DMA前验证，所有有效输出写ACK后才发布成功完成
+  数值门禁: 每个实际Matrix包和全部有效输出与独立整数及C参考核对，并保留每个Q/K/V/gate官方producer比较；完整native BF16审计FAIL和原门限不得被局部RTL一致性覆盖
+  通用Host下一步: 解耦hidden1024与query/context2048及packedQ4096，贯通typed BF16的实际bytes/mask/stride；复用既有MatrixStreamPort资源而不复制Matrix阵列，接回HostBlockCommands及SSA完成发布
+  通用HostV局部进展: 默认关闭V-only profile与owner-managed版本2描述符已实现；同一StreamingDense、8个既有Matrix512 slice和单一pinned iDMA，BF16 A/D真实bytes/mask/stride及仅ACK窗口发布。frontend和标量/burst控制器测试已过，实际Host四组cold128/carried128共262144个V输出逐位符合独立参考，另有非零窗口及错误ACK覆盖；报告doc/U00_2_HOST_BF16_V_20261008_CN.md。Q/K的生产Host常量加载与SFU链未接通
+  HostV发布回归边界: 本地实际V四组M128已验真；旧Qwen2两层连续42命令回归两次失去执行会话且无终态，原因未知，未作第三次本地重跑。通过精确commit绑定的GitHub Actions构建及连续执行两个job收尾，CI待完成前保持未验收；不上传模型权重或NPZ
+  跨环境输入边界: 固定模型和forward源码不代表官方前缀激活跨主机逐位相同。旧6c0daf8同HEAD的CI与本地80个重叠case激活哈希不同，W/gamma/trig相同；两端各自严格oracle及协议通过，未定位kernel或误差幅度。新子链按每次真实输入/capture哈希独立验收，不声称跨主机同输入，阈值不变
+  后续完整block: [有前缀QK与causal softmax和PV, sigmoid attention gate, OProj2048到1024, residual和post-attention Norm, dense SwiGLU3584与down及residual, 层0GDN完整状态链, 35B-A3B真实路由与expert完整链]
+  保留状态: C03.2/C04.2/C05及S01/Q35A大项不关闭；C02.2原native精度门禁保持OPEN；U00.2 ongoing，U01 to do
+  交付策略: Git仅源码、脚本、pins、哈希、小摘要和中文计划；不含权重、NPZ、memh、全参考轨迹或编码后的可重建payload

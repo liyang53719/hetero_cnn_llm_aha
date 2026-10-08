@@ -49,6 +49,7 @@ class HostBlockCommandsSpec extends AnyFlatSpec with ChiselScalatestTester with 
         d.clock.step(2);d.io.response.bits.data.poke(data.U);d.io.response.bits.tag.poke(tag.U);d.io.response.bits.error.poke(readError.B)
         d.io.response.valid.poke(true.B);d.io.response.ready.expect(true.B);d.clock.step();d.io.response.valid.poke(false.B);memory+=1
       }else if(d.io.job.valid.peek().litToBoolean){
+        d.io.job.bits.activationBf16.expect(false.B);d.io.job.bits.outputBf16.expect(false.B)
         val pc=d.io.pc.peek().litValue.toInt;val tag=d.io.job.bits.tag.peek().litValue;val bytes=d.io.job.bits.writeBytes.peek().litValue
         val destination=BigInt(manifest("tensors")(manifest("schedule")(pc)("dst").str)("address").num.toLong)
         d.io.job.bits.dst.expect(destination.U);d.io.job.bits.m.expect(integer("tokens").U)
@@ -116,6 +117,19 @@ class HostBlockCommandsSpec extends AnyFlatSpec with ChiselScalatestTester with 
       val stale=(commands(1)&~(BigInt(65535)<<24))
       val result=run(d,commands.updated(0,stale))
       result._1 shouldBe Status.Dependency;result._2 shouldBe 0;result._3 shouldBe 0
+    }
+  }
+
+  it should "allow a legacy Softmax policy at descriptor index zero" in {
+    test(dut).withAnnotations(Seq(VerilatorBackendAnnotation)){d=>
+      initialize(d)
+      val old=(((commands(11)>>56)&0xffffff).toInt)+3
+      def remap(index:BigInt):BigInt=if(index==0)BigInt(old)else if(index==old)BigInt(0)else index
+      def next(word:BigInt):BigInt=(word&~(BigInt(0xffffff)<<32))|(remap((word>>32)&0xffffff)<<32)
+      val moved=descriptors.indices.map(i=>next(descriptors(remap(BigInt(i)).toInt))).toVector
+      val cs=commands.map(w=>Seq(56,80,104).foldLeft(w){case(v,shift)=>
+        (v&~(BigInt(0xffffff)<<shift))|(remap((w>>shift)&0xffffff)<<shift)})
+      run(d,cs,moved) shouldBe (0,integer("commands").toInt/21*19,integer("commands").toInt)
     }
   }
 

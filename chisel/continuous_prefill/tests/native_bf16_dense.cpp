@@ -63,7 +63,7 @@ struct Test{
    for(unsigned i=0;i<k*n/2;i++)memory[pos(B)+i]=(bits(bf(fl(memory[pos(B)+2*i])))>>16)|(bits(bf(fl(memory[pos(B)+2*i+1])))&0xffff0000U);
    for(unsigned i=k*n/2;i<k*n;i++)memory[pos(B)+i]=0x7fc00001;
   }
-  d.io_job_bits_weightBf16=native;d.io_job_bits_kind=1;d.io_job_bits_m=m;d.io_job_bits_n=n;d.io_job_bits_k=k;d.io_job_bits_a=A;d.io_job_bits_b=B;d.io_job_bits_c=0;d.io_job_bits_dst=C;d.io_job_bits_writeBytes=uint64_t(m)*n*4;d.io_job_bits_tag=seed;
+  d.io_job_bits_activationBf16=0;d.io_job_bits_outputBf16=0;d.io_job_bits_weightBf16=native;d.io_job_bits_kind=1;d.io_job_bits_m=m;d.io_job_bits_n=n;d.io_job_bits_k=k;d.io_job_bits_a=A;d.io_job_bits_b=B;d.io_job_bits_c=0;d.io_job_bits_dst=C;d.io_job_bits_writeBytes=uint64_t(m)*n*4;d.io_job_bits_tag=seed;
   d.io_job_valid=1;d.io_done_ready=0;d.eval();ck(d.io_job_ready,"job not admitted");running=true;tick();d.io_job_valid=0;
   while(!d.io_done_valid&&cycles<3000000)tick();ck(d.io_done_valid,"job timeout");ck(!pending.valid&&!aw.valid&&!w.valid,"completion before external drain");
   ck(d.io_done_bits_tag==seed,"result tag");uint64_t checked=0;

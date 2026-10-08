@@ -72,7 +72,7 @@ for name,suites in plan.items():
  if len(counts)!=1 or 'All tests passed.' not in text or '***' in text:raise SystemExit('INCOMPLETE_CONTROL_SUITE:'+name)
  if any(s.split('.')[-1]+':' not in text for s in suites):raise SystemExit('MISSING_SUITE:'+name)
  groups[name]={'tests':int(counts[0]),'suites':suites}
-if groups['tiny']['tests']!=7 or groups['real']['tests']!=9 or groups['native']['tests']!=9:raise SystemExit('INCOMPLETE_FIXTURE_TESTS')
+if groups['tiny']['tests']!=8 or groups['real']['tests']!=10 or groups['native']['tests']!=10:raise SystemExit('INCOMPLETE_FIXTURE_TESTS')
 if 'SOURCE_IMMUTABILITY_PASS' not in (out/'source_verify.log').read_text():raise SystemExit('SOURCE_DRIFT')
 report={'status':'PASS_CONTINUOUS_CONTROL_AND_ELEMENTWISE_REGRESSION','groups':groups,
  'total_tests':sum(x['tests'] for x in groups.values()),'elementwise_sizes':[1,17,33,1025,32768,1572864,2097152,2621440],

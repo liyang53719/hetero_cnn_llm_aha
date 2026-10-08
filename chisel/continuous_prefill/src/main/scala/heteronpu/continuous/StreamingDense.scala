@@ -9,7 +9,7 @@ import chisel3.util._
   * positions for five independent N tiles. The producer fills the alternate
   * buffer through validated real-iDMA bursts while the consumer issues the
   * current one. Each output context receives K=0,1,... without reassociation.
-  * Host completion follows all final FP32 stores, never the last MAC issue.
+  * Host completion follows all final typed stores, never the last MAC issue.
   */
 class DenseCycleProfile extends Bundle {
   val other=UInt(64.W);val activationFetch=UInt(64.W);val setup=UInt(64.W)
@@ -45,6 +45,19 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   val burstCount=Reg(UInt(5.W));val burstIndex=RegInit(0.U(5.W));val sequence=RegInit(0.U(32.W))
   val burstTag=Reg(UInt(64.W))
   val aBanks=Seq.fill(16)(SyncReadMem(scratch.aWordsPerBank,UInt(256.W)))
+  // Native BF16 A supplies two existing 256-bit SRAM words per DDR beat.
+  // Drain its upper half through the SAME bank write port on the next cycle;
+  // do not infer a second SRAM port or consume another response meanwhile.
+  val aHighPending=RegInit(false.B);val aHighData=Reg(UInt(256.W))
+  val aHighBank=Reg(UInt(4.W));val aHighAddress=Reg(UInt(32.W))
+  val aWrite=WireDefault(false.B);val aWriteData=WireDefault(0.U(256.W))
+  val aWriteBank=WireDefault(aRow(3,0));val aWriteAddress=WireDefault(0.U(32.W))
+  when(aHighPending){
+    assert(!io.burstResponse.fire,"native A upper-half SRAM write lost ownership")
+    aWrite:=true.B;aWriteData:=aHighData;aWriteBank:=aHighBank;aWriteAddress:=aHighAddress
+    aHighPending:=false.B
+  }
+  for(i<-0 until 16){when(aWrite&&aWriteBank===i.U){aBanks(i).write(aWriteAddress,aWriteData)}}
   val wBanks=Seq.fill(16)(SyncReadMem(160,UInt(256.W))) // 2 x K16 x contexts5
   val ready=RegInit(VecInit(Seq.fill(2)(false.B)))
   val readyK=Reg(Vec(2,UInt(16.W)))
@@ -65,7 +78,12 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   def nColumns(index:UInt):UInt={val remaining=job.n-(nBase+(index.pad(16)<<8));Mux(remaining>256.U,256.U,remaining)}
   def rowsIn(ctx:UInt):UInt={val remaining=rows-(ctxM(ctx).pad(7)<<4);Mux(remaining>16.U,16.U,remaining)}
   def countAt(addr:UInt,remaining:UInt):UInt={val page=16.U(6.W)-addr(9,6);Mux(remaining<page,remaining,page)}
-  val aAddress=job.a+(((rowBase.pad(64)+aRow)*job.k+(aBeat.pad(64)<<4))<<2)
+  val activationBytes=Mux(job.activationBf16,2.U(3.W),4.U(3.W))
+  val activationBeats=Mux(job.activationBf16,job.k>>5,job.k>>4)
+  val outputBytes=Mux(job.outputBf16,2.U(3.W),4.U(3.W))
+  val outputElementsPerBeat=Mux(job.outputBf16,32.U(6.W),16.U(6.W))
+  def outputBeats(ctx:UInt):UInt=Mux(job.outputBf16,columns(ctx)>>5,columns(ctx)>>4)
+  val aAddress=job.a+(rowBase.pad(64)+aRow)*job.k*activationBytes+(aBeat.pad(64)<<6)
   val weightElementsPerBeat=Mux(job.weightBf16,32.U(6.W),16.U(6.W))
   val weightBytes=Mux(job.weightBf16,2.U(3.W),4.U(3.W))
   val wAddress=job.b+((loadK.pad(64)+loadDepth)*job.n+nBase+(loadContext.pad(64)<<8)+loadBeat.pad(64)*weightElementsPerBeat)*weightBytes
@@ -77,11 +95,11 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   readPlan.io.depth:=loadDepth;readPlan.io.context:=loadContext;readPlan.io.beat:=loadBeat
   readPlan.io.address:=wAddress
   val loadingA=state===aReq||state===aWait
-  io.burst.valid:=status===0.U && (state===aReq || (state===execute&&loadState===loadReq))
+  io.burst.valid:=status===0.U && ((state===aReq && !aHighPending) || (state===execute&&loadState===loadReq))
   io.burst.bits.address:=Mux(loadingA,aAddress,wAddress)
-  io.burst.bits.beats:=Mux(loadingA,countAt(aAddress,(job.k>>4)-aBeat),readPlan.io.beats)
+  io.burst.bits.beats:=Mux(loadingA,countAt(aAddress,activationBeats-aBeat),readPlan.io.beats)
   io.burst.bits.tag:=Cat(job.tag,sequence)
-  io.burstResponse.ready:=state===aWait || (state===execute&&loadState===loadWait)
+  io.burstResponse.ready:=(state===aWait && !aHighPending) || (state===execute&&loadState===loadWait)
   io.job.ready:=state===idle
   io.done.valid:=state===finish;io.done.bits.tag:=job.tag;io.done.bits.status:=status
   io.done.bits.cycles:=cycles;io.done.bits.writeBytes:=bytes;io.done.bits.usefulMacs:=useful
@@ -157,24 +175,31 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   io.matrix.result.ready:=state===execute&&(status=/=0.U || writeState===writeIdle)
   when(io.matrix.result.fire && status===0.U){
     val r=io.matrix.result.bits
-    val finite=(0 until 16).flatMap(i=>(0 until 256).map(j=>i.U>=rowsIn(r.context)||j.U>=columns(r.context)||TensorMath.finite(r.value(i)(j)))).reduce(_&&_)
+    val finite=(0 until 16).flatMap(i=>(0 until 256).map(j=>i.U>=rowsIn(r.context)||j.U>=columns(r.context)||(TensorMath.finite(r.value(i)(j))&&
+      (!job.outputBf16||r.value(i)(j)(30,0)<"h7f7f8000".U(31.W))))).reduce(_&&_)
     when(r.error || !r.last || r.context>=contexts || r.context=/=written){fail(Status.Protocol.U)}
     .elsewhen(!finite){fail(Status.Numerical.U)}
     .otherwise{finalValue:=r.value;writeContext:=r.context;writeRow:=0.U;writeBeat:=0.U;writeState:=writeReq}
   }
-  val outputAddress=job.dst+(((rowBase.pad(64)+(ctxM(writeContext).pad(64)<<4)+writeRow)*job.n+nBase+(ctxN(writeContext).pad(64)<<8)+(writeBeat.pad(64)<<4))<<2)
+  val outputAddress=job.dst+((rowBase.pad(64)+(ctxM(writeContext).pad(64)<<4)+writeRow)*job.n+nBase+
+    (ctxN(writeContext).pad(64)<<8)+writeBeat.pad(64)*outputElementsPerBeat)*outputBytes
+  def outputPacket(beat:UInt):UInt={
+    val fp32=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))(Cat(beat(3,0),i.U(4.W))))).asUInt
+    val bf16=VecInit((0 until 32).map(i=>TensorMath.bf16Rne(finalValue(writeRow(3,0))(Cat(beat(2,0),i.U(5.W)))))).asUInt
+    Mux(job.outputBf16,bf16,fp32)
+  }
   val responseFire=WireDefault(false.B);val responseBits=WireDefault(0.U.asTypeOf(new MemoryResponse))
   val committedBeats=WireDefault(1.U(5.W))
   io.memory.valid:=false.B;io.memory.bits:=0.U.asTypeOf(new MemoryRequest);io.response.ready:=false.B
   if(burstWrites){
     io.writeRequest.get.valid:=state===execute && writeState===writeReq && status===0.U
     io.writeRequest.get.bits.address:=outputAddress
-    io.writeRequest.get.bits.beats:=countAt(outputAddress,(columns(writeContext)>>4)-writeBeat)
+    io.writeRequest.get.bits.beats:=countAt(outputAddress,outputBeats(writeContext)-writeBeat)
     io.writeRequest.get.bits.tag:=writeTag
     // Once a write batch is accepted, drain its data even if a concurrent
     // operand read fails. The group never publishes that failed output.
     io.writeData.get.valid:=state===execute && writeState===writeData
-    io.writeData.get.bits.data:=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))(Cat((writeBeat+writeIndex)(3,0),i.U(4.W))))).asUInt
+    io.writeData.get.bits.data:=outputPacket(writeBeat+writeIndex)
     io.writeData.get.bits.last:=writeIndex+1.U===writeCount
     io.writeResponse.get.ready:=state===execute && writeState===writeWait
     when(io.writeRequest.get.fire){writeCount:=io.writeRequest.get.bits.beats;writeIndex:=0.U;writeState:=writeData}
@@ -183,7 +208,7 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   }else{
     io.memory.valid:=state===execute&&writeState===writeReq&&status===0.U
     io.memory.bits.write:=true.B;io.memory.bits.address:=outputAddress
-    io.memory.bits.data:=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))(Cat(writeBeat(3,0),i.U(4.W))))).asUInt
+    io.memory.bits.data:=outputPacket(writeBeat)
     io.memory.bits.mask:=Fill(64,1.U(1.W));io.memory.bits.tag:=writeTag
     io.response.ready:=state===execute&&writeState===writeWait
     when(io.memory.fire){writeState:=writeWait}
@@ -194,7 +219,7 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
     .elsewhen(responseBits.tag=/=writeTag){fail(Status.Protocol.U);writeState:=writeIdle}
     .otherwise{
       bytes:=bytes+(committedBeats.pad(64)<<6);writeSequence:=writeSequence+1.U
-      when(writeBeat+&committedBeats===(columns(writeContext)>>4)){
+      when(writeBeat+&committedBeats===outputBeats(writeContext)){
         writeBeat:=0.U
         when(writeRow+1.U===rowsIn(writeContext)){written:=written+1.U;writeState:=writeIdle}
         .otherwise{writeRow:=writeRow+1.U;writeState:=writeReq}
@@ -205,16 +230,16 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   when(state=/=idle&&state=/=finish&&state=/=locked){cycles:=cycles+1.U}
   when(io.job.fire){
     val j=io.job.bits;job:=j;status:=0.U;cycles:=0.U;useful:=0.U;bytes:=0.U;physicalBase:=io.physicalSteps
-    rowBase:=0.U;nBase:=0.U;aRow:=0.U;aBeat:=0.U;sequence:=0.U;writeSequence:=0.U;issued:=0.U;starved:=0.U
+    rowBase:=0.U;nBase:=0.U;aRow:=0.U;aBeat:=0.U;aHighPending:=false.B;sequence:=0.U;writeSequence:=0.U;issued:=0.U;starved:=0.U
     val admittedRows=scratch.tokenTiles(j.k).pad(7)<<4
     capacityRows:=admittedRows
     rows:=Mux(j.m>admittedRows,admittedRows,j.m)
-    val aEnd=j.a.pad(66)+((j.m.pad(66)*j.k)<<2);val bEnd=j.b.pad(66)+j.k.pad(66)*j.n*Mux(j.weightBf16,2.U(3.W),4.U(3.W))
-    val cEnd=j.dst.pad(66)+((j.m.pad(66)*j.n)<<2)
+    val aEnd=j.a.pad(66)+j.m.pad(66)*j.k*Mux(j.activationBf16,2.U(3.W),4.U(3.W));val bEnd=j.b.pad(66)+j.k.pad(66)*j.n*Mux(j.weightBf16,2.U(3.W),4.U(3.W))
+    val cEnd=j.dst.pad(66)+j.m.pad(66)*j.n*Mux(j.outputBf16,2.U(3.W),4.U(3.W))
     val aligned=Seq(j.a,j.b,j.dst).map(_(5,0)===0.U).reduce(_&&_)
     val aliases=(j.a.pad(66)<cEnd && j.dst.pad(66)<aEnd)||(j.b.pad(66)<cEnd && j.dst.pad(66)<bEnd)
     when(j.kind=/=QwenOwnerKind.Dense.U||j.m===0.U||j.n===0.U||j.k===0.U||j.k>maxK.U||j.k(3,0)=/=0.U||j.n(3,0)=/=0.U||
-      !aligned||(j.weightBf16&&j.n(4,0)=/=0.U)||aliases||Seq(aEnd,bEnd,cEnd).map(_>(BigInt(1)<<56).U).reduce(_||_)||j.writeBytes=/=((j.m.pad(64)*j.n)<<2)){
+      !aligned||(j.activationBf16&&j.k(4,0)=/=0.U)||((j.weightBf16||j.outputBf16)&&j.n(4,0)=/=0.U)||aliases||Seq(aEnd,bEnd,cEnd).map(_>(BigInt(1)<<56).U).reduce(_||_)||j.writeBytes=/=j.m.pad(64)*j.n*Mux(j.outputBf16,2.U(3.W),4.U(3.W))){
       status:=Status.Bounds.U;state:=finish
     }.otherwise{state:=aReq}
   }
@@ -224,14 +249,23 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
   when(io.burstResponse.fire){
     val r=io.burstResponse.bits;val last=burstIndex+1.U===burstCount
     val words=r.data.asTypeOf(Vec(16,UInt(32.W)))
-    val native=job.weightBf16 && state=/=aWait
+    val native=Mux(state===aWait,job.activationBf16,job.weightBf16)
     val halves=r.data.asTypeOf(Vec(32,UInt(16.W)))
     val finite=Mux(native,halves.map(x=>x(14,7)=/="hff".U).reduce(_&&_),words.map(TensorMath.finite).reduce(_&&_))
     val packed=VecInit(words.map(TensorMath.bf16Rne)).asUInt
     val bad=r.error||r.tag=/=burstTag||r.last=/=last|| !finite
     when(bad){fail(Mux(r.error,Status.Memory.U,Mux(!finite,Status.Numerical.U,Status.Protocol.U)))}
     when(status===0.U && !bad){
-      when(state===aWait){for(i<-0 until 16){when(aRow(3,0)===i.U){aBanks(i).write((aRow>>4).pad(16)*(job.k>>4)+aBeat+&burstIndex,packed)}}}
+      when(state===aWait){
+        val word=(aRow>>4).pad(32)*(job.k>>4)+Mux(job.activationBf16,
+          (aBeat.pad(32)+burstIndex)<<1,aBeat.pad(32)+burstIndex)
+        aWrite:=true.B;aWriteBank:=aRow(3,0);aWriteAddress:=word
+        aWriteData:=Mux(job.activationBf16,r.data(255,0),packed)
+        when(job.activationBf16){
+          aHighPending:=true.B;aHighData:=r.data(511,256)
+          aHighBank:=aRow(3,0);aHighAddress:=word+1.U
+        }
+      }
       .otherwise{
         val wa=Mux(loadSel,80.U(8.W),0.U(8.W))+(loadDepth.pad(8)*5.U)(7,0)+loadContext.pad(8)
         for(i<-0 until 16){
@@ -251,7 +285,7 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
     when(last){
       when(state===aWait){
         when(bad||status=/=0.U){state:=finish}
-        .elsewhen(aBeat+burstCount===(job.k>>4)){
+        .elsewhen(aBeat+burstCount===activationBeats){
           aBeat:=0.U
           when(aRow+1.U===rows){state:=setup}.otherwise{aRow:=aRow+1.U;state:=aReq}
         }.otherwise{aBeat:=aBeat+burstCount;state:=aReq}
@@ -264,7 +298,7 @@ class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolea
       }
     }
   }
-  when(state===setup){
+  when(state===setup && !aHighPending){
     val fullTiles=(job.n-nBase)>>8
     // A partial-width last tile gets its own group and slice mask. Otherwise
     // masked columns would inflate executed-MAC accounting for earlier tiles.

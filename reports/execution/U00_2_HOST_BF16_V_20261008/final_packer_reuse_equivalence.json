@@ -1,0 +1,421 @@
+{
+  "status": "PASS_FINAL_PACKER_PINNED_REUSE_RAW_EQUIVALENCE_ONLY",
+  "cases": [
+    {
+      "fixture": "fixture0",
+      "variant": "baseline",
+      "phase": "cold",
+      "token_base": 0,
+      "token_count": 1,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "79af2e7cd3441d1e19b4b0f2149657bd31be76236785c4366e01a6dcf40e32b8",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 134,
+          "sha256": "b7dfc0e5e55ee3657d1a297c267f957113df82eeb5ef17034bfb405397ba94e3",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "ec85c552b897a8858aec2f3022bc6455115f2ec862efc4010a574088233778ab",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "d117249db543713a8e98d2d6eabd72ec6f9d15ba5bb9df12b15967fddecb044d",
+      "new_manifest_sha256": "1b97c36315ca8d50e532fc4e4c327521a743bc63b9a0bce1cac908ba59cb0652",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    },
+    {
+      "fixture": "fixture1",
+      "variant": "avx2",
+      "phase": "carried",
+      "token_base": 0,
+      "token_count": 128,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "cb479e5e0fedee05d72aca0bfabff7e6495edcfe401eca3d269a47637e247d8c",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "a5455a12b524727c043425450bab2cdcfda55500fa07404469667d539b2e1b73",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 136,
+          "sha256": "32b3ce3dfe23d9477e6140f739cc76d6e8b85739d1b956c4f1db077c0346eaa8",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "ef8929ac5862c5e5f8c8086efd3b257d0c5872f2c2c1a5f274e30ed2f2f982f5",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "b16f98f931e601c773211a5f27927b8a8456257f99be4f917e2944719484186f",
+      "new_manifest_sha256": "716ff4974bbdeea12ef3e2c79d74b9f2fcbc16a68731e946761aa8e67e3deb8b",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    },
+    {
+      "fixture": "fixture2",
+      "variant": "avx2",
+      "phase": "carried",
+      "token_base": 47,
+      "token_count": 81,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "cb479e5e0fedee05d72aca0bfabff7e6495edcfe401eca3d269a47637e247d8c",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "f579076bf793dba219e45ab6a45472485861e42796bad83d90c3a2e1ea53a648",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 136,
+          "sha256": "816536ad2fc4181824032236e30b63663bc7dd81bfb081362e7cba2986b293c2",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "ef8929ac5862c5e5f8c8086efd3b257d0c5872f2c2c1a5f274e30ed2f2f982f5",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "a3d878d668334601108fb3a73cea14fa067d63a01c4061e82d8b99dcd04f234a",
+      "new_manifest_sha256": "b52e3fd28cc3e3974aab3b718837a49342868153e1be047f474b41d713f22afe",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    },
+    {
+      "fixture": "fixture3",
+      "variant": "avx2",
+      "phase": "cold",
+      "token_base": 0,
+      "token_count": 128,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "484551ce4053682b0e45f148f5ef0efb7685977eaaa3dfd4fbd1ce845f5751bd",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "a5455a12b524727c043425450bab2cdcfda55500fa07404469667d539b2e1b73",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 136,
+          "sha256": "32b3ce3dfe23d9477e6140f739cc76d6e8b85739d1b956c4f1db077c0346eaa8",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "c8524c9121db89ae685ecd6485927a1da9eaa8186dd29ec95cd52e258cb223f9",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "4a6a53cf4eafdb93231b72a59143f9177e24f1af943bfc395fd9d2d936b6dc56",
+      "new_manifest_sha256": "0527ae1b11599ad68e6a52370d6aa0b3cfa7a6a7c52a4968068d6f5ecd6cc00c",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    },
+    {
+      "fixture": "fixture4",
+      "variant": "baseline",
+      "phase": "carried",
+      "token_base": 0,
+      "token_count": 128,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "e9050cabc6fd37ca7c59a08ecea996f7e046fa07c5bb258fecdd63822e866347",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "a5455a12b524727c043425450bab2cdcfda55500fa07404469667d539b2e1b73",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 136,
+          "sha256": "32b3ce3dfe23d9477e6140f739cc76d6e8b85739d1b956c4f1db077c0346eaa8",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "564d1c6190c5ddaa1289fdc4d43941a90d21773c042d2f70ea32c4cd03aa15bb",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "3a551123742926a0c4f5e254be1a1e067d25f6d28e8f683926084a1bba6ed744",
+      "new_manifest_sha256": "c00280477b2ab15f3f7882ba398165470b2edc9f2a6a0d26057c12435a07051d",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    },
+    {
+      "fixture": "fixture5",
+      "variant": "baseline",
+      "phase": "cold",
+      "token_base": 0,
+      "token_count": 128,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "a5455a12b524727c043425450bab2cdcfda55500fa07404469667d539b2e1b73",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 136,
+          "sha256": "32b3ce3dfe23d9477e6140f739cc76d6e8b85739d1b956c4f1db077c0346eaa8",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "ec85c552b897a8858aec2f3022bc6455115f2ec862efc4010a574088233778ab",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "a25ecc960579021f0211c1d710847edd984482e86e55923bcee00cea418c8689",
+      "new_manifest_sha256": "7966d0c5fa955c9be6e649e48b90c7240b7c5b5ac74d35fb9b218575b2217362",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    },
+    {
+      "fixture": "fixture6",
+      "variant": "baseline",
+      "phase": "cold",
+      "token_base": 1,
+      "token_count": 17,
+      "files": {
+        "activation.bf16le": {
+          "bytes": 262144,
+          "sha256": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee",
+          "byte_identical": true
+        },
+        "host_commands.bin": {
+          "bytes": 64,
+          "sha256": "28fb7540b1475466f687c316a2d3d79131217960c0273ac845af48993866d93c",
+          "byte_identical": true
+        },
+        "host_descriptors.bin": {
+          "bytes": 384,
+          "sha256": "771abbec25d29075d8f522f0de22139c773779a1e408153a223242e765b1a8ac",
+          "byte_identical": true
+        },
+        "launch.txt": {
+          "bytes": 135,
+          "sha256": "5cc8ee50e2d4c28359910a07a3f2be5d056320fa037a0d84754ceca460a30c8f",
+          "byte_identical": true
+        },
+        "native_v.bf16le": {
+          "bytes": 131072,
+          "sha256": "ec85c552b897a8858aec2f3022bc6455115f2ec862efc4010a574088233778ab",
+          "byte_identical": true
+        },
+        "weight.bf16le": {
+          "bytes": 1048576,
+          "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+          "byte_identical": true
+        }
+      },
+      "prior_manifest_sha256": "418fb8fcc4cf8bf5b24cb17a0d8c00582cdda66c0711bf2fefda82604a419080",
+      "new_manifest_sha256": "04e5dbab66808b03e4eac5e7b1edc79fa230edac4455d5f81f51128cc1903c06",
+      "prior_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "1d05d6a72dae9427efa86ede349f78babd99f9f036a05a26973b0389b8ca4695",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "new_source_metadata": {
+        "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+        "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+        "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5"
+      },
+      "all_non_source_metadata_identical": true,
+      "native_full_block_gate_pass": {
+        "baseline": false,
+        "avx2": false
+      }
+    }
+  ],
+  "case_count": 7,
+  "raw_file_comparisons": 42,
+  "compared_bytes": 10096629,
+  "fresh_official_executions": 0,
+  "reused_official_executions": 2,
+  "actual_fresh_capture_ran": false,
+  "actual_hardware_build_ran": false,
+  "actual_numerical_rerun": false,
+  "fresh_ci_path_locally_validated": false,
+  "cross_host_byte_equivalence_claimed": false,
+  "pinned_capture_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+  "prior_standalone_equivalence_sha256": "609dbea23edac0214e9e9829d26cc0e59250132464265347a8cad87b53233c31",
+  "sealed_actual3_result_sha256": "fcc882460a32d1f8cfdf9284965060844ff3c97dace86e6dab9038c951e8120c",
+  "sealed_windows_result_sha256": "ac22a94af4d802614e7816f50fcd765b892c6c3b992f94c760cade0764a44cc4",
+  "source_sha256": {
+    "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+    "chisel/continuous_prefill/scripts/verify_host_bf16_v_fixture.py": "605a10cb13a9e8c7c7f9ecc05c33a8b46dc2993395324c864615b1df35367f99",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_gate.sh": "79a276c61246206ec0127ef5cb32aba8425d38e974fe8dc461bd07ff9dd00cec",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_replays.py": "93115aa782ec34170b671bcf11c9d7018923de41bd3cf5a782aebc0e9aa73f5f",
+    "chisel/continuous_prefill/scripts/host_bf16_v_execution.py": "0b57ff311fb502df4a14a0333dc83ebdcae7394bb5c592bf4b4ff88121a79bc2",
+    "chisel/continuous_prefill/scripts/host_bf16_v_toolchain.py": "7ad2371138e2a28f6d53f902e64d1604d559f326f670ac777d3265307bb20423",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_fresh_gate.py": "b29211437d32af6654ae8e4b3ecdcc97063a7601f973b2a2e0490f582ee0f679"
+  },
+  "scope": "Only final packer raw-byte equivalence to seven previously sealed code-pinned reuse fixtures. Source metadata recorded separately; no fresh capture or numeric execution."
+}

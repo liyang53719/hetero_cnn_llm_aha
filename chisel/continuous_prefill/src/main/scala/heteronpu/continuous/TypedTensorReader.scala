@@ -18,6 +18,7 @@ class DecodedTensor extends Bundle {
   val payloadBytes = UInt(64.W); val paddedEnd = UInt(64.W)
   val dtype = UInt(4.W); val rank = UInt(3.W)
   val dims = Vec(4, UInt(18.W)); val tail = UInt(24.W)
+  val prefixIndices = Vec(3, UInt(24.W)) // Internal provenance for cross-root chain validation.
 }
 class TensorReadResult extends Bundle {
   val status = UInt(8.W); val tensor = new DecodedTensor
@@ -67,6 +68,7 @@ class TypedTensorReader extends Module {
     .elsewhen(kind =/= step + 1.U) { fail(Status.Unsupported.U) }
     .otherwise {
       indices(step) := index
+      result.tensor.prefixIndices(step) := index
       when(step === 0.U) {
         val dtype = w(111,108); val rank = w(119,116)
         when(w(107,104) =/= 0.U || w(115,112) =/= 0.U ||

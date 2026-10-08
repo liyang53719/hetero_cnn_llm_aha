@@ -1,0 +1,26 @@
+{
+  "status": "PASS_HOST_FRESH_ENTRYPOINT_UNIT_TESTS_ONLY",
+  "fresh_tests": 14,
+  "fresh_tests_python_optimized": 14,
+  "existing_descriptor_tests": 4,
+  "actual_fresh_official_capture_ran": false,
+  "actual_production_compilation_ran": false,
+  "actual_numerical_replay_ran": false,
+  "full_fresh_ci_path_locally_validated": false,
+  "frozen_materializers_modified": false,
+  "sources": {
+    "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+    "chisel/continuous_prefill/scripts/verify_host_bf16_v_fixture.py": "605a10cb13a9e8c7c7f9ecc05c33a8b46dc2993395324c864615b1df35367f99",
+    "chisel/continuous_prefill/scripts/host_bf16_v_execution.py": "0b57ff311fb502df4a14a0333dc83ebdcae7394bb5c592bf4b4ff88121a79bc2",
+    "chisel/continuous_prefill/scripts/host_bf16_v_toolchain.py": "7ad2371138e2a28f6d53f902e64d1604d559f326f670ac777d3265307bb20423",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_replays.py": "93115aa782ec34170b671bcf11c9d7018923de41bd3cf5a782aebc0e9aa73f5f",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_fresh_gate.py": "b29211437d32af6654ae8e4b3ecdcc97063a7601f973b2a2e0490f582ee0f679",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_gate.sh": "79a276c61246206ec0127ef5cb32aba8425d38e974fe8dc461bd07ff9dd00cec",
+    "chisel/continuous_prefill/tests/test_host_bf16_v_fresh.py": "4b287118bd772ecf25f9e766c2df268c7ba32cfa646809195b4b4faa82ac0879"
+  },
+  "logs": {
+    "descriptor_tests.log": "0292b91377e3f5de5fc72b83a91ddacbecbc2c226b761793f9b4babe85f7ad63",
+    "fresh_tests.log": "2f9be523339465aa7e574e1e5d3473fcd4eb43782c26d89bc9cc176429977b94",
+    "fresh_tests_optimized.log": "5a43420a52b38d641b28d0f4cdb3d3e3cdba97214242643a7118f240130671c3"
+  }
+}

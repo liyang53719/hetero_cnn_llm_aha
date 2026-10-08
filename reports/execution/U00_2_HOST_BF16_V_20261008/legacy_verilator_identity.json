@@ -1,0 +1,20 @@
+{
+  "actual_backend": {
+    "bytes": 13920736,
+    "kind": "ELF",
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_ci_tools_layout_reuse_20261008T2155Z/tools/verilator/usr/bin/verilator_bin",
+    "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+    "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+  },
+  "compilation_performed": false,
+  "entrypoint": {
+    "bytes": 675,
+    "kind": "DEBIAN_PERL_FORWARDER",
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_ci_tools_layout_reuse_20261008T2155Z/tools/verilator/usr/share/verilator/bin/verilator_bin",
+    "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+    "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+  },
+  "helper_sha256": "c6bbb084f22a2b6f519074262ee1b3e54e593d6b9a1acb030bb5802b25f94a13",
+  "simulation_performed": false,
+  "status": "PASS_PINNED_TOOL_IDENTITY_ONLY_NOT_NUMERICAL_PASS"
+}

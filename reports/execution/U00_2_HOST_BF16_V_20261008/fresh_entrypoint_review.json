@@ -1,0 +1,107 @@
+{
+  "checks_actually_performed": {
+    "fresh_build_by_reviewer": false,
+    "fresh_numerical_execution_by_reviewer": false,
+    "fresh_official_execution_by_reviewer": false,
+    "git_diff_check": "PASS",
+    "mock_suite_execution_by_reviewer": false,
+    "real_actual3_compiled_and_hardfloat_recheck": "PASS",
+    "real_receipt_check_details": {
+      "build": "work/host_bf16_v_actual3",
+      "hardfloat_receipt_sha256": "27d18303cad34f031dad8f5889d3e0c8ea538ac5ec037cacc00b2278dce022cf",
+      "hardfloat_root": "work/rope_hardware_oracle/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "helper": "run_host_bf16_v_replays.verify_compiled_sources",
+      "note": "Read and hash existing actual receipts/files only; no simulator launched.",
+      "source_receipt_sha256": "0873c2b0dc4091057049494e197f07957bcd656a9c9f56404d9933f4fe561771"
+    },
+    "run_host_bf16_v_gate_bash_syntax": "PASS",
+    "six_python_entry_modules_ast_parse": "PASS"
+  },
+  "open_p0_p1_in_reviewed_scope": [],
+  "prior_review_unchanged": {
+    "path": "work/host_bf16_v_review/summary.json",
+    "sha256": "2d9a5825bb94a3ab21ceb0ef2aea7cd7170c0c97fb7f94986f2c44d8685f90cd"
+  },
+  "resolved_findings": [
+    {
+      "finding": "Compiled-source drift during full128 could escape the end-of-run acceptance fence.",
+      "resolution": "run_replays now checks compiled source/HardFloat identities at entry and exit; the fresh wrapper calls verify_all_build_sources after all replay cases, before PASS.",
+      "severity": "P1"
+    },
+    {
+      "finding": "Initial new HardFloat checker used basenames while real receipts use paths relative to the HardFloat root.",
+      "resolution": "Uses str(p.relative_to(hf)); mocked fixture uses the real path-key shape. Independently exercised this checker against actual3 real receipts successfully.",
+      "severity": "P0"
+    },
+    {
+      "finding": "Host descriptor contract and ABI helper drift were missing from the top-level initial/final snapshot.",
+      "resolution": "EXTRA_SOURCES includes the contract and ABI helpers; final host_sources recheck covers them. Native materializer source_sha256 entries are also included in compact provenance.",
+      "severity": "P2"
+    },
+    {
+      "finding": "Tool/dependency provenance initially retained map hashes without enough actual file identities or final JAR verification.",
+      "resolution": "Toolchain captures before/after executable versions/hashes, actual compiler-JAR digests and post-build file verification, HardFloat source map, and all verified iDMA export file digests including generated backend/includes/ICG.",
+      "severity": "P2"
+    },
+    {
+      "finding": "Workflow compact wildcard plus an extra commit.json disagreed with the strict two-file artifact allowlist.",
+      "resolution": "Workflow uploads exactly compact/summary.json and compact/source_input_hashes.json. Git HEAD is checked within the fresh wrapper, including GITHUB_SHA agreement and unchanged final HEAD.",
+      "severity": "P2"
+    },
+    {
+      "finding": "CI path triggers omitted the Matrix endpoint and ABI helpers.",
+      "resolution": "Workflow now includes qwen2_matrix_command_endpoint.sv, command.py, gemmini_descriptor_v2.py and abi_validation.py.",
+      "severity": "P2"
+    }
+  ],
+  "review_completed_utc": "2026-10-08T16:32:18+00:00",
+  "reviewed_files_sha256": {
+    ".github/workflows/host-bf16-v.yml": "2857dbdbc541628de8384cc6f85add8e0fdf60e95404f81e91d57910e2370155",
+    "chisel/continuous_prefill/config/host_bf16_v_descriptor_contract.json": "78bf6bb4cba70ae9ffd97c5a0c479e2c914f5fde6bd47b5db0ea3de3260901f5",
+    "chisel/continuous_prefill/scripts/host_bf16_v_descriptor.py": "15e44d2644c3199d743ed8d08deeb72b27c726e1c5d9771a992deeb118c77a6c",
+    "chisel/continuous_prefill/scripts/host_bf16_v_execution.py": "0b57ff311fb502df4a14a0333dc83ebdcae7394bb5c592bf4b4ff88121a79bc2",
+    "chisel/continuous_prefill/scripts/host_bf16_v_toolchain.py": "7ad2371138e2a28f6d53f902e64d1604d559f326f670ac777d3265307bb20423",
+    "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+    "chisel/continuous_prefill/scripts/prepare_idma_export.py": "4d61de8a2f4e463782cd871c5f680a7edbb20f1214f36bc81a56628d5513ba94",
+    "chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py": "30faaa0b5d5a27dd80a29acfa791d86079c268d09ad8c27ef76d13ac78775bc8",
+    "chisel/continuous_prefill/scripts/prepare_verilator_runtime.sh": "5f6f6e91ef337f1fe9afb9f18aa8a08ac88a5995b23d800fb9019b616a42f9da",
+    "chisel/continuous_prefill/scripts/production_source_identity.py": "255fe41068490a9ecf27ffc37b3648dd8ca0f868b4c83ba62e04d45716d07896",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_fresh_gate.py": "b29211437d32af6654ae8e4b3ecdcc97063a7601f973b2a2e0490f582ee0f679",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_gate.sh": "79a276c61246206ec0127ef5cb32aba8425d38e974fe8dc461bd07ff9dd00cec",
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_replays.py": "93115aa782ec34170b671bcf11c9d7018923de41bd3cf5a782aebc0e9aa73f5f",
+    "chisel/continuous_prefill/scripts/verify_host_bf16_v_fixture.py": "605a10cb13a9e8c7c7f9ecc05c33a8b46dc2993395324c864615b1df35367f99",
+    "chisel/continuous_prefill/tests/test_host_bf16_v_fresh.py": "4b287118bd772ecf25f9e766c2df268c7ba32cfa646809195b4b4faa82ac0879"
+  },
+  "saved_utc": "2026-10-08T16:38:27.365050+00:00",
+  "schema_version": 1,
+  "scope": "Independent source/workflow review of the fresh production Host BF16 V entrypoint and trust/acceptance helpers. Existing actual3 receipts were rechecked read-only. This is not a fresh capture, compilation or numerical acceptance run.",
+  "status": "PASS_INDEPENDENT_STATIC_FRESH_HOST_ENTRYPOINT_REVIEW",
+  "trust_chain_review": {
+    "build_only_numerical_pass": false,
+    "build_only_status": "BUILT_HOST_V_ONLY_NOT_NUMERICAL_PASS",
+    "caller_capture_digest_npz_expected_output_cli": false,
+    "compact_upload_allowlist": [
+      "compact/summary.json",
+      "compact/source_input_hashes.json"
+    ],
+    "fixture_validation": "Canonical pack regeneration under the same verified session; strict source selector/window types; full manifest and inventory comparison; exact payload/ABI byte comparison; symlink rejection.",
+    "fresh_digest_origin": "capture.rebuild return value retained in a live CaptureSession within the top-level Python invocation",
+    "full_native_failure_preservation": "Original native full-block status, failures and thresholds remain reported independently; V-only success does not mark a whole-block PASS.",
+    "input_hash_coverage": [
+      "full BF16 activation tensor",
+      "actual addressed activation window",
+      "full BF16 V weight tensor",
+      "Command128 image",
+      "descriptor image",
+      "launch metadata"
+    ],
+    "limitations": [
+      "No new official fresh capture was executed by this review.",
+      "No new production build or RTL numerical simulation was executed by this review.",
+      "Mock tests are source/control-flow coverage only; they are not numerical evidence.",
+      "The independent earlier actual3/window evidence remains under its unchanged original review."
+    ],
+    "native_v_gate": "Actual Host subprocess success, exact output/reference equality, checked element/ACK/guard metrics, unchanged native V numerical thresholds.",
+    "saved_fresh_session_accepted_by_standalone_verifier": false
+  }
+}

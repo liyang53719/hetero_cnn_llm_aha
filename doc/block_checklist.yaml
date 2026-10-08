@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: aee9a7cbfb33833644db50051d15344dd429060943ff670459ed335c9124dd87
+计划SHA256: 2d903d8230a06c8c5fd2fb0b54942a211bc666d6ad3ecaaf63967e18ac120943
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -183,7 +183,7 @@
       关联文件:
       - 文件: .github/workflows/shape-layout-contract.yml
         SHA256: 1a43194d122ac2cc2283440809ceddb70f638186445dc556e30a7f0d060f4cfb
-      - 文件: chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/source_snapshot/run_continuous_ci_gate.sh
         SHA256: 36061a4810ef8490faa34aaf0de37355770e1082c46603f21cc91f4075a92855
       - 文件: chisel/continuous_prefill/src/test/resources/c03_3/legacy_layout_vectors.tsv
         SHA256: f11bf773bb49caf78b106926b2413dcbeb1a328487df79ef841d06bf2f2f31ae
@@ -199,7 +199,7 @@
         SHA256: 5a9cb330c0b786d9bf4465183e27334aa8090462ea16e8833d865d70097f7bec
       - 文件: tests/fixtures/block_contracts/legacy_layout_vectors.tsv
         SHA256: f11bf773bb49caf78b106926b2413dcbeb1a328487df79ef841d06bf2f2f31ae
-      - 文件: tests/fixtures/block_contracts/shape_layout_vectors.json
+      - 文件: reports/execution/C03_3_SHAPE_LAYOUT_20261006/source_snapshot/shape_layout_vectors.json
         SHA256: 1185c7462c38b1d59177986bc3811bff2bf7c8eda75dbde4f3956ac072ba567f
       - 文件: tests/test_shape_layout_contract.py
         SHA256: 3cddb2dffd3207ec4fd92e8324c88e427bc4919d1e0809b7e01581a01642bc93
@@ -246,7 +246,7 @@
         SHA256: a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590
       - 文件: src/heteronpu/command.py
         SHA256: 7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b
-      - 文件: src/heteronpu/descriptor_chain.py
+      - 文件: reports/execution/BLOCK_CHECKLIST_ADVANCE_20260917/source_snapshot/descriptor_chain.py
         SHA256: 6e5ae1a811a503d7309e737eae5b089eaab3dea6a2db19e3c2a5e12a5696821b
       - 文件: src/heteronpu/descriptor_v3.py
         SHA256: ea26a8081b30e064d882d885b26269c1be6ef28c4957fe06baab1a80ed42d3f9
@@ -1212,3 +1212,21 @@
 - R00
 - F00
 - F01
+
+候选QKV局部集成子门禁:
+  关联: [C03.2, C04.2, C05]
+  状态: ongoing
+  名称: Qwen3.5-0.8B候选QKV命令子链
+  范围: 既有默认关闭projection controller；标准Command128的typed descriptor扩展绑定全部运行配置；实际Matrix产生Q/gate/K/V，QK Norm及RoPE接真实前驱写入
+  目标: 先16token，随后cold128和carried128全部Q8/K2/V2及gate；最终写ACK后完成，保留背压及fault/reset覆盖
+  非完成项: [通用Chisel Host及whole-block owner, 有前缀Attention, FFN, GDN完整block, 35B完整block, native全producer精度门禁, PPA及MAC90]
+  状态边界: 不改变关联大项状态；U00.2 ongoing、U01 to do；C02.2原native失败保持OPEN
+
+生产HostV局部集成进展:
+  关联: [C03.2, C04.2, C05, U00.2]
+  状态: ongoing
+  本地完成: 真实Host和既有Matrix及单一iDMA完成两来源cold128与carried128四组V投影，262144个BF16输出逐位一致；非零窗口及最后ACK故障不发布已覆盖
+  报告: doc/U00_2_HOST_BF16_V_20261008_CN.md
+  回归边界: 旧Qwen2两层连续42命令本地两次中断，终态及精确新提交CI待完成；构建和运行分job，仅运行job一次连续执行全部命令并应用原oracle后才可PASS
+  原精度门禁: 完整native BF16仍FAIL；阈值不变，不能由V局部一致性关闭C02.2
+  非完成项: [生产HostQK及Norm和RoPE, 有前缀Attention及FFN, 候选QKV全M128实际RTL, 三模型完整block, U01]

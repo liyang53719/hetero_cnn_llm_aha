@@ -9,6 +9,8 @@ class QwenOwnerJob extends Bundle {
   val kind=UInt(3.W); val m=UInt(16.W); val n=UInt(16.W); val k=UInt(16.W)
   val a=UInt(64.W); val b=UInt(64.W); val c=UInt(64.W); val dst=UInt(64.W)
   val weightBf16=Bool() // Dense B storage only; compute remains BF16 x BF16 + FP32.
+  val activationBf16=Bool() // Explicit Dense A storage; false preserves FP32 ingress.
+  val outputBf16=Bool() // Explicit terminal RNE BF16 D storage; false preserves FP32 stores.
   val writeBytes=UInt(64.W); val tag=UInt(32.W)
 }
 class QwenOwnerResult extends Bundle {

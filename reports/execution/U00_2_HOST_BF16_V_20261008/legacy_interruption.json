@@ -1,0 +1,60 @@
+{
+  "status": "SECOND_INTERRUPTION_NO_TERMINAL_ACCEPTANCE",
+  "observed_utc": "2026-10-08T21:43:34.291123+00:00",
+  "original_session": 8189,
+  "recovery_session": 75661,
+  "both_current_session_polls": "Unknown process id",
+  "reference_session": 25817,
+  "reference_completed_exit_code": 0,
+  "reference_summary_sha256": "7a825ff9195db77e5889ecd2c4a4cf6f120454a39160493cd82661b806f97a51",
+  "recovery_last_heartbeat": {
+    "utc": "2026-10-08T20:17:59.737838+00:00",
+    "elapsed_seconds": 3300.03739872,
+    "disk_free_bytes": 1821609984,
+    "last_completion": {
+      "pc": 16,
+      "cycle": 4097803
+    },
+    "process_exit": null,
+    "memory": {
+      "VmHWM": "850656 kB",
+      "VmRSS": "848768 kB"
+    }
+  },
+  "original_last_completed_pc": 17,
+  "original_last_cycle": 5831053,
+  "recovery_last_completed_pc": 16,
+  "recovery_last_cycle": 4097803,
+  "recovery_exit_code": null,
+  "cause": "unknown",
+  "resource_threshold_pause_observed": false,
+  "third_local_replay_started": false,
+  "full128_candidate_rtl_started": false,
+  "files": {
+    "work/host_bf16_v_legacy_real2_recovery_20261008T1921Z/run.log": {
+      "sha256": "b8b7aea801e48a7dfa70c54806c3934dcc2723964a6296251881ae970f0dfc21",
+      "bytes": 2661,
+      "last_write_utc": "2026-10-08T20:09:51.489732+00:00"
+    },
+    "work/host_bf16_v_legacy_real2_recovery_20261008T1921Z/resource_samples.jsonl": {
+      "sha256": "5ad90c2750d1d91a9a4092828ec302b91d290696f7cb40fc1405a5c07d7f6f36",
+      "bytes": 13133,
+      "last_write_utc": "2026-10-08T20:17:59.734497+00:00"
+    },
+    "work/host_bf16_v_legacy_real2_recovery_20261008T1921Z/simulation_launch.json": {
+      "sha256": "5662f4c47b1589fd4b9b063ae729d558a21dee0e13b6417e0ffa3c81adadf7e7",
+      "bytes": 523,
+      "last_write_utc": "2026-10-08T19:22:59.700555+00:00"
+    },
+    "work/host_bf16_v_legacy_real2_recovery_20261008T1921Z/recovery_preflight.json": {
+      "sha256": "e2fb6c58e884de015adc6f0dc884126810462a922ed8004df3c819bc7735c862",
+      "bytes": 3097,
+      "last_write_utc": "2026-10-08T19:22:59.700186+00:00"
+    },
+    "work/host_bf16_v_legacy_real2/run.log": {
+      "sha256": "ae6604f86f923364e6705b53ad417c4ed6b35566345cc7820f544190b832b278",
+      "bytes": 2815,
+      "last_write_utc": "2026-10-08T18:02:10.157513+00:00"
+    }
+  }
+}

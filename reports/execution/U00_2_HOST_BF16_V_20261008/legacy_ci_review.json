@@ -1,0 +1,117 @@
+{
+  "base_commit": "6c0daf8a5be7576492f697f9fbec9aa0e1e10db2",
+  "execution_limits": {
+    "build_job_minutes": 120,
+    "run_job_minutes": 350,
+    "run_job_remaining_minutes": 25,
+    "simulator_timeout_seconds": 19500
+  },
+  "historical_transfer_inspection": {
+    "execution_eligible": false,
+    "files": 21,
+    "scope": "Transport inspection only; no numerical acceptance",
+    "uncompressed_payload_bytes": 75916441
+  },
+  "incremental_review_scope": "Verilator entrypoint/actual ELF identity correction and two new regression tests; previous review otherwise retained.",
+  "limits": [
+    "No DUT compilation or numerical execution performed by this review; tests use small synthetic fixtures and mocked child processes.",
+    "Exact new-commit GitHub Actions build and numerical completion remain pending.",
+    "The locally estimated 4.3\u20134.9 hour simulator runtime is a resource estimate; GitHub runner speed and build completion inside the configured budgets are not proven.",
+    "Historical inspection size is illustrative; the fresh CI package will have its own source commit and trusted digest."
+  ],
+  "open_blockers": [],
+  "previous_review": {
+    "file": "work/host_v_split_ci_review/summary.json",
+    "preserved": true,
+    "sha256": "ac61eeed6abeb95bc9dc06a97d31ff9587cb9f730c3838c6dbc277ef5d218f30"
+  },
+  "reference_source_sha256": {
+    "chisel/continuous_prefill/build.sbt": "af785664a10cf0a0abdd5feea333824bba00c3887fb0d91609e29e25ea994c67",
+    "chisel/continuous_prefill/project/build.properties": "97e9b0adc044c92dbf8dc1e671a268242449320b6911d1623cc93427f0bb1b61",
+    "chisel/continuous_prefill/scripts/audit_matrix_topology.py": "13ad899f0682d3a1e21d089e42e55bc1fc7970685e0f59371753c64c1b0f76d8",
+    "chisel/continuous_prefill/scripts/audit_owner_block_abi.py": "53894b5414d7caea802851b045d9f03e81907d7fe377248578faf522f3dfa03f",
+    "chisel/continuous_prefill/scripts/prepare_hardfloat.sh": "218ffbf5e7f96a03187938772b655c43c7589e526553d596aca1a46eab694c68",
+    "chisel/continuous_prefill/scripts/prepare_verilator_runtime.sh": "5f6f6e91ef337f1fe9afb9f18aa8a08ac88a5995b23d800fb9019b616a42f9da",
+    "chisel/continuous_prefill/scripts/production_source_identity.py": "3340fec5e14e6db52ee9db76921fe6be1fcd7f079f7f70f0097d0b944e35b5fc",
+    "chisel/continuous_prefill/scripts/verify_host_block_gate.py": "084186fc6af08a61eb96af5f620fd46839e9bfd32dd00b0d6146be6d34a458ed",
+    "chisel/continuous_prefill/scripts/verify_real_two_layer.py": "5946e321f7b598f8c16e904ac44bfcc3469223a79e21ee375ba1109c9befd743",
+    "chisel/continuous_prefill/tests/host_block_commands.cpp": "40d2f1c450f3b2bd72a6feaac120bc697fa0c2aa98e746030cbf4b92b28510d6"
+  },
+  "resolved_findings": [
+    {
+      "file": "chisel/continuous_prefill/scripts/real2_ci.py",
+      "function": "summarize",
+      "issue": "Previous summary could report numerical pass with missing/nonzero simulation.exit or an unvalidated acceptance file.",
+      "regression": "13 corrupt/incomplete completion mutations are rejected; complete receipts and build-only summaries are separately tested.",
+      "resolution": "Requires both real zero exit files, one process, no timeout or signal, intact original acceptance SHA/status/commit/coverage, and all original verifier exits.",
+      "severity": "P1"
+    }
+  ],
+  "review_revision": 2,
+  "review_status": "PASS_SOURCE_ONLY_REVIEW_NOT_NUMERICAL_ACCEPTANCE",
+  "reviewed_at": "2026-10-08T21:58:22.937672+00:00",
+  "reviewed_invariants": {
+    "all_42_commands_two_layers": true,
+    "archive_allowlist_path_type_size_sha_checks": true,
+    "candidate_qkv_not_staged_at_review": true,
+    "compact_result_artifacts_only": true,
+    "hardfloat_pin_and_source_layout_compatible": true,
+    "inspection_packages_cannot_execute": true,
+    "layer1_aliases_actual_layer0_y": true,
+    "missing_exit_timeout_incomplete_never_numerical_pass": true,
+    "no_reference_tensor_injection": true,
+    "one_original_binary_process_from_reset": true,
+    "original_host_real2_abi_topology_validators_unchanged": true,
+    "sbt_compiler_jar_hashes_recorded_without_jar_transfer": true,
+    "tool_identity_includes_actual_verilator_backend_and_build_definitions": true,
+    "trusted_archive_sha_and_exact_source_commit_required": true
+  },
+  "reviewed_source_sha256": {
+    ".github/workflows/host-bf16-v.yml": "762a81e216be1396d1790f82e2c4286818e64536f51b1b277ca05490c1989053",
+    "chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh": "b62b5d6f2c1b078f504acd0b4659a93b69539323a7a6fc8521125018d195235b",
+    "chisel/continuous_prefill/scripts/real2_ci.py": "c6bbb084f22a2b6f519074262ee1b3e54e593d6b9a1acb030bb5802b25f94a13",
+    "chisel/continuous_prefill/scripts/run_host_block_gate.sh": "9008c962d61071caedc05c8a57490d7c8b17091412e1d09d0b171abc755fb5f4",
+    "chisel/continuous_prefill/tests/test_real2_ci.py": "70d4f48778154267248e6d192e10dd7504e5a7a8c9df9ecf13c41e30f87b92ba"
+  },
+  "schema": 1,
+  "shell_syntax": "PASS",
+  "sources_stable_during_final_tests": true,
+  "tests": {
+    "normal": {
+      "exit_code": 0,
+      "log": "work/host_v_split_ci_review/pytest_normal_v2.log",
+      "log_sha256": "1dde67d53bb2fc390b1f40eca38f11c721ed0975fd58d0d0a879b16e4528cc5f",
+      "passed": 23,
+      "subtests_passed": 29,
+      "warning": null
+    },
+    "optimized": {
+      "exit_code": 0,
+      "log": "work/host_v_split_ci_review/pytest_optimized_v2.log",
+      "log_sha256": "348369942fcd3c2934bfc117cc169636a84829e865ee6c4c7317ae3d9b620972",
+      "passed": 23,
+      "subtests_passed": 29,
+      "warning": "Expected pytest warning about Python -O assertions"
+    }
+  },
+  "tool_identity_correction": {
+    "actual_backend": {
+      "bytes": 13920736,
+      "kind": "ELF",
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+    },
+    "compilation_performed": false,
+    "entrypoint": {
+      "bytes": 675,
+      "kind": "DEBIAN_PERL_FORWARDER",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+    },
+    "evidence_file": "work/real2_ci_verilator_identity_check_20261008T2157Z.json",
+    "evidence_sha256": "af4c14e2a1bc27305343b58917529fd020c464c6e861e4be0fe71b0976cbc5e9",
+    "review": "Recognized Debian forwarding layout resolves to launcher-adjacent ELF; ELF magic, path, separate hashes, and matching entrypoint/backend/launcher versions are checked. Unknown forwarders and non-ELF backends are rejected.",
+    "simulation_performed": false
+  },
+  "workflow_yaml": "PASS"
+}

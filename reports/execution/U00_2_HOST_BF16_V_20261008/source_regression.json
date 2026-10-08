@@ -1,0 +1,76 @@
+{
+  "status": "NEW_FAILURES_FIXED_EXISTING_FIVE_REMAIN",
+  "full_initial": {
+    "passed": 4262,
+    "failed": 8,
+    "log_sha256": "9716bc84f5bda38943fb76582e6f2c35e237b27368e7e97db350e834438947b7"
+  },
+  "preexisting_failures": [
+    "tests/test_control_v4.py::test_exp2_pwl_bounds",
+    "tests/test_operator_terminal_bridge_v3.py::test_every_simple_target_exists_in_terminal_protocol",
+    "tests/test_planning_v6.py::test_arch_and_control",
+    "tests/test_sandbox_v68.py::test_v69_control_plane_compatibility",
+    "tests/test_specs.py::test_sram_budget_and_frozen_top_level_contract"
+  ],
+  "repaired_new_failures": [
+    "historical checklist source binding preserved",
+    "current shape fixture source metadata refreshed; 64 goldens and TSV unchanged",
+    "explicit default-off version2 descriptor records covered by spec test"
+  ],
+  "focused_after_repairs": {
+    "passed": 236,
+    "log_sha256": "b202adc636511ebbaa23d44cc0f6e88490e9eacdcadfe541fe8dc2f60b1cacef"
+  },
+  "optimized": {
+    "passed": 248,
+    "subtests_passed": 70,
+    "log_sha256": "a128abf1346b518d11b55f7392ca80d0f3e1e6b8a468d38d6dc011b9cf93daae"
+  },
+  "standalone_host_preview": {
+    "status": "PASS",
+    "base_commit": "6c0daf8a5be7576492f697f9fbec9aa0e1e10db2",
+    "candidate_python_implementation_absent": true,
+    "tests_passed": 21,
+    "subtests_passed": 80,
+    "source_receipt_sha256": "09322a96c914e443fa585dae4f21471312a8a93959e220da24c1000f2a304a76",
+    "log_sha256": "764e5d501049d3190a08dcb248cbad5dd7a3af52b8e582a3479e09afe51eaa11"
+  },
+  "full_suite_reexecution_after_fixes": true,
+  "legacy_actual_numeric_regression": "INCOMPLETE_TWO_INTERRUPTED_ATTEMPTS_CI_PENDING",
+  "fresh_actual_ci": "PENDING",
+  "full_after_fixes": {
+    "passed": 4265,
+    "failed": 5,
+    "seconds": 324.26,
+    "log_sha256": "7ec0cb49147457085e46cc737b79ae7c7bb363b0ace717a0b989ff0cf95d6ead",
+    "scope": "Full working tree includes pending candidate tests; exact Host-only checkout is separately covered by preview and forthcoming CI"
+  },
+  "final_host_packaging_retest": {
+    "tests_passed": 21,
+    "subtests_passed": 80,
+    "log_sha256": "6ec5fe9fd71cee6b0f82905294cefb41cd724646a2c18780c467db455ff93435",
+    "script_whitespace_delta": {
+      "path": "chisel/continuous_prefill/scripts/run_host_bf16_v_gate.sh",
+      "old_sha256": "79a276c61246206ec0127ef5cb32aba8425d38e974fe8dc461bd07ff9dd00cec",
+      "new_sha256": "2875bdee18029216ec53c7f51afaa995115b65ef8ad24bd929142e7d01a54b0c",
+      "change": "Removed one trailing space after heredoc delimiter; no command or Python bytecode semantic change"
+    }
+  },
+  "final_host_only_preview": {
+    "tests_passed": 44,
+    "subtests_passed": 109,
+    "candidate_implementation_present": false,
+    "source_overlay_identity_sha256": "8b885e76ccac8cc8402cf0b62fe340e0441fa6ef90e72675a2e96dc870625447",
+    "staged_actual_compile_inputs_checked": 61,
+    "staged_actual_compile_input_differences": 0,
+    "dut_rerun": false
+  },
+  "legacy_ci_tool_review": {
+    "review_file": "legacy_ci_review.json",
+    "review_sha256": "451b28aba5d75cd9ea7f7fd104a3fb93697fc12910009a491b3e19144e8eea83",
+    "normal_tests": 23,
+    "optimized_tests": 23,
+    "subtests_per_run": 29,
+    "actual_ci_executed": false
+  }
+}

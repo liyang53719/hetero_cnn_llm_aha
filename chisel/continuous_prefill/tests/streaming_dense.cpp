@@ -57,7 +57,7 @@ struct Test{
   for(unsigned i=0;i<k*n;i++)memory[pos(B)+i]=bits(float(int((i*17+seed*7)%61)-30)*0.007821f);
   for(unsigned i=0;i<m*n+16;i++)memory[pos(C)+i]=0x7fc00001;
   std::vector<float> gold(m*n,0);if(!fail)for(unsigned r=0;r<m;r++)for(unsigned col=0;col<n;col++)for(unsigned z=0;z<k;z++)gold[r*n+col]=std::fma(bf(fl(memory[pos(A)+r*k+z])),bf(fl(memory[pos(B)+z*n+col])),gold[r*n+col]);
-  d.io_job_bits_weightBf16=0;d.io_job_bits_kind=1;d.io_job_bits_m=m;d.io_job_bits_n=n;d.io_job_bits_k=k;d.io_job_bits_a=A;d.io_job_bits_b=B;d.io_job_bits_c=0;d.io_job_bits_dst=C;d.io_job_bits_writeBytes=uint64_t(m)*n*4;d.io_job_bits_tag=seed;
+  d.io_job_bits_activationBf16=0;d.io_job_bits_outputBf16=0;d.io_job_bits_weightBf16=0;d.io_job_bits_kind=1;d.io_job_bits_m=m;d.io_job_bits_n=n;d.io_job_bits_k=k;d.io_job_bits_a=A;d.io_job_bits_b=B;d.io_job_bits_c=0;d.io_job_bits_dst=C;d.io_job_bits_writeBytes=uint64_t(m)*n*4;d.io_job_bits_tag=seed;
   d.io_job_valid=1;d.io_done_ready=0;d.eval();ck(d.io_job_ready,"job not admitted");running=true;tick();d.io_job_valid=0;
   while(!d.io_done_valid&&cycles<3000000)tick();ck(d.io_done_valid,"job timeout");ck(!pending.valid&&!aw.valid&&!w.valid,"completion before external drain");
   ck(d.io_done_bits_tag==seed,"result tag");uint64_t checked=0;

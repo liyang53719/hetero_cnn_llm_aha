@@ -8,6 +8,8 @@ on:
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala'
       - 'chisel/continuous_prefill/tests/qwen2_block.cpp'
       - 'chisel/continuous_prefill/scripts/run_qwen2_block_verified.sh'
+      - '.github/scripts/run_qwen2_block_ci.sh'
+      - '.github/scripts/tests/test_qwen2_block_ci.py'
       - '.github/workflows/chisel-qwen2-continuous-block.yml'
   workflow_dispatch:
 permissions:
@@ -31,22 +33,32 @@ jobs:
         with:
           clean: false
           sparse-checkout: |
+            .github/scripts
+            .github/workflows
             chisel/p0_safety
             chisel/continuous_prefill
             integration/gemmini
+            src/heteronpu
+            config
+            configs
+            rtl/matrix
+            rtl/integration
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
       - uses: sbt/setup-sbt@v1
-      - name: Install public simulator
+      - name: Install public simulator and fixture dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y verilator
+          sudo apt-get install -y verilator g++
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+      - name: Check fixture orchestration and preserved block coverage
+        run: python3 -m unittest discover -s .github/scripts/tests -p test_qwen2_block_ci.py -v
       - name: Execute actual generated DUT
         id: gate
         run: |
-          bash chisel/continuous_prefill/scripts/run_qwen2_block_verified.sh '${{ matrix.mode }}' '${{ runner.temp }}/qwen2_block_${{ matrix.mode }}' 16
+          bash .github/scripts/run_qwen2_block_ci.sh '${{ matrix.mode }}' '${{ runner.temp }}/qwen2_block_${{ matrix.mode }}' 16
       - name: Record gate status without upgrading evidence
         if: always()
         env:
@@ -71,4 +83,12 @@ jobs:
             ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/*.txt
             ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/*.sha256
             ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/generated/
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/*.log
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/*.json
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/*.exit
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/general/chisel_tests.log
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/tiny/chisel_tests.log
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/real/chisel_tests.log
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/native/chisel_tests.log
+            ${{ runner.temp }}/qwen2_block_${{ matrix.mode }}/control/*_fixture/manifest.json
             chisel/continuous_prefill/target/test-reports/

@@ -43,7 +43,7 @@ def _fields(text,strings=()):
     return result
 
 
-def verify_log(text,suite):
+def verify_log(text,suite,*,require_stalls=True):
     markers=re.findall(r'QWEN35_MATRIX_NORM_ROPE_TILE16_PASS ([^\n]+)',text)
     require(len(markers)==1,'missing/duplicate tile16 PASS marker')
     metrics=_fields(markers[0],('suite',))
@@ -56,7 +56,7 @@ def verify_log(text,suite):
     require(set(metrics)==required,'aggregate log field inventory drift')
     require(metrics['capacity_bytes']==1572864 and metrics['source_injection']==0 and metrics['matrix_lanes_per_output']==512,'tile16 resource/source claim drift')
     for key in ('actual_matrix_inputs','actual_matrix_outputs','explicit_write_acks','read_stall_cycles','write_stall_cycles','dma_stall_cycles','delayed_ACK_cycles','same_cycle_ACKs'):
-        require(metrics[key]>0,'missing real tile16 handshake/stall: '+key)
+        require(metrics[key]>0 if require_stalls or key in ('actual_matrix_inputs','actual_matrix_outputs','explicit_write_acks') else metrics[key]>=0,'missing real tile16 handshake/stall: '+key)
     require(metrics['actual_matrix_inputs']==metrics['actual_matrix_outputs'],'Matrix accepted/output count mismatch')
     require(metrics['actual_matrix_inputs']==(294912 if suite=='main' else 450560),'Matrix packet coverage drift')
     require(metrics['explicit_write_acks']==(9728 if suite=='main' else 12800),'producer ACK coverage drift')

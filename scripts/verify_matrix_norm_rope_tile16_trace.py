@@ -6,9 +6,11 @@ integer/C vectors. Accepted command to done cycles retain all waiting and
 serial Norm/RoPE time; this candidate-only interval is never a fullblock metric.
 """
 from __future__ import annotations
-from collections import Counter, OrderedDict
+from collections import Counter, OrderedDict, deque
+from contextlib import nullcontext
 import gzip
 import json
+from os import PathLike
 from pathlib import Path
 import sys
 import numpy as np
@@ -26,8 +28,18 @@ SCHEMA['head_begin']|={'row'}; SCHEMA['head_done']|={'row'}
 SCHEMA['projection_begin']={'cycle','head','batch_start','rows'}
 SCHEMA['projection_done']=SCHEMA['projection_begin']|{'matrix_inputs','matrix_outputs','write_acks'}
 SCHEMA['matrix']={'cycle','head','batch_start','rows','tile','index','last','context','fp32_rows'}
+SCHEMA['matrix_input']={'cycle','head','batch_start','rows','tile','index','last','context','clear','a','b'}
 SCHEMA['terminal']|={'ddr_read_bytes','ddr_write_bytes','matrix_steps','command_cycles'}
-STRINGS=STRING_FIELDS|{'fp32_rows'}
+STRINGS=STRING_FIELDS|{'fp32_rows','a','b'}
+
+
+def _stats():return {'count':0,'sum':0,'min':None,'max':None}
+
+
+def _sample(stats,value):
+    stats['count']+=1;stats['sum']+=value
+    stats['min']=value if stats['min'] is None else min(stats['min'],value)
+    stats['max']=value if stats['max'] is None else max(stats['max'],value)
 
 
 def _record(line):
@@ -136,7 +148,15 @@ def _dma_plan(b):
 
 
 class Transaction:
-    def __init__(self,b,cases):
+    def __init__(self,b,cases,*,require_inputs=False):
+        require(type(require_inputs) is bool,'require_inputs must be boolean')
+        # Old lossless output-only traces remain readable explicitly. Once an
+        # input event is observed, inputs are mandatory for this transaction;
+        # a partial/mixed input inventory can never fall back to legacy mode.
+        self.input_mode=True if require_inputs else None
+        self.operands={5:None,6:None};self.read_owner=None
+        self.input_queue=deque();self.last_input_cycle=-1
+        self.first_input_cycle=None;self.input_ii=_stats();self.read_latency=_stats()
         self.b=b;self.cases=cases;self.kind=b['kind'];self.name=b['name'];self.role=b['role']
         self.heads,self.tiles=(8,16) if self.role==0 else (2,8)
         self.pending=dict.fromkeys(('descriptor','dma','read','write'))
@@ -163,6 +183,25 @@ class Transaction:
         wanted=self.kind=='fault' and event=='dma_ack' and index==(0 if self.name=='token_count128_admitted' else 111)
         require(r['error']==int(wanted),'missing/spurious/misrouted error')
         if wanted:self.errors.append((event,index))
+    def matrix_owner(self):
+        require(self.p is not None and self.row is None,'Matrix outside projection')
+        require(all(self.pending[k] is None for k in ('descriptor','dma','write')),
+                'Matrix before non-read owner response/ACK')
+    def read_admission(self,r,reg,tile,k):
+        if self.input_mode is not True or tile is None:return
+        i=tile*1024+k;n=self.local['matrix_input']
+        if reg==5:
+            require(i==n or (i==n+1 and i//1024==n//1024),
+                    'Matrix activation lookahead order/tile boundary')
+            if i==n+1:
+                require(all(self.operands[p] is not None and self.operands[p]['index']==n
+                            for p in (5,6)), 'activation lookahead before current operands')
+                require(r['cycle']>self.operands[6]['cycle'],'activation lookahead before weight response')
+        else:
+            a=self.operands[5]
+            require(i==n and a is not None and a['index']==i and self.operands[6] is None,
+                    'Matrix weight before activation response/input release')
+            require(r['cycle']>a['cycle'],'Matrix weight before activation response')
     def read_coord(self,index):
         if index<self.tiles*2048:
             tile,step=divmod(index,2048);k,part=divmod(step,2)
@@ -200,11 +239,15 @@ class Transaction:
             require(rows>0 and (r['head'],r['batch_start'],r['rows'])==(head,batch,rows),'projection identity/order drift')
             require(all(self.act_rows.get(row)==batch+row for row in range(rows)),'projection before activation ACKs')
             self.p=r;self.local=Counter();self.writes=Counter();self.acks=Counter();self.weight_tile=-1
+            self.operands={5:None,6:None};self.input_queue.clear()
         elif event=='projection_done':
             self.idle();require(self.p is not None and self.row is None,'projection done without owner')
             require(all(r[k]==self.p[k] for k in ('head','batch_start','rows')),'projection done identity')
             rows=self.p['rows'];want=self.tiles*1024
             require(r['matrix_inputs']==r['matrix_outputs']==self.local['matrix']==want,'projection Matrix count')
+            if self.input_mode is True:
+                require(self.local['matrix_input']==want and not self.input_queue and
+                        all(v is None for v in self.operands.values()),'projection Matrix input inventory')
             require(r['write_acks']==self.local['l2_write']==self.local['l2_ack']==rows*(self.tiles+16),'projection ACK count')
             require(self.local['head_done']==rows and self.local['norm']==rows and self.local['l2_read']==self.local['l2_response']==2*want+rows*(self.tiles+18),'projection row/transport count')
             require(self.local['dma']==self.local['dma_ack']==2*self.tiles+2*rows,'projection DMA count')
@@ -272,11 +315,19 @@ class Transaction:
             else:
                 require(self.row is not None and self.row['row']==row,'L2 read row owner')
                 if reg in (1,4):require(self.acks[1]==(row+1)*8,'RoPE before Norm ACKs')
-            self.pending['read']=r
+            self.read_admission(r,reg,tile,k)
+            self.pending['read']=r;self.read_owner=(reg,address,tile,k,row)
         elif event=='l2_response':
             q=self.pending['read'];require(q is not None and r['byte_address']==q['byte_address'],'L2 response owner')
             require(r['cycle']>q['cycle'],'L2 response before request')
+            _sample(self.read_latency,r['cycle']-q['cycle'])
             reg,address,tile,offset,row=self.read_coord(self.local[event])
+            require(self.read_owner==(reg,address,tile,offset,row) and q['region']==reg,
+                    'L2 response coordinate owner')
+            if tile is not None and self.input_mode is True:
+                require(tile*1024+offset==self.local['matrix_input'] and self.operands[reg] is None,
+                        'Matrix response overwrites unconsumed operands')
+                require(r['cycle']>self.last_input_cycle,'Matrix response before input release')
             if reg==5:
                 beat=address//64;raw=bytearray((0xa5^((beat*17+b*13)&255)) for b in range(64))
                 for lane,token in self.act_rows.items():raw[lane*2:lane*2+2]=int(self.case(token,0)['activation'][offset]).to_bytes(2,'little')
@@ -288,12 +339,49 @@ class Transaction:
                 ex=self.case(self.p['batch_start']+row,self.p['head']);name={0:'projected',1:'norm',3:'norm_weight',4:'trig'}[reg]
                 want=_packed(ex[name][offset:offset+32])
             require(_hex(r['data'],128)==want,'independent L2 source/producer mismatch')
-            self.error(event,reg,r);self.pending['read']=None
+            if tile is not None:
+                self.operands[reg]={'index':tile*1024+offset,'data':want,'cycle':r['cycle']}
+            self.error(event,reg,r);self.pending['read']=None;self.read_owner=None
+        elif event=='matrix_input':
+            self.matrix_owner();require(self.input_mode is not False,'mixed legacy/actual Matrix inputs')
+            self.input_mode=True;i=self.local[event];k=i%1024
+            require(i<self.tiles*1024 and r['index']==i and r['tile']==i//1024 and
+                    r['context']==0 and r['clear']==int(k==0) and r['last']==int(k==1023),
+                    'Matrix input order/context/clear/last')
+            require(all(r[key]==self.p[key] for key in ('head','batch_start','rows')),
+                    'Matrix input projection identity')
+            require(self.weight_tile==i//1024 and all(self.operands[p] is not None and
+                    self.operands[p]['index']==i for p in (5,6)), 'Matrix input before operand responses')
+            require(all(r['cycle']>self.operands[p]['cycle'] for p in (5,6)),
+                    'Matrix input before registered operand responses')
+            if k:
+                require(r['cycle']-self.last_input_cycle>=5,'Matrix input violates context recurrence II')
+                _sample(self.input_ii,r['cycle']-self.last_input_cycle)
+            rows=self.p['rows'];head=self.p['head'];batch=self.p['batch_start']
+            a=_packed([self.case(batch+row,head)['activation'][k] if row<rows else 0 for row in range(16)])
+            ex=self.case(batch,head);offset=k*ex['columns']+(i//1024)*32
+            b=_packed(ex['weight'][offset:offset+32])
+            require(_hex(r['a'],64)==a and _hex(r['b'],128)==b,
+                    'independent Matrix input operand mismatch')
+            require((self.operands[5]['data']&((1<<(rows*16))-1))==a and self.operands[6]['data']==b,
+                    'Matrix input operand response binding')
+            if self.pending['read'] is not None:
+                reg,_,tile,offset,_=self.read_owner
+                require(reg==5 and tile==i//1024 and tile*1024+offset==i+1,
+                        'Matrix input pending lookahead owner')
+            if self.first_input_cycle is None:self.first_input_cycle=r['cycle']
+            self.operands={5:None,6:None};self.last_input_cycle=r['cycle'];self.input_queue.append(r['cycle'])
         elif event=='matrix':
             require(self.p is not None,'Matrix outside projection');i=self.local[event]
             require(i<self.tiles*1024 and r['index']==i and r['tile']==i//1024 and r['context']==0 and r['last']==int(i%1024==1023),'Matrix order/context/last')
             require(all(r[k]==self.p[k] for k in ('head','batch_start','rows')),'Matrix projection identity')
             require(self.weight_tile==i//1024 and self.local['l2_response']>=2*(i+1),'Matrix before operands')
+            if self.input_mode is None:self.input_mode=False
+            if self.input_mode is True:
+                self.matrix_owner()
+                require(self.local['matrix_input']>i and self.input_queue,'Matrix output before actual input')
+                require(r['cycle']>self.input_queue[0],'Matrix output before input pipeline latency')
+                self.input_queue.popleft()
             actual=_hex(r['fp32_rows'],4096);rows=self.p['rows']
             for row in range(16):
                 got=(actual>>(row*1024))&((1<<1024)-1)
@@ -327,6 +415,9 @@ class Transaction:
             require(r['status']==self.status and self.counts['descriptor']==self.desc_limit,'done status/descriptor inventory')
             require(self.counts['l2_read']==self.counts['l2_response'] and self.counts['l2_write']==self.counts['l2_ack'] and self.counts['dma']==self.counts['dma_ack'],'done before all ACKs')
             require(len(self.errors)==int(self.kind=='fault'),'missing expected fault')
+            if self.input_mode is True:
+                require(self.counts['matrix_input']==self.counts['matrix'] and not self.input_queue,
+                        'done before Matrix input/output drain')
             if not self.status:require(self.p is None and self.completed_heads==self.heads*self.b['token_count'] and self.completed_tokens==self.b['token_count'] and self.counts['dma']==len(self.plan),'missing complete successful inventory')
             require(r['cycle']-self.started+1>=5*self.counts['matrix'],'impossible serial payload issue-cycle budget')
             self.done=r
@@ -334,6 +425,7 @@ class Transaction:
             require(self.done is not None and r['status']==self.done['status'],'terminal without actual done')
             require(r['command_cycles']==self.done['cycle']-self.started+1,'accepted-to-done cycle denominator drift')
             require(r['matrix_inputs']==r['matrix_outputs']==r['matrix_steps']==self.counts['matrix'] and r['dma_count']==self.counts['dma'] and r['write_requests']==self.counts['l2_write'] and r['write_acks']==self.counts['l2_ack'],'terminal counters differ from events')
+            if self.input_mode is True:require(r['matrix_inputs']==self.counts['matrix_input'],'terminal Matrix input inventory')
             require(r['completed_heads']==self.completed_heads and r['completed_tokens']==self.completed_tokens,'terminal completion counters')
             require(r['ddr_read_bytes']==self.read_bytes and r['ddr_write_bytes']==self.write_bytes,'terminal successful DDR ACK bytes')
             require(r['total_tiles']==(self.heads*self.tiles if self.counts['dma'] else 0) and r['flags']==self.flags,'terminal shape/flags')
@@ -345,12 +437,18 @@ class Transaction:
         if self.p is not None or event=='projection_done':self.local[event]+=1
 
 
-def verify_trace(path,vectors,*,suite='main',required_main=None):
+def verify_trace(path,vectors,*,suite='main',required_main=None,require_inputs=False):
+    """Verify a filename or caller-owned iterable text stream through EOF.
+
+    Set require_inputs=True for new runs. The explicit default preserves the
+    historical output-only trace format without claiming checked input fires.
+    """
+    require(type(require_inputs) is bool,'require_inputs must be boolean')
     sequence=_suite_sequence(suite);inventory=Counter(sequence);expected_main=4 if suite in ('main','all') else 0
     require(required_main is None or(type(required_main) is int and required_main==expected_main),'required_main cannot weaken suite')
     cases=Cases(vectors);active=None;seen=0;previous_cycle=-1;counts=Counter();completed=Counter();terminals=[]
     opener=gzip.open if str(path).endswith('.gz') else open
-    with opener(path,'rt') as f:
+    with opener(path,'rt') if isinstance(path,(str,bytes,PathLike)) else nullcontext(path) as f:
         for lineno,line in enumerate(f,1):
             try:
                 r=_record(line);event=r['event']
@@ -358,7 +456,7 @@ def verify_trace(path,vectors,*,suite='main',required_main=None):
                 if event=='begin':
                     require(active is None and r['transaction']==seen+1,'unterminated/duplicate transaction')
                     key=(r['kind'],r['name'],r['case']);require(seen<len(sequence) and key==sequence[seen],'suite identity/order drift')
-                    active=Transaction(r,cases);seen+=1
+                    active=Transaction(r,cases,require_inputs=require_inputs);seen+=1
                 else:
                     require(active is not None and r['transaction']==active.b['transaction'],'event wrong/outside transaction')
                     active.consume(r)
@@ -366,6 +464,10 @@ def verify_trace(path,vectors,*,suite='main',required_main=None):
                         completed[(active.kind,active.name,active.b['case'])]+=1
                         item={'kind':active.kind,'name':active.name,'case':active.b['case'],'status':r.get('status'),
                               'matrix_packets':active.counts['matrix'],'completed_heads':active.completed_heads,
+                              'matrix_input_packets':active.counts['matrix_input'],
+                              'event_counts':dict(active.counts),'input_ii':dict(active.input_ii),
+                              'read_latency':dict(active.read_latency),'first_input_cycle':active.first_input_cycle,
+                              'last_input_cycle':active.last_input_cycle if active.last_input_cycle>=0 else None,
                               'completed_tokens':active.completed_tokens,'ddr_read_bytes':active.read_bytes,'ddr_write_bytes':active.write_bytes}
                         if active.done is not None:
                             cycles=active.done['cycle']-active.started+1;require(cycles>0,'invalid command cycle interval')
@@ -379,6 +481,8 @@ def verify_trace(path,vectors,*,suite='main',required_main=None):
     require(active is None and completed==inventory,'missing complete suite inventory')
     return {'suite':suite,'events':dict(counts),'transactions':seen,'primary_commands':expected_main,
             'bitexact_matrix_packets':counts['matrix'],'matrix_lanes_checked_per_packet':512,'terminals':terminals,
+            'require_inputs':require_inputs,'bitexact_matrix_input_packets':counts['matrix_input'],
+            'actual_matrix_inputs_checked':require_inputs or counts['matrix_input']==counts['matrix']>0,
             'missing_extra_reordered_oracle_values':0,'actual_done_before_ack_checked':True,
             'raw_fabric_ddr_store_data_checked':True,'cumulative_arithmetic_flags_checked':True,
             'fabric_guard_readback_in_trace':False,'whole_block_MAC90_claimed':False}

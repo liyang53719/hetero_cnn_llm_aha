@@ -3,6 +3,7 @@ from collections import Counter
 import gzip
 import importlib.util
 import json
+from io import StringIO
 from pathlib import Path
 
 import numpy as np
@@ -90,7 +91,8 @@ def write(region, address, words):
     yield packet('l2_ack', byte_address=address, error=0)
 
 
-def body(b, cases):
+def body(b, cases, *, inputs=False, lookahead=False):
+    assert not lookahead or inputs
     yield packet('accepted_start')
     yield from descriptors(b)
     if b['kind'] == 'reject':
@@ -121,9 +123,19 @@ def body(b, cases):
                 full_rows = sum(v._packed(ex['steps'][tile * 1024], 4) << (row * 1024) for row, ex in enumerate(row_cases))
                 full_rows_hex = f'{full_rows:04096x}'
                 for k in range(1024):
-                    yield from read(5, b['act_base'] + k * 64, raw=activation_words[k])
+                    activation_read = read(5, b['act_base'] + k * 64, raw=activation_words[k])
+                    if lookahead and k:
+                        next(activation_read)  # Request was accepted before the preceding input.
+                    yield from activation_read
                     off = k * tiles * 32 + tile * 32
                     yield from read(6, b['wgt_base'] + k * 64, row_cases[0]['weight'][off:off + 32])
+                    if lookahead and k < 1023:
+                        yield packet('l2_read', region=5, byte_address=b['act_base'] + (k + 1) * 64)
+                    if inputs:
+                        yield packet('matrix_input', head=head, batch_start=batch, rows=rows, tile=tile,
+                                     index=tile * 1024 + k, context=0, clear=int(k == 0), last=int(k == 1023),
+                                     a=f"{v._packed([ex['activation'][k] for ex in row_cases]):064x}",
+                                     b=f"{v._packed(row_cases[0]['weight'][off:off + 32]):0128x}")
                     yield packet('matrix', head=head, batch_start=batch, rows=rows, tile=tile, index=tile * 1024 + k,
                                  context=0, last=int(k == 1023), fp32_rows=full_rows_hex)
                 for row, ex in enumerate(row_cases):
@@ -161,10 +173,10 @@ def body(b, cases):
                          matrix_inputs=tiles * 1024, matrix_outputs=tiles * 1024, write_acks=rows * (tiles + 16))
 
 
-def transaction(b, cases):
+def transaction(b, cases, *, inputs=False, lookahead=False):
     yield b
     counts = Counter(); flags = 0; current_case = None; completed_tokens = 0; read_bytes = write_bytes = 0; q = None
-    for raw in body(b, cases):
+    for raw in body(b, cases, inputs=inputs, lookahead=lookahead):
         r = dict(raw); event = r['event']
         if event == 'head_begin': current_case = r['case']
         if event == 'norm': flags |= cases[current_case]['norm_trace']['aggregate_flags']
@@ -212,11 +224,11 @@ def complete_records(records):
         yield r
 
 
-def consume(records, cases, validate_json=False):
+def consume(records, cases, validate_json=False, *, require_inputs=False):
     active = None
     for raw in records:
         r = v._record(json.dumps(raw) + '\n') if validate_json else raw
-        if r['event'] == 'begin': active = v.Transaction(r, cases)
+        if r['event'] == 'begin': active = v.Transaction(r, cases, require_inputs=require_inputs)
         else: active.consume(r)
     return active
 
@@ -242,8 +254,10 @@ def test_complete_short_tail_all512_lanes(short, cases):
 
 
 @pytest.mark.parametrize('n', [3, 17])
-def test_multirow_and_second_batch_tail_have_real_row_distinction(cases, n):
-    result = consume(complete_records(transaction(begin(name='tail_' + str(n)), cases)), cases)
+@pytest.mark.parametrize('inputs',[False,True])
+def test_multirow_and_second_batch_tail_have_real_row_distinction(cases, n, inputs):
+    result = consume(complete_records(transaction(begin(name='tail_' + str(n)), cases,
+                                                 inputs=inputs,lookahead=inputs)), cases,require_inputs=inputs)
     batches = (n + 15) // 16
     assert result.completed_heads == n * 2 and result.completed_tokens == n
     assert result.projections == batches * 2
@@ -316,9 +330,10 @@ def test_exact_negative_status_and_no_traffic(cases,name):
 
 
 @pytest.mark.parametrize('name',['last_row_last_head_DMA_error','token_count128_admitted'])
-def test_faults_do_not_complete_failed_batch(cases,name):
-    records=list(complete_records(transaction(begin('fault',name),cases)))
-    result=consume(records,cases)
+@pytest.mark.parametrize('inputs',[False,True])
+def test_faults_do_not_complete_failed_batch(cases,name,inputs):
+    records=list(complete_records(transaction(begin('fault',name),cases,inputs=inputs,lookahead=inputs)))
+    result=consume(records,cases,require_inputs=inputs)
     assert result.completed_heads==(0 if name=='token_count128_admitted' else 31)
     assert result.completed_tokens==0
     with pytest.raises(ValueError): consume(mutate(records,'terminal','completed_tokens',16),cases)
@@ -326,9 +341,10 @@ def test_faults_do_not_complete_failed_batch(cases,name):
 
 
 @pytest.mark.parametrize('name,completed,index',[('reset_late_row',15,63),('reset_late_head',31,111)])
-def test_reset_requires_exact_late_row_and_pending_dma(cases,name,completed,index):
-    records=list(complete_records(transaction(begin('reset',name),cases)))
-    result=consume(records,cases)
+@pytest.mark.parametrize('inputs',[False,True])
+def test_reset_requires_exact_late_row_and_pending_dma(cases,name,completed,index,inputs):
+    records=list(complete_records(transaction(begin('reset',name),cases,inputs=inputs,lookahead=inputs)))
+    result=consume(records,cases,require_inputs=inputs)
     assert result.completed_heads==completed and result.completed_tokens==0
     assert result.pending['dma']['index']==index
     with pytest.raises(ValueError): consume(mutate(records,'reset_flush','stage',9),cases)
@@ -357,13 +373,13 @@ def test_primary_inventory_matches_independent_counter_equations():
     assert [(x[0],x[2],x[3],x[4]) for x in v.MAIN]==[('cold_Q',0,0,16),('cold_K',1,0,16),('carried_Q',0,112,16),('carried_K',1,112,16)]
 
 
-def public_records(tmp_path,monkeypatch,cases,records,suite='tail'):
+def public_records(tmp_path,monkeypatch,cases,records,suite='tail',*,require_inputs=False):
     monkeypatch.setattr(v,'Cases',lambda root:cases)
     # Keep public inventory strict; boundary is a complete one-token K command.
     path=tmp_path/'trace.jsonl.gz'
     with gzip.open(path,'wt') as stream:
         for r in records: stream.write(json.dumps(r)+'\n')
-    return v.verify_trace(path,tmp_path,suite=suite)
+    return v.verify_trace(path,tmp_path,suite=suite,require_inputs=require_inputs)
 
 
 def test_public_full_shorttail_gzip_and_whole_wall_interval(tmp_path,monkeypatch,cases):
@@ -374,6 +390,10 @@ def test_public_full_shorttail_gzip_and_whole_wall_interval(tmp_path,monkeypatch
     assert t['fixed_matrix_lanes']==512 and not t['whole_block_metric']
     assert t['useful_fma']==524288 and 0<t['candidate_useful_wall_fraction']<1
     assert result['matrix_lanes_checked_per_packet']==512
+    assert not result['require_inputs'] and not result['actual_matrix_inputs_checked']
+    assert result['bitexact_matrix_input_packets']==0
+    assert t['matrix_input_packets']==0 and t['first_input_cycle'] is t['last_input_cycle'] is None
+    assert t['input_ii']=={'count':0,'sum':0,'min':None,'max':None}
     for event,field,value in [('dma_ack','cycle',0),('dma_ack','transaction',9),('begin','transaction',2)]:
         with pytest.raises(ValueError): public_records(tmp_path,monkeypatch,cases,mutate(records,event,field,value),'boundary')
     with pytest.raises(ValueError): public_records(tmp_path,monkeypatch,cases,records[:-1],'boundary')
@@ -497,3 +517,180 @@ def test_case_cache_is_bounded_and_reloads_evicted_case(monkeypatch,tmp_path):
     assert cache[40]['case']==40 and len(calls)==41
     assert cache[0]['case']==0 and calls[-1]==0 and len(calls)==42
     assert len(set(weights_ids))==1
+
+
+@pytest.fixture(scope='module')
+def lookahead_prefix(cases):
+    records=[]
+    for r in complete_records(transaction(begin(name='tail_3'),cases,inputs=True,lookahead=True)):
+        records.append(r)
+        if r['event']=='matrix' and r['index']==2:break
+    return records
+
+
+def test_lookahead_overlaps_actual_input_and_output_with_one_read_owner(lookahead_prefix,cases):
+    result=consume(lookahead_prefix,cases,True,require_inputs=True)
+    assert result.counts['matrix_input']==result.counts['matrix']==3
+    assert result.pending['read']['region']==5 and result.pending['read']['byte_address']==0x10000+3*64
+    assert result.read_owner==(5,0x10000+3*64,0,3,None)
+    assert all(operand is None for operand in result.operands.values())
+    assert not result.input_queue
+    # Request and input can fire on the same edge; response cannot.
+    r=next(r for r in lookahead_prefix if r['event']=='matrix_input')
+    q=next(r for r in lookahead_prefix if r['event']=='l2_read' and r['byte_address']==0x10000+64)
+    same_cycle=mutate(lookahead_prefix,'matrix_input','cycle',q['cycle'])
+    assert r['cycle']>q['cycle']
+    assert consume(same_cycle,cases,require_inputs=True).counts['matrix_input']==3
+
+
+@pytest.mark.parametrize('lookahead',[False,True])
+def test_complete_actual_input_trace_and_explicit_legacy_compatibility(cases,short,lookahead):
+    records=complete_records(transaction(begin(),cases,inputs=True,lookahead=lookahead))
+    result=consume(records,cases,True,require_inputs=True)
+    assert result.counts['matrix_input']==result.counts['matrix']==16384
+    assert result.completed_heads==2 and result.completed_tokens==1
+    assert not result.input_queue
+    with pytest.raises(ValueError,match='before actual input'):
+        consume(short,cases,require_inputs=True)
+    assert consume(short,cases).input_mode is False
+
+
+@pytest.mark.parametrize('field,value',[
+    ('index',1),('tile',1),('context',1),('clear',0),('last',1),
+    ('head',1),('batch_start',1),('rows',1),('a','0'*64),('b','0'*128),
+    ('a','0'*63),('b','0'*127),('a','F'*64),('clear',2),
+])
+def test_actual_matrix_input_identity_and_operand_mutations_fail(lookahead_prefix,cases,field,value):
+    with pytest.raises(ValueError):
+        consume(mutate(lookahead_prefix,'matrix_input',field,value),cases,True,require_inputs=True)
+
+
+@pytest.mark.parametrize('row',[0,1,2,3,15])
+def test_actual_input_active_and_inactive_activation_lanes_checked(lookahead_prefix,cases,row):
+    original=next(r for r in lookahead_prefix if r['event']=='matrix_input')['a']
+    changed=f'{int(original,16)^(1<<(row*16)):064x}'
+    with pytest.raises(ValueError,match='input operand mismatch'):
+        consume(mutate(lookahead_prefix,'matrix_input','a',changed),cases,require_inputs=True)
+
+
+@pytest.mark.parametrize('lane',[0,1,15,31])
+def test_actual_input_every_weight_lane_checked(lookahead_prefix,cases,lane):
+    original=next(r for r in lookahead_prefix if r['event']=='matrix_input')['b']
+    changed=f'{int(original,16)^(1<<(lane*16)):0128x}'
+    with pytest.raises(ValueError,match='input operand mismatch'):
+        consume(mutate(lookahead_prefix,'matrix_input','b',changed),cases,require_inputs=True)
+
+
+def test_missing_duplicate_and_reordered_inputs_fail_after_retiming(lookahead_prefix,cases):
+    indices=[i for i,r in enumerate(lookahead_prefix) if r['event']=='matrix_input']
+    reordered=list(lookahead_prefix)
+    reordered[indices[0]],reordered[indices[1]]=reordered[indices[1]],reordered[indices[0]]
+    for i in indices:
+        for records in (lookahead_prefix[:i]+lookahead_prefix[i+1:],
+                        lookahead_prefix[:i]+[lookahead_prefix[i]]+lookahead_prefix[i:],reordered):
+            with pytest.raises(ValueError):
+                consume(complete_records(records),cases,require_inputs=True)
+
+
+def test_next_activation_response_cannot_overwrite_unconsumed_operands(lookahead_prefix,cases):
+    i=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='matrix_input')
+    j=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='l2_response' and r['byte_address']==0x10000+64)
+    early=lookahead_prefix[:i]+[lookahead_prefix[j]]+lookahead_prefix[i:j]+lookahead_prefix[j+1:]
+    with pytest.raises(ValueError,match='overwrites unconsumed'):
+        consume(complete_records(early),cases,require_inputs=True)
+    same_cycle=mutate(lookahead_prefix,'l2_response','cycle',lookahead_prefix[i]['cycle'],2)
+    with pytest.raises(ValueError,match='before input release'):
+        consume(same_cycle,cases,require_inputs=True)
+
+
+def test_no_second_read_owner_or_weight_request_before_activation_response(lookahead_prefix,cases):
+    i=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='l2_response' and r['byte_address']==0x10000+64)
+    j=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='l2_read' and r['byte_address']==0x20000+64)
+    early=lookahead_prefix[:i]+[lookahead_prefix[j]]+lookahead_prefix[i:j]+lookahead_prefix[j+1:]
+    with pytest.raises(ValueError,match='before owner response/ACK'):
+        consume(complete_records(early),cases,require_inputs=True)
+    next_a=next(r for r in lookahead_prefix if r['event']=='l2_read' and r['byte_address']==0x10000+128)
+    with pytest.raises(ValueError,match='before owner response/ACK'):
+        consume(complete_records(lookahead_prefix[:i]+[next_a]+lookahead_prefix[i:]),cases,require_inputs=True)
+
+
+def test_missing_and_misrouted_response_owners_rejected(lookahead_prefix,cases):
+    i=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='l2_read' and r['byte_address']==0x10000+64)
+    with pytest.raises(ValueError,match='L2 response owner'):
+        consume(complete_records(lookahead_prefix[:i]+lookahead_prefix[i+1:]),cases,require_inputs=True)
+    with pytest.raises(ValueError,match='L2 response owner'):
+        consume(mutate(lookahead_prefix,'l2_response','byte_address',0x20000+64,2),cases,require_inputs=True)
+
+
+def test_input_cannot_fire_before_weight_response(lookahead_prefix,cases):
+    i=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='l2_response' and r['byte_address']==0x20000)
+    j=next(i for i,r in enumerate(lookahead_prefix) if r['event']=='matrix_input')
+    early=lookahead_prefix[:i]+[lookahead_prefix[j]]+lookahead_prefix[i:j]+lookahead_prefix[j+1:]
+    with pytest.raises(ValueError,match='before operand responses'):
+        consume(complete_records(early),cases,require_inputs=True)
+
+
+def test_actual_input_context_recurrence_cannot_be_accelerated(lookahead_prefix,cases):
+    first=next(r for r in lookahead_prefix if r['event']=='matrix_input')
+    # Keep all request/response latency legal while shortening the second
+    # four-channel operand fetch to its minimum. Context 0 still needs II=5.
+    second=[r for r in lookahead_prefix if r['event']=='matrix_input'][1]
+    altered=[]
+    for r in lookahead_prefix:
+        if r is second:
+            altered.append({**r,'cycle':first['cycle']+4});break
+        altered.append({**r,'cycle':r['cycle']-1} if r.get('cycle',0)>first['cycle']+1 else r)
+    assert second['cycle']-first['cycle']>4
+    with pytest.raises(ValueError,match='context recurrence II'):
+        consume(altered,cases,require_inputs=True)
+
+
+def test_prefetch_cannot_cross_tile_or_weight_dma_ack(cases):
+    prefix=[]
+    for r in transaction(begin(),cases,inputs=True,lookahead=True):
+        if r['event']=='matrix_input' and r['index']==1023:
+            prefix.append(packet('l2_read',region=5,byte_address=0x10000))
+            break
+        prefix.append(r)
+    with pytest.raises(ValueError,match='before weight ACK'):
+        consume(complete_records(prefix),cases,require_inputs=True)
+
+
+def test_optional_input_mode_never_accepts_mixed_partial_inventory(lookahead_prefix,cases,short):
+    assert consume(lookahead_prefix,cases).input_mode is True
+    first_output=next(i for i,r in enumerate(short) if r['event']=='matrix')
+    input0=next(r for r in lookahead_prefix if r['event']=='matrix_input')
+    mixed=short[:first_output+1]+[{**input0,'rows':1}]
+    with pytest.raises(ValueError,match='mixed legacy/actual'):
+        consume(complete_records(mixed),cases)
+
+
+def test_public_strict_text_stream_is_drained_and_caller_owned(tmp_path,monkeypatch,cases):
+    monkeypatch.setattr(v,'Cases',lambda root:cases)
+    records=complete_records(transaction(begin('boundary','legal_exact_1p5MiB_end'),cases,inputs=True,lookahead=True))
+    stream=StringIO(''.join(json.dumps(r)+'\n' for r in records))
+    result=v.verify_trace((line for line in stream),tmp_path,suite='boundary',require_inputs=True)
+    assert stream.read()=='' and not stream.closed
+    assert result['require_inputs'] and result['actual_matrix_inputs_checked']
+    assert result['bitexact_matrix_input_packets']==result['bitexact_matrix_packets']==16384
+    terminal=result['terminals'][0]
+    assert terminal['matrix_input_packets']==16384
+    assert terminal['event_counts']['matrix_input']==terminal['event_counts']['matrix']==16384
+    assert terminal['event_counts']['l2_read']==terminal['event_counts']['l2_response']==32820
+    assert terminal['input_ii']=={'count':16*1023,'sum':16*(1022*6+5),'min':5,'max':6}
+    assert terminal['read_latency']=={'count':32820,'sum':32820+2*16*1023,'min':1,'max':3}
+    assert 0<terminal['first_input_cycle']<terminal['last_input_cycle']
+    stream.seek(0);bad=StringIO(stream.read()+'{}\n')
+    with pytest.raises(ValueError,match='trace line'):
+        v.verify_trace(bad,tmp_path,suite='boundary',require_inputs=True)
+
+
+def test_empty_or_truncated_stream_never_returns_verified_summary(tmp_path):
+    for text in ('','{"event":"done"'):
+        with pytest.raises(ValueError):v.verify_trace(StringIO(text),tmp_path,suite='negative',require_inputs=True)
+
+
+@pytest.mark.parametrize('require_inputs',[0,1,None,'true'])
+def test_actual_input_requirement_is_typed(tmp_path,require_inputs):
+    with pytest.raises(ValueError,match='must be boolean'):
+        v.verify_trace(StringIO(''),tmp_path,require_inputs=require_inputs)

@@ -1,0 +1,136 @@
+name: qwen35-single-owner-Matrix-read-lookahead
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/matrix-read-lookahead.yml'
+      - 'scripts/*matrix_read_lookahead*'
+      - 'tests/test_matrix_read_lookahead*'
+      - 'tests/test_tile16_causal_fabric_instrumentation.py'
+      - 'tests/test_matrix_tile16_read_lookahead.py'
+      - 'tb/tb_qwen2_matrix_tile16_read_lookahead.sv'
+      - 'tb/qwen2_matrix_read_lookahead_edges.svh'
+      - 'rtl/integration/qwen2_projection*'
+      - 'rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv'
+      - 'rtl/integration/qwen2_matrix_command_endpoint.sv'
+      - 'rtl/integration/*rope*'
+      - 'rtl/fabric/shared_l2_fabric.sv'
+      - 'rtl/matrix/**'
+      - 'rtl/sfu/fp32_*'
+      - 'rtl/sfu/qk_norm256_bf16_candidate.sv'
+      - 'tb/tb_qwen35_matrix_norm_rope_tile16.sv'
+      - 'tb/tb_qwen2_matrix_tile16_nonfinite.sv'
+      - 'scripts/*matrix_norm_rope*'
+      - 'scripts/run_matrix_tile16_nonfinite.py'
+      - 'scripts/qk_norm256_reference.c'
+      - 'scripts/rope_bf16_candidate_reference.c'
+      - 'scripts/rebuild_qk_norm256_corpora.py'
+      - 'scripts/run_qwen35_bf16_audit.py'
+      - 'scripts/run_qwen35_prefix_chain.py'
+      - 'scripts/collect_qwen35*payload.py'
+      - 'scripts/check_git_payloads.py'
+      - 'src/heteronpu/matrix_norm_rope*'
+      - 'src/heteronpu/qk_norm256*'
+      - 'src/heteronpu/rope_bf16_candidate.py'
+      - 'src/heteronpu/qwen35*reference.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/qwen35_dense_contract.py'
+      - 'src/heteronpu/qwen_family_contracts.py'
+      - 'src/heteronpu/weight_header_contract.py'
+      - 'src/heteronpu/pinned*payload.py'
+      - 'config/upstream/qwen3_5_0p8b/**'
+      - 'config/upstream/weight_headers/qwen3_5_0p8b/**'
+      - 'tests/test_matrix_norm_rope*'
+      - 'tests/test_matrix_tile16_nonfinite.py'
+      - 'chisel/matrix_norm_rope_hardware/**'
+      - 'chisel/rope_hardware_oracle/maven-lock.json'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'integration/gemmini/EmitHeteroFP32Pipelines.scala'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paired-default-off-single-owner:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned official CPU runtime
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . pytest numpy==2.3.5 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - name: Reject Git payloads and acquire transient pinned source ranges
+        run: |
+          python scripts/check_git_payloads.py
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Acquire pinned RTL toolchain before small protocol gates
+        run: |
+          OUT="$PWD/work/generated/matrix_norm_rope_tile16_candidate" PYTHON_BIN=python bash scripts/generate_matrix_norm_rope_primitives.sh
+      - name: Normal and optimized source reference and protocol tests
+        run: |
+          python -m pytest -o addopts='' -q tests/test_matrix_norm_rope*.py tests/test_matrix_tile16_nonfinite.py tests/test_matrix_read_lookahead*.py tests/test_tile16_causal_fabric_instrumentation.py tests/test_matrix_tile16_read_lookahead.py
+          python -O -m pytest -o addopts='' -q tests/test_matrix_norm_rope*.py tests/test_matrix_tile16_nonfinite.py tests/test_matrix_read_lookahead*.py tests/test_tile16_causal_fabric_instrumentation.py tests/test_matrix_tile16_read_lookahead.py
+      - name: Fresh official sources then actual Matrix512 and real SharedL2
+        env:
+          HF_HUB_OFFLINE: '1'
+        run: |
+          python - <<'PYCODE'
+          from pathlib import Path
+          from types import SimpleNamespace
+          import sys
+          root=Path.cwd();sys.path[:0]=[str(root/'src'),str(root/'scripts')]
+          import run_matrix_read_lookahead as primary
+          import run_matrix_read_lookahead_edges as edges
+          output=root/'work/matrix_read_lookahead_result'
+          generated=root/'work/generated/matrix_norm_rope_tile16_candidate'
+          args=SimpleNamespace(output=output,cached_vectors=None,generated=generated,verilator=None,jobs=2,
+              payload_layer0=root/'work/qwen35_layer0_payload',payload_layer3=root/'work/qwen35_layer3_payload',
+              payload_extra=root/'work/qwen35_prefix_payload')
+          result=primary.run(args)
+          edges.run_prepared(SimpleNamespace(vectors=output/'vectors',output=output/'held_response_edges',
+              generated=generated,verilator=None),trusted_summary_sha256=result['fixture_summary_sha256'])
+          PYCODE
+      - name: Preserve only hashes and compact result summary
+        if: always()
+        run: |
+          python - <<'PYCODE'
+          import hashlib,json,os
+          from pathlib import Path
+          source=Path('work/matrix_read_lookahead_result/summary.json')
+          if not source.exists():
+              raise SystemExit('No terminal complete paired RTL result; gate remains unverified')
+          summary=json.loads(source.read_text())
+          fixture_bytes=(source.parent/'vectors/summary.json').read_bytes()
+          if hashlib.sha256(fixture_bytes).hexdigest()!=summary['fixture_summary_sha256']:
+              raise SystemExit('Fixture receipt changed after the complete run')
+          fixture=json.loads(fixture_bytes)
+          fields=('variant','case_id','role','phase','token','head','position','columns','files')
+          bindings=[{k:row[k] for k in fields} for row in fixture['cases']+fixture['supplemental_cases']]
+          summary['numeric_fixture_bindings']={
+              'cases':len(bindings),
+              'sha256':hashlib.sha256(json.dumps(bindings,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+              'scope':'All selected raw inputs and every independent numerical reference file, both sources and supplemental cases; no payload included'}
+          summary['held_response_error_reset']=json.loads((source.parent/'held_response_edges/summary.json').read_text())
+          summary['tested_commit']=os.environ['GITHUB_SHA']
+          Path('work/lookahead_ci_summary').mkdir(parents=True,exist_ok=True)
+          Path('work/lookahead_ci_summary/summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          PYCODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matrix-read-lookahead-${{ github.sha }}
+          path: work/lookahead_ci_summary/summary.json
+          if-no-files-found: error

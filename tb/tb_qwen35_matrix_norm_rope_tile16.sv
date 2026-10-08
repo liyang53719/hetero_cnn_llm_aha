@@ -11,7 +11,7 @@
 // +trace=FILE may name a FIFO drained by gzip; every Matrix512 result is lossless.
 // Completion counts retire row-heads at ACK, but tokens only as whole batches.
 `timescale 1ns/1ps
-module tb_qwen35_matrix_norm_rope_tile16;
+module tb_qwen35_matrix_norm_rope_tile16 #(parameter bit READ_LOOKAHEAD=1'b0);
   localparam integer L2_BEATS=24576, L2_BYTES=1572864;
   localparam logic [63:0] ACT=64'h10000, WGT=64'h20000,
     PACKED=64'h40000, NORM=64'h60000, ROPE=64'h80000,
@@ -53,7 +53,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
 
   qwen2_projection_tile16_controller #(
     .ADDR_W(15),.EXPERIMENTAL_QK_NORM_ROPE(1),
-    .CANDIDATE_L2_BEATS(L2_BEATS)
+    .CANDIDATE_L2_BEATS(L2_BEATS),.CANDIDATE_READ_LOOKAHEAD(READ_LOOKAHEAD)
   ) dut (
     .clk_i(clk),.rst_ni(rst_n),.start_i(start),.command_i(command),
     .token_base_i(token_i),.activation_local_i(act_i),
@@ -88,6 +88,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
 
   // These are observation-only probes of actual production endpoint handshakes.
 `define CHAIN dut.g_qk_candidate.candidate
+`define SCHED `CHAIN.matrix.matrix.g_production.front_control.scheduler
   wire matrix_accept=`CHAIN.mpv && `CHAIN.mpr;
   wire matrix_output=`CHAIN.mov && `CHAIN.mor;
   wire matrix_last=`CHAIN.mol;
@@ -142,6 +143,66 @@ module tb_qwen35_matrix_norm_rope_tile16;
   logic [1:0] old_ak;
   logic [31:0] old_ab,old_an,old_ass,old_ads;
   string vectors,suite,trace_path,test_name;
+  // +metrics=FILE opts into additional observation; legacy traces/logs stay exact.
+  // +fabric=random (default), unstalled, or replay changes only artificial delay.
+  localparam integer FAB_RANDOM=0,FAB_UNSTALLED=1,FAB_REPLAY=2;
+  localparam integer CH_DESC=0,CH_DMA=1,CH_READ=2,CH_WRITE=3;
+  localparam logic[31:0] REPLAY_SALT=32'h3c6ef372;
+  string fabric_mode="random",metrics_path,metric_kind;
+  integer fabric_profile=FAB_RANDOM,metrics_fd=0;
+  integer request_ordinal[0:3],admit_remaining[0:3];
+  bit admit_started[0:3];
+  wire[3:0] channel_valid={wv,rv,av,dqv};
+  wire[3:0] channel_fire={wv&&wr,rv&&rr,av&&ar,dqv&&dqr};
+  wire[3:0] channel_response={wsv&&wsr,rsv&&rsr,asv&&asr,dsv&&dsr};
+  wire[3:0] channel_response_hold={wsv&&!wsr,rsv&&!rsr,asv&&!asr,dsv&&!dsr};
+  wire[3:0] channel_pending={wp,rp,ap,dp};
+  longint unsigned metric_requests[0:3],metric_responses[0:3];
+  longint unsigned metric_request_stall[0:3],metric_response_hold[0:3],metric_pending[0:3];
+  longint unsigned metric_latency_sum[0:3],metric_latency_max[0:3];
+  longint unsigned metric_admission_sum[0:3],metric_response_budget_sum[0:3];
+  longint unsigned metric_schedule_hash[0:3];
+  integer metric_request_cycle[0:3];
+  longint unsigned metric_matrix_fires,metric_matrix_stall,metric_operand_wait[0:3];
+  longint unsigned metric_ii_count,metric_ii_sum,metric_ii_min,metric_ii_max;
+  longint unsigned metric_prefetch_occupancy,metric_prefetch_accept;
+  longint unsigned metric_stall_read_overlap,metric_input_read_overlap,metric_read_input_overlap;
+  longint unsigned metric_response_output_overlap,metric_pending_context_overlap;
+  longint unsigned metric_context_busy_raw,metric_context_block,metric_fifo_block;
+  longint unsigned metric_array_block,metric_endpoint_block,metric_same_cycle_acks;
+  longint unsigned metric_cycles,metric_fabric_response_hold,metric_read_delay_hold;
+  integer metric_last_input_cycle,strict_read_pending=0;
+  bit metrics_emitted=0,held_matrix=0;
+  logic[772:0] old_matrix_operands;
+
+  // Stable uint32 avalanche, keyed solely by command-local ordinal/channel/salt.
+  // Salt domains 0=admission, 1=response, 2=same-cycle write ACK. No wall clock,
+  // global LFSR, selected head, or elapsed-cycle state participates in replay.
+  function automatic logic[31:0] replay_hash(input integer ordinal,input integer channel,input integer domain);
+    logic[31:0] h;
+    h=32'(ordinal)^REPLAY_SALT^(32'(channel+1)*32'h9e3779b9)^(32'(domain+1)*32'h85ebca6b);
+    h=(h^(h>>16))*32'h7feb352d;
+    h=(h^(h>>15))*32'h846ca68b;
+    return h^(h>>16);
+  endfunction
+  function automatic integer admission_budget(input integer channel);
+    return integer'(replay_hash(request_ordinal[channel],channel,0)%4);
+  endfunction
+  function automatic integer response_budget(input integer channel);
+    case(channel)
+      CH_DESC,CH_READ:return integer'(replay_hash(request_ordinal[channel],channel,1)%8);
+      CH_DMA:return integer'(replay_hash(request_ordinal[channel],channel,1)%16);
+      default:return 1+integer'(replay_hash(request_ordinal[channel],channel,1)%26);
+    endcase
+  endfunction
+  function automatic bit replay_admit(input integer channel);
+    return admit_started[channel]?admit_remaining[channel]==0:admission_budget(channel)==0;
+  endfunction
+  function automatic string channel_name(input integer channel);
+    case(channel)
+      CH_DESC:return "descriptor";CH_DMA:return "dma";CH_READ:return "read";default:return "write";
+    endcase
+  endfunction
 
   logic host_mode=1,hwv=0,hrv=0,hrsr=0;
   logic [14:0] hwa=0,hra=0;
@@ -157,7 +218,9 @@ module tb_qwen35_matrix_norm_rope_tile16;
   logic dma_transfer_done=0,dma_activation_q=0,dma_store_q=0,dma_read_requested=0;
   integer dma_index=0,dma_tile_q=0,dma_store_addr=0,dma_packet_index=0,dma_rows_q=0;
   logic[63:0] dma_store_destination;
-  wire instant_ack=wv&&wr&&same_cycle_acks&&lfsr[5]&&fault_write_region<0;
+  wire instant_ack=wv&&wr&&same_cycle_acks&&fault_write_region<0&&
+    (fabric_profile==FAB_UNSTALLED||(fabric_profile==FAB_REPLAY?
+      ((replay_hash(request_ordinal[CH_WRITE],CH_WRITE,2)&32'd1)!=0):lfsr[5]));
   logic dma_write_valid,dma_read_valid;
   logic [511:0] dma_write_data;
   logic [14:0] dma_write_addr;
@@ -169,9 +232,13 @@ module tb_qwen35_matrix_norm_rope_tile16;
     .wr_valid_i(fwv),.wr_ready_o(fwr),.wr_addr_i(fwa),.wr_data_i(fwd),.wr_be_i(fbe),
     .cycle_count_o(),.read_count_o(fabric_reads),.write_count_o(fabric_writes),
     .bank_conflict_count_o(),.read_stall_count_o(),.write_stall_count_o());
-  assign request_gate=rst_n&&!rp&&force_read_block==0&&(!random_stalls||lfsr[2]||lfsr[9]);
+  assign request_gate=rst_n&&!rp&&(fabric_profile==FAB_RANDOM?
+    (force_read_block==0&&(!random_stalls||lfsr[2]||lfsr[9])):
+    (fabric_profile==FAB_UNSTALLED||replay_admit(CH_READ)));
   assign response_gate=rst_n&&rp&&rdelay==0;
-  assign write_gate=rst_n&&!wp&&force_write_block==0&&(!random_stalls||lfsr[3]||lfsr[10]);
+  assign write_gate=rst_n&&!wp&&(fabric_profile==FAB_RANDOM?
+    (force_write_block==0&&(!random_stalls||lfsr[3]||lfsr[10])):
+    (fabric_profile==FAB_UNSTALLED||replay_admit(CH_WRITE)));
   assign dma_write_valid=ap&&!dma_transfer_done&&!dma_store_q;
   assign dma_read_valid=ap&&!dma_transfer_done&&dma_store_q&&!dma_read_requested;
   always_comb begin
@@ -194,11 +261,14 @@ module tb_qwen35_matrix_norm_rope_tile16;
     fwd=host_mode?hwd:(dma_write_valid?dma_write_data:wd);
     fbe=host_mode?'1:(dma_write_valid?dma_write_mask:be);
   end
-  assign dqr=rst_n&&!dp&&(!random_stalls||lfsr[0]||lfsr[7]);
+  assign dqr=rst_n&&!dp&&(fabric_profile==FAB_RANDOM?(!random_stalls||lfsr[0]||lfsr[7]):
+    (fabric_profile==FAB_UNSTALLED||replay_admit(CH_DESC)));
   assign dsv=rst_n&&dp&&ddelay==0;
   assign dsd=dpdata;
   assign dse=dperror;
-  assign ar=rst_n&&!ap&&force_dma_block==0&&(!random_stalls||lfsr[1]||lfsr[8]);
+  assign ar=rst_n&&!ap&&(fabric_profile==FAB_RANDOM?
+    (force_dma_block==0&&(!random_stalls||lfsr[1]||lfsr[8])):
+    (fabric_profile==FAB_UNSTALLED||replay_admit(CH_DMA)));
   assign asv=rst_n&&ap&&dma_transfer_done&&adelay==0;
   assign ase=aperror;
   assign rr=!host_mode&&request_gate&&frr[0];
@@ -239,6 +309,136 @@ module tb_qwen35_matrix_norm_rope_tile16;
     endcase
   endfunction
 
+  // Metrics JSONL schema v1: one command_metrics object per command, including
+  // rejects/faults and reset-aborted commands. All counts span accepted_start
+  // through end_cycle inclusively; completed=0 means reset, not a terminal ACK.
+  // channels.{descriptor,dma,read,write}: request/response fires, valid&&!ready,
+  // exposed response valid&&!ready, pending cycles, request-to-response latency
+  // count/sum/max in clocks, artificial admission/response budget sums, and a
+  // 64-bit hex FNV schedule fingerprint of each ordinal and selected budgets.
+  // replay response_budget clocks begin after request (after DMA data completion
+  // for DMA); write response_budget=0 for a same-cycle ACK. Physical fabric
+  // latency/backpressure is never bypassed. Replay admission budget is charged
+  // only once, starting on first valid; ready stays eligible once exhausted.
+  // matrix_input_ii covers adjacent accepted inputs WITHIN each 1024-K tile,
+  // excluding DMA/head/tile boundaries. Zero intervals have min=max=sum=0.
+  // operand_wait_cycles names are actual payload ARQ/ARP/WRQ/WRP states.
+  // scheduler_stall_cycles is an exclusive partition of Matrix valid&&!ready:
+  // endpoint inactive, context unavailable (completion bypass honored), FIFO
+  // full, then array admission blocked. context_busy_raw_cycles is nonexclusive.
+  // prefetch occupancy counts next_a_pending_q; acceptance is actual L2 fire
+  // of next_a_request. overlap counts are sampled simultaneous predicates.
+  // matrix_input trace (only with +metrics): event,transaction,cycle,head,
+  // batch_start,rows,tile,index,last,context,clear,a,b; index is pre-increment
+  // per-projection ordinal, tile=index/1024; a/b are fixed 64/128 hex digits.
+  task automatic reset_metrics;
+    metrics_emitted=0;metric_cycles=0;
+    metric_matrix_fires=0;metric_matrix_stall=0;metric_last_input_cycle=0;
+    metric_ii_count=0;metric_ii_sum=0;metric_ii_min=0;metric_ii_max=0;
+    metric_prefetch_occupancy=0;metric_prefetch_accept=0;
+    metric_stall_read_overlap=0;metric_input_read_overlap=0;metric_read_input_overlap=0;
+    metric_response_output_overlap=0;metric_pending_context_overlap=0;
+    metric_context_busy_raw=0;metric_context_block=0;metric_fifo_block=0;
+    metric_array_block=0;metric_endpoint_block=0;metric_same_cycle_acks=0;
+    metric_fabric_response_hold=0;metric_read_delay_hold=0;
+    for(integer ch=0;ch<4;ch++)begin
+      metric_requests[ch]=0;metric_responses[ch]=0;metric_request_stall[ch]=0;
+      metric_response_hold[ch]=0;metric_pending[ch]=0;metric_latency_sum[ch]=0;
+      metric_latency_max[ch]=0;metric_admission_sum[ch]=0;metric_response_budget_sum[ch]=0;
+      metric_schedule_hash[ch]=64'hcbf29ce484222325;metric_request_cycle[ch]=0;
+      metric_operand_wait[ch]=0;
+    end
+  endtask
+
+  function automatic integer selected_response_budget(input integer channel);
+    if(channel==CH_WRITE&&instant_ack)return 0;
+    if(fabric_profile==FAB_UNSTALLED)return 0;
+    if(fabric_profile==FAB_REPLAY)return response_budget(channel);
+    case(channel)
+      CH_DESC:return random_stalls?integer'(lfsr[13:11])+1:1;
+      CH_DMA:return ak==3&&as==64'(rope_base)?512:(random_stalls?integer'(lfsr[18:15])+3:3);
+      CH_READ:return random_stalls?integer'(lfsr[22:20])+1:1;
+      default:return 11+integer'(lfsr[26:23]);
+    endcase
+  endfunction
+
+  task automatic sample_metrics;
+    integer latency,interval,admission,response;
+    logic[63:0] schedule_word;
+    metric_cycles=metric_cycles+1;
+    for(integer ch=0;ch<4;ch++)begin
+      if(channel_valid[ch]&&!channel_fire[ch])metric_request_stall[ch]=metric_request_stall[ch]+1;
+      if(channel_response_hold[ch])metric_response_hold[ch]=metric_response_hold[ch]+1;
+      if(channel_pending[ch])metric_pending[ch]=metric_pending[ch]+1;
+      if(channel_fire[ch])begin
+        metric_requests[ch]=metric_requests[ch]+1;metric_request_cycle[ch]=cycle;
+        admission=fabric_profile==FAB_REPLAY?admission_budget(ch):0;
+        response=selected_response_budget(ch);
+        metric_admission_sum[ch]=metric_admission_sum[ch]+64'(admission);
+        metric_response_budget_sum[ch]=metric_response_budget_sum[ch]+64'(response);
+        schedule_word={32'(request_ordinal[ch]),16'(admission),16'(response)};
+        metric_schedule_hash[ch]=(metric_schedule_hash[ch]^schedule_word)*64'h100000001b3;
+      end
+      if(channel_response[ch])begin
+        metric_responses[ch]=metric_responses[ch]+1;
+        latency=cycle-metric_request_cycle[ch];
+        metric_latency_sum[ch]=metric_latency_sum[ch]+64'(latency);
+        if(64'(latency)>metric_latency_max[ch])metric_latency_max[ch]=64'(latency);
+      end
+    end
+    case(`CHAIN.payload.st)
+      1:metric_operand_wait[0]=metric_operand_wait[0]+1; // ARQ
+      2:metric_operand_wait[1]=metric_operand_wait[1]+1; // ARP
+      3:metric_operand_wait[2]=metric_operand_wait[2]+1; // WRQ
+      4:metric_operand_wait[3]=metric_operand_wait[3]+1; // WRP
+      default:begin end
+    endcase
+    if(matrix_accept)begin
+      metric_matrix_fires=metric_matrix_fires+1;
+      if(metric_last_input_cycle!=0)begin
+        interval=cycle-metric_last_input_cycle;
+        metric_ii_count=metric_ii_count+1;metric_ii_sum=metric_ii_sum+64'(interval);
+        if(metric_ii_count==1||64'(interval)<metric_ii_min)metric_ii_min=64'(interval);
+        if(64'(interval)>metric_ii_max)metric_ii_max=64'(interval);
+      end
+      metric_last_input_cycle=`CHAIN.ml?0:cycle;
+    end
+    if(`CHAIN.mpv&&`SCHED.busy_o[`CHAIN.mctx])metric_context_busy_raw=metric_context_busy_raw+1;
+    if(`CHAIN.mpv&&!`CHAIN.mpr)begin
+      metric_matrix_stall=metric_matrix_stall+1;
+      if(!`CHAIN.matrix.active_q)metric_endpoint_block=metric_endpoint_block+1;
+      else if(!`SCHED.context_available)metric_context_block=metric_context_block+1;
+      else if(!`SCHED.fifo_not_full)metric_fifo_block=metric_fifo_block+1;
+      else if(!`SCHED.array_in_ready_i)metric_array_block=metric_array_block+1;
+      else $fatal(1,"unclassified Matrix input stall");
+    end
+    if(`CHAIN.payload.next_a_pending_q)metric_prefetch_occupancy=metric_prefetch_occupancy+1;
+    if(`CHAIN.payload.next_a_request&&rv&&rr)metric_prefetch_accept=metric_prefetch_accept+1;
+    if(rp&&`CHAIN.mpv&&!`CHAIN.mpr)metric_stall_read_overlap=metric_stall_read_overlap+1;
+    if(rp&&matrix_accept)metric_input_read_overlap=metric_input_read_overlap+1;
+    if(rv&&rr&&matrix_accept)metric_read_input_overlap=metric_read_input_overlap+1;
+    if(rsv&&rsr&&matrix_output)metric_response_output_overlap=metric_response_output_overlap+1;
+    if(rp&&`SCHED.busy_o[0])metric_pending_context_overlap=metric_pending_context_overlap+1;
+    if(frsv[0]&&!frsr[0])metric_fabric_response_hold=metric_fabric_response_hold+1;
+    if(frsv[0]&&!response_gate)metric_read_delay_hold=metric_read_delay_hold+1;
+    if(instant_ack)metric_same_cycle_acks=metric_same_cycle_acks+1;
+  endtask
+
+  task automatic emit_metrics(input bit completed);
+    if(metrics_emitted)$fatal(1,"duplicate command metrics");
+    if(metric_cycles!=64'(cycle-accepted_cycle+1))$fatal(1,"metrics command cycle interval mismatch");
+    metrics_emitted=1;
+    $fwrite(metrics_fd,"{\"event\":\"command_metrics\",\"schema_version\":1,\"transaction\":%0d,\"name\":\"%s\",\"kind\":\"%s\",\"fabric\":\"%s\",\"read_lookahead\":%0d,\"replay_schedule_version\":1,\"replay_salt\":\"%08h\",\"completed\":%0d,\"status\":%0d,\"start_cycle\":%0d,\"end_cycle\":%0d,\"command_cycles\":%0d,\"matrix_input_fires\":%0d,\"matrix_input_stall_cycles\":%0d,",transaction,test_name,metric_kind,fabric_mode,READ_LOOKAHEAD,REPLAY_SALT,completed,status,accepted_cycle,cycle,metric_cycles,metric_matrix_fires,metric_matrix_stall);
+    $fwrite(metrics_fd,"\"operand_wait_cycles\":{\"arq\":%0d,\"arp\":%0d,\"wrq\":%0d,\"wrp\":%0d},\"matrix_input_ii\":{\"count\":%0d,\"sum\":%0d,\"min\":%0d,\"max\":%0d},",metric_operand_wait[0],metric_operand_wait[1],metric_operand_wait[2],metric_operand_wait[3],metric_ii_count,metric_ii_sum,metric_ii_min,metric_ii_max);
+    $fwrite(metrics_fd,"\"prefetch_occupancy_cycles\":%0d,\"prefetch_accepts\":%0d,\"context_busy_raw_cycles\":%0d,\"scheduler_stall_cycles\":{\"endpoint_inactive\":%0d,\"context_busy\":%0d,\"fifo_full\":%0d,\"array_admission\":%0d},",metric_prefetch_occupancy,metric_prefetch_accept,metric_context_busy_raw,metric_endpoint_block,metric_context_block,metric_fifo_block,metric_array_block);
+    $fwrite(metrics_fd,"\"overlap_cycles\":{\"matrix_stall_read_pending\":%0d,\"matrix_input_read_pending\":%0d,\"read_request_matrix_input\":%0d,\"read_response_matrix_output\":%0d,\"read_pending_context_busy\":%0d},\"fabric_read_response_hold_cycles\":%0d,\"read_artificial_response_hold_cycles\":%0d,\"same_cycle_write_acks\":%0d,\"channels\":{",metric_stall_read_overlap,metric_input_read_overlap,metric_read_input_overlap,metric_response_output_overlap,metric_pending_context_overlap,metric_fabric_response_hold,metric_read_delay_hold,metric_same_cycle_acks);
+    for(integer ch=0;ch<4;ch++)begin
+      if(ch!=0)$fwrite(metrics_fd,",");
+      $fwrite(metrics_fd,"\"%s\":{\"requests\":%0d,\"responses\":%0d,\"request_stall_cycles\":%0d,\"response_hold_cycles\":%0d,\"pending_cycles\":%0d,\"latency_count\":%0d,\"latency_sum\":%0d,\"latency_max\":%0d,\"admission_budget_sum\":%0d,\"response_budget_sum\":%0d,\"schedule_hash\":\"%016h\"}",channel_name(ch),metric_requests[ch],metric_responses[ch],metric_request_stall[ch],metric_response_hold[ch],metric_pending[ch],metric_responses[ch],metric_latency_sum[ch],metric_latency_max[ch],metric_admission_sum[ch],metric_response_budget_sum[ch],metric_schedule_hash[ch]);
+    end
+    $fdisplay(metrics_fd,"}}");$fflush(metrics_fd);
+  endtask
+
   // Single in-flight read model and explicit, delayed write acknowledgments.
   // DMA transfers load selected raw source tiles, never oracle outputs.
   always @(posedge clk) begin : transport
@@ -247,9 +447,12 @@ module tb_qwen35_matrix_norm_rope_tile16;
     if(!rst_n) begin
       dp<=0;ap<=0;rp<=0;wp<=0;ddelay<=0;adelay<=0;rdelay<=0;wdelay<=0;
       dperror<=0;aperror<=0;rperror<=0;wperror<=0;
-      held_read=0;held_write=0;held_dma=0;
+      held_read=0;held_write=0;held_dma=0;held_matrix=0;
       dma_transfer_done<=0;dma_index<=0;dma_read_requested<=0;
-      model_fabric_reads=0;model_fabric_writes=0;
+      model_fabric_reads=0;model_fabric_writes=0;strict_read_pending=0;
+      for(integer ch=0;ch<4;ch++)begin
+        request_ordinal[ch]<=0;admit_remaining[ch]<=0;admit_started[ch]<=0;
+      end
     end else begin
       if(fabric_reads!==model_fabric_reads||fabric_writes!==model_fabric_writes)
         $fatal(1,"actual fabric handshake counters differ");
@@ -269,6 +472,31 @@ module tb_qwen35_matrix_norm_rope_tile16;
         else dma_index<=dma_index+1;
         dma_read_requested<=0;
       end
+      // Request-relative replay admission countdown starts only on valid and
+      // remains attached to that request until it actually handshakes.
+      for(integer ch=0;ch<4;ch++)begin
+        if(channel_fire[ch])begin
+          request_ordinal[ch]<=request_ordinal[ch]+1;
+          admit_remaining[ch]<=0;admit_started[ch]<=0;
+        end else if(fabric_profile==FAB_REPLAY&&channel_valid[ch])begin
+          if(!admit_started[ch])begin
+            admit_started[ch]<=1;
+            admit_remaining[ch]<=admission_budget(ch)>0?admission_budget(ch)-1:0;
+          end else if(admit_remaining[ch]>0)admit_remaining[ch]<=admit_remaining[ch]-1;
+        end
+      end
+      // Fabric port zero has exactly one request owner, including held replies.
+      if(strict_read_pending!=integer'(rp)||strict_read_pending<0||strict_read_pending>1)
+        $fatal(1,"strict single pending read ownership mismatch");
+      if(frsv[0]&&!rp)$fatal(1,"fabric read response without pending owner");
+      if(rv&&rr)begin
+        if(strict_read_pending!=0)$fatal(1,"more than one pending read");
+        strict_read_pending=strict_read_pending+1;
+      end
+      if(rsv&&rsr)begin
+        if(strict_read_pending!=1)$fatal(1,"read response without request");
+        strict_read_pending=strict_read_pending-1;
+      end
       cycle=cycle+1;lfsr<={lfsr[30:0],lfsr[31]^lfsr[21]^lfsr[1]^lfsr[0]};
       if(force_read_block>0)force_read_block<=force_read_block-1;
       if(force_write_block>0)force_write_block<=force_write_block-1;
@@ -283,6 +511,10 @@ module tb_qwen35_matrix_norm_rope_tile16;
         if(held_read&&(!rv||ra!==old_ra))$fatal(1,"read changed under stall %s",test_name);
         if(held_write&&(!wv||wa!==old_wa||wd!==old_wd||be!==old_be))$fatal(1,"write changed under stall %s",test_name);
         if(held_dma&&(!av||as!==old_as||ad!==old_ad||ak!==old_ak||ab!==old_ab||an!==old_an||ass!==old_ass||ads!==old_ads))$fatal(1,"DMA changed under stall %s",test_name);
+        if(held_matrix&&(!`CHAIN.mpv||{`CHAIN.mctx,`CHAIN.mc,`CHAIN.ml,`CHAIN.ma,`CHAIN.mb}!==old_matrix_operands))
+          $fatal(1,"Matrix operands/identity changed under stall %s",test_name);
+        held_matrix=`CHAIN.mpv&&!`CHAIN.mpr;
+        if(held_matrix)old_matrix_operands={`CHAIN.mctx,`CHAIN.mc,`CHAIN.ml,`CHAIN.ma,`CHAIN.mb};
         held_read=rv&&!rr;held_write=wv&&!wr;held_dma=av&&!ar;
         if(held_read)begin old_ra=ra;read_stalls=read_stalls+1;end
         if(held_write)begin old_wa=wa;old_wd=wd;old_be=be;write_stalls=write_stalls+1;end
@@ -295,6 +527,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
         accepted_cycle=cycle;
         $fdisplay(trace_fd,"{\"event\":\"accepted_start\",\"transaction\":%0d,\"cycle\":%0d}",transaction,cycle);
       end
+      if(metrics_fd&&active&&accepted_cycle!=0&&!metrics_emitted)sample_metrics();
       if(dsv&&dsr)begin
         $fdisplay(trace_fd,"{\"event\":\"descriptor\",\"transaction\":%0d,\"cycle\":%0d,\"index\":%0d,\"data\":\"%032h\",\"error\":%0d}",transaction,cycle,dpindex,dpdata,dperror);
         dp<=0;dperror<=0;dpdata<=~dpdata;
@@ -304,7 +537,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
         $fdisplay(trace_fd,"{\"event\":\"descriptor_request\",\"transaction\":%0d,\"cycle\":%0d,\"index\":%0d}",transaction,cycle,dqi);
         if(expect_reject&&dqi>6)$fatal(1,"bad descriptor index escaped snapshot");
         if(dqi<1||dqi>6)$fatal(1,"descriptor index=%0d",dqi);
-        dp<=1;dpindex<=dqi;dpdata<=records[dqi];ddelay<=random_stalls?integer'(lfsr[13:11])+1:1;
+        dp<=1;dpindex<=dqi;dpdata<=records[dqi];ddelay<=fabric_profile==FAB_RANDOM?(random_stalls?integer'(lfsr[13:11])+1:1):(fabric_profile==FAB_REPLAY?response_budget(CH_DESC):0);
         dperror<=fault_descriptor&&!fault_injected;
         if(fault_descriptor&&!fault_injected)fault_injected=1;
         descriptor_count=descriptor_count+1;
@@ -325,7 +558,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
             norm_stores=0;rope_stores=0;norm_writes=0;rope_writes=0;norm_reads=0;rope_reads=0;
           end
         end
-      end else if(ap&&adelay>0)adelay<=adelay-1;
+      end else if(ap&&adelay>0&&(fabric_profile==FAB_RANDOM||dma_transfer_done))adelay<=adelay-1;
       if(av&&ar)begin
         if(expect_reject)$fatal(1,"rejected descriptor issued DMA");
         if(ap)$fatal(1,"more than one pending DMA");
@@ -393,7 +626,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
             if(regid==2)rope_stores=rope_stores+1;
           end
         end else $fatal(1,"unexpected DMA kind=%0d",ak);
-        ap<=1;adelay<=(ak==3&&regid==2)?512:(random_stalls?integer'(lfsr[18:15])+3:3);dma_count=dma_count+1;
+        ap<=1;adelay<=fabric_profile==FAB_RANDOM?((ak==3&&regid==2)?512:(random_stalls?integer'(lfsr[18:15])+3:3)):(fabric_profile==FAB_REPLAY?response_budget(CH_DMA):0);dma_count=dma_count+1;
       end
       if(rsv&&rsr)begin
         $fdisplay(trace_fd,"{\"event\":\"l2_response\",\"transaction\":%0d,\"cycle\":%0d,\"byte_address\":%0d,\"error\":%0d,\"data\":\"%0128h\"}",transaction,cycle,pending_read_addr,rperror,rd);
@@ -420,7 +653,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
         end
         rperror<=!fault_injected&&fault_read_region==regid;
         if(!fault_injected&&fault_read_region==regid)fault_injected=1;
-        rp<=1;pending_read_addr=addr;rdelay<=random_stalls?integer'(lfsr[22:20])+1:1;
+        rp<=1;pending_read_addr=addr;rdelay<=fabric_profile==FAB_RANDOM?(random_stalls?integer'(lfsr[22:20])+1:1):(fabric_profile==FAB_REPLAY?response_budget(CH_READ):0);
         read_requests=read_requests+1;
         $fdisplay(trace_fd,"{\"event\":\"l2_read\",\"transaction\":%0d,\"cycle\":%0d,\"byte_address\":%0d,\"region\":%0d}",transaction,cycle,addr,regid);
       end
@@ -457,7 +690,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
         if(regid==0)packed_writes=packed_writes+1;
         if(regid==1)norm_writes=norm_writes+1;
         if(regid==2)rope_writes=rope_writes+1;
-        wp<=!instant_ack;pending_write_addr=addr;wdelay<=11+integer'(lfsr[26:23]);write_requests=write_requests+1;
+        wp<=!instant_ack;pending_write_addr=addr;wdelay<=fabric_profile==FAB_RANDOM?11+integer'(lfsr[26:23]):(fabric_profile==FAB_REPLAY?response_budget(CH_WRITE):0);write_requests=write_requests+1;
         $fdisplay(trace_fd,"{\"event\":\"l2_write\",\"transaction\":%0d,\"cycle\":%0d,\"byte_address\":%0d,\"region\":%0d,\"mask\":\"%016h\",\"data\":\"%0128h\"}",transaction,cycle,addr,regid,be,wd);
         if(instant_ack)begin
           if(!wsr)$fatal(1,"same-cycle ACK not accepted");
@@ -473,6 +706,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
           $fatal(1,"Matrix actual activation row mismatch row=%0d K=%0d",r,matrix_inputs%1024);
         for(integer lane=0;lane<32;lane++)if(`CHAIN.mb[lane*16+:16]!==weight[(matrix_inputs%1024)*selected_columns+(matrix_inputs/1024)*32+lane])
           $fatal(1,"Matrix actual weight column mismatch");
+        if(metrics_fd)$fdisplay(trace_fd,"{\"event\":\"matrix_input\",\"transaction\":%0d,\"cycle\":%0d,\"head\":%0d,\"batch_start\":%0d,\"rows\":%0d,\"tile\":%0d,\"index\":%0d,\"last\":%0d,\"context\":%0d,\"clear\":%0d,\"a\":\"%064h\",\"b\":\"%0128h\"}",transaction,cycle,selected_head,batch_start,batch_rows,matrix_inputs/1024,matrix_inputs,`CHAIN.ml,`CHAIN.mctx,`CHAIN.mc,`CHAIN.ma,`CHAIN.mb);
         matrix_inputs=matrix_inputs+1;total_matrix_inputs=total_matrix_inputs+1;
       end
       if(matrix_output)begin
@@ -496,6 +730,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
         if(status==0)finish_head();
         $fdisplay(trace_fd,"{\"event\":\"done\",\"transaction\":%0d,\"cycle\":%0d,\"status\":%0d}",transaction,cycle,status);
         if(wp||rp||ap||dp||write_requests!=write_acks||read_requests!=read_responses||dma_count!=dma_acks)$fatal(1,"completion before outstanding response/ACK");
+        if(metrics_fd)emit_metrics(1);
         done_count=done_count+1;
         if(done_count!=1)$fatal(1,"duplicate terminal completion");
       end
@@ -676,7 +911,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
     read_requests=0;read_responses=0;write_requests=0;write_acks=0;
     matrix_inputs=0;matrix_outputs=0;weight_loads=0;stores=0;head_rows_done=0;
     norm_stores=0;rope_stores=0;norm_writes=0;rope_writes=0;norm_reads=0;rope_reads=0;
-    held_read=0;held_write=0;held_dma=0;expect_reject=0;checking=1;
+    held_read=0;held_write=0;held_dma=0;held_matrix=0;expect_reject=0;checking=1;
     fault_dma=-1;fault_read_region=-1;fault_write_region=-1;fault_descriptor=0;fault_injected=0;fault_late_row=0;
     force_read_block=0;force_write_block=0;force_dma_block=0;
   endtask
@@ -690,6 +925,10 @@ module tb_qwen35_matrix_norm_rope_tile16;
     else if(name=="recovery_after_fault_or_reset")kind="recovery";
     else kind="main";
     test_name=name;transaction=transaction+1;active=1;host_mode=0;
+    metric_kind=kind;reset_metrics();
+    for(integer ch=0;ch<4;ch++)begin
+      request_ordinal[ch]=0;admit_remaining[ch]=0;admit_started[ch]=0;
+    end
     $fdisplay(trace_fd,"{\"event\":\"begin\",\"transaction\":%0d,\"case\":%0d,\"name\":\"%s\",\"kind\":\"%s\",\"checking\":1,\"role\":%0d,\"start_token\":%0d,\"token_count\":%0d,\"packed_base\":%0d,\"norm_base\":%0d,\"rope_base\":%0d,\"gamma_base\":%0d,\"trig_base\":%0d,\"act_base\":%0d,\"wgt_base\":%0d}",transaction,case_id,name,kind,role,start_token,token_count,packed_base,norm_base,rope_base,gamma_base,trig_base,act_base,wgt_base);
     @(negedge clk);start=1;
     @(negedge clk);start=0;
@@ -809,7 +1048,7 @@ module tb_qwen35_matrix_norm_rope_tile16;
   task automatic reset_case(input integer which);
     setup_case(1,16);launch(which==0?"reset_late_row":"reset_late_head",1);
     wait(selected_head==(which==0?0:1)&&selected_row==15&&rope_stores==1&&ap);
-    @(negedge clk);rst_n=0;start=0;
+    @(negedge clk);if(metrics_fd)emit_metrics(0);rst_n=0;start=0;
     repeat(4)@(negedge clk);
     active=0;rst_n=1;
     repeat(12)@(negedge clk);
@@ -826,6 +1065,15 @@ module tb_qwen35_matrix_norm_rope_tile16;
     if(!$value$plusargs("suite=%s",suite))suite="all";
     if(!$value$plusargs("trace=%s",trace_path))trace_path={vectors,"/tile16_trace_",suite,".jsonl"};
     trace_fd=$fopen(trace_path,"w");if(!trace_fd)$fatal(1,"cannot open trace file");
+    if($value$plusargs("fabric=%s",fabric_mode))begin
+      if(fabric_mode=="unstalled")fabric_profile=FAB_UNSTALLED;
+      else if(fabric_mode=="replay")fabric_profile=FAB_REPLAY;
+      else if(fabric_mode!="random")$fatal(1,"+fabric must be random, unstalled, or replay");
+    end
+    if($value$plusargs("metrics=%s",metrics_path))begin
+      if(metrics_path==trace_path)$fatal(1,"metrics and trace files must be separate");
+      metrics_fd=$fopen(metrics_path,"w");if(!metrics_fd)$fatal(1,"cannot open metrics file");
+    end
     repeat(5)@(negedge clk);rst_n=1;repeat(3)@(negedge clk);
     for(integer b=0;b<L2_BYTES;b++)begin mem[b]=8'hA5^8'(b*13);expected_memory[b]=mem[b];end
     for(integer beat=0;beat<L2_BEATS;beat++)begin
@@ -849,8 +1097,9 @@ module tb_qwen35_matrix_norm_rope_tile16;
     end
     if(success_count+reject_count+fault_count+reset_count==0)$fatal(1,"unknown/empty suite");
     $display("QWEN35_MATRIX_NORM_ROPE_TILE16_PASS suite=%s successes=%0d rejects=%0d faults=%0d resets=%0d actual_matrix_inputs=%0d actual_matrix_outputs=%0d matrix_lanes_per_output=512 explicit_write_acks=%0d read_stall_cycles=%0d write_stall_cycles=%0d dma_stall_cycles=%0d delayed_ACK_cycles=%0d same_cycle_ACKs=%0d capacity_bytes=1572864 source_injection=0",suite,success_count,reject_count,fault_count,reset_count,total_matrix_inputs,total_matrix_outputs,total_write_acks,read_stalls,write_stalls,dma_stalls,ack_delayed_cycles,same_cycle_ack_count);
-    $fclose(trace_fd);$finish;
+    $fclose(trace_fd);if(metrics_fd)$fclose(metrics_fd);$finish;
   end
   initial begin repeat(300000000)@(posedge clk);$fatal(1,"global timeout");end
+`undef SCHED
 `undef CHAIN
 endmodule

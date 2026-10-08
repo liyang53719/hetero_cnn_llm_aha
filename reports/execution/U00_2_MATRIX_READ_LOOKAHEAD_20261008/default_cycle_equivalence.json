@@ -1,0 +1,12 @@
+{
+  "evidence_file_sha256": {
+    "baseline_payload.sv": "12550671f3339e7ffe7318786abfec1599d9a0e3926f0affc9196d55982352ab",
+    "build.log": "03b4cfd0407e7101b547ecc775c51a6ab59ba6d127c37cc2f693a79ade0dd49e",
+    "equivalence_tb.sv": "92496e44cf5f92695d752a17107145c514060de49cfbf05da6aeff614c0a9dc9",
+    "run.log": "fdcc46caefd1595d403cf4ff4199dc8799eac2efad2d92744cca06ff9eaa6f87"
+  },
+  "reference_commit": "cc572c39fbe514cd7ff9f97fbc0a8bd5a9b5e6ab",
+  "reference_payload_sha256": "deb15093979c30b7fa5188757ac8712e6a5e8e2699fefa915edfc02056d137dd",
+  "scope": "Cycle-for-cycle comparison of every payload output in the50-case direct protocol bench; no whole-controller equivalence or PPA claim.",
+  "status": "PASS_BOUNDED_DEFAULT_PAYLOAD_CYCLE_EQUIVALENCE"
+}

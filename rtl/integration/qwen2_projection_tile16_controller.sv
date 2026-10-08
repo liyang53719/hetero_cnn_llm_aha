@@ -5,7 +5,8 @@ module qwen2_projection_tile16_controller #(
  parameter integer ADDR_W=15,
  parameter bit EXPERIMENTAL_QK_NORM_ROPE=1'b0,
  parameter longint unsigned CANDIDATE_L2_BEATS=
-  ADDR_W<15 ? (64'd1<<ADDR_W) : 64'd24576
+  ADDR_W<15 ? (64'd1<<ADDR_W) : 64'd24576,
+ parameter bit CANDIDATE_READ_LOOKAHEAD=1'b0
 )(
  input logic clk_i,input logic rst_ni,input logic start_i,input logic[127:0]command_i,input logic[31:0]token_base_i,input logic[63:0]activation_local_i,weight_local_i,output_local_i,
  output logic descriptor_req_valid_o,input logic descriptor_req_ready_i,output logic[23:0]descriptor_req_index_o,input logic descriptor_rsp_valid_i,output logic descriptor_rsp_ready_o,input logic[127:0]descriptor_rsp_data_i,input logic descriptor_rsp_error_i,
@@ -34,7 +35,8 @@ module qwen2_projection_tile16_controller #(
  wire mpv,mpr;
  generate if(EXPERIMENTAL_QK_NORM_ROPE)begin:g_qk_candidate
   qwen2_projection_qk_norm_rope_candidate #(.ADDR_W(ADDR_W),
-   .L2_BEATS(CANDIDATE_L2_BEATS)) candidate(.*);
+   .L2_BEATS(CANDIDATE_L2_BEATS),
+   .CANDIDATE_READ_LOOKAHEAD(CANDIDATE_READ_LOOKAHEAD)) candidate(.*);
  // Avoid hierarchical references into an unelaborated optional module:
  // legacy source lists need not include any candidate dependency.
  assign st='0;assign mpv=1'b0;assign mpr=1'b0;

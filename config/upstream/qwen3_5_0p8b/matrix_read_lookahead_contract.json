@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "name": "default_off_single_owner_matrix_read_lookahead_v1",
+  "default_enabled": false,
+  "base_commit": "cc572c39fbe514cd7ff9f97fbc0a8bd5a9b5e6ab",
+  "cached_fixture_receipt_sha256": "045bf413457edea83fa23036f46330d3cdcd07ad9303ce1e0d6c717eea17bd70",
+  "cached_fixture_source": "reports/execution/U00_2_MATRIX_TOKEN_TILE16_20261008/result.json",
+  "fabrics": [
+    "unstalled",
+    "replay"
+  ],
+  "sources": [
+    "baseline",
+    "avx2"
+  ],
+  "lookahead_values": [
+    0,
+    1
+  ],
+  "random_stress": {
+    "source": "baseline",
+    "suite": "all",
+    "lookahead": 1
+  },
+  "matrix_steps_per_source_run": 294912,
+  "tiles_per_source_run": 288,
+  "selected_tokens_per_source_run": 32,
+  "heads_per_source_run": 320,
+  "fixed_matrix_lanes": 512,
+  "shared_l2_bytes": 1572864,
+  "new_data_buffer_bits": 0,
+  "added_outstanding_reads": 0,
+  "trace_evidence": "Complete lossless record stream consumed by independent numerical and protocol verifier; raw stream SHA256 and compact verified result retained; EOF mandatory.",
+  "counter_denominator": "accepted_command_through_done_inclusive_fixed_512_lanes",
+  "full_M128_rtl_coverage": false,
+  "whole_block_MAC90_claimed": false,
+  "PPA_measured": false
+}

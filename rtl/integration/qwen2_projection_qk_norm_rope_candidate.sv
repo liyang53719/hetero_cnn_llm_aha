@@ -31,7 +31,8 @@
 // not external writes already committed. No rollback/atomicity is claimed.
 module qwen2_projection_qk_norm_rope_candidate #(
  parameter integer ADDR_W=15,
- parameter longint unsigned L2_BEATS=ADDR_W<15 ? (64'd1<<ADDR_W) : 64'd24576
+ parameter longint unsigned L2_BEATS=ADDR_W<15 ? (64'd1<<ADDR_W) : 64'd24576,
+ parameter bit CANDIDATE_READ_LOOKAHEAD=1'b0
 )(
  input logic clk_i,rst_ni,start_i,input logic[127:0]command_i,
  input logic[31:0]token_base_i,
@@ -222,7 +223,8 @@ module qwen2_projection_qk_norm_rope_candidate #(
   .weight_row_bytes_o(context_weight_stride),.column_tiles_o(),.output_fp32_o());
  assign cr=state_q==CONTEXT_WAIT;
  qwen2_shared_l2_matrix_tile16_payload #(.ADDR_W(ADDR_W),
-  .CANDIDATE_RNE_BF16(1'b1),.L2_BEATS(L2_BEATS)) payload(
+  .CANDIDATE_RNE_BF16(1'b1),.L2_BEATS(L2_BEATS),
+  .CANDIDATE_READ_LOOKAHEAD(CANDIDATE_READ_LOOKAHEAD)) payload(
   .clk_i,.rst_ni(engine_rst_n),.start_i(state_q==PAYLOAD_START),
   .activation_local_i(activation_q),.weight_local_i(weight_q),
   .output_local_i(packed_tile_address),.depth_i(16'd1024),

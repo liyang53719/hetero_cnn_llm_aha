@@ -1,0 +1,133 @@
+{
+  "additional_protocol_coverage_assessment": {
+    "already_covered": "Direct payload bench resets with next_a_pending_q and held response, but payload has no error input. Full tile16 all suite injects two DMA faults and resets during final-row DMA. Historical selected-head Matrix_L2_read_error targets first A0 and historical reset_stage2 only waits matrix_inputs>=8.",
+    "coverage_gap": "CLOSED by the source-bound supplemental actual wrapper run.",
+    "frozen_sources_edited": false,
+    "inspected_wrapper_behavior": "read_error requires L2 response handshake; fatal response overrides normal progression to status8/DONE; DONE and FLUSH reset payload and Matrix. Normal error consumes and drains its read first. External reset requires accompanying fabric reset to discard unconsumed responses.",
+    "new_targeted_test_executed": true,
+    "original_trace_verifier_reuse_limitation": "Historical verifier assumes first matching A read errors and all accepted Matrix inputs produce outputs. A late abort legitimately drops in-flight Matrix work, so do not claim the unmodified original full-suite verifier applies.",
+    "proposed_targeted_test": "Transient selected-head chain bench, lookahead enabled, actual SharedL2 and Matrix and case1 oracle, zero artificial L2 response delay. Error only on accepted next_a_request with k_q>=1 while MQ blocked. Assert held erroneous reply before Matrix fire, status8/flush/quiet after response handshake, no tile write, exact accepted Matrix step count including aborted work; separately reset pending early response with fabric reset. Complete original selected-K recovery after each.",
+    "source_pointers": [
+      "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv:138-139",
+      "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv:301-305",
+      "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv:329",
+      "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv:493-500",
+      "tb/tb_qwen35_matrix_norm_rope_chain.sv:330-332",
+      "tb/tb_qwen35_matrix_norm_rope_chain.sv:608",
+      "tb/tb_qwen35_matrix_norm_rope_chain.sv:626",
+      "tb/tb_qwen35_matrix_norm_rope_tile16.sv:1038-1060"
+    ]
+  },
+  "base_commit": "cc572c39fbe514cd7ff9f97fbc0a8bd5a9b5e6ab",
+  "checked_properties": [
+    "Replay admission/response/ACK budgets use command-local ordinal, channel and domain hash, not elapsed cycles or global LFSR.",
+    "Admission countdown begins on first request valid and persists until handshake; replay DMA response delay starts after data transfer.",
+    "Real SharedL2 ready/response handshakes remain in the datapath and runtime assertions retain exactly one port0 read owner.",
+    "Default random delay branches and force-block expressions retain legacy semantics; lookahead parameters remain default-off.",
+    "Metrics sample accepted-start through done inclusively; paired useful work uses fixed512 lanes and all command cycles.",
+    "Pending-cycle occupancy and request-response latency include the response edge and handle same-cycle write ACK with zero latency.",
+    "Complete trace is iterated through EOF with independent input/source/all512-output checking; failure aborts and cleans up the stream processes.",
+    "Source hashes, generated hardware manifest, and source-bound fixture receipts/files are checked before and after execution."
+  ],
+  "checked_sources_sha256": {
+    "config/upstream/qwen3_5_0p8b/matrix_read_lookahead_contract.json": "76360c5bbbc5cfdce859d34d734cd98a4ea25c6c490348911dc883b7b01d833e",
+    "rtl/fabric/shared_l2_fabric.sv": "2b1630ac27f2850f57dc2178cd95d7cff00f41eb6162f1cc5c7e857d3d027bcf",
+    "rtl/integration/qwen2_projection_qk_norm_rope_candidate.sv": "1e3190b95c0e94b131ae6b821a71097e030b233dd8798d8222f5311088f8b9bb",
+    "rtl/integration/qwen2_projection_tile16_controller.sv": "72641a87b43cdabe0aa43514ce38efa8e7b46f022a6f03c10736057ba8838e70",
+    "rtl/integration/qwen2_shared_l2_matrix_tile16_payload.sv": "672be24fe5394169b8d80ecb593c33986404ae8e7862705a228e415e14e3af7b",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "scripts/run_matrix_read_lookahead.py": "9c9c7ef0cf1678b03844d49356fe0855a5f5f2be17680ede73f67f411d60f6fe",
+    "scripts/verify_matrix_norm_rope_tile16_trace.py": "e4490eb04183c457ad728cf089509e4055766ec6dd836c18dc229c18f0fe5a14",
+    "scripts/verify_matrix_read_lookahead_metrics.py": "53d335024de5e4d3e2c5dfa7a58dfa8f76ad39938f59d8e47043bc27e71e0cc9",
+    "scripts/verify_matrix_read_lookahead_stream.py": "56276160c7c6fdc735e578ee76b5b4760a722df1c0baa37c05407357d0c92e37",
+    "tb/tb_qwen35_matrix_norm_rope_tile16.sv": "73f1dac1614e63a865501da92b3b1841e3909c0937c45788afaf41b5880c7ec5"
+  },
+  "fixed_findings": [
+    {
+      "finding": "Read-latency metrics selected count/sum/max were compared against a trace dictionary also containing min.",
+      "verified_resolution": "Current verifier selects matching count/sum/max fields and maps empty None extrema to zero."
+    },
+    {
+      "finding": "Runner positive-test fixtures lacked command_metrics after paired-metrics validation was added.",
+      "verified_resolution": "Fixture now provides command_metrics; the 10 then-current runner tests passed in this review."
+    },
+    {
+      "finding": "compare_runs did not validate the ninth run as baseline/random/lookahead1/all.",
+      "verified_resolution": "Current runner requires an exact Counter of the eight main pairs plus the specified random stress run."
+    },
+    {
+      "finding": "Strict improvement was required even for already context-II5-limited unstalled traffic.",
+      "verified_resolution": "Current runner requires nonregression for unstalled and strict improvement for deterministic replay; current 57 runner/metrics/instrumentation source tests passed in this review."
+    }
+  ],
+  "open_findings": [],
+  "prior_focused_verification": {
+    "default_off_cycle_equivalence_to_base_payload": true,
+    "equivalence_evidence": "/tmp/tile16_lookahead_equivalence/run.log",
+    "existing_nonfinite_tests": 19,
+    "matrix_arithmetic_claimed_for_focused_stub_bench": false,
+    "new_protocol_tests": 24,
+    "protocol_cases_each_mode": 50,
+    "pytest_passed": 43,
+    "rejections_each_mode": 14,
+    "reset_recovery_cases_each_mode": 5
+  },
+  "review_status": "REVIEWED_NOT_EXECUTED_FULL",
+  "reviewed_notexecutedfull": {
+    "CI_or_remote_commit_acceptance_claimed": false,
+    "full_source_RTL_AB_executed_by_reviewer": false,
+    "full_source_numerical_acceptance_claimed": false,
+    "shared_files_edited_during_review": false,
+    "supplemental_actual_wrapper_protocol_and_all512_recoveries_verified": true,
+    "synthesis_timing_or_PPA_claimed": false
+  },
+  "schema_version": 1,
+  "source_tests_latest": {
+    "compiled_RTL": false,
+    "files": [
+      "tests/test_matrix_read_lookahead_runner.py",
+      "tests/test_matrix_read_lookahead_metrics.py",
+      "tests/test_tile16_causal_fabric_instrumentation.py"
+    ],
+    "passed": 57
+  },
+  "supplemental_candidate_status": {
+    "actual_Matrix512_packets": 32769,
+    "actual_Matrix_inputs": 32771,
+    "actual_RTL_observed": true,
+    "fault_matrix_inputs_outputs": [
+      2,
+      1
+    ],
+    "final_run_path": "/tmp/matrix_read_lookahead_edges_final_002",
+    "final_source_bound_run_passed": true,
+    "final_source_bound_run_pending": false,
+    "fresh_end_to_end_source_fixture_generated_and_derived_harness_checks": true,
+    "independent_trace_records": 197374,
+    "primary_AB_or_CI_acceptance_claimed": false,
+    "primary_sources_changed": false,
+    "raw_trace_sha256": "3af841daa96d7be945f0c730ec9dbf78f77c59161a27b95176230556c570624b",
+    "recovery_Matrix512_steps": 32768,
+    "reset_matrix_inputs_outputs": [
+      1,
+      0
+    ],
+    "source_files": [
+      "scripts/run_matrix_read_lookahead_edges.py",
+      "scripts/verify_matrix_read_lookahead_edges.py",
+      "tb/qwen2_matrix_read_lookahead_edges.svh",
+      "tests/test_matrix_read_lookahead_edges.py"
+    ],
+    "source_sha256": {
+      "scripts/run_matrix_read_lookahead_edges.py": "326bde3e99ca435da90b92d0dba8d6de1d01e4d672d3e64b25a7642338f63e81",
+      "scripts/verify_matrix_read_lookahead_edges.py": "17c84d4ba7443a7f5568e7a82894a4beb9864fce580a9d30c312131263831506",
+      "tb/qwen2_matrix_read_lookahead_edges.svh": "6d89dc4bbee8d88c84410f988743d36a88ea4ce6ec16d57723c14c771327b355",
+      "tests/test_matrix_read_lookahead_edges.py": "388a68c64d2099106a7ef45e7b61660b15d4c8a6b662827489a776de090d717b"
+    },
+    "source_tests_normal": 27,
+    "source_tests_optimized": 27,
+    "specialized_trace_reverified_with_hardening": true,
+    "summary_path": "/tmp/matrix_read_lookahead_edges_final_002/summary.json",
+    "summary_sha256": "41bbca3b804b5260adbe18dd2b061ce4e57b37af21d88420eda7c1e58abb6f09"
+  }
+}

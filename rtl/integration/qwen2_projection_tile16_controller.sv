@@ -22,7 +22,12 @@ module qwen2_projection_tile16_controller #(
  output logic candidate_l2_wr_rsp_ready_o,output logic ready_o,
  output logic[4:0]candidate_exception_flags_o,
  output logic[3:0]candidate_norm_status_o,
- output logic[31:0]candidate_mean_eps_o,candidate_inv_o
+ output logic[31:0]candidate_mean_eps_o,candidate_inv_o,
+ input logic candidate_tensor_i,input logic[7:0]candidate_token_count_i,
+ input logic[63:0]candidate_norm_output_ddr_i,candidate_rope_output_ddr_i,
+ output logic[7:0]candidate_total_column_tiles_o,
+ output logic[15:0]candidate_completed_heads_o,
+ output logic[7:0]candidate_completed_tokens_o
 );
  // Retain the legacy diagnostic hierarchy used by existing watchdogs.
  wire[4:0]st;
@@ -52,5 +57,8 @@ module qwen2_projection_tile16_controller #(
  assign candidate_norm_status_o='0;
  assign candidate_mean_eps_o='0;
  assign candidate_inv_o='0;
+ assign candidate_total_column_tiles_o='0;
+ assign candidate_completed_heads_o='0;
+ assign candidate_completed_tokens_o='0;
  end endgenerate
 endmodule

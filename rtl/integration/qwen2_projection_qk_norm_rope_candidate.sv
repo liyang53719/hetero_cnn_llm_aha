@@ -1,16 +1,20 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
-// Opt-in bounded descriptor bridge, not a full tensor or architecture top.
+// Opt-in descriptor bridge; tensor mode streams all heads of a checked token
+// window through the same bounded head engine, without a replacement top.
 // Executes one selected token/head: H1024 -> Q256+gate256 or K256 -> Norm256
 // -> SharedL2 -> partial64 RoPE. All Matrix products/accumulators are produced
 // by the existing Revision8B-B endpoint. No native/reference payload input.
 // Gamma (256 BF16) and explicit cos32/sin32 BF16 coefficients are preloaded.
 //
-// The seven selected working regions must be disjoint. Tensor bases denote
-// whole tensors, while activation/weight buffers and gamma/trig are direct
-// addresses. Token extent is 1..128; Q has 8 packed heads, K has 2 heads.
-// Packed projection is also stored through the existing DMA interface. Norm
-// and RoPE outputs remain in SharedL2. done waits for every DMA and L2 ACK.
+// The seven working regions must be disjoint. In selected-head mode local
+// packed/Norm/RoPE bases denote whole tensors and gamma/trig are direct.
+// Tensor mode instead reuses fixed local single-head packed/Norm/RoPE staging;
+// trig is an explicit128-byte-per-token table indexed by absolute source token.
+// All full-mode outputs commit to DDR before staging reuse. Token extent is
+// 1..128; Q has8 packed heads,K has2. done waits for every DMA and L2 ACK.
+// Six-bit column_tiles_o is always per-head16Q/8K. The separate eight-bit
+// candidate_total_column_tiles_o is per-token128Q/16K, never whole-command.
 // L2 write requests and ACKs are separate: exactly one may be outstanding;
 // a same-cycle ACK with request acceptance is supported. Fabric reset must
 // accompany rst_ni and discard old responses. Hold reset for >=2 clocks.
@@ -55,19 +59,35 @@ module qwen2_projection_qk_norm_rope_candidate #(
  output logic candidate_l2_wr_rsp_ready_o,output logic ready_o,
  output logic[4:0]candidate_exception_flags_o,
  output logic[3:0]candidate_norm_status_o,
- output logic[31:0]candidate_mean_eps_o,candidate_inv_o
+ output logic[31:0]candidate_mean_eps_o,candidate_inv_o,
+ // Tensor mode is explicit; omitted ports preserve the selected-head mode.
+ input logic candidate_tensor_i,input logic[7:0]candidate_token_count_i,
+ input logic[63:0]candidate_norm_output_ddr_i,candidate_rope_output_ddr_i,
+ output logic[7:0]candidate_total_column_tiles_o,
+ output logic[15:0]candidate_completed_heads_o,
+ output logic[7:0]candidate_completed_tokens_o
 );
  typedef enum logic[4:0] {
   IDLE,CONTEXT_START,CONTEXT_WAIT,CHECK_ADDRESS,ACT_REQ,ACT_RSP,MATRIX_CMD,
   WEIGHT_REQ,WEIGHT_RSP,PAYLOAD_START,PAYLOAD_WAIT,STORE_REQ,STORE_RSP,
   HEAD_REQ,HEAD_RSP,GAMMA_REQ,GAMMA_RSP,NORM_REQ,NORM_RSP,NORM_WRITE,
-  ROPE_START,ROPE_WAIT,WAIT_MATRIX,DONE,FLUSH
+  ROPE_START,ROPE_WAIT,WAIT_MATRIX,DONE,FLUSH,
+  NORM_STORE_REQ,NORM_STORE_RSP,ROPE_STORE_REQ,ROPE_STORE_RSP,
+  NEXT_HEAD,HEAD_FLUSH1,HEAD_FLUSH2
  } state_e;
  state_e state_q;
  localparam logic[64:0]BYTE_LIMIT=65'(L2_BEATS)<<6;
  localparam logic[64:0]DDR_LIMIT=65'd1<<56;
  logic[127:0]command_q;
- logic[31:0]token_q;
+ logic[31:0]token_q,token_start_q;
+ logic tensor_q;
+ logic[7:0]token_count_q;
+ logic[32:0]token_end;
+ logic[63:0]norm_ddr_base_q,rope_ddr_base_q,trig_head_q;
+ logic[64:0]trig_address,norm_ddr_address,rope_ddr_address;
+ logic[64:0]ddr_region_base[0:4],ddr_region_bytes[0:4];
+ logic tensor_ddr_legal;
+ logic[15:0]head_count;
  logic[1:0]role_q;
  logic[15:0]head_q;
  logic[7:0]policy_q;
@@ -106,13 +126,19 @@ module qwen2_projection_qk_norm_rope_candidate #(
  assign done_o=state_q==DONE;
  // Two full control clocks DONE/FLUSH reset the engines between commands,
  // including after a failed DMA midway through an active Matrix command.
- assign engine_rst_n=rst_ni&&state_q!=IDLE&&state_q!=DONE&&state_q!=FLUSH;
+ assign engine_rst_n=rst_ni&&state_q!=IDLE&&state_q!=DONE&&state_q!=FLUSH&&
+  state_q!=HEAD_FLUSH1&&state_q!=HEAD_FLUSH2;
+ assign token_end={1'b0,token_start_q}+{25'd0,token_count_q};
+ assign head_count=role_q==0?16'd8:16'd2;
  assign packed_stride=role_q==0?32'd8192:32'd1024;
  assign normalized_stride=role_q==0?32'd4096:32'd1024;
  assign head_packed_bytes=role_q==0?32'd1024:32'd512;
- assign packed_address={1'b0,packed_base_q}+65'(token_q)*packed_stride+65'(head_q)*head_packed_bytes;
- assign norm_address={1'b0,norm_base_q}+65'(token_q)*normalized_stride+65'(head_q)*512;
- assign rope_address={1'b0,rope_base_q}+65'(token_q)*normalized_stride+65'(head_q)*512;
+ assign packed_address={1'b0,packed_base_q}+(tensor_q?65'd0:65'(token_q)*packed_stride+65'(head_q)*head_packed_bytes);
+ assign norm_address={1'b0,norm_base_q}+(tensor_q?65'd0:65'(token_q)*normalized_stride+65'(head_q)*512);
+ assign rope_address={1'b0,rope_base_q}+(tensor_q?65'd0:65'(token_q)*normalized_stride+65'(head_q)*512);
+ assign trig_address={1'b0,trig_q}+(tensor_q?65'(token_q)*128:65'd0);
+ assign norm_ddr_address={1'b0,norm_ddr_base_q}+65'(token_q)*normalized_stride+65'(head_q)*512;
+ assign rope_ddr_address={1'b0,rope_ddr_base_q}+65'(token_q)*normalized_stride+65'(head_q)*512;
  assign act_ddr_address={9'd0,tensor_address[0+:56]}+65'(token_q)*2048;
  assign weight_ddr_address={9'd0,tensor_address[56+:56]}+65'(head_q)*head_packed_bytes;
  assign packed_ddr_address={9'd0,tensor_address[112+:56]}+65'(token_q)*packed_stride+65'(head_q)*head_packed_bytes;
@@ -122,7 +148,8 @@ module qwen2_projection_qk_norm_rope_candidate #(
   region_base[2]=packed_address;region_bytes[2]=65'(head_packed_bytes);
   region_base[3]={1'b0,gamma_q};region_bytes[3]=512;
   region_base[4]=norm_address;region_bytes[4]=512;
-  region_base[5]={1'b0,trig_q};region_bytes[5]=128;
+  region_base[5]={1'b0,trig_q}+(tensor_q?65'(token_start_q)*128:65'd0);
+  region_bytes[5]=tensor_q?65'(token_count_q)*128:65'd128;
   region_base[6]=rope_address;region_bytes[6]=512;
   local_legal=1'b1;
   for(int a=0;a<7;a++)begin
@@ -134,7 +161,33 @@ module qwen2_projection_qk_norm_rope_candidate #(
    end
   end
  end
- assign ddr_legal=act_ddr_address[0]==0&&weight_ddr_address[5:0]==0&&
+ // Preflight whole active windows, before any DMA. Reserving only the
+ // current head would let its output destroy a later head/token's input.
+ always_comb begin
+  ddr_region_base[0]={9'd0,tensor_address[0+:56]}+65'(token_start_q)*2048;
+  ddr_region_bytes[0]=65'(token_count_q)*2048;
+  ddr_region_base[1]={9'd0,tensor_address[56+:56]};
+  ddr_region_bytes[1]=65'd1024*packed_stride;
+  ddr_region_base[2]={9'd0,tensor_address[112+:56]}+65'(token_start_q)*packed_stride;
+  ddr_region_bytes[2]=65'(token_count_q)*packed_stride;
+  ddr_region_base[3]={1'b0,norm_ddr_base_q}+65'(token_start_q)*normalized_stride;
+  ddr_region_bytes[3]=65'(token_count_q)*normalized_stride;
+  ddr_region_base[4]={1'b0,rope_ddr_base_q}+65'(token_start_q)*normalized_stride;
+  ddr_region_bytes[4]=65'(token_count_q)*normalized_stride;
+  tensor_ddr_legal=1'b1;
+  for(int a=0;a<5;a++)begin
+   if(ddr_region_base[a]>=DDR_LIMIT||ddr_region_bytes[a]==0||
+      ddr_region_base[a]+ddr_region_bytes[a]>DDR_LIMIT||
+      (a==0?ddr_region_base[a][0]!=0:ddr_region_base[a][5:0]!=0))
+    tensor_ddr_legal=1'b0;
+   for(int b=a+1;b<5;b++)begin
+    if(ddr_region_base[a]<ddr_region_base[b]+ddr_region_bytes[b]&&
+       ddr_region_base[b]<ddr_region_base[a]+ddr_region_bytes[a])
+     tensor_ddr_legal=1'b0;
+   end
+  end
+ end
+ assign ddr_legal=(!tensor_q||tensor_ddr_legal)&&act_ddr_address[0]==0&&weight_ddr_address[5:0]==0&&
   packed_ddr_address[5:0]==0&&act_ddr_address+2048<=DDR_LIMIT&&
   weight_ddr_address+65'd1023*packed_stride+65'(head_packed_bytes)<=DDR_LIMIT&&
   packed_ddr_address+65'(head_packed_bytes)<=DDR_LIMIT&&
@@ -143,7 +196,9 @@ module qwen2_projection_qk_norm_rope_candidate #(
   !(packed_ddr_address<weight_ddr_address+65'd1023*packed_stride+65'(head_packed_bytes)&&
     weight_ddr_address<packed_ddr_address+65'(head_packed_bytes));
  assign shape_legal=(role_q==0||role_q==1)&&policy_q==8'hc1&&
-  head_q<(role_q==0?16'd8:16'd2)&&token_q<{14'd0,tensor_shape[17:0]}&&
+  head_q<head_count&&token_q<{14'd0,tensor_shape[17:0]}&&
+  (!tensor_q||(token_count_q!=0&&token_count_q<=128&&
+   token_end<={15'd0,tensor_shape[17:0]}))&&
   context_columns==(role_q==0?18'd4096:18'd512);
 
  qwen2_projection_descriptor_context #(.CANDIDATE_QK_SHAPES(1'b1)) context_decoder(
@@ -195,7 +250,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
   .clk_i,.rst_ni(engine_rst_n),.start_i(state_q==ROPE_START),
   .data_beats_i(6'd8),.heads_i(10'd1),.head_dim_i(10'd256),
   .position_lane_i(4'd0),.data_local_i(norm_q),.position_local_i(64'd0),
-  .out_local_i(rope_q),.candidate_trig_local_i(trig_q),
+  .out_local_i(rope_q),.candidate_trig_local_i(trig_head_q),
   .candidate_rotary_dim_i(10'd64),.candidate_policy_i(8'hb1),.ready_o(),
   .l2_rd_valid_o(rrv),.l2_rd_ready_i(rrr),.l2_rd_addr_o(rra),
   .l2_rsp_valid_i(rrsv),.l2_rsp_ready_o(rrsr),.l2_rsp_data_i,
@@ -206,18 +261,23 @@ module qwen2_projection_qk_norm_rope_candidate #(
 
  // DMA addresses are immutable throughout request backpressure. Responses
  // are consumed only by the owner that issued the sole outstanding request.
- assign dma_req_valid_o=state_q==ACT_REQ||state_q==WEIGHT_REQ||state_q==STORE_REQ;
- assign dma_req_kind_o=state_q==STORE_REQ?2'd3:2'd1;
+ assign dma_req_valid_o=state_q==ACT_REQ||state_q==WEIGHT_REQ||state_q==STORE_REQ||
+  state_q==NORM_STORE_REQ||state_q==ROPE_STORE_REQ;
+ assign dma_req_kind_o=(state_q==STORE_REQ||state_q==NORM_STORE_REQ||state_q==ROPE_STORE_REQ)?2'd3:2'd1;
  assign dma_src_addr_o=state_q==ACT_REQ?act_ddr_q:
-  state_q==WEIGHT_REQ?weight_ddr_q+64'(tile_q)*64:packed_q+64'(tile_q)*64;
+  state_q==WEIGHT_REQ?weight_ddr_q+64'(tile_q)*64:
+  state_q==NORM_STORE_REQ?norm_q:state_q==ROPE_STORE_REQ?rope_q:packed_q+64'(tile_q)*64;
  assign dma_dst_addr_o=state_q==ACT_REQ?activation_q:
-  state_q==WEIGHT_REQ?weight_q:packed_ddr_q+64'(tile_q)*64;
+  state_q==WEIGHT_REQ?weight_q:state_q==NORM_STORE_REQ?norm_ddr_address[63:0]:
+  state_q==ROPE_STORE_REQ?rope_ddr_address[63:0]:packed_ddr_q+64'(tile_q)*64;
  assign dma_row_bytes_o=state_q==ACT_REQ?32'd2:32'd64;
- assign dma_rows_o=state_q==STORE_REQ?32'd1:32'd1024;
+ assign dma_rows_o=state_q==STORE_REQ?32'd1:
+  (state_q==NORM_STORE_REQ||state_q==ROPE_STORE_REQ)?32'd8:32'd1024;
  assign dma_src_stride_o=state_q==ACT_REQ?32'd2:
   state_q==WEIGHT_REQ?packed_stride:32'd64;
  assign dma_dst_stride_o=32'd64;
- assign dma_rsp_ready_o=state_q==ACT_RSP||state_q==WEIGHT_RSP||state_q==STORE_RSP;
+ assign dma_rsp_ready_o=state_q==ACT_RSP||state_q==WEIGHT_RSP||state_q==STORE_RSP||
+  state_q==NORM_STORE_RSP||state_q==ROPE_STORE_RSP;
 
  // SharedL2 ownership switches only after the previous client drained.
  always_comb begin
@@ -258,6 +318,9 @@ module qwen2_projection_qk_norm_rope_candidate #(
  always_ff@(posedge clk_i or negedge rst_ni)begin
   if(!rst_ni)begin
    state_q<=IDLE;command_q<=0;token_q<=0;role_q<=0;head_q<=0;policy_q<=0;
+   tensor_q<=0;token_start_q<=0;token_count_q<=0;
+   norm_ddr_base_q<=0;rope_ddr_base_q<=0;trig_head_q<=0;
+   candidate_total_column_tiles_o<=0;candidate_completed_heads_o<=0;candidate_completed_tokens_o<=0;
    activation_q<=0;weight_q<=0;packed_base_q<=0;gamma_q<=0;
    norm_base_q<=0;rope_base_q<=0;trig_q<=0;packed_q<=0;norm_q<=0;rope_q<=0;
    act_ddr_q<=0;weight_ddr_q<=0;packed_ddr_q<=0;tile_q<=0;beat_q<=0;
@@ -274,6 +337,10 @@ module qwen2_projection_qk_norm_rope_candidate #(
    case(state_q)
     IDLE:if(start_i&&ready_o)begin
      command_q<=command_i;token_q<=token_base_i;role_q<=candidate_role_i;
+     tensor_q<=candidate_tensor_i===1'b1;token_start_q<=token_base_i;
+     token_count_q<=candidate_token_count_i;
+     norm_ddr_base_q<=candidate_norm_output_ddr_i;rope_ddr_base_q<=candidate_rope_output_ddr_i;
+     candidate_total_column_tiles_o<=0;candidate_completed_heads_o<=0;candidate_completed_tokens_o<=0;
      head_q<=candidate_head_i;policy_q<=candidate_policy_i;
      activation_q<=activation_local_i;weight_q<=weight_local_i;
      packed_base_q<=output_local_i;gamma_q<=candidate_norm_weight_local_i;
@@ -291,10 +358,12 @@ module qwen2_projection_qk_norm_rope_candidate #(
      else state_q<=CHECK_ADDRESS;
     end
     CHECK_ADDRESS:begin
-     if(!shape_legal)begin status_o<=4;state_q<=DONE;end
+     if(!shape_legal||(tensor_q&&candidate_completed_heads_o==0&&head_q!=0))begin status_o<=4;state_q<=DONE;end
      else if(!local_legal||!ddr_legal)begin status_o<=5;state_q<=DONE;end
      else begin
       output_columns_o<=context_columns;column_tiles_o<=role_q==0?6'd16:6'd8;
+      candidate_total_column_tiles_o<=tensor_q?(role_q==0?8'd128:8'd16):(role_q==0?8'd16:8'd8);
+      trig_head_q<=trig_address[63:0];
       packed_q<=packed_address[63:0];norm_q<=norm_address[63:0];rope_q<=rope_address[63:0];
       act_ddr_q<=act_ddr_address[63:0];weight_ddr_q<=weight_ddr_address[63:0];
       packed_ddr_q<=packed_ddr_address[63:0];state_q<=ACT_REQ;
@@ -339,7 +408,7 @@ module qwen2_projection_qk_norm_rope_candidate #(
     end
     NORM_REQ:if(niv&&nir)state_q<=NORM_RSP;
     NORM_RSP:if(nov&&norm_out_ready)begin
-     candidate_norm_status_o<=nstatus;candidate_exception_flags_o<=nflags;
+     candidate_norm_status_o<=nstatus;candidate_exception_flags_o<=candidate_exception_flags_o|nflags;
      candidate_mean_eps_o<=nmean;candidate_inv_o<=ninv;
      if(nstatus!=0)begin status_o<=8'h10+{4'd0,nstatus};state_q<=DONE;end
      else begin norm_head_q<=norm_result;beat_q<=0;state_q<=NORM_WRITE;end
@@ -354,7 +423,32 @@ module qwen2_projection_qk_norm_rope_candidate #(
      if(rbad||(|rflags[4:1]))begin status_o<=7;state_q<=DONE;end
      else state_q<=WAIT_MATRIX;
     end
-    WAIT_MATRIX:if(mseen_q&&!write_pending_q)state_q<=DONE;
+    WAIT_MATRIX:if(mseen_q&&!write_pending_q)begin
+     if(tensor_q)state_q<=NORM_STORE_REQ;
+     else begin candidate_completed_heads_o<=1;candidate_completed_tokens_o<=1;state_q<=DONE;end
+    end
+    NORM_STORE_REQ:if(dma_req_valid_o&&dma_req_ready_i)state_q<=NORM_STORE_RSP;
+    NORM_STORE_RSP:if(dma_rsp_valid_i&&dma_rsp_ready_o)begin
+     if(dma_rsp_error_i)begin status_o<=6;state_q<=DONE;end
+     else begin ddr_write_bytes_o<=ddr_write_bytes_o+512;state_q<=ROPE_STORE_REQ;end
+    end
+    ROPE_STORE_REQ:if(dma_req_valid_o&&dma_req_ready_i)state_q<=ROPE_STORE_RSP;
+    ROPE_STORE_RSP:if(dma_rsp_valid_i&&dma_rsp_ready_o)begin
+     if(dma_rsp_error_i)begin status_o<=6;state_q<=DONE;end
+     else begin ddr_write_bytes_o<=ddr_write_bytes_o+512;state_q<=NEXT_HEAD;end
+    end
+    NEXT_HEAD:begin
+     candidate_completed_heads_o<=candidate_completed_heads_o+1'b1;
+     if(head_q+16'd1==head_count)begin
+      candidate_completed_tokens_o<=candidate_completed_tokens_o+1'b1;
+      if({1'b0,token_q}+33'd1==token_end)state_q<=DONE;
+      else begin token_q<=token_q+1'b1;head_q<=0;state_q<=HEAD_FLUSH1;end
+     end else begin head_q<=head_q+1'b1;state_q<=HEAD_FLUSH1;end
+     tile_q<=0;beat_q<=0;mseen_q<=0;
+     packed_head_q<=0;gamma_head_q<=0;norm_head_q<=0;
+    end
+    HEAD_FLUSH1:state_q<=HEAD_FLUSH2;
+    HEAD_FLUSH2:state_q<=CHECK_ADDRESS;
     DONE:begin write_pending_q<=0;state_q<=FLUSH;end
     FLUSH:state_q<=IDLE;
     default:state_q<=IDLE;

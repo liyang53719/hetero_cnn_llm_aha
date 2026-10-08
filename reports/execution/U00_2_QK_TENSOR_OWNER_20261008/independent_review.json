@@ -1,0 +1,117 @@
+{
+  "artifact_checks": {
+    "bounded_scope_and_known_failures_preserved": true,
+    "default_regression_summary_and_log_hashes_match": true,
+    "fixture_receipt_and_embedded_summary_match": true,
+    "generated_RTL_and_manifest_hashes_match": true,
+    "legacy_summary_and_trace_hash_match": true,
+    "pins_and_native_comparisons_match_fixture": true,
+    "plan_checksum_matches_checklist": true,
+    "primary_fp32_accumulator_observations_both_sources": 37748736,
+    "primary_heads_both_sources": 80,
+    "raw_trace_and_log_hashes_match": true,
+    "result_matches_raw_summary_projection": true
+  },
+  "base_commit": "96f4d39487d0abc4cd7cd4dd8ecb2dcc34807c73",
+  "conclusions": {
+    "QoR": "Not measured. Simulation tool wall time is not hardware latency, PPA or useful-wall MAC utilization.",
+    "functional": "No new blocker found in scoped source review; canonical baseline/AVX2 RTL, integer/C oracle and independent trace summaries agree for all Q8/K2 heads at cold tokens0/1 and carried tokens126/127.",
+    "physical_implementation": "Fixed endpoint and bounded single-head staging retained at source level; no independent synthesis or physical resource inference signoff.",
+    "protocol": "Acceptance snapshot, 33-bit token preflight, full-range alias/overflow checks, per-head engine reset, cumulative flags, and ACK-before-advance paths reviewed with no new P0/P1 finding."
+  },
+  "evidence_sha256": {
+    ".github/workflows/matrix-norm-rope-tensor-candidate.yml": "f946f1ad9993fdc68174a7ec70f3795e4f5119a0e50ddba0ae57aec00b49e18f",
+    "config/upstream/qwen3_5_0p8b/matrix_norm_rope_tensor_contract.json": "bb37b77326a38abe618d3cf6f6602c9f490741fd3beb1265db7f24ea5c33b872",
+    "doc/U00_2_QK_TENSOR_OWNER_20261008_CN.md": "40156538b7df24cd582152816c5aef301be6a6a08b39312cb686272ce82e5284",
+    "doc/block_checklist.yaml": "6bebf855293c6e1158d469cdcfbfec44d014822223afe5a89bd264987a84960a",
+    "doc/three_model_typical_block_closure_20260917_zh.yaml": "f775b7e6a29ab0b731c5a54053d00d143440c6946ec7ca013c247bcc3f4cd906",
+    "reports/execution/U00_2_QK_TENSOR_OWNER_20261008/result.json": "7e4eab73255619e90ba4ef2cf306dde0037e27adb1ef1fd8dddc3f37eae66d47",
+    "work/tensor_default_regression_003/summary.json": "da9533cbcf00bcf28caccedba794cc1140a9a44ab5f33bb9a90a14a9ba7b90dc",
+    "work/tensor_legacy_rtl_003/summary.json": "faf93aa55cebef8ef576565d3320393fe245e1088e162ee400f14899aee509fd",
+    "work/tensor_owner_verified_003/summary.json": "bf9b9f5cba6c4a834ed065b885c14d1c77233ca1d14aa637578bfcc3eae8205b",
+    "work/tensor_recovery_checkpoint/final_focused.log": "70e2b2705c75cfaf5cddf8168b7fa0946c2f1c1c275d85b9a719cdbc60bfe2ba",
+    "work/tensor_recovery_checkpoint/final_full.log": "be0a08364d809ca25753a0cb557d78d796b8cf6b6a9b431c40f6af91f89345ea",
+    "work/tensor_recovery_checkpoint/final_optimized.log": "3188024580717d7c29df3d8df012bd18262a06cb973f7ac8855a0da348ecf533",
+    "work/tensor_recovery_checkpoint/publish_full_003.log": "061f50df039fa8e28c16b7668495ffcf395bd70c26f09409d80c2d26a3226a34"
+  },
+  "hierarchy": "Existing default-off projection controller -> candidate command owner -> existing Matrix512 endpoint, single-head payload, Norm256 and partial64 RoPE; actual 4 x 6144 x 64-byte SharedL2 in the gate.",
+  "independently_executed_tests": [
+    {
+      "command": "work/qk_regen_venv/bin/python -m pytest -o addopts= -q tests/test_matrix_norm_rope_tensor_candidate.py tests/test_matrix_norm_rope_tensor_runner.py tests/test_matrix_norm_rope_tensor_trace.py",
+      "passed": 249,
+      "seconds": 29.82
+    },
+    {
+      "command": "work/qk_regen_venv/bin/python -O -m pytest -o addopts= -q tests/test_matrix_norm_rope_tensor_candidate.py tests/test_matrix_norm_rope_tensor_runner.py tests/test_matrix_norm_rope_tensor_trace.py",
+      "passed": 249,
+      "seconds": 29.79,
+      "warnings": "Expected pytest optimized-mode assertion warning."
+    },
+    {
+      "command": "git diff --check",
+      "pass": true
+    },
+    {
+      "command": "work/qk_regen_venv/bin/python scripts/check_git_payloads.py",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "No new RTL simulation or arithmetic materialization was launched by this reviewer; canonical run summaries, retained artifacts and source bindings were independently checked.",
+    "The large accepted-event traces were hash-verified against the canonical verifier results, not consumed a second time during this artifact review.",
+    "No synthesis, timing, area, power, physical inference or useful-wall MAC90 signoff.",
+    "Coverage is four selected tokens per source, not full M128/M1024 or a complete three-model block; native full-block gates remain false.",
+    "Generic Command128 full-tensor integration, position generation/cache and KV/Attention/FFN remain open; U00.2 remains ongoing and U01 to do.",
+    "Supplemental legacy full-controller testbench has a documented pre-existing Verilator BLKANDNBLK failure; its complete simulation is not claimed.",
+    "No publication or exact-commit remote CI result is certified by this review."
+  ],
+  "open_P0": 0,
+  "open_P1": 0,
+  "open_findings": [],
+  "raw_trace_and_log_bindings": [
+    {
+      "file": "work/tensor_owner_verified_003/baseline_all.log",
+      "sha256": "652904bcf7d3f216c890528d694c6c3e88cf4ac066f0de951af61aa823698eed"
+    },
+    {
+      "file": "work/tensor_owner_verified_003/baseline_all.jsonl",
+      "sha256": "1717477692d5a06e2b29d9ca8a1f6fb6f778d9c3b9c8a602e8f253dde04eb5fe"
+    },
+    {
+      "file": "work/tensor_owner_verified_003/avx2_main.log",
+      "sha256": "1fc2adb03f29c781b47a0907f1d5aab61eae48a68fc45796200637c7070b0ca8"
+    },
+    {
+      "file": "work/tensor_owner_verified_003/avx2_main.jsonl",
+      "sha256": "2478730e16c7a6344dfb8a4d6bb38e1ac5fde363950a4eb45d0a89d43e8ed8b4"
+    }
+  ],
+  "resolved_findings": [
+    {
+      "file": "doc/U00_2_QK_TENSOR_OWNER_20261008_CN.md",
+      "issue": "Document used simulator-reported wall times without distinguishing them from runner call times.",
+      "line": 47,
+      "resolution": "Parent changed to canonical runner call times 2407.065 s and 2143.322 s and labeled the measurement; rechecked.",
+      "severity": "P3"
+    }
+  ],
+  "reviewed_at_utc": "2026-10-08T02:09:00Z",
+  "reviewed_regression_terminals": {
+    "focused_normal_passed": 446,
+    "focused_optimized_passed": 446,
+    "newest_full_known_baseline_failures": 5,
+    "newest_full_passed": 3116,
+    "newest_full_rerun": "Completed: 3116 passed, exactly the same five known baseline failures.",
+    "newest_full_seconds": 168.95,
+    "prior_full_known_baseline_failures": 5,
+    "prior_full_passed": 3116
+  },
+  "schema_version": 1,
+  "source_binding": {
+    "all_current_hashes_match": true,
+    "checked_files": 51,
+    "map_encoding": "UTF-8 JSON sorted keys, compact separators; source_sha256 map in result.json",
+    "source_hash_map_sha256": "5f588ef5a8558c89417d3fc9e28649a47c18317352858a748df348c616485214"
+  },
+  "status": "PASS_BOUNDED_SOURCE_AND_ARTIFACT_REVIEW"
+}

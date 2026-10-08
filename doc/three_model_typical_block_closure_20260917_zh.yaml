@@ -1055,3 +1055,16 @@ U00_2_Matrix_Norm_RoPE有界链_20261007:
   不替代: [生产默认策略切换, 全Q8和K2多token owner, 完整Command128端到端, 三模型完整block数值, PPA, 固定资源整block useful-wall MAC90]
   下一有界门禁: 从该有界链扩展实际全tensor owner及多token生命周期；保留完整producer拒绝，不跳到性能完成
   状态: U00.2 ongoing；U01 to do；三模型完整block数值及MAC90目标不变
+
+U00_2_Q8_K2_token_owner门禁_20261008:
+  报告: doc/U00_2_QK_TENSOR_OWNER_20261008_CN.md
+  冻结合同: config/upstream/qwen3_5_0p8b/matrix_norm_rope_tensor_contract.json
+  接入: 既有projection controller默认关闭分支增加全Q8或K2和token窗口owner，不另建架构top
+  固定资源: 512-lane Matrix与真实1.5MiB SharedL2；仅复用每头staging，不增整tensor驻留缓存
+  门禁范围: baseline及AVX2各执行cold0和1、carried126和127的全部Q8与K2；每来源40头589824个Matrix输出包，不宣称M128全量数值
+  事务合同: 33位token范围检查、全选定DDR窗口无别名、独立8位per-token列tile总数、所有packed及Norm和RoPE写ACK后才推进head和token；全命令flags累计
+  当前状态: 有界门禁PASS；baseline及AVX2实际RTL、整数与C参考、独立trace及末端来源和manifest复核均通过；不扩展为全M128或M1024
+  结果摘要: reports/execution/U00_2_QK_TENSOR_OWNER_20261008/result.json
+  回归: 446项normal及-O通过；全仓3116通过和同5项既有失败；旧单头RTL45事务、默认关闭source-closure及五项生产路径RTL回归通过
+  保留未完成: generic Command128完整接入、全M128、系数生成cache、KV和Attention与FFN、三模型完整block、PPA及固定资源整block MAC90%
+  状态: U00.2 ongoing；U01 to do

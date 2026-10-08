@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "name": "experimental_qwen35_matrix_norm_rope_all_head_token_window_v1",
+  "default_enabled": false,
+  "architecture": "Existing qwen2_projection_tile16_controller default-off candidate; same Revision8B-B 512-lane Matrix endpoint and 4x6144x64-byte SharedL2 fabric; no replacement top",
+  "dtype": "Raw BF16 H1024 activation and actual BF16 checkpoint weights; ascending K0..1023 sequential FP32 FMA, terminal BF16-RNE, Norm256 policy0xc1 and partial64 all-products-BF16 RoPE policy0xb1",
+  "head_shape": {"q_heads": 8, "k_heads": 2, "head_dim": 256, "rotary_dim": 64, "q_packed_columns": 4096, "q_content_columns": 2048, "k_columns": 512},
+  "owner_interface": "One accepted Command128 descriptor plus snapshotted candidate sideband executes all heads of one role for a checked token window; does not add a generic Command128 opcode or complete full-block owner",
+  "token_range": "1 <= count <= 128, start+count <= descriptor M <=128; addition checked at33bits before traffic; tensor head start must be0",
+  "iteration": "token-major, ascending head, ascending32-column Matrix tile; Q16tiles/head,K8tiles/head; two engine-reset clocks betweenheads",
+  "counters": "Legacy six-bit column_tiles reports bounded per-head16Q/8K only. Explicit eight-bit total_column_tiles reports128Q/16K pertoken. completed_heads16bits and completed_tokens8bits advance only after every packed,Norm,RoPE storeACK for the head/token",
+  "staging": "Fixed single-head packed1024Q/512K,Norm512,RoPE512 bytes; activation/weight each64KiB, gamma512bytes and128bytes/token trig table. No whole-tensor buffers or resource widening",
+  "position_coefficients": "Explicit immutable BF16 cos32/sin32 table at trig_base + absolute within-window source token index *128; coefficients from official cold position0/1 and carried position254/255. Generation/cache integration remains open",
+  "external_layout": "Packed output in descriptor DDR tensor: Q8192,K1024byte tokenstrides. Norm/RoPE explicit DDR whole-tensor bases: Q4096,K1024byte tokenstrides;512byte headstride. Q gate stays raw in packed output",
+  "ownership": "One outstanding descriptor,DMA,L2read and L2write owner each. Norm/RoPE stores each8rows x64bytes. All stores mustACK before staging reuse or done. Norm/RoPE arithmetic exception flags OR acrossheads (Matrix intermediate/conversion flags are not exported); first fatalstatus terminates; reset also flushes external fabric and does not roll back writes",
+  "preflight": "Full selected DDR windows for activation,allweightcolumns,packed,Norm,RoPE are pairwise disjoint,aligned and within56bitDDR. Seven fixed local staging/trig regions pairwise disjoint and within true1572864byteL2. All arithmetic checked before truncation",
+  "frozen_gate": {
+    "variants": ["baseline", "avx2"],
+    "commands_per_variant": [
+      {"phase": "cold128", "role": "q", "start": 0, "count": 2, "heads": 8},
+      {"phase": "cold128", "role": "k", "start": 0, "count": 2, "heads": 2},
+      {"phase": "carried128", "role": "q", "start": 126, "count": 2, "heads": 8},
+      {"phase": "carried128", "role": "k", "start": 126, "count": 2, "heads": 2}
+    ],
+    "heads_per_variant": 40,
+    "primary_matrix_steps_per_variant": 589824,
+    "primary_fp32_accumulator_values_per_variant": 18874368,
+    "full_M128_rtl_coverage": false
+  },
+  "numerical_gate": "Independent integer dyadic seqFMA/Norm/RoPE plus separate C fmaf/node reference must match actual RTL bitwise; native source comparison keeps max_abs<=0.03125,mean_abs<=0.005. Preserve each failure and never substitute oracle agreement for native acceptance",
+  "artifact_policy": "Source,pins,hashes,shortsummary only inGit/CI artifact. Checkpoint payloads,NPZ,memh,traces,generatedRTL,binaries rebuilt transiently inwork/",
+  "open": ["all128tokens numericalRTL", "genericCommand128 fulltensor integration", "position coefficientgeneration/cache", "KV/Attention/FFN integration", "three-modelcompleteblocknumerics", "PPA", "fixed-resource wholeblock useful-wallMAC90%"]
+}

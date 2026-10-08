@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: f775b7e6a29ab0b731c5a54053d00d143440c6946ec7ca013c247bcc3f4cd906
+计划SHA256: 54e97482685e1117b46e6e9a4c065143edae3001f1936b91cc98ca02bb5a8ef7
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1157,6 +1157,7 @@
 - {编号: U00.2, 执行者: sandbox@matrix-norm-rope-chain-20261007, 时间: '2026-10-07T23:08:00+00:00', 说明: 完成已有projection controller默认关闭的实际Matrix K1024到Q256加gate256或K256到Norm和真实1.5MiB SharedL2 partial64 RoPE有界链；baseline45事务和AVX2四头及独立trace通过，197项normal和优化测试、全仓2867通过及同5既有失败。保留全Q8/K2和Command128完整owner、完整producer拒绝、三模型完整block与固定资源MAC90未完成。}
 - {编号: U00.2, 执行者: sandbox@q8-k2-token-owner-20261008, 时间: '2026-10-07T23:52:00+00:00', 说明: 接续认领已有默认关闭Matrix到Norm到SharedL2 RoPE链的全Q8和K2及token窗口owner；执行前冻结cold0和1、carried126和127两来源全头实际RTL门禁；单头固定staging复用和全写ACK生命周期。实现及复验进行中，不提前声明M128、generic Command128或三模型完整block及MAC90完成。}
 - {编号: U00.2, 执行者: sandbox@q8-k2-token-owner-20261008, 时间: '2026-10-08T02:04:00+00:00', 说明: 完成已有默认关闭分支的Q8和K2全头两token窗口owner；baseline和AVX2共80个primary头真实RTL、整数及C参考、独立trace和末端来源复核通过。baseline另验30拒绝和2故障及2reset，旧单头和默认关闭路径回归通过。全仓3116通过及同5既有失败；不扩大为M128或M1024，三模型完整block及MAC90仍未完成。}
+- {编号: U00.2, 执行者: sandbox@matrix-token-tile16-20261008, 时间: '2026-10-08T04:35:00+00:00', 说明: 接续认领既有默认关闭Q8及K2 owner的实际16行Matrix token tile门禁；固定cold0至15和carried112至127两来源全头及tail和ACK及reset及fault，保留独立双参考及native原门限。未声明M128或完整block及90%完成。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标

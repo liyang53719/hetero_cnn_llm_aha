@@ -1068,3 +1068,13 @@ U00_2_Q8_K2_token_owner门禁_20261008:
   回归: 446项normal及-O通过；全仓3116通过和同5项既有失败；旧单头RTL45事务、默认关闭source-closure及五项生产路径RTL回归通过
   保留未完成: generic Command128完整接入、全M128、系数生成cache、KV和Attention与FFN、三模型完整block、PPA及固定资源整block MAC90%
   状态: U00.2 ongoing；U01 to do
+
+U00_2_Matrix_token_tile16门禁_20261008:
+  报告: doc/U00_2_MATRIX_TOKEN_TILE16_20261008_CN.md
+  范围: 已有默认关闭候选的显式16token行模式，复用固定512lane Matrix和1.5MiB SharedL2
+  冻结门禁: baseline及AVX2各cold0到15与carried112到127全部Q8和K2，32选定token及320头每来源
+  数据路径: 最多16行H1024 gather至既有activation区，共享每32列权重tile；片上tile-major packed经逐row Norm和RoPE且全部storeACK后复用
+  必须复验: [真实生成RTL, 独立整数与C逐K参考, 原native门限, tail及跨tile, active行非有限拒绝, capacity及alias, 背压和ACK, reset及fault, 旧默认和全仓回归]
+  当前状态: 执行前冻结；不得提前标为通过
+  保留未完成: [全M128实际数值RTL, generic Command128完整接入, 系数生成cache, KV和Attention及FFN, 三模型完整block, PPA, 固定资源整blockMAC90]
+  状态: U00.2 ongoing；U01 to do

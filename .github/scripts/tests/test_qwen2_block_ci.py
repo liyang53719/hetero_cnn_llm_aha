@@ -151,6 +151,18 @@ class Qwen2BlockCiTest(unittest.TestCase):
         original = (ROOT / ORIGINAL).read_text().split(marker, 1)[1]
         self.assertEqual((ROOT / RUNNER).read_text().split(marker, 1)[1], original)
 
+    def test_control_oracles_are_checked_out_and_bound(self):
+        oracles = ('scripts/qk_norm256_reference.c', 'scripts/rope_bf16_candidate_reference.c')
+        continuous = ROOT / '.github/workflows/chisel-continuous-prefill.yml'
+        for workflow_path, job in ((ROOT / WORKFLOW, 'block'), (continuous, 'continuous')):
+            workflow = yaml.safe_load(workflow_path.read_text())
+            scopes = workflow['jobs'][job]['steps'][0]['with']['sparse-checkout'].split()
+            for name in oracles:
+                self.assertTrue(any(Path(scope) in Path(name).parents for scope in scopes),
+                                f'{workflow_path.name}: missing {name}')
+                self.assertIn(name, (ROOT / RUNNER).read_text() if job == 'block' else workflow_path.read_text())
+                self.assertTrue((ROOT / name).is_file())
+
     def test_tiny_covers_every_suite_fixture_payload_and_fault(self):
         result, out, calls = self.run_gate()
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

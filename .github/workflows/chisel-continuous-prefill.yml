@@ -29,6 +29,7 @@ jobs:
             chisel/continuous_prefill
             integration/gemmini
             src/heteronpu
+            scripts
             config
             configs
             rtl/matrix
@@ -49,7 +50,7 @@ jobs:
           git rev-parse HEAD > work/continuous_ci_identity/commit.txt
           git -C "$HARDFLOAT_SOURCE" rev-parse HEAD > work/continuous_ci_identity/hardfloat.txt
           verilator --version > work/continuous_ci_identity/verilator.txt
-          git ls-files -z chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroFP32Alu.scala | xargs -0 sha256sum > work/continuous_ci_identity/sources.sha256
+          git ls-files -z chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroFP32Alu.scala src/heteronpu scripts/qk_norm256_reference.c scripts/rope_bf16_candidate_reference.c | xargs -0 sha256sum > work/continuous_ci_identity/sources.sha256
       - name: Compile all control suites with their own fixtures and run actual payloads
         id: gate
         run: |

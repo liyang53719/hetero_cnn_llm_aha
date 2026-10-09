@@ -28,7 +28,7 @@ export JVM_OPTS=${JVM_OPTS:--Xmx5G -Xss4M -XX:ActiveProcessorCount=4}
 export SBT_OPTS=${SBT_OPTS:--Dsbt.supershell=false -Dsbt.task.cpus=4}
 git -C "$ROOT" rev-parse HEAD > "$OUT/source_commit.txt"
 git -C "$ROOT" status --porcelain > "$OUT/worktree_before.txt"
-(cd "$ROOT"; git ls-files -z .github/scripts/run_qwen2_block_ci.sh .github/workflows/chisel-qwen2-continuous-block.yml chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroBF16Fma.scala integration/gemmini/EmitHeteroFP32Alu.scala src/heteronpu config configs rtl/matrix rtl/integration | xargs -0 sha256sum) > "$OUT/sources.sha256"
+(cd "$ROOT"; git ls-files -z .github/scripts/run_qwen2_block_ci.sh .github/workflows/chisel-qwen2-continuous-block.yml chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroBF16Fma.scala integration/gemmini/EmitHeteroFP32Alu.scala src/heteronpu scripts/qk_norm256_reference.c scripts/rope_bf16_candidate_reference.c config configs rtl/matrix rtl/integration | xargs -0 sha256sum) > "$OUT/sources.sha256"
 verilator --version > "$OUT/verilator.txt"
 java -version 2> "$OUT/java.txt"
 # Run every discovered *Spec exactly once with its required tiny, real-layer,

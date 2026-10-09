@@ -33,5 +33,32 @@
     },
     "dedicated_program_id": "zero_extended_command_opcode",
     "dedicated_vector_lanes": 0
+  },
+  "gdn_policy": {
+    "record_type": 33,
+    "status": "EXPERIMENTAL_DEFAULT_OFF",
+    "version": 1,
+    "operations": {
+      "CONV4": 1,
+      "DENSE_QKV": 2
+    },
+    "fields": {
+      "version": [0, 8],
+      "operation": [8, 8],
+      "context": [16, 8],
+      "cold": [24, 1],
+      "reserved0": [25, 7],
+      "expected_generation": [32, 32],
+      "reserved1": [64, 8]
+    },
+    "contexts": [0]
+  },
+  "gdn_state_roots": {
+    "record_type": 34,
+    "fields": {
+      "history_input_root": [0, 24],
+      "history_output_root": [24, 24],
+      "reserved": [48, 24]
+    }
   }
 }

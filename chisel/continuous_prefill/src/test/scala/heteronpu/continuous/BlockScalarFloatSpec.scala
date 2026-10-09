@@ -25,4 +25,45 @@ class BlockScalarFloatSpec extends AnyFlatSpec with ChiselScalatestTester with M
       println("BLOCK_SCALAR_VECTORS_PASS count=77 random_seed=807")
     }
   }
+  it should "accept rounded underflow only for the explicit IEEE multiply policy" in {
+    test(new BlockScalarFloat).withAnnotations(Seq(VerilatorBackendAnnotation)){d=>
+      d.io.request.valid.poke(false.B);d.io.result.ready.poke(false.B)
+      d.io.request.bits.op.poke(0.U);d.io.request.bits.a.poke(0.U);d.io.request.bits.b.poke(0.U)
+      def run(op:Int,a:String,b:String,expected:String,error:Boolean):Unit={
+        d.io.request.bits.op.poke(op.U);d.io.request.bits.a.poke(BigInt(a,16).U);d.io.request.bits.b.poke(BigInt(b,16).U)
+        d.io.request.valid.poke(true.B)
+        var n=0;while(!d.io.request.ready.peek().litToBoolean&&n<200){d.clock.step();n+=1};assert(n<200)
+        d.clock.step();d.io.request.valid.poke(false.B)
+        // The exception policy belongs to the accepted request, not live pins.
+        d.io.request.bits.op.poke(7.U);d.io.request.bits.a.poke("h7fc00000".U)
+        n=0;while(!d.io.result.valid.peek().litToBoolean&&n<200){d.clock.step();n+=1};assert(n<200)
+        for(_<-0 until 6){d.io.result.bits.expect(BigInt(expected,16).U);d.io.error.expect(error.B);d.io.result.valid.expect(true.B);d.clock.step()}
+        d.io.result.ready.poke(true.B);d.clock.step();d.io.result.ready.poke(false.B)
+      }
+      // Exact official layer0/channel397 operands. RNE is negative zero;
+      // HardFloat's independently probed flags are underflow + inexact (0x03).
+      run(ScalarOp.Mul,"83d70000","02200000","80000000",true)
+      run(ScalarOp.MulIeeeRne,"83d70000","02200000","80000000",false)
+      run(ScalarOp.MulIeeeRne,"03d70000","02200000","00000000",false)
+      // Subnormal ties demonstrate gradual underflow and round-to-even rather
+      // than flush-to-zero. The exact subnormal product keeps legacy behavior.
+      run(ScalarOp.Mul,"00800000","3f000000","00400000",false)
+      run(ScalarOp.Mul,"00800000","3f000001","00400000",true)
+      run(ScalarOp.MulIeeeRne,"00800000","3f000001","00400000",false)
+      run(ScalarOp.MulIeeeRne,"00800000","3f000003","00400002",false)
+      // Both operands are exact BF16 widenings, as in the GDN owner.
+      run(ScalarOp.Mul,"00810000","34810000","00000002",true)
+      run(ScalarOp.MulIeeeRne,"00810000","34810000","00000002",false)
+      run(ScalarOp.MulIeeeRne,"3fc00000","40000000","40400000",false)
+      run(ScalarOp.MulIeeeRne,"3f800001","3f800001","3f800002",false)
+      run(ScalarOp.Mul,"7f7fffff","40000000","7f800000",true)
+      run(ScalarOp.MulIeeeRne,"7f7fffff","40000000","7f800000",true)
+      run(ScalarOp.MulIeeeRne,"7fc00000","3f800000","00000000",true)
+      run(ScalarOp.MulIeeeRne,"7f800000","00000000","00000000",true)
+      run(ScalarOp.Div,"3f800000","00000000","7f800000",true)
+      run(5,"00000000","00000000","00000000",true)
+      run(7,"00000000","00000000","00000000",true)
+      println("BLOCK_SCALAR_IEEE_UNDERFLOW_PASS bit_vectors=18 legacy_policy_preserved=true")
+    }
+  }
 }

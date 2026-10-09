@@ -1,0 +1,201 @@
+name: qwen35-production-Host-BF16-GDN-Dense-Conv
+
+# Runnable acceptance entry, not a historical production numerical PASS.
+# The existing Host-V/QKV and legacy real2 workflow is deliberately independent.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/host-bf16-gdn.yml'
+      - 'chisel/continuous_prefill/**'
+      - 'chisel/p0_safety/src/main/**'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'rtl/matrix/**'
+      - 'rtl/integration/**'
+      - 'src/heteronpu/**'
+      - 'config/model_profiles/qwen3_5_0p8b.json'
+      - 'config/upstream/qwen3_5_0p8b/**'
+      - 'scripts/collect_qwen35*payload.py'
+      - 'scripts/matrix_norm_rope_reference.c'
+      - 'scripts/check_git_payloads.py'
+      - 'pyproject.toml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: host-bf16-gdn-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    outputs:
+      package_sha256: ${{ steps.build.outputs.package_sha256 }}
+      source_commit: ${{ steps.build.outputs.source_commit }}
+      artifact_name: host-gdn-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+    env:
+      BUILD_JOBS: '1'
+      BUILD_RESERVE_BYTES: '1073741824'
+      JVM_OPTS: '-Xmx1500m -Xss4M -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare pinned build tools and original public iDMA sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/gdn_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/gdn_ci_idma
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/gdn_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Source, descriptor, fixture, execution-audit and transfer-admission regression
+        run: |
+          python scripts/check_git_payloads.py
+          python -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_gdn*.py
+          python -O -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_gdn*.py
+      - name: Small scalar, Conv owner and Host frontend control gates
+        working-directory: chisel/continuous_prefill
+        env:
+          MAKEFLAGS: '-j1 VK_PCH_I_FAST= VK_PCH_I_SLOW='
+        run: |
+          sbt -batch 'testOnly heteronpu.continuous.BlockScalarFloatSpec heteronpu.continuous.GdnConv4OwnerSpec heteronpu.continuous.HostBlockCommandsGdnSpec'
+      - name: Build once and seal only ELF, RTL and source/tool identities
+        id: build
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py build --output work/host_gdn_build_ci --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: host-gdn-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+          path: work/host_gdn_build_ci/host_gdn_build.tar.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-gdn-build-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_gdn_build_ci/compact/summary.json
+            work/host_gdn_build_ci/compact/source_input_hashes.json
+
+  four-command-pass:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+      TRUSTED_PACKAGE_SHA: '${{ needs.build.outputs.package_sha256 }}'
+      TRUSTED_SOURCE_COMMIT: '${{ needs.build.outputs.source_commit }}'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install the same fixed official source runtime as the existing Host gate
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: work/host_gdn_download
+      - name: Reacquire only pinned layer0 and prefix payloads
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Fresh live fixture, then Dense0, cold Conv0, Dense1, carry Conv1 on one actual DUT
+        env: {HF_HUB_OFFLINE: '1'}
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py run --output work/host_gdn_pass_ci --archive work/host_gdn_download/host_gdn_build.tar.gz --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT" --mode pass --timeout-seconds 5400
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-gdn-pass-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_gdn_pass_ci/compact/summary.json
+            work/host_gdn_pass_ci/compact/source_input_hashes.json
+
+  required-faults:
+    # A verified four-command pass of the exact same ELF must finish first.
+    # Every fault still launches from reset and computes its real prefix.
+    needs: [build, four-command-pass]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [last-history-ack-error, output-alias, reset-recovery]
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+      TRUSTED_PACKAGE_SHA: '${{ needs.build.outputs.package_sha256 }}'
+      TRUSTED_SOURCE_COMMIT: '${{ needs.build.outputs.source_commit }}'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install the same fixed official source runtime as the existing Host gate
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: work/host_gdn_download
+      - name: Reacquire only pinned layer0 and prefix payloads
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Fresh live fixture and complete actual prefix for the selected fault
+        env: {HF_HUB_OFFLINE: '1', GDN_MODE: '${{ matrix.mode }}'}
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py run --output work/host_gdn_fault_ci --archive work/host_gdn_download/host_gdn_build.tar.gz --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT" --mode "$GDN_MODE" --timeout-seconds 5400
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-gdn-${{ matrix.mode }}-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_gdn_fault_ci/compact/summary.json
+            work/host_gdn_fault_ci/compact/source_input_hashes.json
+
+  dense-conv-v1-acceptance:
+    needs: [build, four-command-pass, required-faults]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every prerequisite job to succeed
+        env:
+          NEEDS_RESULTS: '${{ toJSON(needs) }}'
+        run: |
+          python - <<'PY'
+          import json, os
+          results = {name: row['result'] for name, row in json.loads(os.environ['NEEDS_RESULTS']).items()}
+          expected = {'build', 'four-command-pass', 'required-faults'}
+          if set(results) != expected or any(value != 'success' for value in results.values()):
+              raise SystemExit('PENDING: required actual acceptance did not complete successfully: ' + json.dumps(results))
+          PY
+      - name: Record acceptance only after all required actual cases passed
+        run: |
+          echo 'PASS: production Host Dense0 → cold Conv0 → Dense1 → carry Conv1, last-history-ack-error, output-alias, and same-DUT reset-recovery.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Scope: Dense-QKV + Conv4/SiLU only. InputNorm is the external input boundary. Recurrent SSM, gated norm and full block remain unsupported by this gate.' >> "$GITHUB_STEP_SUMMARY"

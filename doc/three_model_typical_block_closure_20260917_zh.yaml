@@ -1127,3 +1127,17 @@ Qwen35候选QKV命令子链_20261008:
   待完成: [其余实际fault及reset, 新提交fresh CI, Host QKV count16及full128, Host Norm256和RoPE, prefix Attention及FFN, 三模型完整block, PPA及MAC90]
   并行下一步: GDN真实生产Host有界owner及显式状态读写和cold/carried续算；独立GDN单元实验不在本QKV交付，不声明当前main完整GDN实际RTL通过
   状态: C03.2/C04.2/C05仅增M1集成子证据；S01/Q35A保持未完成；U00.2 ongoing、U01 to do、C02.2原native gate OPEN
+
+生产HostGDN_DenseConv可靠执行_20261009:
+  关联任务: [C03.2, C04.2, C05, S02, Q35B, U00.2]
+  状态: PENDING_CI；不关闭关联大项
+  报告: doc/U00_2_HOST_GDN_DENSE_CONV_20261009_CN.md
+  结果摘要: reports/execution/U00_2_HOST_GDN_DENSE_CONV_20261009/result.json
+  实际实现: 标准Command128及五typed roots接同一Dense和Matrix8slice、现有共享Scalar和单iDMA；6144通道QKV投影到Conv4和SiLU及真实history写回
+  输入边界: 固定token19和92的真实embedding经官方inputNorm；inputNorm本次不在DUT中，14份权重按原始精度认证
+  已验证: 48head整数和C参考12582912 FMA；独立Conv owner208896 BF16固定算术逐位一致，官方0数值ULP但保留正负零位差；前端四个控制门禁；完整生产top一次构建EXIT0
+  执行中断: 本地四命令仿真无exit和terminal，sessionUnknown；仅第一Dense部分ACK且完成命令0，不归因为数值FAIL或OOM
+  可靠路线: 后续预计超过十分钟的生产数值交GitHub；build后先同DUT完整四命令pass，再独立完整前缀fault及reset；记录精确提交及每执行输入和工具身份
+  下一最小闭包: 真实Dense Z2048和AB32接InputPrep、FP32 recurrent state及gatednorm；保留双state staging到末fence原子发布和真实checkpoint恢复；再接O和residual及FFN
+  未验收: [本次四命令数值CI, M128, recurrent与gatednorm生产链, 完整GDN及35B block, 原native完整精度, PPA及MAC90]
+  保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN；深core半成品不进入本次v1发布

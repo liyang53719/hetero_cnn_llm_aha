@@ -1,0 +1,59 @@
+{
+  "status": "INTERRUPTED_WITHOUT_TERMINAL_RECEIPT",
+  "observed_at_utc": "2026-10-09T04:54:01Z",
+  "exec_session": 71495,
+  "poll_error": "Unknown process id 71495",
+  "exit_receipt_present": false,
+  "last_resource_utc": "2026-10-09T04:23:16Z",
+  "last_log_utc": "2026-10-09T04:22:40Z",
+  "completed_commands": 0,
+  "numeric_failure_marker_present": false,
+  "terminal_marker_present": false,
+  "last_complete_event": "HOST_BF16_GDN_WRITE_REQUEST run=0 pc=0 cycle=760812 address=4844623744 bytes=64 final=0",
+  "last_resources": {
+    "t": 1791519796.6982317,
+    "pid": 75,
+    "rss": 39161856,
+    "available": 3511455744,
+    "workspace_free": 654680064
+  },
+  "maximum_process_rss_bytes": 39161856,
+  "minimum_mem_available_bytes": 2746015744,
+  "cause": "UNKNOWN_NO_EXIT_OR_RESOURCE_GUARD_RECEIPT",
+  "resume_state_checkpoint": false,
+  "local_restart_authorized_route": "NOT_USED_SWITCH_TO_GITHUB_CI",
+  "files": {
+    "command.json": {
+      "bytes": 692,
+      "sha256": "bbdcedbe3f3d66e7901581eeed3d108f39b14ab0522e7e732ea5de1d5cb2dfc2"
+    },
+    "fixture_authentication.json": {
+      "bytes": 4140,
+      "sha256": "bb97321adeea114e297b18d24b42f64be9f192ed7f786321fe15cb80971f0ce0"
+    },
+    "fixture_authentication.log": {
+      "bytes": 2369,
+      "sha256": "84cc6b3735c7dcb5ba6578ef6e31b3b8753940da0ca6c94eb5df155c351b7bbc"
+    },
+    "run.py": {
+      "bytes": 4086,
+      "sha256": "59ea0f1c1467f383bd8836c5ea3f0e216fec317d4d4f7354f134ac8df0c52299"
+    },
+    "fixture_identity.json": {
+      "bytes": 2836,
+      "sha256": "de583c10e86cf951f17baabe4fa8de1ef747c2bfd35df85f5c31d1447c832286"
+    },
+    "pass.log": {
+      "bytes": 28672,
+      "sha256": "1de133bd8db85d88e714be331db42bd0838924686c575423bdc7478e8baaec51"
+    },
+    "resources.jsonl": {
+      "bytes": 62368,
+      "sha256": "5f195e5efc0f0196b1ad78813a36323ee994d4236d18bedd74e08d908322e707"
+    },
+    "build_identity.json": {
+      "bytes": 1751,
+      "sha256": "f889c491926b4b83dd675492b832e4378b3aa16ed1700d5418eafb5e4e95ffed"
+    }
+  }
+}

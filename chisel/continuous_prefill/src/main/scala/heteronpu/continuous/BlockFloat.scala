@@ -13,7 +13,12 @@ object F32 {
   def less(a:UInt,b:UInt):Bool=Mux(a(31)=/=b(31),a(31)&&(a(30,0).orR||b(30,0).orR),Mux(a(31),a(30,0)>b(30,0),a(30,0)<b(30,0)))
 }
 class ScalarRequest extends Bundle {val op=UInt(3.W);val a=UInt(32.W);val b=UInt(32.W)}
-object ScalarOp {val Add=0;val Mul=1;val Div=2;val Sqrt=3;val ExpNegative=4}
+object ScalarOp {
+  val Add=0;val Mul=1;val Div=2;val Sqrt=3;val ExpNegative=4
+  // Explicit per-request IEEE RNE multiplication policy for GDN convolution.
+  // Keep opcode 5 unsupported and preserve legacy Mul's underflow rejection.
+  val MulIeeeRne=6
+}
 /** exp(-abs(x)): range reduction plus degree-7 polynomial. |x|>=80 -> 0.
   * IEEE operations are actual HardFloat circuits, not simulation callbacks.
   * Functional implementation; 800 MHz is a target, not a timing result. */
@@ -34,11 +39,22 @@ class BlockScalarFloat extends Module {
   io.request.ready:=state===idle;io.result.valid:=state===done;io.result.bits:=out;io.error:=err
   switch(state) {
     is(idle){when(io.request.fire){a:=io.request.bits.a;b:=io.request.bits.b;op:=io.request.bits.op;err:=false.B
-      when(!TensorMath.finite(io.request.bits.a) || !TensorMath.finite(io.request.bits.b) || io.request.bits.op>ScalarOp.ExpNegative.U){out:=0.U;err:=true.B;state:=done}
+      when(!TensorMath.finite(io.request.bits.a) || !TensorMath.finite(io.request.bits.b) ||
+        (io.request.bits.op>ScalarOp.ExpNegative.U && io.request.bits.op=/=ScalarOp.MulIeeeRne.U)){out:=0.U;err:=true.B;state:=done}
       .elsewhen(io.request.bits.op===ScalarOp.ExpNegative.U){state:=expScale}
-      .elsewhen(io.request.bits.op>=ScalarOp.Div.U){state:=divIssue}.otherwise{state:=normal}
+      .elsewhen(io.request.bits.op===ScalarOp.Div.U || io.request.bits.op===ScalarOp.Sqrt.U){state:=divIssue}.otherwise{state:=normal}
     }}
-    is(normal){alu.io.op:=op===ScalarOp.Mul.U;out:=alu.io.out;err:=alu.io.exceptionFlags(4,1).orR || !TensorMath.finite(alu.io.out);state:=done}
+    is(normal){
+      alu.io.op:=op===ScalarOp.Mul.U || op===ScalarOp.MulIeeeRne.U
+      out:=alu.io.out
+      // HardFloat still computes the same rounded bits, including signed zero
+      // and gradual subnormals. Only the explicit GDN multiply policy accepts
+      // underflow/inexact; invalid, divide-by-zero, overflow and nonfinite
+      // results remain fatal. All existing opcodes keep their prior policy.
+      err:=alu.io.exceptionFlags(4,2).orR ||
+        (alu.io.exceptionFlags(1) && op=/=ScalarOp.MulIeeeRne.U) || !TensorMath.finite(alu.io.out)
+      state:=done
+    }
     is(divIssue){when(div.io.inReady){state:=divWait}}
     is(divWait){when(div.io.outValid_div||div.io.outValid_sqrt){val r=fNFromRecFN(8,24,div.io.out);out:=r;err:=div.io.exceptionFlags(4,1).orR || !TensorMath.finite(r);state:=done}}
     is(expScale){alu.io.op:=true.B;alu.io.x:=a & "h7fffffff".U;alu.io.y:=F32.lit(1.0/math.log(2.0));out:=alu.io.out

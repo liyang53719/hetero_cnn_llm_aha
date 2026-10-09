@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: d4285a964686f10538726cfa2d2d4c891b290d081c8cd72df5fd1f1a673c7b5e
+计划SHA256: 7ea6a083744c38840b43127a3bb9dfd4429f9494389f9a100cac5ae9bd502518
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1254,3 +1254,17 @@
   非完成: [Host QKV count16及full128, 新提交fresh CI, 余下fault及reset, Host Norm256及RoPE, Attention及FFN, GDN完整状态链, 35B完整block, PPA及MAC90]
   并行主线: GDN实际生产Host集成及cold/carried状态续算，不等待完整Attention；另行owner单元实验不构成本QKV交付或当前main完整GDN验收
   状态边界: 所有关联大项状态不变；U00.2 ongoing、U01 to do；C02.2原native gate OPEN
+
+生产HostGDN_DenseConv局部进展:
+  关联: [C03.2, C04.2, C05, S02, Q35B, U00.2]
+  状态: ongoing
+  数值门禁: PENDING_CI
+  报告: doc/U00_2_HOST_GDN_DENSE_CONV_20261009_CN.md
+  结果: reports/execution/U00_2_HOST_GDN_DENSE_CONV_20261009/result.json
+  已完成: 默认关闭生产标准Command128接真实Dense6144和共享Scalar的Conv4及SiLU；完整top构建EXIT0；全6144独立owner和前端控制门禁通过
+  本地中断: 四命令实际仿真会话失联且无exit或terminal；仅第一Dense部分ACK，完成命令0，不计数值PASS或FAIL，不从零本地重跑
+  可靠执行: 精确提交GitHub build后先完整同DUT四命令pass，再末history ACK故障及物理alias和reset恢复；原输入及源码工具身份独立复核
+  精度边界: 独立owner官方0数值ULP仍保留正负零原始位差；原native完整精度FAIL不关闭，参考通过不替代实际RTL
+  下一闭包: 同Dense的真实Z和AB32投影接QK L2及g/beta、FP32 recurrent、gatednorm；双状态域staging到末fence原子提交，checkpoint必须来自真实成功回执
+  非完成: [生产Host DenseConv四命令数值终态, GDN M128, recurrent和gatednorm生产链, 输出投影和残差及FFN, 完整GDN及35B block, MAC90及PPA]
+  状态边界: 不关闭关联大项；U00.2 ongoing、U01 to do、C02.2 OPEN；深core草稿不纳入v1发布

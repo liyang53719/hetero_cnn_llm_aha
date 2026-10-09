@@ -10,16 +10,17 @@ import scala.collection.mutable.ArrayBuffer
   * Sixteen shared FMA lanes use the repository BF16/FP32 arithmetic primitive.
   * DDR uses FP32 containers; matrix operands are rounded to BF16 at ingress.
   */
-case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32,qWidth:Int=0,packedQWidth:Int=0,qwen35VOnly:Boolean=false,qwen35QkvOnly:Boolean=false){
+case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32,qWidth:Int=0,packedQWidth:Int=0,qwen35VOnly:Boolean=false,qwen35QkvOnly:Boolean=false,qwen35GdnOnly:Boolean=false){
   val q=if(qWidth==0)hidden else qWidth
   val packedQ=if(packedQWidth==0)q else packedQWidth
   val projectionOnly=qwen35VOnly || qwen35QkvOnly
-  require(!(qwen35VOnly && qwen35QkvOnly), "V-only and QKV-only profiles are distinct")
+  val nativeProfile=projectionOnly || qwen35GdnOnly
+  require(Seq(qwen35VOnly,qwen35QkvOnly,qwen35GdnOnly).count(identity)<=1, "native profiles are distinct")
   require(q==heads*headDim && heads%kvHeads==0)
-  require(!projectionOnly || (hidden==1024 && q==2048 && packedQ==4096 && ffn==3584 && heads==8 && kvHeads==2 && headDim==256),
+  require(!nativeProfile || (hidden==1024 && q==2048 && packedQ==4096 && ffn==3584 && heads==8 && kvHeads==2 && headDim==256),
     "Qwen3.5 projection profiles require H1024, packed Q4096 and KV512")
-  require(!qwen35QkvOnly || maxTokens<=128, "Qwen3.5 QKV projection supports at most 128 tokens")
-  require(projectionOnly || (q==hidden && packedQ==hidden), "independent projection widths require an explicit profile")
+  require(!(qwen35QkvOnly || qwen35GdnOnly) || maxTokens<=128, "Qwen3.5 native subchains support at most 128 tokens")
+  require(nativeProfile || (q==hidden && packedQ==hidden), "independent projection widths require an explicit profile")
   require(headDim>=32 && headDim%32==0 && ffn%16==0 && hidden%16==0)
   require(maxTokens>0 && maxTokens<=1024)
   require(matrixColumns==32||matrixColumns==256)
@@ -28,6 +29,7 @@ case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=
 object QwenBlockShape {
   def qwen35V(maxTokens:Int=128):QwenBlockShape=QwenBlockShape(1024,3584,8,2,256,maxTokens,true,256,2048,4096,true)
   def qwen35Qkv(maxTokens:Int=128):QwenBlockShape=QwenBlockShape(1024,3584,8,2,256,maxTokens,true,256,2048,4096,qwen35QkvOnly=true)
+  def qwen35Gdn(maxTokens:Int=128):QwenBlockShape=QwenBlockShape(1024,3584,8,2,256,maxTokens,true,256,2048,4096,qwen35GdnOnly=true)
 }
 case class BlockRegion(name:String,offset:Long,words:Long,external:Boolean)
 class QwenBlockLayout(s:QwenBlockShape){
@@ -49,9 +51,10 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
   * Each successor starts only after the previous stage's final write ACK.
   */
-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false) extends Module {
+class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false) extends Module {
   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
-  require(!s.projectionOnly || ownerDriven, "Qwen3.5 projection profiles have no autonomous block route")
+  require(!s.nativeProfile || ownerDriven, "Qwen3.5 native subchains have no autonomous block route")
+  require(!externalScalar || ownerDriven, "shared scalar requests require owner serialization")
   val layout=new QwenBlockLayout(s)
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
@@ -64,6 +67,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     val matrixResult=if(externalMatrix)Some(Flipped(Decoupled(new WideMatrixResult(256))))else None
     val matrixAcceptedSteps=if(externalMatrix)Some(Input(UInt(64.W)))else None
     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
+    val scalarService=if(externalScalar)Some(Flipped(new GdnScalarClient))else None
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
     val phase=Output(UInt(5.W));val stageCommit=Output(Bool());val committedPhase=Output(UInt(5.W))
     val resetRequired=Output(Bool());val readBytes=Output(UInt(64.W));val writeBytes=Output(UInt(64.W))
@@ -86,6 +90,20 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   val acc=Reg(Vec(16,UInt(32.W)));val tmp=Reg(Vec(16,UInt(32.W)));val tmp2=Reg(Vec(16,UInt(32.W)))
   val scalarValue=Reg(UInt(32.W));val scalarRequest=Reg(new ScalarRequest)
   val scalar=Module(new BlockScalarFloat);scalar.io.request.valid:=state===st("scalarReq");scalar.io.request.bits:=scalarRequest;scalar.io.result.ready:=state===st("scalarRsp")
+  val scalarExternalExclusive=WireDefault(false.B)
+  if(externalScalar){
+    // One accepted request owns the existing arithmetic until its result is
+    // consumed. The legacy core must be idle; no second scalar is instantiated.
+    val port=io.scalarService.get;val busy=RegInit(false.B)
+    val available=state===st("idle") && !poisoned && !busy
+    port.request.ready:=available && scalar.io.request.ready
+    when(available && port.request.valid){scalar.io.request.valid:=true.B;scalar.io.request.bits:=port.request.bits}
+    port.result.valid:=busy && scalar.io.result.valid;port.result.bits:=scalar.io.result.bits;port.error:=scalar.io.error
+    when(busy){scalar.io.result.ready:=port.result.ready}
+    when(port.request.fire){busy:=true.B}
+    when(port.result.fire){busy:=false.B}
+    scalarExternalExclusive:=busy || port.request.valid
+  }
   val denseBase=RegInit(0.U(16.W));val denseRows=RegInit(0.U(5.W))
   val denseLoadRow=RegInit(0.U(5.W));val denseRow=RegInit(0.U(5.W));val denseWindowRow=RegInit(0.U(5.W))
   val denseWindow=Reg(Vec(denseBatch,Vec(16,UInt(32.W))))
@@ -173,7 +191,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   io.memory.valid:=Mux(resActive,elem.io.memory.valid,state===st("memReq"));io.memory.bits:=Mux(resActive,elem.io.memory.bits,request)
   io.response.ready:=Mux(resActive,elem.io.response.ready,state===st("memRsp"))
   io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned)
-  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned}
+  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !scalarExternalExclusive}
   io.result.valid:=state===st("finish");io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired;io.readBytes:=reads;io.writeBytes:=writes
   // Count memory visibility acknowledgements, not issued stores. The fence
@@ -243,7 +261,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
         QwenOwnerKind.Rope.U->4.U,QwenOwnerKind.Attention.U->6.U,QwenOwnerKind.Add.U->8.U,
         QwenOwnerKind.Activation.U->12.U,QwenOwnerKind.KvAppend.U->16.U))
       seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
-      when(s.projectionOnly.B || j.activationBf16 || j.outputBf16 || j.weightBf16){fail(Status.Unsupported.U)}
+      when(s.nativeProfile.B || j.kind>QwenOwnerKind.KvAppend.U || j.activationBf16 || j.outputBf16 || j.weightBf16){fail(Status.Unsupported.U)}
       .elsewhen(j.m===0.U||j.m>s.maxTokens.U||j.n===0.U||j.n>s.maxRow.U||j.n(3,0)=/=0.U||j.writeBytes===0.U){fail(Status.Bounds.U)}
         .otherwise{state:=st("begin")}
     }

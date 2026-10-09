@@ -10,10 +10,11 @@ import gemmini.{HeteroBF16FmaPre,HeteroBF16FmaMul,HeteroBF16FmaPost,HeteroBF16Fm
   * payload injection, or second iDMA exists. Metadata and owner traffic share
   * the same arbiter, mailbox adapter, original upstream backend and AXI port.
   */
-class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false) extends Module {
+class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false) extends Module {
   require(!bf16V || (pipelined && s.qwen35VOnly), "native V requires the pipelined Qwen3.5 V-only profile")
   require(!bf16Qkv || (pipelined && s.qwen35QkvOnly), "native QKV requires the pipelined Qwen3.5 QKV-only profile")
-  require(!(bf16V && bf16Qkv), "native V-only and QKV features are distinct")
+  require(!bf16Gdn || (pipelined && s.qwen35GdnOnly), "native GDN requires the pipelined GDN profile")
+  require(Seq(bf16V,bf16Qkv,bf16Gdn).count(identity)<=1, "native profiles are distinct")
   require(!overlapSilu || pipelined, "overlapped SiLU requires the pipelined owner path")
   require(!commitTailRead || pipelined)
   require(!burstWrites || pipelined)
@@ -32,7 +33,7 @@ class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=fal
     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
   })
   dontTouch(io)
-  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu))
+  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn))
   val hub=Module(new SharedMemoryArbiter(2))
   val dmaPoison=Wire(Bool())
   cmd.io.launch<>io.launch;io.result<>cmd.io.result;io.completion<>cmd.io.completion
@@ -71,8 +72,8 @@ class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=fal
   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
   io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
 }
-class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false) extends Module {
-  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
+class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false) extends Module {
+  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
   val pre=Module(new HeteroBF16FmaPre);val a=IO(chiselTypeOf(pre.io));a<>pre.io;dontTouch(a)
   val mul=Module(new HeteroBF16FmaMul);val b=IO(chiselTypeOf(mul.io));b<>mul.io;dontTouch(b)
   val post=Module(new HeteroBF16FmaPost);val c=IO(chiselTypeOf(post.io));c<>post.io;dontTouch(c)
@@ -136,4 +137,19 @@ object EmitHostBf16Qkv extends App {
     new HostBlockCollection(s,16,true,burst,false,false,bf16Qkv=true),
     firtoolOpts=Array("--preserve-values=all","-disable-all-randomization")))
   Files.writeString(out.resolve("SCOPE.json"),s"""{"experimental_bf16_qkv":true,"default_enabled":false,"policy_version":2,"owner_managed_staging":true,"hidden":1024,"q_context":2048,"packed_q":4096,"kv":512,"ffn":3584,"max_row":4096,"max_tokens":128,"q_role":0,"k_role":1,"v_role":2,"q_layout":"token_head_query256_gate256","q_k_supported":true,"norm_supported":false,"rope_supported":false,"full_block_supported":false,"burst_writes":${burst},"logical_matrix_engines":1,"physical_matrix_slices":8,"pinned_idma_instances":1,"timing_signoff":false}\n""")
+}
+
+/** Default-off layer0 Dense-QKV -> Conv4/SiLU command subchain. The GDN owner
+  * borrows the legacy core's scalar service and the original memory/iDMA path.
+  * Recurrent FP32 state, gated norm and the complete block remain unsupported. */
+object EmitHostBf16Gdn extends App {
+  require(args.length>=1 && args.length<=2,"OUT [burstWrites=0|1]")
+  require(args.length<2 || Set("0","1").contains(args(1)))
+  val burst=args.length==2 && args(1)=="1"
+  val out=Paths.get(args(0));require(out.isAbsolute && !Files.exists(out),"preserve old outputs");Files.createDirectories(out)
+  val s=QwenBlockShape.qwen35Gdn()
+  Files.writeString(out.resolve("HostBlockTop.sv"),ChiselStage.emitSystemVerilog(
+    new HostBlockCollection(s,16,true,burst,false,false,bf16Gdn=true),
+    firtoolOpts=Array("--preserve-values=all","-disable-all-randomization")))
+  Files.writeString(out.resolve("SCOPE.json"),s"""{"experimental_bf16_gdn":true,"default_enabled":false,"scope":"DENSE_QKV_CONV4_SILU_ONLY","policy_version":1,"hidden":1024,"gdn_channels":6144,"conv_kernel":4,"max_tokens":128,"managed_state_contexts":1,"scalar_service_shared":true,"conv_multiply_scalar_opcode":6,"recurrent_state_supported":false,"gated_norm_supported":false,"full_block_supported":false,"burst_writes":${burst},"logical_matrix_engines":1,"physical_matrix_slices":8,"pinned_idma_instances":1,"timing_signoff":false}\n""")
 }

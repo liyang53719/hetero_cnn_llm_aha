@@ -1,0 +1,23 @@
+{
+  "status": "EXPERIMENTAL_DEFAULT_OFF",
+  "scope": "DENSE_QKV_CONV4_SILU_ONLY",
+  "enable_parameter": "bf16Gdn",
+  "default_enabled": false,
+  "root": "HostBlockTop",
+  "logical_matrix_engines": 1,
+  "physical_matrix_slices": 8,
+  "physical_matrix_slice_macs": 512,
+  "shared_scalar_services": 1,
+  "idma_instances": 1,
+  "dense": {"opcode": 32, "engine": 2, "A": ["M",1024], "B": [1024,6144], "D": ["M",6144], "M": [1,128], "policy_payload": "0x201", "matrix_aux_payload": "0x004000040020ffffff", "records": 12},
+  "conv": {"opcode": 48, "engine": 3, "A": ["M",6144], "B": [6144,4], "D": ["M",6144], "Hin": [6144,4], "Hout": [6144,4], "M": [1,128], "history_layout": "channel-major oldest-to-newest", "program_id": 48, "input_count": 2, "output_count": 1, "lane_width_bits": 16, "vector_lanes": 1, "records": 18},
+  "tensor": {"dtype": 5, "rank": 2, "alignment_bytes": 64, "strides_elements": ["columns",1,1], "all_prefix_policy_indices_distinct": true, "non_A_tails_null": true, "all_own_tensor_ranges_distinct": true},
+  "policy": {"record_type": 33, "version": [0,8], "version_value": 1, "operation": [8,8], "operation_conv": 1, "operation_dense": 2, "context": [16,8], "supported_context": 0, "cold": [24,1], "reserved0": [25,7], "expected_generation": [32,32], "reserved1": [64,8]},
+  "state_roots": {"record_type": 34, "Hin_root": [0,24], "Hout_root": [24,24], "reserved": [48,24]},
+  "publication": "Conv publishes two noncontiguous exact D/Hout spans only after both spans are fully acknowledged and Host completion accepted. Generation advances 0->1->2. Later Hin exactly matches published Hout/generation. Retire only old managed history after commit.",
+  "fixture": "Four M1 commands DenseQKV token0 -> cold Conv0 -> DenseQKV token1 -> carried Conv1. Actual hardware DMA writes are sole intermediate sources. Readonly initial history is zero. All six outputs and intervening guards are sentinel-initialized.",
+  "projection_reference": "Existing integer FMA plus independent C fmaf per256-column head; K0..1023 sequential, BF16 terminal RNE. 48 heads / 12582912 FMA steps. No full128 references.",
+  "conv_reference": "Frozen separate FP32 mul/add over four taps, BF16 RNE boundary, shared degree7 exp/reciprocal/sigmoid recipe, BF16 RNE. Every output/history word bit-exact. Signed-zero raw differences reported independently from numeric BF16 ULP.",
+  "native_thresholds": {"projection_max_abs": 0.03125, "projection_mean_abs": 0.005, "conv_same_canonical_input_max_bf16_ulp": 1, "silu_same_canonical_input_max_bf16_ulp": 1, "end_to_end_max_abs": 0.03125, "end_to_end_mean_abs": 0.005},
+  "unsupported": ["inputNorm DUT", "recurrent SSM", "gated normalization", "residual", "MLP", "full GDN block"]
+}

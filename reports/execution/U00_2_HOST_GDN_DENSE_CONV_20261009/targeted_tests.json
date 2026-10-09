@@ -1,0 +1,25 @@
+{
+  "normal": {
+    "passed": 124,
+    "subtests_passed": 59,
+    "seconds": 15.7
+  },
+  "optimized": {
+    "passed": 124,
+    "subtests_passed": 59,
+    "seconds": 16.18
+  },
+  "shape_vectors": {
+    "cases": 64,
+    "index_sources_verified": 4,
+    "case_content_changed": false
+  },
+  "plan": "PASS_PLAN_CONSISTENCY_ONLY",
+  "checklist": {
+    "hardware_acceptance_claimed": false,
+    "statuses_unchanged": true
+  },
+  "initial_plan_hash_failure_retained": "work/host_gdn_v1_publication_20261009T0457/initial_tests.json",
+  "production_host_numerical": "PENDING_CI",
+  "git_payload_index_check": "PASS"
+}

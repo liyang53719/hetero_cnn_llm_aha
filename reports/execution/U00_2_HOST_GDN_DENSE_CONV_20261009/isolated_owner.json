@@ -1,0 +1,57 @@
+{
+  "status": "PASS_GDN_CONV4_OWNER_ISOLATED_ACTUAL_ARITHMETIC",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "e64e28c3378a9b0e7bb5c0d9a6500b19bc17fa23538dea7a4c9808fe9642a78c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/BlockScalarFloatSpec.scala": "361eca91a3a92d15267a880affa2754fc051e46550398183ce8fe1774c3c137c",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnConv4OwnerSpec.scala": "0463165da45256bbe1b62be53f3bbf7bf6e3f27b93640b39ea49f781ee7d59c2"
+  },
+  "suites": {
+    "scalar": {
+      "exit_code": 0,
+      "seconds": 17.400742292404175,
+      "peak_rss_kib": 304068,
+      "free_disk_bytes_before_pch_cleanup": 1094062080
+    },
+    "small": {
+      "exit_code": 0,
+      "seconds": 26.38515281677246,
+      "peak_rss_kib": 304068,
+      "free_disk_bytes_before_pch_cleanup": 929603584
+    },
+    "real": {
+      "exit_code": 0,
+      "seconds": 81.33251094818115,
+      "peak_rss_kib": 602424,
+      "free_disk_bytes_before_pch_cleanup": 921714688
+    }
+  },
+  "checked_bf16_outputs": 208896,
+  "small_boundary_checks": 608,
+  "small_scalar_result_checks": 7904,
+  "old_scalar_vectors": 77,
+  "explicit_ieee_multiply_vectors": 18,
+  "official_max_bf16_ulp_conv": 0,
+  "official_max_bf16_ulp_silu": 0,
+  "signed_zero_numeric_equal": true,
+  "native_bit_mismatch_counts_per_node": {
+    "cold1": 9,
+    "carried1": 9,
+    "cold16": 116,
+    "carried16": 116
+  },
+  "raw_history_exact": true,
+  "all_output_and_state_writes_acknowledged_before_commit": true,
+  "case_ack_bytes": {
+    "cold1": 61440,
+    "carried1": 61440,
+    "cold16": 245760,
+    "carried16": 245760
+  },
+  "scope": "isolated GDN Conv4+SiLU owner; actual shared BlockScalarFloat arithmetic; no production Host/Dense chain, full GDN recurrence/gatednorm, full-block or MAC utilization acceptance",
+  "fixture_scope": "carried1 verified official-source cache/decode continuation; cold1 controlled cold reset; M16 composed existing verified raw-QKV columns, not original continuous upstream tokens",
+  "known_numerical_domain": "negative convolved BF16 <= -80 rejected; invalid/div0/overflow/nonfinite rejected; conv MulIeeeRne accepts correct gradual underflow; 1 BF16 ULP registered official gate unchanged",
+  "free_disk_bytes": 1078284288,
+  "artifact_bytes": 21205942
+}

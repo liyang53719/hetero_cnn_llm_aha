@@ -1,0 +1,58 @@
+{
+  "status": "PASS_CONTROL_ONLY_HOST_GDN_PAIRWISE_ALIAS_AND_LEGACY_REGRESSION",
+  "tests_passed": 4,
+  "source_sha256": {
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsGdnSpec.scala": "6becd345ef63c78809a20fc3942b5cbe4f6f2305f6dd69f37b6d3f30e05f81ac",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "decba02dca88cb44d99d846b5d580988c9182aeaecb2345bfe022e1ed49b6b94",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsSpec.scala": "ca7fde1aeaf9c034bf97c4640bd4082541cb2750219200287957d33936eb5822"
+  },
+  "production_main_classes": "work/host_gdn_integration_compile_20261009T0327/classes",
+  "final_frontend_override_classes": "work/host_gdn_frontend_control_20261009T0336/classes",
+  "control_result": {
+    "exit_code": 0,
+    "seconds": 33.334877252578735,
+    "peak_rss_kib": 294148,
+    "free_disk_bytes": 864800768
+  },
+  "covered": [
+    "BF16 GDN_QKV Dense public descriptor binding",
+    "five-root BF16 Conv4 public descriptor binding",
+    "Dense publication consumed by Conv with explicit event dependency",
+    "cold and read-only first import",
+    "carried generation and exact history address across Host launches",
+    "ping-pong history retirement while generic outputs remain live",
+    "full 21-command publication capacity with two spans per Conv",
+    "separate D and history publication with no false gap span",
+    "five-root dtype, permission, bounds, stride, alias and descriptor uniqueness checks",
+    "policy version, operation, context, reserved bits and stale/overflow generation rejection",
+    "stable owner and completion backpressure",
+    "owner status, tag and exact aggregate byte validation",
+    "fault preserves committed history/generation; reset clears state",
+    "default-off GDN admission",
+    "GDN-specific pairwise tensor range disjointness, including readonly A/B/Hin aliases",
+    "four focused readonly-alias cases rejected before owner issue",
+    "existing non-GDN 21-command graph and completion ordering regression",
+    "existing non-GDN producer visibility clears across Host launches regression"
+  ],
+  "scope": "CONTROL_ONLY: owner results and metadata supplied by test. No arithmetic, payload DMA, physical write ACK, whole-block, or performance claim.",
+  "legacy_results": {
+    "legacy_graph": {
+      "exit_code": 0,
+      "seconds": 27.470745086669922,
+      "peak_rss_kib": 294148,
+      "free_disk_bytes": 854847488
+    },
+    "legacy_lifetime": {
+      "exit_code": 0,
+      "seconds": 26.95575737953186,
+      "peak_rss_kib": 294148,
+      "free_disk_bytes": 845135872
+    }
+  },
+  "compiled_source_verification": {
+    "status": "PASS_CURRENT_SOURCES_MATCH_FULL_BASE_PLUS_FRONTEND_OVERLAY",
+    "verified_main_source_count": 37,
+    "overlay_source": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala"
+  },
+  "free_disk_bytes_after_owned_pch_cleanup": 1002065920
+}

@@ -24,6 +24,8 @@ class RecordType(IntEnum):
     QKV_POLICY = 0x1A
     QKV_ADDRESS = 0x1B
     SFU_PROGRAM = 0x20
+    GDN_POLICY = 0x21
+    GDN_STATE_ROOTS = 0x22
     KV_ADDRESS = 0x30
     KV_FORMAT = 0x31
     QUANTIZATION = 0x40

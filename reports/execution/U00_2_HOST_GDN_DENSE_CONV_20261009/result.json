@@ -1,0 +1,239 @@
+{
+  "status": "PENDING_PRODUCTION_HOST_GDN_DENSE_CONV_NUMERICAL_CI",
+  "scope": "DENSE_QKV_CONV4_SILU_ONLY",
+  "experimental_default_off": true,
+  "local_build": {
+    "status": "BUILT_HOST_GDN_DENSE_CONV_ONLY_NOT_NUMERICAL_PASS",
+    "numerical_pass": false,
+    "binary_sha256": "ff4661df62a3bfdcf3bb4db7264c18e25df20295c6539773d2e0ecca9ceeaaf6",
+    "rtl_sha256": "8eb8eb96211ed6dd5e0da762fb113c754e4e762132650084e4bb9e15108582ee",
+    "source_base_commit": "55785dd134e5e58ba7c460e5c7d733f838b27a85",
+    "source_manifest_sha256": "eeef2098e4d9d8cf5b57459acf472cf6ae8f85a0ed5997cc341f1799c535856e",
+    "hardfloat_source": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+    "actual_verilator": {
+      "entrypoint": {
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/share/verilator/bin/verilator_bin",
+        "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+        "bytes": 675,
+        "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)",
+        "kind": "DEBIAN_PERL_FORWARDER"
+      },
+      "actual_elf": {
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/rope_hardware_oracle/deps/verilator_debian/usr/bin/verilator_bin",
+        "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+        "bytes": 13920736,
+        "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)",
+        "kind": "ELF"
+      }
+    },
+    "initial_verilation_exit": 0,
+    "source_snapshot_manifest_sha256": "61a616b61d23cebfcb1d1b8dba6b19f1c3dda568e87e46db66ebab282ed26eed",
+    "experimental_default_off": true,
+    "operations": [
+      "dense_qkv",
+      "conv4_silu"
+    ],
+    "recurrent_state_supported": false,
+    "gated_norm_supported": false,
+    "full_block_supported": false,
+    "scalar_service_shared": true
+  },
+  "local_build_resources": {
+    "status": "BUILD_FINISHED",
+    "exit_code": 0,
+    "seconds": 1104.0416774749756,
+    "peak_tree_rss_bytes": 3005751296,
+    "minimum_mem_available_bytes": 1485344768,
+    "maximum_total_tmpfs_increase_bytes": 404668416,
+    "abort": null,
+    "output": "/tmp/host_gdn_dense_conv_build_20261009T0351",
+    "snapshot_sha256": "61a616b61d23cebfcb1d1b8dba6b19f1c3dda568e87e46db66ebab282ed26eed"
+  },
+  "local_actual_execution": "INTERRUPTED_WITHOUT_TERMINAL_RECEIPT",
+  "completed_commands": 0,
+  "numerical_pass": false,
+  "numerical_failure": false,
+  "source_input_boundary": "pinned real embedding tokens0/1 -> official layer0 inputNorm; inputNorm is not DUT",
+  "token_ids": [
+    19,
+    92
+  ],
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "fixture_manifest_sha256": "543677e0cf885f514eaabd007ace3b562a4356741853cd1e845663db322da337",
+  "source_bound_reference": {
+    "heads": 48,
+    "fp32_fma_steps": 12582912,
+    "status": "PASS_REFERENCE_ONLY_NOT_RTL",
+    "fixture_reused": true,
+    "authentication": "fresh_bounded_recomputation",
+    "full_prefix_capture": false
+  },
+  "native_reference_metrics": [
+    {
+      "token": 0,
+      "projection": {
+        "elements": 6144,
+        "bit_mismatches": 5,
+        "max_abs": 4.70197740328915e-38,
+        "mean_abs": 2.0089014784560578e-41,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      "conv_same_canonical_input": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "numeric_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      },
+      "silu_same_canonical_input": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "numeric_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      },
+      "end_to_end_conv": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      "end_to_end_silu": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      "end_to_end_conv_ulp": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "numeric_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      },
+      "end_to_end_silu_ulp": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "numeric_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      }
+    },
+    {
+      "token": 1,
+      "projection": {
+        "elements": 6144,
+        "bit_mismatches": 11,
+        "max_abs": 0.0078125,
+        "mean_abs": 1.3510386149088542e-06,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      "conv_same_canonical_input": {
+        "elements": 6144,
+        "bit_mismatches": 6,
+        "numeric_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      },
+      "silu_same_canonical_input": {
+        "elements": 6144,
+        "bit_mismatches": 6,
+        "numeric_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      },
+      "end_to_end_conv": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "max_abs": 0.0009765625,
+        "mean_abs": 1.5894571940104166e-07,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      "end_to_end_silu": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "max_abs": 0.00048828125,
+        "mean_abs": 7.947285970052083e-08,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "pass": true
+      },
+      "end_to_end_conv_ulp": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "numeric_mismatches": 1,
+        "max_bf16_ulp": 1,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      },
+      "end_to_end_silu_ulp": {
+        "elements": 6144,
+        "bit_mismatches": 7,
+        "numeric_mismatches": 1,
+        "max_bf16_ulp": 1,
+        "signed_zero_numeric_equal": true,
+        "threshold_bf16_ulp": 1,
+        "pass_": true
+      }
+    }
+  ],
+  "planned_actual_commands": [
+    "Dense0",
+    "ConvCold0",
+    "Dense1",
+    "ConvCarried1"
+  ],
+  "expected_ack_bytes": 147456,
+  "expected_metadata_reads": 64,
+  "expected_publication_spans": 6,
+  "isolated_owner_status": "PASS_GDN_CONV4_OWNER_ISOLATED_ACTUAL_ARITHMETIC",
+  "frontend_status": "PASS_CONTROL_ONLY",
+  "native_full_block_status": "NOT_EVALUATED_BY_THIS_BOUNDED_PREFIX",
+  "previous_native_full_block_failures_retained": true,
+  "recurrent_state_supported": false,
+  "gated_norm_supported": false,
+  "input_norm_dut": false,
+  "full_block_supported": false,
+  "m128_host_execution": false,
+  "ci_status": "NOT_STARTED_AT_SOURCE_PREPARATION",
+  "next_gate": "exact-commit GitHub build; complete four-command pass; only then independent fault/reset jobs",
+  "no_local_long_restart": true
+}

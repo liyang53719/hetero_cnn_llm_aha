@@ -1,0 +1,46 @@
+{
+  "status": "PASS_ISOLATED_OWNER_NOT_FULL_BLOCK",
+  "compile": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 8.002536872008932,
+    "peak_rss_kib": 315564,
+    "source_hashes_unchanged": true
+  },
+  "rtl": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 24.004942259998643,
+    "peak_rss_kib": 315564,
+    "source_hashes_unchanged": true
+  },
+  "new_source_files": [
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnElementwiseOwnerSpec.scala",
+    "chisel/continuous_prefill/scripts/gdn_elementwise_reference.py",
+    "chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py"
+  ],
+  "fixture_path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/gdn_elementwise_fixture_20261009T0552",
+  "fixture_manifest_sha256": "4c9f98c0cb1ee272eb7e248645b2dcf2ed70bdbf3550e32acddea968e3dd5e49",
+  "python_tests": 5,
+  "scala_suites": 2,
+  "scala_tests": 2,
+  "actual_cases": 6,
+  "actual_bf16_values": 11264,
+  "actual_recipe_mismatches": 0,
+  "actual_native_mismatches": 0,
+  "tiny_scalar_operations_checked": 701,
+  "frozen_recipe": "RNE BF16 Add; BF16(SiLU polynomial recipe) then BF16 multiply by BF16 up",
+  "limits": [
+    "Negative finite gate <= -80 returns Unsupported (4); mathematically legal but unsupported by shared ExpNegative saturation.",
+    "Native comparisons are isolated diagnostics, no new stage threshold or full-block acceptance.",
+    "Owner reset must be coordinated with external scalar and transport."
+  ],
+  "pch_freed_bytes": 0,
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "b7ce785066053d5cb14cac492fc8b39065a2d05b22d0e1c8918325d0b10c1674",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnElementwiseOwnerSpec.scala": "7d1d398d65aa3ebc1f7e2246e08672a39d423a7b0b66d23817b2f78acd4ca247",
+    "chisel/continuous_prefill/scripts/gdn_elementwise_reference.py": "d2d7cae484be44df141c69db55b5050c17fffadd3accfb993d55c663b231118a",
+    "chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py": "8b2f5a4fbb621d2d56a2d879322ca200f06fbf4e5a96487358169a9a53bcbd9e"
+  }
+}

@@ -14,9 +14,10 @@ import chisel3.util._
   * tensors are internal-only logical values, never DDR materializations.
   * Their completion events are conservatively delayed until PV writeback.
   */
-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false) extends Module {
+class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false) extends Module {
   require(!bf16V || s.qwen35VOnly, "native V requires the explicit Qwen3.5 V-only profile")
   require(!bf16Qkv || s.qwen35QkvOnly, "native QKV requires the explicit Qwen3.5 QKV-only profile")
+  require(!bf16GdnBlock || bf16GdnCore, "native full GDN block requires bf16GdnCore")
   require(!bf16GdnCore || bf16Gdn, "native GDN core requires bf16Gdn")
   require(!bf16Gdn || s.qwen35GdnOnly, "native GDN requires the explicit Qwen3.5 GDN-only profile")
   require(Seq(bf16V,bf16Qkv,bf16Gdn).count(identity)<=1, "native V-only, QKV and GDN features are distinct")
@@ -51,21 +52,35 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val txQkv=Reg(UInt(64.W));val txZ=Reg(UInt(64.W));val txAb=Reg(UInt(64.W))
   val txConvValid=RegInit(false.B);val txPrepValid=RegInit(false.B);val txRecurrentValid=RegInit(false.B);val txNormValid=RegInit(false.B)
   val txConv=Reg(UInt(64.W));val txPrep=Reg(UInt(64.W));val txRecurrent=Reg(UInt(64.W));val txNorm=Reg(UInt(64.W))
+  // Full v3 block values are published only after their exact owner ACK.
+  val txInputNormValid=RegInit(false.B);val txInputNorm=Reg(UInt(64.W))
+  val txOValid=RegInit(false.B);val txO=Reg(UInt(64.W))
+  val txResidual1Valid=RegInit(false.B);val txResidual1=Reg(UInt(64.W))
+  val txPostNormValid=RegInit(false.B);val txPostNorm=Reg(UInt(64.W))
+  val txGateValid=RegInit(false.B);val txGate=Reg(UInt(64.W))
+  val txUpValid=RegInit(false.B);val txUp=Reg(UInt(64.W))
+  val txSiluValid=RegInit(false.B);val txSilu=Reg(UInt(64.W))
+  val txDownValid=RegInit(false.B);val txDown=Reg(UInt(64.W))
+  val txResidual2Valid=RegInit(false.B);val txResidual2=Reg(UInt(64.W))
   val pendingHistoryAddress=Reg(UInt(64.W));val pendingHistoryEnd=Reg(UInt(64.W))
   val pendingStateAddress=Reg(UInt(64.W));val pendingStateEnd=Reg(UInt(64.W))
   val txGeneration=Reg(UInt(32.W));val txCold=Reg(Bool());val boundFence=RegInit(false.B)
   // Fixed semantic sources: hidden, Wqkv, Wz, Wab, Wconv, A_log, dt_bias,
   // norm weight, old history, old recurrent state. Distinct roles never alias.
-  val sourceValid=RegInit(VecInit(Seq.fill(10)(false.B)))
-  val sourceStarts=Reg(Vec(10,UInt(64.W)));val sourceEnds=Reg(Vec(10,UInt(64.W)))
-  // The seven parameter bindings belong to the committed layer checkpoint.
+  val sourceCount=if(bf16GdnBlock)16 else 10
+  val parameterRoles=if(bf16GdnBlock)(1 to 7)++(10 to 15) else (1 to 7)
+  val sourceValid=RegInit(VecInit(Seq.fill(sourceCount)(false.B)))
+  val sourceStarts=Reg(Vec(sourceCount,UInt(64.W)));val sourceEnds=Reg(Vec(sourceCount,UInt(64.W)))
+  // The seven core (thirteen full-block) bindings belong to the committed checkpoint.
   // Hidden changes with each token; carried state cannot change its weights.
-  val committedParameterStarts=Reg(Vec(7,UInt(64.W)));val committedParameterEnds=Reg(Vec(7,UInt(64.W)))
+  val committedParameterStarts=Reg(Vec(parameterRoles.size,UInt(64.W)));val committedParameterEnds=Reg(Vec(parameterRoles.size,UInt(64.W)))
   val previousSignal=RegInit(0.U(16.W))
   def clearTransaction():Unit={
     txInputValid:=false.B;txQkvValid:=false.B;txZValid:=false.B;txAbValid:=false.B
     txConvValid:=false.B;txPrepValid:=false.B;txRecurrentValid:=false.B;txNormValid:=false.B
-    sourceValid:=VecInit(Seq.fill(10)(false.B))
+    txInputNormValid:=false.B;txOValid:=false.B;txResidual1Valid:=false.B;txPostNormValid:=false.B
+    txGateValid:=false.B;txUpValid:=false.B;txSiluValid:=false.B;txDownValid:=false.B;txResidual2Valid:=false.B
+    sourceValid:=VecInit(Seq.fill(sourceCount)(false.B))
   }
   val group=RegInit(0.U(2.W));val qkCommand=Reg(UInt(128.W));val softCommand=Reg(UInt(128.W))
   val q=Reg(new DecodedTensor);val k=Reg(new DecodedTensor);val score=Reg(new DecodedTensor);val probability=Reg(new DecodedTensor)
@@ -132,23 +147,23 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val virtual=(0 until maxCommands).map(i=>i.U<virtualCount && overlap(address,end,vStarts(i),vEnds(i))).reduce(_||_)
     val current=bf16Gdn.B && stateValid && overlap(address,end,currentHistoryAddress,currentHistoryEnd)
     val recurrent=bf16GdnCore.B && stateValid && overlap(address,end,currentStateAddress,currentStateEnd)
-    val source=bf16GdnCore.B && (0 until 10).map(i=>sourceValid(i) && overlap(address,end,sourceStarts(i),sourceEnds(i))).reduce(_||_)
-    val parameter=bf16GdnCore.B && stateValid && (0 until 7).map(i=>
+    val source=bf16GdnCore.B && (0 until sourceCount).map(i=>sourceValid(i) && overlap(address,end,sourceStarts(i),sourceEnds(i))).reduce(_||_)
+    val parameter=bf16GdnCore.B && stateValid && parameterRoles.indices.map(i=>
       overlap(address,end,committedParameterStarts(i),committedParameterEnds(i))).reduce(_||_)
     !(published || virtual || current || recurrent || source || parameter)
   }
   def fresh(t:DecodedTensor):Bool=freshSpan(t.address,t.paddedEnd)
   def sourceAllowed(t:DecodedTensor,role:UInt):Bool={
-    val roles=(0 until 10).map(i=> !sourceValid(i) || Mux(i.U===role,
+    val roles=(0 until sourceCount).map(i=> !sourceValid(i) || Mux(i.U===role,
       t.address===sourceStarts(i) && t.paddedEnd===sourceEnds(i),
       !overlap(t.address,t.paddedEnd,sourceStarts(i),sourceEnds(i)))).reduce(_&&_)
     val published=(0 until producedCapacity).map(i=>producedValid(i) && overlap(t.address,t.paddedEnd,starts(i),ends(i))).reduce(_||_)
     // Old state roots are valid sources only in their dedicated semantic role.
     val oldHistory=stateValid && role=/=8.U && overlap(t.address,t.paddedEnd,currentHistoryAddress,currentHistoryEnd)
     val oldState=stateValid && role=/=9.U && overlap(t.address,t.paddedEnd,currentStateAddress,currentStateEnd)
-    val checkpointParameters=(1 to 7).map(i=> !stateValid || Mux(role===i.U,
-      t.address===committedParameterStarts(i-1) && t.paddedEnd===committedParameterEnds(i-1),
-      !overlap(t.address,t.paddedEnd,committedParameterStarts(i-1),committedParameterEnds(i-1)))).reduce(_&&_)
+    val checkpointParameters=parameterRoles.zipWithIndex.map{case(sourceRole,i)=> !stateValid || Mux(role===sourceRole.U,
+      t.address===committedParameterStarts(i) && t.paddedEnd===committedParameterEnds(i),
+      !overlap(t.address,t.paddedEnd,committedParameterStarts(i),committedParameterEnds(i)))}.reduce(_&&_)
     roles && !published && !oldHistory && !oldState && checkpointParameters
   }
   def rememberSource(t:DecodedTensor,role:UInt):Unit={
@@ -181,7 +196,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val collisions=(for(i<-0 until 4;j<-i+1 until 4)yield l.regions(i).base<l.regions(i).limit && l.regions(j).base<l.regions(j).limit && overlap(l.regions(i).base,l.regions(i).limit,l.regions(j).base,l.regions(j).limit)).reduce(_||_)
     val cmdEnd=l.commandBase.pad(80)+(((l.commands.pad(80)*16.U+63.U)>>6)<<6)
     val descEnd=l.descriptorBase.pad(80)+(((l.descriptors.pad(80)*16.U+63.U)>>6)<<6)
-    val ok=l.commands>0.U && l.commands<=maxCommands.U && l.descriptors>0.U && l.descriptors<=0xffffff.U &&
+    val ok=(!bf16GdnBlock.B || l.commands===17.U) && l.commands>0.U && l.commands<=maxCommands.U && l.descriptors>0.U && l.descriptors<=0xffffff.U &&
       Seq(l.commandBase,l.commandLimit,l.descriptorBase,l.descriptorLimit).map(_(5,0)===0.U).reduce(_&&_) &&
       l.commandBase<l.commandLimit && l.descriptorBase<l.descriptorLimit && cmdEnd<=l.commandLimit && descEnd<=l.descriptorLimit &&
       !overlap(l.commandBase,l.commandLimit,l.descriptorBase,l.descriptorLimit) && validRegions && !collisions &&
@@ -242,10 +257,11 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     .elsewhen(r.data(31,8)=/=0.U || prefixRevisit || policyRevisit){fail(Status.Malformed.U)}
     .elsewhen(gdnCommand){
       if(bf16GdnCore){
-        val fence=policySlot===1.U && r.data(63,56)===2.U && r.data(71,64)===6.U
+        val terminalPolicy=policySlot===1.U && r.data(63,56)===(if(bf16GdnBlock)3 else 2).U &&
+          (r.data(71,64)===6.U || (bf16GdnBlock.B && (r.data(71,64)===8.U || r.data(71,64)===9.U)))
         val expectedKind=Mux(policySlot===0.U,0x20.U,Mux(policySlot===1.U,0x21.U,Mux(gdnOperation===1.U,0x22.U,0x23.U)))
-        when(policySlot>2.U || r.data(7,0)=/=expectedKind || (policySlot===2.U || fence)=/=(next===0xffffff.U)){fail(Status.Malformed.U)}
-        .elsewhen(fence){state:=validate}
+        when(policySlot>2.U || r.data(7,0)=/=expectedKind || (policySlot===2.U || terminalPolicy)=/=(next===0xffffff.U)){fail(Status.Malformed.U)}
+        .elsewhen(terminalPolicy){state:=validate}
         .elsewhen(policySlot===2.U){
           val x=r.data(79,56);val y=r.data(103,80)
           val two=gdnOperation===1.U || gdnOperation===3.U
@@ -333,7 +349,97 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val nativeGdn=WireDefault(false.B);val gdnProjection=WireDefault(false.B);val gdnLive=WireDefault(false.B)
     val gdnFresh=WireDefault(false.B);val gdnDistinct=WireDefault(true.B)
     val corePrep=WireDefault(false.B);val coreRecurrent=WireDefault(false.B);val coreNorm=WireDefault(false.B);val coreFence=WireDefault(false.B)
-    if(bf16GdnCore){
+    val blockRmsNorm=WireDefault(false.B);val blockElementwise=WireDefault(false.B)
+    if(bf16GdnBlock){
+      val x=tensors(3);val y=tensors(4);val program=policy(0);val gp=policy(1);val extra=policy(2)
+      val op=gp(71,64);val role=gp(84,82);val cold=gp(80);val generation=gp(119,88)
+      val denseRole=policy(2)(84,82)
+      val extraCount=Mux(op===1.U || op===3.U,2.U,Mux(op===4.U || op===5.U,1.U,0.U))
+      val tensorCount=Mux(gdnCommand,3.U+extraCount,3.U)
+      val policyCount=Mux(gdnCommand && (op===6.U || op===8.U || op===9.U),2.U,3.U)
+      val allIndices=tensors.flatMap(_.prefixIndices)++policyIndices.take(3)
+      val indexUsed=(0 until 18).map(i=>if(i<15)(i/3).U<tensorCount else (i-15).U<policyCount)
+      gdnDistinct:=(for(i<-allIndices.indices;j<-i+1 until allIndices.size)yield
+        !indexUsed(i) || !indexUsed(j) || allIndices(i)=/=allIndices(j)).reduce(_&&_)
+      val denseK=Mux(denseRole===3.U,2048.U,Mux(denseRole===6.U,3584.U,1024.U))
+      val denseN=MuxLookup(denseRole,0.U)(Seq(0.U->6144.U,1.U->2048.U,2.U->32.U,
+        3.U->1024.U,4.U->3584.U,5.U->3584.U,6.U->1024.U))
+      gdnProjection:=opcode===0x20.U && denseRole<=6.U && m===1.U && n===denseN &&
+        shape2(a,1.U,denseK) && shape2(b,denseK,denseN) && shape2(d,1.U,denseN) &&
+        Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && b.tail===0xffffff.U && d.tail===0xffffff.U &&
+        policy(0)(127,56)===(1.U(72.W)|(denseN.pad(72)<<16)|(denseK.pad(72)<<32)) &&
+        policy(1)(127,56)==="h004000040020ffffff".U(72.W) &&
+        finishRecord(policy(2),0x21.U) && policy(2)(63,56)===3.U && policy(2)(71,64)===2.U &&
+        policy(2)(79,72)===0.U && policy(2)(81)=== !policy(2)(80) && policy(2)(87,85)===0.U && policy(2)(127,120)===0.U
+      val programOK=program(7,0)===0x20.U && program(55,32)=/=0xffffff.U &&
+        program(71,56)===0x30.U && program(79,72)===2.U && program(87,80)===1.U &&
+        program(91,88)===Mux(op===4.U,7.U,5.U) && program(95,92)===Mux(op===3.U,7.U,5.U) &&
+        program(103,96)===16.U && program(111,104)===1.U && program(127,112)===0.U
+      val noExtras=op===6.U || op===8.U || op===9.U
+      val roleOK=Mux(op===8.U,role<=1.U,Mux(op===9.U,role<=2.U,role===0.U))
+      val policyOK=gp(7,0)===0x21.U && gp(63,56)===3.U && gp(79,72)===0.U && roleOK &&
+        gp(87,85)===0.U && gp(127,120)===0.U &&
+        Mux(noExtras,gp(55,32)===0xffffff.U,gp(55,32)=/=0xffffff.U) && gp(81)=== !cold
+      val extraOK=finishRecord(extra,Mux(op===1.U,0x22.U,0x23.U)) && extra(127,104)===0.U
+      val common=gdnCommand && programOK && policyOK && (noExtras || extraOK) && b.tail===0xffffff.U && d.tail===0xffffff.U
+      nativeGdn:=common && op===1.U && shape2(a,1.U,6144.U) && shape2(b,6144.U,4.U) && shape2(d,1.U,6144.U) &&
+        shape2(x,6144.U,4.U) && shape2(y,6144.U,4.U) && tensors.map(_.dtype===5.U).reduce(_&&_) &&
+        x.tail===0xffffff.U && y.tail===0xffffff.U
+      corePrep:=common && op===3.U && shape2(a,1.U,6144.U) && shape2(b,1.U,32.U) && shape2(d,1.U,6400.U) &&
+        shape2(x,1.U,16.U) && shape2(y,1.U,16.U) && a.dtype===5.U && b.dtype===5.U && d.dtype===7.U &&
+        x.dtype===7.U && y.dtype===5.U && x.tail===0xffffff.U && y.tail===0xffffff.U
+      coreRecurrent:=common && op===4.U && shape2(a,1.U,6400.U) && shape2(b,2048.U,128.U) && shape2(d,1.U,2048.U) &&
+        shape2(x,2048.U,128.U) && a.dtype===7.U && b.dtype===7.U && d.dtype===5.U && x.dtype===7.U && x.tail===0xffffff.U
+      coreNorm:=common && op===5.U && shape2(a,1.U,2048.U) && shape2(b,1.U,2048.U) && shape2(d,1.U,2048.U) &&
+        shape2(x,1.U,128.U) && Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && x.dtype===7.U && x.tail===0xffffff.U
+      blockRmsNorm:=common && op===8.U && shape2(a,1.U,1024.U) && shape2(b,1.U,1024.U) && shape2(d,1.U,1024.U) &&
+        Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_)
+      val elementWidth=Mux(role===1.U,3584.U,1024.U)
+      blockElementwise:=common && op===9.U && shape2(a,1.U,elementWidth) && shape2(b,1.U,elementWidth) &&
+        shape2(d,1.U,elementWidth) && Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_)
+      coreFence:=common && op===6.U && shape2(a,6144.U,4.U) && shape2(b,2048.U,128.U) && shape2(d,1.U,1024.U) &&
+        a.dtype===5.U && b.dtype===7.U && d.dtype===5.U
+      val expectedContext=generation===Mux(stateValid,currentGeneration,0.U) && cold=== !stateValid && generation=/="hffffffff".U
+      val sameContext=generation===txGeneration && cold===txCold && generation=/="hffffffff".U
+      val projectionContext=policy(2)(119,88)===txGeneration && policy(2)(80)===txCold && policy(2)(119,88)=/="hffffffff".U
+      val historyLive=Mux(stateValid,!cold && generation===currentGeneration && x.address===currentHistoryAddress && x.paddedEnd===currentHistoryEnd,generation===0.U && cold)
+      val recurrentLive=Mux(stateValid,!cold && generation===currentGeneration && b.address===currentStateAddress && b.paddedEnd===currentStateEnd,generation===0.U && cold)
+      val projectionProducer=MuxLookup(denseRole,false.B)(Seq(
+        0.U->(txInputNormValid && !txQkvValid && a.address===txInputNorm),
+        1.U->(txQkvValid && !txZValid && a.address===txInputNorm),
+        2.U->(txZValid && !txAbValid && a.address===txInputNorm),
+        3.U->(txNormValid && !txOValid && a.address===txNorm),
+        4.U->(txPostNormValid && !txGateValid && a.address===txPostNorm),
+        5.U->(txGateValid && !txUpValid && a.address===txPostNorm),
+        6.U->(txSiluValid && !txDownValid && a.address===txSilu)))
+      val rmsProducer=Mux(role===0.U,!txInputValid && !txInputNormValid && expectedContext,
+        txResidual1Valid && !txPostNormValid && a.address===txResidual1 && sameContext)
+      val elementProducer=MuxLookup(role,false.B)(Seq(
+        0.U->(txOValid && !txResidual1Valid && a.address===txInputAddress && a.paddedEnd===txInputEnd && b.address===txO),
+        1.U->(txGateValid && txUpValid && !txSiluValid && a.address===txGate && b.address===txUp),
+        2.U->(txDownValid && txResidual1Valid && !txResidual2Valid && a.address===txResidual1 && b.address===txDown)))
+      gdnLive:=Mux(gdnProjection,txInputValid && live(a) && live(b) && projectionProducer && projectionContext,
+        Mux(blockRmsNorm,live(a) && live(b) && rmsProducer,
+        Mux(blockElementwise,live(a) && live(b) && elementProducer && sameContext,
+        Mux(nativeGdn,txQkvValid && txZValid && txAbValid && !txConvValid && a.address===txQkv && live(a) && live(b) && historyLive && sameContext,
+        Mux(corePrep,txConvValid && txAbValid && !txPrepValid && a.address===txConv && b.address===txAb && live(a) && live(b) && live(x) && live(y) && sameContext,
+        Mux(coreRecurrent,txPrepValid && !txRecurrentValid && a.address===txPrep && live(a) && recurrentLive && sameContext,
+        Mux(coreNorm,txRecurrentValid && txZValid && !txNormValid && a.address===txRecurrent && b.address===txZ && live(a) && live(b) && live(x) && sameContext,
+        coreFence && txConvValid && txRecurrentValid && txResidual2Valid && sameContext && live(a) && live(b) && live(d) &&
+          a.address===pendingHistoryAddress && a.paddedEnd===pendingHistoryEnd &&
+          b.address===pendingStateAddress && b.paddedEnd===pendingStateEnd && d.address===txResidual2)))))))
+      val projectionWeightRole=Mux(denseRole<=2.U,denseRole+1.U,Mux(denseRole===3.U,11.U,denseRole+9.U))
+      val sourceRoles=Mux(gdnProjection,sourceAllowed(b,projectionWeightRole),
+        Mux(blockRmsNorm,Mux(role===0.U,sourceAllowed(a,0.U) && sourceAllowed(b,10.U),sourceAllowed(b,12.U)),
+        Mux(nativeGdn,sourceAllowed(b,4.U) && sourceAllowed(x,8.U),
+        Mux(corePrep,sourceAllowed(x,5.U) && sourceAllowed(y,6.U),
+        Mux(coreRecurrent,sourceAllowed(b,9.U),Mux(coreNorm,sourceAllowed(x,7.U),true.B))))))
+      val operands=Seq(a,b,d,x,y)
+      val disjoint=(for(i<-operands.indices;j<-i+1 until operands.size)yield
+        i.U>=tensorCount || j.U>=tensorCount || !overlap(operands(i).address,operands(i).paddedEnd,operands(j).address,operands(j).paddedEnd)).reduce(_&&_)
+      gdnFresh:=disjoint && sourceRoles && Mux(coreFence,readwrite(a) && readwrite(b) && readwrite(d),
+        fresh(d) && readwrite(d) && Mux(nativeGdn,fresh(y) && readwrite(y),Mux(coreRecurrent,fresh(x) && readwrite(x),true.B)))
+    }else if(bf16GdnCore){
       val x=tensors(3);val y=tensors(4);val program=policy(0);val gp=policy(1);val extra=policy(2)
       val op=gp(71,64);val cold=gp(80);val generation=gp(119,88)
       val extraCount=Mux(op===1.U || op===3.U,2.U,Mux(op===4.U || op===5.U,1.U,0.U))
@@ -438,7 +544,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     }
     val supportedOrdinary=validDTypes && plainTails && (!s.projectionOnly.B || nativeProjection) &&
       (!extendedProjection || nativeProjection) && (nativeProjection||norm||dense||vector||rope||activation||append||qk||sm||pv)
-    val coreOperation=corePrep || coreRecurrent || coreNorm || coreFence
+    val coreOperation=corePrep || coreRecurrent || coreNorm || coreFence || blockRmsNorm || blockElementwise
     val publicationSlots=Mux(coreFence,0.U,Mux(nativeGdn || coreRecurrent,2.U,1.U))
     when(!Mux(s.qwen35GdnOnly.B,nativeGdn||gdnProjection||coreOperation,supportedOrdinary)){fail(Status.Unsupported.U)}
     .elsewhen((nativeGdn||gdnProjection||coreOperation) && !gdnDistinct){fail(Status.Malformed.U)}
@@ -467,7 +573,18 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
         bound.writeBytes:=projectionBytes;mainPublishBytes:=projectionBytes
       }
       when(gdnProjection){
-        bound.n:=n;bound.k:=1024.U;bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
+        bound.n:=n;bound.k:=(if(bf16GdnBlock)a.dims(1) else 1024.U);bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
+      }
+      if(bf16GdnBlock){
+        when(blockRmsNorm){
+          bound.kind:=QwenOwnerKind.GdnRmsNorm.U;bound.n:=1024.U;bound.k:=1024.U
+          bound.activationBf16:=true.B;bound.outputBf16:=true.B
+        }
+        when(blockElementwise){
+          bound.kind:=QwenOwnerKind.GdnElementwise.U;bound.n:=n;bound.k:=n
+          bound.gdnElementwiseOp:=Mux(policy(1)(84,82)===1.U,1.U,0.U)
+          bound.activationBf16:=true.B;bound.outputBf16:=true.B
+        }
       }
       if(bf16Gdn){when(nativeGdn){
         bound.kind:=QwenOwnerKind.GdnConv.U;bound.c:=tensors(3).address;bound.historyOut:=tensors(4).address
@@ -525,21 +642,36 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
           when(boundFence){
             // One clock edge publishes BOTH persistent roots and generation.
             // Every producer ACK and the exact final D were validated first.
-            when(!stateValid){for(i<-0 until 7){
-              committedParameterStarts(i):=sourceStarts(i+1);committedParameterEnds(i):=sourceEnds(i+1)
+            when(!stateValid){for((sourceRole,i)<-parameterRoles.zipWithIndex){
+              committedParameterStarts(i):=sourceStarts(sourceRole);committedParameterEnds(i):=sourceEnds(sourceRole)
             }}
             stateValid:=true.B;currentGeneration:=txGeneration+1.U
             currentHistoryAddress:=pendingHistoryAddress;currentHistoryEnd:=pendingHistoryEnd
             currentStateAddress:=pendingStateAddress;currentStateEnd:=pendingStateEnd
             clearTransaction()
           }.elsewhen(bound.kind===QwenOwnerKind.Dense.U){
-            txInputValid:=true.B;txInputAddress:=bound.a;txInputEnd:=tensors(0).paddedEnd
-            txGeneration:=policy(2)(119,88);txCold:=policy(2)(80)
-            rememberSource(tensors(0),0.U)
-            rememberSource(tensors(1),Mux(bound.n===6144.U,1.U,Mux(bound.n===2048.U,2.U,3.U)))
-            when(bound.n===6144.U){txQkvValid:=true.B;txQkv:=bound.dst}
-            .elsewhen(bound.n===2048.U){txZValid:=true.B;txZ:=bound.dst}
-            .otherwise{txAbValid:=true.B;txAb:=bound.dst}
+            if(bf16GdnBlock){
+              val denseRole=policy(2)(84,82)
+              val weightRole=Mux(denseRole<=2.U,denseRole+1.U,Mux(denseRole===3.U,11.U,denseRole+9.U))
+              rememberSource(tensors(1),weightRole)
+              switch(denseRole){
+                is(0.U){txQkvValid:=true.B;txQkv:=bound.dst}
+                is(1.U){txZValid:=true.B;txZ:=bound.dst}
+                is(2.U){txAbValid:=true.B;txAb:=bound.dst}
+                is(3.U){txOValid:=true.B;txO:=bound.dst}
+                is(4.U){txGateValid:=true.B;txGate:=bound.dst}
+                is(5.U){txUpValid:=true.B;txUp:=bound.dst}
+                is(6.U){txDownValid:=true.B;txDown:=bound.dst}
+              }
+            }else{
+              txInputValid:=true.B;txInputAddress:=bound.a;txInputEnd:=tensors(0).paddedEnd
+              txGeneration:=policy(2)(119,88);txCold:=policy(2)(80)
+              rememberSource(tensors(0),0.U)
+              rememberSource(tensors(1),Mux(bound.n===6144.U,1.U,Mux(bound.n===2048.U,2.U,3.U)))
+              when(bound.n===6144.U){txQkvValid:=true.B;txQkv:=bound.dst}
+              .elsewhen(bound.n===2048.U){txZValid:=true.B;txZ:=bound.dst}
+              .otherwise{txAbValid:=true.B;txAb:=bound.dst}
+            }
           }.elsewhen(boundGdn){
             val historyIndex=(producedCount+1.U)(producedIndexBits-1,0)
             starts(historyIndex):=bound.historyOut;ends(historyIndex):=tensors(4).paddedEnd
@@ -560,6 +692,23 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
             pendingStateAddress:=bound.gdnStateOut;pendingStateEnd:=tensors(3).paddedEnd
           }.elsewhen(bound.kind===QwenOwnerKind.GdnGatedNorm.U){
             txNormValid:=true.B;txNorm:=bound.dst;rememberSource(tensors(3),7.U)
+          }
+          if(bf16GdnBlock){
+            when(bound.kind===QwenOwnerKind.GdnRmsNorm.U && !boundFence){
+              when(policy(1)(84,82)===0.U){
+                txInputValid:=true.B;txInputAddress:=bound.a;txInputEnd:=tensors(0).paddedEnd
+                txGeneration:=policy(1)(119,88);txCold:=policy(1)(80)
+                txInputNormValid:=true.B;txInputNorm:=bound.dst
+                rememberSource(tensors(0),0.U);rememberSource(tensors(1),10.U)
+              }.otherwise{txPostNormValid:=true.B;txPostNorm:=bound.dst;rememberSource(tensors(1),12.U)}
+            }
+            when(bound.kind===QwenOwnerKind.GdnElementwise.U && !boundFence){
+              switch(policy(1)(84,82)){
+                is(0.U){txResidual1Valid:=true.B;txResidual1:=bound.dst}
+                is(1.U){txSiluValid:=true.B;txSilu:=bound.dst}
+                is(2.U){txResidual2Valid:=true.B;txResidual2:=bound.dst}
+              }
+            }
           }
         }else if(bf16Gdn){when(boundGdn){
           // Legacy v1 profile retains its per-Conv publication contract.

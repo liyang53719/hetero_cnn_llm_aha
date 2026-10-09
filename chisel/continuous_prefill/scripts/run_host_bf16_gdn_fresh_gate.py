@@ -4,7 +4,8 @@
 The build job transfers only its simulator, RTL and identity receipts. Each
 case job regenerates its bounded official two-token input and independent
 reference in-process. No persisted fixture is an acceptance input. Dense/Conv
-v1 remains the default; core acceptance stops before output projection.
+v1 remains the default; core acceptance stops before output projection. The
+explicit block profile requires both exact canonical and original-native gates.
 This entrypoint is not evidence of a production numerical PASS.
 """
 from pathlib import Path
@@ -39,7 +40,12 @@ CORE_BUILD_STATUS = 'BUILT_HOST_GDN_CORE_ONLY_NOT_NUMERICAL_PASS'
 CORE_FIXTURE_SCOPE = 'DENSE_QKV_Z_AB_CONV4_INPUT_PREP_FP32_RECURRENT_GATED_NORM_FENCE_ONLY'
 CORE_PENDING_GATES = ('fault_injection', 'reset_recovery', 'checkpoint_restore',
                       'native_core_acceptance', 'full_block_acceptance')
-PROFILES = ('dense-conv', 'core')
+BLOCK_WORKFLOW = '.github/workflows/host-bf16-gdn-block.yml'
+BLOCK_SCOPE = 'GDN_LAYER0_BLOCK_M1'
+BLOCK_FIXTURE_SCOPE = 'FULL_LAYER0_GDN_BLOCK_RAW_HIDDEN_TO_RESIDUAL2_AND_BOTH_STATES'
+BLOCK_BUILD_STATUS = 'BUILT_HOST_GDN_BLOCK_ONLY_NOT_NUMERICAL_PASS'
+BLOCK_PENDING_GATES = ('fault_injection', 'reset_recovery', 'checkpoint_restore', 'timing_signoff')
+PROFILES = ('dense-conv', 'core', 'block')
 MANIFEST = 'gdn_package_manifest.json'
 FILES = frozenset((
     'obj/VHostBlockTop', 'generated/HostBlockTop.sv', 'generated/SCOPE.json',
@@ -58,6 +64,8 @@ CI_MODES = ('pass', 'last-history-ack-error', 'output-alias', 'reset-recovery')
 
 def profile_contract(profile):
     require(profile in PROFILES, 'unknown GDN profile')
+    if profile == 'block':
+        return dict(scope=BLOCK_SCOPE, build_status=BLOCK_BUILD_STATUS, modes=('pass',), timeout_limit=18000)
     core = profile == 'core'
     return dict(scope=CORE_SCOPE if core else SCOPE,
                 build_status=CORE_BUILD_STATUS if core else BUILD_STATUS,
@@ -79,13 +87,17 @@ def source_closure(build=None, *, profile='dense-conv'):
     profile_contract(profile)
     sources = _sources()
     entry_sources = ENTRY_SOURCES
-    if profile == 'core':
-        from pack_host_bf16_gdn_core_fixture import _sources as core_sources
-        for name, digest in core_sources().items():
+    if profile in ('core', 'block'):
+        if profile == 'block':
+            from pack_host_bf16_gdn_block_fixture import _sources as selected_sources
+        else:
+            from pack_host_bf16_gdn_core_fixture import _sources as selected_sources
+        for name, digest in selected_sources().items():
             require(name not in sources or sources[name] == digest, 'source identity conflict: ' + name)
             sources[name] = digest
         entry_sources = tuple(name for name in ENTRY_SOURCES if name != WORKFLOW) + (
-            CORE_WORKFLOW, 'chisel/continuous_prefill/config/host_bf16_gdn_core_descriptor_contract.json',
+            BLOCK_WORKFLOW if profile == 'block' else CORE_WORKFLOW,
+            'chisel/continuous_prefill/config/host_bf16_gdn_core_descriptor_contract.json',
             'chisel/continuous_prefill/scripts/host_bf16_gdn_execution.py',
             'chisel/continuous_prefill/scripts/host_bf16_qkv_execution.py',
             'chisel/continuous_prefill/scripts/verify_host_bf16_gdn_fixture.py',
@@ -118,7 +130,8 @@ def verify_checkout(commit, sources):
 
 def build_admission(build, commit, *, profile='dense-conv'):
     contract = profile_contract(profile)
-    core = profile == 'core'
+    core = profile in ('core', 'block')
+    block = profile == 'block'
     identity = _build_identity(build, profile=profile)
     ready = read_json(build / 'build_ready.json')
     require(ready['source_base_commit'] == commit
@@ -132,13 +145,16 @@ def build_admission(build, commit, *, profile='dense-conv'):
             'full source scope required')
     scope = read_json(build / 'generated/SCOPE.json')
     expected = dict(experimental_bf16_gdn=True, default_enabled=False, scope=contract['scope'],
-                    policy_version=2 if core else 1, hidden=1024, gdn_channels=6144, conv_kernel=4,
-                    scalar_service_shared=True, full_block_supported=False, burst_writes=False,
+                    policy_version=3 if block else 2 if core else 1, hidden=1024, gdn_channels=6144, conv_kernel=4,
+                    scalar_service_shared=True, full_block_supported=block, burst_writes=False,
                     logical_matrix_engines=1, physical_matrix_slices=8, pinned_idma_instances=1)
     expected.update(dict(experimental_gdn_core=True, max_tokens=1, heads=16, head_dim=128,
                          managed_state_contexts=1, softplus_enabled=True, recurrent_state_dtype='FP32',
-                         output_projection_supported=False, ffn_supported=False, timing_signoff=False)
+                         output_projection_supported=block, ffn_supported=block, timing_signoff=False)
                     if core else dict(recurrent_state_supported=False, gated_norm_supported=False))
+    if block:
+        expected.update(experimental_gdn_block=True, ffn=3584, input_norm_dut=True,
+                        residual_supported=True, numerical_acceptance=False)
     require(all(type(scope.get(k)) is type(v) and scope[k] == v for k, v in expected.items()),
             'wrong GDN ' + profile + ' build profile')
     hf = Path(os.environ.get('HARDFLOAT_SOURCE', ROOT / 'work/upstream/hardfloat_continuous')).resolve()
@@ -314,10 +330,95 @@ def validate_core_result(result, ready):
                 'incomplete core launch or persistent generation')
 
 
+def block_reference_summary(report):
+    expected = dict(schema_version=3, status='SOURCE_AUTHENTICATED_HOST_GDN_BLOCK_TWO_TOKEN_FIXTURE',
+                    scope=BLOCK_FIXTURE_SCOPE, token_ids=[19, 92], tokens_per_launch=1,
+                    launches=2, commands_per_launch=17, heads=16, head_width=128,
+                    reference_head_jobs=138, reference_padded_fma_steps=43515904,
+                    actual_useful_dense_macs=43057152,
+                    canonical_acceptance='EXACT_BITS_EVERY_STAGE_AND_BOTH_STATES',
+                    native_core_gate_pass=None, full_block_supported=True, input_norm_dut=True,
+                    o_projection_dut=True, residual_dut=True, ffn_dut=True,
+                    rtl_executed=False, fault_restore_supported=False, generations=[0, 1, 2])
+    require(all(key in report and type(report[key]) is type(value) and report[key] == value
+                for key, value in expected.items()), 'bounded fresh block source contract changed')
+    layout = report['layout']
+    require(type(layout['actual_write_bytes']) is int and layout['actual_write_bytes'] == 2388096
+            and len(layout['launches']) == 2
+            and all(type(row['descriptor_records']) is int and row['descriptor_records'] == 216
+                    and type(row['commands']) is int and row['commands'] == 17
+                    for row in layout['launches']), 'full block command/ACK inventory drift')
+    require(type(report['native_operator_gate_pass']) is bool
+            and type(report['native_full_block_gate_pass']) is bool,
+            'native block gate must be an explicit boolean')
+    metrics = report['native_full_block_metrics']
+    require(type(metrics) is list and len(metrics) == 2, 'both native token comparisons required')
+    expected_checks = {'input_norm', 'qkv', 'z', 'ab', 'conv', 'recurrent', 'norm', 'o',
+                       'residual1', 'post_norm', 'gate', 'up', 'silu_mul', 'down', 'residual2',
+                       'history', 'state'}
+    for token, row in enumerate(metrics):
+        require(type(row['token']) is int and row['token'] == token
+                and set(row['checks']) == expected_checks, 'native block comparison inventory drift')
+        for name, metric in row['checks'].items():
+            require(type(metric['pass']) is bool, 'native comparison needs explicit result')
+            if name == 'state':
+                require(metric['atol'] == metric['rtol'] == 1e-4
+                        and type(metric['mismatches']) is int and metric['mismatches'] >= 0
+                        and metric['pass'] is (metric['mismatches'] == 0), 'frozen FP32 state gate drift')
+            else:
+                maximum, mean = (.05, .01) if name == 'residual2' else (.03125, .005)
+                require(metric['thresholds'] == dict(max_abs=maximum, mean_abs=mean)
+                        and metric['max_abs'] >= 0 and metric['mean_abs'] >= 0
+                        and metric['pass'] is (metric['max_abs'] <= maximum and metric['mean_abs'] <= mean),
+                        'frozen BF16 block/operator gate drift')
+        require(type(row['passed']) is bool and row['passed'] is all(v['pass'] for v in row['checks'].values()),
+                'native block aggregate changed')
+    fixed = report['frozen_operator_metrics']
+    require(type(fixed) is list and len(fixed) == 2
+            and all(type(row['passed']) is bool for row in fixed)
+            and report['native_operator_gate_pass'] is all(row['passed'] for row in fixed),
+            'frozen Dense/Conv gate changed')
+    passed = report['native_operator_gate_pass'] and all(row['passed'] for row in metrics)
+    require(report['native_full_block_gate_pass'] is passed
+            and report['native_full_block_status'] == ('PASS' if passed else 'FAIL'), 'native block status drift')
+    return {key: report[key] for key in (*expected, 'input_boundary', 'native_operator_gate_pass',
+            'frozen_operator_metrics', 'native_full_block_gate_pass', 'native_full_block_status',
+            'native_full_block_metrics', 'native_gate_threshold_sources',
+            'reference_elapsed_seconds', 'max_rss_kib', 'tools')}
+
+
+def validate_block_result(result, ready, reference):
+    passed = reference['native_full_block_gate_pass']
+    expected = dict(status='PASS_PRODUCTION_HOST_GDN_BLOCK' if passed else 'FAIL_PRODUCTION_HOST_GDN_BLOCK_NATIVE_ACCEPTANCE',
+                    scope=BLOCK_FIXTURE_SCOPE, actual_dut_identity_verified=True, source_immutability_verified=True,
+                    canonical_block_pass=True, canonical_core_pass=True, actual_useful_dense_macs=43057152,
+                    actual_ack_history_state_carry=True, native_operator_gate_pass=reference['native_operator_gate_pass'],
+                    native_core_gate_pass=None, native_full_block_gate_pass=passed,
+                    native_full_block_status='PASS' if passed else 'FAIL', overall_pass=passed,
+                    full_block_supported=True, fault_restore_supported=False, input_norm_dut=True,
+                    o_projection_dut=True, residual_dut=True, ffn_dut=True,
+                    binary_sha256=ready['binary_sha256'], rtl_sha256=ready['rtl_sha256'])
+    require(all(key in result and type(result[key]) is type(value) and result[key] == value
+                for key, value in expected.items()), 'incomplete/mismatched production block execution result')
+    require(result['frozen_operator_metrics'] == reference['frozen_operator_metrics']
+            and result['native_full_block_metrics'] == reference['native_full_block_metrics'],
+            'native block/operator acceptance differs from live reference')
+    require(type(result.get('runs')) is list and len(result['runs']) == 2,
+            'both cold and carried full block launches required')
+    for token, row in enumerate(result['runs']):
+        require(type(row['token']) is int and row['token'] == token
+                and type(row['committed_generation']) is int and row['committed_generation'] == token + 1
+                and type(row['canonical_bit_mismatches']) is int and row['canonical_bit_mismatches'] == 0
+                and type(row['commands']) is list and len(row['commands']) == 17
+                and type(row['write_ack_bytes']) is int and row['write_ack_bytes'] == 1194048,
+                'incomplete block launch, physical ACKs or persistent generation')
+
+
 def run(args):
     profile = getattr(args, 'profile', 'dense-conv')
     contract = profile_contract(profile)
     core = profile == 'core'
+    block = profile == 'block'
     out = fresh_output(args.output)
     started = time.monotonic()
     summary = dict(status='PENDING_PRODUCTION_HOST_GDN_CORE' if core else 'PENDING_PRODUCTION_HOST_GDN',
@@ -333,6 +434,14 @@ def run(args):
                        native_core_gate_pass=None, native_full_block_gate_pass=None,
                        o_projection_dut=False, residual_dut=False, ffn_dut=False,
                        fault_restore_supported=False, pending_gates=list(CORE_PENDING_GATES))
+    if block:
+        summary.update(status='PENDING_PRODUCTION_HOST_GDN_BLOCK', numerical_acceptance_scope='canonical_and_native_full_gdn_block',
+                       execution_scope=BLOCK_FIXTURE_SCOPE,
+                       canonical_block_pass=False, canonical_core_pass=False, native_operator_gate_pass=None,
+                       native_core_gate_pass=None, native_full_block_gate_pass=None, overall_pass=False,
+                       full_block_supported=True, input_norm_dut=True, recurrent_state_supported=True,
+                       gated_norm_supported=True, o_projection_dut=True, residual_dut=True, ffn_dut=True,
+                       fault_restore_supported=False, pending_gates=list(BLOCK_PENDING_GATES))
     hashes = dict(source_sha256={}, input_sha256={}, output_sha256={})
 
     def checkpoint(stage):
@@ -384,15 +493,20 @@ def run(args):
             checkpoint('fresh_official_two_token_reference')
             fixture = out / 'fresh_fixture'
             with (out / 'reference.log').open('x') as log, contextlib.redirect_stdout(log):
-                if core:
+                if block:
+                    from pack_host_bf16_gdn_block_fixture import generate_fixture as generate_block_fixture
+                    session = generate_block_fixture(fixture)
+                elif core:
                     from pack_host_bf16_gdn_core_fixture import generate_fixture as generate_core_fixture
                     session = generate_core_fixture(fixture)
                 else:
                     session = generate_fixture(fixture)
                 fixture_report = session.verify(fixture)
-                if not core:
+                if not (core or block):
                     authority = authenticate_fixture(fixture, session=session)
-            if core:
+            if block:
+                summary['fresh_reference'] = block_reference_summary(fixture_report)
+            elif core:
                 summary['fresh_reference'] = core_reference_summary(fixture_report)
             else:
                 require(fixture_report['token_ids'] == [19, 92] and fixture_report['head_jobs'] == 48
@@ -405,8 +519,15 @@ def run(args):
             hashes['source_payload_manifest_sha256'] = fixture_report['source_payload_manifest_sha256']
             hashes['fixture_manifest_sha256'] = sha(fixture / 'manifest.json')
             verify_checkout(commit, sources)
-            checkpoint('actual_host_core_cold_carried' if core else 'actual_host_' + args.mode)
-            if core:
+            checkpoint('actual_host_block_cold_carried' if block else 'actual_host_core_cold_carried' if core else 'actual_host_' + args.mode)
+            if block:
+                from host_bf16_gdn_block_execution import run_case as run_block_case
+                result = run_block_case(build, fixture, session=session, source_root=ROOT,
+                                       timeout_seconds=args.timeout_seconds)
+                validate_block_result(result, ready, fixture_report)
+                session.verify(fixture)
+                hashes['output_sha256'] = {str(row['token']): row['ddr_after_sha256'] for row in result['runs']}
+            elif core:
                 from host_bf16_gdn_core_execution import run_case as run_core_case
                 result = run_core_case(build, fixture, session=session, source_root=ROOT,
                                        timeout_seconds=args.timeout_seconds)
@@ -438,25 +559,50 @@ def run(args):
                                frozen_operator_metrics=result['frozen_operator_metrics'],
                                actual_useful_dense_macs=result['actual_useful_dense_macs'],
                                actual_ack_history_state_carry=True)
+            if block:
+                summary.update(canonical_block_pass=True, canonical_core_pass=True,
+                               numerical_acceptance=result['overall_pass'], overall_pass=result['overall_pass'],
+                               native_operator_gate_pass=result['native_operator_gate_pass'],
+                               native_full_block_gate_pass=result['native_full_block_gate_pass'],
+                               native_full_block_status=result['native_full_block_status'],
+                               native_full_block_metrics=result['native_full_block_metrics'],
+                               frozen_operator_metrics=result['frozen_operator_metrics'],
+                               actual_useful_dense_macs=result['actual_useful_dense_macs'],
+                               actual_ack_history_state_carry=True)
         checkpoint('complete')
-        return summary, 0
+        return summary, 1 if block and args.command == 'run' and not summary['overall_pass'] else 0
     except (subprocess.TimeoutExpired, InterruptedError, KeyboardInterrupt) as error:
-        summary.update(status='PENDING_INCOMPLETE_PRODUCTION_HOST_GDN_CORE' if core else 'PENDING_INCOMPLETE_PRODUCTION_HOST_GDN',
+        summary.update(status='PENDING_INCOMPLETE_PRODUCTION_HOST_GDN_BLOCK' if block else 'PENDING_INCOMPLETE_PRODUCTION_HOST_GDN_CORE' if core else 'PENDING_INCOMPLETE_PRODUCTION_HOST_GDN',
                        numerical_acceptance=False,
                        error=dict(type=type(error).__name__, message=str(error)))
     except Exception as error:
-        summary.update(status='FAIL_PRODUCTION_HOST_GDN_CORE_GATE' if core else 'FAIL_PRODUCTION_HOST_GDN_GATE',
+        summary.update(status='FAIL_PRODUCTION_HOST_GDN_BLOCK_GATE' if block else 'FAIL_PRODUCTION_HOST_GDN_CORE_GATE' if core else 'FAIL_PRODUCTION_HOST_GDN_GATE',
                        numerical_acceptance=False,
                        error=dict(type=type(error).__name__, message=str(error)))
     finally:
         for sig, handler in old_handlers.items():
             signal.signal(sig, handler)
         if summary['stage'] != 'complete':
-            if core:
+            if core or block:
                 summary['canonical_core_pass'] = False
                 summary['native_operator_gate_pass'] = None
+            if block:
+                summary.update(canonical_block_pass=False, overall_pass=False, native_full_block_gate_pass=None)
             names = ['build.log', 'reference.log']
-            if core:
+            if block:
+                names.append('host_build/block_cold_carried.log')
+                names.extend('host_build/' + name for name in (
+                    'compile.log', 'emit.log', 'compile_emit.log', 'idma_verify.log', 'build.log',
+                    'hierarchy_verilation.log', 'make.log', 'build_source_verification.log'))
+                phases = ('preflight', 'scala_compile', 'rtl_emit', 'scala_compile_rtl_emit',
+                          'idma_prepare', 'hierarchy_plan', 'hierarchy_verilation', 'native_compile',
+                          'receipt_verify', 'build')
+                summary['build_phase_exits'] = {phase: int((out / 'host_build' / (phase + '.exit')).read_text())
+                                               for phase in phases if (out / 'host_build' / (phase + '.exit')).is_file()}
+                phase_path = out / 'host_build/build_phase.txt'
+                if phase_path.is_file():
+                    summary['last_build_phase'] = phase_path.read_text().strip()
+            elif core:
                 names.append('host_build/core_cold_carried.log')
             elif summary['mode'] in CI_MODES:
                 names.append('host_build/' + summary['mode'] + '.log')

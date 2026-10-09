@@ -1,0 +1,95 @@
+{
+  "normal": {
+    "exit_code": 0,
+    "seconds": 33.21699364599772,
+    "peak_rss_kib": 325084,
+    "test_sources_unchanged": true,
+    "tests": 455,
+    "subtests": 707,
+    "log_sha256": "d09729fc7d4168dd30e92fd6a3c43518f9a690f431a3e6ad8e68f0d1c02fdd40",
+    "command": {
+      "argv": [
+        "python",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q",
+        "chisel/continuous_prefill/tests/test_gdn_dense_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_gated_norm_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_input_prep_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_rmsnorm_reference.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_ci.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_build_profile.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_qkv_reference.py",
+        "tests/test_block_checklist.py",
+        "tests/test_descriptor_chain.py",
+        "tests/test_qwen35_gdn_recurrent_fp32.py",
+        "tests/test_shape_layout_contract.py",
+        "tests/test_typical_block_plan.py"
+      ],
+      "cwd": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha",
+      "env": {
+        "PYTHONPATH": "/tmp/qkv_test_dependencies:/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/src"
+      }
+    }
+  },
+  "optimized": {
+    "exit_code": 0,
+    "seconds": 34.26855652399536,
+    "peak_rss_kib": 329148,
+    "test_sources_unchanged": true,
+    "tests": 455,
+    "subtests": 707,
+    "log_sha256": "2f580b4fea403a8eebbc93a36310e650e3ae2b07b696821fb71fb0f7d799349c",
+    "command": {
+      "argv": [
+        "python",
+        "-O",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q",
+        "chisel/continuous_prefill/tests/test_gdn_dense_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_gated_norm_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_input_prep_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_rmsnorm_reference.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_ci.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_build_profile.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_qkv_reference.py",
+        "tests/test_block_checklist.py",
+        "tests/test_descriptor_chain.py",
+        "tests/test_qwen35_gdn_recurrent_fp32.py",
+        "tests/test_shape_layout_contract.py",
+        "tests/test_typical_block_plan.py"
+      ],
+      "cwd": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha",
+      "env": {
+        "PYTHONPATH": "/tmp/qkv_test_dependencies:/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/src"
+      }
+    }
+  }
+}

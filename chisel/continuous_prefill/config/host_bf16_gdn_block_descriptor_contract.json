@@ -1,0 +1,735 @@
+{
+  "status": "EXPERIMENTAL_DEFAULT_OFF",
+  "scope": "M1_LAYER0_FULL_GDN_BLOCK",
+  "enable_parameter": "bf16GdnBlock",
+  "default_enabled": false,
+  "policy_version": 3,
+  "legacy_v1_unchanged": true,
+  "command_order": [
+    "INPUT_NORM",
+    "DENSE_QKV",
+    "DENSE_Z",
+    "DENSE_AB",
+    "CONV4",
+    "INPUT_PREP",
+    "RECURRENT",
+    "GATED_NORM",
+    "DENSE_O",
+    "RESIDUAL1",
+    "POST_NORM",
+    "DENSE_GATE",
+    "DENSE_UP",
+    "SILU_MUL",
+    "DENSE_DOWN",
+    "RESIDUAL2",
+    "FENCE"
+  ],
+  "record_counts": [
+    11,
+    12,
+    12,
+    12,
+    18,
+    18,
+    15,
+    15,
+    12,
+    11,
+    11,
+    12,
+    12,
+    11,
+    12,
+    11,
+    11
+  ],
+  "transaction_record_count": 216,
+  "tensor": {
+    "rank": 2,
+    "memory_space": 0,
+    "layout": 0,
+    "alignment_bytes": 64,
+    "allocation_bytes": "round_up(rows * columns * dtype_bytes, 64)",
+    "shape4_suffix": [
+      1,
+      1
+    ],
+    "strides_elements": [
+      "columns",
+      1,
+      1
+    ],
+    "prefix_records": [
+      1,
+      2,
+      3
+    ],
+    "non_A_tails_null": true,
+    "all_prefix_and_policy_indices_distinct": true,
+    "access": "Access is command-role semantics, not a tensor_base flag. Non-fence D, Conv Hout and Recurrent stateOut are writes. Fence A/B/D are reads of this transaction's acknowledged staging outputs; the Host mapping requires those staging spans to remain read-write."
+  },
+  "policy": {
+    "record_type": 33,
+    "version": [
+      0,
+      8
+    ],
+    "version_value": 3,
+    "operation": [
+      8,
+      8
+    ],
+    "operations": {
+      "CONV4": 1,
+      "DENSE": 2,
+      "INPUT_PREP": 3,
+      "RECURRENT": 4,
+      "GATED_NORM": 5,
+      "FENCE": 6,
+      "RMS_NORM": 8,
+      "ELEMENTWISE": 9
+    },
+    "reserved0": [
+      16,
+      8
+    ],
+    "cold": [
+      24,
+      1
+    ],
+    "recurrent_mode": [
+      25,
+      1
+    ],
+    "reserved1": [
+      29,
+      3
+    ],
+    "expected_generation": [
+      32,
+      32
+    ],
+    "reserved2": [
+      64,
+      8
+    ],
+    "recurrent_mode_rule": "not cold for M1",
+    "cold_generation": 0,
+    "carried_generation_minimum": 1,
+    "generation_wrap_supported": false,
+    "role": [
+      26,
+      3
+    ],
+    "all_17_commands_share_cold_mode_generation": true,
+    "restore_operation_reserved": 7,
+    "roles": {
+      "DENSE": {
+        "QKV": 0,
+        "Z": 1,
+        "AB": 2,
+        "O": 3,
+        "GATE": 4,
+        "UP": 5,
+        "DOWN": 6
+      },
+      "RMS_NORM": {
+        "INPUT": 0,
+        "POST": 1
+      },
+      "ELEMENTWISE": {
+        "RESIDUAL1": 0,
+        "SILU_MUL": 1,
+        "RESIDUAL2": 2
+      },
+      "OTHER_OPERATIONS": 0
+    }
+  },
+  "sfu_program": {
+    "record_type": 32,
+    "program_id": 48,
+    "input_count": 2,
+    "output_count": 1,
+    "lane_width_bits": 16,
+    "vector_lanes": 1,
+    "program_flags": 0,
+    "default_dtype_pair": [
+      5,
+      5
+    ],
+    "INPUT_PREP_dtype_pair": [
+      5,
+      7
+    ],
+    "RECURRENT_dtype_pair": [
+      7,
+      5
+    ]
+  },
+  "dense": {
+    "opcode": 32,
+    "engine": 2,
+    "M": 1,
+    "K": [
+      1024,
+      2048,
+      3584
+    ],
+    "N": [
+      6144,
+      2048,
+      32,
+      1024,
+      3584
+    ],
+    "A": {
+      "dtype": 5,
+      "shape": [
+        1,
+        "K"
+      ],
+      "producer_by_role": [
+        "INPUT_NORM.D",
+        "INPUT_NORM.D",
+        "INPUT_NORM.D",
+        "GATED_NORM.D",
+        "POST_NORM.D",
+        "POST_NORM.D",
+        "SILU_MUL.D"
+      ]
+    },
+    "B": {
+      "dtype": 5,
+      "shape": [
+        "K",
+        "N"
+      ]
+    },
+    "D": {
+      "dtype": 5,
+      "shape": [
+        1,
+        "N"
+      ]
+    },
+    "A_tail": [
+      16,
+      18,
+      33
+    ],
+    "matrix_dataflow": 0,
+    "matrix_aux": "public MatrixAux() defaults",
+    "AB_layout": "one 64-byte row: A0..A15,B0..B15",
+    "role_geometry_K_N": [
+      [
+        1024,
+        6144
+      ],
+      [
+        1024,
+        2048
+      ],
+      [
+        1024,
+        32
+      ],
+      [
+        2048,
+        1024
+      ],
+      [
+        1024,
+        3584
+      ],
+      [
+        1024,
+        3584
+      ],
+      [
+        3584,
+        1024
+      ]
+    ]
+  },
+  "conv": {
+    "opcode": 48,
+    "engine": 3,
+    "A": {
+      "dtype": 5,
+      "shape": [
+        1,
+        6144
+      ],
+      "producer": "DENSE_QKV.D"
+    },
+    "B": {
+      "dtype": 5,
+      "shape": [
+        6144,
+        4
+      ]
+    },
+    "D": {
+      "dtype": 5,
+      "shape": [
+        1,
+        6144
+      ]
+    },
+    "A_tail": [
+      32,
+      33,
+      34
+    ],
+    "extra_record_type": 34,
+    "aux0": {
+      "dtype": 5,
+      "shape": [
+        6144,
+        4
+      ],
+      "role": "history_input"
+    },
+    "aux1": {
+      "dtype": 5,
+      "shape": [
+        6144,
+        4
+      ],
+      "role": "history_output"
+    }
+  },
+  "input_prep": {
+    "opcode": 48,
+    "engine": 3,
+    "A": {
+      "dtype": 5,
+      "shape": [
+        1,
+        6144
+      ],
+      "producer": "CONV4.D"
+    },
+    "B": {
+      "dtype": 5,
+      "shape": [
+        1,
+        32
+      ],
+      "producer": "DENSE_AB.D"
+    },
+    "D": {
+      "dtype": 7,
+      "shape": [
+        1,
+        6400
+      ]
+    },
+    "D_sections": [
+      {
+        "name": "Q",
+        "offset_bytes": 0,
+        "bytes": 8192
+      },
+      {
+        "name": "K",
+        "offset_bytes": 8192,
+        "bytes": 8192
+      },
+      {
+        "name": "V",
+        "offset_bytes": 16384,
+        "bytes": 8192
+      },
+      {
+        "name": "gates",
+        "offset_bytes": 24576,
+        "bytes": 1024
+      }
+    ],
+    "A_tail": [
+      32,
+      33,
+      35
+    ],
+    "extra_record_type": 35,
+    "aux0": {
+      "dtype": 7,
+      "shape": [
+        1,
+        16
+      ],
+      "role": "A_log"
+    },
+    "aux1": {
+      "dtype": 5,
+      "shape": [
+        1,
+        16
+      ],
+      "role": "dt_bias",
+      "allocation_bytes": 64
+    }
+  },
+  "recurrent": {
+    "opcode": 48,
+    "engine": 3,
+    "A": {
+      "dtype": 7,
+      "shape": [
+        1,
+        6400
+      ],
+      "producer": "INPUT_PREP.D"
+    },
+    "B": {
+      "dtype": 7,
+      "shape": [
+        2048,
+        128
+      ],
+      "role": "state_input"
+    },
+    "D": {
+      "dtype": 5,
+      "shape": [
+        1,
+        2048
+      ]
+    },
+    "A_tail": [
+      32,
+      33,
+      35
+    ],
+    "extra_record_type": 35,
+    "aux0": {
+      "dtype": 7,
+      "shape": [
+        2048,
+        128
+      ],
+      "role": "state_output"
+    },
+    "aux1": null
+  },
+  "gated_norm": {
+    "opcode": 48,
+    "engine": 3,
+    "A": {
+      "dtype": 5,
+      "shape": [
+        1,
+        2048
+      ],
+      "producer": "RECURRENT.D"
+    },
+    "B": {
+      "dtype": 5,
+      "shape": [
+        1,
+        2048
+      ],
+      "producer": "DENSE_Z.D"
+    },
+    "D": {
+      "dtype": 5,
+      "shape": [
+        1,
+        2048
+      ]
+    },
+    "A_tail": [
+      32,
+      33,
+      35
+    ],
+    "extra_record_type": 35,
+    "aux0": {
+      "dtype": 7,
+      "shape": [
+        1,
+        128
+      ],
+      "role": "original_gamma_no_1_plus"
+    },
+    "aux1": null
+  },
+  "fence": {
+    "opcode": 48,
+    "engine": 3,
+    "A": {
+      "dtype": 5,
+      "shape": [
+        6144,
+        4
+      ],
+      "producer": "CONV4.aux1"
+    },
+    "B": {
+      "dtype": 7,
+      "shape": [
+        2048,
+        128
+      ],
+      "producer": "RECURRENT.aux0"
+    },
+    "D": {
+      "dtype": 5,
+      "shape": [
+        1,
+        1024
+      ],
+      "producer": "RESIDUAL2.D"
+    },
+    "A_tail": [
+      32,
+      33
+    ],
+    "owner_command": false,
+    "all_roots_are_reads": true,
+    "last_command_required": true,
+    "publication": "Only accepted successful terminal Fence after the exact residual2 ACK atomically replaces both committed history/state bindings and advances generation; no intermediate completion publishes state."
+  },
+  "extra_roots_encoding": {
+    "aux0_root": [
+      0,
+      24
+    ],
+    "aux1_root": [
+      24,
+      24
+    ],
+    "reserved": [
+      48,
+      24
+    ],
+    "null_index": 16777215
+  },
+  "events": {
+    "nonzero_signal": true,
+    "width_bits": 8,
+    "unique_transaction_signals": true,
+    "each_wait_equals_previous_signal": true,
+    "first_wait": 0
+  },
+  "physical_lifetime": {
+    "source_and_output_allocations_reserved_through_fence": true,
+    "transaction_buffer_recycling": false,
+    "same_resource_uses_require_identical_typed_address": true,
+    "different_resource_overlap_rejected_including_readonly_sources": true,
+    "source_contents_and_DMA_ACKs_verified_by_hardware_not_serializer": true
+  },
+  "continuation": {
+    "requires_previous_successful_fence_completion": true,
+    "generation": "previous expected_generation + 1",
+    "history_input": "previous fence A",
+    "state_input": "previous fence B",
+    "same_checkpoint_weight_bindings": true,
+    "temporary_allocations_reusable_only_on_next_launch": true,
+    "latest_committed_states_protected_until_next_fence": true,
+    "implicit_warm_import_after_reset": false,
+    "parameter_binding_count": 13,
+    "parameter_source_roles": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "raw_hidden_may_change": true
+  },
+  "unsupported": [
+    "checkpoint restore",
+    "tokens other than M1",
+    "in-place state update",
+    "mid-transaction allocation reuse",
+    "substituting reference tensors for actual producers"
+  ],
+  "requires_enable_parameters": [
+    "bf16Gdn",
+    "bf16GdnCore"
+  ],
+  "legacy_v2_unchanged": true,
+  "command_count": 17,
+  "owner_job_count": 16,
+  "operation_roles": [
+    [
+      8,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      9,
+      2
+    ],
+    [
+      6,
+      0
+    ]
+  ],
+  "rms_norm": {
+    "opcode": 48,
+    "engine": 3,
+    "A": {
+      "dtype": 5,
+      "shape": [
+        1,
+        1024
+      ],
+      "source_by_role": [
+        "raw_hidden",
+        "RESIDUAL1.D"
+      ]
+    },
+    "B": {
+      "dtype": 5,
+      "shape": [
+        1,
+        1024
+      ],
+      "meaning": "original checkpoint gamma; owner performs gamma+1"
+    },
+    "D": {
+      "dtype": 5,
+      "shape": [
+        1,
+        1024
+      ]
+    },
+    "A_tail": [
+      32,
+      33
+    ],
+    "auxiliary_roots": false,
+    "record_count": 11,
+    "owner_kind": 11
+  },
+  "elementwise": {
+    "opcode": 48,
+    "engine": 3,
+    "A_B_D_dtype": 5,
+    "role_shapes": [
+      [
+        1,
+        1024
+      ],
+      [
+        1,
+        3584
+      ],
+      [
+        1,
+        1024
+      ]
+    ],
+    "A_by_role": [
+      "raw_hidden",
+      "DENSE_GATE.D",
+      "RESIDUAL1.D"
+    ],
+    "B_by_role": [
+      "DENSE_O.D",
+      "DENSE_UP.D",
+      "DENSE_DOWN.D"
+    ],
+    "owner_operations": [
+      0,
+      1,
+      0
+    ],
+    "owner_operation_meanings": {
+      "0": "BF16 Add",
+      "1": "BF16 SiLU(A) times B"
+    },
+    "owner_kind": 13,
+    "A_tail": [
+      32,
+      33
+    ],
+    "auxiliary_roots": false,
+    "record_count": 11
+  },
+  "semantic_source_roles": [
+    "raw_hidden",
+    "Wqkv",
+    "Wz",
+    "Wab",
+    "Wconv",
+    "A_log",
+    "dt_bias",
+    "gated_norm_gamma",
+    "old_history",
+    "old_state",
+    "input_norm_gamma",
+    "Wo",
+    "post_norm_gamma",
+    "Wgate",
+    "Wup",
+    "Wdown"
+  ],
+  "evidence_boundary": "CONTROL_ONLY serializer and frontend tests do not prove numerical closure, real DMA ACKs, or physical resource sharing."
+}

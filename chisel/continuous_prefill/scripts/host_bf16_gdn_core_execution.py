@@ -38,13 +38,13 @@ SCHEMA = {
 }
 
 
-def _events(log):
+def _events(log, *, prefix=PREFIX):
     events = []
     for line in Path(log).read_text().splitlines():
-        if not line.startswith(PREFIX):
+        if not line.startswith(prefix):
             continue
         tokens = line.split()
-        kind = tokens[0][len(PREFIX):]
+        kind = tokens[0][len(prefix):]
         require(kind in SCHEMA, 'unknown/failure core event: ' + kind)
         pairs = [token.split('=', 1) for token in tokens[1:]]
         require(all(len(pair) == 2 for pair in pairs), 'malformed core event')
@@ -98,28 +98,33 @@ def _frozen_gates(fixture, manifest):
     return metrics
 
 
-def audit_artifacts(fixture, output, log, *, session):
+def audit_artifacts(fixture, output, log, *, session, _profile=None):
     """Check actual evidence; requires generate_fixture's live, unforgeable session."""
-    require(type(session) is GdnCoreFixtureSession, 'live GdnCoreFixtureSession required; saved receipts are not authority')
+    block = _profile is not None
+    authority = _profile.GdnBlockFixtureSession if block else GdnCoreFixtureSession
+    commands, recurrent_pc, fence_pc = (17, 6, 16) if block else (8, 5, 7)
+    dense_macs = _profile.ACTUAL_DENSE_MACS if block else ACTUAL_DENSE_MACS
+    require(type(session) is authority, 'live fixture session required; saved receipts are not authority')
     fixture, output, log = Path(fixture), Path(output), Path(log)
     manifest = session.verify(fixture)
-    operator_metrics = _frozen_gates(fixture, manifest)
+    operator_metrics = (_profile._frozen_gates if block else _frozen_gates)(fixture, manifest)
     require(not output.is_symlink() and not log.is_symlink(), 'evidence symlink')
-    layout = build_layout()
+    layout = (_profile.build_layout if block else build_layout)()
     require(manifest['layout'] == layout, 'fixture physical/public ABI layout drift')
     packed = {}
-    _write_launch(layout, lambda name, raw: packed.update({name: raw}))
+    (_profile._write_launch if block else _write_launch)(layout, lambda name, raw: packed.update({name: raw}))
     require(all((fixture / name).read_bytes() == raw for name, raw in packed.items()), 'launch/public helper packing drift')
     require({p.name for p in output.iterdir()} == {'cold', 'carried'}, 'unexpected core evidence directory')
-    events, cursor = _events(log), 0
+    events, cursor = _events(log, prefix=_profile.PREFIX if block else PREFIX), 0
     log_identity = sha(log)
     expected = _initial(fixture, layout)
     scratch = layout['scratch']-layout['base']
     reports, artifacts, last_cycle, fence_cycle = [], {}, 0, None
+    cumulative_fixed_pass = True
     for token, launch in enumerate(layout['launches']):
         directory = output / ('cold' if token == 0 else 'carried')
         require(directory.is_dir() and not directory.is_symlink(), 'missing/symlink core run')
-        inventory = {'ddr_after.bin'} | {f'writable_after_command{i}.bin' for i in range(8)}
+        inventory = {'ddr_after.bin'} | {f'writable_after_command{i}.bin' for i in range(commands)}
         for op in launch['operations']:
             for span in op['writes']:
                 inventory.add('actual_' + span['expected'].removeprefix('expected_'))
@@ -131,7 +136,7 @@ def audit_artifacts(fixture, output, log, *, session):
             raw[name] = path.read_bytes()
             artifacts[str(path)] = sha(path)
         require(cursor < len(events) and events[cursor][0] == 'BEGIN', 'missing core run begin')
-        _expect(events[cursor][1], run=token, commands=8, epoch=9+token, mode='cold' if token == 0 else 'carried',
+        _expect(events[cursor][1], run=token, commands=commands, epoch=9+token, mode='cold' if token == 0 else 'carried',
                 same_dut=1, reset_between_launches=0)
         cursor += 1
         total_bytes, physical_beats, per_command, metrics, carry_seen = 0, 0, [], {}, {}
@@ -156,11 +161,13 @@ def audit_artifacts(fixture, output, log, *, session):
                         conditioned = (fixture / f'conditioned_conv{token}.bf16le').read_bytes()
                         same = ulp_metric(np.frombuffer(actual[name], '<u2'), np.frombuffer(conditioned, '<u2'))
                         conditioned_ulp = same['max_bf16_ulp']
-                        require(same['pass_'], 'actual same-input SiLU fixed one-ULP gate failed')
+                        if not block: require(same['pass_'], 'actual same-input SiLU fixed one-ULP gate failed')
                     if fixed:
-                        require(metric['max_abs'] <= .03125 and metric['mean_abs'] <= .005, 'actual fixed Dense/Conv gate failed')
+                        if not block: require(metric['max_abs'] <= .03125 and metric['mean_abs'] <= .005, 'actual fixed Dense/Conv gate failed')
                         metric['acceptance'] = 'FROZEN_OPERATOR_THRESHOLDS'
-                    metric.update(same_input_max_bf16_ulp=conditioned_ulp, fixed_operator_gate='PASS' if fixed else 'UNASSIGNED')
+                    fixed_pass = metric['max_abs'] <= .03125 and metric['mean_abs'] <= .005 and conditioned_ulp <= 1
+                    if fixed: cumulative_fixed_pass &= fixed_pass
+                    metric.update(same_input_max_bf16_ulp=conditioned_ulp, fixed_operator_gate=('PASS' if fixed_pass else 'FAIL') if fixed else 'UNASSIGNED')
                     for key, value in metric.items():
                         if isinstance(value, float):
                             require(math.isclose(float(event[key]), value, rel_tol=1e-12, abs_tol=1e-15), 'native numerical report drift')
@@ -187,7 +194,7 @@ def audit_artifacts(fixture, output, log, *, session):
                     _expect(event, bus_bytes=64, error=0, write_bytes=mask.bit_count())
                     span = next((s for s in op['writes'] if s['address'] <= address < address+64 <= s['address']+s['bytes']), None)
                     require(span is not None, 'ACK outside exact output span')
-                    require(mask == (1 << 64)-1 or (pc == 5 and span['name'] == 'recurrent' and mask in (0xffffffff, 0xffffffff00000000)), 'unsupported output strobe')
+                    require(mask == (1 << 64)-1 or (pc == recurrent_pc and span['name'] == 'recurrent' and mask in (0xffffffff, 0xffffffff00000000)), 'unsupported output strobe')
                     name, offset = span['name'], address-span['address']
                     for byte in range(64):
                         if mask >> byte & 1:
@@ -208,7 +215,7 @@ def audit_artifacts(fixture, output, log, *, session):
                 elif kind == 'CARRY_READ':
                     address, size, producer = map(int, (event['address'], event['bytes'], event['producer']))
                     require(token == 1 and fence_cycle is not None and cycle > fence_cycle, 'carried read before actual cold fence')
-                    source = next((s for s in op['reads'] if s['producer'] == producer and producer >= 0 and producer < 8 and
+                    source = next((s for s in op['reads'] if s['producer'] == producer and producer >= 0 and producer < commands and
                                    s['address'] <= address < address+size <= s['address']+s['bytes']), None)
                     require(source is not None and address % 64 == size % 64 == 0 and size > 0, 'unbound carried source read')
                     seen = carry_seen.setdefault(producer, bytearray(source['bytes']//64))
@@ -226,15 +233,15 @@ def audit_artifacts(fixture, output, log, *, session):
             last_cycle = cycle
             _expect(event, run=token, operation=op['kind'], pc=pc, status=0, signal=op['event_signal'], write_ack_bytes=ack_bytes,
                     canonical_bit_mismatches=0, previous_outputs_preserved=1, guards_unchanged=1,
-                    persistent_commit=int(pc == 7), expected_committed_generation=token+int(pc == 7))
-            require(final_acks == int(pc != 7) and holds >= 11, 'final ACK/completion backpressure coverage')
+                    persistent_commit=int(pc == fence_pc), expected_committed_generation=token+int(pc == fence_pc))
+            require(final_acks == int(pc != fence_pc) and holds >= 11, 'final ACK/completion backpressure coverage')
             require(native_seen == set(actual), 'missing stage native diagnostics')
             for span in op['writes']:
                 name = span['name']
                 require(all(acked[name]), 'physical ACK byte coverage incomplete')
                 require(actual[name] == (fixture / span['expected']).read_bytes(), 'actual stage differs from shared canonical recipe: ' + name)
             require(raw[f'writable_after_command{pc}.bin'] == expected[scratch:], 'completion snapshot differs from physical ACK replay')
-            if pc == 7:
+            if pc == fence_pc:
                 fence_cycle = cycle
             total_bytes += ack_bytes
             per_command.append(dict(pc=pc, operation=op['kind'], write_ack_bytes=ack_bytes,
@@ -242,15 +249,15 @@ def audit_artifacts(fixture, output, log, *, session):
             cursor += 1
         require(cursor < len(events) and events[cursor][0] == 'END', 'missing successful run result')
         event = events[cursor][1]
-        _expect(event, run=token, status=0, result_epoch=9+token, result_pc=7, completions=8, issued_jobs=7,
-                metadata_reads=121, write_beats=physical_beats, write_ack_beats=physical_beats,
+        _expect(event, run=token, status=0, result_epoch=9+token, result_pc=fence_pc, completions=commands, issued_jobs=commands-1,
+                metadata_reads=launch['descriptor_records']+commands, write_beats=physical_beats, write_ack_beats=physical_beats,
                 write_ack_bytes=total_bytes, published_bytes=total_bytes, committed_generation=token+1,
-                canonical_bit_mismatches=0, native_core_gate='UNASSIGNED_DIAGNOSTIC_ONLY', full_block_supported=0)
-        _expect(event, frozen_operator_gate='PASS')
-        require(int(event['read_beats']) == int(event['read_ack_beats']) and int(event['read_beats']) > 121, 'read ACK accounting')
+                canonical_bit_mismatches=0, native_core_gate='UNASSIGNED_DIAGNOSTIC_ONLY', full_block_supported=int(block))
+        _expect(event, frozen_operator_gate='PASS' if cumulative_fixed_pass else 'FAIL')
+        require(int(event['read_beats']) == int(event['read_ack_beats']) and int(event['read_beats']) > launch['descriptor_records']+commands, 'read ACK accounting')
         require(raw['ddr_after.bin'] == expected, 'whole physical DDR differs from accepted strobed-write replay')
         if token:
-            require(set(carry_seen) == {3, 5} and all(all(v) for v in carry_seen.values()), 'both actual carried state spans must be read after fence')
+            require(set(carry_seen) == ({4, 6} if block else {3, 5}) and all(all(v) for v in carry_seen.values()), 'both actual carried state spans must be read after fence')
         else:
             require(not carry_seen, 'cold launch imported a previous state')
         reports.append(dict(token=token, committed_generation=token+1, commands=per_command,
@@ -260,12 +267,13 @@ def audit_artifacts(fixture, output, log, *, session):
                             ddr_after_sha256=artifacts[str(directory / 'ddr_after.bin')]))
         cursor += 1
     require(cursor < len(events) and events[cursor][0] == 'PASS', 'missing final core closure')
-    _expect(events[cursor][1], scope='GDN_CORE_ONLY', tokens=2, heads=16, commands=16, owner_jobs=14, fences=2,
-            canonical_bit_mismatches=0, actual_dense_macs=ACTUAL_DENSE_MACS, same_dut=1, reset_between_launches=0,
+    _expect(events[cursor][1], scope='GDN_FULL_BLOCK' if block else 'GDN_CORE_ONLY', tokens=2, heads=16, commands=2*commands, owner_jobs=2*(commands-1), fences=2,
+            canonical_bit_mismatches=0, actual_dense_macs=dense_macs, same_dut=1, reset_between_launches=0,
             actual_ack_history_state_carry=1, expected_output_injection=0, logical_matrix_engines=1,
             physical_matrix_slices=8, idma_instances=1, shared_scalar_services=1,
-            input_norm_dut=0, o_projection_dut=0, residual_dut=0, ffn_dut=0,
-            native_core_gate='UNASSIGNED_DIAGNOSTIC_ONLY', frozen_operator_gate='PASS', native_full_block_gate='NOT_ESTABLISHED', full_block_supported=0)
+            input_norm_dut=int(block), o_projection_dut=int(block), residual_dut=int(block), ffn_dut=int(block),
+            native_core_gate='UNASSIGNED_DIAGNOSTIC_ONLY', frozen_operator_gate='PASS' if cumulative_fixed_pass else 'FAIL',
+            native_full_block_gate='DEFERRED_TO_AUDIT' if block else 'NOT_ESTABLISHED', full_block_supported=int(block))
     require(cursor+1 == len(events), 'unexpected or duplicate trailing evidence')
     require(sha(log) == log_identity and all(sha(path) == digest for path, digest in artifacts.items()), 'evidence changed during audit')
     session.verify(fixture)
@@ -275,7 +283,7 @@ def audit_artifacts(fixture, output, log, *, session):
                 native_full_block_gate_pass=None, full_block_supported=False, fault_restore_supported=False,
                 input_norm_dut=False, o_projection_dut=False, residual_dut=False, ffn_dut=False,
                 fixture_sha256=sha(fixture / 'manifest.json'), log_sha256=log_identity,
-                artifact_sha256=artifacts, runs=reports, actual_useful_dense_macs=ACTUAL_DENSE_MACS,
+                artifact_sha256=artifacts, runs=reports, actual_useful_dense_macs=dense_macs,
                 actual_ack_history_state_carry=True, raw_carried_state_read_address_trace_available=True,
                 raw_all_read_address_trace_available=False)
 

@@ -288,7 +288,7 @@ def _write_launch(layout, write):
     write('launch.txt', ('\n'.join(lines) + '\n').encode())
 
 
-def _native_capture(raw, manifest, embedding_bytes, tokens, config, official, torch):
+def _native_capture(raw, manifest, embedding_bytes, tokens, config, official, torch, *, full_block=False):
     """Unmodified official layer, its own cache; hooks record actual producers."""
     from transformers import DynamicCache, Qwen3_5TextConfig
     from heteronpu.pinned_gdn_payload import F32_NAMES
@@ -314,6 +314,17 @@ def _native_capture(raw, manifest, embedding_bytes, tokens, config, official, to
                           ('z', layer.linear_attn.in_proj_z), ('a', layer.linear_attn.in_proj_a),
                           ('b', layer.linear_attn.in_proj_b)]:
         handles.append(module.register_forward_hook(hook(label)))
+    if full_block:
+        for label, module in [('o', layer.linear_attn.out_proj), ('post_norm', layer.post_attention_layernorm),
+                              ('gate', layer.mlp.gate_proj), ('up', layer.mlp.up_proj),
+                              ('down', layer.mlp.down_proj)]:
+            handles.append(module.register_forward_hook(hook(label)))
+        def input_hook(label):
+            def capture(_module, args):
+                current[label] = words(args[0]).reshape(-1)
+            return capture
+        handles.append(layer.post_attention_layernorm.register_forward_pre_hook(input_hook('residual1')))
+        handles.append(layer.mlp.down_proj.register_forward_pre_hook(input_hook('silu_mul')))
     def norm_hook(_module, args, result):
         current['recurrent'] = words(args[0]).reshape(HEADS, WIDTH)
         current['norm'] = words(result).reshape(HEADS, WIDTH)
@@ -344,8 +355,11 @@ def _native_capture(raw, manifest, embedding_bytes, tokens, config, official, to
         with torch.inference_mode():
             for token, token_id in enumerate(tokens):
                 current = {}
-                layer(embedding[token_id].reshape(1, 1, HIDDEN), position_embeddings=None,
+                result = layer(embedding[token_id].reshape(1, 1, HIDDEN), position_embeddings=None,
                       attention_mask=torch.ones((1, 1), dtype=torch.bool), past_key_values=cache)
+                if full_block:
+                    current['input_norm'] = current['activation'].copy()
+                    current['residual2'] = words(result).reshape(-1)
                 current['ab'] = np.concatenate([current.pop('a'), current.pop('b')])
                 current['history'] = words(cache.layers[0].conv_states[0]).reshape(CHANNELS, 4)
                 state = cache.layers[0].recurrent_states[0]

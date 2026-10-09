@@ -1,0 +1,28 @@
+{
+  "status": "PASS_SMALL_LONG_K_REFERENCE_NOT_RTL",
+  "observed_utc": "2026-10-09T06:16:16.458020+00:00",
+  "source_sha256": {
+    "chisel/continuous_prefill/scripts/gdn_dense_reference.c": "20b44883be8428d201c52afb6e583de0de98769525cc421cfb514fad23e87db3",
+    "scripts/matrix_norm_rope_reference.c": "90ac528864881602ca22bd552f3bd18c75ebab11b7d3d881fc8016918573dc3d",
+    "chisel/continuous_prefill/scripts/gdn_dense_reference.py": "351e74c3c083386535db25c8d283984e0480feffb74f6c77a6c89fc26c47e225",
+    "chisel/continuous_prefill/scripts/host_bf16_qkv_reference.py": "d4b7f54d69044f446a196b7cd8ed44b1f86427537049594a9801d3a50711ec7b",
+    "chisel/continuous_prefill/tests/test_gdn_dense_reference.py": "cc09238bd3917aa3caabf4a65282a1172d45c70b11249f81395327f6129488af",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_reference.py": "7e07196c5972c90ad8eed402a00da0a3005a974875037137a00e70c65e61b322"
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=/tmp/qkv_test_dependencies python -m pytest -q chisel/continuous_prefill/tests/test_gdn_dense_reference.py",
+      "tests": 4,
+      "exit_code": 0,
+      "exec_session": 46081
+    },
+    {
+      "command": "PYTHONPATH=/tmp/qkv_test_dependencies python -O -m pytest -q chisel/continuous_prefill/tests/test_gdn_dense_reference.py chisel/continuous_prefill/tests/test_host_bf16_qkv_reference.py",
+      "tests": 13,
+      "exit_code": 0,
+      "exec_session": 90300
+    }
+  ],
+  "coverage": "K1024 existing delegate; K2048/3584 continuous FP32 accumulator, every-K FP32/flags independent C, terminal BF16 once, cross-K1024 cancellation, unsupported/truncated/nonfinite rejection",
+  "arithmetic_source_changed": false
+}

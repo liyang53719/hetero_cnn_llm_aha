@@ -1153,3 +1153,18 @@ Qwen35候选QKV命令子链_20261008:
   未完成: [生产core数值终态, core_fault_reset_restore, DUT_inputNorm, O_residual_postnorm_FFN_down_residual, M128, 完整block]
   最终状态提交: 完整block必须在末次残差ACK及终端Fence后才共同发布history_state_generation
   保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN；C03.2_C04.2_C05仅局部接线子门，S01_Q35A继续
+
+生产Host_GDN_block_v3_20261009:
+  状态: PENDING_完整生产数值CI
+  入口: doc/U00_2_HOST_GDN_BLOCK_20261009_CN.md
+  证据: reports/execution/U00_2_HOST_GDN_BLOCK_20261009/result.json
+  实际目标: 同一DUT的cold19到carried92两次M1，各17条标准命令和216条描述符，raw_hidden起点包含inputNorm_core_O_两次残差_postNorm和完整FFN
+  双状态提交: history和FP32_state独立staging，第二残差末ACK与终端Fence后共同提交两root和generation；13组参数绑定随成功状态保留
+  有用MAC: 43057152
+  独立参考FMA: 43515904
+  实际写ACK字节: 2388096
+  已完成: 两种新增owner真实小RTL分别4096及11264个BF16输出固定算术逐位一致且官方零位差；完整主源码编译；K2048及3584连续FP32参考的小边界门禁；v3和旧v2前端控制共4测；完整两token的CPU参考及原native门限通过，尚非RTL数值
+  资源: 同一MatrixPipelineService及8个Matrix512切片、共享Scalar和单一iDMA；v3默认关闭，v1_v2原默认保留
+  数值门禁: canonical逐位和原native整block及隐藏节点门限同时验收，FP32_state原1e-4绝对相对阈值不变；native_FAIL不能被canonical通过覆盖
+  未完成: [生产完整block数值终态, 完整block故障复位及checkpoint恢复, M128, 后继层及35B, PPA及MAC90]
+  保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN；不关闭C03.2_C04.2_C05等关联大项

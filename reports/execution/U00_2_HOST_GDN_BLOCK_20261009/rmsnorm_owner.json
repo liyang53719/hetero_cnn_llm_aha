@@ -1,0 +1,94 @@
+{
+  "status": "STANDALONE_TYPED_RMSNORM_OWNER_PASS_NOT_PUBLIC_HOST_OR_FULL_BLOCK",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnRmsNormOwnerSpec.scala": "11f3252aa5c9466dc817cca56cd254e0cffecc869800722db2bde66a3f6ffcd9",
+    "chisel/continuous_prefill/scripts/gdn_rmsnorm_reference.py": "f980813563a1dc0fdcfc53ac7473a98ae9d59eb9220d70eb9e97923d3cdf4fb3",
+    "chisel/continuous_prefill/tests/test_gdn_rmsnorm_reference.py": "511d82c965135bfbf9330df969f1f1bcd56a240de7f16e394b8513f7042bad32"
+  },
+  "fixture_manifest_sha256": "562f9606f3ab9228e4ebe63673f7118d15310bb0d7d6cd9e41959d7a1bda6ae9",
+  "native_metrics": {
+    "input_cold1": {
+      "elements": 1024,
+      "bit_mismatches": 0,
+      "numeric_mismatches": 0,
+      "signed_zero_only_mismatches": 0,
+      "max_bf16_ulp": 0,
+      "max_abs": 0.0,
+      "max_relative_nonzero_reference": 0.0,
+      "nonzero_vs_reference_zero": 0,
+      "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+    },
+    "input_carried1": {
+      "elements": 1024,
+      "bit_mismatches": 0,
+      "numeric_mismatches": 0,
+      "signed_zero_only_mismatches": 0,
+      "max_bf16_ulp": 0,
+      "max_abs": 0.0,
+      "max_relative_nonzero_reference": 0.0,
+      "nonzero_vs_reference_zero": 0,
+      "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+    },
+    "post_cold1": {
+      "elements": 1024,
+      "bit_mismatches": 0,
+      "numeric_mismatches": 0,
+      "signed_zero_only_mismatches": 0,
+      "max_bf16_ulp": 0,
+      "max_abs": 0.0,
+      "max_relative_nonzero_reference": 0.0,
+      "nonzero_vs_reference_zero": 0,
+      "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+    },
+    "post_carried1": {
+      "elements": 1024,
+      "bit_mismatches": 0,
+      "numeric_mismatches": 0,
+      "signed_zero_only_mismatches": 0,
+      "max_bf16_ulp": 0,
+      "max_abs": 0.0,
+      "max_relative_nonzero_reference": 0.0,
+      "nonzero_vs_reference_zero": 0,
+      "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+    }
+  },
+  "compile": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 6.002279466003529,
+    "peak_rss_kib": 313576,
+    "source_hashes_unchanged": true
+  },
+  "rtl": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 42.00779617599619,
+    "peak_rss_kib": 319700,
+    "source_hashes_unchanged": true
+  },
+  "reclaimed_pch_bytes": 157840571,
+  "scalar_trace": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 42.007899185002316,
+    "peak_rss_kib": 326632,
+    "source_hashes_unchanged": true
+  },
+  "scalar_trace_operations": 20496,
+  "scalar_trace_backpressure": "periodic five-cycle holds per23 cycles gate shared Scalar request and result; every accepted operand/op/result checked",
+  "scalar_trace_cycles_per_real_job": 20491,
+  "source_hashes_unchanged": true,
+  "trace_sv": {
+    "path": "/tmp/gdn_rmsnorm_trace_20261009T0601/test_run_dir/GdnRmsNormOwner_real_layer0_should_execute_input_and_post_normalization_at_authentic_width1024/GdnRmsNormArithmeticHarness.sv",
+    "bytes": 3664972,
+    "sha256": "8b720a3390b12d34602aab23e98b430a49afb7a1a37b40b566cd40f3d8f6c67b"
+  },
+  "trace_reclaimed_pch_bytes": 157840611,
+  "preserved_prior_evidence": [
+    "work/gdn_rmsnorm_owner_20261009T0553/compile.log",
+    "work/gdn_rmsnorm_owner_20261009T0554/rtl.json",
+    "work/gdn_rmsnorm_owner_20261009T0557/rtl.log",
+    "work/gdn_rmsnorm_owner_20261009T0557/rtl_retry.log"
+  ]
+}

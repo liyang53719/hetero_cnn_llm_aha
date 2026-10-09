@@ -97,9 +97,72 @@
       "reserved": [48, 24]
     },
     "operation_roles": {
-      "INPUT_PREP": ["A_log_FP32", "dt_bias_BF16_padded64"],
-      "RECURRENT": ["state_output_FP32", "NULL_INDEX"],
-      "GATED_NORM": ["original_gamma_FP32", "NULL_INDEX"]
-    }
+      "INPUT_PREP": [
+        "A_log_FP32",
+        "dt_bias_BF16_padded64"
+      ],
+      "RECURRENT": [
+        "state_output_FP32",
+        "NULL_INDEX"
+      ],
+      "GATED_NORM": [
+        "original_gamma_FP32",
+        "NULL_INDEX"
+      ]
+    },
+    "supported_policy_versions": [2, 3]
+  },
+  "gdn_policy_v3": {
+    "record_type": 33,
+    "status": "EXPERIMENTAL_DEFAULT_OFF",
+    "enable_parameter": "bf16GdnBlock",
+    "version": 3,
+    "operations": {
+      "CONV4": 1,
+      "DENSE": 2,
+      "INPUT_PREP": 3,
+      "RECURRENT": 4,
+      "GATED_NORM": 5,
+      "FENCE": 6,
+      "RMSNORM": 8,
+      "ELEMENTWISE": 9
+    },
+    "fields": {
+      "version": [0, 8],
+      "operation": [8, 8],
+      "context_reserved_zero": [16, 8],
+      "cold": [24, 1],
+      "recurrent_mode": [25, 1],
+      "role": [26, 3],
+      "reserved0": [29, 3],
+      "expected_generation": [32, 32],
+      "reserved1": [64, 8]
+    },
+    "roles": {
+      "DENSE": {
+        "QKV": 0,
+        "Z": 1,
+        "AB32": 2,
+        "O": 3,
+        "GATE": 4,
+        "UP": 5,
+        "DOWN": 6
+      },
+      "RMSNORM": {
+        "INPUT": 0,
+        "POST": 1
+      },
+      "ELEMENTWISE": {
+        "RESIDUAL1": 0,
+        "SILU_MUL": 1,
+        "RESIDUAL2": 2
+      },
+      "other_operations_require_role_zero": true
+    },
+    "reserved_operations": [7],
+    "M1_recurrent_mode": "not cold",
+    "commands_per_launch": 17,
+    "descriptor_records": 216,
+    "persistent_commit": "history and FP32 state roots plus generation only after final residual2 ACK and terminal Fence completion"
   }
 }

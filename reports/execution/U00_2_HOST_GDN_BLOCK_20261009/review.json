@@ -1,0 +1,48 @@
+{
+  "status": "INDEPENDENT_READ_ONLY_REVIEW_NO_P0_P1_FOUND",
+  "reviewed_utc": "2026-10-09T06:22:01Z",
+  "source_hashes_recorded_after_review": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "01f9555db57ef0ab120b0119808665003951a739e969b2289a6c1257b58aef3c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "fc7d6860682019f46be7c87478b093cde41f7d8f8abfdb677b76f31028cced1d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "30bed6f495a7003a90cb92d980151aa6b51138d3e4ee24cc5f9bd9388d69ab88",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "b7ce785066053d5cb14cac492fc8b39065a2d05b22d0e1c8918325d0b10c1674",
+    "chisel/continuous_prefill/scripts/host_bf16_gdn_block_descriptor.py": "99e0d14269aab0b97d6f5351a0631fde986b68847f3a583c48d4efb686cb289b",
+    "chisel/continuous_prefill/scripts/pack_host_bf16_gdn_block_fixture.py": "2bd451cc8af952d45c3985431aa32e20a7036e42cbe7933904e4ec2fc3b84e8f",
+    "chisel/continuous_prefill/scripts/host_bf16_gdn_block_execution.py": "f710be34a8ff91e22318d3ddec257dc5235cdb748c02f4d6dbd8f834bb24f061",
+    "chisel/continuous_prefill/scripts/host_bf16_gdn_core_execution.py": "d30be36cead41dd8b0d88c0c246b0562dfda41b2b38ceab4a09803aa8f99cb77",
+    "chisel/continuous_prefill/scripts/gdn_dense_reference.py": "351e74c3c083386535db25c8d283984e0480feffb74f6c77a6c89fc26c47e225",
+    "chisel/continuous_prefill/scripts/gdn_dense_reference.c": "20b44883be8428d201c52afb6e583de0de98769525cc421cfb514fad23e87db3",
+    "chisel/continuous_prefill/tests/host_bf16_gdn_core.cpp": "32348e03944cd5ff94ff32dbd757b5a63f8460130b95dff98877984f4ed7c760",
+    "chisel/continuous_prefill/tests/host_bf16_gdn_block.cpp": "5846ebe17a5199dcee6cf7a342d9ae7824997095ef4b01d52e28b108c01491fb"
+  },
+  "findings": [
+    "Producer and 13 parameter bindings, generations and final residual2 ACK plus Fence consistent.",
+    "New owners share existing Scalar; K2048/3584 continuous FP32 reduction with terminal BF16.",
+    "Physical DDR and ACK replay preserve real dependencies, full guards and carried state reads.",
+    "Native failures retain overall FAIL. No new blocking source-identity loophole found."
+  ],
+  "limitations": [
+    "Static review only; actual integrated RTL not executed.",
+    "Full integrated AXI fault/reset/restore gate remains absent and explicitly pending.",
+    "CI profile edits were concurrently owned by a separate worker and are not covered by this implementation review."
+  ],
+  "ci_followup_review": {
+    "status": "INDEPENDENT_READ_ONLY_NO_P0_P1_FOUND",
+    "reviewed_utc": "2026-10-09T06:27:04Z",
+    "source_sha256": {
+      "chisel/continuous_prefill/scripts/run_host_bf16_gdn_gate.sh": "10b3600df75c4db9f48dcfcd4311706773c2329c566625a84648da758af5119a",
+      "chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py": "0fd14cc5f1be87dbd5112fdcf4398b204c659dcb04b83859b6e2769e69daae9b",
+      "chisel/continuous_prefill/scripts/host_bf16_gdn_execution.py": "dee73e66c5b173367bda14216e8437ecf375e8d7ab10d975aa4b4826cf9de171",
+      ".github/workflows/host-bf16-gdn-block.yml": "a8a8ddf377675fb03244bb67039b543565ce06e90bbe8a08c3cda142cc11984e",
+      "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_ci.py": "5716b6c18a119ccea4bc0753635ce952e9b8d9ad397c362feff4eabb92500f51"
+    },
+    "findings": [
+      "v1 and v2 defaults preserved; explicit block profile.",
+      "Both C and both C++ sources bound.",
+      "Native fail keeps canonical result but exits1; final source drift revokes pass.",
+      "One continuous two-token process capped18000s; job340min.",
+      "Only minimal build package and two compact JSON artifacts."
+    ]
+  }
+}

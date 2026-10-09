@@ -500,21 +500,32 @@ def verify_execution(fixture, outputs, log, mode, *, session=None, authority=Non
 
 
 def _build_identity(build, *, profile='dense-conv'):
-    require(profile in ('dense-conv', 'core'), 'unknown GDN build identity profile')
+    require(profile in ('dense-conv', 'core', 'block'), 'unknown GDN build identity profile')
     core = profile == 'core'
-    expected_status = 'BUILT_HOST_GDN_CORE_ONLY_NOT_NUMERICAL_PASS' if core else BUILD_STATUS
+    block = profile == 'block'
+    expected_status = ('BUILT_HOST_GDN_BLOCK_ONLY_NOT_NUMERICAL_PASS' if block else
+                       'BUILT_HOST_GDN_CORE_ONLY_NOT_NUMERICAL_PASS' if core else BUILD_STATUS)
     expected_operations = (['dense_qkv', 'dense_z', 'dense_ab', 'conv4_silu', 'input_prep',
                             'recurrent_fp32', 'gated_norm', 'state_fence'] if core
                            else ['dense_qkv', 'conv4_silu'])
+    if block:
+        expected_operations = ['input_norm', 'dense_qkv', 'dense_z', 'dense_ab', 'conv4_silu',
+                               'input_prep', 'recurrent_fp32', 'gated_norm', 'dense_o', 'residual1',
+                               'post_norm', 'dense_gate', 'dense_up', 'silu_mul', 'dense_down',
+                               'residual2', 'state_fence']
     ready = json.loads((build / 'build_ready.json').read_text())
     require(ready['status'] == expected_status and ready['numerical_pass'] is False,
             'expected GDN build-only receipt')
     require(ready['experimental_default_off'] is True and ready['operations'] == expected_operations
-            and ready['full_block_supported'] is False and ready['scalar_service_shared'] is True,
+            and ready['full_block_supported'] is block and ready['scalar_service_shared'] is True,
             'GDN build scope drift')
-    if core:
-        require(ready.get('build_profile') == 'core' and ready.get('recurrent_state_supported') is True
+    if core or block:
+        require(ready.get('build_profile') == profile and ready.get('recurrent_state_supported') is True
                 and ready.get('gated_norm_supported') is True, 'GDN core features/profile drift')
+    if block:
+        require(all(ready.get(key) is True for key in
+                    ('input_norm_dut', 'o_projection_dut', 'residual_dut', 'ffn_dut')),
+                'GDN block features/profile drift')
     executable = build / 'obj/VHostBlockTop'; rtl = build / 'generated/HostBlockTop.sv'
     require(sha(executable) == ready['binary_sha256'] and sha(rtl) == ready['rtl_sha256'], 'DUT binary/RTL identity drift')
     require(sha(build / 'sources.sha256.json') == ready['source_manifest_sha256'], 'built source-manifest identity drift')

@@ -1,0 +1,13 @@
+{
+  "status": "SYNTAX_ONLY_USING_EXISTING_UNCHANGED_EXTERNAL_HOST_PORT_HEADER",
+  "exit_code": 0,
+  "seconds": 0.9808855579904048,
+  "files_sha256": {
+    "chisel/continuous_prefill/tests/host_bf16_gdn_block.cpp": "5846ebe17a5199dcee6cf7a342d9ae7824997095ef4b01d52e28b108c01491fb",
+    "chisel/continuous_prefill/tests/host_bf16_gdn_core.cpp": "32348e03944cd5ff94ff32dbd757b5a63f8460130b95dff98877984f4ed7c760",
+    "work/host_qkv_projection_build_20261009T0146Z/obj/VHostBlockTop.h": "b804b8427968d0a546d9aa1e483b274f6a4a02f00d9aba70a06f4a481d29858f"
+  },
+  "source_hashes_unchanged": true,
+  "new_full_block_rtl_generated": false,
+  "production_execution": false
+}

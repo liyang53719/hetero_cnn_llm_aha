@@ -83,13 +83,15 @@ def _tool_file(path):
     return dict(path=str(path), **_file_record(path))
 
 
-def _compile_matrix(directory):
+def _compile_matrix(directory, *, source=None):
     compiler = shutil.which('cc')
     require(compiler is not None, 'existing C compiler required')
     compiler = Path(compiler).resolve()
     executable = directory / 'c_matrix'
+    source = ROOT / 'scripts/matrix_norm_rope_reference.c' if source is None else Path(source).resolve()
+    require(source.is_file() and not source.is_symlink() and source.is_relative_to(ROOT), 'reference C source must be repository source')
     command = [str(compiler), '-std=c11', '-O2', '-fno-fast-math', '-ffp-contract=off',
-               '-frounding-math', str(ROOT / 'scripts/matrix_norm_rope_reference.c'), '-lm', '-o', str(executable)]
+               '-frounding-math', str(source), '-lm', '-o', str(executable)]
     before = _tool_file(compiler)
     version = subprocess.run([str(compiler), '--version'], check=True, capture_output=True, text=True, timeout=15).stdout
     subprocess.run(command, check=True, capture_output=True, text=True, timeout=60)

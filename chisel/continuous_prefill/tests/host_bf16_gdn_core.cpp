@@ -18,6 +18,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <utility>
 
 static void check(bool ok, const std::string &why) { if (!ok) throw std::runtime_error(why); }
 static uint32_t bits(float x) { uint32_t u; std::memcpy(&u, &x, 4); return u; }
@@ -48,7 +49,48 @@ struct Launch {
   std::vector<Operation> operations;
   bool fenced=false;
 };
+#ifdef HOST_GDN_FULL_BLOCK
+#define GDN_LOG_PREFIX "HOST_BF16_GDN_BLOCK_"
+static constexpr bool FullBlock=true;
+static constexpr unsigned Commands=17, ConvPc=4, RecurrentPc=6, FencePc=16, Records=216;
+static constexpr uint64_t DenseMacs=21528576;
+static const std::string Magic="HOST_GDN_BLOCK_V3";
+static const std::array<std::string,17> kinds={"input_norm","qkv","z","ab","conv","prep","recurrent","norm","o","residual1","post_norm","gate","up","silu_mul","down","residual2","fence"};
+static const std::array<unsigned,17> ExpectedRecords={11,12,12,12,18,18,15,15,12,11,11,12,12,11,12,11,11};
+static const std::array<unsigned,17> ExpectedReads={2,2,2,2,3,4,2,3,2,2,2,2,2,2,2,2,3};
+static const std::array<std::string,17> AllowedInputs={"hidden0.bf16le","hidden1.bf16le","weight_input_norm.bf16le",
+  "weight_qkv.bf16le","weight_z.bf16le","weight_ab.bf16le","weight_conv.bf16le","a_log.f32le","dt_bias.bf16le",
+  "weight_norm.f32le","weight_o.bf16le","weight_post_norm.bf16le","weight_gate.bf16le","weight_up.bf16le","weight_down.bf16le",
+  "initial_history.bf16le","initial_state.f32le"};
+static const std::array<uint64_t,17> InputSizes={2048,2048,2048,12582912,4194304,65536,49152,64,64,512,4194304,2048,7340032,7340032,7340032,49152,1048576};
+#else
+#define GDN_LOG_PREFIX "HOST_BF16_GDN_CORE_"
+static constexpr bool FullBlock=false;
+static constexpr unsigned Commands=8, ConvPc=3, RecurrentPc=5, FencePc=7, Records=113;
+static constexpr uint64_t DenseMacs=8421376;
+static const std::string Magic="HOST_GDN_CORE_V2";
 static const std::array<std::string,8> kinds={"qkv","z","ab","conv","prep","recurrent","norm","fence"};
+static const std::array<unsigned,8> ExpectedRecords={12,12,12,18,18,15,15,11};
+static const std::array<unsigned,8> ExpectedReads={2,2,2,3,4,2,3,3};
+static const std::array<std::string,11> AllowedInputs={"activation0.bf16le","activation1.bf16le",
+  "weight_qkv.bf16le","weight_z.bf16le","weight_ab.bf16le","weight_conv.bf16le",
+  "a_log.f32le","dt_bias.bf16le","weight_norm.f32le","initial_history.bf16le","initial_state.f32le"};
+static const std::array<uint64_t,11> InputSizes={2048,2048,12582912,4194304,65536,49152,64,64,512,49152,1048576};
+#endif
+static bool dense(unsigned pc) {
+  const auto &kind=kinds.at(pc);
+  return kind=="qkv" || kind=="z" || kind=="ab" || kind=="o" || kind=="gate" || kind=="up" || kind=="down";
+}
+static uint64_t outputBytes(const std::string &name) {
+  if (name=="history") return 49152;
+  if (name=="state") return 1048576;
+  if (name=="qkv" || name=="conv") return 12288;
+  if (name=="ab") return 64;
+  if (name=="prep") return 25600;
+  if (name=="z" || name=="recurrent" || name=="norm") return 4096;
+  if (name=="gate" || name=="up" || name=="silu_mul") return 7168;
+  return 2048;
+}
 
 class Test {
  public:
@@ -62,6 +104,7 @@ class Test {
   bool arHeld=false, awHeld=false, wHeld=false, running=false, completionHeld=false;
   uint64_t heldCompletion=0;
   uint32_t rng=91827;
+  bool frozenGate=true;
   uint64_t ticks=0, startTicks=0, reads=0, readAck=0, writeBeats=0, writeAck=0;
   uint64_t writeBytes=0, readBursts=0, writeBursts=0, metadata=0, completionBlocked=0;
   uint64_t dmaStart=0, metadataAcceptedStart=0, metadataReturnedStart=0;
@@ -71,17 +114,13 @@ class Test {
   Test(const std::filesystem::path &fixture, const std::filesystem::path &output):out(output) {
     std::ifstream input(fixture/"launch.txt"); std::string magic; uint64_t inputs=0, runs=0;
     input>>magic>>base>>limit>>meta>>scratch>>inputs>>runs;
-    check(bool(input) && magic=="HOST_GDN_CORE_V2" && runs==2 && inputs==11 &&
+    check(bool(input) && magic==Magic && runs==2 && inputs==AllowedInputs.size() &&
           base<meta && meta<scratch && scratch<limit && (limit-base)%64==0,"fixture launch header");
     mem.resize((limit-base)/4,0xa55ac33cU);
-    const std::array<std::string,11> allowed={"activation0.bf16le","activation1.bf16le",
-      "weight_qkv.bf16le","weight_z.bf16le","weight_ab.bf16le","weight_conv.bf16le",
-      "a_log.f32le","dt_bias.bf16le","weight_norm.f32le","initial_history.bf16le","initial_state.f32le"};
-    const std::array<uint64_t,11> sizes={2048,2048,12582912,4194304,65536,49152,64,64,512,49152,1048576};
     std::vector<Source> initialSources;
     for (unsigned i=0;i<inputs;i++) {
       uint64_t address=0, bytes=0; std::string file; input>>address>>bytes>>file;
-      check(bool(input) && file==allowed[i] && bytes==sizes[i] && address%64==0 &&
+      check(bool(input) && file==AllowedInputs[i] && bytes==InputSizes[i] && address%64==0 &&
             address>=meta && address+bytes<=scratch,"raw-only DDR initialization whitelist");
       for (const auto &s:initialSources) check(!overlap(address,address+bytes,s.address,s.address+s.bytes),"raw input alias");
       initialSources.push_back({address,bytes,-1}); load(fixture/file,address,bytes);
@@ -89,25 +128,23 @@ class Test {
     for (unsigned token=0;token<2;token++) {
       auto &l=launches[token];
       input>>l.token>>l.epoch>>l.cb>>l.cl>>l.commands>>l.db>>l.dl>>l.descriptors;
-      check(bool(input) && l.token==token && l.epoch==9+token && l.commands==8 && l.descriptors==113 &&
-            l.cl-l.cb==128 && l.dl-l.db==1856 && l.cb>=base && l.cl<=meta && l.db>=base && l.dl<=meta,
-            "eight-command public table geometry");
+      check(bool(input) && l.token==token && l.epoch==9+token && l.commands==Commands && l.descriptors==Records &&
+            l.cl-l.cb==((Commands*16+63)/64)*64 && l.dl-l.db==((Records*16+63)/64)*64 && l.cb>=base && l.cl<=meta && l.db>=base && l.dl<=meta,
+            "public command table geometry");
       load(fixture/("host_commands"+std::to_string(token)+".bin"),l.cb,l.cl-l.cb);
       load(fixture/("host_descriptors"+std::to_string(token)+".bin"),l.db,l.dl-l.db);
-      l.operations.resize(8); uint64_t records=0;
-      const std::array<unsigned,8> expectedRecords={12,12,12,18,18,15,15,11};
-      const std::array<unsigned,8> expectedReads={2,2,2,3,4,2,3,3};
-      for (unsigned pc=0;pc<8;pc++) {
+      l.operations.resize(Commands); uint64_t records=0;
+      for (unsigned pc=0;pc<Commands;pc++) {
         auto &p=l.operations[pc]; unsigned nr=0,nw=0;
         input>>p.pc>>p.kind>>p.records>>p.engine>>p.wait>>p.signal>>p.destinationRoot>>nr>>nw;
-        check(bool(input) && p.pc==pc && p.kind==pc && p.records==expectedRecords[pc] &&
-              p.engine==(pc<3?2:3) && p.wait==pc && p.signal==pc+1 && p.destinationRoot<113 &&
-              nr==expectedReads[pc] && nw==(pc==7?0:pc==3 || pc==5?2:1),"operation bindings");
+        check(bool(input) && p.pc==pc && p.kind==pc && p.records==ExpectedRecords[pc] &&
+              p.engine==(dense(pc)?2:3) && p.wait==pc && p.signal==pc+1 && p.destinationRoot<Records &&
+              nr==ExpectedReads[pc] && nw==(pc==FencePc?0:pc==ConvPc || pc==RecurrentPc?2:1),"operation bindings");
         records+=p.records;
         for (unsigned i=0;i<nr;i++) {
           Source s; input>>s.address>>s.bytes>>s.producer;
           check(bool(input) && s.address%64==0 && s.bytes%64==0 && s.bytes && s.address>=meta &&
-                s.address+s.bytes<=limit && s.producer<int(token*8+pc),"source geometry/dependency");
+                s.address+s.bytes<=limit && s.producer<int(token*Commands+pc),"source geometry/dependency");
           if (s.producer<0) {
             check(std::any_of(initialSources.begin(),initialSources.end(),[&](const Source &x){return x.address==s.address && x.bytes==s.bytes;}),
                   "source is neither raw input nor an earlier actual producer");
@@ -122,9 +159,9 @@ class Test {
           Span s; input>>s.address>>s.bytes>>s.elementBytes>>s.name>>s.expectedFile>>s.nativeFile;
           check(bool(input) && s.address>=scratch && s.address%64==0 && s.bytes && s.bytes%64==0 &&
                 s.address+s.bytes<=limit && (s.elementBytes==2 || s.elementBytes==4),"output physical geometry");
-          std::string name=i==0?kinds[pc]:pc==3?"history":"state";
-          uint64_t expectedBytes=i?pc==3?49152:1048576:pc==0 || pc==3?12288:pc==2?64:pc==4?25600:4096;
-          unsigned elementBytes=pc==4 || (pc==5 && i==1)?4:2;
+          std::string name=i==0?kinds[pc]:pc==ConvPc?"history":"state";
+          uint64_t expectedBytes=outputBytes(name);
+          unsigned elementBytes=name=="prep" || name=="state"?4:2;
           auto suffix=std::to_string(token)+(elementBytes==4?".f32le":".bf16le");
           check(s.name==name && s.bytes==expectedBytes && s.elementBytes==elementBytes &&
                 s.expectedFile=="expected_"+name+suffix && s.nativeFile=="native_"+name+suffix,"canonical stage geometry");
@@ -134,11 +171,11 @@ class Test {
           if (s.name=="conv") s.conditioned=readBytes(fixture/("conditioned_conv"+std::to_string(token)+".bf16le"),s.bytes);
           s.acknowledged.resize(s.bytes,0); p.writes.push_back(std::move(s));
         }
-        if (pc<3) verifyDense(p); // Comparison only, no write into mem.
+        if (!FullBlock && dense(pc)) verifyDense(p); // Comparison only, no write into mem.
       }
       check(records==l.descriptors,"descriptor count");
     }
-    check(launches[1].operations[3].reads[2].producer==3 && launches[1].operations[5].reads[1].producer==5,
+    check(launches[1].operations[ConvPc].reads[2].producer==int(ConvPc) && launches[1].operations[RecurrentPc].reads[1].producer==int(RecurrentPc),
           "second launch must carry actual first-token history/state");
     std::string extra; check(!(input>>extra),"unexpected fixture fields");
     initial=mem; // No writes to the physical RAM except accepted B responses below.
@@ -151,8 +188,8 @@ class Test {
   }
 
   Launch &current() { return launches[runId]; }
-  Operation &active() { check(completions<8,"operation after fence"); return current().operations[completions]; }
-  Operation &operation(unsigned index) { return launches.at(index/8).operations.at(index%8); }
+  Operation &active() { check(completions<Commands,"operation after fence"); return current().operations[completions]; }
+  Operation &operation(unsigned index) { return launches.at(index/Commands).operations.at(index%Commands); }
   static bool within(uint64_t a,uint64_t b,uint64_t lo,uint64_t hi) { return lo<=a && a<b && b<=hi; }
   static bool overlap(uint64_t a,uint64_t b,uint64_t lo,uint64_t hi) { return a<hi && lo<b; }
   size_t pos(uint64_t address) const {
@@ -179,10 +216,11 @@ class Test {
   }
   void verifyDense(const Operation &p) const {
     const auto &target=p.writes.at(0); unsigned columns=target.bytes/2;
-    check(p.reads[0].bytes==2048 && p.reads[1].bytes==1024*columns*2,"N32/N2048/N6144 Dense input geometry");
+    unsigned reduction=p.reads[0].bytes/2;
+    check((reduction==1024 || (FullBlock && (reduction==2048 || reduction==3584))) && p.reads[1].bytes==reduction*columns*2,"Dense input geometry");
     for (unsigned column=0;column<columns;column++) {
       float sum=0;
-      for (unsigned k=0;k<1024;k++) sum=std::fma(fp(uint32_t(half(p.reads[0].address,k))<<16),
+      for (unsigned k=0;k<reduction;k++) sum=std::fma(fp(uint32_t(half(p.reads[0].address,k))<<16),
           fp(uint32_t(half(p.reads[1].address,k*columns+column))<<16),sum);
       uint16_t expected=0; std::memcpy(&expected,target.reference.data()+column*2,2);
       check(std::isfinite(sum) && rne(sum)==expected,"C++ Dense terminal differs from shared integer/C oracle");
@@ -205,9 +243,9 @@ class Test {
       if (s.producer>=0) {
         auto &producer=operation(unsigned(s.producer));
         check(producer.completed,"consumer read before producer completion/ACK");
-        if (unsigned(s.producer)/8<runId) {
+        if (unsigned(s.producer)/Commands<runId) {
           check(launches[runId-1].fenced,"carried read before preceding fence commit");
-          std::cout<<"HOST_BF16_GDN_CORE_CARRY_READ run="<<runId<<" pc="<<completions<<" cycle="<<ticks
+          std::cout<<GDN_LOG_PREFIX "CARRY_READ run="<<runId<<" pc="<<completions<<" cycle="<<ticks
             <<" address="<<beat.address<<" bytes="<<beat.total*64<<" producer="<<s.producer<<"\n";
         }
       }
@@ -219,23 +257,32 @@ class Test {
     auto &p=active(); bool allowed=false;
     for (const auto &s:p.writes) if (within(beat.address,beat.address+64,s.address,s.address+s.bytes)) {
       allowed=true;
-      check(beat.mask==~0ULL || (p.kind==5 && s.name=="recurrent" &&
+      check(beat.mask==~0ULL || (p.kind==RecurrentPc && s.name=="recurrent" &&
             (beat.mask==0xffffffffULL || beat.mask==0xffffffff00000000ULL)),"unexpected output strobe");
     }
     check(allowed,"write outside exact output/state spans or into guard");
   }
   void verifyMemory() const {
+    // Compare every completed output and every other physical byte. Sorted
+    // gaps retain the original whole-DDR invariant without an O(words*spans)
+    // scan for each of the full block's 34 completions.
+    std::vector<std::pair<uint64_t,uint64_t>> spans;
     for (const auto &l:launches) for (const auto &p:l.operations) if (p.completed)
       for (const auto &s:p.writes) {
         check(std::memcmp(mem.data()+pos(s.address),s.reference.data(),s.bytes)==0,
               "canonical bits/preserved output "+s.name+std::to_string(l.token));
+        spans.emplace_back(s.address,s.address+s.bytes);
       }
-    for (size_t i=0;i<mem.size();i++) {
-      auto address=base+i*4; bool writable=false;
-      for (const auto &l:launches) for (const auto &p:l.operations) if (p.completed)
-        for (const auto &s:p.writes) writable|=within(address,address+4,s.address,s.address+s.bytes);
-      if (!writable) check(mem[i]==initial[i],"raw input, future output, or physical guard modified");
+    std::sort(spans.begin(),spans.end());
+    uint64_t cursor=base;
+    for (const auto &span:spans) {
+      check(cursor<=span.first,"completed physical spans overlap");
+      if (cursor<span.first) check(std::memcmp(mem.data()+pos(cursor),initial.data()+pos(cursor),span.first-cursor)==0,
+                                  "raw input, future output, or physical guard modified");
+      cursor=span.second;
     }
+    if (cursor<limit) check(std::memcmp(mem.data()+pos(cursor),initial.data()+pos(cursor),limit-cursor)==0,
+                           "raw input, future output, or physical guard modified");
   }
   void reportNative(const Span &s) {
     const auto *actual=reinterpret_cast<const uint8_t *>(mem.data()+pos(s.address));
@@ -253,12 +300,12 @@ class Test {
       check(std::isfinite(delta),"nonfinite native diagnostic"); maximum=std::max(maximum,delta); total+=delta;
     }
     bool fixed=s.name=="qkv" || s.name=="z" || s.name=="ab" || s.name=="conv";
-    if (fixed) check(maximum<=.03125 && total/elements<=.005 && (s.conditioned.empty() || conditionedUlp<=1),
-                     "unchanged native Dense/Conv/SiLU operator gate failed");
-    std::cout<<"HOST_BF16_GDN_CORE_NATIVE run="<<runId<<" stage="<<s.name<<" elements="<<elements
+    bool passed=maximum<=.03125 && total/elements<=.005 && (s.conditioned.empty() || conditionedUlp<=1);
+    if (fixed) { frozenGate &= passed; if (!FullBlock) check(passed,"unchanged native Dense/Conv/SiLU operator gate failed"); }
+    std::cout<<GDN_LOG_PREFIX "NATIVE run="<<runId<<" stage="<<s.name<<" elements="<<elements
       <<" element_bytes="<<s.elementBytes<<" bit_mismatches="<<mismatches<<" max_abs="<<maximum
       <<" mean_abs="<<total/elements<<" same_input_max_bf16_ulp="<<conditionedUlp
-      <<" fixed_operator_gate="<<(fixed?"PASS":"UNASSIGNED")
+      <<" fixed_operator_gate="<<(fixed?(passed?"PASS":"FAIL"):"UNASSIGNED")
       <<" acceptance="<<(fixed?"FROZEN_OPERATOR_THRESHOLDS":"UNASSIGNED_DIAGNOSTIC_ONLY")<<"\n";
   }
   void step() {
@@ -321,40 +368,41 @@ class Test {
       check(next.address%64==0,"unaligned AXI"); next.delay=1+random()%7;
       if (!next.write) for (unsigned i=0;i<16;i++) next.data[i]=mem[pos(next.address)+i];
       if (next.write && finalWrite()) next.delay=53;
-      if (next.write) std::cout<<"HOST_BF16_GDN_CORE_WRITE_REQUEST run="<<runId<<" pc="<<completions<<" cycle="<<ticks
+      if (next.write) std::cout<<GDN_LOG_PREFIX "WRITE_REQUEST run="<<runId<<" pc="<<completions<<" cycle="<<ticks
         <<" address="<<next.address<<" bus_bytes="<<next.total*64<<" final="<<finalWrite()<<"\n";
     }
     if (d.io_completion_valid) {
-      check(completions<8 && !pending.valid && !aw.valid && collected.empty(),"completion before final memory ACK");
+      check(completions<Commands && !pending.valid && !aw.valid && collected.empty(),"completion before final memory ACK");
       uint64_t word=d.io_completion_bits; auto &p=active(); unsigned status=(word>>32)&255;
       check((word&((1ULL<<29)-1))==completions && ((word>>29)&7)==p.engine && (word>>40)==p.signal,
             "completion pc/engine/event identity");
       if (completionHeld) check(word==heldCompletion,"completion changed under backpressure");
       heldCompletion=word; completionHeld=!cf;
       check(status==0,"core command failed with status "+std::to_string(status));
-      check(p.ackBytes==p.bytes() && p.acceptedBytes==p.ackBytes && p.finalAcks==(p.kind==7?0:1),
+      check(p.ackBytes==p.bytes() && p.acceptedBytes==p.ackBytes && p.finalAcks==(p.kind==FencePc?0:1),
             "success before exact stage ACK bytes");
       for (const auto &s:p.writes) check(s.ackBytes==s.bytes && std::all_of(s.acknowledged.begin(),s.acknowledged.end(),
         [](uint8_t value){return value==1;}),"stage output omitted or duplicated a strobed byte");
-      if (!cf) std::cout<<"HOST_BF16_GDN_CORE_COMPLETION_HOLD run="<<runId<<" pc="<<completions
+      if (!cf) std::cout<<GDN_LOG_PREFIX "COMPLETION_HOLD run="<<runId<<" pc="<<completions
                         <<" cycle="<<ticks<<" word="<<word<<"\n";
       if (cf) {
+        if (FullBlock && dense(p.kind)) verifyDense(p);
         p.completed=true; verifyMemory();
-        if (p.kind==7) current().fenced=true;
+        if (p.kind==FencePc) current().fenced=true;
         dump("writable_after_command"+std::to_string(completions)+".bin",mem.data()+pos(scratch),limit-scratch);
         for (const auto &s:p.writes) {
           auto extension=s.elementBytes==4?".f32le":".bf16le";
           dump("actual_"+s.name+std::to_string(runId)+extension,mem.data()+pos(s.address),s.bytes); reportNative(s);
         }
-        std::cout<<"HOST_BF16_GDN_CORE_COMMAND run="<<runId<<" cycle="<<ticks<<" operation="<<kinds[p.kind]
+        std::cout<<GDN_LOG_PREFIX "COMMAND run="<<runId<<" cycle="<<ticks<<" operation="<<kinds[p.kind]
           <<" pc="<<completions<<" status="<<status<<" signal="<<p.signal<<" write_ack_bytes="<<p.ackBytes
-          <<" canonical_bit_mismatches=0 previous_outputs_preserved=1 guards_unchanged=1 persistent_commit="<<(p.kind==7)
-          <<" expected_committed_generation="<<(runId+(p.kind==7?1:0))<<"\n";
+          <<" canonical_bit_mismatches=0 previous_outputs_preserved=1 guards_unchanged=1 persistent_commit="<<(p.kind==FencePc)
+          <<" expected_committed_generation="<<(runId+(p.kind==FencePc?1:0))<<"\n";
         completions++; completionWait=11;
       }
     } else check(!completionHeld,"completion withdrawn");
-    if (d.io_result_valid) check(d.io_result_bits_epoch==current().epoch && d.io_result_bits_failedPc==7 &&
-      d.io_result_bits_completed==8 && d.io_result_bits_status==0,"result identity, including acceptance cycle");
+    if (d.io_result_valid) check(d.io_result_bits_epoch==current().epoch && d.io_result_bits_failedPc==FencePc &&
+      d.io_result_bits_completed==Commands && d.io_result_bits_status==0,"result identity, including acceptance cycle");
     d.clock=1; d.eval(); ticks++;
     if (ack) {
       if (pending.write) {
@@ -380,7 +428,7 @@ class Test {
             mem[index]=(mem[index]&~(255U<<shift))|(value<<shift);
           }
           auto count=strobeBytes(w.mask); writeBytes+=count; p.ackBytes+=count;
-          std::cout<<"HOST_BF16_GDN_CORE_WRITE_ACK run="<<runId<<" pc="<<completions<<" cycle="<<ticks
+          std::cout<<GDN_LOG_PREFIX "WRITE_ACK run="<<runId<<" pc="<<completions<<" cycle="<<ticks
             <<" address="<<w.address<<" bus_bytes=64 write_bytes="<<count<<" mask="<<w.mask
             <<" error=0 final="<<(final && beat+1==committing.size())<<"\n";
         }
@@ -399,9 +447,9 @@ class Test {
     check(runId==0 || launches[runId-1].fenced,"second launch before cold fence");
     running=true; startTicks=ticks;
     dmaStart=d.io_idmaTransfers; metadataAcceptedStart=d.io_memoryAccepted_0; metadataReturnedStart=d.io_memoryReturned_0;
-    std::cout<<"HOST_BF16_GDN_CORE_BEGIN run="<<runId<<" commands=8 epoch="<<l.epoch
+    std::cout<<GDN_LOG_PREFIX "BEGIN run="<<runId<<" commands="<<Commands<<" epoch="<<l.epoch
       <<" mode="<<(runId?"carried":"cold")<<" same_dut=1 reset_between_launches=0\n";
-    d.io_launch_bits_commandBase=l.cb; d.io_launch_bits_commandLimit=l.cl; d.io_launch_bits_commands=8;
+    d.io_launch_bits_commandBase=l.cb; d.io_launch_bits_commandLimit=l.cl; d.io_launch_bits_commands=Commands;
     d.io_launch_bits_descriptorBase=l.db; d.io_launch_bits_descriptorLimit=l.dl;
     d.io_launch_bits_descriptors=l.descriptors; d.io_launch_bits_epoch=l.epoch;
     d.io_launch_bits_regions_0_base=base; d.io_launch_bits_regions_0_limit=meta;
@@ -416,26 +464,26 @@ class Test {
     d.io_launch_bits_epoch=99; d.io_launch_bits_commandBase=0;
     while (!d.io_result_valid && ticks-startTicks<600000000ULL) step();
     check(d.io_result_valid,"watchdog");
-    check(completions==8 && l.fenced && d.io_result_bits_epoch==l.epoch && d.io_result_bits_failedPc==7 &&
-          d.io_result_bits_completed==8 && d.io_result_bits_status==0 && d.io_issuedJobs==7 && !d.io_resetRequired,
-          "eight completions/seven owner jobs/fence lifecycle");
+    check(completions==Commands && l.fenced && d.io_result_bits_epoch==l.epoch && d.io_result_bits_failedPc==FencePc &&
+          d.io_result_bits_completed==Commands && d.io_result_bits_status==0 && d.io_issuedJobs==Commands-1 && !d.io_resetRequired,
+          "all completions/owner jobs/fence lifecycle");
     check(reads==readAck && writeBeats==writeAck,"AXI accounting");
     check(d.io_idmaTransfers-dmaStart==readBursts+writeBursts,"single iDMA transfer accounting");
     uint64_t expectedMetadata=0,publishedBytes=0;
     for (const auto &p:l.operations) { expectedMetadata+=1+p.records; publishedBytes+=p.bytes(); }
     check(metadata==expectedMetadata && d.io_memoryAccepted_0-metadataAcceptedStart==expectedMetadata &&
           d.io_memoryReturned_0-metadataReturnedStart==expectedMetadata,"command/descriptor DDR ownership");
-    check(writeBytes==publishedBytes && d.io_writeBytes==publishedBytes && d.io_usefulMacs==8421376,
+    check(writeBytes==publishedBytes && d.io_writeBytes==publishedBytes && d.io_usefulMacs==DenseMacs,
           "exact Dense MACs and all-stage write accounting");
-    check(completionBlocked>=88,"completion backpressure not exercised");
+    check(completionBlocked>=11*Commands,"completion backpressure not exercised");
     verifyMemory(); dump("ddr_after.bin",mem.data(),mem.size()*4);
     for (unsigned i=0;i<7;i++) { step(); check(d.io_result_valid,"result withdrawn under backpressure"); }
     d.io_result_ready=1; step(); d.io_result_ready=0; running=false;
-    std::cout<<"HOST_BF16_GDN_CORE_END run="<<runId<<" status=0 result_epoch="<<l.epoch
-      <<" result_pc=7 completions=8 issued_jobs=7 metadata_reads="<<metadata<<" read_beats="<<reads
+    std::cout<<GDN_LOG_PREFIX "END run="<<runId<<" status=0 result_epoch="<<l.epoch
+      <<" result_pc="<<FencePc<<" completions="<<Commands<<" issued_jobs="<<Commands-1<<" metadata_reads="<<metadata<<" read_beats="<<reads
       <<" read_ack_beats="<<readAck<<" write_beats="<<writeBeats<<" write_ack_beats="<<writeAck
       <<" write_ack_bytes="<<writeBytes<<" published_bytes="<<publishedBytes<<" committed_generation="<<runId+1
-      <<" canonical_bit_mismatches=0 frozen_operator_gate=PASS native_core_gate=UNASSIGNED_DIAGNOSTIC_ONLY full_block_supported=0\n";
+      <<" canonical_bit_mismatches=0 frozen_operator_gate="<<(frozenGate?"PASS":"FAIL")<<" native_core_gate=UNASSIGNED_DIAGNOSTIC_ONLY full_block_supported="<<FullBlock<<"\n";
   }
   void run() {
     auto root=out;
@@ -446,21 +494,21 @@ class Test {
       launch(); // Deliberately no reset and no physical DDR initialization here.
     }
     out=root;
-    std::cout<<"HOST_BF16_GDN_CORE_PASS scope=GDN_CORE_ONLY tokens=2 heads=16 commands=16 owner_jobs=14 fences=2"
-      <<" canonical_bit_mismatches=0 actual_dense_macs=16842752 same_dut=1 reset_between_launches=0"
+    std::cout<<GDN_LOG_PREFIX "PASS scope="<<(FullBlock?"GDN_FULL_BLOCK":"GDN_CORE_ONLY")<<" tokens=2 heads=16 commands="<<2*Commands<<" owner_jobs="<<2*(Commands-1)<<" fences=2"
+      <<" canonical_bit_mismatches=0 actual_dense_macs="<<2*DenseMacs<<" same_dut=1 reset_between_launches=0"
       <<" actual_ack_history_state_carry=1 expected_output_injection=0 logical_matrix_engines=1"
-      <<" physical_matrix_slices=8 idma_instances=1 shared_scalar_services=1 input_norm_dut=0"
-      <<" o_projection_dut=0 residual_dut=0 ffn_dut=0 native_core_gate=UNASSIGNED_DIAGNOSTIC_ONLY"
-      <<" frozen_operator_gate=PASS native_full_block_gate=NOT_ESTABLISHED full_block_supported=0\n";
+      <<" physical_matrix_slices=8 idma_instances=1 shared_scalar_services=1 input_norm_dut="<<FullBlock
+      <<" o_projection_dut="<<FullBlock<<" residual_dut="<<FullBlock<<" ffn_dut="<<FullBlock<<" native_core_gate=UNASSIGNED_DIAGNOSTIC_ONLY"
+      <<" frozen_operator_gate="<<(frozenGate?"PASS":"FAIL")<<" native_full_block_gate="<<(FullBlock?"DEFERRED_TO_AUDIT":"NOT_ESTABLISHED")<<" full_block_supported="<<FullBlock<<"\n";
   }
 };
 
 int main(int argc,char **argv) {
   try {
     std::fesetround(FE_TONEAREST); Verilated::commandArgs(argc,argv); std::cout<<std::setprecision(17);
-    check(argc==3,"FIXTURE OUTPUT (core cold/carry only; no fault/restore claim)");
+    check(argc==3,"FIXTURE OUTPUT (cold/carry only; no fault/restore claim)");
     auto test=std::make_unique<Test>(argv[1],argv[2]); test->run(); return 0;
   } catch (const std::exception &error) {
-    std::cerr<<"HOST_BF16_GDN_CORE_FAIL: "<<error.what()<<std::endl; return 1;
+    std::cerr<<GDN_LOG_PREFIX "FAIL: "<<error.what()<<std::endl; return 1;
   }
 }

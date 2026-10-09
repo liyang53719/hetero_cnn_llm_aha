@@ -4,6 +4,14 @@
 
 固定来源为 Qwen/Qwen3.5-0.8B revision `2fc06364715b967f1860aea9cf38778875588b17`，Transformers revision `14e738b5d0cc69aa27a95dde272aea41fde44f2f`。权重精度以 layer0 payload pin 为准；不得把 A_log、norm.weight 或 recurrent state 降为 BF16。
 
+## 最新推进：完整层 policy v3
+
+v2 core 已发布于 `904dccf2830d8caa50501041ca4895995ac41ad8`，其原持久 CI 继续执行。后继 v3 已接通真实 raw hidden → input RMSNorm → core → O → residual1 → post RMSNorm → gate/up → SiLU×up → down → residual2 → 双状态 Fence，共 17 命令、216 记录。两种新增 owner 的真实小 RTL、全部主源码编译分别通过；生产整链数值仍 PENDING。具体算术、公开协议、两种验收和剩余范围见 [完整 block 接线说明](../../../doc/U00_2_HOST_GDN_BLOCK_20261009_CN.md)。
+
+新增 kind11 typed RMSNorm 和 kind13 typed elementwise 共用原 Scalar；O/FFN 复用原 Dense/Matrix。input/post Norm 使用原始 BF16 gamma 的 `1+weight`，gated norm 保留原 FP32 gamma；SiLU 必须先舍入 BF16 再乘 up。O/down 的 K=2048/3584 参考保持连续 FP32 累加，末端一次 BF16 RNE。十三组参数随最后成功双状态 Fence 保留，状态提交点已移到第二残差 ACK 之后。当前仍仅两次 M1 连续 launch；M128、整链 fault/reset/restore、后继层和 35B 尚未验收。
+
+下列 v1/v2 阶段记录描述各自原始边界，不因 v3 源码接通自动提升为实际数值通过。
+
 ## 当前最小闭包
 
 - 生产标准 Command128、TypedTensorReader、HostBlockTop、StreamingDenseOwner、同一 MatrixPipelineService 的 8 个 Matrix512 切片和同一 iDMA 已接入 GDN QKV 投影与 Conv4/SiLU。

@@ -1,0 +1,335 @@
+{
+  "status": "PASS_ISOLATED_SIGMOID_OWNER_SHARED_SCALAR_NOT_FULL_BLOCK",
+  "official_source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+  "source_profile": {
+    "opcode": 2,
+    "first_three_constructor_arguments_unchanged": true,
+    "attentionWidth_default": 2048,
+    "enableAttentionSigmoidMul_default": false
+  },
+  "source_files": [
+    "src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala",
+    "src/test/scala/heteronpu/continuous/AttentionSigmoidOwnerSpec.scala",
+    "attention_sigmoid_reference.py",
+    "tests/test_attention_sigmoid_reference.py"
+  ],
+  "public_baseline_unchanged": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": true,
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": true,
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnElementwiseOwnerSpec.scala": true,
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": true
+  },
+  "python_tests_passed": 17,
+  "legacy_python_tests_passed": 5,
+  "python_command": "PYTHONDONTWRITEBYTECODE=1 work/qk_regen_venv/bin/python -m pytest -p no:cacheprovider -q work/attention_sigmoid_owner_20261009T1058/tests/test_attention_sigmoid_reference.py chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py",
+  "scala_suites": 1,
+  "scala_tests": 1,
+  "logged_execution_cases": 25,
+  "invalid_job_cases": 13,
+  "exact_scalar_requests_and_results": 1210,
+  "unique_independent_sigmoid_lanes": 70,
+  "sigmoid_success_output_values": 140,
+  "exact_recipe_mismatches": 0,
+  "official_native_comparisons": 0,
+  "shared_scalar_source_sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+  "default_off_verification": {
+    "source_guard": true,
+    "compiled_default_boolean_false": true,
+    "compiled_default_width_2048": true,
+    "unchanged_legacy_test_source_compiles": true,
+    "default_off_RTL_run": false,
+    "evidence": "compiled_defaults.json"
+  },
+  "compile_seconds": 9.014389476011274,
+  "rtl_seconds": 12.017121325974585,
+  "peak_rss_kib": 337724,
+  "max_observed_scratch_bytes": 5066752,
+  "min_observed_global_tmp_free_bytes": 380010496,
+  "min_observed_mem_available_bytes": 1617993728,
+  "resource_guard": null,
+  "recipe": "BF16RNE(BF16(context) * BF16RNE(sigmoid frozen shared ExpNegative/Add/Div/MulIeeeRne recipe of preserved BF16 gate))",
+  "scalar_sequence": [
+    4,
+    0,
+    2,
+    6,
+    6
+  ],
+  "limits": [
+    "Width 2048 is an explicit default and source/bytecode checked; this RTL test uses width 35 only.",
+    "Default-off rejection is checked structurally and through compiled defaults; no default-off RTL suite ran.",
+    "Official torch sigmoid numerical equality and full Attention block acceptance remain unassigned.",
+    "Negative finite gates <= -80 are Unsupported, not zero saturation.",
+    "Scalar/owner/transport reset must be coordinated; reset cannot retract external writes."
+  ],
+  "cases": [
+    {
+      "label": "legacy-add",
+      "op": 0,
+      "width": 33,
+      "tokens": 1,
+      "status": 0,
+      "ack_bytes": 66,
+      "cycles": 246,
+      "scalar_checks": 33
+    },
+    {
+      "label": "legacy-silu",
+      "op": 1,
+      "width": 37,
+      "tokens": 1,
+      "status": 0,
+      "ack_bytes": 74,
+      "cycles": 2621,
+      "scalar_checks": 222
+    },
+    {
+      "label": "sigmoid-tail",
+      "op": 2,
+      "width": 35,
+      "tokens": 1,
+      "status": 0,
+      "ack_bytes": 70,
+      "cycles": 2199,
+      "scalar_checks": 175
+    },
+    {
+      "label": "sigmoid-two-tokens",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 0,
+      "ack_bytes": 140,
+      "cycles": 4372,
+      "scalar_checks": 350
+    },
+    {
+      "label": "legacy-silu-after-sigmoid",
+      "op": 1,
+      "width": 37,
+      "tokens": 1,
+      "status": 0,
+      "ack_bytes": 74,
+      "cycles": 2621,
+      "scalar_checks": 222
+    },
+    {
+      "label": "legacy-add-after-sigmoid",
+      "op": 0,
+      "width": 33,
+      "tokens": 1,
+      "status": 0,
+      "ack_bytes": 66,
+      "cycles": 246,
+      "scalar_checks": 33
+    },
+    {
+      "label": "read",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 3,
+      "ack_bytes": 0,
+      "cycles": 10,
+      "scalar_checks": 0
+    },
+    {
+      "label": "tag",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 7,
+      "ack_bytes": 0,
+      "cycles": 10,
+      "scalar_checks": 0
+    },
+    {
+      "label": "final-ack",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 3,
+      "ack_bytes": 128,
+      "cycles": 4261,
+      "scalar_checks": 0
+    },
+    {
+      "label": "final-tag",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 7,
+      "ack_bytes": 128,
+      "cycles": 4261,
+      "scalar_checks": 0
+    },
+    {
+      "label": "nan-gate",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 11,
+      "scalar_checks": 0
+    },
+    {
+      "label": "infinite-context",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 11,
+      "scalar_checks": 0
+    },
+    {
+      "label": "negative-80",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 4,
+      "ack_bytes": 0,
+      "cycles": 11,
+      "scalar_checks": 0
+    },
+    {
+      "label": "negative-100",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 4,
+      "ack_bytes": 0,
+      "cycles": 11,
+      "scalar_checks": 0
+    },
+    {
+      "label": "late-unsupported-staging-uncommitted",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 4,
+      "ack_bytes": 64,
+      "cycles": 1956,
+      "scalar_checks": 0
+    },
+    {
+      "label": "late-infinite-staging-uncommitted",
+      "op": 2,
+      "width": 35,
+      "tokens": 2,
+      "status": 8,
+      "ack_bytes": 64,
+      "cycles": 1956,
+      "scalar_checks": 0
+    },
+    {
+      "label": "scalar-4-error",
+      "op": 2,
+      "width": 35,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 31,
+      "scalar_checks": 0
+    },
+    {
+      "label": "scalar-0-error",
+      "op": 2,
+      "width": 35,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 34,
+      "scalar_checks": 0
+    },
+    {
+      "label": "scalar-2-error",
+      "op": 2,
+      "width": 35,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 62,
+      "scalar_checks": 0
+    },
+    {
+      "label": "scalar-6-error",
+      "op": 2,
+      "width": 35,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 65,
+      "scalar_checks": 0
+    },
+    {
+      "label": "legacy-scalar-error",
+      "op": 0,
+      "width": 33,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 14,
+      "scalar_checks": 0
+    },
+    {
+      "label": "legacy-scalar-error",
+      "op": 1,
+      "width": 37,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 62,
+      "scalar_checks": 0
+    },
+    {
+      "label": "legacy-negative-80",
+      "op": 1,
+      "width": 37,
+      "tokens": 1,
+      "status": 4,
+      "ack_bytes": 0,
+      "cycles": 11,
+      "scalar_checks": 0
+    },
+    {
+      "label": "legacy-bf16-overflow",
+      "op": 0,
+      "width": 33,
+      "tokens": 1,
+      "status": 8,
+      "ack_bytes": 0,
+      "cycles": 14,
+      "scalar_checks": 0
+    },
+    {
+      "label": "reset-recovered",
+      "op": 2,
+      "width": 35,
+      "tokens": 1,
+      "status": 0,
+      "ack_bytes": 70,
+      "cycles": 2199,
+      "scalar_checks": 175
+    }
+  ],
+  "coverage_note": "Mask contract checks are actual RTL request assertions; redundant arithmetic-only Python mask checks were removed.",
+  "source_sha256": {
+    "work/attention_sigmoid_owner_20261009T1058/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "work/attention_sigmoid_owner_20261009T1058/snapshots/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "work/attention_sigmoid_owner_20261009T1058/snapshots/GdnElementwiseOwnerSpec.scala": "7d1d398d65aa3ebc1f7e2246e08672a39d423a7b0b66d23817b2f78acd4ca247",
+    "work/attention_sigmoid_owner_20261009T1058/src/test/scala/heteronpu/continuous/AttentionSigmoidOwnerSpec.scala": "19f0376f79ac253b4f12a5194abc0efa31675169e212ae73b30968158aa8addb",
+    "fixed_vectors.json": "40254ca4fffe28d430e755109ee0c4b640b9b3606801fe9ee3b5526b74274779"
+  },
+  "generated_rtl_sha256": {
+    "runtime/test_run_dir/GdnElementwiseOwner_SigmoidMul_should_use_the_shared_scalar_retain_old_recipes_and_fence_every_result/AttentionSigmoidArithmeticHarness.sv": {
+      "bytes": 622699,
+      "sha256": "983e38ec9c0656706484649de991fd4dc0f81916092004f6421a2a65595a13db"
+    },
+    "runtime/test_run_dir/GdnElementwiseOwner_SigmoidMul_should_use_the_shared_scalar_retain_old_recipes_and_fence_every_result/AttentionSigmoidArithmeticHarness.lo.fir": {
+      "bytes": 894446,
+      "sha256": "a2a2e0de00d77bd291a167b2e7e41099892f1e25f8f4bf005dbce5a6eeb29863"
+    }
+  }
+}

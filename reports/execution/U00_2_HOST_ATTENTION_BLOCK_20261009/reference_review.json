@@ -1,0 +1,24 @@
+{
+  "status": "NO_ACTIONABLE_SOURCE_CORRECTNESS_BLOCKER",
+  "source_review_only": true,
+  "reference_small_tests": 11,
+  "public_graph_nodes": 57,
+  "raw_hidden_and_trig_source_hashes_verified": true,
+  "source_parameter_count": 11,
+  "reviewed": [
+    "raw RMS actual QKV operands",
+    "gate-first owner contract",
+    "all owner shapes/K1024-K2048-K3584/writeBytes",
+    "16KiB table nonalias",
+    "full physical allocation coexistence",
+    "12 persistent parameter identities",
+    "final residual ACK and accepted fence publication",
+    "same Matrix Scalar iDMA resource wiring",
+    "no intermediate/cache preload",
+    "live source and ELF authority",
+    "native thresholds/failures preserved"
+  ],
+  "compiler_executed_by_reviewer": false,
+  "model_reference_executed_by_reviewer": false,
+  "numerical_rtl_executed_by_reviewer": false
+}

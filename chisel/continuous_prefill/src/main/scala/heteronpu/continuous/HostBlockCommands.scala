@@ -14,7 +14,9 @@ import chisel3.util._
   * tensors are internal-only logical values, never DDR materializations.
   * Their completion events are conservatively delayed until PV writeback.
   */
-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false) extends Module {
+class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {
+  require(!bf16AttentionBlock || (bf16AttentionCore && bf16QkNormRope && bf16Qkv),"BF16 Attention block requires the explicit Attention core/QKV/QK profile")
+  require(!bf16AttentionBlock || maxCommands>=22,"Attention block requires 22 public commands")
   require(!bf16AttentionCore || (bf16QkNormRope && bf16Qkv),"BF16 Attention core requires actual QKV and QK Norm/RoPE producers")
   require(!bf16QkNormRope || bf16Qkv,"QK Norm/RoPE requires the explicit QKV profile")
   require(!bf16V || s.qwen35VOnly, "native V requires the explicit Qwen3.5 V-only profile")
@@ -69,7 +71,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val txGeneration=Reg(UInt(32.W));val txCold=Reg(Bool());val boundFence=RegInit(false.B)
   // Fixed semantic sources: hidden, Wqkv, Wz, Wab, Wconv, A_log, dt_bias,
   // norm weight, old history, old recurrent state. Distinct roles never alias.
-  val sourceCount=if(bf16GdnBlock)16 else 10
+  val sourceCount=if(bf16GdnBlock)16 else if(bf16AttentionBlock)13 else 10
   val parameterRoles=if(bf16GdnBlock)(1 to 7)++(10 to 15) else (1 to 7)
   val sourceValid=RegInit(VecInit(Seq.fill(sourceCount)(false.B)))
   val sourceStarts=Reg(Vec(sourceCount,UInt(64.W)));val sourceEnds=Reg(Vec(sourceCount,UInt(64.W)))
@@ -90,13 +92,22 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val qkNormalizedTensor=Reg(Vec(2,new DecodedTensor))
   val qkRotatedValid=RegInit(VecInit(Seq.fill(2)(false.B)))
   val qkRotatedTensor=Reg(Vec(2,new DecodedTensor));val qkAbsolutePosition=Reg(Vec(2,UInt(32.W)))
-  // One core checkpoint survives normal Host launches. Reset invalidates it;
-  // there is no restore API. Full-block atomicity needs a later residual fence.
+  // One checkpoint survives normal Host launches; reset has no restore API.
+  // Core v2 commits context. Block v3 commits only the final residual output.
   val attentionCacheValid=RegInit(false.B)
   val attentionCache=Reg(new DecodedTensor);val attentionContext=Reg(new DecodedTensor)
   // Wq/Wk/Wv, gammaQ/gammaK and trig belong to the cache checkpoint.
   // Hidden (source role 0) is deliberately not persistent.
-  val attentionParameters=Reg(Vec(6,new DecodedTensor))
+  val attentionParameterCount=if(bf16AttentionBlock)12 else 6
+  val attentionParameters=Reg(Vec(attentionParameterCount,new DecodedTensor))
+  // Block roles: raw hidden=0, legacy Wq/Wk/Wv/Qgamma/Kgamma/trig=1..6,
+  // input gamma=7, Wo=8, post gamma=9, Wgate/Wup/Wdown=10..12.
+  // Actual ACK snapshots: inputNorm, Qgate, sigmoidMul, O, residual1,
+  // postNorm, FFNgate, FFNup, siluMul, down, finalResidual.
+  val attentionBlockValues=Reg(Vec(11,new DecodedTensor))
+  val attentionBlockValid=RegInit(VecInit(Seq.fill(11)(false.B)))
+  val attentionBlockContext=Reg(UInt(72.W))
+  val attentionBlockMatrix=RegInit(false.B)
   val attentionLength=RegInit(0.U(32.W));val attentionGeneration=RegInit(0.U(32.W))
   val pendingAttentionValid=RegInit(false.B);val pendingGqaValid=RegInit(false.B)
   val pendingAttentionCache=Reg(new DecodedTensor);val pendingAttentionContext=Reg(new DecodedTensor)
@@ -111,6 +122,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     txInputNormValid:=false.B;txOValid:=false.B;txResidual1Valid:=false.B;txPostNormValid:=false.B
     txGateValid:=false.B;txUpValid:=false.B;txSiluValid:=false.B;txDownValid:=false.B;txResidual2Valid:=false.B
     sourceValid:=VecInit(Seq.fill(sourceCount)(false.B))
+    if(bf16AttentionBlock){attentionBlockValid:=VecInit(Seq.fill(11)(false.B))}
   }
   val group=RegInit(0.U(2.W));val qkCommand=Reg(UInt(128.W));val softCommand=Reg(UInt(128.W))
   val q=Reg(new DecodedTensor);val k=Reg(new DecodedTensor);val score=Reg(new DecodedTensor);val probability=Reg(new DecodedTensor)
@@ -131,7 +143,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val isSoftmax=opcode===0x33.U;val kv=opcode===0x41.U
   val qkCommandPolicy=bf16QkNormRope.B && (opcode===0x32.U||opcode===0x34.U)
   val gdnCommand=bf16Gdn.B && opcode===0x30.U
-  val attentionCommandPolicy=bf16AttentionCore.B && (kv || opcode===0x23.U || opcode===0x24.U || isSoftmax || opcode===0x30.U)
+  val attentionCommandPolicy=bf16AttentionCore.B && (kv || opcode===0x23.U || opcode===0x24.U || isSoftmax || opcode===0x30.U || (bf16AttentionBlock.B && attentionBlockMatrix && opcode===0x20.U))
   val attentionPolicySlot=Mux(kv,0.U,Mux(isMatrix,2.U,1.U))
   val attentionContextSlot=attentionPolicySlot+1.U
   val reader=Module(new Record128Reader);val tensor=Module(new TypedTensorReader)
@@ -190,7 +202,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val attention=bf16AttentionCore.B && ((attentionCacheValid &&
       (overlap(address,end,attentionCache.address,attentionCache.paddedEnd) || overlap(address,end,attentionContext.address,attentionContext.paddedEnd))) ||
       (pendingAttentionValid && overlap(address,end,pendingAttentionCache.address,pendingAttentionCache.paddedEnd)))
-    val attentionParameter=bf16AttentionCore.B && attentionCacheValid && (0 until 6).map(i=>
+    val attentionParameter=bf16AttentionCore.B && attentionCacheValid && (0 until attentionParameterCount).map(i=>
       overlap(address,end,attentionParameters(i).address,attentionParameters(i).paddedEnd)).reduce(_||_)
     !(published || virtual || current || recurrent || source || parameter || allocation || attention || attentionParameter)
   }
@@ -209,7 +221,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val allocation=bf16QkNormRope.B && (0 until producedCapacity).map(i=>producedValid(i) && overlap(t.address,t.paddedEnd,allocationStarts(i),allocationEnds(i))).reduce(_||_)
     val attention=bf16AttentionCore.B && attentionCacheValid &&
       (overlap(t.address,t.paddedEnd,attentionCache.address,attentionCache.paddedEnd) || overlap(t.address,t.paddedEnd,attentionContext.address,attentionContext.paddedEnd))
-    val attentionParametersOK= !bf16AttentionCore.B || !attentionCacheValid || (0 until 6).map(i=>Mux(role===(i+1).U,
+    val attentionParametersOK= !bf16AttentionCore.B || !attentionCacheValid || (0 until attentionParameterCount).map(i=>Mux(role===(i+1).U,
       sameAllocation(t,attentionParameters(i)), !overlap(t.address,t.paddedEnd,attentionParameters(i).address,attentionParameters(i).paddedEnd))).reduce(_&&_)
     roles && !published && !allocation && !oldHistory && !oldState && checkpointParameters && !attention && attentionParametersOK
   }
@@ -254,7 +266,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val collisions=(for(i<-0 until 4;j<-i+1 until 4)yield l.regions(i).base<l.regions(i).limit && l.regions(j).base<l.regions(j).limit && overlap(l.regions(i).base,l.regions(i).limit,l.regions(j).base,l.regions(j).limit)).reduce(_||_)
     val cmdEnd=l.commandBase.pad(80)+(((l.commands.pad(80)*16.U+63.U)>>6)<<6)
     val descEnd=l.descriptorBase.pad(80)+(((l.descriptors.pad(80)*16.U+63.U)>>6)<<6)
-    val ok=(!bf16AttentionCore.B || l.commands===12.U) && (!bf16GdnBlock.B || l.commands===17.U) && l.commands>0.U && l.commands<=maxCommands.U && l.descriptors>0.U && l.descriptors<=0xffffff.U &&
+    val ok=(!bf16AttentionCore.B || l.commands===(if(bf16AttentionBlock)22 else 12).U) && (!bf16GdnBlock.B || l.commands===17.U) && l.commands>0.U && l.commands<=maxCommands.U && l.descriptors>0.U && l.descriptors<=0xffffff.U &&
       Seq(l.commandBase,l.commandLimit,l.descriptorBase,l.descriptorLimit).map(_(5,0)===0.U).reduce(_&&_) &&
       l.commandBase<l.commandLimit && l.descriptorBase<l.descriptorLimit && cmdEnd<=l.commandLimit && descEnd<=l.descriptorLimit &&
       !overlap(l.commandBase,l.commandLimit,l.descriptorBase,l.descriptorLimit) && validRegions && !collisions &&
@@ -290,7 +302,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     .elsewhen(waitEvent>=eventSlots.U||signalEvent===0.U||signalEvent>=eventSlots.U|| !dependency||
       events(signalEvent(log2Ceil(eventSlots)-1,0))||signalEvent===waitEvent||
       (group=/=0.U && signalEvent===qkCommand(55,40))){fail(Status.Dependency.U)}
-    .otherwise{slot:=0.U;policy:=VecInit(Seq.fill(12)(0.U(128.W)));extendedProjection:=false.B;state:=tensorIssue}
+    .otherwise{slot:=0.U;policy:=VecInit(Seq.fill(12)(0.U(128.W)));extendedProjection:=false.B;attentionBlockMatrix:=false.B;state:=tensorIssue}
   }
   when(state===tensorIssue&&tensor.io.request.fire){state:=tensorGet}
   when(state===tensorGet&&tensor.io.result.fire){
@@ -366,6 +378,11 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     }.elsewhen(isMatrix && policySlot===1.U && next=/=0xffffff.U){
       when(!(bf16V || bf16Qkv).B || opcode=/=0x20.U || r.data(7,0)=/=0x12.U){fail(Status.Unsupported.U)}
       .otherwise{extendedProjection:=true.B;policyIndex:=next;policySlot:=2.U;state:=policyIssue}
+    }.elsewhen(bf16AttentionBlock.B && extendedProjection && policySlot===2.U && r.data(7,0)===0x24.U){
+      // Ordinary MATRIX_GEMM is discriminated by its public typed policy;
+      // never by a private opcode or the expected program counter.
+      when(next===0xffffff.U){fail(Status.Malformed.U)}
+      .otherwise{attentionBlockMatrix:=true.B;extendedProjection:=false.B;policyIndex:=next;policySlot:=3.U;state:=policyIssue}
     }.elsewhen(extendedProjection){
       val expectedKind=Mux(policySlot===2.U,0x1a.U,0x1b.U)
       when(r.data(7,0)=/=expectedKind || (policySlot===11.U)=/=(next===0xffffff.U)) {fail(Status.Malformed.U)}
@@ -400,7 +417,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       policy(1)(7,0)===0x12.U && policy(1)(127,56)==="h004000040020ffffff".U(72.W)
     // Q columns preserve the official [Q256, gate256] pair for each of 8
     // heads. Dense has no head-wise rearrangement and stores one contiguous D.
-    val nativeProjection=(bf16V || bf16Qkv).B && opcode===0x20.U && m>0.U && m<=128.U && m<=s.maxTokens.U &&
+    val nativeProjection=(bf16V || bf16Qkv).B && opcode===0x20.U && (!bf16AttentionBlock.B || (m===1.U && tokenBase===0.U && tokenCount===1.U)) && m>0.U && m<=128.U && m<=s.maxTokens.U &&
       shape2(a,m,1024.U)&&shape2(b,1024.U,projectionN)&&shape2(d,m,projectionN)&&
       Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && ownerPolicy && projectionMatrix && distinctPrefixes
     val nativeWeight=bf16Weights.B && opcode===0x20.U && b.dtype===5.U && n(4,0)===0.U
@@ -474,14 +491,16 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val attentionAppend=WireDefault(false.B);val attentionQk=WireDefault(false.B)
     val attentionSoft=WireDefault(false.B);val attentionPv=WireDefault(false.B);val attentionFence=WireDefault(false.B)
     val attentionLive=WireDefault(false.B);val attentionFresh=WireDefault(false.B);val attentionDistinct=WireDefault(true.B)
+    val attentionBlockRms=WireDefault(false.B);val attentionBlockDense=WireDefault(false.B);val attentionBlockElement=WireDefault(false.B)
     val cp=policy(attentionPolicySlot);val cx=policy(attentionContextSlot)
     val attentionOp=cp(67,64);val attentionBase=cp(99,68);val attentionCount=cp(107,100)
+    val attentionBlockRole=cp(118,116)
     val attentionCapacity=cx(72,64);val attentionExpectedLength=cx(81,73);val attentionQueryStart=cx(90,82)
     val attentionExpectedGeneration=cx(122,91);val attentionCold=cx(123)
     val attentionNewLength=attentionExpectedLength.pad(33)+attentionCount.pad(33)
     if(bf16AttentionCore){
       val arithmetic=attentionOp>=1.U && attentionOp<=3.U
-      val policyOK=cp(7,0)===0x24.U && cp(55,32)=/=0xffffff.U && cp(63,56)===2.U && attentionOp<=4.U &&
+      val policyOK=cp(7,0)===0x24.U && cp(55,32)=/=0xffffff.U && cp(63,56)===2.U && attentionOp<=(if(bf16AttentionBlock)3 else 4).U &&
         cp(115,108)===Mux(arithmetic,"ha1".U,0.U) && cp(127,116)===0.U && attentionCount>0.U && attentionCount<=128.U
       val contextOK=finishRecord(cx,0x26.U) && cx(63,56)===2.U && cx(127,125)===0.U && cx(124) &&
         attentionCapacity>0.U && attentionCapacity<=256.U && attentionExpectedLength===attentionQueryStart &&
@@ -490,7 +509,8 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
           attentionExpectedLength>0.U && attentionExpectedGeneration>0.U)
       val tails=(isSoftmax || b.tail===0xffffff.U) && d.tail===0xffffff.U
       val typeOK=a.dtype===5.U && d.dtype===5.U && (isSoftmax || b.dtype===5.U)
-      val common=attentionCommandPolicy && policyOK && contextOK && tails && typeOK
+      val blockWindow=attentionBase===0.U && attentionCount===1.U
+      val common=attentionCommandPolicy && policyOK && contextOK && tails && typeOK && (!bf16AttentionBlock.B || blockWindow)
       def matrix(m:UInt,n:UInt,k:UInt,transpose:Bool):Bool={val p=policy(0);val aux=policy(1)
         p(7,0)===0x10.U && p(31,8)===0.U && p(55,32)=/=0xffffff.U && p(71,56)===m && p(87,72)===n &&
           p(111,88)===k && p(114,112)===0.U && p(115)===transpose && p(127,116)===0.U &&
@@ -513,8 +533,10 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       attentionPv:=common && opcode===0x24.U && attentionOp===3.U && group===2.U &&
         shape3(a,8.U,attentionCount,attentionNewLength) && cacheB && shape2(d,rows,2048.U) &&
         matrix(attentionCount,256.U,attentionNewLength,false.B)
-      attentionFence:=common && opcode===0x30.U && attentionOp===4.U && group===0.U &&
-        shape3(a,2.U,attentionCapacity,512.U) && shape2(b,rows,2048.U) && shape2(d,rows,2048.U) && program(2)
+      if(!bf16AttentionBlock){
+        attentionFence:=common && opcode===0x30.U && attentionOp===4.U && group===0.U &&
+          shape3(a,2.U,attentionCapacity,512.U) && shape2(b,rows,2048.U) && shape2(d,rows,2048.U) && program(2)
+      }
       val countPolicy=attentionContextSlot+1.U
       val indices=tensors.take(3).flatMap(_.prefixIndices)++policyIndices.take(4)
       val used=indices.indices.map(i=>if(i<9) !((i/3)==1).B || !isSoftmax else (i-9).U<countPolicy)
@@ -528,6 +550,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       val producers=qkProjectedValid.asUInt.andR && qkNormalizedValid.asUInt.andR && qkRotatedValid.asUInt.andR &&
         qkAbsolutePosition(0)===attentionQueryStart && qkAbsolutePosition(1)===attentionQueryStart
       val appendLive=producers && !pendingAttentionValid && !pendingGqaValid && trusted &&
+        (!bf16AttentionBlock.B || (attentionBlockValid(0) && cx(127,56)===attentionBlockContext)) &&
         sameAllocation(a,qkRotatedTensor(1)) && sameAllocation(b,qkProjectedTensor(2)) &&
         liveSpan(a.address+(attentionBase.pad(64)<<10),a.address+((attentionBase.pad(64)+attentionCount)<<10)) &&
         liveSpan(b.address+(attentionBase.pad(64)<<10),b.address+((attentionBase.pad(64)+attentionCount)<<10)) &&
@@ -546,8 +569,53 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       val appendFresh=disjoint && readwrite(d) && Mux(attentionCacheValid,reusableAttentionCache(d),fresh(d))
       val freshOutput=disjoint && fresh(d) && readwrite(d)
       attentionFresh:=Mux(attentionAppend,appendFresh,Mux(attentionFence,true.B,freshOutput))
+      if(bf16AttentionBlock){
+        // ATTENTION_POLICY v3: payload op[11:8], role[62:60], tokenCount=1.
+        // Full-record coordinates add 56: op[67:64], role[118:116].
+        val role=attentionBlockRole
+        val blockPolicy=cp(7,0)===0x24.U && cp(55,32)=/=0xffffff.U && cp(63,56)===3.U &&
+          attentionOp>=4.U && attentionOp<=7.U && cp(115,108)===0.U && cp(127,119)===0.U && blockWindow &&
+          Mux(attentionOp===4.U,role===0.U,Mux(attentionOp===5.U,role<=1.U,role<=3.U))
+        val blockCommon=attentionCommandPolicy && blockPolicy && contextOK && tails && typeOK && group===0.U
+        val denseK=Mux(role===0.U,2048.U,Mux(role===3.U,3584.U,1024.U))
+        val denseN=Mux(role===0.U || role===3.U,1024.U,3584.U)
+        val elementN=Mux(role===0.U,2048.U,Mux(role===2.U,3584.U,1024.U))
+        attentionBlockRms:=blockCommon && opcode===0x30.U && attentionOp===5.U && program(2) &&
+          shape2(a,1.U,1024.U) && shape2(b,1.U,1024.U) && shape2(d,1.U,1024.U)
+        attentionBlockDense:=blockCommon && opcode===0x20.U && attentionOp===6.U &&
+          shape2(a,1.U,denseK) && shape2(b,denseK,denseN) && shape2(d,1.U,denseN) && matrix(1.U,denseN,denseK,false.B)
+        attentionBlockElement:=blockCommon && opcode===0x30.U && attentionOp===7.U && program(2) &&
+          shape2(a,1.U,elementN) && shape2(b,1.U,elementN) && shape2(d,1.U,elementN)
+        attentionFence:=blockCommon && opcode===0x30.U && attentionOp===4.U && program(2) &&
+          shape3(a,2.U,attentionCapacity,512.U) && shape2(b,1.U,1024.U) && shape2(d,1.U,1024.U)
+        def actual(t:DecodedTensor,i:Int):Bool=attentionBlockValid(i) && sameAllocation(t,attentionBlockValues(i)) && live(t)
+        val sameContext=cx(127,56)===attentionBlockContext
+        val inputRms=role===0.U && !attentionBlockValid.asUInt.orR && !qkProjectedValid.asUInt.orR &&
+          !pendingAttentionValid && trusted && readonly(a) && readonly(b) && sourceAllowed(a,0.U) && sourceAllowed(b,7.U)
+        val postRms=role===1.U && actual(a,4) && !attentionBlockValid(5) && readonly(b) && sourceAllowed(b,9.U) && sameContext
+        val denseProducer=MuxLookup(role,false.B)(Seq(
+          0.U->(actual(a,2) && !attentionBlockValid(3)),
+          1.U->(actual(a,5) && !attentionBlockValid(6)),
+          2.U->(actual(a,5) && attentionBlockValid(6) && !attentionBlockValid(7)),
+          3.U->(actual(a,8) && !attentionBlockValid(9))))
+        val weightRole=Mux(role===0.U,8.U,role+9.U)
+        val elementProducer=MuxLookup(role,false.B)(Seq(
+          0.U->(pendingAttentionValid && pendingGqaValid && actual(a,1) && sameAllocation(b,pendingAttentionContext) && live(b) && !attentionBlockValid(2)),
+          1.U->(sourceValid(0) && sameAllocation(a,sourceTensor(0)) && live(a) && actual(b,3) && !attentionBlockValid(4)),
+          2.U->(actual(a,6) && actual(b,7) && !attentionBlockValid(8)),
+          3.U->(actual(a,4) && actual(b,9) && !attentionBlockValid(10))))
+        val fullFenceLive=pendingAttentionValid && pendingGqaValid && attentionBlockValid.asUInt.andR && sameContext &&
+          sameAllocation(a,pendingAttentionCache) && sourceValid(0) && sameAllocation(b,sourceTensor(0)) && actual(d,10) &&
+          (1 until sourceCount).map(i=>sourceValid(i)).reduce(_&&_)
+        when(attentionBlockRms || attentionBlockDense || attentionBlockElement || attentionFence){
+          attentionLive:=Mux(attentionBlockRms,inputRms||postRms,
+            Mux(attentionBlockDense,sameContext && denseProducer && readonly(b) && sourceAllowed(b,weightRole),
+            Mux(attentionBlockElement,sameContext && elementProducer,fullFenceLive)))
+          attentionFresh:=disjoint && Mux(attentionFence,readwrite(a) && readonly(b) && readwrite(d),fresh(d) && readwrite(d))
+        }
+      }
     }
-    val nativeAttention=attentionAppend||attentionQk||attentionSoft||attentionPv||attentionFence
+    val nativeAttention=attentionAppend||attentionQk||attentionSoft||attentionPv||attentionFence||attentionBlockRms||attentionBlockDense||attentionBlockElement
     val nativeGdn=WireDefault(false.B);val gdnProjection=WireDefault(false.B);val gdnLive=WireDefault(false.B)
     val gdnFresh=WireDefault(false.B);val gdnDistinct=WireDefault(true.B)
     val corePrep=WireDefault(false.B);val coreRecurrent=WireDefault(false.B);val coreNorm=WireDefault(false.B);val coreFence=WireDefault(false.B)
@@ -751,7 +819,9 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val projectionOrder=Mux(role===0.U,!qkProjectedValid.asUInt.orR,
       Mux(role===1.U,qkProjectedValid(0) && !qkProjectedValid(1) && !qkProjectedValid(2),
         qkProjectedValid(0) && qkProjectedValid(1) && !qkProjectedValid(2)))
-    val qkProjectionLive=(!bf16AttentionCore.B || projectionOrder) && sourceLive && readonly(a) && readonly(b) && sourceAllowed(a,0.U) && sourceAllowed(b,role+1.U) &&
+    val qkProjectionLive=(!bf16AttentionCore.B || projectionOrder) && sourceLive &&
+      Mux(bf16AttentionBlock.B,attentionBlockValid(0) && sameAllocation(a,attentionBlockValues(0)),readonly(a) && sourceAllowed(a,0.U)) &&
+      readonly(b) && sourceAllowed(b,role+1.U) &&
       !qkProjectedValid(role) && !overlap(a.address,a.paddedEnd,b.address,b.paddedEnd) &&
       (0 until 3).map(i=> !qkProjectedValid(i) || (qkRows(i)===m && qkWindowBase(i)===tokenBase && qkWindowCount(i)===tokenCount)).reduce(_&&_)
     val qkProjectionFresh=noAlias && fresh(d) && readwrite(d)
@@ -805,6 +875,12 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
         bound.activationBf16:=true.B;bound.weightBf16:=true.B;bound.outputBf16:=true.B
         bound.writeBytes:=Mux(attentionAppend,attentionCount.pad(64)<<11,attentionCount.pad(64)<<12)
         mainPublishBytes:=Mux(attentionAppend,0.U,attentionCount.pad(64)<<12)
+      }}
+      if(bf16AttentionBlock){when(attentionBlockRms || attentionBlockDense || attentionBlockElement){
+        bound.kind:=Mux(attentionBlockRms,QwenOwnerKind.GdnRmsNorm.U,Mux(attentionBlockDense,QwenOwnerKind.Dense.U,QwenOwnerKind.GdnElementwise.U))
+        bound.m:=1.U;bound.n:=d.dims(1);bound.k:=a.dims(1)
+        bound.activationBf16:=true.B;bound.weightBf16:=true.B;bound.outputBf16:=true.B
+        when(attentionBlockElement){bound.gdnElementwiseOp:=Mux(attentionBlockRole===0.U,2.U,Mux(attentionBlockRole===2.U,1.U,0.U))}
       }}
       when(gdnProjection){
         bound.n:=n;bound.k:=(if(bf16GdnBlock)a.dims(1) else 1024.U);bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
@@ -875,11 +951,12 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
         if(bf16QkNormRope){
           val outputIndex=producedCount(producedIndexBits-1,0)
           allocationStarts(outputIndex):=tensors(2).address;allocationEnds(outputIndex):=tensors(2).paddedEnd
-          when(bound.kind===QwenOwnerKind.Dense.U){
+          when(bound.kind===QwenOwnerKind.Dense.U && !attentionBlockMatrix && !boundFence){
             val role=policy(2)(65,64)
             qkProjectedValid(role):=true.B;qkProjected(role):=tensors(2).address;qkProjectedTensor(role):=tensors(2);qkRows(role):=tensors(0).dims(0)
             qkWindowBase(role):=policy(2)(99,68);qkWindowCount(role):=policy(2)(107,100)
-            rememberSource(tensors(0),0.U);rememberSource(tensors(1),role+1.U)
+            if(!bf16AttentionBlock){rememberSource(tensors(0),0.U)}
+            rememberSource(tensors(1),role+1.U)
           }.elsewhen(bound.kind===QwenOwnerKind.QkNorm256.U){
             qkNormalizedValid(bound.qkRole):=true.B;qkNormalized(bound.qkRole):=tensors(2).address;qkNormalizedTensor(bound.qkRole):=tensors(2)
             rememberSource(tensors(1),4.U+bound.qkRole)
@@ -888,6 +965,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
               starts(gateIndex):=bound.c;ends(gateIndex):=bound.c+mainPublishBytes
               allocationStarts(gateIndex):=tensors(3).address;allocationEnds(gateIndex):=tensors(3).paddedEnd
               producedValid(gateIndex):=true.B;managedHistory(gateIndex):=false.B;producedCount:=producedCount+2.U
+              if(bf16AttentionBlock){attentionBlockValues(1):=tensors(3);attentionBlockValid(1):=true.B}
             }
           }.elsewhen(bound.kind===QwenOwnerKind.PartialRope64.U && !boundFence){
             rememberSource(tensors(1),6.U);qkRotatedValid(bound.qkRole):=true.B
@@ -898,8 +976,9 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
           when(boundAttentionFence){
             // Acceptance of the terminal core completion is the sole commit.
             // Append/GQA ACKs only stage a proposal, never alter visible roots.
-            when(!attentionCacheValid){for(i<-0 until 6){attentionParameters(i):=sourceTensor(i+1)}}
-            attentionCacheValid:=true.B;attentionCache:=pendingAttentionCache;attentionContext:=pendingAttentionContext
+            when(!attentionCacheValid){for(i<-0 until attentionParameterCount){attentionParameters(i):=sourceTensor(i+1)}}
+            attentionCacheValid:=true.B;attentionCache:=pendingAttentionCache
+            attentionContext:=(if(bf16AttentionBlock)tensors(2) else pendingAttentionContext)
             attentionLength:=pendingAttentionLength;attentionGeneration:=pendingAttentionGeneration+1.U
             pendingAttentionValid:=false.B;pendingGqaValid:=false.B
           }.elsewhen(boundAttentionAppend){
@@ -908,6 +987,26 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
             pendingAttentionGeneration:=bound.expectedGeneration;pendingAttentionCold:=bound.cold
             pendingAttentionBase:=policy(attentionPolicySlot)(99,68);pendingAttentionCount:=bound.m
           }.elsewhen(boundAttentionGqa){pendingGqaValid:=true.B;pendingAttentionContext:=tensors(2)}
+        }
+        if(bf16AttentionBlock){
+          when(!boundFence){
+            val role=policy(attentionPolicySlot)(118,116)
+            when(bound.kind===QwenOwnerKind.GdnRmsNorm.U){
+              val target=Mux(role===0.U,0.U,5.U)
+              attentionBlockValues(target):=tensors(2);attentionBlockValid(target):=true.B
+              when(role===0.U){
+                rememberSource(tensors(0),0.U);rememberSource(tensors(1),7.U)
+                attentionBlockContext:=policy(attentionContextSlot)(127,56)
+              }.otherwise{rememberSource(tensors(1),9.U)}
+            }.elsewhen(bound.kind===QwenOwnerKind.Dense.U && attentionBlockMatrix){
+              val target=MuxLookup(role,3.U)(Seq(0.U->3.U,1.U->6.U,2.U->7.U,3.U->9.U))
+              attentionBlockValues(target):=tensors(2);attentionBlockValid(target):=true.B
+              rememberSource(tensors(1),Mux(role===0.U,8.U,role+9.U))
+            }.elsewhen(bound.kind===QwenOwnerKind.GdnElementwise.U){
+              val target=MuxLookup(role,2.U)(Seq(0.U->2.U,1.U->4.U,2.U->8.U,3.U->10.U))
+              attentionBlockValues(target):=tensors(2);attentionBlockValid(target):=true.B
+            }
+          }
         }
         if(bf16GdnCore){
           when(boundFence){

@@ -28,7 +28,8 @@ class QwenOwnerResult extends Bundle {
 /** No block launch is exposed. One decoded owner operation per transaction;
   * the arithmetic implementation must return instead of advancing to a phase.
   */
-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false) extends Module {
+class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {
+  require(!bf16AttentionBlock || bf16AttentionCore,"Attention block requires the explicit core profile")
   require(!bf16AttentionCore || bf16QkNormRope,"Attention core requires the explicit QKV/Norm/RoPE profile")
   require(!bf16QkNormRope || (pipelined && s.qwen35QkvOnly && !bf16Gdn), "QK Norm/RoPE requires the exclusive pipelined QKV profile")
   require(!bf16Gdn || (pipelined && s.qwen35GdnOnly), "GDN requires the explicit pipelined profile")
@@ -76,8 +77,8 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     legacy.io.request<>core.io.matrixRequest.get;core.io.matrixResult.get<>legacy.io.result
     core.io.matrixAcceptedSteps.get:=matrix.io.acceptedSteps
     dense.io.physicalSteps:=matrix.io.acceptedSteps
-    val rmsNorm=if(bf16GdnBlock)Some(Module(new GdnRmsNormOwner(width=1024,maxTokens=1)))else None
-    val elementwise=if(bf16GdnBlock)Some(Module(new GdnElementwiseOwner(hiddenWidth=1024,ffnWidth=3584,maxTokens=1)))else None
+    val rmsNorm=if(bf16GdnBlock||bf16AttentionBlock)Some(Module(new GdnRmsNormOwner(width=1024,maxTokens=1)))else None
+    val elementwise=if(bf16GdnBlock||bf16AttentionBlock)Some(Module(new GdnElementwiseOwner(hiddenWidth=1024,ffnWidth=3584,maxTokens=1,attentionWidth=2048,enableAttentionSigmoidMul=bf16AttentionBlock)))else None
     val qkNorm=if(bf16QkNormRope)Some(Module(new QkNorm256Owner(qHeads=8,kvHeads=2,maxTokens=s.maxTokens)))else None
     val partialRope=if(bf16QkNormRope)Some(Module(new PartialRope64Owner(maxHeads=8,maxTokens=s.maxTokens)))else None
     val kvAppend=if(bf16AttentionCore)Some(Module(new Bf16KvAppendOwner(maxTokens=s.maxTokens)))else None
@@ -92,8 +93,8 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
           Mux(bf16GdnCore.B && io.job.bits.kind===QwenOwnerKind.GdnGatedNorm.U,6.U,
             Mux(io.job.bits.kind>QwenOwnerKind.KvAppend.U,7.U,
               Mux(io.job.bits.kind===QwenOwnerKind.Dense.U,1.U,Mux((bf16GdnCore||bf16QkNormRope).B,7.U,Mux(io.job.bits.kind===QwenOwnerKind.Activation.U,2.U,0.U))))))))
-    val chooseBase=Mux(bf16GdnBlock.B && io.job.bits.kind===QwenOwnerKind.GdnRmsNorm.U,8.U,
-      Mux(bf16GdnBlock.B && io.job.bits.kind===QwenOwnerKind.GdnElementwise.U,9.U,chooseCore))
+    val chooseBase=Mux((bf16GdnBlock||bf16AttentionBlock).B && io.job.bits.kind===QwenOwnerKind.GdnRmsNorm.U,8.U,
+      Mux((bf16GdnBlock||bf16AttentionBlock).B && io.job.bits.kind===QwenOwnerKind.GdnElementwise.U,9.U,chooseCore))
     val chooseQk=Mux(bf16QkNormRope.B && io.job.bits.kind===QwenOwnerKind.QkNorm256.U,10.U,
       Mux(bf16QkNormRope.B && io.job.bits.kind===QwenOwnerKind.PartialRope64.U,11.U,chooseBase))
     val attentionTyped=io.job.bits.activationBf16 && io.job.bits.weightBf16 && io.job.bits.outputBf16 &&

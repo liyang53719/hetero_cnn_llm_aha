@@ -1202,3 +1202,17 @@ Qwen35候选QKV命令子链_20261008:
   计划来源: 同次官方cold_m128的token0_1，两次Host真实cold_carried缓存依赖，生产门禁待执行；不冒充上游GDN_decode或模型M128
   未完成: [实际12命令Host数值, 实际Matrix矩形路径, Q17_K33跨tile, native_GQA_stage门限, inputNorm_sigmoidgate_O_residual_postnorm_FFN, 完整block_fault_reset_restore, cold128_carried128]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；C03.2_C04.2_C05及S01_Q35A不关闭
+
+生产Host_Attention_block_v3_20261009:
+  状态: 生产22命令接线与小控制通过；完整物理数值PENDING_CI
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_BLOCK_20261009_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_BLOCK_20261009/result.json
+  实际范围: raw_hidden_input_RMS_QKV_C1_Norm_B1_RoPE_KV_GQA_sigmoid_O_residual_postRMS_FFN_down_residual_finalFence；22条Command128_296条record_19owner；正式M1两launch
+  来源: 同一fresh官方cold_m128的raw_hidden_token0_1；DUT真实cold_carried_prefix_KV；11原始参数加完整256乘64_trig；所有中间值必须实际写ACK后再读
+  原子性: 末residual全部ACK且最终fence被接受才公布cache_length_generation和最终输出；中途故障保持已提交prefix_final及12参数身份
+  接线修正: 发布前发现sigmoid两输入反向；已统一A等于实际gate及B等于实际context，新增job端口与反向pre_owner拒绝回归；旧控制PASS保留为错误版本历史，不绑定新源码
+  本地门禁: 原共享Scalar_sigmoid逐位门禁；新descriptor21项及前端3项CONTROL_ONLY；统一5文件typecheck；原始输入全图reference小测，均不能代替完整生产数值
+  资源: 复用既有八Matrix512切片_单Scalar_单iDMA；没有新增计算阵列；只GitHub执行预计超过10分钟的生产top
+  未完成: [实际完整22命令Host数值终态, 原native_full_block精度, native_GQA_stage门限, cold128_carried128, 完整fault_reset_restore, 后继层与35B, PPA及MAC90]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；C03.2_C04.2_C05及S01_Q35A不关闭

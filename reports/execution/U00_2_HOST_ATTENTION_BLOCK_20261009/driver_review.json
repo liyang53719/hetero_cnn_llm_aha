@@ -1,0 +1,52 @@
+{
+  "status": "PREPARED_ISOLATED_FULL_BLOCK_DRIVER_AND_LIVE_GATE_SOURCE_ONLY",
+  "base_commit": "6959810",
+  "operand_order": "PC12_A_Q_GATE_B_CONTEXT",
+  "files_sha256": {
+    "host_bf16_attention_block_execution.py": "1593277a7c19993f969e718b2d74fe0ff53b5986ff6c144b771a3d4319cb1066",
+    "test_host_bf16_attention_block_live_gate.py": "6567199bf3ad92d362641bd636e40e0e0c78b68fb71bb0f1a15405ea445f8e11",
+    "apply_manifest.json": "5ef81929cb9cad612893f8f68b9cc65154c50da49f42420db83591935cc1a166",
+    "host_bf16_attention_block.cpp": "691bacd67865f430523803af5faee45eef4e0395827cb61fed3697b8d925c659",
+    "host_bf16_attention_block_live_gate.py": "a8631069d71721d9f5da0aff5742c34debf8ebf8c6087862c4669ab387f1c75a",
+    "layout_contract.json": "2156335b8256f06c4bf98c1ecbbbcf13d467276b436d0109ee7069c67eac9137",
+    "test_host_bf16_attention_block_driver.py": "f5ada9630df564706f2a9d86ccf1973da0679334ddff0727d59fb066e5a476de",
+    "prepare_public_sources.py": "fbcea97f22453d9a50001978d6278b6d6bd1f8e6e4ba0b65715c775139d70572",
+    "README.md": "55482858dce33f7e0199278f2ef92778421a2aea19dd95c1716d8083a79f94ac",
+    "host_bf16_attention_block_fixture.py": "9127c9e19c7d652ad52e9126b2e82f7b0891f1ead5b8ae916f02520a78cc0d42"
+  },
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/qkv_test_dependencies:src python -m pytest -o addopts='' -p no:cacheprovider -q work/attention_full_block_driver_20261009T1137/test_host_bf16_attention_block_driver.py work/attention_full_block_driver_20261009T1137/test_host_bf16_attention_block_live_gate.py",
+    "tests": 40,
+    "subtests": 13,
+    "failures": 0,
+    "errors": 0,
+    "returncode": 0
+  },
+  "physical_ddr_bytes": 37670144,
+  "input_bytes": 36742144,
+  "commands": 22,
+  "descriptor_records": 296,
+  "owner_jobs": 19,
+  "compiled": false,
+  "model_executed": false,
+  "numerical_rtl_executed": false,
+  "fixture_payload_generated": false,
+  "artifact_auditor_executed_on_actual_dut": false,
+  "generic_artifact_auditor_authoritative": false,
+  "full_m128_executed": false,
+  "reset_restore_executed": false,
+  "native_final_accepted": false,
+  "live_full_block_factory_executed": false,
+  "tracked_source_or_index_modified_by_this_task": false,
+  "public_promotion_manifest": "apply_manifest.json",
+  "superseded_evidence": "preparation_receipt_superseded_operand_order.json",
+  "optimized_tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/qkv_test_dependencies:src python -O -m pytest -o addopts='' -p no:cacheprovider -q work/attention_full_block_driver_20261009T1137/test_host_bf16_attention_block_driver.py work/attention_full_block_driver_20261009T1137/test_host_bf16_attention_block_live_gate.py",
+    "tests": 40,
+    "subtests": 13,
+    "failures": 0,
+    "errors": 0,
+    "returncode": 0,
+    "warning": "pytest notes Python -O disables non-test assert statements; production guards use require"
+  }
+}

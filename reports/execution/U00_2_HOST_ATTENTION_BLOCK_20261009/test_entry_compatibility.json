@@ -1,0 +1,130 @@
+{
+  "status": "PASS_CURRENT_TEST_ENTRY_TYPECHECK_AND_SMOKE_NOT_RTL_RERUN",
+  "source_sha256": {
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostAttentionBlockCommandsSpec.scala": "8a3f92ac3ebf76cc4c09d7d8c0e5973e0b5efaf7edb00aec431bbf120a36db66",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/chisel/continuous_prefill/src/test/scala/heteronpu/continuous/AttentionSigmoidOwnerSpec.scala": "adbfba2e0246bdcce53012c0735950a29a54585e546b3e1d182c9d45c10c1efd",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/attention_full_block_frontend_20261009T1131/sparse_path_validation/AttentionSigmoidDefaultOracleSmoke.scala": "d4b4001896fbe109d589c012d11d2441ffb9fe0c83860bf2331314c3bd7b4561"
+  },
+  "typecheck": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 7.008621724991826,
+    "peak_rss_kib": 318188,
+    "source_hashes_unchanged": true,
+    "resource_samples": [
+      {
+        "mem_available_bytes": 2205085696,
+        "tmp_free_bytes": 377876480,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      },
+      {
+        "mem_available_bytes": 2074165248,
+        "tmp_free_bytes": 377843712,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      },
+      {
+        "mem_available_bytes": 1988231168,
+        "tmp_free_bytes": 377843712,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      },
+      {
+        "mem_available_bytes": 1967865856,
+        "tmp_free_bytes": 377843712,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      },
+      {
+        "mem_available_bytes": 1922633728,
+        "tmp_free_bytes": 377810944,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      },
+      {
+        "mem_available_bytes": 1875046400,
+        "tmp_free_bytes": 377810944,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      },
+      {
+        "mem_available_bytes": 1829564416,
+        "tmp_free_bytes": 377810944,
+        "workspace_free_bytes": 233082880,
+        "scratch_bytes": 53248
+      }
+    ]
+  },
+  "default_sigmoid_oracle": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 1.002712713991059,
+    "peak_rss_kib": 318188,
+    "source_hashes_unchanged": true,
+    "resource_samples": [
+      {
+        "mem_available_bytes": 2116579328,
+        "tmp_free_bytes": 377843712,
+        "workspace_free_bytes": 232595456,
+        "scratch_bytes": 532480
+      }
+    ]
+  },
+  "helper_cli": {
+    "helper": "chisel/continuous_prefill/tests/host_attention_block_control_vectors.py",
+    "helper_sha256": "7bc5fef0056044695c0fbef36d4f1172f8cdd79c6e11b401d82d2dd022982c97",
+    "cwd": "chisel/continuous_prefill",
+    "root_helper_absent": true,
+    "cases": [
+      {
+        "old": 0,
+        "generation": 0,
+        "mode": "block",
+        "commands": 22,
+        "records": 296,
+        "jobs": 19,
+        "stdout_sha256": "c09e58c5f1e0b280f0f9d69fd0b757eac4f4da840f70cdcc0644f1203a9a2259"
+      },
+      {
+        "old": 1,
+        "generation": 1,
+        "mode": "block",
+        "commands": 22,
+        "records": 296,
+        "jobs": 19,
+        "stdout_sha256": "25c5ed8e7200e76d655af520bd8c9e739b21bea8e306c970f73cd82a39c0a41c"
+      },
+      {
+        "old": 0,
+        "generation": 0,
+        "mode": "core",
+        "commands": 12,
+        "records": 172,
+        "jobs": 9,
+        "stdout_sha256": "63da0281c4b4fbdda8f15a07c00c07a81d297bc8755a3aef1eff4d3b9c13c8e2"
+      },
+      {
+        "old": 0,
+        "generation": 0,
+        "mode": "preloaded",
+        "commands": 22,
+        "records": 296,
+        "jobs": 19,
+        "stdout_sha256": "28c8aca8b56cb7facbbf3f1d362833dd257160ec3625a3b02634d0bd853c870d"
+      },
+      {
+        "old": 0,
+        "generation": 0,
+        "mode": "reversed_sigmoid",
+        "commands": 22,
+        "records": 296,
+        "jobs": 19,
+        "stdout_sha256": "278a6873b471b35672bc59cf9de8025d777d2e70f5bb87f1163bc9fd22d7ddff"
+      }
+    ]
+  },
+  "source_changes": "Only test entry paths and default pure-integer synthetic oracle regeneration; previous real Scalar/control RTL retains original Spec source hashes.",
+  "current_specs_rtl_executed": false,
+  "default_oracle_rows": 70
+}

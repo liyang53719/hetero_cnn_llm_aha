@@ -1,0 +1,61 @@
+{
+  "status": "PENDING_PRODUCTION_HOST_ATTENTION_BLOCK_M1_CI",
+  "implementation_base_commit": "6959810545203d5f9508075b311dba52f1bee0c9",
+  "experimental_default_off": true,
+  "production_host_connected": true,
+  "actual_full_host_numerical_execution_completed": false,
+  "numerical_acceptance": false,
+  "native_full_block_acceptance": false,
+  "overall_pass": false,
+  "commands_per_launch": 22,
+  "descriptor_records": 296,
+  "owner_jobs_per_successful_launch": 19,
+  "acknowledged_bytes_per_successful_launch": 68608,
+  "dense_macs_per_token": 18350080,
+  "active_tokens": 1,
+  "host_launches_per_case": 2,
+  "source_phase": "cold_m128",
+  "source_token_indices": [
+    0,
+    1
+  ],
+  "upstream_gdn_decode_executed": false,
+  "logical_matrix_engines": 1,
+  "physical_matrix_slices": 8,
+  "shared_scalar_service": true,
+  "pinned_idma_instances": 1,
+  "raw_hidden_to_final_residual_connected": true,
+  "persistent_parameter_identities": 12,
+  "full_authenticated_trig_bytes": 32768,
+  "terminal_fence_commits": "cache_length_generation_final_output_only_after_final_residual_all_ACK",
+  "intermediate_preloads_allowed": false,
+  "reference_injection_allowed": false,
+  "model_payloads_committed": false,
+  "full128_executed": false,
+  "reset_restore_supported": false,
+  "stage_native_gqa_gate": "UNASSIGNED_DIAGNOSTIC_ONLY",
+  "original_native_failures_preserved": true,
+  "thresholds_unchanged": true,
+  "planned_ci_modes": [
+    "pass",
+    "final-residual-ack-error"
+  ],
+  "local_evidence": [
+    "frontend_control.json",
+    "sigmoid_owner.json",
+    "python_tests.json",
+    "reference_review.json",
+    "driver_review.json",
+    "ci_entry_tests.json",
+    "test_entry_compatibility.json"
+  ],
+  "superseded_candidate": "Pre-publication sigmoid A/B reversal fixed before production run; original source and control logs retained under ignored work and not rebound.",
+  "open_items": [
+    "complete actual M1 block result",
+    "cold128 and carried128",
+    "native complete block accuracy",
+    "fault/reset/restore",
+    "subsequent layers and 35B",
+    "timing/QoR/MAC90"
+  ]
+}

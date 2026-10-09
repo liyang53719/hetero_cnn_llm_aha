@@ -1,0 +1,57 @@
+{
+  "status": "PREPARED_SOURCE_ONLY_NOT_NUMERICAL_PASS",
+  "git_head": "6959810545203d5f9508075b311dba52f1bee0c9",
+  "pytest": {
+    "normal_passed": 19,
+    "optimized_passed": 19,
+    "normal_seconds": 1.96,
+    "optimized_seconds": 2.07,
+    "optimized_warnings": [
+      "expected pytest warning about non-test assertions under Python -O"
+    ]
+  },
+  "shell_syntax_passed": true,
+  "embedded_python_heredocs_parsed": 5,
+  "original_core_entries_modified": false,
+  "actual_model_capture_executed": false,
+  "actual_full_reference_executed": false,
+  "scala_cpp_build_executed": false,
+  "dut_execution_executed": false,
+  "download_executed": false,
+  "true_scope": "Two-case orchestration and process-group cleanup controls; imports use live sibling source-only candidates without invoking heavy factories.",
+  "source_inventory": [
+    "run_host_bf16_attention_block_fresh_gate.py",
+    "run_host_bf16_attention_block_gate.sh",
+    "host-bf16-attention-block.yml",
+    "tests/test_host_bf16_attention_block_fresh_gate.py",
+    "tests/test_host_bf16_attention_block_ci.py"
+  ],
+  "future_ci": {
+    "commands_per_launch": 22,
+    "descriptors_per_launch": 296,
+    "owner_jobs_per_successful_launch": 19,
+    "acknowledged_bytes_per_successful_launch": 68608,
+    "modes": [
+      "pass",
+      "final-residual-ack-error"
+    ],
+    "launches_per_case": 2,
+    "runner_budget_seconds": 18000,
+    "failure_reserve_seconds": 180,
+    "build_cap_seconds": 7200,
+    "case_cap_seconds": 3600,
+    "uploads": [
+      "compact/summary.json",
+      "compact/source_input_hashes.json"
+    ],
+    "required_root_reference_regressions": [
+      "tests/test_host_bf16_attention_block_reference.py",
+      "tests/test_attention_sigmoid_reference.py"
+    ],
+    "reference_test_execution_modes": [
+      "normal",
+      "python -O"
+    ]
+  },
+  "root_reference_execution_note": "Both complete root reference test files are scheduled in normal and Python -O CI invocations; no exclusions. They are not rerun here before public owner integration."
+}

@@ -1,0 +1,73 @@
+{
+  "normal_tests": 232,
+  "optimized_tests": 232,
+  "subtests_each": 33,
+  "runs": [
+    {
+      "mode": "normal",
+      "argv": [
+        "python",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-p",
+        "no:cacheprovider",
+        "-q",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_ci.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_driver.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_live_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_ci.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_driver.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_live_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_reference.py",
+        "tests/test_host_bf16_attention_block_descriptor.py",
+        "tests/test_host_bf16_attention_block_reference.py",
+        "tests/test_attention_sigmoid_reference.py",
+        "tests/test_host_bf16_attention_core_descriptor.py",
+        "chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py"
+      ],
+      "exit_code": 0,
+      "seconds": 7.956691055995179,
+      "log": "final_integrated_python_normal.log"
+    },
+    {
+      "mode": "optimized",
+      "argv": [
+        "python",
+        "-O",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-p",
+        "no:cacheprovider",
+        "-q",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_ci.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_driver.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_block_live_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_ci.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_driver.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_live_gate.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_attention_core_reference.py",
+        "tests/test_host_bf16_attention_block_descriptor.py",
+        "tests/test_host_bf16_attention_block_reference.py",
+        "tests/test_attention_sigmoid_reference.py",
+        "tests/test_host_bf16_attention_core_descriptor.py",
+        "chisel/continuous_prefill/tests/test_gdn_elementwise_reference.py"
+      ],
+      "exit_code": 0,
+      "seconds": 8.507845020008972,
+      "log": "final_integrated_python_optimized.log"
+    }
+  ],
+  "scope": "public descriptor/reference/auditor/orchestration and old core controls; no model or full DUT",
+  "additional_plan_shape_tests": 291,
+  "plan_shape_exit_code": 0,
+  "post_run_sigmoid_cli_tests": 13,
+  "final_source_tests": true
+}

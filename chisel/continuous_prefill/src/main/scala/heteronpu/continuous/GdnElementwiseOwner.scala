@@ -4,11 +4,12 @@ package heteronpu.continuous
 import chisel3._
 import chisel3.util._
 
-object GdnElementwiseOp { val Add = 0; val SiluMul = 1 }
+object GdnElementwiseOp { val Add = 0; val SiluMul = 1; val SigmoidMul = 2 }
 
 /** Internal decoded job, not a public Host command. All tensors are contiguous
   * BF16 [tokens,width], with 64-byte aligned, bus-rounded allocations. Add uses
   * hiddenWidth; SiluMul uses ffnWidth and interprets a as gate and b as up.
+  * Opt-in SigmoidMul uses attentionWidth, a as preserved gate and b as context.
   */
 class GdnElementwiseJob extends Bundle {
   val op = UInt(2.W)
@@ -37,13 +38,15 @@ class GdnElementwiseOwnerPort extends Bundle {
   val resetRequired = Output(Bool())
 }
 
-/** Qwen3.5 residual and MLP activation owner with only an external shared FPU.
+/** Qwen3.5 residual, MLP activation and optional attention gate owner with only an external shared FPU.
   * Pinned modeling_qwen3_5.py: residual additions at 896/902 and MLP at 826.
   * The official BF16 SiLU output is rounded BEFORE multiplication with up.
   * The shared exp polynomial is a frozen recipe, not native torch equality.
   * SiLU: e=exp(-abs(g)); inv=1/(1+e); sig=inv*(g.sign ? e : 1);
   * BF16(sig*g), then BF16(roundedSiLU*up). All multiplications explicitly use
   * MulIeeeRne, allowing gradual underflow; Add/Div errors are never masked.
+  * Attention (pinned source line 808): BF16(sig), then BF16(context*roundedSig).
+  * This path skips multiplication by the gate itself; it is not SiLU.
   * Mathematically legal negative gates <= -80 return Unsupported because the
   * shared exp service saturates there. They are never silently changed to zero.
   *
@@ -54,10 +57,12 @@ class GdnElementwiseOwnerPort extends Bundle {
   * reset; reset alone cannot cancel an external transaction already in flight.
   */
 class GdnElementwiseOwner(hiddenWidth: Int = 1024, ffnWidth: Int = 3584,
-                          maxTokens: Int = 128) extends Module {
+                          maxTokens: Int = 128, attentionWidth: Int = 2048,
+                          enableAttentionSigmoidMul: Boolean = false) extends Module {
   require(hiddenWidth > 0 && hiddenWidth <= 65535)
   require(ffnWidth > 0 && ffnWidth <= 65535)
   require(maxTokens > 0 && maxTokens <= 65535)
+  require(attentionWidth > 0 && attentionWidth <= 65535)
   val io = IO(new GdnElementwiseOwnerPort)
   val idle :: readA :: waitA :: readB :: waitB :: checkLane :: scalarIssue :: scalarWait :: writeOutput :: waitOutput :: finish :: locked :: Nil = Enum(12)
   val state = RegInit(idle)
@@ -120,8 +125,10 @@ class GdnElementwiseOwner(hiddenWidth: Int = 1024, ffnWidth: Int = 3584,
     val span = ((payload + 63.U) >> 6) << 6
     def badSpan(base: UInt): Bool = base(5, 0) =/= 0.U || base.pad(66) + span > (BigInt(1) << 56).U
     def overlap(a: UInt, b: UInt): Bool = a.pad(66) < b.pad(66) + span && b.pad(66) < a.pad(66) + span
-    val validOp = j.op === GdnElementwiseOp.Add.U || j.op === GdnElementwiseOp.SiluMul.U
-    val expectedWidth = Mux(j.op === GdnElementwiseOp.Add.U, hiddenWidth.U, ffnWidth.U)
+    val validOp = j.op === GdnElementwiseOp.Add.U || j.op === GdnElementwiseOp.SiluMul.U ||
+      (enableAttentionSigmoidMul.B && j.op === GdnElementwiseOp.SigmoidMul.U)
+    val expectedWidth = MuxLookup(j.op, hiddenWidth.U)(Seq(
+      GdnElementwiseOp.SiluMul.U -> ffnWidth.U, GdnElementwiseOp.SigmoidMul.U -> attentionWidth.U))
     when(!validOp || j.tokens === 0.U || j.tokens > maxTokens.U || j.rowWidth =/= expectedWidth ||
       badSpan(j.a) || badSpan(j.b) || badSpan(j.output) || overlap(j.output, j.a) || overlap(j.output, j.b)) {
       fail(Status.Bounds.U)
@@ -153,7 +160,7 @@ class GdnElementwiseOwner(hiddenWidth: Int = 1024, ffnWidth: Int = 3584,
   }
   when(state === checkLane) {
     when(!TensorMath.finite(x) || !TensorMath.finite(y)) { fail(Status.Numerical.U) }
-      .elsewhen(job.op === GdnElementwiseOp.SiluMul.U && x(31) && x(30, 0) >= F32.lit(80)) {
+      .elsewhen((job.op === GdnElementwiseOp.SiluMul.U || job.op === GdnElementwiseOp.SigmoidMul.U) && x(31) && x(30, 0) >= F32.lit(80)) {
         fail(Status.Unsupported.U)
       }.otherwise {
         operation := Mux(job.op === GdnElementwiseOp.Add.U, add, exp)
@@ -171,7 +178,12 @@ class GdnElementwiseOwner(hiddenWidth: Int = 1024, ffnWidth: Int = 3584,
           is(exp) { exponential := r; operation := denominator }
           is(denominator) { operation := inverse }
           is(inverse) { operation := sign }
-          is(sign) { operation := activate }
+          is(sign) {
+            when(job.op === GdnElementwiseOp.SigmoidMul.U) {
+              value := Cat(rounded, 0.U(16.W)); operation := multiply
+              when(rounded(14, 7) === 255.U) { fail(Status.Numerical.U) }
+            }.otherwise { operation := activate }
+          }
           is(activate) {
             value := Cat(rounded, 0.U(16.W)); operation := multiply
             when(rounded(14, 7) === 255.U) { fail(Status.Numerical.U) }

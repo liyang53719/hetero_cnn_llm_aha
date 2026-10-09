@@ -1,0 +1,85 @@
+{
+  "status": "PASS_FRONTEND_CONTROL_ONLY",
+  "numeric_execution": false,
+  "owner_completions": "test_double",
+  "max_commands": 21,
+  "commands": 7,
+  "descriptor_records": 114,
+  "features": "bf16Weights,bf16Qkv,bf16QkNormRope",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "be6a78ef29c871d0bf8648164306bb3f9bc71401942f2ef018eaaf411b30536d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "3c9e6f35c98d66513c94986b8c61b5c128e8847bb07e41280ea192c42ab3c4b1",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "54a2d86cedde849d3046218795d016ebb6583c4b63bea21cf229c786e8c54b90",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostQkNormRopeCommandsSpec.scala": "1487d04195bdc3f0e6ec7a1bcbfbfecd1c43912f50c63b02ed124b915617109f"
+  },
+  "source_hashes_unchanged": true,
+  "stages": {
+    "compile": {
+      "exit_code": 0,
+      "seconds": 16.00385241000913,
+      "max_rss_kib": 441328,
+      "guard": null,
+      "source_hashes_unchanged": true
+    },
+    "enabled": {
+      "exit_code": 0,
+      "seconds": 36.00904957900639,
+      "max_rss_kib": 441328,
+      "guard": null,
+      "source_hashes_unchanged": true
+    },
+    "default_off": {
+      "exit_code": 0,
+      "seconds": 28.005619029005175,
+      "max_rss_kib": 441328,
+      "guard": null,
+      "source_hashes_unchanged": true
+    }
+  },
+  "legal_windows": [
+    [
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      128,
+      0,
+      128,
+      0
+    ],
+    [
+      128,
+      0,
+      128,
+      128
+    ],
+    [
+      128,
+      127,
+      1,
+      255
+    ]
+  ],
+  "coverage": [
+    "7 exact owner bindings and byte counts",
+    "opaque Q gate destination binding",
+    "absolute position255 independent of tensor base127",
+    "28 owner tag/status/short-byte/long-byte failures",
+    "typed shape/dtype/version/mode/policy/tail/reserved/stride corruption",
+    "actual Dense and Norm completion dependencies",
+    "readonly preloaded lookalikes rejected",
+    "full allocation alias rejection including inactive areas",
+    "latched launch and inactive done sidebands",
+    "job/completion/result/memory backpressure",
+    "locked error reset recovery",
+    "default-off new SFU rejection and existing 3-command QKV success"
+  ],
+  "minimum_mem_available_bytes": 1505677312,
+  "minimum_tmp_free_bytes": 424632320,
+  "reclaimed_own_pch_bytes": 314351114,
+  "tmp_free_after_bytes": 737669120,
+  "elaboration_warnings": "4 nonblocking W004: qkNormalized Vec2 indexed by 2-bit role in HostBlockCommands.scala405/729"
+}

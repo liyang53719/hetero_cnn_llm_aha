@@ -1,0 +1,93 @@
+name: qwen35-production-Host-QKV-Norm-RoPE
+
+# Representative M1 command subchain only. Full M128, attention, FFN and
+# whole-block acceptance remain open. No tensor/weight/NPZ artifact upload.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/host-bf16-qkv-rope.yml'
+      - 'chisel/continuous_prefill/**'
+      - 'chisel/p0_safety/src/main/**'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'rtl/matrix/**'
+      - 'rtl/integration/**'
+      - 'rtl/sfu/**'
+      - 'src/heteronpu/**'
+      - 'config/model_profiles/qwen3_5_0p8b.json'
+      - 'config/upstream/qwen3_5_0p8b/**'
+      - 'scripts/collect_qwen35*payload.py'
+      - 'scripts/*reference.c'
+      - 'scripts/check_git_payloads.py'
+      - 'pyproject.toml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: host-bf16-qkv-rope-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  representative-chain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      BUILD_JOBS: '1'
+      BUILD_RESERVE_BYTES: '1073741824'
+      JVM_OPTS: '-Xmx1500m -Xss4M -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare pinned tools, upstream iDMA and official source runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/qkv_rope_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/qkv_rope_ci_idma
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/qkv_rope_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Source payload boundary and public descriptor regressions
+        run: |
+          python scripts/check_git_payloads.py
+          python -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_qk_rope*.py chisel/continuous_prefill/tests/test_host_bf16_qkv*.py chisel/continuous_prefill/tests/test_prepare_qk_norm_rope_owner_fixture.py
+          python -O -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_qk_rope*.py chisel/continuous_prefill/tests/test_host_bf16_qkv*.py chisel/continuous_prefill/tests/test_prepare_qk_norm_rope_owner_fixture.py
+      - name: Shared Scalar and owner/frontend controls before production build
+        working-directory: chisel/continuous_prefill
+        env:
+          MAKEFLAGS: '-j1 VK_PCH_I_FAST= VK_PCH_I_SLOW='
+        run: |
+          sbt -batch 'testOnly heteronpu.continuous.BlockScalarFloatSpec heteronpu.continuous.QkNorm256OwnerSpec heteronpu.continuous.PartialRope64OwnerSpec heteronpu.continuous.HostQkNormRopeCommandsSpec'
+      - name: Reacquire only pinned layer0, layer3 and prefix sources
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Fresh independent reference and actual seven-command cold0/carried127 subchain
+        env: {HF_HUB_OFFLINE: '1'}
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_qkv_rope_fresh_gate.py --output work/host_qkv_rope_fresh_ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-qkv-rope-m1-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_qkv_rope_fresh_ci/compact/summary.json
+            work/host_qkv_rope_fresh_ci/compact/source_input_hashes.json
+      - name: State the exact acceptance boundary
+        run: |
+          echo 'Production Command128 Q/gate, K, V -> QK Norm256 -> partial64 RoPE, two representative M1 windows with faults and reset recovery. Every intermediate is a prior actual ACKed physical write.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Frozen C1 Norm and B1 RoPE arithmetic and native source failure reports are retained. M128, prefix KV, QK/softmax/PV, output projection, FFN and complete attention block remain PENDING.' >> "$GITHUB_STEP_SUMMARY"

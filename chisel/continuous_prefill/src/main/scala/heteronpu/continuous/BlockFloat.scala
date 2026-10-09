@@ -30,10 +30,16 @@ object ScalarOp {
   * iterative divider and the selected branch; result stays held until fire.
   * Functional implementation; 800 MHz is a target, not a timing result. */
 class BlockScalarFloat(enableSoftplus: Boolean = false) extends Module {
-  val io=IO(new Bundle {val request=Flipped(Decoupled(new ScalarRequest));val result=Decoupled(UInt(32.W));val error=Output(Bool())})
+  val io=IO(new Bundle {
+    val request=Flipped(Decoupled(new ScalarRequest));val result=Decoupled(UInt(32.W));val error=Output(Bool())
+    // Raw flags from the actual Add/Mul ALU result. Compound operations and
+    // requests rejected before arithmetic do not assert primitiveFlagsValid.
+    val primitiveFlags=Output(UInt(5.W));val primitiveFlagsValid=Output(Bool())
+  })
   val idle::normal::divIssue::divWait::expScale::expFloor::expFraction::expMul::expAdd::expFinish::softDenominator::softSquare::softMul::softAdd::softDouble::softLog::softFinish::done::Nil=Enum(18)
   val state=RegInit(idle);val op=Reg(UInt(3.W));val a=Reg(UInt(32.W));val b=Reg(UInt(32.W));val out=Reg(UInt(32.W))
   val err=RegInit(false.B);val k=Reg(UInt(8.W));val frac=Reg(UInt(32.W));val horner=Reg(UInt(32.W));val product=Reg(UInt(32.W));val index=Reg(UInt(3.W))
+  val primitiveFlags=RegInit(0.U(5.W));val primitiveFlagsValid=RegInit(false.B)
   // Softplus reuses the existing ALU, exp path and divider; no second SFU.
   val softInput=Reg(UInt(32.W));val softE=Reg(UInt(32.W));val softY=Reg(UInt(32.W));val softZ=Reg(UInt(32.W))
   val softRom=VecInit((0 to 7).map(i=>F32.lit(1.0/(2*i+1))))
@@ -47,8 +53,10 @@ class BlockScalarFloat(enableSoftplus: Boolean = false) extends Module {
   val integer=Module(new INToRecFN(32,8,24));integer.io.signedIn:=false.B;integer.io.in:=k
   integer.io.roundingMode:=round_near_even;integer.io.detectTininess:=tininess_afterRounding
   io.request.ready:=state===idle;io.result.valid:=state===done;io.result.bits:=out;io.error:=err
+  io.primitiveFlags:=primitiveFlags;io.primitiveFlagsValid:=state===done && primitiveFlagsValid
   switch(state) {
     is(idle){when(io.request.fire){a:=io.request.bits.a;b:=io.request.bits.b;op:=io.request.bits.op;err:=false.B
+      primitiveFlags:=0.U;primitiveFlagsValid:=false.B
       when(!TensorMath.finite(io.request.bits.a) || !TensorMath.finite(io.request.bits.b) ||
         (io.request.bits.op>ScalarOp.ExpNegative.U && io.request.bits.op=/=ScalarOp.MulIeeeRne.U && (io.request.bits.op=/=ScalarOp.Softplus.U || !enableSoftplus.B))){out:=0.U;err:=true.B;state:=done}
       .elsewhen(io.request.bits.op===ScalarOp.Softplus.U){
@@ -63,6 +71,7 @@ class BlockScalarFloat(enableSoftplus: Boolean = false) extends Module {
     is(normal){
       alu.io.op:=op===ScalarOp.Mul.U || op===ScalarOp.MulIeeeRne.U
       out:=alu.io.out
+      primitiveFlags:=alu.io.exceptionFlags;primitiveFlagsValid:=true.B
       // HardFloat still computes the same rounded bits, including signed zero
       // and gradual subnormals. Only the explicit GDN multiply policy accepts
       // underflow/inexact; invalid, divide-by-zero, overflow and nonfinite

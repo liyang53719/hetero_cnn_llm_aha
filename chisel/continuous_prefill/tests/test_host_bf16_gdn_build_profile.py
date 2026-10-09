@@ -1,6 +1,9 @@
 """Build receipt/profile boundaries; no compiler, model or simulator execution."""
 from pathlib import Path
 import json
+import os
+import re
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -10,6 +13,36 @@ from host_bf16_gdn_execution import _build_identity, sha
 
 
 class GdnBuildProfileTests(unittest.TestCase):
+    def test_effective_driver_flags_override_inherited_make_optimization(self):
+        script = Path(__file__).resolve().parents[1] / 'scripts/run_host_bf16_gdn_gate.sh'
+        source = script.read_text()
+        assignment, = re.findall(r'^export MAKEFLAGS=.*$', source, re.M)
+        cflags, = re.findall(r"-CFLAGS '([^']+)'", source)
+        # The two different option orders are the retained Verilator rules:
+        # explicit user-file rule in VHostBlockTop.mk and verilated.mk model rule.
+        makefile = ('CPPFLAGS := ' + cflags + '\n.PHONY: flags\nflags:\n'
+                    '\t@echo $(CXX) $(CPPFLAGS) $(OPT_FAST) -c host_bf16_gdn_core.cpp\n'
+                    '\t@echo $(CXX) $(OPT_FAST) $(CPPFLAGS) -c VHostBlockTop.cpp\n'
+                    '\t@echo $(OPT_SLOW)\n')
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'flags.mk'; path.write_text(makefile)
+            for inherited in ('', 'OPT_FAST=-O0', 'OPT_FAST=-Os OPT_SLOW=-O3'):
+                with self.subTest(inherited=inherited):
+                    env = dict(os.environ, MAKEFLAGS=inherited)
+                    flags = subprocess.check_output(['bash', '-c', assignment + '\nprintf %s "$MAKEFLAGS"'],
+                                                    env=env, text=True)
+                    env['MAKEFLAGS'] = flags
+                    lines = subprocess.check_output(['make', '--no-print-directory', '-j1', '-f', str(path), 'flags'],
+                                                    env=env, text=True).splitlines()
+                    self.assertEqual(len(lines), 3)
+                    for line in lines[:2]:
+                        words = shlex.split(line)
+                        self.assertEqual([x for x in words if x.startswith('-O')][-1], '-O2')
+                        self.assertIn('-fno-fast-math', words)
+                        self.assertIn('-ffp-contract=off', words)
+                        self.assertNotIn('-ffast-math', words)
+                    self.assertEqual(lines[2], '-O0')
+
     def test_explicit_core_receipt_cannot_be_admitted_as_v1(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

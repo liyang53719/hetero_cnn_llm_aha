@@ -14,7 +14,8 @@ import chisel3.util._
   * tensors are internal-only logical values, never DDR materializations.
   * Their completion events are conservatively delayed until PV writeback.
   */
-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false) extends Module {
+class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false) extends Module {
+  require(!bf16QkNormRope || bf16Qkv,"QK Norm/RoPE requires the explicit QKV profile")
   require(!bf16V || s.qwen35VOnly, "native V requires the explicit Qwen3.5 V-only profile")
   require(!bf16Qkv || s.qwen35QkvOnly, "native QKV requires the explicit Qwen3.5 QKV-only profile")
   require(!bf16GdnBlock || bf16GdnCore, "native full GDN block requires bf16GdnCore")
@@ -34,7 +35,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val state=RegInit(idle);val cfg=Reg(new HostCommandLaunch);val cmd=RegInit(0.U(128.W))
   val pc=RegInit(0.U(16.W));val completed=RegInit(0.U(16.W));val status=RegInit(0.U(8.W));val poison=RegInit(false.B)
   val events=RegInit(VecInit(Seq.fill(eventSlots)(false.B)))
-  val tensorSlots=if(bf16Gdn)5 else 3
+  val tensorSlots=if(bf16Gdn)5 else if(bf16QkNormRope)4 else 3
   val tensors=Reg(Vec(tensorSlots,new DecodedTensor));val slot=RegInit(0.U(log2Ceil(tensorSlots).W))
   val policy=Reg(Vec(12,UInt(128.W)));val policySlot=RegInit(0.U(4.W));val policyIndex=Reg(UInt(24.W))
   val policyIndices=Reg(Vec(12,UInt(24.W)));val extendedProjection=RegInit(false.B)
@@ -74,6 +75,13 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   // The seven core (thirteen full-block) bindings belong to the committed checkpoint.
   // Hidden changes with each token; carried state cannot change its weights.
   val committedParameterStarts=Reg(Vec(parameterRoles.size,UInt(64.W)));val committedParameterEnds=Reg(Vec(parameterRoles.size,UInt(64.W)))
+  // Actual projection/normalization producers for this Host launch. Readonly
+  // preloaded lookalikes cannot satisfy these semantic dependencies.
+  val qkProjectedValid=RegInit(VecInit(Seq.fill(3)(false.B)))
+  val qkProjected=Reg(Vec(3,UInt(64.W)));val qkRows=Reg(Vec(3,UInt(16.W)))
+  val qkWindowBase=Reg(Vec(3,UInt(32.W)));val qkWindowCount=Reg(Vec(3,UInt(8.W)))
+  val qkNormalizedValid=RegInit(VecInit(Seq.fill(2)(false.B)))
+  val qkNormalized=Reg(Vec(2,UInt(64.W)))
   val previousSignal=RegInit(0.U(16.W))
   def clearTransaction():Unit={
     txInputValid:=false.B;txQkvValid:=false.B;txZValid:=false.B;txAbValid:=false.B
@@ -85,10 +93,11 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val group=RegInit(0.U(2.W));val qkCommand=Reg(UInt(128.W));val softCommand=Reg(UInt(128.W))
   val q=Reg(new DecodedTensor);val k=Reg(new DecodedTensor);val score=Reg(new DecodedTensor);val probability=Reg(new DecodedTensor)
   val completingGroup=RegInit(false.B);val completionIndex=RegInit(0.U(2.W))
-  val producedCapacity=if(bf16Gdn)2*maxCommands else maxCommands
+  val producedCapacity=if(bf16Gdn||bf16QkNormRope)2*maxCommands else maxCommands
   val producedIndexBits=log2Ceil(producedCapacity)
   val producedCount=RegInit(0.U(log2Ceil(producedCapacity+1).W))
   val starts=Reg(Vec(producedCapacity,UInt(64.W)));val ends=Reg(Vec(producedCapacity,UInt(64.W)))
+  val allocationStarts=Reg(Vec(producedCapacity,UInt(64.W)));val allocationEnds=Reg(Vec(producedCapacity,UInt(64.W)))
   val producedValid=RegInit(VecInit(Seq.fill(producedCapacity)(false.B)))
   val managedHistory=RegInit(VecInit(Seq.fill(producedCapacity)(false.B)))
   val virtualCount=RegInit(0.U(8.W));val vStarts=Reg(Vec(maxCommands,UInt(64.W)));val vEnds=Reg(Vec(maxCommands,UInt(64.W)))
@@ -98,6 +107,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val opcode=cmd(7,0);val engine=cmd(10,8);val waitEvent=cmd(39,24);val signalEvent=cmd(55,40)
   val isMatrix=opcode===0x20.U||opcode===0x23.U||opcode===0x24.U
   val isSoftmax=opcode===0x33.U;val kv=opcode===0x41.U
+  val qkCommandPolicy=bf16QkNormRope.B && (opcode===0x32.U||opcode===0x34.U)
   val gdnCommand=bf16Gdn.B && opcode===0x30.U
   val reader=Module(new Record128Reader);val tensor=Module(new TypedTensorReader)
   io.memory<>reader.io.memory;reader.io.response<>io.response
@@ -118,10 +128,11 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   tensor.io.request.bits.tableLimit:=cfg.descriptorLimit;tensor.io.request.bits.entryCount:=cfg.descriptors
   tensor.io.request.bits.root:=roots(slot(1,0))
   if(bf16Gdn){when(slot>=3.U){tensor.io.request.bits.root:=Mux(slot===3.U,policy(2)(79,56),policy(2)(103,80))}}
+  if(bf16QkNormRope){when(slot===3.U){tensor.io.request.bits.root:=policy(2)(79,56)}}
   tensor.io.request.bits.regions:=cfg.regions
   val gdnOperation=policy(1)(71,64)
   val extraWrite=if(bf16GdnCore) (slot===4.U && gdnOperation===1.U)||(slot===3.U && gdnOperation===4.U) else bf16Gdn.B && slot===4.U
-  tensor.io.request.bits.writeAccess:=slot===2.U || extraWrite
+  tensor.io.request.bits.writeAccess:=slot===2.U || extraWrite || (bf16QkNormRope.B && slot===3.U)
   tensor.io.result.ready:=state===tensorGet
   io.launch.ready:=state===idle && !poison
   io.result.valid:=state===finish;io.result.bits.status:=status;io.result.bits.completed:=completed
@@ -147,10 +158,11 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val virtual=(0 until maxCommands).map(i=>i.U<virtualCount && overlap(address,end,vStarts(i),vEnds(i))).reduce(_||_)
     val current=bf16Gdn.B && stateValid && overlap(address,end,currentHistoryAddress,currentHistoryEnd)
     val recurrent=bf16GdnCore.B && stateValid && overlap(address,end,currentStateAddress,currentStateEnd)
-    val source=bf16GdnCore.B && (0 until sourceCount).map(i=>sourceValid(i) && overlap(address,end,sourceStarts(i),sourceEnds(i))).reduce(_||_)
+    val source=(bf16GdnCore||bf16QkNormRope).B && (0 until sourceCount).map(i=>sourceValid(i) && overlap(address,end,sourceStarts(i),sourceEnds(i))).reduce(_||_)
     val parameter=bf16GdnCore.B && stateValid && parameterRoles.indices.map(i=>
       overlap(address,end,committedParameterStarts(i),committedParameterEnds(i))).reduce(_||_)
-    !(published || virtual || current || recurrent || source || parameter)
+    val allocation=bf16QkNormRope.B && (0 until producedCapacity).map(i=>producedValid(i) && overlap(address,end,allocationStarts(i),allocationEnds(i))).reduce(_||_)
+    !(published || virtual || current || recurrent || source || parameter || allocation)
   }
   def fresh(t:DecodedTensor):Bool=freshSpan(t.address,t.paddedEnd)
   def sourceAllowed(t:DecodedTensor,role:UInt):Bool={
@@ -164,7 +176,8 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val checkpointParameters=parameterRoles.zipWithIndex.map{case(sourceRole,i)=> !stateValid || Mux(role===sourceRole.U,
       t.address===committedParameterStarts(i) && t.paddedEnd===committedParameterEnds(i),
       !overlap(t.address,t.paddedEnd,committedParameterStarts(i),committedParameterEnds(i)))}.reduce(_&&_)
-    roles && !published && !oldHistory && !oldState && checkpointParameters
+    val allocation=bf16QkNormRope.B && (0 until producedCapacity).map(i=>producedValid(i) && overlap(t.address,t.paddedEnd,allocationStarts(i),allocationEnds(i))).reduce(_||_)
+    roles && !published && !allocation && !oldHistory && !oldState && checkpointParameters
   }
   def rememberSource(t:DecodedTensor,role:UInt):Unit={
     sourceValid(role.pad(4)):=true.B;sourceStarts(role.pad(4)):=t.address;sourceEnds(role.pad(4)):=t.paddedEnd
@@ -203,7 +216,8 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       roTable(l.commandBase,l.commandLimit) && roTable(l.descriptorBase,l.descriptorLimit)
     cfg:=l;pc:=0.U;completed:=0.U;status:=0.U;cmd:=0.U;producedCount:=0.U;virtualCount:=0.U;group:=0.U;completingGroup:=false.B
     jobs:=0.U;useful:=0.U;executed:=0.U;written:=0.U;boundFence:=false.B;previousSignal:=0.U
-    if(bf16GdnCore){clearTransaction()}
+    if(bf16GdnCore||bf16QkNormRope){clearTransaction()}
+    if(bf16QkNormRope){qkProjectedValid:=VecInit(Seq.fill(3)(false.B));qkNormalizedValid:=VecInit(Seq.fill(2)(false.B))}
     producedValid:=VecInit(Seq.fill(producedCapacity)(false.B));managedHistory:=VecInit(Seq.fill(producedCapacity)(false.B));boundGdn:=false.B
     events:=VecInit(Seq.fill(eventSlots)(false.B));events(0):=true.B
     when(!ok){status:=Status.Bounds.U;state:=finish}.otherwise{state:=fetch}
@@ -216,14 +230,14 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     .otherwise{state:=decode}
   }
   when(state===decode){
-    val supported=if(s.qwen35GdnOnly) opcode===0x30.U||opcode===0x20.U else if(s.qwen35QkvOnly) opcode===0x20.U else
+    val supported=if(s.qwen35GdnOnly) opcode===0x30.U||opcode===0x20.U else if(s.qwen35QkvOnly) opcode===0x20.U||(bf16QkNormRope.B&&(opcode===0x32.U||opcode===0x34.U)) else
       isMatrix||opcode===0x30.U||opcode===0x32.U||isSoftmax||opcode===0x34.U||opcode===0x35.U||kv
     val correctEngine=engine===Mux(isMatrix,2.U,Mux(kv,4.U,3.U))
     val rootsOK=roots(0)=/=0xffffff.U&&roots(2)=/=0xffffff.U&&roots(0)<cfg.descriptors&&roots(2)<cfg.descriptors&&
       Mux(isSoftmax,roots(1)===0xffffff.U,roots(1)=/=0xffffff.U&&roots(1)<cfg.descriptors)
     val expectedWait=Mux(group===1.U,qkCommand(55,40),softCommand(55,40))
     val dependency=Mux(group===0.U,events(waitEvent(log2Ceil(eventSlots)-1,0)),waitEvent===expectedWait) &&
-      (!bf16GdnCore.B || waitEvent===previousSignal)
+      (!(bf16GdnCore||bf16QkNormRope).B || waitEvent===previousSignal)
     val groupOrder=Mux(group===1.U,isSoftmax,Mux(group===2.U,opcode===0x24.U,!isSoftmax && opcode=/=0x24.U))
     when(!supported|| !correctEngine){fail(Status.Unsupported.U)}
     .elsewhen(cmd(23,11)=/=0.U|| !rootsOK|| !groupOrder){fail(Status.Malformed.U)}
@@ -239,7 +253,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       when(slot===2.U){
         policyIndex:=tensors(0).tail;policySlot:=0.U
         state:=Mux(kv,validate,policyIssue)
-      }.elsewhen(bf16Gdn.B && (slot===4.U || (bf16GdnCore.B && slot===3.U && (gdnOperation===4.U || gdnOperation===5.U)))){state:=validate}.otherwise{
+      }.elsewhen(bf16QkNormRope.B && slot===3.U){state:=validate}.elsewhen(bf16Gdn.B && (slot===4.U || (bf16GdnCore.B && slot===3.U && (gdnOperation===4.U || gdnOperation===5.U)))){state:=validate}.otherwise{
         when(slot===0.U&&isSoftmax){tensors(1):=0.U.asTypeOf(new DecodedTensor);slot:=2.U}.otherwise{slot:=slot+1.U}
         state:=tensorIssue
       }
@@ -255,6 +269,15 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     when(r.status=/=0.U){fail(r.status)}
     .elsewhen(r.requestTag=/=Cat(cfg.epoch,pc,0.U(32.W))){fail(Status.Protocol.U)}
     .elsewhen(r.data(31,8)=/=0.U || prefixRevisit || policyRevisit){fail(Status.Malformed.U)}
+    .elsewhen(qkCommandPolicy){
+      val expectedKind=Mux(policySlot===0.U,0x20.U,Mux(policySlot===1.U,0x24.U,0x25.U))
+      when(policySlot>2.U || r.data(7,0)=/=expectedKind || (policySlot===2.U)=/=(next===0xffffff.U)){fail(Status.Malformed.U)}
+      .elsewhen(policySlot===2.U){
+        val gate=r.data(79,56);val hasGate=opcode===0x32.U && policy(1)(65,64)===0.U
+        when(Mux(hasGate,gate===0xffffff.U||gate>=cfg.descriptors,gate=/=0xffffff.U)){fail(Status.Malformed.U)}
+        .elsewhen(hasGate){slot:=3.U;state:=tensorIssue}.otherwise{state:=validate}
+      }.otherwise{policyIndex:=next;policySlot:=policySlot+1.U;state:=policyIssue}
+    }
     .elsewhen(gdnCommand){
       if(bf16GdnCore){
         val terminalPolicy=policySlot===1.U && r.data(63,56)===(if(bf16GdnBlock)3 else 2).U &&
@@ -346,6 +369,49 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val sm=isSoftmax&&group===1.U&&same(a,score)&&shape3(d,s.heads.U,q.dims(0),q.dims(0))&&sfuPolicy(1)
     val pv=opcode===0x24.U&&group===2.U&&same(a,probability)&&shape2(b,q.dims(0),s.kv.U)&&
       shape2(d,q.dims(0),s.hidden.U)&&matrixPolicy(q.dims(0),s.headDim.U,q.dims(0),false.B)
+    val nativeQkNorm=WireDefault(false.B);val nativePartialRope=WireDefault(false.B)
+    val qkLive=WireDefault(false.B);val qkFresh=WireDefault(false.B);val qkDistinct=WireDefault(true.B)
+    val ap=policy(1);val ax=policy(2)
+    val qkRole=ap(65,64);val qkBase=ap(99,68);val qkCount=ap(107,100)
+    val qkHeads=Mux(qkRole===0.U,8.U(16.W),2.U(16.W))
+    val qkWidth=Mux(qkRole===0.U,2048.U(16.W),512.U(16.W))
+    val qkBytes=Mux(qkRole===0.U,qkCount.pad(64)<<12,qkCount.pad(64)<<10)
+    val qkOffset=Mux(qkRole===0.U,qkBase.pad(64)<<12,qkBase.pad(64)<<10)
+    val qkInputOffset=Mux(opcode===0x32.U && qkRole===0.U,qkBase.pad(64)<<13,qkOffset)
+    val qkActiveA=a.address+qkInputOffset;val qkActiveD=d.address+qkOffset
+    if(bf16QkNormRope){
+      val gate=tensors(3);val program=policy(0);val normQ=opcode===0x32.U && qkRole===0.U
+      val usedCount=Mux(normQ,4.U,3.U)
+      val indices=tensors.flatMap(_.prefixIndices)++policyIndices.take(3)
+      val used=indices.indices.map(i=>if(i<12)(i/3).U<usedCount else true.B)
+      qkDistinct:=(for(i<-indices.indices;j<-i+1 until indices.size)yield !used(i)|| !used(j)||indices(i)=/=indices(j)).reduce(_&&_)
+      val programOK=program(7,0)===0x20.U && program(55,32)=/=0xffffff.U &&
+        program(71,56)===opcode && program(79,72)===2.U && program(87,80)===1.U &&
+        program(91,88)===5.U && program(95,92)===5.U && program(103,96)===16.U && program(127,104)===0.U
+      val policyOK=ap(7,0)===0x24.U && ap(55,32)=/=0xffffff.U && ap(63,56)===1.U && qkRole<=1.U &&
+        ap(67,66)===Mux(opcode===0x32.U,0.U,1.U) && ap(115,108)===Mux(opcode===0x32.U,"hc1".U,"hb1".U) &&
+        ap(127,116)===0.U && qkCount>0.U && qkCount<=128.U && qkBase.pad(34)+&qkCount<=m
+      val extraOK=finishRecord(ax,0x25.U) && ax(127,112)===0.U &&
+        Mux(normQ,ax(79,56)=/=0xffffff.U,ax(79,56)===0xffffff.U)
+      val common=qkCommandPolicy && m>0.U && m<=128.U && m<=s.maxTokens.U && programOK && policyOK && extraOK &&
+        Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && b.tail===0xffffff.U && d.tail===0xffffff.U && shape2(d,m,qkWidth)
+      nativeQkNorm:=common && opcode===0x32.U && ax(111,80)===0.U &&
+        shape2(a,m,Mux(qkRole===0.U,4096.U,512.U)) && shape2(b,1.U,256.U) &&
+        (!normQ || (shape2(gate,m,2048.U) && gate.dtype===5.U && gate.tail===0xffffff.U))
+      nativePartialRope:=common && opcode===0x34.U && shape2(a,m,qkWidth) &&
+        b.dims(0)>0.U && shape2(b,b.dims(0),64.U) && ax(111,80).pad(65)+qkCount<=b.dims(0)
+      val knownProjection=qkProjectedValid(qkRole) && a.address===qkProjected(qkRole) &&
+        m===qkRows(qkRole) && qkBase===qkWindowBase(qkRole) && qkCount===qkWindowCount(qkRole)
+      val knownNorm=qkNormalizedValid(qkRole) && a.address===qkNormalized(qkRole) &&
+        m===qkRows(qkRole) && qkBase===qkWindowBase(qkRole) && qkCount===qkWindowCount(qkRole)
+      val weightRole=Mux(opcode===0x32.U,4.U+qkRole,6.U)
+      qkLive:=Mux(opcode===0x32.U,knownProjection,knownNorm) && readonly(b) && sourceAllowed(b,weightRole) &&
+        liveSpan(qkActiveA,qkActiveA+Mux(normQ,qkBytes<<1,qkBytes))
+      val operands=Seq(a,b,d,gate)
+      val disjoint=(for(i<-operands.indices;j<-i+1 until operands.size)yield
+        (j==3).B && !normQ || !overlap(operands(i).address,operands(i).paddedEnd,operands(j).address,operands(j).paddedEnd)).reduce(_&&_)
+      qkFresh:=disjoint && fresh(d) && readwrite(d) && (!normQ || (fresh(gate)&&readwrite(gate)))
+    }
     val nativeGdn=WireDefault(false.B);val gdnProjection=WireDefault(false.B);val gdnLive=WireDefault(false.B)
     val gdnFresh=WireDefault(false.B);val gdnDistinct=WireDefault(true.B)
     val corePrep=WireDefault(false.B);val coreRecurrent=WireDefault(false.B);val coreNorm=WireDefault(false.B);val coreFence=WireDefault(false.B)
@@ -542,16 +608,21 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
         !overlap(operands(i).address,operands(i).paddedEnd,operands(j).address,operands(j).paddedEnd)).reduce(_&&_)
       gdnFresh:=disjoint && fresh(d) && fresh(hout) && readwrite(d) && readwrite(hout)
     }
-    val supportedOrdinary=validDTypes && plainTails && (!s.projectionOnly.B || nativeProjection) &&
-      (!extendedProjection || nativeProjection) && (nativeProjection||norm||dense||vector||rope||activation||append||qk||sm||pv)
+    val supportedOrdinary=(validDTypes||nativeQkNorm||nativePartialRope) && plainTails && (!s.projectionOnly.B || nativeProjection||nativeQkNorm||nativePartialRope) &&
+      (!extendedProjection || nativeProjection) && (nativeProjection||nativeQkNorm||nativePartialRope||norm||dense||vector||rope||activation||append||qk||sm||pv)
     val coreOperation=corePrep || coreRecurrent || coreNorm || coreFence || blockRmsNorm || blockElementwise
-    val publicationSlots=Mux(coreFence,0.U,Mux(nativeGdn || coreRecurrent,2.U,1.U))
+    val publicationSlots=Mux(coreFence,0.U,Mux(nativeGdn || coreRecurrent || (nativeQkNorm && qkRole===0.U),2.U,1.U))
+    val qkProjectionLive=sourceLive && readonly(a) && readonly(b) && sourceAllowed(a,0.U) && sourceAllowed(b,role+1.U) &&
+      !qkProjectedValid(role) && !overlap(a.address,a.paddedEnd,b.address,b.paddedEnd) &&
+      (0 until 3).map(i=> !qkProjectedValid(i) || (qkRows(i)===m && qkWindowBase(i)===tokenBase && qkWindowCount(i)===tokenCount)).reduce(_&&_)
+    val qkProjectionFresh=noAlias && fresh(d) && readwrite(d)
     when(!Mux(s.qwen35GdnOnly.B,nativeGdn||gdnProjection||coreOperation,supportedOrdinary)){fail(Status.Unsupported.U)}
+    .elsewhen((nativeQkNorm||nativePartialRope) && !qkDistinct){fail(Status.Malformed.U)}
     .elsewhen((nativeGdn||gdnProjection||coreOperation) && !gdnDistinct){fail(Status.Malformed.U)}
     .elsewhen(bf16GdnCore.B && (coreFence =/= (pc+1.U===cfg.commands))){fail(Status.Malformed.U)}
-    .elsewhen(!Mux(nativeGdn||coreOperation||(bf16GdnCore.B && gdnProjection),gdnLive,sourceLive)){fail(Status.Dependency.U)}
-    .elsewhen(!Mux(nativeGdn||coreOperation||(bf16GdnCore.B && gdnProjection),gdnFresh,noAlias && (!gdnProjection || !overlap(a.address,a.paddedEnd,b.address,b.paddedEnd)) &&
-      Mux(nativeProjection,freshSpan(activeD,activeDEnd),fresh(d)))||
+    .elsewhen(!Mux(nativeGdn||coreOperation||(bf16GdnCore.B && gdnProjection),gdnLive,Mux(nativeQkNorm||nativePartialRope,qkLive,Mux(bf16QkNormRope.B&&nativeProjection,qkProjectionLive,sourceLive)))){fail(Status.Dependency.U)}
+    .elsewhen(!Mux(nativeGdn||coreOperation||(bf16GdnCore.B && gdnProjection),gdnFresh,Mux(nativeQkNorm||nativePartialRope,qkFresh,Mux(bf16QkNormRope.B&&nativeProjection,qkProjectionFresh,noAlias && (!gdnProjection || !overlap(a.address,a.paddedEnd,b.address,b.paddedEnd)) &&
+      Mux(nativeProjection,freshSpan(activeD,activeDEnd),fresh(d)))))||
       producedCount+&publicationSlots>producedCapacity.U||virtualCount>=maxCommands.U){fail(Status.Permission.U)}
     .elsewhen(coreFence){boundFence:=true.B;state:=complete}
     .elsewhen(qk){q:=a;k:=b;score:=d;qkCommand:=cmd;group:=1.U
@@ -572,6 +643,14 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
         bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
         bound.writeBytes:=projectionBytes;mainPublishBytes:=projectionBytes
       }
+      if(bf16QkNormRope){when(nativeQkNorm||nativePartialRope){
+        bound.kind:=Mux(nativeQkNorm,QwenOwnerKind.QkNorm256.U,QwenOwnerKind.PartialRope64.U)
+        bound.a:=qkActiveA;bound.dst:=qkActiveD;bound.m:=qkCount;bound.n:=qkHeads;bound.k:=256.U
+        bound.qkRole:=qkRole;bound.qkPositionBase:=ax(111,80);bound.qkTrigTokens:=b.dims(0)
+        bound.c:=Mux(nativeQkNorm && qkRole===0.U,tensors(3).address+qkOffset,0.U)
+        bound.activationBf16:=true.B;bound.outputBf16:=true.B;bound.weightBf16:=true.B
+        bound.writeBytes:=Mux(nativeQkNorm && qkRole===0.U,qkBytes<<1,qkBytes);mainPublishBytes:=qkBytes
+      }}
       when(gdnProjection){
         bound.n:=n;bound.k:=(if(bf16GdnBlock)a.dims(1) else 1024.U);bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
       }
@@ -629,7 +708,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     when(status=/=0.U){state:=finish}
     .otherwise{
       events(completionCommand(55,40)(log2Ceil(eventSlots)-1,0)):=true.B;completed:=completed+1.U
-      if(bf16GdnCore){previousSignal:=completionCommand(55,40)}
+      if(bf16GdnCore||bf16QkNormRope){previousSignal:=completionCommand(55,40)}
       when(completingGroup && completionIndex<2.U){completionIndex:=completionIndex+1.U}
       .otherwise{
         when(!boundFence){
@@ -637,6 +716,25 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
           starts(outputIndex):=bound.dst;ends(outputIndex):=bound.dst+mainPublishBytes
           producedValid(outputIndex):=true.B;managedHistory(outputIndex):=false.B
           producedCount:=producedCount+1.U
+        }
+        if(bf16QkNormRope){
+          val outputIndex=producedCount(producedIndexBits-1,0)
+          allocationStarts(outputIndex):=tensors(2).address;allocationEnds(outputIndex):=tensors(2).paddedEnd
+          when(bound.kind===QwenOwnerKind.Dense.U){
+            val role=policy(2)(65,64)
+            qkProjectedValid(role):=true.B;qkProjected(role):=tensors(2).address;qkRows(role):=tensors(0).dims(0)
+            qkWindowBase(role):=policy(2)(99,68);qkWindowCount(role):=policy(2)(107,100)
+            rememberSource(tensors(0),0.U);rememberSource(tensors(1),role+1.U)
+          }.elsewhen(bound.kind===QwenOwnerKind.QkNorm256.U){
+            qkNormalizedValid(bound.qkRole):=true.B;qkNormalized(bound.qkRole):=tensors(2).address
+            rememberSource(tensors(1),4.U+bound.qkRole)
+            when(bound.qkRole===0.U){
+              val gateIndex=(producedCount+1.U)(producedIndexBits-1,0)
+              starts(gateIndex):=bound.c;ends(gateIndex):=bound.c+mainPublishBytes
+              allocationStarts(gateIndex):=tensors(3).address;allocationEnds(gateIndex):=tensors(3).paddedEnd
+              producedValid(gateIndex):=true.B;managedHistory(gateIndex):=false.B;producedCount:=producedCount+2.U
+            }
+          }.elsewhen(bound.kind===QwenOwnerKind.PartialRope64.U){rememberSource(tensors(1),6.U)}
         }
         if(bf16GdnCore){
           when(boundFence){

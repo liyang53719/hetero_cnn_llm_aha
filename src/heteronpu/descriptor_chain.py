@@ -27,6 +27,8 @@ class RecordType(IntEnum):
     GDN_POLICY = 0x21
     GDN_STATE_ROOTS = 0x22
     GDN_AUX_ROOTS = 0x23
+    ATTENTION_POLICY = 0x24
+    ATTENTION_AUX = 0x25
     KV_ADDRESS = 0x30
     KV_FORMAT = 0x31
     QUANTIZATION = 0x40

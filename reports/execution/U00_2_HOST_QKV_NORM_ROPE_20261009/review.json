@@ -1,0 +1,25 @@
+{
+  "status": "STATIC_REVIEW_NO_BLOCKERS_AFTER_TWO_FIXES",
+  "scope": [
+    "QkNorm256Owner",
+    "PartialRope64Owner",
+    "BlockScalarFloat primitive flags",
+    "HostBlockCommands",
+    "QwenOwnerKernel",
+    "HostBlockTop"
+  ],
+  "review_findings": [
+    "New QKV profile legacy Activation would wait on an absent owner; fixed all non-Dense/Norm/RoPE kinds to Unsupported.",
+    "Q/K/V projections must share full row count and active window; explicit cross-role check added.",
+    "Fresh CI output hash collection initially looked at top-level result; fixed to preserve each actual run including recovery."
+  ],
+  "pending": [
+    "Actual production seven-command numerical chain",
+    "Production core Scalar flags path runtime",
+    "Full cold128/carried128",
+    "Attention and full attention block"
+  ],
+  "original_arithmetic_preserved": true,
+  "original_native_full_gate_preserved": true,
+  "independent_review_read_only": true
+}

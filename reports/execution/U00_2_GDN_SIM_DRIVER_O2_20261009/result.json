@@ -1,0 +1,31 @@
+{
+  "base_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "change": "Only effective user-driver optimization changes from O0 to O2; generated-model effective optimization was already O2",
+  "fast_math_enabled": false,
+  "fp_contract": "off",
+  "full_block_acceptance": "PENDING_ORIGINAL_JOB",
+  "full_core_acceptance": "PENDING_INCOMPLETE",
+  "hardware_rtl_source_changed_by_this_fix": false,
+  "measured_runtime_speedup": null,
+  "new_dut_executed": false,
+  "original_block_timeout_seconds": 18000,
+  "original_core_timeout_seconds": 7200,
+  "resource_count_changed": false,
+  "source_sha256": {
+    "chisel/continuous_prefill/scripts/run_host_bf16_gdn_gate.sh": "84dbd0c2b4fc93bd802b0630a3cc487d7f30cce5ee1b0825d98875271f2110b1",
+    "chisel/continuous_prefill/tests/test_host_bf16_gdn_build_profile.py": "414df15be9a05290422f541b48511380732c61e4683e1736fd7582654a5a2ccc",
+    "doc/U00_2_GDN_CORE_TIMEOUT_DRIVER_BUILD_20261009_CN.md": "f7266e7a818918f83fc464bf79f48c05466de53e0af07ae3a5576026fd3f4b0e"
+  },
+  "status": "BUILD_PARAMETER_REGRESSION_PASS_ACTUAL_RUNTIME_PENDING",
+  "tests": {
+    "normal": {
+      "passed": 3,
+      "subtests_passed": 9
+    },
+    "optimized_python": {
+      "passed": 3,
+      "subtests_passed": 9
+    }
+  },
+  "timeout_evidence_sha256": "441638934721a79cb8ec03a0fa0e86699d8aa4fb31f81b8dd6bbb06a2b222d81"
+}

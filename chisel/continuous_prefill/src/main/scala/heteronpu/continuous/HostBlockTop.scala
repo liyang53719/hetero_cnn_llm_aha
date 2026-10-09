@@ -10,7 +10,8 @@ import gemmini.{HeteroBF16FmaPre,HeteroBF16FmaMul,HeteroBF16FmaPost,HeteroBF16Fm
   * payload injection, or second iDMA exists. Metadata and owner traffic share
   * the same arbiter, mailbox adapter, original upstream backend and AXI port.
   */
-class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false) extends Module {
+class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false) extends Module {
+  require(!bf16QkNormRope || bf16Qkv,"QK Norm/RoPE requires the explicit QKV profile")
   require(!bf16V || (pipelined && s.qwen35VOnly), "native V requires the pipelined Qwen3.5 V-only profile")
   require(!bf16Qkv || (pipelined && s.qwen35QkvOnly), "native QKV requires the pipelined Qwen3.5 QKV-only profile")
   require(!bf16Gdn || (pipelined && s.qwen35GdnOnly), "native GDN requires the pipelined GDN profile")
@@ -35,7 +36,7 @@ class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=fal
     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
   })
   dontTouch(io)
-  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock))
+  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope))
   val hub=Module(new SharedMemoryArbiter(2))
   val dmaPoison=Wire(Bool())
   cmd.io.launch<>io.launch;io.result<>cmd.io.result;io.completion<>cmd.io.completion
@@ -74,8 +75,8 @@ class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=fal
   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
   io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
 }
-class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false) extends Module {
-  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
+class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false) extends Module {
+  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
   val pre=Module(new HeteroBF16FmaPre);val a=IO(chiselTypeOf(pre.io));a<>pre.io;dontTouch(a)
   val mul=Module(new HeteroBF16FmaMul);val b=IO(chiselTypeOf(mul.io));b<>mul.io;dontTouch(b)
   val post=Module(new HeteroBF16FmaPost);val c=IO(chiselTypeOf(post.io));c<>post.io;dontTouch(c)
@@ -179,4 +180,18 @@ object EmitHostBf16GdnBlock extends App {
     new HostBlockCollection(QwenBlockShape.qwen35Gdn(),16,true,burst,false,false,bf16Gdn=true,bf16GdnCore=true,bf16GdnBlock=true),
     firtoolOpts=Array("--preserve-values=all","-disable-all-randomization")))
   Files.writeString(out.resolve("SCOPE.json"),s"""{"experimental_bf16_gdn":true,"experimental_gdn_core":true,"experimental_gdn_block":true,"default_enabled":false,"scope":"GDN_LAYER0_BLOCK_M1","policy_version":3,"hidden":1024,"ffn":3584,"gdn_channels":6144,"conv_kernel":4,"max_tokens":1,"heads":16,"head_dim":128,"managed_state_contexts":1,"scalar_service_shared":true,"softplus_enabled":true,"recurrent_state_dtype":"FP32","input_norm_dut":true,"output_projection_supported":true,"residual_supported":true,"ffn_supported":true,"full_block_supported":true,"numerical_acceptance":false,"burst_writes":${burst},"logical_matrix_engines":1,"physical_matrix_slices":8,"pinned_idma_instances":1,"timing_signoff":false}\n""")
+}
+
+/** Default-off production Host QKV -> frozen QK Norm256 -> partial64 RoPE.
+  * Only the command subchain is represented; attention and FFN are not admitted.
+  */
+object EmitHostBf16QkNormRope extends App {
+  require(args.length>=1 && args.length<=2,"OUT [burstWrites=0|1]")
+  require(args.length<2 || Set("0","1").contains(args(1)))
+  val burst=args.length==2 && args(1)=="1"
+  val out=Paths.get(args(0));require(out.isAbsolute && !Files.exists(out),"preserve old outputs");Files.createDirectories(out)
+  Files.writeString(out.resolve("HostBlockTop.sv"),ChiselStage.emitSystemVerilog(
+    new HostBlockCollection(QwenBlockShape.qwen35Qkv(),16,true,burst,false,false,bf16Qkv=true,bf16QkNormRope=true),
+    firtoolOpts=Array("--preserve-values=all","-disable-all-randomization")))
+  Files.writeString(out.resolve("SCOPE.json"),s"""{"experimental_bf16_qkv":true,"experimental_qk_norm_rope":true,"default_enabled":false,"scope":"QKV_NORM256_PARTIAL64_COMMAND_SUBCHAIN","projection_policy_version":2,"attention_policy_version":1,"norm_recipe":"C1","rope_recipe":"B1","hidden":1024,"q_context":2048,"packed_q":4096,"kv":512,"max_tokens":128,"q_heads":8,"kv_heads":2,"head_dim":256,"rotary_dim":64,"scalar_service_shared":true,"primitive_flags_shared":true,"attention_supported":false,"ffn_supported":false,"full_block_supported":false,"numerical_acceptance":false,"burst_writes":${burst},"logical_matrix_engines":1,"physical_matrix_slices":8,"pinned_idma_instances":1,"timing_signoff":false}\n""")
 }

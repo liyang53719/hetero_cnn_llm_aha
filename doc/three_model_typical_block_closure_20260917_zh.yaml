@@ -1177,3 +1177,16 @@ Qwen35候选QKV命令子链_20261008:
   证据: reports/execution/U00_2_GDN_RECURRENT_IDMA_MASK_20261009/result.json
   生产数值: 修复提交的完整core及block终态仍待持久CI；旧FAIL及原native门限不改
   对应: C03.2/C04.2/C05局部修复；U00.2 ongoing；U01 to do；C02.2 OPEN；Q35B未关闭
+
+生产Host_QKV_Norm256_partial64_RoPE_20261009:
+  状态: owner实际数值与前端控制PASS；七命令生产数值PENDING
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, U00.2]
+  入口: doc/U00_2_HOST_QKV_NORM_ROPE_20261009_CN.md
+  证据: reports/execution/U00_2_HOST_QKV_NORM_ROPE_20261009/result.json
+  实际接线: 默认关闭生产Host复用Dense_MatrixPipelineService_单Scalar_单iDMA；标准Dense及Norm32_RoPE34三根与显式policy24_aux25，内部kind14_15不别名
+  数值冻结: Norm沿原reduce16_serial16_PWL32_一次Newton和gamma1加weight；RoPE沿原四产品与两终值BF16边界；未换算术或放宽原native门限
+  已验证: Norm20头25800个Scalar节点及flags逐位；RoPE3840个Scalar与3840个BF16边界逐位；Host七命令114记录前端控制和默认off通过，前端owner完成由测试替身提供
+  真实内存合同: 同一输入与窗口的QKV实际完成后才可读Norm，Norm实际完成后才可读RoPE；完整allocation防alias，active写span发布；QNorm与gate两span全部ACK后发布
+  验收执行: GitHub持久CI同一实际DUT每case七命令；独立fresh官方capture及integer_C参考；只上传两紧凑JSON，不上传权重或NPZ
+  仍未完成: [七命令实际Host数值及故障恢复, cold128_carried128全部token, layer3_DUT_inputNorm, prefix_KV_QK_softmax_PV_sigmoidgate_O, residual_postnorm_FFN_down_residual, 三模型完整block]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；C03.2_C04.2_C05与S01_Q35A不关闭

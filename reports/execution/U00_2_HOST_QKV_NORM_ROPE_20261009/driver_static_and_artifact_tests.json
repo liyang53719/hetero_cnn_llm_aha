@@ -1,0 +1,35 @@
+{
+  "status": "PASS_SOURCE_AND_ARTIFACT_UNIT_CHECKS_ONLY",
+  "actual_seven_command_dut_executed": false,
+  "tests": {
+    "artifact_audit": 19,
+    "fresh_attention_reference_and_chain_integration": 8,
+    "typed_descriptor": 98
+  },
+  "cpp_syntax": "g++ -std=c++17 -fsyntax-only with retained same-interface VHostBlockTop.h; no compile/link/run",
+  "retained_windows": {
+    "cold0": {
+      "token_base": 0,
+      "position_base": 0
+    },
+    "carried127": {
+      "token_base": 127,
+      "position_base": 255
+    }
+  },
+  "commands": 7,
+  "descriptor_records": 114,
+  "metadata_requests": 121,
+  "write_bytes_per_token": 24576,
+  "native_full_block_gate": {
+    "baseline": false,
+    "avx2": false
+  },
+  "files": {
+    "chisel/continuous_prefill/tests/host_bf16_qkv_rope.cpp": "44b3fcead7e2b08dcfb8c0149c64098b84e24aba8086446deecb8a361daeb25c",
+    "chisel/continuous_prefill/tests/host_physical_axi.h": "c328df0b560c26b310b1e8f8b9b91d23acf68a59f5ce1b1122c201a2534ff02e",
+    "chisel/continuous_prefill/scripts/host_bf16_qkv_rope_fixture.py": "f64460256c26e80de3b9658488c177990f70a553e51f67ffcec1b4a008c5c412",
+    "chisel/continuous_prefill/scripts/host_bf16_qkv_rope_execution.py": "c773b3e0bc53c6a86373ff038fb33997b0b24aa0b5c10f64c8464c753b39490d",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_rope_execution.py": "999f1503f75cf23ac78389aecc099953cb23c21c97015f22d51a526e000575fb"
+  }
+}

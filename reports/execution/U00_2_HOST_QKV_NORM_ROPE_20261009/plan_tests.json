@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "command": "PYTHONPATH=/tmp/qkv_test_dependencies:src python -m pytest -o addopts='' -q tests/test_typical_block_plan.py tests/test_block_checklist.py",
+  "exit_code": 0,
+  "terminal_summary": "91 passed in 13.20s",
+  "source_sha256": {
+    "doc/block_checklist.yaml": "c441504e503142634d800ba06c1782d56c24ee66308e11c7c6a9aaa6f7a6baf2",
+    "doc/three_model_typical_block_closure_20260917_zh.yaml": "e7caf620e6daf894989f75e708ebde77947475783143345e2b642c1e35fdb375",
+    "tests/test_typical_block_plan.py": "7a0bb3e1704b765b3397a20a95a07703a05bb263ab8da2453ec46492eed0037d",
+    "tests/test_block_checklist.py": "967352af01823c3be146e277424201334ae9ae330d7717daef2f1c25478af957"
+  },
+  "parent_tasks": 46,
+  "leaf_items": 61,
+  "parent_counts": {
+    "ongoing": 12,
+    "to do": 34
+  },
+  "leaf_counts": {
+    "done": 13,
+    "to do": 47,
+    "ongoing": 1
+  }
+}

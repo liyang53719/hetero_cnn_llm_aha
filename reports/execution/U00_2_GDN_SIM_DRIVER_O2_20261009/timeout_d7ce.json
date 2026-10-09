@@ -1,0 +1,53 @@
+{
+  "status": "VERIFIED_TERMINAL_CORE_TIMEOUT_NUMERICAL_ACCEPTANCE_PENDING",
+  "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "run_id": 37900097873,
+  "job_id": 113737768573,
+  "acceptance_job_id": 113779976988,
+  "github_run_conclusion": "failure",
+  "artifact_id": 11610947281,
+  "zip_sha256": "7f474e8ccef8bdf20bdd51b9094443122e9365bc982054abbf3c2b68c21345a9",
+  "github_zip_digest_verified": true,
+  "source_hashes_verified": 481,
+  "source_input_hash_count": 62,
+  "build_package_elf_rtl_identity_bound": true,
+  "actual_post_execution_dut_identity_verified": false,
+  "canonical_core_acceptance": false,
+  "numerical_acceptance": "PENDING_INCOMPLETE",
+  "classification": "TimeoutExpired of original 7200-second DUT budget, not an observed numeric mismatch or Memory status3",
+  "elapsed_seconds": 7257.331838244,
+  "error": {
+    "message": "Command '['/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_core_pass_ci/host_build/obj/VHostBlockTop', '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_core_pass_ci/fresh_fixture', '/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_core_pass_ci/host_build/core_cold_carried']' timed out after 7199.999988603 seconds",
+    "type": "TimeoutExpired"
+  },
+  "last_complete_ack": "HOST_BF16_GDN_CORE_WRITE_ACK run=1 pc=5 cycle=13708458 address=4851952768 bus_bytes=64 write_bytes=64 mask=18446744073709551615 error=0 final=0",
+  "decoded_state_position": {
+    "token": 1,
+    "pc": 5,
+    "state_base": 4851280640,
+    "offset": 672128,
+    "head_zero_based": 10,
+    "row_zero_based": 32,
+    "column_zero_based": 96
+  },
+  "launch_identity_sha256": "ab3e3e14d775906cc778d3048427376c79df55eaceb82eccdc860e5716efefbd",
+  "partial_progress_inference": "The exact hashed driver sequentially completes launch0, requiring8 commands, fence, byte-exact verifyMemory and ACK accounting before launch1. Therefore observed run1 establishes progress beyond those driver checks. Full independent Python audit and final identity checks never completed.",
+  "inference_source": "chisel/continuous_prefill/tests/host_bf16_gdn_core.cpp:444-494",
+  "inference_source_sha256": "622300eae3eebcfac7273d374302910bbe2ee1e569e434635c1f232b1af33b75",
+  "available_trace_scope": {
+    "host_build/core_cold_carried.log": 4096,
+    "reference.log": 4096
+  },
+  "diagnostic_full_file_hashes_claimed_by_ci": {
+    "host_build/core_cold_carried.log": "0b6a1263e318316a041a89b825966e2b9a16d513c4f9f12f85fe07bea3fd4da2",
+    "reference.log": "cc0cb726712d84920ff4e5132f9760536af5c072ed01c0f88013e9661b5e77d0"
+  },
+  "full_dut_log_independently_read_locally": false,
+  "reference_elapsed_seconds": 52.52379103199999,
+  "reference_max_rss_kib": 589744,
+  "dut_cpu_rss_peak_or_sampler_available": false,
+  "stage_wall_clock_throughput_available": false,
+  "raw_numerical_ddr_independently_rechecked_locally": false,
+  "timeout_job_log_sha256": "d60410b700fe9de00fc94a1dd19c6f6a197fd4a2120ab53b0f88b384599bd9c2",
+  "rerun_cancel_or_budget_extension_performed": false
+}

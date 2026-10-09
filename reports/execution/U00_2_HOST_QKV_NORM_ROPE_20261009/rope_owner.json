@@ -1,0 +1,62 @@
+{
+  "status": "PASS_COMPILE_SYNTHETIC_REAL_OWNER_ONLY",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/PartialRope64OwnerSpec.scala": "4e22821008dd3124b714ca1730f418581075d0e94d730915ad9a28d9cc2574fe"
+  },
+  "compile": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 9.004651704002754,
+    "peak_rss_kib": 333352,
+    "source_hashes_unchanged": true
+  },
+  "synthetic": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 46.02064095300739,
+    "peak_rss_kib": 333352,
+    "source_hashes_unchanged": true
+  },
+  "real": {
+    "exit_code": 0,
+    "guard": null,
+    "seconds": 25.013793409991194,
+    "peak_rss_kib": 262924,
+    "source_hashes_unchanged": true
+  },
+  "fixture_manifest_sha256": "890da192e5d11d95661db68e5b3b8210f205ac165a8ed12a0bad952160e413ab",
+  "real_scalar_nodes": 3840,
+  "real_conversion_nodes": 3840,
+  "real_native_prefix_values": 1280,
+  "real_native_prefix_bit_mismatches": 0,
+  "real_tail_elements": 3840,
+  "real_tail_bit_mismatches": 0,
+  "full_host_chain_executed": false,
+  "outputs": {
+    "cold0/q": {
+      "actual_path": "/tmp/partial_rope64_owner_20261009T0807/actual/cold0/actual_rope_q.bf16le",
+      "bytes": 4096,
+      "sha256": "0f34adc1e31e96db74b207cfc130085860962138f608a8bf42a35dadc59971f7",
+      "recipe_bit_mismatches": 0
+    },
+    "cold0/k": {
+      "actual_path": "/tmp/partial_rope64_owner_20261009T0807/actual/cold0/actual_rope_k.bf16le",
+      "bytes": 1024,
+      "sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+      "recipe_bit_mismatches": 0
+    },
+    "carried127/q": {
+      "actual_path": "/tmp/partial_rope64_owner_20261009T0807/actual/carried127/actual_rope_q.bf16le",
+      "bytes": 4096,
+      "sha256": "e58700c1682854d29c4bf9ccf7a8362ff04aab529a6a146ad4d1c360dcc783d0",
+      "recipe_bit_mismatches": 0
+    },
+    "carried127/k": {
+      "actual_path": "/tmp/partial_rope64_owner_20261009T0807/actual/carried127/actual_rope_k.bf16le",
+      "bytes": 1024,
+      "sha256": "6c951c6d987d315a33bb21b5246fdda75388c291b10628b98e6d95b03c42da69",
+      "recipe_bit_mismatches": 0
+    }
+  }
+}

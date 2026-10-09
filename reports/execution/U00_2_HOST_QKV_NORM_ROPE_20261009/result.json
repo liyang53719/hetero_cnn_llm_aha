@@ -1,0 +1,26 @@
+{
+  "status": "PASS_OWNERS_AND_FRONTEND_ONLY_PRODUCTION_CHAIN_PENDING",
+  "default_enabled": false,
+  "scope": "QKV_NORM256_PARTIAL64_COMMAND_SUBCHAIN",
+  "numerical_host_chain_pass": false,
+  "whole_attention_block_pass": false,
+  "full128_pass": false,
+  "shared_scalar_primitive_flags_pass": true,
+  "norm_owner_heads": 20,
+  "norm_owner_scalar_nodes": 25800,
+  "rope_scalar_nodes": 3840,
+  "rope_bf16_boundaries": 3840,
+  "frontend_only_mock_owner": true,
+  "commands": 7,
+  "descriptors": 114,
+  "expected_ack_bytes_per_token": 24576,
+  "fixture_manifest_sha256": "890da192e5d11d95661db68e5b3b8210f205ac165a8ed12a0bad952160e413ab",
+  "fresh_capture_this_local_owner_gate": 0,
+  "retained_actual_projection_windows": 2,
+  "native_full_block_gate_closed": false,
+  "plan_states": {
+    "U00.2": "ongoing",
+    "U01": "to do",
+    "C02.2": "OPEN"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "status": "PASS_OWNER_ONLY_REAL_SCALAR_FROZEN_RECIPE",
+  "implementation_files": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/QkNorm256OwnerSpec.scala": "b35776bad002dfecfc48c0fd196c9028f02b00f291fa77e6d444887ca0aa77c2"
+  },
+  "frozen_candidate_files_unchanged": 19,
+  "fixture_manifest_sha256": "890da192e5d11d95661db68e5b3b8210f205ac165a8ed12a0bad952160e413ab",
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "layer_id": 3,
+  "cases": [
+    "cold0",
+    "carried127"
+  ],
+  "heads_checked": 20,
+  "actual_scalar_operations_checked": 25800,
+  "exact_checks": [
+    "request op/a/b",
+    "result bits",
+    "raw primitive flags",
+    "norm BF16",
+    "Q opaque gate",
+    "aggregate flags",
+    "last mean_eps",
+    "last inverse"
+  ],
+  "acknowledged_bytes": 18432,
+  "commit_fenced_by_all_norm_and_gate_acks": true,
+  "matrix_rerun": false,
+  "full_host_chain_rerun": false,
+  "native_framework_acceptance_claimed": false,
+  "one_external_production_scalar": true,
+  "stages": {
+    "compile": {
+      "exit_code": 0,
+      "seconds": 8.001831123998272,
+      "max_rss_kib": 325212,
+      "guard": null,
+      "source_hashes_unchanged": true
+    },
+    "QkNorm256OwnerSpec": {
+      "exit_code": 0,
+      "seconds": 32.01009419199545,
+      "max_rss_kib": 325212,
+      "guard": null,
+      "source_hashes_unchanged": true
+    },
+    "QkNorm256OwnerRealSpec": {
+      "exit_code": 0,
+      "seconds": 36.01006667899492,
+      "max_rss_kib": 325212,
+      "guard": null,
+      "source_hashes_unchanged": true
+    }
+  },
+  "minimum_mem_available_bytes": 1913303040,
+  "minimum_tmp_free_bytes": 928591872
+}

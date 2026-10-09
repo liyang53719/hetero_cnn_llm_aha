@@ -69,6 +69,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     val matrixAcceptedSteps=if(externalMatrix)Some(Input(UInt(64.W)))else None
     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
     val scalarService=if(externalScalar)Some(Flipped(new GdnScalarClient))else None
+    val scalarPrimitiveFlags=if(externalScalar)Some(Output(UInt(5.W)))else None
+    val scalarPrimitiveFlagsValid=if(externalScalar)Some(Output(Bool()))else None
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
     val phase=Output(UInt(5.W));val stageCommit=Output(Bool());val committedPhase=Output(UInt(5.W))
     val resetRequired=Output(Bool());val readBytes=Output(UInt(64.W));val writeBytes=Output(UInt(64.W))
@@ -100,6 +102,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     port.request.ready:=available && scalar.io.request.ready
     when(available && port.request.valid){scalar.io.request.valid:=true.B;scalar.io.request.bits:=port.request.bits}
     port.result.valid:=busy && scalar.io.result.valid;port.result.bits:=scalar.io.result.bits;port.error:=scalar.io.error
+    io.scalarPrimitiveFlags.get:=scalar.io.primitiveFlags
+    io.scalarPrimitiveFlagsValid.get:=busy && scalar.io.primitiveFlagsValid
     when(busy){scalar.io.result.ready:=port.result.ready}
     when(port.request.fire){busy:=true.B}
     when(port.result.fire){busy:=false.B}

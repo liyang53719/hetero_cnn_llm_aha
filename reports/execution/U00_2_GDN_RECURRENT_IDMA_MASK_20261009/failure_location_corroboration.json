@@ -1,0 +1,26 @@
+{
+  "status": "FAILURE_LOCATION_CORROBORATED_BY_HASH_BOUND_LAYOUT_AND_LOG_TAIL",
+  "commit": "904dccf2830d8caa50501041ca4895995ac41ad8",
+  "launch_sha256": "ab3e3e14d775906cc778d3048427376c79df55eaceb82eccdc860e5716efefbd",
+  "launch_file_matches_failure_compact": true,
+  "state_out0_base": 4850083520,
+  "recurrent_out0_base": 4850075328,
+  "last_observed_ack_address": 4850148608,
+  "last_observed_ack_hex": "0x121176500",
+  "matched_layout_indices": {
+    "head": 0,
+    "column_start": 16,
+    "key_row": 127
+  },
+  "address_formula": "state_out0 + 0*(128*128*4) + 127*(128*4) + 16*4",
+  "last_ack_cycle": 1900852,
+  "last_ack_bytes": 64,
+  "last_ack_error": 0,
+  "last_ack_final": 0,
+  "visible_prior_lower_32_byte_output_acks": [],
+  "bounded_tail_does_not_establish_absence_of_earlier_output_ack": true,
+  "upper_32_byte_output_expected_same_aligned_address": 4850075328,
+  "upper_32_byte_mask": "0xffffffff00000000",
+  "full_log_unavailable": true,
+  "no_rerun_or_local_execution": true
+}

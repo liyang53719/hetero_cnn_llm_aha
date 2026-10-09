@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/usr/bin/g++",
+    "-std=c++17",
+    "-fsyntax-only",
+    "-ffp-contract=off",
+    "-fno-fast-math",
+    "-I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_qkv_projection_build_20261009T0146Z/obj",
+    "-I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_bf16_v_tools/share/verilator/include",
+    "-I/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_bf16_v_tools/share/verilator/include/vltstd",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/chisel/continuous_prefill/tests/host_bf16_gdn_block.cpp"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.9772557700052857
+}

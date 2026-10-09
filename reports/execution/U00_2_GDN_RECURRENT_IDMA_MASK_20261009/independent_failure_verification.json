@@ -1,0 +1,49 @@
+{
+  "actual_dut_identity_verified": false,
+  "artifact_upload_allowlist": [
+    "compact/source_input_hashes.json",
+    "compact/summary.json"
+  ],
+  "build_profile": "core",
+  "canonical_core_pass": false,
+  "cross_host_byte_equivalence_claimed": false,
+  "elapsed_seconds": 1463.532784571,
+  "error": {
+    "message": "production Host GDN core execution failed; no acceptance",
+    "type": "ValueError"
+  },
+  "fault_restore_supported": false,
+  "ffn_dut": false,
+  "full_block_supported": false,
+  "gated_norm_supported": true,
+  "input_norm_dut": false,
+  "mode": "pass",
+  "native_core_gate_pass": null,
+  "native_full_block_gate_pass": null,
+  "native_operator_gate_pass": null,
+  "numerical_acceptance": false,
+  "numerical_acceptance_scope": "canonical_gdn_core_only",
+  "o_projection_dut": false,
+  "pending_gates": [
+    "fault_injection",
+    "reset_recovery",
+    "checkpoint_restore",
+    "native_core_acceptance",
+    "full_block_acceptance"
+  ],
+  "recurrent_state_supported": true,
+  "residual_dut": false,
+  "scope": "GDN_CORE_M1_BEFORE_OUTPUT_PROJECTION",
+  "source_commit": "904dccf2830d8caa50501041ca4895995ac41ad8",
+  "stage": "actual_host_core_cold_carried",
+  "status": "FAIL_PRODUCTION_HOST_GDN_CORE_GATE",
+  "identity_matches_verified_build": true,
+  "reference_elapsed_seconds": 93.94848089100002,
+  "input_hash_count": 62,
+  "terminal_failure_line": "HOST_BF16_GDN_CORE_FAIL: core command failed with status 3",
+  "underlying_internal_cause_established": false,
+  "status_3_symbol_in_exact_commit": "Status.Memory",
+  "last_observed_command_pc": 5,
+  "command_pc5_kind": "recurrent",
+  "numerical_threshold_failure_established": false
+}

@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "python",
+    "-m",
+    "pytest",
+    "-o",
+    "addopts=",
+    "-q",
+    "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_execution.py",
+    "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_execution.py",
+    "chisel/continuous_prefill/tests/test_host_bf16_gdn_fresh_gate.py",
+    "chisel/continuous_prefill/tests/test_host_bf16_gdn_block_ci.py"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 1.0737501800031168,
+  "log_sha256": "e4e08ae20dc0157933098422219dddde7655492e3e2094299a0d1e3ed64fc563",
+  "tests": 47,
+  "subtests": 66
+}

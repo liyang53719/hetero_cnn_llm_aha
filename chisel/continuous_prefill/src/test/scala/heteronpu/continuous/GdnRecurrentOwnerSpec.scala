@@ -94,8 +94,11 @@ trait GdnRecurrentTestSupport { self: ChiselScalatestTester with Matchers =>
     val want=beats(outBase,gold.out)++beats(newBase,gold.state)
     val actual=scala.collection.mutable.Map.empty[BigInt,BigInt]
     val seenMasks=scala.collection.mutable.Map.empty[BigInt,BigInt]
+    val outputWrites=scala.collection.mutable.ArrayBuffer.empty[BigInt]
+    val fullMask=(BigInt(1)<<64)-1
     var elapsed=0;var issued=0;var acknowledged=0;var injected=false
     def step(n:Int):Unit={d.clock.step(n);elapsed+=n}
+    def collected(base:BigInt,n:Int)= (0 until n/64).flatMap(i=>(0 until 64).map(j=>((actual.getOrElse(base+i*64,BigInt(0))>>(8*j))&255).toByte)).toArray
     setJob(d,heads,dk,dv,cold,generation);d.io.job.ready.expect(true.B);d.io.job.valid.poke(true.B);step(1);d.io.job.valid.poke(false.B)
     if(fault=="scalar")d.io.scalarFault.poke(true.B)
     while(!d.io.done.valid.peek().litToBoolean && elapsed<100000+heads*dk*dv*40){
@@ -103,23 +106,50 @@ trait GdnRecurrentTestSupport { self: ChiselScalatestTester with Matchers =>
         val r=req(d);assert(r.tag==((tag<<32)|issued));assert((r.address&63)==0)
         d.io.scalarHold.poke((issued%3==0).B);step(1+issued%5);assert(req(d)==r,"request changed under backpressure")
         d.io.scalarHold.poke(false.B);d.io.memory.ready.poke(true.B);step(1);d.io.memory.ready.poke(false.B)
-        val last=r.write&&r.address==outBase+gold.out.length-64&&r.mask==BigInt("ffffffff00000000",16)
-        val inject= !injected && (if(fault=="read"||fault=="tag") !r.write else fault=="final-ack"&&last)
+        val last=r.write&&r.address==outBase+gold.out.length-64&&r.mask==fullMask
+        val secondTileLast=r.write&&r.address==newBase+(dk-1)*dv*4+16*4
+        val inject= !injected && (if(fault=="read"||fault=="tag") !r.write else
+          (fault=="final-ack"&&last)||((fault=="second-tile-state-ack"||fault=="second-tile-reset")&&secondTileLast))
         if(inject)injected=true
+        val mask=(0 until 64).foldLeft(BigInt(0)){(m,i)=>if(r.mask.testBit(i))m|(BigInt(255)<<(i*8))else m}
         if(r.write){
+          // Match the real retained-iDMA interface, including its rejection
+          // of the old upper-only ffffffff00000000 output mask.
+          assert(r.mask>0 && (r.mask&(r.mask+1))==0,"write mask is not a low contiguous prefix")
+          assert(r.mask==fullMask,"recurrent state and paired output writes must both be full 64-byte beats")
           assert(want.contains(r.address),"write outside staging spans")
           assert((seenMasks.getOrElse(r.address,BigInt(0))&r.mask)==0,"duplicate staging-byte write")
           seenMasks(r.address)=seenMasks.getOrElse(r.address,BigInt(0))|r.mask
-          val mask=(0 until 64).foldLeft(BigInt(0)){(m,i)=>if(r.mask.testBit(i))m|(BigInt(255)<<(i*8))else m}
           assert((r.data&mask)==(want(r.address)&mask),s"actual FP32/BF16 arithmetic mismatch $label address=${r.address.toString(16)}")
-          assert(if(r.address>=outBase) Set(BigInt("ffffffff",16),BigInt("ffffffff00000000",16)).contains(r.mask) else r.mask==(BigInt(1)<<64)-1)
-          if(!inject){actual(r.address)=(actual.getOrElse(r.address,BigInt(0))& ~mask)|(r.data&mask);acknowledged+=r.mask.bitCount}
+          if(r.address>=outBase){
+            val h=((r.address-outBase)/(dv*2)).toInt
+            val firstColumn=(((r.address-outBase)%(dv*2))/2).toInt
+            assert(firstColumn%32==0 && firstColumn+32<=dv,"output escaped its complete tile pair")
+            for(i<-0 until dk;j<-Seq(firstColumn,firstColumn+16)){
+              val stateAddress=newBase+((h*dk+i)*dv+j)*4
+              assert(actual.contains(stateAddress),"output issued before both tiles' state ACKs")
+            }
+            outputWrites+=r.address
+          }
         }else{assert(reads.contains(r.address));assert(r.mask==0);if(cold)assert(r.address<oldBase||r.address>=oldBase+in.past.length,"cold read stale state")}
         step(if(last)31 else 2);d.io.done.valid.expect(false.B);d.io.done.bits.stateCommitted.expect(false.B)
+        if(inject&&fault=="second-tile-reset"){
+          // Both halves have been computed and the low half is buffered, but
+          // the second tile's final state ACK is outstanding. Reset the owner,
+          // arithmetic service and modeled transport together, discarding it.
+          assert(outputWrites.isEmpty,"unpaired output was issued before reset")
+          assert(acknowledged==(2*dk-1)*64,"reset did not reach the second tile's final state ACK")
+          init(d);step(17)
+          d.io.memory.valid.expect(false.B);d.io.done.valid.expect(false.B)
+          d.io.job.ready.expect(true.B);d.io.resetRequired.expect(false.B)
+          println(s"GDN_RECURRENT_RTL_CASE label=$label reset_pending_pair=true acknowledged_bytes=$acknowledged")
+          return Expected(collected(outBase,gold.out.length),collected(newBase,gold.state.length))
+        }
         d.io.response.bits.data.poke((if(r.write)BigInt(0)else reads(r.address)).U)
         d.io.response.bits.tag.poke((r.tag^(if(inject&&fault=="tag")BigInt(1)else BigInt(0))).U)
         d.io.response.bits.error.poke((inject&&fault!="tag").B);d.io.response.valid.poke(true.B);d.io.response.ready.expect(true.B)
         step(1);d.io.response.valid.poke(false.B);issued+=1
+        if(r.write && !inject){actual(r.address)=(actual.getOrElse(r.address,BigInt(0))& ~mask)|(r.data&mask);acknowledged+=r.mask.bitCount}
       }
     }
     assert(d.io.done.valid.peek().litToBoolean,s"deadlock $label cycles=$elapsed")
@@ -128,10 +158,19 @@ trait GdnRecurrentTestSupport { self: ChiselScalatestTester with Matchers =>
     d.io.done.bits.stateCommitted.expect((fault=="none").B);d.io.done.bits.generation.expect((generation+(if(fault=="none")1 else 0)).U)
     def completion=Seq(d.io.done.bits.tag.peek().litValue,d.io.done.bits.status.peek().litValue,d.io.done.bits.writeBytes.peek().litValue,d.io.done.bits.cycles.peek().litValue,d.io.done.bits.stateCommitted.peek().litValue,d.io.done.bits.generation.peek().litValue)
     val held=completion;step(17);assert(completion==held,"unstable terminal result")
-    if(fault=="none"){assert(actual.toMap==want,"not every output/state byte was actually written");assert(acknowledged==gold.out.length+gold.state.length,"incorrect acknowledged byte total")}
+    if(fault=="none"){
+      assert(actual.toMap==want,"not every output/state byte was actually written")
+      assert(acknowledged==gold.out.length+gold.state.length,"incorrect acknowledged byte total")
+      assert(outputWrites.toSeq==(0 until heads*dv/32).map(i=>outBase+i*64),"missing, repeated or out-of-order output pair, including the tail pair")
+    }
+    if(Set("read","tag","final-ack","second-tile-state-ack").contains(fault))assert(injected,s"fault was not exercised: $fault")
+    if(fault=="second-tile-state-ack"){
+      assert(outputWrites.isEmpty,"a failed second tile published unpaired output")
+      assert(acknowledged==(2*dk-1)*64,"wrong acknowledged state byte count before failed pair")
+    }
+    if(fault=="final-ack")assert(!actual.contains(outBase+gold.out.length-64),"failed final output ACK committed data")
     println(s"GDN_RECURRENT_RTL_CASE label=$label heads=$heads dk=$dk dv=$dv cold=$cold status=$status acknowledged_bytes=$acknowledged cycles=${d.io.done.bits.cycles.peek().litValue}")
     d.io.done.ready.poke(true.B);step(1);d.io.done.ready.poke(false.B);d.io.job.ready.expect((fault=="none").B)
-    def collected(base:BigInt,n:Int)= (0 until n/64).flatMap(i=>(0 until 64).map(j=>((actual.getOrElse(base+i*64,BigInt(0))>>(8*j))&255).toByte)).toArray
     Expected(collected(outBase,gold.out.length),collected(newBase,gold.state.length))
   }
 }
@@ -148,7 +187,10 @@ class GdnRecurrentOwnerSpec extends AnyFlatSpec with ChiselScalatestTester with 
       val carried=in.copy(v=vector(32),past=first.state);val carry=expected(carried,1,16,32,false)
       run(d,carried,carry,1,16,32,false,1,"carried_decode_m1")
       assert(!java.util.Arrays.equals(carry.state,expected(carried,1,16,32,true).state))
-      for(fault<-Seq("read","tag","scalar","final-ack")){init(d);run(d,in,cold,1,16,32,true,0,fault,fault);d.io.resetRequired.expect(true.B);d.clock.step(5);d.io.job.ready.expect(false.B)}
+      for(fault<-Seq("read","tag","scalar","second-tile-state-ack","final-ack")){init(d);run(d,in,cold,1,16,32,true,0,fault,fault);d.io.resetRequired.expect(true.B);d.clock.step(5);d.io.job.ready.expect(false.B)}
+      init(d);run(d,in,cold,1,16,32,true,0,"reset_unpaired_output","second-tile-reset")
+      val afterPairReset=in.copy(v=vector(32))
+      run(d,afterPairReset,expected(afterPairReset,1,16,32,true),1,16,32,true,0,"reset_pending_pair_then_new_cold")
       for((g,b)<-Seq((-80f,.5f),(.1f,.5f),(-.7f,1.1f),(Float.NaN,.5f))){
         init(d);val bad=in.copy(gates=bytes(Seq(bits(g),bits(b))++Seq.fill(14)(BigInt(0)),32))
         run(d,bad,cold,1,16,32,true,0,"invalid_gate_domain","domain")
@@ -163,15 +205,37 @@ class GdnRecurrentOwnerSpec extends AnyFlatSpec with ChiselScalatestTester with 
       init(d)
       val tiny=java.lang.Float.intBitsToFloat(1);val tinyIn=Inputs(bytes(Seq.fill(16)(bits(-0f)),32),bytes(Seq.fill(16)(bits(.5f)),32),bytes(Seq.fill(32)(bits(tiny)),32),gates,bytes(Seq.fill(16*32)(bits(-tiny)),32))
       run(d,tinyIn,expected(tinyIn,1,16,32,false),1,16,32,false,4,"signed_zero_gradual_underflow")
-      for(bad<-0 until 9){
+      for(bad<-0 until 10){
         init(d);setJob(d,1,16,32,false,7);val j=d.io.job.bits
-        bad match{case 0=>j.stateOut.poke(oldBase.U);case 1=>j.output.poke(qBase.U);case 2=>j.key.poke((kBase+4).U);case 3=>j.tokens.poke(2.U);case 4=>j.heads.poke(0.U);case 5=>j.keyDim.poke(128.U);case 6=>j.expectedGeneration.poke(6.U);case 7=>j.cold.poke(true.B);case 8=>j.stateOut.poke(((BigInt(1)<<56)-64).U)}
+        bad match{case 0=>j.stateOut.poke(oldBase.U);case 1=>j.output.poke(qBase.U);case 2=>j.key.poke((kBase+4).U);case 3=>j.tokens.poke(2.U);case 4=>j.heads.poke(0.U);case 5=>j.keyDim.poke(128.U);case 6=>j.expectedGeneration.poke(6.U);case 7=>j.cold.poke(true.B);case 8=>j.stateOut.poke(((BigInt(1)<<56)-64).U);case 9=>j.valueDim.poke(16.U)}
         d.io.job.valid.poke(true.B);d.clock.step();d.io.job.valid.poke(false.B);d.io.done.valid.expect(true.B)
         d.io.done.bits.status.expect((if(bad==6||bad==7)Status.Dependency else Status.Bounds).U)
         d.io.memory.valid.expect(false.B);d.io.done.bits.stateCommitted.expect(false.B)
       }
       // A new cold job after the common reset cannot expose stale tile contents.
       init(d);run(d,in,cold,1,16,32,true,0,"reset_then_cold")
+    }
+  }
+
+  it should "write complete tail pairs across head boundaries" in {
+    test(new GdnRecurrentArithmeticHarness(2,16,96)).withAnnotations(Seq(VerilatorBackendAnnotation)){d=>
+      init(d)
+      val random=new scala.util.Random(350892)
+      def vector(n:Int)=bytes(Seq.fill(n)(bits((random.nextDouble()*.4-.2).toFloat)),32)
+      val gates=bytes(Seq(-.7f,.65f,-.2f,.4f).grouped(2).flatMap(g=>g.map(bits)++Seq.fill(14)(BigInt(0))).toSeq,32)
+      val in=Inputs(vector(32),vector(32),vector(192),gates,vector(2*16*96))
+      val first=run(d,in,expected(in,2,16,96,true),2,16,96,true,0,"tail_pair_two_heads_cold")
+      val carried=in.copy(v=vector(192),past=first.state)
+      run(d,carried,expected(carried,2,16,96,false),2,16,96,false,1,"tail_pair_two_heads_carried")
+    }
+  }
+
+  it should "reject geometries with an unpaired 16-column output tile" in {
+    for(dv<-Seq(16,48,80,112)){
+      val error=intercept[IllegalArgumentException]{
+        _root_.circt.stage.ChiselStage.emitCHIRRTL(new GdnRecurrentOwner(1,16,dv))
+      }
+      assert(error.getMessage.contains("complete pairs of 16-column output tiles"))
     }
   }
 }

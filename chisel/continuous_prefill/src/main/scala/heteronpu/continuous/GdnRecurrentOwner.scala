@@ -18,8 +18,10 @@ import chisel3.util._
   * different sum tree/exp; passing the fixed oracle alone is not that gate.
   *
   * Only 16 value columns are retained in a 128x512-bit local state tile.
-  * The tile is filled before reads; cold jobs never read stateIn. StateOut and
-  * BF16 output are staged, acknowledged beat by beat, and committed together only
+  * The tile is filled before reads; cold jobs never read stateIn. Two adjacent
+  * 16-column BF16 outputs form one aligned 64-byte write, issued only after both
+  * tiles' StateOut writes are acknowledged. StateOut and BF16 output are staged,
+  * acknowledged beat by beat, and committed together only
   * after the final output ACK. An error locks this owner until joint reset of
   * owner, shared arithmetic service and transport. M=1 jobs compose decode or
   * prefill one token at a time; multi-token jobs fail closed in this revision.
@@ -27,7 +29,8 @@ import chisel3.util._
 class GdnRecurrentOwner(maxHeads: Int = 16, keyDim: Int = 128, valueDim: Int = 128) extends Module {
   require(maxHeads > 0 && maxHeads <= 16)
   require(keyDim > 0 && keyDim <= 128 && keyDim % 16 == 0)
-  require(valueDim > 0 && valueDim <= 128 && valueDim % 32 == 0)
+  require(valueDim > 0 && valueDim <= 128 && valueDim % 32 == 0,
+    "valueDim must contain complete pairs of 16-column output tiles")
   val io = IO(new GdnRecurrentOwnerPort)
   val idle :: readQ :: waitQ :: readK :: waitK :: readV :: waitV :: readG :: waitG :: prepareTile :: readState :: waitState :: scalarIssue :: scalarWait :: saveRow :: loadRow :: writeState :: waitStateWrite :: writeOutput :: waitOutput :: finish :: locked :: Nil = Enum(22)
   val state = RegInit(idle)
@@ -47,6 +50,7 @@ class GdnRecurrentOwner(maxHeads: Int = 16, keyDim: Int = 128, valueDim: Int = 1
   val prediction = Reg(Vec(16, UInt(32.W)))
   val delta = Reg(Vec(16, UInt(32.W)))
   val output = Reg(Vec(16, UInt(32.W)))
+  val outputLow = RegInit(0.U(256.W))
   val logDecay = Reg(UInt(32.W))
   val beta = Reg(UInt(32.W))
   val decayFactor = Reg(UInt(32.W))
@@ -74,8 +78,7 @@ class GdnRecurrentOwner(maxHeads: Int = 16, keyDim: Int = 128, valueDim: Int = 1
     rowIndex.pad(64) * (valueDim * 4).U + (column.pad(64) << 2)
   val outputOffset = head.pad(64) * (valueDim * 2).U + ((column.pad(64) >> 5) << 6)
   val outputBf16 = VecInit(output.map(TensorMath.bf16Rne)).asUInt
-  val outputData = Mux(column(4), Cat(outputBf16, 0.U(256.W)), Cat(0.U(256.W), outputBf16))
-  val outputMask = Mux(column(4), "hffffffff00000000".U(64.W), "h00000000ffffffff".U(64.W))
+  val outputData = Cat(outputBf16, outputLow)
   io.memory.valid := state === readQ || state === readK || state === readV || state === readG ||
     state === readState || state === writeState || state === writeOutput
   io.memory.bits.write := state === writeState || state === writeOutput
@@ -84,7 +87,7 @@ class GdnRecurrentOwner(maxHeads: Int = 16, keyDim: Int = 128, valueDim: Int = 1
     readG -> (job.gates + (head.pad(64) << 6)), readState -> (job.stateIn + stateOffset),
     writeState -> (job.stateOut + stateOffset), writeOutput -> (job.output + outputOffset)))
   io.memory.bits.data := Mux(state === writeState, row.asUInt, Mux(state === writeOutput, outputData, 0.U))
-  io.memory.bits.mask := Mux(state === writeOutput, outputMask, Mux(state === writeState, Fill(64, 1.U(1.W)), 0.U))
+  io.memory.bits.mask := Mux(state === writeState || state === writeOutput, Fill(64, 1.U(1.W)), 0.U)
   io.memory.bits.tag := Cat(job.tag, sequence)
   io.response.ready := state === waitQ || state === waitK || state === waitV || state === waitG ||
     state === waitState || state === waitStateWrite || state === waitOutput
@@ -107,7 +110,7 @@ class GdnRecurrentOwner(maxHeads: Int = 16, keyDim: Int = 128, valueDim: Int = 1
   when(io.job.fire) {
     val j = io.job.bits
     job := j; head := 0.U; vectorBeat := 0.U; column := 0.U; rowIndex := 0.U; lane := 0.U
-    sequence := 0.U; status := Status.Ok.U; cycles := 0.U; bytes := 0.U
+    sequence := 0.U; status := Status.Ok.U; cycles := 0.U; bytes := 0.U; outputLow := 0.U
     val qBytes = j.heads.pad(66) * (keyDim * 4).U
     val vBytes = j.heads.pad(66) * (valueDim * 4).U
     val gBytes = j.heads.pad(66) << 6
@@ -168,11 +171,20 @@ class GdnRecurrentOwner(maxHeads: Int = 16, keyDim: Int = 128, valueDim: Int = 1
         }
         when(state === waitStateWrite) {
           bytes := bytes + 64.U
-          when(rowIndex === (keyDim - 1).U) { state := writeOutput }
+          when(rowIndex === (keyDim - 1).U) {
+            when(!column(4)) {
+              // Retained iDMA accepts only low-prefix masks. Hold the first
+              // half until the adjacent tile's final state ACK, then write
+              // their combined BF16 output with a full 64-byte mask.
+              outputLow := outputBf16
+              column := column + 16.U
+              state := prepareTile
+            }.otherwise { state := writeOutput }
+          }
             .otherwise { rowIndex := rowIndex + 1.U; state := loadRow }
         }
         when(state === waitOutput) {
-          bytes := bytes + 32.U
+          bytes := bytes + 64.U
           when(column + 16.U === valueDim.U) {
             when(head + 1.U === job.heads) { state := finish }
               .otherwise { head := head + 1.U; vectorBeat := 0.U; column := 0.U; state := readQ }

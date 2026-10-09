@@ -102,7 +102,7 @@ def audit_artifacts(fixture, output, log, *, session, _profile=None):
     """Check actual evidence; requires generate_fixture's live, unforgeable session."""
     block = _profile is not None
     authority = _profile.GdnBlockFixtureSession if block else GdnCoreFixtureSession
-    commands, recurrent_pc, fence_pc = (17, 6, 16) if block else (8, 5, 7)
+    commands, fence_pc = (17, 16) if block else (8, 7)
     dense_macs = _profile.ACTUAL_DENSE_MACS if block else ACTUAL_DENSE_MACS
     require(type(session) is authority, 'live fixture session required; saved receipts are not authority')
     fixture, output, log = Path(fixture), Path(output), Path(log)
@@ -184,7 +184,7 @@ def audit_artifacts(fixture, output, log, *, session, _profile=None):
                 if kind == 'WRITE_REQUEST':
                     address, size = int(event['address']), int(event['bus_bytes'])
                     require(pending is None and op_bytes and ack_bytes < op_bytes and size in range(64, 1025, 64), 'overlapping or invalid write request')
-                    require(address % 64 == 0 and (address & 4095)+size <= 4096, 'invalid AXI request geometry')
+                    require(address % 64 == 0 and (address & 1023)+size <= 1024, 'invalid AXI request geometry')
                     require(any(s['address'] <= address and address+size <= s['address']+s['bytes'] for s in op['writes']), 'request outside stage output')
                     require(int(event['final']) in (0, 1), 'final request flag')
                     pending = dict(address=address, remaining=size, cycle=cycle, final=int(event['final']))
@@ -194,7 +194,7 @@ def audit_artifacts(fixture, output, log, *, session, _profile=None):
                     _expect(event, bus_bytes=64, error=0, write_bytes=mask.bit_count())
                     span = next((s for s in op['writes'] if s['address'] <= address < address+64 <= s['address']+s['bytes']), None)
                     require(span is not None, 'ACK outside exact output span')
-                    require(mask == (1 << 64)-1 or (pc == recurrent_pc and span['name'] == 'recurrent' and mask in (0xffffffff, 0xffffffff00000000)), 'unsupported output strobe')
+                    require(mask == (1 << 64)-1, 'unsupported output strobe: production GDN stages require complete 64B beats')
                     name, offset = span['name'], address-span['address']
                     for byte in range(64):
                         if mask >> byte & 1:
@@ -254,6 +254,7 @@ def audit_artifacts(fixture, output, log, *, session, _profile=None):
                 write_ack_bytes=total_bytes, published_bytes=total_bytes, committed_generation=token+1,
                 canonical_bit_mismatches=0, native_core_gate='UNASSIGNED_DIAGNOSTIC_ONLY', full_block_supported=int(block))
         _expect(event, frozen_operator_gate='PASS' if cumulative_fixed_pass else 'FAIL')
+        require(physical_beats * 64 == total_bytes, 'full-beat physical write accounting')
         require(int(event['read_beats']) == int(event['read_ack_beats']) and int(event['read_beats']) > launch['descriptor_records']+commands, 'read ACK accounting')
         require(raw['ddr_after.bin'] == expected, 'whole physical DDR differs from accepted strobed-write replay')
         if token:

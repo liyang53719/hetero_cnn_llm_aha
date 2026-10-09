@@ -3,9 +3,11 @@ package heteronpu.continuous
 import chisel3._
 import _root_.circt.stage.ChiselStage
 import java.nio.file.{Files,Paths}
-/** Test-only public-port wrapper. Backend is the original pinned iDMA RTL. */
+/** Test-only public-port wrapper using the production streaming configuration.
+  * Backend is the original pinned iDMA RTL; ordinary stores share that backend.
+  */
 class IdmaWeightBurstProbe extends Module {
-  val dut=Module(new RetainedIdmaWeightBurstAdapter(16))
+  val dut=Module(new RetainedIdmaWeightBurstAdapter(16, streaming=true))
   val io=IO(chiselTypeOf(dut.io));io<>dut.io;dontTouch(io)
 }
 object EmitIdmaWeightBurstProbe extends App {

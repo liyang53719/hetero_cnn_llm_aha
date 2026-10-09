@@ -257,8 +257,7 @@ class Test {
     auto &p=active(); bool allowed=false;
     for (const auto &s:p.writes) if (within(beat.address,beat.address+64,s.address,s.address+s.bytes)) {
       allowed=true;
-      check(beat.mask==~0ULL || (p.kind==RecurrentPc && s.name=="recurrent" &&
-            (beat.mask==0xffffffffULL || beat.mask==0xffffffff00000000ULL)),"unexpected output strobe");
+      check(beat.mask==~0ULL,"unexpected output strobe: production GDN stages require complete 64B beats");
     }
     check(allowed,"write outside exact output/state spans or into guard");
   }
@@ -331,7 +330,7 @@ class Test {
       read.valid=true; read.address=d.io_axi_ar_bits_addr; read.id=d.io_axi_ar_bits_id;
       read.total=read.remaining=d.io_axi_ar_bits_len+1;
       check(read.total<=16 && d.io_axi_ar_bits_size==6 && d.io_axi_ar_bits_burst==1 &&
-            ((read.address&4095)+64*read.total)<=4096,"AR fields");
+            ((read.address&1023)+64*read.total)<=1024,"AR fields");
       if (arHeld) check(equal(read,heldAr),"AR changed under backpressure");
       heldAr=read; arHeld=!ar;
     } else check(!arHeld,"AR withdrawn");
@@ -339,7 +338,7 @@ class Test {
       address.valid=true; address.address=d.io_axi_aw_bits_addr; address.id=d.io_axi_aw_bits_id;
       address.total=address.remaining=d.io_axi_aw_bits_len+1;
       check(address.total<=16 && d.io_axi_aw_bits_size==6 && d.io_axi_aw_bits_burst==1 &&
-            ((address.address&4095)+64*address.total)<=4096,"AW fields");
+            ((address.address&1023)+64*address.total)<=1024,"AW fields");
       if (awHeld) check(equal(address,heldAw),"AW changed under backpressure");
       heldAw=address; awHeld=!af;
     } else check(!awHeld,"AW withdrawn");
@@ -420,8 +419,8 @@ class Test {
             found=true;
           }
           check(found,"unbound physical ACK");
-          // Preserve unstrobed bytes, including the other half of a recurrent
-          // BF16 beat. Reference/native buffers cannot reach this write path.
+          // Only physically strobed bytes enter memory. All current GDN stages
+          // require full64; reference/native buffers cannot reach this path.
           for (unsigned byte=0;byte<64;byte++) if ((w.mask>>byte)&1) {
             auto index=pos(w.address)+byte/4; unsigned shift=(byte%4)*8;
             auto value=(w.data[byte/4]>>shift)&255;

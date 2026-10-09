@@ -28,7 +28,7 @@ class GdnCoreExecutionTests(unittest.TestCase):
             with self.subTest(text=text), self.assertRaises(ValueError):
                 self.parse(text)
 
-    def test_actual_partial_write_masks_are_preserved_as_unsigned_64_bit(self):
+    def test_raw_unsupported_mask_is_parsed_without_integer_truncation(self):
         line = 'HOST_BF16_GDN_CORE_WRITE_ACK run=1 pc=5 cycle=99 address=4096 bus_bytes=64 write_bytes=32 mask=18446744069414584320 error=0 final=1\n'
         event = self.parse(line)[0][1]
         self.assertEqual(int(event['mask']), 0xffffffff00000000)
@@ -101,7 +101,7 @@ class GdnCoreExecutionTests(unittest.TestCase):
                         if span['name'] == 'conv':
                             (fixture/f'conditioned_conv{token}.bf16le').write_bytes(bytes(64))
                         (directory/('actual_'+span['expected'].removeprefix('expected_'))).write_bytes(bytes(64))
-                        masks = (0xffffffff, 0xffffffff00000000) if span['name'] == 'recurrent' else ((1<<64)-1,)
+                        masks = ((1<<64)-1,)
                         for mask in masks:
                             final = int(acknowledged+mask.bit_count() == stage_bytes)
                             cycle += 1
@@ -148,9 +148,14 @@ class GdnCoreExecutionTests(unittest.TestCase):
                 self.assertFalse(result['source_immutability_verified'])
                 self.assertIsNone(result['native_core_gate_pass'])
                 self.assertEqual(result['runs'][1]['carried_history_state_read_beats'], {'3': 1, '5': 1})
-                # Missing halfbeat, a changed readonly word, and absent carried
+                # Missing beat, illegal masks, a changed readonly word, and absent carried
                 # state reads must each defeat an otherwise intact PASS line.
-                line = next(x for x in transcript if 'WRITE_ACK ' in x and 'mask=18446744069414584320 ' in x)
+                line = next(x for x in transcript if 'WRITE_ACK ' in x and 'pc=5 ' in x)
+                for mask in (0, 0xffffffff, 0xffffffff00000000, 0xfffffffeffffffff):
+                    bad = line.replace('mask=18446744073709551615 ', f'mask={mask} ').replace('write_bytes=64 ', f'write_bytes={mask.bit_count()} ')
+                    log.write_text(baseline.replace(line, bad, 1))
+                    with self.assertRaisesRegex(ValueError, 'unsupported output strobe'):
+                        execution.audit_artifacts(fixture, output, log, session=fake)
                 log.write_text(baseline.replace(line+'\n', '', 1))
                 with self.assertRaises(ValueError): execution.audit_artifacts(fixture, output, log, session=fake)
                 log.write_text(baseline)

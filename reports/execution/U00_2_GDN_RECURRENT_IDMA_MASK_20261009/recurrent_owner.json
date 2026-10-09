@@ -1,0 +1,114 @@
+{
+  "passed": true,
+  "results": {
+    "compile": {
+      "exit_code": 0,
+      "elapsed_seconds": 6.001460105006117,
+      "peak_rss_kib": 269836,
+      "source_hashes_unchanged": true,
+      "guard": null
+    },
+    "test_compile": {
+      "exit_code": 0,
+      "elapsed_seconds": 6.00155460901442,
+      "peak_rss_kib": 293220,
+      "source_hashes_unchanged": true,
+      "guard": null
+    },
+    "small": {
+      "exit_code": 0,
+      "elapsed_seconds": 50.01296143900254,
+      "peak_rss_kib": 304600,
+      "source_hashes_unchanged": true,
+      "guard": null
+    },
+    "checkpoint": {
+      "exit_code": 0,
+      "elapsed_seconds": 40.008142570004566,
+      "peak_rss_kib": 325564,
+      "source_hashes_unchanged": true,
+      "guard": null
+    }
+  },
+  "generated_root": "/tmp/gdn_recurrent_pair_gate_20261009T0724",
+  "base_classes": "/tmp/host_gdn_block_compile_20261009T0611/classes",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnRecurrentOwnerSpec.scala": "03856a0ee174ebb114ed4f6d6448e978d4e9816c557aaea54ec52b2fd5520ce9",
+    "src/heteronpu/qwen35_gdn_recurrent_fp32.py": "1ae13a546fc3a391f32a7afaa8a40a1b155cebdcdf022bfaf62c52d61dd440f7",
+    "scripts/prepare_gdn_recurrent_fixture.py": "4390c30f38f8fe07aba95e7550b59e9d72960b19cbae0d618a547677fc1a1273"
+  },
+  "artifacts": {
+    "test_run_dir/GdnRecurrentOwner_should_compute_FP32_state_preserve_signed_zero_and_underflow_fence_ACKs_and_reset_failures/GdnRecurrentArithmeticHarness.sv": {
+      "bytes": 1441308,
+      "sha256": "42e424c6e803f606b9a9b69c99a209361335637cf87c684bc497075040602f05"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_compute_FP32_state_preserve_signed_zero_and_underflow_fence_ACKs_and_reset_failures/verilated/VGdnRecurrentArithmeticHarness": {
+      "bytes": 407760,
+      "sha256": "85ad9d3bcb0563fbee030f36c7883f1302f6de4cdebf1ef908ab0d21fb23c41b"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_compute_FP32_state_preserve_signed_zero_and_underflow_fence_ACKs_and_reset_failures/verilated/VGdnRecurrentArithmeticHarness_123": {
+      "bytes": 407760,
+      "sha256": "85ad9d3bcb0563fbee030f36c7883f1302f6de4cdebf1ef908ab0d21fb23c41b"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_compute_pinned_checkpoint_heads_at_the_real_128_by_128_geometry/GdnRecurrentArithmeticHarness.sv": {
+      "bytes": 4886756,
+      "sha256": "27c70485ee9bc7373ce9d155bc8393fa86159455d8e4ff4d1a6c0ddaf6be7835"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_compute_pinned_checkpoint_heads_at_the_real_128_by_128_geometry/verilated/VGdnRecurrentArithmeticHarness": {
+      "bytes": 477648,
+      "sha256": "84dd5c0d679486808a873e93808e12962b888ed2407d7fb8433ad1e0fc3b852f"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_compute_pinned_checkpoint_heads_at_the_real_128_by_128_geometry/verilated/VGdnRecurrentArithmeticHarness_123": {
+      "bytes": 477648,
+      "sha256": "84dd5c0d679486808a873e93808e12962b888ed2407d7fb8433ad1e0fc3b852f"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_write_complete_tail_pairs_across_head_boundaries/GdnRecurrentArithmeticHarness.sv": {
+      "bytes": 2206485,
+      "sha256": "531d2298efa6988d8d372ae7a651aac20afad710238d8e2c62522f04c248f25c"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_write_complete_tail_pairs_across_head_boundaries/verilated/VGdnRecurrentArithmeticHarness": {
+      "bytes": 424160,
+      "sha256": "98ca4b0bca4ac34f7fef2eb3a73263a05100a00df5cd78cdf885721cb9a5a446"
+    },
+    "test_run_dir/GdnRecurrentOwner_should_write_complete_tail_pairs_across_head_boundaries/verilated/VGdnRecurrentArithmeticHarness_124": {
+      "bytes": 424160,
+      "sha256": "98ca4b0bca4ac34f7fef2eb3a73263a05100a00df5cd78cdf885721cb9a5a446"
+    }
+  },
+  "small.log": {
+    "sha256": "cec5deb915874192787698067e5b483358c47d26c3919bd441dc82040e27e04f",
+    "cases": [
+      "GDN_RECURRENT_RTL_CASE label=cold_m1 heads=1 dk=16 dv=32 cold=true status=0 acknowledged_bytes=2112 cycles=15140",
+      "GDN_RECURRENT_RTL_CASE label=carried_decode_m1 heads=1 dk=16 dv=32 cold=false status=0 acknowledged_bytes=2112 cycles=17223",
+      "GDN_RECURRENT_RTL_CASE label=read heads=1 dk=16 dv=32 cold=true status=3 acknowledged_bytes=0 cycles=5",
+      "GDN_RECURRENT_RTL_CASE label=tag heads=1 dk=16 dv=32 cold=true status=7 acknowledged_bytes=0 cycles=5",
+      "GDN_RECURRENT_RTL_CASE label=scalar heads=1 dk=16 dv=32 cold=true status=8 acknowledged_bytes=0 cycles=119",
+      "GDN_RECURRENT_RTL_CASE label=second-tile-state-ack heads=1 dk=16 dv=32 cold=true status=3 acknowledged_bytes=1984 cycles=15104",
+      "GDN_RECURRENT_RTL_CASE label=final-ack heads=1 dk=16 dv=32 cold=true status=3 acknowledged_bytes=2048 cycles=15140",
+      "GDN_RECURRENT_RTL_CASE label=reset_unpaired_output reset_pending_pair=true acknowledged_bytes=1984",
+      "GDN_RECURRENT_RTL_CASE label=reset_pending_pair_then_new_cold heads=1 dk=16 dv=32 cold=true status=0 acknowledged_bytes=2112 cycles=15140",
+      "GDN_RECURRENT_RTL_CASE label=invalid_gate_domain heads=1 dk=16 dv=32 cold=true status=8 acknowledged_bytes=0 cycles=35",
+      "GDN_RECURRENT_RTL_CASE label=invalid_gate_domain heads=1 dk=16 dv=32 cold=true status=8 acknowledged_bytes=0 cycles=35",
+      "GDN_RECURRENT_RTL_CASE label=invalid_gate_domain heads=1 dk=16 dv=32 cold=true status=8 acknowledged_bytes=0 cycles=35",
+      "GDN_RECURRENT_RTL_CASE label=invalid_gate_domain heads=1 dk=16 dv=32 cold=true status=8 acknowledged_bytes=0 cycles=35",
+      "GDN_RECURRENT_RTL_CASE label=reset_inflight_read_then_cold heads=1 dk=16 dv=32 cold=true status=0 acknowledged_bytes=2112 cycles=15140",
+      "GDN_RECURRENT_RTL_CASE label=signed_zero_gradual_underflow heads=1 dk=16 dv=32 cold=false status=0 acknowledged_bytes=2112 cycles=17223",
+      "GDN_RECURRENT_RTL_CASE label=reset_then_cold heads=1 dk=16 dv=32 cold=true status=0 acknowledged_bytes=2112 cycles=15140",
+      "GDN_RECURRENT_RTL_CASE label=tail_pair_two_heads_cold heads=2 dk=16 dv=96 cold=true status=0 acknowledged_bytes=12672 cycles=90371",
+      "GDN_RECURRENT_RTL_CASE label=tail_pair_two_heads_carried heads=2 dk=16 dv=96 cold=false status=0 acknowledged_bytes=12672 cycles=102466"
+    ]
+  },
+  "checkpoint.log": {
+    "sha256": "b26bc1f072bba5324e156eb4db845e5417483b836b8bbb03bf451088cc92bbf6",
+    "cases": [
+      "GDN_RECURRENT_RTL_CASE label=checkpoint_cold_m1 heads=2 dk=128 dv=128 cold=true status=0 acknowledged_bytes=131584 cycles=959665",
+      "GDN_RECURRENT_RTL_CASE label=checkpoint_carried_decode_m1 heads=2 dk=128 dv=128 cold=false status=0 acknowledged_bytes=131584 cycles=1085489"
+    ]
+  },
+  "prior_compile_failure": {
+    "path": "work/gdn_recurrent_pair_gate_20261009T0723/test_compile.log",
+    "cause": "test source circt namespace shadowing; fixed _root_ qualification; no design change",
+    "preserved": true
+  }
+}

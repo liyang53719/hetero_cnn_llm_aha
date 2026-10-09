@@ -41,7 +41,7 @@ p=Path(sys.argv[1]);text=(p/'run.log').read_text()
 lines=[s for s in text.splitlines() if s.startswith('IDMA_WEIGHT_BURST_PASS ')]
 if len(lines)!=1 or 'FAIL' in text:raise SystemExit('INCOMPLETE_BURST_PROBE')
 v=dict(re.findall(r'(\w+)=(\d+)',lines[0]))
-if any(int(v[k])!=n for k,n in {'cases':24,'real_pinned_idma':1,'max_beats':16,'mailbox_bytes':1024,'data_mismatches':0}.items()):raise SystemExit('BAD_PROBE_COUNTERS')
+if any(int(v[k])!=n for k,n in {'cases':31,'real_pinned_idma':1,'max_beats':16,'mailbox_bytes':1024,'streaming':0,'high32_reject_cases':1,'low32_prefix_cases':1,'paired_bf16_cases':3,'final_b_fence_cases':2,'data_mismatches':0}.items()):raise SystemExit('BAD_PROBE_COUNTERS')
 if not 0<int(v['supply_cycles_burst'])<int(v['supply_cycles_single']):raise SystemExit('NO_SUPPLY_IMPROVEMENT')
 r={'status':'PASS_REAL_SHARED_IDMA_WEIGHT_BURST_PROBE','counters':v,'full_model':False,'dc':False,'production_shared_arbiter':True,
    'log_sha256':hashlib.sha256((p/'run.log').read_bytes()).hexdigest(),

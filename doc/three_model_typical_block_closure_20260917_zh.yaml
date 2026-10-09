@@ -1168,3 +1168,12 @@ Qwen35候选QKV命令子链_20261008:
   数值门禁: canonical逐位和原native整block及隐藏节点门限同时验收，FP32_state原1e-4绝对相对阈值不变；native_FAIL不能被canonical通过覆盖
   未完成: [生产完整block数值终态, 完整block故障复位及checkpoint恢复, M128, 后继层及35B, PPA及MAC90]
   保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN；不关闭C03.2_C04.2_C05等关联大项
+
+生产Host_GDN_recurrent_iDMA配对修复_20261009:
+  原失败提交: 904dccf2830d8caa50501041ca4895995ac41ad8
+  原失败: core cold pc5返回Memory3；high32非prefix mask在实际retained iDMA入口拒绝
+  修改: 两个16列BF16输出合并full64；两tile的FP32 state全ACK后才写output；算术与状态精度不改
+  局部门禁: owner小协议3项与两个真实head128平方状态cold携带1项通过；两种真实iDMA配置各31项通过
+  证据: reports/execution/U00_2_GDN_RECURRENT_IDMA_MASK_20261009/result.json
+  生产数值: 修复提交的完整core及block终态仍待持久CI；旧FAIL及原native门限不改
+  对应: C03.2/C04.2/C05局部修复；U00.2 ongoing；U01 to do；C02.2 OPEN；Q35B未关闭

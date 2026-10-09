@@ -1,0 +1,57 @@
+{
+  "status": "PASS_REAL_IDMA_RECURRENT_MASKS",
+  "counters": {
+    "cases": 31,
+    "real_pinned_idma": 1,
+    "max_beats": 16,
+    "mailbox_bytes": 1024,
+    "streaming": 1,
+    "high32_reject_cases": 1,
+    "low32_prefix_cases": 1,
+    "paired_bf16_cases": 3,
+    "final_b_fence_cases": 2,
+    "supply_cycles_single": 3328,
+    "supply_cycles_burst": 2128,
+    "data_mismatches": 0
+  },
+  "reused_classes": "/tmp/host_gdn_block_compile_20261009T0611/classes",
+  "production_source_hashes_verified": true,
+  "full_host_run": false,
+  "generated_sha256": "9a295419298906c23027c4ba231d7a85257b169ad6c7e52144b02781cb3298b5",
+  "run_log_sha256": "f7d69413f20f8243b11a3b28f65523c241257734efdccbca888cd179a3af4408",
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+    "chisel/continuous_prefill/tests/idma_weight_burst.cpp": "cef471e5b76fa652f07fdec650369d343f3f3b69a8eafaf6e362a75f458d05d9",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/IdmaWeightBurstProbe.scala": "5b45c8fc2c70f27a6387d2f4fb5673a4a366c81184671368470354ebe44f8999",
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0"
+  },
+  "idma_identity": {
+    "commits": {
+      "idma": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+      "apb": "6ae8bf8d5eab5dc70d032231c01ab95e1c5774b9",
+      "axi": "0ccc838fe06aeeb857eb83c6be9a915c4bf99566",
+      "axi_stream": "ce1547861f99ab3d8834d04aa36d2d4184a28df7",
+      "common_cells": "63b7c50d43e462b59506f69d341ff1e40202866d",
+      "common_verification": "fb1885f48ea46164a10568aeff51884389f67ae3",
+      "obi": "b69af4aa00630efd14b1c5cbf9bac977f23ce840",
+      "tech_cells_generic": "3a3de73632a06826b1bd9c65a0a2e92b32016845"
+    },
+    "files_verified": 925,
+    "export_manifest_sha256": "7ed54b0e149defee1c81fd0dcb1f6005f58773338c2be4a41111a93d2bc77248"
+  },
+  "artifacts": {
+    "obj/VIdmaWeightBurstProbe": {
+      "sha256": "1e09a047cb0a0ac58812e4ea9084b26dce415778ad5f8feed581f736a8d65ff2",
+      "bytes": 438248
+    },
+    "generated/IdmaWeightBurstProbe.sv": {
+      "sha256": "9a295419298906c23027c4ba231d7a85257b169ad6c7e52144b02781cb3298b5",
+      "bytes": 238111
+    }
+  },
+  "new_memoryrequest_cases_only": true,
+  "new_stream_request_or_burstwrite_coverage": false
+}

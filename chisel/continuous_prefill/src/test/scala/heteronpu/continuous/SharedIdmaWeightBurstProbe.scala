@@ -27,6 +27,9 @@ class SharedIdmaWeightBurstProbe extends Module {
   io.axi <> dma.io.axi
   io.resetRequired := dma.io.resetRequired || hub.io.resetRequired
   io.transfers := dma.io.transfers
+  io.completedTransfers := dma.io.completedTransfers
+  io.streamedBeats := dma.io.streamedBeats
+  io.streamedWriteBeats := dma.io.streamedWriteBeats
   io.readBeats := dma.io.readBeats
   io.writeBeats := dma.io.writeBeats
   io.readBursts := dma.io.readBursts

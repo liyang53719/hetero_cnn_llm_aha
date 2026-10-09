@@ -2,6 +2,12 @@
 
 本次 policy v3 从真实 raw hidden 开始接通整层运算，生产数值验收仍为 PENDING。源码编译、独立 owner 的小型真实 RTL 和前端控制检查各有自己的证据；只有同一生产 HostBlockTop 的完整 cold→carried 终态与原官方精度门禁同时通过，才可称本范围完整 block 通过。既有 v1、v2 和旧 Qwen2 作业继续绑定其原始提交，不以本次源码重新解释旧证据。
 
+## 生产递推写回故障与修复边界
+
+2026-10-09 的精确提交 `904dccf2830d8caa50501041ca4895995ac41ad8` 实际 core CI 在 cold 的 pc5（第 6 条命令）返回 Memory=3。最后成功的物理 ACK 对应 head0、row127、column16 的 FP32 state；随后输出高半 32B mask `ffffffff00000000` 被真实 retained iDMA 的低位连续 prefix 契约拒绝。原独立 owner 测试直接接受该 mask，遗漏了生产接口限制。原失败日志、输入与源码身份保留，不能改写为数值通过。
+
+本次修复把相邻两组 16 个 BF16 输出保留并合并为完整 64B，只有两组 FP32 state 全部 ACK 后才发送输出；原 FP32 算术、状态精度、顺序及官方门限不变。合法 valueDim 必须含完整两 tile，奇数 tile 几何仍拒绝。独立 owner 与生产日志审计同时限制完整 mask，并检查最后一对、第二 tile 错误、配对中 reset 和最终 ACK 屏障。修复后独立 owner 的 3 项协议/尾 pair 测试和两实际 head×128² cold→carried 均通过，每次 131584B 全 ACK，固定算术全位一致。真实 pinned iDMA 在 streaming 配置和 shared hub 两种结构中分别 31/31 通过，明确复现旧 high32 零 AXI 拒绝、完整 pair 0/31/63、最终 B 延迟 40 周期及错误屏障；这新增的是普通 MemoryRequest store 契约验证。生产 adapter 没有改变。新生产整链 CI 终态前仍为 PENDING。
+
 ## 实际命令链
 
 每个 token 使用 17 条标准 Command128、216 条公开描述符记录、16 次 owner 执行和一次终端 Fence：

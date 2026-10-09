@@ -1,0 +1,28 @@
+{
+  "status": "PREPARED_PRODUCTION_CI_ENTRY_SOURCE_ONLY",
+  "production_files": 13,
+  "normal_python_tests": 48,
+  "optimized_python_tests": 48,
+  "subtests_per_run": 20,
+  "normal_seconds": 0.44,
+  "optimized_seconds": 0.59,
+  "bash_syntax": "PASS",
+  "python_ast": "PASS",
+  "source_capture_executed": false,
+  "independent_c_reference_executed": false,
+  "scala_compilation_executed": false,
+  "production_build_executed": false,
+  "numerical_dut_executed": false,
+  "numerical_acceptance": false,
+  "no_arithmetic_recipe_or_threshold_changes": true,
+  "all_outputs_inside_isolated_tree": true,
+  "scope": "QKV_NORM_ROPE_KV_RECTANGULAR_GQA_CORE",
+  "open": [
+    "Actual production build and all three same-DUT two-launch modes",
+    "Full Bf16CausalGqaOwnerSpec including Q17/K33 in CI",
+    "Native context acceptance remains diagnostic only",
+    "Input normalization, sigmoid gate, output projection, FFN, full M128 and full-block acceptance"
+  ],
+  "original_local_receipt": "work/host_attention_ci_entry_20261009T1055/validation_status.json",
+  "original_local_receipt_sha256": "034a06842cdbb4aa1b1b031316549cd072a75aae27e1992ca15104e6fea402ec"
+}

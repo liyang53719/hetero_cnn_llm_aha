@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: e7caf620e6daf894989f75e708ebde77947475783143345e2b642c1e35fdb375
+计划SHA256: 8c0b7d5f2331cc4c8d6d21bcbef7c14cd352d733b0a90d4dfb1d7493620b23f0
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1286,3 +1286,15 @@
   精度: 原block_隐藏节点_状态三类native阈值和canonical逐位共同保留；不改旧native_FAIL结论
   未完成: [生产整链数值终态, 完整fault_reset_restore, M128, 后继层及35B, PPA及MAC90]
   保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN，不关闭关联大项
+
+生产Host_Attention_core_v2_20261009:
+  状态: owner及前端控制通过；实际12命令Host数值PENDING
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_CORE_20261009_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_CORE_20261009/result.json
+  接线: QKV_Norm_RoPE后接实际双plane_KV_append与矩形QK_softmax_PV，12条公开Command128和172记录，复用同一Matrix_Scalar_iDMA
+  提交: K_V和context全部ACK后终端core_Fence才发布length_generation；故障真实staging保留但旧prefix_context不变；完整block须把fence移至末residual之后
+  小门禁: KV四测_GQA五测和35项独立参考通过；GQA_Matrix响应受控，实际阵列与生产Host数值未验；Q17_K33本地编译SIG9未执行，交CI
+  计划来源: 同次官方cold_m128的token0_1，两次Host真实cold_carried缓存依赖，生产门禁待执行；不冒充上游GDN_decode或模型M128
+  未完成: [实际12命令Host数值, 实际Matrix矩形路径, Q17_K33跨tile, native_GQA_stage门限, inputNorm_sigmoidgate_O_residual_postnorm_FFN, 完整block_fault_reset_restore, cold128_carried128]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；C03.2_C04.2_C05及S01_Q35A不关闭

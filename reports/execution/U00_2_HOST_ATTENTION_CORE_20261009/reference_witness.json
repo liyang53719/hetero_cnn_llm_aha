@@ -1,0 +1,72 @@
+{
+  "bit_mismatches": 0,
+  "flag_mismatches": 0,
+  "fmas": 16384,
+  "input_sha256": "f7f8cd940a00b81b9412b908f5df04a2e46a68b152f400fae17ead7c11d0dea2",
+  "masked_probability_bits": 0,
+  "model_reference_generated": false,
+  "native_capture_executed": false,
+  "output_sha256": "9fad61b0402cf6ece9cf70e98aae10997d0f10d830f6500e099695eb60aac52a",
+  "pytest_cases": 3,
+  "rtl_executed": false,
+  "source_sha256": {
+    "host_bf16_attention_core_reference.py": "b606581bb46168fa24c37b33cd4af3e69ac2054ad2166edd40d210f4df1eb81a",
+    "host_bf16_qk_rope_reference.py": "24822114a65a8d161e55403fb9f6d012dbfd29b2fe345a22a01fb988a67c78d5",
+    "host_bf16_qkv_reference.py": "8822fb2175d1ff78cd959e7e2e3496367d687b78ced8ddd58f30fa37fc3ac212",
+    "prepare.py": "5a67bd570e78c568438ee2ba0d183352f6f497b84cd7c080c9b96ccd4f79a265",
+    "test_candidates.py": "b14cd2757a2b48e9bdb3255352fdb903572ecbd3a05837c47236e7fdcf9744d4"
+  },
+  "status": "PASS_SYNTHETIC_QK_PV_FMA_WITNESS_NOT_MODEL_OR_RTL",
+  "tools": {
+    "compile_argv": [
+      "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "-std=c11",
+      "-O2",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "-frounding-math",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/scripts/matrix_norm_rope_reference.c",
+      "-lm",
+      "-o",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_attention_reference_candidate_20261009T0956/verification/c_matrix"
+    ],
+    "compiler": {
+      "bytes": 1162264,
+      "path": "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f"
+    },
+    "compiler_version": "x86_64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "dynamic_runtime": {
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "bytes": 225672,
+        "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307"
+      },
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "bytes": 1995216,
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92"
+      },
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "bytes": 977112,
+        "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+        "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+      }
+    },
+    "executable": {
+      "bytes": 16712,
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_attention_reference_candidate_20261009T0956/verification/c_matrix",
+      "sha256": "7618dd903f5949fe68967d2db1fae9876bc789cbbbda21009afb377204fb5014"
+    },
+    "numpy_version": "2.3.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "python": {
+      "bytes": 30894944,
+      "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+  },
+  "original_local_receipt": "work/host_attention_reference_candidate_20261009T0956/verification_source_fixed/summary.json",
+  "original_local_receipt_sha256": "4e41dd6bdfae209a03210386b6b0165c114854064c153f45c2b66a03a34e11cc"
+}

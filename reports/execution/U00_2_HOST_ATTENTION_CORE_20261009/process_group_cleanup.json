@@ -1,0 +1,178 @@
+{
+  "status": "PASS_PROCESS_GROUP_CLEANUP_CONTROLS_ONLY",
+  "normal_tests": 14,
+  "optimized_tests": 14,
+  "actual_control_process_tree_modes": [
+    "normal",
+    "timeout",
+    "SIGTERM",
+    "SIGINT"
+  ],
+  "reports": [
+    {
+      "report": "tests.xml",
+      "actual_process_group_cases": [
+        {
+          "elapsed_seconds": 0.16423888300778344,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 16,
+          "mode": "normal",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 15,
+              "term_sent": true
+            },
+            "forced_shutdown": false,
+            "reason": "worker_exit",
+            "returncode": 0,
+            "worker_returncode": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.1009484239912126,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 18,
+          "mode": "timeout",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 17,
+              "term_sent": true
+            },
+            "forced_shutdown": true,
+            "reason": "total_budget_timeout",
+            "returncode": 1,
+            "worker_returncode": -15
+          }
+        },
+        {
+          "elapsed_seconds": 0.1386992799816653,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 20,
+          "mode": "interrupt",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 19,
+              "term_sent": true
+            },
+            "error": "signal 15",
+            "forced_shutdown": true,
+            "reason": "interrupted",
+            "returncode": 1,
+            "worker_returncode": -15
+          }
+        },
+        {
+          "elapsed_seconds": 0.13406889501493424,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 22,
+          "mode": "interrupt_int",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 21,
+              "term_sent": true
+            },
+            "error": "signal 2",
+            "forced_shutdown": true,
+            "reason": "interrupted",
+            "returncode": 1,
+            "worker_returncode": -15
+          }
+        }
+      ]
+    },
+    {
+      "report": "tests_optimized.xml",
+      "actual_process_group_cases": [
+        {
+          "elapsed_seconds": 0.16428992297733203,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 16,
+          "mode": "normal",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 15,
+              "term_sent": true
+            },
+            "forced_shutdown": false,
+            "reason": "worker_exit",
+            "returncode": 0,
+            "worker_returncode": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.1008852219965775,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 18,
+          "mode": "timeout",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 17,
+              "term_sent": true
+            },
+            "forced_shutdown": true,
+            "reason": "total_budget_timeout",
+            "returncode": 1,
+            "worker_returncode": -15
+          }
+        },
+        {
+          "elapsed_seconds": 0.13790818900451995,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 20,
+          "mode": "interrupt",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 19,
+              "term_sent": true
+            },
+            "error": "signal 15",
+            "forced_shutdown": true,
+            "reason": "interrupted",
+            "returncode": 1,
+            "worker_returncode": -15
+          }
+        },
+        {
+          "elapsed_seconds": 0.15033701798529364,
+          "grandchild_active_after_cleanup": false,
+          "grandchild_pid": 22,
+          "mode": "interrupt_int",
+          "result": {
+            "cleanup": {
+              "direct_child_reaped": true,
+              "kill_sent": true,
+              "process_group": 21,
+              "term_sent": true
+            },
+            "error": "signal 2",
+            "forced_shutdown": true,
+            "reason": "interrupted",
+            "returncode": 1,
+            "worker_returncode": -15
+          }
+        }
+      ]
+    }
+  ],
+  "capture_or_build_or_dut_executed": false,
+  "numerical_acceptance": false,
+  "public_files_changed": [
+    "chisel/continuous_prefill/scripts/run_host_bf16_attention_core_fresh_gate.py",
+    "chisel/continuous_prefill/tests/test_host_bf16_attention_core_fresh_gate.py"
+  ],
+  "original_local_receipt": "work/host_attention_ci_entry_20261009T1055/supervisor_review_20261009T1115/summary.json"
+}

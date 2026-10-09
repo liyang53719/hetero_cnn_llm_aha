@@ -1,0 +1,69 @@
+{
+  "classification": "ISOLATED_ATTENTION_CORE_CANDIDATE_CONTROL_PASS_NOT_NUMERIC_NOT_FULL_BLOCK",
+  "python_normal": {
+    "passed": 67,
+    "source": "descriptor worker"
+  },
+  "python_optimized": {
+    "passed": 67,
+    "log": "python_optimized.log"
+  },
+  "unified_scala_typecheck": "PASS",
+  "corrected_spec_typecheck": "PASS",
+  "mocked_owner_checkpoint": "PASS_INITIAL_SPEC_SAME_FRONTEND",
+  "mocked_owner_malformed": "PASS_CORRECTED_SPEC",
+  "mocked_owner_default_off": "PASS_CORRECTED_SPEC",
+  "original_harness_failure": "PRESERVED_AT_attempts/initial_harness",
+  "actual_matrix_numeric": "NOT_RUN",
+  "real_owner_end_to_end": "NOT_RUN",
+  "full_block_atomicity": "OPEN",
+  "full_model_M128": "NOT_CLAIMED",
+  "frozen_index_tree": "3a3d15a2e84a6524b24281ca2986fbe14cd8d51c",
+  "frozen_head": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "frozen_file_count": 42,
+  "frozen_worktree_hashes_unchanged": true,
+  "frontend_sha256": "66ebae1cb541c17f0936b8659f2c2f29fb4405b175d3cc86037cb9e9a89bbad3",
+  "current_spec_sha256": "b0b3ff3909b467bc54364b055883361f3fd9907207465c6eac912aeb0519db30",
+  "resource_min_tmp_free_bytes": 386146304,
+  "resource_min_mem_available_bytes": 1316294656,
+  "max_stage_peak_rss_kib": 494300,
+  "stages": {
+    "compile": {
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 18.004918964987155,
+      "peak_rss_kib": 468548,
+      "source_hashes_unchanged": true
+    },
+    "compile_spec": {
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 8.006765908008674,
+      "peak_rss_kib": 304276,
+      "source_hashes_unchanged": true
+    },
+    "checkpoint": {
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 34.02454216100159,
+      "peak_rss_kib": 494300,
+      "source_hashes_unchanged": true
+    },
+    "malformed": {
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 42.0415343370114,
+      "peak_rss_kib": 494236,
+      "source_hashes_unchanged": true
+    },
+    "default_off": {
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 22.022165570990182,
+      "peak_rss_kib": 473276,
+      "source_hashes_unchanged": true
+    }
+  },
+  "original_local_receipt": "work/host_attention_core_candidate_20261009T0930/validation_status.json",
+  "original_local_receipt_sha256": "130fe25844bdb070ca95ee5f990318d9147e711d6f501574cfbf603619786ce1"
+}

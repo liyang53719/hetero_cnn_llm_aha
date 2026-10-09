@@ -1,0 +1,131 @@
+{
+  "status": "FIVE_SCALA_SUITES_PASS_Q17_K33_BUILD_BLOCKED",
+  "default_query_tile_rows": 16,
+  "terminal_bf16_converters": 32,
+  "logical_local_buffer_bytes": 50688,
+  "python_reference_tests_passed": 35,
+  "python_reference_seconds": 0.9,
+  "python_reference_result_source": "reference worker approved existing-dependency pytest command; no subsequent reference edits",
+  "scala_suites_passed": 5,
+  "stages": [
+    {
+      "stage": "cold_carried_stack8",
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 62.08017888298491,
+      "source_hashes_unchanged": true,
+      "pass": true,
+      "max_rss_bytes": 947912704,
+      "min_mem_available_bytes": 1354022912,
+      "min_tmp_free_bytes": 581390336,
+      "max_tmp_bytes": 29749938
+    },
+    {
+      "stage": "faults_stack8",
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 51.093707641994115,
+      "source_hashes_unchanged": true,
+      "pass": true,
+      "max_rss_bytes": 950472704,
+      "min_mem_available_bytes": 1347035136,
+      "min_tmp_free_bytes": 552079360,
+      "max_tmp_bytes": 106303140
+    },
+    {
+      "stage": "final_write_stack8",
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 72.17121557399514,
+      "source_hashes_unchanged": true,
+      "pass": true,
+      "max_rss_bytes": 951242752,
+      "min_mem_available_bytes": 1318281216,
+      "min_tmp_free_bytes": 522784768,
+      "max_tmp_bytes": 135489661
+    },
+    {
+      "stage": "bounds_stack8",
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 44.11479641601909,
+      "source_hashes_unchanged": true,
+      "pass": true,
+      "max_rss_bytes": 954347520,
+      "min_mem_available_bytes": 1248063488,
+      "min_tmp_free_bytes": 493490176,
+      "max_tmp_bytes": 164676982
+    },
+    {
+      "stage": "address_reset_stack8",
+      "exit_code": 0,
+      "guard": null,
+      "seconds": 53.22682412600261,
+      "source_hashes_unchanged": true,
+      "pass": true,
+      "max_rss_bytes": 959922176,
+      "min_mem_available_bytes": 1259597824,
+      "min_tmp_free_bytes": 464195584,
+      "max_tmp_bytes": 193863799
+    },
+    {
+      "stage": "tile_boundaries_stack8",
+      "exit_code": 143,
+      "guard": "resource_or_stage_deadline",
+      "seconds": 12.065485096012708,
+      "source_hashes_unchanged": true,
+      "pass": false,
+      "max_rss_bytes": 637394944,
+      "min_mem_available_bytes": 1500336128,
+      "min_tmp_free_bytes": 440913920,
+      "max_tmp_bytes": 217204116
+    },
+    {
+      "stage": "tile_boundaries_recovery_stack8",
+      "exit_code": 1,
+      "guard": null,
+      "seconds": 34.107532476016786,
+      "source_hashes_unchanged": true,
+      "pass": false,
+      "max_rss_bytes": 856371200,
+      "min_mem_available_bytes": 1243537408,
+      "min_tmp_free_bytes": 399515648,
+      "max_tmp_bytes": 218056550
+    }
+  ],
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": "47670efdb97d98e6faa1b8c24bbd0c059a510e5e2968346910053c380526511d",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Bf16CausalGqaOwnerSpec.scala": "d76e675cae8bc82018b06eab0eb19706bbb5d1d99291cc42522f08d3f85332bf",
+    "src/heteronpu/qwen35_gqa_fixed_reference.py": "18741eb2a8363cc66e94472c4a7ccec9c6d64ab7f7dc61389dd54c1a85726ae3",
+    "tests/test_qwen35_gqa_fixed_reference.py": "d2566aeba6c72f76bc846736bff58800f8ded7000465b761fdb436b5d02c2ed4",
+    "chisel/continuous_prefill/doc/bf16_causal_gqa_owner.md": "a8da693fbac202e851771a18e2493b64c6c4b438cc14802e7ba2fb800d669c6f"
+  },
+  "q17_k33_recovery": {
+    "status": "NOT_COMPLETED_BUILD",
+    "phase": "C++ compiler",
+    "message": "g++: fatal error: Killed signal terminated program cc1plus",
+    "make_exit": 2,
+    "stage_exit": 1,
+    "guard": null,
+    "simulation_started": false,
+    "source_or_numerical_failure_established": false,
+    "kill_cause": "unverified",
+    "source_and_SV_unchanged": true,
+    "further_local_retries": false
+  },
+  "preserved_earlier_attempt": "work/bf16_causal_gqa_owner_20261009T0912",
+  "preserved_stack_diagnostic": "native_stack_diagnostic.json",
+  "stack8_recovery_proof": "cold_carried_stack8_summary.json",
+  "open": [
+    "Q17/K33 test source exists but C++ build did not complete locally",
+    "real MatrixPipeline arithmetic integration",
+    "retained iDMA and Host integration",
+    "actual cold128 plus carried128 model acceptance and token127 tail addressing",
+    "native GQA stage comparison is UNASSIGNED_DIAGNOSTIC_ONLY",
+    "SRAM inference, synthesis, timing and QoR"
+  ],
+  "staged_by_this_worker": false,
+  "pre_existing_repository_files_edited_by_this_worker": false,
+  "original_local_receipt": "work/bf16_causal_gqa_owner_serial_20261009T0928/summary.json",
+  "original_local_receipt_sha256": "a16d8cff5cff1bd3e3ff8db71127fc66aa346c6adc8ef123f1d5b92192b4ec98"
+}

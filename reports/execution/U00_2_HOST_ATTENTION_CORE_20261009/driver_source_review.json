@@ -1,0 +1,30 @@
+{
+  "status": "SOURCE_ONLY_DRIVER_AND_FIXTURE_CONTRACT_PREPARED",
+  "python_tests_normal": 11,
+  "python_tests_optimized": 11,
+  "cpp_compiled": false,
+  "real_fixture_generated": false,
+  "rtl_built": false,
+  "actual_dut_executed": false,
+  "numerical_acceptance_eligible": false,
+  "full_block_supported": false,
+  "model_m128_accepted": false,
+  "staged_changed_files": 42,
+  "staged_index_tree_readonly_reconstruction": "3a3d15a2e84a6524b24281ca2986fbe14cd8d51c",
+  "expected_frozen_tree": "3a3d15a2e84a6524b24281ca2986fbe14cd8d51c",
+  "staged_tree_matches": true,
+  "candidate_sha256": {
+    "docs/fixture_contract.md": "2b8af738b3bc66dc666bf577a1ffadf2d82bb0102f7285851996b5cfc68a3307",
+    "tests/test_host_bf16_attention_core_driver.py": "b27d083512db2991abea34b2c5f6c0b0ca73dc4dd4c372debf3f3eec8e44d0be",
+    "chisel/continuous_prefill/scripts/host_bf16_attention_core_fixture.py": "6bfcf56cbfa51a2d5464158b7e6a09a6261c653a3861042631a4359e891bef3e",
+    "chisel/continuous_prefill/scripts/host_bf16_attention_core_execution.py": "83d8d2a9e68c193c4a49c479d53b6e26cdca3161c1521522506a4dfdb2e220bf",
+    "chisel/continuous_prefill/tests/host_bf16_attention_core.cpp": "fd54f0620b3782dd69c3619ac60e96e2bf1087e7b6bd6c0e3a6cf7edb42085d4"
+  },
+  "limitations": [
+    "Production cache length/generation are inferred from accepted fences, not directly visible IO.",
+    "Strong numerical acceptance still requires live reference authorities and exact production binary/RTL/toolchain source verification.",
+    "The B-error paths intentionally retain actual failed-burst W data as uncommitted physical staging."
+  ],
+  "original_local_receipt": "work/host_attention_core_driver_candidate_20261009T0954/validation_status.json",
+  "original_local_receipt_sha256": "6cf57af47c0a6da0575717b2aaf19838db5d06bbacd03faca84ab74ed668fc7e"
+}

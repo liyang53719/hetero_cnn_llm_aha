@@ -2,7 +2,7 @@
 """Bounded same-invocation QKV terminals from the established integer/C oracle.
 
 No command-line trust loader is provided. A factory executes the existing
-integer and C arithmetic once for cold0/carried127, then returns an opaque live
+integer and C arithmetic once for two explicit single-token windows, then returns an opaque live
 authority. Repacking only verifies/selects that authority; it never computes.
 """
 from __future__ import annotations
@@ -38,6 +38,19 @@ VARIANT_PROGRESS_BUDGET_SECONDS = 900
 def require(ok, message):
     if not ok:
         raise ValueError(message)
+
+
+def validate_windows(windows):
+    # Exactly two single-token windows keep the established 24 heads and
+    # 10,485,760 FMA budget per CPU variant; no implicit full128 generation.
+    require(type(windows) is tuple and len(windows) == 2,
+            'exactly two explicit single-token windows required')
+    require(all(type(w) is tuple and len(w) == 3 for w in windows), 'window tuple schema')
+    require(all(type(phase) is str and phase in ('cold', 'carried') and
+                type(token) is int and 0 <= token < 128 and type(count) is int and count == 1
+                for phase, token, count in windows), 'window phase/token/count')
+    require(len(set(windows)) == 2, 'duplicate reference window')
+    return windows
 
 
 def digest(data):
@@ -246,9 +259,10 @@ class FreshProjectionReferenceSession:
         return receipt
 
     def select(self, activation, weights, *, session, variant, phase, token_base, token_count):
-        require(type(token_base) is int and type(token_count) is int and (phase, token_base, token_count) in WINDOWS,
-                'fresh independent references only cover cold0/carried127 count1')
         receipt = self.verify(session=session)
+        selected_windows = validate_windows(tuple(tuple(w) for w in receipt['requested_windows']))
+        require(type(token_base) is int and type(token_count) is int and (phase, token_base, token_count) in selected_windows,
+                'window was not computed by this live independent reference authority')
         require(variant in receipt['variants'], 'uncomputed CPU variant')
         key = variant + '/' + phase + str(token_base)
         row = receipt['windows'][key]
@@ -271,12 +285,14 @@ def independent_admitted(admission):
             admission.get('fresh_reference_authority_verified') is True)
 
 
-def generate_projection_references(session, output, *, variants=VARIANTS):
+def generate_projection_references(session, output, *, variants=VARIANTS, windows=WINDOWS):
     """Execute once; return authority only after all bounded checks pass.
 
     No NPZ/weight/reference/digest override, no M16/full128 option, no dedup by
     assumed backend identity. Baseline and AVX2 each select exactly two windows.
+    Defaults stay cold0/carried127; cold0/cold1 supports real adjacent KV appends.
     """
+    windows = validate_windows(windows)
     require(type(session) is CaptureSession, 'live CaptureSession required')
     require(type(variants) is tuple and variants and len(set(variants)) == len(variants) and
             all(type(v) is str and v in VARIANTS for v in variants), 'invalid independent variant scope')
@@ -290,7 +306,8 @@ def generate_projection_references(session, output, *, variants=VARIANTS):
     output.mkdir(parents=True)
     executable, tools = _compile_matrix(output)
     receipt = dict(schema_version=1, status='VERIFIED_BOUNDED_INTEGER_C_QKV_TERMINALS', origin=ORIGIN,
-        scope='PROJECTION_ONLY', policy=POLICY, variants=list(variants), windows={}, files={}, heads=[],
+        scope='PROJECTION_ONLY', policy=POLICY, variants=list(variants),
+        requested_windows=[list(w) for w in windows], windows={}, files={}, heads=[],
         official_manifest_sha256=session.manifest_sha256, source_sha256=sources, tools=tools,
         source_weight_sha256=raw_weight_hashes, model_revision=manifest['revision'],
         native_full_block_failures=failures, native_full_block_gate_pass=session.evidence(official)['native_full_block_gate_pass'],
@@ -303,7 +320,7 @@ def generate_projection_references(session, output, *, variants=VARIANTS):
         scratch = Path(temporary)
         for variant in variants:
             variant_start = time.monotonic()
-            for phase, token, count in WINDOWS:
+            for phase, token, count in windows:
                 activation, native = _load_window(session, official, variant, phase, token)
                 key = variant + '/' + phase + str(token)
                 destination = output / key; destination.mkdir(parents=True)

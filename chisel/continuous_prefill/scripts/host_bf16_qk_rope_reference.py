@@ -296,10 +296,11 @@ class FreshAttentionReferenceSession:
     def select(self, activation, weights, *, session, projection_reference_session=None, reference_session=None,
                variant, phase, token_base, token_count):
         projection_reference_session = _projection_argument(projection_reference_session, reference_session)
-        require(type(token_base) is int and type(token_count) is int and (phase, token_base, token_count) in WINDOWS,
-                'attention references only cover cold0/carried127 count1')
         activation, weights = _actual_inputs(activation, weights)
         receipt = self.verify(session=session, projection_reference_session=projection_reference_session)
+        selected_windows = projection.validate_windows(tuple(tuple(w) for w in receipt['requested_windows']))
+        require(type(token_base) is int and type(token_count) is int and (phase, token_base, token_count) in selected_windows,
+                'window was not computed by this live Norm/RoPE reference authority')
         require(variant in receipt['variants'], 'uncomputed attention CPU variant')
         window = receipt['windows'][variant + '/' + phase + str(token_base)]
         require(projection._input_hashes(activation, weights, token_base) == window['input_sha256'], 'actual A/W differs from attention proof')
@@ -328,6 +329,7 @@ def generate_attention_references(session, projection_reference_session, output,
     never invokes capture, Torch, the Matrix oracle, JVM or RTL simulation.
     """
     projection_receipt = _sessions(session, projection_reference_session)
+    windows = projection.validate_windows(tuple(tuple(w) for w in projection_receipt['requested_windows']))
     require(type(variants) is tuple and variants and len(set(variants)) == len(variants)
             and all(type(v) is str and v in VARIANTS and v in projection_receipt['variants'] for v in variants), 'invalid attention variant scope')
     original = Path(output)
@@ -344,6 +346,7 @@ def generate_attention_references(session, projection_reference_session, output,
     executables, tools = _compile_references(output)
     receipt = dict(schema_version=1, status='VERIFIED_BOUNDED_NORM256_PARTIAL64_INTEGER_C_EXPECTATIONS',
         scope='QKV_NORM256_PARTIAL64_EXPECTED_ONLY', origin=ORIGIN, policy=POLICY, variants=list(variants),
+        requested_windows=[list(w) for w in windows],
         model_revision=arithmetic.MODEL_REVISION, framework_revision=arithmetic.FRAMEWORK_REVISION,
         norm_policy=0xC1, rope_policy=0xB1, epsilon_word=arithmetic.norm.EPSILON,
         source_sha256=sources, oracle_source_sha256=ORACLE_PINS, tools=tools,
@@ -364,7 +367,7 @@ def generate_attention_references(session, projection_reference_session, output,
         windows={}, files={})
     with tempfile.TemporaryDirectory(prefix='.oracle_', dir=output) as temporary:
         for variant in variants:
-            for phase, token, count in WINDOWS:
+            for phase, token, count in windows:
                 activation, native_projection, trig, native = _load_window(session, official, variant, phase, token)
                 projected, proof = projection_reference_session.select(activation, weights, session=session,
                     variant=variant, phase=phase, token_base=token, token_count=count)

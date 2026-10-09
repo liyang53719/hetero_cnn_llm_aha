@@ -1,0 +1,19 @@
+{
+  "source_review": {
+    "status": "NO_REMAINING_BLOCKER",
+    "scope": "owners, public frontend/kernel/descriptors, default reference selection and documentation",
+    "resolved": [
+      "production Spec serializer defaults to production path; override explicit",
+      "carried helper lifetime now matches RTL; recently committed cache/context/parameters remain protected",
+      "planned production checks separated from completed synthetic C witness"
+    ]
+  },
+  "ci_entry_review": {
+    "status": "NO_REMAINING_CI_BLOCKER_AFTER_PROCESS_GROUP_FIX",
+    "scope": "live authority, build/ELF/RTL/tool/source binding, same-DUT two-launch driver and artifacts",
+    "resolved": "whole live-authority worker in owned process group, TERM then KILL on normal/timeout/SIGINT/SIGTERM exit",
+    "tiny_process_tests": "real TERM-resistant grandchildren cleaned; no model or DUT executed",
+    "additional_cli_fix": "resolve output and payload paths before child cwd changes"
+  },
+  "actual_host_numerical_pass": false
+}

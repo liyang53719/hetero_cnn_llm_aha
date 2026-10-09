@@ -1,0 +1,77 @@
+{
+  "status": "PASS_LOCAL_OWNERS_AND_CONTROL_PRODUCTION_CORE_PENDING",
+  "scope": "QKV_NORM_ROPE_KV_RECTANGULAR_GQA_CORE",
+  "default_enabled": false,
+  "public_commands": 12,
+  "descriptor_records": 172,
+  "owner_jobs": 9,
+  "same_dut_launches_planned": 2,
+  "source_windows": [
+    [
+      "cold",
+      0,
+      1
+    ],
+    [
+      "cold",
+      1,
+      1
+    ]
+  ],
+  "second_host_mode": "carried_from_actual_first_cache_writes",
+  "upstream_gdn_decode_executed": false,
+  "numerical_host_core_pass": false,
+  "actual_matrix_rectangular_path_verified": false,
+  "model_m128_executed": false,
+  "whole_attention_block_pass": false,
+  "kv_owner_tests_passed": 4,
+  "gqa_owner_tests_passed": 5,
+  "gqa_reference_tests_passed": 35,
+  "gqa_matrix_service_in_unit_tests": "controlled_response",
+  "q17_k33_status": "NOT_EXECUTED_LOCAL_BUILD_GUARD_THEN_SIGNAL9",
+  "signal9_cause_verified": false,
+  "frontend_owner_completion_mocked": true,
+  "frontend_checkpoint_malformed_default_off_suites": "PASS",
+  "native_context_acceptance": "DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_ASSIGNED",
+  "native_full_block_gate_closed": false,
+  "norm_recipe": "C1_UNCHANGED",
+  "rope_recipe": "B1_UNCHANGED",
+  "matrix_resources": "one_service_eight_physical_slices",
+  "scalar_resources": "existing_shared_service",
+  "idma_instances": 1,
+  "local_public_source_admission": {
+    "python_tests": 119,
+    "subtests": 9,
+    "actual_model_or_dut_executed": false,
+    "integrated_attention_tests": 116,
+    "integrated_attention_subtests": 20,
+    "carried_descriptor_tests": 68,
+    "existing_qkv_rope_tests": 190,
+    "existing_qkv_rope_subtests": 120,
+    "existing_qkv_rope_python_optimized": "PASS",
+    "plan_tests": 96,
+    "integrated_attention_python_optimized": "PASS",
+    "final_attention_tests": 123,
+    "final_attention_subtests": 20,
+    "final_attention_normal_and_optimized": "PASS"
+  },
+  "historical_seven_command_ci_source": "67e81bfd738e40c66d54078dd89237f07f77b07e",
+  "plan_states": {
+    "U00.2": "ongoing",
+    "U01": "to do",
+    "C02.2": "OPEN",
+    "S01": "OPEN",
+    "Q35A": "OPEN"
+  },
+  "public_test_serializer_default": "production_repo_path_only",
+  "prior_frontend_rtl_spec_sha256": "b0b3ff3909b467bc54364b055883361f3fd9907207465c6eac912aeb0519db30",
+  "normalized_spec_typecheck": {
+    "exit_code": 0,
+    "seconds": 5.887238972994965,
+    "source_sha256": "0c493f949b20d04e81f86aa3c57f74e9b3742810dc2de1160a1e2db6602ee0a9",
+    "source_unchanged": true,
+    "rtl_executed": false
+  },
+  "carried_helper_lifetime": "expired scratch reusable after previous successful fence; cache/current context/parameters protected",
+  "source_manifest_scope": "selected local source/control contracts; complete production build identity remains pending"
+}

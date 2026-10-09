@@ -1,0 +1,21 @@
+{
+  "status": "PASS_SYNTHETIC_MEMORY_OWNER_ONLY",
+  "compile_exit": 0,
+  "tests_passed": 4,
+  "host_integration_tested": false,
+  "retained_idma_tested": false,
+  "model_m128_acceptance": false,
+  "source_hashes_unchanged": true,
+  "tmp_bytes": 5663812,
+  "gch_files": 0,
+  "minimum_mem_available_bytes": 1642262528,
+  "minimum_tmp_free_bytes": 659505152,
+  "peak_task_tmp_bytes": 5010455,
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Bf16KvAppendOwnerSpec.scala": "b86af55db49b58c5f848d7d7f3a451419d72c0caccfd4a88512505cc1dbc660b",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+  },
+  "original_local_receipt": "work/bf16_kv_append_owner_20261009T0853/summary.json",
+  "original_local_receipt_sha256": "05e2a4bfd5d43e3c482830f9294d87db4283a35db605ea6b64a0f72e3de6de92"
+}

@@ -127,14 +127,14 @@ def test_exact_three_payloads_are_collected_in_the_frozen_source_checkout():
 
 
 def test_runner_uses_absolute_source_and_output_under_frozen_checkout():
-    profile = step_named("Profile the unchanged full production top within fixed budgets")
+    profile = step_named("Profile baseline and simulator GQA boundary within one fixed budget")
     assert "working-directory" not in profile
     assert profile["env"] == {"HF_HUB_OFFLINE": "1"}
     assert profile["run"].splitlines() == [
         "set -euo pipefail",
         f'python "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}/tools/attention_profile/run_profile.py" '
         '--source-root "$GITHUB_WORKSPACE" '
-        '--output "$GITHUB_WORKSPACE/work/full_top_profile"',
+        '--output "$GITHUB_WORKSPACE/work/full_top_profile" --gqa-boundary-ab',
     ]
 
 
@@ -156,7 +156,11 @@ def test_diagnostic_boundary_does_not_claim_acceptance_or_speedup():
     assert boundary["if"] == "always()"
     for statement in (
         SOURCE_SHA, "numerical_acceptance=false", "7800 seconds overall",
-        "6000 seconds for build", "two 4096-cycle prefixes capped at 240 seconds each",
+        "Build baseline then candidate", "adding only simulator hier_block Bf16CausalGqaOwner",
+        "Both builds and all prefixes share the original",
+        "each build is capped at 6000 seconds and remaining overall time",
+        "Each variant runs two 4096-cycle prefixes capped at 240 seconds each",
+        "four prefix runs total", "all using the same fresh fixture",
         "Fresh original reference functions remain unchanged",
         "runtime, stage, tool-hash", "no speedup",
     ):

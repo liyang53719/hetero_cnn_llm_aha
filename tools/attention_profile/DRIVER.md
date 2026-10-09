@@ -12,6 +12,10 @@
 
 已有生成 SV 证实源码相对目录会进入 source-location 注释及其排序；本次 SV 原文未保留，因此尚不能断言差异全为注释。修正后冻结生产 checkout 位于原 CI workspace 根目录，诊断 checkout 位于其 ignored `work/attention_profile_diagnostic` 下。原 SV SHA 硬门禁前移到 emit 后、Verilation/C++ 前；即使只有注释变化也必须拒绝，不做字符串归一化或更换期望 SHA。再次运行仍只算诊断，是否恢复必须看其实际结果。
 
+恢复诊断 [run 37949433235](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37949433235) 已成功匹配原 `4f061…` SV。两次同 ELF、同输入的 4096 周期各耗时 92.08 / 92.41 秒，其中 RTL `eval` 占 99.760% / 99.762%，其余夹具和插桩约 0.22 秒；80 次 AR、794 次 R、80 次 Matrix issue 与完整确定性摘要一致。619 项生产源码、10 项诊断源码及 7 项实际输入哈希已核对。该结果定位到顶层 RTL 求值成本，尚未定位具体模块；官方 baseline / AVX2 整层仍分别有 6 / 5 项原阈值失败。
+
+后续 `--gqa-boundary-ab` 实验在同一个 job、同一份 fresh fixture 上顺序构建 baseline 和 candidate，各测两次相同前缀。candidate 只在复制的 Verilator 配置末尾增加 `hier_block -module "Bf16CausalGqaOwner"`，原配置不改；两版生成 SV 都必须匹配原硬 SHA，实际 build stage 必须出现该新分层，编译器、严格 FP 参数和所有输入保持一致。两个 build 共享原 7800 秒总预算，各自最多 6000 秒且受剩余预算约束；四个前缀仍各最多 240 秒。仅报告本机顺序测量的 eval/build 比值，前缀、事件 SHA 或原 driver 日志任一不等均拒绝。该 A/B 尚未实测，不构成完整数值链、M128 或硬件 QoR 验收。
+
 This generator only instruments the simulation driver. It does not emit RTL,
 change hierarchy or resources, introduce a command variant, preload references
 into the DUT/store, or run the production top. A successful bounded prefix is a

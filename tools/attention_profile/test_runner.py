@@ -90,6 +90,66 @@ def test_exact_sv_admission_stops_before_compile_and_never_normalizes(tmp_path):
     assert 'compilation not started' in failed.stderr
 
 
+def test_gqa_ab_changes_only_one_simulator_config_argument_and_appended_boundary(tmp_path):
+    source_root=Path(os.environ.get('ATTENTION_PROFILE_SOURCE_ROOT',R.DIAGNOSTIC_ROOT))
+    raw=subprocess.check_output(['git','-C',str(source_root),'show',R.PIN+':chisel/continuous_prefill/scripts/run_host_bf16_attention_core_gate.sh'])
+    config=subprocess.check_output(['git','-C',str(source_root),'show',R.PIN+':chisel/continuous_prefill/tests/native_weight_hierarchy.vlt'])
+    candidate=R.gqa_boundary_configuration(config)
+    assert candidate.encode()==config+b'\nhier_block -module "Bf16CausalGqaOwner"\n'
+    with pytest.raises(ValueError):R.gqa_boundary_configuration(candidate.encode())
+    with pytest.raises(ValueError):R.gqa_boundary_configuration(b'not a config')
+    root=tmp_path/'source';driver=tmp_path/'profile.cpp';hierarchy=tmp_path/'new hierarchy.vlt'
+    base=R.relocated_builder(raw,root,driver)
+    changed=R.relocated_builder(raw,root,driver,hierarchy)
+    import shlex
+    assert changed.replace(shlex.quote(str(hierarchy)),'"$P/tests/native_weight_hierarchy.vlt"',1)==base
+    p=tmp_path/'candidate.sh';p.write_text(changed);subprocess.run(['bash','-n',str(p)],check=True)
+
+
+def test_candidate_registration_cannot_rebind_baseline_driver_or_builder(tmp_path):
+    driver=tmp_path/'driver.cpp';driver.write_text('frozen shared driver')
+    builder=tmp_path/'baseline.sh';builder.write_text('frozen baseline builder')
+    original=R.bind_instrumented_sources(tmp_path,[driver,builder],{})
+    candidate=tmp_path/'candidate.vlt';candidate.write_text('new boundary')
+    appended=R.bind_instrumented_sources(tmp_path,[driver,builder,candidate],original)
+    assert {k:appended[k] for k in original}==original and len(appended)==3
+    assert len(original)==2
+    driver.write_text('unexpected source drift')
+    with pytest.raises(ValueError,match='previously frozen'):
+        R.bind_instrumented_sources(tmp_path,[driver,builder,candidate],original)
+    with pytest.raises(ValueError,match='previously frozen'):
+        R.bind_instrumented_sources(tmp_path,[],appended)
+
+
+def test_ab_reports_timing_only_and_rejects_changed_semantics():
+    a=sample();b=sample();b.update(eval_ns=450,step_elapsed_ns=550)
+    base=dict(prefixes=[a,deepcopy(a)]);candidate=dict(prefixes=[b,deepcopy(b)])
+    R.check_profiles(a,b,'a'*64,'a'*64)
+    result=R.compare_variant_measurements(base,candidate,200,100)
+    assert result['baseline_over_candidate_eval']==2
+    assert result['baseline_over_candidate_build']==2
+    assert result['numerical_acceptance'] is False and result['original_full_chain_completed'] is False
+    candidate['prefixes'][0]['deterministic']['terminal_event']['end_pipeline_issues']=4
+    with pytest.raises(ValueError,match='prefix differs'):R.check_profiles(a,b,'a'*64,'a'*64)
+    with pytest.raises(ValueError):R.compare_variant_measurements(base,dict(prefixes=[b]),200,100)
+
+
+@pytest.mark.parametrize('enabled',[False,True])
+def test_supervisor_forwards_explicit_ab_selection_with_original_total_budget(tmp_path,monkeypatch,enabled):
+    from types import SimpleNamespace
+    seen={}
+    def supervise(command,timeout_seconds):
+        seen.update(command=command,timeout=timeout_seconds)
+        return {'returncode':0,'forced_shutdown':False}
+    monkeypatch.setattr(R,'arguments',lambda:SimpleNamespace(gqa_boundary_ab=enabled))
+    monkeypatch.setattr(R,'checked_paths',lambda args:(tmp_path/'source',tmp_path/'out'))
+    monkeypatch.setattr(R,'imports',lambda source:SimpleNamespace(supervise_process=supervise))
+    monkeypatch.setattr(R,'finalize_supervision',lambda out,result:result['returncode'])
+    with pytest.raises(SystemExit) as stopped:R.main()
+    assert stopped.value.code==0 and seen['timeout']==7800
+    assert seen['command'].count('--gqa-boundary-ab')==int(enabled)
+
+
 def test_actual_compile_flag_collection_and_missing_strict_flags(tmp_path):
     b=tmp_path/'bounded_build';b.mkdir()
     (b/'result.json').write_text(json.dumps({'status':'PASS','stages':[]}))

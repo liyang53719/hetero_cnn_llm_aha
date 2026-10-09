@@ -72,7 +72,30 @@ PY_PROFILE_RTL_IDENTITY
 '''
 
 
-def relocated_builder(raw, source_root, driver):
+def gqa_boundary_configuration(raw):
+    """Append one simulator boundary; never rewrite RTL or the original config."""
+    text = raw.decode()
+    require(text.startswith('`verilator_config\n'), 'not a Verilator configuration')
+    require('Bf16CausalGqaOwner' not in text, 'GQA boundary already present')
+    return text + '\nhier_block -module "Bf16CausalGqaOwner"\n'
+
+
+def bind_instrumented_sources(out, paths, bound):
+    """Append new identities without ever rebinding a previously frozen file."""
+    result = dict(bound)
+    for name,digest in result.items():
+        path = out/name
+        require(path.is_file() and not path.is_symlink() and sha(path) == digest,
+                'previously frozen instrumentation changed: '+name)
+    for path in paths:
+        require(path.is_file() and not path.is_symlink(), 'invalid instrumentation file')
+        name = str(path.relative_to(out))
+        if name not in result:
+            result[name] = sha(path)
+    return result
+
+
+def relocated_builder(raw, source_root, driver, hierarchy=None):
     """Two path substitutions and a read-only, fail-closed post-emit guard."""
     text = raw.decode()
     old_root = 'ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"'
@@ -80,6 +103,10 @@ def relocated_builder(raw, source_root, driver):
     require(text.count(old_root) == text.count(old_driver) == 1, 'frozen build anchors changed')
     text = text.replace(old_root, 'ROOT=' + shlex.quote(str(source_root)) + ';P="$ROOT/chisel/continuous_prefill"', 1)
     text = text.replace(old_driver, shlex.quote(str(driver)), 1)
+    if hierarchy is not None:
+        old_hierarchy = '"$P/tests/native_weight_hierarchy.vlt"'
+        require(text.count(old_hierarchy) == 1, 'frozen hierarchy argument changed')
+        text = text.replace(old_hierarchy, shlex.quote(str(hierarchy)), 1)
     anchor = 'python3 "$P/scripts/prepare_idma_export.py" "$IDMA_EXPORT" "$OUT" >"$OUT/idma_verify.log"'
     require(text.count(anchor) == 1, 'frozen post-emit boundary changed')
     text = text.replace(anchor, rtl_admission_guard() + anchor, 1)
@@ -132,10 +159,33 @@ def check_profiles(first, second, first_events_sha, second_events_sha):
             'same-source deterministic prefix differs')
 
 
+def compare_variant_measurements(baseline, candidate, baseline_build_seconds, candidate_build_seconds):
+    """Describe this sequential same-host experiment, without accepting numerics."""
+    measurements = {}
+    for name,result,seconds in (('baseline',baseline,baseline_build_seconds),
+                                ('gqa_boundary',candidate,candidate_build_seconds)):
+        require(len(result['prefixes']) == 2 and seconds > 0, 'two bounded samples and build timing required')
+        samples = result['prefixes']
+        avg_eval = sum(p['eval_ns'] for p in samples)/2e9
+        avg_step = sum(p['step_elapsed_ns'] for p in samples)/2e9
+        require(avg_step >= avg_eval > 0, 'invalid A/B timing')
+        measurements[name] = dict(build_seconds=seconds, mean_eval_seconds=avg_eval,
+            mean_step_seconds=avg_step, eval_seconds=[p['eval_ns']/1e9 for p in samples],
+            step_seconds=[p['step_elapsed_ns']/1e9 for p in samples])
+    return dict(measurements=measurements,
+        baseline_over_candidate_eval=measurements['baseline']['mean_eval_seconds']/measurements['gqa_boundary']['mean_eval_seconds'],
+        baseline_over_candidate_build=baseline_build_seconds/candidate_build_seconds,
+        measured_scope='same runner, sequential baseline then GQA boundary, instrumented 4096-cycle prefix only',
+        input_fixture_reused_unchanged=True, functional_rtl_sha256_equal=True,
+        original_full_chain_completed=False, numerical_acceptance=False)
+
+
 def arguments():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--source-root', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--gqa-boundary-ab', action='store_true',
+                   help='same-source/input A/B with only a GQA simulator compilation boundary')
     return p.parse_args()
 
 
@@ -173,7 +223,8 @@ def run_worker(args):
                    production_source_commit=PIN, diagnostic_source_commit=diagnostic_commit,
                    github_trigger_sha=trigger_sha, frozen_worker_github_sha=PIN,
                    original_failure_rtl_sha256=RTL_SHA256, functional_rtl_changed=False,
-                   hierarchy_changed=False, source_profile='EmitHostBf16AttentionCore',
+                   hierarchy_changed=args.gqa_boundary_ab, source_profile='EmitHostBf16AttentionCore',
+                   simulator_hierarchy_comparison=args.gqa_boundary_ab, variants={},
                    intended_cycles_per_prefix=CYCLES, prefix_timeout_seconds=PREFIX_SECONDS,
                    prefixes=[], stage='preflight', phase_seconds={}, full_command_chain_completed=False,
                    instrumentation_overhead_included=True, speedup_claimed=False,
@@ -250,52 +301,89 @@ def run_worker(args):
             instrumentation = out/'instrumentation'
             run_to_log([sys.executable,str(HERE/'generate_profile.py'),'--repo',str(source),'--output',str(instrumentation),'--cycles',str(CYCLES)],out/'instrumentation.log',30)
             raw = frozen_file(source,'chisel/continuous_prefill/scripts/run_host_bf16_attention_core_gate.sh')
-            builder = out/'diagnostic_build.sh'
-            builder.write_text(relocated_builder(raw,source,instrumentation/'profile_driver.cpp'))
-            tracked = [builder]+sorted(p for p in instrumentation.rglob('*') if p.is_file())
-            hashes['instrumented_source_sha256'] = {str(p.relative_to(out)):sha(p) for p in tracked}
+            original_hierarchy = frozen_file(source,'chisel/continuous_prefill/tests/native_weight_hierarchy.vlt')
+            tracked = sorted(p for p in instrumentation.rglob('*') if p.is_file())
             summary['instrumentation'] = json.loads((instrumentation/'transformation_receipt.json').read_text())
-            summary['build_transformation'] = dict(original_script_sha256=hashlib.sha256(raw).hexdigest(),
-                modified_script_sha256=sha(builder), replacements=['script ROOT relocation','diagnostic driver translation unit'],
-                readonly_additions=['exact generated RTL admission before Verilation/C++'],rtl_or_compile_flag_replacements=0)
-            build = out/'host_build'
-            with phase('unchanged_full_top_build'):
-                run_to_log(['bash',str(builder),str(build),'0'],out/'build.log',BUILD_SECONDS,env)
-            ready = json.loads((build/'build_ready.json').read_text())
-            summary['build'] = ready
-            summary['generated_rtl_admission'] = json.loads((build/'generated_rtl_identity.json').read_text())
-            require(ready['rtl_sha256'] == RTL_SHA256 and ready['numerical_pass'] is False and
-                    ready['source_base_commit'] == PIN and ready['status'] == frozen.BUILD_STATUS,
-                    'generated RTL/source/build scope differs from original failed full top')
-            summary['compiler_evidence'] = compiler_evidence(build)
-            hashes['source_sha256'].update(json.loads((build/'sources.sha256.json').read_text()))
-            hashes.update(binary_sha256=sha(build/'obj/VHostBlockTop'), rtl_sha256=sha(build/'generated/HostBlockTop.sv'), build_ready_sha256=sha(build/'build_ready.json'))
-            initial_identity = frozen.build_identity(build, admitted['source_sha256'])
-            for index in range(2):
-                require(frozen.admit_fixture(fixture,**authorities) == admitted, 'live fixture changed before profile')
-                require(frozen.build_identity(build,admitted['source_sha256']) == initial_identity, 'build identity changed before profile')
-                prefix = out/('prefix'+str(index))
-                with phase('actual_bounded_prefix_'+str(index)):
-                    run_to_log([str(build/'obj/VHostBlockTop'),str(fixture),str(prefix),'pass'],out/('prefix'+str(index)+'.log'),PREFIX_SECONDS)
-                report = json.loads((prefix/'attention_profile.json').read_text())
-                summary['prefixes'].append(report)
-                hashes['output_sha256'][str(index)] = dict(profile_json=sha(prefix/'attention_profile.json'),
-                    events=sha(prefix/'prefix_events.jsonl'), original_driver_log=sha(out/('prefix'+str(index)+'.log')))
-                require(frozen.admit_fixture(fixture,**authorities) == admitted, 'live fixture changed after profile')
-            check_profiles(*summary['prefixes'],hashes['output_sha256']['0']['events'],hashes['output_sha256']['1']['events'])
-            require(hashes['output_sha256']['0']['original_driver_log'] == hashes['output_sha256']['1']['original_driver_log'], 'original deterministic visible event log differs')
-            frozen.verify_all_build_sources(build,'profile_final_source_verify.log')
-            require(frozen.build_identity(build,admitted['source_sha256']) == initial_identity, 'final build identity changed')
+            variants = ('baseline','gqa_boundary') if args.gqa_boundary_ab else ('baseline',)
+            hashes['build_variants'] = {}
+            for variant in variants:
+                candidate = variant == 'gqa_boundary'
+                hierarchy = out/'native_weight_hierarchy_gqa.vlt' if candidate else None
+                if hierarchy is not None:
+                    hierarchy.write_text(gqa_boundary_configuration(original_hierarchy))
+                    tracked.append(hierarchy)
+                builder = out/('diagnostic_build_'+variant+'.sh')
+                builder.write_text(relocated_builder(raw,source,instrumentation/'profile_driver.cpp',hierarchy))
+                tracked.append(builder)
+                hashes['instrumented_source_sha256'] = bind_instrumented_sources(out,tracked,hashes['instrumented_source_sha256'])
+                result = dict(prefixes=[], output_keys=[], hierarchy_changed=candidate,
+                    hierarchy_configuration_sha256=sha(hierarchy) if candidate else hashlib.sha256(original_hierarchy).hexdigest(),
+                    build_transformation=dict(original_script_sha256=hashlib.sha256(raw).hexdigest(),
+                        modified_script_sha256=sha(builder), replacements=['script ROOT relocation','diagnostic driver translation unit']+
+                            (['simulator hierarchy configuration path'] if candidate else []),
+                        readonly_additions=['exact generated RTL admission before Verilation/C++'],rtl_or_compile_flag_replacements=0))
+                summary['variants'][variant] = result
+                build = out/('host_build_gqa' if candidate else 'host_build')
+                build_phase = 'gqa_boundary_full_top_build' if candidate else 'unchanged_full_top_build'
+                with phase(build_phase):
+                    run_to_log(['bash',str(builder),str(build),'0'],out/('build_'+variant+'.log'),BUILD_SECONDS,env)
+                bind_instrumented_sources(out,[],hashes['instrumented_source_sha256'])
+                result['build'] = ready = json.loads((build/'build_ready.json').read_text())
+                result['generated_rtl_admission'] = json.loads((build/'generated_rtl_identity.json').read_text())
+                require(ready['rtl_sha256'] == RTL_SHA256 and ready['numerical_pass'] is False and
+                        ready['source_base_commit'] == PIN and ready['status'] == frozen.BUILD_STATUS,
+                        'generated RTL/source/build scope differs from original failed full top')
+                result['compiler_evidence'] = compiler_evidence(build)
+                if candidate:
+                    require(any('Bf16CausalGqaOwner' in r['target'] for r in result['compiler_evidence']['bounded_build']['stages']),
+                            'requested GQA simulator boundary absent from actual build stages')
+                    baseline_build = summary['variants']['baseline']['build']
+                    for key in ('source_manifest_sha256','compiler_jars_sha256','hardfloat_manifest_sha256','scope_sha256','rtl_sha256'):
+                        require(ready[key] == baseline_build[key], 'A/B build identity differs: '+key)
+                    require(ready['actual_verilator']['actual_elf']['sha256'] == baseline_build['actual_verilator']['actual_elf']['sha256'],
+                            'A/B actual Verilator backend differs')
+                hashes['source_sha256'].update(json.loads((build/'sources.sha256.json').read_text()))
+                hashes['build_variants'][variant] = dict(binary_sha256=sha(build/'obj/VHostBlockTop'),
+                    rtl_sha256=sha(build/'generated/HostBlockTop.sv'), build_ready_sha256=sha(build/'build_ready.json'))
+                initial_identity = frozen.build_identity(build, admitted['source_sha256'])
+                for index in range(2):
+                    require(frozen.admit_fixture(fixture,**authorities) == admitted, 'live fixture changed before profile')
+                    require(frozen.build_identity(build,admitted['source_sha256']) == initial_identity, 'build identity changed before profile')
+                    key = str(index) if not candidate else 'gqa_boundary:'+str(index)
+                    name = 'prefix'+str(index) if not candidate else 'prefix_gqa_'+str(index)
+                    prefix = out/name
+                    with phase('actual_bounded_'+name):
+                        run_to_log([str(build/'obj/VHostBlockTop'),str(fixture),str(prefix),'pass'],out/(name+'.log'),PREFIX_SECONDS)
+                    report = json.loads((prefix/'attention_profile.json').read_text())
+                    result['prefixes'].append(report); result['output_keys'].append(key)
+                    hashes['output_sha256'][key] = dict(profile_json=sha(prefix/'attention_profile.json'),
+                        events=sha(prefix/'prefix_events.jsonl'), original_driver_log=sha(out/(name+'.log')))
+                    require(frozen.admit_fixture(fixture,**authorities) == admitted, 'live fixture changed after profile')
+                first,second=(hashes['output_sha256'][k] for k in result['output_keys'])
+                check_profiles(*result['prefixes'],first['events'],second['events'])
+                require(first['original_driver_log'] == second['original_driver_log'], 'original deterministic visible event log differs')
+                frozen.verify_all_build_sources(build,'profile_final_source_verify.log')
+                require(frozen.build_identity(build,admitted['source_sha256']) == initial_identity, 'final build identity changed')
+                if not candidate:
+                    summary.update({k:result[k] for k in ('build','generated_rtl_admission','compiler_evidence','build_transformation','prefixes')})
+                    hashes.update(hashes['build_variants'][variant])
+                else:
+                    base = summary['variants']['baseline']
+                    check_profiles(base['prefixes'][0],result['prefixes'][0],hashes['output_sha256']['0']['events'],first['events'])
+                    require(hashes['output_sha256']['0']['original_driver_log']==first['original_driver_log'],
+                            'A/B original visible event log differs')
+                    summary['ab_measurements'] = compare_variant_measurements(base,result,
+                        summary['phase_seconds']['unchanged_full_top_build'],summary['phase_seconds']['gqa_boundary_full_top_build'])
             require(all(sha(out/name) == digest for name,digest in hashes['instrumented_source_sha256'].items()), 'instrumented source changed')
             frozen.verify_checkout(PIN,hashes['source_sha256'])
-            summary.update(status='COMPLETE_BOUNDED_FULL_TOP_PROFILE_NOT_NUMERICAL_ACCEPTANCE', deterministic_prefix_equal=True)
+            summary.update(status=('COMPLETE_BOUNDED_FULL_TOP_GQA_BOUNDARY_AB_NOT_NUMERICAL_ACCEPTANCE' if args.gqa_boundary_ab
+                                   else 'COMPLETE_BOUNDED_FULL_TOP_PROFILE_NOT_NUMERICAL_ACCEPTANCE'), deterministic_prefix_equal=True)
             checkpoint('complete')
             return 0
     except (Exception, KeyboardInterrupt) as error:
         summary.update(status='INCOMPLETE_BOUNDED_FULL_TOP_PROFILE', error=dict(type=type(error).__name__, message=str(error)))
-        admission = out/'host_build/generated_rtl_identity.json'
-        if admission.is_file():
-            summary['generated_rtl_admission'] = json.loads(admission.read_text())
+        summary['generated_rtl_admissions'] = {str(p.relative_to(out)):json.loads(p.read_text())
+            for p in sorted(out.glob('host_build*/generated_rtl_identity.json'))}
         partials = []
         for p in sorted(out.glob('prefix*/attention_profile.json')):
             try:
@@ -360,7 +448,10 @@ def main():
     source, out = checked_paths(args)
     frozen = imports(source)
     entry = 'import sys;sys.path.insert(0,sys.argv.pop(1));from run_profile import worker_entry;worker_entry()'
-    result = frozen.supervise_process([sys.executable,'-c',entry,str(HERE),'--source-root',str(source),'--output',str(out)], timeout_seconds=BUDGET_SECONDS)
+    command = [sys.executable,'-c',entry,str(HERE),'--source-root',str(source),'--output',str(out)]
+    if args.gqa_boundary_ab:
+        command.append('--gqa-boundary-ab')
+    result = frozen.supervise_process(command, timeout_seconds=BUDGET_SECONDS)
     raise SystemExit(finalize_supervision(out, result))
 
 

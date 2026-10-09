@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "source_base_commit": "78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b",
+  "source_manifest_sha256": "73fbc1871dadffa07c9f085502c9479e7345b7a0ab558d69620c3add52f5b6e2",
+  "source_manifest_count": 403,
+  "historical_source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "9b196742847aec644a506d85ba359b91fe1aa5202a3f3ee5e3ec861d27171485",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "41990cf11489ecdb0c1299a5d23f7ee3b90559fcc8fd2c2a8af41c8a2234f249",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "0a93310be51bd64d199dafd4813d86802a9edbba005769b74d76a596dc61e303",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "345027d7703ef51f4113b2ba9e648c23c88568566723c7ec61fbe033919b62fb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/tests/host_bf16_qkv.cpp": "2c6a0739056c3f93cb30b2cc743ddd60b2bbb32c046c43c3735248f647528af5",
+    "chisel/continuous_prefill/config/host_bf16_qkv_descriptor_contract.json": "8a41f8e831977f29b4b57512adf26c5ca94fb757bb60cb15eff8d7bfadd4b5d0",
+    "chisel/continuous_prefill/scripts/host_bf16_qkv_execution.py": "7d6944232fbf4ca0ba2e3b6129eaac2e2af341517653cd65472c35455a5f16ed",
+    "chisel/continuous_prefill/scripts/pack_host_bf16_qkv_fixture.py": "9b39f2afc532e9fbfe2c8b6b7226bf06ce7ffc27998304d843946de342ff2ed9",
+    "chisel/continuous_prefill/scripts/verify_host_bf16_qkv_fixture.py": "831483bf5e25533868378573f01d2c42a6ca5f52a5526005360cba0c38c3f4b4",
+    "chisel/continuous_prefill/scripts/run_host_bf16_qkv_gate.sh": "579f6f28dcd68a13cff9de32d1d315b26e459ff4bb8df1f5899030df4a88d82d"
+  },
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "transformers_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "hardfloat_commit": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+  "actual_verilator": {
+    "entrypoint": {
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675,
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)",
+      "kind": "DEBIAN_PERL_FORWARDER"
+    },
+    "actual_elf": {
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+      "bytes": 13920736,
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)",
+      "kind": "ELF"
+    }
+  },
+  "evidence_files": [
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/cold0_pass.result.json",
+      "bytes": 12456,
+      "sha256": "89d2d755736b6e569f122d7fc157edc5297512415421d4cb5a3bace6a4167a9b"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/carried127_pass.result.json",
+      "bytes": 12430,
+      "sha256": "86a4a3c3a3c56e8f9aed92a67e5502b93d9cdbf64af1f9c3bec05411a602c472"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/cold0_output_alias.result.json",
+      "bytes": 11659,
+      "sha256": "2e3fc3ef42da7d46764d3e5055b5dd0b7a2e030bbaf0edb3242997846b4a9324"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/cold0_pass.supervisor.json",
+      "bytes": 2225,
+      "sha256": "8877144c2cad262d79bd869c221c705080077b5406cc460eff5db4726a14c3ee"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/carried127_pass.supervisor.json",
+      "bytes": 2438,
+      "sha256": "54cb1cb15bb54a180aa9d8c950e4d8297432dc8099afa5492b8251ee1da2f664"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/cold0_output_alias.supervisor.json",
+      "bytes": 1670,
+      "sha256": "b10f446fd3a78e6eb69153e3e4902c652a84015c8643855dcd27283f2eca51d7"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/build_ready.json",
+      "bytes": 1580,
+      "sha256": "cda38bce8b9cbc0046e6002f687f97a375e3c0d667ebf34f6036fd02b85c6240"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/sources.sha256.json",
+      "bytes": 54518,
+      "sha256": "73fbc1871dadffa07c9f085502c9479e7345b7a0ab558d69620c3add52f5b6e2"
+    },
+    {
+      "path": "work/host_qkv_projection_build_20261009T0146Z/matrix_topology_audit.json",
+      "bytes": 1710,
+      "sha256": "1753bb139b908339284e2d4bef657699594b56dc26178904df5306fe67de0d03"
+    },
+    {
+      "path": "work/host_qkv_actual_review_20261009/artifact_recheck.json",
+      "bytes": 13393,
+      "sha256": "81918ba56f85c82ee7a35179d32e6972d7d946ba802907d6ed211e9ec8f186a2"
+    },
+    {
+      "path": "work/host_qkv_actual_review_20261009/carried127_pass_recheck.json",
+      "bytes": 13359,
+      "sha256": "2eae7344bc83344089286e05267e5cf9893c8b06dffed6a6f69e0534dc2d2fa7"
+    },
+    {
+      "path": "work/host_qkv_actual_review_20261009/cold0_output_alias_recheck.json",
+      "bytes": 12531,
+      "sha256": "9f71de2f6f6ac23dc53e218c04d984c9a8ce36d2c87ee7b45b235c866a13df4b"
+    },
+    {
+      "path": "work/host_qkv_actual_review_20261009/direct_checks.json",
+      "bytes": 1564,
+      "sha256": "16a6d17a081bb4f45518d4f2746d8992318a347e9e4f958e0d5195ec5c54d338"
+    },
+    {
+      "path": "work/host_qkv_actual_review_20261009/summary.json",
+      "bytes": 774,
+      "sha256": "c48c26c529cf404b2be349c394c291e6121a89de0388c9ed219a232322aaaeaa"
+    }
+  ]
+}

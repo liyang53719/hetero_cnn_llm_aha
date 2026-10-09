@@ -1,0 +1,374 @@
+{
+  "schema": 1,
+  "scope": "Completed older CI chains; independent from new local Host QKV M1 execution.",
+  "source_binding": {
+    "host_v_and_legacy_exact_commit": "7945a708a28e888aaf1eeccbf55bc0cf07817048",
+    "qwen2_block_exact_commit": "78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b",
+    "new_commit_parent": "7945a708a28e888aaf1eeccbf55bc0cf07817048",
+    "new_commit_changes_only": [
+      ".github/scripts/run_qwen2_block_ci.sh",
+      ".github/scripts/tests/test_qwen2_block_ci.py",
+      ".github/workflows/chisel-qwen2-continuous-block.yml"
+    ],
+    "host_implementation_same_source_at_new_commit": true,
+    "host_jobs_rerun_at_new_commit": false,
+    "dirty_worktree_used_as_source_authority": false,
+    "independent_source_counts": {
+      "host_v_exact_git_blobs": 408,
+      "legacy_exact_git_blobs": 189,
+      "qwen2_bound_repository_sources": 632,
+      "qwen2_control_sources_per_mode": 384
+    }
+  },
+  "host_v": {
+    "status": "PASS_FRESH_PRODUCTION_HOST_V_ONLY_FULL128",
+    "source_commit": "7945a708a28e888aaf1eeccbf55bc0cf07817048",
+    "run_id": 37851669678,
+    "job_id": 113565801048,
+    "job_conclusion": "success",
+    "fresh_official_executions": 2,
+    "reused_official_executions": 0,
+    "checked_bf16_full128_total": 262144,
+    "native_operator_thresholds_unchanged": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "native_v_operator_gate": "PASS",
+    "native_full_block_gate": {
+      "block_thresholds": {
+        "max_abs": 0.05,
+        "mean_abs": 0.01
+      },
+      "failed_comparisons": {
+        "avx2": 5,
+        "baseline": 6
+      },
+      "failure_rows_recounted_and_threshold_failures_verified": true,
+      "gate_pass": {
+        "avx2": false,
+        "baseline": false
+      },
+      "operator_thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "status": {
+        "avx2": "BLOCKED_BF16_PRODUCER_GATE",
+        "baseline": "BLOCKED_BF16_PRODUCER_GATE"
+      }
+    },
+    "cross_host_comparison": {
+      "recorded_activation_hashes_identical": false,
+      "recorded_output_hashes_identical": false,
+      "weight_hashes_identical": true,
+      "cycles_identical": true,
+      "each_runtime_canonical_differences": 0,
+      "bit_exact_claimed": false,
+      "specific_kernel_cause_or_error_magnitude_identified": false,
+      "raw_cross_host_recomparison_performed": false
+    },
+    "tool_capture_limitation": {
+      "actual_elf_digest_directly_present_in_fresh_artifact": false,
+      "actual_elf_sha256_locally_verified_from_pinned_deb": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+      "artifact_field": "toolchain.tools.verilator_backend",
+      "captured_bytes": 675,
+      "captured_format": "Debian Perl dispatcher wrapper",
+      "captured_sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "conclusion": "Do not describe this fresh artifact as directly capturing the actual Verilator ELF digest. The exact workflow pins the Debian package, whose ELF was independently inspected locally. The separately fixed legacy helper does not change this artifact.",
+      "severity": "provenance limitation"
+    },
+    "artifact": {
+      "id": 11585506393,
+      "bytes": 80690,
+      "sha256": "77b450b1e156da2f4899e71c3d664245f58fe843ecd6701233048f7b0bb9efbd",
+      "raw_tensors_outputs_rtl_binaries_included": false
+    },
+    "key_hashes": {
+      "official_capture_manifest": "b7950b7f5248c119c242ba192a2e40eeeec5f54e27c7b207d9cec8caa2824162",
+      "native_audit_baseline": "8428543ef373f203b000582813ad61121a38a65f6de509fcac326b7448e98520",
+      "native_audit_avx2": "01fa51d95e5a1a8210c96163898a972024dc04e1e5e7399eefa6c6959e93bb90",
+      "generated_rtl": "9c0662b5b3685d60788a2a24c220acadc7c41ba573b3c0f66479a07ae2a84c79",
+      "simulator_binary": "dfb435c44775031b921631a080ccf8666a34679b5532fdf9acfc6efd732837df",
+      "pinned_verilator_deb": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2"
+    }
+  },
+  "legacy_two_layer": {
+    "status": "PASS_REAL16_TWO_LAYER_HOST_NUMERICAL",
+    "source_commit": "7945a708a28e888aaf1eeccbf55bc0cf07817048",
+    "run_id": 37851669678,
+    "job_id": 113577376513,
+    "job_conclusion": "success",
+    "started_at": "2026-10-08T22:42:49.082551+00:00",
+    "finished_at": "2026-10-09T01:59:25.163860+00:00",
+    "elapsed_seconds": 11796.081309,
+    "process_launches": 1,
+    "simulator_exit": 0,
+    "shape": {
+      "tokens": 16,
+      "layers": 2,
+      "hidden": 1536,
+      "ffn": 8960
+    },
+    "commands": 42,
+    "descriptors": 430,
+    "checked_fp32": 1409024,
+    "bit_differences": 0,
+    "cycles": 17096970,
+    "verified_payload_members": 21,
+    "source_files_verified": 189,
+    "layer0_y_directly_aliases_layer1_x": true,
+    "scope": {
+      "original_host_command_graph": true,
+      "retained_matrix": true,
+      "pinned_idma": true,
+      "one_launch": true,
+      "block_launch": false,
+      "host_layer_copy": false,
+      "synthetic_weights": true,
+      "official_weights": false,
+      "full_network_q1024": false,
+      "dc": false
+    },
+    "limits": [
+      "Compact receipt verification, not independent re-comparison of the 1,409,024 FP32 output values. Raw tensors and full CSV were intentionally not uploaded.",
+      "Full run.log and host verification.log are unavailable; their digest consistency and available tails were checked, not full raw-file digests or earlier completion trace entries.",
+      "iDMA source export, HardFloat source files, compiler jars, and runtime library bytes were not newly re-read; sealed identity receipt cross-hashes were checked.",
+      "Closes only the legacy synthetic-weight two-layer numerical regression. No official full-model, q1024 throughput, physical timing, or new Qwen3.5 QKV implementation acceptance."
+    ],
+    "artifact": {
+      "id": 11590893155,
+      "bytes": 5895,
+      "sha256": "ff9ab65e44e8da3678aea18eea4a12605d4a496dd324d5fa1a3487029b95a95b"
+    },
+    "key_hashes": {
+      "acceptance_sha256": "4d73076a450de974607cb25bb4445a7b47ee6d31f9a321b3e6b0731ac1462e1e",
+      "package_sha256": "cdcfdaa0585c24b14c452974b3a8a8e74e2562c1cc6d95877fc2e347c7a1ecb7",
+      "package_manifest_sha256": "c5569d4b34fe459014952c8315d63e6e5ee00a4f1732a320284ae9ad747be1f5",
+      "build_receipt_sha256": "54cafa140f5f97bdc9bf4b7892e036b17951712403e4b7092b04c4eb0c5a36f4",
+      "transfer_receipt_sha256": "b4d9d72e5d9b7c01b78ed10aba4fb32e00de112bdf350099eb872f575f8cd5d4",
+      "transfer_method": "Reconstructed exact sort_keys/indent/newline encoding and fixed fields from committed real2_ci.py; matched terminal digest.",
+      "generated_rtl_sha256": "f82eb79bd1dab6a5ab62bf3649caef4627fdabb7dee0c1440b4157a52897794c",
+      "binary_sha256": "cad630b8e72572dece5da634112fda5bd0f300b83a7bcd10ef2934e33a6b08e9",
+      "source_manifest_sha256": "63e459e2e5739f24edba3ac830fc47c4380d7943a4142202e8fbc7fb540734c0",
+      "run_log_sha256": "6cf7e858cb9931a88bb8ac7a5f658d8e1734e3f95abf1f23a4f6071bfe61eb84",
+      "csv_sha256": "b04b39061458069dd863008c09bb3c0c5f38cccb227a8a96d6532a4c9d332477"
+    }
+  },
+  "qwen2_legacy_functional_block": {
+    "status": "PASS_WITH_SCOPE_LIMITS",
+    "source_commit": "78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b",
+    "run_id": 37853441187,
+    "jobs": {
+      "real": 113571842438,
+      "tiny": 113571842839
+    },
+    "job_conclusions": {
+      "real": "success",
+      "tiny": "success"
+    },
+    "passed_review_checks": 2792,
+    "scope": "Synthetic-weight legacy 16-lane functional block; real describes H1536/F8960 shape, not official weights. Distinct from Matrix4096 Host legacy two-layer regression.",
+    "stages": [
+      "n0",
+      "qr",
+      "kr",
+      "v",
+      "q",
+      "k",
+      "att",
+      "o",
+      "r",
+      "n1",
+      "gate",
+      "up",
+      "act",
+      "down",
+      "y"
+    ],
+    "original_numerical_body_preserved": true,
+    "numerical_body_sha256": "341620145e111584e8e11e43691f9fac3128d11b016c7b96f44465d94f721fdc",
+    "modes": {
+      "real": {
+        "artifact_id": 11584132926,
+        "zip_sha256": "e294da67aa0f6bbf28a3f3098afd4460296b5bceb0976fdce9d238f0d38c2456",
+        "runs": [
+          {
+            "tokens": 16,
+            "checked_fp32": 663552,
+            "bit_diffs": 0,
+            "cycles": 83428956
+          }
+        ],
+        "suites": 21,
+        "tests": 129,
+        "elementwise_sizes": [
+          1,
+          17,
+          33,
+          1025,
+          32768,
+          1572864,
+          2097152,
+          2621440
+        ],
+        "orchestration_tests": 8,
+        "repeat_and_faults": "NOT_RUN_IN_REAL_MODE"
+      },
+      "tiny": {
+        "artifact_id": 11583871396,
+        "zip_sha256": "fb59c4e8190af6e3c1927f1d1e547c311d0dcf0d08bfa35d39a4d8bd755237e4",
+        "runs": [
+          {
+            "tokens": 1,
+            "checked_fp32": 1056,
+            "bit_diffs": 0,
+            "cycles": 24903
+          },
+          {
+            "tokens": 2,
+            "checked_fp32": 2112,
+            "bit_diffs": 0,
+            "cycles": 38926
+          },
+          {
+            "tokens": 17,
+            "checked_fp32": 17952,
+            "bit_diffs": 0,
+            "cycles": 299016
+          },
+          {
+            "tokens": 33,
+            "checked_fp32": 34848,
+            "bit_diffs": 0,
+            "cycles": 652185
+          }
+        ],
+        "suites": 21,
+        "tests": 129,
+        "elementwise_sizes": [
+          1,
+          17,
+          33,
+          1025,
+          32768,
+          1572864,
+          2097152,
+          2621440
+        ],
+        "orchestration_tests": 8,
+        "repeat_and_faults": "PASS"
+      }
+    },
+    "limits": [
+      "Legacy 16-lane functional Qwen2 block with synthetic weights only; real means shape (hidden 1536, FFN 8960), not official model weights.",
+      "No Matrix4096 full numerical, official Qwen3.5, full model, canonical 512-MAC integration, Command128 integration, pinned IDMA/AXI integration, or DC/timing acceptance is established.",
+      "800 MHz is a target field, not a measured timing result.",
+      "HardFloat external source hashes and Verilator backend hash are recorded in original CI evidence; no independent local rebuild or fresh upstream toolchain audit was performed.",
+      "Host V and legacy two-layer numerical jobs at 7945a708 are separate evidence and are not rerun, relabeled, or re-certified by this report."
+    ]
+  },
+  "preserved_history": {
+    "local_legacy_attempts": [
+      {
+        "last_completed_pc": 17,
+        "last_completed_cycle": 5831053,
+        "terminal_exit": null,
+        "status": "INTERRUPTED_NOT_PASS"
+      },
+      {
+        "last_completed_pc": 16,
+        "last_completed_cycle": 4097803,
+        "terminal_exit": null,
+        "status": "INTERRUPTED_NOT_PASS"
+      }
+    ],
+    "local_interruption_cause": "unknown",
+    "local_third_rerun_started": false,
+    "old_qwen2_block_ci": {
+      "run_id": 37851669536,
+      "source_commit": "7945a708a28e888aaf1eeccbf55bc0cf07817048",
+      "status": "FAILURE_BEFORE_QWEN2_BLOCK_NUMERICAL_DUT",
+      "reason": "preflight PCH and missing OWNER_FIXTURE failures",
+      "preserved": true
+    }
+  },
+  "github_links": {
+    "host_implementation_commit": "https://github.com/liyang53719/hetero_cnn_llm_aha/commit/7945a708a28e888aaf1eeccbf55bc0cf07817048",
+    "ci_only_fix_commit": "https://github.com/liyang53719/hetero_cnn_llm_aha/commit/78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b",
+    "host_v_and_legacy_run": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37851669678",
+    "fresh_host_v_job": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37851669678/job/113565801048",
+    "fresh_host_v_artifact": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37851669678/artifacts/11585506393",
+    "legacy_two_layer_job": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37851669678/job/113577376513",
+    "legacy_terminal_artifact": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37851669678/artifacts/11590893155",
+    "qwen2_block_run": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37853441187",
+    "qwen2_real_job": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37853441187/job/113571842438",
+    "qwen2_tiny_job": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37853441187/job/113571842839",
+    "qwen2_real_artifact": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37853441187/artifacts/11584132926",
+    "qwen2_tiny_artifact": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37853441187/artifacts/11583871396",
+    "historical_qwen2_failure_run": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37851669536"
+  },
+  "evidence_files": [
+    {
+      "path": "work/host_v_fresh_ci_7945a708/independent_review.json",
+      "bytes": 10263,
+      "sha256": "34150f4f5d33720fb39f33371f2e86fe78a08e209aa5e726695620d580c2e9f2"
+    },
+    {
+      "path": "work/host_v_fresh_ci_7945a708/cross_environment_comparison.json",
+      "bytes": 3159,
+      "sha256": "26836254e32f94248679389d64f771ea3bd8911e556e0cc328d5592ad9bc5777"
+    },
+    {
+      "path": "work/host_v_fresh_ci_7945a708/summary.json",
+      "bytes": 171218,
+      "sha256": "c52b71806d35e1175ca9f53bd91e45c99cdb3fb4cb577fc2079489e3d584d67d"
+    },
+    {
+      "path": "work/host_v_fresh_ci_7945a708/source_input_hashes.json",
+      "bytes": 59669,
+      "sha256": "803df1307164bfab64dac2fdea3021982b7cc58b655b23962f36061f8464e3c4"
+    },
+    {
+      "path": "work/host_v_legacy_ci_7945a708/terminal_SUMMARY.json",
+      "bytes": 19623,
+      "sha256": "e9ec99eb323a1c2533161af24041f3474a252e2b2b04fbc8063088c8982953d5"
+    },
+    {
+      "path": "work/host_v_legacy_ci_7945a708/terminal_REAL2_ACCEPTANCE.json",
+      "bytes": 2578,
+      "sha256": "4d73076a450de974607cb25bb4445a7b47ee6d31f9a321b3e6b0731ac1462e1e"
+    },
+    {
+      "path": "work/host_v_legacy_ci_7945a708/terminal_independent_review.json",
+      "bytes": 4809,
+      "sha256": "b9e792d3bc9c4ad6add51f217b104e43268c6af0e38264b220fac04849e6befc"
+    },
+    {
+      "path": "work/host_v_legacy_ci_7945a708/build_receipt.json",
+      "bytes": 8527,
+      "sha256": "54cafa140f5f97bdc9bf4b7892e036b17951712403e4b7092b04c4eb0c5a36f4"
+    },
+    {
+      "path": "work/host_v_legacy_ci_7945a708/package_manifest.json",
+      "bytes": 3471,
+      "sha256": "c5569d4b34fe459014952c8315d63e6e5ee00a4f1732a320284ae9ad747be1f5"
+    },
+    {
+      "path": "work/qwen2_ci_final_78e60a5e/REPORT.md",
+      "bytes": 5011,
+      "sha256": "d5d0bf035b9e187572ba63b9b2153897401584d42f099cde16516a599fc1787b"
+    },
+    {
+      "path": "work/qwen2_ci_final_78e60a5e/verification.json",
+      "bytes": 395507,
+      "sha256": "5d17cd86aa0ca2bc1f6535e3968d88e7371955c8ef185429bcf5415037bb5db9"
+    },
+    {
+      "path": "reports/execution/U00_2_HOST_BF16_V_20261008/legacy_interruption.json",
+      "bytes": 2290,
+      "sha256": "f4a9843a49bfcaca9e8e721926d934db9923db0757ffde2e67270dcf30580f8f"
+    }
+  ],
+  "compilation_receipt_sha256": "a368c6fe9c1adfde399173d873d4aceea2a0bfda4691965b38d3e03d81d00caa",
+  "no_host_job_rerun_claim_at_78e60": true
+}

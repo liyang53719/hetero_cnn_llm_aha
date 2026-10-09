@@ -1,7 +1,8 @@
 # Host Q/gate、K、QK Norm 与 partial64 RoPE：下一有界闭包
 
-状态：只读代码审查形成的实施计划，未改生产源、未运行数值测试。审查日期：2026-10-08 UTC。
-前置：先完成并发布当前 Host V 四组 M128 结果及旧路径回归，并等候选 small16/full128 数值结果完成。本计划不能作为 Host Q/K、Norm、RoPE 或完整 block 的 PASS。
+状态：2026-10-08设计审查快照，2026-10-09追加执行进度。下文历史行号、源码SHA及接口建议保留原样，不代表最新源码逐行状态。
+Host V四组M128及legacy回归CI已分别收尾，见 `doc/U00_2_HOST_BF16_V_20261008_CN.md`。生产Host Q/gate、K、V已有cold0/carried127两个M1实际投影与alias拒绝局部结果，见 `doc/U00_2_HOST_QKV_PROJECTION_20261009_CN.md`；全M128、新提交fresh CI、余下故障/reset及Norm/RoPE仍未完成。候选SharedL2与生产Host分别验收。
+优先级：GDN真实生产Host和状态续算与attention-path后续并行推进，不把完整Attention或候选full128当作GDN启动前置；单元实验不能升级为main完整GDN验收。
 
 ## 结论：最短的下一条可验收链
 
@@ -42,7 +43,7 @@
   - 外层 hub 仍是两个 client：metadata reader 与 owner。新 SFU 是 owner 内部的第四种 mode，外层不增加 client、iDMA 或 AXI master。
   - 新 SFU 首版使用普通 512-bit `MemoryRequest/Response`，已有 dense burst/read/write 直连保持不变。
 
-## 2. 第一小步：只扩 Q/gate、K 的实际 Dense 入口
+## 2. 第一小步：Q/gate、K 的实际 Dense 入口（M1已局部验真）
 
 修改范围建议：HostBlockCommands、HostBlockTop 的显式 feature/profile 选择、QwenBlockShape 的新 profile 工厂、Host descriptor serializer/contract/fixture 与测试。StreamingDense、MatrixPipelineService 的计算实现无需改动。
 
@@ -54,7 +55,7 @@
 - Q/gate 权重仍是完整 1024×4096 row-major；只做官方 weight 转置/排布搬运，不预计算投影、不把 native projection 写进 DUT 输入。
 - packed Q 是八个连续 head，每个 [Q256,gate256]，不能误用全 Q2048 后接全 gate2048 布局。
 
-该步骤的独立验收是 Host Q/gate、K 实际数值 + 原 V 回归，尚不等于 QK postprocess 完成。
+该步骤已完成的本地边界是baseline cold0/carried127各M1的Q/gate/K/V实际数值，以及cold0输出alias在owner前拒绝。来源为403个dirty-build源hash绑定，不能称精确新提交CI；count16/full128及余下故障仍待验，不等于QK postprocess完成。
 
 ## 3. 3-bit kind 已满：必须显式内部版本扩展
 
@@ -153,7 +154,7 @@ QwenOwnerKernel 的 mode 仍可保持 2 bit，mode=3 接新 owner。未识别的
 
 当前 `HostBlockCommands.scala:220-224` 仍以 `s.hidden` 绑定Q/PV；`Qwen2Block.scala:412-436` 相应attention寻址也用hidden。这些不能在本轮仅通过打开profile来误放行。已有SiLU owner是 FFN gate×SiLU 语义，不能当作attention sigmoid gate使用。
 
-本文件仅保存明确的下一闭包与风险；没有生产代码变更、没有数值PASS声明。
+本文件保存原设计快照与最新有界进度；已执行结果仅按独立报告的M1 projection边界接受，Norm/RoPE及完整block仍是待执行计划。GDN作为并行生产Host主线推进。
 
 ## 审查快照的源文件SHA256
 

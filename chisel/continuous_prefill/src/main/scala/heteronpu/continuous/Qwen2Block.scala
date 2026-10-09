@@ -10,13 +10,16 @@ import scala.collection.mutable.ArrayBuffer
   * Sixteen shared FMA lanes use the repository BF16/FP32 arithmetic primitive.
   * DDR uses FP32 containers; matrix operands are rounded to BF16 at ingress.
   */
-case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32,qWidth:Int=0,packedQWidth:Int=0,qwen35VOnly:Boolean=false){
+case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=2,headDim:Int=128,maxTokens:Int=1024,retainedMatrix:Boolean=false,matrixColumns:Int=32,qWidth:Int=0,packedQWidth:Int=0,qwen35VOnly:Boolean=false,qwen35QkvOnly:Boolean=false){
   val q=if(qWidth==0)hidden else qWidth
   val packedQ=if(packedQWidth==0)q else packedQWidth
+  val projectionOnly=qwen35VOnly || qwen35QkvOnly
+  require(!(qwen35VOnly && qwen35QkvOnly), "V-only and QKV-only profiles are distinct")
   require(q==heads*headDim && heads%kvHeads==0)
-  require(!qwen35VOnly || (hidden==1024 && q==2048 && packedQ==4096 && ffn==3584 && heads==8 && kvHeads==2 && headDim==256),
-    "Qwen3.5 profile currently admits only H1024 V projection")
-  require(qwen35VOnly || (q==hidden && packedQ==hidden), "independent projection widths require an explicit profile")
+  require(!projectionOnly || (hidden==1024 && q==2048 && packedQ==4096 && ffn==3584 && heads==8 && kvHeads==2 && headDim==256),
+    "Qwen3.5 projection profiles require H1024, packed Q4096 and KV512")
+  require(!qwen35QkvOnly || maxTokens<=128, "Qwen3.5 QKV projection supports at most 128 tokens")
+  require(projectionOnly || (q==hidden && packedQ==hidden), "independent projection widths require an explicit profile")
   require(headDim>=32 && headDim%32==0 && ffn%16==0 && hidden%16==0)
   require(maxTokens>0 && maxTokens<=1024)
   require(matrixColumns==32||matrixColumns==256)
@@ -24,6 +27,7 @@ case class QwenBlockShape(hidden:Int=1536,ffn:Int=8960,heads:Int=12,kvHeads:Int=
 }
 object QwenBlockShape {
   def qwen35V(maxTokens:Int=128):QwenBlockShape=QwenBlockShape(1024,3584,8,2,256,maxTokens,true,256,2048,4096,true)
+  def qwen35Qkv(maxTokens:Int=128):QwenBlockShape=QwenBlockShape(1024,3584,8,2,256,maxTokens,true,256,2048,4096,qwen35QkvOnly=true)
 }
 case class BlockRegion(name:String,offset:Long,words:Long,external:Boolean)
 class QwenBlockLayout(s:QwenBlockShape){
@@ -47,7 +51,7 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   */
 class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false) extends Module {
   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
-  require(!s.qwen35VOnly || ownerDriven, "Qwen3.5 V-only profile has no autonomous block route")
+  require(!s.projectionOnly || ownerDriven, "Qwen3.5 projection profiles have no autonomous block route")
   val layout=new QwenBlockLayout(s)
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
@@ -239,7 +243,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
         QwenOwnerKind.Rope.U->4.U,QwenOwnerKind.Attention.U->6.U,QwenOwnerKind.Add.U->8.U,
         QwenOwnerKind.Activation.U->12.U,QwenOwnerKind.KvAppend.U->16.U))
       seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
-      when(s.qwen35VOnly.B || j.activationBf16 || j.outputBf16 || j.weightBf16){fail(Status.Unsupported.U)}
+      when(s.projectionOnly.B || j.activationBf16 || j.outputBf16 || j.weightBf16){fail(Status.Unsupported.U)}
       .elsewhen(j.m===0.U||j.m>s.maxTokens.U||j.n===0.U||j.n>s.maxRow.U||j.n(3,0)=/=0.U||j.writeBytes===0.U){fail(Status.Bounds.U)}
         .otherwise{state:=st("begin")}
     }

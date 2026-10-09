@@ -1,0 +1,352 @@
+{
+  "schema": 1,
+  "status": "PASS_LOCAL_M1_PROJECTIONS_AND_ALIAS_ONLY_WITH_BUILD_RECOVERY_QUALIFICATION",
+  "date_utc": "2026-10-09",
+  "scope": "PROJECTION_ONLY",
+  "experimental_default_off": true,
+  "source_base_commit": "78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b",
+  "source_identity": "403 content-hashed dirty-build inputs; base commit is not the exact numerical source commit. Historical case receipts are immutable; later helper edits are not retroactively certified.",
+  "exact_committed_head_numerical_pass": false,
+  "source_manifest_sha256": "73fbc1871dadffa07c9f085502c9479e7345b7a0ab558d69620c3add52f5b6e2",
+  "binary_sha256": "fbfa36d98a4ab5b0fd2fa3ef200a7ab1f12de289938ac0b77122d4529a8f38a2",
+  "rtl_sha256": "1a3e604b01a5b945e6cab11319bc6afd326c54b1e8524817b84144b123796229",
+  "build_receipt_sha256": "cda38bce8b9cbc0046e6002f687f97a375e3c0d667ebf34f6036fd02b85c6240",
+  "source_files_bound": 403,
+  "cases": [
+    {
+      "case": "cold0_pass",
+      "status": "PASS_PRODUCTION_HOST_QKV_CASE",
+      "mode": "pass",
+      "variant": "baseline",
+      "phase": "cold",
+      "token_base": 0,
+      "token_count": 1,
+      "simulator_exit": 0,
+      "supervised_wall_seconds": 524.1829192638397,
+      "result_status": 0,
+      "issued_jobs": 3,
+      "successful_commands": 3,
+      "write_ack_bytes": 10240,
+      "published_bytes": 10240,
+      "physical_ddr_bytes_checked": 12156928,
+      "readonly_and_guard_bytes_checked": 12146688,
+      "independent_terminal_checked": true,
+      "native": {
+        "q_content": {
+          "elements": 2048,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        },
+        "q_gate": {
+          "elements": 2048,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        },
+        "k": {
+          "elements": 512,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        },
+        "v": {
+          "elements": 512,
+          "bit_differences": 2,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 2.3847678676247597e-07,
+          "gate": "PASS"
+        }
+      },
+      "actual_sha256": {
+        "q": "7dfbffadca7c671e49f403f420299066f6a33f9711e6e05fe979a7fea5805a11",
+        "k": "8aceb19ca25b1a5526fe9ee31a39c4bb8bd9c4e5c7458b28c429c9801e989c24",
+        "v": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3"
+      },
+      "reference_sha256": {
+        "q": "7dfbffadca7c671e49f403f420299066f6a33f9711e6e05fe979a7fea5805a11",
+        "k": "8aceb19ca25b1a5526fe9ee31a39c4bb8bd9c4e5c7458b28c429c9801e989c24",
+        "v": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3"
+      },
+      "ddr_after_sha256": "92ef7749979e8050a19feab6b599ddffeceaa571aea229001f3f5b567d36cb7e",
+      "writable_snapshot_sha256": {
+        "writable_after_command0.bin": "2d547d7874a7f2f204c824dd80e5f0467ef1fdc19c8c1e303d2c04d9250d63ce",
+        "writable_after_command1.bin": "3a7a5a1ea6f00c909e57ed0baafe343c0a7bd6d48a000a20e25b5fe65cbef99c",
+        "writable_after_command2.bin": "0a6f05369efe0a0a78bc8a9a87b66f98a229c33b66c36aa9d576347374fe47c3"
+      },
+      "input_sha256": {
+        "activation_tensor": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee",
+        "activation_window": "ce6abece8ee0f1015c87d176d84afa6f5c302814283013189ebbbda9007c99f7",
+        "weight_tensor": {
+          "q": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+          "k": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+          "v": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+        },
+        "command": "bd261c125d2c23425da4fe6ff0b8e1af8c837b3ee3a77cf02c9fe6e82e5a6d26",
+        "descriptors": "eddb92e6f287c31cb175ed51e0edc9d350f2d4628b68601e3573875a2852db94",
+        "launch": "333ce3a031c9eea94b76d429ad7787dfcc4c7d41394562b7d8b25a73adfc0030"
+      },
+      "fixture_sha256": "7ffc50015132f11454b14e36b21130f796d5d46e5a73615c7f774a903a112470",
+      "log_sha256": "784c1f417043e8a39f9846ab87adeec2958b2414538d98a1d821174c49e76e75",
+      "result_sha256": "89d2d755736b6e569f122d7fc157edc5297512415421d4cb5a3bace6a4167a9b",
+      "supervisor_sha256": "8877144c2cad262d79bd869c221c705080077b5406cc460eff5db4726a14c3ee",
+      "checked_bf16": 5120,
+      "canonical_bit_differences": 0,
+      "cycles": 762218
+    },
+    {
+      "case": "carried127_pass",
+      "status": "PASS_PRODUCTION_HOST_QKV_CASE",
+      "mode": "pass",
+      "variant": "baseline",
+      "phase": "carried",
+      "token_base": 127,
+      "token_count": 1,
+      "simulator_exit": 0,
+      "supervised_wall_seconds": 517.4436271190643,
+      "result_status": 0,
+      "issued_jobs": 3,
+      "successful_commands": 3,
+      "write_ack_bytes": 10240,
+      "published_bytes": 10240,
+      "physical_ddr_bytes_checked": 12156928,
+      "readonly_and_guard_bytes_checked": 12146688,
+      "independent_terminal_checked": true,
+      "native": {
+        "q_content": {
+          "elements": 2048,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        },
+        "q_gate": {
+          "elements": 2048,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        },
+        "k": {
+          "elements": 512,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        },
+        "v": {
+          "elements": 512,
+          "bit_differences": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "gate": "PASS"
+        }
+      },
+      "actual_sha256": {
+        "q": "3fd4886f9ef93c4e3db9f923efe6ad2fca334d52dc898c7b3b19f24fa24cfdc5",
+        "k": "3f594fbbb25df5ae54c0a63b1b7c59676eda3433d430ec1db8d665d9e796d88a",
+        "v": "8704b57257e2e0a396d73e0ded653378fdfba0586583428349a84750486c4b84"
+      },
+      "reference_sha256": {
+        "q": "3fd4886f9ef93c4e3db9f923efe6ad2fca334d52dc898c7b3b19f24fa24cfdc5",
+        "k": "3f594fbbb25df5ae54c0a63b1b7c59676eda3433d430ec1db8d665d9e796d88a",
+        "v": "8704b57257e2e0a396d73e0ded653378fdfba0586583428349a84750486c4b84"
+      },
+      "ddr_after_sha256": "4f3c7a2e38fedec54b7a92fb82db403c34de132ced3ea92b0fc5e4233ea9f486",
+      "writable_snapshot_sha256": {
+        "writable_after_command0.bin": "da1ebe68eedc40943049d50e3672070fa049a59ff219dbe6b9f3a1f798628efa",
+        "writable_after_command1.bin": "27d4a9357a8dd79c558cca6a653dcee30a664cefebf811231bfdc9e0099e53f3",
+        "writable_after_command2.bin": "3d177777072af3e5903b921989b9cca59e95d88ecfb7f88dc9cd39de832daba2"
+      },
+      "input_sha256": {
+        "activation_tensor": "e9050cabc6fd37ca7c59a08ecea996f7e046fa07c5bb258fecdd63822e866347",
+        "activation_window": "dc5ac31432af58a9495d005014ee0a64b1d56c034de3685797a321fb3405c900",
+        "weight_tensor": {
+          "q": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+          "k": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+          "v": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+        },
+        "command": "bd261c125d2c23425da4fe6ff0b8e1af8c837b3ee3a77cf02c9fe6e82e5a6d26",
+        "descriptors": "9a8de26f691b7966668c86a27a7c36f29c80599b486ad370afe70b5bc4f34606",
+        "launch": "57705c6defd57963f3dd7e911cb249a3853ab4f68029f279eb0cb7429e70496f"
+      },
+      "fixture_sha256": "77ae66190ee914c93ff1f79c7b83d0abd09269c2e28d14bd76fc5f087da79a83",
+      "log_sha256": "be29ba56542bc0188c148650c7e04d2f1426e0c7a76d9e7c4388658089e15e15",
+      "result_sha256": "86a4a3c3a3c56e8f9aed92a67e5502b93d9cdbf64af1f9c3bec05411a602c472",
+      "supervisor_sha256": "54cb1cb15bb54a180aa9d8c950e4d8297432dc8099afa5492b8251ee1da2f664",
+      "checked_bf16": 5120,
+      "canonical_bit_differences": 0,
+      "cycles": 762218
+    },
+    {
+      "case": "cold0_output_alias",
+      "status": "PASS_PRODUCTION_HOST_QKV_CASE",
+      "mode": "output-alias",
+      "variant": "baseline",
+      "phase": "cold",
+      "token_base": 0,
+      "token_count": 1,
+      "simulator_exit": 0,
+      "supervised_wall_seconds": 413.3421046733856,
+      "result_status": 9,
+      "issued_jobs": 1,
+      "successful_commands": 1,
+      "write_ack_bytes": 8192,
+      "published_bytes": 8192,
+      "physical_ddr_bytes_checked": 12156928,
+      "readonly_and_guard_bytes_checked": 12148736,
+      "independent_terminal_checked": true,
+      "native": {},
+      "actual_sha256": {
+        "q": "7dfbffadca7c671e49f403f420299066f6a33f9711e6e05fe979a7fea5805a11",
+        "k": "046bc77c6ab1f5f2b8b16d235cb66490fee59257e96f52f8838664be9d5e0ff9",
+        "v": "046bc77c6ab1f5f2b8b16d235cb66490fee59257e96f52f8838664be9d5e0ff9"
+      },
+      "reference_sha256": {
+        "q": "7dfbffadca7c671e49f403f420299066f6a33f9711e6e05fe979a7fea5805a11",
+        "k": "8aceb19ca25b1a5526fe9ee31a39c4bb8bd9c4e5c7458b28c429c9801e989c24",
+        "v": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3"
+      },
+      "ddr_after_sha256": "4cdde2fe78c983a6ed2020f1deaa96250dda0ffbedba97ca753a602c26d61d87",
+      "writable_snapshot_sha256": {
+        "writable_after_command0.bin": "2d547d7874a7f2f204c824dd80e5f0467ef1fdc19c8c1e303d2c04d9250d63ce",
+        "writable_after_command1.bin": "2d547d7874a7f2f204c824dd80e5f0467ef1fdc19c8c1e303d2c04d9250d63ce"
+      },
+      "input_sha256": {
+        "activation_tensor": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee",
+        "activation_window": "ce6abece8ee0f1015c87d176d84afa6f5c302814283013189ebbbda9007c99f7",
+        "weight_tensor": {
+          "q": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+          "k": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+          "v": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+        },
+        "command": "bd261c125d2c23425da4fe6ff0b8e1af8c837b3ee3a77cf02c9fe6e82e5a6d26",
+        "descriptors": "eddb92e6f287c31cb175ed51e0edc9d350f2d4628b68601e3573875a2852db94",
+        "launch": "333ce3a031c9eea94b76d429ad7787dfcc4c7d41394562b7d8b25a73adfc0030"
+      },
+      "fixture_sha256": "7ffc50015132f11454b14e36b21130f796d5d46e5a73615c7f774a903a112470",
+      "log_sha256": "fc499b715cd642e9da8efe363c59e91dc5215f8b88d93035cc30d23e5867605f",
+      "result_sha256": "2e3fc3ef42da7d46764d3e5055b5dd0b7a2e030bbaf0edb3242997846b4a9324",
+      "supervisor_sha256": "b10f446fd3a78e6eb69153e3e4902c652a84015c8643855dcd27283f2eca51d7",
+      "rejected_before_k_owner": true,
+      "q_output_preserved_bytes": 8192,
+      "k_v_published": false
+    }
+  ],
+  "total_pass_checked_bf16": 10240,
+  "topology": {
+    "status": "PASS_REACHABLE_MATRIX_TOPOLOGY",
+    "logical_matrix_engines": 1,
+    "physical_512mac_slices": 8,
+    "peak_macs_per_cycle": 4096,
+    "idma_instances": 1,
+    "generated_sha256": "1a3e604b01a5b945e6cab11319bc6afd326c54b1e8524817b84144b123796229",
+    "timing_signoff": false
+  },
+  "reference_boundary": {
+    "sequential_fp32_fma_bf16_rne": true,
+    "exact_input_bound_integer_and_C_terminals_reused": true,
+    "terminal_summary_sha256": "7a825ff9195db77e5889ecd2c4a4cf6f120454a39160493cd82661b806f97a51",
+    "accumulator_traces_regenerated_or_loaded": false,
+    "official_capture_fresh": 0,
+    "official_capture_reused": 2,
+    "official_manifest_sha256": "21eb0f6f3f59b3b1a33650a07692084eabe69a0d04cec60036a434357b2c1b02",
+    "cross_host_bit_exact_claim": false
+  },
+  "native_precision": {
+    "operator_thresholds": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "full_block_gate_pass": false,
+    "full_block_failed_comparisons": {
+      "baseline": 5,
+      "avx2": 9
+    },
+    "thresholds_relaxed": false
+  },
+  "build_recovery": {
+    "status": "PASS_DIRECT_PHYSICAL_AND_RECEIPT_SPOTCHECKS",
+    "role_checks": [
+      {
+        "role": "q",
+        "write_requests": 128,
+        "acknowledged_bytes": 8192,
+        "final_ack_delay_cycles": 55,
+        "distinct_held_cycles": 12,
+        "completion_cycle": 612411
+      },
+      {
+        "role": "k",
+        "write_requests": 16,
+        "acknowledged_bytes": 1024,
+        "final_ack_delay_cycles": 55,
+        "distinct_held_cycles": 11,
+        "completion_cycle": 687420
+      },
+      {
+        "role": "v",
+        "write_requests": 16,
+        "acknowledged_bytes": 1024,
+        "final_ack_delay_cycles": 55,
+        "distinct_held_cycles": 11,
+        "completion_cycle": 762253
+      }
+    ],
+    "physical_A_W_bytes_unchanged": true,
+    "all_actual_reference_independent_words_equal": true,
+    "all_three_prior_output_snapshots_preserved": true,
+    "guards_and_inactive_windows_unchanged": true,
+    "generated_proof_current_raw_hash_checks": {
+      "old": 538,
+      "new": 538
+    },
+    "generated_files_raw_identical": 523,
+    "generated_files_narrow_normalized": 15,
+    "raw_generation_comparison_failure_retained": true,
+    "initial_verilation_exit": 255,
+    "compiled_artifacts_match_retained_receipts": true,
+    "narrow_proof_sha256": "39420ae0400d914a6b36516475bc0351e91ca151f838b0faca30f27873703e61",
+    "build_provenance_qualification": "Initial SIG9/overlapping same-directory generation retained; fresh serial generation equivalent after only audited path comments/paired protectlib guards. Timestamp/log ordering precedes compilation. No precompile per-C++ hash manifest is claimed."
+  },
+  "independent_review": {
+    "cold0_status": "PASS_INDEPENDENT_COLD0_M1_ARTIFACT_RECHECK",
+    "carried127_status": "PASS_INDEPENDENT_LOCAL_CASE_RECHECK",
+    "output_alias_status": "PASS_INDEPENDENT_LOCAL_CASE_RECHECK",
+    "all_stored_fields_match": true,
+    "source_files_verified_before_later_patch": 403,
+    "hardfloat_files_verified": 20,
+    "raw_artifacts_rechecked": true,
+    "new_build_or_simulator_rerun": false,
+    "status": "PASS_INDEPENDENT_LOCAL_THREE_CASE_REVIEW",
+    "summary_sha256": "c48c26c529cf404b2be349c394c291e6121a89de0388c9ed219a232322aaaeaa",
+    "verified_cases": [
+      "cold0_pass",
+      "carried127_pass",
+      "cold0_output_alias"
+    ]
+  },
+  "not_completed": [
+    "other actual fault modes and reset-recovery",
+    "fresh clean exact-new-commit CI",
+    "Host QKV count16 and fullM128",
+    "production Host Norm256/RoPE",
+    "prefix attention/FFN full block",
+    "GDN production Host state chain",
+    "35B-A3B full block",
+    "three-model complete numerical and MAC90",
+    "DC/PPA/timing"
+  ],
+  "broad_states": {
+    "U00.2": "ongoing",
+    "U01": "to do",
+    "C02.2": "native gate OPEN; checklist to do",
+    "C03.2_C04.2_C05": "local M1 integration subgate only; broad status unchanged",
+    "S01_Q35A": "open"
+  },
+  "next_priority": "Advance true production Host GDN integration in parallel with the bounded attention-path follow-up; do not make complete Attention a serial prerequisite. Separate GDN owner unit work is not included in this QKV acceptance.",
+  "delivery": "Source, pins, hashes and compact summaries only; no tensors, weights, NPZ, RTL/binary bytes or encoded payload."
+}

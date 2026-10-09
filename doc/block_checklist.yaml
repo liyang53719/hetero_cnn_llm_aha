@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 2d903d8230a06c8c5fd2fb0b54942a211bc666d6ad3ecaaf63967e18ac120943
+计划SHA256: d4285a964686f10538726cfa2d2d4c891b290d081c8cd72df5fd1f1a673c7b5e
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1108,6 +1108,17 @@
         SHA256: b016426f764e7b5f36dc7060761aa6909949dcefc384a83db536ae869d34fd5c
       - 文件: doc/U00_2_MATRIX_READ_LOOKAHEAD_20261008_CN.md
         SHA256: 2902cec4ef7b5788deb77547253c3d3514c2754861e97378bedded964a6f7f72
+    - 文件: reports/execution/U00_2_HOST_QKV_PROJECTION_20261009/result.json
+      SHA256: cbbe6b880046ea5fa98dba68f1a53c852847261a02cf12158a778aa7b7a84eb7
+      设计提交: 78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b
+      范围: 设计提交仅为基线，实际结果由403个dirty-build源hash及RTL和程序hash绑定；默认关闭生产Host QKV的baseline cold0和carried127各M1共10240 BF16 canonical零位差，真实K输出alias在owner前拒绝且保留Q。保留构建255及SIG9和538生成文件窄恢复比较限制；全M128、新提交CI、余下fault/reset、Norm/RoPE及完整block未完成，所有大项状态不升级。
+      关联文件:
+      - 文件: reports/execution/U00_2_HOST_QKV_PROJECTION_20261009/pins.json
+        SHA256: 516c282d22937406a2f2cd508c95cca5bc9dfb3b3d573985c0b7eb925d15eacd
+      - 文件: reports/execution/U00_2_HOST_QKV_PROJECTION_20261009/prior_ci_summary.json
+        SHA256: 212d7b1443b10d8cede978648d733784ef89a30b376b97ee28190cad3cc5bc9b
+      - 文件: doc/U00_2_HOST_QKV_PROJECTION_20261009_CN.md
+        SHA256: 9f428662cbfc62b22ac324c2f66c052abd124717437f1cd70ac7f55052b086b3
 - {编号: U01, 名称: 三模型典型block数值及90%联合验收, 状态: to do, 执行侧: local-agent, 负责人: '', 证据: []}
 默认执行侧: sandbox
 本地事项:
@@ -1193,6 +1204,7 @@
 - {编号: U00.2, 执行者: sandbox@matrix-token-tile16-20261008, 时间: '2026-10-08T06:10:00+00:00', 说明: 完成默认关闭候选实际16行Matrix token批处理，复用固定512lane及1.5MiB；640主head、两来源独立逐K和RTL、tail17跨批、ACK及fault及reset验真通过。候选commandwall5.6268406%；1218相关normal及-O、全仓3888通过及同5既有失败。保留全M128、三模型完整block和90%未完成。}
 - {编号: U00.2, 执行者: sandbox@matrix-read-lookahead-20261008, 时间: '2026-10-08T08:03:00+00:00', 说明: 接续认领既有tile16 payload默认关闭的单请求A下一K lookahead及因果A/B；固定单owner和512lane资源、原数值及fault协议。先小K及旧默认逐周期门禁，再两来源冻结32token的无延迟及transaction-indexed replay和random stress。实现及全量验真进行中，不提前声明性能改善或完整block90%。}
 - {编号: U00.2, 执行者: sandbox@matrix-read-lookahead-20261008, 时间: '2026-10-08T10:54:00+00:00', 说明: 默认关闭单请求lookahead本地封存通过；两来源确定延迟周期下降5.6711475%，无停顿无提升。完整输入及512lane独立trace、严格同budget和fingerprint、random49事务及早到响应错误和reset恢复通过。1372normal及-O、4042全仓通过和同5既有失败。独立评审通过，source-only main和精确HEAD CI发布后另核对；U00.2ongoing及U01to do，不宣称PPA或完整block90%。}
+- {编号: U00.2, 执行者: sandbox@host-qkv-projection-20261009, 时间: '2026-10-09T02:46:00+00:00', 说明: 补齐旧HostV及legacy三条CI终态；追加默认关闭生产HostQKV两个M1投影及真实alias拒绝子证据，保留dirty-source与构建恢复限制。GDN真实Host集成并行推进，完整native精度和full128及新提交CI仍OPEN；U00.2ongoing和U01to do及所有大项状态不变。}
 当前统一验收目标:
   依据: 2026-10-06用户指定三模型典型block数值及90%目标
   计划字段: 当前统一验收目标
@@ -1227,6 +1239,18 @@
   状态: ongoing
   本地完成: 真实Host和既有Matrix及单一iDMA完成两来源cold128与carried128四组V投影，262144个BF16输出逐位一致；非零窗口及最后ACK故障不发布已覆盖
   报告: doc/U00_2_HOST_BF16_V_20261008_CN.md
-  回归边界: 旧Qwen2两层连续42命令本地两次中断，终态及精确新提交CI待完成；构建和运行分job，仅运行job一次连续执行全部命令并应用原oracle后才可PASS
+  回归边界: 精确7945a708的Host V fresh和synthetic legacy两层CI均PASS；后者一次进程42命令/430 descriptors/1409024 FP32零位差。78e60a5e独立legacy16-lane real/tiny block CI通过，Host同源不称重跑；本地两次中断、旧block入口失败及wrapper/原始输出可用性限制全部保留
   原精度门禁: 完整native BF16仍FAIL；阈值不变，不能由V局部一致性关闭C02.2
-  非完成项: [生产HostQK及Norm和RoPE, 有前缀Attention及FFN, 候选QKV全M128实际RTL, 三模型完整block, U01]
+  非完成项: [生产HostQK的count16和full128及新提交CI, Host Norm和RoPE, 有前缀Attention及FFN, 候选QKV全M128实际RTL, GDN及35B完整block, 三模型联合验收, U01]
+
+生产HostQKV投影局部进展:
+  关联: [C03.2, C04.2, C05, U00.2]
+  状态: ongoing
+  报告: doc/U00_2_HOST_QKV_PROJECTION_20261009_CN.md
+  结果: reports/execution/U00_2_HOST_QKV_PROJECTION_20261009/result.json
+  结果SHA256: cbbe6b880046ea5fa98dba68f1a53c852847261a02cf12158a778aa7b7a84eb7
+  本地完成: baseline cold0及carried127各M1的5120 BF16 canonical零位差和762218周期；cold K输出alias在owner前status9且issued_jobs1，只保留Q8192B，三例完整物理DDR及快照复核
+  来源边界: 403个冻结dirty-build源hash绑定于78e60a5e基线之上；保留255及SIG9和重叠生成窄恢复证明；不是新精确提交CI，完整代表性fault/reset套件未完成
+  非完成: [Host QKV count16及full128, 新提交fresh CI, 余下fault及reset, Host Norm256及RoPE, Attention及FFN, GDN完整状态链, 35B完整block, PPA及MAC90]
+  并行主线: GDN实际生产Host集成及cold/carried状态续算，不等待完整Attention；另行owner单元实验不构成本QKV交付或当前main完整GDN验收
+  状态边界: 所有关联大项状态不变；U00.2 ongoing、U01 to do；C02.2原native gate OPEN

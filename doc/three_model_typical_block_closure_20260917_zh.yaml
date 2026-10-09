@@ -1097,7 +1097,7 @@ U00_2_Matrix_read_lookahead门禁_20261008:
   状态: U00.2 ongoing；U01 to do
 
 Qwen35候选QKV命令子链_20261008:
-  用户优先级: 先完成Qwen3.5实际模型数值路径，再开展新的MAC利用率优化；已运行的旧CI仅核验收尾
+  用户优先级: 先完成Qwen3.5实际模型数值路径；GDN真实生产Host及状态链与attention后续并行推进，不等待完整Attention闭包；新的MAC优化后置，旧CI只核验收尾
   关联任务: [C03.2, C04.2, C05, S01, Q35A]
   当前状态: 实现中；先16token调试，再执行cold128与carried128的全部Q8、K2、V2及原样gate
   接入边界: 既有projection controller默认关闭分支的候选QKV命令子链；不是通用Chisel Host或whole-block owner已接通
@@ -1106,10 +1106,24 @@ Qwen35候选QKV命令子链_20261008:
   数据路径: 同一个实际Matrix512与1.5MiB SharedL2；顺序K1024的FP32 FMA末端BF16-RNE；Q每头query256/gate256交织，QK Norm256后partial64 RoPE；V直接实际Matrix写回且不读Norm或RoPE系数
   生命周期: 中间区仅预置哨兵；下游只读实际前驱写入；全部描述符及地址在DMA前验证，所有有效输出写ACK后才发布成功完成
   数值门禁: 每个实际Matrix包和全部有效输出与独立整数及C参考核对，并保留每个Q/K/V/gate官方producer比较；完整native BF16审计FAIL和原门限不得被局部RTL一致性覆盖
-  通用Host下一步: 解耦hidden1024与query/context2048及packedQ4096，贯通typed BF16的实际bytes/mask/stride；复用既有MatrixStreamPort资源而不复制Matrix阵列，接回HostBlockCommands及SSA完成发布
-  通用HostV局部进展: 默认关闭V-only profile与owner-managed版本2描述符已实现；同一StreamingDense、8个既有Matrix512 slice和单一pinned iDMA，BF16 A/D真实bytes/mask/stride及仅ACK窗口发布。frontend和标量/burst控制器测试已过，实际Host四组cold128/carried128共262144个V输出逐位符合独立参考，另有非零窗口及错误ACK覆盖；报告doc/U00_2_HOST_BF16_V_20261008_CN.md。Q/K的生产Host常量加载与SFU链未接通
-  HostV发布回归边界: 本地实际V四组M128已验真；旧Qwen2两层连续42命令回归两次失去执行会话且无终态，原因未知，未作第三次本地重跑。通过精确commit绑定的GitHub Actions构建及连续执行两个job收尾，CI待完成前保持未验收；不上传模型权重或NPZ
+  通用Host下一步: Q/gate、K、V三个标准Command128已在默认关闭生产Host完成baseline cold0及carried127各M1局部门禁；下一步补精确新提交fresh CI和余下故障/reset，并接QK常量及Norm256和partial64 RoPE；GDN有界owner及状态续算并行
+  通用HostV局部进展: 默认关闭V-only profile与owner-managed版本2描述符已实现；同一StreamingDense、8个Matrix512 slice和单一pinned iDMA；本地四组M128及非零窗口验真。精确7945a708 fresh CI四组M128共262144 BF16 canonical零位差、fresh2/reuse0通过；后续生产Host QKV M1另见doc/U00_2_HOST_QKV_PROJECTION_20261009_CN.md，QK常量/SFU链仍未接通
+  HostV发布回归边界: 精确7945a708的Host V fresh及synthetic legacy两层CI均完成；后者一次进程42命令/430 descriptors/1409024 FP32零位差/17096970周期，2026-10-09T01:59:25Z结束。78e60a5e仅三文件CI修复且独立legacy16-lane real/tiny block通过；Host same-source不冒称新SHA重跑。本地两次无退出中断及旧block入口失败保留；wrapper和紧凑回执缺原始输出限制见prior_ci_summary.json
   跨环境输入边界: 固定模型和forward源码不代表官方前缀激活跨主机逐位相同。旧6c0daf8同HEAD的CI与本地80个重叠case激活哈希不同，W/gamma/trig相同；两端各自严格oracle及协议通过，未定位kernel或误差幅度。新子链按每次真实输入/capture哈希独立验收，不声称跨主机同输入，阈值不变
   后续完整block: [有前缀QK与causal softmax和PV, sigmoid attention gate, OProj2048到1024, residual和post-attention Norm, dense SwiGLU3584与down及residual, 层0GDN完整状态链, 35B-A3B真实路由与expert完整链]
   保留状态: C03.2/C04.2/C05及S01/Q35A大项不关闭；C02.2原native精度门禁保持OPEN；U00.2 ongoing，U01 to do
   交付策略: Git仅源码、脚本、pins、哈希、小摘要和中文计划；不含权重、NPZ、memh、全参考轨迹或编码后的可重建payload
+
+生产HostQKV投影M1门禁_20261009:
+  关联任务: [C03.2, C04.2, C05, U00.2]
+  报告: doc/U00_2_HOST_QKV_PROJECTION_20261009_CN.md
+  结果摘要: reports/execution/U00_2_HOST_QKV_PROJECTION_20261009/result.json
+  身份: 基线78e60a5ea661b295d1e1e04669a9d0c7cc52cb0b上的403个冻结dirty-build源hash；不是该Git提交的精确数值执行，后续helper修改不追溯重证历史
+  范围: 默认关闭PROJECTION_ONLY；原HostBlockTop和三个Command128读同一官方归一化A，Q/gate4096及K512和V512；一个逻辑Matrix及八个既有512slice，单一pinned iDMA
+  已完成: baseline cold0/count1和carried127/count1各5120 BF16 canonical零位差，各762218周期；全部实际写ACK后发布，原native阈值通过
+  拒绝验收: cold K目标alias Q的已发布输出，status9且issued_jobs1；保留Q8192B，K/V无发布。三例各12156928物理DDR字节及逐命令快照独立复核
+  来源边界: fresh0/reused2；真实A及官方W绑定既有整数/C terminal，未再生成全accumulator trace；cold V两值native差异max0.0001220703125，carried全native逐位一致；完整native audit仍FAIL
+  构建边界: 初次exit255及SIG9和重叠生成保留；538个生成C++及header仅523原字节一致、15经路径注释及配对protectlib guard窄比较，原raw比较FAIL不改写；clean exact-new-commit CI未完成
+  待完成: [其余实际fault及reset, 新提交fresh CI, Host QKV count16及full128, Host Norm256和RoPE, prefix Attention及FFN, 三模型完整block, PPA及MAC90]
+  并行下一步: GDN真实生产Host有界owner及显式状态读写和cold/carried续算；独立GDN单元实验不在本QKV交付，不声明当前main完整GDN实际RTL通过
+  状态: C03.2/C04.2/C05仅增M1集成子证据；S01/Q35A保持未完成；U00.2 ongoing、U01 to do、C02.2原native gate OPEN

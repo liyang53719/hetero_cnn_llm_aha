@@ -14,8 +14,10 @@ import chisel3.util._
   * tensors are internal-only logical values, never DDR materializations.
   * Their completion events are conservatively delayed until PV writeback.
   */
-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false) extends Module {
+class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false) extends Module {
   require(!bf16V || s.qwen35VOnly, "native V requires the explicit Qwen3.5 V-only profile")
+  require(!bf16Qkv || s.qwen35QkvOnly, "native QKV requires the explicit Qwen3.5 QKV-only profile")
+  require(!(bf16V && bf16Qkv), "native V-only and QKV features are distinct")
   require(eventSlots>=4 && isPow2(eventSlots) && maxCommands>=21 && maxCommands<=255)
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new HostCommandLaunch));val result=Decoupled(new HostCommandResult)
@@ -31,7 +33,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
   val events=RegInit(VecInit(Seq.fill(eventSlots)(false.B)))
   val tensors=Reg(Vec(3,new DecodedTensor));val slot=RegInit(0.U(2.W))
   val policy=Reg(Vec(12,UInt(128.W)));val policySlot=RegInit(0.U(4.W));val policyIndex=Reg(UInt(24.W))
-  val policyIndices=Reg(Vec(12,UInt(24.W)));val extendedV=RegInit(false.B)
+  val policyIndices=Reg(Vec(12,UInt(24.W)));val extendedProjection=RegInit(false.B)
   val bound=Reg(new QwenOwnerJob)
   val group=RegInit(0.U(2.W));val qkCommand=Reg(UInt(128.W));val softCommand=Reg(UInt(128.W))
   val q=Reg(new DecodedTensor);val k=Reg(new DecodedTensor);val score=Reg(new DecodedTensor);val probability=Reg(new DecodedTensor)
@@ -129,7 +131,8 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     .otherwise{state:=decode}
   }
   when(state===decode){
-    val supported=isMatrix||opcode===0x30.U||opcode===0x32.U||isSoftmax||opcode===0x34.U||opcode===0x35.U||kv
+    val supported=if(s.qwen35QkvOnly) opcode===0x20.U else
+      isMatrix||opcode===0x30.U||opcode===0x32.U||isSoftmax||opcode===0x34.U||opcode===0x35.U||kv
     val correctEngine=engine===Mux(isMatrix,2.U,Mux(kv,4.U,3.U))
     val rootsOK=roots(0)=/=0xffffff.U&&roots(2)=/=0xffffff.U&&roots(0)<cfg.descriptors&&roots(2)<cfg.descriptors&&
       Mux(isSoftmax,roots(1)===0xffffff.U,roots(1)=/=0xffffff.U&&roots(1)<cfg.descriptors)
@@ -141,7 +144,7 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     .elsewhen(waitEvent>=eventSlots.U||signalEvent===0.U||signalEvent>=eventSlots.U|| !dependency||
       events(signalEvent(log2Ceil(eventSlots)-1,0))||signalEvent===waitEvent||
       (group=/=0.U && signalEvent===qkCommand(55,40))){fail(Status.Dependency.U)}
-    .otherwise{slot:=0.U;policy:=VecInit(Seq.fill(12)(0.U(128.W)));extendedV:=false.B;state:=tensorIssue}
+    .otherwise{slot:=0.U;policy:=VecInit(Seq.fill(12)(0.U(128.W)));extendedProjection:=false.B;state:=tensorIssue}
   }
   when(state===tensorIssue&&tensor.io.request.fire){state:=tensorGet}
   when(state===tensorGet&&tensor.io.result.fire){
@@ -170,9 +173,9 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       when(r.data(7,0)=/=0x10.U||next===0xffffff.U){fail(Status.Malformed.U)}
       .otherwise{policyIndex:=next;policySlot:=1.U;state:=policyIssue}
     }.elsewhen(isMatrix && policySlot===1.U && next=/=0xffffff.U){
-      when(!bf16V.B || opcode=/=0x20.U || r.data(7,0)=/=0x12.U){fail(Status.Unsupported.U)}
-      .otherwise{extendedV:=true.B;policyIndex:=next;policySlot:=2.U;state:=policyIssue}
-    }.elsewhen(extendedV){
+      when(!(bf16V || bf16Qkv).B || opcode=/=0x20.U || r.data(7,0)=/=0x12.U){fail(Status.Unsupported.U)}
+      .otherwise{extendedProjection:=true.B;policyIndex:=next;policySlot:=2.U;state:=policyIssue}
+    }.elsewhen(extendedProjection){
       val expectedKind=Mux(policySlot===2.U,0x1a.U,0x1b.U)
       when(r.data(7,0)=/=expectedKind || (policySlot===11.U)=/=(next===0xffffff.U)) {fail(Status.Malformed.U)}
       .elsewhen(policySlot===11.U){state:=validate}
@@ -183,30 +186,37 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val a=tensors(0);val b=tensors(1);val d=tensors(2)
     val m=a.dims(0);val n=d.dims(1)
     val vp=policy(2)
+    val role=vp(65,64)
+    val projectionN=Mux(role===0.U,4096.U(16.W),512.U(16.W))
     val tokenBase=vp(99,68);val tokenCount=vp(107,100)
     val activeA=a.address+(tokenBase.pad(64)<<11)
-    val activeD=d.address+(tokenBase.pad(64)<<10)
+    val projectionOffset=Mux(role===0.U,tokenBase.pad(64)<<13,tokenBase.pad(64)<<10)
+    val projectionBytes=Mux(role===0.U,tokenCount.pad(64)<<13,tokenCount.pad(64)<<10)
+    val activeD=d.address+projectionOffset
     val activeAEnd=activeA+(tokenCount.pad(64)<<11)
-    val activeDEnd=activeD+(tokenCount.pad(64)<<10)
+    val activeDEnd=activeD+projectionBytes
     val prefixes=tensors.flatMap(_.prefixIndices)
     val distinctPrefixes=(for(i<-0 until 9;j<-i+1 until 9)yield prefixes(i)=/=prefixes(j)).reduce(_&&_)
     // Version 2 is owner-managed staging. tile16 describes arithmetic tile
     // granularity, not a fixed token batch; the private SRAM chooses contexts.
-    val ownerPolicy=extendedV && vp(7,0)===0x1a.U && vp(63,56)===2.U && vp(65,64)===2.U &&
+    val admittedRole=Mux(bf16Qkv.B,role<=2.U,role===2.U)
+    val ownerPolicy=extendedProjection && vp(7,0)===0x1a.U && vp(63,56)===2.U && admittedRole &&
       vp(67,66)===3.U && vp(127,108)===0.U && tokenCount>0.U && tokenCount<=128.U &&
       tokenBase.pad(34)+&tokenCount<=m &&
       (0 until 9).map(i=>policy(i+3)(7,0)===0x1b.U && policy(i+3)(127,120)===0.U &&
         policy(i+3)(119,112)===i.U && policy(i+3)(111,56)===0.U).reduce(_&&_)
-    val vMatrix=policy(0)(127,56)===(m.pad(72)|(512.U(72.W)<<16)|(1024.U(72.W)<<32)) &&
+    val projectionMatrix=policy(0)(127,56)===(m.pad(72)|(projectionN.pad(72)<<16)|(1024.U(72.W)<<32)) &&
       policy(1)(7,0)===0x12.U && policy(1)(127,56)==="h004000040020ffffff".U(72.W)
-    val nativeV=bf16V.B && opcode===0x20.U && m>0.U && m<=128.U && m<=s.maxTokens.U &&
-      shape2(a,m,1024.U)&&shape2(b,1024.U,512.U)&&shape2(d,m,512.U)&&
-      Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && ownerPolicy && vMatrix && distinctPrefixes
+    // Q columns preserve the official [Q256, gate256] pair for each of 8
+    // heads. Dense has no head-wise rearrangement and stores one contiguous D.
+    val nativeProjection=(bf16V || bf16Qkv).B && opcode===0x20.U && m>0.U && m<=128.U && m<=s.maxTokens.U &&
+      shape2(a,m,1024.U)&&shape2(b,1024.U,projectionN)&&shape2(d,m,projectionN)&&
+      Seq(a,b,d).map(_.dtype===5.U).reduce(_&&_) && ownerPolicy && projectionMatrix && distinctPrefixes
     val nativeWeight=bf16Weights.B && opcode===0x20.U && b.dtype===5.U && n(4,0)===0.U
-    val validDTypes=nativeV || (a.dtype===7.U&&d.dtype===7.U&&(isSoftmax||b.dtype===7.U||nativeWeight))
+    val validDTypes=nativeProjection || (a.dtype===7.U&&d.dtype===7.U&&(isSoftmax||b.dtype===7.U||nativeWeight))
     val plainTails=(isSoftmax||b.tail===0xffffff.U)&&d.tail===0xffffff.U&&(kv=== (a.tail===0xffffff.U))
     val noAlias= !overlap(d.address,d.paddedEnd,a.address,a.paddedEnd) && (isSoftmax|| !overlap(d.address,d.paddedEnd,b.address,b.paddedEnd))
-    val sourceLive=Mux(nativeV,liveSpan(activeA,activeAEnd)&&live(b),Mux(group===1.U,same(a,score),Mux(group===2.U,same(a,probability)&&live(b),live(a)&&live(b))))
+    val sourceLive=Mux(nativeProjection,liveSpan(activeA,activeAEnd)&&live(b),Mux(group===1.U,same(a,score),Mux(group===2.U,same(a,probability)&&live(b),live(a)&&live(b))))
     val shapeBase=m>0.U&&m<=s.maxTokens.U&&n>0.U&&n<=s.maxRow.U&&n(3,0)===0.U
     val shapeSame=shape2(a,m,n)&&shape2(d,m,n)
     val norm=opcode===0x32.U&&shapeBase&&n===s.hidden.U&&shapeSame&&shape2(b,1.U,n)&&sfuPolicy(2)
@@ -222,9 +232,9 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
     val sm=isSoftmax&&group===1.U&&same(a,score)&&shape3(d,s.heads.U,q.dims(0),q.dims(0))&&sfuPolicy(1)
     val pv=opcode===0x24.U&&group===2.U&&same(a,probability)&&shape2(b,q.dims(0),s.kv.U)&&
       shape2(d,q.dims(0),s.hidden.U)&&matrixPolicy(q.dims(0),s.headDim.U,q.dims(0),false.B)
-    when(!validDTypes|| !plainTails|| (s.qwen35VOnly.B && !nativeV)|| (extendedV && !nativeV)|| !(nativeV||norm||dense||vector||rope||activation||append||qk||sm||pv)){fail(Status.Unsupported.U)}
+    when(!validDTypes|| !plainTails|| (s.projectionOnly.B && !nativeProjection)|| (extendedProjection && !nativeProjection)|| !(nativeProjection||norm||dense||vector||rope||activation||append||qk||sm||pv)){fail(Status.Unsupported.U)}
     .elsewhen(!sourceLive){fail(Status.Dependency.U)}
-    .elsewhen(!noAlias|| !Mux(nativeV,freshSpan(activeD,activeDEnd),fresh(d))||producedCount>=maxCommands.U||virtualCount>=maxCommands.U){fail(Status.Permission.U)}
+    .elsewhen(!noAlias|| !Mux(nativeProjection,freshSpan(activeD,activeDEnd),fresh(d))||producedCount>=maxCommands.U||virtualCount>=maxCommands.U){fail(Status.Permission.U)}
     .elsewhen(qk){q:=a;k:=b;score:=d;qkCommand:=cmd;group:=1.U
       vStarts(virtualCount(log2Ceil(maxCommands)-1,0)):=d.address;vEnds(virtualCount(log2Ceil(maxCommands)-1,0)):=d.paddedEnd;virtualCount:=virtualCount+1.U;nextCommand()
     }.elsewhen(sm){probability:=d;softCommand:=cmd;group:=2.U
@@ -233,14 +243,14 @@ class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,b
       bound:=0.U.asTypeOf(new QwenOwnerJob)
       bound.tag:=Cat(cfg.epoch,pc);bound.a:=a.address;bound.b:=b.address;bound.dst:=d.address;bound.writeBytes:=d.payloadBytes
       bound.m:=m;bound.n:=n;bound.k:=a.dims(1);bound.weightBf16:=nativeWeight
-      bound.kind:=Mux(norm,QwenOwnerKind.Norm.U,Mux(dense||nativeV,QwenOwnerKind.Dense.U,
+      bound.kind:=Mux(norm,QwenOwnerKind.Norm.U,Mux(dense||nativeProjection,QwenOwnerKind.Dense.U,
         Mux(vector,Mux(b.dims(0)===1.U,QwenOwnerKind.Bias.U,QwenOwnerKind.Add.U),
         Mux(rope,QwenOwnerKind.Rope.U,Mux(activation,QwenOwnerKind.Activation.U,
         Mux(append,QwenOwnerKind.KvAppend.U,QwenOwnerKind.Attention.U))))))
-      when(nativeV){
-        bound.a:=activeA;bound.dst:=activeD;bound.m:=tokenCount;bound.n:=512.U;bound.k:=1024.U
+      when(nativeProjection){
+        bound.a:=activeA;bound.dst:=activeD;bound.m:=tokenCount;bound.n:=projectionN;bound.k:=1024.U
         bound.weightBf16:=true.B;bound.activationBf16:=true.B;bound.outputBf16:=true.B
-        bound.writeBytes:=tokenCount.pad(64)<<10
+        bound.writeBytes:=projectionBytes
       }
       when(rope){bound.c:=b.address+(s.maxTokens.toLong*s.headDim/2*4).U}
       when(append){bound.n:=s.kv.U}

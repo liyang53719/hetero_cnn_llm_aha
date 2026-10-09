@@ -1,0 +1,25 @@
+{
+  "status": "PASS_54_TARGETED_PYTHON_TESTS",
+  "exit_code": 0,
+  "collected_tests": 54,
+  "command": "work/qk_regen_venv/bin/python -m pytest -q chisel/continuous_prefill/tests/test_host_bf16_qkv_descriptor.py chisel/continuous_prefill/tests/test_host_bf16_qkv_fixture.py chisel/continuous_prefill/tests/test_host_bf16_qkv_execution.py chisel/continuous_prefill/tests/test_host_bf16_qkv_reference.py chisel/continuous_prefill/tests/test_host_bf16_qkv_serial_orchestration.py chisel/continuous_prefill/tests/test_host_bf16_qkv_fresh_gate.py",
+  "recorded_at": "2026-10-09T02:45:38.395665+00:00",
+  "includes_real_synthetic_integer_c_head": true,
+  "real_model_capture": false,
+  "actual_DUT_execution": false,
+  "source_sha256": {
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_descriptor.py": "bbead7bbea0e2d9b09a98baf452d8750555bc684b2b0eef1f61a4d7bb470cd10",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_execution.py": "39eb35a7a9506913c33b3f8b51b55e5d6f5745e938e9abd2ceb0b9cfe0a06449",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_fixture.py": "13415a7fb564deda7614c3ac955f0427ac93e5cfd932d7a431bb4b096ee2c6ce",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_fresh_gate.py": "c382005876805887491d7097bbb5ed1a8f72cf59cb1724f3219e05dbb707cf75",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_reference.py": "7e07196c5972c90ad8eed402a00da0a3005a974875037137a00e70c65e61b322",
+    "chisel/continuous_prefill/tests/test_host_bf16_qkv_serial_orchestration.py": "48cfa68c4cd44576e402538633435034c2e8e0e29f9086585ee596425bc55aeb"
+  },
+  "optimized_mode": {
+    "exit_code": 0,
+    "tests_passed": 54,
+    "subtests_passed": 116,
+    "seconds": 10.53,
+    "warning": "Expected pytest -O warning: dependency assert statements disabled"
+  }
+}

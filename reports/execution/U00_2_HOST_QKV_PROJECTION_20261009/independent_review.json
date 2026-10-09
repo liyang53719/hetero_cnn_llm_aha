@@ -1,0 +1,24 @@
+{
+  "status": "PASS_INDEPENDENT_LOCAL_THREE_CASE_REVIEW",
+  "open_blocking_findings": [],
+  "scope": "PROJECTION_ONLY",
+  "tokens": 1,
+  "token_base": 0,
+  "variant": "baseline",
+  "phase": "cold",
+  "checked_bf16_words": 5120,
+  "cycles": 762218,
+  "actual_numerical_case_pass": true,
+  "full_representative_fault_reset_acceptance": false,
+  "clean_exact_commit_ci_acceptance": false,
+  "full_native_block_pass": false,
+  "build_recovery_qualification_retained": true,
+  "binary_sha256": "fbfa36d98a4ab5b0fd2fa3ef200a7ab1f12de289938ac0b77122d4529a8f38a2",
+  "rtl_sha256": "1a3e604b01a5b945e6cab11319bc6afd326c54b1e8524817b84144b123796229",
+  "verified_cases": [
+    "cold0_pass",
+    "carried127_pass",
+    "cold0_output_alias"
+  ],
+  "source_checked_before_patch": true
+}

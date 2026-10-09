@@ -1,0 +1,134 @@
+# Frozen Attention core diagnostic driver
+
+## 当前诊断范围
+
+本入口只定位精确 `6959810545203d5f9508075b311dba52f1bee0c9` 的生产 Attention core 仿真为何在原 3600 秒 case 上限内仍处于首个 Q 投影。现有尾日志显示实际读请求持续前进，尚不能确认最后是否停顿，也没有数值反例。新 GQA 的未激活组合求值成本是待验证假设。
+
+诊断复用同一完整 HostBlockTop、Matrix512、iDMA、官方来源及原夹具；功能 RTL 必须与原失败版本的 SHA256 相同。只增加 `eval` 与夹具执行时间、实际周期和握手计数，运行两次相同的 4096 周期前缀，每次上限 240 秒。前缀确定性通过不等于完整数值链通过；`numerical_acceptance` 始终为 false。测量包括插桩开销，不能称原始未插桩性能或 MAC 利用率。
+
+运行前先核对两个独立 checkout：GitHub 触发提交绑定本诊断源码，冻结的 695981 提交绑定生产源码。仅独立 source worker 适配旧入口的单一 `GITHUB_SHA` 检查，摘要同时保留真实触发提交和两个源码身份。未修改 hierarchy；只有测量支持相关假设后才考虑模拟编译边界。完整 block、M128 和原官方精度门禁的状态不由本诊断改变。
+
+This generator only instruments the simulation driver. It does not emit RTL,
+change hierarchy or resources, introduce a command variant, preload references
+into the DUT/store, or run the production top. A successful bounded prefix is a
+diagnostic result with `numerical_acceptance: false`.
+
+## Source and build contract
+
+Run from a checkout containing the exact frozen Git objects:
+
+```sh
+python3 tools/attention_profile/generate_profile.py \
+  --repo /absolute/frozen-source-checkout \
+  --output /absolute/new/instrumentation \
+  --cycles 4096
+```
+
+The generator reads `git show 6959810545203d5f9508075b311dba52f1bee0c9:<path>` and
+checks complete SHA256 pins for `host_bf16_attention_core.cpp` and
+`host_physical_axi.h`. The former is emitted byte-for-byte unchanged, including
+its constructor, all public launch construction, reference audits, physical
+memory, backpressure, and error checks. Both original sources are also retained
+in `original/`.
+
+The generated header differs by exactly five reversible edits: a timing-header
+include, a timer at entry to `PhysicalAxi::step`, and substitutions at the three
+existing `d.eval()` sites. The first records the same pre-edge handshakes the
+original service consumes. The last records the finished step and stops at the
+fixed prefix after all original physical-store/ACK bookkeeping and the final
+falling-clock evaluation. No additional DUT evaluations occur.
+
+Use generated `profile_driver.cpp` as the single C++ translation unit in place
+of the original driver argument. Keep the original production RTL, emitter,
+filelists, resources, hierarchical build recipe, and compiler flags unchanged:
+
+```
+-O2 -std=c++17 -ffp-contract=off -fno-fast-math
+```
+
+The generated `.cpp` includes the exact original under a renamed `main`. Its
+wrapper catches only the dedicated non-`std::exception` prefix sentinel as
+success. Assertions, driver errors, bad modes, invalid paths, and unexpectedly
+finishing the complete workload before the prefix are failures. This generation
+receipt alone cannot prove the RTL or compiler identity; the build orchestrator
+must verify those against the frozen source and actual emitted build commands.
+
+`transformation_receipt.json` records the exact replacement strings, source pins,
+generator SHA256, hashes of every generated file, compile path, and CLI contract.
+Generation rejects reused/symlink outputs and malformed/out-of-range cycle
+limits. The fixed compiled bound is 37–65536 cycles, normally 4096. It includes
+the original six reset and thirty idle constructor cycles. No runtime option can
+extend the compiled bound.
+
+## Runtime and reports
+
+The binary preserves the original CLI:
+
+```sh
+VHostBlockTop FIXTURE FRESH_OUTPUT [pass|cache-v-write-error|context-write-error]
+```
+
+The original constructor creates `FRESH_OUTPUT`. Instrumentation writes:
+
+- `attention_profile.json`: status, timing, cycle/eval inventory, handshake totals,
+  and deterministic terminal counters
+- `prefix_events.jsonl`: deterministic per-cycle comparison input with no timing,
+  filesystem paths, or raw payload data
+
+The successful schema has `schema_version: 1`,
+`schema: HOST_ATTENTION_PREFIX_PROFILE_V1`,
+`status: BOUNDED_DIAGNOSTIC_PREFIX`, `prefix_reached: true`,
+`cycles == cycle_limit`, `eval_calls == 3 * cycles`, and
+`numerical_acceptance: false`. Exit status 0 means only that this prefix was
+measured. Any other exit, a missing final report, or `PREFIX_RUNNING` is not
+successful diagnostic completion.
+
+`eval_ns` measures just the three actual `d.eval()` calls using a monotonic
+clock. `step_elapsed_ns` measures the entire instrumented physical-service
+steps. `driver_excluding_eval_ns = step_elapsed_ns - eval_ns`; it includes
+instrumentation, event hashing/serialization, existing driver logging, and prior
+checkpoint writes. It is not a measurement of the uninstrumented driver's cost.
+Per-phase call/timing arrays expose the three evaluation sites. The entire
+wrapper wall time additionally includes DUT construction, fixture loading,
+original audits outside steps, and teardown. The final report write is outside
+the per-step measurement. A failure report explicitly counts an incomplete step.
+
+A partial report is atomically replaced after the first completed cycle and every
+64 cycles. Those reports exclude their own current write cost; final accounting
+includes all prior checkpoint writes. A process killed by the external wall-time
+limit retains the last flushed prefix and cannot claim acceptance.
+
+`deterministic.terminal_event` includes original PC/run, public matrix pipeline
+issues/stalls, metadata ownership, iDMA progress, bus accepted/read/write/ACK
+counts, pending transaction state, completion/result state, and physical store
+byte counts. First-evaluation handshakes describe the transfers used by the
+original step. End-state values are sampled after the third evaluation. The
+matrix observation is the existing public `io_pipelineIssues` (`wideSteps`) and
+`io_pipelineStalls`, with no private hierarchy access. Lack of progress remains
+visible; instrumentation does not infer or synthesize progress.
+
+Compare the complete `deterministic` objects and SHA256 of the exact
+`prefix_events.jsonl` bytes across two runs of the same ELF/fixture. Every event
+contains only counters/handshakes and noncryptographic FNV-1a-64 hashes of valid
+bus payloads (16 little-endian 32-bit words). FNV is a useful additional check,
+not a collision-resistant integrity or numerical correctness proof. Timings
+and output paths are excluded from all deterministic inputs. Raw event files
+are local diagnostic inputs; the orchestrator may publish only their hashes and
+compact counters.
+
+## Small local verification
+
+```sh
+python3 tools/attention_profile/test_profile.py -v
+```
+
+These tests verify frozen-source hashes and byte identity, exact reversible
+instrumentation, malformed-bound rejection, compile the complete original driver
+against an explicit tiny test stub, verify the exact prefix/exception behavior,
+verify a killed run retains only an unaccepted partial report, and show that
+changing eval wall time does not change deterministic events. A separate small
+synthetic physical AXI read/write exercise compares original and instrumented
+headers: eval count, seeded backpressure state, beats, ACKs, drain state, and the
+actual single memory store must match. They exercise successful read responses
+and physical writes committed before the B-ACK callback. No local test here
+builds or runs full production RTL, or provides numerical acceptance.

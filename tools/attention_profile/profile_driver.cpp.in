@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: Apache-2.0
+// Diagnostic wrapper only. The included production source is byte-identical.
+#include "profile_runtime.h"
+#define main attention_profile_frozen_main
+#include "host_bf16_attention_core.cpp"
+#undef main
+
+int main(int argc, char** argv) {
+  if (argc != 3 && argc != 4) {
+    std::cerr << "ATTENTION_PROFILE_FAIL: FIXTURE FRESH_OUTPUT [pass|cache-v-write-error|context-write-error]\n";
+    return 2;
+  }
+  try {
+    attention_profile::configure(argv[2], @CYCLE_LIMIT@);
+    int result = attention_profile_frozen_main(argc, argv);
+    attention_profile::finish(result == 0 ? "DRIVER_FINISHED_BEFORE_PREFIX" : "DRIVER_FAILED", false);
+    return 2;
+  } catch (const attention_profile::PrefixStop&) {
+    try {
+      attention_profile::finish("BOUNDED_DIAGNOSTIC_PREFIX", true);
+      std::cout << "ATTENTION_PROFILE_PREFIX numerical_acceptance=false cycles="
+                << attention_profile::state().completed << "\n";
+      return 0;
+    } catch (const std::exception& e) {
+      std::cerr << "ATTENTION_PROFILE_FAIL: " << e.what() << "\n";
+      return 2;
+    }
+  } catch (const std::exception& e) {
+    std::cerr << "ATTENTION_PROFILE_FAIL: " << e.what() << "\n";
+    return 2;
+  } catch (...) {
+    std::cerr << "ATTENTION_PROFILE_FAIL: unexpected non-standard exception\n";
+    return 2;
+  }
+}

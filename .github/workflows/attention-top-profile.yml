@@ -1,0 +1,110 @@
+name: bounded-production-Attention-Core-top-diagnostic
+
+# One bounded timing diagnostic of the immutable failing production top.
+# Numerical acceptance is false; no functional, hierarchy or resource change.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/attention-top-profile.yml'
+      - 'tools/attention_profile/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: attention-top-profile-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  bounded-attention-top-profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    env:
+      SOURCE_SHA: '6959810545203d5f9508075b311dba52f1bee0c9'
+      BUILD_JOBS: '1'
+      BUILD_RESERVE_BYTES: '1073741824'
+      MAKEFLAGS: '-j1 VM_PARALLEL_BUILDS=0 VK_PCH_I_FAST= VK_PCH_I_SLOW='
+      JVM_OPTS: '-Xmx1500m -Xss8m -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/attention_profile_source/work/upstream/hardfloat_continuous'
+    steps:
+      - name: Check out diagnostic orchestration at the exact triggering commit
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Check out the immutable failing production source separately
+        uses: actions/checkout@v4
+        with:
+          ref: '6959810545203d5f9508075b311dba52f1bee0c9'
+          path: work/attention_profile_source
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify both exact revisions and separate repository roots
+        run: |
+          set -euo pipefail
+          diagnostic_root=$(realpath "$GITHUB_WORKSPACE")
+          source_root=$(realpath "$GITHUB_WORKSPACE/work/attention_profile_source")
+          test "$diagnostic_root" != "$source_root"
+          test "$(git -C "$diagnostic_root" rev-parse --show-toplevel)" = "$diagnostic_root"
+          test "$(git -C "$source_root" rev-parse --show-toplevel)" = "$source_root"
+          test "$(git -C "$diagnostic_root" rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git -C "$source_root" rev-parse HEAD)" = "$SOURCE_SHA"
+          git -C "$diagnostic_root" diff --exit-code HEAD --
+          git -C "$source_root" diff --exit-code HEAD --
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare the frozen source runtime, pinned tools and upstream iDMA
+        working-directory: work/attention_profile_source
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl time
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e "$GITHUB_WORKSPACE/work/attention_profile_source" pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_profile_source/work/attention_profile_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/attention_profile_ci_idma
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_profile_source/work/attention_profile_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Check only the diagnostic tests and Git payload boundary
+        env:
+          ATTENTION_PROFILE_SOURCE_ROOT: '${{ github.workspace }}/work/attention_profile_source'
+        run: |
+          set -euo pipefail
+          python scripts/check_git_payloads.py
+          python work/attention_profile_source/scripts/check_git_payloads.py
+          python -m pytest -o addopts='' -q tools/attention_profile
+          python -O -m pytest -o addopts='' -q tools/attention_profile
+      - name: Reacquire the same pinned layer0, layer3 and prefix payloads
+        working-directory: work/attention_profile_source
+        run: |
+          set -euo pipefail
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Profile the unchanged full production top within fixed budgets
+        env: {HF_HUB_OFFLINE: '1'}
+        run: |
+          set -euo pipefail
+          python tools/attention_profile/run_profile.py --source-root "$GITHUB_WORKSPACE/work/attention_profile_source" --output "$GITHUB_WORKSPACE/work/attention_profile_source/work/full_top_profile"
+      - name: Preserve only compact timing and source identity receipts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bounded-attention-top-profile-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/attention_profile_source/work/full_top_profile/compact/summary.json
+            work/attention_profile_source/work/full_top_profile/compact/source_input_hashes.json
+      - name: State the diagnostic boundary even on timeout or failure
+        if: always()
+        run: |
+          echo 'Bounded diagnostic of full production Attention Core top at 6959810545203d5f9508075b311dba52f1bee0c9. numerical_acceptance=false. No functional RTL, hierarchy, resource, or floating-point changes.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Runner budget: 7800 seconds overall, 6000 seconds for build, and two 4096-cycle prefixes capped at 240 seconds each. Fresh original reference functions remain unchanged; no full numerical rerun or repeated owner regressions.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Only compact runtime, stage, tool-hash and source/input identity receipts are retained. No raw weights, tensors, NPZ, RTL, binaries, traces or build outputs are uploaded. This diagnostic makes no speedup, numerical acceptance, timing signoff or QoR claim.' >> "$GITHUB_STEP_SUMMARY"

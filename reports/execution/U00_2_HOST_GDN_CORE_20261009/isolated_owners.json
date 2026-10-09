@@ -1,0 +1,654 @@
+{
+  "input_prep": {
+    "original_summary_sha256": "53a34e6e1f3eb5b46804fccda015fe7a1150d4ab8138509907231a6b0c08c021",
+    "result": {
+      "status": "PASS_INPUT_PREP_AND_SHARED_SOFTPLUS_OWNER_SUBGATE_ONLY",
+      "scope": "M1 standalone actual shared-scalar input-preparation owner; no public Host/full-GDN/full-block or M128 claim",
+      "source_sha256": {
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "e6f4bae6cc6f13fa69f59e2061982bf3c9372ecbe63f187e287e430a1f61969f",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+        "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnInputPrepOwnerSpec.scala": "3bbe26bf8fa05d4386cdc41d242063c3a268d7e03f731ef4b882417973fe5415",
+        "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnSoftplusSpec.scala": "02f4b6c1ed310756d71baab7b31d8ce301f4f2df7a6d7bcaf6924075f52070ae",
+        "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/BlockScalarFloatSpec.scala": "361eca91a3a92d15267a880affa2754fc051e46550398183ce8fe1774c3c137c",
+        "chisel/continuous_prefill/scripts/gdn_input_prep_reference.py": "97aa46c6ca4b70bf09e545db60d4e9109c5c6a884c52a9f9523929b10fef526a",
+        "chisel/continuous_prefill/tests/test_gdn_input_prep_reference.py": "e1759a6731f7684b8e700679f4b17641c387583e47a966e6950dc6a828f038c3",
+        "work/gdn_input_prep_gate_20261009T0414/run_gate.py": "42e8d1283441e0c3e26e2a7dbe773c7eb526fe69ee903451ef5e0cad529c5bb7"
+      },
+      "base_class_identity_receipt": "base_class_sha256.json",
+      "source_identity_rechecked": true,
+      "gates": {
+        "compile": {
+          "exit_code": 0,
+          "elapsed_seconds": 5.511749234996387,
+          "peak_rss_kib": 293752,
+          "free_disk_bytes": 658087936
+        },
+        "test_compile": {
+          "exit_code": 0,
+          "elapsed_seconds": 5.2120950579992495,
+          "peak_rss_kib": 308640,
+          "free_disk_bytes": 657952768
+        },
+        "softplus": {
+          "exit_code": 0,
+          "elapsed_seconds": 18.369889248002437,
+          "peak_rss_kib": 308984,
+          "free_disk_bytes": 659419136
+        },
+        "legacy_scalar": {
+          "exit_code": 0,
+          "elapsed_seconds": 17.986817199998768,
+          "peak_rss_kib": 308984,
+          "free_disk_bytes": 659103744
+        },
+        "owner_control": {
+          "exit_code": 0,
+          "elapsed_seconds": 29.835533720994135,
+          "peak_rss_kib": 318516,
+          "free_disk_bytes": 657534976
+        },
+        "checkpoint": {
+          "exit_code": 0,
+          "elapsed_seconds": 30.520335410998086,
+          "peak_rss_kib": 318516,
+          "free_disk_bytes": 657125376
+        }
+      },
+      "fixed_recipe": "All actual scalar request operands/opcodes and result words bitexact against independent Scala per-operation FP32 recipe; output memory bitexact; actual fixture also compares independent Python recipe before RTL",
+      "actual_checkpoint": {
+        "heads": 2,
+        "tokens_per_command": 1,
+        "commands": 2,
+        "cold_mode": "official chunk scale multiply",
+        "carried_mode": "official recurrent scale divide",
+        "scalar_steps_per_command": 1821,
+        "output_bytes_per_command": 3200,
+        "all_output_words_bitexact": true,
+        "cycles_with_artificial_backpressure": [
+          8023,
+          14602
+        ],
+        "independent_projection_integer_c_fmaf_steps": 8192
+      },
+      "dtype": "Q/K/V inputs BF16, AB BF16[A16,B16] one64B beat, A_log originalFP32, dt_bias originalBF16; outputs FP32 Q/K/V/g/beta; beta BF16RNE before expansion; no recurrent state payload touched",
+      "softplus": {
+        "default_enabled": false,
+        "opcode": 7,
+        "shared_alu_div_exp_only": true,
+        "accepted_input_samples_bitexact": 20,
+        "nonfinite_or_unsupported_samples_rejected": 6,
+        "old_scalar_vectors_pass": 77,
+        "old_scalar_ieee_vectors_pass": 18,
+        "cycles_after_accept_measured_full_path": [
+          63,
+          64
+        ],
+        "large_positive_threshold_path_additional_cycles": 0,
+        "unsupported_legal_range": "finite x<=-80",
+        "nonfinite_policy": "reject NaN and +/-Inf"
+      },
+      "control_cases": [
+        "read error",
+        "wrong response tag",
+        "final gate ACK error",
+        "scalar error",
+        "NaN query",
+        "infinite value",
+        "beta exp unsupported range",
+        "A_log exp unsupported range",
+        "recurrent g unsupported range",
+        "softplus unsupported legal range",
+        "zero head epsilon/signed zero",
+        "alias/alignment/M128/head/bounds rejection",
+        "in-flight memory reset with shared service/transport reset",
+        "reset reuse negative A_log",
+        "done and memory request backpressure"
+      ],
+      "fixture_manifest_sha256": "41890fbdc0f7d6c3f4322d8a7167810ab2800112e73c27171e3e24396f20243f",
+      "official_stage_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY; full-output/state tolerances are not an independent stage gate",
+      "official_same_boundary_diagnostics": [
+        {
+          "case": "cold_chunk_m1",
+          "same_boundary_official": {
+            "query": {
+              "elements": 256,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 3.725290298461914e-09,
+              "rmse": 4.692840919743198e-10,
+              "max_tolerance_ratio": 3.644257661662253e-05,
+              "raw_bit_mismatches": 124
+            },
+            "key": {
+              "elements": 256,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 1.1920928955078125e-07,
+              "rmse": 9.070374100909877e-09,
+              "max_tolerance_ratio": 0.0007338442356902209,
+              "raw_bit_mismatches": 128
+            },
+            "value": {
+              "elements": 256,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 0.0,
+              "rmse": 0.0,
+              "max_tolerance_ratio": 0.0,
+              "raw_bit_mismatches": 0
+            },
+            "g": {
+              "elements": 2,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 1.1920928955078125e-07,
+              "rmse": 8.429369714199827e-08,
+              "max_tolerance_ratio": 0.00040389309321404266,
+              "raw_bit_mismatches": 2
+            },
+            "beta": {
+              "elements": 2,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 0.0,
+              "rmse": 0.0,
+              "max_tolerance_ratio": 0.0,
+              "raw_bit_mismatches": 0
+            }
+          },
+          "projection_official_max_abs": {
+            "a": 0.0,
+            "b": 0.0
+          },
+          "a": [
+            -1.2890625,
+            -4.3125
+          ],
+          "b": [
+            0.412109375,
+            -0.61328125
+          ],
+          "a_log": [
+            0.2578125,
+            -2.03125
+          ],
+          "dt_bias": [
+            2.546875,
+            -5.59375
+          ]
+        },
+        {
+          "case": "carried_decode_m1",
+          "same_boundary_official": {
+            "query": {
+              "elements": 256,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 7.450580596923828e-09,
+              "rmse": 8.213157109340207e-10,
+              "max_tolerance_ratio": 6.907871104651483e-05,
+              "raw_bit_mismatches": 251
+            },
+            "key": {
+              "elements": 256,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 5.960464477539063e-08,
+              "rmse": 7.260731250976283e-09,
+              "max_tolerance_ratio": 0.0003318512634672709,
+              "raw_bit_mismatches": 237
+            },
+            "value": {
+              "elements": 256,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 0.0,
+              "rmse": 0.0,
+              "max_tolerance_ratio": 0.0,
+              "raw_bit_mismatches": 0
+            },
+            "g": {
+              "elements": 2,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 5.820766091346741e-11,
+              "rmse": 4.1159031748919956e-11,
+              "max_tolerance_ratio": 5.820437300919952e-07,
+              "raw_bit_mismatches": 1
+            },
+            "beta": {
+              "elements": 2,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 0.0,
+              "rmse": 0.0,
+              "max_tolerance_ratio": 0.0,
+              "raw_bit_mismatches": 0
+            }
+          },
+          "projection_official_max_abs": {
+            "a": 0.0,
+            "b": 0.0
+          },
+          "a": [
+            -1.0859375,
+            -2.15625
+          ],
+          "b": [
+            0.4453125,
+            -1.59375
+          ],
+          "a_log": [
+            0.2578125,
+            -2.03125
+          ],
+          "dt_bias": [
+            2.546875,
+            -5.59375
+          ]
+        }
+      ],
+      "softplus_source_audit": {
+        "scope": "isolated Softplus recipe/source-domain audit; no RTL or full-block claim",
+        "torch_source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+        "official_stage_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY; full-output tolerances do not establish independent stage acceptance",
+        "grid": {
+          "elements": 100012,
+          "atol": 0.0001,
+          "rtol": 0.0001,
+          "mismatches": 0,
+          "max_abs_error": 9.5367431640625e-07,
+          "rmse": 5.3611867597675267e-08,
+          "max_tolerance_ratio": 0.006148816845722686,
+          "max_relative": 4.409779078410997e-06,
+          "max_relative_x": -45.05434799194336,
+          "max_abs_x": 8.009119987487793,
+          "bit_mismatches": 77552
+        },
+        "series_terms": 8,
+        "highest_odd_power": 15,
+        "series_absolute_truncation_bound": 1.0248782261214157e-09,
+        "unsupported_legal_inputs": "finite x<=-80; +/-Inf/NaN rejected by service policy, unlike full torch domain",
+        "domains": [
+          {
+            "case": "actual_embedding_token0",
+            "origin": "real embedding token19/92 -> official inputNorm (M1)",
+            "elements": 16,
+            "softplus_min": -11.375,
+            "softplus_max": 6.21875,
+            "unsupported_softplus": 0,
+            "beta_b_min": -1.7578125,
+            "beta_b_max": 3.34375,
+            "unsupported_beta": 0,
+            "g_min": -3.5306520462036133,
+            "g_max": -1.7195582131535048e-06,
+            "unsupported_recurrent_g": 0,
+            "recipe_official": {
+              "elements": 16,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 4.76837158203125e-07,
+              "rmse": 1.2310396974337817e-07,
+              "max_tolerance_ratio": 0.002298934340481142
+            }
+          },
+          {
+            "case": "actual_embedding_token1",
+            "origin": "real embedding token19/92 -> official inputNorm (M1)",
+            "elements": 16,
+            "softplus_min": -10.625,
+            "softplus_max": 5.046875,
+            "unsupported_softplus": 0,
+            "beta_b_min": -1.59375,
+            "beta_b_max": 4.78125,
+            "unsupported_beta": 0,
+            "g_min": -2.868048906326294,
+            "g_max": -3.3264928589460396e-08,
+            "unsupported_recurrent_g": 0,
+            "recipe_official": {
+              "elements": 16,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 2.384185791015625e-07,
+              "rmse": 6.668084118788687e-08,
+              "max_tolerance_ratio": 0.0007692274556355758
+            }
+          },
+          {
+            "case": "cold_m128",
+            "origin": "existing frozen deterministic synthetic hidden-state corpus; not real upstream activation",
+            "elements": 2048,
+            "softplus_min": -14.0390625,
+            "softplus_max": 10.109375,
+            "unsupported_softplus": 0,
+            "beta_b_min": -2.71875,
+            "beta_b_max": 2.90625,
+            "unsupported_beta": 0,
+            "g_min": -6.901371002197266,
+            "g_max": -1.0946699102731827e-09,
+            "unsupported_recurrent_g": 0,
+            "recipe_official": {
+              "elements": 2048,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 7.748603820800781e-07,
+              "rmse": 6.094450443631143e-08,
+              "max_tolerance_ratio": 0.005505807409186206
+            }
+          },
+          {
+            "case": "carried_m128",
+            "origin": "existing frozen deterministic synthetic hidden-state corpus; not real upstream activation",
+            "elements": 2048,
+            "softplus_min": -14.1015625,
+            "softplus_max": 11.0625,
+            "unsupported_softplus": 0,
+            "beta_b_min": -2.765625,
+            "beta_b_max": 2.96875,
+            "unsupported_beta": 0,
+            "g_min": -6.981873035430908,
+            "g_max": -1.0283472962058227e-09,
+            "unsupported_recurrent_g": 0,
+            "recipe_official": {
+              "elements": 2048,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 9.5367431640625e-07,
+              "rmse": 7.138147239278628e-08,
+              "max_tolerance_ratio": 0.005505807409186206
+            }
+          },
+          {
+            "case": "carried_decode1",
+            "origin": "existing frozen deterministic synthetic hidden-state corpus; not real upstream activation",
+            "elements": 16,
+            "softplus_min": -12.8447265625,
+            "softplus_max": 9.7265625,
+            "unsupported_softplus": 0,
+            "beta_b_min": -1.65625,
+            "beta_b_max": 0.94921875,
+            "unsupported_beta": 0,
+            "g_min": -5.520455837249756,
+            "g_max": -3.613901622401272e-09,
+            "unsupported_recurrent_g": 0,
+            "recipe_official": {
+              "elements": 16,
+              "atol": 0.0001,
+              "rtol": 0.0001,
+              "mismatches": 0,
+              "max_abs_error": 1.1920928955078125e-07,
+              "rmse": 3.0103006475315487e-08,
+              "max_tolerance_ratio": 0.0005979469372320749
+            }
+          }
+        ],
+        "a_log_min": -6.59375,
+        "a_log_max": 0.2578125,
+        "all_selected_domains_supported": true
+      },
+      "prior_attempt": {
+        "owner_control_exit_code": 1,
+        "log": "/tmp/gdn_input_prep_gate_20261009T0412/owner_control.log",
+        "reason": "Chiseltest implicit1000 idle-cycle timeout during legitimate sequential norm in nontrace case",
+        "fix": "test harness setTimeout100000; run-loop45000*heads watchdog remains; no DUT or numeric tolerance change"
+      },
+      "pending": [
+        "Host descriptor/context/publication integration",
+        "actual Dense32 AB production feeding this owner",
+        "actual Conv4 -> InputPrep -> recurrent -> gatednorm chain",
+        "all16heads runtime gate",
+        "M128 producer/state/block validation",
+        "complete-block fixed official thresholds",
+        "synthesis/timing/QoR"
+      ]
+    }
+  },
+  "recurrent_two_heads": {
+    "original_summary_sha256": "5013d34a88226cb3038c9cb7978728e8c5188255eb012b81b9570b6cd6b0d61f",
+    "result": {
+      "status": "PASS_RECURRENT_OWNER_SUBGATE_ONLY",
+      "base_commit": "55785dd134e5e58ba7c460e5c7d733f838b27a85",
+      "source_sha256": {
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": "8d47c83d0a9ba882624b210d71bacc17d41026f6d5339d971ef793a823414600",
+        "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnRecurrentOwnerSpec.scala": "28b34c824c8456229d68473974fbd612ad925ee66b90fbd1d588ed9f6a801c56",
+        "src/heteronpu/qwen35_gdn_recurrent_fp32.py": "1ae13a546fc3a391f32a7afaa8a40a1b155cebdcdf022bfaf62c52d61dd440f7",
+        "scripts/prepare_gdn_recurrent_fixture.py": "4390c30f38f8fe07aba95e7550b59e9d72960b19cbae0d618a547677fc1a1273"
+      },
+      "fixture_manifest_sha256": "78cd3e256df810b145fd60d712e2003b0c9aaf3db0a9627e576b9fb742355a47",
+      "source_identity_rechecked": true,
+      "gates": {
+        "compile": {
+          "exit_code": 0,
+          "elapsed_seconds": 4.342160897998838,
+          "peak_rss_kib": 280700,
+          "free_disk_bytes": 999497728
+        },
+        "test_compile": {
+          "exit_code": 0,
+          "elapsed_seconds": 4.501697491999948,
+          "peak_rss_kib": 280700,
+          "free_disk_bytes": 999477248
+        },
+        "small": {
+          "exit_code": 0,
+          "elapsed_seconds": 22.18100457599212,
+          "peak_rss_kib": 280700,
+          "free_disk_bytes": 832471040
+        },
+        "checkpoint": {
+          "exit_code": 0,
+          "elapsed_seconds": 34.38325017900206,
+          "peak_rss_kib": 322384,
+          "free_disk_bytes": 660955136
+        }
+      },
+      "reference": [
+        {
+          "case": "cold_m1",
+          "official_state_fp32": {
+            "elements": 32768,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 0.0,
+            "rmse": 0.0,
+            "max_tolerance_ratio": 0.0
+          },
+          "official_core_fp32": {
+            "elements": 256,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 1.0913936421275139e-11,
+            "rmse": 7.995437790246157e-13,
+            "max_tolerance_ratio": 1.0913635561699306e-07
+          },
+          "official_output_bf16": {
+            "max_bf16_ulp": 0,
+            "bit_mismatches": 0,
+            "threshold_bf16_ulp": 1,
+            "signed_zero_numeric_equal": true,
+            "pass": true
+          },
+          "independent_fp64_state": {
+            "elements": 32768,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 2.266460796818137e-09,
+            "rmse": 1.9323721780910724e-11,
+            "max_tolerance_ratio": 1.9903258279354347e-05
+          },
+          "independent_fp64_output": {
+            "elements": 256,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 4.617719164131621e-12,
+            "rmse": 4.3070664635890854e-13,
+            "max_tolerance_ratio": 4.617652880372428e-08
+          },
+          "official_path": "chunk_cold_multiply_inv_sqrt",
+          "log_decay_min": -1.9515060186386108,
+          "log_decay_max": -6.5403164626332e-06
+        },
+        {
+          "case": "carried_decode_m1",
+          "official_state_fp32": {
+            "elements": 32768,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 4.656612873077393e-10,
+            "rmse": 5.194796460398496e-12,
+            "max_tolerance_ratio": 4.635786144641272e-06
+          },
+          "official_core_fp32": {
+            "elements": 256,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 2.8194335754960775e-11,
+            "rmse": 2.2328477624058004e-12,
+            "max_tolerance_ratio": 2.819420775481638e-07
+          },
+          "official_output_bf16": {
+            "max_bf16_ulp": 0,
+            "bit_mismatches": 0,
+            "threshold_bf16_ulp": 1,
+            "signed_zero_numeric_equal": true,
+            "pass": true
+          },
+          "independent_fp64_state": {
+            "elements": 32768,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 3.476401486124381e-09,
+            "rmse": 4.7463307245883566e-11,
+            "max_tolerance_ratio": 3.2548205186070236e-05
+          },
+          "independent_fp64_output": {
+            "elements": 256,
+            "atol": 0.0001,
+            "rtol": 0.0001,
+            "mismatches": 0,
+            "max_abs_error": 1.5366218158465415e-11,
+            "rmse": 1.715980302362481e-12,
+            "max_tolerance_ratio": 1.5366148396804142e-07
+          },
+          "official_path": "recurrent_decode_divide_sqrt",
+          "log_decay_min": -2.160611867904663,
+          "log_decay_max": -5.648895603371784e-05,
+          "carried_vs_reset_state_max_abs": 0.01294739544391632
+        }
+      ],
+      "python_tests": {
+        "tests": 8,
+        "failed": 0,
+        "command": "PYTHONPATH=src work/qk_regen_venv/bin/python -m pytest -q tests/test_qwen35_gdn_recurrent_fp32.py"
+      },
+      "rtl_state_words_compared": 65536,
+      "rtl_bf16_output_words_compared": 512,
+      "state_word_bit_mismatches": 0,
+      "output_word_bit_mismatches": 0,
+      "checkpoint_head_indices": [
+        0,
+        1
+      ],
+      "checkpoint_cycles": {
+        "cold": 959401,
+        "carried_decode": 1085672
+      },
+      "checkpoint_acknowledged_bytes_per_job": 131584,
+      "source_boundary": "software-produced L2/scaled Q, L2 K, FP32-expanded V and gates; official pinned checkpoint Dense/Conv fixture inputs",
+      "state_carry_source": "actual acknowledged RTL FP32 writes only",
+      "full_gdn_or_host_pass": false,
+      "all_16_heads_rtl_pass": false,
+      "output_state_staging_and_generation_fence": true,
+      "shared_service_instances_in_owner": 0,
+      "next_integration": "Connect kind9 to production shared Scalar/iDMA; real input-prep owner and BF16 gated-norm owner must form same data path."
+    }
+  },
+  "gated_norm_independent": {
+    "original_summary_sha256": "a1f863fb84ecc463184b9215832714a332f05e0addb6662b7a489b317d33278d",
+    "result": {
+      "status": "PASS_ISOLATED_GATED_NORM_OWNER_SMALL_RTL",
+      "source_sha256": {
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnGatedNormOwner.scala": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db",
+        "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnGatedNormOwnerSpec.scala": "eb8b3444bc6eca2207549adcb53b5c837e91a0a5b87fb2faf445321e286321a3",
+        "chisel/continuous_prefill/scripts/gdn_gated_norm_reference.py": "ab08fa108e17201b032f0d18d75c497e029bdf52bc2c62b46db11144aff4e223",
+        "chisel/continuous_prefill/tests/test_gdn_gated_norm_reference.py": "398cc8116b2afe25c416222520f85c89a596d134b47d19d984d155828a21a108"
+      },
+      "scalar_source_sha256": "e64e28c3378a9b0e7bb5c0d9a6500b19bc17fa23538dea7a4c9808fe9642a78c",
+      "scalar_policy": "All owner products use MulIeeeRne(6); shared error and nonfinite always fatal",
+      "memory": "512-bit single in-flight transaction; tag+sequence checked; no publish until last ACK; failure requires reset",
+      "dtype": "BF16 core/gate/output; original FP32 gamma; normalize FP32 then BF16 RNE before gamma; no 1+gamma; recurrent state stays upstream FP32",
+      "test_log": "small_retry2.log",
+      "test_log_sha256": "fc45d6665a05014e521697870914b86af450ddf5b6ef94b49450e01eebfcc554",
+      "test_stats": {
+        "exit_code": 0,
+        "seconds": 30.36601654799597,
+        "peak_rss_kib": 320104
+      },
+      "standalone_python_tests": 4,
+      "python_optimized_tests": 4,
+      "scala_compile_pass": true,
+      "actual_head_jobs": 32,
+      "actual_output_elements": 4096,
+      "actual_bit_mismatches_vs_independent_recipe": 0,
+      "actual_bit_mismatches_vs_official": 0,
+      "scalar_requests_and_results_each_bitchecked": 3852,
+      "rtl_job_cases": 42,
+      "malformed_job_rejections": 7,
+      "actual_fixture_manifest_sha256": "9a452a741983749183263f8e2ecfac672022bb8c7678c22fb881ffd6d66c85f2",
+      "actual_fixture": "work/gdn_gated_norm_fixture_20261009T0335",
+      "official_acceptance": "DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN",
+      "not_yet_verified": [
+        "16-head single-job address loop",
+        "Host kind12 integration",
+        "complete GDN block",
+        "MAC utilization",
+        "timing or area"
+      ],
+      "preserved_failed_attempts": {
+        "small.log": "toolchain PCH include .fast missing; fixed by known MAKEFLAGS PCH include overrides",
+        "small_retry.log": "test driver held scalarHold on a following job and default 1000 idle cycle timeout; fixed in test only"
+      },
+      "build_directory": "/tmp/gdn_gated_norm_small_20261009T0341",
+      "deleted_data": false
+    }
+  },
+  "gated_norm_single_job_16heads": {
+    "status": "PASS_ISOLATED_OWNER",
+    "jobs": 2,
+    "output_bf16_elements": 4096,
+    "canonical_bit_mismatches": 0,
+    "native_diagnostic_bit_mismatches": 0,
+    "ack_bytes_per_job": 4096,
+    "cycles_per_job": 152160,
+    "log_sha256": "62e719e5940c6e0e8148cac564968520d44964b89004f8429811c3d6fd888197",
+    "measurement": {
+      "exit_code": 0,
+      "seconds": 30.842529369998374,
+      "peak_rss_kib": 313760
+    },
+    "production_host_numeric": false
+  }
+}

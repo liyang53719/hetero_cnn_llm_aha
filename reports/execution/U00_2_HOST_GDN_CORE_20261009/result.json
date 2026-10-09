@@ -1,0 +1,46 @@
+{
+  "status": "PENDING_PRODUCTION_HOST_GDN_CORE_NUMERICAL_CI",
+  "scope": "GDN_CORE_M1_BEFORE_OUTPUT_PROJECTION",
+  "experimental_default_off": true,
+  "actual_host_rtl_executed": false,
+  "numerical_pass": false,
+  "numerical_failure": false,
+  "tokens": [
+    19,
+    92
+  ],
+  "tokens_per_launch": 1,
+  "commands_per_launch": 8,
+  "launches": 2,
+  "planned_operations": [
+    "dense_qkv",
+    "dense_z",
+    "dense_ab",
+    "conv4_silu",
+    "input_prep",
+    "recurrent_fp32",
+    "gated_norm",
+    "state_fence"
+  ],
+  "actual_useful_dense_macs": 16842752,
+  "oracle_padded_fma_steps": 17301504,
+  "expected_ack_bytes": 2320512,
+  "state_dtype": "FP32",
+  "history_dtype": "BF16",
+  "input_norm_dut": false,
+  "output_projection_dut": false,
+  "residual_dut": false,
+  "ffn_dut": false,
+  "full_block_supported": false,
+  "m128_execution": false,
+  "restore_supported": false,
+  "native_core_gate_pass": null,
+  "native_full_block_gate_pass": null,
+  "prior_native_full_block_failures_retained": true,
+  "unchanged_plan_states": [
+    "U00.2 ongoing",
+    "U01 to do",
+    "C02.2 OPEN"
+  ],
+  "next_gate": "Exact-commit persistent GitHub core build and one continuous two-token numerical process; current core fault/reset/restore acceptance remains pending."
+}

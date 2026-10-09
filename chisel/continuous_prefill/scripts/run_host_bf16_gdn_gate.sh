@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
-# Production GDN Dense-QKV and Conv4/SiLU build only. No numerical PASS.
+# Production GDN build only; profile is explicit and never implies numerical PASS.
 # Same HostTop, StreamingDense, MatrixPipelineService and one pinned iDMA.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"
-OUT=${1:?absolute NEW build output};BURST=${2:-0}
+OUT=${1:?absolute NEW build output};BURST=${2:-0};PROFILE=${3:-dense-conv}
+[[ $# -le 3 ]] || exit 2
+case "$PROFILE" in
+ dense-conv) EMITTER=EmitHostBf16Gdn;DRIVER=host_bf16_gdn.cpp ;;
+ core) EMITTER=EmitHostBf16GdnCore;DRIVER=host_bf16_gdn_core.cpp ;;
+ *) echo UNKNOWN_GDN_BUILD_PROFILE >&2;exit 2 ;;
+esac
 [[ "$OUT" = /* && ! -e "$OUT" && ! -L "$OUT" && "$BURST" =~ ^[01]$ ]] || exit 2
 [[ -n ${IDMA_EXPORT:-} && -f "$IDMA_EXPORT/idma.f.in" ]] || { echo BLOCKED_PINNED_IDMA;exit 77; }
 [[ ${BUILD_JOBS:-1} = 1 ]] || { echo SERIAL_BUILD_REQUIRED;exit 2; }
@@ -37,10 +43,10 @@ export SOURCE_IDENTITY_SCOPE=full
 python3 "$P/scripts/production_source_identity.py" record "$ROOT" "$OUT" "$HARDFLOAT_SOURCE"
 # Add noncompiled serialization/build contracts to the same immutable map.
 # Model capture/reference source identities are separately checked by the fixture verifier.
-python3 - "$ROOT" "$OUT" <<'PY_IDENTITY'
+python3 - "$ROOT" "$OUT" "$PROFILE" <<'PY_IDENTITY'
 from pathlib import Path
 import hashlib,json,sys
-root,out=map(Path,sys.argv[1:]);path=out/'sources.sha256.json';bound=json.loads(path.read_text())
+root,out=map(Path,sys.argv[1:3]);profile=sys.argv[3];path=out/'sources.sha256.json';bound=json.loads(path.read_text())
 if json.loads((out/'source_scope.json').read_text()).get('scope')!='full':raise ValueError('full GDN source scope required')
 for name in ['run_host_bf16_gdn_gate.sh','host_bf16_gdn_descriptor.py','pack_host_bf16_gdn_fixture.py','verify_host_bf16_gdn_fixture.py']:
  if 'chisel/continuous_prefill/scripts/'+name not in bound:raise ValueError('missing GDN execution source: '+name)
@@ -50,6 +56,10 @@ extra=['chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json'
  'chisel/continuous_prefill/build.sbt','chisel/continuous_prefill/project/build.properties',
  'src/heteronpu/abi_validation.py','src/heteronpu/command.py','src/heteronpu/descriptor_chain.py',
  'src/heteronpu/gemmini_descriptor_v2.py','src/heteronpu/gemmini_rocc_lowering.py']
+if profile=='core':
+ extra += ['chisel/continuous_prefill/config/host_bf16_gdn_core_descriptor_contract.json']
+ for name in ['scripts/host_bf16_gdn_core_descriptor.py','scripts/pack_host_bf16_gdn_core_fixture.py','scripts/host_bf16_gdn_core_execution.py','tests/host_bf16_gdn_core.cpp']:
+  if 'chisel/continuous_prefill/'+name not in bound:raise ValueError('missing GDN core execution source: '+name)
 for name in extra:
  file=root/name
  if not file.is_file() or file.is_symlink():raise ValueError('missing exact source contract: '+name)
@@ -76,7 +86,7 @@ cmd=['java','-Xmx1500m','-XX:ActiveProcessorCount=2','-cp',cp,'scala.tools.nsc.M
 with (out/'compile.log').open('w') as log:subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,check=True)
 PY
 CP=$(cat "$OUT/classpath.txt")
-java -Xmx1500m -XX:ActiveProcessorCount=2 -cp "$OUT/classes:$CP" heteronpu.continuous.EmitHostBf16Gdn "$OUT/generated" "$BURST" >"$OUT/emit.log" 2>&1
+java -Xmx1500m -XX:ActiveProcessorCount=2 -cp "$OUT/classes:$CP" "heteronpu.continuous.$EMITTER" "$OUT/generated" "$BURST" >"$OUT/emit.log" 2>&1
 else
  # A fresh task-local cache must never add test/compiler dependencies to the
  # separately locked arithmetic/candidate Maven cache.
@@ -84,7 +94,7 @@ else
  (cd "$P";sbt -batch -J-Xmx1500m -J-XX:ActiveProcessorCount=2 \
    "-Dsbt.global.base=$OUT/sbt/global" "-Dsbt.boot.directory=$OUT/sbt/boot" \
    "-Dsbt.ivy.home=$OUT/sbt/ivy" compile \
-   "runMain heteronpu.continuous.EmitHostBf16Gdn $OUT/generated $BURST") >"$OUT/compile_emit.log" 2>&1
+   "runMain heteronpu.continuous.$EMITTER $OUT/generated $BURST") >"$OUT/compile_emit.log" 2>&1
  python3 - "$OUT" <<'PY_DEPS'
 from pathlib import Path
 import hashlib,json,sys
@@ -102,7 +112,7 @@ JOBS=${BUILD_JOBS:-1};((JOBS>=1&&JOBS<=2))||exit 2
 # Plan only, then release the initial elaborator before child Verilation.
 # Keep the original Verilator argv and generated child argument files intact.
 set +e
-env -u MFLAGS -u GNUMAKEFLAGS MAKEFLAGS=-n verilator --cc --exe --assert --comp-limit-parens 16 --output-split 3000 --output-split-cfuncs 200 -Wno-fatal --top-module HostBlockTop -CFLAGS '-O2 -std=c++17 -ffp-contract=off -fno-fast-math' -j "$JOBS" --Mdir "$OUT/obj" --hierarchical "$P/tests/native_weight_hierarchy.vlt" "${RETAINED_SOURCES[@]}" "${IDMA_OPTIONS[@]}" -f "$OUT/idma.f" "$OUT/generated/HostBlockTop.sv" "$ROOT/rtl/integration/idma_backend_rw_axi_flat_wrap.sv" "$P/tests/host_bf16_gdn.cpp" >"$OUT/build.log" 2>&1
+env -u MFLAGS -u GNUMAKEFLAGS MAKEFLAGS=-n verilator --cc --exe --assert --comp-limit-parens 16 --output-split 3000 --output-split-cfuncs 200 -Wno-fatal --top-module HostBlockTop -CFLAGS '-O2 -std=c++17 -ffp-contract=off -fno-fast-math' -j "$JOBS" --Mdir "$OUT/obj" --hierarchical "$P/tests/native_weight_hierarchy.vlt" "${RETAINED_SOURCES[@]}" "${IDMA_OPTIONS[@]}" -f "$OUT/idma.f" "$OUT/generated/HostBlockTop.sv" "$ROOT/rtl/integration/idma_backend_rw_axi_flat_wrap.sv" "$P/tests/$DRIVER" >"$OUT/build.log" 2>&1
 code=$?;set -e;echo "$code" >"$OUT/initial_verilation.exit"
 ((code==0)) || exit "$code"
 [[ -s "$OUT/obj/VHostBlockTop_hier.mk" && ! -e "$OUT/obj/VHostBlockTop.mk" ]] || { echo INVALID_HIERARCHY_PLAN >&2;exit 2; }
@@ -115,20 +125,23 @@ python3 "$P/scripts/host_bf16_v_toolchain.py" after "$OUT"
 record_verilator_elf "$OUT/actual_verilator_after.json"
 cmp "$OUT/actual_verilator_before.json" "$OUT/actual_verilator_after.json"
 python3 "$P/scripts/production_source_identity.py" verify "$ROOT" "$OUT" "$HARDFLOAT_SOURCE" >"$OUT/build_source_verification.log"
-python3 - "$OUT" "$HARDFLOAT_SOURCE" <<'PY_BUILD'
+python3 - "$OUT" "$HARDFLOAT_SOURCE" "$PROFILE" <<'PY_BUILD'
 from pathlib import Path
 import hashlib,json,sys
-out,hf=map(Path,sys.argv[1:]);sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+out,hf=map(Path,sys.argv[1:3]);profile=sys.argv[3];core=profile=='core';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 scope=json.loads((out/'generated/SCOPE.json').read_text())
-if scope.get('experimental_bf16_gdn') is not True:raise ValueError('not the GDN Dense/Conv profile')
-report=dict(status='BUILT_HOST_GDN_DENSE_CONV_ONLY_NOT_NUMERICAL_PASS',numerical_pass=False,
+if scope.get('experimental_bf16_gdn') is not True:raise ValueError('not a production GDN profile')
+expected_scope='GDN_CORE_M1_BEFORE_OUTPUT_PROJECTION' if core else 'DENSE_QKV_CONV4_SILU_ONLY'
+if scope.get('scope')!=expected_scope or scope.get('policy_version')!=(2 if core else 1):raise ValueError('GDN build profile/scope mismatch')
+if bool(scope.get('experimental_gdn_core',False))!=core:raise ValueError('GDN core profile mismatch')
+report=dict(status=('BUILT_HOST_GDN_CORE_ONLY_NOT_NUMERICAL_PASS' if core else 'BUILT_HOST_GDN_DENSE_CONV_ONLY_NOT_NUMERICAL_PASS'),numerical_pass=False,build_profile=profile,
  binary_sha256=sha(out/'obj/VHostBlockTop'),rtl_sha256=sha(out/'generated/HostBlockTop.sv'),
  source_base_commit=(out/'source_base_commit.txt').read_text().strip(),
  source_manifest_sha256=sha(out/'sources.sha256.json'),hardfloat_source=str(hf.resolve()),
  actual_verilator=json.loads((out/'actual_verilator_after.json').read_text()),
  initial_verilation_exit=int((out/'initial_verilation.exit').read_text()),
  source_snapshot_manifest_sha256=sha(out/'source_snapshot.json') if (out/'source_snapshot.json').is_file() else None,
- experimental_default_off=True,operations=['dense_qkv','conv4_silu'],
- recurrent_state_supported=False,gated_norm_supported=False,full_block_supported=False,scalar_service_shared=True)
+ experimental_default_off=True,operations=(['dense_qkv','dense_z','dense_ab','conv4_silu','input_prep','recurrent_fp32','gated_norm','state_fence'] if core else ['dense_qkv','conv4_silu']),
+ recurrent_state_supported=core,gated_norm_supported=core,full_block_supported=False,scalar_service_shared=True)
 (out/'build_ready.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 PY_BUILD

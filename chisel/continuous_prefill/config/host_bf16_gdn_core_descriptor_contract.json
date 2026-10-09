@@ -1,0 +1,142 @@
+{
+  "status": "EXPERIMENTAL_DEFAULT_OFF",
+  "scope": "M1_GDN_CORE_PRODUCER_CHAIN",
+  "enable_parameter": "bf16GdnCore",
+  "default_enabled": false,
+  "policy_version": 2,
+  "legacy_v1_unchanged": true,
+  "command_order": ["DENSE_QKV", "DENSE_Z", "DENSE_AB", "CONV4", "INPUT_PREP", "RECURRENT", "GATED_NORM", "FENCE"],
+  "record_counts": [12, 12, 12, 18, 18, 15, 15, 11],
+  "transaction_record_count": 113,
+  "tensor": {
+    "rank": 2,
+    "memory_space": 0,
+    "layout": 0,
+    "alignment_bytes": 64,
+    "allocation_bytes": "round_up(rows * columns * dtype_bytes, 64)",
+    "shape4_suffix": [1, 1],
+    "strides_elements": ["columns", 1, 1],
+    "prefix_records": [1, 2, 3],
+    "non_A_tails_null": true,
+    "all_prefix_and_policy_indices_distinct": true,
+    "access": "Access is command-role semantics, not a tensor_base flag. Non-fence D, Conv Hout and Recurrent stateOut are writes. Fence A/B/D are reads of this transaction's acknowledged staging outputs; the Host mapping requires those staging spans to remain read-write."
+  },
+  "policy": {
+    "record_type": 33,
+    "version": [0, 8],
+    "version_value": 2,
+    "operation": [8, 8],
+    "operations": {"CONV4": 1, "DENSE": 2, "INPUT_PREP": 3, "RECURRENT": 4, "GATED_NORM": 5, "FENCE": 6},
+    "reserved0": [16, 8],
+    "cold": [24, 1],
+    "recurrent_mode": [25, 1],
+    "reserved1": [26, 6],
+    "expected_generation": [32, 32],
+    "reserved2": [64, 8],
+    "all_eight_commands_share_cold_mode_generation": true,
+    "recurrent_mode_rule": "not cold for M1",
+    "cold_generation": 0,
+    "carried_generation_minimum": 1,
+    "generation_wrap_supported": false
+  },
+  "sfu_program": {
+    "record_type": 32,
+    "program_id": 48,
+    "input_count": 2,
+    "output_count": 1,
+    "lane_width_bits": 16,
+    "vector_lanes": 1,
+    "program_flags": 0,
+    "default_dtype_pair": [5, 5],
+    "INPUT_PREP_dtype_pair": [5, 7],
+    "RECURRENT_dtype_pair": [7, 5]
+  },
+  "dense": {
+    "opcode": 32, "engine": 2, "M": 1, "K": 1024, "N": [6144, 2048, 32],
+    "A": {"dtype": 5, "shape": [1, 1024]},
+    "B": {"dtype": 5, "shape": [1024, "N"]},
+    "D": {"dtype": 5, "shape": [1, "N"]},
+    "A_tail": [16, 18, 33],
+    "matrix_dataflow": 0,
+    "matrix_aux": "public MatrixAux() defaults",
+    "shared_hidden_A": true,
+    "AB_layout": "one 64-byte row: A0..A15,B0..B15"
+  },
+  "conv": {
+    "opcode": 48, "engine": 3,
+    "A": {"dtype": 5, "shape": [1, 6144], "producer": "DENSE_QKV.D"},
+    "B": {"dtype": 5, "shape": [6144, 4]},
+    "D": {"dtype": 5, "shape": [1, 6144]},
+    "A_tail": [32, 33, 34],
+    "extra_record_type": 34,
+    "aux0": {"dtype": 5, "shape": [6144, 4], "role": "history_input"},
+    "aux1": {"dtype": 5, "shape": [6144, 4], "role": "history_output"}
+  },
+  "input_prep": {
+    "opcode": 48, "engine": 3,
+    "A": {"dtype": 5, "shape": [1, 6144], "producer": "CONV4.D"},
+    "B": {"dtype": 5, "shape": [1, 32], "producer": "DENSE_AB.D"},
+    "D": {"dtype": 7, "shape": [1, 6400]},
+    "D_sections": [
+      {"name": "Q", "offset_bytes": 0, "bytes": 8192},
+      {"name": "K", "offset_bytes": 8192, "bytes": 8192},
+      {"name": "V", "offset_bytes": 16384, "bytes": 8192},
+      {"name": "gates", "offset_bytes": 24576, "bytes": 1024}
+    ],
+    "A_tail": [32, 33, 35],
+    "extra_record_type": 35,
+    "aux0": {"dtype": 7, "shape": [1, 16], "role": "A_log"},
+    "aux1": {"dtype": 5, "shape": [1, 16], "role": "dt_bias", "allocation_bytes": 64}
+  },
+  "recurrent": {
+    "opcode": 48, "engine": 3,
+    "A": {"dtype": 7, "shape": [1, 6400], "producer": "INPUT_PREP.D"},
+    "B": {"dtype": 7, "shape": [2048, 128], "role": "state_input"},
+    "D": {"dtype": 5, "shape": [1, 2048]},
+    "A_tail": [32, 33, 35],
+    "extra_record_type": 35,
+    "aux0": {"dtype": 7, "shape": [2048, 128], "role": "state_output"},
+    "aux1": null
+  },
+  "gated_norm": {
+    "opcode": 48, "engine": 3,
+    "A": {"dtype": 5, "shape": [1, 2048], "producer": "RECURRENT.D"},
+    "B": {"dtype": 5, "shape": [1, 2048], "producer": "DENSE_Z.D"},
+    "D": {"dtype": 5, "shape": [1, 2048]},
+    "A_tail": [32, 33, 35],
+    "extra_record_type": 35,
+    "aux0": {"dtype": 7, "shape": [1, 128], "role": "original_gamma_no_1_plus"},
+    "aux1": null
+  },
+  "fence": {
+    "opcode": 48, "engine": 3,
+    "A": {"dtype": 5, "shape": [6144, 4], "producer": "CONV4.aux1"},
+    "B": {"dtype": 7, "shape": [2048, 128], "producer": "RECURRENT.aux0"},
+    "D": {"dtype": 5, "shape": [1, 2048], "producer": "GATED_NORM.D"},
+    "A_tail": [32, 33],
+    "owner_command": false,
+    "all_roots_are_reads": true,
+    "last_command_required": true,
+    "publication": "After all producer writes have been acknowledged, successful fence completion atomically replaces both committed history/state bindings and advances generation. No intermediate operation publishes committed state."
+  },
+  "extra_roots_encoding": {"aux0_root": [0, 24], "aux1_root": [24, 24], "reserved": [48, 24], "null_index": 16777215},
+  "events": {"nonzero_signal": true, "width_bits": 8, "unique_transaction_signals": true, "each_wait_equals_previous_signal": true},
+  "physical_lifetime": {
+    "source_and_output_allocations_reserved_through_fence": true,
+    "transaction_buffer_recycling": false,
+    "same_resource_uses_require_identical_typed_address": true,
+    "different_resource_overlap_rejected_including_readonly_sources": true,
+    "source_contents_and_DMA_ACKs_verified_by_hardware_not_serializer": true
+  },
+  "continuation": {
+    "requires_previous_successful_fence_completion": true,
+    "generation": "previous expected_generation + 1",
+    "history_input": "previous fence A",
+    "state_input": "previous fence B",
+    "same_checkpoint_weight_bindings": true,
+    "temporary_allocations_reusable_only_on_next_launch": true,
+    "latest_committed_states_protected_until_next_fence": true,
+    "implicit_warm_import_after_reset": false
+  },
+  "unsupported": ["checkpoint restore", "tokens other than M1", "in-place state update", "full GDN block", "residual", "MLP"]
+}

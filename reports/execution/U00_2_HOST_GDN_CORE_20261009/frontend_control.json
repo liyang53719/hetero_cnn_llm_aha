@@ -1,0 +1,46 @@
+{
+  "status": "PASS_CONTROL_ONLY",
+  "suite": "HostBlockCommandsGdnCoreSpec",
+  "tests": 2,
+  "failed": 0,
+  "elapsed_seconds": 51.206,
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "bda6585e9d709feebc815daf574f21836310b2852c178a1a5530c2a05153a793",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsGdnCoreSpec.scala": "157b21c07d3b6fcd92b15585c923f1555bddc0458381a484598d3e5acec5f226",
+    "chisel/continuous_prefill/doc/host_gdn_core_protocol.md": "fe9cc910dbf2013e0fa50dc7f051876e4da9345fc39cfdd29a3b57d3c6d8b8b2"
+  },
+  "overlay": "/tmp/host_gdn_core_alias_control_20261009T0531/overlay",
+  "overlay_classes_identity": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_gdn_core_alias_control_20261009T0531/overlay_classes_sha256.json",
+  "base_classes": "/tmp/host_gdn_core_emission_20261009T0525/classes",
+  "base_source_identity": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_gdn_core_emission_20261009T0525/source_sha256.json",
+  "intentional_main_override": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala",
+  "all_other_main_sources_match_base": true,
+  "control_log_sha256": "e7ede8dd9bfb33434f8ba8fabd6e56a609fbbfd155864bef538f276c57b77fb1",
+  "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "owner": "stand-in; actual arithmetic and payload DMA are not exercised",
+  "covered": [
+    "Seven actual producer bindings and terminal Fence without owner issue",
+    "Atomic committed history/state/generation with completion stalls",
+    "Cold and multiple carried launches; temporary-buffer reuse",
+    "All seven owner fault/status/tag/short-and-long-ACK failures preserve old checkpoint",
+    "Missing or malformed Fence and swapped producer roots",
+    "Typed auxiliary dtype/stride/root/policy validation",
+    "Cross-command semantic source alias rejection",
+    "All seven parameter bindings fixed across carry; hidden token address may change",
+    "Committed state and all parameter spans protected from writes despite permission remapping",
+    "Hidden alias to unvisited committed gamma rejected before first owner",
+    "Immediate predecessor event dependency; default-off admission"
+  ],
+  "legacy_v1_evidence": "/tmp/host_gdn_core_control_20261009T0519/summary.json",
+  "earlier_full_top_emission": {
+    "source_sha256": "e65471698e9273cc47ad1ebe9b537ff3f16167a691ca6d11b83cf2ed5a0f42d0",
+    "identity": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/host_gdn_core_emission_20261009T0525/source_sha256.json",
+    "note": "Full production top emission predates the final readonly source-alias Mux; final fresh whole-top build belongs to CI"
+  },
+  "unverified": [
+    "Actual core numerical and payload DMA chain",
+    "Checkpoint restore op7 and crash-retry semantics"
+  ],
+  "legacy_v1_test_source_unchanged": true,
+  "legacy_v1_logic_changes": "new checks guarded by bf16GdnCore; exact new whole-top v1 regression remains CI pending"
+}

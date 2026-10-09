@@ -1,0 +1,172 @@
+{
+  "status": "PASS_FROZEN_OPERATOR_DIAGNOSTICS_FROM_HASH_VERIFIED_PRIOR_FIXTURE",
+  "original_fixture_manifest_sha256": "c3a9c2b252258181791b5a119e8a167ec452652497d98a48bceb651ab3aecf55",
+  "source_authority_reissued": false,
+  "prior_fixture_source_binding_preserved": true,
+  "new_source_fresh_fixture_generated": false,
+  "rtl_executed": false,
+  "frozen_operator_metrics": [
+    {
+      "token": 0,
+      "comparisons": {
+        "qkv": {
+          "elements": 6144,
+          "bit_mismatches": 5,
+          "max_abs": 4.70197740328915e-38,
+          "mean_abs": 2.0089014784560578e-41,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "z": {
+          "elements": 2048,
+          "bit_mismatches": 1,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 2.9802322387695312e-08,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "ab": {
+          "elements": 32,
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "end_to_end_conv": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "end_to_end_silu": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "conv_same_canonical_input": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1,
+          "pass_": true
+        },
+        "silu_same_canonical_input": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1,
+          "pass_": true
+        }
+      },
+      "passed": true,
+      "contract": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json"
+    },
+    {
+      "token": 1,
+      "comparisons": {
+        "qkv": {
+          "elements": 6144,
+          "bit_mismatches": 11,
+          "max_abs": 0.0078125,
+          "mean_abs": 1.3510386149088542e-06,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "z": {
+          "elements": 2048,
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "ab": {
+          "elements": 32,
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "end_to_end_conv": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "max_abs": 0.0009765625,
+          "mean_abs": 1.5894571940104166e-07,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "end_to_end_silu": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "max_abs": 0.00048828125,
+          "mean_abs": 7.947285970052083e-08,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "pass": true
+        },
+        "conv_same_canonical_input": {
+          "elements": 6144,
+          "bit_mismatches": 6,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1,
+          "pass_": true
+        },
+        "silu_same_canonical_input": {
+          "elements": 6144,
+          "bit_mismatches": 6,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1,
+          "pass_": true
+        }
+      },
+      "passed": true,
+      "contract": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json"
+    }
+  ],
+  "current_diagnostic_source_sha256": "103027994fd482669313d9d885d0bb4a6040391023c17b8019e532538da43eb8",
+  "elapsed_seconds": 0.033665473994915374
+}

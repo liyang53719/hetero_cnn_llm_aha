@@ -1,0 +1,158 @@
+name: qwen35-production-Host-BF16-GDN-Core
+
+# A fresh canonical core numerical gate. Native core, fault/reset/restore,
+# output projection, residual, FFN, and full-block acceptance remain pending.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/host-bf16-gdn-core.yml'
+      - 'chisel/continuous_prefill/**'
+      - 'chisel/p0_safety/src/main/**'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'rtl/matrix/**'
+      - 'rtl/integration/**'
+      - 'src/heteronpu/**'
+      - 'config/model_profiles/qwen3_5_0p8b.json'
+      - 'config/upstream/qwen3_5_0p8b/**'
+      - 'scripts/collect_qwen35*payload.py'
+      - 'scripts/matrix_norm_rope_reference.c'
+      - 'scripts/check_git_payloads.py'
+      - 'pyproject.toml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: host-bf16-gdn-core-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    outputs:
+      package_sha256: ${{ steps.build.outputs.package_sha256 }}
+      source_commit: ${{ steps.build.outputs.source_commit }}
+      artifact_name: host-gdn-core-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+    env:
+      BUILD_JOBS: '1'
+      BUILD_RESERVE_BYTES: '1073741824'
+      JVM_OPTS: '-Xmx1500m -Xss4M -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare pinned build tools and original public iDMA sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/gdn_core_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/gdn_core_ci_idma
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/gdn_core_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Source, v1/core ABI, fresh authority and transfer-admission regression
+        run: |
+          python scripts/check_git_payloads.py
+          python -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_gdn*.py chisel/continuous_prefill/tests/test_gdn_*reference.py
+          python -O -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_gdn*.py chisel/continuous_prefill/tests/test_gdn_*reference.py
+      - name: Small scalar, v1 Conv and v1/core Host frontend control gates
+        working-directory: chisel/continuous_prefill
+        env:
+          MAKEFLAGS: '-j1 VK_PCH_I_FAST= VK_PCH_I_SLOW='
+        run: |
+          sbt -batch 'testOnly heteronpu.continuous.BlockScalarFloatSpec heteronpu.continuous.GdnConv4OwnerSpec heteronpu.continuous.HostBlockCommandsGdnSpec heteronpu.continuous.HostBlockCommandsGdnCoreSpec'
+      - name: Build core once and seal only ELF, RTL and source/tool identities
+        id: build
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py build --profile core --output work/host_gdn_core_build_ci --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: host-gdn-core-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+          path: work/host_gdn_core_build_ci/host_gdn_build.tar.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-gdn-core-build-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_gdn_core_build_ci/compact/summary.json
+            work/host_gdn_core_build_ci/compact/source_input_hashes.json
+
+  core-canonical-pass:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+      TRUSTED_PACKAGE_SHA: '${{ needs.build.outputs.package_sha256 }}'
+      TRUSTED_SOURCE_COMMIT: '${{ needs.build.outputs.source_commit }}'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install the same fixed official source runtime as the existing Host gate
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: work/host_gdn_core_download
+      - name: Reacquire only pinned layer0 and prefix payloads
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Fresh live core reference, cold token19 then carried token92 on one actual DUT
+        env: {HF_HUB_OFFLINE: '1'}
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py run --profile core --output work/host_gdn_core_pass_ci --archive work/host_gdn_core_download/host_gdn_build.tar.gz --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT" --mode pass --timeout-seconds 7200
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-gdn-core-pass-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_gdn_core_pass_ci/compact/summary.json
+            work/host_gdn_core_pass_ci/compact/source_input_hashes.json
+
+  core-only-acceptance:
+    needs: [build, core-canonical-pass]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require both exact-source core jobs to succeed
+        env:
+          NEEDS_RESULTS: '${{ toJSON(needs) }}'
+        run: |
+          python - <<'PY'
+          import json, os
+          results = {name: row['result'] for name, row in json.loads(os.environ['NEEDS_RESULTS']).items()}
+          expected = {'build', 'core-canonical-pass'}
+          if set(results) != expected or any(value != 'success' for value in results.values()):
+              raise SystemExit('PENDING: canonical core acceptance did not complete successfully: ' + json.dumps(results))
+          PY
+      - name: Record canonical numerical core-only acceptance and pending gates
+        run: |
+          echo 'PASS_PRODUCTION_HOST_GDN_CORE_CANONICAL: two continuous M1 launches, cold token19 then carried token92, eight commands each on one actual HostBlockTop.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Scope: GDN_CORE_M1_BEFORE_OUTPUT_PROJECTION, 16 heads x 128. Real physical ACK writes feed all consumers and carried history/state. Actual useful Dense MACs: 16,842,752; independent padded oracle FMA steps: 17,301,504.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'InputNorm is external. Output projection, residual and FFN are outside this gate. Fault injection, reset recovery, checkpoint restore, native core acceptance and full-block acceptance remain PENDING.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Existing Dense/Conv operator gates retain their fixed thresholds. InputPrep, Softplus, recurrent and gated norm native comparisons remain diagnostic.' >> "$GITHUB_STEP_SUMMARY"

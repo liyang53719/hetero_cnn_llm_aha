@@ -1,0 +1,242 @@
+{
+  "status": "SOURCE_AUTHENTICATED_HOST_GDN_CORE_TWO_TOKEN_FIXTURE",
+  "scope": "DENSE_QKV_Z_AB_CONV4_INPUT_PREP_FP32_RECURRENT_GATED_NORM_FENCE_ONLY",
+  "input_boundary": "real embedding rows19/92 -> official inputNorm; inputNorm is external, not DUT",
+  "token_ids": [
+    19,
+    92
+  ],
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "framework_source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+  "source_sha256": {
+    "chisel/continuous_prefill/scripts/pack_host_bf16_gdn_core_fixture.py": "397652d47c1de5039e102bad399fb690d958c330d2db94251e7b123065e1e27c",
+    "chisel/continuous_prefill/scripts/pack_host_bf16_gdn_fixture.py": "764c5040062bc153cee365b1f5ad78a54c7cdcd8ded68184791a12c48a50e1ca",
+    "chisel/continuous_prefill/scripts/host_bf16_gdn_core_descriptor.py": "72a03341ccffd5cfa9b49d15623dbefeff0e53fa38812720969a6f5706843c4c",
+    "chisel/continuous_prefill/scripts/host_bf16_gdn_core_execution.py": "6a0e0e04e825e17d8dd45f0dff8ff9588bdaa8787b6d1718bc30c15f6331fea6",
+    "chisel/continuous_prefill/scripts/host_bf16_qkv_reference.py": "92a25242f1af74237f164875543d774c292417feb338256a34e28ebaa9f19f47",
+    "chisel/continuous_prefill/scripts/gdn_input_prep_reference.py": "97aa46c6ca4b70bf09e545db60d4e9109c5c6a884c52a9f9523929b10fef526a",
+    "chisel/continuous_prefill/scripts/gdn_gated_norm_reference.py": "ab08fa108e17201b032f0d18d75c497e029bdf52bc2c62b46db11144aff4e223",
+    "src/heteronpu/qwen35_gdn_recurrent_fp32.py": "1ae13a546fc3a391f32a7afaa8a40a1b155cebdcdf022bfaf62c52d61dd440f7",
+    "src/heteronpu/matrix_norm_rope_candidate.py": "41a4a25575de2f1b7323582b1b79553417ce99f90a38b2ee5a54948da111e764",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+    "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+    "src/heteronpu/pinned_prefix_payload.py": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+    "scripts/matrix_norm_rope_reference.c": "90ac528864881602ca22bd552f3bd18c75ebab11b7d3d881fc8016918573dc3d",
+    "config/model_profiles/qwen3_5_0p8b.json": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769",
+    "config/upstream/qwen3_5_0p8b/config.json": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "config/upstream/qwen3_5_0p8b/prefix_token_fixture.json": "7aa77ba8b89001738c5b3a9a04b6f27a59118cbeebd01cffe82e42954b85f7b1",
+    "config/upstream/qwen3_5_0p8b/prefix_payload_pin.json": "1abdfec9e51e2fe77be685a9e2a5e3f3894162daa9b63e7c336b28ae399b104c",
+    "config/upstream/qwen3_5_0p8b/layer0_payload_pin.json": "80352cc5df45472a8867a4e1d346f60dc888e6f89ee191ec35457b484770d9c4",
+    "chisel/continuous_prefill/tests/host_bf16_gdn_core.cpp": "6f4935a78cc796ffe18544e2490ec492b0dbdeebff64063f2a25679d126c5012"
+  },
+  "reference_head_jobs": 66,
+  "reference_padded_fma_steps": 17301504,
+  "actual_useful_dense_macs": 16842752,
+  "native_metrics": [
+    {
+      "token": 0,
+      "token_id": 19,
+      "official_path": "torch_chunk_gated_delta_rule",
+      "source": "independent official full-layer producer and its own cold/carried cache",
+      "stages": {
+        "qkv": {
+          "elements": 6144,
+          "bit_mismatches": 5,
+          "numeric_mismatches": 5,
+          "max_bf16_ulp": 12,
+          "max_abs": 4.70197740328915e-38,
+          "max_relative_nonzero_reference": 0.04897959183673469,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "z": {
+          "elements": 2048,
+          "bit_mismatches": 1,
+          "numeric_mismatches": 1,
+          "max_bf16_ulp": 1,
+          "max_abs": 6.103515625e-05,
+          "max_relative_nonzero_reference": 0.004975124378109453,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "ab": {
+          "elements": 32,
+          "bit_mismatches": 0,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "max_relative_nonzero_reference": 0.0,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "conv": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "max_relative_nonzero_reference": 0.0,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "history": {
+          "elements": 24576,
+          "bit_mismatches": 5,
+          "numeric_mismatches": 5,
+          "max_bf16_ulp": 12,
+          "max_abs": 4.70197740328915e-38,
+          "max_relative_nonzero_reference": 0.04897959183673469,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "prep": {
+          "elements": 6400,
+          "bit_mismatches": 2182,
+          "max_abs": 9.5367431640625e-07,
+          "mean_abs": 1.180281266055516e-09,
+          "max_relative_nonzero_reference": 1.583100089920085e-06,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "recurrent": {
+          "elements": 2048,
+          "bit_mismatches": 0,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "max_relative_nonzero_reference": 0.0,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "state": {
+          "elements": 262144,
+          "bit_mismatches": 131869,
+          "max_abs": 1.7881393432617188e-07,
+          "mean_abs": 3.13622070834413e-11,
+          "max_relative_nonzero_reference": 3.9329351957485755e-07,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "norm": {
+          "elements": 2048,
+          "bit_mismatches": 1,
+          "numeric_mismatches": 1,
+          "max_bf16_ulp": 1,
+          "max_abs": 5.960464477539063e-08,
+          "max_relative_nonzero_reference": 0.006493506493506494,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        }
+      }
+    },
+    {
+      "token": 1,
+      "token_id": 92,
+      "official_path": "torch_recurrent_gated_delta_rule",
+      "source": "independent official full-layer producer and its own cold/carried cache",
+      "stages": {
+        "qkv": {
+          "elements": 6144,
+          "bit_mismatches": 11,
+          "numeric_mismatches": 11,
+          "max_bf16_ulp": 55,
+          "max_abs": 0.0078125,
+          "max_relative_nonzero_reference": 0.3107344632768362,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "z": {
+          "elements": 2048,
+          "bit_mismatches": 0,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "max_relative_nonzero_reference": 0.0,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "ab": {
+          "elements": 32,
+          "bit_mismatches": 0,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "max_relative_nonzero_reference": 0.0,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "conv": {
+          "elements": 6144,
+          "bit_mismatches": 7,
+          "numeric_mismatches": 1,
+          "max_bf16_ulp": 1,
+          "max_abs": 0.00048828125,
+          "max_relative_nonzero_reference": 0.005405405405405406,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "history": {
+          "elements": 24576,
+          "bit_mismatches": 16,
+          "numeric_mismatches": 16,
+          "max_bf16_ulp": 55,
+          "max_abs": 0.0078125,
+          "max_relative_nonzero_reference": 0.3107344632768362,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "prep": {
+          "elements": 6400,
+          "bit_mismatches": 2611,
+          "max_abs": 3.3182092010974884e-05,
+          "mean_abs": 9.2961192532659e-09,
+          "max_relative_nonzero_reference": 0.00537910385207789,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "recurrent": {
+          "elements": 2048,
+          "bit_mismatches": 1,
+          "numeric_mismatches": 1,
+          "max_bf16_ulp": 1,
+          "max_abs": 9.5367431640625e-07,
+          "max_relative_nonzero_reference": 0.0072992700729927005,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "state": {
+          "elements": 262144,
+          "bit_mismatches": 161405,
+          "max_abs": 1.1920928955078125e-07,
+          "mean_abs": 5.134586448437936e-11,
+          "max_relative_nonzero_reference": 0.02564102564102564,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        },
+        "norm": {
+          "elements": 2048,
+          "bit_mismatches": 0,
+          "numeric_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "max_relative_nonzero_reference": 0.0,
+          "nonzero_vs_reference_zero": 0,
+          "official_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NO_STAGE_THRESHOLD_FROZEN"
+        }
+      }
+    }
+  ],
+  "native_core_gate_pass": null,
+  "official_stage_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY; no whole-block tolerance inheritance",
+  "native_full_block_gate_pass": null,
+  "native_full_block_status": "NOT_ESTABLISHED_BY_CORE_FIXTURE",
+  "full_block_supported": false,
+  "rtl_executed": false,
+  "reference_elapsed_seconds": 59.26361016998999,
+  "max_rss_kib": 578108,
+  "manifest_sha256": "c3a9c2b252258181791b5a119e8a167ec452652497d98a48bceb651ab3aecf55",
+  "source_revision_boundary": "Reference generated before the later inherited native Dense/Conv operator-gate audit patch. Original fixture is preserved; it is not current-source fresh authority.",
+  "numeric_reference_only": true
+}

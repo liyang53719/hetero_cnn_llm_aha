@@ -1,0 +1,20 @@
+{
+  "status": "PASS_STATIC_REVIEW_NO_DEMONSTRATED_P0_P1",
+  "arithmetic_or_simulation_executed_by_reviewer": false,
+  "reviewed_scope": [
+    "production owner mux and one shared scalar",
+    "typed BF16/FP32 offsets and actual producer bindings",
+    "two-state terminal Fence and no failed publication",
+    "committed seven-parameter spans and immediate event dependency",
+    "explicit receiver-selected core CI and source/ELF/archive admission",
+    "old Dense/Conv native operator gates and unsupported full-block boundaries"
+  ],
+  "resolved_findings": [
+    "carry must use same committed parameter spans",
+    "all committed parameter spans protected from output and other semantic reads",
+    "v2 event wait must match previous accepted signal",
+    "core-only profile omits unused legacy sixteen-lane SiLU"
+  ],
+  "host_source_sha256": "bda6585e9d709feebc815daf574f21836310b2852c178a1a5530c2a05153a793",
+  "production_numeric_ci": "PENDING"
+}

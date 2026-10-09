@@ -1141,3 +1141,15 @@ Qwen35候选QKV命令子链_20261008:
   下一最小闭包: 真实Dense Z2048和AB32接InputPrep、FP32 recurrent state及gatednorm；保留双state staging到末fence原子发布和真实checkpoint恢复；再接O和residual及FFN
   未验收: [本次四命令数值CI, M128, recurrent与gatednorm生产链, 完整GDN及35B block, 原native完整精度, PPA及MAC90]
   保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN；深core半成品不进入本次v1发布
+
+生产Host_GDN_core_v2_20261009:
+  状态: PENDING_实际数值CI
+  入口: doc/U00_2_HOST_GDN_CORE_20261009_CN.md
+  证据: reports/execution/U00_2_HOST_GDN_CORE_20261009/result.json
+  已完成: [独立owner小算术, 生产core源码接线, 小前端控制RTL, 有界Host_RTL生成]
+  真实目标: 两次M1连续launch各八命令，真实QKV_Z_AB_Conv_Prep_FP32递推_gatednorm及双state_Fence
+  资源: 原Host_MatrixPipelineService_iDMA与单共享Scalar，core默认关闭
+  数值边界: 固定整数C参考逐位与既有Dense_Conv门限并存；新stage官方误差仍诊断；旧完整native拒绝保留
+  未完成: [生产core数值终态, core_fault_reset_restore, DUT_inputNorm, O_residual_postnorm_FFN_down_residual, M128, 完整block]
+  最终状态提交: 完整block必须在末次残差ACK及终端Fence后才共同发布history_state_generation
+  保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN；C03.2_C04.2_C05仅局部接线子门，S01_Q35A继续

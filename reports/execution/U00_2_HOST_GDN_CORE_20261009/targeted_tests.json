@@ -1,0 +1,81 @@
+{
+  "normal": {
+    "exit_code": 0,
+    "seconds": 17.85457420349121,
+    "peak_rss_kib": 128660,
+    "tests_passed": 395,
+    "subtests_passed": 393,
+    "log_sha256": "61285c98f9bbdf41851ef8b9820a14d669ff6f4f79695eb8373456c711303537",
+    "command": {
+      "argv": [
+        "python",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_build_profile.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_gdn_input_prep_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_gated_norm_reference.py",
+        "tests/test_qwen35_gdn_recurrent_fp32.py",
+        "tests/test_shape_layout_contract.py",
+        "tests/test_descriptor_chain.py",
+        "tests/test_block_checklist.py",
+        "tests/test_typical_block_plan.py"
+      ],
+      "cwd": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha",
+      "env": {
+        "PYTHONPATH": "/tmp/qkv_test_dependencies:/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/src"
+      }
+    }
+  },
+  "optimized": {
+    "exit_code": 0,
+    "seconds": 19.952794551849365,
+    "peak_rss_kib": 133484,
+    "tests_passed": 395,
+    "subtests_passed": 393,
+    "log_sha256": "a7f46935e2f040d35b5ffac0b69ea593a116e9bbc541f59a4aee678640c0fe6a",
+    "command": {
+      "argv": [
+        "python",
+        "-O",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_build_profile.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_core_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_descriptor.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_execution.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fixture.py",
+        "chisel/continuous_prefill/tests/test_host_bf16_gdn_fresh_gate.py",
+        "chisel/continuous_prefill/tests/test_gdn_input_prep_reference.py",
+        "chisel/continuous_prefill/tests/test_gdn_gated_norm_reference.py",
+        "tests/test_qwen35_gdn_recurrent_fp32.py",
+        "tests/test_shape_layout_contract.py",
+        "tests/test_descriptor_chain.py",
+        "tests/test_block_checklist.py",
+        "tests/test_typical_block_plan.py"
+      ],
+      "cwd": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha",
+      "env": {
+        "PYTHONPATH": "/tmp/qkv_test_dependencies:/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/src"
+      }
+    }
+  },
+  "scope": "Targeted production GDN Python, descriptor, source/transfer, arithmetic-reference, shape and Chinese-plan regressions; no actual Host core RTL executed",
+  "hardware_numerical_pass": false,
+  "synthetic_shape_vectors": 64,
+  "legacy_tsv_bytes_unchanged": true
+}

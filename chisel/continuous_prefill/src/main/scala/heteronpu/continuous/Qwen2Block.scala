@@ -51,7 +51,8 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
   * Each successor starts only after the previous stage's final write ACK.
   */
-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false) extends Module {
+class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false) extends Module {
+  require(!enableGdnSoftplus || (externalScalar && s.qwen35GdnOnly), "Softplus requires the explicit GDN scalar service")
   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
   require(!s.nativeProfile || ownerDriven, "Qwen3.5 native subchains have no autonomous block route")
   require(!externalScalar || ownerDriven, "shared scalar requests require owner serialization")
@@ -89,7 +90,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   val av=Reg(Vec(16,UInt(32.W)));val bv=Reg(Vec(16,UInt(32.W)));val cv=Reg(Vec(16,UInt(32.W)));val dv=Reg(Vec(16,UInt(32.W)))
   val acc=Reg(Vec(16,UInt(32.W)));val tmp=Reg(Vec(16,UInt(32.W)));val tmp2=Reg(Vec(16,UInt(32.W)))
   val scalarValue=Reg(UInt(32.W));val scalarRequest=Reg(new ScalarRequest)
-  val scalar=Module(new BlockScalarFloat);scalar.io.request.valid:=state===st("scalarReq");scalar.io.request.bits:=scalarRequest;scalar.io.result.ready:=state===st("scalarRsp")
+  val scalar=Module(new BlockScalarFloat(enableSoftplus=enableGdnSoftplus));scalar.io.request.valid:=state===st("scalarReq");scalar.io.request.bits:=scalarRequest;scalar.io.result.ready:=state===st("scalarRsp")
   val scalarExternalExclusive=WireDefault(false.B)
   if(externalScalar){
     // One accepted request owns the existing arithmetic until its result is

@@ -60,5 +60,46 @@
       "history_output_root": [24, 24],
       "reserved": [48, 24]
     }
+  },
+  "gdn_policy_v2": {
+    "record_type": 33,
+    "status": "EXPERIMENTAL_DEFAULT_OFF",
+    "enable_parameter": "bf16GdnCore",
+    "version": 2,
+    "operations": {
+      "CONV4": 1,
+      "DENSE": 2,
+      "INPUT_PREP": 3,
+      "RECURRENT": 4,
+      "GATED_NORM": 5,
+      "FENCE": 6
+    },
+    "fields": {
+      "version": [0, 8],
+      "operation": [8, 8],
+      "reserved0": [16, 8],
+      "cold": [24, 1],
+      "recurrent_mode": [25, 1],
+      "reserved1": [26, 6],
+      "expected_generation": [32, 32],
+      "reserved2": [64, 8]
+    },
+    "M1_recurrent_mode": "not cold",
+    "transaction_policy_fields_match": true
+  },
+  "gdn_aux_roots": {
+    "record_type": 35,
+    "status": "EXPERIMENTAL_DEFAULT_OFF",
+    "policy_version": 2,
+    "fields": {
+      "aux0_root": [0, 24],
+      "aux1_root": [24, 24],
+      "reserved": [48, 24]
+    },
+    "operation_roles": {
+      "INPUT_PREP": ["A_log_FP32", "dt_bias_BF16_padded64"],
+      "RECURRENT": ["state_output_FP32", "NULL_INDEX"],
+      "GATED_NORM": ["original_gamma_FP32", "NULL_INDEX"]
+    }
   }
 }

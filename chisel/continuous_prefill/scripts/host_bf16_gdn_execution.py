@@ -499,13 +499,22 @@ def verify_execution(fixture, outputs, log, mode, *, session=None, authority=Non
                 native_full_block_status=manifest['native_full_block_status'])
 
 
-def _build_identity(build):
+def _build_identity(build, *, profile='dense-conv'):
+    require(profile in ('dense-conv', 'core'), 'unknown GDN build identity profile')
+    core = profile == 'core'
+    expected_status = 'BUILT_HOST_GDN_CORE_ONLY_NOT_NUMERICAL_PASS' if core else BUILD_STATUS
+    expected_operations = (['dense_qkv', 'dense_z', 'dense_ab', 'conv4_silu', 'input_prep',
+                            'recurrent_fp32', 'gated_norm', 'state_fence'] if core
+                           else ['dense_qkv', 'conv4_silu'])
     ready = json.loads((build / 'build_ready.json').read_text())
-    require(ready['status'] == BUILD_STATUS and ready['numerical_pass'] is False,
+    require(ready['status'] == expected_status and ready['numerical_pass'] is False,
             'expected GDN build-only receipt')
-    require(ready['experimental_default_off'] is True and ready['operations'] == ['dense_qkv', 'conv4_silu']
+    require(ready['experimental_default_off'] is True and ready['operations'] == expected_operations
             and ready['full_block_supported'] is False and ready['scalar_service_shared'] is True,
             'GDN build scope drift')
+    if core:
+        require(ready.get('build_profile') == 'core' and ready.get('recurrent_state_supported') is True
+                and ready.get('gated_norm_supported') is True, 'GDN core features/profile drift')
     executable = build / 'obj/VHostBlockTop'; rtl = build / 'generated/HostBlockTop.sv'
     require(sha(executable) == ready['binary_sha256'] and sha(rtl) == ready['rtl_sha256'], 'DUT binary/RTL identity drift')
     require(sha(build / 'sources.sha256.json') == ready['source_manifest_sha256'], 'built source-manifest identity drift')

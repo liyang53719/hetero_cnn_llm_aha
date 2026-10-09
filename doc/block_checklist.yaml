@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 7ea6a083744c38840b43127a3bb9dfd4429f9494389f9a100cac5ae9bd502518
+计划SHA256: e87dc1813feddf027b33eee478e568c806b0e6f17ca602c64d726aea87f81ec0
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1268,3 +1268,11 @@
   下一闭包: 同Dense的真实Z和AB32投影接QK L2及g/beta、FP32 recurrent、gatednorm；双状态域staging到末fence原子提交，checkpoint必须来自真实成功回执
   非完成: [生产Host DenseConv四命令数值终态, GDN M128, recurrent和gatednorm生产链, 输出投影和残差及FFN, 完整GDN及35B block, MAC90及PPA]
   状态边界: 不关闭关联大项；U00.2 ongoing、U01 to do、C02.2 OPEN；深core草稿不纳入v1发布
+
+生产Host_GDN_core_v2_20261009:
+  状态: PENDING_生产数值CI
+  记录: doc/U00_2_HOST_GDN_CORE_20261009_CN.md
+  范围: 八命令core生产接线及独立小门禁，尚非完整GDN_block
+  证据: reports/execution/U00_2_HOST_GDN_CORE_20261009/result.json
+  未完成: [真实core连续数值终态, core_fault_reset_restore, DUT_inputNorm与后续O残差FFN, M128, 完整native精度]
+  保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN

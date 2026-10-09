@@ -26,6 +26,7 @@ class RecordType(IntEnum):
     SFU_PROGRAM = 0x20
     GDN_POLICY = 0x21
     GDN_STATE_ROOTS = 0x22
+    GDN_AUX_ROOTS = 0x23
     KV_ADDRESS = 0x30
     KV_FORMAT = 0x31
     QUANTIZATION = 0x40

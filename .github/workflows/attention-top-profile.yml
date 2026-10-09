@@ -1,6 +1,6 @@
-name: bounded-production-Attention-Core-hotspot-diagnostic
+name: bounded-production-Attention-Core-concat-codegen-diagnostic
 
-# One unchanged full-top build and bounded eval-thread CPU hotspot sampling.
+# Generate the identical frozen full top, inspect concat callers, stop before C++ compilation.
 # Numerical acceptance is false; no functional RTL or physical resource change.
 on:
   push:
@@ -18,7 +18,7 @@ concurrency:
 jobs:
   bounded-attention-top-profile:
     runs-on: ubuntu-24.04
-    timeout-minutes: 150
+    timeout-minutes: 40
     env:
       SOURCE_SHA: '6959810545203d5f9508075b311dba52f1bee0c9'
       BUILD_JOBS: '1'
@@ -82,18 +82,12 @@ jobs:
           python scripts/check_git_payloads.py
           python -m pytest -o addopts='' -q tools/attention_profile
           python -O -m pytest -o addopts='' -q tools/attention_profile
-      - name: Reacquire the same pinned layer0, layer3 and prefix payloads
-        run: |
-          set -euo pipefail
-          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
-          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
-          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
-      - name: Sample eval hotspots within one fixed full-top build budget
+      - name: Generate exact frozen SV and concat callers without C++ build or model execution
         env: {HF_HUB_OFFLINE: '1'}
         run: |
           set -euo pipefail
-          python "$GITHUB_WORKSPACE/work/attention_profile_diagnostic/tools/attention_profile/run_profile.py" --source-root "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/work/full_top_profile" --hotspot-sampling
-      - name: Preserve only compact timing and source identity receipts
+          python "$GITHUB_WORKSPACE/work/attention_profile_diagnostic/tools/attention_profile/run_codegen.py" --source-root "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/work/full_top_profile"
+      - name: Preserve compact identity and selected generated caller sources
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -103,9 +97,10 @@ jobs:
           path: |
             work/full_top_profile/compact/summary.json
             work/full_top_profile/compact/source_input_hashes.json
+            work/full_top_profile/selected-source/
       - name: State the diagnostic boundary even on timeout or failure
         if: always()
         run: |
-          echo 'Bounded eval-thread hotspot diagnostic of full production Attention Core top at 6959810545203d5f9508075b311dba52f1bee0c9. numerical_acceptance=false. Build the unchanged baseline once; run sampling off then on using the same ELF. No functional RTL, physical hierarchy, resource, or floating-point changes.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'One build and both prefixes share the original 7800 seconds overall budget; the build is capped at 6000 seconds and remaining overall time. Two 4096-cycle prefixes are capped at 240 seconds each, both using the same fresh fixture. Fresh original reference functions remain unchanged; no full numerical rerun or repeated owner regressions.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Only compact runtime, stage, tool-hash, function hotspot counts and source/input identity receipts are retained. No raw weights, tensors, NPZ, RTL, binaries, traces or build outputs are uploaded. This diagnostic makes no speedup, numerical acceptance, timing signoff or QoR claim.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Codegen-only diagnosis of the frozen full production Attention Core top at 6959810545203d5f9508075b311dba52f1bee0c9. numerical_acceptance=false. Exact original SV SHA required before Verilation. Original hierarchy and codegen options unchanged; stop immediately after hier_verilation and before any C++ compilation.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'One 1200-second process-tree budget. No model downloads, fresh model execution, reference arithmetic, ELF build, DUT simulation or full numerical rerun. The original local baseline helper hotspot is an aggregate symbol; caller attribution requires the generated call sites and active conditions.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Only compact call-site/width/source identities and an explicitly bounded selection of pure generated caller/header/runtime source are uploaded. No weights, NPZ, tensor payloads, raw numeric traces, binary or object files. No speedup, numerical acceptance or QoR claim.' >> "$GITHUB_STEP_SUMMARY"

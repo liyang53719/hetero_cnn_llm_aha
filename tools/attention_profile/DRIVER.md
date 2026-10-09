@@ -167,3 +167,29 @@ may include at most five short, address-stripped assembly windows of at most
 ten instructions each, alongside function counts and source identities. The unchanged 6000-second
 build cap, 240-second prefix cap and 7800-second overall cap apply. This job
 does not execute or accept a complete block; numerical acceptance remains false.
+
+## Current default: codegen-only caller attribution
+
+Run 37982064254 at `331aa938` completed the bounded sampling diagnostic. Of
+8438 eval-caller CPU samples, 6422 (76.1081%) belong to `VL_CONCAT_WWI`;
+1016 (12.0408%) remain unresolved, predominantly in libc. No buffer drops or
+timer overruns occurred. This identifies a helper hotspot, not its caller or RTL
+module. Both sampled/unsampled prefixes match exactly within that run. The
+fresh activation hash differs from the previous A/B; its native producer gates
+also remain failed (baseline 11, AVX2 13). Cross-run bit equality and speedup
+are not established.
+
+The current workflow invokes `run_codegen.py` once. It emits the original
+frozen SV, checks the unchanged exact SV SHA before Verilation, and performs
+only the original `hier_verilation` stage. It stops before the original C++
+builder; no ELF, model capture, reference calculation or DUT execution is run.
+The total process-tree budget is 1200 seconds. The original hierarchy and
+expansion settings remain unchanged. Two generated C++ caller-file hashes
+observed in the sampling run are checked without path normalization.
+
+The compact call-site/width/condition inventory and up to 12 MiB of selected
+pure generated caller/header/runtime source are retained as CI artifacts, so
+the evidence remains inspectable after the runner disappears. The selection
+has an explicit file/hash/byte manifest and excludes object files, weights,
+tensors, NPZ and numeric traces. Caller attribution and any future expansion
+limit change require this evidence; no new full A/B is enabled.

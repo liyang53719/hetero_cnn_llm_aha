@@ -41,7 +41,7 @@ def test_only_main_diagnostic_paths_or_manual_dispatch_can_trigger():
 def test_one_bounded_serial_job_and_exact_commit_concurrency():
     assert len(WORKFLOW["jobs"]) == 1
     assert JOB["runs-on"] == "ubuntu-24.04"
-    assert JOB["timeout-minutes"] == "150"
+    assert JOB["timeout-minutes"] == "40"
     assert "strategy" not in JOB
     assert WORKFLOW["concurrency"] == {
         "group": "attention-top-profile-${{ github.sha }}",
@@ -116,34 +116,28 @@ def test_tests_are_fast_diagnostic_only_and_payload_guards_cover_both_roots():
     assert "--max-cycles" not in all_runs  # The fixed cap belongs to the runner.
 
 
-def test_exact_three_payloads_are_collected_in_the_frozen_source_checkout():
-    collect = step_named("Reacquire the same pinned layer0, layer3 and prefix payloads")
-    assert "working-directory" not in collect
-    commands = [line.strip() for line in collect["run"].splitlines() if line.startswith("python ")]
-    assert commands == [
-        f"python scripts/collect_qwen35_{part}_payload.py --output work/qwen35_{part}_payload"
-        for part in ("layer0", "layer3", "prefix")
-    ]
-
-
-def test_runner_uses_absolute_source_and_output_under_frozen_checkout():
-    profile = step_named("Sample eval hotspots within one fixed full-top build budget")
+def test_codegen_performs_no_payload_collection_or_model_execution():
+    all_runs = "\n".join(step.get("run", "") for step in STEPS)
+    assert "collect_qwen35" not in all_runs
+    assert "run_profile.py" not in all_runs
+    profile = step_named("Generate exact frozen SV and concat callers without C++ build or model execution")
     assert "working-directory" not in profile
     assert profile["env"] == {"HF_HUB_OFFLINE": "1"}
     assert profile["run"].splitlines() == [
         "set -euo pipefail",
-        f'python "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}/tools/attention_profile/run_profile.py" '
+        f'python "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}/tools/attention_profile/run_codegen.py" '
         '--source-root "$GITHUB_WORKSPACE" '
-        '--output "$GITHUB_WORKSPACE/work/full_top_profile" --hotspot-sampling',
+        '--output "$GITHUB_WORKSPACE/work/full_top_profile"',
     ]
 
 
-def test_upload_allowlist_is_only_two_compact_json_receipts_even_on_failure():
+def test_upload_allowlist_is_compact_and_selected_pure_source_even_on_failure():
     uploads = [step for step in STEPS if step.get("uses", "").startswith("actions/upload-artifact@")]
     assert len(uploads) == 1
     assert uploads[0]["if"] == "always()"
     assert uploads[0]["with"]["path"].splitlines() == [
         f"{COMPACT_ROOT}/summary.json", f"{COMPACT_ROOT}/source_input_hashes.json",
+        "work/full_top_profile/selected-source/",
     ]
     assert "${{ github.sha }}" in uploads[0]["with"]["name"]
     assert "${{ github.run_attempt }}" in uploads[0]["with"]["name"]
@@ -155,14 +149,11 @@ def test_diagnostic_boundary_does_not_claim_acceptance_or_speedup():
     boundary = step_named("State the diagnostic boundary even on timeout or failure")
     assert boundary["if"] == "always()"
     for statement in (
-        SOURCE_SHA, "numerical_acceptance=false", "7800 seconds overall",
-        "Build the unchanged baseline once", "sampling off then on using the same ELF",
-        "One build and both prefixes share the original",
-        "the build is capped at 6000 seconds and remaining overall time",
-        "Two 4096-cycle prefixes are capped at 240 seconds each",
-        "both using the same fresh fixture",
-        "Fresh original reference functions remain unchanged",
-        "runtime, stage, tool-hash", "no speedup",
+        SOURCE_SHA, "numerical_acceptance=false", "1200-second process-tree budget",
+        "stop immediately after hier_verilation and before any C++ compilation",
+        "No model downloads, fresh model execution, reference arithmetic, ELF build, DUT simulation",
+        "caller attribution requires the generated call sites and active conditions",
+        "pure generated caller/header/runtime source", "No speedup",
     ):
         assert statement in boundary["run"]
 

@@ -1,0 +1,253 @@
+{
+  "schema": "HOST_ATTENTION_FUNCTION_HOTSPOT_RESULT_V1",
+  "status": "VERIFIED_BOUNDED_HELPER_HOTSPOT_NOT_NUMERICAL_ACCEPTANCE",
+  "finding": "VL_CONCAT_WWI 是本次 4096 cycle prefix 的 eval 调用线程 self-CPU 样本中占比最高的聚合 helper；其调用者、位宽来源及 RTL 模块尚未确定。",
+  "acceptance": {
+    "numerical_acceptance": false,
+    "full_command_chain_completed": false,
+    "speedup_established": false,
+    "rtl_module_attribution_established": false,
+    "helper_callers_identified": false,
+    "hardware_MAC_utilization_established": false,
+    "physical_QoR_acceptance": false
+  },
+  "ci": {
+    "run_id": "37982064254",
+    "job_id": "113994781438",
+    "artifact_id": "11643857799",
+    "reported_conclusion": "SUCCESS",
+    "completed_at_utc": "2026-10-09T20:38:44Z",
+    "meaning": "有界热点诊断完成。",
+    "remote_status_basis": "parent report; local review did not query CI API",
+    "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37982064254",
+    "job_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37982064254/job/113994781438",
+    "artifact_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37982064254/artifacts/11643857799"
+  },
+  "source_identity": {
+    "production_commit": "6959810545203d5f9508075b311dba52f1bee0c9",
+    "diagnostic_commit": "331aa938eb820ac15deb13a7bbc927373d5b7924",
+    "source_profile": "EmitHostBf16AttentionCore",
+    "topology": "冻结 Attention core 配置的完整 HostBlockTop，不是完整 Attention block 验收。",
+    "functional_rtl_changed": false,
+    "hierarchy_changed": false,
+    "rtl_sha256": "4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9",
+    "binary_sha256": "0c9ccbf8bddbae084b8e2299a886c819684d8d6dfc8092ebe8a2dc1411ed3c1e",
+    "build_ready_sha256": "325d52acf3d6f6a62f2c5deb3d44ca95157f360d069e5ab46c5a082ab679761f",
+    "hierarchy_configuration_sha256": "d2b9e5391113b68d6848d9901b9ee57e0aee17c8cddcbfd6faa92feb2ba7b24b",
+    "actual_verilator_elf_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+    "source_manifest_sha256": "6f585196dedf470f62007980d9066b8a1e16607dbeabb9e162c244f02ca042c4",
+    "production_git_blob_hashes_verified": 619,
+    "diagnostic_git_blob_hashes_verified": 13,
+    "source_mismatches": [],
+    "instrumented_files_reconstructed_by_independent_review": 9
+  },
+  "sampling": {
+    "scope": "eval caller thread self CPU only; helper/worker CPU is excluded",
+    "route": "CLOCK_THREAD_CPUTIME_ID + SIGEV_THREAD_ID + SIGPROF/ucontext RIP",
+    "interval_ns": 9973000,
+    "sample_count": 8438,
+    "threads_at_start": 4,
+    "threads_at_finish": 4,
+    "phase_sample_counts": [
+      1663,
+      3520,
+      3255,
+      0
+    ],
+    "outside_eval_events_excluded": 13,
+    "capacity": 65536,
+    "buffer_saturated": false,
+    "dropped_buffer_full": 0,
+    "timer_overruns": 0,
+    "unknown_samples": 1016,
+    "unknown_percent": 12.0408,
+    "modules": [
+      {
+        "is_main_executable": true,
+        "module": "VHostBlockTop",
+        "resolved_samples": 7393,
+        "samples": 7408,
+        "sha256": "0c9ccbf8bddbae084b8e2299a886c819684d8d6dfc8092ebe8a2dc1411ed3c1e",
+        "symbol_count": 5132,
+        "unknown_samples": 15
+      },
+      {
+        "is_main_executable": false,
+        "module": "libc.so.6",
+        "resolved_samples": 29,
+        "samples": 1030,
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+        "symbol_count": 2299,
+        "unknown_samples": 1001
+      }
+    ],
+    "top_functions": [
+      {
+        "name": "VL_CONCAT_WWI(int, int, int, unsigned int*, unsigned int const*, unsigned int) [clone .constprop.0] [clone .isra.0]",
+        "samples": 6422,
+        "percent_of_all_samples": 76.1081,
+        "generated_sources": []
+      },
+      {
+        "name": "VHostBlockTop___024root___nba_comb__TOP__282(VHostBlockTop___024root*)",
+        "samples": 205,
+        "percent_of_all_samples": 2.4295,
+        "generated_sources": [
+          {
+            "bytes": 966989,
+            "file": "obj/VHostBlockTop___024root__DepSet_h74254c49__94.cpp",
+            "line": 568,
+            "sha256": "f1b680a5fb3ff465a4a8885e7e3c8c0da4a049fa12ae4c07fe4ba79a4c90b87f"
+          }
+        ]
+      },
+      {
+        "name": "VHostBlockTop___024root___ico_comb__TOP__227(VHostBlockTop___024root*)",
+        "samples": 132,
+        "percent_of_all_samples": 1.5644,
+        "generated_sources": [
+          {
+            "bytes": 981451,
+            "file": "obj/VHostBlockTop___024root__DepSet_h74254c49__13.cpp",
+            "line": 787,
+            "sha256": "8c97e4003108d2ff4dc356546d4ddfa922cfbd3968293ba7ca3df27bfa0d06f8"
+          }
+        ]
+      }
+    ],
+    "top_functions_are_self_samples_not_helper_caller_attribution": true,
+    "call_stacks_available": false,
+    "local_resymbolization_performed": false
+  },
+  "timing_seconds": {
+    "build": 2783.121230576,
+    "sampling_off_eval": 84.941082435,
+    "sampling_on_eval": 84.109330578,
+    "sampling_off_step": 85.126943725,
+    "sampling_on_step": 84.297778978,
+    "overall": 3154.874218561,
+    "eval_includes_sampling_window_and_signal_handler": true,
+    "speedup_or_precise_sampling_overhead_claimed": false
+  },
+  "prefix_verification": {
+    "ar_handshakes": 80,
+    "completions": 0,
+    "cycles": [
+      4096,
+      4096
+    ],
+    "deterministic_counters_equal": true,
+    "eval_calls": [
+      12288,
+      12288
+    ],
+    "event_sha256": "ff043cede9bc321de7d8dcb910eb58d31669f5b2c63fe4a6c0aa8ac26c476d5d",
+    "events_and_stdout_equal": true,
+    "original_stdout_sha256": "1a8408b275a5ef753d881cd06a0107c0a74d7d00ebcbec4b5c16e7d706f091fa",
+    "pipeline_issues": 80,
+    "r_handshakes": 794,
+    "raw_sample_sha256": [
+      "b9f0cd6c7fd7fe11d75451f8114e7413a1d7301b0a4e84aca657f5b78feaec24",
+      "15f28b1728eb2f8adc2c4cefbf7ebcc2c1e282d1fedd2f49f15ab338ffdd7f46"
+    ],
+    "sampler_off_zero_completed_basis": "required by audited run_profile before COMPLETE; raw off receipt omitted from uploaded allowlist",
+    "sampling_order": [
+      "off",
+      "on"
+    ],
+    "terminal_pc": 0,
+    "terminal_run": 0
+  },
+  "compiler": {
+    "actual_recorded_compile_commands": 17,
+    "bounded_build_stages": 7,
+    "compiler_jobs": 1,
+    "effective_O0_evidence": false,
+    "effective_optimization": "-O2 for every recorded command",
+    "extra_gqa_boundary": false,
+    "ffp_contract_off": true,
+    "fno_fast_math": true,
+    "generated_inputs_unchanged": true
+  },
+  "input_identity": {
+    "input_sha256": {
+      "activation.bf16le": "ff5b88559102bf22e9808d7a9939f7fe0376d32403db9fbb4450e198e3978d23",
+      "k_gamma.bf16le": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+      "q_gamma.bf16le": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+      "trig.bf16le": "c6207c787dd0bdcf3b260a1663f2c496d29b973d4a4b556d9afffe3ca389edc0",
+      "weight_k.bf16le": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+      "weight_q.bf16le": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+      "weight_v.bf16le": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+    },
+    "fresh_official_executions": 2,
+    "reused_official_executions": 0,
+    "same_live_fixture_for_both_prefixes": true,
+    "cross_run_input_byte_equivalence": false,
+    "prior_ab_input_hash_manifest_sha256": "447753250483b5de1eb34c640f94095dc2fb7b4fa61812b4bf21948ca6acca9e",
+    "cross_run_input_differences": {
+      "activation.bf16le": {
+        "current": "ff5b88559102bf22e9808d7a9939f7fe0376d32403db9fbb4450e198e3978d23",
+        "previous": "f8ae9b179fb3a322c64a623329a27d3912b563aad3d0a23249a6789d65e4c7d0"
+      }
+    },
+    "other_input_hashes_equal_to_prior_ab": 6
+  },
+  "native_full_block_gate": {
+    "failed_comparisons": {
+      "avx2": 13,
+      "baseline": 11
+    },
+    "passed": false
+  },
+  "original_evidence": {
+    "local_directory": "work/attention_hotspot_ci_331aa938",
+    "archive_members": [
+      "summary.json",
+      "source_input_hashes.json"
+    ],
+    "archive_members_match_saved_bytes": true,
+    "raw_payloads_committed": false,
+    "files": {
+      "summary.json": {
+        "bytes": 211969,
+        "sha256": "e37ba4ac9e744586bd3cca2a8e8d235f7c96db052b066936a4bf2ae96b140af7"
+      },
+      "source_input_hashes.json": {
+        "bytes": 87951,
+        "sha256": "d80601a8a829d1d6d2f4c70b55e870ab76de3a2b9ac93ad350b889d3f279547b"
+      },
+      "independent_verification.json": {
+        "bytes": 15263,
+        "sha256": "2bfc0819a6c254ad913b900750fcbbe88d23d0b74fae9f15a6abd4276ab5e45f"
+      },
+      "artifact.zip": {
+        "bytes": 54265,
+        "sha256": "611472266e2e02c7c0a7de2dfd43d2be474174a642cb010bf0d75d6745dbdd93"
+      }
+    }
+  },
+  "limitations": [
+    "Raw samples, ELF, RTL, generated C++ and fixture bytes were not uploaded; their reported hashes were checked for internal binding and runner enforcement, not independently rehashed or re-symbolized.",
+    "The current activation differs from the prior A/B activation; six other input hashes are identical. No exact original-failure input-byte or cross-run timing equivalence is claimed.",
+    "Statistical samples cover only the eval caller thread, excluding other threads; timer delivery and periodic sampling may bias counts.",
+    "No call stacks or debug-line/inlined-frame attribution are available; the leading helper has no generated source mapping. Its caller, wide-net origin and RTL module remain unproven.",
+    "Unknown 12.0408% remains unresolved, mainly libc. It is not attributed to memcpy or another libc implementation.",
+    "Off/on elapsed-time variation is not a speedup or precise sampler-overhead measurement.",
+    "Full native numerical gates remain failed: baseline 11 and AVX2 13 comparisons."
+  ],
+  "next_step": {
+    "status": "PLANNED_NOT_ESTABLISHED_BY_THIS_RUN",
+    "scope": "codegen-only：核对原 SV 后执行层次 Verilation，完成生成 C++ 后、开始 C++ 编译前停止；检查 VL_CONCAT_WWI 调用方及参数位宽。",
+    "official_model_execution": false,
+    "fixture_or_numerical_execution": false,
+    "cpp_compilation": false,
+    "new_full_ab": false,
+    "static_call_sites_do_not_establish_runtime_contributions": true
+  },
+  "related_documents": {
+    "this_report": "../../../doc/U00_2_HOST_ATTENTION_HOTSPOT_331AA938_20261009_CN.md",
+    "prior_ab_negative_result": "../../../doc/U00_2_HOST_ATTENTION_PROFILE_AB_8A937EAD_20261009_CN.md",
+    "gdn_dual_m1": "../../../doc/U00_2_HOST_GDN_BLOCK_20261009_CN.md",
+    "attention_full_block": "../../../doc/U00_2_HOST_ATTENTION_BLOCK_20261009_CN.md"
+  }
+}

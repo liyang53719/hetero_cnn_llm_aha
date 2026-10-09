@@ -1,0 +1,194 @@
+{
+  "schema": "ATTENTION_GQA_SELECTOR_SOURCE_DIAGNOSIS_V1",
+  "recorded_utc": "2026-10-09T21:50:57.742763+00:00",
+  "production_source_commit": "6959810545203d5f9508075b311dba52f1bee0c9",
+  "diagnostic_source_commit": "06e78fd07f18362f13010d2baf34cd79ac6ece12",
+  "run_id": 37990673233,
+  "job_id": 114023723055,
+  "ci_conclusion": "success",
+  "elapsed_seconds": 302.796286627,
+  "numerical_acceptance": false,
+  "artifact": {
+    "id": 11645237319,
+    "bytes": 1370163,
+    "sha256": "e2f9501e7b763c43d6354077d3213f10dc6218a648e059dd6c329d60cafd42d0"
+  },
+  "independent_verification": {
+    "checks_passed": 48,
+    "failures": 0,
+    "sha256": "4e8395965d4e17a403f8c835c3077153eb858db2ff6b024d0ddb4cad4ff41043",
+    "production_git_sources": 619,
+    "diagnostic_git_sources": 17
+  },
+  "rtl_identity": {
+    "actual_sha256": "4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9",
+    "checked_before_verilation_and_cpp": true,
+    "exact_match": true,
+    "expected_sha256": "4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9",
+    "numerical_acceptance": false
+  },
+  "sampled_cpp_identity": {
+    "obj/VHostBlockTop___024root__DepSet_h74254c49__13.cpp": {
+      "actual_sha256": "8c97e4003108d2ff4dc356546d4ddfa922cfbd3968293ba7ca3df27bfa0d06f8",
+      "exact_match": true,
+      "expected_sha256": "8c97e4003108d2ff4dc356546d4ddfa922cfbd3968293ba7ca3df27bfa0d06f8"
+    },
+    "obj/VHostBlockTop___024root__DepSet_h74254c49__94.cpp": {
+      "actual_sha256": "f1b680a5fb3ff465a4a8885e7e3c8c0da4a049fa12ae4c07fe4ba79a4c90b87f",
+      "exact_match": true,
+      "expected_sha256": "f1b680a5fb3ff465a4a8885e7e3c8c0da4a049fa12ae4c07fe4ba79a4c90b87f"
+    }
+  },
+  "actual_verilator": {
+    "actual_elf": {
+      "bytes": 13920736,
+      "kind": "ELF",
+      "path": "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_profile_ci_tools/verilator/usr/bin/verilator_bin",
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+    },
+    "entrypoint": {
+      "bytes": 675,
+      "kind": "DEBIAN_PERL_FORWARDER",
+      "path": "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_profile_ci_tools/verilator/usr/share/verilator/bin/verilator_bin",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+    }
+  },
+  "inventory": {
+    "calls": 8192,
+    "calls_by_file": [
+      {
+        "calls": 4032,
+        "file": "obj/VHostBlockTop___024root__DepSet_h74254c49__13.cpp"
+      },
+      {
+        "calls": 4032,
+        "file": "obj/VHostBlockTop___024root__DepSet_h74254c49__94.cpp"
+      },
+      {
+        "calls": 64,
+        "file": "obj/VHostBlockTop___024root__DepSet_h74254c49__3__Slow.cpp"
+      },
+      {
+        "calls": 64,
+        "file": "obj/VHostBlockTop___024root__DepSet_h74254c49__77.cpp"
+      }
+    ],
+    "cpp_files_discovered": 486,
+    "cpp_bytes_scanned": 78672001,
+    "truncated": false,
+    "unresolved_calls": 64
+  },
+  "static_gqa_chain": {
+    "instances_in_saved_sources": 2,
+    "calls_each": 4032,
+    "smallest_output_bits": 2080,
+    "largest_output_bits": 131072,
+    "selected_bits": 1024,
+    "left_words_copied_per_full_invocation": 8384544,
+    "destination_words_per_full_invocation": 8388576,
+    "no_local_valid_state_guard": true,
+    "scheduler_invocation_frequency_verified": false,
+    "sampled_helper_callsite_weight_verified": false,
+    "source_selector": "value(row)(32 * (if resultQk then 0 else beat) + lane)"
+  },
+  "microprobe": {
+    "scope": "synthetic same-shape SV only; no production Scala or numerical acceptance",
+    "address_space_cap_bytes": 2147483648,
+    "cpu_cap_seconds": 90,
+    "wall_cap_seconds": 100,
+    "baseline": {
+      "limit": 64,
+      "returncode": 0,
+      "elapsed_seconds": 2.2733312039999873,
+      "cpp_bytes": 833462,
+      "cpp_files": 12,
+      "concat_wwi_calls": 4032,
+      "argv": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/tools/verilator/usr/bin/verilator_bin",
+        "--cc",
+        "--top-module",
+        "Probe",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/expand64",
+        "--comp-limit-parens",
+        "16",
+        "--output-split",
+        "3000",
+        "--output-split-cfuncs",
+        "200",
+        "--expand-limit",
+        "64",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/probe.sv"
+      ],
+      "rlimit_as_bytes": 2147483648,
+      "timeout_seconds": 100,
+      "sv_sha256": "3d337002cf1ce2b58efecc0a8c2d531587e1351cb31c22e77a7ee4bac2715f82"
+    },
+    "expand4096": {
+      "limit": 4096,
+      "returncode": -6,
+      "elapsed_seconds": 2.925263721999727,
+      "cpp_bytes": 0,
+      "cpp_files": 0,
+      "concat_wwi_calls": 0,
+      "argv": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/tools/verilator/usr/bin/verilator_bin",
+        "--cc",
+        "--top-module",
+        "Probe",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/expand4096",
+        "--comp-limit-parens",
+        "16",
+        "--output-split",
+        "3000",
+        "--output-split-cfuncs",
+        "200",
+        "--expand-limit",
+        "4096",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/probe.sv"
+      ],
+      "rlimit_as_bytes": 2147483648,
+      "timeout_seconds": 100,
+      "sv_sha256": "3d337002cf1ce2b58efecc0a8c2d531587e1351cb31c22e77a7ee4bac2715f82"
+    },
+    "expand4096_stderr": "terminate called after throwing an instance of 'std::bad_alloc'\n  what():  std::bad_alloc",
+    "explicit_lanes": {
+      "returncode": 0,
+      "elapsed_seconds": 0.3669617899995501,
+      "cpp_bytes": 554137,
+      "concat_wwi_calls": 0,
+      "sv_sha256": "c8223dc1ec94993804886baa7d2a468674a1e4438e816b9b894fa8a03a457b02",
+      "argv": [
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/tools/verilator/usr/bin/verilator_bin",
+        "--cc",
+        "--top-module",
+        "Probe",
+        "--Mdir",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/explicit_lanes",
+        "--comp-limit-parens",
+        "16",
+        "--output-split",
+        "3000",
+        "--output-split-cfuncs",
+        "200",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736/work/concat_microprobe_20261009T2136/explicit_lanes.sv"
+      ],
+      "scope": "synthetic expression codegen only; actual Scala candidate not yet elaborated"
+    }
+  },
+  "next_gate_status": "PENDING_ACTUAL_CHISEL_AND_OWNER_RTL",
+  "next_gate_scope": [
+    "all 16x8 row/beat encodings, raw bit patterns and valid/ready",
+    "all six existing GQA owner tests, actual shared scalar and external software Matrix",
+    "original full-top emit exact SHA followed by explicitly new candidate SV with only GQA module changed",
+    "candidate codegen only, no full-top compilation/simulation"
+  ],
+  "full_attention_block": "OPEN",
+  "M128": "OPEN",
+  "native_precision_gate": "OPEN_UNCHANGED",
+  "U00.2": "ONGOING",
+  "U01": "TODO"
+}

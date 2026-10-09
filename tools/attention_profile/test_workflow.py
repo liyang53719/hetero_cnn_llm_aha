@@ -116,16 +116,16 @@ def test_tests_are_fast_diagnostic_only_and_payload_guards_cover_both_roots():
     assert "--max-cycles" not in all_runs  # The fixed cap belongs to the runner.
 
 
-def test_codegen_performs_no_payload_collection_or_model_execution():
+def test_selector_gate_performs_no_payload_collection_or_model_execution():
     all_runs = "\n".join(step.get("run", "") for step in STEPS)
     assert "collect_qwen35" not in all_runs
     assert "run_profile.py" not in all_runs
-    profile = step_named("Generate exact frozen SV and concat callers without C++ build or model execution")
+    profile = step_named("Check selector and owner RTL then compare candidate full-top codegen")
     assert "working-directory" not in profile
     assert profile["env"] == {"HF_HUB_OFFLINE": "1"}
     assert profile["run"].splitlines() == [
         "set -euo pipefail",
-        f'python "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}/tools/attention_profile/run_codegen.py" '
+        f'python "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}/tools/attention_profile/run_selector_gate.py" '
         '--source-root "$GITHUB_WORKSPACE" '
         '--output "$GITHUB_WORKSPACE/work/full_top_profile"',
     ]
@@ -149,11 +149,12 @@ def test_diagnostic_boundary_does_not_claim_acceptance_or_speedup():
     boundary = step_named("State the diagnostic boundary even on timeout or failure")
     assert boundary["if"] == "always()"
     for statement in (
-        SOURCE_SHA, "numerical_acceptance=false", "1200-second process-tree budget",
-        "stop immediately after hier_verilation and before any C++ compilation",
-        "No model downloads, fresh model execution, reference arithmetic, ELF build, DUT simulation",
-        "caller attribution requires the generated call sites and active conditions",
-        "pure generated caller/header/runtime source", "No speedup",
+        SOURCE_SHA, "numerical_acceptance=false", "1800-second process-tree budget",
+        "before full-top C++ compilation or simulation",
+        "No model downloads, fresh model execution",
+        "all six existing GQA owner tests", "software reference",
+        "only Bf16CausalGqaOwner may differ byte-for-byte",
+        "pure generated caller/header/runtime source", "No full-block PASS",
     ):
         assert statement in boundary["run"]
 

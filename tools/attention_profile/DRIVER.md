@@ -1,6 +1,26 @@
 # Frozen Attention core diagnostic driver
 
-## 当前诊断范围
+## 当前入口：GQA 选择器候选门禁
+
+`06e78fd` 的原始 codegen 已完成：实际两条 4032 次宽拼接链将完整
+131072-bit Matrix tile 打包后才选择 GQA 的 1024-bit beat。精确源码、限制与
+负实验见 `doc/U00_2_HOST_ATTENTION_SELECTOR_06E78FD_20261009_CN.md`。
+
+当前 `run_selector_gate.py` 顺序执行：冻结基线 emit 与原 SV SHA 检查；
+只应用 `gqa_selector_candidate.transform` 的单文件 lane 选择重写及独立测试；
+实际 Chisel 逐位等价测试和原 GQA owner 全六项测试；候选完整 top codegen。
+候选使用新的 SV 身份，逐模块原文字节检查只允许 `Bf16CausalGqaOwner` 改变。
+不修改 Matrix、浮点计算、状态或生命周期。row/beat 分别为 4/3 bits，全部编码
+都在合法范围内。等价门覆盖 16×8 全选择、原始特殊/随机位图、QK 强制 beat0、
+PV beat、valid/ready 的全部组合；owner 门覆盖真实控制和外部软件 Matrix 端点。
+
+总进程树预算 1800 秒，编译串行。基线和候选的源码 map 分开保留。候选只在
+CI 独立 checkout 中应用，未将未验的改动写入生产文件。完整 top 停在
+`hier_verilation`，不构建其 ELF、不执行模型或前缀。本入口的局部 RTL PASS
+不能关闭完整 Attention block、M128 或原官方精度门禁。下一阶段仍需完整 top
+确定性前缀、活跃数据路径和实际完整 block 数值验证。
+
+## 历史冻结诊断范围
 
 本入口只定位精确 `6959810545203d5f9508075b311dba52f1bee0c9` 的生产 Attention core 仿真为何在原 3600 秒 case 上限内仍处于首个 Q 投影。现有尾日志显示实际读请求持续前进，尚不能确认最后是否停顿，也没有数值反例。新 GQA 的未激活组合求值成本是待验证假设。
 

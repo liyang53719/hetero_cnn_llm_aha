@@ -290,9 +290,9 @@ class Bf16CausalGqaOwner(maxTokens: Int = 128, maxCacheTokens: Int = 256) extend
         .otherwise { key := key + 1.U; state := readV }
     }
   }
-  val incomingRows = VecInit(io.matrix.result.bits.value.map(_.asUInt))
-  val incomingBeat = incomingRows(row).asTypeOf(Vec(8, UInt(1024.W)))(Mux(state === resultQk, 0.U, beat))
-  val incomingFloats = incomingBeat.asTypeOf(Vec(32, UInt(32.W)))
+  val incomingFloats = GqaMatrixResultSelect(io.matrix.result.bits.value,
+    row, Mux(state === resultQk, 0.U(3.W), beat))
+
   val converted = VecInit(incomingFloats.map(TensorMath.bf16Rne))
   val badConversion = VecInit((0 until 32).map { c =>
     (state === resultPv || c.U < columns) &&
@@ -407,3 +407,22 @@ class Bf16CausalGqaOwner(maxTokens: Int = 128, maxCacheTokens: Int = 256) extend
   when(matrixActive && io.matrix.done.valid && !awaitingMatrixDone && state =/= drain) { fail(Status.Protocol.U) }
   when(io.done.fire) { state := Mux(status === Status.Ok.U, idle, locked) }
 }
+/** Select exactly 32 FP32 bit patterns without first packing the whole tile.
+  * Every row/beat encoding is valid (four/three bits). This is purely a wire
+  * selection; it is independent of valid/ready and performs no arithmetic.
+  */
+object GqaMatrixResultSelect {
+  def apply(value: Vec[Vec[UInt]], row: UInt, beat: UInt): Vec[UInt] = {
+    require(value.length == 16 && value.forall(_.length == 256))
+    require(value.forall(_.forall(_.getWidth == 32)))
+    require(row.getWidth == 4 && beat.getWidth == 3)
+    VecInit((0 until 32).map { lane =>
+      MuxLookup(row, 0.U(32.W))((0 until 16).map { r =>
+        r.U -> MuxLookup(beat, 0.U(32.W))((0 until 8).map { b =>
+          b.U -> value(r)(b * 32 + lane)
+        })
+      })
+    })
+  }
+}
+

@@ -18,6 +18,9 @@ import time
 
 # Fixture first: all imports resolve to the production v2 descriptor enum.
 import host_bf16_attention_block_fixture as fixture
+from host_bf16_attention_block_prefix import run_pair as run_deterministic_prefixes, STATUS as PREFIX_STATUS
+from host_block_mac_profile import collect as collect_mac_profile
+from heteronpu.qwen35_arch_utilization import report as gdn_architecture_bound
 from host_bf16_attention_block_live_gate import (
     BUILD_STATUS, CASE_STATUS, MODES, SCOPE, generate_block_reference,
     pack_fixture, admit_fixture, run_case, build_identity, verify_all_build_sources, verify_case_outputs,
@@ -42,11 +45,15 @@ ENTRY_SOURCES = (
     'chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py',
     'chisel/continuous_prefill/scripts/run_host_bf16_attention_block_gate.sh',
     'chisel/continuous_prefill/scripts/host_bf16_attention_block_live_gate.py',
+    'chisel/continuous_prefill/scripts/host_bf16_attention_block_prefix.py',
+    'chisel/continuous_prefill/scripts/host_block_mac_profile.py',
+    'src/heteronpu/qwen35_arch_utilization.py',
     'chisel/continuous_prefill/scripts/host_bf16_attention_block_reference.py',
     'chisel/continuous_prefill/scripts/host_bf16_attention_block_fixture.py',
     'chisel/continuous_prefill/scripts/host_bf16_attention_block_execution.py',
     'chisel/continuous_prefill/scripts/host_bf16_attention_block_descriptor.py',
     'chisel/continuous_prefill/tests/host_bf16_attention_block.cpp',
+    'chisel/continuous_prefill/tests/host_attention_block_prefix.h',
     'chisel/continuous_prefill/scripts/attention_sigmoid_reference.py',
     # Reused supervisor imports the full stable core closure. The live fixture
     # source identity also binds all production scripts and Python ABI sources.
@@ -113,6 +120,9 @@ def run(args):
             merge_sources(hashes['source_sha256'], {name:sha(ROOT/name) for name in ENTRY_SOURCES})
             head = _git_head(); summary['git_head'] = head
             verify_checkout(head, hashes['source_sha256'])
+            # A source-derived GDN M1 bound is distinct from this Attention
+            # execution's measured counters. It is not an RTL cycle prediction.
+            summary['source_only_gdn_m1_architectural_bound'] = gdn_architecture_bound(repo=ROOT)
             env = os.environ.copy(); env.setdefault('BUILD_JOBS','1')
             require(env['BUILD_JOBS'] == '1', 'serial production build required')
             env['SOURCE_IDENTITY_SCOPE'] = 'full'
@@ -172,6 +182,17 @@ def run(args):
                               build_ready_sha256=sha(build/'build_ready.json'),build_identity_sha256=initial_identity)
                 summary['build'] = ready
                 summary['toolchain'] = json.loads((build/'toolchain.json').read_text())
+                checkpoint('actual_bounded_full_block_prefixes')
+                prefix_result = run_deterministic_prefixes(build, fixture_path,
+                    timeout_seconds=remaining(240), **authorities)
+                require(prefix_result['status'] == PREFIX_STATUS and
+                        prefix_result['numerical_acceptance'] is False and
+                        prefix_result['binary_sha256'] == hashes['binary_sha256'] and
+                        prefix_result['rtl_sha256'] == hashes['rtl_sha256'] and
+                        prefix_result['build_ready_sha256'] == hashes['build_ready_sha256'],
+                        'bounded prefixes must use the actual unchanged numerical DUT')
+                summary['deterministic_prefixes'] = prefix_result
+                checkpoint('completed_bounded_full_block_prefixes')
                 for mode in case_plan():
                     checkpoint('actual_two_launch_'+mode.replace('-','_'))
                     result = run_case(build,fixture_path,mode,timeout_seconds=remaining(3600),**authorities)
@@ -186,6 +207,13 @@ def run(args):
                     require(len(result['runs']) == 2 and set(result['actual_sha256']) == set(fixture.PHASES) and
                             all(set(row) == set(fixture.NAMES) for row in result['actual_sha256'].values()),
                             'missing per-launch actual output identity')
+                    profile_log = build/(mode.replace('-', '_')+'.log')
+                    profile = collect_mac_profile(profile_log, mode)
+                    require(profile['log_sha256'] == result['log_sha256'],
+                            'MAC profile and actual numerical audit used different logs')
+                    summary.setdefault('measured_mac_profiles', {})[mode] = dict(profile,
+                        actual_dut_identity_verified=True, binary_sha256=result['binary_sha256'],
+                        rtl_sha256=result['rtl_sha256'], build_ready_sha256=result['build_ready_sha256'])
                     summary['cases'].append(dict(mode=mode,result=result))
                     hashes['output_sha256'][mode] = result['actual_sha256']
                     checkpoint('completed_'+mode.replace('-','_'))

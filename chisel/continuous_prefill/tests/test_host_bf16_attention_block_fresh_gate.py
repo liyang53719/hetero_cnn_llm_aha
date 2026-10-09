@@ -23,9 +23,11 @@ def harness(tmp_path,monkeypatch):
     checked=[]; monkeypatch.setattr(gate,'verify_checkout',lambda *args:checked.append(args))
     monkeypatch.setattr(gate,'merge_sources',lambda dst,src:dst.update(src))
     monkeypatch.setattr(gate,'_preflight',lambda *args:{'control_only':True})
+    monkeypatch.setattr(gate,'gdn_architecture_bound',lambda **kwargs:{'control_only':True,'rtl_measured_utilization':None})
+    monkeypatch.setattr(gate,'collect_mac_profile',lambda *args:{'control_only':True,'log_sha256':('0' if state['bad_profile_hash'] else 'f')*64})
     monkeypatch.setattr(gate,'total_budget',lambda *args:nullcontext())
-    state=dict(captures=0,builds=0,cases=[],original=True,clock=0.,timeout_build=False,
-               bad_status=False,bad_hash=False,bad_authority=False,missing_mode=False,final_drift=False)
+    state=dict(captures=0,builds=0,prefixes=0,cases=[],original=True,clock=0.,timeout_build=False,
+               bad_status=False,bad_hash=False,bad_authority=False,bad_profile_hash=False,missing_mode=False,final_drift=False)
     monkeypatch.setattr(gate.time,'monotonic',lambda:state['clock'])
     class Capture:
         fresh=True;manifest_sha256='b'*64
@@ -85,6 +87,14 @@ def harness(tmp_path,monkeypatch):
         identities.append(None)
         return {'identity':'changed' if state['final_drift'] and len(identities)>1 else 'CONTROL_ONLY'}
     monkeypatch.setattr(gate,'build_identity',identity)
+    def prefixes(build,path,*,timeout_seconds,**given):
+        assert given==authority and not state['cases'] and timeout_seconds<=240
+        state['prefixes']+=1
+        ready=json.loads((build/'build_ready.json').read_text())
+        return dict(status=gate.PREFIX_STATUS,numerical_acceptance=False,
+                    binary_sha256=ready['binary_sha256'],rtl_sha256=ready['rtl_sha256'],
+                    build_ready_sha256=gate.sha(build/'build_ready.json'))
+    monkeypatch.setattr(gate,'run_deterministic_prefixes',prefixes)
     def run_case(build,path,mode,*,timeout_seconds,**given):
         assert given==authority
         state['cases'].append((mode,timeout_seconds));ready=json.loads((build/'build_ready.json').read_text())
@@ -92,7 +102,7 @@ def harness(tmp_path,monkeypatch):
             live_authorities_verified=not state['bad_authority'],same_dut_launches=2,resets_between_launches=0,
             numerical_acceptance_eligible=mode=='pass',binary_sha256='0'*64 if state['bad_hash'] else ready['binary_sha256'],
             rtl_sha256=ready['rtl_sha256'],build_ready_sha256=gate.sha(build/'build_ready.json'),
-            block_reference_receipt_sha256=block.receipt_sha256,runs=[dict(phase=p) for p in gate.fixture.PHASES],
+            block_reference_receipt_sha256=block.receipt_sha256,log_sha256='f'*64,runs=[dict(phase=p) for p in gate.fixture.PHASES],
             actual_sha256={p:{name:'a'*64 for name in gate.fixture.NAMES} for p in gate.fixture.PHASES})
     monkeypatch.setattr(gate,'run_case',run_case)
     monkeypatch.setattr(gate,'verify_all_build_sources',lambda *args:None)
@@ -105,6 +115,10 @@ def test_two_pairs_keep_live_authorities_native_failures_and_compact_hashes(harn
     args,state,checked=harness;summary,code=gate.run(args)
     assert code==0 and summary['frozen_recipe_block_acceptance'] is True
     assert state['captures']==state['builds']==1 and len(state['cases'])==2 and len(checked)==3
+    assert state['prefixes']==1 and summary['deterministic_prefixes']['numerical_acceptance'] is False
+    assert set(summary['measured_mac_profiles'])==set(gate.MODES)
+    assert all(r['actual_dut_identity_verified'] is True for r in summary['measured_mac_profiles'].values())
+    assert summary['source_only_gdn_m1_architectural_bound']['rtl_measured_utilization'] is None
     assert [row[0] for row in state['cases']]==['pass','final-residual-ack-error']
     assert state['build_timeout']==7200 and all(row[1]==3600 for row in state['cases'])
     assert summary['planned_actual_launches']==4 and summary['source_tokens']==[0,1]
@@ -129,7 +143,17 @@ def test_original_native_gate_failure_blocks_actual_build(harness):
     assert summary['native_full_block_failures']['baseline']['gate_pass'] is False
 
 
-@pytest.mark.parametrize('fault',['bad_status','bad_hash','bad_authority'])
+def test_prefix_failure_blocks_numerical_cases_without_awarding_partial_pass(harness,monkeypatch):
+    args,state,_=harness
+    def failed(*args,**kwargs):raise ValueError('actual full-block prefixes are not deterministic')
+    monkeypatch.setattr(gate,'run_deterministic_prefixes',failed)
+    summary,code=gate.run(args)
+    assert code==1 and state['builds']==1 and not state['cases']
+    assert not summary['numerical_acceptance'] and not summary['frozen_recipe_block_acceptance']
+    assert summary['stage']=='actual_bounded_full_block_prefixes'
+
+
+@pytest.mark.parametrize('fault',['bad_status','bad_hash','bad_authority','bad_profile_hash'])
 def test_unproven_case_cannot_be_promoted(harness,fault):
     args,state,_=harness;state[fault]=True;summary,code=gate.run(args)
     assert code==1 and not summary['numerical_acceptance'] and not summary['cases']

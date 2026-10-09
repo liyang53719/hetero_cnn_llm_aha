@@ -4,6 +4,7 @@
 #include "VHostBlockTop.h"
 #include "verilated.h"
 #include "host_physical_axi.h"
+#include "host_attention_block_prefix.h"
 #include <algorithm>
 #include <array>
 #include <filesystem>
@@ -39,6 +40,7 @@ class BlockPair {
   std::array<Launch,2> launches;
   std::unique_ptr<host_test::PhysicalMemory> mem;
   std::unique_ptr<host_test::PhysicalAxi<VHostBlockTop,BlockPair>> bus;
+  attention_block_prefix::Recorder prefix;
   std::vector<uint32_t> initial;
   fs::path out;
   std::string mode;
@@ -71,7 +73,7 @@ class BlockPair {
     require(bool(f)&&uint64_t(f.tellg())==bytes,"preload bytes: "+name);f.seekg(0);
     f.read((char*)(mem->words.data()+mem->index(address)),bytes);require(bool(f),"preload read");
   }
-  BlockPair(const fs::path& fixture,const fs::path& output,const std::string& selected):out(output),mode(selected) {
+  BlockPair(const fs::path& fixture,const fs::path& output,const std::string& selected,uint64_t prefixCycles=0):prefix(prefixCycles),out(output),mode(selected) {
     require(mode=="pass"||mode=="final-residual-ack-error","unsupported mode");
     std::ifstream f(fixture/"launch.txt");std::string magic;f>>magic>>base>>limit>>meta>>scratch>>cache>>capacity;
     require(bool(f)&&magic=="HOST_ATTENTION_BLOCK_PAIR_V1"&&base>0xffffffffULL&&limit<=(1ULL<<56)&&meta==base+32768&&meta<scratch&&scratch==cache&&scratch<limit&&capacity==256,"physical aperture/contract");
@@ -128,10 +130,20 @@ class BlockPair {
     for(auto&a:launches[0].spans)for(auto&b:launches[1].spans)require(!(a.begin<b.begin+b.bytes&&b.begin<a.begin+a.bytes),"prior active output alias");
     initial=mem->words;require(!fs::exists(out),"fresh execution output required");fs::create_directories(out);
     d.clock=0;d.reset=1;d.io_launch_valid=0;d.io_completion_ready=0;d.io_result_ready=0;
-    for(unsigned i=0;i<6;i++)bus->step();d.reset=0;for(unsigned i=0;i<30;i++)bus->step();
+    for(unsigned i=0;i<6;i++)step();d.reset=0;for(unsigned i=0;i<30;i++)step();
+  }
+  void step(){prefix.step(*bus,out);}
+  // Observe existing public counters; no extra eval, clock, request or RNG draw.
+  // Useful/executed reset on launch and include successful owner receipts only.
+  // Pipeline/iDMA counters are cumulative and are differenced by the auditor.
+  void macCounters(){
+    std::cout<<" useful_macs="<<uint64_t(d.io_usefulMacs)<<" executed_macs="<<uint64_t(d.io_executedMacs)
+      <<" wide_steps="<<uint64_t(d.io_pipelineIssues)<<" pipeline_stalls="<<uint64_t(d.io_pipelineStalls)
+      <<" read_beats="<<bus->readBeats<<" read_ack_beats="<<bus->readAcks
+      <<" write_beats="<<bus->writeBeats<<" write_ack_beats="<<bus->writeAcks;
   }
   void drive(){bool block=d.io_completion_valid&&holdRemaining>0;d.io_completion_ready=running&&!block&&bus->random()%4!=0;if(block)holdRemaining--;}
-  void traffic(bool present){require(running||!present,"traffic without launch");require(!d.io_completion_valid||!present,"traffic during blocked/completing command");}
+  void traffic(bool present){require(running||!present,"traffic without launch");require(!d.io_completion_valid||!present,"traffic during blocked/completing command");prefix.capture(*bus);}
   void readCheck(const Beat& b) {
     const unsigned pc=executionPc();auto& c=l().commands[pc];uint64_t n=b.total*64;
     bool table=inside(b.address,n,l().cb,l().cl-l().cb)||inside(b.address,n,l().db,l().dl-l().db);
@@ -216,6 +228,7 @@ class BlockPair {
         if(pc==21){fenceAccepted=true;inferredCommittedLength=l().oldLength+1;inferredCommittedGeneration=l().oldGeneration+1;inferredFinalOutput=l().spans[20].begin;}
         verifyMemory();dump("writable_after_command"+std::to_string(pc)+".bin",mem->words.data()+mem->index(scratch),limit-scratch);
         std::cout<<"HOST_ATTN_BLOCK_COMMAND run="<<run<<" pc="<<pc<<" cycle="<<bus->ticks<<" engine="<<c.engine<<" status="<<st<<" signal="<<c.signal<<" ack_bytes="<<c.acked<<" owner_pc="<<ownerPc<<" checkpoint_accepted="<<fenceAccepted<<"\n";
+        std::cout<<"HOST_MAC_PROFILE_COMMAND run="<<run<<" pc="<<pc<<" cycle="<<bus->ticks;macCounters();std::cout<<"\n";
         holdRemaining=pc==20?37:11;
       }
     }else require(!held,"completion withdrawn while blocked");
@@ -235,8 +248,16 @@ class BlockPair {
 #define REGION(i,b,e,r,w) d.io_launch_bits_regions_##i##_base=b;d.io_launch_bits_regions_##i##_limit=e;d.io_launch_bits_regions_##i##_read=r;d.io_launch_bits_regions_##i##_write=w
     REGION(0,base,meta,1,0);REGION(1,meta,scratch,1,0);REGION(2,scratch,limit,1,1);REGION(3,0,0,0,0);
 #undef REGION
-    require(d.io_launch_ready,"Host launch not ready");d.io_launch_valid=1;bus->step();d.io_launch_valid=0;d.io_launch_bits_epoch=99;d.io_launch_bits_commandBase=0;
-    while(!d.io_result_valid&&bus->ticks-start<300000000ULL)bus->step();require(d.io_result_valid,"watchdog");
+    require(d.io_launch_ready,"Host launch not ready");d.io_launch_valid=1;
+    // Boundary before accepting edge: END-BEGIN includes that edge and excludes
+    // the constructor/reset and later deliberate seven-cycle result hold.
+    std::cout<<"HOST_MAC_PROFILE_BEGIN run="<<run<<" cycle="<<start<<" wide_steps="<<uint64_t(d.io_pipelineIssues)
+      <<" pipeline_stalls="<<uint64_t(d.io_pipelineStalls)<<" idma_transfers="<<uint64_t(d.io_idmaTransfers)<<"\n";
+    step();require(d.io_usefulMacs==0&&d.io_executedMacs==0,"launch MAC counters did not reset");
+    d.io_launch_valid=0;d.io_launch_bits_epoch=99;d.io_launch_bits_commandBase=0;
+    while(!d.io_result_valid&&bus->ticks-start<300000000ULL)step();require(d.io_result_valid,"watchdog");
+    std::cout<<"HOST_MAC_PROFILE_END run="<<run<<" cycle="<<bus->ticks<<" cycles="<<bus->ticks-start;
+    macCounters();std::cout<<" idma_transfers="<<uint64_t(d.io_idmaTransfers)<<" status="<<unsigned(d.io_result_bits_status)<<"\n";
     unsigned failed=failing()?faultPc():21;unsigned expectedCompletions=failing()?21:22;
     unsigned expectedSuccess=failing()?20:22,jobs=19;
     uint64_t expectedMetadata=0;for(unsigned pc=0;pc<=failed;pc++)expectedMetadata+=1+l().commands[pc].records;
@@ -251,18 +272,27 @@ class BlockPair {
     require(bool(d.io_resetRequired)==failing()&&(!failing()||injected),"fault/reset lockout");
     verifyMemory();dump("ddr_after.bin",mem->words.data(),mem->words.size()*4);
     for(auto& s:l().spans)dump("actual_"+s.name+".bf16le",mem->words.data()+mem->index(s.begin),s.bytes);
-    for(unsigned i=0;i<7;i++){bus->step();require(d.io_result_valid,"result withdrawn");std::cout<<"HOST_ATTN_BLOCK_RESULT_HOLD run="<<run<<" cycle="<<bus->ticks<<" epoch="<<l().epoch<<" pc="<<failed<<" status="<<status()<<" completed="<<successful<<"\n";}
+    for(unsigned i=0;i<7;i++){step();require(d.io_result_valid,"result withdrawn");std::cout<<"HOST_ATTN_BLOCK_RESULT_HOLD run="<<run<<" cycle="<<bus->ticks<<" epoch="<<l().epoch<<" pc="<<failed<<" status="<<status()<<" completed="<<successful<<"\n";}
     std::cout<<"HOST_ATTN_BLOCK_END run="<<run<<" status="<<status()<<" completions="<<completions<<" successful="<<successful<<" issued_jobs="<<jobs<<" metadata_reads="<<metadata<<" ack_bytes="<<ackBytes<<" physical_bytes="<<physicalBytes<<" receipt_bytes="<<receiptBytes<<" useful_macs="<<macs<<" read_beats="<<bus->readBeats<<" read_ack_beats="<<bus->readAcks<<" write_beats="<<bus->writeBeats<<" write_ack_beats="<<bus->writeAcks<<" read_bursts="<<bus->readBursts<<" write_bursts="<<bus->writeBursts<<" idma_transfers="<<uint64_t(d.io_idmaTransfers)-transferBase<<" checkpoint_accepted="<<fenceAccepted<<" inferred_length="<<inferredCommittedLength<<" inferred_generation="<<inferredCommittedGeneration<<" inferred_final_output="<<inferredFinalOutput<<" reset_required="<<unsigned(d.io_resetRequired)<<"\n";
-    d.io_result_ready=1;bus->step();d.io_result_ready=0;running=false;
+    d.io_result_ready=1;step();d.io_result_ready=0;running=false;
     if(failing()){
       auto transfers=d.io_idmaTransfers;d.io_launch_valid=1;
-      for(unsigned i=0;i<10;i++){require(!d.io_launch_ready,"fault escaped reset lockout");bus->step();require(d.io_idmaTransfers==transfers,"work after poisoned result");}
+      for(unsigned i=0;i<10;i++){require(!d.io_launch_ready,"fault escaped reset lockout");step();require(d.io_idmaTransfers==transfers,"work after poisoned result");}
       d.io_launch_valid=0;verifyMemory();
     }
   }
 };
 int main(int argc,char** argv){try{
-  require(argc==3||argc==4,"FIXTURE FRESH_OUTPUT [pass|final-residual-ack-error]");Verilated::commandArgs(argc,argv);
-  auto p=std::make_unique<BlockPair>(argv[1],argv[2],argc==4?argv[3]:"pass");p->launch();p->run=1;p->launch();
+  require(argc>=3&&argc<=5,"FIXTURE FRESH_OUTPUT [pass|final-residual-ack-error] [--diagnostic-prefix=37..65536]");
+  std::string mode="pass";uint64_t prefixCycles=0;unsigned next=3;
+  if(next<unsigned(argc)&&std::string(argv[next]).rfind("--",0)!=0)mode=argv[next++];
+  if(next<unsigned(argc)){
+    const std::string arg=argv[next++],key="--diagnostic-prefix=";
+    require(arg.rfind(key,0)==0,"unsupported diagnostic option");prefixCycles=attention_block_prefix::cycleLimit(arg.substr(key.size()));
+  }
+  require(next==unsigned(argc),"unexpected driver argument");Verilated::commandArgs(argc,argv);
+  auto p=std::make_unique<BlockPair>(argv[1],argv[2],mode,prefixCycles);p->launch();p->run=1;p->launch();
+  require(!prefixCycles,"full run ended before diagnostic prefix limit");
   std::cout<<"HOST_ATTN_BLOCK_PAIR same_dut=1 resets_between_launches=0 reference_injection=0 cache_prefill=0 launches=2\n";return 0;
+}catch(const attention_block_prefix::PrefixStop&){std::cout<<"HOST_ATTN_BLOCK_PREFIX numerical_acceptance=0\n";return 0;
 }catch(const std::exception& e){std::cerr<<"HOST_ATTN_BLOCK_FAIL: "<<e.what()<<"\n";return 1;}}

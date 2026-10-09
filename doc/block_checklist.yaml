@@ -1316,3 +1316,16 @@
   资源: 复用既有八Matrix512切片_单Scalar_单iDMA；没有新增计算阵列；只GitHub执行预计超过10分钟的生产top
   未完成: [实际完整22命令Host数值终态, 原native_full_block精度, native_GQA_stage门限, cold128_carried128, 完整fault_reset_restore, 后继层与35B, PPA及MAC90]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；C03.2_C04.2_C05及S01_Q35A不关闭
+
+生产Host_GQA选择器修正与MAC统计_20261009:
+  状态: 精确选择器与原owner七项实际RTL小门及严格生成模块门通过；生产完整22命令数值PENDING
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, P00, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_SELECTOR_RELEASE_20261009_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_SELECTOR_RELEASE_20261009/summary.json
+  候选CI: run37998493748；aa9ac8277217c20c10652aa639f329e44184d6b2；独立19项源和工件核验
+  修正: 每32bit_lane按row_beat选择；旧源码行号保持；56模块仅GQA原文变化；不放宽SHA和精度门
+  实际统计计划: 同完整ELF两次4096周期前缀后原pass及末residual_ACK故障；现有公开端口记录完整周期和MAC；固定4096分母包含全部等待；故障不算成功利用率
+  生成RTL前检查: 固定5源码的GDN_M1乐观界；基本递推1839104_scalar请求且II至少3；整层Matrix上界0.09381854百分比；不是预测或RTL实测
+  旧证据缺口: GDN双M1已记录43057152_useful_MAC但未保留完整cycle或executed；真实利用率不可补算
+  未完成: [新完整Attention数值终态, RTL实测MAC利用率, 可校准完整周期预测, cold128_carried128, native完整精度合同, 35B, PPA及MAC90]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭

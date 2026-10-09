@@ -1,0 +1,200 @@
+{
+  "schema": "HOST_ATTENTION_SELECTOR_PRODUCTION_RELEASE_V1",
+  "source_parent_commit": "aa9ac8277217c20c10652aa639f329e44184d6b2",
+  "candidate_gate": {
+    "run_id": 37998493748,
+    "job_id": 114050486438,
+    "conclusion": "success",
+    "elapsed_seconds": 816.556992972,
+    "artifact_id": 11649015099,
+    "artifact_bytes": 1093315,
+    "artifact_sha256": "b414ccefc11eb37f6980606aefc5fa61cda8e1e506c517b25232dc1cb5a9f174",
+    "independent_checks": 19,
+    "independent_verification_sha256": "21540b45da536c0c6c4f85ace4e41190b5a2cdd73cb4d5b6c441d22d81520940",
+    "baseline_rtl_sha256": "4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9",
+    "candidate_rtl_sha256": "88253f7c5967f914eed1875d49d82446c4f1673011fa42cef7fdfc65e6c81eda",
+    "changed_modules": [
+      "Bf16CausalGqaOwner"
+    ],
+    "unchanged_modules": 55,
+    "raw_rtl_normalization": false,
+    "selector_tests_passed": 1,
+    "owner_tests_passed": 6,
+    "largest_concat_output_bits": 4096,
+    "concat_calls": 128,
+    "whole_top_numeric_execution": false,
+    "measured_speedup": null,
+    "candidate_owner_sv_preserved": false,
+    "candidate_owner_sv_omission": "12MiB selected source limit"
+  },
+  "production_whole_block_numerical_status": "PENDING_NEW_EXACT_SHA_CI",
+  "production_rtl_sha256": null,
+  "measured_mac_utilization": null,
+  "source_only_gdn_m1_architectural_bound": {
+    "schema_version": 1,
+    "evidence_kind": "architectural_source_derived_lower_bound",
+    "scope": "Qwen3.5-0.8B layer0 full GDN, one cold or carried M1 launch",
+    "audited_commit": "aa9ac8277217c20c10652aa639f329e44184d6b2",
+    "source_pins_verified": true,
+    "source_hashes": {
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "physical_matrix_macs_per_cycle": 4096,
+    "mac_definition": "one useful multiply-accumulate is one MAC, not two FLOPs",
+    "denominator": "4096 * launch_accept_to_terminal_result_wall_cycles; includes idle, Scalar, DDR and clock gating",
+    "dense": [
+      {
+        "name": "qkv",
+        "m": 1,
+        "k": 1024,
+        "n": 6144,
+        "useful_macs": 6291456,
+        "wide_issue_cycles_lower_bound": 24576,
+        "issued_physical_lane_macs": 100663296,
+        "geometry_utilization_upper_bound": 0.0625
+      },
+      {
+        "name": "z",
+        "m": 1,
+        "k": 1024,
+        "n": 2048,
+        "useful_macs": 2097152,
+        "wide_issue_cycles_lower_bound": 8192,
+        "issued_physical_lane_macs": 33554432,
+        "geometry_utilization_upper_bound": 0.0625
+      },
+      {
+        "name": "ab",
+        "m": 1,
+        "k": 1024,
+        "n": 32,
+        "useful_macs": 32768,
+        "wide_issue_cycles_lower_bound": 1024,
+        "issued_physical_lane_macs": 524288,
+        "geometry_utilization_upper_bound": 0.0078125
+      },
+      {
+        "name": "o",
+        "m": 1,
+        "k": 2048,
+        "n": 1024,
+        "useful_macs": 2097152,
+        "wide_issue_cycles_lower_bound": 8192,
+        "issued_physical_lane_macs": 33554432,
+        "geometry_utilization_upper_bound": 0.0625
+      },
+      {
+        "name": "gate",
+        "m": 1,
+        "k": 1024,
+        "n": 3584,
+        "useful_macs": 3670016,
+        "wide_issue_cycles_lower_bound": 14336,
+        "issued_physical_lane_macs": 58720256,
+        "geometry_utilization_upper_bound": 0.0625
+      },
+      {
+        "name": "up",
+        "m": 1,
+        "k": 1024,
+        "n": 3584,
+        "useful_macs": 3670016,
+        "wide_issue_cycles_lower_bound": 14336,
+        "issued_physical_lane_macs": 58720256,
+        "geometry_utilization_upper_bound": 0.0625
+      },
+      {
+        "name": "down",
+        "m": 1,
+        "k": 3584,
+        "n": 1024,
+        "useful_macs": 3670016,
+        "wide_issue_cycles_lower_bound": 14336,
+        "issued_physical_lane_macs": 58720256,
+        "geometry_utilization_upper_bound": 0.0625
+      }
+    ],
+    "useful_matrix_macs": 21528576,
+    "issued_physical_lane_macs": 344457216,
+    "dense_issue_cycles_lower_bound": 84992,
+    "dense_geometry_utilization_upper_bound": 0.061841114457831324,
+    "scalar_recurrence": {
+      "state_cells": 262144,
+      "multiply_requests": 1050624,
+      "add_requests": 788480,
+      "basic_requests": 1839104,
+      "additional_exp_requests_excluded": 16,
+      "basic_request_minimum_ii": 3,
+      "cycles_lower_bound": 5517312,
+      "measured_utilization": null,
+      "mac_equivalence": null
+    },
+    "lower_bound_cycles": 5602304,
+    "upper_bound_utilization": 0.0009381854322792908,
+    "upper_bound_utilization_exact": {
+      "numerator": 657,
+      "denominator": 700288
+    },
+    "predicted_cycles": null,
+    "predicted_utilization": null,
+    "rtl_measured_cycles": null,
+    "rtl_measured_utilization": null,
+    "warning": "Optimistic bound only, not a calibrated cycle prediction or RTL utilization measurement.",
+    "omitted_positive_costs": [
+      "recurrence exp",
+      "all other Scalar owners",
+      "memory transfer and ACK waits",
+      "Matrix feedback stalls",
+      "command/descriptor and Fence overhead"
+    ],
+    "calibration_required": [
+      "source/RTL/binary/fixture identity",
+      "launch accept and terminal result ticks",
+      "per-command owner start/end and cycles",
+      "Matrix wideSteps and acceptedSteps",
+      "Dense useful/executed MACs and seven exclusive cycle buckets",
+      "Scalar opcode request/result ticks",
+      "AXI read/write-ACK beats and waits"
+    ],
+    "restrictions": [
+      "M1 only; do not multiply by 128 to predict M128",
+      "no overlap between Host owners",
+      "one in-flight Scalar operation",
+      "FP32 state and separate-rounding dependencies unchanged",
+      "Scalar operations are not Matrix MACs",
+      "nominal frequency is not timing signoff"
+    ]
+  },
+  "previous_gdn_two_m1": {
+    "useful_dense_macs": 43057152,
+    "cycles_available": false,
+    "executed_macs_available": false,
+    "measured_utilization": null
+  },
+  "planned_actual_gate": {
+    "prefixes": 2,
+    "prefix_cycles_each": 4096,
+    "prefix_numerical_acceptance": false,
+    "modes": [
+      "pass",
+      "final-residual-ack-error"
+    ],
+    "launches_per_process": 2,
+    "commands_per_launch": 22,
+    "runner_budget_seconds": 18000,
+    "case_budget_seconds": 3600,
+    "fixed_matrix_macs_per_cycle": 4096
+  },
+  "numerical_acceptance": false,
+  "performance_acceptance": false,
+  "native_precision_thresholds_changed": false,
+  "M128": "OPEN",
+  "full_attention_block": "OPEN",
+  "C02_2": "OPEN",
+  "U00_2": "ONGOING",
+  "U01": "TODO"
+}

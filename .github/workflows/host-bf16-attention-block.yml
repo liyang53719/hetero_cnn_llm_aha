@@ -62,6 +62,8 @@ jobs:
       - name: Source payload boundary and public descriptor regressions
         run: |
           python scripts/check_git_payloads.py
+          python -m pytest -o addopts='' -q tests/test_qwen35_arch_utilization.py
+          python -m heteronpu.qwen35_arch_utilization --repo .
           python -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_qk_rope*.py chisel/continuous_prefill/tests/test_host_bf16_qkv*.py chisel/continuous_prefill/tests/test_prepare_qk_norm_rope_owner_fixture.py chisel/continuous_prefill/tests/test_host_bf16_attention_core*.py chisel/continuous_prefill/tests/test_host_bf16_attention_block*.py tests/test_host_bf16_attention_core_descriptor.py tests/test_host_bf16_attention_block_descriptor.py tests/test_host_bf16_attention_block_reference.py tests/test_attention_sigmoid_reference.py tests/test_qwen35_gqa_fixed_reference.py
           python -O -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_qk_rope*.py chisel/continuous_prefill/tests/test_host_bf16_qkv*.py chisel/continuous_prefill/tests/test_prepare_qk_norm_rope_owner_fixture.py chisel/continuous_prefill/tests/test_host_bf16_attention_core*.py chisel/continuous_prefill/tests/test_host_bf16_attention_block*.py tests/test_host_bf16_attention_core_descriptor.py tests/test_host_bf16_attention_block_descriptor.py tests/test_host_bf16_attention_block_reference.py tests/test_attention_sigmoid_reference.py tests/test_qwen35_gqa_fixed_reference.py
       - name: Shared Scalar and owner/frontend controls before production build
@@ -73,7 +75,7 @@ jobs:
           export ATTENTION_SIGMOID_FIXED_VECTORS="$GITHUB_WORKSPACE/work/attention_block_sigmoid_ci/fixed_vectors.json"
           python scripts/attention_sigmoid_reference.py --output "$ATTENTION_SIGMOID_FIXED_VECTORS"
           export ATTENTION_SIGMOID_FIXED_SHA256=$(sha256sum "$ATTENTION_SIGMOID_FIXED_VECTORS" | cut -d' ' -f1)
-          sbt -batch -J-Xss8m 'testOnly heteronpu.continuous.BlockScalarFloatSpec heteronpu.continuous.QkNorm256OwnerSpec heteronpu.continuous.PartialRope64OwnerSpec heteronpu.continuous.HostQkNormRopeCommandsSpec heteronpu.continuous.HostAttentionCoreCommandsSpec heteronpu.continuous.HostAttentionBlockCommandsSpec heteronpu.continuous.AttentionSigmoidOwnerSpec heteronpu.continuous.Bf16KvAppendOwnerSpec heteronpu.continuous.Bf16CausalGqaOwnerSpec'
+          sbt -batch -J-Xss8m 'testOnly heteronpu.continuous.BlockScalarFloatSpec heteronpu.continuous.QkNorm256OwnerSpec heteronpu.continuous.PartialRope64OwnerSpec heteronpu.continuous.HostQkNormRopeCommandsSpec heteronpu.continuous.HostAttentionCoreCommandsSpec heteronpu.continuous.HostAttentionBlockCommandsSpec heteronpu.continuous.AttentionSigmoidOwnerSpec heteronpu.continuous.Bf16KvAppendOwnerSpec heteronpu.continuous.Bf16CausalGqaOwnerSpec heteronpu.continuous.GqaMatrixResultSelectSpec'
       - name: Reacquire only pinned layer0, layer3 and prefix sources
         run: |
           python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload

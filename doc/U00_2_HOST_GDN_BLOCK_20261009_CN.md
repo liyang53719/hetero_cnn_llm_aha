@@ -70,3 +70,26 @@ input/post RMSNorm 按原模型的零中心 gamma 规则计算 FP32 `1+weight`�
 紧凑证据在 [独立 CI 摘要](../reports/execution/U00_2_HOST_GDN_BLOCK_CI_D7CE_20261009/result.json)。[原工件 11617056788](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/artifacts/11617056788) 的 ZIP SHA256 为 `e07741127d89dbe44d6b2cc5e4d22b904cfa457ef05b94caa848dd1b05a61e8c`。独立复核完成 359 项检查，逐项核对 491 个精确提交源码哈希和 104 项输入/比较器/ABI 哈希，核对已验证的 ELF、RTL、构建包及两次输出身份；原 validator 的已导出字段和原门限复核通过。未导出的 layout 不补造。原始 DDR、逐 ACK 日志和 tensor 数值只在 CI 内全量验证，紧凑工件不含这些原始数据，未在本地重新数值回放。
 
 整个 case 为 16,422.8152456 秒，包含参考、准入和审计；fresh reference 为 240.234389595 秒。未导出独立 DUT 耗时或实际完成 cycle，因此不能相减后当作仿真速度，也不能直接外推 M128 预算。当前结果是两次 M1，不是 M128 prefill；carried 多 token 的 chunk 语义和真实批次实现仍需接入与测量。完整 block 的 fault/reset/checkpoint restore、全网、35B、DC/PPA 和跨主机位精确复现继续未建立。
+
+## 695981 与 675d 的后续精确提交验收
+
+以下两条原 CI 均已独立完成完整第 0 层 GDN 的 cold token19→carried token92 数值验收，并通过各自显式 acceptance。它们分别绑定 `6959810545203d5f9508075b311dba52f1bee0c9` 和 `675d0ccfb3a189bcd18fede0fda6cc78fee6a282`；上文 d7ce 的首次通过记录保持不变。
+
+| 精确提交 | 原数值 job / UTC 终态 | 显式 acceptance / UTC 终态 | 独立检查 / 精确源码哈希 | 整个 case 秒数 |
+|---|---|---|---|---|
+| 6959810545203d5f9508075b311dba52f1bee0c9 | [113821750506](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/job/113821750506)，18:06:48 SUCCESS | [113957310366](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/job/113957310366)，18:06:55 SUCCESS | 1644 / 528 | 16951.509792187 |
+| 675d0ccfb3a189bcd18fede0fda6cc78fee6a282 | [113834908181](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/job/113834908181)，18:02:28 SUCCESS | [113955587512](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/job/113955587512)，18:02:37 SUCCESS | 1666 / 544 | 16416.734598095 |
+
+表内日期均为 2026-10-09。两个 run 的 build、数值和 acceptance 三个 job 均绑定本行精确提交；acceptance 只在本 run 的 build 与 `block-canonical-native-pass` 均成功后通过。两份独立审查分别核对 GitHub ZIP digest、可信构建输出给出的包哈希、全部 15 个构建包成员及实际 ELF/RTL 字节，按流式读取核验，没有执行或展开这些大文件。原 build 源码清单分别为 504 和 520 项，均包含于各自精确源码闭包；编译入口 wrapper 与实际 compiler ELF 的身份分开记录。每份数值证据的 104 项输入哈希清单、43 条原始 tensor 获取记录及固定模型来源均核对；只对可重建的五份 ABI 和初始零状态重新计算字节哈希，不声称本地重算全部数值输入。
+
+每个提交都实际完成两次 M1，每次 17 条命令、216 条描述符、1,194,048B 写 ACK、18,657 个物理 64B 写 beat，以及 46,887,680B 全 DDR 检查。第二次 launch 在同一 DUT 内读取前一次成功 ACK 的 768 个 history beat 和 16,384 个 FP32 state beat。总有用 Dense MAC 为 43,057,152；独立参考填充后的 FMA 为 43,515,904。两次 M1 不能称为 M128 prefill。
+
+两份新证据分别观察到相同的下列指标，但不据此宣称跨主机输入、工具或 RTL 字节等价：canonical 中间节点、双状态及最终输出均零位差；两 token 的原 native `residual2` 均零位差，max/mean error 均为 0。FP32 state 原始位差为 132002 / 161534，原逐元素容差失败为 0 / 0，最大绝对误差分别为 1.7881393432617188e-7 / 1.9572617020457983e-6。state 的数值门通过不改称原始位精确。PREP 的位差为 2176 / 2606，最大绝对误差为 9.5367431640625e-7 / 3.3182092010974884e-5，仍是未分配门限的诊断项。
+
+原门限全部保持：BF16 隐藏运算 max_abs≤0.03125、mean_abs≤0.005；最终 residual2 max_abs≤0.05、mean_abs≤0.01；FP32 state atol=rtol=1e-4；同 canonical 输入 Conv/SiLU≤1 BF16 数值 ULP，本次均观察到 0 ULP。正负零数值相等与原始位差分开保留。上表耗时包含参考、准入、执行及审计，没有单独导出的 DUT 秒数或完成 cycle，不能作为纯 RTL 吞吐，也不能把不同提交或机器之间的差值归因为 `-O2` 提速。
+
+紧凑结果见 [后续两提交验收摘要](../reports/execution/U00_2_HOST_GDN_BLOCK_CI_FOLLOWUP_20261009/result.json)，其中记录独立 receipt、ELF、RTL、输入/输出身份、ZIP 和构建包哈希，以及各原 run/job/artifact 链接。695 的[数值工件 11634704403](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/artifacts/11634704403) ZIP SHA256 为 `7fbd7a18cffd70f547eb6030c6a9cfeabfc0562486d011726c808663e679c851`；675 的[数值工件 11636065241](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/artifacts/11636065241) 为 `f95e68821cebf7db0941105a9bac10b1049a715566f687c798bce893d4a1c809`。摘要只保存计数、哈希、指标、门限和来源链接，不复制权重或原始 payload。
+
+这两份独立回执在本地环境状态回退后，依据当前可读的精确 Git 对象、CI 工件和 job 元数据/日志重新建立；没有据旧路径声称此前未提交的 work 文件仍存在。原始 tensor、完整逐 ACK 事件和 DDR 快照未上传，本地没有重新数值回放。原 immutable 包 validator 完整复核，数值 validator 只重验已导出字段；没有补造未导出的 live session、原始数组或完整 layout。
+
+两个提交各自 core-only 超时，以及相应 Attention / QKV-Norm-RoPE 范围的历史失败保持原结论，具体原 run 列于摘要；第 3 层历史 full-native FAIL 也不被本次第 0 层结果覆盖。完整 block 的 fault/reset/checkpoint restore、M128、后继层、全网、35B 和 DC/PPA 继续未建立。本次仅追加精确提交证据，不改变全局 checklist 的状态。

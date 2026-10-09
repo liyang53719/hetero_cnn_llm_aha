@@ -1,0 +1,274 @@
+{
+  "schema": "HOST_ATTENTION_GQA_BOUNDARY_AB_NEGATIVE_RESULT_V1",
+  "status": "DIAGNOSTIC_COMPLETED_CANDIDATE_REJECTED",
+  "decision": {
+    "adopt_gqa_boundary": false,
+    "reason": "同 runner 顺序执行的两次候选 prefix 均慢于两次基线；本候选不采用。",
+    "numerical_acceptance": false,
+    "full_command_chain_completed": false,
+    "module_bottleneck_proven": false,
+    "hardware_MAC_utilization_established": false,
+    "speedup_established": false
+  },
+  "ci": {
+    "run_id": "37958175705",
+    "job_id": "113913923585",
+    "reported_conclusion": "SUCCESS",
+    "meaning": "仅表示有界诊断实验完成。",
+    "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37958175705",
+    "job_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37958175705/job/113913923585"
+  },
+  "source_identity": {
+    "production_commit": "6959810545203d5f9508075b311dba52f1bee0c9",
+    "diagnostic_commit": "8a937eadccf4e33f75ee11b7971ebdaa5236da94",
+    "source_profile": "EmitHostBf16AttentionCore",
+    "functional_rtl_changed": false,
+    "simulation_hierarchy_changed": true,
+    "rtl_sha256": "4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9",
+    "common_build_receipt_hashes": {
+      "actual_verilator_sha256": "864678881d11caf6b6c6acebd4e99dd454393dfafe0b312f26c71cea4a61cfe8",
+      "compiler_jars_sha256": "3863a929fcd9d214e5cd524adfbaea221c4d5a8a7575b72c0c45253b03344f92",
+      "hardfloat_manifest_sha256": "40accc06df4092bf0ee54e040dddbb574100beae391bd09229ebd602f7d45136",
+      "rtl_sha256": "4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9",
+      "scope_sha256": "16c4eb58c637f1c7e903f72f70eaaacabbb23768a32759706125cfe50d5e6dd3",
+      "source_manifest_sha256": "6f585196dedf470f62007980d9066b8a1e16607dbeabb9e162c244f02ca042c4",
+      "toolchain_sha256": "4b95047b7195d6d2e38ec5c35b1094956d36368d29402ec7c821a1d28404465b"
+    },
+    "actual_verilator_elf_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+    "source_verification": {
+      "all_reconstructed_hashes_match_recorded_hashes": true,
+      "both_builders_reconstructed_from_pinned_original_plus_declared_edits": true,
+      "candidate_config_reconstructed_as_original_plus_one_hier_block": true,
+      "diagnostic_git_blob_hashes_verified": 10,
+      "mismatches": [],
+      "production_git_blob_hashes_verified": 619,
+      "six_instrumentation_assets_reconstructed_in_memory": true,
+      "transformation_receipt_hash_reconstructed": true
+    }
+  },
+  "scope": {
+    "description": "same runner, sequential baseline then GQA boundary, instrumented 4096-cycle prefix only",
+    "topology": "冻结 EmitHostBf16AttentionCore 的完整 HostBlockTop；不是完整 Attention block。",
+    "variant_change": "原仿真层次配置仅增加一个 Bf16CausalGqaOwner hier_block。",
+    "cycles_per_prefix": 4096,
+    "prefixes_per_variant": 2,
+    "constructor_cycles_included": 36,
+    "eval_calls_per_prefix": 12288,
+    "instrumentation_overhead_included": true,
+    "fresh_official_executions": 2,
+    "reused_official_executions": 0,
+    "input_fixture_shared_unchanged": true
+  },
+  "timing_seconds": {
+    "baseline": {
+      "build_seconds": 3016.149331275,
+      "eval_seconds": [
+        87.19634147,
+        87.09394533
+      ],
+      "mean_eval_seconds": 87.1451434,
+      "mean_step_seconds": 87.3578586375,
+      "step_seconds": [
+        87.410953732,
+        87.304763543
+      ]
+    },
+    "gqa_boundary": {
+      "build_seconds": 3117.476007985,
+      "eval_seconds": [
+        153.720475774,
+        143.945737919
+      ],
+      "mean_eval_seconds": 148.8331068465,
+      "mean_step_seconds": 149.066726824,
+      "step_seconds": [
+        153.961534553,
+        144.171919095
+      ]
+    }
+  },
+  "regression": {
+    "candidate_over_baseline_mean_eval": 1.7078760908493724,
+    "candidate_extra_mean_eval_percent": 70.78760908493724,
+    "candidate_over_baseline_build": 1.0335947148436337,
+    "candidate_extra_build_percent": 3.3594714843633744,
+    "total_elapsed_seconds": 6837.378587646
+  },
+  "compiler": {
+    "baseline": {
+      "effective_O0_observed": false,
+      "effective_optimization": "-O2",
+      "groups": [
+        {
+          "compile_commands": 13,
+          "effective_optimization": "-O2",
+          "fp_contract_off": true,
+          "kind": "other_cpp",
+          "no_fast_math": true,
+          "optimization_flags": [
+            "-O2",
+            "-O2"
+          ]
+        },
+        {
+          "compile_commands": 3,
+          "effective_optimization": "-O2",
+          "fp_contract_off": true,
+          "kind": "other_cpp",
+          "no_fast_math": true,
+          "optimization_flags": [
+            "-Os",
+            "-O2"
+          ]
+        },
+        {
+          "compile_commands": 1,
+          "effective_optimization": "-O2",
+          "fp_contract_off": true,
+          "kind": "profile_driver",
+          "no_fast_math": true,
+          "optimization_flags": [
+            "-O2",
+            "-O2"
+          ]
+        }
+      ],
+      "recorded_compile_commands": 17,
+      "strict_fp_all_recorded_commands": true
+    },
+    "gqa_boundary": {
+      "effective_O0_observed": false,
+      "effective_optimization": "-O2",
+      "groups": [
+        {
+          "compile_commands": 15,
+          "effective_optimization": "-O2",
+          "fp_contract_off": true,
+          "kind": "other_cpp",
+          "no_fast_math": true,
+          "optimization_flags": [
+            "-O2",
+            "-O2"
+          ]
+        },
+        {
+          "compile_commands": 3,
+          "effective_optimization": "-O2",
+          "fp_contract_off": true,
+          "kind": "other_cpp",
+          "no_fast_math": true,
+          "optimization_flags": [
+            "-Os",
+            "-O2"
+          ]
+        },
+        {
+          "compile_commands": 1,
+          "effective_optimization": "-O2",
+          "fp_contract_off": true,
+          "kind": "profile_driver",
+          "no_fast_math": true,
+          "optimization_flags": [
+            "-O2",
+            "-O2"
+          ]
+        }
+      ],
+      "recorded_compile_commands": 19,
+      "strict_fp_all_recorded_commands": true
+    }
+  },
+  "four_prefix_receipt_verification": {
+    "accepted_read_beats": 806,
+    "acknowledged_read_beats": 794,
+    "all_complete_deterministic_objects_equal": true,
+    "all_reported_event_sha256_equal": "ac6ccca4fa5e761e9f3c1b1d957fda305091824721db62448b556d13d2380e84",
+    "all_reported_original_stdout_sha256_equal": "1a8408b275a5ef753d881cd06a0107c0a74d7d00ebcbec4b5c16e7d706f091fa",
+    "ar_handshakes": 80,
+    "completed_commands": 0,
+    "cycles_per_prefix": 4096,
+    "eval_calls_per_prefix": 12288,
+    "incomplete_steps": 0,
+    "issued_jobs": 1,
+    "pending_read_beats": 12,
+    "pipeline_issues": 80,
+    "r_handshakes": 794,
+    "terminal_pc": 0,
+    "terminal_run": 0
+  },
+  "variant_hashes": {
+    "baseline": {
+      "binary_sha256": "5e9e010663d3bc49dc5c1670d55b2060a220ea955f9a37ea8a6fecef8d9909f4",
+      "hierarchy_configuration_sha256": "d2b9e5391113b68d6848d9901b9ee57e0aee17c8cddcbfd6faa92feb2ba7b24b",
+      "build_ready_sha256": "6660d44830db229ce5804135270e700f54204d2ab1af540cea27445d3661a8fa"
+    },
+    "gqa_boundary": {
+      "binary_sha256": "a5c20b1addcc1f101d0f76df0198dee4edb84d4b72086ee3987c0027353b18a6",
+      "hierarchy_configuration_sha256": "5e1a3e7aab8d9bde47e6648230f126816fa38632c69cf63bba977f6655e236be",
+      "build_ready_sha256": "5d7ae46121793525c591474ad8df2b10aa827623c79ee072b67fa6bd2a33298b"
+    }
+  },
+  "input_sha256": {
+    "activation.bf16le": "f8ae9b179fb3a322c64a623329a27d3912b563aad3d0a23249a6789d65e4c7d0",
+    "k_gamma.bf16le": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+    "q_gamma.bf16le": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+    "trig.bf16le": "c6207c787dd0bdcf3b260a1663f2c496d29b973d4a4b556d9afffe3ca389edc0",
+    "weight_k.bf16le": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+    "weight_q.bf16le": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+    "weight_v.bf16le": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+  },
+  "native_full_block_gate": {
+    "pass": {
+      "avx2": false,
+      "baseline": false
+    },
+    "failed_comparisons": {
+      "avx2": 5,
+      "baseline": 6
+    }
+  },
+  "original_evidence": {
+    "local_directory": "work/attention_profile_ab_8a937ead",
+    "committed_payloads": false,
+    "archive_members": [
+      "summary.json",
+      "source_input_hashes.json"
+    ],
+    "archive_members_match_saved_bytes": true,
+    "files": {
+      "summary.json": {
+        "bytes": 68545,
+        "sha256": "c21b66b1492760d69f6af86a76cdf599a89177f2a1d6112434999511d118e6e9"
+      },
+      "source_input_hashes.json": {
+        "bytes": 88428,
+        "sha256": "447753250483b5de1eb34c640f94095dc2fb7b4fa61812b4bf21948ca6acca9e"
+      },
+      "independent_verification.json": {
+        "bytes": 10901,
+        "sha256": "857269671c57b6c7f97820503da053a672fa4f4233b77db5fe08afd725c30fab"
+      },
+      "artifact.zip": {
+        "bytes": 42010,
+        "sha256": "e64b27efe78ff8cd8ad1267d961181c9b3600da0189b488c499ae479791e7db9"
+      }
+    }
+  },
+  "limitations": [
+    "仅每方案两次、同 runner 顺序采样，计时包含插桩开销。",
+    "四个 prefix 的确定性字段、事件和原 stdout 哈希一致，不能替代整链数值验收。",
+    "原始 CI RTL、ELF、event、输入 payload 和编译日志未包含在紧凑工件中；对应身份仅按回执交叉核验，未从不可用原始文件重新计算哈希。",
+    "未证明具体模块或生成函数瓶颈；未建立硬件 MAC 利用率。",
+    "原 native full-block baseline/AVX2 门禁仍失败；不改变已有 GDN、Attention 或全局 checklist 验收状态。"
+  ],
+  "next_step": {
+    "status": "PLANNED_NOT_EXECUTED",
+    "description": "以相同冻结完整顶层、源身份、输入、严格 FP 和实际 O2，实施函数级有界采样，先记录采样/符号映射与计时开销，再依据实际热点证据决定下一候选。",
+    "hotspot_inferred": false
+  },
+  "related_documents": {
+    "this_report": "../../../doc/U00_2_HOST_ATTENTION_PROFILE_AB_8A937EAD_20261009_CN.md",
+    "gdn_dual_m1": "../../../doc/U00_2_HOST_GDN_BLOCK_20261009_CN.md",
+    "attention_full_block": "../../../doc/U00_2_HOST_ATTENTION_BLOCK_20261009_CN.md"
+  }
+}

@@ -1,0 +1,471 @@
+{
+  "schema_version": 1,
+  "report_date_utc": "2026-10-09",
+  "scope": "Qwen3.5-0.8B layer0 full GDN block: cold token19 then carried token92, two continuous M1 launches on one actual DUT per exact commit.",
+  "first_d7_result_unchanged": {
+    "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+    "result": "../U00_2_HOST_GDN_BLOCK_CI_D7CE_20261009/result.json"
+  },
+  "thresholds_unchanged": {
+    "bf16_hidden_operators": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "bf16_final_residual2": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "fp32_state": {
+      "atol": 0.0001,
+      "rtol": 0.0001,
+      "rule": "abs(actual-native) <= atol + rtol * abs(native)"
+    },
+    "same_canonical_input_conv_silu": {
+      "max_bf16_numeric_ulp": 1,
+      "signed_zero_numeric_equal": true
+    },
+    "prep_native_stage": "UNASSIGNED_DIAGNOSTIC_ONLY"
+  },
+  "evidence_boundary": {
+    "audits_reconstructed_after_environment_rollback": true,
+    "basis": "Currently readable exact Git objects, GitHub artifact bytes, compact CI results, job metadata and job logs. No assertion that older untracked work files survived.",
+    "zip_digests_and_streamed_simulator_rtl_bytes_rehashed": true,
+    "source_hashes_rechecked_from_immutable_git": true,
+    "raw_numerical_ddr_tensors_or_full_event_logs_available_locally": false,
+    "raw_numerical_or_ack_replay_performed_locally": false,
+    "raw_external_tool_binaries_rehashed_locally": false,
+    "all_numerical_input_bytes_rehashed_locally": false,
+    "full_checkpoint_lfs_integrity_verified": false,
+    "new_ci_or_rtl_execution_triggered": false,
+    "cross_host_equivalence_claimed": false,
+    "payloads_copied_to_report": false
+  },
+  "still_unestablished": [
+    "M128 prefill",
+    "complete-block fault injection",
+    "complete-block reset recovery",
+    "checkpoint restore",
+    "successor layers and full network",
+    "35B",
+    "timing/DC/PPA signoff",
+    "historical layer3 full-native acceptance"
+  ],
+  "results": [
+    {
+      "source_commit": "6959810545203d5f9508075b311dba52f1bee0c9",
+      "commit_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/commit/6959810545203d5f9508075b311dba52f1bee0c9",
+      "status": "PASS_FULL_LAYER0_GDN_TWO_CONTINUOUS_M1",
+      "run_id": 37924374860,
+      "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860",
+      "jobs": [
+        {
+          "id": 113799682872,
+          "name": "build",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-09T11:32:39Z",
+          "completed_at": "2026-10-09T12:36:04Z",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/job/113799682872"
+        },
+        {
+          "id": 113821750506,
+          "name": "block-canonical-native-pass",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-09T13:22:44Z",
+          "completed_at": "2026-10-09T18:06:48Z",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/job/113821750506"
+        },
+        {
+          "id": 113957310366,
+          "name": "block-acceptance",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-09T18:06:51Z",
+          "completed_at": "2026-10-09T18:06:55Z",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/job/113957310366"
+        }
+      ],
+      "acceptance_dependencies": [
+        "build",
+        "block-canonical-native-pass"
+      ],
+      "independent_audit": {
+        "checks_passed": 1644,
+        "exact_git_source_hashes": 528,
+        "build_source_map_entries": 504,
+        "streamed_build_members": 15,
+        "input_hash_inventory_entries": 104,
+        "abi_hashes_reproduced": 5,
+        "cold_zero_input_hashes_reproduced": 2,
+        "acquired_tensor_pin_records": 43,
+        "independent_case_verification_sha256": "b5ac1deaa72b2dafc513067669c339ae44be943126c872df33815783b0a8800a",
+        "final_acceptance_verification_sha256": "ed7cff51a7f7a62142547173017623839c69162b8a1b1b15aba3b29ee990c558",
+        "audit_script_sha256": "77a9d57739a7feedbe06c1ba72f3d63b7980137d673a59f04ed4be2b905e8f5f",
+        "compact_summary_sha256": "7c7946f6eaf9c176b2bfe9a0e9fac79d575a235ad18d30fddb72a60d715f84a3",
+        "compact_source_input_hashes_sha256": "56ec6aad6b0a94fdaec45e1303e72c8a28f4cd479f41cdba0fb61b7ff3716b71",
+        "source_identity_method": "Exact immutable Git objects; current working tree sources are not authority."
+      },
+      "artifacts": [
+        {
+          "id": 11615799345,
+          "name": "host-gdn-block-build-6959810545203d5f9508075b311dba52f1bee0c9-37924374860-1",
+          "zip_bytes": 5426865,
+          "zip_sha256": "0bbbd9e05ca4edee7b0eb4e8665bd670448589c3c8193b5fede1646dfa8eeaa4",
+          "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/artifacts/11615799345"
+        },
+        {
+          "id": 11615824396,
+          "name": "host-gdn-block-build-proof-6959810545203d5f9508075b311dba52f1bee0c9-1",
+          "zip_bytes": 26638,
+          "zip_sha256": "7080e6c638d8c6922ffe329d951fd8328a188258175cb8edd5f1240e0b83111d",
+          "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/artifacts/11615824396"
+        },
+        {
+          "id": 11634704403,
+          "name": "host-gdn-block-pass-proof-6959810545203d5f9508075b311dba52f1bee0c9-1",
+          "zip_bytes": 36433,
+          "zip_sha256": "7fbd7a18cffd70f547eb6030c6a9cfeabfc0562486d011726c808663e679c851",
+          "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374860/artifacts/11634704403"
+        }
+      ],
+      "identities": {
+        "package_sha256": "d04c740e925afef27a2063e250778f1378d29b74cd7d39239f0e07d469bf5219",
+        "binary_sha256": "4a7e197e17f946bd81fa9617584a5fbf4bc09e7cace64b3b5a181ff92975135b",
+        "rtl_sha256": "f180e1f5906698e2f6c9c54c46018d3588fd544398b911240dafdf4c04fc8ed6",
+        "build_ready_sha256": "6edc521f8ed6e7fe8726f1314b6f5765e5c331482e62a4a103652d0b2ce5b1cd",
+        "fixture_manifest_sha256": "17d6d53213a4a449ae260407cba7edbe7fcae5e3fa789677d8d12229539814b2",
+        "actual_log_sha256": "b67542320d5eb81a90295c70e1d0391a7a7ac324c610448b80e9d7b393741674",
+        "source_payload_manifest_sha256": {
+          "qwen35_layer0_payload": "18a5bcccb2c1cbc31c10a4278671f6f512b86b0224a1dec051d5e721877024ab",
+          "qwen35_prefix_payload": "2c7aeeee9434668825f929c92b8675f7ee35b889b23fdfc13244af2392632ced"
+        },
+        "output_sha256": {
+          "0": "aa1a06d633697805c46d91acdc7234d3982116737b00b94ce3e142342b5a78e4",
+          "1": "a9b8def295f79443998567c67904ecc59c682c22670abb19762e6cf42ab758da"
+        }
+      },
+      "execution": {
+        "launches": 2,
+        "tokens": [
+          19,
+          92
+        ],
+        "tokens_per_launch": 1,
+        "same_dut": true,
+        "reset_between_launches": false,
+        "commands_per_launch": 17,
+        "descriptor_records_per_launch": 216,
+        "canonical_bit_mismatches": [
+          0,
+          0
+        ],
+        "write_ack_bytes_total": 2388096,
+        "physical_write_beats_total": 37314,
+        "ddr_bytes_checked_per_launch": 46887680,
+        "history_carried_read_beats": 768,
+        "fp32_state_carried_read_beats": 16384,
+        "useful_dense_macs": 43057152,
+        "padded_reference_fma_steps": 43515904
+      },
+      "native": {
+        "residual2": [
+          {
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true
+          },
+          {
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true
+          }
+        ],
+        "fp32_state": [
+          {
+            "raw_bit_mismatches": 132002,
+            "tolerance_failures": 0,
+            "max_abs_error": 1.7881393432617188e-07,
+            "max_tolerance_ratio": 0.0009032398581443737,
+            "elements": 262144,
+            "pass": true
+          },
+          {
+            "raw_bit_mismatches": 161534,
+            "tolerance_failures": 0,
+            "max_abs_error": 1.9572617020457983e-06,
+            "max_tolerance_ratio": 0.01956401859386669,
+            "elements": 262144,
+            "pass": true
+          }
+        ],
+        "prep_diagnostic": [
+          {
+            "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+            "bit_mismatches": 2176,
+            "max_abs": 9.5367431640625e-07,
+            "mean_abs": 1.2182279429673315e-09
+          },
+          {
+            "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+            "bit_mismatches": 2606,
+            "max_abs": 3.3182092010974884e-05,
+            "mean_abs": 1.4183998439110113e-08
+          }
+        ],
+        "same_canonical_input_conv_silu": [
+          {
+            "conv_max_bf16_ulp": 0,
+            "silu_max_bf16_ulp": 0,
+            "signed_zero_numeric_equal": true
+          },
+          {
+            "conv_max_bf16_ulp": 0,
+            "silu_max_bf16_ulp": 0,
+            "signed_zero_numeric_equal": true
+          }
+        ]
+      },
+      "timing": {
+        "case_elapsed_seconds": 16951.509792187,
+        "includes_reference_admission_execution_and_audit": true,
+        "isolated_dut_seconds_exported": false,
+        "actual_completed_cycles_exported": false,
+        "rtl_throughput_or_speedup_claimed": false
+      },
+      "historical_failures_not_overwritten": [
+        {
+          "id": 37924374923,
+          "name": "qwen35-production-Host-Attention-Core",
+          "head_sha": "6959810545203d5f9508075b311dba52f1bee0c9",
+          "conclusion": "failure",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374923"
+        },
+        {
+          "id": 37924374921,
+          "name": "qwen35-production-Host-BF16-GDN-Core",
+          "head_sha": "6959810545203d5f9508075b311dba52f1bee0c9",
+          "conclusion": "failure",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37924374921"
+        }
+      ]
+    },
+    {
+      "source_commit": "675d0ccfb3a189bcd18fede0fda6cc78fee6a282",
+      "commit_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/commit/675d0ccfb3a189bcd18fede0fda6cc78fee6a282",
+      "status": "PASS_FULL_LAYER0_GDN_TWO_CONTINUOUS_M1",
+      "run_id": 37928256911,
+      "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911",
+      "jobs": [
+        {
+          "id": 113812357143,
+          "name": "build",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-09T12:21:12Z",
+          "completed_at": "2026-10-09T13:11:12Z",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/job/113812357143"
+        },
+        {
+          "id": 113834908181,
+          "name": "block-canonical-native-pass",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-09T13:27:11Z",
+          "completed_at": "2026-10-09T18:02:28Z",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/job/113834908181"
+        },
+        {
+          "id": 113955587512,
+          "name": "block-acceptance",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-09T18:02:32Z",
+          "completed_at": "2026-10-09T18:02:37Z",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/job/113955587512"
+        }
+      ],
+      "acceptance_dependencies": [
+        "build",
+        "block-canonical-native-pass"
+      ],
+      "independent_audit": {
+        "checks_passed": 1666,
+        "exact_git_source_hashes": 544,
+        "build_source_map_entries": 520,
+        "streamed_build_members": 15,
+        "input_hash_inventory_entries": 104,
+        "abi_hashes_reproduced": 5,
+        "cold_zero_input_hashes_reproduced": 2,
+        "acquired_tensor_pin_records": 43,
+        "independent_case_verification_sha256": "b6fc031115b225eff32eec6506a3bcdc4b6491bb5921207e0b99326f54fbb020",
+        "final_acceptance_verification_sha256": "c9e3e6f68dd7a30ba61b16d2dd81146f3b38c6a1bd00a44005c9064c893b9bd6",
+        "audit_script_sha256": "295a00f5ebdceca92215b609d86a56404fa96538f17c78e0f0365ffb59be29fa",
+        "compact_summary_sha256": "2d9274fe7a751fcd33d1205541fdc0e3e2cd2619dedfe25867db1f64b44ffbf4",
+        "compact_source_input_hashes_sha256": "d5aeb3e7c3db81696841eaffabbb9292e033bf9dde4dcc66edc5ee86abd78022",
+        "source_identity_method": "Exact immutable Git objects; current working tree sources are not authority."
+      },
+      "artifacts": [
+        {
+          "id": 11617374482,
+          "name": "host-gdn-block-build-675d0ccfb3a189bcd18fede0fda6cc78fee6a282-37928256911-1",
+          "zip_bytes": 5425357,
+          "zip_sha256": "15c557550944ac78a1d627731f42c407851c0a3d03176053f9b4aa60a1e8ed09",
+          "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/artifacts/11617374482"
+        },
+        {
+          "id": 11617901222,
+          "name": "host-gdn-block-build-proof-675d0ccfb3a189bcd18fede0fda6cc78fee6a282-1",
+          "zip_bytes": 27360,
+          "zip_sha256": "95beaa655ab5b8ca58e1603da82063636d377593d2741fc8073662d4a848778c",
+          "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/artifacts/11617901222"
+        },
+        {
+          "id": 11636065241,
+          "name": "host-gdn-block-pass-proof-675d0ccfb3a189bcd18fede0fda6cc78fee6a282-1",
+          "zip_bytes": 37149,
+          "zip_sha256": "f95e68821cebf7db0941105a9bac10b1049a715566f687c798bce893d4a1c809",
+          "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256911/artifacts/11636065241"
+        }
+      ],
+      "identities": {
+        "package_sha256": "67504e2d2cbbc6ed1c190f9bfbf0d68b2940e39f828760ec764112e723b005c0",
+        "binary_sha256": "11588209946b62bd8ae861c337ad0197b2793e33bb4d8e5ea2c7de73a24fa6c6",
+        "rtl_sha256": "096c58b750df384f5d169085a683b714c3f6e38bf3fdd78a19cdd5042ee3187c",
+        "build_ready_sha256": "23a2b40e8853c267e6e8620b8b8b39b1b4cf036a7c73636fb73cd7dd95d138fd",
+        "fixture_manifest_sha256": "90adb3b60ae9d71722984651b46eac8f3566f00388dd57b53ccce02c1796b3c1",
+        "actual_log_sha256": "b67542320d5eb81a90295c70e1d0391a7a7ac324c610448b80e9d7b393741674",
+        "source_payload_manifest_sha256": {
+          "qwen35_layer0_payload": "52e8ffdf070d9add960b9a2567ade734fe3f17c727b2859425af8d453f9c28fe",
+          "qwen35_prefix_payload": "90406418e0a6db974524a257d6de0d224f36afb7e4d450d902b9336bc4c082f9"
+        },
+        "output_sha256": {
+          "0": "aa1a06d633697805c46d91acdc7234d3982116737b00b94ce3e142342b5a78e4",
+          "1": "a9b8def295f79443998567c67904ecc59c682c22670abb19762e6cf42ab758da"
+        }
+      },
+      "execution": {
+        "launches": 2,
+        "tokens": [
+          19,
+          92
+        ],
+        "tokens_per_launch": 1,
+        "same_dut": true,
+        "reset_between_launches": false,
+        "commands_per_launch": 17,
+        "descriptor_records_per_launch": 216,
+        "canonical_bit_mismatches": [
+          0,
+          0
+        ],
+        "write_ack_bytes_total": 2388096,
+        "physical_write_beats_total": 37314,
+        "ddr_bytes_checked_per_launch": 46887680,
+        "history_carried_read_beats": 768,
+        "fp32_state_carried_read_beats": 16384,
+        "useful_dense_macs": 43057152,
+        "padded_reference_fma_steps": 43515904
+      },
+      "native": {
+        "residual2": [
+          {
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true
+          },
+          {
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true
+          }
+        ],
+        "fp32_state": [
+          {
+            "raw_bit_mismatches": 132002,
+            "tolerance_failures": 0,
+            "max_abs_error": 1.7881393432617188e-07,
+            "max_tolerance_ratio": 0.0009032398581443737,
+            "elements": 262144,
+            "pass": true
+          },
+          {
+            "raw_bit_mismatches": 161534,
+            "tolerance_failures": 0,
+            "max_abs_error": 1.9572617020457983e-06,
+            "max_tolerance_ratio": 0.01956401859386669,
+            "elements": 262144,
+            "pass": true
+          }
+        ],
+        "prep_diagnostic": [
+          {
+            "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+            "bit_mismatches": 2176,
+            "max_abs": 9.5367431640625e-07,
+            "mean_abs": 1.2182279429673315e-09
+          },
+          {
+            "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+            "bit_mismatches": 2606,
+            "max_abs": 3.3182092010974884e-05,
+            "mean_abs": 1.4183998439110113e-08
+          }
+        ],
+        "same_canonical_input_conv_silu": [
+          {
+            "conv_max_bf16_ulp": 0,
+            "silu_max_bf16_ulp": 0,
+            "signed_zero_numeric_equal": true
+          },
+          {
+            "conv_max_bf16_ulp": 0,
+            "silu_max_bf16_ulp": 0,
+            "signed_zero_numeric_equal": true
+          }
+        ]
+      },
+      "timing": {
+        "case_elapsed_seconds": 16416.734598095,
+        "includes_reference_admission_execution_and_audit": true,
+        "isolated_dut_seconds_exported": false,
+        "actual_completed_cycles_exported": false,
+        "rtl_throughput_or_speedup_claimed": false
+      },
+      "historical_failures_not_overwritten": [
+        {
+          "id": 37928256884,
+          "name": "qwen35-production-Host-QKV-Norm-RoPE",
+          "head_sha": "675d0ccfb3a189bcd18fede0fda6cc78fee6a282",
+          "conclusion": "failure",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256884"
+        },
+        {
+          "id": 37928256908,
+          "name": "qwen35-production-Host-Attention-Block",
+          "head_sha": "675d0ccfb3a189bcd18fede0fda6cc78fee6a282",
+          "conclusion": "failure",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256908"
+        },
+        {
+          "id": 37928256905,
+          "name": "qwen35-production-Host-Attention-Core",
+          "head_sha": "675d0ccfb3a189bcd18fede0fda6cc78fee6a282",
+          "conclusion": "failure",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256905"
+        },
+        {
+          "id": 37928256885,
+          "name": "qwen35-production-Host-BF16-GDN-Core",
+          "head_sha": "675d0ccfb3a189bcd18fede0fda6cc78fee6a282",
+          "conclusion": "failure",
+          "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37928256885"
+        }
+      ]
+    }
+  ]
+}

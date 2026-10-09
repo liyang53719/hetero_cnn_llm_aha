@@ -1,6 +1,6 @@
-name: bounded-production-Attention-Core-GQA-boundary-AB-diagnostic
+name: bounded-production-Attention-Core-hotspot-diagnostic
 
-# One bounded simulator GQA hierarchy A/B diagnostic of the frozen production top.
+# One unchanged full-top build and bounded eval-thread CPU hotspot sampling.
 # Numerical acceptance is false; no functional RTL or physical resource change.
 on:
   push:
@@ -88,11 +88,11 @@ jobs:
           python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
           python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
           python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
-      - name: Profile baseline and simulator GQA boundary within one fixed budget
+      - name: Sample eval hotspots within one fixed full-top build budget
         env: {HF_HUB_OFFLINE: '1'}
         run: |
           set -euo pipefail
-          python "$GITHUB_WORKSPACE/work/attention_profile_diagnostic/tools/attention_profile/run_profile.py" --source-root "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/work/full_top_profile" --gqa-boundary-ab
+          python "$GITHUB_WORKSPACE/work/attention_profile_diagnostic/tools/attention_profile/run_profile.py" --source-root "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/work/full_top_profile" --hotspot-sampling
       - name: Preserve only compact timing and source identity receipts
         uses: actions/upload-artifact@v4
         if: always()
@@ -106,6 +106,6 @@ jobs:
       - name: State the diagnostic boundary even on timeout or failure
         if: always()
         run: |
-          echo 'Bounded simulator GQA hierarchy A/B diagnostic of full production Attention Core top at 6959810545203d5f9508075b311dba52f1bee0c9. numerical_acceptance=false. Build baseline then candidate, adding only simulator hier_block Bf16CausalGqaOwner. No functional RTL, physical hierarchy, resource, or floating-point changes.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Both builds and all prefixes share the original 7800 seconds overall budget; each build is capped at 6000 seconds and remaining overall time. Each variant runs two 4096-cycle prefixes capped at 240 seconds each, four prefix runs total, all using the same fresh fixture. Fresh original reference functions remain unchanged; no full numerical rerun or repeated owner regressions.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Only compact runtime, stage, tool-hash and source/input identity receipts are retained. No raw weights, tensors, NPZ, RTL, binaries, traces or build outputs are uploaded. This diagnostic makes no speedup, numerical acceptance, timing signoff or QoR claim.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Bounded eval-thread hotspot diagnostic of full production Attention Core top at 6959810545203d5f9508075b311dba52f1bee0c9. numerical_acceptance=false. Build the unchanged baseline once; run sampling off then on using the same ELF. No functional RTL, physical hierarchy, resource, or floating-point changes.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'One build and both prefixes share the original 7800 seconds overall budget; the build is capped at 6000 seconds and remaining overall time. Two 4096-cycle prefixes are capped at 240 seconds each, both using the same fresh fixture. Fresh original reference functions remain unchanged; no full numerical rerun or repeated owner regressions.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Only compact runtime, stage, tool-hash, function hotspot counts and source/input identity receipts are retained. No raw weights, tensors, NPZ, RTL, binaries, traces or build outputs are uploaded. This diagnostic makes no speedup, numerical acceptance, timing signoff or QoR claim.' >> "$GITHUB_STEP_SUMMARY"

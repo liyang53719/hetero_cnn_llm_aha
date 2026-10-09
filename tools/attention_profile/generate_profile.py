@@ -91,6 +91,7 @@ def generate(repo: Path, output: Path, cycles: int) -> dict:
     )
     emitted = {
         "profile_runtime.h": runtime,
+        "sampler_runtime.h": (assets / "sampler_runtime.h").read_bytes(),
         "profile_driver.cpp": wrapper,
     }
     for path, data in sources.items():
@@ -115,7 +116,8 @@ def generate(repo: Path, output: Path, cycles: int) -> dict:
         "compile_source": "profile_driver.cpp",
         "required_cflags": ["-O2", "-std=c++17", "-ffp-contract=off", "-fno-fast-math"],
         "binary_arguments": "FIXTURE FRESH_OUTPUT [pass|cache-v-write-error|context-write-error]",
-        "result_files": ["attention_profile.json", "prefix_events.jsonl"],
+        "result_files": ["attention_profile.json", "prefix_events.jsonl", "samples.json"],
+        "sampling_selection": "ATTENTION_PROFILE_SAMPLE=0|1; default off; same compiled prefix bound",
         "event_digest_input": "exact prefix_events.jsonl bytes; no timings or output paths",
         "exit_contract": {"0": "diagnostic prefix reached, never numerical acceptance",
                           "2": "invalid arguments, driver failure, premature finish or profile error"},

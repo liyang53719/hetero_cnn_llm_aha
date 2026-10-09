@@ -14,7 +14,7 @@
 
 恢复诊断 [run 37949433235](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37949433235) 已成功匹配原 `4f061…` SV。两次同 ELF、同输入的 4096 周期各耗时 92.08 / 92.41 秒，其中 RTL `eval` 占 99.760% / 99.762%，其余夹具和插桩约 0.22 秒；80 次 AR、794 次 R、80 次 Matrix issue 与完整确定性摘要一致。619 项生产源码、10 项诊断源码及 7 项实际输入哈希已核对。该结果定位到顶层 RTL 求值成本，尚未定位具体模块；官方 baseline / AVX2 整层仍分别有 6 / 5 项原阈值失败。
 
-后续 `--gqa-boundary-ab` 实验在同一个 job、同一份 fresh fixture 上顺序构建 baseline 和 candidate，各测两次相同前缀。candidate 只在复制的 Verilator 配置末尾增加 `hier_block -module "Bf16CausalGqaOwner"`，原配置不改；两版生成 SV 都必须匹配原硬 SHA，实际 build stage 必须出现该新分层，编译器、严格 FP 参数和所有输入保持一致。两个 build 共享原 7800 秒总预算，各自最多 6000 秒且受剩余预算约束；四个前缀仍各最多 240 秒。仅报告本机顺序测量的 eval/build 比值，前缀、事件 SHA 或原 driver 日志任一不等均拒绝。该 A/B 尚未实测，不构成完整数值链、M128 或硬件 QoR 验收。
+后续 `--gqa-boundary-ab` 实验在同一个 job、同一份 fresh fixture 上顺序构建 baseline 和 candidate，各测两次相同前缀。candidate 只在复制的 Verilator 配置末尾增加 `hier_block -module "Bf16CausalGqaOwner"`，原配置不改；两版生成 SV 都必须匹配原硬 SHA，实际 build stage 必须出现该新分层，编译器、严格 FP 参数和所有输入保持一致。两个 build 共享原 7800 秒总预算，各自最多 6000 秒且受剩余预算约束；四个前缀仍各最多 240 秒。仅报告本机顺序测量的 eval/build 比值，前缀、事件 SHA 或原 driver 日志任一不等均拒绝。该 A/B 已在 8a937ead 实测完成，候选 eval 均值慢 70.79%，明确不采用；完整来源与负结果见 [中文记录](../../doc/U00_2_HOST_ATTENTION_PROFILE_AB_8A937EAD_20261009_CN.md)。本诊断不构成完整数值链、M128 或硬件 QoR 验收。
 
 This generator only instruments the simulation driver. It does not emit RTL,
 change hierarchy or resources, introduce a command variant, preload references
@@ -140,3 +140,30 @@ headers: eval count, seeded backpressure state, beats, ACKs, drain state, and th
 actual single memory store must match. They exercise successful read responses
 and physical writes committed before the B-ACK callback. No local test here
 builds or runs full production RTL, or provides numerical acceptance.
+
+## Same-ELF eval-thread hotspot diagnostic
+
+The GQA simulator boundary tested at `8a937ead` is rejected: it increased
+mean eval time from 87.1451 to 148.8331 seconds for the same 4096-cycle prefix.
+The source-pinned negative result is recorded in the Chinese execution report.
+The default isolated workflow now builds only the original baseline once.
+`--hotspot-sampling` and `--gqa-boundary-ab` are mutually exclusive; the latter
+is retained solely as the reproducible historical experiment.
+
+The two prefixes use the same ELF, fresh fixture, exact original generated SV,
+and strict FP flags. Prefix 0 disables sampling; prefix 1 enables a Linux x86-64
+thread-CPU timer directed at the thread calling `eval()`. Only an active eval
+window records instruction pointers in a bounded signal-safe buffer. Other
+threads are not profiled; this is not a whole-process call graph or hardware
+performance-counter measurement. The two semantic/event/stdout digests must
+match. `eval_ns` includes Window construction/destruction and signal-handler CPU
+time as well as `d.eval()`. Off/on timing ratios are diagnostic observations,
+not uninstrumented eval performance or a speedup.
+
+Offline symbolization checks the actual ELF, load bias and symbol bounds, and
+reports sampled function counts, relative offsets, unresolved counts and
+generated C++ identities/sizes. Per-sample RIP sequences and ASLR addresses stay local. Compact summaries
+may include at most five short, address-stripped assembly windows of at most
+ten instructions each, alongside function counts and source identities. The unchanged 6000-second
+build cap, 240-second prefix cap and 7800-second overall cap apply. This job
+does not execute or accept a complete block; numerical acceptance remains false.

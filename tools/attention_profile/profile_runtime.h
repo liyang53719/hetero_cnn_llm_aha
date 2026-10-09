@@ -2,9 +2,11 @@
 #pragma once
 // This header is used only by a generated copy of the physical test service.
 // No RTL ports, hierarchy, arithmetic, command construction or store are changed.
+#include "sampler_runtime.h"
 #include <array>
 #include <chrono>
 #include <cstdint>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -74,6 +76,10 @@ inline void configure(const std::filesystem::path& out, uint64_t limit) {
   check(limit >= 1 && limit <= 65536, "invalid bounded prefix limit");
   check(!out.empty() && !std::filesystem::exists(out) && !std::filesystem::is_symlink(out),
         "fresh execution output required");
+  const char* sample = std::getenv("ATTENTION_PROFILE_SAMPLE");
+  check(!sample || std::string(sample) == "0" || std::string(sample) == "1",
+        "invalid explicit sampling selection");
+  attention_sampling::configure(sample && std::string(sample) == "1");
   s.configured = true; s.out = out; s.limit = limit; s.begun = Clock::now();
 }
 inline void openEvents() {
@@ -114,7 +120,7 @@ inline void writeReport(const char* status, bool reached) {
     << "\"eval_ns\":" << s.evalNs << ",\n\"step_elapsed_ns\":" << s.stepElapsedNs << ",\n"
     << "\"driver_excluding_eval_ns\":" << s.stepElapsedNs - s.evalNs << ",\n"
     << "\"driver_includes_instrumentation_overhead\":true,\n"
-    << "\"timing_scope\":\"PhysicalAxi steps including incomplete exception step on failure; steady_clock; includes event/report instrumentation; excludes construction outside steps and final report\",\n"
+    << "\"timing_scope\":\"PhysicalAxi steps including incomplete exception step on failure; steady_clock; includes event/report instrumentation and eval sampling Window/signal-handler overhead; excludes construction outside steps and final report\",\n"
     << "\"timing_interpretation\":\"instrumented diagnostic, not original uninstrumented performance\",\n"
     << "\"profile_wall_ns\":" << ns(Clock::now() - s.begun) << ",\n"
     << "\"prior_checkpoint_report_writes_ns\":" << s.reportWritesNs << ",\n"
@@ -138,7 +144,10 @@ inline void writeReport(const char* status, bool reached) {
   f.close(); check(bool(f), "cannot finish profile report");
   std::filesystem::rename(tmp, s.out / "attention_profile.json");
 }
-inline void finish(const char* status, bool reached) { writeReport(status, reached); }
+inline void finish(const char* status, bool reached) {
+  attention_sampling::finish(state().out);
+  writeReport(status, reached);
+}
 
 class StepTimer {
   Clock::time_point start_;
@@ -160,7 +169,7 @@ class StepTimer {
     check(phase < 3 && phase == nextPhase_, "invalid eval phase sequence");
     ++s.evalAttempts;
     const auto begin = Clock::now();
-    try { d.eval(); }
+    try { attention_sampling::Window sampleWindow(phase); d.eval(); }
     catch (...) {
       const uint64_t elapsed = ns(Clock::now() - begin);
       s.evalNs += elapsed; s.phaseNs[phase] += elapsed;

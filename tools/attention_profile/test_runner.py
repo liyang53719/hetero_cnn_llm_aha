@@ -141,7 +141,7 @@ def test_supervisor_forwards_explicit_ab_selection_with_original_total_budget(tm
     def supervise(command,timeout_seconds):
         seen.update(command=command,timeout=timeout_seconds)
         return {'returncode':0,'forced_shutdown':False}
-    monkeypatch.setattr(R,'arguments',lambda:SimpleNamespace(gqa_boundary_ab=enabled))
+    monkeypatch.setattr(R,'arguments',lambda:SimpleNamespace(gqa_boundary_ab=enabled,hotspot_sampling=False))
     monkeypatch.setattr(R,'checked_paths',lambda args:(tmp_path/'source',tmp_path/'out'))
     monkeypatch.setattr(R,'imports',lambda source:SimpleNamespace(supervise_process=supervise))
     monkeypatch.setattr(R,'finalize_supervision',lambda out,result:result['returncode'])
@@ -184,3 +184,25 @@ def test_supervisor_preserves_interrupted_receipt_and_never_invents_success(tmp_
     assert s['status']==('COMPLETE' if kind=='valid' else 'INCOMPLETE_BOUNDED_FULL_TOP_PROFILE')
     assert {p.name for p in (tmp_path/'compact').iterdir()}=={'summary.json','source_input_hashes.json'}
     if kind=='partial':assert (tmp_path/'supervisor_previous_summary.json.partial').read_text()=='{"stage":'
+
+
+def test_hotspot_selection_is_forwarded_and_excludes_ab(tmp_path,monkeypatch):
+    from types import SimpleNamespace
+    seen={}
+    def supervise(command,timeout_seconds):
+        seen.update(command=command,timeout=timeout_seconds)
+        return {'returncode':0,'forced_shutdown':False}
+    monkeypatch.setattr(R,'arguments',lambda:SimpleNamespace(gqa_boundary_ab=False,hotspot_sampling=True))
+    monkeypatch.setattr(R,'checked_paths',lambda args:(tmp_path/'source',tmp_path/'out'))
+    monkeypatch.setattr(R,'imports',lambda source:SimpleNamespace(supervise_process=supervise))
+    monkeypatch.setattr(R,'finalize_supervision',lambda out,result:result['returncode'])
+    with pytest.raises(SystemExit) as stopped:R.main()
+    assert stopped.value.code==0 and seen['timeout']==7800
+    assert seen['command'].count('--hotspot-sampling')==1
+    assert '--gqa-boundary-ab' not in seen['command']
+    monkeypatch.setattr('sys.argv',['run_profile.py','--source-root','/tmp/source','--output','/tmp/out','--hotspot-sampling','--gqa-boundary-ab'])
+    # Rebind the original parser to exercise its explicit mutual exclusion.
+    fresh_spec=importlib.util.spec_from_file_location('fresh_runner_parser',PATH)
+    fresh=importlib.util.module_from_spec(fresh_spec);fresh_spec.loader.exec_module(fresh)
+    with pytest.raises(SystemExit) as bad:fresh.arguments()
+    assert bad.value.code==2

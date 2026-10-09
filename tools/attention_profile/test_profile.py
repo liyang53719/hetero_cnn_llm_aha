@@ -160,6 +160,28 @@ class SyntheticCppTests(unittest.TestCase):
                 (expected / f"{name}.bf16le").write_bytes(bytes(64))
         (fixture / "launch.txt").write_text("\n".join(lines) + "\n")
 
+    def test_same_wrapper_sampling_toggle_keeps_complete_prefix_identical(self):
+        reports=[]; events=[]; stdout=[]
+        for enabled in (False,True):
+            output=self.root/('sampling-on' if enabled else 'sampling-off')
+            env={**os.environ,'ATTENTION_PROFILE_SAMPLE':str(int(enabled))}
+            result=run([str(self.binary),str(self.fixture),str(output)],env=env)
+            self.assertEqual(result.returncode,0,result.stderr)
+            reports.append(json.loads((output/'attention_profile.json').read_text()))
+            events.append((output/'prefix_events.jsonl').read_bytes());stdout.append(result.stdout)
+            sample=json.loads((output/'samples.json').read_text())
+            self.assertIs(sample['enabled'],enabled)
+            if enabled:
+                self.assertTrue(sample['completed'])
+                self.assertEqual(sample['window_counts'],[96,96,96,0])
+            else:self.assertEqual(sample['sample_count'],0)
+        self.assertEqual(reports[0]['deterministic'],reports[1]['deterministic'])
+        self.assertEqual(events[0],events[1]);self.assertEqual(stdout[0],stdout[1])
+        bad=run([str(self.binary),str(self.fixture),str(self.root/'invalid-sampling')],
+                env={**os.environ,'ATTENTION_PROFILE_SAMPLE':'maybe'})
+        self.assertEqual(bad.returncode,2)
+        self.assertIn('invalid explicit sampling selection',bad.stderr)
+
     def test_complete_source_wrapper_prefix_and_timing_independent_digest(self):
         import os
         outputs = []

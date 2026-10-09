@@ -184,7 +184,10 @@ def arguments():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--source-root', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
-    p.add_argument('--gqa-boundary-ab', action='store_true',
+    modes = p.add_mutually_exclusive_group()
+    modes.add_argument('--hotspot-sampling', action='store_true',
+                   help='one unchanged full-top build, sampling off/on deterministic prefixes')
+    modes.add_argument('--gqa-boundary-ab', action='store_true',
                    help='same-source/input A/B with only a GQA simulator compilation boundary')
     return p.parse_args()
 
@@ -224,10 +227,11 @@ def run_worker(args):
                    github_trigger_sha=trigger_sha, frozen_worker_github_sha=PIN,
                    original_failure_rtl_sha256=RTL_SHA256, functional_rtl_changed=False,
                    hierarchy_changed=args.gqa_boundary_ab, source_profile='EmitHostBf16AttentionCore',
-                   simulator_hierarchy_comparison=args.gqa_boundary_ab, variants={},
+                   simulator_hierarchy_comparison=args.gqa_boundary_ab, hotspot_sampling=args.hotspot_sampling, variants={},
                    intended_cycles_per_prefix=CYCLES, prefix_timeout_seconds=PREFIX_SECONDS,
                    prefixes=[], stage='preflight', phase_seconds={}, full_command_chain_completed=False,
                    instrumentation_overhead_included=True, speedup_claimed=False,
+                   eval_timing_includes_sampling_window_and_signal_handler=True,
                    artifact_upload_allowlist=['compact/summary.json', 'compact/source_input_hashes.json'])
     hashes = dict(source_sha256={}, diagnostic_source_sha256={}, instrumented_source_sha256={}, input_sha256={}, output_sha256={})
     from run_host_bf16_v_fresh_gate import _write_compact
@@ -353,15 +357,32 @@ def run_worker(args):
                     name = 'prefix'+str(index) if not candidate else 'prefix_gqa_'+str(index)
                     prefix = out/name
                     with phase('actual_bounded_'+name):
-                        run_to_log([str(build/'obj/VHostBlockTop'),str(fixture),str(prefix),'pass'],out/(name+'.log'),PREFIX_SECONDS)
+                        prefix_env = dict(os.environ, ATTENTION_PROFILE_SAMPLE='1' if args.hotspot_sampling and index == 1 else '0')
+                        run_to_log([str(build/'obj/VHostBlockTop'),str(fixture),str(prefix),'pass'],out/(name+'.log'),PREFIX_SECONDS,prefix_env)
                     report = json.loads((prefix/'attention_profile.json').read_text())
                     result['prefixes'].append(report); result['output_keys'].append(key)
                     hashes['output_sha256'][key] = dict(profile_json=sha(prefix/'attention_profile.json'),
-                        events=sha(prefix/'prefix_events.jsonl'), original_driver_log=sha(out/(name+'.log')))
+                        events=sha(prefix/'prefix_events.jsonl'), original_driver_log=sha(out/(name+'.log')),
+                        samples_sha256=sha(prefix/'samples.json'))
                     require(frozen.admit_fixture(fixture,**authorities) == admitted, 'live fixture changed after profile')
                 first,second=(hashes['output_sha256'][k] for k in result['output_keys'])
                 check_profiles(*result['prefixes'],first['events'],second['events'])
                 require(first['original_driver_log'] == second['original_driver_log'], 'original deterministic visible event log differs')
+                if args.hotspot_sampling:
+                    from sample_symbols import summarize
+                    off = json.loads((out/'prefix0/samples.json').read_text())
+                    require(off['enabled'] is False and off['sample_count'] == 0 and off['completed'] is True,
+                            'first prefix sampling was not disabled/completed')
+                    result['hotspot_profile'] = summarize(build/'obj/VHostBlockTop', out/'prefix1/samples.json', build)
+                    require(result['hotspot_profile']['sample_count'] > 0, 'no eval samples collected')
+                    require(result['hotspot_profile']['window_counts'] == [CYCLES,CYCLES,CYCLES,0],
+                            'sampler did not cover the exact three eval windows per cycle')
+                    require(result['hotspot_profile']['elf_sha256'] == hashes['build_variants'][variant]['binary_sha256'],
+                            'sampled ELF differs from admitted build')
+                    summary['hotspot_profile'] = result['hotspot_profile']
+                    summary['sampling_off_eval_seconds'] = result['prefixes'][0]['eval_ns']/1e9
+                    summary['sampling_on_eval_seconds'] = result['prefixes'][1]['eval_ns']/1e9
+                    summary['sampling_timing_is_diagnostic_not_speedup'] = True
                 frozen.verify_all_build_sources(build,'profile_final_source_verify.log')
                 require(frozen.build_identity(build,admitted['source_sha256']) == initial_identity, 'final build identity changed')
                 if not candidate:
@@ -377,6 +398,7 @@ def run_worker(args):
             require(all(sha(out/name) == digest for name,digest in hashes['instrumented_source_sha256'].items()), 'instrumented source changed')
             frozen.verify_checkout(PIN,hashes['source_sha256'])
             summary.update(status=('COMPLETE_BOUNDED_FULL_TOP_GQA_BOUNDARY_AB_NOT_NUMERICAL_ACCEPTANCE' if args.gqa_boundary_ab
+                                   else 'COMPLETE_BOUNDED_FULL_TOP_HOTSPOT_PROFILE_NOT_NUMERICAL_ACCEPTANCE' if args.hotspot_sampling
                                    else 'COMPLETE_BOUNDED_FULL_TOP_PROFILE_NOT_NUMERICAL_ACCEPTANCE'), deterministic_prefix_equal=True)
             checkpoint('complete')
             return 0
@@ -451,6 +473,8 @@ def main():
     command = [sys.executable,'-c',entry,str(HERE),'--source-root',str(source),'--output',str(out)]
     if args.gqa_boundary_ab:
         command.append('--gqa-boundary-ab')
+    if args.hotspot_sampling:
+        command.append('--hotspot-sampling')
     result = frozen.supervise_process(command, timeout_seconds=BUDGET_SECONDS)
     raise SystemExit(finalize_supervision(out, result))
 

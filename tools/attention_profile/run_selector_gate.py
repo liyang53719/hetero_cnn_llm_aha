@@ -302,6 +302,91 @@ def preserve_changed_modules(baseline, candidate, comparison, output, inventory)
     return receipts
 
 
+def collect_failure_module_evidence(out, summary, hashes):
+    """Bind optional pre-Verilation failure evidence without accepting the gate."""
+    from concat_inventory import MAX_SOURCE_BYTES
+    receipt_path = out/'candidate_build/generated_rtl_identity.failure.json'
+    selected = out/'selected-source'
+    modules = selected/'failure-module-diff'
+    if 'failure_module_evidence_error' in summary and not modules.exists() and not modules.is_symlink():
+        return  # Already rejected/quarantined by the worker; retain its reason.
+    if not receipt_path.exists() and not receipt_path.is_symlink() and not modules.exists() and not modules.is_symlink():
+        return
+    try:
+        require(not selected.is_symlink() and selected.is_dir(), 'invalid failure selected-source directory')
+        require(receipt_path.is_file() and not receipt_path.is_symlink() and
+                receipt_path.stat().st_size <= 2*1024*1024, 'invalid or oversized module failure receipt')
+        receipt = _json(receipt_path)
+        require(type(receipt) is dict, 'module failure receipt must be an object')
+        require(receipt.get('status') == 'REJECTED' and receipt.get('numerical_acceptance') is False and
+                receipt.get('normalization_applied') is False and receipt.get('source_limit_bytes') == MAX_SOURCE_BYTES,
+                'module failure receipt does not describe strict rejection')
+        entries = receipt.get('preserved_sources')
+        require(type(entries) is list and len(entries) <= 512, 'invalid failure source manifest')
+        expected = {}
+        for entry in entries:
+            require(type(entry) is dict and type(entry.get('path')) is str, 'invalid failure source entry')
+            name = entry['path']
+            relative = _safe_name(name)
+            require(relative.parts[0] == 'failure-module-diff' and len(relative.parts) >= 2 and
+                    relative.suffix == '.sv' and relative.as_posix() == name and name not in expected,
+                    'failure source is outside exact SV allowlist')
+            require(type(entry.get('bytes')) is int and 0 < entry['bytes'] <= MAX_SOURCE_BYTES and
+                    type(entry.get('sha256')) is str and re.fullmatch('[0-9a-f]{64}', entry['sha256']),
+                    'invalid failure source identity')
+            expected[name] = entry
+        require(receipt.get('selected_source_bytes') == sum(item['bytes'] for item in expected.values()),
+                'module failure source byte accounting differs')
+        require(not modules.is_symlink() and (modules.is_dir() or not entries), 'invalid failure module directory')
+        actual, total_source_bytes, discovered = {}, 0, 0
+        for path in selected.rglob('*'):
+            require(not path.is_symlink(), 'selected source symlink in module failure evidence')
+            if path.is_dir():
+                continue
+            require(path.is_file(), 'non-file selected source evidence')
+            name = path.relative_to(selected).as_posix()
+            if path.suffix in ('.cpp', '.h', '.sv'):
+                total_source_bytes += path.stat().st_size
+                require(total_source_bytes <= MAX_SOURCE_BYTES, 'module failure evidence exceeds shared source cap')
+            if path.is_relative_to(modules):
+                discovered += 1
+                require(discovered <= 512 and name in expected, 'unlisted failure module evidence')
+                item = expected[name]
+                require(path.stat().st_size == item['bytes'] and sha(path) == item['sha256'],
+                        'failure module source identity mismatch')
+                actual['selected-source/'+name] = item['sha256']
+        require({name.removeprefix('selected-source/') for name in actual} == set(expected),
+                'listed failure module source missing')
+        receipt_digest = sha(receipt_path)
+        summary['generated_rtl_failure'] = receipt
+        summary['failure_module_evidence'] = dict(verified=True, files=len(actual),
+            shared_selected_source_bytes=total_source_bytes, selected_source_limit_bytes=MAX_SOURCE_BYTES,
+            strict_comparison_failed=True, numerical_acceptance=False)
+        hashes['generated_rtl_failure_receipt_sha256'] = receipt_digest
+        hashes['failure_module_source_sha256'] = actual
+        hashes.setdefault('selected_source_sha256', {}).update(actual)
+    except (Exception, KeyboardInterrupt) as error:
+        summary.pop('generated_rtl_failure', None)
+        summary.pop('failure_module_evidence', None)
+        hashes.pop('generated_rtl_failure_receipt_sha256', None)
+        hashes.pop('failure_module_source_sha256', None)
+        if 'selected_source_sha256' in hashes:
+            hashes['selected_source_sha256'] = {name:digest for name,digest in hashes['selected_source_sha256'].items()
+                if not name.startswith('selected-source/failure-module-diff/')}
+        summary['failure_module_evidence_error'] = dict(type=type(error).__name__, message=str(error))
+        # Preserve rejected files for inspection, but keep them out of the
+        # selected-source/** artifact allowlist. Never rewrite the gate error.
+        rejected = selected if selected.is_symlink() else modules
+        if rejected.exists() or rejected.is_symlink():
+            try:
+                quarantine = out/('rejected-selected-source' if rejected == selected else 'rejected-failure-module-diff')
+                require(not quarantine.exists() and not quarantine.is_symlink(), 'failure evidence quarantine already exists')
+                rejected.rename(quarantine)
+                summary['failure_module_evidence_error']['quarantined_from_upload'] = True
+            except (OSError, ValueError) as quarantine_error:
+                summary['failure_module_evidence_error']['quarantine_error'] = str(quarantine_error)
+
+
 def _json(path):
     require(path.is_file() and not path.is_symlink(), 'missing receipt: '+str(path))
     return json.loads(path.read_text())
@@ -515,6 +600,7 @@ def run_worker(args):
     except (Exception, KeyboardInterrupt) as error:
         summary.update(status='INCOMPLETE_SELECTOR_GATE', error=dict(type=type(error).__name__, message=str(error)))
         summary['diagnostic_log_tail'] = log_tails()
+        collect_failure_module_evidence(out, summary, hashes)
         checkpoint(summary['stage'])
         return 1
 
@@ -534,6 +620,12 @@ def finalize_selector_supervision(out, result):
                    physical_qor_acceptance=False)
     if code or summary['supervisor'].get('forced_shutdown'):
         summary['status'] = 'INCOMPLETE_SELECTOR_GATE'
+        hashes_path = out/'compact/source_input_hashes.json'
+        hashes = _json(hashes_path)
+        collect_failure_module_evidence(out, summary, hashes)
+        temporary_hashes = hashes_path.with_name('source_input_hashes.json.tmp')
+        temporary_hashes.write_text(json.dumps(hashes, sort_keys=True, indent=2)+'\n')
+        temporary_hashes.replace(hashes_path)
     temporary = path.with_name('summary.json.tmp')
     temporary.write_text(json.dumps(summary, sort_keys=True, indent=2)+'\n')
     temporary.replace(path)

@@ -350,6 +350,111 @@ def test_module_preservation_rejects_drift_without_saving_unverified_bytes(tmp_p
     assert not (output/'source/modules').exists()
 
 
+def failure_module_fixture(tmp_path):
+    from gqa_selector_candidate import preserve_failure
+    out = tmp_path/'out'
+    baseline, candidate = out/'host_build/generated/HostBlockTop.sv', out/'candidate_build/generated/HostBlockTop.sv'
+    for path, bit in ((baseline, '0'), (candidate, '1')):
+        path.parent.mkdir(parents=True)
+        path.write_text('module Bf16CausalGqaOwner;\nwire value = '+bit+';\nendmodule\n'
+                        'module mem_8x512;\nwire value = '+bit+';\nendmodule\n')
+    failure = out/'candidate_build/generated_rtl_identity.failure.json'
+    preserve_failure(baseline, candidate, failure.with_name('generated_rtl_identity.json'), 'strict module mismatch')
+    summary = dict(status='INCOMPLETE_SELECTOR_GATE', error={'type':'ValueError','message':'original strict gate failure'},
+                   numerical_acceptance=False)
+    return out, failure, summary, {}
+
+
+def test_pre_verilation_failure_modules_reach_compact_summary_and_hashes(tmp_path):
+    out, receipt, summary, hashes = failure_module_fixture(tmp_path)
+    original_error = dict(summary['error'])
+    S.collect_failure_module_evidence(out, summary, hashes)
+    assert summary['status'] == 'INCOMPLETE_SELECTOR_GATE' and summary['error'] == original_error
+    assert summary['numerical_acceptance'] is False
+    assert summary['generated_rtl_failure'] == json.loads(receipt.read_text())
+    assert summary['failure_module_evidence']['verified'] is True
+    assert summary['failure_module_evidence']['files'] == 4
+    assert hashes['generated_rtl_failure_receipt_sha256'] == S.sha(receipt)
+    assert hashes['selected_source_sha256'] == hashes['failure_module_source_sha256']
+    for name, digest in hashes['failure_module_source_sha256'].items():
+        assert name.startswith('selected-source/failure-module-diff/') and S.sha(out/name) == digest
+
+
+@pytest.mark.parametrize('problem', ['hash', 'unlisted', 'symlink', 'traversal', 'oversized_receipt', 'claims_pass'])
+def test_invalid_failure_modules_are_quarantined_without_replacing_original_error(tmp_path, problem):
+    out, receipt, summary, hashes = failure_module_fixture(tmp_path)
+    report = json.loads(receipt.read_text())
+    first = out/'selected-source'/report['preserved_sources'][0]['path']
+    if problem == 'hash':
+        first.write_bytes(b'x'*first.stat().st_size)
+    elif problem == 'unlisted':
+        (first.parent/'unlisted.sv').write_text('module unlisted;\nendmodule\n')
+    elif problem == 'symlink':
+        first.unlink()
+        first.symlink_to(out/'host_build/generated/HostBlockTop.sv')
+    elif problem == 'traversal':
+        report['preserved_sources'][0]['path'] = '../outside.sv'
+        receipt.write_text(json.dumps(report))
+    elif problem == 'oversized_receipt':
+        receipt.write_bytes(b' '*(2*1024*1024+1))
+    else:
+        report['status'] = 'PASS'
+        receipt.write_text(json.dumps(report))
+    original_error = dict(summary['error'])
+    S.collect_failure_module_evidence(out, summary, hashes)
+    assert summary['status'] == 'INCOMPLETE_SELECTOR_GATE' and summary['error'] == original_error
+    assert summary['failure_module_evidence_error']['quarantined_from_upload'] is True
+    assert not hashes and 'generated_rtl_failure' not in summary
+    assert not (out/'selected-source/failure-module-diff').exists()
+    assert (out/'rejected-failure-module-diff').is_dir()
+
+
+def test_failure_module_cap_includes_already_selected_source_bytes(tmp_path):
+    from concat_inventory import MAX_SOURCE_BYTES
+    out, receipt, summary, hashes = failure_module_fixture(tmp_path)
+    existing = out/'selected-source/source/existing.cpp'
+    existing.parent.mkdir()
+    with existing.open('wb') as stream:
+        stream.truncate(MAX_SOURCE_BYTES)
+    S.collect_failure_module_evidence(out, summary, hashes)
+    assert 'shared source cap' in summary['failure_module_evidence_error']['message']
+    assert not hashes and existing.is_file()
+    assert not (out/'selected-source/failure-module-diff').exists()
+
+
+def test_failure_revalidation_revokes_stale_hash_claims_and_keeps_rejection_reason(tmp_path):
+    out, receipt, summary, hashes = failure_module_fixture(tmp_path)
+    S.collect_failure_module_evidence(out, summary, hashes)
+    entry = next(iter(hashes['failure_module_source_sha256']))
+    (out/entry).write_text('corrupted')
+    S.collect_failure_module_evidence(out, summary, hashes)
+    reason = dict(summary['failure_module_evidence_error'])
+    assert 'failure_module_evidence' not in summary and 'generated_rtl_failure' not in summary
+    assert 'failure_module_source_sha256' not in hashes and not hashes['selected_source_sha256']
+    S.collect_failure_module_evidence(out, summary, hashes)
+    assert summary['failure_module_evidence_error'] == reason
+
+
+def test_missing_optional_failure_evidence_leaves_original_receipt_unchanged(tmp_path):
+    summary, hashes = {'status':'INCOMPLETE_SELECTOR_GATE'}, {'existing':'hash'}
+    S.collect_failure_module_evidence(tmp_path, summary, hashes)
+    assert summary == {'status':'INCOMPLETE_SELECTOR_GATE'} and hashes == {'existing':'hash'}
+
+
+def test_forced_supervisor_collects_precreated_failure_evidence(tmp_path):
+    out, receipt, summary, hashes = failure_module_fixture(tmp_path)
+    compact = out/'compact'
+    compact.mkdir()
+    (compact/'summary.json').write_text(json.dumps(summary))
+    (compact/'source_input_hashes.json').write_text(json.dumps(hashes))
+    assert S.finalize_selector_supervision(out, {'returncode':1, 'forced_shutdown':True}) == 1
+    result = json.loads((compact/'summary.json').read_text())
+    result_hashes = json.loads((compact/'source_input_hashes.json').read_text())
+    assert result['status'] == 'INCOMPLETE_SELECTOR_GATE' and result['error'] == summary['error']
+    assert result['failure_module_evidence']['files'] == 4
+    assert result_hashes['generated_rtl_failure_receipt_sha256'] == S.sha(receipt)
+
+
 def test_supervisor_uses_single_1800_second_process_tree_budget(tmp_path, monkeypatch):
     seen = {}
     def supervise(command, timeout_seconds):

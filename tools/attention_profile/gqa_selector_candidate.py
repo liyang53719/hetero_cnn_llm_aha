@@ -14,6 +14,7 @@ OLD = '''  val incomingRows = VecInit(io.matrix.result.bits.value.map(_.asUInt))
 '''
 NEW = '''  val incomingFloats = GqaMatrixResultSelect(io.matrix.result.bits.value,
     row, Mux(state === resultQk, 0.U(3.W), beat))
+
 '''
 HELPER = '''/** Select exactly 32 FP32 bit patterns without first packing the whole tile.
   * Every row/beat encoding is valid (four/three bits). This is purely a wire
@@ -48,7 +49,11 @@ def transform(raw):
             'candidate requires the exact frozen GQA source')
     text = raw.decode('utf-8')
     require(text.count(OLD) == text.count(ANCHOR) == 1, 'selector source anchor changed')
-    return text.replace(ANCHOR, HELPER + ANCHOR, 1).replace(OLD, NEW, 1).encode('utf-8')
+    # Keep every pre-existing source line at the same line number, including
+    # inferred memories' source-location metadata. The strict raw module gate
+    # still decides whether only the intended owner changed; no normalization.
+    require(len(OLD.splitlines()) == len(NEW.splitlines()), 'replacement moved original source lines')
+    return (text.replace(OLD, NEW, 1) + HELPER).encode('utf-8')
 
 
 def module_hashes(path):
@@ -112,6 +117,64 @@ def module_diff(baseline, candidate):
                 physical_qor_acceptance=False)
 
 
+def preserve_failure(baseline, candidate, receipt, message):
+    """Keep exact failing module bytes, without admitting any changed module."""
+    from concat_inventory import MAX_SOURCE_BYTES
+    baseline, candidate, receipt = map(Path, (baseline, candidate, receipt))
+    destination = receipt.parent.parent/'selected-source/failure-module-diff'
+    require(not destination.parent.exists(), 'fresh failure source destination required')
+    destination.mkdir(parents=True)
+    left, right = module_hashes(baseline), module_hashes(candidate)
+    names = sorted(set(left['modules']) | set(right['modules']))
+    changed = [name for name in names if left['modules'].get(name) != right['modules'].get(name)]
+    result = dict(schema='GQA_SELECTOR_STRICT_MODULE_FAILURE_V1', status='REJECTED',
+        numerical_acceptance=False, normalization_applied=False, error=message,
+        changed_modules=changed, baseline=left, candidate=right,
+        source_limit_bytes=MAX_SOURCE_BYTES, selected_source_bytes=0, saved_modules=[], preserved_sources=[])
+    for variant, path, inventory in (('baseline', baseline, left), ('candidate', candidate, right)):
+        with path.open('rb') as stream:
+            active = None
+            captured = None
+            for line in stream:
+                start = re.match(rb'^module\s+([A-Za-z_][A-Za-z_0-9$]*)\b', line)
+                if start and start[1].decode('ascii') in changed:
+                    active = start[1].decode('ascii')
+                    identity = inventory['modules'][active]
+                    entry = dict(variant=variant, module=active, **identity, preserved=False)
+                    result['saved_modules'].append(entry)
+                    if result['selected_source_bytes'] + identity['bytes'] <= MAX_SOURCE_BYTES:
+                        captured = bytearray()
+                    else:
+                        entry['reason'] = 'source_byte_budget'
+                if active is not None:
+                    if captured is not None:
+                        captured.extend(line)
+                        require(len(captured) <= identity['bytes'], 'failure module byte overflow')
+                    if re.match(rb'^endmodule\b', line):
+                        if captured is not None:
+                            require(len(captured) == identity['bytes'] and
+                                hashlib.sha256(captured).hexdigest() == identity['sha256'],
+                                'failure module identity mismatch')
+                            output = destination/variant/(active+'.sv')
+                            output.parent.mkdir(parents=True, exist_ok=True)
+                            output.write_bytes(captured)
+                            result['selected_source_bytes'] += len(captured)
+                            entry.update(preserved=True, saved_as=str(output.relative_to(destination.parent)))
+                            result['preserved_sources'].append(dict(path=entry['saved_as'],
+                                bytes=identity['bytes'], sha256=identity['sha256']))
+                        active, captured = None, None
+        with path.open('rb') as stream:
+            result[variant+'_rtl_sha256'] = hashlib.file_digest(stream, 'sha256').hexdigest()
+    failure = receipt.with_suffix('.failure.json')
+    failure.write_text(json.dumps(result, indent=2)+'\n')
+    return result
+
+
 if __name__ == '__main__':
     baseline, candidate, receipt = map(Path, sys.argv[1:])
-    receipt.write_text(json.dumps(module_diff(baseline, candidate), indent=2) + '\n')
+    try:
+        result = module_diff(baseline, candidate)
+    except ValueError as error:
+        preserve_failure(baseline, candidate, receipt, str(error))
+        raise
+    receipt.write_text(json.dumps(result, indent=2) + '\n')

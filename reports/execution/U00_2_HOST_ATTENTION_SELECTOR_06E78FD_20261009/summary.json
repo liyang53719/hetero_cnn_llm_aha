@@ -179,7 +179,7 @@
       "scope": "synthetic expression codegen only; actual Scala candidate not yet elaborated"
     }
   },
-  "next_gate_status": "PENDING_ACTUAL_CHISEL_AND_OWNER_RTL",
+  "next_gate_status": "PENDING_SOURCE_LINE_PRESERVING_CANDIDATE_RTL_AND_STRICT_MODULE_RECHECK",
   "next_gate_scope": [
     "all 16x8 row/beat encodings, raw bit patterns and valid/ready",
     "all six existing GQA owner tests, actual shared scalar and external software Matrix",
@@ -190,5 +190,78 @@
   "M128": "OPEN",
   "native_precision_gate": "OPEN_UNCHANGED",
   "U00.2": "ONGOING",
-  "U01": "TODO"
+  "U01": "TODO",
+  "first_candidate_gate": {
+    "status": "VERIFIED_FAILED_GATE_AND_SEVEN_PASSED_UNIT_TESTS",
+    "source_checks": [
+      {
+        "map": "source_sha256",
+        "commit": "6959810545203d5f9508075b311dba52f1bee0c9",
+        "sources": 619,
+        "match": true
+      },
+      {
+        "map": "diagnostic_source_sha256",
+        "commit": "8e2d89524a6801cc0f3f233774a0a0954a3dc8d4",
+        "sources": 12210,
+        "match": true
+      }
+    ],
+    "artifact_id": 11647531439,
+    "archive_sha256": "e2b1e1b9a8389df0202869cee40684ce4a66c88842a1bf3d71fa388cca7a0bdd",
+    "summary_sha256": "14ad68a6fd3d1cd728e4eb6552c30a7534ea0bb9db8aefa5f582e42bf618751f",
+    "hashes_sha256": "36192adf5d02e368f5fbe96c7f6e0c7753aeff4c04c31271053e96706e1b232c",
+    "rtl_unit_tests": {
+      "heteronpu.continuous.Bf16CausalGqaOwnerSpec": {
+        "cases": [
+          "Bf16CausalGqaOwner should preserve actual cold and carried append bytes through causal GQA with head mapping",
+          "Bf16CausalGqaOwner should compute a three-row tail and retain failed final physical stores without publication",
+          "Bf16CausalGqaOwner should drain Matrix faults, reject nonfinite inputs and unsupported exp, and lock until joint reset",
+          "Bf16CausalGqaOwner should cross the sixteen-query and thirty-two-key boundaries using an actual carried append prefix",
+          "Bf16CausalGqaOwner should reject geometry, fully masked descriptors, whole-allocation aliases, and address overflow before access",
+          "Bf16CausalGqaOwner should address a synthetic M128 source near the aperture boundary and reset a pending cache read"
+        ],
+        "passed": 6,
+        "report_sha256": "42a99a66c52564e14d3e98ad52fb5bc17c0eb741a2aa7d17d849f4801a645e23",
+        "skipped": 0,
+        "tests": 6
+      },
+      "heteronpu.continuous.GqaMatrixResultSelectSpec": {
+        "cases": [
+          "GqaMatrixResultSelect should preserve every raw lane and QK/PV selection independently of valid and ready"
+        ],
+        "passed": 1,
+        "report_sha256": "c3dbc0133e2505914ba79cbe240dae2764f20683ae9dce9b1fe48eb01ec5bef1",
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    "stage": "candidate_full_top_compile_and_hier_verilation_only",
+    "elapsed_seconds": 622.7784800090001,
+    "unexpected_changed_modules": [
+      "Bf16CausalGqaOwner",
+      "mem_8x512",
+      "qk_16x512",
+      "scores_256x32"
+    ],
+    "failure_module_bytes_preserved": false,
+    "cause": "UNRESOLVED: source-line shift is a hypothesis, failing module bytes unavailable",
+    "production_release_allowed": false,
+    "run_id": 37996344724,
+    "job_id": 114043294398,
+    "diagnostic_source_commit": "8e2d89524a6801cc0f3f233774a0a0954a3dc8d4",
+    "ci_conclusion": "failure",
+    "artifact_bytes": 588582,
+    "verification_sha256": "4ace5ecdc95e57781edf6199cd7f635da32d3f5e13fcac41bf959ab13037ce86"
+  },
+  "source_line_preserving_fix": {
+    "candidate_sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "old_source_lines_preserved": true,
+    "helper_placed_after_existing_owner": true,
+    "strict_raw_module_gate_unchanged": true,
+    "annotation_only_cause_proven": false,
+    "failure_module_source_preservation_cap_bytes": 12582912,
+    "budget_seconds": 1800,
+    "production_owner_modified": false
+  }
 }

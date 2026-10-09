@@ -1,0 +1,312 @@
+{
+  "observed_at_utc": "2026-10-09T13:31:45.118Z",
+  "run": {
+    "id": 37900097687,
+    "name": "qwen35-production-Host-BF16-GDN-Block",
+    "head_sha": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+    "path": ".github/workflows/host-bf16-gdn-block.yml",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "created_at": "2026-10-09T07:37:34Z",
+    "updated_at": "2026-10-09T13:27:09Z",
+    "run_started_at": "2026-10-09T07:37:34Z",
+    "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687"
+  },
+  "commit_tree": "d2c55ad72011b46cb05da106584a28b06940b22a",
+  "jobs": [
+    {
+      "id": 113720378411,
+      "run_id": 37900097687,
+      "name": "build",
+      "head_sha": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-09T07:37:35Z",
+      "started_at": "2026-10-09T07:38:30Z",
+      "completed_at": "2026-10-09T08:12:41Z",
+      "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/job/113720378411",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-09T07:38:31Z",
+          "completed_at": "2026-10-09T07:38:36Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-09T07:38:36Z",
+          "completed_at": "2026-10-09T07:38:40Z"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-09T07:38:40Z",
+          "completed_at": "2026-10-09T07:38:41Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-09T07:38:41Z",
+          "completed_at": "2026-10-09T07:38:41Z"
+        },
+        {
+          "name": "Run sbt/setup-sbt@v1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-09T07:38:41Z",
+          "completed_at": "2026-10-09T07:38:43Z"
+        },
+        {
+          "name": "Prepare pinned build tools and original public iDMA sources",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-09T07:38:43Z",
+          "completed_at": "2026-10-09T07:39:16Z"
+        },
+        {
+          "name": "Source, v1/core/block ABI, fresh authority and transfer-admission regression",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-09T07:39:16Z",
+          "completed_at": "2026-10-09T07:39:40Z"
+        },
+        {
+          "name": "Small scalar, v1 Conv and v1/core/block Host frontend control gates",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-09T07:39:40Z",
+          "completed_at": "2026-10-09T07:41:23Z"
+        },
+        {
+          "name": "Build block once and seal only ELF, RTL and source/tool identities",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-09T07:41:23Z",
+          "completed_at": "2026-10-09T08:12:36Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-09T08:12:36Z",
+          "completed_at": "2026-10-09T08:12:37Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-09T08:12:37Z",
+          "completed_at": "2026-10-09T08:12:38Z"
+        },
+        {
+          "name": "Post Run sbt/setup-sbt@v1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-09T08:12:38Z",
+          "completed_at": "2026-10-09T08:12:39Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-09T08:12:39Z",
+          "completed_at": "2026-10-09T08:12:40Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-09T08:12:40Z",
+          "completed_at": "2026-10-09T08:12:40Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-09T08:12:40Z",
+          "completed_at": "2026-10-09T08:12:40Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-09T08:12:40Z",
+          "completed_at": "2026-10-09T08:12:40Z"
+        }
+      ]
+    },
+    {
+      "id": 113731529569,
+      "run_id": 37900097687,
+      "name": "block-canonical-native-pass",
+      "head_sha": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-09T08:12:42Z",
+      "started_at": "2026-10-09T08:12:44Z",
+      "completed_at": "2026-10-09T12:47:59Z",
+      "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/job/113731529569",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-09T08:12:45Z",
+          "completed_at": "2026-10-09T08:12:46Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-09T08:12:46Z",
+          "completed_at": "2026-10-09T08:12:52Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-09T08:12:52Z",
+          "completed_at": "2026-10-09T08:12:52Z"
+        },
+        {
+          "name": "Install the same fixed official source runtime as the existing Host gate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-09T08:12:52Z",
+          "completed_at": "2026-10-09T08:13:49Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-09T08:13:49Z",
+          "completed_at": "2026-10-09T08:13:51Z"
+        },
+        {
+          "name": "Reacquire only pinned layer0 and prefix payloads",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-09T08:13:51Z",
+          "completed_at": "2026-10-09T08:14:12Z"
+        },
+        {
+          "name": "Fresh live full-block reference, cold token19 then carried token92 on one actual DUT",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-09T08:14:12Z",
+          "completed_at": "2026-10-09T12:47:56Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-09T12:47:56Z",
+          "completed_at": "2026-10-09T12:47:57Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-09T12:47:57Z",
+          "completed_at": "2026-10-09T12:47:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-09T12:47:57Z",
+          "completed_at": "2026-10-09T12:47:57Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-09T12:47:57Z",
+          "completed_at": "2026-10-09T12:47:57Z"
+        }
+      ]
+    },
+    {
+      "id": 113826113688,
+      "run_id": 37900097687,
+      "name": "block-acceptance",
+      "head_sha": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-09T12:47:59Z",
+      "started_at": "2026-10-09T13:27:05Z",
+      "completed_at": "2026-10-09T13:27:09Z",
+      "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/job/113826113688",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-09T13:27:06Z",
+          "completed_at": "2026-10-09T13:27:06Z"
+        },
+        {
+          "name": "Require both exact-source full-block jobs to succeed",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-09T13:27:06Z",
+          "completed_at": "2026-10-09T13:27:06Z"
+        },
+        {
+          "name": "Record canonical and native full-block acceptance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-09T13:27:06Z",
+          "completed_at": "2026-10-09T13:27:06Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-09T13:27:06Z",
+          "completed_at": "2026-10-09T13:27:06Z"
+        }
+      ]
+    }
+  ]
+}

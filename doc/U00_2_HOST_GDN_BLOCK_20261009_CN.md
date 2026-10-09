@@ -1,12 +1,14 @@
 # Qwen3.5-0.8B 第 0 层完整 GDN block 的生产接线
 
-本次 policy v3 从真实 raw hidden 开始接通整层运算，生产数值验收仍为 PENDING。源码编译、独立 owner 的小型真实 RTL 和前端控制检查各有自己的证据；只有同一生产 HostBlockTop 的完整 cold→carried 终态与原官方精度门禁同时通过，才可称本范围完整 block 通过。既有 v1、v2 和旧 Qwen2 作业继续绑定其原始提交，不以本次源码重新解释旧证据。
+精确提交 `d7ce9bd74a929037e459b3300134bd9f1722916e` 已完成第 0 层完整 GDN 的两次连续 M1 生产 RTL 数值验收：cold token19→carried token92，在同一 HostBlockTop 内从 raw hidden 经整层到最终残差与双状态 Fence；固定算术逐位和原官方门限共同通过。独立显式 workflow acceptance 和整个原 CI run 也已成功，见下方本次 CI 记录。M128、完整 block 的 fault/reset/restore、后继层及 35B 尚未完成。
+
+本文保留最初接线、局部门禁和失败记录；其中历史 PENDING 仅表示当时证据边界，后续结果以精确提交和 CI 记录区分。既有 v1、v2、core-only 和旧 Qwen2 作业继续绑定其原始提交，不以本次源码重新解释旧证据。
 
 ## 生产递推写回故障与修复边界
 
 2026-10-09 的精确提交 `904dccf2830d8caa50501041ca4895995ac41ad8` 实际 core CI 在 cold 的 pc5（第 6 条命令）返回 Memory=3。最后成功的物理 ACK 对应 head0、row127、column16 的 FP32 state；随后输出高半 32B mask `ffffffff00000000` 被真实 retained iDMA 的低位连续 prefix 契约拒绝。原独立 owner 测试直接接受该 mask，遗漏了生产接口限制。原失败日志、输入与源码身份保留，不能改写为数值通过。
 
-本次修复把相邻两组 16 个 BF16 输出保留并合并为完整 64B，只有两组 FP32 state 全部 ACK 后才发送输出；原 FP32 算术、状态精度、顺序及官方门限不变。合法 valueDim 必须含完整两 tile，奇数 tile 几何仍拒绝。独立 owner 与生产日志审计同时限制完整 mask，并检查最后一对、第二 tile 错误、配对中 reset 和最终 ACK 屏障。修复后独立 owner 的 3 项协议/尾 pair 测试和两实际 head×128² cold→carried 均通过，每次 131584B 全 ACK，固定算术全位一致。真实 pinned iDMA 在 streaming 配置和 shared hub 两种结构中分别 31/31 通过，明确复现旧 high32 零 AXI 拒绝、完整 pair 0/31/63、最终 B 延迟 40 周期及错误屏障；这新增的是普通 MemoryRequest store 契约验证。生产 adapter 没有改变。新生产整链 CI 终态前仍为 PENDING。
+本次修复把相邻两组 16 个 BF16 输出保留并合并为完整 64B，只有两组 FP32 state 全部 ACK 后才发送输出；原 FP32 算术、状态精度、顺序及官方门限不变。合法 valueDim 必须含完整两 tile，奇数 tile 几何仍拒绝。独立 owner 与生产日志审计同时限制完整 mask，并检查最后一对、第二 tile 错误、配对中 reset 和最终 ACK 屏障。修复后独立 owner 的 3 项协议/尾 pair 测试和两实际 head×128² cold→carried 均通过，每次 131584B 全 ACK，固定算术全位一致。真实 pinned iDMA 在 streaming 配置和 shared hub 两种结构中分别 31/31 通过，明确复现旧 high32 零 AXI 拒绝、完整 pair 0/31/63、最终 B 延迟 40 周期及错误屏障；这新增的是普通 MemoryRequest store 契约验证。生产 adapter 没有改变。该修复发布时，新生产整链 CI 尚为 PENDING；下方新增 d7ce 完整 block 数值结果不改写原失败。
 
 ## 实际命令链
 
@@ -39,10 +41,32 @@ input/post RMSNorm 按原模型的零中心 gamma 规则计算 FP32 `1+weight`�
 
 硬件必须逐位等于冻结算术及状态参考，同时保留 `spec/numerical_contract.md` 的原门限：BF16 整 block 最终输出 max_abs≤0.05、mean_abs≤0.01，各隐藏运算 max_abs≤0.03125、mean_abs≤0.005。原 FP32 state 比较保持 atol=rtol=1e-4。既有 Dense/Conv 及同输入 Conv/SiLU≤1 BF16 ULP 门禁继续执行。官方门禁失败时保留固定算术的真实结果和失败数值，但总体验收失败，不用 canonical 相等覆盖 native FAIL，也不修改门限。
 
-本次两 token 的完整 CPU 参考已在 153.4 秒完成，138 片所有逐 K 位/flag 比较一致，39 份参考源与工具身份前后保持。cold 最终输出 max_abs=0.0001220703125、mean_abs=1.4901161193847656e-7，carried 最终输出零位差；FP32 state 的最大绝对误差分别为 1.7881393432617188e-7 和 1.1920928955078125e-7，原逐元素阈值下均无失败。全部 BF16 隐藏节点通过原 operator 门限，最大误差来自 carried QKV 的 0.0078125；同输入 Conv/SiLU 均为 0 数值 ULP。这仅说明本次真实两 token 的完整参考通过原门限，尚无生产 RTL 输出，不能关闭历史其他范围的 native 失败。
+最初接线阶段，两 token 的完整 CPU 参考在 153.4 秒完成，138 片所有逐 K 位/flag 比较一致，39 份参考源与工具身份前后保持。cold 最终输出 max_abs=0.0001220703125、mean_abs=1.4901161193847656e-7，carried 最终输出零位差；FP32 state 的最大绝对误差分别为 1.7881393432617188e-7 和 1.1920928955078125e-7，原逐元素阈值下均无失败。全部 BF16 隐藏节点通过原 operator 门限，最大误差来自 carried QKV 的 0.0078125；同输入 Conv/SiLU 均为 0 数值 ULP。这仅说明本次真实两 token 的完整参考通过原门限，尚无生产 RTL 输出，不能关闭历史其他范围的 native 失败。
 
 预计超过十分钟的构建和生产数值均交 GitHub 持久 CI：一次构建交接精确哈希的 ELF、RTL 与源码/工具回执，后续一个连续进程完成两 token 的 34 条命令。物理测试内存只以真实地址索引，每条命令检查已完成输出和所有未写字节；独立审计逐 strobe/ACK、所有完成快照、最终整片 DDR 及两域 carried 读取。Git 和紧凑数值工件不保存权重、NPZ 或原始 tensor；构建交接仅包含运行所必需的程序、RTL 和身份回执。
 
 本地主源码编译通过后，完整 Host 的有界 RTL emission 在 56 秒收到 SIGKILL，exit -9，未生成 RTL。外部资源 guard 未触发，采样最低 MemAvailable 约 1.29GiB；没有足够证据指定 OOM 或其他原因。该失败及完整源/资源回执保留，未作本地重试，后续完整生成和构建交持久 CI。它不是数值失败，也不能算生成成功。
 
-本次尚未完成生产整链数值终态、完整 block 的实际 fault/reset/checkpoint restore、M128、后继层及 35B。控制错误测试和独立 owner 的 reset 不能替代完整生产链恢复。U00.2 保持 ongoing，U01 为 to do，C02.2 原 native 门禁保持 OPEN；C03.2/C04.2/C05 只增加本次有界接线证据。
+最初接线阶段尚未完成生产整链数值终态。当前仍未完成完整 block 的实际 fault/reset/checkpoint restore、M128、后继层及 35B。控制错误测试和独立 owner 的 reset 不能替代完整生产链恢复。U00.2 保持 ongoing，U01 为 to do，C02.2 原 native 门禁保持 OPEN；C03.2/C04.2/C05 只增加本次有界接线证据。
+
+## d7ce 的完整生产数值 CI：两次连续 M1
+
+[原 run 37900097687](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687) 的 [numerical job 113731529569](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/job/113731529569) 于 2026-10-09 12:47:59 UTC 成功。此结果只绑定 `d7ce9bd74a929037e459b3300134bd9f1722916e`；后续 main 的新增 Attention 接线不能继承为同一数值证明。显式 acceptance job 113826113688 于 13:27:09 UTC 完成，整个原 run 也为 SUCCESS；它检查同一精确提交的 build 与数值 job 均成功。数值终态与 workflow 总验收分别记录。
+
+两次 launch 各 17 条命令、216 条描述符；每次全 DDR 检查 46,887,680B、有效写 ACK 1,194,048B（18,657 个完整 64B beat）。同一 DUT 中间没有 reset 或重新装载 DDR。第二 token 的 Conv 从首 token 的真实已写 history 读取 768 beats，递推从真实 FP32 state 读取 16,384 beats；两次最终残差 ACK 和 Fence 后 generation 依次为 0→1→2。中间区初始化为哨兵，expected/native 数组不属于可预装区，只有真实 strobed DUT 写及成功 ACK 改变物理内存。
+
+所有实际中间结果、history、FP32 state 和最终输出均与冻结 canonical 位精确。原官方层使用原始 14 份混合 BF16/FP32 参数和自己的独立 cold/carried cache，DUT 状态不注入 native 参考；生产 ABI 将合并 A/B 对应为 13 组参数地址绑定。native 门限保持不变：
+
+| 项目 | 原门限 | cold token19 | carried token92 |
+|---|---|---|---|
+| BF16 隐藏运算 | max_abs≤0.03125、mean_abs≤0.005 | 全部通过 | 全部通过 |
+| 最终 residual2 | max_abs≤0.05、mean_abs≤0.01 | 对官方零位差 | 对官方零位差 |
+| FP32 state | 每元素误差≤1e-4+1e-4×abs(native) | 零超限；max_abs=1.7881393433e-7 | 零超限；max_abs=1.9572617020e-6 |
+| FP32 state 原始位差 | 独立列出，不替代数值门限 | 132002 | 161534 |
+| 同 canonical 输入 Conv/SiLU | ≤1 BF16 数值 ULP | 均为 0 ULP | 均为 0 ULP |
+
+本次 native FP32 state 不能称位精确；正负零与原始位差也不能用数值 ULP 隐去。packed FP32 input preparation 的独立官方 stage 门限仍未分配，保留诊断值：两次 max_abs 为 9.5367431641e-7 和 3.3182092011e-5。它的 canonical 位精确及整层原 native 门限通过不能自动设定新的 stage 门限。第 3 层历史 full-native FAIL 保持原结论。
+
+紧凑证据在 [独立 CI 摘要](../reports/execution/U00_2_HOST_GDN_BLOCK_CI_D7CE_20261009/result.json)。[原工件 11617056788](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/artifacts/11617056788) 的 ZIP SHA256 为 `e07741127d89dbe44d6b2cc5e4d22b904cfa457ef05b94caa848dd1b05a61e8c`。独立复核完成 359 项检查，逐项核对 491 个精确提交源码哈希和 104 项输入/比较器/ABI 哈希，核对已验证的 ELF、RTL、构建包及两次输出身份；原 validator 的已导出字段和原门限复核通过。未导出的 layout 不补造。原始 DDR、逐 ACK 日志和 tensor 数值只在 CI 内全量验证，紧凑工件不含这些原始数据，未在本地重新数值回放。
+
+整个 case 为 16,422.8152456 秒，包含参考、准入和审计；fresh reference 为 240.234389595 秒。未导出独立 DUT 耗时或实际完成 cycle，因此不能相减后当作仿真速度，也不能直接外推 M128 预算。当前结果是两次 M1，不是 M128 prefill；carried 多 token 的 chunk 语义和真实批次实现仍需接入与测量。完整 block 的 fault/reset/checkpoint restore、全网、35B、DC/PPA 和跨主机位精确复现继续未建立。

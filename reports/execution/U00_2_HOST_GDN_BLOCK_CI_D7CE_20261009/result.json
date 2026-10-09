@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "status": "PASS_LAYER0_GDN_TWO_M1_NUMERICAL",
+  "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "recorded_at_utc": "2026-10-09T13:32:25.983047+00:00",
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687",
+  "numerical_job": {
+    "id": 113731529569,
+    "conclusion": "success",
+    "completed_at_utc": "2026-10-09T12:47:59Z"
+  },
+  "workflow_acceptance": {
+    "job_id": 113826113688,
+    "status": "completed",
+    "conclusion": "success",
+    "started_at_utc": "2026-10-09T13:27:05Z",
+    "completed_at_utc": "2026-10-09T13:27:09Z",
+    "workflow_conclusion": "success",
+    "receipt": "final_acceptance.verified.json"
+  },
+  "scope": "Qwen3.5-0.8B layer0 full GDN block; cold token19 then carried token92; two uninterrupted M1 launches on the same production HostBlockTop",
+  "production_numerical_pass": true,
+  "canonical_bit_exact": true,
+  "original_native_full_block_gate_pass": true,
+  "native_final_output_bit_exact": [
+    true,
+    true
+  ],
+  "native_fp32_state_bit_exact": [
+    false,
+    false
+  ],
+  "native_fp32_state_bit_mismatches": [
+    132002,
+    161534
+  ],
+  "native_fp32_state_atol": 0.0001,
+  "native_fp32_state_rtol": 0.0001,
+  "native_fp32_state_tolerance_mismatches": [
+    0,
+    0
+  ],
+  "native_fp32_state_max_abs_error": [
+    1.7881393432617188e-07,
+    1.9572617020457983e-06
+  ],
+  "native_bf16_operator_thresholds": {
+    "max_abs": 0.03125,
+    "mean_abs": 0.005
+  },
+  "native_bf16_final_output_thresholds": {
+    "max_abs": 0.05,
+    "mean_abs": 0.01
+  },
+  "thresholds_changed": false,
+  "native_prep_stage_acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+  "transaction_proof": {
+    "launches": 2,
+    "commands_per_launch": 17,
+    "descriptor_records_per_launch_source_validator": 216,
+    "generations": [
+      0,
+      1,
+      2
+    ],
+    "same_dut": true,
+    "reset_between_launches": false,
+    "canonical_bit_mismatches": [
+      0,
+      0
+    ],
+    "whole_ddr_bytes_checked_per_launch": 46887680,
+    "write_ack_bytes_per_launch": 1194048,
+    "write_beats_per_launch": 18657,
+    "write_ack_bytes_total": 2388096,
+    "carried_history_read_beats_from_cold_output": 768,
+    "carried_fp32_state_read_beats_from_cold_output": 16384,
+    "carried_reads_after_cold_fence": true,
+    "intermediate_output_source": "Only real DUT strobed write data committed at successful AXI ACK; sentinel initial DDR and whitelist exclude expected/native buffers",
+    "physical_replay_evidence_level": "Performed by source-bound CI Python audit; only compact receipts retained locally"
+  },
+  "identities": {
+    "binary_sha256": "ad298a209207f0044cd0e8226334727bd19c430083a42f8cf22afd4b15b43987",
+    "rtl_sha256": "07879f21dfd6bcb7a5252ef3e58944530d50194a04b2fce63efae4a823c324fa",
+    "package_sha256": "d6920f083564146f889d9760fed2e6d449c7a5bd53533b92af1d0e09c8c681a9",
+    "build_ready_sha256": "b377a64e8d275dcf758a0c82997c9f31819f79ab8b4eb9cc8f718462b8679306",
+    "fixture_manifest_sha256": "fbdaccdba3af7033ebd8decbdafae0629f47d8c5e68c405db7c7870e5234983b",
+    "actual_log_sha256": "b67542320d5eb81a90295c70e1d0391a7a7ac324c610448b80e9d7b393741674",
+    "source_payload_manifest_sha256": {
+      "qwen35_layer0_payload": "973841becbaeabb83756abeeda126e0a7dcdeeb9bd9e45c0ec16d57272862146",
+      "qwen35_prefix_payload": "a65f5966852428d27c737f3c27b16045c1a70b9f37d3637fd9bd9ea556dfafb4"
+    },
+    "output_sha256": {
+      "0": "aa1a06d633697805c46d91acdc7234d3982116737b00b94ce3e142342b5a78e4",
+      "1": "a9b8def295f79443998567c67904ecc59c682c22670abb19762e6cf42ab758da"
+    }
+  },
+  "independent_audit": {
+    "checks_passed": 359,
+    "source_hashes_verified_at_immutable_commit": 491,
+    "fixture_comparator_abi_hashes_verified": 104,
+    "raw_numeric_replay_performed_in_ci": true,
+    "raw_numeric_replay_performed_locally": false,
+    "frozen_validator_exported_fields_rechecked": true,
+    "unexported_layout_fields_not_recreated": true
+  },
+  "case_elapsed_seconds": 16422.8152456,
+  "separate_dut_elapsed_seconds": null,
+  "actual_command_completion_cycles": null,
+  "not_established": [
+    "fault injection",
+    "reset recovery",
+    "checkpoint restore",
+    "M128",
+    "full network",
+    "timing signoff or DC QoR",
+    "cross-host byte equivalence",
+    "full checkpoint LFS integrity",
+    "historical layer3 native full-block acceptance"
+  ],
+  "historical_evidence_preserved": "reports/execution/U00_2_HOST_GDN_BLOCK_20261009/result.json",
+  "other_scope_status": "Historical layer3 native FAIL and core-only timeout remain unchanged; no proof at later main implied",
+  "artifact_sha256": "e07741127d89dbe44d6b2cc5e4d22b904cfa457ef05b94caa848dd1b05a61e8c",
+  "files_sha256": {
+    "artifact_metadata.json": "226061a11393ff473a656530ea17eca2fa0e3e85bc3c87393f15fbe7e4c4dcc4",
+    "final_acceptance.verified.json": "a5d29cfc0efcb198921a1ff335c4b13b45d2008c1a5bd6b5545e8de058034ad3",
+    "final_workflow_metadata.json": "7cf60c022653ff7328a3cf9d82c4519c5878e593642ad8a88e03ed6a21e8f887",
+    "independent_case_verification.json": "0c281a8e055d2c3800332d53521a7d899ee335b3164dc6a4b53ab886353111c2",
+    "source_input_hashes.json": "2d62622106eb941f9892c6ab8bb88ee83ac0e06d3891452f7fe5cc6c410a8a6e",
+    "summary.json": "1c9e66b1adc83e74f88239314149132ef3d4cf98dce6731870b7732d15c4b41a"
+  }
+}

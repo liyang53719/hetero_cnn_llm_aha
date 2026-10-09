@@ -1,0 +1,2286 @@
+{
+  "actual_ack_history_state_carry": true,
+  "actual_dut_identity_verified": true,
+  "actual_useful_dense_macs": 43057152,
+  "artifact_upload_allowlist": [
+    "compact/source_input_hashes.json",
+    "compact/summary.json"
+  ],
+  "build_profile": "block",
+  "canonical_block_pass": true,
+  "canonical_core_pass": true,
+  "case_verified": true,
+  "cross_host_byte_equivalence_claimed": false,
+  "elapsed_seconds": 16422.8152456,
+  "execution_scope": "FULL_LAYER0_GDN_BLOCK_RAW_HIDDEN_TO_RESIDUAL2_AND_BOTH_STATES",
+  "fault_restore_supported": false,
+  "ffn_dut": true,
+  "fresh_reference": {
+    "actual_useful_dense_macs": 43057152,
+    "canonical_acceptance": "EXACT_BITS_EVERY_STAGE_AND_BOTH_STATES",
+    "commands_per_launch": 17,
+    "fault_restore_supported": false,
+    "ffn_dut": true,
+    "frozen_operator_metrics": [
+      {
+        "comparisons": {
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 32,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "conv_same_canonical_input": {
+            "bit_mismatches": 0,
+            "elements": 6144,
+            "max_bf16_ulp": 0,
+            "numeric_mismatches": 0,
+            "pass_": true,
+            "signed_zero_numeric_equal": true,
+            "threshold_bf16_ulp": 1
+          },
+          "end_to_end_conv": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 1.1920928955078125e-07,
+            "mean_abs": 2.0615213240186374e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "end_to_end_silu": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 1.0307606620093187e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "qkv": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 0.0001220703125,
+            "mean_abs": 1.9907020032405853e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "silu_same_canonical_input": {
+            "bit_mismatches": 0,
+            "elements": 6144,
+            "max_bf16_ulp": 0,
+            "numeric_mismatches": 0,
+            "pass_": true,
+            "signed_zero_numeric_equal": true,
+            "threshold_bf16_ulp": 1
+          },
+          "z": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 6.103515625e-05,
+            "mean_abs": 2.9802322387695312e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          }
+        },
+        "contract": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+        "passed": true,
+        "token": 0
+      },
+      {
+        "comparisons": {
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 32,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "conv_same_canonical_input": {
+            "bit_mismatches": 0,
+            "elements": 6144,
+            "max_bf16_ulp": 0,
+            "numeric_mismatches": 0,
+            "pass_": true,
+            "signed_zero_numeric_equal": true,
+            "threshold_bf16_ulp": 1
+          },
+          "end_to_end_conv": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.0009765625,
+            "mean_abs": 1.6453365484873453e-07,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "end_to_end_silu": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.00048828125,
+            "mean_abs": 8.226682742436726e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "qkv": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.0078125,
+            "mean_abs": 1.3907750447591145e-06,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "silu_same_canonical_input": {
+            "bit_mismatches": 0,
+            "elements": 6144,
+            "max_bf16_ulp": 0,
+            "numeric_mismatches": 0,
+            "pass_": true,
+            "signed_zero_numeric_equal": true,
+            "threshold_bf16_ulp": 1
+          },
+          "z": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          }
+        },
+        "contract": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+        "passed": true,
+        "token": 1
+      }
+    ],
+    "full_block_supported": true,
+    "generations": [
+      0,
+      1,
+      2
+    ],
+    "head_width": 128,
+    "heads": 16,
+    "input_boundary": "original real embedding rows19/92; all layer0 operators execute on DUT",
+    "input_norm_dut": true,
+    "launches": 2,
+    "max_rss_kib": 591856,
+    "native_core_gate_pass": null,
+    "native_full_block_gate_pass": true,
+    "native_full_block_metrics": [
+      {
+        "checks": {
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 32,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "conv": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 1.0307606620093187e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "down": {
+            "bit_mismatches": 1,
+            "elements": 1024,
+            "max_abs": 1.52587890625e-05,
+            "mean_abs": 1.4901161193847656e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "gate": {
+            "bit_mismatches": 0,
+            "elements": 3584,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "history": {
+            "bit_mismatches": 2,
+            "elements": 24576,
+            "max_abs": 0.0001220703125,
+            "mean_abs": 4.976755008101463e-09,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "input_norm": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "norm": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 2.9103830456733704e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "o": {
+            "bit_mismatches": 1,
+            "elements": 1024,
+            "max_abs": 2.7939677238464355e-09,
+            "mean_abs": 2.7284841053187847e-12,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "post_norm": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "qkv": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 0.0001220703125,
+            "mean_abs": 1.9907020032405853e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "recurrent": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "residual1": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "residual2": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.05,
+              "mean_abs": 0.01
+            }
+          },
+          "silu_mul": {
+            "bit_mismatches": 2,
+            "elements": 3584,
+            "max_abs": 4.76837158203125e-07,
+            "mean_abs": 1.9956912313188824e-10,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "state": {
+            "atol": 0.0001,
+            "elements": 262144,
+            "max_abs_error": 1.7881393432617188e-07,
+            "max_tolerance_ratio": 0.0009032398581443737,
+            "mismatches": 0,
+            "pass": true,
+            "rmse": 6.018317639481455e-10,
+            "rtol": 0.0001
+          },
+          "up": {
+            "bit_mismatches": 3,
+            "elements": 3584,
+            "max_abs": 3.0517578125e-05,
+            "mean_abs": 1.0111502238682339e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "z": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 6.103515625e-05,
+            "mean_abs": 2.9802322387695312e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          }
+        },
+        "passed": true,
+        "threshold_sources": [
+          "spec/numerical_contract.md",
+          "src/heteronpu/qwen35_numpy_reference.py",
+          "scripts/prepare_gdn_recurrent_fixture.py"
+        ],
+        "token": 0
+      },
+      {
+        "checks": {
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 32,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "conv": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.00048828125,
+            "mean_abs": 8.226682742436726e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "down": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "gate": {
+            "bit_mismatches": 1,
+            "elements": 3584,
+            "max_abs": 0.00390625,
+            "mean_abs": 1.0899135044642857e-06,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "history": {
+            "bit_mismatches": 5,
+            "elements": 24576,
+            "max_abs": 0.0078125,
+            "mean_abs": 3.526705161978801e-07,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "input_norm": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "norm": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 1.9073486328125e-06,
+            "mean_abs": 9.313225746154785e-10,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "o": {
+            "bit_mismatches": 1,
+            "elements": 1024,
+            "max_abs": 1.9073486328125e-06,
+            "mean_abs": 1.862645149230957e-09,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "post_norm": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "qkv": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.0078125,
+            "mean_abs": 1.3907750447591145e-06,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "recurrent": {
+            "bit_mismatches": 2,
+            "elements": 2048,
+            "max_abs": 9.5367431640625e-07,
+            "mean_abs": 4.802132025361061e-10,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "residual1": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "residual2": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.05,
+              "mean_abs": 0.01
+            }
+          },
+          "silu_mul": {
+            "bit_mismatches": 1,
+            "elements": 3584,
+            "max_abs": 1.4901161193847656e-08,
+            "mean_abs": 4.157690065247672e-12,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "state": {
+            "atol": 0.0001,
+            "elements": 262144,
+            "max_abs_error": 1.9572617020457983e-06,
+            "max_tolerance_ratio": 0.01956401859386669,
+            "mismatches": 0,
+            "pass": true,
+            "rmse": 6.929818969509121e-09,
+            "rtol": 0.0001
+          },
+          "up": {
+            "bit_mismatches": 1,
+            "elements": 3584,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 1.6630760260990687e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "z": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          }
+        },
+        "passed": true,
+        "threshold_sources": [
+          "spec/numerical_contract.md",
+          "src/heteronpu/qwen35_numpy_reference.py",
+          "scripts/prepare_gdn_recurrent_fixture.py"
+        ],
+        "token": 1
+      }
+    ],
+    "native_full_block_status": "PASS",
+    "native_gate_threshold_sources": [
+      "spec/numerical_contract.md",
+      "src/heteronpu/qwen35_numpy_reference.py",
+      "scripts/prepare_gdn_recurrent_fixture.py"
+    ],
+    "native_operator_gate_pass": true,
+    "o_projection_dut": true,
+    "reference_elapsed_seconds": 240.23438959499998,
+    "reference_head_jobs": 138,
+    "reference_padded_fma_steps": 43515904,
+    "residual_dut": true,
+    "rtl_executed": false,
+    "schema_version": 3,
+    "scope": "FULL_LAYER0_GDN_BLOCK_RAW_HIDDEN_TO_RESIDUAL2_AND_BOTH_STATES",
+    "status": "SOURCE_AUTHENTICATED_HOST_GDN_BLOCK_TWO_TOKEN_FIXTURE",
+    "token_ids": [
+      19,
+      92
+    ],
+    "tokens_per_launch": 1,
+    "tools": {
+      "compile_argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "-std=c11",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-frounding-math",
+        "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/scripts/gdn_dense_reference.c",
+        "-lm",
+        "-o",
+        "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_block_pass_ci/fresh_fixture/c_matrix"
+      ],
+      "compiler": {
+        "bytes": 1023032,
+        "path": "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "compiler_version": "x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "dynamic_runtime": {
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+          "bytes": 236616,
+          "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+        },
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+          "bytes": 2129424,
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+          "bytes": 952616,
+          "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+        }
+      },
+      "executable": {
+        "bytes": 16776,
+        "path": "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_block_pass_ci/fresh_fixture/c_matrix",
+        "sha256": "67661b3997fc2612baecb6ab96ae631e9a95ab8bd23bdda3deb9989bdfe2ed98"
+      },
+      "numpy_version": "2.3.5",
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": {
+        "bytes": 17752,
+        "path": "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12",
+        "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+      },
+      "python_version": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]"
+    }
+  },
+  "frozen_operator_metrics": [
+    {
+      "comparisons": {
+        "ab": {
+          "bit_mismatches": 0,
+          "elements": 32,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "conv_same_canonical_input": {
+          "bit_mismatches": 0,
+          "elements": 6144,
+          "max_bf16_ulp": 0,
+          "numeric_mismatches": 0,
+          "pass_": true,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1
+        },
+        "end_to_end_conv": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 1.1920928955078125e-07,
+          "mean_abs": 2.0615213240186374e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "end_to_end_silu": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.0307606620093187e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "qkv": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.9907020032405853e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "silu_same_canonical_input": {
+          "bit_mismatches": 0,
+          "elements": 6144,
+          "max_bf16_ulp": 0,
+          "numeric_mismatches": 0,
+          "pass_": true,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1
+        },
+        "z": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 2.9802322387695312e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "contract": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "passed": true,
+      "token": 0
+    },
+    {
+      "comparisons": {
+        "ab": {
+          "bit_mismatches": 0,
+          "elements": 32,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "conv_same_canonical_input": {
+          "bit_mismatches": 0,
+          "elements": 6144,
+          "max_bf16_ulp": 0,
+          "numeric_mismatches": 0,
+          "pass_": true,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1
+        },
+        "end_to_end_conv": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.0009765625,
+          "mean_abs": 1.6453365484873453e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "end_to_end_silu": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.00048828125,
+          "mean_abs": 8.226682742436726e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "qkv": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.0078125,
+          "mean_abs": 1.3907750447591145e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "silu_same_canonical_input": {
+          "bit_mismatches": 0,
+          "elements": 6144,
+          "max_bf16_ulp": 0,
+          "numeric_mismatches": 0,
+          "pass_": true,
+          "signed_zero_numeric_equal": true,
+          "threshold_bf16_ulp": 1
+        },
+        "z": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "contract": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "passed": true,
+      "token": 1
+    }
+  ],
+  "full_block_supported": true,
+  "gated_norm_supported": true,
+  "input_norm_dut": true,
+  "mode": "pass",
+  "native_core_gate_pass": null,
+  "native_full_block_gate_pass": true,
+  "native_full_block_metrics": [
+    {
+      "checks": {
+        "ab": {
+          "bit_mismatches": 0,
+          "elements": 32,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "conv": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.0307606620093187e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "down": {
+          "bit_mismatches": 1,
+          "elements": 1024,
+          "max_abs": 1.52587890625e-05,
+          "mean_abs": 1.4901161193847656e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "gate": {
+          "bit_mismatches": 0,
+          "elements": 3584,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "history": {
+          "bit_mismatches": 2,
+          "elements": 24576,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 4.976755008101463e-09,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "input_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "norm": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 2.9103830456733704e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "o": {
+          "bit_mismatches": 1,
+          "elements": 1024,
+          "max_abs": 2.7939677238464355e-09,
+          "mean_abs": 2.7284841053187847e-12,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "post_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "qkv": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.9907020032405853e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "recurrent": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual1": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual2": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.05,
+            "mean_abs": 0.01
+          }
+        },
+        "silu_mul": {
+          "bit_mismatches": 2,
+          "elements": 3584,
+          "max_abs": 4.76837158203125e-07,
+          "mean_abs": 1.9956912313188824e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "state": {
+          "atol": 0.0001,
+          "elements": 262144,
+          "max_abs_error": 1.7881393432617188e-07,
+          "max_tolerance_ratio": 0.0009032398581443737,
+          "mismatches": 0,
+          "pass": true,
+          "rmse": 6.018317639481455e-10,
+          "rtol": 0.0001
+        },
+        "up": {
+          "bit_mismatches": 3,
+          "elements": 3584,
+          "max_abs": 3.0517578125e-05,
+          "mean_abs": 1.0111502238682339e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "z": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 2.9802322387695312e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "passed": true,
+      "threshold_sources": [
+        "spec/numerical_contract.md",
+        "src/heteronpu/qwen35_numpy_reference.py",
+        "scripts/prepare_gdn_recurrent_fixture.py"
+      ],
+      "token": 0
+    },
+    {
+      "checks": {
+        "ab": {
+          "bit_mismatches": 0,
+          "elements": 32,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "conv": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.00048828125,
+          "mean_abs": 8.226682742436726e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "down": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "gate": {
+          "bit_mismatches": 1,
+          "elements": 3584,
+          "max_abs": 0.00390625,
+          "mean_abs": 1.0899135044642857e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "history": {
+          "bit_mismatches": 5,
+          "elements": 24576,
+          "max_abs": 0.0078125,
+          "mean_abs": 3.526705161978801e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "input_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "norm": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 9.313225746154785e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "o": {
+          "bit_mismatches": 1,
+          "elements": 1024,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 1.862645149230957e-09,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "post_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "qkv": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.0078125,
+          "mean_abs": 1.3907750447591145e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "recurrent": {
+          "bit_mismatches": 2,
+          "elements": 2048,
+          "max_abs": 9.5367431640625e-07,
+          "mean_abs": 4.802132025361061e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual1": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual2": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.05,
+            "mean_abs": 0.01
+          }
+        },
+        "silu_mul": {
+          "bit_mismatches": 1,
+          "elements": 3584,
+          "max_abs": 1.4901161193847656e-08,
+          "mean_abs": 4.157690065247672e-12,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "state": {
+          "atol": 0.0001,
+          "elements": 262144,
+          "max_abs_error": 1.9572617020457983e-06,
+          "max_tolerance_ratio": 0.01956401859386669,
+          "mismatches": 0,
+          "pass": true,
+          "rmse": 6.929818969509121e-09,
+          "rtol": 0.0001
+        },
+        "up": {
+          "bit_mismatches": 1,
+          "elements": 3584,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.6630760260990687e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "z": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "passed": true,
+      "threshold_sources": [
+        "spec/numerical_contract.md",
+        "src/heteronpu/qwen35_numpy_reference.py",
+        "scripts/prepare_gdn_recurrent_fixture.py"
+      ],
+      "token": 1
+    }
+  ],
+  "native_full_block_status": "PASS",
+  "native_operator_gate_pass": true,
+  "numerical_acceptance": true,
+  "numerical_acceptance_scope": "canonical_and_native_full_gdn_block",
+  "o_projection_dut": true,
+  "overall_pass": true,
+  "pending_gates": [
+    "fault_injection",
+    "reset_recovery",
+    "checkpoint_restore",
+    "timing_signoff"
+  ],
+  "recurrent_state_supported": true,
+  "residual_dut": true,
+  "runs": [
+    {
+      "canonical_bit_mismatches": 0,
+      "carried_history_state_read_beats": {},
+      "commands": [
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "input_norm",
+          "pc": 0,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "qkv",
+          "pc": 1,
+          "write_ack_bytes": 12288
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "z",
+          "pc": 2,
+          "write_ack_bytes": 4096
+        },
+        {
+          "completion_hold_cycles": 12,
+          "final_ack_count": 1,
+          "operation": "ab",
+          "pc": 3,
+          "write_ack_bytes": 64
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "conv",
+          "pc": 4,
+          "write_ack_bytes": 61440
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "prep",
+          "pc": 5,
+          "write_ack_bytes": 25600
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "recurrent",
+          "pc": 6,
+          "write_ack_bytes": 1052672
+        },
+        {
+          "completion_hold_cycles": 13,
+          "final_ack_count": 1,
+          "operation": "norm",
+          "pc": 7,
+          "write_ack_bytes": 4096
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "o",
+          "pc": 8,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "residual1",
+          "pc": 9,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "post_norm",
+          "pc": 10,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "gate",
+          "pc": 11,
+          "write_ack_bytes": 7168
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "up",
+          "pc": 12,
+          "write_ack_bytes": 7168
+        },
+        {
+          "completion_hold_cycles": 12,
+          "final_ack_count": 1,
+          "operation": "silu_mul",
+          "pc": 13,
+          "write_ack_bytes": 7168
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "down",
+          "pc": 14,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "residual2",
+          "pc": 15,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 0,
+          "operation": "fence",
+          "pc": 16,
+          "write_ack_bytes": 0
+        }
+      ],
+      "committed_generation": 1,
+      "ddr_after_sha256": "aa1a06d633697805c46d91acdc7234d3982116737b00b94ce3e142342b5a78e4",
+      "native_diagnostics": {
+        "ab": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 32,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 32,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "conv": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 2,
+          "element_bytes": 2,
+          "elements": 6144,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 1.0307606620093187e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.0307606620093187e-11,
+          "same_input_max_bf16_ulp": 0
+        },
+        "down": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 1024,
+            "max_abs": 1.52587890625e-05,
+            "mean_abs": 1.4901161193847656e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 1.52587890625e-05,
+          "mean_abs": 1.4901161193847656e-08,
+          "same_input_max_bf16_ulp": 0
+        },
+        "gate": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 3584,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 3584,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "history": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 2,
+          "element_bytes": 2,
+          "elements": 24576,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 2,
+            "elements": 24576,
+            "max_abs": 0.0001220703125,
+            "mean_abs": 4.976755008101463e-09,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0001220703125,
+          "mean_abs": 4.976755008101463e-09,
+          "same_input_max_bf16_ulp": 0
+        },
+        "input_norm": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "norm": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 2048,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 2.9103830456733704e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 2.9103830456733704e-11,
+          "same_input_max_bf16_ulp": 0
+        },
+        "o": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 1024,
+            "max_abs": 2.7939677238464355e-09,
+            "mean_abs": 2.7284841053187847e-12,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 2.7939677238464355e-09,
+          "mean_abs": 2.7284841053187847e-12,
+          "same_input_max_bf16_ulp": 0
+        },
+        "post_norm": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "prep": {
+          "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+          "bit_mismatches": 2176,
+          "element_bytes": 4,
+          "elements": 6400,
+          "fixed_operator_gate": "UNASSIGNED",
+          "max_abs": 9.5367431640625e-07,
+          "mean_abs": 1.2182279429673315e-09,
+          "same_input_max_bf16_ulp": 0
+        },
+        "qkv": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 2,
+          "element_bytes": 2,
+          "elements": 6144,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 2,
+            "elements": 6144,
+            "max_abs": 0.0001220703125,
+            "mean_abs": 1.9907020032405853e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.9907020032405853e-08,
+          "same_input_max_bf16_ulp": 0
+        },
+        "recurrent": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 2048,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "residual1": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "residual2": {
+          "acceptance": "FROZEN_BF16_BLOCK_OUTPUT",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.05,
+              "mean_abs": 0.01
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "silu_mul": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 2,
+          "element_bytes": 2,
+          "elements": 3584,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 2,
+            "elements": 3584,
+            "max_abs": 4.76837158203125e-07,
+            "mean_abs": 1.9956912313188824e-10,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 4.76837158203125e-07,
+          "mean_abs": 1.9956912313188824e-10,
+          "same_input_max_bf16_ulp": 0
+        },
+        "state": {
+          "acceptance": "FROZEN_FP32_STATE_ABS_REL",
+          "bit_mismatches": 132002,
+          "element_bytes": 4,
+          "elements": 262144,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "atol": 0.0001,
+            "elements": 262144,
+            "max_abs_error": 1.7881393432617188e-07,
+            "max_tolerance_ratio": 0.0009032398581443737,
+            "mismatches": 0,
+            "pass": true,
+            "rmse": 6.018317639481455e-10,
+            "rtol": 0.0001
+          },
+          "max_abs": 1.7881393432617188e-07,
+          "mean_abs": 3.149209308952896e-11,
+          "same_input_max_bf16_ulp": 0
+        },
+        "up": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 3,
+          "element_bytes": 2,
+          "elements": 3584,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 3,
+            "elements": 3584,
+            "max_abs": 3.0517578125e-05,
+            "mean_abs": 1.0111502238682339e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 3.0517578125e-05,
+          "mean_abs": 1.0111502238682339e-08,
+          "same_input_max_bf16_ulp": 0
+        },
+        "z": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 2048,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 6.103515625e-05,
+            "mean_abs": 2.9802322387695312e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 2.9802322387695312e-08,
+          "same_input_max_bf16_ulp": 0
+        }
+      },
+      "physical_ddr_bytes_checked": 46887680,
+      "physical_write_beats": 18657,
+      "token": 0,
+      "write_ack_bytes": 1194048
+    },
+    {
+      "canonical_bit_mismatches": 0,
+      "carried_history_state_read_beats": {
+        "4": 768,
+        "6": 16384
+      },
+      "commands": [
+        {
+          "completion_hold_cycles": 12,
+          "final_ack_count": 1,
+          "operation": "input_norm",
+          "pc": 0,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 14,
+          "final_ack_count": 1,
+          "operation": "qkv",
+          "pc": 1,
+          "write_ack_bytes": 12288
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "z",
+          "pc": 2,
+          "write_ack_bytes": 4096
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "ab",
+          "pc": 3,
+          "write_ack_bytes": 64
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "conv",
+          "pc": 4,
+          "write_ack_bytes": 61440
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "prep",
+          "pc": 5,
+          "write_ack_bytes": 25600
+        },
+        {
+          "completion_hold_cycles": 13,
+          "final_ack_count": 1,
+          "operation": "recurrent",
+          "pc": 6,
+          "write_ack_bytes": 1052672
+        },
+        {
+          "completion_hold_cycles": 12,
+          "final_ack_count": 1,
+          "operation": "norm",
+          "pc": 7,
+          "write_ack_bytes": 4096
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "o",
+          "pc": 8,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 14,
+          "final_ack_count": 1,
+          "operation": "residual1",
+          "pc": 9,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "post_norm",
+          "pc": 10,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "gate",
+          "pc": 11,
+          "write_ack_bytes": 7168
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "up",
+          "pc": 12,
+          "write_ack_bytes": 7168
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "silu_mul",
+          "pc": 13,
+          "write_ack_bytes": 7168
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "down",
+          "pc": 14,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 1,
+          "operation": "residual2",
+          "pc": 15,
+          "write_ack_bytes": 2048
+        },
+        {
+          "completion_hold_cycles": 11,
+          "final_ack_count": 0,
+          "operation": "fence",
+          "pc": 16,
+          "write_ack_bytes": 0
+        }
+      ],
+      "committed_generation": 2,
+      "ddr_after_sha256": "a9b8def295f79443998567c67904ecc59c682c22670abb19762e6cf42ab758da",
+      "native_diagnostics": {
+        "ab": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 32,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 32,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "conv": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 3,
+          "element_bytes": 2,
+          "elements": 6144,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.00048828125,
+            "mean_abs": 8.226682742436726e-08,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.00048828125,
+          "mean_abs": 8.226682742436726e-08,
+          "same_input_max_bf16_ulp": 0
+        },
+        "down": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "gate": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 3584,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 3584,
+            "max_abs": 0.00390625,
+            "mean_abs": 1.0899135044642857e-06,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.00390625,
+          "mean_abs": 1.0899135044642857e-06,
+          "same_input_max_bf16_ulp": 0
+        },
+        "history": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 5,
+          "element_bytes": 2,
+          "elements": 24576,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 5,
+            "elements": 24576,
+            "max_abs": 0.0078125,
+            "mean_abs": 3.526705161978801e-07,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0078125,
+          "mean_abs": 3.526705161978801e-07,
+          "same_input_max_bf16_ulp": 0
+        },
+        "input_norm": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "norm": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 2048,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 2048,
+            "max_abs": 1.9073486328125e-06,
+            "mean_abs": 9.313225746154785e-10,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 9.313225746154785e-10,
+          "same_input_max_bf16_ulp": 0
+        },
+        "o": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 1024,
+            "max_abs": 1.9073486328125e-06,
+            "mean_abs": 1.862645149230957e-09,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 1.862645149230957e-09,
+          "same_input_max_bf16_ulp": 0
+        },
+        "post_norm": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "prep": {
+          "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+          "bit_mismatches": 2606,
+          "element_bytes": 4,
+          "elements": 6400,
+          "fixed_operator_gate": "UNASSIGNED",
+          "max_abs": 3.3182092010974884e-05,
+          "mean_abs": 1.4183998439110113e-08,
+          "same_input_max_bf16_ulp": 0
+        },
+        "qkv": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 3,
+          "element_bytes": 2,
+          "elements": 6144,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 3,
+            "elements": 6144,
+            "max_abs": 0.0078125,
+            "mean_abs": 1.3907750447591145e-06,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0078125,
+          "mean_abs": 1.3907750447591145e-06,
+          "same_input_max_bf16_ulp": 0
+        },
+        "recurrent": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 2,
+          "element_bytes": 2,
+          "elements": 2048,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 2,
+            "elements": 2048,
+            "max_abs": 9.5367431640625e-07,
+            "mean_abs": 4.802132025361061e-10,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 9.5367431640625e-07,
+          "mean_abs": 4.802132025361061e-10,
+          "same_input_max_bf16_ulp": 0
+        },
+        "residual1": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "residual2": {
+          "acceptance": "FROZEN_BF16_BLOCK_OUTPUT",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 1024,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 1024,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.05,
+              "mean_abs": 0.01
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        },
+        "silu_mul": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 3584,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 3584,
+            "max_abs": 1.4901161193847656e-08,
+            "mean_abs": 4.157690065247672e-12,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 1.4901161193847656e-08,
+          "mean_abs": 4.157690065247672e-12,
+          "same_input_max_bf16_ulp": 0
+        },
+        "state": {
+          "acceptance": "FROZEN_FP32_STATE_ABS_REL",
+          "bit_mismatches": 161534,
+          "element_bytes": 4,
+          "elements": 262144,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "atol": 0.0001,
+            "elements": 262144,
+            "max_abs_error": 1.9572617020457983e-06,
+            "max_tolerance_ratio": 0.01956401859386669,
+            "mismatches": 0,
+            "pass": true,
+            "rmse": 6.929818969509121e-09,
+            "rtol": 0.0001
+          },
+          "max_abs": 1.9572617020457983e-06,
+          "mean_abs": 1.5664387154329616e-10,
+          "same_input_max_bf16_ulp": 0
+        },
+        "up": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 1,
+          "element_bytes": 2,
+          "elements": 3584,
+          "fixed_operator_gate": "UNASSIGNED",
+          "frozen_full_block_check": {
+            "bit_mismatches": 1,
+            "elements": 3584,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 1.6630760260990687e-11,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.6630760260990687e-11,
+          "same_input_max_bf16_ulp": 0
+        },
+        "z": {
+          "acceptance": "FROZEN_BF16_OPERATOR",
+          "bit_mismatches": 0,
+          "element_bytes": 2,
+          "elements": 2048,
+          "fixed_operator_gate": "PASS",
+          "frozen_full_block_check": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "pass": true,
+            "thresholds": {
+              "max_abs": 0.03125,
+              "mean_abs": 0.005
+            }
+          },
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "same_input_max_bf16_ulp": 0
+        }
+      },
+      "physical_ddr_bytes_checked": 46887680,
+      "physical_write_beats": 18657,
+      "token": 1,
+      "write_ack_bytes": 1194048
+    }
+  ],
+  "runtime": {
+    "dynamic_libraries": {
+      "ld-linux-x86-64.so.2": {
+        "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+      },
+      "libc.so.6": {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      "libgcc_s.so.1": {
+        "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+      },
+      "libm.so.6": {
+        "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+        "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+      },
+      "libstdc++.so.6.0.33": {
+        "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+      }
+    },
+    "ldd": "linux-vdso.so.1 (0x00007fb172dbd000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fb172200000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fb172cc2000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fb172c94000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb171e00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fb172dbf000)",
+    "libc": [
+      "glibc",
+      "2.39"
+    ],
+    "machine": "x86_64",
+    "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]"
+  },
+  "scope": "GDN_LAYER0_BLOCK_M1",
+  "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "stage": "complete",
+  "status": "PASS_PRODUCTION_HOST_GDN_BLOCK"
+}

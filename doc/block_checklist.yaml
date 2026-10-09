@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: d474773a81018f2f9f70f8b3309aba48cf31a07f2c0534f16f8e31a121202818
+计划SHA256: 437f24796d141408f9a2a5d17e46eb97248e29c0e6d6b6c9f89100682f5f154d
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1278,13 +1278,17 @@
   保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN
 
 生产Host_GDN_block_v3_20261009:
-  状态: PENDING_完整生产数值CI
+  状态: d7ce_两次M1完整生产数值_原native门限_显式acceptance均PASS
   记录: doc/U00_2_HOST_GDN_BLOCK_20261009_CN.md
-  证据: reports/execution/U00_2_HOST_GDN_BLOCK_20261009/result.json
+  原接线证据: reports/execution/U00_2_HOST_GDN_BLOCK_20261009/result.json
+  新数值证据: reports/execution/U00_2_HOST_GDN_BLOCK_CI_D7CE_20261009/result.json
+  数值设计提交: d7ce9bd74a929037e459b3300134bd9f1722916e
+  实际承接: 同DUT无reset，真实history768及FP32_state16384beats从上一token已ACK写回读取，generation0到1到2
+  官方状态边界: residual2两次native零位差；FP32_state有132002及161534位差但原atol_rtol各1e-4下零超限，不能称native_state位精确
   实际范围: raw_hidden经inputNorm_core_O_residual_postNorm_FFN_residual到双状态Fence，各17命令，两次M1连续cold_carried
   小门禁: 新Norm与elementwise真实owner逐位门禁通过，主源码编译通过，生产整链不能由小门禁替代
   精度: 原block_隐藏节点_状态三类native阈值和canonical逐位共同保留；不改旧native_FAIL结论
-  未完成: [生产整链数值终态, 完整fault_reset_restore, M128, 后继层及35B, PPA及MAC90]
+  未完成: [完整fault_reset_restore, M128, 后继层及35B, PPA及MAC90]
   保留状态: U00.2 ongoing、U01 to do、C02.2 OPEN，不关闭关联大项
 
 生产Host_Attention_core_v2_20261009:

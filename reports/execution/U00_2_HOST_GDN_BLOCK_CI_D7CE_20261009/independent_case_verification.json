@@ -1,0 +1,973 @@
+{
+  "schema_version": 1,
+  "status": "PASS_INDEPENDENT_COMPACT_AND_FROZEN_SOURCE_AUDIT",
+  "created_at_utc": "2026-10-09T12:56:06.541792+00:00",
+  "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "run_id": 37900097687,
+  "numerical_job_id": 113731529569,
+  "artifact_id": 11617056788,
+  "ci_job_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/job/113731529569",
+  "verification_scope": "Authenticated compact numerical evidence, immutable-source validator/provenance audit, and consistency with prior independently verified raw build identity; no local raw numerical replay",
+  "checks_passed": 359,
+  "checks": [
+    "all exported commit identities match immutable d7ce",
+    "compact ZIP hash equals GitHub artifact digest",
+    "local summary.json equals authenticated ZIP bytes",
+    "local source_input_hashes.json equals authenticated ZIP bytes",
+    "491 source entries exported",
+    "all 491 source hashes independently equal git show at immutable d7ce",
+    "numerical source closure equals sealed build-package source closure",
+    "numerical package hash equals independently verified build package",
+    "binary_sha256 binds pass, build-ready and package member",
+    "rtl_sha256 binds pass, build-ready and package member",
+    "saved simulator ELF independently rehashed to pass identity",
+    "saved build-ready independently rehashed to pass identity",
+    "actual Verilator before/after/ready receipts identical",
+    "build identity remains build-only evidence",
+    "all independent canonical, native and actual-DUT aggregate flags true",
+    "complete production block numerical pass",
+    "actual acceptance metrics equal live-reference metrics",
+    "frozen validator: bounded fresh block source contract changed",
+    "frozen validator: native block gate must be an explicit boolean",
+    "frozen validator: both native token comparisons required",
+    "frozen validator: native block comparison inventory drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen FP32 state gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native block aggregate changed",
+    "frozen validator: native block comparison inventory drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen FP32 state gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native comparison needs explicit result",
+    "frozen validator: frozen BF16 block/operator gate drift",
+    "frozen validator: native block aggregate changed",
+    "frozen validator: frozen Dense/Conv gate changed",
+    "frozen validator: native block status drift",
+    "original frozen block-reference validator projected to exported fields passes without changed thresholds",
+    "token 0: correct index and generation",
+    "token 0: exported canonical mismatch count zero",
+    "token 0: whole-DDR checked byte count",
+    "token 0: exact full-beat ACK arithmetic",
+    "token 0: output digest bound in both exports",
+    "token 0: 17 command records",
+    "token 0 command 0: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 1: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 2: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 3: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 4: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 5: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 6: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 7: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 8: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 9: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 10: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 11: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 12: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 13: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 14: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 15: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0 command 16: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 0: cold/carried state read coverage",
+    "token 0: native stages include every assigned gate and diagnostic prep",
+    "token 0 ab: original tensor geometry",
+    "token 0 ab: finite exported metrics",
+    "token 0 ab: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 ab: actual diagnostics bind frozen full-block check",
+    "token 0 ab: original BF16 threshold and observed metric binding",
+    "token 0 conv: original tensor geometry",
+    "token 0 conv: finite exported metrics",
+    "token 0 conv: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 conv: actual diagnostics bind frozen full-block check",
+    "token 0 conv: original BF16 threshold and observed metric binding",
+    "token 0 down: original tensor geometry",
+    "token 0 down: finite exported metrics",
+    "token 0 down: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 down: actual diagnostics bind frozen full-block check",
+    "token 0 down: original BF16 threshold and observed metric binding",
+    "token 0 gate: original tensor geometry",
+    "token 0 gate: finite exported metrics",
+    "token 0 gate: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 gate: actual diagnostics bind frozen full-block check",
+    "token 0 gate: original BF16 threshold and observed metric binding",
+    "token 0 history: original tensor geometry",
+    "token 0 history: finite exported metrics",
+    "token 0 history: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 history: actual diagnostics bind frozen full-block check",
+    "token 0 history: original BF16 threshold and observed metric binding",
+    "token 0 input_norm: original tensor geometry",
+    "token 0 input_norm: finite exported metrics",
+    "token 0 input_norm: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 input_norm: actual diagnostics bind frozen full-block check",
+    "token 0 input_norm: original BF16 threshold and observed metric binding",
+    "token 0 norm: original tensor geometry",
+    "token 0 norm: finite exported metrics",
+    "token 0 norm: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 norm: actual diagnostics bind frozen full-block check",
+    "token 0 norm: original BF16 threshold and observed metric binding",
+    "token 0 o: original tensor geometry",
+    "token 0 o: finite exported metrics",
+    "token 0 o: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 o: actual diagnostics bind frozen full-block check",
+    "token 0 o: original BF16 threshold and observed metric binding",
+    "token 0 post_norm: original tensor geometry",
+    "token 0 post_norm: finite exported metrics",
+    "token 0 post_norm: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 post_norm: actual diagnostics bind frozen full-block check",
+    "token 0 post_norm: original BF16 threshold and observed metric binding",
+    "token 0 prep: original tensor geometry",
+    "token 0 prep: finite exported metrics",
+    "token 0 prep: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0: prep remains native diagnostic only",
+    "token 0 qkv: original tensor geometry",
+    "token 0 qkv: finite exported metrics",
+    "token 0 qkv: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 qkv: actual diagnostics bind frozen full-block check",
+    "token 0 qkv: original BF16 threshold and observed metric binding",
+    "token 0 recurrent: original tensor geometry",
+    "token 0 recurrent: finite exported metrics",
+    "token 0 recurrent: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 recurrent: actual diagnostics bind frozen full-block check",
+    "token 0 recurrent: original BF16 threshold and observed metric binding",
+    "token 0 residual1: original tensor geometry",
+    "token 0 residual1: finite exported metrics",
+    "token 0 residual1: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 residual1: actual diagnostics bind frozen full-block check",
+    "token 0 residual1: original BF16 threshold and observed metric binding",
+    "token 0 residual2: original tensor geometry",
+    "token 0 residual2: finite exported metrics",
+    "token 0 residual2: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 residual2: actual diagnostics bind frozen full-block check",
+    "token 0 residual2: original BF16 threshold and observed metric binding",
+    "token 0 silu_mul: original tensor geometry",
+    "token 0 silu_mul: finite exported metrics",
+    "token 0 silu_mul: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 silu_mul: actual diagnostics bind frozen full-block check",
+    "token 0 silu_mul: original BF16 threshold and observed metric binding",
+    "token 0 state: original tensor geometry",
+    "token 0 state: finite exported metrics",
+    "token 0 state: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 state: actual diagnostics bind frozen full-block check",
+    "token 0: original state abs/relative gate consistency",
+    "token 0 up: original tensor geometry",
+    "token 0 up: finite exported metrics",
+    "token 0 up: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 up: actual diagnostics bind frozen full-block check",
+    "token 0 up: original BF16 threshold and observed metric binding",
+    "token 0 z: original tensor geometry",
+    "token 0 z: finite exported metrics",
+    "token 0 z: expected/native hash equality agrees with exported bit mismatch count",
+    "token 0 z: actual diagnostics bind frozen full-block check",
+    "token 0 z: original BF16 threshold and observed metric binding",
+    "token 0: frozen operator inventory",
+    "token 0 ab: frozen operator numerical acceptance",
+    "token 0 ab: separate operator and full-block metrics identical",
+    "token 0 conv_same_canonical_input: unchanged one-ULP gate",
+    "token 0 conv_same_canonical_input: conditioned digest equals canonical digest",
+    "token 0 end_to_end_conv: frozen operator numerical acceptance",
+    "token 0 end_to_end_silu: frozen operator numerical acceptance",
+    "token 0: end-to-end SiLU and full-block conv metric identical",
+    "token 0 qkv: frozen operator numerical acceptance",
+    "token 0 qkv: separate operator and full-block metrics identical",
+    "token 0 silu_same_canonical_input: unchanged one-ULP gate",
+    "token 0 silu_same_canonical_input: conditioned digest equals canonical digest",
+    "token 0 z: frozen operator numerical acceptance",
+    "token 0 z: separate operator and full-block metrics identical",
+    "token 1: correct index and generation",
+    "token 1: exported canonical mismatch count zero",
+    "token 1: whole-DDR checked byte count",
+    "token 1: exact full-beat ACK arithmetic",
+    "token 1: output digest bound in both exports",
+    "token 1: 17 command records",
+    "token 1 command 0: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 1: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 2: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 3: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 4: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 5: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 6: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 7: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 8: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 9: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 10: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 11: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 12: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 13: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 14: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 15: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1 command 16: exact stage/ACK/final-ACK/backpressure inventory",
+    "token 1: cold/carried state read coverage",
+    "token 1: native stages include every assigned gate and diagnostic prep",
+    "token 1 ab: original tensor geometry",
+    "token 1 ab: finite exported metrics",
+    "token 1 ab: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 ab: actual diagnostics bind frozen full-block check",
+    "token 1 ab: original BF16 threshold and observed metric binding",
+    "token 1 conv: original tensor geometry",
+    "token 1 conv: finite exported metrics",
+    "token 1 conv: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 conv: actual diagnostics bind frozen full-block check",
+    "token 1 conv: original BF16 threshold and observed metric binding",
+    "token 1 down: original tensor geometry",
+    "token 1 down: finite exported metrics",
+    "token 1 down: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 down: actual diagnostics bind frozen full-block check",
+    "token 1 down: original BF16 threshold and observed metric binding",
+    "token 1 gate: original tensor geometry",
+    "token 1 gate: finite exported metrics",
+    "token 1 gate: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 gate: actual diagnostics bind frozen full-block check",
+    "token 1 gate: original BF16 threshold and observed metric binding",
+    "token 1 history: original tensor geometry",
+    "token 1 history: finite exported metrics",
+    "token 1 history: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 history: actual diagnostics bind frozen full-block check",
+    "token 1 history: original BF16 threshold and observed metric binding",
+    "token 1 input_norm: original tensor geometry",
+    "token 1 input_norm: finite exported metrics",
+    "token 1 input_norm: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 input_norm: actual diagnostics bind frozen full-block check",
+    "token 1 input_norm: original BF16 threshold and observed metric binding",
+    "token 1 norm: original tensor geometry",
+    "token 1 norm: finite exported metrics",
+    "token 1 norm: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 norm: actual diagnostics bind frozen full-block check",
+    "token 1 norm: original BF16 threshold and observed metric binding",
+    "token 1 o: original tensor geometry",
+    "token 1 o: finite exported metrics",
+    "token 1 o: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 o: actual diagnostics bind frozen full-block check",
+    "token 1 o: original BF16 threshold and observed metric binding",
+    "token 1 post_norm: original tensor geometry",
+    "token 1 post_norm: finite exported metrics",
+    "token 1 post_norm: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 post_norm: actual diagnostics bind frozen full-block check",
+    "token 1 post_norm: original BF16 threshold and observed metric binding",
+    "token 1 prep: original tensor geometry",
+    "token 1 prep: finite exported metrics",
+    "token 1 prep: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1: prep remains native diagnostic only",
+    "token 1 qkv: original tensor geometry",
+    "token 1 qkv: finite exported metrics",
+    "token 1 qkv: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 qkv: actual diagnostics bind frozen full-block check",
+    "token 1 qkv: original BF16 threshold and observed metric binding",
+    "token 1 recurrent: original tensor geometry",
+    "token 1 recurrent: finite exported metrics",
+    "token 1 recurrent: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 recurrent: actual diagnostics bind frozen full-block check",
+    "token 1 recurrent: original BF16 threshold and observed metric binding",
+    "token 1 residual1: original tensor geometry",
+    "token 1 residual1: finite exported metrics",
+    "token 1 residual1: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 residual1: actual diagnostics bind frozen full-block check",
+    "token 1 residual1: original BF16 threshold and observed metric binding",
+    "token 1 residual2: original tensor geometry",
+    "token 1 residual2: finite exported metrics",
+    "token 1 residual2: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 residual2: actual diagnostics bind frozen full-block check",
+    "token 1 residual2: original BF16 threshold and observed metric binding",
+    "token 1 silu_mul: original tensor geometry",
+    "token 1 silu_mul: finite exported metrics",
+    "token 1 silu_mul: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 silu_mul: actual diagnostics bind frozen full-block check",
+    "token 1 silu_mul: original BF16 threshold and observed metric binding",
+    "token 1 state: original tensor geometry",
+    "token 1 state: finite exported metrics",
+    "token 1 state: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 state: actual diagnostics bind frozen full-block check",
+    "token 1: original state abs/relative gate consistency",
+    "token 1 up: original tensor geometry",
+    "token 1 up: finite exported metrics",
+    "token 1 up: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 up: actual diagnostics bind frozen full-block check",
+    "token 1 up: original BF16 threshold and observed metric binding",
+    "token 1 z: original tensor geometry",
+    "token 1 z: finite exported metrics",
+    "token 1 z: expected/native hash equality agrees with exported bit mismatch count",
+    "token 1 z: actual diagnostics bind frozen full-block check",
+    "token 1 z: original BF16 threshold and observed metric binding",
+    "token 1: frozen operator inventory",
+    "token 1 ab: frozen operator numerical acceptance",
+    "token 1 ab: separate operator and full-block metrics identical",
+    "token 1 conv_same_canonical_input: unchanged one-ULP gate",
+    "token 1 conv_same_canonical_input: conditioned digest equals canonical digest",
+    "token 1 end_to_end_conv: frozen operator numerical acceptance",
+    "token 1 end_to_end_silu: frozen operator numerical acceptance",
+    "token 1: end-to-end SiLU and full-block conv metric identical",
+    "token 1 qkv: frozen operator numerical acceptance",
+    "token 1 qkv: separate operator and full-block metrics identical",
+    "token 1 silu_same_canonical_input: unchanged one-ULP gate",
+    "token 1 silu_same_canonical_input: conditioned digest equals canonical digest",
+    "token 1 z: frozen operator numerical acceptance",
+    "token 1 z: separate operator and full-block metrics identical",
+    "exact 104-entry source-bound fixture input/comparator/ABI inventory",
+    "all 104 input commitments are valid SHA256 digests",
+    "both independently reacquired payload manifest commitments present",
+    "useful Dense MACs derive from seven real projection shapes over two tokens",
+    "padded reference accounting is separately identified",
+    "scope limitations remain explicit",
+    "full GitHub job log has no exported raw DUT cycle/ACK events",
+    "completed GitHub job printed summary exactly equals authenticated compact summary"
+  ],
+  "identities": {
+    "binary_sha256": "ad298a209207f0044cd0e8226334727bd19c430083a42f8cf22afd4b15b43987",
+    "rtl_sha256": "07879f21dfd6bcb7a5252ef3e58944530d50194a04b2fce63efae4a823c324fa",
+    "package_sha256": "d6920f083564146f889d9760fed2e6d449c7a5bd53533b92af1d0e09c8c681a9",
+    "build_ready_sha256": "b377a64e8d275dcf758a0c82997c9f31819f79ab8b4eb9cc8f718462b8679306",
+    "fixture_manifest_sha256": "fbdaccdba3af7033ebd8decbdafae0629f47d8c5e68c405db7c7870e5234983b",
+    "actual_log_sha256": "b67542320d5eb81a90295c70e1d0391a7a7ac324c610448b80e9d7b393741674",
+    "source_payload_manifest_sha256": {
+      "qwen35_layer0_payload": "973841becbaeabb83756abeeda126e0a7dcdeeb9bd9e45c0ec16d57272862146",
+      "qwen35_prefix_payload": "a65f5966852428d27c737f3c27b16045c1a70b9f37d3637fd9bd9ea556dfafb4"
+    },
+    "output_sha256": {
+      "0": "aa1a06d633697805c46d91acdc7234d3982116737b00b94ce3e142342b5a78e4",
+      "1": "a9b8def295f79443998567c67904ecc59c682c22670abb19762e6cf42ab758da"
+    }
+  },
+  "compact_zip_sha256": "e07741127d89dbe44d6b2cc5e4d22b904cfa457ef05b94caa848dd1b05a61e8c",
+  "summary_sha256": "1c9e66b1adc83e74f88239314149132ef3d4cf98dce6731870b7732d15c4b41a",
+  "source_input_hashes_sha256": "2d62622106eb941f9892c6ab8bb88ee83ac0e06d3891452f7fe5cc6c410a8a6e",
+  "sources_independently_verified": 491,
+  "source_checkout_read_method": "git show <immutable commit>:<path> only; no current checkout source imported",
+  "fixture_hash_inventory_entries": 104,
+  "frozen_validator": {
+    "source": "chisel/continuous_prefill/scripts/run_host_bf16_gdn_fresh_gate.py",
+    "function": "block_reference_summary",
+    "method": "Executed unchanged AST statements over exported fields; only unexported layout assignment/check omitted; no synthetic layout supplied",
+    "omitted_source_line_ranges": [
+      [
+        345,
+        345
+      ],
+      [
+        346,
+        350
+      ]
+    ],
+    "raw_array_frozen_gate_recomputed_locally": false,
+    "exported_numerical_thresholds_and_aggregates_rechecked": true
+  },
+  "reference_provenance": {
+    "evidence_level": "Immutable producer/workflow source plus successful CI execution and exported fixture/payload commitments; full raw fixture manifest and installed source bytes not exported",
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "official_modeling_source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "framework_archive_sha256": "15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d",
+    "official_cache_source_sha256": "abdcb0ae88aa5b924ef7d76879db680e9af8f3ec1dafbba7ce446ecb521a944b",
+    "native_capture": "Unmodified official layer0 forward with strict all-14 mixed-dtype parameters; observation hooks call original chunk then recurrent functions and use its own private carried DynamicCache; no canonical or DUT state fed into native reference",
+    "input_boundary": "Actual pinned embedding rows 19 and 92; original layer0 weights; no precomputed inputNorm boundary",
+    "canonical_reference": "Independent integer/C crosschecked dense reductions plus frozen stage recipes; own canonical history/state carry",
+    "live_authority": "Process-local GdnBlockFixtureSession issued only by generate_fixture; verifies all fixture bytes, original source identities and reference tool identity repeatedly before/after actual DUT execution",
+    "reference_tool_identity_exported": {
+      "compile_argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "-std=c11",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-frounding-math",
+        "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/scripts/gdn_dense_reference.c",
+        "-lm",
+        "-o",
+        "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_block_pass_ci/fresh_fixture/c_matrix"
+      ],
+      "compiler": {
+        "bytes": 1023032,
+        "path": "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "compiler_version": "x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "dynamic_runtime": {
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+          "bytes": 236616,
+          "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+        },
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+          "bytes": 2129424,
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+          "bytes": 952616,
+          "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+        }
+      },
+      "executable": {
+        "bytes": 16776,
+        "path": "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/host_gdn_block_pass_ci/fresh_fixture/c_matrix",
+        "sha256": "67661b3997fc2612baecb6ab96ae631e9a95ab8bd23bdda3deb9989bdfe2ed98"
+      },
+      "numpy_version": "2.3.5",
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": {
+        "bytes": 17752,
+        "path": "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12",
+        "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+      },
+      "python_version": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]"
+    },
+    "whole_checkpoint_lfs_integrity_established": false
+  },
+  "transaction_proof": {
+    "launches": 2,
+    "commands_per_launch": 17,
+    "descriptor_records_per_launch_source_validator": 216,
+    "generations": [
+      0,
+      1,
+      2
+    ],
+    "same_dut": true,
+    "reset_between_launches": false,
+    "canonical_bit_mismatches": [
+      0,
+      0
+    ],
+    "whole_ddr_bytes_checked_per_launch": 46887680,
+    "write_ack_bytes_per_launch": 1194048,
+    "write_beats_per_launch": 18657,
+    "write_ack_bytes_total": 2388096,
+    "carried_history_read_beats_from_cold_output": 768,
+    "carried_fp32_state_read_beats_from_cold_output": 16384,
+    "carried_reads_after_cold_fence": true,
+    "intermediate_output_source": "Only real DUT strobed write data committed at successful AXI ACK; sentinel initial DDR and whitelist exclude expected/native buffers",
+    "physical_replay_evidence_level": "Performed by source-bound CI Python audit; only compact receipts retained locally"
+  },
+  "numerical_metrics": [
+    {
+      "token": 0,
+      "native_checks": {
+        "ab": {
+          "bit_mismatches": 0,
+          "elements": 32,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "conv": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.0307606620093187e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "down": {
+          "bit_mismatches": 1,
+          "elements": 1024,
+          "max_abs": 1.52587890625e-05,
+          "mean_abs": 1.4901161193847656e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "gate": {
+          "bit_mismatches": 0,
+          "elements": 3584,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "history": {
+          "bit_mismatches": 2,
+          "elements": 24576,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 4.976755008101463e-09,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "input_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "norm": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 2.9103830456733704e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "o": {
+          "bit_mismatches": 1,
+          "elements": 1024,
+          "max_abs": 2.7939677238464355e-09,
+          "mean_abs": 2.7284841053187847e-12,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "post_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "qkv": {
+          "bit_mismatches": 2,
+          "elements": 6144,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.9907020032405853e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "recurrent": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual1": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual2": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.05,
+            "mean_abs": 0.01
+          }
+        },
+        "silu_mul": {
+          "bit_mismatches": 2,
+          "elements": 3584,
+          "max_abs": 4.76837158203125e-07,
+          "mean_abs": 1.9956912313188824e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "state": {
+          "atol": 0.0001,
+          "elements": 262144,
+          "max_abs_error": 1.7881393432617188e-07,
+          "max_tolerance_ratio": 0.0009032398581443737,
+          "mismatches": 0,
+          "pass": true,
+          "rmse": 6.018317639481455e-10,
+          "rtol": 0.0001
+        },
+        "up": {
+          "bit_mismatches": 3,
+          "elements": 3584,
+          "max_abs": 3.0517578125e-05,
+          "mean_abs": 1.0111502238682339e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "z": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 2.9802322387695312e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "prep_diagnostic": {
+        "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+        "bit_mismatches": 2176,
+        "element_bytes": 4,
+        "elements": 6400,
+        "fixed_operator_gate": "UNASSIGNED",
+        "max_abs": 9.5367431640625e-07,
+        "mean_abs": 1.2182279429673315e-09,
+        "same_input_max_bf16_ulp": 0
+      },
+      "state_native_bit_mismatches": 132002,
+      "completion_hold_cycles": [
+        11,
+        11,
+        11,
+        12,
+        11,
+        11,
+        11,
+        13,
+        11,
+        11,
+        11,
+        11,
+        11,
+        12,
+        11,
+        11,
+        11
+      ]
+    },
+    {
+      "token": 1,
+      "native_checks": {
+        "ab": {
+          "bit_mismatches": 0,
+          "elements": 32,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "conv": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.00048828125,
+          "mean_abs": 8.226682742436726e-08,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "down": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "gate": {
+          "bit_mismatches": 1,
+          "elements": 3584,
+          "max_abs": 0.00390625,
+          "mean_abs": 1.0899135044642857e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "history": {
+          "bit_mismatches": 5,
+          "elements": 24576,
+          "max_abs": 0.0078125,
+          "mean_abs": 3.526705161978801e-07,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "input_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "norm": {
+          "bit_mismatches": 1,
+          "elements": 2048,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 9.313225746154785e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "o": {
+          "bit_mismatches": 1,
+          "elements": 1024,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 1.862645149230957e-09,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "post_norm": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "qkv": {
+          "bit_mismatches": 3,
+          "elements": 6144,
+          "max_abs": 0.0078125,
+          "mean_abs": 1.3907750447591145e-06,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "recurrent": {
+          "bit_mismatches": 2,
+          "elements": 2048,
+          "max_abs": 9.5367431640625e-07,
+          "mean_abs": 4.802132025361061e-10,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual1": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "residual2": {
+          "bit_mismatches": 0,
+          "elements": 1024,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.05,
+            "mean_abs": 0.01
+          }
+        },
+        "silu_mul": {
+          "bit_mismatches": 1,
+          "elements": 3584,
+          "max_abs": 1.4901161193847656e-08,
+          "mean_abs": 4.157690065247672e-12,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "state": {
+          "atol": 0.0001,
+          "elements": 262144,
+          "max_abs_error": 1.9572617020457983e-06,
+          "max_tolerance_ratio": 0.01956401859386669,
+          "mismatches": 0,
+          "pass": true,
+          "rmse": 6.929818969509121e-09,
+          "rtol": 0.0001
+        },
+        "up": {
+          "bit_mismatches": 1,
+          "elements": 3584,
+          "max_abs": 5.960464477539063e-08,
+          "mean_abs": 1.6630760260990687e-11,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "z": {
+          "bit_mismatches": 0,
+          "elements": 2048,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "pass": true,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        }
+      },
+      "prep_diagnostic": {
+        "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY",
+        "bit_mismatches": 2606,
+        "element_bytes": 4,
+        "elements": 6400,
+        "fixed_operator_gate": "UNASSIGNED",
+        "max_abs": 3.3182092010974884e-05,
+        "mean_abs": 1.4183998439110113e-08,
+        "same_input_max_bf16_ulp": 0
+      },
+      "state_native_bit_mismatches": 161534,
+      "completion_hold_cycles": [
+        12,
+        14,
+        11,
+        11,
+        11,
+        11,
+        13,
+        12,
+        11,
+        14,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ]
+    }
+  ],
+  "performance": {
+    "case_elapsed_seconds": 16422.8152456,
+    "reference_elapsed_seconds": 240.23438959499998,
+    "separate_dut_elapsed_seconds": null,
+    "actual_command_completion_cycles": null,
+    "reason": "Compact per-command report exports hold-cycle counts, not raw command timestamps; raw DUT log absent from compact artifact and job log. Case elapsed includes transfer admission, fresh reference and audits; subtracting reference time is not a DUT timer."
+  },
+  "not_established": [
+    "fault injection",
+    "reset recovery",
+    "checkpoint restore",
+    "M128",
+    "full network",
+    "timing signoff or DC QoR",
+    "cross-host byte equivalence",
+    "full checkpoint LFS integrity",
+    "historical layer3 native full-block acceptance"
+  ],
+  "not_recomputed_locally": [
+    "raw DDR after either token",
+    "raw write/ACK replay and writable completion snapshots",
+    "raw actual output tensors",
+    "raw canonical/native arrays and numeric errors",
+    "raw fixture manifest or original payload manifests",
+    "raw actual DUT log"
+  ],
+  "explicit_acceptance_job_status": "Owned and monitored separately by parent; not asserted by this audit",
+  "upstream_build_verification": "../build_identity/independent_build_verification.json"
+}

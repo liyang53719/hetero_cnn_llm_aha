@@ -1,0 +1,39 @@
+{
+  "status": "VERIFIED_CANONICAL_AND_NATIVE_FULL_GDN_BLOCK_M1_FINAL_ACCEPTANCE",
+  "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+  "run_id": 37900097687,
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687",
+  "workflow_conclusion": "success",
+  "acceptance_job_id": 113826113688,
+  "acceptance_job_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37900097687/job/113826113688",
+  "acceptance_started_at": "2026-10-09T13:27:05Z",
+  "acceptance_completed_at": "2026-10-09T13:27:09Z",
+  "acceptance_log_sha256": "efcb7d9bd990b30b5f55ad8c1cf09aac86c05f81122b6162dd2e5e7f7b972358",
+  "acceptance_log_bytes": 4870,
+  "workflow_source_sha256": "a8a8ddf377675fb03244bb67039b543565ce06e90bbe8a08c3cda142cc11984e",
+  "prerequisite_results": {
+    "build": "success",
+    "block-canonical-native-pass": "success"
+  },
+  "trusted_build_outputs": {
+    "package_sha256": "d6920f083564146f889d9760fed2e6d449c7a5bd53533b92af1d0e09c8c681a9",
+    "source_commit": "d7ce9bd74a929037e459b3300134bd9f1722916e",
+    "artifact_name": "host-gdn-block-build-d7ce9bd74a929037e459b3300134bd9f1722916e-37900097687-1"
+  },
+  "job_metadata_sha256": "7cf60c022653ff7328a3cf9d82c4519c5878e593642ad8a88e03ed6a21e8f887",
+  "numerical_artifact_id": 11617056788,
+  "numerical_artifact_zip_sha256": "e07741127d89dbe44d6b2cc5e4d22b904cfa457ef05b94caa848dd1b05a61e8c",
+  "independent_case_verification_sha256": "0c281a8e055d2c3800332d53521a7d899ee335b3164dc6a4b53ab886353111c2",
+  "independent_case_checks_passed": 359,
+  "scope": "Actual layer0 GDN, same-DUT two M1 launches token19 cold then token92 carried, 17 commands each, canonical outputs and both states exact; original native operator, residual2 and FP32 state gates pass.",
+  "excluded": [
+    "fault_injection",
+    "reset_recovery",
+    "checkpoint_restore",
+    "M128",
+    "full_network",
+    "layer3_native_acceptance",
+    "timing_DC_QoR"
+  ],
+  "raw_numerical_ddr_recomputed_locally": false
+}

@@ -47,7 +47,7 @@ def test_idle_or_poisoned_prefix_is_not_active_matrix_profile():
     with pytest.raises(ValueError,match='pc0 scope'): R.check_profiles(a,b,'a'*64,'a'*64)
 
 
-def test_frozen_builder_has_only_two_reversible_substitutions(tmp_path):
+def test_frozen_builder_has_two_substitutions_and_readonly_precompile_guard(tmp_path):
     source_root=Path(os.environ.get('ATTENTION_PROFILE_SOURCE_ROOT',R.DIAGNOSTIC_ROOT))
     raw=subprocess.check_output(['git','-C',str(source_root),'show',R.PIN+':chisel/continuous_prefill/scripts/run_host_bf16_attention_core_gate.sh'])
     root=tmp_path/'source with spaces'; driver=tmp_path/'profile driver.cpp'
@@ -58,10 +58,36 @@ def test_frozen_builder_has_only_two_reversible_substitutions(tmp_path):
     restored=text.replace('ROOT='+shlex.quote(str(root))+';P="$ROOT/chisel/continuous_prefill"',
         'ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"',1)
     restored=restored.replace(shlex.quote(str(driver)),'"$P/tests/host_bf16_attention_core.cpp"',1)
+    assert restored.count(R.rtl_admission_guard())==1
+    assert restored.index(R.rtl_admission_guard()) < restored.index('python3 "$P/scripts/prepare_idma_export.py"')
+    restored=restored.replace(R.rtl_admission_guard(),'')
     assert restored.encode()==raw
     assert R.RTL_SHA256=='4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9'
     with pytest.raises(ValueError): R.relocated_builder(raw.replace(b'OPT_FAST=-O2',b'OPT_FAST=-Ofast'),root,driver)
     with pytest.raises(ValueError): R.relocated_builder(raw.replace(b'"$P/tests/host_bf16_attention_core.cpp"',b'"wrong.cpp"'),root,driver)
+
+
+def test_exact_sv_admission_stops_before_compile_and_never_normalizes(tmp_path):
+    import hashlib
+    root=tmp_path/'build';(root/'generated').mkdir(parents=True)
+    rtl=root/'generated/HostBlockTop.sv';rtl.write_text('module T; // exact source path\nendmodule\n')
+    digest=hashlib.sha256(rtl.read_bytes()).hexdigest()
+    guard=R.rtl_admission_guard()
+    assert R.RTL_SHA256 in guard
+    # A tiny explicit test fixture supplies only this test's expected digest.
+    script='set -e\n'+guard.replace(R.RTL_SHA256,digest)+'touch "$OUT/compile_started"\n'
+    env={**os.environ,'OUT':str(root)}
+    assert subprocess.run(['bash','-c',script],env=env,capture_output=True).returncode==0
+    assert (root/'compile_started').exists()
+    (root/'compile_started').unlink()
+    rtl.write_text(rtl.read_text().replace('exact source path','different source path'))
+    failed=subprocess.run(['bash','-c',script],env=env,capture_output=True,text=True)
+    assert failed.returncode!=0 and not (root/'compile_started').exists()
+    receipt=json.loads((root/'generated_rtl_identity.json').read_text())
+    assert receipt['exact_match'] is False and receipt['expected_sha256']==digest
+    assert receipt['checked_before_verilation_and_cpp'] is True
+    assert receipt['numerical_acceptance'] is False
+    assert 'compilation not started' in failed.stderr
 
 
 def test_actual_compile_flag_collection_and_missing_strict_flags(tmp_path):

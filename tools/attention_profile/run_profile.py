@@ -56,14 +56,33 @@ def frozen_file(root, name):
     return raw
 
 
+def rtl_admission_guard():
+    """Check the original exact SV bytes before spending time on C++ compilation."""
+    return '''python3 - "$OUT/generated/HostBlockTop.sv" "$OUT/generated_rtl_identity.json" ''' + shlex.quote(RTL_SHA256) + ''' <<'PY_PROFILE_RTL_IDENTITY'
+from pathlib import Path
+import hashlib,json,sys
+rtl,receipt=map(Path,sys.argv[1:3]);expected=sys.argv[3]
+digest=hashlib.sha256(rtl.read_bytes()).hexdigest()
+report=dict(expected_sha256=expected,actual_sha256=digest,exact_match=digest==expected,
+            checked_before_verilation_and_cpp=True,numerical_acceptance=False)
+receipt.write_text(json.dumps(report,sort_keys=True,indent=2)+'\\n')
+print(json.dumps(report),flush=True)
+if digest!=expected:raise SystemExit('generated RTL differs from original failed full top; compilation not started')
+PY_PROFILE_RTL_IDENTITY
+'''
+
+
 def relocated_builder(raw, source_root, driver):
-    """Only relocate script ROOT and the compiled diagnostic C++ translation unit."""
+    """Two path substitutions and a read-only, fail-closed post-emit guard."""
     text = raw.decode()
     old_root = 'ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"'
     old_driver = '"$P/tests/host_bf16_attention_core.cpp"'
     require(text.count(old_root) == text.count(old_driver) == 1, 'frozen build anchors changed')
     text = text.replace(old_root, 'ROOT=' + shlex.quote(str(source_root)) + ';P="$ROOT/chisel/continuous_prefill"', 1)
     text = text.replace(old_driver, shlex.quote(str(driver)), 1)
+    anchor = 'python3 "$P/scripts/prepare_idma_export.py" "$IDMA_EXPORT" "$OUT" >"$OUT/idma_verify.log"'
+    require(text.count(anchor) == 1, 'frozen post-emit boundary changed')
+    text = text.replace(anchor, rtl_admission_guard() + anchor, 1)
     require('OPT_FAST=-O2 OPT_SLOW=-O0' in text and '-ffp-contract=off -fno-fast-math' in text,
             'original strict floating-point/build policy missing')
     return text
@@ -238,15 +257,16 @@ def run_worker(args):
             summary['instrumentation'] = json.loads((instrumentation/'transformation_receipt.json').read_text())
             summary['build_transformation'] = dict(original_script_sha256=hashlib.sha256(raw).hexdigest(),
                 modified_script_sha256=sha(builder), replacements=['script ROOT relocation','diagnostic driver translation unit'],
-                rtl_or_compile_flag_replacements=0)
+                readonly_additions=['exact generated RTL admission before Verilation/C++'],rtl_or_compile_flag_replacements=0)
             build = out/'host_build'
             with phase('unchanged_full_top_build'):
                 run_to_log(['bash',str(builder),str(build),'0'],out/'build.log',BUILD_SECONDS,env)
             ready = json.loads((build/'build_ready.json').read_text())
+            summary['build'] = ready
+            summary['generated_rtl_admission'] = json.loads((build/'generated_rtl_identity.json').read_text())
             require(ready['rtl_sha256'] == RTL_SHA256 and ready['numerical_pass'] is False and
                     ready['source_base_commit'] == PIN and ready['status'] == frozen.BUILD_STATUS,
                     'generated RTL/source/build scope differs from original failed full top')
-            summary['build'] = ready
             summary['compiler_evidence'] = compiler_evidence(build)
             hashes['source_sha256'].update(json.loads((build/'sources.sha256.json').read_text()))
             hashes.update(binary_sha256=sha(build/'obj/VHostBlockTop'), rtl_sha256=sha(build/'generated/HostBlockTop.sv'), build_ready_sha256=sha(build/'build_ready.json'))
@@ -273,6 +293,9 @@ def run_worker(args):
             return 0
     except (Exception, KeyboardInterrupt) as error:
         summary.update(status='INCOMPLETE_BOUNDED_FULL_TOP_PROFILE', error=dict(type=type(error).__name__, message=str(error)))
+        admission = out/'host_build/generated_rtl_identity.json'
+        if admission.is_file():
+            summary['generated_rtl_admission'] = json.loads(admission.read_text())
         partials = []
         for p in sorted(out.glob('prefix*/attention_profile.json')):
             try:

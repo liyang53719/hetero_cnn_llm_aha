@@ -8,6 +8,10 @@
 
 运行前先核对两个独立 checkout：GitHub 触发提交绑定本诊断源码，冻结的 695981 提交绑定生产源码。仅独立 source worker 适配旧入口的单一 `GITHUB_SHA` 检查，摘要同时保留真实触发提交和两个源码身份。未修改 hierarchy；只有测量支持相关假设后才考虑模拟编译边界。完整 block、M128 和原官方精度门禁的状态不由本诊断改变。
 
+首次诊断 [run 37944430478](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/37944430478) 在构建成功后被原始 SV 字节哈希准入拒绝：生成值 `4d20ce579a2e8bb9598cd71e1b5187fe70f131992849507f077a154944269dbd`，要求值仍为 `4f061c48397979339ff97bef5a5e9f9dee2bd4a0dec7a5637f8a95b5de2e45f9`。构建耗时 1518.05 秒，前缀执行次数为零，没有性能结果。原失败保留，不能记为数值失败或通过。
+
+已有生成 SV 证实源码相对目录会进入 source-location 注释及其排序；本次 SV 原文未保留，因此尚不能断言差异全为注释。修正后冻结生产 checkout 位于原 CI workspace 根目录，诊断 checkout 位于其 ignored `work/attention_profile_diagnostic` 下。原 SV SHA 硬门禁前移到 emit 后、Verilation/C++ 前；即使只有注释变化也必须拒绝，不做字符串归一化或更换期望 SHA。再次运行仍只算诊断，是否恢复必须看其实际结果。
+
 This generator only instruments the simulation driver. It does not emit RTL,
 change hierarchy or resources, introduce a command variant, preload references
 into the DUT/store, or run the production top. A successful bounded prefix is a

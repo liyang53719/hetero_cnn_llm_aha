@@ -10,8 +10,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW_PATH = ".github/workflows/attention-top-profile.yml"
 SOURCE_SHA = "6959810545203d5f9508075b311dba52f1bee0c9"
-SOURCE_ROOT = "work/attention_profile_source"
-COMPACT_ROOT = f"{SOURCE_ROOT}/work/full_top_profile/compact"
+DIAGNOSTIC_ROOT = "work/attention_profile_diagnostic"
+COMPACT_ROOT = "work/full_top_profile/compact"
 
 
 def read_workflow(path: Path) -> dict:
@@ -56,14 +56,18 @@ def test_frozen_source_and_diagnostic_are_separate_verified_checkouts():
     checkouts = [step for step in STEPS if step.get("uses", "").startswith("actions/checkout@")]
     assert len(checkouts) == 2
     assert checkouts[0]["with"] == {
-        "ref": "${{ github.sha }}", "fetch-depth": "1", "persist-credentials": "false",
+        "ref": SOURCE_SHA, "fetch-depth": "1", "persist-credentials": "false",
     }
     assert checkouts[1]["with"] == {
-        "ref": SOURCE_SHA, "path": SOURCE_ROOT,
+        "ref": "${{ github.sha }}", "path": DIAGNOSTIC_ROOT,
         "fetch-depth": "1", "persist-credentials": "false",
     }
     assert JOB["env"]["SOURCE_SHA"] == SOURCE_SHA
+    assert "defaults" not in WORKFLOW
+    assert "defaults" not in JOB
     verify = step_named("Verify both exact revisions and separate repository roots")["run"]
+    assert 'source_root=$(realpath "$GITHUB_WORKSPACE")' in verify
+    assert f'diagnostic_root=$(realpath "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}")' in verify
     assert 'test "$diagnostic_root" != "$source_root"' in verify
     for root, revision in (("diagnostic_root", "GITHUB_SHA"), ("source_root", "SOURCE_SHA")):
         assert f'git -C "${root}" rev-parse --show-toplevel' in verify
@@ -76,9 +80,9 @@ def test_frozen_source_and_diagnostic_are_separate_verified_checkouts():
 
 def test_original_pinned_dependencies_are_installed_from_the_source_root():
     setup = step_named("Prepare the frozen source runtime, pinned tools and upstream iDMA")
-    assert setup["working-directory"] == SOURCE_ROOT
+    assert "working-directory" not in setup
     run = setup["run"]
-    assert f'python -m pip install -e "$GITHUB_WORKSPACE/{SOURCE_ROOT}"' in run
+    assert 'python -m pip install -e "$GITHUB_WORKSPACE"' in run
     for pin in (
         "torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu",
         "PyYAML==6.0.3", "numpy==2.3.5", "uv==0.12.19",
@@ -87,21 +91,21 @@ def test_original_pinned_dependencies_are_installed_from_the_source_root():
         "#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d",
     ):
         assert pin in run
-    assert f'prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/{SOURCE_ROOT}/work/attention_profile_ci_tools"' in run
+    assert 'prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_profile_ci_tools"' in run
     assert "prepare_pinned_idma_sources.py --output work/attention_profile_ci_idma" in run
-    assert f'IDMA_EXPORT=$GITHUB_WORKSPACE/{SOURCE_ROOT}/work/attention_profile_ci_idma/idma_export' in run
+    assert 'IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_profile_ci_idma/idma_export' in run
     assert JOB["env"]["HARDFLOAT_SOURCE"] == (
-        "${{ github.workspace }}/" + SOURCE_ROOT + "/work/upstream/hardfloat_continuous"
+        "${{ github.workspace }}/work/upstream/hardfloat_continuous"
     )
 
 
 def test_tests_are_fast_diagnostic_only_and_payload_guards_cover_both_roots():
     check = step_named("Check only the diagnostic tests and Git payload boundary")
-    assert "working-directory" not in check
-    assert check['env']['ATTENTION_PROFILE_SOURCE_ROOT'] == '${{ github.workspace }}/work/attention_profile_source'
+    assert check["working-directory"] == DIAGNOSTIC_ROOT
+    assert check["env"]["ATTENTION_PROFILE_SOURCE_ROOT"] == "${{ github.workspace }}"
     run = check["run"]
+    assert '(cd "$GITHUB_WORKSPACE" && python scripts/check_git_payloads.py)\n' in run
     assert "python scripts/check_git_payloads.py\n" in run
-    assert f"python {SOURCE_ROOT}/scripts/check_git_payloads.py\n" in run
     assert "python -m pytest -o addopts='' -q tools/attention_profile\n" in run
     assert "python -O -m pytest -o addopts='' -q tools/attention_profile\n" in run
     all_runs = "\n".join(step.get("run", "") for step in STEPS)
@@ -114,7 +118,7 @@ def test_tests_are_fast_diagnostic_only_and_payload_guards_cover_both_roots():
 
 def test_exact_three_payloads_are_collected_in_the_frozen_source_checkout():
     collect = step_named("Reacquire the same pinned layer0, layer3 and prefix payloads")
-    assert collect["working-directory"] == SOURCE_ROOT
+    assert "working-directory" not in collect
     commands = [line.strip() for line in collect["run"].splitlines() if line.startswith("python ")]
     assert commands == [
         f"python scripts/collect_qwen35_{part}_payload.py --output work/qwen35_{part}_payload"
@@ -128,9 +132,9 @@ def test_runner_uses_absolute_source_and_output_under_frozen_checkout():
     assert profile["env"] == {"HF_HUB_OFFLINE": "1"}
     assert profile["run"].splitlines() == [
         "set -euo pipefail",
-        'python tools/attention_profile/run_profile.py '
-        f'--source-root "$GITHUB_WORKSPACE/{SOURCE_ROOT}" '
-        f'--output "$GITHUB_WORKSPACE/{SOURCE_ROOT}/work/full_top_profile"',
+        f'python "$GITHUB_WORKSPACE/{DIAGNOSTIC_ROOT}/tools/attention_profile/run_profile.py" '
+        '--source-root "$GITHUB_WORKSPACE" '
+        '--output "$GITHUB_WORKSPACE/work/full_top_profile"',
     ]
 
 

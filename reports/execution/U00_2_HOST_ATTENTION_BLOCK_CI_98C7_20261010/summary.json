@@ -1,12 +1,47 @@
 {
   "aggregation_repair": {
+    "acceptance_sha256": "312967dee127d6892ce9b18f14f278a1e693cc133ca772de4bc4975cc2aef037",
+    "authenticated_input_provenance_sha256": "29fa12aabe9bc80121a311b19e80670b885e90ee8680cfbda90c02a642dcce01",
+    "build_performed": false,
+    "checker_commit": "33b24b6e9ce3a6c88f12d6700818ea073ce3a2d4",
     "complete_prefix_independently_rehashed_from_compact": false,
     "full_ddr_prefix_validation": "authenticated live driver and Python execution auditor; compact retains hashes only",
+    "numerical_execution_performed": false,
+    "original_aggregate_conclusion": "failure",
+    "original_aggregate_error": "scope/value mismatch: bytes",
+    "original_aggregate_job_id": 114145766746,
+    "original_compact_bytes_reused": true,
     "original_failure": "full 2048B carried reference cache compared to 1024B current append",
-    "repaired_readonly_gate": "PENDING",
-    "rtl_rerun_required": false
+    "original_source_closure_counts": {
+      "build": 657,
+      "fault": 660,
+      "pass": 660
+    },
+    "prior_pending_attempt": {
+      "exit": 75,
+      "numerical_acceptance": false,
+      "reason": "original fault not terminal",
+      "run_id": 38026245939
+    },
+    "provenance_sha256": "7eca57cf253bf54338a63ab00bbe2437a06e5b9bb8d2bce1fde639f013c24415",
+    "recovery_artifact_id": 11661097655,
+    "recovery_completed_utc": "2026-10-10T05:54:07Z",
+    "recovery_job_id": 114145823091,
+    "recovery_run_id": 38029009316,
+    "recovery_zip_sha256": "8b3a90b278bf34b50152a2ec274f59e4d2cf18f6518d35d5b585aab806bbc686",
+    "repaired_readonly_gate": "PASS",
+    "rtl_rerun_required": false,
+    "source_rebinding": false
   },
   "artifacts": {
+    "fault": {
+      "bytes": 179978,
+      "hashes_sha256": "7343efb4c4bde1d05305d79d749a704b2601f47270bbaf8e26009edec3993869",
+      "id": 11661232391,
+      "source_files_verified_against_git": 660,
+      "summary_sha256": "dbbb1c44ecf7b0f6d8f9d512085f4c84ccea4e0c1b1881f6d4f12a0b2111d776",
+      "zip_sha256": "fac4d178cab2c606f29c92180bb03c456f74b1561a7b7d0a9ad01337bbcc7c7f"
+    },
     "pass": {
       "hashes_sha256": "d2901a747272845ada4a0803cefdef4f649643ba6515b821609104ad8135eeaf",
       "id": 11659653260,
@@ -19,18 +54,349 @@
     "binary_sha256": "f0f194342fe9ab70290069441f48b9863c6ed9ab9bcd5f3991c7f60168073263",
     "rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510"
   },
-  "fault_job_conclusion": "PENDING",
+  "conditional_memory_traffic_bound": {
+    "axi_r_bytes_per_cycle_upper_bound": 64,
+    "dense_m1_geometry_ceiling_fraction": 0.0625,
+    "dense_weight_only_ceiling_fraction": 0.0078125,
+    "full128_executed": false,
+    "full_weight_residency_across_launches": false,
+    "internal_cycle_attribution_available": false,
+    "pass_summary_sha256": "37ea106b55dc0a3f53ce0334f780842b172c7980063a7a0663575edd9dfdb6a6",
+    "performance_acceptance": false,
+    "physical_macs_per_cycle": 4096,
+    "proof": "Successful drained launch has read_beats=read_ack_beats and only one R channel; wall_cycles >= read_ack_beats regardless of compute overlap. Do not add reads to compute cycles.",
+    "runs": [
+      {
+        "all_read_ack_beats": 575170,
+        "dense_commands": [
+          {
+            "cycle": 630093,
+            "cycles": 613012,
+            "executed_macs": 67108864,
+            "pc": 1,
+            "pipeline_stalls": 3840,
+            "read_ack_beats": 131126,
+            "read_beats": 131126,
+            "useful_macs": 4194304,
+            "wide_steps": 16384,
+            "write_ack_beats": 128,
+            "write_beats": 128
+          },
+          {
+            "cycle": 705306,
+            "cycles": 75213,
+            "executed_macs": 8388608,
+            "pc": 2,
+            "pipeline_stalls": 2880,
+            "read_ack_beats": 16438,
+            "read_beats": 16438,
+            "useful_macs": 524288,
+            "wide_steps": 2048,
+            "write_ack_beats": 16,
+            "write_beats": 16
+          },
+          {
+            "cycle": 779819,
+            "cycles": 74513,
+            "executed_macs": 8388608,
+            "pc": 3,
+            "pipeline_stalls": 2880,
+            "read_ack_beats": 16438,
+            "read_beats": 16438,
+            "useful_macs": 524288,
+            "wide_steps": 2048,
+            "write_ack_beats": 16,
+            "write_beats": 16
+          },
+          {
+            "cycle": 1270009,
+            "cycles": 297480,
+            "executed_macs": 33554432,
+            "pc": 13,
+            "pipeline_stalls": 1920,
+            "read_ack_beats": 65614,
+            "read_beats": 65614,
+            "useful_macs": 2097152,
+            "wide_steps": 8192,
+            "write_ack_beats": 32,
+            "write_beats": 32
+          },
+          {
+            "cycle": 1822935,
+            "cycles": 530060,
+            "executed_macs": 58720256,
+            "pc": 16,
+            "pipeline_stalls": 960,
+            "read_ack_beats": 114734,
+            "read_beats": 114734,
+            "useful_macs": 3670016,
+            "wide_steps": 14336,
+            "write_ack_beats": 112,
+            "write_beats": 112
+          },
+          {
+            "cycle": 2352395,
+            "cycles": 529460,
+            "executed_macs": 58720256,
+            "pc": 17,
+            "pipeline_stalls": 960,
+            "read_ack_beats": 114734,
+            "read_beats": 114734,
+            "useful_macs": 3670016,
+            "wide_steps": 14336,
+            "write_ack_beats": 112,
+            "write_beats": 112
+          },
+          {
+            "cycle": 3100164,
+            "cycles": 520428,
+            "executed_macs": 58720256,
+            "pc": 19,
+            "pipeline_stalls": 3360,
+            "read_ack_beats": 114814,
+            "read_beats": 114814,
+            "useful_macs": 3670016,
+            "wide_steps": 14336,
+            "write_ack_beats": 32,
+            "write_beats": 32
+          }
+        ],
+        "dense_totals": {
+          "cycles": 2640166,
+          "executed_macs": 293601280,
+          "read_ack_beats": 573898,
+          "read_beats": 573898,
+          "useful_macs": 18350080,
+          "wide_steps": 71680
+        },
+        "phase": "cold0",
+        "read_bandwidth_ceiling_fraction": 0.007790740129005338,
+        "wall_cycles": 3106174,
+        "wall_cycles_over_read_beat_lower_bound": 5.40044508580072
+      },
+      {
+        "all_read_ack_beats": 575298,
+        "dense_commands": [
+          {
+            "cycle": 3736519,
+            "cycles": 613199,
+            "executed_macs": 67108864,
+            "pc": 1,
+            "pipeline_stalls": 3840,
+            "read_ack_beats": 131126,
+            "read_beats": 131126,
+            "useful_macs": 4194304,
+            "wide_steps": 16384,
+            "write_ack_beats": 128,
+            "write_beats": 128
+          },
+          {
+            "cycle": 3811304,
+            "cycles": 74785,
+            "executed_macs": 8388608,
+            "pc": 2,
+            "pipeline_stalls": 2880,
+            "read_ack_beats": 16438,
+            "read_beats": 16438,
+            "useful_macs": 524288,
+            "wide_steps": 2048,
+            "write_ack_beats": 16,
+            "write_beats": 16
+          },
+          {
+            "cycle": 3886901,
+            "cycles": 75597,
+            "executed_macs": 8388608,
+            "pc": 3,
+            "pipeline_stalls": 2880,
+            "read_ack_beats": 16438,
+            "read_beats": 16438,
+            "useful_macs": 524288,
+            "wide_steps": 2048,
+            "write_ack_beats": 16,
+            "write_beats": 16
+          },
+          {
+            "cycle": 4379944,
+            "cycles": 297855,
+            "executed_macs": 33554432,
+            "pc": 13,
+            "pipeline_stalls": 1920,
+            "read_ack_beats": 65614,
+            "read_beats": 65614,
+            "useful_macs": 2097152,
+            "wide_steps": 8192,
+            "write_ack_beats": 32,
+            "write_beats": 32
+          },
+          {
+            "cycle": 4932179,
+            "cycles": 529395,
+            "executed_macs": 58720256,
+            "pc": 16,
+            "pipeline_stalls": 960,
+            "read_ack_beats": 114734,
+            "read_beats": 114734,
+            "useful_macs": 3670016,
+            "wide_steps": 14336,
+            "write_ack_beats": 112,
+            "write_beats": 112
+          },
+          {
+            "cycle": 5462513,
+            "cycles": 530334,
+            "executed_macs": 58720256,
+            "pc": 17,
+            "pipeline_stalls": 960,
+            "read_ack_beats": 114734,
+            "read_beats": 114734,
+            "useful_macs": 3670016,
+            "wide_steps": 14336,
+            "write_ack_beats": 112,
+            "write_beats": 112
+          },
+          {
+            "cycle": 6209807,
+            "cycles": 519948,
+            "executed_macs": 58720256,
+            "pc": 19,
+            "pipeline_stalls": 3360,
+            "read_ack_beats": 114814,
+            "read_beats": 114814,
+            "useful_macs": 3670016,
+            "wide_steps": 14336,
+            "write_ack_beats": 32,
+            "write_beats": 32
+          }
+        ],
+        "dense_totals": {
+          "cycles": 2641113,
+          "executed_macs": 293601280,
+          "read_ack_beats": 573898,
+          "read_beats": 573898,
+          "useful_macs": 18350080,
+          "wide_steps": 71680
+        },
+        "phase": "carried1",
+        "read_bandwidth_ceiling_fraction": 0.007790744970432715,
+        "wall_cycles": 3109624,
+        "wall_cycles_over_read_beat_lower_bound": 5.40524041453299
+      }
+    ],
+    "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "source_sha256": {
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+      "chisel/continuous_prefill/tests/host_bf16_attention_block.cpp": "be1281e44d17228aaba63daeeae2ae8cb10e7c5c39fc30fca681ca0998628f09",
+      "chisel/continuous_prefill/tests/host_physical_axi.h": "c328df0b560c26b310b1e8f8b9b91d23acf68a59f5ce1b1122c201a2534ff02e"
+    },
+    "status": "SOURCE_AND_OBSERVED_TRAFFIC_CONDITIONAL_BOUND",
+    "test_memory_service": {
+      "address_and_write_backpressure": true,
+      "delayed_final_ack_clocks": 53,
+      "physical_ddr_benchmark": false,
+      "pseudorandom_response_delay_clocks": [
+        1,
+        7
+      ],
+      "single_pending_transaction": true
+    },
+    "weight_ping_pong_bytes": 81920
+  },
+  "dormant_replay_tools": {
+    "combined_with_document_ledger_tests_normal": 165,
+    "eda_executed": false,
+    "future_prior_source": "carried1/writable_after_command0.bin actual DDR before KV append",
+    "hardware_authority_verified": false,
+    "model_executed": false,
+    "native_full_block_acceptance": false,
+    "original_bytes_recovered": false,
+    "receipt_identity": "separate saved-file bytes and sorted compact live JSON hashes",
+    "remaining": [
+      "future successful same-live-session pack hook and authenticated CI artifact retention",
+      "reconstruct reference bundle from retained original bytes and downloadable pinned weights",
+      "actual internal GQA producer capture if stage admission is required",
+      "execute pinned same-input official M1 reference and enforce unchanged full native gates"
+    ],
+    "source_sha256": {
+      ".github/workflows/attention-native-replay-contract.yml": "d0996b75650a6050ae1de509e614b7a0c6ebaf268ea708249f6d6177b0fc1367",
+      "scripts/verify_attention_native_m1.py": "ebf935a71ddf79fa2dda242877f809636ee831e23536daf6363aea3bdeee8c14",
+      "tests/test_attention_native_m1.py": "b1b5de10af53c04cc35b3930ce28386894e0710759c39346544c3fa00847b714",
+      "tests/test_attention_native_replay_pack.py": "b1b21c947754ab41bbd56a903a666419b6f6e5b055c73a82860ac58e5acefb3c",
+      "tools/attention_native/pack_replay.py": "1a5a3f0623b93f0c5be13531ef88fc63c0763de956c327870426ea56a6f7d942"
+    },
+    "status": "SOURCE_TESTED_DORMANT_NOT_MODEL_VALIDATED",
+    "synthetic_tests_normal": 74,
+    "synthetic_tests_optimized_python": 74
+  },
+  "fault_job_completed_utc": "2026-10-10T05:52:36Z",
+  "fault_job_conclusion": "success",
   "fault_job_id": 114118685810,
+  "fault_native_software_failed_comparisons": {
+    "avx2": 13,
+    "baseline": 11
+  },
+  "fault_protocol_acceptance": true,
+  "fault_protocol_scope": {
+    "cache_registers_directly_observed": false,
+    "case_frozen_recipe_acceptance": false,
+    "changed_input_hash_names_vs_pass": [
+      "cold0_hidden.bf16le",
+      "cold1_hidden.bf16le"
+    ],
+    "hashes_sha256": "7343efb4c4bde1d05305d79d749a704b2601f47270bbaf8e26009edec3993869",
+    "mismatches": [],
+    "mode": "final-residual-ack-error",
+    "native_full_block_acceptance": false,
+    "reset_restore_executed": false,
+    "runs": [
+      {
+        "checkpoint_accepted": true,
+        "ddr_sha256": "55bc9f467531d6c5aa802de640695b94b1e4e0a86a706f5707c381519031d72c",
+        "inferred_committed_generation": 1,
+        "inferred_committed_length": 1,
+        "inferred_final_output": 4869341184,
+        "phase": "cold0",
+        "physical_ack_bytes": 68608,
+        "physical_written_bytes": 68608,
+        "status": 0,
+        "successful_owner_receipt_bytes": 68608
+      },
+      {
+        "checkpoint_accepted": false,
+        "ddr_sha256": "83abb6c3b1a52768a51149b9b0b7df94222be79436058d89e11f25b19c2c6319",
+        "inferred_committed_generation": 1,
+        "inferred_committed_length": 1,
+        "inferred_final_output": 4869341184,
+        "phase": "carried1",
+        "physical_ack_bytes": 68544,
+        "physical_written_bytes": 68608,
+        "status": 3,
+        "successful_owner_receipt_bytes": 66560
+      }
+    ],
+    "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "summary_sha256": "dbbb1c44ecf7b0f6d8f9d512085f4c84ccea4e0c1b1881f6d4f12a0b2111d776",
+    "verified_source_files": 660
+  },
   "full128_executed": false,
   "future_replay_retention_budget": {
     "downloadable_weights": false,
     "final_kv_bytes": 4096,
     "git_payloads": false,
     "internal_gqa_fp32_container_bytes": 480,
+    "maximum_archive_bytes": 262144,
+    "maximum_metadata_bytes": 65536,
+    "optional_internal_gqa_bytes": 480,
     "original_bytes_available": false,
     "prior_kv_bytes": 2048,
     "proposed_only": true,
     "raw_hidden_bytes": 4096,
+    "required_files": 49,
+    "required_tensor_bytes": 147712,
     "stored_terminal_bytes": 137216,
     "total_tensor_bytes": 148192,
     "trig_bytes": 256
@@ -223,7 +589,20 @@
     ],
     "scalar_internal_or_memory_cycle_buckets_available": false,
     "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
-    "status": "PASS_EXACT_PORT_COUNTER_ARITHMETIC"
+    "status": "PASS_EXACT_PORT_COUNTER_ARITHMETIC",
+    "stimulus_scope": {
+      "address_and_write_backpressure": true,
+      "final_write_ack_delay_cycles": 53,
+      "full_cycle_denominator_includes_all_injected_delays": true,
+      "inter_read_beat_delay": true,
+      "outstanding_transactions": 1,
+      "pseudorandom_response_delay_cycles": [
+        1,
+        7
+      ],
+      "real_ddr_benchmark": false,
+      "testbench": "PhysicalAxi"
+    }
   },
   "missing_replay_data": [
     "original raw hidden bytes for both tokens",
@@ -271,7 +650,6 @@
   "pass_job_id": 114118686395,
   "physical_macs_per_cycle": 4096,
   "remaining": [
-    "fault and corrected split aggregate terminal",
     "same-input/same-actual-cache native M1 reference and hidden-node gate",
     "cold128/carried128",
     "reset/restore",
@@ -292,6 +670,159 @@
     "tokens_per_launch": 1
   },
   "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
-  "split_acceptance": false,
-  "status": "PASS_FROZEN_RECIPE_PAIR_NATIVE_AND_SPLIT_ACCEPTANCE_OPEN"
+  "split_acceptance": true,
+  "status": "PASS_FROZEN_RECIPE_PAIR_AND_FAULT_PROTOCOL_NATIVE_OPEN",
+  "threads2_diagnostic": {
+    "candidate_adopted": false,
+    "candidate_build_seconds": 3261.158292294,
+    "candidate_members": {
+      "build_threads2.sh": {
+        "bytes": 2879,
+        "sha256": "a9d32eb691bc4ad1eb42b471cec35df980a34f162f35e5eb4731d4e0ad96c3be"
+      },
+      "candidate_identity.json": {
+        "bytes": 8575,
+        "sha256": "81e6c49b1a601e3758d53fdd25db66aa0c8bc9ab41b00864539d19290ae4300b"
+      },
+      "generated/HostBlockTop.sv": {
+        "bytes": 80205065,
+        "sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510"
+      },
+      "generated/SCOPE.json": {
+        "bytes": 522,
+        "sha256": "fc788fefdddee379700b52190f439140abe159e2335bf680e07a54aee18ef312"
+      },
+      "idma.f": {
+        "bytes": 47399,
+        "sha256": "7ee86e9d6cd38f995d2a3a00dfbe60f15236295230f862bbd272c3a9d6b7c61f"
+      },
+      "idma_identity.json": {
+        "bytes": 631,
+        "sha256": "ca5f764c1a915ce7fa8856631e08b116e538f924aa3929de965226ec6707d118"
+      },
+      "obj/VHostBlockTop": {
+        "bytes": 7544744,
+        "sha256": "3ef8814b9f3aeb016c73635371c251f5736af8835750486e081937d2a201e0d0"
+      },
+      "obj/VHostBlockTop.cpp": {
+        "bytes": 8717,
+        "sha256": "ce7a5e8fcda2f93ed263dab863d30c294c78a3dc64b6bf8fdd9114652658eace"
+      },
+      "verilator_argv.json": {
+        "bytes": 3952,
+        "sha256": "e749155897c37a7f5ba325c141042b1ac4b25dc852dde3fc504bb73c6e01794d"
+      }
+    },
+    "candidate_zip_sha256": "a563b20348625f332abf2020efdfab813f4f112d4cdd325f10f81f81b9335803",
+    "diagnostic_source_commit": "5ff4ca072b5aa707b18fa48730d572f4a2e59a36",
+    "job_id": 114131802450,
+    "measured_scope": "elapsed PhysicalAxi.step calls including capture overhead; excludes event serialization, final memory digest and report; not isolated eval timing",
+    "new_hardware_numerical_acceptance": false,
+    "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "run_id": 38024322165,
+    "status": "VERIFIED_PREFIX_DIAGNOSTIC_ONLY_NOT_ADOPTED",
+    "summary_sha256": "e80892ff2a22dff4dfb7f86ee34da0d369128554411226055a69e4f5d75f4dd9",
+    "whole_layer_speedup_claimed": false,
+    "windows": {
+      "norm_prefix": {
+        "activity": {
+          "executed_macs_delta": 0,
+          "final_pc": 0,
+          "final_pipeline_issues": 0,
+          "first_matrix_issue_cycle": null,
+          "matrix_activity_proven": false,
+          "matrix_issue_cycles": 0,
+          "matrix_pipeline_issue_delta": 0,
+          "norm_acked_bytes": 0,
+          "norm_completion_before_matrix": false,
+          "norm_completion_cycle": null,
+          "norm_physical_bytes": 0,
+          "norm_write_ack_beats": 0,
+          "pcs_seen": [
+            0
+          ],
+          "useful_macs_delta": 0,
+          "write_acknowledgements": 0
+        },
+        "baseline_over_threads2": 0.8210090128828267,
+        "counters": {
+          "active_cycles": 4060,
+          "ar_handshakes": 77,
+          "aw_handshakes": 0,
+          "b_handshakes": 0,
+          "cycles": 4096,
+          "r_handshakes": 77,
+          "reset_cycles": 6,
+          "w_handshakes": 0
+        },
+        "cycles": 4096,
+        "mean_step_seconds": {
+          "baseline": 5.1590358385,
+          "threads2": 6.283774913
+        },
+        "prefix_equal": true,
+        "runtime_mean_cores": {
+          "baseline": [
+            0.9920212626558687,
+            0.9861825300680104
+          ],
+          "threads2": [
+            1.9752383453883928,
+            1.9675707315699011
+          ]
+        },
+        "threads2_slowdown_percent": 21.801342531999545
+      },
+      "reset_to_matrix_prefix": {
+        "activity": {
+          "executed_macs_delta": 0,
+          "final_pc": 1,
+          "final_pipeline_issues": 1280,
+          "first_matrix_issue_cycle": 20532,
+          "matrix_activity_proven": true,
+          "matrix_issue_cycles": 1280,
+          "matrix_pipeline_issue_delta": 1280,
+          "norm_acked_bytes": 2048,
+          "norm_completion_before_matrix": true,
+          "norm_completion_cycle": 17082,
+          "norm_physical_bytes": 2048,
+          "norm_write_ack_beats": 32,
+          "pcs_seen": [
+            0,
+            1
+          ],
+          "useful_macs_delta": 0,
+          "write_acknowledgements": 32
+        },
+        "baseline_over_threads2": 0.81224705433477,
+        "counters": {
+          "active_cycles": 65500,
+          "ar_handshakes": 877,
+          "aw_handshakes": 32,
+          "b_handshakes": 32,
+          "cycles": 65536,
+          "r_handshakes": 10474,
+          "reset_cycles": 6,
+          "w_handshakes": 32
+        },
+        "cycles": 65536,
+        "mean_step_seconds": {
+          "baseline": 84.37791673,
+          "threads2": 103.8820840035
+        },
+        "prefix_equal": true,
+        "runtime_mean_cores": {
+          "baseline": [
+            0.9992909800939627,
+            0.999012987169424
+          ],
+          "threads2": [
+            1.997700712868438,
+            1.9979111425221552
+          ]
+        },
+        "threads2_slowdown_percent": 23.115251038860297
+      }
+    }
+  }
 }

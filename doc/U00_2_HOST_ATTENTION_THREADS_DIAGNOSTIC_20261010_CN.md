@@ -91,7 +91,7 @@ compact JSON；因此首轮候选 ELF 只有哈希，无法恢复。修复后的
 
 首版诊断工具的 53 项测试在普通 Python 和 `python -O` 下分别通过，但它们
 没有覆盖本次真实构建与参考闭包的差集，不能据此声称原工具完整正确。首轮
-真实双线程构建已经完成；前缀等价及速度仍没有结果。修复后的 78 项测试在普通 Python 和 `python -O` 下均通过，增加真实集合合同
+首轮真实双线程构建已经完成，但当时没有前缀等价或速度结果。修复后的 78 项测试在普通 Python 和 `python -O` 下均通过，增加真实集合合同
 及多余、缺件、漂移负测，并保留 child/grandchild 的 worker-SIGKILL 回收回归。
 只读预检还重新核对归档 655 项构建源与各工厂完整集合的 658 项并集，全部匹配
 冻结提交及当前字节，不执行模型或 EDA。
@@ -103,7 +103,30 @@ compact JSON；因此首轮候选 ELF 只有哈希，无法恢复。修复后的
 它是 16 tokens、两层、合成权重的旧 Host 回归，不能替代 Qwen3.5 官方权重
 完整 Attention 或 M128 验收。
 
-U00.2 ongoing、U01 to do、C02.2 OPEN。完整 Attention 数值与故障终态、
-完整周期 MAC 实测、native 完整精度、cold128/carried128、reset/restore、
+## 修正版实测终态：双线程较慢，不采用
+
+精确诊断源码 `5ff4ca072b5aa707b18fa48730d572f4a2e59a36` 的
+[run 38024322165](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38024322165)
+/ job `114131802450` 于 05:44:55 UTC 成功。两个 ABBA 窗口都完成，事件、
+terminal、计数及内存摘要严格一致；658 个生产源与冻结 98c7 匹配，诊断
+driver 与 5ff4ca0 匹配。候选构建实耗 3,261.16 秒，原单线程 ELF 未重建。
+compact 工件 `11661242028` 与候选九文件工件 `11661007086` 均已下载核验
+GitHub 摘要；候选 ELF、相同 SV、生成 top C++ 与构建脚本摘要也逐一相符。
+
+| 完整 DUT 的有界前缀 | 单线程 step 均值 | 双线程 step 均值 | 双线程耗时增加 |
+|---|---:|---:|---:|
+| 4096 拍 Norm | 5.1590 秒 | 6.2838 秒 | 21.80% |
+| reset 至 65536 拍 Matrix 活跃窗口 | 84.3779 秒 | 103.8821 秒 | 23.12% |
+
+长窗口在第 17,082 拍完成 Norm 发布及 32 个写 ACK，第 20,532 拍首次
+Matrix issue，共真实发射 1,280 次；没有注入 checkpoint 或跳过前序计算。
+双线程进程平均占用约两核，单线程约一核。计时含 step 捕获开销，未隔离
+eval、纯 Matrix 或完整层，不据此声称完整 block 提速。此候选不采用；原
+数值路线继续使用原 ELF。先前身份失败记录和本次负性能结果均保留。
+
+独立的原 Attention pass 已通过完整双 M1 frozen-recipe，并取得协议背压
+条件下全周期 MAC 实测；见 [完整数值及统计范围](U00_2_HOST_ATTENTION_BLOCK_CI_98C7_20261010_CN.md)。
+原末 ACK 故障协议和只读修正汇总也已通过，详见上述完整范围记录。
+U00.2 ongoing、U01 to do、C02.2 OPEN。native 完整精度、cold128/carried128、reset/restore、
 35B 和 PPA/90% 仍按各自门禁验收。GDN M1 的 0.09381854% 是既有源码
 约束导出的乐观架构上界，不是本诊断实测，也不适用于 Attention 或 M128。

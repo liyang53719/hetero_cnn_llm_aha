@@ -34,9 +34,43 @@ reset 和故意延迟读取 terminal 的七拍；连续 launch 的累计端口�
 useful/executed 约 6.23%，还叠加大量非发射周期。未保留 Scalar opcode 内部
 周期或互斥 stall 分类；现有 stall 事件可重叠，不允许相加充当完整周期拆分。
 
-以上是完整成功 M1 pair 的 RTL 端口实测。GDN 的 0.09381854% 仍仅为固定
+以上是完整成功 M1 pair 在协议压力测试条件下的 RTL 端口实测。当前
+PhysicalAxi 测试内存只允许一个 pending 事务，故意在响应及 burst 的各 R beat
+之间插入伪随机 1–7 拍延迟，并对 AR/AW/W 注入背压；末写 ACK 另延迟 53 拍。
+因此 0.1442% 不能当作真实 DDR 带宽下的性能测量，也不能把所有等待归因于硬件。
+
+另可从已测流量得到有条件的严格上界：单一 512-bit R 端口每拍至多接受
+一个 beat；cold/carried 的 575,170/575,298 个实际读 ACK 使完整周期至少等于
+这些数量。在当前流量不变的条件下，即便理想连续供数，Matrix useful 利用率
+也至多约 0.779074%，并非对未来优化实现或 M128 的预测。七个 Dense 命令
+各轮共读 573,898 beat，其中 573,440 个是 BF16 权重、336 个是输入、122 个
+是描述符。M1 每次 wide issue 仅 256/4096 个 MAC 有用，而这些 256 个 BF16
+权重需要八个 64-byte beat，故仅 Dense 的理想权重供数上界是 0.78125%。
+当前已有两个 K16 ping-pong 权重缓冲，共 81,920 B；并非没有本地缓冲，但
+没有跨 launch 保持完整权重。读周期下界和计算周期不能相加，否则会重复计入
+可重叠部分。全层现有周期是读 beat 下界的约 5.40 倍；其中具体硬件等待与
+人为背压仍需后续受控统计区分。
+
+GDN 的 0.09381854% 仍仅为固定
 源码的乐观架构上界；两者不是同层、同算法或同证据类型。故障样本不作为
 成功 whole-block 利用率。当前优先收敛数值合同，不以此启动硬件微优化。
+
+## Verilator 双线程对照：不采用
+
+原诊断 run `38024322165` / job `114131802450` 于 05:44:55 UTC 成功完成。
+基线复用原单线程 ELF；仅候选构建一次，耗时 3,261.16 秒。两者使用同一个
+生产 SV、资源、driver、strict-FP 参数和同次生成的输入，在相同 CPU affinity
+上按 ABBA 顺序各运行两次。658 个生产源码与精确 98c7、诊断 driver 与 5ff4ca0
+均核验一致；候选九文件归档已下载，ELF/SV/脚本及 GitHub ZIP SHA 均匹配。
+
+4096 拍 Norm 前缀的 step 均值为单线程 5.1590 秒、双线程 6.2838 秒；
+从 reset 到 Matrix 的 65,536 拍前缀为 84.3779 秒、103.8821 秒，双线程
+分别慢 21.80% 和 23.12%。第二窗口已完成 input Norm 的 32 个写 ACK，
+真实 Matrix 发射 1,280 次，且两种 ELF 的事件、terminal、计数与内存摘要一致。
+进程实际平均用核约为 1.00 与 2.00，增加线程没有缩短这两个窗口。
+测量包括 PhysicalAxi.step 的捕获开销，未单独测 eval 或纯 Matrix，更没有
+测完整 block 的线程加速。此候选不采用，不为该负结果重复构建；已有数值
+pass/fault 路线继续使用原 ELF。
 
 ## native 失败的实际含义
 
@@ -67,7 +101,25 @@ prefix 尺寸/来源、当前 tail 与 rope_k/V 对应关系以及认证的 DDR/
 证据。compact 只有哈希，不能独立重新读取 old-prefix 字节；该限制显式保留。
 修正版只读汇总复用原 pass/fault 工件，不重新执行两条数值路线。
 
-截至本记录，fault `114118685810` 和修正汇总仍待终态。新增 5 分钟 scope
+fault `114118685810` 于 05:52:36 UTC 成功：cold0 正常提交，carried1 在最后
+残差的末 64 B 写 ACK 注入错误。实际写入 68,608 B、成功 ACK 68,544 B；
+返回 status3、末 fence 不接受，按已接受协议推断的可见 generation/length
+仍为 1/1，最终输出指针仍指向 cold0；随后十拍拒绝新 launch 且无新 iDMA。
+这些 cache 寄存器未单独导出，故仍标为协议推断；reset/restore 未执行。
+fault 的 660 个源码哈希与原 98c7 Git 对象一致。两条独立 fresh case 的
+权重/trig 相同，但两 token 的 raw hidden SHA 都不同，不能称同激励故障 A/B。
+fault 自身软件 native producer 审计另有 baseline 11 / AVX2 13 项失败，原样保留。
+
+原 aggregate `114145766746` 于 05:52:53 UTC 因 `scope/value mismatch: bytes`
+失败。修正 checker `33b24b6e9ce3a6c88f12d6700818ea073ce3a2d4` 的
+[只读恢复 run 38029009316](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38029009316)
+/ job `114145823091` 于 05:54:07 UTC 成功。新工件 `11661097655` 已下载核
+GitHub ZIP SHA，内含原 build/pass/fault compact；pass/fault 与此前直接下载
+的原字节相同。汇总通过 frozen-recipe 完整双 M1 与故障协议，仍不授予 native、
+M128、性能或同激励 A/B 验收。未重新 build、捕获模型、执行 RTL 或重绑源码。
+此前 05:05 的只读尝试因原 fault 尚未终态返回 exit75，保留为 PENDING。
+
+新增 5 分钟 scope
 仅在精确白名单的只读 checker/测试/文档变化、且原生产 job 正文逐字不变时
 跳过重复 EDA；未知 diff、缺 base、RTL/driver/oracle 或 job 正文变化均全跑。
 原四个数值/汇总 job 的 570 runner-min 上界不变，新 scope 是额外 5 分钟上界，
@@ -80,9 +132,25 @@ prefix 尺寸/来源、当前 tail 与 rope_k/V 对应关系以及认证的 DDR/
 不进 Git，不含可下载权重。两 token 的 raw hidden 4,096 B、trig 256 B、
 42 个 terminal 合计 137,216 B、显式 prior KV 2,048 B、最终 KV 4,096 B、
 五个内部 GQA 边界的 FP32 容器 480 B，共 148,192 B，加受限元数据；
-这只是后续采集预算，不是已经保存或重新验真的证据。休眠的 reference-only 入口准备显式同 prior-state
-条件参考和完全官方两 M1 轨迹；缺失原数据就保持不可复验，不用新 fresh
-输入冒充原 pass。全 M128、reset/restore、35B、PPA、MAC 目标仍未完成。
+这只是后续采集预算，不是已经保存或重新验真的证据。
+
+已实现休眠的 `tools/attention_native/pack_replay.py`：未来成功 pass 的同一
+live session 可调用它，复用既有 build/source/物理执行检查，并保全 49 个
+BF16 文件、147,712 B 必需 tensor。prior KV 从 carried 的 command-0 实际
+全可写 DDR 快照切出，此时 input Norm 已结束、KV append 尚未开始；最终 KV
+从真正末 DDR 切出，42 个 terminal 同时与对应 DDR span 核验。内部 GQA
+边界仍需未来 driver 真实导出，当前 pack 不伪造这 480 B。元数据最多 64 KiB，
+整个 ZIP 最多 256 KiB，只允许写入忽略的 work 子目录；下载后还须独立认证
+原 GitHub run/job 与工件 digest，离线自填哈希不授予硬件或 native 验收。
+
+`scripts/verify_attention_native_m1.py` 是休眠的 reference-only 入口，默认
+只核验已有字节；显式执行路径准备官方两次 M1、canonical-prior 与 supplied-prior
+条件参考，保留不同证据等级。官方 runtime 路径本轮未运行，pack 到原始参考
+bundle 的恢复/集成也未完成。保存的缩进 receipt 文件 SHA 与 live canonical
+JSON SHA 分开，不能混用。两工具共 74 项合成/源合同测试普通与 `python -O`
+均通过；不因此声称模型数值通过。轻量 CI 只运行这些测试，不下载模型或执行
+EDA。缺失原数据就保持不可复验，不用新 fresh 输入冒充原 pass。
+全 M128、reset/restore、35B、PPA、MAC 目标仍未完成。
 
 U00.2 保持 ongoing，U01 保持 to do，C02.2 保持 OPEN；C03.2/C04.2/C05、
 S01/Q35A 与完整模型大项不因本次 M1 子门关闭。

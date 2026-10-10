@@ -1,6 +1,6 @@
 {
   "schema": "HOST_ATTENTION_THREADS_DIAGNOSTIC_DELIVERY_V1",
-  "status": "SOURCE_INVENTORY_REPAIR_READY_PENDING_SINGLE_RECOVERY_CI",
+  "status": "COMPLETE_PREFIX_DIAGNOSTIC_THREADS2_SLOWER_NOT_ADOPTED",
   "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
   "producer_run_id": 38015586840,
   "producer_job_id": 114105000691,
@@ -117,5 +117,171 @@
     "candidate_fixed_files_preserved": 9,
     "compact_receipts_printed_to_actions_log": true,
     "weights_fixture_events_uploaded": false
+  },
+  "verified_recovery_result": {
+    "status": "VERIFIED_PREFIX_DIAGNOSTIC_ONLY_NOT_ADOPTED",
+    "run_id": 38024322165,
+    "job_id": 114131802450,
+    "diagnostic_source_commit": "5ff4ca072b5aa707b18fa48730d572f4a2e59a36",
+    "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "summary_sha256": "e80892ff2a22dff4dfb7f86ee34da0d369128554411226055a69e4f5d75f4dd9",
+    "candidate_zip_sha256": "a563b20348625f332abf2020efdfab813f4f112d4cdd325f10f81f81b9335803",
+    "candidate_members": {
+      "candidate_identity.json": {
+        "bytes": 8575,
+        "sha256": "81e6c49b1a601e3758d53fdd25db66aa0c8bc9ab41b00864539d19290ae4300b"
+      },
+      "verilator_argv.json": {
+        "bytes": 3952,
+        "sha256": "e749155897c37a7f5ba325c141042b1ac4b25dc852dde3fc504bb73c6e01794d"
+      },
+      "build_threads2.sh": {
+        "bytes": 2879,
+        "sha256": "a9d32eb691bc4ad1eb42b471cec35df980a34f162f35e5eb4731d4e0ad96c3be"
+      },
+      "obj/VHostBlockTop": {
+        "bytes": 7544744,
+        "sha256": "3ef8814b9f3aeb016c73635371c251f5736af8835750486e081937d2a201e0d0"
+      },
+      "obj/VHostBlockTop.cpp": {
+        "bytes": 8717,
+        "sha256": "ce7a5e8fcda2f93ed263dab863d30c294c78a3dc64b6bf8fdd9114652658eace"
+      },
+      "generated/HostBlockTop.sv": {
+        "bytes": 80205065,
+        "sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510"
+      },
+      "generated/SCOPE.json": {
+        "bytes": 522,
+        "sha256": "fc788fefdddee379700b52190f439140abe159e2335bf680e07a54aee18ef312"
+      },
+      "idma_identity.json": {
+        "bytes": 631,
+        "sha256": "ca5f764c1a915ce7fa8856631e08b116e538f924aa3929de965226ec6707d118"
+      },
+      "idma.f": {
+        "bytes": 47399,
+        "sha256": "7ee86e9d6cd38f995d2a3a00dfbe60f15236295230f862bbd272c3a9d6b7c61f"
+      }
+    },
+    "windows": {
+      "norm_prefix": {
+        "cycles": 4096,
+        "mean_step_seconds": {
+          "baseline": 5.1590358385,
+          "threads2": 6.283774913
+        },
+        "baseline_over_threads2": 0.8210090128828267,
+        "threads2_slowdown_percent": 21.801342531999545,
+        "activity": {
+          "executed_macs_delta": 0,
+          "final_pc": 0,
+          "final_pipeline_issues": 0,
+          "first_matrix_issue_cycle": null,
+          "matrix_activity_proven": false,
+          "matrix_issue_cycles": 0,
+          "matrix_pipeline_issue_delta": 0,
+          "norm_acked_bytes": 0,
+          "norm_completion_before_matrix": false,
+          "norm_completion_cycle": null,
+          "norm_physical_bytes": 0,
+          "norm_write_ack_beats": 0,
+          "pcs_seen": [
+            0
+          ],
+          "useful_macs_delta": 0,
+          "write_acknowledgements": 0
+        },
+        "counters": {
+          "active_cycles": 4060,
+          "ar_handshakes": 77,
+          "aw_handshakes": 0,
+          "b_handshakes": 0,
+          "cycles": 4096,
+          "r_handshakes": 77,
+          "reset_cycles": 6,
+          "w_handshakes": 0
+        },
+        "runtime_mean_cores": {
+          "baseline": [
+            0.9920212626558687,
+            0.9861825300680104
+          ],
+          "threads2": [
+            1.9752383453883928,
+            1.9675707315699011
+          ]
+        },
+        "prefix_equal": true
+      },
+      "reset_to_matrix_prefix": {
+        "cycles": 65536,
+        "mean_step_seconds": {
+          "baseline": 84.37791673,
+          "threads2": 103.8820840035
+        },
+        "baseline_over_threads2": 0.81224705433477,
+        "threads2_slowdown_percent": 23.115251038860297,
+        "activity": {
+          "executed_macs_delta": 0,
+          "final_pc": 1,
+          "final_pipeline_issues": 1280,
+          "first_matrix_issue_cycle": 20532,
+          "matrix_activity_proven": true,
+          "matrix_issue_cycles": 1280,
+          "matrix_pipeline_issue_delta": 1280,
+          "norm_acked_bytes": 2048,
+          "norm_completion_before_matrix": true,
+          "norm_completion_cycle": 17082,
+          "norm_physical_bytes": 2048,
+          "norm_write_ack_beats": 32,
+          "pcs_seen": [
+            0,
+            1
+          ],
+          "useful_macs_delta": 0,
+          "write_acknowledgements": 32
+        },
+        "counters": {
+          "active_cycles": 65500,
+          "ar_handshakes": 877,
+          "aw_handshakes": 32,
+          "b_handshakes": 32,
+          "cycles": 65536,
+          "r_handshakes": 10474,
+          "reset_cycles": 6,
+          "w_handshakes": 32
+        },
+        "runtime_mean_cores": {
+          "baseline": [
+            0.9992909800939627,
+            0.999012987169424
+          ],
+          "threads2": [
+            1.997700712868438,
+            1.9979111425221552
+          ]
+        },
+        "prefix_equal": true
+      }
+    },
+    "candidate_build_seconds": 3261.158292294,
+    "measured_scope": "elapsed PhysicalAxi.step calls including capture overhead; excludes event serialization, final memory digest and report; not isolated eval timing",
+    "whole_layer_speedup_claimed": false,
+    "new_hardware_numerical_acceptance": false,
+    "candidate_adopted": false,
+    "completed_at": "2026-10-10T05:44:55Z",
+    "source_files_verified": 658,
+    "diagnostic_source_files_verified": 1,
+    "compact_artifact": {
+      "id": 11661242028,
+      "bytes": 92393,
+      "sha256": "1263e14429a450af9bdda6ff55fd2328e8b456c09a2ce7bbfbf041a7ddd3355a"
+    },
+    "candidate_artifact": {
+      "id": 11661007086,
+      "bytes": 5850850,
+      "sha256": "a563b20348625f332abf2020efdfab813f4f112d4cdd325f10f81f81b9335803"
+    }
   }
 }

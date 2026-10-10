@@ -1,0 +1,31 @@
+name: qwen35-Attention-Native-Replay-Source-Contract
+
+# Lightweight source and synthetic-file tests only. No model, capture or EDA.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/attention-native-replay-contract.yml'
+      - 'scripts/verify_attention_native_m1.py'
+      - 'tests/test_attention_native_m1.py'
+      - 'tools/attention_native/**'
+      - 'tests/test_attention_native_replay_pack.py'
+permissions:
+  contents: read
+jobs:
+  source-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install numpy==2.3.5 PyYAML==6.0.3 pytest==8.3.5
+      - name: Check dormant reference and small replay boundary
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONPATH: 'src:chisel/continuous_prefill/scripts'
+        run: |
+          python -B -m pytest -o addopts='' -q tests/test_attention_native_m1.py tests/test_attention_native_replay_pack.py
+          python -B -O -m pytest -o addopts='' -q tests/test_attention_native_m1.py tests/test_attention_native_replay_pack.py
+          python -B scripts/check_git_payloads.py

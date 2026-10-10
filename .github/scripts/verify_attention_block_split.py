@@ -3,7 +3,9 @@
 
 This is not a live capture, reference, DUT, or numerical authority factory. The
 caller MUST obtain each expected digest from the corresponding trusted CI job
-output, not calculate it from the downloaded JSON being admitted. The immutable
+output, or from members of its artifact ZIP after independently authenticating
+the ZIP digest and exact run/job identity through trusted CI metadata. Hashing
+unauthenticated downloaded JSON does not establish trust. The immutable
 build job supplies the commit/package/build digests. Each consumer supplies its
 two compact-file digests. Each consumer must have run cold0 -> carried1 in one
 DUT with its own fresh live reference authorities. No cold/carried splice is
@@ -29,9 +31,18 @@ import host_bf16_attention_block_fixture as fixture
 from host_bf16_attention_block_execution import completion_plan
 from host_bf16_attention_block_live_gate import BUILD_STATUS, CASE_STATUS, SCOPE
 from host_bf16_attention_block_prefix import STATUS as PREFIX_STATUS, CYCLES as PREFIX_CYCLES
-from host_bf16_attention_block_reference import contract_schema, CONTRACT_PATH
+from host_bf16_attention_block_reference import contract_schema, CONTRACT_PATH, PIN_PATH
 from host_block_mac_profile import STATUS as PROFILE_STATUS
 from real2_ci import hash_map, require, safe_name, sha, unique_object
+
+# The aggregation checker may be newer than the frozen production checkout.
+# Every imported production helper and data file must still have frozen bytes.
+IMPORTED_SOURCE_PATHS = frozenset(
+    Path(module.__file__).resolve() for module in tuple(sys.modules.values())
+    if getattr(module, '__file__', None) and any(
+        Path(module.__file__).resolve().is_relative_to(directory)
+        for directory in (SCRIPTS, ROOT / 'src/heteronpu'))
+) | {CONTRACT_PATH, PIN_PATH}
 
 MODES = ('pass', 'final-residual-ack-error')
 PASS = 'PASS_ATTENTION_BLOCK_SPLIT_FROZEN_RECIPE_AND_FAULT_PROTOCOL'
@@ -45,6 +56,16 @@ AUTHORITY_SCOPE = (
 )
 MAX_COMPACT_BYTES = 16 * 1024 * 1024
 HIDDEN_INPUTS = frozenset(('cold0_hidden.bf16le', 'cold1_hidden.bf16le'))
+CACHE_PRODUCERS = {'cache_k': 'rope_k', 'cache_v': 'v'}
+EMPTY_SHA256 = hashlib.sha256(b'').hexdigest()
+CACHE_EVIDENCE_SCOPE = (
+    'Reference cache records describe the full prefix; actual cache records '
+    'describe only the current append. Full-prefix preservation and dependency '
+    'reads are attested by the authenticated live job and frozen driver/auditor, '
+    'with every full-DDR and command-snapshot digest retained. Compact JSON '
+    'does not contain cache bytes: the aggregator cannot independently recompute '
+    'the carried full-cache or canonical FP32 prior-prefix hash.'
+)
 REQUIRED_SOURCES = frozenset((
     '.github/scripts/verify_attention_block_split.py',
     '.github/workflows/host-bf16-attention-block.yml',
@@ -130,12 +151,12 @@ def _git(repo, *args):
     return result.stdout
 
 
-def _verify_sources(repo, commit, sources):
+def _verify_sources(repo, commit, sources, *, check_github_sha=True):
     """Check bytes in both the clean worktree and the exact committed Git blobs."""
     hash_map(sources)
     require(REQUIRED_SOURCES <= sources.keys(), 'incomplete acceptance source closure')
     require(_git(repo, 'rev-parse', 'HEAD').decode().strip() == commit, 'trusted commit differs from current HEAD')
-    require(not os.environ.get('GITHUB_SHA') or os.environ['GITHUB_SHA'] == commit,
+    require(not check_github_sha or not os.environ.get('GITHUB_SHA') or os.environ['GITHUB_SHA'] == commit,
             'trusted commit differs from GITHUB_SHA')
     require(not _git(repo, 'status', '--porcelain', '--untracked-files=normal').strip(),
             'exact-commit acceptance requires a clean checkout')
@@ -160,10 +181,44 @@ def _verify_sources(repo, commit, sources):
         require(hashlib.sha256(committed).hexdigest() == expected, 'committed source drift: ' + name)
 
 
+def _verify_imported_sources(sources):
+    for path in sorted(IMPORTED_SOURCE_PATHS):
+        name = str(path.relative_to(ROOT))
+        require(name in sources, 'unbound imported production helper/data: ' + name)
+        require(sha(_regular(path)) == sources[name], 'imported production helper/data drift: ' + name)
+
+
 def _bound_sources(subset, sources, label):
     hash_map(subset)
     require(all(sources.get(name) == value for name, value in subset.items()),
             'unbound reference source: ' + label)
+
+
+def _verify_cache_reference(reference):
+    """Check full-prefix geometry/provenance without pretending hashes are bytes."""
+    for index, phase in enumerate(fixture.SOURCE_PHASES):
+        case = reference['cases'][phase]
+        _value(case, 'cache_prefix_origin', 'cold_empty' if index == 0 else
+               'previous_launch_canonical_append_outputs')
+        prefix = _digest(case.get('canonical_cache_prefix_sha256'), phase + ' canonical cache prefix')
+        if index == 0:
+            require(prefix == EMPTY_SHA256, 'cold cache prefix must be empty')
+        else:
+            require(prefix != EMPTY_SHA256, 'carried canonical cache prefix cannot be empty')
+        expected = reference['expected'][phase]
+        for cache, producer in CACHE_PRODUCERS.items():
+            # The reference contains [prior prefix | current append]. The
+            # fixture packs only its current 1024-byte tail for actual_* files.
+            full = expected[cache + '.bf16le']
+            tail = expected[producer + '.bf16le']
+            _value(full, 'bytes', (index + 1) * 1024)
+            _value(tail, 'bytes', 1024)
+            if index == 0:
+                _value(full, 'sha256', tail['sha256'])
+            else:
+                require(full['sha256'] not in (tail['sha256'],
+                        reference['expected']['cold0'][cache + '.bf16le']['sha256']),
+                        'full cache reference cannot be relabelled as a single-token cache: ' + cache)
 
 
 def _verify_build(summary, hashes, trusted):
@@ -262,6 +317,7 @@ def _verify_reference(summary, hashes):
         _value(failures[variant], 'gate_pass', False)
         require(failures[variant]['failed_producers'] or failures[variant]['failed_softmax_invariants'],
                 'native failure records were erased')
+    _verify_cache_reference(reference)
     return reference
 
 
@@ -307,8 +363,10 @@ def _verify_case(summary, hashes, mode, trusted):
         require(set(hash_map(actual[phase])) == set(fixture.NAMES), 'missing actual terminal output')
         expected = summary['block_reference']['expected'][fixture.SOURCE_PHASES[index]]
         for name, width in zip(fixture.NAMES, fixture.WIDTHS):
-            _value(expected[name + '.bf16le'], 'bytes', width * 2)
-            _value(actual[phase], name, expected[name + '.bf16le']['sha256'])
+            _value(expected[name + '.bf16le'], 'bytes', width * 2 *
+                   (index + 1 if name in CACHE_PRODUCERS else 1))
+            producer = CACHE_PRODUCERS.get(name, name)
+            _value(actual[phase], name, expected[producer + '.bf16le']['sha256'])
         expected_files.update({phase + '/actual_' + name + '.bf16le': digest for name, digest in actual[phase].items()})
         snapshots = hash_map(row.get('snapshot_sha256'))
         require(set(snapshots) == {'writable_after_command' + str(pc) + '.bin' for pc in completion_plan(failing)},
@@ -396,14 +454,43 @@ def _base_report():
                 full128_executed=False, overall_pass=False, performance_acceptance=False,
                 timing_signoff=False, qor_signoff=False,
                 paired_identical_stimulus_fault_comparison=False,
-                cross_host_byte_equivalence_claimed=False)
+                cross_host_byte_equivalence_claimed=False,
+                cache_evidence_scope=CACHE_EVIDENCE_SCOPE,
+                cache_reference_contract_verified=False, cache_append_digest_verified=False,
+                cache_full_prefix_preservation_live_attested=False,
+                cache_full_prefix_bytes_independently_verified=False,
+                carried_canonical_prefix_hash_recomputed=False)
+
+
+def _cache_evidence(summary):
+    reference = summary['block_reference']
+    result = summary['cases'][0]['result']
+    evidence = {}
+    for index, phase in enumerate(fixture.PHASES):
+        source_phase = fixture.SOURCE_PHASES[index]
+        case = reference['cases'][source_phase]
+        expected = reference['expected'][source_phase]
+        evidence[phase] = dict(
+            reference_source_phase=source_phase,
+            cache_prefix_origin=case['cache_prefix_origin'],
+            canonical_prior_prefix_fp32_sha256=case['canonical_cache_prefix_sha256'],
+            prior_prefix_reference_source_phase='cold0' if index else None,
+            prior_prefix_reference={cache: reference['expected']['cold0'][cache + '.bf16le']
+                                    for cache in CACHE_PRODUCERS} if index else {},
+            full_prefix_reference={cache: expected[cache + '.bf16le'] for cache in CACHE_PRODUCERS},
+            actual_append={cache: dict(bytes=1024, sha256=result['actual_sha256'][phase][cache],
+                                      canonical_producer=producer)
+                           for cache, producer in CACHE_PRODUCERS.items()},
+            full_ddr_sha256=result['runs'][index]['ddr_sha256'],
+            command_snapshot_sha256=result['runs'][index]['snapshot_sha256'])
+    return evidence
 
 
 def verify(pass_compact, fault_compact, *, expected_commit, expected_package_sha256,
            expected_binary_sha256, expected_rtl_sha256, expected_build_ready_sha256,
            expected_source_manifest_sha256, expected_toolchain_sha256,
            expected_pass_summary_sha256, expected_pass_hashes_sha256,
-           expected_fault_summary_sha256, expected_fault_hashes_sha256, repo=ROOT):
+           expected_fault_summary_sha256, expected_fault_hashes_sha256, repo=None):
     """Validate externally pinned CI attestations, never infer their authority."""
     require(type(expected_commit) is str and re.fullmatch('[0-9a-f]{40}', expected_commit),
             'exact trusted Git commit required')
@@ -427,11 +514,20 @@ def verify(pass_compact, fault_compact, *, expected_commit, expected_package_sha
         summary = _read_trusted(directory / 'summary.json', pins[mode]['summary_sha256'])
         hashes = _read_trusted(directory / 'source_input_hashes.json', pins[mode]['hashes_sha256'])
         evidence[mode] = dict(summary=summary, source_input_hashes=hashes)
-        references[mode] = _verify_consumer(summary, hashes, mode, trusted)
     first, second = (evidence[mode] for mode in MODES)
     sources = first['source_input_hashes']['source_sha256']
     require(sources == second['source_input_hashes']['source_sha256'], 'cross-job source closure mismatch')
-    _verify_sources(Path(repo).resolve(), expected_commit, sources)
+    _verify_sources(ROOT if repo is None else Path(repo).resolve(), expected_commit, sources,
+                    check_github_sha=repo is None)
+    if repo is not None:
+        # Explicit --repo permits a newer aggregation workflow/checker, never a
+        # different production commit or drifted imported production helpers.
+        checker_commit = _git(ROOT, 'rev-parse', 'HEAD').decode().strip()
+        require(not os.environ.get('GITHUB_SHA') or os.environ['GITHUB_SHA'] == checker_commit,
+                'checker commit differs from GITHUB_SHA')
+        _verify_imported_sources(sources)
+    for mode, item in evidence.items():
+        references[mode] = _verify_consumer(item['summary'], item['source_input_hashes'], mode, trusted)
     for key in ('build', 'toolchain', 'build_transfer'):
         require(first['summary'][key] == second['summary'][key], 'cross-job immutable build identity mismatch: ' + key)
     require(references[MODES[0]]['model_revision'] == references[MODES[1]]['model_revision'], 'cross-job model revision mismatch')
@@ -445,6 +541,10 @@ def verify(pass_compact, fault_compact, *, expected_commit, expected_package_sha
         frozen_recipe_block_acceptance=True, fault_protocol_acceptance=True,
         git_head=expected_commit, exact_clean_commit_verified=True,
         source_immutability_verified=True, trusted_build=trusted, trusted_compact_digests=pins,
+        explicit_production_checkout=repo is not None,
+        cache_reference_contract_verified=True, cache_append_digest_verified=True,
+        cache_full_prefix_preservation_live_attested=True,
+        cache_evidence={mode: _cache_evidence(item['summary']) for mode, item in evidence.items()},
         mode_inventory=list(MODES), same_dut_launches_per_case=2, resets_between_launches=0,
         model_revision=references[MODES[0]]['model_revision'], shared_weight_trig_sha256=shared,
         actual_raw_hidden_sha256=raw_hidden,
@@ -462,6 +562,8 @@ def parser():
     result.add_argument('--pass-compact', required=True, type=Path)
     result.add_argument('--fault-compact', required=True, type=Path)
     result.add_argument('--expected-commit', required=True)
+    result.add_argument('--repo', type=Path,
+                        help='explicit clean frozen production checkout; GITHUB_SHA identifies the checker checkout')
     for key in BUILD_KEYS:
         result.add_argument('--expected-' + key.replace('_', '-'), required=True)
     for mode in ('pass', 'fault'):

@@ -1371,3 +1371,18 @@
   MAC边界: 实际useful端口每launch硬检查21528576；完整周期端点与executed未保留，实测利用率为空；43515904仅参考padded_FMA
   未完成: [完整block_fault_reset_restore, cold128_carried128, 后继层与35B, 完整周期MAC实测, PPA及MAC90]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；旧d7与Attention_native失败保留，不重绑旧证据
+
+生产Host_Attention完整block复核98c7_20261010:
+  状态: 原pass完整双M1_frozen_recipe通过；fault及修正汇总待终态；native完整门开放
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, P00, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_BLOCK_CI_98C7_20261010_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_BLOCK_CI_98C7_20261010/summary.json
+  设计提交: 98c7d80f65c5f05b55726c5239a6e9ec15d1b53f
+  实际运行: run38015586840；pass114118686395成功；同DUT连续两次M1各22命令；真实前次KV写ACK后读取
+  来源核验: 660源码对精确Git对象；42实际terminal_hash对canonical及current_append；GitHub工件摘要复核
+  MAC实测: 两轮6215798周期_36712448useful_MAC；固定4096全周期分母_合计0.1441971百分比；仅Attention_M1
+  native边界: 7和9项是M128软件隐藏节点审计失败；实际最终输出诊断在原限内，但同原输入实际cache的官方M1及内部QK捕获缺失，完整门不通过
+  汇总修正: carried完整cache_prefix2048字节与tail1024字节分别核验；保留完整DDR和快照认证，不以tail冒充完整prefix；原数值不重跑
+  数据待补: 后续同次CI保存最小raw_input_actual_output_priorKV及必要隐藏边界_逐文件大小SHA隐私清单；非Git无权重；不以newfresh冒充原pass
+  未完成: [fault及修正汇总终态, 严格native完整合同, 可校准周期预测, cold128_carried128, reset_restore, 35B, PPA及MAC90]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭

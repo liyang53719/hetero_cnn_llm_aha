@@ -1,0 +1,1385 @@
+{
+  "actual_to_canonical_terminal_hash_links": {
+    "carried1": {
+      "cache_k": {
+        "actual_sha256": "4062d4ec461b919cb01527ea41d4ca15abedffd4d1045027e1c521503296c8f7",
+        "equal": true,
+        "interpretation": "Actual cache artifact is current append only; full expected cache includes preceding prefix. Fixture slices expected cache at run*1024 bytes. Current append equals canonical rope_k.",
+        "reference_phase": "cold1",
+        "reference_sha256": "4062d4ec461b919cb01527ea41d4ca15abedffd4d1045027e1c521503296c8f7",
+        "reference_terminal": "rope_k"
+      },
+      "cache_v": {
+        "actual_sha256": "b9935452919df5693b58177b1eec8acda35b43f417190a869d7b62b906fff896",
+        "equal": true,
+        "interpretation": "Actual cache artifact is current append only; full expected cache includes preceding prefix. Fixture slices expected cache at run*1024 bytes. Current append equals canonical v.",
+        "reference_phase": "cold1",
+        "reference_sha256": "b9935452919df5693b58177b1eec8acda35b43f417190a869d7b62b906fff896",
+        "reference_terminal": "v"
+      },
+      "context": {
+        "actual_sha256": "e49fd4d6e0ff1a3ac9b2ea9b96d4d8b954b31ee0ea1b5b782e6fcec7d8be3197",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "e49fd4d6e0ff1a3ac9b2ea9b96d4d8b954b31ee0ea1b5b782e6fcec7d8be3197",
+        "reference_terminal": "context"
+      },
+      "down": {
+        "actual_sha256": "4b1e58e17b32bd45c4ed3e66019cb2863193903f1417182f863594db17320215",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "4b1e58e17b32bd45c4ed3e66019cb2863193903f1417182f863594db17320215",
+        "reference_terminal": "down"
+      },
+      "ffn_gate": {
+        "actual_sha256": "e8c7da2c8a67a1c6dd4d099c0b25e6a14b943b8710253625f15a16b36d34c8e7",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "e8c7da2c8a67a1c6dd4d099c0b25e6a14b943b8710253625f15a16b36d34c8e7",
+        "reference_terminal": "ffn_gate"
+      },
+      "ffn_up": {
+        "actual_sha256": "8a3e6962ce40f76dd2889a67f6a4005cf92f39d30e1acb02b720dd325d9a8078",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "8a3e6962ce40f76dd2889a67f6a4005cf92f39d30e1acb02b720dd325d9a8078",
+        "reference_terminal": "ffn_up"
+      },
+      "gate": {
+        "actual_sha256": "e0072628cb8b5d19008723a977d93b3ca29a1bcbf4c05900e56959e2379de018",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "e0072628cb8b5d19008723a977d93b3ca29a1bcbf4c05900e56959e2379de018",
+        "reference_terminal": "gate"
+      },
+      "input_norm": {
+        "actual_sha256": "46619c1b9b5564d1729c97d30e6ef33b6d1d737510175af73e88a14a7a80b71f",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "46619c1b9b5564d1729c97d30e6ef33b6d1d737510175af73e88a14a7a80b71f",
+        "reference_terminal": "input_norm"
+      },
+      "k": {
+        "actual_sha256": "52ece5cca061213971e82da154e64428bd103dd8282b6fbe69eed16447cf61a7",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "52ece5cca061213971e82da154e64428bd103dd8282b6fbe69eed16447cf61a7",
+        "reference_terminal": "k"
+      },
+      "norm_k": {
+        "actual_sha256": "a599b50064e195a9110050c96b4baae41bbafce2bb0ebfdbe6c40c9251e39573",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "a599b50064e195a9110050c96b4baae41bbafce2bb0ebfdbe6c40c9251e39573",
+        "reference_terminal": "norm_k"
+      },
+      "norm_q": {
+        "actual_sha256": "b252dbe33df0cdb1e12cd12d596d7e8aa4db68a0b409644ee2b710b92021b7f6",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "b252dbe33df0cdb1e12cd12d596d7e8aa4db68a0b409644ee2b710b92021b7f6",
+        "reference_terminal": "norm_q"
+      },
+      "o": {
+        "actual_sha256": "5760f568f6441744df07b180a7d38fbcd79d7020ffa295bc3b2406baa3ad532f",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "5760f568f6441744df07b180a7d38fbcd79d7020ffa295bc3b2406baa3ad532f",
+        "reference_terminal": "o"
+      },
+      "post_norm": {
+        "actual_sha256": "8c72ba89a68b76592118ece5ba7507eefe45777544dd09ab203857427aaa32d2",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "8c72ba89a68b76592118ece5ba7507eefe45777544dd09ab203857427aaa32d2",
+        "reference_terminal": "post_norm"
+      },
+      "q": {
+        "actual_sha256": "3a3cada6cd18d6304376367bbc9d7549c2d616c205574d25d864447621860fd8",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "3a3cada6cd18d6304376367bbc9d7549c2d616c205574d25d864447621860fd8",
+        "reference_terminal": "q"
+      },
+      "residual1": {
+        "actual_sha256": "de029db283a4b1b4bedb796c32102f19e45ccaa9505c6c52bd44c6aad93889d9",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "de029db283a4b1b4bedb796c32102f19e45ccaa9505c6c52bd44c6aad93889d9",
+        "reference_terminal": "residual1"
+      },
+      "residual2": {
+        "actual_sha256": "8bb06a3b5e3edb1a1d203b0148fb32bd420e32ffa334d39331af8b996f5939fc",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "8bb06a3b5e3edb1a1d203b0148fb32bd420e32ffa334d39331af8b996f5939fc",
+        "reference_terminal": "residual2"
+      },
+      "rope_k": {
+        "actual_sha256": "4062d4ec461b919cb01527ea41d4ca15abedffd4d1045027e1c521503296c8f7",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "4062d4ec461b919cb01527ea41d4ca15abedffd4d1045027e1c521503296c8f7",
+        "reference_terminal": "rope_k"
+      },
+      "rope_q": {
+        "actual_sha256": "0cebbd7261ea57aa6468f8582da35cf8d13e9959bc057199c77e6082a1d13b5b",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "0cebbd7261ea57aa6468f8582da35cf8d13e9959bc057199c77e6082a1d13b5b",
+        "reference_terminal": "rope_q"
+      },
+      "sigmoid_mul": {
+        "actual_sha256": "6bbf1bfe8450e2dd57fc9a5a737c225e2c3c5882c097b3aea7fa81c4701caaa9",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "6bbf1bfe8450e2dd57fc9a5a737c225e2c3c5882c097b3aea7fa81c4701caaa9",
+        "reference_terminal": "sigmoid_mul"
+      },
+      "silu_mul": {
+        "actual_sha256": "f5080594d0b55d933835074cdc01e205e3021b0b5268f7517e63eb112acece77",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "f5080594d0b55d933835074cdc01e205e3021b0b5268f7517e63eb112acece77",
+        "reference_terminal": "silu_mul"
+      },
+      "v": {
+        "actual_sha256": "b9935452919df5693b58177b1eec8acda35b43f417190a869d7b62b906fff896",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold1",
+        "reference_sha256": "b9935452919df5693b58177b1eec8acda35b43f417190a869d7b62b906fff896",
+        "reference_terminal": "v"
+      }
+    },
+    "cold0": {
+      "cache_k": {
+        "actual_sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+        "reference_terminal": "cache_k"
+      },
+      "cache_v": {
+        "actual_sha256": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3",
+        "reference_terminal": "cache_v"
+      },
+      "context": {
+        "actual_sha256": "1a4318bbdf409e6fb2f9fe42f4751fbe9d03d277504b4b42d0b20e3e0da11a2e",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "1a4318bbdf409e6fb2f9fe42f4751fbe9d03d277504b4b42d0b20e3e0da11a2e",
+        "reference_terminal": "context"
+      },
+      "down": {
+        "actual_sha256": "6d53a91c9d41197716cc7c99afc2d9ee5b67ece0fc59620f7c4d9fdf0972a285",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "6d53a91c9d41197716cc7c99afc2d9ee5b67ece0fc59620f7c4d9fdf0972a285",
+        "reference_terminal": "down"
+      },
+      "ffn_gate": {
+        "actual_sha256": "ec1ff57d01fa5cf2c7cd104a050a4cfec700a1227ac228773cd48c0e64220868",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "ec1ff57d01fa5cf2c7cd104a050a4cfec700a1227ac228773cd48c0e64220868",
+        "reference_terminal": "ffn_gate"
+      },
+      "ffn_up": {
+        "actual_sha256": "24bbb15f0e0d41b81b4bcbae2fab8eb211ba223feec81d02f91732ed383be2fd",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "24bbb15f0e0d41b81b4bcbae2fab8eb211ba223feec81d02f91732ed383be2fd",
+        "reference_terminal": "ffn_up"
+      },
+      "gate": {
+        "actual_sha256": "0b2cb0468e81a7736eef9871e193cf7773fc7915325d073e053f19104c0f2813",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "0b2cb0468e81a7736eef9871e193cf7773fc7915325d073e053f19104c0f2813",
+        "reference_terminal": "gate"
+      },
+      "input_norm": {
+        "actual_sha256": "ce6abece8ee0f1015c87d176d84afa6f5c302814283013189ebbbda9007c99f7",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "ce6abece8ee0f1015c87d176d84afa6f5c302814283013189ebbbda9007c99f7",
+        "reference_terminal": "input_norm"
+      },
+      "k": {
+        "actual_sha256": "8aceb19ca25b1a5526fe9ee31a39c4bb8bd9c4e5c7458b28c429c9801e989c24",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "8aceb19ca25b1a5526fe9ee31a39c4bb8bd9c4e5c7458b28c429c9801e989c24",
+        "reference_terminal": "k"
+      },
+      "norm_k": {
+        "actual_sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+        "reference_terminal": "norm_k"
+      },
+      "norm_q": {
+        "actual_sha256": "0f34adc1e31e96db74b207cfc130085860962138f608a8bf42a35dadc59971f7",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "0f34adc1e31e96db74b207cfc130085860962138f608a8bf42a35dadc59971f7",
+        "reference_terminal": "norm_q"
+      },
+      "o": {
+        "actual_sha256": "0a5fe5874ae0d876bb8cb0ed0ec273b09ed28b16f7eca48220b871095286178a",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "0a5fe5874ae0d876bb8cb0ed0ec273b09ed28b16f7eca48220b871095286178a",
+        "reference_terminal": "o"
+      },
+      "post_norm": {
+        "actual_sha256": "c631fb5e368a1d154325adec55ac1d0f4d7369b68ce246a41ed7bd4a207e571e",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "c631fb5e368a1d154325adec55ac1d0f4d7369b68ce246a41ed7bd4a207e571e",
+        "reference_terminal": "post_norm"
+      },
+      "q": {
+        "actual_sha256": "7dfbffadca7c671e49f403f420299066f6a33f9711e6e05fe979a7fea5805a11",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "7dfbffadca7c671e49f403f420299066f6a33f9711e6e05fe979a7fea5805a11",
+        "reference_terminal": "q"
+      },
+      "residual1": {
+        "actual_sha256": "a467d78515b31a94a8043b778dd9f5be6cbee6c3745a940bd22f3413680752c1",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "a467d78515b31a94a8043b778dd9f5be6cbee6c3745a940bd22f3413680752c1",
+        "reference_terminal": "residual1"
+      },
+      "residual2": {
+        "actual_sha256": "d9b5efa1dcbfde1406863fefca2eaf81e75c0a645dfd98704d438f7b6e19fcc5",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "d9b5efa1dcbfde1406863fefca2eaf81e75c0a645dfd98704d438f7b6e19fcc5",
+        "reference_terminal": "residual2"
+      },
+      "rope_k": {
+        "actual_sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "9171b4841e193f585794dbb14d837905dbff75f4852f233861e151fbf065c0fb",
+        "reference_terminal": "rope_k"
+      },
+      "rope_q": {
+        "actual_sha256": "0f34adc1e31e96db74b207cfc130085860962138f608a8bf42a35dadc59971f7",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "0f34adc1e31e96db74b207cfc130085860962138f608a8bf42a35dadc59971f7",
+        "reference_terminal": "rope_q"
+      },
+      "sigmoid_mul": {
+        "actual_sha256": "7616672a109bd8a6ebbf7feac369d2aea56744b371953de0f83157bee3966b51",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "7616672a109bd8a6ebbf7feac369d2aea56744b371953de0f83157bee3966b51",
+        "reference_terminal": "sigmoid_mul"
+      },
+      "silu_mul": {
+        "actual_sha256": "f9204c81bcd9c33816f6d3c41b19198b347a8ee87937922b8ca59b51e685685e",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "f9204c81bcd9c33816f6d3c41b19198b347a8ee87937922b8ca59b51e685685e",
+        "reference_terminal": "silu_mul"
+      },
+      "v": {
+        "actual_sha256": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3",
+        "equal": true,
+        "interpretation": "Actual stored terminal hash equals complete canonical terminal hash.",
+        "reference_phase": "cold0",
+        "reference_sha256": "a63c6cc2701a21335817ea0ae5f13cc0bbe36a23011674caeee3d94dfd96a9b3",
+        "reference_terminal": "v"
+      }
+    }
+  },
+  "audit_kind": "read_only_existing_artifacts_and_source_no_new_capture_or_eda",
+  "audited_current_commit": "5ff4ca072b5aa707b18fa48730d572f4a2e59a36",
+  "comparison_classes": {
+    "component_gates": "Original QKV and Norm/RoPE gates use conditioned reference inputs. Norm/RoPE checks explicitly say rtl_executed=false; their same-native-input properties are not the raw-hidden composed block properties.",
+    "direct_actual_rtl_to_canonical": "Physical DDR snapshots/readback and actual stored terminal files are checked byte-for-byte against canonical expected files by host_bf16_attention_block_execution.audit; live run_case binds exact binary, RTL, sources, fixture and fresh authorities.",
+    "direct_actual_rtl_to_official_in_this_block_run": "No comparator in this full-block run loads both actual RTL values and official native values. Native metrics in block_reference are computed before RTL execution.",
+    "internal_qk_readback": "No actual QK/score/probability trace is included among 21 stored terminal names; expected producer33 failure is not a direct RTL QK measurement.",
+    "transitive_terminal_diagnostics": "All 42 actual terminal artifact hashes link to canonical terminal/current-append hashes, including residual2 and context; therefore the reported canonical-versus-native error applies to identical stored terminal values, without creating native gate acceptance."
+  },
+  "conclusion": "The inherited baseline 7 / AVX2 9 failures are official Torch-versus-independent NumPy M128 producer audits, not full-block RTL output error measurements. The M1 RTL run proves canonical terminal/DDR equality. Its selected final-output comparisons are within block limits by the authenticated canonical-to-native diagnostic chain, but native acceptance is not established and an internal canonical QK diagnostic fails.",
+  "created_utc": "2026-10-10T04:48:56.353648+00:00",
+  "failure_origin": {
+    "actual": "pinned official Qwen3_5DecoderLayer layer3, Torch CPU BF16, eager attention, traced producer boundaries",
+    "cases": {
+      "carried_m128": {
+        "key_rows": 256,
+        "positions": [
+          128,
+          255
+        ],
+        "query_rows": 128
+      },
+      "cold_m128": {
+        "key_rows": 128,
+        "positions": [
+          0,
+          127
+        ],
+        "query_rows": 128
+      }
+    },
+    "method": "producer_compare: abs difference in float64 of losslessly decoded float32 containers; both max and mean must pass; all producers plus softmax invariants enter gate_pass",
+    "reference": "heteronpu.qwen35_bf16_reference.forward: independent producer-rounded NumPy FP32 BLAS/mean/sum, own prior cache, own trig",
+    "reports_copied_by": "run_host_bf16_v_fresh_gate._native_failure_evidence reads session/<variant>/native/result.json; CaptureSession.evidence supplies counts/status",
+    "threshold_source": "repository spec/numerical_contract.md, frozen before RTL integration; not a tolerance supplied by upstream Transformers",
+    "thresholds": {
+      "block": {
+        "max_abs": 0.05,
+        "mean_abs": 0.01
+      },
+      "operator": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    }
+  },
+  "identity": {
+    "attention_reference_receipt_sha256": "07432ab6dfe4ab3c41107372c4db4d2d0e06e8f698902e6525a4a3038ee3b65c",
+    "binary_sha256": "f0f194342fe9ab70290069441f48b9863c6ed9ab9bcd5f3991c7f60168073263",
+    "block_reference_receipt_sha256": "34770d58aa968363ac71ce73b55d501b4f3b31a67fc68628eedfee0305acb63c",
+    "input_sha256": {
+      "cold0_hidden.bf16le": "44966ce8348c45fb7259536dd989972dc021fdc65640ec6c2430f1b4765408bc",
+      "cold1_hidden.bf16le": "33e7a03a2ce8a0851fd23d4b7859cb7d0cb2dc2c8ffd44dc54cd91d3a56888d9",
+      "trig.bf16le": "c6207c787dd0bdcf3b260a1663f2c496d29b973d4a4b556d9afffe3ca389edc0",
+      "weight_down.bf16le": "62bc4adbc7f5d1f3a7b3cee267ef7bf554f14a03a1a52b113647d73c290f06fd",
+      "weight_ffn_gate.bf16le": "5e7d7f8917d58500ee994d151b248a666b82ca28f5425a1bcd4c39e1e1cdbe53",
+      "weight_ffn_up.bf16le": "6d2fdcf162c1a2d82ec91d63315422120faf5fd51d99cefb054c2a41c3bcb335",
+      "weight_input_norm.bf16le": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b",
+      "weight_k.bf16le": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+      "weight_k_gamma.bf16le": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+      "weight_o.bf16le": "cfb07026ead17cbab983f08a04d2788c0958d4c200108503551593a9708ddad9",
+      "weight_post_norm.bf16le": "480c483e9af2962e8213512464316402dd657d0dcfa37119a58409689330c7a2",
+      "weight_q.bf16le": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+      "weight_q_gamma.bf16le": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+      "weight_v.bf16le": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+    },
+    "official_capture_manifest_sha256": "49cba70c4deb77ebc36b94c6b98b4dad209d94b5fbdbd4f3091ae8693380e7c2",
+    "projection_reference_receipt_sha256": "4f80d006a2dfbe1920be665b2536a7e8ec57dbc4792507b447599126bd3a4c14",
+    "rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510"
+  },
+  "inherited_failures": {
+    "avx2": {
+      "failed_producers": [
+        {
+          "bit_different": 23,
+          "case": "cold_m128",
+          "elements": 131072,
+          "max_abs_error": 1.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 9.5367431640625e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 23,
+          "numerically_different": 23,
+          "pass": false,
+          "producer": "self_attn|aten.matmul.default|0",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 23,
+          "case": "cold_m128",
+          "elements": 131072,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 5.9604644775390625e-06,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 3,
+          "numerically_different": 23,
+          "pass": false,
+          "producer": "self_attn|aten.mul.Tensor|4",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 248,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 0.091552734375,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 9.596343579091672e-07,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 1,
+          "numerically_different": 248,
+          "pass": false,
+          "producer": "self_attn.q_norm|aten.pow.Tensor_Scalar|0",
+          "storage_dtype": "float32"
+        },
+        {
+          "bit_different": 307,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 1.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.000421818345785141,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 285,
+          "numerically_different": 307,
+          "pass": false,
+          "producer": "self_attn|aten.matmul.default|0",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 307,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.6363646611571312e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 26,
+          "numerically_different": 307,
+          "pass": false,
+          "producer": "self_attn|aten.mul.Tensor|4",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 228,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.8153688870370388e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 17,
+          "numerically_different": 228,
+          "pass": false,
+          "producer": "self_attn|aten.add.Tensor|2",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 103313,
+          "case": "carried_m128",
+          "elements": 131072,
+          "max_abs_error": 0.08007240295410156,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 7.229624322779848e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 1,
+          "numerically_different": 103313,
+          "pass": false,
+          "producer": "post_attention_layernorm|aten.mul.Tensor|0",
+          "storage_dtype": "float32"
+        },
+        {
+          "bit_different": 103065,
+          "case": "carried_m128",
+          "elements": 131072,
+          "max_abs_error": 0.06427764892578125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 8.891424716717111e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 1,
+          "numerically_different": 103065,
+          "pass": false,
+          "producer": "post_attention_layernorm|aten.mul.Tensor|1",
+          "storage_dtype": "float32"
+        },
+        {
+          "bit_different": 3744,
+          "case": "carried_m128",
+          "elements": 131072,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 8.865362906362861e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 1,
+          "numerically_different": 3744,
+          "pass": false,
+          "producer": "post_attention_layernorm|cast_bf16|0",
+          "storage_dtype": "bfloat16"
+        }
+      ],
+      "failed_softmax_invariants": [],
+      "gate_pass": false,
+      "status": "BLOCKED_BF16_PRODUCER_GATE",
+      "thresholds": {
+        "block": {
+          "max_abs": 0.05,
+          "mean_abs": 0.01
+        },
+        "operator": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      }
+    },
+    "baseline": {
+      "failed_producers": [
+        {
+          "bit_different": 47,
+          "case": "cold_m128",
+          "elements": 131072,
+          "max_abs_error": 1.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0001663118600845337,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 41,
+          "numerically_different": 47,
+          "pass": false,
+          "producer": "self_attn|aten.matmul.default|0",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 47,
+          "case": "cold_m128",
+          "elements": 131072,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.0394491255283356e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 7,
+          "numerically_different": 47,
+          "pass": false,
+          "producer": "self_attn|aten.mul.Tensor|4",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 205,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 1.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.00024157017469406128,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 177,
+          "numerically_different": 205,
+          "pass": false,
+          "producer": "self_attn|aten.matmul.default|0",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 205,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.509813591837883e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 14,
+          "numerically_different": 205,
+          "pass": false,
+          "producer": "self_attn|aten.mul.Tensor|4",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 182,
+          "case": "carried_m128",
+          "elements": 262144,
+          "max_abs_error": 0.0625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.3406388461589813e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 13,
+          "numerically_different": 182,
+          "pass": false,
+          "producer": "self_attn|aten.add.Tensor|2",
+          "storage_dtype": "bfloat16"
+        },
+        {
+          "bit_different": 69483,
+          "case": "carried_m128",
+          "elements": 131072,
+          "max_abs_error": 0.03156471252441406,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 3.438344040002095e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 1,
+          "numerically_different": 69483,
+          "pass": false,
+          "producer": "post_attention_layernorm|aten.mul.Tensor|0",
+          "storage_dtype": "float32"
+        },
+        {
+          "bit_different": 68950,
+          "case": "carried_m128",
+          "elements": 131072,
+          "max_abs_error": 0.037976741790771484,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 4.238141529566697e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 1,
+          "numerically_different": 68950,
+          "pass": false,
+          "producer": "post_attention_layernorm|aten.mul.Tensor|1",
+          "storage_dtype": "float32"
+        }
+      ],
+      "failed_softmax_invariants": [],
+      "gate_pass": false,
+      "status": "BLOCKED_BF16_PRODUCER_GATE",
+      "thresholds": {
+        "block": {
+          "max_abs": 0.05,
+          "mean_abs": 0.01
+        },
+        "operator": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      }
+    }
+  },
+  "m1_reference_diagnostics": {
+    "carried1": {
+      "absolute_position": 1,
+      "all_57_reference_diagnostic_failures": [
+        {
+          "acceptance": "UNASSIGNED_DIAGNOSTIC_ONLY_NOT_NATIVE_ACCEPTANCE",
+          "comparison": {
+            "bit_different": 1,
+            "elements": 16,
+            "max_abs_error": 0.5,
+            "max_abs_limit": 0.03125,
+            "mean_abs_error": 0.03125,
+            "mean_abs_limit": 0.005,
+            "mismatches_over_max": 1,
+            "numerically_different": 1,
+            "pass": false
+          },
+          "diagnostic_only": true,
+          "index": 33,
+          "original_native_comparison": {
+            "bit_different": 47,
+            "case": "cold_m128",
+            "elements": 131072,
+            "max_abs_error": 1.0,
+            "max_abs_limit": 0.03125,
+            "mean_abs_error": 0.0001663118600845337,
+            "mean_abs_limit": 0.005,
+            "mismatches_over_max": 41,
+            "numerically_different": 47,
+            "pass": false,
+            "producer": "self_attn|aten.matmul.default|0",
+            "storage_dtype": "bfloat16"
+          },
+          "predecessor_bit_identity_claimed": false,
+          "producer": "self_attn|aten.matmul.default|0",
+          "storage_dtype": "bfloat16"
+        }
+      ],
+      "cache_prefix_comparisons": {
+        "k": {
+          "bit_different": 18,
+          "elements": 1024,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 3.302842378616333e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 18,
+          "pass": true
+        },
+        "v": {
+          "bit_different": 32,
+          "elements": 1024,
+          "max_abs_error": 0.001953125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.3714685337617993e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 32,
+          "pass": true
+        }
+      },
+      "native_accuracy_accepted": false,
+      "native_source_case": "cold_m128",
+      "native_source_token": 1,
+      "output_comparison": {
+        "bit_different": 493,
+        "elements": 1024,
+        "max_abs_error": 0.00390625,
+        "max_abs_limit": 0.05,
+        "mean_abs_error": 0.00011262670159339905,
+        "mean_abs_limit": 0.01,
+        "mismatches_over_max": 0,
+        "numerically_different": 493,
+        "pass": true
+      },
+      "raw_hidden_sha256": "33e7a03a2ce8a0851fd23d4b7859cb7d0cb2dc2c8ffd44dc54cd91d3a56888d9",
+      "reference_phase": "cold1",
+      "terminal_diagnostics": {
+        "context": {
+          "bit_different": 277,
+          "elements": 2048,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.000409761443734169,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 277,
+          "pass": true
+        },
+        "down": {
+          "bit_different": 674,
+          "elements": 1024,
+          "max_abs_error": 0.00048828125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 9.979942115023732e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 674,
+          "pass": true
+        },
+        "ffn_gate": {
+          "bit_different": 1271,
+          "elements": 3584,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0010823053973061697,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 1271,
+          "pass": true
+        },
+        "ffn_up": {
+          "bit_different": 1977,
+          "elements": 3584,
+          "max_abs_error": 0.0078125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0005693001647679401,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 1977,
+          "pass": true
+        },
+        "input_norm": {
+          "bit_different": 2,
+          "elements": 1024,
+          "max_abs_error": 0.00390625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 4.0531158447265625e-06,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 2,
+          "pass": true
+        },
+        "k": {
+          "bit_different": 19,
+          "elements": 512,
+          "max_abs_error": 0.00390625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.9527971744537354e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 19,
+          "pass": true
+        },
+        "norm_k": {
+          "bit_different": 18,
+          "elements": 512,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 6.605684757232666e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 18,
+          "pass": true
+        },
+        "norm_q": {
+          "bit_different": 70,
+          "elements": 2048,
+          "max_abs_error": 0.03125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 6.591901183128357e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 70,
+          "pass": true
+        },
+        "o": {
+          "bit_different": 614,
+          "elements": 1024,
+          "max_abs_error": 0.00048828125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 5.8242352679371834e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 614,
+          "pass": true
+        },
+        "post_norm": {
+          "bit_different": 327,
+          "elements": 1024,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.001284126192331314,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 327,
+          "pass": true
+        },
+        "q": {
+          "bit_different": 87,
+          "elements": 4096,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.7931295335292816e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 87,
+          "pass": true
+        },
+        "residual1": {
+          "bit_different": 338,
+          "elements": 1024,
+          "max_abs_error": 0.00048828125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 5.718320608139038e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 338,
+          "pass": true
+        },
+        "residual2": {
+          "bit_different": 493,
+          "elements": 1024,
+          "max_abs_error": 0.00390625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.00011262670159339905,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 493,
+          "pass": true
+        },
+        "sigmoid_mul": {
+          "bit_different": 268,
+          "elements": 2048,
+          "max_abs_error": 0.00390625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.4629822291899472e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 268,
+          "pass": true
+        },
+        "silu_mul": {
+          "bit_different": 2206,
+          "elements": 3584,
+          "max_abs_error": 0.00390625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.00015438591279754682,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 2206,
+          "pass": true
+        },
+        "v": {
+          "bit_different": 30,
+          "elements": 512,
+          "max_abs_error": 0.001953125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.719089388847351e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 30,
+          "pass": true
+        }
+      }
+    },
+    "cold0": {
+      "absolute_position": 0,
+      "all_57_reference_diagnostic_failures": [],
+      "cache_prefix_comparisons": {
+        "k": {
+          "bit_different": 0,
+          "elements": 512,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 0,
+          "pass": true
+        },
+        "v": {
+          "bit_different": 2,
+          "elements": 512,
+          "max_abs_error": 0.0001220703125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.3847678676247597e-07,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 2,
+          "pass": true
+        }
+      },
+      "native_accuracy_accepted": false,
+      "native_source_case": "cold_m128",
+      "native_source_token": 0,
+      "output_comparison": {
+        "bit_different": 75,
+        "elements": 1024,
+        "max_abs_error": 0.0009765625,
+        "max_abs_limit": 0.05,
+        "mean_abs_error": 1.5780329704284668e-05,
+        "mean_abs_limit": 0.01,
+        "mismatches_over_max": 0,
+        "numerically_different": 75,
+        "pass": true
+      },
+      "raw_hidden_sha256": "44966ce8348c45fb7259536dd989972dc021fdc65640ec6c2430f1b4765408bc",
+      "reference_phase": "cold0",
+      "terminal_diagnostics": {
+        "context": {
+          "bit_different": 8,
+          "elements": 2048,
+          "max_abs_error": 0.0001220703125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.3847678676247597e-07,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 8,
+          "pass": true
+        },
+        "down": {
+          "bit_different": 165,
+          "elements": 1024,
+          "max_abs_error": 0.00048828125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.4372169971466064e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 165,
+          "pass": true
+        },
+        "ffn_gate": {
+          "bit_different": 96,
+          "elements": 3584,
+          "max_abs_error": 0.015625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.833455801010132e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 96,
+          "pass": true
+        },
+        "ffn_up": {
+          "bit_different": 277,
+          "elements": 3584,
+          "max_abs_error": 0.00390625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.1485212658132825e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 277,
+          "pass": true
+        },
+        "input_norm": {
+          "bit_different": 0,
+          "elements": 1024,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 0,
+          "pass": true
+        },
+        "k": {
+          "bit_different": 0,
+          "elements": 512,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 0,
+          "pass": true
+        },
+        "norm_k": {
+          "bit_different": 0,
+          "elements": 512,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 0,
+          "pass": true
+        },
+        "norm_q": {
+          "bit_different": 0,
+          "elements": 2048,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 0,
+          "pass": true
+        },
+        "o": {
+          "bit_different": 5,
+          "elements": 1024,
+          "max_abs_error": 0.0001220703125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.828011590987444e-07,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 5,
+          "pass": true
+        },
+        "post_norm": {
+          "bit_different": 3,
+          "elements": 1024,
+          "max_abs_error": 0.001953125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 3.889203071594238e-06,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 3,
+          "pass": true
+        },
+        "q": {
+          "bit_different": 0,
+          "elements": 4096,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 0,
+          "pass": true
+        },
+        "residual1": {
+          "bit_different": 3,
+          "elements": 1024,
+          "max_abs_error": 0.0001220703125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.421438694000244e-07,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 3,
+          "pass": true
+        },
+        "residual2": {
+          "bit_different": 75,
+          "elements": 1024,
+          "max_abs_error": 0.0009765625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 1.5780329704284668e-05,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 75,
+          "pass": true
+        },
+        "sigmoid_mul": {
+          "bit_different": 5,
+          "elements": 2048,
+          "max_abs_error": 7.62939453125e-06,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 7.451262717950158e-09,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 5,
+          "pass": true
+        },
+        "silu_mul": {
+          "bit_different": 323,
+          "elements": 3584,
+          "max_abs_error": 0.0009765625,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 5.0406171275036674e-06,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 323,
+          "pass": true
+        },
+        "v": {
+          "bit_different": 2,
+          "elements": 512,
+          "max_abs_error": 0.0001220703125,
+          "max_abs_limit": 0.03125,
+          "mean_abs_error": 2.3847678676247597e-07,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "numerically_different": 2,
+          "pass": true
+        }
+      }
+    }
+  },
+  "native_acceptance_gaps": [
+    "An explicit, versioned native GQA gate remains unassigned. Preserve frozen operator 0.03125/0.005 and block 0.05/0.01 limits; do not waive hidden-node failures via final-output success.",
+    "Bind direct actual terminal and required internal/hidden-stage readbacks to the official comparison for the identical declared input/state/position/shape contract. Resolve the canonical cold1 QK max0.5/mean0.03125 failure or establish justified alternate semantic coverage without loosening limits.",
+    "Explain/fix or otherwise formally close independent-software M128 producer differences separately from RTL defects. The native accumulation tree is unidentified, backend bit identity unclaimed, and no formal backend error bound is proved.",
+    "For full-M128 or both-variant hardware claims, execute actual full128 and same-input variant coverage under appropriate authority; existing M1 baseline pass cannot establish either."
+  ],
+  "native_audit_report_sha256": {
+    "avx2": "dfc4714fe6b01753ea9330144ff066bcbd85867e115fdf5e03b8ea9f909aeef8",
+    "baseline": "fa8479d1c270edf137f843a94027671003c82872311c23df268fd21ec1e4f5f3"
+  },
+  "original_baseline_software_output_and_cache_comparisons": [
+    {
+      "bit_different": 5597,
+      "case": "cold_m128",
+      "elements": 131072,
+      "max_abs_error": 0.00390625,
+      "max_abs_limit": 0.05,
+      "mean_abs_error": 7.176037229328358e-06,
+      "mean_abs_limit": 0.01,
+      "mismatches_over_max": 0,
+      "numerically_different": 5597,
+      "pass": true,
+      "producer": "output",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "bit_different": 11,
+      "case": "cold_m128",
+      "elements": 65536,
+      "max_abs_error": 0.015625,
+      "max_abs_limit": 0.03125,
+      "mean_abs_error": 3.4960248740389943e-07,
+      "mean_abs_limit": 0.005,
+      "mismatches_over_max": 0,
+      "numerically_different": 11,
+      "pass": true,
+      "producer": "key",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "bit_different": 15,
+      "case": "cold_m128",
+      "elements": 65536,
+      "max_abs_error": 0.001953125,
+      "max_abs_limit": 0.03125,
+      "mean_abs_error": 7.420248948619701e-08,
+      "mean_abs_limit": 0.005,
+      "mismatches_over_max": 0,
+      "numerically_different": 15,
+      "pass": true,
+      "producer": "value",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "bit_different": 12216,
+      "case": "carried_m128",
+      "elements": 131072,
+      "max_abs_error": 0.00390625,
+      "max_abs_limit": 0.05,
+      "mean_abs_error": 1.4982415677877725e-05,
+      "mean_abs_limit": 0.01,
+      "mismatches_over_max": 0,
+      "numerically_different": 12216,
+      "pass": true,
+      "producer": "output",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "bit_different": 18,
+      "case": "carried_m128",
+      "elements": 131072,
+      "max_abs_error": 0.015625,
+      "max_abs_limit": 0.03125,
+      "mean_abs_error": 2.4966016098915134e-07,
+      "mean_abs_limit": 0.005,
+      "mismatches_over_max": 0,
+      "numerically_different": 18,
+      "pass": true,
+      "producer": "key",
+      "storage_dtype": "bfloat16"
+    },
+    {
+      "bit_different": 28,
+      "case": "carried_m128",
+      "elements": 131072,
+      "max_abs_error": 0.00390625,
+      "max_abs_limit": 0.03125,
+      "mean_abs_error": 1.2480199984565843e-07,
+      "mean_abs_limit": 0.005,
+      "mismatches_over_max": 0,
+      "numerically_different": 28,
+      "pass": true,
+      "producer": "value",
+      "storage_dtype": "bfloat16"
+    }
+  ],
+  "original_job_id": 114118686395,
+  "original_pass_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+  "original_run_id": 38015586840,
+  "performance_scope": "No optimization or performance claim made. Existing 0.1442% full-MAC utilization remains the separate two-launch M1 measurement, not native acceptance or M128 performance.",
+  "repository": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261009T1736",
+  "run_scope": {
+    "commands_per_launch": 22,
+    "cross_host_byte_equivalence_claimed": false,
+    "frozen_recipe_block_acceptance": true,
+    "full128_executed": false,
+    "host_phases": [
+      "cold0",
+      "carried1"
+    ],
+    "native_context_acceptance": false,
+    "native_full_block_acceptance": false,
+    "numerical_acceptance": true,
+    "overall_pass": false,
+    "resets_between_launches": 0,
+    "same_dut_launches_per_case": 2,
+    "scope": "QWEN35_LAYER3_ATTENTION_BLOCK_M1",
+    "source_phase": "cold_m128",
+    "source_tokens": [
+      0,
+      1
+    ],
+    "status": "PASS_FRESH_HOST_ATTENTION_BLOCK_CASE_M1"
+  },
+  "semantic_limits": [
+    "Host carried1 is source cold_m128 row1 at absolute position1, with actual previous row0 cache; it is not source carried_m128 at position128.",
+    "Official comparison comes from rows0/1 of a 128-row eager invocation; canonical/DUT run is two one-row launches. Causal prefix semantics align for these rows, but batching/backend arithmetic identity is not asserted.",
+    "Raw-hidden canonical graph recomputes input norm, all projections and cache. At cold1, input_norm has two BF16 bit differences from native; conditional component gates do not make composed predecessors bit-identical.",
+    "Both CPU variants have fresh independent upstream captures; actual full-block reference and RTL fixture use baseline only. Cross-variant and cross-host input byte identity is expressly unclaimed; do not equate the 7-versus-9 audit difference with a hardware difference.",
+    "The compact artifact preserves metrics/hashes, not complete native/RTL tensor bytes locally. This audit checks recorded hash relationships and source logic; it does not rerun numerical arrays."
+  ],
+  "source_artifacts": {
+    "work/attention_split_release_20261010/attention_pass_source_input_hashes.json": {
+      "bytes": 95194,
+      "sha256": "d2901a747272845ada4a0803cefdef4f649643ba6515b821609104ad8135eeaf"
+    },
+    "work/attention_split_release_20261010/attention_pass_summary.json": {
+      "bytes": 842170,
+      "sha256": "37ea106b55dc0a3f53ce0334f780842b172c7980063a7a0663575edd9dfdb6a6"
+    },
+    "work/attention_split_release_20261010/job_114118686395.log": {
+      "bytes": 781235,
+      "sha256": "87f62e7b0830b4798d37b0f24d1613d26520ce8ff90d1cfc2268db7d14ac5903"
+    }
+  },
+  "source_closure": {
+    "chisel/continuous_prefill/scripts/host_bf16_attention_block_execution.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "1593277a7c19993f969e718b2d74fe0ff53b5986ff6c144b771a3d4319cb1066",
+      "sha256": "1593277a7c19993f969e718b2d74fe0ff53b5986ff6c144b771a3d4319cb1066"
+    },
+    "chisel/continuous_prefill/scripts/host_bf16_attention_block_fixture.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "4b982d77ef5ed121dddddadf39e9fa9d1cdf84adf8a62c9bcde11f34df3d4a58",
+      "sha256": "4b982d77ef5ed121dddddadf39e9fa9d1cdf84adf8a62c9bcde11f34df3d4a58"
+    },
+    "chisel/continuous_prefill/scripts/host_bf16_attention_block_live_gate.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "70bc54417d091ec737ad7b2e3945a1b2e2cd5472fce8cb2649adcc9489206772",
+      "sha256": "70bc54417d091ec737ad7b2e3945a1b2e2cd5472fce8cb2649adcc9489206772"
+    },
+    "chisel/continuous_prefill/scripts/host_bf16_attention_block_reference.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "dc79486ad0bfaf6e1e8bf1453f5f7dad88ce4b37ffd12952189476dd662542a0",
+      "sha256": "dc79486ad0bfaf6e1e8bf1453f5f7dad88ce4b37ffd12952189476dd662542a0"
+    },
+    "chisel/continuous_prefill/scripts/host_bf16_qk_rope_reference.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "24822114a65a8d161e55403fb9f6d012dbfd29b2fe345a22a01fb988a67c78d5",
+      "sha256": "24822114a65a8d161e55403fb9f6d012dbfd29b2fe345a22a01fb988a67c78d5"
+    },
+    "chisel/continuous_prefill/scripts/host_bf16_qkv_reference.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "8822fb2175d1ff78cd959e7e2e3496367d687b78ced8ddd58f30fa37fc3ac212",
+      "sha256": "8822fb2175d1ff78cd959e7e2e3496367d687b78ced8ddd58f30fa37fc3ac212"
+    },
+    "chisel/continuous_prefill/scripts/pack_host_bf16_v_fixture.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f",
+      "sha256": "00caed15800d4c4495ded8760f23bc9d65af3cd19671853a9709046b24a0682f"
+    },
+    "chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "becd323cc8973ed97952839eb341474e7d7b433bd8bce675fb612d85ce78cbc2",
+      "sha256": "becd323cc8973ed97952839eb341474e7d7b433bd8bce675fb612d85ce78cbc2"
+    },
+    "chisel/continuous_prefill/scripts/run_host_bf16_v_fresh_gate.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "b29211437d32af6654ae8e4b3ecdcc97063a7601f973b2a2e0490f582ee0f679",
+      "sha256": "b29211437d32af6654ae8e4b3ecdcc97063a7601f973b2a2e0490f582ee0f679"
+    },
+    "config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97",
+      "sha256": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97"
+    },
+    "scripts/run_qwen35_bf16_audit.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "13119e753f6003090d6b2582b545f42985a9fef3e84c585bde48a8bac17250eb",
+      "sha256": "13119e753f6003090d6b2582b545f42985a9fef3e84c585bde48a8bac17250eb"
+    },
+    "spec/numerical_contract.md": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+      "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+    },
+    "src/heteronpu/qk_norm256_materialization.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "da78c47d6b07aac43dcff04b4c9e1efe374fe50d3b5ff156e1040a83d947ae59",
+      "sha256": "da78c47d6b07aac43dcff04b4c9e1efe374fe50d3b5ff156e1040a83d947ae59"
+    },
+    "src/heteronpu/qwen35_bf16_reference.py": {
+      "matches_original_commit": true,
+      "matches_run_source_receipt": true,
+      "original_commit_sha256": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9",
+      "sha256": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9"
+    }
+  }
+}

@@ -30,6 +30,16 @@ def git(repo, *args):
     return subprocess.check_output(['git', '-C', str(repo), *args], stderr=subprocess.DEVNULL).decode().strip()
 
 
+def terminal_bytes(mode, index, name):
+    """Concrete finite BF16 terminals, including both tokens in carried caches."""
+    producer = {'cache_k': 'rope_k', 'cache_v': 'v'}.get(name)
+    if producer:
+        return b''.join(terminal_bytes(mode, token, producer) for token in range(index + 1))
+    width = dict(zip(gate.fixture.NAMES, gate.fixture.WIDTHS))[name]
+    seed = hashlib.sha256((mode + str(index) + name).encode()).digest()
+    return b''.join(bytes((seed[element % len(seed)] & 127, 0x3f)) for element in range(width))
+
+
 def make_reference(sources, inputs, mode, failures, report_hashes):
     schema = contract_schema()
     manifest = digest(mode + ' official capture')
@@ -47,12 +57,17 @@ def make_reference(sources, inputs, mode, failures, report_hashes):
             producer_predecessors=deepcopy(schema['producer_predecessors']),
             raw_hidden_sha256=inputs[phase + '_hidden.bf16le'],
             selected_trig=dict(backing_sha256=inputs['trig.bf16le']))
+        prior = b''.join(terminal_bytes(mode, 0, name) for name in ('cache_k', 'cache_v')) if index else b''
+        prior_fp32 = b''.join(b'\0\0' + prior[offset:offset + 2] for offset in range(0, len(prior), 2))
+        cases[phase].update(cache_prefix_origin='cold_empty' if index == 0 else
+                           'previous_launch_canonical_append_outputs',
+                           canonical_cache_prefix_sha256=hashlib.sha256(prior_fp32).hexdigest())
         names = {name + '.bf16le' for name in (*gate.fixture.NAMES, 'sigmoid', 'silu')}
         names.update(f'producer_{i:02d}.f32le' for i in range(57))
         expected[phase] = {name: dict(bytes=2, sha256=digest(mode + phase + name)) for name in sorted(names)}
         for name, width in zip(gate.fixture.NAMES, gate.fixture.WIDTHS):
-            expected[phase][name + '.bf16le'] = dict(bytes=width * 2,
-                sha256=digest(mode + gate.fixture.PHASES[index] + name))
+            raw = terminal_bytes(mode, index, name)
+            expected[phase][name + '.bf16le'] = dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
     original_failures = {variant: dict(
         **{key: deepcopy(row[key]) for key in ('gate_pass', 'status', 'failed_producers', 'failed_softmax_invariants')},
         report_sha256=report_hashes[variant]) for variant, row in failures.items()}
@@ -79,7 +94,12 @@ def make_case(mode, inputs, trusted, block_digest):
     files, actual, runs, profiles = {}, {}, [], []
     for index, phase in enumerate(gate.fixture.PHASES):
         failing = mode != 'pass' and index == 1
-        actual[phase] = {name: digest(mode + phase + name) for name in gate.fixture.NAMES}
+        actual[phase] = {}
+        for name in gate.fixture.NAMES:
+            raw = terminal_bytes(mode, index, name)
+            if name.startswith('cache_'):
+                raw = raw[index * 1024:]
+            actual[phase][name] = hashlib.sha256(raw).hexdigest()
         snapshots = {'writable_after_command' + str(pc) + '.bin': digest(mode + phase + str(pc))
                      for pc in gate.completion_plan(failing)}
         ddr = digest(mode + phase + ' DDR')
@@ -116,14 +136,18 @@ class Evidence:
     def __init__(self, tmp_path):
         self.repo = tmp_path / 'repo'
         self.repo.mkdir()
-        for name in gate.REQUIRED_SOURCES:
+        source_names = gate.REQUIRED_SOURCES | {
+            str(path.relative_to(gate.ROOT)) for path in gate.IMPORTED_SOURCE_PATHS}
+        imported = {str(path.relative_to(gate.ROOT)): path for path in gate.IMPORTED_SOURCE_PATHS}
+        for name in source_names:
             path = self.repo / name
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text('# SYNTHETIC COMMITTED SOURCE: ' + name + '\n')
+            path.write_bytes(imported[name].read_bytes() if name in imported else
+                             ('# SYNTHETIC COMMITTED SOURCE: ' + name + '\n').encode())
         git(self.repo, 'init', '-q')
         git(self.repo, 'add', '.')
         git(self.repo, '-c', 'user.name=Control Tests', '-c', 'user.email=control@example.invalid', 'commit', '-qm', 'control sources')
-        self.sources = {name: gate.sha(self.repo / name) for name in gate.REQUIRED_SOURCES}
+        self.sources = {name: gate.sha(self.repo / name) for name in source_names}
         self.kwargs = dict(expected_commit=git(self.repo, 'rev-parse', 'HEAD'), repo=self.repo)
         self.kwargs.update({'expected_' + key: digest('trusted build ' + key) for key in gate.BUILD_KEYS})
         self.directories, self.summaries, self.hashes = {}, {}, {}
@@ -251,6 +275,98 @@ def test_complete_trusted_jobs_accept_only_frozen_pair_and_fault_protocol(eviden
     assert 'No live authority' in result['authority_scope']
 
 
+def test_full_prefix_reference_and_actual_append_remain_separate(evidence):
+    report = evidence.verify()
+    assert report['cache_reference_contract_verified'] is True
+    assert report['cache_append_digest_verified'] is True
+    assert report['cache_full_prefix_preservation_live_attested'] is True
+    assert report['cache_full_prefix_bytes_independently_verified'] is False
+    assert report['carried_canonical_prefix_hash_recomputed'] is False
+    assert 'cannot independently recompute' in report['cache_evidence_scope']
+    for mode in gate.MODES:
+        cold, carried = (report['cache_evidence'][mode][phase] for phase in gate.fixture.PHASES)
+        assert cold['canonical_prior_prefix_fp32_sha256'] == hashlib.sha256(b'').hexdigest()
+        assert carried['prior_prefix_reference_source_phase'] == 'cold0'
+        for cache, producer in (('cache_k', 'rope_k'), ('cache_v', 'v')):
+            raw = terminal_bytes(mode, 1, cache)
+            assert raw[:1024] == terminal_bytes(mode, 0, cache)
+            assert raw[1024:] == terminal_bytes(mode, 1, producer)
+            assert cold['full_prefix_reference'][cache]['bytes'] == 1024
+            assert carried['full_prefix_reference'][cache] == dict(bytes=2048, sha256=hashlib.sha256(raw).hexdigest())
+            assert carried['actual_append'][cache]['sha256'] == hashlib.sha256(raw[1024:]).hexdigest()
+            assert carried['actual_append'][cache]['sha256'] != carried['full_prefix_reference'][cache]['sha256']
+            assert carried['prior_prefix_reference'][cache] == cold['full_prefix_reference'][cache]
+        for index, phase in enumerate(gate.fixture.PHASES):
+            run = evidence.summaries[mode]['cases'][0]['result']['runs'][index]
+            assert report['cache_evidence'][mode][phase]['full_ddr_sha256'] == run['ddr_sha256']
+            assert report['cache_evidence'][mode][phase]['command_snapshot_sha256'] == run['snapshot_sha256']
+
+
+@pytest.mark.parametrize('mode', gate.MODES)
+@pytest.mark.parametrize('cache', ['cache_k', 'cache_v'])
+@pytest.mark.parametrize('mutation', ['short_full_prefix', 'long_cold_prefix', 'tail_as_full_hash',
+                                      'old_prefix_as_full_hash', 'wrong_cold_hash', 'wrong_append'])
+def test_cache_prefix_and_tail_contract_rejects_self_consistent_relabelling(evidence, mode, cache, mutation):
+    summary = evidence.summaries[mode]
+    reference = summary['block_reference']['expected']
+    name = cache + '.bf16le'
+    producer = {'cache_k': 'rope_k', 'cache_v': 'v'}[cache]
+    if mutation == 'short_full_prefix':
+        reference['cold1'][name]['bytes'] = 1024
+    elif mutation == 'long_cold_prefix':
+        reference['cold0'][name]['bytes'] = 2048
+    elif mutation == 'tail_as_full_hash':
+        reference['cold1'][name]['sha256'] = reference['cold1'][producer + '.bf16le']['sha256']
+    elif mutation == 'old_prefix_as_full_hash':
+        reference['cold1'][name]['sha256'] = reference['cold0'][name]['sha256']
+    elif mutation == 'wrong_cold_hash':
+        reference['cold0'][name]['sha256'] = digest('incorrect cold cache')
+    else:
+        changed = reference['cold1'][name]['sha256']
+        case = summary['cases'][0]['result']
+        case['actual_sha256']['carried1'][cache] = changed
+        case['execution_identity']['files_sha256']['carried1/actual_' + name] = changed
+        evidence.hashes[mode]['output_sha256'][mode]['carried1'][cache] = changed
+    evidence.rebind_reference(mode)
+    evidence.write()
+    with pytest.raises(ValueError):
+        evidence.verify()
+
+
+@pytest.mark.parametrize('phase', gate.fixture.SOURCE_PHASES)
+@pytest.mark.parametrize('mutation', ['missing_origin', 'wrong_origin', 'missing_prefix_hash',
+                                      'invalid_prefix_hash', 'wrong_empty_prefix'])
+def test_reference_cache_provenance_is_required(evidence, phase, mutation):
+    case = evidence.summaries['pass']['block_reference']['cases'][phase]
+    if mutation == 'missing_origin': del case['cache_prefix_origin']
+    elif mutation == 'wrong_origin': case['cache_prefix_origin'] = 'native_capture_cache'
+    elif mutation == 'missing_prefix_hash': del case['canonical_cache_prefix_sha256']
+    elif mutation == 'invalid_prefix_hash': case['canonical_cache_prefix_sha256'] = 'not a digest'
+    else: case['canonical_cache_prefix_sha256'] = digest('wrong cold prefix') if phase == 'cold0' else hashlib.sha256(b'').hexdigest()
+    evidence.rebind_reference('pass')
+    evidence.write()
+    with pytest.raises(ValueError, match='cache_prefix|cache prefix'):
+        evidence.verify()
+
+
+@pytest.mark.parametrize('mode', gate.MODES)
+@pytest.mark.parametrize('missing', ['ddr', 'snapshot', 'artifact_consistency', 'live_authority'])
+def test_tail_match_cannot_replace_full_memory_attestation(evidence, mode, missing):
+    result = evidence.summaries[mode]['cases'][0]['result']
+    if missing == 'ddr':
+        del result['runs'][1]['ddr_sha256']
+        del result['execution_identity']['files_sha256']['carried1/ddr_after.bin']
+    elif missing == 'snapshot':
+        filename = 'writable_after_command0.bin'
+        del result['runs'][1]['snapshot_sha256'][filename]
+        del result['execution_identity']['files_sha256']['carried1/' + filename]
+    elif missing == 'artifact_consistency': result['full_block_artifact_consistency'] = False
+    else: result['live_authorities_verified'] = False
+    evidence.write()
+    with pytest.raises(ValueError):
+        evidence.verify()
+
+
 @pytest.mark.parametrize('label', ['pass', 'fault'])
 @pytest.mark.parametrize('filename', ['summary.json', 'source_input_hashes.json'])
 def test_missing_job_artifact_is_not_acceptance(evidence, label, filename):
@@ -326,6 +442,53 @@ def test_current_github_sha_must_match(evidence, monkeypatch):
     monkeypatch.setenv('GITHUB_SHA', '0' * 40)
     with pytest.raises(ValueError, match='GITHUB_SHA'):
         evidence.verify()
+
+
+def test_omitting_repo_keeps_default_source_and_github_sha_coupled(evidence, monkeypatch):
+    monkeypatch.setattr(gate, 'ROOT', evidence.repo)
+    evidence.kwargs.pop('repo')
+    monkeypatch.setenv('GITHUB_SHA', evidence.kwargs['expected_commit'])
+    assert evidence.verify()['explicit_production_checkout'] is False
+    monkeypatch.setenv('GITHUB_SHA', '0' * 40)
+    with pytest.raises(ValueError, match='GITHUB_SHA'):
+        evidence.verify()
+
+
+def test_explicit_production_repo_can_differ_from_checker_commit(evidence, monkeypatch):
+    checker_commit = git(gate.ROOT, 'rev-parse', 'HEAD')
+    assert checker_commit != evidence.kwargs['expected_commit']
+    monkeypatch.setenv('GITHUB_SHA', checker_commit)
+    result = evidence.verify()
+    assert result['git_head'] == evidence.kwargs['expected_commit']
+    assert result['exact_clean_commit_verified'] is True
+    assert result['explicit_production_checkout'] is True
+
+
+def test_explicit_repo_still_rejects_imported_production_helper_drift(evidence, monkeypatch):
+    path = Path(gate.fixture.__file__).resolve()
+    original = gate.sha
+    monkeypatch.setattr(gate, 'sha', lambda value: '0' * 64 if Path(value) == path else original(value))
+    with pytest.raises(ValueError, match='imported production helper/data drift'):
+        evidence.verify()
+
+
+def test_explicit_repo_requires_imported_data_pin(evidence):
+    name = str(gate.PIN_PATH.relative_to(gate.ROOT))
+    for mode in gate.MODES:
+        del evidence.hashes[mode]['source_sha256'][name]
+    evidence.write()
+    with pytest.raises(ValueError, match='unbound imported production helper/data'):
+        evidence.verify()
+
+
+def test_cli_accepts_explicit_frozen_production_repo(evidence, tmp_path):
+    argv = [part for key, value in evidence.kwargs.items()
+            for part in ('--' + key.replace('_', '-'), str(value))]
+    output = tmp_path / 'explicit-production-report.json'
+    assert gate.main([*argv, '--output', str(output)]) == 0
+    report = json.loads(output.read_text())
+    assert report['git_head'] == evidence.kwargs['expected_commit']
+    assert report['explicit_production_checkout'] is True
 
 
 def test_committed_source_bytes_are_checked_with_git_show(evidence, monkeypatch):

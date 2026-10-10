@@ -1,0 +1,297 @@
+{
+  "aggregation_repair": {
+    "complete_prefix_independently_rehashed_from_compact": false,
+    "full_ddr_prefix_validation": "authenticated live driver and Python execution auditor; compact retains hashes only",
+    "original_failure": "full 2048B carried reference cache compared to 1024B current append",
+    "repaired_readonly_gate": "PENDING",
+    "rtl_rerun_required": false
+  },
+  "artifacts": {
+    "pass": {
+      "hashes_sha256": "d2901a747272845ada4a0803cefdef4f649643ba6515b821609104ad8135eeaf",
+      "id": 11659653260,
+      "source_files_verified_against_git": 660,
+      "summary_sha256": "37ea106b55dc0a3f53ce0334f780842b172c7980063a7a0663575edd9dfdb6a6",
+      "zip_sha256": "780df1fff624715f32bc801e722e7353e78701193b1d78f4058b7670307e7c87"
+    }
+  },
+  "build": {
+    "binary_sha256": "f0f194342fe9ab70290069441f48b9863c6ed9ab9bcd5f3991c7f60168073263",
+    "rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510"
+  },
+  "fault_job_conclusion": "PENDING",
+  "fault_job_id": 114118685810,
+  "full128_executed": false,
+  "future_replay_retention_budget": {
+    "downloadable_weights": false,
+    "final_kv_bytes": 4096,
+    "git_payloads": false,
+    "internal_gqa_fp32_container_bytes": 480,
+    "original_bytes_available": false,
+    "prior_kv_bytes": 2048,
+    "proposed_only": true,
+    "raw_hidden_bytes": 4096,
+    "stored_terminal_bytes": 137216,
+    "total_tensor_bytes": 148192,
+    "trig_bytes": 256
+  },
+  "mac_port_audit": {
+    "case": "pass",
+    "combined": {
+      "cycles": 6215798,
+      "executed_macs": 589398016,
+      "pipeline_stalls": 49920,
+      "read_beats": 1150468,
+      "useful_macs": 36712448,
+      "useful_utilization_percent": 0.1441970926339627,
+      "wide_steps": 147480,
+      "write_beats": 2144
+    },
+    "fault_or_native_gate_acceptance_implied": false,
+    "fixed_macs_per_cycle": 4096,
+    "runs": [
+      {
+        "begin_cycle": 36,
+        "command_cycle_groups": {
+          "dense_projection_ffn": {
+            "cycles": 2640166,
+            "percent_of_launch": 84.99736331577046
+          },
+          "fence": {
+            "cycles": 269,
+            "percent_of_launch": 0.008660171645245887
+          },
+          "gqa_fused": {
+            "cycles": 15287,
+            "percent_of_launch": 0.49214886223373194
+          },
+          "input_post_qk_norm": {
+            "cycles": 77751,
+            "percent_of_launch": 2.5031115449424277
+          },
+          "kv_setup": {
+            "cycles": 1198,
+            "percent_of_launch": 0.038568348070648975
+          },
+          "residual": {
+            "cycles": 11572,
+            "percent_of_launch": 0.3725483504787562
+          },
+          "rope": {
+            "cycles": 8668,
+            "percent_of_launch": 0.27905712944606453
+          },
+          "sigmoid_gate": {
+            "cycles": 123921,
+            "percent_of_launch": 3.989506061154333
+          },
+          "silu_up": {
+            "cycles": 227341,
+            "percent_of_launch": 7.319004022311693
+          }
+        },
+        "cumulative_counter_begin": {
+          "idma_transfers": 0,
+          "pipeline_stalls": 0,
+          "wide_steps": 0
+        },
+        "cumulative_counter_end": {
+          "idma_transfers": 42423,
+          "pipeline_stalls": 24960,
+          "wide_steps": 73736
+        },
+        "cycles": 3106174,
+        "end_cycle": 3106210,
+        "executed_macs": 294682624,
+        "hardware_status": 0,
+        "idma_transfers": 42423,
+        "phase": "cold0",
+        "pipeline_stalls": 24960,
+        "read_ack_beats": 575170,
+        "read_beats": 575170,
+        "receipt_executed_over_fixed_wall_percent": 2.316161296823681,
+        "receipt_useful_over_executed_percent": 6.228455465361948,
+        "run": 0,
+        "terminal_counter_deltas": {
+          "cycle": 3106210,
+          "cycles": 1,
+          "executed_macs": 0,
+          "pipeline_stalls": 0,
+          "read_ack_beats": 0,
+          "read_beats": 0,
+          "useful_macs": 0,
+          "wide_steps": 0,
+          "write_ack_beats": 0,
+          "write_beats": 0
+        },
+        "terminal_cycles": 1,
+        "useful_macs": 18354176,
+        "useful_utilization": {
+          "denominator": 12722888704,
+          "numerator": 18354176
+        },
+        "utilization_percent": 0.14426107487861273,
+        "wide_steps": 73736,
+        "write_ack_beats": 1072,
+        "write_beats": 1072
+      },
+      {
+        "begin_cycle": 3106218,
+        "command_cycle_groups": {
+          "dense_projection_ffn": {
+            "cycles": 2641113,
+            "percent_of_launch": 84.93351607782806
+          },
+          "fence": {
+            "cycles": 256,
+            "percent_of_launch": 0.008232506566710316
+          },
+          "gqa_fused": {
+            "cycles": 17631,
+            "percent_of_launch": 0.5669817315533968
+          },
+          "input_post_qk_norm": {
+            "cycles": 77867,
+            "percent_of_launch": 2.5040648001173134
+          },
+          "kv_setup": {
+            "cycles": 1180,
+            "percent_of_launch": 0.037946709955930365
+          },
+          "residual": {
+            "cycles": 11527,
+            "percent_of_launch": 0.3706879031033977
+          },
+          "rope": {
+            "cycles": 8723,
+            "percent_of_launch": 0.2805162296148988
+          },
+          "sigmoid_gate": {
+            "cycles": 123980,
+            "percent_of_launch": 3.986977203674785
+          },
+          "silu_up": {
+            "cycles": 227346,
+            "percent_of_launch": 7.3110446793567325
+          }
+        },
+        "cumulative_counter_begin": {
+          "idma_transfers": 42423,
+          "pipeline_stalls": 24960,
+          "wide_steps": 73736
+        },
+        "cumulative_counter_end": {
+          "idma_transfers": 84981,
+          "pipeline_stalls": 49920,
+          "wide_steps": 147480
+        },
+        "cycles": 3109624,
+        "end_cycle": 6215842,
+        "executed_macs": 294715392,
+        "hardware_status": 0,
+        "idma_transfers": 42558,
+        "phase": "carried1",
+        "pipeline_stalls": 24960,
+        "read_ack_beats": 575298,
+        "read_beats": 575298,
+        "receipt_executed_over_fixed_wall_percent": 2.313848876906018,
+        "receipt_useful_over_executed_percent": 6.229152768512342,
+        "run": 1,
+        "terminal_counter_deltas": {
+          "cycle": 6215842,
+          "cycles": 1,
+          "executed_macs": 0,
+          "pipeline_stalls": 0,
+          "read_ack_beats": 0,
+          "read_beats": 0,
+          "useful_macs": 0,
+          "wide_steps": 0,
+          "write_ack_beats": 0,
+          "write_beats": 0
+        },
+        "terminal_cycles": 1,
+        "useful_macs": 18358272,
+        "useful_utilization": {
+          "denominator": 12737019904,
+          "numerator": 18358272
+        },
+        "utilization_percent": 0.14413318137498296,
+        "wide_steps": 73744,
+        "write_ack_beats": 1072,
+        "write_beats": 1072
+      }
+    ],
+    "scalar_internal_or_memory_cycle_buckets_available": false,
+    "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "status": "PASS_EXACT_PORT_COUNTER_ARITHMETIC"
+  },
+  "missing_replay_data": [
+    "original raw hidden bytes for both tokens",
+    "actual full acknowledged prior KV bytes",
+    "actual stored terminal tensor bytes; compact contains hashes only",
+    "actual internal QK/score/probability if hidden-node native admission is required"
+  ],
+  "native_audit_sha256": "7060ba622faf2449e8853a3dfdaa8c726c8be82672a3d593f03b2bedfc72832c",
+  "native_full_block_acceptance": false,
+  "native_summary": {
+    "block_limits": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "direct_same_input_same_actual_cache_official_m1_comparator": false,
+    "failure_scope": "official Torch vs independent NumPy M128 hidden producers; not measured RTL final-output failures",
+    "inherited_failures": {
+      "avx2": 9,
+      "baseline": 7
+    },
+    "limits_origin": "repository frozen contract, not upstream-published tolerances",
+    "m1_final_diagnostics": [
+      {
+        "max_abs": 0.0009765625,
+        "mean_abs": 1.5780329704284668e-05,
+        "phase": "cold0"
+      },
+      {
+        "max_abs": 0.00390625,
+        "mean_abs": 0.00011262670159339905,
+        "phase": "carried1"
+      }
+    ],
+    "qk_cold1_diagnostic": {
+      "actual_internal_rtl_qk_dump_available": false,
+      "max_abs": 0.5,
+      "mean_abs": 0.03125,
+      "operator_max_abs": 0.03125,
+      "operator_mean_abs": 0.005
+    }
+  },
+  "overall_pass": false,
+  "pass_job_completed_utc": "2026-10-10T04:42:15Z",
+  "pass_job_conclusion": "success",
+  "pass_job_id": 114118686395,
+  "physical_macs_per_cycle": 4096,
+  "remaining": [
+    "fault and corrected split aggregate terminal",
+    "same-input/same-actual-cache native M1 reference and hidden-node gate",
+    "cold128/carried128",
+    "reset/restore",
+    "35B",
+    "timing/PPA and MAC target"
+  ],
+  "run_id": 38015586840,
+  "schema": 1,
+  "scope": {
+    "ack_bytes_per_launch": 68608,
+    "cache": "actual prior acknowledged same-DUT prefix, no reset or intermediate injection",
+    "canonical_outputs": "42 stored terminal hashes match canonical/current-append outputs",
+    "commands_per_launch": 22,
+    "descriptors_per_launch": 296,
+    "launches": 2,
+    "owners_per_launch": 19,
+    "raw_hidden_source": "baseline cold_m128 rows 0 and 1",
+    "tokens_per_launch": 1
+  },
+  "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+  "split_acceptance": false,
+  "status": "PASS_FROZEN_RECIPE_PAIR_NATIVE_AND_SPLIT_ACCEPTANCE_OPEN"
+}

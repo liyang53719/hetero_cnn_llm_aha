@@ -22,6 +22,14 @@ import sys
 PROJECT = "chisel/continuous_prefill/"
 LIVE_GATE = PROJECT + "scripts/host_bf16_attention_block_live_gate.py"
 ATTENTION_ONLY_PATHS = frozenset({
+    '.github/scripts/attention_readonly_ci_scope.py',
+    '.github/scripts/tests/test_attention_readonly_ci_scope.py',
+    '.github/workflows/attention-block-readonly-acceptance.yml',
+    'doc/U00_2_HOST_ATTENTION_BLOCK_CI_98C7_20261010_CN.md',
+    'reports/execution/U00_2_HOST_ATTENTION_BLOCK_CI_98C7_20261010/native_gap_audit.json',
+    'reports/execution/U00_2_HOST_ATTENTION_BLOCK_CI_98C7_20261010/summary.json',
+    'tests/test_attention_readonly_acceptance.py',
+    'tools/attention_acceptance/run_readonly.py',
     PROJECT + "scripts/run_host_bf16_attention_block_fresh_gate.py",
     PROJECT + "scripts/host_bf16_attention_block_build_artifact.py",
     PROJECT + "tests/test_host_bf16_attention_block_fresh_gate.py",

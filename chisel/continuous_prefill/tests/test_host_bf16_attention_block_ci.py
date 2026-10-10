@@ -15,7 +15,7 @@ import run_host_bf16_attention_block_fresh_gate as gate
 def test_workflow_full_owner_controls_finite_serial_build_and_no_raw_upload():
     flow=yaml.load(FLOW.read_text(),Loader=yaml.BaseLoader)
     job=flow['jobs']['build']
-    assert set(flow['jobs'])=={'build','pass','fault','acceptance'}
+    assert set(flow['jobs'])=={'readonly-scope','build','pass','fault','acceptance'}
     assert gate.BUILD_RUNNER_BUDGET_SECONDS < int(job['timeout-minutes'])*60 < 6*3600
     assert job['env']['BUILD_JOBS']=='1' and '-Xss8m' in job['env']['JVM_OPTS']
     controls=next(step for step in job['steps'] if step.get('name','').startswith('Shared Scalar'))
@@ -36,7 +36,10 @@ def test_workflow_full_owner_controls_finite_serial_build_and_no_raw_upload():
 
 def test_split_jobs_run_complete_pairs_and_only_share_the_immutable_build():
     flow=yaml.load(FLOW.read_text(),Loader=yaml.BaseLoader)
-    assert sum(int(job['timeout-minutes']) for job in flow['jobs'].values())==570
+    assert sum(int(job['timeout-minutes']) for job in flow['jobs'].values())==575
+    assert flow['jobs']['readonly-scope']['timeout-minutes']=='5'
+    assert flow['jobs']['build']['needs']=='readonly-scope'
+    assert "outputs.run_full != 'false'" in flow['jobs']['build']['if']
     for key,mode in [('pass','pass'),('fault','final-residual-ack-error')]:
         job=flow['jobs'][key]
         assert job['needs']=='build'
@@ -55,7 +58,7 @@ def test_split_jobs_run_complete_pairs_and_only_share_the_immutable_build():
         assert '--prepare-jars --archive ' in '\n'.join(s.get('run','') for s in job['steps'])
         assert 'bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh' in '\n'.join(s.get('run','') for s in job['steps'])
     final=flow['jobs']['acceptance']
-    assert final['needs']==['build','pass','fault'] and final['if']=='always()'
+    assert final['needs']==['build','pass','fault'] and final['if']=="${{ always() && needs.build.result != 'skipped' }}"
     dependencies=next(s for s in final['steps'] if s.get('name')=='Install pinned compact-verifier dependencies')
     assert dependencies['run']=='python -m pip install numpy==2.3.5 PyYAML==6.0.3'
     verify=next(s for s in final['steps'] if s.get('name','').startswith('Verify trusted'))

@@ -1,0 +1,88 @@
+name: qwen35-Attention-Block-Readonly-Acceptance
+
+# This recovery never dispatches or reruns the production numerical workflow.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/attention-block-readonly-acceptance.yml'
+      - '.github/scripts/verify_attention_block_split.py'
+      - '.github/scripts/tests/test_attention_block_split_acceptance.py'
+      - 'tools/attention_acceptance/**'
+      - 'tests/test_attention_readonly_acceptance.py'
+  workflow_run:
+    workflows: [qwen35-production-Host-Attention-Block]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: attention-readonly-${{ github.sha }}-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  acceptance:
+    if: >-
+      github.repository == 'liyang53719/hetero_cnn_llm_aha' &&
+      (github.event_name == 'push' ||
+       (github.event.workflow_run.id == 38015586840 &&
+        github.event.workflow_run.run_attempt == 1 &&
+        github.event.workflow_run.head_sha == '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f' &&
+        github.event.workflow_run.path == '.github/workflows/host-bf16-attention-block.yml'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONPATH: '${{ github.workspace }}/checker/src:${{ github.workspace }}/checker/chisel/continuous_prefill/scripts'
+    steps:
+      - name: Check out the current verifier separately
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          path: checker
+          persist-credentials: false
+      - name: Check out the exact original production sources
+        uses: actions/checkout@v4
+        with:
+          ref: '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f'
+          path: production
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install compact verifier dependencies
+        run: python -m pip install numpy==2.3.5 PyYAML==6.0.3 pytest==8.3.5
+      - name: Test the read-only trust boundary and aggregate contracts
+        working-directory: checker
+        run: >-
+          python -B -m pytest -o addopts='' -q
+          tests/test_attention_readonly_acceptance.py
+          .github/scripts/tests/test_attention_readonly_ci_scope.py
+          .github/scripts/tests/test_host_attention_block_ci_scope.py
+          .github/scripts/tests/test_attention_block_split_acceptance.py
+          chisel/continuous_prefill/tests/test_host_bf16_attention_block_ci.py
+      - name: Authenticate and re-admit the original compact proofs
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
+        run: >-
+          python -B checker/tools/attention_acceptance/run_readonly.py
+          --checker-repo checker --production-repo production
+          --output work/attention_readonly_acceptance
+      - name: Retain the exact evidence and independent checker provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: attention-readonly-acceptance-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/attention_readonly_acceptance/provenance.json
+            work/attention_readonly_acceptance/authenticated_input_provenance.json
+            work/attention_readonly_acceptance/acceptance.json
+            work/attention_readonly_acceptance/build/summary.json
+            work/attention_readonly_acceptance/build/source_input_hashes.json
+            work/attention_readonly_acceptance/pass/summary.json
+            work/attention_readonly_acceptance/pass/source_input_hashes.json
+            work/attention_readonly_acceptance/fault/summary.json
+            work/attention_readonly_acceptance/fault/source_input_hashes.json

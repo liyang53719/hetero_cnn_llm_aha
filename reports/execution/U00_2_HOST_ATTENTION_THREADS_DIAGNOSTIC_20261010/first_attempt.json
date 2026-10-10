@@ -1,0 +1,235 @@
+{
+  "schema": "HOST_ATTENTION_THREADS_FIRST_ATTEMPT_V1",
+  "diagnostic_source_commit": "7ea2fd42e3f66c26018e3ad6a5e6a57ba4460319",
+  "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+  "run_id": 38020436763,
+  "job_id": 114120036538,
+  "completed_at": "2026-10-10T04:18:05Z",
+  "github_conclusion": "failure",
+  "artifact_upload_success": true,
+  "artifact_id": 11659860629,
+  "artifact_zip_bytes": 41224,
+  "artifact_zip_sha256": "b7b83c508e0d6f300c634102eff9721e42a348455d4edb3ac85b35356ad34388",
+  "status": "FAILED_DIAGNOSTIC",
+  "stage": "one_fresh_capture_and_live_fixture",
+  "error": {
+    "message": "built/live source closure mismatch",
+    "type": "ValueError"
+  },
+  "source_closure_diagnosis": {
+    "status": "DIAGNOSTIC_SOURCE_INVENTORY_MIXUP",
+    "baseline_sources": 655,
+    "aggregated_sources": 658,
+    "aggregate_paths_absent_from_build_manifest": {
+      "scripts/rebuild_qk_norm256_corpora.py": "a800f2f0613c1768a056ac178d289fb63d7acef04bae52984654fbcebb833765",
+      "scripts/run_qwen35_bf16_audit.py": "13119e753f6003090d6b2582b545f42985a9fef3e84c585bde48a8bac17250eb",
+      "scripts/run_qwen35_prefix_chain.py": "d5a5594eb572960102d31e0caf7043a1d1ecfbaf6d3a4f7811498c3f5860d88b"
+    },
+    "common_path_hash_drift": {},
+    "all_aggregate_sources_match_frozen_git": true,
+    "prefix_executions": 0,
+    "not_dut_numerical_failure": true
+  },
+  "candidate": {
+    "baseline_rebuilt": false,
+    "binary_sha256": "3ef8814b9f3aeb016c73635371c251f5736af8835750486e081937d2a201e0d0",
+    "builder_sha256": "a9d32eb691bc4ad1eb42b471cec35df980a34f162f35e5eb4731d4e0ad96c3be",
+    "compile": {
+      "bounded_build": {
+        "generated_inputs_unchanged": true,
+        "jobs": 1,
+        "stages": [
+          {
+            "artifact_sha256": "e740c58f0685c3999908231b450d17a022f8adf4d2890cf99d05136f839ffb20",
+            "freed_pch_bytes": 140770178,
+            "log_sha256": "c89f23e41a5f01e572a9395059b9efc4131b89bedecd5d015098bb51b275f048",
+            "seconds": 21.973112106323242,
+            "target": "VHeteroFP32Alu/libHeteroFP32Alu.a"
+          },
+          {
+            "artifact_sha256": "1d3f703f846fa111f6088f67e9cb60dc4d42ed410625c830078b4db5302fc6bb",
+            "freed_pch_bytes": 141230884,
+            "log_sha256": "1bccccba4e8f2c92de757bf05e59efb8ac52ddcf2bb8a3b14b6a7c970519cd73",
+            "seconds": 18.247552394866943,
+            "target": "Vbf16_context_lane_cluster16_rev8b_b_candidate/libbf16_context_lane_cluster16_rev8b_b_candidate.a"
+          },
+          {
+            "artifact_sha256": "310149c9eac21f3b769dc75e42e2bf0c5d53db4be7b290f5887a87483b1d368a",
+            "freed_pch_bytes": 147745112,
+            "log_sha256": "ed781e05514d93169143f9e3c8b8e1d51589c33047b6231f65904ef7c39d0929",
+            "seconds": 27.999679803848267,
+            "target": "Vqwen2_matrix_command_endpoint/libqwen2_matrix_command_endpoint.a"
+          },
+          {
+            "artifact_sha256": "2ab3db6c41c604d8be334f99329342738534d3d48b982abdb48974409ff1073b",
+            "freed_pch_bytes": 165441958,
+            "log_sha256": "8ee42dc6b786198892e163f56211fc75849fd2b59e6eaa0c8e9ea634d1900e00",
+            "seconds": 140.7927668094635,
+            "target": "VMatrixPipelineService/libMatrixPipelineService.a"
+          },
+          {
+            "artifact_sha256": "ab936b4c9894d7a8295241e1b752355d72599f5b2761dda8f0f982e0d20d4b6c",
+            "freed_pch_bytes": 159711072,
+            "log_sha256": "62f16946f827efc4ff1655dc7c0144941241ce2d19257b03a1f8fd269f514312",
+            "seconds": 148.29145741462708,
+            "target": "VQwen2ContinuousBlock/libQwen2ContinuousBlock.a"
+          },
+          {
+            "artifact_sha256": "d2b95d3016485a3e5b23dc330b1f2da4ae0fe196586049b3aea5723e70352b25",
+            "freed_pch_bytes": 156537423,
+            "log_sha256": "40372f0ae3cd5bd3148a70d35ca9bd92d1cf9d2ee83cc94c131cc663c686ccf5",
+            "seconds": 108.67250061035156,
+            "target": "VStreamingDenseOwner/libStreamingDenseOwner.a"
+          },
+          {
+            "artifact_sha256": "3ef8814b9f3aeb016c73635371c251f5736af8835750486e081937d2a201e0d0",
+            "freed_pch_bytes": 192602294,
+            "log_sha256": "8cf7261a73cc1b9b752832476ac9d178917acb96d3e26a7e5b3ca1224a9ca660",
+            "seconds": 2091.435623884201,
+            "target": "VHostBlockTop"
+          }
+        ],
+        "status": "PASS"
+      },
+      "commands": [
+        {
+          "count": 302,
+          "effective_optimization": "-O2",
+          "generated_slow": false
+        },
+        {
+          "count": 221,
+          "effective_optimization": "-O2",
+          "generated_slow": true
+        }
+      ]
+    },
+    "dpi_thread_safety_forced": false,
+    "driver_sha256": "be1281e44d17228aaba63daeeae2ae8cb10e7c5c39fc30fca681ca0998628f09",
+    "generated_top_sha256": "ce7a5e8fcda2f93ed263dab863d30c294c78a3dc64b6bf8fdd9114652658eace",
+    "hierarchy_configuration_sha256": "d2b9e5391113b68d6848d9901b9ee57e0aee17c8cddcbfd6faa92feb2ba7b24b",
+    "numerical_acceptance": false,
+    "original_builder_sha256": "bfd6f528fe036c38113f5316361258c54a1975dd733a97ae9f0d139c72157951",
+    "prefix_header_sha256": "3618a544538abb20d850d24afac11b3479443e4b5f7155f7ecb0680f6c42ea0a",
+    "process": {
+      "affinity": [
+        0,
+        1
+      ],
+      "argv": [
+        "bash",
+        "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_threads_result/threads2/build_threads2.sh"
+      ],
+      "elapsed_seconds": 2707.5195695449997,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "process_group_cleaned": true,
+      "returncode": 0,
+      "timed_out": false
+    },
+    "rtl_changed": false,
+    "rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510",
+    "scala_executed": false,
+    "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "status": "BUILT_THREADS2_PREFIX_DIAGNOSTIC_ONLY",
+    "threads": 2,
+    "verilator_argv": [
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_tools/verilator/usr/bin/verilator",
+      "--threads",
+      "2",
+      "--cc",
+      "--exe",
+      "--assert",
+      "--comp-limit-parens",
+      "16",
+      "--output-split",
+      "3000",
+      "--output-split-cfuncs",
+      "200",
+      "-Wno-fatal",
+      "--top-module",
+      "HostBlockTop",
+      "-CFLAGS",
+      "-O2 -std=c++17 -ffp-contract=off -fno-fast-math",
+      "-j",
+      "1",
+      "--Mdir",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_threads_result/threads2/obj",
+      "--hierarchical",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/tests/native_weight_hierarchy.vlt",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/integration/qwen2_matrix_command_endpoint.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/bf16_outer_product_array_glue512.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+      "+define+TARGET_ASIC",
+      "+define+TARGET_RTL",
+      "+define+TARGET_SYNTHESIS",
+      "+define+TARGET_VERILATOR",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/deps/apb/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/deps/axi/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/deps/axi_stream/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/deps/common_cells/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/deps/obi/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/idma/src/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/idma/target/rtl/include",
+      "+incdir+/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_block_ci_idma/idma_export/idma/test",
+      "-f",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_threads_result/threads2/idma.f",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/work/attention_threads_result/threads2/generated/HostBlockTop.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/rtl/integration/idma_backend_rw_axi_flat_wrap.sv",
+      "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/chisel/continuous_prefill/tests/host_bf16_attention_block.cpp"
+    ]
+  },
+  "baseline_build_transfer": {
+    "binary_sha256": "f0f194342fe9ab70290069441f48b9863c6ed9ab9bcd5f3991c7f60168073263",
+    "build_ready_sha256": "2338703ab4f4d6218c9c389efd42166267312a9f13d814f8b64aa38e4c5064c7",
+    "numerical_pass": false,
+    "package_sha256": "1cfaf045ca58704016bfecff3f079b7fa708d1d7f7043b0fb014b5da61b7bfb1",
+    "rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510",
+    "schema": 1,
+    "scope": "QWEN35_LAYER3_ATTENTION_BLOCK_M1",
+    "source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+    "source_manifest_sha256": "bdf62d17f0d716ea242c340d2f22e60d8e251063a3f52d8d64c50d142555dcef",
+    "status": "BUILT_HOST_ATTENTION_BLOCK_NOT_NUMERICAL_PASS",
+    "toolchain_sha256": "3f65fa1cf11455cc8988c83fd5977d1de1cba06d5d2fd6d49859ba613947b273"
+  },
+  "effective_cpu_count": 4,
+  "affinity": [
+    0,
+    1
+  ],
+  "nproc": "2",
+  "fresh_official_executions": 2,
+  "reused_official_executions": 0,
+  "native_full_block_failed_comparisons": {
+    "avx2": 9,
+    "baseline": 7
+  },
+  "windows": {
+    "norm_prefix": {
+      "comparison": {
+        "status": "PENDING"
+      },
+      "cycles": 4096,
+      "runs": [],
+      "timeout_seconds": 60
+    }
+  },
+  "completed_prefixes": 0,
+  "speed_ratio": null,
+  "candidate_elf_preserved": false,
+  "candidate_recovery_from_hash_only_possible": false,
+  "numerical_acceptance": false,
+  "whole_layer_speedup_claimed": false,
+  "raw_tensors_in_artifact": false,
+  "original_summary_sha256": "03f318e41ead889df3b85618f0ead6dae91e1d014af39d19ec515899a6790642",
+  "original_hashes_sha256": "8115d1f857cce71f06269eaf439730f14b91fbcd889ec0226bc872bf017ffc80"
+}

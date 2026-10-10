@@ -1,0 +1,12 @@
+{
+  "source_commit": "79bbe751b7b221023b02546860e213c16c07b2ea",
+  "manifest_entries": 552,
+  "repo_blob_matches": 552,
+  "repo_blob_mismatches": [],
+  "not_in_exact_git_tree": [],
+  "status": "PASS_EXACT_IMMUTABLE_GIT_SOURCE_BYTES",
+  "complete_source_sha256_map": "result.json:ci_recorded_identities.source_sha256",
+  "comparison": "SHA256(git show 79bbe751b7b221023b02546860e213c16c07b2ea:path) equals each original recorded SHA256",
+  "full_local_per_file_audit_sha256": "7c270e9e1bc6acc42436a1b3392c75b662bd884ba3c51024d544363e9e1f70e4",
+  "source_map_omitted_from_this_file_to_avoid_duplicate": true
+}

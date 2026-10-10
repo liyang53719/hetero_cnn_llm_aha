@@ -92,6 +92,23 @@ jobs:
           path: |
             work/attention_threads_result/compact/summary.json
             work/attention_threads_result/compact/source_input_hashes.json
+      - name: Preserve only the built candidate and its checked identity files
+        if: always() && hashFiles('work/attention_threads_result/threads2/candidate_identity.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: bounded-attention-threads2-candidate-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            work/attention_threads_result/threads2/candidate_identity.json
+            work/attention_threads_result/threads2/build_threads2.sh
+            work/attention_threads_result/threads2/verilator_argv.json
+            work/attention_threads_result/threads2/obj/VHostBlockTop
+            work/attention_threads_result/threads2/obj/VHostBlockTop.cpp
+            work/attention_threads_result/threads2/generated/HostBlockTop.sv
+            work/attention_threads_result/threads2/generated/SCOPE.json
+            work/attention_threads_result/threads2/idma_identity.json
+            work/attention_threads_result/threads2/idma.f
       - name: State the strict diagnostic boundary
         if: always()
         run: |

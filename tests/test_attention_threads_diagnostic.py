@@ -322,7 +322,8 @@ def test_supervisor_failure_never_preserves_success(tmp_path):
     summary = json.loads((tmp_path/'compact/summary.json').read_text())
     assert summary['status'] == 'FAILED_DIAGNOSTIC'
     assert summary['numerical_acceptance'] is summary['overall_pass'] is False
-    assert summary['artifact_upload_allowlist'] == ['compact/summary.json', 'compact/source_input_hashes.json']
+    assert summary['compact_artifact_upload_allowlist'] == list(diag.COMPACT_FILES)
+    assert summary['artifact_upload_allowlist'] == diag.upload_allowlists()['artifact_upload_allowlist']
 
 
 def test_missing_supervisor_evidence_fails_closed(tmp_path):
@@ -366,11 +367,15 @@ def test_factory_uses_original_live_authorities_once(tmp_path):
         pack_fixture=call('pack',dict(live_authorities_verified=True, source_sha256={}, input_sha256={'raw':'hash'})))
     args = SimpleNamespace(payload_layer0='l0',payload_layer3='l3',payload_extra='extra')
     summary, hashes = {}, dict(source_sha256={})
-    authorities, admitted = diag.fresh_fixture(frozen, args, tmp_path, summary, hashes)
+    stages = []
+    inventory = SimpleNamespace(admit=lambda stage, actual, hashes: stages.append((stage, actual)),
+                                require_complete=lambda hashes: None)
+    authorities, admitted = diag.fresh_fixture(frozen, args, tmp_path, summary, hashes, inventory)
     assert [call[0] for call in calls] == ['capture','projection','attention','block','pack']
     assert calls[1][2]['variants'] == calls[2][2]['variants'] == ('baseline',)
     assert calls[-1][2] == authorities and authorities['session'] is session
     assert hashes['input_sha256'] == {'raw':'hash'} and summary['native_full_block_failures']['still_failed']
+    assert stages == [(stage, {}) for stage in diag.SOURCE_STAGES]
 
 
 @pytest.mark.parametrize('field,value', [('pre_completion_valid', 0), ('end_ack_bytes', 1984),
@@ -451,8 +456,9 @@ def test_original_native_failure_survives_reference_failure(tmp_path):
         merge_sources=lambda dst, src: dst.update(src), WINDOWS=(), generate_projection_references=projection)
     args = SimpleNamespace(payload_layer0='l0',payload_layer3='l3',payload_extra='extra')
     summary, hashes = {}, dict(source_sha256={})
+    inventory = SimpleNamespace(admit=lambda *args: None)
     with pytest.raises(ValueError, match='original native'):
-        diag.fresh_fixture(frozen, args, tmp_path, summary, hashes)
+        diag.fresh_fixture(frozen, args, tmp_path, summary, hashes, inventory)
     assert summary['native_full_block_failures'] == {'unchanged_failure':True}
 
 
@@ -463,22 +469,41 @@ def test_worker_mocked_end_to_end_abba_and_pending(tmp_path, monkeypatch, timeou
     args = SimpleNamespace(expected_sha256=diag.sha(archive), baseline_run_id='38015586840', archive=archive)
     calls = []; admission = dict(effective_cpu_count=2, selected_affinity=[0,1], sched_getaffinity=[0,1],
         cpus_allowed_list='0-1', permitted_cpus=[0,1], quota_cpu_limits=[2], cgroups=[])
-    admitted = dict(live_authorities_verified=True, input_sha256={}, source_sha256={})
+    build_sources, stage_sources = source_shape()
+    full_sources = diag.source_union(build_sources, *stage_sources.values())
+    admitted = dict(live_authorities_verified=True, input_sha256={}, source_sha256=stage_sources['fixture'])
     session = SimpleNamespace(evidence=lambda: dict(fresh_official_executions=2,reused_official_executions=0))
     identity = {'generated/HostBlockTop.sv':diag.RTL_SHA256, 'obj/VHostBlockTop':'baseline ELF'}
+    build_identity_calls = []
+    def verify_checkout(pin, sources):
+        diag.require(pin == diag.PIN and all(full_sources.get(name) == digest for name, digest in sources.items()),
+                     'source differs from immutable test checkout')
+    def build_identity(build, required):
+        actual = json.loads((build/'sources.sha256.json').read_text())
+        # Model the production authority's required-source subset check, and
+        # strengthen this diagnostic test to require the entire build closure.
+        diag.require(required and all(actual.get(name) == digest for name, digest in required.items()),
+                     'built/live source closure mismatch')
+        diag.require(required == actual == build_sources, 'full immutable build source map required')
+        build_identity_calls.append(dict(required))
+        return dict(identity)
     frozen = SimpleNamespace(total_budget=lambda seconds: contextlib.nullcontext(),
-        merge_sources=lambda dst,src: dst.update(src), verify_checkout=lambda *a: None,
-        build_identity=lambda *a: dict(identity), verify_all_build_sources=lambda *a: None,
+        merge_sources=lambda dst,src: dst.update(src), verify_checkout=verify_checkout,
+        build_identity=build_identity, verify_all_build_sources=lambda *a: None,
         admit_fixture=lambda *a,**kw: admitted, _native_failure_evidence=lambda value:{'failed':True})
     def restore(*args):
         calls.append('restore'); baseline=out/'baseline'; baseline.mkdir()
-        (baseline/'sources.sha256.json').write_text('{}'); (baseline/'idma_identity.json').write_text('{}')
+        (baseline/'sources.sha256.json').write_text(json.dumps(build_sources)); (baseline/'idma_identity.json').write_text('{}')
         return {'restored':True}
     def build(*args, **kwargs):
         calls.append('build'); candidate=out/'threads2'; candidate.mkdir()
         (candidate/'idma_identity.json').write_text('{}')
         return dict(binary_sha256='candidate ELF')
-    def fresh(*args): calls.append('fresh'); return dict(session=session), admitted
+    def fresh(frozen, args, output, summary, hashes, inventory):
+        calls.append('fresh')
+        for stage in diag.SOURCE_STAGES:
+            inventory.admit(stage, stage_sources[stage], hashes)
+        return dict(session=session), admitted
     count = 0
     def launch(argv, log, **kwargs):
         nonlocal count
@@ -493,6 +518,7 @@ def test_worker_mocked_end_to_end_abba_and_pending(tmp_path, monkeypatch, timeou
                                                      final_pipeline_issues=0 if cycles==4096 else 3))
     monkeypatch.setattr(diag,'checked_paths',lambda a:(ROOT,out,'b'*40))
     monkeypatch.setattr(diag,'imports',lambda s:(frozen,SimpleNamespace(prepare_compiler_jars=lambda *a:{},restore=restore)))
+    monkeypatch.setattr(diag,'source_stage_snapshots',lambda *args:stage_sources)
     monkeypatch.setattr(diag,'resource_snapshot',lambda:dict(admission))
     monkeypatch.setattr(diag,'build_candidate',build); monkeypatch.setattr(diag,'fresh_fixture',fresh)
     monkeypatch.setattr(diag,'selected_tools',lambda p:{})
@@ -510,3 +536,163 @@ def test_worker_mocked_end_to_end_abba_and_pending(tmp_path, monkeypatch, timeou
     assert summary['native_full_block_failures'] == {'failed':True}
     assert summary['numerical_acceptance'] is summary['overall_pass'] is False
     assert summary['candidate_builds'] == 1 and summary['source_tool_identity_verified'] is True
+    hashes = json.loads((out/'compact/source_input_hashes.json').read_text())
+    assert len(hashes['source_sha256']) == 658 and len(hashes['build_source_sha256']) == 655
+    assert all(len(required) == 655 for required in build_identity_calls)
+    assert len(build_identity_calls) >= 9
+
+
+def source_shape():
+    """The real failure shape: 655 immutable build sources plus 3 capture-only sources."""
+    build = {'sources/source_'+str(index)+'.py': diag.object_sha(index) for index in range(655)}
+    extra = {name: diag.object_sha(name) for name in sorted(diag.REFERENCE_ONLY_PATHS)}
+    names = list(build)
+    stages = dict(capture={names[0]:build[names[0]], **extra},
+                  projection={name:build[name] for name in names[1:12]},
+                  attention={name:build[name] for name in names[8:25]},
+                  block={name:build[name] for name in names[:40]}, fixture=dict(build))
+    return build, stages
+
+
+def source_inventory():
+    build, stages = source_shape()
+    full = diag.source_union(build, *stages.values())
+    verified = []
+    def verify(pin, actual):
+        diag.require(pin == diag.PIN and actual == full, 'complete frozen source union differs')
+        verified.append(dict(actual))
+    frozen = SimpleNamespace(verify_checkout=verify, merge_sources=lambda dst, src: dst.update(src))
+    hashes = dict(source_sha256={})
+    inventory = diag.SourceInventory(frozen, build, stages, hashes)
+    return inventory, hashes, build, stages, verified
+
+
+def test_source_inventory_real_655_plus_3_shape_preserves_every_source():
+    inventory, hashes, build, stages, verified = source_inventory()
+    assert len(hashes['source_sha256']) == 655 and hashes['reference_source_sha256'] == {}
+    for index, stage in enumerate(diag.SOURCE_STAGES):
+        inventory.admit(stage, stages[stage], hashes)
+        assert hashes['source_sha256'] == diag.source_union(build, *(stages[key] for key in diag.SOURCE_STAGES[:index+1]))
+        inventory.verify(hashes, dict(build))
+    inventory.require_complete(hashes)
+    assert len(hashes['source_sha256']) == 658
+    assert hashes['build_source_sha256'] == dict(inventory.build) == build
+    assert set(hashes['source_sha256'])-set(build) == diag.REFERENCE_ONLY_PATHS
+    assert all(value == diag.source_union(build, *stages.values()) for value in verified)
+    with pytest.raises(TypeError): inventory.build['extra.py'] = 'a'*64
+    # Caller mutations cannot change either immutable snapshot.
+    build.pop(next(iter(build))); stages['capture'].clear()
+    inventory.verify(hashes)
+
+
+@pytest.mark.parametrize('mutation', ['missing', 'extra', 'drift'])
+def test_each_reference_stage_rejects_incomplete_extra_or_changed_receipt(mutation):
+    for rejected in diag.SOURCE_STAGES:
+        inventory, hashes, _, stages, _ = source_inventory()
+        for stage in diag.SOURCE_STAGES:
+            actual = dict(stages[stage])
+            if stage == rejected:
+                if mutation == 'missing': actual.pop(next(iter(actual)))
+                elif mutation == 'extra': actual['unlisted.py'] = 'c'*64
+                else: actual[next(iter(actual))] = 'd'*64
+                with pytest.raises(ValueError, match='source inventory|nonempty'):
+                    inventory.admit(stage, actual, hashes)
+                break
+            inventory.admit(stage, actual, hashes)
+
+
+@pytest.mark.parametrize('field', ['source_sha256', 'build_source_sha256', 'reference_source_sha256'])
+@pytest.mark.parametrize('mutation', ['missing', 'extra', 'drift'])
+def test_aggregate_and_partition_tampering_rejected(field, mutation):
+    inventory, hashes, _, stages, _ = source_inventory()
+    for stage in diag.SOURCE_STAGES: inventory.admit(stage, stages[stage], hashes)
+    if mutation == 'missing': hashes[field].pop(next(iter(hashes[field])))
+    elif mutation == 'extra': hashes[field]['unknown.py'] = 'a'*64
+    else: hashes[field][next(iter(hashes[field]))] = 'a'*64
+    with pytest.raises(ValueError, match='union inventory drift'): inventory.verify(hashes)
+
+
+@pytest.mark.parametrize('mutation', ['missing', 'extra', 'drift'])
+def test_original_build_inventory_drift_rejected(mutation):
+    inventory, hashes, build, _, _ = source_inventory()
+    if mutation == 'missing': build.pop(next(iter(build)))
+    elif mutation == 'extra': build['extra.py'] = 'b'*64
+    else: build[next(iter(build))] = 'b'*64
+    with pytest.raises(ValueError, match='build source inventory drift'): inventory.verify(hashes, build)
+
+
+def test_stage_omission_reordering_or_hash_conflict_rejected():
+    inventory, hashes, _, stages, _ = source_inventory()
+    with pytest.raises(ValueError, match='incomplete'): inventory.require_complete(hashes)
+    with pytest.raises(ValueError, match='order'): inventory.admit('projection', stages['projection'], hashes)
+    build, stages = source_shape()
+    stages['projection'][next(iter(build))] = 'e'*64
+    with pytest.raises(ValueError, match='conflict'):
+        diag.SourceInventory(SimpleNamespace(), build, stages, dict(source_sha256={}))
+
+
+def test_finalizer_logs_both_complete_compact_receipts(tmp_path, capsys):
+    build, stages = source_shape()
+    summary = dict(status='COMPLETE_PREFIX_DIAGNOSTIC_ONLY', windows={'test': {'hash':'a'*64}})
+    hashes = dict(source_sha256=diag.source_union(build, *stages.values()), candidate_identity={'obj/VHostBlockTop':'b'*64})
+    diag.write_compact(tmp_path, summary, hashes)
+    assert diag.finalize_supervision(tmp_path, dict(returncode=0, forced_shutdown=False)) == 0
+    printed = capsys.readouterr().out
+    for name in diag.COMPACT_FILES:
+        begin, end = 'BEGIN_ATTENTION_THREADS_COMPACT '+name+'\n', 'END_ATTENTION_THREADS_COMPACT '+name+'\n'
+        assert printed.count(begin) == printed.count(end) == 1
+        raw = printed.split(begin, 1)[1].split(end, 1)[0]
+        assert raw == (tmp_path/name).read_text()
+        assert json.loads(raw) == json.loads((tmp_path/name).read_text())
+
+
+def test_candidate_workflow_upload_is_exactly_nine_identity_files():
+    import yaml
+    value = yaml.safe_load((ROOT/'.github/workflows/attention-threads-diagnostic.yml').read_text())
+    steps = [step for job in value['jobs'].values() for step in job['steps']
+             if step.get('name') == 'Preserve only the built candidate and its checked identity files']
+    assert len(steps) == 1
+    step = steps[0]
+    assert step['uses'] == 'actions/upload-artifact@v4'
+    paths = step['with']['path'].strip().splitlines()
+    expected = ['work/attention_threads_result/threads2/'+name for name in diag.CANDIDATE_FILES]
+    assert len(paths) == 9 and set(paths) == set(expected)
+    assert all('*' not in path and '..' not in Path(path).parts for path in paths)
+    allowlists = diag.upload_allowlists()
+    assert set(allowlists['artifact_upload_allowlist']) == set(diag.COMPACT_FILES) | {'threads2/'+name for name in diag.CANDIDATE_FILES}
+
+
+@pytest.mark.parametrize('mutation', [None, 'missing', 'extra', 'git_drift', 'file_drift', 'wrong_module'])
+def test_reference_snapshot_preflight_binds_all_extra_sources_to_frozen_git(tmp_path, monkeypatch, mutation):
+    build, stages = source_shape()
+    modules = {}
+    paths = dict(capture=('heteronpu.qk_norm256_materialization', 'src/heteronpu/qk_norm256_materialization.py'),
+        projection=('host_bf16_qkv_reference', 'chisel/continuous_prefill/scripts/host_bf16_qkv_reference.py'),
+        attention=('host_bf16_qk_rope_reference', 'chisel/continuous_prefill/scripts/host_bf16_qk_rope_reference.py'),
+        block=('host_bf16_attention_block_reference', 'chisel/continuous_prefill/scripts/host_bf16_attention_block_reference.py'),
+        fixture=('host_bf16_attention_block_fixture', 'chisel/continuous_prefill/scripts/host_bf16_attention_block_fixture.py'))
+    for stage, (name, relative) in paths.items():
+        modules[name] = SimpleNamespace(__file__=str(tmp_path/relative),
+            _source_identity=lambda stage=stage: stages[stage], source_identity=lambda stage=stage: stages[stage])
+    capture = modules[paths['capture'][0]]
+    capture._contract = lambda root: {}
+    capture._source_hashes = lambda root, contract: stages['capture']
+    originals = {name: json.dumps(name, separators=(',', ':')).encode() for name in diag.REFERENCE_ONLY_PATHS}
+    for name, raw in originals.items():
+        path = tmp_path/name; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(raw)
+    if mutation == 'missing': stages['capture'].pop(next(iter(originals)))
+    elif mutation == 'extra': stages['capture']['scripts/unexpected_reference.py'] = 'a'*64
+    elif mutation == 'file_drift': (tmp_path/next(iter(originals))).write_bytes(b'changed')
+    elif mutation == 'wrong_module': capture.__file__ = str(tmp_path/'wrong.py')
+    git_reads = []
+    def git_blob(argv, **kwargs):
+        assert argv[:4] == ['git','-C',str(tmp_path),'show'] and argv[4].startswith(diag.PIN+':')
+        name = argv[4].split(':',1)[1]; git_reads.append(name)
+        return b'drifted Git bytes' if mutation == 'git_drift' else originals[name]
+    monkeypatch.setattr(diag.importlib, 'import_module', lambda name: modules[name])
+    monkeypatch.setattr(diag.subprocess, 'check_output', git_blob)
+    if mutation is None:
+        assert diag.source_stage_snapshots(tmp_path, build) == stages
+        assert set(git_reads) == diag.REFERENCE_ONLY_PATHS
+    else:
+        with pytest.raises(ValueError): diag.source_stage_snapshots(tmp_path, build)

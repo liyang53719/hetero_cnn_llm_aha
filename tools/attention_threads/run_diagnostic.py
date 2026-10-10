@@ -3,7 +3,8 @@
 
 Dormant unless explicitly invoked with the trusted successful build's identity.
 No Scala emission, baseline rebuild, state injection or numerical acceptance.
-Only compact/summary.json and compact/source_input_hashes.json may be uploaded.
+Upload only the two compact JSON receipts and the nine explicitly allowlisted
+candidate identity/ELF/SV files. Fixtures, weights and raw events stay local.
 """
 from pathlib import Path, PurePosixPath
 import argparse
@@ -20,6 +21,7 @@ import signal
 import subprocess
 import sys
 import time
+from types import MappingProxyType
 
 PIN = '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f'
 RTL_SHA256 = 'e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510'
@@ -33,6 +35,13 @@ HERE = Path(__file__).resolve().parent
 DIAGNOSTIC_ROOT = HERE.parents[1]
 BUILD_SCRIPT = 'chisel/continuous_prefill/scripts/run_host_bf16_attention_block_gate.sh'
 PREFIX_HEADER = 'chisel/continuous_prefill/tests/host_attention_block_prefix.h'
+SOURCE_STAGES = ('capture', 'projection', 'attention', 'block', 'fixture')
+REFERENCE_ONLY_PATHS = frozenset(('scripts/rebuild_qk_norm256_corpora.py',
+    'scripts/run_qwen35_bf16_audit.py', 'scripts/run_qwen35_prefix_chain.py'))
+COMPACT_FILES = ('compact/summary.json', 'compact/source_input_hashes.json')
+CANDIDATE_FILES = ('candidate_identity.json', 'build_threads2.sh', 'verilator_argv.json',
+    'obj/VHostBlockTop', 'obj/VHostBlockTop.cpp', 'generated/HostBlockTop.sv',
+    'generated/SCOPE.json', 'idma_identity.json', 'idma.f')
 TIMING_SCOPE = ('elapsed PhysicalAxi.step calls including capture overhead; excludes event '
                 'serialization, final memory digest and report; not isolated eval timing')
 HEADER = dict(schema='HOST_ATTENTION_BLOCK_PREFIX_EVENTS_V1', numerical_acceptance=False,
@@ -543,9 +552,7 @@ def build_candidate(source, baseline, output, *, timeout, affinity, launch=run_l
 
 def candidate_identity(output):
     require(not (output/'build_ready.json').exists(), 'candidate production receipt forbidden')
-    return {name: sha(regular(output/name)) for name in ('candidate_identity.json', 'build_threads2.sh',
-            'verilator_argv.json', 'obj/VHostBlockTop', 'obj/VHostBlockTop.cpp', 'generated/HostBlockTop.sv',
-            'generated/SCOPE.json', 'idma_identity.json', 'idma.f')}
+    return {name: sha(regular(output/name)) for name in CANDIDATE_FILES}
 
 
 def selected_tools(baseline):
@@ -600,32 +607,147 @@ def write_compact(out, summary, hashes):
         temporary.write_text(json.dumps(value, sort_keys=True, indent=2)+'\n'); temporary.replace(compact/name)
 
 
-def fresh_fixture(frozen, args, out, summary, hashes):
+def upload_allowlists():
+    compact = list(COMPACT_FILES)
+    candidate = ['threads2/'+name for name in CANDIDATE_FILES]
+    return dict(compact_artifact_upload_allowlist=compact,
+                candidate_artifact_upload_allowlist=candidate,
+                artifact_upload_allowlist=compact+candidate)
+
+
+def source_map(value):
+    require(type(value) is dict and value, 'nonempty complete source map required')
+    require(all(type(name) is str and not PurePosixPath(name).is_absolute() and
+                '..' not in PurePosixPath(name).parts and type(digest) is str and
+                re.fullmatch('[0-9a-f]{64}', digest) for name, digest in value.items()),
+            'invalid source map path/digest')
+    return dict(value)
+
+
+def source_union(*maps):
+    result = {}
+    for mapping in maps:
+        for name, digest in mapping.items():
+            require(name not in result or result[name] == digest, 'source union hash conflict: '+name)
+            result[name] = digest
+    return result
+
+
+def source_stage_snapshots(source, build_sources):
+    """Read frozen factories' entire source inventories before running any factory."""
+    names = dict(capture=('heteronpu.qk_norm256_materialization', 'src/heteronpu/qk_norm256_materialization.py'),
+        projection=('host_bf16_qkv_reference', 'chisel/continuous_prefill/scripts/host_bf16_qkv_reference.py'),
+        attention=('host_bf16_qk_rope_reference', 'chisel/continuous_prefill/scripts/host_bf16_qk_rope_reference.py'),
+        block=('host_bf16_attention_block_reference', 'chisel/continuous_prefill/scripts/host_bf16_attention_block_reference.py'),
+        fixture=('host_bf16_attention_block_fixture', 'chisel/continuous_prefill/scripts/host_bf16_attention_block_fixture.py'))
+    modules = {stage: importlib.import_module(name) for stage, (name, _) in names.items()}
+    require(all(Path(modules[stage].__file__).resolve() == source/path for stage, (_, path) in names.items()),
+            'reference source inventory imported from wrong frozen checkout')
+    capture = modules['capture']
+    snapshots = dict(capture=capture._source_hashes(source, capture._contract(source)),
+        projection=modules['projection']._source_identity(), attention=modules['attention']._source_identity(),
+        block=modules['block'].source_identity(), fixture=modules['fixture'].source_identity())
+    snapshots = {stage: source_map(value) for stage, value in snapshots.items()}
+    union = source_union(*snapshots.values())
+    require(set(union)-set(build_sources) == REFERENCE_ONLY_PATHS,
+            'frozen reference-only source inventory changed')
+    # These three files have no entry in the build manifest. Bind them directly
+    # to the exact frozen Git objects, independently of a live factory receipt.
+    for name in sorted(REFERENCE_ONLY_PATHS):
+        raw = subprocess.check_output(['git', '-C', str(source), 'show', PIN+':'+name], timeout=30)
+        require(hashlib.sha256(raw).hexdigest() == union[name] == sha(regular(source/name)),
+                'reference-only source differs from frozen commit: '+name)
+    return snapshots
+
+
+class SourceInventory:
+    """Separate immutable build closure from strictly staged reference unions."""
+    def __init__(self, frozen, build_sources, stage_sources, hashes):
+        require(type(stage_sources) is dict and set(stage_sources) == set(SOURCE_STAGES),
+                'complete reference stage inventory required')
+        self.frozen = frozen
+        self.build = MappingProxyType(source_map(build_sources))
+        self.stages = MappingProxyType({stage: MappingProxyType(source_map(stage_sources[stage]))
+                                       for stage in SOURCE_STAGES})
+        self.completed = []
+        self.full = MappingProxyType(source_union(self.build, *self.stages.values()))
+        require(hashes['source_sha256'] == {} and 'build_source_sha256' not in hashes and
+                'reference_source_sha256' not in hashes and 'source_inventory' not in hashes,
+                'fresh source inventory required')
+        # Full future reference inventory is checked before capture/reference
+        # execution, but only completed stages enter the current aggregate.
+        frozen.verify_checkout(PIN, dict(self.full))
+        frozen.merge_sources(hashes['source_sha256'], dict(self.build))
+        hashes.update(build_source_sha256=dict(self.build), reference_source_sha256={},
+                      source_inventory=self.receipt())
+        self.verify(hashes)
+
+    def references(self):
+        return source_union(*(self.stages[stage] for stage in self.completed))
+
+    def receipt(self):
+        references = self.references()
+        return dict(completed_stages=list(self.completed), build_files=len(self.build),
+                    build_source_map_sha256=object_sha(dict(self.build)),
+                    reference_files=len(references), reference_source_map_sha256=object_sha(references),
+                    aggregate_files=len(source_union(self.build, references)),
+                    stages={stage: dict(files=len(self.stages[stage]),
+                                       source_map_sha256=object_sha(dict(self.stages[stage])))
+                            for stage in SOURCE_STAGES})
+
+    def verify(self, hashes, current_build=None):
+        if current_build is not None:
+            require(current_build == dict(self.build), 'immutable complete build source inventory drift')
+        references = self.references()
+        require(hashes['build_source_sha256'] == dict(self.build) and
+                hashes['reference_source_sha256'] == references and
+                hashes['source_sha256'] == source_union(self.build, references) and
+                hashes['source_inventory'] == self.receipt(), 'staged source union inventory drift')
+        self.frozen.verify_checkout(PIN, dict(self.full))
+
+    def admit(self, stage, actual, hashes):
+        self.verify(hashes)
+        require(len(self.completed) < len(SOURCE_STAGES) and stage == SOURCE_STAGES[len(self.completed)],
+                'reference source stage order changed')
+        require(source_map(actual) == dict(self.stages[stage]), 'complete '+stage+' source inventory drift')
+        self.frozen.merge_sources(hashes['source_sha256'], actual)
+        self.completed.append(stage)
+        hashes['reference_source_sha256'] = self.references()
+        hashes['source_inventory'] = self.receipt()
+        self.verify(hashes)
+
+    def require_complete(self, hashes):
+        self.verify(hashes)
+        require(tuple(self.completed) == SOURCE_STAGES, 'incomplete reference source stage inventory')
+
+
+def fresh_fixture(frozen, args, out, summary, hashes, inventory):
     """Exactly one original baseline/AVX2 capture; retain all live factories."""
     session = frozen.rebuild_session(out/'official_capture', args.payload_layer0, args.payload_layer3, args.payload_extra)
     summary.update(session.evidence())
     require(session.fresh and summary['fresh_official_executions'] == 2 and
             summary['reused_official_executions'] == 0, 'one fresh baseline/AVX2 execution required')
     hashes['official_capture_manifest_sha256'] = session.manifest_sha256
-    frozen.merge_sources(hashes['source_sha256'], session.verify()['source_sha256'])
+    inventory.admit('capture', session.verify()['source_sha256'], hashes)
     summary['native_full_block_failures'] = frozen._native_failure_evidence(session)
     projection = frozen.generate_projection_references(session, out/'projection_reference', variants=('baseline',), windows=frozen.WINDOWS)
     projected = projection.verify(session=session)
     require(projected['requested_windows'] == [list(window) for window in frozen.WINDOWS] and
             projected['head_jobs'] == 24 and projected['matrix_accumulator_steps'] == 10485760 and
             projected['native_operator_gate_pass'] is True, 'original projection gate/inventory')
-    frozen.merge_sources(hashes['source_sha256'], projected['source_sha256'])
+    inventory.admit('projection', projected['source_sha256'], hashes)
     attention = frozen.generate_attention_references(session, projection, out/'attention_reference', variants=('baseline',))
     attended = attention.verify(session=session, projection_reference_session=projection)
     require(attended['original_operator_gate_pass'] is True, 'original Norm/RoPE operator gate')
-    frozen.merge_sources(hashes['source_sha256'], attended['source_sha256'])
+    inventory.admit('attention', attended['source_sha256'], hashes)
     block = frozen.generate_block_reference(session, projection, attention, out/'block_reference')
     authorities = dict(block_session=block, session=session, projection_session=projection, attention_session=attention)
     receipt = block.verify(session=session, projection_session=projection, attention_session=attention)
-    frozen.merge_sources(hashes['source_sha256'], receipt['source_sha256_after'])
+    inventory.admit('block', receipt['source_sha256_after'], hashes)
     admitted = frozen.pack_fixture(out/'pair_fixture', **authorities)
     require(admitted['live_authorities_verified'] is True, 'live fixture admission required')
-    frozen.merge_sources(hashes['source_sha256'], admitted['source_sha256'])
+    inventory.admit('fixture', admitted['source_sha256'], hashes)
+    inventory.require_complete(hashes)
     hashes['input_sha256'] = admitted['input_sha256']
     hashes.update(projection_reference_receipt_sha256=projection.receipt_sha256,
                   attention_reference_receipt_sha256=attention.receipt_sha256,
@@ -649,13 +771,13 @@ def run_worker(args):
                    runner_budget_seconds=BUDGET_SECONDS, failure_reserve_seconds=RESERVE_SECONDS,
                    windows={}, raw_prefix_events_upload_allowed=False,
                    step_timing_scope=TIMING_SCOPE,
-                   artifact_upload_allowlist=['compact/summary.json', 'compact/source_input_hashes.json'])
+                   **upload_allowlists())
     hashes = dict(source_sha256={}, input_sha256={}, output_sha256={},
                   diagnostic_source_sha256={str(Path(__file__).relative_to(DIAGNOSTIC_ROOT)): sha(__file__)},
                   baseline_archive_sha256=args.expected_sha256)
     started = time.monotonic(); deadline = started+BUDGET_SECONDS-RESERVE_SECONDS
     baseline, candidate = out/'baseline', out/'threads2'
-    authorities = admitted = initial_baseline = initial_candidate = admission = None
+    authorities = admitted = initial_baseline = initial_candidate = admission = inventory = None
     code = 1
 
     def remaining(cap):
@@ -674,9 +796,11 @@ def run_worker(args):
                 'diagnostic source identity drift')
         require(sha(args.archive) == args.expected_sha256, 'baseline archive changed')
         frozen.verify_checkout(PIN, hashes['source_sha256'])
+        if inventory is not None:
+            inventory.verify(hashes, read_json(baseline/'sources.sha256.json'))
         if initial_baseline is not None:
             frozen.verify_all_build_sources(baseline, 'threads_final_source_verify.log')
-            require(frozen.build_identity(baseline, hashes['source_sha256']) == initial_baseline,
+            require(frozen.build_identity(baseline, dict(inventory.build)) == initial_baseline,
                     'baseline/source/tool identity drift')
         if initial_candidate is not None:
             require(candidate_identity(candidate) == initial_candidate, 'candidate ELF/RTL/argv identity drift')
@@ -708,8 +832,9 @@ def run_worker(args):
             require(os.environ.get('OFFLINE_TOOLS'), 'original compiler JAR receipt runtime required')
             summary['compiler_jars'] = artifact.prepare_compiler_jars(args.archive, Path(os.environ['OFFLINE_TOOLS']), args.expected_sha256, PIN)
             summary['build_transfer'] = artifact.restore(args.archive, baseline, args.expected_sha256, PIN)
-            frozen.merge_sources(hashes['source_sha256'], read_json(baseline/'sources.sha256.json'))
-            initial_baseline = frozen.build_identity(baseline, hashes['source_sha256'])
+            build_sources = read_json(baseline/'sources.sha256.json')
+            inventory = SourceInventory(frozen, build_sources, source_stage_snapshots(source, build_sources), hashes)
+            initial_baseline = frozen.build_identity(baseline, dict(inventory.build))
             require(initial_baseline['generated/HostBlockTop.sv'] == RTL_SHA256, 'trusted baseline RTL differs')
             hashes['baseline_identity'] = initial_baseline
             summary['selected_tools_before'] = selected_tools(baseline)
@@ -725,7 +850,8 @@ def run_worker(args):
             require(summary['selected_tools_after'] == summary['selected_tools_before'], 'selected tools drift')
             checkpoint('one_fresh_capture_and_live_fixture')
             with (out/'pipeline.log').open('x') as pipeline, contextlib.redirect_stdout(pipeline):
-                authorities, admitted = fresh_fixture(frozen, args, out, summary, hashes)
+                authorities, admitted = fresh_fixture(frozen, args, out, summary, hashes, inventory)
+            inventory.require_complete(hashes)
             for name, cycles, timeout in WINDOWS:
                 window = dict(cycles=cycles, timeout_seconds=timeout, runs=[], comparison=dict(status='PENDING'))
                 summary['windows'][name] = window
@@ -804,10 +930,16 @@ def finalize_supervision(out, outcome):
         outcome = dict(outcome, returncode=1, missing_or_invalid_worker_evidence=True)
     summary.update(supervisor=outcome, numerical_acceptance=False, native_full_block_acceptance=False,
                    overall_pass=False, whole_layer_speedup_claimed=False,
-                   artifact_upload_allowlist=['compact/summary.json', 'compact/source_input_hashes.json'])
+                   **upload_allowlists())
     if outcome['forced_shutdown'] or outcome['returncode']:
         summary['status'] = 'FAILED_DIAGNOSTIC'
     write_compact(out, summary, hashes)
+    # CI artifact storage can be unavailable. Preserve the complete compact
+    # receipts in Actions logs, never raw fixture/trace/tensor files.
+    for name in COMPACT_FILES:
+        print('BEGIN_ATTENTION_THREADS_COMPACT '+name, flush=True)
+        print((out/name).read_text(), end='', flush=True)
+        print('END_ATTENTION_THREADS_COMPACT '+name, flush=True)
     return outcome['returncode']
 
 

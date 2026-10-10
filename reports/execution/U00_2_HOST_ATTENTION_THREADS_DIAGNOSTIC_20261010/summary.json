@@ -1,6 +1,6 @@
 {
   "schema": "HOST_ATTENTION_THREADS_DIAGNOSTIC_DELIVERY_V1",
-  "status": "READY_FOR_SINGLE_DIAGNOSTIC_CI",
+  "status": "SOURCE_INVENTORY_REPAIR_READY_PENDING_SINGLE_RECOVERY_CI",
   "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
   "producer_run_id": 38015586840,
   "producer_job_id": 114105000691,
@@ -41,10 +41,11 @@
   "raw_events_uploaded": false,
   "weights_or_tensors_uploaded": false,
   "local_tests": {
-    "normal_passed": 53,
-    "optimized_passed": 53,
-    "independent_review": "PASS",
-    "actual_candidate_build_or_prefix_executed": false
+    "normal_passed": 78,
+    "optimized_passed": 78,
+    "independent_review": "PASS_NO_BLOCKING_FINDINGS",
+    "production_eda_executed_during_repair": false,
+    "actual_655_plus_3_source_preflight": "PASS_FROZEN_GIT_AND_CURRENT_BYTES"
   },
   "numerical_acceptance": false,
   "native_full_block_acceptance": false,
@@ -76,9 +77,9 @@
     "official_qwen35_model_acceptance": false
   },
   "delivery_source_sha256": {
-    "tools/attention_threads/run_diagnostic.py": "d68a2d30011d7c140d157a5d8533e463133c1378ce3f508c8f3adf453703238e",
-    "tests/test_attention_threads_diagnostic.py": "cbfcacd6ae08796bedbe5013728905892e2cf36af0c0389e58f739e458fac199",
-    ".github/workflows/attention-threads-diagnostic.yml": "18033c7cdc8a3d125dc5a63d8f6680a386f9ba01fb8ed8d2320e3f208516509f"
+    "tools/attention_threads/run_diagnostic.py": "a273b08d00882be556572116138395905121afb6d78a9969066c759ca64c0c2a",
+    "tests/test_attention_threads_diagnostic.py": "e4a9c4b4c7ed5f815b0cb8bf1ec3ae5041e848578fb87c0863a67d053f0c7715",
+    ".github/workflows/attention-threads-diagnostic.yml": "92175be8e259481b6385f858828da3b5b776caff94ae67096cf9344b240de8f4"
   },
   "producer_build_verified": {
     "completed_at": "2026-10-10T03:16:53Z",
@@ -95,5 +96,26 @@
     "receipt_cross_binding": "PASS",
     "local_elf_executed": false,
     "live_consumer_tool_hash_check_still_required": true
+  },
+  "first_attempt_report": "reports/execution/U00_2_HOST_ATTENTION_THREADS_DIAGNOSTIC_20261010/first_attempt.json",
+  "recovery": {
+    "previous_candidate_elf_recoverable": false,
+    "additional_candidate_builds_authorized": 1,
+    "previous_actual_candidate_build_seconds": 2707.5195695449997,
+    "baseline_rebuilt": false,
+    "budget_changed": false,
+    "source_stage_inventory_counts": {
+      "build": 655,
+      "capture": 18,
+      "projection": 10,
+      "attention": 14,
+      "block": 29,
+      "fixture": 279,
+      "full_union": 658
+    },
+    "source_filtering_or_ignored_extra_sources": false,
+    "candidate_fixed_files_preserved": 9,
+    "compact_receipts_printed_to_actions_log": true,
+    "weights_fixture_events_uploaded": false
   }
 }

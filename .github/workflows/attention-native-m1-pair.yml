@@ -1,0 +1,259 @@
+name: qwen35-Attention-native-M1-pair
+
+# Dedicated source-path trigger; reviewed numerical run reuses the original build.
+# One future native replay of a NEW raw pair; never recreate the lost old pass.
+# Helper-only changes do not start this numerical job.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/attention-native-m1-pair.yml'
+      - 'tools/attention_native/run_native_pair.py'
+      - 'tests/test_attention_native_pair.py'
+      - 'tests/test_attention_native_pair_ci.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: attention-native-m1-pair-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  native-m1-pair:
+    name: Native M1 cold0/carried1 pair
+    runs-on: ubuntu-24.04
+    timeout-minutes: 220
+    env:
+      SOURCE_SHA: '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f'
+      BASELINE_RUN_ID: '38015586840'
+      BASELINE_ARCHIVE_SHA256: '1cfaf045ca58704016bfecff3f079b7fa708d1d7f7043b0fb014b5da61b7bfb1'
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      PYTHONDONTWRITEBYTECODE: '1'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - name: Frozen production checkout at original source root
+        uses: actions/checkout@v4
+        with:
+          ref: '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f'
+          persist-credentials: false
+      - name: Independent native tools checkout at exact trigger
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          path: work/attention_native_tools
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install lightweight source-test dependencies
+        run: python -m pip install numpy==2.3.5 PyYAML==6.0.3 pytest==8.3.5
+      - name: Test native replay boundaries before any heavy phase
+        working-directory: work/attention_native_tools
+        env:
+          PYTHONPATH: 'src:chisel/continuous_prefill/scripts'
+        run: |
+          set -euo pipefail
+          python -B scripts/check_git_payloads.py
+          python -B -m pytest -q -o addopts='' tests/test_attention_native_pair.py tests/test_attention_native_pair_ci.py tests/test_attention_native_m1.py tests/test_attention_native_replay_pack.py
+          python -B -O -m pytest -q -o addopts='' tests/test_attention_native_pair.py tests/test_attention_native_pair_ci.py tests/test_attention_native_m1.py tests/test_attention_native_replay_pack.py
+      - name: Resolve this attempt's numeric job identity
+        id: identity
+        uses: actions/github-script@v7
+        env:
+          EXPECTED_JOB_NAME: Native M1 cold0/carried1 pair
+        with:
+          script: |
+            const requireValue = (ok, message) => { if (!ok) throw new Error(message); };
+            const runId = Number(process.env.GITHUB_RUN_ID);
+            const attempt = Number(process.env.GITHUB_RUN_ATTEMPT);
+            requireValue(Number.isSafeInteger(runId) && runId > 0 && runId === context.runId,
+              'Invalid current run identity');
+            requireValue(Number.isSafeInteger(attempt) && attempt > 0, 'Invalid current attempt');
+            const request = { ...context.repo, run_id: runId, attempt_number: attempt };
+            const { data: run } = await github.rest.actions.getWorkflowRunAttempt(request);
+            requireValue(run.id === runId && run.run_attempt === attempt && run.head_sha === context.sha,
+              'Current run, attempt or trigger source changed');
+            requireValue(run.path === '.github/workflows/attention-native-m1-pair.yml',
+              'Unexpected workflow path');
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt,
+              { ...request, per_page: 100 });
+            const matches = jobs.filter(job => job.name === process.env.EXPECTED_JOB_NAME &&
+              job.run_id === runId && job.head_sha === context.sha && job.status === 'in_progress' &&
+              job.runner_name === process.env.RUNNER_NAME);
+            requireValue(matches.length === 1, 'Current numerical job is missing or ambiguous');
+            const job = matches[0];
+            requireValue(Number.isSafeInteger(job.id) && job.id > 0, 'Invalid numeric job ID');
+            requireValue(typeof job.started_at === 'string' &&
+              /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(job.started_at) &&
+              Number.isFinite(Date.parse(job.started_at)) && Date.parse(job.started_at) <= Date.now(),
+              'Missing or invalid current job start time');
+            core.setOutput('job_id', String(job.id));
+            core.setOutput('job_started_at', job.started_at);
+            // API identity is provenance only; it cannot authorize any live fixture or DUT result.
+      - name: Prepare metadata-only retention canary
+        env:
+          CURRENT_JOB_ID: '${{ steps.identity.outputs.job_id }}'
+        run: |
+          python -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          raw = (json.dumps(dict(schema='ATTENTION_NATIVE_RETENTION_CANARY_V1',
+              run_id=os.environ['GITHUB_RUN_ID'], job_id=os.environ['CURRENT_JOB_ID'],
+              run_attempt=os.environ['GITHUB_RUN_ATTEMPT'],
+              trigger_source=os.environ['GITHUB_SHA'], production_source=os.environ['SOURCE_SHA']),
+              sort_keys=True) + '\n').encode()
+          if len(raw) > 2048:
+              raise ValueError('retention canary exceeds 2 KiB')
+          path = Path(os.environ['GITHUB_WORKSPACE']) / 'work/attention_native_admission/retention_canary.json'
+          path.parent.mkdir(parents=True, exist_ok=True)
+          with path.open('xb') as stream:
+              stream.write(raw)
+          PY
+      - name: Require artifact storage before capture or RTL
+        id: retention_canary
+        uses: actions/upload-artifact@v4
+        with:
+          name: attention-native-retention-canary-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          if-no-files-found: error
+          path: work/attention_native_admission/retention_canary.json
+      - name: Record bounded runner plan
+        run: |
+          echo 'One numerical job, at most 220 minutes (13,200 s) end to end. Wrapper total budget is min(12,000 s, 13,200 s minus API job age minus 180 s upload reserve). Inside that bound, a separate 180 s failure reserve is withheld. The sole complete pass is capped at min(10,800 s, active time remaining), and no RTL launches below 9,000 s active time remaining.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Reuse only original build 38015586840 and its pinned archive. Restore the original tools, iDMA sources and 173 compiler JAR receipts without a Scala/C++ build or threads-2 candidate. Capture baseline once and AVX2 once; preflight the pinned official M1 runtime before the sole uninterrupted cold0/carried1 RTL pass.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The metadata-only canary passed artifact storage admission. It cannot guarantee quota remains available for final retention; final upload failure makes the job fail without rerunning numerical work.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare identical original tools and pinned public sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install -e . uv==0.12.19
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_block_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/attention_block_ci_idma
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_block_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Install fixed official producer runtime
+        run: |
+          set -euo pipefail
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - name: Download only the existing original producer archive
+        uses: actions/download-artifact@v4
+        with:
+          name: host-attention-block-build-98c7d80f65c5f05b55726c5239a6e9ec15d1b53f-38015586840-1
+          run-id: 38015586840
+          github-token: '${{ github.token }}'
+          path: work/attention_native_download
+      - name: Reacquire pinned public model payloads locally
+        run: |
+          set -euo pipefail
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Preflight official M1 and execute exactly one native pair
+        id: execute
+        env:
+          HF_HUB_OFFLINE: '1'
+          OFFLINE_TOOLS: '${{ github.workspace }}/work/attention_block_ci_runtime'
+          CURRENT_JOB_ID: '${{ steps.identity.outputs.job_id }}'
+          CURRENT_JOB_STARTED_AT: '${{ steps.identity.outputs.job_started_at }}'
+        run: |
+          python -B "$GITHUB_WORKSPACE/work/attention_native_tools/tools/attention_native/run_native_pair.py" \
+            --source-root "$GITHUB_WORKSPACE" \
+            --output "$GITHUB_WORKSPACE/work/attention_native_result" \
+            --archive "$GITHUB_WORKSPACE/work/attention_native_download/host_attention_block_build.tar.gz" \
+            --expected-sha256 "$BASELINE_ARCHIVE_SHA256" \
+            --expected-commit "$SOURCE_SHA" \
+            --baseline-run-id "$BASELINE_RUN_ID" \
+            --payload-layer0 "$GITHUB_WORKSPACE/work/qwen35_layer0_payload" \
+            --payload-layer3 "$GITHUB_WORKSPACE/work/qwen35_layer3_payload" \
+            --payload-extra "$GITHUB_WORKSPACE/work/qwen35_prefix_payload" \
+            --run-id "$GITHUB_RUN_ID" \
+            --job-id "$CURRENT_JOB_ID" \
+            --job-started-at "$CURRENT_JOB_STARTED_AT"
+      - name: Admit only bounded allowlisted evidence
+        id: evidence
+        if: always()
+        run: |
+          python -B - <<'PY'
+          import os
+          import stat
+          import zipfile
+          from pathlib import Path
+          root = Path(os.environ['GITHUB_WORKSPACE']) / 'work/attention_native_result'
+          limits = {
+              'compact/summary.json': 8 * 1024 * 1024,
+              'compact/source_input_hashes.json': 8 * 1024 * 1024,
+              'official_m1_preflight.json': 2 * 1024 * 1024,
+              'official_m1_actual.json': 2 * 1024 * 1024,
+              'input_replay.zip': 16 * 1024,
+              'replay_pack.zip': 256 * 1024,
+              'pack_summary.json': 64 * 1024,
+              'diagnostic_tail.txt': 12 * 1024,
+          }
+          present = []
+          for name, limit in limits.items():
+              path = root / name
+              if any(parent.is_symlink() for parent in (path, *path.parents)):
+                  raise ValueError('symlink evidence: ' + name)
+              if not path.exists():
+                  continue
+              info = path.stat()
+              if not stat.S_ISREG(info.st_mode) or info.st_size > limit:
+                  raise ValueError('nonregular or oversized evidence: ' + name)
+              if name == 'replay_pack.zip':
+                  with zipfile.ZipFile(path) as archive:
+                      metadata = archive.getinfo('replay_manifest.json')
+                      if metadata.file_size > 64 * 1024:
+                          raise ValueError('replay metadata exceeds 64 KiB')
+              present.append(name)
+          with Path(os.environ['GITHUB_OUTPUT']).open('a') as stream:
+              stream.write('file_count=' + str(len(present)) + '\n')
+              stream.write('input_replay_present=' + str('input_replay.zip' in present).lower() + '\n')
+              stream.write('replay_pack_present=' + str('replay_pack.zip' in present).lower() + '\n')
+          PY
+      - name: Retain only authorized small replay evidence
+        id: upload
+        uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success' && steps.evidence.outputs.file_count != '0'
+        continue-on-error: true
+        with:
+          name: attention-native-m1-pair-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            work/attention_native_result/compact/summary.json
+            work/attention_native_result/compact/source_input_hashes.json
+            work/attention_native_result/official_m1_preflight.json
+            work/attention_native_result/official_m1_actual.json
+            work/attention_native_result/input_replay.zip
+            work/attention_native_result/replay_pack.zip
+            work/attention_native_result/pack_summary.json
+            work/attention_native_result/diagnostic_tail.txt
+      - name: Report artifact quota fallback
+        if: always() && steps.upload.outcome == 'failure'
+        run: |
+          echo 'Replay artifact upload failed. The wrapper preserves compact JSON receipts in this job log; the raw replay pack was not delivered. Do not claim retained replay bytes or reproducible raw replay from compact receipts alone.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Fail closed when evidence retention fails
+        if: >-
+          always() &&
+          (steps.retention_canary.outcome == 'failure' ||
+           steps.evidence.outcome == 'failure' ||
+           steps.upload.outcome == 'failure' ||
+           ((steps.evidence.outputs.replay_pack_present == 'true' ||
+             steps.evidence.outputs.input_replay_present == 'true') &&
+            (steps.upload.outcome != 'success' || steps.upload.outputs.artifact-id == '')))
+        run: |
+          echo 'RETENTION_FAILED: required artifact admission, evidence bounds or final retention failed. Compact logs are diagnostic evidence only; no numerical rerun or artifact deletion is authorized by this failure.' >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+      - name: State the exact numerical evidence boundary
+        if: always()
+        run: |
+          echo 'This workflow requires the same new raw pair for the live canonical gate, official M1 preflight and direct actual-snapshot comparison. Original native full-block producer failures and native counts remain visible. Existing live factories and checks retain DUT authority; GitHub API JSON alone supplies no numerical authorization.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'A canonical PASS is scoped separately from the official native comparison. Native full-block acceptance remains open when actual internal producer nodes are absent. The authorized raw replay zip is at most 256 KiB with at most 64 KiB internal metadata. Never retain weights, raw NPZ, full DDR, event streams or fixtures; raw replay bytes remain outside Git.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The separate input-only zip is at most 16 KiB and is retained before official preflight. It records prepared stimulus only, never an executed or accepted native pair.' >> "$GITHUB_STEP_SUMMARY"

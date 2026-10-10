@@ -1,0 +1,56 @@
+{
+  "actual_execution": false,
+  "archive_sha256": "1cfaf045ca58704016bfecff3f079b7fa708d1d7f7043b0fb014b5da61b7bfb1",
+  "binary_sha256": "f0f194342fe9ab70290069441f48b9863c6ed9ab9bcd5f3991c7f60168073263",
+  "budget": {
+    "failure_reserve_seconds": 180,
+    "job_seconds": 13200,
+    "jobs": 1,
+    "minimum_pair_start_remaining_seconds": 9000,
+    "pair_max_seconds": 10800,
+    "upload_reserve_seconds": 180,
+    "wrapper_max_seconds": 12000
+  },
+  "full128_executed": false,
+  "hardware_performance_acceptance": false,
+  "native_full_block_acceptance": false,
+  "old_pass_revalidated": false,
+  "original_build_run_id": 38015586840,
+  "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+  "retention": {
+    "actual_tensor_bytes": 147712,
+    "actual_tensor_files": 49,
+    "actual_zip_max_bytes": 262144,
+    "input_zip_max_bytes": 16384,
+    "npz": false,
+    "raw_tensors_in_git": false,
+    "weights": false
+  },
+  "rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510",
+  "schema": "ATTENTION_NATIVE_M1_PAIR_PLAN_V1",
+  "source_files": {
+    "build": 655,
+    "full_union": 658,
+    "full_union_sha256": "f9ab4f1c8f5eeee7a5b8fb6d289f133072522cf3f21acf2b142d90f94d78dbe9"
+  },
+  "source_sha256": {
+    ".github/workflows/attention-native-m1-pair.yml": "eddaf480440ff5f1119086c071b283e82e851c4473eab0bebd1afeb7d02e7064",
+    "scripts/verify_attention_native_m1.py": "0be8211121892b2fdba2459dfc915619785c2086d26f674a7f3ae87fa4d33f78",
+    "tests/test_attention_native_m1.py": "021be0c34972c1efb1b5f153838e19049ea7b94ee74d52b6209688ad2b5c6f67",
+    "tests/test_attention_native_pair.py": "0970e422c7c245619f892c650ba68027594e911259fcb14650d74e83089f91f3",
+    "tests/test_attention_native_pair_ci.py": "89b364564e684aa2b82dc885f545e1327f8f8ee0b44856e74c3b83564a4d4e2f",
+    "tests/test_attention_native_replay_pack.py": "b1b21c947754ab41bbd56a903a666419b6f6e5b055c73a82860ac58e5acefb3c",
+    "tools/attention_native/pack_replay.py": "1a5a3f0623b93f0c5be13531ef88fc63c0763de956c327870426ea56a6f7d942",
+    "tools/attention_native/run_native_pair.py": "ab845ea88dafe453ab2d5565991b6ebc10e53ec65d315956e7881f726c9e7d41"
+  },
+  "status": "SOURCE_REVIEWED_NUMERICAL_EXECUTION_PENDING",
+  "tools_parent_commit": "1803b5441ecfed0dfa6ebdb656a1bacca67ddebb",
+  "validation": {
+    "independent_review": "PASS",
+    "inherited_test_github_run_id": "999",
+    "normal_tests": 185,
+    "optimized_python_tests": 185,
+    "payload_guard": "PASS",
+    "real_read_only_source_closure": "PASS"
+  }
+}

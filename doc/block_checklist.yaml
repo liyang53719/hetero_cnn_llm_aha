@@ -1391,3 +1391,17 @@
   休眠工具: reference与49文件147712B保全工具74项normal及O测试通过；未接生产runner且未执行官方M1；小数据本轮没有追溯保全
   未完成: [严格native完整合同, 可校准周期预测, cold128_carried128, reset_restore, 35B, PPA及MAC90]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭
+
+生产Host_Attention同输入实际KV官方M1核验_20261010:
+  状态: 源码及独立审查通过；新激励单次数值CI待执行；不追认原pass
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_NATIVE_M1_REPLAY_20261010_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_NATIVE_M1_REPLAY_20261010/plan.json
+  固定生产身份: 98c7d80f65c5f05b55726c5239a6e9ec15d1b53f；复用run38015586840原ELF和SV；655构建源与658完整源分别核验
+  执行闭包: 新fresh两raw_hidden先保全；官方M1兼容预检后同DUT从reset执行一次cold0到carried1；实际prior与final_KV及42terminal写回先封存再比较
+  保全边界: 工件49tensor共147712B且ZIP至多256KiB；准备输入ZIP至多16KiB；无权重无NPZ；不进入Git
+  准入: metadata工件canary先行；单job220分钟；原pair上限10800秒且剩余不足9000秒拒绝启动；不构建不重启19项公共EDA
+  原数值合同: operator_max0.03125_mean0.005；block_max0.05_mean0.01；实际terminal_output_cache超限保存证据并exit2；未授予独立GQA门限保持诊断
+  验证: 185项normal和185项O测试通过；真实655_658闭包只读通过；review完成；数值尚未运行
+  未完成: [新激励官方M1实际对照, 实际内部GQA节点, 严格native完整合同, cold128_carried128, reset_restore, 35B, PPA及MAC90]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；原M128软件失败保留

@@ -3,6 +3,8 @@ from pathlib import Path
 import copy
 import importlib.util
 import json
+import shutil
+import subprocess
 import sys
 from types import SimpleNamespace
 
@@ -450,3 +452,233 @@ def test_historical_failure_claims_must_remain_internally_consistent():
         else: target['failed_producers'][0]['max_abs_limit'] = 1
         with pytest.raises(ValueError, match='historical failure'):
             m1.validate_native_failure_claims(altered)
+
+
+@pytest.fixture
+def replay_material(tmp_path):
+    """Synthetic claimed pack only; no hardware/model authority is manufactured."""
+    spec = importlib.util.spec_from_file_location('m1_test_pack', ROOT / 'tools/attention_native/pack_replay.py')
+    pack = importlib.util.module_from_spec(spec); spec.loader.exec_module(pack)
+    bundle = small_bundle(); bundle['files']['input/trig.bf16le'] = bytes(32768)
+    supplied = actual_files(bundle, same_cache=False)
+    for pos, phase in enumerate(m1.PHASES):
+        for role, value in [('k', 6), ('v', 7)]:
+            raw = words(np.full((1, 2, 256), value + 2 * pos, dtype='<f4'))
+            supplied['files'][phase + '/cache_' + role] = raw
+            supplied['files'][phase + ('/rope_k' if role == 'k' else '/v')] = raw
+    files = {phase + '/actual_' + name + '.bf16le': supplied['files'][phase + '/' + name]
+             for phase in m1.PHASES for name in m1.STORED_WIDTHS}
+    for role, value in [('k', 6), ('v', 7)]:
+        files[f'cache/prior_carried1_{role}.bf16le'] = words(np.full((1, 2, 256), value, dtype='<f4'))
+        files[f'cache/final_carried1_{role}.bf16le'] = words(np.stack([
+            np.full((2, 256), value, dtype='<f4'), np.full((2, 256), value + 2, dtype='<f4')]))
+    for phase in m1.SOURCES:
+        files['input/' + phase + '_hidden.bf16le'] = bundle['files']['input/' + phase + '_hidden.bf16le']
+    files['input/trig_first_two_rows.bf16le'] = bundle['files']['input/trig.bf16le'][:256]
+    inputs = {name: dict(sha256=m1.digest(bundle['files']['input/' + name])
+                        if 'input/' + name in bundle['files'] else 'b' * 64) for name in pack.INPUT_NAMES}
+    reference = m1.production_module('host_bf16_attention_block_reference')
+    fixture = m1.production_module('host_bf16_attention_block_fixture')
+    bundle['receipt'].update(inputs=inputs, variant='baseline', official_manifest_sha256='a' * 64,
+                             source_sha256_before=reference.source_identity(),
+                             source_sha256_after=reference.source_identity())
+    c = m1.contract()
+    model = {name: c[name] for name in ('model_id', 'revision', 'layer_id', 'framework_revision',
+                                     'official_modeling_sha256', 'torch_version', 'numpy_version')}
+    model.update(contract_sha256=m1.CONTRACT_SHA, payload_pin_sha256=m1.PAYLOAD_PIN_SHA)
+    execution = {name: m1.digest(files[name]) if name in files else 'd' * 64 for name in pack.EXECUTION_PATHS}
+    identity = dict(original_commit='1' * 40, run_id='100', job_id='200', CPU_variant='baseline', model=model,
+        input_sha256={name: row['sha256'] for name, row in inputs.items()},
+        source_files_sha256={name: m1.digest((ROOT / name).read_bytes()) for name in pack.SOURCE_PATHS},
+        retained_execution_sha256=execution, **{key: 'e' * 64 for key in pack.DIGEST_KEYS})
+    identity.update(reference_receipt_sha256=bundle['reference_receipt_sha256'],
+        reference_receipt_file_sha256=bundle['reference_receipt_file_sha256'],
+        official_capture_manifest_sha256=bundle['receipt']['official_manifest_sha256'],
+        reference_sources_sha256=m1.digest(pack.encoded(bundle['receipt']['source_sha256_before'])),
+        fixture_sources_sha256=m1.digest(pack.encoded(fixture.source_identity())),
+        packer_sha256=m1.digest((ROOT / 'tools/attention_native/pack_replay.py').read_bytes()))
+    records = {}
+    for name, definition in pack.SPECS.items():
+        source = definition['source_file']
+        source_sha = (identity['input_sha256'][source.split('/')[-1]] if name.startswith('input/')
+                      else execution[source])
+        snapshot = name.startswith('cache/')
+        records[name] = dict(definition, sha256=m1.digest(files[name]), source_sha256=source_sha,
+            source_bytes=524288 if snapshot else 32768 if 'trig_first' in name else len(files[name]),
+            source_offset=(256 * 1024 if name.endswith('_v.bf16le') else 0) if snapshot else 0)
+    manifest = dict(schema=pack.SCHEMA, identity=identity, pair_sha256=m1.digest(pack.encoded(identity)),
+        launches=copy.deepcopy(pack.LAUNCHES), files=records, raw_bytes=pack.RAW_BYTES,
+        privacy_description=pack.PRIVACY, hardware_authority_verified=False,
+        native_full_block_acceptance=False, downloadable_weights_included=False,
+        evidence_status='retained_bytes_only_external_CI_authentication_required')
+    return dict(pack=pack, bundle=bundle, manifest=manifest, files=files, archive=tmp_path / 'pack.zip')
+
+
+def load_test_replay(material):
+    pack, manifest = material['pack'], material['manifest']
+    manifest['pair_sha256'] = m1.digest(pack.encoded(manifest['identity']))
+    raw = pack._zip_bytes(manifest, material['files'])
+    material['archive'].write_bytes(raw)
+    return m1.load_replay_pack(material['archive'], m1.digest(raw), material['bundle'],
+                              expected_commit='1' * 40, expected_run_id='100', expected_job_id='200')
+
+
+def test_retained_snapshots_drive_official_prior_and_conditioned_final_without_reconstruction(replay_material):
+    actual = load_test_replay(replay_material)
+    class SnapshotOnlyCache(dict):
+        def __getitem__(self, name):
+            assert name not in {phase + '/cache_' + role for phase in m1.PHASES for role in ('k', 'v')}, \
+                'audit must consume the retained DDR snapshot, not reconstruct cache from terminal appends'
+            return super().__getitem__(name)
+    actual['files'] = SnapshotOnlyCache(actual['files'])
+    engine = FakeOfficial()
+    report = m1.audit(replay_material['bundle'], engine, actual)
+    assert set(report['modes']) == {'official_own_cache', 'canonical_prior_cache', 'retained_snapshot_prior_cache'}
+    assert engine.calls[1][2][0][0, 0, 0, 0] == 10
+    assert engine.calls[3][2][0][0, 0, 0, 0] == 1
+    assert engine.calls[5][2][0][0, 0, 0, 0] == 6
+    assert np.all(engine.gqa_calls[0][1] == 6)
+    assert np.all(engine.gqa_calls[1][1][:, :, 0] == 6)
+    assert np.all(engine.gqa_calls[1][1][:, :, 1] == 8)
+    carried = report['modes']['retained_snapshot_prior_cache']['cases'][1]
+    assert carried['prior_cache_files']['cache/prior_carried1_k.bf16le']['source_file'] == 'carried1/writable_after_command0.bin'
+    assert carried['retained_cache_files']['cache/final_carried1_k.bf16le']['source_file'] == 'carried1/ddr_after.bin'
+    assert carried['retained_cache_comparisons']['k']['max_abs_error'] == 2
+    assert carried['retained_cache_comparisons']['k']['max_abs_limit'] == .03125
+    assert carried['receipt_hashed_output_comparison']['max_abs_limit'] == .05
+    assert report['conditioned_gqa']['carried1']['cache_origin'] == 'explicit_retained_final_ddr_snapshot'
+    assert report['supplied_output_evidence_status'] == 'retained_pack_hashed_claim_only'
+    assert report['missing_actual_internal_gqa_producers'] == {phase: list(range(33, 38)) for phase in m1.PHASES}
+    assert not report['hardware_authority_verified'] and not report['native_full_block_acceptance']
+    assert not report['retained_replay_pack']['old_pass_revalidated']
+    assert actual['evidence_status'] == 'retained_pack_hashed_claim_only' and not actual['hardware_authority_verified']
+
+
+@pytest.mark.parametrize('field,reason', [
+    ('reference_receipt_sha256', 'original pair/reference'),
+    ('reference_receipt_file_sha256', 'receipt file identity'),
+    ('input_sha256', 'raw input identities'),
+    ('CPU_variant', 'CPU or original capture'),
+    ('official_capture_manifest_sha256', 'CPU or original capture'),
+    ('model', 'pinned model/runtime'),
+    ('reference_sources_sha256', 'reference source identity'),
+    ('fixture_sources_sha256', 'fixture source closure'),
+    ('source_files_sha256', 'hash mismatch'),
+    ('packer_sha256', 'hash mismatch'),
+    ('original_commit', 'original pair/reference'),
+    ('run_id', 'original pair/reference'),
+    ('job_id', 'original pair/reference'),
+])
+def test_replay_loader_rejects_rehashed_identity_substitutions(replay_material, field, reason):
+    identity = replay_material['manifest']['identity']
+    if field == 'CPU_variant': identity[field] = 'avx2'
+    elif field == 'model': identity[field]['revision'] = '9' * 40
+    elif field == 'input_sha256': identity[field]['weight_q.bf16le'] = '9' * 64
+    elif field == 'source_files_sha256': identity[field][next(iter(identity[field]))] = '9' * 64
+    elif field in ('run_id', 'job_id'): identity[field] = '999'
+    elif field == 'original_commit': identity[field] = '9' * 40
+    else: identity[field] = '9' * 64
+    with pytest.raises(ValueError, match=reason):
+        load_test_replay(replay_material)
+
+
+@pytest.mark.parametrize('name,reason', [
+    ('input/cold0_hidden.bf16le', 'exact raw hidden'), ('input/trig.bf16le', 'exact original trig')])
+def test_replay_rejects_different_original_raw_bytes_even_with_unchanged_claims(replay_material, name, reason):
+    replay_material['bundle']['files'][name] = b'\x80\x3f' + replay_material['bundle']['files'][name][2:]
+    if 'hidden' in name:
+        replay_material['bundle']['files'][name] = b'\x00\x40' + replay_material['bundle']['files'][name][2:]
+    with pytest.raises(ValueError, match=reason):
+        load_test_replay(replay_material)
+
+
+@pytest.mark.parametrize('when', ['prior', 'final'])
+def test_replay_rejects_corrupt_rehashed_explicit_snapshot(replay_material, when):
+    name = f'cache/{when}_carried1_k.bf16le'
+    raw = b'\x00\x40' + replay_material['files'][name][2:]
+    replay_material['files'][name] = raw
+    replay_material['manifest']['files'][name]['sha256'] = m1.digest(raw)
+    with pytest.raises(ValueError, match='actual prior/final cache trajectory'):
+        load_test_replay(replay_material)
+
+
+def test_replay_cannot_fall_back_when_explicit_snapshot_is_absent(replay_material):
+    del replay_material['files']['cache/prior_carried1_k.bf16le']
+    with pytest.raises(ValueError, match='archive file inventory'):
+        load_test_replay(replay_material)
+
+
+def test_production_root_reuses_correct_cached_modules_and_rejects_other_root(tmp_path, monkeypatch):
+    assert m1.configure_production_source_root(ROOT) == ROOT
+    module = m1.production_module('host_bf16_attention_block_reference')
+    assert m1.production_module('host_bf16_attention_block_reference') is module
+    other = tmp_path / 'production'
+    for name in (m1.CONTRACT, m1.PAYLOAD_PIN):
+        (other / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, other / name)
+    (other / 'src/heteronpu').mkdir(parents=True)
+    (other / 'chisel/continuous_prefill/scripts').mkdir(parents=True)
+    (other / 'chisel/continuous_prefill/scripts/host_bf16_attention_block_reference.py').write_text('')
+    with pytest.raises(ValueError, match='mixed production source roots'):
+        m1.configure_production_source_root(other)
+    assert m1.PRODUCTION_ROOT == ROOT
+    link = tmp_path / 'link'; link.symlink_to(ROOT, target_is_directory=True)
+    with pytest.raises(ValueError, match='nonsymlink production source root'):
+        m1.configure_production_source_root(link)
+
+
+def test_importing_helper_does_not_import_production_or_model_modules():
+    code = """
+import importlib.util, sys
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('fresh_m1_helper', sys.argv[1])
+helper = importlib.util.module_from_spec(spec); spec.loader.exec_module(helper)
+assert not any(n == 'heteronpu' or n.startswith(('heteronpu.', 'host_bf16_', 'torch', 'transformers')) for n in sys.modules)
+assert helper.configure_production_source_root(Path(sys.argv[2])) == Path(sys.argv[2])
+assert not any(n.startswith(('torch', 'transformers')) for n in sys.modules)
+"""
+    subprocess.run([sys.executable, '-c', code, str(ROOT / 'scripts/verify_attention_native_m1.py'), str(ROOT)], check=True)
+
+
+def test_separate_production_root_supplies_real_cached_sources_without_git_rewriting(tmp_path):
+    other = tmp_path / 'frozen_production'
+    for name in (m1.CONTRACT, m1.PAYLOAD_PIN,
+                 *(str(path.relative_to(ROOT)) for path in (ROOT / 'src/heteronpu').glob('*.py'))):
+        (other / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, other / name)
+    (other / 'chisel/continuous_prefill/scripts').mkdir(parents=True)
+    code = """
+import importlib.util, sys
+from pathlib import Path
+production = Path(sys.argv[2]); sys.path.insert(0, str(production / 'src'))
+import heteronpu.qwen35_bf16_reference as frozen
+spec = importlib.util.spec_from_file_location('fresh_m1_helper', sys.argv[1])
+helper = importlib.util.module_from_spec(spec); spec.loader.exec_module(helper)
+helper.configure_production_source_root(production)
+assert helper.ROOT != helper.PRODUCTION_ROOT
+assert helper.production_module('heteronpu.qwen35_bf16_reference') is frozen
+assert Path(frozen.__file__).is_relative_to(production)
+assert helper.stage_metrics(frozen.np.zeros(1), frozen.np.zeros(1))['pass']
+assert not any(n.startswith(('torch', 'transformers')) for n in sys.modules)
+"""
+    subprocess.run([sys.executable, '-c', code, str(ROOT / 'scripts/verify_attention_native_m1.py'), str(other)], check=True)
+    assert not (other / '.git').exists()
+
+
+def test_cli_replay_inspection_reads_explicit_snapshots_without_executing_model(replay_material, monkeypatch, capsys):
+    loaded = load_test_replay(replay_material)
+    bundle = replay_material['bundle']
+    monkeypatch.setattr(m1, 'load_bundle', lambda *args: bundle)
+    monkeypatch.setattr(m1, 'OfficialM1', lambda *args: pytest.fail('inspection constructed a model'))
+    monkeypatch.setattr('sys.argv', ['verify_attention_native_m1.py', '--production-source-root', str(ROOT),
+        '--bundle', str(replay_material['archive'].parent),
+        '--receipt-file-sha256', bundle['reference_receipt_file_sha256'],
+        '--canonical-receipt-sha256', bundle['reference_receipt_sha256'],
+        '--replay-pack', str(replay_material['archive']), '--replay-pack-sha256', loaded['replay_archive_sha256'],
+        '--expected-commit', '1' * 40, '--expected-run-id', '100', '--expected-job-id', '200'])
+    m1.main()
+    report = json.loads(capsys.readouterr().out)
+    assert report['status'] == 'RETAINED_BYTES_VERIFIED_NO_MODEL_EXECUTED'
+    assert report['explicit_cache_snapshot_files_verified'] and report['receipt_claim_file_hashes_verified']
+    assert report['reference_receipt_file_sha256'] != report['reference_receipt_sha256']
+    assert not report['hardware_authority_verified'] and not report['native_full_block_acceptance']

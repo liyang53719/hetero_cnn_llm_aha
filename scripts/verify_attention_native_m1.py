@@ -10,6 +10,12 @@ only. Their DUT/CI authority claims are not authenticated here. Even optional
 "actual" dumps remain receipt_hashed_claim_only, hardware_authority_verified
 is always false, and this script has no authority-upgrade path. Direct hardware
 evidence would require the existing complete live/CI authentication workflow.
+--replay-pack consumes the exact explicit prior/final snapshots retained by
+pack_replay, after the wrapper's live checks. It never reconstructs those KV
+inputs from append terminals. The prior is actual command-0 DDR before the
+carried KV append, not a pre-launch dump. Offline authority remains false.
+--production-source-root selects real frozen source modules beside the helper
+checkout; it never substitutes a Git commit or changes module source roots.
 
 Receipt identities are deliberately separate: reference_receipt_file_sha256
 hashes the saved indented JSON bytes; reference_receipt_sha256 hashes the live
@@ -27,28 +33,30 @@ original raw-input hashes cannot be reproduced. Optional internal producer
 dumps need actual driver instrumentation and execution-receipt hashes; merely
 writing canonical expectations under an actual filename is not valid evidence.
 
-The present threads workflow has a fresh canonical bundle before its bounded
-prefix windows, but does not execute the full two-token actual block. A future
-reference-only invocation immediately after fresh_fixture can close the M1
-reference gap with canonical prior KV only. It cannot establish actual/native
-block acceptance. No workflow is changed or launched by this script.
+The reference-only invocation remains separate from a live two-token actual
+block. A replay pack from a fresh run does not revalidate an earlier pass.
+No workflow is changed or launched by this script.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import importlib.metadata
+import importlib.util
 import inspect
+import io
 import json
 import os
 from pathlib import Path
 import sys
+import zipfile
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'src'))
-from heteronpu.qwen35_bf16_reference import producer_compare, softmax_invariants
+PRODUCTION_ROOT = ROOT
+_PRODUCTION_MODULES = {}
 
 CONTRACT = 'config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json'
 CONTRACT_SHA = '13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97'
@@ -94,6 +102,60 @@ def checked(path, expected, size=None):
     require(digest(raw) == expected, 'evidence hash mismatch: ' + str(path))
     require(size is None or len(raw) == size, 'evidence size mismatch: ' + str(path))
     return raw
+
+
+def _check_loaded_production_modules(root):
+    """Never reuse a cached module belonging to the other checkout."""
+    scripts = root / 'chisel/continuous_prefill/scripts'
+    names = {path.stem for path in scripts.glob('*.py')}
+    for name, module in tuple(sys.modules.items()):
+        if name in names or name == 'heteronpu' or name.startswith('heteronpu.'):
+            path = getattr(module, '__file__', None)
+            require(path is not None, 'production module has no source file: ' + name)
+            path = Path(path).absolute()
+            require((path.is_relative_to(scripts) or path.is_relative_to(root / 'src')) and
+                    not any(p.is_symlink() for p in (path, *path.parents)),
+                    'mixed production source roots: ' + name)
+
+
+def configure_production_source_root(root):
+    """Select real source modules before loading them; never rewrite Git identity.
+
+    A wrapper may already have imported live authorities from this exact root.
+    Importing authorities from another root is rejected, not repaired/reloaded.
+    """
+    global PRODUCTION_ROOT
+    root = Path(root).absolute()
+    require(root.is_dir() and '..' not in root.parts and
+            not any(p.is_symlink() for p in (root, *root.parents)),
+            'nonsymlink production source root required')
+    checked(root / CONTRACT, CONTRACT_SHA)
+    checked(root / PAYLOAD_PIN, PAYLOAD_PIN_SHA)
+    require((root / 'src/heteronpu').is_dir() and
+            (root / 'chisel/continuous_prefill/scripts').is_dir(), 'production source directories required')
+    _check_loaded_production_modules(root)
+    PRODUCTION_ROOT = root
+    for path in (root / 'src', root / 'chisel/continuous_prefill/scripts'):
+        while str(path) in sys.path:
+            sys.path.remove(str(path))
+        sys.path.insert(0, str(path))
+    return root
+
+
+def production_module(name):
+    """Import from the explicitly selected source tree with cached-root checks."""
+    key = (PRODUCTION_ROOT, name)
+    if key in _PRODUCTION_MODULES:
+        return _PRODUCTION_MODULES[key]
+    configure_production_source_root(PRODUCTION_ROOT)
+    module = importlib.import_module(name)
+    path = Path(module.__file__).absolute()
+    require(path.is_relative_to(PRODUCTION_ROOT / 'src') or
+            path.is_relative_to(PRODUCTION_ROOT / 'chisel/continuous_prefill/scripts'),
+            'requested module outside production source root: ' + name)
+    _check_loaded_production_modules(PRODUCTION_ROOT)
+    _PRODUCTION_MODULES[key] = module
+    return module
 
 
 def fresh_report_path(path):
@@ -144,7 +206,7 @@ def producer_shape(index, position):
 
 
 def contract():
-    value = json.loads(checked(ROOT / CONTRACT, CONTRACT_SHA))
+    value = json.loads(checked(PRODUCTION_ROOT / CONTRACT, CONTRACT_SHA))
     require(value['thresholds'] == {'operator': {'max_abs': .03125, 'mean_abs': .005},
                                     'block': {'max_abs': .05, 'mean_abs': .01}}, 'frozen limits drift')
     return value
@@ -181,7 +243,7 @@ def retention_plan():
 def validated_weight_words(files):
     """Check all original parameter bytes even during default no-model inspection."""
     c = contract()
-    manifest = json.loads(checked(ROOT / PAYLOAD_PIN, PAYLOAD_PIN_SHA))
+    manifest = json.loads(checked(PRODUCTION_ROOT / PAYLOAD_PIN, PAYLOAD_PIN_SHA))
     require((manifest['model_id'], manifest['revision'], manifest['layer_id']) ==
             (c['model_id'], c['revision'], 3), 'original payload model/layer pin mismatch')
     pins = {v['local_name']: v for v in manifest['tensors']}
@@ -228,10 +290,7 @@ def validate_native_failure_claims(receipt):
 
 def read_reference_receipt(path, file_sha, canonical_sha=None):
     """Bind saved file bytes and live canonical content as distinct identities."""
-    scripts = ROOT / 'chisel/continuous_prefill/scripts'
-    if str(scripts) not in sys.path:
-        sys.path.insert(0, str(scripts))
-    from host_bf16_attention_block_live_gate import encoded
+    encoded = production_module('host_bf16_attention_block_live_gate').encoded
     raw = checked(path, file_sha)
     receipt = json.loads(raw)
     identities = dict(reference_receipt_file_sha256=digest(raw),
@@ -243,11 +302,8 @@ def read_reference_receipt(path, file_sha, canonical_sha=None):
 
 def load_bundle(directory, receipt_file_sha, canonical_receipt_sha=None):
     """Hash-bound existing source bundle; not a live-authority or RTL issuer."""
-    scripts = ROOT / 'chisel/continuous_prefill/scripts'
-    if str(scripts) not in sys.path:
-        sys.path.insert(0, str(scripts))
-    import host_bf16_attention_block_fixture as fixture
-    import host_bf16_attention_block_reference as reference
+    fixture = production_module('host_bf16_attention_block_fixture')
+    reference = production_module('host_bf16_attention_block_reference')
     directory = Path(directory)
     receipt, identities = read_reference_receipt(directory / 'reference_receipt.json',
                                                 receipt_file_sha, canonical_receipt_sha)
@@ -286,7 +342,8 @@ def load_bundle(directory, receipt_file_sha, canonical_receipt_sha=None):
                     'canonical cache current append differs from predecessor')
             if position:
                 require(cache[:1024] == files[f'reference/cold0/cache_{role}.bf16le'], 'canonical cache prefix changed')
-    return dict(receipt=receipt, **identities, files=files, nodes=nodes)
+    return dict(receipt=receipt, **identities, files=files, nodes=nodes,
+                production_source_root=str(PRODUCTION_ROOT))
 
 
 def cache_array(raw, tokens):
@@ -294,7 +351,7 @@ def cache_array(raw, tokens):
 
 
 def stage_metrics(candidate, native, *, block=False):
-    return producer_compare(candidate, native, block=block)
+    return production_module('heteronpu.qwen35_bf16_reference').producer_compare(candidate, native, block=block)
 
 
 def load_actual(directory, result_path, result_sha, bundle):
@@ -341,6 +398,64 @@ def load_actual(directory, result_path, result_sha, bundle):
                 evidence_status='receipt_hashed_claim_only', hardware_authority_verified=False)
 
 
+def load_replay_pack(archive, archive_sha256, bundle, *, expected_commit,
+                     expected_run_id, expected_job_id):
+    """Read exact retained snapshots; the caller owns live/CI authentication.
+
+    The archive's explicit prior comes from command-0 DDR, before KV append.
+    Checking all its claimed identities does not authenticate hardware here.
+    No extraction, model, download, execution, or acceptance upgrade occurs.
+    """
+    spec = importlib.util.spec_from_file_location('attention_m1_replay_reader',
+                                                 ROOT / 'tools/attention_native/pack_replay.py')
+    pack = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(pack)
+    manifest = pack.verify_pack(archive, archive_sha256, expected_commit=expected_commit,
+        expected_run_id=expected_run_id, expected_job_id=expected_job_id,
+        expected_reference_sha256=bundle['reference_receipt_sha256'])
+    identity = manifest['identity']; receipt = bundle['receipt']
+    require(identity['reference_receipt_file_sha256'] == bundle['reference_receipt_file_sha256'],
+            'replay/reference receipt file identity mismatch')
+    require(identity['input_sha256'] == {name: row['sha256'] for name, row in receipt['inputs'].items()},
+            'replay/reference raw input identities differ')
+    require(identity['CPU_variant'] == receipt['variant'] and
+            identity['official_capture_manifest_sha256'] == receipt['official_manifest_sha256'],
+            'replay/reference CPU or original capture identity mismatch')
+    c = contract()
+    model = {key: c[key] for key in ('model_id', 'revision', 'layer_id', 'framework_revision',
+                                   'official_modeling_sha256', 'torch_version', 'numpy_version')}
+    model.update(contract_sha256=CONTRACT_SHA, payload_pin_sha256=PAYLOAD_PIN_SHA)
+    require(identity['model'] == model, 'replay pinned model/runtime identity mismatch')
+    require(identity['reference_sources_sha256'] == digest(pack.encoded(receipt['source_sha256_before'])),
+            'replay reference source identity mismatch')
+    reference = production_module('host_bf16_attention_block_reference')
+    require(receipt['source_sha256_before'] == receipt['source_sha256_after'] == reference.source_identity(),
+            'replay complete original reference source closure required')
+    fixture = production_module('host_bf16_attention_block_fixture')
+    require(identity['fixture_sources_sha256'] == digest(pack.encoded(fixture.source_identity())),
+            'replay production fixture source closure mismatch')
+    for name, pin in identity['source_files_sha256'].items():
+        checked(PRODUCTION_ROOT / name, pin)
+    checked(Path(pack.__file__), identity['packer_sha256'])
+    # Reread into one hash-checked buffer after verification, so paths cannot
+    # swap the verified archive for different bytes during tensor loading.
+    raw = checked(archive, archive_sha256)
+    with zipfile.ZipFile(io.BytesIO(raw)) as package:
+        files = {name: package.read(name) for name in pack.SPECS}
+    for source in SOURCES:
+        name = 'input/' + source + '_hidden.bf16le'
+        require(files[name] == bundle['files'][name], 'replay exact raw hidden bytes differ')
+    require(files['input/trig_first_two_rows.bf16le'] == bundle['files']['input/trig.bf16le'][:256],
+            'replay exact original trig rows differ')
+    claimed = {phase + '/' + name: files[phase + '/actual_' + name + '.bf16le']
+               for phase in PHASES for name in STORED_WIDTHS}
+    claimed.update({name: value for name, value in files.items() if name.startswith('cache/')})
+    return dict(files=claimed, receipt_sha256=identity['result_receipt_sha256'],
+        result=identity, replay_manifest=manifest, replay_archive_sha256=archive_sha256,
+        evidence_status='retained_pack_hashed_claim_only', hardware_authority_verified=False,
+        explicit_cache_snapshots=True)
+
+
 class OfficialM1:
     """Only explicit construction imports Torch/Transformers and instantiates a layer."""
     def __init__(self, bundle):
@@ -368,7 +483,7 @@ class OfficialM1:
                 package.get('archive_info', {}).get('hashes', {}).get('sha256') ==
                 '15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d', 'framework package identity drift')
         config = Qwen3_5TextConfig.from_dict(json.loads(checked(
-            ROOT / 'config/upstream/qwen3_5_0p8b/config.json', c['config_sha256']))['text_config'])
+            PRODUCTION_ROOT / 'config/upstream/qwen3_5_0p8b/config.json', c['config_sha256']))['text_config'])
         config._attn_implementation = 'eager'
         torch.set_num_threads(2)
         torch.use_deterministic_algorithms(True)
@@ -456,24 +571,35 @@ class OfficialM1:
 
 def audit(bundle, engine, actual=None):
     """Model adapter is injected so carry/acceptance logic can be tested without a model."""
+    snapshots = actual is not None and actual.get('explicit_cache_snapshots') is True
+    evidence = ('retained_pack_hashed_claim_only' if snapshots else 'receipt_hashed_claim_only') if actual else 'not_supplied'
+    actual_mode = 'retained_snapshot_prior_cache' if snapshots else 'receipt_claimed_prior_cache'
+    softmax_invariants = production_module('heteronpu.qwen35_bf16_reference').softmax_invariants
     result = dict(status='REFERENCE_ONLY_M1_DIAGNOSTIC', native_full_block_acceptance=False,
         numerical_rtl_executed=False, native_context_acceptance=False, overall_pass=False,
         hardware_authority_verified=False, hardware_authority_upgrade_supported=False,
-        supplied_output_evidence_status='receipt_hashed_claim_only' if actual else 'not_supplied',
+        supplied_output_evidence_status=evidence,
         source_sha256=digest(Path(__file__).read_bytes()), cross_host_input_identity_claimed=False,
+        production_source_root=str(PRODUCTION_ROOT),
         reference_receipt_sha256=bundle['reference_receipt_sha256'],
         reference_receipt_file_sha256=bundle['reference_receipt_file_sha256'], runtime=engine.metadata,
         original_native_full_block_failures=bundle['receipt']['original_native_full_block_failures'],
         original_native_failure_evidence_status='receipt_claimed_historical_evidence_not_independently_authenticated',
         modes={}, conditioned_gqa={})
     empty = tuple(np.empty((1, 2, 0, 256), dtype='<f4') for _ in range(2))
-    modes = ['official_own_cache', 'canonical_prior_cache'] + (['receipt_claimed_prior_cache'] if actual else [])
+    modes = ['official_own_cache', 'canonical_prior_cache'] + ([actual_mode] if actual else [])
     for mode in modes:
         prior = empty; rows = []
         for position, (host, source) in enumerate(zip(PHASES, SOURCES)):
             if position and mode != 'official_own_cache':
-                prior = tuple(cache_array(actual['files']['cold0/cache_' + role] if mode == 'receipt_claimed_prior_cache'
-                        else bundle['files']['reference/cold0/cache_' + role + '.bf16le'], 1) for role in ('k', 'v'))
+                if mode == 'retained_snapshot_prior_cache':
+                    prior = tuple(cache_array(actual['files'][f'cache/prior_carried1_{role}.bf16le'], 1)
+                                  for role in ('k', 'v'))
+                elif mode == 'receipt_claimed_prior_cache':
+                    prior = tuple(cache_array(actual['files']['cold0/cache_' + role], 1) for role in ('k', 'v'))
+                else:
+                    prior = tuple(cache_array(bundle['files']['reference/cold0/cache_' + role + '.bf16le'], 1)
+                                  for role in ('k', 'v'))
             hidden = bf16(bundle['files']['input/' + source + '_hidden.bf16le'], (1, 1, 1024))
             native = engine.forward(hidden, position, tuple(v.copy() for v in prior))
             trig = bf16(bundle['files']['input/trig.bf16le'][position * 128:(position + 1) * 128], (64,))
@@ -483,6 +609,7 @@ def audit(bundle, engine, actual=None):
             comparisons = {str(i): stage_metrics(bundle['nodes'][source][i], native['nodes'][i]) for i in range(57)}
             row = dict(host_phase=host, absolute_position=position, query_tokens=1,
                 raw_hidden_sha256=digest(bundle['files']['input/' + source + '_hidden.bf16le']),
+                original_trig_row_sha256=digest(bundle['files']['input/trig.bf16le'][position * 128:(position + 1) * 128]),
                 prior_cache_decoded_fp32_sha256=[array_sha(v) for v in prior],
                 prior_origin='empty' if position == 0 else mode,
                 comparison_origin='canonical_expected_not_actual_rtl', producer_comparisons=comparisons,
@@ -491,23 +618,40 @@ def audit(bundle, engine, actual=None):
                 output_comparison=stage_metrics(bundle['nodes'][source][56], native['output'], block=True),
                 softmax_invariants=softmax_invariants(native['nodes'][36], np.zeros((1, 1, 1, position + 1), dtype='<f4')))
             if actual:
-                row['supplied_output_evidence_status'] = 'receipt_hashed_claim_only'
+                row['supplied_output_evidence_status'] = evidence
                 row['hardware_authority_verified'] = False
                 row['receipt_hashed_terminal_comparisons'] = {name: stage_metrics(
                     bf16(actual['files'][host + '/' + name], producer_shape(i, position)), native['nodes'][i])
                     for name, i in TERMINALS.items()}
                 row['receipt_hashed_output_comparison'] = stage_metrics(
                     bf16(actual['files'][host + '/residual2'], (1, 1, 1024)), native['output'], block=True)
+                if snapshots:
+                    when = 'prior' if position == 0 else 'final'
+                    names = [f'cache/{when}_carried1_{role}.bf16le' for role in ('k', 'v')]
+                    row['retained_cache_comparisons'] = {role: stage_metrics(
+                        cache_array(actual['files'][name], position + 1), value)
+                        for role, name, value in zip(('k', 'v'), names, native['cache'])}
+                    row['retained_cache_files'] = {name: actual['replay_manifest']['files'][name] for name in names}
+                    if position and mode == 'retained_snapshot_prior_cache':
+                        row['prior_cache_files'] = {f'cache/prior_carried1_{role}.bf16le':
+                            actual['replay_manifest']['files'][f'cache/prior_carried1_{role}.bf16le'] for role in ('k', 'v')}
             rows.append(row); prior = native['cache']
         result['modes'][mode] = dict(meaning='independent official two-M1 cache trajectory' if mode == 'official_own_cache'
-            else ('conditional official decoder: supplied append-derived prior cache, hardware provenance unverified; official current K/V'
+            else ('conditional official decoder: explicit retained command-0 DDR prior snapshot before KV append; official current K/V; hardware provenance unverified'
+                  if mode == 'retained_snapshot_prior_cache' else
+                  'conditional official decoder: supplied append-derived prior cache, hardware provenance unverified; official current K/V'
                   if mode == 'receipt_claimed_prior_cache' else
                   'conditional official decoder: canonical prior cache, official current K/V; not independent official cache trajectory'), cases=rows)
     for position, (host, source) in enumerate(zip(PHASES, SOURCES)):
         canonical = tuple(cache_array(bundle['files'][f'reference/{source}/cache_{role}.bf16le'], position + 1) for role in ('k', 'v'))
         canonical_q = bf16(bundle['files'][f'reference/{source}/rope_q.bf16le'], (1, 8, 1, 256))
         if actual:
-            kv = tuple(cache_array(b''.join(actual['files'][phase + '/cache_' + role] for phase in PHASES[:position + 1]), position + 1) for role in ('k', 'v'))
+            if snapshots:
+                when = 'prior' if position == 0 else 'final'
+                kv = tuple(cache_array(actual['files'][f'cache/{when}_carried1_{role}.bf16le'], position + 1)
+                           for role in ('k', 'v'))
+            else:
+                kv = tuple(cache_array(b''.join(actual['files'][phase + '/cache_' + role] for phase in PHASES[:position + 1]), position + 1) for role in ('k', 'v'))
             query = bf16(actual['files'][host + '/rope_q'], (1, 8, 1, 256))
         else:
             query, kv = canonical_q, canonical
@@ -518,17 +662,19 @@ def audit(bundle, engine, actual=None):
             dump = host + f'/actual_producer_{i:02d}.f32le'
             if actual and dump in actual['files']:
                 candidate = np.frombuffer(actual['files'][dump], dtype='<f4').reshape(producer_shape(i, position))
-                origin, file_kind = 'receipt_hashed_claim_only', 'claimed_stage_dump'
+                origin, file_kind = evidence, 'claimed_stage_dump'
             elif actual and i == 38:
                 candidate = bf16(actual['files'][host + '/context'], producer_shape(i, position))
-                origin, file_kind = 'receipt_hashed_claim_only', 'claimed_terminal_file'
+                origin, file_kind = evidence, 'claimed_terminal_file'
             elif identity:
                 candidate, origin, file_kind = bundle['nodes'][source][i], 'canonical_expected_only', 'expected_producer_file'
             else:
                 stages[str(i)] = dict(status='MISSING_ACTUAL_STAGE_AND_CANONICAL_PREDECESSORS_DIFFER'); continue
             stages[str(i)] = dict(origin=origin, file_kind=file_kind, hardware_authority_verified=False,
                                   comparison=stage_metrics(candidate, native[i]))
-        result['conditioned_gqa'][host] = dict(operand_origin='receipt_hashed_claim_only' if actual else 'canonical_expected',
+        result['conditioned_gqa'][host] = dict(operand_origin=evidence if actual else 'canonical_expected',
+            cache_origin=('explicit_retained_command0_prior_snapshot' if position == 0 else 'explicit_retained_final_ddr_snapshot')
+                if snapshots else ('append_derived_receipt_claim' if actual else 'canonical_expected'),
             hardware_authority_verified=False, actual_predecessor_identity_established=False,
             conditioned_native_operands_exact_to_supplied_files=True,
             actual_dut_internal_qk_operands_directly_observed=False,
@@ -537,14 +683,23 @@ def audit(bundle, engine, actual=None):
             meaning='pinned official eager attention with exactly supplied Q/K/V; isolates GQA from upstream decoder differences')
     result['future_retention_todo'] = retention_plan()
     if actual:
+        result['missing_actual_internal_gqa_producers'] = {phase: [i for i in range(33, 38)
+            if phase + f'/actual_producer_{i:02d}.f32le' not in actual['files']] for phase in PHASES}
         result['receipt_hashed_claim_evidence'] = dict(receipt_sha256=actual.get('receipt_sha256'),
             hardware_authority_verified=False,
             claimed_identity={key: actual.get('result', {}).get(key) for key in ('binary_sha256', 'rtl_sha256', 'input_sha256')})
+    if snapshots:
+        result['retained_replay_pack'] = dict(archive_sha256=actual['replay_archive_sha256'],
+            pair_sha256=actual['replay_manifest']['pair_sha256'], identity=actual['replay_manifest']['identity'],
+            explicit_prior_snapshot_timing='after_carried_command0_input_norm_before_command8_kv_append',
+            hardware_authority_verified=False, old_pass_revalidated=False)
     return result
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--production-source-root', type=Path,
+                   help='real frozen production checkout; select before importing its source modules')
     p.add_argument('--bundle', type=Path)
     p.add_argument('--receipt-file-sha256', help='SHA256 of saved reference_receipt.json file bytes')
     p.add_argument('--canonical-receipt-sha256', help='optional live canonical JSON identity, distinct from file SHA256')
@@ -552,22 +707,37 @@ def main():
     p.add_argument('--actual', type=Path)
     p.add_argument('--actual-result', type=Path)
     p.add_argument('--actual-result-sha256')
+    p.add_argument('--replay-pack', type=Path)
+    p.add_argument('--replay-pack-sha256')
+    p.add_argument('--expected-commit')
+    p.add_argument('--expected-run-id')
+    p.add_argument('--expected-job-id')
     p.add_argument('--execute-official', action='store_true')
     p.add_argument('--output', type=Path)
     a = p.parse_args()
+    if a.production_source_root is not None:
+        configure_production_source_root(a.production_source_root)
     if a.retention_plan:
         require(not a.execute_official, 'retention plan cannot execute a model')
         print(json.dumps(retention_plan(), indent=2)); return
     require(a.bundle is not None and a.receipt_file_sha256 is not None, 'retained bundle and receipt file hash required')
     require(all(v is None for v in (a.actual, a.actual_result, a.actual_result_sha256)) or
             all(v is not None for v in (a.actual, a.actual_result, a.actual_result_sha256)), 'all actual-evidence arguments required together')
+    replay_args = (a.replay_pack, a.replay_pack_sha256, a.expected_commit, a.expected_run_id, a.expected_job_id)
+    require(all(v is None for v in replay_args) or all(v is not None for v in replay_args),
+            'all replay-pack identity arguments required together')
+    require(a.actual is None or a.replay_pack is None, 'select actual receipt or retained replay pack, not both')
     bundle = load_bundle(a.bundle, a.receipt_file_sha256, a.canonical_receipt_sha256)
     actual = load_actual(a.actual, a.actual_result, a.actual_result_sha256, bundle) if a.actual else None
+    if a.replay_pack:
+        actual = load_replay_pack(a.replay_pack, a.replay_pack_sha256, bundle, expected_commit=a.expected_commit,
+                                 expected_run_id=a.expected_run_id, expected_job_id=a.expected_job_id)
     if not a.execute_official:
         print(json.dumps(dict(status='RETAINED_BYTES_VERIFIED_NO_MODEL_EXECUTED',
                               reference_receipt_file_sha256=bundle['reference_receipt_file_sha256'],
                               reference_receipt_sha256=bundle['reference_receipt_sha256'],
                               receipt_claim_file_hashes_verified=actual is not None,
+                              explicit_cache_snapshot_files_verified=bool(actual and actual.get('explicit_cache_snapshots')),
                               hardware_authority_verified=False, native_full_block_acceptance=False), indent=2)); return
     output = fresh_report_path(a.output)
     result = audit(bundle, OfficialM1(bundle), actual)

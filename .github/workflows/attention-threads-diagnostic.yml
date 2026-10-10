@@ -1,0 +1,99 @@
+name: bounded-production-Attention-threads2-diagnostic
+
+# Publish only after the frozen producer has succeeded and its archive SHA is pinned.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/attention-threads-diagnostic.yml'
+      - 'tools/attention_threads/**'
+      - 'tests/test_attention_threads_diagnostic.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: attention-threads-diagnostic-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  same-rtl-prefix-comparison:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      SOURCE_SHA: '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f'
+      BASELINE_RUN_ID: '38015586840'
+      BASELINE_ARCHIVE_SHA256: '1cfaf045ca58704016bfecff3f079b7fa708d1d7f7043b0fb014b5da61b7bfb1'
+      BUILD_JOBS: '1'
+      BUILD_RESERVE_BYTES: '1073741824'
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+    steps:
+      - name: Frozen production checkout at original source root
+        uses: actions/checkout@v4
+        with:
+          ref: '98c7d80f65c5f05b55726c5239a6e9ec15d1b53f'
+          persist-credentials: false
+      - name: Independent diagnostic checkout at exact trigger
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          path: work/attention_threads_diagnostic
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare identical original tools and pinned public sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_block_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/attention_block_ci_idma
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_block_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Install fixed official producer runtime
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - name: Download only the existing successful producer archive
+        uses: actions/download-artifact@v4
+        with:
+          name: host-attention-block-build-98c7d80f65c5f05b55726c5239a6e9ec15d1b53f-38015586840-1
+          run-id: 38015586840
+          github-token: '${{ github.token }}'
+          path: work/attention_threads_download
+      - name: Diagnostic-only regressions and Git payload boundary
+        working-directory: work/attention_threads_diagnostic
+        run: |
+          python scripts/check_git_payloads.py
+          python -m pytest -q -o addopts='' tests/test_attention_threads_diagnostic.py
+          python -O -m pytest -q -o addopts='' tests/test_attention_threads_diagnostic.py
+      - name: Reacquire pinned public model payloads locally
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: One candidate C++ build and bounded same-input ABBA windows
+        env:
+          HF_HUB_OFFLINE: '1'
+          OFFLINE_TOOLS: '${{ github.workspace }}/work/attention_block_ci_runtime'
+        run: |
+          python "$GITHUB_WORKSPACE/work/attention_threads_diagnostic/tools/attention_threads/run_diagnostic.py" --source-root "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/work/attention_threads_result" --archive "$GITHUB_WORKSPACE/work/attention_threads_download/host_attention_block_build.tar.gz" --expected-sha256 "$BASELINE_ARCHIVE_SHA256" --expected-commit "$SOURCE_SHA" --baseline-run-id "$BASELINE_RUN_ID" --payload-layer0 "$GITHUB_WORKSPACE/work/qwen35_layer0_payload" --payload-layer3 "$GITHUB_WORKSPACE/work/qwen35_layer3_payload" --payload-extra "$GITHUB_WORKSPACE/work/qwen35_prefix_payload"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bounded-attention-threads2-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/attention_threads_result/compact/summary.json
+            work/attention_threads_result/compact/source_input_hashes.json
+      - name: State the strict diagnostic boundary
+        if: always()
+        run: |
+          echo 'Reuse the trusted original production ELF and identical SystemVerilog; compile exactly one --threads 2 candidate, no Scala or baseline rebuild. Explicit two-CPU affinity after effective cgroup/CPU admission. Same local fresh fixture, no checkpoints or tensor injection.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'A/B/B/A separately for 4096-cycle Norm smoke and 65536-cycle reset-to-Matrix prefix. Matrix activity must be observed in actual pc1 step counters; absence or timeout remains PENDING. Completed-step timing includes capture; no isolated eval/Matrix time, full-layer speedup, numerical/M128/native or hardware QoR acceptance.' >> "$GITHUB_STEP_SUMMARY"

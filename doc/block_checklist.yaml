@@ -1341,3 +1341,16 @@
   预算: 四个job时限上界合计570_runner_min；不是实测耗时；pair上限10800秒，未沿用旧18000总预算的说法
   未完成: [完整Attention数值终态, 完整周期MAC实测, native完整精度, cold128_carried128, reset_restore, 35B, PPA及MAC90]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭
+
+生产Host_Attention双线程有界诊断_20261010:
+  状态: 诊断工具53项正常与优化模式测试及独立审查通过；真实threads2构建和前缀等价待验
+  关联任务: [P00, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_THREADS_DIAGNOSTIC_20261010_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_THREADS_DIAGNOSTIC_20261010/summary.json
+  源码边界: 固定98c7生产checkout及原ELF_SV_driver，诊断checkout独立；只有一次threads2候选构建，不执行Scala或重建基线
+  启动依赖: run38015586840原build成功并核验archive及源码工具身份后才启动；实际有效CPU小于2或不可确认则NOT_RUN
+  数值边界: 同一fresh本地fixture，从reset执行4096和65536周期的ABBA；长窗口须实际Norm发布后观察pc1_Matrix_issue，缺失或超时保持PENDING
+  计时边界: 原step计时含事件捕获，不是孤立eval或纯Matrix；前缀不得升级为完整层加速或成功全程MAC利用率
+  旧回归终态: 79bbe的run38003994787单launch42命令及38owner_jobs通过；1409024个FP32值零位差，17096970周期；仅M16双层合成权重旧Host范围
+  未完成: [真实threads2前缀等价与耗时, 完整Attention数值终态, 完整周期MAC实测, native完整精度, cold128_carried128, reset_restore, 35B, PPA及MAC90]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭

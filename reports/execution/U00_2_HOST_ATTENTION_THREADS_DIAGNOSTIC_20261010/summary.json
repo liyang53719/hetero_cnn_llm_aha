@@ -1,0 +1,99 @@
+{
+  "schema": "HOST_ATTENTION_THREADS_DIAGNOSTIC_DELIVERY_V1",
+  "status": "READY_FOR_SINGLE_DIAGNOSTIC_CI",
+  "production_source_commit": "98c7d80f65c5f05b55726c5239a6e9ec15d1b53f",
+  "producer_run_id": 38015586840,
+  "producer_job_id": 114105000691,
+  "trusted_producer_archive_sha256": "1cfaf045ca58704016bfecff3f079b7fa708d1d7f7043b0fb014b5da61b7bfb1",
+  "expected_rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510",
+  "candidate_builds_planned": 1,
+  "baseline_rebuilt": false,
+  "scala_executed": false,
+  "same_local_fixture": true,
+  "state_or_reference_injection": false,
+  "effective_cpu_count_minimum": 2,
+  "runtime_affinity_cpu_count": 2,
+  "job_timeout_minutes": 180,
+  "runner_budget_seconds": 9000,
+  "candidate_build_timeout_seconds": 6300,
+  "failure_reserve_seconds": 180,
+  "windows": [
+    {
+      "name": "norm_prefix",
+      "cycles": 4096,
+      "timeout_seconds_each": 60
+    },
+    {
+      "name": "reset_to_matrix_prefix",
+      "cycles": 65536,
+      "timeout_seconds_each": 240
+    }
+  ],
+  "order": [
+    "baseline",
+    "threads2",
+    "threads2",
+    "baseline"
+  ],
+  "timing_scope": "PhysicalAxi.step including capture; excludes event serialization and final memory digest; not isolated eval or Matrix timing",
+  "matrix_activity_required": "pc0 successful Norm publication and 32 acknowledged 64-byte W beats (2048 bytes), then actual positive pc1 pipeline issue count",
+  "event_bytes_limit": 268435456,
+  "raw_events_uploaded": false,
+  "weights_or_tensors_uploaded": false,
+  "local_tests": {
+    "normal_passed": 53,
+    "optimized_passed": 53,
+    "independent_review": "PASS",
+    "actual_candidate_build_or_prefix_executed": false
+  },
+  "numerical_acceptance": false,
+  "native_full_block_acceptance": false,
+  "full128_executed": false,
+  "whole_layer_speedup_claimed": false,
+  "measured_whole_layer_mac_utilization": null,
+  "overall_pass": false,
+  "gate_status": {
+    "U00.2": "ongoing",
+    "U01": "to do",
+    "C02.2": "OPEN"
+  },
+  "verified_prior_legacy_regression": {
+    "source_commit": "79bbe751b7b221023b02546860e213c16c07b2ea",
+    "run_id": 38003994787,
+    "job_id": 114082015261,
+    "completed_at": "2026-10-10T02:45:53Z",
+    "artifact_id": 11656633733,
+    "artifact_sha256": "3ce0baebc9e1b62c2263fca57fdbb561d5fc9dc469503700f7a8811d6f632f24",
+    "scope": "M16, two layers, synthetic weights, original Host graph",
+    "launches": 1,
+    "commands": 42,
+    "owner_jobs": 38,
+    "compared_fp32_values": 1409024,
+    "bit_differences": 0,
+    "cycles": 17096970,
+    "useful_macs": 1498202112,
+    "executed_macs": 1524105216,
+    "official_qwen35_model_acceptance": false
+  },
+  "delivery_source_sha256": {
+    "tools/attention_threads/run_diagnostic.py": "d68a2d30011d7c140d157a5d8533e463133c1378ce3f508c8f3adf453703238e",
+    "tests/test_attention_threads_diagnostic.py": "cbfcacd6ae08796bedbe5013728905892e2cf36af0c0389e58f739e458fac199",
+    ".github/workflows/attention-threads-diagnostic.yml": "18033c7cdc8a3d125dc5a63d8f6680a386f9ba01fb8ed8d2320e3f208516509f"
+  },
+  "producer_build_verified": {
+    "completed_at": "2026-10-10T03:16:53Z",
+    "build_elapsed_seconds": 3617.723927589,
+    "archive_bytes": 5534215,
+    "archive_file_count_excluding_manifest": 15,
+    "source_paths_verified_against_immutable_git": 655,
+    "compact_source_paths_verified_against_immutable_git": 657,
+    "compiler_jars_count": 173,
+    "binary_sha256": "f0f194342fe9ab70290069441f48b9863c6ed9ab9bcd5f3991c7f60168073263",
+    "github_archive_zip_digest": "0493191505f429fbf60f5eb8ac175b367fc8a8f5ea234660230493396299ee9c",
+    "github_proof_zip_digest": "d188f8340ac3db33f641809c37f8d0e46f9bce713c04253a12048a63972fbe9b",
+    "archive_admission": "PASS",
+    "receipt_cross_binding": "PASS",
+    "local_elf_executed": false,
+    "live_consumer_tool_hash_check_still_required": true
+  }
+}

@@ -225,7 +225,7 @@ def verify_case_outputs(build, result):
 
 def run_case(build, path, mode, *, block_session, session, projection_session, attention_session, timeout_seconds=3600):
     require(mode in MODES, 'unsupported actual mode')
-    require(type(timeout_seconds) is int and 1 <= timeout_seconds <= 3600, 'bounded actual timeout required')
+    require(type(timeout_seconds) is int and 1 <= timeout_seconds <= 10800, 'bounded actual timeout required')
     build, path = Path(build), Path(path)
     authorities = dict(block_session=block_session, session=session, projection_session=projection_session, attention_session=attention_session)
     admitted = admit_fixture(path, **authorities)

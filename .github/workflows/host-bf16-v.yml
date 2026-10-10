@@ -37,7 +37,28 @@ concurrency:
   group: host-bf16-v-${{ github.sha }}
   cancel-in-progress: false
 jobs:
+  # BEGIN HOST_ATTENTION_BLOCK_CI_SCOPE
+  host-attention-scope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run_full: ${{ steps.classify.outputs.run_full }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          fetch-depth: 0
+      - name: Classify exact Attention orchestration diff
+        id: classify
+        env:
+          BASE_SHA: ${{ github.event_name == 'push' && github.event.before || '' }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python3 .github/scripts/host_attention_block_ci_scope.py --base "$BASE_SHA" --head "$HEAD_SHA" --github-output "$GITHUB_OUTPUT"
+  # END HOST_ATTENTION_BLOCK_CI_SCOPE
   fresh-official-actual-Host-V:
+    needs: host-attention-scope
+    if: ${{ always() && (needs.host-attention-scope.result != 'success' || needs.host-attention-scope.outputs.run_full != 'false') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 240
     env:
@@ -91,6 +112,8 @@ jobs:
             work/host_bf16_v_ci/compact/source_input_hashes.json
 
   legacy-real2-build:
+    needs: host-attention-scope
+    if: ${{ always() && (needs.host-attention-scope.result != 'success' || needs.host-attention-scope.outputs.run_full != 'false') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     outputs:
@@ -201,6 +224,8 @@ jobs:
             work/legacy_real2_ci_summary/
 
   fresh-official-actual-Host-QKV-representative:
+    needs: host-attention-scope
+    if: ${{ always() && (needs.host-attention-scope.result != 'success' || needs.host-attention-scope.outputs.run_full != 'false') }}
     # Projection-only default gate. No full128 independent-reference scope yet.
     # Each run_case remains one uninterrupted Q/K/V launch on the actual Host.
     runs-on: ubuntu-24.04

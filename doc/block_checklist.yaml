@@ -1329,3 +1329,15 @@
   旧证据缺口: GDN双M1已记录43057152_useful_MAC但未保留完整cycle或executed；真实利用率不可补算
   未完成: [新完整Attention数值终态, RTL实测MAC利用率, 可校准完整周期预测, cold128_carried128, native完整精度合同, 35B, PPA及MAC90]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭
+
+生产Host_Attention完整pair拆分CI_20261010:
+  状态: 79bbe原pass子预算到期；单构建与两套连续pair的CI恢复待验收
+  关联任务: [C03.2, C04.2, C05, S01, Q35A, P00, U00.2]
+  报告: doc/U00_2_HOST_ATTENTION_SPLIT_CI_20261010_CN.md
+  证据: reports/execution/U00_2_HOST_ATTENTION_SPLIT_CI_20261010/summary.json
+  原结果: run38003994774最后保留run0的pc18与cycle2512781；持续ACK但未有完整终态；native失败11和13项保留
+  调度: 一个冻结ELF构建；pass与fault各自同DUT连续cold0到carried1；最后汇总同时要求两者通过
+  身份: 包仅ELF和RTL及源码工具摘要；权重与输入各job重取；raw_hidden跨主机可不同且显式记录，不声称同激励故障对照
+  预算: 四个job时限上界合计570_runner_min；不是实测耗时；pair上限10800秒，未沿用旧18000总预算的说法
+  未完成: [完整Attention数值终态, 完整周期MAC实测, native完整精度, cold128_carried128, reset_restore, 35B, PPA及MAC90]
+  保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；各完整任务不关闭

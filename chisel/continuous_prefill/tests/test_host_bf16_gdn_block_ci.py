@@ -303,11 +303,11 @@ class BlockProfileTests(unittest.TestCase):
 
     def test_workflow_runs_one_complete_case_and_only_uploads_compact_receipts(self):
         workflow = yaml.load((gate.ROOT/gate.BLOCK_WORKFLOW).read_text(), Loader=yaml.BaseLoader)
-        jobs = workflow['jobs']; self.assertEqual(set(jobs), {'build','block-canonical-native-pass','block-acceptance'})
+        jobs = workflow['jobs']; self.assertEqual(set(jobs), {'host-attention-scope','build','block-canonical-native-pass','block-acceptance'})
         self.assertEqual(jobs['build']['timeout-minutes'], '120')
         self.assertEqual(jobs['block-canonical-native-pass']['timeout-minutes'], '340')
         self.assertEqual(jobs['block-acceptance']['needs'], ['build','block-canonical-native-pass'])
-        self.assertEqual(jobs['block-acceptance']['if'], 'always()')
+        self.assertEqual(jobs['block-acceptance']['if'], "${{ always() && needs.build.result != 'skipped' }}")
         self.assertEqual(workflow['concurrency']['cancel-in-progress'], 'false')
         commands = '\n'.join(step.get('run','') for job in jobs.values() for step in job['steps'])
         self.assertEqual(commands.count('run_host_bf16_gdn_fresh_gate.py run'), 1)

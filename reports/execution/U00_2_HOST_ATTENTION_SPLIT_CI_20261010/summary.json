@@ -1,0 +1,99 @@
+{
+  "schema": "HOST_ATTENTION_SPLIT_CI_RECOVERY_V1",
+  "source_parent_commit": "79bbe751b7b221023b02546860e213c16c07b2ea",
+  "prior_attempt": {
+    "run_id": 38003994774,
+    "job_id": 114068468799,
+    "conclusion": "failure",
+    "failure": "actual pass pair subprocess reached 3600-second cap",
+    "elapsed_seconds": 6907.88337941,
+    "remaining_total_budget_seconds": 11092,
+    "last_surviving_complete_event": {
+      "run": 0,
+      "pc": 18,
+      "operation": "FFN SiLU times up",
+      "cycle": 2512781
+    },
+    "last_surviving_complete_ack_cycle": 2512775,
+    "pc18_acknowledged_beats": 79,
+    "pc18_total_beats": 112,
+    "actual_terminal_cycle": null,
+    "full_block_numerical_acceptance": false,
+    "measured_mac_utilization": null,
+    "artifact_id": 11654561907,
+    "artifact_bytes": 173023,
+    "artifact_sha256": "c5362f32ddf9b99b8182b45750cd42353a68339d5ddf7068d2456c732aaaee3b",
+    "verified_unique_repository_sources": 656,
+    "verified_repository_hash_occurrences": 769,
+    "native_failed_comparisons": {
+      "baseline": 11,
+      "avx2": 13
+    },
+    "prefix_repeatability_only": true,
+    "prefix_cycles_each": 4096,
+    "raw_elf_or_fixture_recoverable_from_artifact": false
+  },
+  "next_route": {
+    "status": "PENDING_NEW_EXACT_SHA_CI",
+    "build_count": 1,
+    "numerical_jobs": [
+      "pass",
+      "final-residual-ack-error"
+    ],
+    "same_dut_continuous_launches_per_job": 2,
+    "resets_between_launches": 0,
+    "intermediate_or_cache_injection": false,
+    "weights_or_npz_in_build_artifact": false,
+    "raw_inputs_regenerated_per_case": true,
+    "cross_job_raw_input_equality_assumed": false,
+    "paired_identical_stimulus_fault_comparison": false,
+    "expected_unchanged_rtl_sha256": "e8b6ab6640ef0b932a0fc976b00b64998094d692698b4f8e134ead0911611510",
+    "job_timeout_minutes": {
+      "build": 120,
+      "pass": 220,
+      "fault": 220,
+      "acceptance": 10
+    },
+    "primary_route_timeout_runner_minutes_upper_bound": 570,
+    "light_guard_jobs": 7,
+    "light_guard_timeout_minutes_each": 5,
+    "build_runner_budget_seconds": 6300,
+    "case_runner_budget_seconds": 12000,
+    "continuous_pair_timeout_seconds": 10800,
+    "failure_reserve_seconds": 180,
+    "old_combined_18000_seconds_budget_retained": false,
+    "rtl_driver_arithmetic_or_threshold_changes": false
+  },
+  "numerical_acceptance": false,
+  "native_full_block_acceptance": false,
+  "full128_executed": false,
+  "measured_mac_utilization": null,
+  "overall_pass": false,
+  "gate_status": {
+    "U00.2": "ongoing",
+    "U01": "to do",
+    "C02.2": "OPEN"
+  },
+  "local_validation": {
+    "normal": {
+      "tests_passed": 540,
+      "subtests_passed": 132,
+      "elapsed_seconds": 28.79
+    },
+    "python_optimized": {
+      "tests_passed": 540,
+      "subtests_passed": 132,
+      "elapsed_seconds": 28.67
+    },
+    "independent_review": "No remaining blocker; dependency omission corrected and covered; seven unrelated workflow bodies byte-identical after exact scope wiring removal.",
+    "production_numerical_execution": false
+  },
+  "local_delivery_source_sha256": {
+    ".github/scripts/host_attention_block_ci_scope.py": "0086e728f19c3b262221763664fb4e529ed5b12b8e82daa8e98438293ebd95f6",
+    ".github/scripts/verify_attention_block_split.py": "a5f74051867fc552f514b9ed4669db83fad72c2057aa644085bcf86b20a3b155",
+    "chisel/continuous_prefill/scripts/host_bf16_attention_block_build_artifact.py": "128bac77f960e62625c67d1bc9cc1523548a7df903e9418d95778d9a60e427b1",
+    "chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py": "becd323cc8973ed97952839eb341474e7d7b433bd8bce675fb612d85ce78cbc2",
+    "chisel/continuous_prefill/scripts/host_bf16_attention_block_live_gate.py": "70bc54417d091ec737ad7b2e3945a1b2e2cd5472fce8cb2649adcc9489206772",
+    ".github/workflows/host-bf16-attention-block.yml": "b2afd1c990a9006274bd7bb0e30fb6b88c581ad912c2dd4f56e7940584e8888f"
+  }
+}

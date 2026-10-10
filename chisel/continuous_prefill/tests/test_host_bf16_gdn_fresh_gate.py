@@ -585,7 +585,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(jobs['required-faults']['needs'], ['build', 'four-command-pass'])
         self.assertEqual(jobs['required-faults']['strategy']['matrix']['mode'], list(gate.CI_MODES[1:]))
         self.assertEqual(jobs['dense-conv-v1-acceptance']['needs'], ['build', 'four-command-pass', 'required-faults'])
-        self.assertEqual(jobs['dense-conv-v1-acceptance']['if'], 'always()')
+        self.assertEqual(jobs['dense-conv-v1-acceptance']['if'], "${{ always() && needs.build.result != 'skipped' }}")
         self.assertEqual(workflow['concurrency']['cancel-in-progress'], 'false')
         small = next(step for step in jobs['build']['steps'] if step.get('name', '').startswith('Small scalar'))
         self.assertEqual(small['env']['MAKEFLAGS'], '-j1 VK_PCH_I_FAST= VK_PCH_I_SLOW=')
@@ -608,12 +608,12 @@ class WorkflowTests(unittest.TestCase):
     def test_core_workflow_only_runs_bounded_continuous_core_and_compact_uploads(self):
         workflow = yaml.load((gate.ROOT / gate.CORE_WORKFLOW).read_text(), Loader=yaml.BaseLoader)
         jobs = workflow['jobs']
-        self.assertEqual(set(jobs), {'build', 'core-canonical-pass', 'core-only-acceptance'})
+        self.assertEqual(set(jobs), {'host-attention-scope', 'build', 'core-canonical-pass', 'core-only-acceptance'})
         self.assertEqual(jobs['build']['timeout-minutes'], '120')
         self.assertEqual(jobs['core-canonical-pass']['needs'], 'build')
         self.assertEqual(jobs['core-canonical-pass']['timeout-minutes'], '180')
         self.assertEqual(jobs['core-only-acceptance']['needs'], ['build', 'core-canonical-pass'])
-        self.assertEqual(jobs['core-only-acceptance']['if'], 'always()')
+        self.assertEqual(jobs['core-only-acceptance']['if'], "${{ always() && needs.build.result != 'skipped' }}")
         self.assertEqual(workflow['concurrency']['cancel-in-progress'], 'false')
         commands = '\n'.join(step.get('run', '') for job in jobs.values() for step in job['steps'])
         self.assertEqual(commands.count('run_host_bf16_gdn_fresh_gate.py run'), 1)

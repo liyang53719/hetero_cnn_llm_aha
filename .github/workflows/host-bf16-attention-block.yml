@@ -1,13 +1,17 @@
 name: qwen35-production-Host-Attention-Block
 
-# Frozen-recipe raw-hidden full Attention block: two processes, two actual M1
-# launches each, retained prefix KV. Native full-block and full M128 stay open.
-# No tensor/weight/NPZ/build artifact upload; only two compact JSON files.
+# One immutable production build; two independent complete cold0/carried1 pairs.
+# Cases may have different fresh raw hidden bytes; every input hash is retained.
+# Build archive contains ELF/RTL/identity only, never weights, tensors or NPZ.
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/host-bf16-attention-block.yml'
+      - '.github/scripts/verify_attention_block_split.py'
+      - '.github/scripts/tests/test_attention_block_split_acceptance.py'
+      - '.github/scripts/host_attention_block_ci_scope.py'
+      - '.github/scripts/tests/test_host_attention_block_ci_scope.py'
       - 'chisel/continuous_prefill/**'
       - 'chisel/p0_safety/src/main/**'
       - 'integration/gemmini/EmitHeteroBF16Fma.scala'
@@ -30,16 +34,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  representative-attention-block:
+  build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 340
+    timeout-minutes: 120
+    outputs:
+      source_commit: ${{ steps.execute.outputs.source_commit }}
+      package_sha256: ${{ steps.execute.outputs.package_sha256 }}
+      binary_sha256: ${{ steps.execute.outputs.binary_sha256 }}
+      rtl_sha256: ${{ steps.execute.outputs.rtl_sha256 }}
+      build_ready_sha256: ${{ steps.execute.outputs.build_ready_sha256 }}
+      source_manifest_sha256: ${{ steps.execute.outputs.source_manifest_sha256 }}
+      toolchain_sha256: ${{ steps.execute.outputs.toolchain_sha256 }}
     env:
       BUILD_JOBS: '1'
       BUILD_RESERVE_BYTES: '1073741824'
       JVM_OPTS: '-Xmx1500m -Xss8m -XX:ActiveProcessorCount=2'
       SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
-      OPENBLAS_NUM_THREADS: '2'
-      OMP_NUM_THREADS: '2'
       HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
     steps:
       - uses: actions/checkout@v4
@@ -49,19 +59,20 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - uses: sbt/setup-sbt@v1
-      - name: Prepare pinned tools, upstream iDMA and official source runtime
+      - name: Prepare identical pinned build tools and public iDMA sources
         run: |
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y verilator g++ make curl
-          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
-          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19 huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19
           bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_block_ci_tools"
           python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/attention_block_ci_idma
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
           echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_block_ci_idma/idma_export" >> "$GITHUB_ENV"
       - name: Source payload boundary and public descriptor regressions
         run: |
           python scripts/check_git_payloads.py
+          python -m pytest -o addopts='' -q .github/scripts/tests/test_host_attention_block_ci_scope.py .github/scripts/tests/test_attention_block_split_acceptance.py
           python -m pytest -o addopts='' -q tests/test_qwen35_arch_utilization.py
           python -m heteronpu.qwen35_arch_utilization --repo .
           python -m pytest -o addopts='' -q chisel/continuous_prefill/tests/test_host_bf16_qk_rope*.py chisel/continuous_prefill/tests/test_host_bf16_qkv*.py chisel/continuous_prefill/tests/test_prepare_qk_norm_rope_owner_fixture.py chisel/continuous_prefill/tests/test_host_bf16_attention_core*.py chisel/continuous_prefill/tests/test_host_bf16_attention_block*.py tests/test_host_bf16_attention_core_descriptor.py tests/test_host_bf16_attention_block_descriptor.py tests/test_host_bf16_attention_block_reference.py tests/test_attention_sigmoid_reference.py tests/test_qwen35_gqa_fixed_reference.py
@@ -76,25 +87,212 @@ jobs:
           python scripts/attention_sigmoid_reference.py --output "$ATTENTION_SIGMOID_FIXED_VECTORS"
           export ATTENTION_SIGMOID_FIXED_SHA256=$(sha256sum "$ATTENTION_SIGMOID_FIXED_VECTORS" | cut -d' ' -f1)
           sbt -batch -J-Xss8m 'testOnly heteronpu.continuous.BlockScalarFloatSpec heteronpu.continuous.QkNorm256OwnerSpec heteronpu.continuous.PartialRope64OwnerSpec heteronpu.continuous.HostQkNormRopeCommandsSpec heteronpu.continuous.HostAttentionCoreCommandsSpec heteronpu.continuous.HostAttentionBlockCommandsSpec heteronpu.continuous.AttentionSigmoidOwnerSpec heteronpu.continuous.Bf16KvAppendOwnerSpec heteronpu.continuous.Bf16CausalGqaOwnerSpec heteronpu.continuous.GqaMatrixResultSelectSpec'
-      - name: Reacquire only pinned layer0, layer3 and prefix sources
+      - name: Build once and seal the unchanged production RTL and ELF
+        id: execute
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py --build-only --output work/host_attention_block_build_ci --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: host-attention-block-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+          path: work/host_attention_block_build_ci/host_attention_block_build.tar.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-attention-block-build-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_attention_block_build_ci/compact/summary.json
+            work/host_attention_block_build_ci/compact/source_input_hashes.json
+
+  pass:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 220
+    outputs:
+      summary_sha256: ${{ steps.execute.outputs.summary_sha256 }}
+      hashes_sha256: ${{ steps.execute.outputs.hashes_sha256 }}
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      JVM_OPTS: '-Xmx1500m -Xss8m -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+      TRUSTED_PACKAGE_SHA: '${{ needs.build.outputs.package_sha256 }}'
+      TRUSTED_SOURCE_COMMIT: '${{ needs.build.outputs.source_commit }}'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare identical pinned build tools and public iDMA sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_block_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/attention_block_ci_idma
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_block_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Install the fixed official source runtime
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-attention-block-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/host_attention_block_download
+      - name: Reacquire original compiler JARs by trusted manifest SHA without compiling
+        run: |
+          set -euo pipefail
+          python chisel/continuous_prefill/scripts/host_bf16_attention_block_build_artifact.py --prepare-jars --archive work/host_attention_block_download/host_attention_block_build.tar.gz --runtime work/attention_block_ci_runtime --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT"
+          echo "OFFLINE_TOOLS=$GITHUB_WORKSPACE/work/attention_block_ci_runtime" >> "$GITHUB_ENV"
+      - name: Reacquire pinned public weights; keep tensors local to this job
         run: |
           python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
           python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
           python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
-      - name: Fresh independent reference and actual twenty-two-command cold0/carried1 block with final-residual ACK fault
+      - name: Fresh reference and complete uninterrupted cold0 to carried1 pair
+        id: execute
         env: {HF_HUB_OFFLINE: '1'}
         run: |
-          python chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py --output work/host_attention_block_fresh_ci
+          python chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py --output work/host_attention_block_pass_ci --archive work/host_attention_block_download/host_attention_block_build.tar.gz --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT" --mode pass --github-output "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: host-attention-block-m1-proof-${{ github.sha }}-${{ github.run_attempt }}
+          name: host-attention-block-pass-proof-${{ github.sha }}-${{ github.run_attempt }}
           retention-days: 90
           if-no-files-found: warn
           path: |
-            work/host_attention_block_fresh_ci/compact/summary.json
-            work/host_attention_block_fresh_ci/compact/source_input_hashes.json
+            work/host_attention_block_pass_ci/compact/summary.json
+            work/host_attention_block_pass_ci/compact/source_input_hashes.json
+
+  fault:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 220
+    outputs:
+      summary_sha256: ${{ steps.execute.outputs.summary_sha256 }}
+      hashes_sha256: ${{ steps.execute.outputs.hashes_sha256 }}
+    env:
+      OPENBLAS_NUM_THREADS: '2'
+      OMP_NUM_THREADS: '2'
+      JVM_OPTS: '-Xmx1500m -Xss8m -XX:ActiveProcessorCount=2'
+      SBT_OPTS: '-Dsbt.supershell=false -Dsbt.task.cpus=2'
+      HARDFLOAT_SOURCE: '${{ github.workspace }}/work/upstream/hardfloat_continuous'
+      TRUSTED_PACKAGE_SHA: '${{ needs.build.outputs.package_sha256 }}'
+      TRUSTED_SOURCE_COMMIT: '${{ needs.build.outputs.source_commit }}'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: sbt/setup-sbt@v1
+      - name: Prepare identical pinned build tools and public iDMA sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator g++ make curl
+          python -m pip install -e . pytest PyYAML==6.0.3 numpy==2.3.5 uv==0.12.19
+          bash chisel/continuous_prefill/scripts/prepare_host_ci_tools.sh "$GITHUB_WORKSPACE/work/attention_block_ci_tools"
+          python chisel/continuous_prefill/scripts/prepare_pinned_idma_sources.py --output work/attention_block_ci_idma
+          bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh
+          echo "IDMA_EXPORT=$GITHUB_WORKSPACE/work/attention_block_ci_idma/idma_export" >> "$GITHUB_ENV"
+      - name: Install the fixed official source runtime
+        run: |
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install huggingface-hub==1.33.0 tokenizers==0.23.2 safetensors==0.8.0 'https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip#sha256=15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-attention-block-build-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/host_attention_block_download
+      - name: Reacquire original compiler JARs by trusted manifest SHA without compiling
+        run: |
+          set -euo pipefail
+          python chisel/continuous_prefill/scripts/host_bf16_attention_block_build_artifact.py --prepare-jars --archive work/host_attention_block_download/host_attention_block_build.tar.gz --runtime work/attention_block_ci_runtime --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT"
+          echo "OFFLINE_TOOLS=$GITHUB_WORKSPACE/work/attention_block_ci_runtime" >> "$GITHUB_ENV"
+      - name: Reacquire pinned public weights; keep tensors local to this job
+        run: |
+          python scripts/collect_qwen35_layer0_payload.py --output work/qwen35_layer0_payload
+          python scripts/collect_qwen35_layer3_payload.py --output work/qwen35_layer3_payload
+          python scripts/collect_qwen35_prefix_payload.py --output work/qwen35_prefix_payload
+      - name: Fresh reference and complete uninterrupted cold0 to carried1 pair
+        id: execute
+        env: {HF_HUB_OFFLINE: '1'}
+        run: |
+          python chisel/continuous_prefill/scripts/run_host_bf16_attention_block_fresh_gate.py --output work/host_attention_block_fault_ci --archive work/host_attention_block_download/host_attention_block_build.tar.gz --expected-sha256 "$TRUSTED_PACKAGE_SHA" --expected-commit "$TRUSTED_SOURCE_COMMIT" --mode final-residual-ack-error --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-attention-block-fault-proof-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            work/host_attention_block_fault_ci/compact/summary.json
+            work/host_attention_block_fault_ci/compact/source_input_hashes.json
+
+  acceptance:
+    needs: [build, pass, fault]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned compact-verifier dependencies
+        run: python -m pip install numpy==2.3.5 PyYAML==6.0.3
+      - name: Require the immutable build and both complete pair jobs
+        env:
+          NEEDS_RESULTS: '${{ toJSON(needs) }}'
+        run: |
+          python - <<'PY_CHECK'
+          import json, os
+          values = {key: value['result'] for key, value in json.loads(os.environ['NEEDS_RESULTS']).items()}
+          if set(values) != {'build', 'pass', 'fault'} or any(value != 'success' for value in values.values()):
+              raise SystemExit('PENDING: build and both complete pairs are required: '+json.dumps(values))
+          PY_CHECK
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-attention-block-pass-proof-${{ github.sha }}-${{ github.run_attempt }}
+          path: work/host_attention_block_acceptance/pass
+      - uses: actions/download-artifact@v4
+        with:
+          name: host-attention-block-fault-proof-${{ github.sha }}-${{ github.run_attempt }}
+          path: work/host_attention_block_acceptance/fault
+      - name: Verify trusted producer digests, source identities, both numerical and fault contracts
+        env:
+          COMMIT: '${{ needs.build.outputs.source_commit }}'
+          PACKAGE: '${{ needs.build.outputs.package_sha256 }}'
+          BINARY: '${{ needs.build.outputs.binary_sha256 }}'
+          RTL: '${{ needs.build.outputs.rtl_sha256 }}'
+          READY: '${{ needs.build.outputs.build_ready_sha256 }}'
+          SOURCES: '${{ needs.build.outputs.source_manifest_sha256 }}'
+          TOOLS: '${{ needs.build.outputs.toolchain_sha256 }}'
+          PASS_SUMMARY: '${{ needs.pass.outputs.summary_sha256 }}'
+          PASS_HASHES: '${{ needs.pass.outputs.hashes_sha256 }}'
+          FAULT_SUMMARY: '${{ needs.fault.outputs.summary_sha256 }}'
+          FAULT_HASHES: '${{ needs.fault.outputs.hashes_sha256 }}'
+        run: |
+          python .github/scripts/verify_attention_block_split.py --pass-compact work/host_attention_block_acceptance/pass --fault-compact work/host_attention_block_acceptance/fault --expected-pass-summary-sha256 "$PASS_SUMMARY" --expected-pass-hashes-sha256 "$PASS_HASHES" --expected-fault-summary-sha256 "$FAULT_SUMMARY" --expected-fault-hashes-sha256 "$FAULT_HASHES" --expected-commit "$COMMIT" --expected-package-sha256 "$PACKAGE" --expected-binary-sha256 "$BINARY" --expected-rtl-sha256 "$RTL" --expected-build-ready-sha256 "$READY" --expected-source-manifest-sha256 "$SOURCES" --expected-toolchain-sha256 "$TOOLS" --output work/host_attention_block_acceptance/acceptance.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: host-attention-block-acceptance-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 90
+          if-no-files-found: warn
+          path: work/host_attention_block_acceptance/acceptance.json
       - name: State the exact acceptance boundary
         run: |
-          echo 'Production 22-command/296-descriptor/19-owner-job M1 block: raw hidden -> input RMS -> Q/gate,K,V -> C1 QK Norm -> B1 partial64 RoPE -> KV append -> causal GQA -> BF16 sigmoid times context -> O -> residual -> post RMS -> FFN gate/up -> SiLU times up -> down -> final residual -> terminal fence. 68608 acknowledged bytes per successful launch. Two same-DUT two-launch cases: pass and final-residual-ack-error, with actual cold0/carried1 prefix KV and shared full256x64 BF16 trig.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Frozen-recipe hardware equality only. Original official producer thresholds and native failures remain visible; native full-block PASS, full M128, reset/restore, timing and QoR signoff remain PENDING. One Matrix with 8 physical slices, one shared Scalar service and one pinned iDMA. Default off. No intermediate, golden or prior-cache preloads.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Frozen-recipe production 22-command M1 block with final-residual ACK fault. Each case independently executes cold0 and carried1 without reset or injected intermediate/cache state. Same frozen source/ELF/RTL; per-case fresh official inputs are separately hashed and may differ across hosts. No same-stimulus cross-job fault comparison is claimed.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Native full-block, full M128, reset/restore, timing and QoR remain open. One Matrix, eight physical slices, one pinned iDMA, shared Scalar; all original numerical thresholds and native failures retained.' >> "$GITHUB_STEP_SUMMARY"

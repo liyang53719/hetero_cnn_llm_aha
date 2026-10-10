@@ -29,7 +29,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # BEGIN HOST_ATTENTION_BLOCK_CI_SCOPE
+  host-attention-scope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run_full: ${{ steps.classify.outputs.run_full }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          fetch-depth: 0
+      - name: Classify exact Attention orchestration diff
+        id: classify
+        env:
+          BASE_SHA: ${{ github.event_name == 'push' && github.event.before || '' }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python3 .github/scripts/host_attention_block_ci_scope.py --base "$BASE_SHA" --head "$HEAD_SHA" --github-output "$GITHUB_OUTPUT"
+  # END HOST_ATTENTION_BLOCK_CI_SCOPE
   build:
+    needs: host-attention-scope
+    if: ${{ always() && (needs.host-attention-scope.result != 'success' || needs.host-attention-scope.outputs.run_full != 'false') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     outputs:
@@ -180,7 +201,7 @@ jobs:
 
   dense-conv-v1-acceptance:
     needs: [build, four-command-pass, required-faults]
-    if: always()
+    if: ${{ always() && needs.build.result != 'skipped' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:

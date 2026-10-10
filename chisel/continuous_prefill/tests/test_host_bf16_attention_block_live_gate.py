@@ -95,7 +95,7 @@ def test_actual_runner_rejects_incomplete_unbound_or_drifting_evidence(actual_ha
 
 def test_run_timeout_cannot_be_extended_past_ci_contract(actual_harness):
     build,path,state,authority=actual_harness
-    for value in (0,3601,True):
+    for value in (0,10801,True):
         with pytest.raises(ValueError,match='bounded actual timeout'):live.run_case(build,path,'pass',timeout_seconds=value,**authority)
     assert state['verifies']==0
 

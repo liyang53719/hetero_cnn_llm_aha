@@ -521,3 +521,41 @@ group状态与2304bit源码共享mux及准入比较逻辑，面积与时序尚�
 - ongoing：原M128 native/FP32-final FAIL、数值政策待决定，阈值未改。
 - to do：carried/更长prefill与冻结激励最终硬件验收。
 - 保持 Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。
+
+## fb909e8 终态与实际 bank / owner 源码闭包
+
+`fb909e861ab91dfd7ecc44bc3e86245c3e63b029` 的110项测试、13条Scala/CHIRRTL
+命令及payload guard已在CI通过。11,560,736B工件SHA为
+`ed6537b4a8588b0d630833f8cc7af8be367cce8e4af5d9f9e5ab9ab4dd45a901`；
+47份IR严格对照、3套源码manifest和87依赖SHA核验完成。
+
+后续[默认关闭的owner替换候选](../candidates/qwen2_resident_matrix/transposed_owner/README.md)
+已将实际DMA、A/B同步bank、operand FIFO、同一Matrix service、物理结果gather
+与末写ACK落实为Chisel源码。只在构造时选旧或新owner，避免双份SRAM；首门准入
+M16/M128、K≤1536、N为32倍数，down K8960明确拒绝，Bias仍是原独立Host命令。
+
+48个控制/结构小门通过。真实owner/service编译与12份CHIRRTL通过，严格关闭
+模式single/burst两档相同；81份生产/P0/gemmini/HardFloat源码typecheck通过。
+完整kernel未展开。每组合均核验32个1R1W bank、688/80KiB、八endpoint/clock
+ gate、4096 FMA和既有五context/四operand/八metadata/两result槽。A加载明确有
+256bit RMW加256bit上半缓存；没有把端口或存储当免费资源。
+
+真实数值单位门取封存M128 n0和Wq前160通道：实际model bank发出7680个step，
+驱动31,457,280次host FMA；同一个model将物理tile经1280写beat、640次ACK写回
+81920B。20480个bias前结果与独立raw输入点积全bit一致，ACK结果再单独加bias
+也与保存qr子集全bit相同。没有golden返回注入。这是派生N160单位组的主机模型
+数值闭包，不是完整投影、Chisel执行或端点FPU验收。56,196协议ticks不代表硬件
+cycles；单64B读描述符/逐行写ACK的保守实现也没有给出吞吐提升预测。
+
+首次前端strict比较因三条assert来源字符串失败，证据保留；修正源文件名/行数
+后重验，未放宽normalizer。源审查还修复了FP32→BF16 Inf提前拒绝、跨owner
+poison准入、模型同拍fault/transfer义务，均未改成功数值或原验收门。
+故障终态沿用原唯一在途端口契约，错误tag/LAST只允许错误退休并锁到共享域reset，
+不允许成功发布；跨job陈旧响应的fence依赖协调reset，不能用局部generation证明。
+
+- done（局部）：fb909e8精确CI、110测试/47IR与源码/依赖核验。
+- done（源码/模型局部）：实际bank/owner组合、48小门、12前端IR/81源typecheck及N160实值闭包。
+- ongoing：down真实FP32 seed、FFN保留槽、共享端口/完整Host和全周期模型。
+- ongoing：原M128 native/FP32-final FAIL与数值政策决定，门限未改变。
+- to do：完整kernel展开与真实端点协议/数值、carried/长prefill及最终冻结刺激硬件门。
+- 保持 Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。

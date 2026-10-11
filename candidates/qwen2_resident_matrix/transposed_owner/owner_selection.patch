@@ -1,0 +1,156 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+@@ -28,7 +28,9 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDense:Boolean=false) extends Module {
++  require(!enableTransposedDense || (pipelined && !bf16Gdn && !bf16QkNormRope),
++    "transposed Dense is an explicit Qwen2 pipelined elaboration profile")
+   require(!bf16AttentionBlock || bf16AttentionCore,"Attention block requires the explicit core profile")
+   require(!bf16AttentionCore || bf16QkNormRope,"Attention core requires the explicit QKV/Norm/RoPE profile")
+   require(!bf16QkNormRope || (pipelined && s.qwen35QkvOnly && !bf16Gdn), "QK Norm/RoPE requires the exclusive pipelined QKV profile")
+@@ -64,11 +66,14 @@
+     require(s.matrixColumns==256 && s.retainedMatrix)
+     val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore))
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+-    val dense=Module(new StreamingDenseOwner(s.maxRow,burstWrites=burstWrites))
++    // Elaborate one owner and one bank allocation; the common IO is storage-free.
++    val dense:DenseOwnerIO=if(enableTransposedDense)
++      Module(new TransposedDenseOwner(burstWrites=burstWrites)).io
++    else Module(new StreamingDenseOwner(s.maxRow,burstWrites=burstWrites)).io
+     // The core-only GDN command profile never accepts legacy Activation jobs.
+     // Do not elaborate the otherwise unused sixteen-lane legacy SFU here.
+     val silu=if(bf16GdnCore||bf16QkNormRope)None else Some(Module(new ScheduledSiluOwner(overlapSilu)))
+-    val matrix=Module(new MatrixPipelineService)
++    val matrix=Module(new MatrixPipelineService(enableTransposedDense=enableTransposedDense))
+     val legacy=Module(new LegacyMatrixStreamClient)
+     val gdn=if(bf16Gdn)Some(Module(new GdnConv4Owner(channels=6144,maxTokens=s.maxTokens)))else None
+     val prep=if(bf16GdnCore)Some(Module(new GdnInputPrepOwner(heads=16)))else None
+@@ -76,7 +81,7 @@
+     val gatedNorm=if(bf16GdnCore)Some(Module(new GdnGatedNormOwner(heads=16,maxTokens=1)))else None
+     legacy.io.request<>core.io.matrixRequest.get;core.io.matrixResult.get<>legacy.io.result
+     core.io.matrixAcceptedSteps.get:=matrix.io.acceptedSteps
+-    dense.io.physicalSteps:=matrix.io.acceptedSteps
++    dense.physicalSteps:=matrix.io.acceptedSteps
+     val rmsNorm=if(bf16GdnBlock||bf16AttentionBlock)Some(Module(new GdnRmsNormOwner(width=1024,maxTokens=1)))else None
+     val elementwise=if(bf16GdnBlock||bf16AttentionBlock)Some(Module(new GdnElementwiseOwner(hiddenWidth=1024,ffnWidth=3584,maxTokens=1,attentionWidth=2048,enableAttentionSigmoidMul=bf16AttentionBlock)))else None
+     val qkNorm=if(bf16QkNormRope)Some(Module(new QkNorm256Owner(qHeads=8,kvHeads=2,maxTokens=s.maxTokens)))else None
+@@ -105,12 +110,12 @@
+         Mux(attentionTyped && io.job.bits.n===2048.U,13.U,7.U),chooseQk))
+     val gdnReady=gdn.map(_.io.job.ready).getOrElse(false.B)
+     val gdnPoison=(gdn.toSeq.map(_.io.resetRequired)++prep.toSeq.map(_.io.resetRequired)++recurrent.toSeq.map(_.io.resetRequired)++gatedNorm.toSeq.map(_.io.resetRequired)++rmsNorm.toSeq.map(_.io.resetRequired)++elementwise.toSeq.map(_.io.resetRequired)++qkNorm.toSeq.map(_.io.resetRequired)++partialRope.toSeq.map(_.io.resetRequired)++kvAppend.toSeq.map(_.io.resetRequired)++gqa.toSeq.map(_.io.resetRequired)).foldLeft(false.B)(_||_)
+-    val sharedPoison=core.io.resetRequired||dense.io.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+-    val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope).B && sharedPoison)
+-    io.job.ready:=canStart && MuxLookup(choose,false.B)(Seq(0.U->core.io.ownerJob.get.ready,1.U->dense.io.job.ready,2.U->silu.map(_.io.job.ready).getOrElse(false.B),3.U->gdnReady,
++    val sharedPoison=core.io.resetRequired||dense.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
++    val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope||enableTransposedDense).B && sharedPoison)
++    io.job.ready:=canStart && MuxLookup(choose,false.B)(Seq(0.U->core.io.ownerJob.get.ready,1.U->dense.job.ready,2.U->silu.map(_.io.job.ready).getOrElse(false.B),3.U->gdnReady,
+       4.U->prep.map(_.io.job.ready).getOrElse(false.B),5.U->recurrent.map(_.io.job.ready).getOrElse(false.B),6.U->gatedNorm.map(_.io.job.ready).getOrElse(false.B),7.U->true.B,8.U->rmsNorm.map(_.io.job.ready).getOrElse(false.B),9.U->elementwise.map(_.io.job.ready).getOrElse(false.B),10.U->qkNorm.map(_.io.job.ready).getOrElse(false.B),11.U->partialRope.map(_.io.job.ready).getOrElse(false.B),12.U->kvAppend.map(_.io.job.ready).getOrElse(false.B),13.U->gqa.map(_.io.job.ready).getOrElse(false.B)))
+     core.io.ownerJob.get.valid:=io.job.valid && canStart && choose===0.U;core.io.ownerJob.get.bits:=io.job.bits
+-    dense.io.job.valid:=io.job.valid && canStart && choose===1.U;dense.io.job.bits:=io.job.bits
++    dense.job.valid:=io.job.valid && canStart && choose===1.U;dense.job.bits:=io.job.bits
+     silu.foreach{a=>a.io.job.valid:=io.job.valid && canStart && choose===2.U;a.io.job.bits:=io.job.bits}
+     when(io.job.fire){active:=true.B;mode:=choose;tag:=io.job.bits.tag
+       when(choose===3.U || choose===5.U || choose===12.U){gdnExpected:=io.job.bits.expectedGeneration;gdnCurrent:=io.job.bits.currentGeneration}
+@@ -285,25 +290,25 @@
+     val oldDone=Wire(new QwenOwnerResult)
+     oldDone.tag:=tag;oldDone.status:=core.io.result.bits.status;oldDone.cycles:=core.io.result.bits.cycles
+     oldDone.writeBytes:=core.io.acknowledgedWriteBytes;oldDone.usefulMacs:=core.io.result.bits.macs;oldDone.executedMacs:=core.io.result.bits.executedMacs
+-    io.done.valid:=active && MuxLookup(mode,false.B)(Seq(0.U->core.io.result.valid,1.U->dense.io.done.valid,2.U->silu.map(_.io.done.valid).getOrElse(false.B),3.U->gdnValid,4.U->prepValid,5.U->recurrentValid,6.U->gatedValid,7.U->true.B,8.U->rmsValid,9.U->elementValid,10.U->qkNormValid,11.U->partialRopeValid,12.U->kvAppendValid,13.U->gqaValid))
+-    io.done.bits:=MuxLookup(mode,rejectedDone)(Seq(0.U->oldDone,1.U->dense.io.done.bits,2.U->silu.map(_.io.done.bits).getOrElse(rejectedDone),3.U->gdnDone,4.U->prepDone,5.U->recurrentDone,6.U->gatedDone,8.U->rmsDone,9.U->elementDone,10.U->qkNormDone,11.U->partialRopeDone,12.U->kvAppendDone,13.U->gqaDone))
++    io.done.valid:=active && MuxLookup(mode,false.B)(Seq(0.U->core.io.result.valid,1.U->dense.done.valid,2.U->silu.map(_.io.done.valid).getOrElse(false.B),3.U->gdnValid,4.U->prepValid,5.U->recurrentValid,6.U->gatedValid,7.U->true.B,8.U->rmsValid,9.U->elementValid,10.U->qkNormValid,11.U->partialRopeValid,12.U->kvAppendValid,13.U->gqaValid))
++    io.done.bits:=MuxLookup(mode,rejectedDone)(Seq(0.U->oldDone,1.U->dense.done.bits,2.U->silu.map(_.io.done.bits).getOrElse(rejectedDone),3.U->gdnDone,4.U->prepDone,5.U->recurrentDone,6.U->gatedDone,8.U->rmsDone,9.U->elementDone,10.U->qkNormDone,11.U->partialRopeDone,12.U->kvAppendDone,13.U->gqaDone))
+     core.io.result.ready:=active&&mode===0.U&&io.done.ready
+-    dense.io.done.ready:=active&&mode===1.U&&io.done.ready;silu.foreach{a=>a.io.done.ready:=active&&mode===2.U&&io.done.ready}
++    dense.done.ready:=active&&mode===1.U&&io.done.ready;silu.foreach{a=>a.io.done.ready:=active&&mode===2.U&&io.done.ready}
+     when(io.done.fire){active:=false.B}
+     // Explicit mode keys keep GDN slots stable when legacy Activation is absent.
+-    val memories=Seq(0->core.io.memory,1->dense.io.memory)++silu.toSeq.map(x=>2->x.io.memory)++gdn.toSeq.map(x=>3->x.io.memory)++prep.toSeq.map(x=>4->x.io.memory)++recurrent.toSeq.map(x=>5->x.io.memory)++gatedNorm.toSeq.map(x=>6->x.io.memory)++rmsNorm.toSeq.map(x=>8->x.io.memory)++elementwise.toSeq.map(x=>9->x.io.memory)++qkNorm.toSeq.map(x=>10->x.io.memory)++partialRope.toSeq.map(x=>11->x.io.memory)++kvAppend.toSeq.map(x=>12->x.io.memory)++gqa.toSeq.map(x=>13->x.io.memory)
+-    val responses=Seq(0->core.io.response,1->dense.io.response)++silu.toSeq.map(x=>2->x.io.response)++gdn.toSeq.map(x=>3->x.io.response)++prep.toSeq.map(x=>4->x.io.response)++recurrent.toSeq.map(x=>5->x.io.response)++gatedNorm.toSeq.map(x=>6->x.io.response)++rmsNorm.toSeq.map(x=>8->x.io.response)++elementwise.toSeq.map(x=>9->x.io.response)++qkNorm.toSeq.map(x=>10->x.io.response)++partialRope.toSeq.map(x=>11->x.io.response)++kvAppend.toSeq.map(x=>12->x.io.response)++gqa.toSeq.map(x=>13->x.io.response)
++    val memories=Seq(0->core.io.memory,1->dense.memory)++silu.toSeq.map(x=>2->x.io.memory)++gdn.toSeq.map(x=>3->x.io.memory)++prep.toSeq.map(x=>4->x.io.memory)++recurrent.toSeq.map(x=>5->x.io.memory)++gatedNorm.toSeq.map(x=>6->x.io.memory)++rmsNorm.toSeq.map(x=>8->x.io.memory)++elementwise.toSeq.map(x=>9->x.io.memory)++qkNorm.toSeq.map(x=>10->x.io.memory)++partialRope.toSeq.map(x=>11->x.io.memory)++kvAppend.toSeq.map(x=>12->x.io.memory)++gqa.toSeq.map(x=>13->x.io.memory)
++    val responses=Seq(0->core.io.response,1->dense.response)++silu.toSeq.map(x=>2->x.io.response)++gdn.toSeq.map(x=>3->x.io.response)++prep.toSeq.map(x=>4->x.io.response)++recurrent.toSeq.map(x=>5->x.io.response)++gatedNorm.toSeq.map(x=>6->x.io.response)++rmsNorm.toSeq.map(x=>8->x.io.response)++elementwise.toSeq.map(x=>9->x.io.response)++qkNorm.toSeq.map(x=>10->x.io.response)++partialRope.toSeq.map(x=>11->x.io.response)++kvAppend.toSeq.map(x=>12->x.io.response)++gqa.toSeq.map(x=>13->x.io.response)
+     io.memory.valid:=active&&MuxLookup(mode,false.B)(memories.map{case(i,p)=>i.U->p.valid})
+     io.memory.bits:=MuxLookup(mode,0.U.asTypeOf(new MemoryRequest))(memories.map{case(i,p)=>i.U->p.bits})
+     io.response.ready:=active&&MuxLookup(mode,false.B)(responses.map{case(i,p)=>i.U->p.ready})
+     for((i,p)<-memories){p.ready:=active&&mode===i.U&&io.memory.ready}
+     for((i,p)<-responses){p.valid:=active&&mode===i.U&&io.response.valid;p.bits:=io.response.bits}
+-    if(burstWrites){io.writeRequest.get<>dense.io.writeRequest.get;io.writeData.get<>dense.io.writeData.get;dense.io.writeResponse.get<>io.writeResponse.get}
+-    io.burst.get<>dense.io.burst;dense.io.burstResponse<>io.burstResponse.get
++    if(burstWrites){io.writeRequest.get<>dense.writeRequest.get;io.writeData.get<>dense.writeData.get;dense.writeResponse.get<>io.writeResponse.get}
++    io.burst.get<>dense.burst;dense.burstResponse<>io.burstResponse.get
+     if(bf16AttentionCore){
+       // Exactly one retained service owns all eight physical slices. The
+       // selected owner retains the service through terminal result and done.
+-      val clients=Seq(0->legacy.io.port,1->dense.io.matrix)++gqa.toSeq.map(x=>13->x.io.matrix)
++      val clients=Seq(0->legacy.io.port,1->dense.matrix)++gqa.toSeq.map(x=>13->x.io.matrix)
+       val selectedMode=Mux(active,mode,0.U)
+       for((i,c)<-clients){
+         val selected=selectedMode===i.U
+@@ -321,22 +326,25 @@
+       matrix.io.port.abort:=MuxLookup(selectedMode,false.B)(clients.map{case(i,c)=>i.U->c.abort})
+     }else{
+     val useDense=active&&mode===1.U
+-    for((client,index)<-Seq(legacy.io.port,dense.io.matrix).zipWithIndex){
++    for((client,index)<-Seq(legacy.io.port,dense.matrix).zipWithIndex){
+       val selected=if(index==1)useDense else !useDense
+       client.group.ready:=selected&&matrix.io.port.group.ready
+       client.step.ready:=selected&&matrix.io.port.step.ready
+       client.result.valid:=selected&&matrix.io.port.result.valid;client.result.bits:=matrix.io.port.result.bits
+       client.done.valid:=selected&&matrix.io.port.done.valid;client.done.bits:=matrix.io.port.done.bits
+     }
+-    matrix.io.port.group.valid:=Mux(useDense,dense.io.matrix.group.valid,legacy.io.port.group.valid)
+-    matrix.io.port.group.bits:=Mux(useDense,dense.io.matrix.group.bits,legacy.io.port.group.bits)
+-    matrix.io.port.step.valid:=Mux(useDense,dense.io.matrix.step.valid,legacy.io.port.step.valid)
+-    matrix.io.port.step.bits:=Mux(useDense,dense.io.matrix.step.bits,legacy.io.port.step.bits)
+-    matrix.io.port.result.ready:=Mux(useDense,dense.io.matrix.result.ready,legacy.io.port.result.ready)
+-    matrix.io.port.done.ready:=Mux(useDense,dense.io.matrix.done.ready,legacy.io.port.done.ready)
+-    matrix.io.port.abort:=Mux(useDense,dense.io.matrix.abort,legacy.io.port.abort)
++    matrix.io.port.group.valid:=Mux(useDense,dense.matrix.group.valid,legacy.io.port.group.valid)
++    matrix.io.port.group.bits.opcode:=Mux(useDense,dense.matrix.group.bits.opcode,legacy.io.port.group.bits.opcode)
++    matrix.io.port.group.bits.sliceMask:=Mux(useDense,dense.matrix.group.bits.sliceMask,legacy.io.port.group.bits.sliceMask)
++    matrix.io.port.group.bits.tag:=Mux(useDense,dense.matrix.group.bits.tag,legacy.io.port.group.bits.tag)
++    matrix.io.port.group.bits.transposedDense.foreach(_:=useDense)
++    matrix.io.port.step.valid:=Mux(useDense,dense.matrix.step.valid,legacy.io.port.step.valid)
++    matrix.io.port.step.bits:=Mux(useDense,dense.matrix.step.bits,legacy.io.port.step.bits)
++    matrix.io.port.result.ready:=Mux(useDense,dense.matrix.result.ready,legacy.io.port.result.ready)
++    matrix.io.port.done.ready:=Mux(useDense,dense.matrix.done.ready,legacy.io.port.done.ready)
++    matrix.io.port.abort:=Mux(useDense,dense.matrix.abort,legacy.io.port.abort)
+     }
+     io.pipelineIssues:=matrix.io.wideSteps;io.pipelineStalls:=matrix.io.stallCycles
+-    io.resetRequired:=rejected||gdnPoison||core.io.resetRequired||dense.io.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
++    io.resetRequired:=rejected||gdnPoison||core.io.resetRequired||dense.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+   }
+ }
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala
+@@ -23,17 +23,17 @@
+   // N-only context schedule remains exactly the real16 compatibility case.
+   private val scratch=DenseScratchGeometry(maxK,maxTokenTiles)
+   require(maxK>0 && maxK%16==0)
+-  val io=IO(new Bundle {
+-    val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
+-    val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
+-    val burst=Decoupled(new BurstReadRequest);val burstResponse=Flipped(Decoupled(new BurstReadResponse))
+-    val writeRequest=if(burstWrites)Some(Decoupled(new BurstWriteRequest))else None
+-    val writeData=if(burstWrites)Some(Decoupled(new BurstWriteBeat))else None
+-    val writeResponse=if(burstWrites)Some(Flipped(Decoupled(new MemoryResponse)))else None
+-    val matrix=new MatrixStreamPort;val physicalSteps=Input(UInt(64.W))
+-    val profile=Output(new DenseCycleProfile)
+-    val resetRequired=Output(Bool());val issueCycles=Output(UInt(64.W));val operandStalls=Output(UInt(64.W))
+-  })
++  val io=IO(new DenseOwnerIO(burstWrites))
++
++
++
++
++
++
++
++
++
++
+   val idle::aReq::aWait::setup::execute::finish::locked::Nil=Enum(7)
+   val state=RegInit(idle);val job=Reg(new QwenOwnerJob)
+   val status=RegInit(0.U(8.W));val cycles=RegInit(0.U(64.W));val useful=RegInit(0.U(64.W));val bytes=RegInit(0.U(64.W))

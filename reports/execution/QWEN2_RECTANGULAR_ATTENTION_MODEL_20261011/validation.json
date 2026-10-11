@@ -1,0 +1,18 @@
+{
+  "status": "CANDIDATE_SOFTWARE_TESTS_PASS_NOT_HARDWARE_ACCEPTANCE",
+  "tests_passed": 44,
+  "new_rectangular_tests": 33,
+  "existing_bound_tests": 11,
+  "reported_seconds": 1.52,
+  "test_evidence": "author observed pytest terminal result; no redirected raw log",
+  "source_sha256": {
+    "scripts/qwen2_rectangular_attention_model.py": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8",
+    "tests/test_qwen2_rectangular_attention_model.py": "57bd1b1288eb32020c07ec1aaffa3963d562c5f8d16a138f95e1e2adcb3494bb",
+    "doc/QWEN2_RECTANGULAR_ATTENTION_MODEL_20261011_CN.md": "b8c25191b55f10c82ebaf85fb93c41d70dc3d599a144fc50e841aa05154cb185",
+    ".github/workflows/qwen2-prefill-model-contract.yml": "8b4db707aafb4dea20307360f405c9f4522dbb5da9b4d69443dbd8398a411c02"
+  },
+  "four_cli_reports_reproduced": true,
+  "numerical_policy_changed": false,
+  "generated_or_executed_rtl": false,
+  "model_weights_used": false
+}

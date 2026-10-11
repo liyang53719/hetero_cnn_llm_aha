@@ -150,3 +150,16 @@ CI 实跑 83 项测试。完整 native 精度失败仍开放。进一步的
 [官方 BF16 物化候选](QWEN2_BF16_POLICY_DIAGNOSTIC_20261011_CN.md)和
 [固定资源驻留/调度审计](QWEN2_PREFILL_RESIDENCY_AUDIT_20261011_CN.md)
 分别保留数值和资源边界，均未生成新 RTL。
+
+## 固定资源矩形 Attention 模型增量
+
+`b7e24cc` 的 94 项模型合同 CI 已通过，四份流量/Host 下界报告均与本地
+逐字节相同。数值候选仍保留 M128 producer FAIL，完整 block 尚未验收。
+
+[矩形 Attention 候选](QWEN2_RECTANGULAR_ATTENTION_MODEL_20261011_CN.md)
+现给出 M128/M1024 的 bank 布局、1/5 context 事件和完整片上/外部流量，
+不生成 RTL。33 项新轻量检查涵盖舍入顺序、因果/GQA、row-final 捕获、
+资源与14个源码pin；与既有11项bound测试合计44项通过。该候选尚未接
+生产 owner。Attention自身issue几何上界为32.25%/61.0119%，若保持
+单Scalar归约与softmax，乐观上界更低；全层80%目标仍需驻留和共享
+Vector/SFU调度证明。Q21.3/U00.2保持ongoing，U01保持todo。

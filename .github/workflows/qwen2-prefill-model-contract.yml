@@ -13,11 +13,17 @@ on:
       - 'scripts/qwen2_block_recipe_model.py'
       - 'scripts/qwen2_bf16_materialization_candidate.py'
       - 'scripts/qwen2_prefill_traffic_bound.py'
+      - 'scripts/qwen2_rectangular_attention_model.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
       - 'tests/test_qwen2_layer0_payload.py'
       - 'tests/test_qwen2_layer0_model_gate.py'
       - 'tests/test_qwen2_block_recipe_model.py'
       - 'tests/test_qwen2_bf16_materialization_candidate.py'
       - 'tests/test_qwen2_prefill_traffic_bound.py'
+      - 'tests/test_qwen2_rectangular_attention_model.py'
       - 'config/payload_pins/qwen2_layer0.json'
       - 'config/upstream/weight_headers/qwen2_1p5b/**'
       - 'spec/numerical_contract.md'
@@ -78,16 +84,20 @@ jobs:
           python -m pip install --disable-pip-version-check numpy==2.3.5 pytest==8.4.2 transformers==4.40.1
       - name: Check model contracts and scalar software recipe without RTL
         run: |
-          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py
+          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py tests/test_qwen2_rectangular_attention_model.py
           python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --host-schedule --out work/qwen2_model_contract/m128_host_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --host-schedule --out work/qwen2_model_contract/m1024_host_bound.json
+          python scripts/qwen2_rectangular_attention_model.py --tokens 128 --contexts 1 --out work/qwen2_model_contract/m128_context1_schedule.json
+          python scripts/qwen2_rectangular_attention_model.py --tokens 128 --contexts 5 --out work/qwen2_model_contract/m128_context5_schedule.json
+          python scripts/qwen2_rectangular_attention_model.py --tokens 1024 --contexts 1 --out work/qwen2_model_contract/m1024_context1_schedule.json
+          python scripts/qwen2_rectangular_attention_model.py --tokens 1024 --contexts 5 --out work/qwen2_model_contract/m1024_context5_schedule.json
           python scripts/check_git_payloads.py
       - name: Retain compact source-bound traffic evidence
         uses: actions/upload-artifact@v4
         with:
           name: qwen2-model-contract-${{ github.sha }}
-          path: work/qwen2_model_contract/*_bound.json
+          path: work/qwen2_model_contract/*.json
           if-no-files-found: error
           retention-days: 14

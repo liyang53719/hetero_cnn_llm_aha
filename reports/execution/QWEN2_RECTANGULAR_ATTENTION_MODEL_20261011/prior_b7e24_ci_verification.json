@@ -1,0 +1,32 @@
+{
+  "commit": "b7e24cc8af1fd10ed6d38ba99cac6a5fe98ea9bf",
+  "workflow_run": 38142286323,
+  "job": 114478436131,
+  "status": "SUCCESS",
+  "tests": 94,
+  "seconds": 7.51,
+  "artifact_id": 11702833000,
+  "artifact_bytes": 11345,
+  "artifact_sha256": "0990cfb844a740ecbee76212c0e0c4b722cacb05c05200bd22f0e9a899b13d43",
+  "files": {
+    "m1024_bf16_bound.json": {
+      "sha256": "9876daa395eb021b1cea34c946df467a152051d24f63dbb95d5374a1e5c0c88e",
+      "source_pins_verified": 23
+    },
+    "m1024_host_bound.json": {
+      "sha256": "c42fc801945a821aab4177b94351be5cf0d0bd334b83e5ece8ded6ebb8e27550",
+      "source_pins_verified": 27
+    },
+    "m128_bf16_bound.json": {
+      "sha256": "2b15ecb576cdc3fa5c05456e07907c8e0dca3f32a3175887202dfbe9e063f0e3",
+      "source_pins_verified": 23
+    },
+    "m128_host_bound.json": {
+      "sha256": "5494296503ffb6ca5a20e67099db6e2e6631d087bb48f7da64053e1a7a8fcbfc",
+      "source_pins_verified": 27
+    }
+  },
+  "all_four_reports_exact_local_match": true,
+  "hardware_generated_or_executed": false,
+  "numerical_acceptance": "OPEN"
+}

@@ -1,0 +1,117 @@
+{
+  "scope": "DEFAULT_OFF_CHUNK_MAJOR_DOWN_SOURCE_CONTROL_HOST_FMA_FRONTEND_ONLY",
+  "base_commit": "825caff3a6c618419c49c7da452e009ce86ae8b5",
+  "seed_parent_commit": "3206b14227aabbf30f931827e6ece33f899b1bdc",
+  "candidate_files": {
+    "DownOwnerElaboration.scala": "7998516233838a96d5d997dc9b42972120e5d9b846ab944fa42f4acdd9a54165",
+    "README.md": "ac15e7c4459238dfeebbc2d784b1ca14d82b9da1492be2ca5ffe36cb36e53118",
+    "check_frontend.py": "5e18e3b188b0bb52ea32e2f5c41389ee18db70cc60b3fadf2b1453cb8b325465",
+    "check_numeric_smoke.py": "5a6a369b9d1287ac7875602f33a4b3eaeb6d0e7754bcc83c25060d1703506048",
+    "model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+    "source_pins.json": "215ee112815b0970d55dbdfb9e1f89632cdb02eb2853b68e42177ea7f3e23ce0",
+    "test_frontend.py": "ac79e7685df53ff14577856cc15f92fa795e7682a334ee03554436be225e3a84",
+    "test_model.py": "179926762e408d816e80712280173496e413b737db885a1df7fa2838281875c8"
+  },
+  "tests": {
+    "source_composition": 6,
+    "control_geometry_lifecycle": 15,
+    "total": 21
+  },
+  "numeric": {
+    "actual_slice": [
+      128,
+      8960,
+      160
+    ],
+    "actual_full_down": [
+      128,
+      8960,
+      1536
+    ],
+    "chunk_k": [
+      2560,
+      2560,
+      2560,
+      1280
+    ],
+    "slice_final_cells": 20480,
+    "slice_bit_mismatches": 0,
+    "full_final_cells": 196608,
+    "full_independent_bit_mismatches": 0,
+    "full_saved_phase13_bit_mismatches": 0,
+    "full_groups": 40,
+    "full_steps": 430080,
+    "full_context_results": 192,
+    "full_seed_acks": 144,
+    "full_seed_beats": 36864,
+    "prefix_workspace_bytes": 786432,
+    "full_prefix_ack_bytes": 2359296,
+    "full_final_ack_bytes": 786432,
+    "full_read_descriptors": 538624,
+    "full_write_acks": 43008,
+    "full_write_data_beats": 49152,
+    "same_five_banks_erased_each_group": true,
+    "read_before_overwrite_exact_previous_version": true,
+    "slice_wall_seconds": 7.89426526799798,
+    "full_wall_seconds": 44.41285855099704,
+    "full_output_sha256": "48c8e5509f94fa9dae7dc0e13ffd2811d4aabda518e3c1a64ed4d79e415c8af1"
+  },
+  "frontend": {
+    "actual_scala_sources_typechecked": 85,
+    "chirrtl_files": 9,
+    "exact_default_off_module_comparisons": 12,
+    "default_endpoint_ports": 22,
+    "seeded_endpoint_ports": 45,
+    "retained_endpoints": 8,
+    "full_kernel_elaborated": false,
+    "old_candidate_bytes_and_original_assertion_locations_preserved": true
+  },
+  "resource_ledger": {
+    "sram_bytes": 786432,
+    "a_banks": 16,
+    "a_depth": 1376,
+    "b_banks": 16,
+    "b_depth": 160,
+    "bank_word_bits": 256,
+    "read_ports_per_bank": 1,
+    "write_ports_per_bank": 1,
+    "prefix_final_value_bytes": 16384,
+    "prior_seed_added_register_bits": 1852,
+    "down_added_owner_register_bits": 129,
+    "down_added_bank_register_bits": 2,
+    "total_added_source_and_chirrtl_register_bits": 1983,
+    "new_fma": 0,
+    "new_accumulator_banks": 0,
+    "new_sram": 0,
+    "new_queue": 0,
+    "area_timing_measured": false
+  },
+  "corrected_in_down_only": [
+    "Owned seed begin remains outstanding until physical ACK; error completion cannot strand ACK after MatrixDone",
+    "Single-chunk Dense keeps validated shared lease without unused per-N prefix capacity or traffic"
+  ],
+  "preserved_earlier_captures": {
+    "numeric_01": "pre-final model/runner; not relabeled final",
+    "frontend_01": "pre single-chunk and seed-obligation fix; not relabeled final"
+  },
+  "limits": [
+    "No retained SystemVerilog parsing, execution, simulation, synthesis or formal equivalence",
+    "No full selected-source block execution; full Down is Python control plus host FMA only",
+    "Native M128 and FP32-final FAIL remain; numerical policy pending",
+    "Internal prefix workspace production Host binding OPEN",
+    "Coordinated DMA/owner/service/leaf reset freshness and physical latency/clocking unvalidated",
+    "Frozen seed-only profile retains inherited missing owned-seed error-drain fence; only Down selection corrects it"
+  ],
+  "evidence": {
+    "work/qwen2_transposed_down_20261011/frontend_01/summary.json": "472ae1627fafbec848189893b22fb478c1c9a9200ff1f729ff5e256ef4f7b1ef",
+    "work/qwen2_transposed_down_20261011/frontend_02/summary.json": "9b57c825c356a8bfc08d9eb9d7dacd025d6baa7004fec63d7360b4a5031bccbc",
+    "work/qwen2_transposed_down_20261011/numeric_01/summary.json": "8b683687cdc3bcc50fad3cebbb59020706f4aa15611ad66d528ca5237862d2f0",
+    "work/qwen2_transposed_down_20261011/numeric_02/summary.json": "9453f20cc8fa980ea1cb2864ad31f967750764b8390b789e7c2a183bb01f208b",
+    "work/qwen2_transposed_down_20261011/numeric_full_03/summary.json": "5d3688179363fef340cd5a3aab245c41f58f69dd173d25b6747d5c2fdef5794b",
+    "work/qwen2_transposed_down_20261011/artifact_audit_01.json": "b16f0fb219acf2a7c16e7790434822c758262b4394501184f33b09b224954846",
+    "work/qwen2_transposed_down_20261011/audit_final_artifacts.py": "e5fc77fc081164afbab59c5532aa9869c917e40713bf5f9440bce87f2f39e31f",
+    "work/qwen2_transposed_down_20261011/final_tests_01.log": "d7ce0f83dc15a6ab29ad815ae4530430aef2e8d8e6dda1a3b153bae861d4e830"
+  }
+}

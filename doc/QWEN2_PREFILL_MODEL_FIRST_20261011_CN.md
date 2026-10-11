@@ -614,3 +614,73 @@ flags一致排空，成功reserve后才hold；五个pipeline/结果阶段及背�
 - to do：K2560/2560/2560/1280 down、FFN共享驻留、完整prefill/硬件链。
 - 原M128 native/FP32-final FAIL、数值政策待定；其余四个模型block状态未改变。
 - 保持Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。
+
+## 3206b14 精确前端 CI 终态与 Down 接线
+
+`3206b14227aabbf30f931827e6ece33f899b1bdc` 的 payload guard 和前端 CI 已成功。
+233项测试、18条 Scala/CHIRRTL 命令、84源 kernel typecheck、66份本地/CI IR
+严格对照及87个锁定依赖 hash 均已核验。工件24,388,394B，SHA为
+`ea15eb4cb7382eee830fc2ac4218fda2b2cf82e8ef45984f3f0c2a3fad77aead`。
+原825前端与最终inventory的4项差异继续单列；seed源码清单另行区分两份自动
+生成的Python缓存，未把缓存视为源码。完整kernel没有展开，未生成RTL或执行FPU。
+
+首次尝试在233项测试通过后，锁定Maven依赖下载返回HTTP404，尚未执行Scala。
+原失败日志和1287B工件保留；日志没有给出失败URL，原因未定。随后只读检查87个
+原始URL均可访问，仅重试原失败job一次，同一源码和依赖锁成功，不能记成首次通过。
+
+下一增量是实际Down的K8960分块接线：固定768KiB bank中按2560/2560/2560/1280
+重载A，每块扫完全部N32 context，真实prefix写ACK和Matrix完成之后才推进下一块。
+必须分离全局K/行stride、局部bank K、是否恢复seed与是否最终输出；只扩大K准入
+会越过容量或错误发布中间结果。沿用已接通五bank seed，不增加array、SRAM或端口。
+
+- done（精确CI局部）：3206b14前端/源码/工件核验，首次下载失败完整保留。
+- ongoing：Down分块源码与真实先前act输出驱动的有界主机数值门。
+- to do：生产Host workspace绑定、FFN共享驻留、完整prefill和硬件动态验收。
+- 原native/FP32-final FAIL、数值政策待定及其余四个block状态不变。
+
+## 完整 Down M128 的分块源码与模型闭包
+
+[Down候选](../candidates/qwen2_resident_matrix/transposed_down/README.md) 已在同一
+owner/service/seed路径落实K8960的四块调度。每块重载实际A后遍历全部N组，全局
+K和行stride保持原值，bank只使用局部K。N1536每轮为9组五context加最后3个
+context，四轮共40组。K1536等单块操作也可使用同一owner，不制造prefix流量；
+N8960单块准入可复用786432B租约，不额外要求未使用的按N扩展prefix容量。
+
+最终21项源/控制测试通过。85个实际Scala源码typecheck与9份CHIRRTL通过，
+12份默认关闭module比较保持相同。固定32个1R1W bank、768KiB SRAM、4096 FMA、
+五accumulator和4/8/2队列不变；新增宽度/调度/未退休seed状态合计131寄存器bit，
+连同先前seed增量共1983bit，另有地址选择与frontier比较逻辑。该账本不是综合
+面积、时序或额外资源免费的证明。
+前端capture时的主机数值runner/C++仍是N160版本，后来扩成N160/N1536；两项
+inventory差异明确保留，实际Scala、模型、patch和pins未变。最终numeric_02和
+numeric_full_03绑定新主机源码，前端PASS没有重绑定成主机算术证明。
+
+独立审查发现此前seed-only错误路径没有等待已接受seed的最终ACK。新Down层
+已补显式未退休义务：扣住ACK且错误MatrixDone先到时保持drain，没有终态；
+ACK真正到达后才允许错误完成并poison。原seed-only候选和首轮Down的前端/数值
+capture保持原身份，不能追认为已覆盖此修复。最终源码已重新小批验证。
+
+真实输入来自已执行完整软件图的phase12 act，权重来自固定Qwen2-1.5B L0
+payload。最终N160先通过，再运行一次完整M128/K8960/N1536，耗时44.41秒；
+430080个bank实际载荷step驱动1761607680次host FMA，196608个最终FP32值在
+输出全部ACK后对独立全K点积及原phase13逐bit相同。两次最终运行源码相同；
+完整Down的summary SHA为
+`5d3688179363fef340cd5a3aab245c41f58f69dd173d25b6747d5c2fdef5794b`。
+这是完整Down子算子的主机模型验真，不是完整block、Chisel硬件执行或native门通过。
+
+prefix占用独立DDR区786432B，即48个物理[16][256]FP32 context；不计为新增SRAM。
+该区必须64B对齐、合法56bit范围，与A、B、D及未来Host普通tensor/元数据区隔离，
+并在launch接受时固定租约。每轮先读取对应旧版本，seed ACK后才可原址覆盖；全部
+context写ACK及Matrix完成后才发布下一轮。失败后的混合版本不是可恢复checkpoint，
+需协调owner/DMA/service/leaf reset。生产公开Host分配、隔离和实际绑定仍待完成。
+
+完整模型保全了三轮各786432B实际prefix、36864条seed记录及地址唯一索引的
+读写版本日志；独立复核全部载荷和最终值，没有重跑算术。该阶段计入A读4587520B、
+W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
+写2359296B和最终输出786432B。未来真实iDMA周期分母必须包含这些读写、元数据、
+背压与所有等待；目前计数是模型事件，不是实测带宽、硬件周期或MAC利用率。
+
+- done（局部）：完整Down M128/K8960/N1536实值模型、最终21小门/85源/9IR及capture复核。
+- ongoing：本批精确发布/轻量CI；公开Host workspace lease与单一顶层接入。
+- to do：FFN共享驻留、完整所选prefill源路径、最终冻结刺激硬件回放。
+- 原M128 native/FP32-final FAIL、数值政策待定，Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。

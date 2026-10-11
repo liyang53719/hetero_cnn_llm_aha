@@ -48,6 +48,7 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_owner -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_seed -p 'test_*.py' -v
           python candidates/qwen2_resident_matrix/transposed_seed/leaf/test_seed_leaf_contract.py
+          python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_down -p 'test_*.py' -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure
@@ -58,6 +59,7 @@ jobs:
           bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh > work/matrix-interface-frontend/hardfloat-source.log
           python candidates/qwen2_resident_matrix/transposed_owner/check_frontend.py --out work/matrix-interface-frontend/transposed-owner --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/transposed_seed/check_frontend.py --out work/matrix-interface-frontend/transposed-seed --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
+          python candidates/qwen2_resident_matrix/transposed_down/check_frontend.py --out work/matrix-interface-frontend/transposed-down --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

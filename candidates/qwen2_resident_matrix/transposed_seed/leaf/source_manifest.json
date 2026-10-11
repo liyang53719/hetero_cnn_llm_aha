@@ -1,0 +1,35 @@
+{
+  "base_commit": "825caff3a6c618419c49c7da452e009ce86ae8b5",
+  "kind": "source_patch_only_not_hardware_validated",
+  "files": {
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": {
+      "base_sha256": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+      "patched_sha256": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": {
+      "base_sha256": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+      "patched_sha256": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": {
+      "base_sha256": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+      "patched_sha256": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": {
+      "base_sha256": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+      "patched_sha256": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": {
+      "base_sha256": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+      "patched_sha256": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27"
+    },
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": {
+      "base_sha256": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+      "patched_sha256": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": {
+      "base_sha256": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+      "patched_sha256": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9"
+    }
+  },
+  "patch_sha256": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98"
+}

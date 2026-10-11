@@ -1,0 +1,85 @@
+{
+  "scope": "DEFAULT_OFF_ACTUAL_RETAINED_SEED_SOURCE_MODEL_FRONTEND_ONLY",
+  "base_commit": "825caff3a6c618419c49c7da452e009ce86ae8b5",
+  "candidate_files": {
+    "README.md": "543b4e0d1b11b2fbf47809aa5323ba33e9247132874df585f8a81d978d3beb40",
+    "SeedOwnerElaboration.scala": "32136fb48af0c5389c86320362013c4863610ab7d1e85dcbf0926dcf095c0aa3",
+    "baseline_ir.json": "757c869b5516fb3cde762608bf5c33a3e5f09ed9c7af42ebedb217ea0577d0fa",
+    "check_frontend.py": "6e012e5ec21c52825ab27a53ff518c15bd69309c3d752f13116891ce55bd5919",
+    "check_numeric_smoke.py": "480137eefaccb698bebabbc7c428ec0a9ca448bc00a62191f4d98398b72a352c",
+    "leaf/README.md": "547bd10154dc2aeb5b65b105c00a89031fd478ac7d45c50b6b9b5b478aaa8eec",
+    "leaf/abi.json": "e93d82b094ff3ab7bf61029464932b6326837831fd416d6cc4599f5fdb2205af",
+    "leaf/dependency_manifest.json": "76f7d6770304935069756340bbd4b763b4f5c9fbc0479e1b7877a48534f176e0",
+    "leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+    "leaf/source_manifest.json": "1750861f6291bd2a9859f61ed251281124f6b3539819931109e8ffa8dbb6faea",
+    "leaf/test_seed_leaf_contract.py": "27ad82eed4e2e084a899cc3e1ae7668622214e530e0eef7108c7ff159f3c3521",
+    "model.py": "72b5a1280533335d8b20732e9d2ee67411a4ce3e95a48a20692e01a46bea3495",
+    "numeric_smoke.cpp": "a4c69c6ee27da4d99519b5c07ecc278b8c6b568b39fb2b6af091d02e22e76770",
+    "owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+    "service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+    "source_pins.json": "7402214dc2c1d3fdf67cb7e964dc9dde9336b3da88685471cf4b729e6c706c3f",
+    "test_frontend.py": "69bd903a75038469a34554616f87ccae90a140a03d8d577071b3b5237683f386",
+    "test_model.py": "121254f5b28a1a20401cf0d6b305cf1c592af388762d9d4e3cec58d4704b3dac"
+  },
+  "tests": {
+    "owner_service_composition": 62,
+    "leaf_source_token_data_model": 13,
+    "total": 75
+  },
+  "numeric": {
+    "actual_shape": [
+      128,
+      1536,
+      160
+    ],
+    "split_k": 768,
+    "final_cells": 20480,
+    "final_bit_mismatches": 0,
+    "bias_saved_qr_mismatches": 0,
+    "prefix_ack_bytes": 81920,
+    "prefix_reads": 1280,
+    "accepted_seed_records": 1280,
+    "seed_record_bytes": 80,
+    "same_existing_host_banks_erased_before_restore": true
+  },
+  "frontend": {
+    "actual_scala_sources_typechecked": 84,
+    "chirrtl_files": 7,
+    "exact_default_off_module_comparisons": 12,
+    "default_endpoint_ports": 22,
+    "seeded_endpoint_ports": 45,
+    "first_audit_failure_preserved": true,
+    "reaudit_executed_no_compile": true
+  },
+  "resource_ledger": {
+    "added_owner_ff_bits": 805,
+    "added_service_ff_bits": 37,
+    "added_seed_controller_ff_bits": 138,
+    "added_retained_leaf_source_ff_bits": 872,
+    "total_added_source_and_chirrtl_ff_bits": 1852,
+    "existing_fma_lanes": 4096,
+    "new_fma": 0,
+    "new_accumulator_banks": 0,
+    "new_sram": 0,
+    "per_existing_lane_bank_write_mux": {
+      "data_bits": 32,
+      "context_bits": 3
+    },
+    "area_timing_measured": false
+  },
+  "limits": [
+    "No retained SystemVerilog parsing, execution, simulation, synthesis or formal equivalence",
+    "No full Down/full-block execution",
+    "Native M128 and FP32-final FAIL remain; numerical policy pending",
+    "Internal prefix workspace production Host binding OPEN",
+    "Coordinated DMA/owner/service/leaf reset freshness unvalidated in hardware"
+  ],
+  "evidence": {
+    "work/qwen2_transposed_seed_20261011/numeric_03/summary.json": "0c19d2b0866b57f6fd6a9764f6828edf241640279ceaa595d5d9484e74612af6",
+    "work/qwen2_transposed_seed_20261011/frontend_01/summary.json": "f8bcad8d4312d16db9a2e3720715048b9b8eee4ea657e60b4ff30f4a9b2cdabc",
+    "work/qwen2_transposed_seed_20261011/frontend_audit_02/summary.json": "a2960f5b86a1b9d901c3c138b4e7024eb45f54ac7cd2e2000a325b5bd344c5cf",
+    "work/qwen2_transposed_seed_20261011/final_tests_01.log": "fd68e75e2b47cc3fac6de6fbefff261c3f7f5e3c4cda6a504b3588538b5de145",
+    "work/qwen2_transposed_seed_20261011/leaf_model_01.log": "0b0432a1ed7ef6eb8f762b352e96d1c340a68d810f883407582fb2ebf1cf7ba5",
+    "work/qwen2_transposed_seed_20261011/numeric_model_source_03106.py": "03106dd7288866351de2d9e386391b1aed9697c4feaf9b688f8a27aa5759bce8"
+  }
+}

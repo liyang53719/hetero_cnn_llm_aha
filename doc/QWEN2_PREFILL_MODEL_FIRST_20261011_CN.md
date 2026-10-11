@@ -559,3 +559,58 @@ poison准入、模型同拍fault/transfer义务，均未改成功数值或原验
 - ongoing：原M128 native/FP32-final FAIL与数值政策决定，门限未改变。
 - to do：完整kernel展开与真实端点协议/数值、carried/长prefill及最终冻结刺激硬件门。
 - 保持 Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。
+
+## 825caff 精确前端 CI 终态与下一依赖
+
+`825caff3a6c618419c49c7da452e009ce86ae8b5` 的158项测试、16条前端命令及
+payload guard成功；81个kernel typecheck源码身份、59份实际CHIRRTL与本地
+严格规范化对照通过。工件21,345,364B，SHA为
+`9520687c90d77459c3102c9cc1d1de6fe1bd00466f6e3fc74d4f0abf3dfa52aa`。
+本地早期前端capture与最终CI inventory有4项明确差异：README修订及后来新增
+的numeric Python/C++和test_frontend；其余原9项及实际14个编译源码一致。
+这些差异单列保留，数值单位门仍绑定自己的capture，不重绑定旧前端PASS。
+
+下一闭包选真实FP32 prefix保存/恢复：先将原N160、K1536实值单位在K768分割，
+通过DDR实际写回再恢复同一Matrix的五个accumulator context。真实存储位于
+保留SystemVerilog叶模块，Chisel BlackBox新增端口本身不构成接通。需要同时
+落实ICG唤醒、完整seed提交后clear=false、错误退休和协调reset。该闭包通过后
+再推进已选K2560/2560/2560/1280的down调度；完整down和Host workspace仍open。
+
+- done（前端局部）：825caff精确CI与工件核验；未执行RTL/FPU数值。
+- ongoing：真实叶FP32 seed及保存/恢复源码和模型；无新SRAM/array预算。
+- 保持原native/FP32-final FAIL、数值政策待定及上述完整block未验范围。
+
+## 默认关闭的真实 accumulator seed 源码增量
+
+[seed候选](../candidates/qwen2_resident_matrix/transposed_seed/README.md) 将内部
+prefix workspace、同一owner/service、八个保留endpoint及其既有五bank写口接成
+源码路径。新增Chisel端口仅在使能时出现；SV源保留默认关闭参数，没有另外复制
+阵列或SRAM。当前证明单位
+仍是M128/K1536/N160，在K768保存实际FP32中间量，经全部1280个prefix写ACK和
+Matrixdone之后才发布内部generation，再实际读回并恢复五个context。
+
+最终本地模型运行1.50秒；恢复前主机accumulator已清空，1280条seed载荷来自实际
+先前写回，不由golden注入。20480最终值与原未分块结果全bit相同，独立raw-input
+点积和最后单独bias也全部相同。实际81920B prefix、102400B seed记录和每次运行
+源码快照保存在工作产物，不进入Git。协议ticks仍不代表硬件周期或MAC利用率。
+
+75项小门覆盖owner/service、源码绑定和叶协议模型。独立审查发现并修复了忙时
+seed begin提前冻结数据而token继续的风险：新issue先阻止，已接受的FMA/result/
+flags一致排空，成功reserve后才hold；五个pipeline/结果阶段及背压模型有变异
+敏感性回归。这是源/事件模型保证，未执行实际门控时钟或保留SystemVerilog。
+
+84源实际Scala typecheck与7份CHIRRTL展开均退出0。首次检查器把既有Queue误
+匹配成smem，原FAIL保留；修成实际cmem之后只审计同一冻结IR，没有重复编译。
+12份默认关闭module比较相同，默认/开启端点ABI分别22/45端口。保留SV仅静态
+源码审查，未进行SV解析、仿真、综合或形式等价，完整kernel也未展开。
+
+新增寄存器源码/IR记账为owner805、service37、controller138、八leaf872，合计
+1852bit；每个既有lane写口增加32bit数据与3bitcontext选择，另有分发/比较逻辑。
+仍为4096 FMA、五accumulator context、768KiB SRAM和原4/8/2队列；面积与时序
+未测，不能因单元数相同就宣称资源免费或实现了71.35%上界。
+
+- done（局部）：75小门、同输入split实值模型、真实源接线与前端审计。
+- ongoing：新提交精确轻量CI；生产Host workspace绑定和硬件reset/seed动态门。
+- to do：K2560/2560/2560/1280 down、FFN共享驻留、完整prefill/硬件链。
+- 原M128 native/FP32-final FAIL、数值政策待定；其余四个模型block状态未改变。
+- 保持Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。

@@ -1,0 +1,35 @@
+{
+  "blackbox": "RetainedMatrixEndpoint(enableAccumulatorSeed:Boolean=false)",
+  "module": "qwen2_matrix_command_endpoint",
+  "parameter": "ENABLE_ACCUMULATOR_SEED",
+  "default_parameter": 0,
+  "enabled_parameter": 1,
+  "default_chisel_abi": "unchanged, no optional pins and no parameter override",
+  "inputs": {
+    "seed_begin_valid_i": 1,
+    "seed_context_i": 3,
+    "seed_group_tag_i": 32,
+    "seed_group_sequence_i": 32,
+    "seed_source_generation_i": 32,
+    "seed_beat_valid_i": 1,
+    "seed_cluster_i": 5,
+    "seed_data_i": 512,
+    "seed_commit_valid_i": 1,
+    "seed_abort_i": 1,
+    "seed_ack_ready_i": 1
+  },
+  "outputs": {
+    "seed_begin_ready_o": 1,
+    "seed_beat_ready_o": 1,
+    "seed_commit_ready_o": 1,
+    "seed_ack_valid_o": 1,
+    "seed_ack_context_o": 3,
+    "seed_ack_group_tag_o": 32,
+    "seed_ack_group_sequence_o": 32,
+    "seed_ack_source_generation_o": 32,
+    "seed_ack_error_o": 1,
+    "seed_reset_required_o": 1,
+    "arithmetic_busy_o": 5,
+    "arithmetic_out_valid_o": 1
+  }
+}

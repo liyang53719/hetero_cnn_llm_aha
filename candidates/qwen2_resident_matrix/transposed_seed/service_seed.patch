@@ -1,0 +1,133 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala
+@@ -27,7 +27,8 @@
+   * (slice%4)*32+column and logical N is (slice/4)*16+row.
+   * This is a bit-preserving routing contract, with no numerical conversion.
+   */
+-class MatrixStreamGroup(val enableTransposedDense:Boolean=false) extends Bundle {
++class MatrixStreamGroup(val enableTransposedDense:Boolean=false,val enableAccumulatorSeed:Boolean=false) extends Bundle {
++  val groupSequence=if(enableAccumulatorSeed)Some(UInt(32.W))else None
+   val transposedDense=if(enableTransposedDense)Some(Bool())else None
+   val opcode=UInt(8.W);val sliceMask=UInt(8.W);val tag=UInt(32.W)
+ }
+@@ -46,13 +47,14 @@
+   val context=UInt(3.W);val last=Bool();val error=Bool()
+ }
+ class MatrixStreamDone extends Bundle {val tag=UInt(32.W);val error=Bool()}
+-class MatrixStreamPort(val returnTagBits:Int=0,val enableTransposedDense:Boolean=false) extends Bundle {
++class MatrixStreamPort(val returnTagBits:Int=0,val enableTransposedDense:Boolean=false,val enableAccumulatorSeed:Boolean=false) extends Bundle {
+   require(returnTagBits>=0 && returnTagBits<=32,"returnTagBits must be in 0..32")
+-  val group=Decoupled(new MatrixStreamGroup(enableTransposedDense))
++  val group=Decoupled(new MatrixStreamGroup(enableTransposedDense,enableAccumulatorSeed))
+   val step=Decoupled(new MatrixStreamStep(returnTagBits))
+   val result=Flipped(Decoupled(new MatrixStreamResult(returnTagBits)))
+   val done=Flipped(Decoupled(new MatrixStreamDone))
+   val abort=Output(Bool())
++  val seed=if(enableAccumulatorSeed)Some(new MatrixAccumulatorSeedPort)else None
+ }
+ 
+ /** Internal whole-beat write batch. Accepted data is not a completion: the
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+@@ -29,9 +29,9 @@
+   * Partial sums may be discarded; final values are credit-buffered. No step
+   * waits for its own result when a different legal context can issue.
+   */
+-class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false) extends Module {
++class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false,enableAccumulatorSeed:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+-    val port=Flipped(new MatrixStreamPort(returnTagBits,enableTransposedDense))
++    val port=Flipped(new MatrixStreamPort(returnTagBits,enableTransposedDense,enableAccumulatorSeed))
+     val acceptedSteps=Output(UInt(64.W)) // physical 512-MAC slice issues
+     val wideSteps=Output(UInt(64.W))
+     val stallCycles=Output(UInt(64.W))
+@@ -39,7 +39,7 @@
+   })
+   val idle :: command :: running :: ending :: finish :: draining :: locked :: Nil=Enum(7)
+   val state=RegInit(idle)
+-  val group=Reg(new MatrixStreamGroup(enableTransposedDense))
++  val group=Reg(new MatrixStreamGroup(enableTransposedDense,enableAccumulatorSeed))
+   val event=RegInit(0.U(16.W))
+   val poison=RegInit(false.B)
+   val endIssued=RegInit(false.B)
+@@ -61,7 +61,13 @@
+   io.port.done.valid:=state===finish && !values.io.deq.valid
+   io.port.done.bits.tag:=group.tag;io.port.done.bits.error:=poison
+ 
+-  val leaves=Seq.fill(8)(Module(new RetainedMatrixEndpoint))
++  val leaves=Seq.fill(8)(Module(new RetainedMatrixEndpoint(enableAccumulatorSeed)))
++  // A seed is distinct from a first arithmetic issue. Finish must close every
++  // seeded context, including a seeded context which has not issued yet.
++  val seeded=if(enableAccumulatorSeed)Some(RegInit(0.U(5.W)))else None
++  val seedController=if(enableAccumulatorSeed)Some(Module(new MatrixAccumulatorSeedController))else None
++  val seedBlocks=seedController.map(_.io.blockIssue).getOrElse(false.B)
++  val seedPoison=seedController.map(_.io.resetRequired).getOrElse(false.B)
+   val selected=(0 until 8).map(i=>group.sliceMask(i))
+   val allCommandReady=(0 until 8).map(i=> !selected(i)||leaves(i).io.cmd_ready_o).reduce(_&&_)
+   val allStepReady=(0 until 8).map(i=> !selected(i)||leaves(i).io.step_ready_o).reduce(_&&_)
+@@ -69,8 +75,8 @@
+   val allCompletion=(0 until 8).map(i=> !selected(i)||leaves(i).io.completion_valid_o).reduce(_&&_)
+   val x=io.port.step.bits
+   val legalContext=x.context<5.U
+-  val legalStep=legalContext && x.clear=== !seen(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|UIntToOH(x.context,5)))))
+-  val work=state===running && !endIssued && !io.port.abort
++  val legalStep=if(enableAccumulatorSeed){legalContext && x.clear=== !(seen|seeded.getOrElse(0.U(5.W)))(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|seeded.getOrElse(0.U(5.W))|UIntToOH(x.context,5)))))}else{legalContext && x.clear=== !seen(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|UIntToOH(x.context,5)))))}
++  val work=if(enableAccumulatorSeed){state===running && !endIssued && !io.port.abort && !seedBlocks && !seedPoison}else{state===running && !endIssued && !io.port.abort}
+   val consumeOutput=(state===running||state===ending||state===draining) && tags.io.deq.valid && allOutValid &&
+     (state===draining|| !tags.io.deq.bits.emit||values.io.enq.ready)
+   val outputBad=(0 until 8).map(i=>selected(i)&&
+@@ -83,12 +89,52 @@
+   // toggling all 4096 MACs. Reopen for accepted input, in-flight pipeline drain,
+   // returned-output consumption, and command/completion handshakes.
+   val canIssue=work && legalStep && io.port.step.valid && tags.io.enq.ready && allStepReady
+-  val needsClock=state===command || state===ending || state===draining ||
+-    (state===running && (canIssue || (tags.io.deq.valid && (!allOutValid || consumeOutput))))
++  val needsClock=if(enableAccumulatorSeed){seedBlocks || seedPoison || state===command || state===ending || state===draining ||
++    (state===running && (canIssue || (tags.io.deq.valid && (!allOutValid || consumeOutput))))}else{state===command || state===ending || state===draining ||
++    (state===running && (canIssue || (tags.io.deq.valid && (!allOutValid || consumeOutput))))}
+   // Mode comes only from the accepted group register. Share the upper weight
+   // mux across four existing endpoints; no payload register or wider lane.
+   val upperWeights=if(enableTransposedDense)Some(Mux(group.transposedDense.get,
+     VecInit((128 until 144).map(j=>x.b(j))).asUInt,x.a.asUInt))else None
++  if(enableAccumulatorSeed){
++    val ctl=seedController.get.io
++    ctl.seed<>io.port.seed.get
++    // The accepted group has a separate retained command handshake. Do not
++    // consume begin until the service reaches running and leaves are active.
++    ctl.seed.begin.valid:=io.port.seed.get.begin.valid && state===running
++    io.port.seed.get.begin.ready:=ctl.seed.begin.ready && state===running
++    ctl.groupActive:=state===running && !endIssued && !poison && group.transposedDense.getOrElse(false.B)
++    ctl.groupTag:=group.tag;ctl.groupSequence:=group.groupSequence.get;ctl.sliceMask:=group.sliceMask
++    ctl.freeContexts:= ~(seen|closed|seeded.get)
++    ctl.quiescent:= !tags.io.deq.valid && !values.io.deq.valid && (0 until 8).map(i=>
++      !selected(i)||(!leaves(i).io.arithmetic_busy_o.get.orR && !leaves(i).io.arithmetic_out_valid_o.get)).reduce(_&&_)
++    ctl.abort:=io.port.abort||poison
++    val allBegin=(0 until 8).map(i=> !ctl.leafBegin.bits.sliceMask(i)||leaves(i).io.seed_begin_ready_o.get).reduce(_&&_)
++    val allCommit=(0 until 8).map(i=> !ctl.leafCommit.bits.sliceMask(i)||leaves(i).io.seed_commit_ready_o.get).reduce(_&&_)
++    ctl.leafBegin.ready:=allBegin;ctl.leafCommit.ready:=allCommit
++    ctl.leafBeat.ready:=MuxLookup(ctl.leafBeat.bits.slice,false.B)((0 until 8).map(i=>i.U->leaves(i).io.seed_beat_ready_o.get))
++    for(i<-0 until 8){
++      val e=leaves(i).io
++      e.seed_begin_valid_i.get:=ctl.leafBegin.valid && allBegin && ctl.leafBegin.bits.sliceMask(i)
++      e.seed_group_tag_i.get:=ctl.leafBegin.bits.groupTag
++      e.seed_group_sequence_i.get:=ctl.leafBegin.bits.groupSequence
++      e.seed_source_generation_i.get:=ctl.leafBegin.bits.sourceGeneration
++      e.seed_context_i.get:=ctl.leafBegin.bits.context
++      e.seed_beat_valid_i.get:=ctl.leafBeat.valid && ctl.leafBeat.bits.slice===i.U
++      e.seed_cluster_i.get:=ctl.leafBeat.bits.cluster;e.seed_data_i.get:=ctl.leafBeat.bits.data
++      e.seed_commit_valid_i.get:=ctl.leafCommit.valid && allCommit && ctl.leafCommit.bits.sliceMask(i)
++      ctl.leafAck(i).valid:=e.seed_ack_valid_o.get;e.seed_ack_ready_i.get:=ctl.leafAck(i).ready
++      ctl.leafAck(i).bits.groupTag:=e.seed_ack_group_tag_o.get
++      ctl.leafAck(i).bits.groupSequence:=e.seed_ack_group_sequence_o.get
++      ctl.leafAck(i).bits.sourceGeneration:=e.seed_ack_source_generation_o.get
++      ctl.leafAck(i).bits.context:=e.seed_ack_context_o.get;ctl.leafAck(i).bits.error:=e.seed_ack_error_o.get
++      e.seed_abort_i.get:=selected(i) && (io.port.abort || poison || ctl.invalidate.valid)
++    }
++    when(ctl.committed.valid){seeded.get:=seeded.get|UIntToOH(ctl.committed.bits.context,5)}
++    when(io.port.group.fire){seeded.get:=0.U}
++    val leafPoison=leaves.map(_.io.seed_reset_required_o.get).reduce(_||_)
++    when(ctl.resetRequired||leafPoison){poison:=true.B;when(state=/=finish && state=/=locked){state:=draining}}
++  }
+   for(i<-0 until 8){
+     val e=leaves(i).io
+     val gate=Module(new RetainedMatrixClockGate)

@@ -1,0 +1,492 @@
+--- a/rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv
+@@ -2,8 +2,13 @@
+ // Five-stage candidate: a cluster-local input register cuts distribution from
+ // HardFloat Pre. Generated HardFloat modules are instantiated unchanged.
+ `timescale 1ns/1ps
+-module bf16_context_fma_pipeline_lane5_rev8b_b_candidate (
++module bf16_context_fma_pipeline_lane5_rev8b_b_candidate #(
++  parameter bit ENABLE_ACCUMULATOR_SEED=1'b0
++)(
+   input logic clk_i,rst_ni,input_write_i,pre_write_i,mul_write_i,post_write_i,output_write_i,
++  input logic seed_block_i,seed_reserve_i,seed_write_i,seed_commit_i,seed_invalidate_i,
++  input logic [2:0] seed_context_i,
++  input logic [31:0] seed_data_i,
+   input logic [15:0] a_i,b_i,
+   input logic [2:0] issue_context_i,
+   input logic issue_clear_i,
+@@ -13,6 +18,13 @@
+   output logic [4:0] flags_o,bank_valid_o
+ );
+   logic [31:0] accumulator_bank[0:4];
++  logic bank_seed_write,bank_write;
++  logic [2:0] bank_write_context;
++  logic [31:0] bank_write_data;
++  assign bank_seed_write=ENABLE_ACCUMULATOR_SEED&&seed_write_i&&seed_context_i<5;
++  assign bank_write=bank_seed_write||(output_write_i&&!(ENABLE_ACCUMULATOR_SEED&&seed_block_i));
++  assign bank_write_context=bank_seed_write?seed_context_i:early_commit_context_i;
++  assign bank_write_data=bank_seed_write?seed_data_i:round_out;
+   logic [31:0] result_fifo[0:4];
+   logic [2:0] result_write_pointer_q,result_read_pointer_q;
+   logic [4:0] bank_valid_q;
+@@ -48,17 +60,27 @@
+       post_raw_q<='0;post_invalid_q<=0;bank_valid_q<='0;result_write_pointer_q<='0;result_read_pointer_q<='0;
+       for(integer result_index=0;result_index<5;result_index++)result_fifo[result_index]<='0;
+     end else begin
++      // Reservation stops every arithmetic/result FIFO register write. Seed
++      // data bypasses HardFloat and writes the SAME bank as round_out.
++      if(!(ENABLE_ACCUMULATOR_SEED && seed_block_i))begin
+       if(input_write_i)begin input_a_q<=a_i;input_b_q<=b_i;input_context_q<=issue_context_i;input_clear_q<=issue_clear_i;end
+       if(pre_write_i)begin pre_a_q<=pre_a;pre_b_q<=pre_b;pre_c_q<=pre_c;pre_meta_q<=pre_meta;end
+       if(mul_write_i)begin mul_result_q<=mul_result;mul_meta_q<=pre_meta_q;end
+       if(post_write_i)begin post_raw_q<=post_raw;post_invalid_q<=post_invalid;end
+       if(output_write_i)begin
+-        accumulator_bank[early_commit_context_i]<=round_out;
+         result_fifo[result_write_pointer_q]<=round_out;
+         result_write_pointer_q<=(result_write_pointer_q==4)?0:result_write_pointer_q+1'b1;
+         bank_valid_q[early_commit_context_i]<=1'b1;
+       end
+       if(output_pop_i)result_read_pointer_q<=(result_read_pointer_q==4)?0:result_read_pointer_q+1'b1;
++      end
++      // Explicit one-write-port address/data mux, not a second memory port.
++      if(bank_write)accumulator_bank[bank_write_context]<=bank_write_data;
++      if(ENABLE_ACCUMULATOR_SEED && seed_commit_i && seed_context_i<5)
++        bank_valid_q[seed_context_i]<=1'b1;
++      // Invalidation dominates commit, including abort on the commit edge.
++      if(ENABLE_ACCUMULATOR_SEED && (seed_reserve_i||seed_invalidate_i) && seed_context_i<5)
++        bank_valid_q[seed_context_i]<=1'b0;
+     end
+   end
+ endmodule
+--- a/rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv
+@@ -1,8 +1,13 @@
+ // SPDX-License-Identifier: Apache-2.0
+ `timescale 1ns/1ps
+-module bf16_context_lane_cluster16_rev8b_b_candidate (
++module bf16_context_lane_cluster16_rev8b_b_candidate #(
++  parameter bit ENABLE_ACCUMULATOR_SEED=1'b0
++)(
+   input logic clk_i,
+   input logic [15:0] lane_rst_ni_i,
++  input logic seed_block_i,seed_reserve_i,seed_write_i,seed_commit_i,seed_invalidate_i,
++  input logic [2:0] seed_context_i,
++  input logic [511:0] seed_data_i,
+   input logic input_write_i,pre_write_i,mul_write_i,post_write_i,output_write_i,
+   input logic [16*16-1:0] lane_a_i,lane_b_i,
+   input logic [2:0] issue_context_i,
+@@ -26,7 +31,7 @@
+     if(!lane_rst_ni_i[0])begin
+       flags_write_pointer_q<='0;flags_read_pointer_q<='0;
+       for(integer context_index=0;context_index<5;context_index++)cluster_flags_fifo[context_index]<='0;
+-    end else begin
++    end else if(!(ENABLE_ACCUMULATOR_SEED && seed_block_i))begin
+       if(output_write_i)begin
+         cluster_flags_fifo[flags_write_pointer_q]<=reduced_round_flags;
+         flags_write_pointer_q<=(flags_write_pointer_q==4)?0:flags_write_pointer_q+1'b1;
+@@ -36,7 +41,11 @@
+   end
+   for(genvar lane=0;lane<16;lane++)begin:g_lane
+     logic [4:0] bank_valid_unused;
+-    bf16_context_fma_pipeline_lane5_rev8b_b_candidate u_lane(
++    bf16_context_fma_pipeline_lane5_rev8b_b_candidate #(
++      .ENABLE_ACCUMULATOR_SEED(ENABLE_ACCUMULATOR_SEED)) u_lane(
++      .seed_block_i(seed_block_i),.seed_reserve_i(seed_reserve_i),.seed_write_i(seed_write_i),
++      .seed_commit_i(seed_commit_i),.seed_invalidate_i(seed_invalidate_i),
++      .seed_context_i(seed_context_i),.seed_data_i(seed_data_i[lane*32+:32]),
+       .clk_i(clk_i),.rst_ni(lane_rst_ni_i[lane]),
+       .input_write_i(input_write_i),.pre_write_i(pre_write_i),.mul_write_i(mul_write_i),
+       .post_write_i(post_write_i),.output_write_i(output_write_i),
+--- a/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv
+@@ -1,7 +1,11 @@
+ // SPDX-License-Identifier: Apache-2.0
+ `timescale 1ns/1ps
+-module bf16_context_scheduler5_rev8b_b_candidate (
++module bf16_context_scheduler5_rev8b_b_candidate #(
++  parameter bit ENABLE_ACCUMULATOR_SEED=1'b0
++)(
+   input logic clk_i,rst_ni,in_valid_i,
++  input logic seed_block_i,seed_reserve_i,seed_commit_i,seed_invalidate_i,
++  input logic [2:0] seed_context_i,
+   output logic in_ready_o,
+   input logic [2:0] context_i,
+   input logic clear_i,last_i,
+@@ -34,8 +38,8 @@
+   assign completion_fire_o=array_out_valid_i&&array_out_ready_o;
+   assign completion_same_context=completion_fire_o&&completion_context_o==context_i;
+   assign context_available=context_legal&&(!busy_q[context_i]||completion_same_context);
+-  assign array_in_valid_o=in_valid_i&&context_available&&fifo_not_full;
+-  assign in_ready_o=context_available&&fifo_not_full&&array_in_ready_i;
++  assign array_in_valid_o=in_valid_i&&context_available&&fifo_not_full&&!(ENABLE_ACCUMULATOR_SEED&&seed_block_i);
++  assign in_ready_o=context_available&&fifo_not_full&&array_in_ready_i&&!(ENABLE_ACCUMULATOR_SEED&&seed_block_i);
+   assign issue_fire=array_in_valid_o&&array_in_ready_i;
+   assign issue_context_o=context_i;
+   assign issue_clear_o=clear_i;
+@@ -60,6 +64,10 @@
+         write_pointer_q<=write_pointer_q+1'b1;busy_q[context_i]<=1'b1;
+         accepted_steps_o<=accepted_steps_o+1'b1;
+       end
++      if(ENABLE_ACCUMULATOR_SEED && seed_commit_i && seed_context_i<5)
++        accumulator_valid_q[seed_context_i]<=1'b1;
++      if(ENABLE_ACCUMULATOR_SEED && (seed_reserve_i||seed_invalidate_i) && seed_context_i<5)
++        accumulator_valid_q[seed_context_i]<=1'b0;
+       case({issue_fire,completion_fire_o})
+         2'b10:fifo_count_q<=fifo_count_q+1'b1;
+         2'b01:fifo_count_q<=fifo_count_q-1'b1;
+--- a/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv
+@@ -1,6 +1,27 @@
+ // SPDX-License-Identifier: Apache-2.0
+ `timescale 1ns/1ps
+-module bf16_context_front_control5_rev8b_b_candidate (
++module bf16_context_front_control5_rev8b_b_candidate #(
++  parameter bit ENABLE_ACCUMULATOR_SEED=1'b0
++)(
++  // Optional raw FP32 accumulator restore; absent from the default Chisel ABI.
++  input logic seed_begin_valid_i,
++  output logic seed_begin_ready_o,
++  input logic [2:0] seed_context_i,
++  input logic [31:0] seed_group_tag_i,seed_group_sequence_i,seed_source_generation_i,
++  input logic seed_beat_valid_i,
++  output logic seed_beat_ready_o,
++  input logic [4:0] seed_cluster_i,
++  input logic [511:0] seed_data_i,
++  input logic seed_commit_valid_i,
++  output logic seed_commit_ready_o,
++  input logic seed_abort_i,
++  output logic seed_ack_valid_o,
++  input logic seed_ack_ready_i,
++  output logic [2:0] seed_ack_context_o,
++  output logic [31:0] seed_ack_group_tag_o,seed_ack_group_sequence_o,seed_ack_source_generation_o,
++  output logic seed_ack_error_o,seed_reset_required_o,
++  output logic seed_block_o,seed_hold_o,seed_reserve_o,seed_write_o,seed_commit_o,seed_invalidate_o,
++  output logic [2:0] seed_bank_context_o,
+   input logic clk_i,rst_ni,in_valid_i,
+   output logic in_ready_o,
+   input logic [2:0] context_i,
+@@ -24,7 +45,11 @@
+   logic [31:0] array_accepted_unused,array_completed_unused;
+   logic scheduler_error;
+   logic [2:0] tag_output_context_unused;
+-  bf16_context_scheduler5_rev8b_b_candidate scheduler(
++  bf16_context_scheduler5_rev8b_b_candidate #(
++    .ENABLE_ACCUMULATOR_SEED(ENABLE_ACCUMULATOR_SEED)) scheduler(
++    .seed_block_i(seed_block_o),.seed_reserve_i(seed_reserve_o),
++    .seed_commit_i(seed_commit_o),.seed_invalidate_i(seed_invalidate_o),
++    .seed_context_i(seed_bank_context_o),
+     .clk_i(clk_i),.rst_ni(rst_ni),.in_valid_i(in_valid_i),.in_ready_o(in_ready_o),
+     .context_i(context_i),.clear_i(clear_i),.last_i(last_i),.out_valid_o(out_valid_o),
+     .out_ready_i(out_ready_i),.context_o(context_o),.last_o(last_o),
+@@ -48,5 +73,90 @@
+     .output_context_o(tag_output_context_unused));
+   assign output_context_o=context_o;
+   assign completion_pop_o=out_valid_o&&out_ready_i;
+-  assign protocol_error_o=scheduler_error;
++  assign protocol_error_o=scheduler_error||seed_reset_required_o;
++
++  generate if(ENABLE_ACCUMULATOR_SEED)begin:g_seed
++    // 109 flip-flops: identity99, beat count6, reserved/ACK/error/poison4.
++    // There is no seed payload storage and no new accumulator or arithmetic.
++    logic [31:0] group_tag_q,group_sequence_q,source_generation_q;
++    logic [2:0] context_q;
++    logic [5:0] beat_count_q;
++    logic reserved_q,ack_valid_q,ack_error_q,poison_q;
++    logic quiescent,identity_matches,finite_data,begin_fire,beat_fire,commit_fire;
++    logic legal_begin,legal_beat,legal_commit,fault;
++    assign quiescent=(busy_o==5'b0)&&!out_valid_o&&!array_out_valid&&
++      !input_write_o&&!pre_write_o&&!mul_write_o&&!post_write_o&&!output_write_o;
++    assign identity_matches=seed_context_i==context_q&&seed_group_tag_i==group_tag_q&&
++      seed_group_sequence_i==group_sequence_q&&seed_source_generation_i==source_generation_q;
++    always_comb begin
++      finite_data=1'b1;
++      for(integer lane_index=0;lane_index<16;lane_index++)
++        finite_data=finite_data&&(seed_data_i[lane_index*32+23+:8]!=8'hff);
++    end
++    // Block a same-cycle first arithmetic issue already on begin.valid.
++    assign seed_block_o=reserved_q||ack_valid_q||poison_q||seed_abort_i||
++      seed_begin_valid_i||seed_beat_valid_i||seed_commit_valid_i;
++    // Admission blocking must not freeze an already accepted FMA. Only a
++    // successful, genuinely quiescent reservation holds the datapath/FIFOs.
++    assign seed_hold_o=reserved_q||ack_valid_q;
++    assign seed_begin_ready_o=!reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
++    assign seed_beat_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
++    assign seed_commit_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
++    assign begin_fire=seed_begin_valid_i&&seed_begin_ready_o;
++    assign beat_fire=seed_beat_valid_i&&seed_beat_ready_o;
++    assign commit_fire=seed_commit_valid_i&&seed_commit_ready_o;
++    assign legal_begin=seed_context_i<5&&!seed_beat_valid_i&&!seed_commit_valid_i;
++    assign legal_beat=identity_matches&&beat_count_q<32&&
++      seed_cluster_i==beat_count_q[4:0]&&finite_data&&!seed_commit_valid_i&&!seed_begin_valid_i;
++    assign legal_commit=identity_matches&&beat_count_q==32&&
++      !seed_beat_valid_i&&!seed_begin_valid_i;
++    assign fault=seed_abort_i||(reserved_q&&!quiescent)||(seed_begin_valid_i&&!quiescent)||
++      (begin_fire&&!legal_begin)||(beat_fire&&!legal_beat)||(commit_fire&&!legal_commit)||
++      (seed_begin_valid_i&&(reserved_q||ack_valid_q))||
++      ((seed_beat_valid_i||seed_commit_valid_i)&&(!reserved_q||ack_valid_q));
++    assign seed_reserve_o=begin_fire&&legal_begin&&!fault;
++    assign seed_write_o=beat_fire&&legal_beat&&!fault;
++    assign seed_commit_o=commit_fire&&legal_commit&&!fault;
++    // Remember context after ACK consumption so a later service invalidate
++    // still removes its bank validity. Any poison requires coordinated reset.
++    assign seed_invalidate_o=fault||poison_q;
++    assign seed_bank_context_o=seed_reserve_o?seed_context_i:context_q;
++    assign seed_ack_valid_o=ack_valid_q;
++    assign seed_ack_context_o=context_q;
++    assign seed_ack_group_tag_o=group_tag_q;
++    assign seed_ack_group_sequence_o=group_sequence_q;
++    assign seed_ack_source_generation_o=source_generation_q;
++    assign seed_ack_error_o=ack_error_q;
++    assign seed_reset_required_o=poison_q;
++    always_ff @(posedge clk_i or negedge rst_ni)begin
++      if(!rst_ni)begin
++        group_tag_q<='0;group_sequence_q<='0;source_generation_q<='0;context_q<='0;
++        beat_count_q<='0;reserved_q<=0;ack_valid_q<=0;ack_error_q<=0;poison_q<=0;
++      end else begin
++        if(begin_fire)begin
++          group_tag_q<=seed_group_tag_i;group_sequence_q<=seed_group_sequence_i;
++          source_generation_q<=seed_source_generation_i;context_q<=seed_context_i;
++          beat_count_q<='0;reserved_q<=legal_begin;ack_error_q<=0;
++        end
++        if(seed_write_o)beat_count_q<=beat_count_q+1'b1;
++        // This register can only assert AFTER the commit edge and its bank
++        // valid writes. Hold the identity and error stable under backpressure.
++        if(commit_fire)begin ack_valid_q<=1'b1;ack_error_q<=!legal_commit||fault;end
++        if(ack_valid_q&&seed_ack_ready_i)begin
++          ack_valid_q<=1'b0;
++          if(!poison_q&&!fault)reserved_q<=1'b0;
++        end
++        // Abort/late transport can never make a partially written bank reusable.
++        // A held success ACK remains immutable; resetRequired dominates it.
++        if(fault)poison_q<=1'b1;
++      end
++    end
++  end else begin:g_no_seed
++    assign seed_begin_ready_o=0;assign seed_beat_ready_o=0;assign seed_commit_ready_o=0;
++    assign seed_ack_valid_o=0;assign seed_ack_context_o='0;assign seed_ack_group_tag_o='0;
++    assign seed_ack_group_sequence_o='0;assign seed_ack_source_generation_o='0;
++    assign seed_ack_error_o=0;assign seed_reset_required_o=0;assign seed_block_o=0;assign seed_hold_o=0;
++    assign seed_reserve_o=0;assign seed_write_o=0;assign seed_commit_o=0;
++    assign seed_invalidate_o=0;assign seed_bank_context_o='0;
++  end endgenerate
+ endmodule
+--- a/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv
+@@ -2,8 +2,28 @@
+ `timescale 1ns/1ps
+ module bf16_outer_product_context_array_rev8b_b_candidate #(
+   parameter integer ROWS=16,COLS=32,CONTEXTS=5,FIFO_DEPTH=8,
+-  localparam integer LANES=ROWS*COLS,CONTEXT_BITS=3,CONTROL_WIDTH=13
++  parameter bit ENABLE_ACCUMULATOR_SEED=1'b0,
++  localparam integer LANES=ROWS*COLS,CONTEXT_BITS=3,
++  CONTROL_WIDTH=ENABLE_ACCUMULATOR_SEED?20:13
+ )(
++  // Optional raw FP32 accumulator restore; absent from the default Chisel ABI.
++  input logic seed_begin_valid_i,
++  output logic seed_begin_ready_o,
++  input logic [2:0] seed_context_i,
++  input logic [31:0] seed_group_tag_i,seed_group_sequence_i,seed_source_generation_i,
++  input logic seed_beat_valid_i,
++  output logic seed_beat_ready_o,
++  input logic [4:0] seed_cluster_i,
++  input logic [511:0] seed_data_i,
++  input logic seed_commit_valid_i,
++  output logic seed_commit_ready_o,
++  input logic seed_abort_i,
++  output logic seed_ack_valid_o,
++  input logic seed_ack_ready_i,
++  output logic [2:0] seed_ack_context_o,
++  output logic [31:0] seed_ack_group_tag_o,seed_ack_group_sequence_o,seed_ack_source_generation_o,
++  output logic seed_ack_error_o,seed_reset_required_o,
++  output logic seed_active_o,
+   input logic clk_i,rst_ni,in_valid_i,
+   output logic in_ready_o,
+   input logic[CONTEXT_BITS-1:0]context_i,
+@@ -20,6 +40,8 @@
+   output logic[31:0]accepted_steps_o,completed_steps_o,
+   output logic protocol_error_o
+ );
++  logic seed_block,seed_hold,seed_reserve,seed_write,seed_commit,seed_invalidate;
++  logic [2:0] seed_bank_context;
+   logic input_write,pre_write,mul_write,post_write,output_write,issue_clear,completion_pop;
+   logic[2:0]issue_context,early_commit_context,tag_output_context;
+   logic[CONTROL_WIDTH-1:0]front_control_bundle;
+@@ -31,7 +53,22 @@
+   logic[4:0]reset_glue_flags_unused;
+   generate
+     if(ROWS==16&&COLS==32&&CONTEXTS==5&&FIFO_DEPTH==8)begin:g_production
+-      bf16_context_front_control5_rev8b_b_candidate front_control(
++      bf16_context_front_control5_rev8b_b_candidate #(
++        .ENABLE_ACCUMULATOR_SEED(ENABLE_ACCUMULATOR_SEED)) front_control(
++        .seed_begin_valid_i(seed_begin_valid_i),.seed_begin_ready_o(seed_begin_ready_o),
++        .seed_context_i(seed_context_i),.seed_group_tag_i(seed_group_tag_i),
++        .seed_group_sequence_i(seed_group_sequence_i),.seed_source_generation_i(seed_source_generation_i),
++        .seed_beat_valid_i(seed_beat_valid_i),.seed_beat_ready_o(seed_beat_ready_o),
++        .seed_cluster_i(seed_cluster_i),.seed_data_i(seed_data_i),
++        .seed_commit_valid_i(seed_commit_valid_i),.seed_commit_ready_o(seed_commit_ready_o),
++        .seed_abort_i(seed_abort_i),.seed_ack_valid_o(seed_ack_valid_o),.seed_ack_ready_i(seed_ack_ready_i),
++        .seed_ack_context_o(seed_ack_context_o),.seed_ack_group_tag_o(seed_ack_group_tag_o),
++        .seed_ack_group_sequence_o(seed_ack_group_sequence_o),
++        .seed_ack_source_generation_o(seed_ack_source_generation_o),
++        .seed_ack_error_o(seed_ack_error_o),.seed_reset_required_o(seed_reset_required_o),
++        .seed_block_o(seed_block),.seed_hold_o(seed_hold),.seed_reserve_o(seed_reserve),.seed_write_o(seed_write),
++        .seed_commit_o(seed_commit),.seed_invalidate_o(seed_invalidate),
++        .seed_bank_context_o(seed_bank_context),
+         .clk_i(clk_i),.rst_ni(rst_ni),.in_valid_i(in_valid_i),.in_ready_o(in_ready_o),
+         .context_i(context_i),.clear_i(clear_i),.last_i(last_i),.out_valid_o(out_valid_o),
+         .out_ready_i(out_ready_i),.context_o(context_o),.last_o(last_o),.busy_o(busy_o),
+@@ -50,7 +87,16 @@
+       assign front_control_bundle[8]=issue_clear;
+       assign front_control_bundle[11:9]=early_commit_context;
+       assign front_control_bundle[12]=completion_pop;
+-      bf16_front_to_cluster_broadcast32_rev8b_b_candidate broadcast32(
++      assign seed_active_o=seed_block;
++      if(ENABLE_ACCUMULATOR_SEED)begin:g_seed_broadcast
++        assign front_control_bundle[13]=seed_hold;
++        assign front_control_bundle[14]=seed_reserve;
++        assign front_control_bundle[15]=seed_commit;
++        assign front_control_bundle[16]=seed_invalidate;
++        assign front_control_bundle[19:17]=seed_bank_context;
++      end
++      bf16_front_to_cluster_broadcast32_rev8b_b_candidate #(
++        .BUNDLE_WIDTH(CONTROL_WIDTH)) broadcast32(
+         .control_i(front_control_bundle),.cluster_control_o(cluster_control_bundle));
+       bf16_operand_distribution512_rev8b_a_candidate operand_distribution(
+         .a_i(a_i),.b_i(b_i),.lane_a_o(lane_a),.lane_b_o(lane_b));
+@@ -58,7 +104,25 @@
+       bf16_cluster_flags_glue32_rev8b_b_candidate flags_glue(.cluster_flags_i(cluster_flags),.flags_o(exception_flags_o));
+       for(genvar cluster=0;cluster<32;cluster++)begin:g_cluster
+         localparam integer BASE=cluster*CONTROL_WIDTH;
+-        bf16_context_lane_cluster16_rev8b_b_candidate u_cluster(
++        wire cluster_seed_block,cluster_seed_reserve,cluster_seed_commit,cluster_seed_invalidate;
++        wire [2:0] cluster_seed_context;
++        if(ENABLE_ACCUMULATOR_SEED)begin:g_seed_control
++          assign cluster_seed_block=cluster_control_bundle[BASE+13];
++          assign cluster_seed_reserve=cluster_control_bundle[BASE+14];
++          assign cluster_seed_commit=cluster_control_bundle[BASE+15];
++          assign cluster_seed_invalidate=cluster_control_bundle[BASE+16];
++          assign cluster_seed_context=cluster_control_bundle[BASE+17+:3];
++        end else begin:g_no_seed_control
++          assign cluster_seed_block=0;assign cluster_seed_reserve=0;
++          assign cluster_seed_commit=0;assign cluster_seed_invalidate=0;assign cluster_seed_context='0;
++        end
++        bf16_context_lane_cluster16_rev8b_b_candidate #(
++          .ENABLE_ACCUMULATOR_SEED(ENABLE_ACCUMULATOR_SEED)) u_cluster(
++          .seed_block_i(cluster_seed_block),.seed_reserve_i(cluster_seed_reserve),
++          .seed_commit_i(cluster_seed_commit),.seed_invalidate_i(cluster_seed_invalidate),
++          .seed_context_i(cluster_seed_context),
++          .seed_write_i(ENABLE_ACCUMULATOR_SEED&&seed_write&&seed_cluster_i==cluster),
++          .seed_data_i(seed_data_i),
+           .clk_i(clk_i),.lane_rst_ni_i(lane_rst_ni[cluster*16+:16]),
+           .input_write_i(cluster_control_bundle[BASE+0]),.pre_write_i(cluster_control_bundle[BASE+1]),
+           .mul_write_i(cluster_control_bundle[BASE+2]),.post_write_i(cluster_control_bundle[BASE+3]),
+@@ -75,6 +139,11 @@
+       assign in_ready_o=0;assign out_valid_o=0;assign context_o='0;assign last_o=0;assign acc_o='0;
+       assign exception_flags_o='0;assign busy_o='0;assign accumulator_valid_o='0;
+       assign accepted_steps_o='0;assign completed_steps_o='0;assign protocol_error_o=1;
++      assign seed_begin_ready_o=0;assign seed_beat_ready_o=0;assign seed_commit_ready_o=0;
++      assign seed_ack_valid_o=0;assign seed_ack_context_o='0;assign seed_ack_group_tag_o='0;
++      assign seed_ack_group_sequence_o='0;assign seed_ack_source_generation_o='0;
++      assign seed_ack_error_o=0;assign seed_reset_required_o=ENABLE_ACCUMULATOR_SEED;
++      assign seed_active_o=0;
+     end
+   endgenerate
+ endmodule
+--- a/rtl/integration/qwen2_matrix_command_endpoint.sv
++++ b/rtl/integration/qwen2_matrix_command_endpoint.sv
+@@ -1,11 +1,44 @@
+ // SPDX-License-Identifier: Apache-2.0
+-module qwen2_matrix_command_endpoint(
++module qwen2_matrix_command_endpoint #(parameter bit ENABLE_ACCUMULATOR_SEED=1'b0)(
++  // Optional raw FP32 accumulator restore; absent from the default Chisel ABI.
++  input logic seed_begin_valid_i,
++  output logic seed_begin_ready_o,
++  input logic [2:0] seed_context_i,
++  input logic [31:0] seed_group_tag_i,seed_group_sequence_i,seed_source_generation_i,
++  input logic seed_beat_valid_i,
++  output logic seed_beat_ready_o,
++  input logic [4:0] seed_cluster_i,
++  input logic [511:0] seed_data_i,
++  input logic seed_commit_valid_i,
++  output logic seed_commit_ready_o,
++  input logic seed_abort_i,
++  output logic seed_ack_valid_o,
++  input logic seed_ack_ready_i,
++  output logic [2:0] seed_ack_context_o,
++  output logic [31:0] seed_ack_group_tag_o,seed_ack_group_sequence_o,seed_ack_source_generation_o,
++  output logic seed_ack_error_o,seed_reset_required_o,
++ output logic [4:0] arithmetic_busy_o,output logic arithmetic_out_valid_o,
+  input logic clk_i,rst_ni,input logic cmd_valid_i,output logic cmd_ready_o,input logic[127:0]cmd_i,
+  input logic step_valid_i,output logic step_ready_o,input logic[2:0]step_context_i,input logic step_clear_i,step_last_i,input logic command_last_tile_i,input logic[255:0]step_a_i,input logic[511:0]step_b_i,
+  output logic out_valid_o,input logic out_ready_i,output logic[2:0]out_context_o,output logic out_last_o,output logic[16383:0]out_acc_o,
+  output logic completion_valid_o,input logic completion_ready_i,output logic[55:0]completion_data_o,output logic protocol_error_o);
++ logic seed_active;
+  logic active_q,pending_q;logic[15:0]event_q;logic[7:0]status_q;logic minr,moutv,moutr,mlast,merror;logic[2:0]mctx;logic[4:0]mflags,mbusy,mvalid;logic[31:0]maccept,mcomplete;logic[16383:0]macc;
+- assign cmd_ready_o=!active_q&&!pending_q;assign step_ready_o=active_q&&minr;assign out_valid_o=active_q&&moutv;assign moutr=active_q&&out_ready_i;assign out_context_o=mctx;assign out_last_o=mlast;assign out_acc_o=macc;assign completion_valid_o=pending_q;assign completion_data_o={event_q,status_q,3'd2,29'd0};assign protocol_error_o=merror;
+- bf16_outer_product_context_array_rev8b_b_candidate matrix(.clk_i,.rst_ni,.in_valid_i(step_valid_i&&active_q),.in_ready_o(minr),.context_i(step_context_i),.clear_i(step_clear_i),.last_i(step_last_i),.a_i(step_a_i),.b_i(step_b_i),.out_valid_o(moutv),.out_ready_i(moutr),.context_o(mctx),.last_o(mlast),.acc_o(macc),.exception_flags_o(mflags),.busy_o(mbusy),.accumulator_valid_o(mvalid),.accepted_steps_o(maccept),.completed_steps_o(mcomplete),.protocol_error_o(merror));
++ assign arithmetic_busy_o=mbusy;assign arithmetic_out_valid_o=moutv;
++ assign cmd_ready_o=!active_q&&!pending_q&&!(ENABLE_ACCUMULATOR_SEED&&seed_active);assign step_ready_o=active_q&&minr;assign out_valid_o=active_q&&moutv;assign moutr=active_q&&out_ready_i;assign out_context_o=mctx;assign out_last_o=mlast;assign out_acc_o=macc;assign completion_valid_o=pending_q;assign completion_data_o={event_q,status_q,3'd2,29'd0};assign protocol_error_o=merror;
++ bf16_outer_product_context_array_rev8b_b_candidate #(.ENABLE_ACCUMULATOR_SEED(ENABLE_ACCUMULATOR_SEED)) matrix(
++        .seed_begin_valid_i(seed_begin_valid_i),.seed_begin_ready_o(seed_begin_ready_o),
++        .seed_context_i(seed_context_i),.seed_group_tag_i(seed_group_tag_i),
++        .seed_group_sequence_i(seed_group_sequence_i),.seed_source_generation_i(seed_source_generation_i),
++        .seed_beat_valid_i(seed_beat_valid_i),.seed_beat_ready_o(seed_beat_ready_o),
++        .seed_cluster_i(seed_cluster_i),.seed_data_i(seed_data_i),
++        .seed_commit_valid_i(seed_commit_valid_i),.seed_commit_ready_o(seed_commit_ready_o),
++        .seed_abort_i(seed_abort_i),.seed_ack_valid_o(seed_ack_valid_o),.seed_ack_ready_i(seed_ack_ready_i),
++        .seed_ack_context_o(seed_ack_context_o),.seed_ack_group_tag_o(seed_ack_group_tag_o),
++        .seed_ack_group_sequence_o(seed_ack_group_sequence_o),
++        .seed_ack_source_generation_o(seed_ack_source_generation_o),
++        .seed_ack_error_o(seed_ack_error_o),.seed_reset_required_o(seed_reset_required_o),
++        .seed_active_o(seed_active),
++.clk_i,.rst_ni,.in_valid_i(step_valid_i&&active_q),.in_ready_o(minr),.context_i(step_context_i),.clear_i(step_clear_i),.last_i(step_last_i),.a_i(step_a_i),.b_i(step_b_i),.out_valid_o(moutv),.out_ready_i(moutr),.context_o(mctx),.last_o(mlast),.acc_o(macc),.exception_flags_o(mflags),.busy_o(mbusy),.accumulator_valid_o(mvalid),.accepted_steps_o(maccept),.completed_steps_o(mcomplete),.protocol_error_o(merror));
+  always_ff@(posedge clk_i or negedge rst_ni)begin if(!rst_ni)begin active_q<=0;pending_q<=0;event_q<=0;status_q<=0;end else begin if(cmd_valid_i&&cmd_ready_o)begin event_q<=cmd_i[55:40];if(cmd_i[7:0]inside{8'h20,8'h21,8'h23,8'h24})begin active_q<=1;status_q<=0;end else begin pending_q<=1;status_q<=8'd4;end end if(out_valid_o&&out_ready_i&&out_last_o&&command_last_tile_i)begin active_q<=0;pending_q<=1;end if(pending_q&&completion_ready_i)pending_q<=0;end end
+ endmodule
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala
+@@ -2,17 +2,44 @@
+ package heteronpu.continuous
+ import chisel3._
+ import chisel3.util._
++import chisel3.experimental.{IntParam,Param}
+ import gemmini.{HeteroBF16FmaPre,HeteroBF16FmaMul,HeteroBF16FmaPost,HeteroBF16FmaRound}
+ 
+ /** Retained upstream project RTL, not an embedded replacement implementation.
+   * File identity is pinned by the execution script before compilation. */
+-class RetainedMatrixEndpoint extends BlackBox {
++class RetainedMatrixEndpoint(enableAccumulatorSeed:Boolean=false) extends BlackBox(
++  if(enableAccumulatorSeed)Map("ENABLE_ACCUMULATOR_SEED"->IntParam(1)) else Map.empty[String,Param]) {
+   override def desiredName="qwen2_matrix_command_endpoint"
+   val io=IO(new Bundle {
+     val clk_i=Input(Clock());val rst_ni=Input(Bool());val cmd_valid_i=Input(Bool());val cmd_ready_o=Output(Bool());val cmd_i=Input(UInt(128.W))
+     val step_valid_i=Input(Bool());val step_ready_o=Output(Bool());val step_context_i=Input(UInt(3.W));val step_clear_i=Input(Bool());val step_last_i=Input(Bool());val command_last_tile_i=Input(Bool())
+     val step_a_i=Input(UInt(256.W));val step_b_i=Input(UInt(512.W));val out_valid_o=Output(Bool());val out_ready_i=Input(Bool());val out_context_o=Output(UInt(3.W));val out_last_o=Output(Bool());val out_acc_o=Output(UInt(16384.W))
+     val completion_valid_o=Output(Bool());val completion_ready_i=Input(Bool());val completion_data_o=Output(UInt(56.W));val protocol_error_o=Output(Bool())
++    // Disabled means no new Chisel ports and no parameter override. Existing
++    // adapters keep the old ABI; only the seeded service drives these Options.
++    val seed_begin_valid_i=if(enableAccumulatorSeed)Some(Input(Bool()))else None
++    val seed_begin_ready_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
++    val seed_context_i=if(enableAccumulatorSeed)Some(Input(UInt(3.W)))else None
++    val seed_group_tag_i=if(enableAccumulatorSeed)Some(Input(UInt(32.W)))else None
++    val seed_group_sequence_i=if(enableAccumulatorSeed)Some(Input(UInt(32.W)))else None
++    val seed_source_generation_i=if(enableAccumulatorSeed)Some(Input(UInt(32.W)))else None
++    val seed_beat_valid_i=if(enableAccumulatorSeed)Some(Input(Bool()))else None
++    val seed_beat_ready_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
++    val seed_cluster_i=if(enableAccumulatorSeed)Some(Input(UInt(5.W)))else None
++    val seed_data_i=if(enableAccumulatorSeed)Some(Input(UInt(512.W)))else None
++    val seed_commit_valid_i=if(enableAccumulatorSeed)Some(Input(Bool()))else None
++    val seed_commit_ready_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
++    val seed_abort_i=if(enableAccumulatorSeed)Some(Input(Bool()))else None
++    val seed_ack_valid_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
++    val seed_ack_ready_i=if(enableAccumulatorSeed)Some(Input(Bool()))else None
++    val seed_ack_context_o=if(enableAccumulatorSeed)Some(Output(UInt(3.W)))else None
++    val seed_ack_group_tag_o=if(enableAccumulatorSeed)Some(Output(UInt(32.W)))else None
++    val seed_ack_group_sequence_o=if(enableAccumulatorSeed)Some(Output(UInt(32.W)))else None
++    val seed_ack_source_generation_o=if(enableAccumulatorSeed)Some(Output(UInt(32.W)))else None
++    val seed_ack_error_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
++    val seed_reset_required_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
++    val arithmetic_busy_o=if(enableAccumulatorSeed)Some(Output(UInt(5.W)))else None
++    val arithmetic_out_valid_o=if(enableAccumulatorSeed)Some(Output(Bool()))else None
+   })
+ }
+ class Matrix16Request extends Bundle {

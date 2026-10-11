@@ -35,6 +35,8 @@ jobs:
           git cat-file -e 590f8cfd39a1aa5aa2a2dc481eab29d406d899a2:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
           git fetch --no-tags --depth=1 origin fb909e861ab91dfd7ecc44bc3e86245c3e63b029
           git cat-file -e fb909e861ab91dfd7ecc44bc3e86245c3e63b029:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+          git fetch --no-tags --depth=1 origin 825caff3a6c618419c49c7da452e009ce86ae8b5
+          git cat-file -e 825caff3a6c618419c49c7da452e009ce86ae8b5:candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '21'}
       - uses: actions/setup-python@v5
@@ -44,6 +46,8 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_route -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_owner -p 'test_*.py' -v
+          python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_seed -p 'test_*.py' -v
+          python candidates/qwen2_resident_matrix/transposed_seed/leaf/test_seed_leaf_contract.py
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure
@@ -53,6 +57,7 @@ jobs:
           python scripts/check_transposed_matrix_frontend.py --repo . --out work/matrix-interface-frontend/transposed --cache work/matrix-interface-jars --baseline work/matrix-interface-frontend
           bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh > work/matrix-interface-frontend/hardfloat-source.log
           python candidates/qwen2_resident_matrix/transposed_owner/check_frontend.py --out work/matrix-interface-frontend/transposed-owner --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
+          python candidates/qwen2_resident_matrix/transposed_seed/check_frontend.py --out work/matrix-interface-frontend/transposed-seed --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

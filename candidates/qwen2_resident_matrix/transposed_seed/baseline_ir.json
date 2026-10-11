@@ -1,0 +1,19 @@
+{
+  "source_commit": "825caff3a6c618419c49c7da452e009ce86ae8b5",
+  "evidence_summary_sha256": "334f6b2c9be598fe4146c47f793b4345d73f92a79db0dd302fb0e3bfbb539618",
+  "modules": {
+    "single/TransposedDenseOwner": "b443ab4c98a6baca258fc881145a896972d5b19eaac9e640c5a0cd30a9f47160",
+    "single/TransposedDenseBanks": "b66275f0122ed1f90dc1a5ddcdc94a1d25b8da9498f4660a41a58dbb21558589",
+    "single/MatrixPipelineService": "a98df513c7bd6cc8c492b6218516a97a3c1353e19d1a1051aa3fe8502c97e83f",
+    "single/MatrixResultFifo": "6dc0df319db92c0ae461850baabe641418c7ae9d9aa087893b732a1246f3617f",
+    "single/Queue4_MatrixStreamStep": "4b788763f43019e16395066c922c8f5afdf83650698d9ccba00f211252dbc9ae",
+    "single/Queue8_Meta": "825ce8a83233e4d3e74ef7505b2a763dae15229117b9963d450a8bd760d821b0",
+    "burst/TransposedDenseOwner": "7d20b69eb04d257aef94328ca873fbfc2904b8de4a3bf7295625c2e36fee0d4b",
+    "burst/TransposedDenseBanks": "b66275f0122ed1f90dc1a5ddcdc94a1d25b8da9498f4660a41a58dbb21558589",
+    "burst/MatrixPipelineService": "a98df513c7bd6cc8c492b6218516a97a3c1353e19d1a1051aa3fe8502c97e83f",
+    "burst/MatrixResultFifo": "6dc0df319db92c0ae461850baabe641418c7ae9d9aa087893b732a1246f3617f",
+    "burst/Queue4_MatrixStreamStep": "4b788763f43019e16395066c922c8f5afdf83650698d9ccba00f211252dbc9ae",
+    "burst/Queue8_Meta": "825ce8a83233e4d3e74ef7505b2a763dae15229117b9963d450a8bd760d821b0"
+  },
+  "normalization": "source locations only, exact assertion strings retained"
+}

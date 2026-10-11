@@ -1,0 +1,389 @@
+{
+  "schema": 1,
+  "scope": "DEFAULT_OFF_FFN_PHYSICAL_TILES_SOURCE_CONTROL_FRONTEND_AND_BOUNDED_HOST_NUMERICS",
+  "base_host_commit": "f5b9b738aa631d241ec5fe32271fa045c0f9d1a1",
+  "files": {
+    "FfnTileElaboration.scala": {
+      "bytes": 9002,
+      "sha256": "9165148bb717782e4c486f443ca752bd8244fcdabe43b6f2cfc756669f6ea75f"
+    },
+    "README.md": {
+      "bytes": 5627,
+      "sha256": "506b799048247818a11019d12616bda92bb75f42e7892684312fcd884cb6a949"
+    },
+    "bridge_model.py": {
+      "bytes": 5958,
+      "sha256": "a59d9a7b7077557f367b218ddde03e6e58fc039a80077c6660f70a65c970ec30"
+    },
+    "check_frontend.py": {
+      "bytes": 14393,
+      "sha256": "fcc4490b2bcfc8c911022701b9b62901b9b21b4dbc80cc7529315d101037c62e"
+    },
+    "check_numeric.py": {
+      "bytes": 23218,
+      "sha256": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802"
+    },
+    "model.py": {
+      "bytes": 10237,
+      "sha256": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed"
+    },
+    "precision_pins.json": {
+      "bytes": 4228,
+      "sha256": "52777032bbca39fdb773efada44347a2fd8b0fee69906fe38da21aea4785b717"
+    },
+    "silu_recipe.cpp": {
+      "bytes": 4290,
+      "sha256": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067"
+    },
+    "source_pins.json": {
+      "bytes": 23384,
+      "sha256": "7d82254bfc7319c786674e7fa760d51bad7d92cc235a2e22a677ca45483a7a85"
+    },
+    "test_bridge_model.py": {
+      "bytes": 5092,
+      "sha256": "f3b276ff2b971b877bd6927f1dc208e076ca15346400887948b6f4a8cba1228d"
+    },
+    "test_delivery.py": {
+      "bytes": 1111,
+      "sha256": "aa7bbfe7e2b2194893a4e321b4fdda83486e3fe635e979e8f816c1805792a5a2"
+    },
+    "test_frontend.py": {
+      "bytes": 11612,
+      "sha256": "dc7c563a2aecc7eb35bcd8157a23f6d72ff90b7c6d5bf5aab5852b5f20eba71f"
+    },
+    "test_model.py": {
+      "bytes": 11017,
+      "sha256": "9b727693f49196e9876688c06d7658252b7e88fb159dfe29b30cbd2bd10be298"
+    },
+    "test_numeric.py": {
+      "bytes": 6944,
+      "sha256": "d790ec3c3f64f636c8f9c9d1961f7ba6c62aca5c4bc8b1fbe20a9acfc0fccd58"
+    },
+    "tile_ports.patch": {
+      "bytes": 34795,
+      "sha256": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246"
+    }
+  },
+  "frontend": {
+    "summary_sha256": "64015f30be09f6a91e0281f88bedfc82171820e616fb1df641ddd2f37fbda12c",
+    "typechecked_sources": 87,
+    "full_host_top_typechecked": true,
+    "full_qwen_owner_kernel_typechecked": true,
+    "top_elaborated": false,
+    "default_off_ir": {
+      "banks": {
+        "equal": true,
+        "sha256": "fa7d6f00f5bf1b25f06cfc145e8899878b56d0667cdbd4355c2ea24eb9de6b79"
+      },
+      "owner": {
+        "equal": true,
+        "sha256": "f9154246bb033582427b5f5fada061bbd73c3bd88acdb79da679515a9449520c"
+      },
+      "silu": {
+        "equal": true,
+        "sha256": "e286d9dc6a3e4e41e3b8326e7121757c8c515bb61713680e19cccbdf8d69f83f"
+      }
+    },
+    "generated_chirrtl": {
+      "banks_baseline.fir": {
+        "sha256": "840e963a3d54236f1e3cefaa5695209d98990baa3d14097cb6827d044fe7546f",
+        "bytes": 571376
+      },
+      "banks_disabled.fir": {
+        "sha256": "8c28e946ad4957a74191ac063c5dd741343eaf2f22c69d3e440a2d1b80ba6eb9",
+        "bytes": 677376
+      },
+      "banks_enabled.fir": {
+        "sha256": "42e883478acc0976b9c446d065e8533868850f3a8cdb8f3557a7a7ba599d9ee2",
+        "bytes": 926215
+      },
+      "owner_baseline.fir": {
+        "sha256": "e7840a699e9b37329a6214c452f971f61148e3ed3443b821248838af3178bb2e",
+        "bytes": 10482688
+      },
+      "owner_disabled.fir": {
+        "sha256": "cf8e2877022b3f438061d528cec3774192961402e9361130eb66dcada080b66c",
+        "bytes": 11859400
+      },
+      "owner_enabled.fir": {
+        "sha256": "828e30b57c9a55263fbd4a98d49c3038506e6efc338e85c3951c9f98b626f5b8",
+        "bytes": 12120452
+      },
+      "silu_baseline.fir": {
+        "sha256": "f4130b1793cd1183c85b0fb5588704441485126a5c053bcaf71d6c39885fd4b2",
+        "bytes": 9131213
+      },
+      "silu_disabled.fir": {
+        "sha256": "09a70617dd66e433d9b2263a3f9b56fdd362893b8980e8e8da974b787c2a9e93",
+        "bytes": 9143013
+      },
+      "silu_enabled.fir": {
+        "sha256": "6601375d4e4e9796451e9a9ff127e07f0fc8b49b04acbdb3a0cbf1aec8a63db2",
+        "bytes": 9159449
+      },
+      "tile_silu_harness.fir": {
+        "sha256": "255573df20d881013b1f8bdaf398086612b4c25a3cd9b9fbbd149a61de11e7c9",
+        "bytes": 10175958
+      }
+    },
+    "command_seconds": {
+      "compile.log": 33.32790186700004,
+      "elaboration.log": 6.285387250994972
+    },
+    "source_pins_sha256": "7d82254bfc7319c786674e7fa760d51bad7d92cc235a2e22a677ca45483a7a85",
+    "java_budget": {
+      "active_processors": 1,
+      "heap_mib": 1024,
+      "timeout_seconds_per_command": 180
+    }
+  },
+  "validation": {
+    "python_tests": 46,
+    "python_test_log_sha256": "23994672eee3d491983b1e63d961b392a7624c5a42a083fb79b3298c0304f0ef",
+    "independent_review": "Two P1 findings corrected: invalid final release completion and abort on execute-to-finish. Final source and pre-edge bridge control review no remaining P1."
+  },
+  "resources": {
+    "bank_write_hold_bits": 512,
+    "bank_read_response_hold_bits": 512,
+    "bridge_gate_hold_bits": 512,
+    "bank_added_register_bits": 1387,
+    "bridge_all_register_bits": 592,
+    "new_sram_arrays": 0,
+    "new_sfu_units": 0,
+    "sfu_vector_units": 1,
+    "sfu_lanes": 16,
+    "synchronous_rmw_response_hold_bits": 0,
+    "response_error_after_stall": "immutable; later abort gates publication through sticky resetRequired",
+    "added_register_bits_total": 1981,
+    "fixed_mac": 4096,
+    "fixed_sram_bytes": 786432,
+    "a_bank_depth": 1376,
+    "b_bank_depth": 160,
+    "banks": 32,
+    "bank_bits": 256,
+    "ports_per_bank": {
+      "read": 1,
+      "write": 1
+    },
+    "area_timing_measured": false,
+    "new_comb_logic": "tile arbitration, tag/count validation, variable cols division/remainder address mapping, 16-lane finite-value checks, 16x8 FP32 read selection and RMW lane muxes; no synthesis/QoR estimate"
+  },
+  "numeric_capture": {
+    "summary_sha256": "d0b7a872a95de114bec8fd0e3a974d5c6cbf30ac4ff725fcc211f32a4e530fad",
+    "status": "PASS_BOUNDED_ACTUAL_TILES_HOST_MODEL_ONLY",
+    "scope": "BOUNDED_ACTUAL_V0_PRODUCER_TILES_HOST_STORAGE_CONTROL_AND_STRICT_FP_ONLY",
+    "source_sha256": {
+      "silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+      "model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+      "check_numeric.py": "029f9bf85edc9e5fc24d7bf46b91850f96163ccea6810688676707b64665b23a",
+      "precision_pins.json": "52777032bbca39fdb773efada44347a2fd8b0fee69906fe38da21aea4785b717"
+    },
+    "source_changed_since_freeze": [],
+    "compile": {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-frounding-math",
+        "-fPIC",
+        "-shared",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/ffn_tiles_20261011/numeric_final_02/frozen_sources/silu_recipe.cpp",
+        "-o",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/ffn_tiles_20261011/numeric_final_02/silu_recipe.so"
+      ],
+      "binary_sha256": "8fd45642d6e98d233f1a74ad2308099d4b2677173bda0cbd2bfb52c0cc24b7cc",
+      "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+      "wall_seconds": 0.26779113600059645
+    },
+    "wall_seconds": 1.8072297800026718,
+    "host_process_cpu_seconds": 1.5355693019999999,
+    "host_peak_rss_kib": 56488,
+    "total_values": 35328,
+    "cases": [
+      {
+        "case": {
+          "rows": 16,
+          "cols": 160,
+          "ng": 0,
+          "identity": 1363558912,
+          "note": "First16 rows of the saved M128 producer, not a separate M16 full-block run"
+        },
+        "values": 2560,
+        "beats": 160,
+        "bank_counters": {
+          "read_requests": 480,
+          "write_requests": 480,
+          "read_responses": 480,
+          "rmw_commits": 480,
+          "logical_read_bytes": 30720,
+          "logical_write_bytes": 30720,
+          "physical_read_bytes": 491520,
+          "physical_write_bytes": 245760,
+          "aborted": 0,
+          "dense_grants": 0,
+          "response_stall_cycles": 960
+        },
+        "output_sha256": "13cc7fe4add14dde7980839dd09ef92f971d3aa3405c28379b6316a27229f08e",
+        "independent_flat_bit_mismatches": 0,
+        "saved_act_bit_mismatches": 0,
+        "all_unwritten_bank_bits_preserved": true,
+        "bank_event_sha256": "bd23d7c2b67150f5e33b9047c0942ff7b0b26286fba8c088f8c9d87ee766db86",
+        "source_order_sha256": {
+          "gate": "2a0fa914482335b5b75d2e9bea4d455d4f8259b0f26e7e5abf98005fd571efd2",
+          "up": "8daf34127d99d557bb2e3c9c912a3b1f4b5dfd7d64ed87e3f888a7bb18f68a80",
+          "computed": "83a8413152c05dc6bfae25933bc83b8ba81a109ad61e26a5b05dbfcb7f771309",
+          "bank_accepted_output": "83a8413152c05dc6bfae25933bc83b8ba81a109ad61e26a5b05dbfcb7f771309"
+        },
+        "phase_value_sha256": {
+          "exp": "34e407142b58dede1b0fa7e45a1bde43d7d156325dfbdaca5a41814d9f950617",
+          "add": "05f35523f1945f6fd10a78e2ec1dadf21598ebe061a5263328229634df8be203",
+          "div": "0125af8e04e07d145aeb321a381a1050f422b30477a2b061f34526bdc77837a5",
+          "sign_mul": "27149e27bfb1fed005c949f2e5dfa54ebcedc723ba9cc0edc21313dd66a9b4f9",
+          "gate_mul": "bf084b211a25a818d208189238fc17bdba9a39d4f547ce7fd3e3f3e8a6060697",
+          "up_mul": "83a8413152c05dc6bfae25933bc83b8ba81a109ad61e26a5b05dbfcb7f771309"
+        },
+        "protocol_model_ticks_are_hardware_cycles": false,
+        "predicted_hardware_cycles": null
+      },
+      {
+        "case": {
+          "rows": 128,
+          "cols": 160,
+          "ng": 160,
+          "identity": 1363558913
+        },
+        "values": 20480,
+        "beats": 1280,
+        "bank_counters": {
+          "read_requests": 3840,
+          "write_requests": 3840,
+          "read_responses": 3840,
+          "rmw_commits": 3840,
+          "logical_read_bytes": 245760,
+          "logical_write_bytes": 245760,
+          "physical_read_bytes": 3932160,
+          "physical_write_bytes": 1966080,
+          "aborted": 0,
+          "dense_grants": 0,
+          "response_stall_cycles": 7680
+        },
+        "output_sha256": "5b390f909ac22095de3a07251cf4b449ea3473cc070e051b2c5acb4f90f863ed",
+        "independent_flat_bit_mismatches": 0,
+        "saved_act_bit_mismatches": 0,
+        "all_unwritten_bank_bits_preserved": true,
+        "bank_event_sha256": "4faf461319bf39d27cc86ebf91ff3e6387c612ea5d95e1e0224dbf24fdcea328",
+        "source_order_sha256": {
+          "gate": "9618d9af3dcad77144a5d0abd8a41299e52017d152e8305dc308707d70369784",
+          "up": "818eaaa47ee71c7b4c7403ed923d55660d6cd6b8e56e2b8c653774e4666c26b2",
+          "computed": "ec0822aa4e017e5992203e0d4640b221edbf2807f51d9b9a1547c0481cbcaf5d",
+          "bank_accepted_output": "ec0822aa4e017e5992203e0d4640b221edbf2807f51d9b9a1547c0481cbcaf5d"
+        },
+        "phase_value_sha256": {
+          "exp": "8f1d3997c72957fe77d3f4c19d7f3ec439befecc78aff5210191affb96e3405a",
+          "add": "e9d5133d0a2add61d871525ffca0dd322d9a3dfe8a577033c020c06563636df5",
+          "div": "411854cbe908d1108e92fdc727851bda59cad2f3149f9f9921ce8450967f249a",
+          "sign_mul": "99bf0a0b4dc61fe69cc6a570637066e411da1859554afd93bc8c44f44501731a",
+          "gate_mul": "3d0f9df04b38fbb4193a919962f91065ddd35c76506e999c2b26c1df88eaadfe",
+          "up_mul": "ec0822aa4e017e5992203e0d4640b221edbf2807f51d9b9a1547c0481cbcaf5d"
+        },
+        "protocol_model_ticks_are_hardware_cycles": false,
+        "predicted_hardware_cycles": null
+      },
+      {
+        "case": {
+          "rows": 128,
+          "cols": 96,
+          "ng": 8864,
+          "identity": 1363558914,
+          "note": "Artificial final96-column subwindow.8960 is divisible by160; this is not a natural production tail."
+        },
+        "values": 12288,
+        "beats": 768,
+        "bank_counters": {
+          "read_requests": 2304,
+          "write_requests": 2304,
+          "read_responses": 2304,
+          "rmw_commits": 2304,
+          "logical_read_bytes": 147456,
+          "logical_write_bytes": 147456,
+          "physical_read_bytes": 2359296,
+          "physical_write_bytes": 1179648,
+          "aborted": 0,
+          "dense_grants": 0,
+          "response_stall_cycles": 4608
+        },
+        "output_sha256": "b094fbac31d43dde7d9bc465a98495a85e47786fdef72ce8fe3233ca91d17f66",
+        "independent_flat_bit_mismatches": 0,
+        "saved_act_bit_mismatches": 0,
+        "all_unwritten_bank_bits_preserved": true,
+        "bank_event_sha256": "1bd0af6132fdace12e0393d578bf1ff42c0a2c89b62f6be89861eb5555e90341",
+        "source_order_sha256": {
+          "gate": "eedd4be028587857ecf3c42aca6e2317da67a1949f5fea65861aad7c76e4da76",
+          "up": "39c0a14ee41de499fc1c1757807d43b211479d47cd7f5c20cd4791b717b89069",
+          "computed": "aedf2716fb8e4a0edf320fb0ce58b1d378fc4231f05d38bfc55676670b06c93d",
+          "bank_accepted_output": "aedf2716fb8e4a0edf320fb0ce58b1d378fc4231f05d38bfc55676670b06c93d"
+        },
+        "phase_value_sha256": {
+          "exp": "ec8d6cc91c86b0ca892879303b70e89d36f23d7f81f5ca61c7fa5e630d84895b",
+          "add": "1b05105b18a7b4630dea39479701c412fec77770a6c55901671541a08177b447",
+          "div": "f9f96fc4abf35de93be94ed8b65b4062b5dfbf8701134a303d5b700239121657",
+          "sign_mul": "0be306ae9ce9dfca81941f80c7f07adc6dab2f2801388ff509b9ffadc0cfea77",
+          "gate_mul": "0e7052d51574f3391546a842f95ca5597c316a8a642b54dc4aaf8f2a3b39fedc",
+          "up_mul": "aedf2716fb8e4a0edf320fb0ce58b1d378fc4231f05d38bfc55676670b06c93d"
+        },
+        "protocol_model_ticks_are_hardware_cycles": false,
+        "predicted_hardware_cycles": null
+      }
+    ],
+    "post_capture_source_differences": {
+      "check_numeric.py": {
+        "captured_sha256": "029f9bf85edc9e5fc24d7bf46b91850f96163ccea6810688676707b64665b23a",
+        "delivered_sha256": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802"
+      }
+    },
+    "difference_scope": "Numerical model and C++ remain exact capture identities; runner later splits required actual provenance from source-only unit setup and adds source-drift helper test. Captured execution is not rebound to a different runner."
+  },
+  "failure_history": [
+    {
+      "scope": "prior frontend snapshot",
+      "summary_sha256": "eb8ca60498421711478e5bedb6c95039cc1a6566c25af0506badd82002513c5f",
+      "status": "FAILED",
+      "error": "default-off normalized CHIRRTL drift: banks",
+      "current_source_identity": false
+    },
+    {
+      "scope": "prior frontend snapshot",
+      "summary_sha256": "d5f40acf62f6ba13385963c4588150eff87808e66ff10fb953839e082635371f",
+      "status": "PASS_FFN_TILE_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+      "error": null,
+      "current_source_identity": false
+    },
+    {
+      "scope": "prior frontend snapshot",
+      "summary_sha256": "0f593b16933ee88427310572b8b31045ba02b6aab9fc9d571e6419177beb5a8b",
+      "status": "PASS_FFN_TILE_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+      "error": null,
+      "current_source_identity": false
+    },
+    {
+      "scope": "post-capture model fidelity fix",
+      "reason": "Model release now clears sealed as source does; final_02 re-executed all three bounded actual windows. Prior final_01 preserved under old model hash."
+    }
+  ],
+  "rtl_generated": false,
+  "hardware_arithmetic_executed": false,
+  "production_host_ffn_fused": false,
+  "matrix_direct_tile_writeback": false,
+  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "weights_or_raw_tensors_in_git": false,
+  "unverified": [
+    "production Host three-command validation/fusion",
+    "actual Matrix gate/up tile destinations",
+    "actual downstream act consumption",
+    "full prefill M128 and native/FP32 terminal acceptance",
+    "full-top RTL execution",
+    "physical area/timing and hardware cycle counters"
+  ]
+}

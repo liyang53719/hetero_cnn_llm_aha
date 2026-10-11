@@ -706,3 +706,15 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 小 parser 配置 eventSlots32/maxCommands21 的 enabled/disabled 寄存器相同：Host 131/35,226 bit、record reader 6/334、tensor reader 7/1,278，已有 cfg 833 bit 复用；新增地址算术、比较和门控不能称零面积。保持原 768 KiB/32 bank、4096 MAC、5 accumulator contexts 和同一 iDMA，未扩 SRAM。
 - eaed93d 的完整 Down M128/K8960/N1536 实值证据保持原身份；不继承为新 Host 全链数值 PASS。三个 prefix sweep 对同一 lease 的读和写各 2,359,296 B 必须计入真实共享 iDMA 分母；完整图 131,727,360 B、理想搬运上界 71.3456% 仍非完整周期预测/RTL实测。
 - done：公开 lease 的 source/model/frontend 接线子门；ongoing：生产 Host/owner/iDMA 完整行为、FFN 同 bank residency、全图模型到 Chisel 对应；todo：完整五 block M128 硬件验收。Q21.3/U00.2 ongoing，U01 todo，C02.2 及原 native/FP32 final FAIL 均不关闭。
+
+- 发布闭环：`f5b9b738aa631d241ec5fe32271fa045c0f9d1a1`，tree `0cf2c618c6dcb148f3b3391c3dd756266c2a95f7`。frontend run `38182040972`/job `114596463759` 与 payload run `38182041004` 均一次 SUCCESS。工件逐项复核 282 tests、22 frontend 命令、7 manifest、87 jar、81 份本地/CI相同 CHIRRTL；artifact `11718466606` 为29,358,902 B，SHA256 `11ad71b00cdf11e6fed88c328aceca96e1dc42a1ade07058d0b2fe0560d44c4e`。保留首次frontend到最终模型/文档/审计器六项来源差异，不把后补文件重绑定为原始编译输入。
+
+### 2026-10-11 FFN 共享 A bank / 16-lane SiLU 子门
+
+- `ffn_tiles` 已在真实 Down bank/owner/kernel 和既有 SiLU owner 增加默认关闭的 typed FP32 端口。固定 32 个 1R1W bank、768 KiB SRAM、4096 MAC 与唯一 16-lane SiLU 不变；新增寄存器 1,981 bit，以及地址除余/比较/仲裁/选择逻辑，尚无综合面积或时序结果。
+- A 的低 768 words 保存 M128×K1536 BF16；三个 M128×N160 FP32 slot 各占160 words，高端128 words留空。只有低区 K≤1536 Dense 可与 live tile 共存；冲突 K 明确 Bounds，其他 owner 明确 Unsupported。每次64 B有效 tile读取占512 B SRAM读；写入通过512 B读和512 B写的RMW完成，不能以有效字节替代物理端口带宽。
+- control.fire 只表示接受；完整输入标签预检、生产写入退休、读响应消费计数和最终release后观察共同约束发布。独立审查修复了非法末release提前成功、abort与finish同拍漏报；模型覆盖背压、已接受RMW排空、held response、非有限值、错误结果和协调reset。
+- 最终87个实际Scala/HardFloat源码typecheck与10份CHIRRTL通过，默认关闭三个模块IR与原版等价。完整Host/kernel只typecheck，没有完整顶层展开、RTL生成或硬件算术执行。首轮仅assert诊断位置差异的失败及后续修复快照保留。
+- 既有v0软件producer的gate/up实际经bank模型读出、按原C++ recipe计算、写入act并完整读取后比较，35,328个FP32值对独立平面计算和原act均0位差；保留区、空闲区和所有未写lane哨兵不变。M16来自M128首16行，N96是人为末列窗口，均不冒称独立完整block。host时间、模型tick、SRAM字节不是硬件周期或MAC实测。
+- done（局部）：共享bank typed端口、同一SFU借用、源码/控制/实值子门及独立review；ongoing：本批发布和精确CI、Matrix真实结果直接tile写回、Host三命令完整预检/融合与下游act消费；todo：完整prefill硬件回放及五block M128验收。
+- 原完整图131,727,360 B/71.3456%理想上界尚未由该硬件实现兑现。原native/FP32-final FAIL和数值政策待定保持，Q21.3/U00.2 ongoing、U01 todo、C02.2 OPEN。

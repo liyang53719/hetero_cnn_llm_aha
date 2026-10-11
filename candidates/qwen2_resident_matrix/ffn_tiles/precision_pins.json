@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "scope": "BOUNDED_ACTUAL_V0_PRODUCER_TILES_HOST_STORAGE_CONTROL_AND_STRICT_FP_ONLY",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "layer": 0,
+  "source_shape": [128, 8960],
+  "retained_input_shape": [128, 1536],
+  "producer_origin": "Previously executed unchanged v0 software recipe using official model weights and derived inputs; these are producer exports, not official framework captures.",
+  "sources": {
+    "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+  },
+  "provenance": {
+    "work/qwen2_fullgraph_dataflow_20261011/PREPARED.json": "15b5043a945589cb320319035eeba82a21cc2689fc91ca42ce6bf4b5894726cb",
+    "work/qwen2_fullgraph_dataflow_20261011/cold_m128/RESULT.json": "30614529e641616bfb3fad7857301c4a34104d5b76be92f6c9417e4c387308ae",
+    "work/qwen2_layer0_payload_20261011/manifest.json": "582f34afe5c52633f5290b5ba071f76164193f59d6edfc0d949658fd1e9715d1"
+  },
+  "inputs": {
+    "retained_n1": {"path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_9_n1_recipe.f32le", "bytes": 786432, "sha256": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d"},
+    "gate": {"path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_10_gate_recipe.f32le", "bytes": 4587520, "sha256": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5"},
+    "up": {"path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_11_up_recipe.f32le", "bytes": 4587520, "sha256": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908"}
+  },
+  "comparison_only": {
+    "act": {"path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_12_act_recipe.f32le", "bytes": 4587520, "sha256": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d"}
+  },
+  "recipe": {
+    "phase_order": ["exp(-abs(gate))", "add(1,exp)", "div(1,denominator)", "mul(sig,signbit(gate)?exp:1)", "mul(sig,gate)", "mul(value,up)"],
+    "fp32_rounding": "IEEE round-to-nearest-even at every operation; exp uses original range reduction and degree-7 polynomial; abs(gate)>=80 gives +0",
+    "compiler_flags": ["-std=c++17", "-O2", "-ffp-contract=off", "-fno-fast-math", "-frounding-math", "-fPIC", "-shared"],
+    "legacy_error_policy": "Nonfinite input/output and primitive Add/Div/Mul invalid, division-by-zero, overflow or underflow are fatal. Inexact alone is accepted. Original ExpNegative internal exception flags are not fatal.",
+    "host_exception_limit": "Host fenv flags are reported, not claimed to establish exact HardFloat exception equivalence; no native FP32 policy acceptance."
+  },
+  "storage": {
+    "a_banks": 16, "a_words_per_bank": 1376, "a_word_bits": 256,
+    "b_banks": 16, "b_words_per_bank": 160, "b_word_bits": 256,
+    "slot_base_words": [768, 928, 1088], "slot_words": 160,
+    "retained_words": [0, 768], "spare_words": [1248, 1376],
+    "coordinate": "bank=lane=m%16; word=768+slot*160+(m//16)*20+n//8; fp32lane=n%8",
+    "beat_order": "index=(m//16)*cols+n, 16 consecutive M rows at fixed local n",
+    "ng_semantics": "ng is the actual source column base, aligned to32; local tile width may be less than160"
+  },
+  "default_cases": [
+    {"rows": 16, "cols": 160, "ng": 0, "identity": 1363558912, "note": "First16 rows of the saved M128 producer, not a separate M16 full-block run"},
+    {"rows": 128, "cols": 160, "ng": 160, "identity": 1363558913},
+    {"rows": 128, "cols": 96, "ng": 8864, "identity": 1363558914, "note": "Artificial final96-column subwindow.8960 is divisible by160; this is not a natural production tail."}
+  ],
+  "acceptance": {
+    "hardware_arithmetic_executed": false, "rtl_executed": false,
+    "full_ffn_executed": false, "full_block_executed": false,
+    "official_framework_forward": false,
+    "native_m128_gate": "original FAIL unchanged", "numerical_policy": "open unchanged"
+  }
+}

@@ -361,3 +361,29 @@ CPU运行时间不能换算为MAC利用率。新8项合成数值/控制测试并
 - ongoing：完整DAG端口服务、FP32 seed及bank生命周期与源控制实现对应。
 - to do：可行全周期预测、政策明确后的最小Chisel接入与最终冻结激励RTL。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。
+
+## 299949a 终态及同一全 block 的矩形 Attention 数值映射
+
+`299949a03876fb561010afb6e1d83097db0ca593` 的轻量CI已实跑8＋248＝256项
+通过，payload guard成功。227784B工件SHA为
+`3898a0d31c5d5faf55ea7d7284cf4caa9c4c1bb115b292eab65b7161ab4ed2d5`，
+21份报告与本地逐字节相等，源码pins对精确提交核验。
+
+后续显式矩形模式将同一模型的Attention落实为真实bank读写与返回捕获，保持
+原16条QK累加链、顺序归约/softmax和PV递增K。固定输入下M16先验真，再一次
+M128完成全部15阶段；5308416值全bit等于原v0，CPU27.05秒。Attention的
+19200wide/25362432useful/29884416 active-slice executed计数与事件模型一致。
+没有完整硬件周期，因此不能换算MAC利用率。
+
+新增验证暴露出需要明确的路由合同：每行必须在causal最后有效K返回时捕获，
+后续零概率FMA可把-0改为+0。软件在实际B地址保存原返回值，未添加私有数值槽，
+也没有假设现有硬件提供row write-mask。13项合成小门及独立源码审查通过；
+[来源与复现](../reports/execution/QWEN2_RECTANGULAR_NUMERIC_20261011/README.md)
+保留原native/最终FP32 FAIL和DIAGNOSTIC_NOT_ACCEPTED。
+
+- done（局部）：299949a精确身份、256项CI与21报告核验。
+- done（局部）：同一Dense＋矩形Attention数值链的cold M16/M128保序等价。
+- ongoing：原官方数值政策决定与完整阶段门FAIL，未降低阈值。
+- ongoing：与实际Chisel对齐的seed、bank路由、causal返回捕获及完整端口时序。
+- to do：carried/更长prefill与冻结激励的最终硬件验收。
+- 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。

@@ -22,6 +22,7 @@ on:
       - 'reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/**'
       - 'scripts/qwen2_prefill_resource_schedule.py'
       - 'scripts/qwen2_dense_residency_numeric.py'
+      - 'scripts/qwen2_rectangular_attention_numeric.py'
       - 'scripts/qwen2_shared_sfu_schedule.py'
       - 'chisel/continuous_prefill/scripts/prepare_hardfloat.sh'
       - 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
@@ -101,6 +102,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}'}
+      - name: Fetch the immutable v0 arithmetic comparison source
+        run: |
+          git fetch --no-tags --depth=1 origin 299949a03876fb561010afb6e1d83097db0ca593
+          git cat-file -e 299949a03876fb561010afb6e1d83097db0ca593:chisel/continuous_prefill/tests/qwen2_block.cpp
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install fixed CPU model runtime

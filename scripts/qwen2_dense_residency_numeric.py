@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Bounded, software-only resident Dense extension of the guarded v0 runner.
+"""Bounded, software-only resident Dense/optional Attention v0 storage model.
 
-Only dense() is replaced. No arithmetic policy, native reference, payload loader,
-or RTL is implemented here. All results remain DIAGNOSTIC_NOT_ACCEPTED. The
+Dense is always mapped; --rectangular-attention also maps attention() using the
+published five-context rectangular candidate. No arithmetic policy, native
+reference, payload loader, or RTL is implemented here. All results remain
+DIAGNOSTIC_NOT_ACCEPTED. The
 readonly arena is the existing expanded FP32 *fixture*, not a BF16 DDR image;
 reported BF16 weight traffic is logical transport accounting, not executed iDMA.
 """
@@ -19,12 +21,25 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 BASE_SHA256 = '2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6'
 SCHEDULE_SHA256 = '47e8f3acd6b7dafe4e6fe731cae20205ab93c6208af12b48eb01373edcaa2175'
+ATTENTION_EVENT_SHA256 = 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8'
+SOURCE_PASS_COMMIT = '299949a03876fb561010afb6e1d83097db0ca593'
 STATUS = 'DIAGNOSTIC_NOT_ACCEPTED'
 MAPPING = 'resident_m128_nc3'
 spec = importlib.util.spec_from_file_location('resident_base_recipe', ROOT/'scripts/qwen2_block_recipe_model.py')
 assert spec is not None and spec.loader is not None
 R = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(R)
+
+
+def _module(name):
+    spec = importlib.util.spec_from_file_location(name, ROOT/'scripts'/(name+'.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+ATT = _module('qwen2_rectangular_attention_model')
+NUMERIC_ATT = _module('qwen2_rectangular_attention_numeric')
 
 # This is intentionally inside dense(): the other guarded methods, driver,
 # floating-point probes, and includes are reused without substitutions.
@@ -205,34 +220,68 @@ DENSE_BODY = r'''
 '''
 
 
-def resident_source(root: Path) -> tuple[str, dict]:
+def frozen_sources(root: Path) -> tuple[str, str, dict]:
+    """Bind every new source-pass comparison to immutable original v0 source."""
+    helpers, maths, identity = R.extract_sources(root)
+    committed = subprocess.run(['git', 'show', SOURCE_PASS_COMMIT+':'+R.SOURCE],
+        cwd=root, check=True, capture_output=True, text=True, timeout=15).stdout
+    R.require(R.section(committed, '#include "block_layout.h"', 'struct Pending') == helpers
+              and R.section(committed, '  void norm(', '  void compareStage(') == maths,
+              'canonical arithmetic differs from immutable source-pass reference')
+    identity.update(source_pass_reference_commit=SOURCE_PASS_COMMIT,
+                    source_pass_cpp_sha256=R.sha(committed.encode()))
+    return helpers, maths, identity
+
+
+def resident_source(root: Path, *, rectangular_attention: bool = False) -> tuple[str, dict]:
     R.require(R.file_sha(root/'scripts/qwen2_block_recipe_model.py') == BASE_SHA256,
               'base runner changed; explicit review required')
     R.require(R.file_sha(root/'scripts/qwen2_prefill_resource_schedule.py') == SCHEDULE_SHA256,
               'resident schedule changed; explicit review required')
-    helpers, maths, identity = R.extract_sources(root)
+    R.require(type(rectangular_attention) is bool, 'rectangular Attention opt-in must be boolean')
+    helpers, maths, identity = frozen_sources(root)
     original = R.section(maths, '  void dense(', '  void rope(')
     signature = original[:original.index('{')+1]
     replacement = signature + DENSE_BODY + '  }\n'
     patched = maths.replace(original, replacement)
-    R.require(patched.replace(replacement, original) == maths, 'non-Dense arithmetic changed')
+    restored = patched.replace(replacement, original)
+    support = ''
+    if rectangular_attention:
+        R.require(R.file_sha(root/'scripts/qwen2_rectangular_attention_model.py') == ATTENTION_EVENT_SHA256,
+                  'rectangular Attention event model changed; explicit review required')
+        attention = R.section(maths, '  void attention(', '  void computeReference(')
+        mapped = attention[:attention.index('{')+1] + NUMERIC_ATT.ATTENTION_BODY + '  }\n'
+        patched = patched.replace(attention, mapped)
+        restored = patched.replace(replacement, original).replace(mapped, attention)
+        support = NUMERIC_ATT.CPP_SUPPORT
+        identity.update(attention_event_sha256=ATTENTION_EVENT_SHA256,
+                        attention_helper_sha256=R.file_sha(root/'scripts/qwen2_rectangular_attention_numeric.py'),
+                        replaced_attention_sha256=R.sha(attention.encode()),
+                        resident_attention_body_sha256=R.sha(NUMERIC_ATT.ATTENTION_BODY.encode()),
+                        non_replaced_math_sha256=R.sha(maths.replace(original,'').replace(attention,'').encode()))
+    R.require(restored == maths, 'unmapped canonical arithmetic changed')
     text = '// Ordinary C++ software numerical model; not a hardware simulator.\n'
-    text += helpers + R.HOST_PROBES + R.DRIVER + patched + R.MAIN
+    text += helpers + R.HOST_PROBES + support + R.DRIVER + patched + R.MAIN
     R.require(not re.search(r'Verilat|verilat|BlockDut|VQwen|d\.eval|DUT', text),
               'hardware symbol in software model')
     identity.update(base_runner_sha256=BASE_SHA256, schedule_sha256=SCHEDULE_SHA256,
                     replaced_dense_sha256=R.sha(original.encode()),
                     non_dense_math_sha256=R.sha(maths.replace(original, '').encode()),
-                    resident_dense_body_sha256=R.sha(DENSE_BODY.encode()))
+                    resident_dense_body_sha256=R.sha(DENSE_BODY.encode()),
+                    rectangular_attention=rectangular_attention)
     return text, identity
 
 
-def generate_and_compile(root: Path, output: Path, shape: dict | None = None) -> tuple[dict, dict]:
+def generate_and_compile(root: Path, output: Path, shape: dict | None = None, *,
+                         rectangular_attention: bool = False) -> tuple[dict, dict]:
     """Compile once; default layout has MAX_TOKENS=128 for both actual runs."""
     R.require(not output.exists(), 'refuse existing generated directory')
-    text, provenance = resident_source(root)
+    text, provenance = resident_source(root, rectangular_attention=rectangular_attention)
     layout = R.make_layout(shape)
     R.require(layout['hidden'] <= 1536, 'hidden dimension exceeds resident A capacity')
+    if rectangular_attention:
+        R.require(layout['head_dim']<=128 and layout['heads']<=12,
+                  'rectangular Attention shape exceeds fixed allocation')
     output.mkdir(parents=True)
     (output/'software_recipe.cpp').write_text(text)
     (output/'block_layout.h').write_text(R.header(layout))
@@ -256,9 +305,9 @@ def generate_and_compile(root: Path, output: Path, shape: dict | None = None) ->
 
 def validate_generated(root: Path, generated: Path) -> tuple[dict, dict]:
     """Reuse an intact binary, source, layout, compiler contract, and generator."""
-    source, identity = resident_source(root)
     layout = json.loads((generated/'layout.json').read_text())
     provenance = json.loads((generated/'provenance.json').read_text())
+    source, identity = resident_source(root, rectangular_attention=provenance.get('rectangular_attention', False))
     R.require(layout == R.make_layout({key: layout[key] for key in R.SHAPE}), 'generated layout changed')
     for key, value in identity.items():
         # A later commit may contain unchanged guarded source; no new arithmetic.
@@ -302,6 +351,21 @@ def parse_dense_log(log: str, layout: dict, tokens: int) -> list[dict]:
     return rows
 
 
+def expected_attention(tokens: int, layout: dict) -> dict:
+    return NUMERIC_ATT.expected(tokens, layout, ATT)
+
+
+def parse_attention_log(log: str, layout: dict, tokens: int, enabled: bool) -> list[dict]:
+    rows = []
+    for line in log.splitlines():
+        if line.startswith('RESIDENT_ATTENTION '):
+            row = dict(re.findall(r'(\w+)=([^ ]+)', line))
+            rows.append({key: value if key == 'status' else int(value) for key, value in row.items()})
+    R.require(rows == ([expected_attention(tokens, layout)] if enabled else []),
+              'resident Attention counters/order differ from bounded mapping')
+    return rows
+
+
 def _verify_m16(directory: Path, generated: Path, provenance: dict, arena_sha256: str) -> dict:
     result_path = directory/'RESULT.json'
     result = json.loads(result_path.read_text())
@@ -319,6 +383,7 @@ def _verify_m16(directory: Path, generated: Path, provenance: dict, arena_sha256
               'M16 prerequisite execution/environment incomplete')
     layout = R.make_layout()
     parse_dense_log(log, layout, 16)
+    parse_attention_log(log, layout, 16, provenance.get('rectangular_attention', False))
     R.require([entry['name'] for entry in result['stages']] == list(R.STAGE_NAMES), 'M16 prerequisite stages missing')
     for phase, entry in enumerate(result['stages']):
         name = R.STAGE_NAMES[phase]
@@ -357,6 +422,8 @@ def execute(root: Path, generated: Path, arena: Path, tokens: int, output: Path,
     R.require(R.file_sha(arena) == expected_arena_sha256, 'sealed readonly arena changed during execution')
     log = (output/'run.log').read_text()
     dense = parse_dense_log(log, layout, tokens)
+    attention_enabled = provenance.get('rectangular_attention', False)
+    attention = parse_attention_log(log, layout, tokens, attention_enabled)
     stages = []
     for phase, name in enumerate(R.STAGE_NAMES):
         path = output/f'phase_{phase}_{name}_recipe.f32le'
@@ -368,17 +435,28 @@ def execute(root: Path, generated: Path, arena: Path, tokens: int, output: Path,
         shape={**{key: layout[key] for key in R.SHAPE}, 'tokens': tokens},
         readonly_sha256=expected_arena_sha256, generated_directory=str(generated.resolve()),
         source_identity=provenance, run_log_sha256=R.file_sha(output/'run.log'),
-        stages=stages, dense=dense, wall_seconds=elapsed, m16_prerequisite=prerequisite,
+        stages=stages, dense=dense, attention=attention, wall_seconds=elapsed, m16_prerequisite=prerequisite,
+        wall_seconds_purpose='CPU execution bookkeeping only; not performance, scalar timing or hardware cycles',
         scope=dict(software_only=True, consumes_own_previous_stages=True, all_15_stages=True,
                    sram_numerical_address_model=True, rtl_executed=False, hardware_cycles=None,
                    checkpoint_accuracy_signoff=False, hardware_acceptance=False,
                    official_framework_forward=False, accumulator_seed_interface_implemented=False,
                    physical_sram_repartition_implemented=False, host_command_execution=False,
                    real_idma_execution=False, ack_or_port_timing_validation=False,
+                   rectangular_attention_numerical_address_model=attention_enabled,
+                   attention_row_final_capture_route_implemented=False,
+                   attention_scratch_gather_route_implemented=False,
                    other_operators='unchanged canonical software recipe'),
         weight_transport='logical BF16 byte counts; input arena is expanded FP32 fixture, not BF16 DDR or iDMA execution',
         bias_scope='canonical 15-stage driver fuses bias at Dense final emit; separate Host bias owner/transport is not executed',
-        arithmetic='unchanged v0 BF16 operands, increasing-K FP32 std::fma prefixes, FP32 snapshots, bias once at final K')
+        arithmetic='unchanged v0 BF16 operands, increasing-K FP32 std::fma prefixes, FP32 snapshots, bias once at final K',
+        attention_arithmetic=('16 independent j%16 FP32 FMA stripes, ordered stripe 0..15 FP32 reduction, '
+            'unchanged causal scalar softmax, BF16 probability and V, ascending-key FP32 PV; '
+            'each row captured at its causal final key before physical inactive-row suffix updates'
+            if attention_enabled else 'unchanged canonical software Attention'),
+        attention_memory_accounting=('numeric_* byte counters are actual scalar C++ SRAM dereferences, including '
+            'repeated per-lane operand reads; event_gather_bank_read_bytes counts published gather requests '
+            'and is not executed RTL traffic or a timing measurement'))
     (output/'RESULT.json').write_text(json.dumps(result, indent=2, allow_nan=False)+'\n')
     return result
 
@@ -388,6 +466,8 @@ def main() -> None:
     sub = parser.add_subparsers(dest='command', required=True)
     prepare = sub.add_parser('prepare')
     prepare.add_argument('--output', required=True, type=Path)
+    prepare.add_argument('--rectangular-attention', action='store_true',
+                         help='also map canonical Attention into the fixed resident SRAM (diagnostic only)')
     run = sub.add_parser('execute')
     run.add_argument('--generated', required=True, type=Path)
     run.add_argument('--arena', required=True, type=Path)
@@ -398,7 +478,7 @@ def main() -> None:
     run.add_argument('--timeout-seconds', type=float, default=600)
     args = parser.parse_args()
     if args.command == 'prepare':
-        _, result = generate_and_compile(ROOT, args.output)
+        _, result = generate_and_compile(ROOT, args.output, rectangular_attention=args.rectangular_attention)
     else:
         result = execute(ROOT, args.generated, args.arena, args.tokens, args.output,
             expected_arena_sha256=args.arena_sha256, timeout_seconds=args.timeout_seconds,

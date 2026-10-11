@@ -240,3 +240,10 @@ Dense函数，实际搬运BF16 A/B、保存/读取FP32前缀并逐lane保持递�
 这是软件地址/算术等价门。原Host、物理seed接口、端口时序和异常flags没有
 因此通过；原官方精度FAIL与完整时序unbound保持。29.701173%仍为上述事件图
 的宽松上界，数值CPU耗时不用于硬件周期或利用率。
+
+矩形Attention也已在同一软件block中执行真实bank值：M128的Q/K/V、score、prob
+占A/C168words/bank，五条带partials占B160words/bank，PV捕获仅在条带排空后
+复用B。每行以causal最后有效K的实际返回值捕获，避免后续零概率改变负零；
+返回tag到行捕获的路由仍是未实现硬件接口。15阶段全bit等于原v0，原精度FAIL
+保持。[实际计数与范围](../reports/execution/QWEN2_RECTANGULAR_NUMERIC_20261011/README.md)
+不提供新的时钟预测或RTL利用率，现有宽松下界也未被软件CPU耗时替代。

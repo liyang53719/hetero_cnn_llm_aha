@@ -718,3 +718,16 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 既有v0软件producer的gate/up实际经bank模型读出、按原C++ recipe计算、写入act并完整读取后比较，35,328个FP32值对独立平面计算和原act均0位差；保留区、空闲区和所有未写lane哨兵不变。M16来自M128首16行，N96是人为末列窗口，均不冒称独立完整block。host时间、模型tick、SRAM字节不是硬件周期或MAC实测。
 - done（局部）：共享bank typed端口、同一SFU借用、源码/控制/实值子门及独立review；ongoing：本批发布和精确CI、Matrix真实结果直接tile写回、Host三命令完整预检/融合与下游act消费；todo：完整prefill硬件回放及五block M128验收。
 - 原完整图131,727,360 B/71.3456%理想上界尚未由该硬件实现兑现。原native/FP32-final FAIL和数值政策待定保持，Q21.3/U00.2 ongoing、U01 todo、C02.2 OPEN。
+
+- 本批已发布 `17baa23c1d540681c52038ea8a224dc7fd96e811`，tree `e6a8022713f67e1ce77fa9faddeee7869f366e4b`。frontend run `38184311009`/job `114603266021` 与 payload run `38184311016` 均首次成功；工件核验328 tests、24条前端命令、8 manifest、87 jar及91份本地/CI严格一致IR。artifact `11719176753` 为33,772,252 B，SHA256 `abd1ee1174d2e7dfbba0bd04950f3648582239810131167c57c8de8766197ead`；复核摘要SHA `481924e46a217ac5f50a467ce58cbbcb45c699e583585e01a1e88b828d5867b3`。实际三窗数值仍绑定独立local capture；最终runner仅来源校验封装变化明确单列，不把CI当实际producer重跑。
+
+
+### 2026-10-11 Matrix 实际返回 → FFN 驻留窗口子门
+
+- `ffn_window` 在独立、默认关闭的源码 profile 中接通真实 Dense owner/kernel 的内部 window 入口、实际 Matrix 返回写入既有 A bank，以及带完整 base/dtype/M/K/byte-stride/identity 的 A lease。`job.n=8960` 保留全行 stride，窗口宽度只控制执行列范围；Gate/Up 的完成是 tile commit，真实 DDR writeBytes 始终为0，不送旧 Host done，不发布虚假 DDR live 范围。
+- Matrix 结果用原16 KiB finalValue与8-bit游标重排，tile增加只在begin锁存的context-major写序。写RMW仅等待已接受同步bank响应，不能等待整个operand FIFO清空，否则会与两槽Matrix结果队列循环阻塞。末RMW/seal、所有Matrix结果、已接受内存与错误drain退休后才完成；raw abort、aFence同拍失效、held完成及普通命令准入均纳入审查/模型负测。
+- 最终28个端口/控制模型门、14个数值/身份小门、8个源码门与1个交付门通过。89个真实Scala/HardFloat源typecheck、14份CHIRRTL通过；完整Host/kernel仅typecheck。默认全关闭与旧tiles-on/window-off的端口及规范化IR都保持相同。相比17baa仅净增262个metadata寄存器bit（owner259、bank标签3），固定32个1R1W bank/768 KiB、4096 MAC、单一16-lane SiLU及原result buffer不变，组合逻辑面积/时序未测。
+- 实值路径从既有v0完整软件图phase9 n1与固定官方权重开始：实际DDR地址载荷→A/B bank→接受的Matrix packet→逐K FP32 FMA→Gate/Up tile RMW→实际bank读出的SiLU输入→act写后回读。golden只在真实输出完成后比较，未作为中间初始化。M16/K1536/N32/ng0与M128/K1536/N160/ng160分别0.987/3.518秒host时间；每个Gate/Up/act分别512和20,480个值，对独立raw计算与保存producer均逐bit相同。
+- M128 Gate首次A读786,432 B，Up的A读取和ingress RMW均为0，整个链的低区A hash相同。每个投影7,680实际packet、5结果、1,280 tile拍；权重各读491,520 B，ng160的B首offset320、末27,507,776，完整8960 stride确证。DDR、有效tile字节与物理SRAM流量分别记录；这些是模型事件，不是实际iDMA或硬件周期/MAC实测。当前只验一个N160窗口，56窗完整FFN尚未验收。
+- 两份成功capture保持模型4219c2f身份。随后最终1c9f69be仅修普通job未接受时冲突预检，以及新接受的拒绝任务计数清理；独立review确认window路径无变化，28模型门覆盖修复，但不将原capture改称新源码执行。数值runner/C++未改，precision pins为未来复现更新。首轮M16的trace UInt32/tag错误发生在首个A descriptor、算术前，修复为UInt64后的新capture及原失败均保留。前端最终auditor只新增净寄存器账与只读重验，编译源/IR hash保持，未重编。
+- done（局部）：内部window真实源码、A lease/typed completion、实际Gate→Up→SiLU模型与独立review。ongoing：精确发布/轻CI、公开Host三命令预检/融合及act沿原DDR ACK路径排出。todo：56窗完整FFN、原Down真实依赖、完整prefill冻结刺激硬件回放。原native/FP32-final FAIL、待定数值政策与Q21.3/U00.2 ongoing、U01 todo、C02.2 OPEN均保持。

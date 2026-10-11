@@ -1,0 +1,205 @@
+{
+  "schema": "qwen2-public-host-workspace-v1",
+  "default_enabled": false,
+  "scope": "PUBLIC_HOST_LEASE_SOURCE_AND_MODEL_FRONTEND_ONLY",
+  "base_main": "eaed93d8b200d9e3d059a00678a07b2fcb7076b6",
+  "source_files": {
+    "HostWorkspaceElaboration.scala": {
+      "bytes": 1813,
+      "sha256": "0f6b970cbdc481c7873a02127cd068830a15c131275f1c92c134ff8a32377b43"
+    },
+    "README.md": {
+      "bytes": 7323,
+      "sha256": "7b46be8b1bebaea476f7b906b4a4a05accdf7b16d3b89a7698ab4e89ca2821d8"
+    },
+    "check_frontend.py": {
+      "bytes": 16283,
+      "sha256": "67c6157f56c0b2efdcc21e5351742f7c95bc5acb98f007212768aecbff07c25e"
+    },
+    "host_workspace.patch": {
+      "bytes": 14534,
+      "sha256": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8"
+    },
+    "model.py": {
+      "bytes": 9841,
+      "sha256": "2725286c8eb609c89f48cee899edc6f3c2370529f64c99cd458286ed08607616"
+    },
+    "source_pins.json": {
+      "bytes": 22966,
+      "sha256": "69f272ab7acdd69ba3a8eff8473e340e6d4e9b5f5cd5fdca09c55356c31b97a3"
+    },
+    "test_frontend.py": {
+      "bytes": 9153,
+      "sha256": "777ada793c20887c2f42ffe0a58425a06f9db25e8db27a612926507fae871451"
+    },
+    "test_model.py": {
+      "bytes": 15879,
+      "sha256": "f5b96c39f6c2d8e037d5aaef27e59cdf28e54190c4de1aba64f71f0398da9163"
+    }
+  },
+  "source_pins_sha256": "69f272ab7acdd69ba3a8eff8473e340e6d4e9b5f5cd5fdca09c55356c31b97a3",
+  "validation": {
+    "python_tests": 28,
+    "model_tests": 17,
+    "source_frontend_tests": 11,
+    "test_log_sha256": "4f3bb5e9c3c92b0f440d176bb595112295f9320f8941dd9d7e1650e6c9d3c091",
+    "scala_source_count": 85,
+    "full_host_top_typechecked": true,
+    "full_qwen_owner_kernel_typechecked": true,
+    "full_top_elaborated": false,
+    "frontend_summary_sha256": "0f036dd2b58dfb6600853dac1ff08eb0d4926b59be12b06b8937b15d225c0f5b",
+    "frontend_command_seconds": {
+      "compile.log": 31.551826031995006,
+      "elaboration.log": 2.421464503000607
+    },
+    "register_reaudit_summary_sha256": "5b1787953e38268e50c0273062ab9c2ce7a0fc18118f332f7a91601cf6e5862c",
+    "register_reaudit_compiler_commands": [],
+    "default_off_ir": {
+      "ordinary": {
+        "equal": true,
+        "sha256": "765555d665c6c2bd654152398c7f37c4e4f35bd119b5bf74c452af562f71c4d9"
+      },
+      "qkv": {
+        "equal": true,
+        "sha256": "faad20c3add1930c4b0c851585f3c6be3ef8a770cab7d92e80fa2da32cec9c9d"
+      }
+    },
+    "chirrtl": {
+      "ordinary_baseline.fir": {
+        "sha256": "742627eaa7acb81b32320b13c48dfdaac2fe3e2844f2fed9899f6d1e99d108e4",
+        "bytes": 1429531
+      },
+      "ordinary_disabled.fir": {
+        "sha256": "5d218b3370e66ff20ca4c7d916e083fe0aba9a1c5eb3de714b6b1cfa4a395672",
+        "bytes": 1751853
+      },
+      "ordinary_enabled.fir": {
+        "sha256": "f3b98606808235df8e9c4952918b8300e0580c5bebc0b357c4945087f580fa0b",
+        "bytes": 1757395
+      },
+      "qkv_baseline.fir": {
+        "sha256": "edfae51494eb7c0ed2803efd402f031bdf9c315a7b7e79c5a476cccf99c0dd53",
+        "bytes": 1429080
+      },
+      "qkv_disabled.fir": {
+        "sha256": "82f1b81b858fc7e556409dcaefd8253d0ecf6b38db1a6930a0433883e8d9bc87",
+        "bytes": 1751267
+      },
+      "qkv_enabled.fir": {
+        "sha256": "72d379eb13c0ab7e9b37b05d8da13eda72fcdd7d6cd429fad057bad94fcd2d74",
+        "bytes": 1756809
+      }
+    },
+    "register_inventory": {
+      "ordinary": {
+        "enabled_equals_disabled": true,
+        "added_registers": 0,
+        "added_register_bits": 0,
+        "cfg_reused_bits": 833,
+        "by_module": {
+          "Record128Reader": {
+            "register_count": 6,
+            "total_bits": 334,
+            "inventory_sha256": "d357669d5478f48aba2f501b2a65f61e466f51b2b33493ef59fe598f58513f08"
+          },
+          "TypedTensorReader": {
+            "register_count": 7,
+            "total_bits": 1278,
+            "inventory_sha256": "3cbd7218b4749f2eddbeca2995af74b8c365b4fe355b0bebbbb688e84e9f73db"
+          },
+          "HostBlockCommands": {
+            "register_count": 131,
+            "total_bits": 35226,
+            "inventory_sha256": "8c4fd57cdbfbb5d8f65fa79891d87db5a7bc9f41577148ebe5bd008c4f5e16fb"
+          }
+        }
+      },
+      "qkv": {
+        "enabled_equals_disabled": true,
+        "added_registers": 0,
+        "added_register_bits": 0,
+        "cfg_reused_bits": 833,
+        "by_module": {
+          "Record128Reader": {
+            "register_count": 6,
+            "total_bits": 334,
+            "inventory_sha256": "d357669d5478f48aba2f501b2a65f61e466f51b2b33493ef59fe598f58513f08"
+          },
+          "TypedTensorReader": {
+            "register_count": 7,
+            "total_bits": 1278,
+            "inventory_sha256": "3cbd7218b4749f2eddbeca2995af74b8c365b4fe355b0bebbbb688e84e9f73db"
+          },
+          "HostBlockCommands": {
+            "register_count": 131,
+            "total_bits": 35226,
+            "inventory_sha256": "8c4fd57cdbfbb5d8f65fa79891d87db5a7bc9f41577148ebe5bd008c4f5e16fb"
+          }
+        }
+      }
+    },
+    "source_readonly_audit_sha256": "87d515939f4d81fffdde434c87c09810fb090b55e0af12e214c85f1e6898ef7b"
+  },
+  "public_contract": {
+    "launch_payload_bits": 833,
+    "region_payload_bits": 130,
+    "region_count": 4,
+    "workspace_index_only_when_enabled": 3,
+    "internal_workspace_bits": 173,
+    "split_k": 2560,
+    "dense_m": [
+      16,
+      128
+    ],
+    "max_k": 8960,
+    "n_multiple": 32,
+    "multi_chunk_capacity": "(N/32)*16384",
+    "full_down_workspace_bytes": 786432,
+    "default_empty_region3_compatible": true,
+    "enabled_empty_region3_accepted": false,
+    "generation": "uint32(epoch16)+1; identity only",
+    "bias_index_repurposed": false,
+    "public_abort_port": false
+  },
+  "resources": {
+    "new_sram_bytes": 0,
+    "new_mac": 0,
+    "new_accumulator_contexts": 0,
+    "added_host_register_bits_in_bounded_ir": 0,
+    "fixed_mac": 4096,
+    "fixed_sram_bytes": 786432,
+    "external_prefix_workspace_bytes_for_n1536": 786432,
+    "combinational_area_timing_measured": false,
+    "topology": "same owner / Matrix service / memory hub / iDMA"
+  },
+  "prior_actual_down": {
+    "commit": "eaed93d8b200d9e3d059a00678a07b2fcb7076b6",
+    "geometry": [
+      128,
+      8960,
+      1536
+    ],
+    "fp32_output_words": 196608,
+    "summary_sha256": "5d3688179363fef340cd5a3aab245c41f58f69dd173d25b6747d5c2fdef5794b",
+    "new_host_numerical_run": false
+  },
+  "failure_history": [
+    {
+      "test_log_sha256": "54ff7cabc9f7c7b75c25afc662ce0c309f6cfd65a953b01dac89a99f4b9e82f8",
+      "scope": "test assumption only",
+      "reason": "A write ACK with ready=false is not consumed by the port model; the test was corrected to the existing explicit late-seed-ACK poison path. Frozen owner source/model unchanged."
+    }
+  ],
+  "unverified": [
+    "full Host/top owner/iDMA execution",
+    "physical inactive-kernel late ACK routing",
+    "native V/QKV numerical route under this profile",
+    "whole-block M128",
+    "FFN shared-bank residency",
+    "native M128 and FP32 terminal acceptance"
+  ],
+  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "rtl_generated": false,
+  "hardware_arithmetic_executed": false,
+  "weights_or_raw_tensors_in_git": false
+}

@@ -1,0 +1,160 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
+@@ -14,7 +14,7 @@
+   * tensors are internal-only logical values, never DDR materializations.
+   * Their completion events are conservatively delayed until PV writeback.
+   */
+-class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {
++class HostBlockCommands(s:QwenBlockShape,eventSlots:Int=256,maxCommands:Int=64,bf16Weights:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false) extends Module {
+   require(!bf16AttentionBlock || (bf16AttentionCore && bf16QkNormRope && bf16Qkv),"BF16 Attention block requires the explicit Attention core/QKV/QK profile")
+   require(!bf16AttentionBlock || maxCommands>=22,"Attention block requires 22 public commands")
+   require(!bf16AttentionCore || (bf16QkNormRope && bf16Qkv),"BF16 Attention core requires actual QKV and QK Norm/RoPE producers")
+@@ -28,6 +28,8 @@
+   require(eventSlots>=4 && isPow2(eventSlots) && maxCommands>=21 && maxCommands<=255)
+   val io=IO(new Bundle {
+     val launch=Flipped(Decoupled(new HostCommandLaunch));val result=Decoupled(new HostCommandResult)
++    // Internal lease only: HostCommandLaunch and its four regions stay 833 bits.
++    val prefixWorkspace=if(enableTransposedDown)Some(Output(new TransposedPrefixWorkspace(2560)))else None
+     val completion=Decoupled(UInt(56.W))
+     val job=Decoupled(new QwenOwnerJob);val done=Flipped(Decoupled(new QwenOwnerResult))
+     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
+@@ -167,6 +169,11 @@
+   if(bf16Gdn){when(slot>=3.U){tensor.io.request.bits.root:=Mux(slot===3.U,policy(2)(79,56),policy(2)(103,80))}}
+   if(bf16QkNormRope){when(slot===3.U){tensor.io.request.bits.root:=policy(2)(79,56)}}
+   tensor.io.request.bits.regions:=cfg.regions
++  if(enableTransposedDown){
++    // Slot 3 belongs exclusively to the launch-snapshotted workspace lease.
++    // Generic tensor accesses cannot borrow its read or write permission.
++    tensor.io.request.bits.regions(3):=0.U.asTypeOf(new Region)
++  }
+   val gdnOperation=policy(1)(71,64)
+   val extraWrite=if(bf16GdnCore) (slot===4.U && gdnOperation===1.U)||(slot===3.U && gdnOperation===4.U) else bf16Gdn.B && slot===4.U
+   tensor.io.request.bits.writeAccess:=slot===2.U || extraWrite || (bf16QkNormRope.B && slot===3.U)
+@@ -183,8 +190,9 @@
+   def fail(code:UInt):Unit={status:=code;poison:=true.B;completingGroup:=false.B;state:=complete;if(bf16GdnCore){clearTransaction()};if(bf16AttentionCore){pendingAttentionValid:=false.B;pendingGqaValid:=false.B}}
+   def overlap(a:UInt,e:UInt,b:UInt,f:UInt):Bool=a<f && b<e
+   def intersectsVirtual(t:DecodedTensor):Bool=(0 until maxCommands).map(i=>i.U<virtualCount && overlap(t.address,t.paddedEnd,vStarts(i),vEnds(i))).reduce(_||_)
++  val ordinaryRegions=cfg.regions.take(if(enableTransposedDown)3 else 4)
+   def liveSpan(address:UInt,end:UInt):Bool={
+-    val initial=cfg.regions.map(r=>r.read && !r.write && r.base<=address && end<=r.limit).reduce(_||_)
++    val initial=ordinaryRegions.map(r=>r.read && !r.write && r.base<=address && end<=r.limit).reduce(_||_)
+     val published=(0 until producedCapacity).map(i=>producedValid(i) && starts(i)<=address && end<=ends(i)).reduce(_||_)
+     val virtual=(0 until maxCommands).map(i=>i.U<virtualCount && overlap(address,end,vStarts(i),vEnds(i))).reduce(_||_)
+     (initial||published) && !virtual
+@@ -228,8 +236,8 @@
+   def rememberSource(t:DecodedTensor,role:UInt):Unit={
+     sourceValid(role.pad(4)):=true.B;sourceStarts(role.pad(4)):=t.address;sourceEnds(role.pad(4)):=t.paddedEnd;sourceTensor(role.pad(4)):=t
+   }
+-  def readonly(t:DecodedTensor):Bool=cfg.regions.map(r=>r.read && !r.write && r.base<=t.address && t.paddedEnd<=r.limit).reduce(_||_)
+-  def readwrite(t:DecodedTensor):Bool=cfg.regions.map(r=>r.read && r.write && r.base<=t.address && t.paddedEnd<=r.limit).reduce(_||_)
++  def readonly(t:DecodedTensor):Bool=ordinaryRegions.map(r=>r.read && !r.write && r.base<=t.address && t.paddedEnd<=r.limit).reduce(_||_)
++  def readwrite(t:DecodedTensor):Bool=ordinaryRegions.map(r=>r.read && r.write && r.base<=t.address && t.paddedEnd<=r.limit).reduce(_||_)
+   def same(a:DecodedTensor,b:DecodedTensor):Bool=a.address===b.address && a.rank===b.rank && a.dtype===b.dtype && a.dims.asUInt===b.dims.asUInt
+   def sameAllocation(a:DecodedTensor,b:DecodedTensor):Bool=same(a,b) && a.elementCount===b.elementCount &&
+     a.payloadBytes===b.payloadBytes && a.paddedEnd===b.paddedEnd
+@@ -260,7 +268,7 @@
+   def nextCommand():Unit={when(pc+1.U>=cfg.commands){fail(Status.Malformed.U)}.otherwise{pc:=pc+1.U;state:=fetch}}
+   when(io.launch.fire){
+     val l=io.launch.bits
+-    def roTable(b:UInt,e:UInt):Bool=l.regions.map(r=>r.read && !r.write && r.base<=b && e<=r.limit).reduce(_||_)
++    def roTable(b:UInt,e:UInt):Bool=l.regions.take(if(enableTransposedDown)3 else 4).map(r=>r.read && !r.write && r.base<=b && e<=r.limit).reduce(_||_)
+     val validRegions=l.regions.map(r=>(r.base===r.limit && !r.read && !r.write)||
+       (r.base<r.limit && r.base(5,0)===0.U && r.limit(5,0)===0.U && r.limit<=(BigInt(1)<<56).U)).reduce(_&&_)
+     val collisions=(for(i<-0 until 4;j<-i+1 until 4)yield l.regions(i).base<l.regions(i).limit && l.regions(j).base<l.regions(j).limit && overlap(l.regions(i).base,l.regions(i).limit,l.regions(j).base,l.regions(j).limit)).reduce(_||_)
+@@ -279,6 +287,16 @@
+     producedValid:=VecInit(Seq.fill(producedCapacity)(false.B));managedHistory:=VecInit(Seq.fill(producedCapacity)(false.B));boundGdn:=false.B
+     events:=VecInit(Seq.fill(eventSlots)(false.B));events(0):=true.B
+     when(!ok){status:=Status.Bounds.U;state:=finish}.otherwise{state:=fetch}
++    if(enableTransposedDown){
++      val lease=l.regions(3)
++      val workspaceOK=lease.read && lease.write && lease.base<lease.limit &&
++        lease.base(5,0)===0.U && lease.limit(5,0)===0.U &&
++        lease.limit<=(BigInt(1)<<56).U && lease.limit-lease.base>=64.U &&
++        !overlap(lease.base,lease.limit,l.commandBase,l.commandLimit) &&
++        !overlap(lease.base,lease.limit,l.descriptorBase,l.descriptorLimit)
++      // validRegions and collisions above still check all four public regions.
++      when(!workspaceOK){status:=Status.Bounds.U;state:=finish}
++    }
+   }
+   when(state===fetch && reader.io.request.fire){state:=get}
+   when(state===get && reader.io.result.fire){
+@@ -924,6 +942,32 @@
+       when(pv){bound.a:=q.address;bound.b:=k.address;bound.c:=b.address;bound.m:=q.dims(0);bound.n:=s.hidden.U;bound.k:=s.headDim.U}
+       state:=issue
+     }
++    if(enableTransposedDown){
++      // Validate the actual owner job dimensions before its DMA can start.
++      // Native projection windows use tokenCount, not the declared tensor M.
++      val downM=Mux(nativeProjection,tokenCount,m)
++      val downN=Mux(nativeProjection,projectionN,n)
++      val downK=Mux(nativeProjection,1024.U,a.dims(1))
++      val downActivationBf16=nativeProjection || gdnProjection || attentionBlockDense
++      val downShapeOK=(downM===16.U || downM===128.U) && downN>0.U && downN(4,0)===0.U &&
++        downK>0.U && downK<=8960.U && downK(3,0)===0.U &&
++        (!downActivationBf16 || downK(4,0)===0.U)
++      val workspaceExtent=cfg.regions(3).limit-cfg.regions(3).base
++      val workspaceCapacityOK=downK<=2560.U || workspaceExtent>=(downN.pad(64)>>5)*16384.U
++      when(opcode===0x20.U && (!downShapeOK || !workspaceCapacityOK)){fail(Status.Bounds.U)}
++    }
++  }
++  // cfg is captured only on launch.fire and cannot change through owner ACK,
++  // completion backpressure or terminal result ACK. The owner snapshots again.
++  // Epoch + 1 is an identity tag only, never a persistent checkpoint or proof
++  // of freshness after reset. Widen before addition so epoch 65535 maps to 65536.
++  if(enableTransposedDown){
++    val workspace=io.prefixWorkspace.get
++    workspace.valid:=state=/=idle && state=/=locked && status===0.U && !poison
++    workspace.base:=cfg.regions(3).base
++    workspace.extent:=cfg.regions(3).limit-cfg.regions(3).base
++    workspace.generation:=cfg.epoch.pad(32)+1.U(32.W)
++    workspace.splitK:=2560.U(12.W)
+   }
+   when(io.job.fire){jobs:=jobs+1.U;state:=waitDone}
+   when(io.done.fire){val r=io.done.bits
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
+@@ -10,7 +10,9 @@
+   * payload injection, or second iDMA exists. Metadata and owner traffic share
+   * the same arbiter, mailbox adapter, original upstream backend and AXI port.
+   */
+-class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {
++class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false) extends Module {
++  require(!enableTransposedDown || (pipelined && weightReadBeats==16 && !bf16Gdn && !bf16QkNormRope),
++    "transposed Down requires the existing pipelined weight16 Qwen2 or V/QKV profile")
+   require(!bf16AttentionBlock || bf16AttentionCore,"Attention block requires the explicit core profile")
+   require(!bf16AttentionCore || bf16QkNormRope,"Attention core requires the explicit QKV/Norm/RoPE profile")
+   require(!bf16QkNormRope || bf16Qkv,"QK Norm/RoPE requires the explicit QKV profile")
+@@ -38,10 +40,20 @@
+     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
+   })
+   dontTouch(io)
+-  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock))
++  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown))
+   val hub=Module(new SharedMemoryArbiter(2))
+   val dmaPoison=Wire(Bool())
+-  cmd.io.launch<>io.launch;io.result<>cmd.io.result;io.completion<>cmd.io.completion
++  if(enableTransposedDown){
++    // Both handshake sides see the same poison fence. Accepted traffic keeps
++    // draining through the original owner/hub/iDMA response and ACK paths.
++    // Host has no abort port: resetRequired requires coordinated root reset.
++    val launchPoison=cmd.io.resetRequired||owner.io.resetRequired||hub.io.resetRequired||dmaPoison
++    cmd.io.launch.valid:=io.launch.valid && !launchPoison
++    cmd.io.launch.bits:=io.launch.bits
++    io.launch.ready:=cmd.io.launch.ready && !launchPoison
++    owner.io.prefixWorkspace.get:=cmd.io.prefixWorkspace.get
++  }else{cmd.io.launch<>io.launch}
++  io.result<>cmd.io.result;io.completion<>cmd.io.completion
+   owner.io.job<>cmd.io.job;cmd.io.done<>owner.io.done
+   hub.io.requests(0)<>cmd.io.memory;cmd.io.response<>hub.io.responses(0)
+   hub.io.requests(1)<>owner.io.memory;owner.io.response<>hub.io.responses(1)
+@@ -77,8 +89,8 @@
+   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
+   io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
+ }
+-class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {
+-  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
++class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false) extends Module {
++  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
+   val pre=Module(new HeteroBF16FmaPre);val a=IO(chiselTypeOf(pre.io));a<>pre.io;dontTouch(a)
+   val mul=Module(new HeteroBF16FmaMul);val b=IO(chiselTypeOf(mul.io));b<>mul.io;dontTouch(b)
+   val post=Module(new HeteroBF16FmaPost);val c=IO(chiselTypeOf(post.io));c<>post.io;dontTouch(c)

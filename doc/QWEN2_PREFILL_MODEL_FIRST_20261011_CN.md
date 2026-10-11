@@ -684,3 +684,25 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - ongoing：本批精确发布/轻量CI；公开Host workspace lease与单一顶层接入。
 - to do：FFN共享驻留、完整所选prefill源路径、最终冻结刺激硬件回放。
 - 原M128 native/FP32-final FAIL、数值政策待定，Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。
+
+`eaed93d8b200d9e3d059a00678a07b2fcb7076b6` 精确CI现已收口：254测试、20条前端
+命令、85源typecheck及75份本地/CI CHIRRTL严格一致；87依赖SHA、6源码manifest
+与payload guard通过。108项工件文件共28,813,887B，SHA为
+`66ba0d4dce34ab9b5cbeb3b86afb0698a35ff7b18445382d84e5512d0124ab7d`。
+工件没有执行RTL或主机FMA；全Down实值仍绑定其独立本地capture。前端inventory
+的两项host程序修订，以及后来加入的README/manifest，均单列，不重绑定旧PASS。
+
+- done（精确CI局部）：eaed93d发布、远端tree/13blob及上述工件核验。
+- ongoing：公开Host workspace lease接线；原完整block与native门状态不变。
+
+
+### 2026-10-11 公开 Host workspace 接线子门
+
+- 在 `transposed_host` 显式默认关闭 profile 中，将现有第 4 region 接到真实 chunked Down owner，保持 Host launch 833 bit、Command128、typed descriptor 和 `bias_index` 原语义。旧 driver 的空 region3 仍按原模式兼容。该 region 接口来自本仓库 Host adapter，不是上游硬件的保留区承诺。
+- enabled 要求独立、64B 对齐、56-bit 范围内的非空 RW lease；所有 4 region 仍互斥，并从普通 tensor、初始 live input 与 metadata 权限中排除 workspace。M16/M128、N32、K≤8960 和多 chunk 容量在 owner issue 前检查。完整 N1536 需外部 786,432 B；single chunk 仍需真实 lease，但免未使用的 N-dependent prefix 容量。
+- lease 来自 launch ACK 后的 cfg 快照，epoch 扩宽后 +1 仅作 identity，不构成 checkpoint 或跨 reset freshness。末 owner ACK、completion 和 Host result 背压期间保留；composite poison 同时门控 launch.valid/ready，已接受事务继续沿原路径 drain。公开 Host 无 abort 端口，错误恢复要求 Host/DMA/service/leaf 协调 reset。
+- 本地 28 测通过：17 个模型控制门加 11 个 source/frontend 门。模型复用冻结 Down 实际端口控制，包括两命令真实 ACK 写后读、K2688 两 chunk、不同 lease 成功再 launch、epoch0/65535、全部 region3 输入变化、末 ACK、prefix-error seed ACK 排空、错误不发布。Matrix 使用有限 opaque token，不是算术验收；迟到 seed ACK 注入只验证 owner poison→Host admission，尚未验证 inactive kernel 的真实晚 ACK 路由。
+- 实际 85 个 Scala 源 typecheck 通过，包括完整 Host top/Qwen owner kernel；6 份实际 Commands CHIRRTL 通过，普通/QKV 默认关闭 IR 与冻结基线完全一致。完整 top 未 elaboration、未生成 RTL、未执行 FPU。plain FP32 A/D 模型已覆盖；V/QKV 仅 source/parser 边界覆盖。
+- 小 parser 配置 eventSlots32/maxCommands21 的 enabled/disabled 寄存器相同：Host 131/35,226 bit、record reader 6/334、tensor reader 7/1,278，已有 cfg 833 bit 复用；新增地址算术、比较和门控不能称零面积。保持原 768 KiB/32 bank、4096 MAC、5 accumulator contexts 和同一 iDMA，未扩 SRAM。
+- eaed93d 的完整 Down M128/K8960/N1536 实值证据保持原身份；不继承为新 Host 全链数值 PASS。三个 prefix sweep 对同一 lease 的读和写各 2,359,296 B 必须计入真实共享 iDMA 分母；完整图 131,727,360 B、理想搬运上界 71.3456% 仍非完整周期预测/RTL实测。
+- done：公开 lease 的 source/model/frontend 接线子门；ongoing：生产 Host/owner/iDMA 完整行为、FFN 同 bank residency、全图模型到 Chisel 对应；todo：完整五 block M128 硬件验收。Q21.3/U00.2 ongoing，U01 todo，C02.2 及原 native/FP32 final FAIL 均不关闭。

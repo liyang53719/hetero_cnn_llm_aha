@@ -1,0 +1,97 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala
+@@ -18,7 +18,17 @@
+ class BurstReadResponse extends Bundle {
+   val data=UInt(512.W);val tag=UInt(64.W);val last=Bool();val error=Bool()
+ }
+-class MatrixStreamGroup extends Bundle {
++/** Optional internal Dense operand layout, absent from the default interface.
++  * When transposedDense is true, only opcode 0x20 and sliceMask 0xff are legal.
++  * a[0..15] holds weight N0..15; b[0..127] holds activation M0..127;
++  * b[128..143] holds weight N16..31. b[144..255] is reserved and ignored
++  * in this mode; senders should write zero, receivers must not consume it.
++  * Results keep physical value(row)(slice*32+column): logical M is
++  * (slice%4)*32+column and logical N is (slice/4)*16+row.
++  * This is a bit-preserving routing contract, with no numerical conversion.
++  */
++class MatrixStreamGroup(val enableTransposedDense:Boolean=false) extends Bundle {
++  val transposedDense=if(enableTransposedDense)Some(Bool())else None
+   val opcode=UInt(8.W);val sliceMask=UInt(8.W);val tag=UInt(32.W)
+ }
+ class MatrixStreamStep(val returnTagBits:Int=0) extends Bundle {
+@@ -36,9 +46,9 @@
+   val context=UInt(3.W);val last=Bool();val error=Bool()
+ }
+ class MatrixStreamDone extends Bundle {val tag=UInt(32.W);val error=Bool()}
+-class MatrixStreamPort(val returnTagBits:Int=0) extends Bundle {
++class MatrixStreamPort(val returnTagBits:Int=0,val enableTransposedDense:Boolean=false) extends Bundle {
+   require(returnTagBits>=0 && returnTagBits<=32,"returnTagBits must be in 0..32")
+-  val group=Decoupled(new MatrixStreamGroup)
++  val group=Decoupled(new MatrixStreamGroup(enableTransposedDense))
+   val step=Decoupled(new MatrixStreamStep(returnTagBits))
+   val result=Flipped(Decoupled(new MatrixStreamResult(returnTagBits)))
+   val done=Flipped(Decoupled(new MatrixStreamDone))
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+@@ -29,9 +29,9 @@
+   * Partial sums may be discarded; final values are credit-buffered. No step
+   * waits for its own result when a different legal context can issue.
+   */
+-class MatrixPipelineService(returnTagBits:Int=0) extends Module {
++class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+-    val port=Flipped(new MatrixStreamPort(returnTagBits))
++    val port=Flipped(new MatrixStreamPort(returnTagBits,enableTransposedDense))
+     val acceptedSteps=Output(UInt(64.W)) // physical 512-MAC slice issues
+     val wideSteps=Output(UInt(64.W))
+     val stallCycles=Output(UInt(64.W))
+@@ -39,7 +39,7 @@
+   })
+   val idle :: command :: running :: ending :: finish :: draining :: locked :: Nil=Enum(7)
+   val state=RegInit(idle)
+-  val group=Reg(new MatrixStreamGroup)
++  val group=Reg(new MatrixStreamGroup(enableTransposedDense))
+   val event=RegInit(0.U(16.W))
+   val poison=RegInit(false.B)
+   val endIssued=RegInit(false.B)
+@@ -85,6 +85,10 @@
+   val canIssue=work && legalStep && io.port.step.valid && tags.io.enq.ready && allStepReady
+   val needsClock=state===command || state===ending || state===draining ||
+     (state===running && (canIssue || (tags.io.deq.valid && (!allOutValid || consumeOutput))))
++  // Mode comes only from the accepted group register. Share the upper weight
++  // mux across four existing endpoints; no payload register or wider lane.
++  val upperWeights=if(enableTransposedDense)Some(Mux(group.transposedDense.get,
++    VecInit((128 until 144).map(j=>x.b(j))).asUInt,x.a.asUInt))else None
+   for(i<-0 until 8){
+     val e=leaves(i).io
+     val gate=Module(new RetainedMatrixClockGate)
+@@ -95,7 +99,14 @@
+     e.cmd_i:=Cat(0.U(72.W),event,0.U(16.W),0.U(13.W),2.U(3.W),group.opcode)
+     e.step_valid_i:=work && legalStep && io.port.step.valid && tags.io.enq.ready && allStepReady && selected(i)
+     e.step_context_i:=x.context;e.step_clear_i:=x.clear;e.step_last_i:=x.last
+-    e.step_a_i:=x.a.asUInt;e.step_b_i:=VecInit((0 until 32).map(j=>x.b(i*32+j))).asUInt
++    if(enableTransposedDense && i>=4){
++      e.step_a_i:=upperWeights.get
++      e.step_b_i:=Mux(group.transposedDense.get,
++        VecInit((0 until 32).map(j=>x.b((i%4)*32+j))).asUInt,
++        VecInit((0 until 32).map(j=>x.b(i*32+j))).asUInt)
++    }else{
++      e.step_a_i:=x.a.asUInt;e.step_b_i:=VecInit((0 until 32).map(j=>x.b(i*32+j))).asUInt
++    }
+     e.command_last_tile_i:=tags.io.deq.valid && tags.io.deq.bits.finish && state=/=draining
+     e.out_ready_i:=consumeOutput && selected(i)
+     e.completion_ready_i:=state===ending && allCompletion && selected(i)
+@@ -118,7 +129,12 @@
+   when(io.port.group.fire){
+     group:=io.port.group.bits;event:=event+1.U;seen:=0.U;closed:=0.U;endIssued:=false.B
+     val g=io.port.group.bits
+-    when(!g.sliceMask.orR || !(g.opcode===0x20.U||g.opcode===0x21.U||g.opcode===0x23.U||g.opcode===0x24.U)){
++    when(if(enableTransposedDense){
++      !g.sliceMask.orR || !(g.opcode===0x20.U||g.opcode===0x21.U||g.opcode===0x23.U||g.opcode===0x24.U) ||
++        (g.transposedDense.get && (g.opcode=/=0x20.U || g.sliceMask=/=0xff.U))
++    }else{
++      !g.sliceMask.orR || !(g.opcode===0x20.U||g.opcode===0x21.U||g.opcode===0x23.U||g.opcode===0x24.U)
++    }){
+       poison:=true.B;state:=finish
+     }.otherwise{state:=command}
+   }

@@ -491,3 +491,33 @@ M16/M128：down 用真实 DDR prefix，FFN gate/up 经实际 SRAM 给 SiLU，禁
 - ongoing：原native和FP32-final FAIL、数值政策待决定，不改门限。
 - to do：carried/更长prefill及冻结激励最终硬件门。
 - 保持 Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。
+
+## 590f8cf 终态与既有 Matrix service 的真实前端接线
+
+`590f8cfd39a1aa5aa2a2dc481eab29d406d899a2` 的13＋27＋67＋248＝355项模型
+CI及payload guard已成功。238313B工件SHA为
+`9425e04edd5794f1a50da3021aaa8d94e371c5bee7a4b43a42217a5971e2ea2c`；
+23份报告核验，其中仅转置解析摘要的git_head有精确预期变化。新的fullgraph包装
+做了合成小门及真实prepare，没有重复实际M128数值运行或生成RTL。
+
+随后[转置service候选](../candidates/qwen2_resident_matrix/transposed_route/README.md)
+在原 `MatrixPipelineService` 中接通已选M128×N32的两组weight/activation路由。
+模式在group接受时锁存，默认关闭，原4096 FMA、五contexts及队列保持。新增1位
+group状态与2304bit源码共享mux及准入比较逻辑，面积与时序尚未测。
+
+真实Scala编译与CHIRRTL展开共两条命令成功；20IR身份、六组默认关闭严格等价，
+以及真实组合连接的2,064,384个operand-pair坐标通过。打包后36项模型/身份负测
+及两种baseline路径校验通过，原编译和新检查器身份分列，旧PASS未重绑定。
+这仍是前端与组合路由门：未执行FPU/RTL时钟协议，现行生产owner和Host尚未启用。
+
+下一闭包是从实际A/B bank按既定物理公式取数并接同一step，绑定单端口、同步
+延迟、租约、背压、reset/fault；随后接M128输出和最终写ACK。旧resident seed
+读源的A/C/B分区不能未经修改套到已选A688/B80KiB方案；保留这项实际接线缺口。
+131727360B与71.3456%仅为软件流量及理想上界，未达到80%全周期目标。
+
+- done（局部）：590精确tree、355测试、23报告/源pin核验。
+- done（前端局部）：既有Matrix service的默认关闭转置路由、36小门及真实CHIRRTL检查。
+- ongoing：实际bank/owner/Host、down prefix、FFN共享端口与全周期模型。
+- ongoing：原M128 native/FP32-final FAIL、数值政策待决定，阈值未改。
+- to do：carried/更长prefill与冻结激励最终硬件验收。
+- 保持 Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。

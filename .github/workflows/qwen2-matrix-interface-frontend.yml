@@ -10,6 +10,7 @@ on:
       - 'candidates/qwen2_resident_matrix/**'
       - 'scripts/check_matrix_interface_candidate.py'
       - 'scripts/check_resident_seed_frontend.py'
+      - 'scripts/check_transposed_matrix_frontend.py'
       - 'tests/test_matrix_interface_candidate.py'
       - 'tests/test_resident_seed_frontend.py'
       - 'chisel/rope_hardware_oracle/maven-lock.json'
@@ -30,6 +31,8 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin 43440dbad48c8e8af3112c1ae658db3ae64d76eb
           git cat-file -e 43440dbad48c8e8af3112c1ae658db3ae64d76eb:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+          git fetch --no-tags --depth=1 origin 590f8cfd39a1aa5aa2a2dc481eab29d406d899a2
+          git cat-file -e 590f8cfd39a1aa5aa2a2dc481eab29d406d899a2:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '21'}
       - uses: actions/setup-python@v5
@@ -37,12 +40,14 @@ jobs:
       - name: Independent control contracts and negative identity guards
         run: |
           python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
+          python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_route -p 'test_*.py' -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure
         run: |
           python scripts/check_matrix_interface_candidate.py --repo . --out work/matrix-interface-frontend --cache work/matrix-interface-jars
           python scripts/check_resident_seed_frontend.py --repo . --out work/matrix-interface-frontend/resident --cache work/matrix-interface-jars
+          python scripts/check_transposed_matrix_frontend.py --repo . --out work/matrix-interface-frontend/transposed --cache work/matrix-interface-jars --baseline work/matrix-interface-frontend
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,0 +1,38 @@
+{
+  "source_base_commit": "590f8cfd39a1aa5aa2a2dc481eab29d406d899a2",
+  "status": "DEFAULT_OFF_SOURCE_INTEGRATION_CANDIDATE",
+  "original_sources": {
+    "BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+    "MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "RetainedMatrix.scala": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+    "WideMatrix.scala": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c"
+  },
+  "tag_overlay_sources": {
+    "BurstProtocol.scala": "1f15aaa0e2654b9fb31c14dd38cd258e897eb8433ceb86dd55967202f11f9c94",
+    "MatrixPipeline.scala": "7a5c83a49f9d74f83c6138e1bf498ff0c78179aa733e20ea6a845f98d9ca2499"
+  },
+  "patched_sources": {
+    "BurstProtocol.scala": "8d90cefb9ff5e2b0fe70d2da9b56d5d58bafaa55c32be2dcb7e6f9713315996e",
+    "MatrixPipeline.scala": "eba87ea0c7c771d032003841f68d01ca70aab75340f0df401f10d9d2592c84bd"
+  },
+  "abi_declarations_sha256": "05d15ad23e7bf986ab6757d7b06e6519e1cd9a0a78efb604f56e137fd498ee65",
+  "maven_lock_sha256": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+  "dependencies": {
+    "scripts/check_matrix_interface_candidate.py": "85b4b9197a67309b8a7c2b0f2d633e09b897fdbc407f798bf64f1b30d0f8222d",
+    "candidates/qwen2_resident_matrix/return_tag.patch": "6dcf91d1b5bea2b4e47bb0da9822b5e5eab87b38763e7f104565e1e28069e65c",
+    "candidates/qwen2_resident_matrix/test_return_tag_contract.py": "bfda266725e49b8902e2449ca188a0801b39ec23cd56a791926d97dc1b90845b",
+    "scripts/check_transposed_matrix_frontend.py": "fda6f283dd548946cfc88121de25216c6a9a98bbcf286b9185bf5d4fb4ace3bf"
+  },
+  "task_files": {
+    "transposed_mode.patch": "fd81eea61e7ad9165937a47ded87186b17a5e3ccfcd782e247f3ccef8a4f0cd1",
+    "combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+    "TransposedModeElaboration.scala": "f2325a659887a64f2e21f160b3b755b34e670a6fd56de83573ba4464eb956489",
+    "transposed_model.py": "6954193d9b3cfa6adc01e9e8d762b5327630ccaa822c1487971fe53ac73f1cf6",
+    "test_transposed_mode.py": "4a2ba9c3937f23d635ea289aee5b535db183793e4256932cec080dec28c59402"
+  },
+  "work_execution_origin": {
+    "summary": "work/qwen2_transposed_matrix_mode_20261011/frontend_01/summary.json",
+    "summary_sha256": "ef80d417b5abf56926d67f3dbe029c913522b1fd124bb5b21c2f43cb110596ba",
+    "scope": "Prior actual work runner execution; packaged runner is a distinct identity and does not inherit an execution."
+  }
+}

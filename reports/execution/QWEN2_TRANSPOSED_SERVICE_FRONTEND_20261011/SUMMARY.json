@@ -1,0 +1,566 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SCALA_FRONTEND_AND_COMBINATIONAL_ROUTE_ONLY",
+  "source_base_commit": "590f8cfd39a1aa5aa2a2dc481eab29d406d899a2",
+  "production_sources_modified": false,
+  "rtl_generated": false,
+  "arithmetic_executed": false,
+  "hardware_clock_protocol_executed": false,
+  "native_gate": "UNCHANGED_FAIL",
+  "fp32_final_gate": "UNCHANGED_FAIL",
+  "numerical_policy": "UNCHANGED_PENDING_DECISION",
+  "fixed_fma_denominator": 4096,
+  "actual_frontend": {
+    "original_summary": "work/qwen2_transposed_matrix_mode_20261011/frontend_01/summary.json",
+    "original_summary_sha256": "ef80d417b5abf56926d67f3dbe029c913522b1fd124bb5b21c2f43cb110596ba",
+    "source_pins": {
+      "source_base_commit": "590f8cfd39a1aa5aa2a2dc481eab29d406d899a2",
+      "status": "TASK_OWNED_INTEGRATION_PATCH",
+      "original_sources": {
+        "BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+        "MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+        "RetainedMatrix.scala": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+        "WideMatrix.scala": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c"
+      },
+      "tag_overlay_sources": {
+        "BurstProtocol.scala": "1f15aaa0e2654b9fb31c14dd38cd258e897eb8433ceb86dd55967202f11f9c94",
+        "MatrixPipeline.scala": "7a5c83a49f9d74f83c6138e1bf498ff0c78179aa733e20ea6a845f98d9ca2499"
+      },
+      "patched_sources": {
+        "BurstProtocol.scala": "8d90cefb9ff5e2b0fe70d2da9b56d5d58bafaa55c32be2dcb7e6f9713315996e",
+        "MatrixPipeline.scala": "eba87ea0c7c771d032003841f68d01ca70aab75340f0df401f10d9d2592c84bd"
+      },
+      "abi_declarations_sha256": "05d15ad23e7bf986ab6757d7b06e6519e1cd9a0a78efb604f56e137fd498ee65",
+      "maven_lock_sha256": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+      "dependencies": {
+        "scripts/check_matrix_interface_candidate.py": "85b4b9197a67309b8a7c2b0f2d633e09b897fdbc407f798bf64f1b30d0f8222d",
+        "candidates/qwen2_resident_matrix/return_tag.patch": "6dcf91d1b5bea2b4e47bb0da9822b5e5eab87b38763e7f104565e1e28069e65c",
+        "candidates/qwen2_resident_matrix/test_return_tag_contract.py": "bfda266725e49b8902e2449ca188a0801b39ec23cd56a791926d97dc1b90845b"
+      },
+      "task_files": {
+        "transposed_mode.patch": "fd81eea61e7ad9165937a47ded87186b17a5e3ccfcd782e247f3ccef8a4f0cd1",
+        "combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "TransposedModeElaboration.scala": "f2325a659887a64f2e21f160b3b755b34e670a6fd56de83573ba4464eb956489",
+        "check_frontend.py": "c3d559480f1cb30badcc585da686d2e6c65e9322408fe70c6f37265d4ea0a34b",
+        "transposed_model.py": "c3b10ea7e918517e6f1df1e747776e18ae708fba372332032cab4d9563e84ef4",
+        "test_transposed_mode.py": "adc26ecc146be4779c4b0b624aeb03a724d48ce2b986271de6418a42a5ebfc96"
+      }
+    },
+    "commands": [
+      {
+        "entry": "scala.tools.nsc.Main",
+        "java_options": [
+          "-Xmx1024m",
+          "-XX:ActiveProcessorCount=1"
+        ],
+        "wall_seconds": 4.896925130000454,
+        "exit_code": 0,
+        "log": "compile.log",
+        "log_sha256": "82d1f3498cd715c8b2a129ed7444ddf03c7bf3958ac10f435030d479b17edc48"
+      },
+      {
+        "entry": "heteronpu.continuous.TransposedModeElaboration",
+        "java_options": [
+          "-Xmx1024m",
+          "-XX:ActiveProcessorCount=1"
+        ],
+        "wall_seconds": 4.329635503003374,
+        "exit_code": 0,
+        "log": "elaboration.log",
+        "log_sha256": "09974cb2420e30a655d0be464bec2ed32265404b49a642cc7353d0f03fe69f5d"
+      }
+    ],
+    "java_version": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)",
+    "dependency_count": 87,
+    "dependency_receipt_sha256": "83081508be52e2ae98a74a628cfbabd5d914c98e063dd8898bad3efadeea4e62",
+    "baseline_reuse": {
+      "directory": "work/matrix_interface_frontend_20261011T1821",
+      "summary_sha256": "8f8fef03667ce753d3f5ac19838a3d12c4d6792674bc25766c583038b19242bb",
+      "reason": "exact original/return-tag source bytes, constructor parameters, ABI and 87 dependency SHA identities verified",
+      "new_baseline_compile": false
+    },
+    "default_ir_comparisons": {
+      "fifo_default.fir": {
+        "equal": true,
+        "baseline": "baseline/chirrtl/fifo_default.fir",
+        "normalized_before_sha256": "4da3d57ff5c5afbff69d1601d5ac398396e91eb060765a5bce9e69fd00b7b9dc",
+        "normalized_after_sha256": "4da3d57ff5c5afbff69d1601d5ac398396e91eb060765a5bce9e69fd00b7b9dc"
+      },
+      "service_default.fir": {
+        "equal": true,
+        "baseline": "baseline/chirrtl/service_default.fir",
+        "normalized_before_sha256": "f7a113739172b72bfbe4005a603f3a4d430df8ea9aaefdaa1da97e58bf383e4e",
+        "normalized_after_sha256": "f7a113739172b72bfbe4005a603f3a4d430df8ea9aaefdaa1da97e58bf383e4e"
+      },
+      "service_0_disabled.fir": {
+        "equal": true,
+        "baseline": "candidate/chirrtl/service_0.fir",
+        "normalized_before_sha256": "f7a113739172b72bfbe4005a603f3a4d430df8ea9aaefdaa1da97e58bf383e4e",
+        "normalized_after_sha256": "f7a113739172b72bfbe4005a603f3a4d430df8ea9aaefdaa1da97e58bf383e4e"
+      },
+      "service_1_disabled.fir": {
+        "equal": true,
+        "baseline": "candidate/chirrtl/service_1.fir",
+        "normalized_before_sha256": "8a21bd332cb1cb3c68fb188a8119514d665b020fec31b3fe5db6fbdcf2d67db4",
+        "normalized_after_sha256": "8a21bd332cb1cb3c68fb188a8119514d665b020fec31b3fe5db6fbdcf2d67db4"
+      },
+      "service_16_disabled.fir": {
+        "equal": true,
+        "baseline": "candidate/chirrtl/service_16.fir",
+        "normalized_before_sha256": "29a8eb48249fb4ac30307b7b3463f6f4705180a4248b7420d1ac39893b4f5185",
+        "normalized_after_sha256": "29a8eb48249fb4ac30307b7b3463f6f4705180a4248b7420d1ac39893b4f5185"
+      },
+      "service_32_disabled.fir": {
+        "equal": true,
+        "baseline": "candidate/chirrtl/service_32.fir",
+        "normalized_before_sha256": "18b7d01d78e4f9e46bbd81e6ef027c99cc142b638a78edf075d4fa2d24441245",
+        "normalized_after_sha256": "18b7d01d78e4f9e46bbd81e6ef027c99cc142b638a78edf075d4fa2d24441245"
+      }
+    },
+    "generated_chirrtl": {
+      "chirrtl/bundle_0_disabled.fir": {
+        "sha256": "d6ff3c38dc9a9cb84ca6fdf3c9181c8ff07bcb89bf274f564acb38cfb7a90387",
+        "bytes": 1029
+      },
+      "chirrtl/bundle_0_enabled.fir": {
+        "sha256": "b0bc98bab5b99026499f3e9c8fb70a1d4f3ecfe7d725bf6159ad6c6544d0bee5",
+        "bytes": 1056
+      },
+      "chirrtl/bundle_16_disabled.fir": {
+        "sha256": "1d1241958b49fe305b26a2c8a50a78ef18c173fe05601221a7e773ca308c23d4",
+        "bytes": 1073
+      },
+      "chirrtl/bundle_16_enabled.fir": {
+        "sha256": "b219997e6facad88963312f2ce84c524bd2fcdb74ac1b8af8bf7ec6d26280a0f",
+        "bytes": 1100
+      },
+      "chirrtl/bundle_1_disabled.fir": {
+        "sha256": "54b3915739bfc2bb0f9468e004756af838a71c1c41694d9770338ddcd76b02b2",
+        "bytes": 1071
+      },
+      "chirrtl/bundle_1_enabled.fir": {
+        "sha256": "838ac8ad0868f7b21ab2cb845306b4752e605ccb93c97e8a473553ee2d3cb131",
+        "bytes": 1098
+      },
+      "chirrtl/bundle_32_disabled.fir": {
+        "sha256": "66fc284bacaba401f7798ce102c82d87e59f415916e8b358dc8ef7772d2369d5",
+        "bytes": 1073
+      },
+      "chirrtl/bundle_32_enabled.fir": {
+        "sha256": "ecab8663fd46acb840d106745980b25e852bc470380c9471bf03562d8e53c978",
+        "bytes": 1100
+      },
+      "chirrtl/fifo_default.fir": {
+        "sha256": "5d96b173ea91612a2a6b639fd74c3096c9ce3b02aa1c555117a2b8d33c882dcd",
+        "bytes": 6629
+      },
+      "chirrtl/fixed_normal_16.fir": {
+        "sha256": "6d333886cb79a733d5aa132006b25f4691627bfc967fa5e0d692a4ee901c4715",
+        "bytes": 5332623
+      },
+      "chirrtl/fixed_transposed_16.fir": {
+        "sha256": "32ce2452902afe224583d9bfa2875c989fb7e71b0e05b3e3bc7c5ab9affa2a36",
+        "bytes": 5332623
+      },
+      "chirrtl/service_0_disabled.fir": {
+        "sha256": "3451be88dddb33c1dfc13e4f5489cfb40174ef588539187202784fb37fa2a4a4",
+        "bytes": 5264724
+      },
+      "chirrtl/service_0_enabled.fir": {
+        "sha256": "41cf56b175dff378139c7ac60602bbce47925e51288b57a62def11977433e834",
+        "bytes": 5325847
+      },
+      "chirrtl/service_16_disabled.fir": {
+        "sha256": "59b1f09c7fe3b97c8c054c05d3a10c02c64e5d962ac216e66038bf2cb8493f01",
+        "bytes": 5266279
+      },
+      "chirrtl/service_16_enabled.fir": {
+        "sha256": "144d28776ed06bad7c944bc584648279bee6ae10066792f44f16384ed81a2647",
+        "bytes": 5327402
+      },
+      "chirrtl/service_1_disabled.fir": {
+        "sha256": "64bf1182baaa50aef730e3fcc4633960f833f23ac43f4c0c5b14a76d123597e5",
+        "bytes": 5266267
+      },
+      "chirrtl/service_1_enabled.fir": {
+        "sha256": "ccf24dc92a3bded94e2821f21b30b8ca70bc7991ea93e5ca55676ab5170a4f88",
+        "bytes": 5327390
+      },
+      "chirrtl/service_32_disabled.fir": {
+        "sha256": "b7bf48e7d391a1ceed583d1656fad78304148a978e2a721573fae6d95fc359cb",
+        "bytes": 5266279
+      },
+      "chirrtl/service_32_enabled.fir": {
+        "sha256": "a1d175cea75f27ff12b7c9833cd30b16440ee82c0d1c1c851b39768b77e85b80",
+        "bytes": 5327402
+      },
+      "chirrtl/service_default.fir": {
+        "sha256": "3451be88dddb33c1dfc13e4f5489cfb40174ef588539187202784fb37fa2a4a4",
+        "bytes": 5264724
+      }
+    }
+  },
+  "packaged_execution_before_final_LF_removal": {
+    "status": "FINAL_PACKAGED_SOURCE_MODEL_IDENTITY_IR_RECHECK_PASS",
+    "publish_files": {
+      "candidates/qwen2_resident_matrix/transposed_route/TransposedModeElaboration.scala": {
+        "sha256": "f2325a659887a64f2e21f160b3b755b34e670a6fd56de83573ba4464eb956489",
+        "bytes": 2816
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": {
+        "sha256": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "bytes": 8912
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/manifest.json": {
+        "sha256": "397910d0571007aaefdb624532fc4d5d098a6a02cf75a08e182f43e3bb7bde4b",
+        "bytes": 2538
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/test_transposed_mode.py": {
+        "sha256": "4a2ba9c3937f23d635ea289aee5b535db183793e4256932cec080dec28c59402",
+        "bytes": 21386
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/transposed_mode.patch": {
+        "sha256": "fd81eea61e7ad9165937a47ded87186b17a5e3ccfcd782e247f3ccef8a4f0cd1",
+        "bytes": 5482
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/transposed_model.py": {
+        "sha256": "1c2516712e4ce425cc26712d95fd6add99af29669a9dcb3644121af24faeca81",
+        "bytes": 12806
+      },
+      "scripts/check_transposed_matrix_frontend.py": {
+        "sha256": "fda6f283dd548946cfc88121de25216c6a9a98bbcf286b9185bf5d4fb4ace3bf",
+        "bytes": 13376
+      }
+    },
+    "evidence": {
+      "packaged_model_tests_04.log": {
+        "sha256": "175437b8428a549ca23772ffcfb59f18fe034a71d99c128c683f844bab3323c0",
+        "bytes": 5343
+      },
+      "packaged_validate_03/summary.json": {
+        "sha256": "639081f6e3a60f2eebd1fa377f2dacb7afc7ec96610fef2b7e770969ba7c50f1",
+        "bytes": 4114
+      },
+      "packaged_validate_external_baseline_01/summary.json": {
+        "sha256": "a05694bfe5debe9e5eec37134940f543373cc0d10d9fb0f8c248a5b1ea0f0a6e",
+        "bytes": 4112
+      },
+      "packaged_ir_recheck_02.json": {
+        "sha256": "5cfdc8358627a6b924fc10643a8658a1b9b9fd708e004cc1a1593bec28b46e51",
+        "bytes": 6263
+      }
+    },
+    "packaged_tests_passed": 36,
+    "new_scala_compile_for_package": false,
+    "new_chirrtl_emission_for_package": false,
+    "frozen_work_execution_summary_sha256": "ef80d417b5abf56926d67f3dbe029c913522b1fd124bb5b21c2f43cb110596ba",
+    "actual_scala_and_patch_bytes_unchanged": true,
+    "packaged_frozen_ir_coordinate_rechecks": 2064384,
+    "native_numerical_policy": "UNCHANGED_OPEN",
+    "only_new_source_paths_added": true
+  },
+  "final_package_identity_and_validation": {
+    "status": "FINAL_FORMAT_ONLY_SOURCE_IDENTITY_PASS",
+    "publish_files": {
+      "candidates/qwen2_resident_matrix/transposed_route/README.md": {
+        "sha256": "d2450cadcc50273d2e33e9789dc4710e48c281be1aa321c1a39f28b948022526",
+        "bytes": 4423
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/TransposedModeElaboration.scala": {
+        "sha256": "f2325a659887a64f2e21f160b3b755b34e670a6fd56de83573ba4464eb956489",
+        "bytes": 2816
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": {
+        "sha256": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "bytes": 8912
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/manifest.json": {
+        "sha256": "904199bb5e60566646d949ab4f458eb5fbc656aa5cebb9be0b2f9c7ed593f4db",
+        "bytes": 2538
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/test_transposed_mode.py": {
+        "sha256": "4a2ba9c3937f23d635ea289aee5b535db183793e4256932cec080dec28c59402",
+        "bytes": 21386
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/transposed_mode.patch": {
+        "sha256": "fd81eea61e7ad9165937a47ded87186b17a5e3ccfcd782e247f3ccef8a4f0cd1",
+        "bytes": 5482
+      },
+      "candidates/qwen2_resident_matrix/transposed_route/transposed_model.py": {
+        "sha256": "6954193d9b3cfa6adc01e9e8d762b5327630ccaa822c1487971fe53ac73f1cf6",
+        "bytes": 12805
+      },
+      "scripts/check_transposed_matrix_frontend.py": {
+        "sha256": "fda6f283dd548946cfc88121de25216c6a9a98bbcf286b9185bf5d4fb4ace3bf",
+        "bytes": 13376
+      }
+    },
+    "evidence": {
+      "formatting_fix_01.json": {
+        "sha256": "8d583196987c0bb697016d89e00cd00bca751b092c2a933be9c969b01f9b5324",
+        "bytes": 1034
+      },
+      "packaged_validate_04/summary.json": {
+        "sha256": "926df3b8497fb07b8303a986d446e68cb2ded1694af6797949d2d65db3a450d2",
+        "bytes": 4114
+      },
+      "packaged_ir_identity_recheck_03.json": {
+        "sha256": "b4c13d6f4f49594b143c6b85010c5eb4c35590c323eec5ec9570c4ac3b05a501",
+        "bytes": 1062
+      },
+      "packaged_model_tests_04.log": {
+        "sha256": "175437b8428a549ca23772ffcfb59f18fe034a71d99c128c683f844bab3323c0",
+        "bytes": 5343
+      },
+      "packaged_ir_recheck_02.json": {
+        "sha256": "5cfdc8358627a6b924fc10643a8658a1b9b9fd708e004cc1a1593bec28b46e51",
+        "bytes": 6263
+      }
+    },
+    "prior_packaged_tests_passed": 36,
+    "model_tests_reexecuted_after_final_LF_removal": false,
+    "prior_tested_model_recovered_by_appending_one_LF": true,
+    "previous_delivery": "PACKAGED_DELIVERY_FINAL.json",
+    "previous_delivery_sha256": "dac9b6a0e48cd8d7fb0de2c766891d3c29ca2785ce3b87f38e2b7f9ef73fe0a0",
+    "new_scala_compile_for_package": false,
+    "new_chirrtl_emission_for_package": false,
+    "frozen_work_execution_summary_sha256": "ef80d417b5abf56926d67f3dbe029c913522b1fd124bb5b21c2f43cb110596ba",
+    "actual_scala_and_patch_bytes_unchanged": true,
+    "native_numerical_policy": "UNCHANGED_OPEN",
+    "whitespace_exception": {
+      "path": "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch",
+      "line": 146,
+      "bytes_hex": "20",
+      "reason": "Required unified-diff context prefix for a blank source line; preserve patch byte identity.",
+      "unchanged_sha256": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6"
+    }
+  },
+  "final_checker_on_frozen_ir": {
+    "status": "PASS_PACKAGED_CHECKER_ON_FROZEN_IR",
+    "new_scala_compile": false,
+    "new_chirrtl_emission": false,
+    "original_execution_summary": "work/qwen2_transposed_matrix_mode_20261011/frontend_01/summary.json",
+    "original_execution_summary_sha256": "ef80d417b5abf56926d67f3dbe029c913522b1fd124bb5b21c2f43cb110596ba",
+    "packaged_manifest_sha256": "397910d0571007aaefdb624532fc4d5d098a6a02cf75a08e182f43e3bb7bde4b",
+    "packaged_model_sha256": "1c2516712e4ce425cc26712d95fd6add99af29669a9dcb3644121af24faeca81",
+    "packaged_runner_sha256": "fda6f283dd548946cfc88121de25216c6a9a98bbcf286b9185bf5d4fb4ace3bf",
+    "all_twenty_original_ir_hashes_verified": true,
+    "source_and_harness_bytes_match_original_execution": true,
+    "variants": {
+      "service_0_disabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 172032,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 0,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 0,
+          "source_shared_mux_bit_selects": 0,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_0_enabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 344064,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 1,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 3072,
+          "source_shared_mux_bit_selects": 2304,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_1_disabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 172032,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 0,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 0,
+          "source_shared_mux_bit_selects": 0,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_1_enabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 344064,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 1,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 3072,
+          "source_shared_mux_bit_selects": 2304,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_16_disabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 172032,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 0,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 0,
+          "source_shared_mux_bit_selects": 0,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_16_enabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 344064,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 1,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 3072,
+          "source_shared_mux_bit_selects": 2304,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_32_disabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 172032,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 0,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 0,
+          "source_shared_mux_bit_selects": 0,
+          "physical_area_or_timing_measured": false
+        }
+      },
+      "service_32_enabled.fir": {
+        "route": {
+          "operand_pair_coordinates_checked": 344064,
+          "vectors": 21,
+          "live_group_mode_perturbed": true,
+          "scope": "CHIRRTL combinational operand cone only"
+        },
+        "resources": {
+          "retained_endpoints": 8,
+          "clock_gates": 8,
+          "physical_fma_lanes": 4096,
+          "retained_contexts": 5,
+          "metadata_depth": 8,
+          "result_depth": 2,
+          "added_group_register_bits": 1,
+          "added_operand_buffers": 0,
+          "conservative_unshared_data_mux_bit_selects": 3072,
+          "source_shared_mux_bit_selects": 2304,
+          "physical_area_or_timing_measured": false
+        }
+      }
+    },
+    "total_operand_pair_coordinates": 2064384
+  },
+  "resource_ledger": {
+    "disabled": {
+      "retained_endpoints": 8,
+      "clock_gates": 8,
+      "physical_fma_lanes": 4096,
+      "retained_contexts": 5,
+      "metadata_depth": 8,
+      "result_depth": 2,
+      "added_group_register_bits": 0,
+      "added_operand_buffers": 0,
+      "conservative_unshared_data_mux_bit_selects": 0,
+      "source_shared_mux_bit_selects": 0,
+      "physical_area_or_timing_measured": false
+    },
+    "enabled": {
+      "retained_endpoints": 8,
+      "clock_gates": 8,
+      "physical_fma_lanes": 4096,
+      "retained_contexts": 5,
+      "metadata_depth": 8,
+      "result_depth": 2,
+      "added_group_register_bits": 1,
+      "added_operand_buffers": 0,
+      "conservative_unshared_data_mux_bit_selects": 3072,
+      "source_shared_mux_bit_selects": 2304,
+      "physical_area_or_timing_measured": false
+    },
+    "additional_comparators": "Dense opcode and full sliceMask admission",
+    "area_timing_or_power_measured": false
+  },
+  "scope": {
+    "native_fma_blackbox_executed": false,
+    "model_control_tests_are_abstract": true,
+    "work_execution_and_packaged_runner_have_separate_identities": true,
+    "new_scala_compile_after_packaging": false,
+    "generated_rtl_payload_in_git": false,
+    "data_or_weights_in_git": false
+  },
+  "next_integration": [
+    "Actual bank gather/lease/backpressure/reset and source port phases",
+    "StreamingDense M128 owner and output gather/final write ACK",
+    "DDR prefix to actual FP32 leaf seed, FFN retained A and shared ports",
+    "Source-bound feasible full-cycle prediction",
+    "Carried model, numerical-policy decision and frozen-stimulus final hardware acceptance"
+  ]
+}

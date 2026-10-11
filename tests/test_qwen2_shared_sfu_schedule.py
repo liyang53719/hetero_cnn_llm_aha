@@ -3,6 +3,7 @@ import importlib.util
 import hashlib
 import json
 from pathlib import Path
+import random
 import shutil
 import subprocess
 import sys
@@ -42,6 +43,10 @@ def test_source_divider_integer_significand_classification(a, b, cycles):
     assert timing['latency_cycles'] == timing['initiation_interval_cycles'] == cycles
     assert timing['skip_cycle_2'] == (cycles == 25)
     assert timing['binding'] == 'pinned_source_fsm'
+    candidate = m.source_divider_timing(a, b, options=16)
+    assert candidate['latency_cycles'] == candidate['initiation_interval_cycles'] == 14
+    assert candidate['candidate_options_only'] and not candidate['skip_cycle_2']
+    assert candidate['current_hardware_options'] == 0
 
 
 @pytest.mark.parametrize('invalid', [True, -1, 1 << 32, 0, 0x80000000,
@@ -50,6 +55,97 @@ def test_source_divider_unproved_and_malformed_domains_fail_closed(invalid):
     for a, b in [(invalid, m.ONE), (m.ONE, invalid)]:
         with pytest.raises(ValueError):
             m.source_divider_timing(a, b)
+        for options in (0, 16):
+            with pytest.raises(ValueError):
+                m.source_division_model(a, b, options=options)
+
+
+def normal_rational_division_oracle(a, b):
+    """Independent integer quantization; no source recurrence or NumPy divide."""
+    exponents = [((x >> 23) & 255)-127 for x in (a, b)]
+    assert all(-126 <= x <= 127 for x in exponents)
+    numerator, denominator = [(x & 0x7fffff) | 0x800000 for x in (a, b)]
+    exponent = exponents[0]-exponents[1]
+    scale = 23
+    if numerator < denominator:
+        exponent -= 1
+        scale += 1
+    if not -126 <= exponent <= 127:
+        raise ValueError('exact quotient outside normal domain')
+    quotient, remainder = divmod(numerator << scale, denominator)
+    if 2*remainder > denominator or (2*remainder == denominator and quotient & 1):
+        quotient += 1
+    if quotient == 1 << 24:
+        quotient >>= 1
+        exponent += 1
+    if exponent > 127:
+        raise ValueError('rounded quotient outside normal domain')
+    return dict(result_bits=((a ^ b) & 0x80000000) | ((exponent+127) << 23) | (quotient & 0x7fffff),
+                modeled_flags=int(remainder != 0))
+
+
+def test_integer_source_paths_match_rational_rne_nx_on_8592_bounded_cases():
+    directed = [0x3f800000, 0x3f800001, 0x3f7fffff, 0x3fc00000, 0x3fffffff,
+                0x40000000, 0x40000001, 0x00800000, 0x00800001, 0x7f7fffff]
+    cases = [(a | sa, b | sb) for a in directed for b in directed
+             for sa, sb in [(0, 0), (0, 1 << 31), (1 << 31, 0), (1 << 31, 1 << 31)]]
+    rng = random.Random(0xD14)
+    cases += [((rng.randrange(1, 255) << 23) | rng.getrandbits(23) | (rng.getrandbits(1) << 31),
+               (rng.randrange(1, 255) << 23) | rng.getrandbits(23) | (rng.getrandbits(1) << 31))
+              for _ in range(4096)]
+    cases += [(m.ONE, m.ONE | rng.getrandbits(23)) for _ in range(4096)]
+    accepted = rejected = matched_states = raw_differences = 0
+    timing_counts = {14: 0, 25: 0, 26: 0}
+    for a, b in cases:
+        try:
+            expected = normal_rational_division_oracle(a, b)
+        except ValueError:
+            for options in (0, 16):
+                with pytest.raises(ValueError):
+                    m.source_division_model(a, b, options=options)
+            rejected += 1
+            continue
+        paths = [m.source_division_model(a, b, options=options, trace=True) for options in (0, 16)]
+        for options, actual in zip((0, 16), paths):
+            assert {k: actual[k] for k in expected} == expected
+            timing = m.source_divider_timing(a, b, options=options)
+            latency = timing['latency_cycles']
+            assert actual['result_sample_edge'] == actual['next_accept_edge'] == latency
+            assert actual['output_visible_after_edge'] == latency-1
+            timing_counts[latency] += 1
+        # Only states with the same generated precision should match exactly.
+        states = {s['cycle_num']: s for s in paths[0]['trace'] if s['cycle_num'] > 1}
+        for state in paths[1]['trace']:
+            old = states.get(state['cycle_num'])
+            if old is not None:
+                assert all(state[k] == old[k] for k in ('rem', 'sig', 'sticky'))
+                matched_states += 1
+        raw_differences += paths[0]['quotient_bits'] != paths[1]['quotient_bits']
+        accepted += 1
+    assert (len(cases), accepted, rejected, matched_states, raw_differences) == (8592, 7463, 1129, 95266, 770)
+    assert timing_counts == {14: 7463, 25: 1753, 26: 5710}
+
+
+@pytest.mark.parametrize('options', [0, 16])
+def test_exact_subnormal_rounding_to_min_normal_is_outside_division_model(options):
+    # 0x00ffffff / 2 is halfway below min-normal. RNE selects min-normal,
+    # but its exact quotient is subnormal and is outside this narrow contract.
+    q, remainder = divmod(0xffffff, 2)
+    assert (q, remainder) == (0x7fffff, 1)
+    assert q+(remainder == 1 and q & 1) == 0x800000
+    with pytest.raises(ValueError, match='exact normal quotient'):
+        m.source_division_model(0x00ffffff, 0x40000000, options=options)
+    with pytest.raises(ValueError):
+        m.source_division_model(0x7f7fffff, 0x00800000, options=options)
+
+
+@pytest.mark.parametrize('options', [True, False, None, -1, 1, 8, 32])
+def test_unreviewed_divider_options_fail_closed(options):
+    for function in (m.source_divider_timing, m.source_division_model):
+        with pytest.raises(ValueError, match='options'):
+            function(m.ONE, m.ONE, options=options)
+    with pytest.raises(ValueError, match='options'):
+        m.timing_binding(options=options)
 
 
 def test_source_audit_separates_primitive_wrapper_and_unproved_status():
@@ -126,6 +222,67 @@ def test_source_schedule_backpressure_retains_context_and_fault_drains_returns()
         e['event'] == 'divider_return' for e in rejected['events'])
 
 
+@pytest.mark.parametrize('options', [0, 16])
+def test_source_control_uses_integer_bits_and_retains_stalled_offer_on_later_fault(monkeypatch, options):
+    gates = [[m.f32_bits(80)]*16, [m.ONE]*16]
+    ups = [[m.ONE]*16]*2
+    expected = [[m.ordered_reference(g, u)['value'] for g, u in zip(gg, uu)] for gg, uu in zip(gates, ups)]
+    monkeypatch.setattr(m, '_div', lambda *_: pytest.fail('source division used NumPy oracle'))
+    kwargs = dict(contexts=2, source_divider=True, divider_options=options)
+    success = m.schedule_silu(gates, ups, **kwargs)
+    assert [x['value'] for x in success['outputs']] == expected
+    writes = [e for e in success['events'] if e['event'] == 'writeback' and e['node'] == 'reciprocal']
+    assert {e['modeled_divider_flags'] for e in writes} == {0, 1}
+    assert all(e['flags'] is None for e in writes)
+    assert not success['scope']['hardfloat_flags_generated']
+    assert success['scope']['normal_domain_divider_nx_modeled']
+    assert not success['scope']['numeric_result_bits_only']
+    assert not success['scope']['scalar_error_status_policy_validated']
+    assert not success['numerical_acceptance']
+    # A later injected fatal flag cannot withdraw an already stalled offer.
+    fault = {(1, 0, 'up_multiply'): 3}
+    blocked = m.schedule_silu(gates, ups, **kwargs, injected_flags=fault,
+                             output_ready=lambda _: False, max_cycles=180)
+    assert blocked['status'] == 'SCENARIO_LIMIT_REACHED'
+    assert blocked['poison']['kind'] == 'numerical_injected'
+    assert blocked['pending_output_offer']['batch'] == 0
+    offers = [e for e in blocked['events'] if e['event'] == 'output_offer']
+    assert offers[0]['cycle'] < blocked['poison']['cycle'] < offers[-1]['cycle']
+    assert all(e['value'] == expected[0] for e in offers)
+    drained = m.schedule_silu(gates, ups, **kwargs, injected_flags=fault,
+                             output_ready=lambda cycle: cycle >= 180)
+    assert drained['status'] == 'POISON_DRAINED' and drained['resources_drained']
+    assert drained['outputs'] == [] and drained['output_drains'][0]['cycle'] == 180
+    assert drained['output_drains'][0]['value'] == expected[0]
+
+
+def test_candidate_options16_same_edge_reuse_and_nonfree_datapath_accounting():
+    gates = [[m.ONE]*16, [m.f32_bits(80)]*16, [m.ONE]*16]
+    report = m.schedule_silu(gates, [[m.ONE]*16]*3, contexts=2, source_divider=True, divider_options=16)
+    issues = [e for e in report['events'] if e['event'] == 'issue' and e['node'] == 'reciprocal' and e['lane'] == 0]
+    assert [e['cycle'] for e in issues] == [20, 34, 62]
+    assert all(e['latency_cycles'] == e['initiation_interval_cycles'] == 14 for e in issues)
+    assert any(e['event'] == 'divider_return' and e['cycle'] == 34 and e['lane'] == 0 for e in report['events'])
+    assert report['divider_timing_kind'] == 'candidate_options16_source_fsm'
+    budget = report['work']['resource_budget']
+    assert budget['divider_lanes'] == 16 and budget['added_fp_operator_instances'] == 0
+    assert budget['added_arithmetic_units'] is None
+    assert budget['added_physical_integer_adders'] is budget['combinational_gate_delta'] is None
+    assert budget['area_delta'] is budget['critical_path_delta'] is None
+    assert not budget['same_frequency_proved']
+    assert budget['candidate_divider_reconfiguration'] and budget['current_hardware_divider_options'] == 0
+    assert 'Second dependent' in budget['per_divider_enabled_second_trial_path']
+    binding = report['timing_binding']
+    assert binding['primitive_divider']['parameters'] == [8, 24, 16]
+    assert binding['scalar_wrapper']['instantiated_options'] == binding['silu_wrapper']['instantiated_options'] == 0
+    assert not binding['candidate_datapath']['same_frequency_proved']
+    assert m.resource_budget(2)['added_arithmetic_units'] == 0
+    with pytest.raises(ValueError, match='explicit source_divider'):
+        m.schedule_silu(gates, [[m.ONE]*16]*3, divider_options=16)
+    with pytest.raises(ValueError, match='explicit source_divider'):
+        m.schedule_silu(gates, [[m.ONE]*16]*3, divider_timing=TIMING, divider_options=16)
+
+
 def test_bounded_saved_gate_audit_checks_identity_before_branch_evaluation(tmp_path, monkeypatch):
     gate_path = tmp_path/'raw_stages/phase_10_gate_recipe.f32le'
     gate_path.parent.mkdir()
@@ -185,6 +342,13 @@ def test_cli_source_mode_and_audit_are_explicit_and_exclude_synthetic_timing():
     rejected = subprocess.run(command+['--source-divider-timing', '--divider-latency', '12', '--divider-ii', '13'],
                               capture_output=True, text=True)
     assert rejected.returncode != 0 and 'mutually exclusive' in rejected.stderr
+    candidate = subprocess.run(command+['--source-divider-timing', '--source-divider-options', '16'],
+                               capture_output=True, text=True, check=True)
+    output = json.loads(candidate.stdout)
+    assert output['divider_timing_kind'] == 'candidate_options16_source_fsm'
+    assert output['work']['resource_budget']['added_arithmetic_units'] is None
+    rejected_candidate = subprocess.run(command+['--source-divider-options', '16'], capture_output=True, text=True)
+    assert rejected_candidate.returncode != 0 and 'requires --source-divider-timing' in rejected_candidate.stderr
 
 
 def run(groups=3, contexts=2, **kwargs):

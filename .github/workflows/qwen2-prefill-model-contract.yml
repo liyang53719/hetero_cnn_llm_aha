@@ -24,6 +24,7 @@ on:
       - 'scripts/qwen2_shared_sfu_schedule.py'
       - 'chisel/continuous_prefill/scripts/prepare_hardfloat.sh'
       - 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
+      - 'reports/execution/QWEN2_SFU_TIMING_20261011/V0_SAVED_GATE_AUDIT.json'
       - 'scripts/import_llama_qwen2_graph.py'
       - 'chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala'
       - 'chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala'
@@ -125,6 +126,9 @@ jobs:
           python scripts/qwen2_shared_sfu_schedule.py --contexts 1 --source-divider-timing --out work/qwen2_model_contract/sfu_context1_source_timing.json
           python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --out work/qwen2_model_contract/sfu_context2_source_timing.json
           python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --out work/qwen2_model_contract/sfu_source_timing_binding.json
+          python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --source-divider-options 16 --out work/qwen2_model_contract/sfu_context2_d14_candidate.json
+          python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --source-divider-options 16 --out work/qwen2_model_contract/sfu_d14_candidate_binding.json
+          python scripts/qwen2_prefill_resource_schedule.py --observed-silu-host-bound --out work/qwen2_model_contract/m128_observed_silu_host_bound.json
           python scripts/check_git_payloads.py
       - name: Retain compact source-bound traffic evidence
         uses: actions/upload-artifact@v4

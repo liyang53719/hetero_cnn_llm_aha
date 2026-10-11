@@ -126,3 +126,47 @@ python scripts/qwen2_shared_sfu_schedule.py --gate-result /path/to/cold/RESULT.j
 原 v0 复现脚本及三份紧凑摘要在
 [QWEN2_SFU_TIMING_20261011](../reports/execution/QWEN2_SFU_TIMING_20261011/README.md)。
 flags、完整时序、数值验收和RTL校准保持未完成。
+
+## 后续模型候选：上游两位除法选项
+
+固定上游 `common.scala` 定义 `divSqrtOpt_twoBitsPerCycle=16`。现硬件
+`BlockFloat.scala` 仍实例化 `(8,24,0)`；软件候选显式指定16，没有更改该配置。
+该选项使正常除法计数26→24→…→2→1，edge13后结果可见，edge14采样且可
+接收下一请求。它保持最终RNE rounder及接口，却启用第二个依赖试减、比较
+和选择步骤。divider实例仍16个，并不代表组合电路面积/关键路径不变。
+
+纯整数递推模型的范围刻意限定为：输入正规且有限非零、精确商正规、舍入
+结果正规。只建模该域内的RNE结果和NX；零、次正规、非有限、UF/OF等范围
+拒绝。例如 `00ffffff / 40000000` 的精确商指数为−127，虽然RNE会得到最小
+正规数 `00800000`，此接口仍必须拒绝。不能将这项窄域结果当成完整HardFloat
+flags、sqrt或整个SiLU异常政策的证明。
+
+人工不变式审查：令A、B为24-bit正规化有效数，处理n个小数位后
+`P_n=floor(A*2^n/B)`、`R_n=2*(A*2^n-B*P_n)`、`S_n=P_n*2^(25-n)`。
+始终 `0≤R_n<2B<2^25`，所以26-bit余数与第二步的27-bit截断不丢有效值。
+两位路径恰合成两个相同恢复除法步骤，sticky保持 `R_n!=0`。一位路径在
+A≥B时n=24结束，其他一位及两位在n=25结束；额外低位与余数并入sticky后
+产生相同RNE/NX。指数、符号及normal打包另行对照独立有理数divmod量化器。
+这是针对软件源码翻译的数学审查，未做形式验证或RTL等价检查。
+
+首个原型及已集成的8592个确定用例中，7463个域内输出/NX在两种配置与独立
+量化器之间一致，1129个域外拒绝。95266个相同精度边界的商/余数/sticky
+逐字段一致；770个最终raw商的低位确实不同，RNE/NX仍相同。量化器独立于
+递推/GRS算法，但共享解码与域规则，不能称三套完全独立实现。
+
+当前单写口候选对每个非饱和元素仍需21次ALU、一次转换和一次Div结果写入，
+必要写口服务为23N。即便D14，cold128单独这项仍把全层乐观上界限制到
+89.071234%；它没有建立完整80%或90%可行方案。新增返回写路径、双发射或
+借core算术都须显式计端口、状态、路由、所有权和被挤占工作，不能免费假定。
+下一优先回到完整DAG驻留/外部流量/owner并行条件，不连续以局部SFU吞吐
+代替完整prefill验收。
+
+本次集成保留options0默认值，options16必须显式启用source模式；58项小门
+已通过，覆盖逐位递推、正常域NX、拒绝边界、返回背压、同拍接收、poison及
+资源账。source模式不再调用宿主浮点除法，合成时序模式保留原参考。
+全局flags仍未生成；只有该normal域divider的NX有诊断值，不能据此关闭
+完整SiLU异常或数值门。以下入口仅运行两个group的软件候选：
+
+```sh
+python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --source-divider-options 16
+```

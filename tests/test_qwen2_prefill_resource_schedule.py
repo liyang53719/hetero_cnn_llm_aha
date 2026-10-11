@@ -218,3 +218,33 @@ def test_primitive_source_timing_does_not_bind_full_owner_macros():
     assert r['reservation_result']['synthetic_scheduled_cycles'] is None
     assert r['predicted_full_block_cycles'] is r['rtl_measured_cycles'] is None
     assert r['source_sha256']['scripts/qwen2_shared_sfu_schedule.py']==binding['model_source_sha256']
+
+
+def test_saved_v0_silu_refines_only_original_host_term_without_double_count():
+    r=m.observed_silu_host_bound(ROOT)
+    assert r['previous']['cycles_lower_bound']==9127424
+    assert r['terms']==dict(removed_old_silu_floor=430080,
+        new_silu_arithmetic_edge_span=4515839,
+        unchanged_other_non_dense_lower_bound=4912640,
+        current_dense_lower_bound=3784704,ideal_dense_lower_bound=1462272)
+    assert r['whole_block_cycles_lower_bound']==13213183
+    assert r['ideal_dense_whole_block_cycles_lower_bound']==10890751
+    assert r['useful_macs']==6014828544 and r['fixed_matrix_macs_per_cycle']==4096
+    assert r['useful_utilization_upper_bound']==pytest.approx(0.111136279577903)
+    assert r['whole_block_cycles_lower_bound']==(
+        r['previous']['cycles_lower_bound']-r['terms']['removed_old_silu_floor']+
+        r['terms']['new_silu_arithmetic_edge_span'])
+    assert not any(r['scope'].values())
+    assert r['predicted_full_block_cycles'] is r['rtl_measured_cycles'] is None
+    assert r['evidence']['producer_status']=='DIAGNOSTIC_NOT_ACCEPTED'
+
+
+def test_saved_silu_census_drift_and_wrong_cli_scope_are_rejected(tmp_path):
+    target=tmp_path/m.V0_SILU_AUDIT;target.parent.mkdir(parents=True)
+    target.write_text('{}\n')
+    with pytest.raises(ValueError,match='branch evidence changed'):
+        m.observed_silu_host_bound(tmp_path)
+    for flags in (['--tokens','1024'],['--contexts','5'],['--synthetic-profile']):
+        run=subprocess.run([sys.executable,str(ROOT/'scripts/qwen2_prefill_resource_schedule.py'),
+            '--observed-silu-host-bound',*flags],capture_output=True,text=True)
+        assert run.returncode!=0 and 'requires cold M128' in run.stderr

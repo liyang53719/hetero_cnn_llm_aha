@@ -28,7 +28,7 @@ ATT = _module('qwen2_rectangular_attention_model')
 BOUND = _module('qwen2_prefill_traffic_bound')
 SFU = _module('qwen2_shared_sfu_schedule')
 EXTRA_PINS = {
-    'scripts/qwen2_shared_sfu_schedule.py': '8298201ed32382bd57b2fed29d245cfd442e1f029de1a7ea1c2f655fa17a6b44',
+    'scripts/qwen2_shared_sfu_schedule.py': '8d8ca983d7d8dceaa10282774c6c881ef25d57a49e74a6ad521d61c72f7198d5',
     'scripts/qwen2_rectangular_attention_model.py': 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8',
     'scripts/qwen2_prefill_traffic_bound.py': '3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697',
     'scripts/import_llama_qwen2_graph.py': '07a7edfa3f0c08876fddd47c909b2a340fb6fd175ec46f99c2754f748bb2ea6e',
@@ -58,6 +58,8 @@ TIMING_KEYS = (
     'scalar_add', 'scalar_mul', 'scalar_div', 'scalar_sqrt', 'scalar_exp',
     'core_vector', 'elementwise_vector', 'silu_group', 'terminal_fence',
 )
+V0_SILU_AUDIT = 'reports/execution/QWEN2_SFU_TIMING_20261011/V0_SAVED_GATE_AUDIT.json'
+V0_SILU_AUDIT_SHA256 = '14b65f7fe70416739ca2b5cebffdd5a4bb388077708c579b30aa1f40df247ebf'
 
 
 def timing_profile(synthetic=False):
@@ -610,15 +612,92 @@ def report(root,tokens=128,contexts=1,profile=None):
                 ])
 
 
+def observed_silu_host_bound(root=ROOT):
+    """Refine the ORIGINAL Host bound with one frozen software-input census.
+
+    This is deliberately separate from the rectangular candidate calendar.
+    The gate audit remains historical evidence at its exact hash; it is not
+    rebound to a later Python model implementation or claimed as RTL input.
+    """
+    root=Path(root)
+    audit_path=root/V0_SILU_AUDIT
+    raw=audit_path.read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=V0_SILU_AUDIT_SHA256:
+        raise ValueError('saved v0 SiLU branch evidence changed')
+    audit=json.loads(raw)
+    host=BOUND.host_schedule_report(root,128)
+    binding=SFU.timing_binding(root)
+    # Source facts about physical arithmetic/owners must remain current. The
+    # historical software producer/model identities are retained separately.
+    hardware_pins={k:v for k,v in audit['source_sha256'].items()
+                   if not k.startswith('scripts/')}
+    hardware_pins.update(audit['receipt']['source_identity']['source_sha256'])
+    for path,expected in hardware_pins.items():
+        if hashlib.sha256((root/path).read_bytes()).hexdigest()!=expected:
+            raise ValueError('saved branch audit hardware source changed: '+path)
+    historical_upstream=audit['source_timing_binding']['upstream']
+    current_upstream=binding['upstream']
+    if (historical_upstream['commit']!=current_upstream['commit'] or
+        any(current_upstream['source_sha256'].get(p)!=h
+            for p,h in historical_upstream['source_sha256'].items())):
+        raise ValueError('saved branch audit upstream timing identity changed')
+    groups=audit['gate']['groups']
+    assert groups==128*8960//16 and audit['gate']['elements']==groups*16
+    assert audit['gate']['all_nonsaturated'] and audit['d25_lane_requests']==0
+    assert audit['d26_lane_requests']==groups*16 and audit['wrapper_d26_groups']==groups
+    span=45*groups+17*groups+groups-1
+    assert span==audit['wrapper_arithmetic_edge_span']
+    old=host['issue_counts']['silu_16_lane_primitive_issue_cycles']
+    remaining=host['non_dense_cycles_lower_bound']-old
+    current_total=host['current_dense_cycles_lower_bound']+remaining+span
+    ideal_total=host['ideal_dense_cycles_lower_bound']+remaining+span
+    macs=host['useful_macs']
+    return dict(schema_version=1,status='CONDITIONAL_SAVED_INPUT_HOST_BOUND_NOT_PREDICTION',
+        profile='original Host mapping / cold M128 / successful path / observed v0 gate branches / divider options0',
+        source_sha256={**host['source_sha256'],**hardware_pins},
+        evidence=dict(path=V0_SILU_AUDIT,sha256=V0_SILU_AUDIT_SHA256,
+                      original_source_model_sha256=audit['source_sha256']['scripts/qwen2_shared_sfu_schedule.py'],
+                      gate=audit['gate'],producer_status=audit['receipt']['status']),
+        workload=host['workload'],fixed_matrix_macs_per_cycle=4096,useful_macs=macs,
+        formula_version='host_bound_v2_replace_only_silu_issue_floor',
+        previous=dict(formula_version='host_bound_v1_one_cycle_per_nonoverlapping_request',
+                      cycles_lower_bound=host['whole_block_cycles_lower_bound'],
+                      utilization_upper_bound=host['useful_utilization_upper_bound']),
+        terms=dict(removed_old_silu_floor=old,new_silu_arithmetic_edge_span=span,
+                   unchanged_other_non_dense_lower_bound=remaining,
+                   current_dense_lower_bound=host['current_dense_cycles_lower_bound'],
+                   ideal_dense_lower_bound=host['ideal_dense_cycles_lower_bound']),
+        whole_block_cycles_lower_bound=current_total,
+        useful_utilization_upper_bound=macs/(4096*current_total),
+        ideal_dense_whole_block_cycles_lower_bound=ideal_total,
+        ideal_dense_useful_utilization_upper_bound=macs/(4096*ideal_total),
+        assumptions=[
+            'The actual SFU input has the saved software-producer branch population; actual Host production of these gates is not demonstrated.',
+            'All original numeric/error gates permit full successful execution; current model producer remains NOT_ACCEPTED.',
+            'Original owners serialize; SiLU internal memory overlap cannot overlap another owner.',
+            'Only the old six-primitive issue floor is replaced; do not add it, exp microsteps or divider service again.',
+            'The new internal request-to-result edge span omits first/last owner transitions, memory and ACK; it is a conservative lower bound, not an exact owner duration.',
+            'Applies only to this cold M128 and current mapping; no carried, M1024 or candidate-routing generalization.'],
+        predicted_full_block_cycles=None,rtl_measured_cycles=None,rtl_measured_utilization=None,
+        scope=dict(actual_host_gate_production=False,numerical_acceptance=False,
+                   candidate_mapping=False,rtl_execution=False,cycle_prediction=False))
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--tokens',type=int,choices=(128,1024),default=128)
     p.add_argument('--contexts',type=int,choices=(1,5),default=1)
     p.add_argument('--root',type=Path,default=ROOT)
     p.add_argument('--synthetic-profile',action='store_true')
+    p.add_argument('--observed-silu-host-bound',action='store_true')
     p.add_argument('--out',type=Path)
     args=p.parse_args()
-    result=report(args.root,args.tokens,args.contexts,timing_profile(args.synthetic_profile))
+    if args.observed_silu_host_bound:
+        if args.synthetic_profile or args.tokens!=128 or args.contexts!=1:
+            p.error('saved-input Host bound requires cold M128, original context profile and no synthetic timings')
+        result=observed_silu_host_bound(args.root)
+    else:
+        result=report(args.root,args.tokens,args.contexts,timing_profile(args.synthetic_profile))
     encoded=json.dumps(result,indent=2,sort_keys=True,allow_nan=False)+'\n'
     if args.out:
         args.out.parent.mkdir(parents=True,exist_ok=True)

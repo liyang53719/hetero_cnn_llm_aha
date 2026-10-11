@@ -4,8 +4,9 @@
 The existing sixteen SiLU ALU/divider pairs are rescheduled, not replicated.
 One or two vector contexts retain the exact exp7/SiLU expression order. The
 current RTL has no such controller. Divider timing is unbound by default;
-explicit source mode binds only the pinned primitive's control timing.
-Numeric result bits are diagnostic: HardFloat flags are not generated.
+explicit source mode binds the pinned primitive's control and bounded integer
+division model. Options16 is a model-only candidate, not a hardware setting.
+Numeric results are diagnostic: full HardFloat flags are not generated.
 """
 from __future__ import annotations
 
@@ -24,6 +25,7 @@ BASE = 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/'
 HARDFLOAT_COMMIT = 'c1105e6ac6a0dd90fc80893efc4830ab609005d3'
 HARDFLOAT_RECEIPT = 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
 HARDFLOAT_SOURCE_PINS = {
+    'hardfloat/src/main/scala/common.scala': 'ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb',
     'hardfloat/src/main/scala/DivSqrtRecFN_small.scala': '905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9',
     'hardfloat/src/main/scala/rawFloatFromFN.scala': '39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce',
     'hardfloat/src/main/scala/rawFloatFromRecFN.scala': 'bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317',
@@ -64,12 +66,19 @@ def verify_sources(root=ROOT):
     return dict(SOURCE_PINS)
 
 
-def timing_binding(root=ROOT):
+def _divider_options(options):
+    if type(options) is not int or options not in (0, 16):
+        raise ValueError('only reviewed divider options 0 or candidate 16 are supported')
+    return options
+
+
+def timing_binding(root=ROOT, *, options=0):
     """Reviewed source-FSM formulas, not runtime RTL calibration or a fetch.
 
     The upstream bytes were read at the pinned commit and checked against the
     existing capture receipt. Local pins/receipt are rechecked on every call.
     """
+    options = _divider_options(options)
     pins = verify_sources(root)
     receipt = json.loads((Path(root)/HARDFLOAT_RECEIPT).read_text())
     if any(receipt.get(p) != digest for p, digest in HARDFLOAT_SOURCE_PINS.items()):
@@ -79,53 +88,146 @@ def timing_binding(root=ROOT):
         upstream=dict(commit=HARDFLOAT_COMMIT, source_sha256=dict(HARDFLOAT_SOURCE_PINS),
             receipt_path=HARDFLOAT_RECEIPT, runtime_upstream_fetch=False,
             source_locations={
+                'common.scala': [59],
                 'DivSqrtRecFN_small.scala': [224, 275, 298, 304, 317, 369, 393, 504],
                 'rawFloatFromFN.scala': [45, 53, 55, 70],
                 'rawFloatFromRecFN.scala': [48, 61, 62],
                 'RoundAnyRawFNToRecFN.scala': [47, 55, 294, 326]},
             url='https://github.com/ucb-bar/berkeley-hardfloat/tree/'+HARDFLOAT_COMMIT),
         edge_convention='Request fires at edge 0. A registered result visible after edge k can first be sampled/fired at edge k+1. Ready is continuous unless stated.',
-        primitive_divider=dict(parameters=[8, 24, 0],
+        primitive_divider=dict(parameters=[8, 24, options], current_hardware_options=0,
+            candidate_options_only=options == 16,
             domain='Only IEEE FP32 normal finite nonzero a and b; either sign. Zero, subnormal, nonfinite and malformed inputs fail closed in this binding.',
-            classification='D=25 if normalized significand(a)>=normalized significand(b), else D=26; exponent magnitudes and signs do not select D.',
+            classification=('D=14 for candidate options16; process two quotient bits when cycleNum>=3.' if options else
+                'D=25 if normalized significand(a)>=normalized significand(b), else D=26; exponent magnitudes and signs do not select D.'),
             output_visible_after_edge='D-1', first_sample_edge='D', earliest_next_accept_edge='D',
             same_edge_output_sample_and_next_input=True, output_backpressure_supported=False,
-            recurrence='On accept cycleNum=26; decrement each edge; if cycleNum==3 and first quotient bit is 1, skip to 1. inReady and outValid are true together at cycleNum==1.'),
+            recurrence=('After accept: cycleNum 26,24,...,2,1; output visible after edge13, sample/next accept at edge14.' if options else
+                'On accept cycleNum=26; decrement each edge; if cycleNum==3 and first quotient bit is 1, skip to 1. inReady and outValid are true together at cycleNum==1.')),
         scalar_wrapper=dict(
+            instantiated_options=0,
             columns=['result_visible_after_edge', 'first_result_fire_edge', 'earliest_next_request_edge'],
             add_mul=[1, 2, 3], exp_saturated=[1, 2, 3], exp_nonsaturated=[18, 19, 20],
             div=['D+1', 'D+2', 'D+3'],
             sqrt_positive_finite='Same wrapper formula; primitive D=24 for odd recoded exponent, 25 for even. Not implemented by the divider classifier.',
             rejected_before_arithmetic=[0, 1, 2], held_result=True),
-        silu_wrapper=dict(group_ii_formula='45+17*B+Q',
+        silu_wrapper=dict(instantiated_options=0, group_ii_formula='45+17*B+Q',
             variables='B=1 if any gate lane is nonsaturated; Q=1 if any lane reciprocal takes D26. All six phases must finish without an error.',
             first_result_fire_edge='group_ii-1',
             edge_span_formula='45*N+17*L+Qsum-1',
             same_edge_output_fire_and_next_input=False),
+        normal_division_model=dict(
+            domain='Normal finite nonzero inputs, exact quotient normal, and rounded quotient normal finite; IEEE RNE only.',
+            modeled_flags='Only NX is modeled; NV/DZ/OF/UF cases are excluded by the domain, not covered by full flag equivalence.',
+            method='Pinned one-bit/two-bit integer remainder/quotient/sticky recurrence followed by guard/sticky/LSB RNE.',
+            validation='Deterministic directed/random samples against an independent exact rational oracle; not exhaustive equivalence.'),
+        candidate_datapath=(dict(enabled_second_trial_path=True,
+            description='Each divider enables a second dependent trial subtraction/comparison and remainder/quotient/sticky selection.',
+            added_fp_operator_instances=0, added_physical_integer_adders=None,
+            combinational_gate_delta=None, area_delta=None, critical_path_delta=None,
+            same_frequency_proved=False) if options else None),
         scope=dict(source_fsm_timing=True, rtl_calibrated=False, hardfloat_flags_generated=False,
                    numerical_acceptance=False, full_block_prediction=False),
         limitations=[
-            'The candidate bypasses BlockScalarFloat control and directly schedules the same primitive; it is not implemented RTL.',
+            'The candidate bypasses BlockScalarFloat control; options16 additionally changes the primitive datapath. Neither candidate controller nor option change is implemented RTL.',
             'Scalar core occupancy excludes Qwen2Block calc/resume states and all owner/memory/ACK costs.',
             'Return capture must be reserved: HardFloat has a pulse output with no result-ready input.',
             'Fatal flags can terminate a wrapper phase early; success formulas do not prove numerical acceptance.',
             'An output stall retains the context and extends the schedule; source timing does not remove backpressure.'])
 
 
-def source_divider_timing(a, b):
+def _normal_operand(value):
+    if type(value) is not int or not 0 <= value <= 0xffffffff:
+        raise ValueError('source divider requires raw uint32 FP32 normal operands')
+    exponent = (value >> 23) & 0xff
+    if not 1 <= exponent <= 254:
+        raise ValueError('source divider supports only normal finite nonzero operands')
+    return value >> 31, exponent-127, 0x800000 | (value & 0x7fffff)
+
+
+def source_divider_timing(a, b, *, options=0):
     """Pure integer classification for the reviewed normal-input division path."""
-    def significand(value):
-        if type(value) is not int or not 0 <= value <= 0xffffffff:
-            raise ValueError('source divider requires raw uint32 FP32 normal operands')
-        exponent = (value >> 23) & 0xff
-        if not 1 <= exponent <= 254:
-            raise ValueError('source divider supports only normal finite nonzero operands')
-        return 0x800000 | (value & 0x7fffff)
-    sa, sb = significand(a), significand(b)
-    latency = 25 if sa >= sb else 26
+    options = _divider_options(options)
+    sa, sb = _normal_operand(a)[2], _normal_operand(b)[2]
+    latency = 14 if options else 25 if sa >= sb else 26
     return dict(latency_cycles=latency, initiation_interval_cycles=latency,
-                skip_cycle_2=sa >= sb, normalized_significand_a=sa,
-                normalized_significand_b=sb, binding='pinned_source_fsm')
+                options=options, current_hardware_options=0, candidate_options_only=options == 16,
+                skip_cycle_2=options == 0 and sa >= sb, normalized_significand_a=sa,
+                normalized_significand_b=sb,
+                binding='candidate_options16_source_fsm' if options else 'pinned_source_fsm')
+
+
+def source_division_model(a, b, *, options=0, trace=False):
+    """Pinned integer division recurrence, with RNE and NX in a strict domain.
+
+    Both operands, the exact quotient, and the rounded result must be normal
+    finite. In particular an exact subnormal rounding to min-normal is rejected.
+    The other four exception flags are excluded, not independently modeled.
+    Options16 is only a candidate. No claim of exhaustive/RTL equivalence.
+    """
+    options = _divider_options(options)
+    if type(trace) is not bool:
+        raise ValueError('trace must be a boolean')
+    sign_a, ea, sa = _normal_operand(a)
+    sign_b, eb, sb = _normal_operand(b)
+    exponent = ea-eb-int(sa < sb)
+    if not -126 <= exponent <= 127:
+        raise ValueError('division model requires an exact normal quotient')
+    mask26 = (1 << 26)-1
+    # For division: fractB_Z | (1<<24) = 2*normalized_significand(b).
+    divisor = sb << 1
+    trial = (sa << 1)-divisor
+    first_bit = trial >= 0
+    rem_z = (trial if first_bit else sa << 1) & mask26
+    not_zero_rem_z = trial != 0
+    sig_x = int(first_bit) << 25
+    cycle_num, edge = 26, 0
+    history = [dict(edge=0, cycle_num=26, rem=rem_z, sig=sig_x, sticky=not_zero_rem_z)] if trace else []
+    while cycle_num > 1:
+        process_two = options == 16 and cycle_num >= 3
+        skip_cycle_2 = options == 0 and cycle_num == 3 and bool(sig_x & (1 << 25))
+        trial = (rem_z << 1)-divisor
+        bit = trial >= 0
+        next_rem = (trial if bit else rem_z << 1) & mask26
+        next_not_zero = trial != 0 if bit else not_zero_rem_z
+        # Preserve the source's 27-bit truncation and second dependent trial.
+        trial2 = (trial << 1)-divisor if bit else ((rem_z << 2) & ((1 << 27)-1))-divisor
+        bit2 = trial2 >= 0
+        not_zero_rem_z = ((process_two and bit and trial2 > 0) or
+                         (process_two and not bit and trial2 > 0) or
+                         (not (process_two and bit2) and next_not_zero))
+        rem_z = ((trial2 if bit2 else next_rem << 1) & mask26) if process_two else next_rem
+        if bit:
+            sig_x |= 1 << (cycle_num-2)
+        if process_two and bit2:
+            sig_x |= 1 << (cycle_num-3)
+        cycle_num = 1 if skip_cycle_2 else cycle_num-(2 if process_two else 1)
+        edge += 1
+        if trace:
+            history.append(dict(edge=edge, cycle_num=cycle_num, rem=rem_z, sig=sig_x,
+                                sticky=not_zero_rem_z, bit=int(bit),
+                                bit2=int(bit2) if process_two else None))
+    # rawOut.sig = sigX<<1 | notZeroRem. Option0 may omit the final low
+    # quotient bit: compare rounded output/NX, not terminal raw-register equality.
+    shift = sig_x.bit_length()-24
+    assert shift in (1, 2)
+    retained = sig_x >> shift
+    guard = (sig_x >> (shift-1)) & 1
+    sticky = bool(sig_x & ((1 << (shift-1))-1)) or not_zero_rem_z
+    increment = bool(guard and (sticky or retained & 1))
+    inexact = bool(guard or sticky)
+    retained += increment
+    if retained == 1 << 24:
+        retained >>= 1
+        exponent += 1
+    if exponent > 127:
+        raise ValueError('division model requires a rounded normal finite quotient')
+    bits = ((sign_a ^ sign_b) << 31) | ((exponent+127) << 23) | (retained & 0x7fffff)
+    return dict(result_bits=bits, modeled_flags=int(inexact), quotient_bits=sig_x,
+                remainder_nonzero=not_zero_rem_z, guard=guard, sticky=sticky,
+                increment=increment, output_visible_after_edge=edge,
+                result_sample_edge=edge+1, next_accept_edge=edge+1, trace=history,
+                options=options, candidate_options_only=options == 16)
 
 
 def f32_bits(value):
@@ -308,12 +410,22 @@ def saved_gate_timing(result_path, root=ROOT):
                      'Existing frozen exp7 and FP32-RNE denominator arithmetic.'])
 
 
-def resource_budget(contexts):
+def resource_budget(contexts, *, divider_options=0):
     if type(contexts) is not int or contexts not in (1, 2):
         raise ValueError('only one or two vector contexts are supported')
+    divider_options = _divider_options(divider_options)
     tag_bits = (contexts-1).bit_length()
     return dict(alu_lanes=16, alu_issue_ports_per_lane=1, divider_lanes=16,
-                converter_lanes=16, added_arithmetic_units=0, added_sram_bytes=0,
+                converter_lanes=16, added_arithmetic_units=None if divider_options else 0,
+                added_fp_operator_instances=0, added_sram_bytes=0,
+                divider_options=divider_options, current_hardware_divider_options=0,
+                candidate_divider_reconfiguration=divider_options == 16,
+                per_divider_enabled_second_trial_path=(
+                    'Second dependent trial subtraction/comparison and remainder/quotient/sticky selection.'
+                    if divider_options else None),
+                added_physical_integer_adders=None if divider_options else 0,
+                combinational_gate_delta=None if divider_options else 0,
+                area_delta=None, critical_path_delta=None, same_frequency_proved=False,
                 contexts=contexts, write_ports_per_lane=1, divider_result_queue_entries=0,
                 extra_context_bits=(contexts-1)*16*181,
                 extra_batch_ordinal_bits=(contexts-1)*20,
@@ -333,7 +445,7 @@ def resource_budget(contexts):
                 synthesis_or_area_proof=False)
 
 
-def summarize_work(gates, ups, contexts=1):
+def summarize_work(gates, ups, contexts=1, *, divider_options=0):
     gates, ups = _groups(gates, 'gate'), _groups(ups, 'up')
     if len(gates) != len(ups):
         raise ValueError('gate/up group counts differ')
@@ -350,16 +462,18 @@ def summarize_work(gates, ups, contexts=1):
                 nonsaturated_groups=sum(any((x & 0x7fffffff) < f32_bits(80) for x in g) for g in gates),
                 operations_per_lane=counts,
                 single_issue_alu_service_cycles_lower_bound=max(counts['alu']),
-                resource_budget=resource_budget(contexts))
+                resource_budget=resource_budget(contexts, divider_options=divider_options))
 
 
 def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider=False,
+                  divider_options=0,
                   output_ready=None, injected_flags=None, injected_errors=None,
                   corrupt_divider_tags=None, max_cycles=100000, root=ROOT):
     """Return a candidate calendar, optionally using source-bound primitive timing.
 
     output_ready is a cycle->bool callable (default always ready). Fault keys
-    are (batch,lane,node). Flags are supplied externally, never calculated.
+    are (batch,lane,node). Status flags are supplied externally; the source
+    divider also reports diagnostic NX in its exact-normal/rounded-normal domain.
     A corrupt-tag key is (batch,lane) for that lane's sole reciprocal return.
     Cycle t issues and writes a combinational ALU/converter op at its end; the
     next micro-op and output handshake can use it in cycle t+1.
@@ -370,8 +484,11 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider
         raise ValueError('source_divider must be a boolean')
     if source_divider and divider_timing is not None:
         raise ValueError('source divider timing and synthetic timing are mutually exclusive')
+    divider_options = _divider_options(divider_options)
+    if divider_options and not source_divider:
+        raise ValueError('candidate divider options require explicit source_divider mode')
     gates, ups = _groups(gates, 'gate'), _groups(ups, 'up')
-    work = summarize_work(gates, ups, contexts)
+    work = summarize_work(gates, ups, contexts, divider_options=divider_options)
     result = dict(schema_version=1, component='qwen2_shared_sfu',
                   profile=f'candidate_single_issue_sfu_contexts_{contexts}',
                   profile_kind='candidate_context_schedule',
@@ -381,17 +498,21 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider
                   scope=dict(candidate_hardware_implemented=False,
                     full_block_prediction=False, hardfloat_flags_generated=False,
                     scalar_error_status_policy_validated=False,
-                    numerical_acceptance=False, numeric_result_bits_only=True,
+                    numerical_acceptance=False, numeric_result_bits_only=not source_divider,
+                    normal_domain_divider_nx_modeled=source_divider,
                     memory_traffic_or_ack_modeled=False,
                     scalar_fsm_rewritten_in_candidate=True,
                     current_rtl_wrapper_timing=False),
                   status='TIMING_UNBOUND', divider_timing=divider_timing,
-                  divider_timing_kind=('pinned_source_fsm' if source_divider else
+                  divider_timing_kind=('candidate_options16_source_fsm' if divider_options else
+                                       'pinned_source_fsm' if source_divider else
                                        'synthetic' if divider_timing is not None else 'unbound'),
+                  divider_options=divider_options, current_hardware_divider_options=0,
                   peak_contexts=0, output_count=0, all_outputs_acknowledged=None,
                   cycle_convention='cycle t issue/write commits at its end; next micro-op/output uses it at t+1; final drain cycle is included')
     if source_divider:
-        result['timing_binding'] = timing_binding(root)
+        result['timing_binding'] = timing_binding(root, options=divider_options)
+        result['divider_bit_model'] = 'integer source recurrence; normal inputs, exact-normal and rounded-normal quotient; diagnostic NX only'
     elif divider_timing is None:
         return result
     else:
@@ -442,7 +563,12 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider
 
     def evaluate(cycle, ctx, lane, node):
         try:
-            return _evaluate(node,ctx['lanes'][lane]['registers'])
+            registers = ctx['lanes'][lane]['registers']
+            if source_divider and node['op'] == 'div':
+                a, b = _operand(node['a'], registers), _operand(node['b'], registers)
+                arithmetic = source_division_model(a, b, options=divider_options)
+                return a, b, arithmetic['result_bits'], arithmetic['modeled_flags']
+            return (*_evaluate(node, registers), None)
         except (ValueError, FloatingPointError, OverflowError) as exc:
             # The bit oracle has a deliberately limited domain. Its failure is
             # neither an IEEE flag nor permission to drop accepted transfers.
@@ -467,7 +593,8 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider
                 elif poison is None:
                     assert ctx['lanes'][lane]['waiting_divider']
                     ctx['lanes'][lane]['waiting_divider'] = False
-                    write(cycle, ctx, lane, pending['node'], pending['value'], resource=f'silu.divider.{lane:02d}')
+                    write(cycle, ctx, lane, pending['node'], pending['value'], resource=f'silu.divider.{lane:02d}',
+                          modeled_divider_flags=pending['modeled_flags'])
                 else:
                     event(cycle, 'divider_discard', lane=lane, tag=list(tag))
 
@@ -515,18 +642,19 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider
                         computed = evaluate(cycle,ctx,lane,node)
                         if computed is None:
                             break
-                        a, b, value = computed
-                        timing = source_divider_timing(a, b) if source_divider else divider_timing
+                        a, b, value, modeled_flags = computed
+                        timing = source_divider_timing(a, b, options=divider_options) if source_divider else divider_timing
                         latency = timing['latency_cycles']
                         interval = timing['initiation_interval_cycles']
                         tag = (ctx['batch'],ctx['slot'],ctx['generation'],lane)
-                        dividers[lane] = dict(tag=tag, node=node, value=value, return_cycle=cycle+latency)
+                        dividers[lane] = dict(tag=tag, node=node, value=value, return_cycle=cycle+latency,
+                                             modeled_flags=modeled_flags)
                         div_available[lane] = cycle+interval
                         state['waiting_divider'] = True
                         event(cycle, 'issue', batch=ctx['batch'], lane=lane, slot=ctx['slot'],
                               generation=ctx['generation'], node=node['name'], resource=f'silu.divider.{lane:02d}', a=a,b=b,
                               latency_cycles=latency, initiation_interval_cycles=interval,
-                              timing_binding=result['divider_timing_kind'])
+                              timing_binding=result['divider_timing_kind'], modeled_divider_flags=modeled_flags)
                         reservations.append(dict(resource=f'silu.divider.{lane:02d}',start=cycle,end=cycle+interval,
                                                  batch=ctx['batch'],slot=ctx['slot'],node=node['name']))
                         break
@@ -546,7 +674,7 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider
                     computed = evaluate(cycle,ctx,lane,node)
                     if computed is None:
                         break
-                    a,b,value = computed
+                    a,b,value,_ = computed
                     resource = f"silu.{node['resource']}.{lane:02d}"
                     event(cycle, 'issue', batch=ctx['batch'], lane=lane, slot=ctx['slot'],
                           generation=ctx['generation'], node=node['name'], resource=resource,a=a,b=b)
@@ -594,6 +722,8 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--source-divider-timing', action='store_true')
     mode.add_argument('--source-timing-audit', action='store_true')
+    parser.add_argument('--source-divider-options', type=int, choices=(0, 16), default=0,
+                        help='0 is current source; 16 is an explicit model-only datapath candidate, not a hardware configuration change')
     mode.add_argument('--gate-result', type=Path, nargs='+',
                       help='Hash-check and classify at most two saved gate artifacts; no full forward')
     parser.add_argument('--out', type=Path)
@@ -606,18 +736,21 @@ def main():
         parser.error('source timing/audit and synthetic timing are mutually exclusive')
     if args.gate_result and len(args.gate_result) > 2:
         parser.error('--gate-result accepts at most two saved result files')
+    if args.source_divider_options and not (args.source_divider_timing or args.source_timing_audit):
+        parser.error('candidate options16 requires --source-divider-timing or --source-timing-audit; saved gate census stays on actual options0')
     timing = None if args.divider_latency is None else dict(latency_cycles=args.divider_latency,
                                                          initiation_interval_cycles=args.divider_ii)
     gates = [[f32_bits((lane-8)/4) for lane in range(16)] for _ in range(args.groups)]
     ups = [[ONE]*16 for _ in gates]
     if args.source_timing_audit:
-        report = timing_binding()
+        report = timing_binding(options=args.source_divider_options)
     elif args.gate_result:
         report = dict(timing_binding=timing_binding(),
                       saved_gate_timing=[saved_gate_timing(path) for path in args.gate_result])
     else:
         report = schedule_silu(gates,ups,contexts=args.contexts,divider_timing=timing,
-                               source_divider=args.source_divider_timing)
+                               source_divider=args.source_divider_timing,
+                               divider_options=args.source_divider_options)
     text = json.dumps(report,indent=2,allow_nan=False)+'\n'
     if args.out:
         with args.out.open('x') as stream: stream.write(text)

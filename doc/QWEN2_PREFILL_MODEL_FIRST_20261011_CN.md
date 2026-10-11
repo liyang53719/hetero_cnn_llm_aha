@@ -196,3 +196,54 @@ M128 gate 输入全属非饱和分支，仅 SiLU 就至少2,723,839拍；这是�
 - ongoing：完整DAG资源预约与固定16路SFU调度的软件模型、未绑定时延清单。
 - to do：明确数值政策后才做最小Chisel接入；绑定实际端口与FSM时延，最后冻结刺激跑RTL。
 - 保持：Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN；不将末输出门通过写成完整数值通过。
+
+## RMS1536 / RoPE 定点复现与后续整链诊断
+
+`a17ebcc91cd3ffdd38e42743aa3264ea25d75f0c` 的模型 CI 实跑 168 项测试
+通过，payload guard 通过，14 份报告的源 pins 均已复核。13 份报告逐字节
+一致；资源合成报告的 4 个集合列表顺序不同，原失败保留。排序修正只规范
+序列化，不改变周期/资源成员，并新增两个 Python hashseed 的回归。
+
+[RMS / RoPE 单算子诊断](QWEN2_RMS_ROPE_POLICY_DIAGNOSTIC_20261011_CN.md)
+覆盖旧 cold/carried M16/M128 的 20 组、1440 行评估。1536-channel 显式归约
+使用固定 V8 / 四余数组 / 三块各16项的顺序，均值执行 FP32 除1536；随后
+sqrt、reciprocal 和两个 BF16 物化边界均按冻结官方 CPU 源码。所有相同输入
+RMS 观察节点及输出逐位一致。普通 C 和独立整数中点 RNE 核验通过。
+
+FP32 powf/频率/角度/sinf/cosf 生成的位置 0..255 表在 BF16 物化后全部匹配
+官方；FP32 中间值仍有差异，未证明任意位置或跨 backend 等价。这些结果
+仅对实际源/运行时/输入身份有效，不以 CPU 名称代替 dispatch 验证。
+
+旧 carried M128 actual residual 送入新 RMS 后，n1 相对完整官方链仍有
+13245 个元素不同，max_abs=0.12353515625。这个反例保留，证明单算子同输入
+一致不足以关闭整链。下一步是[隔离 v2 软件候选](QWEN2_RMS_ROPE_PREFILL_CANDIDATE_20261011_CN.md)
+以同一新 ELF 真正执行 cold→carried，读取实际前次 K/V，再比较全部29节点。
+该候选的数值 PASS/FAIL 与政策接受分开；始终 `DIAGNOSTIC_NOT_ACCEPTED`，
+不改变原 v0 硬件、producer 门限或批准状态。
+
+- done（局部）：20组 RMS/有界 RoPE 的独立数值及来源审查；CI 资源列表差异定位。
+- ongoing：同新二进制 cold/carried M16→M128 整链诊断及首差分析。
+- ongoing：固定资源性能模型，时延仍未完全绑定，尚无可信完整 Chisel 周期预测。
+- to do：数值政策确认后最小 Chisel 接入及冻结刺激的完整 RTL 验收。
+- 保持：Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。
+
+本轮 v2 cold128→carried128 已完成实际软件数值执行，分别30.55/33.11秒，
+同一新 ELF 与 M16 一致。carried 从本轮新 cold 的实际 K/V 文件续算，没有
+使用旧候选或官方 cache 替代。四种比较的失败节点数均由15降至4，末输出
+最大差由0.0390625降至0.0078125，各法末门通过。
+
+完整原门仍失败：cold 官方 scores/logits 最大差16/8；carried 官方两法
+剩 scores/logits（max1）、n1（0.0625）、gate（0.0390625），独立两法
+剩 scores/logits（max8）、q（0.125）、gate（0.0390625）。n1 的官方整链
+差异来自其实际 residual 输入已经不同；相同实际输入的前/后 RMS 八节点
+及输出全部精确。这是明确的数值改进和剩余边界，不能写成完整block通过。
+
+首次 M16 新参考加载器漏了 Q/K token-major 逆布局，导致错误比较。原失败
+和当时未发布源码快照已保留；补逆变换及非均匀 token/head 回归后重验，
+新旧两次 M16 的实际 raw 输出及 ELF 逐字节一致。修正不更改候选算术。
+
+逐执行拓扑的只读差异汇总进一步表明：所有新比较方法的第一处 bit 差均在
+`qr` 投影输出，旧 v1 carried 的第一差在 `n0`。carried 官方首个超门节点
+现在为 scores，独立参考首个超门节点为旋转后的 q；旧四法均从 qr 开始超门。
+这些差异使用已保存全量数组复算，未注入官方中间结果或追加实际执行。
+本批完整轻量模型合同198项测试通过（21.07秒），新精确提交的CI另行跟踪。

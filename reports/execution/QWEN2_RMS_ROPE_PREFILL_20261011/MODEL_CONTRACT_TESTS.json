@@ -1,0 +1,18 @@
+{
+  "command_scope": "Exact lightweight workflow test list; no model payload download or RTL",
+  "passed": 198,
+  "seconds": 21.07,
+  "exit_code": 0,
+  "log_sha256": "cb12633fc2b007e756df7052dfd224c6da796936d2180bd46e12e257101c7e55",
+  "source_files": {
+    ".github/workflows/qwen2-prefill-model-contract.yml": "dc76263b97117bfa3017b7a80a3ee1d7ecc5f4c4ad682920792a014dca7377fe",
+    "scripts/qwen2_rms_rope_policy_diagnostic.py": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6",
+    "scripts/qwen2_rms_rope_prefill_candidate.py": "41aea07ba09fc5c11f6aafbe14e83ebdba6e843a3cf47080a954a1032b6461e9",
+    "scripts/qwen2_rms_backend_evidence.py": "54ff85fbdd1222f3884f7ffdba9b56e8f26011e78b0d9944ebcea663d798ab12",
+    "scripts/qwen2_prefill_resource_schedule.py": "d5356874e86f616a113558cea018bcf141ef6273d44523752047e2d5b571ecb9",
+    "tests/test_qwen2_rms_rope_policy_diagnostic.py": "b2a6766d85adc4df422f2b4319de0ceb9e95613f8357c8c1053cfa4f9b5027a2",
+    "tests/test_qwen2_rms_rope_prefill_candidate.py": "02c2c8cedc98b317ece7593fbd968d89424f65d7352deacb5e42a28ee5fed2ce",
+    "tests/test_qwen2_rms_backend_evidence.py": "70719913f57658cac777ec7d2c94932f94bdf8ea3eece6cc72db1dc6d8658540",
+    "tests/test_qwen2_prefill_resource_schedule.py": "801ec7d50f51b6cb3a53695ff160e12c7369bd5e57760339222aa0a94114dee6"
+  }
+}

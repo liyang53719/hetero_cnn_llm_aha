@@ -108,3 +108,16 @@ python -m pytest tests/test_qwen2_prefill_resource_schedule.py
 metadata流量与实际FSM转换，再针对明确bank/缓冲所有权逐项开放重叠。SFU候选
 需先保持独立证据层级，不能直接给默认基线免费pipeline收益。完成这些工作之前，
 可信完整周期模型与性能验收均保持OPEN。
+
+## 2026-10-11 CI 序列化复核
+
+提交 `a17ebcc91cd3ffdd38e42743aa3264ea25d75f0c` 的轻量模型 CI 实跑
+168 项测试通过；14 份 JSON 的源码 pins 均通过核验。13 份报告逐字节相同，
+`m128_resource_synthetic.json` 的 4 个预约样本存在集合遍历顺序差异。
+每个资源集合、周期、事件及其余字段相同；原始 byte-equivalence 失败记录保留，
+不能将它写成全部报告逐字节一致。
+
+修正只在 `ReservationBook.reserve` 中将同时占用的资源名称排序。预约的成员、
+持续时间、冲突检查和释放顺序语义均不改变。新增独立 Python 进程的
+`PYTHONHASHSEED=1/713` 回归检查序列化字节和开始/结束周期一致。这不是
+数值或硬件调度优化；后续 CI 仍需核验新报告的实际字节一致性。

@@ -1,0 +1,449 @@
+{
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "scope": "QWEN2_L0_RMS1536_AND_ROPE_0_255_MODEL_ONLY",
+  "generator_sha256": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6",
+  "inputs": {
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/RESULT.json": {
+      "bytes": 88722,
+      "sha256": "c1130e1d979cc052769d7bfc35d170461e9d84bf8e594d326401bc3a63448a41"
+    },
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/tensors/candidate_x.f32le": {
+      "bytes": 98304,
+      "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+    },
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/tensors/candidate_n0.f32le": {
+      "bytes": 98304,
+      "sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+    },
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/tensors/candidate_r.f32le": {
+      "bytes": 98304,
+      "sha256": "7c71bea2e04755e51cd6c1e7a3dbb67c06f66a38490fa055328c97f1e40d5697"
+    },
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/tensors/candidate_n1.f32le": {
+      "bytes": 98304,
+      "sha256": "4cbd25f7943ff6a9ec16f44dc9253af4e38af867a3bc56367d66d5f1cb9ecc3a"
+    },
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/tensors/candidate_cos.f32le": {
+      "bytes": 8192,
+      "sha256": "0de6a559c6e4fbce57ef2b20078d812ef0a8f11629d5c2bc04ae03df7cc6651c"
+    },
+    "work/qwen2_bf16_candidate_v1_m16_final_20261011/tensors/candidate_sin.f32le": {
+      "bytes": 8192,
+      "sha256": "be646a40c78fa2e19848919e9ea0db27b1a5b10edd12c039c8baf330db3b12ad"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/RESULT.json": {
+      "bytes": 107637,
+      "sha256": "b6206444a95453770ce3131998000aece244e182e45bebeef841038dd8b2d6a6"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/bf16/phase_0/native_x.f32le": {
+      "bytes": 98304,
+      "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/bf16/phase_0/native_n0.f32le": {
+      "bytes": 98304,
+      "sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/bf16/phase_0/native_r.f32le": {
+      "bytes": 98304,
+      "sha256": "40bd90a41c87dcead146fbd213dbcfc24d6a9c3e90fa24f963be4511472331b8"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/bf16/phase_0/native_n1.f32le": {
+      "bytes": 98304,
+      "sha256": "166642e7b98ce53d7dbb0c4884b1337eac0a7d0a64520ba0e8d7fe2a7bb26b5a"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/bf16/phase_0/native_cos.f32le": {
+      "bytes": 8192,
+      "sha256": "0de6a559c6e4fbce57ef2b20078d812ef0a8f11629d5c2bc04ae03df7cc6651c"
+    },
+    "work/qwen2_layer0_model_gate_cold_m16_20261011/bf16/phase_0/native_sin.f32le": {
+      "bytes": 8192,
+      "sha256": "be646a40c78fa2e19848919e9ea0db27b1a5b10edd12c039c8baf330db3b12ad"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/RESULT.json": {
+      "bytes": 89352,
+      "sha256": "7b7de4815daf592b9a807f9057788b7aa815381f2e9c2e65e73ecf18b2c4bb29"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/tensors/candidate_x.f32le": {
+      "bytes": 786432,
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/tensors/candidate_n0.f32le": {
+      "bytes": 786432,
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/tensors/candidate_r.f32le": {
+      "bytes": 786432,
+      "sha256": "91f788a5431c5cac1469b21212634331be14423114de1dafedc635db0088f25e"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/tensors/candidate_n1.f32le": {
+      "bytes": 786432,
+      "sha256": "991d3884440c5a80d14f85ada2219dacce192877b5aa886f4ec29877801d4186"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/tensors/candidate_cos.f32le": {
+      "bytes": 65536,
+      "sha256": "d571dc697faa77a465adc35d0f3464ee4765114a3c1514c997000fab8da950b5"
+    },
+    "work/qwen2_bf16_candidate_v1_m128_final_20261011/tensors/candidate_sin.f32le": {
+      "bytes": 65536,
+      "sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/RESULT.json": {
+      "bytes": 115433,
+      "sha256": "10ad341ee67fc12f1c619c60716647f29110fa49cd8f17163136059f78cb5315"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/bf16/phase_0/native_x.f32le": {
+      "bytes": 786432,
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/bf16/phase_0/native_n0.f32le": {
+      "bytes": 786432,
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/bf16/phase_0/native_r.f32le": {
+      "bytes": 786432,
+      "sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/bf16/phase_0/native_n1.f32le": {
+      "bytes": 786432,
+      "sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/bf16/phase_0/native_cos.f32le": {
+      "bytes": 65536,
+      "sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547"
+    },
+    "work/qwen2_layer0_model_gate_cold_m128_20261011/bf16/phase_0/native_sin.f32le": {
+      "bytes": 65536,
+      "sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/RESULT.json": {
+      "bytes": 311477,
+      "sha256": "24b2c1b48549540cc8689701a270c6e80c1d79b9151a8c40676b7f2a1e773a52"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/tensors/candidate_x.f32le": {
+      "bytes": 98304,
+      "sha256": "61de6ebf94fcd94056e148c2a96e872b5ed464644fe5b7e423aff51ca40957b7"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/tensors/candidate_n0.f32le": {
+      "bytes": 98304,
+      "sha256": "199a924fce7f16c353af5e85968b2b4c56ad8552742a98e9d68c53fcb0c9a65c"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/tensors/candidate_r.f32le": {
+      "bytes": 98304,
+      "sha256": "3da4ebbfe62cdaa315a98c81182b9a45c009e771da4affcf93208d917c2b3552"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/tensors/candidate_n1.f32le": {
+      "bytes": 98304,
+      "sha256": "64867fe5bbcdce1fee94e1c7d0590bb6922113380f57ef4ab46ee622b03a2b29"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/tensors/candidate_cos.f32le": {
+      "bytes": 16384,
+      "sha256": "841c2415088c6c0c4b7628e46ed1f12cc4ac215e56648c4e2cf03b8cd4c024ad"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/tensors/candidate_sin.f32le": {
+      "bytes": 16384,
+      "sha256": "61d28d965ff662c95130c09bf3f2a5c87ec3a76fbb0d8c433f7a3c6ba2c915f8"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/FROZEN.json": {
+      "bytes": 18586,
+      "sha256": "8e341f6cdb1d37f0368e458928f0e8bb795b11d6ed811b7d8c903e1f45fdf3ce"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_self_cache/x.f32le": {
+      "bytes": 98304,
+      "sha256": "61de6ebf94fcd94056e148c2a96e872b5ed464644fe5b7e423aff51ca40957b7"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_self_cache/n0.f32le": {
+      "bytes": 98304,
+      "sha256": "199a924fce7f16c353af5e85968b2b4c56ad8552742a98e9d68c53fcb0c9a65c"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_self_cache/r.f32le": {
+      "bytes": 98304,
+      "sha256": "c3635082365c9ff36c6aea881ffc1e60309dbca494036c1ed43a52a05bf972c8"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_self_cache/n1.f32le": {
+      "bytes": 98304,
+      "sha256": "a41f48175a1c153e556dc0ef669814b7e525b509d09f01bb2fe99fca2e7c81d9"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_self_cache/cos.f32le": {
+      "bytes": 16384,
+      "sha256": "841c2415088c6c0c4b7628e46ed1f12cc4ac215e56648c4e2cf03b8cd4c024ad"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_self_cache/sin.f32le": {
+      "bytes": 16384,
+      "sha256": "61d28d965ff662c95130c09bf3f2a5c87ec3a76fbb0d8c433f7a3c6ba2c915f8"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_candidate_cache/x.f32le": {
+      "bytes": 98304,
+      "sha256": "61de6ebf94fcd94056e148c2a96e872b5ed464644fe5b7e423aff51ca40957b7"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_candidate_cache/n0.f32le": {
+      "bytes": 98304,
+      "sha256": "199a924fce7f16c353af5e85968b2b4c56ad8552742a98e9d68c53fcb0c9a65c"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_candidate_cache/r.f32le": {
+      "bytes": 98304,
+      "sha256": "c3635082365c9ff36c6aea881ffc1e60309dbca494036c1ed43a52a05bf972c8"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_candidate_cache/n1.f32le": {
+      "bytes": 98304,
+      "sha256": "a41f48175a1c153e556dc0ef669814b7e525b509d09f01bb2fe99fca2e7c81d9"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_candidate_cache/cos.f32le": {
+      "bytes": 16384,
+      "sha256": "841c2415088c6c0c4b7628e46ed1f12cc4ac215e56648c4e2cf03b8cd4c024ad"
+    },
+    "work/qwen2_carried_candidate_m16_final_20261011/references/official_candidate_cache/sin.f32le": {
+      "bytes": 16384,
+      "sha256": "61d28d965ff662c95130c09bf3f2a5c87ec3a76fbb0d8c433f7a3c6ba2c915f8"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/RESULT.json": {
+      "bytes": 321725,
+      "sha256": "316b962a61bc53adc5b8d2a0885c977e1fffb52af05ed3667a6494f003eb59c6"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/tensors/candidate_x.f32le": {
+      "bytes": 786432,
+      "sha256": "6cfb0821d22e449a059ef309952ce399d5a559ecdd4c9bd10c934879ea843da6"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/tensors/candidate_n0.f32le": {
+      "bytes": 786432,
+      "sha256": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/tensors/candidate_r.f32le": {
+      "bytes": 786432,
+      "sha256": "188b9c047a1a3236036e4e869684491efb5ef76ca7a0dee543e8206ff7e6bbd6"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/tensors/candidate_n1.f32le": {
+      "bytes": 786432,
+      "sha256": "6654f8b690e8794197d444f0e147a352b0403b72fbdf8f73926e8fb212d20701"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/tensors/candidate_cos.f32le": {
+      "bytes": 131072,
+      "sha256": "cda7dccd991e6e0884fee7c144491927de1a35c0f9326348b2143eb68f21b96f"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/tensors/candidate_sin.f32le": {
+      "bytes": 131072,
+      "sha256": "4d681356abd0db46d9b345da9dd38aee887794878300abe4a4cd85ee2718f511"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/FROZEN.json": {
+      "bytes": 24859,
+      "sha256": "5ff8ac4c446ddc8e2e291a18b05d1978ee089979a50c51fe18c8edff25c67150"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_self_cache/x.f32le": {
+      "bytes": 786432,
+      "sha256": "6cfb0821d22e449a059ef309952ce399d5a559ecdd4c9bd10c934879ea843da6"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_self_cache/n0.f32le": {
+      "bytes": 786432,
+      "sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_self_cache/r.f32le": {
+      "bytes": 786432,
+      "sha256": "cd0c7bc6605c8a22dc4b48600b6ee6bc4bdea2b4e0fdd4f81d555fe943aa14f1"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_self_cache/n1.f32le": {
+      "bytes": 786432,
+      "sha256": "20568544435c7469cad09908e6890e7f500296afcdab258fe9feb0879c25b6ec"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_self_cache/cos.f32le": {
+      "bytes": 131072,
+      "sha256": "b2c04b80563e33961a310e59ae5e631849947230f5a119500cb91a66b698ee9e"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_self_cache/sin.f32le": {
+      "bytes": 131072,
+      "sha256": "f18f7ead36a7657df0baa5e3f549b35b9bcb8703633026bb9767ff40398cfc69"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_candidate_cache/x.f32le": {
+      "bytes": 786432,
+      "sha256": "6cfb0821d22e449a059ef309952ce399d5a559ecdd4c9bd10c934879ea843da6"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_candidate_cache/n0.f32le": {
+      "bytes": 786432,
+      "sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_candidate_cache/r.f32le": {
+      "bytes": 786432,
+      "sha256": "7cb4eb33b06fe5f7c00febf21b752a90da6e0274dbbd303001de434648aa9c4c"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_candidate_cache/n1.f32le": {
+      "bytes": 786432,
+      "sha256": "d97aa54e9e1b17fe7b78d9ae084c5cf8cfa7f1b68f5daa65529f2402ad0d8ed3"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_candidate_cache/cos.f32le": {
+      "bytes": 131072,
+      "sha256": "b2c04b80563e33961a310e59ae5e631849947230f5a119500cb91a66b698ee9e"
+    },
+    "work/qwen2_carried_candidate_m128_final_20261011/references/official_candidate_cache/sin.f32le": {
+      "bytes": 131072,
+      "sha256": "f18f7ead36a7657df0baa5e3f549b35b9bcb8703633026bb9767ff40398cfc69"
+    },
+    "config/payload_pins/qwen2_layer0.json": {
+      "bytes": 11221,
+      "sha256": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88"
+    },
+    "work/qwen2_layer0_payload_20261011/manifest.json": {
+      "bytes": 18512,
+      "sha256": "582f34afe5c52633f5290b5ba071f76164193f59d6edfc0d949658fd1e9715d1"
+    },
+    "work/qwen2_layer0_payload_20261011/input_layernorm.weight.bin": {
+      "bytes": 3072,
+      "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e"
+    },
+    "work/qwen2_layer0_payload_20261011/post_attention_layernorm.weight.bin": {
+      "bytes": 3072,
+      "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a"
+    },
+    "scripts/qwen2_layer0_model_gate.py": {
+      "bytes": 37776,
+      "sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+    },
+    "spec/numerical_contract.md": {
+      "bytes": 2256,
+      "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py": {
+      "bytes": 63883,
+      "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad"
+    },
+    "scripts/qwen2_carried_prefill_candidate.py": {
+      "bytes": 29479,
+      "sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6"
+    },
+    "work/qwen2_rms_rope_sources_20261011/source_manifest.json": {
+      "bytes": 4512,
+      "sha256": "52555a6d4b7b307e7e87bb2cb6bfcaf4b20d27fa58046ef50ea78427a38dcbf9"
+    },
+    "work/qwen2_rms_rope_sources_20261011/ReduceOps.cpp": {
+      "bytes": 90967,
+      "sha256": "3ba2de1c28bb1ddd7c9374b22879f8353170b7291bd98f2ccdd06cc671aa209c"
+    },
+    "work/qwen2_rms_rope_sources_20261011/UnaryOpsKernel.cpp": {
+      "bytes": 36440,
+      "sha256": "e018483843480dfa2e83fd02ce254dc62afffbb72c86330d46551cb99e2bfc11"
+    },
+    "work/qwen2_rms_rope_sources_20261011/PowKernel.cpp": {
+      "bytes": 5258,
+      "sha256": "df8f16ecab4b7848483020c50efe5fe0750eb2acb7042fbe2d262136f10b763c"
+    },
+    "work/qwen2_rms_rope_sources_20261011/Pow.cpp": {
+      "bytes": 5972,
+      "sha256": "e3479837336232c12dddc9bbd2f82a456bf5332784d7fda8df952f03682093e0"
+    },
+    "work/qwen2_rms_rope_sources_20261011/BinaryOpsKernel.cpp": {
+      "bytes": 57306,
+      "sha256": "f9d9513755fd430ace882d3d755da3840ffe0a8167764a6687d67c8e1dca525b"
+    },
+    "work/qwen2_rms_rope_sources_20261011/DispatchStub.cpp": {
+      "bytes": 11893,
+      "sha256": "b77d16444f42d6e0707c581888d5e2069c7958a01ee4cf77a432bd6d13827032"
+    },
+    "work/qwen2_rms_rope_sources_20261011/TensorIteratorReduce.cpp": {
+      "bytes": 6098,
+      "sha256": "5619f1002090dbea04fc0f7355b814d8dbfcce02e342d4cd06ea441ce15a8fbe"
+    },
+    "work/qwen2_rms_rope_sources_20261011/vec512_float.h": {
+      "bytes": 30118,
+      "sha256": "ae677ba7d7b00f50c8ee0f84fd089012aeb23304c509df24ba12cc01fad97b2f"
+    },
+    "work/qwen2_rms_rope_sources_20261011/vec256_float.h": {
+      "bytes": 27301,
+      "sha256": "43a73d3f706dcb3fced14df063f8ed5671bd033960c42f0949074873615c659e"
+    },
+    "work/qwen2_rms_rope_sources_20261011/vml.h": {
+      "bytes": 6073,
+      "sha256": "afabdaa6834d43716e375e030a959a9bc1d23dc17fb2afea575dfdc32580a469"
+    },
+    "work/qwen2_rms_rope_sources_20261011/Loops.h": {
+      "bytes": 14913,
+      "sha256": "a66aec7806c93d8e65ee8946391518eb05b5831e58e5b4c85325a7f802f561ed"
+    },
+    "work/qwen2_rms_rope_sources_20261011/DispatchStub.h": {
+      "bytes": 16019,
+      "sha256": "8ccd731ed22d6078012986b168501cf822464ef504ad50a496a9c54034723553"
+    },
+    "work/qwen2_rms_rope_sources_20261011/AccumulateType.h": {
+      "bytes": 6111,
+      "sha256": "f1defbdc257362abe5c4530baf558bb58880d8d5522b411da12b466cf6de7c08"
+    },
+    "work/qwen2_rms_rope_sources_20261011/SumKernel.cpp": {
+      "bytes": 22844,
+      "sha256": "9b88aa14e626dd708e50816a5ca89acfc66798226dc82501cf1857caebe96f95"
+    },
+    "scripts/qwen2_rms_rope_policy_diagnostic.py": {
+      "bytes": 27129,
+      "sha256": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6"
+    }
+  },
+  "official_reference_identity": {
+    "python": "3.12.14",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.3.5",
+    "transformers": "4.40.1",
+    "device": "cpu",
+    "attention": "eager",
+    "model_revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "forward_revision": "9fe3f585bb4ea29f209dc705d269fbe292e1128f",
+    "source_sha256": {
+      "modeling_qwen2.py": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+      "configuration_qwen2.py": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+      "config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136"
+    },
+    "installed_sources_verified_exact": true,
+    "torch_build": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+    "numpy_build": "{'Compilers': {'c': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'cc'}, 'cython': {'name': 'cython', 'linker': 'cython', 'version': '3.2.1', 'commands': 'cython'}, 'c++': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'c++'}}, 'Machine Information': {'host': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}, 'build': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}}, 'Build Dependencies': {'blas': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}, 'lapack': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}}, 'Python Information': {'path': '/tmp/build-env-aw1mwcap/bin/python', 'version': '3.12'}, 'SIMD Extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'], 'found': ['SSSE3', 'SSE41', 'POPCNT', 'SSE42', 'AVX', 'F16C', 'FMA3', 'AVX2', 'AVX512F', 'AVX512CD', 'AVX512_SKX', 'AVX512_CLX', 'AVX512_CNL', 'AVX512_ICL'], 'not found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}}",
+    "cache_utils_sha256": "2a4b6b398f8ea8631450a871b0a1bbc6b9722148970648c678745a06573bf18c",
+    "mask_utils_sha256": "fa17374bd60fde841bd8d65de072d085505243cc875d882985fcd3622cf08e5b",
+    "activations_sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+    "runner_sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+  },
+  "backend": {
+    "torch_commit": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "reported_cpu_capability": "AVX512",
+    "sum_dispatch": "AVX2 V8 (AVX512 pointer disabled by REGISTER_DISPATCH)",
+    "rsqrt_dispatch": "AVX2; sqrt then reciprocal with separate FP32 rounding",
+    "table_trig_backend": "MKL VML HA; explicit FTZ/DAZ off",
+    "machine": "x86_64",
+    "libc": [
+      "glibc",
+      "2.41"
+    ],
+    "threads": 4,
+    "interop_threads": 1,
+    "deterministic_algorithms": true
+  },
+  "independent_c": {
+    "command": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-std=c11",
+      "-shared",
+      "-fPIC",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "-fno-tree-vectorize",
+      "-fno-builtin",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_policy_diagnostic_20261011/independent.c",
+      "-lm",
+      "-o",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_policy_diagnostic_20261011/independent.so"
+    ],
+    "source_sha256": "1a6114077f2619d54aba0b2f6da34173a8b6f0419229199a45745ead88b3c8e6",
+    "binary_sha256": "73e741654decf8c5d683620427294809eeca101bb512a76568d4f727e5fccbb8",
+    "compiler": "gcc (Debian 14.2.0-19) 14.2.0"
+  },
+  "threshold_policy": {
+    "source": "spec/numerical_contract.md",
+    "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract"
+  },
+  "full_block_executed": false,
+  "rtl_executed": false,
+  "policy_changed": false,
+  "numerical_v0_unchanged": true
+}

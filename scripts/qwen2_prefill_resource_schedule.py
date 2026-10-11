@@ -128,7 +128,9 @@ class ReservationBook:
         self.samples = []
 
     def reserve(self, resources, duration, start=None, label=''):
-        resources = tuple(resources)
+        # Simultaneously owned ports are a set, not a bus transaction order.
+        # Keep the evidence stable when a caller passes RESOURCES (frozenset).
+        resources = tuple(sorted(resources))
         if any(r not in self.free_at for r in resources):
             raise ReservationError('unknown physical resource')
         if type(duration) is not int or duration < 0:

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "work/recovery_20261011/python/bin/python",
+    "-m",
+    "pytest",
+    "-o",
+    "addopts=",
+    "-q",
+    "tests/test_qwen2_rms_rope_policy_diagnostic.py"
+  ],
+  "exit_code": 0,
+  "seconds": 1.7100464630020724,
+  "source_sha256": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6",
+  "test_sha256": "b2a6766d85adc4df422f2b4319de0ceb9e95613f8357c8c1053cfa4f9b5027a2",
+  "stdout": "...........                                                              [100%]\n11 passed in 0.97s\n",
+  "stderr": ""
+}

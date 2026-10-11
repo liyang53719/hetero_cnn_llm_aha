@@ -1,0 +1,17 @@
+{
+  "command": [
+    "work/recovery_20261011/python/bin/python",
+    "-m",
+    "pytest",
+    "-o",
+    "addopts=",
+    "-q",
+    "tests/test_qwen2_rms_backend_evidence.py"
+  ],
+  "exit_code": 0,
+  "seconds": 0.29314507599701756,
+  "stdout": "...........                                                              [100%]\n11 passed in 0.07s\n",
+  "stderr": "",
+  "source_sha256": "54ff85fbdd1222f3884f7ffdba9b56e8f26011e78b0d9944ebcea663d798ab12",
+  "test_sha256": "70719913f57658cac777ec7d2c94932f94bdf8ea3eece6cc72db1dc6d8658540"
+}

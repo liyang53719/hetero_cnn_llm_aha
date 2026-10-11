@@ -1,0 +1,130 @@
+{
+  "status": "READ_ONLY_BACKEND_DISPATCH_VERIFIED",
+  "source_sha256": "ab362419567a7278b69c50f59b04659a64ed1ce102664c8efd7bd712e64ff06e",
+  "checks": [
+    {
+      "stub": "sum",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "sum",
+      "capability": "AVX512",
+      "non_null": false
+    },
+    {
+      "stub": "sum",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "rsqrt",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "rsqrt",
+      "capability": "AVX512",
+      "non_null": false
+    },
+    {
+      "stub": "rsqrt",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "sin",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "sin",
+      "capability": "AVX512",
+      "non_null": false
+    },
+    {
+      "stub": "sin",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "cos",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "cos",
+      "capability": "AVX512",
+      "non_null": false
+    },
+    {
+      "stub": "cos",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "pow_tensor_tensor",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "pow_tensor_tensor",
+      "capability": "AVX512",
+      "non_null": true
+    },
+    {
+      "stub": "pow_tensor_tensor",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "pow_tensor_scalar",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "pow_tensor_scalar",
+      "capability": "AVX512",
+      "non_null": true
+    },
+    {
+      "stub": "pow_tensor_scalar",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "reciprocal",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "reciprocal",
+      "capability": "AVX512",
+      "non_null": true
+    },
+    {
+      "stub": "reciprocal",
+      "capability": "DEFAULT",
+      "non_null": true
+    },
+    {
+      "stub": "div_true",
+      "capability": "AVX2",
+      "non_null": true
+    },
+    {
+      "stub": "div_true",
+      "capability": "AVX512",
+      "non_null": false
+    },
+    {
+      "stub": "div_true",
+      "capability": "DEFAULT",
+      "non_null": true
+    }
+  ],
+  "torch_commit": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+  "reported_capability": "AVX512",
+  "diagnostic_result_sha256": "060bbb4e55fa0abba8ee7f253c68297630b90b2db778dec7dbceafc701e0eae5",
+  "functions_invoked": false
+}

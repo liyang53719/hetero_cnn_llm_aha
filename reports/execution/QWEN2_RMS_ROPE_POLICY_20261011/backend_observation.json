@@ -1,0 +1,192 @@
+{
+  "torch_version": "2.10.0+cpu",
+  "torch_git_version": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+  "reported_cpu_capability": "AVX512",
+  "num_threads": 9,
+  "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+  "environment_overrides": {},
+  "torch_cpu_library": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so",
+  "source_manifest_file": "work/qwen2_rms_rope_sources_20261011/source_manifest.json",
+  "source_manifest_sha256": "52555a6d4b7b307e7e87bb2cb6bfcaf4b20d27fa58046ef50ea78427a38dcbf9",
+  "dispatch_pointer_observations": {
+    "sum": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_14TensorIteratorEENS0_30sum_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_14TensorIteratorEENS0_30sum_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": false
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_14TensorIteratorEENS0_30sum_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "rsqrt": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_32rsqrt_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_32rsqrt_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": false
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_32rsqrt_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "sin": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30sin_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30sin_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": false
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30sin_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "cos": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30cos_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30cos_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": false
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30cos_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "pow_tensor_tensor": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_44pow_tensor_tensor_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_44pow_tensor_tensor_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": true
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_44pow_tensor_tensor_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "pow_tensor_scalar": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseERKN3c106ScalarEENS0_44pow_tensor_scalar_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseERKN3c106ScalarEENS0_44pow_tensor_scalar_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": true
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseERKN3c106ScalarEENS0_44pow_tensor_scalar_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "reciprocal": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_37reciprocal_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_37reciprocal_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": true
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_37reciprocal_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    },
+    "div_true": {
+      "AVX2": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_35div_true_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+        "present": true,
+        "non_null": true
+      },
+      "AVX512": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_35div_true_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+        "present": true,
+        "non_null": false
+      },
+      "DEFAULT": {
+        "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_35div_true_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+        "present": true,
+        "non_null": true
+      }
+    }
+  },
+  "installed_header_observations": [
+    {
+      "upstream_file": "vec256_float.h",
+      "installed_file": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/include/ATen/cpu/vec/vec256/vec256_float.h",
+      "upstream_sha256": "43a73d3f706dcb3fced14df063f8ed5671bd033960c42f0949074873615c659e",
+      "installed_sha256": "62cd6915726701b7b62dea00c16406eb1792c140c197ae1a12e4d35b9c6d81dd",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "vec512_float.h",
+      "installed_file": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/include/ATen/cpu/vec/vec512/vec512_float.h",
+      "upstream_sha256": "ae677ba7d7b00f50c8ee0f84fd089012aeb23304c509df24ba12cc01fad97b2f",
+      "installed_sha256": "0150e7eebb07a5235f19ce5c759368ac3c3bf93f65ff459632a30bcf99d5896c",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "vml.h",
+      "installed_file": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/include/ATen/cpu/vml.h",
+      "upstream_sha256": "afabdaa6834d43716e375e030a959a9bc1d23dc17fb2afea575dfdc32580a469",
+      "installed_sha256": "fdb8944b3720b693b1f9ab63d0c4bc40e085950c4764353686b83b1905a04f4c",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "Loops.h",
+      "installed_file": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/include/ATen/native/cpu/Loops.h",
+      "upstream_sha256": "a66aec7806c93d8e65ee8946391518eb05b5831e58e5b4c85325a7f802f561ed",
+      "installed_sha256": "a6f2ab2e6e7175454f1c4226994177cd2e934d844fe89b09dc049e7a77a7872d",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "DispatchStub.h",
+      "installed_file": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/include/ATen/native/DispatchStub.h",
+      "upstream_sha256": "8ccd731ed22d6078012986b168501cf822464ef504ad50a496a9c54034723553",
+      "installed_sha256": "45cde3f5f24a89acc536a064a17f007189255d6998321a7ac534c7b6f14ddb27",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    }
+  ],
+  "inspection_note": "Read-only ctypes.c_void_p.in_dll pointer inspection after importing Torch; no dispatch function invoked, model loaded, or model forward run."
+}

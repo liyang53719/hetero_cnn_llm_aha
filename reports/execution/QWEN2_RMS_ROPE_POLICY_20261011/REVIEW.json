@@ -1,0 +1,32 @@
+{
+  "scope": "Bounded software RMS1536 and BF16 RoPE-table diagnostic only",
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "independent_read_only_review": true,
+  "reviewed_script_sha256": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6",
+  "reviewed_test_sha256": "b2a6766d85adc4df422f2b4319de0ceb9e95613f8357c8c1053cfa4f9b5027a2",
+  "frozen_input_hashes_checked": 92,
+  "generated_file_hashes_checked": 155,
+  "groups": 20,
+  "row_evaluations": 1440,
+  "all_saved_same_input_rms_outputs_match": true,
+  "cos_and_sin_bf16_elements_each": 32768,
+  "bf16_rope_tables_match": true,
+  "dispatch_pointer_observations_rechecked": 24,
+  "rational_scalar_rne_observed_domain": "positive normal FP32; not a general exceptional/subnormal proof",
+  "unchanged_full_chain_counterexample": {
+    "phase": "carried M128",
+    "node": "n1",
+    "bit_mismatches": 13245,
+    "max_abs": 0.12353515625,
+    "candidate_applied_to": "old actual residual; no full block rerun"
+  },
+  "tests_reexecuted_by_reviewer": false,
+  "numerical_policy_approved": false,
+  "hardware_acceptance": false,
+  "reproducibility_limits": [
+    "Formal numerical CLI needs original sealed captures and gamma; not included in Git",
+    "Historical cold native_directory is an absolute path; captures need explicit relocation support for a fresh checkout",
+    "Backend pointer/header audit was supplementary and not enforced by original numerical CLI",
+    "Auxiliary sidecars are historical verification summaries, not original CLI outputs"
+  ]
+}

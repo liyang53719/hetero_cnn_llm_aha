@@ -181,3 +181,23 @@ def test_source_drift_and_cli_default_report(tmp_path):
     assert not r['resources']['overlap_enabled']
     assert r['resources']['silu_scalar_lanes']==16
     assert len(r['source_sha256'])>=len(m.ATT.SOURCE_PINS)
+
+
+def test_resource_set_serialization_is_stable_across_python_hash_seeds():
+    import os
+    code = """
+import importlib.util,json
+from pathlib import Path
+p=Path('scripts/qwen2_prefill_resource_schedule.py')
+s=importlib.util.spec_from_file_location('resource_model',p)
+m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+b=m.ReservationBook();b.reserve(m.RESOURCES,3,label='all_ports')
+print(json.dumps(b.samples,sort_keys=True))
+"""
+    outputs = [subprocess.check_output([sys.executable, '-c', code], cwd=ROOT,
+               env=dict(os.environ, PYTHONHASHSEED=seed), text=True)
+               for seed in ('1', '713')]
+    assert outputs[0] == outputs[1]
+    sample = json.loads(outputs[0])[0]
+    assert sample['resources'] == sorted(m.RESOURCES)
+    assert sample['start'] == 0 and sample['end'] == 3

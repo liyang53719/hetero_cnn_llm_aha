@@ -1,0 +1,478 @@
+{
+  "policy": {
+    "id": "qwen2-rms1536-fp32-rope-prefill-v2-diagnostic",
+    "status": "DIAGNOSTIC_NOT_ACCEPTED",
+    "policy_approval": false,
+    "hardware_v0_conformant": false,
+    "diagnostic_only": true,
+    "rms": "RMS1536 V8/ILP4/three blocks of16, divide1536, epsilon, FP32 sqrt then reciprocal, BF16 before direct gamma and final BF16",
+    "rope": "FP32 exponent/powf/reciprocal/phase multiply/sinf/cosf then BF16; positions0..255 only",
+    "preserved": "Dense BF16 operands/FP32 increasing-K FMA; original bias order; 16-stripe QK; exp7; all other RNE boundaries",
+    "fp32_trig_bit_exact_claim": false,
+    "cross_host_equivalence_claim": false
+  },
+  "build": {
+    "layout": {
+      "hidden": 1536,
+      "ffn": 8960,
+      "heads": 12,
+      "kv_heads": 2,
+      "head_dim": 128,
+      "max_tokens": 128,
+      "regions": [
+        {
+          "name": "wq",
+          "offset": 0,
+          "words": 2359296,
+          "external": true
+        },
+        {
+          "name": "wk",
+          "offset": 9437184,
+          "words": 393216,
+          "external": true
+        },
+        {
+          "name": "wv",
+          "offset": 11010048,
+          "words": 393216,
+          "external": true
+        },
+        {
+          "name": "wo",
+          "offset": 12582912,
+          "words": 2359296,
+          "external": true
+        },
+        {
+          "name": "wg",
+          "offset": 22020096,
+          "words": 13762560,
+          "external": true
+        },
+        {
+          "name": "wu",
+          "offset": 77070336,
+          "words": 13762560,
+          "external": true
+        },
+        {
+          "name": "wd",
+          "offset": 132120576,
+          "words": 13762560,
+          "external": true
+        },
+        {
+          "name": "gamma0",
+          "offset": 187170816,
+          "words": 1536,
+          "external": true
+        },
+        {
+          "name": "gamma1",
+          "offset": 187176960,
+          "words": 1536,
+          "external": true
+        },
+        {
+          "name": "bq",
+          "offset": 187183104,
+          "words": 1536,
+          "external": true
+        },
+        {
+          "name": "bk",
+          "offset": 187189248,
+          "words": 256,
+          "external": true
+        },
+        {
+          "name": "bv",
+          "offset": 187190272,
+          "words": 256,
+          "external": true
+        },
+        {
+          "name": "cos",
+          "offset": 187191296,
+          "words": 8192,
+          "external": true
+        },
+        {
+          "name": "sin",
+          "offset": 187224064,
+          "words": 8192,
+          "external": true
+        },
+        {
+          "name": "x",
+          "offset": 187256832,
+          "words": 196608,
+          "external": true
+        },
+        {
+          "name": "n0",
+          "offset": 188043264,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "qr",
+          "offset": 188829696,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "kr",
+          "offset": 189616128,
+          "words": 32768,
+          "external": false
+        },
+        {
+          "name": "v",
+          "offset": 189747200,
+          "words": 32768,
+          "external": false
+        },
+        {
+          "name": "q",
+          "offset": 189878272,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "k",
+          "offset": 190664704,
+          "words": 32768,
+          "external": false
+        },
+        {
+          "name": "att",
+          "offset": 190795776,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "o",
+          "offset": 191582208,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "r",
+          "offset": 192368640,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "n1",
+          "offset": 193155072,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "gate",
+          "offset": 193941504,
+          "words": 1146880,
+          "external": false
+        },
+        {
+          "name": "up",
+          "offset": 198529024,
+          "words": 1146880,
+          "external": false
+        },
+        {
+          "name": "act",
+          "offset": 203116544,
+          "words": 1146880,
+          "external": false
+        },
+        {
+          "name": "down",
+          "offset": 207704064,
+          "words": 196608,
+          "external": false
+        },
+        {
+          "name": "y",
+          "offset": 208490496,
+          "words": 196608,
+          "external": false
+        }
+      ],
+      "writable_start": 188043264,
+      "arena_bytes": 209276928,
+      "layout_kind": "software_mirror_of_hash_guarded_QwenBlockLayout",
+      "generated_by_chisel": false
+    },
+    "source_identity": {
+      "source_sha256": {
+        "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43"
+      },
+      "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "section_sha256": {
+        "helpers": "d1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b",
+        "math": "4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8",
+        "layout": "c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f"
+      },
+      "git_head": "a17ebcc91cd3ffdd38e42743aa3264ea25d75f0c",
+      "parent_carried_cpp_sha256": "0aaf9d3b96812694edb7adfd2fef5affb01ee206c8b743a64426752f59c60877",
+      "replaced_norm_sha256": "c33836931456961590c545bf59d7dc15d8bbcdcd1e7b22ff93a783c249fcd9ae",
+      "reviewed_helper_sha256": "1a6114077f2619d54aba0b2f6da34173a8b6f0419229199a45745ead88b3c8e6",
+      "integrated_helper_sha256": "304ea2bbb9ed8af41adaaca46f19abf15430c75c2fc11f5afeeb2b8bad42a2e2",
+      "policy_id": "qwen2-rms1536-fp32-rope-prefill-v2-diagnostic"
+    },
+    "compile_command": [
+      "/usr/bin/g++",
+      "-O2",
+      "-std=c++17",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/build/candidate.cpp",
+      "-o",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/build/candidate"
+    ],
+    "cpp_sha256": "0cdfd2c6927eec8dfb72e315e9a1107d6966d47b6326de077bf77a9e3a73ded6",
+    "binary_sha256": "4715ebf2180c6ccb08ce69f2434ca02cdd0447845164ce486b4bf069cbbd460e",
+    "header_sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30",
+    "compiler_path": "/usr/bin/x86_64-linux-gnu-g++-14",
+    "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "compiler_version": "g++ (Debian 14.2.0-19) 14.2.0"
+  },
+  "inputs": {
+    "token_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "position_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "past_tokens": 0,
+    "readonly_sha256": "0a94ea142c28a6c1ce4b8ad928caecee9c5721bb6e4bc0eb097eebd8202aabf8",
+    "input_x_sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c",
+    "intermediate_preloads": 0,
+    "rope_table_sha256": "5edc3314874c1cf4a7dc9cb54f2c824b18272048f70abcf9021f021308589045",
+    "rope_recipe": "FP32 exponent/powf/reciprocal/phase multiply/sinf/cosf then BF16; positions0..255 only"
+  },
+  "carry_binding": null,
+  "table_identity": {
+    "raw_sha256": "5edc3314874c1cf4a7dc9cb54f2c824b18272048f70abcf9021f021308589045",
+    "positions": [
+      0,
+      255
+    ],
+    "tables": {
+      "cos": {
+        "full_fp32_half_sha256": "2f91912f873360eb2391af7b0fcdd1f998910cf36e1e4a63764dbec22d336d1e",
+        "full_bf16_half_sha256": "6d761a9d4d917d3ee58dd82694d72213b28bb90801e17841f0a314ccd678a731",
+        "reviewed_and_official_bf16_exact": true
+      },
+      "sin": {
+        "full_fp32_half_sha256": "99b178755051d484c5332a65be82f6d1fe1af9e22f691a3a20b70ce21bb87571",
+        "full_bf16_half_sha256": "2dcc4c269e8b13f52b2efc31bb62cc727a1b43bed6a913a3d4f8de46a305d579",
+        "reviewed_and_official_bf16_exact": true
+      }
+    },
+    "produced_by_binary_sha256": "4715ebf2180c6ccb08ce69f2434ca02cdd0447845164ce486b4bf069cbbd460e",
+    "fp32_bit_exact_claim": false
+  },
+  "source_files": {
+    "scripts/qwen2_bf16_materialization_candidate.py": "357a74dd10b69fb78e2aff34410d1a01c881edbebbcf5d422bed2ee8acb47dbd",
+    "scripts/qwen2_carried_prefill_candidate.py": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+    "scripts/qwen2_rms_rope_policy_diagnostic.py": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6",
+    "tests/test_qwen2_rms_rope_policy_diagnostic.py": "b2a6766d85adc4df422f2b4319de0ceb9e95613f8357c8c1053cfa4f9b5027a2",
+    "scripts/qwen2_rms_rope_prefill_candidate.py": "41aea07ba09fc5c11f6aafbe14e83ebdba6e843a3cf47080a954a1032b6461e9",
+    "tests/test_qwen2_rms_rope_prefill_candidate.py": "02c2c8cedc98b317ece7593fbd968d89424f65d7352deacb5e42a28ee5fed2ce",
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "scripts/qwen2_layer0_model_gate.py": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85",
+    "scripts/qwen2_layer0_payload.py": "202b73649dfceed5e0d8ec73fd0b1e9f0de96d936141e3d9808d5e10d5c1beb9",
+    "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "config/payload_pins/qwen2_layer0.json": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88",
+    "reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/RESULT.json": "060bbb4e55fa0abba8ee7f253c68297630b90b2db778dec7dbceafc701e0eae5",
+    "reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/FROZEN.json": "500c4a52e8572bdcf9c295483dab5b533bae4a940ef9bc2df06f3ab216dd50c1",
+    "reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/BACKEND_VERIFIED.json": "c533e3f8d4e035e0c324bf15f4f98fce13fe6b38fdaa2793d56b2b6953a3620c",
+    "reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/source_manifest.json": "52555a6d4b7b307e7e87bb2cb6bfcaf4b20d27fa58046ef50ea78427a38dcbf9"
+  },
+  "official_reference_identity": {
+    "python": "3.12.14",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.3.5",
+    "transformers": "4.40.1",
+    "device": "cpu",
+    "attention": "eager",
+    "model_revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "forward_revision": "9fe3f585bb4ea29f209dc705d269fbe292e1128f",
+    "source_sha256": {
+      "modeling_qwen2.py": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+      "configuration_qwen2.py": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+      "config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136"
+    },
+    "installed_sources_verified_exact": true,
+    "torch_build": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+    "numpy_build": "{'Compilers': {'c': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'cc'}, 'cython': {'name': 'cython', 'linker': 'cython', 'version': '3.2.1', 'commands': 'cython'}, 'c++': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'c++'}}, 'Machine Information': {'host': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}, 'build': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}}, 'Build Dependencies': {'blas': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}, 'lapack': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}}, 'Python Information': {'path': '/tmp/build-env-aw1mwcap/bin/python', 'version': '3.12'}, 'SIMD Extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'], 'found': ['SSSE3', 'SSE41', 'POPCNT', 'SSE42', 'AVX', 'F16C', 'FMA3', 'AVX2', 'AVX512F', 'AVX512CD', 'AVX512_SKX', 'AVX512_CLX', 'AVX512_CNL', 'AVX512_ICL'], 'not found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}}",
+    "cache_utils_sha256": "2a4b6b398f8ea8631450a871b0a1bbc6b9722148970648c678745a06573bf18c",
+    "mask_utils_sha256": "fa17374bd60fde841bd8d65de072d085505243cc875d882985fcd3622cf08e5b",
+    "activations_sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+    "runner_sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+  },
+  "tools": {
+    "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+    "torch_commit": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "reported_cpu_capability": "AVX512",
+    "ldd": "\tlinux-vdso.so.1 (0x00007fa2eb178000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fa2eaed9000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fa2eade9000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fa2eadbc000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa2eabc8000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fa2eb17a000)\n",
+    "runtime_files": [
+      {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "bytes": 30894944,
+        "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+      },
+      {
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so",
+        "bytes": 443509856,
+        "sha256": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "bytes": 2497768,
+        "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+        "bytes": 977112,
+        "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "bytes": 182856,
+        "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "bytes": 1995216,
+        "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92"
+      }
+    ],
+    "reference_settings": {
+      "threads": 4,
+      "interop_threads": 1,
+      "deterministic_algorithms": true,
+      "configured_by": "guarded carried v1 native_references before forwards"
+    },
+    "actual_execution_threads": 1,
+    "maximum_phase_threads": 4
+  },
+  "payload_manifest_sha256": "582f34afe5c52633f5290b5ba071f76164193f59d6edfc0d949658fd1e9715d1",
+  "threshold_policy": {
+    "source": "spec/numerical_contract.md",
+    "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract"
+  },
+  "old_cold_result_sha256": "c1130e1d979cc052769d7bfc35d170461e9d84bf8e594d326401bc3a63448a41",
+  "small_result_sha256": null,
+  "reference_reuse": {
+    "cached_cold_official_forward": 1,
+    "cached_cold_independent_forward": 1,
+    "native_directory": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_layer0_model_gate_cold_m16_20261011",
+    "native_result_sha256": "b6206444a95453770ce3131998000aece244e182e45bebeef841038dd8b2d6a6",
+    "actual_candidate_cold_reused": false
+  },
+  "resource_preflight": {
+    "available_memory_bytes": 8717393920,
+    "free_disk_bytes": 25407066112,
+    "threads": 4,
+    "maximum_query_tokens": 128,
+    "maximum_key_tokens": 256,
+    "maximum_execution_seconds": 60
+  },
+  "command": [
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/build/candidate",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/readonly_arena.f32le",
+    "16",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/raw_stages",
+    "0",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/empty_k.f32le",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/empty_v.f32le"
+  ],
+  "timeout_seconds": 60,
+  "files": [
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/build/candidate",
+      "bytes": 62328,
+      "sha256": "4715ebf2180c6ccb08ce69f2434ca02cdd0447845164ce486b4bf069cbbd460e"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/build/candidate.cpp",
+      "bytes": 14496,
+      "sha256": "0cdfd2c6927eec8dfb72e315e9a1107d6966d47b6326de077bf77a9e3a73ded6"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/build/block_layout.h",
+      "bytes": 1704,
+      "sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/rope_full.f32le",
+      "bytes": 328448,
+      "sha256": "5edc3314874c1cf4a7dc9cb54f2c824b18272048f70abcf9021f021308589045"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/readonly_arena.f32le",
+      "bytes": 188043264,
+      "sha256": "0a94ea142c28a6c1ce4b8ad928caecee9c5721bb6e4bc0eb097eebd8202aabf8"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/input_x.f32le",
+      "bytes": 98304,
+      "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/empty_k.f32le",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_fixed_20261011/cold/empty_v.f32le",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

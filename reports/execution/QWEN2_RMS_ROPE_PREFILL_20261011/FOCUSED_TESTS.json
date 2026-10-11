@@ -1,0 +1,16 @@
+{
+  "status": "PASS_FOCUSED_TESTS",
+  "tests": 18,
+  "executed_tests": [
+    "tests/test_qwen2_rms_rope_prefill_candidate.py",
+    "tests/test_qwen2_rms_rope_policy_diagnostic.py"
+  ],
+  "source_sha256": "41aea07ba09fc5c11f6aafbe14e83ebdba6e843a3cf47080a954a1032b6461e9",
+  "test_sha256": "02c2c8cedc98b317ece7593fbd968d89424f65d7352deacb5e42a28ee5fed2ce",
+  "command": "OPENBLAS_NUM_THREADS=4 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 work/recovery_20261011/python/bin/python -m pytest -q tests/test_qwen2_rms_rope_prefill_candidate.py tests/test_qwen2_rms_rope_policy_diagnostic.py",
+  "tool_session_id": 80712,
+  "exit_code": 0,
+  "record_kind": "post-run receipt of observed successful tool result",
+  "full_production_pairs_executed": 0,
+  "hardware_acceptance": false
+}

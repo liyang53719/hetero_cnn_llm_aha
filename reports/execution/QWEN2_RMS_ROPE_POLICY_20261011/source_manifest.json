@@ -1,0 +1,86 @@
+[
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/ReduceOps.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/ReduceOps.cpp",
+    "sha256": "3ba2de1c28bb1ddd7c9374b22879f8353170b7291bd98f2ccdd06cc671aa209c",
+    "bytes": 90967
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/UnaryOpsKernel.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/UnaryOpsKernel.cpp",
+    "sha256": "e018483843480dfa2e83fd02ce254dc62afffbb72c86330d46551cb99e2bfc11",
+    "bytes": 36440
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/PowKernel.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/PowKernel.cpp",
+    "sha256": "df8f16ecab4b7848483020c50efe5fe0750eb2acb7042fbe2d262136f10b763c",
+    "bytes": 5258
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/Pow.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/Pow.cpp",
+    "sha256": "e3479837336232c12dddc9bbd2f82a456bf5332784d7fda8df952f03682093e0",
+    "bytes": 5972
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/BinaryOpsKernel.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/BinaryOpsKernel.cpp",
+    "sha256": "f9d9513755fd430ace882d3d755da3840ffe0a8167764a6687d67c8e1dca525b",
+    "bytes": 57306
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/DispatchStub.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/DispatchStub.cpp",
+    "sha256": "b77d16444f42d6e0707c581888d5e2069c7958a01ee4cf77a432bd6d13827032",
+    "bytes": 11893
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/TensorIteratorReduce.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/TensorIteratorReduce.cpp",
+    "sha256": "5619f1002090dbea04fc0f7355b814d8dbfcce02e342d4cd06ea441ce15a8fbe",
+    "bytes": 6098
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/cpu/vec/vec512/vec512_float.h",
+    "file": "work/qwen2_rms_rope_sources_20261011/vec512_float.h",
+    "sha256": "ae677ba7d7b00f50c8ee0f84fd089012aeb23304c509df24ba12cc01fad97b2f",
+    "bytes": 30118
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/cpu/vec/vec256/vec256_float.h",
+    "file": "work/qwen2_rms_rope_sources_20261011/vec256_float.h",
+    "sha256": "43a73d3f706dcb3fced14df063f8ed5671bd033960c42f0949074873615c659e",
+    "bytes": 27301
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/cpu/vml.h",
+    "file": "work/qwen2_rms_rope_sources_20261011/vml.h",
+    "sha256": "afabdaa6834d43716e375e030a959a9bc1d23dc17fb2afea575dfdc32580a469",
+    "bytes": 6073
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/Loops.h",
+    "file": "work/qwen2_rms_rope_sources_20261011/Loops.h",
+    "sha256": "a66aec7806c93d8e65ee8946391518eb05b5831e58e5b4c85325a7f802f561ed",
+    "bytes": 14913
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/DispatchStub.h",
+    "file": "work/qwen2_rms_rope_sources_20261011/DispatchStub.h",
+    "sha256": "8ccd731ed22d6078012986b168501cf822464ef504ad50a496a9c54034723553",
+    "bytes": 16019
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/AccumulateType.h",
+    "file": "work/qwen2_rms_rope_sources_20261011/AccumulateType.h",
+    "sha256": "f1defbdc257362abe5c4530baf558bb58880d8d5522b411da12b466cf6de7c08",
+    "bytes": 6111
+  },
+  {
+    "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/SumKernel.cpp",
+    "file": "work/qwen2_rms_rope_sources_20261011/SumKernel.cpp",
+    "sha256": "9b88aa14e626dd708e50816a5ca89acfc66798226dc82501cf1857caebe96f95",
+    "bytes": 22844
+  }
+]

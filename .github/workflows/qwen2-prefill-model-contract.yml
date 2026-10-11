@@ -16,6 +16,10 @@ on:
       - 'scripts/qwen2_rectangular_attention_model.py'
       - 'scripts/qwen2_carried_prefill_candidate.py'
       - 'scripts/qwen2_carried_qlinear_rms_diagnostic.py'
+      - 'scripts/qwen2_rms_rope_policy_diagnostic.py'
+      - 'scripts/qwen2_rms_rope_prefill_candidate.py'
+      - 'scripts/qwen2_rms_backend_evidence.py'
+      - 'reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/**'
       - 'scripts/qwen2_prefill_resource_schedule.py'
       - 'scripts/qwen2_shared_sfu_schedule.py'
       - 'scripts/import_llama_qwen2_graph.py'
@@ -35,6 +39,9 @@ on:
       - 'tests/test_qwen2_prefill_traffic_bound.py'
       - 'tests/test_qwen2_rectangular_attention_model.py'
       - 'tests/test_qwen2_carried_prefill_candidate.py'
+      - 'tests/test_qwen2_rms_rope_policy_diagnostic.py'
+      - 'tests/test_qwen2_rms_rope_prefill_candidate.py'
+      - 'tests/test_qwen2_rms_backend_evidence.py'
       - 'tests/test_qwen2_prefill_resource_schedule.py'
       - 'tests/test_qwen2_shared_sfu_schedule.py'
       - 'config/payload_pins/qwen2_layer0.json'
@@ -98,7 +105,7 @@ jobs:
       - name: Check model contracts and scalar software recipe without RTL
         run: |
           python -m py_compile scripts/qwen2_carried_qlinear_rms_diagnostic.py
-          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py tests/test_qwen2_rectangular_attention_model.py tests/test_qwen2_carried_prefill_candidate.py tests/test_qwen2_prefill_resource_schedule.py tests/test_qwen2_shared_sfu_schedule.py
+          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py tests/test_qwen2_rectangular_attention_model.py tests/test_qwen2_carried_prefill_candidate.py tests/test_qwen2_prefill_resource_schedule.py tests/test_qwen2_shared_sfu_schedule.py tests/test_qwen2_rms_rope_policy_diagnostic.py tests/test_qwen2_rms_rope_prefill_candidate.py tests/test_qwen2_rms_backend_evidence.py
           python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --host-schedule --out work/qwen2_model_contract/m128_host_bound.json

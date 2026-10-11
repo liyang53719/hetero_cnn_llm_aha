@@ -1,0 +1,23 @@
+{
+  "source_commit": "a17ebcc91cd3ffdd38e42743aa3264ea25d75f0c",
+  "ci_artifact_sha256": "a14d0ae5cf478ec5478a76c88eb44f985a5259d2c57cbd22215fb84c147f4c07",
+  "old_report_sha256": "9f44beed57dc440a270ed47b008e77bb613b5bcec60ac375055945e25065395f",
+  "new_report_sha256": "4c7bf1225446518e66a05ce4ff0eb70b1398790b99401658d61de5fde6634a6e",
+  "only_sorted_resource_lists_changed": true,
+  "changed_paths": [
+    "/reservation_result/sample_reservations/5/resources",
+    "/reservation_result/sample_reservations/15/resources",
+    "/reservation_result/sample_reservations/16/resources",
+    "/reservation_result/sample_reservations/18/resources",
+    "/reservation_result/sample_reservations/20/resources",
+    "/reservation_result/sample_reservations/21/resources",
+    "/reservation_result/sample_reservations/22/resources",
+    "/reservation_result/sample_reservations/23/resources"
+  ],
+  "timing_and_members_unchanged": true,
+  "old_byte_equivalence_failure_preserved": true,
+  "fix_sources": {
+    "scripts/qwen2_prefill_resource_schedule.py": "d5356874e86f616a113558cea018bcf141ef6273d44523752047e2d5b571ecb9",
+    "tests/test_qwen2_prefill_resource_schedule.py": "801ec7d50f51b6cb3a53695ff160e12c7369bd5e57760339222aa0a94114dee6"
+  }
+}

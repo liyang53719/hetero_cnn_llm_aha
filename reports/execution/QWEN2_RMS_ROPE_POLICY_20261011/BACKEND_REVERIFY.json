@@ -1,0 +1,395 @@
+{
+  "schema": 1,
+  "status": "BACKEND_EVIDENCE_MATCH",
+  "numerical_status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "observed_at_utc": "2026-10-11T15:24:19.937875+00:00",
+  "mode": "verify",
+  "generator_sha256": "54ff85fbdd1222f3884f7ffdba9b56e8f26011e78b0d9944ebcea663d798ab12",
+  "published_manifest_sha256": "52555a6d4b7b307e7e87bb2cb6bfcaf4b20d27fa58046ef50ea78427a38dcbf9",
+  "published_backend_template_sha256": "ab362419567a7278b69c50f59b04659a64ed1ce102664c8efd7bd712e64ff06e",
+  "source_files": [
+    {
+      "file": "ReduceOps.cpp",
+      "bytes": 90967,
+      "sha256": "3ba2de1c28bb1ddd7c9374b22879f8353170b7291bd98f2ccdd06cc671aa209c",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/ReduceOps.cpp"
+    },
+    {
+      "file": "UnaryOpsKernel.cpp",
+      "bytes": 36440,
+      "sha256": "e018483843480dfa2e83fd02ce254dc62afffbb72c86330d46551cb99e2bfc11",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/UnaryOpsKernel.cpp"
+    },
+    {
+      "file": "PowKernel.cpp",
+      "bytes": 5258,
+      "sha256": "df8f16ecab4b7848483020c50efe5fe0750eb2acb7042fbe2d262136f10b763c",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/PowKernel.cpp"
+    },
+    {
+      "file": "Pow.cpp",
+      "bytes": 5972,
+      "sha256": "e3479837336232c12dddc9bbd2f82a456bf5332784d7fda8df952f03682093e0",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/Pow.cpp"
+    },
+    {
+      "file": "BinaryOpsKernel.cpp",
+      "bytes": 57306,
+      "sha256": "f9d9513755fd430ace882d3d755da3840ffe0a8167764a6687d67c8e1dca525b",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/BinaryOpsKernel.cpp"
+    },
+    {
+      "file": "DispatchStub.cpp",
+      "bytes": 11893,
+      "sha256": "b77d16444f42d6e0707c581888d5e2069c7958a01ee4cf77a432bd6d13827032",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/DispatchStub.cpp"
+    },
+    {
+      "file": "TensorIteratorReduce.cpp",
+      "bytes": 6098,
+      "sha256": "5619f1002090dbea04fc0f7355b814d8dbfcce02e342d4cd06ea441ce15a8fbe",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/TensorIteratorReduce.cpp"
+    },
+    {
+      "file": "vec512_float.h",
+      "bytes": 30118,
+      "sha256": "ae677ba7d7b00f50c8ee0f84fd089012aeb23304c509df24ba12cc01fad97b2f",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/cpu/vec/vec512/vec512_float.h"
+    },
+    {
+      "file": "vec256_float.h",
+      "bytes": 27301,
+      "sha256": "43a73d3f706dcb3fced14df063f8ed5671bd033960c42f0949074873615c659e",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/cpu/vec/vec256/vec256_float.h"
+    },
+    {
+      "file": "vml.h",
+      "bytes": 6073,
+      "sha256": "afabdaa6834d43716e375e030a959a9bc1d23dc17fb2afea575dfdc32580a469",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/cpu/vml.h"
+    },
+    {
+      "file": "Loops.h",
+      "bytes": 14913,
+      "sha256": "a66aec7806c93d8e65ee8946391518eb05b5831e58e5b4c85325a7f802f561ed",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/Loops.h"
+    },
+    {
+      "file": "DispatchStub.h",
+      "bytes": 16019,
+      "sha256": "8ccd731ed22d6078012986b168501cf822464ef504ad50a496a9c54034723553",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/DispatchStub.h"
+    },
+    {
+      "file": "AccumulateType.h",
+      "bytes": 6111,
+      "sha256": "f1defbdc257362abe5c4530baf558bb58880d8d5522b411da12b466cf6de7c08",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/AccumulateType.h"
+    },
+    {
+      "file": "SumKernel.cpp",
+      "bytes": 22844,
+      "sha256": "9b88aa14e626dd708e50816a5ca89acfc66798226dc82501cf1857caebe96f95",
+      "source": "https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/SumKernel.cpp"
+    }
+  ],
+  "source_file_count": 14,
+  "current_runtime": {
+    "torch_version": "2.10.0+cpu",
+    "torch_git_version": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "reported_cpu_capability": "AVX512",
+    "num_threads": 4,
+    "num_interop_threads": 9,
+    "deterministic_algorithms": false,
+    "aten_cpu_capability_override_present": false,
+    "machine": "x86_64",
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+  },
+  "current_torch_cpu_library": {
+    "file": "libtorch_cpu.so",
+    "bytes": 443509856,
+    "sha256": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+  },
+  "runtime_matches_frozen_version_and_capability": true,
+  "dispatch_pointer_observations": [
+    {
+      "stub": "sum",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_14TensorIteratorEENS0_30sum_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "sum",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_14TensorIteratorEENS0_30sum_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": false,
+      "expected_non_null": false,
+      "matches": true
+    },
+    {
+      "stub": "sum",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_14TensorIteratorEENS0_30sum_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "rsqrt",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_32rsqrt_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "rsqrt",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_32rsqrt_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": false,
+      "expected_non_null": false,
+      "matches": true
+    },
+    {
+      "stub": "rsqrt",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_32rsqrt_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "sin",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30sin_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "sin",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30sin_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": false,
+      "expected_non_null": false,
+      "matches": true
+    },
+    {
+      "stub": "sin",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30sin_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "cos",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30cos_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "cos",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30cos_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": false,
+      "expected_non_null": false,
+      "matches": true
+    },
+    {
+      "stub": "cos",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_30cos_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "pow_tensor_tensor",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_44pow_tensor_tensor_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "pow_tensor_tensor",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_44pow_tensor_tensor_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "pow_tensor_tensor",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_44pow_tensor_tensor_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "pow_tensor_scalar",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseERKN3c106ScalarEENS0_44pow_tensor_scalar_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "pow_tensor_scalar",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseERKN3c106ScalarEENS0_44pow_tensor_scalar_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "pow_tensor_scalar",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseERKN3c106ScalarEENS0_44pow_tensor_scalar_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "reciprocal",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_37reciprocal_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "reciprocal",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_37reciprocal_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "reciprocal",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_37reciprocal_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "div_true",
+      "capability": "AVX2",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_35div_true_stub_DECLARE_DISPATCH_typeEE4AVX2E",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    },
+    {
+      "stub": "div_true",
+      "capability": "AVX512",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_35div_true_stub_DECLARE_DISPATCH_typeEE6AVX512E",
+      "present": true,
+      "non_null": false,
+      "expected_non_null": false,
+      "matches": true
+    },
+    {
+      "stub": "div_true",
+      "capability": "DEFAULT",
+      "symbol": "_ZN2at6native12DispatchStubIPFvRNS_18TensorIteratorBaseEENS0_35div_true_stub_DECLARE_DISPATCH_typeEE7DEFAULTE",
+      "present": true,
+      "non_null": true,
+      "expected_non_null": true,
+      "matches": true
+    }
+  ],
+  "installed_header_observations": [
+    {
+      "upstream_file": "vec256_float.h",
+      "installed_relative_path": "include/ATen/cpu/vec/vec256/vec256_float.h",
+      "present": true,
+      "installed_bytes": 27555,
+      "installed_sha256": "62cd6915726701b7b62dea00c16406eb1792c140c197ae1a12e4d35b9c6d81dd",
+      "upstream_sha256": "43a73d3f706dcb3fced14df063f8ed5671bd033960c42f0949074873615c659e",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "vec512_float.h",
+      "installed_relative_path": "include/ATen/cpu/vec/vec512/vec512_float.h",
+      "present": true,
+      "installed_bytes": 30372,
+      "installed_sha256": "0150e7eebb07a5235f19ce5c759368ac3c3bf93f65ff459632a30bcf99d5896c",
+      "upstream_sha256": "ae677ba7d7b00f50c8ee0f84fd089012aeb23304c509df24ba12cc01fad97b2f",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "vml.h",
+      "installed_relative_path": "include/ATen/cpu/vml.h",
+      "present": true,
+      "installed_bytes": 6327,
+      "installed_sha256": "fdb8944b3720b693b1f9ab63d0c4bc40e085950c4764353686b83b1905a04f4c",
+      "upstream_sha256": "afabdaa6834d43716e375e030a959a9bc1d23dc17fb2afea575dfdc32580a469",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "Loops.h",
+      "installed_relative_path": "include/ATen/native/cpu/Loops.h",
+      "present": true,
+      "installed_bytes": 15167,
+      "installed_sha256": "a6f2ab2e6e7175454f1c4226994177cd2e934d844fe89b09dc049e7a77a7872d",
+      "upstream_sha256": "a66aec7806c93d8e65ee8946391518eb05b5831e58e5b4c85325a7f802f561ed",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    },
+    {
+      "upstream_file": "DispatchStub.h",
+      "installed_relative_path": "include/ATen/native/DispatchStub.h",
+      "present": true,
+      "installed_bytes": 16273,
+      "installed_sha256": "45cde3f5f24a89acc536a064a17f007189255d6998321a7ac534c7b6f14ddb27",
+      "upstream_sha256": "8ccd731ed22d6078012986b168501cf822464ef504ad50a496a9c54034723553",
+      "upstream_bytes_match_installed_body": true,
+      "upstream_body_byte_offset": 66
+    }
+  ],
+  "all_backend_checks_match": true,
+  "dispatch_functions_invoked": false,
+  "historical_machine_identity_reused": false,
+  "network_downloads": 0,
+  "output_contains": "metadata_only",
+  "model_loaded": false,
+  "model_forward_executed": false,
+  "rtl_executed": false,
+  "historical_main_cli_enforced_this_backend_check": false,
+  "numerical_or_hardware_acceptance_changed": false,
+  "capture_path_mapping_restored": false
+}

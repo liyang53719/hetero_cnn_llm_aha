@@ -1,0 +1,27 @@
+{
+  "scope": "Source and actual fixed M16 evidence review for one subsequent bounded M128 software diagnostic",
+  "independent_read_only_review": true,
+  "source_sha256": "41aea07ba09fc5c11f6aafbe14e83ebdba6e843a3cf47080a954a1032b6461e9",
+  "test_sha256": "02c2c8cedc98b317ece7593fbd968d89424f65d7352deacb5e42a28ee5fed2ce",
+  "m16_result_sha256": "989c3758008c6ec65db55ad51907f690da98762498a5ce3b3b11d4f375024299",
+  "elf_sha256": "4715ebf2180c6ccb08ce69f2434ca02cdd0447845164ce486b4bf069cbbd460e",
+  "evidence_files_checked": 294,
+  "source_and_report_pins_checked": 15,
+  "m16_rerun_raw_outputs_byte_identical": true,
+  "source_change": "cold reference exported q/k inverse layout only; generated C++ unchanged",
+  "cold_all_defined_gates_pass": true,
+  "carried_official_both_cache_methods_all_defined_gates_pass": true,
+  "carried_independent_failures": [
+    "scores",
+    "logits"
+  ],
+  "independent_failed_elements_per_node": 1,
+  "independent_max_abs": 0.25,
+  "same_input_rms_groups": 4,
+  "same_input_rms_official_nodes_each": 8,
+  "same_input_rms_outputs_exact": true,
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "numerical_policy_approved": false,
+  "hardware_accepted": false,
+  "reviewer_reran_model": false
+}

@@ -1,0 +1,116 @@
+{
+  "commit": "a17ebcc91cd3ffdd38e42743aa3264ea25d75f0c",
+  "tree": "704eee1468d3a8ed6eedf573d9ebde88fbfba19d",
+  "model_run": 38149678312,
+  "model_job": 114500326756,
+  "model_conclusion": "success",
+  "payload_guard_run": 38149678289,
+  "payload_guard_conclusion": "success",
+  "tests": 168,
+  "test_seconds": 26.75,
+  "artifact_id": 11706651806,
+  "artifact_bytes": 103703,
+  "artifact_sha256": "a14d0ae5cf478ec5478a76c88eb44f985a5259d2c57cbd22215fb84c147f4c07",
+  "reports": [
+    {
+      "file": "m1024_bf16_bound.json",
+      "bytes": 8380,
+      "sha256": "9876daa395eb021b1cea34c946df467a152051d24f63dbb95d5374a1e5c0c88e",
+      "source_pins_verified": 23
+    },
+    {
+      "file": "m1024_context1_schedule.json",
+      "bytes": 11613,
+      "sha256": "eb7609181118650230ea2d93dca4bafde37b80f133a16ac5c63b08df7ed3bfd3",
+      "source_pins_verified": 14
+    },
+    {
+      "file": "m1024_context5_schedule.json",
+      "bytes": 11613,
+      "sha256": "67ec1db9ec83cdd372f2a5f27283cf909489f1b5e5e657424192dd884c9a62cb",
+      "source_pins_verified": 14
+    },
+    {
+      "file": "m1024_host_bound.json",
+      "bytes": 6757,
+      "sha256": "c42fc801945a821aab4177b94351be5cf0d0bd334b83e5ece8ded6ebb8e27550",
+      "source_pins_verified": 27
+    },
+    {
+      "file": "m1024_resource_unbound.json",
+      "bytes": 26099,
+      "sha256": "337c1d24164fc817716b541deb7047538112528963b47ffbe132bd91eea5fe71",
+      "source_pins_verified": 39
+    },
+    {
+      "file": "m128_bf16_bound.json",
+      "bytes": 8350,
+      "sha256": "2b15ecb576cdc3fa5c05456e07907c8e0dca3f32a3175887202dfbe9e063f0e3",
+      "source_pins_verified": 23
+    },
+    {
+      "file": "m128_context1_schedule.json",
+      "bytes": 11488,
+      "sha256": "c34ee51b43fac3060de3bcb59e99d2476d69f37417cf147498c5e5e61a2a6c1a",
+      "source_pins_verified": 14
+    },
+    {
+      "file": "m128_context5_schedule.json",
+      "bytes": 11488,
+      "sha256": "a03ef5bcb7cb40bae96ec277369f0df6c738c8bb5941507e831fa8c2825ad3fa",
+      "source_pins_verified": 14
+    },
+    {
+      "file": "m128_host_bound.json",
+      "bytes": 6724,
+      "sha256": "5494296503ffb6ca5a20e67099db6e2e6631d087bb48f7da64053e1a7a8fcbfc",
+      "source_pins_verified": 27
+    },
+    {
+      "file": "m128_resource_synthetic.json",
+      "bytes": 35356,
+      "sha256": "9f44beed57dc440a270ed47b008e77bb613b5bcec60ac375055945e25065395f",
+      "source_pins_verified": 39
+    },
+    {
+      "file": "m128_resource_unbound.json",
+      "bytes": 25927,
+      "sha256": "45b8b34a2c9d0a19120cfdfce5e7df77fdcdc538a6292af3519f804ada400ac3",
+      "source_pins_verified": 39
+    },
+    {
+      "file": "sfu_context1_synthetic.json",
+      "bytes": 565499,
+      "sha256": "86d3753253a4eee66e87906ec954c9a6c8b15655f1ce5b4f0f08c418f2a5cf62",
+      "source_pins_verified": 8
+    },
+    {
+      "file": "sfu_context2_synthetic.json",
+      "bytes": 565504,
+      "sha256": "672e713f364d64634c95bd34a9a4ad5b4ef0f6aa67fcb498e0ff274f7d8ca80e",
+      "source_pins_verified": 8
+    },
+    {
+      "file": "sfu_context2_unbound.json",
+      "bytes": 4758,
+      "sha256": "76edc48268632ab0d6b0b95c4528bf41c6e4a3e6d787d6196388a50f1008eb6d",
+      "source_pins_verified": 8
+    }
+  ],
+  "byte_matches": {
+    "prior_reports": 8,
+    "committed_resource_reports": 2,
+    "small_sfu_scenarios": 3
+  },
+  "all_reports_byte_exact": false,
+  "resource_synthetic_byte_equivalence": "FAILED_UNORDERED_SET_SERIALIZATION",
+  "resource_synthetic_semantics": "MATCH_EXCEPT_FOUR_RESOURCE_SET_LIST_ORDERS",
+  "mismatched_resource_set_indices": [
+    5,
+    15,
+    16,
+    22
+  ],
+  "resource_synthetic_followup": "Sort resource-set serialization and add cross-PYTHONHASHSEED test in next coherent model increment",
+  "scope": "Lightweight software-model and source contracts only. No checkpoint download, actual M128 recomputation or RTL. Original numeric failures remain NOT_ACCEPTED."
+}

@@ -467,3 +467,27 @@ reader/controller组合声明864bit状态和缓冲，使用16个单读单写256-
 - ongoing：原M128 native/最终FP32 FAIL及数值政策决定，没有修改门限。
 - to do：生产Chisel路由、carried/更长prefill和冻结激励硬件门。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。
+
+## b0e4aa7 终态与同一全图的实际流量减少
+
+`b0e4aa72f9dd6e9f3fef8f70089feeda502096c5` 的 13＋27＋248＝288 项轻量 CI
+及 payload guard 完成。234952 B 工件 SHA 为
+`de2974bfa478e8051414c79b0d0bb42afdaa15ce2fc606cc2cbc7d265c0ece79`；
+前21份报告逐字相同，新转置摘要仅精确 git_head 的预期变化，18个来源pin核对。
+
+[同一候选的新数据流](QWEN2_FULLGRAPH_DATAFLOW_20261011_CN.md)已实际跑过 cold
+M16/M128：down 用真实 DDR prefix，FFN gate/up 经实际 SRAM 给 SiLU，禁止从
+观测副本取数。15阶段各次663552/5308416值全bit等于原v0；98.95/159.91秒
+是软件子进程墙钟，Dense 都执行完整 M128 padding 布局，不能解释为硬件周期。
+
+全图账本由187432960降至131727360B，8个修改owner实际计数与11个原源码公式
+复核一致。保持原共享互斥64B/拍条件时，乐观界71.3456%，尚不满足80%目标；
+不把局部issue几何99.1220%当整block利用率。下一步落实已选映射的实际Chisel
+两组operand路由、bank/owner与prefix/FFN接线，不继续扩张独立模型分支。
+
+- done（局部）：b0精确CI、288测试、22份报告与源pin核验。
+- done（软件局部）：同一M16/M128全图真实prefix/FFN存储依赖保持v0位精确。
+- ongoing：实际Chisel路由/共享端口/Host接线及完整周期模型。
+- ongoing：原native和FP32-final FAIL、数值政策待决定，不改门限。
+- to do：carried/更长prefill及冻结激励最终硬件门。
+- 保持 Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN。

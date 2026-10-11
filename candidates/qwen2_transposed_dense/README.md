@@ -82,6 +82,34 @@ The reused 19-owner/21-command ledger includes separate bias, KV append, Attenti
 
 With burst output writes, N32 produces 92,160 two-beat row segments versus 11,520 sixteen-beat segments in N256. The 8× descriptor ratio does not apply when writes are already single-beat requests. Descriptor fetches, burst legalization, ACKs, scalar/SFU/owner timing, route area and frequency remain unresolved.
 
-The existing analytic-only down alternative uses K2560 outer chunks and a separate 786,432-B DDR prefix region: three boundaries move 2,359,296 B each way. Full-graph DDR would be 150,863,872 B, but a real bounded DDR-to-FP32-seed path, transaction identity and ACK/error lifetimes are absent. It is not executed by this candidate or selected for production. The concrete implemented model retains all five contexts and rereads down A.
+In the original compare.py/full_chain.py entry, the analytic-only down alternative uses K2560 outer chunks and a separate 786,432-B DDR prefix region: three boundaries move 2,359,296 B each way. Full-graph DDR would be 150,863,872 B, but a real bounded DDR-to-FP32-seed path, transaction identity and ACK/error lifetimes are absent. Those original entry points do not execute this alternative. Their concrete numerical model retains all five contexts and rereads down A. The later fullgraph entry below implements the alternative and FFN tile flow separately, preserving their old evidence and counters.
 
 Run the focused checks with `python3 -m pytest -q tests/test_qwen2_transposed_dense.py`. No native gates, arithmetic policy or production path are changed.
+
+## Fullgraph dataflow extension
+
+`fullgraph_dataflow.py` extends this same candidate with K-outer down prefix traffic and
+actual SRAM gate/up/SiLU producer-consumer storage. Five frozen source fragments under
+`dataflow/` reproduce C++ SHA `38a3a0169cf584d3aa7f6a6e8ad9766cbd2b150d8568c4ba5f600151dab66d39`.
+There is no extra Matrix array or hidden numerical tile cache. This is software-only;
+Host fusion, real iDMA, bank ports, leaf protocol and native acceptance remain open.
+
+The historical work driver completed cold M16/M128, 15 stages each, against frozen
+v0-equivalent bytes. The newly packaged driver completed 67 focused tests, its
+bounded synthetic small suite and prepare/validation; it did not repeat actual-shaped
+M16/M128. Old executions do not become executions by this new driver. The original
+BF16 native and FP32 final gates stay FAIL and the numerical policy stays open.
+
+Commands are `summary --out NEW_DIR`, `small --out NEW_DIR`,
+`prepare --out NEW_DIR --baseline-root ROOT --arena FILE --small-receipt FILE`, and
+`run --out PREPARED_DIR --tokens 16` followed by `--tokens 128`. A tiny small suite
+cannot qualify prepare; full preparation pins raw input, independent baseline, exact
+source/generated artifacts and complete small proof logs. Each explicit actual run
+has a 180-second bound and no automatic retry. Summary generates identity metadata
+only and never executes arithmetic.
+
+See [execution and reproducible commands](../../reports/execution/QWEN2_FULLGRAPH_DATAFLOW_20261011/README.md)
+and the [Chinese dataflow/resource ledger](../../doc/QWEN2_FULLGRAPH_DATAFLOW_20261011_CN.md).
+The new whole-graph traffic is 131,727,360 B from software counters plus unchanged
+source-event counts. Its conditional ideal-payload 71.3456% upper bound is neither
+actual iDMA traffic nor measured full-cycle MAC utilization.

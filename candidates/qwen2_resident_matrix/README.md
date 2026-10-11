@@ -95,3 +95,8 @@ Verilator，不生成 SystemVerilog，不运行 full block。实际结果以该�
 5. 上述组合完成模型/源检查后，才安排小真实硬件接口门；完整 RTL 数值和 native
    验收仍是后续独立门。当前 M16/M128 软件驻留 replay 的全 15 节点 bit exact
    不替代这些门，也不关闭原官方误差失败。
+
+## 后续实际 bank 读源
+
+已增加[真实同步SRAM读源与生产读口候选](RESIDENT_READER_CN.md)，单独由
+resident_manifest.json绑定来源。原return-tag/seed身份和此前验收不重绑。

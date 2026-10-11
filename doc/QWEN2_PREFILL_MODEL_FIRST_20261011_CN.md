@@ -415,3 +415,30 @@ abort可漏锁存、失败lease复活及stale generation三类候选问题；修
 - ongoing：原native数值FAIL；生产seed/bank-valid/ICG/owner实接与完整端口调度。
 - to do：同资源真实小接口协议门、carried/长prefill及最终冻结激励硬件验收。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。
+
+## 9f96b03 终态与真实 resident bank 读源
+
+`9f96b038aaf5f67423bc64111a37467afd280d25` 的45项小门与6条实际Scala/CHIRRTL
+命令均在CI完成，payload guard成功。978930B工件SHA为
+`2547c7e086b976278e31b38f04386f1378a91a7645a02e648169ed1aa4f0899c`；
+18份CHIRRTL与本地除源位置外逐字一致，87个官方Maven依赖SHA及来源manifest复核。
+
+后续[真实同步bank读源](../candidates/qwen2_resident_matrix/RESIDENT_READER_CN.md)
+已接到既有seed controller的前端组合；生产StreamingDense的默认关闭补丁使用
+原aBanks.read、实际pending/FIFO/DMA/write排空条件。5条新增编译/展开命令通过，
+默认大/小配置除源位置外逐字相同，enabled普通/burst及小深度拒绝展开通过。
+21项模型和8项新增runner负测通过；独立审查补齐11-bit地址、最小物理深度、
+迟到ACK和每bank端口检查。首次比较的assert源行号差异与修正过程如实保留。
+
+reader/controller组合声明864bit状态和缓冲，使用16个单读单写256-bit bank。
+每个有效512-bit restore需两次同bank读，但完整source FSM占4拍；M128原方案
+仅restore路径就有5,111,808拍，未计其他阶段或停顿。旧29.70%宽松事件界不因此
+成为可行预测。下一步先比较同固定资源的转置/驻留映射，再决定生产调度。
+
+- done（局部）：9f精确CI/工件/源码/18份IR核验。
+- done（局部）：真实bank读源源码、默认关闭生产读口补丁及模型/Chisel前端门。
+- ongoing：完整owner metadata/lease/C保存、leaf seed/ICG及group-done发布接线。
+- ongoing：原M128 native FAIL与数值政策决定，未改变算术、阈值或验收语义。
+- to do：固定资源下转置映射实值/端口/全DAG流量比较，再选实际生产接线方案。
+- to do：可行全周期预测、carried/更长prefill及冻结激励最终硬件验收。
+- 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。

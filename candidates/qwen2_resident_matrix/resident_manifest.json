@@ -1,0 +1,30 @@
+{
+  "base_commit": "43440dbad48c8e8af3112c1ae658db3ae64d76eb",
+  "status": "UNINTEGRATED_SOURCE_CANDIDATE",
+  "original_sources": {
+    "StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "DenseReadPlanner.scala": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+    "Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+    "BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac"
+  },
+  "candidate_files": {
+    "ResidentCSeedReader.scala": "5f832dc84e8bbe20a38329f57d7898f47d28b1ea2ae882c9a4a2c3cbe5586bfb",
+    "ResidentCSeedFrontend.scala": "981a163845d6bc95bccd452d49744a438c212a87818782d3d53eb7908f9ce7db",
+    "ResidentDenseBaselineCheck.scala": "2e6732a2190e4eb3d8538530c642c5cae7678a9eecebde447ae28f8010fbe9ed",
+    "ResidentDenseElaborationCheck.scala": "f36ead848bd686ade45c2ade5c979fa1647093487731fcc89f2ef82ced1a8f82",
+    "resident_seed_reader_model.py": "269c02d4f02cda50e39539cb56ff5b6b810a22412fe49e2e1765e67c5a016283",
+    "test_resident_seed_reader.py": "90f852e1b94a36934e0d74be8e0ae9dbe4af193d8e1239631fcd30517fcecf43",
+    "streaming_dense_read_hook.patch": "801e1bad9ba9bd0cf4cbc30273a407f0b2263dd8dadf0af93d67de37fbf69df4"
+  },
+  "seed_dependencies": {
+    "MatrixAccumulatorSeedProtocol.scala": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+    "MatrixAccumulatorSeedController.scala": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3",
+    "seed_protocol_model.py": "18f84cd3b59f7707e1c506162ef15b5f449981c02375da0ce8220a767d4e7636"
+  },
+  "patched_sources": {
+    "StreamingDense.scala": "ce0d1f8c0a460df7de6d03fc619daeb6111a2bac7f162b219fd18adea87f02fc"
+  },
+  "owner_abi_sha256": "b25f82acadcfeb5b5a1e494826100ca78380072a331b5749394e083b040b17ae",
+  "maven_lock_sha256": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b"
+}

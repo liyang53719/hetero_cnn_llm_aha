@@ -1,0 +1,243 @@
+{
+  "scope": "SOURCE_CANDIDATE_AND_CHIRRTL_FRONTEND_ONLY",
+  "native_m128_gate": "UNCHANGED_FAIL_OPEN",
+  "production_enabled": false,
+  "rtl_generated": false,
+  "hardware_protocol_executed": false,
+  "arithmetic_executed": false,
+  "source_manifest": "candidates/qwen2_resident_matrix/resident_manifest.json",
+  "source_manifest_sha256": "0e69232181f37f4f2089e5c65de6e97f6c5d720971bc151e40e8824869bd45b6",
+  "control_model_tests": 21,
+  "runner_guard_tests": 8,
+  "prior_regression_tests": 45,
+  "frontend_command_exit_codes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "frontend_command_seconds": [
+    6.083677,
+    5.231355,
+    8.289394,
+    7.902684,
+    1.588231
+  ],
+  "default_ir_comparisons": {
+    "dense_default.fir": {
+      "equal": true,
+      "normalized_sha256": "a69026d3cc5a5f7c42075c101ce61c6596b014110a86338250359846e52c00cf"
+    },
+    "dense_small.fir": {
+      "equal": true,
+      "normalized_sha256": "fbbf3ae0ff7aec266d0a56a7b12c01165f323df2f49c951370d373a7d5dd225c"
+    }
+  },
+  "assertion_source_mappings": [
+    {
+      "baseline_line": 56,
+      "candidate_line": 58,
+      "source_line_sha256": "78e2f1238511cd47075eee3c3f003678282d9f67916f1535834e325921a64680",
+      "matches_per_emitted_module": 1
+    },
+    {
+      "baseline_line": 139,
+      "candidate_line": 175,
+      "source_line_sha256": "d8d0945359cccc8ae5c3abff5a030f6c0618dcc135ff52b649eee34b63b007e9",
+      "matches_per_emitted_module": 1
+    },
+    {
+      "baseline_line": 173,
+      "candidate_line": 209,
+      "source_line_sha256": "bc03ce3ec8dde09228e23e7cc9ee965f6298a7f54c0d9bee3e642065dbf8fbc6",
+      "matches_per_emitted_module": 1
+    }
+  ],
+  "resource_ledger": {
+    "reader_register_bits": 720,
+    "read_mux_register_bits": 5,
+    "frontend_register_bits": 1,
+    "seed_controller_register_bits": 138,
+    "total_declared_reader_frontend_register_bits": 864,
+    "reader_payload_bits_included_above": 512,
+    "resident_frontend_a_c_bytes": 524288,
+    "resident_frontend_a_c_banks": 16,
+    "resident_frontend_read_ports_per_bank": 1,
+    "resident_frontend_write_ports_per_bank": 1,
+    "production_hook_preserves_existing_a_words_per_bank": 1376,
+    "production_hook_preserves_existing_b_words_per_bank": 160,
+    "production_hook_read_mux_added_register_bits": 5,
+    "production_owner_lease_metadata_installed": false,
+    "leaf_seed_datapath_installed": false,
+    "area_timing_measured": false
+  },
+  "local_control_counts": {
+    "scope": "Python cycle source model plus existing handshake seed-controller reference; no Chisel execution, no FMA, no global layer timing",
+    "full": {
+      "m": 16,
+      "n": 256,
+      "cycles": 1030,
+      "source_reads": 512,
+      "source_beats": 256,
+      "state_cycles": {
+        "idle": 1,
+        "acquiring": 1,
+        "begin": 1,
+        "read_low": 256,
+        "capture_low": 256,
+        "capture_high": 256,
+        "offer": 256,
+        "wait_ack": 3
+      },
+      "offer_stalls": 0,
+      "handshakes": {
+        "start": 1,
+        "acquire": 1,
+        "begin": 1,
+        "beat": 256,
+        "ack": 1,
+        "leaf_begin": 1,
+        "leaf_commit": 1,
+        "leaf_ack": 8
+      },
+      "first_read_cycle": 3,
+      "last_read_cycle": 1024,
+      "completed": 1
+    },
+    "partial": {
+      "m": 3,
+      "n": 48,
+      "cycles": 152,
+      "source_reads": 18,
+      "source_beats": 64,
+      "state_cycles": {
+        "idle": 1,
+        "acquiring": 1,
+        "begin": 1,
+        "read_low": 64,
+        "capture_low": 9,
+        "capture_high": 9,
+        "offer": 64,
+        "wait_ack": 3
+      },
+      "offer_stalls": 0,
+      "handshakes": {
+        "start": 1,
+        "acquire": 1,
+        "begin": 1,
+        "beat": 64,
+        "ack": 1,
+        "leaf_begin": 1,
+        "leaf_commit": 1,
+        "leaf_ack": 2
+      },
+      "first_read_cycle": 3,
+      "last_read_cycle": 92,
+      "completed": 1
+    },
+    "full_with_40_offer_stalls": {
+      "m": 16,
+      "n": 256,
+      "cycles": 1070,
+      "source_reads": 512,
+      "source_beats": 256,
+      "state_cycles": {
+        "idle": 1,
+        "acquiring": 1,
+        "begin": 1,
+        "read_low": 256,
+        "capture_low": 256,
+        "capture_high": 256,
+        "offer": 296,
+        "wait_ack": 3
+      },
+      "offer_stalls": 40,
+      "handshakes": {
+        "start": 1,
+        "acquire": 1,
+        "begin": 1,
+        "beat": 256,
+        "ack": 1,
+        "leaf_begin": 1,
+        "leaf_commit": 1,
+        "leaf_ack": 8
+      },
+      "first_read_cycle": 3,
+      "last_read_cycle": 1064,
+      "completed": 1
+    },
+    "sealed_m128_restore_counts": {
+      "beats": 1277952,
+      "reads256": 2555904,
+      "four_cycle_live_beat_subtotal": 5111808,
+      "warning": "Local source FSM subtotal only; excludes acquire/begin/endpoint ACK/backpressure/store/compute/DMA and is not a layer-cycle prediction"
+    },
+    "declared_storage_bits": {
+      "reader_payload": 512,
+      "reader_control": 208,
+      "read_mux_control": 5,
+      "frontend_legacy_pending": 1,
+      "existing_seed_controller": 138,
+      "frontend_control_and_payload_total": 864,
+      "warning": "Source declarations only; excludes owner metadata/leases, endpoint controls, routing, mux cost, timing and synthesis"
+    }
+  },
+  "initial_failure": {
+    "scope": "frontend comparator source-position metadata",
+    "status": "PRESERVED_THEN_REVIEWED",
+    "diff_sha256": "717a5b8782b837c3a35bf8247bf2da8d8192eddad39f31462cfc3fb9171966d9",
+    "detail": "Only three generated assertion source line numbers differed. Exact same assertion source line and diagnostic are checked; all other full IR remains byte compared. Existing compiled source artifacts reused."
+  },
+  "generated_chirrtl": {
+    "baseline/chirrtl/dense_default.fir": {
+      "sha256": "3fb5b117d6c130ab31cd3897a0a517050eb531820070aefce46bdaae7e29f706",
+      "bytes": 35385556
+    },
+    "baseline/chirrtl/dense_small.fir": {
+      "sha256": "3a27c1180742e91a13b0313a0c68c195592cff5b968c10bc3e92c32556b7a46f",
+      "bytes": 35383867
+    },
+    "candidate/chirrtl/dense_default.fir": {
+      "sha256": "f1a550160217faa05661a395dec3ce2f991bcad8f773b98d9c270d0db9d13ea5",
+      "bytes": 35541093
+    },
+    "candidate/chirrtl/dense_hook.fir": {
+      "sha256": "dbb5e6842689d023457e3e657ade48fd47a1fb2aad3928ccfd5751d673e1e21f",
+      "bytes": 35537590
+    },
+    "candidate/chirrtl/dense_hook_burst_writes.fir": {
+      "sha256": "854dd523af66b34ae08ff38c309b2c84b9d3a592a7cfa9e29809ab89262408c8",
+      "bytes": 35557138
+    },
+    "candidate/chirrtl/dense_small.fir": {
+      "sha256": "4faf2ed90e8297c4f6060fa9069661b7da0bce9d9b01cb5f774305a20a6aab8c",
+      "bytes": 35539399
+    },
+    "reader/chirrtl/resident_c_seed_frontend.fir": {
+      "sha256": "96bd73eb04107ddb1409e949f38dfe965a907ec2150e75c01bf63981982ae871",
+      "bytes": 199331
+    },
+    "reader/chirrtl/resident_c_seed_reader.fir": {
+      "sha256": "64f0370b4909b0372f3d6809ddb7bc676e0ef3d2931b55668c1be1909cdc5b09",
+      "bytes": 68210
+    },
+    "reader/chirrtl/resident_seed_bank_mux.fir": {
+      "sha256": "27aeacc089d183ae76bfd51a625c01fe1169a29ab335ba7770a236384ad9752c",
+      "bytes": 17568
+    }
+  },
+  "review": "Independent source, port, lifecycle and comparator review; no open P0/P1 within candidate scope. Real owner lease/state and leaf datapath remain absent.",
+  "remaining": [
+    "Resident owner metadata/lease arbitration and coordinated reset",
+    "Actual C save and 512/256 KiB repartition",
+    "Leaf seed write/valid/ICG and Matrix service integration",
+    "Group-done gated result publication",
+    "Timing/synthesized port verification",
+    "Original native M128 numerical acceptance"
+  ],
+  "patch_packaging": {
+    "compiled_source_unchanged": true,
+    "patch_sha256": "801e1bad9ba9bd0cf4cbc30273a407f0b2263dd8dadf0af93d67de37fbf69df4"
+  }
+}

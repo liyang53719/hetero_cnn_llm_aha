@@ -262,3 +262,26 @@ Seed完整context为256个512-bit beat。现有256-bit行bank每个active beat�
 identity控制及实际bank写口mux/valid/clock路由。它们尚未实现/绑定，不计为免费。
 两个read事件不自动等于两个全局周期，跨bank重叠与端口时延需组合后证明。
 因此29.701173%旧事件图宽松上界未被冒称新实现的可行预测或实测。
+
+## 真实bank读源的局部控制成本
+
+前述“两次读不等于两周期”现已在真实Chisel读源结构及软件控制模型中落实：
+同bank低/高word相邻发起，随后组装并提交，单缓冲FSM每个有效beat占4拍。
+完整16×256的256beats/512reads在无停顿小模型中共1030拍；它包含6个setup/
+terminal拍，leaf ACK为明确软件握手模型，不能冒称RTL测量。40个offer停顿
+精确增加40拍。partial M3/N48为64beats、18reads、152拍，不读padding哨兵。
+
+原M128驻留方案的1,277,952个restore beats，若使用此保守源FSM，则仅读/提交
+路径小计5,111,808拍，尚未加acquire、保存、Matrix、DMA或其他owner。既有
+29.701173%是旧事件图每请求至少1拍的宽松上界，不是本实现的可行预测。
+这个差距必须进入布局选择，不能把seed接口或两次读当作免费。
+
+实际StreamingDense hook保持A1376/B160word配置，每bank单read/write且默认
+关闭；独立组合仅实例化候选A/C1024word部分，尚未安装B512或owner lease表。
+reader720bit＋读mux5bit＋既有controller138bit＋组合legacy pending1bit合864bit。
+这不是新增864bit物理综合结果；其中既有状态与外部owner/leaf成本明确分列，
+布线和bank选择mux的面积/时序未知，固定4096分母不变。
+
+下一步用相同K/FMA/偏置/异常合同比较M128转置映射：必须核算A广播分组、每个
+bank的真实读写口、K8960容量/重读以及全19-owner流量，不能只看Dense发射饱和度。
+在模型有证据前不启用资源重分区、不增阵列，也不宣称80%可达。

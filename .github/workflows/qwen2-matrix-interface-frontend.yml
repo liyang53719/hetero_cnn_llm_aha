@@ -9,7 +9,9 @@ on:
       - '.github/workflows/qwen2-matrix-interface-frontend.yml'
       - 'candidates/qwen2_resident_matrix/**'
       - 'scripts/check_matrix_interface_candidate.py'
+      - 'scripts/check_resident_seed_frontend.py'
       - 'tests/test_matrix_interface_candidate.py'
+      - 'tests/test_resident_seed_frontend.py'
       - 'chisel/rope_hardware_oracle/maven-lock.json'
   workflow_dispatch:
 permissions:
@@ -36,9 +38,11 @@ jobs:
         run: |
           python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
+          python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure
         run: |
           python scripts/check_matrix_interface_candidate.py --repo . --out work/matrix-interface-frontend --cache work/matrix-interface-jars
+          python scripts/check_resident_seed_frontend.py --repo . --out work/matrix-interface-frontend/resident --cache work/matrix-interface-jars
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

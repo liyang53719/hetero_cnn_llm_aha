@@ -1,0 +1,84 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala
+@@ -17,11 +17,12 @@
+   val matrixBackpressure=UInt(64.W)
+ }
+
+-class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolean=false, coalesceWeightReads:Boolean=true) extends Module {
++class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolean=false, coalesceWeightReads:Boolean=true, enableResidentReadHook:Boolean=false) extends Module {
+   require(maxTokenTiles>=1 && maxTokenTiles<=5)
+   // M contexts reuse one DDR weight tile across up to 80 tokens. The old
+   // N-only context schedule remains exactly the real16 compatibility case.
+   private val scratch=DenseScratchGeometry(maxK,maxTokenTiles)
++  require(!enableResidentReadHook || scratch.aWordsPerBank>=1024,"resident source hook requires all 1024 A/C addresses to exist")
+   require(maxK>0 && maxK%16==0)
+   val io=IO(new Bundle {
+     val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
+@@ -31,6 +32,7 @@
+     val writeData=if(burstWrites)Some(Decoupled(new BurstWriteBeat))else None
+     val writeResponse=if(burstWrites)Some(Flipped(Decoupled(new MemoryResponse)))else None
+     val matrix=new MatrixStreamPort;val physicalSteps=Input(UInt(64.W))
++    val residentRead=if(enableResidentReadHook)Some(new ResidentSeedReadHook)else None
+     val profile=Output(new DenseCycleProfile)
+     val resetRequired=Output(Bool());val issueCycles=Output(UInt(64.W));val operandStalls=Output(UInt(64.W))
+   })
+@@ -95,12 +97,18 @@
+   readPlan.io.depth:=loadDepth;readPlan.io.context:=loadContext;readPlan.io.beat:=loadBeat
+   readPlan.io.address:=wAddress
+   val loadingA=state===aReq||state===aWait
+-  io.burst.valid:=status===0.U && ((state===aReq && !aHighPending) || (state===execute&&loadState===loadReq))
++  // A new request must not create a future conflicting SRAM write while the
++  // source read hook owns the bank. Already outstanding aWait responses drain.
++  if(enableResidentReadHook){
++    io.burst.valid:=status===0.U && ((state===aReq && !aHighPending && !io.residentRead.get.pause) || (state===execute&&loadState===loadReq))
++  }else{
++    io.burst.valid:=status===0.U && ((state===aReq && !aHighPending) || (state===execute&&loadState===loadReq))
++  }
+   io.burst.bits.address:=Mux(loadingA,aAddress,wAddress)
+   io.burst.bits.beats:=Mux(loadingA,countAt(aAddress,activationBeats-aBeat),readPlan.io.beats)
+   io.burst.bits.tag:=Cat(job.tag,sequence)
+   io.burstResponse.ready:=(state===aWait && !aHighPending) || (state===execute&&loadState===loadWait)
+-  io.job.ready:=state===idle
++  io.job.ready:= (if(enableResidentReadHook) state===idle && !io.residentRead.get.pause else state===idle)
+   io.done.valid:=state===finish;io.done.bits.tag:=job.tag;io.done.bits.status:=status
+   io.done.bits.cycles:=cycles;io.done.bits.writeBytes:=bytes;io.done.bits.usefulMacs:=useful
+   io.done.bits.executedMacs:=(io.physicalSteps-physicalBase)*512.U
+@@ -119,8 +127,36 @@
+   val pending=RegInit(false.B);val pendingK=Reg(UInt(16.W));val pendingContext=Reg(UInt(3.W))
+   val canRead=state===execute&&groupStarted && !groupDone && !allIssued&&status===0.U&&
+     ready(issueSel)&&readyK(issueSel)===(issueK&"hfff0".U)&&operands.io.count+&pending.asUInt<4.U
+-  val readFire=canRead
+-  val aRead=aBanks.map(_.read(ctxM(issueContext).pad(16)*(job.k>>4)+(issueK>>4),readFire))
++  // WORK-ONLY optional read routing. This does NOT install the resident
++  // 1024/512 partition, C prefix metadata, or a seed-capable Matrix owner.
++  val readFire=if(enableResidentReadHook) canRead && !io.residentRead.get.pause else canRead
++  val aRead=if(enableResidentReadHook){
++    val hook=io.residentRead.get
++    val mux=Module(new ResidentSeedBankReadMux(log2Ceil(scratch.aWordsPerBank).max(10)))
++    // aWait covers already-issued A DMA, including not-yet-returned payloads.
++    // pausing NEW reads allows the real pending/FIFO path to drain normally.
++    val grant=hook.pause && !pending && !operands.io.deq.valid &&
++      !aHighPending && !aWrite && state=/=aWait && status===0.U
++    hook.grant:=grant
++    mux.io.stopLegacyReads:=hook.pause
++    mux.io.legacyRequest:=canRead
++    mux.io.legacyAddress:=ctxM(issueContext).pad(16)*(job.k>>4)+(issueK>>4)
++    mux.io.legacyPending:=pending
++    mux.io.conflictingWrite:=aHighPending || aWrite || state===aWait
++    mux.io.portsGranted:=grant
++    mux.io.seedEnable:=hook.enable && grant
++    mux.io.seedBank:=hook.bank;mux.io.seedAddress:=hook.address
++    hook.data:=mux.io.seedData;hook.pending:=mux.io.seedPending
++    when(hook.enable){assert(grant,"seed read enabled before actual Dense SRAM/operand/write drain")}
++    assert(mux.io.legacyFire===readFire)
++    aBanks.zipWithIndex.map{case(bank,i)=>
++      val data=bank.read(mux.io.bankAddress(i),mux.io.bankEnable(i))
++      mux.io.bankData(i):=data
++      data
++    }
++  }else{
++    aBanks.map(_.read(ctxM(issueContext).pad(16)*(job.k>>4)+(issueK>>4),readFire))
++  }
+   // 80 + 15*5 + 4 = 159: an explicit eight-bit sum is required.
+   // A seven-bit Mux(80,0) plus a four-bit K product would wrap at 128.
+   val wAddr=Mux(issueSel,80.U(8.W),0.U(8.W))+(issueK(3,0).pad(8)*5.U)(7,0)+ctxN(issueContext).pad(8)

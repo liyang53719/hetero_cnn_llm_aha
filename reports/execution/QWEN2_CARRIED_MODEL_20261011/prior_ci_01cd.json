@@ -1,0 +1,47 @@
+{
+  "commit": "01cd1bfc5fac14ab0bd2d4e6fb7eab041e019da0",
+  "workflow_run": 38143198301,
+  "job": 114481088294,
+  "status": "SUCCESS",
+  "tests": 127,
+  "seconds": 7.85,
+  "artifact_id": 11704230473,
+  "artifact_bytes": 28460,
+  "artifact_sha256": "20bfea0cc4ec256b0d1d7f5029eea4e76443f009c3610ef03c70330d7644b49f",
+  "files": {
+    "m1024_bf16_bound.json": {
+      "sha256": "9876daa395eb021b1cea34c946df467a152051d24f63dbb95d5374a1e5c0c88e",
+      "source_pins_verified": 23
+    },
+    "m1024_context5_schedule.json": {
+      "sha256": "67ec1db9ec83cdd372f2a5f27283cf909489f1b5e5e657424192dd884c9a62cb",
+      "source_pins_verified": 14
+    },
+    "m1024_context1_schedule.json": {
+      "sha256": "eb7609181118650230ea2d93dca4bafde37b80f133a16ac5c63b08df7ed3bfd3",
+      "source_pins_verified": 14
+    },
+    "m1024_host_bound.json": {
+      "sha256": "c42fc801945a821aab4177b94351be5cf0d0bd334b83e5ece8ded6ebb8e27550",
+      "source_pins_verified": 27
+    },
+    "m128_bf16_bound.json": {
+      "sha256": "2b15ecb576cdc3fa5c05456e07907c8e0dca3f32a3175887202dfbe9e063f0e3",
+      "source_pins_verified": 23
+    },
+    "m128_context1_schedule.json": {
+      "sha256": "c34ee51b43fac3060de3bcb59e99d2476d69f37417cf147498c5e5e61a2a6c1a",
+      "source_pins_verified": 14
+    },
+    "m128_context5_schedule.json": {
+      "sha256": "a03ef5bcb7cb40bae96ec277369f0df6c738c8bb5941507e831fa8c2825ad3fa",
+      "source_pins_verified": 14
+    },
+    "m128_host_bound.json": {
+      "sha256": "5494296503ffb6ca5a20e67099db6e2e6631d087bb48f7da64053e1a7a8fcbfc",
+      "source_pins_verified": 27
+    }
+  },
+  "all_eight_reports_exact_local_match": true,
+  "actual_hardware_or_model_acceptance": false
+}

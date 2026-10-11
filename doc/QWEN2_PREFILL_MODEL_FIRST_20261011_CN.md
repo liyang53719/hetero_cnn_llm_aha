@@ -163,3 +163,36 @@ CI 实跑 83 项测试。完整 native 精度失败仍开放。进一步的
 生产 owner。Attention自身issue几何上界为32.25%/61.0119%，若保持
 单Scalar归约与softmax，乐观上界更低；全层80%目标仍需驻留和共享
 Vector/SFU调度证明。Q21.3/U00.2保持ongoing，U01保持todo。
+
+
+## 真实 carried M128 与共享资源模型增量
+
+`01cd1bf` 的 127 项轻量模型 CI 已通过，八份源码绑定报告均与本地逐字节
+一致。新一轮先复用封存 cold 的实际 K/V 输出，再以绝对位置 M..2M-1
+执行 carried M16、M128。不是逐 token 循环，也没有注入官方 cache；cold
+与 carried 是不同软件进程，尚未验证生产 Host 的命令、DMA 和物理状态。
+
+[carried 诊断](QWEN2_CARRIED_PREFILL_MODEL_20261011_CN.md)保留四种比较：
+官方/独立各自 cache 的完整链，以及分别以实际候选旧 cache 为条件的参考。
+M16 两条官方参考的已定义节点门通过；M128 四法均有 15 个中间节点失败。
+M128 末输出最大差 0.0390625 在原末输出门内，不能覆盖 Q、Attention 和 FFN
+内部失败。全部 14 项数据语义检查通过，原策略与 `NOT_ACCEPTED` 保持。
+FP32 softmax 内部值没有已批准逐元素门，只检查原有行和等语义。
+
+[共享资源预约模型](QWEN2_PREFILL_RESOURCE_SCHEDULE_20261011_CN.md)覆盖19个
+owner、21个公开阶段的依赖、缓冲和最终 ACK。cold M128/M1024 的有用 MAC 和
+Dense 权重读字节与已发布算式相符。默认时延未绑定，合成时延仅用于检查
+预约器自身；可信全周期预测、Chisel 状态机执行和硬件死锁证明仍未完成。
+
+[固定16路 SFU 候选](QWEN2_SHARED_SFU_SCHEDULE_MODEL_20261011_CN.md)保留
+原 exp7/RNE 节点，建模1/2个向量 context 的 ALU、divider、回写和背压。
+它需要明确的新控制状态和路由，尚未接 Chisel。既有 wrapper 在本次实际
+M128 gate 输入全属非饱和分支，仅 SiLU 就至少2,723,839拍；这是绑定当前
+实现的下界，不能当成新候选或任意16路 SFU 的极限。原硬件计数与上述
+软件预约时钟分别记录，固定4096 MAC分母不变。
+
+- done（局部）：sealed cold 实际 cache 的 M16/M128 carried 软件执行、四法比较与证据核验。
+- ongoing：RMS归约和RoPE表精度首差诊断；完整producer门仍失败。
+- ongoing：完整DAG资源预约与固定16路SFU调度的软件模型、未绑定时延清单。
+- to do：明确数值政策后才做最小Chisel接入；绑定实际端口与FSM时延，最后冻结刺激跑RTL。
+- 保持：Q21.3/U00.2 ongoing、U01 to do、C02.2 OPEN；不将末输出门通过写成完整数值通过。

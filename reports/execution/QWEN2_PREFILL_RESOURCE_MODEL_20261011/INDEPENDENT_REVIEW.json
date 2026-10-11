@@ -1,0 +1,28 @@
+{
+  "status": "REVIEW_PASS_SOFTWARE_ONLY",
+  "resolved": [
+    "Dense B physical stride5 half reservation separated from payload",
+    "SFU stalled output held through late-context poison and drained as transport",
+    "unsupported numeric oracle overflow drains without invented flags",
+    "new logical state C1=17 bits and C2=2950 bits explicitly counted"
+  ],
+  "independent_checks": [
+    "39 resource and8 SFU pins",
+    "19 owner output/ACK extents and final fence",
+    "blocked and released output with late poison",
+    "unsupported overflow rejection"
+  ],
+  "unproved": [
+    "hardware deadlock freedom",
+    "full-cycle prediction",
+    "HardFloat status equivalence",
+    "physical implementation",
+    "numerical acceptance"
+  ],
+  "source_sha256": {
+    "scripts/qwen2_prefill_resource_schedule.py": "183946bcb51c83f2028f51e9edc925efc0ed525990a390434cf23d727b283cdd",
+    "tests/test_qwen2_prefill_resource_schedule.py": "7353c5e20553cfeb6a6c17b6c2c50b66b2ae41938e9c2db6e65561ca1296f6cb",
+    "scripts/qwen2_shared_sfu_schedule.py": "09e69a806f89a608fdecbce4c90add49fa40e46bc90d75ddea832b535f921f6f",
+    "tests/test_qwen2_shared_sfu_schedule.py": "3484359a566e82706fe38073b20f71db958e1491b0949c5d842d5f46c490ae2e"
+  }
+}

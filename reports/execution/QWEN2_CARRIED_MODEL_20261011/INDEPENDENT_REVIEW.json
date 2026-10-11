@@ -1,0 +1,36 @@
+{
+  "status": "INDEPENDENT_EVIDENCE_REVIEW_PASS_NOT_NUMERICAL_ACCEPTANCE",
+  "scope": "Static source and completed evidence review; no repeated numerical run",
+  "source_sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+  "m16_result_sha256": "24b2c1b48549540cc8689701a270c6e80c1d79b9151a8c40676b7f2a1e773a52",
+  "m128_result_sha256": "316b962a61bc53adc5b8d2a0885c977e1fffb52af05ed3667a6494f003eb59c6",
+  "checks": [
+    "all artifact/source/ELF hashes match",
+    "116 tensor/method metrics and gates independently reconciled per run",
+    "prior K/V byte-exact sealed cold raw outputs",
+    "carried prefixes unchanged and appended K/V exact current writes",
+    "14 semantic checks per run",
+    "both provenance findings fixed and tamper tests present"
+  ],
+  "numerical_status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "m16": "Official branches pass all defined gates; independent branches retain scores/logits failure",
+  "m128_failed_nodes": [
+    "act",
+    "att",
+    "down",
+    "gate",
+    "logits",
+    "n1",
+    "o",
+    "prob",
+    "pv",
+    "q",
+    "qr",
+    "r",
+    "scores",
+    "silu",
+    "up"
+  ],
+  "m128_y_max_abs": 0.0390625,
+  "existing_contract_unchanged": true
+}

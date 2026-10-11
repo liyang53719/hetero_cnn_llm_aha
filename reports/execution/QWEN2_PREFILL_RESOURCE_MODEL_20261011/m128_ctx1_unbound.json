@@ -1,0 +1,826 @@
+{
+  "attention_schedule": {
+    "candidate_routing_not_implemented": true,
+    "pv_contexts": 1,
+    "qk_contexts": 1,
+    "source_iterator": "qwen2_rectangular_attention_model.iter_events"
+  },
+  "dense_schedule_geometry": [
+    {
+      "active_a_bf16_bytes": 245760,
+      "active_a_words_per_bank": 480,
+      "inactive_a_bytes": 458752,
+      "ingress_weight_bytes": 9437184,
+      "k": 1536,
+      "max_m_contexts": 5,
+      "n": 1536,
+      "name": "q",
+      "rows_per_group": 80,
+      "useful_macs": 301989888,
+      "weight_bytes": 4718592,
+      "weight_elements": 2359296,
+      "weight_full_reads": 2
+    },
+    {
+      "active_a_bf16_bytes": 245760,
+      "active_a_words_per_bank": 480,
+      "inactive_a_bytes": 458752,
+      "ingress_weight_bytes": 1572864,
+      "k": 1536,
+      "max_m_contexts": 5,
+      "n": 256,
+      "name": "k",
+      "rows_per_group": 80,
+      "useful_macs": 50331648,
+      "weight_bytes": 786432,
+      "weight_elements": 393216,
+      "weight_full_reads": 2
+    },
+    {
+      "active_a_bf16_bytes": 245760,
+      "active_a_words_per_bank": 480,
+      "inactive_a_bytes": 458752,
+      "ingress_weight_bytes": 1572864,
+      "k": 1536,
+      "max_m_contexts": 5,
+      "n": 256,
+      "name": "v",
+      "rows_per_group": 80,
+      "useful_macs": 50331648,
+      "weight_bytes": 786432,
+      "weight_elements": 393216,
+      "weight_full_reads": 2
+    },
+    {
+      "active_a_bf16_bytes": 245760,
+      "active_a_words_per_bank": 480,
+      "inactive_a_bytes": 458752,
+      "ingress_weight_bytes": 9437184,
+      "k": 1536,
+      "max_m_contexts": 5,
+      "n": 1536,
+      "name": "o",
+      "rows_per_group": 80,
+      "useful_macs": 301989888,
+      "weight_bytes": 4718592,
+      "weight_elements": 2359296,
+      "weight_full_reads": 2
+    },
+    {
+      "active_a_bf16_bytes": 245760,
+      "active_a_words_per_bank": 480,
+      "inactive_a_bytes": 458752,
+      "ingress_weight_bytes": 55050240,
+      "k": 1536,
+      "max_m_contexts": 5,
+      "n": 8960,
+      "name": "gate",
+      "rows_per_group": 80,
+      "useful_macs": 1761607680,
+      "weight_bytes": 27525120,
+      "weight_elements": 13762560,
+      "weight_full_reads": 2
+    },
+    {
+      "active_a_bf16_bytes": 245760,
+      "active_a_words_per_bank": 480,
+      "inactive_a_bytes": 458752,
+      "ingress_weight_bytes": 55050240,
+      "k": 1536,
+      "max_m_contexts": 5,
+      "n": 8960,
+      "name": "up",
+      "rows_per_group": 80,
+      "useful_macs": 1761607680,
+      "weight_bytes": 27525120,
+      "weight_elements": 13762560,
+      "weight_full_reads": 2
+    },
+    {
+      "active_a_bf16_bytes": 573440,
+      "active_a_words_per_bank": 1120,
+      "inactive_a_bytes": 131072,
+      "ingress_weight_bytes": 110100480,
+      "k": 8960,
+      "max_m_contexts": 2,
+      "n": 1536,
+      "name": "down",
+      "rows_per_group": 32,
+      "useful_macs": 1761607680,
+      "weight_bytes": 27525120,
+      "weight_elements": 13762560,
+      "weight_full_reads": 4
+    }
+  ],
+  "dense_weight_bank_layout": {
+    "address_rule": "halfBase + depthWithin16*5 + ctxN",
+    "high_water_span_words_per_half": "15*5+nContexts",
+    "live_halves_in_serial_baseline": 1,
+    "payload_words_per_bank": "16*nContexts",
+    "physical_half_bases_words": [
+      0,
+      80
+    ],
+    "reserved_bytes_per_live_half": 40960,
+    "reserved_words_per_bank_per_live_half": 80
+  },
+  "known_sfu_source_lower_bounds": {
+    "generic_sfu_or_multi_context_rewrite_included": false,
+    "real_gate_branch_population_not_loaded": true,
+    "scalar_add_mul_request_ii_at_least": 3,
+    "scalar_div_actual_latency_and_ii": null,
+    "scalar_div_fsm_request_ii_at_least": 4,
+    "scalar_exp_nonsaturated_request_ii_at_least": 20,
+    "scalar_exp_saturated_request_ii_at_least": 3,
+    "silu16_all_saturated_group_ii_at_least": 21,
+    "silu16_any_nonsaturated_group_ii_at_least": 38,
+    "silu16_edge_span_formula": "21*N+17*L-1; L groups have any lane abs(gate)<80"
+  },
+  "omitted_or_abstracted": [
+    "This is an ordered macro/resource model, not a Chisel FSM execution trace or a lowering implementation.",
+    "Host command/tensor/policy fetch byte counts and exact decoding are opaque admission work with unbound cost; only 21-stage ordering is explicit.",
+    "DDR root alignment, individual AXI bursts/legalization, backpressure, read commit and B ACK timing remain unknown; per-64B synthetic charges are assumptions.",
+    "Dense K16 repeats, Norm row/chunk loops, elementwise tiles and SiLU groups retain ordered bodies but internal request/response FSM cycles are not expanded.",
+    "Attention scratch lease/gather/capture routing is the published pre-RTL candidate, not current Host hardware.",
+    "All bank reads/writes conflict conservatively; actual independent-bank or Dense ping-pong/SiLU memory overlap is not credited.",
+    "Matrix feedback, divider/SFU branch timing, owner switches and final Host fence are explicit unbound parameters by default.",
+    "Only successful finite work is scheduled; arithmetic values, flags, faults, retries, cancellation and fault-drain behavior are not simulated.",
+    "Original Matrix finite checks and Scalar underflow/error policy remain required; no new vectorized Attention/SFU route is assumed."
+  ],
+  "policy": "Current Dense schedule plus candidate rectangular Attention; serialized baseline; no arithmetic/status changes",
+  "predicted_full_block_cycles": null,
+  "reservation_result": {
+    "completed_owners": [
+      "input_norm",
+      "q",
+      "q_bias",
+      "q_rope",
+      "k",
+      "k_bias",
+      "k_rope",
+      "v",
+      "v_bias",
+      "kv_append",
+      "attention",
+      "o",
+      "attn_residual",
+      "post_norm",
+      "gate",
+      "up",
+      "silu",
+      "down",
+      "residual"
+    ],
+    "metrics": {
+      "acknowledged_write_bytes": 22544384,
+      "attention_A_bank_read_bytes": 42688512,
+      "attention_wide_issues": 19200,
+      "core_vector_requests": 133120,
+      "dense_weight_read_bytes": 242221056,
+      "dense_wide_issues": 1462272,
+      "elementwise_vector_requests": 24576,
+      "executed_macs": 6019350528,
+      "external_read_bytes": 272236544,
+      "external_write_bytes": 22544384,
+      "scalar_add_requests": 2176768,
+      "scalar_div_requests": 1792,
+      "scalar_exp_requests": 99072,
+      "scalar_mul_requests": 198400,
+      "scalar_sqrt_requests": 256,
+      "silu_lane_primitive_groups": 430080,
+      "silu_vector_groups": 71680,
+      "useful_macs": 6014828544
+    },
+    "peak_owned": {
+      "A_bytes": 573440,
+      "B_bytes": 40960,
+      "captured_rows": 16,
+      "contexts": 5,
+      "core_bytes": 6144,
+      "core_vectors": 7,
+      "dense_final_values": 1,
+      "dense_scratch_lease": 1,
+      "elementwise_bytes": 12288,
+      "idma_transaction": 1,
+      "matrix_results": 1,
+      "metadata": 1,
+      "partial_slots": 1,
+      "silu_inputs": 1,
+      "silu_outputs": 1
+    },
+    "sample_reservations": [],
+    "stage_metrics": {
+      "attention": {
+        "acknowledged_write_bytes": 786432,
+        "attention_A_bank_read_bytes": 42688512,
+        "attention_wide_issues": 19200,
+        "executed_macs": 29884416,
+        "external_read_bytes": 1048576,
+        "external_write_bytes": 786432,
+        "scalar_add_requests": 1783296,
+        "scalar_div_requests": 1536,
+        "scalar_exp_requests": 99072,
+        "scalar_mul_requests": 198144,
+        "useful_macs": 25362432
+      },
+      "attn_residual": {
+        "acknowledged_write_bytes": 786432,
+        "elementwise_vector_requests": 12288,
+        "external_read_bytes": 1572864,
+        "external_write_bytes": 786432
+      },
+      "down": {
+        "acknowledged_write_bytes": 786432,
+        "dense_weight_read_bytes": 110100480,
+        "dense_wide_issues": 430080,
+        "executed_macs": 1761607680,
+        "external_read_bytes": 114688000,
+        "external_write_bytes": 786432,
+        "useful_macs": 1761607680
+      },
+      "gate": {
+        "acknowledged_write_bytes": 4587520,
+        "dense_weight_read_bytes": 55050240,
+        "dense_wide_issues": 430080,
+        "executed_macs": 1761607680,
+        "external_read_bytes": 55836672,
+        "external_write_bytes": 4587520,
+        "useful_macs": 1761607680
+      },
+      "input_norm": {
+        "acknowledged_write_bytes": 786432,
+        "core_vector_requests": 36864,
+        "external_read_bytes": 1572864,
+        "external_write_bytes": 786432,
+        "scalar_add_requests": 196736,
+        "scalar_div_requests": 128,
+        "scalar_mul_requests": 128,
+        "scalar_sqrt_requests": 128
+      },
+      "k": {
+        "acknowledged_write_bytes": 131072,
+        "dense_weight_read_bytes": 1572864,
+        "dense_wide_issues": 12288,
+        "executed_macs": 50331648,
+        "external_read_bytes": 2359296,
+        "external_write_bytes": 131072,
+        "useful_macs": 50331648
+      },
+      "k_bias": {
+        "acknowledged_write_bytes": 131072,
+        "core_vector_requests": 2048,
+        "external_read_bytes": 262144,
+        "external_write_bytes": 131072
+      },
+      "k_rope": {
+        "acknowledged_write_bytes": 131072,
+        "core_vector_requests": 6144,
+        "external_read_bytes": 262144,
+        "external_write_bytes": 131072
+      },
+      "kv_append": {
+        "acknowledged_write_bytes": 262144,
+        "external_read_bytes": 262144,
+        "external_write_bytes": 262144
+      },
+      "o": {
+        "acknowledged_write_bytes": 786432,
+        "dense_weight_read_bytes": 9437184,
+        "dense_wide_issues": 73728,
+        "executed_macs": 301989888,
+        "external_read_bytes": 10223616,
+        "external_write_bytes": 786432,
+        "useful_macs": 301989888
+      },
+      "post_norm": {
+        "acknowledged_write_bytes": 786432,
+        "core_vector_requests": 36864,
+        "external_read_bytes": 1572864,
+        "external_write_bytes": 786432,
+        "scalar_add_requests": 196736,
+        "scalar_div_requests": 128,
+        "scalar_mul_requests": 128,
+        "scalar_sqrt_requests": 128
+      },
+      "q": {
+        "acknowledged_write_bytes": 786432,
+        "dense_weight_read_bytes": 9437184,
+        "dense_wide_issues": 73728,
+        "executed_macs": 301989888,
+        "external_read_bytes": 10223616,
+        "external_write_bytes": 786432,
+        "useful_macs": 301989888
+      },
+      "q_bias": {
+        "acknowledged_write_bytes": 786432,
+        "core_vector_requests": 12288,
+        "external_read_bytes": 1572864,
+        "external_write_bytes": 786432
+      },
+      "q_rope": {
+        "acknowledged_write_bytes": 786432,
+        "core_vector_requests": 36864,
+        "external_read_bytes": 1572864,
+        "external_write_bytes": 786432
+      },
+      "residual": {
+        "acknowledged_write_bytes": 786432,
+        "elementwise_vector_requests": 12288,
+        "external_read_bytes": 1572864,
+        "external_write_bytes": 786432
+      },
+      "silu": {
+        "acknowledged_write_bytes": 4587520,
+        "external_read_bytes": 9175040,
+        "external_write_bytes": 4587520,
+        "silu_lane_primitive_groups": 430080,
+        "silu_vector_groups": 71680
+      },
+      "up": {
+        "acknowledged_write_bytes": 4587520,
+        "dense_weight_read_bytes": 55050240,
+        "dense_wide_issues": 430080,
+        "executed_macs": 1761607680,
+        "external_read_bytes": 55836672,
+        "external_write_bytes": 4587520,
+        "useful_macs": 1761607680
+      },
+      "v": {
+        "acknowledged_write_bytes": 131072,
+        "dense_weight_read_bytes": 1572864,
+        "dense_wide_issues": 12288,
+        "executed_macs": 50331648,
+        "external_read_bytes": 2359296,
+        "external_write_bytes": 131072,
+        "useful_macs": 50331648
+      },
+      "v_bias": {
+        "acknowledged_write_bytes": 131072,
+        "core_vector_requests": 2048,
+        "external_read_bytes": 262144,
+        "external_write_bytes": 131072
+      }
+    },
+    "successful_path_ownership_closed": true,
+    "synthetic_scheduled_cycles": null,
+    "timing_work_units": {
+      "bank_word": 63286016,
+      "command_admission": 21,
+      "control": 4818,
+      "core_vector": 133120,
+      "elementwise_vector": 24576,
+      "fabric_beat": 212992,
+      "matrix_group": 3624,
+      "matrix_issue": 1481472,
+      "matrix_return_wait": 1481472,
+      "owner_switch": 19,
+      "read_64b_commit": 4253696,
+      "read_64b_service": 4253696,
+      "scalar_add": 2176768,
+      "scalar_div": 1792,
+      "scalar_exp": 99072,
+      "scalar_mul": 198400,
+      "scalar_sqrt": 256,
+      "silu_group": 71680,
+      "terminal_fence": 1,
+      "write_64b_ack": 352256,
+      "write_64b_service": 352256
+    }
+  },
+  "resources": {
+    "capacities": {
+      "A_bytes": 704512,
+      "B_bytes": 81920,
+      "captured_rows": 16,
+      "contexts": 5,
+      "core_bytes": 573440,
+      "core_vectors": 7,
+      "dense_final_values": 1,
+      "dense_scratch_lease": 1,
+      "elementwise_bytes": 12288,
+      "idma_transaction": 1,
+      "matrix_results": 2,
+      "metadata": 8,
+      "partial_slots": 5,
+      "silu_inputs": 1,
+      "silu_outputs": 1
+    },
+    "core_and_elementwise_bank_word_bytes": 16,
+    "core_vector_alu_lanes": 16,
+    "dense_bank_word_bytes": 32,
+    "elementwise_alu_lanes": 16,
+    "exclusive_ports": [
+      "A.bank0",
+      "A.bank1",
+      "A.bank10",
+      "A.bank11",
+      "A.bank12",
+      "A.bank13",
+      "A.bank14",
+      "A.bank15",
+      "A.bank2",
+      "A.bank3",
+      "A.bank4",
+      "A.bank5",
+      "A.bank6",
+      "A.bank7",
+      "A.bank8",
+      "A.bank9",
+      "B.bank0",
+      "B.bank1",
+      "B.bank10",
+      "B.bank11",
+      "B.bank12",
+      "B.bank13",
+      "B.bank14",
+      "B.bank15",
+      "B.bank2",
+      "B.bank3",
+      "B.bank4",
+      "B.bank5",
+      "B.bank6",
+      "B.bank7",
+      "B.bank8",
+      "B.bank9",
+      "core.group0",
+      "core.group1",
+      "core.group2",
+      "core.group3",
+      "core_vector16",
+      "elementwise.group0",
+      "elementwise.group1",
+      "elementwise.group2",
+      "elementwise.group3",
+      "elementwise_vector16",
+      "host_control",
+      "idma",
+      "matrix",
+      "scalar",
+      "silu16"
+    ],
+    "existing_accumulator_bytes": 81920,
+    "existing_dense_final_value_bytes": 16384,
+    "existing_matrix_result_fifo_bytes": 32768,
+    "idma_max_live_transactions": 1,
+    "matrix_macs": 4096,
+    "overlap_enabled": false,
+    "owner_routing_slots": 1,
+    "scalar_cores": 1,
+    "shared_l2_banks_per_arbitration_group": 4,
+    "silu_scalar_lanes": 16,
+    "silu_variants_are_alternatives": true
+  },
+  "rtl_measured_cycles": null,
+  "rtl_measured_utilization": null,
+  "schema_version": 1,
+  "scope": {
+    "credible_full_cycle_prediction": false,
+    "hardware_acceptance": false,
+    "hardware_deadlock_proof": false,
+    "numerical_execution": false,
+    "rtl_execution": false
+  },
+  "source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+    "config/upstream/weight_headers/qwen2_1p5b/config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "scripts/import_llama_qwen2_graph.py": "07a7edfa3f0c08876fddd47c909b2a340fb6fd175ec46f99c2754f748bb2ea6e",
+    "scripts/qwen2_prefill_traffic_bound.py": "3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697",
+    "scripts/qwen2_rectangular_attention_model.py": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8"
+  },
+  "stages": [
+    {
+      "owner": "input_norm",
+      "produces": [
+        "n0"
+      ],
+      "public_stages": [
+        "input_norm"
+      ],
+      "requires": [
+        "x"
+      ]
+    },
+    {
+      "owner": "q",
+      "produces": [
+        "q_projected"
+      ],
+      "public_stages": [
+        "q"
+      ],
+      "requires": [
+        "n0"
+      ]
+    },
+    {
+      "owner": "q_bias",
+      "produces": [
+        "q_biased"
+      ],
+      "public_stages": [
+        "q_bias"
+      ],
+      "requires": [
+        "q_projected"
+      ]
+    },
+    {
+      "owner": "q_rope",
+      "produces": [
+        "q_rotated"
+      ],
+      "public_stages": [
+        "q_rope"
+      ],
+      "requires": [
+        "q_biased"
+      ]
+    },
+    {
+      "owner": "k",
+      "produces": [
+        "k_projected"
+      ],
+      "public_stages": [
+        "k"
+      ],
+      "requires": [
+        "n0"
+      ]
+    },
+    {
+      "owner": "k_bias",
+      "produces": [
+        "k_biased"
+      ],
+      "public_stages": [
+        "k_bias"
+      ],
+      "requires": [
+        "k_projected"
+      ]
+    },
+    {
+      "owner": "k_rope",
+      "produces": [
+        "k_rotated"
+      ],
+      "public_stages": [
+        "k_rope"
+      ],
+      "requires": [
+        "k_biased"
+      ]
+    },
+    {
+      "owner": "v",
+      "produces": [
+        "v_projected"
+      ],
+      "public_stages": [
+        "v"
+      ],
+      "requires": [
+        "n0"
+      ]
+    },
+    {
+      "owner": "v_bias",
+      "produces": [
+        "v_biased"
+      ],
+      "public_stages": [
+        "v_bias"
+      ],
+      "requires": [
+        "v_projected"
+      ]
+    },
+    {
+      "owner": "kv_append",
+      "produces": [
+        "kv_cache"
+      ],
+      "public_stages": [
+        "kv_append"
+      ],
+      "requires": [
+        "k_rotated",
+        "v_biased"
+      ]
+    },
+    {
+      "owner": "attention",
+      "produces": [
+        "att"
+      ],
+      "public_stages": [
+        "qk",
+        "softmax",
+        "pv"
+      ],
+      "requires": [
+        "q_rotated",
+        "kv_cache"
+      ]
+    },
+    {
+      "owner": "o",
+      "produces": [
+        "o"
+      ],
+      "public_stages": [
+        "oproj"
+      ],
+      "requires": [
+        "att"
+      ]
+    },
+    {
+      "owner": "attn_residual",
+      "produces": [
+        "r"
+      ],
+      "public_stages": [
+        "attn_residual"
+      ],
+      "requires": [
+        "o",
+        "x"
+      ]
+    },
+    {
+      "owner": "post_norm",
+      "produces": [
+        "n1"
+      ],
+      "public_stages": [
+        "post_norm"
+      ],
+      "requires": [
+        "r"
+      ]
+    },
+    {
+      "owner": "gate",
+      "produces": [
+        "gate"
+      ],
+      "public_stages": [
+        "gate"
+      ],
+      "requires": [
+        "n1"
+      ]
+    },
+    {
+      "owner": "up",
+      "produces": [
+        "up"
+      ],
+      "public_stages": [
+        "up"
+      ],
+      "requires": [
+        "n1"
+      ]
+    },
+    {
+      "owner": "silu",
+      "produces": [
+        "act"
+      ],
+      "public_stages": [
+        "silu_mul"
+      ],
+      "requires": [
+        "gate",
+        "up"
+      ]
+    },
+    {
+      "owner": "down",
+      "produces": [
+        "down"
+      ],
+      "public_stages": [
+        "down"
+      ],
+      "requires": [
+        "act"
+      ]
+    },
+    {
+      "owner": "residual",
+      "produces": [
+        "y"
+      ],
+      "public_stages": [
+        "residual"
+      ],
+      "requires": [
+        "down",
+        "r"
+      ]
+    }
+  ],
+  "status": "UNBOUND_RESOURCE_RESERVATION_MODEL",
+  "timing_profile": {
+    "meaning": "Per-macro service assumptions, including unknown waits; not measured RTL timings",
+    "name": "unbound",
+    "parameters": {
+      "bank_word": null,
+      "command_admission": null,
+      "control": null,
+      "core_vector": null,
+      "elementwise_vector": null,
+      "fabric_beat": null,
+      "matrix_group": null,
+      "matrix_issue": null,
+      "matrix_return_wait": null,
+      "owner_switch": null,
+      "read_64b_commit": null,
+      "read_64b_service": null,
+      "scalar_add": null,
+      "scalar_div": null,
+      "scalar_exp": null,
+      "scalar_mul": null,
+      "scalar_sqrt": null,
+      "silu_group": null,
+      "terminal_fence": null,
+      "write_64b_ack": null,
+      "write_64b_service": null
+    },
+    "synthetic": false
+  },
+  "traffic_scope": "Modeled tensor/parameter transfers only; descriptor/command/policy bytes remain unresolved",
+  "unbound_timing_parameters": [
+    "owner_switch",
+    "command_admission",
+    "control",
+    "bank_word",
+    "fabric_beat",
+    "read_64b_service",
+    "read_64b_commit",
+    "write_64b_service",
+    "write_64b_ack",
+    "matrix_issue",
+    "matrix_return_wait",
+    "matrix_group",
+    "scalar_add",
+    "scalar_mul",
+    "scalar_div",
+    "scalar_sqrt",
+    "scalar_exp",
+    "core_vector",
+    "elementwise_vector",
+    "silu_group",
+    "terminal_fence"
+  ],
+  "unresolved_traffic": {
+    "command_tensor_policy_metadata_bytes": null
+  },
+  "workload": {
+    "batch": 1,
+    "causal": true,
+    "layer": 0,
+    "model": "Qwen2-1.5B-Instruct",
+    "past_tokens": 0,
+    "tokens": 128,
+    "weight_dtype": "BF16"
+  }
+}

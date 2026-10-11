@@ -1,0 +1,65 @@
+{
+  "files": [
+    {
+      "path": "REVIEW_RECEIPT.json",
+      "bytes": 1433,
+      "sha256": "9e0063727c0ffb2ff172f3be97d9bf3d94fe061b6b10aed27e4ef5ca0ad4ba86",
+      "source": "work/qwen2_shared_sfu_schedule_20261011T1400/REVIEW_RECEIPT.json"
+    },
+    {
+      "path": "TESTS.txt",
+      "bytes": 99,
+      "sha256": "71aeb7d1fe3237cde0e6afb96d00154af237514da6d69fbc635d91a6ca64b325",
+      "source": "work/qwen2_shared_sfu_schedule_20261011T1400/TESTS.txt"
+    },
+    {
+      "path": "TEST_RECEIPT.json",
+      "bytes": 809,
+      "sha256": "9441cc31f8e0bf05407d6d9bea15e5085df37280d915daef84c0246cef3fde09",
+      "source": "work/qwen2_shared_sfu_schedule_20261011T1400/TEST_RECEIPT.json"
+    },
+    {
+      "path": "default_unbound.json",
+      "bytes": 5091,
+      "sha256": "a5fc9e9d80905fbd2c12dbc3df20bd7447227ca6fd5a8ee7fb66167327404792",
+      "source": "work/qwen2_shared_sfu_schedule_20261011T1400/default_unbound.json"
+    },
+    {
+      "path": "synthetic_c1.json",
+      "bytes": 5572,
+      "sha256": "f55eafa477f08f7ac864811b67f922576e280ec344845bf3a38c1e27827dfd73",
+      "source": "work/qwen2_shared_sfu_schedule_20261011T1400/synthetic_c1.json"
+    },
+    {
+      "path": "synthetic_c2.json",
+      "bytes": 5578,
+      "sha256": "2f42b77364897f80094db0742f973c1b62184eafe231c81f2ce8833bc6089bd0",
+      "source": "work/qwen2_shared_sfu_schedule_20261011T1400/synthetic_c2.json"
+    }
+  ],
+  "source_hashes": {
+    "doc/QWEN2_SHARED_SFU_SCHEDULE_MODEL_20261011_CN.md": "0d6b60916ac8e2c28ae396d2453e9617be2e6f3ac5dcdce61f5d0b3490fe5dce",
+    "scripts/qwen2_shared_sfu_schedule.py": "09e69a806f89a608fdecbce4c90add49fa40e46bc90d75ddea832b535f921f6f",
+    "tests/test_qwen2_shared_sfu_schedule.py": "3484359a566e82706fe38073b20f71db958e1491b0949c5d842d5f46c490ae2e"
+  },
+  "prior_audit": "../QWEN2_FIXED16_SFU_BOUND_20261011",
+  "summary": {
+    "default_unbound": {
+      "status": "TIMING_UNBOUND",
+      "scenario_cycles": null,
+      "predicted_full_block_cycles": null
+    },
+    "synthetic_c1": {
+      "status": "SCENARIO_DRAINED",
+      "scenario_cycles": 73,
+      "predicted_full_block_cycles": null
+    },
+    "synthetic_c2": {
+      "status": "SCENARIO_DRAINED",
+      "scenario_cycles": 60,
+      "predicted_full_block_cycles": null
+    }
+  },
+  "source_snapshot_policy": "Current sources tracked once at their production paths; immutable Git blob identities are retained",
+  "scope": "Model-only candidate, no hardware validation or full-cycle prediction"
+}

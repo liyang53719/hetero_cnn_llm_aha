@@ -1,0 +1,24 @@
+{
+  "status": "PASS_FOCUSED_TESTS",
+  "executed_utc": "2026-10-11T13:50:27Z",
+  "exit_code": 0,
+  "passed_tests": 56,
+  "environment": {
+    "OPENBLAS_NUM_THREADS": "4",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4"
+  },
+  "command": [
+    "work/recovery_20261011/python/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_qwen2_carried_prefill_candidate.py",
+    "tests/test_qwen2_bf16_materialization_candidate.py",
+    "tests/test_qwen2_rectangular_attention_model.py"
+  ],
+  "source_sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+  "test_sha256": "937184c86d94bf9bde9c97227a6db6950dd5fc0290c31f01087694dfa66836aa",
+  "stdout": "........................................................                 [100%]\n",
+  "scope": "Three focused software suites. No RTL/EDA. Captured from completed tool execution; no test rerun for this receipt."
+}

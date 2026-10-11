@@ -1,0 +1,38 @@
+{
+  "files": [
+    {
+      "path": "m128_ctx1_unbound.json",
+      "sha256": "45b8b34a2c9d0a19120cfdfce5e7df77fdcdc538a6292af3519f804ada400ac3",
+      "bytes": 25927
+    },
+    {
+      "path": "m128_ctx1_synthetic.json",
+      "sha256": "e1d8240eac24157dd51aca1164681ac6bb3cf522713c861ba6494e16ebc5cf3a",
+      "bytes": 35356
+    },
+    {
+      "path": "m1024_ctx1_unbound.json",
+      "sha256": "337c1d24164fc817716b541deb7047538112528963b47ffbe132bd91eea5fe71",
+      "bytes": 26099
+    },
+    {
+      "path": "m1024_ctx1_synthetic.json",
+      "sha256": "f00488ef4244e73f2da978c9835e0924699954743cf4b4eccbda6488d8673dd8",
+      "bytes": 35541
+    },
+    {
+      "path": "SUMMARY.json",
+      "sha256": "09e6572bdea08b6cedabbfe35f84cdedb37bb935ec6378ae0f229eb51b5b62b9",
+      "bytes": 2491
+    },
+    {
+      "path": "tests-resource.txt",
+      "sha256": "6062c87f119c72b4b23be6a0408032259b9704aa439dc720bf507360a53db810",
+      "bytes": 99
+    }
+  ],
+  "review_correction": "B payload size is distinct from physical depth*5+ctxN high-water; reserve whole 80-word/bank half =40960 bytes",
+  "default_timing_bound": false,
+  "synthetic_cycles_are_not_predictions": true,
+  "hardware_execution": false
+}

@@ -1,0 +1,84 @@
+{
+  "files": [
+    {
+      "path": "m16_first_RESULT.json",
+      "source": "work/qwen2_carried_candidate_m16_20261011/RESULT.json",
+      "bytes": 311342,
+      "sha256": "e74ee6ccecd1dcd11fd8bf6b927da2a061fff85cca2ae1bf3f0ad1d67ca6af10"
+    },
+    {
+      "path": "m16_RESULT.json",
+      "source": "work/qwen2_carried_candidate_m16_final_20261011/RESULT.json",
+      "bytes": 311477,
+      "sha256": "24b2c1b48549540cc8689701a270c6e80c1d79b9151a8c40676b7f2a1e773a52"
+    },
+    {
+      "path": "m16_FROZEN.json",
+      "source": "work/qwen2_carried_candidate_m16_final_20261011/FROZEN.json",
+      "bytes": 18586,
+      "sha256": "8e341f6cdb1d37f0368e458928f0e8bb795b11d6ed811b7d8c903e1f45fdf3ce"
+    },
+    {
+      "path": "m128_RESULT.json",
+      "source": "work/qwen2_carried_candidate_m128_final_20261011/RESULT.json",
+      "bytes": 321725,
+      "sha256": "316b962a61bc53adc5b8d2a0885c977e1fffb52af05ed3667a6494f003eb59c6"
+    },
+    {
+      "path": "m128_FROZEN.json",
+      "source": "work/qwen2_carried_candidate_m128_final_20261011/FROZEN.json",
+      "bytes": 24859,
+      "sha256": "5ff8ac4c446ddc8e2e291a18b05d1978ee089979a50c51fe18c8edff25c67150"
+    },
+    {
+      "path": "prior_ci_01cd.json",
+      "source": "work/recovery_20261011/ci_01cd/verification.json",
+      "bytes": 1693,
+      "sha256": "c4e9a83eadfe94af7a83976ee22dff8bf26c5cf8a7ed60353f2befc7d1e50a98"
+    },
+    {
+      "path": "COMPACT_MANIFEST.json",
+      "source": "work/qwen2_carried_compact_manifest_20261011.json",
+      "bytes": 20978,
+      "sha256": "f8cbaf23934d5159f40e1a18bc32d5f68b6c3ee31fcb22b304024c86519883c7"
+    },
+    {
+      "path": "FOCUSED_TESTS.json",
+      "source": "work/qwen2_carried_tests_20261011.json",
+      "bytes": 896,
+      "sha256": "080e496982f334dde60b6f91b0b61d93b722a2df27775e21885aabe12f676786"
+    },
+    {
+      "path": "POSTMORTEM.json",
+      "source": "work/qwen2_carried_postmortem_20261011.json",
+      "bytes": 34253,
+      "sha256": "df03842c4e5d052231e165d88e59b2f7eb93ebeb6d3d1a60c0733678dee39cc5"
+    },
+    {
+      "path": "Q_LINEAR_RMS_RESULT.json",
+      "source": "work/qwen2_carried_qlinear_rms_20261011/RESULT.json",
+      "bytes": 12262,
+      "sha256": "3a65ed9599c24ef7ed002c3a2dae90c7c408818efd91cf4a41d1cbf266deb454"
+    },
+    {
+      "path": "Q_LINEAR_RMS_FROZEN.json",
+      "source": "work/qwen2_carried_qlinear_rms_20261011/FROZEN.json",
+      "bytes": 5807,
+      "sha256": "06d96bea21cfe499325c833d2a1e11ec6f494f2d3045ff3dc6c8ac5e9a889418"
+    },
+    {
+      "path": "INTEGRATION_TESTS.txt",
+      "source": "work/recovery_20261011/fourth_model_tests.txt",
+      "bytes": 100,
+      "sha256": "91249d0928b88d37da3771db5563759c2c6abebef9c2c7d685173ff3ea670ee7"
+    }
+  ],
+  "excluded": [
+    "weights",
+    "raw activations and cache arrays",
+    "ELF",
+    "NPZ and encoded payloads"
+  ],
+  "local_unique_arrays_preserved": true,
+  "old_pass_not_rebound": true
+}

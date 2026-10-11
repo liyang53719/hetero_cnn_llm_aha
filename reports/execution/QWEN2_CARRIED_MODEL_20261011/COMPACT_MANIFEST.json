@@ -1,0 +1,634 @@
+{
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "scope": "Qwen2-1.5B L0 full block cold evidence reused, fresh carried M16 then M128; not all model layers.",
+  "source_files": [
+    {
+      "path": "scripts/qwen2_carried_prefill_candidate.py",
+      "bytes": 29479,
+      "sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6"
+    },
+    {
+      "path": "tests/test_qwen2_carried_prefill_candidate.py",
+      "bytes": 13393,
+      "sha256": "937184c86d94bf9bde9c97227a6db6950dd5fc0290c31f01087694dfa66836aa"
+    },
+    {
+      "path": "work/qwen2_carried_candidate_m16_final_20261011/RESULT.json",
+      "bytes": 311477,
+      "sha256": "24b2c1b48549540cc8689701a270c6e80c1d79b9151a8c40676b7f2a1e773a52"
+    },
+    {
+      "path": "work/qwen2_carried_candidate_m16_final_20261011/FROZEN.json",
+      "bytes": 18586,
+      "sha256": "8e341f6cdb1d37f0368e458928f0e8bb795b11d6ed811b7d8c903e1f45fdf3ce"
+    },
+    {
+      "path": "work/qwen2_carried_candidate_m128_final_20261011/RESULT.json",
+      "bytes": 321725,
+      "sha256": "316b962a61bc53adc5b8d2a0885c977e1fffb52af05ed3667a6494f003eb59c6"
+    },
+    {
+      "path": "work/qwen2_carried_candidate_m128_final_20261011/FROZEN.json",
+      "bytes": 24859,
+      "sha256": "5ff8ac4c446ddc8e2e291a18b05d1978ee089979a50c51fe18c8edff25c67150"
+    },
+    {
+      "path": "work/qwen2_carried_candidate_m16_20261011/RESULT.json",
+      "bytes": 311342,
+      "sha256": "e74ee6ccecd1dcd11fd8bf6b927da2a061fff85cca2ae1bf3f0ad1d67ca6af10"
+    },
+    {
+      "path": "work/qwen2_carried_postmortem_20261011.json",
+      "bytes": 34253,
+      "sha256": "df03842c4e5d052231e165d88e59b2f7eb93ebeb6d3d1a60c0733678dee39cc5"
+    },
+    {
+      "path": "work/qwen2_carried_qlinear_rms_diagnostic.py",
+      "bytes": 8643,
+      "sha256": "b6e34ad2ca89ed5c6e35493933c18a8bf90d7d1de3ece2d108d2eeb82a5baee7"
+    },
+    {
+      "path": "work/qwen2_carried_qlinear_rms_20261011/RESULT.json",
+      "bytes": 12262,
+      "sha256": "3a65ed9599c24ef7ed002c3a2dae90c7c408818efd91cf4a41d1cbf266deb454"
+    },
+    {
+      "path": "work/qwen2_carried_qlinear_rms_20261011/FROZEN.json",
+      "bytes": 5807,
+      "sha256": "06d96bea21cfe499325c833d2a1e11ec6f494f2d3045ff3dc6c8ac5e9a889418"
+    },
+    {
+      "path": "work/qwen2_carried_tests_20261011.json",
+      "bytes": 896,
+      "sha256": "080e496982f334dde60b6f91b0b61d93b722a2df27775e21885aabe12f676786"
+    }
+  ],
+  "tests": {
+    "status": "PASS_FOCUSED_TESTS",
+    "executed_utc": "2026-10-11T13:50:27Z",
+    "exit_code": 0,
+    "passed_tests": 56,
+    "environment": {
+      "OPENBLAS_NUM_THREADS": "4",
+      "OMP_NUM_THREADS": "4",
+      "MKL_NUM_THREADS": "4"
+    },
+    "command": [
+      "work/recovery_20261011/python/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_qwen2_carried_prefill_candidate.py",
+      "tests/test_qwen2_bf16_materialization_candidate.py",
+      "tests/test_qwen2_rectangular_attention_model.py"
+    ],
+    "source_sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+    "test_sha256": "937184c86d94bf9bde9c97227a6db6950dd5fc0290c31f01087694dfa66836aa",
+    "stdout": "........................................................                 [100%]\n",
+    "scope": "Three focused software suites. No RTL/EDA. Captured from completed tool execution; no test rerun for this receipt."
+  },
+  "runs": {
+    "16": {
+      "cpp_sha256": "0aaf9d3b96812694edb7adfd2fef5affb01ee206c8b743a64426752f59c60877",
+      "binary_sha256": "7b76e11af0f28ca9849fbd8984fcc580e108d03915e4bbcbdef128972cc22872",
+      "generator_sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+      "carried_wall_seconds": 4.548964539000735,
+      "semantic_checks": 14,
+      "all_semantics_exact": true,
+      "cold_result_sha256": "c1130e1d979cc052769d7bfc35d170461e9d84bf8e594d326401bc3a63448a41",
+      "cold_evidence_reused": true,
+      "same_binary_pair": false,
+      "retained_v0_status": "FAIL_EXISTING_FP32_FINAL_BUDGET",
+      "prior_cache_files": [
+        {
+          "role": "cache_k",
+          "path": "previous_cache_k.f32le",
+          "sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0",
+          "bytes": 16384,
+          "source_export_sha256": "d8013ced92babfe6a099fdad23a817e8d9de5d0a78e6d411c566bd0a0710ce77"
+        },
+        {
+          "role": "cache_v",
+          "path": "previous_cache_v.f32le",
+          "sha256": "993b6f4c6b953eb52d7f8a693da9891f8b84c9eaf5d048df4bf31bd6cd640f33",
+          "bytes": 16384,
+          "source_export_sha256": "bebad266267c3f1933d709e2870310c6b1f89a8d6cc733e8c090264c253259d2"
+        }
+      ],
+      "method_results": {
+        "official_self_cache": {
+          "failed_stages": [],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                16,
+                1536
+              ],
+              "elements": 24576,
+              "max_abs": 0.001953125,
+              "mean_abs": 9.087535242239634e-06,
+              "relative_l2": 0.00038941551323327836,
+              "cosine": 0.9999999241832147,
+              "normalized_max_abs": 0.00044014084507042255,
+              "different_elements": 589,
+              "bit_exact": false,
+              "first_difference_flat": 4609,
+              "actual_f32_sha256": "fc57784c3e718497914759f5d0d4e0c4c742a272aadffd2233f854085c8a7658",
+              "reference_f32_sha256": "2f859a330a2de9c03843c4933ad9f1b18662b0651720ed6a151dbc05d3710de1",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              3,
+              689
+            ],
+            "candidate_at_max": -0.23828125,
+            "reference_at_max": -0.236328125
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        },
+        "independent_self_cache": {
+          "failed_stages": [
+            "logits",
+            "scores"
+          ],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                16,
+                1536
+              ],
+              "elements": 24576,
+              "max_abs": 0.0078125,
+              "mean_abs": 4.8576543728510536e-05,
+              "relative_l2": 0.0011537151115602077,
+              "cosine": 0.9999993365836195,
+              "normalized_max_abs": 0.0017605633802816902,
+              "different_elements": 1804,
+              "bit_exact": false,
+              "first_difference_flat": 22,
+              "actual_f32_sha256": "fc57784c3e718497914759f5d0d4e0c4c742a272aadffd2233f854085c8a7658",
+              "reference_f32_sha256": "fe5d42042f6ec3dfe993ba6593ad09b8c41d09f06f932270fbdb2aadf4f89079",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              14,
+              518
+            ],
+            "candidate_at_max": 1.3203125,
+            "reference_at_max": 1.3125
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        },
+        "official_candidate_cache": {
+          "failed_stages": [],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                16,
+                1536
+              ],
+              "elements": 24576,
+              "max_abs": 0.001953125,
+              "mean_abs": 9.087535242239634e-06,
+              "relative_l2": 0.00038941551323327836,
+              "cosine": 0.9999999241832147,
+              "normalized_max_abs": 0.00044014084507042255,
+              "different_elements": 589,
+              "bit_exact": false,
+              "first_difference_flat": 4609,
+              "actual_f32_sha256": "fc57784c3e718497914759f5d0d4e0c4c742a272aadffd2233f854085c8a7658",
+              "reference_f32_sha256": "2f859a330a2de9c03843c4933ad9f1b18662b0651720ed6a151dbc05d3710de1",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              3,
+              689
+            ],
+            "candidate_at_max": -0.23828125,
+            "reference_at_max": -0.236328125
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        },
+        "independent_candidate_cache": {
+          "failed_stages": [
+            "logits",
+            "scores"
+          ],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                16,
+                1536
+              ],
+              "elements": 24576,
+              "max_abs": 0.0078125,
+              "mean_abs": 3.808915304640929e-05,
+              "relative_l2": 0.001075626577845216,
+              "cosine": 0.9999994233683014,
+              "normalized_max_abs": 0.0017605633802816902,
+              "different_elements": 1131,
+              "bit_exact": false,
+              "first_difference_flat": 685,
+              "actual_f32_sha256": "fc57784c3e718497914759f5d0d4e0c4c742a272aadffd2233f854085c8a7658",
+              "reference_f32_sha256": "a9c5104f87e3ce76a9341ef28cce96f84b6b331ffbff0db5abb4fd3b252c9567",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              14,
+              518
+            ],
+            "candidate_at_max": 1.3203125,
+            "reference_at_max": 1.3125
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        }
+      }
+    },
+    "128": {
+      "cpp_sha256": "0aaf9d3b96812694edb7adfd2fef5affb01ee206c8b743a64426752f59c60877",
+      "binary_sha256": "7b76e11af0f28ca9849fbd8984fcc580e108d03915e4bbcbdef128972cc22872",
+      "generator_sha256": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+      "carried_wall_seconds": 30.658695786998578,
+      "semantic_checks": 14,
+      "all_semantics_exact": true,
+      "cold_result_sha256": "7b7de4815daf592b9a807f9057788b7aa815381f2e9c2e65e73ecf18b2c4bb29",
+      "cold_evidence_reused": true,
+      "same_binary_pair": false,
+      "retained_v0_status": "FAIL_EXISTING_FP32_FINAL_BUDGET",
+      "prior_cache_files": [
+        {
+          "role": "cache_k",
+          "path": "previous_cache_k.f32le",
+          "sha256": "4235e281e15b19775085e0b4c2919ee2a433cc3e54f510b3ace76856d0b1fd60",
+          "bytes": 131072,
+          "source_export_sha256": "c4dd94a2d86717d4fb63057275c3265cf11f3a53ce2f1c2c5c1d09f2f695151a"
+        },
+        {
+          "role": "cache_v",
+          "path": "previous_cache_v.f32le",
+          "sha256": "d4858f057b4df5314b90825c1492d08b92d99e6880f8ab1421b70a76da6d79f5",
+          "bytes": 131072,
+          "source_export_sha256": "1e70c348b9a66d6f2c40bbe6f0f26bb81a4524c07f4ff0139b67997517f6a38b"
+        }
+      ],
+      "method_results": {
+        "official_self_cache": {
+          "failed_stages": [
+            "act",
+            "att",
+            "down",
+            "gate",
+            "logits",
+            "n1",
+            "o",
+            "prob",
+            "pv",
+            "q",
+            "qr",
+            "r",
+            "scores",
+            "silu",
+            "up"
+          ],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                128,
+                1536
+              ],
+              "elements": 196608,
+              "max_abs": 0.0390625,
+              "mean_abs": 0.00024341155464450517,
+              "relative_l2": 0.004783872111857798,
+              "cosine": 0.9999885572184178,
+              "normalized_max_abs": 0.008012820512820512,
+              "different_elements": 48667,
+              "bit_exact": false,
+              "first_difference_flat": 259,
+              "actual_f32_sha256": "54611174baadf7838f4fd12ac0434980e11a67fd3df05f06489156e8a25a36d8",
+              "reference_f32_sha256": "45a65b55eec4ef650678f31130b22c5570ef03c967c5cb9df8c677c1ae74304c",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              76,
+              1484
+            ],
+            "candidate_at_max": -0.138671875,
+            "reference_at_max": -0.177734375
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        },
+        "independent_self_cache": {
+          "failed_stages": [
+            "act",
+            "att",
+            "down",
+            "gate",
+            "logits",
+            "n1",
+            "o",
+            "prob",
+            "pv",
+            "q",
+            "qr",
+            "r",
+            "scores",
+            "silu",
+            "up"
+          ],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                128,
+                1536
+              ],
+              "elements": 196608,
+              "max_abs": 0.0390625,
+              "mean_abs": 0.0002214503571546326,
+              "relative_l2": 0.004724105552697228,
+              "cosine": 0.9999888413525239,
+              "normalized_max_abs": 0.008012820512820512,
+              "different_elements": 42994,
+              "bit_exact": false,
+              "first_difference_flat": 375,
+              "actual_f32_sha256": "54611174baadf7838f4fd12ac0434980e11a67fd3df05f06489156e8a25a36d8",
+              "reference_f32_sha256": "82f2a828c32821e15dbda6273ccbbdd131bfc08300874e72f6cb075d4195b6fd",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              76,
+              1484
+            ],
+            "candidate_at_max": -0.138671875,
+            "reference_at_max": -0.177734375
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        },
+        "official_candidate_cache": {
+          "failed_stages": [
+            "act",
+            "att",
+            "down",
+            "gate",
+            "logits",
+            "n1",
+            "o",
+            "prob",
+            "pv",
+            "q",
+            "qr",
+            "r",
+            "scores",
+            "silu",
+            "up"
+          ],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                128,
+                1536
+              ],
+              "elements": 196608,
+              "max_abs": 0.0390625,
+              "mean_abs": 0.0002426624996587634,
+              "relative_l2": 0.0047815096996717665,
+              "cosine": 0.9999885685171804,
+              "normalized_max_abs": 0.008012820512820512,
+              "different_elements": 48451,
+              "bit_exact": false,
+              "first_difference_flat": 259,
+              "actual_f32_sha256": "54611174baadf7838f4fd12ac0434980e11a67fd3df05f06489156e8a25a36d8",
+              "reference_f32_sha256": "41e4523879399692d439404382b18ca53fdc8eb612f989ef59235e5ab62061f9",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              76,
+              1484
+            ],
+            "candidate_at_max": -0.138671875,
+            "reference_at_max": -0.177734375
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        },
+        "independent_candidate_cache": {
+          "failed_stages": [
+            "act",
+            "att",
+            "down",
+            "gate",
+            "logits",
+            "n1",
+            "o",
+            "prob",
+            "pv",
+            "q",
+            "qr",
+            "r",
+            "scores",
+            "silu",
+            "up"
+          ],
+          "terminal_y": {
+            "name": "y",
+            "metrics": {
+              "shape": [
+                1,
+                128,
+                1536
+              ],
+              "elements": 196608,
+              "max_abs": 0.0390625,
+              "mean_abs": 0.00022076560223164657,
+              "relative_l2": 0.004722503989288597,
+              "cosine": 0.9999888489180425,
+              "normalized_max_abs": 0.008012820512820512,
+              "different_elements": 42775,
+              "bit_exact": false,
+              "first_difference_flat": 375,
+              "actual_f32_sha256": "54611174baadf7838f4fd12ac0434980e11a67fd3df05f06489156e8a25a36d8",
+              "reference_f32_sha256": "41cdf15e3ba70184f2f595a9352af35f7dd6f1b36f079a1181453edc2327cb63",
+              "finite": true
+            },
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            },
+            "max_abs_coordinate": [
+              0,
+              76,
+              1484
+            ],
+            "candidate_at_max": -0.138671875,
+            "reference_at_max": -0.177734375
+          },
+          "undefined_gates": [
+            "softmax_fp32"
+          ]
+        }
+      }
+    }
+  },
+  "commands": {
+    "M16": {
+      "environment": {
+        "OPENBLAS_NUM_THREADS": "4",
+        "OMP_NUM_THREADS": "4",
+        "MKL_NUM_THREADS": "4"
+      },
+      "argv": [
+        "work/recovery_20261011/python/bin/python",
+        "scripts/qwen2_carried_prefill_candidate.py",
+        "--cold",
+        "work/qwen2_bf16_candidate_v1_m16_final_20261011",
+        "--cold-sha256",
+        "c1130e1d979cc052769d7bfc35d170461e9d84bf8e594d326401bc3a63448a41",
+        "--payload",
+        "work/qwen2_layer0_payload_20261011",
+        "--tokens",
+        "16",
+        "--out",
+        "work/qwen2_carried_candidate_m16_final_20261011"
+      ]
+    },
+    "M128": {
+      "environment": {
+        "OPENBLAS_NUM_THREADS": "4",
+        "OMP_NUM_THREADS": "4",
+        "MKL_NUM_THREADS": "4"
+      },
+      "argv": [
+        "work/recovery_20261011/python/bin/python",
+        "scripts/qwen2_carried_prefill_candidate.py",
+        "--cold",
+        "work/qwen2_bf16_candidate_v1_m128_final_20261011",
+        "--cold-sha256",
+        "7b7de4815daf592b9a807f9057788b7aa815381f2e9c2e65e73ecf18b2c4bb29",
+        "--payload",
+        "work/qwen2_layer0_payload_20261011",
+        "--tokens",
+        "128",
+        "--small",
+        "work/qwen2_carried_candidate_m16_final_20261011",
+        "--small-sha256",
+        "24b2c1b48549540cc8689701a270c6e80c1d79b9151a8c40676b7f2a1e773a52",
+        "--out",
+        "work/qwen2_carried_candidate_m128_final_20261011"
+      ]
+    },
+    "Q_RMS_operator": {
+      "environment": {
+        "OPENBLAS_NUM_THREADS": "4",
+        "OMP_NUM_THREADS": "4",
+        "MKL_NUM_THREADS": "4"
+      },
+      "argv": [
+        "work/recovery_20261011/python/bin/python",
+        "work/qwen2_carried_qlinear_rms_diagnostic.py",
+        "--run",
+        "work/qwen2_carried_candidate_m128_final_20261011",
+        "--result-sha256",
+        "316b962a61bc53adc5b8d2a0885c977e1fffb52af05ed3667a6494f003eb59c6",
+        "--payload",
+        "work/qwen2_layer0_payload_20261011",
+        "--out",
+        "work/qwen2_carried_qlinear_rms_20261011"
+      ]
+    }
+  },
+  "reproduction_note": "Output directories are immutable existing evidence and overwrite is refused. Use new output names for any authorized rerun. Diagnostic CLI returns exit 1 even on completed computation."
+}

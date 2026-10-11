@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/workspace/shared/hetero-contracts-venv/bin/python",
+    "-m",
+    "pytest",
+    "-o",
+    "addopts=",
+    "-q",
+    "tests/test_qwen2_shared_sfu_schedule.py"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 1.034358697001153,
+  "stdout_sha256": "71aeb7d1fe3237cde0e6afb96d00154af237514da6d69fbc635d91a6ca64b325",
+  "scope": "15 focused software tests including tiny frozen C++ oracle; no RTL or full M128 run",
+  "source_sha256": {
+    "scripts/qwen2_shared_sfu_schedule.py": "09e69a806f89a608fdecbce4c90add49fa40e46bc90d75ddea832b535f921f6f",
+    "tests/test_qwen2_shared_sfu_schedule.py": "3484359a566e82706fe38073b20f71db958e1491b0949c5d842d5f46c490ae2e",
+    "doc/QWEN2_SHARED_SFU_SCHEDULE_MODEL_20261011_CN.md": "0d6b60916ac8e2c28ae396d2453e9617be2e6f3ac5dcdce61f5d0b3490fe5dce"
+  }
+}

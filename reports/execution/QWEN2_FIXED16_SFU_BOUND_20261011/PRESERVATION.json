@@ -1,0 +1,40 @@
+{
+  "files": [
+    {
+      "path": "RESULT.json",
+      "sha256": "34261201e23ee8532631040aeaf13e9f3be07899de0dee9e7c455c6dcfa2ae21",
+      "bytes": 10213,
+      "source": "work/qwen2_silu_fixed16_bound_20261011T1333/RESULT.json"
+    },
+    {
+      "path": "REPORT.md",
+      "sha256": "5645768bddb80f9ede034a21477d7b68d0323ba8abb783ee25df585b3c91d6d0",
+      "bytes": 4135,
+      "source": "work/qwen2_silu_fixed16_bound_20261011T1333/REPORT.md"
+    },
+    {
+      "path": "audit.py",
+      "sha256": "bc21408b333bc930ad833cf16b9696224a90c7713b1afac85a7aca1e6d5fcdee",
+      "bytes": 7128,
+      "source": "work/qwen2_silu_fixed16_bound_20261011T1333/audit.py"
+    },
+    {
+      "path": "MICRO_SCHEDULE_AUDIT.json",
+      "sha256": "7ad18d19fd0e1f1ac1b516de80d4e021e27eec7adeed62c04061c08b77b78c27",
+      "bytes": 4082,
+      "source": "work/qwen2_silu_fixed16_bound_20261011T1333/MICRO_SCHEDULE_AUDIT.json"
+    },
+    {
+      "path": "MICRO_SCHEDULE_AUDIT.md",
+      "sha256": "d9122ee9f7a38d2eb23e7fd1d34cb3ef0dce2a962f757c55fc485017fd43193d",
+      "bytes": 9304,
+      "source": "work/qwen2_silu_fixed16_bound_20261011T1333/MICRO_SCHEDULE_AUDIT.md"
+    }
+  ],
+  "scope": "source-bound lower bounds and microarchitecture candidate audit; no RTL or cycle prediction",
+  "excludes": [
+    "raw gate arrays",
+    "weight payloads",
+    "ELF"
+  ]
+}

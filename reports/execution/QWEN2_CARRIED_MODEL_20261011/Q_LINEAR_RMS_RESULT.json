@@ -1,0 +1,244 @@
+{
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "sealed_result_sha256": "316b962a61bc53adc5b8d2a0885c977e1fffb52af05ed3667a6494f003eb59c6",
+  "diagnostic_script_sha256": "b6e34ad2ca89ed5c6e35493933c18a8bf90d7d1de3ece2d108d2eeb82a5baee7",
+  "source_cpp_sha256": "0aaf9d3b96812694edb7adfd2fef5affb01ee206c8b743a64426752f59c60877",
+  "norm_function_sha256": "c33836931456961590c545bf59d7dc15d8bbcdcd1e7b22ff93a783c249fcd9ae",
+  "rms_only_cpp_sha256": "1ed4f77c76106a3b3e0f6122ffd2e3a403c3486cb293b7835e62cdd28def1e91",
+  "readonly_arena_sha256": "14df80c8cad821890d0bd927a5fd3646e4fb656a1f643c1dea6b6434a435bb77",
+  "compile_command": [
+    "/usr/bin/g++",
+    "-O2",
+    "-std=c++17",
+    "-ffp-contract=off",
+    "-fno-fast-math",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_carried_qlinear_rms_20261011/rms_only.cpp",
+    "-o",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_carried_qlinear_rms_20261011/rms_only"
+  ],
+  "official_reference_identity": {
+    "python": "3.12.14",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.3.5",
+    "transformers": "4.40.1",
+    "device": "cpu",
+    "attention": "eager",
+    "model_revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "forward_revision": "9fe3f585bb4ea29f209dc705d269fbe292e1128f",
+    "source_sha256": {
+      "modeling_qwen2.py": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+      "configuration_qwen2.py": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+      "config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136"
+    },
+    "installed_sources_verified_exact": true,
+    "torch_build": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+    "numpy_build": "{'Compilers': {'c': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'cc'}, 'cython': {'name': 'cython', 'linker': 'cython', 'version': '3.2.1', 'commands': 'cython'}, 'c++': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'c++'}}, 'Machine Information': {'host': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}, 'build': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}}, 'Build Dependencies': {'blas': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}, 'lapack': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}}, 'Python Information': {'path': '/tmp/build-env-aw1mwcap/bin/python', 'version': '3.12'}, 'SIMD Extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'], 'found': ['SSSE3', 'SSE41', 'POPCNT', 'SSE42', 'AVX', 'F16C', 'FMA3', 'AVX2', 'AVX512F', 'AVX512CD', 'AVX512_SKX', 'AVX512_CLX', 'AVX512_CNL', 'AVX512_ICL'], 'not found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}}",
+    "cache_utils_sha256": "2a4b6b398f8ea8631450a871b0a1bbc6b9722148970648c678745a06573bf18c",
+    "mask_utils_sha256": "fa17374bd60fde841bd8d65de072d085505243cc875d882985fcd3622cf08e5b",
+    "activations_sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+    "runner_sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+  },
+  "thread_limit": 4,
+  "input_node_sha256": {
+    "x": "6cfb0821d22e449a059ef309952ce399d5a559ecdd4c9bd10c934879ea843da6",
+    "n0": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720",
+    "qr": "375d39bb9d7d407bc8c19e52b8eebda0dd4cb9aa328488efd70fba536f14b08c"
+  },
+  "frozen_sha256": "06d96bea21cfe499325c833d2a1e11ec6f494f2d3045ff3dc6c8ac5e9a889418",
+  "status_detail": "MODEL_ONLY_SINGLE_OPERATOR_DIAGNOSTIC",
+  "whole_chain_replayed": false,
+  "original_receipt_modified": false,
+  "raw_linear_pre_bias_export_available": false,
+  "calls": {
+    "extracted_original_cpp_rms": 1,
+    "official_eager_rms": 1,
+    "official_eager_q_linear": 2
+  },
+  "rms": {
+    "extracted_cpp_vs_sealed_actual": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "relative_l2": 0.0,
+      "cosine": 0.9999999999999999,
+      "normalized_max_abs": 0.0,
+      "different_elements": 0,
+      "bit_exact": true,
+      "first_difference_flat": null,
+      "actual_f32_sha256": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720",
+      "reference_f32_sha256": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720",
+      "finite": true
+    },
+    "explicit_sequential_equations_vs_extracted_cpp": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "relative_l2": 0.0,
+      "cosine": 0.9999999999999999,
+      "normalized_max_abs": 0.0,
+      "different_elements": 0,
+      "bit_exact": true,
+      "first_difference_flat": null,
+      "actual_f32_sha256": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720",
+      "reference_f32_sha256": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720",
+      "finite": true
+    },
+    "official_rms_vs_sealed_official": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "relative_l2": 0.0,
+      "cosine": 1.0000000000000002,
+      "normalized_max_abs": 0.0,
+      "different_elements": 0,
+      "bit_exact": true,
+      "first_difference_flat": null,
+      "actual_f32_sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433",
+      "reference_f32_sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433",
+      "finite": true
+    },
+    "original_actual_vs_official": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.0078125,
+      "mean_abs": 3.8560635099808377e-07,
+      "relative_l2": 7.023056933236632e-05,
+      "cosine": 0.9999999975342477,
+      "normalized_max_abs": 0.000390625,
+      "different_elements": 35,
+      "bit_exact": false,
+      "first_difference_flat": 70677,
+      "actual_f32_sha256": "b5eb33e5b9c2b339e14354dff42b178706283219b02ae7d0a42ab34aae080720",
+      "reference_f32_sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433",
+      "finite": true
+    },
+    "rows": {
+      "174": {
+        "sequential_square_sum": 0.2802352011203766,
+        "sequential_mean": 0.00018244479724671692,
+        "official_mean": 0.00018244527745991945,
+        "sequential_inverse_sqrt": 73.83245086669922,
+        "official_rsqrt": 73.83235931396484
+      },
+      "204": {
+        "sequential_square_sum": 0.28944888710975647,
+        "sequential_mean": 0.0001884432858787477,
+        "official_mean": 0.00018844376609195024,
+        "sequential_inverse_sqrt": 72.65414428710938,
+        "official_rsqrt": 72.654052734375
+      }
+    }
+  },
+  "q_linear": {
+    "actual_qr_vs_official_linear_conditioned_actual_n0": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.00390625,
+      "mean_abs": 8.28505714404552e-08,
+      "relative_l2": 3.953482108021776e-06,
+      "cosine": 0.999999999992185,
+      "normalized_max_abs": 6.706008583690987e-05,
+      "different_elements": 30,
+      "bit_exact": false,
+      "first_difference_flat": 5238,
+      "actual_f32_sha256": "375d39bb9d7d407bc8c19e52b8eebda0dd4cb9aa328488efd70fba536f14b08c",
+      "reference_f32_sha256": "5433a025c3803a4e58c46239b068c1b8ffb8863edafd8878b72f00969d1ecc6d",
+      "finite": true
+    },
+    "actual_qr_vs_official_linear_conditioned_official_n0": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.125,
+      "mean_abs": 4.967734488066829e-06,
+      "relative_l2": 8.574725975609938e-05,
+      "cosine": 0.9999999963245308,
+      "normalized_max_abs": 0.002145922746781116,
+      "different_elements": 462,
+      "bit_exact": false,
+      "first_difference_flat": 5238,
+      "actual_f32_sha256": "375d39bb9d7d407bc8c19e52b8eebda0dd4cb9aa328488efd70fba536f14b08c",
+      "reference_f32_sha256": "d67fdf1a85857c0deaa9b09ee0390b9879082e3d691e083abb727afd3e1e3052",
+      "finite": true
+    },
+    "official_n0_control_vs_sealed_official_qr": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "relative_l2": 0.0,
+      "cosine": 1.0,
+      "normalized_max_abs": 0.0,
+      "different_elements": 0,
+      "bit_exact": true,
+      "first_difference_flat": null,
+      "actual_f32_sha256": "d67fdf1a85857c0deaa9b09ee0390b9879082e3d691e083abb727afd3e1e3052",
+      "reference_f32_sha256": "d67fdf1a85857c0deaa9b09ee0390b9879082e3d691e083abb727afd3e1e3052",
+      "finite": true
+    },
+    "changed_input_only_effect": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "elements": 196608,
+      "max_abs": 0.125,
+      "mean_abs": 4.884961526840925e-06,
+      "relative_l2": 8.565607139180094e-05,
+      "cosine": 0.9999999963323448,
+      "normalized_max_abs": 0.002145922746781116,
+      "different_elements": 433,
+      "bit_exact": false,
+      "first_difference_flat": 70664,
+      "actual_f32_sha256": "5433a025c3803a4e58c46239b068c1b8ffb8863edafd8878b72f00969d1ecc6d",
+      "reference_f32_sha256": "d67fdf1a85857c0deaa9b09ee0390b9879082e3d691e083abb727afd3e1e3052",
+      "finite": true
+    }
+  },
+  "threshold_policy": {
+    "source": "spec/numerical_contract.md",
+    "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract"
+  },
+  "seconds": 0.12034430700077792,
+  "rms_binary_sha256": "81339a3e46b4c2412cb6eb367f2e3e37e7db19f35f5c67f5c89fe614de8f2d04"
+}

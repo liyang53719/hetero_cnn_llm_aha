@@ -1,0 +1,65 @@
+{
+  "reports": [
+    {
+      "file": "/tmp/qwen2-resource-reviewed-20261011/m128_ctx1_unbound.json",
+      "sha256": "45b8b34a2c9d0a19120cfdfce5e7df77fdcdc538a6292af3519f804ada400ac3",
+      "tokens": 128,
+      "contexts": 1,
+      "status": "UNBOUND_RESOURCE_RESERVATION_MODEL",
+      "useful_macs": 6014828544,
+      "dense_weight_read_bytes": 242221056,
+      "peak_owned_B_bytes": 40960,
+      "synthetic_scheduled_cycles": null,
+      "predicted_full_block_cycles": null,
+      "owner_count": 19,
+      "public_stages": 21
+    },
+    {
+      "file": "/tmp/qwen2-resource-reviewed-20261011/m128_ctx1_synthetic.json",
+      "sha256": "e1d8240eac24157dd51aca1164681ac6bb3cf522713c861ba6494e16ebc5cf3a",
+      "tokens": 128,
+      "contexts": 1,
+      "status": "SYNTHETIC_RESOURCE_SCENARIO",
+      "useful_macs": 6014828544,
+      "dense_weight_read_bytes": 242221056,
+      "peak_owned_B_bytes": 40960,
+      "synthetic_scheduled_cycles": 111130548,
+      "predicted_full_block_cycles": null,
+      "owner_count": 19,
+      "public_stages": 21
+    },
+    {
+      "file": "/tmp/qwen2-resource-reviewed-20261011/m1024_ctx1_unbound.json",
+      "sha256": "337c1d24164fc817716b541deb7047538112528963b47ffbe132bd91eea5fe71",
+      "tokens": 1024,
+      "contexts": 1,
+      "status": "UNBOUND_RESOURCE_RESERVATION_MODEL",
+      "useful_macs": 49527914496,
+      "dense_weight_read_bytes": 1739587584,
+      "peak_owned_B_bytes": 40960,
+      "synthetic_scheduled_cycles": null,
+      "predicted_full_block_cycles": null,
+      "owner_count": 19,
+      "public_stages": 21
+    },
+    {
+      "file": "/tmp/qwen2-resource-reviewed-20261011/m1024_ctx1_synthetic.json",
+      "sha256": "f00488ef4244e73f2da978c9835e0924699954743cf4b4eccbda6488d8673dd8",
+      "tokens": 1024,
+      "contexts": 1,
+      "status": "SYNTHETIC_RESOURCE_SCENARIO",
+      "useful_macs": 49527914496,
+      "dense_weight_read_bytes": 1739587584,
+      "peak_owned_B_bytes": 40960,
+      "synthetic_scheduled_cycles": 1773274756,
+      "predicted_full_block_cycles": null,
+      "owner_count": 19,
+      "public_stages": 21
+    }
+  ],
+  "sources": {
+    "scripts/qwen2_prefill_resource_schedule.py": "183946bcb51c83f2028f51e9edc925efc0ed525990a390434cf23d727b283cdd",
+    "tests/test_qwen2_prefill_resource_schedule.py": "7353c5e20553cfeb6a6c17b6c2c50b66b2ae41938e9c2db6e65561ca1296f6cb",
+    "doc/QWEN2_PREFILL_RESOURCE_SCHEDULE_20261011_CN.md": "6a42cc6310f2bbda1f2d4d10f39d43cfdc5f748f3b9e540a3a035f2521355f44"
+  }
+}

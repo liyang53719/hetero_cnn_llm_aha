@@ -1,0 +1,15 @@
+{
+  "status": "INDEPENDENT_REVIEW_NO_REMAINING_BLOCKER",
+  "reviewer": "/root/integrate_qwen35_qkv_commands/review_resource_sfu_models",
+  "intermediate_finding": {
+    "severity": "P1",
+    "description": "A later-context fault withdrew an earlier valid output under backpressure and released both contexts before ready.",
+    "reproducer": "gates [80]*16 then [1]*16; up=1; C2; divider latency12/II13; ready=false; fault batch1 lane0 up_multiply",
+    "failing_script_sha256": "f3a26bd245cab2790131e50e5614e7acbcca36db57637eb71860e3022f5bdad1",
+    "fix": "Hold offer/context until fire even after poison; separately record poisoned output drain; stalled-ready case remains incomplete. Exact regression included."
+  },
+  "additional_review_fix": "Enumerated register fields and explicit held-offer valid/context state; numeric-oracle overflow drains as unsupported diagnostic domain without fabricated flags.",
+  "current_source_sha256": "09e69a806f89a608fdecbce4c90add49fa40e46bc90d75ddea832b535f921f6f",
+  "final_reviewer_message": "Final ledger change reviewed at script09e69a806f89a608fdecbce4c90add49fa40e46bc90d75ddea832b535f921f6f and tests3484359a566e82706fe38073b20f71db958e1491b0949c5d842d5f46c490ae2e. Independent fault/backpressure and overflow repros pass; no remaining review blocker within declared software-only scope.",
+  "test_receipt_sha256": "9441cc31f8e0bf05407d6d9bea15e5085df37280d915daef84c0246cef3fde09"
+}

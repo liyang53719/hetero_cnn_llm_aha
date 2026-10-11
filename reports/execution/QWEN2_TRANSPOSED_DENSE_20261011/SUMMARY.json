@@ -1,0 +1,1063 @@
+{
+  "schema": "qwen2-transposed-model-v1",
+  "status": "MODEL_ONLY_DIAGNOSTIC_NOT_ACCEPTED",
+  "source_base_commit": "f28f7a5fa6b45b820b18e972090190c84303e693",
+  "scope": {
+    "model": "Qwen/Qwen2-1.5B-Instruct",
+    "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "layer": 0,
+    "arithmetic": "unchanged v0",
+    "input_dtype": "FP32 hidden fixture, BF16-RNE Matrix operands",
+    "weight_dtype": "BF16 expanded losslessly to FP32 fixture",
+    "output_dtype": "FP32",
+    "backend": "ordinary C++ software model; not Chisel execution or RTL simulation",
+    "cold_only": true,
+    "carried": false
+  },
+  "execution": {
+    "prepared_sha256": "7b922d9875f265e0d9af052934d044d8c85be71ce022264357e6f20945169f4e",
+    "arena_sha256": "c34bcef98ca05d3c05087559741152082492b40fa6b74e072a1dec589c964a69",
+    "arena_bytes": 188043264,
+    "cpp_sha256": "4ce29539e1bd7345d5ccee88c7d70b056ec39bdadae4df416ebb401b9afbdcc1",
+    "elf_sha256": "2db7e74b6d434af4d65843059ead7c9084b77d6f17353e1bb24b2a8fa6f26cdb",
+    "header_sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30",
+    "layout_sha256": "e31bc17accf8c6184c0eabf5c22b6bb34b748afa76271493f7ec679d93722e93",
+    "executed_runner_sha256": "ddefda58a109af82f8caee9aa6cbfebf26eca8febcfdbb37788f3e9586a9b4bc",
+    "comparison_driver_sha256": "a7f763f03658a96ee7aca8b454fcce98f640d4f95c18c6fd96b2c30b685ae2cf",
+    "strict_flags": [
+      "-O2",
+      "-std=c++17",
+      "-ffp-contract=off",
+      "-fno-fast-math"
+    ],
+    "compiler_version": "g++ (Debian 14.2.0-19) 14.2.0",
+    "single_cpu": true,
+    "timeout_seconds_each": 180,
+    "attempts_each": 1,
+    "hardware_cycles": null,
+    "hardware_mac_utilization": null
+  },
+  "source_identity": {
+    "base_recipe_identity": {
+      "source_sha256": {
+        "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43"
+      },
+      "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "section_sha256": {
+        "helpers": "d1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b",
+        "math": "4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8",
+        "layout": "c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f"
+      },
+      "git_head": "f28f7a5fa6b45b820b18e972090190c84303e693",
+      "source_pass_reference_commit": "299949a03876fb561010afb6e1d83097db0ca593",
+      "source_pass_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "attention_event_sha256": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8",
+      "attention_helper_sha256": "86cc97dd7f1cfe3c6c87ca5193089411c874d00a938f445238283918e7bef702",
+      "replaced_attention_sha256": "aa89447445c3e989de24fb8d7bdbf0f2606b533f4c74d01b17e6c2bc18dd13e6",
+      "resident_attention_body_sha256": "71993f742c341d24b50fe56cdecb4ec4905099144bfd071baa46f950c4bfdb32",
+      "non_replaced_math_sha256": "a21180c2114511067232de90d9117f51874b8e7beb18f047f493f59aeb9dbf5b",
+      "base_runner_sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+      "schedule_sha256": "47e8f3acd6b7dafe4e6fe731cae20205ab93c6208af12b48eb01373edcaa2175",
+      "replaced_dense_sha256": "40c21155585668fd85ceb7aa0556e985667ae133d95f6f9dfdae022583bff38d",
+      "non_dense_math_sha256": "6125f06639ac847cb17762e238af0dde01682949943901c7fd9436e8bb221de3",
+      "resident_dense_body_sha256": "55aa0e8c1781cc1ee1554911495ad3fa91d7da2cd30b66138bc4d247dc6114c0",
+      "rectangular_attention": true
+    },
+    "actual_mapping": "transposed_m128_n32_a688_b80_retained_fullk",
+    "original_mapping": "resident_m128_nc3_with_rectangular_attention",
+    "transposed_body_sha256": "5db5c1d071d87a6601200706bb709be486235d6bd8671d3018eb792d42dbce6e",
+    "inserted_dense_sha256": "e0f112becd2894f60424560c1a2a1981b5845038412442c6c0ce3f47684348b1",
+    "original_support_sha256": "60cab40de4969a78693e972a696d1e251baa65f4ba04a1c5c37d028fe8170343",
+    "mapped_support_sha256": "1417f716e069cf79e3f876f5a813f885a8679540c636772292778b1010b4c8f1",
+    "unchanged_attention_body_sha256": "71993f742c341d24b50fe56cdecb4ec4905099144bfd071baa46f950c4bfdb32",
+    "support_capacity_replacements": {
+      "uint16_t ac[16][1024][16], b[16][512][16];": "uint16_t ac[16][1376][16], b[16][160][16];",
+      "base<=1024 && 5*32<=512": "base<=1376 && 5*32<=160",
+      "depth=o.inB?512:1024": "depth=o.inB?160:1376",
+      "sizeof(RectangularAttentionStorage::ac)==524288 && sizeof(RectangularAttentionStorage::b)==262144": "sizeof(RectangularAttentionStorage::ac)==704512 && sizeof(RectangularAttentionStorage::b)==81920"
+    },
+    "body_only_replacement_plus_support_capacity_patch": true
+  },
+  "executed_small_source_sha256": {
+    "work/qwen2_transposed_mapping_20261011/compare.py": "a7f763f03658a96ee7aca8b454fcce98f640d4f95c18c6fd96b2c30b685ae2cf",
+    "work/qwen2_transposed_mapping_20261011/transposed_dense.inc.cpp": "5db5c1d071d87a6601200706bb709be486235d6bd8671d3018eb792d42dbce6e",
+    "work/qwen2_transposed_mapping_20261011/small_tests.inc.cpp": "331b4ee38b044766fdbce8bc8b9235bfff53ca356eb762fb6c4d9f95297a82e9",
+    "scripts/qwen2_dense_residency_numeric.py": "ed027ecee56b9bb14c13f190ad4e47433df82a11e26d9157f5e22912a078a114",
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "scripts/qwen2_prefill_resource_schedule.py": "47e8f3acd6b7dafe4e6fe731cae20205ab93c6208af12b48eb01373edcaa2175",
+    "scripts/qwen2_prefill_traffic_bound.py": "3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697",
+    "scripts/qwen2_rectangular_attention_model.py": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+    "reports/execution/QWEN2_DENSE_RESIDENCY_NUMERIC_20261011/SUMMARY.json": "e96ea8516962e0f57acbc59f6866a2c016516882a0177137eee06ee33ab1ee3a",
+    "reports/execution/QWEN2_RESIDENT_SEED_FRONTEND_20261011/SUMMARY.json": "73c0e533f7b50fa5c728d04406df080b6113d49c9f1d1e9280a6829754f37d75"
+  },
+  "numeric_small": {
+    "generated_cpp_sha256": "f7aa842673209d3696317cd380810457ac9cff8eb7ec3c6bdee521717640674d",
+    "binary_sha256": "5666dd74e82c5b69c7b61d8c9b1433c0f3563d64ac964777161e9a7ecdcbd9ca",
+    "log_sha256": "4f8441af41f7edf59fc3f194f34b9a3edac13e742883761023365b3fdb5ef447",
+    "mapped_runs": 20,
+    "checked_values": 79360,
+    "bit_mismatches": 0,
+    "swap_probe_triplets": 5222400,
+    "full_finite_cartesian_domain_exhausted": false,
+    "error_rejections": 18,
+    "arithmetic_rewrite_negative_controls": 2
+  },
+  "cases": [
+    {
+      "tokens": 16,
+      "mode": "cold_prefill",
+      "status": "MODEL_ONLY_DIAGNOSTIC_NOT_ACCEPTED",
+      "all_15_stages_bit_exact": true,
+      "values": 663552,
+      "cpu_wall_seconds": 100.31014785800653,
+      "receipt_sha256": "5aae342312f28c2eab6f81d98b4169d17379eaeb55da1081e6b3a7a12fe67b13",
+      "run_log_sha256": "9f86893d1380deea4c3ca826c663241f034a0bf6f200d2e1e435f32af6838675",
+      "stages": [
+        {
+          "phase": 0,
+          "name": "n0",
+          "width": 1536,
+          "path": "phase_0_n0_recipe.f32le",
+          "sha256": "5655e37126288598ade3473ed7b8799f56db75b6c3eb3d6857ad6c7517d362de"
+        },
+        {
+          "phase": 1,
+          "name": "qr",
+          "width": 1536,
+          "path": "phase_1_qr_recipe.f32le",
+          "sha256": "536f8957b6d671e2d2b09a1b0da85f8d0ad415903413d57b3db752907a67b9fb"
+        },
+        {
+          "phase": 2,
+          "name": "kr",
+          "width": 256,
+          "path": "phase_2_kr_recipe.f32le",
+          "sha256": "f2957b72d490a5c74260aa7e4c57d54e573fec91cacf6884f3931ab89d6d7c28"
+        },
+        {
+          "phase": 3,
+          "name": "v",
+          "width": 256,
+          "path": "phase_3_v_recipe.f32le",
+          "sha256": "cdee098a19a5c27b4c5e627c1a77dfff65658988291b9bf0e539f8286d7cfc46"
+        },
+        {
+          "phase": 4,
+          "name": "q",
+          "width": 1536,
+          "path": "phase_4_q_recipe.f32le",
+          "sha256": "e43306a3d5b92fce094fbcf6f41f64468f5aa2bd463880e58a4a74721ae6563c"
+        },
+        {
+          "phase": 5,
+          "name": "k",
+          "width": 256,
+          "path": "phase_5_k_recipe.f32le",
+          "sha256": "515f5a82231d33ab4e65bc20462d7798443d2920cd551d51262961413094b2b5"
+        },
+        {
+          "phase": 6,
+          "name": "att",
+          "width": 1536,
+          "path": "phase_6_att_recipe.f32le",
+          "sha256": "85209d261b74f8ec2b60bdc771ece64171fdcb505aa867c0294c841f7f179816"
+        },
+        {
+          "phase": 7,
+          "name": "o",
+          "width": 1536,
+          "path": "phase_7_o_recipe.f32le",
+          "sha256": "399743882391dc83e2bee575b33ba470504d50f85402052954e6f463fb17a341"
+        },
+        {
+          "phase": 8,
+          "name": "r",
+          "width": 1536,
+          "path": "phase_8_r_recipe.f32le",
+          "sha256": "f2913af9b657c268d0b1aee8849d78fa855af547a0c40e4a8d5975cacf21ce34"
+        },
+        {
+          "phase": 9,
+          "name": "n1",
+          "width": 1536,
+          "path": "phase_9_n1_recipe.f32le",
+          "sha256": "ab75154372eb177f18136f53e7c008faeb40aedeac59e11fdb38bcd866beed25"
+        },
+        {
+          "phase": 10,
+          "name": "gate",
+          "width": 8960,
+          "path": "phase_10_gate_recipe.f32le",
+          "sha256": "ddb89944efd70e3500c4498f88d48464da5f0c13e1df11f102255ba1b8a90bfb"
+        },
+        {
+          "phase": 11,
+          "name": "up",
+          "width": 8960,
+          "path": "phase_11_up_recipe.f32le",
+          "sha256": "19fe52258f8b4885f213b00e6a6fa418c6c1d187f3f4d086df1763ca26ffa26d"
+        },
+        {
+          "phase": 12,
+          "name": "act",
+          "width": 8960,
+          "path": "phase_12_act_recipe.f32le",
+          "sha256": "ecf19196ce9f5a715aea586cf7729990ea2b5e4707e3e85d0f3d38c8a82d5c6f"
+        },
+        {
+          "phase": 13,
+          "name": "down",
+          "width": 1536,
+          "path": "phase_13_down_recipe.f32le",
+          "sha256": "640b7e45009b417245c4aa521c7336f98628a5b4e0256016e9a38fb9a5e969d4"
+        },
+        {
+          "phase": 14,
+          "name": "y",
+          "width": 1536,
+          "path": "phase_14_y_recipe.f32le",
+          "sha256": "82028d42f23ee898fffa4058da241d41622bbf09f2548fa95dc55410b6adbf9a"
+        }
+      ],
+      "dense": [
+        {
+          "m": 16,
+          "k": 1536,
+          "n": 1536,
+          "a_values": 24576,
+          "w_values": 2359296,
+          "issues": 73728,
+          "swapped_fmas": 301989888,
+          "refill_phases": 4608,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 16,
+          "k": 1536,
+          "n": 256,
+          "a_values": 24576,
+          "w_values": 393216,
+          "issues": 12288,
+          "swapped_fmas": 50331648,
+          "refill_phases": 4608,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 16,
+          "k": 1536,
+          "n": 256,
+          "a_values": 24576,
+          "w_values": 393216,
+          "issues": 12288,
+          "swapped_fmas": 50331648,
+          "refill_phases": 4608,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 16,
+          "k": 1536,
+          "n": 1536,
+          "a_values": 24576,
+          "w_values": 2359296,
+          "issues": 73728,
+          "swapped_fmas": 301989888,
+          "refill_phases": 4608,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 16,
+          "k": 1536,
+          "n": 8960,
+          "a_values": 24576,
+          "w_values": 13762560,
+          "issues": 430080,
+          "swapped_fmas": 1761607680,
+          "refill_phases": 4608,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 16,
+          "k": 1536,
+          "n": 8960,
+          "a_values": 24576,
+          "w_values": 13762560,
+          "issues": 430080,
+          "swapped_fmas": 1761607680,
+          "refill_phases": 4608,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 16,
+          "k": 8960,
+          "n": 1536,
+          "a_values": 1433600,
+          "w_values": 13762560,
+          "issues": 430080,
+          "swapped_fmas": 1761607680,
+          "refill_phases": 268800,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        }
+      ]
+    },
+    {
+      "tokens": 128,
+      "mode": "cold_prefill",
+      "status": "MODEL_ONLY_DIAGNOSTIC_NOT_ACCEPTED",
+      "all_15_stages_bit_exact": true,
+      "values": 5308416,
+      "cpu_wall_seconds": 169.9669535830035,
+      "receipt_sha256": "4020b223137fae6d73993037116d50602431df803a0b4cf899fb9d41e7e35234",
+      "run_log_sha256": "d87d5f68703c7420fe9035ae8bd04db9134ae79b1db691a02599a4a4be9f5caa",
+      "stages": [
+        {
+          "phase": 0,
+          "name": "n0",
+          "width": 1536,
+          "path": "phase_0_n0_recipe.f32le",
+          "sha256": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df"
+        },
+        {
+          "phase": 1,
+          "name": "qr",
+          "width": 1536,
+          "path": "phase_1_qr_recipe.f32le",
+          "sha256": "bd97c7b89801abddbbd88370c5d19c1cf912d572bf42121946168537c58f595b"
+        },
+        {
+          "phase": 2,
+          "name": "kr",
+          "width": 256,
+          "path": "phase_2_kr_recipe.f32le",
+          "sha256": "01a3aed8255cc24d10f5d3c9e4113093d17b2e250cf47b83c9ae89fb1a731e01"
+        },
+        {
+          "phase": 3,
+          "name": "v",
+          "width": 256,
+          "path": "phase_3_v_recipe.f32le",
+          "sha256": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02"
+        },
+        {
+          "phase": 4,
+          "name": "q",
+          "width": 1536,
+          "path": "phase_4_q_recipe.f32le",
+          "sha256": "8a47eb1821eed4007d2842523295e0ea3803d0d9d18cc67913a2295e00dff8d1"
+        },
+        {
+          "phase": 5,
+          "name": "k",
+          "width": 256,
+          "path": "phase_5_k_recipe.f32le",
+          "sha256": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e"
+        },
+        {
+          "phase": 6,
+          "name": "att",
+          "width": 1536,
+          "path": "phase_6_att_recipe.f32le",
+          "sha256": "b546fe31de68553448f05b9a66fa59565eee94552574e608c0258fd68c0e5d54"
+        },
+        {
+          "phase": 7,
+          "name": "o",
+          "width": 1536,
+          "path": "phase_7_o_recipe.f32le",
+          "sha256": "740d6cfeddfbbc42b994be28a4332b32bec17681e62ae8df249496fd28c3b6ec"
+        },
+        {
+          "phase": 8,
+          "name": "r",
+          "width": 1536,
+          "path": "phase_8_r_recipe.f32le",
+          "sha256": "94d50ce1c08947fb4274cf312b001eb80cd07ba03d93f6d4cf01e0da02664de2"
+        },
+        {
+          "phase": 9,
+          "name": "n1",
+          "width": 1536,
+          "path": "phase_9_n1_recipe.f32le",
+          "sha256": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d"
+        },
+        {
+          "phase": 10,
+          "name": "gate",
+          "width": 8960,
+          "path": "phase_10_gate_recipe.f32le",
+          "sha256": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5"
+        },
+        {
+          "phase": 11,
+          "name": "up",
+          "width": 8960,
+          "path": "phase_11_up_recipe.f32le",
+          "sha256": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908"
+        },
+        {
+          "phase": 12,
+          "name": "act",
+          "width": 8960,
+          "path": "phase_12_act_recipe.f32le",
+          "sha256": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d"
+        },
+        {
+          "phase": 13,
+          "name": "down",
+          "width": 1536,
+          "path": "phase_13_down_recipe.f32le",
+          "sha256": "48c8e5509f94fa9dae7dc0e13ffd2811d4aabda518e3c1a64ed4d79e415c8af1"
+        },
+        {
+          "phase": 14,
+          "name": "y",
+          "width": 1536,
+          "path": "phase_14_y_recipe.f32le",
+          "sha256": "cbda6ba00853708fab397dadafbf731b29a8b134f6d9f6541e6b7a5fce6f6cb5"
+        }
+      ],
+      "dense": [
+        {
+          "m": 128,
+          "k": 1536,
+          "n": 1536,
+          "a_values": 196608,
+          "w_values": 2359296,
+          "issues": 73728,
+          "swapped_fmas": 301989888,
+          "refill_phases": 36864,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 128,
+          "k": 1536,
+          "n": 256,
+          "a_values": 196608,
+          "w_values": 393216,
+          "issues": 12288,
+          "swapped_fmas": 50331648,
+          "refill_phases": 36864,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 128,
+          "k": 1536,
+          "n": 256,
+          "a_values": 196608,
+          "w_values": 393216,
+          "issues": 12288,
+          "swapped_fmas": 50331648,
+          "refill_phases": 36864,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 128,
+          "k": 1536,
+          "n": 1536,
+          "a_values": 196608,
+          "w_values": 2359296,
+          "issues": 73728,
+          "swapped_fmas": 301989888,
+          "refill_phases": 36864,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 128,
+          "k": 1536,
+          "n": 8960,
+          "a_values": 196608,
+          "w_values": 13762560,
+          "issues": 430080,
+          "swapped_fmas": 1761607680,
+          "refill_phases": 36864,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 128,
+          "k": 1536,
+          "n": 8960,
+          "a_values": 196608,
+          "w_values": 13762560,
+          "issues": 430080,
+          "swapped_fmas": 1761607680,
+          "refill_phases": 36864,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        },
+        {
+          "m": 128,
+          "k": 8960,
+          "n": 1536,
+          "a_values": 11468800,
+          "w_values": 13762560,
+          "issues": 430080,
+          "swapped_fmas": 1761607680,
+          "refill_phases": 2150400,
+          "context_peak": 5,
+          "meta_peak": 1,
+          "fifo_peak": 1,
+          "final_peak": 1
+        }
+      ]
+    }
+  ],
+  "resources": {
+    "scratch": {
+      "a_banks": 16,
+      "a_words_per_bank": 1376,
+      "a_word_bits": 256,
+      "a_bytes": 704512,
+      "b_banks": 16,
+      "b_words_per_bank": 160,
+      "b_word_bits": 256,
+      "b_bytes": 81920,
+      "total_bytes": 786432,
+      "production_partition_unchanged": "existing 688 KiB A + 80 KiB B retained; only layout/routing changes"
+    },
+    "reused_rectangular_attention": {
+      "used_a_bytes": 86016,
+      "used_b_bytes": 81920,
+      "fits_same_partition": true
+    },
+    "payloads": {
+      "fma_lanes": 4096,
+      "slices": 8,
+      "rows_per_slice": 16,
+      "cols_per_slice": 32,
+      "fp32_contexts": 5,
+      "fp32_context_bytes": 81920,
+      "metadata_entries": 8,
+      "result_fifo_entries": 2,
+      "result_fifo_bytes": 32768,
+      "final_value_entries": 1,
+      "final_value_bytes": 16384,
+      "refill_hold_bf16_bytes": 32,
+      "rmw_optional_stall_response_hold_bytes": 512,
+      "retained_leaf_internal_result_entries": 5,
+      "retained_leaf_internal_result_bytes": 81920,
+      "retained_leaf_internal_result_model_scope": "Existing hardware registers remain; C++ does not model their pipeline or duplicate them as extra service slots."
+    },
+    "activation_gather": {
+      "ports": "one read per each of eight distinct A banks per issue; no extra per-bank port",
+      "address": "bank=(k%16) XOR mt; word=(k//16)*8+mt; lane=m%16",
+      "route": "eight bank words permuted to M order, then M128 duplicated into two sets of four B32 slice operands",
+      "missing": "current same-address A reads and A16 scalar selectors do not implement this gather"
+    },
+    "weight_layout": {
+      "linear_word": "half*1280 + kWithin128*10 + nWithin160//16",
+      "bank": "linear_word%16",
+      "word": "linear_word//16",
+      "lane": "nWithin160%16",
+      "live_bytes": 40960,
+      "reserved_two_halves_bytes": 81920,
+      "allocated_bytes": 81920,
+      "compute_reads": "two 256-bit words from two distinct B banks per N32 context issue",
+      "refill": "one BF16 64B DDR beat writes two full 256-bit words; no masking required for official N multiple32",
+      "capacity_note": "all16 banks exactly160words; each half80words/bank. Numeric model alternates both halves serially; no prefetch overlap credited"
+    },
+    "masked_refill": {
+      "phases": [
+        "accept FP32 DDR beat and latch16 RNE BF16 results",
+        "write one16-bit lane in each of16 independent banks"
+      ],
+      "bank_word_writes_per_fp32_beat": 16,
+      "new_halfword_masks": true,
+      "implementation_missing": "16 independently enabled bank write routes and a real16-bit mask-capable SRAM interface"
+    },
+    "rmw_refill": {
+      "phases": [
+        "accept FP32 DDR beat and latch256-bit conversion",
+        "read one old256-bit word from each of16 banks at common word address",
+        "merge common lane with permuted held16-bit values and write16 full words"
+      ],
+      "bank_word_reads_per_fp32_beat": 16,
+      "bank_word_writes_per_fp32_beat": 16,
+      "control": "held word11 bits, lane4 bits, row-tile3 bits, valid/phase plus256-bit converted payload; synchronous responses consumed at guaranteed next write edge",
+      "masked_sram_required": false,
+      "additional_per_bank_ports": 0,
+      "simultaneous_read_compute": false,
+      "first_lane_initializes_word": true,
+      "publish_only_after_all_rows_and_refill_commit": true,
+      "implementation_missing": "16-bank write enables/data muxes/fanout, read ownership arbitration and synchronous response lifetime; existing DMA selects only one bank",
+      "stall_contract": "do not issue RMW reads unless every following write can commit; otherwise allocate explicit4096-bit response hold",
+      "pipelining": "not credited: 1R+1W could permit overlapping adjacent RMW beats with hazard proof, refill still conflicts with compute reads"
+    },
+    "output_route": {
+      "formula": "Y[m,nWithin32] = finalValue[physical_row=n%16][physical_col=32*(m//32+4*(n//16))+m%32]",
+      "fp32_beat": "16 different physical rows, one common physical column, gathered into one512-bit output beat",
+      "extra_transpose_tile": false,
+      "missing": "output mux/address/row width/control changes; current same-row16-column selector is insufficient"
+    },
+    "operand_route": {
+      "requirement": "two distinct A16 weight groups, each routed to four slices; existing service broadcasts the same A16 to all8",
+      "naive_bus_expansion_bits": 256,
+      "area_timing_free": false,
+      "optional_no_bus_growth": "pack second weight16 into otherwise duplicate b[128:143], retain first128 unique activations, and decode/duplicate inside service; mode, mux and routes still unimplemented"
+    },
+    "scheduling": {
+      "refill_compute_serialized": true,
+      "physical_context_reuse_cycles_at_least": 5,
+      "numerical_model_metadata_peak": 1,
+      "numerical_model_result_peak": 1,
+      "hardware_cycle_prediction": null,
+      "throughput_or_area_signoff": false
+    }
+  },
+  "traffic": {
+    "dense": [
+      {
+        "owner": "q",
+        "k": 1536,
+        "n": 1536,
+        "n160_groups": 10,
+        "a_chunks_per_group": 1,
+        "a_reads": 1,
+        "old_activation_bytes": 786432,
+        "activation_bytes": 786432,
+        "weight_bytes": 4718592,
+        "output_bytes": 786432,
+        "old_prefix_restore_bytes": 3932160,
+        "old_prefix_store_bytes": 3932160,
+        "wide_issues": 73728,
+        "rmw_serial_refill_phases": 36864,
+        "old_output_row_segments": 768,
+        "output_row_segments": 6144,
+        "operand_ready_context_hazard_bubbles_without_refills": 3070
+      },
+      {
+        "owner": "k",
+        "k": 1536,
+        "n": 256,
+        "n160_groups": 2,
+        "a_chunks_per_group": 1,
+        "a_reads": 1,
+        "old_activation_bytes": 786432,
+        "activation_bytes": 786432,
+        "weight_bytes": 786432,
+        "output_bytes": 131072,
+        "old_prefix_restore_bytes": 655360,
+        "old_prefix_store_bytes": 655360,
+        "wide_issues": 12288,
+        "rmw_serial_refill_phases": 36864,
+        "old_output_row_segments": 128,
+        "output_row_segments": 1024,
+        "operand_ready_context_hazard_bubbles_without_refills": 3070
+      },
+      {
+        "owner": "v",
+        "k": 1536,
+        "n": 256,
+        "n160_groups": 2,
+        "a_chunks_per_group": 1,
+        "a_reads": 1,
+        "old_activation_bytes": 786432,
+        "activation_bytes": 786432,
+        "weight_bytes": 786432,
+        "output_bytes": 131072,
+        "old_prefix_restore_bytes": 655360,
+        "old_prefix_store_bytes": 655360,
+        "wide_issues": 12288,
+        "rmw_serial_refill_phases": 36864,
+        "old_output_row_segments": 128,
+        "output_row_segments": 1024,
+        "operand_ready_context_hazard_bubbles_without_refills": 3070
+      },
+      {
+        "owner": "o",
+        "k": 1536,
+        "n": 1536,
+        "n160_groups": 10,
+        "a_chunks_per_group": 1,
+        "a_reads": 1,
+        "old_activation_bytes": 786432,
+        "activation_bytes": 786432,
+        "weight_bytes": 4718592,
+        "output_bytes": 786432,
+        "old_prefix_restore_bytes": 3932160,
+        "old_prefix_store_bytes": 3932160,
+        "wide_issues": 73728,
+        "rmw_serial_refill_phases": 36864,
+        "old_output_row_segments": 768,
+        "output_row_segments": 6144,
+        "operand_ready_context_hazard_bubbles_without_refills": 3070
+      },
+      {
+        "owner": "gate",
+        "k": 1536,
+        "n": 8960,
+        "n160_groups": 56,
+        "a_chunks_per_group": 1,
+        "a_reads": 1,
+        "old_activation_bytes": 786432,
+        "activation_bytes": 786432,
+        "weight_bytes": 27525120,
+        "output_bytes": 4587520,
+        "old_prefix_restore_bytes": 22937600,
+        "old_prefix_store_bytes": 22937600,
+        "wide_issues": 430080,
+        "rmw_serial_refill_phases": 36864,
+        "old_output_row_segments": 4480,
+        "output_row_segments": 35840,
+        "operand_ready_context_hazard_bubbles_without_refills": 0
+      },
+      {
+        "owner": "up",
+        "k": 1536,
+        "n": 8960,
+        "n160_groups": 56,
+        "a_chunks_per_group": 1,
+        "a_reads": 1,
+        "old_activation_bytes": 786432,
+        "activation_bytes": 786432,
+        "weight_bytes": 27525120,
+        "output_bytes": 4587520,
+        "old_prefix_restore_bytes": 22937600,
+        "old_prefix_store_bytes": 22937600,
+        "wide_issues": 430080,
+        "rmw_serial_refill_phases": 36864,
+        "old_output_row_segments": 4480,
+        "output_row_segments": 35840,
+        "operand_ready_context_hazard_bubbles_without_refills": 0
+      },
+      {
+        "owner": "down",
+        "k": 8960,
+        "n": 1536,
+        "n160_groups": 10,
+        "a_chunks_per_group": 4,
+        "a_reads": 10,
+        "old_activation_bytes": 9175040,
+        "activation_bytes": 45875200,
+        "weight_bytes": 27525120,
+        "output_bytes": 786432,
+        "old_prefix_restore_bytes": 26738688,
+        "old_prefix_store_bytes": 26738688,
+        "wide_issues": 430080,
+        "rmw_serial_refill_phases": 2150400,
+        "old_output_row_segments": 768,
+        "output_row_segments": 6144,
+        "operand_ready_context_hazard_bubbles_without_refills": 17918
+      }
+    ],
+    "owners": [
+      {
+        "owner": "input_norm",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 36864
+      },
+      {
+        "owner": "q",
+        "old_read_bytes": 5505024,
+        "read_bytes": 5505024,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 98304
+      },
+      {
+        "owner": "q_bias",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 36864
+      },
+      {
+        "owner": "q_rope",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 36864
+      },
+      {
+        "owner": "k",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 131072,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 26624
+      },
+      {
+        "owner": "k_bias",
+        "old_read_bytes": 262144,
+        "read_bytes": 262144,
+        "write_bytes": 131072,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 6144
+      },
+      {
+        "owner": "k_rope",
+        "old_read_bytes": 262144,
+        "read_bytes": 262144,
+        "write_bytes": 131072,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 6144
+      },
+      {
+        "owner": "v",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 131072,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 26624
+      },
+      {
+        "owner": "v_bias",
+        "old_read_bytes": 262144,
+        "read_bytes": 262144,
+        "write_bytes": 131072,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 6144
+      },
+      {
+        "owner": "kv_append",
+        "old_read_bytes": 262144,
+        "read_bytes": 262144,
+        "write_bytes": 262144,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 8192
+      },
+      {
+        "owner": "attention",
+        "old_read_bytes": 1048576,
+        "read_bytes": 1048576,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 28672
+      },
+      {
+        "owner": "o",
+        "old_read_bytes": 5505024,
+        "read_bytes": 5505024,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 98304
+      },
+      {
+        "owner": "attn_residual",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 36864
+      },
+      {
+        "owner": "post_norm",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 36864
+      },
+      {
+        "owner": "gate",
+        "old_read_bytes": 28311552,
+        "read_bytes": 28311552,
+        "write_bytes": 4587520,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 514048
+      },
+      {
+        "owner": "up",
+        "old_read_bytes": 28311552,
+        "read_bytes": 28311552,
+        "write_bytes": 4587520,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 514048
+      },
+      {
+        "owner": "silu",
+        "old_read_bytes": 9175040,
+        "read_bytes": 9175040,
+        "write_bytes": 4587520,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 215040
+      },
+      {
+        "owner": "down",
+        "old_read_bytes": 36700160,
+        "read_bytes": 73400320,
+        "write_bytes": 786432,
+        "delta_bytes": 36700160,
+        "read_write_64b_transfers": 1159168
+      },
+      {
+        "owner": "residual",
+        "old_read_bytes": 1572864,
+        "read_bytes": 1572864,
+        "write_bytes": 786432,
+        "delta_bytes": 0,
+        "read_write_64b_transfers": 36864
+      }
+    ],
+    "down_ddr_prefix_alternative": {
+      "status": "ANALYTIC_ONLY_NOT_EXECUTED",
+      "mapping": "six full-K transposed Dense; down K2560 outer loop with physical FP32 C in DDR",
+      "down_k_chunks": [
+        2560,
+        2560,
+        2560,
+        1280
+      ],
+      "down_a_reads": 1,
+      "a_sram_bytes": 704512,
+      "b_sram_bytes": 81920,
+      "scratch_bytes": 786432,
+      "down_contexts": 48,
+      "physical_tile_bytes": 16384,
+      "prefix_ddr_region_bytes": 786432,
+      "prefix_ddr_layout": "separate 64-byte-aligned region: base + n32_context*16384 + physical_row*1024 + physical_col*4",
+      "prefix_identity": "(down owner, N32 context index, exact increasing-K prefix end); write ACK before tile reuse/read; final output only at K8960",
+      "prefix_store_bytes": 2359296,
+      "prefix_restore_bytes": 2359296,
+      "prefix_64b_restore_beats": 36864,
+      "hypothetical_four_phase_restore_subtotal": 147456,
+      "restore_subtotal_condition": "ONLY an assumed four-cycle/64B delivery scenario; existing SRAM reader does not read DDR. Not a source-bound timing result for this route.",
+      "full_graph_read_bytes": 125960192,
+      "full_graph_write_bytes": 24903680,
+      "full_graph_bytes": 150863872,
+      "full_graph_64b_transfers": 2357248,
+      "bytes_saved_vs_all_transposed": 36569088,
+      "bytes_added_vs_old_resident": 131072,
+      "interfaces_unimplemented": [
+        "physical-tile prefix DDR writer with ACK lifetime and identity",
+        "DDR response to bounded 64B seed staging and retained leaf exact-FP32 seed port",
+        "error, cancellation, stall and partial-prefix transaction handling"
+      ],
+      "extra_capacity": "786432-byte dedicated DDR allocation, not on-chip SRAM; minimum one 64B seed payload hold plus metadata must be explicitly allocated, never an invisible tile cache"
+    },
+    "totals": {
+      "old_dense_activation_bytes": 13893632,
+      "dense_activation_bytes": 50593792,
+      "dense_weight_bytes": 93585408,
+      "dense_output_bytes": 11796480,
+      "activation_delta_bytes": 36700160,
+      "read_bytes": 164888576,
+      "write_bytes": 22544384,
+      "read_write_bytes": 187432960,
+      "read_write_64b_transfers": 2928640,
+      "old_read_bytes": 128188416,
+      "removed_prefix_restore_bytes": 81788928,
+      "removed_prefix_store_bytes": 81788928,
+      "old_seed_64b_beats": 1277952,
+      "old_seed_source_four_phase_cycles": 5111808,
+      "dense_wide_issues": 1462272,
+      "useful_full_graph_macs": 6014828544,
+      "masked_serial_refill_phases": 1581056,
+      "rmw_serial_refill_phases": 2371584,
+      "rmw_refill_plus_dense_issue_serial_subtotal": 3833856,
+      "old_output_row_segments": 11520,
+      "output_row_segments": 92160,
+      "old_weight_row_segments": 182784,
+      "weight_row_segments": 298496
+    },
+    "shared_idma_conditional_bound": {
+      "cycles_at_least": 2928640,
+      "useful_4096mac_utilization_at_most": 0.5014149912587412,
+      "condition": "existing event model has one serialized idma read/write transaction resource; 64 B/cycle ideal service",
+      "physical_absolute_bound": false,
+      "full_cycle_prediction": false
+    },
+    "notes": [
+      "Only successful-path tensor/parameter transport of the original 19 owners is counted.",
+      "21 public commands remain; q/k/v bias are separate owners in this ledger, not fused away.",
+      "Command/tensor/policy/descriptor fetch bytes, burst legalization, memory and ACK latency are unresolved.",
+      "No cross-owner forwarding, full weight cache or overlap credit.",
+      "Output row segments assume the unchanged one finalValue plus two result slots; no extra coalescing tile.",
+      "All traffic values are analytic event counts. The small C++ test executes no DDR/Host command."
+    ],
+    "geometry_only": {
+      "dense_wide_issues": 1462272,
+      "attention_wide_issues": 19200,
+      "total_wide_issues": 1481472,
+      "full_physical_mac_slots": 6068109312,
+      "useful_macs": 6014828544,
+      "issue_slot_useful_fraction": 0.9912195438050804,
+      "hardware_wall_utilization": null,
+      "scope": "Geometry and numerical software issue count only; excludes every non-issue cycle."
+    }
+  },
+  "validation_limits": [
+    "The official M128 BF16 stage gate and FP32 final gate remain failed; no threshold, input or numerical policy changed.",
+    "All saved phase tensors were used only after execution for comparison. Raw inputs/weights only were initialized before the first operation.",
+    "The 15 arithmetic-stage software recipe does not execute 21 Host commands or their iDMA/ACK/reset lifecycle.",
+    "Port permutations and conservative RMW phases are modelled; production bank, operand and result routes remain unimplemented.",
+    "Physical contexts/register payload capacities are bounded; metadata is host bookkeeping and occupancy is serialized, not bit-level protocol validation.",
+    "Operand-swap probes check result bits, not FPU exception flags. Endpoint flags are not exported.",
+    "The down DDR-prefix alternative is analytic only; no replay or transaction PASS is claimed.",
+    "CPU elapsed seconds are not hardware cycles or achieved MAC utilization."
+  ],
+  "numerical_policy_acceptance": false,
+  "native_accuracy_acceptance": false,
+  "rtl_executed": false,
+  "packaging_validation": {
+    "status": "NEW_ENTRYPOINT_SMALL_TESTS_ONLY",
+    "source_sha256": {
+      "candidates/qwen2_transposed_dense/README.md": "ecbf43aad16de0cc8b2b55cbbe1d0974c2a2af70bb406f7a026baf701bbed868",
+      "candidates/qwen2_transposed_dense/compare.py": "ea27319d496ed750a376409a9156a0005446497d00df9fc762842a05834a5c5b",
+      "candidates/qwen2_transposed_dense/full_chain.py": "a6abe2684d2cc3cb797386a994f5cc67cf3a93580486ea755bc454972e6075c1",
+      "candidates/qwen2_transposed_dense/small_tests.inc.cpp": "331b4ee38b044766fdbce8bc8b9235bfff53ca356eb762fb6c4d9f95297a82e9",
+      "candidates/qwen2_transposed_dense/transposed_dense.inc.cpp": "5db5c1d071d87a6601200706bb709be486235d6bd8671d3018eb792d42dbce6e",
+      "tests/test_qwen2_transposed_dense.py": "839fef27af76a3edc70f50ac9cc9b914b38d91f4758e9bdc8c65e96920adce54"
+    },
+    "algorithm_equal_executed_source": true,
+    "generated_cpp_equal_executed_source": true,
+    "generated_cpp_sha256": "4ce29539e1bd7345d5ccee88c7d70b056ec39bdadae4df416ebb401b9afbdcc1",
+    "historical_full_run_rebound": false,
+    "focused_tests": 27,
+    "analytic_receipt_sha256": "706d0c6004db9834d34c2eefe03f92c64dd56bee2a89a1683d2df4e745822b36",
+    "analytic_numeric_executed": false,
+    "independent_source_review": "no remaining blocker after M16 prerequisite was bound to exact frozen baseline stage hashes",
+    "focused_tests_receipt_sha256": "275f24f79757d143de5b47fadcc84f2b03156ae3fd09bdb5e38ee2a533d1f305",
+    "focused_tests_evidence": "Recorded tool-result transcription, exit0, 27 passing tests; not an original captured stdout file and no rerun."
+  }
+}

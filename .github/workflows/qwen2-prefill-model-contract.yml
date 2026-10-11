@@ -23,6 +23,8 @@ on:
       - 'scripts/qwen2_prefill_resource_schedule.py'
       - 'scripts/qwen2_dense_residency_numeric.py'
       - 'scripts/qwen2_rectangular_attention_numeric.py'
+      - 'candidates/qwen2_transposed_dense/**'
+      - 'tests/test_qwen2_transposed_dense.py'
       - 'scripts/qwen2_shared_sfu_schedule.py'
       - 'chisel/continuous_prefill/scripts/prepare_hardfloat.sh'
       - 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
@@ -116,6 +118,8 @@ jobs:
         run: |
           python -m py_compile scripts/qwen2_carried_qlinear_rms_diagnostic.py
           python -m pytest -o addopts='' -q tests/test_qwen2_dense_residency_numeric.py
+          python -m pytest -o addopts='' -q tests/test_qwen2_transposed_dense.py
+          python candidates/qwen2_transposed_dense/compare.py --analytic-only --out work/qwen2_model_contract/transposed_analytic
           python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py tests/test_qwen2_rectangular_attention_model.py tests/test_qwen2_carried_prefill_candidate.py tests/test_qwen2_prefill_resource_schedule.py tests/test_qwen2_shared_sfu_schedule.py tests/test_qwen2_rms_rope_policy_diagnostic.py tests/test_qwen2_rms_rope_prefill_candidate.py tests/test_qwen2_rms_backend_evidence.py
           python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json
@@ -143,6 +147,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: qwen2-model-contract-${{ github.sha }}
-          path: work/qwen2_model_contract/*.json
+          path: |
+            work/qwen2_model_contract/*.json
+            work/qwen2_model_contract/transposed_analytic/SUMMARY.json
           if-no-files-found: error
           retention-days: 14

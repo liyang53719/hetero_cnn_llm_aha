@@ -442,3 +442,28 @@ reader/controller组合声明864bit状态和缓冲，使用16个单读单写256-
 - to do：固定资源下转置映射实值/端口/全DAG流量比较，再选实际生产接线方案。
 - to do：可行全周期预测、carried/更长prefill及冻结激励最终硬件验收。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。
+
+## f28f7a5 终态与转置映射的完整 cold M128 数值
+
+`f28f7a5fa6b45b820b18e972090190c84303e693` 的74项小门、11条真实Scala/CHIRRTL
+命令及payload guard均在CI通过。工件9,782,822B，SHA为
+`3f507aa8530d605cd5353685cee408c3d21640758b5c573aa0f9bb114239519f`；
+27份CHIRRTL与本地除严格限定来源位置外相同，87依赖与两套源码manifest复核。
+
+随后按原v0算术完成同一block的转置Dense＋矩形Attention cold M16/M128模型。
+原A688/B80KiB、4096FMA和5contexts保持；先M16全663552值通过，再M128全
+5308416值/15阶段逐位相同，各只运行一次。这里是普通C++源码模型，未生成RTL。
+真实小输入、所有实际阶段输出、冻结源/ELF和日志留本地，Git只收源码和摘要。
+
+[新方案与边界](QWEN2_TRANSPOSED_DENSE_MODEL_20261011_CN.md)记录：前六个K1536
+矩阵可驻留A并免C恢复，但down保留全K时需10次A读，令全图DDR为187432960B。
+在原互斥iDMA和理想64B/cycle条件下，完整MAC上界50.1415%，不是实测利用率。
+下一步只在同一模型比较down的实际DDR-prefix及事务依赖，然后决定生产路由；
+不把尚未执行的解析备选或局部PASS代替完整数值/性能验收。
+
+- done（局部）：f28精确CI/源/工件和27份IR核验。
+- done（软件局部）：转置映射cold M16/M128完整15阶段保持原v0逐位数值。
+- ongoing：down映射选择、真实端口/ACK/返回生命周期和全DAG周期模型。
+- ongoing：原M128 native/最终FP32 FAIL及数值政策决定，没有修改门限。
+- to do：生产Chisel路由、carried/更长prefill和冻结激励硬件门。
+- 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。

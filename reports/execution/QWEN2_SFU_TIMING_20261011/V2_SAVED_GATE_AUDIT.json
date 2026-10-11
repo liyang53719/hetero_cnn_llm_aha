@@ -1,0 +1,242 @@
+{
+  "timing_binding": {
+    "local_source_sha256": {
+      "scripts/qwen2_rectangular_attention_model.py": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8",
+      "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+      "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "chisel/continuous_prefill/scripts/prepare_hardfloat.sh": "218ffbf5e7f96a03187938772b655c43c7589e526553d596aca1a46eab694c68",
+      "reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json": "b2c54cf1f12987744b8cabe4de6aed6c6fa393dfb0d82ff6ccc4c0d4f2c1d4e6"
+    },
+    "model_source_sha256": "8298201ed32382bd57b2fed29d245cfd442e1f029de1a7ea1c2f655fa17a6b44",
+    "upstream": {
+      "commit": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "source_sha256": {
+        "hardfloat/src/main/scala/DivSqrtRecFN_small.scala": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+        "hardfloat/src/main/scala/rawFloatFromFN.scala": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+        "hardfloat/src/main/scala/rawFloatFromRecFN.scala": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+        "hardfloat/src/main/scala/recFNFromFN.scala": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+        "hardfloat/src/main/scala/AddRecFN.scala": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+        "hardfloat/src/main/scala/MulRecFN.scala": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+        "hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d"
+      },
+      "receipt_path": "reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json",
+      "runtime_upstream_fetch": false,
+      "source_locations": {
+        "DivSqrtRecFN_small.scala": [
+          224,
+          275,
+          298,
+          304,
+          317,
+          369,
+          393,
+          504
+        ],
+        "rawFloatFromFN.scala": [
+          45,
+          53,
+          55,
+          70
+        ],
+        "rawFloatFromRecFN.scala": [
+          48,
+          61,
+          62
+        ],
+        "RoundAnyRawFNToRecFN.scala": [
+          47,
+          55,
+          294,
+          326
+        ]
+      },
+      "url": "https://github.com/ucb-bar/berkeley-hardfloat/tree/c1105e6ac6a0dd90fc80893efc4830ab609005d3"
+    },
+    "edge_convention": "Request fires at edge 0. A registered result visible after edge k can first be sampled/fired at edge k+1. Ready is continuous unless stated.",
+    "primitive_divider": {
+      "parameters": [
+        8,
+        24,
+        0
+      ],
+      "domain": "Only IEEE FP32 normal finite nonzero a and b; either sign. Zero, subnormal, nonfinite and malformed inputs fail closed in this binding.",
+      "classification": "D=25 if normalized significand(a)>=normalized significand(b), else D=26; exponent magnitudes and signs do not select D.",
+      "output_visible_after_edge": "D-1",
+      "first_sample_edge": "D",
+      "earliest_next_accept_edge": "D",
+      "same_edge_output_sample_and_next_input": true,
+      "output_backpressure_supported": false,
+      "recurrence": "On accept cycleNum=26; decrement each edge; if cycleNum==3 and first quotient bit is 1, skip to 1. inReady and outValid are true together at cycleNum==1."
+    },
+    "scalar_wrapper": {
+      "columns": [
+        "result_visible_after_edge",
+        "first_result_fire_edge",
+        "earliest_next_request_edge"
+      ],
+      "add_mul": [
+        1,
+        2,
+        3
+      ],
+      "exp_saturated": [
+        1,
+        2,
+        3
+      ],
+      "exp_nonsaturated": [
+        18,
+        19,
+        20
+      ],
+      "div": [
+        "D+1",
+        "D+2",
+        "D+3"
+      ],
+      "sqrt_positive_finite": "Same wrapper formula; primitive D=24 for odd recoded exponent, 25 for even. Not implemented by the divider classifier.",
+      "rejected_before_arithmetic": [
+        0,
+        1,
+        2
+      ],
+      "held_result": true
+    },
+    "silu_wrapper": {
+      "group_ii_formula": "45+17*B+Q",
+      "variables": "B=1 if any gate lane is nonsaturated; Q=1 if any lane reciprocal takes D26. All six phases must finish without an error.",
+      "first_result_fire_edge": "group_ii-1",
+      "edge_span_formula": "45*N+17*L+Qsum-1",
+      "same_edge_output_fire_and_next_input": false
+    },
+    "scope": {
+      "source_fsm_timing": true,
+      "rtl_calibrated": false,
+      "hardfloat_flags_generated": false,
+      "numerical_acceptance": false,
+      "full_block_prediction": false
+    },
+    "limitations": [
+      "The candidate bypasses BlockScalarFloat control and directly schedules the same primitive; it is not implemented RTL.",
+      "Scalar core occupancy excludes Qwen2Block calc/resume states and all owner/memory/ACK costs.",
+      "Return capture must be reserved: HardFloat has a pulse output with no result-ready input.",
+      "Fatal flags can terminate a wrapper phase early; success formulas do not prove numerical acceptance.",
+      "An output stall retains the context and extends the schedule; source timing does not remove backpressure."
+    ]
+  },
+  "saved_gate_timing": [
+    {
+      "result_path": "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/RESULT.json",
+      "result_sha256": "ae99b4ce2aceebcbbd9c83b1cbf2ab64605314ae60dfbf5423258db6469d2ab9",
+      "gate_path": "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/raw_stages/phase_10_gate_recipe.f32le",
+      "gate_bytes": 4587520,
+      "gate_sha256": "424023b9d7a446dd8d6f88fd31edeadf749ece5847e9a03ac5c0616a78bdc378",
+      "elements": 1146880,
+      "groups": 71680,
+      "gate_abs_min": 8.456408977508545e-07,
+      "gate_abs_max": 6.0,
+      "distinct_absolute_patterns": 2156,
+      "exact_exp_denominator_evaluations": 2156,
+      "denominator_min": 1.0024787187576294,
+      "denominator_max": 1.9999991655349731,
+      "divider_requests_d25": 0,
+      "divider_requests_d26": 1146880,
+      "nonsaturated_groups": 71680,
+      "d26_groups": 71680,
+      "wrapper_group_ii_min": 63,
+      "wrapper_group_ii_max": 63,
+      "arithmetic_only_first_request_to_final_result_fire_edges": 4515839,
+      "per_divider_lane_service_cycles": [
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680
+      ],
+      "divider_service_floor": 1863680,
+      "evidence_kind": "source control timing plus saved-input denominator branch census",
+      "scope": {
+        "complete_silu_evaluated": false,
+        "hardfloat_flags_generated": false,
+        "numerical_acceptance": false,
+        "rtl_measured": false,
+        "full_block_prediction": false
+      },
+      "assumptions": [
+        "All six wrapper phases finish without fatal flags.",
+        "Continuous inputs and ready outputs; no owner/memory/ACK costs.",
+        "Existing frozen exp7 and FP32-RNE denominator arithmetic."
+      ]
+    },
+    {
+      "result_path": "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/RESULT.json",
+      "result_sha256": "07a63cbe29e26d398c60b0de980cbdf76caeea48cefb39cfe6f559a9592fdd39",
+      "gate_path": "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/raw_stages/phase_10_gate_recipe.f32le",
+      "gate_bytes": 4587520,
+      "gate_sha256": "ece9c6a14c7fc17be04cd6af625aeabdf9580df8cbe59ffd9c2d9f3aa051acf5",
+      "elements": 1146880,
+      "groups": 71680,
+      "gate_abs_min": 1.5459954738616943e-07,
+      "gate_abs_max": 5.59375,
+      "distinct_absolute_patterns": 2106,
+      "exact_exp_denominator_evaluations": 2106,
+      "denominator_min": 1.003720998764038,
+      "denominator_max": 1.999999761581421,
+      "divider_requests_d25": 0,
+      "divider_requests_d26": 1146880,
+      "nonsaturated_groups": 71680,
+      "d26_groups": 71680,
+      "wrapper_group_ii_min": 63,
+      "wrapper_group_ii_max": 63,
+      "arithmetic_only_first_request_to_final_result_fire_edges": 4515839,
+      "per_divider_lane_service_cycles": [
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680,
+        1863680
+      ],
+      "divider_service_floor": 1863680,
+      "evidence_kind": "source control timing plus saved-input denominator branch census",
+      "scope": {
+        "complete_silu_evaluated": false,
+        "hardfloat_flags_generated": false,
+        "numerical_acceptance": false,
+        "rtl_measured": false,
+        "full_block_prediction": false
+      },
+      "assumptions": [
+        "All six wrapper phases finish without fatal flags.",
+        "Continuous inputs and ready outputs; no owner/memory/ACK costs.",
+        "Existing frozen exp7 and FP32-RNE denominator arithmetic."
+      ]
+    }
+  ]
+}

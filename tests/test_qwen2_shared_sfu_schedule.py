@@ -1,5 +1,6 @@
 """Small FP32 oracle and state/credit tests; no RTL or real-prefill forward."""
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -22,6 +23,168 @@ def sample(groups=3):
 
 
 TIMING = dict(latency_cycles=12, initiation_interval_cycles=13)
+
+
+@pytest.mark.parametrize('a,b,cycles', [
+    (0x3f800000, 0x3f800000, 25),  # 1/1: equality skips cycle 2.
+    (0x3f800000, 0x40000000, 25),  # 1/2: magnitude differs, significands equal.
+    (0x3f800000, 0x3fc00000, 26),  # 1/1.5.
+    (0x3f800000, 0x3f800001, 26),  # One significand ULP below denominator.
+    (0x3f800001, 0x3f800000, 25),
+    (0xbf800000, 0xbfc00000, 26),  # Signs do not affect the quotient MSB.
+    (0xbf800000, 0x40000000, 25),
+    (0x00800000, 0x7f7fffff, 26),  # Extremal normal exponents remain irrelevant.
+    (0x7f7fffff, 0x00800000, 25),
+    (0x00800000, 0x7f000000, 25),
+])
+def test_source_divider_integer_significand_classification(a, b, cycles):
+    timing = m.source_divider_timing(a, b)
+    assert timing['latency_cycles'] == timing['initiation_interval_cycles'] == cycles
+    assert timing['skip_cycle_2'] == (cycles == 25)
+    assert timing['binding'] == 'pinned_source_fsm'
+
+
+@pytest.mark.parametrize('invalid', [True, -1, 1 << 32, 0, 0x80000000,
+                                    1, 0x007fffff, 0x7f800000, 0xff800000, 0x7fc00000])
+def test_source_divider_unproved_and_malformed_domains_fail_closed(invalid):
+    for a, b in [(invalid, m.ONE), (m.ONE, invalid)]:
+        with pytest.raises(ValueError):
+            m.source_divider_timing(a, b)
+
+
+def test_source_audit_separates_primitive_wrapper_and_unproved_status():
+    binding = m.timing_binding()
+    assert binding['upstream']['commit'] == m.HARDFLOAT_COMMIT
+    assert binding['upstream']['source_sha256'] == m.HARDFLOAT_SOURCE_PINS
+    assert not binding['upstream']['runtime_upstream_fetch']
+    primitive = binding['primitive_divider']
+    assert primitive['first_sample_edge'] == primitive['earliest_next_accept_edge'] == 'D'
+    assert primitive['same_edge_output_sample_and_next_input']
+    assert not primitive['output_backpressure_supported']
+    assert binding['scalar_wrapper']['add_mul'] == [1, 2, 3]
+    assert binding['scalar_wrapper']['exp_nonsaturated'] == [18, 19, 20]
+    assert binding['silu_wrapper']['edge_span_formula'] == '45*N+17*L+Qsum-1'
+    assert binding['scope'] == dict(source_fsm_timing=True, rtl_calibrated=False,
+        hardfloat_flags_generated=False, numerical_acceptance=False, full_block_prediction=False)
+
+
+def test_source_schedule_classifies_each_denominator_and_preserves_numeric_recipe():
+    gates, ups = sample(2)
+    report = m.schedule_silu(gates, ups, contexts=2, source_divider=True)
+    assert report['status'] == 'SCENARIO_DRAINED'
+    assert report['divider_timing_kind'] == 'pinned_source_fsm'
+    assert report['predicted_full_block_cycles'] is report['rtl_measured_cycles'] is None
+    assert not report['scope']['current_rtl_wrapper_timing']
+    assert not report['scope']['hardfloat_flags_generated']
+    assert not report['scope']['numerical_acceptance']
+    issues = [e for e in report['events'] if e['event'] == 'issue' and e['node'] == 'reciprocal']
+    assert {e['latency_cycles'] for e in issues} == {25, 26}
+    returns = {(e['expected_tag'][0], e['lane']): e['cycle'] for e in report['events']
+               if e['event'] == 'divider_return'}
+    for event in issues:
+        timing = m.source_divider_timing(event['a'], event['b'])
+        assert event['latency_cycles'] == timing['latency_cycles']
+        assert returns[event['batch'], event['lane']] == event['cycle'] + timing['latency_cycles']
+    assert [o['value'] for o in report['outputs']] == [
+        [m.ordered_reference(g, u)['value'] for g, u in zip(gg, uu)] for gg, uu in zip(gates, ups)]
+    with pytest.raises(ValueError, match='mutually exclusive'):
+        m.schedule_silu(gates, ups, divider_timing=TIMING, source_divider=True)
+
+
+def test_source_divider_old_return_and_next_accept_share_an_edge():
+    report = m.schedule_silu([[m.ONE]*16]*3, [[m.ONE]*16]*3, contexts=2, source_divider=True)
+    issues = [e for e in report['events'] if e['event'] == 'issue' and
+              e['node'] == 'reciprocal' and e['lane'] == 0]
+    assert [e['cycle'] for e in issues] == [20, 46, 72]
+    for old, new in zip(issues, issues[1:]):
+        cycle = new['cycle']
+        assert cycle == old['cycle'] + old['initiation_interval_cycles']
+        events = [e for e in report['events'] if e['cycle'] == cycle]
+        returned = next(i for i, e in enumerate(events) if e['event'] == 'divider_return' and e['lane'] == 0)
+        issued = next(i for i, e in enumerate(events) if e['event'] == 'issue' and e['node'] == 'reciprocal' and e['lane'] == 0)
+        assert returned < issued
+        assert not any(e['event'] == 'issue' and e['lane'] == 0 and e['resource'] == 'silu.alu.00' for e in events)
+    assert report['resources_drained']
+
+
+def test_source_schedule_backpressure_retains_context_and_fault_drains_returns():
+    gates, ups = [[m.ONE]*16]*4, [[m.ONE]*16]*4
+    blocked = m.schedule_silu(gates, ups, contexts=2, source_divider=True,
+                             output_ready=lambda _: False, max_cycles=180)
+    assert blocked['accepted_groups'] == 2 and not blocked['outputs']
+    assert blocked['pending_output_offer']['batch'] == 0
+    offers = [e for e in blocked['events'] if e['event'] == 'output_offer']
+    assert all(e['value'] == offers[0]['value'] for e in offers)
+    drained = m.schedule_silu(gates, ups, contexts=2, source_divider=True,
+                             output_ready=lambda cycle: cycle >= 180)
+    assert drained['status'] == 'SCENARIO_DRAINED' and drained['outputs'][0]['cycle'] == 180
+    rejected = m.schedule_silu(gates, ups, contexts=2, source_divider=True,
+                              injected_flags={(0, 0, 'reciprocal'): 3})
+    assert rejected['status'] == 'POISON_DRAINED' and rejected['resources_drained']
+    assert rejected['outputs'] == [] and not rejected['numerical_acceptance']
+    assert sum(e['event'] == 'issue' and e['node'] == 'reciprocal' for e in rejected['events']) == sum(
+        e['event'] == 'divider_return' for e in rejected['events'])
+
+
+def test_bounded_saved_gate_audit_checks_identity_before_branch_evaluation(tmp_path, monkeypatch):
+    gate_path = tmp_path/'raw_stages/phase_10_gate_recipe.f32le'
+    gate_path.parent.mkdir()
+    data = m.np.asarray([0, m.f32_bits(80)]*8 + [m.ONE]*16, dtype='<u4').tobytes()
+    gate_path.write_bytes(data)
+    result_path = tmp_path/'RESULT.json'
+    result_path.write_text(json.dumps({'artifacts': [dict(path='raw_stages/'+gate_path.name,
+        bytes=len(data), sha256=hashlib.sha256(data).hexdigest())]}))
+    result = m.saved_gate_timing(result_path)
+    assert result['groups'] == 2 and result['distinct_absolute_patterns'] == 3
+    assert result['divider_requests_d25'] == result['divider_requests_d26'] == 16
+    assert result['arithmetic_only_first_request_to_final_result_fire_edges'] == 62+63-1
+    assert result['divider_service_floor'] == 51
+    assert not any(result['scope'].values())
+    # Corrupted bytes cannot reach any numerical node.
+    gate_path.write_bytes(data[:-4]+b'\x00\x00\x00\x00')
+    monkeypatch.setattr(m, '_evaluate', lambda *_: pytest.fail('unbound bytes were evaluated'))
+    with pytest.raises(ValueError, match='hash'):
+        m.saved_gate_timing(result_path)
+
+
+@pytest.mark.parametrize('case', ['non_bf16', 'too_many_patterns'])
+def test_saved_gate_census_rejects_unbounded_or_unproved_inputs(tmp_path, monkeypatch, case):
+    gate_path = tmp_path/'raw_stages/phase_10_gate_recipe.f32le'
+    gate_path.parent.mkdir()
+    values = ([m.ONE+1]*16 if case == 'non_bf16' else [0x3f800000+i*65536 for i in range(8208)])
+    data = m.np.asarray(values, dtype='<u4').tobytes()
+    gate_path.write_bytes(data)
+    result_path = tmp_path/'RESULT.json'
+    result_path.write_text(json.dumps({'artifacts': [dict(path='raw_stages/'+gate_path.name,
+        bytes=len(data), sha256=hashlib.sha256(data).hexdigest())]}))
+    monkeypatch.setattr(m, '_evaluate', lambda *_: pytest.fail('out-of-scope input was evaluated'))
+    with pytest.raises(ValueError, match='BF16|distinct-pattern'):
+        m.saved_gate_timing(result_path)
+
+
+@pytest.mark.parametrize('source', ['chisel/continuous_prefill/scripts/prepare_hardfloat.sh', m.HARDFLOAT_RECEIPT])
+def test_source_timing_rejects_dependency_pin_or_receipt_drift(tmp_path, source):
+    for name in m.SOURCE_PINS:
+        target = tmp_path/name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT/name, target)
+    changed = tmp_path/source
+    changed.write_bytes(changed.read_bytes()+b'\n')
+    with pytest.raises(ValueError, match='source identity changed'):
+        m.schedule_silu([[m.ONE]*16], [[m.ONE]*16], source_divider=True, root=tmp_path)
+
+
+def test_cli_source_mode_and_audit_are_explicit_and_exclude_synthetic_timing():
+    command = [sys.executable, str(ROOT/'scripts/qwen2_shared_sfu_schedule.py')]
+    source = subprocess.run(command+['--source-divider-timing', '--contexts', '2'],
+                            capture_output=True, text=True, check=True)
+    report = json.loads(source.stdout)
+    assert report['status'] == 'SCENARIO_DRAINED' and report['divider_timing_kind'] == 'pinned_source_fsm'
+    audit = subprocess.run(command+['--source-timing-audit'], capture_output=True, text=True, check=True)
+    assert json.loads(audit.stdout)['primitive_divider']['same_edge_output_sample_and_next_input']
+    rejected = subprocess.run(command+['--source-divider-timing', '--divider-latency', '12', '--divider-ii', '13'],
+                              capture_output=True, text=True)
+    assert rejected.returncode != 0 and 'mutually exclusive' in rejected.stderr
 
 
 def run(groups=3, contexts=2, **kwargs):

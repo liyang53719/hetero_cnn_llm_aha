@@ -1,6 +1,6 @@
 # 固定16路SFU的跨批预约软件模型
 
-本增量只新增 `scripts/qwen2_shared_sfu_schedule.py` 和对应测试。本模型没有实现硬件、没有运行RTL或整M128微步，也没有改变数值策略。C=1、C=2都是候选微控制器；C=1用于对照候选的串行执行，不是当前 `SiluVectorUnit` 的周期仿真。当前wrapper的II21/38下界仍另列成立。
+首版新增 `scripts/qwen2_shared_sfu_schedule.py` 和对应测试；本次在同一模型中绑定原 divider 的源码时序。本模型没有实现硬件、没有运行RTL或整M128微步，也没有改变数值策略。C=1、C=2都是候选微控制器；C=1用于对照候选的串行执行，不是当前 `SiluVectorUnit` 的周期仿真。首版 wrapper 的 II21/38 是有意保留的较松下界，新的逐分支公式见后文。
 
 ## 原算术与资源
 
@@ -12,7 +12,7 @@
 
 ## 周期与预约契约
 
-默认divider latency和initiation interval均未绑定，返回 `TIMING_UNBOUND`，`scenario_cycles` 为空。只有两项都显式给出，且单在途要求interval≥latency时，才运行小合成scenario。每个cycle的ALU/转换/control写在该cycle末生效，下一micro-op或输出握手下一cycle使用；新输入至少下一cycle才发第一步。
+默认divider latency和initiation interval均未绑定，返回 `TIMING_UNBOUND`，`scenario_cycles` 为空。手工同时给出两项，且单在途 interval≥latency 时，运行明确标注的合成 scenario；新增 `--source-divider-timing` 按每次操作数选择25/26拍，与手工参数互斥。两模式都只调度候选控制器。每个cycle的ALU/转换/control写在该cycle末生效，下一micro-op或输出握手下一cycle使用；新输入至少下一cycle才发第一步。
 
 每lane每cycle只有一个context写口。Div返回优先占用，ALU当拍停止；无隐含返回队列、第二写口或免费重试。另一个context可以在前一个等待Div时使用ALU。Div请求保存batch、slot、generation、lane身份，返回逐一校验。现有寄存器的代次由软件断言追踪，防止context提前释放或串标签。
 
@@ -45,7 +45,7 @@
 
 入口为 `schedule_silu(gates, ups, contexts=1|2, divider_timing=...)`，输入为 `[groups][16]` 原始FP32 uint32 bits。返回profile_kind=`candidate_context_schedule`、源码pins、scenario_cycles、peak_contexts、output_count、scope以及半开区间 `reservations`，资源名为 `silu.alu.00`、`silu.divider.00`等。
 
-整层日历必须显式选择该候选profile，并另外预约输入/输出、存储与ACK；不能将它的吞吐替换默认现wrapper，也不能与另一owner重复占有同16路SFU。本增量不改整层日历文件。
+整层日历必须显式选择该候选profile，并另外预约输入/输出、存储与ACK；不能将它的吞吐替换默认现wrapper，也不能与另一owner重复占有同16路SFU。整层报告只引入这份时序来源元数据，不用它自动填满 owner-level 服务时间。
 
 验证命令：
 
@@ -56,3 +56,73 @@ python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --groups 2 --divider-la
 ```
 
 最后一行的12/13是明确的合成预约条件，不是实际divider参数。测试覆盖逐节点bits、排他资源、Div与ALU写回竞争、背压持有、context/tag生命周期、注入错误不再发布、最终结果和资源排空。
+
+
+## 2026-10-11：绑定原 HardFloat 时序
+
+固定 HardFloat commit 为 `c1105e6ac6a0dd90fc80893efc4830ab609005d3`，
+`DivSqrtRecFN_small.scala` SHA256 为
+`905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9`。
+已只读取得并比对原 capture receipt，连同输入转换和组合 rounding 源码复核；
+`timing_binding()` 每次检查本地准备脚本、算术/控制源码及历史源哈希回执。
+CI 不下载或构建 HardFloat。
+
+以请求在 edge0 握手为准，寄存 valid 在 edge k 后可见，最早 edge k+1 握手。
+
+| 资源/请求 | 结果首次握手 | 下一请求最早握手 | 条件 |
+|---|---:|---:|---|
+| 裸 divider | D | D | D25 或 D26；outValid 与 inReady 可同拍 |
+| BlockScalar Add/Mul | 2 | 3 | 连续 ready、无异常中断 |
+| BlockScalar ExpNegative | 2 或19 | 3 或20 | 饱和 / 非饱和 |
+| BlockScalar Div | D+2 | D+3 | 含 divIssue 和结果寄存边界 |
+
+D25 条件为正规化 significand(a)≥significand(b)，否则 D26；不能比较整个
+浮点数大小或指数。当前软件 classifier 只接受有限、非零、正规 FP32，
+其他域明确拒绝。SiLU 的 a=1，b=1 或2时为 D25，1<b<2 为 D26。
+裸 divider 没有 result-ready，必须保留返回捕获端口；候选允许旧结果采样与
+新除法请求同边沿，仍只有一个 lane 写口。
+
+现 `SiluVectorUnit` 六阶段串行，成功组 II=`45+17*B+Q`，
+B 表示组内任一路非饱和，Q 表示任一路 D26。N组从首次输入到末次输出握手的
+边沿差是 `45*N+17*L+Qsum-1`。这些是现控制器的源码公式，C1/C2候选日历不
+冒充该控制器。owner 的 calc/resume、load/store/ACK 另有开销；例如 core
+直接 Add 链和 Norm reduce 链的请求间隔分别至少4、5拍，不能一律填3拍。
+
+### 已保全 M128 输入的分支检查
+
+只读复用了三份 gate：原 v0 cold128、诊断 v2 cold128 和 carried128(P128)。
+先核原 receipt、字节数和SHA。v2 BF16可表示输入先去重，只计算2156/2106个
+绝对值的原 exp7 与 denominator；v0 FP32输入采用显式逐节点 FP32 add/mul，
+全量节点检查 normal/zero，66个索引的1254个节点再与独立整数RNE核对，
+检查宿主 FE_TONEAREST。没有执行 reciprocal、完整SiLU、完整block或RTL。
+
+三份都为1146880次D26、71680个非饱和组。原 wrapper 算术边沿差下界
+4,515,839；同16个原单在途divider的服务下界为26×71680=1,863,680。
+后者即使允许理想调度/无限context也不能消除，但该理想化只用于下界，
+并未给实现免费增加context。
+
+| 输入 | 有用 MAC | 仅 divider 服务的乐观利用率上界 | 原wrapper+理想Dense上界 |
+|---|---:|---:|---:|
+| v0/v2 cold128，P0 | 6014828544 | 78.793784% | 24.564014% |
+| v2 carried128，P128 | 6065160192 | 79.453125% | 24.769563% |
+
+分母固定4096×完整周期。Dense下界是1462272拍；不把全部有用MAC/4096的
+1468464拍误称Dense。其余成本都未计入，因此这些是乐观上界，不能称预测
+或实测利用率。原21N+17L−1及2723839拍只是较松的v1下界，保留其版本，
+没有悄悄改写旧报告。M1024及其他prefix尚未检查分支分布，不能推广结论。
+
+在这些输入上，仅增加context不够达到80%目标。改divider吞吐、增加流水/
+端口、重用别的已占用单元或改reciprocal算法，都需要明确的新控制/寄存器/
+组合路径/资源所有权与数值证明；不能算免费优化，也未修改固定资源。
+
+复现小门（没有权重、Chisel或RTL）：
+
+```sh
+python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit
+python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --groups 2 --source-divider-timing
+python scripts/qwen2_shared_sfu_schedule.py --gate-result /path/to/cold/RESULT.json
+```
+
+原 v0 复现脚本及三份紧凑摘要在
+[QWEN2_SFU_TIMING_20261011](../reports/execution/QWEN2_SFU_TIMING_20261011/README.md)。
+flags、完整时序、数值验收和RTL校准保持未完成。

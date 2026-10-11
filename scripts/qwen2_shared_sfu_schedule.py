@@ -3,8 +3,9 @@
 
 The existing sixteen SiLU ALU/divider pairs are rescheduled, not replicated.
 One or two vector contexts retain the exact exp7/SiLU expression order. The
-current RTL has no such controller. Divider timing is deliberately unbound by
-default. Numeric result bits are diagnostic: HardFloat flags are not generated.
+current RTL has no such controller. Divider timing is unbound by default;
+explicit source mode binds only the pinned primitive's control timing.
+Numeric result bits are diagnostic: HardFloat flags are not generated.
 """
 from __future__ import annotations
 
@@ -20,6 +21,17 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/'
+HARDFLOAT_COMMIT = 'c1105e6ac6a0dd90fc80893efc4830ab609005d3'
+HARDFLOAT_RECEIPT = 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
+HARDFLOAT_SOURCE_PINS = {
+    'hardfloat/src/main/scala/DivSqrtRecFN_small.scala': '905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9',
+    'hardfloat/src/main/scala/rawFloatFromFN.scala': '39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce',
+    'hardfloat/src/main/scala/rawFloatFromRecFN.scala': 'bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317',
+    'hardfloat/src/main/scala/recFNFromFN.scala': '90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d',
+    'hardfloat/src/main/scala/AddRecFN.scala': '2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85',
+    'hardfloat/src/main/scala/MulRecFN.scala': 'cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d',
+    'hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala': '31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d',
+}
 SOURCE_PINS = {
     'scripts/qwen2_rectangular_attention_model.py': 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8',
     'scripts/qwen2_block_recipe_model.py': '2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6',
@@ -29,6 +41,8 @@ SOURCE_PINS = {
     BASE+'QwenOwnerProtocol.scala': 'c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542',
     'integration/gemmini/EmitHeteroFP32Alu.scala': '83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1',
     'chisel/continuous_prefill/tests/qwen2_block.cpp': 'd757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5',
+    'chisel/continuous_prefill/scripts/prepare_hardfloat.sh': '218ffbf5e7f96a03187938772b655c43c7589e526553d596aca1a46eab694c68',
+    HARDFLOAT_RECEIPT: 'b2c54cf1f12987744b8cabe4de6aed6c6fa393dfb0d82ff6ccc4c0d4f2c1d4e6',
 }
 LANES, MAX_GROUPS = 16, 64
 
@@ -48,6 +62,70 @@ def verify_sources(root=ROOT):
         if hashlib.sha256((Path(root)/name).read_bytes()).hexdigest() != expected:
             raise ValueError('source identity changed; explicit review required: '+name)
     return dict(SOURCE_PINS)
+
+
+def timing_binding(root=ROOT):
+    """Reviewed source-FSM formulas, not runtime RTL calibration or a fetch.
+
+    The upstream bytes were read at the pinned commit and checked against the
+    existing capture receipt. Local pins/receipt are rechecked on every call.
+    """
+    pins = verify_sources(root)
+    receipt = json.loads((Path(root)/HARDFLOAT_RECEIPT).read_text())
+    if any(receipt.get(p) != digest for p, digest in HARDFLOAT_SOURCE_PINS.items()):
+        raise ValueError('HardFloat receipt differs from reviewed upstream source')
+    return dict(local_source_sha256=pins,
+        model_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        upstream=dict(commit=HARDFLOAT_COMMIT, source_sha256=dict(HARDFLOAT_SOURCE_PINS),
+            receipt_path=HARDFLOAT_RECEIPT, runtime_upstream_fetch=False,
+            source_locations={
+                'DivSqrtRecFN_small.scala': [224, 275, 298, 304, 317, 369, 393, 504],
+                'rawFloatFromFN.scala': [45, 53, 55, 70],
+                'rawFloatFromRecFN.scala': [48, 61, 62],
+                'RoundAnyRawFNToRecFN.scala': [47, 55, 294, 326]},
+            url='https://github.com/ucb-bar/berkeley-hardfloat/tree/'+HARDFLOAT_COMMIT),
+        edge_convention='Request fires at edge 0. A registered result visible after edge k can first be sampled/fired at edge k+1. Ready is continuous unless stated.',
+        primitive_divider=dict(parameters=[8, 24, 0],
+            domain='Only IEEE FP32 normal finite nonzero a and b; either sign. Zero, subnormal, nonfinite and malformed inputs fail closed in this binding.',
+            classification='D=25 if normalized significand(a)>=normalized significand(b), else D=26; exponent magnitudes and signs do not select D.',
+            output_visible_after_edge='D-1', first_sample_edge='D', earliest_next_accept_edge='D',
+            same_edge_output_sample_and_next_input=True, output_backpressure_supported=False,
+            recurrence='On accept cycleNum=26; decrement each edge; if cycleNum==3 and first quotient bit is 1, skip to 1. inReady and outValid are true together at cycleNum==1.'),
+        scalar_wrapper=dict(
+            columns=['result_visible_after_edge', 'first_result_fire_edge', 'earliest_next_request_edge'],
+            add_mul=[1, 2, 3], exp_saturated=[1, 2, 3], exp_nonsaturated=[18, 19, 20],
+            div=['D+1', 'D+2', 'D+3'],
+            sqrt_positive_finite='Same wrapper formula; primitive D=24 for odd recoded exponent, 25 for even. Not implemented by the divider classifier.',
+            rejected_before_arithmetic=[0, 1, 2], held_result=True),
+        silu_wrapper=dict(group_ii_formula='45+17*B+Q',
+            variables='B=1 if any gate lane is nonsaturated; Q=1 if any lane reciprocal takes D26. All six phases must finish without an error.',
+            first_result_fire_edge='group_ii-1',
+            edge_span_formula='45*N+17*L+Qsum-1',
+            same_edge_output_fire_and_next_input=False),
+        scope=dict(source_fsm_timing=True, rtl_calibrated=False, hardfloat_flags_generated=False,
+                   numerical_acceptance=False, full_block_prediction=False),
+        limitations=[
+            'The candidate bypasses BlockScalarFloat control and directly schedules the same primitive; it is not implemented RTL.',
+            'Scalar core occupancy excludes Qwen2Block calc/resume states and all owner/memory/ACK costs.',
+            'Return capture must be reserved: HardFloat has a pulse output with no result-ready input.',
+            'Fatal flags can terminate a wrapper phase early; success formulas do not prove numerical acceptance.',
+            'An output stall retains the context and extends the schedule; source timing does not remove backpressure.'])
+
+
+def source_divider_timing(a, b):
+    """Pure integer classification for the reviewed normal-input division path."""
+    def significand(value):
+        if type(value) is not int or not 0 <= value <= 0xffffffff:
+            raise ValueError('source divider requires raw uint32 FP32 normal operands')
+        exponent = (value >> 23) & 0xff
+        if not 1 <= exponent <= 254:
+            raise ValueError('source divider supports only normal finite nonzero operands')
+        return 0x800000 | (value & 0x7fffff)
+    sa, sb = significand(a), significand(b)
+    latency = 25 if sa >= sb else 26
+    return dict(latency_cycles=latency, initiation_interval_cycles=latency,
+                skip_cycle_2=sa >= sb, normalized_significand_a=sa,
+                normalized_significand_b=sb, binding='pinned_source_fsm')
 
 
 def f32_bits(value):
@@ -162,6 +240,74 @@ def ordered_reference(gate, up):
     return dict(value=registers['work0'], nodes=trace)
 
 
+def saved_gate_timing(result_path, root=ROOT):
+    """Bounded branch census of a hash-bound saved BF16 gate, not a forward.
+
+    Scan at most one M128 gate and evaluate at most 8192 distinct absolute
+    values, stopping each existing exact-integer recipe at the denominator.
+    No reciprocal, complete SiLU, flags, or hardware execution is performed.
+    """
+    verify_sources(root)
+    result_path = Path(result_path)
+    result_bytes = result_path.read_bytes()
+    receipt = json.loads(result_bytes)
+    names = ('raw_stages/phase_10_gate_recipe.f32le', 'phase_10_gate_recipe.f32le')
+    entries = [x for x in receipt['artifacts'] if x.get('path') in names]
+    if len(entries) != 1:
+        raise ValueError('saved result must identify exactly one gate artifact')
+    entry = entries[0]
+    name = entry['path']
+    path = result_path.parent/name
+    size = path.stat().st_size
+    if not 0 < size <= 128*8960*4 or size % 64:
+        raise ValueError('saved gate must contain complete groups and be no larger than M128')
+    data = path.read_bytes()
+    digest = hashlib.sha256(data).hexdigest()
+    if size != entry['bytes'] or digest != entry['sha256']:
+        raise ValueError('saved gate artifact bytes or hash differ from RESULT')
+    bits = np.frombuffer(data, dtype='<u4')
+    absolute = bits & 0x7fffffff
+    if np.any((bits & 0xffff) != 0) or np.any(absolute >= 0x7f800000):
+        raise ValueError('saved gate requires finite BF16-representable FP32 values')
+    unique, inverse, counts = np.unique(absolute, return_inverse=True, return_counts=True)
+    if len(unique) > 8192:
+        raise ValueError('saved gate exceeds bounded distinct-pattern evaluation limit')
+    denominators, timings = [], []
+    for gate in unique:
+        registers = dict(gate=int(gate), up=ONE)
+        for node in program(int(gate)):
+            _, _, value = _evaluate(node, registers)
+            _write(node, registers, value)
+            if node['name'] == 'denominator':
+                denominators.append(value)
+                timings.append(source_divider_timing(ONE, value)['latency_cycles'])
+                break
+    classes = np.asarray(timings, dtype=np.int64)
+    lane_timing = classes[inverse].reshape(-1, LANES)
+    groups = len(lane_timing)
+    long_group = (absolute.reshape(-1, LANES) < f32_bits(80)).any(axis=1)
+    slow_group = (lane_timing == 26).any(axis=1)
+    ii = 45 + 17*long_group.astype(np.int64) + slow_group.astype(np.int64)
+    per_lane = lane_timing.sum(axis=0)
+    return dict(result_path=str(result_path), result_sha256=hashlib.sha256(result_bytes).hexdigest(),
+        gate_path=str(path), gate_bytes=size, gate_sha256=digest, elements=len(bits), groups=groups,
+        gate_abs_min=f32_value(int(absolute.min())), gate_abs_max=f32_value(int(absolute.max())),
+        distinct_absolute_patterns=len(unique), exact_exp_denominator_evaluations=len(unique),
+        denominator_min=f32_value(min(denominators)), denominator_max=f32_value(max(denominators)),
+        divider_requests_d25=int(counts[classes == 25].sum()),
+        divider_requests_d26=int(counts[classes == 26].sum()),
+        nonsaturated_groups=int(long_group.sum()), d26_groups=int(slow_group.sum()),
+        wrapper_group_ii_min=int(ii.min()), wrapper_group_ii_max=int(ii.max()),
+        arithmetic_only_first_request_to_final_result_fire_edges=int(ii.sum())-1,
+        per_divider_lane_service_cycles=per_lane.tolist(), divider_service_floor=int(per_lane.max()),
+        evidence_kind='source control timing plus saved-input denominator branch census',
+        scope=dict(complete_silu_evaluated=False, hardfloat_flags_generated=False,
+                   numerical_acceptance=False, rtl_measured=False, full_block_prediction=False),
+        assumptions=['All six wrapper phases finish without fatal flags.',
+                     'Continuous inputs and ready outputs; no owner/memory/ACK costs.',
+                     'Existing frozen exp7 and FP32-RNE denominator arithmetic.'])
+
+
 def resource_budget(contexts):
     if type(contexts) is not int or contexts not in (1, 2):
         raise ValueError('only one or two vector contexts are supported')
@@ -207,10 +353,10 @@ def summarize_work(gates, ups, contexts=1):
                 resource_budget=resource_budget(contexts))
 
 
-def schedule_silu(gates, ups, *, contexts=1, divider_timing=None,
+def schedule_silu(gates, ups, *, contexts=1, divider_timing=None, source_divider=False,
                   output_ready=None, injected_flags=None, injected_errors=None,
                   corrupt_divider_tags=None, max_cycles=100000, root=ROOT):
-    """Return a calendar component. Explicit timing is a hypothetical scenario.
+    """Return a candidate calendar, optionally using source-bound primitive timing.
 
     output_ready is a cycle->bool callable (default always ready). Fault keys
     are (batch,lane,node). Flags are supplied externally, never calculated.
@@ -220,6 +366,10 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None,
     Divider returns at t own that lane's write port and block ALU that cycle.
     """
     pins = verify_sources(root)
+    if type(source_divider) is not bool:
+        raise ValueError('source_divider must be a boolean')
+    if source_divider and divider_timing is not None:
+        raise ValueError('source divider timing and synthetic timing are mutually exclusive')
     gates, ups = _groups(gates, 'gate'), _groups(ups, 'up')
     work = summarize_work(gates, ups, contexts)
     result = dict(schema_version=1, component='qwen2_shared_sfu',
@@ -236,15 +386,20 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None,
                     scalar_fsm_rewritten_in_candidate=True,
                     current_rtl_wrapper_timing=False),
                   status='TIMING_UNBOUND', divider_timing=divider_timing,
+                  divider_timing_kind=('pinned_source_fsm' if source_divider else
+                                       'synthetic' if divider_timing is not None else 'unbound'),
                   peak_contexts=0, output_count=0, all_outputs_acknowledged=None,
                   cycle_convention='cycle t issue/write commits at its end; next micro-op/output uses it at t+1; final drain cycle is included')
-    if divider_timing is None:
+    if source_divider:
+        result['timing_binding'] = timing_binding(root)
+    elif divider_timing is None:
         return result
-    if set(divider_timing) != {'latency_cycles', 'initiation_interval_cycles'}:
-        raise ValueError('explicit divider latency_cycles and initiation_interval_cycles required')
-    latency, interval = (divider_timing[k] for k in ('latency_cycles', 'initiation_interval_cycles'))
-    if any(type(x) is not int or x < 1 for x in (latency, interval)) or interval < latency:
-        raise ValueError('single-outstanding divider requires positive interval >= latency')
+    else:
+        if set(divider_timing) != {'latency_cycles', 'initiation_interval_cycles'}:
+            raise ValueError('explicit divider latency_cycles and initiation_interval_cycles required')
+        latency, interval = (divider_timing[k] for k in ('latency_cycles', 'initiation_interval_cycles'))
+        if any(type(x) is not int or x < 1 for x in (latency, interval)) or interval < latency:
+            raise ValueError('single-outstanding divider requires positive interval >= latency')
     if type(max_cycles) is not int or not 1 <= max_cycles <= 1000000:
         raise ValueError('max_cycles must be an integer in 1..1000000')
     ready = output_ready if output_ready is not None else lambda _: True
@@ -361,12 +516,17 @@ def schedule_silu(gates, ups, *, contexts=1, divider_timing=None,
                         if computed is None:
                             break
                         a, b, value = computed
+                        timing = source_divider_timing(a, b) if source_divider else divider_timing
+                        latency = timing['latency_cycles']
+                        interval = timing['initiation_interval_cycles']
                         tag = (ctx['batch'],ctx['slot'],ctx['generation'],lane)
                         dividers[lane] = dict(tag=tag, node=node, value=value, return_cycle=cycle+latency)
                         div_available[lane] = cycle+interval
                         state['waiting_divider'] = True
                         event(cycle, 'issue', batch=ctx['batch'], lane=lane, slot=ctx['slot'],
-                              generation=ctx['generation'], node=node['name'], resource=f'silu.divider.{lane:02d}', a=a,b=b)
+                              generation=ctx['generation'], node=node['name'], resource=f'silu.divider.{lane:02d}', a=a,b=b,
+                              latency_cycles=latency, initiation_interval_cycles=interval,
+                              timing_binding=result['divider_timing_kind'])
                         reservations.append(dict(resource=f'silu.divider.{lane:02d}',start=cycle,end=cycle+interval,
                                                  batch=ctx['batch'],slot=ctx['slot'],node=node['name']))
                         break
@@ -431,17 +591,33 @@ def main():
     parser.add_argument('--groups', type=int, default=2)
     parser.add_argument('--divider-latency', type=int)
     parser.add_argument('--divider-ii', type=int)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--source-divider-timing', action='store_true')
+    mode.add_argument('--source-timing-audit', action='store_true')
+    mode.add_argument('--gate-result', type=Path, nargs='+',
+                      help='Hash-check and classify at most two saved gate artifacts; no full forward')
     parser.add_argument('--out', type=Path)
     args = parser.parse_args()
     if not 1 <= args.groups <= MAX_GROUPS:
         parser.error(f'--groups must be 1..{MAX_GROUPS}; no full M128 microstep runs')
     if (args.divider_latency is None) != (args.divider_ii is None):
         parser.error('both divider latency and II must be supplied explicitly')
+    if args.divider_latency is not None and (args.source_divider_timing or args.source_timing_audit or args.gate_result):
+        parser.error('source timing/audit and synthetic timing are mutually exclusive')
+    if args.gate_result and len(args.gate_result) > 2:
+        parser.error('--gate-result accepts at most two saved result files')
     timing = None if args.divider_latency is None else dict(latency_cycles=args.divider_latency,
                                                          initiation_interval_cycles=args.divider_ii)
     gates = [[f32_bits((lane-8)/4) for lane in range(16)] for _ in range(args.groups)]
     ups = [[ONE]*16 for _ in gates]
-    report = schedule_silu(gates,ups,contexts=args.contexts,divider_timing=timing)
+    if args.source_timing_audit:
+        report = timing_binding()
+    elif args.gate_result:
+        report = dict(timing_binding=timing_binding(),
+                      saved_gate_timing=[saved_gate_timing(path) for path in args.gate_result])
+    else:
+        report = schedule_silu(gates,ups,contexts=args.contexts,divider_timing=timing,
+                               source_divider=args.source_divider_timing)
     text = json.dumps(report,indent=2,allow_nan=False)+'\n'
     if args.out:
         with args.out.open('x') as stream: stream.write(text)

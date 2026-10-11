@@ -1,0 +1,1906 @@
+{
+  "status": "READ_ONLY_SELECTED_CELL_DIAGNOSTIC_NOT_ACCEPTED",
+  "policy_approval": false,
+  "hardware_v0_conformant": false,
+  "original_pair_result_sha256": "99d551a40ca38af3d196015cf2dbb6e4ea80bdfec1f33f7c0d5cbb58a9131ac0",
+  "original_source_sha256": "41aea07ba09fc5c11f6aafbe14e83ebdba6e843a3cf47080a954a1032b6461e9",
+  "scope": "Existing arrays and selected 1536-term Q projection outputs / 128-term QK cells only; no full actual or reference block run",
+  "conditional_warning": "Q/K substitutions are counterfactual local checks, never replacements for original end-to-end comparisons",
+  "runtime_identity_sha256": "d221a17d06dc676fa38b9a5b688d4cfe70fc80eb9f54907be8c093f7a2f86727",
+  "fmaf_library": "libm.so.6",
+  "threads": 4,
+  "interop_threads": 1,
+  "phases": {
+    "cold": {
+      "actual_n0_vs_official_bit_exact": true,
+      "projection_outputs": [
+        {
+          "reason": "first_difference",
+          "coordinate": [
+            0,
+            4,
+            499
+          ],
+          "actual": {
+            "value": 0.02197265625,
+            "fp32_bits": "0x3cb40000"
+          },
+          "official": {
+            "value": 0.0220947265625,
+            "fp32_bits": "0x3cb50000"
+          },
+          "same_input_n0_exact": true,
+          "input_row_sha256": "62078172f320b0760f9077d71d789ff6967d111609912c396f9dc9061ef3ecfd",
+          "weight_row_sha256": "1649ceb6827804175dc05d8c240f9f737a0887a050d0f8205d27ff29300cbab1",
+          "selected_calculation": {
+            "increasing_K_fmaf_dot": {
+              "value": -0.92327880859375,
+              "fp32_bits": "0xbf6c5c00"
+            },
+            "exact_dot_rounded_fp32": {
+              "value": -0.9232785701751709,
+              "fp32_bits": "0xbf6c5bfc"
+            },
+            "bias": {
+              "value": 0.9453125,
+              "fp32_bits": "0x3f720000"
+            },
+            "original_FP32_add_bias": {
+              "value": 0.02203369140625,
+              "fp32_bits": "0x3cb48000"
+            },
+            "original_BF16_output": {
+              "value": 0.02197265625,
+              "fp32_bits": "0x3cb40000"
+            },
+            "counterfactual_BF16_dot_before_bias_output": {
+              "value": 0.0234375,
+              "fp32_bits": "0x3cc00000"
+            },
+            "exact_dot_plus_bias_rounded_FP32": {
+              "value": 0.022033927962183952,
+              "fp32_bits": "0x3cb4807f"
+            },
+            "exact_dot_plus_bias_then_BF16": {
+              "value": 0.0220947265625,
+              "fp32_bits": "0x3cb50000"
+            },
+            "selected_torch_linear_output": {
+              "value": 0.0220947265625,
+              "fp32_bits": "0x3cb50000"
+            },
+            "selected_torch_shape": [
+              1,
+              1536,
+              1
+            ],
+            "selected_torch_backend_equivalence_to_original_full_matrix_claim": false,
+            "seq_dot_minus_exact": -2.3725442588329315e-07
+          }
+        },
+        {
+          "reason": "maximum_absolute_difference",
+          "coordinate": [
+            0,
+            102,
+            1215
+          ],
+          "actual": {
+            "value": 1.8515625,
+            "fp32_bits": "0x3fed0000"
+          },
+          "official": {
+            "value": 1.84375,
+            "fp32_bits": "0x3fec0000"
+          },
+          "same_input_n0_exact": true,
+          "input_row_sha256": "d695428662ca87ba7e6ccca14a61200cbdd8a86b5f68a584921e3238ac9a356c",
+          "weight_row_sha256": "e83ae99e7911eed655b22133dfaaf1de29fe8eceab0c689e3220e765fc7a7f7d",
+          "selected_calculation": {
+            "increasing_K_fmaf_dot": {
+              "value": 3.2304697036743164,
+              "fp32_bits": "0x404ec004"
+            },
+            "exact_dot_rounded_fp32": {
+              "value": 3.23046875,
+              "fp32_bits": "0x404ec000"
+            },
+            "bias": {
+              "value": -1.3828125,
+              "fp32_bits": "0xbfb10000"
+            },
+            "original_FP32_add_bias": {
+              "value": 1.8476572036743164,
+              "fp32_bits": "0x3fec8008"
+            },
+            "original_BF16_output": {
+              "value": 1.8515625,
+              "fp32_bits": "0x3fed0000"
+            },
+            "counterfactual_BF16_dot_before_bias_output": {
+              "value": 1.8515625,
+              "fp32_bits": "0x3fed0000"
+            },
+            "exact_dot_plus_bias_rounded_FP32": {
+              "value": 1.84765625,
+              "fp32_bits": "0x3fec8000"
+            },
+            "exact_dot_plus_bias_then_BF16": {
+              "value": 1.84375,
+              "fp32_bits": "0x3fec0000"
+            },
+            "selected_torch_linear_output": {
+              "value": 1.84375,
+              "fp32_bits": "0x3fec0000"
+            },
+            "selected_torch_shape": [
+              1,
+              1536,
+              1
+            ],
+            "selected_torch_backend_equivalence_to_original_full_matrix_claim": false,
+            "seq_dot_minus_exact": 1.0109870345331728e-06
+          }
+        }
+      ],
+      "selected_valid_QK_cells": [
+        {
+          "coordinate": [
+            0,
+            9,
+            102,
+            2
+          ],
+          "absolute_query_position": 102,
+          "key_position": 2,
+          "valid_causal": true,
+          "selected_as": [
+            "first_valid_difference",
+            "worst_valid_difference"
+          ],
+          "actual_score": {
+            "value": -848.0,
+            "fp32_bits": "0xc4540000"
+          },
+          "actual_logit": {
+            "value": -848.0,
+            "fp32_bits": "0xc4540000"
+          },
+          "methods": {
+            "official_self_cache": {
+              "official_score": {
+                "value": -856.0,
+                "fp32_bits": "0xc4560000"
+              },
+              "official_logit": {
+                "value": -856.0,
+                "fp32_bits": "0xc4560000"
+              },
+              "q_differences": {
+                "different_elements": 1,
+                "max_abs": 0.0078125,
+                "entries": [
+                  {
+                    "channel": 63,
+                    "actual": {
+                      "value": 1.8515625,
+                      "fp32_bits": "0x3fed0000"
+                    },
+                    "official": {
+                      "value": 1.84375,
+                      "fp32_bits": "0x3fec0000"
+                    }
+                  }
+                ]
+              },
+              "k_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "counterfactual_cells": {
+                "actual_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -9631.1962890625,
+                    "fp32_bits": "0xc6167cc9"
+                  },
+                  "BF16_dot": {
+                    "value": -9600.0,
+                    "fp32_bits": "0xc6160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -848.5281372070312,
+                    "fp32_bits": "0xc45421cd"
+                  },
+                  "BF16_score": {
+                    "value": -848.0,
+                    "fp32_bits": "0xc4540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -9631.1962890625,
+                    "fp32_bits": "0xc6167cc9"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -9600.0,
+                    "fp32_bits": "0xc6160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -9600.0,
+                    "fp32_bits": "0xc6160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -848.0,
+                    "fp32_bits": "0xc4540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -848.0,
+                    "fp32_bits": "0xc4540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -9634.5556640625,
+                    "fp32_bits": "0xc6168a39"
+                  },
+                  "BF16_dot": {
+                    "value": -9664.0,
+                    "fp32_bits": "0xc6170000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -854.1849975585938,
+                    "fp32_bits": "0xc4558bd7"
+                  },
+                  "BF16_score": {
+                    "value": -856.0,
+                    "fp32_bits": "0xc4560000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -9634.5556640625,
+                    "fp32_bits": "0xc6168a39"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -9664.0,
+                    "fp32_bits": "0xc6170000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -9664.0,
+                    "fp32_bits": "0xc6170000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -856.0,
+                    "fp32_bits": "0xc4560000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -856.0,
+                    "fp32_bits": "0xc4560000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "actual_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -9631.1962890625,
+                    "fp32_bits": "0xc6167cc9"
+                  },
+                  "BF16_dot": {
+                    "value": -9600.0,
+                    "fp32_bits": "0xc6160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -848.5281372070312,
+                    "fp32_bits": "0xc45421cd"
+                  },
+                  "BF16_score": {
+                    "value": -848.0,
+                    "fp32_bits": "0xc4540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -9631.1962890625,
+                    "fp32_bits": "0xc6167cc9"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -9600.0,
+                    "fp32_bits": "0xc6160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -9600.0,
+                    "fp32_bits": "0xc6160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -848.0,
+                    "fp32_bits": "0xc4540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -848.0,
+                    "fp32_bits": "0xc4540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -9634.5556640625,
+                    "fp32_bits": "0xc6168a39"
+                  },
+                  "BF16_dot": {
+                    "value": -9664.0,
+                    "fp32_bits": "0xc6170000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -854.1849975585938,
+                    "fp32_bits": "0xc4558bd7"
+                  },
+                  "BF16_score": {
+                    "value": -856.0,
+                    "fp32_bits": "0xc4560000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -9634.5556640625,
+                    "fp32_bits": "0xc6168a39"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -9664.0,
+                    "fp32_bits": "0xc6170000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -9664.0,
+                    "fp32_bits": "0xc6170000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -856.0,
+                    "fp32_bits": "0xc4560000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -856.0,
+                    "fp32_bits": "0xc4560000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                }
+              }
+            }
+          }
+        }
+      ],
+      "global_score_max": {
+        "coordinate": [
+          0,
+          6,
+          70,
+          75
+        ],
+        "valid_causal": false,
+        "actual": {
+          "value": 2560.0,
+          "fp32_bits": "0x45200000"
+        },
+        "official": {
+          "value": 2576.0,
+          "fp32_bits": "0x45210000"
+        }
+      },
+      "original_official_failed_nodes": [
+        "logits",
+        "scores"
+      ]
+    },
+    "carried": {
+      "actual_n0_vs_official_bit_exact": true,
+      "projection_outputs": [
+        {
+          "reason": "first_difference",
+          "coordinate": [
+            0,
+            3,
+            630
+          ],
+          "actual": {
+            "value": 0.00146484375,
+            "fp32_bits": "0x3ac00000"
+          },
+          "official": {
+            "value": 0.00145721435546875,
+            "fp32_bits": "0x3abf0000"
+          },
+          "same_input_n0_exact": true,
+          "input_row_sha256": "457ce697b3033c175ac80fcd94fe3f25bc1376472af5beff9596bc8a1dea9d85",
+          "weight_row_sha256": "b7380870054856c3c1e646aacf4331cb1d56802642d3789084c07167711f3a59",
+          "selected_calculation": {
+            "increasing_K_fmaf_dot": {
+              "value": 0.13525015115737915,
+              "fp32_bits": "0x3e0a7f04"
+            },
+            "exact_dot_rounded_fp32": {
+              "value": 0.13525019586086273,
+              "fp32_bits": "0x3e0a7f07"
+            },
+            "bias": {
+              "value": -0.1337890625,
+              "fp32_bits": "0xbe090000"
+            },
+            "original_FP32_add_bias": {
+              "value": 0.0014610886573791504,
+              "fp32_bits": "0x3abf8200"
+            },
+            "original_BF16_output": {
+              "value": 0.00146484375,
+              "fp32_bits": "0x3ac00000"
+            },
+            "counterfactual_BF16_dot_before_bias_output": {
+              "value": 0.0009765625,
+              "fp32_bits": "0x3a800000"
+            },
+            "exact_dot_plus_bias_rounded_FP32": {
+              "value": 0.0014611396472901106,
+              "fp32_bits": "0x3abf83b6"
+            },
+            "exact_dot_plus_bias_then_BF16": {
+              "value": 0.00146484375,
+              "fp32_bits": "0x3ac00000"
+            },
+            "selected_torch_linear_output": {
+              "value": 0.00146484375,
+              "fp32_bits": "0x3ac00000"
+            },
+            "selected_torch_shape": [
+              1,
+              1536,
+              1
+            ],
+            "selected_torch_backend_equivalence_to_original_full_matrix_claim": false,
+            "seq_dot_minus_exact": -5.094625521451235e-08
+          }
+        },
+        {
+          "reason": "maximum_absolute_difference",
+          "coordinate": [
+            0,
+            24,
+            1532
+          ],
+          "actual": {
+            "value": -0.62890625,
+            "fp32_bits": "0xbf210000"
+          },
+          "official": {
+            "value": -0.6328125,
+            "fp32_bits": "0xbf220000"
+          },
+          "same_input_n0_exact": true,
+          "input_row_sha256": "f05d7297131e152b0b8ea83b4208744e1850681cf7786b5e313dc99dd58dbdbf",
+          "weight_row_sha256": "c320162c3068ff264594bfd58ddd09a375a94444c2a95b2da2bab2840240de0c",
+          "selected_calculation": {
+            "increasing_K_fmaf_dot": {
+              "value": -1.2871092557907104,
+              "fp32_bits": "0xbfa4bfff"
+            },
+            "exact_dot_rounded_fp32": {
+              "value": -1.287109375,
+              "fp32_bits": "0xbfa4c000"
+            },
+            "bias": {
+              "value": 0.65625,
+              "fp32_bits": "0x3f280000"
+            },
+            "original_FP32_add_bias": {
+              "value": -0.6308592557907104,
+              "fp32_bits": "0xbf217ffe"
+            },
+            "original_BF16_output": {
+              "value": -0.62890625,
+              "fp32_bits": "0xbf210000"
+            },
+            "counterfactual_BF16_dot_before_bias_output": {
+              "value": -0.6328125,
+              "fp32_bits": "0xbf220000"
+            },
+            "exact_dot_plus_bias_rounded_FP32": {
+              "value": -0.630859375,
+              "fp32_bits": "0xbf218000"
+            },
+            "exact_dot_plus_bias_then_BF16": {
+              "value": -0.6328125,
+              "fp32_bits": "0xbf220000"
+            },
+            "selected_torch_linear_output": {
+              "value": -0.6328125,
+              "fp32_bits": "0xbf220000"
+            },
+            "selected_torch_shape": [
+              1,
+              1536,
+              1
+            ],
+            "selected_torch_backend_equivalence_to_original_full_matrix_claim": false,
+            "seq_dot_minus_exact": 1.3838871382176876e-07
+          }
+        }
+      ],
+      "selected_valid_QK_cells": [
+        {
+          "coordinate": [
+            0,
+            4,
+            48,
+            79
+          ],
+          "absolute_query_position": 176,
+          "key_position": 79,
+          "valid_causal": true,
+          "selected_as": [
+            "first_valid_difference"
+          ],
+          "actual_score": {
+            "value": 53.0,
+            "fp32_bits": "0x42540000"
+          },
+          "actual_logit": {
+            "value": 53.0,
+            "fp32_bits": "0x42540000"
+          },
+          "methods": {
+            "official_self_cache": {
+              "official_score": {
+                "value": 52.75,
+                "fp32_bits": "0x42530000"
+              },
+              "official_logit": {
+                "value": 52.75,
+                "fp32_bits": "0x42530000"
+              },
+              "q_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "k_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "counterfactual_cells": {
+                "actual_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "actual_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                }
+              }
+            },
+            "official_candidate_cache": {
+              "official_score": {
+                "value": 52.75,
+                "fp32_bits": "0x42530000"
+              },
+              "official_logit": {
+                "value": 52.75,
+                "fp32_bits": "0x42530000"
+              },
+              "q_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "k_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "counterfactual_cells": {
+                "actual_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "actual_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": 53.03300857543945,
+                    "fp32_bits": "0x425421cd"
+                  },
+                  "BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": 598.0000610351562,
+                    "fp32_bits": "0x44158001"
+                  },
+                  "exact_dot_BF16": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": 600.0,
+                    "fp32_bits": "0x44160000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": 53.0,
+                    "fp32_bits": "0x42540000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "coordinate": [
+            0,
+            11,
+            24,
+            24
+          ],
+          "absolute_query_position": 152,
+          "key_position": 24,
+          "valid_causal": true,
+          "selected_as": [
+            "worst_valid_difference"
+          ],
+          "actual_score": {
+            "value": -144.0,
+            "fp32_bits": "0xc3100000"
+          },
+          "actual_logit": {
+            "value": -144.0,
+            "fp32_bits": "0xc3100000"
+          },
+          "methods": {
+            "official_self_cache": {
+              "official_score": {
+                "value": -145.0,
+                "fp32_bits": "0xc3110000"
+              },
+              "official_logit": {
+                "value": -145.0,
+                "fp32_bits": "0xc3110000"
+              },
+              "q_differences": {
+                "different_elements": 1,
+                "max_abs": 0.00390625,
+                "entries": [
+                  {
+                    "channel": 124,
+                    "actual": {
+                      "value": -0.62890625,
+                      "fp32_bits": "0xbf210000"
+                    },
+                    "official": {
+                      "value": -0.6328125,
+                      "fp32_bits": "0xbf220000"
+                    }
+                  }
+                ]
+              },
+              "k_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "counterfactual_cells": {
+                "actual_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.24978637695312,
+                    "fp32_bits": "0xc3103ff2"
+                  },
+                  "BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.95689392089844,
+                    "fp32_bits": "0xc310f4f7"
+                  },
+                  "BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "actual_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.24978637695312,
+                    "fp32_bits": "0xc3103ff2"
+                  },
+                  "BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.95689392089844,
+                    "fp32_bits": "0xc310f4f7"
+                  },
+                  "BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                }
+              }
+            },
+            "official_candidate_cache": {
+              "official_score": {
+                "value": -145.0,
+                "fp32_bits": "0xc3110000"
+              },
+              "official_logit": {
+                "value": -145.0,
+                "fp32_bits": "0xc3110000"
+              },
+              "q_differences": {
+                "different_elements": 1,
+                "max_abs": 0.00390625,
+                "entries": [
+                  {
+                    "channel": 124,
+                    "actual": {
+                      "value": -0.62890625,
+                      "fp32_bits": "0xbf210000"
+                    },
+                    "official": {
+                      "value": -0.6328125,
+                      "fp32_bits": "0xbf220000"
+                    }
+                  }
+                ]
+              },
+              "k_differences": {
+                "different_elements": 0,
+                "max_abs": 0.0,
+                "entries": []
+              },
+              "counterfactual_cells": {
+                "actual_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.24978637695312,
+                    "fp32_bits": "0xc3103ff2"
+                  },
+                  "BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.95689392089844,
+                    "fp32_bits": "0xc310f4f7"
+                  },
+                  "BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "actual_q_official_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.24978637695312,
+                    "fp32_bits": "0xc3103ff2"
+                  },
+                  "BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1635.118408203125,
+                    "fp32_bits": "0xc4cc63ca"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1632.0,
+                    "fp32_bits": "0xc4cc0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -144.0,
+                    "fp32_bits": "0xc3100000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                },
+                "official_q_actual_k": {
+                  "stripe16_FP32_dot": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "FP32_reciprocal_scaled": {
+                    "value": -144.95689392089844,
+                    "fp32_bits": "0xc310f4f7"
+                  },
+                  "BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "exact_dot_FP32": {
+                    "value": -1636.048095703125,
+                    "fp32_bits": "0xc4cc818a"
+                  },
+                  "exact_dot_BF16": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_dot": {
+                    "value": -1640.0,
+                    "fp32_bits": "0xc4cd0000"
+                  },
+                  "torch_selected_BF16_score": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "counterfactual_torch_divide_candidate_BF16_dot": {
+                    "value": -145.0,
+                    "fp32_bits": "0xc3110000"
+                  },
+                  "selected_torch_shape": [
+                    1,
+                    128,
+                    1
+                  ],
+                  "original_full_matmul_backend_equivalence_claim": false
+                }
+              }
+            }
+          }
+        }
+      ],
+      "global_score_max": {
+        "coordinate": [
+          0,
+          11,
+          24,
+          24
+        ],
+        "valid_causal": true,
+        "actual": {
+          "value": -144.0,
+          "fp32_bits": "0xc3100000"
+        },
+        "official": {
+          "value": -145.0,
+          "fp32_bits": "0xc3110000"
+        }
+      },
+      "original_official_failed_nodes": [
+        "gate",
+        "logits",
+        "n1",
+        "scores"
+      ],
+      "official_self_vs_actual_cache_method": {
+        "n0": {
+          "bit_exact": true,
+          "different_elements": 0
+        },
+        "qr": {
+          "bit_exact": true,
+          "different_elements": 0
+        },
+        "q": {
+          "bit_exact": true,
+          "different_elements": 0
+        },
+        "cache_k": {
+          "bit_exact": true,
+          "different_elements": 0
+        },
+        "scores": {
+          "bit_exact": true,
+          "different_elements": 0
+        },
+        "logits": {
+          "bit_exact": true,
+          "different_elements": 0
+        },
+        "cache_v": {
+          "bit_exact": false,
+          "different_elements": 18,
+          "max_abs": 0.000244140625,
+          "first_difference": [
+            0,
+            0,
+            11,
+            6
+          ],
+          "past_prefix_differences": 18,
+          "current_append_differences": 0
+        },
+        "att": {
+          "bit_exact": false,
+          "different_elements": 9,
+          "max_abs": 0.000244140625,
+          "first_difference": [
+            0,
+            17,
+            153
+          ]
+        },
+        "r": {
+          "bit_exact": false,
+          "different_elements": 46,
+          "max_abs": 0.00048828125,
+          "first_difference": [
+            0,
+            37,
+            83
+          ]
+        }
+      }
+    }
+  },
+  "consumed_files": {
+    "work/qwen2_layer0_payload_20261011/self_attn.q_proj.weight.bin": {
+      "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+      "bytes": 4718592
+    },
+    "work/qwen2_layer0_payload_20261011/self_attn.q_proj.bias.bin": {
+      "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+      "bytes": 3072
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/RESULT.json": {
+      "sha256": "ae99b4ce2aceebcbbd9c83b1cbf2ab64605314ae60dfbf5423258db6469d2ab9",
+      "bytes": 125641
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/tensors/candidate_n0.f32le": {
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/tensors/candidate_qr.f32le": {
+      "sha256": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/tensors/candidate_q.f32le": {
+      "sha256": "929000612a9eb51d5305feecdfa0cdf8768d055a06828624075583956a41b4df",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/tensors/candidate_cache_k.f32le": {
+      "sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+      "bytes": 131072
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/tensors/candidate_scores.f32le": {
+      "sha256": "6282a1adce2601ea78dd17d29a3cca1004af8919dcf263ca23c7af8d271d411c",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/tensors/candidate_logits.f32le": {
+      "sha256": "48cb782e790d3547f05636b78419d9fe34a3303beab0625846e5b5a7ec5bede6",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/n0.f32le": {
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/qr.f32le": {
+      "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/q.f32le": {
+      "sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/cache_k.f32le": {
+      "sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+      "bytes": 131072
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/scores.f32le": {
+      "sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/logits.f32le": {
+      "sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/RESULT.json": {
+      "sha256": "07a63cbe29e26d398c60b0de980cbdf76caeea48cefb39cfe6f559a9592fdd39",
+      "bytes": 215885
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/tensors/candidate_n0.f32le": {
+      "sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/tensors/candidate_qr.f32le": {
+      "sha256": "46a8335f22cf41329d0bc3e25902086f36297ee278e3e5c76af91ef99296ce27",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/tensors/candidate_q.f32le": {
+      "sha256": "e651e5189db107bea9c5f98846e7d2513945ffbfa3b809cb6c283af3bc28854b",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/tensors/candidate_cache_k.f32le": {
+      "sha256": "0bb8dea8baa958082cc372406ad614b146e6cb142997e714cb6f8d7fa5c982a3",
+      "bytes": 262144
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/tensors/candidate_scores.f32le": {
+      "sha256": "8a20ae0199d46605229b60ca33d9821b43d262cc31c47237580d63cb2a8f61df",
+      "bytes": 1572864
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/tensors/candidate_logits.f32le": {
+      "sha256": "3f75f6bb5c649f87bcaec2fdfe714d622e6ac55391f5c95dfdee88f578d43bed",
+      "bytes": 1572864
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/n0.f32le": {
+      "sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/qr.f32le": {
+      "sha256": "d67fdf1a85857c0deaa9b09ee0390b9879082e3d691e083abb727afd3e1e3052",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/q.f32le": {
+      "bytes": 786432,
+      "sha256": "f5c683b4ea3c99630b8626287583d698a71a6ae14b3af0b62e05f575c3b7f916"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/cache_k.f32le": {
+      "sha256": "bb4598e9d4589eae81be0c504f567488d5560676c1367696526d44204eab25ae",
+      "bytes": 262144
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/scores.f32le": {
+      "bytes": 1572864,
+      "sha256": "685e620b64583728bb9402cbc91b004a367e7c4ba5c9782ff8e52c660d67d813"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/logits.f32le": {
+      "sha256": "95623175fec070b8f002f50282429ee0700eff65d7b2f84c5f1bae48b5b6af12",
+      "bytes": 1572864
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/n0.f32le": {
+      "sha256": "dbbdd9bffaddfb15e9e1b97174943e8bc01c1d9434871911978d42e0527d8433",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/qr.f32le": {
+      "sha256": "d67fdf1a85857c0deaa9b09ee0390b9879082e3d691e083abb727afd3e1e3052",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/q.f32le": {
+      "sha256": "f5c683b4ea3c99630b8626287583d698a71a6ae14b3af0b62e05f575c3b7f916",
+      "bytes": 786432
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/cache_k.f32le": {
+      "sha256": "bb4598e9d4589eae81be0c504f567488d5560676c1367696526d44204eab25ae",
+      "bytes": 262144
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/scores.f32le": {
+      "sha256": "685e620b64583728bb9402cbc91b004a367e7c4ba5c9782ff8e52c660d67d813",
+      "bytes": 1572864
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/logits.f32le": {
+      "sha256": "95623175fec070b8f002f50282429ee0700eff65d7b2f84c5f1bae48b5b6af12",
+      "bytes": 1572864
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/cache_v.f32le": {
+      "bytes": 262144,
+      "sha256": "54732d0d32423b55b3f8e4df3267591fe4a748c983adccc5303579e27486cfb7"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/cache_v.f32le": {
+      "bytes": 262144,
+      "sha256": "53df87bde574134a80a4a631da892abe8f265e38d75a7a6c803b2d0cdcf4c858"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/att.f32le": {
+      "bytes": 786432,
+      "sha256": "a88752f306c069bd9db538b8ed0e9d75968a451484e92eae64d1d00efe897123"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/att.f32le": {
+      "bytes": 786432,
+      "sha256": "160262170743850737847089a326325c13ddaa01c0f097418f29da29a40583e4"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/r.f32le": {
+      "bytes": 786432,
+      "sha256": "cd0c7bc6605c8a22dc4b48600b6ee6bc4bdea2b4e0fdd4f81d555fe943aa14f1"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_candidate_cache/r.f32le": {
+      "bytes": 786432,
+      "sha256": "7cb4eb33b06fe5f7c00febf21b752a90da6e0274dbbd303001de434648aa9c4c"
+    },
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/carried/references/official_self_cache/repeat_k.f32le": {
+      "bytes": 1572864,
+      "sha256": "fa68220536db0be357a7b29284ab28cffc3f43280c141950ed2098ed66c42f6b"
+    }
+  },
+  "conclusions": [
+    "All cold/carried n0 elements match official. The selected original increasing-K FP32 fmaf plus original FP32 bias then BF16 recipe exactly reproduces all four stored candidate qr outputs.",
+    "Terminal BF16 conversion is consistent with ties-to-even. Cold first biased value0x3cb48000 is a BF16 midpoint; cold worst0x3fec8008 lies above midpoint0x3fec8000; carried worst0xbf217ffe lies on the opposite side of midpoint0xbf218000. Tiny accumulated FP32 differences survive cancellation with bias and alter terminal BF16.",
+    "Exact rational dot plus unchanged bias matches the saved official BF16 projection for both cold selected outputs and carried worst output, but not carried first output. Small-shape Torch Linear also differs from the original full-matrix official capture at carried first output. Full original backend accumulation therefore remains unmeasured.",
+    "Rounding dot to BF16 before bias is only a counterfactual control, is not applied to candidate, and fails to reproduce the original official first projection differences. It is not established as an official bias policy.",
+    "Cold worst valid score and carried worst valid score are explained locally by one changed Q element with identical K. Using saved official Q in the candidate16-stripe selected-cell operator recovers the stored official scores; this is a counterfactual local attribution, not an accepted alternate reference.",
+    "Carried first valid score difference has bit-identical Q and K: candidate C and selected small-shape Torch produce53, stored original full-shape official produces52.75. Candidate and exact-dot FP32 are0x44158001 (598.00006103515625), then BF16dot600. The original pre-scale matmul output is not captured here, so the exact full-shape backend reduction cause remains unresolved.",
+    "Official self-cache and actual-cache-conditioned Q,K,scores,logits are bit-identical in the stored carried captures. Their V-cache prefix differs and downstream attention/residual differs; these paths must not be conflated.",
+    "No acceptance threshold, frozen source, test, document, or original receipt changed. No full model/block/reference rerun occurred.",
+    "The source-derived original full operand layout and full shape reproduce all saved official scores bit-for-bit in one isolated matmul+scale. At [0,4,48,79], full-shape BF16 dot596 / score52.75 contrasts with selected small-shape dot600 / score53; this confirms shape/layout/backend-dependent matmul behavior, without identifying the internal FP32 reduction tree."
+  ],
+  "full_shape_single_operator_replay": {
+    "scope": "Exactly one official full-shape QK matmul plus original scalar division; source-derived stride recreated without running projections, normalization, attention softmax, or block",
+    "source_layout_derivation": "Contiguous nn.Linear output shape -> view/transpose -> frozen apply_rotary_pos_emb -> DynamicCache prefix/current cat -> frozen repeat_kv -> transpose K",
+    "original_stride_receipt_available": false,
+    "layout_derivation_is_source_based": true,
+    "layouts": {
+      "q_projection_output": {
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "stride": [
+          196608,
+          1536,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": true
+      },
+      "q_view_transpose": {
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "stride": [
+          196608,
+          128,
+          1536,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      },
+      "q_after_official_rope": {
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "stride": [
+          196608,
+          128,
+          1536,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      },
+      "k_view_transpose": {
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ],
+        "stride": [
+          32768,
+          128,
+          256,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      },
+      "k_after_official_rope": {
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ],
+        "stride": [
+          32768,
+          128,
+          256,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      },
+      "cached_key_after_cat": {
+        "shape": [
+          1,
+          2,
+          256,
+          128
+        ],
+        "stride": [
+          65536,
+          32768,
+          128,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": true
+      },
+      "repeat_key": {
+        "shape": [
+          1,
+          12,
+          256,
+          128
+        ],
+        "stride": [
+          393216,
+          32768,
+          128,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": true
+      },
+      "repeat_key_transpose": {
+        "shape": [
+          1,
+          12,
+          128,
+          256
+        ],
+        "stride": [
+          393216,
+          32768,
+          1,
+          128
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      }
+    },
+    "actual_matmul_operands": {
+      "q": {
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "stride": [
+          196608,
+          128,
+          1536,
+          1
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      },
+      "k_transpose": {
+        "shape": [
+          1,
+          12,
+          128,
+          256
+        ],
+        "stride": [
+          393216,
+          32768,
+          1,
+          128
+        ],
+        "storage_offset": 0,
+        "dtype": "torch.bfloat16",
+        "contiguous": false
+      }
+    },
+    "values_bit_exact_to_sealed_operands": true,
+    "thread_count": 4,
+    "interop_threads": 1,
+    "deterministic_algorithms": true,
+    "mkldnn_enabled": true,
+    "float32_matmul_precision": "highest",
+    "cpu_autocast_enabled": false,
+    "wall_seconds": 0.0012806400045519695,
+    "full_scores_vs_saved": {
+      "shape": [
+        1,
+        12,
+        128,
+        256
+      ],
+      "elements": 393216,
+      "different_elements": 0,
+      "bit_exact": true,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "first_difference": null,
+      "actual_sha256": "685e620b64583728bb9402cbc91b004a367e7c4ba5c9782ff8e52c660d67d813",
+      "reference_sha256": "685e620b64583728bb9402cbc91b004a367e7c4ba5c9782ff8e52c660d67d813"
+    },
+    "selected_coordinate": [
+      0,
+      4,
+      48,
+      79
+    ],
+    "selected_BF16_dot": {
+      "value": 596.0,
+      "fp32_bits": "0x44150000"
+    },
+    "selected_score": {
+      "value": 52.75,
+      "fp32_bits": "0x42530000"
+    },
+    "saved_original_score": {
+      "value": 52.75,
+      "fp32_bits": "0x42530000"
+    },
+    "selected_exact": {
+      "fp64_product_sum": 598.0000352859497,
+      "fp64_sum_is_exact_rational": true,
+      "exact_rational_numerator": "627048485",
+      "exact_rational_denominator": "1048576",
+      "exact_sum_FP32": {
+        "value": 598.0000610351562,
+        "fp32_bits": "0x44158001"
+      },
+      "exact_sum_then_BF16_RNE": {
+        "value": 600.0,
+        "fp32_bits": "0x44160000"
+      },
+      "full_shape_dot_abs_error": 2.000035285949707,
+      "small_shape_dot_abs_error": 1.999964714050293,
+      "bf16_RNE_dot_abs_error": 1.999964714050293,
+      "exact_scaled_value": 52.856235012561214,
+      "full_shape_score_abs_error": 0.10623501256121415,
+      "small_shape_score_abs_error": 0.14376498743878585
+    },
+    "original_full_backend_internal_FP32_accumulator_not_observed": true,
+    "policy_approval": false
+  }
+}

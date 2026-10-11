@@ -201,3 +201,20 @@ print(json.dumps(b.samples,sort_keys=True))
     sample = json.loads(outputs[0])[0]
     assert sample['resources'] == sorted(m.RESOURCES)
     assert sample['start'] == 0 and sample['end'] == 3
+
+
+def test_primitive_source_timing_does_not_bind_full_owner_macros():
+    r=m.report(ROOT,128,1)
+    binding=r['known_sfu_source_timing']
+    assert binding['upstream']['commit']=='c1105e6ac6a0dd90fc80893efc4830ab609005d3'
+    assert binding['scalar_wrapper']['add_mul']==[1,2,3]
+    assert binding['scalar_wrapper']['div']==['D+1','D+2','D+3']
+    assert binding['primitive_divider']['same_edge_output_sample_and_next_input']
+    assert binding['silu_wrapper']['edge_span_formula']=='45*N+17*L+Qsum-1'
+    assert not binding['scope']['rtl_calibrated']
+    assert not binding['scope']['numerical_acceptance']
+    assert r['known_sfu_source_lower_bounds']['version']=='v1_loose_wrapper_bounds_preserved'
+    assert all(x is None for x in r['timing_profile']['parameters'].values())
+    assert r['reservation_result']['synthetic_scheduled_cycles'] is None
+    assert r['predicted_full_block_cycles'] is r['rtl_measured_cycles'] is None
+    assert r['source_sha256']['scripts/qwen2_shared_sfu_schedule.py']==binding['model_source_sha256']

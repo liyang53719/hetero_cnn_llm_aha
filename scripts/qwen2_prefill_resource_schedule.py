@@ -26,7 +26,9 @@ def _module(name):
 
 ATT = _module('qwen2_rectangular_attention_model')
 BOUND = _module('qwen2_prefill_traffic_bound')
+SFU = _module('qwen2_shared_sfu_schedule')
 EXTRA_PINS = {
+    'scripts/qwen2_shared_sfu_schedule.py': '8298201ed32382bd57b2fed29d245cfd442e1f029de1a7ea1c2f655fa17a6b44',
     'scripts/qwen2_rectangular_attention_model.py': 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8',
     'scripts/qwen2_prefill_traffic_bound.py': '3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697',
     'scripts/import_llama_qwen2_graph.py': '07a7edfa3f0c08876fddd47c909b2a340fb6fd175ec46f99c2754f748bb2ea6e',
@@ -36,7 +38,8 @@ EXTRA_PINS = {
     ATT.BASE+'Record128Reader.scala': '4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb',
     ATT.BASE+'TypedTensorReader.scala': 'a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c',
 }
-SOURCE_PINS = {**BOUND.SOURCE_PINS, **BOUND.HOST_SOURCE_PINS, **ATT.SOURCE_PINS, **EXTRA_PINS}
+SOURCE_PINS = {**BOUND.SOURCE_PINS, **BOUND.HOST_SOURCE_PINS, **ATT.SOURCE_PINS,
+               **SFU.SOURCE_PINS, **EXTRA_PINS}
 A_BANKS = tuple(f'A.bank{i}' for i in range(16))
 B_BANKS = tuple(f'B.bank{i}' for i in range(16))
 CORE_BANKS = tuple(f'core.group{i}' for i in range(4))
@@ -549,7 +552,7 @@ def report(root,tokens=128,contexts=1,profile=None):
         raise ReservationError('full-DAG useful MAC coverage mismatch')
     if result['metrics']['dense_weight_read_bytes'] != bound['weight_ingress_bytes']:
         raise ReservationError('Dense weight-read schedule mismatch')
-    return dict(schema_version=1,status='SYNTHETIC_RESOURCE_SCENARIO' if profile['synthetic'] else 'UNBOUND_RESOURCE_RESERVATION_MODEL',
+    return dict(schema_version=2,status='SYNTHETIC_RESOURCE_SCENARIO' if profile['synthetic'] else 'UNBOUND_RESOURCE_RESERVATION_MODEL',
                 workload=bound['workload'],source_sha256=SOURCE_PINS,
                 policy='Current Dense schedule plus candidate rectangular Attention; serialized baseline; no arithmetic/status changes',
                 dense_schedule_geometry=bound['dense_phases'],
@@ -577,6 +580,7 @@ def report(root,tokens=128,contexts=1,profile=None):
                 unresolved_traffic=dict(command_tensor_policy_metadata_bytes=None),
                 unbound_timing_parameters=[k for k,v in profile['parameters'].items() if v is None],
                 known_sfu_source_lower_bounds=dict(
+                    version='v1_loose_wrapper_bounds_preserved',
                     scalar_add_mul_request_ii_at_least=3,
                     scalar_exp_saturated_request_ii_at_least=3,
                     scalar_exp_nonsaturated_request_ii_at_least=20,
@@ -587,6 +591,8 @@ def report(root,tokens=128,contexts=1,profile=None):
                     silu16_edge_span_formula='21*N+17*L-1; L groups have any lane abs(gate)<80',
                     real_gate_branch_population_not_loaded=True,
                     generic_sfu_or_multi_context_rewrite_included=False),
+                known_sfu_source_timing=SFU.timing_binding(root),
+                source_timing_application='Primitive and wrapper formulas only; not substituted for owner-level macro timing. Branch populations and calc/resume, memory/ACK costs remain unbound in this full-DAG report.',
                 reservation_result=result,
                 predicted_full_block_cycles=None,rtl_measured_cycles=None,rtl_measured_utilization=None,
                 scope=dict(numerical_execution=False,rtl_execution=False,hardware_deadlock_proof=False,
@@ -598,7 +604,7 @@ def report(root,tokens=128,contexts=1,profile=None):
                     'Dense K16 repeats, Norm row/chunk loops, elementwise tiles and SiLU groups retain ordered bodies but internal request/response FSM cycles are not expanded.',
                     'Attention scratch lease/gather/capture routing is the published pre-RTL candidate, not current Host hardware.',
                     'All bank reads/writes conflict conservatively; actual independent-bank or Dense ping-pong/SiLU memory overlap is not credited.',
-                    'Matrix feedback, divider/SFU branch timing, owner switches and final Host fence are explicit unbound parameters by default.',
+                    'Matrix feedback, input-dependent SFU branch populations, owner control/overlap and final Host fence remain unbound; separately pinned primitive/wrapper formulas do not complete those macro costs.',
                     'Only successful finite work is scheduled; arithmetic values, flags, faults, retries, cancellation and fault-drain behavior are not simulated.',
                     'Original Matrix finite checks and Scalar underflow/error policy remain required; no new vectorized Attention/SFU route is assumed.',
                 ])

@@ -76,8 +76,8 @@ descriptor/tensor/policy具体取数与字节量仍为opaque admission，未计�
 tensor/parameter传输字节。各owner内部FSM、异常/取消/重试/错误排空、数值与
 flags尚未执行。Scalar原underflow/error策略必须保留；这里没有另写数值算术。
 
-已知的源码下界单独列为元数据：Scalar Add/Mul请求II≥3，Exp饱和/非饱和
-II≥3/20，Div的FSM下界≥4而实际divider延迟未知。原SiLU16 group II下界为
+首版较松的源码下界以 `v1_loose_wrapper_bounds_preserved` 保留：Scalar Add/Mul请求II≥3，Exp饱和/非饱和
+II≥3/20，当时 Div 的 FSM 下界≥4，未绑定实际 divider 延迟。原SiLU16 group II下界为
 21或38，取决于是否有lane走非饱和exp；没有把六个primitive请求算成六拍。
 本预约器未读取实际gate数组，也不将这些下界当成实测服务时间。
 
@@ -121,3 +121,16 @@ metadata流量与实际FSM转换，再针对明确bank/缓冲所有权逐项开�
 持续时间、冲突检查和释放顺序语义均不改变。新增独立 Python 进程的
 `PYTHONHASHSEED=1/713` 回归检查序列化字节和开始/结束周期一致。这不是
 数值或硬件调度优化；后续 CI 仍需核验新报告的实际字节一致性。
+
+
+## 源码时序元数据的增量
+
+报告schema升级为2，新增 `known_sfu_source_timing`：绑定原HardFloat的
+D25/D26分类、同边沿返回/新接收、Scalar D+3、SiLU六阶段公式及适用域。
+复用[共享SFU模型](QWEN2_SHARED_SFU_SCHEDULE_MODEL_20261011_CN.md)的同一
+函数，并把该函数源码/原准备脚本/历史HardFloat源哈希receipt纳入pins。
+
+完整DAG的21类宏服务参数仍全部unbound；Scalar core占用不等于owner请求
+间隔，当前宏未展开calc/resume、真实branch数量和内存ACK。没有把局部时序
+公式填进完整预测，也不让合成日历改名为实际硬件周期。新增回归明确验证
+元数据已绑定而 full-block prediction/RTL measured 仍为null。

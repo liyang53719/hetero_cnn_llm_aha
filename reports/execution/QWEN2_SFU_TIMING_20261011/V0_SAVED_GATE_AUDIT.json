@@ -1,0 +1,424 @@
+{
+  "assumptions": [
+    "successful original flag policy",
+    "continuously ready arithmetic interface",
+    "resident operands; excludes load/store/ACK and owner control"
+  ],
+  "audit_script_sha256": "951681a2b6b8f73526d5657e5d6e2bc4a5df0e8df724a1aa021376d0703d5bd6",
+  "checked_indices": [
+    0,
+    18204,
+    36408,
+    54613,
+    72817,
+    91022,
+    109226,
+    127431,
+    145635,
+    163839,
+    179217,
+    182044,
+    200248,
+    218453,
+    236657,
+    254862,
+    273066,
+    291270,
+    309475,
+    327679,
+    345884,
+    364088,
+    382293,
+    400497,
+    418701,
+    436906,
+    455110,
+    473315,
+    491519,
+    509724,
+    527928,
+    546132,
+    564337,
+    582541,
+    600746,
+    618950,
+    637155,
+    655359,
+    673563,
+    691768,
+    709972,
+    728177,
+    743987,
+    746381,
+    764586,
+    782790,
+    800994,
+    819199,
+    837403,
+    855608,
+    873812,
+    892017,
+    910221,
+    928425,
+    946630,
+    964834,
+    983039,
+    1001243,
+    1019448,
+    1037652,
+    1055856,
+    1074061,
+    1092265,
+    1110470,
+    1128674,
+    1146879
+  ],
+  "d25_lane_requests": 0,
+  "d26_lane_requests": 1146880,
+  "denominator": {
+    "maximum": 1.9999995231628418,
+    "minimum": 1.003662109375
+  },
+  "gate": {
+    "abs_max": 5.609712600708008,
+    "abs_min": 4.936009645462036e-07,
+    "all_nonsaturated": true,
+    "bf16_representable": false,
+    "bytes": 4587520,
+    "elements": 1146880,
+    "groups": 71680,
+    "path": "work/qwen2_block_recipe_m128_release_20261011/phase_10_gate_recipe.f32le",
+    "sha256": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5"
+  },
+  "independent_node_checks": 1254,
+  "intermediate_ranges": [
+    {
+      "maximum": 8.093104362487793,
+      "minimum": 7.121156500033976e-07,
+      "node": "exp_scale",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.999994158744812,
+      "minimum": 7.121156500033976e-07,
+      "node": "exp_fraction",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -1.0861709968945643e-11,
+      "minimum": -1.5252644516294822e-05,
+      "node": "exp_mul_6",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.00015403528232127428,
+      "minimum": 0.00013878264871891588,
+      "node": "exp_add_6",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.0001387818338116631,
+      "minimum": 1.0969093688917297e-10,
+      "node": "exp_mul_5",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -0.0011945739388465881,
+      "minimum": -0.0013333556707948446,
+      "node": "exp_add_5",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -9.495034758444376e-10,
+      "minimum": -0.0011945669539272785,
+      "node": "exp_mul_4",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.009618127718567848,
+      "minimum": 0.008423561230301857,
+      "node": "exp_add_4",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.008423511870205402,
+      "minimum": 6.849219413851415e-09,
+      "node": "exp_mul_3",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -0.04708059877157211,
+      "minimum": -0.055504102259874344,
+      "node": "exp_add_3",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -3.952533944584502e-08,
+      "minimum": -0.04708032310009003,
+      "node": "exp_mul_2",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.24022646248340607,
+      "minimum": 0.19314618408679962,
+      "node": "exp_add_2",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.1931450515985489,
+      "minimum": 1.7106901850638678e-07,
+      "node": "exp_mul_1",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -0.5000021457672119,
+      "minimum": -0.6931470036506653,
+      "node": "exp_add_1",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": -4.936008508593659e-07,
+      "minimum": -0.4999992251396179,
+      "node": "exp_mul_0",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.9999995231628418,
+      "minimum": 0.5000007748603821,
+      "node": "exp_add_0",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 0.9999995231628418,
+      "minimum": 0.003662122180685401,
+      "node": "exp_finish",
+      "normal_or_zero": true
+    },
+    {
+      "maximum": 1.9999995231628418,
+      "minimum": 1.003662109375,
+      "node": "denominator",
+      "normal_or_zero": true
+    }
+  ],
+  "measured_full_block_cycles": null,
+  "method": "Explicit NumPy FP32 add/mul nodes, no fused expression; every intermediate is verified normal or zero; integer-RNE program checks every node at 64 evenly spaced indices plus min/max. Only exp7 and denominator are evaluated; no reciprocal or full SiLU output.",
+  "per_divider_service_cycles": [
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680,
+    1863680
+  ],
+  "predicted_full_block_cycles": null,
+  "primitive_service_floor_cycles": 1863680,
+  "receipt": {
+    "path": "work/qwen2_block_recipe_m128_release_20261011/RESULT.json",
+    "sha256": "18021a757aef57c94bdbd34a17a899c76df194c0ff32706baa089eefd6a3db6e",
+    "source_identity": {
+      "binary_sha256": "c2b2a058dbbb6046e1628e34cb4ee16427ce2c0b8f81df41646b51fa9843a0b7",
+      "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "compile_command": [
+        "/usr/bin/g++",
+        "-O2",
+        "-std=c++17",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_block_recipe_m128_release_20261011/generated/software_recipe.cpp",
+        "-o",
+        "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_block_recipe_m128_release_20261011/generated/software_recipe"
+      ],
+      "compiler_version": "g++ (Debian 14.2.0-19) 14.2.0",
+      "generated_by_chisel": false,
+      "generated_cpp_sha256": "5c8a7efb1ddd8ac93d6338bad3d2ce9e7a968daa5e8af27175f847e0c79c17af",
+      "generated_header_sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30",
+      "generator_sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+      "git_head": "c14deb7779a47044762bccdd9d8a95abd3b24683",
+      "hardware_simulation": false,
+      "numerical_contract": "qwen2-functional-bf16-fp32-ordered-v1",
+      "rounding_mode": "FE_TONEAREST",
+      "section_sha256": {
+        "helpers": "d1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b",
+        "layout": "c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f",
+        "math": "4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8"
+      },
+      "source_sha256": {
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+        "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5"
+      }
+    },
+    "status": "DIAGNOSTIC_NOT_ACCEPTED"
+  },
+  "runtime": {
+    "fegetround": 0,
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "rounding": "FE_TONEAREST"
+  },
+  "schema_version": 1,
+  "scope": {
+    "full_cycle_prediction": false,
+    "hardfloat_flags": false,
+    "model_rerun": false,
+    "numerical_acceptance": false,
+    "rtl": false
+  },
+  "source_sha256": {
+    "chisel/continuous_prefill/scripts/prepare_hardfloat.sh": "218ffbf5e7f96a03187938772b655c43c7589e526553d596aca1a46eab694c68",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json": "b2c54cf1f12987744b8cabe4de6aed6c6fa393dfb0d82ff6ccc4c0d4f2c1d4e6",
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "scripts/qwen2_rectangular_attention_model.py": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8",
+    "scripts/qwen2_shared_sfu_schedule.py": "8298201ed32382bd57b2fed29d245cfd442e1f029de1a7ea1c2f655fa17a6b44"
+  },
+  "source_timing_binding": {
+    "edge_convention": "Request fires at edge 0. A registered result visible after edge k can first be sampled/fired at edge k+1. Ready is continuous unless stated.",
+    "limitations": [
+      "The candidate bypasses BlockScalarFloat control and directly schedules the same primitive; it is not implemented RTL.",
+      "Scalar core occupancy excludes Qwen2Block calc/resume states and all owner/memory/ACK costs.",
+      "Return capture must be reserved: HardFloat has a pulse output with no result-ready input.",
+      "Fatal flags can terminate a wrapper phase early; success formulas do not prove numerical acceptance.",
+      "An output stall retains the context and extends the schedule; source timing does not remove backpressure."
+    ],
+    "local_source_sha256": {
+      "chisel/continuous_prefill/scripts/prepare_hardfloat.sh": "218ffbf5e7f96a03187938772b655c43c7589e526553d596aca1a46eab694c68",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+      "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json": "b2c54cf1f12987744b8cabe4de6aed6c6fa393dfb0d82ff6ccc4c0d4f2c1d4e6",
+      "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+      "scripts/qwen2_rectangular_attention_model.py": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8"
+    },
+    "model_source_sha256": "8298201ed32382bd57b2fed29d245cfd442e1f029de1a7ea1c2f655fa17a6b44",
+    "primitive_divider": {
+      "classification": "D=25 if normalized significand(a)>=normalized significand(b), else D=26; exponent magnitudes and signs do not select D.",
+      "domain": "Only IEEE FP32 normal finite nonzero a and b; either sign. Zero, subnormal, nonfinite and malformed inputs fail closed in this binding.",
+      "earliest_next_accept_edge": "D",
+      "first_sample_edge": "D",
+      "output_backpressure_supported": false,
+      "output_visible_after_edge": "D-1",
+      "parameters": [
+        8,
+        24,
+        0
+      ],
+      "recurrence": "On accept cycleNum=26; decrement each edge; if cycleNum==3 and first quotient bit is 1, skip to 1. inReady and outValid are true together at cycleNum==1.",
+      "same_edge_output_sample_and_next_input": true
+    },
+    "scalar_wrapper": {
+      "add_mul": [
+        1,
+        2,
+        3
+      ],
+      "columns": [
+        "result_visible_after_edge",
+        "first_result_fire_edge",
+        "earliest_next_request_edge"
+      ],
+      "div": [
+        "D+1",
+        "D+2",
+        "D+3"
+      ],
+      "exp_nonsaturated": [
+        18,
+        19,
+        20
+      ],
+      "exp_saturated": [
+        1,
+        2,
+        3
+      ],
+      "held_result": true,
+      "rejected_before_arithmetic": [
+        0,
+        1,
+        2
+      ],
+      "sqrt_positive_finite": "Same wrapper formula; primitive D=24 for odd recoded exponent, 25 for even. Not implemented by the divider classifier."
+    },
+    "scope": {
+      "full_block_prediction": false,
+      "hardfloat_flags_generated": false,
+      "numerical_acceptance": false,
+      "rtl_calibrated": false,
+      "source_fsm_timing": true
+    },
+    "silu_wrapper": {
+      "edge_span_formula": "45*N+17*L+Qsum-1",
+      "first_result_fire_edge": "group_ii-1",
+      "group_ii_formula": "45+17*B+Q",
+      "same_edge_output_fire_and_next_input": false,
+      "variables": "B=1 if any gate lane is nonsaturated; Q=1 if any lane reciprocal takes D26. All six phases must finish without an error."
+    },
+    "upstream": {
+      "commit": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "receipt_path": "reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json",
+      "runtime_upstream_fetch": false,
+      "source_locations": {
+        "DivSqrtRecFN_small.scala": [
+          224,
+          275,
+          298,
+          304,
+          317,
+          369,
+          393,
+          504
+        ],
+        "RoundAnyRawFNToRecFN.scala": [
+          47,
+          55,
+          294,
+          326
+        ],
+        "rawFloatFromFN.scala": [
+          45,
+          53,
+          55,
+          70
+        ],
+        "rawFloatFromRecFN.scala": [
+          48,
+          61,
+          62
+        ]
+      },
+      "source_sha256": {
+        "hardfloat/src/main/scala/AddRecFN.scala": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+        "hardfloat/src/main/scala/DivSqrtRecFN_small.scala": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+        "hardfloat/src/main/scala/MulRecFN.scala": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+        "hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+        "hardfloat/src/main/scala/rawFloatFromFN.scala": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+        "hardfloat/src/main/scala/rawFloatFromRecFN.scala": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+        "hardfloat/src/main/scala/recFNFromFN.scala": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d"
+      },
+      "url": "https://github.com/ucb-bar/berkeley-hardfloat/tree/c1105e6ac6a0dd90fc80893efc4830ab609005d3"
+    }
+  },
+  "status": "SOURCE_TIMING_BRANCH_AUDIT_OF_SAVED_V0_SOFTWARE_GATES",
+  "wall_seconds": 0.08690958400256932,
+  "wrapper_arithmetic_edge_span": 4515839,
+  "wrapper_d26_groups": 71680
+}

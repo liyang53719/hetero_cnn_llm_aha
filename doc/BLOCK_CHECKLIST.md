@@ -39,6 +39,7 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 | Q21 | P1 | 官方Qwen2 block权重与输入导出 | ongoing |
 | Q21.1 | P1 | 通用权重分块打包与BF16字节回读测试 | done |
 | Q21.2 | P1 | 官方Qwen2权重与真实输入导出验收 | to do |
+| Q21.3 | P1 | 固定Qwen2层0真实payload与完整prefill模型前置验证 | ongoing |
 | Q22 | P1 | Qwen2官方语义与批准混合精度闭环 | to do |
 | Q23 | P1 | Qwen2官方完整block长度扩展 | to do |
 | S00 | P1 | 通用Norm与非线性数值owner | to do |

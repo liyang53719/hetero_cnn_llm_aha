@@ -1,0 +1,1683 @@
+{
+  "acceptance_change": false,
+  "all_unobserved_outputs_match": true,
+  "attention_amplification_example": {
+    "candidate_keys": [
+      {
+        "key": 38,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 2.331695725388272e-07,
+        "score_bf16": 4672.0,
+        "score_fp32": 4684.17236328125
+      },
+      {
+        "key": 57,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 3.0052259347712607e-08,
+        "score_bf16": 4672.0,
+        "score_fp32": 4682.12353515625
+      },
+      {
+        "key": 62,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 3.633855172324729e-08,
+        "score_bf16": 4672.0,
+        "score_fp32": 4682.3134765625
+      },
+      {
+        "key": 64,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 4.944573830240051e-12,
+        "score_bf16": 4672.0,
+        "score_fp32": 4673.4111328125
+      },
+      {
+        "key": 65,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 4.699049851487891e-13,
+        "score_bf16": 4672.0,
+        "score_fp32": 4671.0576171875
+      },
+      {
+        "key": 68,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 1.2174200536563262e-10,
+        "score_bf16": 4672.0,
+        "score_fp32": 4676.61474609375
+      },
+      {
+        "key": 69,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 5.766463306855485e-09,
+        "score_bf16": 4672.0,
+        "score_fp32": 4680.47265625
+      },
+      {
+        "key": 73,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 1.0801117156233886e-07,
+        "score_bf16": 4672.0,
+        "score_fp32": 4683.40283203125
+      },
+      {
+        "key": 78,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 3.0462635452338516e-12,
+        "score_bf16": 4672.0,
+        "score_fp32": 4672.9267578125
+      },
+      {
+        "key": 79,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 6.4741805666512775e-12,
+        "score_bf16": 4672.0,
+        "score_fp32": 4673.6806640625
+      },
+      {
+        "key": 92,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 1.5051703485369217e-05,
+        "score_bf16": 4672.0,
+        "score_fp32": 4688.33984375
+      },
+      {
+        "key": 93,
+        "prob_bf16": 0.0106201171875,
+        "prob_fp32": 0.9999845027923584,
+        "score_bf16": 4672.0,
+        "score_fp32": 4699.44384765625
+      }
+    ],
+    "maximum_probability_error_coordinate": [
+      0,
+      6,
+      93,
+      93
+    ],
+    "native_bf16": 0.0106201171875,
+    "native_fp32": 0.9999845027923584
+  },
+  "autocast_cpu_enabled": false,
+  "diagnostic_source_sha256": "d83d59a1419b25e73e8f15db63617e62dd072095113a54dfe36e8e78f81a471a",
+  "head_dim": 128,
+  "identity": {
+    "activations_sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+    "attention": "eager",
+    "cache_utils_sha256": "2a4b6b398f8ea8631450a871b0a1bbc6b9722148970648c678745a06573bf18c",
+    "device": "cpu",
+    "forward_revision": "9fe3f585bb4ea29f209dc705d269fbe292e1128f",
+    "installed_sources_verified_exact": true,
+    "mask_utils_sha256": "fa17374bd60fde841bd8d65de072d085505243cc875d882985fcd3622cf08e5b",
+    "model_revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "numpy": "2.3.5",
+    "numpy_build": "{'Compilers': {'c': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'cc'}, 'cython': {'name': 'cython', 'linker': 'cython', 'version': '3.2.1', 'commands': 'cython'}, 'c++': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'c++'}}, 'Machine Information': {'host': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}, 'build': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}}, 'Build Dependencies': {'blas': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}, 'lapack': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}}, 'Python Information': {'path': '/tmp/build-env-aw1mwcap/bin/python', 'version': '3.12'}, 'SIMD Extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'], 'found': ['SSSE3', 'SSE41', 'POPCNT', 'SSE42', 'AVX', 'F16C', 'FMA3', 'AVX2', 'AVX512F', 'AVX512CD', 'AVX512_SKX', 'AVX512_CLX', 'AVX512_CNL', 'AVX512_ICL'], 'not found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}}",
+    "python": "3.12.14",
+    "runner_sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85",
+    "source_sha256": {
+      "config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+      "configuration_qwen2.py": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+      "modeling_qwen2.py": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad"
+    },
+    "torch": "2.10.0+cpu",
+    "torch_build": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+    "transformers": "4.40.1"
+  },
+  "input_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+  "logits_mask_metric_note": "Cross-dtype mask/logit full-array errors include intentionally different BF16 and FP32 finite minimum sentinels; interpret unmasked scores separately. Both forwards have exact causal zeros in masked probabilities.",
+  "mask": "official _prepare_4d_causal_attention_mask, past=0, no padding, no sliding window",
+  "modes": {
+    "bf16": {
+      "all_modules_eval": true,
+      "cache_k_bit_exact_to_observed": true,
+      "cache_sequence_length": 128,
+      "cache_v_bit_exact_to_observed": true,
+      "finite": true,
+      "input_lossless_from_BF16_checkpoint": true,
+      "mask_bit_exact_to_observed": true,
+      "metrics": {
+        "actual_f32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "no_hooks_or_tracer": true,
+      "parameter_count": 46797824,
+      "parameter_names": [
+        "input_layernorm.weight",
+        "mlp.down_proj.weight",
+        "mlp.gate_proj.weight",
+        "mlp.up_proj.weight",
+        "post_attention_layernorm.weight",
+        "self_attn.k_proj.bias",
+        "self_attn.k_proj.weight",
+        "self_attn.o_proj.weight",
+        "self_attn.q_proj.bias",
+        "self_attn.q_proj.weight",
+        "self_attn.v_proj.bias",
+        "self_attn.v_proj.weight"
+      ],
+      "parameters_lossless_from_BF16_checkpoint": true,
+      "prob_bit_exact_to_observed": true,
+      "seconds": 0.03518486300163204,
+      "selected_attention_class": "Qwen2Attention",
+      "stored_key_dtype": "torch.bfloat16",
+      "stored_value_dtype": "torch.bfloat16",
+      "y_bit_exact_to_observed_forward": true
+    },
+    "fp32": {
+      "all_modules_eval": true,
+      "cache_k_bit_exact_to_observed": true,
+      "cache_sequence_length": 128,
+      "cache_v_bit_exact_to_observed": true,
+      "finite": true,
+      "input_lossless_from_BF16_checkpoint": true,
+      "mask_bit_exact_to_observed": true,
+      "metrics": {
+        "actual_f32_sha256": "fe4b70a1d424b398cedf75ddeacce960e00d07304c6934e9d2d63c9b74ab53b9",
+        "bit_exact": true,
+        "cosine": 1.0000000000000002,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "fe4b70a1d424b398cedf75ddeacce960e00d07304c6934e9d2d63c9b74ab53b9",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "no_hooks_or_tracer": true,
+      "parameter_count": 46797824,
+      "parameter_names": [
+        "input_layernorm.weight",
+        "mlp.down_proj.weight",
+        "mlp.gate_proj.weight",
+        "mlp.up_proj.weight",
+        "post_attention_layernorm.weight",
+        "self_attn.k_proj.bias",
+        "self_attn.k_proj.weight",
+        "self_attn.o_proj.weight",
+        "self_attn.q_proj.bias",
+        "self_attn.q_proj.weight",
+        "self_attn.v_proj.bias",
+        "self_attn.v_proj.weight"
+      ],
+      "parameters_lossless_from_BF16_checkpoint": true,
+      "prob_bit_exact_to_observed": true,
+      "seconds": 0.06498571500196704,
+      "selected_attention_class": "Qwen2Attention",
+      "stored_key_dtype": "torch.float32",
+      "stored_value_dtype": "torch.float32",
+      "y_bit_exact_to_observed_forward": true
+    }
+  },
+  "native_bf16_vs_native_fp32_stages": {
+    "act": {
+      "actual_f32_sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60",
+      "bf16_magnitude": {
+        "max": 7.53125,
+        "max_abs": 7.53125,
+        "mean_abs": 0.028456527818921832,
+        "min": -5.65625,
+        "rms": 0.06648104432814277
+      },
+      "bit_exact": false,
+      "cosine": 0.932175233769409,
+      "different_elements": 1146880,
+      "elements": 1146880,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 7.27824068069458,
+        "max_abs": 7.27824068069458,
+        "mean_abs": 0.029277068014757462,
+        "min": -5.500025749206543,
+        "rms": 0.07084434626641455
+      },
+      "max_abs": 3.9729385375976562,
+      "maximum_error_export_coordinate": [
+        0,
+        124,
+        3308
+      ],
+      "maximum_error_native_bf16_value": 0.5,
+      "maximum_error_native_fp32_value": 4.472938537597656,
+      "mean_abs": 0.010176572007797811,
+      "normalized_max_abs": 0.5458652319833025,
+      "reference_f32_sha256": "fc1fb5e38f4cd98ffd1ae44194168c8b4a720e3e8564e72e365fde812dd40069",
+      "relative_l2": 0.36206105299273483,
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "att": {
+      "actual_f32_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969",
+      "bf16_magnitude": {
+        "max": 3.453125,
+        "max_abs": 3.453125,
+        "mean_abs": 0.11773342537882552,
+        "min": -1.875,
+        "rms": 0.19415629105613064
+      },
+      "bit_exact": false,
+      "cosine": 0.9712580868849114,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.445038318634033,
+        "max_abs": 3.445038318634033,
+        "mean_abs": 0.12071393611529663,
+        "min": -1.8777592182159424,
+        "rms": 0.19830686690659916
+      },
+      "max_abs": 1.6996159553527832,
+      "maximum_error_export_coordinate": [
+        0,
+        16,
+        1140
+      ],
+      "maximum_error_native_bf16_value": 0.52734375,
+      "maximum_error_native_fp32_value": 2.226959705352783,
+      "mean_abs": 0.019565067489475493,
+      "normalized_max_abs": 0.49335182896505064,
+      "reference_f32_sha256": "4616bc2256ee72ab1d3c8c6e9ec2c8d09372467d91ba268a027505e2edd2080c",
+      "relative_l2": 0.23815699362611176,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "cache_k": {
+      "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+      "bf16_magnitude": {
+        "max": 436.0,
+        "max_abs": 436.0,
+        "mean_abs": 21.254996246658266,
+        "min": -340.0,
+        "rms": 69.45355375510557
+      },
+      "bit_exact": false,
+      "cosine": 0.9999983923874959,
+      "different_elements": 32768,
+      "elements": 32768,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 436.2725830078125,
+        "max_abs": 436.2725830078125,
+        "mean_abs": 21.25695756830018,
+        "min": -339.9056396484375,
+        "rms": 69.46390759281854
+      },
+      "max_abs": 1.061920166015625,
+      "maximum_error_export_coordinate": [
+        0,
+        1,
+        116,
+        125
+      ],
+      "maximum_error_native_bf16_value": -328.0,
+      "maximum_error_native_fp32_value": -326.9380798339844,
+      "mean_abs": 0.03436959911036297,
+      "normalized_max_abs": 0.0024340749507896736,
+      "reference_f32_sha256": "fb2fa7339fb53d1e139989c449172ed897edf61084f6eaa83f6f6b5beb755798",
+      "relative_l2": 0.0017991561105691,
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    "cache_v": {
+      "actual_f32_sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4",
+      "bf16_magnitude": {
+        "max": 3.453125,
+        "max_abs": 3.453125,
+        "mean_abs": 0.1695584500730547,
+        "min": -1.875,
+        "rms": 0.24602949072608069
+      },
+      "bit_exact": false,
+      "cosine": 0.9999949821526897,
+      "different_elements": 32768,
+      "elements": 32768,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.445038318634033,
+        "max_abs": 3.445038318634033,
+        "mean_abs": 0.1695710521417979,
+        "min": -1.8777592182159424,
+        "rms": 0.24604235151009188
+      },
+      "max_abs": 0.008305549621582031,
+      "maximum_error_export_coordinate": [
+        0,
+        0,
+        125,
+        76
+      ],
+      "maximum_error_native_bf16_value": 3.453125,
+      "maximum_error_native_fp32_value": 3.444819450378418,
+      "mean_abs": 0.0005933643473170491,
+      "normalized_max_abs": 0.0024108729289476247,
+      "reference_f32_sha256": "2fd157c0947c74752923dcbd91582ffbcfc45cd9d06f8cb8dd6a4cd2bbde073e",
+      "relative_l2": 0.003168264866749362,
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    "cos": {
+      "actual_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+      "bf16_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.8650642642751336,
+        "min": -1.0,
+        "rms": 0.9007162682339099
+      },
+      "bit_exact": false,
+      "cosine": 0.9999996518465907,
+      "different_elements": 14360,
+      "elements": 16384,
+      "finite": true,
+      "first_difference_flat": 128,
+      "fp32_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.8650109444398026,
+        "min": -1.0,
+        "rms": 0.9006583166325313
+      },
+      "max_abs": 0.001952052116394043,
+      "maximum_error_export_coordinate": [
+        5,
+        10
+      ],
+      "maximum_error_native_bf16_value": 0.8359375,
+      "maximum_error_native_fp32_value": 0.837889552116394,
+      "mean_abs": 0.0004719250036231415,
+      "normalized_max_abs": 0.001952052116394043,
+      "reference_f32_sha256": "08628b4b6cea91f7f88e1ee778eee99f41b4b873d4b7e8368cb3b7a2d0a18de0",
+      "relative_l2": 0.0008369538350978169,
+      "shape": [
+        128,
+        128
+      ]
+    },
+    "down": {
+      "actual_f32_sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1",
+      "bf16_magnitude": {
+        "max": 1.8984375,
+        "max_abs": 1.8984375,
+        "mean_abs": 0.10503540759384578,
+        "min": -1.4453125,
+        "rms": 0.13692122459701256
+      },
+      "bit_exact": false,
+      "cosine": 0.9361044525482952,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 1.899634599685669,
+        "max_abs": 1.899634599685669,
+        "mean_abs": 0.11302024993455191,
+        "min": -1.6235337257385254,
+        "rms": 0.14677207980702897
+      },
+      "max_abs": 1.2656499147415161,
+      "maximum_error_export_coordinate": [
+        0,
+        73,
+        1073
+      ],
+      "maximum_error_native_bf16_value": -0.08984375,
+      "maximum_error_native_fp32_value": -1.3554936647415161,
+      "mean_abs": 0.03371309911549022,
+      "normalized_max_abs": 0.666259666438452,
+      "reference_f32_sha256": "9d291d5b48536974fb4dd4d8f0bcb3b265ea9aea319055de1552b5c0e3b405ea",
+      "relative_l2": 0.35173687557029043,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "gate": {
+      "actual_f32_sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c",
+      "bf16_magnitude": {
+        "max": 3.90625,
+        "max_abs": 6.0,
+        "mean_abs": 0.35979288255135283,
+        "min": -6.0,
+        "rms": 0.49971890451439543
+      },
+      "bit_exact": false,
+      "cosine": 0.9776079933591915,
+      "different_elements": 1146879,
+      "elements": 1146880,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.82363224029541,
+        "max_abs": 5.601271629333496,
+        "mean_abs": 0.35957986902549904,
+        "min": -5.601271629333496,
+        "rms": 0.4983247202801389
+      },
+      "max_abs": 3.850344181060791,
+      "maximum_error_export_coordinate": [
+        0,
+        44,
+        7241
+      ],
+      "maximum_error_native_bf16_value": -1.484375,
+      "maximum_error_native_fp32_value": 2.365969181060791,
+      "mean_abs": 0.06663888913738156,
+      "normalized_max_abs": 0.6874053671842637,
+      "reference_f32_sha256": "7eb0f03a55b1eed4adfcfc47b601d33306c291c0e0f1f48ce991b49f08af3538",
+      "relative_l2": 0.21193662916191885,
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "k": {
+      "actual_f32_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+      "bf16_magnitude": {
+        "max": 436.0,
+        "max_abs": 436.0,
+        "mean_abs": 21.254996246658266,
+        "min": -340.0,
+        "rms": 69.45355375510559
+      },
+      "bit_exact": false,
+      "cosine": 0.9999983923874959,
+      "different_elements": 32768,
+      "elements": 32768,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 436.2725830078125,
+        "max_abs": 436.2725830078125,
+        "mean_abs": 21.25695756830018,
+        "min": -339.9056396484375,
+        "rms": 69.46390759281854
+      },
+      "max_abs": 1.061920166015625,
+      "maximum_error_export_coordinate": [
+        0,
+        116,
+        253
+      ],
+      "maximum_error_native_bf16_value": -328.0,
+      "maximum_error_native_fp32_value": -326.9380798339844,
+      "mean_abs": 0.03436959911036297,
+      "normalized_max_abs": 0.0024340749507896736,
+      "reference_f32_sha256": "59228046fefacdd31f3c91e81695a45861383a713a48bcc417c0b3c94c92f14d",
+      "relative_l2": 0.0017991561105691,
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    "kr": {
+      "actual_f32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+      "bf16_magnitude": {
+        "max": 436.0,
+        "max_abs": 436.0,
+        "mean_abs": 21.249845906429982,
+        "min": -340.0,
+        "rms": 69.4535703834135
+      },
+      "bit_exact": false,
+      "cosine": 0.9999984189747326,
+      "different_elements": 32768,
+      "elements": 32768,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 436.27215576171875,
+        "max_abs": 436.27215576171875,
+        "mean_abs": 21.25207961890321,
+        "min": -339.9195556640625,
+        "rms": 69.46390724734682
+      },
+      "max_abs": 1.002593994140625,
+      "maximum_error_export_coordinate": [
+        0,
+        29,
+        189
+      ],
+      "maximum_error_native_bf16_value": 308.0,
+      "maximum_error_native_fp32_value": 306.9974060058594,
+      "mean_abs": 0.03295286463592895,
+      "normalized_max_abs": 0.0022980930157922284,
+      "reference_f32_sha256": "1574d7d66204ad015b2dbaab7e0d4b00e79ecbb8988f4b0d2557aa1fdc97eff8",
+      "relative_l2": 0.0017842993446603851,
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    "logits": {
+      "actual_f32_sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5",
+      "bf16_magnitude": {
+        "max": 6784.0,
+        "max_abs": 3.3895313892515355e+38,
+        "mean_abs": 1.681525337636504e+38,
+        "min": -3.3895313892515355e+38,
+        "rms": 2.3873799265598086e+38
+      },
+      "bit_exact": false,
+      "cosine": 1.0000000000000018,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 6793.94091796875,
+        "max_abs": 3.4028234663852886e+38,
+        "mean_abs": 1.6881194540270768e+38,
+        "min": -3.4028234663852886e+38,
+        "rms": 2.396742057924644e+38
+      },
+      "max_abs": 1.3292077133753122e+36,
+      "maximum_error_export_coordinate": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "maximum_error_native_bf16_value": -3.3895313892515355e+38,
+      "maximum_error_native_fp32_value": -3.4028234663852886e+38,
+      "mean_abs": 6.594116390572838e+35,
+      "normalized_max_abs": 0.0039061906281823294,
+      "reference_f32_sha256": "c4f99cddac32a7d74dc85d530ba03821a8fafb73f8a05f917f48dc06e765da78",
+      "relative_l2": 0.0039061906281823364,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "mask": {
+      "actual_f32_sha256": "a9f72e2719df06a4bc7cb364c8a61dcb0fd33750eaa6a242922b001b7471ec9c",
+      "bf16_magnitude": {
+        "max": 0.0,
+        "max_abs": 3.3895313892515355e+38,
+        "mean_abs": 1.681525337636504e+38,
+        "min": -3.3895313892515355e+38,
+        "rms": 2.3873799265598086e+38
+      },
+      "bit_exact": false,
+      "cosine": 1.0000000000000009,
+      "different_elements": 8128,
+      "elements": 16384,
+      "finite": true,
+      "first_difference_flat": 1,
+      "fp32_magnitude": {
+        "max": 0.0,
+        "max_abs": 3.4028234663852886e+38,
+        "mean_abs": 1.6881194540270768e+38,
+        "min": -3.4028234663852886e+38,
+        "rms": 2.396742057924644e+38
+      },
+      "max_abs": 1.3292077133753122e+36,
+      "maximum_error_export_coordinate": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "maximum_error_native_bf16_value": -3.3895313892515355e+38,
+      "maximum_error_native_fp32_value": -3.4028234663852886e+38,
+      "mean_abs": 6.594116390572838e+35,
+      "normalized_max_abs": 0.0039061906281823294,
+      "reference_f32_sha256": "7ebaa97f6d57ba03277ad5878c4d247ce716ae0026225c832a4097625d8b3e27",
+      "relative_l2": 0.003906190628182333,
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    "n0": {
+      "actual_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+      "bf16_magnitude": {
+        "max": 10.9375,
+        "max_abs": 15.0,
+        "mean_abs": 0.3508457181224003,
+        "min": -15.0,
+        "rms": 0.5085881742877503
+      },
+      "bit_exact": false,
+      "cosine": 0.9999972349348141,
+      "different_elements": 196606,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 10.924824714660645,
+        "max_abs": 15.01755428314209,
+        "mean_abs": 0.3508637112477992,
+        "min": -15.01755428314209,
+        "rms": 0.508607821604731
+      },
+      "max_abs": 0.05491161346435547,
+      "maximum_error_export_coordinate": [
+        0,
+        92,
+        974
+      ],
+      "maximum_error_native_bf16_value": -12.0625,
+      "maximum_error_native_fp32_value": -12.007588386535645,
+      "mean_abs": 0.0006697276261925927,
+      "normalized_max_abs": 0.0036564950876186502,
+      "reference_f32_sha256": "48901b9ecd38268a2c851f18e932e886e8cdbd4e166b382504110830c41393a9",
+      "relative_l2": 0.0023518947660215047,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "n1": {
+      "actual_f32_sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55",
+      "bf16_magnitude": {
+        "max": 5.53125,
+        "max_abs": 5.53125,
+        "mean_abs": 0.22125153241290718,
+        "min": -3.421875,
+        "rms": 0.32508170324716207
+      },
+      "bit_exact": false,
+      "cosine": 0.9643010899809926,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 5.704808712005615,
+        "max_abs": 5.704808712005615,
+        "mean_abs": 0.2224202357081613,
+        "min": -3.474810838699341,
+        "rms": 0.3263638007073498
+      },
+      "max_abs": 0.70977614633739,
+      "maximum_error_export_coordinate": [
+        0,
+        124,
+        534
+      ],
+      "maximum_error_native_bf16_value": -0.6875,
+      "maximum_error_native_fp32_value": 0.022276146337389946,
+      "mean_abs": 0.06001176713253433,
+      "normalized_max_abs": 0.12441716842208667,
+      "reference_f32_sha256": "e8eca65c3f4fff19e18b90658c5b95f883484e0b6fa6ef6d91da1e2a3f8d4d96",
+      "relative_l2": 0.2667072763158131,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "o": {
+      "actual_f32_sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550",
+      "bf16_magnitude": {
+        "max": 3.890625,
+        "max_abs": 3.890625,
+        "mean_abs": 0.07762109820146179,
+        "min": -1.703125,
+        "rms": 0.14823331890635766
+      },
+      "bit_exact": false,
+      "cosine": 0.9831465708535337,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.869877576828003,
+        "max_abs": 3.869877576828003,
+        "mean_abs": 0.07978504016971326,
+        "min": -1.7521947622299194,
+        "rms": 0.15127569257064843
+      },
+      "max_abs": 0.36922240257263184,
+      "maximum_error_export_coordinate": [
+        0,
+        19,
+        844
+      ],
+      "maximum_error_native_bf16_value": -0.9765625,
+      "maximum_error_native_fp32_value": -1.3457849025726318,
+      "mean_abs": 0.018694175587231854,
+      "normalized_max_abs": 0.09540932374281202,
+      "reference_f32_sha256": "f49c4fc562cf1d942b2578cf0c89b09fc54435f55cc105591fbce37e7a92b652",
+      "relative_l2": 0.1828481198282244,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "prob": {
+      "actual_f32_sha256": "d9c02d605505ee1f3a78ad719f70a03227f7ee66f54f6f39be0fe63ee14612ca",
+      "bf16_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.007812608378748453,
+        "min": 0.0,
+        "rms": 0.056787684421655375
+      },
+      "bit_exact": false,
+      "cosine": 0.9370750357931795,
+      "different_elements": 97749,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 128,
+      "fp32_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.007812500003503496,
+        "min": 0.0,
+        "rms": 0.058998079617491345
+      },
+      "max_abs": 0.9893643856048584,
+      "maximum_error_export_coordinate": [
+        0,
+        6,
+        93,
+        93
+      ],
+      "maximum_error_native_bf16_value": 0.0106201171875,
+      "maximum_error_native_fp32_value": 0.9999845027923584,
+      "mean_abs": 0.0023546403260297057,
+      "normalized_max_abs": 0.9893643856048584,
+      "reference_f32_sha256": "49c16879abe70432221c57b92c6b99af86b965b1ad2139e120cfc1f1d6ca8caa",
+      "relative_l2": 0.35005508042169875,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "pv": {
+      "actual_f32_sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee",
+      "bf16_magnitude": {
+        "max": 3.453125,
+        "max_abs": 3.453125,
+        "mean_abs": 0.11773342537882552,
+        "min": -1.875,
+        "rms": 0.19415629105613064
+      },
+      "bit_exact": false,
+      "cosine": 0.9712580868849116,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.445038318634033,
+        "max_abs": 3.445038318634033,
+        "mean_abs": 0.12071393611529661,
+        "min": -1.8777592182159424,
+        "rms": 0.19830686690659913
+      },
+      "max_abs": 1.6996159553527832,
+      "maximum_error_export_coordinate": [
+        0,
+        8,
+        16,
+        116
+      ],
+      "maximum_error_native_bf16_value": 0.52734375,
+      "maximum_error_native_fp32_value": 2.226959705352783,
+      "mean_abs": 0.019565067489475493,
+      "normalized_max_abs": 0.49335182896505064,
+      "reference_f32_sha256": "562148c644dd4e0052474b9d94afc4880b82897fc759283218af8a8cbf9e37e3",
+      "relative_l2": 0.23815699362611198,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "q": {
+      "actual_f32_sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88",
+      "bf16_magnitude": {
+        "max": 71.0,
+        "max_abs": 71.0,
+        "mean_abs": 1.7558191105066119,
+        "min": -71.0,
+        "rms": 3.9623117834800103
+      },
+      "bit_exact": false,
+      "cosine": 0.9999960485258449,
+      "different_elements": 196605,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 70.74644470214844,
+        "max_abs": 70.95254516601562,
+        "mean_abs": 1.7559325041019271,
+        "min": -70.95254516601562,
+        "rms": 3.9625925018454162
+      },
+      "max_abs": 0.47748565673828125,
+      "maximum_error_export_coordinate": [
+        0,
+        78,
+        1152
+      ],
+      "maximum_error_native_bf16_value": -71.0,
+      "maximum_error_native_fp32_value": -70.52251434326172,
+      "mean_abs": 0.004334831915337826,
+      "normalized_max_abs": 0.006729648043224588,
+      "reference_f32_sha256": "f5f18c42b954687596743fa420f76d033b15ee73dc5b9034f84d633947b4949c",
+      "relative_l2": 0.002812011210976126,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "qr": {
+      "actual_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+      "bf16_magnitude": {
+        "max": 68.5,
+        "max_abs": 68.5,
+        "mean_abs": 1.757200199924834,
+        "min": -66.0,
+        "rms": 3.9623947131128516
+      },
+      "bit_exact": false,
+      "cosine": 0.9999985306422129,
+      "different_elements": 196606,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 68.7006607055664,
+        "max_abs": 68.7006607055664,
+        "mean_abs": 1.7572676613143476,
+        "min": -66.23064422607422,
+        "rms": 3.9625924971321145
+      },
+      "max_abs": 0.23064422607421875,
+      "maximum_error_export_coordinate": [
+        0,
+        13,
+        447
+      ],
+      "maximum_error_native_bf16_value": -66.0,
+      "maximum_error_native_fp32_value": -66.23064422607422,
+      "mean_abs": 0.0030159869608642844,
+      "normalized_max_abs": 0.003357234467696044,
+      "reference_f32_sha256": "4c4de0ff1af79eed22a94777d50e447dcc07fca8bacca018076e221a4177e8ab",
+      "relative_l2": 0.0017149519467654433,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "r": {
+      "actual_f32_sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f",
+      "bf16_magnitude": {
+        "max": 3.9375,
+        "max_abs": 3.9375,
+        "mean_abs": 0.0786519148532534,
+        "min": -1.6953125,
+        "rms": 0.14860364879563145
+      },
+      "bit_exact": false,
+      "cosine": 0.9832161751770339,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.929936170578003,
+        "max_abs": 3.929936170578003,
+        "mean_abs": 0.08069374624451935,
+        "min": -1.7363256216049194,
+        "rms": 0.15159330995606854
+      },
+      "max_abs": 0.37068724632263184,
+      "maximum_error_export_coordinate": [
+        0,
+        19,
+        844
+      ],
+      "maximum_error_native_bf16_value": -0.99609375,
+      "maximum_error_native_fp32_value": -1.3667809963226318,
+      "mean_abs": 0.01869548306763491,
+      "normalized_max_abs": 0.09432398650589592,
+      "reference_f32_sha256": "594d45e149121baf64efd68676fa0a7a9b08c8a552c13ae0758a91eb9f8bf18c",
+      "relative_l2": 0.1824680337390643,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "repeat_k": {
+      "actual_f32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+      "bf16_magnitude": {
+        "max": 436.0,
+        "max_abs": 436.0,
+        "mean_abs": 21.254996246658266,
+        "min": -340.0,
+        "rms": 69.45355375510559
+      },
+      "bit_exact": false,
+      "cosine": 0.9999983923874965,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 436.2725830078125,
+        "max_abs": 436.2725830078125,
+        "mean_abs": 21.25695756830018,
+        "min": -339.9056396484375,
+        "rms": 69.46390759281854
+      },
+      "max_abs": 1.061920166015625,
+      "maximum_error_export_coordinate": [
+        0,
+        6,
+        116,
+        125
+      ],
+      "maximum_error_native_bf16_value": -328.0,
+      "maximum_error_native_fp32_value": -326.9380798339844,
+      "mean_abs": 0.03436959911036297,
+      "normalized_max_abs": 0.0024340749507896736,
+      "reference_f32_sha256": "7c6d91468371762bd7cd6fcd0df1b78cef62fc1d0eb210589d34dc33f8835bd9",
+      "relative_l2": 0.0017991561105690993,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "repeat_v": {
+      "actual_f32_sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d",
+      "bf16_magnitude": {
+        "max": 3.453125,
+        "max_abs": 3.453125,
+        "mean_abs": 0.1695584500730547,
+        "min": -1.875,
+        "rms": 0.24602949072608069
+      },
+      "bit_exact": false,
+      "cosine": 0.9999949821526898,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.445038318634033,
+        "max_abs": 3.445038318634033,
+        "mean_abs": 0.1695710521417979,
+        "min": -1.8777592182159424,
+        "rms": 0.24604235151009188
+      },
+      "max_abs": 0.008305549621582031,
+      "maximum_error_export_coordinate": [
+        0,
+        0,
+        125,
+        76
+      ],
+      "maximum_error_native_bf16_value": 3.453125,
+      "maximum_error_native_fp32_value": 3.444819450378418,
+      "mean_abs": 0.0005933643473170491,
+      "normalized_max_abs": 0.0024108729289476247,
+      "reference_f32_sha256": "c3457f2de4e5971f354cc825c8d5f3dcfd388da83ae388a4aa892a6ec3c00cc0",
+      "relative_l2": 0.003168264866749362,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "scores": {
+      "actual_f32_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+      "bf16_magnitude": {
+        "max": 6784.0,
+        "max_abs": 6784.0,
+        "mean_abs": 582.0652949611346,
+        "min": -4416.0,
+        "rms": 1026.07505331205
+      },
+      "bit_exact": false,
+      "cosine": 0.9999959900330995,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 6793.94091796875,
+        "max_abs": 6793.94091796875,
+        "mean_abs": 582.1983987676814,
+        "min": -4407.62841796875,
+        "rms": 1026.4067365503383
+      },
+      "max_abs": 47.3662109375,
+      "maximum_error_export_coordinate": [
+        0,
+        3,
+        13,
+        2
+      ],
+      "maximum_error_native_bf16_value": 6688.0,
+      "maximum_error_native_fp32_value": 6735.3662109375,
+      "mean_abs": 1.373017139713814,
+      "normalized_max_abs": 0.00697183144649152,
+      "reference_f32_sha256": "7921303fd5fb334876cb4eb638c0353cd47da510f92f619d529bb08cafed255f",
+      "relative_l2": 0.0028498715796534883,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "silu": {
+      "actual_f32_sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db",
+      "bf16_magnitude": {
+        "max": 3.828125,
+        "max_abs": 3.828125,
+        "mean_abs": 0.13548505531160637,
+        "min": -0.279296875,
+        "rms": 0.17172848578155908
+      },
+      "bit_exact": false,
+      "cosine": 0.9632613016629535,
+      "different_elements": 1146879,
+      "elements": 1146880,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.7418785095214844,
+        "max_abs": 3.7418785095214844,
+        "mean_abs": 0.13654309704019188,
+        "min": -0.27846455574035645,
+        "rms": 0.1750854374324462
+      },
+      "max_abs": 2.8466174602508545,
+      "maximum_error_export_coordinate": [
+        0,
+        76,
+        7241
+      ],
+      "maximum_error_native_bf16_value": -0.130859375,
+      "maximum_error_native_fp32_value": 2.7157580852508545,
+      "mean_abs": 0.025473414698540815,
+      "normalized_max_abs": 0.7607455594850093,
+      "reference_f32_sha256": "f7a206b92e200211888479f27eb6e01d48847907672721b8f8b47fc04ad67167",
+      "relative_l2": 0.26913976060724276,
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "sin": {
+      "actual_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+      "bf16_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.26191185128118377,
+        "min": -1.0,
+        "rms": 0.4345523779927334
+      },
+      "bit_exact": false,
+      "cosine": 0.999999094512001,
+      "different_elements": 16256,
+      "elements": 16384,
+      "finite": true,
+      "first_difference_flat": 128,
+      "fp32_magnitude": {
+        "max": 0.9999999403953552,
+        "max_abs": 0.9999999403953552,
+        "mean_abs": 0.26190108838365617,
+        "min": -0.9999994039535522,
+        "rms": 0.4345280200529483
+      },
+      "max_abs": 0.001952826976776123,
+      "maximum_error_export_coordinate": [
+        80,
+        22
+      ],
+      "maximum_error_native_bf16_value": 0.640625,
+      "maximum_error_native_fp32_value": 0.6386721730232239,
+      "mean_abs": 0.0003145454648420948,
+      "normalized_max_abs": 0.0019528270931736882,
+      "reference_f32_sha256": "ed45d8a83d19aadc77ec080f931b37760664d77bc84020308bbdfda5599a2925",
+      "relative_l2": 0.0013469297676030306,
+      "shape": [
+        128,
+        128
+      ]
+    },
+    "softmax_fp32": {
+      "actual_f32_sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8",
+      "bf16_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.007812499995318758,
+        "min": 0.0,
+        "rms": 0.056786192939437936
+      },
+      "bit_exact": false,
+      "cosine": 0.9370718096193635,
+      "different_elements": 97830,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 128,
+      "fp32_magnitude": {
+        "max": 1.0,
+        "max_abs": 1.0,
+        "mean_abs": 0.007812500003503496,
+        "min": 0.0,
+        "rms": 0.058998079617491345
+      },
+      "max_abs": 0.9893462052568793,
+      "maximum_error_export_coordinate": [
+        0,
+        6,
+        93,
+        93
+      ],
+      "maximum_error_native_bf16_value": 0.010638297535479069,
+      "maximum_error_native_fp32_value": 0.9999845027923584,
+      "mean_abs": 0.0023545270175980315,
+      "normalized_max_abs": 0.9893462052568793,
+      "reference_f32_sha256": "49c16879abe70432221c57b92c6b99af86b965b1ad2139e120cfc1f1d6ca8caa",
+      "relative_l2": 0.35006211330903764,
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "up": {
+      "actual_f32_sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95",
+      "bf16_magnitude": {
+        "max": 3.375,
+        "max_abs": 3.40625,
+        "mean_abs": 0.1980446543398817,
+        "min": -3.40625,
+        "rms": 0.2621673121857805
+      },
+      "bit_exact": false,
+      "cosine": 0.9597462019106571,
+      "different_elements": 1146880,
+      "elements": 1146880,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.3466596603393555,
+        "max_abs": 3.582996368408203,
+        "mean_abs": 0.20136851434642677,
+        "min": -3.582996368408203,
+        "rms": 0.2665657299267611
+      },
+      "max_abs": 1.4317933320999146,
+      "maximum_error_export_coordinate": [
+        0,
+        19,
+        5509
+      ],
+      "maximum_error_native_bf16_value": 0.296875,
+      "maximum_error_native_fp32_value": 1.7286683320999146,
+      "mean_abs": 0.05090079754334576,
+      "normalized_max_abs": 0.3996078100229862,
+      "reference_f32_sha256": "0dab36b7bdff860361671ec7700064b0954e5fd1f3029dc20cbb826a0262d3ed",
+      "relative_l2": 0.28187134656495555,
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "v": {
+      "actual_f32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+      "bf16_magnitude": {
+        "max": 3.453125,
+        "max_abs": 3.453125,
+        "mean_abs": 0.1695584500730547,
+        "min": -1.875,
+        "rms": 0.24602949072608069
+      },
+      "bit_exact": false,
+      "cosine": 0.9999949821526898,
+      "different_elements": 32768,
+      "elements": 32768,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 3.445038318634033,
+        "max_abs": 3.445038318634033,
+        "mean_abs": 0.1695710521417979,
+        "min": -1.8777592182159424,
+        "rms": 0.24604235151009188
+      },
+      "max_abs": 0.008305549621582031,
+      "maximum_error_export_coordinate": [
+        0,
+        125,
+        76
+      ],
+      "maximum_error_native_bf16_value": 3.453125,
+      "maximum_error_native_fp32_value": 3.444819450378418,
+      "mean_abs": 0.0005933643473170491,
+      "normalized_max_abs": 0.0024108729289476247,
+      "reference_f32_sha256": "9213c593b2da08e2a2c44e2c2202ceb1e91400bde6703deed88dce743fb0a0ce",
+      "relative_l2": 0.003168264866749362,
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    "x": {
+      "actual_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "bf16_magnitude": {
+        "max": 0.1279296875,
+        "max_abs": 0.142578125,
+        "mean_abs": 0.014186261698246957,
+        "min": -0.142578125,
+        "rms": 0.018007930761414097
+      },
+      "bit_exact": true,
+      "cosine": 1.0,
+      "different_elements": 0,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": null,
+      "fp32_magnitude": {
+        "max": 0.1279296875,
+        "max_abs": 0.142578125,
+        "mean_abs": 0.014186261698246957,
+        "min": -0.142578125,
+        "rms": 0.018007930761414097
+      },
+      "max_abs": 0.0,
+      "maximum_error_export_coordinate": [
+        0,
+        0,
+        0
+      ],
+      "maximum_error_native_bf16_value": 0.004608154296875,
+      "maximum_error_native_fp32_value": 0.004608154296875,
+      "mean_abs": 0.0,
+      "normalized_max_abs": 0.0,
+      "reference_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "relative_l2": 0.0,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "y": {
+      "actual_f32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+      "bf16_magnitude": {
+        "max": 5.0625,
+        "max_abs": 5.0625,
+        "mean_abs": 0.13555517640391676,
+        "min": -2.25,
+        "rms": 0.20994600284240686
+      },
+      "bit_exact": false,
+      "cosine": 0.9658122438138403,
+      "different_elements": 196608,
+      "elements": 196608,
+      "finite": true,
+      "first_difference_flat": 0,
+      "fp32_magnitude": {
+        "max": 4.937824249267578,
+        "max_abs": 4.937824249267578,
+        "mean_abs": 0.14455084421901118,
+        "min": -2.382193088531494,
+        "rms": 0.22007172473519013
+      },
+      "max_abs": 1.0502785444259644,
+      "maximum_error_export_coordinate": [
+        0,
+        73,
+        1073
+      ],
+      "maximum_error_native_bf16_value": 2.9375,
+      "maximum_error_native_fp32_value": 1.8872214555740356,
+      "mean_abs": 0.03711816316218316,
+      "normalized_max_abs": 0.21270067369889703,
+      "reference_f32_sha256": "fe4b70a1d424b398cedf75ddeacce960e00d07304c6934e9d2d63c9b74ab53b9",
+      "relative_l2": 0.25951204015095336,
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    }
+  },
+  "no_RTL": true,
+  "original_result_sha256": "10ad341ee67fc12f1c619c60716647f29110fa49cd8f17163136059f78cb5315",
+  "payload_manifest_sha256": "582f34afe5c52633f5290b5ba071f76164193f59d6edfc0d949658fd1e9715d1",
+  "position_ids": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ]
+  ],
+  "scale_divisor": 11.313708498984761,
+  "status": "DIAGNOSTIC_UNOBSERVED_REPLAY",
+  "token_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "unmasked_scores_metrics": {
+    "elements": 99072,
+    "max_abs": 47.3662109375,
+    "mean_abs": 1.278419886175898,
+    "relative_l2": 0.0029350964346921858
+  }
+}

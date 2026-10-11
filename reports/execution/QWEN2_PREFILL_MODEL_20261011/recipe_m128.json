@@ -1,0 +1,1029 @@
+{
+  "schema": 1,
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "diagnostic_only": true,
+  "completion_status": "ALL_15_SOFTWARE_STAGES_COMPLETE",
+  "shape": {
+    "hidden": 1536,
+    "ffn": 8960,
+    "heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "max_tokens": 128,
+    "tokens": 128
+  },
+  "checkpoint_manifest": {
+    "schema_version": 1,
+    "model_id": "Qwen/Qwen2-1.5B-Instruct",
+    "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "layer_id": 0,
+    "header_sha256": "124516afba769374e2b948e185dd3e9203e2412daaef3f2ccf7bdbaca0f88987",
+    "payload_bytes": 94382080,
+    "layer_bytes": 93595648,
+    "embedding_bytes": 786432,
+    "status": "ACQUIRED_PINNED_QWEN2_LAYER0_AND_EMBEDDING_ROWS_ONLY",
+    "tensors": [
+      {
+        "name": "model.embed_tokens.weight",
+        "local_name": "embed_tokens.rows_0_255",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1536
+        ],
+        "source_shape": [
+          151936,
+          1536
+        ],
+        "source_rows": [
+          0,
+          256
+        ],
+        "source_data_offsets": [
+          0,
+          466747392
+        ],
+        "start": 38536,
+        "end": 824967,
+        "bytes": 786432,
+        "file": "embed_tokens.rows_0_255.bin",
+        "sha256": "3cdd8eecf1d0948c6ebf40ca947875b7b706521733fa3107e934d3815e45c014",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T11:56:34.268516+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=38536-824967",
+            "status": 206,
+            "content_range": "bytes 38536-824967/3087467144",
+            "bytes": 786432,
+            "sha256": "3cdd8eecf1d0948c6ebf40ca947875b7b706521733fa3107e934d3815e45c014"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.input_layernorm.weight",
+        "local_name": "input_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536
+        ],
+        "source_shape": [
+          1536
+        ],
+        "source_data_offsets": [
+          466747392,
+          466750464
+        ],
+        "start": 466785928,
+        "end": 466788999,
+        "bytes": 3072,
+        "file": "input_layernorm.weight.bin",
+        "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T11:58:44.315659+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=466785928-466788999",
+            "status": 206,
+            "content_range": "bytes 466785928-466788999/3087467144",
+            "bytes": 3072,
+            "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.mlp.down_proj.weight",
+        "local_name": "mlp.down_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536,
+          8960
+        ],
+        "source_shape": [
+          1536,
+          8960
+        ],
+        "source_data_offsets": [
+          466750464,
+          494275584
+        ],
+        "start": 466789000,
+        "end": 494314119,
+        "bytes": 27525120,
+        "file": "mlp.down_proj.weight.bin",
+        "sha256": "8a9657234cffb29cec816483e03454846d80d3a1f4171e6bc40479f3ba73ce5a",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T11:58:57.586999+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=466789000-475177607",
+            "status": 206,
+            "content_range": "bytes 466789000-475177607/3087467144",
+            "bytes": 8388608,
+            "sha256": "5d324c50be2db85c1b49b37b0f41cc69ee5266426d19cb118ff97400cd4790d9"
+          },
+          {
+            "acquired_at": "2026-10-11T11:59:11.572537+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=475177608-483566215",
+            "status": 206,
+            "content_range": "bytes 475177608-483566215/3087467144",
+            "bytes": 8388608,
+            "sha256": "9f7ebbc095f29af9b916bb815f9b81ed4bbbfd0fbe12ece643b00b1a9fc28bae"
+          },
+          {
+            "acquired_at": "2026-10-11T11:59:26.231007+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=483566216-491954823",
+            "status": 206,
+            "content_range": "bytes 483566216-491954823/3087467144",
+            "bytes": 8388608,
+            "sha256": "265a40e7ed4bd4d7297bed59909b9db23a5de46639d8d88926cb4d07baf100d3"
+          },
+          {
+            "acquired_at": "2026-10-11T11:59:39.984554+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=491954824-494314119",
+            "status": 206,
+            "content_range": "bytes 491954824-494314119/3087467144",
+            "bytes": 2359296,
+            "sha256": "623d730e0af2b15c3ced2d9823a3182425a143e4f68e5d657dc7fd20eb728a31"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.mlp.gate_proj.weight",
+        "local_name": "mlp.gate_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          8960,
+          1536
+        ],
+        "source_shape": [
+          8960,
+          1536
+        ],
+        "source_data_offsets": [
+          494275584,
+          521800704
+        ],
+        "start": 494314120,
+        "end": 521839239,
+        "bytes": 27525120,
+        "file": "mlp.gate_proj.weight.bin",
+        "sha256": "0219acbf1f5bc38fc55ee56fa6b55c82150a1a4279915090e857beb382cc0d7e",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T11:59:53.048734+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=494314120-502702727",
+            "status": 206,
+            "content_range": "bytes 494314120-502702727/3087467144",
+            "bytes": 8388608,
+            "sha256": "421204b3ec6f6192423ba771cb94e06211cfe792ed20b365c6cfab194ca3f2b8"
+          },
+          {
+            "acquired_at": "2026-10-11T12:00:06.181121+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=502702728-511091335",
+            "status": 206,
+            "content_range": "bytes 502702728-511091335/3087467144",
+            "bytes": 8388608,
+            "sha256": "020093c5916a6a7aba8ca35eb397cd54e1eeb31d74594cfb59bf696ec57da77d"
+          },
+          {
+            "acquired_at": "2026-10-11T12:00:19.878285+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=511091336-519479943",
+            "status": 206,
+            "content_range": "bytes 511091336-519479943/3087467144",
+            "bytes": 8388608,
+            "sha256": "b243407ec82e0ca47c9de51c287cf25fe8beefce783eb8f43e922ba1a09a7d1c"
+          },
+          {
+            "acquired_at": "2026-10-11T12:00:33.071003+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=519479944-521839239",
+            "status": 206,
+            "content_range": "bytes 519479944-521839239/3087467144",
+            "bytes": 2359296,
+            "sha256": "6ae65245b2fd4e8033ae62c4dae28f8513c9ef09e1211cc1c0d7074c05fbe435"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.mlp.up_proj.weight",
+        "local_name": "mlp.up_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          8960,
+          1536
+        ],
+        "source_shape": [
+          8960,
+          1536
+        ],
+        "source_data_offsets": [
+          521800704,
+          549325824
+        ],
+        "start": 521839240,
+        "end": 549364359,
+        "bytes": 27525120,
+        "file": "mlp.up_proj.weight.bin",
+        "sha256": "a403942b0dc208a543e8434d091564cfd4b7a091c291d02d7a62ae46884e61ed",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:00:47.944571+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=521839240-530227847",
+            "status": 206,
+            "content_range": "bytes 521839240-530227847/3087467144",
+            "bytes": 8388608,
+            "sha256": "72f72e56259fc3ccc1c206d7e0f02d2d815432200b154bfc26d222e7111b1373"
+          },
+          {
+            "acquired_at": "2026-10-11T12:01:03.608975+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=530227848-538616455",
+            "status": 206,
+            "content_range": "bytes 530227848-538616455/3087467144",
+            "bytes": 8388608,
+            "sha256": "12b8a02c8ab18e11cf9ca10a9556ddd858c66a0916f4707b133aff93d3e47548"
+          },
+          {
+            "acquired_at": "2026-10-11T12:01:19.951272+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=538616456-547005063",
+            "status": 206,
+            "content_range": "bytes 538616456-547005063/3087467144",
+            "bytes": 8388608,
+            "sha256": "c95ad38f54c0beab8ef02e21dbadd6a955afb75a0abdfac34123465ad53b6632"
+          },
+          {
+            "acquired_at": "2026-10-11T12:01:33.686862+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=547005064-549364359",
+            "status": 206,
+            "content_range": "bytes 547005064-549364359/3087467144",
+            "bytes": 2359296,
+            "sha256": "cb0616750d8c85b8a579fdcf28acedd6e9ac567622acf3887d9bd0306b152636"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.post_attention_layernorm.weight",
+        "local_name": "post_attention_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536
+        ],
+        "source_shape": [
+          1536
+        ],
+        "source_data_offsets": [
+          549325824,
+          549328896
+        ],
+        "start": 549364360,
+        "end": 549367431,
+        "bytes": 3072,
+        "file": "post_attention_layernorm.weight.bin",
+        "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:01:47.999343+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=549364360-549367431",
+            "status": 206,
+            "content_range": "bytes 549364360-549367431/3087467144",
+            "bytes": 3072,
+            "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj.bias",
+        "local_name": "self_attn.k_proj.bias",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "source_shape": [
+          256
+        ],
+        "source_data_offsets": [
+          549328896,
+          549329408
+        ],
+        "start": 549367432,
+        "end": 549367943,
+        "bytes": 512,
+        "file": "self_attn.k_proj.bias.bin",
+        "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:02:01.578816+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=549367432-549367943",
+            "status": 206,
+            "content_range": "bytes 549367432-549367943/3087467144",
+            "bytes": 512,
+            "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj.weight",
+        "local_name": "self_attn.k_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1536
+        ],
+        "source_shape": [
+          256,
+          1536
+        ],
+        "source_data_offsets": [
+          549329408,
+          550115840
+        ],
+        "start": 549367944,
+        "end": 550154375,
+        "bytes": 786432,
+        "file": "self_attn.k_proj.weight.bin",
+        "sha256": "addac2eb287cc8d8caa24178c94156c67bab35bc6a9f76927f50a4f0be0ade47",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:02:15.740807+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=549367944-550154375",
+            "status": 206,
+            "content_range": "bytes 549367944-550154375/3087467144",
+            "bytes": 786432,
+            "sha256": "addac2eb287cc8d8caa24178c94156c67bab35bc6a9f76927f50a4f0be0ade47"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.o_proj.weight",
+        "local_name": "self_attn.o_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536,
+          1536
+        ],
+        "source_shape": [
+          1536,
+          1536
+        ],
+        "source_data_offsets": [
+          550115840,
+          554834432
+        ],
+        "start": 550154376,
+        "end": 554872967,
+        "bytes": 4718592,
+        "file": "self_attn.o_proj.weight.bin",
+        "sha256": "7613bde8e47278a40bbf05222cd0799ed873194e56a96f2f6167d4580bb1a735",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:02:29.836243+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=550154376-554872967",
+            "status": 206,
+            "content_range": "bytes 550154376-554872967/3087467144",
+            "bytes": 4718592,
+            "sha256": "7613bde8e47278a40bbf05222cd0799ed873194e56a96f2f6167d4580bb1a735"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.q_proj.bias",
+        "local_name": "self_attn.q_proj.bias",
+        "dtype": "BF16",
+        "shape": [
+          1536
+        ],
+        "source_shape": [
+          1536
+        ],
+        "source_data_offsets": [
+          554834432,
+          554837504
+        ],
+        "start": 554872968,
+        "end": 554876039,
+        "bytes": 3072,
+        "file": "self_attn.q_proj.bias.bin",
+        "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:02:43.913961+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=554872968-554876039",
+            "status": 206,
+            "content_range": "bytes 554872968-554876039/3087467144",
+            "bytes": 3072,
+            "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.q_proj.weight",
+        "local_name": "self_attn.q_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536,
+          1536
+        ],
+        "source_shape": [
+          1536,
+          1536
+        ],
+        "source_data_offsets": [
+          554837504,
+          559556096
+        ],
+        "start": 554876040,
+        "end": 559594631,
+        "bytes": 4718592,
+        "file": "self_attn.q_proj.weight.bin",
+        "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:02:58.022191+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=554876040-559594631",
+            "status": 206,
+            "content_range": "bytes 554876040-559594631/3087467144",
+            "bytes": 4718592,
+            "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj.bias",
+        "local_name": "self_attn.v_proj.bias",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "source_shape": [
+          256
+        ],
+        "source_data_offsets": [
+          559556096,
+          559556608
+        ],
+        "start": 559594632,
+        "end": 559595143,
+        "bytes": 512,
+        "file": "self_attn.v_proj.bias.bin",
+        "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:03:11.243011+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=559594632-559595143",
+            "status": 206,
+            "content_range": "bytes 559594632-559595143/3087467144",
+            "bytes": 512,
+            "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d"
+          }
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj.weight",
+        "local_name": "self_attn.v_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1536
+        ],
+        "source_shape": [
+          256,
+          1536
+        ],
+        "source_data_offsets": [
+          559556608,
+          560343040
+        ],
+        "start": 559595144,
+        "end": 560381575,
+        "bytes": 786432,
+        "file": "self_attn.v_proj.weight.bin",
+        "sha256": "e99b01559f13e11a0c96309f5b4e11664223aa31a2f318e49597ad8e66b0ea32",
+        "http_ranges": [
+          {
+            "acquired_at": "2026-10-11T12:03:25.429667+00:00",
+            "requested_url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+            "request_range": "bytes=559595144-560381575",
+            "status": 206,
+            "content_range": "bytes 559595144-560381575/3087467144",
+            "bytes": 786432,
+            "sha256": "e99b01559f13e11a0c96309f5b4e11664223aa31a2f318e49597ad8e66b0ea32"
+          }
+        ]
+      }
+    ],
+    "full_checkpoint_sha256_verified": false,
+    "advertised_full_checkpoint_sha256_unverified": "302e327795994403cb1e3cb6a3345c76b246b894d14078c936b570c83a4e9057",
+    "official_forward_executed": false,
+    "rtl_executed": false
+  },
+  "checkpoint_manifest_sha256": "582f34afe5c52633f5290b5ba071f76164193f59d6edfc0d949658fd1e9715d1",
+  "checkpoint_payload_directory": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_layer0_payload_20261011",
+  "input": {
+    "readonly_bytes": 188043264,
+    "readonly_sha256": "c34bcef98ca05d3c05087559741152082492b40fa6b74e072a1dec589c964a69",
+    "input_x_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+    "token_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "intermediate_preloads": 0,
+    "rope_theta": 1000000.0,
+    "positions": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "rope_table_recipe": "canonical_cpp_initialize_double_libm_then_FP32"
+  },
+  "stages": [
+    {
+      "phase": 0,
+      "name": "n0",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_0_n0_recipe.f32le",
+      "sha256": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df"
+    },
+    {
+      "phase": 1,
+      "name": "qr",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_1_qr_recipe.f32le",
+      "sha256": "bd97c7b89801abddbbd88370c5d19c1cf912d572bf42121946168537c58f595b"
+    },
+    {
+      "phase": 2,
+      "name": "kr",
+      "shape": [
+        128,
+        256
+      ],
+      "path": "phase_2_kr_recipe.f32le",
+      "sha256": "01a3aed8255cc24d10f5d3c9e4113093d17b2e250cf47b83c9ae89fb1a731e01"
+    },
+    {
+      "phase": 3,
+      "name": "v",
+      "shape": [
+        128,
+        256
+      ],
+      "path": "phase_3_v_recipe.f32le",
+      "sha256": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02"
+    },
+    {
+      "phase": 4,
+      "name": "q",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_4_q_recipe.f32le",
+      "sha256": "8a47eb1821eed4007d2842523295e0ea3803d0d9d18cc67913a2295e00dff8d1"
+    },
+    {
+      "phase": 5,
+      "name": "k",
+      "shape": [
+        128,
+        256
+      ],
+      "path": "phase_5_k_recipe.f32le",
+      "sha256": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e"
+    },
+    {
+      "phase": 6,
+      "name": "att",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_6_att_recipe.f32le",
+      "sha256": "b546fe31de68553448f05b9a66fa59565eee94552574e608c0258fd68c0e5d54"
+    },
+    {
+      "phase": 7,
+      "name": "o",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_7_o_recipe.f32le",
+      "sha256": "740d6cfeddfbbc42b994be28a4332b32bec17681e62ae8df249496fd28c3b6ec"
+    },
+    {
+      "phase": 8,
+      "name": "r",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_8_r_recipe.f32le",
+      "sha256": "94d50ce1c08947fb4274cf312b001eb80cd07ba03d93f6d4cf01e0da02664de2"
+    },
+    {
+      "phase": 9,
+      "name": "n1",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_9_n1_recipe.f32le",
+      "sha256": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d"
+    },
+    {
+      "phase": 10,
+      "name": "gate",
+      "shape": [
+        128,
+        8960
+      ],
+      "path": "phase_10_gate_recipe.f32le",
+      "sha256": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5"
+    },
+    {
+      "phase": 11,
+      "name": "up",
+      "shape": [
+        128,
+        8960
+      ],
+      "path": "phase_11_up_recipe.f32le",
+      "sha256": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908"
+    },
+    {
+      "phase": 12,
+      "name": "act",
+      "shape": [
+        128,
+        8960
+      ],
+      "path": "phase_12_act_recipe.f32le",
+      "sha256": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d"
+    },
+    {
+      "phase": 13,
+      "name": "down",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_13_down_recipe.f32le",
+      "sha256": "48c8e5509f94fa9dae7dc0e13ffd2811d4aabda518e3c1a64ed4d79e415c8af1"
+    },
+    {
+      "phase": 14,
+      "name": "y",
+      "shape": [
+        128,
+        1536
+      ],
+      "path": "phase_14_y_recipe.f32le",
+      "sha256": "cbda6ba00853708fab397dadafbf731b29a8b134f6d9f6541e6b7a5fce6f6cb5"
+    }
+  ],
+  "source_identity": {
+    "source_sha256": {
+      "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43"
+    },
+    "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "section_sha256": {
+      "helpers": "d1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b",
+      "math": "4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8",
+      "layout": "c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f"
+    },
+    "git_head": "c14deb7779a47044762bccdd9d8a95abd3b24683",
+    "compile_command": [
+      "/usr/bin/g++",
+      "-O2",
+      "-std=c++17",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_block_recipe_m128_release_20261011/generated/software_recipe.cpp",
+      "-o",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_block_recipe_m128_release_20261011/generated/software_recipe"
+    ],
+    "compiler_version": "g++ (Debian 14.2.0-19) 14.2.0",
+    "generated_cpp_sha256": "5c8a7efb1ddd8ac93d6338bad3d2ce9e7a968daa5e8af27175f847e0c79c17af",
+    "generated_header_sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30",
+    "binary_sha256": "c2b2a058dbbb6046e1628e34cb4ee16427ce2c0b8f81df41646b51fa9843a0b7",
+    "generator_sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "numerical_contract": "qwen2-functional-bf16-fp32-ordered-v1",
+    "rounding_mode": "FE_TONEAREST",
+    "hardware_simulation": false,
+    "generated_by_chisel": false
+  },
+  "logical_macs": {
+    "dense": 5989466112,
+    "attention_qk_and_pv": 25362432,
+    "total": 6014828544
+  },
+  "wall_seconds": 29.98843168500025,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "float_environment": {
+    "rounding": "FE_TONEAREST",
+    "probes": "10",
+    "arch": "x86",
+    "mxcsr_before": "8064",
+    "mxcsr_after": "8064",
+    "ftz": "0",
+    "daz": "0"
+  },
+  "m16_prerequisite": {
+    "directory": "work/qwen2_block_recipe_m16_release_20261011",
+    "result_sha256": "3f07e0460681bdb00a7e7500f82c16f8bd8148c112b24c4cf1a9653f6451f025",
+    "comparison_sha256": "864f9625aeaab9fd0d724d211acec45efdadc75ff48bdc2c94f5645482a4911d",
+    "estimated_m128_wall_seconds": 31.354941082066826,
+    "numerical_gate_passed": false,
+    "diagnostic_only": true,
+    "inherited_comparison_status": "FAIL_EXISTING_FP32_FINAL_BUDGET",
+    "inherited_native_status": "PASS_BF16_STAGE_BUDGET"
+  },
+  "estimated_m128_wall_seconds": 29.98843168500025,
+  "scope": {
+    "software_only": true,
+    "all_15_stages": true,
+    "consumes_own_previous_stages": true,
+    "rtl_executed": false,
+    "physical_resource_validation": false,
+    "official_framework_forward": false,
+    "checkpoint_accuracy_signoff": false,
+    "multi_layer": false,
+    "kv_cache_carry": false
+  }
+}

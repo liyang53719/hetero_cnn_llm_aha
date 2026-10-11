@@ -1,0 +1,85 @@
+{
+  "scope": "diagnostic_only_not_replacement_stages_or_acceptance",
+  "method": "NumPy FP32 matmul and true exponential using unchanged actual recipe Q/K/V; ablations are not the canonical ordered-FMA recipe",
+  "source_recipe_result_sha256": "3f07e0460681bdb00a7e7500f82c16f8bd8148c112b24c4cf1a9653f6451f025",
+  "source_comparison_sha256": "864f9625aeaab9fd0d724d211acec45efdadc75ff48bdc2c94f5645482a4911d",
+  "ablations": {
+    "recipe_qkv_fp32_attention": {
+      "against_independent_bf16": {
+        "relative_l2": 0.13574089199798356,
+        "cosine": 0.9908452155859223,
+        "max_abs": 0.44713106751441956,
+        "mean_abs": 0.012209380176717804,
+        "normalized_max_abs": 0.1960026597323483
+      },
+      "against_independent_fp32": {
+        "relative_l2": 0.001985863317030268,
+        "cosine": 0.9999980282428693,
+        "max_abs": 0.002410396933555603,
+        "mean_abs": 0.0002777875142482335,
+        "normalized_max_abs": 0.0010590043474963558
+      },
+      "against_canonical_recipe_attention": {
+        "relative_l2": 0.0260253026394314,
+        "cosine": 0.9996628840307461,
+        "max_abs": 0.05359160900115967,
+        "mean_abs": 0.0026965139512872597,
+        "normalized_max_abs": 0.02349213605319322
+      }
+    },
+    "recipe_qkv_bf16_qk_only": {
+      "against_independent_bf16": {
+        "relative_l2": 0.13180980853057672,
+        "cosine": 0.9913497822269491,
+        "max_abs": 0.42461511492729187,
+        "mean_abs": 0.011742496237722841,
+        "normalized_max_abs": 0.18613265311881289
+      },
+      "against_independent_fp32": {
+        "relative_l2": 0.02605432252597719,
+        "cosine": 0.9996611349682522,
+        "max_abs": 0.05354751646518707,
+        "mean_abs": 0.0027542735049077096,
+        "normalized_max_abs": 0.023526022600193326
+      },
+      "against_canonical_recipe_attention": {
+        "relative_l2": 0.0017105898391943488,
+        "cosine": 0.9999985369403146,
+        "max_abs": 0.00549924373626709,
+        "mean_abs": 0.00018757809263879785,
+        "normalized_max_abs": 0.0024106195811225144
+      }
+    },
+    "recipe_qkv_bf16_qk_probability_v": {
+      "against_independent_bf16": {
+        "relative_l2": 0.13181326298483684,
+        "cosine": 0.9913493397794078,
+        "max_abs": 0.42473018169403076,
+        "mean_abs": 0.011733742523811467,
+        "normalized_max_abs": 0.18618309334532857
+      },
+      "against_independent_fp32": {
+        "relative_l2": 0.02607218249856573,
+        "cosine": 0.9996606677877792,
+        "max_abs": 0.05364762246608734,
+        "mean_abs": 0.0027772872019606507,
+        "normalized_max_abs": 0.023570004024450895
+      },
+      "against_canonical_recipe_attention": {
+        "relative_l2": 2.5618179909069783e-06,
+        "cosine": 0.999999999996721,
+        "max_abs": 1.8596649169921875e-05,
+        "mean_abs": 2.728820547304167e-08,
+        "normalized_max_abs": 8.151929389241773e-06
+      }
+    }
+  },
+  "worst_attention_fp32_difference": {
+    "token": 6,
+    "head": 8,
+    "channel": 75,
+    "recipe": -0.16723012924194336,
+    "independent_fp32": -0.2208777517080307,
+    "absolute_error": 0.05364762246608734
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "status": "PASS_LOCAL_SOFTWARE_TESTS",
+  "tests": 83,
+  "seconds": 5.41,
+  "backend": "Python/PyTorch CPU and ordinary g++; no Chisel/RTL",
+  "command": "PYTHONPATH=src:scripts OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 work/recovery_20261011/python/bin/python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py",
+  "source_sha256": {
+    "scripts/qwen2_layer0_payload.py": "202b73649dfceed5e0d8ec73fd0b1e9f0de96d936141e3d9808d5e10d5c1beb9",
+    "scripts/collect_qwen2_layer0_payload.py": "2e98a4d8d3232e29e7bff7af297b7b08f3203e300d51e27112f82094186c4e15",
+    "scripts/qwen2_layer0_model_gate.py": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85",
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "scripts/qwen2_prefill_traffic_bound.py": "305b7d0fdc9dcae73d8d6496a290630cb0ebee187e158e8f0ffac97b46d0c4ad",
+    "tests/test_qwen2_layer0_payload.py": "2eca53c7c27dd29c1a929d5939fd23b8661997c12a6553d56e23f39620f49049",
+    "tests/test_qwen2_layer0_model_gate.py": "e7321d0da3914b43149a4e183150ac281cd651159885dc51a5e25c6f2c7de883",
+    "tests/test_qwen2_block_recipe_model.py": "2c3c48dc4fdc78a0b43a7b61dfde36a00a3ce9ecbe454c4281c52f47bcfd341a",
+    "tests/test_qwen2_prefill_traffic_bound.py": "b9cacdc6879cefca5c57a8871e788975b18dd7a91859812b83e09552b2c48e4b"
+  },
+  "numerical_full_model_acceptance": false,
+  "numerical_failures_preserved": true
+}

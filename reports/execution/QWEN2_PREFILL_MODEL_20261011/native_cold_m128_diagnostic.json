@@ -1,0 +1,221 @@
+{
+  "status": "DIAGNOSTIC_ONLY_NO_ACCEPTANCE_CHANGE",
+  "failed_report_sha256": "10ad341ee67fc12f1c619c60716647f29110fa49cd8f17163136059f78cb5315",
+  "n0_bit_exact": true,
+  "cos_sin_bit_exact": true,
+  "earliest_projection_differences": {
+    "qr": {
+      "different_elements": 33,
+      "max_abs": 0.0078125,
+      "mean_abs": 1.2919129706763974e-07
+    },
+    "kr": {
+      "different_elements": 5,
+      "max_abs": 0.0009765625,
+      "mean_abs": 3.354944055899978e-08
+    },
+    "v": {
+      "different_elements": 14,
+      "max_abs": 0.00048828125,
+      "mean_abs": 2.9493548936443403e-08
+    }
+  },
+  "points": [
+    {
+      "purpose": "maximum_scores_error_masked",
+      "score_coordinate": [
+        0,
+        6,
+        70,
+        75
+      ],
+      "causally_masked": true,
+      "native_score": 2576.0,
+      "independent_score": 2560.0,
+      "qrope_changed_lanes": [],
+      "key_vector_bit_exact": true,
+      "native_dot": {
+        "fp64_fsum_products": 28992.000022888184,
+        "fp64_sum_plus_bias": 28992.000022888184,
+        "fp64_direct_bf16_round": 29056.0,
+        "numpy_fp32_vector_dot_plus_bias": 28992.0,
+        "C_fmaf_increasing_K_then_fp32_bias": 28992.0,
+        "C_fmaf_increasing_K_then_bf16": 28928.0,
+        "C_fmaf_bias_initialized_accumulator": 28992.0,
+        "C_fmaf_bias_initialized_then_bf16": 28928.0,
+        "K": 128,
+        "fp64_exact_round_then_scaled_bf16": 2576.0,
+        "C_fmaf_round_then_scaled_bf16": 2560.0
+      },
+      "independent_dot": {
+        "fp64_fsum_products": 28992.000022888184,
+        "fp64_sum_plus_bias": 28992.000022888184,
+        "fp64_direct_bf16_round": 29056.0,
+        "numpy_fp32_vector_dot_plus_bias": 28992.0,
+        "C_fmaf_increasing_K_then_fp32_bias": 28992.0,
+        "C_fmaf_increasing_K_then_bf16": 28928.0,
+        "C_fmaf_bias_initialized_accumulator": 28992.0,
+        "C_fmaf_bias_initialized_then_bf16": 28928.0,
+        "K": 128,
+        "fp64_exact_round_then_scaled_bf16": 2576.0,
+        "C_fmaf_round_then_scaled_bf16": 2560.0
+      },
+      "projection_probes": []
+    },
+    {
+      "purpose": "maximum_logits_error_unmasked",
+      "score_coordinate": [
+        0,
+        9,
+        102,
+        2
+      ],
+      "causally_masked": false,
+      "native_score": -856.0,
+      "independent_score": -848.0,
+      "qrope_changed_lanes": [
+        63
+      ],
+      "key_vector_bit_exact": true,
+      "native_dot": {
+        "fp64_fsum_products": -9634.55557513237,
+        "fp64_sum_plus_bias": -9634.55557513237,
+        "fp64_direct_bf16_round": -9664.0,
+        "numpy_fp32_vector_dot_plus_bias": -9634.556640625,
+        "C_fmaf_increasing_K_then_fp32_bias": -9634.5556640625,
+        "C_fmaf_increasing_K_then_bf16": -9664.0,
+        "C_fmaf_bias_initialized_accumulator": -9634.5556640625,
+        "C_fmaf_bias_initialized_then_bf16": -9664.0,
+        "K": 128,
+        "fp64_exact_round_then_scaled_bf16": -856.0,
+        "C_fmaf_round_then_scaled_bf16": -856.0
+      },
+      "independent_dot": {
+        "fp64_fsum_products": -9631.19620013237,
+        "fp64_sum_plus_bias": -9631.19620013237,
+        "fp64_direct_bf16_round": -9600.0,
+        "numpy_fp32_vector_dot_plus_bias": -9631.197265625,
+        "C_fmaf_increasing_K_then_fp32_bias": -9631.1962890625,
+        "C_fmaf_increasing_K_then_bf16": -9600.0,
+        "C_fmaf_bias_initialized_accumulator": -9631.1962890625,
+        "C_fmaf_bias_initialized_then_bf16": -9600.0,
+        "K": 128,
+        "fp64_exact_round_then_scaled_bf16": -848.0,
+        "C_fmaf_round_then_scaled_bf16": -848.0
+      },
+      "projection_probes": [
+        {
+          "fp64_fsum_products": 3.230468692687282,
+          "fp64_sum_plus_bias": 1.8476561926872819,
+          "fp64_direct_bf16_round": 1.84375,
+          "numpy_fp32_vector_dot_plus_bias": 1.84765625,
+          "C_fmaf_increasing_K_then_fp32_bias": 1.8476572036743164,
+          "C_fmaf_increasing_K_then_bf16": 1.8515625,
+          "C_fmaf_bias_initialized_accumulator": 1.8476550579071045,
+          "C_fmaf_bias_initialized_then_bf16": 1.84375,
+          "K": 1536,
+          "coordinate": [
+            0,
+            102,
+            1215
+          ],
+          "head_lane": 63,
+          "native_qraw": 1.84375,
+          "independent_qraw": 1.8515625,
+          "native_independent_midpoint": 1.84765625,
+          "numpy_full_fp32_gemm_plus_bias": 1.8476569652557373
+        }
+      ]
+    },
+    {
+      "purpose": "maximum_probability_error_row",
+      "score_coordinate": [
+        0,
+        7,
+        91,
+        91
+      ],
+      "causally_masked": false,
+      "native_score": 54.75,
+      "independent_score": 55.25,
+      "qrope_changed_lanes": [
+        122
+      ],
+      "key_vector_bit_exact": true,
+      "native_dot": {
+        "fp64_fsum_products": 621.8024965748191,
+        "fp64_sum_plus_bias": 621.8024965748191,
+        "fp64_direct_bf16_round": 620.0,
+        "numpy_fp32_vector_dot_plus_bias": 621.802490234375,
+        "C_fmaf_increasing_K_then_fp32_bias": 621.802490234375,
+        "C_fmaf_increasing_K_then_bf16": 620.0,
+        "C_fmaf_bias_initialized_accumulator": 621.802490234375,
+        "C_fmaf_bias_initialized_then_bf16": 620.0,
+        "K": 128,
+        "fp64_exact_round_then_scaled_bf16": 54.75,
+        "C_fmaf_round_then_scaled_bf16": 54.75
+      },
+      "independent_dot": {
+        "fp64_fsum_products": 622.2595278248191,
+        "fp64_sum_plus_bias": 622.2595278248191,
+        "fp64_direct_bf16_round": 624.0,
+        "numpy_fp32_vector_dot_plus_bias": 622.259521484375,
+        "C_fmaf_increasing_K_then_fp32_bias": 622.259521484375,
+        "C_fmaf_increasing_K_then_bf16": 624.0,
+        "C_fmaf_bias_initialized_accumulator": 622.259521484375,
+        "C_fmaf_bias_initialized_then_bf16": 624.0,
+        "K": 128,
+        "fp64_exact_round_then_scaled_bf16": 55.25,
+        "C_fmaf_round_then_scaled_bf16": 55.25
+      },
+      "projection_probes": [
+        {
+          "fp64_fsum_products": -0.09667971175804269,
+          "fp64_sum_plus_bias": -0.3173828367580427,
+          "fp64_direct_bf16_round": -0.318359375,
+          "numpy_fp32_vector_dot_plus_bias": -0.3173828423023224,
+          "C_fmaf_increasing_K_then_fp32_bias": -0.3173828125,
+          "C_fmaf_increasing_K_then_bf16": -0.31640625,
+          "C_fmaf_bias_initialized_accumulator": -0.3173826336860657,
+          "C_fmaf_bias_initialized_then_bf16": -0.31640625,
+          "K": 1536,
+          "coordinate": [
+            0,
+            91,
+            1018
+          ],
+          "head_lane": 122,
+          "native_qraw": -0.31640625,
+          "independent_qraw": -0.318359375,
+          "native_independent_midpoint": -0.3173828125,
+          "numpy_full_fp32_gemm_plus_bias": -0.3173828721046448
+        }
+      ]
+    }
+  ],
+  "probability_max": {
+    "coordinate": [
+      0,
+      7,
+      91,
+      91
+    ],
+    "native": 0.053955078125,
+    "independent": 0.08544921875
+  },
+  "gate_max": {
+    "coordinate": [
+      0,
+      91,
+      6349
+    ],
+    "native": 0.45703125,
+    "independent": 0.498046875
+  },
+  "direct_fp64_bf16_rounding": "IEEE binary64 integer nearest-even reduction to 8 significant bits; avoids an extra FP32 midpoint rounding",
+  "C_probe": "libm fmaf in increasing K, FP32 final bias; separate bias-initialized accumulator diagnostic",
+  "not_hardware_error_claim": true,
+  "not_acceptance_or_actual_chain_substitution": true,
+  "C_rounding_mode_fegetround": 0,
+  "C_libm": "libm.so.6"
+}

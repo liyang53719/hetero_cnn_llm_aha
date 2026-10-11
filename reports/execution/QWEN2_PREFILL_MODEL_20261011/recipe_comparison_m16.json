@@ -1,0 +1,845 @@
+{
+  "schema": 1,
+  "tokens": 16,
+  "phase": "cold_prefill",
+  "budget": {
+    "thresholds": {
+      "max_relative_l2": 0.01,
+      "min_cosine": 0.9999,
+      "max_normalized_abs": 0.05
+    },
+    "source": "chisel/continuous_prefill/scripts/compare_qwen2_stack_reference.py",
+    "source_fragment_sha256": "7d15a86b3affed31d77814b18fd9d0884fa3c0634733a9bae26aac43d99fb6bf",
+    "source_fragment": "MAX_RELATIVE_L2=0.01\nMIN_COSINE=0.9999\nMAX_NORMALIZED_ABS=0.05\n",
+    "source_kind": "pinned_committed_constants_only_not_executed",
+    "scope": "developer_defined_final_output_bringup_budget_not_model_quality_guarantee"
+  },
+  "comparisons": [
+    {
+      "reference_dtype": "bf16",
+      "reference_kind": "native",
+      "stages": [
+        {
+          "name": "n0",
+          "phase": 0,
+          "metrics": {
+            "relative_l2": 0.002845460908432555,
+            "cosine": 0.9999959517135347,
+            "max_abs": 0.0625,
+            "mean_abs": 0.0005148177345593771,
+            "normalized_max_abs": 0.004366812227074236
+          },
+          "bit_differences": 6333,
+          "reference_sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+        },
+        {
+          "name": "qr",
+          "phase": 1,
+          "metrics": {
+            "relative_l2": 0.0017647499257085098,
+            "cosine": 0.999998443745199,
+            "max_abs": 0.2263946533203125,
+            "mean_abs": 0.0033919188014503257,
+            "normalized_max_abs": 0.003305031435333029
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977"
+        },
+        {
+          "name": "kr",
+          "phase": 2,
+          "metrics": {
+            "relative_l2": 0.0018553514731303351,
+            "cosine": 0.999998299001363,
+            "max_abs": 0.992767333984375,
+            "mean_abs": 0.034602163309045864,
+            "normalized_max_abs": 0.0022769892981293004
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087"
+        },
+        {
+          "name": "v",
+          "phase": 3,
+          "metrics": {
+            "relative_l2": 0.004248667523655113,
+            "cosine": 0.9999909752037897,
+            "max_abs": 0.005960226058959961,
+            "mean_abs": 0.0007410530465676857,
+            "normalized_max_abs": 0.0026127018340646405
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10"
+        },
+        {
+          "name": "q",
+          "phase": 4,
+          "metrics": {
+            "relative_l2": 0.0026142593365731867,
+            "cosine": 0.9999966212999115,
+            "max_abs": 0.3975868225097656,
+            "mean_abs": 0.0044513965026287865,
+            "normalized_max_abs": 0.00563952939730164
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "861dfe5deb8ccddd7d27e2c5e7c75323f9fd608fd1ebfef5072cc9650bd4848e"
+        },
+        {
+          "name": "k",
+          "phase": 5,
+          "metrics": {
+            "relative_l2": 0.0018575519586972523,
+            "cosine": 0.9999982949275795,
+            "max_abs": 0.994873046875,
+            "mean_abs": 0.03526029990769075,
+            "normalized_max_abs": 0.0022818189148509174
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0"
+        },
+        {
+          "name": "att",
+          "phase": 6,
+          "metrics": {
+            "relative_l2": 0.1318135808804366,
+            "cosine": 0.9913492979686473,
+            "max_abs": 0.42473018169403076,
+            "mean_abs": 0.011733770296689983,
+            "normalized_max_abs": 0.18618309334532857
+          },
+          "bit_differences": 23282,
+          "reference_sha256": "39c0801956f002c78669d571104694e48a488b91863eaca4dee47fa35128344a"
+        },
+        {
+          "name": "o",
+          "phase": 7,
+          "metrics": {
+            "relative_l2": 0.1012944227505255,
+            "cosine": 0.9949725813208736,
+            "max_abs": 0.2967522144317627,
+            "mean_abs": 0.010173623106191817,
+            "normalized_max_abs": 0.07913392384847005
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "f57c6cb4ad8a2cc360119fc56c5650a43b3a7c5969be6f858ce9cc2a3ea72eea"
+        },
+        {
+          "name": "r",
+          "phase": 8,
+          "metrics": {
+            "relative_l2": 0.1011923357619034,
+            "cosine": 0.9949802150663215,
+            "max_abs": 0.2904655933380127,
+            "mean_abs": 0.010177905056546402,
+            "normalized_max_abs": 0.07650122622894162
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "40bd90a41c87dcead146fbd213dbcfc24d6a9c3e90fa24f963be4511472331b8"
+        },
+        {
+          "name": "n1",
+          "phase": 9,
+          "metrics": {
+            "relative_l2": 0.14649332592249004,
+            "cosine": 0.9892380391903277,
+            "max_abs": 0.2978515625,
+            "mean_abs": 0.03215842623709856,
+            "normalized_max_abs": 0.06483843537414966
+          },
+          "bit_differences": 23795,
+          "reference_sha256": "166642e7b98ce53d7dbb0c4884b1337eac0a7d0a64520ba0e8d7fe2a7bb26b5a"
+        },
+        {
+          "name": "gate",
+          "phase": 10,
+          "metrics": {
+            "relative_l2": 0.10041203754695395,
+            "cosine": 0.9949463423503758,
+            "max_abs": 0.6817388534545898,
+            "mean_abs": 0.033023289343783194,
+            "normalized_max_abs": 0.13807369183890428
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "c97edcfec798722a75d49e764dfbe5bb202a715d276db4fba2f6ccdcf0c0f315"
+        },
+        {
+          "name": "up",
+          "phase": 11,
+          "metrics": {
+            "relative_l2": 0.15011058750219444,
+            "cosine": 0.9887576134368243,
+            "max_abs": 0.3778986930847168,
+            "mean_abs": 0.025507957913116084,
+            "normalized_max_abs": 0.13144302368164062
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "05766af86dcaf8d50118c96bab97a03fcf0c7e367766264f162a7864d81c8ddb"
+        },
+        {
+          "name": "act",
+          "phase": 12,
+          "metrics": {
+            "relative_l2": 0.1715383298060528,
+            "cosine": 0.9855710232369234,
+            "max_abs": 1.478933334350586,
+            "mean_abs": 0.004696975131608808,
+            "normalized_max_abs": 0.1963728908681276
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "a24d878676fe64b1dbac3f7638dfc3e0e4d39b6f03c1b3eade4380370851d0f3"
+        },
+        {
+          "name": "down",
+          "phase": 13,
+          "metrics": {
+            "relative_l2": 0.16251152936321936,
+            "cosine": 0.9872285944713687,
+            "max_abs": 0.3912046402692795,
+            "mean_abs": 0.01521461489360032,
+            "normalized_max_abs": 0.22969813740581546
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "9ca5893558627d4849845c0bff17162c7d6925c757cc21a4af8be257a2fb1461"
+        },
+        {
+          "name": "y",
+          "phase": 14,
+          "metrics": {
+            "relative_l2": 0.1203989247957909,
+            "cosine": 0.9929580165076265,
+            "max_abs": 0.2932004928588867,
+            "mean_abs": 0.017195067348085995,
+            "normalized_max_abs": 0.06701725551060268
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "ff9eae9551855940bb0dc280713cff6509df26ae6ac41636501cbf0aa434614e"
+        }
+      ],
+      "first_differing_stage": "n0",
+      "final_fp32_bringup_budget_pass": null
+    },
+    {
+      "reference_dtype": "bf16",
+      "reference_kind": "independent",
+      "stages": [
+        {
+          "name": "n0",
+          "phase": 0,
+          "metrics": {
+            "relative_l2": 0.002845460908432555,
+            "cosine": 0.9999959517135347,
+            "max_abs": 0.0625,
+            "mean_abs": 0.0005148177345593771,
+            "normalized_max_abs": 0.004366812227074236
+          },
+          "bit_differences": 6333,
+          "reference_sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+        },
+        {
+          "name": "qr",
+          "phase": 1,
+          "metrics": {
+            "relative_l2": 0.0017647487904566708,
+            "cosine": 0.9999984437472057,
+            "max_abs": 0.2263946533203125,
+            "mean_abs": 0.00339188868868708,
+            "normalized_max_abs": 0.003305031435333029
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "2f79028d4c027a85c31ea18962c951c0598f559375dc364113b42ea765bfaa6d"
+        },
+        {
+          "name": "kr",
+          "phase": 2,
+          "metrics": {
+            "relative_l2": 0.001855351469477836,
+            "cosine": 0.9999982990013697,
+            "max_abs": 0.992767333984375,
+            "mean_abs": 0.034602133448515815,
+            "normalized_max_abs": 0.0022769892981293004
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "707832e5c4c9f77842c5a1d3222e69c91b68780327f01cc1eb63237abc267801"
+        },
+        {
+          "name": "v",
+          "phase": 3,
+          "metrics": {
+            "relative_l2": 0.0042486347641115954,
+            "cosine": 0.9999909753430933,
+            "max_abs": 0.005960226058959961,
+            "mean_abs": 0.0007410446646645141,
+            "normalized_max_abs": 0.0026127018340646405
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "9bc645edd5c89c4e1e5afd933bce1d915b11d8af938db938d3c760b0c8f8d72a"
+        },
+        {
+          "name": "q",
+          "phase": 4,
+          "metrics": {
+            "relative_l2": 0.0026142586030373036,
+            "cosine": 0.9999966213018483,
+            "max_abs": 0.3975868225097656,
+            "mean_abs": 0.004451367010747258,
+            "normalized_max_abs": 0.00563952939730164
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "5feb7cdb21ced852b3f4fc5ee751a41235a69b5517270f48cead9e06a180bc0e"
+        },
+        {
+          "name": "k",
+          "phase": 5,
+          "metrics": {
+            "relative_l2": 0.001857551955216363,
+            "cosine": 0.999998294927586,
+            "max_abs": 0.994873046875,
+            "mean_abs": 0.03526027010536836,
+            "normalized_max_abs": 0.0022818189148509174
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "832339573be592c410b42a814112c3f6796cb643bf5d621d56f0b4f130eb6af6"
+        },
+        {
+          "name": "att",
+          "phase": 6,
+          "metrics": {
+            "relative_l2": 0.13181327384295669,
+            "cosine": 0.9913493375024367,
+            "max_abs": 0.42473018169403076,
+            "mean_abs": 0.011733753067222352,
+            "normalized_max_abs": 0.18618309334532857
+          },
+          "bit_differences": 23282,
+          "reference_sha256": "e889b05b3eed6d25c0930a3c79ba57c0474b8864585aeb9f78815975d6bafe8f"
+        },
+        {
+          "name": "o",
+          "phase": 7,
+          "metrics": {
+            "relative_l2": 0.10129260659356289,
+            "cosine": 0.9949727642330016,
+            "max_abs": 0.2967522144317627,
+            "mean_abs": 0.010173562779105083,
+            "normalized_max_abs": 0.07913392384847005
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "172ba8d44a2223b9a020212ccd3085ad2dfc30cf04df6227ae48fd81802b33be"
+        },
+        {
+          "name": "r",
+          "phase": 8,
+          "metrics": {
+            "relative_l2": 0.10119052419534465,
+            "cosine": 0.9949803929671703,
+            "max_abs": 0.2904655933380127,
+            "mean_abs": 0.010177860818724108,
+            "normalized_max_abs": 0.07650122622894162
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "27439870eb293bb7c9c620f30247aae26de9461e0a7eb757b79aada0c56c79eb"
+        },
+        {
+          "name": "n1",
+          "phase": 9,
+          "metrics": {
+            "relative_l2": 0.14649156676751732,
+            "cosine": 0.989238297366114,
+            "max_abs": 0.2978515625,
+            "mean_abs": 0.03215838952746708,
+            "normalized_max_abs": 0.06483843537414966
+          },
+          "bit_differences": 23795,
+          "reference_sha256": "70ad2526934280ccdb1f1db529e01dd39fe3313825104a7c97b6912dc0bf093f"
+        },
+        {
+          "name": "gate",
+          "phase": 10,
+          "metrics": {
+            "relative_l2": 0.10041062119250219,
+            "cosine": 0.9949464867607477,
+            "max_abs": 0.6817388534545898,
+            "mean_abs": 0.03302328610057706,
+            "normalized_max_abs": 0.13807369183890428
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "1195b4e7dadc01dab500d63f6a33cd267637cc14ce0113d70dc5760d60f8250e"
+        },
+        {
+          "name": "up",
+          "phase": 11,
+          "metrics": {
+            "relative_l2": 0.15010662797840132,
+            "cosine": 0.9887581973579244,
+            "max_abs": 0.3778986930847168,
+            "mean_abs": 0.02550780729738936,
+            "normalized_max_abs": 0.13144302368164062
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "a7cf491badbf23549a4e2550098ab19ec9ae980ee322cb597fa0f4f6f4e0e5da"
+        },
+        {
+          "name": "act",
+          "phase": 12,
+          "metrics": {
+            "relative_l2": 0.17154038853452874,
+            "cosine": 0.9855705989515248,
+            "max_abs": 1.478933334350586,
+            "mean_abs": 0.004697073247750661,
+            "normalized_max_abs": 0.1963728908681276
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "3979c2a0bc508502d0355d7978ff20daa4ecb45c1b142615e23176100b252acd"
+        },
+        {
+          "name": "down",
+          "phase": 13,
+          "metrics": {
+            "relative_l2": 0.16252623100184793,
+            "cosine": 0.9872264894617713,
+            "max_abs": 0.3912046402692795,
+            "mean_abs": 0.01521648100430332,
+            "normalized_max_abs": 0.22969813740581546
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "923ba4cf4c20fd6a9f0b315a12ec2e0650542bc849a2aff8d306b8b999f763f8"
+        },
+        {
+          "name": "y",
+          "phase": 14,
+          "metrics": {
+            "relative_l2": 0.1203984398684311,
+            "cosine": 0.9929580296657076,
+            "max_abs": 0.2932004928588867,
+            "mean_abs": 0.017196546614843083,
+            "normalized_max_abs": 0.06701725551060268
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "9f9e1178e9149ee362a08b829b553e4babdf532a22dac046374f30d5b53ff934"
+        }
+      ],
+      "first_differing_stage": "n0",
+      "final_fp32_bringup_budget_pass": null
+    },
+    {
+      "reference_dtype": "fp32",
+      "reference_kind": "native",
+      "stages": [
+        {
+          "name": "n0",
+          "phase": 0,
+          "metrics": {
+            "relative_l2": 0.0016237472762775191,
+            "cosine": 0.9999986817880294,
+            "max_abs": 0.026147842407226562,
+            "mean_abs": 0.000506419404202855,
+            "normalized_max_abs": 0.001820640181657631
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "a51a838206babc896dfe7a462ed5424b0c0eaaf08053448274fb41559e1fdbbb"
+        },
+        {
+          "name": "qr",
+          "phase": 1,
+          "metrics": {
+            "relative_l2": 0.0003483435284408545,
+            "cosine": 0.999999939727351,
+            "max_abs": 0.02756977081298828,
+            "mean_abs": 0.0009525870862129674,
+            "normalized_max_abs": 0.0004013028481799516
+          },
+          "bit_differences": 24573,
+          "reference_sha256": "f626729a3a2061cd697343d42be91d3784161017cf0c7e03376841b10f8ab65d"
+        },
+        {
+          "name": "kr",
+          "phase": 2,
+          "metrics": {
+            "relative_l2": 1.967670499129866e-05,
+            "cosine": 0.99999999980643,
+            "max_abs": 0.006183505058288574,
+            "mean_abs": 0.0010541887499897484,
+            "normalized_max_abs": 1.4173503801755008e-05
+          },
+          "bit_differences": 4094,
+          "reference_sha256": "69ccd6c004d092ecf4b5897bbc4999a201d58f5cdc78f4f1d6a790734d376533"
+        },
+        {
+          "name": "v",
+          "phase": 3,
+          "metrics": {
+            "relative_l2": 0.0022358483087201136,
+            "cosine": 0.9999975019949149,
+            "max_abs": 0.002410709857940674,
+            "mean_abs": 0.0003980305235131709,
+            "normalized_max_abs": 0.0010591419413085836
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "7cf7ed13acdf324ca9c1376eda866ee410d9cda4a83b116863b3d9a7b67576c8"
+        },
+        {
+          "name": "q",
+          "phase": 4,
+          "metrics": {
+            "relative_l2": 0.0003483424380792031,
+            "cosine": 0.9999999397278062,
+            "max_abs": 0.02756977081298828,
+            "mean_abs": 0.0009521270914468379,
+            "normalized_max_abs": 0.0003900898055307391
+          },
+          "bit_differences": 24575,
+          "reference_sha256": "9c378b4c9d814b2c0d32b6d7c14f612a9b581c153f38321b61e2483f3ef7d081"
+        },
+        {
+          "name": "k",
+          "phase": 5,
+          "metrics": {
+            "relative_l2": 1.9676719097950266e-05,
+            "cosine": 0.9999999998064294,
+            "max_abs": 0.006183147430419922,
+            "mean_abs": 0.0010578596591130918,
+            "normalized_max_abs": 1.417267018658653e-05
+          },
+          "bit_differences": 4094,
+          "reference_sha256": "f0cba81ae11919821a8b4aa88896d06a1c539c224362ccf857e37dbe6bbf9a9f"
+        },
+        {
+          "name": "att",
+          "phase": 6,
+          "metrics": {
+            "relative_l2": 0.02607144368096412,
+            "cosine": 0.9996606872275686,
+            "max_abs": 0.053649306297302246,
+            "mean_abs": 0.0027772427780728783,
+            "normalized_max_abs": 0.023570746282227165
+          },
+          "bit_differences": 24575,
+          "reference_sha256": "b67f240473ca7fa7ff85e2e0bb8f69400718c44245a8294a847c4b07c2e3ee71"
+        },
+        {
+          "name": "o",
+          "phase": 7,
+          "metrics": {
+            "relative_l2": 0.016224540379956822,
+            "cosine": 0.9998686904955998,
+            "max_abs": 0.019611608237028122,
+            "mean_abs": 0.0018218467421580915,
+            "normalized_max_abs": 0.005158448757193146
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "d6d2b43efcc9295d40d4b765e39286e435fc1257ef519c410e1e6d2523951351"
+        },
+        {
+          "name": "r",
+          "phase": 8,
+          "metrics": {
+            "relative_l2": 0.016214387813587253,
+            "cosine": 0.9998688240035923,
+            "max_abs": 0.019611608237028122,
+            "mean_abs": 0.0018218467614682747,
+            "normalized_max_abs": 0.005086587442356432
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "0e67733cf739da7ff189ec4b9df51dbbcc03b69840df9b6f0c9b555805f78c03"
+        },
+        {
+          "name": "n1",
+          "phase": 9,
+          "metrics": {
+            "relative_l2": 0.026292934724078138,
+            "cosine": 0.999654289355993,
+            "max_abs": 0.04418786708265543,
+            "mean_abs": 0.005941247103494178,
+            "normalized_max_abs": 0.009632429646825088
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "70f40221bec3f293147ff6296860478e7d4f626330c940d9439f7347fe98cdd9"
+        },
+        {
+          "name": "gate",
+          "phase": 10,
+          "metrics": {
+            "relative_l2": 0.016517874507877738,
+            "cosine": 0.9998635714786083,
+            "max_abs": 0.1297619342803955,
+            "mean_abs": 0.0056725898022193634,
+            "normalized_max_abs": 0.026245314395875213
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "53a67545043e66349648d966e0ab34b9e94f74aa2eec4ac8ef931c990313a474"
+        },
+        {
+          "name": "up",
+          "phase": 11,
+          "metrics": {
+            "relative_l2": 0.025283376999063596,
+            "cosine": 0.9996803243304699,
+            "max_abs": 0.12779774516820908,
+            "mean_abs": 0.004484009978665832,
+            "normalized_max_abs": 0.044482150733364395
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "495c4974d8a2c807f232d6097be396f10bf287d8c220ec49cd0231903d036fc6"
+        },
+        {
+          "name": "act",
+          "phase": 12,
+          "metrics": {
+            "relative_l2": 0.025233588154905853,
+            "cosine": 0.9996815883151904,
+            "max_abs": 0.16895771026611328,
+            "mean_abs": 0.0008187459979031186,
+            "normalized_max_abs": 0.025951619817448777
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "c8eaa24534bd68ef3c41479763f156e7b2111e288f81c356203b9161cfdb6e37"
+        },
+        {
+          "name": "down",
+          "phase": 13,
+          "metrics": {
+            "relative_l2": 0.022927186663993026,
+            "cosine": 0.9997371379387386,
+            "max_abs": 0.04518628120422363,
+            "mean_abs": 0.002337819095273789,
+            "normalized_max_abs": 0.027282214263520208
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "5e021ee55ed665ae5d0d647bb32079a759abc691172310d5369f49f65ac334c6"
+        },
+        {
+          "name": "y",
+          "phase": 14,
+          "metrics": {
+            "relative_l2": 0.01661479577764512,
+            "cosine": 0.999862093963772,
+            "max_abs": 0.037499189376831055,
+            "mean_abs": 0.0026417746619316063,
+            "normalized_max_abs": 0.008674445575179558
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "55b0c5022b697bd512f0896930b2b7d2a9219da58659bc96065aa2a3b95eb6da"
+        }
+      ],
+      "first_differing_stage": "n0",
+      "final_fp32_bringup_budget_pass": false
+    },
+    {
+      "reference_dtype": "fp32",
+      "reference_kind": "independent",
+      "stages": [
+        {
+          "name": "n0",
+          "phase": 0,
+          "metrics": {
+            "relative_l2": 0.001623748004983643,
+            "cosine": 0.999998681786841,
+            "max_abs": 0.026147842407226562,
+            "mean_abs": 0.0005064194954084167,
+            "normalized_max_abs": 0.001820640181657631
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "e57dad5b055edf4b4c95d2cec5c4d262dadfd9662eb873598530c8fc4b4f42fd"
+        },
+        {
+          "name": "qr",
+          "phase": 1,
+          "metrics": {
+            "relative_l2": 0.0003483487173426886,
+            "cosine": 0.9999999397254552,
+            "max_abs": 0.027579307556152344,
+            "mean_abs": 0.0009525898523179421,
+            "normalized_max_abs": 0.00040144170864829737
+          },
+          "bit_differences": 24575,
+          "reference_sha256": "d0b4a25063c62a4f4732332d0498259005b921da75d2507070c99d639c0df452"
+        },
+        {
+          "name": "kr",
+          "phase": 2,
+          "metrics": {
+            "relative_l2": 1.967541905923571e-05,
+            "cosine": 0.9999999998064548,
+            "max_abs": 0.006182074546813965,
+            "mean_abs": 0.0010541044462115678,
+            "normalized_max_abs": 1.4170223867666561e-05
+          },
+          "bit_differences": 4095,
+          "reference_sha256": "005a2f8499896bc3df1780b2e7d81edef390846b06266c353042d1c2c6fe3b84"
+        },
+        {
+          "name": "v",
+          "phase": 3,
+          "metrics": {
+            "relative_l2": 0.0022358412282309724,
+            "cosine": 0.9999975020120809,
+            "max_abs": 0.002410590648651123,
+            "mean_abs": 0.0003980297977932423,
+            "normalized_max_abs": 0.0010590894559386523
+          },
+          "bit_differences": 4096,
+          "reference_sha256": "83700fc55c670ecc93243c148c444be3b59789831237b67b9a1f17f823a45127"
+        },
+        {
+          "name": "q",
+          "phase": 4,
+          "metrics": {
+            "relative_l2": 0.00034834872806086014,
+            "cosine": 0.9999999397255369,
+            "max_abs": 0.027579307556152344,
+            "mean_abs": 0.0009521316490198236,
+            "normalized_max_abs": 0.00039022474268025334
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "755d9323d589aa7fe26b2f1012198d2a62dd0471a87d720c055f3b8d55c4b72e"
+        },
+        {
+          "name": "k",
+          "phase": 5,
+          "metrics": {
+            "relative_l2": 1.967547189143408e-05,
+            "cosine": 0.9999999998064542,
+            "max_abs": 0.0061817169189453125,
+            "mean_abs": 0.001057777946726901,
+            "normalized_max_abs": 1.4169390255768467e-05
+          },
+          "bit_differences": 4095,
+          "reference_sha256": "0ab9030872f7186b8c1323ebb26ca420c099a15bffe3a5df61150f3a87a6feca"
+        },
+        {
+          "name": "att",
+          "phase": 6,
+          "metrics": {
+            "relative_l2": 0.0260722450205068,
+            "cosine": 0.9996606662321886,
+            "max_abs": 0.05364762246608734,
+            "mean_abs": 0.0027773040052909335,
+            "normalized_max_abs": 0.023570004024450895
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "d93f9ddaee9a1c28dfee737ad0ef3ad4ee5c38852ce18a79fb41204389a4b859"
+        },
+        {
+          "name": "o",
+          "phase": 7,
+          "metrics": {
+            "relative_l2": 0.016224861913090628,
+            "cosine": 0.9998686852309728,
+            "max_abs": 0.019612275063991547,
+            "mean_abs": 0.0018218938203062862,
+            "normalized_max_abs": 0.005158623182430044
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "3a30a751289fbb651db1ae5219b69cc69ec49d63dd4a187b393998234e2230c4"
+        },
+        {
+          "name": "r",
+          "phase": 8,
+          "metrics": {
+            "relative_l2": 0.016214709111400022,
+            "cosine": 0.9998688187459279,
+            "max_abs": 0.019612275063991547,
+            "mean_abs": 0.0018218938165996217,
+            "normalized_max_abs": 0.005086759451042012
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "d96d2b074de0dac371c11291b31effc41c95a8cf4d31bd7cea8a0d18cf484de0"
+        },
+        {
+          "name": "n1",
+          "phase": 9,
+          "metrics": {
+            "relative_l2": 0.026293585974696054,
+            "cosine": 0.9996542722413044,
+            "max_abs": 0.04418936278671026,
+            "mean_abs": 0.0059414102182081775,
+            "normalized_max_abs": 0.009632758696352106
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "ef8d95d22d6dd24b2bec51c5e504f5e44f50b1db17e014587a56caf5bd9a6b0e"
+        },
+        {
+          "name": "gate",
+          "phase": 10,
+          "metrics": {
+            "relative_l2": 0.016518044459605818,
+            "cosine": 0.9998635686638779,
+            "max_abs": 0.12977755069732666,
+            "mean_abs": 0.005672632274512068,
+            "normalized_max_abs": 0.026248470400612303
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "a1d7a2107e4608be5f67f22f069b2d5b53b65addf7a380679defc492e8351193"
+        },
+        {
+          "name": "up",
+          "phase": 11,
+          "metrics": {
+            "relative_l2": 0.025283709249312395,
+            "cosine": 0.9996803159267315,
+            "max_abs": 0.12781884521245956,
+            "mean_abs": 0.004484070247796369,
+            "normalized_max_abs": 0.044489483882044975
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "fd5e0b7a07a0267a85daa2d4e8e02c1d7c787ed69c9463a410a0f100d9ad50bc"
+        },
+        {
+          "name": "act",
+          "phase": 12,
+          "metrics": {
+            "relative_l2": 0.025234310092098238,
+            "cosine": 0.9996815700585457,
+            "max_abs": 0.16898402571678162,
+            "mean_abs": 0.0008187563643990119,
+            "normalized_max_abs": 0.02595550594295336
+          },
+          "bit_differences": 143360,
+          "reference_sha256": "c7b4672d76fc32bff32b90c05c4f7f181a41fb8dbb286fa3454bd2390f8a304e"
+        },
+        {
+          "name": "down",
+          "phase": 13,
+          "metrics": {
+            "relative_l2": 0.022928197124365057,
+            "cosine": 0.9997371147557271,
+            "max_abs": 0.04521071910858154,
+            "mean_abs": 0.0023378812153452464,
+            "normalized_max_abs": 0.02729694168161771
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "981be18150003870601f6bc5138d2f24b3d673d5523ba40e51c8a6c6720a08bd"
+        },
+        {
+          "name": "y",
+          "phase": 14,
+          "metrics": {
+            "relative_l2": 0.016615573952947542,
+            "cosine": 0.9998620810313977,
+            "max_abs": 0.0375208854675293,
+            "mean_abs": 0.0026418631427963155,
+            "normalized_max_abs": 0.00867946247712854
+          },
+          "bit_differences": 24576,
+          "reference_sha256": "7b8dd2703fdd1253581044932ca8f5649697a9b60e17794844e92a4c393d0660"
+        }
+      ],
+      "first_differing_stage": "n0",
+      "final_fp32_bringup_budget_pass": false
+    }
+  ],
+  "recipe_result_sha256": "3f07e0460681bdb00a7e7500f82c16f8bd8148c112b24c4cf1a9653f6451f025",
+  "native_result_sha256": "b6206444a95453770ce3131998000aece244e182e45bebeef841038dd8b2d6a6",
+  "native_directory": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_layer0_model_gate_cold_m16_20261011",
+  "native_gate_status": "PASS_BF16_STAGE_BUDGET",
+  "comparator_sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+  "diagnostic_interpretation": "Stage differences are preserved: recipe BF16 ingress, ordered FP32 FMA/reductions and polynomial exponential differ from native framework arithmetic. Only the preexisting final FP32 budget is evaluated.",
+  "status": "FAIL_EXISTING_FP32_FINAL_BUDGET",
+  "diagnostic_only": false,
+  "final_fp32_budget_status": "FAIL_EXISTING_FP32_FINAL_BUDGET",
+  "per_stage_thresholds": null,
+  "bf16_acceptance_thresholds": null,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "rtl_executed": false
+}

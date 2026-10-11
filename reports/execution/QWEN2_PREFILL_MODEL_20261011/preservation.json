@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "base_commit": "c14deb7779a47044762bccdd9d8a95abd3b24683",
+  "reports": {
+    "native_pair_m16.json": {
+      "bytes": 208657,
+      "sha256": "cbef4040ac16cd1a76ed58fac99b0dffef1f2b3c2b37f5e2cf91e2d4c3a2eb92",
+      "original_local_path": "work/qwen2_layer0_model_gate_m16_20261011/RESULT.json"
+    },
+    "native_cold_m16.json": {
+      "bytes": 107637,
+      "sha256": "b6206444a95453770ce3131998000aece244e182e45bebeef841038dd8b2d6a6",
+      "original_local_path": "work/qwen2_layer0_model_gate_cold_m16_20261011/RESULT.json"
+    },
+    "native_cold_m128.json": {
+      "bytes": 115433,
+      "sha256": "10ad341ee67fc12f1c619c60716647f29110fa49cd8f17163136059f78cb5315",
+      "original_local_path": "work/qwen2_layer0_model_gate_cold_m128_20261011/RESULT.json"
+    },
+    "native_pair_m16_diagnostic.json": {
+      "bytes": 1875,
+      "sha256": "b469df14402f31d5274408fc1571f3968abd398d105e59bd6c8d4b0f65a1255e",
+      "original_local_path": "work/qwen2_layer0_model_gate_m16_20261011/DIAGNOSTIC.json"
+    },
+    "native_cold_m128_diagnostic.json": {
+      "bytes": 7473,
+      "sha256": "a8f5ed7e84ac0f60bd6e56419e0a627c19af7cc2138378056507d62b00cd6f23",
+      "original_local_path": "work/qwen2_layer0_model_gate_cold_m128_20261011/DIAGNOSTIC.json"
+    },
+    "weight_traffic_m128_bf16.json": {
+      "bytes": 8350,
+      "sha256": "2b15ecb576cdc3fa5c05456e07907c8e0dca3f32a3175887202dfbe9e063f0e3",
+      "original_local_path": "work/recovery_20261011/qwen2_traffic_m128_bf16_sealed.json"
+    },
+    "weight_traffic_m1024_bf16.json": {
+      "bytes": 8380,
+      "sha256": "9876daa395eb021b1cea34c946df467a152051d24f63dbb95d5374a1e5c0c88e",
+      "original_local_path": "work/recovery_20261011/qwen2_traffic_m1024_bf16_sealed.json"
+    },
+    "recipe_m16.json": {
+      "bytes": 26896,
+      "sha256": "3f07e0460681bdb00a7e7500f82c16f8bd8148c112b24c4cf1a9653f6451f025",
+      "original_local_path": "work/qwen2_block_recipe_m16_release_20261011/RESULT.json"
+    },
+    "recipe_comparison_m16.json": {
+      "bytes": 30703,
+      "sha256": "864f9625aeaab9fd0d724d211acec45efdadc75ff48bdc2c94f5645482a4911d",
+      "original_local_path": "work/qwen2_block_recipe_m16_release_20261011/REFERENCE_COMPARISON.json"
+    },
+    "recipe_diagnostic_m16.json": {
+      "bytes": 3160,
+      "sha256": "7c2b94002e8fbac4205be5b1ba317eef7eecf153514ea247cf9f2e9c58340654",
+      "original_local_path": "work/qwen2_block_recipe_m16_release_20261011/DIAGNOSTIC.json"
+    },
+    "recipe_m128.json": {
+      "bytes": 29696,
+      "sha256": "18021a757aef57c94bdbd34a17a899c76df194c0ff32706baa089eefd6a3db6e",
+      "original_local_path": "work/qwen2_block_recipe_m128_release_20261011/RESULT.json"
+    },
+    "recipe_comparison_m128.json": {
+      "bytes": 30660,
+      "sha256": "ea2de7a5406860764cba1039f36db77e4fa59596180a53493908467e64cb27e9",
+      "original_local_path": "work/qwen2_block_recipe_m128_release_20261011/REFERENCE_COMPARISON.json"
+    },
+    "recipe_diagnostic_m128.json": {
+      "bytes": 3464,
+      "sha256": "2028aa12724bd644aaba52c7c51b796b87944abe781f1e044f490d4ab557eceb",
+      "original_local_path": "work/qwen2_block_recipe_m128_release_20261011/DIAGNOSTIC.json"
+    },
+    "native_cold_m128_unobserved_forward.json": {
+      "bytes": 49594,
+      "sha256": "015a6c6c52052d8959a2a007048827496c3727ef948da96c7dacfe1d9e651e3f",
+      "original_local_path": "work/qwen2_layer0_model_gate_cold_m128_20261011/UNOBSERVED_FORWARD_DIAGNOSTIC.json"
+    },
+    "verify_unobserved_forward_snapshot.py": {
+      "bytes": 6766,
+      "sha256": "d83d59a1419b25e73e8f15db63617e62dd072095113a54dfe36e8e78f81a471a",
+      "original_local_path": "work/qwen2_layer0_model_gate_cold_m128_20261011/verify_unobserved_forward.py",
+      "kind": "immutable diagnostic source snapshot; restore to original local path to replay with locally acquired inputs"
+    }
+  },
+  "raw_tensor_bytes_in_git": false,
+  "weights_in_git": false,
+  "new_rtl_generated": false,
+  "full_native_acceptance": false,
+  "payload_pin_path": "config/payload_pins/qwen2_layer0.json",
+  "payload_pin_sha256": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88",
+  "path_only_change": "Payload pin relocated out of broad upstream workflow paths; pin bytes and acquired tensor hashes unchanged."
+}

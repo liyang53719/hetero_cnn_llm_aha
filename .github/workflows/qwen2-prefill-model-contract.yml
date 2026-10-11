@@ -1,0 +1,85 @@
+name: qwen2-prefill-model-contract
+
+# Lightweight model contracts only. No Chisel, Verilator, production build,
+# checkpoint download, or claim that the full native numerical gate passed.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-prefill-model-contract.yml'
+      - 'scripts/qwen2_layer0_payload.py'
+      - 'scripts/collect_qwen2_layer0_payload.py'
+      - 'scripts/qwen2_layer0_model_gate.py'
+      - 'scripts/qwen2_block_recipe_model.py'
+      - 'scripts/qwen2_prefill_traffic_bound.py'
+      - 'tests/test_qwen2_layer0_payload.py'
+      - 'tests/test_qwen2_layer0_model_gate.py'
+      - 'tests/test_qwen2_block_recipe_model.py'
+      - 'tests/test_qwen2_prefill_traffic_bound.py'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/**'
+      - 'spec/numerical_contract.md'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala'
+      - 'config/upstream/weight_headers/qwen2_1p5b/config.json'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala'
+      - 'rtl/integration/qwen2_matrix_command_endpoint.sv'
+      - 'rtl/matrix/bf16_outer_product_array_glue512.sv'
+      - 'rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv'
+      - 'chisel/continuous_prefill/tests/qwen2_block.cpp'
+      - 'chisel/continuous_prefill/src/test/resources/c03_3/legacy_layout_vectors.tsv'
+      - 'chisel/continuous_prefill/scripts/compare_qwen2_stack_reference.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/weight_header_contract.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-prefill-model-contract-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  model-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: 'src:scripts'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install fixed CPU model runtime
+        run: |
+          python -m pip install --disable-pip-version-check --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install --disable-pip-version-check numpy==2.3.5 pytest==8.4.2 transformers==4.40.1
+      - name: Check model contracts and scalar software recipe without RTL
+        run: |
+          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py
+          python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json
+          python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json
+          python scripts/check_git_payloads.py
+      - name: Retain compact source-bound traffic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-model-contract-${{ github.sha }}
+          path: work/qwen2_model_contract/*_bound.json
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,224 @@
+{
+  "status": "EXACT_TWO_OPERATOR_REPRODUCTION_WITH_PROFILER",
+  "scope": "only original-shape Q Linear and QK matmul/scaling; no block forward or RTL",
+  "elapsed_seconds": 0.008081727999524446,
+  "input": {
+    "linear_input": {
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "stride": [
+        196608,
+        1536,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "contiguous": true,
+      "storage_offset": 0,
+      "storage_sha256": "bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2"
+    },
+    "linear_weight": {
+      "shape": [
+        1536,
+        1536
+      ],
+      "stride": [
+        1536,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "contiguous": true,
+      "storage_offset": 0,
+      "storage_sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4"
+    },
+    "linear_bias": {
+      "shape": [
+        1536
+      ],
+      "stride": [
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "contiguous": true,
+      "storage_offset": 0,
+      "storage_sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d"
+    },
+    "q": {
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "stride": [
+        196608,
+        128,
+        1536,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "contiguous": false,
+      "storage_offset": 0,
+      "storage_sha256": "e58005e1119948b53bcec128e5e99f09e51441c3a9c59e7441731a60d7e1aa62"
+    },
+    "k": {
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "stride": [
+        32768,
+        128,
+        256,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "contiguous": false,
+      "storage_offset": 0,
+      "storage_sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6"
+    },
+    "repeat_k_transposed": {
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "stride": [
+        196608,
+        16384,
+        1,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "contiguous": false,
+      "storage_offset": 0,
+      "storage_sha256": "583aed976c4090c862eb46fc75aeffad89e8a6663b7d048ca3de834dad672751"
+    }
+  },
+  "comparisons": {
+    "qr": {
+      "metrics": {
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "elements": 196608,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 1.0,
+        "normalized_max_abs": 0.0,
+        "different_elements": 0,
+        "bit_exact": true,
+        "first_difference_flat": null,
+        "actual_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+        "reference_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+        "finite": true
+      },
+      "decoded_fp32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+      "storage_sha256": "5e2d4a612d2179cbe25c09de4d15204b5ec0f6f9ac2a7a5f79cdb006efd08184",
+      "original_storage_sha256": "5e2d4a612d2179cbe25c09de4d15204b5ec0f6f9ac2a7a5f79cdb006efd08184"
+    },
+    "scores": {
+      "metrics": {
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "elements": 196608,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 0.9999999999999999,
+        "normalized_max_abs": 0.0,
+        "different_elements": 0,
+        "bit_exact": true,
+        "first_difference_flat": null,
+        "actual_f32_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+        "reference_f32_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+        "finite": true
+      },
+      "decoded_fp32_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+      "storage_sha256": "b20e22725941e00f5702d73bdf2c9f723cad55eed37e3eca263861257eb6c110",
+      "original_storage_sha256": "b20e22725941e00f5702d73bdf2c9f723cad55eed37e3eca263861257eb6c110"
+    }
+  },
+  "unscaled_qk": {
+    "shape": [
+      1,
+      12,
+      128,
+      128
+    ],
+    "stride": [
+      196608,
+      16384,
+      128,
+      1
+    ],
+    "dtype": "torch.bfloat16",
+    "storage_sha256": "2f3719fa44ac80d8edb4b515590c8e29ea607cf225aa1c0455564c9a6f6e607a",
+    "original_node_saved": false
+  },
+  "original_result_sha256": "10ad341ee67fc12f1c619c60716647f29110fa49cd8f17163136059f78cb5315",
+  "identity": {
+    "python": "3.12.14",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.3.5",
+    "transformers": "4.40.1",
+    "device": "cpu",
+    "attention": "eager",
+    "model_revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "forward_revision": "9fe3f585bb4ea29f209dc705d269fbe292e1128f",
+    "source_sha256": {
+      "modeling_qwen2.py": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+      "configuration_qwen2.py": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+      "config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136"
+    },
+    "installed_sources_verified_exact": true,
+    "torch_build": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+    "numpy_build": "{'Compilers': {'c': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'cc'}, 'cython': {'name': 'cython', 'linker': 'cython', 'version': '3.2.1', 'commands': 'cython'}, 'c++': {'name': 'gcc', 'linker': 'ld.bfd', 'version': '14.2.1', 'commands': 'c++'}}, 'Machine Information': {'host': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}, 'build': {'cpu': 'x86_64', 'family': 'x86_64', 'endian': 'little', 'system': 'linux'}}, 'Build Dependencies': {'blas': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}, 'lapack': {'name': 'scipy-openblas', 'found': True, 'version': '0.3.30', 'detection method': 'pkgconfig', 'include directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/include', 'lib directory': '/opt/_internal/cpython-3.12.12/lib/python3.12/site-packages/scipy_openblas64/lib', 'openblas configuration': 'OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64', 'pc file directory': '/project/.openblas'}}, 'Python Information': {'path': '/tmp/build-env-aw1mwcap/bin/python', 'version': '3.12'}, 'SIMD Extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'], 'found': ['SSSE3', 'SSE41', 'POPCNT', 'SSE42', 'AVX', 'F16C', 'FMA3', 'AVX2', 'AVX512F', 'AVX512CD', 'AVX512_SKX', 'AVX512_CLX', 'AVX512_CNL', 'AVX512_ICL'], 'not found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}}",
+    "cache_utils_sha256": "2a4b6b398f8ea8631450a871b0a1bbc6b9722148970648c678745a06573bf18c",
+    "mask_utils_sha256": "fa17374bd60fde841bd8d65de072d085505243cc875d882985fcd3622cf08e5b",
+    "activations_sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+    "runner_sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+  },
+  "environment": {
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4",
+    "MKL_VERBOSE": "1",
+    "ONEDNN_VERBOSE": "1",
+    "DNNL_VERBOSE": "1",
+    "ATEN_CPU_CAPABILITY": null
+  },
+  "backend_settings": {
+    "mkldnn_enabled": true,
+    "num_threads": 4,
+    "num_interop_threads": 1,
+    "deterministic": true
+  },
+  "cpu": {
+    "vendor_id": "AuthenticAMD",
+    "cpu family": "25",
+    "model": "17",
+    "model name": "AMD EPYC 9V74 80-Core Processor",
+    "stepping": "1",
+    "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm arch_capabilities"
+  },
+  "trace_sha256": "41e080f8a018ccde04983226b2f4f11234cc424f41736a79e008013c5f939ffd",
+  "operator_events_sha256": "b0ca41e598043cf03cb8ef1e5942396a8a74e011273682679f4b8b612dcfdb0a",
+  "script_sha256": "1de274ede0b5a3fc528626cc907adbfd049b2e15201427d0c23cdf129352e8b8",
+  "original_strides_saved": false,
+  "stride_reconstruction": "token-major saved projection/RoPE values, source view/head transpose, literal official repeat_kv; exact full-node output reproduction verified",
+  "executed_instruction_order_proven": false,
+  "limitation": "Profiler dispatcher/kernel names and verbose output cannot by themselves establish instruction-level accumulation or bias order. Raw unscaled original dot was not captured; full scaled score node is compared bitwise."
+}

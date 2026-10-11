@@ -1,0 +1,1306 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_IMPLEMENTED",
+  "tokens": 16,
+  "elapsed_seconds": 3.7112105779997364,
+  "policy": {
+    "source": "spec/numerical_contract.md",
+    "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract"
+  },
+  "changes": [
+    {
+      "label": "RMS normalized BF16 before gamma",
+      "original": "bf(mul(mul(get(in,size_t(t)*H+i),inv),get(gamma,i)))",
+      "replacement": "bf(mul(bf(mul(get(in,size_t(t)*H+i),inv)),get(gamma,i)))",
+      "official_source": "modeling_qwen2.py:85-90"
+    },
+    {
+      "label": "Dense output BF16 after unchanged bias order",
+      "original": "bias>=0?add(sums[j],get(bias,col+j)):sums[j]",
+      "replacement": "bf(bias>=0?add(sums[j],get(bias,col+j)):sums[j])",
+      "official_source": "modeling_qwen2.py:228-231,255-257,313; BF16 nn.Linear output"
+    },
+    {
+      "label": "RoPE table BF16 materialization",
+      "original": "c=get(OFF_COS,size_t(t)*HD/2+j),s=get(OFF_SIN,size_t(t)*HD/2+j)",
+      "replacement": "c=bf(get(OFF_COS,size_t(t)*HD/2+j)),s=bf(get(OFF_SIN,size_t(t)*HD/2+j))",
+      "official_source": "modeling_qwen2.py:119-126"
+    },
+    {
+      "label": "RoPE BF16 products then BF16 sum",
+      "original": "put(out,ix,add(mul(x,c),-mul(y,s)));put(out,ix+HD/2,add(mul(x,s),mul(y,c)));",
+      "replacement": "put(out,ix,bf(add(bf(mul(x,c)),-bf(mul(y,s)))));put(out,ix+HD/2,bf(add(bf(mul(x,s)),bf(mul(y,c)))));",
+      "official_source": "modeling_qwen2.py:162-163"
+    },
+    {
+      "label": "QK BF16 dot result then BF16 scaled result",
+      "original": "p[k]=mul(sum,float(1.0/std::sqrt(double(HD))));max=std::max(max,p[k]);",
+      "replacement": "p[k]=bf(mul(bf(sum),float(1.0/std::sqrt(double(HD)))));candidateScores[(size_t(h)*tokens+t)*tokens+k]=p[k];candidateLogits[(size_t(h)*tokens+t)*tokens+k]=k<=t?p[k]:fp(0xff7f0000u);if(k<=t)max=std::max(max,p[k]);",
+      "official_source": "modeling_qwen2.py:283"
+    },
+    {
+      "label": "PV output BF16 after unchanged FP32 accumulation",
+      "original": "put(OFF_ATT,size_t(t)*H+h*HD+j,sum);",
+      "replacement": "put(OFF_ATT,size_t(t)*H+h*HD+j,bf(sum));",
+      "official_source": "modeling_qwen2.py:302"
+    },
+    {
+      "label": "Attention residual BF16",
+      "original": "put(OFF_R,i,add(get(OFF_X,i),get(OFF_O,i)))",
+      "replacement": "put(OFF_R,i,bf(add(get(OFF_X,i),get(OFF_O,i))))",
+      "official_source": "modeling_qwen2.py:776"
+    },
+    {
+      "label": "SiLU output BF16 then product BF16",
+      "original": "put(OFF_ACT,i,mul(mul(sig,g),get(OFF_UP,i)))",
+      "replacement": "candidateSilu[i]=bf(mul(sig,g));put(OFF_ACT,i,bf(mul(candidateSilu[i],get(OFF_UP,i))))",
+      "official_source": "modeling_qwen2.py:179-180"
+    },
+    {
+      "label": "Final residual BF16",
+      "original": "put(OFF_Y,i,add(get(OFF_R,i),get(OFF_DOWN,i)))",
+      "replacement": "put(OFF_Y,i,bf(add(get(OFF_R,i),get(OFF_DOWN,i))))",
+      "official_source": "modeling_qwen2.py:782"
+    },
+    {
+      "label": "Additional software diagnostic buffers",
+      "original": "  std::vector<float> reference; unsigned tokens;",
+      "replacement": "  std::vector<float> reference; unsigned tokens;\n  std::vector<float> candidateScores,candidateLogits,candidateSoftmax,candidateProb,candidateSilu;",
+      "official_source": "diagnostic_only_not_hardware"
+    },
+    {
+      "label": "Attention observer allocation",
+      "original": "void attention(){std::vector<float> p(tokens);",
+      "replacement": "void attention(){candidateScores.resize(size_t(HEADS)*tokens*tokens);candidateLogits.resize(candidateScores.size());candidateSoftmax.assign(candidateScores.size(),0);candidateProb.assign(candidateScores.size(),0);std::vector<float> p(tokens);",
+      "official_source": "diagnostic_only_not_hardware"
+    },
+    {
+      "label": "Observe masked-future score values without consuming them",
+      "original": "for(unsigned k=0;k<=t;k++){float parts[16]={};",
+      "replacement": "for(unsigned k=0;k<tokens;k++){float parts[16]={};",
+      "official_source": "diagnostic_only_not_hardware"
+    },
+    {
+      "label": "Observe FP32 softmax and BF16 probability",
+      "original": "float inv=1.0f/sum;\n    for(int j=0;j<HD;j++)",
+      "replacement": "float inv=1.0f/sum;\n    for(unsigned k=0;k<=t;k++){candidateSoftmax[(size_t(h)*tokens+t)*tokens+k]=mul(p[k],inv);candidateProb[(size_t(h)*tokens+t)*tokens+k]=bf(mul(p[k],inv));}\n    for(int j=0;j<HD;j++)",
+      "official_source": "diagnostic_only_not_hardware"
+    },
+    {
+      "label": "Observe SiLU materialization",
+      "original": "  void computeReference(){",
+      "replacement": "  void computeReference(){candidateSilu.resize(size_t(tokens)*F);",
+      "official_source": "diagnostic_only_not_hardware"
+    },
+    {
+      "label": "Export diagnostic tensors",
+      "original": "  model.computeReference();",
+      "replacement": "  model.computeReference();\n  auto dump=[&](const char* name,const std::vector<float>& values){std::ofstream f(std::filesystem::path(argv[3])/(std::string(name)+\".f32le\"),std::ios::binary);f.write(reinterpret_cast<const char*>(values.data()),values.size()*4);need(bool(f),\"candidate diagnostic write failed\");};\n  dump(\"scores\",model.candidateScores);dump(\"logits\",model.candidateLogits);dump(\"softmax_fp32\",model.candidateSoftmax);dump(\"prob\",model.candidateProb);dump(\"silu\",model.candidateSilu);",
+      "official_source": "diagnostic_only_not_hardware"
+    }
+  ],
+  "comparisons": {
+    "native": [
+      {
+        "name": "n0",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999999,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce",
+          "reference_f32_sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+      },
+      {
+        "name": "qr",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.00048828125,
+          "mean_abs": 3.5235037406285606e-08,
+          "relative_l2": 7.858218548876239e-07,
+          "cosine": 0.9999999999996912,
+          "normalized_max_abs": 7.128193430656934e-06,
+          "different_elements": 5,
+          "bit_exact": false,
+          "first_difference_flat": 6643,
+          "actual_f32_sha256": "4f27ab0bfcdc533715a55cb922d2307fc5947a19bf9043f210f12b9c9cb84a65",
+          "reference_f32_sha256": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "4f27ab0bfcdc533715a55cb922d2307fc5947a19bf9043f210f12b9c9cb84a65"
+      },
+      {
+        "name": "kr",
+        "metrics": {
+          "shape": [
+            4096
+          ],
+          "elements": 4096,
+          "max_abs": 2.384185791015625e-07,
+          "mean_abs": 5.820766091346741e-11,
+          "relative_l2": 5.364107880961056e-11,
+          "cosine": 1.0,
+          "normalized_max_abs": 5.468316034439507e-10,
+          "different_elements": 1,
+          "bit_exact": false,
+          "first_difference_flat": 3688,
+          "actual_f32_sha256": "f36061b3811ed1c5031b9e528df55b3bba6ec9ca45769f190e1a103228ab6608",
+          "reference_f32_sha256": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "f36061b3811ed1c5031b9e528df55b3bba6ec9ca45769f190e1a103228ab6608"
+      },
+      {
+        "name": "v",
+        "metrics": {
+          "shape": [
+            4096
+          ],
+          "elements": 4096,
+          "max_abs": 1.52587890625e-05,
+          "mean_abs": 7.450580596923828e-09,
+          "relative_l2": 1.249472778973696e-06,
+          "cosine": 0.9999999999992194,
+          "normalized_max_abs": 6.688784246575342e-06,
+          "different_elements": 4,
+          "bit_exact": false,
+          "first_difference_flat": 2822,
+          "actual_f32_sha256": "993b6f4c6b953eb52d7f8a693da9891f8b84c9eaf5d048df4bf31bd6cd640f33",
+          "reference_f32_sha256": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "993b6f4c6b953eb52d7f8a693da9891f8b84c9eaf5d048df4bf31bd6cd640f33"
+      },
+      {
+        "name": "q",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.00048828125,
+          "mean_abs": 3.507981697718302e-08,
+          "relative_l2": 7.859864864457105e-07,
+          "cosine": 0.9999999999996911,
+          "normalized_max_abs": 6.925975177304964e-06,
+          "different_elements": 4,
+          "bit_exact": false,
+          "first_difference_flat": 6643,
+          "actual_f32_sha256": "508db617a2a4157ee71a95b794d7b57a43a4ac716dfb3714ea181a1729ffccf1",
+          "reference_f32_sha256": "861dfe5deb8ccddd7d27e2c5e7c75323f9fd608fd1ebfef5072cc9650bd4848e",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "508db617a2a4157ee71a95b794d7b57a43a4ac716dfb3714ea181a1729ffccf1"
+      },
+      {
+        "name": "k",
+        "metrics": {
+          "shape": [
+            4096
+          ],
+          "elements": 4096,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999998,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0",
+          "reference_f32_sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0"
+      },
+      {
+        "name": "att",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.00048828125,
+          "mean_abs": 2.2662182648976643e-08,
+          "relative_l2": 1.686481393979549e-05,
+          "cosine": 0.9999999998577911,
+          "normalized_max_abs": 0.00021404109589041095,
+          "different_elements": 7,
+          "bit_exact": false,
+          "first_difference_flat": 11251,
+          "actual_f32_sha256": "45c1f61422ce31535aa594156380567f2bae341b5fabf0490621791d376171d7",
+          "reference_f32_sha256": "39c0801956f002c78669d571104694e48a488b91863eaca4dee47fa35128344a",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "45c1f61422ce31535aa594156380567f2bae341b5fabf0490621791d376171d7"
+      },
+      {
+        "name": "o",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.001953125,
+          "mean_abs": 4.88548721477855e-07,
+          "relative_l2": 0.00011663428641659051,
+          "cosine": 0.999999993199393,
+          "normalized_max_abs": 0.0005208333333333333,
+          "different_elements": 133,
+          "bit_exact": false,
+          "first_difference_flat": 4063,
+          "actual_f32_sha256": "b49d48549588bd3102af308d77a0fdf0559be3ae60bfef195472e68eb0ffe3f8",
+          "reference_f32_sha256": "f57c6cb4ad8a2cc360119fc56c5650a43b3a7c5969be6f858ce9cc2a3ea72eea",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "b49d48549588bd3102af308d77a0fdf0559be3ae60bfef195472e68eb0ffe3f8"
+      },
+      {
+        "name": "r",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.001953125,
+          "mean_abs": 5.036902924378713e-07,
+          "relative_l2": 0.00012383041608444133,
+          "cosine": 0.9999999923346465,
+          "normalized_max_abs": 0.00051440329218107,
+          "different_elements": 59,
+          "bit_exact": false,
+          "first_difference_flat": 4063,
+          "actual_f32_sha256": "7c71bea2e04755e51cd6c1e7a3dbb67c06f66a38490fa055328c97f1e40d5697",
+          "reference_f32_sha256": "40bd90a41c87dcead146fbd213dbcfc24d6a9c3e90fa24f963be4511472331b8",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "7c71bea2e04755e51cd6c1e7a3dbb67c06f66a38490fa055328c97f1e40d5697"
+      },
+      {
+        "name": "n1",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.0078125,
+          "mean_abs": 1.5910093983014424e-06,
+          "relative_l2": 0.0002065592406026038,
+          "cosine": 0.9999999786743913,
+          "normalized_max_abs": 0.0017006802721088435,
+          "different_elements": 58,
+          "bit_exact": false,
+          "first_difference_flat": 4063,
+          "actual_f32_sha256": "4cbd25f7943ff6a9ec16f44dc9253af4e38af867a3bc56367d66d5f1cb9ecc3a",
+          "reference_f32_sha256": "166642e7b98ce53d7dbb0c4884b1337eac0a7d0a64520ba0e8d7fe2a7bb26b5a",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "4cbd25f7943ff6a9ec16f44dc9253af4e38af867a3bc56367d66d5f1cb9ecc3a"
+      },
+      {
+        "name": "gate",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.015625,
+          "mean_abs": 1.987103158691233e-05,
+          "relative_l2": 0.0004535677535182777,
+          "cosine": 0.9999998973889634,
+          "normalized_max_abs": 0.0031645569620253164,
+          "different_elements": 4229,
+          "bit_exact": false,
+          "first_difference_flat": 1082,
+          "actual_f32_sha256": "fc77e53b6cda87f5eb417a7ec6b01a9dc16e32f1b006656186ba478c21e1f2cc",
+          "reference_f32_sha256": "c97edcfec798722a75d49e764dfbe5bb202a715d276db4fba2f6ccdcf0c0f315",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "fc77e53b6cda87f5eb417a7ec6b01a9dc16e32f1b006656186ba478c21e1f2cc"
+      },
+      {
+        "name": "up",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.00390625,
+          "mean_abs": 1.2437453785553641e-05,
+          "relative_l2": 0.00045584308026592487,
+          "cosine": 0.9999998961100768,
+          "normalized_max_abs": 0.001358695652173913,
+          "different_elements": 4865,
+          "bit_exact": false,
+          "first_difference_flat": 6350,
+          "actual_f32_sha256": "e1e68ac6c65b25e46813aa918c0a517630635e049f7ca556058fb1b8044d2cfa",
+          "reference_f32_sha256": "05766af86dcaf8d50118c96bab97a03fcf0c7e367766264f162a7864d81c8ddb",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "e1e68ac6c65b25e46813aa918c0a517630635e049f7ca556058fb1b8044d2cfa"
+      },
+      {
+        "name": "act",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.00390625,
+          "mean_abs": 2.6669118235694052e-06,
+          "relative_l2": 0.00041062083076694644,
+          "cosine": 0.9999999157428887,
+          "normalized_max_abs": 0.0005186721991701245,
+          "different_elements": 7414,
+          "bit_exact": false,
+          "first_difference_flat": 6350,
+          "actual_f32_sha256": "4130cbe12ba384042a38ee7fc892c47caaed243aa37fa4c3e4fb01e6b504bd2d",
+          "reference_f32_sha256": "a24d878676fe64b1dbac3f7638dfc3e0e4d39b6f03c1b3eade4380370851d0f3",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "4130cbe12ba384042a38ee7fc892c47caaed243aa37fa4c3e4fb01e6b504bd2d"
+      },
+      {
+        "name": "down",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.001953125,
+          "mean_abs": 1.981549454891744e-05,
+          "relative_l2": 0.000745851209772912,
+          "cosine": 0.9999997218773865,
+          "normalized_max_abs": 0.0011467889908256881,
+          "different_elements": 2028,
+          "bit_exact": false,
+          "first_difference_flat": 79,
+          "actual_f32_sha256": "e2fe033f99686038cb2798ea3132d843297a6da304c1d7b837894dd5ee193fa3",
+          "reference_f32_sha256": "9ca5893558627d4849845c0bff17162c7d6925c757cc21a4af8be257a2fb1461",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "e2fe033f99686038cb2798ea3132d843297a6da304c1d7b837894dd5ee193fa3"
+      },
+      {
+        "name": "y",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.00390625,
+          "mean_abs": 1.988932490348816e-05,
+          "relative_l2": 0.0005802280037452022,
+          "cosine": 0.9999998317091512,
+          "normalized_max_abs": 0.0008928571428571428,
+          "different_elements": 1140,
+          "bit_exact": false,
+          "first_difference_flat": 79,
+          "actual_f32_sha256": "d350c49cd807189084ba425e5a4c4818ef72321f8bd33b8ce8acbcc004c03433",
+          "reference_f32_sha256": "ff9eae9551855940bb0dc280713cff6509df26ae6ac41636501cbf0aa434614e",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:block",
+          "limits": {
+            "max_abs": 0.05,
+            "mean_abs": 0.01
+          },
+          "passed": true
+        },
+        "sha256": "d350c49cd807189084ba425e5a4c4818ef72321f8bd33b8ce8acbcc004c03433"
+      },
+      {
+        "name": "scores",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 1.0,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e",
+          "reference_f32_sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e"
+      },
+      {
+        "name": "logits",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 1.0000000000000002,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054",
+          "reference_f32_sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054"
+      },
+      {
+        "name": "softmax_fp32",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 2.086162567138672e-07,
+          "mean_abs": 6.770928212958705e-09,
+          "relative_l2": 1.1085137083394828e-07,
+          "cosine": 0.9999999999999944,
+          "normalized_max_abs": 2.086162567138672e-07,
+          "different_elements": 1291,
+          "bit_exact": false,
+          "first_difference_flat": 17,
+          "actual_f32_sha256": "988c7954fb1698dd1db5cfcce891edd59efd4bad30cfafe31d476ba7fa46e573",
+          "reference_f32_sha256": "1a409f998759964a59953bf8e225cfaaafc5566027903429e65eed85b58e3646",
+          "finite": true
+        },
+        "verdict": {
+          "contract": null,
+          "passed": null,
+          "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+        },
+        "sha256": "988c7954fb1698dd1db5cfcce891edd59efd4bad30cfafe31d476ba7fa46e573"
+      },
+      {
+        "name": "prob",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 1.8055593228630336e-35,
+          "mean_abs": 1.116798554410684e-37,
+          "relative_l2": 7.962894131034973e-36,
+          "cosine": 1.0,
+          "normalized_max_abs": 1.8055593228630336e-35,
+          "different_elements": 23,
+          "bit_exact": false,
+          "first_difference_flat": 2369,
+          "actual_f32_sha256": "465057c5e7fa5e5fab9c517ec4accd33cf7b50fb668e2c04652f1f0a82829afe",
+          "reference_f32_sha256": "e4c25526d396549245c8c2e4469e0ea3fe546f029e5f1abe619980fbfe20e20d",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "465057c5e7fa5e5fab9c517ec4accd33cf7b50fb668e2c04652f1f0a82829afe"
+      },
+      {
+        "name": "silu",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.00390625,
+          "mean_abs": 7.0272348758797824e-06,
+          "relative_l2": 0.0004360086704484123,
+          "cosine": 0.9999999049747693,
+          "normalized_max_abs": 0.0010204081632653062,
+          "different_elements": 3874,
+          "bit_exact": false,
+          "first_difference_flat": 12362,
+          "actual_f32_sha256": "81901772fceddcba6e62f61108dbf81e10392846eee9e26d75bce28d5513037e",
+          "reference_f32_sha256": "0911c639cdffebe14edcba20acd4bbdc07570021570995308bdc9dfc20ed7bf1",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "81901772fceddcba6e62f61108dbf81e10392846eee9e26d75bce28d5513037e"
+      }
+    ],
+    "independent": [
+      {
+        "name": "n0",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999999,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce",
+          "reference_f32_sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+      },
+      {
+        "name": "qr",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 5.743155876795451e-09,
+          "relative_l2": 1.7287785208531262e-07,
+          "cosine": 0.9999999999999851,
+          "normalized_max_abs": 1.7820483576642335e-06,
+          "different_elements": 3,
+          "bit_exact": false,
+          "first_difference_flat": 1933,
+          "actual_f32_sha256": "4f27ab0bfcdc533715a55cb922d2307fc5947a19bf9043f210f12b9c9cb84a65",
+          "reference_f32_sha256": "2f79028d4c027a85c31ea18962c951c0598f559375dc364113b42ea765bfaa6d",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "4f27ab0bfcdc533715a55cb922d2307fc5947a19bf9043f210f12b9c9cb84a65"
+      },
+      {
+        "name": "kr",
+        "metrics": {
+          "shape": [
+            4096
+          ],
+          "elements": 4096,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 2.9802322387695312e-08,
+          "relative_l2": 2.7464232350516936e-08,
+          "cosine": 0.9999999999999997,
+          "normalized_max_abs": 2.7997778096330277e-07,
+          "different_elements": 1,
+          "bit_exact": false,
+          "first_difference_flat": 1326,
+          "actual_f32_sha256": "f36061b3811ed1c5031b9e528df55b3bba6ec9ca45769f190e1a103228ab6608",
+          "reference_f32_sha256": "707832e5c4c9f77842c5a1d3222e69c91b68780327f01cc1eb63237abc267801",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "f36061b3811ed1c5031b9e528df55b3bba6ec9ca45769f190e1a103228ab6608"
+      },
+      {
+        "name": "v",
+        "metrics": {
+          "shape": [
+            4096
+          ],
+          "elements": 4096,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 1.5832483768463135e-08,
+          "relative_l2": 4.2705324043611455e-06,
+          "cosine": 0.9999999999908813,
+          "normalized_max_abs": 2.675513698630137e-05,
+          "different_elements": 2,
+          "bit_exact": false,
+          "first_difference_flat": 2851,
+          "actual_f32_sha256": "993b6f4c6b953eb52d7f8a693da9891f8b84c9eaf5d048df4bf31bd6cd640f33",
+          "reference_f32_sha256": "9bc645edd5c89c4e1e5afd933bce1d915b11d8af938db938d3c760b0c8f8d72a",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "993b6f4c6b953eb52d7f8a693da9891f8b84c9eaf5d048df4bf31bd6cd640f33"
+      },
+      {
+        "name": "q",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 4.967053731282552e-09,
+          "relative_l2": 1.715003630253993e-07,
+          "cosine": 0.9999999999999853,
+          "normalized_max_abs": 1.731493794326241e-06,
+          "different_elements": 1,
+          "bit_exact": false,
+          "first_difference_flat": 6643,
+          "actual_f32_sha256": "508db617a2a4157ee71a95b794d7b57a43a4ac716dfb3714ea181a1729ffccf1",
+          "reference_f32_sha256": "5feb7cdb21ced852b3f4fc5ee751a41235a69b5517270f48cead9e06a180bc0e",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "508db617a2a4157ee71a95b794d7b57a43a4ac716dfb3714ea181a1729ffccf1"
+      },
+      {
+        "name": "k",
+        "metrics": {
+          "shape": [
+            4096
+          ],
+          "elements": 4096,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 2.9802322387695312e-08,
+          "relative_l2": 2.7464233692398634e-08,
+          "cosine": 0.9999999999999997,
+          "normalized_max_abs": 2.7997778096330277e-07,
+          "different_elements": 1,
+          "bit_exact": false,
+          "first_difference_flat": 1326,
+          "actual_f32_sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0",
+          "reference_f32_sha256": "832339573be592c410b42a814112c3f6796cb643bf5d621d56f0b4f130eb6af6",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0"
+      },
+      {
+        "name": "att",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 6.103515625e-05,
+          "mean_abs": 7.605801026026407e-09,
+          "relative_l2": 3.6437214136507564e-06,
+          "cosine": 0.9999999999933616,
+          "normalized_max_abs": 2.675513698630137e-05,
+          "different_elements": 4,
+          "bit_exact": false,
+          "first_difference_flat": 17315,
+          "actual_f32_sha256": "45c1f61422ce31535aa594156380567f2bae341b5fabf0490621791d376171d7",
+          "reference_f32_sha256": "e889b05b3eed6d25c0930a3c79ba57c0474b8864585aeb9f78815975d6bafe8f",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "45c1f61422ce31535aa594156380567f2bae341b5fabf0490621791d376171d7"
+      },
+      {
+        "name": "o",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.001953125,
+          "mean_abs": 1.984262780752033e-07,
+          "relative_l2": 9.129709481625157e-05,
+          "cosine": 0.9999999958336695,
+          "normalized_max_abs": 0.0005208333333333333,
+          "different_elements": 52,
+          "bit_exact": false,
+          "first_difference_flat": 1993,
+          "actual_f32_sha256": "b49d48549588bd3102af308d77a0fdf0559be3ae60bfef195472e68eb0ffe3f8",
+          "reference_f32_sha256": "172ba8d44a2223b9a020212ccd3085ad2dfc30cf04df6227ae48fd81802b33be",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "b49d48549588bd3102af308d77a0fdf0559be3ae60bfef195472e68eb0ffe3f8"
+      },
+      {
+        "name": "r",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.001953125,
+          "mean_abs": 2.0209699869155884e-07,
+          "relative_l2": 9.341643620447293e-05,
+          "cosine": 0.9999999956379076,
+          "normalized_max_abs": 0.00051440329218107,
+          "different_elements": 19,
+          "bit_exact": false,
+          "first_difference_flat": 1993,
+          "actual_f32_sha256": "7c71bea2e04755e51cd6c1e7a3dbb67c06f66a38490fa055328c97f1e40d5697",
+          "reference_f32_sha256": "27439870eb293bb7c9c620f30247aae26de9461e0a7eb757b79aada0c56c79eb",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "7c71bea2e04755e51cd6c1e7a3dbb67c06f66a38490fa055328c97f1e40d5697"
+      },
+      {
+        "name": "n1",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.0078125,
+          "mean_abs": 6.832027186950048e-07,
+          "relative_l2": 0.00017352812400240174,
+          "cosine": 0.9999999849514831,
+          "normalized_max_abs": 0.0017006802721088435,
+          "different_elements": 17,
+          "bit_exact": false,
+          "first_difference_flat": 1993,
+          "actual_f32_sha256": "4cbd25f7943ff6a9ec16f44dc9253af4e38af867a3bc56367d66d5f1cb9ecc3a",
+          "reference_f32_sha256": "70ad2526934280ccdb1f1db529e01dd39fe3313825104a7c97b6912dc0bf093f",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "4cbd25f7943ff6a9ec16f44dc9253af4e38af867a3bc56367d66d5f1cb9ecc3a"
+      },
+      {
+        "name": "gate",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.015625,
+          "mean_abs": 1.548363486238356e-05,
+          "relative_l2": 0.0004150120006737616,
+          "cosine": 0.999999914100586,
+          "normalized_max_abs": 0.0031645569620253164,
+          "different_elements": 3188,
+          "bit_exact": false,
+          "first_difference_flat": 1082,
+          "actual_f32_sha256": "fc77e53b6cda87f5eb417a7ec6b01a9dc16e32f1b006656186ba478c21e1f2cc",
+          "reference_f32_sha256": "1195b4e7dadc01dab500d63f6a33cd267637cc14ce0113d70dc5760d60f8250e",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "fc77e53b6cda87f5eb417a7ec6b01a9dc16e32f1b006656186ba478c21e1f2cc"
+      },
+      {
+        "name": "up",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.00390625,
+          "mean_abs": 8.504285999931329e-06,
+          "relative_l2": 0.00038804658260183425,
+          "cosine": 0.9999999247140895,
+          "normalized_max_abs": 0.001358695652173913,
+          "different_elements": 3382,
+          "bit_exact": false,
+          "first_difference_flat": 1566,
+          "actual_f32_sha256": "e1e68ac6c65b25e46813aa918c0a517630635e049f7ca556058fb1b8044d2cfa",
+          "reference_f32_sha256": "a7cf491badbf23549a4e2550098ab19ec9ae980ee322cb597fa0f4f6f4e0e5da",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "e1e68ac6c65b25e46813aa918c0a517630635e049f7ca556058fb1b8044d2cfa"
+      },
+      {
+        "name": "act",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.00390625,
+          "mean_abs": 1.875409672688225e-06,
+          "relative_l2": 0.000371059765136095,
+          "cosine": 0.9999999311819779,
+          "normalized_max_abs": 0.0005186721991701245,
+          "different_elements": 5318,
+          "bit_exact": false,
+          "first_difference_flat": 1566,
+          "actual_f32_sha256": "4130cbe12ba384042a38ee7fc892c47caaed243aa37fa4c3e4fb01e6b504bd2d",
+          "reference_f32_sha256": "3979c2a0bc508502d0355d7978ff20daa4ecb45c1b142615e23176100b252acd",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "4130cbe12ba384042a38ee7fc892c47caaed243aa37fa4c3e4fb01e6b504bd2d"
+      },
+      {
+        "name": "down",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.001953125,
+          "mean_abs": 1.939612047863193e-05,
+          "relative_l2": 0.0007656012935622877,
+          "cosine": 0.9999997070316892,
+          "normalized_max_abs": 0.0011467889908256881,
+          "different_elements": 1946,
+          "bit_exact": false,
+          "first_difference_flat": 79,
+          "actual_f32_sha256": "e2fe033f99686038cb2798ea3132d843297a6da304c1d7b837894dd5ee193fa3",
+          "reference_f32_sha256": "923ba4cf4c20fd6a9f0b315a12ec2e0650542bc849a2aff8d306b8b999f763f8",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "e2fe033f99686038cb2798ea3132d843297a6da304c1d7b837894dd5ee193fa3"
+      },
+      {
+        "name": "y",
+        "metrics": {
+          "shape": [
+            24576
+          ],
+          "elements": 24576,
+          "max_abs": 0.00390625,
+          "mean_abs": 1.89861748367548e-05,
+          "relative_l2": 0.000587622570712397,
+          "cosine": 0.9999998273746288,
+          "normalized_max_abs": 0.0008928571428571428,
+          "different_elements": 1079,
+          "bit_exact": false,
+          "first_difference_flat": 79,
+          "actual_f32_sha256": "d350c49cd807189084ba425e5a4c4818ef72321f8bd33b8ce8acbcc004c03433",
+          "reference_f32_sha256": "9f9e1178e9149ee362a08b829b553e4babdf532a22dac046374f30d5b53ff934",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:block",
+          "limits": {
+            "max_abs": 0.05,
+            "mean_abs": 0.01
+          },
+          "passed": true
+        },
+        "sha256": "d350c49cd807189084ba425e5a4c4818ef72321f8bd33b8ce8acbcc004c03433"
+      },
+      {
+        "name": "scores",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 1.0,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e",
+          "reference_f32_sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e"
+      },
+      {
+        "name": "logits",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 1.0000000000000002,
+          "normalized_max_abs": 0.0,
+          "different_elements": 0,
+          "bit_exact": true,
+          "first_difference_flat": null,
+          "actual_f32_sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054",
+          "reference_f32_sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054"
+      },
+      {
+        "name": "softmax_fp32",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 1.9371509552001953e-07,
+          "mean_abs": 6.974415543789719e-09,
+          "relative_l2": 1.1095568132503461e-07,
+          "cosine": 0.9999999999999943,
+          "normalized_max_abs": 1.9371509552001953e-07,
+          "different_elements": 1354,
+          "bit_exact": false,
+          "first_difference_flat": 17,
+          "actual_f32_sha256": "988c7954fb1698dd1db5cfcce891edd59efd4bad30cfafe31d476ba7fa46e573",
+          "reference_f32_sha256": "061dfc3d3d5d63d35a4a62c6c0d3fe2e721f1d502afedc655afe8cdc19cc0477",
+          "finite": true
+        },
+        "verdict": {
+          "contract": null,
+          "passed": null,
+          "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+        },
+        "sha256": "988c7954fb1698dd1db5cfcce891edd59efd4bad30cfafe31d476ba7fa46e573"
+      },
+      {
+        "name": "prob",
+        "metrics": {
+          "shape": [
+            3072
+          ],
+          "elements": 3072,
+          "max_abs": 1.8055593228630336e-35,
+          "mean_abs": 1.116798554410684e-37,
+          "relative_l2": 7.962894131034973e-36,
+          "cosine": 1.0,
+          "normalized_max_abs": 1.8055593228630336e-35,
+          "different_elements": 23,
+          "bit_exact": false,
+          "first_difference_flat": 2369,
+          "actual_f32_sha256": "465057c5e7fa5e5fab9c517ec4accd33cf7b50fb668e2c04652f1f0a82829afe",
+          "reference_f32_sha256": "e4c25526d396549245c8c2e4469e0ea3fe546f029e5f1abe619980fbfe20e20d",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "465057c5e7fa5e5fab9c517ec4accd33cf7b50fb668e2c04652f1f0a82829afe"
+      },
+      {
+        "name": "silu",
+        "metrics": {
+          "shape": [
+            143360
+          ],
+          "elements": 143360,
+          "max_abs": 0.00390625,
+          "mean_abs": 5.302284470027578e-06,
+          "relative_l2": 0.00039023234420194116,
+          "cosine": 0.9999999238819787,
+          "normalized_max_abs": 0.0010204081632653062,
+          "different_elements": 2903,
+          "bit_exact": false,
+          "first_difference_flat": 9006,
+          "actual_f32_sha256": "81901772fceddcba6e62f61108dbf81e10392846eee9e26d75bce28d5513037e",
+          "reference_f32_sha256": "37b977c221a5e5f474d4b22cea8eca85a1e8925df6976d4d011658ab9a6d32c0",
+          "finite": true
+        },
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        },
+        "sha256": "81901772fceddcba6e62f61108dbf81e10392846eee9e26d75bce28d5513037e"
+      }
+    ]
+  },
+  "table_check": {
+    "cos": {
+      "bit_exact": true,
+      "max_abs": 0.0
+    },
+    "sin": {
+      "bit_exact": true,
+      "max_abs": 0.0
+    }
+  },
+  "canonical_result_sha256": "3f07e0460681bdb00a7e7500f82c16f8bd8148c112b24c4cf1a9653f6451f025",
+  "native_result_sha256": "b6206444a95453770ce3131998000aece244e182e45bebeef841038dd8b2d6a6",
+  "candidate_cpp_sha256": "fa8e35755dfd17fb00c911b11b69d55b10cb5cc88002867a7484167d35320f79",
+  "candidate_binary_sha256": "fb06834c4e237c643dd661ff069c29ccce5ced880b3b5f87456357a1a5cc1650",
+  "compile_command": [
+    "g++",
+    "-O2",
+    "-std=c++17",
+    "-ffp-contract=off",
+    "-fno-fast-math",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_bf16_candidate_m16_20261011/candidate.cpp",
+    "-o",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_bf16_candidate_m16_20261011/candidate"
+  ],
+  "retains_dense_increasing_K_FMA": true,
+  "retains_original_FP32_bias_order": true,
+  "retains_QK_16_partial_FP32_reduction": true,
+  "retains_exp_poly7": true,
+  "observation_only_extra_future_scores": true,
+  "rtl_executed": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "final_source_sha256": {
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "tests/test_qwen2_block_recipe_model.py": "2c3c48dc4fdc78a0b43a7b61dfde36a00a3ce9ecbe454c4281c52f47bcfd341a"
+  }
+}

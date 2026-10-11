@@ -1,0 +1,99 @@
+{
+  "scope": "read_only_diagnostic_no_FP64_candidate_substitution",
+  "cases": [
+    {
+      "head": 6,
+      "query": 70,
+      "key": 75,
+      "causally_visible": false,
+      "candidate_score": 2560.0,
+      "native_score": 2576.0,
+      "q_differences": [],
+      "k_differences": [],
+      "candidate_operands": {
+        "dot16_f32": 28992.0,
+        "dot16_bf16": 28928.0,
+        "dot16_scaled_bf16": 2560.0,
+        "fp64_diagnostic_dot": 28992.000022888184,
+        "fp64_through_fp32_bf16": 28928.0,
+        "direct_bf16_of_fp64_diagnostic": 29056.0
+      },
+      "native_operands_same_order": {
+        "dot16_f32": 28992.0,
+        "dot16_bf16": 28928.0,
+        "dot16_scaled_bf16": 2560.0,
+        "fp64_diagnostic_dot": 28992.000022888184,
+        "fp64_through_fp32_bf16": 28928.0,
+        "direct_bf16_of_fp64_diagnostic": 29056.0
+      },
+      "q_changed_values": [],
+      "k_changed_values": []
+    },
+    {
+      "head": 9,
+      "query": 102,
+      "key": 2,
+      "causally_visible": true,
+      "candidate_score": -848.0,
+      "native_score": -856.0,
+      "q_differences": [
+        63
+      ],
+      "k_differences": [],
+      "candidate_operands": {
+        "dot16_f32": -9631.1962890625,
+        "dot16_bf16": -9600.0,
+        "dot16_scaled_bf16": -848.0,
+        "fp64_diagnostic_dot": -9631.19620013237,
+        "fp64_through_fp32_bf16": -9600.0,
+        "direct_bf16_of_fp64_diagnostic": -9600.0
+      },
+      "native_operands_same_order": {
+        "dot16_f32": -9634.5556640625,
+        "dot16_bf16": -9664.0,
+        "dot16_scaled_bf16": -856.0,
+        "fp64_diagnostic_dot": -9634.55557513237,
+        "fp64_through_fp32_bf16": -9664.0,
+        "direct_bf16_of_fp64_diagnostic": -9664.0
+      },
+      "q_changed_values": [
+        {
+          "channel": 63,
+          "candidate": 1.8515625,
+          "native": 1.84375,
+          "native_k": 430.0
+        }
+      ],
+      "k_changed_values": []
+    },
+    {
+      "head": 1,
+      "query": 106,
+      "key": 75,
+      "causally_visible": true,
+      "candidate_score": 438.0,
+      "native_score": 438.0,
+      "q_differences": [],
+      "k_differences": [],
+      "candidate_operands": {
+        "dot16_f32": 4944.0009765625,
+        "dot16_bf16": 4960.0,
+        "dot16_scaled_bf16": 438.0,
+        "fp64_diagnostic_dot": 4944.000680923462,
+        "fp64_through_fp32_bf16": 4960.0,
+        "direct_bf16_of_fp64_diagnostic": 4960.0
+      },
+      "native_operands_same_order": {
+        "dot16_f32": 4944.0009765625,
+        "dot16_bf16": 4960.0,
+        "dot16_scaled_bf16": 438.0,
+        "fp64_diagnostic_dot": 4944.000680923462,
+        "fp64_through_fp32_bf16": 4960.0,
+        "direct_bf16_of_fp64_diagnostic": 4960.0
+      },
+      "q_changed_values": [],
+      "k_changed_values": []
+    }
+  ],
+  "clarification": "The via-FP32 diagnostic includes double rounding; direct BF16 rounding of the mathematical FP64 diagnostic is separately labeled. No FP64 result fed candidate outputs."
+}

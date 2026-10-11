@@ -36,6 +36,12 @@ SOURCE_PINS = {
 MATRICES = [('q',1536,1536), ('k',1536,256), ('v',1536,256),
             ('o',1536,1536), ('gate',1536,8960), ('up',1536,8960),
             ('down',8960,1536)]
+HOST_SOURCE_PINS = {
+    BASE + 'Protocol.scala': '5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783',
+    BASE + 'ElementwiseMemoryEngine.scala': 'cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845',
+    BASE + 'VectorSilu.scala': '758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9',
+    BASE + 'OverlappedSilu.scala': 'd15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea',
+}
 
 
 def verify_sources(root: Path) -> dict:
@@ -115,13 +121,79 @@ def report(root: Path, tokens: int, weight_dtype: str = 'BF16') -> dict:
     return result
 
 
+def host_schedule_report(root: Path, tokens: int, weight_dtype: str = 'BF16') -> dict:
+    """A stricter lower bound for the existing pipelined Host, not simulation.
+
+    Every non-overlapping arithmetic request gets only ONE cycle here, even
+    division/exp and the pending Matrix request. Actual latencies are larger.
+    Dense, core and SiLU owners are serialized by QwenOwnerKernel.active/mode.
+    """
+    base = report(root, tokens, weight_dtype)
+    for name, expected in HOST_SOURCE_PINS.items():
+        path = root / name
+        if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            raise ValueError('source changed; re-audit Host bound before use: ' + name)
+    pairs = 12 * tokens * (tokens + 1) // 2
+    counts = {
+        'causal_head_query_key_pairs': pairs,
+        'qk_matrix_requests': pairs * 8,
+        'pv_matrix_requests': pairs * 8,
+        'qk_reduction_scalar_adds': pairs * 16,
+        'qk_scale_scalar_multiplies': pairs,
+        'softmax_diff_exp_sum_scalar_requests': pairs * 3,
+        'softmax_reciprocal_scalar_requests': 12 * tokens,
+        'pv_probability_scalar_multiplies': pairs * 8,
+        'two_norm_scalar_and_vector_issue_cycles': 3656 * tokens,
+        'qkv_bias_vector_issue_cycles': 128 * tokens,
+        'qk_rope_vector_issue_cycles': 336 * tokens,
+        'two_residual_vector_issue_cycles': 192 * tokens,
+        'silu_16_lane_primitive_issue_cycles': 3360 * tokens,
+    }
+    # The pairs item describes the iteration space, not an additional operation.
+    non_dense = sum(v for k, v in counts.items() if k != 'causal_head_query_key_pairs')
+    dense_ideal = (base['dense_useful_macs'] + 4095) // 4096
+    matrix_only = dense_ideal + 16 * pairs
+    ideal_dense_total = dense_ideal + non_dense
+    current_dense = max(dense_ideal, base['weight_read_cycles_lower_bound'])
+    total = current_dense + non_dense
+    macs = base['total_useful_macs']
+    return dict(schema_version=1, status='HOST_SOURCE_LOWER_BOUND_NOT_CYCLE_PREDICTION',
+        workload=base['workload'], profile='Host real / 4096 MAC / pipelined / weight-read-beats16',
+        scope=base['scope'], matrix_macs_per_cycle=4096, issue_counts=counts,
+        useful_macs=macs, useful_macs_per_attention_matrix_request=16,
+        attention_slice_mask=1, attention_requests_single_inflight=True,
+        matrix_only_cycles_lower_bound=matrix_only,
+        matrix_only_utilization_upper_bound=macs/(4096*matrix_only),
+        non_dense_cycles_lower_bound=non_dense,
+        ideal_dense_cycles_lower_bound=dense_ideal,
+        ideal_dense_whole_block_cycles_lower_bound=ideal_dense_total,
+        ideal_dense_whole_block_utilization_upper_bound=macs/(4096*ideal_dense_total),
+        current_dense_cycles_lower_bound=current_dense,
+        whole_block_cycles_lower_bound=total,
+        useful_utilization_upper_bound=macs/(4096*total),
+        predicted_full_block_cycles=None, rtl_measured_cycles=None, rtl_measured_utilization=None,
+        assumptions=['valid successful complete cold Host block; all stages execute',
+            'one cycle per Matrix/scalar/vector request, including div and exp',
+            'current QK diagonal/PV row0 mapping; only sixteen useful MAC per request',
+            'current sixteen-lane Vector/OverlappedSiLU, not autonomous scalar SiLU',
+            'owners serialize; OverlappedSiLU only overlaps memory inside its owner',
+            'Dense lower bound reuses the fixed single-read-port weight bound'],
+        omitted_costs=['actual arithmetic latency and request/result handshakes',
+            'non-Dense memory traffic, KV copy, descriptors and final ACKs',
+            'Dense activation/output traffic and all pipeline setup/drain'],
+        source_sha256={**base['source_sha256'], **HOST_SOURCE_PINS})
+
+
 def main() -> None:
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1])
     p.add_argument('--tokens',type=int,choices=(128,1024),default=128)
     p.add_argument('--weight-dtype',choices=('BF16','FP32'),default='BF16')
+    p.add_argument('--host-schedule', action='store_true',
+                   help='include the existing serialized Host arithmetic mapping as a strict lower bound')
     p.add_argument('--out',type=Path)
-    args=p.parse_args(); result=report(args.root,args.tokens,args.weight_dtype)
+    args=p.parse_args()
+    result=(host_schedule_report if args.host_schedule else report)(args.root,args.tokens,args.weight_dtype)
     text=json.dumps(result,indent=2,allow_nan=False)+'\n'
     if args.out:
         args.out.parent.mkdir(parents=True,exist_ok=True)

@@ -142,3 +142,11 @@ replay ZIP 和 ELF/SV 构建包的原 GitHub digest；不会以重新 fresh 的�
 - ongoing：Qwen2 精度合同逐节点对齐、M128 原门限失败修复、恢复源码及证据。
 - to do：Qwen2 同输入完整硬件、0.8B 的 M128 与 RMS/GQA 实际修复验证、35B 两个完整 block。
 - 保持：U00.2 ongoing、U01 to do、C02.2 OPEN。以上局部进展不关闭跨模型大项。
+
+## 后续显式模型策略
+
+首批 `5ca2b5c` 已核验远端 tree/31 个 blob，三项轻 CI 全部通过，模型合同
+CI 实跑 83 项测试。完整 native 精度失败仍开放。进一步的
+[官方 BF16 物化候选](QWEN2_BF16_POLICY_DIAGNOSTIC_20261011_CN.md)和
+[固定资源驻留/调度审计](QWEN2_PREFILL_RESIDENCY_AUDIT_20261011_CN.md)
+分别保留数值和资源边界，均未生成新 RTL。

@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "SOURCE_CONTRACT_TESTS_PASS_NUMERICAL_ACCEPTANCE_OPEN",
+  "recorded_utc": "2026-10-11T13:08:47.532047+00:00",
+  "parent_commit": "5ca2b5cf8c948f9a5e193e462b0ddc9f3a65fbd0",
+  "test_runs": [
+    {
+      "tool_session": 98802,
+      "exit_code": 0,
+      "tests_passed": 94,
+      "elapsed_seconds": 7.15,
+      "scope": "five Qwen2 payload/native model/recipe/materialization/bound pytest files",
+      "evidence_kind": "observed tool exit and stdout; raw log was not redirected"
+    },
+    {
+      "exit_code": 0,
+      "tests_passed": 11,
+      "elapsed_seconds": 0.42,
+      "scope": "test_qwen2_prefill_traffic_bound.py",
+      "reason": "restore source-drift check to its original test function; no implementation change",
+      "evidence_kind": "observed tool exit and stdout"
+    }
+  ],
+  "source_sha256": {
+    ".github/workflows/qwen2-prefill-model-contract.yml": "a3244bd78b60c5cd0d899a91535c3a93e4d98330c442b985843bb51af722c55d",
+    "scripts/qwen2_bf16_materialization_candidate.py": "357a74dd10b69fb78e2aff34410d1a01c881edbebbcf5d422bed2ee8acb47dbd",
+    "tests/test_qwen2_bf16_materialization_candidate.py": "c2b6388c88c8352b8afa918cdd656baadf026cbf1c05a5e9b5b1b294ccd158b6",
+    "scripts/qwen2_prefill_traffic_bound.py": "3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697",
+    "tests/test_qwen2_prefill_traffic_bound.py": "0da7be42c00940c554783ca333d7027b833c0a17be6ea3534e21fe5a47fe37a9",
+    "doc/QWEN2_BF16_POLICY_DIAGNOSTIC_20261011_CN.md": "3545758f7084caf984ee579af3d26d85c259f7092b8c7dd585790afdf6b6c631",
+    "doc/QWEN2_PREFILL_RESIDENCY_AUDIT_20261011_CN.md": "0556c7f13d0a335b24d99efbad44a4269c1371c2a198466577a1ebec768e992b",
+    "doc/QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md": "828d88f024dc3a15281b9451ede4587c5b8ed8ead472e910b30fd74fb2b5b53f"
+  },
+  "carried_m128": "NOT_RUN",
+  "rtl_generated_or_executed": false,
+  "candidate_m128_vs_native": "FAIL scores/logits; candidate gate/prob/final pass",
+  "original_independent_formula_m128_vs_native": "FAIL scores/logits/prob/gate; preserved"
+}

@@ -11,10 +11,12 @@ on:
       - 'scripts/collect_qwen2_layer0_payload.py'
       - 'scripts/qwen2_layer0_model_gate.py'
       - 'scripts/qwen2_block_recipe_model.py'
+      - 'scripts/qwen2_bf16_materialization_candidate.py'
       - 'scripts/qwen2_prefill_traffic_bound.py'
       - 'tests/test_qwen2_layer0_payload.py'
       - 'tests/test_qwen2_layer0_model_gate.py'
       - 'tests/test_qwen2_block_recipe_model.py'
+      - 'tests/test_qwen2_bf16_materialization_candidate.py'
       - 'tests/test_qwen2_prefill_traffic_bound.py'
       - 'config/payload_pins/qwen2_layer0.json'
       - 'config/upstream/weight_headers/qwen2_1p5b/**'
@@ -25,6 +27,10 @@ on:
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala'
@@ -72,9 +78,11 @@ jobs:
           python -m pip install --disable-pip-version-check numpy==2.3.5 pytest==8.4.2 transformers==4.40.1
       - name: Check model contracts and scalar software recipe without RTL
         run: |
-          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py
+          python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py
           python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json
           python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json
+          python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --host-schedule --out work/qwen2_model_contract/m128_host_bound.json
+          python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --host-schedule --out work/qwen2_model_contract/m1024_host_bound.json
           python scripts/check_git_payloads.py
       - name: Retain compact source-bound traffic evidence
         uses: actions/upload-artifact@v4

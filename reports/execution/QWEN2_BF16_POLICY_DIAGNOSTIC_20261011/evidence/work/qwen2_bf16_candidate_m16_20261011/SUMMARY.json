@@ -1,0 +1,62 @@
+{
+  "scope": "work_only_candidate_not_implemented_hardware",
+  "tokens": 16,
+  "report_sha256": "be212a2043a47628b94f42668dad04e27cfd404d5b25a44f1719caa9177de1c1",
+  "node_count": 29,
+  "softmax_reference": "official BF16 eager forward internal FP32 softmax, not official FP32-mode attention",
+  "softmax_row_sum_pass": true,
+  "softmax_fp32_elementwise_tolerance": null,
+  "semantics_all_pass": true,
+  "per_reference": {
+    "native": {
+      "failed_nodes": [],
+      "bf16_node_gates_pass": true,
+      "complete_gate_pass": true,
+      "final_y": {
+        "shape": [
+          1,
+          16,
+          1536
+        ],
+        "elements": 24576,
+        "max_abs": 0.00390625,
+        "mean_abs": 1.988932490348816e-05,
+        "relative_l2": 0.0005802280037452022,
+        "cosine": 0.9999998317091512,
+        "normalized_max_abs": 0.0008928571428571428,
+        "different_elements": 1140,
+        "bit_exact": false,
+        "first_difference_flat": 79,
+        "actual_f32_sha256": "d350c49cd807189084ba425e5a4c4818ef72321f8bd33b8ce8acbcc004c03433",
+        "reference_f32_sha256": "ff9eae9551855940bb0dc280713cff6509df26ae6ac41636501cbf0aa434614e",
+        "finite": true
+      }
+    },
+    "independent": {
+      "failed_nodes": [],
+      "bf16_node_gates_pass": true,
+      "complete_gate_pass": true,
+      "final_y": {
+        "shape": [
+          1,
+          16,
+          1536
+        ],
+        "elements": 24576,
+        "max_abs": 0.00390625,
+        "mean_abs": 1.89861748367548e-05,
+        "relative_l2": 0.000587622570712397,
+        "cosine": 0.9999998273746288,
+        "normalized_max_abs": 0.0008928571428571428,
+        "different_elements": 1079,
+        "bit_exact": false,
+        "first_difference_flat": 79,
+        "actual_f32_sha256": "d350c49cd807189084ba425e5a4c4818ef72321f8bd33b8ce8acbcc004c03433",
+        "reference_f32_sha256": "9f9e1178e9149ee362a08b829b553e4babdf532a22dac046374f30d5b53ff934",
+        "finite": true
+      }
+    }
+  },
+  "hardware_cycles": null,
+  "hardware_utilization": null
+}

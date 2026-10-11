@@ -1,0 +1,70 @@
+{
+  "scope": "work_only_candidate_not_implemented_hardware",
+  "tokens": 128,
+  "report_sha256": "c4f721693889d250a61302446bf1ecae8de4224c257b22acd60d13dc2ee2c514",
+  "node_count": 29,
+  "softmax_reference": "official BF16 eager forward internal FP32 softmax, not official FP32-mode attention",
+  "softmax_row_sum_pass": true,
+  "softmax_fp32_elementwise_tolerance": null,
+  "semantics_all_pass": true,
+  "per_reference": {
+    "native": {
+      "failed_nodes": [
+        "logits",
+        "scores"
+      ],
+      "bf16_node_gates_pass": false,
+      "complete_gate_pass": false,
+      "final_y": {
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "elements": 196608,
+        "max_abs": 0.03125,
+        "mean_abs": 2.1343701519072056e-05,
+        "relative_l2": 0.0007482744968870559,
+        "cosine": 0.9999997201149207,
+        "normalized_max_abs": 0.006172839506172839,
+        "different_elements": 8276,
+        "bit_exact": false,
+        "first_difference_flat": 79,
+        "actual_f32_sha256": "7cdb93ccb87e191a47eb2dbaf12b9749a88d420405b7b6e598bd0571f03ea0c9",
+        "reference_f32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+        "finite": true
+      }
+    },
+    "independent": {
+      "failed_nodes": [
+        "gate",
+        "logits",
+        "prob",
+        "scores"
+      ],
+      "bf16_node_gates_pass": false,
+      "complete_gate_pass": false,
+      "final_y": {
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "elements": 196608,
+        "max_abs": 0.03125,
+        "mean_abs": 3.884068185773989e-05,
+        "relative_l2": 0.0011517315865889164,
+        "cosine": 0.9999993368559629,
+        "normalized_max_abs": 0.006172839506172839,
+        "different_elements": 10885,
+        "bit_exact": false,
+        "first_difference_flat": 79,
+        "actual_f32_sha256": "7cdb93ccb87e191a47eb2dbaf12b9749a88d420405b7b6e598bd0571f03ea0c9",
+        "reference_f32_sha256": "d1d4c1d464800f74ac19fdb05d9cdb65b201f85e68dc7ace3c539945d99ee74a",
+        "finite": true
+      }
+    }
+  },
+  "hardware_cycles": null,
+  "hardware_utilization": null
+}

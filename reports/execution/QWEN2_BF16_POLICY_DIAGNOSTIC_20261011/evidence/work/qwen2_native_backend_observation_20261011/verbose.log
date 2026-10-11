@@ -1,0 +1,55 @@
+There was a problem when trying to write in your cache folder (/home/agent/.cache/huggingface/hub). You should set the environment variable TRANSFORMERS_CACHE to a writable directory.
+/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/profiler/profiler.py:217: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.
+  _warn_once(
+onednn_verbose,v1,info,oneDNN v3.7.1 (commit 8d263e693366ef8db40acc569cc7d8edf644556d)
+onednn_verbose,v1,info,cpu,runtime:OpenMP,nthr:4
+onednn_verbose,v1,info,cpu,isa:Intel AVX-512 with Intel DL Boost and bfloat16 support
+onednn_verbose,v1,info,gpu,runtime:none
+onednn_verbose,v1,info,graph,backend,0:dnnl_backend
+onednn_verbose,v1,primitive,info,template:operation,engine,primitive,implementation,prop_kind,memory_descriptors,attributes,auxiliary,problem_desc,exec_time
+onednn_verbose,v1,graph,info,template:operation,engine,partition_id,partition_kind,op_names,data_formats,logical_tensors,fpmath_mode,implementation,backend,exec_time
+onednn_verbose,v1,primitive,exec,cpu,matmul,brg_matmul:avx512_core_bf16,undef,src:bf16::blocked:ab::f0 wei:bf16::blocked:ba::f0 dst:bf16::blocked:ab::f0,attr-scratchpad:user attr-post-ops:sum,,128x1536:1536x1536,1.52515
+onednn_verbose,v1,primitive,exec,cpu,matmul,brg_matmul:avx512_core_bf16,undef,src:bf16::blocked:abc::f0 wei:bf16::blocked:acb::f0 dst:bf16::blocked:abc::f0,attr-scratchpad:user,,12x128x128:12x128x128,0.133057
+{
+  "status": "EXACT_TWO_OPERATOR_REPRODUCTION_WITH_PROFILER",
+  "elapsed_seconds": 0.008081727999524446,
+  "full_output_bit_exact": {
+    "qr": true,
+    "scores": true
+  },
+  "event_names": [
+    "QWEN2_ORIGINAL_SHAPE_Q_LINEAR",
+    "aten::linear",
+    "aten::view",
+    "aten::t",
+    "aten::transpose",
+    "aten::as_strided",
+    "aten::addmm",
+    "aten::expand",
+    "aten::as_strided",
+    "aten::copy_",
+    "aten::resolve_conj",
+    "aten::view",
+    "QWEN2_ORIGINAL_SHAPE_QK_MATMUL_AND_SCALE",
+    "aten::matmul",
+    "aten::expand",
+    "aten::as_strided",
+    "aten::reshape",
+    "aten::_reshape_alias",
+    "aten::bmm",
+    "aten::resolve_conj",
+    "aten::contiguous",
+    "aten::clone",
+    "aten::empty_like",
+    "aten::empty",
+    "aten::fill_",
+    "aten::copy_",
+    "aten::_unsafe_view",
+    "aten::div",
+    "aten::to",
+    "aten::_to_copy",
+    "aten::empty_strided",
+    "aten::fill_",
+    "aten::copy_"
+  ]
+}

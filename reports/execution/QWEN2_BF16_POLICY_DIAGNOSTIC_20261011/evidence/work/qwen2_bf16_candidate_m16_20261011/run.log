@@ -1,0 +1,17 @@
+SOFTWARE_FLOAT_ENV rounding=FE_TONEAREST probes=10 arch=x86 mxcsr_before=8064 mxcsr_after=8064 ftz=0 daz=0
+SOFTWARE_RECIPE_STAGE phase=0 name=n0 values=24576
+SOFTWARE_RECIPE_STAGE phase=1 name=qr values=24576
+SOFTWARE_RECIPE_STAGE phase=2 name=kr values=4096
+SOFTWARE_RECIPE_STAGE phase=3 name=v values=4096
+SOFTWARE_RECIPE_STAGE phase=4 name=q values=24576
+SOFTWARE_RECIPE_STAGE phase=5 name=k values=4096
+SOFTWARE_RECIPE_STAGE phase=6 name=att values=24576
+SOFTWARE_RECIPE_STAGE phase=7 name=o values=24576
+SOFTWARE_RECIPE_STAGE phase=8 name=r values=24576
+SOFTWARE_RECIPE_STAGE phase=9 name=n1 values=24576
+SOFTWARE_RECIPE_STAGE phase=10 name=gate values=143360
+SOFTWARE_RECIPE_STAGE phase=11 name=up values=143360
+SOFTWARE_RECIPE_STAGE phase=12 name=act values=143360
+SOFTWARE_RECIPE_STAGE phase=13 name=down values=24576
+SOFTWARE_RECIPE_STAGE phase=14 name=y values=24576
+SOFTWARE_RECIPE_COMPLETE tokens=16 stages=15

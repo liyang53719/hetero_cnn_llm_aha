@@ -1,0 +1,32 @@
+{
+  "commit": "5ca2b5cf8c948f9a5e193e462b0ddc9f3a65fbd0",
+  "tree": "02559e5e14a3bd5600eb6e6df89da16275511d6a",
+  "runs": {
+    "38139786495": "success",
+    "38139786434": "success",
+    "38139786428": "success"
+  },
+  "model_job_id": 114471089893,
+  "model_ci_tests": 83,
+  "model_ci_test_seconds": 8.02,
+  "artifact_id": 11702715485,
+  "artifact_sha256": "96efb79ca459e2afd0496e99e95e7d5d1bdf87ed213503eba1931f2371dd43cf",
+  "artifact_reports": {
+    "m128_bf16_bound.json": {
+      "sha256": "2b15ecb576cdc3fa5c05456e07907c8e0dca3f32a3175887202dfbe9e063f0e3",
+      "matched_local_bytes": true,
+      "source_pins": 23,
+      "upper_bound": 0.38799969561688313,
+      "rtl_measured_cycles": null
+    },
+    "m1024_bf16_bound.json": {
+      "sha256": "9876daa395eb021b1cea34c946df467a152051d24f63dbb95d5374a1e5c0c88e",
+      "matched_local_bytes": true,
+      "source_pins": 23,
+      "upper_bound": 0.4448604204339964,
+      "rtl_measured_cycles": null
+    }
+  },
+  "new_RTL": false,
+  "full_native_numerical_acceptance": false
+}

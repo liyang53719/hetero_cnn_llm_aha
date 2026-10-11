@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "status": "PASS_FRONTEND_CANDIDATE_ONLY",
+  "base_commit": "43440dbad48c8e8af3112c1ae658db3ae64d76eb",
+  "production_source_modified": false,
+  "return_tag_default_bits": 0,
+  "return_tag_enabled_bits": [
+    1,
+    16,
+    32
+  ],
+  "seed_production_integration": "NOT_IMPLEMENTED",
+  "scala_version": "2.13.16",
+  "chisel_version": "6.7.0",
+  "java_version": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)",
+  "dependency_receipt_sha256": "83081508be52e2ae98a74a628cfbabd5d914c98e063dd8898bad3efadeea4e62",
+  "locked_jars": 87,
+  "locked_jar_bytes": 61870159,
+  "candidate_manifest_sha256": "42bc91edf67a94056b2264b7f5ff60910d4030541928c03f8814e6ff2b9a192c",
+  "compile_and_elaboration": [
+    {
+      "phase": "baseline/compile.log",
+      "exit_code": 0,
+      "wall_seconds": 4.880473664998135
+    },
+    {
+      "phase": "baseline/elaboration.log",
+      "exit_code": 0,
+      "wall_seconds": 2.020092074002605
+    },
+    {
+      "phase": "candidate/compile.log",
+      "exit_code": 0,
+      "wall_seconds": 5.230266919003043
+    },
+    {
+      "phase": "candidate/elaboration.log",
+      "exit_code": 0,
+      "wall_seconds": 3.1731886890047463
+    },
+    {
+      "phase": "seed/compile.log",
+      "exit_code": 0,
+      "wall_seconds": 4.126950070000021
+    },
+    {
+      "phase": "seed/elaboration.log",
+      "exit_code": 0,
+      "wall_seconds": 1.418222558000707
+    }
+  ],
+  "control_reference_tests": {
+    "return_tag": 13,
+    "seed": 25,
+    "runner_guards": 7,
+    "hardware_execution": false
+  },
+  "default_ir_comparisons": {
+    "fifo_default.fir": {
+      "equal": true,
+      "normalized_sha256": "4da3d57ff5c5afbff69d1601d5ac398396e91eb060765a5bce9e69fd00b7b9dc"
+    },
+    "service_default.fir": {
+      "equal": true,
+      "normalized_sha256": "f7a113739172b72bfbe4005a603f3a4d430df8ea9aaefdaa1da97e58bf383e4e"
+    }
+  },
+  "resource_declarations": {
+    "seed_control_register_bits": 138,
+    "seed_payload_register_bits": 0,
+    "retained_endpoint_instances": 8,
+    "retained_clock_gate_instances": 8,
+    "tag_metadata_entries": 8,
+    "tag_result_entries": 2,
+    "added_tag_storage_bits": 160,
+    "physical_area_or_timing_measured": false
+  },
+  "chirrtl_files": {
+    "baseline/chirrtl/fifo_default.fir": {
+      "sha256": "53522e3909192b8f7f3244243e483f0f69a192cb647fd3ba9c7d7a70e0d750f0",
+      "bytes": 6600
+    },
+    "baseline/chirrtl/service_default.fir": {
+      "sha256": "a0e612a9a2eb0c9db1a78fa540ed64658735f5d10c6a00714876cc1753b91e38",
+      "bytes": 5241844
+    },
+    "candidate/chirrtl/bundle_0.fir": {
+      "sha256": "27fe0ca47cd2b3d52ac686843cc238e76f1f8e828c974c571d5b6652d18fd896",
+      "bytes": 1222
+    },
+    "candidate/chirrtl/bundle_1.fir": {
+      "sha256": "022761db5704a39cf2d729ce4cb318d61541eac1d2a1adb38ccae40adb0fff28",
+      "bytes": 1306
+    },
+    "candidate/chirrtl/bundle_16.fir": {
+      "sha256": "c8c271656161c554dfb28f56c6c4f8457fff1cfba236bc644ab8cf1fe2e18aff",
+      "bytes": 1310
+    },
+    "candidate/chirrtl/bundle_32.fir": {
+      "sha256": "fc2797c5b984fbf20473161e2563146dc1da4a2a9f410a633ba6bdc5fb191a09",
+      "bytes": 1310
+    },
+    "candidate/chirrtl/fifo_0.fir": {
+      "sha256": "5352a7439bd8b0ed17acf65c1fb0a425a94bb61496ce6a6982c136ec6e8e59cf",
+      "bytes": 6629
+    },
+    "candidate/chirrtl/fifo_1.fir": {
+      "sha256": "2af2acb48fa01f681dfc5ce687d41ddb7944806b04b0454af489736af9bf9419",
+      "bytes": 6692
+    },
+    "candidate/chirrtl/fifo_16.fir": {
+      "sha256": "63aa57cdf94b7d11f891ef046d456aca5656490bb69c5b44e893ec32d2769fc6",
+      "bytes": 6695
+    },
+    "candidate/chirrtl/fifo_32.fir": {
+      "sha256": "092670cdc9f99c94ea58bc6bdd217a158814f78195591fa43e799eb75d8d0980",
+      "bytes": 6695
+    },
+    "candidate/chirrtl/fifo_default.fir": {
+      "sha256": "5352a7439bd8b0ed17acf65c1fb0a425a94bb61496ce6a6982c136ec6e8e59cf",
+      "bytes": 6629
+    },
+    "candidate/chirrtl/service_0.fir": {
+      "sha256": "4c585adcd13fbfa3ff9c3d238651862198d4121d4e9529a41732b8fd002617c0",
+      "bytes": 5263815
+    },
+    "candidate/chirrtl/service_1.fir": {
+      "sha256": "e40d456049e3acbb72fbe10714bd05c9c965ba8f62d0024cece2c2a3154ca031",
+      "bytes": 5265358
+    },
+    "candidate/chirrtl/service_16.fir": {
+      "sha256": "6184dd816c51d08523124a72c5e25401ca9fb0c7c2051a39607facf73a6189f0",
+      "bytes": 5265370
+    },
+    "candidate/chirrtl/service_32.fir": {
+      "sha256": "ed88f263373cce6453a265d5e9e7e9321f2f574e42b05c934c63e4c68ba79f90",
+      "bytes": 5265370
+    },
+    "candidate/chirrtl/service_default.fir": {
+      "sha256": "4c585adcd13fbfa3ff9c3d238651862198d4121d4e9529a41732b8fd002617c0",
+      "bytes": 5263815
+    },
+    "seed/chirrtl/seed_controller.fir": {
+      "sha256": "6f3d0c7d1cc8736d6461082675036064511e2c8f9219c28d8ffa10218ef2cf22",
+      "bytes": 75707
+    },
+    "seed/chirrtl/seed_port.fir": {
+      "sha256": "b4394749e09901387ca5a56c9ae1f56c1a686eb070c797107998df4e56c19610",
+      "bytes": 980
+    }
+  },
+  "corrections": {
+    "seed_reply_abort": "sticky poison, stable ACK and separate committed; local abstract negative test",
+    "owner_lease": "failed quarantine and stale/generator handle rejection; local abstract negative tests",
+    "runner_normalization": "quote-aware trailing source annotations; revised negative guard and rechecked existing IR; source was not recompiled",
+    "patch_packaging": "Empty context lines normalized to avoid patch-file trailing space; git apply output reverified byte-identical; no source recompilation"
+  },
+  "scope": {
+    "systemverilog_generated": false,
+    "retained_arithmetic_executed": false,
+    "rtl_protocol_executed": false,
+    "whole_block_hardware": false,
+    "new_native_acceptance": false,
+    "original_m128_native_gates": "FAIL_PRESERVED",
+    "physical_area_or_timing": null,
+    "mac_utilization_measured": null
+  },
+  "local_receipt": "work/matrix_interface_frontend_20261011T1821/summary.json",
+  "initial_receipt_sha256": "8f8fef03667ce753d3f5ac19838a3d12c4d6792674bc25766c583038b19242bb"
+}

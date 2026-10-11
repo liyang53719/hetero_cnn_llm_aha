@@ -268,7 +268,6 @@ Q投影舍入传播与相同Q/K的归约差异。完整形状官方QK重放复�
 - to do：决定后最小Chisel接入；模型prefill闭合后才冻结刺激执行RTL。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。
 
-
 ## 8ac4849 已验终态及D14模型增量
 
 `8ac48497c6fb6fa4e46db3593d4bf86174a05255` 的轻量CI实跑229项测试通过
@@ -386,4 +385,33 @@ M128完成全部15阶段；5308416值全bit等于原v0，CPU27.05秒。Attention
 - ongoing：原官方数值政策决定与完整阶段门FAIL，未降低阈值。
 - ongoing：与实际Chisel对齐的seed、bank路由、causal返回捕获及完整端口时序。
 - to do：carried/更长prefill与冻结激励的最终硬件验收。
+- 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。
+
+## 43440d 终态与最小 Chisel 接口候选
+
+`43440dbad48c8e8af3112c1ae658db3ae64d76eb` 已完成13＋248＝261项轻量CI，
+payload guard成功；工件SHA为
+`9645af24197c1b5b2aae6479a25b64951f2913110ab5506001a3a1854f37579f`。
+21份报告与本地逐字相同，源码pins按精确提交复核。
+
+已将驻留数值模型的两个直接依赖落实为[可应用源码候选](../candidates/qwen2_resident_matrix/README.md)：
+原 Matrix service 的可选 return tag，以及 begin/beat/commit/ACK 的 seed FSM。
+Scala2.13.16/Chisel6.7.0实际编译和CHIRRTL前端检查通过；原FIFO/service与tag
+default0的结构逐字相同（仅去来源位置），width1/16/32和非法宽度检查通过。
+Seed源码可展开，但未接生产owner/五bank写口，不能称seed生产模式已通过。
+
+45项小门包含13队列、25控制/地址和7runner负测。审查先修复reply背压下单拍
+abort可漏锁存、失败lease复活及stale generation三类候选问题；修正后的模型
+反例通过。前端比较器也修复字符串内`@[...]`被误删的风险，对同一已有IR
+重新严格比较通过，未重复构建。证据见
+[紧凑摘要](../reports/execution/QWEN2_MATRIX_INTERFACE_FRONTEND_20261011/SUMMARY.json)。
+
+这是Chisel编译/展开结构门，没有生成SystemVerilog、运行Verilator或执行FPU，
+不替代时序协议和完整block验收。原M128 native FAIL、政策待定保持；新精确SHA
+的单项前端CI发布后另验，现行生产源码和旧回归入口不变。
+
+- done（局部）：43440d的261测试/21报告身份核验。
+- done（局部）：最小返回tag/seed源码、45个模型/身份负测及真实Chisel前端门。
+- ongoing：原native数值FAIL；生产seed/bank-valid/ICG/owner实接与完整端口调度。
+- to do：同资源真实小接口协议门、carried/长prefill及最终冻结激励硬件验收。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。

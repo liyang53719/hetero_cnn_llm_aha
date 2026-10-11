@@ -247,3 +247,18 @@ Dense函数，实际搬运BF16 A/B、保存/读取FP32前缀并逐lane保持递�
 返回tag到行捕获的路由仍是未实现硬件接口。15阶段全bit等于原v0，原精度FAIL
 保持。[实际计数与范围](../reports/execution/QWEN2_RECTANGULAR_NUMERIC_20261011/README.md)
 不提供新的时钟预测或RTL利用率，现有宽松下界也未被软件CPU耗时替代。
+
+## 从模型到最小接口的资源检查
+
+[Chisel前端候选](../candidates/qwen2_resident_matrix/README.md) 已对实际生产
+service的可选return-tag补丁做编译/CHIRRTL检查，默认0的IR保持相同。启用16-bit
+tag声明增加160bit存储（原8 metadata＋2 result深度不变），仍8个retained
+endpoint和8个ICG声明。未实例化的seed控制器有138bit状态，无payload寄存器。
+这些是前端声明计数，物理面积/时序未测；没有改变固定4096 MAC/拍分母。
+
+Seed完整context为256个512-bit beat。现有256-bit行bank每个active beat要
+两次同bank read；M128 Dense已知81,788,928B恢复量对应1,277,952 beat与
+2,555,904 read事件。最小owner还需至少512-bit assembly/skid、phase/address/
+identity控制及实际bank写口mux/valid/clock路由。它们尚未实现/绑定，不计为免费。
+两个read事件不自动等于两个全局周期，跨bank重叠与端口时延需组合后证明。
+因此29.701173%旧事件图宽松上界未被冒称新实现的可行预测或实测。

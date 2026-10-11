@@ -1,0 +1,52 @@
+name: qwen2-matrix-interface-frontend
+
+# Applies a source candidate in isolation. Chisel frontend only: no firtool,
+# Verilator, checkpoint download, retained arithmetic or full-block RTL.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-matrix-interface-frontend.yml'
+      - 'candidates/qwen2_resident_matrix/**'
+      - 'scripts/check_matrix_interface_candidate.py'
+      - 'tests/test_matrix_interface_candidate.py'
+      - 'chisel/rope_hardware_oracle/maven-lock.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-matrix-interface-frontend-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - name: Fetch immutable production baseline
+        run: |
+          git fetch --no-tags --depth=1 origin 43440dbad48c8e8af3112c1ae658db3ae64d76eb
+          git cat-file -e 43440dbad48c8e8af3112c1ae658db3ae64d76eb:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Independent control contracts and negative identity guards
+        run: |
+          python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
+          python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
+      - name: Compile real source and check CHIRRTL structure
+        run: |
+          python scripts/check_matrix_interface_candidate.py --repo . --out work/matrix-interface-frontend --cache work/matrix-interface-jars
+      - name: Preserve compact source and frontend evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-matrix-interface-frontend-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/matrix-interface-frontend/**/*.json
+            work/matrix-interface-frontend/**/*.log
+            work/matrix-interface-frontend/**/*.fir

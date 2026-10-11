@@ -1,0 +1,97 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala
+@@ -21,20 +21,26 @@
+ class MatrixStreamGroup extends Bundle {
+   val opcode=UInt(8.W);val sliceMask=UInt(8.W);val tag=UInt(32.W)
+ }
+-class MatrixStreamStep extends Bundle {
++class MatrixStreamStep(val returnTagBits:Int=0) extends Bundle {
++  require(returnTagBits>=0 && returnTagBits<=32,"returnTagBits must be in 0..32")
++  // Internal opaque metadata only; absent from the default interface.
++  val returnTag=if(returnTagBits>0)Some(UInt(returnTagBits.W))else None
+   val a=Vec(16,UInt(16.W));val b=Vec(256,UInt(16.W))
+   val context=UInt(3.W);val clear=Bool();val last=Bool()
+   val finish=Bool();val emit=Bool()
+ }
+-class MatrixStreamResult extends Bundle {
++class MatrixStreamResult(val returnTagBits:Int=0) extends Bundle {
++  require(returnTagBits>=0 && returnTagBits<=32,"returnTagBits must be in 0..32")
++  val returnTag=if(returnTagBits>0)Some(UInt(returnTagBits.W))else None
+   val value=Vec(16,Vec(256,UInt(32.W)))
+   val context=UInt(3.W);val last=Bool();val error=Bool()
+ }
+ class MatrixStreamDone extends Bundle {val tag=UInt(32.W);val error=Bool()}
+-class MatrixStreamPort extends Bundle {
++class MatrixStreamPort(val returnTagBits:Int=0) extends Bundle {
++  require(returnTagBits>=0 && returnTagBits<=32,"returnTagBits must be in 0..32")
+   val group=Decoupled(new MatrixStreamGroup)
+-  val step=Decoupled(new MatrixStreamStep)
+-  val result=Flipped(Decoupled(new MatrixStreamResult))
++  val step=Decoupled(new MatrixStreamStep(returnTagBits))
++  val result=Flipped(Decoupled(new MatrixStreamResult(returnTagBits)))
+   val done=Flipped(Decoupled(new MatrixStreamDone))
+   val abort=Output(Bool())
+ }
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+@@ -8,12 +8,12 @@
+   * 131077-bit memory word, which has neither a useful SRAM mapping nor a portable
+   * simulation representation. These are two bounded 16-KiB output tile buffers.
+   */
+-class MatrixResultFifo extends Module {
++class MatrixResultFifo(returnTagBits:Int=0) extends Module {
+   val io=IO(new Bundle {
+-    val enq=Flipped(Decoupled(new MatrixStreamResult))
+-    val deq=Decoupled(new MatrixStreamResult)
++    val enq=Flipped(Decoupled(new MatrixStreamResult(returnTagBits)))
++    val deq=Decoupled(new MatrixStreamResult(returnTagBits))
+   })
+-  val storage=Reg(Vec(2,new MatrixStreamResult))
++  val storage=Reg(Vec(2,new MatrixStreamResult(returnTagBits)))
+   val head=RegInit(false.B);val tail=RegInit(false.B);val count=RegInit(0.U(2.W))
+   io.deq.valid:=count=/=0.U;io.deq.bits:=storage(head)
+   io.enq.ready:=count<2.U||io.deq.fire
+@@ -29,9 +29,9 @@
+   * Partial sums may be discarded; final values are credit-buffered. No step
+   * waits for its own result when a different legal context can issue.
+   */
+-class MatrixPipelineService extends Module {
++class MatrixPipelineService(returnTagBits:Int=0) extends Module {
+   val io=IO(new Bundle {
+-    val port=Flipped(new MatrixStreamPort)
++    val port=Flipped(new MatrixStreamPort(returnTagBits))
+     val acceptedSteps=Output(UInt(64.W)) // physical 512-MAC slice issues
+     val wideSteps=Output(UInt(64.W))
+     val stallCycles=Output(UInt(64.W))
+@@ -46,12 +46,15 @@
+   val seen=RegInit(0.U(5.W));val closed=RegInit(0.U(5.W))
+   val steps=RegInit(0.U(64.W));val wideSteps=RegInit(0.U(64.W));val stalls=RegInit(0.U(64.W))
+   io.acceptedSteps:=steps;io.wideSteps:=wideSteps;io.stallCycles:=stalls;io.resetRequired:=poison
+-  class Meta extends Bundle {val context=UInt(3.W);val last=Bool();val finish=Bool();val emit=Bool()}
++  class Meta extends Bundle {
++    val context=UInt(3.W);val last=Bool();val finish=Bool();val emit=Bool()
++    val returnTag=if(returnTagBits>0)Some(UInt(returnTagBits.W))else None
++  }
+   val tags=Module(new Queue(new Meta,8,pipe=true))
+-  val values=Module(new MatrixResultFifo)
++  val values=Module(new MatrixResultFifo(returnTagBits))
+   tags.io.enq.valid:=false.B;tags.io.enq.bits:=0.U.asTypeOf(new Meta)
+   tags.io.deq.ready:=false.B
+-  values.io.enq.valid:=false.B;values.io.enq.bits:=0.U.asTypeOf(new MatrixStreamResult)
++  values.io.enq.valid:=false.B;values.io.enq.bits:=0.U.asTypeOf(new MatrixStreamResult(returnTagBits))
+   io.port.result<>values.io.deq
+   io.port.group.ready:=state===idle && !poison
+   io.port.step.ready:=false.B
+@@ -104,9 +107,12 @@
+   tags.io.enq.valid:=io.port.step.fire && legalStep
+   tags.io.enq.bits.context:=x.context;tags.io.enq.bits.last:=x.last
+   tags.io.enq.bits.finish:=x.finish;tags.io.enq.bits.emit:=x.emit
++  if(returnTagBits>0){tags.io.enq.bits.returnTag.get:=x.returnTag.get}
+   tags.io.deq.ready:=consumeOutput
+   values.io.enq.valid:=consumeOutput && tags.io.deq.bits.emit && state=/=draining
+   values.io.enq.bits.context:=tags.io.deq.bits.context;values.io.enq.bits.last:=tags.io.deq.bits.last
++  // Follow the RETURNING accepted step, never live input pins.
++  if(returnTagBits>0){values.io.enq.bits.returnTag.get:=tags.io.deq.bits.returnTag.get}
+   values.io.enq.bits.error:=outputBad||poison
+
+   when(io.port.group.fire){

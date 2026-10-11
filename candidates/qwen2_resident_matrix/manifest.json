@@ -1,0 +1,27 @@
+{
+  "base_commit": "43440dbad48c8e8af3112c1ae658db3ae64d76eb",
+  "status": "UNINTEGRATED_SOURCE_CANDIDATE",
+  "original_sources": {
+    "BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+    "MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "RetainedMatrix.scala": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+    "WideMatrix.scala": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c"
+  },
+  "patched_sources": {
+    "BurstProtocol.scala": "1f15aaa0e2654b9fb31c14dd38cd258e897eb8433ceb86dd55967202f11f9c94",
+    "MatrixPipeline.scala": "7a5c83a49f9d74f83c6138e1bf498ff0c78179aa733e20ea6a845f98d9ca2499"
+  },
+  "abi_declarations_sha256": "05d15ad23e7bf986ab6757d7b06e6519e1cd9a0a78efb604f56e137fd498ee65",
+  "maven_lock_sha256": "e15bbf22b74552ed6a4fc61a7137564c2543488d928cbdff77f27af2dfd3204b",
+  "candidate_files": {
+    "BaselineElaboration.scala": "5b0cb844e561b260d41862a7d2e7de4b29f215bf251389dfee5b5a76892eb86e",
+    "MatrixAccumulatorSeedController.scala": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3",
+    "MatrixAccumulatorSeedProtocol.scala": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+    "ReturnTagElaborationCheck.scala": "846d472149fdcc7fe4db8bf3a170fc594431beb9033ac47cebc7bec550987da2",
+    "SeedElaborationCheck.scala": "4f8e6c36e1d495dd023814c9eb0315fd89c6f2a0fd59e3009b65fec4152a33cf",
+    "return_tag.patch": "6dcf91d1b5bea2b4e47bb0da9822b5e5eab87b38763e7f104565e1e28069e65c",
+    "seed_protocol_model.py": "18f84cd3b59f7707e1c506162ef15b5f449981c02375da0ce8220a767d4e7636",
+    "test_return_tag_contract.py": "bfda266725e49b8902e2449ca188a0801b39ec23cd56a791926d97dc1b90845b",
+    "test_seed_protocol_model.py": "70355089213329b85f8054d6a20d0728e9834df37f716a31c7fea1fdf9ed0a62"
+  }
+}

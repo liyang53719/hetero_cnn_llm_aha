@@ -195,3 +195,35 @@ FP32 A32243712B、FP32 D11796480B，合计137625600B。原iDMA一次一个
 所有权和被挤占工作。当前Matrix尚无FP32 accumulator seed接口，分K保存/
 恢复不能用分块求和替代原FMA顺序。外部改BF16、改归约或近似reciprocal
 会改变数值合同，不能当作本轮已批准或无成本收益。
+
+## 同一全DAG中的 resident_m128_nc3 候选
+
+通过 `--dense-mapping resident_m128_nc3` 显式选择，默认仍为current。
+该候选只支持cold M128，并沿原19-owner/21阶段执行；没有跨owner并发或
+同源A转发。Dense使用前述1024/512 words分区，七矩阵全部纳入容量与流量
+计数，Attention沿同一Scratch对象地址且验证候选分区高水位。
+
+每个C prefix以实际bank word地址绑定逻辑M/N与已完成K。缺seed恢复、丢掉
+最后一拍FMA、地址别名、越界行、提早复用context/C、缺写ACK，均有拒绝
+回归。只保留现5contexts、8metadata、2结果FIFO和1finalValue；结果逐tile
+保存/写回后才复用，不免费缓存五份完整返回。两半B物理容量都保留，但本
+保守日历只声明串行填充一半，没有偷算预取并行。
+
+软件事件运行覆盖有用MAC6014828544，Dense wide issues1462272，partial
+恢复/保存各81788928B；外部读128188416B、写22544384B均计ACK，完成全部
+19 owners。计数模型不执行权重算术，数值/flags/RTL门仍未完成。
+
+新增资源下界从该完整事件图提取，各独立资源只给每请求至少1拍，再对每个
+owner取max、串行owners求和。该图外部iDMA单项至少2355200拍，Scalar
+请求单项至少2476288拍；按owner依赖相加至少4944128拍，固定4096分母的
+有用MAC乐观上界29.701173%。它与原Host的11.113628%条件界属于不同映射，
+不可直接当作实测提速。新界尚未套入实际D26/exp时延、bank等待、partial
+路由、真实FMA反馈、命令字节或DDR延迟，真实周期不会因此已经可信。
+
+```sh
+python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --contexts 5 --dense-mapping resident_m128_nc3
+```
+
+首次独立审查发现模型可漏掉seed操作、可把逻辑行改成128而不拒绝。修正后
+显式绑定shape、C物理地址、seed-ready及255+1连续K步骤，完整tile集合必须
+闭合，新增负例保留。当前小门18项通过；完整CI以新精确提交另验。

@@ -248,3 +248,130 @@ def test_saved_silu_census_drift_and_wrong_cli_scope_are_rejected(tmp_path):
         run=subprocess.run([sys.executable,str(ROOT/'scripts/qwen2_prefill_resource_schedule.py'),
             '--observed-silu-host-bound',*flags],capture_output=True,text=True)
         assert run.returncode!=0 and 'requires cold M128' in run.stderr
+
+
+def test_resident_m128_candidate_full_dag_capacity_traffic_and_final_ack():
+    r=m.report(ROOT,128,5,dense_mapping='resident_m128_nc3')
+    x=r['reservation_result'];metrics=x['metrics'];phases=r['resident_dense_phases']
+    assert len(x['completed_owners'])==19 and x['successful_path_ownership_closed']
+    assert metrics['useful_macs']==6014828544
+    assert metrics['dense_wide_issues']==1462272
+    assert metrics['dense_weight_read_bytes']==93585408
+    assert metrics['dense_activation_read_bytes']==13893632
+    assert metrics['dense_partial_store_bytes']==metrics['dense_partial_restore_bytes']==81788928
+    assert sum(p['external_d_fp32_write_bytes'] for p in phases)==11796480
+    assert metrics['external_read_bytes']==128188416
+    assert metrics['external_write_bytes']==metrics['acknowledged_write_bytes']==22544384
+    assert x['peak_owned']['A_bytes']==524288 and x['peak_owned']['B_bytes']==262144
+    assert x['peak_owned']['contexts']==5 and x['peak_owned']['metadata']<=8
+    assert x['peak_owned']['matrix_results']==x['peak_owned']['dense_final_values']==1
+    assert sum(r['resources']['capacities'][k] for k in ('A_bytes','B_bytes'))==768*1024
+    assert r['attention_schedule']['used_a_bytes']==168*512
+    assert r['attention_schedule']['used_b_bytes']==160*512
+    assert r['attention_schedule']['allocated_a_bytes']==1024*512
+    assert r['attention_schedule']['allocated_b_bytes']==512*512
+    assert r['predicted_full_block_cycles'] is r['rtl_measured_cycles'] is None
+    assert not any(r['scope'].values())
+    assert not r['resources']['overlap_enabled']
+    assert not any(p['accumulator_seed_interface_implemented'] for p in phases)
+    floors=r['resource_issue_floors']
+    assert floors['independent_resource_floors']['idma_64b_read_write']==2355200
+    assert floors['independent_resource_floors']['scalar_requests']==2476288
+    assert floors['serial_owners_cycles_lower_bound']==4944128
+    assert floors['useful_utilization_upper_bound']==pytest.approx(0.2970117278517061)
+    assert floors['serial_owners_cycles_lower_bound']==sum(
+        max(s['resource_cycle_floors'].values()) for s in floors['serial_owner_floors'])
+    assert not floors['primitive_latency_binding_applied']
+
+
+def test_resident_dense_tile_order_capacity_and_three_tile_down_reuse():
+    for name,k,n in m.BOUND.MATRICES:
+        p=m.resident_dense_plan(128,k,n)
+        assert p['a_c_words_per_bank']==(896 if name=='down' else 1024)
+        assert p['b_words_per_bank']==512
+        assert p['n_tiles_retained']==(3 if name=='down' else 1)
+        for objects in (p['a_c_objects'],p['b_objects']):
+            assert all(x['end_word']<=y['start_word'] for x,y in zip(objects,objects[1:]))
+        cursors={}
+        for tile in m.resident_dense_tiles(128,k,n):
+            assert tile['contexts'] in (5,3)
+            for row in range(tile['m_base'],tile['m_base']+tile['rows'],16):
+                key=(row,tile['nbase'])
+                assert cursors.get(key,0)==tile['kbase']
+                assert tile['restore']==(tile['kbase']!=0)
+                cursors[key]=tile['kbase']+256
+                assert tile['final']==(cursors[key]==k)
+        assert len(cursors)==8*(n//256) and set(cursors.values())=={k}
+    down=m.resident_dense_plan(128,8960,1536)
+    assert down['external_a_fp32_read_bytes']==128*8960*4*2
+    assert down['partial_restore_bytes']==down['partial_store_bytes']==26738688
+    assert sum(p['external_a_fp32_read_bytes']+p['external_weight_bf16_read_bytes']+
+               p['external_d_fp32_write_bytes'] for p in
+               [m.resident_dense_plan(128,k,n) for _,k,n in m.BOUND.MATRICES])==119275520
+    # All six down C tiles alone consume the entire 768 KiB budget; A/B cannot fit.
+    assert 128*1536*4+128*256*2+2*256*256*2>768*1024
+    with pytest.raises(m.ReservationError,match='M128|partition'):
+        m.report(ROOT,1024,5,dense_mapping='resident_m128_nc3')
+
+
+def test_fp32_prefix_seed_preserves_order_and_independent_block_sums_do_not():
+    import struct
+    a=[0]*1536;a[0]=0x4b800000;a[256]=0x3f800000;a[257]=0xcb800000
+    sequential=0
+    for value in a:sequential=m.ATT.fp32_fma_bits(value,0x3f800000,sequential)
+    seeded=0;independent=0
+    for kb in range(0,len(a),256):
+        # Exact FP32 snapshot roundtrip, not BF16 conversion or block summation.
+        seeded=struct.unpack('<I',struct.pack('<I',seeded))[0]
+        partial=0
+        for value in a[kb:kb+256]:
+            seeded=m.ATT.fp32_fma_bits(value,0x3f800000,seeded)
+            partial=m.ATT.fp32_fma_bits(value,0x3f800000,partial)
+        independent=m.ATT.fp32_add_bits(independent,partial)
+    assert seeded==sequential==0 and independent==0x3f800000
+
+
+def test_resident_prefix_lifetime_missing_store_ack_and_wrong_k_are_rejected():
+    events=[begin(),*m.resident_dense_events(128,1536,256),
+            dict(event='owner_end',name='test',produces=['y']),dict(event='block_done')]
+    def run(seq):return m.Scheduler(dense_mapping='resident_m128_nc3').run(seq,require_terminal=True)
+    assert run(events)['metrics']['acknowledged_write_bytes']==128*256*4
+    bad=[dict(e) for e in events]
+    first=next(i for i,e in enumerate(bad) if e['event']=='dense_prefix_begin')
+    bad[first]['kbase']=256
+    with pytest.raises(m.ReservationError,match='prefix restore'):run(bad)
+    bad=list(events)
+    index=next(i for i,e in enumerate(bad) if e.get('label')=='candidate_FP32_prefix_store_before_context_reuse')
+    del bad[index]
+    with pytest.raises(m.ReservationError,match='sink completion'):run(bad)
+    bad=list(events);index=next(i for i,e in enumerate(bad) if e['event']=='ack');del bad[index]
+    with pytest.raises(m.ReservationError,match='before ACK'):run(bad)
+    bad=list(events);bad.insert(first+1,m.release('resident_C'))
+    with pytest.raises(m.ReservationError,match='C lease release'):run(bad)
+    bad=list(events);bad.insert(first+1,m.release('dense_contexts'))
+    with pytest.raises(m.ReservationError,match='contexts reused'):run(bad)
+    bad=[dict(e) for e in events]
+    second=next(i for i,e in enumerate(bad[first+1:],first+1) if e['event']=='dense_prefix_begin')
+    bad[second]['c_word_address']=bad[first]['c_word_address']
+    with pytest.raises(m.ReservationError,match='physical bank span alias'):run(bad)
+    bad=list(events)
+    store=next(i for i,e in enumerate(bad) if e['event']=='write')
+    assert bad[store+1]['event']=='ack'
+    del bad[store:store+2]
+    with pytest.raises(m.ReservationError,match='sink completion'):run(bad)
+    bad=[e for e in events if e.get('label')!='candidate_FP32_seed_restore_before_compute']
+    with pytest.raises(m.ReservationError,match='before exact FP32 seed restore'):run(bad)
+    bad=[dict(e) for e in events]
+    for e in bad:
+        if e['event'] in ('dense_prefix_begin','dense_prefix_commit') and e['m_base']==16:e['m_base']=128
+    with pytest.raises(m.ReservationError,match='logical tile range'):run(bad)
+    bad=list(events);index=next(i for i,e in enumerate(bad) if e.get('label')=='resident_Dense_last_K_of_chunk');del bad[index]
+    with pytest.raises(m.ReservationError,match='capture before completed context'):run(bad)
+    for label in ('candidate_FP32_prefix_store_before_context_reuse','write'):
+        bad=list(events)
+        index=next(i for i,e in enumerate(bad) if e.get('label')==label or e['event']==label)
+        moved=bad[index:index+(2 if label=='write' else 1)]
+        del bad[index:index+len(moved)]
+        before=next(i for i,e in enumerate(bad) if e.get('label')=='resident_Dense_increasing_K_prefix')
+        bad[before:before]=moved
+        with pytest.raises(m.ReservationError,match='before .*captured context'):run(bad)

@@ -51,6 +51,18 @@ CAPACITIES = dict(A_bytes=704512, B_bytes=81920, core_bytes=573440,
                   matrix_results=2, dense_final_values=1, partial_slots=5, captured_rows=16,
                   core_vectors=7, silu_inputs=1, silu_outputs=1,
                   idma_transaction=1, dense_scratch_lease=1)
+DENSE_MAPPINGS = ('current', 'resident_m128_nc3')
+
+
+def mapping_capacities(mapping='current'):
+    if mapping not in DENSE_MAPPINGS:
+        raise ReservationError('unknown Dense mapping')
+    capacities = dict(CAPACITIES)
+    if mapping == 'resident_m128_nc3':
+        capacities.update(A_bytes=524288, B_bytes=262144)
+    if capacities['A_bytes']+capacities['B_bytes'] != 768*1024:
+        raise ReservationError('Dense SRAM total changed')
+    return capacities
 TIMING_KEYS = (
     'owner_switch', 'command_admission', 'control', 'bank_word', 'fabric_beat',
     'read_64b_service', 'read_64b_commit', 'write_64b_service', 'write_64b_ack',
@@ -155,8 +167,9 @@ class ReservationBook:
 
 class Scheduler:
     """Validate successful-path model lifetimes, not hardware deadlock freedom."""
-    def __init__(self, profile=None):
+    def __init__(self, profile=None, dense_mapping='current'):
         self.profile = profile or timing_profile()
+        self.capacities = mapping_capacities(dense_mapping)
         params = self.profile['parameters']
         if set(params) != set(TIMING_KEYS):
             raise ReservationError('timing parameters must explicitly cover every timing key')
@@ -173,13 +186,60 @@ class Scheduler:
         self.completed = []
         self.stage_metrics = {}
         self.terminal_seen = False
+        self.dense_prefixes, self.dense_inflight, self.dense_final_tiles = {}, {}, set()
+        self.dense_c_addresses = {}
+        self.resident_shape = None
+        self.seed_ready = set()
+        self.dense_depths = {}
+        self.dense_captured = None
+        self.dense_sink_complete = False
+        self.dense_output_pending = {}
+        self.prefix_store_committed = self.prefix_output_committed = 0
 
     def _snapshot(self):
         return (dict(self.allocations), dict(self.pending), dict(self.usage),
-                self.owner, frozenset(self.published), tuple(self.completed))
+                self.owner, frozenset(self.published), tuple(self.completed),
+                dict(self.dense_prefixes),dict(self.dense_inflight),frozenset(self.dense_final_tiles),
+                dict(self.dense_c_addresses),self.resident_shape,frozenset(self.seed_ready),dict(self.dense_depths),
+                self.dense_captured,self.dense_sink_complete,dict(self.dense_output_pending))
 
     def _run_op(self, event, multiplier):
         resources = event['resources']
+        label=event['label']
+        if label=='resident_Dense_capture_existing_finalValue':
+            ctx=event['dense_context']
+            if (self.dense_depths.get(ctx)!=256 or ctx not in self.seed_ready or
+                self.dense_captured is not None or 'dense_final' not in self.allocations or
+                'dense_result' not in self.allocations):
+                raise ReservationError('Dense capture before completed context or without output buffers')
+            self.dense_captured=ctx
+            self.dense_sink_complete=False
+        if label=='candidate_FP32_prefix_store_before_context_reuse':
+            ctx=event['dense_context']
+            if (self.dense_captured!=ctx or self.dense_depths.get(ctx)!=256 or
+                'dense_final' not in self.allocations or self.dense_sink_complete or
+                self.dense_inflight[ctx][1]+256==self.resident_shape['k']):
+                raise ReservationError('Dense snapshot store before captured context or on final K')
+            self.dense_sink_complete=True
+        if label=='candidate_FP32_seed_restore_before_compute':
+            if (not self.dense_inflight or any(kb==0 for _,kb in self.dense_inflight.values()) or
+                self.seed_ready or event['metrics'].get('dense_partial_restore_bytes')!=len(self.dense_inflight)*16384):
+                raise ReservationError('seed restore lacks exactly the pending nonzero-K contexts')
+            self.seed_ready=set(self.dense_inflight)
+        if label in ('resident_Dense_increasing_K_prefix','resident_Dense_last_K_of_chunk'):
+            if not self.dense_inflight or self.seed_ready!=set(self.dense_inflight):
+                raise ReservationError('Dense compute before exact FP32 seed restore')
+            if label=='resident_Dense_increasing_K_prefix' and len(self.dense_inflight)!=self.usage['contexts']:
+                raise ReservationError('Dense prefix compute lacks a physical context identity')
+            if label=='resident_Dense_increasing_K_prefix':
+                if any(self.dense_depths[c]!=0 for c in self.dense_inflight) or event['metrics']['dense_wide_issues']!=255*len(self.dense_inflight):
+                    raise ReservationError('Dense increasing-K operation repeated or incomplete')
+                self.dense_depths={c:255 for c in self.dense_inflight}
+            else:
+                ctx=event['dense_context']
+                if self.dense_depths.get(ctx)!=255 or event['metrics']['dense_wide_issues']!=1:
+                    raise ReservationError('Dense final K missing its exact context prefix')
+                self.dense_depths[ctx]=256
         if self.pending and 'idma' in resources and event['label'] not in ('write_data_not_committed','write_ACK'):
             raise ReservationError('IDMA reused before outstanding write ACK')
         if not set(resources) <= RESOURCES:
@@ -201,15 +261,21 @@ class Scheduler:
             self._run_op(event, multiplier)
         elif kind == 'acquire':
             name, pool, amount = event['name'], event['pool'], event['amount']
-            if name in self.allocations or pool not in CAPACITIES or type(amount) is not int or amount <= 0:
+            if name in self.allocations or pool not in self.capacities or type(amount) is not int or amount <= 0:
                 raise ReservationError('invalid or duplicate allocation')
-            if self.usage[pool]+amount > CAPACITIES[pool]:
+            if self.usage[pool]+amount > self.capacities[pool]:
                 raise ReservationError('buffer/context capacity exceeded: '+pool)
             self.allocations[name] = (pool, amount, self.owner)
             self.usage[pool] += amount
             self.peaks[pool] = max(self.peaks[pool], self.usage[pool])
         elif kind == 'release':
             name = event['name']
+            if name=='resident_C' and (self.dense_prefixes or self.dense_inflight or self.dense_c_addresses):
+                raise ReservationError('C lease release before all prefixes become final')
+            if name=='dense_contexts' and self.dense_inflight:
+                raise ReservationError('physical contexts reused before prefix drain')
+            if name=='dense_final' and self.dense_captured is not None:
+                raise ReservationError('Dense finalValue release before its sink commit')
             if name.startswith('idma:') or self.pending:
                 raise ReservationError('write must retain IDMA ownership until its ACK')
             if name in self.allocations:
@@ -221,6 +287,13 @@ class Scheduler:
             self._release(name)
         elif kind == 'write':
             tag, size = event['tag'], event['bytes']
+            if self.resident_shape:
+                ctx=event.get('dense_context')
+                if (ctx is None or ctx!=self.dense_captured or self.dense_depths.get(ctx)!=256 or
+                    'dense_final' not in self.allocations or self.dense_sink_complete or size!=16384 or
+                    self.dense_inflight[ctx][1]+256!=self.resident_shape['k']):
+                    raise ReservationError('Dense output write before final captured context')
+                self.dense_output_pending[tag]=ctx
             if tag in self.pending or not self.owner or size <= 0 or size % 64:
                 raise ReservationError('invalid write or missing owner')
             self.execute(acquire('idma:'+tag, 'idma_transaction', 1))
@@ -232,25 +305,106 @@ class Scheduler:
             if tag not in self.pending:
                 raise ReservationError('ACK has no outstanding write')
             size = self.pending.pop(tag)
+            if self.resident_shape:
+                ctx=self.dense_output_pending.pop(tag,None)
+                if ctx is None or ctx!=event.get('dense_context') or ctx!=self.dense_captured:
+                    raise ReservationError('Dense ACK context does not match captured output')
+                self.dense_sink_complete=True
             self._run_op(op('write_ACK', ('idma',), {'write_64b_ack':size//64},
                             {'acknowledged_write_bytes':size}), multiplier)
             self._release('idma:'+tag)
         elif kind == 'owner_begin':
-            if self.owner or self.pending or self.allocations:
+            if (self.owner or self.pending or self.allocations or self.dense_prefixes or
+                self.dense_inflight or self.dense_c_addresses or self.resident_shape):
                 raise ReservationError('owner switch before previous resources drained')
             if not set(event['requires']) <= self.published:
                 raise ReservationError('consumer before committed producer')
             self.owner = event['name']
+            self.dense_final_tiles.clear()
+            self.prefix_store_committed=self.metrics['dense_partial_store_bytes']
+            self.prefix_output_committed=self.metrics['acknowledged_write_bytes']
             self.stage_metrics[self.owner] = Counter(self.metrics)
             self._run_op(op('opaque_host_admission', ('host_control','idma'),
                             {'command_admission':len(event['public_stages']), 'owner_switch':1}), multiplier)
         elif kind == 'owner_end':
-            if self.owner != event['name'] or self.pending or self.allocations:
+            if (self.owner != event['name'] or self.pending or self.allocations or
+                self.dense_prefixes or self.dense_inflight or self.dense_c_addresses or self.resident_shape):
                 raise ReservationError('owner completion before final ACK/buffer drain')
             self.published.update(event['produces'])
             self.completed.append(self.owner)
             self.stage_metrics[self.owner] = dict(self.metrics-self.stage_metrics[self.owner])
             self.owner = None
+            self.dense_final_tiles.clear()
+        elif kind == 'dense_residency_begin':
+            if self.resident_shape or not self.owner:
+                raise ReservationError('resident Dense shape already live or missing owner')
+            self.resident_shape=resident_dense_plan(event['tokens'],event['k'],event['n'])
+        elif kind == 'dense_residency_end':
+            if (not self.resident_shape or self.dense_prefixes or self.dense_inflight or
+                self.dense_c_addresses or self.seed_ready):
+                raise ReservationError('resident Dense ends before prefix drain')
+            expected={(mb,nb) for mb in range(0,128,16) for nb in range(0,self.resident_shape['n'],256)}
+            if self.dense_final_tiles!=expected:
+                raise ReservationError('resident Dense final tile coverage is incomplete')
+            self.resident_shape=None
+        elif kind == 'dense_prefix_begin':
+            key=(event['m_base'],event['nbase']);ctx=event['context'];kb=event['kbase']
+            address=event['c_word_address']
+            shape=self.resident_shape
+            if (not shape or any(type(v) is not int for v in (*key,ctx,kb)) or
+                key[0] not in range(0,128,16) or key[1] not in range(0,shape['n'],256) or
+                kb not in range(0,shape['k'],256)):
+                raise ReservationError('Dense logical tile range or selected shape mismatch')
+            expected_address=shape['a_operand_bf16_bytes']//512+((key[1]//256)%shape['n_tiles_retained'])*256+key[0]//16*32
+            a_end=self.allocations.get('resident_A',(None,0))[1]//512
+            c_end=a_end+self.allocations.get('resident_C',(None,0))[1]//512
+            if (not self.owner or 'resident_C' not in self.allocations or
+                ctx not in range(self.usage['contexts']) or ctx in self.dense_inflight or
+                any(v[0]==key for v in self.dense_inflight.values()) or
+                key in self.dense_final_tiles or
+                self.dense_prefixes.get(key,0)!=kb or (kb==0 and key in self.dense_prefixes)):
+                raise ReservationError('Dense prefix restore/order/context mismatch')
+            if (type(address) is not int or address!=expected_address or address%32 or address<a_end or address+32>c_end or
+                any(other!=key and address<start+32 and start<address+32
+                    for start,other in self.dense_c_addresses.items()) or
+                (kb and self.dense_c_addresses.get(address)!=key)):
+                raise ReservationError('Dense C physical bank span alias or prefix address mismatch')
+            self.dense_c_addresses[address]=key
+            self.dense_inflight[ctx]=(key,kb)
+            self.dense_depths[ctx]=0
+            if kb==0:self.seed_ready.add(ctx)
+        elif kind == 'dense_prefix_commit':
+            ctx=event['context'];kb=event['kbase'];key=(event['m_base'],event['nbase'])
+            if self.pending or self.dense_inflight.get(ctx)!=(key,kb):
+                raise ReservationError('Dense prefix commit before ACK or without matching restore')
+            if self.dense_depths.get(ctx)!=256:
+                raise ReservationError('Dense prefix commit before all increasing-K FMA steps')
+            if self.dense_captured!=ctx or not self.dense_sink_complete:
+                raise ReservationError('Dense prefix commit without its captured sink completion')
+            end=kb+256
+            if (not self.resident_shape or event['total_k']!=self.resident_shape['k'] or
+                end>event['total_k'] or bool(event['final'])!=(end==event['total_k'])):
+                raise ReservationError('Dense prefix has wrong terminal K')
+            del self.dense_inflight[ctx]
+            del self.dense_depths[ctx]
+            if ctx not in self.seed_ready:
+                raise ReservationError('Dense prefix commit without completed seed')
+            self.seed_ready.remove(ctx)
+            self.dense_captured=None
+            self.dense_sink_complete=False
+            if event['final']:
+                if self.metrics['acknowledged_write_bytes']-self.prefix_output_committed != 16384:
+                    raise ReservationError('final Dense tile lacks its complete output ACK')
+                self.prefix_output_committed=self.metrics['acknowledged_write_bytes']
+                self.dense_prefixes.pop(key,None)
+                self.dense_final_tiles.add(key)
+                address=next(a for a,v in self.dense_c_addresses.items() if v==key)
+                del self.dense_c_addresses[address]
+            else:
+                if self.metrics['dense_partial_store_bytes']-self.prefix_store_committed != 16384:
+                    raise ReservationError('Dense prefix lacks its complete FP32 snapshot store')
+                self.prefix_store_committed=self.metrics['dense_partial_store_bytes']
+                self.dense_prefixes[key]=end
         elif kind == 'repeat':
             count = event['count']
             if type(count) is not int or count < 0:
@@ -282,7 +436,8 @@ class Scheduler:
 
     def run(self, events, require_terminal=False):
         for event in events: self.execute(event)
-        if self.owner or self.pending or self.allocations:
+        if (self.owner or self.pending or self.allocations or self.dense_prefixes or
+            self.dense_inflight or self.dense_c_addresses or self.resident_shape or self.seed_ready):
             raise ReservationError('unfinished model ownership / missing ACK')
         if require_terminal and not self.terminal_seen:
             raise ReservationError('missing terminal Host fence')
@@ -367,6 +522,129 @@ def dense_events(tokens, k, n):
         yield release('dense_contexts')
     yield release('dense_A')
     yield release('scratch')
+
+
+def resident_dense_plan(tokens, k, n):
+    """Capacity/traffic contract of an unimplemented KC256 Dense mapping.
+
+    External A/D remain FP32; A SRAM holds the SAME existing RNE BF16 operands.
+    Each C snapshot is the original FP32 accumulator after an increasing-K
+    prefix. A seeded continuation, not independently summed K blocks, is needed.
+    """
+    if tokens != 128 or (k, n) not in [(a,b) for _,a,b in BOUND.MATRICES]:
+        raise ReservationError('resident candidate supports only the seven cold M128 Dense shapes')
+    kc, ntile = 256, 256
+    nt = n//ntile
+    slots = 3 if k == 8960 else 1
+    full_a = k == 1536
+    a_bytes = tokens*(k if full_a else kc)*2
+    c_bytes = tokens*ntile*4*slots
+    b_bytes = 2*kc*ntile*2
+    if a_bytes+c_bytes > 524288 or b_bytes > 262144:
+        raise ReservationError('resident candidate exceeds a physical bank partition')
+    groups = (nt+slots-1)//slots
+    external_a = tokens*k*4*(1 if full_a else groups)
+    partial = tokens*n*4*(k//kc-1)
+    return dict(tokens=tokens,k=k,n=n,k_chunk=kc,n_tile=ntile,
+        n_tiles_retained=slots,n_groups=groups,full_a_resident=full_a,
+        a_operand_bf16_bytes=a_bytes,c_snapshot_fp32_bytes=c_bytes,
+        b_ping_pong_reserved_bytes=b_bytes,
+        a_c_words_per_bank=(a_bytes+c_bytes)//512,b_words_per_bank=b_bytes//512,
+        a_c_objects=[dict(name='A_operand',start_word=0,end_word=a_bytes//512)]+
+                   [dict(name='C'+str(i),start_word=a_bytes//512+i*256,
+                         end_word=a_bytes//512+(i+1)*256) for i in range(slots)],
+        b_objects=[dict(name='B0',start_word=0,end_word=256),dict(name='B1',start_word=256,end_word=512)],
+        m_tiles=8,physical_context_groups=[5,3],physical_context_limit=5,
+        external_a_fp32_read_bytes=external_a,external_weight_bf16_read_bytes=k*n*2,
+        external_d_fp32_write_bytes=tokens*n*4,
+        partial_restore_bytes=partial,partial_store_bytes=partial,
+        matrix_wide_issues=tokens*k*n//4096,useful_macs=tokens*k*n,
+        candidate_only=True,accumulator_seed_interface_implemented=False,
+        physical_sram_repartition_implemented=False)
+
+
+def resident_dense_tiles(tokens, k, n):
+    """Concrete tile-prefix order for independently checking the event loops."""
+    p=resident_dense_plan(tokens,k,n)
+    for ng in range(0,n,p['n_tiles_retained']*256):
+        for kb in range(0,k,256):
+            for nb in range(ng,min(n,ng+p['n_tiles_retained']*256),256):
+                for mb,count in ((0,5),(80,3)):
+                    yield dict(n_group=ng,kbase=kb,nbase=nb,m_base=mb,contexts=count,
+                               rows=16*count,depths=256,columns=256,
+                               restore=kb!=0,final=kb+256==k)
+
+
+def resident_dense_events(tokens, k, n):
+    p=resident_dense_plan(tokens,k,n)
+    yield dict(event='dense_residency_begin',tokens=tokens,k=k,n=n)
+    yield acquire('scratch','dense_scratch_lease',1)
+    yield acquire('resident_B_halves','B_bytes',p['b_ping_pong_reserved_bytes'])
+    if p['full_a_resident']:
+        yield acquire('resident_A','A_bytes',p['a_operand_bf16_bytes'])
+        yield read_span(tokens*k*4,A_BANKS,tokens*k*2//32,'dense_activation_read_bytes')
+    for ng in range(0,n,p['n_tiles_retained']*256):
+        live_nt=min(p['n_tiles_retained'],(n-ng)//256)
+        yield acquire('resident_C','A_bytes',tokens*256*4*live_nt)
+        for kb in range(0,k,256):
+            if not p['full_a_resident']:
+                yield acquire('resident_A','A_bytes',tokens*256*2)
+                yield read_span(tokens*256*4,A_BANKS,tokens*256*2//32,'dense_activation_read_bytes')
+            for nb in range(ng,ng+live_nt*256,256):
+                # Both physical B halves stay reserved. This conservative
+                # serial scenario fills one half; it claims no prefetch overlap.
+                yield read_span(256*256*2,B_BANKS,256*256*2//32,'dense_weight_read_bytes')
+                for mb,ct in ((0,5),(80,3)):
+                    yield acquire('dense_contexts','contexts',ct)
+                    yield op('resident_Dense_group_start',('matrix',),{'matrix_group':1})
+                    for ctx in range(ct):
+                        yield dict(event='dense_prefix_begin',m_base=mb+ctx*16,nbase=nb,
+                                   kbase=kb,context=ctx,
+                                   c_word_address=p['a_operand_bf16_bytes']//512+
+                                     ((nb-ng)//256)*256+(mb//16+ctx)*32)
+                    if kb:
+                        # A/C SRAM and accumulator write port are exclusively
+                        # reserved while restoring. Hardware seed route is absent.
+                        size=ct*16*256*4
+                        yield op('candidate_FP32_seed_restore_before_compute',A_BANKS+('matrix',),
+                                 dict(bank_word=size//32,fabric_beat=size//64,control=ct),
+                                 dict(dense_partial_restore_bytes=size,dense_seed_contexts=ct))
+                    yield acquire('dense_pending','metadata',1)
+                    steps=255*ct
+                    yield op('resident_Dense_increasing_K_prefix',('matrix',)+A_BANKS+B_BANKS,
+                             dict(bank_word=steps*32,matrix_issue=steps,matrix_return_wait=steps),
+                             dict(dense_wide_issues=steps,useful_macs=steps*4096,executed_macs=steps*4096))
+                    yield release('dense_pending')
+                    # Drain each context's last K before emitting the next one:
+                    # one existing finalValue and one result FIFO entry suffice.
+                    for ctx in range(ct):
+                        yield acquire('dense_pending','metadata',1)
+                        yield dict(op('resident_Dense_last_K_of_chunk',('matrix',)+A_BANKS+B_BANKS,
+                                 dict(bank_word=32,matrix_issue=1,matrix_return_wait=1),
+                                 dict(dense_wide_issues=1,useful_macs=4096,executed_macs=4096)),dense_context=ctx)
+                        yield release('dense_pending')
+                        yield acquire('dense_result','matrix_results',1)
+                        yield acquire('dense_final','dense_final_values',1)
+                        yield dict(op('resident_Dense_capture_existing_finalValue',(),{'control':1}),dense_context=ctx)
+                        yield release('dense_result')
+                        if kb+256==k:
+                            for transfer in write_span(16*256*4):
+                                yield dict(transfer,dense_context=ctx)
+                        else:
+                            yield dict(op('candidate_FP32_prefix_store_before_context_reuse',A_BANKS,
+                                     dict(bank_word=16*256*4//32,fabric_beat=16*256*4//64),
+                                     dict(dense_partial_store_bytes=16*256*4)),dense_context=ctx)
+                        yield dict(event='dense_prefix_commit',m_base=mb+ctx*16,nbase=nb,
+                                   kbase=kb,context=ctx,total_k=k,final=kb+256==k)
+                        yield release('dense_final')
+                    yield op('resident_Dense_group_drained',('matrix',),{'matrix_group':1})
+                    yield release('dense_contexts')
+            if not p['full_a_resident']: yield release('resident_A')
+        yield release('resident_C')
+    if p['full_a_resident']: yield release('resident_A')
+    yield release('resident_B_halves')
+    yield release('scratch')
+    yield dict(event='dense_residency_end')
 
 
 def norm_events(tokens):
@@ -506,9 +784,14 @@ def attention_events(tokens, contexts):
             raise ReservationError('unmapped Attention event: '+kind)
 
 
-def stages(tokens, contexts=1):
+def stages(tokens, contexts=1, dense_mapping='current'):
     dims = {name:(k,n) for name,k,n in BOUND.MATRICES}
-    def dense(name): return dense_events(tokens,*dims[name])
+    mapping_capacities(dense_mapping)
+    if dense_mapping!='current' and tokens!=128:
+        raise ReservationError('resident candidate is M128 only; M1024 Attention A exceeds its partition')
+    def dense(name):
+        function=dense_events if dense_mapping=='current' else resident_dense_events
+        return function(tokens,*dims[name])
     yield ('input_norm',['input_norm'],['x'],['n0'],norm_events(tokens))
     yield ('q',['q'],['n0'],['q_projected'],dense('q'))
     yield ('q_bias',['q_bias'],['q_projected'],['q_biased'],bias_events(tokens,1536))
@@ -530,17 +813,54 @@ def stages(tokens, contexts=1):
     yield ('residual',['residual'],['down','r'],['y'],elementwise_events(tokens*1536))
 
 
-def iter_events(tokens,contexts=1):
+def iter_events(tokens,contexts=1,dense_mapping='current'):
     ATT._tokens(tokens)
     ATT.scratch_layout(tokens,contexts)
-    for name, public, requires, produces, body in stages(tokens,contexts):
+    capacities=mapping_capacities(dense_mapping)
+    layout=ATT.scratch_layout(tokens,contexts)
+    if layout['used_a_bytes']>capacities['A_bytes'] or layout['used_b_bytes']>capacities['B_bytes']:
+        raise ReservationError('Attention address high-water exceeds selected Dense SRAM partition')
+    for name, public, requires, produces, body in stages(tokens,contexts,dense_mapping):
         yield dict(event='owner_begin',name=name,public_stages=public,requires=requires)
         yield from body
         yield dict(event='owner_end',name=name,produces=produces)
     yield dict(event='block_done')
 
 
-def report(root,tokens=128,contexts=1,profile=None):
+def resource_issue_floors(result, useful_macs):
+    """One-cycle service floors, never substitute for unbound macro timings.
+
+    Per owner, independent resources may overlap ideally (max). Across owners,
+    this explicit serialized model cannot overlap (sum). Counts do not price
+    seed/control, real SFU latency, bank access, DDR delay or pipeline draining.
+    """
+    rows=[]
+    def floors(metrics):
+        external=metrics.get('external_read_bytes',0)+metrics.get('external_write_bytes',0)
+        return dict(idma_64b_read_write=(external+63)//64,
+            matrix_issues=metrics.get('dense_wide_issues',0)+metrics.get('attention_wide_issues',0),
+            scalar_requests=sum(v for k,v in metrics.items() if k.startswith('scalar_') and k.endswith('_requests')),
+            core_vector_requests=metrics.get('core_vector_requests',0),
+            elementwise_requests=metrics.get('elementwise_vector_requests',0),
+            silu_primitive_issues=metrics.get('silu_lane_primitive_groups',0))
+    for owner in result['completed_owners']:
+        counts=floors(result['stage_metrics'][owner])
+        rows.append(dict(owner=owner,resource_cycle_floors=counts,cycles_lower_bound=max(counts.values())))
+    total=sum(row['cycles_lower_bound'] for row in rows)
+    return dict(status='SOURCE_COUNT_CONDITIONAL_LOWER_BOUNDS_NOT_PREDICTION',
+        primitive_service_cycles_assumed_at_least=1,
+        independent_resource_floors=floors(result['metrics']),
+        serial_owner_floors=rows,serial_owners_cycles_lower_bound=total,
+        useful_utilization_upper_bound=useful_macs/(4096*total),
+        useful_macs=useful_macs,fixed_matrix_macs_per_cycle=4096,
+        primitive_latency_binding_applied=False,
+        assumptions=['Successful path of the selected software event graph; hardware routing not demonstrated.',
+                     '64B maximum external service per cycle, one IDMA transaction shared by reads/writes.',
+                     'Within-owner resource overlap is idealized only for a lower bound; owners remain serialized.',
+                     'No count is a full-cycle estimate; command bytes, bank waits, seed arbitration, flags and drain add unresolved costs.'])
+
+
+def report(root,tokens=128,contexts=1,profile=None,dense_mapping='current'):
     if type(tokens) is not int or tokens not in (128,1024):
         raise ValueError('public reports support M128/M1024 cold prefill only')
     for name,expected in SOURCE_PINS.items():
@@ -548,28 +868,40 @@ def report(root,tokens=128,contexts=1,profile=None):
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise ValueError('source changed; re-audit resource model: '+name)
     profile = profile or timing_profile()
-    result = Scheduler(profile).run(iter_events(tokens,contexts),require_terminal=True)
+    capacities=mapping_capacities(dense_mapping)
+    result = Scheduler(profile,dense_mapping).run(iter_events(tokens,contexts,dense_mapping),require_terminal=True)
     bound = BOUND.calculate(tokens)
     if result['metrics']['useful_macs'] != bound['total_useful_macs']:
         raise ReservationError('full-DAG useful MAC coverage mismatch')
-    if result['metrics']['dense_weight_read_bytes'] != bound['weight_ingress_bytes']:
+    resident = None if dense_mapping=='current' else [dict(name=name,**resident_dense_plan(tokens,k,n))
+                                                     for name,k,n in BOUND.MATRICES]
+    weight_bytes=bound['weight_ingress_bytes'] if resident is None else sum(p['external_weight_bf16_read_bytes'] for p in resident)
+    if result['metrics']['dense_weight_read_bytes'] != weight_bytes:
         raise ReservationError('Dense weight-read schedule mismatch')
     return dict(schema_version=2,status='SYNTHETIC_RESOURCE_SCENARIO' if profile['synthetic'] else 'UNBOUND_RESOURCE_RESERVATION_MODEL',
                 workload=bound['workload'],source_sha256=SOURCE_PINS,
-                policy='Current Dense schedule plus candidate rectangular Attention; serialized baseline; no arithmetic/status changes',
-                dense_schedule_geometry=bound['dense_phases'],
-                dense_weight_bank_layout=dict(
+                policy='Explicit Dense mapping plus candidate rectangular Attention; serialized successful-path software scenario; no hardware or numerical policy changes',
+                dense_mapping=dense_mapping,resident_dense_phases=resident,
+                dense_schedule_geometry=bound['dense_phases'] if resident is None else resident,
+                dense_weight_bank_layout=(dict(
                     address_rule='halfBase + depthWithin16*5 + ctxN',
                     physical_half_bases_words=[0,80],reserved_words_per_bank_per_live_half=80,
                     reserved_bytes_per_live_half=40960,
                     payload_words_per_bank='16*nContexts',
                     high_water_span_words_per_half='15*5+nContexts',
-                    live_halves_in_serial_baseline=1),
+                    live_halves_in_serial_baseline=1) if resident is None else dict(
+                    candidate_only=True,a_c_words_per_bank=1024,b_words_per_bank=512,
+                    b_half_bases_words=[0,256],reserved_words_per_bank_per_live_half=256,
+                    reserved_bytes_per_live_half=131072,both_halves_reserved=True,
+                    prefetch_overlap_credited=False,current_hardware_layout_changed=False)),
                 attention_schedule=dict(qk_contexts=contexts,pv_contexts=1,
                                         source_iterator='qwen2_rectangular_attention_model.iter_events',
-                                        candidate_routing_not_implemented=True),
-                stages=[dict(owner=n,public_stages=p,requires=r,produces=o) for n,p,r,o,_ in stages(tokens,contexts)],
-                resources=dict(exclusive_ports=sorted(RESOURCES),capacities=CAPACITIES,
+                                        candidate_routing_not_implemented=True,
+                                        allocated_a_bytes=capacities['A_bytes'],allocated_b_bytes=capacities['B_bytes'],
+                                        used_a_bytes=ATT.scratch_layout(tokens,contexts)['used_a_bytes'],
+                                        used_b_bytes=ATT.scratch_layout(tokens,contexts)['used_b_bytes']),
+                stages=[dict(owner=n,public_stages=p,requires=r,produces=o) for n,p,r,o,_ in stages(tokens,contexts,dense_mapping)],
+                resources=dict(exclusive_ports=sorted(RESOURCES),capacities=capacities,
                                dense_bank_word_bytes=32,core_and_elementwise_bank_word_bytes=16,
                                shared_l2_banks_per_arbitration_group=4,idma_max_live_transactions=1,
                                owner_routing_slots=1,existing_accumulator_bytes=81920,
@@ -596,10 +928,12 @@ def report(root,tokens=128,contexts=1,profile=None):
                 known_sfu_source_timing=SFU.timing_binding(root),
                 source_timing_application='Primitive and wrapper formulas only; not substituted for owner-level macro timing. Branch populations and calc/resume, memory/ACK costs remain unbound in this full-DAG report.',
                 reservation_result=result,
+                resource_issue_floors=resource_issue_floors(result,bound['total_useful_macs']),
                 predicted_full_block_cycles=None,rtl_measured_cycles=None,rtl_measured_utilization=None,
                 scope=dict(numerical_execution=False,rtl_execution=False,hardware_deadlock_proof=False,
                            hardware_acceptance=False,credible_full_cycle_prediction=False),
                 omitted_or_abstracted=[
+                    'The resident_m128_nc3 option requires unimplemented SRAM repartition, exact FP32 accumulator seed/partial routes and arbitration; no additional port/context or cross-owner forwarding is credited.',
                     'This is an ordered macro/resource model, not a Chisel FSM execution trace or a lowering implementation.',
                     'Host command/tensor/policy fetch byte counts and exact decoding are opaque admission work with unbound cost; only 21-stage ordering is explicit.',
                     'DDR root alignment, individual AXI bursts/legalization, backpressure, read commit and B ACK timing remain unknown; per-64B synthetic charges are assumptions.',
@@ -690,14 +1024,15 @@ def main():
     p.add_argument('--root',type=Path,default=ROOT)
     p.add_argument('--synthetic-profile',action='store_true')
     p.add_argument('--observed-silu-host-bound',action='store_true')
+    p.add_argument('--dense-mapping',choices=DENSE_MAPPINGS,default='current')
     p.add_argument('--out',type=Path)
     args=p.parse_args()
     if args.observed_silu_host_bound:
-        if args.synthetic_profile or args.tokens!=128 or args.contexts!=1:
+        if args.synthetic_profile or args.tokens!=128 or args.contexts!=1 or args.dense_mapping!='current':
             p.error('saved-input Host bound requires cold M128, original context profile and no synthetic timings')
         result=observed_silu_host_bound(args.root)
     else:
-        result=report(args.root,args.tokens,args.contexts,timing_profile(args.synthetic_profile))
+        result=report(args.root,args.tokens,args.contexts,timing_profile(args.synthetic_profile),args.dense_mapping)
     encoded=json.dumps(result,indent=2,sort_keys=True,allow_nan=False)+'\n'
     if args.out:
         args.out.parent.mkdir(parents=True,exist_ok=True)

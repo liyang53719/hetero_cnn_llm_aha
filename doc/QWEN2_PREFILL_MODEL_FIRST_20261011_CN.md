@@ -334,3 +334,30 @@ A六遍读取降到两遍，并保留原五contexts、FP32 accumulator prefix和
 本增量专项57测试及完整模型集229测试通过（21.14秒）；第一次本地完整
 测试缺PYTHONPATH导致collection错误，修正到与CI相同环境后通过，失败日志保留。
 本批新精确SHA的CI需发布后另验，不以本地结果代替。
+
+## ebd3b89 终态及真实驻留数值门
+
+`ebd3b897dcb08be2ad773b936da5ec6fb921d932` 已完成248项轻量CI（27.13秒）
+和payload guard；227784B工件SHA为
+`4184ae52214b9bc16111c21641cacaea1b7bb3a5d90dbae8820adc75b069d220`，
+21份报告逐字节等于本地结果，各源码pin对该精确提交复核。
+
+随后将驻留方案落实为原C++ recipe中的真实bank读写，沿相同BF16输入/权重、
+逐K FP32 FMA及最终偏置顺序完成M16和M128，15阶段分别663552/5308416值
+全部逐字节等于封存v0。先核原arena/权重/源码/输出身份，再M16验真后才执行
+M128；同一ELF、同一只读arena，没有预装中间golden。M128软件耗时24.94秒。
+独立审查复核全部30个输出文件、源码及7 Dense计数，无需重复forward。
+完整身份与复现入口见[紧凑证据](../reports/execution/QWEN2_DENSE_RESIDENCY_NUMERIC_20261011/README.md)。
+
+本门只证明软件驻留映射保留v0数学结果；原M128官方BF16阶段门与最终FP32门
+仍失败，状态是DIAGNOSTIC_NOT_ACCEPTED。不是Chisel执行或21命令Host回放，
+没有验证seed硬件、iDMA/ACK、完整flags或时序；本次也没有carried prefill。
+CPU运行时间不能换算为MAC利用率。新8项合成数值/控制测试并入轻量CI，精确
+新提交的CI在发布后另验，真实权重数据不入Git或该CI工件。
+
+- done（局部）：ebd精确tree、248项CI及21份报告核验。
+- done（局部）：实际M16/M128 cold驻留软件数值与v0逐字节等价、独立复核。
+- ongoing：原M128 native数值FAIL及明确数值政策决定，阈值未改变。
+- ongoing：完整DAG端口服务、FP32 seed及bank生命周期与源控制实现对应。
+- to do：可行全周期预测、政策明确后的最小Chisel接入与最终冻结激励RTL。
+- 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。

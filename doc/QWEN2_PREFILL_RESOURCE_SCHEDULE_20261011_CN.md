@@ -227,3 +227,16 @@ python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --contexts 5 --de
 首次独立审查发现模型可漏掉seed操作、可把逻辑行改成128而不拒绝。修正后
 显式绑定shape、C物理地址、seed-ready及255+1连续K步骤，完整tile集合必须
 闭合，新增负例保留。当前小门18项通过；完整CI以新精确提交另验。
+
+## 驻留方案的实际数值执行
+
+后续[数值证据](../reports/execution/QWEN2_DENSE_RESIDENCY_NUMERIC_20261011/README.md)
+将同一分区落实成普通C++的真实768KiB bank数组，而非只累加事件。仅替换原
+Dense函数，实际搬运BF16 A/B、保存/读取FP32前缀并逐lane保持递增K顺序。
+固定官方L0权重的cold M16/M128全部15阶段与原v0逐字节一致，M128覆盖
+5308416值。七个Dense的A/W/D分别为13893632/93585408/11796480B，partial
+每方向81788928B；五上下文和三C槽路径均实际执行。
+
+这是软件地址/算术等价门。原Host、物理seed接口、端口时序和异常flags没有
+因此通过；原官方精度FAIL与完整时序unbound保持。29.701173%仍为上述事件图
+的宽松上界，数值CPU耗时不用于硬件周期或利用率。

@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "version": "qwen2-official-bf16-v2-qkv-block-pair-reference-v1",
+  "status": "PREPARED_SOURCE_ONLY_NOT_EXECUTED",
+  "rows": 16,
+  "past_tokens": 0,
+  "transform": {
+    "all_other_source_byte_exact": true,
+    "restored_original_sha256": "0cdfd2c6927eec8dfb72e315e9a1107d6966d47b6326de077bf77a9e3a73ded6",
+    "unchanged_original_dense": true,
+    "unchanged_RMS_RoPE_QK_PV_FFN_softmax_bias_BF16": true,
+    "acceptance": "Independent producer auxiliary only; original official target and thresholds unchanged; no dual-AND with old sequential producer",
+    "version": "qwen2-official-bf16-v2-qkv-block-pair-reference-v1",
+    "original_cpp_sha256": "0cdfd2c6927eec8dfb72e315e9a1107d6966d47b6326de077bf77a9e3a73ded6",
+    "candidate_cpp_sha256": "e13bddc69714e6af6a774198d7382b4100f2f50cd843eea5d780bace14c6aacf",
+    "profile_sha256": "07008af966dbe4d64b10f75c37e4d19e17159e3708543982a70c8ec996f1d5a5",
+    "dot16_source_sha256": "175a8c3ff32287c6403a9bdf83c91d45249b6824cf4633753fcccb65c48d4ad6",
+    "block_sizes": [
+      1024,
+      512
+    ],
+    "changed_call_count": 3,
+    "helper_sha256": "7fa66569d6bfe53c87896262d916dc8c89c813eab6fc47acaf484eb776a134f5"
+  },
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/builder.py": "467e30f8f5ff7459431427e72847ec5335442405e8c7532493cccd7ea437af75",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/dot16.inc": "175a8c3ff32287c6403a9bdf83c91d45249b6824cf4633753fcccb65c48d4ad6"
+  },
+  "original_generator_source_sha256": {
+    "scripts/qwen2_rms_rope_prefill_candidate.py": "41aea07ba09fc5c11f6aafbe14e83ebdba6e843a3cf47080a954a1032b6461e9",
+    "scripts/qwen2_carried_prefill_candidate.py": "9df9ad51f98c7273ce8847a47a090093edd23c48289cf9e964f44a8ac3cd41b6",
+    "scripts/qwen2_bf16_materialization_candidate.py": "357a74dd10b69fb78e2aff34410d1a01c881edbebbcf5d422bed2ee8acb47dbd",
+    "scripts/qwen2_rms_rope_policy_diagnostic.py": "9117f240243357786bd538908343fcfb3a791769f2061d585524594b96b76ef6",
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "scripts/qwen2_layer0_model_gate.py": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+  },
+  "original_generator_identity": {
+    "source_sha256": {
+      "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43"
+    },
+    "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "section_sha256": {
+      "helpers": "d1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b",
+      "math": "4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8",
+      "layout": "c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f"
+    },
+    "git_head": "71661884959fc5d4921f6e05d4d284435451b99e",
+    "parent_carried_cpp_sha256": "0aaf9d3b96812694edb7adfd2fef5affb01ee206c8b743a64426752f59c60877",
+    "replaced_norm_sha256": "c33836931456961590c545bf59d7dc15d8bbcdcd1e7b22ff93a783c249fcd9ae",
+    "reviewed_helper_sha256": "1a6114077f2619d54aba0b2f6da34173a8b6f0419229199a45745ead88b3c8e6",
+    "integrated_helper_sha256": "304ea2bbb9ed8af41adaaca46f19abf15430c75c2fc11f5afeeb2b8bad42a2e2",
+    "policy_id": "qwen2-rms1536-fp32-rope-prefill-v2-diagnostic"
+  },
+  "old_archive": {
+    "directory": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_20261011",
+    "top_sha256": "68299c6687734408bf4ac03eae5efe149ed4042113f919eff4c379e78a8558a2",
+    "cold_sha256": "5f2a709fc932ba5cbf436847010c4154d4e7c68ecc1d90f2c82db3b6785ed3f9",
+    "preserved_failures": {
+      "official_self_cache": [
+        "k",
+        "q"
+      ],
+      "independent_self_cache": [
+        "k",
+        "q"
+      ]
+    }
+  },
+  "profile_path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/qkv_reduction_shape_audit/BACKEND_PROFILE.json",
+  "profile_sha256": "07008af966dbe4d64b10f75c37e4d19e17159e3708543982a70c8ec996f1d5a5",
+  "header_sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30",
+  "readonly_input": {
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_20261011/cold/readonly_arena.f32le",
+    "bytes": 188043264,
+    "sha256": "0a94ea142c28a6c1ce4b8ad928caecee9c5721bb6e4bc0eb097eebd8202aabf8",
+    "input_x_sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c",
+    "actual_snapshot_raw_x_bit_exact": true,
+    "intermediate_preloads": 0
+  },
+  "compile_command": [
+    "/usr/bin/g++",
+    "-O2",
+    "-std=c++17",
+    "-ffp-contract=off",
+    "-fno-fast-math",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/candidate.cpp",
+    "-o",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/candidate"
+  ],
+  "proposed_execution_command": [
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/candidate",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m16_20261011/cold/readonly_arena.f32le",
+    "16",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/raw_stages",
+    "0",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/empty_cache.bin",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/empty_cache.bin"
+  ],
+  "output_directory_must_be_created_before_launch": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m16_01/raw_stages",
+  "thresholds": {
+    "source": "spec/numerical_contract.md",
+    "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract"
+  },
+  "threshold_contract_sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+  "acceptance": {
+    "official_target_unchanged": true,
+    "independent_reference_is_auxiliary": true,
+    "dual_AND_with_old_sequential_reference": false,
+    "old_FAIL_preserved": true,
+    "native_acceptance": false
+  },
+  "estimates": {
+    "historical_M16_full_reference_seconds": 4.228034998999647,
+    "historical_M128_full_reference_seconds": 30.55065688200193,
+    "proposed_M16_reference_seconds": [
+      4,
+      10
+    ],
+    "recommended_M16_wall_timeout_seconds": 30,
+    "basis": "Historical same-source independent producer; only QKV reduction changes. Estimate, not a new execution."
+  },
+  "compiled": false,
+  "full_block_executed": false,
+  "new_native_executed": false,
+  "rtl_executed": false
+}

@@ -1,0 +1,139 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala
+@@ -4,7 +4,9 @@
+ import chisel3._
+ import chisel3.util._
+ 
+-class SiluVectorInput(val lanes: Int) extends Bundle {
++class SiluVectorInput(val lanes: Int,enableBinaryAdd:Boolean=false) extends Bundle {
++  // Internal loan opcode; absent from every existing default bundle.
++  val binaryAdd=if(enableBinaryAdd)Some(Bool())else None
+   val gate = Vec(lanes, UInt(32.W))
+   val up = Vec(lanes, UInt(32.W))
+ }
+@@ -18,15 +20,15 @@
+   * Independent early exp completion is held until all lanes have replied.
+   * No floating-point reassociation, lookup approximation, or software callback.
+   */
+-class SiluVectorUnit(val lanes: Int = 16,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class SiluVectorUnit(val lanes: Int = 16,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableBinaryAdd:Boolean=false) extends Module {
+   require(lanes > 0 && lanes <= 16)
+   val io = IO(new Bundle {
+-    val request = Flipped(Decoupled(new SiluVectorInput(lanes)))
++    val request = Flipped(Decoupled(new SiluVectorInput(lanes,enableBinaryAdd)))
+     val result = Decoupled(new SiluVectorOutput(lanes))
+   })
+   val idle :: issue :: waitAll :: reply :: Nil = Enum(4)
+   val state = RegInit(idle)
+-  val input = Reg(new SiluVectorInput(lanes))
++  val input = Reg(new SiluVectorInput(lanes,enableBinaryAdd))
+   val value = Reg(Vec(lanes, UInt(32.W)))
+   val probability = Reg(Vec(lanes, UInt(32.W)))
+   val phase = RegInit(0.U(3.W))
+@@ -38,6 +40,8 @@
+   io.result.valid := state === reply
+   io.result.bits.value := value
+   io.result.bits.error := error
++  // Fault replies carry no numerical payload in the explicit loan profile.
++  if(enableBinaryAdd){when(error){io.result.bits.value:=0.U.asTypeOf(value)}}
+   for (i <- 0 until lanes) {
+     val core = cores(i)
+     core.io.request.valid := state === issue && allReady
+@@ -48,6 +52,13 @@
+     core.io.request.bits.b := MuxLookup(phase, input.up(i))(Seq(
+       0.U -> 0.U, 1.U -> value(i), 2.U -> value(i),
+       3.U -> Mux(input.gate(i)(31), probability(i), F32.lit(1)), 4.U -> input.gate(i)))
++    // One real Add through the existing lane ALU, with no SiLU sentinel or
++    // BF16 materialization. The mode and both operands come from the latch.
++    if(enableBinaryAdd){when(input.binaryAdd.get){
++      core.io.request.bits.op:=ScalarOp.Add.U
++      core.io.request.bits.a:=input.gate(i)
++      core.io.request.bits.b:=input.up(i)
++    }}
+     core.io.result.ready := state === waitAll && allValid
+   }
+   when(io.request.fire) {
+@@ -67,7 +78,7 @@
+       when(phase === 0.U) { probability(i) := cores(i).io.result.bits }
+     }
+     error := error || bad
+-    when(bad || phase === 5.U) { state := reply }
++    when(if(enableBinaryAdd)bad || input.binaryAdd.get || phase === 5.U else bad || phase === 5.U) { state := reply }
+       .otherwise { phase := phase + 1.U; state := issue }
+   }
+   when(io.result.fire) { state := idle }
+@@ -77,9 +88,10 @@
+   * All read/write traffic still goes through the common real iDMA backend.
+   * Completion is emitted only after the final successful write response.
+   */
+-class VectorSiluOwner(enableTileLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class VectorSiluOwner(enableTileLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableBinaryAdd:Boolean=false) extends Module {
++  require(!enableBinaryAdd || enableTileLoan,"binary Add is an explicit internal tile arithmetic loan")
+   val io = IO(new Bundle {
+-    val loan=if(enableTileLoan)Some(new FfnSiluLoanPort)else None
++    val loan=if(enableTileLoan)Some(new FfnSiluLoanPort(enableBinaryAdd))else None
+     val job = Flipped(Decoupled(new QwenOwnerJob))
+     val done = Decoupled(new QwenOwnerResult)
+     val memory = Decoupled(new MemoryRequest)
+@@ -98,9 +110,10 @@
+   val a = Reg(Vec(16,UInt(32.W)))
+   val b = Reg(Vec(16,UInt(32.W)))
+   val output = Reg(UInt(512.W))
+-  val vector = Module(new SiluVectorUnit(16,numericPolicy=numericPolicy))
++  val vector = Module(new SiluVectorUnit(16,numericPolicy=numericPolicy,enableBinaryAdd=enableBinaryAdd))
+   vector.io.request.valid := state === compute
+   vector.io.request.bits.gate := a; vector.io.request.bits.up := b
++  if(enableBinaryAdd){vector.io.request.bits.binaryAdd.get:=false.B}
+   vector.io.result.ready := state === waitCompute
+   io.job.ready := state === idle
+   io.done.valid := state === finish
+@@ -154,29 +167,42 @@
+     val loanActive=RegInit(false.B);val loanPoison=RegInit(false.B)
+     val borrow=state===idle && !loanActive && !loanPoison && !p.abort
+     p.request.ready:=borrow && vector.io.request.ready
+-    p.result.valid:=loanActive && vector.io.result.valid
++    p.result.valid:=(if(enableBinaryAdd)loanActive && vector.io.result.valid && !loanPoison && !p.abort else loanActive && vector.io.result.valid)
+     p.result.bits:=vector.io.result.bits
+-    p.busy:=loanActive || loanPoison
++    p.busy:=(if(enableBinaryAdd)loanActive || loanPoison || p.abort else loanActive || loanPoison)
+     p.drained:= !loanActive
+     p.resetRequired:=loanPoison
+     when(state===idle){
+       vector.io.request.valid:=p.request.valid && borrow
+       vector.io.request.bits:=p.request.bits
+     }
+-    when(loanActive){vector.io.result.ready:=p.result.ready}
++    when(loanActive){vector.io.result.ready:=(if(enableBinaryAdd)p.result.ready || loanPoison || p.abort else p.result.ready)}
+     io.job.ready:=state===idle && !loanActive && !loanPoison && !p.request.valid && !p.abort
+     io.resetRequired:=status=/=0.U || loanPoison
+     when(p.request.fire){loanActive:=true.B}
+-    when(p.result.fire){loanActive:=false.B;when(p.result.bits.error){loanPoison:=true.B}}
+-    // Accepted arithmetic is drained through the same stable result channel.
++    if(enableBinaryAdd){
++      // resetRequired stays registered: a borrower may feed it into abort.
++      // Never feed this cycle's result.error back into abort; consume the
++      // error response and register borrower poison at that same edge.
++      // Abort wins over a coincident final result. Drain privately even when
++      // the borrower holds ready low; never publish an aborted payload.
++      when(loanActive && vector.io.result.fire){
++        loanActive:=false.B
++        when(vector.io.result.bits.error){loanPoison:=true.B}
++      }
++    }else{
++      when(p.result.fire){loanActive:=false.B;when(p.result.bits.error){loanPoison:=true.B}}
++    }
++    // The disabled profile retains the original stable result drain.
++    // Both profiles block new traffic until coordinated reset after abort.
+     when(p.abort){loanPoison:=true.B}
+   }
+   when(io.done.fire) { state:=Mux(status===0.U,idle,locked) }
+ }
+ 
+ /** Explicit internal loan of the existing sixteen-lane arithmetic owner. */
+-class FfnSiluLoanPort extends Bundle {
+-  val request=Flipped(Decoupled(new SiluVectorInput(16)))
++class FfnSiluLoanPort(enableBinaryAdd:Boolean=false) extends Bundle {
++  val request=Flipped(Decoupled(new SiluVectorInput(16,enableBinaryAdd)))
+   val result=Decoupled(new SiluVectorOutput(16))
+   val abort=Input(Bool());val busy=Output(Bool());val drained=Output(Bool());val resetRequired=Output(Bool())
+ }

@@ -1,0 +1,61 @@
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
+@@ -703,7 +703,8 @@
+ }
+ 
+ /** Selected chunk-major extension; same physical banks, service, and seed leaf. */
+-class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false) extends Module {
++class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false) extends Module {
++  require(!enableDenseDrain || enableFfnDrain,"Dense tile drain requires the existing drain port")
+   require(!enableKWindow || enableFfnWindow,"K windows require the actual FFN window owner")
+   private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)
+   require(!enableFfnDrain || enableFfnTiles,"act drain requires the shared tile banks")
+@@ -1402,9 +1403,18 @@
+     d.result.bits.executedMacs:=(io.physicalSteps-physicalBase)*512.U
+     when(d.request.fire){
+       val r=d.request.bits;val j=r.job;val ws=io.prefixWorkspace.get
+-      // Activation's k is its input width, not a Dense reduction dimension.
++      // The output is FP32 for both modes. Dense carries its ORIGINAL Job:
++      // full A and B spans retain K and their source dtype, even for a narrow ng.
+       val size=j.m.pad(66)*j.n*4.U
+-      val aEnd=j.a.pad(66)+size;val bEnd=j.b.pad(66)+size;val dEnd=j.dst.pad(66)+size
++      val aEnd=if(enableDenseDrain){
++        j.a.pad(66)+Mux(j.kind===QwenOwnerKind.Dense.U,
++          j.m.pad(66)*j.k*Mux(j.activationBf16,2.U(3.W),4.U(3.W)),size)
++      }else j.a.pad(66)+size
++      val bEnd=if(enableDenseDrain){
++        j.b.pad(66)+Mux(j.kind===QwenOwnerKind.Dense.U,
++          j.k.pad(66)*j.n*Mux(j.weightBf16,2.U(3.W),4.U(3.W)),size)
++      }else j.b.pad(66)+size
++      val dEnd=j.dst.pad(66)+size
+       val pEnd=ws.base.pad(66)+ws.extent.pad(66)
+       val spans=Seq((j.a,aEnd),(j.b,bEnd),(j.dst,dEnd))
+       val disjoint=(for(i<-spans.indices;k<-i+1 until spans.size)yield
+@@ -1412,12 +1422,26 @@
+       val workspaceOK=ws.valid && ws.base(5,0)===0.U && ws.extent=/=0.U && pEnd<=(BigInt(1)<<56).U &&
+         ws.generation=/=0.U && ws.splitK=/=0.U && ws.splitK<=2560.U && ws.splitK(6,0)===0.U &&
+         spans.map{case(base,end)=> !(ws.base.pad(66)<end && base.pad(66)<pEnd)}.reduce(_&&_)
+-      val shape=j.kind===QwenOwnerKind.Activation.U && (j.m===16.U || j.m===128.U) &&
++      val shape=if(enableDenseDrain){
++        val activationShape=j.kind===QwenOwnerKind.Activation.U && (j.m===16.U || j.m===128.U) &&
++          j.n===8960.U && j.k===8960.U && !j.activationBf16 && !j.weightBf16 && !j.outputBf16
++        val denseShape=j.kind===QwenOwnerKind.Dense.U && (j.m===16.U || j.m===128.U) &&
++          j.m<=j.k && j.k<=1536.U && j.n>0.U && j.n<=j.k && j.n(4,0)===0.U &&
++          j.k(3,0)===0.U && (!j.activationBf16 || j.k(4,0)===0.U) &&
++          !j.outputBf16 && !j.materializeDenseOutput
++        (activationShape || denseShape) &&
++        j.writeBytes===size && disjoint && workspaceOK &&
++        spans.map{case(base,end)=>base(5,0)===0.U && end<=(BigInt(1)<<56).U}.reduce(_&&_) &&
++        r.identity=/=0.U && r.ng(4,0)===0.U && r.cols>0.U && r.cols<=160.U && r.cols(4,0)===0.U &&
++        r.ng.pad(17)+&r.cols.pad(17)<=j.n.pad(18)
++      }else{
++        j.kind===QwenOwnerKind.Activation.U && (j.m===16.U || j.m===128.U) &&
+         j.n===8960.U && j.k===8960.U && !j.activationBf16 && !j.weightBf16 && !j.outputBf16 &&
+         j.writeBytes===size && disjoint && workspaceOK &&
+         spans.map{case(base,end)=>base(5,0)===0.U && end<=(BigInt(1)<<56).U}.reduce(_&&_) &&
+         r.identity=/=0.U && r.ng(4,0)===0.U && r.cols>0.U && r.cols<=160.U && r.cols(4,0)===0.U &&
+         r.ng.pad(17)+&r.cols.pad(17)<=j.n.pad(18)
++      }
+       val slotOK=t.live && t.sealedTile && t.identity===r.identity && t.ng===r.ng && t.rows===j.m &&
+         t.cols===r.cols && t.expected===(j.m>>4)*r.cols && t.produced===t.expected && t.consumed===0.U &&
+         !t.matrixProducerOrder.getOrElse(false.B)

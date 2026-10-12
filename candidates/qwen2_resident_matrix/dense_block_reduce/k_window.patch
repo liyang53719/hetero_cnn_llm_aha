@@ -1,0 +1,203 @@
+--- a/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
+@@ -8,9 +8,9 @@
+   * anonymous StreamingDenseOwner IO exactly. The candidate patch replaces
+   * only that declaration, so elaboration selects ONE Dense implementation.
+   */
+-class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false) extends Bundle {
++class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableKWindow:Boolean=false) extends Bundle {
+   val drain=if(enableFfnDrain)Some(new FfnDrainPort)else None
+-  val window=if(enableFfnWindow)Some(new FfnWindowPort(enableFfnDrain))else None
++  val window=if(enableFfnWindow)Some(new FfnWindowPort(enableFfnDrain,enableKWindow))else None
+   val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder=enableFfnWindow))else None
+   val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
+   val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
+@@ -26,11 +26,13 @@
+ 
+ /** Internal completion is not a Host DDR completion. The original job retains
+   * the full B row stride; ng/cols only select its Matrix context window. */
+-class FfnWindowRequest extends Bundle {
++class FfnWindowRequest(enableKWindow:Boolean=false) extends Bundle {
++  val kWindow=if(enableKWindow)Some(new DenseKWindowPolicy)else None
+   val job=new QwenOwnerJob
+   val identity=UInt(32.W);val ng=UInt(16.W);val cols=UInt(8.W);val slot=UInt(2.W);val reuseA=Bool()
+ }
+-class FfnWindowResult(enableCounters:Boolean=false) extends Bundle {
++class FfnWindowResult(enableCounters:Boolean=false,enableKWindow:Boolean=false) extends Bundle {
++  val kWindow=if(enableKWindow)Some(new DenseKWindowPolicy)else None
+   val cycles=if(enableCounters)Some(UInt(64.W))else None
+   val usefulMacs=if(enableCounters)Some(UInt(64.W))else None
+   val executedMacs=if(enableCounters)Some(UInt(64.W))else None
+@@ -38,8 +40,8 @@
+   val rows=UInt(8.W);val status=UInt(8.W);val committed=Bool();val producedBeats=UInt(11.W)
+   val ddrWriteBytes=UInt(64.W)
+ }
+-class FfnWindowPort(enableCounters:Boolean=false) extends Bundle {
+-  val request=Flipped(Decoupled(new FfnWindowRequest));val result=Decoupled(new FfnWindowResult(enableCounters))
++class FfnWindowPort(enableCounters:Boolean=false,enableKWindow:Boolean=false) extends Bundle {
++  val request=Flipped(Decoupled(new FfnWindowRequest(enableKWindow)));val result=Decoupled(new FfnWindowResult(enableCounters,enableKWindow))
+   val invalidateLease=Input(Bool())
+   val busy=Output(Bool());val leaseValid=Output(Bool());val resetRequired=Output(Bool())
+ }
+@@ -65,3 +67,12 @@
+   val request=Flipped(Decoupled(new FfnDrainRequest));val result=Decoupled(new FfnDrainResult)
+   val abort=Input(Bool());val busy=Output(Bool());val resetRequired=Output(Bool())
+ }
++
++/** Internal policy only: full Job K/strides/alias ranges/A lease never change.
++  * A caller supplies the official shape-dependent split and pair order.
++  * Disabled preserves ordinary window semantics; enabled emits raw FP32.
++  */
++class DenseKWindowPolicy extends Bundle {
++  val enabled=Bool();val begin=UInt(16.W);val end=UInt(16.W)
++  val pairReverse=Bool();val blockId=UInt(32.W)
++}
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
+@@ -703,11 +703,12 @@
+ }
+ 
+ /** Selected chunk-major extension; same physical banks, service, and seed leaf. */
+-class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false) extends Module {
++  require(!enableKWindow || enableFfnWindow,"K windows require the actual FFN window owner")
+   private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)
+   require(!enableFfnDrain || enableFfnTiles,"act drain requires the shared tile banks")
+   require(!enableFfnWindow || enableFfnTiles,"internal window requires the shared tile banks")
+-  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain))
++  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,enableKWindow=enableKWindow))
+   val idle::clearA::aReq::aWait::aFence::setup::execute::drain::finish::locked::Nil=Enum(10)
+   val state=RegInit(idle);val job=Reg(new QwenOwnerJob)
+   val status=RegInit(0.U(8.W));val cycles=RegInit(0.U(64.W));val bytes=RegInit(0.U(64.W))
+@@ -750,6 +751,8 @@
+   val windowPhase=if(enableFfnWindow)Some(RegInit(0.U(3.W)))else None // 1 begin,2 verify,3 run,4 seal,5 retire
+   val aLease=if(enableFfnWindow)Some(Reg(new FfnALease))else None
+   val aLeaseValid=if(enableFfnWindow)Some(RegInit(false.B))else None
++  // Control metadata only. The existing finalValue and A/B banks are shared.
++  val kPolicy=if(enableKWindow)Some(RegInit(0.U.asTypeOf(new DenseKWindowPolicy)))else None
+   val drainActive=if(enableFfnDrain)Some(RegInit(false.B))else None
+   val drainIdentity=if(enableFfnDrain)Some(Reg(UInt(32.W)))else None
+   val drainNg=if(enableFfnDrain)Some(Reg(UInt(16.W)))else None
+@@ -774,6 +777,12 @@
+   // Global DDR stride remains job.k; SRAM coordinates are always local.
+   val chunkDepth=if(enableFfnWindow)Mux(windowActive.get,job.k,Mux(job.k-chunkBase>workspace.splitK,workspace.splitK,job.k-chunkBase))else Mux(job.k-chunkBase>workspace.splitK,workspace.splitK,job.k-chunkBase)
+   val chunkEnd=chunkBase+chunkDepth
++  // Keep chunkDepth as the COMPLETE A load extent. K execution has its own
++  // bounds; otherwise A row stride/clear/RMW/lease would silently be shortened.
++  val kActive=if(enableKWindow)windowActive.get && kPolicy.get.enabled else false.B
++  val executionBegin=if(enableKWindow)Mux(kActive,kPolicy.get.begin,0.U)else 0.U
++  val executionEnd=if(enableKWindow)Mux(kActive,kPolicy.get.end,chunkDepth)else chunkDepth
++  val executionLength=if(enableKWindow)executionEnd-executionBegin else chunkDepth
+   val savingPrefix=chunkEnd<job.k
+   val restoreLegal=prefixValid && committedPrefixEnd===chunkBase &&
+     (nBase.pad(17)>>5)+seedContext===restoredContexts &&
+@@ -892,10 +901,15 @@
+     eligibleHalf && operands.io.count+&banks.io.response.valid.asUInt<4.U
+   if(enableFfnWindow){when(windowActive.get && writeState=/=writeIdle){banks.io.read.valid:=false.B}}
+   banks.io.read.bits.k:=readK;banks.io.read.bits.context:=readContext;banks.io.read.bits.half:=issueHalf
++  if(enableKWindow){
++    // readK remains monotonic progress. Pair permutation is only an SRAM address.
++    when(kActive){banks.io.read.bits.k:=executionBegin+((readK-executionBegin)^kPolicy.get.pairReverse.asUInt)}
++  }
+   when(banks.io.read.fire){pendingK:=readK;pendingContext:=readContext}
+   operands.io.enq.valid:=banks.io.response.valid && status===0.U
+   val step=operands.io.enq.bits
+   step.context:=pendingContext;step.clear:=chunkBase===0.U && pendingK===0.U;step.last:=pendingK+1.U===chunkDepth
++  if(enableKWindow){when(kActive){step.clear:=pendingK===executionBegin;step.last:=pendingK+1.U===executionEnd}}
+   step.finish:=step.last && pendingContext+1.U===contexts;step.emit:=step.last
+   for(n<-0 until 16){step.a(n):=banks.io.response.bits.weight(n)}
+   for(m<-0 until 256){
+@@ -910,8 +924,9 @@
+   when(banks.io.read.fire){
+     when(readContext+1.U===contexts){
+       readContext:=0.U;readK:=readK+1.U
+-      when(readK(6,0)===127.U || readK+1.U===chunkDepth){halfReady(issueHalf):=false.B;issueHalf:= !issueHalf}
+-      when(readK+1.U===chunkDepth){allRead:=true.B}
++      // Release after the final ordinal in the half, including 127 then 126.
++      when(readK(6,0)===127.U || readK+1.U===executionEnd){halfReady(issueHalf):=false.B;issueHalf:= !issueHalf}
++      when(readK+1.U===executionEnd){allRead:=true.B}
+     }.otherwise{readContext:=readContext+1.U}
+   }
+   when(io.matrix.step.fire){
+@@ -1099,7 +1114,7 @@
+             loadBeat:=false.B
+             when(loadContext+1.U===contexts){
+               loadContext:=0.U
+-              when(loadDepth===127.U || loadK+&loadDepth+1.U===chunkDepth){
++              when(loadDepth===127.U || loadK+&loadDepth+1.U===executionEnd){
+                 halfReady(loadHalf):=true.B;halfK(loadHalf):=loadK;halfN(loadHalf):=nBase
+                 nextLoadK:=loadK+&128.U;loadHalf:= !loadHalf
+               }.otherwise{loadDepth:=loadDepth+1.U;loadState:=loadReq}
+@@ -1116,19 +1131,28 @@
+     contexts:=(if(enableFfnWindow)Mux(windowActive.get,(windowCols.get>>5)(2,0),Mux((job.n-nBase)>>5>5.U,5.U,((job.n-nBase)>>5)(2,0)))else Mux((job.n-nBase)>>5>5.U,5.U,((job.n-nBase)>>5)(2,0)))
+     halfReady:=VecInit(Seq.fill(2)(false.B));loadHalf:=false.B;nextLoadK:=0.U;loadState:=loadIdle
+     issueHalf:=false.B;readK:=0.U;readContext:=0.U;allRead:=false.B
++    if(enableKWindow){when(kActive){
++      nextLoadK:=executionBegin;loadHalf:=executionBegin(7)
++      readK:=executionBegin;issueHalf:=executionBegin(7)
++    }}
+     groupStarted:=false.B;groupDone:=false.B;written:=0.U;writeState:=writeIdle;state:=execute
+     groupIssueBase:=issued;terminalIssued:=0.U;captured:=0.U
+     seedState:=Mux(restoring,seedBegin,seedIdle);seedContext:=0.U;seedIndex:=0.U
+     when(groupSequence==="hffffffff".U){fail(Status.Protocol.U)}.otherwise{groupSequence:=groupSequence+1.U}
+   }
+-  when(state===execute && status===0.U && seedFinished && loadState===loadIdle && nextLoadK<chunkDepth && !halfReady(loadHalf)){
++  when(state===execute && status===0.U && seedFinished && loadState===loadIdle && nextLoadK<executionEnd && !halfReady(loadHalf)){
+     loadK:=nextLoadK;loadDepth:=0.U;loadContext:=0.U;loadBeat:=false.B;loadState:=loadReq
++    if(enableKWindow){when(kActive){
++      // Interior even boundaries load only selected rows into their unchanged
++      // physical depth in the 128-K B half. No scratch or address translation.
++      loadK:=Cat(nextLoadK(11,7),0.U(7.W));loadDepth:=nextLoadK(6,0)
++    }}
+   }
+   when(io.matrix.group.fire){groupStarted:=true.B}
+   when(io.matrix.done.fire){
+     groupDone:=true.B
+     when(io.matrix.done.bits.error || io.matrix.done.bits.tag=/=job.tag || !allRead || banks.io.response.valid ||
+-      operands.io.deq.valid || captured=/=contexts || issued-groupIssueBase=/=chunkDepth.pad(64)*contexts){fail(Status.Protocol.U)}
++      operands.io.deq.valid || captured=/=contexts || issued-groupIssueBase=/=executionLength.pad(64)*contexts){fail(Status.Protocol.U)}
+   }
+   val operandsEmpty= !banks.io.response.valid && !operands.io.deq.valid
+   if(enableFfnWindow){
+@@ -1209,6 +1233,7 @@
+     io.job.ready:=state===idle && !active && !w.request.valid && !p.busy &&
+       !io.tiles.get.control.valid && !io.tiles.get.write.valid && !io.tiles.get.read.valid && !io.tiles.get.abort
+     w.result.valid:=active && state===finish
++    if(enableKWindow){w.result.bits.kWindow.get:=kPolicy.get}
+     w.result.bits.tag:=job.tag;w.result.bits.identity:=windowIdentity.get;w.result.bits.ng:=windowNg.get
+     w.result.bits.cols:=windowCols.get;w.result.bits.slot:=windowSlot.get;w.result.bits.rows:=job.m
+     w.result.bits.status:=status;w.result.bits.committed:=windowCommitted.get
+@@ -1235,7 +1260,14 @@
+         (!(j.k>ws.splitK) || ws.extent>=(j.n.pad(64)>>5)*16384.U) &&
+         pEnd<=(BigInt(1)<<56).U && !prefixAliases && ws.generation=/=0.U &&
+         ws.splitK=/=0.U && ws.splitK<=2560.U && ws.splitK(6,0)===0.U
+-      val shape=(!officialBf16.B || j.materializeDenseOutput) && workspaceOK && j.kind===QwenOwnerKind.Dense.U && (j.m===16.U || j.m===128.U) && j.k>0.U && j.k<=1536.U &&
++      val shape=if(enableKWindow){
++      val kShape={
++        val k=r.kWindow.get
++        !k.enabled || (k.begin<k.end && k.end<=j.k && !k.begin(0) && !k.end(0) &&
++          k.blockId=/=0.U && !j.materializeDenseOutput)
++      }
++      val materializeShape= !officialBf16.B || r.kWindow.get.enabled || j.materializeDenseOutput
++      kShape && materializeShape && workspaceOK && j.kind===QwenOwnerKind.Dense.U && (j.m===16.U || j.m===128.U) && j.k>0.U && j.k<=1536.U &&
+         j.k(3,0)===0.U && (!j.activationBf16 || j.k(4,0)===0.U) && !j.outputBf16 &&
+         j.n>0.U && j.n(4,0)===0.U && r.identity=/=0.U && r.ng(4,0)===0.U &&
+         r.cols>0.U && r.cols<=160.U && r.cols(4,0)===0.U && r.slot<2.U &&
+@@ -1243,6 +1275,17 @@
+         j.dst(5,0)===0.U && !aliases && dEnd<=(BigInt(1)<<56).U &&
+         j.writeBytes===j.m.pad(64)*j.n*4.U &&
+         aEnd<=(BigInt(1)<<56).U && bEnd<=(BigInt(1)<<56).U && groupSequence=/="hffffffff".U
++      }else{
++      (!officialBf16.B || j.materializeDenseOutput) && workspaceOK && j.kind===QwenOwnerKind.Dense.U && (j.m===16.U || j.m===128.U) && j.k>0.U && j.k<=1536.U &&
++        j.k(3,0)===0.U && (!j.activationBf16 || j.k(4,0)===0.U) && !j.outputBf16 &&
++        j.n>0.U && j.n(4,0)===0.U && r.identity=/=0.U && r.ng(4,0)===0.U &&
++        r.cols>0.U && r.cols<=160.U && r.cols(4,0)===0.U && r.slot<2.U &&
++        r.ng.pad(17)+&r.cols.pad(17)<=j.n.pad(18) && j.a(5,0)===0.U && j.b(5,0)===0.U &&
++        j.dst(5,0)===0.U && !aliases && dEnd<=(BigInt(1)<<56).U &&
++        j.writeBytes===j.m.pad(64)*j.n*4.U &&
++        aEnd<=(BigInt(1)<<56).U && bEnd<=(BigInt(1)<<56).U && groupSequence=/="hffffffff".U
++      }
++      if(enableKWindow){kPolicy.get:=r.kWindow.get}
+       windowActive.get:=true.B;windowIdentity.get:=r.identity;windowNg.get:=r.ng
+       windowCols.get:=r.cols;windowSlot.get:=r.slot;windowReuse.get:=r.reuseA
+       windowBegun.get:=false.B;windowCommitted.get:=false.B;windowPhase.get:=1.U

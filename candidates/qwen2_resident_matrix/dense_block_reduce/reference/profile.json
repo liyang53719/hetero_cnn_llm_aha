@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "status": "SIX_FIXTURE_NUMERICALLY_VERIFIED_PROFILE_NOT_IMPLEMENTATION_ACCEPTANCE",
+  "profile_id": "torch210cpu_onednn371_avx512_core_bf16_4t_qkv_k1536",
+  "backend": {
+    "torch": "2.10.0+cpu",
+    "onednn": "3.7.1",
+    "onednn_commit": "8d263e693366ef8db40acc569cc7d8edf644556d",
+    "implementation": "brg_matmul:avx512_core_bf16",
+    "threads": 4,
+    "interop_threads": 1,
+    "device": "cpu",
+    "cpu_vendor": "AuthenticAMD",
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "autocast": false,
+    "deterministic": true
+  },
+  "numerically_verified_cases": [
+    {
+      "case": "m16_q",
+      "input_shape": [
+        1,
+        16,
+        1536
+      ],
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "bias_shape": [
+        1536
+      ],
+      "outputs": 24576,
+      "native_sha256": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977",
+      "model_sha256": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977",
+      "profile_sha256": "22be6874bdc36f3ad0c5b2079f1ce7b5da22ecdb6819676c773eca6684ca0f73"
+    },
+    {
+      "case": "m16_k",
+      "input_shape": [
+        1,
+        16,
+        1536
+      ],
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "bias_shape": [
+        256
+      ],
+      "outputs": 4096,
+      "native_sha256": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087",
+      "model_sha256": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087",
+      "profile_sha256": "c7c063012e463f45422422f8c0fe7a6416ee64182d901332774961fc3ca085eb"
+    },
+    {
+      "case": "m16_v",
+      "input_shape": [
+        1,
+        16,
+        1536
+      ],
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "bias_shape": [
+        256
+      ],
+      "outputs": 4096,
+      "native_sha256": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10",
+      "model_sha256": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10",
+      "profile_sha256": "59e0817461c4ac3145dd16727c446684898d14aa2f3f0628954d7f935c70dbc3"
+    },
+    {
+      "case": "m128_q",
+      "input_shape": [
+        1,
+        128,
+        1536
+      ],
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "bias_shape": [
+        1536
+      ],
+      "outputs": 196608,
+      "native_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+      "model_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+      "profile_sha256": "2afd0cb480b795d6962cd511e18f64102aafc0311c3ccf67cef378cc00740fd9"
+    },
+    {
+      "case": "m128_k",
+      "input_shape": [
+        1,
+        128,
+        1536
+      ],
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "bias_shape": [
+        256
+      ],
+      "outputs": 32768,
+      "native_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+      "model_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+      "profile_sha256": "9473b7d7eb0558b53318a1fec83562f4a24770a330ac516d85b8cbd554f83ad0"
+    },
+    {
+      "case": "m128_v",
+      "input_shape": [
+        1,
+        128,
+        1536
+      ],
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "bias_shape": [
+        256
+      ],
+      "outputs": 32768,
+      "native_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+      "model_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+      "profile_sha256": "92d96103cc492e3ffe8f4f832cc58fe4aa8a54b9c1fc915a03f15208f1a945c9"
+    }
+  ],
+  "parameters": {
+    "block_sizes": [
+      1024,
+      512
+    ],
+    "pair_width": 2,
+    "pair_order": "high_then_low",
+    "block_partial": "Independent FP32 positive zero; increasing adjacent pair order inside each block",
+    "combine": "FP32 current block partial + retained previous partial; separate FP32 add",
+    "bias": "FP32 add after cross-block sum; BF16-expanded source",
+    "output": "BF16 RNE once after bias",
+    "FTZ_DAZ": "disabled in model; no subnormal-domain operations in all six fixtures"
+  },
+  "constraints": [
+    "Only the six listed full-shape fixtures were numerically tested. M1 and other shapes are not tested or inferred.",
+    "1024 is a backend-profile parameter supported here by generated kernel code, not a model-wide constant.",
+    "Generated JIT kernels and copy layout were inspected; actual dynamic kernel call order, branch decisions and scratch contents were not traced.",
+    "Strict fmaf is not general VDPBF16PS emulation because the ISA mandates DAZ/FTZ. No subnormal policy is adopted.",
+    "No bank or owner integration, implementation changes, RTL, full-chain execution or native acceptance in this audit."
+  ],
+  "resource_delta": {
+    "extra_fp32_partial_backup_per_active_output": 1,
+    "extra_bits_per_active_output": 32,
+    "cross_block_fp32_adds_per_output": 1,
+    "total_adds_across_six_outputs": 294912,
+    "scheduling": "Explicit pair routing, partial retention/clear, cross-block add scheduling, existing-bank ports and arbitration, tags/backpressure and completion alignment are required. No resource-neutral or cycle claim."
+  },
+  "source_receipts": {
+    "result_sha256": "59bdab9a0699790d08fed25dc674d4837bb9b86d840f11b13ccbdb52289f9c5a",
+    "profiles_sha256": "09051686a70adc8663e5c13878f86f618adf8a325d9fe5b95e2ad5c1555f2bf5",
+    "input_materialization_audit_sha256": "881d906b290a9f19f7272dddc420e4a74d7a65e07f7d71eaa074b09c0c5d5288",
+    "ftz_domain_sha256": "04a000481ae420b82489aaed93abdf0fe502c33964adb22616ab965fc1b8efe9"
+  }
+}

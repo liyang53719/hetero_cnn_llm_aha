@@ -9,7 +9,7 @@ M16 只作早期诊断，不代替 M128；逐次 M1 launch 不称为一次 prefi
 
 | 完整 block | 已有实际范围 | 尚缺的主要闭环 |
 |---|---|---|
-| Qwen2-1.5B L0 | 固定官方权重/embedding 的 cold M16、M128，公开21命令同一软件实例贯通15主阶段，对独立v0算术逐位相同；M128原比较超时与后处理PASS分别保留 | 完整29诊断节点及官方BF16/FP32数值门仍未通过；真实carried prefill与M128完整硬件待验 |
+| Qwen2-1.5B L0 | 固定官方权重/embedding 的 cold M16、M128，公开21命令同一软件实例贯通15主阶段，对独立v0算术逐位相同；M128原比较超时与后处理PASS分别保留 | 完整29诊断节点及官方BF16数值门仍未通过；用户已批准BF16目标，FP32为诊断；真实carried prefill与M128完整硬件待验 |
 | Qwen3.5-0.8B L0 GDN | 79bbe 的同 DUT cold M1→carried M1，完整 RMS/核心/O/残差/FFN/双状态 fence；canonical 和原 native 数值门通过 | M128；整链 fault/reset/restore；完整周期计数 |
 | Qwen3.5-0.8B L3 Attention | 98c7 的完整双 M1 canonical 通过；后续保全 49 个真实 tensor 的相同输入官方 terminal/final/KV 比较通过 | 实际内部 GQA 33–37 未导出；输入 RMS 归约差异的生产修复；M128 |
 | Qwen3.5-35B-A3B L0 GDN+MoE | 固定官方配置、forward、权重 header 和 E0 几何/算子合同 | 真实权重和输入、路由/专家执行、完整数值模型及硬件 |

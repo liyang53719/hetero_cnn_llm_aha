@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "purpose": "Exact source bytes used by completed M16 run, preserved before cold-packaging changes; never imported as live code",
+  "frozen_sha256": "f75d9775e26ee12478262519946275b5c168591c17a25d9b8144d7cd235406c0",
+  "source_snapshots": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/builder.py": {
+      "snapshot": "builder.py.txt",
+      "sha256": "467e30f8f5ff7459431427e72847ec5335442405e8c7532493cccd7ea437af75"
+    },
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/dot16.inc": {
+      "snapshot": "dot16.inc",
+      "sha256": "175a8c3ff32287c6403a9bdf83c91d45249b6824cf4633753fcccb65c48d4ad6"
+    },
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/run_reference.py": {
+      "snapshot": "run_reference.py.txt",
+      "sha256": "2918323099b0b9960e39aeb8ec25b3df8fe81b45f87ef8730f5404652116b012"
+    },
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/test_builder.py": {
+      "snapshot": "test_builder.py.txt",
+      "sha256": "223f764901cd302b3679982d9bfb1999559874eab919b6c76268e4b78b4f4179"
+    }
+  },
+  "receipt_sha256": {
+    "PREPARED.json": "84a850e72e9d2c3c2226586aac4a39ca9541f4ba171d765768ead953384e2c1a",
+    "FROZEN.json": "f75d9775e26ee12478262519946275b5c168591c17a25d9b8144d7cd235406c0",
+    "RESULT.json": "5eeff614754ea28b6f690b5e0b4a54de03b79bb7fa6ceda104beff89d263d728"
+  }
+}

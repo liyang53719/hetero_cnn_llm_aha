@@ -96,6 +96,7 @@ jobs:
           python candidates/qwen2_resident_matrix/ffn_drain/check_frontend.py --out work/matrix-interface-frontend/ffn-drain --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/ffn_group/check_frontend.py --out work/matrix-interface-frontend/ffn-group --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/official_bf16/check_frontend.py --out work/matrix-interface-frontend/official-bf16 --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
+          python candidates/qwen2_resident_matrix/dense_block_reduce/check_public_reduction_frontend.py --baseline work/matrix-interface-frontend/official-bf16 --cache work/matrix-interface-jars --out work/matrix-interface-frontend/public-dense-reduction
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

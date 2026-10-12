@@ -1,0 +1,55 @@
+{
+  "source_result_sha256": "0f7976d97f70c709cd304ea3a08de1cc9c233947f8bb18e298f54c0a1b761ce5",
+  "cases": [
+    {
+      "boundary": "normal_pair_order",
+      "initial_acc_bits": 1065353216,
+      "x_low_bits": 1065353216,
+      "x_high_bits": 1065353216,
+      "w_low_bits": 3212836864,
+      "w_high_bits": 864026624,
+      "strict_high_first_bits": 0,
+      "strict_low_first_bits": 864026624,
+      "spec_high_first_ftz_daz_bits": 0,
+      "native_vdpbf16ps_bits": 0
+    },
+    {
+      "boundary": "daz_bf16_input",
+      "initial_acc_bits": 0,
+      "x_low_bits": 0,
+      "x_high_bits": 65536,
+      "w_low_bits": 0,
+      "w_high_bits": 1149239296,
+      "strict_high_first_bits": 33554432,
+      "strict_low_first_bits": 33554432,
+      "spec_high_first_ftz_daz_bits": 0,
+      "native_vdpbf16ps_bits": 0
+    },
+    {
+      "boundary": "ftz_fma_result",
+      "initial_acc_bits": 0,
+      "x_low_bits": 0,
+      "x_high_bits": 8388608,
+      "w_low_bits": 0,
+      "w_high_bits": 1056964608,
+      "strict_high_first_bits": 4194304,
+      "strict_low_first_bits": 4194304,
+      "spec_high_first_ftz_daz_bits": 0,
+      "native_vdpbf16ps_bits": 0
+    },
+    {
+      "boundary": "daz_fp32_accumulator",
+      "initial_acc_bits": 512,
+      "x_low_bits": 0,
+      "x_high_bits": 0,
+      "w_low_bits": 0,
+      "w_high_bits": 0,
+      "strict_high_first_bits": 512,
+      "strict_low_first_bits": 512,
+      "spec_high_first_ftz_daz_bits": 0,
+      "native_vdpbf16ps_bits": 0
+    }
+  ],
+  "scope": "These existing four ISA-semantic boundary cases are shape independent. They were not re-executed in this six-shape batch. VDPBF16PS mandatory DAZ/FTZ differs from strict no-flush fmaf outside the observed normal-value domain.",
+  "this_batch_all_six_domain_checks_zero": true
+}

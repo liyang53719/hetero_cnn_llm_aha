@@ -1,0 +1,351 @@
+{
+  "status": "PASS_SMALL_SYNTHETIC_SAME_INSTANCE_MODE_CHAIN_ONLY",
+  "exit_code": 0,
+  "command": [
+    "timeout",
+    "180s",
+    "env",
+    "MATRIX_SERVICE_LIBRARY=/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/public_attention_observation_20261012T0843/library/matrix_silu_numeric.so",
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "candidates.qwen2_resident_matrix.dense_block_reduce.test_mode_sequence",
+    "-v"
+  ],
+  "final_test_seconds": 11.588,
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/test_mode_sequence.py": "58a33d41fb2cc851f457ce46df8d0368516935215ec17c3678ffafd798ca909c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+    "candidates/qwen2_resident_matrix/official_bf16/test_owners.py": "db35f7c4f013ade739e4d49eaae4428729441599a2f1eca90b068ccb08345bde"
+  },
+  "library_sha256": "22da518dc47e641cd7052b84d0c46389fd92d71665276fb671410cf5b994136c",
+  "compile_receipt_sha256": "95ed3764630bd4ad39d7d3c7ef8043998afc8de79e2caaf204b01c2b18444a06",
+  "evidence_sha256": {
+    "mode_counters.json": "28ef88f823ba019ffa8a844597cfd8fd453b0bee4d2ee2fcd2e4a1a4ec2d876e",
+    "initial_pass.log": "f1235d8cc49fd588b1262a2718203da15b5937f4d0e883669d2368438266b1f7",
+    "final_pass.log": "27a75398056bdd794e2d648339f9439de648923b49c6a07968e2277e519a2ea2"
+  },
+  "no_new_compile": true,
+  "no_hardware_execution": true,
+  "no_whole_model_acceptance": true,
+  "same_owner_banks_matrix_vector": true,
+  "actual_counters": {
+    "activation_full_n": 8960,
+    "activation_local_window_cols": 160,
+    "activation_windows": 56,
+    "actual_elf_dense_fmas": 110624768,
+    "down_prefix_seed_restores": 3,
+    "owner_or_matrix_resets_between_modes": 0,
+    "phases": [
+      {
+        "accepted_delta": {
+          "ddr": {
+            "accepted_data_bytes": 2048,
+            "acknowledged_bytes": 2048,
+            "read_input": 32,
+            "read_q_weight": 32,
+            "write_ack": 16,
+            "write_command": 16,
+            "write_data": 32
+          },
+          "matrix": {
+            "dense_done": 2,
+            "dense_groups": 2,
+            "dense_results": 2,
+            "dense_steps": 32,
+            "owner_acquires": 2,
+            "owner_releases": 2,
+            "owner_responses": 2
+          },
+          "owner": {
+            "drains": 1,
+            "matrix_steps": 32,
+            "windows": 2
+          },
+          "vector": {
+            "add_issues": 32,
+            "add_results": 32
+          },
+          "window_a_load_fences": {
+            "k": 1,
+            "legacy": 0
+          }
+        },
+        "name": "reduced_q"
+      },
+      {
+        "accepted_delta": {
+          "ddr": {
+            "accepted_data_bytes": 2048,
+            "acknowledged_bytes": 2048,
+            "read_input": 32,
+            "read_k_weight": 32,
+            "read_q_weight": 0,
+            "write_ack": 16,
+            "write_command": 16,
+            "write_data": 32
+          },
+          "matrix": {
+            "dense_done": 2,
+            "dense_groups": 2,
+            "dense_results": 2,
+            "dense_steps": 32,
+            "owner_acquires": 2,
+            "owner_releases": 2,
+            "owner_responses": 2
+          },
+          "owner": {
+            "drains": 1,
+            "matrix_steps": 32,
+            "windows": 2
+          },
+          "vector": {
+            "add_issues": 32,
+            "add_results": 32
+          },
+          "window_a_load_fences": {
+            "k": 1,
+            "legacy": 0
+          }
+        },
+        "name": "reduced_k"
+      },
+      {
+        "accepted_delta": {
+          "ddr": {
+            "accepted_data_bytes": 2048,
+            "acknowledged_bytes": 2048,
+            "read_input": 32,
+            "read_k_weight": 0,
+            "read_q_weight": 0,
+            "read_v_weight": 32,
+            "write_ack": 16,
+            "write_command": 16,
+            "write_data": 32
+          },
+          "matrix": {
+            "dense_done": 2,
+            "dense_groups": 2,
+            "dense_results": 2,
+            "dense_steps": 32,
+            "owner_acquires": 2,
+            "owner_releases": 2,
+            "owner_responses": 2
+          },
+          "owner": {
+            "drains": 1,
+            "matrix_steps": 32,
+            "windows": 2
+          },
+          "vector": {
+            "add_issues": 32,
+            "add_results": 32
+          },
+          "window_a_load_fences": {
+            "k": 1,
+            "legacy": 0
+          }
+        },
+        "name": "reduced_v"
+      },
+      {
+        "accepted_delta": {
+          "ddr": {
+            "accepted_data_bytes": 2048,
+            "acknowledged_bytes": 2048,
+            "read_input": 0,
+            "read_k_weight": 0,
+            "read_o_weight": 32,
+            "read_q": 32,
+            "read_q_weight": 0,
+            "read_v_weight": 0,
+            "write_ack": 16,
+            "write_command": 16,
+            "write_data": 32
+          },
+          "matrix": {
+            "dense_done": 1,
+            "dense_groups": 1,
+            "dense_results": 1,
+            "dense_steps": 32,
+            "owner_acquires": 1,
+            "owner_releases": 1,
+            "owner_responses": 1
+          },
+          "owner": {
+            "drains": 0,
+            "matrix_steps": 32,
+            "windows": 0
+          },
+          "vector": {
+            "add_issues": 0,
+            "add_results": 0
+          },
+          "window_a_load_fences": {
+            "k": 0,
+            "legacy": 0
+          }
+        },
+        "name": "ordinary_o"
+      },
+      {
+        "accepted_delta": {
+          "ddr": {
+            "accepted_data_bytes": 573440,
+            "acknowledged_bytes": 573440,
+            "read_gate_weight": 8960,
+            "read_input": 0,
+            "read_k_weight": 0,
+            "read_o": 32,
+            "read_o_weight": 0,
+            "read_q": 0,
+            "read_q_weight": 0,
+            "read_up_weight": 8960,
+            "read_v_weight": 0,
+            "write_ack": 1344,
+            "write_command": 1344,
+            "write_data": 8960
+          },
+          "matrix": {
+            "dense_done": 112,
+            "dense_groups": 112,
+            "dense_results": 560,
+            "dense_steps": 17920,
+            "owner_acquires": 112,
+            "owner_releases": 112,
+            "owner_responses": 112
+          },
+          "owner": {
+            "drains": 56,
+            "matrix_steps": 17920,
+            "windows": 112
+          },
+          "vector": {
+            "add_issues": 0,
+            "add_results": 0,
+            "silu_phase_issues": 53760,
+            "silu_requests": 8960,
+            "silu_results": 8960
+          },
+          "window_a_load_fences": {
+            "k": 0,
+            "legacy": 1
+          }
+        },
+        "name": "gate_up_silu_act_56_windows"
+      },
+      {
+        "accepted_delta": {
+          "ddr": {
+            "accepted_data_bytes": 2048,
+            "acknowledged_bytes": 2048,
+            "read_act": 8960,
+            "read_down_weight": 8960,
+            "read_gate_weight": 0,
+            "read_input": 0,
+            "read_k_weight": 0,
+            "read_o": 0,
+            "read_o_weight": 0,
+            "read_q": 0,
+            "read_q_weight": 0,
+            "read_up_weight": 0,
+            "read_v_weight": 0,
+            "write_ack": 16,
+            "write_command": 16,
+            "write_data": 32
+          },
+          "matrix": {
+            "dense_done": 4,
+            "dense_groups": 4,
+            "dense_results": 4,
+            "dense_seed_acks": 3,
+            "dense_steps": 8960,
+            "owner_acquires": 1,
+            "owner_releases": 1,
+            "owner_responses": 1
+          },
+          "owner": {
+            "drains": 0,
+            "matrix_steps": 8960,
+            "windows": 0
+          },
+          "vector": {
+            "add_issues": 0,
+            "add_results": 0,
+            "silu_phase_issues": 0,
+            "silu_requests": 0,
+            "silu_results": 0
+          },
+          "window_a_load_fences": {
+            "k": 0,
+            "legacy": 0
+          }
+        },
+        "name": "seeded_down"
+      }
+    ],
+    "rtl_executed": false,
+    "same_owner_banks_matrix_vector": true,
+    "scope": "SMALL_SYNTHETIC_SAME_INSTANCE_MODE_CHAIN_ONLY",
+    "silu_backend": "Existing sf_vector actual accepted payloads and six phase returns; not Chisel Scalar execution",
+    "totals": {
+      "ddr": {
+        "accepted_data_bytes": 583680,
+        "acknowledged_bytes": 583680,
+        "read_act": 8960,
+        "read_down_weight": 8960,
+        "read_gate_weight": 8960,
+        "read_input": 96,
+        "read_k_weight": 32,
+        "read_o": 32,
+        "read_o_weight": 32,
+        "read_q": 32,
+        "read_q_weight": 32,
+        "read_up_weight": 8960,
+        "read_v_weight": 32,
+        "write_ack": 1424,
+        "write_command": 1424,
+        "write_data": 9120
+      },
+      "matrix": {
+        "dense_done": 123,
+        "dense_groups": 123,
+        "dense_results": 571,
+        "dense_seed_acks": 3,
+        "dense_steps": 27008,
+        "owner_acquires": 120,
+        "owner_releases": 120,
+        "owner_responses": 120
+      },
+      "owner": {
+        "drains": 59,
+        "matrix_steps": 27008,
+        "windows": 118
+      },
+      "vector": {
+        "add_issues": 96,
+        "add_results": 96,
+        "silu_phase_issues": 53760,
+        "silu_requests": 8960,
+        "silu_results": 8960
+      },
+      "window_a_load_fences": {
+        "k": 3,
+        "legacy": 1
+      }
+    },
+    "whole_model_acceptance": false
+  }
+}

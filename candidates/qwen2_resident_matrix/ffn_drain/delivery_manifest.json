@@ -1,0 +1,1053 @@
+{
+  "schema": 1,
+  "scope": "DEFAULT_OFF_ACT_DDR_DRAIN_SOURCE_MODEL_FRONTEND_AND_BOUNDED_NUMERICS",
+  "base_commit": "c761ec824ce2c027a66c22feb4a2154829f9d545",
+  "files": {
+    "DrainElaboration.scala": {
+      "bytes": 1446,
+      "sha256": "4286f662d082db164c44e02abcea20ddca98bfcc9bb724b01d2fabc5916e5632"
+    },
+    "README.md": {
+      "bytes": 4676,
+      "sha256": "c7a1f81d785fc0af2ca805318e56321d49a0e02a1e465decaca4dacbb6dee022"
+    },
+    "check_frontend.py": {
+      "bytes": 15167,
+      "sha256": "32485afa5540afb581b4cfc9a1809f55a96cfea2ded8f924548daf1a4977aa60"
+    },
+    "check_numeric.py": {
+      "bytes": 34838,
+      "sha256": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be"
+    },
+    "drain.patch": {
+      "bytes": 32768,
+      "sha256": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e"
+    },
+    "model.py": {
+      "bytes": 21884,
+      "sha256": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe"
+    },
+    "precision_pins.json": {
+      "bytes": 7143,
+      "sha256": "a7baa1874b698257b73b9c816a65fad0630789bf1d283cd6a7a73f9adf86bb33"
+    },
+    "source_pins.json": {
+      "bytes": 24336,
+      "sha256": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23"
+    },
+    "test_delivery.py": {
+      "bytes": 997,
+      "sha256": "515ed3b6d945235e7194e7c7afc35ceaf27af644916fd3ae340386bcc3d02c86"
+    },
+    "test_frontend.py": {
+      "bytes": 6878,
+      "sha256": "a96c0bc745a7b26a0ac3fc7f0ad93410212d8d17baaf8264ee349e8ded69b4c9"
+    },
+    "test_model.py": {
+      "bytes": 28634,
+      "sha256": "e5c60e41637194f50e4c1498d544120af01d31200f2407aa7f0f9ec1c602640e"
+    },
+    "test_numeric.py": {
+      "bytes": 14266,
+      "sha256": "ed7784de5feab3cc28677b9b8f34cd95be8b2b6d69f6d2162c179f9d804007ac"
+    }
+  },
+  "frontend": {
+    "summary_sha256": "8f6717c4e7c6804676eecbfdae07816b608ef4fec07b5d477bc9b2b7865e14a0",
+    "audit_replay_sha256": "646b492c61e77c4ceb1fa8668772bea60a998c11b71bb995486cc646b1d9eea3",
+    "typechecked_sources": 91,
+    "full_host_top_typechecked": true,
+    "full_qwen_owner_kernel_typechecked": true,
+    "full_top_elaborated": false,
+    "generated_chirrtl": {
+      "banks_baseline.fir": {
+        "sha256": "33e04d426647b1eb09eb2bbffc004a1bc4a4bbd746d8fcc7b0e8b609317a3df8",
+        "bytes": 571376
+      },
+      "banks_disabled.fir": {
+        "sha256": "3d55e98ac3fc943ec2553841a75a5bbe8d83fcbe76125228d28819755183b38c",
+        "bytes": 677376
+      },
+      "banks_enabled.fir": {
+        "sha256": "3e4ecfbf7367f118e85a8166ceb6a14016a965195b5d8f0ec7f7c73004b3df78",
+        "bytes": 931207
+      },
+      "banks_tiles.fir": {
+        "sha256": "935a47eee1a1038e27915db413682f4c43c51400c1f9637677314250c7b215f5",
+        "bytes": 926215
+      },
+      "banks_tiles_baseline.fir": {
+        "sha256": "52e380e60a6875a8395d2c2907a33eb7d595a89c7d5e88dbcd187703438ac54d",
+        "bytes": 811152
+      },
+      "owner_baseline.fir": {
+        "sha256": "6cfd63b4be78b038590bd66043f4cd4e8a0a9da80cd69bf55d80cb15a31b2875",
+        "bytes": 10482688
+      },
+      "owner_disabled.fir": {
+        "sha256": "50d4c774c76d89bf2df4ce7a9d200aaad7d4197f4b963f923c05f3533b047503",
+        "bytes": 11859667
+      },
+      "owner_drain.fir": {
+        "sha256": "6dd026c45f067b485ee43511c82c423fb34bfbb36c34bc993c19d3de14f3cabc",
+        "bytes": 12407026
+      },
+      "owner_drain_burst.fir": {
+        "sha256": "0ec50066cb7d998f89986ce609076b9fcfb89724cee051fcbbebac6a0c13895a",
+        "bytes": 12420920
+      },
+      "owner_drain_only.fir": {
+        "sha256": "e1ff79ca80b63168b6e4430ab4e5d3249ad4d99756cdee97c0f64f1cf365ba5f",
+        "bytes": 12271728
+      },
+      "owner_enabled.fir": {
+        "sha256": "3a5bdeef57a38c5068d79aa8858acaf1ce36a2d25e94166aabc9e73fb5dd75e7",
+        "bytes": 12257725
+      },
+      "owner_tiles.fir": {
+        "sha256": "bdc72356ab0a0e40844c37e352700ae63f6f4faf30b83a89887bb14007f6f37d",
+        "bytes": 12120722
+      },
+      "owner_tiles_baseline.fir": {
+        "sha256": "4cc1b6a72749801b826323fc41a2e3cac872394909c53e97588782cbba111d4e",
+        "bytes": 10979953
+      },
+      "owner_window_baseline.fir": {
+        "sha256": "1e54604d173d58522a2523e413e1c31492a0aa1a804ad232a450b424ea62a7ac",
+        "bytes": 11148821
+      },
+      "owner_window_burst_baseline.fir": {
+        "sha256": "7ceb5d17b60055be2866c5212df5ddf30eb83d476e30607e5d2b82cedb35a44c",
+        "bytes": 11158653
+      },
+      "owner_window_burst_disabled.fir": {
+        "sha256": "0c4f3fdce3e7d214f601cdb7f8bb0d2d4171cf069d328cfb3f3f55ff457ce2dd",
+        "bytes": 12268207
+      },
+      "silu_baseline.fir": {
+        "sha256": "43d11d62d5f85a96b457bea4c8da6fae8917526441a81e30f873dbaf4a6cba70",
+        "bytes": 9131213
+      },
+      "silu_disabled.fir": {
+        "sha256": "1eba911f67fccee10e3f3a5fff735d3a5be570d4564188832b116c06a90307e8",
+        "bytes": 9143013
+      },
+      "silu_enabled.fir": {
+        "sha256": "15147851bf0b35d5d880c9418b466d8c102fa438b87cd1a16fbbdb3612295a29",
+        "bytes": 9159449
+      },
+      "tile_silu_harness.fir": {
+        "sha256": "58302969e8295d0fa3ff29b2a82c4d6ac5819a26a799eb68962864259ec3ca2e",
+        "bytes": 10177450
+      }
+    },
+    "default_off_ir": {
+      "banks": {
+        "equal": true,
+        "sha256": "fa7d6f00f5bf1b25f06cfc145e8899878b56d0667cdbd4355c2ea24eb9de6b79"
+      },
+      "owner": {
+        "equal": true,
+        "sha256": "f9154246bb033582427b5f5fada061bbd73c3bd88acdb79da679515a9449520c"
+      },
+      "silu": {
+        "equal": true,
+        "sha256": "e286d9dc6a3e4e41e3b8326e7121757c8c515bb61713680e19cccbdf8d69f83f"
+      }
+    },
+    "compiled_tooling_sha256": {
+      "check_frontend.py": "32485afa5540afb581b4cfc9a1809f55a96cfea2ded8f924548daf1a4977aa60",
+      "test_frontend.py": "a96c0bc745a7b26a0ac3fc7f0ad93410212d8d17baaf8264ee349e8ded69b4c9",
+      "source_pins.json": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23",
+      "DrainElaboration.scala": "4286f662d082db164c44e02abcea20ddca98bfcc9bb724b01d2fabc5916e5632",
+      "drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e"
+    },
+    "post_compile_tooling_differences": {},
+    "post_compile_difference_scope": "Only auditor resource-accounting replay is permitted; exact compiled source and IR hashes were rechecked without Java. Any additional difference must be reviewed independently.",
+    "command_seconds": {
+      "compile.log": 32.26353050999751,
+      "elaboration.log": 11.860201968003821
+    },
+    "java_budget": {
+      "active_processors": 1,
+      "heap_mib": 1024,
+      "timeout_seconds_per_command": 180
+    },
+    "window_on_drain_off_ir": {
+      "nonburst": {
+        "equal": true,
+        "sha256": "470b0bd8dc03de7a2c46a7326deb36c338e71055f78862c615a7dabecb10325b"
+      },
+      "burst": {
+        "equal": true,
+        "sha256": "14f6331870970a945b0d9aa4aef8194317fb3746cfabfaf554ad14eb9a85201c"
+      }
+    }
+  },
+  "validation": {
+    "python_tests": 63,
+    "python_test_log_sha256": "af4304b5ff929b77ec973b274487b252eb22f31034a0ccf7328f4a8f4bb42751",
+    "independent_review": "Source and bounded control review; initial P0/P1 issues corrected. No full root execution, RTL or QoR conclusion."
+  },
+  "rtl_generated": false,
+  "hardware_arithmetic_executed": false,
+  "full_host_execution": false,
+  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "weights_or_raw_tensors_in_git": false,
+  "unverified": [
+    "full production Host/kernel/adapter behavioral execution",
+    "whole56-window numerical group then full Down in same new model",
+    "full selected block M128/native/FP32 final",
+    "hardware replay and fixed-resource whole-wall counters",
+    "physical synthesis area and timing"
+  ],
+  "resources": {
+    "new_owner_metadata_bits": 74,
+    "existing_final_value_bits": 131072,
+    "maximum_group_live_bytes": 10240,
+    "new_payload_buffers": 0,
+    "new_sram_arrays": 0,
+    "new_sfu_units": 0,
+    "new_matrix_units": 0,
+    "shared_write_row_bits": 7,
+    "shared_read_cursor_bits": 8,
+    "shared_row_beat_cursor_bits": 4,
+    "fixed_sram_bytes": 786432,
+    "fixed_mac": 4096,
+    "physical_banks": 32,
+    "ports_per_bank": {
+      "read": 1,
+      "write": 1
+    }
+  },
+  "contract": {
+    "fixed_slot": 2,
+    "rows": [
+      16,
+      128
+    ],
+    "full_n": 8960,
+    "activation_input_k": 8960,
+    "cols": [
+      32,
+      64,
+      96,
+      128,
+      160
+    ],
+    "output": "FP32",
+    "packet_bytes": 64,
+    "full_mask": true,
+    "burst_boundary_bytes": 1024,
+    "completion_after_release_verify": true,
+    "read_count": "matching actual response.fire",
+    "ddr_bytes": "matching successful actual DDR ACK",
+    "held_result": "immutable; later abort/late response gates publication through sticky resetRequired",
+    "permissions": "QwenOwnerJob carries no permission bits; original Host checks remain required"
+  },
+  "numeric_captures": [
+    {
+      "summary_sha256": "cfdc6734e7aa09941a04e4636df0b2f00723bedeff63c4118d7dc5cd6d30205b",
+      "status": "PASS_ACTUAL_N1_GATE_UP_SILU_ACT_DDR_ACK_HOST_MODEL_ONLY",
+      "scope": "ACTUAL_N1_DDR_TO_RETAINED_A_GATE_UP_SILU_ACT_DDR_WRITE_ACK_HOST_MODEL_ONLY",
+      "source_sha256": {
+        "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+        "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+        "candidates/qwen2_resident_matrix/ffn_drain/precision_pins.json": "a7baa1874b698257b73b9c816a65fad0630789bf1d283cd6a7a73f9adf86bb33",
+        "candidates/qwen2_resident_matrix/ffn_drain/test_numeric.py": "ed7784de5feab3cc28677b9b8f34cd95be8b2b6d69f6d2162c179f9d804007ac",
+        "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+        "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+        "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+        "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+        "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+        "candidates/qwen2_resident_matrix/ffn_window/numeric_recipe.cpp": "f0bab2fa7520a704711eb8331a6b53b906ecf0035cc21e0c1ccdd0a4481cfc21",
+        "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+        "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+        "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+        "candidates/qwen2_resident_matrix/ffn_drain/source_pins.json": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23",
+        "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch": "eac9bf90e7c482e879f97d06683d72a6ac699ebc633afe3ee9bfec8c2cfbcac2",
+        "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+        "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+        "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+        "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+        "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+        "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+        "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+        "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e"
+      },
+      "source_unchanged_during_capture": true,
+      "post_capture_source_differences": {},
+      "source_composition_snapshot_sha256": {
+        "candidates/qwen2_resident_matrix/ffn_drain/source_pins.json": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23",
+        "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch": "eac9bf90e7c482e879f97d06683d72a6ac699ebc633afe3ee9bfec8c2cfbcac2",
+        "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+        "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+        "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+        "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+        "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+        "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+        "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+        "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e"
+      },
+      "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+      "binary_sha256": "65bd227963d2698944693f9703f65c3204d7fbdd408e4630e58e6389a2cd2ffc",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-frounding-math",
+        "-fPIC",
+        "-shared"
+      ],
+      "wall_seconds": 1.0639624420000473,
+      "host_peak_rss_kib": 110200,
+      "cases": [
+        {
+          "case": {
+            "rows": 16,
+            "cols": 32,
+            "ng": 0,
+            "identity": 1363559168
+          },
+          "directory": "m16_n32_ng0",
+          "windows": [
+            {
+              "role": "gate",
+              "completion": {
+                "tag": 1363559168,
+                "identity": 1363559168,
+                "ng": 0,
+                "slot": 0,
+                "rows": 16,
+                "cols": 32,
+                "status": null,
+                "committed": true,
+                "produced_beats": 32,
+                "ddr_write_bytes": 0
+              },
+              "ddr": {
+                "declared_full_destination_base": 134217728,
+                "declared_full_destination_bytes": 573440,
+                "a_read_bytes": 98304,
+                "b_read_bytes": 98304,
+                "output_write_bytes": 0,
+                "source_n_stride": 8960,
+                "first_b_address": 33554432,
+                "last_b_address": 61061632,
+                "first_b_offset_bytes": 0,
+                "last_b_offset_bytes": 27507200,
+                "expected_first_b_offset_bytes": 0,
+                "expected_last_b_offset_bytes": 27507200
+              },
+              "physical_sram": {
+                "a_bank_word_reads": 37376,
+                "a_bank_word_writes": 37376,
+                "b_bank_word_reads": 3072,
+                "b_bank_word_writes": 3072,
+                "a_bank_bytes_reads": 1196032,
+                "a_bank_bytes_writes": 1196032,
+                "b_bank_bytes_reads": 98304,
+                "b_bank_bytes_writes": 98304
+              },
+              "accepted": {
+                "a_read_descriptors": 1536,
+                "a_read_responses": 1536,
+                "b_read_descriptors": 1536,
+                "b_read_responses": 1536,
+                "matrix_steps": 1536,
+                "matrix_results": 1
+              },
+              "ddr_descriptor_sha256": "b89a39f0da7c004438968bf0cefd740e1d17bf644042a196f4d260844398a960",
+              "ddr_descriptor_record_format": "<cQIQ: kind, byte_address, beats, full_64bit_internal_tag",
+              "actual_a_load_fences_total": 1,
+              "actual_a_lease": {
+                "base": 16777216,
+                "activation_bf16": false,
+                "rows": 16,
+                "k": 1536,
+                "row_stride": 6144,
+                "identity": 1363559168
+              },
+              "accepted_ddr_payload_sha256": {
+                "a": "ab75154372eb177f18136f53e7c008faeb40aedeac59e11fdb38bcd866beed25",
+                "b": "6101231d39701884247da672fcd599e9adcb2ab8ae8f8f542d0d4d639997f50e"
+              },
+              "matrix_packet_sha256": "d057087951c1bb10c19556e0e8c650c8b7408dac7fec5651004648db3d8f392f",
+              "matrix_result_source": "unchanged td_step on actual accepted bank packets",
+              "actual_a_activation_transactions": 1536,
+              "actual_a_rmw_bank_word_commits": 24576,
+              "a_ingress_accounting": "One accepted FP32 activation DDR beat updates 16 physical A bank words; neither count is a hardware cycle count."
+            },
+            {
+              "role": "up",
+              "completion": {
+                "tag": 1363559169,
+                "identity": 1363559168,
+                "ng": 0,
+                "slot": 1,
+                "rows": 16,
+                "cols": 32,
+                "status": null,
+                "committed": true,
+                "produced_beats": 32,
+                "ddr_write_bytes": 0
+              },
+              "ddr": {
+                "declared_full_destination_base": 150994944,
+                "declared_full_destination_bytes": 573440,
+                "a_read_bytes": 0,
+                "b_read_bytes": 98304,
+                "output_write_bytes": 0,
+                "source_n_stride": 8960,
+                "first_b_address": 67108864,
+                "last_b_address": 94616064,
+                "first_b_offset_bytes": 0,
+                "last_b_offset_bytes": 27507200,
+                "expected_first_b_offset_bytes": 0,
+                "expected_last_b_offset_bytes": 27507200
+              },
+              "physical_sram": {
+                "a_bank_word_reads": 12800,
+                "a_bank_word_writes": 512,
+                "b_bank_word_reads": 3072,
+                "b_bank_word_writes": 3072,
+                "a_bank_bytes_reads": 409600,
+                "a_bank_bytes_writes": 16384,
+                "b_bank_bytes_reads": 98304,
+                "b_bank_bytes_writes": 98304
+              },
+              "accepted": {
+                "b_read_descriptors": 1536,
+                "b_read_responses": 1536,
+                "matrix_steps": 1536,
+                "matrix_results": 1
+              },
+              "ddr_descriptor_sha256": "1ec373a04f2349ef1e4e111271aae561953a7b0cb6c2cd29c7d071b50d46cb4b",
+              "ddr_descriptor_record_format": "<cQIQ: kind, byte_address, beats, full_64bit_internal_tag",
+              "actual_a_load_fences_total": 1,
+              "actual_a_lease": {
+                "base": 16777216,
+                "activation_bf16": false,
+                "rows": 16,
+                "k": 1536,
+                "row_stride": 6144,
+                "identity": 1363559168
+              },
+              "accepted_ddr_payload_sha256": {
+                "a": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "b": "e6f48b2734ce88090776bdf5d2c17c18b427c57e8b82f6ff3b4ef3e456ade4f3"
+              },
+              "matrix_packet_sha256": "11788ec8d0149f9f911cad38b60d8b9ea46e1ab0221830fdabd1f2db158935ea",
+              "matrix_result_source": "unchanged td_step on actual accepted bank packets",
+              "actual_a_activation_transactions": 0,
+              "actual_a_rmw_bank_word_commits": 0,
+              "a_ingress_accounting": "One accepted FP32 activation DDR beat updates 16 physical A bank words; neither count is a hardware cycle count."
+            }
+          ],
+          "drain": {
+            "completion": {
+              "tag": 1363559170,
+              "identity": 1363559168,
+              "ng": 0,
+              "rows": 16,
+              "cols": 32,
+              "status": null,
+              "committed": true,
+              "consumed_beats": 32,
+              "ddr_write_bytes": 2048,
+              "model_ticks": 181,
+              "useful_macs": 0,
+              "executed_macs": 0
+            },
+            "ddr": {
+              "full_destination_bytes": 573440,
+              "written_bytes": 2048,
+              "successful_ack_bytes": 2048,
+              "write_descriptors": 16,
+              "successful_acks": 16,
+              "distinct_physical_64b_writes": 32,
+              "untouched_bytes_including_canaries": 571520,
+              "canary_bytes": 128,
+              "all_untouched_bytes_exact": true,
+              "canaries_exact": true,
+              "full_destination_sha256": "64ea4810e37f8457bec434dc38b52b83cdcd608620ece13e92e2388de885bf20",
+              "sentinel_word_hex": "0xa5963cc3"
+            },
+            "accepted": {
+              "ticks": 182,
+              "a_physical_bank_word_reads": 512,
+              "a_physical_bank_word_writes": 0,
+              "b_physical_bank_word_reads": 0,
+              "b_physical_bank_word_writes": 0,
+              "write_command_fire": 16,
+              "write_data_stall_ticks": 5,
+              "write_data_fire": 32,
+              "write_ack_fire": 16,
+              "write_command_stall_ticks": 9,
+              "final_ack_stall_ticks": 5,
+              "final_ack_tick": 179
+            },
+            "tile_port_counters": {
+              "read_requests": 32,
+              "write_requests": 0,
+              "read_responses": 32,
+              "rmw_commits": 0,
+              "logical_read_bytes": 2048,
+              "logical_write_bytes": 0,
+              "physical_read_bytes": 16384,
+              "physical_write_bytes": 0,
+              "aborted": 0,
+              "dense_grants": 86,
+              "response_stall_cycles": 0
+            },
+            "before_final_ack": {
+              "data_bytes": 2048,
+              "ack_bytes": 1920,
+              "slot2_live": true
+            },
+            "hashes": {
+              "descriptor_sha256": "e2f020b198a96e9d0efd6739f6fa195ec207fc0cf793883a7c4e399f772b46aa",
+              "data_sha256": "af3925184fc38a3abda8e10f6c2dd3cc1d138d50b885e8460bd289ad62d783c0",
+              "ack_sha256": "a174e7443b91d5f9e896754a17d57d7cb0ed744d06e87a0400baefd9ea137219",
+              "trace_sha256": "5c85f43a7d7a9b2b016ab3f1eb4cd5873ee53ec5a63c36809d45d085bd254668"
+            },
+            "trace_record": "one JSON object per protocol model tick, including complete physical write masks/data and ACK tag/status/bytes",
+            "actual_output_source": "address-decoded act DDR after all accepted write beats, successful tagged ACKs and terminal result"
+          },
+          "cross_command_spans_disjoint": [
+            {
+              "begin": 16777216,
+              "end_exclusive": 17563648,
+              "region": "n1"
+            },
+            {
+              "begin": 33554432,
+              "end_exclusive": 61079552,
+              "region": "gate_weight"
+            },
+            {
+              "begin": 67108864,
+              "end_exclusive": 94633984,
+              "region": "up_weight"
+            },
+            {
+              "begin": 134217728,
+              "end_exclusive": 134791168,
+              "region": "gate_declared_destination"
+            },
+            {
+              "begin": 150994944,
+              "end_exclusive": 151568384,
+              "region": "up_declared_destination"
+            },
+            {
+              "begin": 167772096,
+              "end_exclusive": 168345664,
+              "region": "sentinel_act_ddr_with_canaries"
+            },
+            {
+              "begin": 268435456,
+              "end_exclusive": 268451840,
+              "region": "declared_prefix_workspace"
+            }
+          ],
+          "actual_a_loaded_once_reused_without_ddr": true,
+          "same_physical_a_banks_across_entire_chain": true,
+          "retained_a_sha256_after_terminal_drain": "07bf0704aab6494ba72f5020e4acc7518e22c716460fd2cdffb632b4692aa2dd",
+          "silu": {
+            "accepted_requests": 32,
+            "port_counters": {
+              "read_requests": 64,
+              "write_requests": 32,
+              "read_responses": 64,
+              "rmw_commits": 32,
+              "logical_read_bytes": 4096,
+              "logical_write_bytes": 2048,
+              "physical_read_bytes": 49152,
+              "physical_write_bytes": 16384,
+              "aborted": 0,
+              "dense_grants": 0,
+              "response_stall_cycles": 128
+            },
+            "owner_external_tile_port": {
+              "owner_idle_ticks": 388,
+              "ctl_fire": 4,
+              "read_fire": 64,
+              "write_fire": 32,
+              "response_fire": 64,
+              "rmw_commit": 32
+            },
+            "arbitration_evidence_scope": "Every SiLU edge clocked the Python owner external tile interface; no Scala/RTL/SFU arbitration execution is claimed.",
+            "bank_event_sha256": "65cade3d2306411936b89d7ea1024fd421c720dbc3554db92a2773a728c53484",
+            "phase_value_sha256": "336e521294055687023718a3b2424a3196a8544697155941e0ca5dedf31ed1fa",
+            "host_phase_exception_flags": {
+              "1": 2626,
+              "0": 446
+            }
+          },
+          "host_wall_seconds": 0.467650026002957,
+          "host_fma_updates": {
+            "physical_packet_arithmetic": 12582912,
+            "post_completion_independent_direct": 1572864
+          },
+          "all_actual_ddr_writes_acks_and_terminal_completed_before_comparison": true,
+          "comparison": {
+            "gate": {
+              "independent_direct_bit_mismatches": 0,
+              "saved_producer_bit_mismatches": 0,
+              "actual_sha256": "dc9521e2e145ce0d453f541f61aeba9406c927f77479d5cc4b6046484efbd44a",
+              "direct_sha256": "dc9521e2e145ce0d453f541f61aeba9406c927f77479d5cc4b6046484efbd44a",
+              "saved_sha256": "dc9521e2e145ce0d453f541f61aeba9406c927f77479d5cc4b6046484efbd44a",
+              "independent_direct_first_difference": null,
+              "saved_producer_first_difference": null
+            },
+            "up": {
+              "independent_direct_bit_mismatches": 0,
+              "saved_producer_bit_mismatches": 0,
+              "actual_sha256": "29a6394d5f52fb04210fd042aed5ba730078df700201b75ed7603641f99742c5",
+              "direct_sha256": "29a6394d5f52fb04210fd042aed5ba730078df700201b75ed7603641f99742c5",
+              "saved_sha256": "29a6394d5f52fb04210fd042aed5ba730078df700201b75ed7603641f99742c5",
+              "independent_direct_first_difference": null,
+              "saved_producer_first_difference": null
+            },
+            "act": {
+              "independent_direct_bit_mismatches": 0,
+              "saved_producer_bit_mismatches": 0,
+              "actual_sha256": "1a57233908924a40a5d88f19cce8a20b2ae25d527e3badace094349920c5c81a",
+              "direct_sha256": "1a57233908924a40a5d88f19cce8a20b2ae25d527e3badace094349920c5c81a",
+              "saved_sha256": "1a57233908924a40a5d88f19cce8a20b2ae25d527e3badace094349920c5c81a",
+              "independent_direct_first_difference": null,
+              "saved_producer_first_difference": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "summary_sha256": "7578cc30b45cd717cb0e7dc3571c1a2e9fffd9c42563dfa39fc3db2c51169cde",
+      "status": "PASS_ACTUAL_N1_GATE_UP_SILU_ACT_DDR_ACK_HOST_MODEL_ONLY",
+      "scope": "ACTUAL_N1_DDR_TO_RETAINED_A_GATE_UP_SILU_ACT_DDR_WRITE_ACK_HOST_MODEL_ONLY",
+      "source_sha256": {
+        "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+        "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+        "candidates/qwen2_resident_matrix/ffn_drain/precision_pins.json": "a7baa1874b698257b73b9c816a65fad0630789bf1d283cd6a7a73f9adf86bb33",
+        "candidates/qwen2_resident_matrix/ffn_drain/test_numeric.py": "ed7784de5feab3cc28677b9b8f34cd95be8b2b6d69f6d2162c179f9d804007ac",
+        "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+        "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+        "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+        "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+        "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+        "candidates/qwen2_resident_matrix/ffn_window/numeric_recipe.cpp": "f0bab2fa7520a704711eb8331a6b53b906ecf0035cc21e0c1ccdd0a4481cfc21",
+        "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+        "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+        "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+        "candidates/qwen2_resident_matrix/ffn_drain/source_pins.json": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23",
+        "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch": "eac9bf90e7c482e879f97d06683d72a6ac699ebc633afe3ee9bfec8c2cfbcac2",
+        "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+        "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+        "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+        "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+        "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+        "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+        "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+        "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e"
+      },
+      "source_unchanged_during_capture": true,
+      "post_capture_source_differences": {},
+      "source_composition_snapshot_sha256": {
+        "candidates/qwen2_resident_matrix/ffn_drain/source_pins.json": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23",
+        "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+        "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch": "eac9bf90e7c482e879f97d06683d72a6ac699ebc633afe3ee9bfec8c2cfbcac2",
+        "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+        "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+        "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+        "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+        "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+        "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+        "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+        "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e"
+      },
+      "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+      "binary_sha256": "65bd227963d2698944693f9703f65c3204d7fbdd408e4630e58e6389a2cd2ffc",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-frounding-math",
+        "-fPIC",
+        "-shared"
+      ],
+      "wall_seconds": 4.150781465003092,
+      "host_peak_rss_kib": 120312,
+      "cases": [
+        {
+          "case": {
+            "rows": 128,
+            "cols": 160,
+            "ng": 160,
+            "identity": 1363559169
+          },
+          "directory": "m128_n160_ng160",
+          "windows": [
+            {
+              "role": "gate",
+              "completion": {
+                "tag": 1363559169,
+                "identity": 1363559169,
+                "ng": 160,
+                "slot": 0,
+                "rows": 128,
+                "cols": 160,
+                "status": null,
+                "committed": true,
+                "produced_beats": 1280,
+                "ddr_write_bytes": 0
+              },
+              "ddr": {
+                "declared_full_destination_base": 134217728,
+                "declared_full_destination_bytes": 4587520,
+                "a_read_bytes": 786432,
+                "b_read_bytes": 491520,
+                "output_write_bytes": 0,
+                "source_n_stride": 8960,
+                "first_b_address": 33554752,
+                "last_b_address": 61062208,
+                "first_b_offset_bytes": 320,
+                "last_b_offset_bytes": 27507776,
+                "expected_first_b_offset_bytes": 320,
+                "expected_last_b_offset_bytes": 27507776
+              },
+              "physical_sram": {
+                "a_bank_word_reads": 278528,
+                "a_bank_word_writes": 229376,
+                "b_bank_word_reads": 15360,
+                "b_bank_word_writes": 15360,
+                "a_bank_bytes_reads": 8912896,
+                "a_bank_bytes_writes": 7340032,
+                "b_bank_bytes_reads": 491520,
+                "b_bank_bytes_writes": 491520
+              },
+              "accepted": {
+                "a_read_descriptors": 12288,
+                "a_read_responses": 12288,
+                "b_read_descriptors": 7680,
+                "b_read_responses": 7680,
+                "matrix_steps": 7680,
+                "matrix_results": 5
+              },
+              "ddr_descriptor_sha256": "1d4598ff12dc96765a4c538054812acc82bb128d8a8fba21babc82c441b60c87",
+              "ddr_descriptor_record_format": "<cQIQ: kind, byte_address, beats, full_64bit_internal_tag",
+              "actual_a_load_fences_total": 1,
+              "actual_a_lease": {
+                "base": 16777216,
+                "activation_bf16": false,
+                "rows": 128,
+                "k": 1536,
+                "row_stride": 6144,
+                "identity": 1363559169
+              },
+              "accepted_ddr_payload_sha256": {
+                "a": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d",
+                "b": "f51e49d517d1a7ca4ea782cdd966f50dd666b6b2e317fea1f62630c46807fe30"
+              },
+              "matrix_packet_sha256": "1331b40291fd3a55d5d3397bf5c048b4c869aed4a804b74d0b5eb9e22de83ac0",
+              "matrix_result_source": "unchanged td_step on actual accepted bank packets",
+              "actual_a_activation_transactions": 12288,
+              "actual_a_rmw_bank_word_commits": 196608,
+              "a_ingress_accounting": "One accepted FP32 activation DDR beat updates 16 physical A bank words; neither count is a hardware cycle count."
+            },
+            {
+              "role": "up",
+              "completion": {
+                "tag": 1363559170,
+                "identity": 1363559169,
+                "ng": 160,
+                "slot": 1,
+                "rows": 128,
+                "cols": 160,
+                "status": null,
+                "committed": true,
+                "produced_beats": 1280,
+                "ddr_write_bytes": 0
+              },
+              "ddr": {
+                "declared_full_destination_base": 150994944,
+                "declared_full_destination_bytes": 4587520,
+                "a_read_bytes": 0,
+                "b_read_bytes": 491520,
+                "output_write_bytes": 0,
+                "source_n_stride": 8960,
+                "first_b_address": 67109184,
+                "last_b_address": 94616640,
+                "first_b_offset_bytes": 320,
+                "last_b_offset_bytes": 27507776,
+                "expected_first_b_offset_bytes": 320,
+                "expected_last_b_offset_bytes": 27507776
+              },
+              "physical_sram": {
+                "a_bank_word_reads": 81920,
+                "a_bank_word_writes": 20480,
+                "b_bank_word_reads": 15360,
+                "b_bank_word_writes": 15360,
+                "a_bank_bytes_reads": 2621440,
+                "a_bank_bytes_writes": 655360,
+                "b_bank_bytes_reads": 491520,
+                "b_bank_bytes_writes": 491520
+              },
+              "accepted": {
+                "b_read_descriptors": 7680,
+                "b_read_responses": 7680,
+                "matrix_steps": 7680,
+                "matrix_results": 5
+              },
+              "ddr_descriptor_sha256": "a790429995ecb99408982e8f4f886bf4be3b2933e8db4cedbf93a6afec676abb",
+              "ddr_descriptor_record_format": "<cQIQ: kind, byte_address, beats, full_64bit_internal_tag",
+              "actual_a_load_fences_total": 1,
+              "actual_a_lease": {
+                "base": 16777216,
+                "activation_bf16": false,
+                "rows": 128,
+                "k": 1536,
+                "row_stride": 6144,
+                "identity": 1363559169
+              },
+              "accepted_ddr_payload_sha256": {
+                "a": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "b": "42a1b8d46c4c7a5b690d1dbd8807f185a6064b15c8a5718ab3541c5d2539266a"
+              },
+              "matrix_packet_sha256": "2eb7d7c0cac764175e1ec1c31014e8467ad6bd52386a8d099c3069ffaf1b5e26",
+              "matrix_result_source": "unchanged td_step on actual accepted bank packets",
+              "actual_a_activation_transactions": 0,
+              "actual_a_rmw_bank_word_commits": 0,
+              "a_ingress_accounting": "One accepted FP32 activation DDR beat updates 16 physical A bank words; neither count is a hardware cycle count."
+            }
+          ],
+          "drain": {
+            "completion": {
+              "tag": 1363559171,
+              "identity": 1363559169,
+              "ng": 160,
+              "rows": 128,
+              "cols": 160,
+              "status": null,
+              "committed": true,
+              "consumed_beats": 1280,
+              "ddr_write_bytes": 81920,
+              "model_ticks": 5774,
+              "useful_macs": 0,
+              "executed_macs": 0
+            },
+            "ddr": {
+              "full_destination_bytes": 4587520,
+              "written_bytes": 81920,
+              "successful_ack_bytes": 81920,
+              "write_descriptors": 256,
+              "successful_acks": 256,
+              "distinct_physical_64b_writes": 1280,
+              "untouched_bytes_including_canaries": 4505728,
+              "canary_bytes": 128,
+              "all_untouched_bytes_exact": true,
+              "canaries_exact": true,
+              "full_destination_sha256": "7c24c46397440d51ac76c6ccbd79c89ca206752610ad8899ff5bde081ce44695",
+              "sentinel_word_hex": "0xa5963cc3"
+            },
+            "accepted": {
+              "ticks": 5775,
+              "a_physical_bank_word_reads": 20480,
+              "a_physical_bank_word_writes": 0,
+              "b_physical_bank_word_reads": 0,
+              "b_physical_bank_word_writes": 0,
+              "write_command_fire": 256,
+              "write_data_fire": 1280,
+              "write_data_stall_ticks": 113,
+              "write_ack_fire": 256,
+              "write_command_stall_ticks": 22,
+              "final_ack_stall_ticks": 5,
+              "final_ack_tick": 5772
+            },
+            "tile_port_counters": {
+              "read_requests": 1280,
+              "write_requests": 0,
+              "read_responses": 1280,
+              "rmw_commits": 0,
+              "logical_read_bytes": 81920,
+              "logical_write_bytes": 0,
+              "physical_read_bytes": 655360,
+              "physical_write_bytes": 0,
+              "aborted": 0,
+              "dense_grants": 1935,
+              "response_stall_cycles": 0
+            },
+            "before_final_ack": {
+              "data_bytes": 81920,
+              "ack_bytes": 81664,
+              "slot2_live": true
+            },
+            "hashes": {
+              "descriptor_sha256": "60a713f1b3ee120c37b61d83f2d1ec2a0f9e449ca41de1f423d7c2b3d994bcad",
+              "data_sha256": "8f9c9198eb79d2bd2822d2d2bcc2db308fbb9c44a4a4a6ede10f8e0782ab6d87",
+              "ack_sha256": "75cf4dafa518b3e5c69395285c90505a537156f2dcf1ea334dfa45d4773a7ddb",
+              "trace_sha256": "4ba78505990f9ba44583e1395705678e8a0bbcab488b1a1e0085238fdd39775a"
+            },
+            "trace_record": "one JSON object per protocol model tick, including complete physical write masks/data and ACK tag/status/bytes",
+            "actual_output_source": "address-decoded act DDR after all accepted write beats, successful tagged ACKs and terminal result"
+          },
+          "cross_command_spans_disjoint": [
+            {
+              "begin": 16777216,
+              "end_exclusive": 17563648,
+              "region": "n1"
+            },
+            {
+              "begin": 33554432,
+              "end_exclusive": 61079552,
+              "region": "gate_weight"
+            },
+            {
+              "begin": 67108864,
+              "end_exclusive": 94633984,
+              "region": "up_weight"
+            },
+            {
+              "begin": 134217728,
+              "end_exclusive": 138805248,
+              "region": "gate_declared_destination"
+            },
+            {
+              "begin": 150994944,
+              "end_exclusive": 155582464,
+              "region": "up_declared_destination"
+            },
+            {
+              "begin": 167772096,
+              "end_exclusive": 172359744,
+              "region": "sentinel_act_ddr_with_canaries"
+            },
+            {
+              "begin": 268435456,
+              "end_exclusive": 268451840,
+              "region": "declared_prefix_workspace"
+            }
+          ],
+          "actual_a_loaded_once_reused_without_ddr": true,
+          "same_physical_a_banks_across_entire_chain": true,
+          "retained_a_sha256_after_terminal_drain": "5d81c8dfb6bc8a9ab9799d6a30ba2bc40bb6da86c47347b23dbdb5d020b26b1b",
+          "silu": {
+            "accepted_requests": 1280,
+            "port_counters": {
+              "read_requests": 2560,
+              "write_requests": 1280,
+              "read_responses": 2560,
+              "rmw_commits": 1280,
+              "logical_read_bytes": 163840,
+              "logical_write_bytes": 81920,
+              "physical_read_bytes": 1966080,
+              "physical_write_bytes": 655360,
+              "aborted": 0,
+              "dense_grants": 0,
+              "response_stall_cycles": 5120
+            },
+            "owner_external_tile_port": {
+              "owner_idle_ticks": 15364,
+              "ctl_fire": 4,
+              "read_fire": 2560,
+              "write_fire": 1280,
+              "response_fire": 2560,
+              "rmw_commit": 1280
+            },
+            "arbitration_evidence_scope": "Every SiLU edge clocked the Python owner external tile interface; no Scala/RTL/SFU arbitration execution is claimed.",
+            "bank_event_sha256": "b49e44c0bf295cb40e5a406201bc53977093fb376f7bf88756565d3a29a3c351",
+            "phase_value_sha256": "d4d92c271bed69467914054025fd7996cb03b8f243eb474857c561f1bf82ae3c",
+            "host_phase_exception_flags": {
+              "1": 105740,
+              "0": 17140
+            }
+          },
+          "host_wall_seconds": 3.452180505999422,
+          "host_fma_updates": {
+            "physical_packet_arithmetic": 62914560,
+            "post_completion_independent_direct": 62914560
+          },
+          "all_actual_ddr_writes_acks_and_terminal_completed_before_comparison": true,
+          "comparison": {
+            "gate": {
+              "independent_direct_bit_mismatches": 0,
+              "saved_producer_bit_mismatches": 0,
+              "actual_sha256": "6cd5ba5cd50fc2c1bfaa9182d26ad9252c99f2f9d2b15c4bd617f01c513fd6bd",
+              "direct_sha256": "6cd5ba5cd50fc2c1bfaa9182d26ad9252c99f2f9d2b15c4bd617f01c513fd6bd",
+              "saved_sha256": "6cd5ba5cd50fc2c1bfaa9182d26ad9252c99f2f9d2b15c4bd617f01c513fd6bd",
+              "independent_direct_first_difference": null,
+              "saved_producer_first_difference": null
+            },
+            "up": {
+              "independent_direct_bit_mismatches": 0,
+              "saved_producer_bit_mismatches": 0,
+              "actual_sha256": "ad399aa53f8d4e927f9a871ddbd26beefab3469260cc2da1d0c2fd7144ca1b14",
+              "direct_sha256": "ad399aa53f8d4e927f9a871ddbd26beefab3469260cc2da1d0c2fd7144ca1b14",
+              "saved_sha256": "ad399aa53f8d4e927f9a871ddbd26beefab3469260cc2da1d0c2fd7144ca1b14",
+              "independent_direct_first_difference": null,
+              "saved_producer_first_difference": null
+            },
+            "act": {
+              "independent_direct_bit_mismatches": 0,
+              "saved_producer_bit_mismatches": 0,
+              "actual_sha256": "5b390f909ac22095de3a07251cf4b449ea3473cc070e051b2c5acb4f90f863ed",
+              "direct_sha256": "5b390f909ac22095de3a07251cf4b449ea3473cc070e051b2c5acb4f90f863ed",
+              "saved_sha256": "5b390f909ac22095de3a07251cf4b449ea3473cc070e051b2c5acb4f90f863ed",
+              "independent_direct_first_difference": null,
+              "saved_producer_first_difference": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "independent_trace_reconstruction": {
+    "sha256": "099a3f66bc532f8d9cde47bccc72ffd8cd592917fefb8867215f184bd6c49bbc",
+    "scope": "read-only trace/source/output verification, no arithmetic replay or RTL",
+    "cases": [
+      {
+        "capture": "m16_ng0_0026",
+        "summary_sha256": "cfdc6734e7aa09941a04e4636df0b2f00723bedeff63c4118d7dc5cd6d30205b",
+        "status": "PASS_INDEPENDENT_TRACE_RECONSTRUCTION",
+        "rows": 16,
+        "cols": 32,
+        "ng": 0,
+        "actual_ddr_bytes": 2048,
+        "write_beats": 32,
+        "distinct_acks": 16,
+        "whole_ddr_and_canaries_equal": true,
+        "six_comparisons_bit_exact": true,
+        "source_identity_current": true
+      },
+      {
+        "capture": "m128_ng160_0026",
+        "summary_sha256": "7578cc30b45cd717cb0e7dc3571c1a2e9fffd9c42563dfa39fc3db2c51169cde",
+        "status": "PASS_INDEPENDENT_TRACE_RECONSTRUCTION",
+        "rows": 128,
+        "cols": 160,
+        "ng": 160,
+        "actual_ddr_bytes": 81920,
+        "write_beats": 1280,
+        "distinct_acks": 256,
+        "whole_ddr_and_canaries_equal": true,
+        "six_comparisons_bit_exact": true,
+        "source_identity_current": true
+      }
+    ]
+  },
+  "superseded_frontend": {
+    "summary_sha256": "6103e16f278ecbb72b8e4ca853cd049ef6e4236e3af207f322a85988fbc9de8d",
+    "status": "PASS_FFN_DRAIN_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+    "reason": "Provisional PASS on earlier source. Successor fixes unsolicited-return same-edge admission/poison; old evidence is not rebound to final source."
+  }
+}

@@ -52,6 +52,8 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_host -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_tiles -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_window -p 'test_*.py' -v
+          python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_drain -p 'test_*.py' -v
+          python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_group -p 'test_*.py' -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure
@@ -66,6 +68,8 @@ jobs:
           python candidates/qwen2_resident_matrix/transposed_host/check_frontend.py --out work/matrix-interface-frontend/transposed-host --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/ffn_tiles/check_frontend.py --out work/matrix-interface-frontend/ffn-tiles --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/ffn_window/check_frontend.py --out work/matrix-interface-frontend/ffn-window --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
+          python candidates/qwen2_resident_matrix/ffn_drain/check_frontend.py --out work/matrix-interface-frontend/ffn-drain --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
+          python candidates/qwen2_resident_matrix/ffn_group/check_frontend.py --out work/matrix-interface-frontend/ffn-group --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

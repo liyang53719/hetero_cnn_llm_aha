@@ -1,0 +1,436 @@
+--- a/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
+@@ -8,8 +8,9 @@
+   * anonymous StreamingDenseOwner IO exactly. The candidate patch replaces
+   * only that declaration, so elaboration selects ONE Dense implementation.
+   */
+-class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false) extends Bundle {
+-  val window=if(enableFfnWindow)Some(new FfnWindowPort)else None
++class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false) extends Bundle {
++  val drain=if(enableFfnDrain)Some(new FfnDrainPort)else None
++  val window=if(enableFfnWindow)Some(new FfnWindowPort(enableFfnDrain))else None
+   val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder=enableFfnWindow))else None
+   val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
+   val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
+@@ -29,13 +30,16 @@
+   val job=new QwenOwnerJob
+   val identity=UInt(32.W);val ng=UInt(16.W);val cols=UInt(8.W);val slot=UInt(2.W);val reuseA=Bool()
+ }
+-class FfnWindowResult extends Bundle {
++class FfnWindowResult(enableCounters:Boolean=false) extends Bundle {
++  val cycles=if(enableCounters)Some(UInt(64.W))else None
++  val usefulMacs=if(enableCounters)Some(UInt(64.W))else None
++  val executedMacs=if(enableCounters)Some(UInt(64.W))else None
+   val tag=UInt(32.W);val identity=UInt(32.W);val ng=UInt(16.W);val cols=UInt(8.W);val slot=UInt(2.W)
+   val rows=UInt(8.W);val status=UInt(8.W);val committed=Bool();val producedBeats=UInt(11.W)
+   val ddrWriteBytes=UInt(64.W)
+ }
+-class FfnWindowPort extends Bundle {
+-  val request=Flipped(Decoupled(new FfnWindowRequest));val result=Decoupled(new FfnWindowResult)
++class FfnWindowPort(enableCounters:Boolean=false) extends Bundle {
++  val request=Flipped(Decoupled(new FfnWindowRequest));val result=Decoupled(new FfnWindowResult(enableCounters))
+   val invalidateLease=Input(Bool())
+   val busy=Output(Bool());val leaseValid=Output(Bool());val resetRequired=Output(Bool())
+ }
+@@ -43,3 +47,21 @@
+   val base=UInt(64.W);val activationBf16=Bool();val rows=UInt(16.W);val k=UInt(16.W)
+   val rowStride=UInt(64.W);val identity=UInt(32.W)
+ }
++
++/** Independent typed Activation drain. No public Host command/completion ABI.
++  * The complete job retains the full FP32 Gate/Up/Act spans and N=K=8960.
++  * Slot 2 is fixed; only identity and a bounded column window are selectable.
++  */
++class FfnDrainRequest extends Bundle {
++  val job=new QwenOwnerJob
++  val identity=UInt(32.W);val ng=UInt(16.W);val cols=UInt(8.W)
++}
++class FfnDrainResult extends Bundle {
++  val tag=UInt(32.W);val identity=UInt(32.W);val ng=UInt(16.W);val rows=UInt(8.W);val cols=UInt(8.W)
++  val status=UInt(8.W);val committed=Bool();val consumedBeats=UInt(11.W);val ddrWriteBytes=UInt(64.W)
++  val cycles=UInt(64.W);val usefulMacs=UInt(64.W);val executedMacs=UInt(64.W)
++}
++class FfnDrainPort extends Bundle {
++  val request=Flipped(Decoupled(new FfnDrainRequest));val result=Decoupled(new FfnDrainResult)
++  val abort=Input(Bool());val busy=Output(Bool());val resetRequired=Output(Bool())
++}
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
+@@ -703,9 +703,10 @@
+ }
+ 
+ /** Selected chunk-major extension; same physical banks, service, and seed leaf. */
+-class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false) extends Module {
++class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false) extends Module {
++  require(!enableFfnDrain || enableFfnTiles,"act drain requires the shared tile banks")
+   require(!enableFfnWindow || enableFfnTiles,"internal window requires the shared tile banks")
+-  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow))
++  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain))
+   val idle::clearA::aReq::aWait::aFence::setup::execute::drain::finish::locked::Nil=Enum(10)
+   val state=RegInit(idle);val job=Reg(new QwenOwnerJob)
+   val status=RegInit(0.U(8.W));val cycles=RegInit(0.U(64.W));val bytes=RegInit(0.U(64.W))
+@@ -748,6 +749,15 @@
+   val windowPhase=if(enableFfnWindow)Some(RegInit(0.U(3.W)))else None // 1 begin,2 verify,3 run,4 seal,5 retire
+   val aLease=if(enableFfnWindow)Some(Reg(new FfnALease))else None
+   val aLeaseValid=if(enableFfnWindow)Some(RegInit(false.B))else None
++  val drainActive=if(enableFfnDrain)Some(RegInit(false.B))else None
++  val drainIdentity=if(enableFfnDrain)Some(Reg(UInt(32.W)))else None
++  val drainNg=if(enableFfnDrain)Some(Reg(UInt(16.W)))else None
++  val drainCols=if(enableFfnDrain)Some(Reg(UInt(8.W)))else None
++  val drainPhase=if(enableFfnDrain)Some(RegInit(0.U(3.W)))else None
++  val drainReadPending=if(enableFfnDrain)Some(RegInit(false.B))else None
++  val drainConsumed=if(enableFfnDrain)Some(RegInit(0.U(11.W)))else None
++  val drainCommitted=if(enableFfnDrain)Some(RegInit(false.B))else None
++  val drainPoison=if(enableFfnDrain)Some(RegInit(false.B))else None
+   val workspace=Reg(new TransposedPrefixWorkspace(2560))
+   val chunkBase=RegInit(0.U(16.W))
+   val committedPrefixEnd=RegInit(0.U(16.W))
+@@ -797,8 +807,9 @@
+   when(seed.ack.valid && !seed.ack.ready && seedState=/=seedAck){fail(Status.Protocol.U)}
+   val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow))
+   if(enableFfnTiles){banks.io.tiles.get<>io.tiles.get;banks.io.tileEnable.get:=state===idle}
+-  if(enableFfnWindow){
+-    val p=banks.io.tiles.get;val external=io.tiles.get;val active=windowActive.get
++  if(enableFfnWindow || enableFfnDrain){
++    val p=banks.io.tiles.get;val external=io.tiles.get
++    val active=if(enableFfnDrain)drainActive.get || windowActive.getOrElse(false.B)else windowActive.get
+     // Exclusive ownership also covers begin, seal, drain and a stalled result.
+     external.control.ready:= !active && p.control.ready
+     external.write.ready:= !active && p.write.ready
+@@ -809,6 +820,7 @@
+     p.response.ready:= !active && external.response.ready
+     external.response.valid:= !active && p.response.valid
+     p.abort:=external.abort || (active && status=/=0.U)
++    if(enableFfnDrain){p.abort:=external.abort || io.drain.get.abort || drainPoison.get || (active && status=/=0.U)}
+     banks.io.tileEnable.get:=state===idle || active
+   }
+   banks.io.zero.valid:=state===clearA; banks.io.zero.bits:=zeroWord
+@@ -861,7 +873,7 @@
+ 
+   io.job.ready:=state===idle
+   if(enableFfnTiles){io.job.ready:=state===idle && !banks.io.tiles.get.busy && !io.tiles.get.control.valid && !io.tiles.get.write.valid && !io.tiles.get.read.valid && !io.tiles.get.abort}
+-  io.done.valid:=(if(enableFfnWindow)state===finish && !windowActive.get else state===finish);io.done.bits.tag:=job.tag;io.done.bits.status:=status
++  io.done.valid:=(if(enableFfnDrain)state===finish && !drainActive.get && !windowActive.getOrElse(false.B)else if(enableFfnWindow)state===finish && !windowActive.get else state===finish);io.done.bits.tag:=job.tag;io.done.bits.status:=status
+   io.done.bits.writeBytes:=bytes;io.done.bits.cycles:=cycles;io.done.bits.usefulMacs:=useful
+   io.done.bits.executedMacs:=(io.physicalSteps-physicalBase)*512.U
+   io.resetRequired:=(if(enableFfnTiles)(status=/=0.U) || banks.io.tiles.get.resetRequired || io.tiles.get.abort else status=/=0.U);io.issueCycles:=issued;io.operandStalls:=starved
+@@ -922,13 +934,18 @@
+   val finalOutputAddress=job.dst+(writeRow.pad(64)*job.n+nBase+(writeContext.pad(64)<<5)+
+     Mux(writeBeat,16.U(64.W),0.U(64.W)))*outputBytes
+   val prefixOutputAddress=workspace.base+((nBase.pad(64)>>5)+writeContext)*16384.U+(prefixWriteIndex.pad(64)<<6)
+-  val outputAddress=Mux(savingPrefix,prefixOutputAddress,finalOutputAddress)
++  val drainRowBeat=if(enableFfnDrain)Some(Cat(writeContext,writeBeat))else None
++  val drainOutputAddress=if(enableFfnDrain)Some(job.dst+(writeRow.pad(64)*job.n+drainNg.get+(drainRowBeat.get.pad(64)<<4))*4.U)else None
++  val outputAddress=if(enableFfnDrain)Mux(drainActive.get,drainOutputAddress.get,Mux(savingPrefix,prefixOutputAddress,finalOutputAddress))else Mux(savingPrefix,prefixOutputAddress,finalOutputAddress)
+   def outputPacket(beat:UInt):UInt={
+     // Y[m,n] = physical[n%16][32*(4*(n/16)+m/32)+m%32].
+     val fp32=VecInit((0 until 16).map(n=>finalValue(n)(Cat(beat(0),writeRow)))).asUInt
+     val bf16=VecInit((0 until 32).map(n=>TensorMath.bf16Rne(finalValue(n%16)(Cat((n/16).U(1.W),writeRow))))).asUInt
+     val prefix=VecInit((0 until 16).map(i=>finalValue(prefixWriteIndex(7,4))(Cat(prefixWriteIndex(3,0),i.U(4.W))))).asUInt
+-    Mux(savingPrefix,prefix,Mux(job.outputBf16,bf16,fp32))
++    if(enableFfnDrain){
++      val act=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))((beat.pad(8)<<4)+i.U))).asUInt
++      Mux(drainActive.get,act,Mux(savingPrefix,prefix,Mux(job.outputBf16,bf16,fp32)))
++    }else Mux(savingPrefix,prefix,Mux(job.outputBf16,bf16,fp32))
+   }
+   val prefixStoreLegal=(nBase.pad(17)>>5)+writeContext===savedContexts &&
+     (!restoring || (nBase.pad(17)>>5)+writeContext<restoredContexts)
+@@ -939,14 +956,14 @@
+   io.memory.valid:=false.B;io.memory.bits:=0.U.asTypeOf(new MemoryRequest);io.response.ready:=false.B
+   if(burstWrites){
+     val port=io.writeRequest.get
+-    val remaining=outputBeats-writeBeat.asUInt
++    val remaining=if(enableFfnDrain)Mux(drainActive.get,(drainCols.get>>4)-drainRowBeat.get,outputBeats-writeBeat.asUInt)else outputBeats-writeBeat.asUInt
+     val page=16.U(5.W)-outputAddress(9,6)
+     port.valid:=state===execute && writeState===writeReq && status===0.U && (!savingPrefix || prefixStoreLegal)
+     if(enableFfnWindow){when(windowActive.get){port.valid:=false.B}}
+-    port.bits.address:=outputAddress;port.bits.beats:=Mux(savingPrefix,1.U,Mux(remaining<page,remaining,page))
++    port.bits.address:=outputAddress;port.bits.beats:=(if(enableFfnDrain)Mux(drainActive.get,Mux(remaining<page,remaining,page),Mux(savingPrefix,1.U,Mux(remaining<page,remaining,page)))else Mux(savingPrefix,1.U,Mux(remaining<page,remaining,page)))
+     port.bits.tag:=Cat(job.tag,writeSequence)
+     io.writeData.get.valid:=writeActive && writeState===writeData
+-    io.writeData.get.bits.data:=outputPacket(writeBeat.asUInt+writeIndex)
++    io.writeData.get.bits.data:=outputPacket(if(enableFfnDrain)Mux(drainActive.get,drainRowBeat.get+writeIndex,writeBeat.asUInt+writeIndex)else writeBeat.asUInt+writeIndex)
+     io.writeData.get.bits.last:=writeIndex+1.U===writeCount
+     io.writeResponse.get.ready:=writeActive && writeState===writeWait
+     when(port.fire){writeTag:=port.bits.tag;writeCount:=port.bits.beats;writeIndex:=0.U;writeState:=writeData}
+@@ -956,13 +973,13 @@
+     io.memory.valid:=state===execute && writeState===writeReq && status===0.U && (!savingPrefix || prefixStoreLegal)
+     if(enableFfnWindow){when(windowActive.get){io.memory.valid:=false.B}}
+     io.memory.bits.write:=true.B;io.memory.bits.address:=outputAddress
+-    io.memory.bits.data:=outputPacket(writeBeat.asUInt);io.memory.bits.mask:=Fill(64,1.U(1.W))
++    io.memory.bits.data:=outputPacket(if(enableFfnDrain)Mux(drainActive.get,drainRowBeat.get,writeBeat.asUInt)else writeBeat.asUInt);io.memory.bits.mask:=Fill(64,1.U(1.W))
+     io.memory.bits.tag:=Cat(job.tag,writeSequence)
+     io.response.ready:=writeActive && writeState===writeWait
+     when(io.memory.fire){writeTag:=io.memory.bits.tag;writeState:=writeWait}
+     ackFire:=io.response.fire;ackBits:=io.response.bits
+   }
+-  when(ackFire){
++  when(if(enableFfnDrain)ackFire && !drainActive.get else ackFire){
+     when(ackBits.error || ackBits.tag=/=writeTag){
+       fail(Mux(ackBits.error,Status.Memory.U,Status.Protocol.U));writeState:=writeIdle
+     }.otherwise{
+@@ -1165,7 +1182,7 @@
+     }
+   }
+   }
+-  when(status=/=0.U && state=/=idle && state=/=finish && state=/=locked){
++  when(if(enableFfnDrain)status=/=0.U && state=/=idle && state=/=finish && state=/=locked && !drainActive.get else status=/=0.U && state=/=idle && state=/=finish && state=/=locked){
+     state:=drain;aCommitted:=false.B;prefixValid:=false.B;halfReady:=VecInit(Seq.fill(2)(false.B));aHighPending:=false.B
+     when(loadState===loadReq){loadState:=loadIdle}
+     when(writeState===writeReq){writeState:=writeIdle}
+@@ -1193,6 +1210,10 @@
+     w.result.bits.status:=status;w.result.bits.committed:=windowCommitted.get
+     // A tag is not necessarily live after admission rejection. Never report another slot's work.
+     w.result.bits.producedBeats:=Mux(windowBegun.get && exact,t.produced,0.U);w.result.bits.ddrWriteBytes:=0.U
++    if(enableFfnDrain){
++      w.result.bits.cycles.get:=cycles;w.result.bits.usefulMacs.get:=useful
++      w.result.bits.executedMacs.get:=(io.physicalSteps-physicalBase)*512.U
++    }
+     when(w.request.fire){
+       val r=w.request.bits;val j=r.job;val lease=aLease.get;val ws=io.prefixWorkspace.get
+       workspace:=ws
+@@ -1298,5 +1319,153 @@
+     when(w.result.fire){windowActive.get:=false.B;phase:=0.U;state:=Mux(status===0.U && !io.resetRequired,idle,locked)}
+     when(w.result.valid){assert(!io.done.valid && bytes===0.U,"internal window cannot masquerade as DDR completion")}
+   }
++  if(enableFfnDrain){
++    val d=io.drain.get;val p=banks.io.tiles.get;val active=drainActive.get
++    val phase=drainPhase.get;val pending=drainReadPending.get;val t=p.state(2)
++    val expected=(job.m>>4)*drainCols.get
++    val index=(writeRow.pad(11)>>4)*drainCols.get+prefixWriteIndex
++    val exact=t.live && t.sealedTile && t.identity===drainIdentity.get && t.ng===drainNg.get &&
++      t.rows===job.m && t.cols===drainCols.get && t.expected===expected && t.produced===expected &&
++      !t.matrixProducerOrder.getOrElse(false.B)
++    val rawAck=if(burstWrites)io.writeResponse.get.valid else io.response.valid
++    val unexpectedAck=if(burstWrites)rawAck && writeState=/=writeWait && writeState=/=writeData else rawAck && writeState=/=writeWait
++    val activeUnexpected=p.response.valid && !pending || unexpectedAck || io.matrix.result.valid || io.burstResponse.valid
++    val bad=io.tiles.get.abort || d.abort || p.resetRequired || drainPoison.get || status=/=0.U || (active && activeUnexpected)
++    val ackGood=ackFire && !ackBits.error && ackBits.tag===writeTag
++    val matching=p.response.bits.key.slot===2.U && p.response.bits.key.identity===drainIdentity.get &&
++      p.response.bits.key.ng===drainNg.get && p.response.bits.key.index===index
++    val noExternal= !io.tiles.get.control.valid && !io.tiles.get.write.valid && !io.tiles.get.read.valid
++    val windowIdle= !windowActive.getOrElse(false.B)
++    val idleUnexpected=state===idle && (rawAck || io.burstResponse.valid || io.matrix.result.valid)
++    d.request.ready:=state===idle && !active && windowIdle &&
++      !io.window.map(_.request.valid).getOrElse(false.B) && !p.busy && p.drained && noExternal && !bad && !idleUnexpected
++    // Window has priority over drain, drain has priority over the normal job.
++    io.job.ready:=state===idle && windowIdle && !active && !d.request.valid && !io.window.map(_.request.valid).getOrElse(false.B) && !p.busy && noExternal && !bad && !idleUnexpected
++    if(enableFfnWindow){io.window.get.request.ready:=state===idle && windowIdle && !active && !p.busy && p.drained && noExternal && !bad && !idleUnexpected}
++    d.busy:=active;d.resetRequired:=io.resetRequired
++    io.resetRequired:=(status=/=0.U) || p.resetRequired || io.tiles.get.abort || drainPoison.get || d.abort || idleUnexpected || (active && activeUnexpected)
++    d.result.valid:=active && state===finish
++    d.result.bits.tag:=job.tag;d.result.bits.identity:=drainIdentity.get;d.result.bits.ng:=drainNg.get
++    d.result.bits.rows:=job.m;d.result.bits.cols:=drainCols.get;d.result.bits.status:=status
++    d.result.bits.committed:=drainCommitted.get;d.result.bits.consumedBeats:=drainConsumed.get
++    d.result.bits.ddrWriteBytes:=bytes;d.result.bits.cycles:=cycles;d.result.bits.usefulMacs:=useful
++    d.result.bits.executedMacs:=(io.physicalSteps-physicalBase)*512.U
++    when(d.request.fire){
++      val r=d.request.bits;val j=r.job;val ws=io.prefixWorkspace.get
++      // Activation's k is its input width, not a Dense reduction dimension.
++      val size=j.m.pad(66)*j.n*4.U
++      val aEnd=j.a.pad(66)+size;val bEnd=j.b.pad(66)+size;val dEnd=j.dst.pad(66)+size
++      val pEnd=ws.base.pad(66)+ws.extent.pad(66)
++      val spans=Seq((j.a,aEnd),(j.b,bEnd),(j.dst,dEnd))
++      val disjoint=(for(i<-spans.indices;k<-i+1 until spans.size)yield
++        !(spans(i)._1.pad(66)<spans(k)._2 && spans(k)._1.pad(66)<spans(i)._2)).reduce(_&&_)
++      val workspaceOK=ws.valid && ws.base(5,0)===0.U && ws.extent=/=0.U && pEnd<=(BigInt(1)<<56).U &&
++        ws.generation=/=0.U && ws.splitK=/=0.U && ws.splitK<=2560.U && ws.splitK(6,0)===0.U &&
++        spans.map{case(base,end)=> !(ws.base.pad(66)<end && base.pad(66)<pEnd)}.reduce(_&&_)
++      val shape=j.kind===QwenOwnerKind.Activation.U && (j.m===16.U || j.m===128.U) &&
++        j.n===8960.U && j.k===8960.U && !j.activationBf16 && !j.weightBf16 && !j.outputBf16 &&
++        j.writeBytes===size && disjoint && workspaceOK &&
++        spans.map{case(base,end)=>base(5,0)===0.U && end<=(BigInt(1)<<56).U}.reduce(_&&_) &&
++        r.identity=/=0.U && r.ng(4,0)===0.U && r.cols>0.U && r.cols<=160.U && r.cols(4,0)===0.U &&
++        r.ng.pad(17)+&r.cols.pad(17)<=j.n.pad(18)
++      val slotOK=t.live && t.sealedTile && t.identity===r.identity && t.ng===r.ng && t.rows===j.m &&
++        t.cols===r.cols && t.expected===(j.m>>4)*r.cols && t.produced===t.expected && t.consumed===0.U &&
++        !t.matrixProducerOrder.getOrElse(false.B)
++      active:=true.B;drainIdentity.get:=r.identity;drainNg.get:=r.ng;drainCols.get:=r.cols
++      drainConsumed.get:=0.U;drainCommitted.get:=false.B;pending:=false.B;phase:=1.U
++      job:=j;workspace:=ws;status:=0.U;cycles:=0.U;bytes:=0.U;useful:=0.U;issued:=0.U;starved:=0.U
++      cycleBuckets:=VecInit(Seq.fill(7)(0.U(64.W)));physicalBase:=io.physicalSteps
++      writeState:=writeIdle;writeRow:=0.U;prefixWriteIndex:=0.U;writeContext:=0.U;writeBeat:=false.B
++      groupStarted:=false.B;groupDone:=false.B;loadState:=loadIdle;seedState:=seedIdle
++      aHighPending:=false.B;allRead:=true.B;halfReady:=VecInit(Seq.fill(2)(false.B));state:=drain
++      when(!shape || !slotOK){status:=Status.Bounds.U;state:=finish;phase:=0.U}
++    }
++    when(active){
++      // This mode issues no Matrix, A load, prefix restore or tile write.
++      io.matrix.group.valid:=false.B;io.matrix.step.valid:=false.B;io.matrix.result.ready:=false.B
++      banks.io.read.valid:=false.B;p.write.valid:=false.B;p.control.valid:=false.B;p.read.valid:=false.B
++      p.response.ready:=pending
++      if(burstWrites){
++        io.writeRequest.get.valid:=phase===3.U && writeState===writeReq && !bad
++        // Accepted bursts must send every beat even after poison.
++        io.writeData.get.valid:=writeState===writeData
++        io.writeResponse.get.ready:=writeState===writeWait
++      }else{
++        io.memory.valid:=phase===3.U && writeState===writeReq && !bad
++        io.response.ready:=writeState===writeWait
++      }
++      when(state=/=finish){cycleClass:=Mux(phase===3.U,4.U,0.U)}
++      when(!bad && state=/=finish){
++        when(phase===1.U){
++          when(!exact || t.consumed=/=drainConsumed.get){fail(Status.Protocol.U)}
++          .otherwise{
++            p.read.valid:=true.B;p.read.bits.slot:=2.U;p.read.bits.identity:=drainIdentity.get
++            p.read.bits.ng:=drainNg.get;p.read.bits.index:=index
++            when(p.read.fire){pending:=true.B;phase:=2.U}
++          }
++        }
++        when(phase===4.U){
++          when(!exact || t.consumed=/=expected || drainConsumed.get=/=expected || bytes=/=job.m.pad(64)*drainCols.get*4.U){fail(Status.Protocol.U)}
++          .elsewhen(p.drained && !pending && writeState===writeIdle){
++            p.control.valid:=true.B;p.control.bits.op:=2.U;p.control.bits.slot:=2.U
++            p.control.bits.identity:=drainIdentity.get;p.control.bits.ng:=drainNg.get
++            p.control.bits.rows:=job.m;p.control.bits.cols:=drainCols.get
++            p.control.bits.matrixProducerOrder.foreach(_:=false.B)
++            when(p.control.fire){phase:=5.U}
++          }
++        }
++        // Release acceptance is not completion. Check the next-cycle state.
++        when(phase===5.U){
++          when(!t.live && !t.sealedTile && p.drained && !pending && writeState===writeIdle &&
++            t.identity===drainIdentity.get && t.ng===drainNg.get && t.rows===job.m && t.cols===drainCols.get &&
++            t.consumed===expected && drainConsumed.get===expected && bytes===job.m.pad(64)*drainCols.get*4.U){
++            drainCommitted.get:=true.B;state:=finish
++          }.otherwise{fail(Status.Protocol.U)}
++        }
++      }
++      when(p.response.fire){
++        pending:=false.B
++        when(matching){drainConsumed.get:=drainConsumed.get+1.U}
++        when(!matching || p.response.bits.error){fail(Mux(p.response.bits.error,Status.Numerical.U,Status.Protocol.U))}
++        .elsewhen(!bad){
++          for(l<-0 until 16){finalValue(l)(prefixWriteIndex):=p.response.bits.value(l)}
++          when(prefixWriteIndex+1.U===drainCols.get){
++            prefixWriteIndex:=0.U;writeContext:=0.U;writeBeat:=false.B;writeState:=writeReq;phase:=3.U
++          }.otherwise{prefixWriteIndex:=prefixWriteIndex+1.U;phase:=1.U}
++        }
++      }
++      when(ackFire){
++        when(!ackGood){fail(Mux(ackBits.error,Status.Memory.U,Status.Protocol.U));writeState:=writeIdle}
++        .otherwise{
++          // Actual physical ACK bytes remain reportable even on an abort edge.
++          bytes:=bytes+(ackBeats.pad(64)<<6);writeSequence:=writeSequence+1.U
++          when(bad){writeState:=writeIdle}
++          .elsewhen(drainRowBeat.get+&ackBeats===(drainCols.get>>4)){
++            writeContext:=0.U;writeBeat:=false.B
++            when(writeRow+&1.U===job.m){writeState:=writeIdle;phase:=4.U}
++            .otherwise{
++              writeRow:=writeRow+1.U
++              when(writeRow(3,0)===15.U){writeState:=writeIdle;prefixWriteIndex:=0.U;phase:=1.U}
++              .otherwise{writeState:=writeReq}
++            }
++          }.otherwise{
++            val next=drainRowBeat.get+ackBeats;writeContext:=next(3,1);writeBeat:=next(0);writeState:=writeReq
++          }
++        }
++      }
++      when(activeUnexpected){drainPoison.get:=true.B;when(state=/=finish){fail(Status.Protocol.U)}}
++      when(bad && state=/=finish){
++        fail(Status.Protocol.U);phase:=6.U;drainCommitted.get:=false.B
++        when(writeState===writeReq){writeState:=writeIdle}
++        when(!pending && p.drained && writeState=/=writeData && writeState=/=writeWait){state:=finish}
++      }
++    }
++    val idleAck=if(burstWrites)io.writeResponse.get.valid else io.response.valid
++    when(idleUnexpected || ((state===locked || state===finish) && !active && !windowActive.getOrElse(false.B) && idleAck)){drainPoison.get:=true.B}
++    when(d.abort){drainPoison.get:=true.B}
++    if(enableFfnWindow){when(d.abort || drainPoison.get){aLeaseValid.get:=false.B}}
++    when(d.result.fire){active:=false.B;phase:=0.U;state:=Mux(status===0.U && !io.resetRequired,idle,locked)}
++    when(d.result.valid){assert(!io.done.valid && !windowActive.getOrElse(false.B));assert(cycleBuckets.reduce(_+&_)===cycles)}
++  }
+   when(io.done.fire){state:=Mux(status===0.U,idle,locked)}
+ }
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+@@ -28,7 +28,8 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false) extends Module {
++  require(!enableFfnDrain || enableFfnTiles,"act drain requires the selected shared tile owner")
+   require(!enableFfnWindow || enableFfnTiles,"internal windows require the selected shared tile owner")
+   require(!enableFfnTiles || (enableTransposedDown && !overlapSilu),"FFN tile loan requires the selected Down owner and serial SiLU")
+   require(!enableTransposedDown || enableTransposedSeed,"Down chunks require the prefix seed profile")
+@@ -44,7 +45,8 @@
+   require(!burstWrites || pipelined)
+   require(!overlapSilu || pipelined, "overlapped SiLU requires the pipelined owner path")
+   val io=IO(new Bundle {
+-    val window=if(enableFfnWindow)Some(new FfnWindowPort)else None
++    val drain=if(enableFfnDrain)Some(new FfnDrainPort)else None
++    val window=if(enableFfnWindow)Some(new FfnWindowPort(enableFfnDrain))else None
+     val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder=enableFfnWindow))else None
+     val tileSilu=if(enableFfnTiles)Some(new FfnSiluLoanPort)else None
+     val job=Flipped(Decoupled(new QwenOwnerJob)); val done=Decoupled(new QwenOwnerResult)
+@@ -76,7 +78,7 @@
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+     // Elaborate one owner and one bank allocation; the common IO is storage-free.
+     val dense:DenseOwnerIO=if(enableTransposedDown)
+-      Module(new TransposedDenseDownOwner(burstWrites=burstWrites,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow)).io
++      Module(new TransposedDenseDownOwner(burstWrites=burstWrites,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain)).io
+     else if(enableTransposedSeed)
+       Module(new TransposedDenseSeedOwner(burstWrites=burstWrites)).io
+     else if(enableTransposedDense)
+@@ -130,7 +132,7 @@
+     val sharedPoison=core.io.resetRequired||dense.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+     val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope||enableTransposedDense).B && sharedPoison)
+     if(enableFfnTiles){
+-      val available=if(enableFfnWindow)!active && !sharedPoison && !rejected && !dense.window.get.busy else !active && !sharedPoison && !rejected
++      val available=if(enableFfnDrain)!active && !sharedPoison && !rejected && !dense.drain.get.busy && !dense.window.map(_.busy).getOrElse(false.B)else if(enableFfnWindow)!active && !sharedPoison && !rejected && !dense.window.get.busy else !active && !sharedPoison && !rejected
+       dense.tiles.get.control.valid:=io.tiles.get.control.valid && available
+       io.tiles.get.control.ready:=dense.tiles.get.control.ready && available
+       dense.tiles.get.write.valid:=io.tiles.get.write.valid && available
+@@ -144,7 +146,7 @@
+     if(enableFfnWindow){
+       dense.window.get<>io.window.get
+       dense.window.get.invalidateLease:=io.window.get.invalidateLease || io.job.fire
+-      val available= !active && !sharedPoison && !rejected && !tileBusy
++      val available=if(enableFfnDrain)!active && !sharedPoison && !rejected && !tileBusy && !dense.drain.get.busy else !active && !sharedPoison && !rejected && !tileBusy
+       dense.window.get.request.valid:=io.window.get.request.valid && available
+       io.window.get.request.ready:=dense.window.get.request.ready && available
+       // The window shares the poison domain; an upstream service failure must
+@@ -152,8 +154,17 @@
+       dense.tiles.get.abort:=io.tiles.get.abort || io.tileSilu.get.abort ||
+         (dense.window.get.busy && (core.io.resetRequired || matrix.io.resetRequired || legacy.io.resetRequired || silu.get.io.resetRequired))
+     }
++    if(enableFfnDrain){
++      dense.drain.get<>io.drain.get
++      val available= !active && !sharedPoison && !rejected && !tileBusy && !dense.window.map(_.busy).getOrElse(false.B) && !io.window.map(_.request.valid).getOrElse(false.B)
++      dense.drain.get.request.valid:=io.drain.get.request.valid && available
++      io.drain.get.request.ready:=dense.drain.get.request.ready && available
++      dense.drain.get.abort:=io.drain.get.abort || io.tiles.get.abort || io.tileSilu.get.abort ||
++        (dense.drain.get.busy && (core.io.resetRequired || matrix.io.resetRequired || legacy.io.resetRequired || silu.get.io.resetRequired))
++    }
++    val drainBusy=if(enableFfnDrain)dense.drain.get.busy || io.drain.get.request.valid else false.B
+     val windowBusy=if(enableFfnWindow)dense.window.get.busy || io.window.get.request.valid else false.B
+-    val canStartWithTiles=if(enableFfnWindow)canStart && !tileBusy && !windowBusy else if(enableFfnTiles)canStart && !tileBusy else canStart
++    val canStartWithTiles=if(enableFfnDrain)canStart && !tileBusy && !windowBusy && !drainBusy else if(enableFfnWindow)canStart && !tileBusy && !windowBusy else if(enableFfnTiles)canStart && !tileBusy else canStart
+     io.job.ready:=canStartWithTiles && MuxLookup(choose,false.B)(Seq(0.U->core.io.ownerJob.get.ready,1.U->dense.job.ready,2.U->silu.map(_.io.job.ready).getOrElse(false.B),3.U->gdnReady,
+       4.U->prep.map(_.io.job.ready).getOrElse(false.B),5.U->recurrent.map(_.io.job.ready).getOrElse(false.B),6.U->gatedNorm.map(_.io.job.ready).getOrElse(false.B),7.U->true.B,8.U->rmsNorm.map(_.io.job.ready).getOrElse(false.B),9.U->elementwise.map(_.io.job.ready).getOrElse(false.B),10.U->qkNorm.map(_.io.job.ready).getOrElse(false.B),11.U->partialRope.map(_.io.job.ready).getOrElse(false.B),12.U->kvAppend.map(_.io.job.ready).getOrElse(false.B),13.U->gqa.map(_.io.job.ready).getOrElse(false.B)))
+     core.io.ownerJob.get.valid:=io.job.valid && canStartWithTiles && choose===0.U;core.io.ownerJob.get.bits:=io.job.bits
+@@ -345,6 +356,13 @@
+     io.response.ready:=active&&MuxLookup(mode,false.B)(responses.map{case(i,p)=>i.U->p.ready})
+     for((i,p)<-memories){p.ready:=active&&mode===i.U&&io.memory.ready}
+     for((i,p)<-responses){p.valid:=active&&mode===i.U&&io.response.valid;p.bits:=io.response.bits}
++    if(enableFfnDrain){
++      // Nonburst drain has no normal kernel active/mode token.
++      when(dense.drain.get.busy){
++        io.memory.valid:=dense.memory.valid;io.memory.bits:=dense.memory.bits;dense.memory.ready:=io.memory.ready
++        io.response.ready:=dense.response.ready;dense.response.valid:=io.response.valid
++      }
++    }
+     if(burstWrites){io.writeRequest.get<>dense.writeRequest.get;io.writeData.get<>dense.writeData.get;dense.writeResponse.get<>io.writeResponse.get}
+     io.burst.get<>dense.burst;dense.burstResponse<>io.burstResponse.get
+     if(bf16AttentionCore){
+@@ -367,7 +385,7 @@
+       matrix.io.port.done.ready:=MuxLookup(selectedMode,false.B)(clients.map{case(i,c)=>i.U->c.done.ready})
+       matrix.io.port.abort:=MuxLookup(selectedMode,false.B)(clients.map{case(i,c)=>i.U->c.abort})
+     }else{
+-    val useDense=if(enableFfnWindow)(active&&mode===1.U) || dense.window.get.busy else active&&mode===1.U
++    val useDense=if(enableFfnDrain)(active&&mode===1.U) || dense.window.map(_.busy).getOrElse(false.B) || dense.drain.get.busy else if(enableFfnWindow)(active&&mode===1.U) || dense.window.get.busy else active&&mode===1.U
+     for((client,index)<-Seq(legacy.io.port,dense.matrix).zipWithIndex){
+       val selected=if(index==1)useDense else !useDense
+       client.group.ready:=selected&&matrix.io.port.group.ready

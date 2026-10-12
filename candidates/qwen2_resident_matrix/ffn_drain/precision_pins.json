@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "scope": "ACTUAL_N1_DDR_TO_RETAINED_A_GATE_UP_SILU_ACT_DDR_WRITE_ACK_HOST_MODEL_ONLY",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "layer": 0,
+  "source_shape": [
+    128,
+    8960
+  ],
+  "retained_input_shape": [
+    128,
+    1536
+  ],
+  "producer_origin": "Previously executed unchanged v0 software recipe using official model weights and derived inputs; these are producer exports, not official framework captures.",
+  "sources": {
+    "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+    "candidates/qwen2_resident_matrix/ffn_window/numeric_recipe.cpp": "f0bab2fa7520a704711eb8331a6b53b906ecf0035cc21e0c1ccdd0a4481cfc21",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe"
+  },
+  "provenance": {
+    "work/qwen2_fullgraph_dataflow_20261011/PREPARED.json": "15b5043a945589cb320319035eeba82a21cc2689fc91ca42ce6bf4b5894726cb",
+    "work/qwen2_fullgraph_dataflow_20261011/cold_m128/RESULT.json": "30614529e641616bfb3fad7857301c4a34104d5b76be92f6c9417e4c387308ae",
+    "work/qwen2_layer0_payload_20261011/manifest.json": "582f34afe5c52633f5290b5ba071f76164193f59d6edfc0d949658fd1e9715d1"
+  },
+  "inputs": {
+    "n1": {
+      "path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_9_n1_recipe.f32le",
+      "bytes": 786432,
+      "sha256": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d"
+    },
+    "gate_weight": {
+      "path": "work/qwen2_layer0_payload_20261011/mlp.gate_proj.weight.bin",
+      "bytes": 27525120,
+      "sha256": "0219acbf1f5bc38fc55ee56fa6b55c82150a1a4279915090e857beb382cc0d7e"
+    },
+    "up_weight": {
+      "path": "work/qwen2_layer0_payload_20261011/mlp.up_proj.weight.bin",
+      "bytes": 27525120,
+      "sha256": "a403942b0dc208a543e8434d091564cfd4b7a091c291d02d7a62ae46884e61ed"
+    }
+  },
+  "comparison_only": {
+    "gate": {
+      "path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_10_gate_recipe.f32le",
+      "bytes": 4587520,
+      "sha256": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5"
+    },
+    "up": {
+      "path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_11_up_recipe.f32le",
+      "bytes": 4587520,
+      "sha256": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908"
+    },
+    "act": {
+      "path": "work/qwen2_fullgraph_dataflow_20261011/cold_m128/phase_12_act_recipe.f32le",
+      "bytes": 4587520,
+      "sha256": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d"
+    }
+  },
+  "recipe": {
+    "phase_order": [
+      "exp(-abs(gate))",
+      "add(1,exp)",
+      "div(1,denominator)",
+      "mul(sig,signbit(gate)?exp:1)",
+      "mul(sig,gate)",
+      "mul(value,up)"
+    ],
+    "fp32_rounding": "IEEE round-to-nearest-even at every operation; exp uses original range reduction and degree-7 polynomial; abs(gate)>=80 gives +0",
+    "compiler_flags": [
+      "-std=c++17",
+      "-O2",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "-frounding-math",
+      "-fPIC",
+      "-shared"
+    ],
+    "legacy_error_policy": "Nonfinite input/output and primitive Add/Div/Mul invalid, division-by-zero, overflow or underflow are fatal. Inexact alone is accepted. Original ExpNegative internal exception flags are not fatal.",
+    "host_exception_limit": "Host fenv flags are reported, not claimed to establish exact HardFloat exception equivalence; no native FP32 policy acceptance.",
+    "matrix": "Unchanged transposed_down/numeric_smoke.cpp td_group(0,1536,contexts) and td_step: increasing K, BF16 RNE A, BF16 weight, FP32 std::fma, +0 initial, no bias; exact five physical 16x256 packet mapping.",
+    "independent": "Unchanged ffn_window/numeric_recipe.cpp and ffn_tiles/silu_recipe.cpp; independent raw-input logical dots and SiLU called only after all act physical DDR writes, successful tagged ACKs, release and terminal completion."
+  },
+  "storage": {
+    "a_banks": 16,
+    "a_words_per_bank": 1376,
+    "a_word_bits": 256,
+    "b_banks": 16,
+    "b_words_per_bank": 160,
+    "b_word_bits": 256,
+    "slot_base_words": [
+      768,
+      928,
+      1088
+    ],
+    "slot_words": 160,
+    "retained_words": [
+      0,
+      768
+    ],
+    "spare_words": [
+      1248,
+      1376
+    ],
+    "coordinate": "bank=lane=m%16; word=768+slot*160+(m//16)*20+n//8; fp32lane=n%8",
+    "beat_order": "index=(m//16)*cols+n, 16 consecutive M rows at fixed local n",
+    "ng_semantics": "ng is the actual source column base, aligned to32; local tile width may be less than160",
+    "act_ddr": "Full sentinel-initialized [M,8960] FP32 destination with 64-byte guards on both sides; only accepted physical DDR write traffic may change it."
+  },
+  "default_cases": [
+    {
+      "rows": 16,
+      "cols": 32,
+      "ng": 0,
+      "identity": 1363559168
+    },
+    {
+      "rows": 128,
+      "cols": 160,
+      "ng": 160,
+      "identity": 1363559169
+    }
+  ],
+  "acceptance": {
+    "hardware_arithmetic_executed": false,
+    "rtl_executed": false,
+    "full_ffn_executed": false,
+    "full_block_executed": false,
+    "official_framework_forward": false,
+    "native_m128_gate": "original FAIL unchanged",
+    "numerical_policy": "open unchanged",
+    "actual_gate_up_ddr_write": "No Gate/Up DDR output; typed tile commits only",
+    "host_production_coordinator_executed": false,
+    "actual_act_ddr_write": "Host address-only DDR model consumes actual 64B data/descriptor traffic and returns matching tagged ACKs; no hardware IDMA or RTL execution.",
+    "physical_resource_qor_established": false,
+    "silu_owner_interface": "Every SiLU tile control/read/write/consumer-stall edge clocks the Python owner external tile interface; Scala/SFU arbitration is separately checked and not executed by this host numeric capture."
+  }
+}

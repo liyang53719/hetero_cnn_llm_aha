@@ -1,5 +1,7 @@
 """Small negative guards for the source-bound frontend runner; no RTL."""
 import importlib.util
+import ast
+import re
 import copy
 import json
 from pathlib import Path
@@ -11,7 +13,57 @@ runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 
 
+def required_baseline_commits():
+    """Source literals and source manifests are the authority, not Git depth."""
+    commits = set()
+    files = [ROOT/'scripts/check_matrix_interface_candidate.py',
+             ROOT/'scripts/check_transposed_matrix_frontend.py']
+    files += sorted((ROOT/runner.CANDIDATE).glob('*/check_frontend.py'))
+    for path in files:
+        for node in ast.walk(ast.parse(path.read_text())):
+            if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {'BASE', 'COMMIT'} for t in node.targets):
+                if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                    if re.fullmatch('[0-9a-f]{40}', node.value.value):
+                        commits.add(node.value.value)
+    for relative, keys in [('manifest.json', ('base_commit',)),
+                           ('resident_manifest.json', ('base_commit',)),
+                           ('transposed_route/manifest.json', ('source_base_commit',)),
+                           ('transposed_owner/source_pins.json', ('source_commit', 'source_base_commit'))]:
+        manifest = json.loads((ROOT/runner.CANDIDATE/relative).read_text())
+        for key in keys:
+            value = manifest[key]
+            if not re.fullmatch('[0-9a-f]{40}', value):
+                raise ValueError('unfrozen source baseline')
+            commits.add(value)
+    return commits
+
+
+def validate_baseline_fetches(workflow, required):
+    fetches = re.findall(r'^\s*git fetch --no-tags --depth=1 origin (\S+)\s*$', workflow, re.M)
+    probes = re.findall(r'^\s*git cat-file -e ([0-9a-f]{40}):\S+\s*$', workflow, re.M)
+    if set(fetches) != required or len(fetches) != len(required) or set(probes) != required:
+        raise ValueError('explicit immutable baseline fetch/probe closure')
+    if any(not re.fullmatch('[0-9a-f]{40}', ref) for ref in fetches):
+        raise ValueError('unfrozen source baseline')
+
+
 class CandidateRunnerGuards(unittest.TestCase):
+    def test_workflow_fetches_all_frozen_source_baselines(self):
+        workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        required = required_baseline_commits()
+        self.assertEqual(len(required), 5)
+        validate_baseline_fetches(workflow, required)
+
+    def test_missing_or_changed_baseline_fetch_fails_closed(self):
+        workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        for ref in required_baseline_commits():
+            fetch = 'git fetch --no-tags --depth=1 origin ' + ref
+            for broken in [workflow.replace(fetch, '# omitted baseline'),
+                           workflow.replace(fetch, fetch[:-40]+'main'),
+                           workflow.replace('git cat-file -e '+ref+':', 'git cat-file -e '+'0'*40+':')]:
+                with self.subTest(ref=ref), self.assertRaisesRegex(ValueError, 'baseline'):
+                    validate_baseline_fetches(broken, required_baseline_commits())
+
     def test_exact_bytes_and_drift(self):
         data = b"source\n"
         self.assertEqual(runner.checked(data, runner.digest(data), "x"), data)

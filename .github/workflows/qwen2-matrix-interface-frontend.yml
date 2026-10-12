@@ -37,6 +37,8 @@ jobs:
           git cat-file -e fb909e861ab91dfd7ecc44bc3e86245c3e63b029:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
           git fetch --no-tags --depth=1 origin 825caff3a6c618419c49c7da452e009ce86ae8b5
           git cat-file -e 825caff3a6c618419c49c7da452e009ce86ae8b5:candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
+          git fetch --no-tags --depth=1 origin c761ec824ce2c027a66c22feb4a2154829f9d545
+          git cat-file -e c761ec824ce2c027a66c22feb4a2154829f9d545:candidates/qwen2_resident_matrix/transposed_route/manifest.json
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '21'}
       - uses: actions/setup-python@v5

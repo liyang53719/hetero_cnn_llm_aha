@@ -744,3 +744,11 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 实际协调器按56个ng顺序执行Gate→Up复用A→SiLU→act DDR drain；每阶段使用真实typed owner终态与原flush/ACK，全部act字节完成后才退休A lease并依次交付原三个PC completion。group错误/abort/held回复poison不能提前发布虚拟Gate/Up或act。模型覆盖M16/M128全部56窗调度、全program roots、counter/背压/error/reset，但owner结果是opaque token，不能作为56窗算术证明。
 - group最终52测试通过，包括43控制模型、8源码门和交付门；95个真实源typecheck、6个有界IR通过，普通Host/旧bridge的disabled IR相同。完整Host/kernel只typecheck；parser、coordinator及bridge为有界展开。新增账本6,381寄存器bit：coordinator3,389、Host2,398、生产中新实例化的迁移bridge592（含512-bit hold），以及source-only kernel/top poison各1；旧tiles账本已包含外部bridge592，累计时必须只算一次。无新增SRAM/算术/DMA，组合逻辑/面积/时序尚未测。前端编译后只改auditor资源账与README，旧source/IR在只读replay中保持相同，不把后来工具改动冒充原编译输入。
 - done（局部）：真实act排出源码/有界实值、生产Host三命令协调源码/控制模型和独立审查。ongoing：本批精确发布/轻CI、整个56窗真实模型与Down直接依赖。todo：完整Host/iDMA行为、所选完整prefill及最终冻结刺激硬件回放。原131,727,360B/71.3456%仅整图理想搬运上界，尚非硬件兑现；原native/FP32-final FAIL、数值政策待定、Q21.3/U00.2 ongoing、U01 todo、C02.2 OPEN保持。
+
+### 2026-10-12 6510a1d 浅克隆基础设施失败与修复
+
+- 已发布源码 commit `6510a1d4f4dd6b6bb7ca6ceb3df72655e3d8ab67`，tree `fb42f812a41061b3c562aee7e75ed3f97bbc4590`，28文件/503,806B；远端tree、每个blob和本地字节已核对，其他20个工作树修改保留。
+- payload run `38189186423` 成功。frontend run `38189186428`/job `114618058880` 为真实FAIL：494小测试与前9层26条前端命令先通过，新增drain在读取固定父提交c761的route manifest时因浅克隆缺对象退出128。新drain/group在该CI中尚未编译，不能用本地前端PASS替代CI终态。
+- 原日志和artifact `11721061645` 保全，151项/39,338,858B，SHA256 `6ae8d5a89d74ace039b48e12bdca096a0becfe0e608777c371f728ac6aae4976`。失败没有数值执行、RTL或超预算，不改为算术FAIL，也不抹掉基础设施FAIL。
+- 修复只给原workflow显式增加固定c761的depth1 fetch及cat-file probe。用新的局部浅克隆复现缺父对象，再验证5个固定baseline的完整tree与全部blob均可获取；c761 manifest逐字节匹配。另补2个轻量门，从实际脚本BASE/COMMIT及manifest收集引用，逐项检查fetch/probe闭合，覆盖每个baseline的遗漏、改成main及错误probe。现有测试文件9/9通过，未运行Scala/RTL。
+- 本次不改任何owner、模型算术、source pins、数值门限、工作负载或15分钟预算；后继修复提交需重新完成原两门与工件核验。完整56窗实值和所选完整block/native门仍待完成。

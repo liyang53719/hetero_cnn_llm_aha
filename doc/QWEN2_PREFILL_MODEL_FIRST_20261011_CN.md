@@ -752,3 +752,15 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 原日志和artifact `11721061645` 保全，151项/39,338,858B，SHA256 `6ae8d5a89d74ace039b48e12bdca096a0becfe0e608777c371f728ac6aae4976`。失败没有数值执行、RTL或超预算，不改为算术FAIL，也不抹掉基础设施FAIL。
 - 修复只给原workflow显式增加固定c761的depth1 fetch及cat-file probe。用新的局部浅克隆复现缺父对象，再验证5个固定baseline的完整tree与全部blob均可获取；c761 manifest逐字节匹配。另补2个轻量门，从实际脚本BASE/COMMIT及manifest收集引用，逐项检查fetch/probe闭合，覆盖每个baseline的遗漏、改成main及错误probe。现有测试文件9/9通过，未运行Scala/RTL。
 - 本次不改任何owner、模型算术、source pins、数值门限、工作负载或15分钟预算；后继修复提交需重新完成原两门与工件核验。完整56窗实值和所选完整block/native门仍待完成。
+
+- 浅克隆修复闭环：`ecc8aafd6f9a493fe260023c546a6b7741a18ea2`，tree `17c154c51d42fc4f43af63a39115dd5492924950`。原两门 frontend `38190071758`/job `114620718573` 与 payload `38190071834` 均首次SUCCESS。496测试、30前端命令、11份来源manifest、87锁定jar及131份本地/CI规范化IR全部复核；新增drain91源/20IR和group95源/6IR这次确实执行并通过。artifact `11721517979` 为184项/48,428,595B，SHA256 `7ec7d82ea0f52380076463d936926921481ed88b3c4c5247b9921453d06d91bf`，复核摘要SHA `60cafb43d0ef2b434205380ba2310e72d94bf5c07a9d65ac031c7640a8599b4c`。逐项确认repair仅CI/test/doc，实际owner/model/算术与6510源码相同；旧FAIL不覆盖，新来源差异和资源账仍分别保留。完整56窗实值与Down直接消费进入下一模型门，当前没有新增RTL/native通过结论。
+
+
+### 2026-10-12 完整56窗 FFN → 同 owner Down 实值模型
+
+- 从冻结v0 n1和三份官方BF16权重开始，公开组的Python协调模型逐边沿驱动同一owner/bank：56个Gate/Up驻留窗口、真实tile读出的原SiLU、act地址唯一索引DDR写ACK，再由同一owner完整Down读取这些实际act数据。中间未注入保存producer/golden；保存phase10–13及独立计算只在Down末ACK/终态之后比较。
+- M16和M128分别199.869/279.681秒host wall，全Gate/Up/act/Down对两条比较源均0位差。M16是冻结M128前16行，非官方独立16-token forward；M128完整覆盖128行。M128共3,637,248个FP32比较元素，112个真实投影typed终态、56个act drain及4,587,520B实际ACK，Down最终786,432B ACK后下一model tick才终态。原始输入、76个源码快照及输出hash独立只读复核通过。
+- 一次A载入贯穿56窗；Gate/Up虚拟DDR哨兵始终不变。三轮prefix各786,432B只有实际ACK后才回读/seed，seed ACK后才覆写，所有物理4096 cells/context和padding均检查。单元门覆盖coordinator-only错误时仍有读在飞、held SRAM响应丢弃、最后ACK背压、完整mask/1KiB、alias、复位和多K chunk；SiLU主机调用是同步recipe，尚不是硬件SFU延迟模型。
+- M128 payload流量98,041,856B：A786,432，权重82,575,360，act写/读各4,587,520，prefix写/读各2,359,296，Down写786,432；不含完整block/metadata。主机观察有效/物理FMA均5,284,823,040；M16采用相同128-row物理映射，有效660,602,880、物理同M128。因此约200秒M16并非线性M缩放，且这些不是Chisel/RTL计数或硬件利用率。固定4096 MAC×完整硬件wall分母仍无实测值。
+- 本增量只新增模型编排、测试、pins/紧凑摘要和CI小门；旧owner/Chisel/C++算术源保持相同。两份成功capture保持ecc8aaf执行身份，全文轨迹只留明确有界前缀与全流hash；原始输出/prefix/权重仅本地，不上传Git。前序ecc8aaf的131IR前端闭环不冒充本次数值硬件执行。
+- done（局部）：完整FFN子图M16/M128真实软件端口数据依赖、独立review与实际capture；ongoing：本批发布/精确轻CI、生产Host/parser/shared-iDMA行为对应及完整所选图；todo：完整五block M128和冻结刺激硬件回放。原native/FP32-final FAIL与政策待定不变，Q21.3/U00.2 ongoing，U01 todo，C02.2 OPEN。原整图131,727,360B/71.3456%仍是理想搬运上界，不能从FFN子图推成硬件兑现。

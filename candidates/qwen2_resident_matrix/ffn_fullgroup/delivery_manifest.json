@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "scope": "FULL56_FFN_SAME_OWNER_DOWN_SOFTWARE_PORT_MODEL_ONLY",
+  "base_commit": "ecc8aafd6f9a493fe260023c546a6b7741a18ea2",
+  "files": {
+    "README.md": {
+      "bytes": 5441,
+      "sha256": "ff46df5915e8203a3e38fe586ee36de15b148c73831d13e7ddd7fee2d36875ad"
+    },
+    "check_numeric.py": {
+      "bytes": 42048,
+      "sha256": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336"
+    },
+    "down_driver.py": {
+      "bytes": 40858,
+      "sha256": "25aec171892cbbd828b6c0364db96fb0a1a7eefa5d3b0f8b9b8715d0f06b49a8"
+    },
+    "numerical_receipt.json": {
+      "bytes": 36344,
+      "sha256": "17a9b2d44d32f62019344a61d4a7e44afb3e9b72c4204ad9ba7116ee855fd588"
+    },
+    "precision_pins.json": {
+      "bytes": 7969,
+      "sha256": "fb6fc2ea116e708c7560f37144625a3b12d1ad93e4bc69178e8e8509ded5b0c0"
+    },
+    "test_delivery.py": {
+      "bytes": 2732,
+      "sha256": "736c6c45f2057ac4eb93afdfb983f19b60a95efba1c2b9a0faa3aba1b058b02c"
+    },
+    "test_down_driver.py": {
+      "bytes": 12155,
+      "sha256": "8645a72d41260d63e7ef83bbb1d9127a260009eae2ea4b48e01dcbb984629a19"
+    },
+    "test_numeric.py": {
+      "bytes": 10245,
+      "sha256": "0134b59d8ff90849dfa50eaebb16c95012f6b2bc4e585565cd7c30cb8a94a28a"
+    }
+  },
+  "validation": {
+    "implementation_tests": 16,
+    "delivery_tests": 2,
+    "implementation_test_log_sha256": "ad257416bc38f89a8bb5111b174d0afd8800125826bed846387bfc9b127a211f",
+    "independent_review": "No P0/P1 in five implementation files and inherited dependencies; M16 captures/source identities independently checked. M128 completed with same frozen sources and independent read-only receipt validation."
+  },
+  "rtl_executed": false,
+  "chisel_simulation": false,
+  "full_block_executed": false,
+  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "weights_or_raw_tensors_in_git": false,
+  "new_hardware_resources": 0
+}

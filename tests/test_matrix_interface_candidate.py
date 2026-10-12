@@ -19,9 +19,10 @@ def required_baseline_commits():
     files = [ROOT/'scripts/check_matrix_interface_candidate.py',
              ROOT/'scripts/check_transposed_matrix_frontend.py']
     files += sorted((ROOT/runner.CANDIDATE).glob('*/check_frontend.py'))
+    files.append(ROOT/runner.CANDIDATE/'ffn_public/check_numeric.py')
     for path in files:
         for node in ast.walk(ast.parse(path.read_text())):
-            if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {'BASE', 'COMMIT'} for t in node.targets):
+            if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {'BASE', 'COMMIT', 'PUBLISHED_BASELINE'} for t in node.targets):
                 if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
                     if re.fullmatch('[0-9a-f]{40}', node.value.value):
                         commits.add(node.value.value)
@@ -51,7 +52,7 @@ class CandidateRunnerGuards(unittest.TestCase):
     def test_workflow_fetches_all_frozen_source_baselines(self):
         workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
         required = required_baseline_commits()
-        self.assertEqual(len(required), 5)
+        self.assertEqual(len(required), 6)
         validate_baseline_fetches(workflow, required)
 
     def test_missing_or_changed_baseline_fetch_fails_closed(self):

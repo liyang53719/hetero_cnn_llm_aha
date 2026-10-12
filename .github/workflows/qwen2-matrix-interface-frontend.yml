@@ -39,6 +39,8 @@ jobs:
           git cat-file -e 825caff3a6c618419c49c7da452e009ce86ae8b5:candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
           git fetch --no-tags --depth=1 origin c761ec824ce2c027a66c22feb4a2154829f9d545
           git cat-file -e c761ec824ce2c027a66c22feb4a2154829f9d545:candidates/qwen2_resident_matrix/transposed_route/manifest.json
+          git fetch --no-tags --depth=1 origin 812d858f8e33e1e6da0cac354846465e971aa975
+          git cat-file -e 812d858f8e33e1e6da0cac354846465e971aa975:candidates/qwen2_resident_matrix/ffn_fullgroup/precision_pins.json
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '21'}
       - uses: actions/setup-python@v5
@@ -57,6 +59,7 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_drain -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_group -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_fullgroup -p 'test_*.py' -v
+          python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_public -p 'test_*.py' -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure

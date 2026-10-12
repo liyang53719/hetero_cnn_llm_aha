@@ -130,3 +130,36 @@ final acceptance remain FAIL/unapproved under the parent numerical policy.
 - Control-model evidence is separate from this frontend and from arithmetic.
   No RTL, full top/kernel elaboration, native arithmetic, FP32-final, numerical
   policy, physical QoR or performance acceptance is implied.
+
+## 2026-10-12 public-byte integration and ordinary completion fence
+
+The optional Python frontend now demand-fetches public Command128 bytes, typed
+roots and original policy records through the same Host control model. Its
+default decoded-fixture interface remains unchanged. The public adapter and
+actual arithmetic evidence live in `../ffn_public`; this interface alone is not
+a public whole-block numerical result.
+
+The enabled production profile also fences an ordinary Down success against raw
+backend quarantine. Previously the three fence conditions tested only the
+resident group-pending bit, so an ordinary held completion could publish. The
+Top now forwards the existing aggregate owner resetRequired directly, in addition
+to the resident/hub/DMA sources. There is no new epoch-qualified poison signal.
+
+`completion.fire` is the public success linearization point. Poison while
+`waitDone` waits for the genuine owner terminal and accepted-work drain; poison
+on a held, unaccepted successful completion suppresses valid even if ready is
+high that edge, then produces Protocol. An explicit ordinary backend failure
+retains its status. After a successful completion is accepted, later quarantine
+does not revoke its event/range or held final result; it blocks a new launch by
+the existing composite admission gate. An old tag accepted while waiting is
+Protocol; an unexpected late backend response follows the existing global
+quarantine contract, not invented per-epoch freshness.
+
+The new 52 control tests include nine directed ordinary-boundary tests, plus
+eight composition guards. `work/ffn_group_poison_frontend_20261012T0206` contains
+the new 95-source typecheck and six bounded CHIRRTL targets (41.112 seconds).
+Both default-off normalized IR comparisons pass. Register inventory remains
+6,381 incremental bits as previously itemized; no payload storage or arithmetic
+unit is added. The changed boolean fences still have combinational area/timing
+cost that has not been synthesized. Old 0027 evidence remains bound to its old
+source hashes. No RTL or full-top execution is claimed.

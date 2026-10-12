@@ -4,16 +4,16 @@
   "base_commit": "ecc8aafd6f9a493fe260023c546a6b7741a18ea2",
   "files": {
     "README.md": {
-      "bytes": 5441,
-      "sha256": "ff46df5915e8203a3e38fe586ee36de15b148c73831d13e7ddd7fee2d36875ad"
+      "bytes": 6115,
+      "sha256": "8c99b87c60a9c69a2fc993defc2794697549974de9641150ddf7f23327264932"
     },
     "check_numeric.py": {
       "bytes": 42048,
       "sha256": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336"
     },
     "down_driver.py": {
-      "bytes": 40858,
-      "sha256": "25aec171892cbbd828b6c0364db96fb0a1a7eefa5d3b0f8b9b8715d0f06b49a8"
+      "bytes": 40941,
+      "sha256": "efac690c5469f044536b1ac88bb108aea94442a5e1e0b9cc58b539e17e4145be"
     },
     "numerical_receipt.json": {
       "bytes": 36344,
@@ -37,15 +37,26 @@
     }
   },
   "validation": {
-    "implementation_tests": 16,
-    "delivery_tests": 2,
-    "implementation_test_log_sha256": "ad257416bc38f89a8bb5111b174d0afd8800125826bed846387bfc9b127a211f",
-    "independent_review": "No P0/P1 in five implementation files and inherited dependencies; M16 captures/source identities independently checked. M128 completed with same frozen sources and independent read-only receipt validation."
+    "historical_812d858_capture_validation": {
+      "implementation_tests": 16,
+      "delivery_tests": 2,
+      "implementation_test_log_sha256": "ad257416bc38f89a8bb5111b174d0afd8800125826bed846387bfc9b127a211f",
+      "independent_review": "No P0/P1 in five implementation files and inherited dependencies; M16 captures/source identities independently checked. M128 completed with same frozen sources and independent read-only receipt validation."
+    },
+    "callback_default_regression_tests": 9,
+    "callback_default_regression_receipt_sha256": "fee98276bb7d146daeb38f355da6d2152aecfc90b9a5842413ad560956ed593f",
+    "delivery_tests": 2
   },
   "rtl_executed": false,
   "chisel_simulation": false,
   "full_block_executed": false,
   "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
   "weights_or_raw_tensors_in_git": false,
-  "new_hardware_resources": 0
+  "new_hardware_resources": 0,
+  "post_capture_source_changes": {
+    "old_numerical_commit": "812d858f8e33e1e6da0cac354846465e971aa975",
+    "historical_numerical_receipt_unchanged": true,
+    "new_actual_capture_inherited": false,
+    "details": "Public-byte Host adapter seam; optional actual owner-edge callback; default-off ordinary Host unaccepted-success quarantine fence. Arithmetic source unchanged. New public numeric capture tracked separately."
+  }
 }

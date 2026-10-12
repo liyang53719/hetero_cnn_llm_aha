@@ -413,13 +413,15 @@ class VirtualRootPreflight:
     Softmax's public null B is skipped. Extra-root native profiles are excluded
     by the caller's profile admission. Reservation is the caller's final step.
     """
-    def __init__(self, program, reader, gate_pc, captured, gate, up, *, max_commands=64):
+    def __init__(self, program, reader, gate_pc, captured, gate, up, *, max_commands=64, fetch_command=None):
         if not 21 <= max_commands <= 255 or not 0 < len(program) <= max_commands:
             raise Rejected("Bounds", "bounded public command count")
         if not 0 <= gate_pc <= len(program) - 3:
             raise Rejected("Malformed", "three consecutive public commands")
         self.program, self.reader = program, reader
         self.gate_pc, self.captured, self.gate, self.up = gate_pc, tuple(captured), gate, up
+        self.fetch_command = fetch_command
+        self.scan_command = None
         self.pc = self.slot = 0
         self.done = False
         self.trace = []
@@ -427,7 +429,12 @@ class VirtualRootPreflight:
     def step(self):
         if self.done:
             return None
-        c = self.program[self.pc]
+        if self.fetch_command is None:
+            c = self.program[self.pc]
+        else:
+            if self.slot == 0:
+                self.scan_command = self.fetch_command(self.pc)
+            c = self.scan_command
         if self.slot == 0:
             valid = all(uint(x, 24) and x < self.reader.descriptor_count and x != NULL for x in (c.a, c.d))
             valid = valid and (c.b == NULL if c.opcode == 0x33 else uint(c.b, 24) and c.b != NULL and c.b < self.reader.descriptor_count)
@@ -480,10 +487,15 @@ class HostControl:
         self.program = ()
         self.result = None
 
-    def launch(self, program, reader, policies, *, epoch=0, reset_required=False):
+    def launch(self, program, reader, policies, *, epoch=0, reset_required=False, frontend=None):
         if self.state != "idle" or self.poison or reset_required:
             return False
-        self.program, self.reader, self.policies = list(program), reader, dict(policies)
+        # Public-byte frontend is an explicit demand-fetch interface. The default
+        # decoded path remains a launch snapshot for retained model fixtures.
+        self.frontend = frontend
+        self.program = list(program) if frontend is None else program
+        self.reader, self.policies = reader, dict(policies)
+        self.current_command = Command(0, 0, NULL, NULL, NULL, 0, 0)
         self.epoch = epoch
         self.pc = self.completed = self.jobs = self.useful = self.executed = self.written = 0
         self.events, self.published, self.virtual = {0}, [], []
@@ -512,19 +524,30 @@ class HostControl:
     def _fresh(self, t):
         return not any(overlap(t.address, t.padded_end, a, e) for a, e in self.published + self.virtual)
 
-    def _decode(self, pc, *, expected_wait=None, blocked_signals=(), virtual_inputs=None):
-        c = self.program[pc]
+    def _decode(self, pc, *, expected_wait=None, blocked_signals=(), virtual_inputs=None,
+                expected_opcode=None):
+        if self.frontend is None:
+            c = self.program[pc]
+        else:
+            self.current_command = Command(0, 0, NULL, NULL, NULL, 0, 0)
+            c = self.frontend.fetch_command(pc)
+        self.current_command = c
         if c.opcode not in (0x20, 0x35) or c.engine != (2 if c.opcode == 0x20 else 3):
             raise Rejected("Unsupported", "bounded ordinary opcode/engine")
         if c.reserved:
             raise Rejected("Malformed", "reserved command bits")
+        if self.frontend is not None:
+            self.frontend.validate_command(c)
+        if expected_opcode is not None and c.opcode != expected_opcode:
+            raise Rejected("Malformed", "resident public command order")
         dependency = c.wait in self.events if expected_wait is None else c.wait == expected_wait
         if (not uint(c.wait, 16) or not uint(c.signal, 16) or c.wait >= self.event_slots
                 or not 0 < c.signal < self.event_slots or not dependency or c.signal in self.events
                 or c.signal == c.wait or c.signal in blocked_signals):
             raise Rejected("Dependency", "public event chain")
         a, b, d = tuple(self.reader.read(root, slot == 2) for slot, root in enumerate(c.roots))
-        p = self.policies.get(a.tail)
+        p = (self.policies.get(a.tail) if self.frontend is None else
+             self.frontend.read_policy(c, (a, b, d)))
         if p is None or not p.valid or b.tail != NULL or d.tail != NULL:
             raise Rejected("Unsupported", "typed consumer policy/tails")
         if a.dtype != 7 or d.dtype != 7 or a.rank != 2 or b.rank != 2 or d.rank != 2:
@@ -566,16 +589,31 @@ class HostControl:
         if self.pc + 2 >= len(self.program):
             raise Rejected("Malformed", "incomplete resident group")
         gate_pc = self.pc
-        c0, c1, c2 = self.program[gate_pc:gate_pc + 3]
-        self.pc = gate_pc + 1
-        if c1.opcode != 0x20:
-            raise Rejected("Malformed", "resident public command order")
-        u, (ua, ub, ud) = self._decode(self.pc, expected_wait=c0.signal, blocked_signals=(c0.signal,))
-        self.pc = gate_pc + 2
-        if c2.opcode != 0x35:
-            raise Rejected("Malformed", "resident public command order")
-        v, (_, _, vd) = self._decode(self.pc, expected_wait=c1.signal,
-                                    blocked_signals=(c0.signal,), virtual_inputs=(d, ud))
+        if self.frontend is None:
+            c0, c1, c2 = self.program[gate_pc:gate_pc + 3]
+            self.pc = gate_pc + 1
+            if c1.opcode != 0x20:
+                raise Rejected("Malformed", "resident public command order")
+            u, (ua, ub, ud) = self._decode(self.pc, expected_wait=c0.signal, blocked_signals=(c0.signal,))
+            self.pc = gate_pc + 2
+            if c2.opcode != 0x35:
+                raise Rejected("Malformed", "resident public command order")
+            v, (_, _, vd) = self._decode(self.pc, expected_wait=c1.signal,
+                                        blocked_signals=(c0.signal,), virtual_inputs=(d, ud))
+        else:
+            c0 = self.current_command
+            self.frontend.validate_resident_gate((a, b, d))
+            self.pc = gate_pc + 1
+            u, (ua, ub, ud) = self._decode(self.pc, expected_wait=c0.signal,
+                blocked_signals=(c0.signal,), expected_opcode=0x20)
+            c1 = self.current_command
+            if (u.m, u.n, u.k, u.weight_bf16) != (j.m, WIDTH, 1536, True):
+                raise Rejected("Unsupported", "resident fixed Up profile")
+            self.frontend.validate_resident_up((ua, ub, ud), (a, b, d))
+            self.pc = gate_pc + 2
+            v, (_, _, vd) = self._decode(self.pc, expected_wait=c1.signal,
+                blocked_signals=(c0.signal,), virtual_inputs=(d, ud), expected_opcode=0x35)
+            c2 = self.current_command
         if not ua.same_allocation(a):
             raise Rejected("Dependency", "Up requires exact A allocation")
         if (u.m, u.n, u.k, u.weight_bf16) != (j.m, WIDTH, 1536, True) or v.m != j.m:
@@ -593,14 +631,16 @@ class HostControl:
         self.group_commands = (c0, c1, c2)
         self.bound, self.pc = v, gate_pc + 2
         self.scanner = VirtualRootPreflight(self.program, self.reader, gate_pc, self.group_commands,
-                                           d, ud, max_commands=self.max_commands)
+                                           d, ud, max_commands=self.max_commands,
+                                           fetch_command=None if self.frontend is None else self.frontend.fetch_command)
         self.state = "scan"
 
     def ports(self, *, reset_required=False):
-        command = self.program[self.pc] if self.program and self.pc < len(self.program) else None
+        command = (self.current_command if getattr(self, "frontend", None) is not None else
+                   self.program[self.pc] if self.program and self.pc < len(self.program) else None)
         group_pending = self.group is not None
         completion = None
-        if self.state == "complete" and not (group_pending and self.status is None and reset_required):
+        if self.state == "complete" and not (self.enabled and self.status is None and reset_required):
             pc = self.pc
             if self.group_commands and self.status is None:
                 command = self.group_commands[self.completion_index]
@@ -640,8 +680,8 @@ class HostControl:
             elif s == "waitDone" and owner_result is not None:
                 p["owner_result_fire"] = True
                 r = owner_result
-                if self.group is not None and reset_required:
-                    raise Rejected("Protocol", "raw resident reset fences success")
+                if self.enabled and reset_required and (self.group is not None or r.status is None):
+                    raise Rejected("Protocol", "raw backend reset fences unaccepted success")
                 if r.tag != self.bound.tag:
                     raise Rejected("Protocol", "owner terminal tag")
                 if r.status:
@@ -654,8 +694,8 @@ class HostControl:
                 self.completion_index = 0
                 self.state = "complete"
             elif s == "complete":
-                if self.group is not None and self.status is None and reset_required:
-                    raise Rejected("Protocol", "raw reset revokes held Host completion")
+                if self.enabled and self.status is None and reset_required:
+                    raise Rejected("Protocol", "raw backend reset fences held unaccepted completion")
                 if p["completion"] is not None and completion_ready:
                     p["completion_fire"] = True
                     if self.status:

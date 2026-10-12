@@ -795,5 +795,111 @@ class HostTests(unittest.TestCase):
         self.assertEqual(h.state, "issue")
 
 
+class OrdinaryPublicationFenceTests(unittest.TestCase):
+    """Completion.fire linearizes success; raw quarantine has no epoch tag."""
+    def ordinary(self, enabled=True):
+        program, tensors, policies, regions = fixture()
+        tensors[1] = replace(tensors[1], dims=(1536, 32))
+        tensors[2] = replace(tensors[2], dims=(16, 32))
+        policies[100] = replace(policies[100], n=32)
+        h = m.HostControl(enabled=enabled)
+        self.assertTrue(h.launch(program[:1], m.TypedRootReader(tensors, regions, 200), policies, epoch=7))
+        advance_issue(h)
+        self.assertIsNone(h.group)
+        self.assertTrue(h.tick()["request_fire"])
+        return h
+
+    def test_poison_waits_for_actual_owner_terminal_including_delayed_final_ack(self):
+        h = self.ordinary()
+        for _ in range(5):
+            edge = h.tick(reset_required=True, completion_ready=True)
+            self.assertEqual(h.state, "waitDone")
+            self.assertTrue(edge["owner_result_ready"])
+            self.assertFalse(edge["completion_fire"])
+            self.assertEqual(h.events, {0})
+        edge = h.tick(owner_result=opaque_owner_result(h), reset_required=True, completion_ready=True)
+        self.assertTrue(edge["owner_result_fire"])
+        self.assertFalse(edge["completion_fire"])
+        self.assertEqual(h.status, "Protocol")
+        self.assertEqual((h.written, h.published, h.completed), (0, [], 0))
+
+    def test_raw_poison_and_terminal_same_edge_rejects_success(self):
+        h = self.ordinary()
+        h.tick(owner_result=opaque_owner_result(h), reset_required=True)
+        self.assertEqual(h.status, "Protocol")
+        self.assertEqual(h.events, {0})
+
+    def test_held_success_and_ready_poison_same_edge_never_publish(self):
+        for ready in (False, True):
+            h = self.ordinary()
+            h.tick(owner_result=opaque_owner_result(h))
+            held = h.ports()["completion"]
+            for _ in range(4):
+                self.assertEqual(h.tick()["completion"], held)
+            edge = h.tick(completion_ready=ready, reset_required=True)
+            self.assertIsNone(edge["completion"])
+            self.assertFalse(edge["completion_fire"])
+            self.assertEqual((h.status, h.completed, h.published, h.events), ("Protocol", 0, [], {0}))
+            # Error remains visible despite quarantine and can retire once.
+            self.assertTrue(h.tick(completion_ready=True, reset_required=True)["completion_fire"])
+            self.assertTrue(h.tick(result_ready=True, reset_required=True)["result_fire"])
+            self.assertEqual(h.state, "locked")
+
+    def test_accepted_success_survives_late_or_duplicate_poison(self):
+        h = self.ordinary()
+        terminal = opaque_owner_result(h)
+        h.tick(owner_result=terminal)
+        self.assertTrue(h.tick(completion_ready=True)["completion_fire"])
+        expected = (dict(h.result), set(h.events), list(h.published), h.completed)
+        for _ in range(3):
+            edge = h.tick(owner_result=terminal, completion_ready=True, reset_required=True)
+            self.assertFalse(edge["owner_result_fire"])
+            self.assertFalse(edge["completion_fire"])
+            self.assertEqual((h.result, h.events, h.published, h.completed), expected)
+        self.assertTrue(h.tick(result_ready=True, reset_required=True)["result_fire"])
+        self.assertFalse(h.launch(h.program, h.reader, h.policies, epoch=8, reset_required=True))
+
+    def test_duplicate_terminal_after_done_is_not_consumed_twice(self):
+        h = self.ordinary()
+        terminal = opaque_owner_result(h)
+        h.tick(owner_result=terminal)
+        before = (h.written, h.useful, h.executed)
+        for _ in range(3):
+            self.assertFalse(h.tick(owner_result=terminal)["owner_result_fire"])
+            self.assertEqual((h.written, h.useful, h.executed), before)
+        self.assertTrue(h.tick(owner_result=terminal, completion_ready=True)["completion_fire"])
+        self.assertEqual(h.completed, 1)
+
+    def test_old_epoch_tag_while_waiting_is_protocol_not_new_success(self):
+        h = self.ordinary()
+        old = replace(opaque_owner_result(h), tag=(6 << 16))
+        h.tick(owner_result=old)
+        self.assertEqual(h.status, "Protocol")
+        self.assertEqual((h.completed, h.written, h.published), (0, 0, []))
+
+    def test_explicit_ordinary_failure_preserved_under_same_edge_quarantine(self):
+        h = self.ordinary()
+        h.tick(owner_result=replace(opaque_owner_result(h), status="Backend"), reset_required=True)
+        self.assertEqual(h.status, "Backend")
+        self.assertEqual(h.written, 0)
+
+    def test_complete_domain_reset_clears_poison_before_relaunch(self):
+        h = self.ordinary()
+        h.tick(owner_result=opaque_owner_result(h), reset_required=True)
+        program, reader, policies = h.program, h.reader, h.policies
+        h.tick(coordinated_reset=m.RESET_DOMAIN)
+        self.assertFalse(h.poison)
+        self.assertTrue(h.launch(program, reader, policies, epoch=8))
+        advance_issue(h)
+        self.assertEqual(h.bound.tag, 8 << 16)
+
+    def test_disabled_profile_keeps_original_completion_semantics(self):
+        h = self.ordinary(enabled=False)
+        h.tick(owner_result=opaque_owner_result(h), reset_required=True)
+        self.assertIsNone(h.status)
+        self.assertTrue(h.tick(completion_ready=True, reset_required=True)["completion_fire"])
+        self.assertEqual(h.completed, 1)
+
+
 if __name__ == "__main__":
     unittest.main()

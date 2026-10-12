@@ -86,7 +86,7 @@
    val completionCommand=Mux(completingGroup,Mux(completionIndex===0.U,qkCommand,Mux(completionIndex===1.U,softCommand,cmd)),cmd)
    val completionPc=Mux(completingGroup,pc-2.U+completionIndex,pc)
 -  io.completion.valid:=state===complete
-+  io.completion.valid:=(if(enableResidentFfn)state===complete && (!resident.get.pending || status=/=0.U || !io.resident.get.resetRequired)else state===complete)
++  io.completion.valid:=(if(enableResidentFfn)state===complete && (status=/=0.U || !io.resident.get.resetRequired)else state===complete)
    io.completion.bits:=Cat(completionCommand(55,40),status,completionCommand(10,8),completionPc.pad(29))
 -  io.job.valid:=state===issue;io.job.bits:=bound;io.done.ready:=state===waitDone
 +  io.job.valid:=(if(enableResidentFfn)state===issue && !resident.get.pending else state===issue)
@@ -206,7 +206,7 @@
 +  if(enableResidentFfn){when(io.resident.get.request.fire){jobs:=jobs+1.U;state:=waitDone}}
 +  if(enableResidentFfn){
 +  when(io.done.fire || io.resident.get.result.fire){val r=Mux(resident.get.pending,io.resident.get.result.bits,io.done.bits)
-+    when(resident.get.pending && io.resident.get.resetRequired){fail(Status.Protocol.U)}
++    when(io.resident.get.resetRequired && (resident.get.pending || r.status===0.U)){fail(Status.Protocol.U)}
 +    .elsewhen(r.tag=/=bound.tag){fail(Status.Protocol.U)}
 +    .elsewhen(r.status=/=0.U){fail(r.status)}
 +    .elsewhen(r.writeBytes=/=bound.writeBytes){fail(Status.Protocol.U)}
@@ -237,7 +237,7 @@
        }
      }
    }
-+  if(enableResidentFfn){when(state===complete && resident.get.pending && status===0.U && io.resident.get.resetRequired){fail(Status.Protocol.U)}}
++  if(enableResidentFfn){when(state===complete && status===0.U && io.resident.get.resetRequired){fail(Status.Protocol.U)}}
 +  if(enableResidentFfn){
 +    val r=resident.get
 +    when(state===scanFetch && reader.io.request.fire){state:=scanGet}
@@ -311,7 +311,7 @@
 +  if(enableResidentFfn){
 +    owner.io.resident.get<>cmd.io.resident.get
 +    owner.io.resident.get.abort:=cmd.io.resident.get.abort || RegNext(hub.io.resetRequired || dmaPoison,false.B)
-+    cmd.io.resident.get.resetRequired:=owner.io.resident.get.resetRequired || hub.io.resetRequired || dmaPoison
++    cmd.io.resident.get.resetRequired:=owner.io.resident.get.resetRequired || owner.io.resetRequired || hub.io.resetRequired || dmaPoison
 +  }
    hub.io.requests(0)<>cmd.io.memory;cmd.io.response<>hub.io.responses(0)
    hub.io.requests(1)<>owner.io.memory;owner.io.response<>hub.io.responses(1)

@@ -20,39 +20,189 @@
       "sha256": "bb9869995a5b3c22fd5cf4bf23cd98f8af6df3faeafe9a4d6953c11771dbe7e1"
     },
     "README.md": {
-      "bytes": 8210,
-      "sha256": "500c53da179601235ea556461d3e469fe25b445bfc8cae8b90311c9fc488173d"
+      "bytes": 10307,
+      "sha256": "521ee764c77f35442604481ce88681670779b5272bf5dd96be7399dae7d9af87"
     },
     "check_frontend.py": {
       "bytes": 16206,
       "sha256": "16aa6c7f9d4b609275d5e1d946b78897bcc5d5de32508c4677e57d0cfe3db361"
     },
     "group.patch": {
-      "bytes": 43023,
-      "sha256": "97d6f83156f378d32374fe24c35fa0b74ea6e9af5e949d9ed805fdb3bdbf32c8"
+      "bytes": 43020,
+      "sha256": "32551bb06885785fcbc55b7c9c3b7ff04c4f2ab76bb93f2c2c41ff41f312e674"
     },
     "model.py": {
-      "bytes": 30119,
-      "sha256": "368668e1f2ad4e6ba78404089f881888927b507365417c6cd61b51f78d978fff"
+      "bytes": 32407,
+      "sha256": "694b8a420e8b9ed4c7c3d2956ba1a926492ccd9dabe77351887880e3e617610d"
     },
     "source_pins.json": {
       "bytes": 25299,
-      "sha256": "742b085c3a491ad0c92fb005b3b694575cac5c836ca62dfe86a7156afb8bf8e8"
+      "sha256": "bf8b3f7619abc3513edc12cd465fd54ee760860760975502a6e9dfc0c56b6f67"
     },
     "test_delivery.py": {
       "bytes": 997,
       "sha256": "515ed3b6d945235e7194e7c7afc35ceaf27af644916fd3ae340386bcc3d02c86"
     },
     "test_frontend.py": {
-      "bytes": 4755,
-      "sha256": "1dc90e46a2d69355830ba3ce7adfeb7beae2835c423115949aa1386d1044bcf4"
+      "bytes": 4915,
+      "sha256": "9db83ab9309562f028028d9f5e8eecfb0e39f0ef9c9015adb0be4d91412887f8"
     },
     "test_model.py": {
-      "bytes": 38176,
-      "sha256": "04dfa52e22188c50d3f3ef44108b646c2f3d01c22e59cdfb4ea4eb3dbb8e4344"
+      "bytes": 43619,
+      "sha256": "0e40a6937e172842593255230f28c23aba0fda82a13ca687fcb29c84190358b4"
     }
   },
   "frontend": {
+    "summary_sha256": "b0108585105242b2f98f64d5f0b751a13be10189bdff0101a62f96c3d2cc6fac",
+    "audit_replay_sha256": "68ef41f1ca32b706cf49364446b397e3004e5d81f715d49ed3c336a2e4354aeb",
+    "typechecked_sources": 95,
+    "full_host_top_typechecked": true,
+    "full_qwen_owner_kernel_typechecked": true,
+    "full_top_elaborated": false,
+    "generated_chirrtl": {
+      "bridge_baseline.fir": {
+        "sha256": "2028cf90e0c16205ee56918e18497b4d851f9d10887a8c932c6f5ee7b4b01914",
+        "bytes": 39928
+      },
+      "bridge_disabled.fir": {
+        "sha256": "4d44f2a07672085685c806bd636a68caf7574b44efb5db87951cc70c28c2bedb",
+        "bytes": 46094
+      },
+      "coordinator.fir": {
+        "sha256": "e7f36ca8ae457c29b12fcd6e1b9de934a80f263ac3dc162f8ab8e373bd7b7dec",
+        "bytes": 131294
+      },
+      "host_baseline.fir": {
+        "sha256": "7c4e92814e2cb9d02f9c7b643f31e9f994bbb2b1b1b2010e6761d667147781a7",
+        "bytes": 1447127
+      },
+      "host_disabled.fir": {
+        "sha256": "4489c9650cd3bc596766d0b449b19db32174ddc7f70ff023a41c47141cf8c3a3",
+        "bytes": 1734888
+      },
+      "host_enabled.fir": {
+        "sha256": "3a784a7d5588cd4ce1ef2852fd90ec91ef65e42b7a9c53985fac4e5f17b4f099",
+        "bytes": 2015932
+      }
+    },
+    "default_off_ir": {
+      "bridge": {
+        "equal": true,
+        "sha256": "98191dc12b118a6dab3b3a8ab8b3a6ad1aabe5d408556047ba2a2e349d6b1c9f"
+      },
+      "host": {
+        "equal": true,
+        "sha256": "188a09563612c3813a8d5ab34f4d38c80e4287b90ca7bab7ba358829b4dcf4a9"
+      }
+    },
+    "compiled_tooling_sha256": {
+      "check_frontend.py": "16aa6c7f9d4b609275d5e1d946b78897bcc5d5de32508c4677e57d0cfe3db361",
+      "source_pins.json": "bf8b3f7619abc3513edc12cd465fd54ee760860760975502a6e9dfc0c56b6f67",
+      "FfnGroupElaboration.scala": "3950c62a62ee4900d47ccff80c9b9830fc6734e7acb4f14036b4692f4509a800",
+      "group.patch": "32551bb06885785fcbc55b7c9c3b7ff04c4f2ab76bb93f2c2c41ff41f312e674",
+      "FfnTileSiluBridge.scala": "bb9869995a5b3c22fd5cf4bf23cd98f8af6df3faeafe9a4d6953c11771dbe7e1",
+      "FfnResidentCoordinator.scala": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+      "FfnResidentProfile.scala": "1ff2df076371ad9947f9018c02f1e8d00f888613b5d7ca6411954617ef1ea2a6"
+    },
+    "post_compile_tooling_differences": {},
+    "post_compile_difference_scope": "No compiled source/tool drift; new ordinary unaccepted-success poison fence has its own fresh frontend identity.",
+    "command_seconds": {
+      "compile.log": 38.02927707298659,
+      "elaboration.log": 2.371471681006369
+    },
+    "java_budget": {
+      "active_processors": 1,
+      "heap_mib": 1024,
+      "timeout_seconds_per_command": 180
+    }
+  },
+  "validation": {
+    "historical_pre_publication": {
+      "python_tests": 52,
+      "python_test_log_sha256": "9cfc9d967ac27a1043f604c0a28ed5634baff7e8046f7a97466edd947cec7054",
+      "independent_review": "Source and bounded control review; initial P0/P1 issues corrected. No full root execution, RTL or QoR conclusion."
+    },
+    "control_tests": 52,
+    "composition_tests": 8,
+    "delivery_tests": 1,
+    "python_tests": 61,
+    "control_log_sha256": "cfee59a223bc1f0e35b7084b499bcb5f06a9d4e90520c7bfec1f09b84574536d",
+    "composition_log_sha256": "0a1643856df534ed765ec4734283b517551caffa69eb6bb201d7ed0bd522e54e",
+    "frontend": {
+      "summary_sha256": "b0108585105242b2f98f64d5f0b751a13be10189bdff0101a62f96c3d2cc6fac",
+      "source_count": 95,
+      "chirrtl_count": 6,
+      "default_off_ir_equal": true,
+      "rtl_generated": false
+    }
+  },
+  "rtl_generated": false,
+  "hardware_arithmetic_executed": false,
+  "full_host_execution": false,
+  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "weights_or_raw_tensors_in_git": false,
+  "unverified": [
+    "full production Host/kernel/adapter behavioral execution",
+    "whole56-window numerical group then full Down in same new model",
+    "full selected block M128/native/FP32 final",
+    "hardware replay and fixed-resource whole-wall counters",
+    "physical synthesis area and timing"
+  ],
+  "resources": {
+    "comparison_base": "already drain/window/tile-enabled kernel with external tile/SFU ports, before resident coordinator",
+    "coordinator_metadata_bits": 3389,
+    "host_metadata_added_bits": 2398,
+    "migrated_bridge_total_register_bits": 592,
+    "migrated_bridge_gate_payload_hold_bits": 512,
+    "kernel_registered_shared_poison_bits_source_only": 1,
+    "top_registered_memory_poison_bits_source_only": 1,
+    "group_increment_total_bits_including_source_only_poison": 6381,
+    "new_payload_holds_beyond_migrated_bridge": 0,
+    "new_result_buffers": 0,
+    "bridge_was_previously_harness_only": true,
+    "kernel_and_top_full_elaboration_performed": false,
+    "prior_candidate_bank_owner_loan_deltas": "unchanged; accounted in parent window/drain receipts"
+  },
+  "contract": {
+    "public_opcodes": [
+      32,
+      32,
+      53
+    ],
+    "virtual_gate_up": true,
+    "whole_launch_root_preflight": true,
+    "all_three_original_completions_delayed": true,
+    "act_only_ddr_publication": true,
+    "gate_up_weights": "BF16",
+    "a_act": "FP32",
+    "shape_m": [
+      16,
+      128
+    ],
+    "shape_k": 1536,
+    "shape_n": 8960,
+    "groups": 56,
+    "tile_columns": 160,
+    "act_bytes_m16": 573440,
+    "act_bytes_m128": 4587520,
+    "normal_down_uses_ddr": true,
+    "cycles": "actual accept-to-first-terminal wall edges; excludes stalled terminal",
+    "macs": "actual owner terminal counters, including error/drain terminals; never shape predictions",
+    "new_sram_arrays": 0,
+    "new_matrix_units": 0,
+    "new_sfu_units": 0,
+    "new_dma_instances": 0
+  },
+  "model_scope": "Decoded primary-root results and opaque owner terminations; both M16/M12856-window scheduling, counters, abort/reset and Host3completion logic. Does not execute actual descriptor parser, Chisel, FPU, full group numerics or iDMA.",
+  "production_host_routing_implemented": true,
+  "new_public_command_encoding": false,
+  "post_capture_source_changes": {
+    "old_numerical_commit": "812d858f8e33e1e6da0cac354846465e971aa975",
+    "historical_numerical_receipt_unchanged": true,
+    "new_actual_capture_inherited": false,
+    "details": "Public-byte Host adapter seam; optional actual owner-edge callback; default-off ordinary Host unaccepted-success quarantine fence. Arithmetic source unchanged. New public numeric capture tracked separately."
+  },
+  "historical_pre_poison_frontend": {
     "summary_sha256": "40438021ddefb60a260255d000187d5a76f5b7383317ecd871c9141a85135737",
     "audit_replay_sha256": "8ca182c91542b0026c9ae68a7e4a6b3bd66ca589efacc081ef1096779a095faa",
     "typechecked_sources": 95,
@@ -120,70 +270,5 @@
       "heap_mib": 1024,
       "timeout_seconds_per_command": 180
     }
-  },
-  "validation": {
-    "python_tests": 52,
-    "python_test_log_sha256": "9cfc9d967ac27a1043f604c0a28ed5634baff7e8046f7a97466edd947cec7054",
-    "independent_review": "Source and bounded control review; initial P0/P1 issues corrected. No full root execution, RTL or QoR conclusion."
-  },
-  "rtl_generated": false,
-  "hardware_arithmetic_executed": false,
-  "full_host_execution": false,
-  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
-  "weights_or_raw_tensors_in_git": false,
-  "unverified": [
-    "full production Host/kernel/adapter behavioral execution",
-    "whole56-window numerical group then full Down in same new model",
-    "full selected block M128/native/FP32 final",
-    "hardware replay and fixed-resource whole-wall counters",
-    "physical synthesis area and timing"
-  ],
-  "resources": {
-    "comparison_base": "already drain/window/tile-enabled kernel with external tile/SFU ports, before resident coordinator",
-    "coordinator_metadata_bits": 3389,
-    "host_metadata_added_bits": 2398,
-    "migrated_bridge_total_register_bits": 592,
-    "migrated_bridge_gate_payload_hold_bits": 512,
-    "kernel_registered_shared_poison_bits_source_only": 1,
-    "top_registered_memory_poison_bits_source_only": 1,
-    "group_increment_total_bits_including_source_only_poison": 6381,
-    "new_payload_holds_beyond_migrated_bridge": 0,
-    "new_result_buffers": 0,
-    "bridge_was_previously_harness_only": true,
-    "kernel_and_top_full_elaboration_performed": false,
-    "prior_candidate_bank_owner_loan_deltas": "unchanged; accounted in parent window/drain receipts"
-  },
-  "contract": {
-    "public_opcodes": [
-      32,
-      32,
-      53
-    ],
-    "virtual_gate_up": true,
-    "whole_launch_root_preflight": true,
-    "all_three_original_completions_delayed": true,
-    "act_only_ddr_publication": true,
-    "gate_up_weights": "BF16",
-    "a_act": "FP32",
-    "shape_m": [
-      16,
-      128
-    ],
-    "shape_k": 1536,
-    "shape_n": 8960,
-    "groups": 56,
-    "tile_columns": 160,
-    "act_bytes_m16": 573440,
-    "act_bytes_m128": 4587520,
-    "normal_down_uses_ddr": true,
-    "cycles": "actual accept-to-first-terminal wall edges; excludes stalled terminal",
-    "macs": "actual owner terminal counters, including error/drain terminals; never shape predictions",
-    "new_sram_arrays": 0,
-    "new_matrix_units": 0,
-    "new_sfu_units": 0,
-    "new_dma_instances": 0
-  },
-  "model_scope": "Decoded primary-root results and opaque owner terminations; both M16/M12856-window scheduling, counters, abort/reset and Host3completion logic. Does not execute actual descriptor parser, Chisel, FPU, full group numerics or iDMA.",
-  "production_host_routing_implemented": true,
-  "new_public_command_encoding": false
+  }
 }

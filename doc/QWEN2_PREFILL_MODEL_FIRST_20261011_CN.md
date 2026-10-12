@@ -764,3 +764,20 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - M128 payload流量98,041,856B：A786,432，权重82,575,360，act写/读各4,587,520，prefix写/读各2,359,296，Down写786,432；不含完整block/metadata。主机观察有效/物理FMA均5,284,823,040；M16采用相同128-row物理映射，有效660,602,880、物理同M128。因此约200秒M16并非线性M缩放，且这些不是Chisel/RTL计数或硬件利用率。固定4096 MAC×完整硬件wall分母仍无实测值。
 - 本增量只新增模型编排、测试、pins/紧凑摘要和CI小门；旧owner/Chisel/C++算术源保持相同。两份成功capture保持ecc8aaf执行身份，全文轨迹只留明确有界前缀与全流hash；原始输出/prefix/权重仅本地，不上传Git。前序ecc8aaf的131IR前端闭环不冒充本次数值硬件执行。
 - done（局部）：完整FFN子图M16/M128真实软件端口数据依赖、独立review与实际capture；ongoing：本批发布/精确轻CI、生产Host/parser/shared-iDMA行为对应及完整所选图；todo：完整五block M128和冻结刺激硬件回放。原native/FP32-final FAIL与政策待定不变，Q21.3/U00.2 ongoing，U01 todo，C02.2 OPEN。原整图131,727,360B/71.3456%仍是理想搬运上界，不能从FFN子图推成硬件兑现。
+
+- 发布与工件闭环：`812d858f8e33e1e6da0cac354846465e971aa975`，tree `29501548b0c499f914bfff2ead19cba43afb2084`。frontend run `38192104398`/job `114626872092` 和 payload run `38192104433` 均首次SUCCESS；日志实核14个suite/514 tests、30条前端命令、11来源manifest、87锁定依赖及131份本地/CI严格相同IR。artifact `11722430435` 为48,428,613B，SHA256 `901bf26d161cecea62336df69491e0747c1521e8a720698a809bf08d8b68e888`，复核摘要SHA `96905f7b370dea3ea49a7700b65eca6d781dd1c0a49928f3f899178bbc49f411`。CI包含小合成数值门，未重跑官方载荷M16/M128；两份实值capture保持原独立身份，未新增RTL/native通过。下步消费公开Command128/descriptor实际字节，接到同一Host/group/owner链。
+
+### 2026-10-12 公开字节到 FFN4 的模型接入与普通 Down 发布栅栏
+
+- 新 `ffn_public` 复用原公开 packer 生成4条Command128和43条descriptor，按64B真实地址读取，保留尾维填1、元素stride、权限、offset、policy与全program primary-root扫描。没有私有opcode、地址槽或bias_index约定；命令/descriptor、8个tensor和workspace共11个完整物理span互斥。
+- 同一Host模型真实发出一个驻留组请求和一个普通Down请求；同一owner/bank依次执行56窗Gate/Up、原SiLU、act写ACK，再读取实际act进入完整Down。原三个组completion与第四个Down completion均通过正常公开路径，算术golden不参与命令发出或中间初始化。
+- 真实源码审查发现：原三处raw-poison发布栅栏只覆盖resident pending，普通Down held success可能漏过。修正只在enableResidentFfn profile内覆盖普通成功，Top直接加入既有owner总resetRequired；done.ready/在飞ACK排空不变，普通明确error保留。completion.fire之前成功可被隔离阻断，fire之后已发布event/span与held最终result不能被迟到poison追溯撤销；全局quarantine没有epoch字段，不构造跨reset freshness。
+- 修正版52个控制门（新增9门）、8源码组合门和12个真实小算术/ACK门通过，包含同拍terminal/ready/poison、末ACK背压、重复ACK、错tag、fire前后两种边界、错误排空与协调reset。95实际Scala源typecheck、6有界CHIRRTL通过；两份default-off IR相同，寄存器增量账仍6381bit，无新增SRAM/Matrix/SFU/iDMA。完整顶层未展开，组合门控面积/时序及网表环路未验。
+- 公开adapter另31门通过，capture封装10门通过。首次prepare-only误把仓库内venv的numpy/yaml工具计入源码闭包，在读取数值/编译之前失败；保留原回执，修为仅将当前sys.prefix的site/dist-packages归为工具并记录版本，其他repo/work实际依赖仍fail-closed。新的严格执行闭包48源、26项实际Python imports，另47份历史inventory只作保存，不冒充执行源；旧812d858 capture/pins保持原身份。
+- M16新公开FFN4捕获已成功：304.597秒host wall，四阶段对独立固定算术和原v0 producer前16行均0位差；act573440B经1344 ACK完成，Down98304B，公开最终4completion/2job/671744B。Down末ACK model tick3142521、owner终态3142522、公开completion3142527，全部在参考比较前。metadata87个64B读取共5568B，逐record地址/slot/word已独立复核。M16仍是冻结M128前16行，不是独立官方16-token forward；这些tick不是硬件周期。
+- M128同48源单次执行已EXIT0：437.927秒host wall，四阶段3,637,248个FP32元素对独立算术及保存producer均0位差，act4,587,520B和Down786,432B全ACK；末ACK model tick4,674,597、owner终态4,674,598，公开4completion/2job成功。metadata仍87×64B，FFN payload98,041,856B加metadata为98,047,424B。观察有效/物理主机FMA均5,284,823,040；不是Chisel/RTL计数，whole-wall硬件利用率仍null。本路径仍只FFN4子程序，输入为原v0 n1，前置Attention/Norm/residual不在该数值闭包。原完整block native/FP32-final FAIL、政策待定、Q21.3/U00.2 ongoing、U01 todo、C02.2 OPEN保持。
+- CI入口只增加新公开子门和其不可变812d858 baseline fetch/probe；浅克隆依赖集合由5扩到6并保留逐项缺失/漂移负例。测试prepare显式使用当前测试checkout HEAD，生产默认源baseline不变。仍只触发frontend/payload两门，未扩大15分钟预算或触发完整RTL批次。
+
+- 两个新actual capture已独立只读复核：48源运行前/后及冻结副本、4实际输出对保存producer逐字节、3prefix文件与87条metadata原字均一致。M128公开Down completion tick4,674,603晚于真实owner终态；紧凑摘要35,953B独立绑定原完整summary，数据不入Git。done（局部）：公开FFN4 M16/M128源/控制/数值闭包；ongoing：24文件小批精确发布与两门CI、完整所选prefill图；todo：完整五block验收与最终冻结刺激硬件回放。
+
+- 发布前独立摘要审查纠正一处统计：112个窗口回执里的A-load fence是累计值且每项恒为1，不能求和为112。紧凑字段改取最后累计1，并加交付断言；旧草稿摘要与tree清单保留，实际capture/算术/控制源码未变，未重跑数值。

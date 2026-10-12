@@ -98,7 +98,7 @@ class CappedRecords:
         self.stream.close()
 
 
-def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthetic_geometry=False):
+def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthetic_geometry=False, owner_tick=None):
     """Return (accepted-traffic report, actual FP32 words) after final terminal.
 
     memory.read64(address) selects act/weight solely by physical address. The
@@ -106,6 +106,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
     delegating other addresses. Command kinds are checked only after dispatch.
     No owner, SRAM bank, tile adapter, arithmetic model or reference is created.
     """
+    tick_owner = owner.tick if owner_tick is None else owner_tick
     started, start_tick = time.monotonic(), owner.clock
     out, down, workspace = Path(out), model.down, owner.workspace
     require(sys.byteorder == 'little', 'explicit little-endian host required')
@@ -202,7 +203,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
         check_budget()
         port = owner.ports()
         require(port['job_ready'] and port['response'] is None, 'ordinary Down job port not ready')
-        admission = owner.tick(job=job)
+        admission = tick_owner(job=job)
         require(admission['job_ready'] and owner.job is job and owner.state == 'clear' and
                 not admission.get('response_fire'), 'ordinary Down job handshake not accepted')
         counts['job_handshakes'] = 1
@@ -251,7 +252,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                     inputs['write_ack'] = pending_ack
             if seed_ack is not None:
                 inputs['seed_ack'] = seed_ack
-            edge = owner.tick(**inputs)
+            edge = tick_owner(**inputs)
             counts['model_ticks'] += 1
             check_identity()
             for signal, ready in (('write_command', inputs['write_command_ready']),

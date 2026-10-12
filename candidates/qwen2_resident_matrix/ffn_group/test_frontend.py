@@ -58,9 +58,11 @@ class ProductionComposition(unittest.TestCase):
         self.assertRegex(text,r'io\.request\.ready\s*:=.*!io.flush')
         self.assertRegex(text,r'io\.streamRequest.get.ready\s*:=.*!io.flush')
     def test_poison_fences_every_public_success(self):
-        self.assertIn('resident.get.pending && io.resident.get.resetRequired){fail(Status.Protocol.U)}',self.host)
-        self.assertIn('!resident.get.pending || status=/=0.U || !io.resident.get.resetRequired',self.host)
-        self.assertIn('state===complete && resident.get.pending && status===0.U && io.resident.get.resetRequired',self.host)
+        self.assertIn('io.resident.get.resetRequired && (resident.get.pending || r.status===0.U)){fail(Status.Protocol.U)}',self.host)
+        self.assertIn('status=/=0.U || !io.resident.get.resetRequired',self.host)
+        self.assertIn('state===complete && status===0.U && io.resident.get.resetRequired',self.host)
+        self.assertIn("owner.io.resident.get.resetRequired || owner.io.resetRequired || hub.io.resetRequired || dmaPoison",self.top)
+        self.assertNotIn("state===finish &&",self.host)
     def test_numeric_acceptance_not_claimed(self):
         profile=(TASK/'FfnResidentProfile.scala').read_text()
         self.assertIn('"numeric_policy_approved":false',profile)

@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "scope": "PUBLIC_COMMAND128_FFN4_SOURCE_FRONTEND_AND_ACTUAL_SOFTWARE_MODEL",
+  "base_commit": "812d858f8e33e1e6da0cac354846465e971aa975",
+  "files": {
+    "README.md": {
+      "bytes": 4936,
+      "sha256": "f0cc4be2d81b93fe20f2f003377346a48f155ab0b5dc1943aea78400c05df406"
+    },
+    "check_numeric.py": {
+      "bytes": 30263,
+      "sha256": "7447baeb99a4a0c2ab3a8980cf18414db994728164d7905b597d67f5db39359b"
+    },
+    "execute_numeric.py": {
+      "bytes": 19613,
+      "sha256": "d24871022dcdb3ecd06cb52db7dbdc94371a17fd9e7d28b545a777de2fd98b5b"
+    },
+    "fixture.py": {
+      "bytes": 7027,
+      "sha256": "b1058f3156f3b2fcb58b65f99d02040e0c7b174d98c26f0cc20af010ba378f35"
+    },
+    "model.py": {
+      "bytes": 17823,
+      "sha256": "42d6943a506e6f1b6110d5839afc4f8ffa5dd7e1d08851cb47ef8f86b7f4c65f"
+    },
+    "numerical_receipt.json": {
+      "bytes": 35953,
+      "sha256": "011712a7bbcee20cd4226452ab7d7b7d2d1dd78e7a0b83a83899d7f85ca19541"
+    },
+    "test_capture.py": {
+      "bytes": 14164,
+      "sha256": "127f3304f526b1a9ba1bba3fc2ee01992a6dd0e5027e50bd34cc3f00e96a1336"
+    },
+    "test_delivery.py": {
+      "bytes": 3438,
+      "sha256": "b9b535da263f102cf150755a8dc9db31678fea4ce02da1c21547517ff39d0624"
+    },
+    "test_execute_numeric.py": {
+      "bytes": 20241,
+      "sha256": "cb566f7fd15a58f995f860815a5b72329dc719c52b04ddc7733dcd686c6d5e2a"
+    },
+    "test_model.py": {
+      "bytes": 20327,
+      "sha256": "7231f6299707e58e8605629785c79382874235ebc60fa102e5cf0d01beff910f"
+    }
+  },
+  "validation": {
+    "public_byte_tests": 31,
+    "actual_synthetic_execution_tests": 12,
+    "capture_wrapper_tests": 10,
+    "delivery_tests": 2,
+    "total_public_tests": 55,
+    "group_control_tests": 52,
+    "group_composition_tests": 8,
+    "source_frontend_count": 95,
+    "chirrtl_files": 6,
+    "actual_model_rows": [
+      16,
+      128
+    ],
+    "actual_captures_in_ci": false,
+    "independent_source_review_sha256": "4cef237b0940e486a782b949929803e36866771df9ea24db02677ea05c5feab5",
+    "independent_snapshot_review_sha256": "a6cd3510327481fd8421465f1792d459d54b31b7b8ad973ca6ca04363a0e4b12",
+    "independent_actual_review_sha256": "2f7025e0ad99c73beef0193239e52b23fadd2c29917de7ab26376c734f236c14",
+    "independent_actual_review": "No P0/P1; raw outputs, all three physical prefix versions, every accepted metadata word, public terminal sequence and source identities independently read back for both cases."
+  },
+  "resources": {
+    "mac_units": 4096,
+    "sram_bytes": 786432,
+    "bank_count": 32,
+    "bank_ports": "1R1W",
+    "silu_lanes": 16,
+    "new_arithmetic_sram_or_dma_instances": 0,
+    "new_poison_fence_register_bits": 0,
+    "new_combinational_cost_measured": false,
+    "group_total_increment_metadata_bits_including_prior_migrated_bridge": 6381
+  },
+  "rtl_executed": false,
+  "scala_host_executed": false,
+  "full_block_executed": false,
+  "actual_idma": false,
+  "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "weights_or_raw_tensors_in_git": false,
+  "hardware_cycle_prediction": null,
+  "full_wall_mac_utilization": null
+}

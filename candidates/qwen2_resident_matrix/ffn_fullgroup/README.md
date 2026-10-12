@@ -48,3 +48,13 @@ M16为199.869秒，M128为279.681秒主机wall；四阶段均0位差。M128累�
 M128 payload模型流量98,041,856B，包括A读786,432、三份权重82,575,360、act写后读各4,587,520、prefix写后读各2,359,296和最终Down写786,432。它不含整block/metadata，也不是实际DDR带宽测量。
 
 M16和M128均执行原128-row物理Matrix映射，M16只16行有效，其余padding仍检查。因此两者主机物理FMA均为5,284,823,040，M16有效660,602,880，M128有效5,284,823,040；主机wall不能按有效M线性外推。M128的算术映射填满率不是whole-wall硬件MAC利用率。
+
+## 后续公开 Host 接口与历史身份
+
+812d858 的两份成功capture及 `numerical_receipt.json` / `precision_pins.json`
+保持原来源。后续 `down_driver.py` 仅增加可选 `owner_tick` 回调，让公开 Host 在
+同一个真实 owner 边沿推进；默认仍调用原 `owner.tick`，原9个Down小测试通过。
+共享Host模型随后加入公开字节读取接口及普通Down未握手成功的poison栅栏。
+这些改变没有重绑定旧capture为新源码PASS；需要复现旧入口时使用不可变commit
+`812d858f8e33e1e6da0cac354846465e971aa975` 的源码。新公开字节闭包使用
+`../ffn_public` 的独立来源pin、执行及验收结果。

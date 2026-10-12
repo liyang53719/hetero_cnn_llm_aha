@@ -12,8 +12,10 @@ on:
       - 'scripts/check_resident_seed_frontend.py'
       - 'scripts/check_transposed_matrix_frontend.py'
       - 'scripts/run_isolated_public_tests.py'
+      - 'scripts/build_shared_matrix_recipe.py'
       - 'tests/test_matrix_interface_candidate.py'
       - 'tests/test_isolated_public_tests.py'
+      - 'tests/test_shared_matrix_recipe.py'
       - 'tests/test_resident_seed_frontend.py'
       - 'chisel/rope_hardware_oracle/maven-lock.json'
   workflow_dispatch:
@@ -55,10 +57,7 @@ jobs:
           PYTHONPATH=src python -c 'from heteronpu.command import Command128; from heteronpu.descriptor_chain import DescriptorRecord'
       - name: Build one shared host Matrix and existing SiLU recipe
         run: |
-          mkdir -p work/matrix-interface-frontend/attention-tests
-          g++ -shared -fPIC -O2 -ffp-contract=off -fno-fast-math candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp -o work/matrix-interface-frontend/attention-tests/matrix_silu_numeric.so
-          echo "MATRIX_SERVICE_LIBRARY=$PWD/work/matrix-interface-frontend/attention-tests/matrix_silu_numeric.so" >> "$GITHUB_ENV"
-          echo "MATRIX_SERVICE_EVIDENCE_DIR=$PWD/work/matrix-interface-frontend/attention-tests" >> "$GITHUB_ENV"
+          python scripts/build_shared_matrix_recipe.py --repo . --out work/matrix-interface-frontend/attention-tests
       - name: Independent control contracts and negative identity guards
         run: |
           python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
@@ -75,6 +74,7 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_fullgroup -p 'test_*.py' -v
           python scripts/run_isolated_public_tests.py --out work/matrix-interface-frontend/public-tests
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_attention -p 'test_*.py' -v
+          python -m unittest discover -s tests -p test_shared_matrix_recipe.py -v
           python -m unittest discover -s tests -p test_isolated_public_tests.py -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v

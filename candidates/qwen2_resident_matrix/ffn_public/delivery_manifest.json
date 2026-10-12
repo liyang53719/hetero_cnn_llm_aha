@@ -96,8 +96,8 @@
       "sha256": "934e301063a8b87702096dc3ecbc9c1d974c85bf5154646ea88a159dedc473ee"
     },
     "test_fullgraph_memory.py": {
-      "bytes": 22953,
-      "sha256": "b8c17eab64cb8ffaf0a5b15c5f87f89796fc7a4ea210d22db991754f1e62f9dc"
+      "bytes": 22119,
+      "sha256": "e04eca46154404199965484e819af87920ccd3e04312a2b8a315d717437b4f32"
     },
     "test_fullgraph_receipt.py": {
       "bytes": 8353,
@@ -185,7 +185,7 @@
       128
     ],
     "actual_captures_in_ci": false,
-    "independent_actual_review": "Read-only source/input/actual-output/oracle/saved-stage/ACK/checkpoint/sentinel verification passed for both new pc0–9 captures; no arithmetic rerun."
+    "independent_actual_review": "Read-only source/input/actual-output/oracle/saved-stage/ACK/checkpoint/sentinel verification passed for both new pc0\u20139 captures; no arithmetic rerun."
   },
   "historical_numerical_source": {
     "commit": "8212a32f43338163baee4126e522dcacede0fa23",

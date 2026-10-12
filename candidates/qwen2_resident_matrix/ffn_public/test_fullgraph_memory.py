@@ -1,4 +1,4 @@
-"""Small addressed-beat checks for shared public FFN memory; no arithmetic/RTL."""
+"""Addressed-beat and bounded shared-host arithmetic checks; no RTL."""
 from dataclasses import replace
 import ctypes as C
 import hashlib
@@ -310,21 +310,11 @@ class FullGraphMemoryTests(unittest.TestCase):
 
 
 class SharedWorkspaceDriverTests(unittest.TestCase):
-    """Reuse only the verified existing strict binary; never compile a test."""
+    """Consume the workflow's explicit, source-verified shared host build."""
     @classmethod
     def setUpClass(cls):
-        cached = ROOT / 'work/qwen2_ffn_fullgroup_20261012/actual_m128_01'
-        source = Path('candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp')
-        binary, receipt = cached / 'numeric_recipe.so', cached / 'summary.json'
-        frozen = cached / 'frozen_sources' / source
-        if not all(p.is_file() for p in (binary, receipt, frozen)):
-            raise unittest.SkipTest('verified existing arithmetic binary unavailable; no compilation allowed')
-        compiled = json.loads(receipt.read_text())['compile']
-        if (frozen.read_bytes() != (ROOT / source).read_bytes() or
-                hashlib.sha256(binary.read_bytes()).hexdigest() != compiled['binary_sha256'] or
-                not {'-O2', '-fno-fast-math', '-ffp-contract=off', '-frounding-math'} <= set(compiled['argv'])):
-            raise unittest.SkipTest('existing arithmetic source/binary verification failed')
-        cls.lib = C.CDLL(str(binary))
+        from scripts.build_shared_matrix_recipe import from_environment
+        cls.lib = C.CDLL(str(from_environment(ROOT)))
         u16, u32 = C.POINTER(C.c_uint16), C.POINTER(C.c_uint32)
         for name, args in (('td_reset', []), ('td_group', [C.c_uint] * 3),
                 ('td_seed_begin', [C.c_uint]), ('td_seed_beat', [C.c_uint, C.c_uint, u32]),

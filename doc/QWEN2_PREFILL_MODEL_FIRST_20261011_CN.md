@@ -815,3 +815,12 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 完整实际软件物理流量为读217,227,904 B加全ACK写15,728,640 B，共232,956,544 B，包含metadata、全部tensor和workspace；ACK字节表示写入数据，不再把ACK响应当一次payload相加。Host DDR writeBytes13,369,344 B之外还有3×786,432 B staging prefix写回，二者差额恰为2,359,296 B。若采用共享读加写64 B/拍的明确分析假设，至少3,639,946拍，对应40.34301608%乐观上界。实际iDMA/DDR是否满足该共享预算尚未测量，不能当普遍物理上限或完整周期预测。
 - 原理想整图131,727,360 B/71.35%与当前旧Attention映射232,956,544 B/上述上界是不同映射，保留版本和公式。下一最小整改候选先检查KV跨query复用和normal Matrix的有效lane映射；cold M128的FP32 K/V共有262,144 B，要先核真实bank可用容量/单读写端口/生命周期，不能凭空增加SRAM。原QK为16个分片分别FMA再顺序归约，改成普通连续K GEMM会改变v0舍入，必须先以同源数值模型证明或等待明确数值策略决定。当前只收本批完整模型证据，不据此启动无门禁利用率优化。
 - done（局部）：公开原21命令的cold M16/M128源对应完整软件数据链与固定算术逐bit验证，原M128超时及独立后处理身份同时保留。ongoing：本批源码/精确远端/两轻CI、实际Chisel整图路由与既有官方数值差异；todo：carried/更长prefill、五典型block的完整硬件回放与真实whole-cycle MAC验收。原native-v0、FP32-final FAIL及未批准政策不变。
+
+
+### 2026-10-12 cefc79e 冷源码夹具修复
+
+- 完整模型源提交 `cefc79e2a127b3a60203c2600ead11c21793eccc` 的 payload run `38209623653` 成功；frontend run `38209623739` / job `114680656406` 在单测阶段失败，未执行Chisel前端。严格隔离runner拒绝了3个skip：测试误依赖本地历史FFN work下的库/摘要，CI仅执行public165项。原失败工件12,240 B、SHA `13585f341c511bdcdaa13dba4586fd7c303fcecf07b0cd0c8698df566271b69e`、日志及失败结论保留。
+- 修复将三项driver测试接到workflow本轮现编的共享Matrix/原SiLU库；显式要求库与编译receipt，核绝对checkout/输出路径、3份源码编译前后hash、完整编译argv、compiler和库hash/大小。缺件、漂移、额外TU或非strict flags均失败，没有历史缓存fallback或SkipTest。原测试曾使用带-frounding-math的旧单独Down库；现在使用当前已验共享库的原-O2/-fno-fast-math/-ffp-contract=off构建，未声称两个ELF相同，未改变算术源。
+- 发布前在全新源checkout和全新Python3.12 venv中冷启动，未复制历史work目录。先显式获取7个固定Git baseline并probe，再安装固定NumPy2.3.5/PyYAML6.0.3，现编唯一共享库。完整18组776 tests全部通过，包括public16文件168项、原skip的driver3项和新增6个编译来源负例。冷门摘要SHA `3dcaece39c1412a5603592e544459212d45e0dd85200f07af8fbe06f90b78a52`，现编库SHA `22da518dc47e641cd7052b84d0c46389fd92d71665276fb671410cf5b994136c`；所有75项实值执行源在原工作区和冷checkout均与捕获快照相同。
+- 本地第一次冷预检发现浅源克隆未带不可达baseline对象，补齐上述精确fetch后才运行测试；之后本地汇总器以basename匹配完整相对路径误判已成功public结果，保留原记录并修正汇总后继续剩余组，没有重跑已完成测试。全部原日志、每组计数/退出码及explicit构建产物保留。此为夹具可复现性修复，没有重跑长M128、Chisel/RTL或改变数值政策。
+- done（局部）：冷源码完整轻门与来源绑定。ongoing：修复提交远端和两CI终态/工件核验；原cefc失败不重写。完整M128软件固定算术证据、原1200秒失败和独立后处理PASS同时保留；native-v0/FP32-final FAIL、数值政策待定及五block硬件验收OPEN不变。

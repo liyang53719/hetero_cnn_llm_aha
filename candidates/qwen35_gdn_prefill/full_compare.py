@@ -110,6 +110,14 @@ def load_actual(directory, *, root=ROOT):
             summary.get('identity') == identity, 'actual completion/identity seal missing')
     require(identity.get('rows') in (16, 128) and type(identity['rows']) is int, 'M16/M128 only')
     rows = identity['rows']
+    for summary_key, identity_key in (('rms_policy', 'rms_policy'),
+                                     ('projection_policy', 'projection_policy'),
+                                     ('projection_profile', 'projection_profile'),
+                                     ('vector_policy', 'vector_exception_policy'),
+                                     ('vector_fatal_mask', 'vector_fatal_mask')):
+        require(summary_key in summary and identity_key in identity and
+                summary[summary_key] == identity[identity_key],
+                'actual numerical policy differs from prelaunch identity: ' + summary_key)
     require(summary.get('full_block_executed') is True and summary.get('reset_required') is False and
             summary.get('roots', {}).get('generation') == 2 and
             summary.get('response', {}).get('status') is None and
@@ -493,6 +501,8 @@ def compare_run(actual_dir, native_manifest, fixture, output, *, root=ROOT):
         frozen_gate_source_sha256=GATE_SOURCES, native_source_files=native['source_files'],
         native_runtime_files=native['runtime_files'], native_environment=native['environment'],
         actual_identity_file_sha256=identity['identity_file_sha256'], actual_output_files=summary['output_files'],
+        actual_numerical_policy={name: identity[name] for name in
+            ('rms_policy', 'projection_policy', 'projection_profile', 'vector_exception_policy', 'vector_fatal_mask')},
         native_tensor_sha256={name: record['sha256'] for name, record in native['tensors'].items()},
         actual_generation=2, actual_terminal_count=32, actual_cache_continuity_verified=True,
         official_cache_continuity_verified=True, full_block_gate_pass=all(r['passed'] for r in reports),

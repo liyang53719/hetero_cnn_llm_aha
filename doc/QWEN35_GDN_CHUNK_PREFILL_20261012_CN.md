@@ -46,4 +46,6 @@ gated norm的软件流式staging时序与现有Chisel整head缓冲时序不同�
 
 本地冷环境检查保留两次harness失败：首次导入GITHUB_ENV漏掉第三个证据目录变量，第二次git archive只有源而无Git元数据，导致故意读取HEAD固定Chisel源的准入失败。两次都没有修改数值实现或CI门；补与actions/checkout相同的精确HEAD元数据并复用已成功的同源构建后，完整轻门重新执行。旧失败不记为DUT数值失败。
 
-最终冷源码完整workflow顺序小门为271项、20个独立进程全部通过，包含真实小C++共享Matrix与Vector算术及完整控制/负例；没有跳过，也没有下载权重或启动RTL。构建产物、源码和日志hash均封存。相关远端CI仍以新提交精确SHA为准。
+最终冷源码完整workflow顺序小门为271项、20个独立进程全部通过，包含真实小C++共享Matrix与Vector算术及完整控制/负例；没有跳过，也没有下载权重或启动RTL。构建产物、源码和日志hash均封存。
+
+07b9a9b8 的[原模型CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38292156537)和[payload门](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38292156533)均成功。下载18,996B紧凑工件，SHA256为41fb26c9f7ee239700a35a6558926ebcd01fce0143c5e389e9b6672be81baaea；271测试、20日志、44测试/实现源和3编译源逐项核对精确commit。工件不含ELF，编译receipt中的ELF身份与实际ELF字节复验明确分开。这是小门闭环，不改变上述真实M16/M128的数值结论。

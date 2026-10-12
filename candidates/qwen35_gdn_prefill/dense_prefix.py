@@ -15,7 +15,7 @@ import ctypes as C
 import hashlib
 import struct
 
-from .typed_dense import FULL_MASK, MatrixService, TypedMemory, down, require
+from .typed_dense import FULL_MASK, MatrixService, TypedMemory, down, require, dense_wire_authority
 
 
 class TypedSeededDenseDriver:
@@ -26,8 +26,7 @@ class TypedSeededDenseDriver:
     leaves both owners locked until an external coordinated reset.
     """
     def __init__(self, owner, matrix_service, memory, job):
-        require(type(owner) is down.DenseOwnerModel and type(job) is down.Job,
-                'unchanged transposed Down owner/Job required')
+        self.wire = dense_wire_authority(owner, job)
         require(type(matrix_service) is MatrixService and type(memory) is TypedMemory,
                 'base shared MatrixService and typed physical byte map required')
         job.validate()
@@ -35,7 +34,7 @@ class TypedSeededDenseDriver:
                     (job.activation_bf16, job.weight_bf16, job.output_bf16)) and
                 job.write_bytes == job.m * job.n * 2, 'BF16 A/W/D and exact 2B output extent')
         workspace = owner.workspace
-        require(type(workspace) is down.PrefixWorkspace, 'explicit bounded workspace identity required')
+        require(type(workspace) is self.wire.PrefixWorkspace, 'explicit bounded workspace identity required')
         workspace.validate(job)
         require(workspace.split_k < job.k <= 2 * workspace.split_k,
                 'exactly two K chunks required')
@@ -100,7 +99,7 @@ class TypedSeededDenseDriver:
                 'prefix read before complete ACKed prior sweep')
         require(self.memory._resolve(command.address) is self.prefix,
                 'prefix read escaped exact workspace allocation')
-        expected = self.workspace.base + (o.n_base // 32 + o.seed_context) * 16384 + down.prefix_ddr_beat(o.seed_index) * 64
+        expected = self.workspace.base + (o.n_base // 32 + o.seed_context) * 16384 + self.wire.prefix_ddr_beat(o.seed_index) * 64
         require(command.address == expected, 'prefix read address/order mismatch')
         offset = command.address - self.prefix.base
         require(offset in self.prefix_offsets, 'prefix read outside live physical contexts')
@@ -112,7 +111,7 @@ class TypedSeededDenseDriver:
 
     def _check_seed_request(self, request):
         o = self.owner
-        require(o.chunk_index == 1 and request == down.SeedRequest(
+        require(o.chunk_index == 1 and request == self.wire.SeedRequest(
                     self.job.tag, o.group_sequence, self.workspace.generation, o.seed_context) and
                 request.context < o.contexts, 'seed request identity/context mismatch')
 
@@ -124,7 +123,8 @@ class TypedSeededDenseDriver:
         require(self.response is None, 'invocation already retired')
         self._check_identity()
         o = self.owner
-        reset_edge = bool(abort or self.numeric_fault) and not self.aborted
+        owner_poison = bool(o.ports().get('reset_required', False))
+        reset_edge = bool(abort or self.numeric_fault or owner_poison) and not self.aborted
         self.aborted |= reset_edge
         if (reset_edge or o.error) and not self.abort_sent:
             self.matrix.abort(o)
@@ -132,7 +132,7 @@ class TypedSeededDenseDriver:
         # An accepted, even partially loaded, seed owns an ACK obligation.
         # Abort retires it as an error through the real facade, not by reset.
         if self.abort_sent and self.active_seed is not None:
-            self.pending_seed_ack = down.SeedAck(self.active_seed, True)
+            self.pending_seed_ack = self.wire.SeedAck(self.active_seed, True)
         p = o.ports()
         chunk, start, end = o.chunk_index, o.chunk_start, o.chunk_end
         n_base, contexts = o.n_base, getattr(o, 'contexts', 0)
@@ -154,15 +154,15 @@ class TypedSeededDenseDriver:
             inputs['result'] = self.results[0]
         if self.pending_ack is not None and ack_ready:
             a = self.pending_ack
-            inputs['write_ack'] = down.WriteAck(a.tag, bool(ack_error), a.nbytes)
+            inputs['write_ack'] = self.wire.WriteAck(a.tag, bool(ack_error), a.nbytes)
         if self.pending_seed_ack is not None and seed_ack_ready and p['seed_ack_ready']:
             ack = self.pending_seed_ack
-            inputs['seed_ack'] = down.SeedAck(ack.request, bool(ack.error or seed_ack_error))
+            inputs['seed_ack'] = self.wire.SeedAck(ack.request, bool(ack.error or seed_ack_error))
         done = None
         if (p['matrix_done_ready'] and done_ready and not self.results and
                 self.active_seed is None and self.pending_seed_ack is None and
                 self.matrix.lib.matrix_done_ready()):
-            done = down.MatrixDone(self.job.tag, self.matrix.reset_required)
+            done = self.wire.MatrixDone(self.job.tag, self.matrix.reset_required)
             inputs['matrix_done'] = done
         e = o.tick(**inputs)
         self.counts['ticks'] += 1
@@ -188,7 +188,7 @@ class TypedSeededDenseDriver:
                 require((command.kind, id(r)) in (('a', id(self.a)), ('b', id(self.b))),
                         'owner read escaped actual A/W allocation')
                 words = struct.unpack('<32H', self.memory.read64(command.address))
-            self.pending_read = down.ReadBeat(command.tag, words, True)
+            self.pending_read = self.wire.ReadBeat(command.tag, words, True)
             self.counts[command.kind + '_read_beats'] += 1
         if e['result_fire']:
             value = self.results.popleft()
@@ -217,7 +217,7 @@ class TypedSeededDenseDriver:
             beat = e['seed_beat']
             require(beat.request == self.active_seed and not beat.error,
                     'seed beat owner/identity/error')
-            offset = (n_base // 32 + beat.request.context) * 16384 + down.prefix_ddr_beat(beat.index) * 64
+            offset = (n_base // 32 + beat.request.context) * 16384 + self.wire.prefix_ddr_beat(beat.index) * 64
             raw = struct.pack('<16I', *beat.words)
             require(offset in self._prefix_reads and offset not in self._prefix_seeds and
                     self._prefix_receipts.get(offset) == (self.prefix_version, hashlib.sha256(raw).digest()),
@@ -234,7 +234,7 @@ class TypedSeededDenseDriver:
                     if rc != 0:
                         self.numeric_fault = 'actual Matrix seed commit returned ' + str(rc)
                     else:
-                        self.pending_seed_ack = down.SeedAck(beat.request)
+                        self.pending_seed_ack = self.wire.SeedAck(beat.request)
         if e['seed_ack_fire']:
             ack = inputs['seed_ack']
             require(ack.request == self.active_seed, 'seed ACK changed owned request')
@@ -258,7 +258,7 @@ class TypedSeededDenseDriver:
                 require(rc in (0, 1) and bool(rc) == step.last, 'Matrix result timing mismatch')
                 if rc == 1:
                     value = tuple(tuple(int(output[r * 256 + c]) for c in range(256)) for r in range(16))
-                    self.results.append(down.MatrixResult(step.context, value))
+                    self.results.append(self.wire.MatrixResult(step.context, value))
                     self.counts['peak_results'] = max(self.counts['peak_results'], len(self.results))
         if e['write_command_fire']:
             command = e['write_command']
@@ -285,7 +285,7 @@ class TypedSeededDenseDriver:
             self.counts['prefix_write_data_bytes' if is_prefix else 'write_data_bytes'] += 64
             if beat.last:
                 command = self.memory.pending[0]
-                self.pending_ack = down.WriteAck(command.tag, False, command.beats * 64)
+                self.pending_ack = self.wire.WriteAck(command.tag, False, command.beats * 64)
         if e['write_ack_fire']:
             command, region, offsets, _ = self.memory.pending
             ack = inputs['write_ack']
@@ -308,7 +308,9 @@ class TypedSeededDenseDriver:
                     'terminal before transport/seed drain')
             require(self.input_hashes == tuple(hashlib.sha256(r.raw()).hexdigest() for r in (self.a, self.b)),
                     'input/weight changed during actual execution')
-            response = e['response']
+            raw_response = e['response']
+            failed = raw_response[1] or ('Protocol' if o.ports().get('reset_required', False) else None)
+            response = (raw_response[0], failed, raw_response[2])
             if response[1] is None:
                 total_contexts = self.job.n // 32
                 require(self.counts['steps'] == self.job.k * total_contexts and

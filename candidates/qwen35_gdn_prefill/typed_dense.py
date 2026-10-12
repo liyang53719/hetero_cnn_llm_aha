@@ -185,6 +185,22 @@ class TypedMemory:
         r.published = True
 
 
+def dense_wire_authority(owner, job):
+    """Select only the two explicit owner implementations, never duck typing.
+
+    The reduction hierarchy imports a hash-checked copy of the original Down
+    module. Its seeded wire dataclasses have that exact Python identity even
+    though the source and physical bank geometry are identical. Ordinary and
+    seeded jobs keep using the original public Job and unchanged arithmetic.
+    """
+    require(type(job) is down.Job, 'original complete Down Job required')
+    if type(owner) is down.DenseOwnerModel:
+        return down
+    from .projection_owner import GdnProjectionOwner, down as projection_down
+    require(type(owner) is GdnProjectionOwner, 'unsupported Dense owner authority')
+    return projection_down
+
+
 class TypedDenseDriver:
     """One actual single-K-chunk invocation; reuse owner/service between jobs.
 
@@ -193,8 +209,7 @@ class TypedDenseDriver:
     A failed invocation never publishes its staging output.
     """
     def __init__(self, owner, matrix_service, memory, job):
-        require(type(owner) is down.DenseOwnerModel and type(job) is down.Job,
-                'unchanged transposed Down owner/Job required')
+        self.wire = dense_wire_authority(owner, job)
         require(type(matrix_service) is MatrixService and type(memory) is TypedMemory,
                 'base shared MatrixService and typed physical byte map required')
         job.validate()
@@ -221,6 +236,7 @@ class TypedDenseDriver:
         self.counts = Counter()
         self.groups = []
         self.fma_before = int(matrix_service.lib.matrix_dense_fmas())
+        self.executed_fmas = None
         require(self.matrix.acquire(owner, 'dense', job.tag), 'shared Matrix acquisition rejected')
         self.bridge = self.matrix.dense_library(owner)
         self.owner.tick(job=job)
@@ -233,7 +249,8 @@ class TypedDenseDriver:
         require(self.bank_identity == (id(self.owner.a_banks), id(self.owner.b_banks),
                                      self.matrix.resource_address), 'physical resources replaced')
         o = self.owner
-        reset_edge = bool(abort or self.numeric_fault) and not self.aborted
+        owner_poison = bool(o.ports().get('reset_required', False))
+        reset_edge = bool(abort or self.numeric_fault or owner_poison) and not self.aborted
         self.aborted |= reset_edge
         if (reset_edge or o.error) and not self.abort_sent:
             self.matrix.abort(o)
@@ -252,10 +269,10 @@ class TypedDenseDriver:
             inputs['result'] = self.results[0]
         if self.pending_ack is not None and ack_ready:
             a = self.pending_ack
-            inputs['write_ack'] = down.WriteAck(a.tag, bool(ack_error), a.nbytes)
+            inputs['write_ack'] = self.wire.WriteAck(a.tag, bool(ack_error), a.nbytes)
         done = None
         if p['matrix_done_ready'] and done_ready and not self.results and self.matrix.lib.matrix_done_ready():
-            done = down.MatrixDone(self.job.tag, self.matrix.reset_required)
+            done = self.wire.MatrixDone(self.job.tag, self.matrix.reset_required)
             inputs['matrix_done'] = done
         e = o.tick(**inputs)
         self.counts['ticks'] += 1
@@ -269,7 +286,7 @@ class TypedDenseDriver:
             require((command.kind, id(r)) in (('a', id(self.a)), ('b', id(self.b))) and command.beats == 1,
                     'owner read escaped actual A/W allocation')
             words = struct.unpack('<32H', self.memory.read64(command.address))
-            self.pending_read = down.ReadBeat(command.tag, words, True)
+            self.pending_read = self.wire.ReadBeat(command.tag, words, True)
             self.counts[command.kind + '_read_beats'] += 1
         if e['result_fire']:
             value = self.results.popleft()
@@ -293,7 +310,7 @@ class TypedDenseDriver:
                 require(rc in (0, 1) and bool(rc) == step.last, 'Matrix result timing mismatch')
                 if rc == 1:
                     value = tuple(tuple(int(output[r * 256 + c]) for c in range(256)) for r in range(16))
-                    self.results.append(down.MatrixResult(step.context, value))
+                    self.results.append(self.wire.MatrixResult(step.context, value))
                     self.counts['peak_results'] = max(self.counts['peak_results'], len(self.results))
         if e['write_command_fire']:
             require(self.memory._resolve(e['write_command'].address) is self.output,
@@ -306,7 +323,7 @@ class TypedDenseDriver:
             self.counts['write_data_bytes'] += 64
             if beat.last:
                 command = self.memory.pending[0]
-                self.pending_ack = down.WriteAck(command.tag, False, command.beats * 64)
+                self.pending_ack = self.wire.WriteAck(command.tag, False, command.beats * 64)
         if e['write_ack_fire']:
             self.memory.acknowledge(inputs['write_ack'])
             self.pending_ack = None
@@ -321,17 +338,24 @@ class TypedDenseDriver:
                     self.memory.pending is None, 'terminal before transport drain')
             require(self.input_hashes == tuple(hashlib.sha256(r.raw()).hexdigest() for r in (self.a, self.b)),
                     'input/weight changed during actual execution')
-            self.response = e['response']
-            if self.response[1] is None:
+            raw_response = e['response']
+            # This adapter is the public consumer. A sideband poison raised
+            # on this same edge cannot publish a held internal success.
+            failed = raw_response[1] or ('Protocol' if o.ports().get('reset_required', False) else None)
+            response = (raw_response[0], failed, raw_response[2])
+            if response[1] is None:
                 require(self.groups == [(n, min(5, (self.job.n - n) // 32))
                                         for n in range(0, self.job.n, 160)] and
                         self.counts['steps'] == self.job.k * (self.job.n // 32) and
                         self.counts['a_read_beats'] == self.job.m * self.job.k // 32 and
                         self.counts['b_read_beats'] == self.job.k * self.job.n // 32,
                         'incomplete actual Dense windows/reads/steps')
-                self.memory.publish(self.job.dst, self.response)
             self.matrix.retire_owner_response(o)
             self.matrix.release(o)
+            if response[1] is None:
+                self.memory.publish(self.job.dst, response)
+            self.executed_fmas = int(self.matrix.lib.matrix_dense_fmas()) - self.fma_before
+            self.response = response
         return e
 
     def report(self):
@@ -340,5 +364,6 @@ class TypedDenseDriver:
             groups=list(self.groups), input_sha256=list(self.input_hashes),
             output_sha256=hashlib.sha256(self.output.raw()).hexdigest(),
             output_published=self.output.published, numeric_fault=self.numeric_fault,
-            executed_fmas=int(self.matrix.lib.matrix_dense_fmas()) - self.fma_before,
+            executed_fmas=(self.executed_fmas if self.response is not None else
+                           int(self.matrix.lib.matrix_dense_fmas()) - self.fma_before),
             hardware_cycles=None, rtl_executed=False, native_acceptance=False)

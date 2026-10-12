@@ -7,6 +7,19 @@ on:
       - '.github/workflows/qwen35-gdn-prefill-model.yml'
       - 'candidates/qwen35_gdn_prefill/**'
       - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/**'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'
       - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py'
       - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp'
       - 'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp'
@@ -38,6 +51,15 @@ jobs:
         run: python -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
       - name: Build original shared Matrix recipe once
         run: python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen35_gdn_model/library
+      - name: Build shared Vector16 host adapter once
+        run: |
+          python - <<'PY'
+          import os
+          from candidates.qwen35_gdn_prefill.chunk.vector import build_library
+          library = build_library('work/qwen35_gdn_model/vector')
+          with open(os.environ['GITHUB_ENV'], 'a') as stream:
+              stream.write('GDN_VECTOR16_LIBRARY=' + str(library) + '\n')
+          PY
       - name: Run every synthetic suite in an isolated process
         env: {PYTHONDONTWRITEBYTECODE: '1'}
         run: python -m candidates.qwen35_gdn_prefill.run_tests --out work/qwen35_gdn_model/tests
@@ -49,6 +71,7 @@ jobs:
           path: |
             work/qwen35_gdn_model/library/compile.json
             work/qwen35_gdn_model/library/compile.log
+            work/qwen35_gdn_model/vector/*.json
             work/qwen35_gdn_model/tests/*.json
             work/qwen35_gdn_model/tests/*.log
           retention-days: 14

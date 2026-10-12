@@ -123,6 +123,8 @@ class SyntheticTransport:
 
 
 class FullCoordinatorControlTests(unittest.TestCase):
+    PROJECTION_POLICY = f.ProjectionPolicy.Legacy
+
     @classmethod
     def setUpClass(cls):
         cls.weights = {f.WEIGHTS[role]: bytes(k * n * 2)
@@ -143,17 +145,22 @@ class FullCoordinatorControlTests(unittest.TestCase):
         vector = object.__new__(f.Vector16)
         vector.resource_address, vector.client = 456, None
         vector.exception_policy, vector.fatal_mask = f.LEGACY_POLICY, 30
+        vector.calls, vector.lane_ops, vector.flags, vector.host_calls = (Counter() for _ in range(4))
         self.events = []
         self.c = f.FullBlockCoordinator(self.weights, {'cold': bytes(32768), 'carry': bytes(32768)},
-            matrix=matrix, vector=vector, observe=lambda *args: self.events.append(args))
+            matrix=matrix, vector=vector, projection_policy=self.PROJECTION_POLICY,
+            observe=lambda *args: self.events.append(args))
         self.c.test_launches = []
         def factory(owner, *args, **kwargs):
             return SyntheticTransport(self.c, args[-2], args[-1])
         self.original_drivers = {}
-        for module, name in ((f.rms, 'TypedRmsDriver'), (f.d, 'TypedDenseDriver'),
+        drivers = [(f.rms, 'TypedRmsDriver'), (f.d, 'TypedDenseDriver'),
                              (f.conv, 'TypedConvDriver'), (f.prep, 'TypedInputPrepDriver'),
                              (f.chunk, 'TypedChunkDriver'), (f.norm, 'TypedGatedNormDriver'),
-                             (f.elt, 'TypedElementwiseDriver'), (f, 'TypedSeededDenseDriver')):
+                             (f.elt, 'TypedElementwiseDriver'), (f, 'TypedSeededDenseDriver')]
+        if self.c.projection_module is not None:
+            drivers.append((self.c.projection_module, 'TypedProjectionDriver'))
+        for module, name in drivers:
             self.original_drivers[module, name] = getattr(module, name)
             p = patch.object(module, name, factory)
             p.start()
@@ -384,6 +391,31 @@ class FullCoordinatorControlTests(unittest.TestCase):
         self.assert_uncommitted(1)
         self.assertEqual(self.c.response.history, roots.history)
         self.assertEqual(self.c.response.state, roots.state)
+
+
+class ReducedFullCoordinatorControlTests(FullCoordinatorControlTests):
+    """Same full staging/fence negatives with the selected projection owner.
+
+    Numerical transports remain explicitly synthetic, as in the base suite.
+    Actual partial/sum/ordinary/seeded mode switching has its own numerical gate.
+    """
+    PROJECTION_POLICY = f.ProjectionPolicy.IndependentK512
+
+    def test_profile_is_in_launch_resource_identity(self):
+        old = self.c.projection_profile
+        self.c.projection_profile = replace(old, pair_reverse=not old.pair_reverse)
+        with self.assertRaisesRegex(ValueError, 'shared owner/bank/service replaced'):
+            self.start()
+
+    def test_selected_policy_reports_real_owner_and_shared_resources(self):
+        from .projection_owner import GdnProjectionOwner, down as wire
+        self.assertIs(type(self.c.dense), GdnProjectionOwner)
+        self.assertIs(self.c.dense_wire, wire)
+        self.assertIs(self.c.dense.tiles.banks, self.c.dense.a_banks)
+        report = self.c.report()
+        self.assertEqual(report['projection_policy'], self.PROJECTION_POLICY.value)
+        self.assertEqual(report['projection_profile']['ranges'], ((0, 512), (512, 1024)))
+        self.assertFalse(report['vector_policy_control_bound_to_current_chisel'])
 
 
 class IdentityReceiptTests(unittest.TestCase):

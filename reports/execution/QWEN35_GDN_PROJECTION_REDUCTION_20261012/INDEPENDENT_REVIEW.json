@@ -1,0 +1,70 @@
+{
+  "additional_reviewed_source_sha256": {
+    ".github/workflows/qwen35-gdn-prefill-model.yml": "60040a6a3894f08e87a30c5f8c7383b50982c400a1ea2091288b3d912d0e640b",
+    "candidates/qwen35_gdn_prefill/run_tests.py": "f874911b7184689f94bdcd8c57ce541c6a707b9171d91e6a86873beb05ab83c1"
+  },
+  "resolved_findings": [
+    {
+      "id": "ordinary_abort_drain",
+      "problem": "Frozen FFN window reset route could offer an ordinary or seeded terminal before accepted write or seed ACK retirement.",
+      "regression": "candidates/qwen35_gdn_prefill/test_projection_driver.py:377",
+      "resolution": "GdnProjectionOwner keeps each admitted ordinary or seeded invocation on the original Down tick through its actual terminal; live routing resets in place.",
+      "severity": "blocking",
+      "source": "candidates/qwen35_gdn_prefill/projection_owner.py:206"
+    },
+    {
+      "id": "held_success_poison",
+      "problem": "Ordinary or seeded held success could ignore same-edge unsolicited read or Matrix responses and publish despite extended-owner poison.",
+      "regression": "candidates/qwen35_gdn_prefill/test_projection_driver.py:405",
+      "resolution": "Ordinary finish/locked response guard preserves held payload while setting sticky poison; adapters fence publication using post-edge reset_required and retire/release Matrix before publishing.",
+      "severity": "blocking",
+      "sources": [
+        "candidates/qwen35_gdn_prefill/projection_owner.py:220",
+        "candidates/qwen35_gdn_prefill/typed_dense.py:336",
+        "candidates/qwen35_gdn_prefill/dense_prefix.py:305"
+      ]
+    },
+    {
+      "id": "production_profile_binding",
+      "regression": "candidates/qwen35_gdn_prefill/test_projection_driver.py:334",
+      "resolution": "Production qkv/z/ab roles require the exact immutable K512/K512 pair-high-first profile, including provenance; changed split/order/hash tests reject before resource acquisition.",
+      "severity": "medium",
+      "source": "candidates/qwen35_gdn_prefill/projection_driver.py:124"
+    }
+  ],
+  "scope": "INDEPENDENT_STATIC_GDN_PROJECTION_INTEGRATION_REVIEW",
+  "source_hashes_match_final_seal": true,
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/dense_prefix.py": "6b4d7d4544bf6beb4d42ce70f1570d226efaa93ea9116e021ffa319bf1350b68",
+    "candidates/qwen35_gdn_prefill/full_compare.py": "5b5010315847c0616f9405d89f61091ec4a2ea1ef167d5e163b1016c0d79e04c",
+    "candidates/qwen35_gdn_prefill/full_driver.py": "4e8fcca0133541539c1d2a4e0019436a3eac2d0a2694372202ab9bad8202bbb6",
+    "candidates/qwen35_gdn_prefill/projection_driver.py": "f4ff3781f9b426f6cc88897fd00253ac0dac3fdd7f63fea1b65545245075c250",
+    "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+    "candidates/qwen35_gdn_prefill/test_full_compare.py": "d196ac0311bc4d4dd0551da950dfd431d75a2a14933194cffdbf51d00d89b2d0",
+    "candidates/qwen35_gdn_prefill/test_full_driver.py": "3486ce9cb1557f93b45b96f33fa7441969e1693c5ab72c8fd80f8a8ffd0d71af",
+    "candidates/qwen35_gdn_prefill/test_projection_driver.py": "f8dd041bfcec7ec2bb3d60657d94097e9d6a10e21ae6364f638f89c526c83c9a",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "9f1c1046cbd435cf5b73999f60065843b75d21344f72d80c6384d70772effb34"
+  },
+  "status": "NO_REMAINING_BLOCKING_FINDINGS",
+  "unresolved_findings": [],
+  "validation_boundary": {
+    "actual_full_block_numeric_acceptance": "NOT_ESTABLISHED_BY_THIS_REVIEW",
+    "chisel_ieee_exception_policy_and_chunk_route": "UNIMPLEMENTED_AS_DECLARED",
+    "fresh_workflow_validation": "IN_PROGRESS_BY_PARENT_AT_REVIEW_TIME",
+    "reviewer_built_software": false,
+    "reviewer_ran_tests": false,
+    "reviewer_used_git": false,
+    "rtl_or_hardware_acceptance": false
+  },
+  "verified_by_source_review": [
+    "Full BF16 Job and true two-byte destination spans remain intact; no fabricated FP32 physical destination extent.",
+    "Independent partial groups clear the same Matrix resource and traverse full-job logical K in pair-high-first order; resident outputs occupy existing A-bank slots 0 and 1.",
+    "TileSumController borrows the caller Vector16 Add for sixteen FP32 lanes and writes existing slot 2; no additional arithmetic engine or SRAM allocation.",
+    "Selected m-by-32 Matrix outputs receive finite checking; BF16 overflow is checked after Add, with the 0x7f7f8000 RNE boundary; final physical writes pack 32 BF16 values per 64-byte beat.",
+    "BF16 drain retains frozen accepted-read/write/ACK/release lifecycle, with explicit source-structure regression coverage.",
+    "Projection publication follows owner/coordinator/Matrix/Vector/DMA retirement and release of all leases; accepted obligations survive abort.",
+    "Original default full-driver policy remains legacy; explicit new policy routes only qkv/z/ab and preserves ordinary O/Gate/Up plus seeded Down on the same owner/banks/Matrix.",
+    "Exact module authority conversion and dynamic import source closure are explicit; runtime numerical policy is included in resource identity and prelaunch/terminal seal comparison.",
+    "Added tests cover M128 row-group reuse, finite partial cancellation domain, Matrix/Vector/BF16 overflow, selected NaN versus inactive padding, backpressure, reset, production policy rejection, and mode-transition failures."
+  ]
+}

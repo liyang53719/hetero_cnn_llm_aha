@@ -1,0 +1,277 @@
+{
+  "all_original_projection_gates_pass": true,
+  "all_remaining_are_below_1e_minus_30": true,
+  "all_remaining_in_QKV": true,
+  "bad_dot": {
+    "candidate_bf16": -0.11083984375,
+    "index": [
+      1,
+      2383
+    ],
+    "nodes": {
+      "partial0": 0.1581687182188034,
+      "partial1": -0.2692526876926422,
+      "sum": -0.1110839694738388
+    },
+    "official_bf16": -0.11083984375
+  },
+  "bad_state": {
+    "candidate": 0.13094480335712433,
+    "index": [
+      2,
+      79,
+      101
+    ],
+    "official": 0.13094480335712433
+  },
+  "cold_original_state_gate": {
+    "candidate": -0.08426463603973389,
+    "elements": 262144,
+    "max_abs": 4.842877388000488e-07,
+    "max_tolerance_ratio": 0.004466510656259532,
+    "mismatches": 0,
+    "official": -0.08426415175199509,
+    "passed": true,
+    "worst_index": [
+      11,
+      47,
+      110
+    ]
+  },
+  "elapsed_seconds": 4.679872806998901,
+  "interface_suggestions": {
+    "AB_geometry": "Original A and B each N16; pack them as existing GDN AB N32 job for 32-column physical window geometry. No standalone N16 admission shortcut.",
+    "adapter_requirement": "Current ProfiledMatrixService only selects q_raw/k_raw/v_raw Qwen2 roles. A separate explicit GDN role binding and typed BF16 input/output/drain validation would be required; do not relabel GDN jobs as Qwen2.",
+    "both_windows_derived_only": {
+      "independent_partial_window_invocations": 212,
+      "logical_vector16_Add_requests": 16448,
+      "sum_window_invocations": 106
+    },
+    "both_windows_reference_measured": {
+      "fmaf_calls": 269484032,
+      "fp32_Add_calls": 263168
+    },
+    "immutable_request": "Complete original packed-BF16 A/W Job and strides; explicit K ranges ((0,512),(512,1024)), pair_reverse=True, complete job identity and block_id. Scope initially M16/K1024 QKV,Z and packed A16+B16; do not reuse or overwrite Qwen2 K1536 profile.",
+    "lease_and_commit": "Preserve complete A lease through both K windows and N windows, independent block IDs, same bank/Vector exclusive loans, all accepted Matrix/DMA/Vector retirements, reset/poison fencing, and only real packed BF16 writes plus ACK and accepted terminal publication.",
+    "logical_counts_per_window": {
+      "K": 1024,
+      "M": 16,
+      "N": {
+        "packed_ab": 32,
+        "qkv": 6144,
+        "z": 2048
+      },
+      "N_windows_max160": {
+        "packed_ab": 1,
+        "qkv": 39,
+        "total": 53,
+        "z": 13
+      },
+      "independent_partial_window_invocations": 106,
+      "logical_output_elements": 131584,
+      "logical_scalar_FP32_Adds": 131584,
+      "logical_vector16_Add_requests": 8224,
+      "sum_window_invocations": 53
+    },
+    "matrix_requirement": "Same MatrixService and existing bank-fed operands; clear at each independent block; no restored/injected accumulator seed. Address physical K as block_begin + (local_ordinal xor 1) while progress/retirement counts use accepted local ordinal.",
+    "measurement_limits": "Derived planning counts are not actual owner events, padded physical Matrix FMAs, hardware cycles, utilization, or physical bank traffic. Future actual owner run must retain measured accepted-operation counters; M16 valid rows do not prove only16 physical rows execute.",
+    "partial_requirement": "Two live FP32 partials in existing tile slots 0 and 1; shared Vector16 Add into slot 2; final BF16 RNE exactly once after Add, no bias. Per-partial BF16 files are diagnostic observations and never consumed.",
+    "qualification": "All original projection tolerance gates and cold original state gate pass; QKV is not BF16 bit-exact. No actual vendor invocation order claimed.",
+    "resource_scope": "Existing three physical 128x160 FP32 tile slots, 81920 bytes each / 245760 bytes total; at M16 and max160 columns, 10240 valid bytes per slot /30720 valid bytes across three. These are existing capacity figures, not new SRAM allocation. Existing SumController uses one 16-word (64-byte) lhs hold.",
+    "source_sha256": {
+      "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py": "33ea0786d537aa7de59b19ff55cb515f2afeaee780f4a9f1faeb42402da19593",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+      "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "229c0cd0951fef6714ddc5f6b3b4f4f21a023961bcf3a5a0cc78d67df1aee380"
+    },
+    "status": "INTERFACE_SUGGESTIONS_ONLY_NO_IMPLEMENTATION"
+  },
+  "old_failed_candidate_preserved": true,
+  "original_inputs_and_shared_sources_unchanged": true,
+  "parameters_sha256": "8b98184ea237efc0e2599fdaa223e0c04e3a9dee4b07dc091a0867389448bb7e",
+  "projection_gates": [
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "f590f4e344e42b6ad03fb6b31eb462796568e12bcb56c18ebc666a3b7272dbb8",
+      "bit_mismatches": 124,
+      "elements": 98304,
+      "expected_sha256": "e5d382cf358e5d753121ee6892b7a8f57404ac0ae4f775f9d160bbbe6b3d394b",
+      "first_bit_mismatch": 438,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 7.052966104933725e-38,
+      "max_bf16_ulp": 101,
+      "mean_abs": 2.4782430441072496e-41,
+      "numerical_mismatches": 124,
+      "passed": true,
+      "phase": "cold128",
+      "projection": "qkv",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "9d1b7d594e5ab8ab5160620b50c5a7e201fccc2955ec06c1450179930dec990f",
+      "bit_mismatches": 0,
+      "elements": 32768,
+      "expected_sha256": "9d1b7d594e5ab8ab5160620b50c5a7e201fccc2955ec06c1450179930dec990f",
+      "first_bit_mismatch": null,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 0.0,
+      "max_bf16_ulp": 0,
+      "mean_abs": 0.0,
+      "numerical_mismatches": 0,
+      "passed": true,
+      "phase": "cold128",
+      "projection": "z",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "e8964aefd29c337f1a2cca0ab3ebaf033add5dee125b224ae97109af2d8b61c7",
+      "bit_mismatches": 0,
+      "elements": 256,
+      "expected_sha256": "e8964aefd29c337f1a2cca0ab3ebaf033add5dee125b224ae97109af2d8b61c7",
+      "first_bit_mismatch": null,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 0.0,
+      "max_bf16_ulp": 0,
+      "mean_abs": 0.0,
+      "numerical_mismatches": 0,
+      "passed": true,
+      "phase": "cold128",
+      "projection": "a",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "1c1859d3ca4dfb2a6f4b83f2898aa391225f3c828bd3315d0503800b497494bc",
+      "bit_mismatches": 0,
+      "elements": 256,
+      "expected_sha256": "1c1859d3ca4dfb2a6f4b83f2898aa391225f3c828bd3315d0503800b497494bc",
+      "first_bit_mismatch": null,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 0.0,
+      "max_bf16_ulp": 0,
+      "mean_abs": 0.0,
+      "numerical_mismatches": 0,
+      "passed": true,
+      "phase": "cold128",
+      "projection": "b",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "70db6ab80c779cc24f5f8adf008a41e3fb472b52f21746635dd0107d6b7dcce9",
+      "bit_mismatches": 135,
+      "elements": 98304,
+      "expected_sha256": "642d3cd39ae29ceeade550c29b792c557e738570984ecb126002d17805c68442",
+      "first_bit_mismatch": 423,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 4.70197740328915e-38,
+      "max_bf16_ulp": 15,
+      "mean_abs": 2.67928266378905e-41,
+      "numerical_mismatches": 135,
+      "passed": true,
+      "phase": "carried128",
+      "projection": "qkv",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "d36cfb02cef7e9f41af83a30215e194c365f8562311633909db6b3a0615e0832",
+      "bit_mismatches": 0,
+      "elements": 32768,
+      "expected_sha256": "d36cfb02cef7e9f41af83a30215e194c365f8562311633909db6b3a0615e0832",
+      "first_bit_mismatch": null,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 0.0,
+      "max_bf16_ulp": 0,
+      "mean_abs": 0.0,
+      "numerical_mismatches": 0,
+      "passed": true,
+      "phase": "carried128",
+      "projection": "z",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "c21feac3ee79b0453d47e435144170a2461e4e544bb60add51a7aed774daca60",
+      "bit_mismatches": 0,
+      "elements": 256,
+      "expected_sha256": "c21feac3ee79b0453d47e435144170a2461e4e544bb60add51a7aed774daca60",
+      "first_bit_mismatch": null,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 0.0,
+      "max_bf16_ulp": 0,
+      "mean_abs": 0.0,
+      "numerical_mismatches": 0,
+      "passed": true,
+      "phase": "carried128",
+      "projection": "a",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    {
+      "acceptance": "ORIGINAL_NATIVE_PER_NODE_THRESHOLDS_PREFIX_SCOPE_ONLY",
+      "actual_sha256": "83f87b8606ee2802aabbbc8fd380bcaf55aedc7d1ccc1851df1d7e2f6b9cb44a",
+      "bit_mismatches": 0,
+      "elements": 256,
+      "expected_sha256": "83f87b8606ee2802aabbbc8fd380bcaf55aedc7d1ccc1851df1d7e2f6b9cb44a",
+      "first_bit_mismatch": null,
+      "gate_source": "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json",
+      "gate_source_sha256": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+      "max_abs": 0.0,
+      "max_bf16_ulp": 0,
+      "mean_abs": 0.0,
+      "numerical_mismatches": 0,
+      "passed": true,
+      "phase": "carried128",
+      "projection": "b",
+      "signed_zero_only_mismatches": 0,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    }
+  ],
+  "remaining_bit_mismatches": 259,
+  "result_sha256": "03f175d22007750e4e8bfacd16d90bfc426435ec73145a1ca48b2fde95e5fe1a",
+  "status": "PASS_ORIGINAL_PROJECTION_GATES_AND_COLD_STATE_GATE_REFERENCE_ONLY_NOT_BITEXACT_QKV",
+  "vendor_dynamic_sequence_proven": false
+}

@@ -252,7 +252,10 @@ def make_actual(directory):
     source.write_text('# synthetic test input; never an execution\n')
     digest = c.sha(source.read_bytes())
     identity = dict(rows=16, source_sha256={'synthetic_source.py': digest},
-                    identity_file_sha256={str(source): digest})
+                    identity_file_sha256={str(source): digest},
+                    rms_policy='synthetic_fixture', projection_policy='legacy_sequential_k',
+                    projection_profile=None, vector_exception_policy='legacy_vector_fatal_underflow',
+                    vector_fatal_mask=30)
     files, commands = {}, []
     for phase in c.PHASES:
         for role in c.ROLES:
@@ -273,6 +276,8 @@ def make_actual(directory):
     state = files[c.filename('cold128', 'state_staging')]['sha256']
     report = dict(status='ACTUAL_COMPLETE_UNCOMPARED', scope='QWEN35_L0_COMPLETE_TYPED_SOFTWARE_COORDINATOR',
         identity=identity, full_block_executed=True, reset_required=False,
+        rms_policy=identity['rms_policy'], projection_policy=identity['projection_policy'],
+        projection_profile=None, vector_policy=identity['vector_exception_policy'], vector_fatal_mask=30,
         roots=dict(generation=2, history=64, state=128, output=192, history_sha256=history, state_sha256=state),
         response=dict(status=None, generation=2),
         source_initialization='raw_inputs_and_parameters_only_before_launch',
@@ -369,6 +374,17 @@ class ActualSealTest(unittest.TestCase):
         (self.root / 'synthetic_source.py').write_text('# modified\n')
         with self.assertRaisesRegex(ValueError, 'source identity changed'):
             self.load()
+
+    def test_postlaunch_policy_change_is_not_same_sealed_arithmetic(self):
+        for key, changed in (('rms_policy', 'changed'), ('projection_policy', 'changed'),
+                             ('projection_profile', {'ranges': [[0, 16], [16, 32]]}),
+                             ('vector_policy', 'changed'), ('vector_fatal_mask', 28)):
+            old = self.report[key]
+            self.report[key] = changed
+            write_seal(self.root, self.report)
+            with self.assertRaisesRegex(ValueError, 'numerical policy differs from prelaunch'):
+                self.load()
+            self.report[key] = old
 
 
 if __name__ == '__main__':

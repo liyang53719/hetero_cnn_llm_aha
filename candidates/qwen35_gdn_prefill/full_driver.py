@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import ctypes as C
 from dataclasses import asdict, dataclass
+from enum import Enum
 import hashlib
 import json
 import os
@@ -42,6 +43,13 @@ ORDER = ('input_norm', 'qkv', 'z', 'ab', 'conv_silu', 'prep', 'chunk',
 DENSE = {'qkv': (1024, 6144), 'z': (1024, 2048), 'ab': (1024, 32),
          'o': (2048, 1024), 'gate': (1024, 3584), 'up': (1024, 3584),
          'down': (3584, 1024)}
+
+
+class ProjectionPolicy(str, Enum):
+    Legacy = 'legacy_sequential_k'
+    IndependentK512 = 'gdn_pair_k512_independent_fp32_sum'
+
+
 ACTUAL_SOURCE_FILES = (
     'candidates/qwen35_gdn_prefill/full_driver.py',
     'candidates/qwen35_gdn_prefill/typed_dense.py',
@@ -121,7 +129,7 @@ class FullBlockCoordinator:
     """
     def __init__(self, weights, inputs, *, matrix, vector, memory=None, dense=None,
                  scalar=None, rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024,
-                 observe=None):
+                 projection_policy=ProjectionPolicy.Legacy, observe=None):
         require(type(matrix) is d.MatrixService and type(vector) is Vector16,
                 'explicit shared MatrixService and Vector16 required')
         self.memory = d.TypedMemory() if memory is None else memory
@@ -134,9 +142,21 @@ class FullBlockCoordinator:
         self.scalar = prep.PrepScalar(enable_softplus=True) if scalar is None else scalar
         require(type(self.scalar) is prep.PrepScalar and self.scalar.enable_softplus,
                 'one explicitly Softplus-enabled PrepScalar required')
-        self.dense = d.down.DenseOwnerModel() if dense is None else dense
+        self.projection_policy = ProjectionPolicy(projection_policy)
+        self.projection_module = self.projection_profile = None
+        if self.projection_policy is ProjectionPolicy.IndependentK512:
+            from . import projection_driver, projection_owner
+            self.projection_module = projection_driver
+            self.projection_profile = projection_driver.GDN_PROJECTION_PROFILE
+            self.dense = projection_owner.GdnProjectionOwner() if dense is None else dense
+            require(type(self.dense) is projection_owner.GdnProjectionOwner,
+                    'explicit GDN projection owner required by selected policy')
+        else:
+            self.dense = d.down.DenseOwnerModel() if dense is None else dense
+            require(type(self.dense) is d.down.DenseOwnerModel, 'legacy exact Down owner required')
+        self.dense_wire = d.dense_wire_authority(self.dense, d.down.Job())
         # Concrete transport adapters still enforce their own supported owner protocol.
-        require(isinstance(self.dense, d.down.DenseOwnerModel) and self.dense.state == 'idle' and
+        require(self.dense.state == 'idle' and
                 not self.dense.error and matrix.owner is None and not matrix.reset_required and
                 self.scalar.client is None and vector.client is None, 'drained resources required')
         self.rms = rms.RmsOwner(self.scalar)
@@ -228,6 +248,7 @@ class FullBlockCoordinator:
                 id(self.dense.b_banks), self.matrix.resource_address, id(self.scalar),
                 id(self.vector), self.vector.resource_address,
                 self.vector.exception_policy, self.vector.fatal_mask, self.policy,
+                self.projection_policy, self.projection_profile, id(self.projection_module), id(self.dense_wire),
                 *(id(owner) for owner in (self.rms, self.conv, self.prep, self.chunk,
                                            self.norm, self.elementwise)))
 
@@ -291,13 +312,18 @@ class FullBlockCoordinator:
             source = {'qkv': 'input_norm', 'z': 'input_norm', 'ab': 'input_norm',
                       'o': 'gated_norm', 'gate': 'post_norm', 'up': 'post_norm', 'down': 'silu_mul'}[role]
             require(self.dense.state == 'idle' and self.matrix.owner is None, 'workspace rebind while busy')
-            self.dense.workspace = d.down.PrefixWorkspace(p['prefix'], 1024 // 32 * 16384,
+            self.dense.workspace = self.dense_wire.PrefixWorkspace(p['prefix'], 1024 // 32 * 16384,
                                                          self.window_roots.generation + 1)
             job = d.down.Job(m=rows, k=k, n=n, tag=tag, a=p[source], b=w[role], dst=p[role],
                             activation_bf16=True, weight_bf16=True, output_bf16=True,
                             write_bytes=rows * n * 2)
-            driver = TypedSeededDenseDriver if role == 'down' else d.TypedDenseDriver
-            self.active = driver(self.dense, self.matrix, self.memory, job)
+            if role in ('qkv', 'z', 'ab') and self.projection_profile is not None:
+                self.active = self.projection_module.TypedProjectionDriver(
+                    self.dense, self.matrix, self.memory, job, vector=self.vector,
+                    role=role, profile=self.projection_profile)
+            else:
+                driver = TypedSeededDenseDriver if role == 'down' else d.TypedDenseDriver
+                self.active = driver(self.dense, self.matrix, self.memory, job)
         elif role in ('input_norm', 'post_norm'):
             source = 'hidden' if role == 'input_norm' else 'attention_residual'
             self.active = rms.TypedRmsDriver(self.rms, self.memory,
@@ -472,6 +498,8 @@ class FullBlockCoordinator:
         return dict(scope=SCOPE, public_command128_executed=False, rtl_executed=False,
                     hardware_cycles=None, hardware_mac_utilization=None, native_acceptance=False,
                     rms_policy=self.policy.value, vector_policy=self.vector.exception_policy,
+                    projection_policy=self.projection_policy.value,
+                    projection_profile=None if self.projection_profile is None else asdict(self.projection_profile),
                     vector_fatal_mask=self.vector.fatal_mask,
                     vector_policy_control_bound_to_current_chisel=False,
                     roots=asdict(self.roots), response=None if self.response is None else asdict(self.response),
@@ -483,7 +511,8 @@ class FullBlockCoordinator:
                     conv_observations={tag: self._conv_observation(tag) for tag in self.conv_nodes})
 
 
-def freeze_identity(root, fixture, weights, inputs, library, vector, output):
+def freeze_identity(root, fixture, weights, inputs, library, vector, output,
+                    projection_policy=ProjectionPolicy.Legacy):
     """Snapshot only execution/validation sources, not numerical references."""
     from .input_fixture import SOURCE_FILES
     matrix_receipt = Path(os.environ['MATRIX_SERVICE_COMPILE_RECEIPT']).resolve(strict=True)
@@ -491,7 +520,11 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output):
     build = json.loads(matrix_receipt.read_text())
     compiled = build.get('source_sha256', build.get('sources_before'))
     require(type(compiled) is dict and compiled, 'verified Matrix compile source closure required')
-    names = sorted(set(ACTUAL_SOURCE_FILES) | set(SOURCE_FILES) | set(compiled))
+    extra_sources = ()
+    if ProjectionPolicy(projection_policy) is ProjectionPolicy.IndependentK512:
+        from .projection_driver import SOURCE_FILES as PROJECTION_SOURCES
+        extra_sources = PROJECTION_SOURCES
+    names = sorted(set(ACTUAL_SOURCE_FILES) | set(SOURCE_FILES) | set(compiled) | set(extra_sources))
     sources = {}
     for name in names:
         raw = (root / name).read_bytes()
@@ -551,7 +584,7 @@ def final_identity(identity, root, fixture):
 
 def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_library=None,
         rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024, observe=None,
-        vector_exception_policy=LEGACY_POLICY):
+        vector_exception_policy=LEGACY_POLICY, projection_policy=ProjectionPolicy.Legacy):
     """Actual-only two-window entrypoint. Existing libraries only; never builds."""
     from .input_fixture import ROOT, load_fixture, gdn
     from ..qwen2_resident_matrix.ffn_attention.matrix_service import configure_library
@@ -582,8 +615,15 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         library = d.library_from_environment(ROOT)
         if vector is None:
             vector = Vector16(vector_library, exception_policy=vector_exception_policy)
-        identity = freeze_identity(ROOT, fixture, weights, inputs, library, vector, output)
-        identity.update(rows=rows,
+        identity = freeze_identity(ROOT, fixture, weights, inputs, library, vector, output, projection_policy)
+        selected_projection = ProjectionPolicy(projection_policy)
+        if selected_projection is ProjectionPolicy.IndependentK512:
+            from .projection_driver import GDN_PROJECTION_PROFILE
+            projection_profile = asdict(GDN_PROJECTION_PROFILE)
+        else:
+            projection_profile = None
+        identity.update(rows=rows, projection_policy=selected_projection.value,
+                        projection_profile=projection_profile, rms_policy=rms.ReductionPolicy(rms_policy).value,
                         input_sha256={phase: sha(inputs[phase + '.hidden.bf16le'][:rows * 2048])
                                       for phase in ('cold128', 'carried128')},
                         token_fixture_slices={'cold128': [0, rows], 'carried128': [128, 128 + rows]})
@@ -593,7 +633,8 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         matrix = d.MatrixService(lib)
         coordinator = FullBlockCoordinator(weights,
             {phase: inputs[phase + '.hidden.bf16le'][:rows * 2048] for phase in ('cold128', 'carried128')},
-            matrix=matrix, vector=vector, rms_policy=rms_policy, observe=record)
+            matrix=matrix, vector=vector, rms_policy=rms_policy,
+            projection_policy=projection_policy, observe=record)
         for phase, cold in (('cold128', True), ('carried128', False)):
             remaining = budget_seconds - (time.monotonic() - start)
             require(remaining > 0, 'full coordinator wall budget exceeded')
@@ -632,11 +673,14 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--vector-library', required=True)
     parser.add_argument('--vector-exception-policy', choices=(LEGACY_POLICY, IEEE_POLICY), default=LEGACY_POLICY)
+    parser.add_argument('--projection-policy', choices=tuple(p.value for p in ProjectionPolicy),
+                        default=ProjectionPolicy.Legacy.value)
     parser.add_argument('--rows', type=int, choices=(16, 128), default=16)
     parser.add_argument('--budget-seconds', type=int, default=1800)
     args = parser.parse_args()
     result = run(args.fixture, args.output, rows=args.rows, budget_seconds=args.budget_seconds,
-                 vector_library=args.vector_library, vector_exception_policy=args.vector_exception_policy)
+                 vector_library=args.vector_library, vector_exception_policy=args.vector_exception_policy,
+                 projection_policy=args.projection_policy)
     print(json.dumps({'status': result['status'], 'roots': result['roots']}), flush=True)
     return 0 if result['status'] == 'ACTUAL_COMPLETE_UNCOMPARED' else 1
 

@@ -294,9 +294,57 @@ def compare(snapshot, actual, inputs, capture, silu, native):
         reference_reuse='exact frozen same-raw-input cold references; original FAILs preserved')
 
 
+def retain_failed_run(out, physical, capture):
+    """Copy bounded actual diagnostics; never publish, resume, or access goldens.
+
+    A later FFN/Down error may coexist with an accepted Attention terminal.
+    Preserve that original record and its INCOMPLETE classification unchanged;
+    copying it does not claim a successful block or retroactively publish data.
+    Only already-published ordinary physical outputs are copied. Partially
+    written act/workspace and virtual reservations are explicitly omitted.
+    """
+    root = Path(out) / 'failure_capture'
+    require(not root.exists(), 'fresh failure capture required')
+    root.mkdir()
+    result = dict(status='FAILED_RUN_DIAGNOSTICS_ONLY', whole_block_pass=False,
+                  native_acceptance=False, resumable_checkpoint=False, outputs={}, omitted=[])
+    errors = []
+    if physical is not None:
+        before = physical.report()
+        for name, region in physical.regions.items():
+            if region['readonly']:
+                continue
+            if (not region['published'] or region['virtual'] or
+                    region.get('workspace_transport') is not None):
+                result['omitted'].append(name)
+                continue
+            try:
+                record = before['outputs'][name]
+                require(region['terminal'] and record['written_bytes'] == record['ack_bytes'] == region['extent'],
+                        'published diagnostic lacks complete terminal/ACK: ' + name)
+                raw = physical.raw(region['base'], region['extent'])
+                require(len(raw) == record['bytes'] and sha(raw) == record['sha256'],
+                        'published diagnostic hash changed: ' + name)
+                target = root / (name + '.f32le')
+                target.write_bytes(raw)
+                result['outputs'][name] = dict(record, path=target.name,
+                    base=region['base'], dtype=region['dtype'])
+            except Exception as error:
+                errors.append(name + ': ' + str(error))
+        require(physical.report() == before, 'diagnostic preservation changed physical memory/counters')
+    if capture is not None and capture.closed and not capture.active:
+        try:
+            result['attention'] = capture.save(root / 'attention_observation')
+        except Exception as error:
+            errors.append('attention: ' + str(error))
+    result['errors'] = errors
+    (root / 'summary.json').write_bytes(encoded(result))
+    return dict(path=str(root), summary_sha256=file_sha(root / 'summary.json'), **result)
+
+
 def run(out, path, digest, *, wall_budget=1200, m16=None, m16_sha256=None):
     out, path = Path(out).resolve(), Path(path).resolve()
-    require(not out.exists() and 0 < wall_budget <= 1200, 'fresh bounded official model run required')
+    require(not out.exists() and 0 < wall_budget <= 1800, 'fresh bounded official model run required')
     s = verify_snapshot(path, digest)
     modules, dense, observation, native = runtime()
     helper, original_execution, fixtures, public, prefix, _, scalar, suffix, physical_adapter, matrix, _, _ = modules
@@ -340,8 +388,10 @@ def run(out, path, digest, *, wall_budget=1200, m16=None, m16_sha256=None):
             report.update(loaded_inputs=base.identities(inputs),metadata=s['metadata']); save()
             report['prefix_execution'] = prefix.execute_public_prefix(x,physical,guarded,out)
             report['status'] = 'ACTUAL_PREFIX_COMPLETE'; save()
+            report['prefix_host_wall_seconds'] = time.monotonic() - started
             with capture:
                 actual, report['execution'] = suffix.execute_public_suffix(x,physical,guarded,out,memory=memory)
+            report['whole_terminal_host_wall_seconds'] = time.monotonic() - started
             require(x.launch_result and x.launch_result['completed'] == 21 and
                     x.counts['result_fire'] == 1 and not x.reset_required(), 'whole public terminal missing')
             report['observation'] = capture.save(out/'attention_observation')
@@ -371,6 +421,10 @@ def run(out, path, digest, *, wall_budget=1200, m16=None, m16_sha256=None):
         report.update(status='FAILED',error=str(error),host_wall_seconds=time.monotonic()-started)
         if 'x' in locals(): report['failed_host'] = x.report()
         if 'physical' in locals(): report['failed_memory'] = physical.report()
+        try:
+            report['failure_capture'] = retain_failed_run(out, locals().get('physical'), locals().get('capture'))
+        except Exception as preservation_error:
+            report['failure_capture_error'] = str(preservation_error)
         save(); raise
 
 

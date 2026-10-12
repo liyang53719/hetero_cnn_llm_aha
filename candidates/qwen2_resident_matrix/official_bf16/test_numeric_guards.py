@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
 from . import check_numeric as n
 from . import recompare_m16 as post
 
@@ -81,12 +82,101 @@ class NumericPrerequisiteTests(unittest.TestCase):
         self.assertEqual(post.functional_run_ast(old),post.functional_run_ast(new))
         self.assertNotEqual(post.functional_run_ast(old),post.functional_run_ast(new.replace('17','16')))
 
-    def test_original_twelve_hundred_second_bound_and_fresh_output_are_enforced(self):
-        for budget in (0,-1,1201):
+    def test_default_twelve_hundred_explicit_eighteen_hundred_bound_and_fresh_output(self):
+        for budget in (0,-1,1801):
             with self.subTest(budget=budget),self.assertRaisesRegex(ValueError,"fresh bounded"):
                 n.run(Path(self.temp.name)/"never-created", self.path,"0"*64,wall_budget=budget)
         with self.assertRaisesRegex(ValueError,"fresh bounded"):
             n.run(Path(self.temp.name),self.path,"0"*64,wall_budget=1200)
+
+    def test_only_exact_host_diagnostics_normalize_against_actual_m16(self):
+        before = """def run(out, wall_budget=1200):
+    out = Path(out)
+    require(not out.exists() and 0 < wall_budget <= 1200, 'fresh bounded official model run required')
+    try:
+        with base.frozen_exec():
+            report['status'] = 'ACTUAL_PREFIX_COMPLETE'; save()
+            with capture:
+                actual = execute(17)
+            require(completed == 21, 'whole public terminal missing')
+    except Exception as error:
+        if 'physical' in locals(): report['failed_memory'] = physical.report()
+        save(); raise
+"""
+        after=before.replace('<= 1200','<= 1800')
+        after=after.replace("report['status'] = 'ACTUAL_PREFIX_COMPLETE'; save()", "report['status'] = 'ACTUAL_PREFIX_COMPLETE'; save()\n            report['prefix_host_wall_seconds'] = time.monotonic() - started")
+        after=after.replace("            require(completed", "            report['whole_terminal_host_wall_seconds'] = time.monotonic() - started\n            require(completed")
+        failure="        try:\n            report['failure_capture'] = retain_failed_run(out, locals().get('physical'), locals().get('capture'))\n        except Exception as preservation_error:\n            report['failure_capture_error'] = str(preservation_error)\n"
+        after=after.replace('        save(); raise',failure+'        save(); raise')
+        self.assertEqual(post.functional_run_ast(before),post.functional_run_ast(after))
+        relocated=after.replace(failure,'').replace('    try:\n        with base.frozen_exec',
+            '    try:\n'+failure+'        with base.frozen_exec',1)
+        for bad in (after.replace('completed == 21','completed == 20'),
+                    after.replace('<= 1800','<= 1801'),relocated,
+                    after.replace("report['failure_capture_error'] = str(preservation_error)", 'pass'),
+                    after.replace("locals().get('capture')",'reference_tensor')):
+            with self.subTest(bad=bad):
+                self.assertNotEqual(post.functional_run_ast(before),post.functional_run_ast(bad))
+
+    def physical(self, *, corrupt=False, partial=False):
+        raw=b'actual output bytes'.ljust(64,b'!')
+        record=dict(bytes=64,written_bytes=64,ack_bytes=32 if partial else 64,
+                    terminal=True,published=True,sha256=n.sha(raw))
+        regions={'published':dict(readonly=False,published=True,virtual=False,terminal=True,
+                                 extent=64,base=0x1000,dtype=1),
+                 'unpublished':dict(readonly=False,published=False,virtual=False),
+                 'virtual':dict(readonly=False,published=False,virtual=True),
+                 'workspace':dict(readonly=False,published=True,virtual=False,workspace_transport=object()),
+                 'weight':dict(readonly=True)}
+        reads=[]
+        def read(address,extent):
+            self.assertEqual((address,extent),(0x1000,64))
+            reads.append((address,extent))
+            return raw[:-1]+b'?' if corrupt else raw
+        memory=SimpleNamespace(regions=regions,report=lambda:dict(outputs={'published':record}),raw=read)
+        return memory,raw,reads
+
+    def test_failure_preserves_published_bytes_without_reading_weights_or_partial_state(self):
+        memory,raw,reads=self.physical()
+        before=copy.deepcopy(memory.report())
+        observed=dict(status='INCOMPLETE',observer_error='driver exited with an exception',
+                      terminal={'status':None,'tag':12},whole_block_terminal_observed=False)
+        def save(path):
+            path.mkdir();(path/'raw.u32le').write_bytes(b'actual capture')
+            return observed
+        capture=SimpleNamespace(closed=True,active=False,save=save)
+        result=n.retain_failed_run(Path(self.temp.name),memory,capture)
+        self.assertEqual((Path(result['path'])/'published.f32le').read_bytes(),raw)
+        self.assertEqual(reads,[(0x1000,64)])
+        self.assertEqual(memory.report(),before)
+        self.assertEqual(result['attention'],observed)
+        self.assertEqual(set(result['omitted']),{'unpublished','virtual','workspace'})
+        for field in ('whole_block_pass','native_acceptance','resumable_checkpoint'):
+            self.assertFalse(result[field])
+        self.assertEqual(result['errors'],[])
+        with self.assertRaisesRegex(ValueError,'fresh failure'):
+            n.retain_failed_run(Path(self.temp.name),memory,capture)
+
+    def test_invalid_published_hash_or_incomplete_ack_does_not_gain_saved_output(self):
+        for index,kwargs in enumerate((dict(corrupt=True),dict(partial=True))):
+            memory,_,_=self.physical(**kwargs)
+            output=Path(self.temp.name)/str(index);output.mkdir()
+            result=n.retain_failed_run(output,memory,None)
+            self.assertFalse(result['outputs'])
+            self.assertEqual(len(result['errors']),1)
+            self.assertFalse((Path(result['path'])/'published.f32le').exists())
+
+    def test_capture_save_failure_or_active_capture_does_not_claim_success(self):
+        def failed(path):raise OSError('diagnostic disk failure')
+        active=SimpleNamespace(closed=False,active=True,save=failed)
+        (Path(self.temp.name)/'active').mkdir()
+        (Path(self.temp.name)/'closed').mkdir()
+        result=n.retain_failed_run(Path(self.temp.name)/'active',None,active)
+        self.assertNotIn('attention',result)
+        result=n.retain_failed_run(Path(self.temp.name)/'closed',None,
+            SimpleNamespace(closed=True,active=False,save=failed))
+        self.assertEqual(result['errors'],['attention: diagnostic disk failure'])
+        self.assertFalse(result['whole_block_pass'])
 
 
 if __name__ == "__main__":unittest.main()

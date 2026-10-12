@@ -42,10 +42,28 @@
 这些主机小门不能证明M128完成预算，更不代表硬件加速。M128先验将分别绑定同算术/物理链M16实值、诊断布局修正和传输等价门，新增诊断源独立冻结；绝不将新源码悄悄绑定到旧全源PASS。
 
 - done（局部）：官方BF16完整cold M16公开事务模型、原门下已观测节点、独立review、Chisel类型/有界前端。
-- ongoing：本次小批发布/精确CI/工件；新同刺激cold M128原预算执行及全形状节点核验。
+- done（发布）：8a3e2fc 精确远端源码与本轮三个 CI、工件已核验；详见下节。
+- ongoing：cold M128 首次1200秒预算退出；失败保全修复后，仅重跑一次1800秒软件模型及全形状节点核验。
 - todo：真实carried/更长prefill、完整29节点和原质量门、完整Chisel/RTL冻结刺激回放。
 - 五block M128总体：Qwen2 L0正推进；0.8B L0/L3仅先前两个M1实际RTL范围；35B-A3B L0/L3尚无完整数值执行。均不能称五块M128通过。
 
 当前物理映射与资源没有因这次数值修正改变。旧v0 M128对应有效MAC/4096固定资源的issue上界48.19%、共享64B流量假设上界40.34%保留其原source/workload身份；尚无本次whole-wall硬件周期，不能把软件tick或观测器速度换算MAC利用率。
 
 发布前另在全新纯源码checkout按新增workflow步骤顺序现编共享库、完成67软件测试及33源码/前端守卫，再真实编译90Scala、生成12叶CHIRRTL并按CI glob收集29项工件。新增frontend72.482秒，12份正规化IR与首轮完全相同；旧778测试/131IR本地未重复，后续CI会按原workflow执行。纯源码首次clone未携带不可达baseline，被source测试在编译前拒绝；显式补齐原workflow已规定的7个固定fetch/probe后续行，保留失败记录。独立review还补上两个tee步骤的显式bash/pipefail和2个失败传播小门，未改数值或预算。冷门摘要SHA `e5c1a8fb58e230e3b19cd0586661d101623a4e0d9c66c7b77a1fc0b893200e62`。
+
+
+## 8a3e2fc 远端终态与 M128 预算诊断
+
+[源码提交](https://github.com/liyang53719/hetero_cnn_llm_aha/commit/8a3e2fcff27f869e284da2f736fad38322858f13) 的三个原 CI 均成功，未重启：
+
+- [model-contract 38245601441](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38245601441)：441 tests。ZIP 283805 B，SHA `e2267d61b59ee75262b9c96d07129b48a5efc372102967fe4bfe73fa8c9a4efd`，共享旧 Matrix/SiLU 库的三源与编译 receipt 已核验；该库不能冒充新官方物化库。
+- [frontend 38245601426](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38245601426)：811 tests、143份CHIRRTL；新增90 Scala及12叶IR。ZIP 50305334 B，SHA `075bad9a6229c829ab0807233004ffb99bdd35e823d5608b2cbd32106c4e2c6c`。96项编译源身份与本地冻结来源相同；下载后的新增12原始IR长度/hash正确，规范化后与本地逐字相同。工件不包含这96源的原文，另从保留的本地冻结源逐项复核。此处仍是前端证据，没有RTL执行。
+- payload guard成功。未向Git上传输入、权重或NPZ。
+
+第一次实际M128在1200.080849秒抛出 `full group host budget exceeded`：pc0–15已完成，FFN54/56窗，Act ACK 4423680 B，whole terminal=0；Down和最后残差尚未执行，官方节点比较未开始。这是本轮软件预算失败，不能报整块或数值通过。原摘要SHA `45b925ebfc17760b00e37b7408038d4d1898c3d2831a24650454aae4690cddab`、86源快照SHA `22617b51a058b105989ecc0915f77245602d7ed0a967cc83584cc33b1b25e9de`及原日志保留。
+
+完成记录的文件时间显示FFN稳定窗口平均6.4886秒；剩两窗约13秒。已完成M16的Down实测137.835秒，M16也走128物理行，不能简单乘8。根据已完成Dense/FFN比率估计M128 Down约200–285秒，再留10–25秒给末Add、封存和比较，完整软件运行规划值1423–1523秒；这些是主机时间估计，不是硬件周期或利用率。本次将默认1200秒保留，并允许明确指定一次1800秒上限；进程外1860秒看门狗独立保留。
+
+旧进程没有可恢复的Python生成器/Matrix bank checkpoint；保留回执不足以续算。旧runner在全suffix成功后才保存Attention十字段，因此本次超时也丢失了其内存中的实际数组，不能用reference补回。新runner仅在错误退出路径复制已发布、完整ACK并有terminal的普通物理输出，排除权重、未发布Act、workspace和虚拟区，并保存关闭后的原始Attention观测。观测的INCOMPLETE状态及已接受的局部terminal原样保留；保存不发布、不打开reference gate、不宣称block成功或可续跑。诊断写盘失败也保留原错误。
+
+12个小守卫在不含历史work目录的纯源码导出中通过；独立review还发现并修复了AST白名单可被移到成功路径的缺口，现只允许诊断块位于原错误handler的指定位置，原raise/终态/算术变化均拒绝。原M16封存实际数据重新比较约1秒，固定算术和原BF16已观测门保持通过，没有再跑M16或官方forward。新的M128快照SHA `5b9247588ddddcada1e669034c3e8e0a17ffb39c6c6aef3ffd1bb5e49c6924ab` 仅runner与上一快照不同，全部算术、物理驱动、原始输入和ELF相同。2026-10-12 12:13 UTC启动的唯一1800秒运行在本次记录时仍进行中，不提前登记PASS。

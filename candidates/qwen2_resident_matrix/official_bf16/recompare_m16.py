@@ -27,13 +27,59 @@ def verify_terminal(r):
 
 
 def functional_run_ast(source):
-    """The sole accepted run change is selecting the reviewed read-only transport."""
+    """Normalize only exact, reviewed read-only transport/diagnostic changes.
+
+    The budget is host time, not a numerical threshold. Failure preservation
+    runs only after the original failure and cannot make it a success. Any
+    altered arithmetic, driver call, terminal check or exception path remains
+    in the comparison and is rejected against the actual M16 frozen source.
+    """
     tree=ast.parse(source)
     run=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=='run')
-    for node in ast.walk(run):
-        if isinstance(node,ast.Attribute) and node.attr=='OfficialAttentionMonitoringObservation':
-            node.attr='OfficialAttentionObservation'
-    return ast.dump(run,include_attributes=False)
+    def shape(node):return ast.dump(node,include_attributes=False)
+    def statement(text):return ast.parse(text).body[0]
+    prefix_time=shape(statement("report['prefix_host_wall_seconds'] = time.monotonic() - started"))
+    terminal_time=shape(statement("report['whole_terminal_host_wall_seconds'] = time.monotonic() - started"))
+    failure=shape(statement("try:\n    report['failure_capture'] = retain_failed_run(out, locals().get('physical'), locals().get('capture'))\nexcept Exception as preservation_error:\n    report['failure_capture_error'] = str(preservation_error)"))
+    prefix_status=shape(statement("report['status'] = 'ACTUAL_PREFIX_COMPLETE'"))
+    save=shape(statement('save()'))
+    memory=shape(statement("if 'physical' in locals(): report['failed_memory'] = physical.report()"))
+    # The fresh/budget guard is the second statement, before all execution.
+    new_guard=statement("require(not out.exists() and 0 < wall_budget <= 1800, 'fresh bounded official model run required')")
+    old_guard=statement("require(not out.exists() and 0 < wall_budget <= 1200, 'fresh bounded official model run required')")
+    if len(run.body)>1 and shape(run.body[1])==shape(new_guard):run.body[1]=old_guard
+    class DiagnosticOnly(ast.NodeTransformer):
+        def generic_visit(self,node):
+            if hasattr(node,'body') and isinstance(node.body,list):
+                original=node.body
+                keep=[]
+                for i,item in enumerate(original):
+                    previous=original[i-1] if i else None
+                    following=original[i+1] if i+1<len(original) else None
+                    match=shape(item)
+                    prefix=(match==prefix_time and i>=2 and shape(original[i-2])==prefix_status
+                        and shape(previous)==save and isinstance(following,ast.With)
+                        and shape(following.items[0].context_expr)==shape(ast.Name(id='capture',ctx=ast.Load())))
+                    terminal=(match==terminal_time and isinstance(previous,ast.With)
+                        and shape(previous.items[0].context_expr)==shape(ast.Name(id='capture',ctx=ast.Load()))
+                        and isinstance(following,ast.Expr) and isinstance(following.value,ast.Call)
+                        and isinstance(following.value.func,ast.Name) and following.value.func.id=='require'
+                        and any(isinstance(c,ast.Constant) and c.value=='whole public terminal missing'
+                                for c in following.value.args))
+                    failed=(match==failure and isinstance(node,ast.ExceptHandler) and node.name=='error'
+                        and isinstance(node.type,ast.Name) and node.type.id=='Exception'
+                        and previous is not None and shape(previous)==memory
+                        and following is not None and shape(following)==save
+                        and i+2==len(original)-1 and isinstance(original[i+2],ast.Raise)
+                        and original[i+2].exc is None and original[i+2].cause is None)
+                    if not (prefix or terminal or failed):keep.append(item)
+                node.body=keep
+            return super().generic_visit(node)
+        def visit_Attribute(self,node):
+            if node.attr=='OfficialAttentionMonitoringObservation':
+                node.attr='OfficialAttentionObservation'
+            return self.generic_visit(node)
+    return ast.dump(DiagnosticOnly().visit(run),include_attributes=False)
 
 
 def recompare(directory,out):
@@ -55,7 +101,7 @@ def recompare(directory,out):
         if name!=RUNNER:n.require(n.file_sha(n.ROOT/name)==digest,'actual execution source changed: '+name)
     before=(snapshot.parent/'frozen_sources'/RUNNER).read_text()
     n.require(functional_run_ast(before)==functional_run_ast(Path(n.__file__).read_text()),
-              'actual run changed beyond reviewed read-only transport selection')
+              'actual run changed beyond reviewed read-only transport/host diagnostics')
     n.require(n.reference_spec(16)==s['reference'],'frozen reference provenance changed')
     _,dense,_,native=n.runtime()
     n.require(dense.verify_library(r['binaries']['compile_receipt'])['library']==r['binaries']['library'] and
@@ -98,6 +144,7 @@ def recompare(directory,out):
         actual_source_sha256=s['source_sha256'],source_sha256=n.source_hashes(),
         postprocessor_sha256=n.file_sha(Path(__file__)),arithmetic_and_physical_driver_sources_unchanged=True,
         functional_run_ast_unchanged_except_readonly_transport=True,
+        host_diagnostics_only_changes=['budget_max_1800_default_1200', 'host_phase_timestamps', 'failure_actual_preservation'],
         input_spec=s['input_spec'],binaries=s['binaries'],sealed_actual_outputs=r['sealed_actual_outputs'],
         execution=r['execution'],comparison=comparison,
         source_sha256_after=n.source_hashes(),

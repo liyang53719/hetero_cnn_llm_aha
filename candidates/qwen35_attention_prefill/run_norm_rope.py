@@ -29,6 +29,7 @@ from .norm_rope.compare import compare_case, ObservationRecorder
 ROOT=prior.ROOT
 SOURCE_FILES=tuple(dict.fromkeys((*prior.SOURCE_FILES,*SOURCE_SHA256,
     'candidates/qwen35_attention_prefill/run_norm_rope.py',
+    'candidates/qwen35_gdn_prefill/conv/scalar.py',
     'src/heteronpu/qwen35_bf16_reference.py',
     'src/heteronpu/model_geometry.py',
     *(str(p.relative_to(ROOT)) for p in sorted((ROOT/'candidates/qwen35_attention_prefill/norm_rope').glob('*.py'))))))

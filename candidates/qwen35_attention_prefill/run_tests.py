@@ -1,4 +1,4 @@
-"""Cold source and synthetic projection-prefix gate; no model download or RTL."""
+"""Cold source and synthetic attention subchains; no model download or RTL."""
 import argparse
 import hashlib
 import json
@@ -11,9 +11,12 @@ import time
 
 from .run_projection_prefix import SOURCE_FILES
 from .run_norm_rope import SOURCE_FILES as NORM_ROPE_SOURCE_FILES
+from .gqa.owner import SOURCE_PATHS as GQA_SOURCE_FILES
 
 ROOT = Path(__file__).resolve().parents[2]
 DIRECTORY = Path(__file__).resolve().parent
+MATRIX_TESTS = tuple(ROOT / 'candidates/qwen2_resident_matrix/ffn_attention' / name
+                     for name in ('test_matrix_service.py', 'test_rectangular_profile.py'))
 
 
 def main():
@@ -22,20 +25,23 @@ def main():
     args=parser.parse_args()
     args.out.mkdir(parents=True,exist_ok=False)
     dependencies={'candidates/qwen35_gdn_prefill/test_rms_owner.py',
-        'candidates/qwen35_gdn_prefill/prep/scalar.py', 'candidates/qwen35_gdn_prefill/conv/scalar.py'}
-    paths=sorted(set(SOURCE_FILES) | set(NORM_ROPE_SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
+        'candidates/qwen35_gdn_prefill/prep/scalar.py', 'candidates/qwen35_gdn_prefill/conv/scalar.py',
+        'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py',
+        *(str(p.relative_to(ROOT)) for p in MATRIX_TESTS)}
+    paths=sorted(set(SOURCE_FILES) | set(NORM_ROPE_SOURCE_FILES) | set(GQA_SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
         if p.is_file() and p.suffix in ('.py','.json','.cpp','.scala')})
     def hashes():return {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
     sources=hashes()
-    tests=sorted(DIRECTORY.rglob('test_*.py'))
-    report=dict(status='RUNNING',scope='SYNTHETIC_TYPED_L3_PROJECTION_PREFIX_ONLY',source_sha256=sources,
+    tests=sorted((*DIRECTORY.rglob('test_*.py'), *MATRIX_TESTS))
+    report=dict(status='RUNNING',scope='SYNTHETIC_TYPED_L3_ATTENTION_SUBCHAINS_ONLY',source_sha256=sources,
         discovered_tests=[str(p.relative_to(ROOT)) for p in tests],suites=[],tests=0,
         checkpoint_payload_used=False,official_forward_executed=False,rtl_executed=False)
     failed=False
     child_environment = {**os.environ, 'PYTHONPATH': str(ROOT / 'src')}
     for path in tests:
         module='.'.join(path.relative_to(ROOT).with_suffix('').parts)
-        argv=[sys.executable,'-B','-m','unittest',module,'-v'];start=time.monotonic()
+        argv=([sys.executable,'-B',str(path),'-v'] if path in MATRIX_TESTS else
+              [sys.executable,'-B','-m','unittest',module,'-v']);start=time.monotonic()
         try:
             result=subprocess.run(argv,cwd=ROOT,env=child_environment,capture_output=True,text=True,timeout=180)
             code,log=result.returncode,result.stdout+result.stderr
@@ -53,7 +59,7 @@ def main():
         (args.out/'summary.json').write_text(json.dumps(report,indent=2)+'\n')
         print(module,count,'PASS' if passed else 'FAIL',flush=True)
     report['sources_unchanged']=hashes()==sources
-    report['status']='PASS_SYNTHETIC_TYPED_L3_PREFIX_ONLY' if tests and not failed and report['sources_unchanged'] else 'FAILED'
+    report['status']='PASS_SYNTHETIC_TYPED_L3_SUBCHAINS_ONLY' if tests and not failed and report['sources_unchanged'] else 'FAILED'
     (args.out/'summary.json').write_text(json.dumps(report,indent=2)+'\n')
     raise SystemExit(0 if report['status'].startswith('PASS_') else 1)
 

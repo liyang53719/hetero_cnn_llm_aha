@@ -75,6 +75,7 @@ def configure_library(library):
         'matrix_result_retire': [q, u, u], 'matrix_done_retire': [q, u, u],
         'matrix_seed_ack': [q, u, u], 'matrix_legacy_reply_retire': [q],
         'matrix_normal_group': [u] * 4,
+        'matrix_normal_group_v1': [u] * 5,
         'matrix_normal_step': [u] * 6 + [p16, p16, p32],
     }
     for name, args in signatures.items():
@@ -97,6 +98,7 @@ class NormalGroup:
     steps: int
     tag: int
     slice_mask: int = 1
+    profile: int = 0  # 0 legacy Qwen2; 1 existing rectangular GQA stream
 
 
 @dataclass(frozen=True)
@@ -308,9 +310,11 @@ class MatrixService:
         if not self.ports()['group_ready']:
             return False
         require(isinstance(group, NormalGroup) and all(type(x) is int and 0 <= x < 1 << 32
-                for x in (group.opcode, group.steps, group.tag, group.slice_mask)),
+                for x in (group.opcode, group.steps, group.tag, group.slice_mask, group.profile)),
                 'normal Matrix group fields')
-        rc = self.lib.matrix_normal_group(group.opcode, group.steps, group.tag, group.slice_mask)
+        rc = (self.lib.matrix_normal_group(group.opcode, group.steps, group.tag, group.slice_mask)
+              if group.profile == 0 else self.lib.matrix_normal_group_v1(
+                  group.opcode, group.steps, group.tag, group.slice_mask, group.profile))
         require(rc in (0, -1), 'normal group admission disagrees with ready')
         self.group, self._done = group, None
         self.counts['normal_groups'] += 1
@@ -328,7 +332,8 @@ class MatrixService:
         a, b, output = (C.c_uint16 * 16)(*step.a), (C.c_uint16 * 256)(*step.b), (C.c_uint32 * 4096)()
         rc = self.lib.matrix_normal_step(step.index, step.context, step.clear, step.last,
                                         step.finish, step.emit, a, b, output)
-        require(rc in (1, -1), 'normal accepted step disagrees with ready')
+        require(rc in ((0, 1, -1) if self.group.profile == 1 else (1, -1)),
+                'normal accepted step disagrees with ready')
         self.counts['normal_steps'] += 1
         if rc == 1:
             value = MatrixValue(bytes(output))

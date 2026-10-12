@@ -1,0 +1,17 @@
+{
+  "kind": "static_source_and_symbolic_schedule_only",
+  "checks_passed": true,
+  "tests_run": 9,
+  "baseline_sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+  "expected_baseline_sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+  "overlay_sha256": "44dbd2ce97ffe1f7ed7f86eb60f9fd0475643cc70e2be06a4f8e4f93b17d6ea3",
+  "qk_steps": 256,
+  "new_register_declarations": 0,
+  "new_memory_declarations": 0,
+  "new_arithmetic_modules": 0,
+  "scala_frontend": "NOT_RUN",
+  "chisel_elaboration": "NOT_RUN",
+  "rtl_simulation": "NOT_RUN",
+  "numerical_execution": "NOT_RUN",
+  "production_source_replaced": false
+}

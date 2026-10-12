@@ -1,0 +1,243 @@
+{
+  "existing_ascending_matrix_policy": "BLOCKED_ORIGINAL_MAX_ABS",
+  "flags_note": "First variant receipt preserved as *.first. A second identical numerical run moved the wall-clock read before fenv clearing to prevent measurement conversion contributing FE_INEXACT. Output hashes identical. Final strict FMA variants raise only FE_INEXACT; integer exact variant raises no flags.",
+  "full_forward_executed": false,
+  "hardware_policy_changed": false,
+  "independent_witnesses": "All three variant terminal FP32 words checked with independent exact rational RNE at the union of discrepant coordinates:2 cold/7 carried. Original3 traces also verified all256 ascending FMA accumulators.",
+  "input_domain": {
+    "carried128": {
+      "k": {
+        "elements": 131072,
+        "max_abs": 8.8125,
+        "max_significand_power": -4,
+        "min_abs_nonzero": 1.52587890625e-05,
+        "min_significand_power": -23,
+        "nonfinite_count": 0,
+        "subnormal_count": 0,
+        "zero_count": 9
+      },
+      "q": {
+        "elements": 262144,
+        "max_abs": 10.0625,
+        "max_significand_power": -4,
+        "min_abs_nonzero": 3.159046173095703e-06,
+        "min_significand_power": -26,
+        "nonfinite_count": 0,
+        "subnormal_count": 0,
+        "zero_count": 24
+      }
+    },
+    "cold128": {
+      "k": {
+        "elements": 65536,
+        "max_abs": 8.8125,
+        "max_significand_power": -4,
+        "min_abs_nonzero": 3.933906555175781e-05,
+        "min_significand_power": -22,
+        "nonfinite_count": 0,
+        "subnormal_count": 0,
+        "zero_count": 2
+      },
+      "q": {
+        "elements": 262144,
+        "max_abs": 11.0625,
+        "max_significand_power": -4,
+        "min_abs_nonzero": 3.129243850708008e-06,
+        "min_significand_power": -26,
+        "nonfinite_count": 0,
+        "subnormal_count": 0,
+        "zero_count": 18
+      }
+    }
+  },
+  "jit_static_evidence": {
+    "dnnl_dump_cpu_jit_brgemm_kernel_t.0.bin": {
+      "bytes": 3040,
+      "first_vdpbf16ps": [
+        " 229:\t62 62 46 48 52 f8    \tvdpbf16ps zmm31,zmm7,zmm0",
+        " 22f:\t62 62 4e 48 52 f0    \tvdpbf16ps zmm30,zmm6,zmm0",
+        " 235:\t62 62 56 48 52 e8    \tvdpbf16ps zmm29,zmm5,zmm0",
+        " 23b:\t62 62 5e 48 52 e0    \tvdpbf16ps zmm28,zmm4,zmm0"
+      ],
+      "sha256": "490d35caf5edcfd9c73345dba384ee607118fdfa8f3170c26f3a57114ce8b75e",
+      "static_vdpbf16ps_count": 128
+    },
+    "dnnl_dump_cpu_jit_brgemm_kernel_t.2.bin": {
+      "bytes": 3040,
+      "first_vdpbf16ps": [
+        " 229:\t62 62 46 48 52 f8    \tvdpbf16ps zmm31,zmm7,zmm0",
+        " 22f:\t62 62 4e 48 52 f0    \tvdpbf16ps zmm30,zmm6,zmm0",
+        " 235:\t62 62 56 48 52 e8    \tvdpbf16ps zmm29,zmm5,zmm0",
+        " 23b:\t62 62 5e 48 52 e0    \tvdpbf16ps zmm28,zmm4,zmm0"
+      ],
+      "sha256": "efe6cbd988e600ec8568fe4c5856e4b6d802f438cafaf05e0a32de955d109a0b",
+      "static_vdpbf16ps_count": 128
+    },
+    "dnnl_dump_cpu_jit_brgemm_matmul_copy_b_transposed_t.1.bin": {
+      "bytes": 1094,
+      "first_vdpbf16ps": [],
+      "sha256": "41b1adee7f24b0ebcb3af8fb3eb079584d67f4789aaf831422200078b518ca5e",
+      "static_vdpbf16ps_count": 0
+    },
+    "dnnl_dump_cpu_jit_brgemm_matmul_copy_b_transposed_t.3.bin": {
+      "bytes": 1094,
+      "first_vdpbf16ps": [],
+      "sha256": "41b1adee7f24b0ebcb3af8fb3eb079584d67f4789aaf831422200078b518ca5e",
+      "static_vdpbf16ps_count": 0
+    }
+  },
+  "jit_static_scope": "Both generated compute kernels have K-loop count32, four successive pair broadcasts at offsets0/4/8/12 and 16-byte source advance: static K256 per runtime batch. Terminal BF16 conversion present. Runtime batch count/call sequence and every copy permutation have not been dynamically instrumented, so this is not universal ISA/backend equivalence.",
+  "next_step": "If authorized, implement an explicit, bounded high-first pair-routing profile and validate actual Matrix owner execution under original thresholds. Preserve existing failure; no acceptance inherited from this diagnostic.",
+  "official_backend_replay": {
+    "ATEN_CPU_CAPABILITY": "DEFAULT",
+    "cold_carried_replays_byteexact": true,
+    "oneDNN_git": "8d263e693366ef8db40acc569cc7d8edf644556d",
+    "oneDNN_version": "3.7.1",
+    "replay_peak_rss_bytes": 307896320,
+    "replay_seconds": 1.734262824000325,
+    "selected_backend": "brg_matmul:avx512_core_bf16",
+    "torch": "2.10.0+cpu",
+    "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0"
+  },
+  "original_elf_sha256": "d79d9cf37297a65ebefd94cfa15cae53417beb1beb7ed9a2ea43731213436689",
+  "original_failure_all_artifacts_unchanged": true,
+  "original_metadata_sha256": "1ec4dba3f56911b2c4bc56f015707ba57ce41caa7f5da2cd0a8aaa122e42e630",
+  "owner_executed": false,
+  "pair_intermediate_subnormals": {
+    "carried128": 0,
+    "cold128": 0
+  },
+  "references": [
+    {
+      "finding": "x86 bmm consults oneDNN matmul heuristic and dispatches to mkldnn_matmul when accepted; DEFAULT vector capability does not disable this independent backend path.",
+      "title": "Pinned PyTorch bmm dispatch",
+      "url": "https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/LinearAlgebra.cpp#L1635-L1645"
+    },
+    {
+      "finding": "Accepts BF16 batched matmul with contiguous or transposed input memory, as replayed.",
+      "title": "Pinned PyTorch oneDNN matmul",
+      "url": "https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/mkldnn/Matmul.cpp#L285-L356"
+    },
+    {
+      "finding": "VDPBF16PS applies the high BF16 half then the low half as two FP32 RNE accumulations. It mandates input DAZ/output FTZ and does not consult/update MXCSR. Strict no-flush fmaf only agrees within the verified normal/zero domain.",
+      "title": "Intel VDPBF16PS ISA reference, pages76-77",
+      "url": "https://www.intel.com/content/dam/develop/external/us/en/documents/architecture-instruction-set-extensions-programming-reference-737410.pdf#page=78"
+    }
+  ],
+  "results": {
+    "carried128": {
+      "ascending": {
+        "bit_mismatches": 2,
+        "elements": 262144,
+        "max_abs": 1.0,
+        "mean_abs": 5.7220458984375e-06,
+        "over_original_max": 2,
+        "within_original_abs_mean_gate": false
+      },
+      "exact_then_fp32_then_bf16": {
+        "bit_mismatches": 7,
+        "elements": 262144,
+        "max_abs": 1.0,
+        "mean_abs": 1.4306977391242981e-05,
+        "over_original_max": 6,
+        "within_original_abs_mean_gate": false
+      },
+      "pair_high_first": {
+        "bit_mismatches": 0,
+        "elements": 262144,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "over_original_max": 0,
+        "within_original_abs_mean_gate": true
+      }
+    },
+    "cold128": {
+      "ascending": {
+        "bit_mismatches": 1,
+        "elements": 131072,
+        "max_abs": 1.0,
+        "mean_abs": 7.62939453125e-06,
+        "over_original_max": 1,
+        "within_original_abs_mean_gate": false
+      },
+      "exact_then_fp32_then_bf16": {
+        "bit_mismatches": 1,
+        "elements": 131072,
+        "max_abs": 0.5,
+        "mean_abs": 3.814697265625e-06,
+        "over_original_max": 1,
+        "within_original_abs_mean_gate": false
+      },
+      "pair_high_first": {
+        "bit_mismatches": 0,
+        "elements": 131072,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "over_original_max": 0,
+        "within_original_abs_mean_gate": true
+      }
+    }
+  },
+  "rtl_executed": false,
+  "status": "MECHANISM_BACKED_PAIR_ORDER_CANDIDATE_ONLY",
+  "unchanged_thresholds": {
+    "max_abs": 0.03125,
+    "mean_abs": 0.005
+  },
+  "valid_causal_results": {
+    "carried128": {
+      "ascending": {
+        "bit_mismatches": 1,
+        "elements": 197120,
+        "max_abs": 1.0,
+        "mean_abs": 5.073051948051948e-06,
+        "over_original_max": 1,
+        "within_original_abs_mean_gate": false
+      },
+      "exact_then_fp32_then_bf16": {
+        "bit_mismatches": 4,
+        "elements": 197120,
+        "max_abs": 1.0,
+        "mean_abs": 8.880317985237418e-06,
+        "over_original_max": 3,
+        "within_original_abs_mean_gate": false
+      },
+      "pair_high_first": {
+        "bit_mismatches": 0,
+        "elements": 197120,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "over_original_max": 0,
+        "within_original_abs_mean_gate": true
+      }
+    },
+    "cold128": {
+      "ascending": {
+        "bit_mismatches": 0,
+        "elements": 66048,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "over_original_max": 0,
+        "within_original_abs_mean_gate": true
+      },
+      "exact_then_fp32_then_bf16": {
+        "bit_mismatches": 0,
+        "elements": 66048,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "over_original_max": 0,
+        "within_original_abs_mean_gate": true
+      },
+      "pair_high_first": {
+        "bit_mismatches": 0,
+        "elements": 66048,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "over_original_max": 0,
+        "within_original_abs_mean_gate": true
+      }
+    }
+  },
+  "variant_elf_sha256": "6da2cdb028c57d0a43f0a88660c1a87396a9ee381c2e7ec2d4e804571221c630",
+  "variant_metadata_sha256": "89e6312820fa9b0eb7de23e6a65a5011936086359222a3f0a976be6dcea0d7d3"
+}

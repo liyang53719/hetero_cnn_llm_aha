@@ -1,0 +1,104 @@
+"""Diagnostic GQA continuation from sealed real prefix writebacks, not fullblock.
+Replayed producer bytes receive actual TypedMemory writes/ACKs. Cache layout
+assembly is host setup, not an executed KV owner or fullblock generation fence.
+"""
+from pathlib import Path
+import ctypes as C
+import hashlib,json,struct,time,sys,traceback
+import numpy as np
+from candidates.qwen35_attention_prefill.gqa.owner import Bf16CausalGqaOwner,Bf16CausalGqaJob,QkOrder,source_identity
+from candidates.qwen35_attention_prefill.gqa.driver import TypedBf16CausalGqaDriver
+from candidates.qwen35_attention_prefill.norm_rope.scalar import NormRopeScalar
+from candidates.qwen35_attention_prefill.norm_rope.compare import _metrics
+from candidates.qwen35_attention_prefill.norm_rope.fixture import load_contract
+from candidates.qwen35_attention_prefill.input_fixture import read_tensor
+from candidates.qwen35_gdn_prefill.typed_dense import TypedMemory
+from candidates.qwen2_resident_matrix.transposed_down.model import WriteCommand,WriteAck
+from candidates.qwen2_resident_matrix.ffn_attention.matrix_service import MatrixService,configure_library
+from scripts.build_shared_matrix_recipe import from_environment
+
+ROOT=Path.cwd(); BASE=ROOT/'work/l3_default256_policy_20261012/actual_m16'
+CAP=ROOT/'work/qwen35_l3_capture_restored_20261012T202700Z/m16_baseline'
+OUT=ROOT/'work/l3_gqa_matrix_20261012/actual_m16_v2';OUT.mkdir(exist_ok=False)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def save(name,data):
+ (OUT/name).write_text(json.dumps(data,indent=2,sort_keys=True,allow_nan=False)+'\n')
+def store(name,b):
+ (OUT/name).write_bytes(b);return dict(file=name,bytes=len(b),sha256=sha(b))
+started=time.monotonic();report=dict(status='RUNNING',scope='GQA_ONLY_REPLAY_OF_SEALED_ACTUAL_PREFIX',
+ fullblock_executed=False,kv_owner_executed=False,prefix_reexecuted=False,rtl_executed=False,
+ hardware_cycles=None,native_intermediates_injected=False,cases=[],budget_seconds=300)
+save('summary.json',report)
+try:
+ raw=(BASE/'summary.json').read_bytes();assert sha(raw)=='10ccdaf645a14a0b91143ceaed5ebc1f6c58efad4ecd60fe849504356248204f'
+ old=json.loads(raw);assert old['status']=='PASS_ACTUAL_TYPED_NORM_ROPE_PREFIX_ONLY' and old['terminal_count']==16 and all(old['seals'].values())
+ for p,h in old['source_sha256'].items():assert sha((BASE/'source_snapshot'/p).read_bytes())==h
+ manifest_raw=(CAP/'manifest.json').read_bytes();assert manifest_raw==(BASE/'capture_manifest.json').read_bytes()
+ manifest=json.loads(manifest_raw);assert manifest['query_tokens']==16
+ report['prefix_summary_sha256']=sha(raw);report['capture_manifest_sha256']=sha(manifest_raw)
+ identity=source_identity();sources={p:(ROOT/p).read_bytes() for p in identity['source_sha256']}
+ sources[str(Path(__file__).relative_to(ROOT))]=Path(__file__).read_bytes()
+ for p,b in sources.items():
+  target=OUT/'source_snapshot'/p;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(b)
+ report['sources']={p:sha(b) for p,b in sources.items()}
+ libpath=from_environment(ROOT);lib=configure_library(C.CDLL(str(libpath)));assert lib.td_reset()==0
+ report['library']=dict(path=str(libpath),sha256=sha(libpath.read_bytes()))
+ matrix=MatrixService(lib);scalar=NormRopeScalar();memory=TypedMemory();arrays={};covered={}
+ stages=('qk_bf16','scaled_scores_bf16','probability_fp32','probabilities_bf16','context_bf16')
+ def observe(stage,token,head,first,words):
+  if stage not in arrays:return
+  target,mask=arrays[stage],covered[stage];assert not mask[0,head,token,first:first+len(words)].any()
+  target[0,head,token,first:first+len(words)]=words;mask[0,head,token,first:first+len(words)]=True
+ owner=Bf16CausalGqaOwner(matrix,scalar,observe)
+ def replay(base,raw,tag):
+  memory.allocate_output(base,len(raw))
+  for off in range(0,len(raw),64):
+   t=tag<<32|off//64;memory.begin_write(WriteCommand(base+off,1,t));memory.write_data(struct.unpack('<32H',raw[off:off+64]),True);memory.acknowledge(WriteAck(t,False,64))
+  memory.publish(base,(tag,None,len(raw)))
+ prior_k=prior_v=b''
+ for index,case in enumerate(manifest['cases']):
+  name=case['name'];actual={}
+  for role in ('q_rope','k_rope','v'):
+   rec=old['actual_outputs'][name+'.'+role];b=(BASE/rec['file']).read_bytes();assert rec['published'] and rec['terminal_status'] is None and len(b)==rec['bytes'] and sha(b)==rec['sha256'];actual[role]=b
+  length=16*(index+1);query=actual['q_rope'];keys=prior_k+actual['k_rope'];values=prior_v+actual['v']
+  assert len(query)==16*4096 and len(keys)==len(values)==length*1024
+  qbase=0x100000000+index*0x1000000;kbase=qbase+0x200000;outbase=qbase+0x400000
+  job=Bf16CausalGqaJob(71+index,qbase,kbase,outbase,16,index*16,length,qk_policy=QkOrder.PairHighFirst)
+  for i,((base,extent),b) in enumerate(zip(job.input_spans,(query,keys,values))):assert extent==len(b);replay(base,b,10+index*3+i)
+  memory.allocate_output(outbase,job.write_bytes)
+  arrays.clear();covered.clear()
+  for stage in stages:
+   shape=(1,8,16,256 if stage=='context_bf16' else length);arrays[stage]=np.zeros(shape,dtype='<u4');covered[stage]=np.zeros(shape,dtype=bool)
+  d=TypedBf16CausalGqaDriver(owner,memory,job);t0=time.monotonic();last=t0
+  while d.response is None:
+   assert time.monotonic()-started<300,'actual GQA software budget'
+   d.tick()
+   if time.monotonic()-last>=10:
+    print(json.dumps(dict(case=name,state=owner.state,ticks=d.counts['ticks'],counts=dict(owner.counts),seconds=time.monotonic()-t0)),flush=True);last=time.monotonic()
+  item=dict(case=name,seconds=time.monotonic()-t0,driver=d.report(),matrix=matrix.report(),inputs={role:sha(b) for role,b in actual.items()},stages={})
+  report['cases'].append(item);save('summary.json',report)
+  assert d.response.status is None and d.output.published,'GQA actual terminal failed'
+  output=d.output.raw();item['output']=store(name+'.context.actual.bf16le',output)
+  expected_output=(arrays['context_bf16'].transpose(0,2,1,3)>>16).astype('<u2').tobytes();assert expected_output==output
+  events=[e for e in case['dispatch_events'] if e['module']=='self_attn'];mats=[e for e in events if e['op']=='aten.matmul.default'];assert len(mats)==2
+  qindex=mats[0]['index'];by={e['index']:e for e in events};soft=[e for e in events if e['op']=='aten.softmax.int'];assert len(soft)==1
+  selected=dict(qk_bf16=mats[0],scaled_scores_bf16=by[qindex+1],probability_fp32=soft[0],probabilities_bf16=by[soft[0]['index']+1],context_bf16=mats[1])
+  for stage,event in selected.items():
+   assert covered[stage].all(),stage+' incomplete actual observations'
+   key=event['result']['tensor'];rec=manifest['tensors'][key];raw=read_tensor(CAP,manifest,key)
+   native=np.frombuffer(raw,'<u2' if rec['dtype']=='BF16' else '<u4').astype('<u4').reshape(rec['shape'])
+   if rec['dtype']=='BF16':native<<=16
+   a=arrays[stage];item['stages'][stage]=_metrics(a,native,rec['dtype'],load_contract()['thresholds']['operator'])
+   item['stages'][stage]['observation']=store(name+'.'+stage+'.actual.f32bits',a.tobytes())
+   item['stages'][stage]['native_tensor']=key
+  prior_k,prior_v=keys,values
+  print(json.dumps(dict(case=name,seconds=item['seconds'],status=d.response.status,stages={k:(v['pass'],v['max_abs'],v['bit_mismatches']) for k,v in item['stages'].items()})),flush=True)
+  save('summary.json',report)
+ assert all((ROOT/p).read_bytes()==b for p,b in sources.items())
+ report['sources_unchanged']=True
+ report['status']='PASS_GQA_SUBCHAIN_ONLY' if all(s['pass'] for c in report['cases'] for s in c['stages'].values()) else 'FAIL_ORIGINAL_NATIVE_STAGE_LIMITS'
+except BaseException as e:
+ report.update(status='FAILED',exception_type=type(e).__name__,exception=str(e),traceback=traceback.format_exc());print(traceback.format_exc(),flush=True)
+finally:
+ report['seconds']=time.monotonic()-started;save('summary.json',report)
+sys.exit(0 if report['status']=='PASS_GQA_SUBCHAIN_ONLY' else 1)

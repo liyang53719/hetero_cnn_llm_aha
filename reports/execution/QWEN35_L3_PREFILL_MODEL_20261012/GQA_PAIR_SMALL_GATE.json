@@ -1,0 +1,46 @@
+{
+  "arithmetic_changed_by_fence_fix": false,
+  "exit_code": 0,
+  "independent_review": "Original held-success poison P1 found; explicit revocation fix and exact Done metadata/held checks re-reviewed, no P0/P1 outstanding. Read-route driver validates span membership; boundary and actualM16 numerical gates cover limited schedules, not formal routing proof.",
+  "library_sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc",
+  "receipt_sha256": "c1d3f82285b00b0606cb62359d92b7cf0cbf873f3cff7c3d295803f3712a401a",
+  "seconds": 18.35239201299919,
+  "skipped": 0,
+  "source_sha256": {
+    "fullblock_executed": false,
+    "gqa_package_sha256": {
+      "README.md": "7d1dc59845c6f814fdba288af4c3036aed3fcbdf14ea2408eb63e8b5d4441517",
+      "__init__.py": "4bbcec73bb2442a4b78dbff1c27a158fe107013b5b0ae71b695b47eaeefc81d5",
+      "driver.py": "ce3c70729a0be5c7eb63f1e7e0ec20b74f7ed026ac1831a023dffd2ddecbf009",
+      "owner.py": "dd70d3b604c2a69e0ff69d17fbab6078ed04a99bc5ca3cdd4da90c1bacd8c133",
+      "run_small_tests.py": "3e0d2948448060ff2d1367dc7e2938c109504319bddedac6d76db0ccca78c87c",
+      "test_gqa.py": "e9f6971b9c1eabc6a6a5bff8b07d9b4b44097c43c16afd6d70408e76ad3098b6"
+    },
+    "hardware_cycles": null,
+    "native_acceptance": false,
+    "pair_high_first_isa_emulation": false,
+    "production_chisel_qk_policy": "legacy_ascending",
+    "rtl_executed": false,
+    "scope": "BF16_CAUSAL_GQA_SOFTWARE_OWNER",
+    "source_sha256": {
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+      "candidates/qwen35_attention_prefill/gqa/__init__.py": "4bbcec73bb2442a4b78dbff1c27a158fe107013b5b0ae71b695b47eaeefc81d5",
+      "candidates/qwen35_attention_prefill/gqa/driver.py": "ce3c70729a0be5c7eb63f1e7e0ec20b74f7ed026ac1831a023dffd2ddecbf009",
+      "candidates/qwen35_attention_prefill/gqa/owner.py": "dd70d3b604c2a69e0ff69d17fbab6078ed04a99bc5ca3cdd4da90c1bacd8c133",
+      "candidates/qwen35_attention_prefill/norm_rope/scalar.py": "aba2bff915e39044d103a7f470526d4b219dd270bd8e0ec39394f4fd2ea18550",
+      "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+      "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd"
+    }
+  },
+  "sources_unchanged": true,
+  "status": "PASS_SMALL_GQA_SOFTWARE_ONLY",
+  "tests": 18,
+  "tests_log_sha256": "a78d1e2636a888c9158419d1c48c2506f77c83606d4475788d67570a6276596e"
+}

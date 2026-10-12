@@ -3,14 +3,17 @@
 The integer primitives model separate binary32 RNE operations and HardFloat
 tininess. No reference trace, result array, or second scalar instance is used.
 Inherited Div2/Sqrt3/MulIeeeRne6 remain available to the input RMS owner.
+ExpNegative4 reuses the same source-bound degree7 service for GQA softmax;
+its internal primitive counts remain separate from accepted public requests.
 """
 from dataclasses import dataclass
 
 from heteronpu.rope_bf16_candidate import add_rne, mul_rne
-from ...qwen35_gdn_prefill.rms_owner import SharedScalar, ArithmeticFault, finite, require
+from ...qwen35_gdn_prefill.rms_owner import ArithmeticFault, finite, require
+from ...qwen35_gdn_prefill.conv.scalar import ConvScalar
 
 
-OPCODES = {'add': 0, 'mul': 1, 'div': 2, 'sqrt': 3, 'mul_ieee_rne': 6}
+OPCODES = {'add': 0, 'mul': 1, 'div': 2, 'sqrt': 3, 'exp_negative': 4, 'mul_ieee_rne': 6}
 FATAL_FLAGS = 0x1E
 
 
@@ -22,8 +25,8 @@ class RawScalarResult:
     flags_valid: bool = True
 
 
-class NormRopeScalar(SharedScalar):
-    """Inject this same instance into RMS, Norm256 and partial64 RoPE.
+class NormRopeScalar(ConvScalar):
+    """Inject this same instance into RMS, Norm256, partial64 RoPE and GQA.
 
     raw_op exposes the original flags even on a fatal result; op retains the
     existing exception-based API. Both routes count exactly one public call.

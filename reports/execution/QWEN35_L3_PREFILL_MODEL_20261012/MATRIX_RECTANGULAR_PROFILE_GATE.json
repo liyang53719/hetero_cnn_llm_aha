@@ -1,0 +1,388 @@
+{
+  "hardware_cycles": null,
+  "initial_failure": {
+    "cause": "Compiler swapped a/b fmaf argument registers;20 two-NaN payloads differed. Finite arithmetic unchanged. Volatile fmaf function pointer retains explicit C ABI operand order; original32 and new10 tests pass.",
+    "diagnostic": {
+      "baseline": {
+        "examples": [],
+        "mismatch_count": 0
+      },
+      "candidate": {
+        "examples": [
+          {
+            "a": "0x7fc1",
+            "actual": "0x7fc10000",
+            "b": "0xffc2",
+            "col": 3,
+            "expected": "0xffc20000",
+            "row": 2
+          },
+          {
+            "a": "0x7fc1",
+            "actual": "0x7fc10000",
+            "b": "0xff81",
+            "col": 5,
+            "expected": "0xffc10000",
+            "row": 2
+          },
+          {
+            "a": "0x7fc1",
+            "actual": "0x7fc10000",
+            "b": "0xff81",
+            "col": 26,
+            "expected": "0xffc10000",
+            "row": 2
+          },
+          {
+            "a": "0x7fc1",
+            "actual": "0x7fc10000",
+            "b": "0xffc2",
+            "col": 28,
+            "expected": "0xffc20000",
+            "row": 2
+          },
+          {
+            "a": "0xffc2",
+            "actual": "0xffc20000",
+            "b": "0x7fc1",
+            "col": 2,
+            "expected": "0x7fc10000",
+            "row": 3
+          },
+          {
+            "a": "0xffc2",
+            "actual": "0xffc20000",
+            "b": "0x7f81",
+            "col": 4,
+            "expected": "0x7fc10000",
+            "row": 3
+          },
+          {
+            "a": "0xffc2",
+            "actual": "0xffc20000",
+            "b": "0xff81",
+            "col": 5,
+            "expected": "0xffc10000",
+            "row": 3
+          },
+          {
+            "a": "0xffc2",
+            "actual": "0xffc20000",
+            "b": "0xff81",
+            "col": 26,
+            "expected": "0xffc10000",
+            "row": 3
+          },
+          {
+            "a": "0xffc2",
+            "actual": "0xffc20000",
+            "b": "0x7f81",
+            "col": 27,
+            "expected": "0x7fc10000",
+            "row": 3
+          },
+          {
+            "a": "0xffc2",
+            "actual": "0xffc20000",
+            "b": "0x7fc1",
+            "col": 29,
+            "expected": "0x7fc10000",
+            "row": 3
+          },
+          {
+            "a": "0x7f81",
+            "actual": "0x7fc10000",
+            "b": "0xffc2",
+            "col": 3,
+            "expected": "0xffc20000",
+            "row": 4
+          },
+          {
+            "a": "0x7f81",
+            "actual": "0x7fc10000",
+            "b": "0xff81",
+            "col": 5,
+            "expected": "0xffc10000",
+            "row": 4
+          }
+        ],
+        "mismatch_count": 20
+      }
+    },
+    "failed": 1,
+    "legacy_tests": 32,
+    "log_sha256": "b53c3574aef46b7e3933988d9f181fbf4a508f02ff5067484cebb9dfbf189fa5",
+    "threshold_changed": false
+  },
+  "legacy_log_sha256": "7366299a482276aa4c168f1e63d68826fcbbf1341ab8ba90fee46334d3ed3aa6",
+  "legacy_tests": 32,
+  "library_sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc",
+  "rectangular_receipt_sha256": "89f635416a3e6e764d854c7846beac291748c5bfbac098ea4f1b5580fda5dbf7",
+  "rectangular_tests": 10,
+  "rtl_executed": false,
+  "same_accumulator_bytes": 81920,
+  "sources": {
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/candidates/qwen2_resident_matrix/ffn_attention/test_matrix_service.py": "4a9ab01dc14ea7e32266198801046e21826a6c9d281594bc0d6274920bfc7eec",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59"
+  },
+  "status": "PASS_HOST_ARITHMETIC_AND_HANDSHAKE_ONLY",
+  "tests": [
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_abort_before_after_partial_and_held_terminal_drains_then_reset",
+      "passed": true,
+      "seconds": 0.026464636001037434,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "normal_results": 1,
+          "normal_steps": 1,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 4096,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_group_python_field_types_reject_without_consuming_the_group",
+      "passed": true,
+      "seconds": 0.0003461819997028215,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 0,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_intermediate_and_final_controls_fault_without_extra_fmas",
+      "passed": true,
+      "seconds": 0.002805508998790174,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "normal_steps": 2,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 4096,
+        "reset_required": true,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_malformed_packet_widths_reject_without_advancing_or_arithmetic",
+      "passed": true,
+      "seconds": 0.0005006549999961862,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "normal_results": 1,
+          "normal_steps": 1,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 4096,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_mixed_legacy_rectangular_dense_and_back_use_one_resource",
+      "passed": true,
+      "seconds": 2.634789339001145,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "dense_done": 1,
+          "dense_groups": 1,
+          "dense_results": 1,
+          "dense_steps": 16,
+          "legacy_model_ticks": 88,
+          "legacy_replies": 20,
+          "normal_done": 7,
+          "normal_groups": 7,
+          "normal_results": 23,
+          "normal_steps": 533,
+          "owner_acquires": 8,
+          "owner_releases": 8,
+          "owner_responses": 8
+        },
+        "dense_fma_calls": 65536,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 1193984,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_previous_group_and_reset_epoch_reject_late_result_done_and_reply",
+      "passed": true,
+      "seconds": 0.009223464998285635,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "normal_results": 1,
+          "normal_steps": 1,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 4096,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_pv_short_and_non_power_of_two_lengths_compute_every_cell",
+      "passed": true,
+      "seconds": 0.15533701599997585,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 2,
+          "normal_groups": 2,
+          "normal_results": 2,
+          "normal_steps": 19,
+          "owner_acquires": 2,
+          "owner_releases": 2,
+          "owner_responses": 2
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 77824,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_special_operands_preserve_all_payloads_without_protocol_fault",
+      "passed": true,
+      "seconds": 0.008642267999675823,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "normal_results": 1,
+          "normal_steps": 1,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 4096,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_unknown_profile_opcode_shapes_and_masks_fault_before_arithmetic",
+      "passed": true,
+      "seconds": 0.0009767729989107465,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 0,
+        "reset_required": true,
+        "same_accumulator_resource": true
+      }
+    },
+    {
+      "failures": [],
+      "name": "test_rectangular_profile.RectangularProfileTests.test_wrong_done_tag_errors_and_prevents_reacquisition_until_reset",
+      "passed": true,
+      "seconds": 0.009057754999957979,
+      "service_report": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 1,
+          "normal_groups": 1,
+          "normal_results": 1,
+          "normal_steps": 1,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 4096,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      }
+    }
+  ]
+}

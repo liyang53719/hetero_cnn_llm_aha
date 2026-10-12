@@ -1,0 +1,49 @@
+"""Read-only independent source/raw/terminal/native comparison of completed run."""
+from pathlib import Path
+import hashlib,json,subprocess
+import numpy as np
+from candidates.qwen35_attention_prefill.native.capture import validate_manifest
+from candidates.qwen35_attention_prefill.input_fixture import read_tensor
+from candidates.qwen35_attention_prefill.norm_rope.compare import _metrics
+from candidates.qwen35_attention_prefill.norm_rope.fixture import load_contract
+
+root=Path.cwd();w=root/'work/l3_gqa_matrix_20261012';p=w/'actual_m16_v2';h=lambda b:hashlib.sha256(b).hexdigest()
+raw=(p/'summary.json').read_bytes();assert h(raw)=='82f08363bbbd44da9f2d9a389b148a2eea16c99a12854867460e8d93c5a198b4'
+d=json.loads(raw);assert d['status']=='PASS_GQA_SUBCHAIN_ONLY' and d['sources_unchanged'] and len(d['cases'])==2
+for f,s in d['sources'].items():assert h((p/'source_snapshot'/f).read_bytes())==h((root/f).read_bytes())==s
+base=root/'work/l3_default256_policy_20261012/actual_m16';braw=(base/'summary.json').read_bytes();assert h(braw)==d['prefix_summary_sha256'];b=json.loads(braw)
+for f,s in b['source_sha256'].items():assert h((base/'source_snapshot'/f).read_bytes())==s
+cap=root/'work/qwen35_l3_capture_restored_20261012T202700Z/m16_baseline';mraw=(cap/'manifest.json').read_bytes();assert h(mraw)==d['capture_manifest_sha256'] and mraw==(base/'capture_manifest.json').read_bytes();m=json.loads(mraw);validate_manifest(m,cap)
+comparison_sources=('candidates/qwen35_attention_prefill/norm_rope/compare.py','candidates/qwen35_attention_prefill/norm_rope/fixture.py','candidates/qwen35_attention_prefill/input_fixture.py','candidates/qwen35_attention_prefill/native/capture.py','candidates/qwen35_gdn_prefill/prefill_bf16_compare.py','src/heteronpu/qwen35_bf16_reference.py','config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json')
+posthoc={}
+for f in comparison_sources:
+ source=(root/f).read_bytes();assert source==subprocess.check_output(['git','show','478a5420b58c2b176afa6e8cbf1af8076439b6a3:'+f]);posthoc[f]=h(source)
+out=dict(status='PASS_GQA_REPLAY_SUBCHAIN_POSTHOC_AUDIT',summary_sha256=h(raw),
+ execution_source_count=len(d['sources']),comparison_source_count=len(posthoc),
+ comparison_sources_bound_at_posthoc=True,comparison_sources_prebound_by_run=False,
+ comparison_sources_immutable_commit='478a5420b58c2b176afa6e8cbf1af8076439b6a3',
+ comparison_source_sha256=posthoc,capture_manifest_sha256=h(mraw),prefix_summary_sha256=h(braw),
+ cases=[],fullblock_executed=False,kv_owner_executed=False,rtl_executed=False,hardware_cycles=None)
+for i,c in enumerate(d['cases']):
+ name=c['case'];driver=c['driver'];assert driver['complete'] and driver['status'] is None and driver['output_published']==[True]
+ assert driver['counts']['ack_bytes']==driver['counts']['write_bytes']==65536
+ assert driver['owner']['accepted']['owner_results']==1 and driver['owner']['acknowledged_write_bytes']==65536
+ assert driver['owner']['accepted']['qk_groups']==driver['owner']['accepted']['pv_groups']==8
+ assert driver['owner']['accepted']['matrix_results']==driver['owner']['accepted']['matrix_done']==16
+ rec=c['output'];output=(p/rec['file']).read_bytes();assert len(output)==rec['bytes'] and h(output)==rec['sha256']==driver['output_sha256'][0]
+ for role,expected in c['inputs'].items():
+  rec=b['actual_outputs'][name+'.'+role];r=(base/rec['file']).read_bytes();assert h(r)==expected==rec['sha256']
+ stats={}
+ for stage,stored in c['stages'].items():
+  rec=stored['observation'];r=(p/rec['file']).read_bytes();assert len(r)==rec['bytes'] and h(r)==rec['sha256']
+  key=stored['native_tensor'];nr=m['tensors'][key];native=read_tensor(cap,m,key)
+  actual=np.frombuffer(r,'<u4').reshape(nr['shape']);expected=np.frombuffer(native,'<u2' if nr['dtype']=='BF16' else '<u4').astype('<u4').reshape(nr['shape'])
+  if nr['dtype']=='BF16':expected<<=16
+  measured=_metrics(actual,expected,nr['dtype'],load_contract()['thresholds']['operator'])
+  assert all(measured[k]==v for k,v in stored.items() if k not in ('observation','native_tensor'))
+  assert measured['pass'];stats[stage]=dict(max_abs=measured['max_abs'],mean_abs=measured['mean_abs'],bit_mismatches=measured['bit_mismatches'],actual_sha256=h(r),native_sha256=h(native))
+ old=json.loads((w/'actual_m16/summary.json').read_text())['cases'][i]
+ assert old['output']['sha256']==c['output']['sha256']
+ assert all(old['stages'][stage]['observation']['sha256']==v['observation']['sha256'] for stage,v in c['stages'].items())
+ out['cases'].append(dict(case=name,ack_bytes=65536,stages=stats,same_actual_bytes_as_before_fence_fix=True))
+(w/'actual_m16_v2_audit.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:out[k] for k in ('status','summary_sha256','execution_source_count','comparison_source_count')}))

@@ -63,7 +63,7 @@ Q Norm的norm/gate分属两个真实物理span。新增publish_many先验证两�
 
 这些是八阶段模型前缀的数值与控制证据。其余35/57尚未纳入这份统一producer观察集合：其中input RMS最终输出和Q/K/V四节点已有单独前缀门，RMS内部节点尚无本批因果观察；KV复制/追加与最终root fence、矩形Attention、sigmoid gate和O/FFN尚未执行；未据末输出或部分节点关闭完整block验收。同冻结60源M128于21:29:44 UTC启动一次，600秒软件墙钟预算；需以实际终态和独立原门比较决定结果，不能把M16扩大为M128。
 
-完整后继接线优先复用既有Matrix正常模式与L0尾部，而当前正常模式仍固定旧Qwen2 mask1/QK8步，需显式矩形profile扩展且保留旧模式；cache采用新的K/V staging真实copy＋append，完整block末fence才更换外部root/length/generation。O为2048→1024，FFN为1024→3584→1024，可复用L0已验typed Dense/RMS/Elementwise。上述为待实现清单，不作为本批通过范围。
+完整后继接线优先复用既有Matrix正常模式与L0尾部。旧正常profile固定Qwen2 mask1/QK8步；23:04增量已完成显式矩形profile的模型小门，完整前后链仍待接线。cache采用新的K/V staging真实copy＋append，完整block末fence才更换外部root/length/generation。O为2048→1024，FFN为1024→3584→1024，可复用L0已验typed Dense/RMS/Elementwise。这些后继与完整block不由局部小门授予通过。
 
 
 ### 软件预算失败及检查开销修复
@@ -127,3 +127,21 @@ C2消除上游差异后，不能直接把“官方算子吃相同输入”的条
 同一冻结61源、原hidden/weight/trig重新执行完成16个实际终态，534.495秒模型／534.957秒监督EXIT0，最大单子进程RSS315,364KiB。全部7项封存、18实际输出、52观察文件和当前/执行source snapshot逐hash核验；每窗4个前缀门及22个已观察Norm/RoPE官方producer通过，后者所有FP32/BF16字均精确一致。原5个Q Norm/RoPE BF16差异在实际owner数据链中消除，原失败证据未改。summary SHA72d5c380f3c2a3d498d66191b5e67de27238e75456ba8e5a88014715cc337e71。
 
 每窗真实记录Scalar2,599,424（Add1,055,104、Mul1,148,160、op6 393,344、Div/Sqrt各1,408），与源计数预测一致；ACK3,407,872B、Matrix FMA671,088,640、Vector16 Add40,960。软件tick仍1,210,434，因其不计Scalar服务延迟，不能从tick不变推导硬件加速。QK当前配方的matching-input超限仍是独立阻断，KV/完整Attention/O/FFN及生产Chisel C2均未完成。
+
+### 23:04 UTC：显式矩形 Matrix 与实际 GQA 子链
+
+478a542 的 L3 CI38317512609 与 payload CI38317512699 已成功。15,819B紧凑工件的GitHub digest、80个精确提交源码、13suite/137tests无skip、Matrix三源/Vector单源构建receipt均复核完成。没有在CI重跑实际M128或RTL。
+
+匹配输入的ascending QK原FAIL保留。固定官方实际JIT使用oneDNN3.7.1 brg_matmul:avx512_core_bf16、VDPBF16PS；通用成对高半先行d1,0,3,2,…,255,254在完整cold128/carried128独立QK单算子逐bit吻合官方。原有数组和FP32 FMA保持，只改变已有Q/K缓冲的读序；当前证据域为实际正常数/零，不能扩称FTZ/DAZ或整个ISA等价。纯Chisel源码overlay以enableQkPairHighFirst显式开启，默认false，原ABI、步计数、clear/last/finish/emit和PV顺序不变；9项源码/符号检查通过，frontend/RTL未执行。
+
+共享Matrix的软件服务新增profile1，QK为256步/slice0、PV为1..256步/all8，均只在最后发result，随后真正retire result、MatrixDone、owner terminal才能释放。profile0旧Qwen2仍默认且维持逐步reply。两模式共用唯一81,920B累加资源，没有新阵列。新增10门及原32门通过；同实例无reset的混合序列实际计数1,193,984 normal FMA、65,536 Dense FMA、533 normal steps、23 results、7 done，20个legacy replies只来自profile0。扩展源码曾触发编译器交换fmaf的a/b寄存器，造成20个双NaN payload位差；反汇编与原ELF对照后，以volatile函数指针固定host C ABI参数次序，有限数算术、阈值及硬件资源不变，原失败保留。
+
+新GQA owner按既有Chisel形状保留Q16×256、K32×256、scores16×256、QK16×32、context16×256和V256，所有操作数来自实际64B读取，复用同一Matrix和已有Scalar ExpNegative/Div。18项小门通过，覆盖旧模式→Dense→GQA复用、真实末ACK、错误排空/reset/旧epoch和M17/cache33两种tile边界。独立review发现并修复held-success遇Matrix poison后driver卡住错误终态的P1；只允许同一未接受事务的成功撤回，成功握手后不可追溯撤销。MatrixDone类型与背压稳定性也严格检查。边界小门不是M128执行证明。
+
+随后从已封存C2双M16前缀的真实Q/K/V写回，重放到同一TypedMemory、同一Matrix/Scalar与同一GQA owner，两次GQA完成。cold16、carried16分别4.23/10.03秒、各65,536B真实context写ACK；每次8个QK组和8个PV组、16个result/done及1个accepted owner terminal。QK、scale、BF16概率、context四项逐bit相同；FP32 softmax分别888/2757个bit差，最大绝对误差3.27825546e-7/3.87430191e-7，五项均通过原0.03125最大/0.005均差门。修复前后所有实际观察和输出逐SHA相同。这里是GQA子算子复验：cache由封存actual cold/current K/V做宿主布局装载，尚未执行KV owner/fullblock fence；位置0..15及128..143、实际cache16→32，不能称128历史或完整现场前缀→GQA链。
+
+执行原summary SHA为82f08363bbbd44da9f2d9a389b148a2eea16c99a12854867460e8d93c5a198b4。15项执行源码和原始输出已封存；七项比较源码另行绑定不可变478a并对全部已封存actual重新比较，明确属于事后比较复核，不伪称执行前已抓全比较源。masked-logits原producer尚未完整物化，不从未执行的future arithmetic补造观察；五项通过不能替代57项完整验收。
+
+干净新checkout按workflow顺序使用新构建Matrix/Vector库，209tests/18suites、94源、22工件全部核验，141.80秒；不读取历史work，无模型下载或RTL。对应证据为GQA_PAIR_ACTUAL_M16.json、GQA_PAIR_SMALL_GATE.json、MATRIX_RECTANGULAR_PROFILE_GATE.json与GQA_COLD_WORKFLOW.json。本批远端CI须按新精确SHA继续核验。
+
+下一门：先将真实KV staging→GQA→sigmoid gate→O/residual/postnorm/FFN接回完整公开数据链，并对同身份M128做有依据的宿主预算。当前GQA逐tick覆盖集合检查在M128放大明显，任何宿主加速须保持逻辑请求、依赖、原算术和发布栅栏，不能记为硬件提速。完整L3、公共Command128、生产Chisel C2/pair策略、RTL、35B两个block及五block总目标仍open；完整周期和MAC利用率继续为空，不能套用这些软件tick。

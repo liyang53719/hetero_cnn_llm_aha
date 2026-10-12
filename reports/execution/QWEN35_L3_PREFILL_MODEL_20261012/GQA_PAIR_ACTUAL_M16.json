@@ -1,0 +1,697 @@
+{
+  "audit": {
+    "capture_manifest_sha256": "97f0ed29d5e3d7734ce3ed0648c91b2a2f60601176f5cff06d2d3db041e7f172",
+    "cases": [
+      {
+        "ack_bytes": 65536,
+        "case": "cold16",
+        "same_actual_bytes_as_before_fence_fix": true,
+        "stages": {
+          "context_bf16": {
+            "actual_sha256": "d1654ef80f4091eaa5a8a81c21d6ca5106a253682c9da9cdef5cf6e26fd1aec1",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "e4f0d0ecfe82280f9ee5b65a95feebb9c6733c6d695dd5354c734ad6c99efcde"
+          },
+          "probabilities_bf16": {
+            "actual_sha256": "f6adda65dce4c74e4c0dfe970d97c419d136d7d9816e7331d2c6a514b3d26658",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "83d01444614b1eebfac76d46db23513d26369e8e228626b5c2f92c044e560ddc"
+          },
+          "probability_fp32": {
+            "actual_sha256": "b3a02295b13434f20a708b3397335766598f4734f05825804953aaeb9a60e5b7",
+            "bit_mismatches": 888,
+            "max_abs": 3.2782554626464844e-07,
+            "mean_abs": 1.2293725148992962e-08,
+            "native_sha256": "8433f2b7358922c2ec985530545cc6e88708a9b18ec796477555668f284ae67b"
+          },
+          "qk_bf16": {
+            "actual_sha256": "6c85d0959b1ca3075902aa1269b93edcf07043c3a8ab209a703704f0ee69c5a1",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "2e163f9228ad471c00e0e14fdb466fcac770bd754d36a02ec48ab42f39a03147"
+          },
+          "scaled_scores_bf16": {
+            "actual_sha256": "f9ced8bf8f0d0c45c9c338377bd100da86431e97470a193dec967e6fad694755",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "52b6440ccc42fcf143aa34cc30b1da726a98f1ed4014580e1121bdeaac75a00c"
+          }
+        }
+      },
+      {
+        "ack_bytes": 65536,
+        "case": "carried16",
+        "same_actual_bytes_as_before_fence_fix": true,
+        "stages": {
+          "context_bf16": {
+            "actual_sha256": "41c55a6917404024ab908d218e02506fbd5e1aa39912e32357cbcedc024f6706",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "9e66ad921ff9e1371566aa84f0d3adcaad7be074f73dc6b5770a9acdc676792f"
+          },
+          "probabilities_bf16": {
+            "actual_sha256": "ee34cc0c8333347d38b52a2415d6c109879532e39c763a1d5a8b2f6cc75ef718",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "a457a7076c8d47b1aed723d3c8b0d0311971a2c7bc85c2772aeda1abbd98aaff"
+          },
+          "probability_fp32": {
+            "actual_sha256": "c1f575c5692cf48ab788ded92039415537248a526d2179463e7fb4aa64b33376",
+            "bit_mismatches": 2757,
+            "max_abs": 3.8743019104003906e-07,
+            "mean_abs": 7.685855507588712e-09,
+            "native_sha256": "92cf0a1d3a8682b4e7c7d72797494bbc996593a3c9b3b5d0da50c0586168253c"
+          },
+          "qk_bf16": {
+            "actual_sha256": "26d994c3c3355d0f37c55d4cb405ee0feb34bd007a5ec8452e6826678632c2e6",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "5dcc2bbc85f65d4711acfe987614bb651901e6f71cd48c90cdaff4c36c13838c"
+          },
+          "scaled_scores_bf16": {
+            "actual_sha256": "063df22bb184356f6aef5b46ddd7ff4fc5b1a47c2021950420ac8961a2333b26",
+            "bit_mismatches": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "native_sha256": "4dc70b88e77fabfb81c92432afa2c990cf535cd37fe4fc952c2ad4b7775c323e"
+          }
+        }
+      }
+    ],
+    "comparison_source_count": 7,
+    "comparison_source_sha256": {
+      "candidates/qwen35_attention_prefill/input_fixture.py": "e278764adda77e66f8dbf1df40e03984701913692e0cf5d2fdcc9b571425d7fc",
+      "candidates/qwen35_attention_prefill/native/capture.py": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+      "candidates/qwen35_attention_prefill/norm_rope/compare.py": "51600ac35133f711494f848bb7515e9eba151ed3effd4dd38d4f14e13af41f7d",
+      "candidates/qwen35_attention_prefill/norm_rope/fixture.py": "82a1928fc65bea3f997fa8b3212b092cd21696b72d578cff4c2d88cfba48c49f",
+      "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+      "config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97",
+      "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9"
+    },
+    "comparison_sources_bound_at_posthoc": true,
+    "comparison_sources_immutable_commit": "478a5420b58c2b176afa6e8cbf1af8076439b6a3",
+    "comparison_sources_prebound_by_run": false,
+    "execution_source_count": 15,
+    "fullblock_executed": false,
+    "hardware_cycles": null,
+    "kv_owner_executed": false,
+    "prefix_summary_sha256": "10ccdaf645a14a0b91143ceaed5ebc1f6c58efad4ecd60fe849504356248204f",
+    "rtl_executed": false,
+    "status": "PASS_GQA_REPLAY_SUBCHAIN_POSTHOC_AUDIT",
+    "summary_sha256": "82f08363bbbd44da9f2d9a389b148a2eea16c99a12854867460e8d93c5a198b4"
+  },
+  "cases": [
+    {
+      "case": "cold16",
+      "driver_counts": {
+        "ack_bytes": 65536,
+        "memory_requests": 4096,
+        "memory_responses": 4096,
+        "read_bytes": 196608,
+        "ticks": 17953,
+        "write_bytes": 65536
+      },
+      "matrix": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 16,
+          "normal_groups": 16,
+          "normal_results": 16,
+          "normal_steps": 2176,
+          "owner_acquires": 1,
+          "owner_releases": 1,
+          "owner_responses": 1
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 1572864,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      },
+      "output": {
+        "bytes": 65536,
+        "file": "cold16.context.actual.bf16le",
+        "sha256": "e306dfaa3a532c01aac64d13866c2244573f706f5ca1b0d618e7532f21a7b7fa"
+      },
+      "owner": {
+        "accepted": {
+          "matrix_done": 16,
+          "matrix_results": 16,
+          "matrix_steps": 2176,
+          "memory_responses": 4096,
+          "owner_results": 1,
+          "pv_groups": 8,
+          "qk_groups": 8,
+          "read_requests": 3072,
+          "scalar_requests": 6400,
+          "write_acks": 1024,
+          "write_requests": 1024
+        },
+        "acknowledged_write_bytes": 65536,
+        "arithmetic_resources_created": 0,
+        "attention_status": 0,
+        "bounded_payload_bytes": {
+          "context": 8192,
+          "keys": 16384,
+          "qk": 1024,
+          "query": 8192,
+          "scores": 16384,
+          "value": 512
+        },
+        "fullblock_executed": false,
+        "generation_advanced": false,
+        "hardware_cycles": null,
+        "host_observer_snapshots": true,
+        "native_acceptance": false,
+        "physical_bank_allocation_proven": false,
+        "pv_policy": "increasing_keys",
+        "qk_policy": "pair_high_first",
+        "retained_payload_bytes": 50688,
+        "rtl_executed": false,
+        "scalar_calls": {
+          "add": 2176,
+          "div": 1088,
+          "exp_negative": 1088,
+          "mul_ieee_rne": 2048
+        },
+        "scalar_internal_calls": {
+          "add": 8704,
+          "mul": 9792
+        },
+        "scope": "BF16_CAUSAL_GQA_SOFTWARE_OWNER",
+        "shared_matrix_resource_address": 139860921864576,
+        "status": null
+      },
+      "seconds": 4.232827754000027,
+      "source_inputs": {
+        "k_rope": "f29eff0246b26d0faad367abc46ef3670675759af497f1ef7f35623ef50d4e28",
+        "q_rope": "b0c1d5e5755d14a59434a04e3042abc27a948cfaa7f7f0614fb3ca81b25076ef",
+        "v": "e40e0f1f598fcdb4d33ffbe67a70f1f57176431dd77d872ccb2322f015f94c9d"
+      },
+      "stages": {
+        "context_bf16": {
+          "actual_sha256": "e4f0d0ecfe82280f9ee5b65a95feebb9c6733c6d695dd5354c734ad6c99efcde",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "expected_sha256": "e4f0d0ecfe82280f9ee5b65a95feebb9c6733c6d695dd5354c734ad6c99efcde",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "cold16.aten0083.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 131072,
+            "file": "cold16.context_bf16.actual.f32bits",
+            "sha256": "d1654ef80f4091eaa5a8a81c21d6ca5106a253682c9da9cdef5cf6e26fd1aec1"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        },
+        "probabilities_bf16": {
+          "actual_sha256": "83d01444614b1eebfac76d46db23513d26369e8e228626b5c2f92c044e560ddc",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 2048,
+          "expected_sha256": "83d01444614b1eebfac76d46db23513d26369e8e228626b5c2f92c044e560ddc",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "cold16.aten0081.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 8192,
+            "file": "cold16.probabilities_bf16.actual.f32bits",
+            "sha256": "f6adda65dce4c74e4c0dfe970d97c419d136d7d9816e7331d2c6a514b3d26658"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        },
+        "probability_fp32": {
+          "actual_sha256": "b3a02295b13434f20a708b3397335766598f4734f05825804953aaeb9a60e5b7",
+          "bit_different": 888,
+          "bit_mismatches": 888,
+          "elements": 2048,
+          "expected_sha256": "8433f2b7358922c2ec985530545cc6e88708a9b18ec796477555668f284ae67b",
+          "first_bit_difference": {
+            "candidate": 0.37754061818122864,
+            "candidate_word": "0x3ec14d01",
+            "coordinate": [
+              0,
+              0,
+              1,
+              0
+            ],
+            "native": 0.3775406777858734,
+            "native_word": "0x3ec14d03"
+          },
+          "max_abs": 3.2782554626464844e-07,
+          "max_abs_error": 3.2782554626464844e-07,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": null,
+          "mean_abs": 1.2293725148992962e-08,
+          "mean_abs_error": 1.2293725148992962e-08,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_tensor": "cold16.aten0080.result",
+          "numerically_different": 888,
+          "observation": {
+            "bytes": 8192,
+            "file": "cold16.probability_fp32.actual.f32bits",
+            "sha256": "b3a02295b13434f20a708b3397335766598f4734f05825804953aaeb9a60e5b7"
+          },
+          "pass": true,
+          "passed": true,
+          "ulp_gate": "not assigned to FP32 producers",
+          "worst_error_witness": {
+            "candidate": 0.18362338840961456,
+            "candidate_word": "0x3e3c07c5",
+            "coordinate": [
+              0,
+              2,
+              9,
+              5
+            ],
+            "native": 0.18362371623516083,
+            "native_word": "0x3e3c07db"
+          }
+        },
+        "qk_bf16": {
+          "actual_sha256": "2e163f9228ad471c00e0e14fdb466fcac770bd754d36a02ec48ab42f39a03147",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 2048,
+          "expected_sha256": "2e163f9228ad471c00e0e14fdb466fcac770bd754d36a02ec48ab42f39a03147",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "cold16.aten0077.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 8192,
+            "file": "cold16.qk_bf16.actual.f32bits",
+            "sha256": "6c85d0959b1ca3075902aa1269b93edcf07043c3a8ab209a703704f0ee69c5a1"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        },
+        "scaled_scores_bf16": {
+          "actual_sha256": "52b6440ccc42fcf143aa34cc30b1da726a98f1ed4014580e1121bdeaac75a00c",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 2048,
+          "expected_sha256": "52b6440ccc42fcf143aa34cc30b1da726a98f1ed4014580e1121bdeaac75a00c",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "cold16.aten0078.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 8192,
+            "file": "cold16.scaled_scores_bf16.actual.f32bits",
+            "sha256": "f9ced8bf8f0d0c45c9c338377bd100da86431e97470a193dec967e6fad694755"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        }
+      }
+    },
+    {
+      "case": "carried16",
+      "driver_counts": {
+        "ack_bytes": 65536,
+        "memory_requests": 6144,
+        "memory_responses": 6144,
+        "read_bytes": 327680,
+        "ticks": 32417,
+        "write_bytes": 65536
+      },
+      "matrix": {
+        "accumulator_bytes": 81920,
+        "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+        "counters": {
+          "normal_done": 32,
+          "normal_groups": 32,
+          "normal_results": 32,
+          "normal_steps": 4480,
+          "owner_acquires": 2,
+          "owner_releases": 2,
+          "owner_responses": 2
+        },
+        "dense_fma_calls": 0,
+        "hardware_simulation": false,
+        "model_ticks_are_hardware_cycles": false,
+        "normal_fma_calls": 3670016,
+        "reset_required": false,
+        "same_accumulator_resource": true
+      },
+      "output": {
+        "bytes": 65536,
+        "file": "carried16.context.actual.bf16le",
+        "sha256": "fd52cb97c2354ae662597f9d117063958150a86fbe2ae4b6461449fbbd2ff4e6"
+      },
+      "owner": {
+        "accepted": {
+          "matrix_done": 16,
+          "matrix_results": 16,
+          "matrix_steps": 2304,
+          "memory_responses": 6144,
+          "owner_results": 1,
+          "pv_groups": 8,
+          "qk_groups": 8,
+          "read_requests": 5120,
+          "scalar_requests": 16640,
+          "write_acks": 1024,
+          "write_requests": 1024
+        },
+        "acknowledged_write_bytes": 65536,
+        "arithmetic_resources_created": 0,
+        "attention_status": 0,
+        "bounded_payload_bytes": {
+          "context": 8192,
+          "keys": 16384,
+          "qk": 1024,
+          "query": 8192,
+          "scores": 16384,
+          "value": 512
+        },
+        "fullblock_executed": false,
+        "generation_advanced": false,
+        "hardware_cycles": null,
+        "host_observer_snapshots": true,
+        "native_acceptance": false,
+        "physical_bank_allocation_proven": false,
+        "pv_policy": "increasing_keys",
+        "qk_policy": "pair_high_first",
+        "retained_payload_bytes": 50688,
+        "rtl_executed": false,
+        "scalar_calls": {
+          "add": 6272,
+          "div": 3136,
+          "exp_negative": 3136,
+          "mul_ieee_rne": 4096
+        },
+        "scalar_internal_calls": {
+          "add": 25088,
+          "mul": 28224
+        },
+        "scope": "BF16_CAUSAL_GQA_SOFTWARE_OWNER",
+        "shared_matrix_resource_address": 139860921864576,
+        "status": null
+      },
+      "seconds": 10.025113952000538,
+      "source_inputs": {
+        "k_rope": "3a2072ab32076f4b299b60406d4fb8ad24791823fa9338ebfeeeaa291efdaa5e",
+        "q_rope": "4454023e7600a12b619650b8eb532a25980f8b58a6888ecd089de4528d987b72",
+        "v": "d706c8d035a0645d62a79d097c8cfe41aaeeca2f97b6f6db0e7270c4752c350c"
+      },
+      "stages": {
+        "context_bf16": {
+          "actual_sha256": "9e66ad921ff9e1371566aa84f0d3adcaad7be074f73dc6b5770a9acdc676792f",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "expected_sha256": "9e66ad921ff9e1371566aa84f0d3adcaad7be074f73dc6b5770a9acdc676792f",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "carried16.aten0079.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 131072,
+            "file": "carried16.context_bf16.actual.f32bits",
+            "sha256": "41c55a6917404024ab908d218e02506fbd5e1aa39912e32357cbcedc024f6706"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        },
+        "probabilities_bf16": {
+          "actual_sha256": "a457a7076c8d47b1aed723d3c8b0d0311971a2c7bc85c2772aeda1abbd98aaff",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 4096,
+          "expected_sha256": "a457a7076c8d47b1aed723d3c8b0d0311971a2c7bc85c2772aeda1abbd98aaff",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "carried16.aten0077.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 16384,
+            "file": "carried16.probabilities_bf16.actual.f32bits",
+            "sha256": "ee34cc0c8333347d38b52a2415d6c109879532e39c763a1d5a8b2f6cc75ef718"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        },
+        "probability_fp32": {
+          "actual_sha256": "c1f575c5692cf48ab788ded92039415537248a526d2179463e7fb4aa64b33376",
+          "bit_different": 2757,
+          "bit_mismatches": 2757,
+          "elements": 4096,
+          "expected_sha256": "92cf0a1d3a8682b4e7c7d72797494bbc996593a3c9b3b5d0da50c0586168253c",
+          "first_bit_difference": {
+            "candidate": 0.01908276230096817,
+            "candidate_word": "0x3c9c5374",
+            "coordinate": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "native": 0.019082769751548767,
+            "native_word": "0x3c9c5378"
+          },
+          "max_abs": 3.8743019104003906e-07,
+          "max_abs_error": 3.8743019104003906e-07,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": null,
+          "mean_abs": 7.685855507588712e-09,
+          "mean_abs_error": 7.685855507588712e-09,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_tensor": "carried16.aten0076.result",
+          "numerically_different": 2757,
+          "observation": {
+            "bytes": 16384,
+            "file": "carried16.probability_fp32.actual.f32bits",
+            "sha256": "c1f575c5692cf48ab788ded92039415537248a526d2179463e7fb4aa64b33376"
+          },
+          "pass": true,
+          "passed": true,
+          "ulp_gate": "not assigned to FP32 producers",
+          "worst_error_witness": {
+            "candidate": 0.21269814670085907,
+            "candidate_word": "0x3e59cd8b",
+            "coordinate": [
+              0,
+              2,
+              1,
+              13
+            ],
+            "native": 0.2126985341310501,
+            "native_word": "0x3e59cda5"
+          }
+        },
+        "qk_bf16": {
+          "actual_sha256": "5dcc2bbc85f65d4711acfe987614bb651901e6f71cd48c90cdaff4c36c13838c",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 4096,
+          "expected_sha256": "5dcc2bbc85f65d4711acfe987614bb651901e6f71cd48c90cdaff4c36c13838c",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "carried16.aten0073.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 16384,
+            "file": "carried16.qk_bf16.actual.f32bits",
+            "sha256": "26d994c3c3355d0f37c55d4cb405ee0feb34bd007a5ec8452e6826678632c2e6"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        },
+        "scaled_scores_bf16": {
+          "actual_sha256": "4dc70b88e77fabfb81c92432afa2c990cf535cd37fe4fc952c2ad4b7775c323e",
+          "actual_subnormal_count": 0,
+          "bit_different": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 4096,
+          "expected_sha256": "4dc70b88e77fabfb81c92432afa2c990cf535cd37fe4fc952c2ad4b7775c323e",
+          "first_bit_difference": null,
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_abs_error": 0.0,
+          "max_abs_limit": 0.03125,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "mean_abs_error": 0.0,
+          "mean_abs_limit": 0.005,
+          "mismatches_over_max": 0,
+          "native_subnormal_count": 0,
+          "native_tensor": "carried16.aten0074.result",
+          "numerical_mismatches": 0,
+          "numerically_different": 0,
+          "observation": {
+            "bytes": 16384,
+            "file": "carried16.scaled_scores_bf16.actual.f32bits",
+            "sha256": "063df22bb184356f6aef5b46ddd7ff4fc5b1a47c2021950420ac8961a2333b26"
+          },
+          "pass": true,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "ulp_gate": "diagnostic only; original absolute/mean limits apply",
+          "worst_error_witness": null
+        }
+      }
+    }
+  ],
+  "chisel_executed": false,
+  "comparison_binding": "Execution captured15 arithmetic/driver/source files. Seven unchanged comparison helpers were separately bound to immutable478a and independently rerun on all original sealed outputs; this is not retroactive pre-run source capture.",
+  "fullblock_executed": false,
+  "hardware_cycles": null,
+  "hardware_mac_utilization": null,
+  "kv_owner_executed": false,
+  "library": {
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/l3_gqa_matrix_20261012/library_ordered/matrix_silu_numeric.so",
+    "sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc"
+  },
+  "original_max_abs": 0.03125,
+  "original_mean_abs": 0.005,
+  "prefix_executed_in_this_process": false,
+  "public_command128_executed": false,
+  "rtl_executed": false,
+  "schema": 1,
+  "scope": "Replay sealed actual C2 prefix Q/K/V through one addressed memory and one shared Matrix/Scalar GQA owner. Host cache layout setup is not executed KV append or a fullblock state fence. M16 positions0..15 then128..143 with physicalcache0..16..32.",
+  "seconds": 14.324642954999945,
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen35_attention_prefill/gqa/__init__.py": "4bbcec73bb2442a4b78dbff1c27a158fe107013b5b0ae71b695b47eaeefc81d5",
+    "candidates/qwen35_attention_prefill/gqa/driver.py": "ce3c70729a0be5c7eb63f1e7e0ec20b74f7ed026ac1831a023dffd2ddecbf009",
+    "candidates/qwen35_attention_prefill/gqa/owner.py": "dd70d3b604c2a69e0ff69d17fbab6078ed04a99bc5ca3cdd4da90c1bacd8c133",
+    "candidates/qwen35_attention_prefill/norm_rope/scalar.py": "aba2bff915e39044d103a7f470526d4b219dd270bd8e0ec39394f4fd2ea18550",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+    "work/l3_gqa_matrix_20261012/run_actual_m16_v2.py": "10fe68a4812b6fbcac321c2d10c7937fa409e1ab629840afcdb4f3840322732d"
+  },
+  "status": "PASS_GQA_ONLY_M16_REPLAY_SUBCHAIN",
+  "summary_sha256": "82f08363bbbd44da9f2d9a389b148a2eea16c99a12854867460e8d93c5a198b4"
+}

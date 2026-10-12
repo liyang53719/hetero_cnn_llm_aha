@@ -1,0 +1,86 @@
+import os,resource,signal,time,json,hashlib,sys,subprocess,shutil,ctypes,platform
+from pathlib import Path
+START=time.monotonic(); CPUSTART=time.process_time(); OUT=Path(__file__).resolve().parent; ROOT=OUT.parents[1]
+os.sched_setaffinity(0,{2}); resource.setrlimit(resource.RLIMIT_CPU,(55,60)); resource.setrlimit(resource.RLIMIT_AS,(1024**3,1024**3)); signal.setitimer(signal.ITIMER_REAL,60)
+import numpy as np
+CAP=ROOT/'work/qwen35_l3_capture_restored_20261012T202700Z/m128_baseline'
+ACT=ROOT/'work/l3_norm_rope_actual_20261012/actual_m128_02'; DIA=ROOT/'work/l3_c2_qk_diagnostic_20261012'
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+def shaf(p): return sha(p.read_bytes())
+def read(p): return json.loads(p.read_text())
+def dump(p,obj): (OUT/p).write_text(json.dumps(obj,indent=2,sort_keys=True)+'\n')
+VER={}
+def verify(p,rec,key):
+ raw=p.read_bytes(); assert len(raw)==rec['bytes'] and sha(raw)==rec['sha256'],key
+ VER[key]={'path':str(p),'bytes':len(raw),'sha256':sha(raw)}; return raw
+assert shaf(CAP/'manifest.json')=='5e797279a26c9384122023b94c8541d925843ae02f8a5e263c234f344cfb152b'
+assert shaf(ACT/'summary.json')=='3d60e35d0278fc1c09a902929949d24415e7fcfad842cb2b8c120cc52c1c3f02'
+M=read(CAP/'manifest.json'); S=read(ACT/'summary.json'); DH=read(DIA/'artifact_hashes.json')
+for n in ['metadata.json','diagnose.py','operation_identity.json','input_source_identity.json']: verify(DIA/n,DH[n],'c2_diagnostic:'+n)
+D=read(DIA/'metadata.json'); assert D['identity']['capture_manifest_sha256']==shaf(CAP/'manifest.json') and D['identity']['actual_summary_sha256']==shaf(ACT/'summary.json')
+for key in ['modeling','runner']:
+ r=M['source_files'][key]; verify(Path(r['path']),r,'native_source:'+key)
+SOURCES=['chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala','chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala','candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp','candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp']
+for n in SOURCES:
+ p=ROOT/n; raw=p.read_bytes(); dest=OUT/'source_snapshot'/n; dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+ VER['recipe_contract:'+n]={'path':str(p),'bytes':len(raw),'sha256':sha(raw),'snapshot':str(dest.relative_to(OUT))}
+LIMIT=read(ROOT/'config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json')['thresholds']['operator']; assert LIMIT=={'max_abs':.03125,'mean_abs':.005}
+compiler=Path(shutil.which('gcc')).resolve(); lib=OUT/'qk_recipe.so'
+argv=[str(compiler),'-shared','-fPIC','-O2','-fno-fast-math','-ffp-contract=off','-frounding-math',str(OUT/'qk_recipe.c'),'-o',str(lib),'-lm']
+cstart=time.monotonic(); proc=subprocess.run(argv,capture_output=True,text=True,timeout=20);(OUT/'compile.log').write_text(proc.stdout+proc.stderr);assert proc.returncode==0
+compile_id={'argv':argv,'returncode':proc.returncode,'seconds':time.monotonic()-cstart,'compiler':str(compiler),'compiler_sha256':shaf(compiler),'compiler_version':subprocess.check_output([str(compiler),'--version'],text=True),'source_sha256':shaf(OUT/'qk_recipe.c'),'elf_sha256':shaf(lib),'elf_bytes':lib.stat().st_size}
+(OUT/'elf_identity.txt').write_text(subprocess.check_output(['readelf','-h','-d',str(lib)],text=True))
+(OUT/'disassembly.txt').write_text(subprocess.check_output(['objdump','-d',str(lib)],text=True))
+dump('compile.json',compile_id)
+L=ctypes.CDLL(str(lib)); P16=ctypes.POINTER(ctypes.c_uint16);P32=ctypes.POINTER(ctypes.c_uint32)
+L.mxcsr.restype=ctypes.c_uint;L.environment_probes.argtypes=[P32];L.qk.argtypes=[P16,P16,P16,P32,ctypes.c_uint,ctypes.c_uint];L.trace.argtypes=[P16,P16,P32]
+def ptr16(a): return a.ctypes.data_as(P16)
+def ptr32(a): return a.ctypes.data_as(P32)
+def env(): return {'rounding':L.rounding(),'FE_TONEAREST':L.nearest(),'mxcsr':L.mxcsr(),'ftz':bool(L.mxcsr()&0x8000),'daz':bool(L.mxcsr()&0x40),'flags':L.flags(),'fatal_mask':L.fatal_flags(),'FE_INEXACT':L.inexact_flag()}
+assert L.rounding()==L.nearest() and L.mxcsr()&0xe040==0
+initial_env=env(); probes=np.zeros(6,np.uint32);L.environment_probes(ptr32(probes));assert probes.tolist()==[0x00400000,1,0x80000000,0xa8800000,0x3f80,0x3f82],probes
+assert L.clear_flags()==0 and L.flags()==0
+E={'initial':initial_env,'before_run':env(),'probes':[hex(int(x)) for x in probes],'probe_contract':['gradual_output_underflow','subnormal_input_preserved','negative_zero_preserved','fused_cancellation_minus_2pow46','bf16_tie_even_down','bf16_tie_even_up']}
+for line in Path('/proc/self/maps').read_text().splitlines():
+ p=line.split()[-1]
+ if '/libm.so' in p and Path(p).is_file(): VER['loaded_libm']={'path':p,'sha256':shaf(Path(p)),'bytes':Path(p).stat().st_size}
+def native(key):
+ r=M['tensors'][key]; return np.frombuffer(verify(CAP/r['file'],r,'native:'+key),dtype='<u2').reshape(r['shape']).copy()
+def generic(c,role,heads):
+ key=c+'.'+role+'_rope'; r=D['outputs'][key]; raw=verify(DIA/r['file'],r,'computed_c2:'+key)
+ return np.frombuffer(raw,dtype='<u2').reshape(128,heads,256).transpose(1,0,2)[None].copy()
+def fp(a): return (a.astype(np.uint32)<<16).view(np.float32)
+def stats(a,b,mask=None):
+ af=fp(a).astype(np.float64);bf=fp(b).astype(np.float64);assert np.isfinite(af).all() and np.isfinite(bf).all()
+ d=np.abs(af-bf); neq=a!=b
+ if mask is not None: d=d[mask];neq=neq[mask]
+ return {'elements':int(d.size),'bit_mismatches':int(np.count_nonzero(neq)),'max_abs':float(d.max()),'mean_abs':float(d.mean()),'over_original_max':int(np.count_nonzero(d>LIMIT['max_abs'])),'within_original_abs_mean_gate':bool(d.max()<=LIMIT['max_abs'] and d.mean()<=LIMIT['mean_abs'])}
+KCOLD=generic('cold128','k',2); RESULTS={}; OP={};OUTPUTS={}
+for case in M['cases']:
+ c=case['name']; base=0 if c=='cold128' else 128; nq=128;nk=128+base
+ op=next(e for e in case['dispatch_events'] if e['module']=='self_attn' and e['op']=='aten.matmul.default'); OP[c]=op
+ q=generic(c,'q',8); k=KCOLD if not base else np.concatenate([KCOLD,generic(c,'k',2)],axis=2)
+ assert np.array_equal(q,native(op['args'][0]['tensor']))
+ assert np.array_equal(np.repeat(k,4,axis=1).swapaxes(2,3),native(op['args'][1]['tensor']))
+ ref=native(op['result']['tensor']); assert tuple(ref.shape)==(1,8,128,nk)
+ assert shaf(DIA/D['outputs'][c+'.qk']['file'])==sha(ref.tobytes())
+ assert D['qk_results'][c]['native_qk_and_scale_replay_byteexact'] and D['qk_results'][c]['generic_qk']['bit_mismatches']==0
+ # Run the matching-input matrix recipe. Native refs only enter comparisons.
+ a=np.empty(ref.shape,np.uint16); raw=np.empty(ref.shape,np.uint32);L.clear_flags();before=env();t=time.monotonic()
+ L.qk(ptr16(q),ptr16(k),ptr16(a),ptr32(raw),nq,nk)
+ flags=L.flags();after=env();assert not flags&L.fatal_flags() and after['rounding']==L.nearest() and not after['ftz'] and not after['daz']
+ causal=np.broadcast_to(np.arange(nk)[None,None,None,:] <= (base+np.arange(nq)[None,None,:,None]),ref.shape)
+ r={'shape':list(ref.shape),'full':stats(a,ref),'valid_causal':stats(a,ref,causal),'same_qk_inputs_as_official':True,'fixed_official_replay_verified_by_prior_diagnostic':True,'seconds':time.monotonic()-t,'fmaf_count':int(a.size*256),'before':before,'after':after}
+ for label,mask in [('first_mismatch',a!=ref),('first_valid_causal_mismatch',(a!=ref)&causal),('first_valid_causal_over_max',(np.abs(fp(a).astype(np.float64)-fp(ref).astype(np.float64))>LIMIT['max_abs'])&causal)]:
+  indices=np.flatnonzero(mask)
+  if not indices.size: r[label]=None;continue
+  ix=tuple(map(int,np.unravel_index(int(indices[0]),a.shape)));h,qr,kr=ix[1:];trace=np.empty(256,np.uint32);qrow=q[0,h,qr].copy();krow=k[0,h//4,kr].copy();L.trace(ptr16(qrow),ptr16(krow),ptr32(trace)); assert trace[-1]==raw[ix]
+  r[label]={'coordinate':list(ix),'query_absolute_position':base+qr,'key_absolute_position':kr,'candidate_bf16':hex(int(a[ix])),'official_bf16':hex(int(ref[ix])),'candidate_value':float(fp(a)[ix]),'official_value':float(fp(ref)[ix]),'abs_error':float(abs(float(fp(a)[ix])-float(fp(ref)[ix]))),'terminal_fp32_bits':hex(int(raw[ix])),'terminal_fp32_value':float(raw.view(np.float32)[ix])}
+  filename=c+'.'+label+'.trace.npz';np.savez(OUT/filename,q=qrow,k=krow,acc_fp32_bits=trace);r[label]['trace_file']=filename
+ for label,words in [('bf16',a),('fp32',raw)]:
+  name=c+'.qk.sequential_fma.'+label+'le';data=words.tobytes();(OUT/name).write_bytes(data);OUTPUTS[name]={'sha256':sha(data),'bytes':len(data),'shape':list(words.shape)}
+ RESULTS[c]=r;print(c,json.dumps(r),flush=True)
+REPORT={'status':'PASS_CONDITIONAL_MATCHING_INPUT_QK_RECIPE' if all(r['full']['within_original_abs_mean_gate'] for r in RESULTS.values()) else 'BLOCKED_CONDITIONAL_MATCHING_INPUT_QK_RECIPE','scope':'model-only matching-input sequential FP32 FMA and terminal BF16 RNE; no owner, full forward, or RTL execution','owner_executed':False,'full_forward_executed':False,'rtl_executed':False,'upstream_c2_owner_acceptance_claimed':False,'native_mean_substitution':False,'input_source':'authenticated computed generic C2 norm plus frozen B1 RoPE from prior diagnostic; exactly equals fixed native Q/K matmul args','original_thresholds':LIMIT,'identity':{'capture_manifest_sha256':shaf(CAP/'manifest.json'),'actual_c1_summary_sha256':shaf(ACT/'summary.json'),'c2_diagnostic_metadata_sha256':shaf(DIA/'metadata.json'),'script_sha256':shaf(Path(__file__)),'elf_sha256':shaf(lib)},'source_contract':'Bf16CausalGqaOwner.scala dimensions ascending 0..255, clear at d0, emit at d255, TensorMath.bf16Rne terminal. C fmaf mirrors shared Matrix arithmetic expression only, no protocol execution.','runtime':{'cpu_affinity':sorted(os.sched_getaffinity(0)),'python':sys.version,'numpy':np.__version__,'machine':platform.machine(),'cpu_limit_seconds':60,'address_space_limit_bytes':1024**3,'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,'elapsed_seconds':time.monotonic()-START,'cpu_seconds':time.process_time()-CPUSTART},'environment':E,'results':RESULTS,'outputs':OUTPUTS}
+assert REPORT['runtime']['peak_rss_bytes']<1024**3
+dump('metadata.json',REPORT);dump('input_source_identity.json',VER);dump('operation_identity.json',OP)
+print('DONE',REPORT['status'],REPORT['runtime'],flush=True)

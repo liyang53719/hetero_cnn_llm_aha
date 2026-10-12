@@ -1,0 +1,163 @@
+"""Diagnostic-only computed DEFAULT256 norm -> frozen B1 RoPE -> official QK.
+No native norm intermediates feed the generic recipe; no owner or RTL execution.
+"""
+import os, resource, signal, time, json, hashlib, platform, sys
+from pathlib import Path
+START=time.monotonic(); OUT=Path(__file__).resolve().parent; ROOT=OUT.parents[1]
+ACT=ROOT/'work/l3_norm_rope_actual_20261012/actual_m128_02'
+CAP=ROOT/'work/qwen35_l3_capture_restored_20261012T202700Z/m128_baseline'
+RUN=ROOT/'work/qwen35_runtime_20261012_recovered'; OLD=ROOT/'work/l3_qnorm_rounding_20261012'
+os.sched_setaffinity(0,{1}); resource.setrlimit(resource.RLIMIT_CPU,(45,50)); signal.setitimer(signal.ITIMER_REAL,55)
+def sha(b): return hashlib.sha256(b).hexdigest()
+def dump(n,o): (OUT/n).write_text(json.dumps(o,indent=2,sort_keys=True)+'\n')
+def read(p): return json.loads(p.read_text())
+M=read(CAP/'manifest.json'); S=read(ACT/'summary.json'); I=read(ACT/'identity.json')
+assert sha((CAP/'manifest.json').read_bytes())=='5e797279a26c9384122023b94c8541d925843ae02f8a5e263c234f344cfb152b'
+assert sha((ACT/'summary.json').read_bytes())=='3d60e35d0278fc1c09a902929949d24415e7fcfad842cb2b8c120cc52c1c3f02'
+assert sha((ACT/'identity.json').read_bytes())=='9f45d4cebed45b5240b2c9e58b3f8bff3dc8978fde8842918fdc96588e21b417'
+assert S['status']=='PASS_ACTUAL_TYPED_NORM_ROPE_PREFIX_ONLY' and all(S['seals'].values())
+VER={}
+def verify(p,r,key):
+ raw=p.read_bytes(); assert len(raw)==r['bytes'] and sha(raw)==r['sha256'],key
+ VER[key]={'path':str(p),'bytes':len(raw),'sha256':sha(raw)}; return raw
+for k,r in M['tensors'].items(): verify(CAP/r['file'],r,'native:'+k)
+for k,r in S['actual_outputs'].items(): verify(ACT/r['file'],r,'actual:'+k)
+for c,entries in S['observations'].items():
+ for k,r in entries.items(): verify(ACT/r['file'],r,'observation:'+c+'.'+k)
+for k,r in I['norm_rope']['weight_files'].items(): verify(ACT/'raw_weights'/f'{k}.bf16le',r,'weight:'+k)
+for k in ['modeling','runner']:
+ r=M['source_files'][k]; verify(Path(r['path']),r,'source:'+k)
+# Current norm owner code has changed since the original actual run. Authenticate
+# its frozen snapshots, never claim those changed current files are still C1.
+for k,digest in I['source_sha256'].items():
+ if 'norm_rope/' in k or k in ['src/heteronpu/qk_norm256_candidate.py','src/heteronpu/rope_bf16_candidate.py','candidates/qwen35_gdn_prefill/rms_owner.py']:
+  p=ACT/'source_snapshot'/k; assert sha(p.read_bytes())==digest,k
+  VER['original_snapshot:'+k]={'path':str(p),'sha256':digest,'bytes':p.stat().st_size}
+for name,record in read(OLD/'backend_sources/identity.json').items(): verify(OLD/'backend_sources'/name,record,'backend_source:'+name)
+for name in ['chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala','chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala','src/heteronpu/qk_norm256_candidate.py','src/heteronpu/rope_bf16_candidate.py','candidates/qwen35_gdn_prefill/rms_owner.py']:
+ raw=(ROOT/name).read_bytes(); assert raw==(ACT/'source_snapshot'/name).read_bytes(),name
+ VER['unchanged_current:'+name]={'path':str(ROOT/name),'sha256':sha(raw),'bytes':len(raw)}
+for c in ['cold128','carried128']:
+ raw=(ACT/'trig'/f'{c}.bf16le').read_bytes(); assert sha(raw)==I['norm_rope']['trig_table_sha256']
+ VER['trig:'+c]={'path':str(ACT/'trig'/f'{c}.bf16le'),'sha256':sha(raw),'bytes':len(raw)}
+import numpy as np, torch
+from candidates.qwen35_gdn_prefill.rms_owner import SharedScalar
+# SharedScalar implementation is unchanged and just verified against snapshot.
+torch.set_num_threads(1); torch.set_num_interop_threads(1); torch.use_deterministic_algorithms(True); torch.set_float32_matmul_precision('highest'); torch.set_flush_denormal(False)
+assert torch.__version__==M['environment']['packages']['torch'] and torch.version.git_version==M['environment']['torch_git_version']
+assert torch.backends.cpu.get_cpu_capability()=='DEFAULT'
+RUNTIME={'python':platform.python_version(),'torch':torch.__version__,'torch_git_version':torch.version.git_version,'numpy':np.__version__,'aten_cpu_capability':os.environ.get('ATEN_CPU_CAPABILITY'),'torch_cpu_capability':torch.backends.cpu.get_cpu_capability(),'threads':torch.get_num_threads(),'interop_threads':torch.get_num_interop_threads(),'cpu_affinity':sorted(os.sched_getaffinity(0)),'torch_module':torch.__file__,'python_executable':sys.executable,'deterministic':True,'float32_matmul_precision':'highest','flush_denormal':False}
+scalar=SharedScalar(); client=object(); assert scalar.acquire(client)
+def nw(k):
+ r=M['tensors'][k]; return np.fromfile(CAP/r['file'],dtype='<u2' if r['dtype']=='BF16' else '<u4').reshape(r['shape'])
+def fp(a): return (a.astype(np.uint32)<<16).view(np.float32)
+def nf(k):
+ r=M['tensors'][k]; a=nw(k); return fp(a) if r['dtype']=='BF16' else a.view(np.float32)
+def obs(c,k):
+ r=S['observations'][c][k]; return np.fromfile(ACT/r['file'],dtype='<u4').reshape(128,8 if k.startswith('q_') else 2,-1).view(np.float32)
+def actual(c,k,shape):
+ r=S['actual_outputs'][c+'.'+k]; return np.fromfile(ACT/r['file'],dtype='<u2').reshape(shape)
+def bf(a):
+ u=np.ascontiguousarray(a).view(np.uint32); return ((u+np.uint32(0x7fff)+((u>>16)&1))>>16).astype(np.uint16)
+LIMIT=read(ROOT/'config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json')['thresholds']['operator']; assert LIMIT=={'max_abs':.03125,'mean_abs':.005}
+def stats(a,b):
+ assert a.shape==b.shape and a.dtype==b.dtype
+ au=a.view(np.uint32) if a.dtype==np.float32 else a; bu=b.view(np.uint32) if b.dtype==np.float32 else b
+ af=a if a.dtype==np.float32 else fp(a); bf_=b if b.dtype==np.float32 else fp(b)
+ assert np.isfinite(af).all() and np.isfinite(bf_).all()
+ d=np.abs(af.astype(np.float64)-bf_.astype(np.float64)); ix=np.flatnonzero(au.ravel()!=bu.ravel())
+ return {'shape':list(a.shape),'elements':int(a.size),'bit_mismatches':int(ix.size),'max_abs':float(d.max()),'mean_abs':float(d.mean()),'over_original_max':int(np.count_nonzero(d>LIMIT['max_abs'])),'within_original_abs_mean_gate':bool(d.max()<=LIMIT['max_abs'] and d.mean()<=LIMIT['mean_abs']),'sha256':sha(np.ascontiguousarray(a).tobytes()),'reference_sha256':sha(np.ascontiguousarray(b).tobytes()),'mismatch_coordinates':[list(map(int,np.unravel_index(int(j),a.shape))) for j in ix[:20]]}
+def save(name,a):
+ raw=np.ascontiguousarray(a).tobytes(); (OUT/name).write_bytes(raw); return {'file':name,'sha256':sha(raw),'bytes':len(raw),'shape':list(a.shape)}
+def sqdiv(a):
+ words=[]
+ for w in a.view(np.uint32).ravel():
+  sqrt=scalar.op(client,'sqrt',int(w)); words.append(scalar.op(client,'div',0x3f800000,sqrt))
+ return np.array(words,dtype=np.uint32).reshape(a.shape).view(np.float32)
+def mul(a,b): return np.multiply(a,b,dtype=np.float32)
+def add(a,b): return np.add(a,b,dtype=np.float32)
+def generic_mean256(squares):
+ lanes=[]
+ for lane in range(8):
+  residues=[]
+  for residue in range(4):
+   partial=np.zeros(squares.shape[:-1]+(1,),dtype=np.float32)
+   for term in range(8):
+    index=32*term+8*residue+lane; partial=add(partial,squares[...,index:index+1])
+   residues.append(partial)
+  lane_sum=residues[0]
+  for residue in range(1,4): lane_sum=add(lane_sum,residues[residue])
+  lanes.append(lane_sum)
+ total=np.zeros(squares.shape[:-1]+(1,),dtype=np.float32)
+ for lane in lanes: total=add(total,lane)
+ return mul(total,np.float32(1/256))
+def b1_rope(words,trig):
+ x=fp(words); cos=fp(trig[:,:32])[:,None,:]; sin=fp(trig[:,32:])[:,None,:]
+ even,odd=x[:,:,:32],x[:,:,32:64]
+ ec,os_,es,oc=(fp(bf(v)) for v in [mul(even,cos),mul(odd,sin),mul(even,sin),mul(odd,cos)])
+ out=words.copy(); out[:,:,:32]=bf(add(ec,np.negative(os_)));out[:,:,32:64]=bf(add(es,oc))
+ return out,{'cos_product':np.concatenate([ec,oc],axis=-1),'sin_product':np.concatenate([np.negative(os_),es],axis=-1),'rotated':fp(out[:,:,:64]),'output':fp(out)}
+def tensor(words): return torch.from_numpy(np.ascontiguousarray(words)).view(torch.bfloat16)
+def words(t): return t.contiguous().view(torch.uint16).numpy()
+def headmajor(a): return a.transpose(1,0,2)[None].copy()
+def repeat_k(t):
+ b,h,n,d=t.shape; assert (b,h,d)==(1,2,256)
+ ans=t[:,:,None,:,:].expand(b,h,4,n,d).reshape(b,8,n,d)
+ assert all(torch.equal(ans[:,i],t[:,i//4]) for i in range(8)); return ans
+CASES={c['name']:c for c in M['cases']}; RESULTS={}; OUTPUTS={}; NEW={}; OLD_ROPE={}; OPS={}
+for c in ['cold128','carried128']:
+ base=0 if c=='cold128' else 128
+ trig=np.fromfile(ACT/'trig'/f'{c}.bf16le',dtype='<u2').reshape(256,64)[base:base+128].copy()
+ for label,part in [('cos',trig[:,:32]),('sin',trig[:,32:])]:
+  full=nw(CASES[c]['rope_'+label]).reshape(128,64); assert np.array_equal(full[:,:32],full[:,32:]) and np.array_equal(part,full[:,:32])
+ qkop=next(e for e in CASES[c]['dispatch_events'] if e['module']=='self_attn' and e['op']=='aten.matmul.default')
+ scaleop=next(e for e in CASES[c]['dispatch_events'] if e['index']==qkop['index']+1)
+ assert qkop['index']==({'cold128':77,'carried128':73}[c]) and scaleop['op']=='aten.mul.Tensor' and scaleop['args'][1]==.0625
+ OPS[c]={'qk':qkop,'scale':scaleop}
+ for role,heads in [('q',8),('k',2)]:
+  stage=role+'_norm'; shape=(128,heads,256); comp=S['norm_rope_comparisons'][c]['stages']
+  xw=actual(c,'packed_q_gate',(128,8,512))[:,:,:256].copy() if role=='q' else actual(c,'k',shape)
+  ev=next(e for e in CASES[c]['dispatch_events'] if e['module']=='self_attn.'+stage and e['op']=='aten.to.dtype')
+  assert np.array_equal(xw,nw(ev['args'][0]['tensor']).reshape(shape))
+  weight=fp(np.fromfile(ACT/'raw_weights'/f'{stage}.bf16le',dtype='<u2')).reshape(1,1,256)
+  x=fp(xw); square=mul(x,x); mean=generic_mean256(square); inverse=sqdiv(add(mean,np.float32(1e-6))); scaled=mul(x,inverse); gamma=add(np.float32(1),weight); weighted=mul(scaled,gamma); norm=bf(weighted)
+  # Native tensors enter comparisons only, after the complete recipe has run.
+  detail={'actual_projection_equals_official':True,'stages':{}}
+  for n,a in [('squares',square),('mean',mean),('inverse',inverse),('scaled',scaled),('weighted',weighted)]:
+   ref=nf(comp[stage+'.'+n]['native_tensor']).reshape(a.shape);detail['stages'][n]=stats(a,ref);assert detail['stages'][n]['bit_mismatches']==0
+  detail['stages']['norm_bf16']=stats(norm,nw(comp[stage+'.output']['native_tensor']).reshape(shape)); assert detail['stages']['norm_bf16']['bit_mismatches']==0
+  rope,rope_obs=b1_rope(norm,trig); NEW[c+'.'+role]=headmajor(rope)
+  detail['stages']['rope_bf16']=stats(NEW[c+'.'+role],nw(comp[role+'_rope.output']['native_tensor']))
+  assert np.array_equal(rope[:,:,64:],norm[:,:,64:])
+  oldnorm=actual(c,stage,shape); oldrope,old_obs=b1_rope(oldnorm,trig); oldactual=actual(c,role+'_rope',shape)
+  assert np.array_equal(oldrope,oldactual)
+  for n,a in old_obs.items(): assert np.array_equal(a.view(np.uint32),obs(c,role+'_rope.'+n).view(np.uint32)),(c,role,n)
+  detail['old_b1_recipe_replays_all_actual_observers_and_writebacks_byteexact']=True
+  OLD_ROPE[c+'.'+role]=headmajor(oldrope)
+  OUTPUTS[c+'.'+stage]=save(c+'.'+stage+'.generic.bf16le',norm)
+  OUTPUTS[c+'.'+role+'_rope']=save(c+'.'+role+'_rope.generic.bf16le',rope)
+  RESULTS[c+'.'+role]=detail
+  print(c,role,'norm/rope mismatches',detail['stages']['norm_bf16']['bit_mismatches'],detail['stages']['rope_bf16']['bit_mismatches'],flush=True)
+cache_cold=NEW['cold128.k'];cache_carried=np.concatenate([cache_cold,NEW['carried128.k']],axis=2)
+oldcache_cold=OLD_ROPE['cold128.k'];oldcache_carried=np.concatenate([oldcache_cold,OLD_ROPE['carried128.k']],axis=2)
+assert CASES['carried128']['prior_cache']['3']['key']==CASES['cold128']['final_cache']['3']['key']
+CACHE={'source':'computed generic norm/B1 outputs from actual cold and carried projections; no native cache injection','gqa_head_map':[h//4 for h in range(8)],'cold':stats(cache_cold,nw(CASES['cold128']['final_cache']['3']['key'])),'carried':stats(cache_carried,nw(CASES['carried128']['final_cache']['3']['key']))}
+QK={}
+with torch.inference_mode():
+ for c,k,oldk in [('cold128',cache_cold,oldcache_cold),('carried128',cache_carried,oldcache_carried)]:
+  op=OPS[c]['qk']; sop=OPS[c]['scale']; nr=nw(op['result']['tensor']); ns=nw(sop['result']['tensor'])
+  native_replay=torch.ops.aten.matmul.default(tensor(nw(op['args'][0]['tensor'])),tensor(nw(op['args'][1]['tensor'])))
+  assert np.array_equal(words(native_replay),nr)
+  assert np.array_equal(words(torch.ops.aten.mul.Tensor(native_replay,.0625)),ns)
+  generic=torch.ops.aten.matmul.default(tensor(NEW[c+'.q']),repeat_k(tensor(k)).transpose(2,3)); generic_scaled=torch.ops.aten.mul.Tensor(generic,.0625)
+  old=torch.ops.aten.matmul.default(tensor(OLD_ROPE[c+'.q']),repeat_k(tensor(oldk)).transpose(2,3)); oldscaled=torch.ops.aten.mul.Tensor(old,.0625)
+  QK[c]={'native_qk_and_scale_replay_byteexact':True,'original_c1_qk':stats(words(old),nr),'original_c1_scaled':stats(words(oldscaled),ns),'generic_qk':stats(words(generic),nr),'generic_scaled':stats(words(generic_scaled),ns)}
+  previous=read(ROOT/'work/l3_qk_propagation_20261012/metadata.json')['results'][c]
+  assert QK[c]['original_c1_qk']['sha256']==previous['qk']['actual_sha256'] and QK[c]['original_c1_qk']['bit_mismatches']==previous['qk']['bit_mismatches']
+  assert QK[c]['generic_qk']['bit_mismatches']==0 and QK[c]['generic_scaled']['bit_mismatches']==0
+  OUTPUTS[c+'.qk']=save(c+'.qk.generic.bf16le',words(generic)); OUTPUTS[c+'.scaled']=save(c+'.scaled.generic.bf16le',words(generic_scaled))
+  print(c,'QK old/new',QK[c]['original_c1_qk']['bit_mismatches'],QK[c]['generic_qk']['bit_mismatches'],'max',QK[c]['generic_qk']['max_abs'],flush=True)
+REPORT={'status':'GENERIC_RECIPE_ELIMINATES_18_QK_DIFFERENCES_DIAGNOSTIC_ONLY','scope':'fullshape computed DEFAULT256+SqrtDiv and frozen B1, official QK/scaling with computed cold+carried K cache','hardware_recipe_acceptance':False,'owner_executed':False,'matrix_owner_executed':False,'rtl_executed':False,'full_forward_executed':False,'full_attention_executed':False,'native_norm_intermediates_injected':False,'native_cache_injected':False,'original_c1_failure_preserved':True,'source_verification':'original actual source_snapshot for mutated norm owner/scalar/coordinator; unchanged current reference/Chisel/BlockFloat/SharedScalar also verified','original_thresholds':LIMIT,'runtime':RUNTIME,'identity':{'capture_manifest_sha256':sha((CAP/'manifest.json').read_bytes()),'actual_summary_sha256':sha((ACT/'summary.json').read_bytes()),'actual_identity_sha256':sha((ACT/'identity.json').read_bytes()),'script_sha256':sha(Path(__file__).read_bytes()),'wrapper_sha256':sha((RUN/'python.sh').read_bytes())},'norm_rope_results':RESULTS,'cache_checks':CACHE,'qk_results':QK,'outputs':OUTPUTS,'existing_scalar_calls':dict(scalar.calls),'elapsed_seconds':time.monotonic()-START,'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024}
+assert REPORT['peak_rss_bytes']<=1024**3
+dump('metadata.json',REPORT);dump('input_source_identity.json',VER);dump('runtime_identity.json',RUNTIME);dump('operation_identity.json',OPS)
+print('DONE',REPORT['elapsed_seconds'],REPORT['peak_rss_bytes'],flush=True)

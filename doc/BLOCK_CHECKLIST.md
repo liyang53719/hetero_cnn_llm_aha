@@ -118,3 +118,11 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 
 
 2026-10-12 21:51 UTC：0.8B L3同一typed软件模型cold128/carried128的RMS/QKV→Q/K Norm256→partial64 RoPE八阶段前缀完成16终态，原门及独立raw/source审计通过。新增Q Norm/Q RoPE输出cold4点、carried1点各1ULP差异，最大0.015625，不能称全bitexact；全部原阈值保留。首轮600秒预算FAIL与修复后522秒PASS分别归档，宿主检查加速非硬件优化。最终90 L3＋原316 GDN同源轻门已验，远端CI待闭环。[来源与精确范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。完整L3、公共Command128/Chisel/RTL、35B-A3B两个block及五block总门仍open。
+
+
+2026-10-12 22:00 UTC：78e2f52三CI与两份compact工件已核闭环（L3 90/10/70源，GDN316/22/49源）。前缀四个/一个Q Norm BF16差异经固定全形状官方QK单算子传播，cold/carried原QK门最大差1.0/0.5失败，cold缩放logits仍0.0625失败；尚未执行实际Matrix owner，不能当硬件失败或放宽验收。先定位mean/rsqrt通用数值差，再接完整L3；前缀PASS与完整block open并列保留。
+
+- 2026-10-12 C2局部进展：旧C1的Norm小差传播为条件QK 10/8个超限已保留；通用DEFAULT256+SqrtDiv修复在真实双M16八命令/22已观察producer零bit差，完整M128前缀待终态。Chisel同模块overlay仅源/符号门，生产Host未启用；完整L3/五block总项仍ongoing。
+- 新KV staging仅34项合成控制门，实际K/V与最终block凭据接线todo。固定单Scalar映射的L3条件利用率上界约7.56%/7.77%，不是实测或最终Vector架构结论。
+- 后继QK blocker：matching-input的现行ascending FP32 FMA仍cold1/carry2字超限（max1.0），其中carry [0,5,26,64]因果有效；独立C配方预检，尚非Matrix owner。需通用归约机制定位，禁止用C2条件官方QK通过替代此门。
+- 22:30 UTC更新：C2真实cold128/carried128八命令前缀16终态完成，22已观察Norm/RoPE producer的FP32/BF16全部逐bit相同；61源/18输出/52观察封存复核。只关闭C2局部前缀数值门，QK配方超限、KV/完整L3/Chisel/五block总项仍open。

@@ -1,0 +1,37 @@
+import os,resource,signal,json,hashlib
+from pathlib import Path
+from fractions import Fraction
+os.sched_setaffinity(0,{2});resource.setrlimit(resource.RLIMIT_CPU,(20,25));resource.setrlimit(resource.RLIMIT_AS,(1024**3,1024**3));signal.setitimer(signal.ITIMER_REAL,30)
+import numpy as np
+P=Path(__file__).resolve().parent
+
+def decode(word,mantissa_bits,exponent_bits=8):
+ word=int(word); sign=-1 if word>>(mantissa_bits+exponent_bits) else 1
+ exp=(word>>mantissa_bits)&255; frac=word&((1<<mantissa_bits)-1); assert exp!=255
+ mant=frac if exp==0 else (1<<mantissa_bits)+frac
+ power=(1-127-mantissa_bits) if exp==0 else (exp-127-mantissa_bits)
+ return sign*Fraction(mant)*Fraction(2)**power
+
+def rnd_ratio(n,d):
+ q,r=divmod(n,d);return q+int(2*r>d or (2*r==d and q&1))
+
+def encode(value,mantissa_bits):
+ sign=int(value<0);v=abs(value)
+ if not v:return sign<<(mantissa_bits+8)
+ n,d=v.numerator,v.denominator;e=n.bit_length()-d.bit_length()
+ if v<Fraction(2)**e:e-=1
+ assert -126<=e<=127
+ unit=Fraction(2)**(e-mantissa_bits);u=v/unit;m=rnd_ratio(u.numerator,u.denominator)
+ if m==(1<<(mantissa_bits+1)):m>>=1;e+=1
+ return (sign<<(mantissa_bits+8))|((e+127)<<mantissa_bits)|(m-(1<<mantissa_bits))
+M=json.loads((P/'metadata.json').read_text());out={}
+for case,r in M['results'].items():
+ for label in ['first_mismatch','first_valid_causal_mismatch']:
+  w=r[label]
+  if not w:continue
+  source=P/w['trace_file'];a=np.load(source);q=a['q'];k=a['k'];trace=a['acc_fp32_bits'];s=Fraction(0);exact=Fraction(0)
+  for d in range(256):
+   product=decode(q[d],7)*decode(k[d],7);exact+=product;s+=product;word=encode(s,23);assert word==int(trace[d]),(case,label,d);s=decode(word,23)
+  assert encode(s,7)==int(w['candidate_bf16'],16)
+  official=int(w['official_bf16'],16);out[case+'.'+label]={'coordinate':w['coordinate'],'all_256_fp32_accumulators_match_independent_exact_rational_rne':True,'sequential_bf16_bits':hex(encode(s,7)),'exact_dot_fraction':str(exact),'exact_dot_float64':float(exact),'exact_dot_bf16_rne_bits':hex(encode(exact,7)),'official_bf16_bits':hex(official),'official_equals_once_rounded_exact_dot':encode(exact,7)==official,'sequential_terminal_error_vs_exact':float(s-exact),'trace_sha256':hashlib.sha256(source.read_bytes()).hexdigest()}
+(P/'witness_verification.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2))

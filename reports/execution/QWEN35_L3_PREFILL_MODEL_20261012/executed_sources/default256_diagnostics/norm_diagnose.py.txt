@@ -1,0 +1,136 @@
+"""Fullshape counterfactual diagnostics only. No owner execution or acceptance."""
+import os, resource, signal, time, json, hashlib, platform, sys
+from pathlib import Path
+START=time.monotonic(); OUT=Path(__file__).resolve().parent; ROOT=OUT.parents[1]
+ACT=ROOT/'work/l3_norm_rope_actual_20261012/actual_m128_02'
+CAP=ROOT/'work/qwen35_l3_capture_restored_20261012T202700Z/m128_baseline'
+RUN=ROOT/'work/qwen35_runtime_20261012_recovered'
+os.sched_setaffinity(0,{1}); resource.setrlimit(resource.RLIMIT_CPU,(45,50)); signal.setitimer(signal.ITIMER_REAL,55)
+def sha(b): return hashlib.sha256(b).hexdigest()
+def dump(n,o): (OUT/n).write_text(json.dumps(o,indent=2,sort_keys=True)+'\n')
+def read(p): return json.loads(p.read_text())
+M=read(CAP/'manifest.json'); S=read(ACT/'summary.json'); I=read(ACT/'identity.json')
+assert sha((CAP/'manifest.json').read_bytes())=='5e797279a26c9384122023b94c8541d925843ae02f8a5e263c234f344cfb152b'
+assert sha((ACT/'summary.json').read_bytes())=='3d60e35d0278fc1c09a902929949d24415e7fcfad842cb2b8c120cc52c1c3f02'
+assert sha((ACT/'identity.json').read_bytes())=='9f45d4cebed45b5240b2c9e58b3f8bff3dc8978fde8842918fdc96588e21b417'
+assert S['status']=='PASS_ACTUAL_TYPED_NORM_ROPE_PREFIX_ONLY' and all(S['seals'].values())
+VER={}
+def verify(p,r,key):
+ raw=p.read_bytes(); assert len(raw)==r['bytes'] and sha(raw)==r['sha256'],key
+ VER[key]={'path':str(p),'bytes':len(raw),'sha256':sha(raw)}; return raw
+for k,r in M['tensors'].items(): verify(CAP/r['file'],r,'native:'+k)
+for k,r in S['actual_outputs'].items(): verify(ACT/r['file'],r,'actual:'+k)
+for c,entries in S['observations'].items():
+ for k,r in entries.items(): verify(ACT/r['file'],r,'observation:'+c+'.'+k)
+for k,r in I['norm_rope']['weight_files'].items(): verify(ACT/'raw_weights'/f'{k}.bf16le',r,'weight:'+k)
+for k in ['modeling','runner']:
+ r=M['source_files'][k]; verify(Path(r['path']),r,'source:'+k)
+for k,digest in I['source_sha256'].items():
+ if 'norm_rope/' in k or k in ['src/heteronpu/qk_norm256_candidate.py','src/heteronpu/rope_bf16_candidate.py','candidates/qwen35_gdn_prefill/rms_owner.py']:
+  p=ROOT/k; assert sha(p.read_bytes())==digest,k
+  VER['source:'+k]={'path':str(p),'sha256':digest,'bytes':p.stat().st_size}
+for name,record in read(OUT/'backend_sources/identity.json').items():
+ verify(OUT/'backend_sources'/name,record,'backend_source:'+name)
+for name in ['chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala','chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala','candidates/qwen35_gdn_prefill/rms_owner.py']:
+ raw=(ROOT/name).read_bytes(); VER['source:'+name]={'path':str(ROOT/name),'sha256':sha(raw),'bytes':len(raw)}
+import numpy as np, torch
+from heteronpu.qk_norm256_candidate import rsqrt_trace, EPSILON
+from candidates.qwen35_attention_prefill.norm_rope.scalar import NormRopeScalar
+from candidates.qwen35_attention_prefill.norm_rope.owner import source_identity
+source_identity()
+torch.set_num_threads(1); torch.set_num_interop_threads(1); torch.use_deterministic_algorithms(True); torch.set_float32_matmul_precision('highest'); torch.set_flush_denormal(False)
+assert torch.__version__==M['environment']['packages']['torch'] and torch.version.git_version==M['environment']['torch_git_version']
+assert torch.backends.cpu.get_cpu_capability()=='DEFAULT'
+RUNTIME={'python':platform.python_version(),'torch':torch.__version__,'torch_git_version':torch.version.git_version,'numpy':np.__version__,'aten_cpu_capability':os.environ.get('ATEN_CPU_CAPABILITY'),'torch_cpu_capability':torch.backends.cpu.get_cpu_capability(),'threads':torch.get_num_threads(),'interop_threads':torch.get_num_interop_threads(),'cpu_affinity':sorted(os.sched_getaffinity(0)),'torch_module':torch.__file__,'python_executable':sys.executable}
+scalar=NormRopeScalar(); client=object(); assert scalar.acquire(client)
+def nw(k):
+ r=M['tensors'][k]; return np.fromfile(CAP/r['file'],dtype='<u2' if r['dtype']=='BF16' else '<u4').reshape(r['shape'])
+def nf(k):
+ r=M['tensors'][k]; a=nw(k); return ((a.astype(np.uint32)<<16).view(np.float32) if r['dtype']=='BF16' else a.view(np.float32))
+def obs(c,k):
+ r=S['observations'][c][k]; return np.fromfile(ACT/r['file'],dtype='<u4').reshape(128,8 if k.startswith('q_') else 2,-1).view(np.float32)
+def actual(c,k,shape):
+ r=S['actual_outputs'][c+'.'+k]; return np.fromfile(ACT/r['file'],dtype='<u2').reshape(shape)
+def bf(a):
+ u=a.view(np.uint32); return ((u+np.uint32(0x7fff)+((u>>16)&1))>>16).astype(np.uint16)
+def stats(a,b):
+ assert a.shape==b.shape
+ au=a.view(np.uint32) if a.dtype==np.float32 else a; bu=b.view(np.uint32) if b.dtype==np.float32 else b
+ af=a if a.dtype==np.float32 else (a.astype(np.uint32)<<16).view(np.float32); bf_=b if b.dtype==np.float32 else (b.astype(np.uint32)<<16).view(np.float32)
+ d=np.abs(af.astype(np.float64)-bf_.astype(np.float64)); ix=np.flatnonzero(au.ravel()!=bu.ravel())
+ return {'elements':int(a.size),'bit_mismatches':int(ix.size),'max_abs':float(d.max()),'mean_abs':float(d.mean()),'over_original_max':int(np.count_nonzero(d>.03125)),'within_original_abs_mean_gate':bool(d.max()<=.03125 and d.mean()<=.005),'sha256':sha(a.tobytes()),'reference_sha256':sha(b.tobytes()),'mismatch_coordinates':[list(map(int,np.unravel_index(int(j),a.shape))) for j in ix[:20]]}
+def rsq(a): return np.array([rsqrt_trace(int(w))['inverse'] for w in a.view(np.uint32).ravel()],dtype=np.uint32).reshape(a.shape).view(np.float32)
+def sqdiv(a):
+ words=[]
+ for w in a.view(np.uint32).ravel():
+  sqrt=scalar.op(client,'sqrt',int(w)); words.append(scalar.op(client,'div',0x3f800000,sqrt))
+ return np.array(words,dtype=np.uint32).reshape(a.shape).view(np.float32)
+def mul(a,b): return np.multiply(a,b,dtype=np.float32)
+def add(a,b): return np.add(a,b,dtype=np.float32)
+EPS=np.array([EPSILON],dtype=np.uint32).view(np.float32)[0]
+def generic_mean256(squares):
+ # Torch 2.10 DEFAULT V8 / ILP4 for H256: 8 terms per residue.
+ # Omit only identity +0 folds for unused multi_row_sum cascade levels.
+ lanes=[]
+ for lane in range(8):
+  residue_sums=[]
+  for residue in range(4):
+   partial=np.zeros(squares.shape[:-1]+(1,),dtype=np.float32)
+   for term in range(8):
+    index=32*term+8*residue+lane
+    partial=add(partial,squares[...,index:index+1])
+   residue_sums.append(partial)
+  lane_sum=residue_sums[0]
+  for residue in range(1,4): lane_sum=add(lane_sum,residue_sums[residue])
+  lanes.append(lane_sum)
+ total=np.zeros(squares.shape[:-1]+(1,),dtype=np.float32)
+ for lane in lanes: total=add(total,lane)
+ return mul(total,np.float32(1/256))
+RESULTS={}; WITNESSES={} 
+for c in ['cold128','carried128']:
+ for role,heads in [('q',8),('k',2)]:
+  stage=role+'_norm'; comp=S['norm_rope_comparisons'][c]['stages']; shape=(128,heads,256)
+  xw=actual(c,'packed_q_gate',(128,8,512))[:,:,:256].copy() if role=='q' else actual(c,'k',shape)
+  x=(xw.astype(np.uint32)<<16).view(np.float32)
+  events=next(v for v in M['cases'] if v['name']==c)['dispatch_events']; ev=next(e for e in events if e['module']=='self_attn.'+stage and e['op']=='aten.to.dtype')
+  native_input=nw(ev['args'][0]['tensor']).reshape(shape); assert np.array_equal(xw,native_input)
+  native={name:nf(comp[stage+'.'+name]['native_tensor']).reshape(shape if name in ['squares','scaled','weighted','output'] else (1,1,256) if name=='gamma' else (128,heads,1)) for name in ['squares','mean','mean_eps','inverse','scaled','gamma','weighted','output']}
+  native_out=nw(comp[stage+'.output']['native_tensor']).reshape(shape)
+  ob={name:obs(c,stage+'.'+name) for name in ['squares','sum','mean','mean_eps','inverse','scaled','gamma','weighted','output']}
+  weight=np.fromfile(ACT/'raw_weights'/f'{stage}.bf16le',dtype='<u2'); weight=(weight.astype(np.uint32)<<16).view(np.float32).reshape(1,1,256)
+  gamma=add(np.float32(1),weight); assert np.array_equal(np.broadcast_to(gamma,shape).view(np.uint32),ob['gamma'].view(np.uint32))
+  squares=mul(x,x); assert np.array_equal(squares.view(np.uint32),ob['squares'].view(np.uint32))
+  tree=squares.reshape(128,heads,16,16).copy()
+  while tree.shape[-1]>1: tree=add(tree[...,::2],tree[...,1::2])
+  total=np.zeros((128,heads,1),dtype=np.float32)
+  for j in range(16): total=add(total,tree[:,:,j,:])
+  mean=mul(total,np.float32(1/256)); assert np.array_equal(mean.view(np.uint32),ob['mean'].view(np.uint32))
+  me=add(mean,EPS); assert np.array_equal(me.view(np.uint32),ob['mean_eps'].view(np.uint32))
+  inv=rsq(me); assert np.array_equal(inv.view(np.uint32),ob['inverse'].view(np.uint32))
+  scaled=mul(x,inv); weighted=mul(scaled,gamma)
+  assert np.array_equal(scaled.view(np.uint32),ob['scaled'].view(np.uint32)) and np.array_equal(weighted.view(np.uint32),ob['weighted'].view(np.uint32))
+  assert np.array_equal(bf(weighted),actual(c,stage,shape))
+  xt=torch.from_numpy(x.copy()); wt=torch.from_numpy(weight.copy())
+  replay_mean=xt.pow(2).mean(-1,keepdim=True); replay_eps=replay_mean+1e-6; replay_inv=torch.rsqrt(replay_eps); replay_scaled=xt*replay_inv; replay_weighted=replay_scaled*(1+wt); replay_out=replay_weighted.to(torch.bfloat16).view(torch.uint16).numpy()
+  for name,arr in [('mean',replay_mean),('mean_eps',replay_eps),('inverse',replay_inv),('scaled',replay_scaled),('weighted',replay_weighted)]: assert np.array_equal(arr.numpy().view(np.uint32),native[name].view(np.uint32)),(c,stage,name)
+  assert np.array_equal(replay_out,native_out)
+  native_me=add(native['mean'],EPS); assert np.array_equal(native_me.view(np.uint32),native['mean_eps'].view(np.uint32))
+  generic_mean=generic_mean256(squares); assert np.array_equal(generic_mean.view(np.uint32),native['mean'].view(np.uint32)),(c,role,'generic_mean')
+  generic_inverse=sqdiv(add(generic_mean,EPS))
+  variants={'generic_default256_sqrt_div':generic_inverse,'original_c1_replay':inv,'native_mean_only_c1_pwl_nr':rsq(native_me),'actual_mean_sqrt_div':sqdiv(me),'native_mean_sqrt_div':sqdiv(native_me),'native_inverse_only':native['inverse']}
+  results={'generic_default256_mean_vs_native':stats(generic_mean,native['mean']),'generic_recipe_uses_native_nodes':False,'actual_input_equals_official_input':True,'all_original_c1_observers_replayed_byteexact':True,'official_fullshape_native_replay_byteexact':True,'original_mean_vs_native':stats(mean,native['mean']),'original_inverse_vs_native':stats(inv,native['inverse']),'variants':{}}
+  final_outputs={}
+  for label,iv in variants.items():
+   sc=mul(x,iv); w=mul(sc,gamma); out=bf(w); final_outputs[label]=out
+   out.tofile(OUT/f'{c}.{role}.{label}.bf16le')
+   results['variants'][label]={'counterfactual_diagnostic':label!='original_c1_replay','hardware_recipe_acceptance':False,'inverse_vs_native':stats(iv,native['inverse']),'scaled_vs_native':stats(sc,native['scaled']),'weighted_vs_native':stats(w,native['weighted']),'bf16_vs_native':stats(out,native_out),'bf16_first16_vs_native':stats(out[:16],native_out[:16])}
+  WITNESSES[c+'.'+role]=[]
+  bad=np.flatnonzero(final_outputs['original_c1_replay'].ravel()!=native_out.ravel())
+  for j in bad:
+   idx=tuple(int(z) for z in np.unravel_index(int(j),shape)); hi=idx[:2]+(0,)
+   WITNESSES[c+'.'+role].append({'coordinate':list(idx),'actual_mean_word':hex(int(mean.view(np.uint32)[hi])),'native_mean_word':hex(int(native['mean'].view(np.uint32)[hi])),'actual_inverse_word':hex(int(inv.view(np.uint32)[hi])),'native_inverse_word':hex(int(native['inverse'].view(np.uint32)[hi])),'native_output_word':hex(int(native_out[idx])),'variant_output_words':{n:hex(int(o[idx])) for n,o in final_outputs.items()},'variant_inverse_words':{n:hex(int(o.view(np.uint32)[hi])) for n,o in variants.items()}})
+  RESULTS[c+'.'+role]=results
+  print(c,role,{k:v['bf16_vs_native']['bit_mismatches'] for k,v in results['variants'].items()},flush=True)
+REPORT={'status':'COUNTERFACTUAL_DIAGNOSTIC_ONLY','scope':'all 2560 Q/K heads, cold128/carried128; first16 slices supplementary','hardware_recipe_acceptance':False,'owner_executed':False,'rtl_executed':False,'full_forward_executed':False,'original_thresholds':{'max_abs':.03125,'mean_abs':.005},'runtime':RUNTIME,'identity':{'capture_manifest_sha256':sha((CAP/'manifest.json').read_bytes()),'actual_summary_sha256':sha((ACT/'summary.json').read_bytes()),'actual_identity_sha256':sha((ACT/'identity.json').read_bytes()),'script_sha256':sha(Path(__file__).read_bytes()),'wrapper_sha256':sha((RUN/'python.sh').read_bytes())},'results':RESULTS,'five_actual_bf16_witnesses':WITNESSES,'existing_scalar_calls':dict(scalar.calls),'elapsed_seconds':time.monotonic()-START,'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024}
+dump('metadata.json',REPORT);dump('input_source_identity.json',VER);dump('runtime_identity.json',RUNTIME)
+print('DONE',REPORT['elapsed_seconds'],REPORT['peak_rss_bytes'],flush=True)

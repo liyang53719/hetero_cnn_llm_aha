@@ -84,7 +84,7 @@ class TypedNormRopeDriver:
         for r in self.inputs:
             require(r.readonly or r.written == r.acknowledged == set(range(0, r.extent, 64)),
                     'input needs actual full producer data/ACK coverage')
-        self.identity = source_identity()
+        self.identity = source_identity(policy=job.policy) if type(job) is QkNorm256Job else source_identity()
         self.pending, self.response, self.aborted = None, None, False
         self._accepted, self._physical_pending, self._pending_response = None, None, None
         self._accepted_fields, self._response_fields = None, None
@@ -220,7 +220,9 @@ class TypedNormRopeDriver:
                         result.write_bytes == self.job.write_bytes and
                         self.counts['write_bytes'] == self.job.write_bytes,
                         'success before complete accepted output writes/ACKs')
-                require(source_identity() == self.identity, 'frozen source identity changed during execution')
+                current = (source_identity(policy=self.job.policy) if type(self.job) is QkNorm256Job
+                           else source_identity())
+                require(current == self.identity, 'frozen source identity changed during execution')
                 response = (result.tag, result.status, result.write_bytes)
                 bases = tuple(r.base for r in self._outputs)
                 if len(bases) == 1:

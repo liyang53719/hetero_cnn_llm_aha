@@ -12,7 +12,7 @@ from ..projection_driver import (
     L3ProjectionCoordinator, L3ProjectionPlan, ORDER as PREFIX_ORDER, sha,
 )
 from .driver import TypedNormRopeDriver
-from .owner import QkNorm256Job, QkNorm256Owner, PartialRope64Job, PartialRope64Owner, source_identity
+from .owner import QkNorm256Job, QkNorm256Owner, PartialRope64Job, PartialRope64Owner, source_identity, POLICY, TORCH_DEFAULT256_POLICY
 from .scalar import NormRopeScalar
 from ...qwen35_gdn_prefill.typed_dense import GUARD
 
@@ -43,10 +43,13 @@ class L3NormRopePlan:
     trig: int
     position_base: int
     trig_tokens: int
+    norm_policy: int = POLICY
 
     def validate(self):
         require(type(self.projection) is L3ProjectionPlan, 'original immutable projection plan required')
         self.projection.validate()
+        require(type(self.norm_policy) is int and self.norm_policy in (POLICY, TORCH_DEFAULT256_POLICY),
+                'explicit C1/C2 Norm policy required')
         require(self.projection.tag_base <= (1 << 32) - len(ORDER), 'eight distinct UInt32 owner tags required')
         for name in ('q_norm_weight', 'k_norm_weight', 'q_norm', 'k_norm', 'gate', 'q_rope', 'k_rope', 'trig'):
             value = getattr(self, name)
@@ -102,8 +105,8 @@ class L3NormRopeCoordinator:
         self.matrix, self.vector, self.dense = prefix.matrix, prefix.vector, prefix.dense
         t, p, tag = plan.tokens, plan.projection, plan.projection.tag_base
         self.jobs = (*prefix.jobs,
-            QkNorm256Job(tag + 4, p.packed_q_gate, plan.q_norm_weight, plan.q_norm, t, 0, plan.gate),
-            QkNorm256Job(tag + 5, p.k, plan.k_norm_weight, plan.k_norm, t, 1),
+            QkNorm256Job(tag + 4, p.packed_q_gate, plan.q_norm_weight, plan.q_norm, t, 0, plan.gate, policy=plan.norm_policy),
+            QkNorm256Job(tag + 5, p.k, plan.k_norm_weight, plan.k_norm, t, 1, policy=plan.norm_policy),
             PartialRope64Job(tag + 6, plan.q_norm, plan.trig, plan.q_rope, t, 8,
                              plan.position_base, plan.trig_tokens),
             PartialRope64Job(tag + 7, plan.k_norm, plan.trig, plan.k_rope, t, 2,
@@ -139,7 +142,7 @@ class L3NormRopeCoordinator:
         self._commands, self._receipts, self._prefix_result = [], {}, None
         self._prefix_result_fields = None
         self._scalar_baseline = self.scalar.calls.copy()
-        self.identity = source_identity()
+        self.identity = source_identity(policy=plan.norm_policy)
         self._identity = deepcopy(self.identity)
         self._binding = self._resource_identity()
         self._require_drained()

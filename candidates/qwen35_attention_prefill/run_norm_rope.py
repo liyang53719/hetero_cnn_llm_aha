@@ -21,7 +21,7 @@ import numpy as np
 from . import run_projection_prefix as prior
 from .projection_driver import L3ProjectionCoordinator, L3ProjectionPlan
 from .norm_rope.coordinator import L3NormRopeCoordinator, L3NormRopePlan
-from .norm_rope.owner import QkNorm256Owner, PartialRope64Owner, SOURCE_SHA256
+from .norm_rope.owner import QkNorm256Owner, PartialRope64Owner, SOURCE_SHA256, POLICY, TORCH_DEFAULT256_POLICY
 from .norm_rope.scalar import NormRopeScalar
 from .norm_rope import fixture
 from .norm_rope.compare import compare_case, ObservationRecorder
@@ -65,9 +65,10 @@ def state(coordinator):
                 terminal=coordinator.response is not None,active=None if coordinator.active is None else coordinator.active.owner.state)
 
 
-def run(capture_directory,payload_directory,output,*,budget_seconds=600):
+def run(capture_directory,payload_directory,output,*,budget_seconds=600,norm_policy=POLICY):
     output=Path(output)
     require(not output.exists() and type(budget_seconds) is int and 0<budget_seconds<=900,'fresh directory and wall budget1..900')
+    require(type(norm_policy) is int and norm_policy in (POLICY,TORCH_DEFAULT256_POLICY),'explicit C1/C2 norm policy')
     output.mkdir(parents=True)
     start=time.monotonic();coordinator=memory=None;plans=[];active_outputs={};observed=None;active_name=None
     report=dict(status='RUNNING',scope='ACTUAL_TYPED_L3_RMS_QKV_NORM_ROPE_ONLY',budget_seconds=budget_seconds,
@@ -105,7 +106,7 @@ def run(capture_directory,payload_directory,output,*,budget_seconds=600):
             c=extra['cases'][name]
             plan=L3NormRopePlan(projection=p,q_norm_weight=norm_parameters['q_norm'],k_norm_weight=norm_parameters['k_norm'],
                 q_norm=outputs['q_norm'],k_norm=outputs['k_norm'],gate=outputs['raw_gate'],q_rope=outputs['q_rope'],k_rope=outputs['k_rope'],
-                trig=allocate(len(c['trig']),c['trig']),position_base=c['position_base'],trig_tokens=c['trig_tokens'])
+                trig=allocate(len(c['trig']),c['trig']),position_base=c['position_base'],trig_tokens=c['trig_tokens'],norm_policy=norm_policy)
             plans.append((name,plan,outputs))
         workspace=prior.PrefixWorkspace(allocate(16384),16384,1);dense=prior.GdnProjectionOwner(workspace)
         libraries=(library,Path(os.environ['MATRIX_SERVICE_COMPILE_RECEIPT']),vector.library,vector.library.with_suffix('.json'))
@@ -122,7 +123,9 @@ def run(capture_directory,payload_directory,output,*,budget_seconds=600):
             local_snapshot_files=snapshots,plans={name:asdict(p) for name,p,_ in plans},matrix_reset_count=1,
             raw_weight_layout='checkpoint[N,K] -> physical[K,N] bytes only',trig_generation_executed=False,native_capture_integrity_prevalidated=True,
             native_intermediates_used_as_execution_inputs=False,native_numeric_comparison_after_terminals=True,
-            matrix_vector_scalar_memory_shared=True,scalar_flags='legacy C1/B1 Add0/Mul1 fatal0x1e; input RMS explicit op6 retained')
+            matrix_vector_scalar_memory_shared=True,norm_policy=norm_policy,
+            norm_policy_chisel_production_enabled=False if norm_policy==TORCH_DEFAULT256_POLICY else None,
+            scalar_flags='C1/C2/B1 Add0/Mul1 raw fatal0x1e; C2 Div2/Sqrt3 existing result/error, no fabricated raw flags; input RMS op6')
         report['identity']=identity;persist(output/'identity.json',identity)
         initial=(matrix.resource_address,vector.resource_address,id(memory),id(scalar),id(dense),id(dense.a_banks),id(rms),id(norm),id(rope),matrix.epoch)
         all_observations={};all_terminals={};all_actual={}
@@ -212,8 +215,10 @@ def run(capture_directory,payload_directory,output,*,budget_seconds=600):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ('capture','payload','out'):parser.add_argument('--'+name,type=Path,required=True)
-    parser.add_argument('--budget-seconds',type=int,default=600);args=parser.parse_args()
-    report=run(args.capture,args.payload,args.out,budget_seconds=args.budget_seconds)
+    parser.add_argument('--budget-seconds',type=int,default=600)
+    parser.add_argument('--norm-policy',type=lambda x:int(x,0),choices=(POLICY,TORCH_DEFAULT256_POLICY),default=POLICY)
+    args=parser.parse_args()
+    report=run(args.capture,args.payload,args.out,budget_seconds=args.budget_seconds,norm_policy=args.norm_policy)
     print(json.dumps({k:report[k] for k in ('status','elapsed_seconds','terminal_count')}))
     raise SystemExit(0 if report['status'].startswith('PASS_') else 1)
 

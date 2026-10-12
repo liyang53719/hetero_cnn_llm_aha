@@ -86,3 +86,44 @@ Q Norm的norm/gate分属两个真实物理span。新增publish_many先验证两�
 独立只读审计重新核验60份执行/当前源码、226native raw、23source/29runtime/11payload pins、18actual outputs、52observer文件、七项seal和全部真实terminal/ACK，并重新比较原门，结果PASS。完整summary SHA3d60e35d0278fc1c09a902929949d24415e7fcfad842cb2b8c120cc52c1c3f02，独立审计SHAebdf1f2fabaed46b79a3db6ddda3290dce29e275fc1442d1d56e5ea60c1057d4。修复前失败run里完整cold的九份实际输出共3,407,872B也与新cold逐SHA一致，未将它们作为新运行输入。
 
 最终L3轻门在原干净目录/已验ELF上90测试/10suite通过，14份工件和12,911源前后hash一致；原GDN316/22和49源同身份复用，未重建或重复运行。Git只保存紧凑指标/hash、源码和必要旧纯源码快照，实际输入/观察/输出留在本地。远端本批CI尚待提交后核验；本次只完成C03.2/C04.2/C05模型八阶段前缀子门，公共Command128、Chisel/RTL、实际KV续写及完整L3仍未完成。
+
+
+### 22:00 UTC：78e2f52 CI闭环与下一门的上游误差传播
+
+78e2f52eec3b96c09d8552bb1cde0062e3f18426的L3 CI38313580146、GDN CI38313580056与payload CI38313580178均成功。L3为90测试/10suite/70源码，GDN为316/22/49；12,522B与21,585B紧凑ZIP的GitHub digest、精确commit逐源码、全部suite日志/退出/计数、Matrix三源与Vector单源构建receipt均已复核。此CI没有实际大模型或RTL重跑。
+
+随后使用已封存actual Q-RoPE/K-RoPE，仅执行一次固定Torch全形状BF16 QK单算子诊断。先用native Q/K逐bit复现原cold/carried QK，确认该重放在本机与原capture一致；再仅换成真实前缀输出，carried K由真实cold+carried K拼接，完全等于原native cache。cold QK出现10/131072个1ULP差异、最大绝对差1.0；carried出现8/262144个差异、最大0.5，均超过原0.03125最大差门。乘1/16并BF16物化后cold仍有一个0.0625超限，carried最大0.03125通过。最坏cold的query87/key86属于实际因果范围，不能以future masking忽略。
+
+这证明已知Q Norm四个/一个BF16差异能传播到下一原门失败；并未执行实际Matrix owner，也不能称其硬件缺陷。前缀自身的原门PASS不变，完整block质量门明确保持open。正在用全形状单节点反事实区分mean归约与C1 PWL/NR逆平方根误差，不替换官方输入来授予PASS，不降低阈值、不做单点调参。诊断原始结果与完整身份在本地保留，metadata SHA2319f512db9b20afd927312b2c1b9b0aa3f9dddd1a1d0a04e479b3b43e7c56d6。
+
+### C2：修复已证实的归约与 inverse 差异
+
+下一全形状官方 QK 条件诊断证明，旧 C1 前缀的 cold 4 个／carried 1 个 Q Norm BF16 差异会传播为 QK 的 10／8 个差异，最大绝对误差 1.0／0.5，超过原 0.03125 门。cold 最差位置 [0,3,87,86] 因果有效，不能靠 mask 排除。该诊断使用真正保存的实际投影、K cache 字节与全形状官方同输入运算；不是实际 Matrix QK owner 执行。旧局部 Norm/RoPE PASS、后继条件 QK FAIL 同时保留。
+
+对全部2,560个Q/K head定位：2个原BF16误差来自均值归约顺序，另外3个来自PWL/NR inverse；只替换其中一项仍有差异。新增显式 C2 Torch210CpuDefault256 策略，按固定 Torch2.10 CPU DEFAULT V8/ILP4 的 H256 路径计算：每lane四个residue，每residue八项按32*t+8*r+lane递增求平方和，先fold residue0..3，再fold lane0..7；均值和epsilon保持FP32，复用现有Sqrt3再Div2(1,root)，其后FP32 gamma=1+weight和最终BF16 RNE保持。未注入官方mean/inverse，未按坐标分支，未放宽原有限输入域或阈值。C1仍是默认独立策略。
+
+Add0/Mul1继续要求真实raw flagsValid和原fatal0x1e。现有Div/Sqrt只有result/error，C2按该真实协议消费并校验类型/finite，未伪造零flags；返回的root/inverse真正驱动下一请求。52项新旧小门覆盖C1 Q→C2 Q→C1 K→C2 K、opaque gate、成功返回值扰动、错误/末ACK/held终态及真实双span发布。C2真实双M16八命令已16终态成功，模型151.983秒，监督152.333秒，61源/全部输出与观察hash复核；22个已观察官方producer的FP32和BF16均零bit差。M16仍是0→16→32实际cache语义，不能称128-token历史。
+
+独立全形状条件诊断从已保存实际M128投影计算通用C2，再执行原B1和官方QK；冷131,072／暖262,144个QK与scale字全部精确一致，旧18个QK差异归零，并复现保存原C1失败。这个条件诊断没有执行owner/Matrix/完整block。C2完整双M128实际前缀正在原冻结61源下执行一次，900秒为有依据的宿主预算，终态待验。
+
+对应Chisel采用同一QkNorm256Owner的纯源码overlay，enableTorchDefaultPolicy默认false，C2显式开启；复用原treeValues(0..1)、lane和共享DivSqrt，不新增浮点单元或数据bank。操作状态寄存器从4增至5bit，选择/控制逻辑增加，面积与时序未测。六项静态/符号调度检查及独立源审查通过；没有可用的离线Scala/Chisel依赖，本批尚未编译、展开或仿真该overlay。它尚未替换生产源，也未接Host C2，因此当前模型通过不能称生产Chisel同策略通过。
+
+干净源导出顺序复现：固定Python3.12+NumPy2.3.5+PyYAML6.0.3，重新构建共享Matrix与Vector小库，然后全部137项／13suite，无skip，116.086秒、最大单子进程RSS261,528KiB；源码及全部工件集合核验。没有读取原work数据、下载模型或运行RTL。新增KV staging候选34项仅合成控制门，覆盖真实地址copy/append、末双span ACK、poison后精确drain和新重试；仍需接实际K-RoPE/V及完整block末owner凭据，不能算实际M128 cache完成。
+
+### 固定资源的精度路径风险
+
+按当前模型每笔请求逐一映射到既有单BlockScalarFloat，C2每M128窗共有2,599,424次Scalar请求（C1为2,566,144）；基础请求启动间隔至少3拍，Div/Sqrt更慢。完整launch到terminal的保守下界为7,798,272拍，仅用于条件架构上界，软件tick不是该周期。
+
+全L3逻辑Matrix MAC：Dense为128×(1024×4096+2×1024×512+2048×1024+3×1024×3584)=2,348,810,240；加QK/PV的2×8×128×keys×256后，cold keys128为2,415,919,104，carried keys256为2,483,027,968。沿仓库矩形逻辑MAC口径包含causal-zero项，是偏乐观分子。固定4096 MAC/拍、所有等待均计分母，U≤MAC/(4096×7,798,272)，即冷7.5635%／暖7.7736%；未计后续存储/softmax/FFN等只会更低。它不是RTL实测、完整周期预测或通用架构天花板。Matrix重叠不能越过同一Scalar服务的下界，今后的Vector映射需要重新给资源、端口、精度及完整周期证据；当前先完成数值链，不把此串行保精度路径当80%目标终架构。
+
+### Matching-input QK 顺序FMA仍阻断后继验收
+
+C2消除上游差异后，不能直接把“官方算子吃相同输入”的条件PASS当作当前Matrix配方PASS。对原Chisel Bf16CausalGqaOwner规定的d0..255逐次FP32 FMA、末BF16 RNE做独立C fmaf全形状预检，cold仍1/131,072、carried仍2/262,144字不同，最大绝对差1.0。暖[0,5,26,64]是有效因果位置（绝对query154/key64）：末FP32为131.49998474121094，BF16为131，官方为132；其独立精确有理点积也舍入到131，不能以更接近数学精确值豁免原官方门。其余两个差异位于future mask位置，仍保留原中间节点要求，不偷删门。
+
+这个预检仅0.54秒、42.2MiB，FE_TONEAREST、无FTZ/DAZ，所见仅inexact；输入、源、编译器、ELF、输出及三条逐FMA见证已保全。没有改QK归约策略或资源，没有Matrix owner/完整Attention执行。后续必须定位通用且可映射到Chisel的归约/后台差异；当前完整L3数值项继续阻断，原max_abs0.03125/mean_abs0.005不变。
+
+### 22:30 UTC：C2真实双M128前缀完成
+
+同一冻结61源、原hidden/weight/trig重新执行完成16个实际终态，534.495秒模型／534.957秒监督EXIT0，最大单子进程RSS315,364KiB。全部7项封存、18实际输出、52观察文件和当前/执行source snapshot逐hash核验；每窗4个前缀门及22个已观察Norm/RoPE官方producer通过，后者所有FP32/BF16字均精确一致。原5个Q Norm/RoPE BF16差异在实际owner数据链中消除，原失败证据未改。summary SHA72d5c380f3c2a3d498d66191b5e67de27238e75456ba8e5a88014715cc337e71。
+
+每窗真实记录Scalar2,599,424（Add1,055,104、Mul1,148,160、op6 393,344、Div/Sqrt各1,408），与源计数预测一致；ACK3,407,872B、Matrix FMA671,088,640、Vector16 Add40,960。软件tick仍1,210,434，因其不计Scalar服务延迟，不能从tick不变推导硬件加速。QK当前配方的matching-input超限仍是独立阻断，KV/完整Attention/O/FFN及生产Chisel C2均未完成。

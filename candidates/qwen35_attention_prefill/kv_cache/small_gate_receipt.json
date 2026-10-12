@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "status": "PASS_SMALL_SYNTHETIC_KV_COPY_APPEND_ONLY",
+  "completed_utc": "2026-10-12T22:14:19.275664+00:00",
+  "test_module": "candidates.qwen35_attention_prefill.kv_cache.test_kv_cache",
+  "tests": 34,
+  "failures": 0,
+  "errors": 0,
+  "test_seconds": 0.659485424000195,
+  "cpu_affinity": [
+    1
+  ],
+  "address_space_limit_bytes": 209715200,
+  "max_rss_kib": 21448,
+  "stdlib_only": true,
+  "new_source_identity": {
+    "source_sha256": {
+      "candidates/qwen35_attention_prefill/kv_cache/__init__.py": "78c3bb90d35860dfc7e44fe216c4bfe621409df2fc0439c913512bf87847a45e",
+      "candidates/qwen35_attention_prefill/kv_cache/owner.py": "80d53e55b94e4b94f7f1f4f8425c1a38dfecaf91a437b89d0e16ee5a726f6603",
+      "candidates/qwen35_attention_prefill/kv_cache/driver.py": "51add2e3d36b3a4ab3c0bef69dfe5ecd5d7822ce6521bac0d0d170e5d2da443e",
+      "candidates/qwen35_attention_prefill/kv_cache/fence.py": "6f91475f68b496fa46805fe53dfce9ef03dfaaecbb12822f5cff2c4d1f9bbddc",
+      "candidates/qwen35_attention_prefill/kv_cache/test_kv_cache.py": "74fcaed59ea0d50e3dce3990ad2f04696f5de484449a75bf376140d00ef1f58b"
+    },
+    "shared_transport_sha256": {
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345"
+    },
+    "scope": "KV_COPY_APPEND_SOFTWARE_ONLY",
+    "rtl_executed": false,
+    "hardware_cycles": null,
+    "native_acceptance": false,
+    "fullblock_executed": false
+  },
+  "executed_token_cases": [
+    1,
+    2,
+    3
+  ],
+  "bytes_per_k_or_v_token": 1024,
+  "capacity_tokens": 256,
+  "m128_cold_carried256_checked_as_descriptors_only": true,
+  "actual_projection_or_rope_executed": false,
+  "fullblock_downstream_terminal_is_synthetic_standin": true,
+  "fullblock_executed": false,
+  "rtl_executed": false,
+  "compiled": false,
+  "checkpoint_loaded": false,
+  "model_downloaded": false,
+  "source_files_outside_kv_cache_modified_by_this_task": false,
+  "independent_readonly_review": "review_l3_kv_fence reread recovery/provenance changes: no remaining P0/P1 found in reviewed source-integrity recovery; final-owner authentication remains a trusted integration obligation.",
+  "initial_gate": {
+    "tests": 20,
+    "errors": 1,
+    "status": "FAILED_THEN_FIXED",
+    "detail": "Rejected reset incorrectly latched abort before a held completion; fixed before final gate."
+  },
+  "prior_passes": [
+    {
+      "schema": 1,
+      "status": "PASS_SMALL_SYNTHETIC_KV_COPY_APPEND_ONLY",
+      "completed_utc": "2026-10-12T21:56:33.357570+00:00",
+      "test_module": "candidates.qwen35_attention_prefill.kv_cache.test_kv_cache",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "test_seconds": 0.188,
+      "cpu_affinity": [
+        1
+      ],
+      "address_space_limit_bytes": 209715200,
+      "max_rss_kib": 20908,
+      "stdlib_only": true,
+      "new_source_identity": {
+        "source_sha256": {
+          "candidates/qwen35_attention_prefill/kv_cache/__init__.py": "78c3bb90d35860dfc7e44fe216c4bfe621409df2fc0439c913512bf87847a45e",
+          "candidates/qwen35_attention_prefill/kv_cache/owner.py": "6d2d124e1053907215677710df65d903f9a022d984c8642c430af77e1fb94129",
+          "candidates/qwen35_attention_prefill/kv_cache/driver.py": "06efdb8f00319e91f3b2b02baa348a57836c1bffb5045c6e040740d3adabb3b1",
+          "candidates/qwen35_attention_prefill/kv_cache/fence.py": "ab655ec5948cd6637a82badc2e65e2821919ecee362b021f605df97cbe352f02",
+          "candidates/qwen35_attention_prefill/kv_cache/test_kv_cache.py": "254afdba96ffe268cb8f60c397a8ed6694e3e50e37efd71c5fbfcc9bd4316c19"
+        },
+        "shared_transport_sha256": {
+          "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+          "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+          "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345"
+        },
+        "scope": "KV_COPY_APPEND_SOFTWARE_ONLY",
+        "rtl_executed": false,
+        "hardware_cycles": null,
+        "native_acceptance": false,
+        "fullblock_executed": false
+      },
+      "executed_token_cases": [
+        1,
+        2,
+        3
+      ],
+      "bytes_per_k_or_v_token": 1024,
+      "capacity_tokens": 256,
+      "m128_cold_carried256_checked_as_descriptors_only": true,
+      "actual_projection_or_rope_executed": false,
+      "fullblock_downstream_terminal_is_synthetic_standin": true,
+      "fullblock_executed": false,
+      "rtl_executed": false,
+      "compiled": false,
+      "checkpoint_loaded": false,
+      "model_downloaded": false,
+      "source_files_outside_kv_cache_modified_by_this_task": false,
+      "independent_readonly_review": "Four findings fixed and reread; no remaining blocker in those fixes.",
+      "initial_gate": {
+        "tests": 20,
+        "errors": 1,
+        "status": "FAILED_THEN_FIXED",
+        "detail": "Rejected reset incorrectly latched abort before a held completion; fixed before final gate."
+      }
+    },
+    {
+      "schema": 1,
+      "status": "PASS_SMALL_SYNTHETIC_KV_COPY_APPEND_ONLY",
+      "completed_utc": "2026-10-12T21:59:09.485246+00:00",
+      "test_module": "candidates.qwen35_attention_prefill.kv_cache.test_kv_cache",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "test_seconds": 0.223,
+      "cpu_affinity": [
+        1
+      ],
+      "address_space_limit_bytes": 209715200,
+      "max_rss_kib": 20936,
+      "stdlib_only": true,
+      "new_source_identity": {
+        "source_sha256": {
+          "candidates/qwen35_attention_prefill/kv_cache/__init__.py": "78c3bb90d35860dfc7e44fe216c4bfe621409df2fc0439c913512bf87847a45e",
+          "candidates/qwen35_attention_prefill/kv_cache/owner.py": "28c9cfb2e8e01d84624215b1d784b95e3a7fce05a271a1366089bd881a40ac7a",
+          "candidates/qwen35_attention_prefill/kv_cache/driver.py": "40420bde0db1639cdb9b36d8b823f2550d605d1a077ac39a8b04dcb52f5fbbc6",
+          "candidates/qwen35_attention_prefill/kv_cache/fence.py": "e02f8f82972cfd9a674e9e7c22b0f0628b6e242d959084561a074db7fcd22158",
+          "candidates/qwen35_attention_prefill/kv_cache/test_kv_cache.py": "cb7db98f9c56001eb18432cdbec60e95f800783c44e86056cdc9a8c52fd35749"
+        },
+        "shared_transport_sha256": {
+          "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+          "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+          "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345"
+        },
+        "scope": "KV_COPY_APPEND_SOFTWARE_ONLY",
+        "rtl_executed": false,
+        "hardware_cycles": null,
+        "native_acceptance": false,
+        "fullblock_executed": false
+      },
+      "executed_token_cases": [
+        1,
+        2,
+        3
+      ],
+      "bytes_per_k_or_v_token": 1024,
+      "capacity_tokens": 256,
+      "m128_cold_carried256_checked_as_descriptors_only": true,
+      "actual_projection_or_rope_executed": false,
+      "fullblock_downstream_terminal_is_synthetic_standin": true,
+      "fullblock_executed": false,
+      "rtl_executed": false,
+      "compiled": false,
+      "checkpoint_loaded": false,
+      "model_downloaded": false,
+      "source_files_outside_kv_cache_modified_by_this_task": false,
+      "independent_readonly_review": "Four findings fixed and reread; no remaining blocker in those fixes.",
+      "initial_gate": {
+        "tests": 20,
+        "errors": 1,
+        "status": "FAILED_THEN_FIXED",
+        "detail": "Rejected reset incorrectly latched abort before a held completion; fixed before final gate."
+      },
+      "added_regression": "Normalize non-exact coverage containers before comparison; reject lying written/ACK coverage at input admission, during execution, and for staged, final, and committed fence spans."
+    }
+  ],
+  "added_regression": "Source payload/guard integrity failures latch poison and drain accepted read/write or cancel held success; failed terminal retains evidence and fresh retry succeeds. Report/current source identities compare to an independent deep baseline. Coverage offsets require exact ints and bounded normalization. Failed owner reports remain frozen across owner reset/reuse.",
+  "sources_unchanged_during_gate": true,
+  "final_gate_log": "test_abort_and_reset_drain_read_and_write_before_failed_terminal (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_abort_and_reset_drain_read_and_write_before_failed_terminal) ... ok\ntest_abort_before_first_transfer_requires_new_staging_even_with_zero_writes (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_abort_before_first_transfer_requires_new_staging_even_with_zero_writes) ... ok\ntest_abort_cancels_held_success_even_with_ready_and_reset_cannot_erase (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_abort_cancels_held_success_even_with_ready_and_reset_cannot_erase) ... ok\ntest_actual_cold_then_carried_on_same_memory_1_plus_2_tokens (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_actual_cold_then_carried_on_same_memory_1_plus_2_tokens) ... ok\ntest_carried_capacity_overflow_and_previous_reservation_alias (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_carried_capacity_overflow_and_previous_reservation_alias) ... ok\ntest_changed_receipt_or_committed_state_cannot_be_promoted (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_changed_receipt_or_committed_state_cannot_be_promoted) ... ok\ntest_coverage_requires_exact_integer_offsets (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_coverage_requires_exact_integer_offsets) ... ok\ntest_downstream_failure_discards_staging_without_changing_committed_state (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_downstream_failure_discards_staging_without_changing_committed_state) ... ok\ntest_exact_m128_cold_and_carried256_descriptor_extents_without_execution (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_exact_m128_cold_and_carried256_descriptor_extents_without_execution) ... ok\ntest_failed_carried_stage_preserves_old_committed_prefix (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_failed_carried_stage_preserves_old_committed_prefix) ... ok\ntest_failed_downstream_terminal_cannot_discard_undrained_write (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_failed_downstream_terminal_cannot_discard_undrained_write) ... ok\ntest_fence_requires_exact_accepted_fullblock_evidence_and_ack_coverage (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_fence_requires_exact_accepted_fullblock_evidence_and_ack_coverage) ... ok\ntest_final_second_span_ack_and_held_terminal_keep_both_private (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_final_second_span_ack_and_held_terminal_keep_both_private) ... ok\ntest_integrity_cancellation_still_rejects_replaced_inflight_obligation (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_integrity_cancellation_still_rejects_replaced_inflight_obligation) ... ok\ntest_invalid_descriptor_rejected_before_any_owner_dma (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_invalid_descriptor_rejected_before_any_owner_dma) ... ok\ntest_lying_coverage_rejected_for_staged_final_and_committed_fence_spans (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_lying_coverage_rejected_for_staged_final_and_committed_fence_spans) ... ok\ntest_lying_nonempty_source_coverage_rejected_at_admission_and_during_job (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_lying_nonempty_source_coverage_rejected_at_admission_and_during_job) ... ok\ntest_old_prefix_tampering_is_rejected_between_jobs_and_before_commit_or_discard (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_old_prefix_tampering_is_rejected_between_jobs_and_before_commit_or_discard) ... ok\ntest_output_data_tamper_during_held_terminal_prevents_publication (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_output_data_tamper_during_held_terminal_prevents_publication) ... ok\ntest_preexisting_upstream_span_cannot_masquerade_as_final_output (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_preexisting_upstream_span_cannot_masquerade_as_final_output) ... ok\ntest_read_error_has_no_output_and_releases_no_external_generation (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_read_error_has_no_output_and_releases_no_external_generation) ... ok\ntest_reported_source_identity_cannot_rewrite_admission_snapshot (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_reported_source_identity_cannot_rewrite_admission_snapshot) ... ok\ntest_restoring_corrupt_bytes_does_not_clear_latched_failure (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_restoring_corrupt_bytes_does_not_clear_latched_failure) ... ok\ntest_second_job_rejected_until_block_success_or_failure_retires (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_second_job_rejected_until_block_success_or_failure_retires) ... ok\ntest_second_span_final_ack_failure_does_not_publish_or_advance (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_second_span_final_ack_failure_does_not_publish_or_advance) ... ok\ntest_source_identity_separate_and_unchanged_before_publication (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_source_identity_separate_and_unchanged_before_publication) ... ok\ntest_source_integrity_failure_abort_drains_read_write_and_held_success_then_fresh_retry (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_source_integrity_failure_abort_drains_read_write_and_held_success_then_fresh_retry) ... ok\ntest_source_integrity_failure_reset_drains_inflight_read_and_write (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_source_integrity_failure_reset_drains_inflight_read_and_write) ... ok\ntest_stale_generation_and_wrong_committed_prefix_rejected_before_dma (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_stale_generation_and_wrong_committed_prefix_rejected_before_dma) ... ok\ntest_tampered_job_source_request_or_pending_identity_rejected (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_tampered_job_source_request_or_pending_identity_rejected) ... ok\ntest_unpublished_readonly_and_wrong_extent_inputs_rejected (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvCacheTests.test_unpublished_readonly_and_wrong_extent_inputs_rejected) ... ok\ntest_bad_read_tag_count_type_and_data_fail_once_and_lock (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvOwnerProtocolTests.test_bad_read_tag_count_type_and_data_fail_once_and_lock) ... ok\ntest_bad_write_ack_drains_and_prevents_more_dma (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvOwnerProtocolTests.test_bad_write_ack_drains_and_prevents_more_dma) ... ok\ntest_held_request_is_stable_and_full_address_is_not_truncated (candidates.qwen35_attention_prefill.kv_cache.test_kv_cache.KvOwnerProtocolTests.test_held_request_is_stable_and_full_address_is_not_truncated) ... ok\n\n----------------------------------------------------------------------\nRan 34 tests in 0.659s\n\nOK\n",
+  "intermediate_gate_before_report_freeze": {
+    "tests": 34,
+    "errors": 0,
+    "test_seconds": 0.692,
+    "max_rss_kib": 21084
+  },
+  "trusted_integration_requirement": "Construct FullBlockTerminal only from the actual accepted final residual owner; bind final_owner_tag, output root, byte extent and publication to that terminal, and test forged in-range final-owner tags at integration."
+}

@@ -1,0 +1,39 @@
+"""Bounded supervisor for only this diagnostic child process group."""
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import time
+
+out = Path(__file__).resolve().parent
+root = out.parents[1]
+command = [str(root / 'work/qwen35_runtime_20261012_recovered/python.sh'), str(out / 'diagnose.py')]
+start = time.monotonic()
+max_rss = 0
+reason = None
+with (out / 'run.log').open('w') as log:
+    p = subprocess.Popen(command, cwd=root, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    while p.poll() is None:
+        if time.monotonic() - start > 60:
+            reason = 'outer_wall_limit'
+        try:
+            status = Path(f'/proc/{p.pid}/status').read_text()
+            line = next((s for s in status.splitlines() if s.startswith('VmRSS:')), None)
+            rss = int(line.split()[1]) * 1024 if line else 0
+            max_rss = max(max_rss, rss)
+            if rss > 1024 ** 3:
+                reason = 'rss_limit'
+        except (FileNotFoundError, ProcessLookupError):
+            pass
+        if reason:
+            os.killpg(p.pid, signal.SIGKILL)
+            break
+        time.sleep(0.025)
+    exit_code = p.wait()
+report = {'command': command, 'exit_code': exit_code, 'limit_reason': reason,
+          'wall_seconds': time.monotonic() - start, 'peak_polled_rss_bytes': max_rss,
+          'outer_wall_limit_seconds': 60, 'rss_limit_bytes': 1024 ** 3}
+(out / 'supervisor.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report))
+raise SystemExit(exit_code if exit_code >= 0 else 1)

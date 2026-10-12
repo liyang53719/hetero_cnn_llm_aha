@@ -23,6 +23,7 @@ from .scalar import FATAL_FLAGS, NormRopeScalar, RawScalarResult
 
 BEAT_BYTES, HEAD_DIM, HEAD_BYTES = 64, 256, 512
 ROPE_POLICY, ROTARY_DIM = 0xB1, 64
+TORCH_DEFAULT256_POLICY = 0xC2
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE_SHA256 = {
     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala':
@@ -41,12 +42,16 @@ def require(ok, detail):
         raise ValueError('typed Norm/RoPE: ' + detail)
 
 
-def source_identity(root=ROOT):
+def source_identity(root=ROOT, *, policy=POLICY):
+    require(type(policy) is int and policy in (POLICY, TORCH_DEFAULT256_POLICY), 'source policy identity')
     for name, expected in SOURCE_SHA256.items():
         require(hashlib.sha256((Path(root) / name).read_bytes()).hexdigest() == expected,
                 'frozen recipe source drift: ' + name)
     return dict(source_sha256=dict(SOURCE_SHA256), rtl_executed=False,
-                hardware_cycles=None, native_acceptance=False)
+                hardware_cycles=None, native_acceptance=False, norm_policy=policy,
+                production_chisel_policy_implemented=policy == POLICY,
+                current_chisel_source_policy=POLICY,
+                c2_div_sqrt_flags='unobserved; existing result/error' if policy == TORCH_DEFAULT256_POLICY else None)
 
 
 def _uint(value, bits):
@@ -106,9 +111,9 @@ class QkNorm256Job:
         require(type(self.tokens) is int and 1 <= self.tokens <= 128 and
                 type(self.role) is int and self.role in (0, 1), 'M1..128 and Q0/K1 required')
         require(type(self.head_dim) is int and self.head_dim == HEAD_DIM and
-                type(self.policy) is int and self.policy == POLICY and
+                type(self.policy) is int and self.policy in (POLICY, TORCH_DEFAULT256_POLICY) and
                 type(self.epsilon) is int and self.epsilon == EPSILON and
-                type(self.dtype) is str and self.dtype == 'bf16', 'C1 BF16 H256/epsilon descriptor')
+                type(self.dtype) is str and self.dtype == 'bf16', 'C1/C2 BF16 H256/epsilon descriptor')
         require(_uint(self.gate_output, 56) and (self.role == 0 or self.gate_output == 0),
                 'K gate_output must be zero')
         _spans(((self.input, self.input_bytes), (self.weight, HEAD_BYTES)), self.output_spans)
@@ -267,6 +272,21 @@ class _Owner:
             raise _Fault('Numerical', 4)
         return rounded
 
+    def _unflagged_op(self, operation, a, b=0):
+        # Existing shared Div2/Sqrt3 expose result/error, not raw flagsValid.
+        # Do not invent flags or weaken the C1/Add0/Mul1 raw-flag checks.
+        require(operation in ('sqrt', 'div') and self.job.policy == TORCH_DEFAULT256_POLICY,
+                'unflagged Div/Sqrt only in explicit C2 policy')
+        try:
+            bits = self.scalar.op(self, operation, a, b)
+        except ArithmeticFault as error:
+            raise _Fault('Numerical', 4) from error
+        if not _uint(bits, 32):
+            raise _Fault('Protocol')
+        if not finite(bits):
+            raise _Fault('Numerical', 4)
+        return bits
+
     def _read(self, base, count, *, finite_beats=0):
         raw = bytearray()
         for beat in range(count):
@@ -381,6 +401,7 @@ class _Owner:
 
     def report(self):
         return dict(scope=self.scope, status=self.status, accepted=dict(self.counts),
+                    policy=None if self.job is None else self.job.policy,
                     acknowledged_write_bytes=self.ack_bytes, exception_flags=self.exception_flags,
                     norm_status=self.norm_status, last_mean_eps=self.last_mean_eps, last_inverse=self.last_inverse,
                     scalar_calls=dict(self.scalar_counts if self.state in ('finish', 'idle', 'locked')
@@ -394,7 +415,7 @@ class _Owner:
 
 class QkNorm256Owner(_Owner):
     job_type = QkNorm256Job
-    scope = 'PACKED_BF16_C1_QK_NORM256_SOFTWARE_OWNER'
+    scope = 'PACKED_BF16_EXPLICIT_POLICY_QK_NORM256_SOFTWARE_OWNER'
 
     def _compute(self, j):
         raw_weight = yield from self._read(j.weight, 8)
@@ -405,19 +426,38 @@ class QkNorm256Owner(_Owner):
                 raw = yield from self._read(j.input + row * (1024 if j.role == 0 else 512),
                                             16 if j.role == 0 else 8)
                 x = tuple(v << 16 for v in struct.unpack('<256H', raw[:HEAD_BYTES]))
-                admission = admit(x, weights, policy=j.policy, role=j.role,
+                # Descriptor policy was checked at admission. Both policies
+                # deliberately retain the frozen C1 finite operand domain.
+                admission = admit(x, weights, policy=POLICY, role=j.role,
                                   head_dim=j.head_dim, epsilon=j.epsilon)
                 if admission:
                     raise _Fault('Numerical', admission)
-                squares = [] if self.observer is not None else None
+                squares = [0] * 256 if self.observer is not None else None
                 total = 0
-                for chunk in range(16):
-                    level = [self._op('mul', v, v) for v in x[chunk * 16:(chunk + 1) * 16]]
-                    if squares is not None:
-                        squares.extend(level)
-                    while len(level) > 1:
-                        level = [self._op('add', level[i], level[i + 1]) for i in range(0, len(level), 2)]
-                    total = self._op('add', total, level[0])
+                if j.policy == TORCH_DEFAULT256_POLICY:
+                    # Torch 2.10 CPU DEFAULT V8/ILP4, H256. The serial owner
+                    # reads the existing head buffer in this order; the host
+                    # observer alone retains the full square tensor.
+                    for lane in range(8):
+                        lane_sum = None
+                        for residue in range(4):
+                            partial = 0
+                            for term in range(8):
+                                index = 32 * term + 8 * residue + lane
+                                square = self._op('mul', x[index], x[index])
+                                if squares is not None:
+                                    squares[index] = square
+                                partial = self._op('add', partial, square)
+                            lane_sum = partial if lane_sum is None else self._op('add', lane_sum, partial)
+                        total = self._op('add', total, lane_sum)
+                else:
+                    for chunk in range(16):
+                        level = [self._op('mul', v, v) for v in x[chunk * 16:(chunk + 1) * 16]]
+                        if squares is not None:
+                            squares[chunk * 16:(chunk + 1) * 16] = level
+                        while len(level) > 1:
+                            level = [self._op('add', level[i], level[i + 1]) for i in range(0, len(level), 2)]
+                        total = self._op('add', total, level[0])
                 if squares is not None:
                     self._observe('squares', token, head, squares)
                 self._observe('sum', token, head, (total,))
@@ -429,19 +469,23 @@ class QkNorm256Owner(_Owner):
                 exponent = (mean_eps >> 23) & 255
                 if mean_eps >> 31 or not 2 <= exponent <= 253:
                     raise _Fault('Numerical', 4)
-                e = exponent - 127
-                odd = e & 1
-                normalized = ((128 if odd else 127) << 23) | (mean_eps & 0x7FFFFF)
-                scale = ((127 - ((e - odd) // 2)) & 255) << 23
-                coefficient = RSQRT_COEFFICIENTS[(odd << 4) | ((mean_eps >> 19) & 15)]
-                slope = self._op('mul', coefficient >> 32, normalized)
-                seed = self._op('add', slope, coefficient & 0xFFFFFFFF)
-                square = self._op('mul', seed, seed)
-                product = self._op('mul', normalized, square)
-                half = self._op('mul', 0x3F000000, product)
-                term = self._op('add', 0x3FC00000, half ^ 0x80000000)
-                refined = self._op('mul', seed, term)
-                inverse = self._op('mul', refined, scale)
+                if j.policy == TORCH_DEFAULT256_POLICY:
+                    root = self._unflagged_op('sqrt', mean_eps)
+                    inverse = self._unflagged_op('div', 0x3F800000, root)
+                else:
+                    e = exponent - 127
+                    odd = e & 1
+                    normalized = ((128 if odd else 127) << 23) | (mean_eps & 0x7FFFFF)
+                    scale = ((127 - ((e - odd) // 2)) & 255) << 23
+                    coefficient = RSQRT_COEFFICIENTS[(odd << 4) | ((mean_eps >> 19) & 15)]
+                    slope = self._op('mul', coefficient >> 32, normalized)
+                    seed = self._op('add', slope, coefficient & 0xFFFFFFFF)
+                    square = self._op('mul', seed, seed)
+                    product = self._op('mul', normalized, square)
+                    half = self._op('mul', 0x3F000000, product)
+                    term = self._op('add', 0x3FC00000, half ^ 0x80000000)
+                    refined = self._op('mul', seed, term)
+                    inverse = self._op('mul', refined, scale)
                 self.last_inverse = inverse
                 if inverse >> 31 or not 1 <= ((inverse >> 23) & 255) <= 254:
                     raise _Fault('Numerical', 4)

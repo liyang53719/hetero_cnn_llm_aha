@@ -1,0 +1,45 @@
+/* HOST MODEL ONLY. Increasing d=0..255 FP32 fmaf, then one BF16 RNE. */
+#pragma STDC FENV_ACCESS ON
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+#include <math.h>
+#include <fenv.h>
+#include <xmmintrin.h>
+static float fp(uint32_t u) { float x; memcpy(&x,&u,4); return x; }
+static uint32_t bits(float x) { uint32_t u; memcpy(&u,&x,4); return u; }
+static uint16_t bf16(float x) { uint32_t u=bits(x); return (uint16_t)((u+0x7fff+((u>>16)&1))>>16); }
+unsigned mxcsr(void) { return _mm_getcsr(); }
+int rounding(void) { return fegetround(); }
+int nearest(void) { return FE_TONEAREST; }
+int flags(void) { return fetestexcept(FE_ALL_EXCEPT); }
+int fatal_flags(void) { return FE_INVALID|FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW; }
+int inexact_flag(void) { return FE_INEXACT; }
+int clear_flags(void) { return feclearexcept(FE_ALL_EXCEPT); }
+void environment_probes(uint32_t *out) {
+  fenv_t original; fegetenv(&original);
+  volatile float half=.5f, one=1.f, zero=0.f;
+  out[0]=bits(fmaf(fp(0x00800000),half,zero));
+  out[1]=bits(fmaf(fp(1),one,zero));
+  out[2]=bits(fmaf(fp(0x80000000),one,fp(0x80000000)));
+  out[3]=bits(fmaf(fp(0x3f800001),fp(0x3f7ffffe),-one));
+  out[4]=bf16(fp(0x3f808000)); out[5]=bf16(fp(0x3f818000));
+  fesetenv(&original);
+}
+void qk(const uint16_t *q,const uint16_t *k,uint16_t *out,uint32_t *raw,
+        unsigned queries,unsigned keys) {
+  for(unsigned h=0;h<8;h++) for(unsigned r=0;r<queries;r++) for(unsigned c=0;c<keys;c++) {
+    float sum=0.0f;
+    for(unsigned d=0;d<256;d++) {
+      const float a=fp((uint32_t)q[(h*queries+r)*256+d]<<16);
+      const float b=fp((uint32_t)k[((h/4)*keys+c)*256+d]<<16);
+      sum=fmaf(a,b,sum);
+    }
+    size_t index=(h*queries+r)*keys+c;
+    raw[index]=bits(sum); out[index]=bf16(sum);
+  }
+}
+void trace(const uint16_t *q,const uint16_t *k,uint32_t *out) {
+  float sum=0.0f;
+  for(unsigned d=0;d<256;d++) { sum=fmaf(fp((uint32_t)q[d]<<16),fp((uint32_t)k[d]<<16),sum); out[d]=bits(sum); }
+}

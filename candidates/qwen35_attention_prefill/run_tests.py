@@ -24,7 +24,7 @@ def main():
     dependencies={'candidates/qwen35_gdn_prefill/test_rms_owner.py',
         'candidates/qwen35_gdn_prefill/prep/scalar.py', 'candidates/qwen35_gdn_prefill/conv/scalar.py'}
     paths=sorted(set(SOURCE_FILES) | set(NORM_ROPE_SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
-        if p.is_file() and p.suffix in ('.py','.json','.cpp')})
+        if p.is_file() and p.suffix in ('.py','.json','.cpp','.scala')})
     def hashes():return {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
     sources=hashes()
     tests=sorted(DIRECTORY.rglob('test_*.py'))

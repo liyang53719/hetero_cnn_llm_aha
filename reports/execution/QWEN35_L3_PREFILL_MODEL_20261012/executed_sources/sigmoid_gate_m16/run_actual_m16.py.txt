@@ -1,0 +1,99 @@
+"""Bounded gate-only replay of sealed actual prefix/GQA output bytes.
+
+No native intermediate is an execution input. This is not a live full block:
+prior actual bytes are explicitly replayed through producer write/ACKs.
+"""
+from pathlib import Path
+import hashlib,json,struct,time,traceback,sys
+import numpy as np
+from candidates.qwen35_gdn_prefill.elementwise import model as e
+from candidates.qwen35_attention_prefill.norm_rope.scalar import NormRopeScalar
+from candidates.qwen35_attention_prefill.norm_rope.compare import _metrics
+from candidates.qwen35_attention_prefill.norm_rope.fixture import load_contract
+from candidates.qwen35_attention_prefill.input_fixture import read_tensor
+from candidates.qwen2_resident_matrix.transposed_down.model import WriteCommand,WriteAck
+
+ROOT=Path.cwd()
+PREFIX=ROOT/'work/l3_default256_policy_20261012/actual_m16'
+GQA=ROOT/'work/l3_gqa_matrix_20261012/actual_m16_v2'
+CAP=ROOT/'work/qwen35_l3_capture_restored_20261012T202700Z/m16_baseline'
+OUT=ROOT/'work/attention_sigmoid_owner_20261012/actual_m16_bound'
+sha=lambda raw:hashlib.sha256(raw).hexdigest()
+def save(name,data):
+ (OUT/name).write_text(json.dumps(data,indent=2,sort_keys=True,allow_nan=False)+'\n')
+def store(name,raw):
+ (OUT/name).parent.mkdir(parents=True,exist_ok=True);(OUT/name).write_bytes(raw)
+ return dict(file=name,bytes=len(raw),sha256=sha(raw))
+def replay(memory,base,raw,tag):
+ memory.allocate_output(base,len(raw))
+ for off in range(0,len(raw),64):
+  t=tag<<32|off//64;memory.begin_write(WriteCommand(base+off,1,t));memory.write_data(struct.unpack('<32H',raw[off:off+64]),True);memory.acknowledge(WriteAck(t,False,64))
+ memory.publish(base,(tag,None,len(raw)))
+
+OUT.mkdir(exist_ok=False);start=time.monotonic()
+report=dict(status='RUNNING',scope='SIGMOID_GATE_ONLY_REPLAY_OF_SEALED_ACTUAL_PREFIX_AND_GQA',
+ full_block_executed=False,prefix_reexecuted=False,gqa_reexecuted=False,rtl_executed=False,
+ hardware_cycles=None,producer_replay=True,native_intermediates_used_as_inputs=False,cases=[],budget_seconds=180)
+save('summary.json',report)
+try:
+ a=(PREFIX/'summary.json').read_bytes();b=(GQA/'summary.json').read_bytes()
+ assert sha(a)=='10ccdaf645a14a0b91143ceaed5ebc1f6c58efad4ecd60fe849504356248204f'
+ assert sha(b)=='82f08363bbbd44da9f2d9a389b148a2eea16c99a12854867460e8d93c5a198b4'
+ prefix,gqa=json.loads(a),json.loads(b);assert prefix['status'].startswith('PASS_') and gqa['status']=='PASS_GQA_SUBCHAIN_ONLY'
+ manifest_raw=(CAP/'manifest.json').read_bytes();manifest=json.loads(manifest_raw)
+ assert sha(manifest_raw)==gqa['capture_manifest_sha256'] and manifest_raw==(PREFIX/'capture_manifest.json').read_bytes()
+ for history,root,key in ((prefix,PREFIX,'source_sha256'),(gqa,GQA,'sources')):
+  for p,h in history[key].items():assert sha((root/'source_snapshot'/p).read_bytes())==h
+ report.update(prefix_summary_sha256=sha(a),gqa_summary_sha256=sha(b),capture_manifest_sha256=sha(manifest_raw))
+ identity=e.source_identity(); paths=set(identity['implementation_sha256'])
+ paths.update(('candidates/qwen35_attention_prefill/norm_rope/scalar.py',
+  'candidates/qwen35_attention_prefill/norm_rope/compare.py','candidates/qwen35_attention_prefill/norm_rope/fixture.py',
+  'candidates/qwen35_attention_prefill/input_fixture.py','config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json',str(Path(__file__).relative_to(ROOT))))
+ 
+ for module in tuple(sys.modules.values()):
+  filename=getattr(module,'__file__',None)
+  if filename:
+   path=Path(filename).resolve()
+   if path.is_relative_to(ROOT) and path.suffix=='.py':paths.add(str(path.relative_to(ROOT)))
+ for path in identity['source_sha256']:
+  paths.add(path.removeprefix('HEAD:'))
+ sources={p:(ROOT/p).read_bytes() for p in paths};report['sources']={p:sha(raw) for p,raw in sources.items()}
+ for p,raw in sources.items():store('source_snapshot/'+p,raw)
+ store('capture_manifest.json',manifest_raw);report['owner_identity']=identity
+ memory=e.TypedMemory();scalar=NormRopeScalar();seen={};observed=[]
+ def observe(index,fp32,bf16):
+  assert index==len(observed);observed.append((fp32,bf16))
+ owner=e.ElementwiseOwner(scalar,enable_attention_sigmoid_mul=True,sigmoid_observer=observe)
+ initial=(id(memory),id(scalar),id(owner))
+ for index,case in enumerate(manifest['cases']):
+  name=case['name'];gate_rec=prefix['actual_outputs'][name+'.raw_gate'];gate=(PREFIX/gate_rec['file']).read_bytes()
+  qcase=next(c for c in gqa['cases'] if c['case']==name);ctx_rec=qcase['output'];context=(GQA/ctx_rec['file']).read_bytes()
+  for raw,rec in ((gate,gate_rec),(context,ctx_rec)):assert len(raw)==rec['bytes'] and sha(raw)==rec['sha256']
+  assert len(gate)==len(context)==16*2048*2 and gate_rec['published'] and qcase['driver']['output_published']==[True]
+  base=0x100000+index*0x1000000;replay(memory,base,gate,10+index*2);replay(memory,base+0x200000,context,11+index*2)
+  memory.allocate_output(base+0x400000,len(gate));observed.clear()
+  job=e.ElementwiseJob(30+index,base,base+0x200000,base+0x400000,16,e.ElementwiseOp.SigmoidMul,2048)
+  driver=e.TypedElementwiseDriver(owner,memory,job);t0=time.monotonic()
+  while driver.response is None:
+   assert time.monotonic()-start<180,'bounded software gate budget';driver.tick()
+  item=dict(case=name,seconds=time.monotonic()-t0,driver=driver.report(),input_sha256=dict(gate=sha(gate),context=sha(context)),stages={})
+  report['cases'].append(item);save('summary.json',report)
+  assert driver.response.status is None and driver.output.published and len(observed)==16*2048
+  assert initial==(id(memory),id(scalar),id(owner))
+  output=driver.output.raw();item['output']=store(name+'.gated_context.actual.bf16le',output)
+  obs=struct.pack('<'+'H'*len(observed),*(v[1] for v in observed));item['sigmoid_observation']=store(name+'.sigmoid.actual.bf16le',obs)
+  item['sigmoid_fp32_observation']=store(name+'.sigmoid.actual.f32le',struct.pack('<'+'I'*len(observed),*(v[0] for v in observed)))
+  event=next(v for v in case['dispatch_events'] if v['module']=='self_attn' and v['op']=='aten.sigmoid.default')
+  mul=next(v for v in case['dispatch_events'] if v['index']==event['index']+1);assert mul['op']=='aten.mul.Tensor'
+  for stage,actual,node in (('sigmoid_bf16',obs,event),('gated_context_bf16',output,mul)):
+   key=node['result']['tensor'];rec=manifest['tensors'][key];assert rec['dtype']=='BF16'
+   native=read_tensor(CAP,manifest,key);a=np.frombuffer(actual,'<u2').astype('<u4')<<16;b=np.frombuffer(native,'<u2').astype('<u4')<<16
+   item['stages'][stage]=_metrics(a,b,'BF16',load_contract()['thresholds']['operator']);item['stages'][stage]['native_tensor']=key
+  save('summary.json',report);print(json.dumps(dict(case=name,seconds=item['seconds'],stages=item['stages'])),flush=True)
+ assert all((ROOT/p).read_bytes()==raw for p,raw in sources.items());report['sources_unchanged']=True
+ report['status']='PASS_ACTUAL_SIGMOID_GATE_SUBCHAIN_ONLY' if all(s['pass'] for c in report['cases'] for s in c['stages'].values()) else 'FAIL_ORIGINAL_NATIVE_STAGE_LIMITS'
+except BaseException as ex:
+ report.update(status='FAILED',error=str(ex),traceback=traceback.format_exc());print(traceback.format_exc(),flush=True)
+finally:
+ report['seconds']=time.monotonic()-start;save('summary.json',report)
+sys.exit(0 if report['status']=='PASS_ACTUAL_SIGMOID_GATE_SUBCHAIN_ONLY' else 1)

@@ -27,18 +27,11 @@ def _field_values(value):
 
 
 def _same_coverage(actual, expected):
-    if type(actual) in (set, frozenset):
-        return (len(actual) == len(expected) and
-                all(type(offset) is int for offset in actual) and actual == expected)
-    offsets = []
-    try:
-        for index, offset in enumerate(actual):
-            if index >= len(expected) or type(offset) is not int:
-                return False
-            offsets.append(offset)
-    except (TypeError, ValueError):
-        return False
-    return frozenset(offsets) == expected
+    # Real TypedMemory producers use exact sets; another GQA invocation may
+    # already have sealed them. Reject custom equality/iteration and bool/int
+    # aliases before converting the actual metadata to an immutable object.
+    return (type(actual) in (set, frozenset) and len(actual) == len(expected) and
+            all(type(offset) is int for offset in actual) and actual == expected)
 
 
 class TypedBf16CausalGqaDriver:
@@ -99,9 +92,12 @@ class TypedBf16CausalGqaDriver:
         self._source_storage = tuple(bytes(memoryview(r.storage)) for r in inputs)
         self._source_coverage = tuple((frozenset(r.written), frozenset(r.acknowledged))
                                       for r in inputs)
+        for r, coverage in zip(inputs, self._source_coverage):
+            r.written, r.acknowledged = coverage
         self._source_hashes = tuple(hashlib.sha256(memoryview(raw)[64:-64]).hexdigest()
                                     for raw in self._source_storage)
         self._written_offsets, self._acknowledged_offsets = set(), set()
+        self._seal_output_coverage()
         self._output_hash = hashlib.sha256()
         self.identity = source_identity()
         self._identity, self._identity_object = deepcopy(self.identity), self.identity
@@ -127,6 +123,24 @@ class TypedBf16CausalGqaDriver:
     def _request_fields(request):
         return (_field_values(request), type(request.nbytes), request.nbytes,
                 type(request.mask), request.mask, type(request.write), request.write)
+
+    def _seal_output_coverage(self):
+        # Validate metadata produced by the actual memory operation, then
+        # freeze those values, never the driver's expected offset ledger.
+        require(_same_coverage(self.output.written, self._written_offsets) and
+                _same_coverage(self.output.acknowledged, self._acknowledged_offsets),
+                'altered actual output write/ACK coverage')
+        self._output_coverage = (frozenset(self.output.written),
+                                 frozenset(self.output.acknowledged))
+        self.output.written, self.output.acknowledged = self._output_coverage
+
+    def _thaw_output_coverage(self, field):
+        require(self.output.written is self._output_coverage[0] and
+                self.output.acknowledged is self._output_coverage[1],
+                'altered output write/ACK coverage seal')
+        # Only the field mutated by the immediately following TypedMemory
+        # operation is writable. Every tick boundary retains exact frozensets.
+        setattr(self.output, field, set(getattr(self.output, field)))
 
     def _check_bindings(self, *, cancelling=False):
         require(self.owner is self._owner and self.matrix is self._matrix and
@@ -162,14 +176,13 @@ class TypedBf16CausalGqaDriver:
                 r.check()
         for r, frozen, coverage in zip(self._inputs, self._source_storage, self._source_coverage):
             self._integrity(r.published is True and bytearray.__eq__(r.storage, frozen) and
-                            _same_coverage(r.written, coverage[0]) and
-                            _same_coverage(r.acknowledged, coverage[1]),
+                            r.written is coverage[0] and r.acknowledged is coverage[1],
                             'published source bytes or producer coverage changed', cancelling=cancelling)
         require(not self._integrity_errors or cancelling,
                 'latched integrity failure requires abort before further execution')
         require(self.output.published is False and
-                _same_coverage(self.output.written, self._written_offsets) and
-                _same_coverage(self.output.acknowledged, self._acknowledged_offsets) and
+                self.output.written is self._output_coverage[0] and
+                self.output.acknowledged is self._output_coverage[1] and
                 self.counts['write_bytes'] == len(self._written_offsets) * BEAT_BYTES and
                 self.counts['ack_bytes'] == len(self._acknowledged_offsets) * BEAT_BYTES,
                 'premature output publication or altered write/ACK coverage')
@@ -346,10 +359,12 @@ class TypedBf16CausalGqaDriver:
         if event['memory_response_fire']:
             require(pending is not None and accepted is not None, 'response without physical request')
             if accepted.write:
+                self._thaw_output_coverage('acknowledged')
                 self.memory.acknowledge(WriteAck(pending.tag, pending.error, pending.nbytes))
                 if not pending.error:
                     self._acknowledged_offsets.add(accepted.address - self.output.base)
                     self.counts['ack_bytes'] += BEAT_BYTES
+                self._seal_output_coverage()
             self.pending = self._pending_response = None
             self._accepted = self._physical_pending = None
             self._accepted_fields = self._response_fields = None
@@ -360,11 +375,13 @@ class TypedBf16CausalGqaDriver:
             self._check_request(request)
             if request.write:
                 self.memory.begin_write(WriteCommand(request.address, 1, request.tag))
+                self._thaw_output_coverage('written')
                 self.memory.write_data(struct.unpack('<32H', request.data), True, mask=request.mask)
                 self.pending = MemoryResponse(request.tag)
                 self._written_offsets.add(request.address - self.output.base)
                 self._output_hash.update(request.data)
                 self.counts['write_bytes'] += BEAT_BYTES
+                self._seal_output_coverage()
             else:
                 self.pending = MemoryResponse(request.tag, self.memory.read64(request.address))
                 self.counts['read_bytes'] += BEAT_BYTES
@@ -380,6 +397,13 @@ class TypedBf16CausalGqaDriver:
                     'accepted GQA terminal retained shared arithmetic resources')
             if result.status is None:
                 self.memory.publish(self.output.base, (result.tag, result.status, result.write_bytes))
+            # The accepted terminal ends this invocation's seal ownership.
+            # Return actual coverage to the shared memory's ordinary mutable
+            # representation without clearing any writes/ACKs or repairing
+            # bytes. A wholly unwritten failed output can then be reused by
+            # another producer; partial output still fails the fresh fence.
+            self.output.written, self.output.acknowledged = (
+                set(self.output.written), set(self.output.acknowledged))
             self.response = result
             self._owner_terminal_report = deepcopy(self.owner.report())
             self._held_terminal = self._held_terminal_fields = None

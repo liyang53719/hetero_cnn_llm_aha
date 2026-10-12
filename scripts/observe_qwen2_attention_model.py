@@ -23,15 +23,29 @@ import types
 
 ROOT = Path(__file__).resolve().parents[1]
 OWNER = 'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py'
+SOURCE_VERSION = 'qwen2-existing-attention-observation-v2'
+SOURCE_COMMIT = '97446dabb936675932e1928ee31c4040d1d35315'
 PINS = {
     OWNER: '8f954329ef7a4ae472b8247e6e34456affee2e946f1fcfb439b19d89d2b786ec',
     'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py': '3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369',
-    'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py': 'f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345',
+    'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py': '286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4',
     'candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py': 'a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d',
 }
 SENTINEL = 0xa5963cc3
 RECEIPT = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_receipt.json'
 RECEIPT_SHA = '3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e'
+RECEIPT_COMMIT = '37b7de74431ed79b7e9f3d52d308ed7f46727b7a'
+# V2 admits only the opt-in rectangular Matrix service and ordered host FMA
+# extension. The other 73 source identities remain exact. This is a new runtime
+# inventory, never a rebind or inheritance of the frozen fullgraph/v1 results.
+EXECUTION_SOURCE_REPLACEMENTS = {
+    'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py': (
+        'f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345',
+        '286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4'),
+    'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp': (
+        'f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd',
+        '7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14'),
+}
 
 
 def execute_public_attention_observed(execution, physical, job, *,
@@ -81,14 +95,25 @@ def verify_sources(root=ROOT):
     return dict(PINS)
 
 
-def verify_execution_sources():
-    raw = (ROOT / RECEIPT).read_bytes()
+def verify_execution_sources(root=ROOT):
+    root = Path(root).resolve()
+    raw = (root / RECEIPT).read_bytes()
     require(sha(raw) == RECEIPT_SHA, 'frozen execution-source inventory changed')
     sources = json.loads(raw)['source_sha256']
     require(len(sources) == 75, 'frozen execution-source inventory is incomplete')
+    require(set(EXECUTION_SOURCE_REPLACEMENTS) == {
+        'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
+        'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp',
+    }, 'v2 execution-source replacement closure changed')
+    for relative, (previous, current) in EXECUTION_SOURCE_REPLACEMENTS.items():
+        require(sources.get(relative) == previous and previous != current,
+                'v2 execution-source replacement origin changed: ' + relative)
+        require(relative not in PINS or PINS[relative] == current,
+                'v2 observation/execution source identity mismatch: ' + relative)
+        sources[relative] = current
     for relative, expected in sources.items():
-        require(sha((ROOT / relative).read_bytes()) == expected,
-                'frozen execution source drift: ' + relative)
+        require(sha((root / relative).read_bytes()) == expected,
+                'v2 execution source drift: ' + relative)
     return sources
 
 
@@ -437,8 +462,12 @@ class AttentionObservation:
                 and self._coverage()
                 and all(sum(self.fields[n]['observed']) == count and self.fields[n]['writes'] == writes[n]
                         for n, count in counts.items()))
-        return dict(schema='qwen2-existing-attention-observation-v1',
+        return dict(schema='qwen2-existing-attention-observation-v2',
             status='COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED' if complete else 'INCOMPLETE',
+            source_version=SOURCE_VERSION, execution_source_commit=SOURCE_COMMIT,
+            prior_observation_results_inherited=False,
+            historical_fullgraph=dict(commit=RECEIPT_COMMIT, path=RECEIPT,
+                sha256=RECEIPT_SHA, results_inherited=False),
             source_sha256=self.sources, execution_source_sha256=self.execution_sources,
             instrumentation_sha256=self.instrumentation_sha256, python=sys.version,
             loaded_python_functions_checked=self.loaded_functions_checked,

@@ -121,6 +121,10 @@ class PublicObservationTests(unittest.TestCase):
         if capture:
             r = capture.report()
             self.assertEqual(r['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
+            self.assertEqual(r['source_version'], 'qwen2-existing-attention-observation-v2')
+            self.assertFalse(r['historical_fullgraph']['results_inherited'] or
+                             r['prior_observation_results_inherited'])
+            self.assertEqual(r['execution_source_sha256'], observation.verify_execution_sources())
             self.assertFalse(r['whole_block_terminal_observed'] or r['full_29_node_gate'] or r['hardware_simulation'])
             self.assertEqual(capture._bytes('pv'), expected)
             self.assertEqual(tuple(capture.fields['prob']['words']), (0x3f800000,) * 12)
@@ -139,6 +143,9 @@ class PublicObservationTests(unittest.TestCase):
             capture.save(destination / 'owner')
             receipt = Path(os.environ['MATRIX_SERVICE_COMPILE_RECEIPT'])
             evidence = dict(schema=1, status='PASS_SYNTHETIC_PUBLIC3_OBSERVATION',
+                source_version=observation.SOURCE_VERSION,
+                execution_source_commit=observation.SOURCE_COMMIT,
+                historical_results_inherited=False,
                 stimulus='existing M1 public QK/Softmax/PV fixture, synthetic readonly Q/K/V',
                 source_sha256={str(p.relative_to(ROOT)): build.sha(p) for p in
                     (Path(__file__), ROOT/'scripts/observe_qwen2_attention_model.py',

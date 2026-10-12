@@ -374,7 +374,7 @@ class GqaModelTests(unittest.TestCase):
                 if mutation == 'guard':
                     driver.inputs[0].storage[0] ^= 1
                 else:
-                    driver.inputs[0].acknowledged.remove(0)
+                    driver.inputs[0].acknowledged = driver.inputs[0].acknowledged - {0}
                 with self.assertRaises(ValueError):
                     driver.tick(memory_response_ready=False)
                 driver.tick(abort=True, memory_response_ready=False)

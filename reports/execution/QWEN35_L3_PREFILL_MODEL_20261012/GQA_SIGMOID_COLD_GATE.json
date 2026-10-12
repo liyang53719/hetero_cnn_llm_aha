@@ -1,0 +1,115 @@
+{
+  "status": "PASS_COLD_AFFECTED_SOFTWARE_AND_FRONTEND_CONTROLS_ONLY",
+  "base": "97446dabb936675932e1928ee31c4040d1d35315",
+  "overlay": {
+    ".github/workflows/qwen2-matrix-interface-frontend.yml": "f17aab7c08d19c6d612e8c88bce55fec13b48d6f3737e6c9a6a52c70fc056389",
+    "candidates/qwen2_resident_matrix/ffn_public/delivery_manifest.json": "0aef27a69a21b32682ba664eb941e7c33859e1a0bddcbcefbd187c76d680e8c6",
+    "candidates/qwen2_resident_matrix/ffn_public/test_fullgraph_receipt.py": "747e7125d2c38a4ebb33b0c4731560e18c2ccb0a0aef40d9e7a21db9ee49476b",
+    "candidates/qwen35_attention_prefill/gqa/driver.py": "96a7176bde74ca6536589dd4effce20c3f1a1e352d1eb353788ed50c0517f0f6",
+    "candidates/qwen35_attention_prefill/gqa/run_small_tests.py": "c0f6757acdbe363619ba2377be7529b75a9164a8abbe06b71ee55ec2dba61b55",
+    "candidates/qwen35_attention_prefill/gqa/test_coverage_seal.py": "11ddf93582abfcb5cc59c30e9bf2b328a7d1d95e5c859903fccdfd37f3c44889",
+    "candidates/qwen35_attention_prefill/gqa/test_gqa.py": "0b65c84c6fa7e46e5bd895945a327a577c06374eac45937a7c9fb6d4c59b36d0",
+    "candidates/qwen35_gdn_prefill/elementwise/model.py": "8514a6b9108b1e2a6fa5ed63d39b28fb949c63c2438fa317442894452d0de5ba",
+    "candidates/qwen35_gdn_prefill/elementwise/test_attention_gate.py": "e65c412edb8106d415472a743ae3167d864bf0f21fb8bc6967b34bf38107cae1",
+    "doc/BLOCK_CHECKLIST.md": "a262c37a47c87ef5140ca46d07bc4b961701e1829c559649bcb2c30d696921d8",
+    "doc/QWEN35_L3_PREFILL_MODEL_20261012_CN.md": "d8c851030c8c7b149bdc7099c6cf3a9b9f404f1616491420aa840caf78fccb5f",
+    "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/CI_97446_RECONCILED.json": "1a875e45d481df3554d4897c4eee8b43229256916df5237b413f794ce1bbfe8e",
+    "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/GQA_COVERAGE_SEAL_EQUIVALENCE.json": "24b145f60ae24ec5a164db86a913cae15026d85c828fccec9b3e8958d1779f89",
+    "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/GQA_COVERAGE_SEAL_SMALL_GATE.json": "241cba421c2edd2e63bd67ce4c71721356e2f65560d61a89a81dc3be5d4e855e",
+    "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/SIGMOID_GATE_ACTUAL_M16.json": "52fe0d59e8d842615996792da899feea459db2d6b1cb50eaa7f198a6c09a8707",
+    "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/SIGMOID_GATE_SMALL_GATE.json": "cb7b5b518bc7a0f93109e6a5694c56ac2e9dab277ee2c04a815a7dffb3563937",
+    "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/executed_sources/sigmoid_gate_m16/run_actual_m16.py.txt": "de2a6d6eaa8808ecc7f9e641acd774017c5daebbd476050b48d805aa487319ac",
+    "scripts/observe_qwen2_attention_model.py": "d3113892044eea7681869b2fc20eb4dfdb8085ae4c24e75c749b8e778ff16bab",
+    "tests/test_matrix_interface_candidate.py": "d393a9464ecd0fb1659465a2c37d8c6e99bd89333b2b3b29b9b4cd47712e705d",
+    "tests/test_qwen2_attention_observation.py": "1f4d866d10d14cebae7c7377f6fb0c5cf77103189f518df9683ebca86bfc3bc8",
+    "tests/test_qwen2_public_attention_observation.py": "c285567a8418d90cb76de85dad36a6c4e025c5e7c59be4229ce4b3b918e1d1ea"
+  },
+  "model_payload_used": false,
+  "rtl_executed": false,
+  "scala_compiled": false,
+  "old_work_read": false,
+  "sources_unchanged": true,
+  "seconds": 312.99825177599996,
+  "max_child_rss_kib": 1873644,
+  "started_utc": "2026-10-12T23:30:38.078332+00:00",
+  "ended_utc": "2026-10-12T23:35:51.076647+00:00",
+  "scope": "COLD_SOURCE_FULL_AFFECTED_SOFTWARE_AND_ALL_FRONTEND_CONTROL_STEPS; CHIRRTL LEFT TO CI",
+  "test_executions": 1395,
+  "frontend_controls": 824,
+  "observer": 17,
+  "public_observer": 5,
+  "gdn": {
+    "tests": 330,
+    "suites": 23,
+    "sources": 50
+  },
+  "l3": {
+    "tests": 219,
+    "suites": 19,
+    "sources": 95
+  },
+  "steps": [
+    {
+      "label": "baseline_objects",
+      "returncode": 0,
+      "seconds": 0.06481582000014896,
+      "log_sha256": "2d4cac88377d4543c962a9a6b9348e9cec08f9df3704ea757b33eb2593ff20af"
+    },
+    {
+      "label": "dependencies",
+      "returncode": 0,
+      "seconds": 0.11575513199932175,
+      "log_sha256": "c5460c1406c728109e90b9c981e75035425603017308beb9f7d6f81a696f92b0"
+    },
+    {
+      "label": "matrix_build",
+      "returncode": 0,
+      "seconds": 0.6200227109984553,
+      "log_sha256": "f533f29d4aee5f5ca57696aa1645079ad3c3f0bf66a63e48bad3758c11481834"
+    },
+    {
+      "label": "vector_build",
+      "returncode": 0,
+      "seconds": 0.31532156899993424,
+      "log_sha256": "ba752a880de3345eedea858ef146574dc4ceb672021223dbdfc283c2aeb08925"
+    },
+    {
+      "label": "frontend_all_controls",
+      "returncode": 0,
+      "seconds": 83.63108032300079,
+      "log_sha256": "690f0c29ac169555b8b62756a242373239aa8a3d681d2d47d550a249fe8c3adb"
+    },
+    {
+      "label": "observer",
+      "returncode": 0,
+      "seconds": 5.6411715319991345,
+      "log_sha256": "2f69d1bab30a793a6e83a6a19d7a21d37254984f57dba980fe72d32f25c48d68"
+    },
+    {
+      "label": "public_observer",
+      "returncode": 0,
+      "seconds": 2.221822957999393,
+      "log_sha256": "9ab3bacaa24f2dca5c43135370d969f91999f0e5ee0d7ddd656a8f3dc824c939"
+    },
+    {
+      "label": "gdn_all_suites",
+      "returncode": 0,
+      "seconds": 92.92540633899989,
+      "log_sha256": "b7567e3c163c9cc4c797986228844abb4484560f36228a328e5b981507920f90"
+    },
+    {
+      "label": "l3_all_suites",
+      "returncode": 0,
+      "seconds": 126.67454842700135,
+      "log_sha256": "051b507ce3cd7a6357cdcb419009b1ece839bc80ee9d46e3bce9dde3f484fc59"
+    }
+  ],
+  "artifact_count": 69,
+  "artifact_bytes": 326310,
+  "artifact_manifest_sha256": "7b60aa667983f1808a6337c9060097bd741b707020a54abc0aeb40b3cf4ad7e7",
+  "prior_preflight_failures_preserved": [
+    "2324: missing historical object during controls",
+    "2328/2329: exact baseline probe missing in local clone; subsequent explicit fetch in that clone fixed availability"
+  ],
+  "original_summary_sha256": "d8ff6048681d691c3d9b4b0aea983ebfcd44ec545b6be29bc04fc1a8e12eed7d"
+}

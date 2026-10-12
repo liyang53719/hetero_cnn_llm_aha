@@ -1,11 +1,12 @@
-"""Memory-fed BF16 residual Add and BF16-SiLU-then-Mul software owner.
+"""Memory-fed BF16 residual Add, SiLU-Mul and opt-in attention sigmoid-Mul.
 
 Maps committed GdnElementwiseOwner onto one caller-owned ConvScalar/PrepScalar.
 Add/Div retain legacy fault flags; only source opcode 6 accepts tiny inexact
-multiplication. Negative SiLU gates <= -80 remain Unsupported. The official
-SiLU BF16 boundary occurs BEFORE multiplying by the BF16 up projection.
+multiplication. Negative activation gates <= -80 remain Unsupported. The
+official SiLU or sigmoid BF16 boundary occurs BEFORE the final BF16 product.
 
-Production widths are H1024 and FFN3584. Explicit reduced test widths are
+Production widths are H1024, FFN3584 and attention2048. SigmoidMul is disabled
+by default, exactly as in the committed owner. Explicit reduced test widths are
 multiples of 32: this candidate makes no claim for arbitrary partial tails.
 Three 32-element input/output beat buffers are retained, never a tensor.
 Software ticks are not hardware cycles; no Host command or RTL is introduced.
@@ -28,7 +29,8 @@ OWNER_SOURCE = 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Gd
 OWNER_SHA = '01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3'
 OFFICIAL_SOURCE = 'config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py'
 OFFICIAL_SHA = 'aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18'
-HIDDEN_WIDTH, FFN_WIDTH, BEAT_ELEMENTS, BEAT_BYTES = 1024, 3584, 32, 64
+HIDDEN_WIDTH, FFN_WIDTH, ATTENTION_WIDTH = 1024, 3584, 2048
+BEAT_ELEMENTS, BEAT_BYTES = 32, 64
 
 
 def require(ok, why):
@@ -39,14 +41,16 @@ def require(ok, why):
 class ElementwiseOp(IntEnum):
     Add = 0
     SiluMul = 1
+    SigmoidMul = 2
 
 
-def _geometry(hidden_width, ffn_width, test_geometry):
+def _geometry(hidden_width, ffn_width, test_geometry, attention_width=ATTENTION_WIDTH):
     require(type(test_geometry) is bool and all(type(n) is int and n > 0 and n % 32 == 0
-            for n in (hidden_width, ffn_width)), 'full 32-element beat geometry required')
-    require((hidden_width, ffn_width) == (HIDDEN_WIDTH, FFN_WIDTH) or
-            (test_geometry and hidden_width <= HIDDEN_WIDTH and ffn_width <= FFN_WIDTH),
-            'production H1024/FFN3584 or explicit reduced test geometry required')
+            for n in (hidden_width, ffn_width, attention_width)), 'full 32-element beat geometry required')
+    require((hidden_width, ffn_width, attention_width) == (HIDDEN_WIDTH, FFN_WIDTH, ATTENTION_WIDTH) or
+            (test_geometry and hidden_width <= HIDDEN_WIDTH and ffn_width <= FFN_WIDTH and
+             attention_width <= ATTENTION_WIDTH),
+            'production H1024/FFN3584/attention2048 or explicit reduced test geometry required')
 
 
 def source_identity(root=ROOT):
@@ -67,8 +71,12 @@ def source_identity(root=ROOT):
                 implementation_sha256={p: sha((root / p).read_bytes()) for p in models},
                 opcodes=dict(OPCODES), source_default_max_tokens=128,
                 candidate_tokens='M1..128', production_host_command=False,
-                arithmetic='BF16_Add_or_BF16_SiLU_before_BF16_product',
-                negative_silu_le_minus80='Unsupported', arbitrary_tail_supported=False,
+                arithmetic='BF16_Add_or_BF16_SiLU_or_opt_in_BF16_sigmoid_before_BF16_product',
+                source_default_attention_width=ATTENTION_WIDTH,
+                source_default_enable_attention_sigmoid_mul=False,
+                elementwise_opcodes={op.name: int(op) for op in ElementwiseOp},
+                negative_silu_le_minus80='Unsupported', negative_sigmoid_le_minus80='Unsupported',
+                arbitrary_tail_supported=False,
                 native_acceptance=False, native_numeric_diagnostics_executed=False,
                 rtl_executed=False, historical_pass_inherited=False)
 
@@ -87,11 +95,16 @@ class ElementwiseJob:
     def write_bytes(self):
         return self.tokens * self.row_width * 2
 
-    def validate(self, hidden_width=HIDDEN_WIDTH, ffn_width=FFN_WIDTH, test_geometry=False):
-        _geometry(hidden_width, ffn_width, test_geometry)
+    def validate(self, hidden_width=HIDDEN_WIDTH, ffn_width=FFN_WIDTH, test_geometry=False,
+                 *, attention_width=ATTENTION_WIDTH, enable_attention_sigmoid_mul=False):
+        _geometry(hidden_width, ffn_width, test_geometry, attention_width)
+        require(type(enable_attention_sigmoid_mul) is bool, 'explicit attention SigmoidMul enable flag')
         require(type(self.op) in (int, ElementwiseOp) and self.op in tuple(ElementwiseOp),
-                'only existing Add=0 and SiluMul=1 operations supported')
-        width = hidden_width if self.op == ElementwiseOp.Add else ffn_width
+                'only existing Add=0, SiluMul=1 and opt-in SigmoidMul=2 operations supported')
+        require(self.op != ElementwiseOp.SigmoidMul or enable_attention_sigmoid_mul,
+                'attention SigmoidMul disabled; explicit opt-in required')
+        width = {ElementwiseOp.Add: hidden_width, ElementwiseOp.SiluMul: ffn_width,
+                 ElementwiseOp.SigmoidMul: attention_width}[self.op]
         require(type(self.tokens) is int and 1 <= self.tokens <= 128 and
                 type(self.row_width) is int and self.row_width == width, 'M1..128 / exact operation width')
         require(type(self.tag) is int and 0 <= self.tag < 1 << 32, 'job tag domain')
@@ -125,13 +138,25 @@ class ElementwiseOwner:
     Abort/reset drains an accepted external request and poisons admission until
     reset. A held success can still be aborted before terminal acceptance.
     Accepted completion is not retracted; earlier faults retain their status.
+
+    Optional sigmoid_observer(index, fp32_word, bf16_word) sees the actual
+    SigmoidMul boundary, using a flattened element index and a 16-bit BF16
+    word. Its return is ignored. The owner retains no observations, and reset
+    preserves the observer and all explicit constructor parameters.
     """
     def __init__(self, scalar, *, hidden_width=HIDDEN_WIDTH, ffn_width=FFN_WIDTH,
-                 test_geometry=False):
+                 test_geometry=False, attention_width=ATTENTION_WIDTH,
+                 enable_attention_sigmoid_mul=False, sigmoid_observer=None):
         require(isinstance(scalar, ConvScalar), 'explicit caller-owned ConvScalar or PrepScalar required')
-        _geometry(hidden_width, ffn_width, test_geometry)
+        _geometry(hidden_width, ffn_width, test_geometry, attention_width)
+        require(type(enable_attention_sigmoid_mul) is bool, 'explicit attention SigmoidMul enable flag')
+        require(sigmoid_observer is None or callable(sigmoid_observer), 'callable sigmoid observer required')
         self.scalar = scalar
         self.hidden_width, self.ffn_width, self.test_geometry = hidden_width, ffn_width, test_geometry
+        self.attention_width, self.enable_attention_sigmoid_mul = attention_width, enable_attention_sigmoid_mul
+        self.sigmoid_observer = sigmoid_observer
+        self._parameter_binding = self._parameters()
+        self._observer_binding = sigmoid_observer
         self.state, self.job, self.request, self.result = 'idle', None, None, None
         self.program, self.poison, self.status = None, False, None
         self.ticks, self.start, self.sequence, self.ack_bytes = 0, 0, 0, 0
@@ -139,7 +164,24 @@ class ElementwiseOwner:
         self.exp_baseline, self.exp_counts = Counter(), Counter()
         self.identity, self.numerical_detail = None, None
 
+    def _parameters(self):
+        return (self.hidden_width, self.ffn_width, self.test_geometry,
+                self.attention_width, self.enable_attention_sigmoid_mul)
+
+    def _check_parameters(self):
+        actual = self._parameters()
+        require(len(actual) == len(self._parameter_binding) and
+                all(type(a) is type(b) and a == b for a, b in zip(actual, self._parameter_binding)) and
+                self.sigmoid_observer is self._observer_binding, 'owner parameters changed after construction')
+
+    def _validate_job(self, job):
+        self._check_parameters()
+        job.validate(self.hidden_width, self.ffn_width, self.test_geometry,
+                     attention_width=self.attention_width,
+                     enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul)
+
     def ports(self):
+        self._check_parameters()
         return dict(job_ready=self.state == 'idle' and not self.poison and self.scalar.client is None,
                     memory=self.request if self.state == 'issue' else None,
                     memory_response_ready=self.state in ('wait', 'drain'),
@@ -147,10 +189,13 @@ class ElementwiseOwner:
                     reset_required=self.poison, state=self.state)
 
     def reset(self):
+        self._check_parameters()
         require(self.state in ('idle', 'locked') and self.request is None and self.scalar.client is not self,
                 'reset requires drained transport and retired held completion')
         self.__init__(self.scalar, hidden_width=self.hidden_width, ffn_width=self.ffn_width,
-                      test_geometry=self.test_geometry)
+                      test_geometry=self.test_geometry, attention_width=self.attention_width,
+                      enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul,
+                      sigmoid_observer=self.sigmoid_observer)
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
@@ -175,12 +220,21 @@ class ElementwiseOwner:
                     result = self._op('add', x, y)
                 else:
                     if x >> 31 and x & 0x7fffffff >= word(80):
-                        raise UnsupportedGate('source SiLU gate requires finite x > -80')
+                        activation = 'SiLU' if j.op == ElementwiseOp.SiluMul else 'sigmoid'
+                        raise UnsupportedGate('source ' + activation + ' gate requires finite x > -80')
                     exponential = self._op('exp_negative', x)
                     denominator = self._op('add', word(1), exponential)
                     inverse = self._op('div', word(1), denominator)
                     sigmoid = self._op('mul_ieee_rne', inverse, exponential if x >> 31 else word(1))
-                    activated = self._bf16(self._op('mul_ieee_rne', sigmoid, x))
+                    if j.op == ElementwiseOp.SigmoidMul:
+                        activated = self._bf16(sigmoid)
+                        # Observe actual scalar output and the consumed BF16
+                        # boundary. Return values never enter computation; no
+                        # observations or additional tensor buffers are retained.
+                        if self.sigmoid_observer is not None:
+                            self.sigmoid_observer(offset // 2 + lane, sigmoid, activated >> 16)
+                    else:
+                        activated = self._bf16(self._op('mul_ieee_rne', sigmoid, x))
                     result = self._op('mul_ieee_rne', activated, y)
                 output[lane] = self._bf16(result) >> 16
             yield (j.output + offset, struct.pack('<32H', *output))
@@ -231,7 +285,7 @@ class ElementwiseOwner:
                 self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
             require(type(job) is ElementwiseJob, 'typed immutable ElementwiseJob required')
-            job.validate(self.hidden_width, self.ffn_width, self.test_geometry)
+            self._validate_job(job)
             identity = source_identity()
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
@@ -273,6 +327,7 @@ class ElementwiseOwner:
         return p
 
     def report(self):
+        self._check_parameters()
         active = self.state not in ('finish', 'idle', 'locked')
         return dict(scope='GDN_ELEMENTWISE_SOFTWARE_OWNER', identity=self.identity,
                     status=self.status, numerical_detail=self.numerical_detail,
@@ -281,7 +336,11 @@ class ElementwiseOwner:
                     exp_internal_calls=dict(self.scalar.internal_calls - self.exp_baseline if active else self.exp_counts),
                     operation=None if self.job is None else ElementwiseOp(self.job.op).name,
                     hidden_width=self.hidden_width, ffn_width=self.ffn_width,
-                    production_geometry=(self.hidden_width, self.ffn_width) == (HIDDEN_WIDTH, FFN_WIDTH),
+                    attention_width=self.attention_width,
+                    enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul,
+                    parameter_binding=self._parameter_binding,
+                    production_geometry=(self.hidden_width, self.ffn_width, self.attention_width) ==
+                        (HIDDEN_WIDTH, FFN_WIDTH, ATTENTION_WIDTH),
                     test_geometry=self.test_geometry, arbitrary_tail_supported=False,
                     retained_a_elements=32, retained_b_elements=32, retained_output_elements=32,
                     tensor_buffered=False, output_mask=FULL_MASK,
@@ -300,7 +359,7 @@ class TypedElementwiseDriver:
     def __init__(self, owner, memory, job):
         require(type(owner) is ElementwiseOwner and type(memory) is TypedMemory and
                 type(job) is ElementwiseJob, 'elementwise owner, shared TypedMemory and immutable job required')
-        job.validate(owner.hidden_width, owner.ffn_width, owner.test_geometry)
+        owner._validate_job(job)
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained resources required')
         self.a = memory.exact(job.a, job.write_bytes, readable=True)
         self.b = memory.exact(job.b, job.write_bytes, readable=True)
@@ -315,6 +374,7 @@ class TypedElementwiseDriver:
         self.sources = (self.a, self.b)
         self.scalar_resource = owner.scalar
         self.resource_identity = (id(owner), id(memory), id(owner.scalar))
+        self.parameter_binding = owner._parameter_binding
         self.source_hashes = tuple(sha(r.raw()) for r in self.sources)
         self.pending, self.response, self.aborted = None, None, False
         self.pending_request, self.pending_write = None, None
@@ -327,6 +387,9 @@ class TypedElementwiseDriver:
         require(self.response is None, 'elementwise invocation already retired')
         require(self.resource_identity == (id(self.owner), id(self.memory), id(self.owner.scalar)) and
                 self.owner.scalar is self.scalar_resource, 'owner/memory/shared scalar resource replaced')
+        self.owner._check_parameters()
+        require(self.parameter_binding == self.owner._parameter_binding,
+                'owner parameter binding replaced during invocation')
         pending = self.pending if memory_response_ready else None
         if pending is not None:
             # Keep accepted request identity after the owner consumes the wire

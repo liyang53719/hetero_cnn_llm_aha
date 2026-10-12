@@ -97,6 +97,12 @@ class ObservationTests(unittest.TestCase):
         self.assertEqual(h.bus.raw(job.dst), struct.pack('<3072I', *a.reference_attention(2,*inputs)))
         report = capture.report()
         self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
+        self.assertEqual(report['schema'], 'qwen2-existing-attention-observation-v2')
+        self.assertEqual(report['source_version'], o.SOURCE_VERSION)
+        self.assertEqual(report['execution_source_commit'], o.SOURCE_COMMIT)
+        self.assertFalse(report['prior_observation_results_inherited'])
+        self.assertEqual(report['historical_fullgraph'], dict(commit=o.RECEIPT_COMMIT,
+            path=o.RECEIPT, sha256=o.RECEIPT_SHA, results_inherited=False))
         self.assertFalse(report['future_scores_observed'] or report['full_29_node_gate'] or
                          report['hardware_simulation'] or report['whole_block_terminal_observed'])
         self.assertEqual(report['fields']['prob']['identical_repeats'], 7*36)
@@ -302,6 +308,66 @@ class ObservationTests(unittest.TestCase):
         finally:
             sys.settrace(None)
         self.assertEqual(h.owner.state,'idle')
+
+    def test_v2_execution_inventory_replaces_only_two_exact_historical_sources(self):
+        frozen = json.loads((ROOT / o.RECEIPT).read_bytes())['source_sha256']
+        current = o.verify_execution_sources()
+        self.assertEqual(set(current), set(frozen))
+        self.assertEqual(len(current), 75)
+        changed = {name for name in current if current[name] != frozen[name]}
+        self.assertEqual(changed, set(o.EXECUTION_SOURCE_REPLACEMENTS))
+        self.assertEqual(len(changed), 2)
+        for name, (previous, successor) in o.EXECUTION_SOURCE_REPLACEMENTS.items():
+            self.assertEqual(frozen[name], previous)
+            self.assertEqual(current[name], successor)
+        for name, digest in o.PINS.items():
+            self.assertEqual(current[name], digest)
+        self.assertEqual(hashlib.sha256((ROOT / o.RECEIPT).read_bytes()).hexdigest(), o.RECEIPT_SHA)
+
+    def test_missing_extra_or_third_execution_source_replacement_is_rejected(self):
+        good = o.EXECUTION_SOURCE_REPLACEMENTS
+        missing = dict(good)
+        del missing[next(iter(missing))]
+        frozen = json.loads((ROOT / o.RECEIPT).read_bytes())['source_sha256']
+        for changed in (missing, dict(good, **{'unreviewed.py': ('a'*64, 'b'*64)}),
+                        {**good, o.OWNER: (frozen[o.OWNER], '0'*64)}):
+            with self.subTest(keys=tuple(changed)), patch.object(o, 'EXECUTION_SOURCE_REPLACEMENTS', changed):
+                with self.assertRaisesRegex(ValueError, 'replacement closure'):
+                    o.verify_execution_sources()
+        name = next(iter(good))
+        for replacement, message in ((('0'*64, good[name][1]), 'replacement origin'),
+                                     ((good[name][0], good[name][0]), 'replacement origin'),
+                                     ((good[name][0], '0'*64), 'source identity mismatch')):
+            with patch.object(o, 'EXECUTION_SOURCE_REPLACEMENTS', {**good, name: replacement}):
+                with self.assertRaisesRegex(ValueError, message):
+                    o.verify_execution_sources()
+
+    def test_runtime_execution_rejects_third_source_drift_missing_file_and_receipt_rewrite(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name in (*o.verify_execution_sources(), o.RECEIPT):
+                dst = root / name
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                dst.write_bytes((ROOT / name).read_bytes())
+            self.assertEqual(o.verify_execution_sources(root), o.verify_execution_sources())
+            # A source outside the two reviewed replacements remains guarded.
+            name = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
+            original = (root / name).read_bytes()
+            (root / name).write_bytes(original + b'\n# unreviewed drift\n')
+            with self.assertRaisesRegex(ValueError, 'execution source drift'):
+                o.verify_execution_sources(root)
+            (root / name).unlink()
+            with self.assertRaises(FileNotFoundError):
+                o.verify_execution_sources(root)
+            (root / name).write_bytes(original)
+            frozen = json.loads((root / o.RECEIPT).read_bytes())
+            missing = dict(frozen['source_sha256'])
+            del missing[name]
+            for sources in (missing, {**frozen['source_sha256'], 'extra.py': '0'*64},
+                            o.verify_execution_sources()):
+                (root / o.RECEIPT).write_text(json.dumps({**frozen, 'source_sha256': sources}))
+                with self.assertRaisesRegex(ValueError, 'frozen execution-source inventory changed'):
+                    o.verify_execution_sources(root)
 
     def test_loaded_arithmetic_alias_instance_and_type_guards(self):
         from candidates.qwen2_resident_matrix.ffn_attention import attention_owner, scalar_recipe

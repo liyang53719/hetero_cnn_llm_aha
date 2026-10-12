@@ -41,8 +41,9 @@ def main():
         report.update(library=str(library), library_sha256=sha(library),
                       compile_receipt=str(receipt), compile_receipt_sha256=sha(receipt),
                       compile_identity_verified=True)
-        suite = unittest.defaultTestLoader.loadTestsFromName(
-            'candidates.qwen35_attention_prefill.gqa.test_gqa')
+        report['test_modules'] = ['candidates.qwen35_attention_prefill.gqa.test_gqa',
+                                  'candidates.qwen35_attention_prefill.gqa.test_coverage_seal']
+        suite = unittest.defaultTestLoader.loadTestsFromNames(report['test_modules'])
         result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
         report.update(tests_run=result.testsRun, failures=len(result.failures), errors=len(result.errors),
                       skipped=len(result.skipped), exit_code=0 if result.wasSuccessful() and not result.skipped else 1)

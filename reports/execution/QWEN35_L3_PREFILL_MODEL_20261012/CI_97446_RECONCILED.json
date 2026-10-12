@@ -1,0 +1,53 @@
+{
+  "status": "THREE_SUCCESS_TWO_IDENTITY_FAILURES",
+  "commit": "97446dabb936675932e1928ee31c4040d1d35315",
+  "verified_success": [
+    {
+      "run": 38320597518,
+      "commit": "97446dabb936675932e1928ee31c4040d1d35315",
+      "source_count": 94,
+      "tests": 209,
+      "suites": 18,
+      "scope": "SYNTHETIC_TYPED_L3_ATTENTION_SUBCHAINS_ONLY",
+      "artifact": {
+        "run": 38320597518,
+        "id": 11778232091,
+        "sha": "121887830eca5f46d726df406da9221fe2cb861adbf3258b3b44c95b1c836fed",
+        "size": 21030
+      },
+      "verification": "EXACT_COMMIT_SOURCE_LOG_COUNTS_AND_COMPILE_RECEIPTS",
+      "binary_retrieved": false
+    },
+    {
+      "run": 38320597548,
+      "commit": "97446dabb936675932e1928ee31c4040d1d35315",
+      "source_count": 49,
+      "tests": 316,
+      "suites": 22,
+      "scope": "SYNTHETIC_GDN_TYPED_FULLBLOCK_CONTROL_AND_COMPONENT_SOFTWARE_ONLY",
+      "artifact": {
+        "run": 38320597548,
+        "id": 11778238155,
+        "sha": "6ddc9e023a464016dbf98ef3f878016665ed1461dea17b03c8c40ae1f2cfb85f",
+        "size": 21598
+      },
+      "verification": "EXACT_COMMIT_SOURCE_LOG_COUNTS_AND_COMPILE_RECEIPTS",
+      "binary_retrieved": false
+    }
+  ],
+  "payload_run": 38320597369,
+  "failures": [
+    {
+      "run": 38320597453,
+      "job": 115047496685,
+      "cause": "current observer pins reject updated MatrixService"
+    },
+    {
+      "run": 38320597455,
+      "job": 115047496606,
+      "cause": "historical receipt compared to changed working tree; frontend not executed"
+    }
+  ],
+  "verified_utc": "2026-10-12T23:18:53.334294+00:00",
+  "whole_block_numeric_pass": false
+}

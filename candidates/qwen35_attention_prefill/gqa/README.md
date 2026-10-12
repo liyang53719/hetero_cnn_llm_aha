@@ -71,6 +71,17 @@ successful ACK, every Matrix result/done, and accepted successful owner
 terminal. The same Matrix ownership remains held until terminal acceptance.
 Whole-block generation/root publication is deliberately outside this owner.
 
+The host adapter seals actual producer write/ACK coverage as exact immutable
+frozensets after full validation. Tick boundaries check the sealed object
+identities, while source bytes are still compared on every tick and terminal
+hashes remain mandatory. Output metadata is temporarily mutable only around
+the existing real memory write/ACK calls, then validated and sealed again.
+Only after terminal acceptance is output metadata returned to ordinary sets,
+so an untouched aborted destination remains reusable by other producers.
+This reduces Python integrity-check work without changing modeled requests,
+arithmetic, cycles, bytes, or hardware resources. Injected exceptions inside
+memory methods remain fail-closed; resumable drain is not promised for them.
+
 Errors and explicit abort drain accepted memory and held Matrix result/done,
 publish no Context, and poison admission until owner and shared Matrix receive
 a coordinated reset after terminal retirement. The synchronous scalar API
@@ -96,6 +107,7 @@ and driver identity snapshots are explicitly host-only diagnostic storage.
 and never builds or searches for a library. Missing or invalid bindings fail
 the suite rather than skipping it. `run_small_tests.py --out <fresh-dir>`
 records actual test exit and source/library identities before and after.
+The normal small runner includes both `test_gqa` and `test_coverage_seal`.
 Most tests use <=2 query tokens and <=3 cache tokens; one explicit synthetic
 M17/cache33 case crosses both bounded tile loops and independently accounts
 for BF16 probability rounding in every expected context value. Tests use

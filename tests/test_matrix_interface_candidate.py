@@ -23,6 +23,7 @@ def required_baseline_commits():
     files += sorted((ROOT/runner.CANDIDATE).glob('*/check_frontend.py'))
     files.append(ROOT/runner.CANDIDATE/'ffn_public/check_numeric.py')
     files.append(ROOT/runner.CANDIDATE/'ffn_public/test_delivery.py')
+    files.append(ROOT/runner.CANDIDATE/'ffn_public/test_fullgraph_receipt.py')
     for path in files:
         for node in ast.walk(ast.parse(path.read_text())):
             if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {'BASE', 'COMMIT', 'PUBLISHED_BASELINE'} for t in node.targets):
@@ -90,7 +91,8 @@ class CandidateRunnerGuards(unittest.TestCase):
     def test_workflow_fetches_all_frozen_source_baselines(self):
         workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
         required = required_baseline_commits()
-        self.assertEqual(len(required), 7)
+        self.assertEqual(len(required), 8)
+        self.assertIn('37b7de74431ed79b7e9f3d52d308ed7f46727b7a', required)
         validate_baseline_fetches(workflow, required)
 
     def test_missing_or_changed_baseline_fetch_fails_closed(self):
@@ -99,9 +101,13 @@ class CandidateRunnerGuards(unittest.TestCase):
             fetch = 'git fetch --no-tags --depth=1 origin ' + ref
             for broken in [workflow.replace(fetch, '# omitted baseline'),
                            workflow.replace(fetch, fetch[:-40]+'main'),
+                           workflow.replace(fetch, fetch + '\n          ' + fetch),
                            workflow.replace('git cat-file -e '+ref+':', 'git cat-file -e '+'0'*40+':')]:
                 with self.subTest(ref=ref), self.assertRaisesRegex(ValueError, 'baseline'):
                     validate_baseline_fetches(broken, required_baseline_commits())
+        with self.assertRaisesRegex(ValueError, 'baseline'):
+            validate_baseline_fetches(workflow + '\n          git fetch --no-tags --depth=1 origin ' + '0'*40,
+                                      required_baseline_commits())
 
     def test_exact_bytes_and_drift(self):
         data = b"source\n"

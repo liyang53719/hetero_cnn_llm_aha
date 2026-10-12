@@ -128,3 +128,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 - 22:30 UTC更新：C2真实cold128/carried128八命令前缀16终态完成，22已观察Norm/RoPE producer的FP32/BF16全部逐bit相同；61源/18输出/52观察封存复核。只关闭C2局部前缀数值门，QK配方超限、KV/完整L3/Chisel/五block总项仍open。
 
 - 2026-10-12 23:04 UTC：478a542两CI/137tests/80源工件闭环。显式矩形Matrix profile与旧模式共资源小门完成；GQA同输入双M16子算子实际QK/scale/BF16概率/context全bitexact，FP32softmax过原门。18个owner门含held-success poison修复和M17/cache33边界；干净209tests/18suites通过。该运行重放封存prefix写回，KV装载仍宿主设置，不是现场完整block或M128；57节点/最终fence、公共Host/生产Chisel/RTL和五block总门保持open。[准确范围和来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+
+- 2026-10-12 23:28 UTC：97446 的 L3/GDN/payload 成功工件已核，两个旧 Qwen2 门因源身份绑定失败，原 FAIL 保留；新历史 commit:path 与 observer v2 修复48小门通过。实际 Sigmoid gate 双M16回放四官方门逐bit相同、46合成门；GQA封存28门及八旧新全事件对照通过，仅宿主检查优化。冷受影响1395次软件测试执行/313秒已过，新CI待验，完整L3活链、M128 GQA/五block/Chisel/RTL仍open。[范围与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。

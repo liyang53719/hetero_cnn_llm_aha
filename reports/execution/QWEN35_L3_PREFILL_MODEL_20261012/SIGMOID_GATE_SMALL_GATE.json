@@ -1,0 +1,46 @@
+{
+  "scope": "existing source-bound opt-in attention SigmoidMul Python owner mapping, including directed observer failure recovery",
+  "head": "97446dabb936675932e1928ee31c4040d1d35315",
+  "command": [
+    "python",
+    "-m",
+    "unittest",
+    "candidates.qwen35_gdn_prefill.elementwise.test_model",
+    "candidates.qwen35_gdn_prefill.elementwise.test_reference",
+    "candidates.qwen35_gdn_prefill.elementwise.test_attention_gate"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 1.853,
+  "result": "..............................................\n----------------------------------------------------------------------\nRan 46 tests in 1.638s\n\nOK",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/elementwise/model.py": "8514a6b9108b1e2a6fa5ed63d39b28fb949c63c2438fa317442894452d0de5ba",
+    "candidates/qwen35_gdn_prefill/elementwise/test_attention_gate.py": "e65c412edb8106d415472a743ae3167d864bf0f21fb8bc6967b34bf38107cae1",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"
+  },
+  "prior_receipt": {
+    "path": "work/attention_sigmoid_owner_20261012/receipt.json",
+    "sha256": "f53f7c57ff6b1648932587df26ef53713f3f384217dbdd6f87b5f8d67636c4e3",
+    "preserved": true
+  },
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "output": ""
+  },
+  "scope_limits": {
+    "torch_executed": false,
+    "downloads": false,
+    "compile_executed": false,
+    "rtl_executed": false,
+    "chisel_source_changed": false,
+    "new_arithmetic_resource": false,
+    "staged_committed_or_pushed": false,
+    "synthetic_software_tests_only": true
+  }
+}

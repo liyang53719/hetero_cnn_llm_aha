@@ -2,10 +2,13 @@
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import unittest
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
+COMMIT = '37b7de74431ed79b7e9f3d52d308ed7f46727b7a'
+RECEIPT_SHA = '3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e'
 
 
 class FullgraphReceiptTests(unittest.TestCase):
@@ -13,8 +16,10 @@ class FullgraphReceiptTests(unittest.TestCase):
     def setUpClass(cls):
         cls.receipt = json.loads((HERE / 'fullgraph_numerical_receipt.json').read_text())
 
-    def test_current_source_and_acceptance_scope(self):
+    def test_historical_source_and_acceptance_scope(self):
         r = self.receipt
+        self.assertEqual(hashlib.sha256((HERE / 'fullgraph_numerical_receipt.json').read_bytes()).hexdigest(),
+                         RECEIPT_SHA)
         self.assertEqual(r['scope'], 'PUBLIC21_FULLGRAPH_SOFTWARE_MODEL_COLD_M16_M128')
         self.assertTrue(r['full_block_software_model_executed'])
         for key in ['full_block_hardware_executed', 'rtl_executed', 'scala_host_executed',
@@ -25,7 +30,10 @@ class FullgraphReceiptTests(unittest.TestCase):
         self.assertIsNone(r['full_wall_mac_utilization'])
         self.assertEqual(len(r['source_sha256']), 75)
         for path, sha in r['source_sha256'].items():
-            self.assertEqual(hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), sha, path)
+            # The historical PASS stays bound to the exact original commit and
+            # path. Successor live files need their own execution evidence.
+            raw = subprocess.check_output(['git', 'show', COMMIT + ':' + path], cwd=ROOT)
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), sha, path)
         for path, sha in r['imported_python_sha256'].items():
             self.assertEqual(r['source_sha256'][path], sha)
         self.assertFalse(r['historical_prefix']['pass_inherited'])

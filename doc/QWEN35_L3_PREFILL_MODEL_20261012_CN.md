@@ -145,3 +145,18 @@ C2消除上游差异后，不能直接把“官方算子吃相同输入”的条
 干净新checkout按workflow顺序使用新构建Matrix/Vector库，209tests/18suites、94源、22工件全部核验，141.80秒；不读取历史work，无模型下载或RTL。对应证据为GQA_PAIR_ACTUAL_M16.json、GQA_PAIR_SMALL_GATE.json、MATRIX_RECTANGULAR_PROFILE_GATE.json与GQA_COLD_WORKFLOW.json。本批远端CI须按新精确SHA继续核验。
 
 下一门：先将真实KV staging→GQA→sigmoid gate→O/residual/postnorm/FFN接回完整公开数据链，并对同身份M128做有依据的宿主预算。当前GQA逐tick覆盖集合检查在M128放大明显，任何宿主加速须保持逻辑请求、依赖、原算术和发布栅栏，不能记为硬件提速。完整L3、公共Command128、生产Chisel C2/pair策略、RTL、35B两个block及五block总目标仍open；完整周期和MAC利用率继续为空，不能套用这些软件tick。
+
+
+### 23:28 UTC：原 CI 身份回归收口与实际 Sigmoid gate
+
+97446dabb936675932e1928ee31c4040d1d35315 的原五项 CI 均已终态：L3 38320597518（209 测试/18 suite/94 源）、GDN 38320597548（316/22/49）及 payload 成功；两份成功 ZIP 的 GitHub digest、精确提交源、全部日志/计数及 Matrix/Vector 构建回执已核验。Qwen2 contract 38320597453 和 frontend 38320597455 失败，原日志/ZIP保留，后者尚未运行 Scala frontend。失败分别来自当前 observer 仍绑定旧 MatrixService SHA，以及历史 75 源 receipt 被拿来与新工作树比较，并非这两份日志证明数值错误。
+
+修复保留原 receipt 字节 SHA 3d0f449d…e5570e 和原结论，历史源逐路径读取固定 37b7de74431ed79b7e9f3d52d308ed7f46727b7a；当前 observer 显式升为 v2，仅允许 Matrix Python/C++ 两个已审源身份更新，其他 73 源、import/loaded-code/数值/发布栅栏仍严格。新增缺件、额外替换、第三源漂移、旧 hash 来源与浅克隆 fetch 集合负测。48 项受影响小门通过且独立审查无阻断；当前版本的 legacy 默认路径仍实际运行独立整数算术和公开 QK→Softmax→PV 对照，没有将旧整链 PASS 重绑到新源码。
+
+现有生产 GdnElementwiseOwner 的 SigmoidMul=2 已映射到同一个软件 Elementwise owner，显式开关默认 false、attentionWidth=2048。复用同一 Scalar，依次 ExpNegative4→Add0→Div2→MulIeeeRne6→BF16 sigmoid→MulIeeeRne6 context→BF16；没有把 sigmoid 错写为 SiLU。原 Add/SiLU、有限下溢策略及负 gate≤−80 Unsupported 范围保持。46 项合成门包含参数锁定、真实 M1×2048、同实例模式切换、末 ACK、observer 异常后的同 pending abort/drain/reset。
+
+真实子算子以封存的 actual raw-gate 和 actual GQA context 回放到同一 TypedMemory 的真实 producer 写/ACK/terminal；cold16/carried16 共 65,536 个 gated-context 输出及 65,536 个 sigmoid BF16 观察全部与固定官方逐 bit 一致，四项原 max=0.03125/mean=0.005 门通过。最终封存运行 5.249 秒、132 个已加载项目源/固定源码身份；每窗 131,072B 读、65,536B 写 ACK，32,768 exp/add/div 与 65,536 mul6，6,145 软件 tick。仍是 replay 子门，prefix/GQA 未在这一进程重执行，也不是完整 L3、M128 或硬件周期。
+
+GQA driver 的重复 coverage 扫描改为宿主不可变集合封存：只在 admission 和真实 write/ACK 后验证实际整数集合，每 tick 检查同一 frozenset 身份，原逐字节 source 检查与末 SHA 保留。accepted terminal 后才归还 output 普通集合，支持未写 early-abort 输出被其他真实 producer 重用；部分写入仍拒绝 fresh 重用。28 项小门及八组旧/新实际输出、全事件/observer trace、tick、ACK、发布结果完全一致。此项仅减少宿主验真开销，不减少任何逻辑请求、物理流量或硬件资源，不能算硬件 MAC 提升。注入 memory 方法异常仍 fail-closed，不伪造进度或保证原 invocation 可续跑。
+
+冷源受影响软件门313.0秒完成：完整frontend control步骤824次、observer/public observer22次、GDN330次/23suite、L3 219次/19suite，合计1395次测试执行（不是去重用例数），无skip。全部测试源/日志/工件身份复核；Scala/CHIRRTL仍交后继CI，未宣称本地展开。初期冷clone缺历史对象的失败保留，在该clone精确fetch八个固定commit后恢复，没有读取历史work或重跑大模型。后继精确提交 CI 待验。完整 L3 活链的 KV/final fence、O/residual/postnorm/FFN、M128 GQA、生产 C2/pair Chisel 选择和五 block 总门继续 open。

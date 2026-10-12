@@ -1,0 +1,26 @@
+{
+  "status": "NO_BLOCKING_FINDING_IN_INDEPENDENT_READ_ONLY_SOURCE_REVIEW",
+  "reviewer": "review_input_prep_chain",
+  "base_commit": "cb935968c88cdd80db003617659cae3a3475a1da",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/prefix_driver.py": "eccdbba58e77e8cf4ca0e71478e6900bfbee26791c06d360605d3581282df384",
+    "candidates/qwen35_gdn_prefill/run_tests.py": "dba8cf254cb0ca65d60b9c19d9f1f5c9e4154b200f68de759a81a1e4a06a29da",
+    "candidates/qwen35_gdn_prefill/prep/model.py": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+    "candidates/qwen35_gdn_prefill/prep/reference.py": "e51583b6e6837ca373f27896ef81097731036e067b9881fff086eb94b8a251eb",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/prep/test_chain.py": "be23dad829a4a1301a8f9a67e659820be907025c4dfcc8b16b0b24f612a0565f",
+    "candidates/qwen35_gdn_prefill/prep/test_model.py": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62",
+    "candidates/qwen35_gdn_prefill/prep/test_reference.py": "2f1ec0fcead2b9ab22900f6683a224acaf4236a04c1073fe10e7d537ae2bd9fe"
+  },
+  "findings": [
+    "Complete production spans disjoint; exact Conv/AB published producers required",
+    "FP32[M,6400] writes preserve bits over uint16 transport; all output bytes ACK before accepted terminal publishes",
+    "held success abort cannot publish; prior faults preserved; accepted success not revoked",
+    "Source M1 chunk arithmetic: ascending QK reduction, FP32 A_log, BF16 dtBias and beta, Softplus7 thresholds and severe exception policy",
+    "Same resource identities retained; two window allocations do not overlap",
+    "M128 token-independent software extension; native per-role comparisons remain diagnostic only"
+  ],
+  "tests_run_by_reviewer": false,
+  "rtl_executed": false,
+  "complete_block_pass": false
+}

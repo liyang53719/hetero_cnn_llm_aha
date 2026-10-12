@@ -1,7 +1,7 @@
 """Raw checkpoint input → typed RMS → real shared-Matrix QKV/Z/AB prefix.
 
-The default four-command chain can append the explicit Conv4 staging owner.
-It has no public Command128 decoder yet; no input prep, chunk GDN, state, O or FFN executes here.
+The default four-command chain can append Conv4 staging and M128 input prep.
+It has no public Command128 decoder yet; no chunk GDN, state, O or FFN executes here.
 Carried input names identify tokens128..255, not a stateful completed block.
 """
 from __future__ import annotations
@@ -70,10 +70,12 @@ def final_identity(report, fixture, *, root=ROOT):
 
 
 def run(fixture, output, *, rows=16, budget_seconds=600,
-        policy=r.ReductionPolicy.Torch210CpuDefault1024, include_conv=False):
+        policy=r.ReductionPolicy.Torch210CpuDefault1024, include_conv=False, include_prep=False):
     d.require(type(rows) is int and rows in (16, 128), 'M16 or M128 prefix only')
     d.require(type(budget_seconds) is int and 0 < budget_seconds <= 3600, 'bounded software wall budget')
     d.require(type(include_conv) is bool, 'explicit Conv option required')
+    d.require(type(include_prep) is bool and (not include_prep or include_conv),
+              'InputPrep requires actual preceding Conv')
     output = Path(output)
     d.require(not output.exists(), 'fresh output required')
     manifest, inputs = load_fixture(ROOT, fixture)
@@ -84,6 +86,11 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         from .conv import model as c
         source_names=sorted(set(source_names) | {
             'candidates/qwen35_gdn_prefill/conv/'+name
+            for name in ('model.py','scalar.py','reference.py')})
+    if include_prep:
+        from .prep import model as prep
+        source_names=sorted(set(source_names) | {
+            'candidates/qwen35_gdn_prefill/prep/'+name
             for name in ('model.py','scalar.py','reference.py')})
     sources = {name: sha((ROOT/name).read_bytes()) for name in source_names}
     output.mkdir(parents=True)
@@ -108,17 +115,25 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         report.update(scope='QWEN35_L0_TYPED_OWNER_RMS_QKV_Z_AB_CONV_STAGING_ONLY',
             conv_cold_for_each_input_window=True, conv_history_published=False,
             owner_commands_per_window=5)
+    if include_prep:
+        report.update(scope='QWEN35_L0_TYPED_OWNER_PREFIX_CONV_INPUT_PREP_ONLY',
+            owner_commands_per_window=6,prep_native_stage_acceptance='UNASSIGNED_DIAGNOSTIC_ONLY',
+            prep_tokens128_is_software_extension=True)
     persist(output/'identity.json', report)
     try:
         if include_conv:
             report['conv_source']=c.source_identity()
+            persist(output/'identity.json',report)
+        if include_prep:
+            report['prep_source']=prep.source_identity()
             persist(output/'identity.json',report)
         memory = d.TypedMemory()
         lib = configure_library(C.CDLL(str(library)))
         d.require(lib.td_reset() == 0, 'single initial Matrix reset')
         matrix = d.MatrixService(lib)
         dense = d.down.DenseOwnerModel(d.down.PrefixWorkspace(0x90000000, 64, 1))
-        scalar = c.ConvScalar() if include_conv else r.SharedScalar()
+        scalar = (prep.PrepScalar(enable_softplus=True) if include_prep else
+                  c.ConvScalar() if include_conv else r.SharedScalar())
         rms = r.RmsOwner(scalar)
         conv_observations={}
         def observe_conv(tag,token,channel,bits):
@@ -129,6 +144,7 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
             struct.pack_into('<H',slot['data'],index*2,bits)
             slot['seen'][index]=1
         conv = c.ConvOwner(scalar,observe=observe_conv) if include_conv else None
+        preparation = prep.InputPrepOwner(scalar) if include_prep else None
         resources = (id(memory), id(dense), id(dense.a_banks), id(dense.b_banks), matrix.resource_address, id(scalar))
         memory.add_readonly(0x1000000, weights['input_layernorm.weight'])
         original_weights = {role: weights['linear_attn.in_proj_'+role+'.weight'] for role in ('qkv','z')}
@@ -139,6 +155,9 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
             memory.add_readonly(weight_bases[role], packed)
         if include_conv:
             memory.add_readonly(0x7000000,weights['linear_attn.conv1d.weight'])
+        if include_prep:
+            memory.add_readonly(0x7100000,weights['linear_attn.A_log'])
+            memory.add_readonly(0x7100040,weights['linear_attn.dt_bias']+bytes(32))
         actual, tag = {}, 1
     except BaseException as error:
         report.update(status="FAILED",error=dict(type=type(error).__name__,message=str(error)),
@@ -146,7 +165,7 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         persist(output/"summary.json",report)
         raise
 
-    def execute(driver, phase, role):
+    def execute(driver, phase, role, dtype='bf16le'):
         nonlocal current
         current = driver
         command_start = time.monotonic()
@@ -160,7 +179,7 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         command = dict(phase=phase, role=role, seconds=time.monotonic()-command_start, **driver.report())
         sequence.append(command)
         raw = driver.output.raw()
-        (output/f'{phase}.{role}.actual.bf16le').write_bytes(raw)
+        (output/f'{phase}.{role}.actual.{dtype}').write_bytes(raw)
         actual[phase][role] = raw
         persist(output/'progress.json', dict(commands=sequence, elapsed_seconds=time.monotonic()-start))
         print(json.dumps(dict(phase=phase, role=role, seconds=command['seconds'],
@@ -169,7 +188,7 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
     try:
         for case, phase in enumerate(('cold128', 'carried128')):
             hidden = inputs[phase+'.hidden.bf16le'][:rows*2048]
-            input_base, base = 0x100000+case*0x100000, 0x10000000+case*0x1000000
+            input_base, base = 0x100000+case*0x100000, 0x10000000+case*(0x2000000 if include_prep else 0x1000000)
             memory.add_readonly(input_base, hidden)
             (output/f'{phase}.input.bf16le').write_bytes(hidden)
             actual[phase] = {}
@@ -202,6 +221,12 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
                 actual[phase]['conv_pre_silu']=bytes(conv_observations[tag]['data'])
                 (output/f'{phase}.conv_pre_silu.actual.bf16le').write_bytes(actual[phase]['conv_pre_silu'])
                 tag += 1
+            if include_prep:
+                destination=base+0x1000000
+                memory.allocate_output(destination,rows*prep.CORE_ROW_BYTES)
+                job=prep.InputPrepJob(tag,base+0x800000,base+0x600000,0x7100000,0x7100040,destination,rows)
+                execute(prep.TypedInputPrepDriver(preparation,memory,job),phase,'prep','fp32le')
+                tag+=1
             d.require(resources == (id(memory),id(dense),id(dense.a_banks),id(dense.b_banks),matrix.resource_address,id(scalar)),
                       'resource identity changed between actual prefix commands')
         report['actual_terminal_reached'] = True
@@ -241,6 +266,15 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
                     actual[phase]['conv_silu'],actual[phase]['history_staging'],
                     official_qkv=native['qkv'],output=output,phase=phase,
                     actual_conv=actual[phase]['conv_pre_silu'])
+            if include_prep:
+                from .prep import reference as prep_reference
+                official_conv=Path(report['comparisons'][phase]['conv']['artifacts']['native_endtoend_silu']['path']).read_bytes()
+                report['comparisons'][phase]['prep']=prep_reference.verify_outputs(
+                    actual[phase]['conv_silu'],actual[phase]['ab'],weights['linear_attn.A_log'],
+                    weights['linear_attn.dt_bias']+bytes(32),rows,actual[phase]['prep'],
+                    official_conv=official_conv,official_ab=native['ab'],output=output,phase=phase)
+                d.require(report['comparisons'][phase]['prep']['passed'],
+                          'actual InputPrep differs from independent fixed arithmetic')
             d.require(all(v['bit_mismatches'] == 0 for v in fixed.values()),'actual prefix differs from independent fixed arithmetic')
         report['fixed_arithmetic_pass']=True
         report['official_prefix_gate_pass']=all(v['passed'] for case in report['comparisons'].values()
@@ -248,6 +282,9 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         if include_conv:
             report['conv_gate_pass']=all(case['conv']['passed'] for case in report['comparisons'].values())
             report['official_prefix_gate_pass'] &= report['conv_gate_pass']
+        if include_prep:
+            report['prep_fixed_arithmetic_pass']=True
+            report['prep_official_gate_pass']=None
         report['status'] = ('PASS_PREFIX_GATES_ONLY' if report['official_prefix_gate_pass']
                             else 'FAIL_OFFICIAL_PREFIX_GATES')
         report['official_stage_acceptance'] = 'ORIGINAL_GDN_PER_NODE_THRESHOLDS_ONLY_FULL_BLOCK_OPEN'
@@ -257,7 +294,8 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         if current is not None:
             report['interrupted_owner'] = current.report()
             raw=current.output.raw()
-            name='interrupted_output.unpublished_or_partial.bf16le'
+            dtype='fp32le' if include_prep and isinstance(current,prep.TypedInputPrepDriver) else 'bf16le'
+            name='interrupted_output.unpublished_or_partial.'+dtype
             (output/name).write_bytes(raw)
             report['interrupted_staging']=dict(file=name,bytes=len(raw),sha256=sha(raw),
                 published=current.output.published,written_offsets=sorted(current.output.written),
@@ -293,6 +331,7 @@ def main():
     parser.add_argument('--rows',type=int,choices=(16,128),default=16)
     parser.add_argument('--budget-seconds',type=int,default=600)
     parser.add_argument('--include-conv',action='store_true',help='append cold Conv/history staging per input window')
+    parser.add_argument('--include-prep',action='store_true',help='append independent-token M128 preparation after Conv')
     parser.add_argument('--policy',choices=[p.value for p in r.ReductionPolicy],default=r.ReductionPolicy.Torch210CpuDefault1024.value)
     args=parser.parse_args()
     def timed_out(signum, frame):
@@ -305,7 +344,7 @@ def main():
     signal.setitimer(signal.ITIMER_REAL,args.budget_seconds)
     try:
         result=run(args.fixture,args.out,rows=args.rows,budget_seconds=args.budget_seconds,policy=args.policy,
-                   include_conv=args.include_conv)
+                   include_conv=args.include_conv,include_prep=args.include_prep)
     finally:
         signal.setitimer(signal.ITIMER_REAL,0)
     print(json.dumps(dict(status=result['status'],seconds=result['elapsed_seconds'])))

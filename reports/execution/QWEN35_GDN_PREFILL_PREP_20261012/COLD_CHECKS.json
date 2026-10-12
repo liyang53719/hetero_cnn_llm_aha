@@ -1,0 +1,307 @@
+{
+  "status": "PASS_COLD_ORDERED_WORKFLOW",
+  "base_commit": "cb935968c88cdd80db003617659cae3a3475a1da",
+  "checkout": "/tmp/qwen35_gdn_prep_cold_20261012T1726",
+  "historical_work_absent_before_build": true,
+  "seconds": 25.387646672010305,
+  "test_count": 103,
+  "suites": [
+    {
+      "module": "candidates.qwen35_gdn_prefill.conv.test_model",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.conv.test_model",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 17,
+      "passed": true,
+      "seconds": 0.8348037779942388,
+      "log": "conv__test_model.log",
+      "log_sha256": "57596f2f0dd2f8c65d087d80ee5e0b98d199b5ca9ab401448c0e15ef81f3872f"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.conv.test_reference",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.conv.test_reference",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "passed": true,
+      "seconds": 0.5457519100018544,
+      "log": "conv__test_reference.log",
+      "log_sha256": "91913198a69ddb203a2da39b5047c05a4d7cb73bd844aced392bddc7ae002af6"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.prep.test_chain",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.prep.test_chain",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 1,
+      "passed": true,
+      "seconds": 15.797186374999,
+      "log": "prep__test_chain.log",
+      "log_sha256": "80955721b178a0a9d979a8a0cf317957bdc9fa98145960bcaa763857b8efbb59"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.prep.test_model",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.prep.test_model",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 19,
+      "passed": true,
+      "seconds": 2.636425081989728,
+      "log": "prep__test_model.log",
+      "log_sha256": "512722b9b05caec7bff519231479255a241c36e42ccccf3716fb50043002f836"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.prep.test_reference",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.prep.test_reference",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "passed": true,
+      "seconds": 0.6805053939897334,
+      "log": "prep__test_reference.log",
+      "log_sha256": "7b294d6af18669800b0191f0d38efbd0ca1092fa9c1b319a9a26a8ffb80cdaf7"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_input_fixture",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_input_fixture",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "passed": true,
+      "seconds": 0.48790269599703606,
+      "log": "test_input_fixture.log",
+      "log_sha256": "e29050cec1e35989c8c9f8f66c948f91290e68e7e28063ce686942f7629ece0c"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_prefix_driver",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_prefix_driver",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 3,
+      "passed": true,
+      "seconds": 2.0415780860057566,
+      "log": "test_prefix_driver.log",
+      "log_sha256": "3672f8aa6f781caac5df5e195e80bb3c5dae281f4889c55ef9555d2b5b6cd0cb"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_prefix_reference",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_prefix_reference",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 7,
+      "passed": true,
+      "seconds": 0.3066921140125487,
+      "log": "test_prefix_reference.log",
+      "log_sha256": "b413cdc3120b888b3953a0bba94fc9af29a7449883927a7db6037a34f645ad53"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_rms_owner",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_rms_owner",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "passed": true,
+      "seconds": 1.2360109250003006,
+      "log": "test_rms_owner.log",
+      "log_sha256": "f2fe1ba05a25e242bf77bf2e0dcdcf8d39d3a7236ea5ba5f0415fa8bfbde0e89"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_typed_dense",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_typed_dense",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 8,
+      "passed": true,
+      "seconds": 0.24812032499175984,
+      "log": "test_typed_dense.log",
+      "log_sha256": "f34c8bf907ba1f095e17bb061a67045fb0ec8b711677549d91055de7cb7c8ece"
+    }
+  ],
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/conv/model.py": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+    "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/conv/test_model.py": "b4e6f37b17cbbb93a9ec407d3d46f84be824b12b0a184df8e933a60366fda13d",
+    "candidates/qwen35_gdn_prefill/conv/test_reference.py": "989dbb03b669ae41af29274f38ba2f77e34410133a82b33705d883bb49e29ccf",
+    "candidates/qwen35_gdn_prefill/input_fixture.py": "ab9839f63d45a10302754b7cc730ee7bba76cd6d9fc895c1f801d6a94936ffa2",
+    "candidates/qwen35_gdn_prefill/prefix_driver.py": "eccdbba58e77e8cf4ca0e71478e6900bfbee26791c06d360605d3581282df384",
+    "candidates/qwen35_gdn_prefill/prefix_reference.py": "807a06cd0befb697e8e2536f73319a6670c834a52dee7f29249dfe37be3806f6",
+    "candidates/qwen35_gdn_prefill/prep/model.py": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+    "candidates/qwen35_gdn_prefill/prep/reference.py": "e51583b6e6837ca373f27896ef81097731036e067b9881fff086eb94b8a251eb",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/prep/test_chain.py": "be23dad829a4a1301a8f9a67e659820be907025c4dfcc8b16b0b24f612a0565f",
+    "candidates/qwen35_gdn_prefill/prep/test_model.py": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62",
+    "candidates/qwen35_gdn_prefill/prep/test_reference.py": "2f1ec0fcead2b9ab22900f6683a224acaf4236a04c1073fe10e7d537ae2bd9fe",
+    "candidates/qwen35_gdn_prefill/projection_reference.cpp": "143e28be0ea03e6c29e9d0e58afe1190e7050fa4ea43e9237a45fb218e9a3edd",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/run_tests.py": "dba8cf254cb0ca65d60b9c19d9f1f5c9e4154b200f68de759a81a1e4a06a29da",
+    "candidates/qwen35_gdn_prefill/test_input_fixture.py": "8bab3edf5c0aa4cb43e19d54b0d8071688a12b50cdca279a33800025a19dfba2",
+    "candidates/qwen35_gdn_prefill/test_prefix_driver.py": "3444f1279d641b8181f39943e73de1b8305c9c43477fd1ac388abd7394ec935f",
+    "candidates/qwen35_gdn_prefill/test_prefix_reference.py": "e565846e4da063b13d0193e6e9b982f2c15aee8e0deb8c2d5662a98e2a5ab0a4",
+    "candidates/qwen35_gdn_prefill/test_rms_owner.py": "564f8fc51043c733d419dab0a94d5714af9146240baab1612d40c8ed8bf55800",
+    "candidates/qwen35_gdn_prefill/test_typed_dense.py": "6282663eecbe8d9c32ebc478eab1cfec9e2853681abd268822fe466154072f15",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "5754040059a39bbeca67c30a71c4babb168e2445a8eed24d4e9cd4127c642565"
+  },
+  "workflow_sha256": "563726c768adbe4b96d02a60c59562e01a5ff4504081c8da3443d4fa12bc0f9b",
+  "overlay_files": [
+    ".github/workflows/qwen35-gdn-prefill-model.yml",
+    "candidates/qwen35_gdn_prefill/prefix_driver.py",
+    "candidates/qwen35_gdn_prefill/run_tests.py",
+    "candidates/qwen35_gdn_prefill/prep/model.py",
+    "candidates/qwen35_gdn_prefill/prep/reference.py",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py",
+    "candidates/qwen35_gdn_prefill/prep/test_chain.py",
+    "candidates/qwen35_gdn_prefill/prep/test_model.py",
+    "candidates/qwen35_gdn_prefill/prep/test_reference.py"
+  ],
+  "compact_sha256": "1de430bc31d212a2d1dc1db9fb95e840658533da50316ea24639f294e57a5874",
+  "artifacts": [
+    {
+      "path": "work/qwen35_gdn_model/library/compile.json",
+      "bytes": 1903,
+      "sha256": "6de33282b02c2a0a3beaec2893cfc1fd0ca6d9b30eabbcd788ac03de197c74cf"
+    },
+    {
+      "path": "work/qwen35_gdn_model/library/compile.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/summary.json",
+      "bytes": 8827,
+      "sha256": "b5930cf9a789813426ad832dacc9d225aae882ed6bd568945aedea92d04bd214"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/test_typed_dense.log",
+      "bytes": 1572,
+      "sha256": "f34c8bf907ba1f095e17bb061a67045fb0ec8b711677549d91055de7cb7c8ece"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/test_rms_owner.log",
+      "bytes": 2261,
+      "sha256": "f2fe1ba05a25e242bf77bf2e0dcdcf8d39d3a7236ea5ba5f0415fa8bfbde0e89"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/test_prefix_reference.log",
+      "bytes": 1346,
+      "sha256": "b413cdc3120b888b3953a0bba94fc9af29a7449883927a7db6037a34f645ad53"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/test_prefix_driver.log",
+      "bytes": 732,
+      "sha256": "3672f8aa6f781caac5df5e195e80bb3c5dae281f4889c55ef9555d2b5b6cd0cb"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/test_input_fixture.log",
+      "bytes": 2177,
+      "sha256": "e29050cec1e35989c8c9f8f66c948f91290e68e7e28063ce686942f7629ece0c"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/prep__test_reference.log",
+      "bytes": 2409,
+      "sha256": "7b294d6af18669800b0191f0d38efbd0ca1092fa9c1b319a9a26a8ffb80cdaf7"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/prep__test_model.log",
+      "bytes": 3677,
+      "sha256": "512722b9b05caec7bff519231479255a241c36e42ccccf3716fb50043002f836"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/prep__test_chain.log",
+      "bytes": 312,
+      "sha256": "80955721b178a0a9d979a8a0cf317957bdc9fa98145960bcaa763857b8efbb59"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/conv__test_reference.log",
+      "bytes": 2467,
+      "sha256": "91913198a69ddb203a2da39b5047c05a4d7cb73bd844aced392bddc7ae002af6"
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests/conv__test_model.log",
+      "bytes": 3360,
+      "sha256": "57596f2f0dd2f8c65d087d80ee5e0b98d199b5ca9ab401448c0e15ef81f3872f"
+    }
+  ],
+  "dependencies": [
+    "numpy==2.3.5",
+    "PyYAML==6.0.3"
+  ],
+  "hardware_simulation": false,
+  "steps": [
+    {
+      "name": "build",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "scripts/build_shared_matrix_recipe.py",
+        "--repo",
+        ".",
+        "--out",
+        "work/qwen35_gdn_model/library"
+      ],
+      "exit_code": 0,
+      "seconds": 0.5230530919943703
+    },
+    {
+      "name": "test",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "candidates.qwen35_gdn_prefill.run_tests",
+        "--out",
+        "work/qwen35_gdn_model/tests"
+      ],
+      "exit_code": 0,
+      "seconds": 24.861131887999363
+    }
+  ]
+}

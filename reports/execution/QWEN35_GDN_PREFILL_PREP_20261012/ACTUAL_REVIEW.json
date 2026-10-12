@@ -1,0 +1,198 @@
+{
+  "checked_contracts": [
+    "Complete physical spans and disjoint fresh staging allocations reviewed in source.",
+    "Conv/AB provenance links point to actual prior ACKed/published producers.",
+    "FP32[M,6400] Prep bytes retain Q/K/V and gates; V widening, BF16 beta boundary and positive-zero padding checked.",
+    "A_log retains original 64-byte FP32 payload; dtBias uses original 32-byte BF16 payload plus exactly 32 padding bytes.",
+    "Final publication requires drained transport, full ACK coverage and accepted successful terminal in reviewed source; artifact receipts balance.",
+    "Same Memory, Matrix and Scalar chain reviewed; scalar is caller-owned and Softplus7 is explicitly enabled.",
+    "Every recorded fixed/native artifact path/hash/size checked; all 140 comparison records recomputed from saved arrays.",
+    "Pinned M1 source mapping and M1..128 independent-token extension are explicitly distinguished."
+  ],
+  "cross_run_source_identity_equal": true,
+  "findings": [],
+  "limitations": [
+    "Artifact review verifies receipt consistency; it does not independently replay handshakes or establish RTL correctness.",
+    "Native InputPrep comparisons remain diagnostic only, with no assigned standalone threshold. Fixed arithmetic is the bit-exact acceptance gate.",
+    "Both cold128 and carried128 labels denote input windows executed with cold Conv history; no carried recurrent state is established.",
+    "No public Command128 decode, chunk GDN, state commit, O/FFN, complete official block, synthesis, timing, physical resource inference or hardware-utilization acceptance is established."
+  ],
+  "methodology": "Read-only source review followed by independent Python standard-library/NumPy hash, byte, dtype, producer-chain, receipt, and saved-array metric checks. No candidate or reference module imported or executed; no test suite, compilation, simulation or RTL run by this reviewer.",
+  "reviewed_runs": [
+    {
+      "accepted_owner_terminals": 12,
+      "all_saved_comparison_metrics_match": true,
+      "checks": {
+        "chain": 14,
+        "comparison": 820,
+        "dtype": 20,
+        "file_hash": 159,
+        "file_size": 50,
+        "fixture": 19,
+        "identity": 73,
+        "output": 18,
+        "scope": 28,
+        "terminal": 55
+      },
+      "checks_total": 1256,
+      "comparison_records_recomputed": 70,
+      "errors": [],
+      "launch_exit_code": 0,
+      "launch_seconds": 78.93266186000255,
+      "peak_rss_kib": 418408,
+      "prep_ACKs_per_window": 6400,
+      "prep_bytes_per_window": 409600,
+      "prep_fixed_bit_mismatches": 0,
+      "prep_native_acceptance": null,
+      "prep_native_diagnostic_max_abs": {
+        "carried128": {
+          "native_official_inputs": {
+            "beta": 0.0,
+            "g": 1.430511474609375e-06,
+            "gate_padding": 0.0,
+            "key": 5.3851399570703506e-05,
+            "query": 0.00024625658988952637,
+            "value": 1.9073486328125e-06
+          },
+          "native_sameinput": {
+            "beta": 0.0,
+            "g": 1.430511474609375e-06,
+            "gate_padding": 0.0,
+            "key": 2.980232238769531e-07,
+            "query": 2.9802322387695312e-08,
+            "value": 0.0
+          }
+        },
+        "cold128": {
+          "native_official_inputs": {
+            "beta": 0.0,
+            "g": 1.430511474609375e-06,
+            "gate_padding": 0.0,
+            "key": 0.0002591535449028015,
+            "query": 3.3182092010974884e-05,
+            "value": 3.814697265625e-06
+          },
+          "native_sameinput": {
+            "beta": 0.0,
+            "g": 1.430511474609375e-06,
+            "gate_padding": 0.0,
+            "key": 1.7881393432617188e-07,
+            "query": 2.2351741790771484e-08,
+            "value": 0.0
+          }
+        }
+      },
+      "rows": 16,
+      "run": "actual_m16_01",
+      "source_snapshot_files_verified": 32,
+      "status": "PASS_INDEPENDENT_ARTIFACT_REVIEW",
+      "summary_sha256": "8aab8619be3ce8eb88eabb8c72ef529302d07ba816c4aa0d2c860560254381b7"
+    },
+    {
+      "accepted_owner_terminals": 12,
+      "all_saved_comparison_metrics_match": true,
+      "checks": {
+        "chain": 14,
+        "comparison": 820,
+        "dtype": 20,
+        "file_hash": 159,
+        "file_size": 50,
+        "fixture": 19,
+        "identity": 73,
+        "output": 18,
+        "scope": 28,
+        "terminal": 55
+      },
+      "checks_total": 1256,
+      "comparison_records_recomputed": 70,
+      "errors": [],
+      "launch_exit_code": 0,
+      "launch_seconds": 279.80213762300264,
+      "peak_rss_kib": 487684,
+      "prep_ACKs_per_window": 51200,
+      "prep_bytes_per_window": 3276800,
+      "prep_fixed_bit_mismatches": 0,
+      "prep_native_acceptance": null,
+      "prep_native_diagnostic_max_abs": {
+        "carried128": {
+          "native_official_inputs": {
+            "beta": 0.0,
+            "g": 1.9073486328125e-06,
+            "gate_padding": 0.0,
+            "key": 0.0006065219640731812,
+            "query": 0.00024625658988952637,
+            "value": 0.000244140625
+          },
+          "native_sameinput": {
+            "beta": 0.0,
+            "g": 1.9073486328125e-06,
+            "gate_padding": 0.0,
+            "key": 3.5762786865234375e-07,
+            "query": 4.470348358154297e-08,
+            "value": 0.0
+          }
+        },
+        "cold128": {
+          "native_official_inputs": {
+            "beta": 0.0,
+            "g": 1.430511474609375e-06,
+            "gate_padding": 0.0,
+            "key": 0.0018176548182964325,
+            "query": 0.0001358911395072937,
+            "value": 0.00048828125
+          },
+          "native_sameinput": {
+            "beta": 0.0,
+            "g": 1.430511474609375e-06,
+            "gate_padding": 0.0,
+            "key": 2.980232238769531e-07,
+            "query": 2.9802322387695312e-08,
+            "value": 0.0
+          }
+        }
+      },
+      "rows": 128,
+      "run": "actual_m128_01",
+      "source_snapshot_files_verified": 32,
+      "status": "PASS_INDEPENDENT_ARTIFACT_REVIEW",
+      "summary_sha256": "49637d15a8c3974f5ee5ff601805f879241d6c05eb58cfb862db10987f7fc6c3"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "M16_AND_M128_RMS_MATRIX_QKV_Z_AB_CONV_INPUT_PREP_SOFTWARE_ARTIFACT_REVIEW",
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen35_gdn_prefill/conv/model.py": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+    "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/input_fixture.py": "ab9839f63d45a10302754b7cc730ee7bba76cd6d9fc895c1f801d6a94936ffa2",
+    "candidates/qwen35_gdn_prefill/prefix_driver.py": "eccdbba58e77e8cf4ca0e71478e6900bfbee26791c06d360605d3581282df384",
+    "candidates/qwen35_gdn_prefill/prefix_reference.py": "807a06cd0befb697e8e2536f73319a6670c834a52dee7f29249dfe37be3806f6",
+    "candidates/qwen35_gdn_prefill/prep/model.py": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+    "candidates/qwen35_gdn_prefill/prep/reference.py": "e51583b6e6837ca373f27896ef81097731036e067b9881fff086eb94b8a251eb",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/projection_reference.cpp": "143e28be0ea03e6c29e9d0e58afe1190e7050fa4ea43e9237a45fb218e9a3edd",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "5754040059a39bbeca67c30a71c4babb168e2445a8eed24d4e9cd4127c642565",
+    "chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json": "3f55253cc9aff3f7875e2764a61cfef2b695d808e2fe4938eb9a2ca78b91596d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+    "config/upstream/qwen3_5_0p8b/layer0_payload_pin.json": "80352cc5df45472a8867a4e1d346f60dc888e6f89ee191ec35457b484770d9c4",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "config/upstream/qwen3_5_0p8b/prefix_payload_pin.json": "1abdfec9e51e2fe77be685a9e2a5e3f3894162daa9b63e7c336b28ae399b104c",
+    "config/upstream/qwen3_5_0p8b/prefix_token_fixture.json": "7aa77ba8b89001738c5b3a9a04b6f27a59118cbeebd01cffe82e42954b85f7b1",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+    "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+    "src/heteronpu/pinned_prefix_payload.py": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+    "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8"
+  },
+  "status": "PASS_INDEPENDENT_ARTIFACT_REVIEW"
+}

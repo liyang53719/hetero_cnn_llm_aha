@@ -9,7 +9,7 @@ import sys
 import time
 
 ROOT=Path(__file__).resolve().parents[2]
-SOURCE_DIRS=(Path(__file__).parent,Path(__file__).parent/'conv')
+SOURCE_DIRS=tuple(Path(__file__).parent / name for name in ('', 'conv', 'prep'))
 
 
 def source_files():
@@ -25,7 +25,7 @@ def main():
     sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
              for p in source_files()}
     tests=sorted(p for directory in SOURCE_DIRS for p in directory.glob('test_*.py'))
-    report=dict(scope='SYNTHETIC_TYPED_RMS_DENSE_SOFTWARE_ONLY',status='RUNNING',
+    report=dict(scope='SYNTHETIC_TYPED_RMS_DENSE_CONV_INPUT_PREP_SOFTWARE_ONLY',status='RUNNING',
         source_sha256=sources,discovered_tests=[str(p.relative_to(ROOT)) for p in tests],
         suites=[],test_count=0,rtl_executed=False,checkpoint_payload_used=False)
     failed=False

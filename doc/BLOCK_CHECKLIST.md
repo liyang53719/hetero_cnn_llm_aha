@@ -95,4 +95,6 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 
 2026-10-12 0.8B L0 typed owner前缀：真实embedding→RMS→QKV/Z/AB，两个M128输入窗口8个owner终态及原12项前缀数值门通过。见[来源与范围](QWEN35_GDN_PREFILL_PREFIX_20261012_CN.md)。这仍是S04/Q35B下的模型前置子门，未接公共Command128/Conv/chunk/state/FFN、无新RTL；第二输入窗口不等于carried GDN状态验收。S04/Q35B/U00.2/U01及五block M128总门保持open。
 
-2026-10-12 17:04 UTC：0.8B L0的真实typed投影写回→Conv4/SiLU/history staging已在两个M128输入窗口完成10个owner终态，原12项前缀门、实际Conv/SiLU同输入门及端到端原门通过。见[本轮数据与范围](QWEN35_GDN_PREFILL_CONV_20261012_CN.md)。两个Conv均cold，history未发布/无generation提交，仍不是carried GDN或完整block。S02/S04/Q35B/U00.2/U01及五block总目标保持open。e0bf前缀两CI及其下载工件已核闭环，本批等待独立产物复核和新轻CI。
+2026-10-12 17:04 UTC：0.8B L0的真实typed投影写回→Conv4/SiLU/history staging已在两个M128输入窗口完成10个owner终态，原12项前缀门、实际Conv/SiLU同输入门及端到端原门通过。见[本轮数据与范围](QWEN35_GDN_PREFILL_CONV_20261012_CN.md)。两个Conv均cold，history未发布/无generation提交，仍不是carried GDN或完整block。S02/S04/Q35B/U00.2/U01及五block总目标保持open。e0bf前缀两CI及其下载工件已核闭环，cb93596的独立产物复核、两CI及下载工件均已闭环。
+
+2026-10-12 17:34 UTC：0.8B L0实际Conv/AB→InputPrep M128软件前缀完成，两个cold输入窗口12个owner、全部1,638,400个新增FP32字对独立固定配方一致，原RMS/投影/Conv门保持。103项冷小测试通过；[数值与范围](QWEN35_GDN_PREFILL_PREP_20261012_CN.md)保留全部native差异，InputPrep native stage未另授门限。尚未真正chunk/state/fence或完整block，原Chisel准备owner仍M1。S02/S04/Q35B/U00.2/U01及五block总目标保持open。

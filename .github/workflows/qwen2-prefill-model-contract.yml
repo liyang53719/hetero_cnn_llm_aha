@@ -19,11 +19,14 @@ on:
       - 'scripts/qwen2_rms_rope_policy_diagnostic.py'
       - 'scripts/qwen2_rms_rope_prefill_candidate.py'
       - 'scripts/qwen2_rms_backend_evidence.py'
+      - 'scripts/observe_qwen2_attention_model.py'
+      - 'scripts/build_shared_matrix_recipe.py'
       - 'reports/execution/QWEN2_RMS_ROPE_POLICY_20261011/**'
       - 'scripts/qwen2_prefill_resource_schedule.py'
       - 'scripts/qwen2_dense_residency_numeric.py'
       - 'scripts/qwen2_rectangular_attention_numeric.py'
       - 'candidates/qwen2_transposed_dense/**'
+      - 'candidates/qwen2_resident_matrix/**'
       - 'tests/test_qwen2_transposed_dense.py'
       - 'tests/test_qwen2_fullgraph_dataflow.py'
       - 'scripts/qwen2_shared_sfu_schedule.py'
@@ -50,6 +53,7 @@ on:
       - 'tests/test_qwen2_rms_rope_policy_diagnostic.py'
       - 'tests/test_qwen2_rms_rope_prefill_candidate.py'
       - 'tests/test_qwen2_rms_backend_evidence.py'
+      - 'tests/test_qwen2_attention_observation.py'
       - 'tests/test_qwen2_prefill_resource_schedule.py'
       - 'tests/test_qwen2_dense_residency_numeric.py'
       - 'tests/test_qwen2_shared_sfu_schedule.py'
@@ -145,6 +149,8 @@ jobs:
           python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --source-divider-options 16 --out work/qwen2_model_contract/sfu_d14_candidate_binding.json
           python scripts/qwen2_prefill_resource_schedule.py --observed-silu-host-bound --out work/qwen2_model_contract/m128_observed_silu_host_bound.json
           python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --contexts 5 --dense-mapping resident_m128_nc3 --out work/qwen2_model_contract/m128_resident_nc3_unbound.json
+          python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen2_model_contract/attention-library
+          MATRIX_SERVICE_LIBRARY="$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so" MATRIX_SERVICE_COMPILE_RECEIPT="$PWD/work/qwen2_model_contract/attention-library/compile.json" QWEN2_ATTENTION_OBSERVATION_OUT="$PWD/work/qwen2_model_contract/attention-observation" python -m unittest discover -s tests -p test_qwen2_attention_observation.py -v
           python scripts/check_git_payloads.py
       - name: Retain compact source-bound traffic evidence
         uses: actions/upload-artifact@v4
@@ -154,5 +160,7 @@ jobs:
             work/qwen2_model_contract/*.json
             work/qwen2_model_contract/transposed_analytic/SUMMARY.json
             work/qwen2_model_contract/fullgraph_dataflow/SUMMARY.json
+            work/qwen2_model_contract/attention-library/*
+            work/qwen2_model_contract/attention-observation/*
           if-no-files-found: error
           retention-days: 14

@@ -9,7 +9,7 @@ M16 只作早期诊断，不代替 M128；逐次 M1 launch 不称为一次 prefi
 
 | 完整 block | 已有实际范围 | 尚缺的主要闭环 |
 |---|---|---|
-| Qwen2-1.5B L0 | 合成权重、真实 H1536/F8960 的完整 15 阶段 M16；另有 Matrix4096/iDMA 双层连续合成回归 | 固定官方权重/embedding 的 M128 软件模型已执行但未过完整数值门；原硬件算术与官方差异待修；真实 M128 完整硬件 |
+| Qwen2-1.5B L0 | 固定官方权重/embedding 的 cold M16、M128，公开21命令同一软件实例贯通15主阶段，对独立v0算术逐位相同；M128原比较超时与后处理PASS分别保留 | 完整29诊断节点及官方BF16/FP32数值门仍未通过；真实carried prefill与M128完整硬件待验 |
 | Qwen3.5-0.8B L0 GDN | 79bbe 的同 DUT cold M1→carried M1，完整 RMS/核心/O/残差/FFN/双状态 fence；canonical 和原 native 数值门通过 | M128；整链 fault/reset/restore；完整周期计数 |
 | Qwen3.5-0.8B L3 Attention | 98c7 的完整双 M1 canonical 通过；后续保全 49 个真实 tensor 的相同输入官方 terminal/final/KV 比较通过 | 实际内部 GQA 33–37 未导出；输入 RMS 归约差异的生产修复；M128 |
 | Qwen3.5-35B-A3B L0 GDN+MoE | 固定官方配置、forward、权重 header 和 E0 几何/算子合同 | 真实权重和输入、路由/专家执行、完整数值模型及硬件 |
@@ -833,3 +833,15 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 发布前在第二个纯源码checkout，从固定baseline fetch、固定依赖安装、现编共享库开始，按workflow原次序执行完整18组778测试、30条真实Scala/CHIRRTL命令，最后按同一工件glob收集131份IR及全部摘要/日志。此前不存在work；87个Maven依赖重新下载逐hash核验，HardFloat精确commit重新获取。全流程759.291秒，未扩大900秒预算；没有RTL/长数值重跑。实际收集204项、49,120,284 B，SHA `3fd7e75d951bf008f7fa593b7b31e70d1b0ce202b066213293d5297f8e631a8f`。
 - 独立读回核对11源manifest、87依赖、30成功命令和131份IR；所有真实源码条目与旧df18相同，IR仅移除原审定来源位置后逐字相同。旧task_source字典误包含Python缓存，其中down的3项和seed的2项pyc hash不同；5个对应.py源hash均相同。原pyc字节未归档，不能进一步归因具体字段，因此保留差异而不宣称整个元数据字典相同。首次过强全字典比较失败也保留，未修改实际frontend门。独立核验摘要SHA `257c874ed11b22febbeb05ba39a4dfbb049600e1607ae258a69897797f3b6807`。
 - done（局部）：冷源码完整顺序流程及工件核验。ongoing：本4文件修复发布与精确CI终态/工件闭环。75项M128执行源保持不变，数值策略/所有原FAIL保持。当前真实命令链仍是v0：相对官方BF16的第一差在n0，末y rel-L2约0.2682195；相对官方FP32末y rel-L2约0.0332366、cos约0.99944752，原开发门仍失败。隔离v2的改进不能转移为本链native通过；完整五block硬件验收保持OPEN。
+
+
+### 2026-10-12 冷流程CI闭环与不改算术的内部观测
+
+- 修复提交 `545226c1539d0488187df604a020301e4fd76137` 的 [frontend run38213042469](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38213042469) 与 payload run38213042402 均SUCCESS。工件11729499931已下载核对48,455,609 B与SHA `19c2c6da7fd09bec3a22fa3d51c1f16ffa737fe3a0deed5af6675e8f34bbcdb4`；778 tests、30成功前端命令、11份源码清单、87依赖和131份与df18正规化一致IR逐项通过。独立验证摘要SHA `101968180df0f527d0b9ab50ae5e6f11bf6263d44a8f48715565860c151fa57a`。5项旧pyc差异及其对应源码相同分别记录。cefc/ce7两次旧基础设施失败保持原结论。
+- 新 `scripts/observe_qwen2_attention_model.py` 在现有软件 Attention owner 上读取已计算的局部值，不替换owner或Scalar/Matrix。源绑定的CPython3.12 trace仅观察QK最终16分片、顺序和、实际因果score、exp/max/sum/inverse、进入PV的FP32/BF16 probability和最终PV packet；原75项执行源没有修改。观测器单独记录自身身份及已载入Python代码/默认参数/系数绑定；调用者仍须提供并验证Matrix库编译来源，它不自行证明ELF来源。
+- 只在实际owner `response_fire` 接受成功、准确最终ACK字节和服务退休后封存。held success不算接受，错误ACK、reset或不完整观测不算成功；后续新事务不能追溯撤销已经接受的旧回执。future scores原路径未计算，原位保留缺失mask；PV各16列组重复8次的概率逐位核对并保留每坐标次数。外置诊断buffer不是新增硬件SRAM，不参与任何后续运算。
+- 使用方法是在原驱动外层、原严格导入闭包之外导入该模块，再以 `AttentionObservation(existing_owner)` 的context包住现有驱动；接受Attention终态时自动停trace，后续FFN继续原路径。`save`可保全小实际激活、presence和次数文件以及摘要，禁止写入Git。新捕获必须有自己的source/input/工具身份，不继承旧M128数值PASS；本轮仅小synthetic门，不重跑M128、Chisel或RTL。
+- 原v0公式和数值门均保持。采用官方BF16物化v2作为目标的询问尚未获答，当前4节点差异仍阻断；FP32模型比较、完整29节点门、真实carried prefill与五block硬件验收均未关闭。
+- 新观测14测试通过，包含trace开/关所有实际服务握手及输出完全相同、独立整数舍入参考、真实响应改变、末ACK/错误/reset/held终态、源码/已载入函数及缺失/重复事件拒绝。独立纯源码checkout在显式获取固定baseline后，按现有model-contract工作流次序完成13+27+67+248+14=369测试及原解析模型摘要，68.268秒；只复用固定Python工具环境，未复制历史work或实值输入。首次准备因浅clone缺baseline在测试前停止，原失败保留；补精确fetch后续行成功。执行日志SHA `f96ef8260d6e6d94add7c6dfa9d330fe4f54c8e903674125a414fd29dbbf853d`。测试后仅补本文结果与状态表，执行源码、测试和workflow身份未变。
+- 同次新编共享Matrix库SHA `22da518dc47e641cd7052b84d0c46389fd92d71665276fb671410cf5b994136c`，显式编译回执与源码逐项验证。synthetic M2捕获36个因果score、576个QK分片、72个normalizer字及3072个PV字；概率每坐标8次实际观察全部相同。所有被观察字段均经独立参考核对；future上三角缺失且不补值。完整握手trace SHA `d634b23f55d30131801a0f0d9814b004a14660be1f0713029cda87fc912a5e58`、实际输出SHA `8d7ae9c2688ea00bd1a46e7068daca70d746452c3edaab76fd202ada0026add3`；这是软件owner观测门，不是官方payload、整block或硬件数值通过。
+- done（局部）：原545双CI及工件、只读内部观测和369项冷轻门。ongoing：本5文件增量发布与精确model-contract/payload两CI工件核验。todo：后续获准数值策略接入时，同完整链保全实际内部观测；当前不为补观测重复长M128。

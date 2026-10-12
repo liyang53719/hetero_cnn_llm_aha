@@ -30,7 +30,7 @@ carried 官方自己的 cache 与候选 cache 条件下，Q/K/scores/logits 相�
 
 ## 两个待批准方向
 
-**A：保留 v0 固定算术，建立独立实现正确性参考。** 保留原 v0 FP32 RoPE pair 后 BF16 输出等既有顺序，明确逐步舍入、累加次序、bias 和近似函数。独立参考不能导入候选生成器作为答案。官方模型比较继续报告原始 FAIL，单独记录模型质量。若要改变哪一个参考决定验收，即使门限数字不变，也需要版本化批准。当前尚不能据此宣告实现或质量通过。
+**A：保留 v0 固定算术，建立独立实现正确性参考。** 保留当前 Qwen2 的实际顺序：RoPE pair 在 FP32 完成并原样写回 FP32 tensor，随后在 Matrix 入口进行 BF16 RNE；这与通用 v0 文本所述的 pair 后 BF16 输出边界须分别标注。逐步舍入、累加次序、bias 和近似函数仍按冻结源码核对。独立参考不能导入候选生成器作为答案。官方模型比较继续报告原始 FAIL，单独记录模型质量。若要改变哪一个参考决定验收，即使门限数字不变，也需要版本化批准。当前尚不能据此宣告实现或质量通过。
 
 **B：明确采用官方物化边界，再批准独立的模型保真度门。** 逐项写清 RMS、RoPE table/乘积、QK dot/scale、softmax、probability、PV 和 residual 的精度与舍入；仍为硬件指定确定归约及独立算术参考。另行定义并批准原始官方比较的绝对 max/mean、ULP分布、近零规则，以及完整模型的质量门。不能凭本样本选新阈值，不能仅靠最后一层输出；代表语料上的 logits/分布、loss或任务质量及基线波动需另行验证。本材料没有运行或自动批准该更大范围。
 
@@ -41,6 +41,8 @@ carried 官方自己的 cache 与候选 cache 条件下，Q/K/scores/logits 相�
 原始只读归因：[ATTRIBUTION.json](../reports/execution/QWEN2_BF16_ERROR_ATTRIBUTION_20261011/ATTRIBUTION.json)，SHA256 `2e5991c9efb31e980c8ef9199717b6c7a0e4d58b91f3bcfd5faa4086d2c3519a`。其顶层 scope 的范围补正在同目录 README；只做了一次完整形状孤立 QK，没有追加完整 block。
 
 两段软件结果：[m128_RESULT.json](../reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m128_RESULT.json)，SHA256 `99d551a40ca38af3d196015cf2dbb6e4ea80bdfec1f33f7c0d5cbb58a9131ac0`。cold末输出max/mean为0.03125/0.0000189665，carried官方自身cache为0.0078125/0.0000537381；末门通过但中间门失败。完整 Chisel/RTL、跨主机稳定性、完整模型质量和新政策批准均未完成。
+
+2026-10-12 的公开21命令软件链另有完整15个实际主阶段与raw QKV/KV写回比较；它没有导出内部 scores/logits/softmax/prob，不能替代上述29节点诊断。29节点中的future score来自额外软件诊断计算，原生产对应的因果owner只计算 `key <= query`。后续实际内部观测应保留“实际计算且观测”“未执行”“派生视图”三个范围，不填入官方结果或将未执行的future score冒充实际输出；原完整诊断门及其FAIL仍保留。
 
 - done（局部）：RMS/表精度首差定位、同形状QK反例与上游传播的独立复核。
 - ongoing：原门下的M128整链数值修正与固定资源调度模型。

@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "status": "PASS_M128_PUBLIC21_OBSERVED_OFFICIAL_GATES_REVIEW",
+  "scope": "Independent read-only review of completed run and frozen artifacts; no model, test, compile or reference rerun",
+  "summary_path": "work/qwen2_official_public21_20261012/reduction_actual_m128_01/summary.json",
+  "summary_sha256": "ce41fcef0fbcbcbcf90ea6b7d090fd00584ce3cb426d52323a6c429aac18f289",
+  "snapshot_sha256": "dc0b459c3f60e294a1ac77eda4aeea26e7782ec78fa87652ffb9b64830e99a9d",
+  "run_receipt_sha256": "bb7bc7093fb738df022602cf73f5866022ae9ffd802de5eba951fda7929b3d17",
+  "returncode": 0,
+  "host_wall_seconds": 1548.1124136120052,
+  "source_count": 116,
+  "checks": {
+    "snapshot_sha256_exact": true,
+    "summary_snapshot_digest_matches": true,
+    "source_before_after_equal": true,
+    "all_116_current_and_frozen_sources_match": true,
+    "original_snapshot_digest_matches": true,
+    "original_source_input_metadata_preserved": true,
+    "actual_input_identities_match_snapshot": true,
+    "readonly_arena_sha256_matches": true,
+    "raw_x_slice_matches_actual": true,
+    "no_intermediate_preloads": true,
+    "elf_magic_and_digest_match": true,
+    "compile_receipt_digest_matches": true,
+    "reference_result_digest_matches": true,
+    "reference_frozen_digest_matches": true,
+    "reference_binary_digest_matches": true,
+    "reference_rows_exact": true,
+    "all_reference_artifacts_match": true,
+    "all_original_reference_artifacts_match": true,
+    "all_actual_output_files_match": true,
+    "all_observer_file_hashes_match": true,
+    "host_21_17_1_success": true,
+    "17_published_outputs_complete_ack": true,
+    "memory_write_obligations_balanced": true,
+    "no_reset_required": true,
+    "fixed_15_files_bit_exact": true,
+    "fixed_6_observed_fields_bit_exact": true,
+    "official_qkv_and_causal_scores_direct_bytes_match": true,
+    "all_27_assigned_official_gates_pass": true,
+    "run_log_digest_matches": true
+  },
+  "published_output_count": 17,
+  "published_output_ack_bytes": 13369344,
+  "all_physical_write_ack_bytes_including_workspace": 15728640,
+  "fixed_main_stage_checks": {
+    "n0": true,
+    "qr": true,
+    "kr": true,
+    "v": true,
+    "q": true,
+    "k": true,
+    "att": true,
+    "o": true,
+    "r": true,
+    "n1": true,
+    "gate": true,
+    "up": true,
+    "act": true,
+    "down": true,
+    "y": true
+  },
+  "fixed_observed_checks": {
+    "scores": true,
+    "logits": true,
+    "softmax_fp32": true,
+    "prob": true,
+    "pv": true,
+    "silu": true
+  },
+  "official_direct_byte_checks": {
+    "q": true,
+    "k": true,
+    "qr": true,
+    "kr": true,
+    "v": true,
+    "scores": true,
+    "logits": true
+  },
+  "official_y_recomputed_from_saved_files": {
+    "max_abs": 0.03125,
+    "mean_abs": 7.282360456883907e-06
+  },
+  "causal_coverage": {
+    "scores": {
+      "mask_exact": true,
+      "observed": 99072,
+      "future_absent": 97536
+    },
+    "logits": {
+      "mask_exact": true,
+      "observed": 99072,
+      "future_absent": 97536
+    },
+    "softmax_fp32": {
+      "mask_exact": true,
+      "observed": 99072,
+      "future_absent": 97536
+    },
+    "prob": {
+      "mask_exact": true,
+      "observed": 99072,
+      "future_absent": 97536
+    }
+  },
+  "official_assigned_pass_count": 27,
+  "softmax_fp32": {
+    "contract": null,
+    "passed": null,
+    "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+  },
+  "original_independent_auxiliary_failures": [
+    "gate",
+    "scores",
+    "logits",
+    "prob"
+  ],
+  "original_historical_diagnostic_failures": {
+    "independent_self_cache": [
+      "gate",
+      "logits",
+      "prob",
+      "scores"
+    ],
+    "official_self_cache": [
+      "logits",
+      "scores"
+    ]
+  },
+  "gaps": {
+    "missing_nodes": [
+      "explicit_mask_tensor"
+    ],
+    "partially_observed_nodes": [
+      "scores",
+      "logits",
+      "prob",
+      "softmax_fp32"
+    ],
+    "full_29_node_acceptance": false,
+    "future_score_materialization": false,
+    "new_official_forward_executed": false,
+    "rtl_executed": false,
+    "scala_executed": false,
+    "hardware_cycles": null
+  },
+  "thresholds": {
+    "block": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "operator": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract",
+    "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "source": "spec/numerical_contract.md"
+  },
+  "claims": "Actual M128 cold public21 software execution and all assigned observed official gates only; original auxiliary failures preserved"
+}

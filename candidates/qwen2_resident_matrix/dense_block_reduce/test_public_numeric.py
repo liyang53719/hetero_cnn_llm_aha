@@ -13,6 +13,16 @@ from scripts import qwen2_layer0_model_gate as native
 
 
 class NumericGuards(unittest.TestCase):
+    def test_only_two_explicit_cold_geometries_are_admitted_before_output_creation(self):
+        for rows in (16,128):self.assertEqual(R.validate_rows(rows),rows)
+        for rows in (True,16.0,0,1,17,127,129,1024,'128'):
+            with self.subTest(rows=rows):
+                with self.assertRaises(ValueError):R.validate_rows(rows)
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp)/'new'
+            with self.assertRaises(ValueError):R.prepare(out,None,None,None,rows=1)
+            self.assertFalse(out.exists())
+
     def test_artifact_bytes_hash_and_unique_inventory(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);(root/'raw_stages').mkdir();p=root/'raw_stages/x.f32le';p.write_bytes(b'1234')

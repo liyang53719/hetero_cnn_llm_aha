@@ -1,0 +1,66 @@
+{
+  "status": "PASS_FINAL_CI_BUDGET_INCREMENTAL_CHECK",
+  "final_source_sha256": {
+    ".github/workflows/qwen2-prefill-model-contract.yml": "36c2005340980ef1d47c29e9703de7d0be12b4ce3809ee7eb3cd6fb1fcc97302",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/run_tests.py": "22ab6d7e59723d1eb47290028d849f543e4ca594810f9e9d7bc27f3617b0c138",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/test_ci_runner.py": "f5f7065f5d7d9509953285d1d67cee17c0630e7921df9cff0e4e794ee85906ce",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/builder.py": "1a66657556438a95a843e6965ec96f7a263285149f244e08893d453a0f70603c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/run_reference.py": "1b9aae3af5c7873e8e9b4bdd81b437aa19da5a826ef4d3dd0f9ed8aac815ce03",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/completed.py": "2f4175b4b7fef3ea9a663f068e47efbc23f9cdb03f93813a81cf8ff7c6b2efbf",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/cold_check.py": "edb03352c60e7a5b0210ba8f3169d0202629839ec7a20d1045f08b4291dc4c68",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/README.md": "c3b6dd9a1dda13abfebde0ba7aa01a046e266f64c1db21481dd7e0250ad961ca",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/workload.py": "58d23b12e300b0cf61316582dc2e6679a83b8b4a2427bee11d41bc71035916e1",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/test_workload.py": "99fd9073da9b5ad62ea68d67d721c930c198012e502e9bf2eba645eb65036fd4",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py": "1b5466572150afc9c47ba9ee847957f24da2819f7b83c4a7fc7be930da2c2c6b",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/test_public_numeric.py": "4d11d8a24396eaca5af36f63da3eb5920a7ed2db0832550ba7e2bceda93efe4e",
+    ".github/workflows/qwen2-matrix-interface-frontend.yml": "6c7255cfc8f2fe9a6a8f151a7d6828d999e92c062234a781af41cf41bcca8af7"
+  },
+  "normalized_frontend_workflow_sha256": "898e1ced4a9b83641d5fe1944bffdbb3c3e4a71d4d51193cbd17bd7a94ff8aa4",
+  "only_frontend_effective_change": "timeout-minutes: 15 -> 20",
+  "fresh_test_ci_runner_tests": 6,
+  "fresh_test_ci_runner_exit_code": 0,
+  "fresh_test_log_sha256": "4f0f6c7bb9a0b32b324adddfeae5f7ee3c54c9dbbfae6a4090fae0fffeadb587",
+  "prior_full_isolated_tests": 117,
+  "prior_full_isolated_suites": 13,
+  "prior_evidence_sha256": {
+    "summary.json": "c83c80038ca2ee673f9ee777f72a098a31fc9ad6b6da493435a4932f7b0b6898",
+    "verification.json": "cfe40433f5de9f382bd0c759dede802bb6de1f5df9996712f1b62421f898d094",
+    "source_map.json": "30e944c53ebfac8a093b3351eaeea2abb5aa183156ce708b96ce2140e0b98cd0"
+  },
+  "prior_evidence_preserved": true,
+  "git_objects_unchanged": true,
+  "commits_present": [
+    "299949a03876fb561010afb6e1d83097db0ca593",
+    "825caff3a6c618419c49c7da452e009ce86ae8b5",
+    "a2e4beef6ec5278a68a6bc4021780ff0f26aff8d"
+  ],
+  "no_build_or_full_suite_rerun": true,
+  "root_source_edits": false,
+  "evidence_scope": "cold shallow source tests; no complete model replay and no RTL",
+  "head_under_test": "a2e4beef6ec5278a68a6bc4021780ff0f26aff8d plus the explicitly listed 13-file overlay",
+  "observed_original_failures": {
+    "model": {
+      "run": 38267504415,
+      "job": 114873264663,
+      "conclusion": "failure",
+      "cause": "missing immutable 825caff Git object in shallow checkout",
+      "raw_log_sha256": "edeec8a1d30b2b00c5d53b4c9275456bbbc4b412dcaf647d6a11b391212b7feb"
+    },
+    "frontend": {
+      "run": 38267504488,
+      "job": 114873265013,
+      "conclusion": "cancelled",
+      "last_step_message": "The operation was canceled.",
+      "configured_timeout_minutes": 15,
+      "step_times_seconds": {
+        "setup_and_source_tests": 169,
+        "frontend": 747,
+        "artifact_upload": 13
+      },
+      "new_job_timeout_minutes": 20,
+      "artifact_sha256": "a51f5a052fcdb7d687e55e6f1c7f4c019c47d9c3611c6798f2af97e9ad819eeb",
+      "raw_log_sha256": "38fb5320857871336e67ab29dd70c64cd1a0043266701ab3311b19fa88c1f44c",
+      "actor_cancellation_not_attributed": true
+    }
+  }
+}

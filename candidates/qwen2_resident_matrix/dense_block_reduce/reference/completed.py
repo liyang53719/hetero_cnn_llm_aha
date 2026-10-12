@@ -1,8 +1,24 @@
 """Hash-verified adapter for the new auxiliary producer's completed outputs."""
 from pathlib import Path
 from . import builder as b
+from . import workload as w
 
 EXECUTED_FROZEN_SHA='f75d9775e26ee12478262519946275b5c168591c17a25d9b8144d7cd235406c0'
+
+def receipt_rows(result,prepared,frozen):
+    rows=w.cold_rows(result['rows'],prepared['past_tokens'])
+    b.require(type(prepared['rows']) is int and prepared['rows']==rows,'result/preparation row identity differs')
+    if 'rows' not in frozen:
+        b.require(rows==16 and result['frozen_sha256']==EXECUTED_FROZEN_SHA,
+                  'only the preserved M16 execution may omit frozen row metadata')
+    else:
+        b.require(w.cold_rows(frozen['rows'],frozen['past_tokens'])==rows,'frozen row identity differs')
+    b.require(frozen['run_command'][2]==str(rows) and frozen['run_command'][4]=='0',
+              'executed command row/past identity differs')
+    b.require(frozen['compile_wall_budget_seconds']==w.COMPILE_WALL_SECONDS and
+              frozen['run_wall_budget_seconds']==w.RUN_WALL_SECONDS[rows],
+              'execution budgets differ from admitted workload')
+    return rows
 
 def verify_source_provenance(frozen,frozen_sha256):
     """Bind old receipts to exact retained source, never relabel current wrappers."""
@@ -29,19 +45,20 @@ def reference_spec(directory, result_sha256):
     directory=Path(directory).resolve()
     result=b.frozen_json(directory/'RESULT.json',result_sha256)
     b.require(result['status']=='COMPLETE_INDEPENDENT_REFERENCE_WITH_ARCHIVED_DIAGNOSTIC'
-              and result['version']==b.VERSION and result['rows']==16
+              and result['version']==b.VERSION
               and result['full_reference_executed'] and not result['actual_chain_executed']
               and not result['new_official_forward_executed'] and not result['rtl_executed']
               and not result['implementation_acceptance'] and not result['native_acceptance'],
               'incomplete or incompatible independent reference receipt')
     frozen=b.frozen_json(directory/'FROZEN.json',result['frozen_sha256'])
     prepared=b.frozen_json(directory/'PREPARED.json',result['prepared_sha256'])
+    rows=receipt_rows(result,prepared,frozen)
     b.require(frozen['prepared_sha256']==result['prepared_sha256'] and
               prepared['version']==frozen['version']==b.VERSION,'reference provenance mismatch')
     b.require(prepared['source_sha256'].items()<=frozen['source_sha256'].items(),
               'prepared sources differ from execution freeze')
     provenance=verify_source_provenance(frozen,result['frozen_sha256'])
-    archive,top,cold=b.archive_context(16,archive_directory=prepared['old_archive']['directory'])
+    archive,top,cold=b.archive_context(rows,archive_directory=prepared['old_archive']['directory'])
     original,_=b.regenerate_original()
     b.verify_transform(original,(directory/'candidate.cpp').read_bytes(),(b.ROOT/b.PROFILE_REL).read_bytes())
     b.require(b.file_sha(directory/'candidate.cpp')==frozen['candidate_cpp_sha256'] and
@@ -49,16 +66,23 @@ def reference_spec(directory, result_sha256):
               b.file_sha(directory/'candidate')==result['binary_sha256'],'reference build artifact drift')
     b.require(b.file_sha(prepared['readonly_input']['path'])==cold['inputs']['readonly_sha256']==
               prepared['readonly_input']['sha256'],'reference readonly input drift')
+    b.require(frozen['readonly_input']==prepared['readonly_input'],'frozen readonly input differs')
+    if result['frozen_sha256']!=EXECUTED_FROZEN_SHA:
+        b.require(frozen['actual_input_source']==prepared['actual_input_source'],'frozen actual input provenance differs')
+    b.verify_input_binding(prepared,top,cold,require_actual_source=result['frozen_sha256']!=EXECUTED_FROZEN_SHA)
+    b.require((directory/'empty_cache.bin').read_bytes()==b'','cold cache must be empty')
     b.require(result['comparison']['producer_outputs_sealed_before_official_read'] and
               not result['comparison']['full_29_node_acceptance'],'reference comparison scope differs')
     artifacts=[]
+    expected=w.validate_sealed_inventory(rows,result['sealed_outputs'])
+    b.require({p.name for p in (directory/'raw_stages').iterdir()}==set(expected),'raw output inventory differs')
     for name,record in result['sealed_outputs'].items():
         b.require(Path(name).name==name,'invalid producer artifact path')
         path=directory/'raw_stages'/name
         b.require(not path.is_symlink() and path.stat().st_size==record['bytes'] and
                   b.file_sha(path)==record['sha256'],'independent producer output drift: '+name)
         artifacts.append(dict(path='raw_stages/'+name,**record))
-    return dict(schema=1,version=b.VERSION,directory=str(directory),rows=16,past_tokens=0,
+    return dict(schema=1,version=b.VERSION,directory=str(directory),rows=rows,past_tokens=0,
                 result_sha256=result_sha256,frozen_sha256=result['frozen_sha256'],
                 candidate_cpp_sha256=frozen['candidate_cpp_sha256'],binary_sha256=result['binary_sha256'],
                 header_sha256=frozen['header_sha256'],profile_sha256=prepared['profile_sha256'],

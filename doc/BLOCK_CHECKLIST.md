@@ -86,3 +86,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 队列默认跳过所有 done 和已有负责人正在执行的 ongoing 叶项，不自动重开历史任务。
 
 2026-10-12 QKV归约接入进度与资源/验真范围见 [Qwen2分块归约记录](QWEN2_QKV_BLOCK_REDUCTION_20261012_CN.md)。这是Q21.3的实现子门，未关闭Q22/Q23/U01；官方BF16为用户批准目标，原FAIL与其余四个block的M128缺口保留。
+
+2026-10-12 本轮QKV分块归约已在公开21命令cold M16完整模型到达终态，17输出共1,671,168B ACK，15主阶段+6内部节点对固定配方逐bit一致、官方27已分配门通过。Q21.3仍ongoing：M128同源实际链正在执行，future scores未执行不能冒作全29节点通过，Chisel仅前端/默认关闭，尚无本批RTL验收。a2e4远端payload成功；model浅克隆基线FAIL已修且冷117测试通过；frontend原job cancelled但保存了完整PASS工件，等待修正预算后的新CI。详见分块归约记录；五block M128总门保持open。

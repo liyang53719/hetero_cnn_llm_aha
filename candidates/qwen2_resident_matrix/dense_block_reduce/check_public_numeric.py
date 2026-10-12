@@ -50,9 +50,15 @@ def runtime():
     return old,modules
 
 
+def validate_rows(rows):
+    require(type(rows) is int and rows in (16,128),'cold public21 rows must be exactly 16 or 128')
+    return rows
+
+
 def prepare(out,compile_receipt,reference,reference_sha256,rows=16):
     out=Path(out).resolve()
-    require(not out.exists() and rows==16,'fresh first M16 integration snapshot required')
+    validate_rows(rows)
+    require(not out.exists(),'fresh integration snapshot required')
     out.mkdir(parents=True)
     # Revalidate original source, public metadata, payload, table and native
     # archives; this performs no arithmetic or actual-chain execution.
@@ -78,7 +84,7 @@ def verify_snapshot(path,digest):
     s=json.loads(path.read_text());original=prior.verify_snapshot(s['original_snapshot'],s['original_snapshot_sha256'])
     _,modules=runtime()
     require(s['status']=='PREPARED_REDUCED_PUBLIC21_NOT_EXECUTED' and s['reduction_policy']==POLICY_ID
-        and s['rows']==16 and s['source_sha256']==source_hashes()
+        and validate_rows(s['rows'])==s['rows'] and s['source_sha256']==source_hashes()
         and s['source_manifest_sha256']==sha(encoded(s['source_sha256'])),'new source/policy/domain drift')
     for key in ('rows','epoch','input_spec','loaded_inputs','binaries','metadata','host_tools','reference'):
         require(s[key]==original[key],'original input/tool/public identity changed: '+key)
@@ -168,6 +174,10 @@ def run(out,path,digest,*,wall_budget=900):
             report.update(status='ACTUAL_PREFIX_COMPLETE',prefix_host_wall_seconds=time.monotonic()-started);save()
             with capture:actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory)
             report['whole_terminal_host_wall_seconds']=time.monotonic()-started
+            # The unchanged suffix driver carries a historical policy label;
+            # execution itself never evaluates a native numerical contract.
+            report['execution']['inherited_native_acceptance_label']=report['execution']['native_acceptance']
+            report['execution']['native_acceptance']='NOT_EVALUATED_BY_EXECUTION_SEE_COMPARISON'
             require(x.launch_result and x.launch_result['completed']==21 and x.counts['result_fire']==1 and not x.reset_required(),
                     'whole public terminal missing')
             report['observation']=capture.save(out/'attention_observation')
@@ -201,11 +211,11 @@ def run(out,path,digest,*,wall_budget=900):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True)
     p.add_argument('--prepare-only',action='store_true');p.add_argument('--compile-receipt',type=Path)
-    p.add_argument('--reference',type=Path);p.add_argument('--reference-sha256')
+    p.add_argument('--reference',type=Path);p.add_argument('--reference-sha256');p.add_argument('--rows',type=int,choices=(16,128),default=16)
     p.add_argument('--snapshot',type=Path);p.add_argument('--snapshot-sha256');p.add_argument('--wall-budget',type=int,default=900)
     a=p.parse_args()
     if a.prepare_only:
-        path,s=prepare(a.out,a.compile_receipt,a.reference,a.reference_sha256)
+        path,s=prepare(a.out,a.compile_receipt,a.reference,a.reference_sha256,rows=a.rows)
         print(json.dumps(dict(path=str(path),sha256=file_sha(path),status=s['status'])),flush=True)
     else:
         r=run(a.out,a.snapshot,a.snapshot_sha256,wall_budget=a.wall_budget)

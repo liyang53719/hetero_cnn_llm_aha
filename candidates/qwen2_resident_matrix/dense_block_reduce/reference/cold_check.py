@@ -29,7 +29,9 @@ def reject_original_tree(event,args):
 sys.addaudithook(reject_original_tree)
 from candidates.qwen2_resident_matrix.dense_block_reduce.reference import builder as b
 assert b.ROOT==cold
-suite=unittest.defaultTestLoader.loadTestsFromName('candidates.qwen2_resident_matrix.dense_block_reduce.reference.test_builder')
+suite=unittest.defaultTestLoader.loadTestsFromNames([
+    'candidates.qwen2_resident_matrix.dense_block_reduce.reference.test_builder',
+    'candidates.qwen2_resident_matrix.dense_block_reduce.reference.test_workload'])
 result=unittest.TextTestRunner(verbosity=2).run(suite)
 original_cpp,header,_=b.regenerate_sources()
 changed,_=b.transform(original_cpp,(b.ROOT/b.PROFILE_REL).read_bytes())

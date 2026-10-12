@@ -110,10 +110,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}'}
-      - name: Fetch the immutable v0 arithmetic comparison source
+      - name: Fetch immutable arithmetic comparison and source-composer baselines
         run: |
           git fetch --no-tags --depth=1 origin 299949a03876fb561010afb6e1d83097db0ca593
           git cat-file -e 299949a03876fb561010afb6e1d83097db0ca593:chisel/continuous_prefill/tests/qwen2_block.cpp
+          # official_bf16 -> ffn_group -> transposed_seed source composition.
+          git fetch --no-tags --depth=1 origin 825caff3a6c618419c49c7da452e009ce86ae8b5
+          git cat-file -e 825caff3a6c618419c49c7da452e009ce86ae8b5:candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install fixed CPU model runtime
@@ -158,6 +161,7 @@ jobs:
           MATRIX_SERVICE_LIBRARY="$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so" MATRIX_SERVICE_COMPILE_RECEIPT="$PWD/work/qwen2_model_contract/attention-library/compile.json" python candidates/qwen2_resident_matrix/dense_block_reduce/run_tests.py --out work/qwen2_model_contract/dense-block-reduce-tests
           python scripts/check_git_payloads.py
       - name: Retain compact source-bound traffic evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: qwen2-model-contract-${{ github.sha }}

@@ -1,0 +1,675 @@
+{
+  "schema": 1,
+  "status": "COMPLETE_INDEPENDENT_REFERENCE_WITH_ARCHIVED_DIAGNOSTIC",
+  "scope": "independent software reference only; actual new M128 chain pending",
+  "rows": 128,
+  "reference_result_sha256": "6d2a13bc957fd4f9cd05e3ad3099f5b6e9ba9b5a7b809c32155ac2e7531348b8",
+  "prepared_sha256": "79d1118d9acc35d4bc7ebef789ed90de27147bf38818ddd4d962826d0625b371",
+  "frozen_sha256": "e370541a2ac2c20e0de8873f6e78be069bf49242562fec5889b68af9017c5c3a",
+  "candidate_cpp_sha256": "e13bddc69714e6af6a774198d7382b4100f2f50cd843eea5d780bace14c6aacf",
+  "header_sha256": "79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30",
+  "binary_sha256": "cf7eedd91913178b93fa61e2f8d96d711b831c5df0978d4005711152b49c8ff1",
+  "compile": {
+    "returncode": 0,
+    "wall_seconds": 1.9271093139977893,
+    "command": [
+      "/usr/bin/g++",
+      "-O2",
+      "-std=c++17",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m128_01/candidate.cpp",
+      "-o",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m128_01/candidate"
+    ],
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "execution": {
+    "returncode": 0,
+    "wall_seconds": 35.39219632500317,
+    "command": [
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m128_01/candidate",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/readonly_arena.f32le",
+      "128",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m128_01/raw_stages",
+      "0",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m128_01/empty_cache.bin",
+      "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/independent_qkv_reference_v1_m128_01/empty_cache.bin"
+    ],
+    "stdout_sha256": "141ad850bcff10add0a14df552b1f865e278fa5d519b393b896a3a89441390a7",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "official_failed_stages": [
+    "scores"
+  ],
+  "causal_failed_stages": [],
+  "stages": {
+    "n0": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+        "reference_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "qr": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+        "reference_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "kr": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+        "reference_f32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "v": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+        "reference_f32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "q": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910",
+        "reference_f32_sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "k": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+        "reference_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "att": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 3,
+        "max_abs": 0.0009765625,
+        "mean_abs": 8.071462313334147e-09,
+        "actual_f32_sha256": "d8e888f201396a6125a93c0602aaf3e53bf4700d4298db0795aa8a1355149287",
+        "reference_f32_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "o": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 366,
+        "max_abs": 0.001953125,
+        "mean_abs": 1.835282243215867e-07,
+        "actual_f32_sha256": "2382ddd71a0b78bee980a84f834b4344b5766c0dc85ac016670204ef26504cc5",
+        "reference_f32_sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "r": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 180,
+        "max_abs": 0.001953125,
+        "mean_abs": 1.7938630965848765e-07,
+        "actual_f32_sha256": "147339169cec250c50618f561433c969a1f85f7bf6f9e08819ca975c5374cc66",
+        "reference_f32_sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "n1": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 168,
+        "max_abs": 0.0078125,
+        "mean_abs": 5.938539591928323e-07,
+        "actual_f32_sha256": "9ee7d7e58fd46391d0b36c008873f115be119221abf001935182e47723d20204",
+        "reference_f32_sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "gate": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 8447,
+        "max_abs": 0.015625,
+        "mean_abs": 5.1223860899491615e-06,
+        "actual_f32_sha256": "aca4c2e3aefc46b6d5d23080d7b3050b603b51fd4f3cd058f0ffd440695539d5",
+        "reference_f32_sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "up": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 10851,
+        "max_abs": 0.0078125,
+        "mean_abs": 3.798839052901063e-06,
+        "actual_f32_sha256": "866fc87964b98947fff4fc0faa7db5fcb13828eea44b35009cf7af59be0ad67f",
+        "reference_f32_sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "act": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 15483,
+        "max_abs": 0.0078125,
+        "mean_abs": 7.899575045909403e-07,
+        "actual_f32_sha256": "7c9b265fd1017aa7618f69941bb6360ad3dceed6fdcf39887eadc181925adba5",
+        "reference_f32_sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "down": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 5800,
+        "max_abs": 0.0078125,
+        "mean_abs": 7.164664661255908e-06,
+        "actual_f32_sha256": "f973b9f9b2515d67fbf6bcdab651f229895a9dac714ed50cac564e4c25389b8b",
+        "reference_f32_sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "y": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 3132,
+        "max_abs": 0.03125,
+        "mean_abs": 7.282360456883907e-06,
+        "actual_f32_sha256": "a8a1791dcdf4b14ac2d8e550aa254225e714f5e8cc6618eb056b256843b6e16b",
+        "reference_f32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:block",
+        "limits": {
+          "max_abs": 0.05,
+          "mean_abs": 0.01
+        },
+        "passed": true
+      }
+    },
+    "cache_k": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+        "reference_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "cache_v": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4",
+        "reference_f32_sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "scores": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 4,
+        "max_abs": 16.0,
+        "mean_abs": 9.791056315104167e-05,
+        "actual_f32_sha256": "1e9be3f5076fc2c968af2f44fed190ee7542134bd795fef857f192fc1f29eddf",
+        "reference_f32_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": false
+      }
+    },
+    "logits": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5",
+        "reference_f32_sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "softmax_fp32": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 88026,
+        "max_abs": 2.384185791015625e-07,
+        "mean_abs": 1.060311722838361e-09,
+        "actual_f32_sha256": "4c58b6ea1793e23b8a22f372ac56093ec893a75bb4a7927acb293db6ffe20081",
+        "reference_f32_sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8"
+      },
+      "verdict": {
+        "contract": null,
+        "passed": null,
+        "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+      }
+    },
+    "prob": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 1736,
+        "max_abs": 2.2737367544323206e-13,
+        "mean_abs": 6.938893903907228e-18,
+        "actual_f32_sha256": "12b493b84a77e3d290597ce867ef8a9540248381ea44fd0a0af48aa7c104354c",
+        "reference_f32_sha256": "d9c02d605505ee1f3a78ad719f70a03227f7ee66f54f6f39be0fe63ee14612ca"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "silu": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 7715,
+        "max_abs": 0.0078125,
+        "mean_abs": 1.8766443434157866e-06,
+        "actual_f32_sha256": "c2412951d87899e1578d88509cde6612858a26599bf59842339b16f7c5d00db7",
+        "reference_f32_sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "pv": {
+      "metrics": {
+        "bit_exact": false,
+        "different_elements": 3,
+        "max_abs": 0.0009765625,
+        "mean_abs": 8.071462313334147e-09,
+        "actual_f32_sha256": "73972a9589d73b492eb727b401607df43b317595f9b54e3e41857a31323fb98d",
+        "reference_f32_sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "repeat_k": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+        "reference_f32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "repeat_v": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d",
+        "reference_f32_sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "x": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+        "reference_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "cos": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+        "reference_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    },
+    "sin": {
+      "metrics": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "actual_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+        "reference_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e"
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      }
+    }
+  },
+  "causal_attention": {
+    "scores": {
+      "metrics": {
+        "shape": [
+          99072
+        ],
+        "elements": 99072,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 1.0000000000000002,
+        "normalized_max_abs": 0.0,
+        "different_elements": 0,
+        "bit_exact": true,
+        "first_difference_flat": null,
+        "actual_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "reference_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "finite": true
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      },
+      "coverage": "causal positions only for comparability with actual owner observation"
+    },
+    "logits": {
+      "metrics": {
+        "shape": [
+          99072
+        ],
+        "elements": 99072,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 1.0000000000000002,
+        "normalized_max_abs": 0.0,
+        "different_elements": 0,
+        "bit_exact": true,
+        "first_difference_flat": null,
+        "actual_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "reference_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "finite": true
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      },
+      "coverage": "causal positions only for comparability with actual owner observation"
+    },
+    "softmax_fp32": {
+      "metrics": {
+        "shape": [
+          99072
+        ],
+        "elements": 99072,
+        "max_abs": 2.384185791015625e-07,
+        "mean_abs": 2.1041845042373674e-09,
+        "relative_l2": 1.113058327897874e-07,
+        "cosine": 0.9999999999999936,
+        "normalized_max_abs": 2.384185791015625e-07,
+        "different_elements": 88026,
+        "bit_exact": false,
+        "first_difference_flat": 2,
+        "actual_f32_sha256": "ae236b4284128299efab41c1f184d3d97d3c41cd30d7bf9f4812786d667bda2a",
+        "reference_f32_sha256": "1905d73dc6a487cbf09779b8a8d0c01b0c0fcf90961cfe896b2cd4f271784637",
+        "finite": true
+      },
+      "verdict": {
+        "contract": null,
+        "passed": null,
+        "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+      },
+      "coverage": "causal positions only for comparability with actual owner observation"
+    },
+    "prob": {
+      "metrics": {
+        "shape": [
+          99072
+        ],
+        "elements": 99072,
+        "max_abs": 2.2737367544323206e-13,
+        "mean_abs": 1.3770208057366282e-17,
+        "relative_l2": 2.2118774162730773e-14,
+        "cosine": 1.0,
+        "normalized_max_abs": 2.2737367544323206e-13,
+        "different_elements": 1736,
+        "bit_exact": false,
+        "first_difference_flat": 24909,
+        "actual_f32_sha256": "e053132ca3786412548c929460884eb77091a4c221997d4a0186618c1ff9b6ad",
+        "reference_f32_sha256": "52fd419462986d14fa9268791ffdeeecb3a54beebc5685af14be00186bc9af15",
+        "finite": true
+      },
+      "verdict": {
+        "contract": "spec/numerical_contract.md:operator",
+        "limits": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        },
+        "passed": true
+      },
+      "coverage": "causal positions only for comparability with actual owner observation"
+    }
+  },
+  "actual_chain_executed": false,
+  "rtl_executed": false,
+  "full_29_node_acceptance": false,
+  "explicit_mask_missing": true,
+  "thresholds_changed": false,
+  "unmasked_future_score_failure_preserved": "Four noncausal scores differ, max_abs=16. These are not executed by the actual causal owner and will remain unobserved rather than receive a passing result.",
+  "original_input": {
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/readonly_arena.f32le",
+    "bytes": 188043264,
+    "sha256": "e96def26157427fc60a44f1af7a9a8443010eb5327c1ccb9b93c3b0e70fcafe7",
+    "input_x_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+    "actual_snapshot_raw_x_bit_exact": true,
+    "intermediate_preloads": 0
+  }
+}

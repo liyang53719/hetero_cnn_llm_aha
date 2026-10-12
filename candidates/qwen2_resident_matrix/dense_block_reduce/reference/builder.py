@@ -11,6 +11,10 @@ import json
 from pathlib import Path
 import shutil
 import sys
+if __package__:
+    from . import workload as w
+else:
+    import workload as w
 
 ROOT=Path(__file__).resolve().parents[4]
 HERE=Path(__file__).resolve().parent
@@ -156,7 +160,38 @@ def archive_context(rows,root=ROOT,*,archive_directory=None):
     require(file_sha(root/'spec/numerical_contract.md')==CONTRACT_SHA,'official thresholds/contract changed')
     return directory,top,cold
 
-def prepare(rows,out,*,archive_directory,snapshot_path,root=ROOT,readonly_arena=None,profile_path=None):
+def verify_actual_source(rows,source,thresholds):
+    rows=w.cold_rows(rows);pin=w.INPUT_PINS[rows]
+    require(source['summary_sha256']==pin['summary_sha256'] and source['snapshot_sha256']==pin['snapshot_sha256'],
+            'actual input metadata identities differ')
+    summary=frozen_json(source['summary_path'],pin['summary_sha256'])
+    require(summary['snapshot_sha256']==pin['snapshot_sha256'],'actual summary/snapshot binding differs')
+    snapshot=frozen_json(source['snapshot_path'],pin['snapshot_sha256'])
+    expected_x=dict(bytes=rows*1536*4,sha256=pin['input_x_sha256'])
+    require(summary['rows']==snapshot['rows']==rows and summary['loaded_inputs']['x']==snapshot['loaded_inputs']['x']==expected_x and
+            summary['prelaunch_intermediate_payloads']==snapshot['prelaunch_intermediate_payloads']==[],
+            'actual raw input shape or intermediate preload differs')
+    require(snapshot['reference']['threshold_policy']==thresholds,
+            'official gate policy differs')
+
+def verify_input_binding(prepared,top,cold,*,require_actual_source=True):
+    rows=w.cold_rows(prepared['rows'],prepared['past_tokens'])
+    record=prepared['readonly_input'];pin=w.validate_input_metadata(rows,cold,record)
+    arena=Path(record['path']);layout=top['build']['layout']
+    require(arena.is_file() and arena.stat().st_size==record['bytes']==layout['writable_start'] and
+            file_sha(arena)==record['sha256'],'original readonly arena bytes differ')
+    x=next(r for r in layout['regions'] if r['name']=='x')
+    with arena.open('rb') as stream:stream.seek(x['offset']);raw_x=stream.read(rows*1536*4)
+    require(len(raw_x)==rows*1536*4 and sha(raw_x)==pin['input_x_sha256'],'original raw x slice differs')
+    require(prepared['thresholds']==top['threshold_policy'],'official gate policy differs')
+    source=prepared.get('actual_input_source')
+    if source is None:
+        require(not require_actual_source,'explicit actual summary/snapshot input provenance required')
+        return
+    verify_actual_source(rows,source,prepared['thresholds'])
+
+def prepare(rows,out,*,archive_directory,snapshot_path,actual_summary_path,root=ROOT,readonly_arena=None,profile_path=None):
+    rows=w.cold_rows(rows)
     root=Path(root);out=Path(out).resolve();require(not out.exists(),'fresh preparation directory required')
     directory,top,cold=archive_context(rows,root,archive_directory=archive_directory)
     original,header,identity=regenerate_sources(root)
@@ -168,29 +203,32 @@ def prepare(rows,out,*,archive_directory,snapshot_path,root=ROOT,readonly_arena=
     x=next(r for r in layout['regions'] if r['name']=='x')
     with arena.open('rb') as stream:stream.seek(x['offset']);raw_x=stream.read(rows*1536*4)
     require(sha(raw_x)==cold['inputs']['input_x_sha256'],'original raw x slice differs')
-    snapshot=frozen_json(snapshot_path,
-        '88cc7fe74bbe0a982490f138c99928314c325ded5de73fc50296d5c0cf5c17e2' if rows==16 else '5b9247588ddddcada1e669034c3e8e0a17ffb39c6c6aef3ffd1bb5e49c6924ab')
-    require(snapshot['loaded_inputs']['x']['sha256']==sha(raw_x),'reference raw x differs from actual snapshot')
-    require(snapshot['reference']['threshold_policy']==top['threshold_policy'],'official gate policy differs')
+    input_record=dict(path=str(arena.resolve()),bytes=arena.stat().st_size,sha256=file_sha(arena),input_x_sha256=sha(raw_x),actual_snapshot_raw_x_bit_exact=True,intermediate_preloads=0)
+    pin=w.INPUT_PINS[rows]
+    actual_source=dict(summary_path=str(Path(actual_summary_path).resolve()),summary_sha256=pin['summary_sha256'],
+                       snapshot_path=str(Path(snapshot_path).resolve()),snapshot_sha256=pin['snapshot_sha256'])
+    verify_input_binding(dict(rows=rows,past_tokens=0,readonly_input=input_record,actual_input_source=actual_source,
+                              thresholds=top['threshold_policy']),top,cold)
     compiler=shutil.which('g++');require(compiler is not None,'g++ unavailable')
     out.mkdir(parents=True);(out/'candidate.cpp').write_bytes(candidate);(out/'block_layout.h').write_bytes(header);(out/'empty_cache.bin').write_bytes(b'')
     receipt=dict(schema=1,version=VERSION,status='PREPARED_SOURCE_ONLY_NOT_EXECUTED',rows=rows,past_tokens=0,
-        transform=audit,source_sha256={str(p.relative_to(root)):file_sha(p) for p in (Path(__file__),HERE/'dot16.inc')},
+        transform=audit,source_sha256={str(p.relative_to(root)):file_sha(p) for p in (Path(__file__),HERE/'dot16.inc',HERE/'workload.py')},
         original_generator_source_sha256=GENERATOR_PINS,original_generator_identity=identity,
         old_archive=dict(directory=str(directory),top_sha256=ARCHIVES[rows][0],cold_sha256=ARCHIVES[rows][1],
                          preserved_failures={k:v['failed_stages'] for k,v in cold['evaluation']['methods'].items()}),
         profile_path=str(profile_path),profile_sha256=PROFILE_SHA,header_sha256=HEADER_SHA,
-        readonly_input=dict(path=str(arena.resolve()),bytes=arena.stat().st_size,sha256=file_sha(arena),input_x_sha256=sha(raw_x),actual_snapshot_raw_x_bit_exact=True,intermediate_preloads=0),
+        readonly_input=input_record,actual_input_source=actual_source,
         compile_command=[compiler,*FLAGS,str(out/'candidate.cpp'),'-o',str(out/'candidate')],
         proposed_execution_command=[str(out/'candidate'),str(arena.resolve()),str(rows),str(out/'raw_stages'),'0',str(out/'empty_cache.bin'),str(out/'empty_cache.bin')],
         output_directory_must_be_created_before_launch=str(out/'raw_stages'),
         thresholds=top['threshold_policy'],threshold_contract_sha256=CONTRACT_SHA,
         acceptance=dict(official_target_unchanged=True,independent_reference_is_auxiliary=True,dual_AND_with_old_sequential_reference=False,old_FAIL_preserved=True,native_acceptance=False),
-        estimates=dict(historical_M16_full_reference_seconds=4.228034998999647,historical_M128_full_reference_seconds=30.55065688200193,proposed_M16_reference_seconds=[4,10],recommended_M16_wall_timeout_seconds=30,basis='Historical same-source independent producer; only QKV reduction changes. Estimate, not a new execution.'),
+        estimates=dict(historical_M16_full_reference_seconds=4.228034998999647,historical_M128_full_reference_seconds=30.55065688200193,proposed_M16_reference_seconds=[4,10],recommended_compile_wall_timeout_seconds=w.COMPILE_WALL_SECONDS,recommended_run_wall_timeout_seconds=w.RUN_WALL_SECONDS[rows],basis='Historical same-source independent producer; only QKV reduction changes. Estimate, not a new execution.'),
         compiled=False,full_block_executed=False,new_native_executed=False,rtl_executed=False)
     (out/'PREPARED.json').write_text(json.dumps(receipt,indent=2)+'\n');return receipt
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--rows',type=int,choices=(16,128),required=True);parser.add_argument('--out',type=Path,required=True)
     parser.add_argument('--archive-directory',type=Path,required=True);parser.add_argument('--snapshot-path',type=Path,required=True)
-    args=parser.parse_args();r=prepare(args.rows,args.out,archive_directory=args.archive_directory,snapshot_path=args.snapshot_path);print(json.dumps(dict(status=r['status'],rows=r['rows'],candidate_cpp_sha256=r['transform']['candidate_cpp_sha256'],all_other_source_byte_exact=True)))
+    parser.add_argument('--actual-summary-path',type=Path,required=True)
+    args=parser.parse_args();r=prepare(args.rows,args.out,archive_directory=args.archive_directory,snapshot_path=args.snapshot_path,actual_summary_path=args.actual_summary_path);print(json.dumps(dict(status=r['status'],rows=r['rows'],candidate_cpp_sha256=r['transform']['candidate_cpp_sha256'],all_other_source_byte_exact=True)))

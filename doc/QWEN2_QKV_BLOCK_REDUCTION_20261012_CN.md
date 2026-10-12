@@ -26,6 +26,14 @@
 - 独立审查发现公开驱动在abort后未通知Matrix且过早抛错的真实缺口，现已修复：真实service abort、实际Done-ready及已接收DMA/Vector排空后唯一失败终态。定向覆盖接受read、Matrix step、result queue、DDR descriptor和Vector Add后abort，以及真实FP溢出；负返回码只锁存错误，不虚构result packet。
 - 新M16第一次实际运行47.51秒，在pc13 O写回因同源Python模块重复加载的WriteBeat类型身份失败。实际数据形状正确，但隐式mask未被原物理内存接口接受；修复改为显式完整64B typed beat，原mask/last/extent拒绝门不放宽。失败前n0/QKV/Q/K全部与官方逐bit一致，已执行1632个causal scores/logits也逐bit一致；这只是失败运行的因果诊断，不是整块通过。
 - 第二次M16实际运行68.91秒，O、残差、postNorm完成，首个FFN Gate窗口在旧A fence计数断言失败。现统一公开驱动的原始模块/type身份；新K-window A装载fence与旧FFN window计数分别记录，并提供累积总和，不在命令切换时清零。同实例QKV→O→Gate/Up/Down模式串联小门已通过：QKV/O各K=N32，FFN的56个局部N160窗真实写满N8960 Activation，再由Down K8960/N32读取并完成3次prefix/seed。27008 accepted Matrix steps、110624768执行FMA、新/旧fence=3/1，全程无owner或Matrix重置。最终11.588秒；这是内部真实端口模式小门，未代替公开21命令模型验收。第三次M16已冻结新身份后执行。两次FAILED及其源码/日志/失败capture全部保留。
-- 完整新M16与同冻结M128仍待通过；旧完整M128 FAIL、1200秒预算FAIL和独立producer FAIL保留。没有新增RTL或性能微优化。
+- 第三次完整cold M16已通过，原进程499.32秒EXIT0；模型终态498.28秒，比较完成498.47秒。21命令/17 owner/1 Host result、17个公开输出共1,671,168B全部ACK；114执行源码与冻结副本一致。15个实际主阶段与6项内部节点对新固定配方逐bit一致，官方27个已分配门全部通过；Y max_abs=0.00390625、mean_abs=1.407166322e-5。原官方QKV与1632个causal scores/logits均逐bit一致，独立审查完成。详见 [M16紧凑结果](../reports/execution/QWEN2_DENSE_BLOCK_REDUCTION_20261012/M16_RESULT.json)。
+- 此时旧执行层的native_acceptance仍是历史占位，不能据它判断当前数值；外层和comparison.methods是已完成的数值裁决，原receipt不重写。28个观测/输入节点中softmax_fp32没有批准容差，仅诊断；显式mask缺失，四个Attention张量各1440个future位置不执行，完整29节点仍未验收。
+- 同冻结M128于15:16:20 UTC启动一次1800秒软件模型门；97.07秒完成真实prefix，尚未到完整数值终态。独立M128配方已在35.39秒完成：QKV和全部causal scores/logits逐bit匹配官方，所有已分配causal门通过；全unmasked scores另有4个未执行future位置最大差16，保留该FAIL，不能填充实际观测或声称29节点全通过。旧完整M128 FAIL、1200秒预算FAIL和独立producer FAIL保留。没有新增RTL或性能微优化。
 
 新runner只在实际终态和完整ACK后打开对照；逐个主阶段与内部实际观测比较。官方FAIL给独立失败状态和非零退出，固定recipe一致另列。显式mask tensor未物化，未来causal位置保持缺失，不能把已观测项通过写成完整29节点通过。
+
+## 远端验收及小型 CI 修复
+
+实现已发布 [a2e4bee](https://github.com/liyang53719/hetero_cnn_llm_aha/commit/a2e4beef6ec5278a68a6bc4021780ff0f26aff8d)，63个Git blob和tree已逐项复核。其payload门成功；model CI因浅克隆缺少不可变825caff基线而失败，原失败保留。现仅补精确fetch/probe，并将子suite失败尾部明确打印、完整日志始终保存；同a2e4的干净浅克隆、无历史work/alternates下，新鲜共享Matrix库及13个isolated suite共117 tests通过。新增M128包装/形状测试已包含，其中不重跑M128。
+
+[原frontend run](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38267504488)的job结论为cancelled，不能改写成CI成功。不过已上传工件SHA a51f5a052fcdb7d687e55e6f1c7f4c019c47d9c3611c6798f2af97e9ad819eeb，经下载复核，新门17命令全部exit0，16份新CHIRRTL完整且summary PASS，耗时118.02秒；全工件有159份FIR。该job原预算15分钟，实际setup/小测约169秒，完整前端约747秒，上传另13秒。后续仅将这一无RTL的job预算改为20分钟，保留所有命令与门禁，并用完整workflow body哈希保证无静默跳过。旧cancelled与工件内完成的证据分开记录；不据此宣称新CI已过。

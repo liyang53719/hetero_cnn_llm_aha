@@ -27,7 +27,9 @@ concurrency:
 jobs:
   source-frontend:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    # a2e4: setup/tests ~169s + all frontend stages ~747s; retain upload margin.
+    # This bounds source/CHIRRTL checks only; no RTL or model replay is added.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}'}

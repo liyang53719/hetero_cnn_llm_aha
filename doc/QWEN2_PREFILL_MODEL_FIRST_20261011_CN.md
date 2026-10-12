@@ -824,3 +824,12 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 发布前在全新源checkout和全新Python3.12 venv中冷启动，未复制历史work目录。先显式获取7个固定Git baseline并probe，再安装固定NumPy2.3.5/PyYAML6.0.3，现编唯一共享库。完整18组776 tests全部通过，包括public16文件168项、原skip的driver3项和新增6个编译来源负例。冷门摘要SHA `3dcaece39c1412a5603592e544459212d45e0dd85200f07af8fbe06f90b78a52`，现编库SHA `22da518dc47e641cd7052b84d0c46389fd92d71665276fb671410cf5b994136c`；所有75项实值执行源在原工作区和冷checkout均与捕获快照相同。
 - 本地第一次冷预检发现浅源克隆未带不可达baseline对象，补齐上述精确fetch后才运行测试；之后本地汇总器以basename匹配完整相对路径误判已成功public结果，保留原记录并修正汇总后继续剩余组，没有重跑已完成测试。全部原日志、每组计数/退出码及explicit构建产物保留。此为夹具可复现性修复，没有重跑长M128、Chisel/RTL或改变数值政策。
 - done（局部）：冷源码完整轻门与来源绑定。ongoing：修复提交远端和两CI终态/工件核验；原cefc失败不重写。完整M128软件固定算术证据、原1200秒失败和独立后处理PASS同时保留；native-v0/FP32-final FAIL、数值政策待定及五block硬件验收OPEN不变。
+
+
+### 2026-10-12 ce7bda 跨阶段输出目录修复与完整冷流程
+
+- `ce7bda275033f0bfc6a062a6b9755920e662dcd2` 的 frontend run `38211082143` / job `114685163115` 已在CI真实通过776项测试，随后因测试提前创建 `work/matrix-interface-frontend` 而触发原“输出目录必须全新”守卫；Java编译尚未启动。payload run `38211082246` 成功。失败工件16,552 B、SHA `141fbe879a648b614cbefba1f850c3bc96828bd93206dc3d5f900c72027b6dcb`及原日志保留；这是跨阶段目录生命周期缺口，前轮只跑单测的冷验证没有覆盖它。
+- 最小修复把共享库和public测试产物放到兄弟目录 `work/matrix-interface-tests`，Chisel原输出目录及fresh拒绝保持，入口另显式检查不存在。工件收集同时覆盖两目录。新增2个定向测试拒绝当前已知Python --out命令碰撞、丢fresh guard或漏工件模式；不声称这是通用shell输出分析器。
+- 发布前在第二个纯源码checkout，从固定baseline fetch、固定依赖安装、现编共享库开始，按workflow原次序执行完整18组778测试、30条真实Scala/CHIRRTL命令，最后按同一工件glob收集131份IR及全部摘要/日志。此前不存在work；87个Maven依赖重新下载逐hash核验，HardFloat精确commit重新获取。全流程759.291秒，未扩大900秒预算；没有RTL/长数值重跑。实际收集204项、49,120,284 B，SHA `3fd7e75d951bf008f7fa593b7b31e70d1b0ce202b066213293d5297f8e631a8f`。
+- 独立读回核对11源manifest、87依赖、30成功命令和131份IR；所有真实源码条目与旧df18相同，IR仅移除原审定来源位置后逐字相同。旧task_source字典误包含Python缓存，其中down的3项和seed的2项pyc hash不同；5个对应.py源hash均相同。原pyc字节未归档，不能进一步归因具体字段，因此保留差异而不宣称整个元数据字典相同。首次过强全字典比较失败也保留，未修改实际frontend门。独立核验摘要SHA `257c874ed11b22febbeb05ba39a4dfbb049600e1607ae258a69897797f3b6807`。
+- done（局部）：冷源码完整顺序流程及工件核验。ongoing：本4文件修复发布与精确CI终态/工件闭环。75项M128执行源保持不变，数值策略/所有原FAIL保持。当前真实命令链仍是v0：相对官方BF16的第一差在n0，末y rel-L2约0.2682195；相对官方FP32末y rel-L2约0.0332366、cos约0.99944752，原开发门仍失败。隔离v2的改进不能转移为本链native通过；完整五block硬件验收保持OPEN。

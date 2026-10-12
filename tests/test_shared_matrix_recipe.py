@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import shlex
 from pathlib import Path
 import tempfile
 import unittest
@@ -10,6 +11,26 @@ ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('shared_recipe', ROOT / 'scripts/build_shared_matrix_recipe.py')
 recipe = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(recipe)
+
+
+def validate_output_lifecycle(workflow):
+    pre, frontend = workflow.split('      - name: Compile real source and check CHIRRTL structure', 1)
+    root = Path('work/matrix-interface-frontend')
+    for line in pre.splitlines():
+        argv = shlex.split(line.strip())
+        if argv and argv[0] == 'python' and '--out' in argv:
+            out = Path(argv[argv.index('--out') + 1])
+            if out == root or root in out.parents:
+                raise ValueError('test output collides with fresh frontend root')
+    if 'test ! -e work/matrix-interface-frontend' not in frontend:
+        raise ValueError('missing fresh frontend entry guard')
+    for pattern in ('work/matrix-interface-frontend/**/*.json',
+                    'work/matrix-interface-frontend/**/*.log',
+                    'work/matrix-interface-frontend/**/*.fir',
+                    'work/matrix-interface-tests/**/*.json',
+                    'work/matrix-interface-tests/**/*.log'):
+        if pattern not in frontend:
+            raise ValueError('missing frontend or test artifact collection')
 
 
 class RecipeGuards(unittest.TestCase):
@@ -92,12 +113,29 @@ class RecipeGuards(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.check()
 
+    def test_workflow_stage_output_lifecycle_and_artifact_roots(self):
+        text = (ROOT / '.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        validate_output_lifecycle(text)
+
+    def test_test_outputs_cannot_precreate_frontend_and_collection_is_complete(self):
+        text = (ROOT / '.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        for subdir in ('attention-tests', 'public-tests'):
+            bad = text.replace('work/matrix-interface-tests/' + subdir,
+                               'work/matrix-interface-frontend/' + subdir)
+            with self.assertRaisesRegex(ValueError, 'collides'):
+                validate_output_lifecycle(bad)
+        for missing in ('test ! -e work/matrix-interface-frontend',
+                        'work/matrix-interface-tests/**/*.json',
+                        'work/matrix-interface-frontend/**/*.fir'):
+            with self.assertRaises(ValueError):
+                validate_output_lifecycle(text.replace(missing, ''))
+
     def test_workflow_builds_before_tests_and_preserves_receipt(self):
         text = (ROOT / '.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
-        build = 'python scripts/build_shared_matrix_recipe.py --repo . --out work/matrix-interface-frontend/attention-tests'
+        build = 'python scripts/build_shared_matrix_recipe.py --repo . --out work/matrix-interface-tests/attention-tests'
         self.assertEqual(text.count(build), 1)
         self.assertLess(text.index(build), text.index('python -m unittest'))
-        self.assertIn('work/matrix-interface-frontend/**/*.json', text)
+        self.assertIn('work/matrix-interface-tests/**/*.json', text)
         self.assertIn('test_shared_matrix_recipe.py -v', text)
         source = (ROOT / 'candidates/qwen2_resident_matrix/ffn_public/test_fullgraph_memory.py').read_text()
         self.assertIn('from_environment(ROOT)', source)

@@ -57,7 +57,7 @@ jobs:
           PYTHONPATH=src python -c 'from heteronpu.command import Command128; from heteronpu.descriptor_chain import DescriptorRecord'
       - name: Build one shared host Matrix and existing SiLU recipe
         run: |
-          python scripts/build_shared_matrix_recipe.py --repo . --out work/matrix-interface-frontend/attention-tests
+          python scripts/build_shared_matrix_recipe.py --repo . --out work/matrix-interface-tests/attention-tests
       - name: Independent control contracts and negative identity guards
         run: |
           python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
@@ -72,7 +72,7 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_drain -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_group -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_fullgroup -p 'test_*.py' -v
-          python scripts/run_isolated_public_tests.py --out work/matrix-interface-frontend/public-tests
+          python scripts/run_isolated_public_tests.py --out work/matrix-interface-tests/public-tests
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_attention -p 'test_*.py' -v
           python -m unittest discover -s tests -p test_shared_matrix_recipe.py -v
           python -m unittest discover -s tests -p test_isolated_public_tests.py -v
@@ -80,6 +80,7 @@ jobs:
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
       - name: Compile real source and check CHIRRTL structure
         run: |
+          test ! -e work/matrix-interface-frontend
           python scripts/check_matrix_interface_candidate.py --repo . --out work/matrix-interface-frontend --cache work/matrix-interface-jars
           python scripts/check_resident_seed_frontend.py --repo . --out work/matrix-interface-frontend/resident --cache work/matrix-interface-jars
           python scripts/check_transposed_matrix_frontend.py --repo . --out work/matrix-interface-frontend/transposed --cache work/matrix-interface-jars --baseline work/matrix-interface-frontend
@@ -103,3 +104,5 @@ jobs:
             work/matrix-interface-frontend/**/*.json
             work/matrix-interface-frontend/**/*.log
             work/matrix-interface-frontend/**/*.fir
+            work/matrix-interface-tests/**/*.json
+            work/matrix-interface-tests/**/*.log

@@ -59,7 +59,7 @@ class IsolatedPublicTests(unittest.TestCase):
 
     def test_workflow_uses_isolation_without_public_file_exclusions(self):
         workflow = (ROOT / ".github/workflows/qwen2-matrix-interface-frontend.yml").read_text()
-        command = "python scripts/run_isolated_public_tests.py --out work/matrix-interface-frontend/public-tests"
+        command = "python scripts/run_isolated_public_tests.py --out work/matrix-interface-tests/public-tests"
         self.assertEqual(workflow.count(command), 1)
         self.assertNotIn("python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_public", workflow)
         self.assertIn("python -m unittest discover -s tests -p test_isolated_public_tests.py -v", workflow)

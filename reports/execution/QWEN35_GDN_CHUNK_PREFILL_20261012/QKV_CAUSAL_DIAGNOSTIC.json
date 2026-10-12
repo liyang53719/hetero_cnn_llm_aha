@@ -1,0 +1,230 @@
+{
+  "status": "COMPLETE_BOUNDED_DIAGNOSTICS_NO_ADOPTION",
+  "counterfactual_original_state_gate": {
+    "elements": 262144,
+    "mismatches": 0,
+    "max_abs": 4.842877388000488e-07,
+    "max_tolerance_ratio": 0.004466510656259532,
+    "worst_index": [
+      11,
+      47,
+      110
+    ],
+    "actual": -0.08426463603973389,
+    "official": -0.08426415175199509,
+    "passed": true
+  },
+  "baseline_original_state_gate": {
+    "elements": 262144,
+    "mismatches": 1,
+    "max_abs": 0.0002851039171218872,
+    "max_tolerance_ratio": 2.5209357368775005,
+    "worst_index": [
+      2,
+      79,
+      101
+    ],
+    "actual": 0.13122990727424622,
+    "official": 0.13094480335712433,
+    "passed": false
+  },
+  "pair_original_state_gate": {
+    "elements": 262144,
+    "mismatches": 1,
+    "max_abs": 0.0002851039171218872,
+    "max_tolerance_ratio": 2.5209357368775005,
+    "worst_index": [
+      2,
+      79,
+      101
+    ],
+    "actual": 0.13122990727424622,
+    "official": 0.13094480335712433,
+    "passed": false
+  },
+  "head2_all_key_value_projection_differences": [
+    {
+      "token": 1,
+      "column": 2383,
+      "actual": -0.111328125,
+      "official": -0.11083984375
+    }
+  ],
+  "relevant_key_lane_propagation": [
+    {
+      "stage": "conv",
+      "column": 2383,
+      "changes": [
+        {
+          "token": 2,
+          "actual": 0.020751953125,
+          "official_qkv_counterfactual": 0.0206298828125
+        }
+      ]
+    },
+    {
+      "stage": "silu",
+      "column": 2383,
+      "changes": [
+        {
+          "token": 2,
+          "actual": 0.010498046875,
+          "official_qkv_counterfactual": 0.01043701171875
+        }
+      ]
+    },
+    {
+      "stage": "prep",
+      "column": 2383,
+      "changes": [
+        {
+          "token": 2,
+          "actual": 0.04466251656413078,
+          "official_qkv_counterfactual": 0.04440336301922798
+        }
+      ]
+    }
+  ],
+  "projection_pair_fullshape_counts": [
+    {
+      "phase": "cold128",
+      "projection": "qkv",
+      "elements": 98304,
+      "baseline_official_bit_mismatches": 142,
+      "official_bit_mismatches": 139,
+      "max_abs": 0.001953125,
+      "new_mismatches": 3
+    },
+    {
+      "phase": "cold128",
+      "projection": "z",
+      "elements": 32768,
+      "baseline_official_bit_mismatches": 8,
+      "official_bit_mismatches": 4,
+      "max_abs": 6.103515625e-05,
+      "new_mismatches": 0
+    },
+    {
+      "phase": "cold128",
+      "projection": "a",
+      "elements": 256,
+      "baseline_official_bit_mismatches": 0,
+      "official_bit_mismatches": 0,
+      "max_abs": 0.0,
+      "new_mismatches": 0
+    },
+    {
+      "phase": "cold128",
+      "projection": "b",
+      "elements": 256,
+      "baseline_official_bit_mismatches": 0,
+      "official_bit_mismatches": 0,
+      "max_abs": 0.0,
+      "new_mismatches": 0
+    },
+    {
+      "phase": "carried128",
+      "projection": "qkv",
+      "elements": 98304,
+      "baseline_official_bit_mismatches": 152,
+      "official_bit_mismatches": 148,
+      "max_abs": 0.015625,
+      "new_mismatches": 3
+    },
+    {
+      "phase": "carried128",
+      "projection": "z",
+      "elements": 32768,
+      "baseline_official_bit_mismatches": 13,
+      "official_bit_mismatches": 12,
+      "max_abs": 0.0078125,
+      "new_mismatches": 2
+    },
+    {
+      "phase": "carried128",
+      "projection": "a",
+      "elements": 256,
+      "baseline_official_bit_mismatches": 0,
+      "official_bit_mismatches": 0,
+      "max_abs": 0.0,
+      "new_mismatches": 0
+    },
+    {
+      "phase": "carried128",
+      "projection": "b",
+      "elements": 256,
+      "baseline_official_bit_mismatches": 0,
+      "official_bit_mismatches": 0,
+      "max_abs": 0.0,
+      "new_mismatches": 0
+    }
+  ],
+  "total_host_fmaf_calls": 269484032,
+  "separate_diagnostic_elapsed_seconds": [
+    2.6803775560110807,
+    2.0070647659886163,
+    2.4867920440010494
+  ],
+  "two_blocks_required": "UNDETERMINED; full-K one-accumulator pair hypothesis fails. No candidate split tested and no dynamic GDN backend arithmetic trace obtained.",
+  "all_frozen_source_and_consumed_input_hashes_unchanged": true,
+  "hash_verification": {
+    "candidates/qwen35_gdn_prefill/conv/reference.py": true,
+    "candidates/qwen35_gdn_prefill/prep/reference.py": true,
+    "candidates/qwen35_gdn_prefill/chunk/reference.py": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/summary.json": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/manifest.json": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.qkv.actual.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0006.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.qkv.official.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.ab.actual.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.conv1d.weight.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.A_log.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.dt_bias.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.conv_silu.actual.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.prep.actual.fp32le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0021.f32le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_chunk_fullheads_20261012/actual_m16_01/comparison/official_full16_state.fp32le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_chunk_fullheads_20261012/actual_m16_01/comparison/fixed_state.fp32le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.input_norm.actual.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0003.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0012.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0010.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/cold128.qkv.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/cold128.z.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0008.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/cold128.a.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/cold128.b.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/carried128.qkv.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0052.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/carried128.z.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0054.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/carried128.a.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0058.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/carried128.b.pair.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0056.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/COUNTERFACTUAL_RESULT.json": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.in_proj_qkv.weight.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.in_proj_z.weight.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.in_proj_a.weight.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.in_proj_b.weight.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/carried128.input_norm.actual.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0049.bf16le": true,
+    "strict_generic_pair.cpp": true,
+    "probe_generic_pair.py": true,
+    "counterfactual.py": true,
+    "evaluate_pair_state.py": true
+  },
+  "compiler_version": "x86_64-linux-gnu-g++-14 (Debian 14.2.0-19) 14.2.0",
+  "artifact_sha256": {
+    "COUNTERFACTUAL_RESULT.json": "67733d3029bd81b7faa1124afb80c67d562f2ab794b0bdcca05b65c5fa12a3e9",
+    "PAIR_RESULT.json": "0b9949243ce4ae027fdba7e679efdc17bde4cc63698a3f657cb92ff2c47426b2",
+    "PAIR_STATE_RESULT.json": "2669bb3669dc17448ebf49c313adfd16f9520f4d5b5f5b15b27b5e1439af9137"
+  },
+  "limits": [
+    "Diagnostic counterfactual only; no owner output injection",
+    "No shared source, hardware profile, gates, RTL, or model changes",
+    "No new native full-model or actual-owner execution",
+    "Cold recurrence checked; carried projection checked independently, not carried recurrence"
+  ],
+  "original_receipt_sha256": "659a2ca4a58e87b15b815c7b3bb0ade3a71f98efabf722947d8ec052b52de8be"
+}

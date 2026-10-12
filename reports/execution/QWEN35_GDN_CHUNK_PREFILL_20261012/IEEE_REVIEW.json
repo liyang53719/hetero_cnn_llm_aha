@@ -1,0 +1,118 @@
+{
+  "status": "PASS_SOFTWARE_ONLY_POLICY_DELTA_REVIEW",
+  "reviewed_at_utc": "2026-10-12T18:14:37.697892+00:00",
+  "scope": "Explicit Vector finite gradual-underflow policy; no RTL, full-size run, physical resource, timing, throughput, or native whole-layer acceptance signoff.",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "0c790204954d6ed5342ca95725aab9fc556f91471f0e2ae26f2c0580ef97cf2f",
+    "candidates/qwen35_gdn_prefill/chunk/reference.py": "2fa75494a96e10e6ed4e20c3ffc0030ce6566fbed37d02091e17eda1e083a995",
+    "candidates/qwen35_gdn_prefill/chunk/test_ieee_policy.py": "7a360af74efb9efae142c5e342b2e7d5b0970b27fe6e668a6fea673d9f2550d9"
+  },
+  "baseline_source_sha256": {
+    "work/qwen35_gdn_chunk_fullheads_20261012/actual_m16_01/source_snapshot/candidates/qwen35_gdn_prefill/chunk/vector.py": "5e5a65b05c5d9e31ee33aee0a98bac7f33571b0229e491b2227653c69590e647",
+    "work/qwen35_gdn_chunk_fullheads_20261012/actual_m16_01/source_snapshot/candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "bc4db0ef4dab709788096c9e9da48ef9aaecd495ed699da00d3d5704ca9e7ddd",
+    "work/qwen35_gdn_chunk_fullheads_20261012/actual_m16_01/source_snapshot/candidates/qwen35_gdn_prefill/chunk/model.py": "9b755861da417427c3e4a65a6f70b7446634d765d6e4a01a8554d8ae718a2f73"
+  },
+  "unchanged_source_sha256": {
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+  },
+  "checks": [
+    {
+      "name": "explicit_policy_and_legacy_default",
+      "result": "PASS",
+      "evidence": "vector.py:19-21,58-62,127-129,173-176; legacy default mask 30, IEEE mask 28. Both retain invalid/div0/overflow as fatal plus finite-input/result checks."
+    },
+    {
+      "name": "rounded_results_and_flags_unchanged",
+      "result": "PASS",
+      "evidence": "vector16.cpp complete primitive/environment prefix is byte-identical to the M16 snapshot. RNE and FTZ/DAZ checks, per-lane flag generation, and caller sticky-flag restoration are unchanged."
+    },
+    {
+      "name": "batch_selected_mask_and_old_abi",
+      "result": "PASS",
+      "evidence": "vector16.cpp:72-92; new entry accepts only masks 30/28, gates Add using selected mask, old ABI forwards with mask 30."
+    },
+    {
+      "name": "separate_mul_add_no_fma",
+      "result": "PASS",
+      "evidence": "vector16.cpp:78,83 call unchanged compute separately; strict compiler flags preserve rounding. Direct FMA-discriminating case produced +0 in both policies."
+    },
+    {
+      "name": "first_fault_not_swallowed",
+      "result": "PASS",
+      "evidence": "model.py:_op/_mul_add remember and rethrow ArithmeticFault; _advance returns terminal Numerical. Batch retains last attempted stage and per-stage issue flags; IEEE accepted underflow does not become an artificial first fault."
+    },
+    {
+      "name": "midjob_policy_identity",
+      "result": "PASS",
+      "evidence": "model.py:568,579 latch/check policy string and fatal mask alongside resource identity before owner tick. Direct mutation of either field was rejected without advancing owner.ticks."
+    },
+    {
+      "name": "per_job_flags",
+      "result": "PASS",
+      "evidence": "model.py flag_baseline/flag_counts capture at admission and release; active report uses delta. Python increments full unmasked logical-issue flag values."
+    },
+    {
+      "name": "independent_fixed_reference",
+      "result": "PASS",
+      "evidence": "reference.py fixed_chunk validates its explicit policy; local node closure passes gradual-underflow choice through matmul and solve. It uses separate NumPy FP32 operations and imports no owner/Vector/scalar candidate. BF16 output and FP32 state unchanged."
+    },
+    {
+      "name": "native_reference_unchanged_policy_semantics",
+      "result": "PASS",
+      "evidence": "Final native_prepared_chunk has no exception_policy parameter; original conditional Torch suffix remains separately sourced and diagnostic."
+    },
+    {
+      "name": "chisel_gap_disclosed",
+      "result": "PASS",
+      "evidence": "ElementwiseMemoryEngine.scala:58 still treats exceptionFlags(4,1) as fatal. model.py source_identity explicitly marks IEEE control unbound and states routing/per-job control gap; no new hardware claim."
+    },
+    {
+      "name": "exp_recipe_and_diagnostic_scope",
+      "result": "PASS",
+      "evidence": "Owner scalar sources, BlockFloat, and retained arithmetic sources match M16 snapshot hashes. Original abs>=80 +0 saturation retained. exp_domain.json identifies only local primitive error and has null whole-output/state bound and no threshold assignment."
+    }
+  ],
+  "directed_review_probes": {
+    "process_seconds": 0.272,
+    "old_abi_vs_mask30": "Identical: Mul underflow flags=3, stage=1, Add unissued.",
+    "mask28_underflow_then_add_overflow": "stage=2, issue_flags=[3,5], final lane flags=[5,0]; selected mask permits only finite underflow progression.",
+    "invalid_mask0": "Rejected before arithmetic: stage=1, issue_flags=[-5,0].",
+    "fma_discriminator": "(0x3f800001 * 0x3f7ffffe) + 0xbf800000 returned 0x00000000 for both policies.",
+    "midjob_mutations": "Both exception_policy and fatal_mask rejected before owner tick."
+  },
+  "test_evidence": {
+    "parent_reported_policy_tests": "5 PASS in 4.64s before review; not rerun.",
+    "parent_reported_reference_tests": "15 PASS; sole later change removed unused native signature parameter.",
+    "parent_combined_suite": "Not independently repeated; parent owns final status/receipt."
+  },
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "severity": "P3",
+      "evidence": "reference.py:native_prepared_chunk",
+      "finding": "Unused exception_policy parameter could imply native policy selection. Parent removed it; verified final AST while fixed_chunk retains explicit option."
+    }
+  ],
+  "limitations": [
+    "The supplied M16 snapshot omits reference.py and test_ieee_policy.py; those files were reviewed directly, not represented as exact snapshot diffs.",
+    "model.py also contains independent transport-drain changes relative to M16. This review covers the policy delta, policy identity, flags, and fault propagation rather than full transport re-signoff.",
+    "No full-size M128 IEEE rerun or whole-layer official acceptance was performed by this reviewer.",
+    "No RTL, EDA, physical resource, timing, or throughput claims are established."
+  ],
+  "exp_diagnostic": {
+    "path": "work/qwen35_gdn_chunk_ieee_20261012/exp_domain.json",
+    "sha256": "314f90b289838c18f47acf751f43aecb6a90236dc7580fba57f0e947e1167e42",
+    "calls": 70688,
+    "saturated_calls": 4705,
+    "max_abs_input": 258.0842590332031,
+    "max_local_abs_error": 1.2516975402832031e-06,
+    "whole_output_or_state_error_bound": null
+  },
+  "original_receipt_sha256": "51a83cea51ca331d28a34462367acc9840fa60220ef184f737880340e5afeb0f"
+}

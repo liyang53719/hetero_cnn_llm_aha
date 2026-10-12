@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "PASS_REPORTED_BOUNDED_SOFTWARE_TESTS",
+  "scope": "SINGLE_AND_TWO_CHUNK_DENSE_TERMINAL_ABORT_REGRESSION_SOFTWARE_ONLY",
+  "provenance": {
+    "evidence_kind": "author_reported_from_retained_tool_output",
+    "run_already_completed": true,
+    "rerun_for_receipt": false,
+    "raw_stdout_stderr_file_retained": false,
+    "note": "The original combined stdout/stderr was returned in exec/write_stdin tool messages, not saved to a file. This receipt records those completed tool results and copies the exact terminal unittest summary; it is not a newly executed test or a complete raw log.",
+    "exec_session_id": 79980,
+    "first_output_chunk_id": "7d604a",
+    "final_output_chunk_id": "fee37f",
+    "hash_check_chunk_id": "359585"
+  },
+  "command": {
+    "cwd": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142",
+    "argv": [
+      "python",
+      "-m",
+      "unittest",
+      "candidates.qwen35_gdn_prefill.test_typed_dense",
+      "candidates.qwen35_gdn_prefill.test_dense_prefix",
+      "-v"
+    ],
+    "environment": {
+      "MATRIX_SERVICE_LIBRARY": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/library_01/official_bf16_matrix_silu.so",
+      "MATRIX_SERVICE_COMPILE_RECEIPT": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/library_01/official_bf16_compile.json"
+    }
+  },
+  "returncode": 0,
+  "test_count": 27,
+  "elapsed_seconds": 4.157,
+  "elapsed_source": "unittest terminal summary, not complete shell/tool wall time",
+  "exact_terminal_summary": "----------------------------------------------------------------------\nRan 27 tests in 4.157s\n\nOK\n",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "229c0cd0951fef6714ddc5f6b3b4f4f21a023961bcf3a5a0cc78d67df1aee380",
+    "candidates/qwen35_gdn_prefill/test_typed_dense.py": "d03790dfa9d52c436602ae765da37bb9fa240b3896b4c451409a06780cda502e",
+    "candidates/qwen35_gdn_prefill/dense_prefix.py": "9fdc52c86b14784996b7b77f81eba0fd2be067abbf2055d843ed190f1b61a04a",
+    "candidates/qwen35_gdn_prefill/test_dense_prefix.py": "d38746f00fd95028c9df43b333138a318ad1efc747240fdeffc07707d848ef63"
+  },
+  "source_hashes_reverified_while_writing_receipt": true,
+  "library_sha256": "bcab4d36ae7990bf6b40c08866066b563d8c6c09fb134a2393d8268505c89c7f",
+  "compile_receipt_sha256": "98d12038175ec3e0cadde0293be7ca43224cc430acfe267f29b52e79a1133e9a",
+  "validation": [
+    "Explicit existing library receipt was validated by setUpModule during the test run.",
+    "git diff --check returned 0.",
+    "py_compile for the four source/test files returned 0."
+  ],
+  "new_regressions_per_mode": [
+    "Abort and separately injected numeric-fault latch at held success terminal suppress first-edge acceptance.",
+    "Abort at final ACK held or accepted on the same edge drains exactly one failed terminal.",
+    "Existing write ACK error retains its original terminal reason after abort.",
+    "Already consumed successful terminal cannot be revoked by later abort."
+  ],
+  "checked_failure_invariants": [
+    "D and prefix remain unpublished.",
+    "One failed terminal, Matrix owner response, and release.",
+    "Accepted transport/result/seed obligations drain.",
+    "Owner locks and Matrix requires coordinated reset; new admission fails.",
+    "Explicit caller reset preserves owner/bank/accumulator addresses."
+  ],
+  "fresh_build_executed": false,
+  "full_k3584_m128_executed": false,
+  "rtl_executed": false,
+  "hardware_cycles": null,
+  "native_acceptance": false,
+  "original_receipt_sha256": "7ff53c871b8bfbefa264f6341163192f6d643203b96597bfc40eb711f41b0365"
+}

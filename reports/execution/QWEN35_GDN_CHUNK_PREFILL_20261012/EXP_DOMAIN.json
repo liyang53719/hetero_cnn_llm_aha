@@ -1,0 +1,19 @@
+{
+  "scope": "LOCAL_EXP_PRIMITIVE_DOMAIN_DIAGNOSTIC_NOT_DOWNSTREAM_BOUND",
+  "input_sha256": "cb5ebbac0bab724e7c717adf1cb9391726412e010dab778dc8807fa38e4d94df",
+  "calls": 70688,
+  "saturated_calls": 4705,
+  "max_abs_input": 258.0842590332031,
+  "native_nonzero_discarded": 1618,
+  "largest_native_discarded": 1.7745667083182273e-35,
+  "saturated_max_abs_error": 1.7745667083182273e-35,
+  "nonsaturated_max_abs_error": 1.2516975402832031e-06,
+  "all_max_abs_error": 1.2516975402832031e-06,
+  "torch": "2.10.0+cpu",
+  "threads": 1,
+  "upstream_source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+  "exp_recipe_changed": false,
+  "whole_output_or_state_error_bound": null,
+  "node_threshold_assigned": false,
+  "original_receipt_sha256": "314f90b289838c18f47acf751f43aecb6a90236dc7580fba57f0e947e1167e42"
+}

@@ -1,0 +1,385 @@
+{
+  "scope": "ACTUAL_PREP_BOUNDARY_REPLAY_FULL16_M16_FULL128_DIM_PADDED64_COMPARISON",
+  "actual_summary_sha256": "d6a546cb9474e7dcaa31a1ede189dde026df29dbb744fa81ac81087861cb82f8",
+  "source_reference_sha256": "ba4f0ec8a33131f5b070caf34b9733e4bad9841a35c9d65b4a093861aa5e6cd1",
+  "fixed": {
+    "status": "FIXED_BITWISE_CONFORMANCE",
+    "passed": true,
+    "thresholds": null,
+    "bitwise_required": true,
+    "output": {
+      "dtype": "bf16",
+      "elements": 32768,
+      "bit_mismatches": 0,
+      "numerical_mismatches": 0,
+      "signed_zero_only_mismatches": 0,
+      "nonfinite": false,
+      "actual_nonfinite": 0,
+      "expected_nonfinite": 0,
+      "first_bit_mismatch": null,
+      "actual_sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+      "expected_sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "max_ulp": 0,
+      "relative_l2": 0.0,
+      "cosine": 0.9999999999999998
+    },
+    "state": {
+      "dtype": "fp32",
+      "elements": 262144,
+      "bit_mismatches": 0,
+      "numerical_mismatches": 0,
+      "signed_zero_only_mismatches": 0,
+      "nonfinite": false,
+      "actual_nonfinite": 0,
+      "expected_nonfinite": 0,
+      "first_bit_mismatch": null,
+      "actual_sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c",
+      "expected_sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c",
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "max_ulp": 0,
+      "relative_l2": 0.0,
+      "cosine": 1.0
+    }
+  },
+  "native_sameinput": {
+    "status": "DIAGNOSTIC_ONLY_NO_APPROVED_CHUNK_THRESHOLD",
+    "passed": null,
+    "thresholds": null,
+    "bitwise_required": false,
+    "output": {
+      "dtype": "bf16",
+      "elements": 32768,
+      "bit_mismatches": 1,
+      "numerical_mismatches": 1,
+      "signed_zero_only_mismatches": 0,
+      "nonfinite": false,
+      "actual_nonfinite": 0,
+      "expected_nonfinite": 0,
+      "first_bit_mismatch": 23035,
+      "actual_sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+      "expected_sha256": "ce4968f9f1f9ea034ccd9d35e9a68d07ac8f4cd42c63dc07f9538e239b4373eb",
+      "max_abs": 1.1920928955078125e-07,
+      "mean_abs": 3.637978807091713e-12,
+      "max_ulp": 1,
+      "relative_l2": 2.2003007259247312e-07,
+      "cosine": 0.9999999999999756
+    },
+    "state": {
+      "dtype": "fp32",
+      "elements": 262144,
+      "bit_mismatches": 192794,
+      "numerical_mismatches": 192794,
+      "signed_zero_only_mismatches": 0,
+      "nonfinite": false,
+      "actual_nonfinite": 0,
+      "expected_nonfinite": 0,
+      "first_bit_mismatch": 0,
+      "actual_sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c",
+      "expected_sha256": "a96bb7fdcc6b62d78c3c6314fd95d3e887c1f1c48d7bc68a2a0ece3936e0ed82",
+      "max_abs": 4.842877388000488e-07,
+      "mean_abs": 3.8515487253474283e-10,
+      "max_ulp": 493033,
+      "relative_l2": 1.311779272406974e-07,
+      "cosine": 0.9999999999999913
+    }
+  },
+  "native_full_official_layer_prefix": {
+    "status": "DIAGNOSTIC_ONLY_NO_APPROVED_CHUNK_THRESHOLD",
+    "passed": null,
+    "thresholds": null,
+    "bitwise_required": false,
+    "output": {
+      "dtype": "bf16",
+      "elements": 32768,
+      "bit_mismatches": 24,
+      "numerical_mismatches": 24,
+      "signed_zero_only_mismatches": 0,
+      "nonfinite": false,
+      "actual_nonfinite": 0,
+      "expected_nonfinite": 0,
+      "first_bit_mismatch": 2762,
+      "actual_sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+      "expected_sha256": "bb13862b0addf02c57926265bb11e673e77fbc33c462d8a479efda34ebb96050",
+      "max_abs": 3.0517578125e-05,
+      "mean_abs": 3.044647201022599e-09,
+      "max_ulp": 1,
+      "relative_l2": 8.718845863782819e-05,
+      "cosine": 0.9999999962001314
+    },
+    "state": {
+      "dtype": "fp32",
+      "elements": 262144,
+      "bit_mismatches": 223966,
+      "numerical_mismatches": 223966,
+      "signed_zero_only_mismatches": 0,
+      "nonfinite": false,
+      "actual_nonfinite": 0,
+      "expected_nonfinite": 0,
+      "first_bit_mismatch": 0,
+      "actual_sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c",
+      "expected_sha256": "a280057d471d2d1896aa054539d1a7c5e30e23164596c337b9df7a498b368f9e",
+      "max_abs": 0.0002851039171218872,
+      "mean_abs": 9.812007656466132e-09,
+      "max_ulp": 5161921,
+      "relative_l2": 3.022905938320664e-05,
+      "cosine": 0.9999999995431401
+    }
+  },
+  "fixed_identity": {
+    "rows": 16,
+    "heads": 16,
+    "key_dim": 128,
+    "value_dim": 128,
+    "input_shape": [
+      16,
+      6400
+    ],
+    "output_shape": [
+      16,
+      16,
+      128
+    ],
+    "state_shape": [
+      16,
+      128,
+      128
+    ],
+    "chunk_size": 64,
+    "chunks": 1,
+    "pad_size": 48,
+    "input_sha256": "3dddf7d5d1233918979019e44de7f0180b531e78dbe460ad17ebf18e7a7a7e65",
+    "initial_state_sha256": null,
+    "output_sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+    "state_sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c",
+    "source_sha256": {
+      "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    "implementation_sha256": "ba4f0ec8a33131f5b070caf34b9733e4bad9841a35c9d65b4a093861aa5e6cd1",
+    "input_layout": "Q2048_K2048_V2048_gate16x16_FP32; gate={g,beta,14_positive_zero}",
+    "input_scope": "supplied_prepared_boundary; Q_already_L2_and_scaled; K_already_L2",
+    "output_dtype": "BF16_RNE",
+    "state_dtype": "FP32",
+    "reference_only": true,
+    "scalar_or_owner_called": false,
+    "vector_called": false,
+    "rtl_executed": false,
+    "full_official_block_executed": false,
+    "hardware_cycles": null,
+    "official_stage_acceptance": "UNASSIGNED; native comparisons diagnostic only",
+    "complete_gdn_final_gate": "REQUIRED_DOWNSTREAM_UNCHANGED; not evaluated here",
+    "scope": "INDEPENDENT_NUMPY_TRUE_CHUNK64_FIXED_RECIPE",
+    "numpy": "2.3.5",
+    "arithmetic": "separate_FP32_RNE_Mul_Add; ascending_K_from_positive_zero; unit_diagonal_forward_solve",
+    "vector_underflow_policy": "fatal_inexact_underflow_after_rounding",
+    "exp_policy": "original_degree7_ExpNegative_abs_ge_80_positive_zero_saturation",
+    "exp_stats": {
+      "calls": 35344,
+      "saturated_abs_ge_80": 0,
+      "max_abs_input_word": 1115503236
+    },
+    "synthetic_geometry": false,
+    "bitwise_required": true,
+    "native_acceptance": false
+  },
+  "native_identity": {
+    "rows": 16,
+    "heads": 16,
+    "key_dim": 128,
+    "value_dim": 128,
+    "input_shape": [
+      16,
+      6400
+    ],
+    "output_shape": [
+      16,
+      16,
+      128
+    ],
+    "state_shape": [
+      16,
+      128,
+      128
+    ],
+    "chunk_size": 64,
+    "chunks": 1,
+    "pad_size": 48,
+    "input_sha256": "3dddf7d5d1233918979019e44de7f0180b531e78dbe460ad17ebf18e7a7a7e65",
+    "initial_state_sha256": null,
+    "output_sha256": "ce4968f9f1f9ea034ccd9d35e9a68d07ac8f4cd42c63dc07f9538e239b4373eb",
+    "state_sha256": "a96bb7fdcc6b62d78c3c6314fd95d3e887c1f1c48d7bc68a2a0ece3936e0ed82",
+    "source_sha256": {
+      "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    "implementation_sha256": "ba4f0ec8a33131f5b070caf34b9733e4bad9841a35c9d65b4a093861aa5e6cd1",
+    "input_layout": "Q2048_K2048_V2048_gate16x16_FP32; gate={g,beta,14_positive_zero}",
+    "input_scope": "supplied_prepared_boundary; Q_already_L2_and_scaled; K_already_L2",
+    "output_dtype": "BF16_RNE",
+    "state_dtype": "FP32",
+    "reference_only": true,
+    "scalar_or_owner_called": false,
+    "vector_called": false,
+    "rtl_executed": false,
+    "full_official_block_executed": false,
+    "hardware_cycles": null,
+    "official_stage_acceptance": "UNASSIGNED; native comparisons diagnostic only",
+    "complete_gdn_final_gate": "REQUIRED_DOWNSTREAM_UNCHANGED; not evaluated here",
+    "scope": "PINNED_OFFICIAL_FULLSHAPE_CHUNK_SUFFIX_ON_PREPARED_INPUTS",
+    "native_acceptance": false,
+    "original_ast": {
+      "original_function_ast_sha256": "1d166d0ba9b6fc0de8f88d8ee5f9dc01cb072e4a469fbb4027a538cc02ccb300",
+      "removed_preparation_ast_sha256": "9d5924c649327da750144835f63676dda77b3df02155d62fe29373f5c79fa6e8",
+      "unchanged_suffix_ast_sha256": "427c9083192058cce00dafb890878159e34585ed5163b2758c6e2efd2983d9c9",
+      "explicit_binding_ast_sha256": "dc4674395b09a277d52bbd652a6481483ddb7a904cb3eef3af8dd6fc9a739200",
+      "executable_ast_sha256": "c5ef052f8ed3a46ad2ab9ab948322829f626d981d96975dd41e4bc3b43f12293",
+      "modifications": [
+        "remove_hub_decorator",
+        "replace_preparation_prefix_with_explicit_stage_bindings"
+      ],
+      "suffix_unchanged": true,
+      "entry": "immediately_after_query_equals_query_times_scaling",
+      "original_initial_dtype": "BF16",
+      "export_branch": false
+    },
+    "prepared_input_layout": {
+      "query": {
+        "shape": [
+          1,
+          16,
+          16,
+          128
+        ],
+        "stride": [
+          32768,
+          2048,
+          128,
+          1
+        ],
+        "dtype": "torch.float32",
+        "contiguous": true
+      },
+      "key": {
+        "shape": [
+          1,
+          16,
+          16,
+          128
+        ],
+        "stride": [
+          32768,
+          2048,
+          128,
+          1
+        ],
+        "dtype": "torch.float32",
+        "contiguous": true
+      },
+      "value": {
+        "shape": [
+          1,
+          16,
+          16,
+          128
+        ],
+        "stride": [
+          32768,
+          2048,
+          128,
+          1
+        ],
+        "dtype": "torch.float32",
+        "contiguous": true
+      },
+      "beta": {
+        "shape": [
+          1,
+          16,
+          16
+        ],
+        "stride": [
+          256,
+          16,
+          1
+        ],
+        "dtype": "torch.float32",
+        "contiguous": true
+      },
+      "g": {
+        "shape": [
+          1,
+          16,
+          16
+        ],
+        "stride": [
+          256,
+          1,
+          16
+        ],
+        "dtype": "torch.float32",
+        "contiguous": false
+      }
+    },
+    "initial_dtype_binding": "BF16_original_function_entry_before_preparation",
+    "query_transform": "none_already_normalized_and_scaled",
+    "backend": {
+      "torch": "2.10.0+cpu",
+      "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+      "cpu_capability": "DEFAULT",
+      "requested_cpu_capability": "default",
+      "machine": "x86_64",
+      "threads": 1,
+      "interop_threads": 1,
+      "deterministic": true,
+      "autocast": false,
+      "float32_matmul_precision": "highest",
+      "mkldnn_enabled": true,
+      "configuration": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 201703\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: DEFAULT\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=449b1768410104d3ed79d3bcfe4ba1d65c7f22c0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.10.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n"
+    }
+  },
+  "full_official_manifest_sha256": "f0d8d888e6ef56b1703eb427e87f04369151380ff2631dee107ee8dba01e2170",
+  "native_fullshape_executed": [
+    1,
+    16,
+    16,
+    128
+  ],
+  "head_extraction_after_native_operation": null,
+  "software_seconds": 5.3853814429894555,
+  "full_block_executed": false,
+  "rtl_executed": false,
+  "artifacts": {
+    "fixed.bf16le": {
+      "bytes": 65536,
+      "sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a"
+    },
+    "fixed_state.fp32le": {
+      "bytes": 1048576,
+      "sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c"
+    },
+    "native_full16.bf16le": {
+      "bytes": 65536,
+      "sha256": "ce4968f9f1f9ea034ccd9d35e9a68d07ac8f4cd42c63dc07f9538e239b4373eb"
+    },
+    "native_full16_state.fp32le": {
+      "bytes": 1048576,
+      "sha256": "a96bb7fdcc6b62d78c3c6314fd95d3e887c1f1c48d7bc68a2a0ece3936e0ed82"
+    },
+    "official_full16.bf16le": {
+      "bytes": 65536,
+      "sha256": "bb13862b0addf02c57926265bb11e673e77fbc33c462d8a479efda34ebb96050"
+    },
+    "official_full16_state.fp32le": {
+      "bytes": 1048576,
+      "sha256": "a280057d471d2d1896aa054539d1a7c5e30e23164596c337b9df7a498b368f9e"
+    }
+  },
+  "original_receipt_sha256": "e78ab617e7e2e9afb81b96c1824c0f0cfc46a09b85adcb403f78651796e881df"
+}

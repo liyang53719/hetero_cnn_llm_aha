@@ -1,0 +1,173 @@
+{
+  "scope": "ACTUAL_PREP_BOUNDARY_REPLAY_FULL16_HEADS_FULL128_DIM_TRUE_PADDED64",
+  "producer_summary_sha256": "8aab8619be3ce8eb88eabb8c72ef529302d07ba816c4aa0d2c860560254381b7",
+  "input_sha256": "3dddf7d5d1233918979019e44de7f0180b531e78dbe460ad17ebf18e7a7a7e65",
+  "input_bytes": 409600,
+  "host_batch": true,
+  "same_prior_instance": false,
+  "reference_injected": false,
+  "producer_operators_reexecuted": false,
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "9b755861da417427c3e4a65a6f70b7446634d765d6e4a01a8554d8ae718a2f73",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "5e5a65b05c5d9e31ee33aee0a98bac7f33571b0229e491b2227653c69590e647",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "bc4db0ef4dab709788096c9e9da48ef9aaecd495ed699da00d3d5704ca9e7ddd",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/prep/model.py": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "5754040059a39bbeca67c30a71c4babb168e2445a8eed24d4e9cd4127c642565",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+  },
+  "job": {
+    "tag": 7,
+    "input": 1048576,
+    "state_in": 5242880,
+    "state_out": 6291456,
+    "output": 7340032,
+    "scratch": 16777216,
+    "tokens": 16,
+    "cold": true,
+    "expected_generation": 0,
+    "heads": 16,
+    "key_dim": 128,
+    "value_dim": 128
+  },
+  "hardware_cycles": null,
+  "rtl_executed": false,
+  "native_acceptance": false,
+  "full_block_executed": false,
+  "status": "ACTUAL_STAGING_SUCCESS_PENDING_REFERENCE",
+  "seconds": 174.47825342298893,
+  "peak_rss_kib": 98704,
+  "driver": {
+    "owner": {
+      "scope": "TRUE_CHUNK64_GDN_SOFTWARE_MAPPING",
+      "identity": {
+        "source_sha256": {
+          "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+          "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+          "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+          "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"
+        },
+        "implementation_sha256": {
+          "model.py": "9b755861da417427c3e4a65a6f70b7446634d765d6e4a01a8554d8ae718a2f73",
+          "vector.py": "5e5a65b05c5d9e31ee33aee0a98bac7f33571b0229e491b2227653c69590e647",
+          "vector16.cpp": "bc4db0ef4dab709788096c9e9da48ef9aaecd495ed699da00d3d5704ca9e7ddd"
+        },
+        "vector_underflow_policy": "fatal_inexact_underflow_flags_4_to_1",
+        "exp_policy": "existing_ExpNegative_including_abs_ge_80_zero_saturation",
+        "mapping": "one_retained_16_lane_Add_Mul_resource_candidate",
+        "matrix_used": false,
+        "new_array": false,
+        "rtl_executed": false,
+        "native_acceptance": false,
+        "throughput_80_percent_achieved": false
+      },
+      "status": null,
+      "numerical_detail": null,
+      "accepted": {
+        "write_requests": 235520,
+        "memory_responses": 6011648,
+        "write_acks": 235520,
+        "scratch_ack_bytes": 13959168,
+        "chunks_started": 16,
+        "read_requests": 5776128,
+        "upper_triangle_masked": 32256,
+        "chunks_completed": 16,
+        "owner_results": 1
+      },
+      "exp": {
+        "calls": 35344,
+        "saturated_abs_ge_80": 0,
+        "max_abs_input_word": 1115503236
+      },
+      "first_numerical_failure": null,
+      "scalar_calls": {
+        "exp_negative": 35344
+      },
+      "vector_issue_counts": {
+        "add": 5319168,
+        "mul": 5300224
+      },
+      "vector_lane_operations": {
+        "add": 84576768,
+        "mul": 84803584
+      },
+      "host_batch": true,
+      "host_call_counts": {
+        "single": 150016,
+        "mul_add": 5234688
+      },
+      "physical_vector_lanes": 16,
+      "vector_instances": 1,
+      "scalar_instances_created": 0,
+      "arithmetic": "FP32_each_Mul_Add_RNE_ascending_K_no_FMA",
+      "transpose_tile_fp32_payload_bytes": 1024,
+      "hardware_register_allocation_established": false,
+      "python_diagnostic_storage": {
+        "adapter_fp32_buffer_words": 64,
+        "adapter_lane_flag_words": 16,
+        "adapter_issue_flag_words": 2,
+        "vector_failure_capture_max_words": 64,
+        "peak_live_python_storage_bytes": null,
+        "suspended_generator_locals": "Retained across yield: at least nine FP32 lists in _compute, plus nested helper locals and adapter buffers; no proven register or live-list bound."
+      },
+      "scratch_ddr_bytes": 13959168,
+      "production_geometry": true,
+      "state_committed": false,
+      "history_committed": false,
+      "generation_advanced": false,
+      "hardware_cycles": null,
+      "rtl_executed": false,
+      "native_acceptance": false,
+      "throughput_80_percent_achieved": false
+    },
+    "complete": true,
+    "status": null,
+    "counts": {
+      "ticks": 12023297,
+      "write_bytes": 15073280,
+      "source_read_bytes": 409600,
+      "read_bytes": 369672192,
+      "scratch_read_bytes": 369262592
+    },
+    "staging_complete": true,
+    "output_published": false,
+    "state_published": false,
+    "state_committed": false,
+    "history_committed": false,
+    "generation_advanced": false,
+    "input_sha256": [
+      "3dddf7d5d1233918979019e44de7f0180b531e78dbe460ad17ebf18e7a7a7e65"
+    ],
+    "output_sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+    "state_sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c"
+  },
+  "source_unchanged": true,
+  "source_input_unchanged": true,
+  "core.bf16le": {
+    "sha256": "f2792f74622558b4cf8d27921e712e305faeee02491a7d90a3acae8f945b543a",
+    "bytes": 65536,
+    "published": false,
+    "written_beats": 1024,
+    "acknowledged_beats": 1024
+  },
+  "state.fp32le": {
+    "sha256": "f5bd305f9c5b0c8040a9ca23f8f00ff3fda4d418cf03d933f7fc93caf682425c",
+    "bytes": 1048576,
+    "published": false,
+    "written_beats": 16384,
+    "acknowledged_beats": 16384
+  },
+  "scratch.fp32le": {
+    "sha256": "dad76293e2de546521ce4ca25664e9a88023cc13d37b8ac6f95144f94886a9f5",
+    "bytes": 13959168,
+    "published": false,
+    "written_beats": 218112,
+    "acknowledged_beats": 218112
+  },
+  "original_receipt_sha256": "d6a546cb9474e7dcaa31a1ede189dde026df29dbb744fa81ac81087861cb82f8"
+}

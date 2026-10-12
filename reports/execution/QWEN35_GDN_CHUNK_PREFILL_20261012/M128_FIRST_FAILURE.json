@@ -1,0 +1,43 @@
+{
+  "scope": "PRESERVED_LEGACY_VECTOR_FIRST_M128_REJECTION",
+  "status": "ACTUAL_OWNER_REJECTED",
+  "seconds": 0.15216214400425088,
+  "original_receipt_sha256": "abdab900371f1efbf21ab8c846f4aa7ab472eb46274076aca7d0b7eb5d3961e3",
+  "producer_summary_sha256": "49637d15a8c3974f5ee5ff601805f879241d6c05eb58cfb862db10987f7fc6c3",
+  "input_sha256": "cb5ebbac0bab724e7c717adf1cb9391726412e010dab778dc8807fa38e4d94df",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "9b755861da417427c3e4a65a6f70b7446634d765d6e4a01a8554d8ae718a2f73",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "5e5a65b05c5d9e31ee33aee0a98bac7f33571b0229e491b2227653c69590e647",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "bc4db0ef4dab709788096c9e9da48ef9aaecd495ed699da00d3d5704ca9e7ddd",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/prep/model.py": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "5754040059a39bbeca67c30a71c4babb168e2445a8eed24d4e9cd4127c642565",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+  },
+  "position": {
+    "phase": "prepare_key_query_products",
+    "head": 0,
+    "chunk": 0,
+    "row": 18,
+    "column": 0,
+    "memory_sequence": 5640
+  },
+  "minimal_arithmetic_counterexample": {
+    "lane": 4,
+    "a_hex": "0xb7ae8141",
+    "b_hex": "0x7dd24d3",
+    "result_hex": "0x804b5f58",
+    "flags": 3
+  },
+  "core_written_beats": 0,
+  "state_written_beats": 0,
+  "published": false,
+  "generation_advanced": false,
+  "subsequent_explicit_ieee_fullblock_acceptance": "PENDING",
+  "no_threshold_change": true
+}

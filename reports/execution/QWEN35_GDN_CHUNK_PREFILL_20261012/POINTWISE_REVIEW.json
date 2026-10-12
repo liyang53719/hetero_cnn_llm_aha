@@ -1,0 +1,48 @@
+{
+  "scope": "INDEPENDENT_SOFTWARE_POINTWISE_SOURCE_REVIEW",
+  "completed_at_utc": "2026-10-12T18:10:33.411863+00:00",
+  "head": "ada0a8a81e2a19f1ecd306df7fa3ae56f2fc6f3b",
+  "status": "NO_REMAINING_CODE_BLOCKERS_IN_REVIEWED_SCOPE",
+  "closed_findings": [
+    "POINTWISE-001 malformed ACK retirement",
+    "POINTWISE-002 readonly initial residual Add",
+    "POINTWISE-003 preservation of pending wire error"
+  ],
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/elementwise/model.py": "e192035e29792d0d22094cce674942e906e0433d6874348e0497c6bff4f65e03",
+    "candidates/qwen35_gdn_prefill/elementwise/reference.py": "88c0069f2e84462dd91e6363f101f5490d724e0ae3d36643385ee7c4307496e2",
+    "candidates/qwen35_gdn_prefill/elementwise/test_model.py": "c0ffd676a737b6f0b05974b86628f7acc6d14e9f7129644e253c63b9fdefc43f",
+    "candidates/qwen35_gdn_prefill/elementwise/test_reference.py": "9c5d1beef09a377da61371032b01b4be8a7892b6c72e4627314aa698587dbcf1",
+    "candidates/qwen35_gdn_prefill/gated_norm/model.py": "8ca0c4974e9f72e3e39186e68841be27ac86e56a9a11fdd746c0360b5e0cd7c8",
+    "candidates/qwen35_gdn_prefill/gated_norm/test_model.py": "f59daf182a009bde91fe0d142cea3d657a1f80d48097bbf361e53c5ba0e833bd"
+  },
+  "conclusions": {
+    "functional": "BF16 materialization boundaries, FP32 gamma, op6 multiplication policy, supported domains and production address formulas map to pinned committed source. M1 full-width readonly residual independently passes; production M16/M128 arithmetic remains pending.",
+    "protocol": "78 independent through-driver fault scenarios pass on current source, including malformed reads/first and final write ACKs, abort/reset drain, failure priority, no invalid ACK credit or publication, stable single terminal and exclusive Scalar release.",
+    "physical_implementation": "Not evaluated; software synchronous Scalar calls and retained buffers do not establish Chisel or RTL timing/resource equivalence.",
+    "qor": "Not evaluated; no RTL/EDA/synthesis or hardware-cycle claims."
+  },
+  "readonly_contract": "Only Add input A may be authenticated readonly initial hidden data. Exact aligned extent, guards and immutable byte hash remain checked. Input B and both SiluMul inputs still require complete actual producer data/ACK/publication. No synthetic ACKs are added to readonly input.",
+  "remaining_evidence_limits": [
+    "GatedNorm M16/M128 tests use reduced active heads at production strides; all16 arithmetic is covered only at M1.",
+    "Elementwise reviewed suite covers production H1024/FFN3584 at M1 and reduced width at M16; actual production M16/M128 still needed.",
+    "GatedNorm software streams gate beats and may write partial head staging before a late fault; committed Chisel buffers a full head first. Neither may publish failure.",
+    "Original-Torch pointwise helper is diagnostic only; no native threshold was introduced or relaxed, and no complete official BF16 block result is claimed."
+  ],
+  "validation_artifacts": [
+    "work/gdn_pointwise_review_20261012/initial_review.json",
+    "work/gdn_pointwise_review_20261012/incremental_validation.json"
+  ],
+  "reviewer_execution": {
+    "fault_scenarios_passed": 78,
+    "production_m1_readonly_add": "PASS, independent fixed BF16 reference",
+    "wall_seconds": 0.697,
+    "whole_existing_suites_rerun_by_reviewer": false,
+    "long_tests": false,
+    "rtl": false,
+    "eda": false,
+    "torch_native": false
+  },
+  "allowed_next_step": "Continue authorized model-first full16head M16/M128 and official BF16 fullblock progression with unchanged thresholds; this review is not its acceptance result.",
+  "original_receipt_sha256": "ad9c445d3ec5c06607594901dd11b52252e9995038f011a8a2570a313aedb74b"
+}

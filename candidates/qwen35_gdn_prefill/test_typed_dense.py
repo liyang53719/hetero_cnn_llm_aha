@@ -59,7 +59,162 @@ def values(count, salt=0):
     return struct.pack('<' + 'H' * count, *(basis[(i*3 + i//7 + salt) % len(basis)] for i in range(count)))
 
 
-class TypedDenseTests(unittest.TestCase):
+class DenseTerminalAbortCases:
+    """The same real-library terminal races are checked for both adapters."""
+    def _until_terminal_edge(self, driver, predicate, **kwargs):
+        deadline = time.monotonic() + 15
+        for _ in range(100000):
+            if predicate():
+                return
+            self.assertLess(time.monotonic(), deadline, 'small terminal-race wall budget')
+            driver.tick(**kwargs)
+        self.fail('small terminal-race tick budget')
+
+    def _resource_identity(self):
+        return (id(self.owner), id(self.owner.a_banks), id(self.owner.b_banks),
+                self.matrix.resource_address, LIB.matrix_accumulator_address())
+
+    def _assert_unpublished(self, driver):
+        self.assertFalse(driver.output.published)
+        with self.assertRaises(ValueError):
+            self.memory.read64(driver.job.dst)
+        if hasattr(driver, 'prefix'):
+            self.assertFalse(driver.prefix.published)
+            with self.assertRaises(ValueError):
+                self.memory.read64(driver.prefix.base)
+
+    def _assert_failed_terminal_and_reset(self, driver, reason, identity):
+        self.assertEqual(driver.response[1], reason)
+        self.assertEqual(self.owner.error, reason)
+        self._assert_unpublished(driver)
+        self.assertIsNone(driver.pending_read)
+        self.assertIsNone(driver.pending_ack)
+        self.assertIsNone(self.memory.pending)
+        self.assertFalse(driver.results)
+        if hasattr(driver, 'active_seed'):
+            self.assertIsNone(driver.active_seed)
+            self.assertIsNone(driver.pending_seed_ack)
+        self.assertEqual(self.owner.responses, 1)
+        self.assertEqual(self.matrix.counts['aborts'], 1)
+        self.assertEqual(self.matrix.counts['owner_responses'], 1)
+        self.assertEqual(self.matrix.counts['owner_releases'], 1)
+        self.assertEqual(self.matrix.epoch, 0)
+        self.assertIsNone(self.matrix.owner)
+        self.assertEqual(self.owner.state, 'locked')
+        self.assertTrue(self.matrix.reset_required)
+        self.assertFalse(LIB.matrix_state() & (4 | 8 | 32 | 64 | 128))
+        self.assertEqual(self._resource_identity(), identity)
+        with self.assertRaisesRegex(ValueError, 'unpoisoned owner'):
+            self.driver(driver.job)
+        self.assertFalse(self.matrix.acquire(self.owner, 'normal', 99))
+        with self.assertRaisesRegex(ValueError, 'invocation already retired'):
+            driver.tick(abort=True)
+        self.assertEqual(self.owner.responses, 1)
+        self.assertEqual(self.matrix.counts['owner_releases'], 1)
+        # Only a caller-coordinated reset unlocks the same physical resources.
+        self.owner.tick(coordinated_reset=True)
+        self.matrix.reset()
+        self.assertEqual(self.owner.state, 'idle')
+        self.assertFalse(self.matrix.reset_required)
+        self.assertEqual(self.matrix.epoch, 1)
+        self.assertEqual(self._resource_identity(), identity)
+        self._assert_unpublished(driver)
+
+    def test_abort_or_latched_fault_cannot_consume_held_success_terminal(self):
+        for cause in ('abort', 'numeric_fault'):
+            with self.subTest(cause=cause):
+                self.setUp()
+                d = self.driver(self.prepare(n=32))
+                identity = self._resource_identity()
+                self._until_terminal_edge(d, lambda: self.owner.ports()['response'] is not None,
+                                          response_ready=False)
+                held_success = self.owner.ports()['response']
+                self.assertEqual(held_success, (d.job.tag, None, d.job.write_bytes))
+                self.assertEqual(d.output.acknowledged, set(range(0, d.job.write_bytes, 64)))
+                self.assertEqual(self.owner.responses, 0)
+                if cause == 'numeric_fault':
+                    # Inject only the adapter's fault latch; all tensor bytes
+                    # above came from the accepted original C++ execution.
+                    d.numeric_fault = 'late fault latch regression injection'
+                edge = d.tick(abort=cause == 'abort', response_ready=True)
+                self.assertEqual(edge['response'], held_success)
+                self.assertFalse(edge['response_fire'])
+                self.assertIsNone(d.response)
+                self.assertEqual(self.owner.responses, 0)
+                self._assert_unpublished(d)
+                error = 'local reset requires coordinated backend reset'
+                self.assertEqual(self.owner.ports()['response'], (d.job.tag, error, d.job.write_bytes))
+                for _ in range(3):
+                    d.tick(abort=True, response_ready=False)
+                    self.assertIsNone(d.response)
+                    self.assertEqual(self.matrix.counts['aborts'], 1)
+                self.assertTrue(d.tick(abort=True, response_ready=True)['response_fire'])
+                self._assert_failed_terminal_and_reset(d, error, identity)
+
+    def test_abort_at_held_final_ack_drains_one_failed_terminal(self):
+        for ack_on_abort in (False, True):
+            with self.subTest(ack_on_abort=ack_on_abort):
+                self.setUp()
+                d = self.driver(self.prepare(n=32))
+                identity = self._resource_identity()
+                self._until_terminal_edge(d, lambda: d.pending_ack is not None and
+                                          d.counts['write_data_bytes'] == d.job.write_bytes)
+                for _ in range(3):
+                    d.tick(ack_ready=False)
+                edge = d.tick(abort=True, ack_ready=ack_on_abort, response_ready=True)
+                self.assertEqual(edge['write_ack_fire'], ack_on_abort)
+                self.assertFalse(edge['response_fire'])
+                self.assertIsNone(d.response)
+                self._assert_unpublished(d)
+                if not ack_on_abort:
+                    for _ in range(3):
+                        d.tick(abort=True, ack_ready=False)
+                        self.assertIsNone(d.response)
+                        self.assertIsNotNone(self.memory.pending)
+                self.finish(d, lambda *_: dict(abort=True))
+                self._assert_failed_terminal_and_reset(
+                    d, 'local reset requires coordinated backend reset', identity)
+
+    def test_abort_preserves_preexisting_failed_terminal_reason(self):
+        d = self.driver(self.prepare(n=32))
+        identity = self._resource_identity()
+        self._until_terminal_edge(d, lambda: d.pending_ack is not None and
+                                  d.counts['write_data_bytes'] == d.job.write_bytes)
+        d.tick(ack_error=True, response_ready=False)
+        error = self.owner.error
+        self.assertEqual(error, 'write ACK tag/error/bytes')
+        self._until_terminal_edge(d, lambda: self.owner.ports()['response'] is not None,
+                                  response_ready=False)
+        edge = d.tick(abort=True, response_ready=True)
+        self.assertFalse(edge['response_fire'])
+        self.assertIsNone(d.response)
+        self.assertEqual(self.owner.error, error)
+        self.assertTrue(d.tick(abort=True, response_ready=True)['response_fire'])
+        self._assert_failed_terminal_and_reset(d, error, identity)
+
+    def test_consumed_success_cannot_be_revoked_by_late_abort(self):
+        d = self.driver(self.prepare(n=32))
+        identity = self._resource_identity()
+        self.finish(d)
+        response, raw = d.response, d.output.raw()
+        self.assertEqual(response, (d.job.tag, None, d.job.write_bytes))
+        self.assertTrue(d.output.published)
+        with self.assertRaisesRegex(ValueError, 'invocation already retired'):
+            d.tick(abort=True)
+        self.assertEqual(d.response, response)
+        self.assertEqual(d.output.raw(), raw)
+        self.assertTrue(d.output.published)
+        self.assertEqual(self.owner.responses, 1)
+        self.assertEqual(self.matrix.counts['owner_responses'], 1)
+        self.assertEqual(self.matrix.counts['owner_releases'], 1)
+        self.assertEqual(self.matrix.counts['aborts'], 0)
+        self.assertEqual(self.owner.state, 'idle')
+        self.assertFalse(self.matrix.reset_required)
+        self.assertIsNone(self.matrix.owner)
+        self.assertEqual(self._resource_identity(), identity)
+
+
+class TypedDenseTests(DenseTerminalAbortCases, unittest.TestCase):
     def setUp(self):
         self.assertEqual(LIB.td_reset(), 0)
         self.matrix = t.MatrixService(LIB)

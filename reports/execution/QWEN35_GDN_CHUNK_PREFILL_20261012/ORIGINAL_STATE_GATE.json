@@ -1,0 +1,15 @@
+{
+  "scope": "ORIGINAL_WHOLEBLOCK_FP32_STATE_TOLERANCE_APPLIED_ONLY_TO_COMPLETED_COLD_M16_STATE",
+  "metric": {
+    "elements": 262144,
+    "atol": 0.0001,
+    "rtol": 0.0001,
+    "mismatches": 1,
+    "max_abs_error": 0.0002851039171218872,
+    "rmse": 5.925642547706937e-07,
+    "max_tolerance_ratio": 2.5209357368775005
+  },
+  "passed": false,
+  "fullblock_pass": false,
+  "original_receipt_sha256": "eba4dd24a82decb3ae348ca63a2498ff5892764535ce61ecc224e1fbdca1123e"
+}

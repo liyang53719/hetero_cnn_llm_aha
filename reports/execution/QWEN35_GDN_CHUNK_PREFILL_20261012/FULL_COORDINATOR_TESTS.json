@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python",
+    "-m",
+    "unittest",
+    "candidates.qwen35_gdn_prefill.test_full_driver",
+    "-v"
+  ],
+  "compiler_executed": false,
+  "elapsed_seconds": 9.116801577998558,
+  "full_numerical_execution": false,
+  "returncode": 0,
+  "rtl_executed": false,
+  "scope": "SYNTHETIC_CONTROL_REAL_CONSTRUCTOR_ADMISSION_AND_IDENTITY_ONLY",
+  "source_sha256_after": {
+    "candidates/qwen35_gdn_prefill/full_driver.py": "344ccb26853a117a8163c8264a8fb450ba008b29433409ff07e25094df61edad",
+    "candidates/qwen35_gdn_prefill/test_full_driver.py": "fcd997cade7e4528dca70651f21e22c55d1544baef9c0e852b542dd45d280071"
+  },
+  "source_sha256_before": {
+    "candidates/qwen35_gdn_prefill/full_driver.py": "344ccb26853a117a8163c8264a8fb450ba008b29433409ff07e25094df61edad",
+    "candidates/qwen35_gdn_prefill/test_full_driver.py": "fcd997cade7e4528dca70651f21e22c55d1544baef9c0e852b542dd45d280071"
+  },
+  "original_receipt_sha256": "7d39874e5873cd085bdd26a55865959afc340b1a4a910936749a4832dfa5f685"
+}

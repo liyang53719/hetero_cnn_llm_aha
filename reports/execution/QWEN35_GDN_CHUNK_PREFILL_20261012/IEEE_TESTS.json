@@ -1,0 +1,20 @@
+{
+  "scope": "IEEE_SOFTWARE_POLICY_AND_LEGACY_SMALL_REGRESSION_ONLY",
+  "tests": 41,
+  "seconds": 33.144,
+  "status": "PASS",
+  "log_sha256": "1f4fa0c2f2b8fc4b6f6aa067ce09265472181fc6a1c4e93a4cdb94a595c7cf33",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/chunk/reference.py": "2fa75494a96e10e6ed4e20c3ffc0030ce6566fbed37d02091e17eda1e083a995",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "0c790204954d6ed5342ca95725aab9fc556f91471f0e2ae26f2c0580ef97cf2f",
+    "candidates/qwen35_gdn_prefill/chunk/test_model.py": "046342605227a151c4fe3bd744fd793c714068561875cb08e81e97eee2434dfd",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+    "candidates/qwen35_gdn_prefill/chunk/test_reference.py": "24647f9d65c38f6e89cebbabd25f6f37f16da08387101cde90bf233205c42ab3",
+    "candidates/qwen35_gdn_prefill/chunk/test_ieee_policy.py": "7a360af74efb9efae142c5e342b2e7d5b0970b27fe6e668a6fea673d9f2550d9"
+  },
+  "native_parameter_signature_removed_after_test": true,
+  "arithmetic_changed_after_test": false,
+  "rtl_executed": false,
+  "original_receipt_sha256": "361972af730b260e845e9ab0dd5c3695f416dd0fff8dcf1025820fc3e8aa4d6f"
+}

@@ -1,0 +1,148 @@
+{
+  "scope": "Independent read-only source review of typed software full-block coordinator and seeded Dense transport; no numerical acceptance, public Command128, Chisel, RTL, synthesis or QoR signoff.",
+  "status": "PASS_SOFTWARE_SOURCE_AND_CONTROL_REVIEW_NUMERICAL_PENDING",
+  "hierarchy": {
+    "coordinator": "FullBlockCoordinator",
+    "order": [
+      "input_norm",
+      "qkv",
+      "z",
+      "ab",
+      "conv_silu",
+      "prep",
+      "chunk",
+      "gated_norm",
+      "o",
+      "attention_residual",
+      "post_norm",
+      "gate",
+      "up",
+      "silu_mul",
+      "down",
+      "output"
+    ],
+    "shared_resources": [
+      "one TypedMemory",
+      "one DenseOwnerModel A/B bank pair",
+      "one MatrixService and existing five FP32 accumulator contexts",
+      "one Softplus-enabled PrepScalar",
+      "one explicit-policy Vector16"
+    ],
+    "publication": "Actual owner ACK/terminal makes only intermediate spans readable; Conv history and FP32 state stay private until final output terminal and joint generation fence."
+  },
+  "conclusions": {
+    "functional_correctness": "PENDING full actual cold/carried numerical comparison; 15 synthetic/API tests cannot establish it. No reference/native result is used as a producer in the reviewed actual path.",
+    "protocol_correctness": "No open source-level blocker after the reviewed fixes. Complete final ACK/terminal gates the software joint output/history/state fence; carried windows consume the preceding actual committed pair. Full production numerical execution is still pending.",
+    "physical_implementation": "Software identity checks retain actual shared owner/banks/Matrix service and FP32 prefix bytes; no physical Chisel/RTL integration proven.",
+    "qor": "Not evaluated; no hardware cycles/utilization/throughput claims accepted."
+  },
+  "evidence_limits": {
+    "reviewer_executed_tests": false,
+    "long_actual_model_run": false,
+    "compiler_run": false,
+    "rtl_run": false,
+    "author_reported_tests": {
+      "full_coordinator_control_and_identity": {
+        "passed": 16,
+        "seconds": 8.864,
+        "receipt": "work/qwen35_full_coordinator_control_20261012T1823/receipt.json",
+        "log": "work/qwen35_full_coordinator_control_20261012T1823/test.log",
+        "reviewer_read_receipt_and_log": true,
+        "before_after_source_hashes_match": true
+      },
+      "dense_prefix_and_original_dense": {
+        "passed": 27,
+        "seconds": 4.157,
+        "receipt": "work/gdn_dense_terminal_abort_review_20261012/final_evidence.json",
+        "reviewer_read_source_regressions": true,
+        "receipt_sha256": "7ff53c871b8bfbefa264f6341163192f6d643203b96597bfc40eb711f41b0365",
+        "provenance": "author_reported_from_retained_tool_output",
+        "raw_log_retained": false,
+        "reviewer_read_receipt": true,
+        "source_hashes_match": true
+      }
+    },
+    "legacy_chunk_result": "Existing original-native M16 final-state failure remains open and full-block numerical acceptance is PENDING; neither source review nor synthetic/API/short Dense tests erase it.",
+    "upstream_vector_review": "work/qwen35_gdn_chunk_ieee_20261012/review.json; reviewed source-policy report, no separate re-execution here."
+  },
+  "initial_reviewed_source_sha256": {
+    "candidates/qwen35_gdn_prefill/full_driver.py": "427ae267897d0bf12a17c9c5a7abccaea6237287f2e740aad54c024dbd7c49e0",
+    "candidates/qwen35_gdn_prefill/test_full_driver.py": "e06780b862b22a111b243da9ef1176f0f647f8ee16c65e5c1b41b63de4011b67",
+    "candidates/qwen35_gdn_prefill/dense_prefix.py": "c27b9f8e6112565d13e1e5dc6d226b27e4bf193c9f06abb088a58ee8241da73d",
+    "candidates/qwen35_gdn_prefill/test_dense_prefix.py": "65b84600b8da550b3d804e4c1431bc839441ff139e538aa315c097f61a95f3b5",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "5754040059a39bbeca67c30a71c4babb168e2445a8eed24d4e9cd4127c642565",
+    "candidates/qwen35_gdn_prefill/test_typed_dense.py": "6282663eecbe8d9c32ebc478eab1cfec9e2853681abd268822fe466154072f15"
+  },
+  "reviewed_source_sha256": {
+    "candidates/qwen35_gdn_prefill/full_driver.py": "344ccb26853a117a8163c8264a8fb450ba008b29433409ff07e25094df61edad",
+    "candidates/qwen35_gdn_prefill/test_full_driver.py": "fcd997cade7e4528dca70651f21e22c55d1544baef9c0e852b542dd45d280071",
+    "candidates/qwen35_gdn_prefill/dense_prefix.py": "9fdc52c86b14784996b7b77f81eba0fd2be067abbf2055d843ed190f1b61a04a",
+    "candidates/qwen35_gdn_prefill/test_dense_prefix.py": "d38746f00fd95028c9df43b333138a318ad1efc747240fdeffc07707d848ef63",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "229c0cd0951fef6714ddc5f6b3b4f4f21a023961bcf3a5a0cc78d67df1aee380",
+    "candidates/qwen35_gdn_prefill/test_typed_dense.py": "d03790dfa9d52c436602ae765da37bb9fa240b3896b4c451409a06780cda502e"
+  },
+  "reviewed_at_utc": "2026-10-12T18:28:49Z",
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "id": "GDN-FULL-001",
+      "severity": "P1",
+      "status": "resolved",
+      "target": "TypedSeededDenseDriver.tick and inherited TypedDenseDriver.tick",
+      "evidence": [
+        "candidates/qwen35_gdn_prefill/dense_prefix.py:143",
+        "candidates/qwen35_gdn_prefill/dense_prefix.py:309",
+        "candidates/qwen35_gdn_prefill/dense_prefix.py:326",
+        "candidates/qwen35_gdn_prefill/typed_dense.py:246",
+        "candidates/qwen35_gdn_prefill/typed_dense.py:322",
+        "candidates/qwen2_resident_matrix/transposed_down/model.py:566",
+        "candidates/qwen2_resident_matrix/transposed_down/model.py:573",
+        "candidates/qwen2_resident_matrix/transposed_down/model.py:592"
+      ],
+      "finding": "Abort on the exact edge accepting a held successful Dense terminal passes response_ready unchanged. DenseOwnerModel captures the old success tuple before local_reset sets owner.error, then accepts that stale tuple. Both adapters interpret it as success and publish the intermediate D even though abort was issued and the owner/backend become poisoned. Full-block roots remain protected by coordinator.aborted; the adapter terminal/publication contract is nevertheless violated.",
+      "minimal_fix": "Suppress response_ready on the first abort/numeric-fault edge, allowing the next owner terminal to carry the actual fault; apply to both adapters or correct the shared owner without changing unrelated protocols.",
+      "mechanical_acceptance": "For each adapter, reach a held successful terminal with complete final ACK and no pending transport, then tick(abort=True,response_ready=True). Assert no successful terminal and no D publication; then drain one failed response, one Matrix release, poisoned resources, and reset-required admission blocking. Add equivalent coordinator coverage for a Dense stage.",
+      "waiver": "None for the advertised abort/no-publication transport contract.",
+      "resolution": "Both adapters now gate response_ready with not reset_edge, preserving the held pre-edge response until the real owner exposes its faulted terminal. Four lifecycle regressions are shared by both adapter suites.",
+      "final_evidence": [
+        "candidates/qwen35_gdn_prefill/dense_prefix.py:145",
+        "candidates/qwen35_gdn_prefill/typed_dense.py:248",
+        "candidates/qwen35_gdn_prefill/test_typed_dense.py:123",
+        "candidates/qwen35_gdn_prefill/test_typed_dense.py:154",
+        "candidates/qwen35_gdn_prefill/test_typed_dense.py:179",
+        "candidates/qwen35_gdn_prefill/test_typed_dense.py:195",
+        "candidates/qwen35_gdn_prefill/test_dense_prefix.py:23"
+      ]
+    },
+    {
+      "id": "GDN-FULL-002",
+      "severity": "P2",
+      "status": "resolved",
+      "target": "FullBlockCoordinator._resource_identity/_launch",
+      "evidence": [
+        "candidates/qwen35_gdn_prefill/full_driver.py:226",
+        "candidates/qwen35_gdn_prefill/full_driver.py:304"
+      ],
+      "finding": "Vector policy and fatal mask are sealed, but RMS reduction policy self.policy is omitted from the sealed identity and reread for post_norm. A caller can switch reduction policy during one invocation or between cold/carried windows without rejection.",
+      "minimal_fix": "Include the normalized RMS reduction policy in the immutable configuration/resource seal and test a policy mutation between owner commands.",
+      "mechanical_acceptance": "After cold start, assign the other valid RMS ReductionPolicy and confirm the next tick/start rejects before further arithmetic or publication.",
+      "waiver": "May be waived only if mutable per-stage RMS policy is explicitly intended and reported; current single rms_policy API/report implies one selection.",
+      "resolution": "Normalized RMS ReductionPolicy is included in the resource seal. A new test changes it after attention_residual and verifies rejection before post_norm launch or joint commit.",
+      "final_evidence": [
+        "candidates/qwen35_gdn_prefill/full_driver.py:230",
+        "candidates/qwen35_gdn_prefill/test_full_driver.py:334"
+      ]
+    }
+  ],
+  "checks": {
+    "prelaunch_inputs": "Only raw BF16 inputs and original checkpoint parameters are preloaded; weight transpose preserves BF16 bits. All intermediate/history/state/prefix/scratch destinations are fresh guarded allocations.",
+    "chain_dependencies": "All sixteen owners consume exact physical spans. Typed drivers require prior ACKed/published producers. Chunk core is explicitly published only after its staging terminal, while its state stays private.",
+    "dual_state_fence": "Final residual success is held for checks of exact Conv/chunk receipts, full history/state/output ACK coverage, drained resources, immutable raw/producer hashes, unchanged preceding roots and generation. The synchronous software commit then publishes both new roots and advances once.",
+    "cold_carried": "Cold owners internally initialize zero history/state rather than consuming sentinels. Carried jobs take the last committed history/state addresses and generation; failed carried work preserves the previous pair.",
+    "shared_identity": "One retained Dense owner/A-B banks/MatrixService, one PrepScalar, and one Vector16 are reused. Vector policy/mask and RMS reduction policy are sealed. Reset is admitted only after draining and keeps physical resources in place.",
+    "seeded_down": "Exactly two ascending-K chunks with K3584 split2560. Full FP32 context bytes are written, ACKed, privately reread in the original permutation, hashed/versioned, and fed to real seed begin/beat/commit/ACK on the same five contexts. No prefix BF16 rounding or oracle-produced seed.",
+    "scope": "Reports explicitly deny public Command128 execution, RTL execution, hardware cycle/utilization claims and native acceptance. IEEE vector mode keeps the legacy default and explicit current Chisel integration gap."
+  },
+  "source_hashes_reverified_at_review_completion": true,
+  "original_receipt_sha256": "ea60ed8692c26fb069a700015c3877ed847d1ca3961d008facc5ad37dfea49dc"
+}

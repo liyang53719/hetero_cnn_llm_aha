@@ -243,7 +243,9 @@ class TypedDenseDriver:
             step_ready=step_ready and not self.abort_sent and
                 not (p['step'] is not None and p['step'].last and len(self.results) >= 2),
             write_command_ready=write_ready, write_data_ready=data_ready,
-            response_ready=response_ready, local_reset=reset_edge)
+            # The owner exposes PRE-edge ports. A first abort/fault must not
+            # consume a held success before local_reset changes its terminal.
+            response_ready=response_ready and not reset_edge, local_reset=reset_edge)
         if self.pending_read is not None and read_response_ready:
             inputs['read_beat'] = self.pending_read
         if self.results and result_ready:

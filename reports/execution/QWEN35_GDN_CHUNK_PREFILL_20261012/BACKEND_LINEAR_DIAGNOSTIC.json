@@ -1,0 +1,114 @@
+{
+  "status": "ORIGINAL_SINGLE_OP_REPRODUCED_STATIC_K512_STRUCTURE_ESTABLISHED_RUNTIME_CALL_SEQUENCE_UNOBSERVED",
+  "shape": {
+    "M": 16,
+    "N": 6144,
+    "K": 1024
+  },
+  "single_linear_invocation_verified": true,
+  "original_output_bit_exact": true,
+  "output_sha256": "e5d382cf358e5d753121ee6892b7a8f57404ac0ae4f775f9d160bbbe6b3d394b",
+  "official_operation_host_seconds": 0.0041791650000959635,
+  "bounded_process_seconds": 2.45352876400284,
+  "oneDNN_primitive": "onednn_verbose,v1,primitive,exec,cpu,matmul,brg_matmul:avx512_core_bf16,undef,src:bf16::blocked:ab::f0 wei:bf16::blocked:ba::f0 dst:bf16::blocked:ab::f0,attr-scratchpad:user,,16x1024:1024x6144,2.47412",
+  "proven_static_facts": [
+    "K extent per runtime batch is 64 iterations x 4 adjacent BF16 pairs x 2 = 512 in both full-row and tail-row paths",
+    "One generated variant adds a previous FP32 partial before final conversion; the other does not",
+    "Symbolic copy transpose preserves the original adjacent BF16 pair halves",
+    "Runtime batch loop carries the accumulator between batches; a K512 loop alone does not prove an independent K512 partial"
+  ],
+  "unobserved_runtime_values": [
+    "batch count at call struct +0x50",
+    "kernel invocation order and counts",
+    "batch input K offsets",
+    "final-conversion versus FP32-scratch branch"
+  ],
+  "two_independent_K512_partials_proven": false,
+  "two_independent_K512_partials": "Source-grounded next hypothesis only; not numerically evaluated or adopted",
+  "bad_dot_exact_diagnostic": {
+    "index": [
+      1,
+      2383
+    ],
+    "terms": 1024,
+    "exact_numerator": -1908407469,
+    "exact_denominator": 17179869184,
+    "exact_sum_as_float64": -0.11108393484028056,
+    "fp64_fsum_proven_exact": true,
+    "midpoint": -0.111083984375,
+    "exact_minus_midpoint": 4.9534719437360764e-08,
+    "strict_fullK_pair_raw": -0.111083984375,
+    "strict_pair_minus_midpoint": 0.0,
+    "actual_bf16": -0.111328125,
+    "official_bf16": -0.11083984375,
+    "nearest_exact_is_official": true,
+    "strict_pair_subnormal_accumulators": 0,
+    "exact_products_below_min_normal_fp32": 0,
+    "not_an_implementation_substitute": true
+  },
+  "tools": {
+    "objdump": {
+      "path": "/usr/bin/x86_64-linux-gnu-objdump",
+      "sha256": "96afb8521834982d0e711b5d6e9785252bf82129fb0106b93a6bd54d83fae11f",
+      "version": "GNU objdump (GNU Binutils for Debian) 2.44"
+    },
+    "readelf": {
+      "path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "4a387d80a70e6e97ef940a666fab59d5c38e7cf19ff907192fa983cb8505a7de",
+      "version": "GNU readelf (GNU Binutils for Debian) 2.44"
+    },
+    "nm": {
+      "path": "/usr/bin/x86_64-linux-gnu-nm",
+      "sha256": "ddb55c0685721bf494aa2d090056b8b32a40614ad4464b305896f527d882c3c1",
+      "version": "GNU nm (GNU Binutils for Debian) 2.44"
+    }
+  },
+  "all_hashes_unchanged": true,
+  "hash_verification": {
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/native_linear_replay.py": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/gdn_projection_state_diagnostic_20261012/review_native_linear.py": true,
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/__init__.py": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_runtime_20261012/python.sh": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_prep_prefill_20261012/actual_m16_01/cold128.input_norm.actual.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0003.bf16le": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha/work/qwen35_layer0_payload/linear_attn.in_proj_qkv.weight.bin": true,
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen35_gdn_native_20261012/m16_01/0006.bf16le": true,
+    "dnnl_dump_cpu_jit_brgemm_kernel_t.0.bin": true,
+    "dnnl_dump_cpu_jit_brgemm_kernel_t.0.asm": true,
+    "dnnl_dump_cpu_jit_brgemm_kernel_t.1.bin": true,
+    "dnnl_dump_cpu_jit_brgemm_kernel_t.1.asm": true,
+    "dnnl_dump_cpu_jit_brgemm_matmul_copy_b_transposed_t.2.bin": true,
+    "dnnl_dump_cpu_jit_brgemm_matmul_copy_b_transposed_t.2.asm": true
+  },
+  "small_artifacts": {
+    "STATIC_REVIEW.json": {
+      "bytes": 9632,
+      "sha256": "f745832094e3a034857df3e9102aed37a426ce8752bcac43142d5b527128ebe4"
+    },
+    "INSTRUCTION_EVIDENCE.txt": {
+      "bytes": 1446,
+      "sha256": "12fce8adc1bdc5b5b175e49699c939b0e3013dc3c08880808853294154e4fd7b"
+    },
+    "REPLAY_RESULT.json": {
+      "bytes": 4156,
+      "sha256": "4771799a2b03825024455ff3ab88651fb526f3671d9c019e2a93580872dec77f"
+    },
+    "PARAMETERS.json": {
+      "bytes": 3632,
+      "sha256": "ade90b71d8acebe0deb3c1d0604e5bee78f9cfe37f06110cba538e05d9f2d6ad"
+    },
+    "COMMAND.json": {
+      "bytes": 646,
+      "sha256": "eaeec7906265b00e454b2df1dadcd6ed9235bc400a55e63b48fb4be5b9da93f1"
+    },
+    "native_replay.log": {
+      "bytes": 4780,
+      "sha256": "1800944da36e326f52295a6d46891515c45eb74ba98e85aef60ee0a1849ebb39"
+    }
+  },
+  "scope": "One official F.linear replay only; no new model/RTL/owner runs, shape sweep, profile adoption, or source edits. JIT binaries and input tensors remain local; share small reports only.",
+  "original_receipt_sha256": "9b71f713ca361f7add4e8c95e20f648d1f19d1229b29c4b3970490042f73e99a"
+}

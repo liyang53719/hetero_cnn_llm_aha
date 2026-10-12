@@ -1,0 +1,23 @@
+{
+  "scope": "NARROW_INCREMENTAL_CHUNK_TRANSPORT_SOURCE_REVIEW",
+  "status": "NO_BLOCKER_FOUND_IN_REVIEWED_DELTA",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "0c790204954d6ed5342ca95725aab9fc556f91471f0e2ae26f2c0580ef97cf2f",
+    "candidates/qwen35_gdn_prefill/chunk/test_model.py": "046342605227a151c4fe3bd744fd793c714068561875cb08e81e97eee2434dfd"
+  },
+  "reviewed": [
+    "TypedChunkDriver accepted request and physical write record latching",
+    "malformed write response reaches owner unchanged and retires only matching latched physical write as failed",
+    "pending wire error and malformed non-bool error preserved under explicit error injection",
+    "ChunkOwner validates malformed read data before drain and preserves Protocol/Memory over concurrent Aborted",
+    "faults leave scratch/output/state unpublishable; scalar/vector leases release and terminal remains held",
+    "new TransportOnlyTests use explicitly scripted three-write transport with no arithmetic library build or numeric claim"
+  ],
+  "test_evidence": "Fix worker reports four isolated TransportOnlyTests PASS; reviewer inspected tests and source without duplicate execution. Pointwise 78-case independent replay is a separate artifact.",
+  "limits": [
+    "Not a full Chunk arithmetic, resource, native BF16 or physical implementation review",
+    "Existing reset-on-held-completion rejection remains unchanged and explicit",
+    "No compiler, vector arithmetic library, Torch, RTL or EDA executed by this additional review"
+  ],
+  "original_receipt_sha256": "f908e4fe973e6c6082b633bba86581f98f3ee05bf11c4314470a0f8747e37219"
+}

@@ -102,3 +102,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 2026-10-12 18:21 UTC：ada0a8a 两CI/103测试/工件闭环。新增全16头、完整128²状态的M16 true chunk64边界模型174.48秒固定算术逐bit通过；纯官方state原门仍1/262144超限，QKV-only反事实将其消除，不能宣称完整GDN通过。原M128合法UF拒绝保留，显式IEEE软件策略默认关闭且未接Chisel控制。16阶段完整typed协调器、双root最终fence、Down真实FP32seed及pointwise排空小门已落地，实际整链待归约修复后验证。[范围与原FAIL](QWEN35_GDN_CHUNK_PREFILL_20261012_CN.md)。此映射M128 Vector约2124万issue，固定4096资源乐观Matrix利用率≤3.168%，非RTL实测；五block M128总门、S02/S04/Q35B/U00.2/U01继续open。
 
 2026-10-12 19:07 UTC：07b9a9b8 两CI、271测试和18,996B紧凑工件已核闭环。下一批将通用两段K512投影真正接入同一GDN完整typed软件协调器，保留BF16物理跨度、原共享Vector Add、普通/seeded切换及双state最后发布。冷完整workflow305测试/21进程通过；实际cold16→carried16仍PENDING，尚不继承独立候选的state通过。[实现与验真范围](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。显式IEEE与新投影的Chisel控制/公共Command128仍未接，五block M128总门不关闭。
+
+2026-10-12 19:20 UTC：8ef1239a 两轻CI/305测试/47执行测试源与紧凑工件闭环；0.8B L0同一完整typed软件模型cold16→实际carried16完成32终态、双root generation1→2，所有原已分配完整节点/state/operator门通过，旧FP32状态单点失败已在实际链消除。Prep单独门未分配，Chisel/Command128仍未接，不升级为M128或RTL通过。[逐项记录](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。同源完整M128已基于分阶段预算启动一次，S04/Q35B/U00.2/U01及五block总门继续open。

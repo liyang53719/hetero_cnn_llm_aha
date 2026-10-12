@@ -1,0 +1,45 @@
+{
+  "reason": "Immutable executed source versions before metadata/failure-preservation-only follow-up corrections. No numerical PASS rebinding.",
+  "records": [
+    {
+      "execution": "m16",
+      "original_path": "candidates/qwen35_attention_prefill/input_fixture.py",
+      "file": "m16_input_fixture.py.txt",
+      "sha256": "eeb28b83e964afc2f3d60016b36889e2412555a3bc2655caf35a20d7fd1e0965",
+      "pure_source_snapshot": true,
+      "current_production_source": false
+    },
+    {
+      "execution": "m16",
+      "original_path": "candidates/qwen35_attention_prefill/projection_driver.py",
+      "file": "m16_projection_driver.py.txt",
+      "sha256": "9bbf291f813cc6e4f4ea0d32a2d5f44db176b0d3f9c4f8e022df1dfc45b4671d",
+      "pure_source_snapshot": true,
+      "current_production_source": false
+    },
+    {
+      "execution": "m16",
+      "original_path": "candidates/qwen35_attention_prefill/run_projection_prefix.py",
+      "file": "m16_run_projection_prefix.py.txt",
+      "sha256": "50565afcca928f1182130afbe0171d5258546c4136326c7df5de0541ee773f36",
+      "pure_source_snapshot": true,
+      "current_production_source": false
+    },
+    {
+      "execution": "m128",
+      "original_path": "candidates/qwen35_attention_prefill/run_projection_prefix.py",
+      "file": "m128_run_projection_prefix.py.txt",
+      "sha256": "42dff9211056d04ead14d2f84b919d8be94e00a7f94142bd26f1debf3247406e",
+      "pure_source_snapshot": true,
+      "current_production_source": false
+    },
+    {
+      "execution": "m16_posthoc_identity",
+      "original_path": "work/l3_projection_model_20261012/verify_m16_manifest_repair.py",
+      "file": "verify_m16_manifest_repair.py.txt",
+      "sha256": "8798d498f5bb5b0dfeb040fc89bf3e39390147cde0fef297b5796abf2d874d80",
+      "pure_source_snapshot": true,
+      "current_production_source": false
+    }
+  ]
+}

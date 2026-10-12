@@ -1,4 +1,4 @@
-"""Actual typed GDN partials -> shared Vector16 Add -> packed BF16 ACKs.
+"""Actual typed partials -> shared Vector16 Add -> packed BF16 ACKs.
 
 All arithmetic uses the caller's one MatrixService and one Vector16. The
 resident partials and sum occupy the owner's existing three A-bank tile slots.
@@ -9,6 +9,8 @@ import ctypes as C
 from copy import deepcopy
 from dataclasses import asdict
 import hashlib
+import json
+from pathlib import Path
 import struct
 
 from . import typed_dense as t
@@ -27,12 +29,19 @@ GDN_PROJECTION_PROFILE = ReductionProfile(
     ((0, 512), (512, 1024)), True,
     '8b98184ea237efc0e2599fdaa223e0c04e3a9dee4b07dc091a0867389448bb7e')
 ROLES = {'qkv': (1024, 6144), 'z': (1024, 2048), 'ab': (1024, 32)}
+ATTENTION_FAMILY = 'attention_l3_v1'
+ATTENTION_PROJECTION_PROFILE = ReductionProfile(
+    'torch210cpu_default_l3_k1024_two_k512_pair_reverse_fp32_sum_bf16',
+    ((0, 512), (512, 1024)), True,
+    'e4f616563bfc94978a528ee012bad498841156dae8809054d0d9cc5c0422ef5d')
+ATTENTION_ROLES = {'packed_q_gate': (1024, 4096), 'k': (1024, 512), 'v': (1024, 512)}
 
 # Execution definitions and the unchanged files which select their dynamic
 # authority are frozen separately. The latter are import scaffolding only:
 # their checkpoint readers/reference/numeric drivers are never called here.
 EXECUTION_SOURCE_FILES = tuple('candidates/' + name for name in (
     'qwen35_gdn_prefill/projection_owner.py', 'qwen35_gdn_prefill/projection_driver.py',
+    'qwen35_attention_prefill/projection_profile.json',
     'qwen35_gdn_prefill/typed_dense.py',
     'qwen35_gdn_prefill/rms_owner.py', 'qwen35_gdn_prefill/chunk/vector.py',
     'qwen35_gdn_prefill/chunk/vector16.cpp',
@@ -110,18 +119,31 @@ There is no NumPy arithmetic, lane allocation, or invented hardware latency.
 
 class TypedProjectionDriver:
     def __init__(self, owner, matrix_service, memory, job, *, vector, role,
-                 profile=GDN_PROJECTION_PROFILE):
+                 profile=GDN_PROJECTION_PROFILE, family='gdn'):
         require(type(owner) is GdnProjectionOwner, 'exact existing GDN projection owner required')
         require(type(matrix_service) is t.MatrixService and type(memory) is t.TypedMemory,
                 'same base MatrixService and typed physical byte map required')
         require(type(job) in (t.down.Job, down.Job, Job), 'supported complete original Dense Job authority')
         require(type(profile) is ReductionProfile, 'explicit immutable reduction profile required')
         profile.validate(job.k)
-        require(role in ROLES or role == 'synthetic' and profile != GDN_PROJECTION_PROFILE,
-                'explicit production GDN role or nonproduction synthetic profile required')
-        if role in ROLES:
-            require((job.k, job.n) == ROLES[role], 'production GDN projection full shape mismatch')
-            require(profile == GDN_PROJECTION_PROFILE, 'production GDN projection policy/profile mismatch')
+        require(type(family) is str and family in ('gdn', ATTENTION_FAMILY),
+                'explicit supported projection family required')
+        if family == 'gdn':
+            require(role in ROLES or role == 'synthetic' and profile not in
+                    (GDN_PROJECTION_PROFILE, ATTENTION_PROJECTION_PROFILE),
+                    'explicit production GDN role or nonproduction synthetic profile required')
+            if role in ROLES:
+                require((job.k, job.n) == ROLES[role], 'production GDN projection full shape mismatch')
+                require(profile == GDN_PROJECTION_PROFILE, 'production GDN projection policy/profile mismatch')
+        else:
+            require(role in ATTENTION_ROLES, 'explicit production L3 projection role required')
+            require((job.k, job.n) == ATTENTION_ROLES[role], 'production L3 projection full shape mismatch')
+            require(profile == ATTENTION_PROJECTION_PROFILE, 'production L3 projection policy/profile mismatch')
+            parameters = Path(__file__).resolve().parents[1] / 'qwen35_attention_prefill/projection_profile.json'
+            canonical = json.dumps(json.loads(parameters.read_text()), sort_keys=True,
+                                   separators=(',', ':'), ensure_ascii=True).encode()
+            require(hashlib.sha256(canonical).hexdigest() == profile.source_sha256,
+                    'production L3 projection parameter identity drift')
         typed_job = Job(**vars(job))
         self.call = GdnReductionRequest(typed_job, job.tag or 1, profile.ranges, profile.pair_reverse)
         self.call.validate()
@@ -136,7 +158,8 @@ class TypedProjectionDriver:
         self.b = memory.exact(job.b, job.k * job.n * 2, readable=True)
         self.output = memory.exact(job.dst, job.write_bytes, readable=False)
         self.owner, self.matrix, self.memory, self.job = owner, matrix_service, memory, job
-        self.role, self.profile = role, profile
+        self.family, self.role, self.profile = family, role, profile
+        self.binding_identity = self._binding_identity()
         self.loan = SharedVector16Loan(vector)
         self.sum = TileSumController(owner.tiles, bank_tick=lambda **p: owner_tile_edge(owner, **p))
         self.coordinator = GdnReductionCoordinator()
@@ -164,6 +187,9 @@ class TypedProjectionDriver:
                 self.matrix.resource_address, id(self.loan.vector), self.loan.vector.resource_address,
                 id(self.owner.workspace))
 
+    def _binding_identity(self):
+        return (self.family, self.role, self.profile, tuple(sorted(vars(self.job).items())))
+
     def services(self):
         o = self.owner
         return Services(window_busy=o.window_request is not None and o.state not in ('idle', 'locked'),
@@ -180,6 +206,8 @@ class TypedProjectionDriver:
              result_ready=True, done_ready=True, write_ready=True, data_ready=True,
              ack_ready=True, response_ready=True, abort=False, ack_error=False):
         require(self.response is None, 'projection invocation already retired')
+        require(self.binding_identity == self._binding_identity(),
+                'accepted projection family/role/profile/job binding changed')
         require(self.bank_identity == self._identity() and self.owner.tiles.banks is self.owner.a_banks and
                 self.matrix.epoch == self.epoch, 'physical projection resources/epoch replaced')
         o, c = self.owner, self.coordinator
@@ -318,7 +346,9 @@ class TypedProjectionDriver:
         return deepcopy(self._terminal_report) if self._terminal_report is not None else self._report()
 
     def _report(self):
-        return dict(scope='GDN_TWO_PARTIAL_PACKED_BF16_SOFTWARE_OWNER', complete=self.response is not None,
+        return dict(scope=('GDN_TWO_PARTIAL_PACKED_BF16_SOFTWARE_OWNER' if self.family == 'gdn' else
+                           'L3_TWO_PARTIAL_PACKED_BF16_SOFTWARE_OWNER'), family=self.family,
+            complete=self.response is not None,
             response=self.response, role=self.role, profile=asdict(self.profile), counts=dict(self.counts),
             groups=list(self.groups), partials=list(self.partials), drains=list(self.drains),
             shared_vector=dict(self.sum.counts), vector_add_calls=self.loan.vector.calls['add'] - self.vector_calls_before,

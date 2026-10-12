@@ -1,0 +1,154 @@
+{
+  "original_report": {
+    "bytes": 4405,
+    "path": "work/qwen35_l3_capture_restored_20261012T202700Z/suite_summary.json",
+    "sha256": "5b3857da6a189cbd3cc5fd0a798e31bc5fc35aa7ec27d94bfe7e629a096e5e07"
+  },
+  "report": {
+    "at": "2026-10-12T20:29:00.256390+00:00",
+    "model_correctness_gate_passed": false,
+    "numerical_acceptance_claimed": false,
+    "retry_performed": false,
+    "rtl_executed": false,
+    "run_id": "7c938e56-b779-4be2-a473-f41ee7d109d0",
+    "status": "VERIFIED_TWO_OFFICIAL_CAPTURE_WINDOWS_ONLY",
+    "windows": [
+      {
+        "at": "2026-10-12T20:28:47.121408+00:00",
+        "cache_continuity_verified": true,
+        "cache_tokens": [
+          0,
+          16,
+          32
+        ],
+        "capture_count": 226,
+        "case_identity": "cold16_then_carried16_from_second_window",
+        "dispatch_counts": [
+          107,
+          103
+        ],
+        "every_raw_tensor_hash_shape_dtype_verified": true,
+        "journal": {
+          "bytes": 40535,
+          "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_capture_restored_20261012T202700Z/m16_baseline/tensor_index.jsonl",
+          "sha256": "2d27ce431da249addff9d916b806915977105d0b1397505189b41fa0f8a3fc05"
+        },
+        "journal_equals_manifest": true,
+        "journal_tail_bytes": 0,
+        "manifest": {
+          "bytes": 297936,
+          "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_capture_restored_20261012T202700Z/m16_baseline/manifest.json",
+          "sha256": "97f0ed29d5e3d7734ce3ed0648c91b2a2f60601176f5cff06d2d3db041e7f172"
+        },
+        "model_correctness_gate_passed": false,
+        "numerical_acceptance_claimed": false,
+        "official_function_counts": [
+          {
+            "attention": 1,
+            "chunk": 3,
+            "eager": 1,
+            "norm": 4,
+            "norm_core": 4,
+            "rope": 1
+          },
+          {
+            "attention": 1,
+            "chunk": 3,
+            "eager": 1,
+            "norm": 4,
+            "norm_core": 4,
+            "rope": 1
+          }
+        ],
+        "original_parameter_count": 53,
+        "payload_tensor_count": 54,
+        "position_spans": [
+          [
+            0,
+            16
+          ],
+          [
+            128,
+            144
+          ]
+        ],
+        "query_tokens": 16,
+        "raw_capture_bytes": 14402048,
+        "rtl_executed": false,
+        "run_id": "7c938e56-b779-4be2-a473-f41ee7d109d0",
+        "runtime_file_count": 29,
+        "source_file_count": 23,
+        "source_runtime_payload_hashes_verified": true,
+        "status": "VERIFIED_OFFICIAL_CAPTURE_INTEGRITY_ONLY"
+      },
+      {
+        "at": "2026-10-12T20:29:00.197571+00:00",
+        "cache_continuity_verified": true,
+        "cache_tokens": [
+          0,
+          128,
+          256
+        ],
+        "capture_count": 226,
+        "case_identity": "cold128_then_carried128",
+        "dispatch_counts": [
+          107,
+          103
+        ],
+        "every_raw_tensor_hash_shape_dtype_verified": true,
+        "journal": {
+          "bytes": 41184,
+          "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_capture_restored_20261012T202700Z/m128_baseline/tensor_index.jsonl",
+          "sha256": "af17a087cb659f015b256cb72ba091089292743c3fdff77c93e0128e9a8ba00d"
+        },
+        "journal_equals_manifest": true,
+        "journal_tail_bytes": 0,
+        "manifest": {
+          "bytes": 299499,
+          "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_capture_restored_20261012T202700Z/m128_baseline/manifest.json",
+          "sha256": "5e797279a26c9384122023b94c8541d925843ae02f8a5e263c234f344cfb152b"
+        },
+        "model_correctness_gate_passed": false,
+        "numerical_acceptance_claimed": false,
+        "official_function_counts": [
+          {
+            "attention": 1,
+            "chunk": 3,
+            "eager": 1,
+            "norm": 4,
+            "norm_core": 4,
+            "rope": 1
+          },
+          {
+            "attention": 1,
+            "chunk": 3,
+            "eager": 1,
+            "norm": 4,
+            "norm_core": 4,
+            "rope": 1
+          }
+        ],
+        "original_parameter_count": 53,
+        "payload_tensor_count": 54,
+        "position_spans": [
+          [
+            0,
+            128
+          ],
+          [
+            128,
+            256
+          ]
+        ],
+        "query_tokens": 128,
+        "raw_capture_bytes": 73176064,
+        "rtl_executed": false,
+        "run_id": "7c938e56-b779-4be2-a473-f41ee7d109d0",
+        "runtime_file_count": 29,
+        "source_file_count": 23,
+        "source_runtime_payload_hashes_verified": true,
+        "status": "VERIFIED_OFFICIAL_CAPTURE_INTEGRITY_ONLY"
+      }
+    ]
+  }
+}

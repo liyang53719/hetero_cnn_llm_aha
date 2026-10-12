@@ -1,0 +1,55 @@
+{
+  "family": "attention_l3_v1",
+  "K": 1024,
+  "N": [
+    4096,
+    512
+  ],
+  "ranges": [
+    [
+      0,
+      512
+    ],
+    [
+      512,
+      1024
+    ]
+  ],
+  "pair_reverse": true,
+  "partial": "FP32",
+  "partial_initial": "positive_zero",
+  "accumulate": "FP32_FMA_RNE",
+  "merge": "FP32_Add",
+  "terminal": "BF16_RNE",
+  "input": "BF16",
+  "weight": "BF16_output_major",
+  "FTZ": false,
+  "DAZ": false,
+  "model_id": "Qwen/Qwen3.5-0.8B",
+  "checkpoint_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "backend": {
+    "torch": "2.10.0+cpu",
+    "torch_git_version": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "aten_cpu_capability": "default",
+    "torch_cpu_capability": "DEFAULT",
+    "torch_threads": 1,
+    "torch_interop_threads": 1,
+    "deterministic_algorithms": true,
+    "float32_matmul_precision": "highest",
+    "autocast": false,
+    "flush_denormal": false,
+    "transformers": "5.19.0.dev0",
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f"
+  },
+  "source": {
+    "official_sha256": {
+      "activations": "5b20c0a3625edc0001a98f09ce3c6b5baa1100e1d7ad8dee649e4d45c8468665",
+      "cache": "abdcb0ae88aa5b924ef7d76879db680e9af8f3ec1dafbba7ce446ecb521a944b",
+      "configuration": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e",
+      "masking": "af3d84dfe82a0b57c40625c89fb32b2cd6bf7351432ee5e76a9e8eac4289575b",
+      "modeling": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"
+    },
+    "capture_runner_sha256": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+    "independent_reference_sha256": "e059bd0c02473b0da02156cef4d9622c38fb70a5262e1db60da6b8100e2e2d12"
+  }
+}

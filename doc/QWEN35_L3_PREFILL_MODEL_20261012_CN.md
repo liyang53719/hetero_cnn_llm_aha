@@ -20,10 +20,30 @@
 
 已在独立新目录从远端恢复精确37b7de及原CI工件。两份capture源码从可访问创建内容和补丁逐字恢复，最终SHA与旧版本一致，随后在新环境重新跑11项小测试；python -S也通过，证明该小门只需标准库。旧L0/L3权重可逐hash复用；固定runtime和额外29份prefix payload分别重新核验/恢复，不重跑已完成的GDN长模型。
 
-## 当前清单
+## 2026-10-12 20:53 UTC：四阶段实际 typed 软件链
 
-- done：固定BF16 prefix/L3参考入口、真实cache/position区分、观察边界、partial索引与失败保全、独立源码审查、恢复后11项小门。
-- ongoing：新环境固定runtime/payload恢复和一次新的受控M16→M128官方采集，必须有新的来源身份与实际终态。
-- to do：L3实际RMS→Q+gate/K/V→Norm256→partial64 RoPE→KV→矩形QK/Softmax/PV→sigmoid gate→O/residual/postnorm/FFN/residual完整模型接线及原门验真，随后Chisel/RTL。
+恢复后的新官方采集已完成。M16为226个tensor/14,402,048B，manifest SHA97f0ed29d5e3d7734ce3ed0648c91b2a2f60601176f5cff06d2d3db041e7f172；M128为226个tensor/73,176,064B，manifest SHA5e797279a26c9384122023b94c8541d925843ae02f8a5e263c234f344cfb152b。全部原始字节、23源码、29 runtime项及54份固定payload已核验。它们是本轮新的输入身份，不继承旧不可见采集。
 
-新CI只有标准库11项源码/失败保全测试及Git payload检查，不下载权重、不跑Torch或RTL。Qwen2 cold M128和0.8B L0双M128维持各自已完成模型范围；0.8B L3、35B-A3B L0/L3和五block联合验收仍未完成。
+同一 TypedMemory、三 A bank、MatrixService、Vector16 Add 和 Scalar 实例已真实执行：原始 L3 hidden→input RMS→packed Q/gate→K→V。每一阶段仅读取上一阶段已经实际写回且完成ACK的数据；启动前只初始化原始hidden、固定权重与输出哨兵。packed Q/gate是每头[Q256,gate256]交错的4096列，K/V各512列。输出需要真实终态被消费者接受后才发布，末V完成才返回前缀完成。
+
+投影使用独立命名的 attention_l3_v1 通用分块参数：K1024分两段K512，段内BF16成对反序、FP32顺序累加，两个partial通过原共享Vector16 Add合并，最后BF16 RNE。参数不是所有模型的硬常量，旧GDN默认模式保持原合同。12组M16/M128、cold/carried、Q/K/V的独立完整形状参考共1,474,560个BF16值与该冻结官方CPU后台逐bit一致；本数据未覆盖FTZ/DAZ等全域边界，不据此宣布跨后台普适位等价。
+
+实际M128 cold/carried前缀一次177.338秒正常EXIT0，8个真实accepted terminals、1,572,864个输出BF16元素逐bit等于各自原manifest绑定的官方节点，全部原max_abs≤0.03125/mean_abs≤0.005门通过且实测误差为零。独立审查重新核验了8份actual原始输出、40份源码快照、11份输入/权重/ELF/receipt/manifest快照和物理权重转置哈希，未重跑模型。摘要SHA8441936e5b90dbab00adcff2b6eefc34dda860d849e17a6a8ab6c5620c25d672。
+
+每窗记录671,088,640个Matrix FMA、40,960次Vector16 Add（655,360 lanes）、1,572,864B真实写ACK，以及1,094,686个软件调度tick。4096个固定Matrix MAC资源不变；这些tick不是硬件周期，不能据此算完整block利用率。此前缀未执行KV owner；cold/carried只描述官方输入来源，不能称实际L3缓存续写已经验收。
+
+M16原运行79.138秒已完成8个数值终态且逐bit相同，但最终元数据检查EXIT1：fixture运行时依赖循环覆盖了manifest局部路径，导致报告将最后依赖文件的hash误填为manifest hash。原FAILED摘要保留。只修变量绑定，新增回归；独立后处理核验原source/input/output预存hash和正确manifest，恢复为明确的POSTHOC身份验真，未重跑算术、未改原文件。完整M128随后使用修正fixture正常通过。
+
+异常测试另外发现：Matrix失败排空后会保留poisoned lease等待reset，协调器原先错误要求失败终态也无lease。现成功仍要求清lease，失败只在全部物理请求退休后允许带poison隔离状态返回；真实首Q tile abort、hold完成、未启动K/V及拒绝再次acquire均有测试。之后仅补源码快照闭包和失败保全兜底，保留M128真正执行的runner源码快照；第三C++源原未复制到快照，其运行前compile receipt与ELF已有绑定，本轮独立补证，不描述为原已存在的快照。
+
+## 当前清单与下一接线
+
+- done：新官方M16/M128参考采集；实际typed input RMS→Q/gate/K/V双M128四阶段前缀；实际输出与官方8门通过；失败发布/模式切换/输入角色和形状前置拒绝小门。
+- done：最终干净源码目录按workflow顺序新建Matrix/Vector小库，26项L3与316项原GDN测试全部通过，26个suite无skip、34份102,262B紧凑工件逐hash核验；全部12,885源码前后无漂移。首轮独立验证额外施加512MB虚拟地址空间限制导致25个MemoryError，原FAIL保留；移除该非workflow限制后137.40秒通过，最高单进程RSS约1.79GiB。未改实际数值或重跑M128。
+- ongoing：本批远端CI工件闭环；C03.2/C04.2/C05中的L3模型子链继续，不能关闭父项。
+- to do：同实例Q/K Norm256→partial64 RoPE→KV双span fence→矩形QK/Softmax/PV→sigmoid gate→O/residual/postnorm/FFN/residual。Norm256原PWL/NR算术及原native失败/门限必须保留，新增数值差异要明确阻断。
+- to do：公共Command128和Chisel接入，包括新RMS归约、投影分块、共享Scalar IEEE选择；当前软件通过不冒充这些硬件接口已经执行。
+
+2b21d738的参考源码CI38304400698与payload CI38304400709成功，11测试、3源码/contract身份及1116B紧凑工件逐hash核验。本批新增CI只构建小共享软件库，运行全部source/synthetic测试；不采集模型、不下载权重、不生成RTL。实际大张量仅在本地保留，Git只提交源码、固定版本/hash、紧凑验证摘要和必要历史纯源码。
+
+Qwen2完整cold M128、0.8B L0完整cold→carried M128维持各自已完成软件模型范围；0.8B L3完整block、35B-A3B L0/L3、Chisel/RTL及五block联合验收均未完成，S01/Q35A/U00.2/U01继续open。

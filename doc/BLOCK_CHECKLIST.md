@@ -110,3 +110,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 2026-10-12 19:57 UTC：0.8B L0完整typed软件模型cold128→实际carried128一次运行正常完成32终态和双root generation1→2；每窗真实两个64-token chunk。finite-BF16域、全部原数值阈值下，各17个已分配节点、完整FP32 state及Conv/SiLU operator门均通过，旧normal-only拒绝明确保留；Prep仍unassigned。313/22最终轻门通过。[完整记录](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。这是S04/Q35B的模型数值子门完成，公共Command128/Chisel/RTL仍未接，不关闭父项及五block总验收；下一步0.8B L3 M128模型，35B-A3B两block未完成。
 
 2026-10-12 20:07–20:20 UTC：37b7de的GDN软件/公共payload两CI成功，313测试/22suite及21,490B工件逐hash核验。下一步0.8B L3完整prefill模型的官方BF16 prefix采集源码已准备并独立审查；环境替换后两源码逐hash精确恢复，新环境11项stdlib门通过。旧M16原始采集不可见，旧M128终态未知，不能继承成现环境通过。参考入口和下一数据链范围见[L3计划](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。0.8B L3/35B-A3B两block及Chisel/RTL总门继续open。
+
+2026-10-12 20:53 UTC：0.8B L3新官方M16/M128采集完成；同一实际typed软件资源执行RMS→packed Q/gate→K→V的cold128/carried128前缀，8个accepted terminals、1,572,864个BF16输出逐bit吻合官方，原门通过。M16元数据路径错误原EXIT1与独立posthoc身份恢复并列保留。见[L3记录](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。仅四阶段前缀，无实际KV续写、Norm256/RoPE/Attention/FFN和公共Command128/Chisel/RTL；C03.2/C04.2/C05为实现子门，S01/Q35A/U00.2/U01及五block总目标保持open。2b21两轻CI与1116B工件已核闭环，本批模型小门/新CI继续收口。

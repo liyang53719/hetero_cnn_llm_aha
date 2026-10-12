@@ -1,0 +1,103 @@
+"""Verified original L3 hidden/weights and post-execution native references.
+
+No projection/RMS arithmetic or official forward runs in this loader. Native
+intermediates are never returned as execution inputs.
+"""
+from pathlib import Path
+import hashlib
+import json
+
+from .native import capture
+
+ROOT = Path(__file__).resolve().parents[2]
+WEIGHTS = {'input_norm': 'input_layernorm.weight', 'packed_q_gate': 'self_attn.q_proj.weight',
+           'k': 'self_attn.k_proj.weight', 'v': 'self_attn.v_proj.weight'}
+WIDTHS = {'input_norm': 1024, 'packed_q_gate': 4096, 'k': 512, 'v': 512}
+
+
+def require(ok, why):
+    if not ok:
+        raise ValueError('L3 projection fixture: ' + why)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def select_prefix_tensors(manifest, payload):
+    """Metadata binding after complete capture/payload integrity validation."""
+    rows = manifest['query_tokens']
+    require(type(rows) is int and rows in (16, 128), 'complete M16/M128 only')
+    require((manifest['model_id'], manifest['revision']) == (payload['model_id'], payload['revision']),
+            'capture and checkpoint identity mismatch')
+    params = {v['local_name']: v for v in payload['tensors']}
+    for role, name in WEIGHTS.items():
+        actual, expected = manifest['parameters']['layers.3.' + name], params[name]
+        require(all(actual[k] == expected[k] for k in ('shape', 'dtype', 'bytes', 'sha256')),
+                'captured parameter differs from pinned checkpoint')
+        require(expected['dtype'] == 'BF16' and expected['shape'] ==
+                ([1024] if role == 'input_norm' else [WIDTHS[role], 1024]), 'original weight geometry')
+    selections = []
+    require(len(manifest['cases']) == 2, 'two original cache windows required')
+    for index, case in enumerate(manifest['cases']):
+        require(case['name'] == ('cold' if index == 0 else 'carried') + str(rows), 'case label')
+        modules = case['module_boundaries']
+        hidden = case['input']
+        require(modules['input_layernorm']['input']['args'] == [{'tensor': hidden}],
+                'input RMS does not consume original L3 hidden')
+        norm = modules['input_layernorm']['output']['result']['tensor']
+        refs = {'input_norm': norm}
+        for role in ('packed_q_gate', 'k', 'v'):
+            event = modules[WEIGHTS[role].removesuffix('.weight')]
+            require(event['input']['args'] == [{'tensor': norm}], 'projection does not consume actual official RMS')
+            refs[role] = event['output']['result']['tensor']
+        for role, name in {'hidden': hidden, **refs}.items():
+            entry = manifest['tensors'][name]
+            require(entry['dtype'] == 'BF16' and entry['shape'] == [1, rows, WIDTHS.get(role, 1024)],
+                    'full tensor shape/dtype mismatch')
+        require(len({hidden, *refs.values()}) == 5, 'input/intermediate alias')
+        selections.append(dict(name=case['name'], hidden=hidden, references=refs))
+    return selections
+
+
+def read_tensor(directory, manifest, key):
+    record = manifest['tensors'][key]
+    capture.validate_tensor_record(record, directory)
+    return (Path(directory) / record['file']).read_bytes()
+
+
+def load_fixture(directory, payload_directory, root=ROOT):
+    from heteronpu.pinned_block_payload import load_payload
+    directory, payload_directory, root = map(Path, (directory, payload_directory, root))
+    path = directory / 'manifest.json'
+    manifest = json.loads(path.read_text())
+    capture.validate_manifest(manifest, directory)
+    parameters = json.loads((root / 'candidates/qwen35_attention_prefill/projection_profile.json').read_text())
+    expected, observed = parameters['backend'], manifest['environment']
+    for key in ('torch_git_version', 'aten_cpu_capability', 'torch_cpu_capability', 'torch_threads',
+                'torch_interop_threads', 'deterministic_algorithms', 'float32_matmul_precision',
+                'autocast', 'flush_denormal'):
+        require(observed[key] == expected[key], 'profile backend mismatch: ' + key)
+    require(observed['variant'] == 'baseline' and observed['eval'] is True and observed['inference'] is True and
+            all(observed['packages'][key] == expected[key] for key in ('torch', 'transformers')) and
+            manifest['framework_revision'] == expected['framework_revision'], 'frozen official backend identity')
+    for entries in (manifest['source_files'], manifest['runtime_files']):
+        for name, record in entries.items():
+            path = Path(record['path']).resolve(strict=True)
+            require(path.is_relative_to(root.resolve()), 'capture dependency outside explicit repository: ' + name)
+            require(path.stat().st_size == record['bytes'] and sha(path.read_bytes()) == record['sha256'],
+                    'capture source/runtime dependency changed: ' + name)
+    journal = capture.recover_tensor_journal(directory)
+    require(journal['tensors'] == manifest['tensors'] and not journal['ignored_unterminated_tail_bytes'],
+            'complete durable tensor journal differs from manifest')
+    payload, all_weights = load_payload(root, payload_directory)
+    selections = select_prefix_tensors(manifest, payload)
+    inputs = {case['name']: read_tensor(directory, manifest, case['hidden']) for case in selections}
+    weights = {role: all_weights[name] for role, name in WEIGHTS.items()}
+    identity = dict(capture_directory=str(directory.resolve()), capture_manifest_sha256=sha(path.read_bytes()),
+        payload_directory=str(payload_directory.resolve()), payload_manifest_sha256=sha((payload_directory / 'manifest.json').read_bytes()),
+        model_id=manifest['model_id'], revision=manifest['revision'], rows=manifest['query_tokens'],
+        case_identity=manifest['case_identity'], backend=manifest['environment'],
+        input_sha256={k: sha(v) for k, v in inputs.items()}, weight_sha256={k: sha(v) for k, v in weights.items()},
+        selections=selections, execution_input_is_original_hidden=True, native_intermediates_injected=False)
+    return manifest, weights, inputs, identity

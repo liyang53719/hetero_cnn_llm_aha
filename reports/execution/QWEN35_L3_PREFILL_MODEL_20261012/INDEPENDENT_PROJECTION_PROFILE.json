@@ -1,0 +1,780 @@
+{
+  "actual_owner_executed": false,
+  "all_bitwise_equal": true,
+  "all_node_gates_pass": true,
+  "compile_command": [
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-mfma",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/independent_pair_reference.cpp",
+    "-o",
+    "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/independent_pair_reference"
+  ],
+  "elf": {
+    "bytes": 28928,
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/independent_pair_reference",
+    "sha256": "4b4d16aa8113ca4ff5684220259158d0251b3c69fd18d59efc8d3d9c3a676407"
+  },
+  "execution_wall_seconds": 1.0205978159999631,
+  "original_report": {
+    "bytes": 48230,
+    "path": "work/qwen35_l3_projection_profile_20261012T203000Z/report.json",
+    "sha256": "600d50a08017c18071c7b3126e08a0cac4312a65540d0656953126670d2a0d0e"
+  },
+  "parameters_sha256": "e4f616563bfc94978a528ee012bad498841156dae8809054d0d9cc5c0422ef5d",
+  "results": [
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 65536,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 16359,
+        "positive_zero": 25,
+        "subnormal": 0
+      },
+      "label": "cold16_q",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 131072,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/cold16_q.bf16le",
+        "sha256": "f4b7945b0f13c65112fe66bb02c850e3fcee0f12d8979ebdcdc00eae40b1c748"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        16,
+        4096
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 4194304,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 8192,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 16359,
+        "positive_zero": 25,
+        "subnormal": 0
+      },
+      "label": "cold16_k",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 16384,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/cold16_k.bf16le",
+        "sha256": "e306dc09f69124efa25ca20a10b6d90bc26af2457e73a7a00d6f17348322b13b"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        16,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 8192,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 16359,
+        "positive_zero": 25,
+        "subnormal": 0
+      },
+      "label": "cold16_v",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 16384,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/cold16_v.bf16le",
+        "sha256": "e40e0f1f598fcdb4d33ffbe67a70f1f57176431dd77d872ccb2322f015f94c9d"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        16,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 65536,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 16362,
+        "positive_zero": 22,
+        "subnormal": 0
+      },
+      "label": "carried16_q",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 131072,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/carried16_q.bf16le",
+        "sha256": "585e6d5da7ddcf6360e4a93d812f8159541cbb2310b8bce633f8006a99d3df7c"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        16,
+        4096
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 4194304,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 8192,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 16362,
+        "positive_zero": 22,
+        "subnormal": 0
+      },
+      "label": "carried16_k",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 16384,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/carried16_k.bf16le",
+        "sha256": "1f9ba8dbf8ca394eb2ad53c1d054840d3ad2f7ca87519abb2feabee13f75d8ba"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        16,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 8192,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 8192,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 16362,
+        "positive_zero": 22,
+        "subnormal": 0
+      },
+      "label": "carried16_v",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 16384,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/carried16_v.bf16le",
+        "sha256": "d706c8d035a0645d62a79d097c8cfe41aaeeca2f97b6f6db0e7270c4752c350c"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        16,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 524288,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 130914,
+        "positive_zero": 158,
+        "subnormal": 0
+      },
+      "label": "cold128_q",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 1048576,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/cold128_q.bf16le",
+        "sha256": "14c85f0db0fb6b76c72b9073a9bf9004cc7d70bb7c42e7663cdbab12b54d06df"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        128,
+        4096
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 4194304,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 65536,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 130914,
+        "positive_zero": 158,
+        "subnormal": 0
+      },
+      "label": "cold128_k",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 131072,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/cold128_k.bf16le",
+        "sha256": "c257149d811a307c3bd7be8d2124ab9528e62ad50a5327a73263948c0fc1cece"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        128,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 65536,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 130914,
+        "positive_zero": 158,
+        "subnormal": 0
+      },
+      "label": "cold128_v",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 131072,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/cold128_v.bf16le",
+        "sha256": "ec85c552b897a8858aec2f3022bc6455115f2ec862efc4010a574088233778ab"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        128,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 524288,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 130924,
+        "positive_zero": 148,
+        "subnormal": 0
+      },
+      "label": "carried128_q",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 1048576,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/carried128_q.bf16le",
+        "sha256": "e4614f8b8e1b3221559abd47d83fbf186ca5de6bc22ddd199c1d04c354aa9e72"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        128,
+        4096
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 4194304,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 65536,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 130924,
+        "positive_zero": 148,
+        "subnormal": 0
+      },
+      "label": "carried128_k",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 131072,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/carried128_k.bf16le",
+        "sha256": "24309568eff2f6c08dc8ed33f6efce4d573a12f554c1333d8f4d2511ec686bc5"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        128,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    },
+    {
+      "actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "bitwise_equal": true,
+      "elements": 65536,
+      "expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 65536,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "first_difference": null,
+      "input_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 130924,
+        "positive_zero": 148,
+        "subnormal": 0
+      },
+      "label": "carried128_v",
+      "max_abs_error": 0.0,
+      "mean_abs_error": 0.0,
+      "mismatch_actual_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "mismatch_expected_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 0,
+        "positive_zero": 0,
+        "subnormal": 0
+      },
+      "node_gate_pass": true,
+      "output": {
+        "bytes": 131072,
+        "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/carried128_v.bf16le",
+        "sha256": "564d1c6190c5ddaa1289fdc4d43941a90d21773c042d2f70ea32c4cd03aa15bb"
+      },
+      "rawbit_mismatch_count": 0,
+      "shape": [
+        128,
+        512
+      ],
+      "signed_zero_only_mismatches": 0,
+      "weight_classes": {
+        "negative_zero": 0,
+        "nonfinite": 0,
+        "normal": 524288,
+        "positive_zero": 0,
+        "subnormal": 0
+      }
+    }
+  ],
+  "scope": "Independent logical-coordinate software diagnostic; no actual Matrix/owner execution.",
+  "source": {
+    "bytes": 3572,
+    "path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/qwen35_l3_projection_profile_20261012T203000Z/independent_pair_reference.cpp",
+    "sha256": "e059bd0c02473b0da02156cef4d9622c38fb70a5262e1db60da6b8100e2e2d12"
+  }
+}

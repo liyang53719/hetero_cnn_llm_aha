@@ -1,0 +1,49 @@
+from pathlib import Path
+import hashlib,json
+from candidates.qwen35_attention_prefill import input_fixture as f
+from candidates.qwen35_gdn_prefill.prefill_bf16_compare import compare_finite_bf16
+
+root=Path.cwd(); out=root/'work/l3_projection_model_20261012/actual_m16_01'
+sha=lambda raw:hashlib.sha256(raw).hexdigest()
+old_raw=(out/'summary.json').read_bytes();old=json.loads(old_raw)
+terminal_raw=(out/'actual_terminal.json').read_bytes();terminal=json.loads(terminal_raw)
+assert old['status']=='FAILED' and 'error' not in old
+assert old['capture_manifest_unchanged'] is False
+assert all(old[k] is True for k in ('source_unchanged','libraries_unchanged','actual_outputs_unchanged'))
+assert terminal['status']=='ACTUAL_COMPLETE_UNCOMPARED' and terminal['terminal_count']==old['terminal_count']==8
+assert len(old['windows'])==2 and terminal['windows']==old['windows']
+assert len(old['actual_outputs'])==8 and terminal['actual_outputs']==old['actual_outputs']
+assert terminal['source_sha256']==old['source_sha256']
+for p,h in old['source_sha256'].items():
+ assert sha((out/'source_snapshot'/p).read_bytes())==h,p
+for p,h in old['identity']['libraries'].items():assert sha(Path(p).read_bytes())==h,p
+directory=Path(old['identity']['capture_directory']);payload=Path(old['identity']['payload_directory'])
+manifest,weights,inputs,fixed=f.load_fixture(directory,payload)
+for key,value in fixed.items():
+ if key!='capture_manifest_sha256':assert old['identity'][key]==value,key
+last_runtime=list(manifest['runtime_files'].values())[-1]
+assert old['identity']['capture_manifest_sha256']==last_runtime['sha256']
+assert fixed['capture_manifest_sha256']=='97f0ed29d5e3d7734ce3ed0648c91b2a2f60601176f5cff06d2d3db041e7f172'
+gates={}
+for case in fixed['selections']:
+ for role,key in case['references'].items():
+  name=case['name']+'.'+role+'.actual.bf16le';raw=(out/name).read_bytes();record=old['actual_outputs'][name]
+  assert len(raw)==record['bytes'] and sha(raw)==record['sha256'] and record['owner_terminal_status'] is None
+  metric=compare_finite_bf16(raw,f.read_tensor(directory,manifest,key))
+  metric.update(thresholds={'max_abs':0.03125,'mean_abs':0.005},passed=metric['max_abs']<=0.03125 and metric['mean_abs']<=0.005)
+  assert metric==old['gates'][case['name']+'.'+role]
+  assert metric['passed'] and metric['bit_mismatches']==0
+  gates[case['name']+'.'+role]=metric
+report=dict(status='PASS_POSTHOC_M16_PROJECTION_PREFIX_IDENTITY_REPAIR',
+ original_run_status='FAILED_CAPTURE_MANIFEST_IDENTITY_FIELD',original_exit_code=1,
+ original_summary_sha256=sha(old_raw),original_actual_terminal_sha256=sha(terminal_raw),
+ original_actual_execution_source_sha256=old['source_sha256'],
+ corrected_manifest_sha256=fixed['capture_manifest_sha256'],wrong_recorded_hash=old['identity']['capture_manifest_sha256'],
+ identified_shadowed_dependency=last_runtime,actual_rerun=False,native_forward_rerun=False,arithmetic_changed=False,
+ original_raw_outputs_hash_bound_before_posthoc=True,original_summary_untouched=True,
+ native_gates=gates,complete_owner_terminals=8,public_command128_executed=False,full_block_executed=False,
+ hardware_cycles=None,rtl_executed=False,current_unexecuted_source_inherits_old_pass=False,
+ repair_source_sha256=sha(Path(__file__).read_bytes()),corrected_loader_sha256=sha(Path(f.__file__).read_bytes()))
+assert (out/'summary.json').read_bytes()==old_raw and (out/'actual_terminal.json').read_bytes()==terminal_raw
+target=out.parent/'actual_m16_01_posthoc_identity.json';assert not target.exists();target.write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+print(json.dumps(dict(status=report['status'],original_exit=1,terminals=8,gates=len(gates),all_bit_exact=True,report_sha256=sha(target.read_bytes()))))

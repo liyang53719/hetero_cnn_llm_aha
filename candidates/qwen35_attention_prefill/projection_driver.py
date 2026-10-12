@@ -1,0 +1,338 @@
+"""L3 input RMS -> packed Q/gate -> K -> V typed SOFTWARE coordinator.
+
+The caller supplies every arithmetic resource and the sole physical byte map.
+Only original hidden/weight bytes may be readonly inputs; all four destination
+spans start as unpublished sentinels. No native/reference forward is imported.
+This prefix stops before Q/K normalization, RoPE, attention, output and FFN.
+Software transport ticks are not hardware cycles or public-command execution.
+"""
+from copy import deepcopy
+from dataclasses import asdict, dataclass
+import hashlib
+from types import MappingProxyType
+
+from ..qwen35_gdn_prefill import typed_dense as d, rms_owner as rms
+from ..qwen35_gdn_prefill.projection_owner import GdnProjectionOwner, Job
+from ..qwen35_gdn_prefill.projection_driver import (
+    TypedProjectionDriver, ATTENTION_FAMILY, ATTENTION_PROJECTION_PROFILE, ATTENTION_ROLES)
+from ..qwen35_gdn_prefill.chunk.vector import Vector16, POLICY_MASKS
+from ..qwen2_resident_matrix.dense_block_reduce.profile import ReductionProfile
+
+
+SCOPE = 'QWEN35_L3_PROJECTION_PREFIX_TYPED_SOFTWARE_COORDINATOR'
+FAMILY = ATTENTION_FAMILY
+ORDER = ('input_norm', 'packed_q_gate', 'k', 'v')
+SHAPES = MappingProxyType(dict(ATTENTION_ROLES))
+SOURCE_FILES = ('candidates/qwen35_attention_prefill/projection_driver.py',)
+
+
+def require(ok, why):
+    if not ok:
+        raise ValueError('typed L3 projection prefix: ' + why)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+@dataclass(frozen=True)
+class L3ProjectionPlan:
+    """Addresses only; weights already use the owner's BF16 [K,N] layout."""
+    tokens: int
+    hidden: int
+    input_weight: int
+    packed_q_gate_weight: int
+    k_weight: int
+    v_weight: int
+    input_norm: int
+    packed_q_gate: int
+    k: int
+    v: int
+    tag_base: int = 1
+
+    def validate(self):
+        require(type(self.tokens) is int and self.tokens in (16, 128), 'full M16/M128 geometry required')
+        require(type(self.tag_base) is int and 0 < self.tag_base <= (1 << 32) - len(ORDER),
+                'four distinct nonzero UInt32 owner tags required')
+        for name, value in asdict(self).items():
+            if name not in ('tokens', 'tag_base'):
+                require(type(value) is int and 0 <= value < 1 << 56 and value % 64 == 0,
+                        name + ' must be an aligned 56-bit physical address')
+
+
+@dataclass(frozen=True)
+class L3ProjectionResult:
+    tag: int
+    status: str | None
+    tokens: int
+    packed_q_gate: int | None
+    k: int | None
+    v: int | None
+    acknowledged_write_bytes: int
+    failed_role: str | None = None
+
+
+class L3ProjectionCoordinator:
+    """One invocation on preallocated shared resources, never a second owner.
+
+    Construction validates without launching; call start(), then tick(). Each
+    stage advances only after its real accepted terminal. The final V terminal
+    is also the full-prefix terminal: response_ready=False holds both and keeps
+    V unpublished. A failed instance must drain and retire; recovery/reset and
+    fresh staging are the caller's responsibility, outside this invocation.
+
+    The common read/write/ACK controls map to RMS memory request/response ports
+    according to the actual request direction. memory_ready and
+    memory_response_ready additionally gate transport for either driver.
+    """
+    def __init__(self, *, memory, dense, matrix, vector, rms_owner, plan,
+                 profile=ATTENTION_PROJECTION_PROFILE,
+                 rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024):
+        require(type(memory) is d.TypedMemory and type(dense) is GdnProjectionOwner and
+                type(matrix) is d.MatrixService and type(vector) is Vector16 and
+                type(rms_owner) is rms.RmsOwner, 'explicit existing shared resources required')
+        require(isinstance(rms_owner.scalar, rms.SharedScalar), 'existing shared RMS scalar required')
+        require(type(plan) is L3ProjectionPlan, 'immutable explicit L3ProjectionPlan required')
+        plan.validate()
+        require(type(profile) is ReductionProfile and profile == ATTENTION_PROJECTION_PROFILE,
+                'exact production attention profile required; synthetic shapes are unsupported')
+        profile.validate(1024)
+        require(vector.exception_policy in POLICY_MASKS and
+                vector.fatal_mask == POLICY_MASKS[vector.exception_policy], 'coherent Vector policy required')
+        self.memory, self.dense, self.matrix, self.vector = memory, dense, matrix, vector
+        self.rms, self.scalar, self.plan = rms_owner, rms_owner.scalar, plan
+        self.profile, self.rms_policy = profile, rms.ReductionPolicy(rms_policy)
+        jobs = [rms.RmsJob(plan.tag_base, plan.hidden, plan.input_weight, plan.input_norm,
+                           plan.tokens, self.rms_policy)]
+        for index, role in enumerate(ORDER[1:], 1):
+            k, n = SHAPES[role]
+            jobs.append(Job(m=plan.tokens, k=k, n=n, tag=plan.tag_base + index,
+                a=plan.input_norm, b=getattr(plan, role + '_weight'), dst=getattr(plan, role),
+                activation_bf16=True, weight_bf16=True, output_bf16=True,
+                write_bytes=plan.tokens * n * 2))
+        self.jobs = tuple(jobs)
+        for job in self.jobs:
+            job.validate()
+        for job in self.jobs[1:]:
+            dense.workspace.validate(job)
+        self._input_spans = ((plan.hidden, plan.tokens * 2048), (plan.input_weight, 2048),
+            *((getattr(plan, role + '_weight'), k * n * 2) for role, (k, n) in SHAPES.items()))
+        self._output_spans = tuple((getattr(plan, role), job.write_bytes)
+                                   for role, job in zip(ORDER, self.jobs))
+        spans = self._input_spans + self._output_spans
+        require(all(a + n <= b or b + m <= a for i, (a, n) in enumerate(spans) for b, m in spans[:i]),
+                'all complete original inputs, parameters and staging spans must be disjoint')
+        workspace = dense.workspace
+        require(all(workspace.base + workspace.extent <= base or base + extent <= workspace.base
+                    for base, extent in spans), 'workspace overlaps a live prefix allocation')
+        for base, extent in self._input_spans:
+            require(memory.exact(base, extent, readable=True).readonly,
+                    'only original prelaunch readonly hidden/weight inputs are accepted')
+        self._fresh_outputs()
+        self.allocations = tuple((base, region, id(region.storage), region.extent, region.readonly)
+                                 for base, region in memory.regions.items())
+        self.source_hashes = {base: sha(memory.regions[base].raw()) for base, _ in self._input_spans}
+        self.producer_hashes = {}
+        self.active = self.response = self.role = None
+        self.started = self.aborted = self.locked = False
+        self._index = self.ticks = 0
+        self.commands, self.receipts = [], {}
+        self._active_binding = self._terminal_report = None
+        self._resource_binding = self._resource_identity()
+        self._job_binding = tuple((id(job), tuple(vars(job).items())) for job in self.jobs)
+        self._require_drained()
+
+    def _resource_identity(self):
+        o = self.dense
+        return (id(self.memory), id(self.memory.regions), id(o), id(o.a_banks), id(o.b_banks),
+            *((id(bank.words), bank.depth, tuple((id(words), len(words)) for words in bank.words))
+              for bank in (o.a_banks, o.b_banks)),
+            id(o.tiles), id(o.tiles.banks), id(o.workspace), tuple(vars(o.workspace).items()),
+            id(self.matrix), id(self.matrix.lib), self.matrix.resource_address, self.matrix.epoch,
+            id(self.vector), id(self.vector.lib), self.vector.resource_address,
+            *(id(getattr(self.vector, name)) for name in ('a', 'b', 'output', 'total', 'lane_flags', 'issue_flags')),
+            self.vector.exception_policy, self.vector.fatal_mask, id(self.rms), id(self.rms.scalar),
+            id(self.scalar), id(self.plan), tuple(vars(self.plan).items()), id(self.profile),
+            tuple(vars(self.profile).items()), self.rms_policy, id(self.jobs), FAMILY, tuple(SHAPES.items()))
+
+    def _check_resources(self):
+        require(self._resource_binding == self._resource_identity() and
+                self.dense.tiles.banks is self.dense.a_banks and self.rms.scalar is self.scalar and
+                self.matrix.resource_address == self.matrix.lib.matrix_accumulator_address(),
+                'resource, bank, workspace, policy, plan or epoch binding changed')
+        require(self._job_binding == tuple((id(job), tuple(vars(job).items())) for job in self.jobs),
+                'immutable complete owner job binding changed')
+        require(len(self.memory.regions) == len(self.allocations) and all(
+            self.memory.regions.get(base) is region and region.base == base and region.extent == extent and
+            id(region.storage) == storage and region.readonly is readonly
+            for base, region, storage, extent, readonly in self.allocations),
+            'physical byte-map allocation/storage changed after prelaunch')
+        if self.active is not None:
+            require(self._active_binding == self._driver_binding(), 'active transport/job/resource binding changed')
+
+    def _driver_binding(self):
+        driver = self.active
+        common = (id(driver), id(driver.owner), id(driver.memory), id(driver.job))
+        if self.role == 'input_norm':
+            return common + (id(driver.input), id(driver.weight), id(driver.output),
+                             id(driver.owner.scalar), id(driver.owner.job))
+        return common + (id(driver.matrix), id(driver.a), id(driver.b), id(driver.output),
+                         id(driver.loan.vector), driver.role, driver.family, id(driver.profile))
+
+    def _fresh_outputs(self):
+        for base, extent in self._output_spans:
+            region = self.memory.exact(base, extent, readable=False)
+            require(region.raw() == d.GUARD * (extent // 64), 'intermediate lost prelaunch sentinels')
+
+    def _check_bytes(self):
+        for base, digest in {**self.source_hashes, **self.producer_hashes}.items():
+            require(sha(self.memory.regions[base].raw()) == digest, 'original input/weight or actual producer bytes changed')
+
+    def _require_drained(self, *, success=True):
+        o = self.dense
+        require(self.memory.pending is None and self.matrix.owner is None and self.vector.client is None and
+                self.scalar.client is None and o.tiles.idle,
+                'all shared arithmetic/transport obligations must drain')
+        if success:
+            require(not o.tiles.leased and o.lease is None and
+                    not self.matrix.reset_required and o.state == 'idle' and not o.error and
+                    not o.drain_poison and not o.tiles.poison and self.rms.ports()['job_ready'],
+                    'unpoisoned idle owners required')
+        else:
+            # Failure retires physical obligations, but poisoned tile leases
+            # remain quarantined until the caller performs coordinated reset.
+            require(o.read_active is None and o.a_hold is None and o.a_rmw_pending is None and
+                    o.pending is None and not o.fifo and o.accepted_write is None,
+                    'failed terminal before physical owner obligations drain')
+            require((not o.tiles.leased or o.tiles.poison) and
+                    (o.lease is None or o.error or o.drain_poison or o.tiles.poison),
+                    'retained failed leases must remain poisoned and quarantined')
+
+    def start(self):
+        self._check_resources()
+        require(not self.started, 'fixed preallocated prefix invocation cannot be relaunched')
+        self._require_drained()
+        self._check_bytes()
+        self._fresh_outputs()
+        self.started = True
+        self._launch()
+
+    def _launch(self):
+        self._check_resources()
+        self._require_drained()
+        self._check_bytes()
+        require(self._index == len(self.commands) < len(ORDER) and not self.aborted,
+                'stage sequence or abort fence violated')
+        self.role, job = ORDER[self._index], self.jobs[self._index]
+        if self.role == 'input_norm':
+            self.active = rms.TypedRmsDriver(self.rms, self.memory, job)
+        else:
+            prior = self.receipts.get('input_norm')
+            require(type(prior) is rms.RmsResult and prior.status is None and
+                    prior.tag == self.jobs[0].tag and prior.write_bytes == self.jobs[0].write_bytes,
+                    'Dense admission requires actual accepted input RMS terminal')
+            self.memory.exact(self.plan.input_norm, self.jobs[0].write_bytes, readable=True)
+            self.active = TypedProjectionDriver(self.dense, self.matrix, self.memory, job,
+                vector=self.vector, role=self.role, family=FAMILY, profile=self.profile)
+        self._active_binding = self._driver_binding()
+
+    def _finish(self, failure=None):
+        self._require_drained(success=failure is None)
+        self._check_bytes()
+        self.locked = failure is not None
+        self.response = L3ProjectionResult(self.plan.tag_base, failure, self.plan.tokens,
+            None if failure else self.plan.packed_q_gate, None if failure else self.plan.k,
+            None if failure else self.plan.v,
+            sum(command['acknowledged_write_bytes'] for command in self.commands),
+            self.role if failure else None)
+        self._terminal_report = self._report()
+
+    def tick(self, *, read_ready=True, read_response_ready=True, step_ready=True,
+             result_ready=True, done_ready=True, write_ready=True, data_ready=True,
+             ack_ready=True, response_ready=True, memory_ready=True,
+             memory_response_ready=True, abort=False, reset=False,
+             read_error=False, ack_error=False):
+        require(self.started and self.response is None, 'no active prefix invocation')
+        self._check_resources()
+        self.ticks += 1
+        self.aborted |= bool(abort or reset)
+        if self.active is None:
+            if self.aborted:
+                if response_ready:
+                    self._finish('Aborted')
+                return dict(prefix_terminal_fire=self.response is not None)
+            self._launch()
+        driver = self.active
+        if self.role == 'input_norm':
+            request = self.rms.request
+            writing = request is not None and request.write
+            event = driver.tick(memory_ready=memory_ready and (write_ready and data_ready if writing else read_ready),
+                memory_response_ready=memory_response_ready and (ack_ready if writing else read_response_ready),
+                response_ready=response_ready, abort=self.aborted, read_error=read_error, ack_error=ack_error)
+        else:
+            require(not read_error, 'projection read-error injection is not supported by its shared transport')
+            event = driver.tick(read_ready=read_ready and memory_ready,
+                read_response_ready=read_response_ready and memory_response_ready,
+                step_ready=step_ready, result_ready=result_ready, done_ready=done_ready,
+                write_ready=write_ready and memory_ready, data_ready=data_ready and memory_ready,
+                ack_ready=ack_ready and memory_response_ready, response_ready=response_ready,
+                abort=self.aborted, ack_error=ack_error)
+        if driver.response is None:
+            return event
+        self._check_resources()
+        response = driver.response
+        failed = response.status if self.role == 'input_norm' else response[1]
+        tag = response.tag if self.role == 'input_norm' else response[0]
+        written = response.write_bytes if self.role == 'input_norm' else response[2]
+        require(tag == driver.job.tag and (failed is not None or written == driver.job.write_bytes),
+                'accepted terminal identity/full byte extent mismatch')
+        report = driver.report()
+        counts = report['counts']
+        ack_bytes = (report['owner']['acknowledged_write_bytes'] if self.role == 'input_norm'
+                     else counts.get('ack_bytes', 0))
+        self.receipts[self.role] = response
+        self.commands.append(dict(role=self.role, job=asdict(driver.job), terminal_status=failed,
+            terminal_accepted=True, software_ticks=counts.get('ticks', 0),
+            read_bytes=counts.get('read_bytes', 0) if self.role == 'input_norm' else
+                64 * (counts.get('a_read_beats', 0) + counts.get('b_read_beats', 0)),
+            write_data_bytes=counts.get('write_bytes', 0) if self.role == 'input_norm' else
+                counts.get('write_data_bytes', 0), acknowledged_write_bytes=ack_bytes,
+            executed_fmas=report.get('executed_fmas', 0), vector_add_calls=report.get('vector_add_calls', 0),
+            vector_add_lanes=report.get('vector_add_lanes', 0), owner_report=report))
+        if failed is None and not self.aborted:
+            region = self.memory.exact(getattr(self.plan, self.role), driver.job.write_bytes, readable=True)
+            require(region is driver.output and not region.readonly and
+                    region.written == region.acknowledged == set(range(0, region.extent, 64)),
+                    'stage advance before real producer bytes/final ACK/publication')
+            self.producer_hashes[region.base] = sha(region.raw())
+        self.active = self._active_binding = None
+        if failed is not None or self.aborted:
+            self._finish(failed or 'Aborted')
+        else:
+            self._index += 1
+            if self._index == len(ORDER):
+                self._finish()
+        event['prefix_terminal_fire'] = self.response is not None
+        return event
+
+    def _report(self):
+        return dict(scope=SCOPE, family=FAMILY, plan=asdict(self.plan), profile=asdict(self.profile),
+            rms_policy=self.rms_policy.value, vector_policy=self.vector.exception_policy,
+            complete=self.response is not None, response=None if self.response is None else asdict(self.response),
+            fullprefix_terminal_accepted=self.response is not None,
+            fullprefix_success=self.response is not None and self.response.status is None,
+            reset_required=self.locked, software_ticks=self.ticks, commands=deepcopy(self.commands),
+            executed_fmas=sum(c['executed_fmas'] for c in self.commands),
+            vector_add_calls=sum(c['vector_add_calls'] for c in self.commands),
+            vector_add_lanes=sum(c['vector_add_lanes'] for c in self.commands),
+            acknowledged_write_bytes=sum(c['acknowledged_write_bytes'] for c in self.commands),
+            same_memory_owner_matrix_vector_scalar=True, original_inputs_sha256=dict(self.source_hashes),
+            actual_producer_sha256=dict(self.producer_hashes),
+            source_initialization='original_hidden_and_weights_only_before_launch',
+            public_command128_executed=False, chisel_executed=False, rtl_executed=False,
+            hardware_cycles=None, hardware_mac_utilization=None, native_acceptance=False,
+            vector_policy_control_bound_to_current_chisel=False, full_block_executed=False,
+            not_executed=['q_k_normalization', 'rope', 'attention', 'attention_output', 'residual', 'ffn'])
+
+    def report(self):
+        return deepcopy(self._terminal_report) if self._terminal_report is not None else self._report()

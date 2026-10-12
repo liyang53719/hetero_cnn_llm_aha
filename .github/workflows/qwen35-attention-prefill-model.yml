@@ -1,0 +1,86 @@
+name: qwen35-attention-prefill-model
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen35-attention-prefill-model.yml'
+      - 'candidates/qwen35_attention_prefill/**'
+      - 'candidates/qwen35_gdn_prefill/projection_owner.py'
+      - 'candidates/qwen35_gdn_prefill/projection_driver.py'
+      - 'candidates/qwen35_gdn_prefill/typed_dense.py'
+      - 'candidates/qwen35_gdn_prefill/rms_owner.py'
+      - 'candidates/qwen35_gdn_prefill/chunk/vector.py'
+      - 'candidates/qwen35_gdn_prefill/chunk/vector16.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/model.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/profile.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/check_numeric.py'
+      - 'candidates/qwen35_gdn_prefill/prefill_bf16_compare.py'
+      - 'src/heteronpu/pinned_block_payload.py'
+      - 'config/upstream/qwen3_5_0p8b/layer3_payload_pin.json'
+      - 'config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp'
+      - 'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp'
+      - 'scripts/build_shared_matrix_recipe.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala'
+      - 'candidates/qwen35_gdn_prefill/test_rms_owner.py'
+      - 'candidates/qwen35_gdn_prefill/prep/scalar.py'
+      - 'candidates/qwen35_gdn_prefill/conv/scalar.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-prefix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install fixed model dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+      - name: Build the shared Matrix recipe
+        run: python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen35_l3_model/library
+      - name: Build the shared Vector16 adapter
+        run: |
+          python - <<'PY'
+          import os
+          from candidates.qwen35_gdn_prefill.chunk.vector import build_library
+          library = build_library('work/qwen35_l3_model/vector')
+          with open(os.environ['GITHUB_ENV'], 'a') as stream:
+              stream.write('GDN_VECTOR16_LIBRARY=' + str(library) + '\n')
+          PY
+      - name: Run all source and synthetic suites in separate processes
+        env: {PYTHONDONTWRITEBYTECODE: '1'}
+        run: python -m candidates.qwen35_attention_prefill.run_tests --out work/qwen35_l3_model/tests
+      - name: Keep compact source and result evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen35-l3-projection-prefix-${{ github.sha }}
+          path: |
+            work/qwen35_l3_model/library/*.json
+            work/qwen35_l3_model/library/*.log
+            work/qwen35_l3_model/vector/*.json
+            work/qwen35_l3_model/tests/*.json
+            work/qwen35_l3_model/tests/*.log
+          retention-days: 14

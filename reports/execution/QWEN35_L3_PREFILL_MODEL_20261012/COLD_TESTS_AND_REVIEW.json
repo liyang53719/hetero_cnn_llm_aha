@@ -1,0 +1,82 @@
+{
+  "status": "PASS_COLD_L3_AND_GDN_LIGHT_WORKFLOWS",
+  "started_utc": "2026-10-12T21:01:26.408183+00:00",
+  "ended_utc": "2026-10-12T21:03:43.805832+00:00",
+  "base": "2b21d73869386a4628a9b7c92c4d0b6531e7f099",
+  "wall_seconds": 137.39766808900004,
+  "test_summaries": {
+    "qwen35_l3_model": {
+      "status": "PASS_SYNTHETIC_TYPED_L3_PREFIX_ONLY",
+      "tests": 26,
+      "suites": 4,
+      "sources_unchanged": true
+    },
+    "qwen35_gdn_model": {
+      "status": "PASS_SYNTHETIC_SOFTWARE_ONLY",
+      "tests": 316,
+      "suites": 22,
+      "sources_unchanged": true
+    }
+  },
+  "frozen_overlay_sha256": "c6a6914ce4522fdf3228adc3a1d075416baccab0f4098bcf1cfd2cd903de1b28",
+  "all_source_hashes_unchanged": true,
+  "source_work_exists_after": false,
+  "unexpected_untracked_files": [],
+  "artifact_count": 34,
+  "artifact_bytes": 102262,
+  "max_rss_kib": 1877344,
+  "official_forward_executed": false,
+  "model_weights_downloaded": false,
+  "rtl_executed": false,
+  "shared_new_build_between_suites": true,
+  "old_parent_work_read_by_test_or_build": false,
+  "source_overlay": {
+    ".github/workflows/qwen35-attention-prefill-model.yml": "68e79b885bfd5c44ca7e7a9a27299188abbcf6fe00b01bcf56a0b62ddb20423a",
+    "candidates/qwen35_attention_prefill/input_fixture.py": "e278764adda77e66f8dbf1df40e03984701913692e0cf5d2fdcc9b571425d7fc",
+    "candidates/qwen35_attention_prefill/projection_driver.py": "c8ce1a4c1b5cc7f94b3d254a369977eebba75b096b4809c113bfa599a3ac5217",
+    "candidates/qwen35_attention_prefill/projection_profile.json": "e40a928879837eeb74b65ad7a211d8e61d457f8f145169d02839efa109be1063",
+    "candidates/qwen35_attention_prefill/projection_reference.cpp": "e059bd0c02473b0da02156cef4d9622c38fb70a5262e1db60da6b8100e2e2d12",
+    "candidates/qwen35_attention_prefill/run_projection_prefix.py": "3a6a470fd9ab88bc7d4beda1ce4ad9406e49d0be74d9cffc7d3092cfc9c3c9fc",
+    "candidates/qwen35_attention_prefill/run_tests.py": "b5ee3bf50aefb9676479f3c6c7fb7358a0c019230f4245f26968bd45bf97757a",
+    "candidates/qwen35_attention_prefill/test_input_fixture.py": "2b42565a7d16e6bf5d3a17efbeeea50859322ae9cc87540af902fe77ed8fb5e0",
+    "candidates/qwen35_attention_prefill/test_projection_driver.py": "e95d4ff0021c08f2196d51432e26b0ee4b36b52bdb862f62408ee87c00fa7928",
+    "candidates/qwen35_attention_prefill/test_runner.py": "5e259c75879971b82d4367f454e9a89c60134c80edc082d5c364682fc6fbc66b",
+    "candidates/qwen35_gdn_prefill/projection_driver.py": "a15add79a9c48b3bcc768d5fa8cec58a3a11f9599285787334837d28f44cb1c5",
+    "candidates/qwen35_gdn_prefill/test_projection_driver.py": "b3b85b517df41e0be78f116ecc6b922385a45931895bd24e43332f0a664723f0"
+  },
+  "full_receipt_sha256": "63e57acb563732cc4c60ad5e90bd74110e5ca5031eca6111d8c27f05003dcac4",
+  "artifact_manifest_sha256": "def8e5881bed8862465db617aec67c8dcb5c2274d3a3ae83ee22a8b50b8448c8",
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "numpy": "2.3.5",
+    "PyYAML": "6.0.3",
+    "cpu_affinity": [
+      1
+    ],
+    "address_space_limit": [
+      -1,
+      -1
+    ]
+  },
+  "resource_scope": "max_rss_kib is RUSAGE_CHILDREN maximum single child including descendants; sampled /proc tree can be incomplete and is not claimed as whole-tree peak",
+  "old_failed_run": {
+    "receipt_sha256": "dc13fb4008c4efe0f9d8a8a7c733a76e7da3de9c33c54157c57596336a71f944",
+    "status": "FAILED",
+    "test_summaries": null,
+    "cause": "Reviewer-added RLIMIT_AS=512000000 bytes prevented full_driver allocation; this was not workflow configuration. Original failure and all tests preserved.",
+    "max_rss_kib": 364020,
+    "rerun_change": "Remove extra virtual-address-space cap; keep original tests/arithmetic and actual RSS/available RAM monitoring."
+  },
+  "independent_review": {
+    "actual_m128_raw_outputs_verified": 8,
+    "elements": 1572864,
+    "all_bitwise_equal": true,
+    "source_snapshots": 40,
+    "local_input_library_snapshots": 11,
+    "p0_p1_findings_open": 0,
+    "failure_diagnostic_p2_fixed": true
+  },
+  "failed_first_shared_test": "Workspace fixture incorrectly split128; preserved binding_tests.log; corrected to production split2560; 20 shared tests then passed.",
+  "failed_abort_test": "Original failure terminal rejected poisoned retained lease; preserved exact traceback before source fix; physical drain, quarantine and reset-required regression passed.",
+  "final_verification_sha256": "a055cedab4c7caf9bde44b648ca0bccfa9ae8a43ed50b05d60bf02c4b3f315da"
+}

@@ -19,7 +19,8 @@ from unittest.mock import patch
 from . import typed_dense as t
 from .dense_prefix import TypedSeededDenseDriver
 from . import projection_owner as p
-from .projection_driver import TypedProjectionDriver, GDN_PROJECTION_PROFILE, SharedVector16Loan
+from .projection_driver import (TypedProjectionDriver, GDN_PROJECTION_PROFILE, SharedVector16Loan,
+    ATTENTION_FAMILY, ATTENTION_PROJECTION_PROFILE)
 from .chunk.vector import Vector16, IEEE_POLICY
 from ..qwen2_resident_matrix.dense_block_reduce.profile import ReductionProfile
 from ..qwen2_resident_matrix.ffn_attention.matrix_service import configure_library
@@ -354,6 +355,88 @@ class ProjectionTests(unittest.TestCase):
         self.assertEqual(report['vector_add_calls'], 256)
         self.assertEqual(report['counts']['a_read_beats'], 512)
         self.assertEqual(report['executed_fmas'], 128 * 4096)
+
+    def test_l3_binding_rejects_wrong_family_role_shape_and_profile_before_dma(self):
+        j = t.down.Job(m=16, k=1024, n=512, tag=17, a=0x100000,
+            b=0x400000, dst=0x2000000, output_bf16=True, write_bytes=16 * 512 * 2)
+        cases = [
+            (j, 'unknown', 'k', ATTENTION_PROJECTION_PROFILE),
+            (j, ATTENTION_FAMILY, 'synthetic', ATTENTION_PROJECTION_PROFILE),
+            (j, ATTENTION_FAMILY, 'qkv', ATTENTION_PROJECTION_PROFILE),
+            (j, 'gdn', 'k', ATTENTION_PROJECTION_PROFILE),
+            (j, ATTENTION_FAMILY, 'k', GDN_PROJECTION_PROFILE),
+            (replace(j, n=2048, write_bytes=16 * 2048 * 2), ATTENTION_FAMILY,
+             'packed_q_gate', ATTENTION_PROJECTION_PROFILE),
+        ]
+        for changed in (replace(ATTENTION_PROJECTION_PROFILE, pair_reverse=False),
+                        replace(ATTENTION_PROJECTION_PROFILE, ranges=((0, 256), (256, 1024))),
+                        replace(ATTENTION_PROJECTION_PROFILE, source_sha256='0' * 64)):
+            cases.append((j, ATTENTION_FAMILY, 'k', changed))
+        for job, family, role, profile in cases:
+            with self.subTest(family=family, role=role, profile=profile):
+                with self.assertRaises(ValueError):
+                    TypedProjectionDriver(self.owner, self.matrix, self.memory, job,
+                        vector=self.vector, role=role, profile=profile, family=family)
+                self.assertIsNone(self.matrix.owner)
+                self.assertIsNone(self.vector.client)
+                self.assertIsNone(self.memory.pending)
+                self.assertEqual(self.owner.state, 'idle')
+
+    def test_accepted_binding_cannot_change_identity_without_arithmetic_change(self):
+        for field in ('family', 'role', 'profile', 'job'):
+            with self.subTest(field=field):
+                self.setUp()
+                d = self.driver(self.prepare())
+                old = getattr(d, field)
+                changed = {'family': ATTENTION_FAMILY, 'role': 'k',
+                    'profile': replace(PROFILE, identity='changed_identity_only'),
+                    'job': replace(d.job, tag=d.job.tag + 1)}[field]
+                setattr(d, field, changed)
+                with self.assertRaisesRegex(ValueError, 'accepted projection family/role/profile/job'):
+                    d.tick()
+                self.assertEqual(d.counts['ticks'], 0)
+                self.assertIsNone(self.matrix.owner)
+                setattr(d, field, old)
+                self.finish(d)
+                self.assertIsNone(d.response[1])
+
+    def test_actual_gdn_l3_gdn_roles_reuse_resources_without_reset(self):
+        self.owner.workspace = p.PrefixWorkspace(0x900000, 16384, 1)
+        identity = self.identity()
+        a = 0x100000
+        self.memory.add_readonly(a, struct.pack('<H', 0x3f00) * (16 * 1024))
+        old_outputs, old_reports = [], []
+        for i, (family, role, n, profile) in enumerate((
+                ('gdn', 'ab', 32, GDN_PROJECTION_PROFILE),
+                (ATTENTION_FAMILY, 'k', 512, ATTENTION_PROJECTION_PROFILE),
+                ('gdn', 'ab', 32, GDN_PROJECTION_PROFILE))):
+            b, dst = 0x400000 + i * 0x200000, 0x2000000 + i * 0x100000
+            weights = bytearray(1024 * n * 2)
+            weights[:n * 2] = struct.pack('<H', 0x3e80) * n
+            weights[513 * n * 2:514 * n * 2] = struct.pack('<H', 0xbe00) * n
+            self.memory.add_readonly(b, bytes(weights))
+            self.memory.allocate_output(dst, 16 * n * 2)
+            j = t.down.Job(m=16, k=1024, n=n, tag=80 + i, a=a, b=b, dst=dst,
+                output_bf16=True, write_bytes=16 * n * 2)
+            d = TypedProjectionDriver(self.owner, self.matrix, self.memory, j,
+                vector=self.vector, role=role, profile=profile, family=family)
+            report = self.finish(d)
+            self.assertEqual(d.response, (80 + i, None, 16 * n * 2))
+            self.assertEqual(d.output.raw(), struct.pack('<H', 0x3d80) * (16 * n))
+            self.assertEqual(report['family'], family)
+            self.assertEqual(report['counts']['ack_bytes'], 16 * n * 2)
+            self.assertEqual(self.identity(), identity)
+            self.assertIsNone(self.owner.lease)
+            self.assertFalse(self.owner.tiles.leased)
+            self.assertIsNone(self.memory.pending)
+            self.assertIsNone(self.matrix.owner)
+            self.assertIsNone(self.vector.client)
+            old_outputs.append((d.output, d.output.raw()))
+            old_reports.append((d, report))
+            for region, original in old_outputs:
+                self.assertEqual(region.raw(), original)
+            for driver, original in old_reports:
+                self.assertEqual(driver.report(), original)
 
     def test_partial_checks_selected_nan_and_ignores_inactive_padding(self):
         for selected in (False, True):

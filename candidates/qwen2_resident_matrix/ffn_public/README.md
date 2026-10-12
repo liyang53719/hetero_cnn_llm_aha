@@ -52,3 +52,32 @@ M128 payload流量98,041,856B，加入metadata为98,047,424B；仍是FFN子图�
 本轮 pc0–9 新捕获 M16/M128 分别22.985/48.492秒 host wall；十个输出区126,976/1,015,808个FP32值均对独立原方法逐bit一致。两组分别写入507,904/4,063,232B并全ACK，共10个公开completion，pc10仍待执行。M128读取14,425,088B含7,168B metadata，连同写回共18,488,320B实际软件端口流量。两个case原63源与冻结副本、执行前后SHA全部一致，独立复核直接重建raw输入并逐字节核对输出、参考、哨兵与ACK，未重跑算术。
 
 结果见 `prefix_numerical_receipt.json`。M128观察有用/物理主机FMA均402,653,184；M16分别50,331,648/402,653,184。原生M128与FP32-final门仍 FAIL/待定，硬件whole-wall周期及利用率保持null。
+
+## 原公开21命令的完整cold M16/M128软件链
+
+`check_fullgraph_numeric.py` 将前述前缀接到 `ffn_attention` 的原QK/softmax/PV
+方法，再执行O、两次residual、postNorm与完整FFN/Down。它复用原21命令/215
+描述符和同一物理内存、Matrix accumulator、Dense owner/五bank；所有中间值
+来自实际前驱写回或已经退休的驻留结果。`--prepare-only --rows 16/128
+--compile-receipt ...` 先冻结75源/35 Python导入与原始输入身份，执行必须给出
+`--snapshot`、其SHA以及M128所需同源M16先验。Gate/Up和Attention临时区保持
+虚拟span语义，普通DDR写回与驻留tile completion分开计账。
+
+本次数值结果见 `fullgraph_numerical_receipt.json`：M16原单次运行成功；M128
+在1200秒预算内已接受全部21 completion、17 owner results及唯一整程序终态，
+但最后新执行的独立参考仅剩29.024秒而超时，原运行仍记FAILED。
+`verify_completed_fullgraph.py` 随后仅复用冻结前已存在、逐项证明同源码/ELF/
+输入/shape的完整参考，19个实际输出共5,636,096个FP32值逐字节相同，没有
+重跑实际链或参考。后处理PASS与原超时并列。17个输出可对照原终态摘要hash；
+Gate/Up原驻留observer文件的bulk hash首次在后处理记录，未伪称提前封存。
+
+M128实际软件端口读217,227,904 B、全ACK写15,728,640 B，共232,956,544 B；
+Host有效MAC6,014,828,544，实际主机FMA6,801,063,936。Dense1,462,272步与
+legacy Attention1,585,152步互斥使用同一资源。固定4096 MAC/拍分母，以每拍
+最多接受一步得到极乐观48.187%上界；若再假设共享双向64 B/拍流量预算，则
+流量上界40.343%。它们不是硬件利用率实测，也不证明iDMA实际带宽。当前旧
+Attention映射没有兑现此前理想整图131.7 MB/71.35%的搬运上界。
+
+仍未验carried/prefix矩形调度、实际Chisel/RTL/iDMA整链或官方native质量；
+原native-v0/FP32-final FAIL与未批准的数值策略均保持。公共轻CI按test文件
+独立解释器执行，完整发现且计数；不删除旧capture严格import闭包。

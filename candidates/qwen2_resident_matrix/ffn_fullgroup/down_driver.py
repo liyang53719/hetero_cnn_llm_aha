@@ -145,16 +145,18 @@ class DenseSource:
         return sha(raw)
 
 
-def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthetic_geometry=False, owner_tick=None):
+def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthetic_geometry=False,
+                 owner_tick=None, matrix_bridge=None, workspace_transport=None, output_event=None):
     """Strict historical Down entry point, returning report and actual FP32 words."""
     report, destination = _execute_dense(model, owner, lib, memory, job, out, deadline, trace,
-        synthetic_geometry=synthetic_geometry, owner_tick=owner_tick, a_source=None, output_event=None)
+        synthetic_geometry=synthetic_geometry, owner_tick=owner_tick, a_source=None,
+        output_event=output_event, matrix_bridge=matrix_bridge, workspace_transport=workspace_transport)
     actual = array('I'); actual.frombytes(destination.raw())
     return report, actual
 
 
 def execute_dense(model, owner, lib, memory, job, out, deadline, trace, *, a_source,
-                  output_event, owner_tick=None):
+                  output_event, owner_tick=None, matrix_bridge=None, workspace_transport=None):
     """Return (report, actual acknowledged PhysicalRegion) after final terminal.
 
     output_event(kind, value) is mandatory shared-memory transport: command,
@@ -167,11 +169,12 @@ def execute_dense(model, owner, lib, memory, job, out, deadline, trace, *, a_sou
     require(isinstance(a_source, DenseSource), 'explicit DenseSource required')
     require(callable(output_event), 'Dense requires actual shared-memory output event routing')
     return _execute_dense(model, owner, lib, memory, job, out, deadline, trace,
-        synthetic_geometry=False, owner_tick=owner_tick, a_source=a_source, output_event=output_event)
+        synthetic_geometry=False, owner_tick=owner_tick, a_source=a_source,
+        output_event=output_event, matrix_bridge=matrix_bridge, workspace_transport=workspace_transport)
 
 
 def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
-                   synthetic_geometry, owner_tick, a_source, output_event):
+                   synthetic_geometry, owner_tick, a_source, output_event, matrix_bridge, workspace_transport):
     """One accepted-port orchestration for both ordinary Dense and strict Down.
 
     memory.read64(address) selects act/weight solely by physical address. The
@@ -180,6 +183,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
     No owner, SRAM bank, tile adapter, arithmetic model or reference is created.
     """
     legacy_down = a_source is None
+    require(matrix_bridge is None or (lib is matrix_bridge and matrix_bridge.owner is owner),
+            'shared Matrix bridge must be this driver arithmetic resource and actual owner')
     tick_owner = owner.tick if owner_tick is None else owner_tick
     started, start_tick = time.monotonic(), owner.clock
     out, down, workspace = Path(out), model.down, owner.workspace
@@ -205,7 +210,7 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
     final_chunk = len(chunks) - 1
     prefix_versions = tuple(range(1, len(chunks)))
     active_prefix_extent = (job.n // 32) * CONTEXT_BYTES if final_chunk else 0
-    if legacy_down:
+    if legacy_down and workspace_transport is None:
         require(workspace.extent == active_prefix_extent,
                 'full physical Down prefix workspace required')
     require(owner.state == 'idle' and owner.lease is None and owner.window_request is None and
@@ -232,7 +237,16 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
     initial_group_sequence, initial_responses = owner.group_sequence, owner.responses
     # The owner's full reservation remains untouched. Only used prefix bytes
     # need backing; single-chunk jobs neither allocate nor access a prefix.
-    prefix = PhysicalRegion(workspace.base, active_prefix_extent) if active_prefix_extent else None
+    if workspace_transport is not None:
+        physical = getattr(memory, 'physical_memory', memory)
+        require(workspace_transport.physical_memory is physical,
+                'Dense workspace transport must share the operand physical address index')
+        prefix = workspace_transport.begin(job, workspace)
+        require((prefix is None) == (active_prefix_extent == 0) and
+                (prefix is None or prefix.extent == active_prefix_extent),
+                'shared workspace active extent differs from accepted Dense geometry')
+    else:
+        prefix = PhysicalRegion(workspace.base, active_prefix_extent) if active_prefix_extent else None
     destination = PhysicalRegion(job.dst, job.write_bytes)
     prefix_beats, contexts_total = active_prefix_extent // 64, job.n // 32
     versions = bytearray(prefix_beats)
@@ -278,9 +292,14 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
         raw = (json.dumps(value, sort_keys=True, separators=(',', ':')) + '\n').encode()
         prefix_records.write(raw)
 
-    def read64(address):
+    def read64(command):
+        address = command.address
         if prefix is not None and prefix.contains(address):
-            return 'workspace', prefix.read64(address)
+            # Shared transport resolves the original address index and records
+            # this accepted descriptor; audit reads never authorize operands.
+            words = (workspace_transport.accept_read(command) if workspace_transport is not None
+                     else prefix.read64(address))
+            return 'workspace', words
         region, words = memory.read64(address)
         if legacy_down:
             return region, words
@@ -391,6 +410,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                                              path=path.name, physical_cells=contexts_total * 4096,
                                              all_128_rows_per_context=True, canaries_exact=True))
                 require(edge['group'] == (job.tag, 0x20, 0xff, True), 'Down Matrix group identity/profile')
+                if workspace_transport is not None:
+                    workspace_transport.accept_group(chunk_index, n_base, contexts, group_sequence)
                 require(lib.td_group(chunk_start, chunk_end, contexts) == 0, 'unchanged Down host group setup')
                 groups.append(dict(observed, sequence=group_sequence, start_tick=owner.clock))
                 counts['groups'] += 1
@@ -400,6 +421,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 require(chunk_index > 0 and request.tag == job.tag and request.sequence == group_sequence and
                         request.generation == workspace.generation and 0 <= request.context < contexts and
                         request.slice_mask == 255, 'Down seed request identity/profile')
+                if workspace_transport is not None:
+                    workspace_transport.seed_begin(request)
                 require(lib.td_seed_begin(request.context) == 0, 'unchanged Down seed reserve')
                 hashes['seed_requests'].update(struct.pack('<IIIBB', request.tag, request.sequence,
                     request.generation, request.context, request.slice_mask))
@@ -415,6 +438,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 require(beat.request.tag == job.tag and beat.request.sequence == group_sequence and
                         beat.request.generation == workspace.generation and not beat.error and
                         beat.last == (beat.index == 255), 'Down seed beat identity/status/LAST')
+                if workspace_transport is not None:
+                    workspace_transport.seed_beat(address, beat.request, beat.words)
                 seeded_versions[index, version] += 1
                 seed_counts[version] += 1
                 seed_words[:] = beat.words
@@ -431,6 +456,10 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 ack = inputs['seed_ack']
                 key = (chunk_index, n_base // 32 + ack.request.context)
                 require(seed_ack == ack and key not in seed_commits, 'duplicate or unsolicited seed ACK')
+                if workspace_transport is not None:
+                    workspace_transport.seed_ack(ack)
+                if matrix_bridge is not None:
+                    matrix_bridge.retire_seed_ack(ack)
                 seed_commits.add(key)
                 hashes['seed_acks'].update(struct.pack('<IIIB?', ack.request.tag, ack.request.sequence,
                                                       ack.request.generation, ack.request.context, ack.error))
@@ -444,6 +473,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 if region == 'workspace':
                     index = (command.address - workspace.base) // 64
                     require(read_versions[index, version] == 0, 'duplicate physical prefix version reread')
+                    if workspace_transport is not None:
+                        workspace_transport.retire_read(command, words)
                     read_versions[index, version] += 1
                     prefix_reads[version] += 1
                     prefix_record('read', command.address, version, words)
@@ -455,7 +486,7 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 require(pending_read is None and command.beats == 1 and command.address % 64 == 0 and
                         command.tag == (job.tag << 32) | (initial_read_sequence + counts['read_descriptors']),
                         'Down read descriptor overlap/shape/tag sequence')
-                region, words = read64(command.address)
+                region, words = read64(command)
                 version = None
                 if region == 'workspace':
                     index = (command.address - workspace.base) // 64
@@ -513,6 +544,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
             if edge.get('result_fire'):
                 result = results.popleft()
                 require(result == inputs['result'], 'Down Matrix result queue handshake mismatch')
+                if matrix_bridge is not None:
+                    matrix_bridge.retire_result(result)
                 raw = b''.join(struct.pack('<256I', *row) for row in result.value)
                 hashes['results'].update(struct.pack('<II', group_sequence, result.context)); hashes['results'].update(raw)
                 if chunk_index < final_chunk:
@@ -539,6 +572,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 hashes['write_descriptors'].update(struct.pack('<QQI', command.address, command.tag, command.beats))
                 counts['write_descriptors'] += 1
                 region_counts[region + '_write_descriptors'] += 1
+                if region == 'workspace' and workspace_transport is not None:
+                    workspace_transport.write_event('command', command)
                 if region == 'down' and output_event is not None:
                     output_event('command', command)
             if edge.get('write_data_fire'):
@@ -565,7 +600,10 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                         require(read_versions[beat_index, old] == 1 and seeded_versions[beat_index, old] == 1 and
                                 (write_chunk, (address - workspace.base) // CONTEXT_BYTES) in seed_commits,
                                 'physical prefix overwrite before exact old version reread and seed ACK')
-                    prefix.write64(address, words)
+                    if workspace_transport is not None:
+                        workspace_transport.write_event('data', beat)
+                    else:
+                        prefix.write64(address, words)
                     data_versions[beat_index] = version
                 else:
                     require(address not in written and destination.read64(address) == (SENTINEL_WORD,) * 16,
@@ -612,6 +650,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 counts['write_acks'] += 1
                 region_counts[region + '_write_acks'] += 1
                 region_counts[region + '_ack_bytes'] += ack.nbytes
+                if region == 'workspace' and workspace_transport is not None:
+                    workspace_transport.write_event('ack', ack)
                 if region == 'down' and output_event is not None:
                     output_event('ack', ack)
                 if region == 'down' and len(acknowledged) * 64 == job.write_bytes:
@@ -623,6 +663,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
                 staged = []
             if 'matrix_done' in inputs and edge['matrix_done_ready']:
                 require(group_sequence not in matrix_done_groups, 'duplicate Down MatrixDone')
+                if matrix_bridge is not None:
+                    matrix_bridge.retire_done(inputs['matrix_done'])
                 matrix_done_groups.add(group_sequence)
                 hashes['matrix_done'].update(struct.pack('<II', group_sequence, job.tag))
                 counts['matrix_done_handshakes'] += 1
@@ -680,6 +722,8 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
             prefix.check_guards()
         destination.check_guards()
         check_identity(); check_budget()
+        if workspace_transport is not None:
+            workspace_transport.finish()
         raw = destination.raw()
         output_path = 'actual_down.f32le' if legacy_down else 'actual_dense.f32le'
         (out / output_path).write_bytes(raw)
@@ -737,8 +781,18 @@ def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
             report['prefix']['active_extent'] = active_prefix_extent
             report['owner_counter_deltas'] = owner_deltas
             report['output_transport'] = 'Actual accepted command/data/ACK events; terminal publishes only after final ACK'
+        if workspace_transport is not None:
+            report['prefix'].update(shared_public_allocation=True,
+                active_extent=active_prefix_extent, reserved_extent=workspace_transport.extent,
+                inactive_tail_pristine=True, public_epoch=workspace_transport.epoch,
+                transport_accepted=dict(workspace_transport.counts))
+        if output_event is not None:
             output_event('terminal', finished)
         return report, destination
+    except Exception as error:
+        if workspace_transport is not None:
+            workspace_transport.invalidate(type(error).__name__ + ': ' + str(error))
+        raise
     finally:
         seed_records.close()
         prefix_records.close()

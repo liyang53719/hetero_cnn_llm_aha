@@ -393,6 +393,7 @@ class Policy:
     opcode: int = 0
     inputs: int = 2
     valid: bool = True
+    transpose_b: bool = False
 
 
 @dataclass(frozen=True)
@@ -419,7 +420,8 @@ class VirtualRootPreflight:
     Softmax's public null B is skipped. Extra-root native profiles are excluded
     by the caller's profile admission. Reservation is the caller's final step.
     """
-    def __init__(self, program, reader, gate_pc, captured, gate, up, *, max_commands=64, fetch_command=None):
+    def __init__(self, program, reader, gate_pc, captured, gate, up, *, max_commands=64,
+                 fetch_command=None, allowed_uses=None):
         if not 21 <= max_commands <= 255 or not 0 < len(program) <= max_commands:
             raise Rejected("Bounds", "bounded public command count")
         if not 0 <= gate_pc <= len(program) - 3:
@@ -427,6 +429,10 @@ class VirtualRootPreflight:
         self.program, self.reader = program, reader
         self.gate_pc, self.captured, self.gate, self.up = gate_pc, tuple(captured), gate, up
         self.fetch_command = fetch_command
+        self.allowed_uses = (frozenset(((gate_pc, 2), (gate_pc + 2, 0))),
+                             frozenset(((gate_pc + 1, 2), (gate_pc + 2, 1)))) if allowed_uses is None else tuple(map(frozenset, allowed_uses))
+        if len(self.allowed_uses) != 2 or any(not uses for uses in self.allowed_uses):
+            raise Rejected("Malformed", "two explicit virtual consumer sets required")
         self.scan_command = None
         self.pc = self.slot = 0
         self.done = False
@@ -450,8 +456,8 @@ class VirtualRootPreflight:
                 raise Rejected("Protocol", "captured group command changed during scan")
         t = self.reader.read(c.roots[self.slot], self.slot == 2)
         self.trace.append((self.pc, self.slot, c.roots[self.slot]))
-        gate_use = (self.pc, self.slot) in ((self.gate_pc, 2), (self.gate_pc + 2, 0))
-        up_use = (self.pc, self.slot) in ((self.gate_pc + 1, 2), (self.gate_pc + 2, 1))
+        gate_use = (self.pc, self.slot) in self.allowed_uses[0]
+        up_use = (self.pc, self.slot) in self.allowed_uses[1]
         exact_gate = gate_use and t.same_allocation(self.gate)
         exact_up = up_use and t.same_allocation(self.up)
         if ((t.overlaps(self.gate) and not exact_gate) or (t.overlaps(self.up) and not exact_up)
@@ -483,15 +489,18 @@ class HostControl:
     then rejected by this bounded subset if execution reaches them.
     """
     def __init__(self, *, enabled=False, profile="legacy_qwen2", max_commands=64, event_slots=256,
-                 legacy_prefix=False, max_tokens=1024):
-        if (enabled or legacy_prefix) and profile != "legacy_qwen2":
+                 legacy_prefix=False, max_tokens=1024, legacy_attention=False):
+        if (enabled or legacy_prefix or legacy_attention) and profile != "legacy_qwen2":
             raise ValueError("resident FFN excludes native extra-root profiles")
         if not 21 <= max_commands <= 255 or event_slots < 4 or event_slots & (event_slots - 1):
             raise ValueError("Host parameter domain")
         if type(legacy_prefix) is not bool or not uint(max_tokens, 16) or not 0 < max_tokens <= 1024:
             raise ValueError("legacy prefix model parameter domain")
+        if type(legacy_attention) is not bool or (legacy_attention and not legacy_prefix):
+            raise ValueError("legacy attention requires the explicit prefix profile")
         self.enabled, self.profile, self.max_commands, self.event_slots = enabled, profile, max_commands, event_slots
         self.legacy_prefix, self.max_tokens = legacy_prefix, max_tokens
+        self.legacy_attention = legacy_attention
         self.state = "idle"
         self.poison = False
         self.program = ()
@@ -543,7 +552,9 @@ class HostControl:
             c = self.frontend.fetch_command(pc)
         self.current_command = c
         supported = (0x20, 0x35, 0x30, 0x32, 0x34, 0x41) if self.legacy_prefix else (0x20, 0x35)
-        if c.opcode not in supported or c.engine != (2 if c.opcode == 0x20 else 4 if c.opcode == 0x41 else 3):
+        if self.legacy_attention:
+            supported += (0x23, 0x33, 0x24)
+        if c.opcode not in supported or c.engine != (2 if c.opcode in (0x20, 0x23, 0x24) else 4 if c.opcode == 0x41 else 3):
             raise Rejected("Unsupported", "bounded ordinary opcode/engine")
         if c.reserved:
             raise Rejected("Malformed", "reserved command bits")
@@ -556,11 +567,14 @@ class HostControl:
                 or not 0 < c.signal < self.event_slots or not dependency or c.signal in self.events
                 or c.signal == c.wait or c.signal in blocked_signals):
             raise Rejected("Dependency", "public event chain")
-        a, b, d = tuple(self.reader.read(root, slot == 2) for slot, root in enumerate(c.roots))
+        a, b, d = tuple(None if slot == 1 and c.opcode == 0x33 and root == NULL else
+                        self.reader.read(root, slot == 2) for slot, root in enumerate(c.roots))
         p = ((Policy("kv", valid=a.tail == NULL) if c.opcode == 0x41 else self.policies.get(a.tail)) if self.frontend is None else
              self.frontend.read_policy(c, (a, b, d)))
-        if p is None or not p.valid or b.tail != NULL or d.tail != NULL:
+        if p is None or not p.valid or (b is not None and b.tail != NULL) or d.tail != NULL:
             raise Rejected("Unsupported", "typed consumer policy/tails")
+        if c.opcode in (0x23, 0x33, 0x24):
+            return self._attention_job(c, a, b, d, p, pc, virtual_inputs), (a, b, d)
         if c.opcode in (0x30, 0x32, 0x34, 0x41):
             j = self._prefix_job(c, a, b, d, p, pc)
             if not (self.live(a) and self.live(b)):
@@ -595,11 +609,89 @@ class HostControl:
                 a.address, b.address, d.address, m, n, k, d.payload_bytes, b.dtype == 5)
         return j, (a, b, d)
 
+    def _attention_job(self, command, a, b, d, policy, pc, virtual_inputs):
+        """Original public QK/Softmax/PV shape and policy, before fused issue.
+
+        Scores and probabilities are virtual allocations. They never become
+        ordinary readable tensors or individual successful owner jobs.
+        """
+        operands = tuple(t for t in (a, b, d) if t is not None)
+        if not self.legacy_attention or any(t.dtype != 7 for t in operands):
+            raise Rejected("Unsupported", "legacy attention FP32 containers")
+        if command.opcode == 0x23:
+            m = a.dims[0]
+            valid = (a.dims == (m, 1536) and b is not None and b.dims == (m, 256)
+                     and d.dims == (12, m, m) and policy.kind == "matrix"
+                     and (policy.m, policy.n, policy.k) == (m, m, 128) and policy.transpose_b)
+            kind = "AttentionQk"
+        elif command.opcode == 0x33:
+            m = a.dims[1] if a.rank == 3 else 0
+            valid = (b is None and a.dims == d.dims == (12, m, m)
+                     and policy.kind == "sfu" and policy.opcode == 0x33 and policy.inputs == 1)
+            kind = "AttentionSoft"
+        else:
+            m = d.dims[0]
+            valid = (a.dims == (12, m, m) and b is not None and b.dims == (m, 256)
+                     and d.dims == (m, 1536) and policy.kind == "matrix"
+                     and (policy.m, policy.n, policy.k) == (m, 128, m) and not policy.transpose_b)
+            kind = "AttentionPv"
+        if not valid or not 0 < m <= self.max_tokens:
+            raise Rejected("Unsupported", "legacy attention shape/policy")
+        if command.opcode == 0x23:
+            live = virtual_inputs is None and self.live(a) and self.live(b)
+        else:
+            live = (virtual_inputs is not None and a.same_allocation(virtual_inputs[0])
+                    and (b is None or self.live(b)))
+        if not live:
+            raise Rejected("Dependency", "attention source allocation liveness")
+        if not self._fresh(d) or any(d.overlaps(t) for t in (a, b) if t is not None):
+            raise Rejected("Permission", "attention destination freshness/alias")
+        return Job(kind, (self.epoch << 16) | pc, a.address, 0 if b is None else b.address,
+                   d.address, m, 1536, 128, d.payload_bytes)
+
+    def _admit_attention(self, qk, query, key, scores):
+        """One original Attention owner; three public completion handshakes.
+
+        The whole-program typed-root scan is candidate hardening in addition
+        to production Host's sequential virtual-span liveness checks.
+        """
+        first = self.pc
+        if first + 2 >= len(self.program):
+            raise Rejected("Malformed", "incomplete public attention group")
+        c0 = self.current_command
+        self.pc = first + 1
+        soft, (_, absent, probabilities) = self._decode(self.pc, expected_wait=c0.signal,
+            blocked_signals=(c0.signal,), virtual_inputs=(scores, None), expected_opcode=0x33)
+        c1 = self.current_command
+        self.pc = first + 2
+        pv, (_, value, output) = self._decode(self.pc, expected_wait=c1.signal,
+            blocked_signals=(c0.signal,), virtual_inputs=(probabilities, None), expected_opcode=0x24)
+        c2 = self.current_command
+        if absent is not None or (soft.m, pv.m) != (qk.m, qk.m):
+            raise Rejected("Unsupported", "attention group geometry")
+        operands = (query, key, value, scores, probabilities, output)
+        if any(a.overlaps(b) for i, a in enumerate(operands) for b in operands[i + 1:]):
+            raise Rejected("Permission", "attention full allocations pairwise disjoint")
+        if not all(any(r.read and r.write and r.contains(t) for r in self.reader.regions)
+                   for t in (scores, probabilities, output)):
+            raise Rejected("Permission", "attention destinations require readwrite reservations")
+        if len(self.virtual) + 2 > self.max_commands:
+            raise Rejected("Permission", "attention virtual reservation capacity")
+        self.group = None
+        self.bound = PrefixJob("Attention", pv.tag, query.address, key.address, output.address,
+                               qk.m, 1536, 128, output.payload_bytes, c=value.address)
+        self.group_commands = (c0, c1, c2)
+        self.scanner = VirtualRootPreflight(self.program, self.reader, first, self.group_commands,
+            scores, probabilities, max_commands=self.max_commands,
+            fetch_command=None if self.frontend is None else self.frontend.fetch_command,
+            allowed_uses=(((first, 2), (first + 1, 0)), ((first + 1, 2), (first + 2, 0))))
+        self.state = "scan"
+
     def _prefix_job(self, command, a, b, d, policy, pc):
         """Legacy production decode at HostBlockCommands.scala:395,430,848–924.
 
         This optional software subset adds no ABI or arithmetic policy. The
-        attention group remains unimplemented and is rejected at its first op.
+        Attention additionally requires its separate explicit opt-in.
         """
         if not all(t.dtype == 7 for t in (a, b, d)) or a.rank != 2:
             raise Rejected("Unsupported", "legacy prefix FP32 dtype/rank")
@@ -632,6 +724,11 @@ class HostControl:
 
     def _admit(self):
         j, (a, b, d) = self._decode(self.pc)
+        if j.kind == "AttentionQk":
+            self._admit_attention(j, a, b, d)
+            return
+        if j.kind in ("AttentionSoft", "AttentionPv"):
+            raise Rejected("Malformed", "attention requires QK then Softmax then PV")
         eligible = self.enabled and j.kind == "Dense" and j.m in (16, 128) and j.k == 1536 and j.n == WIDTH and j.weight_bf16
         self.bound = j
         if not eligible:
@@ -693,7 +790,7 @@ class HostControl:
                    self.program[self.pc] if self.program and self.pc < len(self.program) else None)
         group_pending = self.group is not None
         completion = None
-        if self.state == "complete" and not (self.enabled and self.status is None and reset_required):
+        if self.state == "complete" and not ((self.enabled or self.legacy_attention) and self.status is None and reset_required):
             pc = self.pc
             if self.group_commands and self.status is None:
                 command = self.group_commands[self.completion_index]
@@ -714,7 +811,7 @@ class HostControl:
                 raise ValueError("coordinated reset must cover complete backend domain")
             self.__init__(enabled=self.enabled, profile=self.profile, max_commands=self.max_commands,
                           event_slots=self.event_slots, legacy_prefix=self.legacy_prefix,
-                          max_tokens=self.max_tokens)
+                          max_tokens=self.max_tokens, legacy_attention=self.legacy_attention)
             return p
         s = self.state
         try:
@@ -734,7 +831,7 @@ class HostControl:
             elif s == "waitDone" and owner_result is not None:
                 p["owner_result_fire"] = True
                 r = owner_result
-                if self.enabled and reset_required and (self.group is not None or r.status is None):
+                if (self.enabled or self.legacy_attention) and reset_required and (self.group is not None or r.status is None):
                     raise Rejected("Protocol", "raw backend reset fences unaccepted success")
                 if r.tag != self.bound.tag:
                     raise Rejected("Protocol", "owner terminal tag")
@@ -748,7 +845,7 @@ class HostControl:
                 self.completion_index = 0
                 self.state = "complete"
             elif s == "complete":
-                if self.enabled and self.status is None and reset_required:
+                if (self.enabled or self.legacy_attention) and self.status is None and reset_required:
                     raise Rejected("Protocol", "raw backend reset fences held unaccepted completion")
                 if p["completion"] is not None and completion_ready:
                     p["completion_fire"] = True

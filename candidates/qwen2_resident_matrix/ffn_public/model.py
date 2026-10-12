@@ -338,7 +338,9 @@ class PublicFrontend:
                              (word >> 11) & 0x1fff)
 
     def validate_command(self, command):
-        if any(root == NULL or not 0 <= root < self.config.descriptor.count for root in command.roots):
+        roots = (command.a, command.d) if command.opcode == 0x33 else command.roots
+        if (any(root == NULL or not 0 <= root < self.config.descriptor.count for root in roots)
+                or (command.opcode == 0x33 and command.b != NULL)):
             raise Rejected('Malformed', 'public primary root bounds')
 
     def _readonly(self, tensor):
@@ -367,10 +369,11 @@ class PublicFrontend:
             # Original KV_APPEND has no policy record and never reads NULL.
             return group.Policy('kv', valid=tensors[0].tail == NULL)
         index, visited = tensors[0].tail, []
-        prefixes = {i for t in tensors for i in t.prefix_indices}
+        prefixes = {i for t in tensors if t is not None for i in t.prefix_indices}
         tag = (self.config.epoch << 48) | (self.current_pc << 32)
         words = []
-        for slot in range(2 if command.opcode == 0x20 else 1):
+        matrix = command.opcode in (0x20, 0x23, 0x24)
+        for slot in range(2 if matrix else 1):
             word = self.port.read(self.config.descriptor, index, tag, purpose='policy')
             self.policy_reads.append((self.current_pc, index))
             if (word >> 8) & 0xffffff or index in visited or index in prefixes:
@@ -378,18 +381,20 @@ class PublicFrontend:
             words.append(word)
             visited.append(index)
             kind, nxt = word & 255, (word >> 32) & NULL
-            if command.opcode == 0x20 and slot == 0 and (kind != 0x10 or nxt == NULL):
+            if matrix and slot == 0 and (kind != 0x10 or nxt == NULL):
                 raise Rejected('Malformed', 'matrix policy chain first record')
-            if command.opcode == 0x20 and slot == 1 and nxt != NULL:
+            if matrix and slot == 1 and nxt != NULL:
                 raise Rejected('Unsupported', 'legacy FFN excludes extended policy profiles')
             index = nxt
-        if command.opcode == 0x20:
+        if matrix:
             p, aux = words[0] >> 56, words[1]
-            valid = ((words[0] & 255) == 0x10 and p >> 56 == 0
+            transpose_b = command.opcode == 0x23
+            valid = ((words[0] & 255) == 0x10 and p >> 56 == (8 if transpose_b else 0)
                      and (aux & 255) == 0x12 and aux >> 56 == 0x4000040024ffffff)
             return group.Policy('matrix', p & 0xffff, (p >> 16) & 0xffff,
-                                (p >> 32) & 0xffffff, valid=valid)
+                                (p >> 32) & 0xffffff, valid=valid, transpose_b=transpose_b)
         word, p = words[0], words[0] >> 56
-        expected = command.opcode | (2 << 16) | (1 << 24) | (7 << 32) | (7 << 36) | (16 << 40)
+        inputs = 1 if command.opcode == 0x33 else 2
+        expected = command.opcode | (inputs << 16) | (1 << 24) | (7 << 32) | (7 << 36) | (16 << 40)
         return group.Policy('sfu', opcode=p & 0xffff, inputs=(p >> 16) & 255,
                             valid=(word & 255) == 0x20 and index == NULL and p == expected)

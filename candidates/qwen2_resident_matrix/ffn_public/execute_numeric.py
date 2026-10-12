@@ -54,7 +54,8 @@ class PublicExecution:
     every public response. ``ordinary_edge`` is the optional original Down
     driver's callback and invokes this exact owner once per call.
     """
-    def __init__(self, frontend, owner, trace, deadline, *, host=None, prefix_owner=None):
+    def __init__(self, frontend, owner, trace, deadline, *, host=None, prefix_owner=None,
+                 attention_owner=None, matrix_service=None):
         self.frontend, self.owner, self.trace, self.deadline = frontend, owner, trace, deadline
         self.host = host if host is not None else public_group.HostControl(enabled=True)
         require(frontend.launch(self.host), 'public raw frontend launch rejected')
@@ -73,8 +74,15 @@ class PublicExecution:
         self.bank_ids = (id(owner), id(owner.a_banks), id(owner.b_banks), id(owner.tiles.banks))
         self.last_host_edge = None
         self.prefix_owner = prefix_owner
+        self.attention_owner, self.matrix_service = attention_owner, matrix_service
+        if attention_owner is not None:
+            require(prefix_owner is not None and attention_owner.scalar is prefix_owner.scalar
+                    and attention_owner.matrix is matrix_service,
+                    'Attention and prefix must share the identical scalar and Matrix services')
         self.prefix_jobs = self.prefix_results = 0
+        self.attention_jobs = self.attention_results = 0
         self.ordinary_history = []
+        self.window_matrix_bridge = None
 
     def reset_required(self):
         reset = self.owner.ports().get('reset_required', False)
@@ -82,6 +90,10 @@ class PublicExecution:
             reset = reset or self.coupled.c.poison or self.coupled.services().error
         if self.prefix_owner is not None:
             reset = reset or self.prefix_owner.ports()['reset_required']
+        if self.attention_owner is not None:
+            reset = reset or self.attention_owner.ports()['reset_required']
+        if self.matrix_service is not None:
+            reset = reset or self.matrix_service.reset_required
         return bool(reset)
 
     def ports(self):
@@ -139,7 +151,7 @@ class PublicExecution:
         if 'job' in inputs:
             decoded = hp['ordinary_request']
             require(decoded is inputs['job'] and hp['group_request'] is None and
-                    decoded.kind in ('Norm', 'Bias', 'Rope', 'KvAppend'),
+                    decoded.kind in ('Norm', 'Bias', 'Rope', 'KvAppend', 'Add'),
                     'prefix backend must accept the original public job object')
         require('response_ready' not in inputs, 'prefix result readiness is owned by Host')
         inputs['response_ready'] = hp['owner_result_ready']
@@ -167,6 +179,39 @@ class PublicExecution:
             owner_start_tick=self.down_start_tick))
         self.down_job = self.down_terminal = None
         self.down_start_tick = self.down_terminal_tick = None
+
+    def attention_edge(self, **inputs):
+        """Couple the real legacy Attention backend to this same public launch.
+
+        Its Matrix packets go through the same acquired service used by Dense.
+        Host counts consume only the backend's accepted terminal after DDR ACKs.
+        """
+        backend = self.attention_owner
+        require(backend is not None and backend.matrix is self.matrix_service,
+                'Attention backend/shared Matrix service not attached')
+        require(self.owner.state == 'idle' and self.owner.lease is None and self.owner.tiles.idle
+                and self.owner.ports()['response'] is None and self.prefix_owner.state == 'idle',
+                'Attention conflicts with retained Dense/prefix obligations')
+        hp, pp = self.ports(), backend.ports()
+        before_reset = self.reset_required()
+        if 'job' in inputs:
+            decoded = hp['ordinary_request']
+            require(decoded is inputs['job'] and decoded.kind == 'Attention'
+                    and hp['group_request'] is None,
+                    'Attention must accept this original fused public owner job')
+        require('response_ready' not in inputs, 'Attention result readiness belongs to Host')
+        inputs['response_ready'] = hp['owner_result_ready']
+        edge = backend.tick(**inputs)
+        self.owner.tick()
+        accepted = bool(edge.get('job_fire'))
+        terminal = pp['response'] if edge.get('response_fire') else None
+        self.attention_jobs += accepted
+        self.attention_results += terminal is not None
+        self._host_edge(request_ready=accepted, owner_result=terminal, reset_required=before_reset)
+        require(bool(self.last_host_edge['request_fire']) == accepted and
+                bool(self.last_host_edge['owner_result_fire']) == (terminal is not None),
+                'public/Attention request or terminal handshake disagreement')
+        return edge
 
     def advance_to_request(self, limit=4096):
         for _ in range(limit):
@@ -293,6 +338,18 @@ class PublicCoupled(numeric.Coupled):
                     'coordinator start has no matching offered public group')
         edge, ce = super().tick(start=start,
             group_result_ready=hp['owner_result_ready'], **inputs)
+        bridge = x.window_matrix_bridge
+        if bridge is not None:
+            # Match the real owner/Matrix handshakes. A C return only offers a
+            # result; the shared resource stays owned through accepted done
+            # and the coordinator's genuine window terminal.
+            if edge.get('result_fire'):
+                bridge.retire_result(inputs['result'], ticket=bridge.ticket, epoch=bridge.epoch)
+            if inputs.get('matrix_done') is not None and edge.get('matrix_done_ready'):
+                bridge.retire_done(inputs['matrix_done'], ticket=bridge.ticket, epoch=bridge.epoch)
+            if ce['window_result_fire']:
+                x.matrix_service.retire_owner_response(x.owner)
+                x.matrix_service.release(x.owner)
         he = x._host_edge(request_ready=ce['request_fire'],
             owner_result=cp['result'] if ce['result_fire'] else None,
             reset_required=before_reset)
@@ -309,13 +366,35 @@ def execute_windows(execution, lib, memory, outputs, out, *, window_limit=56):
     require(h is not None and h.call is execution.host.group, 'no accepted public group')
     tile_trace = numeric.CappedTrace(Path(out) / 'silu_events_prefix.jsonl')
     reports, retained = [], None
+    def window(ng, role):
+        if execution.matrix_service is None:
+            return numeric.execute_window(h, lib, memory, ng, role)
+        require(execution.window_matrix_bridge is None, 'overlapping public Matrix window')
+        request = h.next_request('window_request')
+        require(execution.matrix_service.acquire(owner, 'dense', request.job.tag),
+                'FFN window could not acquire the shared Matrix')
+        bridge = execution.matrix_service.dense_library(owner)
+        execution.window_matrix_bridge = bridge
+        try:
+            result = numeric.execute_window(h, bridge, memory, ng, role)
+            require(execution.matrix_service.owner is None,
+                    'FFN window returned before genuine Matrix/owner retirement')
+            execution.window_matrix_bridge = None
+            return result
+        except Exception:
+            # A host-driver exception is not an accepted hardware terminal.
+            # Quarantine and retain the adapter so existing result/done/seed
+            # obligations can still be drained; never clear ownership here.
+            if execution.matrix_service.owner is owner:
+                execution.matrix_service.abort(owner)
+            raise
     try:
         for ng in range(0, window_limit * numeric.WINDOW, numeric.WINDOW):
-            gate = numeric.execute_window(h, lib, memory, ng, 'gate')
+            gate = window(ng, 'gate')
             current = numeric.tile_check.bank_region_hash(owner.a_banks.words, 0, 768)
             retained = current if retained is None else retained
             require(current == retained, 'later public Gate changed retained A')
-            up = numeric.execute_window(h, lib, memory, ng, 'up')
+            up = window(ng, 'up')
             silu = numeric.execute_silu(h, lib, ng, outputs, tile_trace)
             drain = numeric.execute_drain(h, memory.act, ng)
             require(numeric.tile_check.bank_region_hash(owner.a_banks.words, 0, 768) == retained,

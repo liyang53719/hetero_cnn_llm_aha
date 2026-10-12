@@ -70,6 +70,8 @@ class PhysicalMemory:
             raw = r['provider'](offset)
             require(isinstance(raw, bytes) and len(raw) == 64, 'readonly beat extent')
         else:
+            require(r.get('workspace_transport') is None,
+                    'workspace reads require its accepted transport/lifecycle')
             require(r['published'] and address in r['acked'], 'read before ACK and public publication: ' + name)
             raw = bytes(r['data'][64 + offset:128 + offset])
         self.counts['read_bytes'] += 64
@@ -105,6 +107,8 @@ class PhysicalMemory:
                     command.address // 1024 == (command.address + command.beats * 64 - 1) // 1024,
                     'physical write overlap/burst boundary')
             name, r = self.region(command.address, command.beats * 64)
+            require(r.get('workspace_transport') is None,
+                    'workspace writes require its accepted transport/lifecycle')
             require(not r['readonly'] and not r['published'] and not r['terminal'], 'write to immutable/published allocation')
             self.pending = [name, command, 0]
             self.counts['write_commands'] += 1
@@ -112,6 +116,8 @@ class PhysicalMemory:
             require(self.pending is not None, 'physical data without accepted command')
             name, command, index = self.pending
             r = self.regions[name]
+            require(r.get('workspace_transport') is None,
+                    'workspace data requires its accepted transport/lifecycle')
             # The inherited ordinary Dense wire has words/last only and always
             # writes one complete 512-bit beat. The typed drain/prefix wire has
             # an explicit mask. Do not silently treat arbitrary missing masks
@@ -131,6 +137,8 @@ class PhysicalMemory:
             require(index == command.beats and value.tag == command.tag and not value.error and
                     value.nbytes == command.beats * 64, 'physical ACK tag/status/byte fence')
             r = self.regions[name]
+            require(r.get('workspace_transport') is None,
+                    'workspace ACK requires its accepted transport/lifecycle')
             addresses = set(range(command.address, command.address + command.beats * 64, 64))
             require(not addresses.intersection(r['acked']), 'duplicate physical ACK')
             r['acked'].update(addresses)
@@ -167,6 +175,9 @@ class PhysicalMemory:
                 continue
             require(r['data'][:64] == r['data'][-64:] == SENTINEL * 16,
                     'physical allocation canary changed: ' + name)
+            if r.get('workspace_transport') is not None:
+                r['workspace_transport'].check_guards()
+                continue
             if r['published']:
                 require(hashlib.sha256(r['data'][64:-64]).hexdigest() == self.published_hashes[name],
                         'prior published output changed: ' + name)
@@ -264,13 +275,22 @@ def execute_public_prefix(x, memory, lib, output):
             path.mkdir()
             dense_job = execution.numeric.decode_job(job)
             trace = execution.numeric.CappedTrace()
-            report, actual = execution.down_driver.execute_dense(execution.numeric.model, x.owner, lib,
+            bridge = None
+            if x.matrix_service is not None:
+                require(x.matrix_service.acquire(x.owner, 'dense', job.tag),
+                        'Dense could not acquire the same Matrix resource')
+                bridge = x.matrix_service.dense_library(x.owner)
+            report, actual = execution.down_driver.execute_dense(execution.numeric.model, x.owner, lib if bridge is None else bridge,
                 memory, dense_job, path, x.deadline, trace, a_source=memory.dense_source(dense_job),
-                output_event=memory.dense_sink(dense_job), owner_tick=x.ordinary_edge)
+                output_event=memory.dense_sink(dense_job), owner_tick=x.ordinary_edge,
+                matrix_bridge=bridge)
             require(report['prefix']['completed_sweeps'] == report['prefix']['ack_bytes'] == 0,
                     'QKV prefix cannot use an unbound external prefix workspace')
             require(memory.raw(job.dst, job.write_bytes) == actual.raw(), 'shared DDR and actual Dense writes differ')
             x.accept_down_terminal(report)
+            if bridge is not None:
+                x.matrix_service.retire_owner_response(x.owner)
+                x.matrix_service.release(x.owner)
         else:
             report = execute_prefix_owner(x, memory, job)
         x.publish_completions((pc,))

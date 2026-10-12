@@ -91,7 +91,7 @@ class PrefixOwner:
       Only one 1024-word software copy tile is needed; the source engine uses
       three bounded canonical buffers. No extra hardware or ports are claimed.
     """
-    KINDS = ('Norm', 'Bias', 'Rope', 'KvAppend')
+    KINDS = ('Norm', 'Bias', 'Rope', 'KvAppend', 'Add')
 
     def __init__(self, scalar=None, *, hidden=1536, kv=256, head_dim=128,
                  max_tokens=1024):
@@ -109,6 +109,7 @@ class PrefixOwner:
         self.scalar_counts = Counter()
         self.tag_prefix = 0
         self.row_words = self.peak_row_words = self.peak_copy_words = 0
+        self.peak_add_words = 0
 
     def ports(self):
         return dict(job_ready=self.state == 'idle' and not self.poison and self.scalar.client is None,
@@ -135,7 +136,7 @@ class PrefixOwner:
         inputs = [(job.a, job.m * job.n * 4)]
         if job.kind in ('Norm', 'Bias'):
             inputs.append((job.b, job.n * 4))
-        elif job.kind == 'KvAppend':
+        elif job.kind in ('KvAppend', 'Add'):
             inputs.append((job.b, job.m * job.n * 4))
         else:
             trig_bytes = self.max_tokens * (self.head_dim // 2) * 4
@@ -234,6 +235,23 @@ class PrefixOwner:
                     yield from self._write(j.dst + (half * elements + base + offset) * 4,
                                            tile[offset:offset + LANES])
 
+    def _add(self, j):
+        # ElementwiseMemoryEngine loads both complete canonical tiles, computes
+        # all 16-lane chunks into C, and only then issues any external store.
+        # Keep that fault boundary: a bad late lane cannot leak this tile.
+        elements = j.m * j.n
+        for base in range(0, elements, 1024):
+            count = min(1024, elements - base)
+            left, right = [], []
+            for offset in range(0, count, LANES):
+                left.extend((yield from self._read(j.a + (base + offset) * 4)))
+            for offset in range(0, count, LANES):
+                right.extend((yield from self._read(j.b + (base + offset) * 4)))
+            output = [self._op('add', a, b, policy='legacy_scalar') for a, b in zip(left, right)]
+            self.peak_add_words = max(self.peak_add_words, len(left) + len(right) + len(output))
+            for offset in range(0, count, LANES):
+                yield from self._write(j.dst + (base + offset) * 4, output[offset:offset + LANES])
+
     def _finish(self, status=None, detail=None):
         self.status, self.detail = status, detail
         self.poison = self.poison or status is not None
@@ -306,14 +324,15 @@ class PrefixOwner:
             self.counts = Counter(job_fire=1)
             self.scalar_baseline = self.scalar.calls.copy()
             self.scalar_counts = Counter()
-            self.tag_prefix = ((job.tag >> 16) << 16) | 16 if job.kind == 'KvAppend' else job.tag >> 16
-            self.peak_row_words = self.peak_copy_words = 0
+            self.tag_prefix = (((job.tag >> 16) << 16) | (16 if job.kind == 'KvAppend' else 8)
+                               if job.kind in ('KvAppend', 'Add') else job.tag >> 16)
+            self.peak_row_words = self.peak_copy_words = self.peak_add_words = 0
             try:
                 self._validate(job)
                 if not self.scalar.acquire(self):
                     raise PrefixFault('Protocol', 'shared scalar resource admission mismatch')
                 self.program = {'Norm': self._norm, 'Bias': self._bias,
-                                'Rope': self._rope, 'KvAppend': self._append}[job.kind](job)
+                                'Rope': self._rope, 'KvAppend': self._append, 'Add': self._add}[job.kind](job)
                 self._advance()
             except PrefixFault as error:
                 self._finish(error.status, error.detail)
@@ -358,6 +377,7 @@ class PrefixOwner:
                                         else self.scalar.calls - self.scalar_baseline),
             row_buffer_capacity_words=self.hidden, peak_row_buffer_words=self.peak_row_words,
             copy_tile_capacity_words=1024, peak_copy_tile_words=self.peak_copy_words,
+            add_tile_capacity_words=3072, peak_add_tile_words=self.peak_add_words,
             local_array_is_physical_bank_allocation_evidence=False,
             one_shared_scalar_software_service=True, hardware_instances_added=0,
             hardware_simulation=False, model_ticks_are_hardware_cycles=False,

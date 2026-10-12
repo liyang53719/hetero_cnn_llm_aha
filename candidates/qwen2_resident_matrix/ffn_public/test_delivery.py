@@ -2,9 +2,11 @@
 from pathlib import Path
 import hashlib
 import json
+import subprocess
 import unittest
 
 HERE = Path(__file__).resolve().parent
+COMMIT = 'df18ba25a439fd90c846b22b9aafe992a2a6ae79'
 
 class DeliveryTests(unittest.TestCase):
     def test_prefix_capture_keeps_actual_public_fences_and_historical_scope(self):
@@ -23,7 +25,10 @@ class DeliveryTests(unittest.TestCase):
                          '011712a7bbcee20cd4226452ab7d7b7d2d1dd78e7a0b83a83899d7f85ca19541')
         root = HERE.parents[2]
         for path, digest in receipt['source_sha256'].items():
-            self.assertEqual(hashlib.sha256((root / path).read_bytes()).hexdigest(), digest, path)
+            # The prefix PASS remains bound to the immutable original source,
+            # never rebound to the new fullgraph successor's live files.
+            raw = subprocess.check_output(['git', 'show', COMMIT + ':' + path], cwd=root)
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), digest, path)
         for case in receipt['cases']:
             rows = case['rows']
             self.assertEqual(case['prelaunch_intermediate_payloads'], [])

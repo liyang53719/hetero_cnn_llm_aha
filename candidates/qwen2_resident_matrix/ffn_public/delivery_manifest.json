@@ -1,11 +1,15 @@
 {
   "schema": 1,
-  "scope": "PUBLIC_COMMAND128_FFN4_AND_PUBLIC21_PREFIX_SOFTWARE_MODEL",
+  "scope": "PUBLIC_COMMAND128_FFN4_AND_PUBLIC21_SOFTWARE_MODEL",
   "base_commit": "812d858f8e33e1e6da0cac354846465e971aa975",
   "files": {
     "README.md": {
-      "bytes": 8327,
-      "sha256": "f28541d02722e567151ba8e65dc88cf22222d6cd63b3596f22d251e2104881b3"
+      "bytes": 10466,
+      "sha256": "5a992cb4e20753cbf0c81ec18916384ea9a541d85994a6a77fac603dbfdaaef8"
+    },
+    "check_fullgraph_numeric.py": {
+      "bytes": 22992,
+      "sha256": "198e2b7b87c6fbf7a317174d7653ea2d4da912c7eabda09b8addfd9bc2752992"
     },
     "check_numeric.py": {
       "bytes": 30263,
@@ -16,16 +20,28 @@
       "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
     },
     "execute_numeric.py": {
-      "bytes": 22489,
-      "sha256": "fcb6fedf288a5e7168d968b12c22405bdd6713ccd51914915f5e42810b851c41"
+      "bytes": 27126,
+      "sha256": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3"
     },
     "fixture.py": {
       "bytes": 15492,
       "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208"
     },
+    "fullgraph_execution.py": {
+      "bytes": 17521,
+      "sha256": "787b8de034428ffab0aec3a462c1a5c1ad9b737fcd1eb495b376189442bfec71"
+    },
+    "fullgraph_memory.py": {
+      "bytes": 22905,
+      "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+    },
+    "fullgraph_numerical_receipt.json": {
+      "bytes": 95162,
+      "sha256": "3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e"
+    },
     "model.py": {
-      "bytes": 18154,
-      "sha256": "cb14fe6ecc13889b783e1e66a6bafe1297011fd6b6bda9c50734a0a8d60ef609"
+      "bytes": 18460,
+      "sha256": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96"
     },
     "numerical_receipt.json": {
       "bytes": 35953,
@@ -36,28 +52,36 @@
       "sha256": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369"
     },
     "prefix_execution.py": {
-      "bytes": 15629,
-      "sha256": "9e6d04ad438dee7bddf46f820aabcfd5780303615ac89bfc076817f3480bccc6"
+      "bytes": 16825,
+      "sha256": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3"
     },
     "prefix_numerical_receipt.json": {
       "bytes": 47293,
       "sha256": "da8a54ff9150b2fc93fc4df545da4fedf2b4dcefb7a6e73ac46d116b5c88a1ef"
     },
     "prefix_owners.py": {
-      "bytes": 17869,
-      "sha256": "cbe6f149999f74288be6a23ee4f6f4a8c231b13c94f19e919285a4c4db0b894f"
+      "bytes": 19134,
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+    },
+    "test_attention_decode.py": {
+      "bytes": 10731,
+      "sha256": "76229b7ed3ca19badb83f190e924fed2c3a476911c310078993b776522741fdd"
     },
     "test_capture.py": {
       "bytes": 14164,
       "sha256": "127f3304f526b1a9ba1bba3fc2ee01992a6dd0e5027e50bd34cc3f00e96a1336"
+    },
+    "test_check_fullgraph_numeric.py": {
+      "bytes": 4507,
+      "sha256": "cc4f6a1cb57c474b198a3a09aca2d468e75692a67cb9b9a014c92fae3d854343"
     },
     "test_check_prefix_numeric.py": {
       "bytes": 14360,
       "sha256": "d0e7ea1031a6b53fb0657502707ffeef00da3f7478fbd258b1a67d533c4b909a"
     },
     "test_delivery.py": {
-      "bytes": 6946,
-      "sha256": "016695754ada4161f7ea8e955d10a75678e886b8db50355adc087d91c725e8d0"
+      "bytes": 7234,
+      "sha256": "97f99825bb178b20ec42102e00cfb6f98711514a20787a0f168ae498df52b08b"
     },
     "test_execute_numeric.py": {
       "bytes": 20241,
@@ -66,6 +90,18 @@
     "test_fullblock_fixture.py": {
       "bytes": 15098,
       "sha256": "37cc8a9d837787a1103fe355f3fe0b7a89df9023d6d7ce33b50db07a29aadb80"
+    },
+    "test_fullgraph_execution.py": {
+      "bytes": 12830,
+      "sha256": "934e301063a8b87702096dc3ecbc9c1d974c85bf5154646ea88a159dedc473ee"
+    },
+    "test_fullgraph_memory.py": {
+      "bytes": 22953,
+      "sha256": "b8c17eab64cb8ffaf0a5b15c5f87f89796fc7a4ea210d22db991754f1e62f9dc"
+    },
+    "test_fullgraph_receipt.py": {
+      "bytes": 8353,
+      "sha256": "03db2f36db3465006c3a8141583c9619f33cb853849ed894951d6ff832447d8d"
     },
     "test_model.py": {
       "bytes": 20327,
@@ -82,6 +118,18 @@
     "test_prefix_owners.py": {
       "bytes": 25923,
       "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+    },
+    "test_residual_owner.py": {
+      "bytes": 4979,
+      "sha256": "8c9eb00b8e48ea32c2c2977b50bf330bb13d3b038271a0d3c198b1b2423b471a"
+    },
+    "test_verify_completed_fullgraph.py": {
+      "bytes": 5673,
+      "sha256": "ba5f51a0edc4847bd807ff55e9af5f4b4e1a346f8b79c6d051e9503a9107770c"
+    },
+    "verify_completed_fullgraph.py": {
+      "bytes": 10884,
+      "sha256": "428345edb52391436738bc0bfea4cee8114a77aa71819d428a0df5d530bc22e2"
     }
   },
   "resources": {
@@ -137,12 +185,23 @@
       128
     ],
     "actual_captures_in_ci": false,
-    "independent_actual_review": "Read-only source/input/actual-output/oracle/saved-stage/ACK/checkpoint/sentinel verification passed for both new pc0\u20139 captures; no arithmetic rerun."
+    "independent_actual_review": "Read-only source/input/actual-output/oracle/saved-stage/ACK/checkpoint/sentinel verification passed for both new pc0–9 captures; no arithmetic rerun."
   },
   "historical_numerical_source": {
     "commit": "8212a32f43338163baee4126e522dcacede0fa23",
     "receipt": "numerical_receipt.json",
     "sha256": "011712a7bbcee20cd4226452ab7d7b7d2d1dd78e7a0b83a83899d7f85ca19541",
     "new_source_pass_inherited": false
-  }
+  },
+  "historical_prefix_source": {
+    "commit": "df18ba25a439fd90c846b22b9aafe992a2a6ae79",
+    "receipt": "prefix_numerical_receipt.json",
+    "sha256": "da8a54ff9150b2fc93fc4df545da4fedf2b4dcefb7a6e73ac46d116b5c88a1ef",
+    "new_source_pass_inherited": false
+  },
+  "full_block_software_model_executed": true,
+  "full_block_executed_field_scope": "Hardware/Chisel full-block execution remains false; software-only completion is separate.",
+  "fullgraph_numerical_receipt": "fullgraph_numerical_receipt.json",
+  "m128_original_run_status": "FAILED_POST_TERMINAL_ORACLE_TIMEOUT",
+  "m128_postprocessing_status": "PASS_SAME_INPUT_ARCHIVED_REFERENCE_BYTE_COMPARE"
 }

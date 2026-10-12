@@ -40,10 +40,49 @@ M16原运行79.138秒已完成8个数值终态且逐bit相同，但最终元数�
 
 - done：新官方M16/M128参考采集；实际typed input RMS→Q/gate/K/V双M128四阶段前缀；实际输出与官方8门通过；失败发布/模式切换/输入角色和形状前置拒绝小门。
 - done：最终干净源码目录按workflow顺序新建Matrix/Vector小库，26项L3与316项原GDN测试全部通过，26个suite无skip、34份102,262B紧凑工件逐hash核验；全部12,885源码前后无漂移。首轮独立验证额外施加512MB虚拟地址空间限制导致25个MemoryError，原FAIL保留；移除该非workflow限制后137.40秒通过，最高单进程RSS约1.79GiB。未改实际数值或重跑M128。
-- ongoing：本批远端CI工件闭环；C03.2/C04.2/C05中的L3模型子链继续，不能关闭父项。
+- done：8ca23b28 三CI与L3/GDN紧凑工件逐源/hash闭环。
+- ongoing：C03.2/C04.2/C05中的L3模型子链继续，不能关闭父项。
 - to do：同实例Q/K Norm256→partial64 RoPE→KV双span fence→矩形QK/Softmax/PV→sigmoid gate→O/residual/postnorm/FFN/residual。Norm256原PWL/NR算术及原native失败/门限必须保留，新增数值差异要明确阻断。
 - to do：公共Command128和Chisel接入，包括新RMS归约、投影分块、共享Scalar IEEE选择；当前软件通过不冒充这些硬件接口已经执行。
 
 2b21d738的参考源码CI38304400698与payload CI38304400709成功，11测试、3源码/contract身份及1116B紧凑工件逐hash核验。本批新增CI只构建小共享软件库，运行全部source/synthetic测试；不采集模型、不下载权重、不生成RTL。实际大张量仅在本地保留，Git只提交源码、固定版本/hash、紧凑验证摘要和必要历史纯源码。
 
 Qwen2完整cold M128、0.8B L0完整cold→carried M128维持各自已完成软件模型范围；0.8B L3完整block、35B-A3B L0/L3、Chisel/RTL及五block联合验收均未完成，S01/Q35A/U00.2/U01继续open。
+
+## 2026-10-12：同实例 Norm256 / partial64 RoPE
+
+8ca23b28 的三个原push CI均成功：L3软件门38308654550（26测试/4suite/50源）、旧GDN门38308654539（316测试/22suite/49源）、payload38308654572。7006B和21593B紧凑工件的ZIP digest、每项源对应精确commit、suite日志计数/hash与Matrix三源/Vector单源receipt均已核验；没有重跑M128或RTL。
+
+下一批复用同一prefix、TypedMemory与Scalar，真正追加Q Norm256、K Norm256、Q partial64 RoPE、K partial64 RoPE。Norm保留原C1归约、32项PWL和一次NR，Gamma是FP32(1+原BF16weight)；RoPE保留原B1的四产品各BF16 RNE后再相加，后192通道逐bit搬运。没有使用head_trace/pair_trace的结果驱动owner。Norm输入/weight的原有限范围和NV/DZ/OF/UF拒绝策略保留；NX原flags可观察。
+
+Q Norm的norm/gate分属两个真实物理span。新增publish_many先验证两个span全部实际write/ACK及guard，再一次发布；第二span错误不能先暴露第一个。每阶段必须收到实际accepted terminal才启动下一阶段。明确的软件abort边界：未被consumer接受的held success可被当前事务abort取消；普通背压保持结果稳定；已经接受的success不能追溯撤销。该软件sideband不冒充原Chisel拥有abort端口。
+
+默认关闭的只读observer直接记录Scalar实际返回值，开启后保存Norm squares/mean/epsilon/inverse/gamma/scaled/weighted与RoPE两个产品/旋转/输出节点。开关两路输出、请求及计数一致的小门已通过；callback失败只能返回Observer错误，不能发布成功。宿主观察数组不是新增硬件资源。完整capture原始文件可在prelaunch做hash和finite完整性检查，但native中间值不进入执行输入；只有原hidden、checkpoint权重、已验证trig常量进入owner，数值比较在实际终态之后。
+
+最终同源实际M16 cold/carried一次143.816秒模型执行、supervisor144.165秒EXIT0，共16真实终态；每窗425,984B写ACK、671,088,640 Matrix FMA、5,120次Vector16 Add。60份当前/执行源码、4 library/receipt、15输入快照、18actual输出、52observer文件及226native tensors已独立核验。每窗4个前缀门与后段22/57 producer＋5个gate/布局检查通过，BF16全部逐bit相同；FP32最大差2.86102294921875e-6、最大均差9.685754776000977e-8，原0.03125/0.005阈值不变。
+
+这些是八阶段模型前缀的数值与控制证据。其余35/57尚未纳入这份统一producer观察集合：其中input RMS最终输出和Q/K/V四节点已有单独前缀门，RMS内部节点尚无本批因果观察；KV复制/追加与最终root fence、矩形Attention、sigmoid gate和O/FFN尚未执行；未据末输出或部分节点关闭完整block验收。同冻结60源M128于21:29:44 UTC启动一次，600秒软件墙钟预算；需以实际终态和独立原门比较决定结果，不能把M16扩大为M128。
+
+完整后继接线优先复用既有Matrix正常模式与L0尾部，而当前正常模式仍固定旧Qwen2 mask1/QK8步，需显式矩形profile扩展且保留旧模式；cache采用新的K/V staging真实copy＋append，完整block末fence才更换外部root/length/generation。O为2048→1024，FFN为1024→3584→1024，可复用L0已验typed Dense/RMS/Elementwise。上述为待实现清单，不作为本批通过范围。
+
+
+### 软件预算失败及检查开销修复
+
+第一轮双M128在600.001秒内部墙钟预算处受控退出，supervisor600.434秒EXIT1。cold128已经完成八命令，carried128完成RMS/Qgate/K/V四命令，在Q Norm中断；没有owner数值异常，尚未执行最终官方比较。全部60源前后相同、失败保全无错误，已完成输出、未发布staging、观察片段和原FAIL摘要保留。没有用这些部分输出恢复或注入下一轮。
+
+原因之一是纯宿主验真：Norm/RoPE driver每tick对全部已发布输入做raw副本与SHA，并重建coverage集合。M128 Q的1MiB输入和512B权重每tick产生2,098,176B临时payload副本、SHA扫描1,049,088B以及四次frozenset构造。这不是硬件传输或MAC周期。修复在接收时冻结完整guarded字节，每tick仍逐字节严格相等且检查同一coverage；异常容器仍走原frozenset规范化，bytearray基类比较与buffer视图防止自定义比较伪造。接收SHA与末终态前SHA均保留，字节/guard/身份/ACK发布门没有削弱。
+
+这只消除重复拷贝/hash等常数开销，完整比较仍是每tick O(input bytes)，不能宣称解除平方扩展或硬件性能优化。新增的约1,049,344B Q+weight快照是宿主诊断存储，不计为新硬件bank。24项driver回归通过，覆盖实际producer非空coverage、字节/guard篡改、伪造容器、末SHA拒绝和背压下输出/请求计数一致。旧SHA附加检查对照并非执行 untouched 旧driver；原M16及失败M128的真正driver/test源码另行封存，旧PASS没有重绑到修改后源码。
+
+第一轮干净workflow已完成82项L3/316项GDN，398个结果全部OK、无skip，12,911源及40份119,326B工件核验。上述仅两文件检查修复之后，在同一干净环境/已验小ELF上重验完整L3，旧GDN49源未变，316项原证据单独保留。新实际双M128按cold368秒阶段实证和检查成本，以900秒软件预算从原始输入重新执行一次；其终态尚待记录。
+
+
+### 21:51 UTC：完整双M128八阶段前缀终态
+
+唯一修复后运行522.223秒到达16个真实accepted terminals，supervisor522.733秒EXIT0、峰值单子进程RSS315,448KiB。cold/carried八命令分别260.033/254.122秒；每窗3,407,872B实际写ACK、671,088,640 Matrix FMA、40,960次Vector16 Add，以及Scalar Add1,016,704、Mul1,155,840、MulIeeeRne393,344、Div128、Sqrt128。软件tick每窗1,210,434，不是RTL完整周期，仍不据此报告MAC实测利用率。
+
+每窗四个prefix gate、Norm/RoPE统一22/57 producer和五项gate/布局检查均过原门。RMS/QKV仍逐bit相同；新增Q Norm和Q RoPE最终BF16输出cold各4/262144、carried各1/262144处相差1ULP，最大绝对差分别0.015625/0.0078125，仍在原0.03125最大差/0.005均差内。不能称M128全bitexact。第一FP32差异在Q Norm mean，全部FP32节点最坏最大差2.86102294921875e-6、最坏单节点均差1.0628718882799149e-7；原C1/B1算术和门限没有修改。
+
+独立只读审计重新核验60份执行/当前源码、226native raw、23source/29runtime/11payload pins、18actual outputs、52observer文件、七项seal和全部真实terminal/ACK，并重新比较原门，结果PASS。完整summary SHA3d60e35d0278fc1c09a902929949d24415e7fcfad842cb2b8c120cc52c1c3f02，独立审计SHAebdf1f2fabaed46b79a3db6ddda3290dce29e275fc1442d1d56e5ea60c1057d4。修复前失败run里完整cold的九份实际输出共3,407,872B也与新cold逐SHA一致，未将它们作为新运行输入。
+
+最终L3轻门在原干净目录/已验ELF上90测试/10suite通过，14份工件和12,911源前后hash一致；原GDN316/22和49源同身份复用，未重建或重复运行。Git只保存紧凑指标/hash、源码和必要旧纯源码快照，实际输入/观察/输出留在本地。远端本批CI尚待提交后核验；本次只完成C03.2/C04.2/C05模型八阶段前缀子门，公共Command128、Chisel/RTL、实际KV续写及完整L3仍未完成。

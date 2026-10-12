@@ -1,0 +1,39 @@
+{
+  "l3": {
+    "status": "PASS_CI_ARTIFACT_VERIFIED",
+    "commit": "8ca23b28fe5876f7b29038b94c314a1da040fedc",
+    "run": 38308654550,
+    "artifact": 11773971477,
+    "zip_sha256": "c409d394dc876609d403b20711fceb49b1ca62f0e099bd5d65d69e8b7cd63c62",
+    "zip_bytes": 7006,
+    "tests": 26,
+    "suites": 4,
+    "source_files": 50,
+    "matrix_sources": 3,
+    "vector_sources": 1,
+    "all_source_and_log_hashes_verified": true,
+    "full_model_rerun": false,
+    "rtl_executed": false
+  },
+  "gdn": {
+    "status": "PASS_CI_ARTIFACT_VERIFIED",
+    "commit": "8ca23b28fe5876f7b29038b94c314a1da040fedc",
+    "run": 38308654539,
+    "artifact": 11773572538,
+    "zip_sha256": "1a0d63bad768d4d57cbf773af86c9dd14fdd10ef0374cdb24dd7f0d02ef3e954",
+    "zip_bytes": 21593,
+    "tests": 316,
+    "suites": 22,
+    "source_files": 49,
+    "matrix_sources": 3,
+    "vector_sources": 1,
+    "all_source_and_log_hashes_verified": true,
+    "full_model_rerun": false,
+    "rtl_executed": false
+  },
+  "payload": {
+    "run": 38308654572,
+    "commit": "8ca23b28fe5876f7b29038b94c314a1da040fedc",
+    "conclusion": "success"
+  }
+}

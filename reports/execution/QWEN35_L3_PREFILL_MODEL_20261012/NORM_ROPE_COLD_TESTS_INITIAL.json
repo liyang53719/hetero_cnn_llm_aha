@@ -1,0 +1,37 @@
+{
+  "status": "PASS_INDEPENDENT_EVIDENCE_RECHECK",
+  "base": "8ca23b28fe5876f7b29038b94c314a1da040fedc",
+  "overlay_sha256": "47ffe04f4b48c2e0f229edf84262c66a526f0144eac10758b0300256987ed770",
+  "tracked_files": 12897,
+  "tracked_plus_overlay_files": 12911,
+  "source_manifest_sha256": "c3fe22af8d782dc318f96bd9ab48829ea2ac192bde2aa4f7797f31581023ab02",
+  "source_bytes_and_git_index_unchanged": true,
+  "source_work_exists": false,
+  "tests": {
+    "qwen35_l3_model": {
+      "tests": 82,
+      "suites": 10
+    },
+    "qwen35_gdn_model": {
+      "tests": 316,
+      "suites": 22
+    }
+  },
+  "individual_ok_results": 398,
+  "fresh_matrix_elf_sha256": "22da518dc47e641cd7052b84d0c46389fd92d71665276fb671410cf5b994136c",
+  "fresh_vector_elf_sha256": "71275803ea5ab05fd5ef991c133f0a87a9217e062fd012b416dd627aafd12e8d",
+  "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+  "artifacts": 40,
+  "artifact_bytes": 119326,
+  "all_artifact_copies_verified": true,
+  "elf_artifacts": 0,
+  "wall_seconds": 229.48834880400045,
+  "rusage_children_peak_kib": 1883468,
+  "rss_scope_limitations": "The sampled /proc child tree can omit namespace-invisible descendants or short-lived peaks. Its value is a lower bound, not full-tree proof. RUSAGE_CHILDREN ru_maxrss is the largest child high-water RSS, not simultaneous aggregate RSS; the 2.5 GiB guard checks observable live descendants and the child high-water value at each completed step. RLIMIT_AS is unchanged.",
+  "model_weights_downloaded": false,
+  "official_forward_executed": false,
+  "rtl_executed": false,
+  "artifact_manifest_sha256": "aabc4fba6ffb6796536587d98183d7d6d78276c71d8fbf585b9981391035a9b3",
+  "suite_receipts_sha256": "84082f377aa5cbb42c3715770c520950c4dd331a53df305cfeb717d371a82169",
+  "full_workflow_report_sha256": "a1f4cb99c146a0496e54318e00fa09eb5b720cb1af5109154e4e8fbc4a97dfed"
+}

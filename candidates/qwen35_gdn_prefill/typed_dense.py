@@ -184,6 +184,30 @@ class TypedMemory:
         r.check()
         r.published = True
 
+    def publish_many(self, bases, response):
+        """Atomically expose all spans of one accepted successful terminal.
+
+        Validate every span, including guards and complete real ACK coverage,
+        before changing any visibility. The driver owns terminal handshake
+        and tag validation; this byte map enforces the aggregate byte fence.
+        """
+        require(type(bases) is tuple and bases and all(type(b) is int for b in bases)
+                and len(set(bases)) == len(bases), 'distinct explicit output spans required')
+        require(type(response) is tuple and len(response) == 3 and
+                response[1] is None and type(response[2]) is int and self.pending is None,
+                'multi-span publication before successful owner terminal')
+        require(all(b in self.regions for b in bases), 'unknown publication span')
+        regions = tuple(self.regions[b] for b in bases)
+        require(response[2] == sum(r.extent for r in regions),
+                'aggregate terminal byte count does not cover output spans')
+        for r in regions:
+            require(not r.readonly and not r.published and
+                    r.written == r.acknowledged == set(range(0, r.extent, 64)),
+                    'incomplete actual multi-span data/ACK coverage')
+            r.check()
+        for r in regions:
+            r.published = True
+
 
 def dense_wire_authority(owner, job):
     """Select only the two explicit owner implementations, never duck typing.

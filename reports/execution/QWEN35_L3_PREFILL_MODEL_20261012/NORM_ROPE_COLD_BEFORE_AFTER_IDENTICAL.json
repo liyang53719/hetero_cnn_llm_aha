@@ -1,0 +1,45 @@
+{
+  "status": "PASS_COMPLETED_COLD_WINDOW_BYTE_EQUIVALENCE_ONLY",
+  "files": {
+    "cold128.input_norm.actual.bf16le": {
+      "bytes": 262144,
+      "sha256": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee"
+    },
+    "cold128.k.actual.bf16le": {
+      "bytes": 131072,
+      "sha256": "c257149d811a307c3bd7be8d2124ab9528e62ad50a5327a73263948c0fc1cece"
+    },
+    "cold128.k_norm.actual.bf16le": {
+      "bytes": 131072,
+      "sha256": "2e545d0dd90cfb92e7fc2253bf326bcd7eb43cedbd88bf49af29aa87c121b859"
+    },
+    "cold128.k_rope.actual.bf16le": {
+      "bytes": 131072,
+      "sha256": "3de9834067c771fe6dd4e3661b2f590352d2fb7184ab1afad78a7cec848382df"
+    },
+    "cold128.packed_q_gate.actual.bf16le": {
+      "bytes": 1048576,
+      "sha256": "14c85f0db0fb6b76c72b9073a9bf9004cc7d70bb7c42e7663cdbab12b54d06df"
+    },
+    "cold128.q_norm.actual.bf16le": {
+      "bytes": 524288,
+      "sha256": "97ad24184a9878c0aecf86c5fe8b9aaca8deb7593fd7517bf883e5bb39ecf30e"
+    },
+    "cold128.q_rope.actual.bf16le": {
+      "bytes": 524288,
+      "sha256": "0895672b50dcf68ded142856b3d11634458a933dc4fc98c87e4262cf6bb0fb89"
+    },
+    "cold128.raw_gate.actual.bf16le": {
+      "bytes": 524288,
+      "sha256": "9b2954c3d372dee5cb26d11235b65c67241852fd314baa0e085c7c5328cfbc96"
+    },
+    "cold128.v.actual.bf16le": {
+      "bytes": 131072,
+      "sha256": "ec85c552b897a8858aec2f3022bc6455115f2ec862efc4010a574088233778ab"
+    }
+  },
+  "whole_pair_complete": false,
+  "old_run_status": "FAILED_SOFTWARE_BUDGET",
+  "new_run_status": "RUNNING",
+  "scope": "actual acknowledged cold outputs from both independently executed whole-pair runs; no state/output injection"
+}

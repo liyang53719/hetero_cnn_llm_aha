@@ -1,0 +1,265 @@
+{
+  "status": "FAILED",
+  "scope": "ACTUAL_TYPED_L3_RMS_QKV_NORM_ROPE_ONLY",
+  "budget_seconds": 600,
+  "elapsed_seconds": 600.0012397769997,
+  "error": {
+    "message": "actual L3 Norm/RoPE runner: software wall budget exceeded",
+    "type": "ValueError"
+  },
+  "active_at_failure": {
+    "active": "wait",
+    "completed_commands": 4,
+    "role": "q_norm",
+    "terminal": false,
+    "ticks": 1122329
+  },
+  "evidence_preservation_errors": [],
+  "failure_observations_complete": false,
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+    "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen35_attention_prefill/input_fixture.py": "e278764adda77e66f8dbf1df40e03984701913692e0cf5d2fdcc9b571425d7fc",
+    "candidates/qwen35_attention_prefill/native/capture.py": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+    "candidates/qwen35_attention_prefill/norm_rope/__init__.py": "ab7ae0c015e1c1912ec85940f7e118e61185788104df63046f50e7988a35e313",
+    "candidates/qwen35_attention_prefill/norm_rope/compare.py": "51600ac35133f711494f848bb7515e9eba151ed3effd4dd38d4f14e13af41f7d",
+    "candidates/qwen35_attention_prefill/norm_rope/coordinator.py": "37354ce8bab73e7365c79bb92d144b3ffdb87a0e58cf0d98963c34985b3a240b",
+    "candidates/qwen35_attention_prefill/norm_rope/driver.py": "0412aa05ac68072a0f6cb793f8ffc3b169789db972f21fa81bcd8ee743ff62d3",
+    "candidates/qwen35_attention_prefill/norm_rope/fixture.py": "82a1928fc65bea3f997fa8b3212b092cd21696b72d578cff4c2d88cfba48c49f",
+    "candidates/qwen35_attention_prefill/norm_rope/owner.py": "1513521b3b20678d410692407c9bd388d68f6ebeefa4e808b8ff7040a8cc5a57",
+    "candidates/qwen35_attention_prefill/norm_rope/scalar.py": "115dc84f5ac8786e59ba542466e21f8a97003726365a7ba7743fc6c143f433d5",
+    "candidates/qwen35_attention_prefill/norm_rope/test_coordinator.py": "38744f3fc97278fc6ca3143c996601fa52641e2b80ba025dd2a0d382b10758e9",
+    "candidates/qwen35_attention_prefill/norm_rope/test_driver.py": "2704241e55a50d6b0d85e1dae66e2fcb66dc3d23389371eced6f0bb8aef2c61a",
+    "candidates/qwen35_attention_prefill/norm_rope/test_fixture.py": "cf9325cd15fafc5c0904eb62f343fa9b3b77942db80d88bf571ae20c34962144",
+    "candidates/qwen35_attention_prefill/norm_rope/test_owner.py": "19fdd7f0e15d96e6083e07e22cea1d0b0ecbef8000ec42b491475b87ef1f2084",
+    "candidates/qwen35_attention_prefill/norm_rope/test_publication.py": "f58deb0428b0f75ee4c1d7b55f0739a36f0011f4b142da30e115879e099f679a",
+    "candidates/qwen35_attention_prefill/projection_driver.py": "c8ce1a4c1b5cc7f94b3d254a369977eebba75b096b4809c113bfa599a3ac5217",
+    "candidates/qwen35_attention_prefill/projection_profile.json": "e40a928879837eeb74b65ad7a211d8e61d457f8f145169d02839efa109be1063",
+    "candidates/qwen35_attention_prefill/run_norm_rope.py": "573f5719fc404d6dbf195ca65bd2511b57093cc4ef943c54cd74c5d72d957258",
+    "candidates/qwen35_attention_prefill/run_projection_prefix.py": "3a6a470fd9ab88bc7d4beda1ce4ad9406e49d0be74d9cffc7d3092cfc9c3c9fc",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+    "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+    "candidates/qwen35_gdn_prefill/projection_driver.py": "a15add79a9c48b3bcc768d5fa8cec58a3a11f9599285787334837d28f44cb1c5",
+    "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+    "config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97",
+    "config/upstream/qwen3_5_0p8b/layer3_payload_pin.json": "ab9735a92f3b3377737288621019bccd855a5696bd4d02b2d8257cbf24a5b0ac",
+    "scripts/build_shared_matrix_recipe.py": "2bcb269f959c04af287d2c0de9cbaf63169081d897b26ee25a96392e20a9f271",
+    "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+    "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+    "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+    "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd"
+  },
+  "actual_outputs": {
+    "carried128.input_norm": {
+      "bytes": 262144,
+      "file": "carried128.input_norm.actual.bf16le",
+      "published": true,
+      "sha256": "e9050cabc6fd37ca7c59a08ecea996f7e046fa07c5bb258fecdd63822e866347",
+      "terminal_status": null
+    },
+    "carried128.k": {
+      "bytes": 131072,
+      "file": "carried128.k.actual.bf16le",
+      "published": true,
+      "sha256": "24309568eff2f6c08dc8ed33f6efce4d573a12f554c1333d8f4d2511ec686bc5",
+      "terminal_status": null
+    },
+    "carried128.packed_q_gate": {
+      "bytes": 1048576,
+      "file": "carried128.packed_q_gate.actual.bf16le",
+      "published": true,
+      "sha256": "e4614f8b8e1b3221559abd47d83fbf186ca5de6bc22ddd199c1d04c354aa9e72",
+      "terminal_status": null
+    },
+    "carried128.v": {
+      "bytes": 131072,
+      "file": "carried128.v.actual.bf16le",
+      "published": true,
+      "sha256": "564d1c6190c5ddaa1289fdc4d43941a90d21773c042d2f70ea32c4cd03aa15bb",
+      "terminal_status": null
+    },
+    "cold128.input_norm": {
+      "bytes": 262144,
+      "file": "cold128.input_norm.actual.bf16le",
+      "published": true,
+      "sha256": "85e79dcfb6869c03e69290c05b5cb871359958c9a04f21d89c8670c94840e9ee",
+      "terminal_status": null
+    },
+    "cold128.k": {
+      "bytes": 131072,
+      "file": "cold128.k.actual.bf16le",
+      "published": true,
+      "sha256": "c257149d811a307c3bd7be8d2124ab9528e62ad50a5327a73263948c0fc1cece",
+      "terminal_status": null
+    },
+    "cold128.k_norm": {
+      "bytes": 131072,
+      "file": "cold128.k_norm.actual.bf16le",
+      "published": true,
+      "sha256": "2e545d0dd90cfb92e7fc2253bf326bcd7eb43cedbd88bf49af29aa87c121b859",
+      "terminal_status": null
+    },
+    "cold128.k_rope": {
+      "bytes": 131072,
+      "file": "cold128.k_rope.actual.bf16le",
+      "published": true,
+      "sha256": "3de9834067c771fe6dd4e3661b2f590352d2fb7184ab1afad78a7cec848382df",
+      "terminal_status": null
+    },
+    "cold128.packed_q_gate": {
+      "bytes": 1048576,
+      "file": "cold128.packed_q_gate.actual.bf16le",
+      "published": true,
+      "sha256": "14c85f0db0fb6b76c72b9073a9bf9004cc7d70bb7c42e7663cdbab12b54d06df",
+      "terminal_status": null
+    },
+    "cold128.q_norm": {
+      "bytes": 524288,
+      "file": "cold128.q_norm.actual.bf16le",
+      "published": true,
+      "sha256": "97ad24184a9878c0aecf86c5fe8b9aaca8deb7593fd7517bf883e5bb39ecf30e",
+      "terminal_status": null
+    },
+    "cold128.q_rope": {
+      "bytes": 524288,
+      "file": "cold128.q_rope.actual.bf16le",
+      "published": true,
+      "sha256": "0895672b50dcf68ded142856b3d11634458a933dc4fc98c87e4262cf6bb0fb89",
+      "terminal_status": null
+    },
+    "cold128.raw_gate": {
+      "bytes": 524288,
+      "file": "cold128.raw_gate.actual.bf16le",
+      "published": true,
+      "sha256": "9b2954c3d372dee5cb26d11235b65c67241852fd314baa0e085c7c5328cfbc96",
+      "terminal_status": null
+    },
+    "cold128.v": {
+      "bytes": 131072,
+      "file": "cold128.v.actual.bf16le",
+      "published": true,
+      "sha256": "ec85c552b897a8858aec2f3022bc6455115f2ec862efc4010a574088233778ab",
+      "terminal_status": null
+    }
+  },
+  "failure_staging": {
+    "input_norm": {
+      "acknowledged_beats": 4096,
+      "bytes": 262144,
+      "file": "failure_staging/input_norm.partial.bf16le",
+      "published": true,
+      "sha256": "e9050cabc6fd37ca7c59a08ecea996f7e046fa07c5bb258fecdd63822e866347",
+      "written_beats": 4096
+    },
+    "k": {
+      "acknowledged_beats": 2048,
+      "bytes": 131072,
+      "file": "failure_staging/k.partial.bf16le",
+      "published": true,
+      "sha256": "24309568eff2f6c08dc8ed33f6efce4d573a12f554c1333d8f4d2511ec686bc5",
+      "written_beats": 2048
+    },
+    "k_norm": {
+      "acknowledged_beats": 0,
+      "bytes": 131072,
+      "file": "failure_staging/k_norm.partial.bf16le",
+      "published": false,
+      "sha256": "d1be6fe32cce5f95b2b9d1a7b88438cd788a7ff44e5a50c88f7b06e5f3869fe1",
+      "written_beats": 0
+    },
+    "k_rope": {
+      "acknowledged_beats": 0,
+      "bytes": 131072,
+      "file": "failure_staging/k_rope.partial.bf16le",
+      "published": false,
+      "sha256": "d1be6fe32cce5f95b2b9d1a7b88438cd788a7ff44e5a50c88f7b06e5f3869fe1",
+      "written_beats": 0
+    },
+    "packed_q_gate": {
+      "acknowledged_beats": 16384,
+      "bytes": 1048576,
+      "file": "failure_staging/packed_q_gate.partial.bf16le",
+      "published": true,
+      "sha256": "e4614f8b8e1b3221559abd47d83fbf186ca5de6bc22ddd199c1d04c354aa9e72",
+      "written_beats": 16384
+    },
+    "q_norm": {
+      "acknowledged_beats": 3453,
+      "bytes": 524288,
+      "file": "failure_staging/q_norm.partial.bf16le",
+      "published": false,
+      "sha256": "96b6b4c64e64d133bd8c3d5d78662cf939e60b83d99b464b601fc240a6cf888d",
+      "written_beats": 3454
+    },
+    "q_rope": {
+      "acknowledged_beats": 0,
+      "bytes": 524288,
+      "file": "failure_staging/q_rope.partial.bf16le",
+      "published": false,
+      "sha256": "5f262b5adb6c45f940b5549e9a7c5a09a5fdf004ef7234ff74b84bddbdd9d5db",
+      "written_beats": 0
+    },
+    "raw_gate": {
+      "acknowledged_beats": 3448,
+      "bytes": 524288,
+      "file": "failure_staging/raw_gate.partial.bf16le",
+      "published": false,
+      "sha256": "9e709505a1144ad20605bd5b0d203605ffb79586bef3a858cd8fbae864091a49",
+      "written_beats": 3448
+    },
+    "v": {
+      "acknowledged_beats": 2048,
+      "bytes": 131072,
+      "file": "failure_staging/v.partial.bf16le",
+      "published": true,
+      "sha256": "564d1c6190c5ddaa1289fdc4d43941a90d21773c042d2f70ea32c4cd03aa15bb",
+      "written_beats": 2048
+    }
+  },
+  "supervisor": {
+    "returncode": 1,
+    "elapsed_seconds": 600.4341137270003,
+    "max_rss_kib": 218772,
+    "sources_unchanged": true,
+    "started_utc": "2026-10-12T21:29:45.833089+00:00",
+    "ended_utc": "2026-10-12T21:39:46.267438+00:00"
+  },
+  "raw_summary_sha256": "b3730a0c044dd4a37c4b4797ad903eb02a367e5453bac7199f7f874242308d29",
+  "cold_terminal_sha256": "4dea90a2cfb2a7850835bc6e52d23e5555b94e82fbb6485e143b991d23ae5264",
+  "completed_commands": {
+    "cold128": 8,
+    "carried128": 4
+  },
+  "numerical_comparison_executed": false,
+  "reason": "Internal software budget before carried Q Norm completion; not numerical rejection; no checkpoint restore",
+  "raw_data_local_only": true
+}

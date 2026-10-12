@@ -1,0 +1,38 @@
+{
+  "scope": "HOST_VALIDATION_ONLY_NOT_HARDWARE_SPEEDUP",
+  "before_driver_sha256": "0412aa05ac68072a0f6cb793f8ffc3b169789db972f21fa81bcd8ee743ff62d3",
+  "after_driver_sha256": "37e46860c260d77e5477028f0a80581c2a814e9733908512faf30d2aa41ab93b",
+  "test_sha256": "b11db894a06a9c550b5594c9a3f09014b3448bb1040d7d802a26eb9660ad2b91",
+  "test_log_sha256": "4a39888815ce8134f13e4bbec8486d21597a768749226a0efa9ab761e3f63beb",
+  "tests": 24,
+  "all_passed": true,
+  "same_numeric_policy": true,
+  "same_owner_request_and_backpressure_schedule": true,
+  "legacy_comparison_scope": "new driver with and without additional former SHA/coverage checks, not untouched old-driver execution",
+  "independent_review": "No blocker; final two coverage gaps also tested",
+  "diagnostic": {
+    "scope": "host_validation_only_not_hardware_performance",
+    "rows": [
+      {
+        "input_bytes": 131072,
+        "iterations": 200,
+        "seconds": {
+          "sha_raw_copy_frozenset": 0.03131333600049402,
+          "exact_bytes_existing_coverage": 0.009628427000279771
+        },
+        "both_reject_midbyte": true
+      },
+      {
+        "input_bytes": 1048576,
+        "iterations": 200,
+        "seconds": {
+          "sha_raw_copy_frozenset": 0.5627583929999673,
+          "exact_bytes_existing_coverage": 0.1327876440000182
+        },
+        "both_reject_midbyte": true
+      }
+    ],
+    "note": "bytearray equality uses exact full guarded bytes; no SHA collision acceptance; benchmark does not represent whole model elapsed time"
+  },
+  "remaining_asymptotics": "Still O(input bytes) per tick; full-window validation may remain quadratic"
+}

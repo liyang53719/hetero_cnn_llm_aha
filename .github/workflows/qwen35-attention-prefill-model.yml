@@ -44,6 +44,12 @@ on:
       - 'candidates/qwen35_gdn_prefill/test_rms_owner.py'
       - 'candidates/qwen35_gdn_prefill/prep/scalar.py'
       - 'candidates/qwen35_gdn_prefill/conv/scalar.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala'
+      - 'src/heteronpu/qk_norm256_candidate.py'
+      - 'src/heteronpu/rope_bf16_candidate.py'
+      - 'src/heteronpu/qwen35_bf16_reference.py'
+      - 'src/heteronpu/model_geometry.py'
   workflow_dispatch:
 permissions:
   contents: read

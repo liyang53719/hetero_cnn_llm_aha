@@ -1,0 +1,526 @@
+"""Small real scalar/physical-memory gates; no Matrix build, checkpoint or RTL."""
+from dataclasses import FrozenInstanceError, replace
+import struct
+import time
+import unittest
+from unittest.mock import patch
+
+from heteronpu.qk_norm256_candidate import head_trace
+from heteronpu.rope_bf16_candidate import pair_trace
+
+from ...qwen2_resident_matrix.transposed_down.model import WriteCommand, WriteAck
+from ...qwen35_gdn_prefill.typed_dense import FULL_MASK, TypedMemory
+from . import owner as o
+from .driver import TypedNormRopeDriver
+from .scalar import NormRopeScalar
+
+
+def _pack(words):
+    return struct.pack('<' + str(len(words)) + 'H', *words)
+
+
+def _words(raw):
+    return struct.unpack('<' + str(len(raw) // 2) + 'H', raw)
+
+
+def _norm_input(tokens, role):
+    rows = tokens * (8 if role == 0 else 2)
+    words = []
+    for row in range(rows):
+        words.extend((0x3F00 + (row * 13 + lane * 7) % 128) ^ (0x8000 if lane % 3 == 0 else 0)
+                     for lane in range(256))
+        if role == 0:
+            # Gate is copied without numeric inspection, including NaN, Inf,
+            # negative zero and subnormal encodings.
+            words.extend((0x7FC1, 0x7F80, 0x8000, 1)[(row + lane) % 4] for lane in range(256))
+    return _pack(words)
+
+
+def _norm_expected(raw, weights, tokens, role):
+    """Independent frozen reference invoked only after owner completion."""
+    source, w = _words(raw), tuple(v << 16 for v in _words(weights))
+    stride, heads = (512, 8) if role == 0 else (256, 2)
+    output, gate = [], []
+    for row in range(tokens * heads):
+        x = tuple(v << 16 for v in source[row * stride:row * stride + 256])
+        output.extend(v >> 16 for v in head_trace(x, w)['output_bf16'])
+        if role == 0:
+            gate.extend(source[row * stride + 256:(row + 1) * stride])
+    return (_pack(output), _pack(gate)) if role == 0 else (_pack(output),)
+
+
+def _trig_raw(tokens):
+    patterns = ((0x3F80, 0), (0, 0x3F80), (0x3F00, 0xBF00), (0xBF00, 0x3F00))
+    return _pack([word for position in range(tokens) for word in
+                  ([patterns[position % 4][0]] * 32 + [patterns[position % 4][1]] * 32)])
+
+
+def _rope_expected(raw, trig, tokens, heads, position):
+    words, coefficients = _words(raw), _words(trig)
+    output = list(words)
+    for token in range(tokens):
+        c = coefficients[(position + token) * 64:(position + token + 1) * 64]
+        for head in range(heads):
+            start = (token * heads + head) * 256
+            for pair in range(32):
+                trace = pair_trace(words[start + pair] << 16, words[start + pair + 32] << 16,
+                                   c[pair] << 16, c[pair + 32] << 16)
+                output[start + pair], output[start + pair + 32] = (v >> 16 for v in trace[20:22])
+    return _pack(output)
+
+
+class TypedNormRopeTests(unittest.TestCase):
+    def norm(self, role=0, tokens=1):
+        memory, scalar = TypedMemory(), NormRopeScalar()
+        memory.add_readonly(0x10000, _norm_input(tokens, role))
+        memory.add_readonly(0x60000, _pack([0x3C00 + lane % 32 for lane in range(256)]))
+        job = o.QkNorm256Job(41, 0x10000, 0x60000, 0x80000, tokens, role,
+                            0xA0000 if role == 0 else 0)
+        for base, extent in job.output_spans:
+            memory.allocate_output(base, extent)
+        return TypedNormRopeDriver(o.QkNorm256Owner(scalar), memory, job)
+
+    def rope(self, tokens=1, heads=2, position=3):
+        memory, scalar = TypedMemory(), NormRopeScalar()
+        raw = _pack([((0x3E80 + (row * 11 + lane) % 160) ^ (0x8000 if lane % 5 == 0 else 0))
+                     for row in range(tokens * heads) for lane in range(256)])
+        memory.add_readonly(0x10000, raw)
+        memory.add_readonly(0x60000, _trig_raw(position + tokens + 1))
+        memory.allocate_output(0x80000, tokens * heads * 512)
+        job = o.PartialRope64Job(51, 0x10000, 0x60000, 0x80000, tokens, heads,
+                                position, position + tokens + 1)
+        return TypedNormRopeDriver(o.PartialRope64Owner(scalar), memory, job)
+
+    def until(self, driver, condition, controls=None):
+        deadline = time.monotonic() + 25
+        for tick in range(20000):
+            if condition(driver):
+                return
+            self.assertLess(time.monotonic(), deadline, 'small physical-memory wall budget')
+            driver.tick(**({} if controls is None else controls(driver, tick)))
+        self.fail('small physical-memory handshake budget')
+
+    def finish(self, driver, controls=None):
+        self.until(driver, lambda d: d.response is not None, controls)
+        return driver.report()
+
+    def final_write(self, d):
+        return d.pending is not None and d.owner.request.write and d.counts['write_bytes'] == d.job.write_bytes
+
+    def test_q_and_k_outputs_from_actual_scalar_and_physical_writes(self):
+        for role in (0, 1):
+            with self.subTest(role=role):
+                d = self.norm(role)
+                report = self.finish(d, lambda _, i: dict(memory_ready=i % 3 != 0,
+                    memory_response_ready=i % 4 != 0, response_ready=i % 5 != 0))
+                expected = _norm_expected(d.input.raw(), d.weight.raw(), 1, role)
+                self.assertEqual(tuple(r.raw() for r in d.outputs), expected)
+                self.assertTrue(all(r.published for r in d.outputs))
+                self.assertEqual(d.response.status, None)
+                self.assertEqual(d.response.write_bytes, d.job.write_bytes)
+                self.assertEqual(d.counts['read_bytes'], d.job.input_bytes + 512)
+                self.assertEqual(d.counts['write_bytes'], d.counts['ack_bytes'])
+                self.assertEqual(sum(report['owner']['scalar_calls'].values()), d.job.heads * 1290)
+                self.assertEqual(d.owner.counts['owner_results'], 1)
+                self.assertIsNone(d.owner.scalar.client)
+                self.assertFalse(report['rtl_executed'])
+                self.assertFalse(report['native_acceptance'])
+
+    def test_rope_contiguous_rows_absolute_trig_and_unchanged_tail(self):
+        d = self.rope(tokens=2, heads=2, position=3)
+        self.finish(d)
+        self.assertEqual(d.output.raw(), _rope_expected(d.input.raw(), d.trig.raw(), 2, 2, 3))
+        self.assertEqual(sum(d.owner.scalar_counts.values()), 2 * 2 * 192)
+        self.assertEqual(d.counts['read_bytes'], d.job.input_bytes + 2 * 128)
+        for row in range(4):
+            start = row * 512 + 128
+            self.assertEqual(d.output.raw()[start:(row + 1) * 512], d.input.raw()[start:(row + 1) * 512])
+
+    def test_final_ack_and_held_q_terminal_keep_both_spans_private(self):
+        d = self.norm()
+        self.until(d, self.final_write)
+        self.assertEqual(d.memory._resolve(d.owner.request.address).base, d.job.gate_output)
+        for _ in range(4):
+            d.tick(memory_response_ready=False)
+            self.assertTrue(all(not r.published for r in d.outputs))
+            self.assertIsNone(d.owner.ports()['response'])
+        d.tick(response_ready=False)
+        held = d.owner.ports()['response']
+        self.assertIsNotNone(held)
+        for _ in range(4):
+            d.tick(response_ready=False)
+            self.assertEqual(d.owner.ports()['response'], held)
+            for region in d.outputs:
+                self.assertFalse(region.published)
+                with self.assertRaisesRegex(ValueError, 'read before producer terminal'):
+                    d.memory.read64(region.base)
+        with self.assertRaisesRegex(ValueError, 'held completion'):
+            d.owner.reset()
+        d.tick()
+        self.assertTrue(all(r.published for r in d.outputs))
+        self.assertEqual(d.response, held)
+
+    def test_second_output_final_ack_fault_keeps_both_unpublished(self):
+        d = self.norm()
+        self.until(d, self.final_write)
+        d.tick(ack_error=True)
+        self.finish(d)
+        self.assertEqual(d.response.status, 'Memory')
+        self.assertEqual(d.response.write_bytes, d.job.write_bytes - 64)
+        for region in d.outputs:
+            self.assertEqual(region.written, set(range(0, region.extent, 64)))
+            self.assertFalse(region.published)
+        self.assertEqual(d.output.written, d.output.acknowledged)
+        self.assertEqual(len(d.gate_output.written - d.gate_output.acknowledged), 1)
+        self.assertIsNone(d.memory.pending)
+
+    def test_actual_published_q_norm_feeds_rope_on_same_memory_and_scalar(self):
+        norm = self.norm()
+        self.finish(norm)
+        first = tuple(region.raw() for region in norm.outputs)
+        norm.memory.add_readonly(0xC0000, _trig_raw(5))
+        norm.memory.allocate_output(0xE0000, norm.job.vector_bytes)
+        job = o.PartialRope64Job(42, norm.job.output, 0xC0000, 0xE0000, 1, 8, 3, 5)
+        owner = o.PartialRope64Owner(norm.owner.scalar)
+        rope = TypedNormRopeDriver(owner, norm.memory, job)
+        self.finish(rope)
+        self.assertEqual(rope.output.raw(), _rope_expected(first[0], rope.trig.raw(), 1, 8, 3))
+        self.assertIs(rope.input, norm.output)
+        self.assertIs(rope.memory, norm.memory)
+        self.assertIs(rope.owner.scalar, norm.owner.scalar)
+        self.assertEqual(tuple(region.raw() for region in norm.outputs), first)
+        self.assertTrue(all(region.published for region in (*norm.outputs, rope.output)))
+
+    def test_execution_never_calls_composite_reference_or_allocates_another_scalar(self):
+        for make in (self.norm, self.rope):
+            with self.subTest(owner=make.__name__):
+                d = make()
+                with (patch('heteronpu.qk_norm256_candidate.head_trace', side_effect=AssertionError('oracle')),
+                     patch('heteronpu.qk_norm256_candidate.rsqrt_trace', side_effect=AssertionError('oracle')),
+                     patch('heteronpu.rope_bf16_candidate.pair_trace', side_effect=AssertionError('oracle')),
+                     patch.object(NormRopeScalar, '__init__', side_effect=AssertionError('second scalar')),
+                     patch('candidates.qwen35_gdn_prefill.rms_owner.SharedScalar.__init__',
+                           side_effect=AssertionError('second scalar')),
+                     patch('candidates.qwen2_resident_matrix.ffn_attention.matrix_service.MatrixService.__init__',
+                           side_effect=AssertionError('Matrix resource'))):
+                    self.finish(d)
+                self.assertIsNone(d.response.status)
+                if type(d.job) is o.QkNorm256Job:
+                    expected = _norm_expected(d.input.raw(), d.weight.raw(), d.job.tokens, d.job.role)
+                    self.assertEqual(tuple(r.raw() for r in d.outputs), expected)
+                else:
+                    self.assertEqual(d.output.raw(), _rope_expected(d.input.raw(), d.trig.raw(),
+                        d.job.tokens, d.job.heads, d.job.position_base))
+
+    def test_previously_published_output_coexists_with_later_q_failure(self):
+        previous = self.rope()
+        self.finish(previous)
+        saved = previous.output.raw()
+        memory, scalar = previous.memory, previous.owner.scalar
+        memory.add_readonly(0xA0000, _norm_input(1, 0))
+        memory.add_readonly(0xC0000, bytes(512))
+        memory.allocate_output(0xE0000, 4096)
+        memory.allocate_output(0x100000, 4096)
+        d = TypedNormRopeDriver(o.QkNorm256Owner(scalar), memory,
+            o.QkNorm256Job(61, 0xA0000, 0xC0000, 0xE0000, 1, gate_output=0x100000))
+        self.until(d, self.final_write)
+        d.tick(ack_error=True)
+        self.finish(d)
+        self.assertEqual(previous.output.raw(), saved)
+        self.assertTrue(previous.output.published)
+        self.assertTrue(all(not region.published for region in d.outputs))
+
+    def test_unpublished_or_incomplete_input_and_wrong_extent_rejected(self):
+        for defect in ('unpublished', 'incomplete_ack', 'extent'):
+            with self.subTest(defect=defect):
+                memory, scalar = TypedMemory(), NormRopeScalar()
+                source = memory.allocate_output(0x10000, 1024)
+                if defect == 'incomplete_ack':
+                    source.published = True
+                memory.add_readonly(0x60000, bytes(512))
+                memory.allocate_output(0x80000, 2048 if defect == 'extent' else 1024)
+                if defect == 'extent':
+                    source.published = True
+                    source.written = source.acknowledged = set(range(0, 1024, 64))
+                owner = o.QkNorm256Owner(scalar)
+                with self.assertRaises(ValueError):
+                    TypedNormRopeDriver(owner, memory,
+                        o.QkNorm256Job(1, 0x10000, 0x60000, 0x80000, 1, role=1))
+                self.assertTrue(owner.ports()['job_ready'])
+                self.assertIsNone(scalar.client)
+
+    def test_complete_data_ack_without_producer_terminal_is_unreadable(self):
+        memory, scalar = TypedMemory(), NormRopeScalar()
+        source = memory.allocate_output(0x10000, 1024)
+        for index in range(16):
+            memory.begin_write(WriteCommand(source.base + index * 64, 1, index))
+            memory.write_data((0x3F80,) * 32, True, mask=FULL_MASK)
+            memory.acknowledge(WriteAck(index, False, 64))
+        memory.add_readonly(0x60000, bytes(512))
+        memory.allocate_output(0x80000, 1024)
+        with self.assertRaisesRegex(ValueError, 'producer ACK/terminal'):
+            TypedNormRopeDriver(o.QkNorm256Owner(scalar), memory,
+                o.QkNorm256Job(1, source.base, 0x60000, 0x80000, 1, role=1))
+        self.assertFalse(source.published)
+
+    def test_abort_drains_each_accepted_read_and_write_then_reset(self):
+        for make in (self.norm, self.rope):
+            for write in (False, True):
+                with self.subTest(owner=make.__name__, write=write):
+                    d = make()
+                    self.until(d, lambda x: x.pending is not None and x.owner.request.write == write)
+                    accepted = d.owner.request
+                    d.tick(abort=True, memory_response_ready=False)
+                    self.assertEqual(d.owner.state, 'drain')
+                    self.assertIs(d.owner.request, accepted)
+                    self.assertIs(d.owner.scalar.client, d.owner)
+                    with self.assertRaises(ValueError):
+                        d.owner.reset()
+                    self.finish(d)
+                    self.assertEqual(d.response.status, 'Aborted')
+                    self.assertTrue(all(not r.published for r in d.outputs))
+                    self.assertIsNone(d.memory.pending)
+                    self.assertIsNone(d.pending)
+                    self.assertEqual(d.owner.state, 'locked')
+                    d.owner.reset()
+                    self.assertTrue(d.owner.ports()['job_ready'])
+
+    def test_abort_on_held_success_does_not_publish(self):
+        for make in (self.norm, self.rope):
+            for ready in (False, True):
+                with self.subTest(owner=make.__name__, response_ready=ready):
+                    d = make()
+                    self.until(d, lambda x: x.owner.ports()['response'] is not None,
+                               lambda *_: dict(response_ready=False))
+                    self.assertIsNone(d.owner.ports()['response'].status)
+                    d.tick(abort=True, response_ready=ready)
+                    self.assertIsNone(d.response)
+                    self.assertEqual(d.owner.ports()['response'].status, 'Aborted')
+                    self.finish(d)
+                    self.assertEqual(d.response.status, 'Aborted')
+                    self.assertTrue(all(not r.published for r in d.outputs))
+                    self.assertIsNone(d.memory.pending)
+
+    def test_accepted_success_is_final_and_read_fault_drains(self):
+        d = self.rope()
+        self.finish(d)
+        saved = d.response, d.output.raw()
+        with self.assertRaisesRegex(ValueError, 'already retired'):
+            d.tick(abort=True)
+        self.assertEqual((d.response, d.output.raw()), saved)
+        self.assertTrue(d.output.published)
+        fault = self.rope()
+        fault.tick()
+        fault.tick(read_error=True)
+        self.finish(fault)
+        self.assertEqual(fault.response.status, 'Memory')
+        self.assertFalse(fault.output.published)
+        self.assertIsNone(fault.memory.pending)
+
+    def test_mask_tag_and_address_guards_precede_physical_acceptance(self):
+        for defect in ('mask', 'tag', 'range'):
+            with self.subTest(defect=defect):
+                d = self.rope()
+                self.until(d, lambda x: x.owner.ports()['memory'] is not None and x.owner.request.write)
+                q = d.owner.request
+                if defect == 'tag':
+                    d.owner.request = replace(q, tag=q.tag + 1)
+                elif defect == 'range':
+                    d.owner.request = replace(q, address=d.job.input)
+                before = d.counts['write_bytes']
+                if defect == 'mask':
+                    with patch.object(o.MemoryRequest, 'mask', property(lambda _: FULL_MASK ^ 1)):
+                        with self.assertRaisesRegex(ValueError, 'mask'):
+                            d.tick()
+                else:
+                    with self.assertRaises(ValueError):
+                        d.tick()
+                self.assertEqual(d.counts['write_bytes'], before)
+                self.assertIsNone(d.memory.pending)
+                self.assertFalse(d.output.published)
+
+    def test_job_span_scalar_and_transport_identity_are_immutable(self):
+        for defect in ('job', 'scalar', 'storage', 'region', 'source', 'pending'):
+            with self.subTest(defect=defect):
+                d = self.rope()
+                with self.assertRaises(FrozenInstanceError):
+                    d.job.tag = 99
+                if defect == 'job':
+                    object.__setattr__(d.job, 'position_base', 0)
+                elif defect == 'scalar':
+                    d.owner.scalar = NormRopeScalar()
+                elif defect == 'storage':
+                    d.output.storage = bytearray(d.output.storage)
+                elif defect == 'region':
+                    d.output.extent += 64
+                elif defect == 'source':
+                    d.input.storage[64] ^= 1
+                else:
+                    d.tick()
+                    d.pending = replace(d.pending, tag=d.pending.tag + 1)
+                with self.assertRaises(ValueError):
+                    d.tick()
+                self.assertFalse(d.output.published)
+
+    def test_dtype_alias_position_and_56bit_range_rejected_before_admission(self):
+        d = self.rope()
+        for job in (replace(d.job, dtype='fp32'), replace(d.job, output=d.job.input),
+                    replace(d.job, position_base=d.job.trig_tokens), replace(d.job, heads=0),
+                    replace(d.job, output=(1 << 56) - 64), replace(d.job, input=1),
+                    replace(d.job, tag=True)):
+            with self.subTest(job=job), self.assertRaises(ValueError):
+                job.validate()
+        q = o.QkNorm256Job(3, 0x10000, 0x60000, 0x80000, 1, gate_output=0xA0000)
+        for job in (replace(q, gate_output=q.output), replace(q, gate_output=q.input),
+                    replace(q, output=q.weight)):
+            with self.subTest(job=job), self.assertRaisesRegex(ValueError, 'alias'):
+                job.validate()
+
+    def test_every_input_payload_byte_position_is_frozen(self):
+        for region_index in (0, 1):
+            for position in ('first', 'middle', 'last'):
+                with self.subTest(region=region_index, position=position):
+                    d = self.norm()
+                    r = d.inputs[region_index]
+                    frozen = d._source_storage[region_index]
+                    offset = {'first': 64, 'middle': 64 + r.extent // 2,
+                              'last': 63 + r.extent}[position]
+                    before = bytes(r.storage)
+                    r.storage[offset] ^= 1
+                    self.assertEqual(frozen, before)
+                    with self.assertRaisesRegex(ValueError, 'published input'):
+                        d.tick()
+                    self.assertEqual(d.counts['ticks'], 0)
+                    self.assertTrue(all(not x.published for x in d.outputs))
+
+    def test_input_guards_remain_checked_during_held_terminal(self):
+        for offset in (0, -1):
+            d = self.rope()
+            self.until(d, lambda x: x.owner.ports()['response'] is not None,
+                       lambda *_: dict(response_ready=False))
+            d.input.storage[offset] ^= 1
+            with self.assertRaisesRegex(ValueError, 'guard'):
+                d.tick()
+            self.assertFalse(d.output.published)
+            self.assertIsNone(d.response)
+
+    def test_coverage_membership_and_legacy_container_normalization(self):
+        class Lying:
+            def __init__(self, values): self.values = values
+            def __iter__(self): return iter(self.values)
+            def __eq__(self, other): return True
+        for field in ('written', 'acknowledged'):
+            for container in (set, frozenset, list, tuple, Lying):
+                with self.subTest(field=field, container=container.__name__):
+                    d = self.rope()
+                    setattr(d.input, field, container(()))
+                    d.tick()  # Readonly source historically has empty coverage.
+                    setattr(d.input, field, container((0,)))
+                    before = d.counts['ticks']
+                    with self.assertRaisesRegex(ValueError, 'coverage'):
+                        d.tick()
+                    self.assertEqual(d.counts['ticks'], before)
+                    self.assertFalse(d.output.published)
+
+    def test_tick_avoids_input_raw_sha_but_terminal_checks_sha(self):
+        from . import driver as module
+        d = self.rope()
+        original = module._hash
+        with patch.object(module, '_hash', wraps=original) as hashing:
+            for _ in range(3):
+                d.tick(memory_ready=False)
+            self.assertEqual(hashing.call_count, 0)
+            self.until(d, lambda x: x.response is not None)
+            self.assertEqual(hashing.call_count, 2)
+            self.assertEqual(tuple(call.args[0] for call in hashing.call_args_list), d.inputs)
+        self.assertEqual(d.source_hashes, tuple(original(r) for r in d.inputs))
+
+    def test_terminal_digest_mismatch_prevents_publication(self):
+        from . import driver as module
+        d = self.rope()
+        self.until(d, lambda x: x.owner.ports()['response'] is not None,
+                   lambda *_: dict(response_ready=False))
+        with patch.object(module, '_hash', return_value='0' * 64):
+            with self.assertRaisesRegex(ValueError, 'terminal input SHA'):
+                d.tick()
+        self.assertFalse(d.output.published)
+        self.assertIsNone(d.response)
+
+    def test_full_bytes_validation_preserves_arithmetic_and_schedule(self):
+        from . import driver as module
+        actual, legacy_checks = self.norm(), self.norm()
+        original = legacy_checks._check_bindings
+        def legacy():
+            original()
+            for region, coverage, digest in zip(legacy_checks.inputs,
+                    legacy_checks._source_coverage, legacy_checks._source_hashes):
+                self.assertEqual((frozenset(region.written), frozenset(region.acknowledged)), coverage)
+                self.assertEqual(module._hash(region), digest)
+        legacy_checks._check_bindings = legacy
+        controls = lambda _, i: dict(memory_ready=i % 3 != 0,
+            memory_response_ready=i % 4 != 0, response_ready=i % 5 != 0)
+        self.finish(actual, controls)
+        self.finish(legacy_checks, controls)
+        self.assertEqual(tuple(r.raw() for r in actual.outputs),
+                         tuple(r.raw() for r in legacy_checks.outputs))
+        self.assertEqual(actual.counts, legacy_checks.counts)
+        self.assertEqual(actual.owner.scalar_counts, legacy_checks.owner.scalar_counts)
+        self.assertEqual(actual.response, legacy_checks.response)
+        self.assertEqual(actual.source_hashes, legacy_checks.source_hashes)
+
+    def test_published_producer_nonempty_coverage_mutations(self):
+        for field in ('written', 'acknowledged'):
+            for mutation in ('remove', 'wrong_replacement'):
+                with self.subTest(field=field, mutation=mutation):
+                    norm = self.norm(role=1)
+                    self.finish(norm)
+                    norm.memory.add_readonly(0xC0000, _trig_raw(2))
+                    norm.memory.allocate_output(0xE0000, norm.job.vector_bytes)
+                    d = TypedNormRopeDriver(o.PartialRope64Owner(norm.owner.scalar), norm.memory,
+                        o.PartialRope64Job(42, norm.job.output, 0xC0000, 0xE0000, 1, 2, 0, 2))
+                    coverage = set(getattr(d.input, field))
+                    self.assertTrue(coverage)
+                    setattr(d.input, field, set(coverage))
+                    d.tick()  # Equal membership replacement remains valid.
+                    if mutation == 'remove':
+                        getattr(d.input, field).remove(0)
+                    else:
+                        setattr(d.input, field, (coverage - {0}) | {d.input.extent})
+                    before = d.counts['ticks']
+                    with self.assertRaisesRegex(ValueError, 'coverage'):
+                        d.tick()
+                    self.assertEqual(d.counts['ticks'], before)
+                    self.assertFalse(d.output.published)
+
+    def test_storage_subclass_cannot_forge_snapshot_or_comparison(self):
+        class Deceptive(bytearray):
+            def __bytes__(self): return b'forged'
+            def __eq__(self, other): return True
+        memory, scalar = TypedMemory(), NormRopeScalar()
+        source = memory.add_readonly(0x10000, _norm_input(1, 1))
+        source.storage = Deceptive(source.storage)
+        memory.add_readonly(0x60000, bytes(512))
+        memory.allocate_output(0x80000, 1024)
+        d = TypedNormRopeDriver(o.QkNorm256Owner(scalar), memory,
+            o.QkNorm256Job(41, 0x10000, 0x60000, 0x80000, 1, role=1))
+        self.assertEqual(d._source_storage[0], bytes(memoryview(source.storage)))
+        self.assertNotEqual(d._source_storage[0], bytes(source.storage))
+        d.tick()
+        source.storage[64] ^= 1
+        self.assertTrue(source.storage == d._source_storage[0])  # Malicious overload.
+        with self.assertRaisesRegex(ValueError, 'published input'):
+            d.tick()
+        self.assertFalse(d.output.published)
+
+    def test_atomic_publish_validates_all_spans_before_any_flag_changes(self):
+        d = self.norm()
+        self.until(d, lambda x: x.owner.ports()['response'] is not None,
+                   lambda *_: dict(response_ready=False))
+        d.gate_output.acknowledged.remove(d.gate_output.extent - 64)
+        with self.assertRaisesRegex(ValueError, 'coverage'):
+            d.tick()
+        self.assertTrue(all(not r.published for r in d.outputs))
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -9,6 +10,7 @@ import sys
 import time
 
 from .run_projection_prefix import SOURCE_FILES
+from .run_norm_rope import SOURCE_FILES as NORM_ROPE_SOURCE_FILES
 
 ROOT = Path(__file__).resolve().parents[2]
 DIRECTORY = Path(__file__).resolve().parent
@@ -21,7 +23,7 @@ def main():
     args.out.mkdir(parents=True,exist_ok=False)
     dependencies={'candidates/qwen35_gdn_prefill/test_rms_owner.py',
         'candidates/qwen35_gdn_prefill/prep/scalar.py', 'candidates/qwen35_gdn_prefill/conv/scalar.py'}
-    paths=sorted(set(SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
+    paths=sorted(set(SOURCE_FILES) | set(NORM_ROPE_SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
         if p.is_file() and p.suffix in ('.py','.json','.cpp')})
     def hashes():return {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
     sources=hashes()
@@ -30,11 +32,12 @@ def main():
         discovered_tests=[str(p.relative_to(ROOT)) for p in tests],suites=[],tests=0,
         checkpoint_payload_used=False,official_forward_executed=False,rtl_executed=False)
     failed=False
+    child_environment = {**os.environ, 'PYTHONPATH': str(ROOT / 'src')}
     for path in tests:
         module='.'.join(path.relative_to(ROOT).with_suffix('').parts)
         argv=[sys.executable,'-B','-m','unittest',module,'-v'];start=time.monotonic()
         try:
-            result=subprocess.run(argv,cwd=ROOT,capture_output=True,text=True,timeout=180)
+            result=subprocess.run(argv,cwd=ROOT,env=child_environment,capture_output=True,text=True,timeout=180)
             code,log=result.returncode,result.stdout+result.stderr
         except subprocess.TimeoutExpired as error:
             code,log=124,str(error)+'\n'+(error.stdout or b'').decode(errors='replace')+(error.stderr or b'').decode(errors='replace')

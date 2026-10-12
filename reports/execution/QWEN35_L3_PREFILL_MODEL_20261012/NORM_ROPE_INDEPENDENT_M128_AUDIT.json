@@ -1,0 +1,824 @@
+{
+  "arithmetic_execution": false,
+  "checks": {
+    "artifacts": {
+      "actual_outputs": 18,
+      "all_pass": true,
+      "capture_manifest_sha256": "5e797279a26c9384122023b94c8541d925843ae02f8a5e263c234f344cfb152b",
+      "libraries_and_receipts": 4,
+      "local_snapshots": 15,
+      "native_runtime_files": 29,
+      "native_source_files": 23,
+      "native_tensor_journal_sha256": "af17a087cb659f015b256cb72ba091089292743c3fdff77c93e0128e9a8ba00d",
+      "native_tensors": 226
+    },
+    "independent_comparisons": {
+      "all_pass": true,
+      "bf16_bit_mismatches": 18,
+      "fp32_bit_mismatches": 698928,
+      "fp32_max_abs": 2.86102294921875e-06,
+      "fp32_max_node_mean_abs": 1.0628718882799149e-07,
+      "observer_files": 52,
+      "prefix_gates": 8,
+      "stages": 54,
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      }
+    },
+    "input_layout_positions": {
+      "all_pass": true,
+      "captured_trig_table_verified": true,
+      "carried_positions": [
+        128,
+        255
+      ],
+      "cold_positions": [
+        0,
+        127
+      ],
+      "independent_trig_generation": false,
+      "packed_q_first_half_verified": true,
+      "raw_gate_second_half_verified": true,
+      "rope_tail_192_bit_exact": true
+    },
+    "libraries_and_weight_pins": {
+      "all_pass": true,
+      "compile_receipts": 2,
+      "elf_files": 2,
+      "execution_weights": 6,
+      "payload_tensors": 11,
+      "physical_weight_transpose_sha256": {
+        "input_norm": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b",
+        "k": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+        "k_norm": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+        "packed_q_gate": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+        "q_norm": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+        "v": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+      }
+    },
+    "seals": {
+      "actual_outputs": true,
+      "libraries": true,
+      "manifest": true,
+      "observations": true,
+      "snapshots": true,
+      "source": true,
+      "source_snapshot": true
+    },
+    "source_current_and_frozen": {
+      "all_pass": true,
+      "count": 60,
+      "driver_sha256": "37e46860c260d77e5477028f0a80581c2a814e9733908512faf30d2aa41ab93b",
+      "test_driver_sha256": "b11db894a06a9c550b5594c9a3f09014b3448bb1040d7d802a26eb9660ad2b91"
+    },
+    "terminal_and_producer_causality": {
+      "accepted_terminals": 16,
+      "all_pass": true,
+      "physical_input_transpose_and_prior_output_hashes_match": true,
+      "precomparison_actual_terminal_sha256": "ac64f757e48691608280f2b6516f2f49a34073b514f9d597df09cd177f00e8e0",
+      "windows": {
+        "carried128": {
+          "acknowledged_write_bytes": 3407872,
+          "actual_owner_commands": 8,
+          "executed_fmas": 671088640,
+          "scalar_request_count": 2566144,
+          "software_ticks": 1210434,
+          "vector_add_calls": 40960,
+          "vector_add_lanes": 655360
+        },
+        "cold128": {
+          "acknowledged_write_bytes": 3407872,
+          "actual_owner_commands": 8,
+          "executed_fmas": 671088640,
+          "scalar_request_count": 2566144,
+          "software_ticks": 1210434,
+          "vector_add_calls": 40960,
+          "vector_add_lanes": 655360
+        }
+      }
+    }
+  },
+  "completed_utc": "2026-10-12T21:52:02.647210+00:00",
+  "created_utc": "2026-10-12T21:52:02.350566+00:00",
+  "first_numeric_failure": null,
+  "limitations": [
+    "Software eight-stage prefix only",
+    "35 of 57 required producers remain uncomputed",
+    "No full-block, actual KV cache, public HostCommand128, Chisel or RTL acceptance",
+    "Native capture is integrity-read before execution; post-terminal numerical reference reads do not imply no prelaunch reads",
+    "Captured original trig constants are execution inputs; no independent trig generation",
+    "Current CI workflow and independent kv_cache folder are outside the frozen 60-source closure"
+  ],
+  "model_or_test_rerun": false,
+  "numerical_comparisons": {
+    "carried128": {
+      "computed_required_producers": 22,
+      "layout_and_gate_checks": 5,
+      "stages": {
+        "k_norm.gamma": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0035.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.add.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "k_norm.head_major": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0038.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "k_norm.inverse": {
+          "bit_mismatches": 155,
+          "max_abs": 4.76837158203125e-07,
+          "mean_abs": 1.0058283805847168e-07,
+          "native_tensor": "carried128.aten0032.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.rsqrt.default|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.mean": {
+          "bit_mismatches": 134,
+          "max_abs": 8.940696716308594e-08,
+          "mean_abs": 2.0023435354232788e-08,
+          "native_tensor": "carried128.aten0030.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.mean.dim|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.mean_eps": {
+          "bit_mismatches": 134,
+          "max_abs": 8.940696716308594e-08,
+          "mean_abs": 2.0023435354232788e-08,
+          "native_tensor": "carried128.aten0031.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.add.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.output": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0037.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|cast_bf16|0",
+          "storage_dtype": "BF16"
+        },
+        "k_norm.scaled": {
+          "bit_mismatches": 35317,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 4.455282984205944e-08,
+          "native_tensor": "carried128.aten0033.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.mul.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.squares": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0029.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.pow.Tensor_Scalar|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.weighted": {
+          "bit_mismatches": 31973,
+          "max_abs": 1.430511474609375e-06,
+          "mean_abs": 6.226953921939504e-08,
+          "native_tensor": "carried128.aten0036.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.mul.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "k_rope.cos_product": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0055.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|2",
+          "storage_dtype": "BF16"
+        },
+        "k_rope.output": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0063.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "k_rope.rotated": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0061.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.add.Tensor|1",
+          "storage_dtype": "BF16"
+        },
+        "k_rope.sin_product": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0060.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|3",
+          "storage_dtype": "BF16"
+        },
+        "q_norm.gamma": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0022.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.add.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "q_norm.head_major": {
+          "bit_mismatches": 1,
+          "max_abs": 0.0078125,
+          "mean_abs": 2.9802322387695312e-08,
+          "native_tensor": "carried128.aten0025.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "q_norm.inverse": {
+          "bit_mismatches": 657,
+          "max_abs": 5.960464477539062e-07,
+          "mean_abs": 1.0628718882799149e-07,
+          "native_tensor": "carried128.aten0019.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.rsqrt.default|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.mean": {
+          "bit_mismatches": 611,
+          "max_abs": 1.7881393432617188e-07,
+          "mean_abs": 2.4941982701420784e-08,
+          "native_tensor": "carried128.aten0017.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.mean.dim|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.mean_eps": {
+          "bit_mismatches": 611,
+          "max_abs": 1.7881393432617188e-07,
+          "mean_abs": 2.4941982701420784e-08,
+          "native_tensor": "carried128.aten0018.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.add.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.output": {
+          "bit_mismatches": 1,
+          "max_abs": 0.0078125,
+          "mean_abs": 2.9802322387695312e-08,
+          "native_tensor": "carried128.aten0024.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|cast_bf16|0",
+          "storage_dtype": "BF16"
+        },
+        "q_norm.scaled": {
+          "bit_mismatches": 150264,
+          "max_abs": 2.86102294921875e-06,
+          "mean_abs": 4.554357321655267e-08,
+          "native_tensor": "carried128.aten0020.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.mul.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.squares": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0016.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.pow.Tensor_Scalar|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.weighted": {
+          "bit_mismatches": 136263,
+          "max_abs": 2.86102294921875e-06,
+          "mean_abs": 6.43890926983054e-08,
+          "native_tensor": "carried128.aten0023.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.mul.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "q_rope.cos_product": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0048.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|0",
+          "storage_dtype": "BF16"
+        },
+        "q_rope.output": {
+          "bit_mismatches": 1,
+          "max_abs": 0.0078125,
+          "mean_abs": 2.9802322387695312e-08,
+          "native_tensor": "carried128.aten0062.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "q_rope.rotated": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0054.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.add.Tensor|0",
+          "storage_dtype": "BF16"
+        },
+        "q_rope.sin_product": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0053.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|1",
+          "storage_dtype": "BF16"
+        },
+        "raw_gate": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "carried128.aten0013.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        }
+      },
+      "uncomputed_required_producer_keys": [
+        "input_layernorm|aten.pow.Tensor_Scalar|0",
+        "input_layernorm|aten.mean.dim|0",
+        "input_layernorm|aten.add.Tensor|0",
+        "input_layernorm|aten.rsqrt.default|0",
+        "input_layernorm|aten.mul.Tensor|0",
+        "input_layernorm|aten.add.Tensor|1",
+        "input_layernorm|aten.mul.Tensor|1",
+        "input_layernorm|cast_bf16|0",
+        "self_attn.q_proj|aten.linear.default|0",
+        "self_attn.k_proj|aten.linear.default|0",
+        "self_attn.v_proj|aten.linear.default|0",
+        "self_attn|aten.matmul.default|0",
+        "self_attn|aten.mul.Tensor|4",
+        "self_attn|aten.add.Tensor|2",
+        "self_attn|aten.softmax.int|0",
+        "self_attn|cast_bf16|0",
+        "self_attn|aten.matmul.default|1",
+        "self_attn|aten.sigmoid.default|0",
+        "self_attn|aten.mul.Tensor|5",
+        "self_attn.o_proj|aten.linear.default|0",
+        "|aten.add.Tensor|0",
+        "post_attention_layernorm|aten.pow.Tensor_Scalar|0",
+        "post_attention_layernorm|aten.mean.dim|0",
+        "post_attention_layernorm|aten.add.Tensor|0",
+        "post_attention_layernorm|aten.rsqrt.default|0",
+        "post_attention_layernorm|aten.mul.Tensor|0",
+        "post_attention_layernorm|aten.add.Tensor|1",
+        "post_attention_layernorm|aten.mul.Tensor|1",
+        "post_attention_layernorm|cast_bf16|0",
+        "mlp.gate_proj|aten.linear.default|0",
+        "mlp.act_fn|aten.silu.default|0",
+        "mlp.up_proj|aten.linear.default|0",
+        "mlp|aten.mul.Tensor|0",
+        "mlp.down_proj|aten.linear.default|0",
+        "|aten.add.Tensor|1"
+      ]
+    },
+    "cold128": {
+      "computed_required_producers": 22,
+      "layout_and_gate_checks": 5,
+      "stages": {
+        "k_norm.gamma": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0035.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.add.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "k_norm.head_major": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0038.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "k_norm.inverse": {
+          "bit_mismatches": 166,
+          "max_abs": 3.5762786865234375e-07,
+          "mean_abs": 9.685754776000977e-08,
+          "native_tensor": "cold128.aten0032.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.rsqrt.default|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.mean": {
+          "bit_mismatches": 149,
+          "max_abs": 1.1920928955078125e-07,
+          "mean_abs": 2.695014700293541e-08,
+          "native_tensor": "cold128.aten0030.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.mean.dim|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.mean_eps": {
+          "bit_mismatches": 149,
+          "max_abs": 1.1920928955078125e-07,
+          "mean_abs": 2.695014700293541e-08,
+          "native_tensor": "cold128.aten0031.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.add.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.output": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0037.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|cast_bf16|0",
+          "storage_dtype": "BF16"
+        },
+        "k_norm.scaled": {
+          "bit_mismatches": 38656,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 4.689572258298469e-08,
+          "native_tensor": "cold128.aten0033.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.mul.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.squares": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0029.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.pow.Tensor_Scalar|0",
+          "storage_dtype": "F32"
+        },
+        "k_norm.weighted": {
+          "bit_mismatches": 35011,
+          "max_abs": 1.9073486328125e-06,
+          "mean_abs": 6.535869195856137e-08,
+          "native_tensor": "cold128.aten0036.result",
+          "passed": true,
+          "producer_key": "self_attn.k_norm|aten.mul.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "k_rope.cos_product": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0055.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|2",
+          "storage_dtype": "BF16"
+        },
+        "k_rope.output": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0063.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "k_rope.rotated": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0061.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.add.Tensor|1",
+          "storage_dtype": "BF16"
+        },
+        "k_rope.sin_product": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0060.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|3",
+          "storage_dtype": "BF16"
+        },
+        "q_norm.gamma": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0022.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.add.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "q_norm.head_major": {
+          "bit_mismatches": 4,
+          "max_abs": 0.015625,
+          "mean_abs": 1.4156103134155273e-07,
+          "native_tensor": "cold128.aten0025.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "q_norm.inverse": {
+          "bit_mismatches": 593,
+          "max_abs": 4.76837158203125e-07,
+          "mean_abs": 8.597271516919136e-08,
+          "native_tensor": "cold128.aten0019.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.rsqrt.default|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.mean": {
+          "bit_mismatches": 641,
+          "max_abs": 3.5762786865234375e-07,
+          "mean_abs": 3.557943273335695e-08,
+          "native_tensor": "cold128.aten0017.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.mean.dim|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.mean_eps": {
+          "bit_mismatches": 641,
+          "max_abs": 3.5762786865234375e-07,
+          "mean_abs": 3.557943273335695e-08,
+          "native_tensor": "cold128.aten0018.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.add.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.output": {
+          "bit_mismatches": 4,
+          "max_abs": 0.015625,
+          "mean_abs": 1.4156103134155273e-07,
+          "native_tensor": "cold128.aten0024.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|cast_bf16|0",
+          "storage_dtype": "BF16"
+        },
+        "q_norm.scaled": {
+          "bit_mismatches": 139511,
+          "max_abs": 2.384185791015625e-06,
+          "mean_abs": 4.037612126367093e-08,
+          "native_tensor": "cold128.aten0020.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.mul.Tensor|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.squares": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0016.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.pow.Tensor_Scalar|0",
+          "storage_dtype": "F32"
+        },
+        "q_norm.weighted": {
+          "bit_mismatches": 127292,
+          "max_abs": 2.86102294921875e-06,
+          "mean_abs": 5.694933238268446e-08,
+          "native_tensor": "cold128.aten0023.result",
+          "passed": true,
+          "producer_key": "self_attn.q_norm|aten.mul.Tensor|1",
+          "storage_dtype": "F32"
+        },
+        "q_rope.cos_product": {
+          "bit_mismatches": 1,
+          "max_abs": 0.015625,
+          "mean_abs": 2.384185791015625e-07,
+          "native_tensor": "cold128.aten0048.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|0",
+          "storage_dtype": "BF16"
+        },
+        "q_rope.output": {
+          "bit_mismatches": 4,
+          "max_abs": 0.015625,
+          "mean_abs": 1.4156103134155273e-07,
+          "native_tensor": "cold128.aten0062.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        },
+        "q_rope.rotated": {
+          "bit_mismatches": 1,
+          "max_abs": 0.015625,
+          "mean_abs": 2.384185791015625e-07,
+          "native_tensor": "cold128.aten0054.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.add.Tensor|0",
+          "storage_dtype": "BF16"
+        },
+        "q_rope.sin_product": {
+          "bit_mismatches": 1,
+          "max_abs": 0.0001220703125,
+          "mean_abs": 1.862645149230957e-09,
+          "native_tensor": "cold128.aten0053.result",
+          "passed": true,
+          "producer_key": "self_attn|aten.mul.Tensor|1",
+          "storage_dtype": "BF16"
+        },
+        "raw_gate": {
+          "bit_mismatches": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "native_tensor": "cold128.aten0013.result",
+          "passed": true,
+          "producer_key": null,
+          "storage_dtype": "BF16"
+        }
+      },
+      "uncomputed_required_producer_keys": [
+        "input_layernorm|aten.pow.Tensor_Scalar|0",
+        "input_layernorm|aten.mean.dim|0",
+        "input_layernorm|aten.add.Tensor|0",
+        "input_layernorm|aten.rsqrt.default|0",
+        "input_layernorm|aten.mul.Tensor|0",
+        "input_layernorm|aten.add.Tensor|1",
+        "input_layernorm|aten.mul.Tensor|1",
+        "input_layernorm|cast_bf16|0",
+        "self_attn.q_proj|aten.linear.default|0",
+        "self_attn.k_proj|aten.linear.default|0",
+        "self_attn.v_proj|aten.linear.default|0",
+        "self_attn|aten.matmul.default|0",
+        "self_attn|aten.mul.Tensor|4",
+        "self_attn|aten.add.Tensor|2",
+        "self_attn|aten.softmax.int|0",
+        "self_attn|cast_bf16|0",
+        "self_attn|aten.matmul.default|1",
+        "self_attn|aten.sigmoid.default|0",
+        "self_attn|aten.mul.Tensor|5",
+        "self_attn.o_proj|aten.linear.default|0",
+        "|aten.add.Tensor|0",
+        "post_attention_layernorm|aten.pow.Tensor_Scalar|0",
+        "post_attention_layernorm|aten.mean.dim|0",
+        "post_attention_layernorm|aten.add.Tensor|0",
+        "post_attention_layernorm|aten.rsqrt.default|0",
+        "post_attention_layernorm|aten.mul.Tensor|0",
+        "post_attention_layernorm|aten.add.Tensor|1",
+        "post_attention_layernorm|aten.mul.Tensor|1",
+        "post_attention_layernorm|cast_bf16|0",
+        "mlp.gate_proj|aten.linear.default|0",
+        "mlp.act_fn|aten.silu.default|0",
+        "mlp.up_proj|aten.linear.default|0",
+        "mlp|aten.mul.Tensor|0",
+        "mlp.down_proj|aten.linear.default|0",
+        "|aten.add.Tensor|1"
+      ]
+    }
+  },
+  "prefix_gates": {
+    "carried128.input_norm": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "carried128.k": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "carried128.packed_q_gate": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "carried128.v": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "cold128.input_norm": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "cold128.k": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "cold128.packed_q_gate": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    },
+    "cold128.v": {
+      "bit_mismatches": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "passed": true
+    }
+  },
+  "report_compared_using": "Independent NumPy raw-word decoding, reshape/transposition, hash and error metrics only; no repository model/comparator imported",
+  "run_directory": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/l3_norm_rope_actual_20261012/actual_m128_02",
+  "schema": 1,
+  "scope": "READ_ONLY_INDEPENDENT_ACTUAL_M128_NORM_ROPE_EVIDENCE_AUDIT",
+  "source_review": {
+    "driver_change_from_M16": "Host integrity snapshots, exact bytearray equality and terminal SHA recheck; no arithmetic or owner path changes",
+    "evidence": "Read frozen run_norm_rope.py, input_fixture.py, norm_rope fixture/compare/coordinator/driver/owner/scalar; current source hashes match frozen closure",
+    "input_initialization": "Original hidden, original checkpoint weights and captured original trig only",
+    "native_integrity_reads_before_launch": true,
+    "native_intermediate_values_used_as_execution_inputs": false,
+    "numerical_comparison_after_accepted_terminals": true,
+    "observer_return_value_used_by_owner": false
+  },
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+    "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen35_attention_prefill/input_fixture.py": "e278764adda77e66f8dbf1df40e03984701913692e0cf5d2fdcc9b571425d7fc",
+    "candidates/qwen35_attention_prefill/native/capture.py": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+    "candidates/qwen35_attention_prefill/norm_rope/__init__.py": "ab7ae0c015e1c1912ec85940f7e118e61185788104df63046f50e7988a35e313",
+    "candidates/qwen35_attention_prefill/norm_rope/compare.py": "51600ac35133f711494f848bb7515e9eba151ed3effd4dd38d4f14e13af41f7d",
+    "candidates/qwen35_attention_prefill/norm_rope/coordinator.py": "37354ce8bab73e7365c79bb92d144b3ffdb87a0e58cf0d98963c34985b3a240b",
+    "candidates/qwen35_attention_prefill/norm_rope/driver.py": "37e46860c260d77e5477028f0a80581c2a814e9733908512faf30d2aa41ab93b",
+    "candidates/qwen35_attention_prefill/norm_rope/fixture.py": "82a1928fc65bea3f997fa8b3212b092cd21696b72d578cff4c2d88cfba48c49f",
+    "candidates/qwen35_attention_prefill/norm_rope/owner.py": "1513521b3b20678d410692407c9bd388d68f6ebeefa4e808b8ff7040a8cc5a57",
+    "candidates/qwen35_attention_prefill/norm_rope/scalar.py": "115dc84f5ac8786e59ba542466e21f8a97003726365a7ba7743fc6c143f433d5",
+    "candidates/qwen35_attention_prefill/norm_rope/test_coordinator.py": "38744f3fc97278fc6ca3143c996601fa52641e2b80ba025dd2a0d382b10758e9",
+    "candidates/qwen35_attention_prefill/norm_rope/test_driver.py": "b11db894a06a9c550b5594c9a3f09014b3448bb1040d7d802a26eb9660ad2b91",
+    "candidates/qwen35_attention_prefill/norm_rope/test_fixture.py": "cf9325cd15fafc5c0904eb62f343fa9b3b77942db80d88bf571ae20c34962144",
+    "candidates/qwen35_attention_prefill/norm_rope/test_owner.py": "19fdd7f0e15d96e6083e07e22cea1d0b0ecbef8000ec42b491475b87ef1f2084",
+    "candidates/qwen35_attention_prefill/norm_rope/test_publication.py": "f58deb0428b0f75ee4c1d7b55f0739a36f0011f4b142da30e115879e099f679a",
+    "candidates/qwen35_attention_prefill/projection_driver.py": "c8ce1a4c1b5cc7f94b3d254a369977eebba75b096b4809c113bfa599a3ac5217",
+    "candidates/qwen35_attention_prefill/projection_profile.json": "e40a928879837eeb74b65ad7a211d8e61d457f8f145169d02839efa109be1063",
+    "candidates/qwen35_attention_prefill/run_norm_rope.py": "573f5719fc404d6dbf195ca65bd2511b57093cc4ef943c54cd74c5d72d957258",
+    "candidates/qwen35_attention_prefill/run_projection_prefix.py": "3a6a470fd9ab88bc7d4beda1ce4ad9406e49d0be74d9cffc7d3092cfc9c3c9fc",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+    "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+    "candidates/qwen35_gdn_prefill/projection_driver.py": "a15add79a9c48b3bcc768d5fa8cec58a3a11f9599285787334837d28f44cb1c5",
+    "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "6b633b912d0c226dc57a456044c28dd4a00bbb789451997dee5fee1d4b155bbe",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+    "config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97",
+    "config/upstream/qwen3_5_0p8b/layer3_payload_pin.json": "ab9735a92f3b3377737288621019bccd855a5696bd4d02b2d8257cbf24a5b0ac",
+    "scripts/build_shared_matrix_recipe.py": "2bcb269f959c04af287d2c0de9cbaf63169081d897b26ee25a96392e20a9f271",
+    "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+    "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+    "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+    "src/heteronpu/qwen35_bf16_reference.py": "f6a8f9cea441552baf099de174247b47f4c1004fee5b3e5790dfa010083665b9",
+    "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd"
+  },
+  "status": "PASS_INDEPENDENT_READONLY_ACTUAL_M128_PREFIX_ONLY",
+  "summary_sha256": "3d60e35d0278fc1c09a902929949d24415e7fcfad842cb2b8c120cc52c1c3f02",
+  "summary_status": "PASS_ACTUAL_TYPED_NORM_ROPE_PREFIX_ONLY",
+  "supervisor": {
+    "elapsed_seconds": 522.7330441739996,
+    "ended_utc": "2026-10-12T21:51:29.462819+00:00",
+    "max_rss_kib": 315448,
+    "returncode": 0,
+    "started_utc": "2026-10-12T21:42:46.729428+00:00"
+  },
+  "supervisor_sha256": "532dc9904fdbd04b899b3f2a4fe1fbea2d005ff0aebaf2a1f22f7d570282c10b"
+}

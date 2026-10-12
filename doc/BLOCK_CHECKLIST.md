@@ -92,3 +92,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 2026-10-12 15:42 UTC：Qwen2-1.5B L0完整cold M128公开21命令对应软件模型已完成，官方27已分配因果节点门均通过，116源/实际ACK/固定配方经独立复核。[完整记录](QWEN2_QKV_BLOCK_REDUCTION_20261012_CN.md)。Q21.3仍ongoing，保留full29缺口、carried128/Chisel/RTL未验；Q22/Q23及其余四block M128不关闭。新增共享Add的原始事件已记录，完整周期预测待纳入其bank/Vector开销，不声称达到80%利用率。
 
 38b943c 的model/frontend/payload三门及下载工件已闭环：新118模型小测＋原71数值策略小测，159 CHIRRTL，均保持各自身份；未把这些CI小门称为M128重放或RTL数值验收。
+
+2026-10-12 0.8B L0 typed owner前缀：真实embedding→RMS→QKV/Z/AB，两个M128输入窗口8个owner终态及原12项前缀数值门通过。见[来源与范围](QWEN35_GDN_PREFILL_PREFIX_20261012_CN.md)。这仍是S04/Q35B下的模型前置子门，未接公共Command128/Conv/chunk/state/FFN、无新RTL；第二输入窗口不等于carried GDN状态验收。S04/Q35B/U00.2/U01及五block M128总门保持open。

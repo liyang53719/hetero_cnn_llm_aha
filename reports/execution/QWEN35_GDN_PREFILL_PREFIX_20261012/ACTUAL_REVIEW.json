@@ -1,0 +1,346 @@
+{
+  "checks": 496,
+  "created_at_utc": "2026-10-12T16:30:13.257695+00:00",
+  "exported_bf16_file_sha256": {
+    "128": {
+      "carried128.a.official.bf16le": "03d74b35892ee02e2c099c2001d004da9eb3cf12b187050285f2f669e413bccf",
+      "carried128.ab.actual.bf16le": "f356b1300a7d7bf856322ba8b87b4f9c315470cf153af2347ceea93ba0ad0268",
+      "carried128.ab.fixed.bf16le": "f356b1300a7d7bf856322ba8b87b4f9c315470cf153af2347ceea93ba0ad0268",
+      "carried128.ab.official.bf16le": "f356b1300a7d7bf856322ba8b87b4f9c315470cf153af2347ceea93ba0ad0268",
+      "carried128.b.official.bf16le": "e759bb00afd11b766299c5fa524ebcad2f17b9b0ecf21c5eeeae55e23cf76f15",
+      "carried128.input.bf16le": "01e6c989b40eb2a9774cb9fe93f9818fb18128e996771ec581fdb23587270fc0",
+      "carried128.input_norm.actual.bf16le": "3769b764d059795eb8ddbcefc43b102e61ca5b3bdf9c7c872038ed5dff94be7b",
+      "carried128.input_norm.official.bf16le": "3769b764d059795eb8ddbcefc43b102e61ca5b3bdf9c7c872038ed5dff94be7b",
+      "carried128.qkv.actual.bf16le": "dcd802e2eb1c602a10e9c85346b0b38410fc6ff24c54b51e4b6e2988806e1759",
+      "carried128.qkv.fixed.bf16le": "dcd802e2eb1c602a10e9c85346b0b38410fc6ff24c54b51e4b6e2988806e1759",
+      "carried128.qkv.official.bf16le": "bfda990bccf7178505f679057fc5cf5957b0ed263efb82bcbcdfa57a17ff0d27",
+      "carried128.z.actual.bf16le": "334cb252c6b3670e0a0ba5eb5adc108a35c149f0e26466da7139a9e09566b418",
+      "carried128.z.fixed.bf16le": "334cb252c6b3670e0a0ba5eb5adc108a35c149f0e26466da7139a9e09566b418",
+      "carried128.z.official.bf16le": "2a7ba0a0fc92d62f01de65caf8a2a25cb925f015e8b896bc0309bd4a3dbfccec",
+      "cold128.a.official.bf16le": "7e25bf815b87c9444969f635d42948aac227135fbd972a75e436c837b526a3c8",
+      "cold128.ab.actual.bf16le": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+      "cold128.ab.fixed.bf16le": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+      "cold128.ab.official.bf16le": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+      "cold128.b.official.bf16le": "528ccb70fbb4cb4416fa92198706116358713e6904c5069d9c918c36847df9fc",
+      "cold128.input.bf16le": "6e8c1a99dd98313abeb693afbe1fdf3aece5ebfab4b19f4737f3b663a0013b54",
+      "cold128.input_norm.actual.bf16le": "a6caca5d99ec4ae6328417a5e017ad7501d8b6dfec3798e4f5a4230bbcaef468",
+      "cold128.input_norm.official.bf16le": "a6caca5d99ec4ae6328417a5e017ad7501d8b6dfec3798e4f5a4230bbcaef468",
+      "cold128.qkv.actual.bf16le": "b6c6565b27ea0c2e998fe7f38e9d0a69d073bc42bc257cca124a9ed76e88631c",
+      "cold128.qkv.fixed.bf16le": "b6c6565b27ea0c2e998fe7f38e9d0a69d073bc42bc257cca124a9ed76e88631c",
+      "cold128.qkv.official.bf16le": "d2e925b4bb4114a2696441c7004102ad51ae077be3161f7b293fcafbaee643f9",
+      "cold128.z.actual.bf16le": "f7a99b76ae1fbed4d3d9ef4631f700e28ad2207484e992a4cec446da16b9f504",
+      "cold128.z.fixed.bf16le": "f7a99b76ae1fbed4d3d9ef4631f700e28ad2207484e992a4cec446da16b9f504",
+      "cold128.z.official.bf16le": "357084d2ea03a68b6e9db00378fa17aad20741bf9964286c0f1b358a38d437a2"
+    },
+    "16": {
+      "carried128.a.official.bf16le": "c21feac3ee79b0453d47e435144170a2461e4e544bb60add51a7aed774daca60",
+      "carried128.ab.actual.bf16le": "f503d215da5a6fcc06f836ff08c30273e238c4bf0dda88d66ba6cf8214798cf5",
+      "carried128.ab.fixed.bf16le": "f503d215da5a6fcc06f836ff08c30273e238c4bf0dda88d66ba6cf8214798cf5",
+      "carried128.ab.official.bf16le": "f503d215da5a6fcc06f836ff08c30273e238c4bf0dda88d66ba6cf8214798cf5",
+      "carried128.b.official.bf16le": "83f87b8606ee2802aabbbc8fd380bcaf55aedc7d1ccc1851df1d7e2f6b9cb44a",
+      "carried128.input.bf16le": "a24b815636c594465e7510c3c98cf74447f6a166f301cc1ecf9d3cedb3daf326",
+      "carried128.input_norm.actual.bf16le": "4ecb4c4914387d490a5a7150f9b5d5045ffa3e4bb89c899499e300b8c80dd33a",
+      "carried128.input_norm.official.bf16le": "4ecb4c4914387d490a5a7150f9b5d5045ffa3e4bb89c899499e300b8c80dd33a",
+      "carried128.qkv.actual.bf16le": "eadc7d784324a574697cad444e72b99eda37f5d48e93593752abbe111559aaec",
+      "carried128.qkv.fixed.bf16le": "eadc7d784324a574697cad444e72b99eda37f5d48e93593752abbe111559aaec",
+      "carried128.qkv.official.bf16le": "642d3cd39ae29ceeade550c29b792c557e738570984ecb126002d17805c68442",
+      "carried128.z.actual.bf16le": "1f1ef5f6d46e890c9f7df7eca622b453658cc84d4a89e4ed2b5fb92fc8f9e710",
+      "carried128.z.fixed.bf16le": "1f1ef5f6d46e890c9f7df7eca622b453658cc84d4a89e4ed2b5fb92fc8f9e710",
+      "carried128.z.official.bf16le": "d36cfb02cef7e9f41af83a30215e194c365f8562311633909db6b3a0615e0832",
+      "cold128.a.official.bf16le": "e8964aefd29c337f1a2cca0ab3ebaf033add5dee125b224ae97109af2d8b61c7",
+      "cold128.ab.actual.bf16le": "d69951ece8213211cee0efb38e0d0d67e9bf9437cc32c82142e5fa1ddbdd61f7",
+      "cold128.ab.fixed.bf16le": "d69951ece8213211cee0efb38e0d0d67e9bf9437cc32c82142e5fa1ddbdd61f7",
+      "cold128.ab.official.bf16le": "d69951ece8213211cee0efb38e0d0d67e9bf9437cc32c82142e5fa1ddbdd61f7",
+      "cold128.b.official.bf16le": "1c1859d3ca4dfb2a6f4b83f2898aa391225f3c828bd3315d0503800b497494bc",
+      "cold128.input.bf16le": "88916e8b8abd3c9b465099058cf6a5c40a43f1c7d102a294eefdb2e9afe2940e",
+      "cold128.input_norm.actual.bf16le": "9232663cb4be486a7df33f9b7b8cfb3684631c18833808b95378f6cdb0054582",
+      "cold128.input_norm.official.bf16le": "9232663cb4be486a7df33f9b7b8cfb3684631c18833808b95378f6cdb0054582",
+      "cold128.qkv.actual.bf16le": "7202c7b8d28ec221e95005a542025590586120b4a984d3cbc483befd9bf5e693",
+      "cold128.qkv.fixed.bf16le": "7202c7b8d28ec221e95005a542025590586120b4a984d3cbc483befd9bf5e693",
+      "cold128.qkv.official.bf16le": "e5d382cf358e5d753121ee6892b7a8f57404ac0ae4f775f9d160bbbe6b3d394b",
+      "cold128.z.actual.bf16le": "389a5c8feea245a6e4b687d5f9579f21d7f230a1647332696d80cd22592b8b06",
+      "cold128.z.fixed.bf16le": "389a5c8feea245a6e4b687d5f9579f21d7f230a1647332696d80cd22592b8b06",
+      "cold128.z.official.bf16le": "9d1b7d594e5ab8ab5160620b50c5a7e201fccc2955ec06c1450179930dec990f"
+    }
+  },
+  "failed_checks": [],
+  "inputs": {
+    "embedding_bytes": 524288,
+    "embedding_manifest_sha256": "c591cf645e1e951a5c52a37b93a210abb22f28b45796b1a5c39a9246a5ab7f82",
+    "embedding_sha256": "5e6f4f309ddda446bf86c961ea13fc12030713b6cac428f7af6c8f9d1b5b83da",
+    "input_fixture_sha256": "186a17124bebe5be936a9e3e71e6e90d74869eb8dd201c326a1b8cadd33885f8",
+    "layer0_bytes": 43111008,
+    "layer0_manifest_sha256": "6c47a66ee801740c3200203b6e18045cafd7e17f898660598119ab67e374e8e0",
+    "layer0_tensors": 14,
+    "original_fp32_parameters": [
+      "linear_attn.A_log",
+      "linear_attn.norm.weight"
+    ],
+    "raw_token_order_verified": true
+  },
+  "limits": [
+    "Second carried128 label denotes token input window only; no history or FP32 GDN state is consumed or committed.",
+    "Conv/InputPrep/chunk recurrence/gated norm/O/residual/FFN/full block and public Command128 are unexecuted.",
+    "ACK/producer/resource checks review counters plus frozen-code runtime assertions; no raw per-beat event timeline or full physical-memory dump was exported.",
+    "Six saved fixed projection arrays per run were byte-compared; the two independent RMS expected arrays were not exported, so only their saved digest receipts are rechecked.",
+    "Official source RMS AST plus original separate linear operations is an operation reference, not an executed complete official DecoderLayer.",
+    "No model, arithmetic reference, compiler or RTL was executed in this review; only existing bytes/metadata were read and comparison metrics recomputed.",
+    "M16 and M128 use distinct prefix_driver source hashes; both corresponding frozen snapshots are retained.",
+    "Software observed FMA counts are not hardware utilization or throughput evidence."
+  ],
+  "runs": {
+    "128": {
+      "acknowledged_output_bytes": 4734976,
+      "actual_elapsed_seconds": 68.37872380600311,
+      "actual_output_sha256": {
+        "carried128.ab": "f356b1300a7d7bf856322ba8b87b4f9c315470cf153af2347ceea93ba0ad0268",
+        "carried128.input_norm": "3769b764d059795eb8ddbcefc43b102e61ca5b3bdf9c7c872038ed5dff94be7b",
+        "carried128.qkv": "dcd802e2eb1c602a10e9c85346b0b38410fc6ff24c54b51e4b6e2988806e1759",
+        "carried128.z": "334cb252c6b3670e0a0ba5eb5adc108a35c149f0e26466da7139a9e09566b418",
+        "cold128.ab": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+        "cold128.input_norm": "a6caca5d99ec4ae6328417a5e017ad7501d8b6dfec3798e4f5a4230bbcaef468",
+        "cold128.qkv": "b6c6565b27ea0c2e998fe7f38e9d0a69d073bc42bc257cca124a9ed76e88631c",
+        "cold128.z": "f7a99b76ae1fbed4d3d9ef4631f700e28ad2207484e992a4cec446da16b9f504"
+      },
+      "actual_owner_terminals": 8,
+      "actual_terminal_sha256": "2395532c96781b6d04a0b07794d49235ca0f0ce747df664e247a50f7c85ac237",
+      "compile_receipt_sha256": "98d12038175ec3e0cadde0293be7ca43224cc430acfe267f29b52e79a1133e9a",
+      "exported_fixed_projection_files_verified": 6,
+      "external_elapsed_seconds": 76.45662585500395,
+      "identity_sha256": "c735554af5f8efd6340a4a09405ab1e7993a942a11583a677da38f4300857726",
+      "launch_receipt_sha256": "b946df24cce36d50d1ba5e045d14cc927776cdda9701f62544fbd3dddfe4c080",
+      "library_sha256": "bcab4d36ae7990bf6b40c08866066b563d8c6c09fb134a2393d8268505c89c7f",
+      "matrix_actual_fma_calls": 2155872256,
+      "maxrss_kib": 428956,
+      "official_gates_recomputed": 12,
+      "official_metrics": {
+        "carried128": {
+          "a": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 4096,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "b": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_norm": {
+            "bit_mismatches": 0,
+            "elements": 131072,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "qkv": {
+            "bit_mismatches": 1203,
+            "elements": 786432,
+            "max_abs": 0.015625,
+            "mean_abs": 1.2005167112268586e-07
+          },
+          "z": {
+            "bit_mismatches": 61,
+            "elements": 262144,
+            "max_abs": 0.015625,
+            "mean_abs": 1.964740476978477e-07
+          }
+        },
+        "cold128": {
+          "a": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 4096,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "b": {
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_norm": {
+            "bit_mismatches": 0,
+            "elements": 131072,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "qkv": {
+            "bit_mismatches": 1176,
+            "elements": 786432,
+            "max_abs": 0.03125,
+            "mean_abs": 1.7383319080484702e-07
+          },
+          "z": {
+            "bit_mismatches": 53,
+            "elements": 262144,
+            "max_abs": 0.0078125,
+            "mean_abs": 1.3482053873303812e-07
+          }
+        }
+      },
+      "rms_fixed_reference": "digest receipt checked; standalone expected RMS bytes were not exported or recomputed",
+      "rows_per_input_window": 128,
+      "source_count": 26,
+      "status": "PASS_EXPORTED_PREFIX_EVIDENCE_REVIEW",
+      "summary_sha256": "395411597dc0b04c3722920f5f934044cb5ca93180a1cf34f9f1ac7b7cf2ba6d",
+      "token_slices": {
+        "carried128": [
+          128,
+          256
+        ],
+        "cold128": [
+          0,
+          128
+        ]
+      }
+    },
+    "16": {
+      "acknowledged_output_bytes": 591872,
+      "actual_elapsed_seconds": 50.452407800999936,
+      "actual_output_sha256": {
+        "carried128.ab": "f503d215da5a6fcc06f836ff08c30273e238c4bf0dda88d66ba6cf8214798cf5",
+        "carried128.input_norm": "4ecb4c4914387d490a5a7150f9b5d5045ffa3e4bb89c899499e300b8c80dd33a",
+        "carried128.qkv": "eadc7d784324a574697cad444e72b99eda37f5d48e93593752abbe111559aaec",
+        "carried128.z": "1f1ef5f6d46e890c9f7df7eca622b453658cc84d4a89e4ed2b5fb92fc8f9e710",
+        "cold128.ab": "d69951ece8213211cee0efb38e0d0d67e9bf9437cc32c82142e5fa1ddbdd61f7",
+        "cold128.input_norm": "9232663cb4be486a7df33f9b7b8cfb3684631c18833808b95378f6cdb0054582",
+        "cold128.qkv": "7202c7b8d28ec221e95005a542025590586120b4a984d3cbc483befd9bf5e693",
+        "cold128.z": "389a5c8feea245a6e4b687d5f9579f21d7f230a1647332696d80cd22592b8b06"
+      },
+      "actual_owner_terminals": 8,
+      "actual_terminal_sha256": "30fd28960392db059c98ca54952d010ce48977cf377a0c896a0aff17ed4bb971",
+      "compile_receipt_sha256": "98d12038175ec3e0cadde0293be7ca43224cc430acfe267f29b52e79a1133e9a",
+      "exported_fixed_projection_files_verified": 6,
+      "external_elapsed_seconds": 54.36148683600186,
+      "identity_sha256": "8affaedb7a5ee75bcaefda11bba915930a247973de636f82e2db19107d9c88b8",
+      "launch_receipt_sha256": "e803b186d32838871ba2f851dce0466e01af0193f74664bb36ca4779c10305c2",
+      "library_sha256": "bcab4d36ae7990bf6b40c08866066b563d8c6c09fb134a2393d8268505c89c7f",
+      "matrix_actual_fma_calls": 2155872256,
+      "maxrss_kib": 406284,
+      "official_gates_recomputed": 12,
+      "official_metrics": {
+        "carried128": {
+          "a": {
+            "bit_mismatches": 0,
+            "elements": 256,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 512,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "b": {
+            "bit_mismatches": 0,
+            "elements": 256,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_norm": {
+            "bit_mismatches": 0,
+            "elements": 16384,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "qkv": {
+            "bit_mismatches": 152,
+            "elements": 98304,
+            "max_abs": 0.015625,
+            "mean_abs": 2.1470259525813162e-07
+          },
+          "z": {
+            "bit_mismatches": 13,
+            "elements": 32768,
+            "max_abs": 0.0078125,
+            "mean_abs": 4.860521585214883e-07
+          }
+        },
+        "cold128": {
+          "a": {
+            "bit_mismatches": 0,
+            "elements": 256,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "ab": {
+            "bit_mismatches": 0,
+            "elements": 512,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "b": {
+            "bit_mismatches": 0,
+            "elements": 256,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_norm": {
+            "bit_mismatches": 0,
+            "elements": 16384,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "qkv": {
+            "bit_mismatches": 142,
+            "elements": 98304,
+            "max_abs": 0.0078125,
+            "mean_abs": 1.5493806889329184e-07
+          },
+          "z": {
+            "bit_mismatches": 8,
+            "elements": 32768,
+            "max_abs": 0.0078125,
+            "mean_abs": 2.5731787900440395e-07
+          }
+        }
+      },
+      "rms_fixed_reference": "digest receipt checked; standalone expected RMS bytes were not exported or recomputed",
+      "rows_per_input_window": 16,
+      "source_count": 26,
+      "status": "PASS_EXPORTED_PREFIX_EVIDENCE_REVIEW",
+      "summary_sha256": "2b2fc6b87d910c4475e3b2d034855ce4137d80bd30360a1994f3682d079a1125",
+      "token_slices": {
+        "carried128": [
+          128,
+          144
+        ],
+        "cold128": [
+          0,
+          16
+        ]
+      }
+    }
+  },
+  "schema_version": 1,
+  "scope": "M16/M128 two raw-input-window RMS+QKV+Z+AB owner-prefix evidence only",
+  "source_mapping": {
+    "driver_delta": "only token_fixture_slices and carried_label_means_input_window_only reporting metadata",
+    "legacy_main_owner_sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "m128_frozen_source_count": 26,
+    "m128_live_drift": [],
+    "m16_vs_m128_different_files": [
+      "candidates/qwen35_gdn_prefill/prefix_driver.py"
+    ],
+    "preserved_dirty_candidates": 20,
+    "preserved_dirty_unchanged": true,
+    "same_actual_matrix_binary_and_compilation_receipt": true,
+    "same_source_claim_for_entire_runs": false,
+    "torch_rms_policy": "model-only formula; not the original main default or production Chisel hookup"
+  },
+  "status": "PASS_READONLY_PREFIX_EVIDENCE_REVIEW"
+}

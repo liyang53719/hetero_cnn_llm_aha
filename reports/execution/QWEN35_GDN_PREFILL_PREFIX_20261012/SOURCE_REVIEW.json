@@ -1,0 +1,24 @@
+{
+  "status": "NO_BLOCKING_FINDING_FOR_SEALED_M16_M128_PREFIX",
+  "review": "independent read-only source and sealed-identity review; no reexecution",
+  "driver_sha256": "01d13429a52e0ad1467c9c813acf1ca181b0fdd9b152df4e46b07c496f5f5a8f",
+  "workflow_sha256": "12c3a91cde924477faeb8486168bd6e25b61268c329bb46268ceda165a7d5c12",
+  "run_tests_sha256": "7ea84a37d2b61609520910eea4ee48110bf141a308f03e88bb2c137e6c4f6857",
+  "summary_m128_sha256": "395411597dc0b04c3722920f5f934044cb5ca93180a1cf34f9f1ac7b7cf2ba6d",
+  "checked": [
+    "same physical address map and real RMS output into Dense",
+    "N-by-K checkpoint to K-by-N physical weights",
+    "separate native A16 and B16 comparisons",
+    "no independent reference before actual terminal",
+    "last ACK and accepted owner completion publication",
+    "original per-node max/mean thresholds and failure reporting",
+    "M128 26 snapshot sources match runtime/current source",
+    "M16 arithmetic sources same; driver input-range metadata differs",
+    "small CI emits no RTL and uses explicit newly built library"
+  ],
+  "remaining_preservation_limits": [
+    "finally may fail to write summary if an identity source is deleted or unreadable",
+    "fixture completion check is manifest-only; startup checks full payload and sealed bytes remain"
+  ],
+  "scope": "typed owner prefix only; no public Command128, conv, chunk, state, whole block or RTL"
+}

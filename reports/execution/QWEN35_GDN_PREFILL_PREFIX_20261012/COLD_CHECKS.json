@@ -1,0 +1,156 @@
+{
+  "status": "PASS_COLD_SOURCE_AND_DEPENDENCY_WORKFLOW_ORDER",
+  "checkout": "/tmp/qwen35_gdn_prefix_cold_20261012T1623",
+  "base_commit": "a38d0bb25da6d94911f823b5820b0f1c975d6609",
+  "historical_work_absent_before_build": true,
+  "test_count": 40,
+  "suites": [
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_input_fixture",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_input_fixture",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "passed": true,
+      "seconds": 0.593593037003302,
+      "log": "test_input_fixture.log",
+      "log_sha256": "6223c4224cc5614755528000ce4b9e4ab7151a27b4bd7873d44f9f79fc7fc3f3"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_prefix_driver",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_prefix_driver",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 1,
+      "passed": true,
+      "seconds": 1.314914951013634,
+      "log": "test_prefix_driver.log",
+      "log_sha256": "f1403c5ab342b8315d4d0b26653b12de69f3efb5a81d6452ef2a570b5d54efaf"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_prefix_reference",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_prefix_reference",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 7,
+      "passed": true,
+      "seconds": 0.4104569870105479,
+      "log": "test_prefix_reference.log",
+      "log_sha256": "9b23f93d2fa212855539b868ddad0d6859825cdbc370371934b8c5254e2ff7ef"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_rms_owner",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_rms_owner",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "passed": true,
+      "seconds": 1.3461157560086576,
+      "log": "test_rms_owner.log",
+      "log_sha256": "ff3e2a00435081509031d8970a8b2fd4789d77c1a7a6569afbcda51bb670563a"
+    },
+    {
+      "module": "candidates.qwen35_gdn_prefill.test_typed_dense",
+      "argv": [
+        "/tmp/qwen35_gdn_prefix_cold_20261012T1623_venv/bin/python",
+        "-m",
+        "unittest",
+        "candidates.qwen35_gdn_prefill.test_typed_dense",
+        "-v"
+      ],
+      "returncode": 0,
+      "test_count": 8,
+      "passed": true,
+      "seconds": 0.26110156800132245,
+      "log": "test_typed_dense.log",
+      "log_sha256": "2db0c7c5cb1c7afd3297010e96962c33c39d3da7266edac3c1b112de90e7ff5a"
+    }
+  ],
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/input_fixture.py": "ab9839f63d45a10302754b7cc730ee7bba76cd6d9fc895c1f801d6a94936ffa2",
+    "candidates/qwen35_gdn_prefill/prefix_driver.py": "01d13429a52e0ad1467c9c813acf1ca181b0fdd9b152df4e46b07c496f5f5a8f",
+    "candidates/qwen35_gdn_prefill/prefix_reference.py": "807a06cd0befb697e8e2536f73319a6670c834a52dee7f29249dfe37be3806f6",
+    "candidates/qwen35_gdn_prefill/projection_reference.cpp": "143e28be0ea03e6c29e9d0e58afe1190e7050fa4ea43e9237a45fb218e9a3edd",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "1f85f2d8118d50c421b5abfedda08c281380803e462f2b183bfb489942ab14d7",
+    "candidates/qwen35_gdn_prefill/run_tests.py": "7ea84a37d2b61609520910eea4ee48110bf141a308f03e88bb2c137e6c4f6857",
+    "candidates/qwen35_gdn_prefill/test_input_fixture.py": "8bab3edf5c0aa4cb43e19d54b0d8071688a12b50cdca279a33800025a19dfba2",
+    "candidates/qwen35_gdn_prefill/test_prefix_driver.py": "ead211501f651138983099ac8f1f891a4ce52dec2a0a49a9e098b526cf221a9d",
+    "candidates/qwen35_gdn_prefill/test_prefix_reference.py": "e565846e4da063b13d0193e6e9b982f2c15aee8e0deb8c2d5662a98e2a5ab0a4",
+    "candidates/qwen35_gdn_prefill/test_rms_owner.py": "564f8fc51043c733d419dab0a94d5714af9146240baab1612d40c8ed8bf55800",
+    "candidates/qwen35_gdn_prefill/test_typed_dense.py": "6282663eecbe8d9c32ebc478eab1cfec9e2853681abd268822fe466154072f15",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "5754040059a39bbeca67c30a71c4babb168e2445a8eed24d4e9cd4127c642565"
+  },
+  "workflow_sha256": "12c3a91cde924477faeb8486168bd6e25b61268c329bb46268ceda165a7d5c12",
+  "compact_sha256": "8f8ee9edc594f9db529e3314b2b6542b76126de1a78e76a8555ee21fe8c129cf",
+  "compact_files": [
+    {
+      "path": "work/qwen35_gdn_model/tests_final/summary.json",
+      "sha256": "061f39df8077659b08bc8f25828698c421a5e0fea705f1408988f463252d75fd",
+      "bytes": 4618
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests_final/test_input_fixture.log",
+      "sha256": "6223c4224cc5614755528000ce4b9e4ab7151a27b4bd7873d44f9f79fc7fc3f3",
+      "bytes": 2177
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests_final/test_prefix_driver.log",
+      "sha256": "f1403c5ab342b8315d4d0b26653b12de69f3efb5a81d6452ef2a570b5d54efaf",
+      "bytes": 299
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests_final/test_prefix_reference.log",
+      "sha256": "9b23f93d2fa212855539b868ddad0d6859825cdbc370371934b8c5254e2ff7ef",
+      "bytes": 1346
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests_final/test_rms_owner.log",
+      "sha256": "ff3e2a00435081509031d8970a8b2fd4789d77c1a7a6569afbcda51bb670563a",
+      "bytes": 2261
+    },
+    {
+      "path": "work/qwen35_gdn_model/tests_final/test_typed_dense.log",
+      "sha256": "2db0c7c5cb1c7afd3297010e96962c33c39d3da7266edac3c1b112de90e7ff5a",
+      "bytes": 1572
+    },
+    {
+      "path": "work/qwen35_gdn_model/library_final/compile.json",
+      "sha256": "4b842d87ec1ca20eb57ef06effbdeaf1d475f2cc4cb926c8e01514df59e55d72",
+      "bytes": 1925
+    },
+    {
+      "path": "work/qwen35_gdn_model/library_final/compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "python_dependencies": [
+    "numpy==2.3.5",
+    "PyYAML==6.0.3"
+  ],
+  "preserved_first_failure": {
+    "summary_sha256": "d3b50670e12853aa9ee6d22a274de4fec09c8cfedf8a9f3f33e87290453bd8e3",
+    "reason": "PyYAML indirect dependency via heteronpu.__init__ -> config missing; no numerical/code gate waived"
+  },
+  "hardware_simulation": false
+}

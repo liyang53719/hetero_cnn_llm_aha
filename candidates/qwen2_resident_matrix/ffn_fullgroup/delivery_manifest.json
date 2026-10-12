@@ -12,8 +12,8 @@
       "sha256": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336"
     },
     "down_driver.py": {
-      "bytes": 40941,
-      "sha256": "efac690c5469f044536b1ac88bb108aea94442a5e1e0b9cc58b539e17e4145be"
+      "bytes": 48882,
+      "sha256": "b51e653a425c868b3891ec91be177b94ac76c9294f8d4fd3a8a32e11aaac86f2"
     },
     "numerical_receipt.json": {
       "bytes": 36344,
@@ -28,8 +28,8 @@
       "sha256": "736c6c45f2057ac4eb93afdfb983f19b60a95efba1c2b9a0faa3aba1b058b02c"
     },
     "test_down_driver.py": {
-      "bytes": 12155,
-      "sha256": "8645a72d41260d63e7ef83bbb1d9127a260009eae2ea4b48e01dcbb984629a19"
+      "bytes": 28862,
+      "sha256": "c806f7ef3184fa53093dfbd09b93605b18aed216bbb1bc0bc6f0dca737a3e8ed"
     },
     "test_numeric.py": {
       "bytes": 10245,
@@ -45,7 +45,8 @@
     },
     "callback_default_regression_tests": 9,
     "callback_default_regression_receipt_sha256": "fee98276bb7d146daeb38f355da6d2152aecfc90b9a5842413ad560956ed593f",
-    "delivery_tests": 2
+    "delivery_tests": 2,
+    "general_dense_driver_tests": 21
   },
   "rtl_executed": false,
   "chisel_simulation": false,
@@ -57,6 +58,6 @@
     "old_numerical_commit": "812d858f8e33e1e6da0cac354846465e971aa975",
     "historical_numerical_receipt_unchanged": true,
     "new_actual_capture_inherited": false,
-    "details": "Public-byte Host adapter seam; optional actual owner-edge callback; default-off ordinary Host unaccepted-success quarantine fence. Arithmetic source unchanged. New public numeric capture tracked separately."
+    "details": "Public-byte Host adapter seam; optional actual owner-edge callback; default-off ordinary Host unaccepted-success quarantine fence. Arithmetic source unchanged. New public numeric capture tracked separately. Ordinary Dense now reuses the same driver with typed live A input and actual command/data/ACK callbacks, plus per-job sequence deltas. New actual QKV prefix evidence lives in ffn_public/prefix_numerical_receipt.json; this old full-FFN capture is not rebound."
   }
 }

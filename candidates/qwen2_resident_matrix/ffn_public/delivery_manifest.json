@@ -1,68 +1,88 @@
 {
   "schema": 1,
-  "scope": "PUBLIC_COMMAND128_FFN4_SOURCE_FRONTEND_AND_ACTUAL_SOFTWARE_MODEL",
+  "scope": "PUBLIC_COMMAND128_FFN4_AND_PUBLIC21_PREFIX_SOFTWARE_MODEL",
   "base_commit": "812d858f8e33e1e6da0cac354846465e971aa975",
   "files": {
     "README.md": {
-      "bytes": 4936,
-      "sha256": "f0cc4be2d81b93fe20f2f003377346a48f155ab0b5dc1943aea78400c05df406"
+      "bytes": 8327,
+      "sha256": "f28541d02722e567151ba8e65dc88cf22222d6cd63b3596f22d251e2104881b3"
     },
     "check_numeric.py": {
       "bytes": 30263,
       "sha256": "7447baeb99a4a0c2ab3a8980cf18414db994728164d7905b597d67f5db39359b"
     },
+    "check_prefix_numeric.py": {
+      "bytes": 42761,
+      "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+    },
     "execute_numeric.py": {
-      "bytes": 19613,
-      "sha256": "d24871022dcdb3ecd06cb52db7dbdc94371a17fd9e7d28b545a777de2fd98b5b"
+      "bytes": 22489,
+      "sha256": "fcb6fedf288a5e7168d968b12c22405bdd6713ccd51914915f5e42810b851c41"
     },
     "fixture.py": {
-      "bytes": 7027,
-      "sha256": "b1058f3156f3b2fcb58b65f99d02040e0c7b174d98c26f0cc20af010ba378f35"
+      "bytes": 15492,
+      "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208"
     },
     "model.py": {
-      "bytes": 17823,
-      "sha256": "42d6943a506e6f1b6110d5839afc4f8ffa5dd7e1d08851cb47ef8f86b7f4c65f"
+      "bytes": 18154,
+      "sha256": "cb14fe6ecc13889b783e1e66a6bafe1297011fd6b6bda9c50734a0a8d60ef609"
     },
     "numerical_receipt.json": {
       "bytes": 35953,
       "sha256": "011712a7bbcee20cd4226452ab7d7b7d2d1dd78e7a0b83a83899d7f85ca19541"
     },
+    "prefix_arithmetic.py": {
+      "bytes": 7657,
+      "sha256": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369"
+    },
+    "prefix_execution.py": {
+      "bytes": 15629,
+      "sha256": "9e6d04ad438dee7bddf46f820aabcfd5780303615ac89bfc076817f3480bccc6"
+    },
+    "prefix_numerical_receipt.json": {
+      "bytes": 47293,
+      "sha256": "da8a54ff9150b2fc93fc4df545da4fedf2b4dcefb7a6e73ac46d116b5c88a1ef"
+    },
+    "prefix_owners.py": {
+      "bytes": 17869,
+      "sha256": "cbe6f149999f74288be6a23ee4f6f4a8c231b13c94f19e919285a4c4db0b894f"
+    },
     "test_capture.py": {
       "bytes": 14164,
       "sha256": "127f3304f526b1a9ba1bba3fc2ee01992a6dd0e5027e50bd34cc3f00e96a1336"
     },
+    "test_check_prefix_numeric.py": {
+      "bytes": 14360,
+      "sha256": "d0e7ea1031a6b53fb0657502707ffeef00da3f7478fbd258b1a67d533c4b909a"
+    },
     "test_delivery.py": {
-      "bytes": 3438,
-      "sha256": "b9b535da263f102cf150755a8dc9db31678fea4ce02da1c21547517ff39d0624"
+      "bytes": 6946,
+      "sha256": "016695754ada4161f7ea8e955d10a75678e886b8db50355adc087d91c725e8d0"
     },
     "test_execute_numeric.py": {
       "bytes": 20241,
       "sha256": "cb566f7fd15a58f995f860815a5b72329dc719c52b04ddc7733dcd686c6d5e2a"
     },
+    "test_fullblock_fixture.py": {
+      "bytes": 15098,
+      "sha256": "37cc8a9d837787a1103fe355f3fe0b7a89df9023d6d7ce33b50db07a29aadb80"
+    },
     "test_model.py": {
       "bytes": 20327,
       "sha256": "7231f6299707e58e8605629785c79382874235ebc60fa102e5cf0d01beff910f"
+    },
+    "test_prefix_decode.py": {
+      "bytes": 6039,
+      "sha256": "160094be27f8500e3271b77253dc63351a3fd6f0a341dc1161dd479ab25b872d"
+    },
+    "test_prefix_execution.py": {
+      "bytes": 8566,
+      "sha256": "3f746285e22c0fce84ec6427f91e79168bf1bdbff1e600995708ff96624a2c38"
+    },
+    "test_prefix_owners.py": {
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
     }
-  },
-  "validation": {
-    "public_byte_tests": 31,
-    "actual_synthetic_execution_tests": 12,
-    "capture_wrapper_tests": 10,
-    "delivery_tests": 2,
-    "total_public_tests": 55,
-    "group_control_tests": 52,
-    "group_composition_tests": 8,
-    "source_frontend_count": 95,
-    "chirrtl_files": 6,
-    "actual_model_rows": [
-      16,
-      128
-    ],
-    "actual_captures_in_ci": false,
-    "independent_source_review_sha256": "4cef237b0940e486a782b949929803e36866771df9ea24db02677ea05c5feab5",
-    "independent_snapshot_review_sha256": "a6cd3510327481fd8421465f1792d459d54b31b7b8ad973ca6ca04363a0e4b12",
-    "independent_actual_review_sha256": "2f7025e0ad99c73beef0193239e52b23fadd2c29917de7ab26376c734f236c14",
-    "independent_actual_review": "No P0/P1; raw outputs, all three physical prefix versions, every accepted metadata word, public terminal sequence and source identities independently read back for both cases."
   },
   "resources": {
     "mac_units": 4096,
@@ -82,5 +102,47 @@
   "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
   "weights_or_raw_tensors_in_git": false,
   "hardware_cycle_prediction": null,
-  "full_wall_mac_utilization": null
+  "full_wall_mac_utilization": null,
+  "historical_8212_ffn4_validation": {
+    "public_byte_tests": 31,
+    "actual_synthetic_execution_tests": 12,
+    "capture_wrapper_tests": 10,
+    "delivery_tests": 2,
+    "total_public_tests": 55,
+    "group_control_tests": 52,
+    "group_composition_tests": 8,
+    "source_frontend_count": 95,
+    "chirrtl_files": 6,
+    "actual_model_rows": [
+      16,
+      128
+    ],
+    "actual_captures_in_ci": false,
+    "independent_source_review_sha256": "4cef237b0940e486a782b949929803e36866771df9ea24db02677ea05c5feab5",
+    "independent_snapshot_review_sha256": "a6cd3510327481fd8421465f1792d459d54b31b7b8ad973ca6ca04363a0e4b12",
+    "independent_actual_review_sha256": "2f7025e0ad99c73beef0193239e52b23fadd2c29917de7ab26376c734f236c14",
+    "independent_actual_review": "No P0/P1; raw outputs, all three physical prefix versions, every accepted metadata word, public terminal sequence and source identities independently read back for both cases."
+  },
+  "validation": {
+    "total_public_tests": 116,
+    "old_public_regression_tests": 53,
+    "full21_fixture_tests": 13,
+    "prefix_decode_tests": 6,
+    "prefix_primitive_owner_tests": 20,
+    "prefix_memory_host_tests": 7,
+    "prefix_capture_guard_tests": 14,
+    "delivery_tests": 3,
+    "actual_prefix_rows": [
+      16,
+      128
+    ],
+    "actual_captures_in_ci": false,
+    "independent_actual_review": "Read-only source/input/actual-output/oracle/saved-stage/ACK/checkpoint/sentinel verification passed for both new pc0\u20139 captures; no arithmetic rerun."
+  },
+  "historical_numerical_source": {
+    "commit": "8212a32f43338163baee4126e522dcacede0fa23",
+    "receipt": "numerical_receipt.json",
+    "sha256": "011712a7bbcee20cd4226452ab7d7b7d2d1dd78e7a0b83a83899d7f85ca19541",
+    "new_source_pass_inherited": false
+  }
 }

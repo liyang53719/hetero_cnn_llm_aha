@@ -1,12 +1,16 @@
-"""Public encoder fixture for exactly Gate, Up, SiLU multiply and Down.
+"""Public encoder fixtures for FFN4 and the original Qwen2 21-op schedule.
 
-This is FFN4, not a skipped-prefix execution of the 21-command full block.
-Only metadata bytes are built here; reconstructible numeric payloads stay local.
+FFN4 remains a separate subprogram. The opt-in full-block fixture reuses the
+retained public packers and builds metadata only, never numeric payloads.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import hashlib
+import importlib.util
 from math import prod
 from pathlib import Path
 import sys
+from tempfile import TemporaryDirectory
+from types import MappingProxyType
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'src'))
@@ -15,9 +19,51 @@ from heteronpu.descriptor_chain import DescriptorRecord, MatrixAux, SfuProgram, 
 from heteronpu.gemmini_descriptor_v2 import tensor_base_record, shape4_record, stride3_record, matrix_op_record
 
 try:
-    from .model import LaunchConfig, MetadataMemory, NULL, Region, Table, align64
+    from .model import LaunchConfig, MetadataMemory, NULL, LIMIT, Region, Table, align64
 except ImportError:
-    from model import LaunchConfig, MetadataMemory, NULL, Region, Table, align64
+    from model import LaunchConfig, MetadataMemory, NULL, LIMIT, Region, Table, align64
+
+
+QWEN2_21_SOURCE_COMMIT = '8212a32f43338163baee4126e522dcacede0fa23'
+QWEN2_21_SOURCE_PINS = (
+    ('chisel/continuous_prefill/scripts/pack_owner_block_fixture.py',
+     '3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154'),
+    ('chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py',
+     '17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692'),
+)
+QWEN2_21_WORKSPACE_BYTES = 786432
+
+
+@dataclass(frozen=True)
+class PhysicalAllocation:
+    """A true reservation, including the original FP32-sized weight guard half."""
+    address: int
+    shape: tuple
+    dtype: int
+    reserved_bytes: int
+    readonly: bool
+    virtual: bool = False
+
+    @property
+    def storage_bytes(self):
+        return align64(prod(self.shape) * (2 if self.dtype == 5 else 4))
+
+    @property
+    def limit(self):
+        return self.address + self.reserved_bytes
+
+
+@dataclass(frozen=True)
+class AllocationView:
+    """A typed subview of one allocation, not an independent reservation."""
+    allocation: str
+    offset_bytes: int
+    shape: tuple
+    dtype: int
+
+    @property
+    def storage_bytes(self):
+        return align64(prod(self.shape) * (2 if self.dtype == 5 else 4))
 
 
 @dataclass
@@ -29,16 +75,49 @@ class Fixture:
     roots: tuple
     specs: dict
     scope: str = 'FFN4_COMMAND_SUBPROGRAM_ONLY'
+    allocations: dict = field(default_factory=dict)
+    views: dict = field(default_factory=dict)
+    manifest: dict = field(default_factory=dict)
+    provenance: object = field(default_factory=dict)
 
     def physical_spans(self):
-        spans = [(name, address, address + align64(prod(shape) * (2 if dtype == 5 else 4)))
-                 for name, (address, shape, dtype) in self.specs.items()]
+        if self.allocations:
+            spans = [(name, a.address, a.limit) for name, a in self.allocations.items()]
+        else:
+            spans = [(name, address, address + align64(prod(shape) * (2 if dtype == 5 else 4)))
+                     for name, (address, shape, dtype) in self.specs.items()]
         spans += [('command_table', self.config.command.base, self.config.command.limit),
                   ('descriptor_table', self.config.descriptor.base, self.config.descriptor.limit),
                   ('workspace', self.config.regions[3].base, self.config.regions[3].limit)]
         return spans
 
     def validate_spans(self):
+        if self.allocations:
+            if set(self.specs) != set(self.allocations) | set(self.views):
+                raise ValueError('fixture allocation/view coverage')
+            if set(self.allocations) & set(self.views):
+                raise ValueError('fixture view is not an independent allocation')
+            for name, a in self.allocations.items():
+                if (not 1 <= len(a.shape) <= 4 or any(type(n) is not int or n <= 0 for n in a.shape)
+                        or a.dtype not in (5, 7) or type(a.address) is not int
+                        or type(a.reserved_bytes) is not int or a.address < 0 or a.address % 64
+                        or a.reserved_bytes % 64 or not 0 < a.storage_bytes <= a.reserved_bytes
+                        or a.limit > LIMIT):
+                    raise ValueError('physical fixture allocation extent')
+                if self.specs[name] != (a.address, a.shape, a.dtype):
+                    raise ValueError('fixture allocation/spec mismatch')
+                if not any(r.base <= a.address < a.limit <= r.limit and r.read
+                           and r.write == (not a.readonly) for r in self.config.ordinary_regions):
+                    raise ValueError('physical fixture allocation permission')
+            for name, view in self.views.items():
+                a = self.allocations.get(view.allocation)
+                if (a is None or type(view.offset_bytes) is not int or view.offset_bytes < 0
+                        or view.offset_bytes % 64 or not 1 <= len(view.shape) <= 4
+                        or any(type(n) is not int or n <= 0 for n in view.shape)
+                        or view.dtype != a.dtype or view.offset_bytes + view.storage_bytes > a.storage_bytes):
+                    raise ValueError('fixture view outside its allocation')
+                if self.specs[name] != (a.address + view.offset_bytes, view.shape, view.dtype):
+                    raise ValueError('fixture view/spec mismatch')
         spans = self.physical_spans()
         for i, (name, a, b) in enumerate(spans):
             for other, c, d in spans[i + 1:]:
@@ -108,6 +187,86 @@ def make_ffn4_fixture(rows=16, epoch=7, relocate=0):
     memory = MetadataMemory(((c.base, cb.ljust(align64(len(cb)), b'\0')),
                              (d.base, db.ljust(align64(len(db)), b'\0'))))
     fixture = Fixture(cfg, memory, tuple(commands), tuple(records), tuple(roots), specs)
+    fixture.validate_spans()
+    return fixture
+
+
+def _qwen2_21_packers():
+    """Verify retained source before importing the two existing metadata packers."""
+    modules = []
+    for path, expected in QWEN2_21_SOURCE_PINS:
+        source = ROOT / path
+        if hashlib.sha256(source.read_bytes()).hexdigest() != expected:
+            raise ValueError(f'Qwen2 public fixture source pin drift: {path}')
+        spec = importlib.util.spec_from_file_location('_qwen2_21_' + source.stem, source)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        modules.append(module)
+    return modules[0].pack, modules[1].convert
+
+
+def make_qwen2_21_fixture(rows=16, epoch=7, relocate=0, max_tokens=1024):
+    """Reuse the unchanged public21 command/descriptor packing, metadata only.
+
+    No weight bytes, initial inputs or writable intermediates are materialized.
+    Dense B storage alone changes FP32 dtype 7 to native BF16 dtype 5 through
+    the retained converter; original addresses/reservations/shape/strides stay.
+    Scores/probabilities retain virtual reservations for fused PCs 10--12.
+    This fixture is neither official model data nor full-block numeric proof.
+    """
+    if type(rows) is not int or rows not in (16, 128):
+        raise ValueError('resident Qwen2 profile requires M16 or M128')
+    if type(epoch) is not int or not 0 <= epoch < 1 << 16:
+        raise ValueError('physical fixture epoch must be an unsigned 16-bit integer')
+    if type(relocate) is not int or relocate < 0 or relocate % 64:
+        raise ValueError('physical fixture relocation must be nonnegative and 64-byte aligned')
+    if type(max_tokens) is not int or max_tokens != 1024:
+        raise ValueError('retained Qwen2 public fixture requires MAX_TOKENS=1024')
+    if relocate >= LIMIT - 0x100000000:
+        raise ValueError('physical fixture relocation exceeds the 56-bit address space')
+    pack, convert = _qwen2_21_packers()
+    shape = dict(H=1536, F=8960, HEADS=12, KVHEADS=2, HD=128, MAX_TOKENS=max_tokens)
+    # Both helpers write only public metadata. Temporary directories are removed
+    # before returning; convert() never calls its separate pack_words() helper.
+    with TemporaryDirectory(prefix='qwen2_21_metadata_') as temporary:
+        source, output = Path(temporary) / 'fp32', Path(temporary) / 'bf16'
+        original = pack(shape, rows, source, relocate)
+        if original['limit'] + QWEN2_21_WORKSPACE_BYTES > LIMIT:
+            raise ValueError('physical fixture arena/workspace exceeds the 56-bit address space')
+        manifest = convert(source, output)
+        cb = (output / 'host_commands.bin').read_bytes()
+        db = (output / 'host_descriptors.bin').read_bytes()
+    c = Table(manifest['commandBase'], manifest['commandLimit'], manifest['commands'])
+    d = Table(manifest['descriptorBase'], manifest['descriptorLimit'], manifest['descriptors'])
+    regions = (
+        Region(manifest['metadataLimit'], manifest['scratchBase'], True, False),
+        Region(manifest['scratchBase'], manifest['limit'], True, True),
+        Region(manifest['base'], manifest['metadataLimit'], True, False),
+        Region(manifest['limit'], manifest['limit'] + QWEN2_21_WORKSPACE_BYTES, True, True),
+    )
+    cfg = LaunchConfig(c, d, regions, epoch)
+    cfg.validate()
+    commands = tuple(Command128.from_bytes(cb[i * 16:(i + 1) * 16]) for i in range(c.count))
+    records = tuple(DescriptorRecord.unpack(int.from_bytes(db[i * 16:(i + 1) * 16], 'little'))
+                    for i in range(d.count))
+    roots = tuple((cmd.src0, cmd.src1, cmd.dst) for cmd in commands)
+    specs = {name: (t['address'], tuple(t['dims']), t.get('storage_dtype', 7))
+             for name, t in manifest['tensors'].items()}
+    allocations = {
+        name: PhysicalAllocation(*specs[name], align64(t['words'] * 4), t['readonly'], t['virtual'])
+        for name in manifest['allocations'] for t in (manifest['tensors'][name],)
+    }
+    kv = allocations['kv']
+    views = {name: AllocationView('kv', specs[name][0] - kv.address, specs[name][1], specs[name][2])
+             for name in ('cache_k', 'cache_v')}
+    provenance = MappingProxyType(dict(source_commit=QWEN2_21_SOURCE_COMMIT,
+        source_sha256=QWEN2_21_SOURCE_PINS, max_tokens=max_tokens,
+        original_descriptor_sha256=manifest['weight_contract']['original_descriptor_sha256'],
+        command_sha256=manifest['table_sha256']['host_commands.bin'],
+        descriptor_sha256=manifest['table_sha256']['host_descriptors.bin'],
+        tensor_payloads_materialized=False, official_weights=False, full_block_numeric_proof=False))
+    fixture = Fixture(cfg, MetadataMemory(((c.base, cb), (d.base, db))), commands, records,
+                      roots, specs, 'QWEN2_21_METADATA_ONLY', allocations, views, manifest, provenance)
     fixture.validate_spans()
     return fixture
 

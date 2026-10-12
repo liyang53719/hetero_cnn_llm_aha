@@ -1,4 +1,4 @@
-"""Drive ordinary Down on the exact owner that produced and drained full act.
+"""Drive ordinary Dense/Down on the caller's exact owner and physical banks.
 
 This file contains transport orchestration and physical DDR checks only. The
 unchanged inherited transposed_down owner generates every transaction and the
@@ -9,7 +9,7 @@ belong after this function has observed the final ACK and owner terminal.
 from array import array
 from collections import Counter, deque
 import ctypes as C
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 import hashlib
 import json
 from pathlib import Path
@@ -98,14 +98,88 @@ class CappedRecords:
         self.stream.close()
 
 
+@dataclass(frozen=True)
+class DenseSource:
+    """Caller-owned physical A span; callbacks observe the live shared memory.
+
+    ready() must return True only when this span is readable. raw() returns its
+    actual bytes for integrity checks, never arithmetic. A published span also
+    supplies write_acks(): the actual (WriteCommand, WriteAck) pairs retained
+    by shared memory, covering every byte once. Readonly inputs need no ACKs.
+    These callbacks are checked again immediately before admission and after
+    terminal; accepted A payloads always come from memory.read64(address).
+    """
+    base: int
+    extent: int
+    provenance: str
+    ready: object
+    raw: object
+    write_acks: object = None
+
+    def validate(self, job):
+        require(type(self.base) is int and type(self.extent) is int and
+                self.base == job.a and self.extent == job.m * job.k * 4,
+                'Dense A source must match the actual full physical span')
+        require(self.provenance in ('readonly', 'published') and callable(self.ready) and
+                callable(self.raw), 'Dense A requires explicit readonly/published provenance and readiness')
+        require(self.ready() is True, 'Dense A physical span is not ready for admission')
+        if self.provenance == 'published':
+            require(callable(self.write_acks), 'published Dense A requires actual prior write ACK records')
+            covered = set()
+            for command, ack in self.write_acks():
+                require(type(command.address) is int and command.address % 64 == 0 and
+                        type(command.beats) is int and 1 <= command.beats <= 16 and
+                        self.base <= command.address and
+                        command.address + command.beats * 64 <= self.base + self.extent and
+                        command.address // 1024 == (command.address + command.beats * 64 - 1) // 1024 and
+                        ack.tag == command.tag and not ack.error and ack.nbytes == command.beats * 64,
+                        'published Dense A has malformed prior physical write ACK')
+                addresses = set(range(command.address, command.address + command.beats * 64, 64))
+                require(not covered.intersection(addresses), 'published Dense A has duplicate prior write ACK')
+                covered.update(addresses)
+            require(covered == set(range(self.base, self.base + self.extent, 64)),
+                    'published Dense A lacks full prior physical write ACK coverage')
+        raw = self.raw()
+        require(isinstance(raw, (bytes, bytearray, memoryview)) and len(raw) == self.extent,
+                'Dense A source snapshot byte extent')
+        return sha(raw)
+
+
 def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthetic_geometry=False, owner_tick=None):
-    """Return (accepted-traffic report, actual FP32 words) after final terminal.
+    """Strict historical Down entry point, returning report and actual FP32 words."""
+    report, destination = _execute_dense(model, owner, lib, memory, job, out, deadline, trace,
+        synthetic_geometry=synthetic_geometry, owner_tick=owner_tick, a_source=None, output_event=None)
+    actual = array('I'); actual.frombytes(destination.raw())
+    return report, actual
+
+
+def execute_dense(model, owner, lib, memory, job, out, deadline, trace, *, a_source,
+                  output_event, owner_tick=None):
+    """Return (report, actual acknowledged PhysicalRegion) after final terminal.
+
+    output_event(kind, value) is mandatory shared-memory transport: command,
+    data, and ack receive the unchanged accepted port objects, in that order.
+    The sink must keep the destination unreadable until terminal receives the
+    successful owner response, after the final ACK and all driver checks. An
+    exception/fault never emits terminal; accepted writes remain in the sink.
+    No end-of-job bulk injection substitutes for these actual write events.
+    """
+    require(isinstance(a_source, DenseSource), 'explicit DenseSource required')
+    require(callable(output_event), 'Dense requires actual shared-memory output event routing')
+    return _execute_dense(model, owner, lib, memory, job, out, deadline, trace,
+        synthetic_geometry=False, owner_tick=owner_tick, a_source=a_source, output_event=output_event)
+
+
+def _execute_dense(model, owner, lib, memory, job, out, deadline, trace, *,
+                   synthetic_geometry, owner_tick, a_source, output_event):
+    """One accepted-port orchestration for both ordinary Dense and strict Down.
 
     memory.read64(address) selects act/weight solely by physical address. The
     local physical prefix span is selected by that same address rule before
     delegating other addresses. Command kinds are checked only after dispatch.
     No owner, SRAM bank, tile adapter, arithmetic model or reference is created.
     """
+    legacy_down = a_source is None
     tick_owner = owner.tick if owner_tick is None else owner_tick
     started, start_tick = time.monotonic(), owner.clock
     out, down, workspace = Path(out), model.down, owner.workspace
@@ -116,7 +190,10 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
             job.write_bytes == job.m * job.n * 4, 'full Down decoded job/dtype/byte contract')
     require(workspace is not None, 'same-owner explicit Down workspace required')
     workspace.validate(job)
-    if synthetic_geometry:
+    if not legacy_down:
+        chunks = tuple((start, min(start + workspace.split_k, job.k))
+                       for start in range(0, job.k, workspace.split_k))
+    elif synthetic_geometry:
         require(job.m == 16 and job.k in (256, 512) and job.n == 32 and workspace.split_k == 128,
                 'synthetic Down restricted to M16/K256-or512/N32/split128')
         chunks = tuple((start, min(start + workspace.split_k, job.k))
@@ -127,18 +204,21 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
         chunks = CHUNKS
     final_chunk = len(chunks) - 1
     prefix_versions = tuple(range(1, len(chunks)))
-    require(workspace.extent == (job.n // 32) * CONTEXT_BYTES,
-            'full physical Down prefix workspace required')
+    active_prefix_extent = (job.n // 32) * CONTEXT_BYTES if final_chunk else 0
+    if legacy_down:
+        require(workspace.extent == active_prefix_extent,
+                'full physical Down prefix workspace required')
     require(owner.state == 'idle' and owner.lease is None and owner.window_request is None and
             owner.drain_request is None and owner.tiles.idle and not owner.tiles.leased and
             not owner.error and not owner.tiles.poison and not owner.drain_poison and
             all(not tag.live for tag in owner.tiles.tags),
             'Down admission before group terminal, lease invalidation, or tile drain')
-    require(job.a == memory.act.base and memory.act.pending is None and
-            memory.act.extent == job.m * job.k * 4 and memory.act.ack_bytes == memory.act.extent and
-            memory.act.data_bytes == memory.act.extent and
-            len(memory.act.write_addresses) == memory.act.extent // 64,
-            'Down A is not the fully ACK-written actual act address span')
+    if legacy_down:
+        require(job.a == memory.act.base and memory.act.pending is None and
+                memory.act.extent == job.m * job.k * 4 and memory.act.ack_bytes == memory.act.extent and
+                memory.act.data_bytes == memory.act.extent and
+                len(memory.act.write_addresses) == memory.act.extent // 64,
+                'Down A is not the fully ACK-written actual act address span')
     require(not any((owner.read_active, owner.a_hold, owner.a_rmw_pending, owner.pending,
                      owner.fifo, owner.final_value, owner.seed_outstanding)) and
             owner.write_state == 'idle', 'Down admission with unfinished physical obligation')
@@ -146,12 +226,15 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
     require(owner.tiles.banks is owner.a_banks and
             (len(owner.a_banks.words), len(owner.a_banks.words[0]), len(owner.b_banks.words),
              len(owner.b_banks.words[0])) == (16, 1376, 16, 160), 'same fixed physical owner banks')
-    initial_act_hash = sha(memory.act.data[GUARD_BYTES:-GUARD_BYTES])
+    initial_act_hash = (sha(memory.act.data[GUARD_BYTES:-GUARD_BYTES]) if legacy_down else
+                        a_source.validate(job))
     initial_read_sequence, initial_write_sequence = owner.read_sequence, owner.write_sequence
     initial_group_sequence, initial_responses = owner.group_sequence, owner.responses
-    prefix = PhysicalRegion(workspace.base, workspace.extent)
+    # The owner's full reservation remains untouched. Only used prefix bytes
+    # need backing; single-chunk jobs neither allocate nor access a prefix.
+    prefix = PhysicalRegion(workspace.base, active_prefix_extent) if active_prefix_extent else None
     destination = PhysicalRegion(job.dst, job.write_bytes)
-    prefix_beats, contexts_total = workspace.extent // 64, job.n // 32
+    prefix_beats, contexts_total = active_prefix_extent // 64, job.n // 32
     versions = bytearray(prefix_beats)
     data_versions = bytearray(prefix_beats)
     read_versions, seeded_versions = Counter(), Counter()
@@ -169,7 +252,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
     physical, seed_words = (C.c_uint32 * 4096)(), (C.c_uint32 * 16)()
     pending_read = pending_write = pending_ack = seed_ack = None
     results, staged = deque(), []
-    result_peak, finished, final_ack_tick = 0, None, None
+    result_peak, operand_peak, finished, final_ack_tick = 0, 0, None, None
     final_ack_stall_remaining, final_ack_stall_ticks = 5, 0
     saw_explicit_mask, saw_implicit_mask = False, False
     expected_groups = [dict(chunk_index=chunk, start=start, end=end, n_base=n,
@@ -183,6 +266,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
     def check_identity():
         require(bank_ids == (id(owner), id(owner.a_banks), id(owner.b_banks),
                              id(owner.tiles), id(owner.tiles.banks)), 'physical owner/banks replaced')
+        require(owner.workspace is workspace, 'physical owner workspace reservation replaced')
         require(owner.lease is None and not owner.error and not owner.tiles.poison and
                 not owner.drain_poison, 'same-owner Down fault/lease: ' + str(owner.error))
 
@@ -195,12 +279,23 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
         prefix_records.write(raw)
 
     def read64(address):
-        if prefix.contains(address):
+        if prefix is not None and prefix.contains(address):
             return 'workspace', prefix.read64(address)
-        return memory.read64(address)
+        region, words = memory.read64(address)
+        if legacy_down:
+            return region, words
+        # Dispatch the actual physical memory first. Its labels do not select
+        # arithmetic operands; the accepted address and live tensor spans do.
+        if job.a <= address and address + 64 <= job.a + a_source.extent:
+            return 'act', words
+        if job.b <= address and address + 64 <= job.b + job.k * job.n * 2:
+            return 'down_weight', words
+        raise ValueError('Dense read escaped physical A/weight/workspace spans')
 
     try:
         check_budget()
+        if not legacy_down:
+            require(a_source.validate(job) == initial_act_hash, 'Dense A changed before actual admission')
         port = owner.ports()
         require(port['job_ready'] and port['response'] is None, 'ordinary Down job port not ready')
         admission = tick_owner(job=job)
@@ -210,7 +305,9 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
         counts['model_ticks'] = 1
         check_identity()
         trace.event(dict(kind='down_admission', tick=owner.clock, job=asdict(job),
-                         inherited_owner=True, lease_invalid=True, act_ack_bytes=memory.act.ack_bytes,
+                         inherited_owner=True, lease_invalid=True,
+                         act_ack_bytes=(memory.act.ack_bytes if legacy_down else
+                                        a_source.extent if a_source.provenance == 'published' else 0),
                          initial_read_sequence=initial_read_sequence,
                          initial_write_sequence=initial_write_sequence))
         while finished is None:
@@ -220,6 +317,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
             n_base, group_sequence = owner.n_base, owner.group_sequence
             contexts = getattr(owner, 'contexts', 0)
             tick = counts['model_ticks']
+            operand_peak = max(operand_peak, len(owner.fifo) + int(owner.pending is not None))
             inputs = dict(step_ready=not (ports['step'] is not None and ports['step'].last and len(results) >= 2),
                           write_command_ready=tick % 5 != 0, write_data_ready=tick % 7 != 0)
             if pending_read is not None:
@@ -429,7 +527,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                         command.address // 1024 == (command.address + command.beats * 64 - 1) // 1024 and
                         command.tag == (job.tag << 32) | (initial_write_sequence + counts['write_descriptors']),
                         'Down write descriptor overlap/alignment/1KiB/tag sequence')
-                if prefix.contains(command.address, command.beats * 64):
+                if prefix is not None and prefix.contains(command.address, command.beats * 64):
                     region = 'workspace'
                     require(chunk_index < final_chunk and command.beats == 1, 'Down final chunk prefix write/physical beat')
                 elif destination.contains(command.address, command.beats * 64):
@@ -441,6 +539,8 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                 hashes['write_descriptors'].update(struct.pack('<QQI', command.address, command.tag, command.beats))
                 counts['write_descriptors'] += 1
                 region_counts[region + '_write_descriptors'] += 1
+                if region == 'down' and output_event is not None:
+                    output_event('command', command)
             if edge.get('write_data_fire'):
                 require(pending_write is not None, 'Down write data without accepted descriptor')
                 command, index, write_chunk, region = pending_write
@@ -480,6 +580,8 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                 if beat.last:
                     require(pending_ack is None, 'duplicate Down pending write ACK')
                     pending_ack = down.WriteAck(command.tag, nbytes=command.beats * 64)
+                if region == 'down' and output_event is not None:
+                    output_event('data', beat)
             if edge.get('write_ack_fire'):
                 require(pending_write is not None and pending_ack is not None, 'Down ACK without accepted write')
                 command, index, write_chunk, region = pending_write
@@ -510,6 +612,8 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                 counts['write_acks'] += 1
                 region_counts[region + '_write_acks'] += 1
                 region_counts[region + '_ack_bytes'] += ack.nbytes
+                if region == 'down' and output_event is not None:
+                    output_event('ack', ack)
                 if region == 'down' and len(acknowledged) * 64 == job.write_bytes:
                     require(final_ack_stall_remaining == 0, 'final Down ACK was not deliberately held')
                     final_ack_tick = owner.clock
@@ -540,7 +644,7 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                 'Down terminal with outstanding external/owner obligation')
         require(len(groups) == len(expected_groups) and matrix_done_groups == {g['sequence'] for g in groups} and
                 owner.completed_prefix_sweeps == final_chunk and owner.committed_prefix_end == chunks[-1][0] and
-                owner.prefix_bytes == final_chunk * workspace.extent and counts['seed_acks'] == final_chunk * contexts_total and
+                owner.prefix_bytes == final_chunk * active_prefix_extent and counts['seed_acks'] == final_chunk * contexts_total and
                 counts['full_physical_prefix_context_checks'] == final_chunk * contexts_total,
                 'Down chunk/sweep/full physical prefix completion')
         for version in prefix_versions:
@@ -560,15 +664,27 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                 region_counts['down_ack_bytes'] == owner.write_bytes == job.write_bytes and
                 region_counts['workspace_ack_bytes'] == owner.prefix_bytes and
                 counts['write_descriptors'] == counts['write_acks'], 'Down full physical output/ACK coverage')
+        owner_deltas = dict(read_descriptors=owner.read_sequence - initial_read_sequence,
+                            write_descriptors=owner.write_sequence - initial_write_sequence,
+                            groups=owner.group_sequence - initial_group_sequence,
+                            responses=owner.responses - initial_responses)
+        require(owner_deltas == dict(read_descriptors=counts['read_descriptors'],
+                                    write_descriptors=counts['write_descriptors'],
+                                    groups=counts['groups'], responses=counts['response_handshakes']),
+                'Dense per-job owner sequence/counter deltas differ from accepted traffic')
         require(all(version == final_chunk for version in versions) and versions == data_versions and
-                sha(memory.act.data[GUARD_BYTES:-GUARD_BYTES]) == initial_act_hash,
+                (sha(memory.act.data[GUARD_BYTES:-GUARD_BYTES]) if legacy_down else
+                 a_source.validate(job)) == initial_act_hash,
                 'Down prefix final version or source act mutation')
-        prefix.check_guards(); destination.check_guards()
+        if prefix is not None:
+            prefix.check_guards()
+        destination.check_guards()
         check_identity(); check_budget()
         raw = destination.raw()
-        actual = array('I'); actual.frombytes(raw)
-        (out / 'actual_down.f32le').write_bytes(raw)
-        report = dict(scope=('SYNTHETIC_TINY_DOWN_HOST_MODEL_ONLY' if synthetic_geometry else
+        output_path = 'actual_down.f32le' if legacy_down else 'actual_dense.f32le'
+        (out / output_path).write_bytes(raw)
+        report = dict(scope=('ACTUAL_SAME_OWNER_DENSE_HOST_MODEL_ONLY' if not legacy_down else
+                             'SYNTHETIC_TINY_DOWN_HOST_MODEL_ONLY' if synthetic_geometry else
                              'ACTUAL_SAME_OWNER_FULL_DOWN_HOST_MODEL_ONLY'),
             synthetic_geometry=synthetic_geometry, job=asdict(job),
             completed=True, completion=list(finished), owner_completed_before_comparison=True,
@@ -577,18 +693,21 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
             useful_macs=counts['observed_valid_logical_cells'],
             executed_macs=counts['completed_host_physical_fmas'],
             counter_provenance='Harness observations incremented after each successful accepted td_step: m*32 valid logical cells and 4096 host physical FMAs; inactive rows and packet padding checked. These are not RTL measurements or hardware cycles, and do not substitute for the Chisel (physicalSteps - physicalBase)*512 accounting.',
-            actual_act_source=dict(base=job.a, bytes=memory.act.extent, sha256=initial_act_hash,
-                actual_prior_ack_written=True, unchanged=True, read_beats=len(act_reads),
+            actual_act_source=dict(base=job.a, bytes=job.m * job.k * 4, sha256=initial_act_hash,
+                actual_prior_ack_written=legacy_down or a_source.provenance == 'published',
+                unchanged=True, read_beats=len(act_reads),
                 full_once_only_read_coverage=True),
             prefix=dict(base=workspace.base, extent=workspace.extent, generation=workspace.generation,
-                initial_sha256=prefix.initial_sha256, sentinel_word_hex=hex(SENTINEL_WORD),
-                final_sha256=sha(prefix.raw()), completed_sweeps=owner.completed_prefix_sweeps,
+                initial_sha256=prefix.initial_sha256 if prefix is not None else sha(b''),
+                sentinel_word_hex=hex(SENTINEL_WORD),
+                final_sha256=sha(prefix.raw()) if prefix is not None else sha(b''),
+                completed_sweeps=owner.completed_prefix_sweeps,
                 committed_prefix_end=owner.committed_prefix_end, ack_bytes=owner.prefix_bytes,
                 versions={str(v): dict(ack_beats=prefix_writes[v], read_beats=prefix_reads[v],
                                       seed_beats=seed_counts[v]) for v in prefix_versions},
                 physical_sweeps=prefix_sweeps, exact_version_read_before_overwrite=True,
                 seed_ack_before_overwrite=True, all_4096_cells_checked_each_context=True,
-                canaries_exact=True, guard_bytes=2 * GUARD_BYTES,
+                canaries_exact=True, guard_bytes=2 * GUARD_BYTES if prefix is not None else 0,
                 transaction_records=prefix_records.report(), seed_records=seed_records.report(),
                 seed_record_format='<IIIBBBB16I', seed_record_bytes=80),
             ddr=dict(base=job.dst, bytes=job.write_bytes, data_bytes=len(written) * 64,
@@ -598,12 +717,13 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
                 burst_max_beats=16, all_bursts_within_1kib=True, all_full_64byte_writes=True,
                 explicit_mask_observed=saw_explicit_mask, implicit_mask_observed=saw_implicit_mask,
                 mask_contract='Inherited ordinary Down WriteBeat has no mask field; all sixteen FP32 words form an implicit full 64-byte write. Any explicit mask is checked against 0xffffffffffffffff.',
-                sha256=sha(raw), path='actual_down.f32le'),
+                sha256=sha(raw), path=output_path),
             final_ack_fence=dict(held_ticks=final_ack_stall_ticks, final_ack_tick=final_ack_tick,
                 terminal_tick=owner.clock, terminal_strictly_after_final_ack=True),
             hashes={name: value.hexdigest() for name, value in hashes.items()},
             same_five_host_banks_erased_at_every_group=True, physical_result_fifo_peak=result_peak,
-            operand_reservation_peak=owner.max_reserved, actual_a_rmw_commits=owner.rmw_commits,
+            operand_reservation_peak=owner.max_reserved if legacy_down else operand_peak,
+            actual_a_rmw_commits=owner.rmw_commits,
             owner_start_tick=start_tick, owner_completion_tick=owner.clock,
             protocol_model_ticks=owner.clock - start_tick, protocol_model_ticks_are_hardware_cycles=False,
             arithmetic='Unchanged td_group/td_step/td_seed_* called only for accepted physical packets',
@@ -611,7 +731,14 @@ def execute_down(model, owner, lib, memory, job, out, deadline, trace, *, synthe
             rtl_generated=False, actual_idma=False, hardware_arithmetic_executed=False,
             native_m128_and_fp32_final_acceptance='UNCHANGED_FAIL_POLICY_PENDING',
             trace=trace.report(), host_wall_seconds=time.monotonic() - started)
-        return report, actual
+        if not legacy_down:
+            report['actual_a_source'] = report.pop('actual_act_source')
+            report['actual_a_source']['provenance'] = a_source.provenance
+            report['prefix']['active_extent'] = active_prefix_extent
+            report['owner_counter_deltas'] = owner_deltas
+            report['output_transport'] = 'Actual accepted command/data/ACK events; terminal publishes only after final ACK'
+            output_event('terminal', finished)
+        return report, destination
     finally:
         seed_records.close()
         prefix_records.close()

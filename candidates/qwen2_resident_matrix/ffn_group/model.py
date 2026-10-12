@@ -47,6 +47,12 @@ class Job:
 
 
 @dataclass(frozen=True)
+class PrefixJob(Job):
+    """Existing owner third address, used for the separate RoPE sine span."""
+    c: int = 0
+
+
+@dataclass(frozen=True)
 class GroupRequest:
     gate: Job
     up: Job
@@ -476,12 +482,16 @@ class HostControl:
     ordinary semantics are modeled here; other commands can be scanned safely,
     then rejected by this bounded subset if execution reaches them.
     """
-    def __init__(self, *, enabled=False, profile="legacy_qwen2", max_commands=64, event_slots=256):
-        if enabled and profile != "legacy_qwen2":
+    def __init__(self, *, enabled=False, profile="legacy_qwen2", max_commands=64, event_slots=256,
+                 legacy_prefix=False, max_tokens=1024):
+        if (enabled or legacy_prefix) and profile != "legacy_qwen2":
             raise ValueError("resident FFN excludes native extra-root profiles")
         if not 21 <= max_commands <= 255 or event_slots < 4 or event_slots & (event_slots - 1):
             raise ValueError("Host parameter domain")
+        if type(legacy_prefix) is not bool or not uint(max_tokens, 16) or not 0 < max_tokens <= 1024:
+            raise ValueError("legacy prefix model parameter domain")
         self.enabled, self.profile, self.max_commands, self.event_slots = enabled, profile, max_commands, event_slots
+        self.legacy_prefix, self.max_tokens = legacy_prefix, max_tokens
         self.state = "idle"
         self.poison = False
         self.program = ()
@@ -532,7 +542,8 @@ class HostControl:
             self.current_command = Command(0, 0, NULL, NULL, NULL, 0, 0)
             c = self.frontend.fetch_command(pc)
         self.current_command = c
-        if c.opcode not in (0x20, 0x35) or c.engine != (2 if c.opcode == 0x20 else 3):
+        supported = (0x20, 0x35, 0x30, 0x32, 0x34, 0x41) if self.legacy_prefix else (0x20, 0x35)
+        if c.opcode not in supported or c.engine != (2 if c.opcode == 0x20 else 4 if c.opcode == 0x41 else 3):
             raise Rejected("Unsupported", "bounded ordinary opcode/engine")
         if c.reserved:
             raise Rejected("Malformed", "reserved command bits")
@@ -546,10 +557,17 @@ class HostControl:
                 or c.signal == c.wait or c.signal in blocked_signals):
             raise Rejected("Dependency", "public event chain")
         a, b, d = tuple(self.reader.read(root, slot == 2) for slot, root in enumerate(c.roots))
-        p = (self.policies.get(a.tail) if self.frontend is None else
+        p = ((Policy("kv", valid=a.tail == NULL) if c.opcode == 0x41 else self.policies.get(a.tail)) if self.frontend is None else
              self.frontend.read_policy(c, (a, b, d)))
         if p is None or not p.valid or b.tail != NULL or d.tail != NULL:
             raise Rejected("Unsupported", "typed consumer policy/tails")
+        if c.opcode in (0x30, 0x32, 0x34, 0x41):
+            j = self._prefix_job(c, a, b, d, p, pc)
+            if not (self.live(a) and self.live(b)):
+                raise Rejected("Dependency", "source allocation liveness")
+            if d.overlaps(a) or d.overlaps(b) or not self._fresh(d):
+                raise Rejected("Permission", "destination allocation freshness")
+            return j, (a, b, d)
         if a.dtype != 7 or d.dtype != 7 or a.rank != 2 or b.rank != 2 or d.rank != 2:
             raise Rejected("Unsupported", "ordinary dtype/rank")
         m, n = d.dims
@@ -576,6 +594,41 @@ class HostControl:
         j = Job("Dense" if c.opcode == 0x20 else "Activation", (self.epoch << 16) | pc,
                 a.address, b.address, d.address, m, n, k, d.payload_bytes, b.dtype == 5)
         return j, (a, b, d)
+
+    def _prefix_job(self, command, a, b, d, policy, pc):
+        """Legacy production decode at HostBlockCommands.scala:395,430,848–924.
+
+        This optional software subset adds no ABI or arithmetic policy. The
+        attention group remains unimplemented and is rejected at its first op.
+        """
+        if not all(t.dtype == 7 for t in (a, b, d)) or a.rank != 2:
+            raise Rejected("Unsupported", "legacy prefix FP32 dtype/rank")
+        m, k = a.dims
+        if not 0 < m <= self.max_tokens or (command.opcode == 0x41) != (a.tail == NULL):
+            raise Rejected("Unsupported", "legacy prefix rows/policy tail")
+        c_address = 0
+        if command.opcode == 0x41:
+            n, kind = 256, "KvAppend"
+            valid = (a.dims == b.dims == (m, n) and d.dims == (2, m, n)
+                     and policy.kind == "kv")
+        else:
+            n = d.dims[1] if d.rank == 2 else 0
+            valid = (a.dims == d.dims == (m, n) and 0 < n <= WIDTH and n % 16 == 0
+                     and policy.kind == "sfu" and policy.opcode == command.opcode and policy.inputs == 2)
+            if command.opcode == 0x32:
+                kind = "Norm"
+                valid = valid and n == 1536 and b.dims == (1, n)
+            elif command.opcode == 0x30:
+                kind = "Bias" if b.dims[0] == 1 else "Add"
+                valid = valid and b.dims in ((1, n), (m, n))
+            else:
+                kind = "Rope"
+                valid = valid and n in (1536, 256) and b.dims == (2, self.max_tokens, 64)
+                c_address = b.address + self.max_tokens * 64 * 4
+        if not valid:
+            raise Rejected("Unsupported", "legacy prefix shape/policy")
+        return PrefixJob(kind, (self.epoch << 16) | pc, a.address, b.address, d.address,
+                   m, n, k, d.payload_bytes, c=c_address)
 
     def _admit(self):
         j, (a, b, d) = self._decode(self.pc)
@@ -660,7 +713,8 @@ class HostControl:
             if frozenset(coordinated_reset) != RESET_DOMAIN:
                 raise ValueError("coordinated reset must cover complete backend domain")
             self.__init__(enabled=self.enabled, profile=self.profile, max_commands=self.max_commands,
-                          event_slots=self.event_slots)
+                          event_slots=self.event_slots, legacy_prefix=self.legacy_prefix,
+                          max_tokens=self.max_tokens)
             return p
         s = self.state
         try:

@@ -54,7 +54,7 @@ class PublicExecution:
     every public response. ``ordinary_edge`` is the optional original Down
     driver's callback and invokes this exact owner once per call.
     """
-    def __init__(self, frontend, owner, trace, deadline, *, host=None):
+    def __init__(self, frontend, owner, trace, deadline, *, host=None, prefix_owner=None):
         self.frontend, self.owner, self.trace, self.deadline = frontend, owner, trace, deadline
         self.host = host if host is not None else public_group.HostControl(enabled=True)
         require(frontend.launch(self.host), 'public raw frontend launch rejected')
@@ -72,11 +72,16 @@ class PublicExecution:
         self.down_terminal_tick = self.down_start_tick = None
         self.bank_ids = (id(owner), id(owner.a_banks), id(owner.b_banks), id(owner.tiles.banks))
         self.last_host_edge = None
+        self.prefix_owner = prefix_owner
+        self.prefix_jobs = self.prefix_results = 0
+        self.ordinary_history = []
 
     def reset_required(self):
         reset = self.owner.ports().get('reset_required', False)
         if self.coupled is not None:
             reset = reset or self.coupled.c.poison or self.coupled.services().error
+        if self.prefix_owner is not None:
+            reset = reset or self.prefix_owner.ports()['reset_required']
         return bool(reset)
 
     def ports(self):
@@ -118,6 +123,50 @@ class PublicExecution:
         self.counts['idle_owner_edges'] += 1
         self._host_edge(owner_result=owner_result, reset_required=before_reset)
         return edge
+
+    def prefix_edge(self, **inputs):
+        """One existing Host edge coupled to a source-bound prefix memory owner.
+
+        The Matrix owner stays in this same execution instance, idle between
+        Dense commands. No opaque successful prefix terminal is accepted here.
+        """
+        require(self.prefix_owner is not None, 'prefix backend not attached')
+        require(self.owner.state == 'idle' and self.owner.lease is None and
+                self.owner.tiles.idle and not self.owner.ports()['response'],
+                'prefix scalar/memory owner conflicts with Matrix obligations')
+        hp, pp = self.ports(), self.prefix_owner.ports()
+        before_reset = self.reset_required()
+        if 'job' in inputs:
+            decoded = hp['ordinary_request']
+            require(decoded is inputs['job'] and hp['group_request'] is None and
+                    decoded.kind in ('Norm', 'Bias', 'Rope', 'KvAppend'),
+                    'prefix backend must accept the original public job object')
+        require('response_ready' not in inputs, 'prefix result readiness is owned by Host')
+        inputs['response_ready'] = hp['owner_result_ready']
+        edge = self.prefix_owner.tick(**inputs)
+        self.owner.tick()
+        accepted = bool(edge.get('job_fire'))
+        terminal = pp['response'] if edge.get('response_fire') else None
+        self.prefix_jobs += accepted
+        self.prefix_results += terminal is not None
+        self._host_edge(request_ready=accepted, owner_result=terminal, reset_required=before_reset)
+        require(bool(self.last_host_edge['request_fire']) == accepted and
+                bool(self.last_host_edge['owner_result_fire']) == (terminal is not None),
+                'public/prefix request or terminal handshake disagreement')
+        return edge
+
+    def retire_ordinary_bookkeeping(self):
+        """Retire one Dense driver association after its public completion fires."""
+        require(self.down_job is not None and self.down_terminal is not None and
+                self.host.state in ('decode', 'finish') and
+                self.host.pc == (self.down_job.tag & 0xffff) + 1 and
+                self.host.status is None and self.owner.state == 'idle',
+                'Dense bookkeeping retirement before public completion')
+        self.ordinary_history.append(dict(job=asdict(self.down_job),
+            terminal=list(self.down_terminal), owner_terminal_tick=self.down_terminal_tick,
+            owner_start_tick=self.down_start_tick))
+        self.down_job = self.down_terminal = None
+        self.down_start_tick = self.down_terminal_tick = None
 
     def advance_to_request(self, limit=4096):
         for _ in range(limit):

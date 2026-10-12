@@ -4,7 +4,9 @@ The retained Host/coordinator own admission, liveness, scan and completion.
 This adapter fetches the actual public 128-bit words using physical 64-byte
 reads. No command/tensor/policy cache or opaque decoded-success input exists.
 RecordReader ticks describe ready/valid events, NOT Chisel execution or cycles.
-The supported execution subset is the explicitly named FFN4 subprogram.
+The default execution subset is the explicitly named FFN4 subprogram. The
+optional legacy-prefix policy decodes the existing public21 image through
+pc0--9; its remaining Attention/Add suffix is not accepted by this subset.
 """
 from dataclasses import dataclass, replace
 import importlib.util
@@ -361,6 +363,9 @@ class PublicFrontend:
             raise Rejected('Permission', 'resident Up allocation permissions/alias')
 
     def read_policy(self, command, tensors):
+        if command.opcode == 0x41:
+            # Original KV_APPEND has no policy record and never reads NULL.
+            return group.Policy('kv', valid=tensors[0].tail == NULL)
         index, visited = tensors[0].tail, []
         prefixes = {i for t in tensors for i in t.prefix_indices}
         tag = (self.config.epoch << 48) | (self.current_pc << 32)

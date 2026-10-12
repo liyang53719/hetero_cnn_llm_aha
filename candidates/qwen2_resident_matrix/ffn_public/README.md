@@ -36,3 +36,19 @@ M16/M128分别304.597/437.927秒host wall，Gate/Up/act/Down全部逐bit等于�
 M128 payload流量98,041,856B，加入metadata为98,047,424B；仍是FFN子图的实际软件端口流量，不含整个block，不是测得DDR带宽。M128观察有用/物理主机FMA均5,284,823,040，M16有用660,602,880/物理5,284,823,040；硬件whole-wall利用率保持null。新公开Host逐边沿控制增加的是主机模型开销，不能用约305/438秒推断硬件时延。
 
 来源与结果见 `numerical_receipt.json`。两次执行均绑定同48个严格源，原812d858旧capture没有重新绑定。源于prepare-only的venv分类失败及修复记录保留，未将其记为算术失败。
+
+## 同一公开21命令程序的前缀接入
+
+新增 `make_qwen2_21_fixture` 直接复用原 `pack_owner_block_fixture.py` 与 BF16 权重描述符转换器：21条 Command128、215条描述符、35个真实分配及同一 KV 分配中的两个 view。命令原始字节、地址、stride、生命周期保留；七个 Dense B 的存储 dtype 从 FP32 改为既有 BF16 合同，原 FP32 大小的保留区未被其它数据占用。原三类普通 region 与第4 workspace 分区仍隔离。
+
+`legacy_prefix=True` 仅启用旧生产入口已有的 Norm、Bias、RoPE、KV 解码。`prefix_execution.py` 从 raw x 开始，按 pc0–9 连续执行 Norm、Q/Bias/RoPE、K/Bias/RoPE、V/Bias、KV。元数据实际读取端口和全部数值读写使用同一个物理地址索引；三次 Dense 使用同一个 Matrix owner、A/B bank、原 accepted-step C++ FMA。所有中间结果从真实模型写拍产生，只有全量 ACK、owner 终态和公开 completion 握手之后才可被下一命令读取。每次发布复核此前输出，pc9 后全量检查输出共存、canary 及未执行 suffix/virtual 区哨兵。
+
+前缀 owner 的 NumPy FP32 原语保持原 v0 运算和舍入点。Norm 的 Scalar 路径保留原 underflow 错误策略；Vector 乘加保留原路径的有限数写回检查。这里模拟共享资源的串行所有权，不证明 row buffer 的实际 bank 分配、共享端口时延或 Chisel 执行。QKV 的 K1536 可放入现有 K2560 chunk，不读写外部 prefix workspace；完整 Down 还需将外部 workspace 实存接到此唯一地址模型，不能从本次前缀继承该结论。
+
+`check_prefix_numeric.py` 冻结 raw 输入、公开 metadata 和执行源码，M16 为同一 frozen cold M128 的前16行。公开 RoPE 表容量1024、原数值参考容量128，活动 token 的双精度 libm→FP32 生成顺序相同，sin 半区地址按各自真实容量计算。十个写回区在 pc9 的真实 ACK/公开 completion 后，与提取的原 C++ Norm/Dense/RoPE 方法逐位比较，包含 bias 前的 qraw/kraw/vraw；旧保存参考只覆盖 n0、qr、kr、v、q、k 六项，另由保存 k/v 组成 KV 校验。独立 oracle 不计算 Attention/FFN。
+
+该前缀 checkpoint 停在同一 launch 的 pc10，尚无整个21命令程序的 terminal。它不覆盖 Attention、O、residual、后置 Norm、FFN 或 carried cache，不是完整 block 验收。上文 FFN4 两个历史实值捕获对应不可变提交 `8212a32f43338163baee4126e522dcacede0fa23` 的源码，`numerical_receipt.json` 保持原哈希；新增普通 Dense/前缀实现不得继承其旧 PASS。新捕获必须用自己的源码与结果身份。
+
+本轮 pc0–9 新捕获 M16/M128 分别22.985/48.492秒 host wall；十个输出区126,976/1,015,808个FP32值均对独立原方法逐bit一致。两组分别写入507,904/4,063,232B并全ACK，共10个公开completion，pc10仍待执行。M128读取14,425,088B含7,168B metadata，连同写回共18,488,320B实际软件端口流量。两个case原63源与冻结副本、执行前后SHA全部一致，独立复核直接重建raw输入并逐字节核对输出、参考、哨兵与ACK，未重跑算术。
+
+结果见 `prefix_numerical_receipt.json`。M128观察有用/物理主机FMA均402,653,184；M16分别50,331,648/402,653,184。原生M128与FP32-final门仍 FAIL/待定，硬件whole-wall周期及利用率保持null。

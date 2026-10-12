@@ -7,6 +7,55 @@ import unittest
 HERE = Path(__file__).resolve().parent
 
 class DeliveryTests(unittest.TestCase):
+    def test_prefix_capture_keeps_actual_public_fences_and_historical_scope(self):
+        receipt = json.loads((HERE / 'prefix_numerical_receipt.json').read_text())
+        self.assertEqual(receipt['scope'], 'PUBLIC21_PREFIX_PC0_9_SOFTWARE_MODEL_ONLY')
+        self.assertEqual([c['rows'] for c in receipt['cases']], [16, 128])
+        self.assertFalse(receipt['full_block_executed'])
+        self.assertFalse(receipt['whole_program_terminal_observed'])
+        self.assertFalse(receipt['carried_cache_executed'])
+        self.assertIsNone(receipt['hardware_cycles'])
+        self.assertIsNone(receipt['full_wall_mac_utilization'])
+        self.assertEqual(receipt['native_acceptance'], 'UNCHANGED_FAIL_POLICY_PENDING')
+        self.assertEqual(receipt['historical_ffn4']['commit'], '8212a32f43338163baee4126e522dcacede0fa23')
+        self.assertFalse(receipt['historical_ffn4']['new_source_pass_inherited'])
+        self.assertEqual(hashlib.sha256((HERE / 'numerical_receipt.json').read_bytes()).hexdigest(),
+                         '011712a7bbcee20cd4226452ab7d7b7d2d1dd78e7a0b83a83899d7f85ca19541')
+        root = HERE.parents[2]
+        for path, digest in receipt['source_sha256'].items():
+            self.assertEqual(hashlib.sha256((root / path).read_bytes()).hexdigest(), digest, path)
+        for case in receipt['cases']:
+            rows = case['rows']
+            self.assertEqual(case['prelaunch_intermediate_payloads'], [])
+            self.assertEqual(case['checkpoint']['public_completion_pcs'], list(range(10)))
+            self.assertTrue(case['checkpoint']['all_actual_final_acks_before_comparison'])
+            self.assertTrue(case['checkpoint']['pc10_not_executed'])
+            self.assertIsNone(case['host']['launch_result'])
+            self.assertEqual(case['host']['accepted']['result_fire'], 0)
+            self.assertEqual(case['host']['accepted']['completion_fire'], 10)
+            self.assertEqual(case['public_metadata']['command']['count'], 21)
+            self.assertEqual(case['public_metadata']['descriptor']['count'], 215)
+            self.assertEqual(case['metadata_read_bytes'], 7168)
+            self.assertEqual(case['checked_values'], rows * 7936)
+            writes = case['memory_accepted']['write_ack_bytes']
+            self.assertEqual(writes, rows * 7936 * 4)
+            self.assertEqual(writes, case['memory_accepted']['write_data_bytes'])
+            self.assertEqual(case['all_read_write_bytes'],
+                             writes + case['payload_read_bytes'] + case['metadata_read_bytes'])
+            self.assertEqual(set(case['outputs']), set(case['comparison']))
+            for name, output in case['outputs'].items():
+                c = case['comparison'][name]
+                self.assertTrue(output['terminal'] and output['published'])
+                self.assertEqual(output['bytes'], output['written_bytes'])
+                self.assertEqual(output['bytes'], output['ack_bytes'])
+                self.assertEqual(output['sha256'], c['actual_sha256'])
+                self.assertEqual(c['actual_sha256'], c['independent_sha256'])
+                self.assertEqual(c['independent_bit_mismatches'], 0)
+                self.assertIn(c['saved_bit_mismatches'], (None, 0))
+            self.assertTrue(case['observed_software_macs']['not_hardware_measurement'])
+            self.assertEqual(case['observed_software_macs']['useful'], rows * 1536 * 2048)
+            self.assertEqual(case['observed_software_macs']['physical_host_fmas'], 402653184)
+
     def test_exact_files_and_software_scope(self):
         d = json.loads((HERE / 'delivery_manifest.json').read_text())
         names = {p.name for p in HERE.iterdir() if p.is_file() and p.name != 'delivery_manifest.json'}

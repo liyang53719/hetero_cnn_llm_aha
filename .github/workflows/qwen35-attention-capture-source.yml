@@ -1,0 +1,52 @@
+name: qwen35-attention-capture-source
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen35-attention-capture-source.yml'
+      - 'candidates/qwen35_attention_prefill/native/**'
+      - 'config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Validate capture and partial-evidence contracts without third-party packages
+        run: |
+          mkdir -p work/qwen35_attention_capture_source
+          python -S -B - <<'PY' > work/qwen35_attention_capture_source/tests.log 2>&1
+          import hashlib, json, pathlib, sys, unittest
+          from candidates.qwen35_attention_prefill.native import capture
+          paths = [pathlib.Path(capture.__file__), pathlib.Path('candidates/qwen35_attention_prefill/native/test_capture.py'), pathlib.Path(capture.CONTRACT)]
+          def hashes():
+              return {str(p.resolve().relative_to(pathlib.Path.cwd())): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+          before = hashes()
+          assert before[capture.CONTRACT] == capture.CONTRACT_SHA256, 'frozen official contract drift'
+          suite = unittest.defaultTestLoader.loadTestsFromName('candidates.qwen35_attention_prefill.native.test_capture')
+          result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(suite)
+          passed = result.wasSuccessful() and result.testsRun == 11 and not result.skipped and before == hashes()
+          report = dict(status='PASS_SOURCE_CONTRACT_ONLY' if passed else 'FAIL', tests=result.testsRun,
+              failures=len(result.failures), errors=len(result.errors), skipped=len(result.skipped),
+              source_sha256=before, sources_unchanged=before == hashes(),
+              torch_imported='torch' in sys.modules, numeric_capture_executed=False, rtl_executed=False)
+          passed = passed and not report['torch_imported']
+          report['status'] = 'PASS_SOURCE_CONTRACT_ONLY' if passed else 'FAIL'
+          pathlib.Path('work/qwen35_attention_capture_source/summary.json').write_text(json.dumps(report, indent=2) + '\n')
+          raise SystemExit(0 if passed else 1)
+          PY
+      - name: Retain compact source gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen35-attention-capture-source-${{ github.sha }}
+          path: |
+            work/qwen35_attention_capture_source/*.json
+            work/qwen35_attention_capture_source/*.log
+          retention-days: 14

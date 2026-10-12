@@ -1,0 +1,117 @@
+{
+  "cold_workflow": {
+    "artifact_files": {
+      "summary.json": "7222ebf6c07038a0d7904d98c951aa16428bda514ae815c5d6a0be0ff579bdc3",
+      "tests.log": "1e429f20a610a43fddbf71cec1503899b92d737585c5c3a71758880674ceb2e5"
+    },
+    "exit_code": 0,
+    "exported_sources": {
+      ".github/workflows/qwen35-attention-capture-source.yml": "ce583bc78c7892097efcdcae91af808400d0f4037cbdbf7c1cbe2d7349377ea9",
+      "candidates/qwen35_attention_prefill/native/capture.py": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+      "candidates/qwen35_attention_prefill/native/test_capture.py": "bf9baf7bddc7a0b0d2ddbfd5c10733c023daf5a0f21e22dace4208c2198cf7ef",
+      "config/upstream/qwen3_5_0p8b/layer3_bf16_contract.json": "13b52da81746346f62c6a2f28cc1d6fa565989bd71d834dd4951ee2056355d97"
+    },
+    "frozen_contract_sha256_checked": true,
+    "no_numeric_capture": true,
+    "no_original_work_read": true,
+    "only_standard_library": true,
+    "status": "PASS_COLD_WORKFLOW_BODY",
+    "tests": 11
+  },
+  "environment_transition": {
+    "actual_gdn_m128_historical_exit": 0,
+    "actual_gdn_m128_historical_summary_sha256": "033697cf2b2972884d5848c82353328cee5e9265a5a9a7df3d2ce9147473d661",
+    "failure_messages": [
+      "exec-server rejected request (-32603): No such file or directory",
+      "exec-server transport disconnected; executor key changed during session recovery"
+    ],
+    "gdn_m128_local_raw_data_currently_visible": false,
+    "human_deletion_cause_asserted": false,
+    "l3_m128_last_session": 41652,
+    "l3_m128_terminal": "UNKNOWN_NO_EXIT_RECEIPT_RECOVERED",
+    "l3_m16_historical_exit": 0,
+    "l3_m16_historical_manifest_sha256": "4a22043eed901f9e959a63e76e2f75542cfb21e39ef1e1e12f1eb666de38dec2",
+    "l3_m16_raw_data_currently_visible": false,
+    "long_actual_model_rerun": false,
+    "new_directory": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011",
+    "old_workspace_head": "54776eab5c2d928cd1a9888cf17fd4bf98a44ef0",
+    "previous_directory_unavailable": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142",
+    "remote_commit": "37b7de74431ed79b7e9f3d52d308ed7f46727b7a",
+    "remote_tree": "fe133cea91e03ae82d53e38b2805cea837fdebd7",
+    "utc": "2026-10-12T20:12:20Z"
+  },
+  "new_environment_tests": {
+    "log_sha256": "41b910a7d0331b87e0b0fe5a4d1a539b128597b581f0f1aef15c64fa6383e26c",
+    "m128_old_session_terminal": "UNKNOWN",
+    "new_native_capture_executed": false,
+    "raw_capture_restored": false,
+    "source_recovery_receipt_sha256": "e54abaa342ae8765ac7eb2ca7873adb240decc6219c4ed955ed11f774df62479",
+    "sources": {
+      "candidates/qwen35_attention_prefill/native/capture.py": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+      "candidates/qwen35_attention_prefill/native/test_capture.py": "bf9baf7bddc7a0b0d2ddbfd5c10733c023daf5a0f21e22dace4208c2198cf7ef"
+    },
+    "status": "PASS_RESTORED_SOURCE_SMALL_TESTS_ONLY",
+    "tests": 11
+  },
+  "new_model_or_rtl_pass_claimed": false,
+  "numeric_capture_pass_inherited": false,
+  "old_m128_capture_exit_known": false,
+  "old_m16_raw_capture_recovered": false,
+  "previous_main_ci_reverified": {
+    "artifact_bytes": 21490,
+    "artifact_id": 11770706620,
+    "artifact_sha256": "90071012582a9894e85d5f24d7920fb7638d17c7aaedcf2d0805af14f847efdb",
+    "commit": "37b7de74431ed79b7e9f3d52d308ed7f46727b7a",
+    "compiled_source_hashes_verified": 4,
+    "local_elf_restored": false,
+    "model_run": 38301729918,
+    "new_test_run": false,
+    "payload_run": 38301729944,
+    "source_hashes_verified": 49,
+    "suites": 22,
+    "tests": 313
+  },
+  "restored_source": {
+    "created_at": "2026-10-12T20:17:56.306687+00:00",
+    "files": [
+      {
+        "bytes": 49478,
+        "exact_match": true,
+        "expected_final_sha256": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+        "observed_final_sha256": "e5ff1b00b2d1007c5b76cbdbc66fc09ecb0623f3dadb400e97fb44886984bb52",
+        "path": "candidates/qwen35_attention_prefill/native/capture.py",
+        "pre_journal_sha256_verified_during_replay": "f0efe3359abc0977190bf7aa69133c3c9bebe7952aaa2190a5b151f6e9ee9882"
+      },
+      {
+        "bytes": 15185,
+        "exact_match": true,
+        "expected_final_sha256": "bf9baf7bddc7a0b0d2ddbfd5c10733c023daf5a0f21e22dace4208c2198cf7ef",
+        "observed_final_sha256": "bf9baf7bddc7a0b0d2ddbfd5c10733c023daf5a0f21e22dace4208c2198cf7ef",
+        "path": "candidates/qwen35_attention_prefill/native/test_capture.py",
+        "pre_journal_sha256_verified_during_replay": "0bd63ac678fee6474dc1a81b45fae4509a378200433fcccb3dc10b7366005e44"
+      }
+    ],
+    "fresh_tests_run": false,
+    "git_invoked": false,
+    "method": [
+      "Replayed the complete original file creation contents and subsequent source patches still visible in the current conversation/tool context.",
+      "Verified both reconstructed pre-journal files against their previously recorded SHA256 values.",
+      "Applied the exact preservation unified diff retained in the current tool context.",
+      "Verified both final files byte-for-byte by their previously recorded final SHA256 values."
+    ],
+    "model_capture_executed": false,
+    "next_validation_command": "PYTHONDONTWRITEBYTECODE=1 python -B -m unittest candidates.qwen35_attention_prefill.native.test_capture -v",
+    "numerical_acceptance_claimed": false,
+    "old_paths_read": false,
+    "previous_capture_evidence_recovered": false,
+    "previous_m128_exit_status_unknown": true,
+    "previous_m16_success_not_reasserted": true,
+    "repository": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011",
+    "session_files_read": false,
+    "status": "EXACT_SOURCE_BYTES_RECOVERED",
+    "torch_imported": false,
+    "write_scope": "These two source files and this newly authorized recovery receipt only."
+  },
+  "schema_version": 1,
+  "scope": "RESTORED_L3_NATIVE_CAPTURE_SOURCE_ONLY"
+}

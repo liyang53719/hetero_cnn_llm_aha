@@ -1,0 +1,73 @@
+{
+  "actual_n0_official_bit_exact": true,
+  "actual_summary_sha256": "25b947ff774412685d9691de0a06f1a1cf489388557db357013bf7911c11681a",
+  "consumed_sha256": {
+    "work/qwen2_layer0_payload_20261011/self_attn.q_proj.bias.bin": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+    "work/qwen2_layer0_payload_20261011/self_attn.q_proj.weight.bin": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_k.f32le": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_n0.f32le": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_q.f32le": "929000612a9eb51d5305feecdfa0cdf8768d055a06828624075583956a41b4df",
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_qr.f32le": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9",
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_qraw.f32le": "f0a3b928a24695b69b6ecaee32d5be384d3d4ac055caec91b7228ba770a06cd7",
+    "work/qwen2_official_public21_20261012/actual_m128_02/attention_observation/dot_bf16.u32le": "5c7989afac216467b0049c75b51e13cd7370a8ec41725b81823a431b14e68bce",
+    "work/qwen2_official_public21_20261012/actual_m128_02/attention_observation/dot_parts.u32le": "ec04bf34310429b5ec7bc73d0070ac684023d6ec8f218ef4906d172c36e52726",
+    "work/qwen2_official_public21_20261012/actual_m128_02/attention_observation/scores_bf16.u32le": "c5896eabe76360ee2bfcc6d77d5590fadf14e1b23637599c5bb77e7ef076d8a4",
+    "work/qwen2_official_public21_20261012/actual_m128_02/attention_observation/unrounded_dot_sum.u32le": "eaed5a1edc49d3135aabf0ca2eaf8fc8e294b8a51287b9ec61ad7fbe4dd3c097",
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/n0.f32le": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/qr.f32le": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+  },
+  "exact_dot_then_bias_matches": 27,
+  "exact_fused_matches": 27,
+  "full_work_report_sha256": "028e6952ce3d840595e28dc9231bbd32a0010d0fce741dd23532d006266cff14",
+  "independent_rne_source_sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+  "previous_attribution_sha256": "2e5991c9efb31e980c8ef9199717b6c7a0e4d58b91f3bcfd5faa4086d2c3519a",
+  "rows_count": 40,
+  "scope": "All 40 actual-vs-official QR bit differences; 1536 products each. Exact rational calculations are diagnostic only and propose no hardware precision/resource change. No native forward or complete chain rerun.",
+  "script_sha256": "999955f472c7578a6dcfd2fddec316dafa91d4ccecc96ebdf52074589b3445ef",
+  "seconds": 0.4327081660012482,
+  "selected_first_and_maximum_projection": [
+    {
+      "actual_qr_hex": "0x3cb40000",
+      "actual_qraw_hex": "0xbf6c5c00",
+      "exact_dot_then_bias_matches_official": true,
+      "exact_dot_then_fp32_bias_bf16_hex": "0x3cb50000",
+      "exact_fused_dot_bias_bf16_hex": "0x3cb50000",
+      "exact_fused_matches_official": true,
+      "official_qr_hex": "0x3cb50000",
+      "output_channel": 499,
+      "token": 4
+    },
+    {
+      "actual_qr_hex": "0x3fed0000",
+      "actual_qraw_hex": "0x404ec004",
+      "exact_dot_then_bias_matches_official": true,
+      "exact_dot_then_fp32_bias_bf16_hex": "0x3fec0000",
+      "exact_fused_dot_bias_bf16_hex": "0x3fec0000",
+      "exact_fused_matches_official": true,
+      "official_qr_hex": "0x3fec0000",
+      "output_channel": 1215,
+      "token": 102
+    }
+  ],
+  "sequential_fp32_recipe_matches_all_40_raw_actual": true,
+  "status": "READ_ONLY_SELECTED_PROJECTION_ATTRIBUTION_NOT_ACCEPTANCE",
+  "worst_causal_score_coordinate": [
+    9,
+    102,
+    2
+  ],
+  "worst_observed_dot_and_score": {
+    "dot_bf16": {
+      "hex": "0xc6160000",
+      "value": -9600.0
+    },
+    "scores_bf16": {
+      "hex": "0xc4540000",
+      "value": -848.0
+    },
+    "unrounded_dot_sum": {
+      "hex": "0xc6167cc9",
+      "value": -9631.1962890625
+    }
+  }
+}

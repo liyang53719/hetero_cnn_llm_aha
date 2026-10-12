@@ -1,0 +1,261 @@
+{
+  "actual_operands_scores_sha256": "1d7a859cd8e20b3f766ff02f5031af68263d55035f9221ce548f5c7e1fa99fe0",
+  "actual_summary_sha256": "25b947ff774412685d9691de0a06f1a1cf489388557db357013bf7911c11681a",
+  "actual_vs_native_same_actual_operands": {
+    "causal_elements": 99072,
+    "coordinates": [],
+    "different_elements": 0,
+    "greater_than_original_abs_max": 0,
+    "max_abs": 0.0,
+    "mean_abs": 0.0
+  },
+  "actual_vs_official": {
+    "causal_elements": 99072,
+    "coordinates": [
+      [
+        0,
+        9,
+        102,
+        2
+      ],
+      [
+        0,
+        9,
+        102,
+        25
+      ],
+      [
+        0,
+        9,
+        102,
+        32
+      ],
+      [
+        0,
+        9,
+        102,
+        40
+      ],
+      [
+        0,
+        9,
+        102,
+        45
+      ],
+      [
+        0,
+        9,
+        102,
+        65
+      ],
+      [
+        0,
+        9,
+        102,
+        70
+      ],
+      [
+        0,
+        9,
+        102,
+        82
+      ],
+      [
+        0,
+        9,
+        102,
+        86
+      ],
+      [
+        0,
+        9,
+        102,
+        96
+      ],
+      [
+        0,
+        9,
+        102,
+        100
+      ]
+    ],
+    "different_elements": 11,
+    "greater_than_original_abs_max": 11,
+    "max_abs": 8.0,
+    "mean_abs": 0.0005652454780361757
+  },
+  "autocast_enabled": false,
+  "consumed_sha256": {
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_k.f32le": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+    "work/qwen2_official_public21_20261012/actual_m128_02/actual_q.f32le": "929000612a9eb51d5305feecdfa0cdf8768d055a06828624075583956a41b4df",
+    "work/qwen2_official_public21_20261012/actual_m128_02/attention_observation/scores_bf16.u32le": "c5896eabe76360ee2bfcc6d77d5590fadf14e1b23637599c5bb77e7ef076d8a4",
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/k.f32le": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/q.f32le": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910",
+    "work/qwen2_rms_rope_prefill_v2_m128_20261011/cold/references/official_self_cache/scores.f32le": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350"
+  },
+  "deterministic": true,
+  "elapsed_seconds": 0.03232066100463271,
+  "full_block_reexecuted": false,
+  "future_positions_remain_unobserved": true,
+  "interop_threads": 1,
+  "layouts": {
+    "actual_operands": {
+      "key_transposed": {
+        "dtype": "torch.bfloat16",
+        "logical_bf16_sha256": "583aed976c4090c862eb46fc75aeffad89e8a6663b7d048ca3de834dad672751",
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          1,
+          128
+        ]
+      },
+      "q": {
+        "dtype": "torch.bfloat16",
+        "logical_bf16_sha256": "2f55280c6c87d388260d6a2d715187e109e4057e0b273d19c01cab5044098d71",
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          128,
+          1536,
+          1
+        ]
+      }
+    },
+    "official_operands": {
+      "key_transposed": {
+        "dtype": "torch.bfloat16",
+        "logical_bf16_sha256": "583aed976c4090c862eb46fc75aeffad89e8a6663b7d048ca3de834dad672751",
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          1,
+          128
+        ]
+      },
+      "q": {
+        "dtype": "torch.bfloat16",
+        "logical_bf16_sha256": "e58005e1119948b53bcec128e5e99f09e51441c3a9c59e7441731a60d7e1aa62",
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          128,
+          1536,
+          1
+        ]
+      }
+    }
+  },
+  "mkldnn_enabled": true,
+  "native_acceptance": false,
+  "native_actual_vs_official_operands": {
+    "causal_elements": 99072,
+    "coordinates": [
+      [
+        0,
+        9,
+        102,
+        2
+      ],
+      [
+        0,
+        9,
+        102,
+        25
+      ],
+      [
+        0,
+        9,
+        102,
+        32
+      ],
+      [
+        0,
+        9,
+        102,
+        40
+      ],
+      [
+        0,
+        9,
+        102,
+        45
+      ],
+      [
+        0,
+        9,
+        102,
+        65
+      ],
+      [
+        0,
+        9,
+        102,
+        70
+      ],
+      [
+        0,
+        9,
+        102,
+        82
+      ],
+      [
+        0,
+        9,
+        102,
+        86
+      ],
+      [
+        0,
+        9,
+        102,
+        96
+      ],
+      [
+        0,
+        9,
+        102,
+        100
+      ]
+    ],
+    "different_elements": 11,
+    "greater_than_original_abs_max": 11,
+    "max_abs": 8.0,
+    "mean_abs": 0.0005652454780361757
+  },
+  "official_full_scores_replayed_bit_exact": true,
+  "official_operands_scores_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+  "official_runtime_identity_sha256": "5cec6123066819fc79a4f279706fa4a03faeca33cb747f2e082b0ea07297f1d6",
+  "original_stride_receipt_available": false,
+  "script_sha256": "7d3919d0fa1d3b6a587f0f7685c5c573bb4b7d5ce07a37d1e14ec69fafaaeab8",
+  "status": "CONDITIONAL_FULL_SHAPE_OPERATOR_DIAGNOSTIC_ONLY",
+  "stride_reconstructed_from_frozen_source": true,
+  "threads": 4,
+  "thresholds_changed": false
+}

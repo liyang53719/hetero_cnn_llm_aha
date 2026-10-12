@@ -1,0 +1,3022 @@
+{
+  "accepted": {
+    "completion_backpressure_edges": 63,
+    "completion_fire": 21,
+    "host_model_ticks": 17010491,
+    "idle_owner_edges": 234,
+    "ordinary_owner_edges": 1960288,
+    "owner_result_fire": 17,
+    "request_fire": 17,
+    "result_backpressure_edges": 3,
+    "result_fire": 1
+  },
+  "actual_output_seals": {
+    "act": {
+      "bytes": 4587520,
+      "sha256": "97cfcc46b796721a9f820ce8d741410b9e0a50859c2e6ec7de393765dfa01ea1"
+    },
+    "att": {
+      "bytes": 786432,
+      "sha256": "9b75bb40067dbfb50ca8751107913e4f40810e34309cbae1528da3a0b8d42bf9"
+    },
+    "down": {
+      "bytes": 786432,
+      "sha256": "339209481560bc65cc7d336f7235aa742104a9a34b84b089c5e21b77c7faa8f9"
+    },
+    "gate": {
+      "bytes": 4587520,
+      "sha256": "424023b9d7a446dd8d6f88fd31edeadf749ece5847e9a03ac5c0616a78bdc378"
+    },
+    "k": {
+      "bytes": 131072,
+      "sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb"
+    },
+    "kr": {
+      "bytes": 131072,
+      "sha256": "52739e6dddc63cac6dae735bf71faaf8c66bca9a93ad71e4d2cf7c1395c14cce"
+    },
+    "kraw": {
+      "bytes": 131072,
+      "sha256": "eb621120ff86112c07c32e32281c0bab1613628f5d1bdd48bbb66c6aec6bd443"
+    },
+    "kv": {
+      "bytes": 262144,
+      "sha256": "5a4af947459c203e3be10fc6afb687d46efec99bae96677c435188a29ae0a11b"
+    },
+    "n0": {
+      "bytes": 786432,
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+    },
+    "n1": {
+      "bytes": 786432,
+      "sha256": "c8b087a24e55c28c7c24298d4c96e785ee5ab917c530a9a407786a7c09c0a141"
+    },
+    "o": {
+      "bytes": 786432,
+      "sha256": "8d61502d6e8872d1031eed79022f36382a0f522a902b180e38c398afb7ef1cbf"
+    },
+    "q": {
+      "bytes": 786432,
+      "sha256": "929000612a9eb51d5305feecdfa0cdf8768d055a06828624075583956a41b4df"
+    },
+    "qr": {
+      "bytes": 786432,
+      "sha256": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9"
+    },
+    "qraw": {
+      "bytes": 786432,
+      "sha256": "f0a3b928a24695b69b6ecaee32d5be384d3d4ac055caec91b7228ba770a06cd7"
+    },
+    "r": {
+      "bytes": 786432,
+      "sha256": "91f788a5431c5cac1469b21212634331be14423114de1dafedc635db0088f25e"
+    },
+    "up": {
+      "bytes": 4587520,
+      "sha256": "03906993d0bb5a4f478f857f395008f761db689e7e64ff85669bc5223ae28957"
+    },
+    "v": {
+      "bytes": 131072,
+      "sha256": "d4858f057b4df5314b90825c1492d08b92d99e6880f8ab1421b70a76da6d79f5"
+    },
+    "vraw": {
+      "bytes": 131072,
+      "sha256": "46df4f921adb53e1bb0bebd75fa8804045455d2394778faddf355071cf349589"
+    },
+    "y": {
+      "bytes": 786432,
+      "sha256": "f9026021e39b2a9c58865cf80dac4f20e9abd3917e117762beed4d9fa69c833a"
+    }
+  },
+  "actual_silu_sha256": "f80dd322769ba700de849118d0fa2eb147c3b6462167eaec6f51397584417e40",
+  "actual_summary_sha256": "25b947ff774412685d9691de0a06f1a1cf489388557db357013bf7911c11681a",
+  "binaries": {
+    "compile_receipt": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/library_01/official_bf16_compile.json",
+    "compile_sha256": "98d12038175ec3e0cadde0293be7ca43224cc430acfe267f29b52e79a1133e9a",
+    "library": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/qwen2_official_public21_20261012/library_01/official_bf16_matrix_silu.so",
+    "library_sha256": "bcab4d36ae7990bf6b40c08866066b563d8c6c09fb134a2393d8268505c89c7f"
+  },
+  "comparison": {
+    "actual_observed_nodes": {
+      "logits": {
+        "actual_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 99072,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+        "relative_l2": 0.0,
+        "shape": [
+          99072
+        ]
+      },
+      "prob": {
+        "actual_f32_sha256": "aa1b7e6d09ba8a108677779b033f84cbabf274ad0ee0f1640f08c6e7d1e8fa7d",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 99072,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "aa1b7e6d09ba8a108677779b033f84cbabf274ad0ee0f1640f08c6e7d1e8fa7d",
+        "relative_l2": 0.0,
+        "shape": [
+          99072
+        ]
+      },
+      "pv": {
+        "actual_f32_sha256": "b5f8e604d9cf537afff0dca1e2127c62ad4427cf1f31ef1808ba1804469fa9c7",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "b5f8e604d9cf537afff0dca1e2127c62ad4427cf1f31ef1808ba1804469fa9c7",
+        "relative_l2": 0.0,
+        "shape": [
+          196608
+        ]
+      },
+      "scores": {
+        "actual_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 99072,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+        "relative_l2": 0.0,
+        "shape": [
+          99072
+        ]
+      },
+      "silu": {
+        "actual_f32_sha256": "f80dd322769ba700de849118d0fa2eb147c3b6462167eaec6f51397584417e40",
+        "bit_exact": true,
+        "cosine": 0.9999999999999998,
+        "different_elements": 0,
+        "elements": 1146880,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "f80dd322769ba700de849118d0fa2eb147c3b6462167eaec6f51397584417e40",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          8960
+        ]
+      },
+      "softmax_fp32": {
+        "actual_f32_sha256": "4b5ca37c920c55c031afc3b73dfaeb8b38e9125c568601e32ec01856529b0b24",
+        "bit_exact": true,
+        "cosine": 1.0000000000000002,
+        "different_elements": 0,
+        "elements": 99072,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "4b5ca37c920c55c031afc3b73dfaeb8b38e9125c568601e32ec01856529b0b24",
+        "relative_l2": 0.0,
+        "shape": [
+          99072
+        ]
+      }
+    },
+    "fixed_arithmetic_pass": true,
+    "full_29_node_acceptance": false,
+    "future_score_materialization": false,
+    "historical_diagnostic_failures": {
+      "independent_self_cache": [
+        "gate",
+        "logits",
+        "prob",
+        "scores"
+      ],
+      "official_self_cache": [
+        "logits",
+        "scores"
+      ]
+    },
+    "methods": {
+      "independent_self_cache": {
+        "failed_stages": [
+          "gate",
+          "scores",
+          "logits",
+          "prob"
+        ],
+        "numerical_status": "FAIL",
+        "stages": {
+          "act": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "97cfcc46b796721a9f820ce8d741410b9e0a50859c2e6ec7de393765dfa01ea1",
+              "bit_exact": false,
+              "cosine": 0.9999992466221412,
+              "different_elements": 58864,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 1566,
+              "max_abs": 0.03125,
+              "mean_abs": 7.6082091027274146e-06,
+              "normalized_max_abs": 0.004149377593360996,
+              "reference_f32_sha256": "f5266834046a097127763647a3a587a632946e5ff3db55ef46be919585bfea72",
+              "relative_l2": 0.001227500233185678,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "att": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "9b75bb40067dbfb50ca8751107913e4f40810e34309cbae1528da3a0b8d42bf9",
+              "bit_exact": false,
+              "cosine": 0.9999996133695622,
+              "different_elements": 322,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 17315,
+              "max_abs": 0.03125,
+              "mean_abs": 3.711253384608426e-06,
+              "normalized_max_abs": 0.00904977375565611,
+              "reference_f32_sha256": "a866a59d53de627f2321bb79e0b9ba2a87af2dd2cfe3a65f25072496e27b33cb",
+              "relative_l2": 0.0008793814312599658,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "cache_k": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+              "bit_exact": false,
+              "cosine": 0.9999999999999998,
+              "different_elements": 1,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 686,
+              "max_abs": 0.0001220703125,
+              "mean_abs": 3.725290298461914e-09,
+              "normalized_max_abs": 2.7997778096330277e-07,
+              "reference_f32_sha256": "5c80472e3481872129f8a849f16b6c0446975beaa0ffd044171770cd15926751",
+              "relative_l2": 9.709360280570538e-09,
+              "shape": [
+                1,
+                2,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "cache_v": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "1e70c348b9a66d6f2c40bbe6f0f26bb81a4524c07f4ff0139b67997517f6a38b",
+              "bit_exact": false,
+              "cosine": 0.9999999999088749,
+              "different_elements": 15,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 1443,
+              "max_abs": 0.00048828125,
+              "mean_abs": 3.233526513213292e-08,
+              "normalized_max_abs": 0.0001414027149321267,
+              "reference_f32_sha256": "571048b5c5234dfaac43b791a4aa3563ff35d225123b3be297f53d0fb19cb353",
+              "relative_l2": 1.3500033355407286e-05,
+              "shape": [
+                1,
+                2,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "cos": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+              "bit_exact": true,
+              "cosine": 1.0000000000000002,
+              "different_elements": 0,
+              "elements": 16384,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+              "relative_l2": 0.0,
+              "shape": [
+                128,
+                128
+              ]
+            },
+            "observed_elements": 16384,
+            "original_shape": [
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "down": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "339209481560bc65cc7d336f7235aa742104a9a34b84b089c5e21b77c7faa8f9",
+              "bit_exact": false,
+              "cosine": 0.9999990562218649,
+              "different_elements": 15691,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 79,
+              "max_abs": 0.0078125,
+              "mean_abs": 3.4401178728179126e-05,
+              "normalized_max_abs": 0.00411522633744856,
+              "reference_f32_sha256": "0f7e51b6fc86823d243b386c618fc33cae0e216734907ecd03a8c26937c5c3b6",
+              "relative_l2": 0.0013739102677245202,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "gate": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "424023b9d7a446dd8d6f88fd31edeadf749ece5847e9a03ac5c0616a78bdc378",
+              "bit_exact": false,
+              "cosine": 0.9999996146966494,
+              "different_elements": 37060,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 1082,
+              "max_abs": 0.041015625,
+              "mean_abs": 4.767766571538752e-05,
+              "normalized_max_abs": 0.0068359375,
+              "reference_f32_sha256": "eb4db54100f2b05558edcaf16a9b770b655fd549f37a05a111be678e4ef1f060",
+              "relative_l2": 0.0008778768551297764,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": false
+            }
+          },
+          "k": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+              "bit_exact": false,
+              "cosine": 0.9999999999999998,
+              "different_elements": 1,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 686,
+              "max_abs": 0.0001220703125,
+              "mean_abs": 3.725290298461914e-09,
+              "normalized_max_abs": 2.7997778096330277e-07,
+              "reference_f32_sha256": "5c80472e3481872129f8a849f16b6c0446975beaa0ffd044171770cd15926751",
+              "relative_l2": 9.709360280570538e-09,
+              "shape": [
+                1,
+                2,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "kr": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "52739e6dddc63cac6dae735bf71faaf8c66bca9a93ad71e4d2cf7c1395c14cce",
+              "bit_exact": false,
+              "cosine": 1.0000000000000002,
+              "different_elements": 4,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 1326,
+              "max_abs": 0.0001220703125,
+              "mean_abs": 3.852619556710124e-09,
+              "normalized_max_abs": 2.7997778096330277e-07,
+              "reference_f32_sha256": "6abb796bee2d2c93637d9ae7a4a8b2758cf84e305c061ef6e3c24ae91eb7aac2",
+              "relative_l2": 9.7141208341498e-09,
+              "shape": [
+                1,
+                128,
+                256
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              128,
+              256
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "logits": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+              "bit_exact": false,
+              "cosine": 0.9999999999622149,
+              "different_elements": 12,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 14002,
+              "max_abs": 2.0,
+              "mean_abs": 6.560885012919897e-05,
+              "normalized_max_abs": 0.00029481132075471697,
+              "reference_f32_sha256": "94c0cbe992b7b8bd344b5837fbf3243e41a02dabcfb5586f739391f8ceb65eef",
+              "relative_l2": 8.693134636510067e-06,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": false
+            }
+          },
+          "n0": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+              "bit_exact": true,
+              "cosine": 1.0,
+              "different_elements": 0,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "n1": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "c8b087a24e55c28c7c24298d4c96e785ee5ab917c530a9a407786a7c09c0a141",
+              "bit_exact": false,
+              "cosine": 0.999999280766385,
+              "different_elements": 2755,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1993,
+              "max_abs": 0.03125,
+              "mean_abs": 3.103879377401123e-05,
+              "normalized_max_abs": 0.005649717514124294,
+              "reference_f32_sha256": "343a4c24844b07570dc71c72cdba5b0b2457e86ec5acc65e8dc7bcbb7762bab4",
+              "relative_l2": 0.0011994255757112546,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "o": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "8d61502d6e8872d1031eed79022f36382a0f522a902b180e38c398afb7ef1cbf",
+              "bit_exact": false,
+              "cosine": 0.9999997199774489,
+              "different_elements": 3560,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1993,
+              "max_abs": 0.005859375,
+              "mean_abs": 8.952771717455713e-06,
+              "normalized_max_abs": 0.0015060240963855422,
+              "reference_f32_sha256": "6bf70e28942748d3a4f8b9888070585fb033e437af22f6a611138f1cb5c86c21",
+              "relative_l2": 0.0007483770241624243,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "prob": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "aa1b7e6d09ba8a108677779b033f84cbabf274ad0ee0f1640f08c6e7d1e8fa7d",
+              "bit_exact": false,
+              "cosine": 0.9999988693705499,
+              "different_elements": 1834,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 14002,
+              "max_abs": 0.031494140625,
+              "mean_abs": 7.710111561039325e-07,
+              "normalized_max_abs": 0.031494140625,
+              "reference_f32_sha256": "108c612d1cc47d0a622fa600c076a331900e2199bcd19a2926c811f83773bc95",
+              "relative_l2": 0.0015038118009636711,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": false
+            }
+          },
+          "pv": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "b5f8e604d9cf537afff0dca1e2127c62ad4427cf1f31ef1808ba1804469fa9c7",
+              "bit_exact": false,
+              "cosine": 0.9999996133695622,
+              "different_elements": 322,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 10971,
+              "max_abs": 0.03125,
+              "mean_abs": 3.711253384608426e-06,
+              "normalized_max_abs": 0.00904977375565611,
+              "reference_f32_sha256": "79d005c82a86541a7afb20f87ce440db4353227e80ec106425e1d7ba221faa44",
+              "relative_l2": 0.0008793814312599658,
+              "shape": [
+                196608
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "q": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "86f796d78416ff95f8a85c871bbe9677a9a3a73323d0a0eb841a388e652bf2e2",
+              "bit_exact": false,
+              "cosine": 0.9999999999709446,
+              "different_elements": 18,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 26483,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.7172230097154775e-07,
+              "normalized_max_abs": 0.00011003521126760564,
+              "reference_f32_sha256": "b40ba46e5d33e8a6899004c6ef3343f1ca90dd4e191848e8a1b6d808710c6800",
+              "relative_l2": 7.623083806048179e-06,
+              "shape": [
+                1,
+                12,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "qr": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9",
+              "bit_exact": false,
+              "cosine": 0.9999999999670817,
+              "different_elements": 38,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1933,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.97885431892549e-07,
+              "normalized_max_abs": 0.00011405109489051095,
+              "reference_f32_sha256": "a010ba8d609d9ceed5ee21284f92b4b3ff2d1901f165e0a13d955603262a67b6",
+              "relative_l2": 8.113980643395924e-06,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "r": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "91f788a5431c5cac1469b21212634331be14423114de1dafedc635db0088f25e",
+              "bit_exact": false,
+              "cosine": 0.9999997158607289,
+              "different_elements": 2840,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1993,
+              "max_abs": 0.005859375,
+              "mean_abs": 8.959686965681612e-06,
+              "normalized_max_abs": 0.001488095238095238,
+              "reference_f32_sha256": "88436bf70a7d8efa1f3e9792ef814bcf8c2129fc024469747dd1bfc0ddd80e51",
+              "relative_l2": 0.0007538616280736353,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "repeat_k": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+              "bit_exact": false,
+              "cosine": 0.9999999999999999,
+              "different_elements": 6,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 686,
+              "max_abs": 0.0001220703125,
+              "mean_abs": 3.725290298461914e-09,
+              "normalized_max_abs": 2.7997778096330277e-07,
+              "reference_f32_sha256": "1fa19196075fa7b75c36239ee8a5fa1c6b4fe7ceca998a372b2879b2de42c175",
+              "relative_l2": 9.70936028057054e-09,
+              "shape": [
+                1,
+                12,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "repeat_v": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "bdb4df6588981551794426ec6ca16389fd7468ac6f3c35f154a372323faf061f",
+              "bit_exact": false,
+              "cosine": 0.9999999999088749,
+              "different_elements": 90,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1443,
+              "max_abs": 0.00048828125,
+              "mean_abs": 3.233526513213292e-08,
+              "normalized_max_abs": 0.0001414027149321267,
+              "reference_f32_sha256": "d99b9fab5cee4ee127fd97e6dc90efc5855590210a45eed4aabbaf5b064ed75a",
+              "relative_l2": 1.3500033355407286e-05,
+              "shape": [
+                1,
+                12,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "scores": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+              "bit_exact": false,
+              "cosine": 0.9999999999622149,
+              "different_elements": 12,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 14002,
+              "max_abs": 2.0,
+              "mean_abs": 6.560885012919897e-05,
+              "normalized_max_abs": 0.00029481132075471697,
+              "reference_f32_sha256": "94c0cbe992b7b8bd344b5837fbf3243e41a02dabcfb5586f739391f8ceb65eef",
+              "relative_l2": 8.693134636510067e-06,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": false
+            }
+          },
+          "silu": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "f80dd322769ba700de849118d0fa2eb147c3b6462167eaec6f51397584417e40",
+              "bit_exact": false,
+              "cosine": 0.999999498728199,
+              "different_elements": 33273,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 9006,
+              "max_abs": 0.03125,
+              "mean_abs": 1.7654159122620124e-05,
+              "normalized_max_abs": 0.00816326530612245,
+              "reference_f32_sha256": "3f625159cce93acc4bac281a6ab2311072ffa8b246b7bef348942483d96bd425",
+              "relative_l2": 0.001001278814560254,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "sin": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+              "bit_exact": true,
+              "cosine": 0.9999999999999999,
+              "different_elements": 0,
+              "elements": 16384,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+              "relative_l2": 0.0,
+              "shape": [
+                128,
+                128
+              ]
+            },
+            "observed_elements": 16384,
+            "original_shape": [
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "softmax_fp32": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "4b5ca37c920c55c031afc3b73dfaeb8b38e9125c568601e32ec01856529b0b24",
+              "bit_exact": false,
+              "cosine": 0.9999988729609899,
+              "different_elements": 89529,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 2,
+              "max_abs": 0.031655944883823395,
+              "mean_abs": 7.673890071196268e-07,
+              "normalized_max_abs": 0.031655944883823395,
+              "reference_f32_sha256": "598c4da128bc518b25f827204ea71984b9e26474cbea0b2436032a3c0c92ee2f",
+              "relative_l2": 0.0015014168566410814,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": null,
+              "passed": null,
+              "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+            }
+          },
+          "up": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "03906993d0bb5a4f478f857f395008f761db689e7e64ff85669bc5223ae28957",
+              "bit_exact": false,
+              "cosine": 0.9999993256911942,
+              "different_elements": 44388,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 1566,
+              "max_abs": 0.02734375,
+              "mean_abs": 3.604650504972337e-05,
+              "normalized_max_abs": 0.008027522935779817,
+              "reference_f32_sha256": "9bfba052d070d3b4c97a27b52a84dbcbf5463fc4ee3af3874bde2041a6fa2148",
+              "relative_l2": 0.0011613140920786456,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "v": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "d4858f057b4df5314b90825c1492d08b92d99e6880f8ab1421b70a76da6d79f5",
+              "bit_exact": false,
+              "cosine": 0.9999999999088749,
+              "different_elements": 15,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 2851,
+              "max_abs": 0.00048828125,
+              "mean_abs": 3.233526513213292e-08,
+              "normalized_max_abs": 0.0001414027149321267,
+              "reference_f32_sha256": "2daebf64ad0cbb5f7e7f7438064f68b5df5c8cb3439f2040ccec65e9c081c8cf",
+              "relative_l2": 1.3500033355407286e-05,
+              "shape": [
+                1,
+                128,
+                256
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              128,
+              256
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "x": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+              "bit_exact": true,
+              "cosine": 0.9999999999999999,
+              "different_elements": 0,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "y": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "f9026021e39b2a9c58865cf80dac4f20e9abd3917e117762beed4d9fa69c833a",
+              "bit_exact": false,
+              "cosine": 0.9999993624487999,
+              "different_elements": 10206,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 79,
+              "max_abs": 0.03125,
+              "mean_abs": 3.662025361942748e-05,
+              "normalized_max_abs": 0.006172839506172839,
+              "reference_f32_sha256": "d1d4c1d464800f74ac19fdb05d9cdb65b201f85e68dc7ace3c539945d99ee74a",
+              "relative_l2": 0.0011293032166462729,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            }
+          }
+        }
+      },
+      "official_self_cache": {
+        "failed_stages": [
+          "scores",
+          "logits"
+        ],
+        "numerical_status": "FAIL",
+        "stages": {
+          "act": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "97cfcc46b796721a9f820ce8d741410b9e0a50859c2e6ec7de393765dfa01ea1",
+              "bit_exact": false,
+              "cosine": 0.9999998813926962,
+              "different_elements": 43620,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 6350,
+              "max_abs": 0.0078125,
+              "mean_abs": 2.6299451603404936e-06,
+              "normalized_max_abs": 0.001037344398340249,
+              "reference_f32_sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60",
+              "relative_l2": 0.0004871069461121889,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "att": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "9b75bb40067dbfb50ca8751107913e4f40810e34309cbae1528da3a0b8d42bf9",
+              "bit_exact": false,
+              "cosine": 0.9999999997235562,
+              "different_elements": 50,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 11251,
+              "max_abs": 0.0009765625,
+              "mean_abs": 4.0933855416369624e-08,
+              "normalized_max_abs": 0.0002828054298642534,
+              "reference_f32_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969",
+              "relative_l2": 2.3513559668174093e-05,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "cache_k": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+              "bit_exact": true,
+              "cosine": 1.0,
+              "different_elements": 0,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                2,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "cache_v": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "1e70c348b9a66d6f2c40bbe6f0f26bb81a4524c07f4ff0139b67997517f6a38b",
+              "bit_exact": false,
+              "cosine": 0.9999999999510124,
+              "different_elements": 18,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 1414,
+              "max_abs": 0.000244140625,
+              "mean_abs": 2.7791884349426255e-08,
+              "normalized_max_abs": 7.070135746606335e-05,
+              "reference_f32_sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4",
+              "relative_l2": 9.898240210432013e-06,
+              "shape": [
+                1,
+                2,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "cos": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+              "bit_exact": true,
+              "cosine": 1.0000000000000002,
+              "different_elements": 0,
+              "elements": 16384,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+              "relative_l2": 0.0,
+              "shape": [
+                128,
+                128
+              ]
+            },
+            "observed_elements": 16384,
+            "original_shape": [
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "down": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "339209481560bc65cc7d336f7235aa742104a9a34b84b089c5e21b77c7faa8f9",
+              "bit_exact": false,
+              "cosine": 0.9999996816583531,
+              "different_elements": 12527,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 79,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.855341249286842e-05,
+              "normalized_max_abs": 0.00411522633744856,
+              "reference_f32_sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1",
+              "relative_l2": 0.0007979438860227768,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "gate": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "424023b9d7a446dd8d6f88fd31edeadf749ece5847e9a03ac5c0616a78bdc378",
+              "bit_exact": false,
+              "cosine": 0.9999999373054779,
+              "different_elements": 23231,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 1082,
+              "max_abs": 0.015625,
+              "mean_abs": 1.4606423126549219e-05,
+              "normalized_max_abs": 0.0026041666666666665,
+              "reference_f32_sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c",
+              "relative_l2": 0.00035411594699472104,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "k": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+              "bit_exact": true,
+              "cosine": 1.0,
+              "different_elements": 0,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                2,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "kr": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "52739e6dddc63cac6dae735bf71faaf8c66bca9a93ad71e4d2cf7c1395c14cce",
+              "bit_exact": false,
+              "cosine": 0.999999999999997,
+              "different_elements": 4,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 3688,
+              "max_abs": 0.0009765625,
+              "mean_abs": 2.992965164594352e-08,
+              "normalized_max_abs": 2.239822247706422e-06,
+              "reference_f32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+              "relative_l2": 7.767545915145405e-08,
+              "shape": [
+                1,
+                128,
+                256
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              128,
+              256
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "logits": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+              "bit_exact": false,
+              "cosine": 0.9999999981034876,
+              "different_elements": 11,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 79559,
+              "max_abs": 8.0,
+              "mean_abs": 0.0005652454780361757,
+              "normalized_max_abs": 0.0011792452830188679,
+              "reference_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+              "relative_l2": 6.159012001271234e-05,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": false
+            }
+          },
+          "n0": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+              "bit_exact": true,
+              "cosine": 1.0,
+              "different_elements": 0,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "n1": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "c8b087a24e55c28c7c24298d4c96e785ee5ab917c530a9a407786a7c09c0a141",
+              "bit_exact": false,
+              "cosine": 0.9999999831556506,
+              "different_elements": 654,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 4063,
+              "max_abs": 0.0078125,
+              "mean_abs": 2.1256467637916407e-06,
+              "normalized_max_abs": 0.0014124293785310734,
+              "reference_f32_sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55",
+              "relative_l2": 0.0001835451431454667,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "o": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "8d61502d6e8872d1031eed79022f36382a0f522a902b180e38c398afb7ef1cbf",
+              "bit_exact": false,
+              "cosine": 0.9999999949786703,
+              "different_elements": 1282,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 4063,
+              "max_abs": 0.001953125,
+              "mean_abs": 5.927316237830382e-07,
+              "normalized_max_abs": 0.000502008032128514,
+              "reference_f32_sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550",
+              "relative_l2": 0.00010021312046405792,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "prob": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "aa1b7e6d09ba8a108677779b033f84cbabf274ad0ee0f1640f08c6e7d1e8fa7d",
+              "bit_exact": false,
+              "cosine": 1.0,
+              "different_elements": 1745,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 24909,
+              "max_abs": 2.2737367544323206e-13,
+              "mean_abs": 1.3770209616154431e-17,
+              "normalized_max_abs": 2.2737367544323206e-13,
+              "reference_f32_sha256": "52fd419462986d14fa9268791ffdeeecb3a54beebc5685af14be00186bc9af15",
+              "relative_l2": 2.2118774162731195e-14,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "pv": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "b5f8e604d9cf537afff0dca1e2127c62ad4427cf1f31ef1808ba1804469fa9c7",
+              "bit_exact": false,
+              "cosine": 0.9999999997235562,
+              "different_elements": 50,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 10971,
+              "max_abs": 0.0009765625,
+              "mean_abs": 4.0933855416369624e-08,
+              "normalized_max_abs": 0.0002828054298642534,
+              "reference_f32_sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee",
+              "relative_l2": 2.3513559668174093e-05,
+              "shape": [
+                196608
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "q": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "86f796d78416ff95f8a85c871bbe9677a9a3a73323d0a0eb841a388e652bf2e2",
+              "bit_exact": false,
+              "cosine": 0.9999999999744885,
+              "different_elements": 19,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1465,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.4267667817572752e-07,
+              "normalized_max_abs": 0.00011003521126760564,
+              "reference_f32_sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910",
+              "relative_l2": 7.143044726574992e-06,
+              "shape": [
+                1,
+                12,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "qr": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9",
+              "bit_exact": false,
+              "cosine": 0.9999999999701629,
+              "different_elements": 40,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 6643,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.7378503495516875e-07,
+              "normalized_max_abs": 0.00011405109489051095,
+              "reference_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+              "relative_l2": 7.724942616081985e-06,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "r": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "91f788a5431c5cac1469b21212634331be14423114de1dafedc635db0088f25e",
+              "bit_exact": false,
+              "cosine": 0.9999999945822248,
+              "different_elements": 701,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 4063,
+              "max_abs": 0.001953125,
+              "mean_abs": 5.768185170988241e-07,
+              "normalized_max_abs": 0.000496031746031746,
+              "reference_f32_sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f",
+              "relative_l2": 0.00010409410795830311,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "repeat_k": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+              "bit_exact": true,
+              "cosine": 1.0,
+              "different_elements": 0,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                12,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "repeat_v": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "bdb4df6588981551794426ec6ca16389fd7468ac6f3c35f154a372323faf061f",
+              "bit_exact": false,
+              "cosine": 0.9999999999510125,
+              "different_elements": 108,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 1414,
+              "max_abs": 0.000244140625,
+              "mean_abs": 2.7791884349426255e-08,
+              "normalized_max_abs": 7.070135746606335e-05,
+              "reference_f32_sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d",
+              "relative_l2": 9.898240210432014e-06,
+              "shape": [
+                1,
+                12,
+                128,
+                128
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "scores": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "8870317382b69c1acaaad9820a7fc3134386985bc0d832953fe58d5dba839577",
+              "bit_exact": false,
+              "cosine": 0.9999999981034876,
+              "different_elements": 11,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 79559,
+              "max_abs": 8.0,
+              "mean_abs": 0.0005652454780361757,
+              "normalized_max_abs": 0.0011792452830188679,
+              "reference_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+              "relative_l2": 6.159012001271234e-05,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": false
+            }
+          },
+          "silu": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "f80dd322769ba700de849118d0fa2eb147c3b6462167eaec6f51397584417e40",
+              "bit_exact": false,
+              "cosine": 0.9999999171647634,
+              "different_elements": 21176,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 12362,
+              "max_abs": 0.015625,
+              "mean_abs": 5.504801062475703e-06,
+              "normalized_max_abs": 0.004081632653061225,
+              "reference_f32_sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db",
+              "relative_l2": 0.0004070294841620368,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "sin": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+              "bit_exact": true,
+              "cosine": 0.9999999999999999,
+              "different_elements": 0,
+              "elements": 16384,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+              "relative_l2": 0.0,
+              "shape": [
+                128,
+                128
+              ]
+            },
+            "observed_elements": 16384,
+            "original_shape": [
+              128,
+              128
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "softmax_fp32": {
+            "coverage": "actual_causal_positions_only",
+            "metrics": {
+              "actual_f32_sha256": "4b5ca37c920c55c031afc3b73dfaeb8b38e9125c568601e32ec01856529b0b24",
+              "bit_exact": false,
+              "cosine": 0.9999999999999936,
+              "different_elements": 88026,
+              "elements": 99072,
+              "finite": true,
+              "first_difference_flat": 2,
+              "max_abs": 2.384185791015625e-07,
+              "mean_abs": 2.104184504237369e-09,
+              "normalized_max_abs": 2.384185791015625e-07,
+              "reference_f32_sha256": "1905d73dc6a487cbf09779b8a8d0c01b0c0fcf90961cfe896b2cd4f271784637",
+              "relative_l2": 1.113058327897874e-07,
+              "shape": [
+                99072
+              ]
+            },
+            "observed_elements": 99072,
+            "original_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "unobserved_elements": 97536,
+            "verdict": {
+              "contract": null,
+              "passed": null,
+              "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+            }
+          },
+          "up": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "03906993d0bb5a4f478f857f395008f761db689e7e64ff85669bc5223ae28957",
+              "bit_exact": false,
+              "cosine": 0.9999999036746133,
+              "different_elements": 30791,
+              "elements": 1146880,
+              "finite": true,
+              "first_difference_flat": 6350,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.1804246423707809e-05,
+              "normalized_max_abs": 0.0022935779816513763,
+              "reference_f32_sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95",
+              "relative_l2": 0.0004389201968378631,
+              "shape": [
+                1,
+                128,
+                8960
+              ]
+            },
+            "observed_elements": 1146880,
+            "original_shape": [
+              1,
+              128,
+              8960
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "v": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "d4858f057b4df5314b90825c1492d08b92d99e6880f8ab1421b70a76da6d79f5",
+              "bit_exact": false,
+              "cosine": 0.9999999999510124,
+              "different_elements": 18,
+              "elements": 32768,
+              "finite": true,
+              "first_difference_flat": 2822,
+              "max_abs": 0.000244140625,
+              "mean_abs": 2.7791884349426255e-08,
+              "normalized_max_abs": 7.070135746606335e-05,
+              "reference_f32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+              "relative_l2": 9.898240210432013e-06,
+              "shape": [
+                1,
+                128,
+                256
+              ]
+            },
+            "observed_elements": 32768,
+            "original_shape": [
+              1,
+              128,
+              256
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "x": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+              "bit_exact": true,
+              "cosine": 0.9999999999999999,
+              "different_elements": 0,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "normalized_max_abs": 0.0,
+              "reference_f32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:operator",
+              "limits": {
+                "max_abs": 0.03125,
+                "mean_abs": 0.005
+              },
+              "passed": true
+            }
+          },
+          "y": {
+            "coverage": "complete",
+            "metrics": {
+              "actual_f32_sha256": "f9026021e39b2a9c58865cf80dac4f20e9abd3917e117762beed4d9fa69c833a",
+              "bit_exact": false,
+              "cosine": 0.9999997478011968,
+              "different_elements": 7549,
+              "elements": 196608,
+              "finite": true,
+              "first_difference_flat": 79,
+              "max_abs": 0.03125,
+              "mean_abs": 1.8966500647366047e-05,
+              "normalized_max_abs": 0.006172839506172839,
+              "reference_f32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+              "relative_l2": 0.0007103269391808657,
+              "shape": [
+                1,
+                128,
+                1536
+              ]
+            },
+            "observed_elements": 196608,
+            "original_shape": [
+              1,
+              128,
+              1536
+            ],
+            "unobserved_elements": 0,
+            "verdict": {
+              "contract": "spec/numerical_contract.md:block",
+              "limits": {
+                "max_abs": 0.05,
+                "mean_abs": 0.01
+              },
+              "passed": true
+            }
+          }
+        }
+      }
+    },
+    "missing_nodes": [
+      "explicit_mask_tensor"
+    ],
+    "new_official_forward_executed": false,
+    "partially_observed_nodes": [
+      "scores",
+      "logits",
+      "prob",
+      "softmax_fp32"
+    ],
+    "reference_layout": {
+      "native_result_sha256": "10ad341ee67fc12f1c619c60716647f29110fa49cd8f17163136059f78cb5315",
+      "producer_sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85",
+      "qk_storage": "head_major"
+    },
+    "reference_reuse": "exact frozen same-raw-input cold references; original FAILs preserved",
+    "thresholds": {
+      "block": {
+        "max_abs": 0.05,
+        "mean_abs": 0.01
+      },
+      "operator": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract",
+      "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+      "source": "spec/numerical_contract.md"
+    },
+    "whole_outputs": {
+      "act": {
+        "actual_f32_sha256": "97cfcc46b796721a9f820ce8d741410b9e0a50859c2e6ec7de393765dfa01ea1",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 1146880,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "97cfcc46b796721a9f820ce8d741410b9e0a50859c2e6ec7de393765dfa01ea1",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          8960
+        ]
+      },
+      "att": {
+        "actual_f32_sha256": "9b75bb40067dbfb50ca8751107913e4f40810e34309cbae1528da3a0b8d42bf9",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "9b75bb40067dbfb50ca8751107913e4f40810e34309cbae1528da3a0b8d42bf9",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "down": {
+        "actual_f32_sha256": "339209481560bc65cc7d336f7235aa742104a9a34b84b089c5e21b77c7faa8f9",
+        "bit_exact": true,
+        "cosine": 0.9999999999999999,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "339209481560bc65cc7d336f7235aa742104a9a34b84b089c5e21b77c7faa8f9",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "gate": {
+        "actual_f32_sha256": "424023b9d7a446dd8d6f88fd31edeadf749ece5847e9a03ac5c0616a78bdc378",
+        "bit_exact": true,
+        "cosine": 1.0000000000000002,
+        "different_elements": 0,
+        "elements": 1146880,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "424023b9d7a446dd8d6f88fd31edeadf749ece5847e9a03ac5c0616a78bdc378",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          8960
+        ]
+      },
+      "k": {
+        "actual_f32_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 32768,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          256
+        ]
+      },
+      "kr": {
+        "actual_f32_sha256": "52739e6dddc63cac6dae735bf71faaf8c66bca9a93ad71e4d2cf7c1395c14cce",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 32768,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "52739e6dddc63cac6dae735bf71faaf8c66bca9a93ad71e4d2cf7c1395c14cce",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          256
+        ]
+      },
+      "n0": {
+        "actual_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "n1": {
+        "actual_f32_sha256": "c8b087a24e55c28c7c24298d4c96e785ee5ab917c530a9a407786a7c09c0a141",
+        "bit_exact": true,
+        "cosine": 1.0000000000000002,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "c8b087a24e55c28c7c24298d4c96e785ee5ab917c530a9a407786a7c09c0a141",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "o": {
+        "actual_f32_sha256": "8d61502d6e8872d1031eed79022f36382a0f522a902b180e38c398afb7ef1cbf",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "8d61502d6e8872d1031eed79022f36382a0f522a902b180e38c398afb7ef1cbf",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "q": {
+        "actual_f32_sha256": "929000612a9eb51d5305feecdfa0cdf8768d055a06828624075583956a41b4df",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "929000612a9eb51d5305feecdfa0cdf8768d055a06828624075583956a41b4df",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "qr": {
+        "actual_f32_sha256": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "8fca69970e0b3911846c6fa6b856b272014c4edf1592be24254b3d10c5cf2bf9",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "r": {
+        "actual_f32_sha256": "91f788a5431c5cac1469b21212634331be14423114de1dafedc635db0088f25e",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "91f788a5431c5cac1469b21212634331be14423114de1dafedc635db0088f25e",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "up": {
+        "actual_f32_sha256": "03906993d0bb5a4f478f857f395008f761db689e7e64ff85669bc5223ae28957",
+        "bit_exact": true,
+        "cosine": 1.0,
+        "different_elements": 0,
+        "elements": 1146880,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "03906993d0bb5a4f478f857f395008f761db689e7e64ff85669bc5223ae28957",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          8960
+        ]
+      },
+      "v": {
+        "actual_f32_sha256": "d4858f057b4df5314b90825c1492d08b92d99e6880f8ab1421b70a76da6d79f5",
+        "bit_exact": true,
+        "cosine": 0.9999999999999999,
+        "different_elements": 0,
+        "elements": 32768,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "d4858f057b4df5314b90825c1492d08b92d99e6880f8ab1421b70a76da6d79f5",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          256
+        ]
+      },
+      "y": {
+        "actual_f32_sha256": "f9026021e39b2a9c58865cf80dac4f20e9abd3917e117762beed4d9fa69c833a",
+        "bit_exact": true,
+        "cosine": 0.9999999999999998,
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "first_difference_flat": null,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "normalized_max_abs": 0.0,
+        "reference_f32_sha256": "f9026021e39b2a9c58865cf80dac4f20e9abd3917e117762beed4d9fa69c833a",
+        "relative_l2": 0.0,
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      }
+    }
+  },
+  "execution_commit": "f1d1324efd8d2ac3594acfac1732b3b719030da9",
+  "host_peak_rss_kib": 463628,
+  "host_result": {
+    "completed": 21,
+    "executed_macs": 6801063936,
+    "jobs": 17,
+    "status": null,
+    "useful_macs": 6014828544,
+    "write_bytes": 13369344
+  },
+  "host_wall_seconds": 1369.1287546850072,
+  "layer": 0,
+  "loaded_inputs": {
+    "bk": {
+      "bytes": 1024,
+      "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d"
+    },
+    "bq": {
+      "bytes": 6144,
+      "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d"
+    },
+    "bv": {
+      "bytes": 1024,
+      "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70"
+    },
+    "gamma0": {
+      "bytes": 6144,
+      "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180"
+    },
+    "gamma1": {
+      "bytes": 6144,
+      "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a"
+    },
+    "rope": {
+      "bytes": 524288,
+      "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af"
+    },
+    "wd": {
+      "bytes": 27525120,
+      "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec"
+    },
+    "wg": {
+      "bytes": 27525120,
+      "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f"
+    },
+    "wk": {
+      "bytes": 786432,
+      "sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344"
+    },
+    "wo": {
+      "bytes": 4718592,
+      "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c"
+    },
+    "wq": {
+      "bytes": 4718592,
+      "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72"
+    },
+    "wu": {
+      "bytes": 27525120,
+      "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040"
+    },
+    "wv": {
+      "bytes": 786432,
+      "sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a"
+    },
+    "x": {
+      "bytes": 786432,
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    }
+  },
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "observation": {
+    "accepted_retirement": {
+      "client_retired": true,
+      "matrix_released": true,
+      "matrix_reset_required": false,
+      "memory_pending": false,
+      "poison": false,
+      "same_job": true,
+      "same_services": true,
+      "scalar_released": true,
+      "state": "idle"
+    },
+    "fields": {
+      "dot_bf16": {
+        "frequency_sha256": "d0f726c465598ec5863a89413cb24cef5c2831c3498cb29449a2bee966e2b45f",
+        "identical_repeats": 0,
+        "observed_words": 99072,
+        "presence_sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c",
+        "raw_sha256": "5c7989afac216467b0049c75b51e13cd7370a8ec41725b81823a431b14e68bce",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 99072
+      },
+      "dot_parts": {
+        "frequency_sha256": "22613575583a605dcf27bba5aa496bdb99a0311b55a38c7689b86fb37fa66c39",
+        "identical_repeats": 0,
+        "observed_words": 1585152,
+        "presence_sha256": "fd5e928128d1b6ff8c6b54bba0723efd1b0acc42e5e559ac7a9aad6f5639d239",
+        "raw_sha256": "ec04bf34310429b5ec7bc73d0070ac684023d6ec8f218ef4906d172c36e52726",
+        "shape": [
+          12,
+          128,
+          128,
+          16
+        ],
+        "words": 3145728,
+        "writes": 1585152
+      },
+      "normalizer": {
+        "frequency_sha256": "67637e66fa69b790c8df12540c2aeb95d4d6180da3405511bfb3d7ba915f7e66",
+        "identical_repeats": 2373120,
+        "observed_words": 4608,
+        "presence_sha256": "a42c9a52e785e7a57d19655fbcac963e2af7f45dfd3ff3e3bad6bc92dbcc6fdd",
+        "raw_sha256": "189cc9eb0d8c42903e254e59043b7708ac78f8c101801440ea2dc6a858633d71",
+        "shape": [
+          12,
+          128,
+          3
+        ],
+        "words": 4608,
+        "writes": 2377728
+      },
+      "prob_bf16": {
+        "frequency_sha256": "4c90b100dbe25f58e42a7703e9842ca5427e98a5ea9bb8294c95544516629729",
+        "identical_repeats": 693504,
+        "observed_words": 99072,
+        "presence_sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c",
+        "raw_sha256": "a8c0dccaf20e2521b38d4d3ae9821c6a2bdb088ab1cec4eed7f94f5272cb90e4",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 792576
+      },
+      "pv_bf16": {
+        "frequency_sha256": "ac2c6f7bb4cdede0b6cdd604daef9b160ded844ca697a79c674b8832bae9e34c",
+        "identical_repeats": 0,
+        "observed_words": 196608,
+        "presence_sha256": "d6756540388da598995c5ebfd85c3f4a81cfffa1ebccf9ea61a02b1f4630b07c",
+        "raw_sha256": "b5f8e604d9cf537afff0dca1e2127c62ad4427cf1f31ef1808ba1804469fa9c7",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 196608
+      },
+      "pv_raw": {
+        "frequency_sha256": "ac2c6f7bb4cdede0b6cdd604daef9b160ded844ca697a79c674b8832bae9e34c",
+        "identical_repeats": 0,
+        "observed_words": 196608,
+        "presence_sha256": "d6756540388da598995c5ebfd85c3f4a81cfffa1ebccf9ea61a02b1f4630b07c",
+        "raw_sha256": "230e20b1e62a576f425605f6971c53fee37ccc9e507860288c86a8ef24dabf0d",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 196608
+      },
+      "scores_bf16": {
+        "frequency_sha256": "d0f726c465598ec5863a89413cb24cef5c2831c3498cb29449a2bee966e2b45f",
+        "identical_repeats": 0,
+        "observed_words": 99072,
+        "presence_sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c",
+        "raw_sha256": "c5896eabe76360ee2bfcc6d77d5590fadf14e1b23637599c5bb77e7ef076d8a4",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 99072
+      },
+      "softmax_exp": {
+        "frequency_sha256": "d0f726c465598ec5863a89413cb24cef5c2831c3498cb29449a2bee966e2b45f",
+        "identical_repeats": 0,
+        "observed_words": 99072,
+        "presence_sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c",
+        "raw_sha256": "98062c5bd84b41a045416a2a6cce1cb4033737edadb15707f5100230fbed47b3",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 99072
+      },
+      "softmax_fp32": {
+        "frequency_sha256": "4c90b100dbe25f58e42a7703e9842ca5427e98a5ea9bb8294c95544516629729",
+        "identical_repeats": 693504,
+        "observed_words": 99072,
+        "presence_sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c",
+        "raw_sha256": "8ba56a9e68c5e4a4c29ee4c3124cdc7ff1501b3d4c278a492565e9357a6b56ae",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 792576
+      },
+      "unrounded_dot_sum": {
+        "frequency_sha256": "d0f726c465598ec5863a89413cb24cef5c2831c3498cb29449a2bee966e2b45f",
+        "identical_repeats": 0,
+        "observed_words": 99072,
+        "presence_sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c",
+        "raw_sha256": "eaed5a1edc49d3135aabf0ca2eaf8fc8e294b8a51287b9ec61ad7fbe4dd3c097",
+        "shape": [
+          12,
+          128,
+          128
+        ],
+        "words": 196608,
+        "writes": 99072
+      }
+    },
+    "future_scores_observed": false,
+    "job": {
+      "a": 4485895360,
+      "activation_bf16": false,
+      "b": 4487337536,
+      "c": 4487468608,
+      "dst": 4489172736,
+      "k": 128,
+      "kind": "Attention",
+      "m": 128,
+      "n": 1536,
+      "output_bf16": false,
+      "tag": 458764,
+      "weight_bf16": false,
+      "write_bytes": 786432
+    },
+    "observer_error": null,
+    "physical_publication_observed": false,
+    "status": "COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED",
+    "terminal": {
+      "cycles": 11130671,
+      "executed_macs": 811597824,
+      "status": null,
+      "tag": 458764,
+      "useful_macs": 25362432,
+      "write_bytes": 786432
+    },
+    "whole_block_terminal_observed": false
+  },
+  "old_failed_attempt": {
+    "completed_ffn_windows": 54,
+    "completed_public_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "preserved": true,
+    "reason": "full group host budget exceeded",
+    "status": "FAILED",
+    "summary_sha256": "45b925ebfc17760b00e37b7408038d4d1898c3d2831a24650454aae4690cddab",
+    "total_ffn_windows": 56,
+    "wall_seconds": 1200.0808491490025,
+    "whole_terminal": false
+  },
+  "past_tokens": 0,
+  "prefix_host_wall_seconds": 53.83710912900278,
+  "schema": "public21-official-bf16-cold-m128-actual-v1",
+  "scope": {
+    "actual_software_physical_transaction_chain": true,
+    "carried_prefill_executed": false,
+    "full_29_node_gate": false,
+    "full_wall_mac_utilization": null,
+    "hardware_cycles": null,
+    "intermediate_preloads": [],
+    "native_numerical_acceptance": false,
+    "rtl_executed": false,
+    "scala_executed": false
+  },
+  "snapshot_sha256": "5b9247588ddddcada1e669034c3e8e0a17ffb39c6c6aef3ffd1bb5e49c6924ab",
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": "8f954329ef7a4ae472b8247e6e34456affee2e946f1fcfb439b19d89d2b786ec",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+    "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+    "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+    "candidates/qwen2_resident_matrix/ffn_drain/precision_pins.json": "a7baa1874b698257b73b9c816a65fad0630789bf1d283cd6a7a73f9adf86bb33",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/precision_pins.json": "fb6fc2ea116e708c7560f37144625a3b12d1ad93e4bc69178e8e8509ded5b0c0",
+    "candidates/qwen2_resident_matrix/ffn_group/group.patch": "32551bb06885785fcbc55b7c9c3b7ff04c4f2ab76bb93f2c2c41ff41f312e674",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_group/source_pins.json": "bf8b3f7619abc3513edc12cd465fd54ee760860760975502a6e9dfc0c56b6f67",
+    "candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py": "198e2b7b87c6fbf7a317174d7653ea2d4da912c7eabda09b8addfd9bc2752992",
+    "candidates/qwen2_resident_matrix/ffn_public/check_numeric.py": "7447baeb99a4a0c2ab3a8980cf18414db994728164d7905b597d67f5db39359b",
+    "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_public/fixture.py": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208",
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py": "787b8de034428ffab0aec3a462c1a5c1ad9b737fcd1eb495b376189442bfec71",
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/precision_pins.json": "52777032bbca39fdb773efada44347a2fd8b0fee69906fe38da21aea4785b717",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/ffn_window/numeric_recipe.cpp": "f0bab2fa7520a704711eb8331a6b53b906ecf0035cc21e0c1ccdd0a4481cfc21",
+    "candidates/qwen2_resident_matrix/ffn_window/precision_pins.json": "a2c584c5181247621c03e8bbe3ff0e9a0c5e77157ee69eef11b74f8ad04089f3",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+    "candidates/qwen2_resident_matrix/official_bf16/check_numeric.py": "efa2d88c698536332646fe3528f0943adf3cd79544f47f160a991a415d581e93",
+    "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699",
+    "candidates/qwen2_resident_matrix/official_bf16/execution.py": "e3b5906d7589885e5aade7344d8c7d7497b61aa967b2034dbba4e1e0ebeb25d0",
+    "candidates/qwen2_resident_matrix/official_bf16/observation.py": "746548cb5da470ab8e4a6febb00492004ddc43f41fcd47a3a9e47d85097861df",
+    "candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py": "3c27ce71bd93937707c909ccd7507baff6a401c49b50e6a9753ab224a9d2a3c5",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "candidates/qwen2_resident_matrix/official_bf16/reference_layout.py": "70b6a3678d5cf2fa14ab7aae61f1f97fffdbf5dac1f17fb0fa6aa4a822fe7170",
+    "candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+    "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+    "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch": "eac9bf90e7c482e879f97d06683d72a6ac699ebc633afe3ee9bfec8c2cfbcac2",
+    "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+    "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+    "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+    "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692",
+    "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59",
+    "scripts/observe_qwen2_attention_model.py": "8479c41eb837814712419cbb72128d48f1ece4ba3a654a292d5e063aa99ec8a7",
+    "scripts/qwen2_block_recipe_model.py": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+    "scripts/qwen2_layer0_model_gate.py": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85",
+    "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+    "src/heteronpu/__init__.py": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be",
+    "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+    "src/heteronpu/cgra_sfu.py": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854",
+    "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+    "src/heteronpu/config.py": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4",
+    "src/heteronpu/descriptor_chain.py": "bedf5d138e0fdf26fb5b2a09421172a261d5f029911166bc97f8e0b8c229da89",
+    "src/heteronpu/dtypes.py": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34",
+    "src/heteronpu/gemmini_descriptor_v2.py": "6802790c4aa91406a289f3da2990b35acba25f2a3a096ccb071ece12fbd0ac60",
+    "src/heteronpu/gemmini_rocc_lowering.py": "842aaa8ef916a993d6b58f82529bbc9ef57221c47cd4e8d659d27141d28cc485",
+    "src/heteronpu/kv_engine.py": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a",
+    "src/heteronpu/l9_transport_contract.py": "d672178bd13511e6f3bbed821fef570f79c83e7c314e4040903d98e5d8729a4c",
+    "src/heteronpu/matrix_engine.py": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8",
+    "src/heteronpu/scheduler.py": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55"
+  },
+  "status": "SOFTWARE_COMPLETE_FIXED_ARITHMETIC_PASS_NATIVE_FAIL",
+  "successful_process_sha256": "67390f83357ca2804d47a7cf9043c426d5475cbd2987fcf327ff4d058d946569",
+  "tokens": 128,
+  "whole_terminal_host_wall_seconds": 1367.00836213
+}

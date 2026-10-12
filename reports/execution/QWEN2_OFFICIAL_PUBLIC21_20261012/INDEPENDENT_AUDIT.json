@@ -1,0 +1,281 @@
+{
+  "actual_output_files_verified": 19,
+  "check_labels_sha256": "e4696914062227263bf254371a1bf6f06b178ac922bd5bd16696014912a4ca97",
+  "checks_passed": 935,
+  "final_ack_fences": [
+    {
+      "final_ack_tick": 315635,
+      "held_ticks": 5,
+      "pcs": [
+        1
+      ],
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 315636
+    },
+    {
+      "final_ack_tick": 568342,
+      "held_ticks": 5,
+      "pcs": [
+        4
+      ],
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 568343
+    },
+    {
+      "final_ack_tick": 667703,
+      "held_ticks": 5,
+      "pcs": [
+        7
+      ],
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 667704
+    },
+    {
+      "final_ack_tick": 11130672,
+      "held_ticks": 5,
+      "pcs": [
+        10,
+        11,
+        12
+      ],
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 11130673
+    },
+    {
+      "final_ack_tick": 12057782,
+      "held_ticks": 5,
+      "pcs": [
+        13
+      ],
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 12057783
+    },
+    {
+      "final_ack_tick": 16918309,
+      "held_ticks": 5,
+      "pcs": [
+        19
+      ],
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 16918310
+    }
+  ],
+  "fixed_observed_nodes": [
+    "scores",
+    "logits",
+    "softmax_fp32",
+    "prob",
+    "pv",
+    "silu"
+  ],
+  "fixed_whole_nodes": [
+    "n0",
+    "qr",
+    "kr",
+    "v",
+    "q",
+    "k",
+    "att",
+    "o",
+    "r",
+    "n1",
+    "gate",
+    "up",
+    "act",
+    "down",
+    "y"
+  ],
+  "git_head": "f1d1324efd8d2ac3594acfac1732b3b719030da9",
+  "host_counts": {
+    "completion_backpressure_edges": 63,
+    "completion_fire": 21,
+    "host_model_ticks": 17010491,
+    "idle_owner_edges": 234,
+    "ordinary_owner_edges": 1960288,
+    "owner_result_fire": 17,
+    "request_fire": 17,
+    "result_backpressure_edges": 3,
+    "result_fire": 1
+  },
+  "launch_result": {
+    "completed": 21,
+    "executed_macs": 6801063936,
+    "jobs": 17,
+    "status": null,
+    "useful_macs": 6014828544,
+    "write_bytes": 13369344
+  },
+  "limits": [
+    "Software protocol ticks are not hardware cycles.",
+    "Observer does not itself prove whole-block publication; host/memory receipts provide that software claim.",
+    "Full 29-node gate incomplete: explicit mask tensor missing and future score/logit/probability/softmax positions absent.",
+    "No new native or RTL execution."
+  ],
+  "native_diagnostics": {
+    "independent_self_cache": {
+      "failed_stages": [
+        "gate",
+        "scores",
+        "logits",
+        "prob"
+      ],
+      "failures": {
+        "gate": {
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "max_abs": 0.041015625,
+          "mean_abs": 4.767766571538752e-05
+        },
+        "logits": {
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "max_abs": 2.0,
+          "mean_abs": 6.560885012919897e-05
+        },
+        "prob": {
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "max_abs": 0.031494140625,
+          "mean_abs": 7.710111561039325e-07
+        },
+        "scores": {
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "max_abs": 2.0,
+          "mean_abs": 6.560885012919897e-05
+        }
+      },
+      "status": "FAIL"
+    },
+    "official_self_cache": {
+      "failed_stages": [
+        "scores",
+        "logits"
+      ],
+      "failures": {
+        "logits": {
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "max_abs": 8.0,
+          "mean_abs": 0.0005652454780361757
+        },
+        "scores": {
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "max_abs": 8.0,
+          "mean_abs": 0.0005652454780361757
+        }
+      },
+      "status": "FAIL"
+    }
+  },
+  "observation_fields": {
+    "dot_bf16": {
+      "absent_words": 97536,
+      "observed_words": 99072,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 99072
+    },
+    "dot_parts": {
+      "absent_words": 1560576,
+      "observed_words": 1585152,
+      "raw_presence_frequency_verified": true,
+      "words": 3145728,
+      "writes": 1585152
+    },
+    "normalizer": {
+      "absent_words": 0,
+      "observed_words": 4608,
+      "raw_presence_frequency_verified": true,
+      "words": 4608,
+      "writes": 2377728
+    },
+    "prob_bf16": {
+      "absent_words": 97536,
+      "observed_words": 99072,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 792576
+    },
+    "pv_bf16": {
+      "absent_words": 0,
+      "observed_words": 196608,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 196608
+    },
+    "pv_raw": {
+      "absent_words": 0,
+      "observed_words": 196608,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 196608
+    },
+    "scores_bf16": {
+      "absent_words": 97536,
+      "observed_words": 99072,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 99072
+    },
+    "softmax_exp": {
+      "absent_words": 97536,
+      "observed_words": 99072,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 99072
+    },
+    "softmax_fp32": {
+      "absent_words": 97536,
+      "observed_words": 99072,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 792576
+    },
+    "unrounded_dot_sum": {
+      "absent_words": 97536,
+      "observed_words": 99072,
+      "raw_presence_frequency_verified": true,
+      "words": 196608,
+      "writes": 99072
+    }
+  },
+  "observed_pv_equals_physical_attention": true,
+  "old_1200_second_failure_preserved": true,
+  "old_failed_summary_sha256": "45b925ebfc17760b00e37b7408038d4d1898c3d2831a24650454aae4690cddab",
+  "old_pass_inherited": false,
+  "physical_memory_counts": {
+    "read_bytes": 217227904,
+    "write_ack_bytes": 15728640,
+    "write_acks": 166784,
+    "write_commands": 166784,
+    "write_data_bytes": 15728640
+  },
+  "published_physical_outputs": 17,
+  "raw_input_identities_verified": 14,
+  "recorded_utc": "2026-10-12T12:43:56.132591+00:00",
+  "reference_artifacts_verified": 114,
+  "schema": 1,
+  "scope": "Saved bytes, metadata, source closure and software transaction receipts only. No model rerun, native forward, compilation, RTL, or source edits.",
+  "silu_file_verified": true,
+  "snapshot_sha256": "5b9247588ddddcada1e669034c3e8e0a17ffb39c6c6aef3ffd1bb5e49c6924ab",
+  "sources_verified": 86,
+  "status": "PASS_INDEPENDENT_SAVED_CAPTURE_AUDIT_NATIVE_GATE_REMAINS_FAIL",
+  "successful_process_finished_utc": "2026-10-12T12:36:14.896542+00:00",
+  "successful_process_receipt": "work/qwen2_official_public21_20261012/actual_m128_03_process.json",
+  "summary_sha256": "25b947ff774412685d9691de0a06f1a1cf489388557db357013bf7911c11681a",
+  "verifier_sha256": "9dbd3ab582f2520c228d0c400b36842388600023ad15194ac6e2f4bfe3a2ab5e"
+}

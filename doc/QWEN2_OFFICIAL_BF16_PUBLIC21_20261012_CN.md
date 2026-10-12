@@ -43,7 +43,8 @@
 
 - done（局部）：官方BF16完整cold M16公开事务模型、原门下已观测节点、独立review、Chisel类型/有界前端。
 - done（发布）：8a3e2fc 精确远端源码与本轮三个 CI、工件已核验；详见下节。
-- ongoing：cold M128 首次1200秒预算退出；失败保全修复后，仅重跑一次1800秒软件模型及全形状节点核验。
+- done（实现正确性局部）：cold M128公开软件链完整终态、15+6固定算术逐bit一致及935项独立读回审查；原1200秒失败保留。
+- ongoing（模型质量）：官方scores/logits仍超原门，独立BF16另有gate/prob超门，不能关闭整块数值验收。
 - todo：真实carried/更长prefill、完整29节点和原质量门、完整Chisel/RTL冻结刺激回放。
 - 五block M128总体：Qwen2 L0正推进；0.8B L0/L3仅先前两个M1实际RTL范围；35B-A3B L0/L3尚无完整数值执行。均不能称五块M128通过。
 
@@ -67,3 +68,16 @@
 旧进程没有可恢复的Python生成器/Matrix bank checkpoint；保留回执不足以续算。旧runner在全suffix成功后才保存Attention十字段，因此本次超时也丢失了其内存中的实际数组，不能用reference补回。新runner仅在错误退出路径复制已发布、完整ACK并有terminal的普通物理输出，排除权重、未发布Act、workspace和虚拟区，并保存关闭后的原始Attention观测。观测的INCOMPLETE状态及已接受的局部terminal原样保留；保存不发布、不打开reference gate、不宣称block成功或可续跑。诊断写盘失败也保留原错误。
 
 12个小守卫在不含历史work目录的纯源码导出中通过；独立review还发现并修复了AST白名单可被移到成功路径的缺口，现只允许诊断块位于原错误handler的指定位置，原raise/终态/算术变化均拒绝。原M16封存实际数据重新比较约1秒，固定算术和原BF16已观测门保持通过，没有再跑M16或官方forward。新的M128快照SHA `5b9247588ddddcada1e669034c3e8e0a17ffb39c6c6aef3ffd1bb5e49c6924ab` 仅runner与上一快照不同，全部算术、物理驱动、原始输入和ELF相同。2026-10-12 12:13 UTC启动的唯一1800秒运行在本次记录时仍进行中，不提前登记PASS。
+
+
+## cold M128 完整终态与仍开放的官方差异
+
+上述唯一1800秒运行于12:36:14 UTC成功退出，主机1369.129秒、whole terminal1367.008秒，Down实测156.737秒（早先200–285秒是规划估计）。公开21命令、17 owner、唯一最终结果、所有实际ACK与workspace三次prefix续算均完成。19实际输出及10组内部观测已封存；15主阶段+6观测节点逐bit对冻结算术通过。另一检查器完成935项来源/字节/覆盖/ACK复核。[紧凑结果与可复现脚本](../reports/execution/QWEN2_OFFICIAL_PUBLIC21_20261012/README.md)。
+
+原官方门仍FAIL：99,072个实际causal scores/logits有11差，max8/mean0.000565245；独立BF16 scores/logits max2、gate max0.041015625、prob max0.031494140625。原max0.03125/mean0.005不变；97,536未执行future位置没有填数，显式mask和完整29节点门仍不闭合。
+
+本次实际n0与官方逐bit一致，K也相同，QR有40个、RoPE后Q有19个bit差（max0.0078125）。对真实Q/K的完整形状孤立官方QK重放，全部99,072个实际causal值与owner逐bit相同；换回官方Q/K才出现上述11差，全部来自head9/query102。官方自身Q/K重放全部196,608 scores等于保存参考，确保没有用小形状算子代替全形状。当前cold问题定位到上游Q投影，不能继续误改QK、scale、RMS或mask。
+
+全部40个不同QR位置的独立有理数1536项计算精确复现当前顺序FP32 FMA与实际qraw；用精确点积再舍入仅27/40匹配官方。因此后续研究通用、Chisel可实现的归约规则及其寄存器/端口/周期代价，区分BF16物化语义和固定CPU实现，不按单点硬编码，也不宣称增加精度免费解决。未采用新累加器、资源扩容或放宽门限。
+
+f1d1324对应model CI445tests、frontend811tests/143IR及payload三门全成功；model/frontend两份工件已下载、hash核验，143IR原始字节全部与上一8a3e2fc相同。此次主机17,010,491 tick不代表硬件cycle；有效MAC6,014,828,544、执行MAC6,801,063,936、writeBytes13,369,344均来自实际owner汇总。五个block M128的总体验收仍未通过。

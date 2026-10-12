@@ -844,4 +844,14 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 原v0公式和数值门均保持。采用官方BF16物化v2作为目标的询问尚未获答，当前4节点差异仍阻断；FP32模型比较、完整29节点门、真实carried prefill与五block硬件验收均未关闭。
 - 新观测14测试通过，包含trace开/关所有实际服务握手及输出完全相同、独立整数舍入参考、真实响应改变、末ACK/错误/reset/held终态、源码/已载入函数及缺失/重复事件拒绝。独立纯源码checkout在显式获取固定baseline后，按现有model-contract工作流次序完成13+27+67+248+14=369测试及原解析模型摘要，68.268秒；只复用固定Python工具环境，未复制历史work或实值输入。首次准备因浅clone缺baseline在测试前停止，原失败保留；补精确fetch后续行成功。执行日志SHA `f96ef8260d6e6d94add7c6dfa9d330fe4f54c8e903674125a414fd29dbbf853d`。测试后仅补本文结果与状态表，执行源码、测试和workflow身份未变。
 - 同次新编共享Matrix库SHA `22da518dc47e641cd7052b84d0c46389fd92d71665276fb671410cf5b994136c`，显式编译回执与源码逐项验证。synthetic M2捕获36个因果score、576个QK分片、72个normalizer字及3072个PV字；概率每坐标8次实际观察全部相同。所有被观察字段均经独立参考核对；future上三角缺失且不补值。完整握手trace SHA `d634b23f55d30131801a0f0d9814b004a14660be1f0713029cda87fc912a5e58`、实际输出SHA `8d7ae9c2688ea00bd1a46e7068daca70d746452c3edaab76fd202ada0026add3`；这是软件owner观测门，不是官方payload、整block或硬件数值通过。
-- done（局部）：原545双CI及工件、只读内部观测和369项冷轻门。ongoing：本5文件增量发布与精确model-contract/payload两CI工件核验。todo：后续获准数值策略接入时，同完整链保全实际内部观测；当前不为补观测重复长M128。
+- done（局部）：原545双CI及工件、只读内部观测和369项冷轻门；`c3645ea54bcee44e97443239c07967a559e0ef50` 已发布，model-contract run38217457589与payload run38217457594均成功。工件11733430538的261,855 B/SHA `9699ba4c3009541ba1463e934d89e42dcdf96ed14ff49d45d7c8cf228480290a`、5发布源、75执行源、92个已载入函数、3900实际word及presence/counts均独立核对，所有实际数据和握手与本地相同。CI共享库按自己的编译回执核验且ELF已保全，不声称不同环境的ELF相同。todo：后续获准数值策略接入时，同完整链保全实际内部观测；当前不为补观测重复长M128。
+
+### 2026-10-12 公开三命令驱动的只读观测接线
+
+- `execute_public_attention_observed` 直接包住原 `fullgraph_execution.execute_attention_owner`，绑定同一实际owner和原driver代码，返回原报告及已关闭的capture；不改变driver参数、握手和调度，也不调用completion、physical publish或finish。可传入未用capture以便原错误异常后检查不完整观测。原75项执行源码和算术均未改。
+- 小门复用既有公开Command128 QK/Softmax/PV三命令M1合成fixture、同物理metadata/operand内存和原Matrix/Scalar；输入只有readonly Q/K/V，输出及两个虚拟区域均从哨兵开始。观测开/关的owner报告、所有Host计数和request/completion tick、完整Host事件digest、每次DDR写/ACK记录、每一公开边界快照及6144B实际输出完全相同。
+- owner成功且最终ACK之后仍须接受原3个completion；PC0、PC1及背压均不允许物理读或publish。PC2接受后才允许physical publish，此时launch_result仅offered，原finish接受它是独立后续边界。虚拟scores/probabilities始终未写、未ACK、未发布；实际PV与写回逐字相同。owner级capture始终不宣称完整block或public launch通过。
+- 额外检查实际Numerical错误、owner已成功但公开completion被扣住时发生local reset、复制job/断开的metadata map、错owner/reuse capture和被替换driver。真实reset与completion_ready同拍必须阻断公开成功；已接受的owner观测历史不会被追溯撤销。首次本地准备误指向另一冷checkout的共享库回执，被原严格路径守卫在0测试前拒绝；改为当前checkout现编0.5秒级host库，未放宽守卫。首轮5项小门通过，2.279秒，无RTL或M128。
+- 独立review指出首次证据快照保留了Host报告的活动list引用；原直接边界断言及运算无误，但不能将首版工件当作各历史时刻的冻结快照。现改为即时deepcopy，并在执行结束后逐项断言历史completion长度0/1/2/3/3/3、Host允许发布0/0/0/1/1/1、物理已发布0/0/0/0/1/1及最终launch仅最后已接受。修正后5门2.294秒通过；初版日志/工件和发现记录保留。小路径共1973个Host模型tick，不能作为硬件周期或利用率。
+- 修正后独立review无剩余阻断。新source-only checkout先获取精确baseline、现编共享host库，再按workflow原次序执行374测试（原369+公开接线5）和全部原解析摘要，69.621秒、EXIT0；4文件前后hash一致，日志SHA `037c676a6638872d30fa69140b041d7f411785c639db9bfd9ffcb42976af615d`。未复制历史work，只复用固定Python工具环境。本文在测试后追加结果，执行代码/测试/workflow保持冻结身份。
+- done（局部）：原公开三命令路径小规模接线、边界比较、独立review及source-only完整轻门。ongoing：本小批发布与精确CI工件闭环。原v0/native数值失败、未批准v2策略、真实carried prefill及五block M128验收仍开放。

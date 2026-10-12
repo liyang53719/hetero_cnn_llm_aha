@@ -34,6 +34,36 @@ RECEIPT = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_recei
 RECEIPT_SHA = '3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e'
 
 
+def execute_public_attention_observed(execution, physical, job, *,
+                                      final_ack_stall=5, observation=None):
+    """Observe the original public driver; return its report without publication.
+
+    The caller still owns all three public completion handshakes, physical
+    publication and final launch-result acceptance. An optional unused capture
+    lets the caller inspect a failed driver without replacing its exception.
+    This helper never advances those public gates or changes driver readiness.
+    """
+    from candidates.qwen2_resident_matrix.ffn_public import fullgraph_execution as driver
+    path = ROOT / 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
+    sources = verify_execution_sources()
+    require(sha(path.read_bytes()) == sources[str(path.relative_to(ROOT))],
+            'public Attention driver source drift')
+    function = driver.execute_attention_owner
+    expected = _code(compile(path.read_text(), str(path), 'exec',
+                             dont_inherit=True, optimize=0), 'execute_attention_owner')
+    require(isinstance(function, types.FunctionType) and
+            _same_code(function.__code__, expected) and function.__defaults__ is None and
+            function.__kwdefaults__ == {'final_ack_stall': 5} and
+            function.__globals__ is driver.__dict__, 'loaded public Attention driver changed')
+    capture = (AttentionObservation(execution.attention_owner) if observation is None
+               else observation)
+    require(type(capture) is AttentionObservation and capture.owner is execution.attention_owner,
+            'public observer must belong to this actual Attention owner')
+    with capture:
+        report = function(execution, physical, job, final_ack_stall=final_ack_stall)
+    return report, capture
+
+
 def require(ok, message):
     if not ok:
         raise ValueError(message)

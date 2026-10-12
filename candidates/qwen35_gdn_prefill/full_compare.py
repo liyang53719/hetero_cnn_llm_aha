@@ -1,10 +1,12 @@
-"""Posthoc frozen gates for a sealed, complete two-window typed L0 execution.
+"""Posthoc original thresholds over finite BF16 materialized L0 outputs.
 
 This module never launches an owner, recaptures a block, or feeds native bytes
 back into execution. Existing original full-block captures supply every stage.
 The only reference arithmetic is the source-pinned full-shape Conv fallback,
 to recover its unobserved pre-SiLU boundary and condition Conv on ACTUAL QKV
 and ACTUAL prior history. M128 remains one function call with two chunks.
+This version explicitly admits finite BF16 subnormals in compared outputs;
+the legacy Matrix/Norm/RoPE normal-only comparator is retained unchanged.
 """
 from __future__ import annotations
 
@@ -19,10 +21,11 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'src'))
-from heteronpu.matrix_norm_rope_candidate import compare_native
+from heteronpu.matrix_norm_rope_candidate import MAX_ABS, MEAN_ABS
 from heteronpu.qwen35_numpy_reference import compare as compare_state
 from .conv import reference as conv_reference
 from .native.capture import validate_manifest, validate_tensor_record
+from .prefill_bf16_compare import DOMAIN as BF16_COMPARISON_DOMAIN, compare_finite_bf16
 
 ORDER = ('input_norm', 'qkv', 'z', 'ab', 'conv_silu', 'prep', 'chunk',
          'gated_norm', 'o', 'attention_residual', 'post_norm', 'gate', 'up',
@@ -286,15 +289,15 @@ def verify_native_identity(manifest, *, root=ROOT):
 
 
 def bf16_metric(actual, expected, *, gate='node'):
-    stats = conv_reference.compare_bf16(actual, expected)
+    stats = compare_finite_bf16(actual, expected)
     require(gate in ('node', 'output', 'ulp'), 'unknown frozen gate')
     if gate == 'ulp':
         stats.update(thresholds={'max_bf16_ulp': 1}, passed=stats['max_bf16_ulp'] <= 1,
                      gate='ORIGINAL_SAME_ACTUAL_INPUT_CONV_SILU_1_BF16_ULP')
     else:
-        original = compare_native(np.frombuffer(actual, '<u2'), np.frombuffer(expected, '<u2'))
-        require(original['thresholds'] == {'max_abs': .03125, 'mean_abs': .005}, 'original node thresholds changed')
-        limits = {'max_abs': .05, 'mean_abs': .01} if gate == 'output' else original['thresholds']
+        original = {'max_abs': MAX_ABS, 'mean_abs': MEAN_ABS}
+        require(original == {'max_abs': .03125, 'mean_abs': .005}, 'original node thresholds changed')
+        limits = {'max_abs': .05, 'mean_abs': .01} if gate == 'output' else original
         stats.update(thresholds=limits, passed=stats['max_abs'] <= limits['max_abs'] and
                      stats['mean_abs'] <= limits['mean_abs'], gate='ORIGINAL_FULL_BLOCK_OUTPUT' if gate == 'output' else 'ORIGINAL_NATIVE_PER_NODE')
     stats.update(status='PASS' if stats['passed'] else 'FAIL', signed_zero_numeric_equal=True,
@@ -421,6 +424,7 @@ def compare_run(actual_dir, native_manifest, fixture, output, *, root=ROOT):
     verify_source_hashes(GATE_SOURCES, root)
     sources = {p: sha((root / p).read_bytes()) for p in (
         'candidates/qwen35_gdn_prefill/full_compare.py', 'candidates/qwen35_gdn_prefill/conv/reference.py',
+        'candidates/qwen35_gdn_prefill/prefill_bf16_compare.py',
         'candidates/qwen35_gdn_prefill/native/capture.py', conv_reference.SOURCE)}
     from .input_fixture import load_fixture, gdn
     fixture_manifest, raw_inputs = load_fixture(root, fixture)
@@ -491,14 +495,17 @@ def compare_run(actual_dir, native_manifest, fixture, output, *, root=ROOT):
         verify_record(file_bytes(native_manifest.parent, record['file']), record, name)
     passed = all(r['passed'] for r in reports + operator_reports)
     missing = any(v.get('status') == 'MISSING' for r in reports for v in r['checks'].values())
-    result = dict(schema_version=1, scope='POSTHOC_COMPLETE_TYPED_L0_FROZEN_ORIGINAL_GATES', rows=rows,
+    result = dict(schema_version=2, scope='POSTHOC_COMPLETE_TYPED_L0_FINITE_BF16_ORIGINAL_THRESHOLDS', rows=rows,
         status='PASS' if passed else 'MISSING' if missing else 'FAIL', passed=passed,
         actual_summary_sha256=seal_sha, native_manifest_sha256=sha(native_raw),
         input_fixture_sha256=sha((fixture / 'manifest.json').read_bytes()),
         actual_directory=str(actual_dir.resolve()), native_manifest=str(native_manifest.resolve()),
         input_sha256=identity['input_sha256'], parameter_sha256=identity['parameter_sha256'],
         actual_source_sha256=identity['source_sha256'], comparison_source_sha256=sources,
-        frozen_gate_source_sha256=GATE_SOURCES, native_source_files=native['source_files'],
+        frozen_gate_source_sha256=GATE_SOURCES, bf16_comparison_domain=BF16_COMPARISON_DOMAIN,
+        comparison_domain_extended=True, numeric_thresholds_changed=False,
+        legacy_normal_only_comparator_unchanged=True, execution_arithmetic_changed=False,
+        native_source_files=native['source_files'],
         native_runtime_files=native['runtime_files'], native_environment=native['environment'],
         actual_identity_file_sha256=identity['identity_file_sha256'], actual_output_files=summary['output_files'],
         actual_numerical_policy={name: identity[name] for name in

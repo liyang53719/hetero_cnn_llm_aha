@@ -1,0 +1,132 @@
+{
+  "actual_and_comparison_exit_codes": 0,
+  "actual_carried_conv_and_chunk_input_hashes_bind_cold_history_and_state": true,
+  "actual_dual_root_continuity_verified": true,
+  "actual_elapsed_seconds": 2154.3035236540018,
+  "actual_execution_arithmetic_changed": false,
+  "actual_execution_source_files_verified": 49,
+  "actual_generation": 2,
+  "actual_output_bytes_verified": 29999104,
+  "actual_output_files_verified": 38,
+  "actual_summary_sha256": "033697cf2b2972884d5848c82353328cee5e9265a5a9a7df3d2ce9147473d661",
+  "actual_terminal_count": 32,
+  "all_original_numeric_thresholds_unchanged": true,
+  "all_reported_metrics_bound_to_sealed_actual_files": true,
+  "assigned_node_gates_per_window": 17,
+  "assigned_operator_gates_per_window": 7,
+  "bf16_comparison_domain": "finite_bf16_materialized_prefill_v1",
+  "blocking_findings": [],
+  "command_sha256": "70ace3f8c1c88c62424a7b91ff0437f7f77b8bfc9246d8413bc4e87be56bb884",
+  "comparator_review_sha256": "8e29872652e0bfe09ff5d0e1322e64a332722fbf066c52fff13673dfaa127e0a",
+  "comparison_domain_extended": true,
+  "comparison_elapsed_seconds": 4.225899416022003,
+  "exit_receipt_sha256": "55bc9d82e7314f6ff3291aad298813e819ca880abed858ca0870be2738976edb",
+  "full_comparison_sha256": "1415ecd5514d0c6b645ae0bc3cb45a3431eaa7f454bda0d3a134edda8705e482",
+  "hardware_or_rtl_acceptance_claimed": false,
+  "legacy_cold128_numeric_metrics_preserved": true,
+  "legacy_domain_rejection_sha256": "38999592972693c6d6429c032dc2b223ca4e87289cb9814ce44a22f7cab9e6c1",
+  "legacy_normal_only_gate_pass_claimed": false,
+  "legacy_normal_only_rejection_preserved": true,
+  "model_or_native_or_full_compare_reexecuted_by_review": false,
+  "native_manifest_sha256": "8f835860753f598520437cbe2f7d296c1c30fb08575a0f7446d53a4163e07e9c",
+  "native_tensor_files_verified": 91,
+  "no_activation_arrays_in_report": true,
+  "numeric_metrics_recomputed_by_review": false,
+  "official_cache_continuity_verified": true,
+  "original_parameter_files_verified": 14,
+  "prep_threshold_assigned": false,
+  "public_command128_executed": false,
+  "review_elapsed_seconds": 0.36257200001273304,
+  "reviewed_at": "2026-10-12T20:00:07.682448+00:00",
+  "rows": 128,
+  "scope": "Complete L0 typed software cold128 then actual carried128; finite BF16 comparison domain with unchanged original numeric thresholds",
+  "source_sha256": "5fec7c6f4946d2741c329acebe6d5a6b7cef1c49126a38f7d195c7764700e6a9",
+  "source_snapshots_verified": 49,
+  "status": "PASS_INDEPENDENT_READ_ONLY_M128_EVIDENCE_REVIEW",
+  "true_chunk_geometry": {
+    "chunk_size": 64,
+    "chunks_per_head": 2,
+    "head_chunks_per_window": 32,
+    "heads": 16,
+    "padding": 0,
+    "sequence_length": 128
+  },
+  "windows": [
+    {
+      "all_assigned_pass": true,
+      "assigned_nodes": 17,
+      "operator_gates": 7,
+      "output": {
+        "bit_mismatches": 5479,
+        "max_abs": 0.001953125,
+        "mean_abs": 4.597064275912999e-06,
+        "thresholds": {
+          "max_abs": 0.05,
+          "mean_abs": 0.01
+        }
+      },
+      "phase": "cold128",
+      "qkv": {
+        "actual_subnormal_count": 2,
+        "bit_mismatches": 1043,
+        "max_abs": 9.4039548065783e-38,
+        "mean_abs": 2.7149573871933194e-41,
+        "native_subnormal_count": 0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "same_actual_input_conv_max_bf16_ulp": 0,
+      "same_actual_input_silu_max_bf16_ulp": 0,
+      "state": {
+        "elements": 262144,
+        "max_abs_error": 9.5367431640625e-07,
+        "max_tolerance_ratio": 0.003976213056452241,
+        "mismatches": 0,
+        "thresholds": {
+          "atol": 0.0001,
+          "rtol": 0.0001
+        }
+      }
+    },
+    {
+      "all_assigned_pass": true,
+      "assigned_nodes": 17,
+      "operator_gates": 7,
+      "output": {
+        "bit_mismatches": 4175,
+        "max_abs": 0.0009765625,
+        "mean_abs": 4.574758349917829e-06,
+        "thresholds": {
+          "max_abs": 0.05,
+          "mean_abs": 0.01
+        }
+      },
+      "phase": "carried128",
+      "qkv": {
+        "actual_subnormal_count": 2,
+        "bit_mismatches": 1068,
+        "max_abs": 9.4039548065783e-38,
+        "mean_abs": 2.8156406818550575e-41,
+        "native_subnormal_count": 0,
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "same_actual_input_conv_max_bf16_ulp": 0,
+      "same_actual_input_silu_max_bf16_ulp": 0,
+      "state": {
+        "elements": 262144,
+        "max_abs_error": 8.344650268554688e-07,
+        "max_tolerance_ratio": 0.006926371641664922,
+        "mismatches": 0,
+        "thresholds": {
+          "atol": 0.0001,
+          "rtol": 0.0001
+        }
+      }
+    }
+  ]
+}

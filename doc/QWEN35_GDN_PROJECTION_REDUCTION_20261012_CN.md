@@ -46,4 +46,26 @@ Conv history 和 FP32 state 仍是独立 staging。只有全16阶段及最后残
 
 8ef1239a的[模型轻门](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38295788115)与[payload门](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38295788106)均成功。20,776B工件SHA817a3ca55cfa7c12d55581d462c78f35b17a33be82fbc40ce82f57c4ce2726b1，305测试/21suite、47实现测试源/4编译源/21日志都核对精确commit。工件仅保存ELF身份receipt，没有ELF字节；不假称跨环境同binary。
 
-M128全形状短预检复用原独立C ELF，8.136秒内两个窗口QKV/Z/A/B原门通过；Z/A/B逐位一致，QKV仅1043/1068个极小值位差，最大9.4039548e-38。它没有执行真实owner，也没有给actual注入数据。依此及M16分阶段耗时，19:20:44 UTC启动唯一同源完整cold128→carried128实际模型：3600秒计算预算、4000秒外层进程上限，比较单列；预计35–45分钟，尚未完成。TypedMemory为126,374,528B，完整输出29,999,104B；这些是软件分配/文件字节，不是新增片上SRAM。原Chisel/Command128缺口与五block M128总门继续保留。
+M128全形状短预检复用原独立C ELF，8.136秒内两个窗口QKV/Z/A/B的有限值及原max/mean阈值检查通过；它没有执行旧normal-only准入，不能称旧比较器完整通过。Z/A/B逐位一致，QKV仅1043/1068个极小值位差，最大9.4039548e-38。它没有执行真实owner，也没有给actual注入数据。依此及M16分阶段耗时，19:20:44 UTC启动唯一同源完整cold128→carried128实际模型：3600秒计算预算、4000秒外层进程上限，比较单列；预计35–45分钟，尚未完成。TypedMemory为126,374,528B，完整输出29,999,104B；这些是软件分配/文件字节，不是新增片上SRAM。原Chisel/Command128缺口与五block M128总门继续保留。
+
+## 19:52 UTC：有限 BF16 比较域修复，旧拒绝保留
+
+真实cold128完成全16阶段并发布generation1后，旧比较器在QKV的两个合法BF16 subnormal处提前拒绝。它复用了Matrix→Norm→RoPE候选的normal-only输入准入；实际GDN传输、BF16 RNE和固定Torch BF16类型均支持有限subnormal。原拒绝保留，不将它改写为旧门PASS，也不将这些值FTZ。短C预检只覆盖有限值和原max/mean数值阈值，遗漏该旧域限制，已在上述记录纠正。
+
+新增显式finite_bf16_materialized_prefill_v1比较域，直接将整数BF16编码精确解码到binary64，避免经过宿主FP32 subnormal转换。保留±0位差、所有实际哈希与误差，拒绝全部NaN/Inf；原节点max/mean=0.03125/0.005、末输出0.05/0.01、同实际输入Conv/SiLU≤1 BF16 ULP、FP32 state的1e-4绝对/相对门全部未变。旧normal-only helper源码和原失败结论不变。新结果有独立schema/scope及比较器源码身份，不能说旧normal-only接受范围未变。
+
+独立检查穷举65,280个有限BF16编码并复核Torch固定CPU头文件；全部精确往返。旧合法域65,026个编码及随机对照的指标和判定与原比较器一致。真实cold128两个QKV差分别为93×2^-133及188×2^-133，均保留非零误差；全QKV最大9.4039548e-38、均值2.7149574e-41，1043位差。QKV没有1-ULP门，其最大201 ULP只作诊断，不能挪用Conv的门限。微型官方conv探针在FTZ/DAZ关闭时仍将subnormal归零，记录为具体后端算子行为，不推论全部projection都如此。
+
+当前唯一完整cold128→实际carried128原进程继续，49实际执行源保持原身份。比较器修复只用于完成并封存实际输出后的独立后处理；未得到双窗口终态和全部门前，M128保持PENDING。
+
+## 19:57 UTC：完整 cold128→实际 carried128 模型全部已分配数值门通过
+
+唯一原进程在2154.304秒正常退出0，M=128的两个连续窗口共32个owner terminal，各窗口真正处理两个64-token chunk、全部16头。末残差ACK后双state generation1→2；carried从实际cold成功发布的history/FP32 state读取，没有参考状态或中间输出注入。38个实际输出文件与49个执行源完整封存，实际摘要SHA033697cf2b2972884d5848c82353328cee5e9265a5a9a7df3d2ce9147473d661。峰RSS414,600KiB。54,840,934是软件模型tick，不能当硬件cycle或据此计算RTL MAC利用率。
+
+独立后处理在明确的finite-BF16比较域及全部原数值阈值下通过：两个窗口各17个已分配捕获节点、双state和全部已分配operator门，无缺失冒充PASS。完整两份FP32 state各262,144字、超限均0，最大绝对差9.5367432e-7/8.3446503e-7，最大容差比0.00397622/0.00692638。末输出cold max/mean=0.001953125/4.5970643e-6，carried=0.0009765625/4.5747583e-6，均用原0.05/0.01门。
+
+同实际输入Conv/SiLU均0数值BF16 ULP；cold919、carried925个raw位差全部为±0。QKV仍1043/1068个位差及每窗2个合法subnormal，所有原max/mean门通过；不是所有中间张量与官方bit exact。Prep单独门仍未分配，只保留其可观察子边界诊断；不能把整模型结果提升为每个内部节点都独立过门。旧normal-only拒绝、旧UF/state失败继续保存，未重新命名为PASS。
+
+[完整数值记录](../reports/execution/QWEN35_GDN_PROJECTION_REDUCTION_20261012/ACTUAL_M128_FINITE_BF16_GATES.json)SHA1415ecd5514d0c6b645ae0bc3cb45a3431eaa7f454bda0d3a134edda8705e482；[比较域审查](../reports/execution/QWEN35_GDN_PROJECTION_REDUCTION_20261012/FINITE_BF16_DOMAIN_AUDIT.json)保留旧拒绝及官方位级反例。最终比较器轻门313测试/22进程通过、源身份一致。第一轮313测试均通过但期间补schema/docstring导致source guard正确失败，该失败保留；最终冻结后完整重跑轻门通过，没有重跑实际M128。
+
+验收层级仍是完整typed软件模型。公共Command128、对应Chisel的新投影/IEEE控制/完整路由以及RTL冻结刺激重放尚未完成；五block总验收、S04/Q35B/U00.2/U01仍open。Qwen2 cold M128及0.8B L0 cold+carried M128分别已到模型已分配数值门，下一目标是0.8B L3真正M128模型；35B-A3B L0/L3保持未完成。新增shared Add、bank及全部访存仍需加入完整硬件周期账，≤3.168%是原固定资源乐观风险界，绝非实测利用率或达到80%/90%。

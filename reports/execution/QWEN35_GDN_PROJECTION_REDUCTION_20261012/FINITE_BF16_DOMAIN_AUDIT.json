@@ -1,0 +1,1116 @@
+{
+  "actual_execution_arithmetic_changed": false,
+  "header_probe": {
+    "cases": [
+      {
+        "bf16_bits": 0,
+        "fp32_bits": 32768
+      },
+      {
+        "bf16_bits": 2,
+        "fp32_bits": 98304
+      },
+      {
+        "bf16_bits": 128,
+        "fp32_bits": 8355840
+      },
+      {
+        "bf16_bits": 32768,
+        "fp32_bits": 2147516416
+      },
+      {
+        "bf16_bits": 32770,
+        "fp32_bits": 2147581952
+      },
+      {
+        "bf16_bits": 32896,
+        "fp32_bits": 2155839488
+      }
+    ],
+    "controls_unchanged": true,
+    "finite_roundtrip_count": 65280,
+    "mismatches": 0,
+    "mxcsr_after": 8066,
+    "mxcsr_before": 8064,
+    "normal_operands_product_bf16_bits": 64,
+    "normal_operands_product_fp32_bits": 4194304
+  },
+  "legacy_helper_unchanged": true,
+  "new_domain": "finite_bf16_materialized_prefill_v1",
+  "old_domain": "normal_only_matrix_norm_rope_operand_admission",
+  "old_rejection_preserved": true,
+  "prior_light_gate_failure": {
+    "all_313_tests_passed": true,
+    "original_summary_sha256": "5a04ed51e208cad36cb1bb5625393a723b382ab348eb730d189479a2dc089469",
+    "reason": "Comparison result metadata/docstring were clarified during the first light gate. The guard correctly rejected source drift. No actual execution source changed. Final comparator source is now frozen; rerun the complete bounded light gate once.",
+    "status": "SOURCE_IDENTITY_GUARD_FAILED"
+  },
+  "report_sources": {
+    "comparator_review.json": {
+      "bytes": 7242,
+      "sha256": "8e29872652e0bfe09ff5d0e1322e64a332722fbf066c52fff13673dfaa127e0a"
+    },
+    "header_probe.cpp": {
+      "bytes": 1462,
+      "sha256": "bea2260fabf0a2a234482addd4b7697d97a4fe1963293c98f0a78b30ea52f3bc"
+    },
+    "header_probe.json": {
+      "bytes": 441,
+      "sha256": "ad2b00432aef9e8a429924a108ca3b6ffdddf22225462cda43316063656e1bb0"
+    },
+    "pre_edit_full_compare.py": {
+      "bytes": 33213,
+      "sha256": "5b5010315847c0616f9405d89f61091ec4a2ea1ef167d5e163b1016c0d79e04c"
+    },
+    "probe.py": {
+      "bytes": 3647,
+      "sha256": "9a0c38a256b5b5c2630dedbffd7d859e8f8e54aa0f882b72d348d2c9e077854e"
+    },
+    "read_controls.c": {
+      "bytes": 94,
+      "sha256": "a0db97869d46b98a8eabcfbe39bc7ffc373700bb731f236ca420de4f0e3e56df"
+    },
+    "source_audit.json": {
+      "bytes": 17648,
+      "sha256": "bc3dc1dded15c0b8b845cc8f0637a2fad3d26f9748aa880088dde47156dbe63e"
+    },
+    "torch_probe.json": {
+      "bytes": 9795,
+      "sha256": "a0307a591d5f9b783f903118b7a16f1084cd245a3e9f0c59c2d20dcb7baebe56"
+    }
+  },
+  "review": {
+    "archived_comparator_identity_verified": true,
+    "caveat": "The comparison domain is explicitly extended from normal-only to finite BF16; old rejection must remain in provenance. Original gate labels identify numeric thresholds, not unchanged legacy domain acceptance.",
+    "cold_bf16_node_review": [
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "input_norm",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "FROZEN_COMPARATOR_DOMAIN_REJECTED",
+        "raw_numeric_metrics_identical": true,
+        "role": "qkv",
+        "subnormal_count": 2
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "z",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "ab",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "conv_silu",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "chunk",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "gated_norm",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "o",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "attention_residual",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "post_norm",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "gate",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "up",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "silu_mul",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "down",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "output",
+        "subnormal_count": 0
+      },
+      {
+        "finite_domain_status": "PASS",
+        "legacy_status": "PASS",
+        "raw_numeric_metrics_identical": true,
+        "role": "history_staging",
+        "subnormal_count": 0
+      }
+    ],
+    "finite_diagnostic_equivalence_elements": 65280,
+    "fp32_state_path_unchanged": true,
+    "full_model_rerun": false,
+    "independent_checks_source_sha256": {
+      "candidates/qwen35_gdn_prefill/full_compare.py": "e13a31c8f60e5d1080a5b29f5987afb72f4b6ce21962d4dc18ab4d6be3e729e3",
+      "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+      "candidates/qwen35_gdn_prefill/test_prefill_bf16_compare.py": "27566f1d6f3aa59781e36dee2ca111838bf9e06f3513fa5ce11a41dddbb08ed5"
+    },
+    "legacy_helper_source_unchanged": true,
+    "metadata_only_followup_review": {
+      "comparison_domain_extended": true,
+      "execution_arithmetic_changed": false,
+      "legacy_normal_only_comparator_unchanged": true,
+      "numeric_thresholds_changed": false,
+      "numerical_implementation_bytes_unchanged": true,
+      "proof": "Reversing only the module docstring and output schema/scope/identity metadata changes reproduces the exact previously tested full_compare.py SHA-256.",
+      "reconstructed_pre_metadata_sha256": "e13a31c8f60e5d1080a5b29f5987afb72f4b6ce21962d4dc18ab4d6be3e729e3",
+      "schema_version": 2,
+      "scope": "POSTHOC_COMPLETE_TYPED_L0_FINITE_BF16_ORIGINAL_THRESHOLDS",
+      "status": "PASS_STRUCTURAL_REVIEW_ONLY",
+      "test_attribution": "All recorded numeric and test checks apply to independent_checks_source_sha256. Final reviewed_sources were structurally reviewed after metadata-only changes; no tests were repeated.",
+      "tests_repeated": false
+    },
+    "normal_domain_equivalence": [
+      {
+        "all_old_metrics_equal": true,
+        "case": "all_legacy_reversed",
+        "elements": 65026,
+        "gate_equal": true
+      },
+      {
+        "all_old_metrics_equal": true,
+        "case": "all_legacy_identity",
+        "elements": 65026,
+        "gate_equal": true
+      },
+      {
+        "all_old_metrics_equal": true,
+        "case": "seeded_50000",
+        "elements": 50000,
+        "gate_equal": true
+      }
+    ],
+    "numeric_thresholds": {
+      "node": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "output": {
+        "max_abs": 0.05,
+        "mean_abs": 0.01
+      },
+      "same_actual_conv_silu_max_ulp": 1
+    },
+    "overall_m128_acceptance_claimed": false,
+    "real_two_point_nonzero_error_verified": true,
+    "reviewed_sources": {
+      "candidates/qwen35_gdn_prefill/full_compare.py": "4faec1bf97918483c182da5aba5cc7ce0dd5b0affd922a5fb3341f632cdc74f5",
+      "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+      "candidates/qwen35_gdn_prefill/test_prefill_bf16_compare.py": "45ff92bb7ca036f02166ad226d8b8e5c2721fd4d20197844b351babd7a06f483"
+    },
+    "status": "PASS_INDEPENDENT_COMPARATOR_REVIEW_ONLY",
+    "test_import_order_followup_review": {
+      "final_test_sha256": "45ff92bb7ca036f02166ad226d8b8e5c2721fd4d20197844b351babd7a06f483",
+      "independent_numeric_check_attribution": "The original independent_checks_source_sha256 is retained unchanged; this follow-up does not rerun or reattribute those numeric checks.",
+      "parent_reported_validation": "Parent reports 42 focused tests passed with PYTHONPATH unset. This review did not independently rerun them.",
+      "prior_reviewed_sources": {
+        "candidates/qwen35_gdn_prefill/full_compare.py": "4faec1bf97918483c182da5aba5cc7ce0dd5b0affd922a5fb3341f632cdc74f5",
+        "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+        "candidates/qwen35_gdn_prefill/test_prefill_bf16_compare.py": "27566f1d6f3aa59781e36dee2ca111838bf9e06f3513fa5ce11a41dddbb08ed5"
+      },
+      "proof": "Reversing only the two import lines reproduces the exact prior test SHA-256. full_compare bootstraps root/src before the test imports heteronpu. Both production comparison files retain their prior reviewed hashes.",
+      "reconstructed_prior_test_sha256": "27566f1d6f3aa59781e36dee2ca111838bf9e06f3513fa5ce11a41dddbb08ed5",
+      "status": "PASS_STRUCTURAL_REVIEW_ONLY",
+      "tests_repeated_by_auditor": false
+    }
+  },
+  "schema_version": 1,
+  "scope": "FINITE_BF16_COMPARISON_DOMAIN_EXTENSION_ONLY",
+  "source_audit": {
+    "actual_qkv_sha256": "8bae6c663641a75a7fec38a35a48edc3d46e419f5512cba08fd99b289507f76d",
+    "frozen_execution_source_count": 49,
+    "frozen_execution_sources": {
+      "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": {
+        "current": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+        "frozen": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": {
+        "current": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+        "frozen": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": {
+        "current": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+        "frozen": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": {
+        "current": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+        "frozen": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": {
+        "current": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+        "frozen": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": {
+        "current": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+        "frozen": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": {
+        "current": "f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd",
+        "frozen": "f5e8767890aeb06a9b6b07e0c7602e38d8aa0af76e72ae9f7b22b61e03100ddd",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+        "current": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+        "frozen": "f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": {
+        "current": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+        "frozen": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_drain/model.py": {
+        "current": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+        "frozen": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": {
+        "current": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+        "frozen": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": {
+        "current": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+        "frozen": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_group/model.py": {
+        "current": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+        "frozen": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": {
+        "current": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+        "frozen": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/model.py": {
+        "current": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+        "frozen": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+        "current": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+        "frozen": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": {
+        "current": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+        "frozen": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_tiles/model.py": {
+        "current": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+        "frozen": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": {
+        "current": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+        "frozen": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": {
+        "current": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+        "frozen": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/ffn_window/model.py": {
+        "current": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+        "frozen": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp": {
+        "current": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+        "frozen": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": {
+        "current": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+        "frozen": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+        "matches": true
+      },
+      "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": {
+        "current": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+        "frozen": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/chunk/model.py": {
+        "current": "0c790204954d6ed5342ca95725aab9fc556f91471f0e2ae26f2c0580ef97cf2f",
+        "frozen": "0c790204954d6ed5342ca95725aab9fc556f91471f0e2ae26f2c0580ef97cf2f",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+        "current": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+        "frozen": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": {
+        "current": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+        "frozen": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/conv/model.py": {
+        "current": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+        "frozen": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/conv/scalar.py": {
+        "current": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+        "frozen": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/dense_prefix.py": {
+        "current": "6b4d7d4544bf6beb4d42ce70f1570d226efaa93ea9116e021ffa319bf1350b68",
+        "frozen": "6b4d7d4544bf6beb4d42ce70f1570d226efaa93ea9116e021ffa319bf1350b68",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/elementwise/model.py": {
+        "current": "e192035e29792d0d22094cce674942e906e0433d6874348e0497c6bff4f65e03",
+        "frozen": "e192035e29792d0d22094cce674942e906e0433d6874348e0497c6bff4f65e03",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/full_driver.py": {
+        "current": "4e8fcca0133541539c1d2a4e0019436a3eac2d0a2694372202ab9bad8202bbb6",
+        "frozen": "4e8fcca0133541539c1d2a4e0019436a3eac2d0a2694372202ab9bad8202bbb6",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/gated_norm/model.py": {
+        "current": "8ca0c4974e9f72e3e39186e68841be27ac86e56a9a11fdd746c0360b5e0cd7c8",
+        "frozen": "8ca0c4974e9f72e3e39186e68841be27ac86e56a9a11fdd746c0360b5e0cd7c8",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/input_fixture.py": {
+        "current": "ab9839f63d45a10302754b7cc730ee7bba76cd6d9fc895c1f801d6a94936ffa2",
+        "frozen": "ab9839f63d45a10302754b7cc730ee7bba76cd6d9fc895c1f801d6a94936ffa2",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/prep/model.py": {
+        "current": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+        "frozen": "af8e52ee3e6e69af8809a09eaa660ccbee5975553922af15a178d6f125175973",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/prep/scalar.py": {
+        "current": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+        "frozen": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/projection_driver.py": {
+        "current": "f4ff3781f9b426f6cc88897fd00253ac0dac3fdd7f63fea1b65545245075c250",
+        "frozen": "f4ff3781f9b426f6cc88897fd00253ac0dac3fdd7f63fea1b65545245075c250",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/projection_owner.py": {
+        "current": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+        "frozen": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/rms_owner.py": {
+        "current": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+        "frozen": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+        "matches": true
+      },
+      "candidates/qwen35_gdn_prefill/typed_dense.py": {
+        "current": "9f1c1046cbd435cf5b73999f60065843b75d21344f72d80c6384d70772effb34",
+        "frozen": "9f1c1046cbd435cf5b73999f60065843b75d21344f72d80c6384d70772effb34",
+        "matches": true
+      },
+      "config/upstream/qwen3_5_0p8b/layer0_payload_pin.json": {
+        "current": "80352cc5df45472a8867a4e1d346f60dc888e6f89ee191ec35457b484770d9c4",
+        "frozen": "80352cc5df45472a8867a4e1d346f60dc888e6f89ee191ec35457b484770d9c4",
+        "matches": true
+      },
+      "config/upstream/qwen3_5_0p8b/prefix_payload_pin.json": {
+        "current": "1abdfec9e51e2fe77be685a9e2a5e3f3894162daa9b63e7c336b28ae399b104c",
+        "frozen": "1abdfec9e51e2fe77be685a9e2a5e3f3894162daa9b63e7c336b28ae399b104c",
+        "matches": true
+      },
+      "config/upstream/qwen3_5_0p8b/prefix_token_fixture.json": {
+        "current": "7aa77ba8b89001738c5b3a9a04b6f27a59118cbeebd01cffe82e42954b85f7b1",
+        "frozen": "7aa77ba8b89001738c5b3a9a04b6f27a59118cbeebd01cffe82e42954b85f7b1",
+        "matches": true
+      },
+      "scripts/build_shared_matrix_recipe.py": {
+        "current": "2bcb269f959c04af287d2c0de9cbaf63169081d897b26ee25a96392e20a9f271",
+        "frozen": "2bcb269f959c04af287d2c0de9cbaf63169081d897b26ee25a96392e20a9f271",
+        "matches": true
+      },
+      "src/heteronpu/model_geometry.py": {
+        "current": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+        "frozen": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+        "matches": true
+      },
+      "src/heteronpu/pinned_block_payload.py": {
+        "current": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+        "frozen": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+        "matches": true
+      },
+      "src/heteronpu/pinned_gdn_payload.py": {
+        "current": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+        "frozen": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+        "matches": true
+      },
+      "src/heteronpu/pinned_prefix_payload.py": {
+        "current": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+        "frozen": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+        "matches": true
+      },
+      "src/heteronpu/weight_header_contract.py": {
+        "current": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8",
+        "frozen": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8",
+        "matches": true
+      }
+    },
+    "legacy_vs_transport_probe": [
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 0,
+        "legacy_admitted": true,
+        "materializer_roundtrip_word": 0
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 32768,
+        "legacy_admitted": true,
+        "materializer_roundtrip_word": 32768
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 1,
+        "legacy_admitted": false,
+        "materializer_roundtrip_word": 1
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 32769,
+        "legacy_admitted": false,
+        "materializer_roundtrip_word": 32769
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 127,
+        "legacy_admitted": false,
+        "materializer_roundtrip_word": 127
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 32895,
+        "legacy_admitted": false,
+        "materializer_roundtrip_word": 32895
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 128,
+        "legacy_admitted": true,
+        "materializer_roundtrip_word": 128
+      },
+      {
+        "actual_transport_admitted": true,
+        "bf16_word": 32896,
+        "legacy_admitted": true,
+        "materializer_roundtrip_word": 32896
+      }
+    ],
+    "native_qkv_sha256": "d2e925b4bb4114a2696441c7004102ad51ae077be3161f7b293fcafbaee643f9",
+    "native_qkv_subnormal_count": 0,
+    "old_actual_qkv_gate": {
+      "error": "actual: subnormal BF16",
+      "error_type": "ModelContractError",
+      "status": "REJECTED"
+    },
+    "prior_c_precheck_scope": "The previous C precheck applied finite/max/mean checks. Its original-gate PASS wording did not execute the normal-only validator and does not establish legacy gate acceptance.",
+    "qkv_subnormal_pairs": [
+      {
+        "actual_bf16_word": 32834,
+        "actual_fp32": -6.06114274642742e-39,
+        "column": 479,
+        "flat_index": 571871,
+        "native_bf16_word": 32927,
+        "native_fp32": -1.4601843889120603e-38,
+        "row": 93
+      },
+      {
+        "actual_bf16_word": 94,
+        "actual_fp32": 8.632536638851174e-39,
+        "column": 2501,
+        "flat_index": 659909,
+        "native_bf16_word": 269,
+        "native_fp32": 2.589760991655352e-38,
+        "row": 107
+      }
+    ],
+    "raw_numeric_diagnostic_only": {
+      "actual_sha256": "8bae6c663641a75a7fec38a35a48edc3d46e419f5512cba08fd99b289507f76d",
+      "bit_mismatches": 1043,
+      "elements": 786432,
+      "expected_sha256": "d2e925b4bb4114a2696441c7004102ad51ae077be3161f7b293fcafbaee643f9",
+      "first_bit_mismatch": 438,
+      "max_abs": 9.4039548065783e-38,
+      "max_bf16_ulp": 201,
+      "mean_abs": 2.7149573871933194e-41,
+      "numerical_mismatches": 1043,
+      "signed_zero_only_mismatches": 0
+    },
+    "scope": "Independent numeric/domain audit; no execution or capture rerun; no overall M128 PASS claim.",
+    "source_hashes": {
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+      "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+      "candidates/qwen35_gdn_prefill/full_compare.py": "5b5010315847c0616f9405d89f61091ec4a2ea1ef167d5e163b1016c0d79e04c",
+      "candidates/qwen35_gdn_prefill/native/capture.py": "72c5181034162ee9a475d3118c85a18dab62e50348ab6e753795cbfefa8f03e7",
+      "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+      "candidates/qwen35_gdn_prefill/projection_reference.cpp": "143e28be0ea03e6c29e9d0e58afe1190e7050fa4ea43e9237a45fb218e9a3edd",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "src/heteronpu/matrix_norm_rope_candidate.py": "41a4a25575de2f1b7323582b1b79553417ce99f90a38b2ee5a54948da111e764",
+      "work/gdn_actual_projection_compare_20261012/cold128_all_published_comparison.json": "38999592972693c6d6429c032dc2b223ca4e87289cb9814ce44a22f7cab9e6c1",
+      "work/qwen35_gdn_full_prefill_20261012/actual_m128_01/identity.json": "aaeaf8deab1bc3be92c67d7e2c031ca18e2fcf63767cfd51305cc1bcd44dfacd",
+      "work/qwen35_gdn_native_20261012/m128_01/manifest.json": "8f835860753f598520437cbe2f7d296c1c30fb08575a0f7446d53a4163e07e9c",
+      "work/recovery_20261011/python/lib/python3.12/site-packages/torch/include/torch/headeronly/util/BFloat16.h": "003ff623b1bf9ce82111801d2bbe84d58f3f43e15b4682ec6266b3e6cb47a9f8"
+    }
+  },
+  "thresholds_changed": false,
+  "torch_probe": {
+    "aten_cpu_capability": "default",
+    "daz_before": false,
+    "denormal_policy_changed": false,
+    "deterministic_algorithms": true,
+    "float32_matmul_precision": "highest",
+    "ftz_before": false,
+    "interop_threads": 1,
+    "maxrss_kib": 289308,
+    "mkldnn_enabled": true,
+    "mxcsr_after": "0x1fa3",
+    "mxcsr_before": "0x1fa3",
+    "mxcsr_before_import": "0x1fa0",
+    "mxcsr_control_bits_unchanged": true,
+    "probe_sha256": "9a0c38a256b5b5c2630dedbffd7d859e8f8e54aa0f882b72d348d2c9e077854e",
+    "results": {
+      "bf16_add_positive_zero": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          0,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          0,
+          1,
+          32769,
+          127,
+          32895,
+          128,
+          32896,
+          66,
+          32834,
+          94,
+          32862
+        ]
+      },
+      "bf16_add_self": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          2147483648,
+          131072,
+          2147614720,
+          16646144,
+          2164129792,
+          16777216,
+          2164260864,
+          8650752,
+          2156134400,
+          12320768,
+          2159804416
+        ],
+        "fp32_values": [
+          0.0,
+          -0.0,
+          1.8367099231598242e-40,
+          -1.8367099231598242e-40,
+          2.3326216024129768e-38,
+          -2.3326216024129768e-38,
+          2.350988701644575e-38,
+          -2.350988701644575e-38,
+          1.212228549285484e-38,
+          -1.212228549285484e-38,
+          1.7265073277702348e-38,
+          -1.7265073277702348e-38
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          32768,
+          2,
+          32770,
+          254,
+          33022,
+          256,
+          33024,
+          132,
+          32900,
+          188,
+          32956
+        ]
+      },
+      "bf16_conv1d_unit_kernel": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          8388608,
+          2155872256,
+          0,
+          0,
+          0,
+          0
+        ],
+        "fp32_values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          128,
+          32896,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "bf16_linear_K1": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          0,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          0,
+          1,
+          32769,
+          127,
+          32895,
+          128,
+          32896,
+          66,
+          32834,
+          94,
+          32862
+        ]
+      },
+      "bf16_matmul_identity_K12": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          0,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          0,
+          1,
+          32769,
+          127,
+          32895,
+          128,
+          32896,
+          66,
+          32834,
+          94,
+          32862
+        ]
+      },
+      "bf16_multiply_one": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          2147483648,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          -0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          32768,
+          1,
+          32769,
+          127,
+          32895,
+          128,
+          32896,
+          66,
+          32834,
+          94,
+          32862
+        ]
+      },
+      "bf16_silu": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          2147483648,
+          0,
+          2147483648,
+          4194304,
+          2151677952,
+          4194304,
+          2151677952,
+          2162688,
+          2149646336,
+          3080192,
+          2150563840
+        ],
+        "fp32_values": [
+          0.0,
+          -0.0,
+          0.0,
+          -0.0,
+          5.877471754111438e-39,
+          -5.877471754111438e-39,
+          5.877471754111438e-39,
+          -5.877471754111438e-39,
+          3.03057137321371e-39,
+          -3.03057137321371e-39,
+          4.316268319425587e-39,
+          -4.316268319425587e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          32768,
+          0,
+          32768,
+          64,
+          32832,
+          64,
+          32832,
+          33,
+          32801,
+          47,
+          32815
+        ]
+      },
+      "bf16_widen_fp32": {
+        "dtype": "torch.float32",
+        "fp32_uint32": [
+          0,
+          2147483648,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          -0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": null
+      },
+      "fp32_to_bf16_roundtrip": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          2147483648,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          -0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "mxcsr_after": "0x1fa3",
+        "mxcsr_before": "0x1fa3",
+        "uint16_words": [
+          0,
+          32768,
+          1,
+          32769,
+          127,
+          32895,
+          128,
+          32896,
+          66,
+          32834,
+          94,
+          32862
+        ]
+      },
+      "input": {
+        "dtype": "torch.bfloat16",
+        "fp32_uint32": [
+          0,
+          2147483648,
+          65536,
+          2147549184,
+          8323072,
+          2155806720,
+          8388608,
+          2155872256,
+          4325376,
+          2151809024,
+          6160384,
+          2153644032
+        ],
+        "fp32_values": [
+          0.0,
+          -0.0,
+          9.183549615799121e-41,
+          -9.183549615799121e-41,
+          1.1663108012064884e-38,
+          -1.1663108012064884e-38,
+          1.1754943508222875e-38,
+          -1.1754943508222875e-38,
+          6.06114274642742e-39,
+          -6.06114274642742e-39,
+          8.632536638851174e-39,
+          -8.632536638851174e-39
+        ],
+        "uint16_words": [
+          0,
+          32768,
+          1,
+          32769,
+          127,
+          32895,
+          128,
+          32896,
+          66,
+          32834,
+          94,
+          32862
+        ]
+      }
+    },
+    "runtime_seconds": 2.1316990460036322,
+    "scope": "Tiny fixed-runtime CPU BF16 conversion/operator domain probe; no model, weights, or capture loaded.",
+    "threads": 1,
+    "torch_cpu_capability": "DEFAULT",
+    "torch_path": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261011T1142/work/recovery_20261011/python/lib/python3.12/site-packages/torch/__init__.py",
+    "torch_version": "2.10.0+cpu"
+  }
+}

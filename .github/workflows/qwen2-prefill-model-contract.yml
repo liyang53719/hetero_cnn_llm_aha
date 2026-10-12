@@ -121,6 +121,7 @@ jobs:
           python -m pip install --disable-pip-version-check --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
           python -m pip install --disable-pip-version-check numpy==2.3.5 pytest==8.4.2 transformers==4.40.1
       - name: Check model contracts and scalar software recipe without RTL
+        shell: bash
         run: |
           python -m py_compile scripts/qwen2_carried_qlinear_rms_diagnostic.py
           python -m pytest -o addopts='' -q tests/test_qwen2_dense_residency_numeric.py
@@ -153,6 +154,7 @@ jobs:
           python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen2_model_contract/attention-library
           MATRIX_SERVICE_LIBRARY="$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so" MATRIX_SERVICE_COMPILE_RECEIPT="$PWD/work/qwen2_model_contract/attention-library/compile.json" QWEN2_ATTENTION_OBSERVATION_OUT="$PWD/work/qwen2_model_contract/attention-observation" python -m unittest discover -s tests -p test_qwen2_attention_observation.py -v
           MATRIX_SERVICE_LIBRARY="$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so" MATRIX_SERVICE_COMPILE_RECEIPT="$PWD/work/qwen2_model_contract/attention-library/compile.json" QWEN2_PUBLIC_ATTENTION_OBSERVATION_OUT="$PWD/work/qwen2_model_contract/public-attention-observation" python -m unittest discover -s tests -p test_qwen2_public_attention_observation.py -v
+          MATRIX_SERVICE_LIBRARY="$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so" MATRIX_SERVICE_COMPILE_RECEIPT="$PWD/work/qwen2_model_contract/attention-library/compile.json" python -m unittest candidates.qwen2_resident_matrix.official_bf16.test_owners candidates.qwen2_resident_matrix.official_bf16.test_dense_silu candidates.qwen2_resident_matrix.official_bf16.test_execution candidates.qwen2_resident_matrix.official_bf16.test_observation candidates.qwen2_resident_matrix.official_bf16.test_observation_monitoring candidates.qwen2_resident_matrix.official_bf16.test_numeric_guards candidates.qwen2_resident_matrix.official_bf16.test_reference_layout -v 2>&1 | tee work/qwen2_model_contract/official-bf16-tests.log
           python scripts/check_git_payloads.py
       - name: Retain compact source-bound traffic evidence
         uses: actions/upload-artifact@v4
@@ -160,6 +162,7 @@ jobs:
           name: qwen2-model-contract-${{ github.sha }}
           path: |
             work/qwen2_model_contract/*.json
+            work/qwen2_model_contract/official-bf16-tests.log
             work/qwen2_model_contract/transposed_analytic/SUMMARY.json
             work/qwen2_model_contract/fullgraph_dataflow/SUMMARY.json
             work/qwen2_model_contract/attention-library/*

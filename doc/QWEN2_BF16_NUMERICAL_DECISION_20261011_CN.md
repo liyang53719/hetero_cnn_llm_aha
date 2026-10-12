@@ -1,6 +1,6 @@
-# Qwen2 BF16 数值差异与待决策项
+# Qwen2 BF16 数值差异与已选实施目标
 
-状态：`DIAGNOSTIC_NOT_ACCEPTED`。本材料不批准新算术、不调整门限，也不把最终输出接近当成整个 block 通过。软件基线是 `e327e14e549921e7569792bf6593fb0dea4b2397`；M128 为真正 cold→carried 两段，carried 使用本次 cold 实际产生的 K/V。
+当前实施目标：2026-10-12 10:50:23 UTC 用户明确要求“按官方 BF16 的舍入和中间张量精度规则，修改当前完整计算链”。官方 BF16 物化目标已获准，FP32 保留误差诊断；逐节点原门限、原失败与完整验收范围没有改变。下文保留批准前的诊断和选项作为历史记录，其中更宽模型质量门、仅末输出验收均未获批准。当前进展见 [公开21命令实现](QWEN2_OFFICIAL_BF16_PUBLIC21_20261012_CN.md)。软件基线是 `e327e14e549921e7569792bf6593fb0dea4b2397`；M128 为真正 cold→carried 两段，carried 使用本次 cold 实际产生的 K/V。
 
 ## 固定绝对门限与 BF16 网格
 
@@ -40,11 +40,12 @@ carried 官方自己的 cache 与候选 cache 条件下，Q/K/scores/logits 相�
 
 原始只读归因：[ATTRIBUTION.json](../reports/execution/QWEN2_BF16_ERROR_ATTRIBUTION_20261011/ATTRIBUTION.json)，SHA256 `2e5991c9efb31e980c8ef9199717b6c7a0e4d58b91f3bcfd5faa4086d2c3519a`。其顶层 scope 的范围补正在同目录 README；只做了一次完整形状孤立 QK，没有追加完整 block。
 
-两段软件结果：[m128_RESULT.json](../reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m128_RESULT.json)，SHA256 `99d551a40ca38af3d196015cf2dbb6e4ea80bdfec1f33f7c0d5cbb58a9131ac0`。cold末输出max/mean为0.03125/0.0000189665，carried官方自身cache为0.0078125/0.0000537381；末门通过但中间门失败。完整 Chisel/RTL、跨主机稳定性、完整模型质量和新政策批准均未完成。
+两段软件结果：[m128_RESULT.json](../reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m128_RESULT.json)，SHA256 `99d551a40ca38af3d196015cf2dbb6e4ea80bdfec1f33f7c0d5cbb58a9131ac0`。cold末输出max/mean为0.03125/0.0000189665，carried官方自身cache为0.0078125/0.0000537381；末门通过但中间门失败。当时完整 Chisel/RTL、跨主机稳定性、完整模型质量和新政策批准均未完成；本页首段记录后续已批准的BF16实施目标，其他门仍开放。
 
-2026-10-12 的公开21命令软件链另有完整15个实际主阶段与raw QKV/KV写回比较；它没有导出内部 scores/logits/softmax/prob，不能替代上述29节点诊断。29节点中的future score来自额外软件诊断计算，原生产对应的因果owner只计算 `key <= query`。后续实际内部观测应保留“实际计算且观测”“未执行”“派生视图”三个范围，不填入官方结果或将未执行的future score冒充实际输出；原完整诊断门及其FAIL仍保留。
+2026-10-12 批准前的旧v0公开21命令软件链另有完整15个实际主阶段与raw QKV/KV写回比较；它没有导出内部 scores/logits/softmax/prob，不能替代上述29节点诊断。29节点中的future score来自额外软件诊断计算，原生产对应的因果owner只计算 `key <= query`。后续实际内部观测应保留“实际计算且观测”“未执行”“派生视图”三个范围，不填入官方结果或将未执行的future score冒充实际输出；原完整诊断门及其FAIL仍保留。
 
 - done（局部）：RMS/表精度首差定位、同形状QK反例与上游传播的独立复核。
 - ongoing：原门下的M128整链数值修正与固定资源调度模型。
-- to do：用户确认版本化算术/验收方向后，再实施对应最小Chisel接入和冻结刺激RTL重放。
+- ongoing：已获准官方 BF16 物化目标的公开完整链及对应 Chisel 接入。
+- to do：逐节点原门、真实 carried prefill 和最终冻结刺激 RTL 重放；未批准扩大容差或仅末输出验收。
 - 保持：Q21.3/U00.2 ongoing，U01 to do，C02.2 OPEN。

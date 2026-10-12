@@ -59,6 +59,7 @@ jobs:
         run: |
           python scripts/build_shared_matrix_recipe.py --repo . --out work/matrix-interface-tests/attention-tests
       - name: Independent control contracts and negative identity guards
+        shell: bash
         run: |
           python -m unittest discover -s candidates/qwen2_resident_matrix -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/transposed_route -p 'test_*.py' -v
@@ -78,6 +79,7 @@ jobs:
           python -m unittest discover -s tests -p test_isolated_public_tests.py -v
           python -m unittest discover -s tests -p test_matrix_interface_candidate.py -v
           python -m unittest discover -s tests -p test_resident_seed_frontend.py -v
+          python -m unittest candidates.qwen2_resident_matrix.official_bf16.test_chisel_policy candidates.qwen2_resident_matrix.official_bf16.test_frontend candidates.qwen2_resident_matrix.official_bf16.test_workflow -v 2>&1 | tee work/matrix-interface-tests/official-bf16-source-tests.log
       - name: Compile real source and check CHIRRTL structure
         run: |
           test ! -e work/matrix-interface-frontend
@@ -93,6 +95,7 @@ jobs:
           python candidates/qwen2_resident_matrix/ffn_window/check_frontend.py --out work/matrix-interface-frontend/ffn-window --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/ffn_drain/check_frontend.py --out work/matrix-interface-frontend/ffn-drain --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
           python candidates/qwen2_resident_matrix/ffn_group/check_frontend.py --out work/matrix-interface-frontend/ffn-group --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
+          python candidates/qwen2_resident_matrix/official_bf16/check_frontend.py --out work/matrix-interface-frontend/official-bf16 --cache work/matrix-interface-jars --hardfloat work/upstream/hardfloat_continuous
       - name: Preserve compact source and frontend evidence
         if: always()
         uses: actions/upload-artifact@v4

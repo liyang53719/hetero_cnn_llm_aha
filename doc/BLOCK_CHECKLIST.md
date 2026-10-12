@@ -94,3 +94,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 38b943c 的model/frontend/payload三门及下载工件已闭环：新118模型小测＋原71数值策略小测，159 CHIRRTL，均保持各自身份；未把这些CI小门称为M128重放或RTL数值验收。
 
 2026-10-12 0.8B L0 typed owner前缀：真实embedding→RMS→QKV/Z/AB，两个M128输入窗口8个owner终态及原12项前缀数值门通过。见[来源与范围](QWEN35_GDN_PREFILL_PREFIX_20261012_CN.md)。这仍是S04/Q35B下的模型前置子门，未接公共Command128/Conv/chunk/state/FFN、无新RTL；第二输入窗口不等于carried GDN状态验收。S04/Q35B/U00.2/U01及五block M128总门保持open。
+
+2026-10-12 17:04 UTC：0.8B L0的真实typed投影写回→Conv4/SiLU/history staging已在两个M128输入窗口完成10个owner终态，原12项前缀门、实际Conv/SiLU同输入门及端到端原门通过。见[本轮数据与范围](QWEN35_GDN_PREFILL_CONV_20261012_CN.md)。两个Conv均cold，history未发布/无generation提交，仍不是carried GDN或完整block。S02/S04/Q35B/U00.2/U01及五block总目标保持open。e0bf前缀两CI及其下载工件已核闭环，本批等待独立产物复核和新轻CI。

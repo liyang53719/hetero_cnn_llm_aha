@@ -9,6 +9,12 @@ import sys
 import time
 
 ROOT=Path(__file__).resolve().parents[2]
+SOURCE_DIRS=(Path(__file__).parent,Path(__file__).parent/'conv')
+
+
+def source_files():
+    return sorted(p for directory in SOURCE_DIRS for p in directory.iterdir()
+                  if p.is_file() and p.suffix in ('.py','.cpp'))
 
 
 def main():
@@ -17,8 +23,8 @@ def main():
     args=parser.parse_args()
     args.out.mkdir(parents=True,exist_ok=False)
     sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
-             for p in sorted(Path(__file__).parent.iterdir()) if p.suffix in ('.py','.cpp')}
-    tests=sorted(Path(__file__).parent.glob('test_*.py'))
+             for p in source_files()}
+    tests=sorted(p for directory in SOURCE_DIRS for p in directory.glob('test_*.py'))
     report=dict(scope='SYNTHETIC_TYPED_RMS_DENSE_SOFTWARE_ONLY',status='RUNNING',
         source_sha256=sources,discovered_tests=[str(p.relative_to(ROOT)) for p in tests],
         suites=[],test_count=0,rtl_executed=False,checkpoint_payload_used=False)
@@ -33,7 +39,8 @@ def main():
         except subprocess.TimeoutExpired as e:
             code=124
             log=str(e)+'\n'+(e.stdout or b'').decode(errors='replace')+(e.stderr or b'').decode(errors='replace')
-        logfile=path.stem+'.log'; (args.out/logfile).write_text(log)
+        logfile='__'.join(path.relative_to(Path(__file__).parent).with_suffix('').parts)+'.log'
+        (args.out/logfile).write_text(log)
         found=re.findall(r'^Ran (\d+) tests? in ',log,re.M)
         count=int(found[-1]) if found else 0
         ok=code==0 and count>0 and re.search(r'^OK$',log,re.M) is not None and 'skipped=' not in log
@@ -44,7 +51,7 @@ def main():
         (args.out/'summary.json').write_text(json.dumps(report,indent=2)+'\n')
         print(name,count,'PASS' if ok else 'FAIL',flush=True)
     after={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
-           for p in sorted(Path(__file__).parent.iterdir()) if p.suffix in ('.py','.cpp')}
+           for p in source_files()}
     report['sources_unchanged']=sources==after
     failed |= not report['sources_unchanged'] or not tests
     report['status']='FAILED' if failed else 'PASS_SYNTHETIC_SOFTWARE_ONLY'

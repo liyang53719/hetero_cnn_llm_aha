@@ -1,7 +1,7 @@
 """Raw checkpoint input → typed RMS → real shared-Matrix QKV/Z/AB prefix.
 
-Only this four-command owner chain is implemented. It has no public Command128
-decoder yet; no Conv, input prep, chunk GDN, state, O or FFN is executed here.
+The default four-command chain can append the explicit Conv4 staging owner.
+It has no public Command128 decoder yet; no input prep, chunk GDN, state, O or FFN executes here.
 Carried input names identify tokens128..255, not a stateful completed block.
 """
 from __future__ import annotations
@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 import sys
 import signal
+import struct
 import time
 
 import numpy as np
@@ -49,16 +50,41 @@ def persist(path, value):
     path.write_text(json.dumps(value, sort_keys=True, indent=2, allow_nan=False) + '\n')
 
 
+def final_identity(report, fixture, *, root=ROOT):
+    """A missing input/source must produce a failure receipt, not erase it."""
+    checks, errors = {}, {}
+    probes = {
+        'source_unchanged': lambda: report['source_sha256'] == {
+            name:sha((root/name).read_bytes()) for name in report['source_sha256']},
+        'library_unchanged': lambda: (sha(Path(report['library']).read_bytes())==report['library_sha256'] and
+            sha(Path(report['compile_receipt']).read_bytes())==report['compile_receipt_sha256']),
+        'fixture_unchanged': lambda: (sha((Path(fixture)/'manifest.json').read_bytes())==report['input_fixture_sha256']
+            and bool(load_fixture(root,fixture))),
+    }
+    for name, probe in probes.items():
+        try: checks[name]=bool(probe())
+        except (OSError, ValueError, KeyError) as error:
+            checks[name]=False
+            errors[name]=dict(type=type(error).__name__,message=str(error))
+    return dict(**checks, identity_read_errors=errors)
+
+
 def run(fixture, output, *, rows=16, budget_seconds=600,
-        policy=r.ReductionPolicy.Torch210CpuDefault1024):
+        policy=r.ReductionPolicy.Torch210CpuDefault1024, include_conv=False):
     d.require(type(rows) is int and rows in (16, 128), 'M16 or M128 prefix only')
     d.require(type(budget_seconds) is int and 0 < budget_seconds <= 3600, 'bounded software wall budget')
+    d.require(type(include_conv) is bool, 'explicit Conv option required')
     output = Path(output)
     d.require(not output.exists(), 'fresh output required')
     manifest, inputs = load_fixture(ROOT, fixture)
     _, weights = gdn.load_payload(ROOT, Path(manifest['sources']['layer0_directory']))
     library = d.library_from_environment(ROOT)
     source_names=sorted(set(MODEL_SOURCES) | set(INPUT_SOURCES) | set(MATRIX_SOURCES))
+    if include_conv:
+        from .conv import model as c
+        source_names=sorted(set(source_names) | {
+            'candidates/qwen35_gdn_prefill/conv/'+name
+            for name in ('model.py','scalar.py','reference.py')})
     sources = {name: sha((ROOT/name).read_bytes()) for name in source_names}
     output.mkdir(parents=True)
     for name in source_names:
@@ -78,15 +104,31 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         public_command128_executed=False, full_block_executed=False,
         chunk_gdn_executed=False, history_or_state_committed=False,
         hardware_cycles=None, hardware_mac_utilization=None, rtl_executed=False)
+    if include_conv:
+        report.update(scope='QWEN35_L0_TYPED_OWNER_RMS_QKV_Z_AB_CONV_STAGING_ONLY',
+            conv_cold_for_each_input_window=True, conv_history_published=False,
+            owner_commands_per_window=5)
     persist(output/'identity.json', report)
     try:
+        if include_conv:
+            report['conv_source']=c.source_identity()
+            persist(output/'identity.json',report)
         memory = d.TypedMemory()
         lib = configure_library(C.CDLL(str(library)))
         d.require(lib.td_reset() == 0, 'single initial Matrix reset')
         matrix = d.MatrixService(lib)
         dense = d.down.DenseOwnerModel(d.down.PrefixWorkspace(0x90000000, 64, 1))
-        scalar = r.SharedScalar()
+        scalar = c.ConvScalar() if include_conv else r.SharedScalar()
         rms = r.RmsOwner(scalar)
+        conv_observations={}
+        def observe_conv(tag,token,channel,bits):
+            slot=conv_observations[tag]
+            index=token*6144+channel
+            d.require(0<=token<rows and 0<=channel<6144 and 0<=bits<65536 and not slot['seen'][index],
+                      'invalid or duplicate actual Conv observation')
+            struct.pack_into('<H',slot['data'],index*2,bits)
+            slot['seen'][index]=1
+        conv = c.ConvOwner(scalar,observe=observe_conv) if include_conv else None
         resources = (id(memory), id(dense), id(dense.a_banks), id(dense.b_banks), matrix.resource_address, id(scalar))
         memory.add_readonly(0x1000000, weights['input_layernorm.weight'])
         original_weights = {role: weights['linear_attn.in_proj_'+role+'.weight'] for role in ('qkv','z')}
@@ -95,6 +137,8 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
         for role, raw in original_weights.items():
             packed = np.frombuffer(raw, '<u2').reshape(-1, 1024).T.copy().tobytes()
             memory.add_readonly(weight_bases[role], packed)
+        if include_conv:
+            memory.add_readonly(0x7000000,weights['linear_attn.conv1d.weight'])
         actual, tag = {}, 1
     except BaseException as error:
         report.update(status="FAILED",error=dict(type=type(error).__name__,message=str(error)),
@@ -139,6 +183,25 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
                     activation_bf16=True,weight_bf16=True,output_bf16=True,write_bytes=rows*width*2)
                 execute(d.TypedDenseDriver(dense,matrix,memory,job),phase,role)
                 tag += 1
+            if include_conv:
+                destination, history_in, history_out = base+0x800000, base+0xc00000, base+0xd00000
+                memory.allocate_output(destination,rows*6144*2)
+                # Cold Conv must initialize internal zeros and ignore these sentinel bytes.
+                memory.allocate_output(history_in,6144*8)
+                history = memory.allocate_output(history_out,6144*8)
+                job = c.ConvJob(tag,base+0x100000,0x7000000,destination,history_in,
+                                history_out,rows,True,0)
+                conv_observations[tag]=dict(data=bytearray(rows*6144*2),seen=bytearray(rows*6144))
+                driver = c.TypedConvDriver(conv,memory,job,current_generation=0)
+                execute(driver,phase,'conv_silu')
+                d.require(not history.published and driver.response.staging_complete and
+                          not driver.response.history_committed,'history committed before full block fence')
+                actual[phase]['history_staging']=history.raw()
+                (output/f'{phase}.history_staging.actual.bf16le').write_bytes(history.raw())
+                d.require(all(conv_observations[tag]['seen']),'missing actual pre-SiLU node')
+                actual[phase]['conv_pre_silu']=bytes(conv_observations[tag]['data'])
+                (output/f'{phase}.conv_pre_silu.actual.bf16le').write_bytes(actual[phase]['conv_pre_silu'])
+                tag += 1
             d.require(resources == (id(memory),id(dense),id(dense.a_banks),id(dense.b_banks),matrix.resource_address,id(scalar)),
                       'resource identity changed between actual prefix commands')
         report['actual_terminal_reached'] = True
@@ -163,16 +226,28 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
                 fixed[role] = reference.compare_bf16(actual[phase][role],expected)
                 (output/f'{phase}.{role}.fixed.bf16le').write_bytes(expected)
             native, native_receipt = reference.native_prefix(hidden,weights)
-            official = {role:reference.original_prefix_gate(raw,native[role]) for role,raw in actual[phase].items()}
+            official = {role:reference.original_prefix_gate(actual[phase][role],native[role])
+                        for role in ('input_norm','qkv','z','ab')}
             ab=np.frombuffer(actual[phase]['ab'],'<u2').reshape(rows,32)
             for role,part in (('a',ab[:,:16]),('b',ab[:,16:])):
                 official[role]=reference.original_prefix_gate(part.copy().tobytes(),native[role])
             for role,raw in native.items(): (output/f'{phase}.{role}.official.bf16le').write_bytes(raw)
             report['comparisons'][phase] = dict(fixed_arithmetic=fixed,official=official,official_identity=native_receipt)
+            if include_conv:
+                from .conv import reference as conv_reference
+                # Both same-input and pure-official-input references run after actual termination.
+                report['comparisons'][phase]['conv'] = conv_reference.verify_outputs(
+                    actual[phase]['qkv'],weights['linear_attn.conv1d.weight'],rows,
+                    actual[phase]['conv_silu'],actual[phase]['history_staging'],
+                    official_qkv=native['qkv'],output=output,phase=phase,
+                    actual_conv=actual[phase]['conv_pre_silu'])
             d.require(all(v['bit_mismatches'] == 0 for v in fixed.values()),'actual prefix differs from independent fixed arithmetic')
         report['fixed_arithmetic_pass']=True
         report['official_prefix_gate_pass']=all(v['passed'] for case in report['comparisons'].values()
                                                 for v in case['official'].values())
+        if include_conv:
+            report['conv_gate_pass']=all(case['conv']['passed'] for case in report['comparisons'].values())
+            report['official_prefix_gate_pass'] &= report['conv_gate_pass']
         report['status'] = ('PASS_PREFIX_GATES_ONLY' if report['official_prefix_gate_pass']
                             else 'FAIL_OFFICIAL_PREFIX_GATES')
         report['official_stage_acceptance'] = 'ORIGINAL_GDN_PER_NODE_THRESHOLDS_ONLY_FULL_BLOCK_OPEN'
@@ -187,13 +262,21 @@ def run(fixture, output, *, rows=16, budget_seconds=600,
             report['interrupted_staging']=dict(file=name,bytes=len(raw),sha256=sha(raw),
                 published=current.output.published,written_offsets=sorted(current.output.written),
                 acknowledged_offsets=sorted(current.output.acknowledged))
+            if include_conv and isinstance(current,c.TypedConvDriver):
+                raw=current.history_out.raw()
+                name='interrupted_history.unpublished_or_partial.bf16le'
+                (output/name).write_bytes(raw)
+                report['interrupted_history']=dict(file=name,bytes=len(raw),sha256=sha(raw),
+                    published=current.history_out.published,
+                    written_offsets=sorted(current.history_out.written),
+                    acknowledged_offsets=sorted(current.history_out.acknowledged))
+                slot=conv_observations[current.job.tag]
+                for suffix,raw in (('data',bytes(slot['data'])),('valid',bytes(slot['seen']))):
+                    (output/f'interrupted_conv_observer.{suffix}.bin').write_bytes(raw)
         raise
     finally:
         report['elapsed_seconds'] = time.monotonic()-start
-        report['source_unchanged'] = sources == {name:sha((ROOT/name).read_bytes()) for name in source_names}
-        report['library_unchanged'] = (sha(library.read_bytes())==report['library_sha256'] and
-            sha(Path(report['compile_receipt']).read_bytes())==report['compile_receipt_sha256'])
-        report['fixture_unchanged'] = sha((Path(fixture)/'manifest.json').read_bytes())==report['input_fixture_sha256']
+        report.update(final_identity(report,fixture))
         if not all(report[name] for name in ('source_unchanged','library_unchanged','fixture_unchanged')):
             report['status']='FAILED'
             report['error']=dict(type='IdentityDrift',message='source/library/fixture changed during actual prefix')
@@ -209,6 +292,7 @@ def main():
     parser.add_argument('--out',type=Path,required=True)
     parser.add_argument('--rows',type=int,choices=(16,128),default=16)
     parser.add_argument('--budget-seconds',type=int,default=600)
+    parser.add_argument('--include-conv',action='store_true',help='append cold Conv/history staging per input window')
     parser.add_argument('--policy',choices=[p.value for p in r.ReductionPolicy],default=r.ReductionPolicy.Torch210CpuDefault1024.value)
     args=parser.parse_args()
     def timed_out(signum, frame):
@@ -220,7 +304,8 @@ def main():
     signal.signal(signal.SIGALRM,timed_out)
     signal.setitimer(signal.ITIMER_REAL,args.budget_seconds)
     try:
-        result=run(args.fixture,args.out,rows=args.rows,budget_seconds=args.budget_seconds,policy=args.policy)
+        result=run(args.fixture,args.out,rows=args.rows,budget_seconds=args.budget_seconds,policy=args.policy,
+                   include_conv=args.include_conv)
     finally:
         signal.setitimer(signal.ITIMER_REAL,0)
     print(json.dumps(dict(status=result['status'],seconds=result['elapsed_seconds'])))

@@ -207,7 +207,7 @@ class RmsOwner:
     """One outstanding 64-byte request and one held terminal per accepted job."""
     def __init__(self, scalar=None):
         self.scalar = SharedScalar() if scalar is None else scalar
-        require(type(self.scalar) is SharedScalar, 'explicit shared scalar service required')
+        require(isinstance(self.scalar, SharedScalar), 'explicit shared scalar service required')
         self.state, self.job, self.request, self.result = 'idle', None, None, None
         self.program, self.poison, self.status = None, False, None
         self.ticks, self.start, self.sequence, self.ack_bytes = 0, 0, 0, 0

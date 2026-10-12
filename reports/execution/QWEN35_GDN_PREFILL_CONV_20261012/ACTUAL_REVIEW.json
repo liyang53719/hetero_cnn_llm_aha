@@ -1,0 +1,382 @@
+{
+  "boundaries": [
+    "Two independently cold token windows; carried128 is an input-slice label only.",
+    "No complete block, public Command128, input prep, chunk GDN, global history commit, RTL or hardware-cycle claim.",
+    "Producer identity, ACK/publication ordering and counters are supported by runtime receipts plus frozen source inspection; no per-cycle transaction trace exists.",
+    "RMS fixed files were materialized after the actual runs; all four match the unchanged original summaries' prebound expected SHA256 and actual output bytes exactly. This reviewer did not execute the reference recipe."
+  ],
+  "check_count": 1178,
+  "checker_correction": {
+    "checks_not_ignored": true,
+    "committed_source_rechecks": [
+      {
+        "bytes": 9456,
+        "match": true,
+        "pinned_sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+        "selector": "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala",
+        "sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065"
+      },
+      {
+        "bytes": 10423,
+        "match": true,
+        "pinned_sha256": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+        "selector": "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala",
+        "sha256": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a"
+      }
+    ],
+    "correction": "Repeated every affected identity check using the complete HEAD:path object selector and raw subprocess stdout bytes, without decoding, trimming or newline changes.",
+    "initial_checker_issue": "The first audit incorrectly stripped the HEAD: prefix before git show, requesting git show path instead of git show HEAD:path. Its six committed-source mismatch labels were checker false negatives, not source drift.",
+    "initial_false_failure_count": 6,
+    "original_run_artifacts_modified": false
+  },
+  "compilation": false,
+  "cross_run_first_16_rows_match_all_six_outputs_both_windows": true,
+  "failed_checks": [],
+  "method": "Independent SHA256 re-reads, pinned raw-input/weight byte linkage, immutable source snapshots and receipt checks, BF16 element comparisons with signed-zero-collapsed numerical ULP and raw-bit mismatch counts. No actual chain, reference recipe, test suite or compiler executed by reviewer.",
+  "model_rerun": false,
+  "rms_fixed_postrun_materialization": {
+    "actual_chain_rerun": false,
+    "original_summaries_unchanged": true,
+    "path": "work/qwen35_gdn_conv_prefill_20261012/rms_fixed_export",
+    "prebound_expected_hashes_verified": true,
+    "receipt_sha256": "8a9fa8bb6cce5b74ef2b827b937be97247fe9060669d1a79c98a1bd05e8f00cd",
+    "records": [
+      {
+        "bit_mismatches": 0,
+        "elements": 16384,
+        "file": "m16.cold128.rms.fixed.bf16le",
+        "phase": "cold128",
+        "rows": 16,
+        "sha256": "9232663cb4be486a7df33f9b7b8cfb3684631c18833808b95378f6cdb0054582"
+      },
+      {
+        "bit_mismatches": 0,
+        "elements": 16384,
+        "file": "m16.carried128.rms.fixed.bf16le",
+        "phase": "carried128",
+        "rows": 16,
+        "sha256": "4ecb4c4914387d490a5a7150f9b5d5045ffa3e4bb89c899499e300b8c80dd33a"
+      },
+      {
+        "bit_mismatches": 0,
+        "elements": 131072,
+        "file": "m128.cold128.rms.fixed.bf16le",
+        "phase": "cold128",
+        "rows": 128,
+        "sha256": "a6caca5d99ec4ae6328417a5e017ad7501d8b6dfec3798e4f5a4230bbcaef468"
+      },
+      {
+        "bit_mismatches": 0,
+        "elements": 131072,
+        "file": "m128.carried128.rms.fixed.bf16le",
+        "phase": "carried128",
+        "rows": 128,
+        "sha256": "3769b764d059795eb8ddbcefc43b102e61ca5b3bdf9c7c872038ed5dff94be7b"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "check_count": 512,
+      "command_count": 10,
+      "elf_receipt_fixture_identity_verified": true,
+      "exit_code": 0,
+      "failed_checks": [],
+      "launch_sha256": "f95d3d7bafe6bb773bf0fdfbed4b9fe8aa90fcf77d32918e746d24eb9977af5d",
+      "path": "work/qwen35_gdn_conv_prefill_20261012/actual_m16_01",
+      "rows": 16,
+      "runtime_dense_fma_calls": 2155872256,
+      "source_count": 29,
+      "source_identity_method": "git show HEAD:path for committed owners; SHA256 snapshot/report/current for 29 execution sources",
+      "source_snapshot_report_current_all_match": true,
+      "status": "PASS",
+      "summary_sha256": "ddf1b40af610e3a6bdf5989ab565d8d71c31354cee94c63962266a885aceeed4",
+      "wall_seconds": 78.60813466200489,
+      "windows": {
+        "carried128": {
+          "actual_sha256": {
+            "conv_pre_silu": "8f013629f8adc4510e0de09732878b7f39afa7b83f74786d219521cbfabde5cb",
+            "conv_silu": "56bf4aa5640bad2dda27ed49517c848a19ebb0703b9926682b60f76df473188f",
+            "history_staging": "1415725c878abda747f6280f8b3500e344f2344ad9877ea65b4463c86b960980"
+          },
+          "endtoend_silu": {
+            "bit_mismatches": 129,
+            "max_abs": 0.0078125,
+            "mean_abs": 8.171476828522373e-08,
+            "signed_zero_only_mismatches": 118
+          },
+          "fixed_conv_silu_history_bit_mismatches": {
+            "conv": 0,
+            "history": 0,
+            "silu": 0
+          },
+          "generation_advanced": false,
+          "history_unpublished": true,
+          "prefix_official": {
+            "a": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "ab": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "b": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "input_norm": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "qkv": {
+              "bit_mismatches": 152,
+              "max_abs": 0.015625,
+              "mean_abs": 2.1470259525813162e-07
+            },
+            "z": {
+              "bit_mismatches": 13,
+              "max_abs": 0.0078125,
+              "mean_abs": 4.860521585214883e-07
+            }
+          },
+          "producer_hash_links_verified": true,
+          "sameinput": {
+            "conv": {
+              "bit_mismatches": 118,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 118
+            },
+            "silu": {
+              "bit_mismatches": 118,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 118
+            }
+          }
+        },
+        "cold128": {
+          "actual_sha256": {
+            "conv_pre_silu": "03ff2f331276907a0762a3033a24b1ba4571187f969a01902da660932b2c9838",
+            "conv_silu": "055a89ebe0737b850b553e7df60d2ea476d6410573ac7abe4f704f088d7a638d",
+            "history_staging": "557c5753aa5e348d5f4a00d5184303eb21a7373df2642fcde04b8ae58986f4d8"
+          },
+          "endtoend_silu": {
+            "bit_mismatches": 133,
+            "max_abs": 0.00048828125,
+            "mean_abs": 1.3969838619232178e-08,
+            "signed_zero_only_mismatches": 122
+          },
+          "fixed_conv_silu_history_bit_mismatches": {
+            "conv": 0,
+            "history": 0,
+            "silu": 0
+          },
+          "generation_advanced": false,
+          "history_unpublished": true,
+          "prefix_official": {
+            "a": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "ab": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "b": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "input_norm": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "qkv": {
+              "bit_mismatches": 142,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.5493806889329184e-07
+            },
+            "z": {
+              "bit_mismatches": 8,
+              "max_abs": 0.0078125,
+              "mean_abs": 2.5731787900440395e-07
+            }
+          },
+          "producer_hash_links_verified": true,
+          "sameinput": {
+            "conv": {
+              "bit_mismatches": 122,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 122
+            },
+            "silu": {
+              "bit_mismatches": 122,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 122
+            }
+          }
+        }
+      }
+    },
+    {
+      "check_count": 512,
+      "command_count": 10,
+      "elf_receipt_fixture_identity_verified": true,
+      "exit_code": 0,
+      "failed_checks": [],
+      "launch_sha256": "b43aa806122ed1c4bbec8f695fada59b083f5d9549f5e9eb8e258e7bd6a83792",
+      "path": "work/qwen35_gdn_conv_prefill_20261012/actual_m128_01",
+      "rows": 128,
+      "runtime_dense_fma_calls": 2155872256,
+      "source_count": 29,
+      "source_identity_method": "git show HEAD:path for committed owners; SHA256 snapshot/report/current for 29 execution sources",
+      "source_snapshot_report_current_all_match": true,
+      "status": "PASS",
+      "summary_sha256": "ce9485cae0b66bd4bbb8c972abf8fda5b1d94d9b35a90e99eb1eddf8c1207ccf",
+      "wall_seconds": 253.7582685189991,
+      "windows": {
+        "carried128": {
+          "actual_sha256": {
+            "conv_pre_silu": "349c9a8bdff19fadbf39f40ec6624e8334db63c0cf087def31803fd5f6f9d6ae",
+            "conv_silu": "bc54dde14c9e3f3b1fc4d326c38515ac316ab89d43b86d8620e9478e66f5a60b",
+            "history_staging": "6a47bc0785c3dbdf4af941d95b398d66b1a1bf2c4e30f2527550876435d3eb0a"
+          },
+          "endtoend_silu": {
+            "bit_mismatches": 984,
+            "max_abs": 0.0078125,
+            "mean_abs": 1.410765837484007e-08,
+            "signed_zero_only_mismatches": 925
+          },
+          "fixed_conv_silu_history_bit_mismatches": {
+            "conv": 0,
+            "history": 0,
+            "silu": 0
+          },
+          "generation_advanced": false,
+          "history_unpublished": true,
+          "prefix_official": {
+            "a": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "ab": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "b": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "input_norm": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "qkv": {
+              "bit_mismatches": 1203,
+              "max_abs": 0.015625,
+              "mean_abs": 1.2005167112268586e-07
+            },
+            "z": {
+              "bit_mismatches": 61,
+              "max_abs": 0.015625,
+              "mean_abs": 1.964740476978477e-07
+            }
+          },
+          "producer_hash_links_verified": true,
+          "sameinput": {
+            "conv": {
+              "bit_mismatches": 925,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 925
+            },
+            "silu": {
+              "bit_mismatches": 925,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 925
+            }
+          }
+        },
+        "cold128": {
+          "actual_sha256": {
+            "conv_pre_silu": "0ebdbbbc4eb110ec52936c3d1532df26533efaf5f3fe18505652e44499abcafb",
+            "conv_silu": "55dcbedd2dea13193c6aecb8bf86b2116700035e2cef8459480b6713d5205a92",
+            "history_staging": "04417889b5a18a3db1490752c8a1ed080dffb6f76f56390a2f2542d3f97258e3"
+          },
+          "endtoend_silu": {
+            "bit_mismatches": 985,
+            "max_abs": 0.001953125,
+            "mean_abs": 1.83105157702812e-08,
+            "signed_zero_only_mismatches": 919
+          },
+          "fixed_conv_silu_history_bit_mismatches": {
+            "conv": 0,
+            "history": 0,
+            "silu": 0
+          },
+          "generation_advanced": false,
+          "history_unpublished": true,
+          "prefix_official": {
+            "a": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "ab": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "b": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "input_norm": {
+              "bit_mismatches": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "qkv": {
+              "bit_mismatches": 1176,
+              "max_abs": 0.03125,
+              "mean_abs": 1.7383319080484702e-07
+            },
+            "z": {
+              "bit_mismatches": 53,
+              "max_abs": 0.0078125,
+              "mean_abs": 1.3482053873303812e-07
+            }
+          },
+          "producer_hash_links_verified": true,
+          "sameinput": {
+            "conv": {
+              "bit_mismatches": 919,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 919
+            },
+            "silu": {
+              "bit_mismatches": 919,
+              "max_bf16_ulp": 0,
+              "signed_zero_only_mismatches": 919
+            }
+          }
+        }
+      }
+    }
+  ],
+  "schema_version": 1,
+  "scope": "INDEPENDENT_PERSISTED_ARTIFACT_REVIEW_ONLY",
+  "status": "PASS_ARTIFACT_REVIEW",
+  "tests_rerun": false
+}

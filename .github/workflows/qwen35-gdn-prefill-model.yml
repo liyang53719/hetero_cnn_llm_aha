@@ -12,6 +12,9 @@ on:
       - 'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
       - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala'
+      - 'chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json'
+      - 'config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py'
       - 'scripts/build_shared_matrix_recipe.py'
 permissions:
   contents: read

@@ -1,0 +1,42 @@
+{
+  "status": "NO_BLOCKING_FINDING_AFTER_TARGETED_FIXES",
+  "scope": "READ_ONLY_PREFIX_CONV_LIFECYCLE_AND_OBSERVATION",
+  "source_sha256": {
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "99e554de800bd876bb4ef772aca049d1678bfcbab9d0ec018d10c868b7bbee96",
+    "candidates/qwen35_gdn_prefill/prefix_driver.py": "c07e113db98116d9f3e2b394a73e5a2b18c2143dd044bba35a20b03c99e172c5",
+    "candidates/qwen35_gdn_prefill/run_tests.py": "ca0a4720c0240bee0f4c8329aebe88debd0716f6b8544f911ccbe0a31e5c1eee",
+    "candidates/qwen35_gdn_prefill/test_prefix_driver.py": "3444f1279d641b8181f39943e73de1b8305c9c43477fd1ac388abd7394ec935f",
+    "candidates/qwen35_gdn_prefill/conv/model.py": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/conv/test_model.py": "b4e6f37b17cbbb93a9ec407d3d46f84be824b12b0a184df8e933a60366fda13d",
+    "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+    "candidates/qwen35_gdn_prefill/conv/test_reference.py": "989dbb03b669ae41af29274f38ba2f77e34410133a82b33705d883bb49e29ccf"
+  },
+  "reviewed_findings": [
+    {
+      "finding": "held errors overwritten by abort",
+      "resolution": "preserve prior error; held success before consumer acceptance becomes Aborted; accepted success allocation never revoked",
+      "directed_test": "test_abort_at_terminal_acceptance_prevents_success_preserves_prior_fault",
+      "test_scope": "Memory explicitly exercised; Numerical preservation follows identical status branch"
+    },
+    {
+      "finding": "Conv source probe outside setup exception preservation",
+      "resolution": "probe now inside setup try; failed identity produces FAILED summary"
+    },
+    {
+      "finding": "pre-SiLU node not observable in first draft",
+      "resolution": "default-none callback exports immutable coordinates/bits; return ignored; external recorder, no arithmetic resource; actual bits enter independent fixed/native gates",
+      "directed_test": "test_readonly_node_observer_cannot_inject_computed_value_or_change_schedule"
+    }
+  ],
+  "confirmed": [
+    "single Scalar instance shared by RMS and Conv",
+    "same Matrix/TypedMemory across commands and input windows",
+    "actual published QKV data is only Conv activation input",
+    "both windows cold generation0; no carried state claim",
+    "both write spans ACK before output terminal publication",
+    "history remains staging and generation unchanged",
+    "base+conv test discovery excludes unrelated prep/native candidates"
+  ],
+  "review_is_not_execution": true
+}

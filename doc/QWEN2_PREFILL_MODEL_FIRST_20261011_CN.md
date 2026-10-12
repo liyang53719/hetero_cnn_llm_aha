@@ -781,3 +781,10 @@ W读27525120B、prefix读2359296B及总写3145728B，合计37617664B，含prefix
 - 两个新actual capture已独立只读复核：48源运行前/后及冻结副本、4实际输出对保存producer逐字节、3prefix文件与87条metadata原字均一致。M128公开Down completion tick4,674,603晚于真实owner终态；紧凑摘要35,953B独立绑定原完整summary，数据不入Git。done（局部）：公开FFN4 M16/M128源/控制/数值闭包；ongoing：24文件小批精确发布与两门CI、完整所选prefill图；todo：完整五block验收与最终冻结刺激硬件回放。
 
 - 发布前独立摘要审查纠正一处统计：112个窗口回执里的A-load fence是累计值且每项恒为1，不能求和为112。紧凑字段改取最后累计1，并加交付断言；旧草稿摘要与tree清单保留，实际capture/算术/控制源码未变，未重跑数值。
+
+### 2026-10-12 4982f09 公开 packer 的 CI 依赖修复
+
+- 24文件源码已发布为 `4982f09253d34e8803fbe1984c2190c9fc0edfe1`，tree `62408eb1d20c0c94df444a233fc0171c24b144dc`，远端逐blob与本地索引复核一致。payload run `38196767890` SUCCESS；frontend run `38196767794`/job `114641051742` 在单测导入阶段失败，前12组506测试通过，公开suite出现3个import/setup错误。Chisel编译没有执行；工件步骤因尚未产生frontend文件而失败，没有该轮IR产物。
+- 原始日志确认为 Python3.12 无 NumPy：公开 `heteronpu.command` 导入包初始化后进入 `cgra_sfu.py`；同一初始化还导入 `config.py` 的 PyYAML。二者都已是 pyproject 声明依赖。修复只在该工作流的测试前从 PyPI 安装固定 `numpy==2.3.5`、`PyYAML==6.0.3`，与实值capture工具版本相同，并以实际Command128/DescriptorRecord导入作smoke，不跳过包初始化。
+- 干净Python3.12 venv先复现缺NumPy，安装两依赖后，6个不可变baseline对象probe、公开包导入以及完整15组580个轻量测试均通过，其中公开suite55门。新增依赖守卫从pyproject核对完整依赖集合，拒绝漏包、浮动版本、额外包、未审核registry和导入顺序错误；与既有浅克隆baseline负例合并作为发布前预检。单次本地预检runner在580测试结束后因过宽命令筛选误选一个frontend入口，在读取本地jar前失败，未启动Java/编译；原记录保留，筛选已限定test路径，没有用该调用声称frontend通过。
+- 本补丁只改变workflow、其测试和中文记录。48个实际执行源、两份M16/M128数值capture、固定算术、所有阈值和95源本地前端证据不变；不重跑M128。ongoing：修复提交的精确远端/两门CI与工件核验，成功前不把4982f09的失败改记通过。完整block/native政策与五block状态保持OPEN。

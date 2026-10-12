@@ -4,6 +4,8 @@ import ast
 import re
 import copy
 import json
+import shlex
+import tomllib
 from pathlib import Path
 import unittest
 
@@ -48,7 +50,42 @@ def validate_baseline_fetches(workflow, required):
         raise ValueError('unfrozen source baseline')
 
 
+def validate_python_prerequisites(workflow):
+    """The public packer imports the package's declared NumPy/YAML dependencies."""
+    declarations = tomllib.loads((ROOT/'pyproject.toml').read_text())['project']['dependencies']
+    required = {re.split(r'[<>=!~\[]', value, maxsplit=1)[0].lower() for value in declarations}
+    installs = list(re.finditer(r'^\s*python -m pip install --index-url https://pypi\.org/simple (.+)$', workflow, re.M))
+    if len(installs) != 1:
+        raise ValueError('Python dependency install closure')
+    pins = shlex.split(installs[0].group(1))
+    if any(not re.fullmatch(r'[A-Za-z0-9_-]+==[0-9]+(?:\.[0-9]+)+', pin) for pin in pins):
+        raise ValueError('Python dependency version pin')
+    if {pin.split('==')[0].lower() for pin in pins} != required or len(pins) != len(required):
+        raise ValueError('Python dependency install closure')
+    smoke = "PYTHONPATH=src python -c 'from heteronpu.command import Command128; from heteronpu.descriptor_chain import DescriptorRecord'"
+    if smoke not in workflow or not installs[0].start() < workflow.index(smoke) < workflow.index('python -m unittest'):
+        raise ValueError('Python dependency import preflight order')
+
+
 class CandidateRunnerGuards(unittest.TestCase):
+    def test_workflow_public_packer_dependency_preflight(self):
+        workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        validate_python_prerequisites(workflow)
+        self.assertIn("'numpy==2.3.5' 'PyYAML==6.0.3'", workflow)
+
+    def test_missing_unpinned_or_late_dependency_preflight_rejected(self):
+        workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        for broken in [workflow.replace("'numpy==2.3.5'", ''),
+                       workflow.replace("'PyYAML==6.0.3'", ''),
+                       workflow.replace('numpy==2.3.5', 'numpy'),
+                       workflow.replace('PyYAML==6.0.3', 'PyYAML>=6.0'),
+                       workflow.replace('https://pypi.org/simple', 'https://unreviewed.invalid/simple'),
+                       workflow.replace("'numpy==2.3.5'", "'numpy==2.3.5' 'torch==2.10.0'"),
+                       workflow.replace('PYTHONPATH=src python -c', '# omitted import smoke'),
+                       'python -m unittest\n'+workflow]:
+            with self.subTest(broken=broken[-80:]), self.assertRaisesRegex(ValueError, 'Python dependency'):
+                validate_python_prerequisites(broken)
+
     def test_workflow_fetches_all_frozen_source_baselines(self):
         workflow = (ROOT/'.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
         required = required_baseline_commits()

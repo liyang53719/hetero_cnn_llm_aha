@@ -206,3 +206,38 @@ RMS 与 SiLU 增加只读实际节点回调，输入/输出、原 Scalar 顺序�
 01:00 UTC原监督结束：1200.529秒、EXIT1、峰RSS236,592KiB，唯一错误为显式软件墙钟预算到期。carry已经完成17命令，Down仍推进，prefix写ACK163,840/524,288B；最终Add未执行，已提交双根/长度/generation仍保持cold的16/1。91源不变，所有失败观察/暂存/终态保全无错误，禁止把这个pair记PASS或从partial state冒充续跑。原runner异常摘要随后写出了cold在637秒内收集的51份观察哈希，本次逐项再核全部相同；之前只读复核的来源限制据此补强，不改原日志。[原失败摘要](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/M16_ORIGINAL_BUDGET_FAILURE.json)。
 
 已测cold636秒，加carry各已完成阶段和Down剩余工作，完整pair预估1300–1400秒；待本批源码/CI收口，用CLI已有可配置预算单次1800秒从raw输入、空cache重新执行完整pair，约400–500秒留给波动、比较和封存。数值阈值及算术不变。今后完整M128预算必须依据完整双M16实测重新估算，不能继承任意1200秒或把墙钟预算当硬件周期。
+
+### 2026-10-13 01:45 UTC：完整双 M16 数值与来源闭环
+
+43fc70f 的 [L3 CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38330488062)、[GDN CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38330487998) 和 payload 38330488259 全成功。两个紧凑工件下载后逐 ZIP digest、源字节、测试日志/计数核验，共596项测试，L3 247/23 suite/118源、GDN349/25 suite/52源。CI日志的 Matrix/Vector ELF receipt 与源码、编译参数绑定；ELF未打包，不声称另行重哈希CI二进制或与本地G++14二进制相同。[CI记录](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/CI_43FC_RECONCILED.json)。
+
+在完全相同91份算术/执行源、已有库与冻结输入上，从raw hidden、权重/trig、空cache重新执行的一次1800秒预算pair正常EXIT0：监督耗时1364.134秒，cold663.725秒、carry698.016秒，峰RSS232656KiB。前一1200秒FAILED原件和部分状态继续保留，本次没有继承其partial state。两个窗口同一memory/owner/Matrix/Vector/Scalar实际完成38个accepted terminals；carry读取cold真实成功提交的KV双根。末实际残差Add全ACK并成功接受后，generation0→1→2，有效长度0→16→32；最终K/V roots为41066944/41329088。本M16夹具使用冻结token切片0..15和128..143，对应position span [0,16)／[128,144)，cache长度仍16→32；不称位置连续的32-token样本。下一M128夹具才是0..127接128..255。
+
+独立审查逐项核完91源与git43fc70f、11权重、226参考张量、42实际输出、102实际观测和38命令真实依赖。每窗56个已物化原producer门全过；最终输出max_abs均0.0009765625，mean_abs分别2.5373883545398712e-6／3.727385774254799e-6，保留251／306个原始位差。完整KV对官方位精确，softmax行和最大误差1.043081283569336e-7／1.9963772501796484e-7。未降低任何逐节点/末输出门限。[双窗口紧凑摘要](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/M16_COMPLETE_PAIR.json)。
+
+这是完整typed软件功能链的双M16数值验真。融合因果mask-add未物化，原57-producer全观察仍false；六个真实小门证明其因果等价范围，不能制造缺失张量。公共Command128、生产Chisel策略接线、RTL和完整双M128仍未执行，不关闭S01/Q35A/U00.2/U01及五block总门。
+
+#### 实际计数与利用率口径
+
+每个已过case均须记录固定资源、完整block分母、useful/executed MAC及占空比证据；缺失字段明确unknown。下列数值来自本次软件执行，不是RTL周期：
+
+| 项目 | cold16 | carried16 |
+|---|---:|---:|
+| Matrix实际C++ FMA调用，含填充 | 2,350,383,104 | 2,350,907,392 |
+| 其中Dense / QK+PV | 2,348,810,240 / 1,572,864 | 2,348,810,240 / 2,097,152 |
+| 公共Scalar请求 | 955,648 | 965,888 |
+| 基本Add/Mul/MulIeeeRne请求 | 772,864 | 779,008 |
+| Vector Add调用 / 活跃lane计算次数 | 5,120 / 81,920 | 5,120 / 81,920 |
+| 全物理读bytes | 38,593,536 | 38,757,376 |
+| 全物理写及ACK bytes | 1,622,016 | 1,654,784 |
+| 硬件完整周期、busy/active-lane占空比、stall/overlap时间线 | unknown | unknown |
+
+物理流量分别包含一次Down私有FP32 prefix读524288B、写/ACK524288B。公共owner ACK单独仅1097728／1130496B，不能误当全链写流量；上表不重复计私有prefix。软件tick不能作固定4096 MAC资源的时钟周期分母，81,920个Vector lane计算次数也不能直接称占空比。
+
+若未来将已记录的基本Scalar请求一一映射到同一个未改动BlockScalarFloat，不融合、向量化或复制，其idle→normal→done握手最小II为3，首接受至末返回至少3N−1拍。Dense逻辑MAC为16×Σ(KN)=293601280；矩形QK/PV乐观分子分别1048576／2097152（包含因果零系数位置）。仅由这一资源约束得到完整窗口Matrix利用率条件上界约3.1025739%／3.0890582%：useful/(4096×(3N−1))，还未计Div/Exp/Sqrt/访存。它不是当前RTL实测、可行完整周期预测或所有架构的上限。新C2／pair策略尚未生产接线，此条件必须显式保留。
+
+当前命令依次等前一真实结果/ACK，主要流水机会需先证明同一bank端口、workspace lease、Matrix最终结果消费、Vector/Scalar依赖与错误排空允许，再考虑跨tile供数和计算重叠。新M128先保数值，不以宿主检查加速冒充硬件流水。后续计数需覆盖launch到最终fence全周期，分别记录各资源busy、有效lane、供数等待、数据依赖、写回、调度空闲与重叠；可重叠stall分类不能直接相加。
+
+#### 下一完整 M128 的宿主预算
+
+使用本次完整双M16阶段耗时、已封存M128前缀形状缩放和单次33.260秒/44项纯宿主guard计时，规划约5800–6100秒，采用现有CLI可配置7200秒预算，约1100–1400秒余量包含最终比较、封存及波动。新增history比较成本已扣除M16基线中对应项；无数值/RTL重放，未修改任何91执行源。该范围是运行规划而非完成保证或硬件周期。先核资源/原进程退出，再只启动一次同输入完整pair，不从partial state续成成功。[预算证据](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/M128_HOST_BUDGET.json)。

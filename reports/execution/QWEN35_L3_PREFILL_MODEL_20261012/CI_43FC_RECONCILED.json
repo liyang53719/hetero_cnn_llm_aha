@@ -1,0 +1,63 @@
+{
+  "gdn": {
+    "actual_ELF_packaged": false,
+    "artifact_bytes": 23981,
+    "artifact_id": 11783125627,
+    "artifact_sha256": "96ba97bb603388da7a4ac5ef514e6aaa56f699f03ad422aa012d3fa9a03a1bc7",
+    "commit": "43fc70f62e86db415a94ee7d015886de7127ac4f",
+    "compiler_driver_sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769",
+    "each_log_hash_and_count_verified": true,
+    "gitHub_digest_matched": true,
+    "hardware_simulation": false,
+    "matrix_library_sha256_receipt": "46b4d7b5987fad2a241c4894e61e15360c40336edb78e037eea314b63da448b1",
+    "matrix_source_files_checked": 3,
+    "run": 38330487998,
+    "source_files_checked": 52,
+    "status": "PASS_COMPACT_ARTIFACT_VERIFIED",
+    "suites": 25,
+    "tests": 349,
+    "vector_library_sha256_receipt": "9dfbc901346f009ff900c6d79bb55cb351bbe6ea9b7898008319cf124060d097"
+  },
+  "l3": {
+    "actual_ELF_packaged": false,
+    "artifact_bytes": 25525,
+    "artifact_id": 11781394980,
+    "artifact_sha256": "e722e3f62af7a713325e9a66369c36e8ffab128b9774fff3a1fd63da4008785f",
+    "commit": "43fc70f62e86db415a94ee7d015886de7127ac4f",
+    "compiler_driver_sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769",
+    "each_log_hash_and_count_verified": true,
+    "gitHub_digest_matched": true,
+    "hardware_simulation": false,
+    "matrix_library_sha256_receipt": "46b4d7b5987fad2a241c4894e61e15360c40336edb78e037eea314b63da448b1",
+    "matrix_source_files_checked": 3,
+    "run": 38330488062,
+    "source_files_checked": 118,
+    "status": "PASS_COMPACT_ARTIFACT_VERIFIED",
+    "suites": 23,
+    "tests": 247,
+    "vector_library_sha256_receipt": "9dfbc901346f009ff900c6d79bb55cb351bbe6ea9b7898008319cf124060d097"
+  },
+  "publication": {
+    "actual_pair_budget_failure_preserved": true,
+    "ci_all_passed": true,
+    "ci_final_verified": true,
+    "ci_pending": false,
+    "ci_run_ids": [
+      38330488062,
+      38330487998,
+      38330488259
+    ],
+    "commit": "43fc70f62e86db415a94ee7d015886de7127ac4f",
+    "files": 21,
+    "local_commit_tree_and_bytes_verified": true,
+    "parent": "a35adbd7cebdf2ab1f1ee0de75fa23623e55a577",
+    "payload_guard": "PASS",
+    "remote_tree_blobs_verified": 21,
+    "tree": "d6c85bc4b364fdfb6674e2200e3beb39a8474e41",
+    "verified_source_counts": [
+      52,
+      118
+    ],
+    "verified_tests": 596
+  }
+}

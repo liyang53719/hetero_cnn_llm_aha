@@ -139,3 +139,6 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 - 2026-10-13 00:55 UTC：L3 cold16真实19命令完整typed软件链及末Add→KV双根generation1已完成；56实际物化producer、最终输出、实际KV和行和全过原门。mask-add未物化保留，6个融合因果真实小门证明max/exp/sum排除future与PV零系数语义（±0位差保留）。carried16原任务继续，完整双M128、生产Command128／Chisel／RTL和五block总门未关闭。[指标与范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
 
 - 01:00 UTC：原双M16监督在1200秒软件预算退出，cold19完整/原数值门通过；carry17、Down部分、末Add未到，generation仍1。原FAIL与部分证据已保全；下一完整pair1800秒依实测预算待本批CI后启动，不能继承partial state或关闭双窗门。
+
+- 2026-10-13 01:45 UTC：43fc70f三CI及596测试/两份紧凑工件已核闭环。0.8B L3完整cold16→实际carried16 typed软件链从raw重新运行正常结束，38终态、双root generation2/32tokens、每窗56已物化原producer及最终output/KV/行和全过；91源/42输出/102观察/实际cache依赖独立核验。原1200秒FAIL不覆盖，57中未物化mask-add保留；公共Command128/Chisel/RTL和完整双M128仍open。[完整范围与计数](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。后续单次7200秒M128预算依据1364秒完整M16和33秒guard计时，非数值门限。
+- 用户要求所有已过case补MAC/占空比账：本双M16已有物理流量、Matrix FMA、Scalar/Vector逻辑次数；硬件全周期/busy/stall/overlap仍unknown。条件单Scalar映射Matrix上界3.1026%／3.0891%独立列示，不当实测。Qwen2 M128、L0 M16/M128与L3子链现有证据清单继续补齐；后续流水整改必须计bank端口/lease/排空和完整周期，不关闭U01或承诺80%。

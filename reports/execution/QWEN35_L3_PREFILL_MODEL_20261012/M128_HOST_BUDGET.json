@@ -1,0 +1,81 @@
+{
+  "analysis": {
+    "GQA_source_byte_delta_seconds": 55.06707153613579,
+    "KV_shape_only_coverage_approx_delta_seconds": {
+      "carried": 44.147202364586704,
+      "cold": 11.225994693880512,
+      "model": "source field counts exact; output coverage uses approximately linear occupancy cost, not an executed KV trace"
+    },
+    "M16_outside_window_seconds": 2.0056486600005883,
+    "additional_evidence_sha256": {
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen35_attention_prefill/norm_rope/coordinator.py": "b4e85952f4802d7a780c0fbe799baf8298fc014109de99de691219f797ff5f09",
+      "work/l3_fullblock_20261013/actual_m16_1800/carried16.terminal.json": "15893e07a9945c6b50a99a181eb84c5570c3442ecf947151a474f96b28da914b",
+      "work/l3_fullblock_20261013/actual_m16_1800/cold16.terminal.json": "2d2f0723de76a28a3c37ab87e03071b4c4920dd8d711b7fd8cb0c34dffe5a6a5",
+      "work/l3_fullblock_20261013/actual_m16_1800/summary.json": "f59376b8ccc3212fb5f51502bc3447754810afaa8a4cd813116d038f296246b0"
+    },
+    "batch_extremes_additional_history_sensitivity_seconds": 232.10163011842528,
+    "construction_components_seconds": {
+      "current_GQA_times_exact_tick_ratios": 1096.857269824473,
+      "current_tail_Dense_times_serialized_event_allowance_ratio": 1152.498403664753,
+      "extra_GQA_source_byte_checks_after_subtracting_scaled_M16_cost": 55.0670715361358,
+      "extra_prefix_history_shape_cost_after_subtracting_scaled_M16_cost": 1819.1359512928407,
+      "old_measured_shape_ratio_times_current_prefixes": 1296.2656126366737,
+      "other_postprefix_stages_times_8": 346.1872591279971
+    },
+    "construction_subtotal_seconds": 5766.011568082875,
+    "definitive_M16_pair_seconds": [
+      663.7249853230023,
+      698.0156578339993
+    ],
+    "history_comparisons_per_postprefix_tick": {
+      "prefix4": 1,
+      "prefix8_or_prefix_containing_full_history": 3
+    },
+    "history_delta_for_pair_seconds": 1819.1359512928407,
+    "history_delta_seconds_per_tick": 0.00033968014405037284,
+    "history_delta_using_batch_extremes_seconds_per_tick": 0.0003830195740126701,
+    "planning_interpretation": "approximately 5800..6100 seconds execution after small coverage/history sensitivity allowances; 7200 leaves about 1100..1400 seconds for comparison, sealing, host variation and unmeasured work. Not a guaranteed interval or completion claim.",
+    "proposed_next_end_to_end_budget_seconds": 7200,
+    "remaining_uncertainty": [
+      "actual full-M128 tail history does not exist; the prefix enlargement proxy is measured, tail postnorm enlargement is not",
+      "synchronous scalar work, resource-check details and host scheduling are not completely isolated",
+      "bulk raw copying measured as terminal/setup work, never charged once per tick",
+      "shape-only coverage collections are not physical execution/ACK evidence",
+      "no software timing converts to hardware cycles or utilization"
+    ],
+    "requires_parent_launch_decision": true,
+    "runner_maximum_seconds": 7200,
+    "status": "MEASUREMENT_INFORMED_PLANNING_NOT_A_FULL_M128_RUN",
+    "tail_Dense_software_tick_planning_allowance": {
+      "down": 372593,
+      "formula": "observed16 + 7*(5*A_read_beats16 + 3*D_write_beats16); serialize added A loads and final writes, allow no overlap saving",
+      "gate": 307781,
+      "limitation": "a count-based scheduling allowance; not a measured full-M128 Dense tick receipt or formal upper-bound proof",
+      "o": 189461,
+      "up": 307781
+    },
+    "unmodified_sources": true
+  },
+  "benchmark_arithmetic_or_model_ticks_executed": false,
+  "budget_includes_complete_pair_comparison_and_sealing": true,
+  "execution_source_commit": "43fc70f62e86db415a94ee7d015886de7127ac4f",
+  "inputs": {
+    "execution_receipt.json": "a556ac3b3d3c5e52854a106682f5c00f85f23cebff6133d781a89bf681563231",
+    "host_guard_bench.py": "559bcf9e7d43d76c58d469d0e814bd07eee6638d93b5e2effb863b4fd932ba84",
+    "manifest.json": "230dc181177223162a82d3216d7838148e56e20e2d3d58a0f69ef94f29265eb5",
+    "result.json": "1d1b391ba5b65b20df5ccf34ad212be3e8c9401944db359c5f715b898d191d12",
+    "timing_analysis.json": "a3c0737462017043e96c02b90a5d839df5d1be266469aee2bfa7615ccbcd5f40"
+  },
+  "numeric_arithmetic_or_thresholds_changed": false,
+  "planning_interval_seconds": [
+    5800,
+    6100
+  ],
+  "recommended_budget_seconds": 7200,
+  "reserve_seconds": [
+    1100,
+    1400
+  ],
+  "scope": "SOFTWARE_HOST_EXECUTION_PLANNING_NOT_HARDWARE_CYCLES"
+}

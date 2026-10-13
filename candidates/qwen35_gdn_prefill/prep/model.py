@@ -24,6 +24,7 @@ from ..rms_owner import (ROOT, SCALAR_SOURCE, SCALAR_SHA, ArithmeticFault,
 from ..typed_dense import TypedMemory, FULL_MASK
 from ...qwen2_resident_matrix.transposed_down.model import WriteCommand, WriteAck
 from .scalar import PrepScalar, OPCODES
+from .reduction import ASCENDING, CPU_DEFAULT_35B, sum_squares128
 from .layout import PrepLayout, EQUAL_HEADS, GROUPED_35B, grouped_source_identity
 
 
@@ -42,7 +43,7 @@ def require(ok, why):
         raise ValueError('typed InputPrep: ' + why)
 
 
-def source_identity(root=ROOT, *, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
+def source_identity(root=ROOT, *, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE, reduction_policy=ASCENDING):
     root = Path(root)
     source = subprocess.run(['git', 'show', 'HEAD:' + OWNER_SOURCE], cwd=root,
                             check=True, capture_output=True, timeout=10).stdout
@@ -50,15 +51,16 @@ def source_identity(root=ROOT, *, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
     require(sha((root / SCALAR_SOURCE).read_bytes()) == SCALAR_SHA, 'shared scalar source drift')
     models = ('candidates/qwen35_gdn_prefill/prep/model.py',
               'candidates/qwen35_gdn_prefill/prep/scalar.py',
+              'candidates/qwen35_gdn_prefill/prep/reduction.py',
               'candidates/qwen35_gdn_prefill/prep/layout.py',
               'candidates/qwen35_gdn_prefill/conv/scalar.py',
               'candidates/qwen35_gdn_prefill/rms_owner.py',
               'candidates/qwen35_gdn_prefill/typed_dense.py')
-    return dict(gate_policy=gate_policy,grouped_source=grouped_source_identity(root) if layout == GROUPED_35B else None,
+    return dict(reduction_policy=reduction_policy,gate_policy=gate_policy,grouped_source=grouped_source_identity(root) if layout == GROUPED_35B else None,
                 source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, SCALAR_SOURCE: SCALAR_SHA},
                 implementation_sha256={p: sha((root / p).read_bytes()) for p in models},
                 opcodes=dict(OPCODES), source_tokens=1, candidate_tokens='M1..128',
-                arithmetic='source_ascending_square_add_sqrt_reciprocal_chunk_q_scale',
+                arithmetic=('source_ascending_square_add_sqrt_reciprocal_chunk_q_scale' if reduction_policy==ASCENDING else 'fixed_cpu_default_8lane_4ilp_f32_square_sum_sqrt_reciprocal'),
                 token_independent=True, recurrence_implemented=False,
                 required_downstream='true_chunk64_x2_for_M128',
                 native_acceptance=False, rtl_executed=False, historical_pass_inherited=False)
@@ -76,6 +78,7 @@ class InputPrepJob:
     heads: int = HEADS
     layout: PrepLayout = EQUAL_HEADS
     gate_policy: str = LEGACY_GATE
+    reduction_policy: str = ASCENDING
 
     @property
     def conv_bytes(self):
@@ -89,7 +92,9 @@ class InputPrepJob:
     def write_bytes(self):
         return self.tokens * self.layout.core_row_bytes
 
-    def validate(self, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
+    def validate(self, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE, reduction_policy=ASCENDING):
+        require(self.reduction_policy == reduction_policy and reduction_policy in (ASCENDING, CPU_DEFAULT_35B), "explicit reduction policy identity")
+        require(reduction_policy == ASCENDING or layout == GROUPED_35B, "fixed CPU reduction only explicit35B")
         require(self.gate_policy == gate_policy and gate_policy in (LEGACY_GATE,FINITE_GATE_35B), "explicit gate policy identity")
         require(gate_policy==LEGACY_GATE or layout==GROUPED_35B,"finite gate policy only for explicit35B")
         require(type(self.layout) is PrepLayout and self.layout == layout, 'explicit caller/owner layout identity')
@@ -126,8 +131,10 @@ class InputPrepOwner:
     is zero-written and ACKed at its production offset. Default heads=16 has
     no inactive-head fill and computes every production head.
     """
-    def __init__(self, scalar, *, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
+    def __init__(self, scalar, *, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE, reduction_policy=ASCENDING):
         require(gate_policy in (LEGACY_GATE,FINITE_GATE_35B) and (gate_policy==LEGACY_GATE or layout==GROUPED_35B), "explicit supported gate policy")
+        require(reduction_policy in (ASCENDING, CPU_DEFAULT_35B) and (reduction_policy == ASCENDING or layout == GROUPED_35B), "explicit reduction policy")
+        self.reduction_policy=reduction_policy
         self.gate_policy=gate_policy
         require(isinstance(scalar, PrepScalar), 'explicit caller-owned PrepScalar required')
         require(type(layout) is PrepLayout, 'explicit pinned geometry required')
@@ -152,7 +159,7 @@ class InputPrepOwner:
     def reset(self):
         require(self.state in ('idle', 'locked') and self.request is None and self.scalar.client is not self,
                 'reset requires drained transport and retired held completion')
-        self.__init__(self.scalar, heads=self.heads, layout=self.layout, gate_policy=self.gate_policy)
+        self.__init__(self.scalar, heads=self.heads, layout=self.layout, gate_policy=self.gate_policy, reduction_policy=self.reduction_policy)
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
@@ -189,10 +196,13 @@ class InputPrepOwner:
                         for lane, raw in enumerate(packet):
                             cache[beat * 32 + lane] = raw << 16
                     if role != 2:
-                        total = 0
-                        for x in cache:
-                            square = self._op('mul_ieee_rne', x, x)
-                            total = self._op('add', total, square)
+                        if self.reduction_policy == CPU_DEFAULT_35B:
+                            total = sum_squares128(cache, self._op)
+                        else:
+                            total = 0
+                            for x in cache:
+                                square = self._op('mul_ieee_rne', x, x)
+                                total = self._op('add', total, square)
                         variance = self._op('add', total, word(1e-6))
                         root = self._op('sqrt', variance)
                         inverse = self._op('div', word(1), root)
@@ -293,8 +303,8 @@ class InputPrepOwner:
                 self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
             require(type(job) is InputPrepJob, 'typed immutable InputPrepJob required')
-            job.validate(self.heads, self.layout, self.gate_policy)
-            identity = source_identity(layout=self.layout, gate_policy=self.gate_policy)
+            job.validate(self.heads, self.layout, self.gate_policy, self.reduction_policy)
+            identity = source_identity(layout=self.layout, gate_policy=self.gate_policy, reduction_policy=self.reduction_policy)
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
             self.job, self.start, self.identity = job, self.ticks, identity
@@ -347,6 +357,8 @@ class InputPrepOwner:
                     scalar_calls=dict(self.scalar.calls - self.scalar_baseline if active else self.scalar_counts),
                     exp_internal_calls=dict(self.scalar.internal_calls - self.exp_baseline if active else self.exp_counts),
                     softplus_internal_calls=dict(self.scalar.soft_internal_calls - self.soft_baseline if active else self.soft_counts),
+                    reduction_policy=self.reduction_policy, reduction_phase_fp32_temporaries=4 if self.reduction_policy==CPU_DEFAULT_35B else 2,
+                    reduction_extra_ddr_bytes=0, production_reduction_binding=False if self.reduction_policy==CPU_DEFAULT_35B else None,
                     softplus_enabled=self.scalar.enable_softplus,
                     active_heads=self.heads, production_geometry=self.heads == self.layout.value_heads,
                     key_heads=self.layout.key_heads, value_heads=self.layout.value_heads,
@@ -372,7 +384,7 @@ class TypedInputPrepDriver:
     def __init__(self, owner, memory, job):
         require(type(owner) is InputPrepOwner and type(memory) is TypedMemory and type(job) is InputPrepJob,
                 'InputPrep owner, shared TypedMemory and immutable job required')
-        job.validate(owner.heads, owner.layout, owner.gate_policy)
+        job.validate(owner.heads, owner.layout, owner.gate_policy, owner.reduction_policy)
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained resources required')
         self.conv = memory.exact(job.conv, job.conv_bytes, readable=True)
         self.ab = memory.exact(job.ab, job.ab_bytes, readable=True)
@@ -431,7 +443,7 @@ class TypedInputPrepDriver:
             require(self.source_hashes == tuple(sha(r.raw()) for r in self.sources), 'actual producer/parameters changed')
             self.response = e['response']
             if self.response.status is None:
-                require(self.owner.identity == source_identity(layout=self.owner.layout, gate_policy=self.owner.gate_policy), 'InputPrep source changed during execution')
+                require(self.owner.identity == source_identity(layout=self.owner.layout, gate_policy=self.owner.gate_policy, reduction_policy=self.owner.reduction_policy), 'InputPrep source changed during execution')
                 require(self.response.staging_complete and self.response.write_bytes == self.job.write_bytes and
                         not any((self.response.history_committed, self.response.state_committed,
                                  self.response.generation_advanced)), 'complete stateless staging receipt required')

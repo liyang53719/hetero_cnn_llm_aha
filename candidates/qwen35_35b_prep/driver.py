@@ -68,7 +68,7 @@ def pack_window(raw_nk, window):
 
 def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                    matrix, vector, deadline, memory=None, controls=None, observe=None,
-                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None):
+                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -255,8 +255,8 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
     if not run('ab_pack',pack_driver):return report,memory
     log_base,bias_base=region(a_log),region(dt_bias)
     core_base=region(size=tokens*prep.GROUPED_35B.core_row_bytes)
-    prep_owner=prep.InputPrepOwner(scalar,heads=32,layout=prep.GROUPED_35B,gate_policy=prep.FINITE_GATE_35B)
-    prep_job=prep.InputPrepJob(35201,conv_out,packed_ab_base,log_base,bias_base,core_base,tokens,32,prep.GROUPED_35B,prep.FINITE_GATE_35B)
+    prep_owner=prep.InputPrepOwner(scalar,heads=32,layout=prep.GROUPED_35B,gate_policy=prep.FINITE_GATE_35B,reduction_policy=reduction_policy)
+    prep_job=prep.InputPrepJob(35201,conv_out,packed_ab_base,log_base,bias_base,core_base,tokens,32,prep.GROUPED_35B,prep.FINITE_GATE_35B,reduction_policy)
     prep_driver=prep.TypedInputPrepDriver(prep_owner,memory,prep_job)
     require(prep_driver.conv is conv_driver.output and prep_driver.ab is pack_driver.output and
         prep_owner.scalar is conv_owner.scalar is rms_owner.scalar,'Prep actual producers/one Scalar identity')

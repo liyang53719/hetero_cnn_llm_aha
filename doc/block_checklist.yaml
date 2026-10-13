@@ -1529,10 +1529,24 @@ Qwen35_35B_同生产者实际Prep前缀_20261013:
 Qwen35_35B_exp渐进下溢候选_20261013:
   状态: ongoing
   done: [显式P7_split_ln2_RNE候选, 默认旧op4不变, 原实际Prep输入单算子重放, 固定Torch参考逐raw诊断, 521项46套145源冷门零skip]
-  ongoing: [小批发布及精确CI工件]
+  ongoing: [后继实际Prep归约及g精度收敛]
+  发布闭环: 57eaba59b962ce6d00a33b4203d7346d1820e704；GDN38407393457_goal38407393193_payload38407393161全success；521项46套145源与原工件逐SHA闭环
   todo: [生产Chisel_opcode绑定, 实际Prep接线及Q_K_g精度收敛, 32头chunk布局及cumsum顺序, 完整block_RTL及周期占空比]
   边界: 新opcode未生产绑定；近似P7非正确舍入exp；五组最大1ULP仅观察无新门；原真实producer未重跑
   诊断: 网格951_10001差1ULP；原actual_g_falsezero_M16_16_M128_128全部消除；cumsum仍1001_2356处差异
   资源: 单Scalar内部计数可测；Matrix_Vector_MAC均0；硬件cycle_duty未知
   报告: doc/QWEN35_35B_EXP_GRADUAL_UNDERFLOW_20261013_CN.md
   证据: reports/execution/QWEN35_35B_EXP_GRADUAL_UNDERFLOW_20261013.json
+
+Qwen35_35B_Prep固定FP32归约接线_20261013:
+  状态: ongoing
+  done: [固定Torch_DEFAULT真实stride及8lane4ILP审计, 独立sum树与4寄存器映射, 显式35Bpolicy_旧默认不变, 同真实producer_M16_M128重跑, Q_K_V_beta_bitexact, g原误差不改, 真实DDR读写无新增]
+  ongoing: [小批发布及精确CI工件]
+  冷门: 526项47套147源零skip_前后不变；指定计划清单pytest91项
+  todo: [g_Softplus精度收敛, 生产Chisel归约绑定, 32头chunk及cumsum, 完整block_RTL_完整周期占空比]
+  资源: 128word_head_cache不增；四FP32相位值复用旧寄存器；Matrix4096_Vector16_Scalar1
+  数值: M16_QK各65536_M128_QK各524288元素bitexact；g仍33_35ULP诊断；没有新增容差
+  性能: Prep_Add减少1024_8192；M16_DDR读401408写819200_M128读3211264写6553600均不变；hardware_cycle_duty未知
+  边界: 72执行源码10native前后不变；七真实终态；history未发布；生产Chisel未绑定
+  报告: doc/QWEN35_35B_PREP_SUM_ORDER_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_PREP_SUM_ORDER_20261013.json

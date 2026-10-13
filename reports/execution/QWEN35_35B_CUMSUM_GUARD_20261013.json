@@ -1,0 +1,1278 @@
+{
+  "cold_regression": {
+    "sources": 155,
+    "sources_unchanged": true,
+    "suites": 51,
+    "summary": {
+      "bytes": 51741,
+      "path": "work/cumsum_guard_cold_tests_v2/summary.json",
+      "sha256": "69701394dfdd4c40c8284bc45e70150b349c37d7d40831989bef07f901ed4685"
+    },
+    "tests": 543,
+    "zero_skip": true
+  },
+  "counterexample": {
+    "bytes": 2632,
+    "path": "candidates/qwen35_gdn_prefill/chunk/cumsum_counterexample.json",
+    "sha256": "a815b03a153547ba66c35fd686c2dfab2d0fc1c6fa7dcf2c6bf4d444857011d3"
+  },
+  "final_plan_regression": {
+    "log": {
+      "bytes": 160,
+      "path": "work/cumsum_plan_final_tests.log",
+      "sha256": "d5909c51985bd5db202843a4382250d792189dd73767b52e1fa90d69193bf46c"
+    },
+    "passed": 91
+  },
+  "first_cold_failure": {
+    "candidate_arithmetic_changed": false,
+    "failed_summary": {
+      "bytes": 51722,
+      "path": "work/cumsum_guard_cold_tests/summary.json",
+      "sha256": "c7ff6eef3fb2210d332519a1d8906694dca7fff7df4da4fe4860ea1760916381"
+    },
+    "identity_retest": {
+      "bytes": 337,
+      "path": "work/cumsum_identity_fix.log",
+      "sha256": "d2bf69667b670e28561ff652399f9fb173373dab523851a7437a097201e8d2c3"
+    },
+    "module": "chunk.test_model.IdentityTests",
+    "reason": "test clone omitted newly imported cumsum.py; implementation source list now includes module and mutation coverage",
+    "replay_reexecuted": true
+  },
+  "full_block": false,
+  "initial_test_failure": {
+    "boundary_retest": {
+      "bytes": 454,
+      "path": "work/cumsum_boundaries_final.log",
+      "sha256": "99e4d9ac3e80313be927457eaea87faff5cf1d7baaa6ea048b28aa15afa76bec"
+    },
+    "candidate_changed": false,
+    "corrected_reference": "explicit binary64 +0 running; no changed tolerance",
+    "original_log": {
+      "bytes": 6949,
+      "path": "work/cumsum_first_tests.log",
+      "sha256": "3d4b76fd17786b5ff8c739e24256048c890596c442ccd9a346caac28909471da"
+    },
+    "reason": "numpy.cumsum preserves first negative zero rather than source running initialized +0"
+  },
+  "native_chunk_acceptance": false,
+  "new_checkpoint_producer_executed": false,
+  "official_cpu_sources": [
+    {
+      "git_blob_sha1": "2e62936501948580a665ef30d23e8f23a7be8b25",
+      "path": "aten/src/ATen/native/cpu/ReduceOpsKernel.cpp",
+      "sha256": "5ab4ebf7f6d06f4f036c2ae710d893c5f3ab74be5883fc524c71d95159e845b0",
+      "url": "https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/ReduceOpsKernel.cpp"
+    },
+    {
+      "git_blob_sha1": "0829853a97979075e3b83d8c917ad7289ddb0e1d",
+      "path": "aten/src/ATen/AccumulateType.h",
+      "sha256": "f1defbdc257362abe5c4530baf558bb58880d8d5522b411da12b466cf6de7c08",
+      "url": "https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/AccumulateType.h"
+    },
+    {
+      "git_blob_sha1": "db046428bb6839efd1a1806fc97c9f8523c835ce",
+      "path": "aten/src/ATen/native/ReduceOps.cpp",
+      "sha256": "3ba2de1c28bb1ddd7c9374b22879f8353170b7291bd98f2ccdd06cc671aa209c",
+      "url": "https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/ReduceOps.cpp"
+    }
+  ],
+  "open": [
+    "old chunk exp saturation still selected",
+    "same-input standalone chunk threshold unassigned",
+    "real producer live handoff",
+    "full-dimension 32head checkpoint chunk",
+    "warm state and fullblock joint fence",
+    "hardware register/handshake binding and cycles"
+  ],
+  "plan_regression": {
+    "command": "python -m pytest -q tests/test_typical_block_plan.py tests/test_block_checklist.py tests/test_model_geometry.py tests/test_qwen_family_contracts.py tests/test_qwen35_dense_geometry.py tests/test_control_v4.py::test_profiles_and_support",
+    "log": {
+      "bytes": 400,
+      "path": "work/cumsum_plan_tests.log",
+      "sha256": "89d8f79699db29b40beb4f9b8ad53731a77aa0fb1ef2ed768771e525c2c643aa"
+    },
+    "passed": 338
+  },
+  "policy_scope": {
+    "add_issues_per_accepted_item": 13,
+    "allowed_input": "nonpositive normal FP32 or signed zero",
+    "fail_closed": true,
+    "max_exponent_span": 18,
+    "max_terms": 64,
+    "max_unbiased_exponent": 120,
+    "require_zero_low_residual": true,
+    "universal_cumsum_replacement": false
+  },
+  "replay": {
+    "cases": [
+      {
+        "accepted_guard_checks": 2048,
+        "actual": {
+          "bytes": 8192,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/cumsum_span18_actual_probe_v2/m16.actual.f32le",
+          "sha256": "b297e96b1a3750a608fb8343a36410a661ecf6f7ac6f7758e736896838cd6895"
+        },
+        "bit_mismatches": 0,
+        "executed_add_issues": 26624,
+        "heads_chunks": [
+          {
+            "chunk": 0,
+            "emax": 116,
+            "emin": 111,
+            "head": 0,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 115,
+            "head": 1,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 114,
+            "head": 2,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 129,
+            "emin": 127,
+            "head": 3,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 127,
+            "emin": 125,
+            "head": 4,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 126,
+            "emin": 124,
+            "head": 5,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 115,
+            "emin": 106,
+            "head": 6,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 115,
+            "emin": 106,
+            "head": 7,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 121,
+            "emin": 112,
+            "head": 8,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 113,
+            "head": 9,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 111,
+            "head": 10,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 132,
+            "emin": 132,
+            "head": 11,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 122,
+            "emin": 115,
+            "head": 12,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 125,
+            "emin": 120,
+            "head": 13,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 118,
+            "emin": 106,
+            "head": 14,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 117,
+            "emin": 106,
+            "head": 15,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 126,
+            "emin": 125,
+            "head": 16,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 125,
+            "emin": 122,
+            "head": 17,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 132,
+            "emin": 132,
+            "head": 18,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 131,
+            "emin": 131,
+            "head": 19,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 119,
+            "emin": 112,
+            "head": 20,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 123,
+            "emin": 117,
+            "head": 21,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 133,
+            "emin": 133,
+            "head": 22,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 110,
+            "emin": 105,
+            "head": 23,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 115,
+            "emin": 108,
+            "head": 24,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 116,
+            "emin": 106,
+            "head": 25,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 121,
+            "emin": 112,
+            "head": 26,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 119,
+            "emin": 112,
+            "head": 27,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 118,
+            "emin": 113,
+            "head": 28,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 132,
+            "emin": 132,
+            "head": 29,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 121,
+            "emin": 105,
+            "head": 30,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 122,
+            "emin": 113,
+            "head": 31,
+            "terms": 64
+          }
+        ],
+        "input": {
+          "bytes": 8192,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/cumsum_span18_actual_probe_v2/m16.input.f32le",
+          "sha256": "47b37776839e834a66076012d4ef5197ea4398881c6c6f4174908bfcebb9a56d"
+        },
+        "padding_terms": 1536,
+        "producer_output": {
+          "bytes": 819200,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/prep_dual_gate_actual_m16/prep.actual.fp32le",
+          "sha256": "9ded712e5645c2c25ad2b25f34b60bf8c5fbedb528c0696dfe5b2a36f50537ef"
+        },
+        "producer_summary": {
+          "bytes": 299717,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/prep_dual_gate_actual_m16/summary.json",
+          "sha256": "5453d659ba52dbff7cff0d780033750b29d776aa087c7190b56305b47465eac7"
+        },
+        "real_token_terms": 512,
+        "reference": {
+          "bytes": 8192,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/cumsum_span18_actual_probe_v2/m16.torch.f32le",
+          "sha256": "b297e96b1a3750a608fb8343a36410a661ecf6f7ac6f7758e736896838cd6895"
+        },
+        "shape": [
+          1,
+          32,
+          1,
+          64
+        ],
+        "strides": [
+          2048,
+          64,
+          64,
+          1
+        ],
+        "tokens": 16
+      },
+      {
+        "accepted_guard_checks": 4096,
+        "actual": {
+          "bytes": 16384,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/cumsum_span18_actual_probe_v2/m128.actual.f32le",
+          "sha256": "c9726567aad14bd9f797d51b6173d1408f0e2cfd028a719d45b0fdaf46f9e630"
+        },
+        "bit_mismatches": 0,
+        "executed_add_issues": 53248,
+        "heads_chunks": [
+          {
+            "chunk": 0,
+            "emax": 116,
+            "emin": 111,
+            "head": 0,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 117,
+            "emin": 110,
+            "head": 0,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 115,
+            "head": 1,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 119,
+            "emin": 114,
+            "head": 1,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 113,
+            "head": 2,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 117,
+            "emin": 112,
+            "head": 2,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 129,
+            "emin": 127,
+            "head": 3,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 133,
+            "emin": 124,
+            "head": 3,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 127,
+            "emin": 125,
+            "head": 4,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 127,
+            "emin": 124,
+            "head": 4,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 127,
+            "emin": 124,
+            "head": 5,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 126,
+            "emin": 124,
+            "head": 5,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 115,
+            "emin": 106,
+            "head": 6,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 114,
+            "emin": 105,
+            "head": 6,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 115,
+            "emin": 106,
+            "head": 7,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 115,
+            "emin": 107,
+            "head": 7,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 121,
+            "emin": 112,
+            "head": 8,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 119,
+            "emin": 110,
+            "head": 8,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 113,
+            "head": 9,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 118,
+            "emin": 112,
+            "head": 9,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 120,
+            "emin": 111,
+            "head": 10,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 120,
+            "emin": 109,
+            "head": 10,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 132,
+            "emin": 132,
+            "head": 11,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 132,
+            "emin": 132,
+            "head": 11,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 122,
+            "emin": 113,
+            "head": 12,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 121,
+            "emin": 113,
+            "head": 12,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 126,
+            "emin": 119,
+            "head": 13,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 125,
+            "emin": 119,
+            "head": 13,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 118,
+            "emin": 106,
+            "head": 14,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 117,
+            "emin": 110,
+            "head": 14,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 117,
+            "emin": 106,
+            "head": 15,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 117,
+            "emin": 110,
+            "head": 15,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 127,
+            "emin": 125,
+            "head": 16,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 127,
+            "emin": 123,
+            "head": 16,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 125,
+            "emin": 120,
+            "head": 17,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 126,
+            "emin": 120,
+            "head": 17,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 132,
+            "emin": 132,
+            "head": 18,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 132,
+            "emin": 132,
+            "head": 18,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 131,
+            "emin": 131,
+            "head": 19,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 131,
+            "emin": 131,
+            "head": 19,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 119,
+            "emin": 112,
+            "head": 20,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 116,
+            "emin": 110,
+            "head": 20,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 123,
+            "emin": 117,
+            "head": 21,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 123,
+            "emin": 116,
+            "head": 21,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 133,
+            "emin": 133,
+            "head": 22,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 133,
+            "emin": 133,
+            "head": 22,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 112,
+            "emin": 104,
+            "head": 23,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 112,
+            "emin": 106,
+            "head": 23,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 115,
+            "emin": 108,
+            "head": 24,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 116,
+            "emin": 109,
+            "head": 24,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 116,
+            "emin": 106,
+            "head": 25,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 116,
+            "emin": 110,
+            "head": 25,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 121,
+            "emin": 111,
+            "head": 26,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 118,
+            "emin": 110,
+            "head": 26,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 119,
+            "emin": 112,
+            "head": 27,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 117,
+            "emin": 110,
+            "head": 27,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 118,
+            "emin": 112,
+            "head": 28,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 117,
+            "emin": 112,
+            "head": 28,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 132,
+            "emin": 132,
+            "head": 29,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 132,
+            "emin": 132,
+            "head": 29,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 121,
+            "emin": 105,
+            "head": 30,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 120,
+            "emin": 110,
+            "head": 30,
+            "terms": 64
+          },
+          {
+            "chunk": 0,
+            "emax": 122,
+            "emin": 113,
+            "head": 31,
+            "terms": 64
+          },
+          {
+            "chunk": 1,
+            "emax": 119,
+            "emin": 112,
+            "head": 31,
+            "terms": 64
+          }
+        ],
+        "input": {
+          "bytes": 16384,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/cumsum_span18_actual_probe_v2/m128.input.f32le",
+          "sha256": "019c2b843fe38ef0ee072ebd8446372649aeb52768379d245215fd492700e1cd"
+        },
+        "padding_terms": 0,
+        "producer_output": {
+          "bytes": 6553600,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/prep_dual_gate_actual_m128/prep.actual.fp32le",
+          "sha256": "ead2462aaaebb607114df42d1d282ad7962d3b7c785fa1e9f0c7f7ccb5190d32"
+        },
+        "producer_summary": {
+          "bytes": 354210,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/prep_dual_gate_actual_m128/summary.json",
+          "sha256": "49a356f23374c38d72c6a2f6d08e89f3d203a7f3b45ed121c8b8c431dff7c522"
+        },
+        "real_token_terms": 4096,
+        "reference": {
+          "bytes": 16384,
+          "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/cumsum_span18_actual_probe_v2/m128.torch.f32le",
+          "sha256": "c9726567aad14bd9f797d51b6173d1408f0e2cfd028a719d45b0fdaf46f9e630"
+        },
+        "shape": [
+          1,
+          32,
+          2,
+          64
+        ],
+        "strides": [
+          32,
+          1,
+          2048,
+          32
+        ],
+        "tokens": 128
+      }
+    ],
+    "duty": null,
+    "full_block": false,
+    "full_chunk_executed": false,
+    "hardware_binding": false,
+    "hardware_cycles": null,
+    "matrix_mac": 0,
+    "new_producer_executed": false,
+    "numerical_acceptance": null,
+    "official_model_source": {
+      "key_heads": 16,
+      "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+      "native_acceptance": false,
+      "official_forward_executed": false,
+      "production_chisel_supports_grouped_heads": false,
+      "repeat_ast_sha256": "967f6ef189bffa9a7ab5606d1ef36cac1065e70532355b5d36055414caf0f085",
+      "source_head": "value_head//2",
+      "source_sha256": {
+        "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+        "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+      },
+      "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+      "value_heads": 32
+    },
+    "policy": "35b_guarded_two_sum_fp32_span18_64",
+    "reference_operation": "torch.cumsum(dim=-1)",
+    "rtl_executed": false,
+    "runtime": {
+      "affinity": [
+        0
+      ],
+      "build_config_sha256": "4357da55584ba812c9f81a8baf65bb935a0345c1ef83e5e39e76803c1899ce8b",
+      "complete_runtime_dependency_source_closure": false,
+      "cpu_capability": "DEFAULT",
+      "installed_transformers_is_not_35b_source_authority": true,
+      "interop_threads": 1,
+      "intraop_threads": 1,
+      "numpy_version": "2.3.5",
+      "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "runtime_profile": "recovery_20261013",
+      "runtime_root": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/runtime_recovery",
+      "sha256": {
+        "python.sh": "96b219bd3d5c5aaeaf47685dfa9e12c2012f1e4a799d74e844e9005f494e26c2",
+        "runtime_receipt.json": "19bbdd8c3cc8b182c6b85db0a163a825a236d88718c2598926a7a2d4b4fff854",
+        "site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+        "site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+        "site-packages/torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+      },
+      "torch_git_revision": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+      "torch_version": "2.10.0+cpu"
+    },
+    "scope": "SAME_INPUT_GUARDED_CUMSUM_COMPONENT_REPLAY",
+    "seconds": 0.655555433997506,
+    "source_sha256": {
+      "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+      "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+      "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+      "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+      "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+      "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+      "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+      "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+      "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+      "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+      "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+      "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen35_35b_conv/payload.py": "2d23660b650879230c24037474d7f35de60610df12b58494ce0fba1e485201b4",
+      "candidates/qwen35_35b_conv/reference.py": "9a75df30a0763c248097fbae99e8d3f730dd641b89761698f94b75ab3b9adb7d",
+      "candidates/qwen35_35b_conv/verify.py": "0e04e5241bd854f1e490ca3a95d7fd7107d22c212293dae476c32b2fc69a73f3",
+      "candidates/qwen35_35b_exp/gate_scalar.py": "c3661f498912ec55b70bd4344a53013409e567c6f01f78af26fe515e8710532d",
+      "candidates/qwen35_35b_exp/scalar.py": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5",
+      "candidates/qwen35_35b_payload/__init__.py": "1aa7a9f8752b61eff2288b0732a056525adbdeee2f74ee054f3ef32fbd2c8434",
+      "candidates/qwen35_35b_payload/packer.py": "e11d8d2a7499629d57f4341e440c4c1f06c080368b8d2cdd190af5ad5197ccc9",
+      "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+      "candidates/qwen35_35b_prefill/prefix_driver.py": "fc911dc5e387dd470df9fedf99d930158a95a46188d0706ef2f183879e5300e8",
+      "candidates/qwen35_35b_prefill/projection_driver.py": "76e4dc2f6f19fc529feecdc066489f1a1aaa9dfd9f51445c279c8eb23ad92c7b",
+      "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+      "candidates/qwen35_35b_prefill/run_prefix.py": "82b8e8dc886b931218902b3869325b93eb1ca3a4302aaabcee2f4ce88841f602",
+      "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+      "candidates/qwen35_35b_rms/__init__.py": "60f72d6b1dee8a03768c23fcae4feec2f7522101516e1c69ee9220ba5b6f399f",
+      "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+      "candidates/qwen35_35b_rms/reference.py": "b7a59beb38817ce10d0416de575983762c296a87eef9d57ea87b28158b091230",
+      "candidates/qwen35_gdn_prefill/chunk/cumsum.py": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f",
+      "candidates/qwen35_gdn_prefill/chunk/model.py": "9fbee9ae91c358aaf090624d5a7954a10fd8cdd2f983b2be388a8200ea6f46e2",
+      "candidates/qwen35_gdn_prefill/chunk/probe_cumsum.py": "926cd1fcc1b41d160c00f3988c677061016c4d3ac664d217a971f7b7195a2f82",
+      "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+      "candidates/qwen35_gdn_prefill/conv/model.py": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+      "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+      "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+      "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+      "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+      "candidates/qwen35_gdn_prefill/prep/model.py": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11",
+      "candidates/qwen35_gdn_prefill/prep/reduction.py": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1",
+      "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+      "candidates/qwen35_gdn_prefill/projection_driver.py": "2ef090d3cc4abdb7cc88a479933166378f570b6ae8eb3960fa18f841a9eaf05f",
+      "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+      "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+      "src/heteronpu/__init__.py": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be",
+      "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+      "src/heteronpu/cgra_sfu.py": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854",
+      "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+      "src/heteronpu/config.py": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4",
+      "src/heteronpu/dtypes.py": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34",
+      "src/heteronpu/kv_engine.py": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a",
+      "src/heteronpu/matrix_engine.py": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8",
+      "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+      "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+      "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+      "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+      "src/heteronpu/qwen_family_contracts.py": "7cddcac095535e706ac31161303c94a8ad0a0ad6c4ece775f279190c5f283ab0",
+      "src/heteronpu/scheduler.py": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55",
+      "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8"
+    },
+    "source_sha256_after": {
+      "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+      "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+      "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+      "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+      "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+      "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+      "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+      "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+      "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+      "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+      "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+      "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen35_35b_conv/payload.py": "2d23660b650879230c24037474d7f35de60610df12b58494ce0fba1e485201b4",
+      "candidates/qwen35_35b_conv/reference.py": "9a75df30a0763c248097fbae99e8d3f730dd641b89761698f94b75ab3b9adb7d",
+      "candidates/qwen35_35b_conv/verify.py": "0e04e5241bd854f1e490ca3a95d7fd7107d22c212293dae476c32b2fc69a73f3",
+      "candidates/qwen35_35b_exp/gate_scalar.py": "c3661f498912ec55b70bd4344a53013409e567c6f01f78af26fe515e8710532d",
+      "candidates/qwen35_35b_exp/scalar.py": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5",
+      "candidates/qwen35_35b_payload/__init__.py": "1aa7a9f8752b61eff2288b0732a056525adbdeee2f74ee054f3ef32fbd2c8434",
+      "candidates/qwen35_35b_payload/packer.py": "e11d8d2a7499629d57f4341e440c4c1f06c080368b8d2cdd190af5ad5197ccc9",
+      "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+      "candidates/qwen35_35b_prefill/prefix_driver.py": "fc911dc5e387dd470df9fedf99d930158a95a46188d0706ef2f183879e5300e8",
+      "candidates/qwen35_35b_prefill/projection_driver.py": "76e4dc2f6f19fc529feecdc066489f1a1aaa9dfd9f51445c279c8eb23ad92c7b",
+      "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+      "candidates/qwen35_35b_prefill/run_prefix.py": "82b8e8dc886b931218902b3869325b93eb1ca3a4302aaabcee2f4ce88841f602",
+      "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+      "candidates/qwen35_35b_rms/__init__.py": "60f72d6b1dee8a03768c23fcae4feec2f7522101516e1c69ee9220ba5b6f399f",
+      "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+      "candidates/qwen35_35b_rms/reference.py": "b7a59beb38817ce10d0416de575983762c296a87eef9d57ea87b28158b091230",
+      "candidates/qwen35_gdn_prefill/chunk/cumsum.py": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f",
+      "candidates/qwen35_gdn_prefill/chunk/model.py": "9fbee9ae91c358aaf090624d5a7954a10fd8cdd2f983b2be388a8200ea6f46e2",
+      "candidates/qwen35_gdn_prefill/chunk/probe_cumsum.py": "926cd1fcc1b41d160c00f3988c677061016c4d3ac664d217a971f7b7195a2f82",
+      "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+      "candidates/qwen35_gdn_prefill/conv/model.py": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+      "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+      "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+      "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+      "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+      "candidates/qwen35_gdn_prefill/prep/model.py": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11",
+      "candidates/qwen35_gdn_prefill/prep/reduction.py": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1",
+      "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+      "candidates/qwen35_gdn_prefill/projection_driver.py": "2ef090d3cc4abdb7cc88a479933166378f570b6ae8eb3960fa18f841a9eaf05f",
+      "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+      "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+      "src/heteronpu/__init__.py": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be",
+      "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+      "src/heteronpu/cgra_sfu.py": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854",
+      "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+      "src/heteronpu/config.py": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4",
+      "src/heteronpu/dtypes.py": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34",
+      "src/heteronpu/kv_engine.py": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a",
+      "src/heteronpu/matrix_engine.py": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8",
+      "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+      "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+      "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+      "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+      "src/heteronpu/qwen_family_contracts.py": "7cddcac095535e706ac31161303c94a8ad0a0ad6c4ece775f279190c5f283ab0",
+      "src/heteronpu/scheduler.py": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55",
+      "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8"
+    },
+    "sources_unchanged": true,
+    "status": "COMPONENT_REPLAY_COMPLETE_NO_WHOLE_CHUNK_ACCEPTANCE",
+    "thresholds": null,
+    "vector_binary": {
+      "bytes": 15880,
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/recovery_vector/gdn_vector16.so",
+      "sha256": "71275803ea5ab05fd5ef991c133f0a87a9217e062fd012b416dd627aafd12e8d"
+    },
+    "vector_calls": {
+      "add": 79872
+    },
+    "vector_flags": {
+      "0": 69696,
+      "1": 10176
+    },
+    "vector_mul_mac": 0,
+    "vector_receipt": {
+      "bytes": 759,
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/recovery_vector/gdn_vector16.json",
+      "sha256": "97f8f921b82a6ae90964d156fdd4963ca864fb5133da57516ac86d6f7e1051da"
+    }
+  },
+  "replay_record": {
+    "bytes": 35811,
+    "path": "work/cumsum_span18_actual_probe_v2/report.json",
+    "sha256": "d7b2aea01320bb27ca958d2b0ddfae4db33e18d634c6423643b7b44a99688893"
+  },
+  "resources": {
+    "active_lanes_per_add": 1,
+    "cumsum_executed_mac": 0,
+    "duty": null,
+    "existing_output_and_packet_registers_excluded_from_pair_count": true,
+    "hardware_cycles": null,
+    "new_ddr_reads": 0,
+    "new_ddr_writes": 0,
+    "persistent_accumulator_words": 2,
+    "production_binding": false,
+    "temporary_register_bound_proven": false,
+    "utilization": null,
+    "vector_instances": 1
+  },
+  "rtl_executed": false,
+  "status": "BOUNDED_COMPONENT_REPLAY_AND_SYNTHETIC_OWNER_ONLY",
+  "synthetic_owner": {
+    "accepted_add_issues": 26624,
+    "accepted_terms": 2048,
+    "duty": null,
+    "executed_vector_mul_add_pairs": 14630912,
+    "hardware_cycles": null,
+    "head0_nonzero_hi_lo_then_other31_zero_gates_verified": true,
+    "heads": 32,
+    "key_dim": 16,
+    "late_residual_failure_add_issues": 831,
+    "late_residual_failure_terms": 63,
+    "log": {
+      "bytes": 6102,
+      "path": "work/cumsum_guard_cold_tests_v2/chunk__test_cumsum.log",
+      "sha256": "bc2946f869ec3c280d8796ba37b05385c53197e731da92a5ae71f88324bc0aa3"
+    },
+    "matrix_executed_mac": 0,
+    "report": {
+      "complete": true,
+      "counts": {
+        "read_bytes": 70324224,
+        "scratch_read_bytes": 70303744,
+        "source_read_bytes": 20480,
+        "ticks": 2363649,
+        "write_bytes": 5312512
+      },
+      "generation_advanced": false,
+      "history_committed": false,
+      "input_sha256": [
+        "e6fbd6b7274784a373e2762cf6155b5202855951593a61f14006a832b1fc9326"
+      ],
+      "output_published": false,
+      "output_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+      "owner": {
+        "accepted": {
+          "chunks_completed": 32,
+          "chunks_started": 32,
+          "cumsum_add_issues": 26624,
+          "cumsum_terms": 2048,
+          "memory_responses": 1181824,
+          "owner_results": 1,
+          "read_requests": 1098816,
+          "scratch_ack_bytes": 5242880,
+          "upper_triangle_masked": 64512,
+          "write_acks": 83008,
+          "write_requests": 83008
+        },
+        "arithmetic": "FP32_each_Mul_Add_RNE_ascending_K_no_FMA",
+        "cumsum_hardware_binding": false,
+        "cumsum_policy": "35b_guarded_two_sum_fp32_span18_64",
+        "exp": {
+          "calls": 70688,
+          "max_abs_input_word": 1073741824,
+          "saturated_abs_ge_80": 0
+        },
+        "first_numerical_failure": null,
+        "generation_advanced": false,
+        "hardware_cycles": null,
+        "hardware_register_allocation_established": false,
+        "history_committed": false,
+        "host_batch": true,
+        "host_call_counts": {
+          "mul_add": 914432,
+          "single": 140288
+        },
+        "identity": {
+          "cumsum_chisel_bound": false,
+          "cumsum_policy": "35b_guarded_two_sum_fp32_span18_64",
+          "cumsum_source_sha256": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f",
+          "exp_policy": "existing_ExpNegative_including_abs_ge_80_zero_saturation",
+          "grouped_source": {
+            "key_heads": 16,
+            "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+            "native_acceptance": false,
+            "official_forward_executed": false,
+            "production_chisel_supports_grouped_heads": false,
+            "repeat_ast_sha256": "967f6ef189bffa9a7ab5606d1ef36cac1065e70532355b5d36055414caf0f085",
+            "source_head": "value_head//2",
+            "source_sha256": {
+              "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+              "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+            },
+            "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+            "value_heads": 32
+          },
+          "ieee_mode_integration_gap": "ElementwiseMemoryEngine.scala binary fatal mask is still flags[4:1]; explicit per-job policy selection and physical shared Vector routing remain required",
+          "implementation_sha256": {
+            "cumsum.py": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f",
+            "model.py": "9fbee9ae91c358aaf090624d5a7954a10fd8cdd2f983b2be388a8200ea6f46e2",
+            "vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+            "vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+          },
+          "layout": {
+            "core_row_bytes": 51200,
+            "key_heads": 16,
+            "value_heads": 32,
+            "width": 128
+          },
+          "layout_source_sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+          "mapping": "one_retained_16_lane_Add_Mul_resource_candidate",
+          "matrix_used": false,
+          "native_acceptance": false,
+          "new_array": false,
+          "rtl_executed": false,
+          "source_sha256": {
+            "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+            "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+            "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+            "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+          },
+          "throughput_80_percent_achieved": false,
+          "vector_exception_control_chisel_bound": true,
+          "vector_underflow_policy": "legacy_vector_fatal_underflow"
+        },
+        "input_core_row_bytes": 51200,
+        "input_role_elements": 4096,
+        "native_acceptance": false,
+        "numerical_detail": null,
+        "physical_vector_lanes": 16,
+        "production_geometry": false,
+        "python_diagnostic_storage": {
+          "adapter_fp32_buffer_words": 64,
+          "adapter_issue_flag_words": 2,
+          "adapter_lane_flag_words": 16,
+          "peak_live_python_storage_bytes": null,
+          "suspended_generator_locals": "Retained across yield: at least nine FP32 lists in _compute, plus nested helper locals and adapter buffers; no proven register or live-list bound.",
+          "vector_failure_capture_max_words": 64
+        },
+        "rtl_executed": false,
+        "scalar_calls": {
+          "exp_negative": 70688
+        },
+        "scalar_instances_created": 0,
+        "scope": "TRUE_CHUNK64_GDN_SOFTWARE_MAPPING",
+        "scratch_ddr_bytes": 5242880,
+        "state_committed": false,
+        "state_fp32_bytes": 65536,
+        "status": null,
+        "synthetic_reduced_dimensions": true,
+        "throughput_80_percent_achieved": false,
+        "transpose_tile_fp32_payload_bytes": 1024,
+        "vector_exception_flag_counts": {
+          "0": 1969088,
+          "1": 64
+        },
+        "vector_instances": 1,
+        "vector_issue_counts": {
+          "add": 1025024,
+          "mul": 944128
+        },
+        "vector_lane_operations": {
+          "add": 14971904,
+          "mul": 15106048
+        }
+      },
+      "staging_complete": true,
+      "state_committed": false,
+      "state_published": false,
+      "state_sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "status": null
+    },
+    "scope": "SYNTHETIC_REDUCED_DIMENSION_COMPLETE_CHUNK_OWNER_AFTER_ABORT_RESET",
+    "tokens": 2,
+    "useful_vector_mac": null,
+    "value_dim": 32,
+    "vector_pair_definition": "16 separately rounded Mul then Add per host mul_add, no FMA"
+  },
+  "thresholds": null
+}

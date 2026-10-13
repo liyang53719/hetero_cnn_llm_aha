@@ -6,6 +6,7 @@ or reference-injected candidate activation is used by this suite.
 from contextlib import nullcontext
 from dataclasses import replace
 import hashlib
+import json
 import random
 import struct
 import sys
@@ -27,7 +28,7 @@ from candidates.qwen2_resident_matrix.ffn_attention.test_scalar_recipe import re
 
 def snapshot():
     sources = o.base.verify_execution_sources()
-    for name in (o.OWNER, o.SERVICE, o.OBSERVER):
+    for name in o.REQUIRED_SOURCES:
         sources[name] = hashlib.sha256((o.ROOT / name).read_bytes()).hexdigest()
     return sources
 
@@ -131,6 +132,13 @@ class OfficialObservationTests(unittest.TestCase):
                 self.assertEqual(h.bus.raw(job.dst), baseline[0].bus.raw(job.dst))
                 report = capture.report()
                 self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
+                self.assertEqual(report['schema'], o.SOURCE_VERSION)
+                self.assertEqual(report['source_version'], 'qwen2-official-bf16-attention-observation-v2')
+                self.assertEqual(report['helper_source_version'], o.base.SOURCE_VERSION)
+                self.assertEqual(report['helper_source_sha256'], {o.HELPER: o.HELPER_SHA256})
+                self.assertFalse(report['prior_observation_results_inherited'])
+                self.assertEqual(report['historical_fullgraph'], dict(commit=o.base.RECEIPT_COMMIT,
+                    path=o.base.RECEIPT, sha256=o.base.RECEIPT_SHA, results_inherited=False))
                 self.assertFalse(report['future_scores_observed'] or report['full_29_node_gate']
                     or report['whole_block_terminal_observed'] or report['physical_publication_observed']
                     or report['hardware_simulation'])
@@ -236,18 +244,56 @@ class OfficialObservationTests(unittest.TestCase):
                 self.assertTrue(capture.disarmed)
                 self.assertIsNone(sys.gettrace())
 
-    def test_snapshot_cannot_replace_old75_or_omit_new_dependencies(self):
+    def test_snapshot_requires_exact_v2_inventory_and_all_extra_dependencies(self):
         h, _, _ = self.make()
         original = snapshot()
-        for name in (next(iter(o.base.verify_execution_sources())), o.OWNER, o.SERVICE, o.OBSERVER):
+        frozen_raw = (o.ROOT / o.base.RECEIPT).read_bytes()
+        frozen = json.loads(frozen_raw)['source_sha256']
+        execution = o.verify_source_snapshot(original)
+        self.assertEqual(len(execution), 75)
+        self.assertEqual(set(execution), set(frozen))
+        self.assertEqual({name for name in execution if execution[name] != frozen[name]},
+                         set(o.base.EXECUTION_SOURCE_REPLACEMENTS))
+        self.assertEqual(len(o.base.EXECUTION_SOURCE_REPLACEMENTS), 2)
+        self.assertEqual(hashlib.sha256(frozen_raw).hexdigest(), o.base.RECEIPT_SHA)
+        self.assertEqual(set(original) - set(execution), set(o.REQUIRED_SOURCES))
+        for name in (*execution, *o.REQUIRED_SOURCES):
             changed = dict(original)
             changed.pop(name)
             with self.subTest(omitted=name), self.assertRaises(ValueError):
                 o.OfficialAttentionObservation(h.owner, source_sha256=changed)
-        changed = dict(original)
-        changed[o.OWNER] = '0' * 64
+        for name in o.REQUIRED_SOURCES:
+            changed = dict(original)
+            changed[name] = '0' * 64
+            with self.subTest(drift=name), self.assertRaisesRegex(ValueError, 'source drift'):
+                o.OfficialAttentionObservation(h.owner, source_sha256=changed)
+        for name in o.base.EXECUTION_SOURCE_REPLACEMENTS:
+            changed = dict(original)
+            changed[name] = frozen[name]
+            with self.subTest(historical=name), self.assertRaisesRegex(ValueError, 'exact v2 75-source'):
+                o.OfficialAttentionObservation(h.owner, source_sha256=changed)
+        # Runner-specific supersets are allowed only with every extra identity
+        # checked. They do not add entries to the exact 75-source inventory.
+        extra = 'candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py'
+        extended = dict(original, **{extra: hashlib.sha256((o.ROOT / extra).read_bytes()).hexdigest()})
+        self.assertEqual(o.verify_source_snapshot(extended), execution)
+        extended[extra] = '0' * 64
         with self.assertRaisesRegex(ValueError, 'source drift'):
-            o.OfficialAttentionObservation(h.owner, source_sha256=changed)
+            o.verify_source_snapshot(extended)
+        real_read = Path.read_bytes
+        def drift(path):
+            raw = real_read(path)
+            return raw + b'\n# unreviewed helper drift\n' if path == o.ROOT / o.HELPER else raw
+        with patch.object(Path, 'read_bytes', drift):
+            with self.assertRaisesRegex(ValueError, 'helper source drift'):
+                o.verify_source_snapshot(original)
+        good = o.base.EXECUTION_SOURCE_REPLACEMENTS
+        missing = dict(good)
+        missing.pop(next(iter(missing)))
+        for changed in (missing, dict(good, **{'extra.py': ('a' * 64, 'b' * 64)})):
+            with self.subTest(replacements=tuple(changed)), patch.object(o.base, 'EXECUTION_SOURCE_REPLACEMENTS', changed):
+                with self.assertRaisesRegex(ValueError, 'replacement closure'):
+                    o.OfficialAttentionObservation(h.owner, source_sha256=original)
         capture = o.OfficialAttentionObservation(h.owner, source_sha256=original)
         original[o.OWNER] = '0' * 64
         self.assertNotEqual(capture.sources[o.OWNER], original[o.OWNER])
@@ -267,10 +313,13 @@ class OfficialObservationTests(unittest.TestCase):
             (dense_silu, 'ROLE_SHAPES', types.MappingProxyType({})),
             (dense_silu.DenseBinding, '__setattr__', lambda *args: None),
             (o.base, '_same_code', lambda *args: True),
+            (o.base, 'SOURCE_VERSION', 'qwen2-existing-attention-observation-v1'),
+            (o.base, 'verify_execution_sources', lambda: {}),
+            (o, 'HELPER_SHA256', '0' * 64),
         )
         for target, name, replacement in replacements:
             with self.subTest(name=name), patch.object(target, name, replacement):
-                with self.assertRaisesRegex(ValueError, 'changed|patched'):
+                with self.assertRaisesRegex(ValueError, 'changed|patched|source drift|exact v2 75-source'):
                     o.OfficialAttentionObservation(h.owner, source_sha256=snapshot())
         with patch.object(owners.OfficialAttentionOwner, '_advance', lambda *args: None, create=True):
             with self.assertRaisesRegex(ValueError, 'inventory changed'):

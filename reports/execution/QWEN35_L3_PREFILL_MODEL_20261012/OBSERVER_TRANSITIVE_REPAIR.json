@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "scope": "TRANSITIVE_OBSERVER_IDENTITY_AND_CI_PREREQUISITE_REPAIR_ONLY",
+  "base_commit": "c554e502dfe462d5a0acb7030eff4bb51570bdf2",
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/observation.py": "bba49c6c98e2a7c2f547fce501e79f455d910216de65d6ae0b5243d27fe078fd",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/test_ci_runner.py": "45015e2740a5956d89530e7b3999a730ef7fb955b51c58d4cb3da1ca142b8f43",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/test_observation.py": "330a3a12dda8310fb887d94cfe7ad744bfa8c81973936c75bb4c36621a7a12fe",
+    "candidates/qwen2_resident_matrix/official_bf16/observation.py": "c34907c33daac71c058e328db436faa88b88a6214b11a15625c6ba6c5a429273",
+    "candidates/qwen2_resident_matrix/official_bf16/test_observation.py": "e4859d438dcf6d68eeca6d56b14ee339d25ddb0c660bb1b3019c750b602c79f4",
+    "candidates/qwen2_resident_matrix/official_bf16/test_observation_monitoring.py": "33c4a324001b20ffafa8c2a25e0f4ff2770174cefcc8f357a0c9eea4b9faaadd"
+  },
+  "arithmetic_implementation_changed": false,
+  "numerical_thresholds_changed": false,
+  "historical_receipts_changed": false,
+  "historical_acceptance_inherited": false,
+  "identity_inventory": {
+    "base_execution": 75,
+    "unchanged": 73,
+    "explicit_matrix_replacements": 2,
+    "official_minimum": 79,
+    "monitoring_minimum": 80,
+    "profiled_minimum": 83,
+    "historical_unchanged_artifacts": 25
+  },
+  "original_ci_failure": {
+    "run": 38323301022,
+    "job": 115056097027,
+    "cause": "official observer helper SHA predates v2 source",
+    "official_suite": {
+      "tests": 71,
+      "failures": 11,
+      "errors": 32
+    },
+    "log_sha256": "98e0007f42f19da6c15b84d4f973f8a6ac5bc1ea4d632641b378699c4a008b0d"
+  },
+  "preserved_local_failure": {
+    "dense_tests": 118,
+    "passed": 117,
+    "failed": 1,
+    "cause": "frontend whole-body guard predates exact reviewed two-line historical baseline prerequisite",
+    "log_sha256": "2abd74a5527469d1dcf6f5d1bba4528aac6fe3c5e43bb9d28384939924459243"
+  },
+  "frontend_extension": {
+    "original_body_sha256": "898e1ced4a9b83641d5fe1944bffdbb3c3e4a71d4d51193cbd17bd7a94ff8aa4",
+    "admitted_exact_commit": "37b7de74431ed79b7e9f3d52d308ed7f46727b7a",
+    "admitted_lines": 2,
+    "old_python_commands_protected": 35,
+    "timeout_minutes": 20,
+    "workflow_bytes_changed": false
+  },
+  "cold_full_workflow": {
+    "status": "PASS_COLD_ENTIRE_QWEN2_CONTRACT_WORKFLOW_SOFTWARE_ONLY",
+    "tests": 566,
+    "seconds": 156.9127336520014,
+    "max_child_rss_kib": 376552,
+    "source_unchanged": true,
+    "source_files": 12978,
+    "summary_sha256": "57da1c34cf6119c74d2ccd4691fa2ed307eb1bc4992c97a45bb988fbb541281f",
+    "workflow_body_sha256": "72886392ba3ee9daf01dd5f162516e445e2507a66c84b3d082ab17b3dea09ff9",
+    "log_sha256": "27ba5036fec8f85171fa909c6d7b005f6654911fcf5b4575a01c7ff379d71c3c",
+    "artifact_count": 44,
+    "artifact_bytes": 3509351,
+    "runtime": {
+      "python": "3.12.14",
+      "torch": "2.10.0+cpu",
+      "transformers": "4.40.1",
+      "numpy": "2.3.5",
+      "pytest": "8.4.2"
+    },
+    "prior_work_directory_read": false,
+    "bounded_host_test_builds": true,
+    "model_m16_m128_run": false,
+    "rtl_run": false
+  },
+  "independent_review": {
+    "base": "c554e502dfe462d5a0acb7030eff4bb51570bdf2",
+    "independent_review_status": "NO_P0_P1",
+    "scope": "six source/test identity files only",
+    "reviewed_checks": [
+      "exact 75 entry execution inventory: only two explicitly reviewed Matrix replacements; 73 unchanged",
+      "official helper, monitoring and profiled adapter transitive identities closed",
+      "25 historical artifacts unchanged from base",
+      "caller extra source hashes checked, no replacement wildcard",
+      "loaded functions, defaults, imports, constants, instances checked",
+      "frontend permits only two exact c554 baseline fetch/probe additions at exact site",
+      "after removing exact approved two-line extension, original 898e frontend body hash retained",
+      "all 35 old Python commands and 20 minute budget remain protected"
+    ],
+    "reviewer_executed_tests": false,
+    "numeric_acceptance_inherited": false
+  },
+  "audit_sha256": "7d334e20189adfee9e05e18a345007fa951634db817bbd778a0f77a90f2c4121",
+  "next_gate": "live L3 final-residual acceptance and actual KV commit/discard, then complete cold/carried M16",
+  "prior_count_correction": {
+    "original_commit": "c554e502dfe462d5a0acb7030eff4bb51570bdf2",
+    "original_summary_path": "reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/GQA_SIGMOID_COLD_GATE.json",
+    "original_summary_sha256": "a2b7bc0f7dae20a4772502476746524504bc8e5d3090c8c99a8d9d2113bdba86",
+    "original_summary_unchanged": true,
+    "reported_test_executions": 1395,
+    "correct_test_executions": 1392,
+    "cause": "manual addition used isolated public count171 instead of actual168",
+    "pieces": {
+      "frontend_regular": 653,
+      "frontend_isolated_public": 168,
+      "observer": 17,
+      "public_observer": 5,
+      "gdn": 330,
+      "l3": 219
+    },
+    "frontend_log_sha256": "690f0c29ac169555b8b62756a242373239aa8a3d681d2d47d550a249fe8c3adb",
+    "isolated_summary_sha256": "fc2e55f816be5025aff0ab34c713a9e13b9b0030f5dcc119e299101ec2723b36",
+    "no_test_or_result_changed": true
+  }
+}

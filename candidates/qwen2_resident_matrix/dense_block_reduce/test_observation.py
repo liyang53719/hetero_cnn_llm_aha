@@ -22,7 +22,7 @@ from ..ffn_public.test_prefix_owners import Harness
 
 def snapshot():
     sources = obs.base.verify_execution_sources()
-    for relative in (obs.original.OWNER, obs.original.SERVICE, obs.original.OBSERVER,
+    for relative in (*obs.original.REQUIRED_SOURCES,
                      obs.monitoring.MONITORING, *obs.EXTRA_SOURCES):
         sources[relative] = hashlib.sha256((obs.ROOT / relative).read_bytes()).hexdigest()
     return sources
@@ -127,6 +127,11 @@ class ProfiledObservationTests(unittest.TestCase):
         self.assertEqual((edges, steps), (previous[3], previous[4]))
         report = capture.report()
         self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
+        self.assertEqual(report['profiled_observation_source_version'], obs.SOURCE_VERSION)
+        self.assertEqual(report['source_version'], obs.CAPTURE_SOURCE_VERSION)
+        self.assertEqual(report['helper_source_version'], obs.base.SOURCE_VERSION)
+        self.assertFalse(report['prior_observation_results_inherited'])
+        self.assertFalse(report['historical_fullgraph']['results_inherited'])
         self.assertEqual(len(report['fields']), 10)
         self.assertEqual(report['matrix_service_type'], 'ProfiledMatrixService')
         self.assertEqual(report['instrumentation_sha256'], snapshot()[obs.ADAPTER])
@@ -148,7 +153,7 @@ class ProfiledObservationTests(unittest.TestCase):
         h, _ = self.make()
         sources = snapshot()
         before = object_state(h.owner), object_state(h.owner.matrix)
-        for relative in obs.EXTRA_SOURCES:
+        for relative in (*obs.EXTRA_SOURCES, obs.original.HELPER):
             changed = dict(sources)
             changed.pop(relative)
             with self.subTest(missing=relative), self.assertRaisesRegex(ValueError, 'snapshot must include'):
@@ -181,6 +186,9 @@ class ProfiledObservationTests(unittest.TestCase):
             (h.owner.matrix, 'dense_library', lambda *args: None),
             (h.owner, '_attention', lambda *args: None),
             (h.owner.scalar, 'op', lambda *args: 0),
+            (obs.base, 'SOURCE_VERSION', 'qwen2-existing-attention-observation-v1'),
+            (obs.original, 'SOURCE_VERSION', 'qwen2-official-bf16-attention-observation-v1'),
+            (obs, 'CAPTURE_SHA256', '0' * 64),
         ):
             with self.subTest(name=name), patch.object(target, name, value):
                 with self.assertRaisesRegex(ValueError, 'changed|patched'):

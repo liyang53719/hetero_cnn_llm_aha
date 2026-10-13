@@ -159,4 +159,19 @@ C2消除上游差异后，不能直接把“官方算子吃相同输入”的条
 
 GQA driver 的重复 coverage 扫描改为宿主不可变集合封存：只在 admission 和真实 write/ACK 后验证实际整数集合，每 tick 检查同一 frozenset 身份，原逐字节 source 检查与末 SHA 保留。accepted terminal 后才归还 output 普通集合，支持未写 early-abort 输出被其他真实 producer 重用；部分写入仍拒绝 fresh 重用。28 项小门及八组旧/新实际输出、全事件/observer trace、tick、ACK、发布结果完全一致。此项仅减少宿主验真开销，不减少任何逻辑请求、物理流量或硬件资源，不能算硬件 MAC 提升。注入 memory 方法异常仍 fail-closed，不伪造进度或保证原 invocation 可续跑。
 
-冷源受影响软件门313.0秒完成：完整frontend control步骤824次、observer/public observer22次、GDN330次/23suite、L3 219次/19suite，合计1395次测试执行（不是去重用例数），无skip。全部测试源/日志/工件身份复核；Scala/CHIRRTL仍交后继CI，未宣称本地展开。初期冷clone缺历史对象的失败保留，在该clone精确fetch八个固定commit后恢复，没有读取历史work或重跑大模型。后继精确提交 CI 待验。完整 L3 活链的 KV/final fence、O/residual/postnorm/FFN、M128 GQA、生产 C2/pair Chisel 选择和五 block 总门继续 open。
+冷源受影响软件门313.0秒完成：完整frontend control步骤821次、observer/public observer22次、GDN330次/23suite、L3 219次/19suite，合计1392次测试执行（不是去重用例数），无skip。全部测试源/日志/工件身份复核；Scala/CHIRRTL仍交后继CI，未宣称本地展开。初期冷clone缺历史对象的失败保留，在该clone精确fetch八个固定commit后恢复，没有读取历史work或重跑大模型。后继精确提交 CI 待验。完整 L3 活链的 KV/final fence、O/residual/postnorm/FFN、M128 GQA、生产 C2/pair Chisel 选择和五 block 总门继续 open。
+
+
+### c554：补齐 observer 的传递身份闭包
+
+c554e502 的 L3（219测试／19suite／95源）与 GDN（330／23／50）原 CI 成功；两份紧凑工件的 ZIP digest、精确提交逐源码、suite日志/计数及编译receipt已核对。原 Qwen2 contract 38323301022 失败：新基础 observer 已显式 v2，但 official observer 仍固定旧 helper SHA，随后 profiled adapter 也固定旧 official observer。71项套件在真正比较前出现11 failures/32 errors，原日志与FAIL保留；不能将这个身份拒绝写为模型数值失败。原 frontend 38323301183 已于23:55成功，821测试、13份frontend receipt和159份CHIRRTL逐hash复核；61,428,945B ZIP与23项精确源码工具绑定已核。c554五门为四成功、一项上述身份失败，原FAIL保留。
+
+本轮统一枚举 helper→official→monitoring→profiled 的全部传递引用。执行库存仍恰好75路径：73身份不变，只承认前一批已审的两个Matrix替换。官方快照必须含helper、owner、service、observer四项；其余caller自带源也逐项核验，缺项/漂移/非法replacement及loaded bytecode变更均拒绝。官方最小闭包79项、monitoring80项、profiled83项，实际runner按其完整闭包采集。25份历史receipt/report字节未改，新v2报告显式不继承旧数值验收。
+
+完整尾段的小测试又发现原 frontend 全文hash门未包含c554新增的37b7de精确fetch/probe。保留首次117/118失败，修复只允许这两条精确行各一次、顺序相邻且处于已审位置；剥离后仍必须等于原898e1ced…整body身份。35条原Python命令、20分钟预算和其余workflow内容继续受原hash保护；未改workflow正文或预算，负测覆盖缺失、重复、漂移、移位和原命令改变。
+
+独立只读审查六文件无阻断。随后在全新源码目录和按原CI版本新建的Python3.12环境，原contract步骤全文按原顺序执行，含全部后段suite与artifact收集：566项测试、156.913秒、最大子进程RSS376,552KiB，44份metadata/log工件3,509,351B，所有源前后不变，无历史work依赖。包含必要的小型宿主测试库构建，没有M16/M128模型或RTL重放。证据摘要见[传递身份修复](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/OBSERVER_TRANSITIVE_REPAIR.json)。此修复不改变算术、阈值或实际L3覆盖；完整L3、公共Command128/生产Chisel/RTL和五block总门继续open。
+
+下一实际闭包固定为19阶段：原8阶段前缀→真实KV append→GQA→SigmoidMul→O→残差→postNorm→Gate→Up→SiLUMul→Down→最终残差。先把最终真实Add的tag、完整ACK和held终态验证移到接受之前，并把KV prepare/retire与该driver绑定；held success遇abort/reset不得发布。carried只能消费同一fence上一成功提交的实际root，RoPE绝对位置与cache内query start分开。双M16完成后按完整阶段实测预算双M128，不再单独长跑GQA子门。
+
+计数更正：c554文字与紧凑摘要原写1395次，复核原日志应为653＋168＋17＋5＋330＋219＝1392次。原因是人工合计将isolated public的168误写171；CI和原冷日志实际一致，无测试或结论改变。旧摘要原件及SHA保留，更正明细记录在新传递身份摘要。

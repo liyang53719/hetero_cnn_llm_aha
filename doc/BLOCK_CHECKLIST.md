@@ -129,4 +129,6 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 
 - 2026-10-12 23:04 UTC：478a542两CI/137tests/80源工件闭环。显式矩形Matrix profile与旧模式共资源小门完成；GQA同输入双M16子算子实际QK/scale/BF16概率/context全bitexact，FP32softmax过原门。18个owner门含held-success poison修复和M17/cache33边界；干净209tests/18suites通过。该运行重放封存prefix写回，KV装载仍宿主设置，不是现场完整block或M128；57节点/最终fence、公共Host/生产Chisel/RTL和五block总门保持open。[准确范围和来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
 
-- 2026-10-12 23:28 UTC：97446 的 L3/GDN/payload 成功工件已核，两个旧 Qwen2 门因源身份绑定失败，原 FAIL 保留；新历史 commit:path 与 observer v2 修复48小门通过。实际 Sigmoid gate 双M16回放四官方门逐bit相同、46合成门；GQA封存28门及八旧新全事件对照通过，仅宿主检查优化。冷受影响1395次软件测试执行/313秒已过，新CI待验，完整L3活链、M128 GQA/五block/Chisel/RTL仍open。[范围与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+- 2026-10-12 23:28 UTC：97446 的 L3/GDN/payload 成功工件已核，两个旧 Qwen2 门因源身份绑定失败，原 FAIL 保留；新历史 commit:path 与 observer v2 修复48小门通过。实际 Sigmoid gate 双M16回放四官方门逐bit相同、46合成门；GQA封存28门及八旧新全事件对照通过，仅宿主检查优化。冷受影响1392次软件测试执行（原1395人工合计更正，原日志未改）/313秒已过，新CI待验，完整L3活链、M128 GQA/五block/Chisel/RTL仍open。[范围与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+
+- c554后继身份收口：L3 219/19/95源与GDN330/23/50源原CI工件已核；Qwen2 contract旧helper传递pin拒绝保留。六文件显式v2闭包与原frontend全文门精确两行扩展修复完成，独立审查及全新环境完整contract566小测/156.913秒通过；未重跑模型/RTL、未改数值门。原frontend821测试/159 CHIRRTL及工件已成功闭环，c554五門为四成功/一身份FAIL；新修复提交CI待验，19阶段L3活链、真实KV末残差提交与五block总门仍open。

@@ -1,0 +1,132 @@
+{
+  "status": "FOUR_SUCCESS_ONE_PRESERVED_IDENTITY_FAILURE",
+  "commit": "c554e502dfe462d5a0acb7030eff4bb51570bdf2",
+  "verified_success": [
+    {
+      "run": 38323300993,
+      "commit": "c554e502dfe462d5a0acb7030eff4bb51570bdf2",
+      "sources": 50,
+      "tests": 330,
+      "suites": 23,
+      "status": "PASS_SYNTHETIC_SOFTWARE_ONLY",
+      "scope": "SYNTHETIC_GDN_TYPED_FULLBLOCK_CONTROL_AND_COMPONENT_SOFTWARE_ONLY",
+      "binary_retrieved": false
+    },
+    {
+      "run": 38323300996,
+      "commit": "c554e502dfe462d5a0acb7030eff4bb51570bdf2",
+      "sources": 95,
+      "tests": 219,
+      "suites": 19,
+      "status": "PASS_SYNTHETIC_TYPED_L3_SUBCHAINS_ONLY",
+      "scope": "SYNTHETIC_TYPED_L3_ATTENTION_SUBCHAINS_ONLY",
+      "binary_retrieved": false
+    }
+  ],
+  "contract_failure": {
+    "run": 38323301022,
+    "job": 115056097027,
+    "cause": "transitive official_bf16 helper identity guard predates versioned helper"
+  },
+  "frontend": {
+    "run": 38323301183,
+    "job": 115056097659,
+    "status": "success",
+    "tests": 821,
+    "control_log_tests": 653,
+    "isolated_public_tests": 168,
+    "chirrtl": 159,
+    "summaries": [
+      {
+        "path": "matrix-interface-frontend/ffn-drain/summary.json",
+        "status": "PASS_FFN_DRAIN_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 20
+      },
+      {
+        "path": "matrix-interface-frontend/ffn-group/summary.json",
+        "status": "PASS_FFN_GROUP_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 6
+      },
+      {
+        "path": "matrix-interface-frontend/ffn-tiles/summary.json",
+        "status": "PASS_FFN_TILE_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 10
+      },
+      {
+        "path": "matrix-interface-frontend/ffn-window/summary.json",
+        "status": "PASS_FFN_WINDOW_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 14
+      },
+      {
+        "path": "matrix-interface-frontend/official-bf16/summary.json",
+        "status": "PASS_OFFICIAL_BF16_TYPECHECK_AND_BOUNDED_FRONTEND_ONLY",
+        "commands": 13,
+        "chirrtl": 12
+      },
+      {
+        "path": "matrix-interface-frontend/public-dense-reduction/summary.json",
+        "status": "PASS_PUBLIC_DENSE_COORDINATOR_SHARED_RESOURCE_FRONTEND_ONLY",
+        "commands": 17,
+        "chirrtl": 16
+      },
+      {
+        "path": "matrix-interface-frontend/resident/summary.json",
+        "status": "PASS_FRONTEND_ONLY",
+        "commands": 5,
+        "chirrtl": 9
+      },
+      {
+        "path": "matrix-interface-frontend/summary.json",
+        "status": "PASS_FRONTEND_ONLY",
+        "commands": 6,
+        "chirrtl": 18
+      },
+      {
+        "path": "matrix-interface-frontend/transposed/summary.json",
+        "status": "PASS_FRONTEND_AND_COMBINATIONAL_ROUTE_ONLY",
+        "commands": 2,
+        "chirrtl": 20
+      },
+      {
+        "path": "matrix-interface-frontend/transposed-down/summary.json",
+        "status": "PASS_DOWN_OWNER_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 9
+      },
+      {
+        "path": "matrix-interface-frontend/transposed-host/summary.json",
+        "status": "PASS_HOST_WORKSPACE_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 6
+      },
+      {
+        "path": "matrix-interface-frontend/transposed-owner/summary.json",
+        "status": "PASS_OWNER_SERVICE_FRONTEND_ONLY",
+        "commands": 3,
+        "chirrtl": 12
+      },
+      {
+        "path": "matrix-interface-frontend/transposed-seed/summary.json",
+        "status": "PASS_SEED_OWNER_FULL_TYPECHECK_AND_FRONTEND_ONLY",
+        "commands": 2,
+        "chirrtl": 7
+      }
+    ],
+    "tooling_bindings_verified": 23,
+    "zip_bytes": 61428945,
+    "zip_sha256": "8604a75149f4dc3cfa6c0d577ef5dd3a1ee3c1de1d953a98d33d46dac406cf49",
+    "scope": "SCALA_TYPECHECK_AND_CHIRRTL_FRONTEND_ONLY",
+    "all_emitted_ir_hashes_verified": true,
+    "compiled_derived_source_claim": "reported by exact source-bound checkers; complete derived Scala files not included in artifact",
+    "completed_utc": "2026-10-12T23:55:12Z"
+  },
+  "verified_utc": "2026-10-12T23:59:18.502662+00:00",
+  "payload": {
+    "run": 38323301034,
+    "status": "success"
+  }
+}

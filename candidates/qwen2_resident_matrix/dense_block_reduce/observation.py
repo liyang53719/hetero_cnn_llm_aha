@@ -31,12 +31,16 @@ ADAPTER = 'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py'
 BINDING = 'candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py'
 PROFILE = 'candidates/qwen2_resident_matrix/dense_block_reduce/profile.py'
 EXTRA_SOURCES = (ADAPTER, BINDING, PROFILE)
-CAPTURE_SHA256 = '746548cb5da470ab8e4a6febb00492004ddc43f41fcd47a3a9e47d85097861df'
+SOURCE_VERSION = 'qwen2-profiled-attention-observation-v2'
+CAPTURE_SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v2'
+CAPTURE_SHA256 = 'c34907c33daac71c058e328db436faa88b88a6214b11a15625c6ba6c5a429273'
 MONITORING_SHA256 = '3c27ce71bd93937707c909ccd7507baff6a401c49b50e6a9753ab224a9d2a3c5'
 
 
 def verify_constructor_delta():
     """Allow only the reviewed imports/service type and one closure check."""
+    require(original.SOURCE_VERSION == CAPTURE_SOURCE_VERSION,
+            'reviewed observer source version changed')
     paths = ((original.OBSERVER, CAPTURE_SHA256), (monitoring.MONITORING, MONITORING_SHA256))
     for relative, digest in paths:
         require(base.sha((ROOT / relative).read_bytes()) == digest,
@@ -183,6 +187,7 @@ class ProfiledAttentionMonitoringObservation(monitoring.OfficialAttentionMonitor
 
     def report(self):
         report = super().report()
+        report['profiled_observation_source_version'] = SOURCE_VERSION
         report['profiled_observation_source_sha256'] = {name: self.sources[name] for name in EXTRA_SOURCES}
         report['profiled_loaded_python_functions_checked'] = self.profiled_loaded_functions_checked
         report['matrix_service_type'] = 'ProfiledMatrixService'

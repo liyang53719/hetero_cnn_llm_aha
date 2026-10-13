@@ -208,7 +208,7 @@ class MonitoringObservationTests(unittest.TestCase):
 
     def test_source_and_loaded_transport_mutations_rejected(self):
         h, _, _ = self.make()
-        for name in (new.MONITORING, old.OBSERVER, old.OWNER, old.SERVICE,
+        for name in (new.MONITORING, *old.REQUIRED_SOURCES,
                      next(iter(old.base.verify_execution_sources()))):
             sources = snapshot()
             sources.pop(name)

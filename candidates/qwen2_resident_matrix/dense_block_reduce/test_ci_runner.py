@@ -12,6 +12,28 @@ from unittest.mock import patch
 
 from . import run_tests as runner
 
+FRONTEND_BASELINE_SHA256 = '898e1ced4a9b83641d5fe1944bffdbb3c3e4a71d4d51193cbd17bd7a94ff8aa4'
+FULLGRAPH_FETCH = '          git fetch --no-tags --depth=1 origin 37b7de74431ed79b7e9f3d52d308ed7f46727b7a'
+FULLGRAPH_PROBE = '          git cat-file -e 37b7de74431ed79b7e9f3d52d308ed7f46727b7a:candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_receipt.json'
+
+
+def validate_frontend_extension(current):
+    """Retain the frozen body; admit only c554's exact fullgraph fetch/probe."""
+    # Preserve the original comment-only normalization. The two added lines
+    # must each occur once, consecutively at the reviewed baseline-fetch site.
+    lines = [line for line in current.splitlines() if not line.lstrip().startswith('#')]
+    if lines.count(FULLGRAPH_FETCH) != 1 or lines.count(FULLGRAPH_PROBE) != 1:
+        raise ValueError('frontend fullgraph fetch/probe identity or count changed')
+    fetch, probe = lines.index(FULLGRAPH_FETCH), lines.index(FULLGRAPH_PROBE)
+    previous = '          git cat-file -e df18ba25a439fd90c846b22b9aafe992a2a6ae79:candidates/qwen2_resident_matrix/ffn_public/prefix_numerical_receipt.json'
+    if not (fetch > 0 and probe == fetch + 1 and probe + 1 < len(lines) and
+            lines[fetch - 1] == previous and lines[probe + 1] == '      - uses: actions/setup-java@v4'):
+        raise ValueError('frontend fullgraph fetch/probe order changed')
+    body = '\n'.join(lines[:fetch] + lines[probe + 1:])
+    if hashlib.sha256(body.encode()).hexdigest() != FRONTEND_BASELINE_SHA256:
+        raise ValueError('frozen frontend budget or existing checks changed')
+    return FRONTEND_BASELINE_SHA256
+
 
 def source_constant(relative, name):
     for node in ast.walk(ast.parse((runner.ROOT / relative).read_text())):
@@ -25,12 +47,35 @@ class ModelWorkflowGuards(unittest.TestCase):
     def test_frontend_budget_retains_all_existing_checks(self):
         relative = '.github/workflows/qwen2-matrix-interface-frontend.yml'
         current = (runner.ROOT / relative).read_text()
-        # Freeze the complete a2e4 workflow after the sole 15->20 minute change.
-        # Ignore comments only. No extra historical Git object is required.
-        body = '\n'.join(line for line in current.splitlines()
-                         if not line.lstrip().startswith('#'))
-        self.assertEqual(hashlib.sha256(body.encode()).hexdigest(),
+        # Keep the original a2e4 + 15->20 minute body identity. The c554
+        # historical-receipt fetch/probe is the only admitted later extension.
+        self.assertEqual(validate_frontend_extension(current),
                          '898e1ced4a9b83641d5fe1944bffdbb3c3e4a71d4d51193cbd17bd7a94ff8aa4')
+        for line in (FULLGRAPH_FETCH, FULLGRAPH_PROBE):
+            for kind, changed in (
+                ('missing', current.replace(line + '\n', '')),
+                ('duplicate', current.replace(line, line + '\n' + line)),
+                ('commit drift', current.replace(line, line.replace('37b7de', '000000'))),
+                ('command drift', current.replace(line, line + ' --unreviewed')),
+            ):
+                with self.subTest(line=line, mutation=kind), self.assertRaisesRegex(ValueError, 'fetch/probe'):
+                    validate_frontend_extension(changed)
+        pair = FULLGRAPH_FETCH + '\n' + FULLGRAPH_PROBE
+        for changed in (current.replace(pair, FULLGRAPH_PROBE + '\n' + FULLGRAPH_FETCH),
+                        current.replace(pair + '\n', '') + pair + '\n',
+                        current.replace(FULLGRAPH_PROBE, FULLGRAPH_PROBE.replace('fullgraph_numerical', 'prefix_numerical'))):
+            with self.subTest(mutation='order or probe path'), self.assertRaisesRegex(ValueError, 'fetch/probe'):
+                validate_frontend_extension(changed)
+        with self.assertRaisesRegex(ValueError, 'frozen frontend'):
+            validate_frontend_extension(current.replace('timeout-minutes: 20', 'timeout-minutes: 21'))
+        # Every old Python test, build, and frontend command stays inside the
+        # original whole-body guard; no wildcard excludes future drift.
+        commands = [line for line in current.splitlines()
+                    if line.startswith('          ') and 'python ' in line]
+        self.assertGreater(len(commands), 30)
+        for command in commands:
+            with self.subTest(command=command), self.assertRaisesRegex(ValueError, 'frozen frontend'):
+                validate_frontend_extension(current.replace(command, command + ' --unreviewed'))
 
     def test_exact_model_baselines_and_failure_artifacts(self):
         # Reuse the frontend's immutable-fetch validator, but only require the

@@ -12,6 +12,7 @@ on:
       - 'candidates/qwen35_35b_conv/**'
       - 'candidates/qwen35_35b_ab/**'
       - 'candidates/qwen35_35b_prep/**'
+      - 'candidates/qwen35_35b_exp/**'
       - 'candidates/qwen35_35b_projection_reference/**'
       - 'config/upstream/weight_headers/qwen3_5_35b_a3b/**'
       - 'config/model_profiles/qwen3_5_35b_a3b.json'

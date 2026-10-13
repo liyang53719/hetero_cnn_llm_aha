@@ -33,6 +33,8 @@ HEADS, HEAD_WIDTH, VECTOR_ELEMENTS = 16, 128, 2048
 CONV_ELEMENTS, CORE_ELEMENTS = 6144, 6400
 CONV_ROW_BYTES, AB_ROW_BYTES, CORE_ROW_BYTES = 12288, 64, 25600
 BEAT_BYTES, PARAM_BYTES = 64, 64
+LEGACY_GATE = "legacy_open80"
+FINITE_GATE_35B = "35b_finite_nonpositive_fp32"
 
 
 def require(ok, why):
@@ -40,7 +42,7 @@ def require(ok, why):
         raise ValueError('typed InputPrep: ' + why)
 
 
-def source_identity(root=ROOT, *, layout=EQUAL_HEADS):
+def source_identity(root=ROOT, *, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
     root = Path(root)
     source = subprocess.run(['git', 'show', 'HEAD:' + OWNER_SOURCE], cwd=root,
                             check=True, capture_output=True, timeout=10).stdout
@@ -52,7 +54,7 @@ def source_identity(root=ROOT, *, layout=EQUAL_HEADS):
               'candidates/qwen35_gdn_prefill/conv/scalar.py',
               'candidates/qwen35_gdn_prefill/rms_owner.py',
               'candidates/qwen35_gdn_prefill/typed_dense.py')
-    return dict(grouped_source=grouped_source_identity(root) if layout == GROUPED_35B else None,
+    return dict(gate_policy=gate_policy,grouped_source=grouped_source_identity(root) if layout == GROUPED_35B else None,
                 source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, SCALAR_SOURCE: SCALAR_SHA},
                 implementation_sha256={p: sha((root / p).read_bytes()) for p in models},
                 opcodes=dict(OPCODES), source_tokens=1, candidate_tokens='M1..128',
@@ -73,6 +75,7 @@ class InputPrepJob:
     tokens: int
     heads: int = HEADS
     layout: PrepLayout = EQUAL_HEADS
+    gate_policy: str = LEGACY_GATE
 
     @property
     def conv_bytes(self):
@@ -86,7 +89,9 @@ class InputPrepJob:
     def write_bytes(self):
         return self.tokens * self.layout.core_row_bytes
 
-    def validate(self, heads=HEADS, layout=EQUAL_HEADS):
+    def validate(self, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
+        require(self.gate_policy == gate_policy and gate_policy in (LEGACY_GATE,FINITE_GATE_35B), "explicit gate policy identity")
+        require(gate_policy==LEGACY_GATE or layout==GROUPED_35B,"finite gate policy only for explicit35B")
         require(type(self.layout) is PrepLayout and self.layout == layout, 'explicit caller/owner layout identity')
         require(type(heads) is int and 1 <= heads <= layout.value_heads and
                 type(self.heads) is int and self.heads == heads and
@@ -121,7 +126,9 @@ class InputPrepOwner:
     is zero-written and ACKed at its production offset. Default heads=16 has
     no inactive-head fill and computes every production head.
     """
-    def __init__(self, scalar, *, heads=HEADS, layout=EQUAL_HEADS):
+    def __init__(self, scalar, *, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE):
+        require(gate_policy in (LEGACY_GATE,FINITE_GATE_35B) and (gate_policy==LEGACY_GATE or layout==GROUPED_35B), "explicit supported gate policy")
+        self.gate_policy=gate_policy
         require(isinstance(scalar, PrepScalar), 'explicit caller-owned PrepScalar required')
         require(type(layout) is PrepLayout, 'explicit pinned geometry required')
         require(type(heads) is int and 1 <= heads <= layout.value_heads, 'head count within pinned layout')
@@ -145,7 +152,7 @@ class InputPrepOwner:
     def reset(self):
         require(self.state in ('idle', 'locked') and self.request is None and self.scalar.client is not self,
                 'reset requires drained transport and retired held completion')
-        self.__init__(self.scalar, heads=self.heads, layout=self.layout)
+        self.__init__(self.scalar, heads=self.heads, layout=self.layout, gate_policy=self.gate_policy)
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
@@ -209,8 +216,12 @@ class InputPrepOwner:
                 if not log >> 31:
                     exponential = self._op('div', word(1), exponential)
                 g = self._op('mul_ieee_rne', exponential ^ 0x80000000, positive)
-                if (not g >> 31 and g & 0x7fffffff) or g & 0x7fffffff >= word(80):
+                if not finite(g) or (not g >> 31 and g & 0x7fffffff):
+                    raise ArithmeticFault('gate output requires finite nonpositive FP32')
+                if self.gate_policy==LEGACY_GATE and g & 0x7fffffff >= word(80):
                     raise ArithmeticFault('source gate decay requires -80 < g <= 0')
+                # Explicit35B output policy preserves raw finite g without clipping.
+                # This does not admit a downstream chunk/exp policy or alter legacy.
                 exponential = self._op('exp_negative', b)
                 denominator = self._op('add', word(1), exponential)
                 inverse = self._op('div', word(1), denominator)
@@ -282,8 +293,8 @@ class InputPrepOwner:
                 self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
             require(type(job) is InputPrepJob, 'typed immutable InputPrepJob required')
-            job.validate(self.heads, self.layout)
-            identity = source_identity(layout=self.layout)
+            job.validate(self.heads, self.layout, self.gate_policy)
+            identity = source_identity(layout=self.layout, gate_policy=self.gate_policy)
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
             self.job, self.start, self.identity = job, self.ticks, identity
@@ -361,7 +372,7 @@ class TypedInputPrepDriver:
     def __init__(self, owner, memory, job):
         require(type(owner) is InputPrepOwner and type(memory) is TypedMemory and type(job) is InputPrepJob,
                 'InputPrep owner, shared TypedMemory and immutable job required')
-        job.validate(owner.heads, owner.layout)
+        job.validate(owner.heads, owner.layout, owner.gate_policy)
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained resources required')
         self.conv = memory.exact(job.conv, job.conv_bytes, readable=True)
         self.ab = memory.exact(job.ab, job.ab_bytes, readable=True)
@@ -420,7 +431,7 @@ class TypedInputPrepDriver:
             require(self.source_hashes == tuple(sha(r.raw()) for r in self.sources), 'actual producer/parameters changed')
             self.response = e['response']
             if self.response.status is None:
-                require(self.owner.identity == source_identity(layout=self.owner.layout), 'InputPrep source changed during execution')
+                require(self.owner.identity == source_identity(layout=self.owner.layout, gate_policy=self.owner.gate_policy), 'InputPrep source changed during execution')
                 require(self.response.staging_complete and self.response.write_bytes == self.job.write_bytes and
                         not any((self.response.history_committed, self.response.state_committed,
                                  self.response.generation_advanced)), 'complete stateless staging receipt required')

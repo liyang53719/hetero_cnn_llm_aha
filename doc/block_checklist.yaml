@@ -1500,7 +1500,8 @@ Qwen35_35B_RMS到AB独立N32_20261013:
   状态: ongoing
   父项: [Q35C, U00.2, U01]
   done: [四原张量262336B获取, 官方A_B分别N32形状独立校准, 真实同RMS写回接A_B, M16_M128各三成功终态, A末ACK错阻止B及B中断保留pending, 冷GDN491项40套132源, 独立原始输出与源复核]
-  ongoing: [小批发布及精确CI工件]
+  ongoing: []
+  发布闭环: 0bbb8b22b51c642723dbe5f2f518ec1deb8259ba；GDN38398068368_goal38398068228_payload38398068222全success；491项40套132源及工件日志逐SHA闭环
   todo: [实际AB逐token打包接Prep, Prep逐角色官方数值诊断, 32头chunk及状态生命周期, 完整L0_L3及RTL]
   原门: A_B分别max0p03125_mean0p005；本批实际均官方和独立配方bitexact；未继承N8192归约验收
   资源: Matrix4096_5contexts_Vector16_Scalar1；N32不能降低固定资源分母
@@ -1508,3 +1509,18 @@ Qwen35_35B_RMS到AB独立N32_20261013:
   边界: AB尚未打包给Prep；log_bias获取但未执行；完整block与RTL未通过
   报告: doc/QWEN35_35B_RMS_AB_N32_20261013_CN.md
   证据: reports/execution/QWEN35_35B_RMS_AB_N32_20261013.json
+
+Qwen35_35B_同生产者实际Prep前缀_20261013:
+  状态: ongoing
+  父项: [Q35C, U00.2, U01]
+  done: [同memory_PrepScalar真实RMS_QKV_Conv_AB, AB单64B缓冲真实读写ACK重排, M16_M128七终态, 上游原strict门不变, 原g域阻塞定位, 显式35B有限非正FP32输出policy不夹断, Prep逐角色官方诊断]
+  ongoing: [小批发布及精确CI工件]
+  冷门: GDN513项44套141源零skip；指定计划清单91项；另行5项固定runtime官方smoke实际通过
+  todo: [Q_K_g精度诊断收敛, 32头chunk布局及exp_subnormal策略, 完整状态fence, O_residual_MoE_L0_L3, RTL及完整周期利用率占空比]
+  原默认: legacy_open80未改；新policy仅显式35B；不授予Prep误差PASS
+  数值诊断: V_beta_bitexact；M16_Q6_K6_g33ULP；M128_Q7_K8_g35ULP；thresholds_null
+  状态边界: history未发布staging_generation0；无完整block_commit
+  性能: 每档Matrix_executed2164260864；M16_useful270532608_M128_useful2164260864；pack读写ACK各2048或16384B；cycle_duty未知
+  源边界: 71执行源码_10native前后不变；新gate输出域及pack仅软件候选未生成生产Chisel
+  报告: doc/QWEN35_35B_ACTUAL_PREP_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_ACTUAL_PREP_20261013.json

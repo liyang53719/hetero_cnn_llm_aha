@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[2]
 SOURCE_DIRS=tuple(Path(__file__).parent / name for name in ('', 'conv', 'prep', 'chunk', 'gated_norm', 'elementwise', 'native'))
 SOURCE_DIRS += tuple(Path(__file__).parent.parent / name for name in (
     'qwen35_35b_prefill', 'qwen35_35b_payload', 'qwen35_35b_payload/tests',
-    'qwen35_35b_rms', 'qwen35_35b_projection_reference', 'qwen35_35b_conv', 'qwen35_35b_ab'))
+    'qwen35_35b_rms', 'qwen35_35b_projection_reference', 'qwen35_35b_conv', 'qwen35_35b_ab', 'qwen35_35b_prep'))
 PAYLOAD_DEPENDENCIES = tuple('src/heteronpu/' + name + '.py' for name in (
     '__init__', 'config', 'model_geometry', 'weight_header_contract',
     'qwen35_dense_contract', 'pinned_block_payload', 'pinned_gdn_payload',

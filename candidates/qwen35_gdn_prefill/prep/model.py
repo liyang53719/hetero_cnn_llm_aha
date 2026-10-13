@@ -5,9 +5,11 @@ tokens without recurrence or state mutation; it is not a replacement for the
 subsequent true chunk64 x 2 algorithm. Native numeric acceptance and RTL have
 not been run. Software ticks and scalar calls are not hardware cycles.
 
-Production strides are fixed, also in reduced-head transport tests:
+The default 0.8B strides remain fixed in reduced-head transport tests:
 Conv BF16 [M,6144], AB BF16 [M,32] = [A16,B16], and core FP32 [M,6400]
 = [Q2048,K2048,V2048,gates256]. Each gate is {g,beta,14 positive zeros}.
+Explicit35B layout uses Conv8192/AB64/Core12800 elements and repeats Q/K
+by source head floor(value_head/2). Parameter banks refill in16-head groups.
 One in-place FP32 head[128] cache is reused for every role, head and token.
 """
 from collections import Counter
@@ -22,6 +24,7 @@ from ..rms_owner import (ROOT, SCALAR_SOURCE, SCALAR_SHA, ArithmeticFault,
 from ..typed_dense import TypedMemory, FULL_MASK
 from ...qwen2_resident_matrix.transposed_down.model import WriteCommand, WriteAck
 from .scalar import PrepScalar, OPCODES
+from .layout import PrepLayout, EQUAL_HEADS, GROUPED_35B, grouped_source_identity
 
 
 OWNER_SOURCE = 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala'
@@ -37,7 +40,7 @@ def require(ok, why):
         raise ValueError('typed InputPrep: ' + why)
 
 
-def source_identity(root=ROOT):
+def source_identity(root=ROOT, *, layout=EQUAL_HEADS):
     root = Path(root)
     source = subprocess.run(['git', 'show', 'HEAD:' + OWNER_SOURCE], cwd=root,
                             check=True, capture_output=True, timeout=10).stdout
@@ -45,10 +48,12 @@ def source_identity(root=ROOT):
     require(sha((root / SCALAR_SOURCE).read_bytes()) == SCALAR_SHA, 'shared scalar source drift')
     models = ('candidates/qwen35_gdn_prefill/prep/model.py',
               'candidates/qwen35_gdn_prefill/prep/scalar.py',
+              'candidates/qwen35_gdn_prefill/prep/layout.py',
               'candidates/qwen35_gdn_prefill/conv/scalar.py',
               'candidates/qwen35_gdn_prefill/rms_owner.py',
               'candidates/qwen35_gdn_prefill/typed_dense.py')
-    return dict(source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, SCALAR_SOURCE: SCALAR_SHA},
+    return dict(grouped_source=grouped_source_identity(root) if layout == GROUPED_35B else None,
+                source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, SCALAR_SOURCE: SCALAR_SHA},
                 implementation_sha256={p: sha((root / p).read_bytes()) for p in models},
                 opcodes=dict(OPCODES), source_tokens=1, candidate_tokens='M1..128',
                 arithmetic='source_ascending_square_add_sqrt_reciprocal_chunk_q_scale',
@@ -67,26 +72,28 @@ class InputPrepJob:
     output: int
     tokens: int
     heads: int = HEADS
+    layout: PrepLayout = EQUAL_HEADS
 
     @property
     def conv_bytes(self):
-        return self.tokens * CONV_ROW_BYTES
+        return self.tokens * self.layout.conv_row_bytes
 
     @property
     def ab_bytes(self):
-        return self.tokens * AB_ROW_BYTES
+        return self.tokens * self.layout.ab_row_bytes
 
     @property
     def write_bytes(self):
-        return self.tokens * CORE_ROW_BYTES
+        return self.tokens * self.layout.core_row_bytes
 
-    def validate(self, heads=HEADS):
-        require(type(heads) is int and 1 <= heads <= HEADS and
+    def validate(self, heads=HEADS, layout=EQUAL_HEADS):
+        require(type(self.layout) is PrepLayout and self.layout == layout, 'explicit caller/owner layout identity')
+        require(type(heads) is int and 1 <= heads <= layout.value_heads and
                 type(self.heads) is int and self.heads == heads and
                 type(self.tokens) is int and 1 <= self.tokens <= 128, 'heads/M1..128 domain')
         require(type(self.tag) is int and 0 <= self.tag < 1 << 32, 'job tag domain')
         spans = ((self.conv, self.conv_bytes), (self.ab, self.ab_bytes),
-                 (self.a_log, PARAM_BYTES), (self.dt_bias, PARAM_BYTES),
+                 (self.a_log, self.layout.a_log_bytes), (self.dt_bias, self.layout.dt_bias_bytes),
                  (self.output, self.write_bytes))
         for base, extent in spans:
             require(type(base) is int and base >= 0 and base % 64 == 0 and base + extent <= 1 << 56,
@@ -114,10 +121,12 @@ class InputPrepOwner:
     is zero-written and ACKed at its production offset. Default heads=16 has
     no inactive-head fill and computes every production head.
     """
-    def __init__(self, scalar, *, heads=HEADS):
+    def __init__(self, scalar, *, heads=HEADS, layout=EQUAL_HEADS):
         require(isinstance(scalar, PrepScalar), 'explicit caller-owned PrepScalar required')
-        require(type(heads) is int and 1 <= heads <= HEADS, 'head count 1..16')
-        self.scalar, self.heads = scalar, heads
+        require(type(layout) is PrepLayout, 'explicit pinned geometry required')
+        require(type(heads) is int and 1 <= heads <= layout.value_heads, 'head count within pinned layout')
+        require(layout == EQUAL_HEADS or heads == 32, '35B geometry requires all32 value heads')
+        self.scalar, self.heads, self.layout = scalar, heads, layout
         self.state, self.job, self.request, self.result = 'idle', None, None, None
         self.program, self.poison, self.status = None, False, None
         self.ticks, self.start, self.sequence, self.ack_bytes = 0, 0, 0, 0
@@ -136,24 +145,36 @@ class InputPrepOwner:
     def reset(self):
         require(self.state in ('idle', 'locked') and self.request is None and self.scalar.client is not self,
                 'reset requires drained transport and retired held completion')
-        self.__init__(self.scalar, heads=self.heads)
+        self.__init__(self.scalar, heads=self.heads, layout=self.layout)
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
 
     def _compute(self, j):
-        a_log = struct.unpack('<16I', (yield (j.a_log, None)))
-        bias = struct.unpack('<32H', (yield (j.dt_bias, None)))[:16]
+        if self.layout == EQUAL_HEADS:
+            a_log = struct.unpack('<16I', (yield (j.a_log, None)))
+            bias = struct.unpack('<32H', (yield (j.dt_bias, None)))[:16]
         # Only this 128-element cache scales with head width; no token array,
         # all-head tensor, or recurrent/chunk state is retained by this owner.
         cache = [0] * HEAD_WIDTH
+        if self.layout == GROUPED_35B:
+            ab = [0] * 32
         for token in range(j.tokens):
-            ab = struct.unpack('<32H', (yield (j.ab + token * AB_ROW_BYTES, None)))
+            if self.layout == EQUAL_HEADS:
+                ab = struct.unpack('<32H', (yield (j.ab + token * self.layout.ab_row_bytes, None)))
             for head in range(j.heads):
+                if self.layout == GROUPED_35B and head % 16 == 0:
+                    # Refill the same four16-value parameter banks, never all32 FP32 heads.
+                    group = head // 16
+                    a_log = struct.unpack('<16I', (yield (j.a_log + group*64, None)))
+                    bias = struct.unpack('<32H', (yield (j.dt_bias, None)))[group*16:group*16+16]
+                    ab[:16] = struct.unpack('<32H', (yield (j.ab + token*self.layout.ab_row_bytes, None)))[group*16:group*16+16]
+                    ab[16:] = struct.unpack('<32H', (yield (j.ab + token*self.layout.ab_row_bytes + 64, None)))[group*16:group*16+16]
+                parameter_head = head % 16
                 for role in range(3):
-                    element = role * VECTOR_ELEMENTS + head * HEAD_WIDTH
-                    source = j.conv + token * CONV_ROW_BYTES + element * 2
-                    destination = j.output + token * CORE_ROW_BYTES + element * 4
+                    element = role * self.layout.vector_elements + head * HEAD_WIDTH
+                    source = j.conv + token * self.layout.conv_row_bytes + self.layout.source_element(role, head) * 2
+                    destination = j.output + token * self.layout.core_row_bytes + element * 4
                     for beat in range(4):
                         packet = struct.unpack('<32H', (yield (source + beat * 64, None)))
                         if any(not finite(v << 16) for v in packet):
@@ -176,11 +197,11 @@ class InputPrepOwner:
                         yield (destination + beat * 64, struct.pack('<16I', *cache[beat * 16:beat * 16 + 16]))
 
                 # Preserve source gate ordering and domain checks, after V ACK.
-                a, b, log = ab[head] << 16, ab[16 + head] << 16, a_log[head]
+                a, b, log = ab[parameter_head] << 16, ab[16 + parameter_head] << 16, a_log[parameter_head]
                 if (not finite(log) or log & 0x7fffffff >= word(80) or not finite(b) or
                         (b >> 31 and b & 0x7fffffff >= word(80))):
                     raise ArithmeticFault('A_log requires abs < 80 and beta input requires b > -80')
-                biased = self._op('add', a, bias[head] << 16)
+                biased = self._op('add', a, bias[parameter_head] << 16)
                 positive = self._op('softplus', biased)
                 if positive >> 31:
                     raise ArithmeticFault('negative Softplus result')
@@ -197,18 +218,18 @@ class InputPrepOwner:
                 if beta >> 31 or beta > word(1):
                     raise ArithmeticFault('source beta outside [0,1]')
                 beta = ((beta + 0x7fff + ((beta >> 16) & 1)) & 0xffffffff) & 0xffff0000
-                yield (j.output + token * CORE_ROW_BYTES + CONV_ELEMENTS * 4 + head * 64,
+                yield (j.output + token * self.layout.core_row_bytes + 3*self.layout.vector_elements * 4 + head * 64,
                        struct.pack('<16I', g, beta, *([0] * 14)))
 
-            if j.heads != HEADS:
+            if j.heads != self.layout.value_heads:
                 # Test-only reduced geometry: complete the fixed production
                 # allocation honestly with actual zero writes and ACKs.
                 for role in range(3):
-                    for offset in range(j.heads * HEAD_WIDTH * 4, VECTOR_ELEMENTS * 4, 64):
-                        yield (j.output + token * CORE_ROW_BYTES + role * VECTOR_ELEMENTS * 4 + offset,
+                    for offset in range(j.heads * HEAD_WIDTH * 4, self.layout.vector_elements * 4, 64):
+                        yield (j.output + token * self.layout.core_row_bytes + role * self.layout.vector_elements * 4 + offset,
                                bytes(64))
-                for head in range(j.heads, HEADS):
-                    yield (j.output + token * CORE_ROW_BYTES + CONV_ELEMENTS * 4 + head * 64, bytes(64))
+                for head in range(j.heads, self.layout.value_heads):
+                    yield (j.output + token * self.layout.core_row_bytes + 3*self.layout.vector_elements * 4 + head * 64, bytes(64))
 
     def _finish(self, status=None):
         self.status = status
@@ -261,8 +282,8 @@ class InputPrepOwner:
                 self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
             require(type(job) is InputPrepJob, 'typed immutable InputPrepJob required')
-            job.validate(self.heads)
-            identity = source_identity()
+            job.validate(self.heads, self.layout)
+            identity = source_identity(layout=self.layout)
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
             self.job, self.start, self.identity = job, self.ticks, identity
@@ -316,11 +337,14 @@ class InputPrepOwner:
                     exp_internal_calls=dict(self.scalar.internal_calls - self.exp_baseline if active else self.exp_counts),
                     softplus_internal_calls=dict(self.scalar.soft_internal_calls - self.soft_baseline if active else self.soft_counts),
                     softplus_enabled=self.scalar.enable_softplus,
-                    active_heads=self.heads, production_geometry=self.heads == HEADS,
-                    test_only_zero_filled_heads=HEADS - self.heads,
+                    active_heads=self.heads, production_geometry=self.heads == self.layout.value_heads,
+                    key_heads=self.layout.key_heads, value_heads=self.layout.value_heads,
+                    qk_head_mapping='value_head // (value_heads/key_heads)',
+                    grouped_parameter_refill=self.layout == GROUPED_35B,
+                    test_only_zero_filled_heads=self.layout.value_heads - self.heads,
                     retained_fp32_head_capacity=HEAD_WIDTH, head_width=HEAD_WIDTH,
                     retained_parameter_elements=64, retained_output_packet_bytes=64,
-                    conv_row_bytes=CONV_ROW_BYTES, ab_row_bytes=AB_ROW_BYTES, core_row_bytes=CORE_ROW_BYTES,
+                    conv_row_bytes=self.layout.conv_row_bytes, ab_row_bytes=self.layout.ab_row_bytes, core_row_bytes=self.layout.core_row_bytes,
                     history_committed=False, state_committed=False, generation_advanced=False,
                     hardware_cycles=None, rtl_executed=False, native_acceptance=False,
                     native_numeric_diagnostics_executed=False, downstream_chunk_executed=False)
@@ -337,15 +361,15 @@ class TypedInputPrepDriver:
     def __init__(self, owner, memory, job):
         require(type(owner) is InputPrepOwner and type(memory) is TypedMemory and type(job) is InputPrepJob,
                 'InputPrep owner, shared TypedMemory and immutable job required')
-        job.validate(owner.heads)
+        job.validate(owner.heads, owner.layout)
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained resources required')
         self.conv = memory.exact(job.conv, job.conv_bytes, readable=True)
         self.ab = memory.exact(job.ab, job.ab_bytes, readable=True)
         for region in (self.conv, self.ab):
             require(not region.readonly and region.written == region.acknowledged == set(range(0, region.extent, 64)),
                     'ConvOut/AB require previous actual producer data/ACK and publication')
-        self.a_log = memory.exact(job.a_log, PARAM_BYTES, readable=True)
-        self.dt_bias = memory.exact(job.dt_bias, PARAM_BYTES, readable=True)
+        self.a_log = memory.exact(job.a_log, job.layout.a_log_bytes, readable=True)
+        self.dt_bias = memory.exact(job.dt_bias, job.layout.dt_bias_bytes, readable=True)
         require(self.a_log.readonly and self.dt_bias.readonly, 'original A_log/dtBias parameters must be readonly')
         self.output = memory.exact(job.output, job.write_bytes, readable=False)
         self.owner, self.memory, self.job = owner, memory, job
@@ -396,7 +420,7 @@ class TypedInputPrepDriver:
             require(self.source_hashes == tuple(sha(r.raw()) for r in self.sources), 'actual producer/parameters changed')
             self.response = e['response']
             if self.response.status is None:
-                require(self.owner.identity == source_identity(), 'InputPrep source changed during execution')
+                require(self.owner.identity == source_identity(layout=self.owner.layout), 'InputPrep source changed during execution')
                 require(self.response.staging_complete and self.response.write_bytes == self.job.write_bytes and
                         not any((self.response.history_committed, self.response.state_committed,
                                  self.response.generation_advanced)), 'complete stateless staging receipt required')

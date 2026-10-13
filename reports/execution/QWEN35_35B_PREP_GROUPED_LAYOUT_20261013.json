@@ -1,0 +1,247 @@
+{
+  "base_commit": "c4c13fe41b5affadcf9fe510c968b7022feafcbb",
+  "cases": [
+    {
+      "busy_duty": null,
+      "checkpoint_payload_used": false,
+      "counts": {
+        "read_bytes": 25088,
+        "ticks": 2385,
+        "write_bytes": 51200
+      },
+      "exp_internal_calls": {
+        "add": 512,
+        "mul": 576
+      },
+      "fixed_recipe_bitexact": true,
+      "hardware_cycles": null,
+      "lane_duty": null,
+      "mac_utilization": null,
+      "matrix_macs": 0,
+      "native_acceptance": false,
+      "output_sha256": "afab66a7cc08c68e1fd325b6fd28178a3e34d6df78bac6abf929bfd106bd6932",
+      "overlap_timeline": null,
+      "qk_square_products_executed": 8192,
+      "qk_unique_source_square_products": 4096,
+      "retained_fp32_head_capacity": 128,
+      "retained_parameter_elements": 64,
+      "rtl_executed": false,
+      "scalar_calls": {
+        "add": 8320,
+        "div": 112,
+        "exp_negative": 64,
+        "mul_ieee_rne": 20544,
+        "softplus": 32,
+        "sqrt": 64
+      },
+      "scalar_units": 1,
+      "softplus_internal_calls": {
+        "add": 544,
+        "div": 32,
+        "mul": 608
+      },
+      "source_identity": {
+        "arithmetic": "source_ascending_square_add_sqrt_reciprocal_chunk_q_scale",
+        "candidate_tokens": "M1..128",
+        "grouped_source": {
+          "key_heads": 16,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "native_acceptance": false,
+          "official_forward_executed": false,
+          "production_chisel_supports_grouped_heads": false,
+          "repeat_ast_sha256": "967f6ef189bffa9a7ab5606d1ef36cac1065e70532355b5d36055414caf0f085",
+          "source_head": "value_head//2",
+          "source_sha256": {
+            "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+            "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+          },
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+          "value_heads": 32
+        },
+        "historical_pass_inherited": false,
+        "implementation_sha256": {
+          "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+          "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+          "candidates/qwen35_gdn_prefill/prep/model.py": "f07f71c050fc5de4a4336090f4abe51d9693b4a2e540d91e51a3576ecc38785b",
+          "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+          "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+          "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+        },
+        "native_acceptance": false,
+        "opcodes": {
+          "add": 0,
+          "div": 2,
+          "exp_negative": 4,
+          "mul": 1,
+          "mul_ieee_rne": 6,
+          "softplus": 7,
+          "sqrt": 3
+        },
+        "recurrence_implemented": false,
+        "required_downstream": "true_chunk64_x2_for_M128",
+        "rtl_executed": false,
+        "source_sha256": {
+          "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+          "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+        },
+        "source_tokens": 1,
+        "token_independent": true
+      },
+      "stall_breakdown": null,
+      "synthetic": true,
+      "tokens": 1,
+      "vector_operations": 0
+    },
+    {
+      "busy_duty": null,
+      "checkpoint_payload_used": false,
+      "counts": {
+        "read_bytes": 3211264,
+        "ticks": 305153,
+        "write_bytes": 6553600
+      },
+      "exp_internal_calls": {
+        "add": 65536,
+        "mul": 73728
+      },
+      "fixed_recipe_bitexact": true,
+      "hardware_cycles": null,
+      "lane_duty": null,
+      "mac_utilization": null,
+      "matrix_macs": 0,
+      "native_acceptance": false,
+      "output_sha256": "0ab75604b6e6292891df657fa7de626c6eb3984e134426159d66f3e198f619b9",
+      "overlap_timeline": null,
+      "qk_square_products_executed": 1048576,
+      "qk_unique_source_square_products": 524288,
+      "retained_fp32_head_capacity": 128,
+      "retained_parameter_elements": 64,
+      "rtl_executed": false,
+      "scalar_calls": {
+        "add": 1064960,
+        "div": 14336,
+        "exp_negative": 8192,
+        "mul_ieee_rne": 2629632,
+        "softplus": 4096,
+        "sqrt": 8192
+      },
+      "scalar_units": 1,
+      "softplus_internal_calls": {
+        "add": 69632,
+        "div": 4096,
+        "mul": 77824
+      },
+      "source_identity": {
+        "arithmetic": "source_ascending_square_add_sqrt_reciprocal_chunk_q_scale",
+        "candidate_tokens": "M1..128",
+        "grouped_source": {
+          "key_heads": 16,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "native_acceptance": false,
+          "official_forward_executed": false,
+          "production_chisel_supports_grouped_heads": false,
+          "repeat_ast_sha256": "967f6ef189bffa9a7ab5606d1ef36cac1065e70532355b5d36055414caf0f085",
+          "source_head": "value_head//2",
+          "source_sha256": {
+            "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+            "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+          },
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+          "value_heads": 32
+        },
+        "historical_pass_inherited": false,
+        "implementation_sha256": {
+          "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+          "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+          "candidates/qwen35_gdn_prefill/prep/model.py": "f07f71c050fc5de4a4336090f4abe51d9693b4a2e540d91e51a3576ecc38785b",
+          "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+          "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+          "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+        },
+        "native_acceptance": false,
+        "opcodes": {
+          "add": 0,
+          "div": 2,
+          "exp_negative": 4,
+          "mul": 1,
+          "mul_ieee_rne": 6,
+          "softplus": 7,
+          "sqrt": 3
+        },
+        "recurrence_implemented": false,
+        "required_downstream": "true_chunk64_x2_for_M128",
+        "rtl_executed": false,
+        "source_sha256": {
+          "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+          "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+        },
+        "source_tokens": 1,
+        "token_independent": true
+      },
+      "stall_breakdown": null,
+      "synthetic": true,
+      "tokens": 128,
+      "vector_operations": 0
+    }
+  ],
+  "checkpoint_payload_used": false,
+  "ci": {
+    "status": "PENDING_EXACT_COMMIT"
+  },
+  "cold_tests": {
+    "report_sha256": "8269c1ac8deb63ba0dbbaac54719028bc37fe88bc2af8b8160d139303df844a8",
+    "sources": 124,
+    "sources_unchanged": true,
+    "status": "PASS_SYNTHETIC_SOFTWARE_ONLY",
+    "suites": 37,
+    "test_count": 481
+  },
+  "component_counter_definition": "Per-case matrix_macs and vector_operations are zero executed operation counts, not removal of configured shared units.",
+  "configured_prefix_resources": {
+    "matrix_macs_per_cycle": 4096,
+    "scalar_units": 1,
+    "vector_lanes": 16
+  },
+  "failures_checked": [
+    "Second16-head parameter group read error drains and locks without publication",
+    "Final write ACK stall then failure cannot publish output",
+    "Mixed or unpinned geometry rejected"
+  ],
+  "fixed_resources": {
+    "output_packet_bytes": 64,
+    "retained_fp32_head_capacity": 128,
+    "retained_parameter_elements": 64,
+    "scalar_units": 1
+  },
+  "full_block": false,
+  "generation_advanced": false,
+  "history_committed": false,
+  "log": {
+    "path": "work/prep_grouped_cold/prep__test_grouped_layout.log",
+    "sha256": "6df53a418c014226c989b16308dd5f3083cf039513fe07279ed20e562f978c1f"
+  },
+  "native_acceptance": false,
+  "next_dependencies": [
+    "ActualRMS to A/B projection and262336B pinned payload",
+    "Per-role native Prep diagnostics without invented tolerance",
+    "32-head chunk and full-block state lifecycle",
+    "Production Chisel and actual RTL"
+  ],
+  "no_materialized_qk_expansion": true,
+  "no_recurrence": true,
+  "original_0p8_layout_unchanged": true,
+  "performance_note": "QK normalization is executed32 times per role, even though source contains16 heads; both execution and unique-source square counts reported. No hardware cycles or duty inferred from Python ticks.",
+  "physical_qk_head_mapping": "value_head//2",
+  "plan_tests": {
+    "log_sha256": "d5909c51985bd5db202843a4382250d792189dd73767b52e1fa90d69193bf46c",
+    "passed": true,
+    "tests": 91
+  },
+  "read_bytes_per_token": 25088,
+  "rtl_executed": false,
+  "schema": 1,
+  "scope": "SYNTHETIC_GROUPED35B_INPUT_PREP_TYPED_LAYOUT_AND_CONTROL_ONLY",
+  "state_committed": false,
+  "value_head_mapping": "identity",
+  "write_ack_bytes_per_token": 51200
+}

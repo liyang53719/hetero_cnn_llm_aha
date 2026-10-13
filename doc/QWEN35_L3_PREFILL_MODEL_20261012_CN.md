@@ -175,3 +175,34 @@ c554e502 的 L3（219测试／19suite／95源）与 GDN（330／23／50）原 CI
 下一实际闭包固定为19阶段：原8阶段前缀→真实KV append→GQA→SigmoidMul→O→残差→postNorm→Gate→Up→SiLUMul→Down→最终残差。先把最终真实Add的tag、完整ACK和held终态验证移到接受之前，并把KV prepare/retire与该driver绑定；held success遇abort/reset不得发布。carried只能消费同一fence上一成功提交的实际root，RoPE绝对位置与cache内query start分开。双M16完成后按完整阶段实测预算双M128，不再单独长跑GQA子门。
 
 计数更正：c554文字与紧凑摘要原写1395次，复核原日志应为653＋168＋17＋5＋330＋219＝1392次。原因是人工合计将isolated public的168误写171；CI和原冷日志实际一致，无测试或结论改变。旧摘要原件及SHA保留，更正明细记录在新传递身份摘要。
+
+
+### 2026-10-13：a35 身份修复 CI 终态与完整活链接入
+
+a35adbd7cebdf2ab1f1ee0de75fa23623e55a577 的四个原 CI 全部成功并完成工件核验：contract [38325293783](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38325293783) 566 测试，GDN [38325293747](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38325293747) 330 测试／23 suite，frontend [38325293740](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38325293740) 821 测试／13 receipt／159 CHIRRTL，payload 38325293755 成功。159 个 IR 的真实 ZIP 内字节逐 SHA 与 c554 相同，纯源码和工具组合也相同。两个旧任务摘要另列了 5 个未打包 .pyc，它们跨运行 SHA 不同；原过严的全任务文件对比失败仍保存，不能据此宣称字节码相同，也没有因此重跑。见 [精确 CI 记录](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/CI_A35_RECONCILED.json)。
+
+下一批实际连接 19 个 typed 软件命令，全部中间输出从同一 TypedMemory 的真实写入、ACK 和 accepted terminal 读取。完整 KV capacity 为 K/V 各 256×1024B；有效区域只覆盖当前前缀，剩余容量洞也禁止其他 tensor 使用。cold 与 carried 的 Down workspace 各 524,288B，只能在前一完整 block 退休后让同一 Dense owner 改绑到后一全新区域；没有扩展片上 bank 或增加 Matrix/Vector/Scalar。
+
+KV copy/append 的结果只供本 block 内部读取。外部 root/length/generation 由真实最终残差 Add 接受事件提交，必须先验证不可变 job/tag、实际物理输出、所有 ACK、先前 root 和完整 staged K/V。held success 时 abort/reset 优先，失败 carried 保持旧 generation，重试使用新 staging；旧 FullBlockTerminal 仅保留为旧测试的可信占位协议，不作为本实际链的证明。Elementwise 新接受前检查修正了原先先握手再核验的时序；原 owner 已有的 abort 优先级没有假称为新修复。
+
+RMS 与 SiLU 增加只读实际节点回调，输入/输出、原 Scalar 顺序与计数保持；观测值不会返回计算链。RMS 回调异常产生真实 Observer 失败终态并保留此前 ACK。比较器严格分开完整命令终态、56 个可观察的原 producer 与原 57 节点合同：fused causal owner 没有实际物化 native mask-add 张量，该项仍缺失，不用重建或 golden 补值关闭。其余节点、最终 BF16 output、完整 K/V 和 softmax 行和都保留原门限。当前公共 Command128、生产 Chisel C2／pair 选择与 RTL 尚未接入。
+
+本轮小门已完成并独立审查；真实 cold16→carried16 正在一次冻结 91 源和原始输入身份下执行，软件预算包含比较与封存。各阶段真实 C++ Dense 与 QK/PV FMA 调用分开取差值；它们不是硬件周期或有效 MAC 利用率。完整双 M128 仍待双 M16 终态及分阶段耗时后决定有依据预算；不继承先前 replay 子链的 PASS。
+
+
+### 2026-10-13 00:55 UTC：完整 cold16 活链与融合因果语义
+
+原始 hidden、11 份冻结 BF16 权重和 trig 经同一 TypedMemory、Matrix、Vector、Scalar 与实际 owner，cold16 完成19个命令，包括 input RMS、Q+gate/K/V、Q/K Norm/RoPE、KV staging、GQA、sigmoid gate、O、残差、post RMS、Gate/Up、SiLU×Up、Down 和最终残差。1,097,728 B 均已 ACK；末真实 Add 的成功接受边界才把 KV 双根 generation0→1、有效长度0→16。下一 carried16 从这些真实根继续，未从官方 reference 注入 cache。cold 窗口耗时636.215秒为宿主时间。
+
+读取该次真实终态、输出和实际观察文件后，56个已物化 producer 全过原 max_abs0.03125／mean_abs0.005 门；最终输出 max_abs0.0009765625、mean_abs2.53738835e-6，满足原0.05／0.01。K/V与官方逐位相同，Softmax行和最大误差1.04308128e-7。输出字节哈希与原 progress 逐项匹配；观察文件哈希首次由本次只读复核封存，不能声称此前已绑定。没有重放任何 owner 算术。[完整逐项指标](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/COLD16_COMPLETE_MODEL.json)。
+
+原57项 producer 的 mask-add 张量未物化，不因此增加无用算术或落地。融合因果控制的六个真实小用例与独立审查证明：未来 key 不参加 max／exp／sum／Div，实际 PV 仍按全cache发送概率为正零的 FMA 包。有限且通过现有数值防护的未来K/V扰动不改变因果行的数值结果；有明确 +0／-0 原始位差反例，不能宣传全bit不变。cache33、首末query、非法零长度／不匹配query_start的pre-DMA拒绝及NaN／Inf拒绝均覆盖。当前合法因果描述符保证每行至少一个有效key，任意mask／全mask不属于该接口能力，未伪造支持。57项参考producer全观察仍false，与完整功能因果路径的证明分开。
+
+干净源目录按现有GDN、L3 workflow完整顺序执行590项小测及工件收集，另追加新因果文件6项冷门，共596项实际执行；新文件不冒称属于原590次。没有读取历史work或模型payload，重新构建仅小C++配方库，没有RTL／Scala。独立审查确认91份执行源和运行库未因因果测试漂移。[冷门证据](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/FULLCHAIN_COLD_WORKFLOW.json)。
+
+本次cold Matrix真实软件FMA调用为Dense2,348,810,240加QK/PV1,572,864，总2,350,383,104；它含映射填充计算，不是有效MAC分子，软件ticks也不是固定4096 MAC资源的全周期分母。完整MAC利用率仍未给硬件实测值。生产Command128、Chisel C2／pair策略接线、RTL、完整双M128及五block总门继续open。
+
+
+01:00 UTC原监督结束：1200.529秒、EXIT1、峰RSS236,592KiB，唯一错误为显式软件墙钟预算到期。carry已经完成17命令，Down仍推进，prefix写ACK163,840/524,288B；最终Add未执行，已提交双根/长度/generation仍保持cold的16/1。91源不变，所有失败观察/暂存/终态保全无错误，禁止把这个pair记PASS或从partial state冒充续跑。原runner异常摘要随后写出了cold在637秒内收集的51份观察哈希，本次逐项再核全部相同；之前只读复核的来源限制据此补强，不改原日志。[原失败摘要](../reports/execution/QWEN35_L3_PREFILL_MODEL_20261012/M16_ORIGINAL_BUDGET_FAILURE.json)。
+
+已测cold636秒，加carry各已完成阶段和Down剩余工作，完整pair预估1300–1400秒；待本批源码/CI收口，用CLI已有可配置预算单次1800秒从raw输入、空cache重新执行完整pair，约400–500秒留给波动、比较和封存。数值阈值及算术不变。今后完整M128预算必须依据完整双M16实测重新估算，不能继承任意1200秒或把墙钟预算当硬件周期。

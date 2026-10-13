@@ -132,3 +132,10 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 - 2026-10-12 23:28 UTC：97446 的 L3/GDN/payload 成功工件已核，两个旧 Qwen2 门因源身份绑定失败，原 FAIL 保留；新历史 commit:path 与 observer v2 修复48小门通过。实际 Sigmoid gate 双M16回放四官方门逐bit相同、46合成门；GQA封存28门及八旧新全事件对照通过，仅宿主检查优化。冷受影响1392次软件测试执行（原1395人工合计更正，原日志未改）/313秒已过，新CI待验，完整L3活链、M128 GQA/五block/Chisel/RTL仍open。[范围与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
 
 - c554后继身份收口：L3 219/19/95源与GDN330/23/50源原CI工件已核；Qwen2 contract旧helper传递pin拒绝保留。六文件显式v2闭包与原frontend全文门精确两行扩展修复完成，独立审查及全新环境完整contract566小测/156.913秒通过；未重跑模型/RTL、未改数值门。原frontend821测试/159 CHIRRTL及工件已成功闭环，c554五門为四成功/一身份FAIL；新修复提交CI待验，19阶段L3活链、真实KV末残差提交与五block总门仍open。
+
+
+- 2026-10-13：a35adbd7 原四 CI 全成功并核完工件（contract566、GDN330、frontend821／159IR）；原 c554 身份 FAIL 与 5 个未打包 .pyc 的不可比限制保留。完整 L3 19 段 typed 软件活链与真实末 Add→KV 双根提交已接线，小门及独立审查通过，真实双 M16 执行中；原 57 producer 中未物化 mask-add 保持缺失，不能按末输出替代验收。公共 Command128、生产 Chisel／RTL、五 block M128 和 S01/Q35A/U00.2/U01 父项保持 open。[来源与范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+
+- 2026-10-13 00:55 UTC：L3 cold16真实19命令完整typed软件链及末Add→KV双根generation1已完成；56实际物化producer、最终输出、实际KV和行和全过原门。mask-add未物化保留，6个融合因果真实小门证明max/exp/sum排除future与PV零系数语义（±0位差保留）。carried16原任务继续，完整双M128、生产Command128／Chisel／RTL和五block总门未关闭。[指标与范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+
+- 01:00 UTC：原双M16监督在1200秒软件预算退出，cold19完整/原数值门通过；carry17、Down部分、末Add未到，generation仍1。原FAIL与部分证据已保全；下一完整pair1800秒依实测预算待本批CI后启动，不能继承partial state或关闭双窗门。

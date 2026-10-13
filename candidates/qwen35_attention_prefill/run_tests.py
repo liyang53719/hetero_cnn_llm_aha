@@ -12,6 +12,7 @@ import time
 from .run_projection_prefix import SOURCE_FILES
 from .run_norm_rope import SOURCE_FILES as NORM_ROPE_SOURCE_FILES
 from .gqa.owner import SOURCE_PATHS as GQA_SOURCE_FILES
+from .run_fullblock import SOURCE_FILES as FULL_BLOCK_SOURCE_FILES
 
 ROOT = Path(__file__).resolve().parents[2]
 DIRECTORY = Path(__file__).resolve().parent
@@ -28,7 +29,7 @@ def main():
         'candidates/qwen35_gdn_prefill/prep/scalar.py', 'candidates/qwen35_gdn_prefill/conv/scalar.py',
         'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py',
         *(str(p.relative_to(ROOT)) for p in MATRIX_TESTS)}
-    paths=sorted(set(SOURCE_FILES) | set(NORM_ROPE_SOURCE_FILES) | set(GQA_SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
+    paths=sorted(set(SOURCE_FILES) | set(NORM_ROPE_SOURCE_FILES) | set(GQA_SOURCE_FILES) | set(FULL_BLOCK_SOURCE_FILES) | dependencies | {str(p.relative_to(ROOT)) for p in DIRECTORY.rglob('*')
         if p.is_file() and p.suffix in ('.py','.json','.cpp','.scala')})
     def hashes():return {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
     sources=hashes()

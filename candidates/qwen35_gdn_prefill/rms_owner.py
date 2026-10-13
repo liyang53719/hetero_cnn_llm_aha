@@ -89,6 +89,10 @@ class ArithmeticFault(Exception):
     pass
 
 
+class _ObserverFault(Exception):
+    pass
+
+
 def _tiny_inexact(operation, a, b, result):
     if result & 0x7f800000:
         return False
@@ -204,10 +208,27 @@ class RmsResult:
 
 
 class RmsOwner:
-    """One outstanding 64-byte request and one held terminal per accepted job."""
-    def __init__(self, scalar=None):
+    """One outstanding 64-byte request and one held terminal per accepted job.
+
+    Optional observer(stage, token, words) receives immutable tuples of actual
+    FP32 raw uint32 nodes: squares, sum, mean, mean_eps, inverse, scaled, gamma,
+    weighted and output. Vectors use original lane order; output contains the
+    rounded BF16 words promoted into FP32 bit positions. Observer return values
+    are ignored. Snapshot buffers/callback copies are host-only observability,
+    not added hardware storage, arithmetic resources or latency evidence.
+
+    Callbacks run synchronously during compute, after the input read response
+    retires and before that row's writes. Exceptions produce an Observer error
+    terminal and poison admission through the existing completion/reset path.
+    Earlier rows may already have acknowledged writes, but no output publishes.
+    This is not a general callback sandbox or an asynchronous transport drain;
+    callbacks must not mutate owner, scalar or memory through outside references.
+    """
+    def __init__(self, scalar=None, observer=None):
         self.scalar = SharedScalar() if scalar is None else scalar
         require(isinstance(self.scalar, SharedScalar), 'explicit shared scalar service required')
+        require(observer is None or callable(observer), 'optional host observer callback')
+        self.observer = observer
         self.state, self.job, self.request, self.result = 'idle', None, None, None
         self.program, self.poison, self.status = None, False, None
         self.ticks, self.start, self.sequence, self.ack_bytes = 0, 0, 0, 0
@@ -224,7 +245,17 @@ class RmsOwner:
     def reset(self):
         require(self.state in ('idle', 'locked') and self.request is None and self.scalar.client is not self,
                 'reset requires drained transport and retired held completion')
-        self.__init__(self.scalar)
+        self.__init__(self.scalar, self.observer)
+
+    def _observe(self, stage, token, words):
+        if self.observer is not None:
+            snapshot = tuple(words)
+            require(all(type(bits) is int and 0 <= bits < 1 << 32 for bits in snapshot),
+                    'observer FP32 raw-word snapshot')
+            try:
+                self.observer(stage, token, snapshot)
+            except Exception as error:
+                raise _ObserverFault() from error
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
@@ -243,10 +274,14 @@ class RmsOwner:
         weight = yield from self._read_row(j.weight)
         for token in range(j.tokens):
             row = yield from self._read_row(j.input + token * ROW_BYTES)
+            squares = [0] * WIDTH if self.observer is not None else None
             total = 0
             if ReductionPolicy(j.policy) == ReductionPolicy.LegacyAscending:
-                for x in row:
-                    total = self._op('add', total, self._op('mul_ieee_rne', x << 16, x << 16))
+                for index, x in enumerate(row):
+                    square = self._op('mul_ieee_rne', x << 16, x << 16)
+                    if squares is not None:
+                        squares[index] = square
+                    total = self._op('add', total, square)
             else:
                 for lane in range(8):
                     lane_total = 0
@@ -255,17 +290,29 @@ class RmsOwner:
                         for block in range(2):
                             block_total = 0
                             for term in range(16):
-                                x = row[512 * block + 32 * term + 8 * residue + lane] << 16
-                                block_total = self._op('add', block_total, self._op('mul_ieee_rne', x, x))
+                                index = 512 * block + 32 * term + 8 * residue + lane
+                                x = row[index] << 16
+                                square = self._op('mul_ieee_rne', x, x)
+                                if squares is not None:
+                                    squares[index] = square
+                                block_total = self._op('add', block_total, square)
                             residue_total = self._op('add', residue_total, block_total)
                         lane_total = self._op('add', lane_total, residue_total)
                     total = self._op('add', total, lane_total)
+            if squares is not None:
+                self._observe('squares', token, squares)
+            self._observe('sum', token, (total,))
             mean = self._op('mul_ieee_rne', total, word(1 / WIDTH))
+            self._observe('mean', token, (mean,))
             variance = self._op('add', mean, word(1e-6))
+            self._observe('mean_eps', token, (variance,))
             root = self._op('sqrt', variance)
             inverse = self._op('div', word(1), root)
+            self._observe('inverse', token, (inverse,))
             self.row_scalars.append(dict(token=token, sum=total, mean=mean, variance=variance, root=root, inverse=inverse))
             output = []
+            scaled_words, gamma_words, weighted_words = (([], [], []) if self.observer is not None
+                                                         else (None, None, None))
             for x, w in zip(row, weight):
                 normalized = self._op('mul_ieee_rne', x << 16, inverse)
                 scale = self._op('add', word(1), w << 16)
@@ -274,6 +321,15 @@ class RmsOwner:
                 if not finite(rounded << 16):
                     raise ArithmeticFault('terminal BF16 conversion overflow')
                 output.append(rounded)
+                if scaled_words is not None:
+                    scaled_words.append(normalized)
+                    gamma_words.append(scale)
+                    weighted_words.append(weighted)
+            if scaled_words is not None:
+                self._observe('scaled', token, scaled_words)
+                self._observe('gamma', token, gamma_words)
+                self._observe('weighted', token, weighted_words)
+                self._observe('output', token, (bits << 16 for bits in output))
             for offset in range(0, WIDTH, 32):
                 yield (j.output + token * ROW_BYTES + offset * 2, struct.pack('<32H', *output[offset:offset + 32]))
 
@@ -298,6 +354,8 @@ class RmsOwner:
             self._finish(None if self.ack_bytes == self.job.write_bytes else 'Protocol')
         except ArithmeticFault:
             self._finish('Numerical')
+        except _ObserverFault:
+            self._finish('Observer')
 
     def tick(self, *, job=None, memory_ready=False, memory_response=None,
              response_ready=False, abort=False, reset=False):

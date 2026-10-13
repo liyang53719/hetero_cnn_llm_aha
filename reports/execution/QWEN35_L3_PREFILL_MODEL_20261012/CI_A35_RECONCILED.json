@@ -1,0 +1,86 @@
+{
+  "commit": "a35adbd7cebdf2ab1f1ee0de75fa23623e55a577",
+  "contract": {
+    "actual_elf_hash_verified": true,
+    "artifact_verified": true,
+    "observer_artifact_source_count": 78,
+    "run": 38325293783,
+    "status": "success",
+    "tail_suites": 13,
+    "tail_tests": 118,
+    "tests": 566
+  },
+  "frontend": {
+    "all_ir_hashes_verified": true,
+    "chirrtl": 159,
+    "completed_utc": "2026-10-13T00:15:28Z",
+    "ir_changed_vs_c554": [],
+    "job": 115062429928,
+    "prior_overstrict_all_task_files_comparison_failed_on_only_five_pyc": true,
+    "receipt_count": 13,
+    "run": 38325293740,
+    "same_pure_source_tooling_and_composition_as_verified_c554": true,
+    "scope": "SCALA_TYPECHECK_CHIRRTL_ONLY",
+    "status": "success",
+    "tests": 821,
+    "unretrieved_pyc_identity_differences": [
+      {
+        "artifact_file_included": false,
+        "bytecode_equivalence_claimed": false,
+        "current": "ba912e0b2072f9ad64c23894ede7e46f805ce7684b50c14242d01cf5af59985a",
+        "entry": "__pycache__/test_frontend.cpython-312.pyc",
+        "previous": "c3ce525cf0bdc1b504b8d27ddd3cd19f0e3c7ec9b5e4f987d19093929874b582",
+        "summary": "matrix-interface-frontend/transposed-down/summary.json"
+      },
+      {
+        "artifact_file_included": false,
+        "bytecode_equivalence_claimed": false,
+        "current": "5d1cc5eebfce4a84f74a7000b73720fb4219445771af1e0559598524fd02941f",
+        "entry": "__pycache__/check_frontend.cpython-312.pyc",
+        "previous": "cfdf267c5038db2a848a5c9e564f12bea6d8d18f7b0806fef80f411c93abaf24",
+        "summary": "matrix-interface-frontend/transposed-down/summary.json"
+      },
+      {
+        "artifact_file_included": false,
+        "bytecode_equivalence_claimed": false,
+        "current": "63ce34c6ebc08c1f6bb6564b633ebb6a70c69390ad3ef1daf21d72fc7238f334",
+        "entry": "__pycache__/model.cpython-312.pyc",
+        "previous": "4131490e69d00768ab19198fdc9e8e612660fcbb08ae728f78f8cd1abee01beb",
+        "summary": "matrix-interface-frontend/transposed-down/summary.json"
+      },
+      {
+        "artifact_file_included": false,
+        "bytecode_equivalence_claimed": false,
+        "current": "3f3b3ea236244f79519b553861c91251eeba0461777da83d2b6c992e4d6413b4",
+        "entry": "__pycache__/test_frontend.cpython-312.pyc",
+        "previous": "8a44b83d9e0f53ca85b3e88a506d8fca9513620f9e59074766fb0d2524482c28",
+        "summary": "matrix-interface-frontend/transposed-seed/summary.json"
+      },
+      {
+        "artifact_file_included": false,
+        "bytecode_equivalence_claimed": false,
+        "current": "cceff115116f9765b902c64c38ce3a5eb46a2f738b55ed98540f38df69922fbd",
+        "entry": "__pycache__/check_frontend.cpython-312.pyc",
+        "previous": "b82e6d0139c23a583e5cc5e3beb6c3e9202aac64c3900fc0d74367009b0bf1ac",
+        "summary": "matrix-interface-frontend/transposed-seed/summary.json"
+      }
+    ],
+    "zip_bytes": 61428996,
+    "zip_sha256": "sha256:a166214e06e4ee5368e08c27fd88abe97e779c8bf82b1bc188a3e8c41632a5a6"
+  },
+  "gdn": {
+    "artifact_verified": true,
+    "run": 38325293747,
+    "source_count": 50,
+    "status": "success",
+    "suites": 23,
+    "tests": 330
+  },
+  "payload": {
+    "run": 38325293755,
+    "status": "success"
+  },
+  "scope": "original a35 CI only; no rerun of actual M16/M128 or RTL",
+  "status": "ALL_FOUR_SUCCESS_ARTIFACTS_VERIFIED",
+  "verification_file_sha256": "4c5ead76b953a0cf2799ad09fe180a93a6db855ae89567282addae19a8127039"
+}

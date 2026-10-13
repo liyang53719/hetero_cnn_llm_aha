@@ -1,9 +1,9 @@
 """Separate internal KV readability from external fullblock cache commit.
 
-The future fullblock coordinator must construct FullBlockTerminal only from
-its actual accepted final residual terminal. Unit tests use an explicitly
-synthetic downstream stand-in; this module does not implement that block.
-The copy/append owner cannot call commit_after_fullblock or advance an epoch.
+FullBlockTerminal is retained as a legacy trusted integration stand-in. The
+actual fullblock route prepares and accepts the real final Add driver, before
+installing roots without a fallible check or callback after its acceptance.
+The copy/append owner cannot advance an epoch.
 """
 from dataclasses import dataclass, fields
 import hashlib
@@ -13,7 +13,8 @@ from .owner import CAPACITY, TOKEN_BYTES, KvCacheJob, disjoint, require, same_co
 
 
 def _fields(value):
-    return tuple((field.name, getattr(value, field.name)) for field in fields(value))
+    return tuple((field.name, type(getattr(value, field.name)), getattr(value, field.name))
+                 for field in fields(value))
 
 
 @dataclass(frozen=True)
@@ -67,6 +68,16 @@ class FullBlockTerminal:
     final_write_bytes: int
 
 
+@dataclass(frozen=True)
+class _PreparedFinalOwner:
+    receipt: KvStagingReceipt
+    driver: object
+    job: object
+    result: object
+    before: CommittedKvState
+    after: CommittedKvState
+
+
 class KvBlockFence:
     """Caller-owned committed state, with one outstanding block transaction."""
     def __init__(self, memory):
@@ -80,6 +91,7 @@ class KvBlockFence:
         self._used_reservations = []
         self._committed_regions = self._committed_bindings = self._committed_digests = ()
         self._published_before = ()
+        self._prepared_final = self._prepared_final_fields = None
 
     @property
     def memory(self):
@@ -161,13 +173,16 @@ class KvBlockFence:
         self._staged_bindings = tuple((r.base, r.extent, r.storage) for r in outputs)
         return receipt
 
-    def _validate_terminal(self, receipt, terminal):
+    def _validate_receipt(self, receipt):
         require(_fields(self._state) == self._state_fields, 'committed state descriptor changed')
         self._validate_committed()
         require(type(receipt) is KvStagingReceipt and receipt is self._receipt and
                 self._active is not None and receipt.committed_before is self._state,
                 'stale, duplicate, or foreign staging receipt')
         require(_fields(receipt) == self._receipt_fields, 'immutable staging receipt changed')
+
+    def _validate_terminal(self, receipt, terminal):
+        self._validate_receipt(receipt)
         require(type(terminal) is FullBlockTerminal and terminal.kv_receipt is receipt and
                 type(terminal.tag) is int and terminal.tag == receipt.tag and
                 type(terminal.expected_generation) is int and
@@ -177,7 +192,7 @@ class KvBlockFence:
                 'exact accepted fullblock terminal/tag/generation required')
 
     def commit_after_fullblock(self, receipt, terminal):
-        """Promote only after the actual downstream final terminal was accepted."""
+        """Legacy trusted stand-in; not proof of actual fullchain execution."""
         self._validate_terminal(receipt, terminal)
         require(terminal.status is None and type(terminal.final_output_bytes) is int and
                 terminal.final_output_bytes > 0 and
@@ -210,6 +225,90 @@ class KvBlockFence:
         self._committed_digests = receipt.output_sha256
         self._active = self._receipt = self._staged_regions = self._staged_bindings = None
         self._receipt_fields = None
+        return self._state
+
+    def _preflight_final_owner(self, receipt, driver, expected_job):
+        from ...qwen35_gdn_prefill.elementwise.model import (
+            ElementwiseJob, ElementwiseOp, TypedElementwiseDriver)
+        self._validate_receipt(receipt)
+        require(type(driver) is TypedElementwiseDriver and type(expected_job) is ElementwiseJob and
+                driver.memory is self._memory and driver.job is expected_job and
+                type(expected_job.op) in (int, ElementwiseOp) and expected_job.op == ElementwiseOp.Add,
+                'exact real final Add driver and expected immutable job required')
+        result = TypedElementwiseDriver.preflight_response(driver)
+        require(result.status is None and result.tag == expected_job.tag and
+                result.write_bytes == expected_job.write_bytes,
+                'successful held final owner tag/byte extent required')
+        output = driver.output
+        require(output.base == expected_job.output and output.extent == expected_job.write_bytes and
+                all(not source.readonly for source in driver.sources),
+                'final Add requires actual producer inputs and exact output root/extent')
+        span = (output.base, output.extent)
+        reservations = [(receipt.k_root, 2 * self._state.capacity * TOKEN_BYTES)]
+        if self._state.valid_tokens:
+            reservations.append((self._state.k_root, 2 * self._state.capacity * TOKEN_BYTES))
+        require(all(disjoint(span, other) for other in (*reservations, *self._published_before)),
+                'final output aliases cache reservation or prior publication')
+        require(self._memory.pending is None, 'fullblock commit with in-flight write')
+        self._validate_regions(self._staged_regions, self._staged_bindings, receipt.output_spans,
+                               receipt.output_sha256, 'staging changed or incomplete at external commit')
+        require(receipt.valid_tokens <= CAPACITY and receipt.write_bytes ==
+                2 * receipt.valid_tokens * TOKEN_BYTES and self._state.generation < (1 << 64) - 1,
+                'commit length/byte/generation overflow')
+        return result
+
+    def prepare_final_owner(self, receipt, driver, *, expected_job):
+        """Validate a real held Add before accepting either output or roots.
+
+        The coordinator supplies its original final job, not a caller-written
+        completion record. Preparation does not accept or publish anything.
+        Acceptance rechecks the exact receipt, old roots, source bytes and ACKs.
+        """
+        result = self._preflight_final_owner(receipt, driver, expected_job)
+        after = CommittedKvState(receipt.k_root, receipt.v_root, receipt.valid_tokens,
+                                 self._state.generation + 1)
+        prepared = _PreparedFinalOwner(receipt, driver, expected_job, result, self._state, after)
+        self._prepared_final = prepared
+        self._prepared_final_fields = (tuple(id(getattr(prepared, field.name)) for field in fields(prepared)),
+                                       _fields(expected_job), _fields(result), _fields(after))
+        return prepared
+
+    def accept_final_owner(self, prepared):
+        """Accept the prepared genuine driver and install prevalidated roots.
+
+        There are no callbacks, awaits or fallible root checks between the
+        driver's real terminal publication and the prepared state assignment.
+        """
+        from ...qwen35_gdn_prefill.elementwise.model import TypedElementwiseDriver
+        require(type(prepared) is _PreparedFinalOwner and prepared is self._prepared_final,
+                'exact current prepared final owner required')
+        require((tuple(id(getattr(prepared, field.name)) for field in fields(prepared)),
+                 _fields(prepared.job), _fields(prepared.result), _fields(prepared.after)) ==
+                self._prepared_final_fields and prepared.before is self._state,
+                'prepared final owner binding changed')
+        require(self._preflight_final_owner(prepared.receipt, prepared.driver, prepared.job) is prepared.result,
+                'prepared held final result changed')
+        # All data, ACK, source and state validation precedes this real edge.
+        event = TypedElementwiseDriver.tick(prepared.driver, response_ready=True)
+        self._state = prepared.after
+        self._state_fields = _fields(prepared.after)
+        self._committed_regions = self._staged_regions
+        self._committed_bindings = self._staged_bindings
+        self._committed_digests = prepared.receipt.output_sha256
+        self._active = self._receipt = self._staged_regions = self._staged_bindings = None
+        self._receipt_fields = self._prepared_final = self._prepared_final_fields = None
+        return event
+
+    def discard_pending(self, receipt):
+        """Retire exact uncommitted staging after downstream transport drains.
+
+        Discard conveys no successful owner evidence and never changes roots.
+        The caller need not fabricate a final-owner completion on early failure.
+        """
+        self._validate_receipt(receipt)
+        require(self._memory.pending is None, 'failed fullblock before write drain')
+        self._active = self._receipt = self._staged_regions = self._staged_bindings = None
+        self._receipt_fields = self._prepared_final = self._prepared_final_fields = None
         return self._state
 
     def discard_after_fullblock(self, receipt, terminal):

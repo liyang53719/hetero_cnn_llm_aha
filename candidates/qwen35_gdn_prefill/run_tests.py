@@ -10,6 +10,7 @@ import time
 
 ROOT=Path(__file__).resolve().parents[2]
 SOURCE_DIRS=tuple(Path(__file__).parent / name for name in ('', 'conv', 'prep', 'chunk', 'gated_norm', 'elementwise', 'native'))
+SOURCE_DIRS += (Path(__file__).parent.parent / 'qwen35_35b_prefill',)
 
 
 def source_files():
@@ -39,7 +40,9 @@ def main():
         except subprocess.TimeoutExpired as e:
             code=124
             log=str(e)+'\n'+(e.stdout or b'').decode(errors='replace')+(e.stderr or b'').decode(errors='replace')
-        logfile='__'.join(path.relative_to(Path(__file__).parent).with_suffix('').parts)+'.log'
+        relative = (path.relative_to(Path(__file__).parent) if path.is_relative_to(Path(__file__).parent)
+                    else path.relative_to(Path(__file__).parent.parent))
+        logfile='__'.join(relative.with_suffix('').parts)+'.log'
         (args.out/logfile).write_text(log)
         found=re.findall(r'^Ran (\d+) tests? in ',log,re.M)
         count=int(found[-1]) if found else 0

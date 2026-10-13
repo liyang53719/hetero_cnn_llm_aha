@@ -1416,3 +1416,17 @@
   验证: 185项normal和185项O测试通过；真实655_658闭包只读通过；review完成；数值尚未运行
   未完成: [新激励官方M1实际对照, 实际内部GQA节点, 严格native完整合同, cold128_carried128, reset_restore, 35B, PPA及MAC90]
   保留状态: U00.2 ongoing；U01 to do；C02.2 OPEN；原M128软件失败保留
+
+Qwen35_35B_K2048双partial子门_20261013:
+  状态: ongoing
+  关联任务: [C03.2, C04.2, C05, Q35C, Q35D, P00, U00.2]
+  报告: doc/QWEN35_35B_K2048_PARTIAL_LEASE_20261013_CN.md
+  已接通: 原Matrix及Vector实际两partial到destructive_Add到BF16真实DDR_ACK；仅显式synthetic软件profile
+  固定资源: 16x1376x256_A_SRAM；每bank_A0到1024_lhs1024到1184_rhs1184到1344_余32words；Matrix4096_五context_Vector16不增
+  精度边界: 合成独立fmaf_Add_BF16RNE检查；官方35B全形状归约profile和权重尚未验；不继承0p8数值PASS
+  生命周期: lhs_rhs响应实际消费后覆盖；RMW保留其他lane；真实末ACK后发布；abort先排空接受写再poison；协调reset先drain
+  进度: 冷GDN387项27套及Attention247项23套全过；独立review十源码hash一致；精确远端CI待本批发布
+  证据: reports/execution/QWEN35_35B_K2048_LEASE_20261013.json
+  计数边界: 每合成数值case保存Matrix_FMA_Vector_Add_真实ACK及软件tick；完整硬件cycle_busy_lane占空比_stall_overlap均unknown
+  后继: 最小35B固定源payload与官方profile；真实L0_GDN_MoE及L3_Attention_MoE_M128；生产Chisel_Host与RTL
+  保留状态: Q35C_Q35D_U01_to_do；U00.2_ongoing；五block联合门不关闭

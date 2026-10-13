@@ -118,14 +118,13 @@ There is no NumPy arithmetic, lane allocation, or invented hardware latency.
 
 
 class TypedProjectionDriver:
-    def __init__(self, owner, matrix_service, memory, job, *, vector, role,
-                 profile=GDN_PROJECTION_PROFILE, family='gdn'):
-        require(type(owner) is GdnProjectionOwner, 'exact existing GDN projection owner required')
-        require(type(matrix_service) is t.MatrixService and type(memory) is t.TypedMemory,
-                'same base MatrixService and typed physical byte map required')
-        require(type(job) in (t.down.Job, down.Job, Job), 'supported complete original Dense Job authority')
-        require(type(profile) is ReductionProfile, 'explicit immutable reduction profile required')
-        profile.validate(job.k)
+    # Explicit implementation hooks retain the original exact types by default.
+    # A derived internal owner must supply its own validated request, sum and
+    # coordinator; these are not selectable public command fields.
+    OWNER_TYPE = GdnProjectionOwner
+    WINDOW_REQUEST_TYPE = GdnKWindowRequest
+
+    def _validate_family(self, job, role, profile, family):
         require(type(family) is str and family in ('gdn', ATTENTION_FAMILY),
                 'explicit supported projection family required')
         if family == 'gdn':
@@ -144,8 +143,27 @@ class TypedProjectionDriver:
                                    separators=(',', ':'), ensure_ascii=True).encode()
             require(hashlib.sha256(canonical).hexdigest() == profile.source_sha256,
                     'production L3 projection parameter identity drift')
+
+    def _make_call(self, typed_job, profile):
+        return GdnReductionRequest(typed_job, typed_job.tag or 1, profile.ranges, profile.pair_reverse)
+
+    def _make_sum(self, owner):
+        return TileSumController(owner.tiles, bank_tick=lambda **p: owner_tile_edge(owner, **p))
+
+    def _make_coordinator(self):
+        return GdnReductionCoordinator()
+
+    def __init__(self, owner, matrix_service, memory, job, *, vector, role,
+                 profile=GDN_PROJECTION_PROFILE, family='gdn'):
+        require(type(owner) is self.OWNER_TYPE, 'exact selected projection owner required')
+        require(type(matrix_service) is t.MatrixService and type(memory) is t.TypedMemory,
+                'same base MatrixService and typed physical byte map required')
+        require(type(job) in (t.down.Job, down.Job, Job), 'supported complete original Dense Job authority')
+        require(type(profile) is ReductionProfile, 'explicit immutable reduction profile required')
+        profile.validate(job.k)
+        self._validate_family(job, role, profile, family)
         typed_job = Job(**vars(job))
-        self.call = GdnReductionRequest(typed_job, job.tag or 1, profile.ranges, profile.pair_reverse)
+        self.call = self._make_call(typed_job, profile)
         self.call.validate()
         require(type(owner.workspace) is down.PrefixWorkspace, 'explicit bounded workspace identity required')
         owner.workspace.validate(typed_job)
@@ -161,8 +179,8 @@ class TypedProjectionDriver:
         self.family, self.role, self.profile = family, role, profile
         self.binding_identity = self._binding_identity()
         self.loan = SharedVector16Loan(vector)
-        self.sum = TileSumController(owner.tiles, bank_tick=lambda **p: owner_tile_edge(owner, **p))
-        self.coordinator = GdnReductionCoordinator()
+        self.sum = self._make_sum(owner)
+        self.coordinator = self._make_coordinator()
         self.pending_read = self.pending_ack = self.bridge = None
         self.results = deque()
         self.response = None
@@ -272,7 +290,7 @@ class TypedProjectionDriver:
             self.bridge.retire_result(self.results.popleft())
         if oe.get('group_fire'):
             q = o.window_request
-            require(type(q) is GdnKWindowRequest and q.job == self.call.job and
+            require(type(q) is self.WINDOW_REQUEST_TYPE and q.job == self.call.job and
                     (q.k_begin, q.k_end) == self.profile.ranges[q.block_id - 1] and
                     q.pair_reverse == self.profile.pair_reverse, 'immutable GDN role/profile binding changed')
             require(self.bridge.td_group(0, q.k_end - q.k_begin, q.cols // 32) == 0,

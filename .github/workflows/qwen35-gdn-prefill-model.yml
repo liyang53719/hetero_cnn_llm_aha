@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/qwen35-gdn-prefill-model.yml'
       - 'candidates/qwen35_gdn_prefill/**'
+      - 'candidates/qwen35_35b_prefill/**'
       - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
       - 'candidates/qwen2_resident_matrix/dense_block_reduce/**'
       - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'

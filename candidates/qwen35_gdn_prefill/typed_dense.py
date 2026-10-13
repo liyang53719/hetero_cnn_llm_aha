@@ -210,7 +210,7 @@ class TypedMemory:
 
 
 def dense_wire_authority(owner, job):
-    """Select only the two explicit owner implementations, never duck typing.
+    """Select only explicit owner implementations, never duck typing.
 
     The reduction hierarchy imports a hash-checked copy of the original Down
     module. Its seeded wire dataclasses have that exact Python identity even
@@ -221,8 +221,13 @@ def dense_wire_authority(owner, job):
     if type(owner) is down.DenseOwnerModel:
         return down
     from .projection_owner import GdnProjectionOwner, down as projection_down
-    require(type(owner) is GdnProjectionOwner, 'unsupported Dense owner authority')
-    return projection_down
+    if type(owner) is GdnProjectionOwner:
+        return projection_down
+    # This opt-in physical layout shares the original Job/wire authority.
+    # Import only on that route; legacy captures retain their old closure.
+    from ..qwen35_35b_prefill.projection_owner import LargeKProjectionOwner, down as large_k_down
+    require(type(owner) is LargeKProjectionOwner, 'unsupported Dense owner authority')
+    return large_k_down
 
 
 class TypedDenseDriver:

@@ -146,3 +146,5 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 
 - 2026-10-13 03:46 UTC：0.8B L3完整cold128→真实carried128 typed软件链一次运行EXIT0，6658.907秒在7200秒预算内；38真实终态、KV0→128→256、generation0→1→2。每窗56已计算producer与最终output/KV/行和原门均通过，KV逐bit相同，mask-add未物化保留；91源/42输出/102观察与真正carried依赖另有独立审查。见[完整数值与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。仅关闭该完整M128软件子门；公共Command128/生产Chisel/RTL及五block联合总门继续open。当前已有Qwen2 L0 coldM128、0.8B L0/L3双M128的已分配软件数值门；35B-A3B L0/L3完整block尚未实现验收。
 - 本次双M128 Matrix实际软件FMA为2,415,919,104／2,483,027,968，Scalar请求7,989,248／8,644,608；完整硬件cycle/busy仍unknown。单Scalar基本请求条件Matrix上界≤3.0661%／≤2.9692%，未满足80%/90%目标；17条逐窗口[性能记录](PASSED_CASE_UTILIZATION_20261013_CN.md)保留证据层级。下一步优先资源安全K2048、官方精度与真实35B prefill接线，任何流水整改仍须固定资源、bank/lease和原数值门。
+
+- 2026-10-13 35B前置：K2048使用原16×1376×256 A SRAM的双N160显式destructive lease，保持五context；原Matrix/Vector/TypedMemory实际两partial→Add→BF16写ACK小闭包已接线，旧0.8B默认路径保持。合成K2048、N160、跨窗、混模式、错误退休/reset门推进，官方35B profile与完整block未验。详见[资源、实际范围与下一步](QWEN35_35B_K2048_PARTIAL_LEASE_20261013_CN.md)。硬件全cycle/busy仍unknown；源/CI小批收口中，不关闭Q35C/Q35D/U00.2/U01。

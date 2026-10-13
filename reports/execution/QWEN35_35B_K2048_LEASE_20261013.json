@@ -1,0 +1,1210 @@
+{
+  "base_commit": "1a59e575d64f59c0d435fbd733bd6d53ffe2947a",
+  "cold_steps": [
+    {
+      "argv": [
+        "taskset",
+        "--cpu-list",
+        "0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "scripts/build_shared_matrix_recipe.py",
+        "--repo",
+        ".",
+        "--out",
+        "work/library"
+      ],
+      "log_sha256": "3b6d9b166eaec40a222cd99e976fd01f861852999d93c4ca62ffe316a69ff44d",
+      "name": "matrix_build",
+      "returncode": 0,
+      "seconds": 0.6154814500005159
+    },
+    {
+      "argv": [
+        "taskset",
+        "--cpu-list",
+        "0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "-c",
+        "from candidates.qwen35_gdn_prefill.chunk.vector import build_library; print(build_library('work/vector'))"
+      ],
+      "log_sha256": "47b0678365f2e5058ade1115a11b2c02d826611bbaef68bea3ce3dda0c537d1a",
+      "name": "vector_build",
+      "returncode": 0,
+      "seconds": 0.3151985180011252
+    },
+    {
+      "argv": [
+        "taskset",
+        "--cpu-list",
+        "0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "-m",
+        "candidates.qwen35_gdn_prefill.run_tests",
+        "--out",
+        "work/gdn_tests"
+      ],
+      "log_sha256": "e37a11272422bc59a7eff62455be635b45da84513940a86e63ef844be46bcea5",
+      "name": "gdn_synthetic",
+      "returncode": 0,
+      "seconds": 104.15942144399742
+    },
+    {
+      "argv": [
+        "taskset",
+        "--cpu-list",
+        "0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "-m",
+        "candidates.qwen35_attention_prefill.run_tests",
+        "--out",
+        "work/attention_tests"
+      ],
+      "log_sha256": "bc748ebad5606960e5b1fc95e4cdbf2ed678f7fa3df71228aa43fef818f56fa4",
+      "name": "attention_synthetic",
+      "returncode": 0,
+      "seconds": 138.91531620100068
+    }
+  ],
+  "cold_summary_sha256": "43c6bb25a4d65286df9e589c020b7c3c0c171ffa4fd9cd7117bc6360fc0f7b05",
+  "goal_optimized_tests": {
+    "log_sha256": "ed476206278d55449c2be1464735fc5c55b8b97a91e4f0fe1c756830fdd09267",
+    "status": "PASS",
+    "tests": 191
+  },
+  "goal_tests": {
+    "log_sha256": "9165dc17fcb70b11c9d1a4f4b7a19c7713da9d6bf54cdbc96be1dea87ada7807",
+    "seconds": 16.76,
+    "status": "PASS",
+    "tests": 338
+  },
+  "independent_review": {
+    "findings": [
+      {
+        "evidence": "LargeKProjectionOwner previously inherited a three-slot _finish_window index guard; a rejected slot=2 request raised IndexError instead of a failed terminal.",
+        "fix": "New two-slot-aware _finish_window retains the original KWindowResult contract.",
+        "id": "R1",
+        "recheck": "slot2 request: one failed terminal, zero DMA, owner locked.",
+        "severity": "P1",
+        "status": "FIXED_AND_REPRO_RECHECKED"
+      },
+      {
+        "evidence": "dense_wire_authority rejected LargeKProjectionOwner, blocking the actual ordinary and seeded drivers after a projection.",
+        "fix": "Narrow exact LargeKProjectionOwner branch after unchanged old-owner returns; original pinned Down wire authority reused.",
+        "id": "R2",
+        "recheck": "Authority selection resolves to the original pinned Down module; mixed actual regression added by implementer.",
+        "severity": "P1",
+        "status": "FIXED_AND_REPRO_RECHECKED"
+      },
+      {
+        "evidence": "First _finish_window override unconditionally multiplied zero accepted_steps by malformed m=None, raising TypeError after validation had rejected the job.",
+        "fix": "Restore inherited conditional useful_macs expression for zero accepted steps.",
+        "id": "R3",
+        "recheck": "m=None produces a failed terminal with zero useful/executed MACs.",
+        "severity": "P1",
+        "status": "FIXED_AND_REPRO_RECHECKED"
+      },
+      {
+        "evidence": "Connected shared_loan_edge coordinated reset with a held Vector result forwarded reset despite controller rejection and produced inconsistent endpoint result handshakes.",
+        "fix": "New-module wrapper settles a premature reset as abort at both endpoints, returns reset_rejected and forwards a true reset only after banks/loan/inflight drain.",
+        "id": "R4",
+        "recheck": "Independent held-result connected probe now drains consistently with no result handshake, retains poison, then accepts a drained reset; actual SharedVector16Loan regression added by implementer.",
+        "severity": "P1",
+        "status": "FIXED_AND_REPRO_RECHECKED"
+      }
+    ],
+    "reviewed_at_utc": "2026-10-13T04:36:27.311445+00:00",
+    "reviewed_paths": 10,
+    "scope": "Independent code and cheap control-probe review of explicit K2048 two-partial destructive software-owner integration; no production 35B policy, RTL, synthesis, timing, area or hardware utilization acceptance.",
+    "self_tests": [
+      {
+        "detail": "32 accepted Add requests/results, 64 operand responses, 32 sum writes, one sealed completion under bank and loan stalls.",
+        "name": "stalled_sum_control",
+        "status": "PASS"
+      },
+      {
+        "detail": "Accepted SRAM RMW committed exact payload, then poisoned, drained and locked without a published sum.",
+        "name": "accepted_sum_rmw_abort",
+        "status": "PASS"
+      },
+      {
+        "name": "malformed_slot2_terminal",
+        "status": "PASS"
+      },
+      {
+        "name": "malformed_m_none_zero_step_terminal",
+        "status": "PASS"
+      },
+      {
+        "name": "mixed_owner_wire_authority",
+        "status": "PASS"
+      },
+      {
+        "detail": "Used existing isolated VectorLoanModel as a control probe; no main numerical suite overlap.",
+        "name": "connected_held_vector_reset",
+        "status": "PASS"
+      },
+      {
+        "detail": "27 test modules, 58 source files; both new test modules discovered; all log filenames distinct.",
+        "name": "runner_discovery",
+        "status": "PASS"
+      },
+      {
+        "name": "git_diff_check",
+        "status": "PASS"
+      },
+      {
+        "detail": "Parent owns the separate sequential final-hash cold GDN and Attention gates.",
+        "name": "full_numerical_cold_gate",
+        "status": "NOT_RUN_BY_REVIEWER"
+      },
+      {
+        "name": "rtl_eda_or_official_35b_acceptance",
+        "status": "NOT_RUN_NOT_CLAIMED"
+      }
+    ],
+    "source_sha256": {
+      ".github/workflows/qwen35-gdn-prefill-model.yml": "9e782515831d8123ed1cad6b8ef9c842b521d3cbfa8d7c57b770d5fc239a652b",
+      "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+      "candidates/qwen35_35b_prefill/projection_driver.py": "76e4dc2f6f19fc529feecdc066489f1a1aaa9dfd9f51445c279c8eb23ad92c7b",
+      "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+      "candidates/qwen35_35b_prefill/sum_tiles.py": "40087b4340c6edcd507f1543ed9be1cbec859a51114a01ea9a03b6ec47bf4bb7",
+      "candidates/qwen35_35b_prefill/test_partial_tiles.py": "6dd4ff0afc1878bb95ae340a547074d3bec4a430cc83fa47bfe76fed161e8786",
+      "candidates/qwen35_35b_prefill/test_projection_driver.py": "3751c571d564ae50f6b5c0f849229b9fe17ab0bbab762012dc45d948e99b988e",
+      "candidates/qwen35_gdn_prefill/projection_driver.py": "2ef090d3cc4abdb7cc88a479933166378f570b6ae8eb3960fa18f841a9eaf05f",
+      "candidates/qwen35_gdn_prefill/run_tests.py": "29136b73220a5ee2508bf8297ec783dc7b394de6a2de8d19c68fd8195d29c034",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+    },
+    "status": "NO_OPEN_REVIEW_FINDINGS_AFTER_RECHECK",
+    "verified_design_points": [
+      "Same physical A/B SRAM, MatrixService, Vector16, TypedMemory, result queue and existing final output hold are reused; no third tile alias or new tensor storage.",
+      "Accepted lhs and rhs response handshakes precede destructive sum RMW; sum phase and distinct identity gate overwrite and drain.",
+      "Retired sum0 keeps identity/count receipt while live/sealed access is revoked; final DDR ACK byte count and release verification gate public completion.",
+      "Accepted sum RMW commits on abort/reset rejection before poison quarantine; owner and sum guards do not erase pending bank obligations.",
+      "Old driver hooks and exact old-owner authority returns retain existing defaults; runner and workflow discover the new candidate explicitly."
+    ]
+  },
+  "independent_review_format_addendum": {
+    "additional_tests_or_eda_run": false,
+    "current_source_sha256": {
+      ".github/workflows/qwen35-gdn-prefill-model.yml": "9e782515831d8123ed1cad6b8ef9c842b521d3cbfa8d7c57b770d5fc239a652b",
+      "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+      "candidates/qwen35_35b_prefill/projection_driver.py": "76e4dc2f6f19fc529feecdc066489f1a1aaa9dfd9f51445c279c8eb23ad92c7b",
+      "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+      "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+      "candidates/qwen35_35b_prefill/test_partial_tiles.py": "6dd4ff0afc1878bb95ae340a547074d3bec4a430cc83fa47bfe76fed161e8786",
+      "candidates/qwen35_35b_prefill/test_projection_driver.py": "3751c571d564ae50f6b5c0f849229b9fe17ab0bbab762012dc45d948e99b988e",
+      "candidates/qwen35_gdn_prefill/projection_driver.py": "2ef090d3cc4abdb7cc88a479933166378f570b6ae8eb3960fa18f841a9eaf05f",
+      "candidates/qwen35_gdn_prefill/run_tests.py": "29136b73220a5ee2508bf8297ec783dc7b394de6a2de8d19c68fd8195d29c034",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+    },
+    "formatting_change": {
+      "ast_equal": true,
+      "exact_delta": "Removed one newline byte at EOF; appending that byte recreates the reviewed old SHA256.",
+      "new_sha256": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+      "old_sha256": "40087b4340c6edcd507f1543ed9be1cbec859a51114a01ea9a03b6ec47bf4bb7",
+      "path": "candidates/qwen35_35b_prefill/sum_tiles.py"
+    },
+    "official_35b_or_rtl_qor_acceptance": false,
+    "original_review_receipt": "work/k2048_projection_20261013/independent_review_receipt.json",
+    "original_review_receipt_preserved": true,
+    "original_review_receipt_sha256": "a46c9886cc0e238313026375b73f8371507247ff7d998a5a03ff278f60e046e3",
+    "other_nine_source_hashes_unchanged": true,
+    "review_effect": "No semantic change or new finding; original bounded software code-review conclusions remain applicable.",
+    "reviewed_at_utc": "2026-10-13T04:45:14.727127+00:00",
+    "status": "PASS_FORMATTING_ONLY_REVIEW_ADDENDUM"
+  },
+  "independent_review_format_addendum_sha256": "aa620c9e8d24ec7fe3b4b8cc0e84abc51c57763a6768720df152004ba78d9289",
+  "independent_review_sha256": "a46c9886cc0e238313026375b73f8371507247ff7d998a5a03ff278f60e046e3",
+  "libraries": [
+    {
+      "receipt": {
+        "argv": [
+          "/usr/bin/x86_64-linux-gnu-g++-14",
+          "-shared",
+          "-fPIC",
+          "-O2",
+          "-ffp-contract=off",
+          "-fno-fast-math",
+          "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout/candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp",
+          "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout/candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp",
+          "-o",
+          "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout/work/library/matrix_silu_numeric.so"
+        ],
+        "compiler": "/usr/bin/x86_64-linux-gnu-g++-14",
+        "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+        "library": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout/work/library/matrix_silu_numeric.so",
+        "library_bytes": 27032,
+        "library_sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc",
+        "repo": "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout",
+        "returncode": 0,
+        "rtl_generated": false,
+        "schema": 1,
+        "seconds": 0.5253257559998019,
+        "sources_after": {
+          "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+          "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+          "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1"
+        },
+        "sources_before": {
+          "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+          "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+          "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1"
+        },
+        "status": "PASS_HOST_BUILD_ONLY"
+      },
+      "receipt_sha256": "4cb2f2cc7cc7a071b95f658383090c664a6469bac54ab365e06efb7e78dac203"
+    },
+    {
+      "receipt": {
+        "argv": [
+          "/usr/bin/g++",
+          "-std=c++17",
+          "-O2",
+          "-shared",
+          "-fPIC",
+          "-fno-fast-math",
+          "-ffp-contract=off",
+          "-frounding-math",
+          "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout/candidates/qwen35_gdn_prefill/chunk/vector16.cpp",
+          "-o",
+          "/workspace/scratch/f28987e955ed/hetero_cnn_llm_aha_recovered_20261012T2011/work/k2048_projection_20261013/cold_release/checkout/work/vector/gdn_vector16.so"
+        ],
+        "compiler_processes": 1,
+        "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+        "hardware_simulation": false,
+        "library_sha256": "71275803ea5ab05fd5ef991c133f0a87a9217e062fd012b416dd627aafd12e8d",
+        "source_sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+        "status": "PASS_HOST_BUILD_ONLY"
+      },
+      "receipt_sha256": "7a1c49aabc6433fdc16d3482f9cfd83c7d4c833de989338c4bf9c9e2c5594852"
+    }
+  ],
+  "prior_evidence": {
+    "first_cold_result": "386 GDN + 247 Attention tests passed on frozen earlier source; overall FAILED source-drift guard after concurrent review fixes, not reused as final pass",
+    "first_cold_summary_sha256": "7847c6bdfe321b9667c626ae4565f598a6fa89696a43dbe4d87eff2a69665d7e",
+    "format_only_reason": "one extra blank EOF line rejected by indexed git diff --check; AST equality independently reviewed; final cold release gates rerun on exact formatted bytes",
+    "pre_format_cold_final_summary_sha256": "82f48b7c62a947947ad12eb6e36a6de016a9304592e68724f2dfe1231a07ef98",
+    "preserved_test_logs": {
+      "expanded_integration.log": {
+        "sha256": "7db5134877ca0546f395f7906e9d7e24aaf83b102fe726851bdc222367927f45",
+        "status": "FAILED_3_INTEGRATION_ERRORS"
+      },
+      "initial_integration.log": {
+        "sha256": "58858a526f392aadcfea9afe1138b63d33c1367269ade155951b72e4975e040b",
+        "status": "PASS_EARLIER_SOURCE_ONLY"
+      },
+      "integration_retry.log": {
+        "sha256": "d1a5941e7bc840dca8657af619f96857ed715dcfdd17c607de82c4ff1668801a",
+        "status": "PASS_EARLIER_SOURCE_ONLY"
+      }
+    }
+  },
+  "resource_ledger": {
+    "a_sram_bytes": 704512,
+    "additional_control_register_area": "not measured",
+    "additional_tensor_storage_bytes": 0,
+    "bank_depth_words": 1376,
+    "bank_word_bits": 256,
+    "banks": 16,
+    "layout_words": {
+      "a": [
+        0,
+        1024
+      ],
+      "lhs_then_sum": [
+        1024,
+        1184
+      ],
+      "rhs": [
+        1184,
+        1344
+      ],
+      "spare": [
+        1344,
+        1376
+      ]
+    },
+    "matrix_contexts": 5,
+    "matrix_mac_units": 4096,
+    "read_ports_per_bank": 1,
+    "vector_lanes": 16,
+    "write_ports_per_bank": 1
+  },
+  "schema": 1,
+  "scope": {
+    "busy_duty": null,
+    "chisel_destructive_lease_integrated": false,
+    "hardware_cycles": null,
+    "model_first": true,
+    "official_35b_acceptance": false,
+    "public_command128_integrated": false,
+    "rtl_generated": false,
+    "rtl_simulated": false,
+    "weights_downloaded": false
+  },
+  "source_sha256": {
+    ".github/workflows/qwen35-gdn-prefill-model.yml": "9e782515831d8123ed1cad6b8ef9c842b521d3cbfa8d7c57b770d5fc239a652b",
+    "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+    "candidates/qwen35_35b_prefill/projection_driver.py": "76e4dc2f6f19fc529feecdc066489f1a1aaa9dfd9f51445c279c8eb23ad92c7b",
+    "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+    "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+    "candidates/qwen35_35b_prefill/test_partial_tiles.py": "6dd4ff0afc1878bb95ae340a547074d3bec4a430cc83fa47bfe76fed161e8786",
+    "candidates/qwen35_35b_prefill/test_projection_driver.py": "3751c571d564ae50f6b5c0f849229b9fe17ab0bbab762012dc45d948e99b988e",
+    "candidates/qwen35_gdn_prefill/projection_driver.py": "2ef090d3cc4abdb7cc88a479933166378f570b6ae8eb3960fa18f841a9eaf05f",
+    "candidates/qwen35_gdn_prefill/run_tests.py": "29136b73220a5ee2508bf8297ec783dc7b394de6a2de8d19c68fd8195d29c034",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+  },
+  "status": "PASS_K2048_SYNTHETIC_SHARED_OWNER_ONLY",
+  "synthetic_cases": [
+    {
+      "active_lane_duty": null,
+      "busy_duty": null,
+      "counts": {
+        "a_read_beats": 1024,
+        "ack_bytes": 1024,
+        "b_read_beats": 2048,
+        "matrix_done_fire": 2,
+        "read_command_fire": 3072,
+        "read_fire": 3072,
+        "result_fire": 2,
+        "step_fire": 2048,
+        "ticks": 14202,
+        "write_ack_fire": 16,
+        "write_command_fire": 16,
+        "write_data_bytes": 1024,
+        "write_data_fire": 16
+      },
+      "executed_macs": 8388608,
+      "hardware_full_cycles": null,
+      "hardware_utilization": null,
+      "input_sha256": [
+        "6715bc249bade125390ebddcd23ee983faa8500b6952e2b6d8cf06069c0e999a",
+        "eb680f75814bfc588be6a488bfb2791b9d3768ceccb3105482312206bc24161c"
+      ],
+      "matrix_contexts": 5,
+      "matrix_macs": 4096,
+      "missing_measurement": "source-bound full-cycle/timeline or later RTL replay",
+      "numerical_status": "PASS_FIXED_RECIPE_BIT_EXACT",
+      "official_model_acceptance": false,
+      "output_sha256": "fc8453decdcb5d769803d35dbd49c1f72b88b55418d4759eb16cb13107dab0ad",
+      "overlap_timeline": null,
+      "scope": "SYNTHETIC_PROJECTION_ONLY",
+      "shape": {
+        "k": 2048,
+        "m": 16,
+        "n": 32
+      },
+      "software_ticks": 14202,
+      "stall_breakdown": null,
+      "useful_macs": 1048576,
+      "vector_active_lane_operations": 512,
+      "vector_add_requests": 32,
+      "vector_lanes": 16
+    },
+    {
+      "active_lane_duty": null,
+      "busy_duty": null,
+      "counts": {
+        "a_read_beats": 16,
+        "ack_bytes": 6144,
+        "b_read_beats": 192,
+        "matrix_done_fire": 4,
+        "read_command_fire": 208,
+        "read_fire": 208,
+        "result_fire": 12,
+        "step_fire": 192,
+        "ticks": 4074,
+        "write_ack_fire": 36,
+        "write_command_fire": 36,
+        "write_data_bytes": 6144,
+        "write_data_fire": 96
+      },
+      "executed_macs": 786432,
+      "hardware_full_cycles": null,
+      "hardware_utilization": null,
+      "input_sha256": [
+        "864b3a0129dfa68060096f2738533dad130a0c000940007c0cfe41c6c9571215",
+        "f600ead326e71a51b5ca2d0206c551adebf6ff360f247c8485d3ca2a705e7998"
+      ],
+      "matrix_contexts": 5,
+      "matrix_macs": 4096,
+      "missing_measurement": "source-bound full-cycle/timeline or later RTL replay",
+      "numerical_status": "PASS_FIXED_RECIPE_BIT_EXACT",
+      "official_model_acceptance": false,
+      "output_sha256": "23e75b6ec077eaa40a4e2e91c4bc8075ccba6a004d1d2fa7589dca89685395a4",
+      "overlap_timeline": null,
+      "scope": "SYNTHETIC_PROJECTION_ONLY",
+      "shape": {
+        "k": 32,
+        "m": 16,
+        "n": 192
+      },
+      "software_ticks": 4074,
+      "stall_breakdown": null,
+      "useful_macs": 98304,
+      "vector_active_lane_operations": 3072,
+      "vector_add_requests": 192,
+      "vector_lanes": 16
+    },
+    {
+      "active_lane_duty": null,
+      "busy_duty": null,
+      "counts": {
+        "a_read_beats": 32,
+        "ack_bytes": 5120,
+        "b_read_beats": 320,
+        "matrix_done_fire": 2,
+        "read_command_fire": 352,
+        "read_fire": 352,
+        "result_fire": 10,
+        "step_fire": 320,
+        "ticks": 4156,
+        "write_ack_fire": 20,
+        "write_command_fire": 20,
+        "write_data_bytes": 5120,
+        "write_data_fire": 80
+      },
+      "executed_macs": 1310720,
+      "hardware_full_cycles": null,
+      "hardware_utilization": null,
+      "input_sha256": [
+        "97fc40e9c1221b6a8ff171106b712cddfd97f7a768574b416026a8d93c9e6b2b",
+        "a15139d7d3bf752f40eab59c0691a543c5110ac708d65dfad9c5ba84e0cfef85"
+      ],
+      "matrix_contexts": 5,
+      "matrix_macs": 4096,
+      "missing_measurement": "source-bound full-cycle/timeline or later RTL replay",
+      "numerical_status": "PASS_FIXED_RECIPE_BIT_EXACT",
+      "official_model_acceptance": false,
+      "output_sha256": "3d01fe0492e244a1ed447088c03b56659c7f5854a293cef259144aa9a82c3eb6",
+      "overlap_timeline": null,
+      "scope": "SYNTHETIC_PROJECTION_ONLY",
+      "shape": {
+        "k": 64,
+        "m": 16,
+        "n": 160
+      },
+      "software_ticks": 4156,
+      "stall_breakdown": null,
+      "useful_macs": 163840,
+      "vector_active_lane_operations": 2560,
+      "vector_add_requests": 160,
+      "vector_lanes": 16
+    },
+    {
+      "active_lane_duty": null,
+      "busy_duty": null,
+      "counts": {
+        "a_read_beats": 16,
+        "ack_bytes": 1024,
+        "b_read_beats": 32,
+        "matrix_done_fire": 2,
+        "read_command_fire": 48,
+        "read_fire": 48,
+        "result_fire": 2,
+        "step_fire": 32,
+        "ticks": 814,
+        "write_ack_fire": 16,
+        "write_command_fire": 16,
+        "write_data_bytes": 1024,
+        "write_data_fire": 16
+      },
+      "executed_macs": 131072,
+      "hardware_full_cycles": null,
+      "hardware_utilization": null,
+      "input_sha256": [
+        "864b3a0129dfa68060096f2738533dad130a0c000940007c0cfe41c6c9571215",
+        "fef433212e0a52558b46d8737641bed5e1d4ea859bb4cd3a91da75ab8bb25c1c"
+      ],
+      "matrix_contexts": 5,
+      "matrix_macs": 4096,
+      "missing_measurement": "source-bound full-cycle/timeline or later RTL replay",
+      "numerical_status": "PASS_FIXED_RECIPE_BIT_EXACT",
+      "official_model_acceptance": false,
+      "output_sha256": "1c80f81dd491263df9a27f312023d27a2438f3178edd11284d53a22963bc6e5a",
+      "overlap_timeline": null,
+      "scope": "SYNTHETIC_PROJECTION_ONLY",
+      "shape": {
+        "k": 32,
+        "m": 16,
+        "n": 32
+      },
+      "software_ticks": 814,
+      "stall_breakdown": null,
+      "useful_macs": 16384,
+      "vector_active_lane_operations": 512,
+      "vector_add_requests": 32,
+      "vector_lanes": 16
+    }
+  ],
+  "synthetic_cases_log_sha256": "8d312c5461956b9152b78b3d5fe82caf8068a2b3d91c92cc67012cb643f54c09",
+  "tests": [
+    {
+      "name": "gdn_tests",
+      "source_count": 58,
+      "status": "PASS_SYNTHETIC_SOFTWARE_ONLY",
+      "suite_count": 27,
+      "suites": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_35b_prefill.test_partial_tiles",
+            "-v"
+          ],
+          "log": "qwen35_35b_prefill__test_partial_tiles.log",
+          "log_sha256": "e597f23654cae8d6eb0f7de089f21a40482e034751d93b3ebd90634fc68387bd",
+          "module": "candidates.qwen35_35b_prefill.test_partial_tiles",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.7090085169984377,
+          "test_count": 22
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_35b_prefill.test_projection_driver",
+            "-v"
+          ],
+          "log": "qwen35_35b_prefill__test_projection_driver.log",
+          "log_sha256": "8d312c5461956b9152b78b3d5fe82caf8068a2b3d91c92cc67012cb643f54c09",
+          "module": "candidates.qwen35_35b_prefill.test_projection_driver",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 3.9772819570025604,
+          "test_count": 16
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.chunk.test_ieee_policy",
+            "-v"
+          ],
+          "log": "chunk__test_ieee_policy.log",
+          "log_sha256": "6b5464d86b64be472ab0289630b9f8fcf6da7e2d016483cb333e873278fd2424",
+          "module": "candidates.qwen35_gdn_prefill.chunk.test_ieee_policy",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 3.9275825820004684,
+          "test_count": 5
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.chunk.test_model",
+            "-v"
+          ],
+          "log": "chunk__test_model.log",
+          "log_sha256": "8e4ef62165e1b055d7b2e25da1d0bfe92bf4d2a03b2587f5bc78317b18435302",
+          "module": "candidates.qwen35_gdn_prefill.chunk.test_model",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 22.31252786999903,
+          "test_count": 21
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.chunk.test_reference",
+            "-v"
+          ],
+          "log": "chunk__test_reference.log",
+          "log_sha256": "5117e17c7aa9ed6c5e07a80d1ed0621a1dd94596b6d29d21abf59ce9b5b45883",
+          "module": "candidates.qwen35_gdn_prefill.chunk.test_reference",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 5.279358674000832,
+          "test_count": 15
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.conv.test_model",
+            "-v"
+          ],
+          "log": "conv__test_model.log",
+          "log_sha256": "26d735e13c8645c1f72c7cbeb921b0c84e7048b040ae6c088e2ed079774f1b89",
+          "module": "candidates.qwen35_gdn_prefill.conv.test_model",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.8550261620002857,
+          "test_count": 17
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.conv.test_reference",
+            "-v"
+          ],
+          "log": "conv__test_reference.log",
+          "log_sha256": "24c54087252fa40a52528f0d78458849479831cecac203c73d7b93986ac0fb15",
+          "module": "candidates.qwen35_gdn_prefill.conv.test_reference",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.5679454540004372,
+          "test_count": 12
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.elementwise.test_attention_gate",
+            "-v"
+          ],
+          "log": "elementwise__test_attention_gate.log",
+          "log_sha256": "c849b69ced409a9297f826e8a7ff4ec9e333b8295037c601d0ca10feda418140",
+          "module": "candidates.qwen35_gdn_prefill.elementwise.test_attention_gate",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.9889532460001647,
+          "test_count": 14
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.elementwise.test_model",
+            "-v"
+          ],
+          "log": "elementwise__test_model.log",
+          "log_sha256": "8b7e1ec9eda20d296cc3817abc23a7e3f4fa030cc01df9e205f7b682d2463e9b",
+          "module": "candidates.qwen35_gdn_prefill.elementwise.test_model",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 1.4236303030011186,
+          "test_count": 22
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.elementwise.test_reference",
+            "-v"
+          ],
+          "log": "elementwise__test_reference.log",
+          "log_sha256": "504053545bc552e3ebc8dbbc8e30c90c5fc489d8b590a5b9f506f6c2973880ae",
+          "module": "candidates.qwen35_gdn_prefill.elementwise.test_reference",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.40304669399847626,
+          "test_count": 10
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.elementwise.test_terminal_preflight",
+            "-v"
+          ],
+          "log": "elementwise__test_terminal_preflight.log",
+          "log_sha256": "e8b34de4241b3e2e8d6ea967bd28344eb491ec8e3757f4b2b31b5cc554542c15",
+          "module": "candidates.qwen35_gdn_prefill.elementwise.test_terminal_preflight",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.6003704920003656,
+          "test_count": 16
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.gated_norm.test_model",
+            "-v"
+          ],
+          "log": "gated_norm__test_model.log",
+          "log_sha256": "abc190d4a849df56ec132d6017e51b59e677bc8d9d787dd4af4dd9d52bc901f5",
+          "module": "candidates.qwen35_gdn_prefill.gated_norm.test_model",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 5.052156082001602,
+          "test_count": 22
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.native.test_capture",
+            "-v"
+          ],
+          "log": "native__test_capture.log",
+          "log_sha256": "c894a416be21d51fde0ddbf8cdf5c70fb752e5554d70c49ce622fe188c8e1e2e",
+          "module": "candidates.qwen35_gdn_prefill.native.test_capture",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.16118055100014317,
+          "test_count": 5
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.prep.test_chain",
+            "-v"
+          ],
+          "log": "prep__test_chain.log",
+          "log_sha256": "1f3073b3b1e764427430e614bbe00d695e1271a4c56c143bb9dd1fe5cc40dd17",
+          "module": "candidates.qwen35_gdn_prefill.prep.test_chain",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 16.236129715998686,
+          "test_count": 1
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.prep.test_model",
+            "-v"
+          ],
+          "log": "prep__test_model.log",
+          "log_sha256": "f0241add6cce809275df8965355ba93c0bb719c7ece13c21ff52501849de9089",
+          "module": "candidates.qwen35_gdn_prefill.prep.test_model",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 2.9164272460002394,
+          "test_count": 19
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.prep.test_reference",
+            "-v"
+          ],
+          "log": "prep__test_reference.log",
+          "log_sha256": "1e8620020b8b0f05662b020a4dc53b7828fb1940b805d10c7ce634f7ef16a799",
+          "module": "candidates.qwen35_gdn_prefill.prep.test_reference",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.679688692001946,
+          "test_count": 12
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_dense_prefix",
+            "-v"
+          ],
+          "log": "test_dense_prefix.log",
+          "log_sha256": "7fa40eec324fcdc56fed0c0021ee5ba74a53c06d3c6d6788b7fe83432ec91ccf",
+          "module": "candidates.qwen35_gdn_prefill.test_dense_prefix",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 4.45033686700117,
+          "test_count": 15
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_full_compare",
+            "-v"
+          ],
+          "log": "test_full_compare.log",
+          "log_sha256": "4f8b1f84f434f580de1e939398f97fb2d68806f72de0adc431bb8135d7c7a524",
+          "module": "candidates.qwen35_gdn_prefill.test_full_compare",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.4541327349979838,
+          "test_count": 34
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_full_driver",
+            "-v"
+          ],
+          "log": "test_full_driver.log",
+          "log_sha256": "2546e25ae0f1881620831d6f2bc4e9223b2c5fa5d542afee6488d58451025d9c",
+          "module": "candidates.qwen35_gdn_prefill.test_full_driver",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 19.66598480900211,
+          "test_count": 32
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_input_fixture",
+            "-v"
+          ],
+          "log": "test_input_fixture.log",
+          "log_sha256": "b60f32f9034013e0ccd9c859f7ba3e0d997f56c649b800e144fb97a4bcdb9723",
+          "module": "candidates.qwen35_gdn_prefill.test_input_fixture",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.5582408179980121,
+          "test_count": 12
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_prefill_bf16_compare",
+            "-v"
+          ],
+          "log": "test_prefill_bf16_compare.log",
+          "log_sha256": "4bcc0b27243552808cedc086ca6dc90a83a84e7294c6da0b656f4f8374c83858",
+          "module": "candidates.qwen35_gdn_prefill.test_prefill_bf16_compare",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.31503850700028124,
+          "test_count": 8
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_prefix_driver",
+            "-v"
+          ],
+          "log": "test_prefix_driver.log",
+          "log_sha256": "6d248b887516b7f6654f05b1f6a7d9b62be95b3b55823d62df06314ed4c49d50",
+          "module": "candidates.qwen35_gdn_prefill.test_prefix_driver",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 2.351137760000711,
+          "test_count": 3
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_prefix_reference",
+            "-v"
+          ],
+          "log": "test_prefix_reference.log",
+          "log_sha256": "da6dd69b11eac3f64d4ec3af1d2f51c10dd1213836106f41bac3f17fb8797f67",
+          "module": "candidates.qwen35_gdn_prefill.test_prefix_reference",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.3158656550003798,
+          "test_count": 7
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_projection_driver",
+            "-v"
+          ],
+          "log": "test_projection_driver.log",
+          "log_sha256": "d7d665c786509d02ec61fb6b605ff133b8ca810e05dcaf373fc6e570f5f16ebb",
+          "module": "candidates.qwen35_gdn_prefill.test_projection_driver",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 7.186592900998221,
+          "test_count": 20
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_rms_observer",
+            "-v"
+          ],
+          "log": "test_rms_observer.log",
+          "log_sha256": "7491c08c3a07535cba2e5dbf0ab1bb369798b9570a59d386b4f8c6a6669bf100",
+          "module": "candidates.qwen35_gdn_prefill.test_rms_observer",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 1.17871010700037,
+          "test_count": 3
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_rms_owner",
+            "-v"
+          ],
+          "log": "test_rms_owner.log",
+          "log_sha256": "c5921f7cc2efed2a861c9cb195a63f7d2fa6c0844360239634dbe5d8a174c4b6",
+          "module": "candidates.qwen35_gdn_prefill.test_rms_owner",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 1.1948476639990986,
+          "test_count": 12
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "unittest",
+            "candidates.qwen35_gdn_prefill.test_typed_dense",
+            "-v"
+          ],
+          "log": "test_typed_dense.log",
+          "log_sha256": "fceee9b58f3e360cd840590e7222724c533de4235f48fa0f34cac05f4bb7a211",
+          "module": "candidates.qwen35_gdn_prefill.test_typed_dense",
+          "passed": true,
+          "returncode": 0,
+          "seconds": 0.3290898240011302,
+          "test_count": 12
+        }
+      ],
+      "summary_sha256": "aedf86432f9da58d4c4cc23f72ff20aaa25e700f83db5c0e82392c46d656ef91",
+      "test_count": 387
+    },
+    {
+      "name": "attention_tests",
+      "source_count": 118,
+      "status": "PASS_SYNTHETIC_TYPED_L3_SUBCHAINS_ONLY",
+      "suite_count": 23,
+      "suites": [
+        {
+          "elapsed_seconds": 2.342198107002332,
+          "log": "candidates__qwen2_resident_matrix__ffn_attention__test_matrix_service.log",
+          "log_sha256": "f4cd5489f4b75f0a53dce49952fc249d5d1c492e68e83ddc172a2d4720b70e33",
+          "module": "candidates.qwen2_resident_matrix.ffn_attention.test_matrix_service",
+          "passed": true,
+          "returncode": 0,
+          "tests": 32
+        },
+        {
+          "elapsed_seconds": 3.1753725150010723,
+          "log": "candidates__qwen2_resident_matrix__ffn_attention__test_rectangular_profile.log",
+          "log_sha256": "22cbcd11f0822976bdbc3a02a2e9ff87bf618a1711359a808fcc68b4c0df2dec",
+          "module": "candidates.qwen2_resident_matrix.ffn_attention.test_rectangular_profile",
+          "passed": true,
+          "returncode": 0,
+          "tests": 10
+        },
+        {
+          "elapsed_seconds": 4.159902726998553,
+          "log": "candidates__qwen35_attention_prefill__gqa__test_causal_equivalence.log",
+          "log_sha256": "4cbb6b70ec942640ae6df3d62a09faa67a2226ae6c291d72202c74c19f10f4fc",
+          "module": "candidates.qwen35_attention_prefill.gqa.test_causal_equivalence",
+          "passed": true,
+          "returncode": 0,
+          "tests": 6
+        },
+        {
+          "elapsed_seconds": 0.9298805549988174,
+          "log": "candidates__qwen35_attention_prefill__gqa__test_coverage_seal.log",
+          "log_sha256": "9b4a52c0eca00672c35ae20d06580b8081ab07356aa28ce74f92d6ac5746006c",
+          "module": "candidates.qwen35_attention_prefill.gqa.test_coverage_seal",
+          "passed": true,
+          "returncode": 0,
+          "tests": 10
+        },
+        {
+          "elapsed_seconds": 4.44824519499889,
+          "log": "candidates__qwen35_attention_prefill__gqa__test_gqa.log",
+          "log_sha256": "3b83a26bfebee4e5ed4d98c904531befdfbf48ed4c65e1ca37c85c9424656600",
+          "module": "candidates.qwen35_attention_prefill.gqa.test_gqa",
+          "passed": true,
+          "returncode": 0,
+          "tests": 18
+        },
+        {
+          "elapsed_seconds": 0.5037860600023123,
+          "log": "candidates__qwen35_attention_prefill__kv_cache__test_final_owner.log",
+          "log_sha256": "86ee58919e8d10e766c8023af11e34fcea8a7eaed285bd982f8acede3786096c",
+          "module": "candidates.qwen35_attention_prefill.kv_cache.test_final_owner",
+          "passed": true,
+          "returncode": 0,
+          "tests": 7
+        },
+        {
+          "elapsed_seconds": 0.8245516359966132,
+          "log": "candidates__qwen35_attention_prefill__kv_cache__test_kv_cache.log",
+          "log_sha256": "e051c2e0c112a13f361b89ca150362acaca8dac7318360cd8c1c66bd8dcfca82",
+          "module": "candidates.qwen35_attention_prefill.kv_cache.test_kv_cache",
+          "passed": true,
+          "returncode": 0,
+          "tests": 34
+        },
+        {
+          "elapsed_seconds": 0.2984446399968874,
+          "log": "candidates__qwen35_attention_prefill__native__test_capture.log",
+          "log_sha256": "c9fcc81e6f8144499240845cda1508e378e7e6a32b84d4cfda62a0b83913f5b8",
+          "module": "candidates.qwen35_attention_prefill.native.test_capture",
+          "passed": true,
+          "returncode": 0,
+          "tests": 11
+        },
+        {
+          "elapsed_seconds": 74.78358049799863,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_coordinator.log",
+          "log_sha256": "94a1d1e780479eddedb122e291315918ff370ebad755f78637e8b385679ffd37",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_coordinator",
+          "passed": true,
+          "returncode": 0,
+          "tests": 7
+        },
+        {
+          "elapsed_seconds": 0.4837836589977087,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_default256.log",
+          "log_sha256": "6cb18f1f7555a2bcbdee6f84b52aa60eea2bdd8a663f0c8c18dd37358b7c562a",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_default256",
+          "passed": true,
+          "returncode": 0,
+          "tests": 7
+        },
+        {
+          "elapsed_seconds": 1.1429892539999855,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_driver.log",
+          "log_sha256": "f5d2376890f5233e8516b756073c75ed06632ac16b8d8946156441b750aaa7f9",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_driver",
+          "passed": true,
+          "returncode": 0,
+          "tests": 24
+        },
+        {
+          "elapsed_seconds": 1.3398672650000663,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_fixture.log",
+          "log_sha256": "1cfaf2020de4180679c781891840cf599be3002357d27febdfdbec752012e63a",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_fixture",
+          "passed": true,
+          "returncode": 0,
+          "tests": 9
+        },
+        {
+          "elapsed_seconds": 0.849526562000392,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_owner.log",
+          "log_sha256": "713fbd256994ffaca7455c14118ee6b44acba145dc70347c6408577c99e12fdc",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_owner",
+          "passed": true,
+          "returncode": 0,
+          "tests": 19
+        },
+        {
+          "elapsed_seconds": 0.09325159700165386,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_publication.log",
+          "log_sha256": "3ac3796d88108df266c979c52fc3ddbd9b7029774c62640773603108cd63dc83",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_publication",
+          "passed": true,
+          "returncode": 0,
+          "tests": 3
+        },
+        {
+          "elapsed_seconds": 0.19484436700076913,
+          "log": "candidates__qwen35_attention_prefill__norm_rope__test_shared_exp.log",
+          "log_sha256": "5887eadd26e6f0787299712319280b5d9b99cdbe0e6517bc32279ca254edbc87",
+          "module": "candidates.qwen35_attention_prefill.norm_rope.test_shared_exp",
+          "passed": true,
+          "returncode": 0,
+          "tests": 3
+        },
+        {
+          "elapsed_seconds": 1.071892795000167,
+          "log": "candidates__qwen35_attention_prefill__pair_qk_chisel__test_overlay.log",
+          "log_sha256": "bf72621617950f6694eaf8275493bb5ab88828418b6b54a6063d7b6f55b1ea99",
+          "module": "candidates.qwen35_attention_prefill.pair_qk_chisel.test_overlay",
+          "passed": true,
+          "returncode": 0,
+          "tests": 9
+        },
+        {
+          "elapsed_seconds": 0.49107363000075566,
+          "log": "candidates__qwen35_attention_prefill__test_full_capture.log",
+          "log_sha256": "e2df77f8290cdc9177f96bc9c70fcdb17221296b05697157903fdc6513c2a822",
+          "module": "candidates.qwen35_attention_prefill.test_full_capture",
+          "passed": true,
+          "returncode": 0,
+          "tests": 7
+        },
+        {
+          "elapsed_seconds": 1.2967781520019344,
+          "log": "candidates__qwen35_attention_prefill__test_full_driver.log",
+          "log_sha256": "846191105e39b030f3af0d4cb204ce7a014352bfcffba41e8df2e503c82a7dea",
+          "module": "candidates.qwen35_attention_prefill.test_full_driver",
+          "passed": true,
+          "returncode": 0,
+          "tests": 8
+        },
+        {
+          "elapsed_seconds": 0.2138414159999229,
+          "log": "candidates__qwen35_attention_prefill__test_input_fixture.log",
+          "log_sha256": "5bcaa93bfb07cb9d7f264a3d342e63010005b8de33e0d9bedd385a8d9514cd92",
+          "module": "candidates.qwen35_attention_prefill.test_input_fixture",
+          "passed": true,
+          "returncode": 0,
+          "tests": 6
+        },
+        {
+          "elapsed_seconds": 0.3821700780026731,
+          "log": "candidates__qwen35_attention_prefill__test_norm_rope_runner.log",
+          "log_sha256": "a4bfbf8d47637d0065b533c348d7279a28b627fc620ad24dbd8c50a7c6dc2c12",
+          "module": "candidates.qwen35_attention_prefill.test_norm_rope_runner",
+          "passed": true,
+          "returncode": 0,
+          "tests": 2
+        },
+        {
+          "elapsed_seconds": 38.998175171000184,
+          "log": "candidates__qwen35_attention_prefill__test_projection_driver.log",
+          "log_sha256": "8935698976d7ae9d02ce8d7e1252cbd06b138d77900b2d09efec7b62019814bf",
+          "module": "candidates.qwen35_attention_prefill.test_projection_driver",
+          "passed": true,
+          "returncode": 0,
+          "tests": 6
+        },
+        {
+          "elapsed_seconds": 0.31659105800281395,
+          "log": "candidates__qwen35_attention_prefill__test_runner.log",
+          "log_sha256": "8a5d1cba5880d5fd60e8d95c87cecbb8e70a8be88ded38b6313d6fc93ec50d13",
+          "module": "candidates.qwen35_attention_prefill.test_runner",
+          "passed": true,
+          "returncode": 0,
+          "tests": 3
+        },
+        {
+          "elapsed_seconds": 0.0691154859996459,
+          "log": "candidates__qwen35_attention_prefill__torch_norm256_chisel__test_overlay.log",
+          "log_sha256": "1fd93cf3d7132f704f25cebbebc13f4f66bcb1d755a0603de1def2a8af281d8d",
+          "module": "candidates.qwen35_attention_prefill.torch_norm256_chisel.test_overlay",
+          "passed": true,
+          "returncode": 0,
+          "tests": 6
+        }
+      ],
+      "summary_sha256": "195644b58e42e180ff748bf55d69ea504e9382f53b7c1e9c839cd17845bc85ea",
+      "test_count": 247
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import time
 
 from ..qwen35_35b_rms import owner as rms
 from ..qwen35_gdn_prefill import typed_dense as dense
+from ..qwen35_gdn_prefill.conv import model as conv
 from ..qwen35_gdn_prefill.chunk.vector import Vector16, IEEE_POLICY
 from ..qwen2_resident_matrix.dense_block_reduce.profile import ReductionProfile
 from .projection_owner import LargeKProjectionOwner, PrefixWorkspace
@@ -32,9 +33,10 @@ def sha(raw):
 
 class PrefixExecutionError(RuntimeError):
     """Interrupted invocation retains actual state; this does not retire DMA."""
-    def __init__(self, error, report, snapshot, raw):
+    def __init__(self, error, report, snapshot, raw, history_raw=None):
         super().__init__(str(error))
         self.execution_report, self.snapshot, self.partial_output = report, snapshot, raw
+        self.partial_history = history_raw
 
 
 @dataclass(frozen=True)
@@ -61,7 +63,8 @@ def pack_window(raw_nk, window):
 
 
 def execute_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
-                   matrix, vector, deadline, memory=None, controls=None, observe=None):
+                   matrix, vector, deadline, memory=None, controls=None, observe=None,
+                   conv_weights=None, conv_observe=None):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -94,7 +97,12 @@ def execute_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
     require(controls is None or callable(controls), 'optional handshake/fault controls')
     require(observe is None or callable(observe), 'optional terminal observer')
     require(type(deadline) in (int, float) and deadline > time.monotonic(), 'bounded wall deadline')
-    scalar = rms.SharedScalar()
+    require(conv_weights is None or type(conv_weights) is bytes and len(conv_weights) == OUTPUTS * 8,
+            'complete BF16 Conv4 weight required')
+    require(conv_weights is None or windows == (ColumnWindow(0, OUTPUTS),),
+            'Conv requires actual complete original QKV')
+    require(conv_observe is None or callable(conv_observe), 'optional immutable Conv observer')
+    scalar = rms.SharedScalar() if conv_weights is None else conv.ConvScalar()
     rms_owner = rms.RmsOwner(scalar)
     # This K2048 job uses resident partials. The legacy prefix spill condition
     # must not advertise split_k=128 and accidentally require N-dependent DDR.
@@ -121,7 +129,7 @@ def execute_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
     packed = [(window, region(pack_window(qkv_nk, window)), region(size=tokens * window.columns * 2))
               for window in windows]
     report = dict(scope='ACTUAL_TYPED_H2048_RMS_TO_K2048_QKV_WINDOWS', status='RUNNING',
-                  tokens=tokens, full_qkv=windows == (ColumnWindow(0, OUTPUTS),),
+                  tokens=tokens, conv4_requested=conv_weights is not None, full_qkv=windows == (ColumnWindow(0, OUTPUTS),),
                   full_block=False, official_model_profile_admitted=False,
                   command128_executed=False, rtl_executed=False, hardware_cycles=None,
                   source_hashes=dict(hidden=sha(hidden), norm_weight=sha(norm_weight), qkv_nk=sha(qkv_nk)),
@@ -156,8 +164,9 @@ def execute_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                 cause=dict(type=type(error).__name__, message=str(error)),
                 automatically_drained=False, resumable_checkpoint=False)
             report.update(status='INTERRUPTED', active_stage=stage)
-            raise PrefixExecutionError(error, report, snapshot, raw) from error
-        status = driver.response.status if stage == 'input_norm' else driver.response[1]
+            raise PrefixExecutionError(error, report, snapshot, raw,
+                driver.history_out.raw() if hasattr(driver, 'history_out') else None) from error
+        status = driver.response.status if stage in ('input_norm', 'conv4_silu') else driver.response[1]
         details = driver.report()
         report['stages'].append(dict(stage=stage, host_seconds=time.monotonic() - started, report=details))
         report['terminals'].append(dict(stage=stage, status=status))
@@ -167,6 +176,12 @@ def execute_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
         if status is not None:
             require(not driver.output.published, 'failed owner published output')
             report.update(status='FAILED', failed_stage=stage)
+            if stage == 'conv4_silu':
+                error = RuntimeError('Conv owner returned '+str(status))
+                raise PrefixExecutionError(error, report, dict(stage=stage, owner_report=details,
+                    terminal_accepted=True, output_published=False, history_published=False,
+                    automatically_drained=False, resumable_checkpoint=False),
+                    driver.output.raw(), driver.history_out.raw())
             return False
         require(driver.output.published, 'successful terminal without actual output publication')
         published.append((driver.output, sha(driver.output.raw())))
@@ -188,6 +203,31 @@ def execute_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                     vector=vector, profile=profile, sum_identity=36002 + index)
         if not run('qkv_columns_' + str(window.start), driver):
             return report, memory
+    if conv_weights is not None:
+        qkv_base = packed[0][2]
+        qkv_region = memory.exact(qkv_base, tokens * OUTPUTS * 2, readable=True)
+        require(qkv_region is driver.output and qkv_region.published,
+                'Conv did not receive actual complete QKV producer region')
+        conv_weight_base = region(conv_weights)
+        conv_out = region(size=tokens * OUTPUTS * 2)
+        history_in = region(bytes(OUTPUTS * 8))
+        history_out = region(size=OUTPUTS * 8)
+        conv_owner = conv.ConvOwner(scalar, channels=OUTPUTS, observe=conv_observe)
+        job = conv.ConvJob(35090, qkv_base, conv_weight_base, conv_out,
+                          history_in, history_out, tokens, True, 0, channels=OUTPUTS)
+        conv_driver = conv.TypedConvDriver(conv_owner, memory, job, current_generation=0)
+        require(conv_driver.input is qkv_region and conv_owner.scalar is rms_owner.scalar,
+                'Conv producer/scalar identity changed')
+        if not run('conv4_silu', conv_driver):
+            return report, memory
+        require(not conv_driver.history_out.published and conv_driver.response.generation == 0 and not conv_driver.response.history_committed,
+                'Conv local completion must not commit block state')
+        report['conv_history_staging'] = dict(sha256=sha(conv_driver.history_out.raw()),
+            bytes=OUTPUTS*8, address=history_out, published=False, generation_advanced=False)
+        report['actual_qkv_region_consumed'] = True
+        if observe is not None:
+            observe('conv_history_staging', dict(published=False, generation_advanced=False),
+                    conv_driver.history_out.raw())
     require(resources == (id(memory), id(scalar), id(rms_owner), id(projection_owner),
                  id(projection_owner.a_banks), id(projection_owner.b_banks),
                  matrix.resource_address, vector.resource_address), 'execution resource replaced')

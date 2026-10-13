@@ -59,6 +59,14 @@ class EvidenceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 r.checked_record(identity)
 
+    def test_synthetic_relative_file_is_not_a_repository_source(self):
+        from types import SimpleNamespace
+        with patch.dict(r.sys.modules, {'synthetic_torch_classes': SimpleNamespace(__file__='_classes.py')}):
+            self.assertNotIn('_classes.py', r.source_closure())
+        with patch.dict(r.sys.modules, {'missing_real_source': SimpleNamespace(__file__=str(r.ROOT/'missing_real_source.py'))}):
+            with self.assertRaises(FileNotFoundError):
+                r.source_closure()
+
 
 if __name__ == '__main__':
     unittest.main()

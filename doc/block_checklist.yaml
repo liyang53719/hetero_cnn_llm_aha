@@ -1459,9 +1459,24 @@ Qwen35_35B_QKV恢复重验_20261013:
   状态: ongoing
   来源: a5f49a1基线及96a065ce7a3fb2e573ab8656f2996fe60e945d29未发布候选树_19blob逐SHA恢复
   done: [官方固定payload重获取, 官方runtime真实重建及二进制同SHA, 真实RMS_M16_M128, 新完整N8192官方reference, 真实完整QKV_M16_M128及逐段原门, 新冷GDN467项33套, Attention247项23套, 独立raw与源码复核]
-  ongoing: [小批发布及精确提交CI工件核验]
+  ongoing: []
+  发布闭环: 9765457a88d02d92810986a3d879a50fc111032b；GDN38387356737_goal38387356702_payload38387356706均success；GDN467项33套原日志及116源码逐SHA核验
   todo: [35B完整L0_L3_M128, 生产Chisel_Command128_RTL, 固定资源完整周期MAC利用率及占空比]
   未继承旧PASS: true
   性能范围: M16useful268435456_executed2147483648；M128useful2147483648_executed2147483648；硬件cycle_busy_duty_stall_overlap未知
   报告: reports/execution/QWEN35_35B_PREFIX_RECOVERY_20261013.json
   边界: 只有RMS到QKV前缀；无carried状态或MoE完整block；80及90目标未达到
+
+Qwen35_35B_RMS到全QKV到Conv软件前缀_20261013:
+  状态: ongoing
+  父项: [Q35C, Q35D, U00.2, U01]
+  done: [固定35B官方Conv65536B最小payload, 同Scalar实际QKV生产者接Conv, 冷history未发布staging, 最后ACK失败不提交, M16实际前缀, 原1ULP严格后验门及2ULP反例]
+  ongoing: [独立复核和小批发布CI]
+  新增done: [M128实际前缀及原严格门, 冷GDN477项36套122源, 计划清单91项]
+  todo: [Prep与GDN头映射, chunk与状态整体fence, O_residual_MoE完整block, L3完整block, 生产Chisel与RTL, 固定资源全周期利用率占空比]
+  历史差异: 生产Chisel局部finish提交history；typed保持staging；不宣称完整控制已闭环
+  原门: 同输入Conv_SiLU最大1BF16ULP；同输入history_bitexact；端到端max0p03125_mean0p005
+  资源: Matrix4096_Vector16_Scalar1；Conv组weights_history各128BF16_input_output各32BF16
+  性能: useful与executed及Scalar操作分别记录；硬件cycle_busy_duty_stall_overlap未知
+  报告: doc/QWEN35_35B_RMS_QKV_CONV_20261013_CN.md
+  完整block与RTL通过: false

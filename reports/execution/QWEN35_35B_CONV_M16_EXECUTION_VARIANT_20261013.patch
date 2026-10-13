@@ -1,0 +1,38 @@
+--- a/candidates/qwen35_35b_prefill/run_prefix.py
++++ b/candidates/qwen35_35b_prefill/run_prefix.py
+@@ -25,7 +25,7 @@
+ # Load that exact source closure before freezing the execution identity.
+ from ..qwen2_resident_matrix.dense_block_reduce import vector_add_model
+ from . import prefix_driver as p
+-from ..qwen35_35b_conv import payload as conv_payload, reference as conv_reference, verify as conv_verify
++from ..qwen35_35b_conv import payload as conv_payload, reference as conv_reference
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+ 
+@@ -205,13 +205,19 @@
+             native_conv, native_id = conv_reference.native_conv(qkv_actual, conv_weight, args.tokens)
+             # Also check end-to-end inherited QKV rounding against the frozen official producer.
+             end_conv, end_id = conv_reference.native_conv(native, conv_weight, args.tokens)
+-            actual_conv = dict(conv=pre_actual,silu=post_actual,history=history_actual)
+-            strict = conv_verify.compare(actual_conv,fixed_conv,native_conv,end_conv)
+-            report['conv_strict_gates'] = strict
+-            report['conv_comparisons'] = strict['comparisons']
+-            report['conv_reference_records'] = conv_verify.save_raw(args.output/'conv_references',
+-                dict(fixed=fixed_conv,same_input=native_conv,end_to_end=end_conv))
+-            p.require(strict['passed'], 'original strict Conv gates failed')
++            comparisons = {}
++            for name, actual_conv in (('conv',pre_actual),('silu',post_actual),('history',history_actual)):
++                p.require(actual_conv == fixed_conv[name], 'actual Conv differs from independent fixed recipe: '+name)
++                per = {}
++                for label, expected in (('same_input',native_conv[name]),('end_to_end',end_conv[name])):
++                    result = compare_finite_bf16(actual_conv, expected)
++                    result['passed'] = result['max_abs'] <= .03125 and result['mean_abs'] <= .005
++                    if name == 'history' and label == 'same_input':
++                        result['passed'] &= result['bit_mismatches'] == 0
++                    p.require(result['passed'], 'original Conv gate failed: '+name+'/'+label)
++                    per[label] = result
++                comparisons[name] = per
++            report['conv_comparisons'] = comparisons
+             report['conv_references'] = dict(fixed=fixed_id,native=native_id,end_to_end=end_id)
+             p.require(execution['conv_history_staging']['published'] is False and
+                       execution['conv_history_staging']['generation_advanced'] is False, 'no local block commit')

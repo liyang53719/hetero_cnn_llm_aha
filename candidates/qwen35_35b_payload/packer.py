@@ -190,6 +190,13 @@ def collect(root: Path, output: Path, *, include_qkv: bool = False,
     Any failure leaves no success manifest. A partial output is never reused.
     """
     plan = selection(root, include_qkv=include_qkv)
+    return collect_plan(root, output, plan, expected_manifest=expected_manifest,
+                        expected_manifest_sha256=expected_manifest_sha256, opener=opener)
+
+
+def collect_plan(root, output, plan, *, expected_manifest=None,
+                 expected_manifest_sha256=None, opener=urllib.request.urlopen):
+    """Internal byte-acquisition engine; caller must supply its source-verified plan."""
     _reject_aliases(plan["tensors"])
     require((expected_manifest is None) == (expected_manifest_sha256 is None),
             "expected manifest path and SHA256 must be supplied together")
@@ -236,6 +243,11 @@ def load_payload(root: Path, directory: Path, *, manifest_sha256: str,
                  include_qkv: bool = False) -> tuple[dict, dict[str, bytes]]:
     """Reload against the caller's independently retained acquisition digest."""
     plan = selection(root, include_qkv=include_qkv)
+    return load_plan(root, directory, plan, manifest_sha256=manifest_sha256)
+
+
+def load_plan(root, directory, plan, *, manifest_sha256):
+    """Internal strict loader shared by separately source-verified selections."""
     directory = Path(directory)
     require(not directory.is_symlink() and directory.resolve() == directory.absolute(),
             "payload directory symlink/alias refused")

@@ -146,5 +146,44 @@ class PrefixTests(unittest.TestCase):
         self.assertEqual(len(failure.execution_report['terminals']), 1)
 
 
+class ConvHandoffTests(unittest.TestCase):
+    """Small synthetic N32 fixture only; actual 35B full geometry is a separate run."""
+    setUpClass = classmethod(PrefixTests.setUpClass.__func__)
+    setUp = PrefixTests.setUp
+    def conv_case(self, **kwargs):
+        from unittest.mock import patch
+        weights = np.zeros((32,4), '<u2'); weights[:,3]=0x3f80
+        with patch.object(p, 'OUTPUTS', 32):
+            return p.execute_prefix(self.hidden, self.weight, self.nk[:32*2048*2],
+                tokens=16, windows=(p.ColumnWindow(0,32),), profile=self.profile,
+                matrix=self.matrix, vector=self.vector, deadline=time.monotonic()+90,
+                conv_weights=weights.tobytes(), **kwargs)
+
+    def test_conv_same_memory_scalar_and_unpublished_history(self):
+        observed=[]; pre=[]
+        report,memory=self.conv_case(observe=lambda *x: observed.append(x),
+                                    conv_observe=lambda *x:pre.append(x))
+        self.assertEqual(report['status'],'PASS_TYPED_PREFIX_EXECUTION_ONLY')
+        self.assertTrue(report['actual_qkv_region_consumed'])
+        self.assertEqual(len(report['terminals']),3)
+        self.assertEqual([x[0] for x in observed],['input_norm','qkv_columns_0','conv4_silu','conv_history_staging'])
+        self.assertEqual(len(pre),16*32)
+        stage=report['conv_history_staging']
+        self.assertFalse(stage['published']);self.assertFalse(stage['generation_advanced'])
+        self.assertFalse(memory.regions[stage['address']].published)
+
+    def test_conv_final_ack_failure_never_commits_history(self):
+        def controls(stage,i,driver):
+            if stage=='conv4_silu' and driver.pending is not None and driver.owner.request.write:
+                return {'ack_error': driver.owner.ack_bytes+64==driver.job.write_bytes}
+            return {}
+        with self.assertRaises(p.PrefixExecutionError) as error:
+            self.conv_case(controls=controls)
+        self.assertEqual(error.exception.snapshot['stage'],'conv4_silu')
+        self.assertFalse(error.exception.snapshot['output_published'])
+        self.assertFalse(error.exception.snapshot['history_published'])
+        self.assertEqual(len(error.exception.partial_history),32*8)
+
+
 if __name__ == '__main__':
     unittest.main()

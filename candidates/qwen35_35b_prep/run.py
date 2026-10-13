@@ -86,6 +86,7 @@ def main(argv=None):
     parser.add_argument('--reference-report', type=Path, required=True)
     parser.add_argument('--reference-report-sha256', required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--gate-policy',choices=(p.prep.FINITE_GATE_35B,p.prep.DUAL_EXP_GATE_35B),default=p.prep.FINITE_GATE_35B)
     parser.add_argument('--reduction-policy',choices=(p.prep.ASCENDING,p.prep.CPU_DEFAULT_35B),default=p.prep.ASCENDING)
     parser.add_argument('--tokens', type=int, choices=(16, 128), default=16)
     parser.add_argument('--full-qkv', action='store_true')
@@ -159,7 +160,7 @@ def main(argv=None):
         conv_seen.add((token,channel)); conv_preact[token,channel] = bits
     args.output.mkdir(parents=True)
     started = time.monotonic()
-    report = dict(status='RUNNING', reduction_policy=args.reduction_policy, tokens=args.tokens, windows=[vars(w) for w in windows],
+    report = dict(status='RUNNING', gate_policy=args.gate_policy, reduction_policy=args.reduction_policy, tokens=args.tokens, windows=[vars(w) for w in windows],
                   full_qkv=args.full_qkv, conv_requested=conv_weight is not None, full_block=False, rtl_executed=False,
                   conv_manifest_sha256=args.conv_manifest_sha256,
                   reference=reference_record, manifest_sha256=args.manifest_sha256,
@@ -195,7 +196,7 @@ def main(argv=None):
         execution, _ = p.execute_prep_prefix(hidden, norm_weight, qkv, tokens=args.tokens, windows=windows,
             profile=profile, matrix=matrix, vector=vector, deadline=started+args.wall_seconds, observe=observe,
             conv_weights=conv_weight, conv_observe=conv_observe,ab_weights=ab_weights,ab_profiles=ab_profiles,
-            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy)
+            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy)
         report['execution'] = execution
         p.require(execution['status'] == 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', 'actual typed prefix failed')
         p.require(execution['actual_rms_output_sha256'] == reference['input']['sha256'], 'actual RMS differs from reference input')

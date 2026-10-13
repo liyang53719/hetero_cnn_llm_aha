@@ -25,6 +25,8 @@ from ..typed_dense import TypedMemory, FULL_MASK
 from ...qwen2_resident_matrix.transposed_down.model import WriteCommand, WriteAck
 from .scalar import PrepScalar, OPCODES
 from .reduction import ASCENDING, CPU_DEFAULT_35B, sum_squares128
+from ...qwen35_35b_exp.gate_scalar import GateScalar, SOFTPLUS_OPERATION
+from ...qwen35_35b_exp.scalar import OPERATION as DECAY_OPERATION
 from .layout import PrepLayout, EQUAL_HEADS, GROUPED_35B, grouped_source_identity
 
 
@@ -36,6 +38,7 @@ CONV_ROW_BYTES, AB_ROW_BYTES, CORE_ROW_BYTES = 12288, 64, 25600
 BEAT_BYTES, PARAM_BYTES = 64, 64
 LEGACY_GATE = "legacy_open80"
 FINITE_GATE_35B = "35b_finite_nonpositive_fp32"
+DUAL_EXP_GATE_35B = "35b_finite_nonpositive_fp32_dual_p7_exp"
 
 
 def require(ok, why):
@@ -52,6 +55,8 @@ def source_identity(root=ROOT, *, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE, r
     models = ('candidates/qwen35_gdn_prefill/prep/model.py',
               'candidates/qwen35_gdn_prefill/prep/scalar.py',
               'candidates/qwen35_gdn_prefill/prep/reduction.py',
+              'candidates/qwen35_35b_exp/scalar.py',
+              'candidates/qwen35_35b_exp/gate_scalar.py',
               'candidates/qwen35_gdn_prefill/prep/layout.py',
               'candidates/qwen35_gdn_prefill/conv/scalar.py',
               'candidates/qwen35_gdn_prefill/rms_owner.py',
@@ -95,7 +100,7 @@ class InputPrepJob:
     def validate(self, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE, reduction_policy=ASCENDING):
         require(self.reduction_policy == reduction_policy and reduction_policy in (ASCENDING, CPU_DEFAULT_35B), "explicit reduction policy identity")
         require(reduction_policy == ASCENDING or layout == GROUPED_35B, "fixed CPU reduction only explicit35B")
-        require(self.gate_policy == gate_policy and gate_policy in (LEGACY_GATE,FINITE_GATE_35B), "explicit gate policy identity")
+        require(self.gate_policy == gate_policy and gate_policy in (LEGACY_GATE,FINITE_GATE_35B,DUAL_EXP_GATE_35B), "explicit gate policy identity")
         require(gate_policy==LEGACY_GATE or layout==GROUPED_35B,"finite gate policy only for explicit35B")
         require(type(self.layout) is PrepLayout and self.layout == layout, 'explicit caller/owner layout identity')
         require(type(heads) is int and 1 <= heads <= layout.value_heads and
@@ -132,10 +137,11 @@ class InputPrepOwner:
     no inactive-head fill and computes every production head.
     """
     def __init__(self, scalar, *, heads=HEADS, layout=EQUAL_HEADS, gate_policy=LEGACY_GATE, reduction_policy=ASCENDING):
-        require(gate_policy in (LEGACY_GATE,FINITE_GATE_35B) and (gate_policy==LEGACY_GATE or layout==GROUPED_35B), "explicit supported gate policy")
+        require(gate_policy in (LEGACY_GATE,FINITE_GATE_35B,DUAL_EXP_GATE_35B) and (gate_policy==LEGACY_GATE or layout==GROUPED_35B), "explicit supported gate policy")
         require(reduction_policy in (ASCENDING, CPU_DEFAULT_35B) and (reduction_policy == ASCENDING or layout == GROUPED_35B), "explicit reduction policy")
         self.reduction_policy=reduction_policy
         self.gate_policy=gate_policy
+        require(gate_policy!=DUAL_EXP_GATE_35B or (isinstance(scalar,GateScalar) and scalar.enable_gate_softplus and scalar.enable_ieee_exp and scalar.enable_softplus), 'dual gate requires explicitly enabled same GateScalar')
         require(isinstance(scalar, PrepScalar), 'explicit caller-owned PrepScalar required')
         require(type(layout) is PrepLayout, 'explicit pinned geometry required')
         require(type(heads) is int and 1 <= heads <= layout.value_heads, 'head count within pinned layout')
@@ -147,6 +153,8 @@ class InputPrepOwner:
         self.counts, self.scalar_baseline, self.scalar_counts = Counter(), Counter(), Counter()
         self.exp_baseline, self.exp_counts = Counter(), Counter()
         self.soft_baseline, self.soft_counts = Counter(), Counter()
+        self.decay_baseline,self.decay_counts=Counter(),Counter()
+        self.inner_exp_baseline,self.inner_exp_count=0,0
         self.identity, self.numerical_detail = None, None
 
     def ports(self):
@@ -219,10 +227,10 @@ class InputPrepOwner:
                         (b >> 31 and b & 0x7fffffff >= word(80))):
                     raise ArithmeticFault('A_log requires abs < 80 and beta input requires b > -80')
                 biased = self._op('add', a, bias[parameter_head] << 16)
-                positive = self._op('softplus', biased)
+                positive = self._op(SOFTPLUS_OPERATION if self.gate_policy==DUAL_EXP_GATE_35B else 'softplus', biased)
                 if positive >> 31:
                     raise ArithmeticFault('negative Softplus result')
-                exponential = self._op('exp_negative', log)
+                exponential = self._op(DECAY_OPERATION,log|0x80000000) if self.gate_policy==DUAL_EXP_GATE_35B else self._op('exp_negative', log)
                 if not log >> 31:
                     exponential = self._op('div', word(1), exponential)
                 g = self._op('mul_ieee_rne', exponential ^ 0x80000000, positive)
@@ -259,6 +267,8 @@ class InputPrepOwner:
             self.scalar_counts = self.scalar.calls - self.scalar_baseline
             self.exp_counts = self.scalar.internal_calls - self.exp_baseline
             self.soft_counts = self.scalar.soft_internal_calls - self.soft_baseline
+            self.decay_counts = getattr(self.scalar,"decay_internal_calls",Counter())-self.decay_baseline
+            self.inner_exp_count = getattr(self.scalar,"gate_inner_exp_calls",0)-self.inner_exp_baseline
             self.scalar.release(self)
         self.request, self.program = None, None
         self.result = InputPrepResult(self.job.tag, status, self.ack_bytes, self.ticks - self.start,
@@ -313,6 +323,8 @@ class InputPrepOwner:
             self.scalar_baseline, self.scalar_counts = self.scalar.calls.copy(), Counter()
             self.exp_baseline, self.exp_counts = self.scalar.internal_calls.copy(), Counter()
             self.soft_baseline, self.soft_counts = self.scalar.soft_internal_calls.copy(), Counter()
+            self.decay_baseline,self.decay_counts=getattr(self.scalar,"decay_internal_calls",Counter()).copy(),Counter()
+            self.inner_exp_baseline,self.inner_exp_count=getattr(self.scalar,"gate_inner_exp_calls",0),0
             self.program = self._compute(job)
             self._advance()
         if not fault and p['memory'] is not None and memory_ready:
@@ -359,6 +371,9 @@ class InputPrepOwner:
                     softplus_internal_calls=dict(self.scalar.soft_internal_calls - self.soft_baseline if active else self.soft_counts),
                     reduction_policy=self.reduction_policy, reduction_phase_fp32_temporaries=4 if self.reduction_policy==CPU_DEFAULT_35B else 2,
                     reduction_extra_ddr_bytes=0, production_reduction_binding=False if self.reduction_policy==CPU_DEFAULT_35B else None,
+                    decay_internal_calls=dict(getattr(self.scalar,"decay_internal_calls",Counter())-self.decay_baseline if active else self.decay_counts),
+                    gate_inner_exp_calls=getattr(self.scalar,"gate_inner_exp_calls",0)-self.inner_exp_baseline if active else self.inner_exp_count,
+                    gate_compound_production_binding=False if self.gate_policy==DUAL_EXP_GATE_35B else None,
                     softplus_enabled=self.scalar.enable_softplus,
                     active_heads=self.heads, production_geometry=self.heads == self.layout.value_heads,
                     key_heads=self.layout.key_heads, value_heads=self.layout.value_heads,

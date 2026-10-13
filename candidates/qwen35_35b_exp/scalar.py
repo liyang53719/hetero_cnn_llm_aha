@@ -43,6 +43,9 @@ class DecayScalar(PrepScalar):
         if not self.enable_ieee_exp:raise ArithmeticFault('explicit IEEE decay candidate disabled')
         if not finite(a) or not finite(b) or (not a>>31 and a&0x7fffffff):
             raise ArithmeticFault('decay requires finite nonpositive FP32')
+        return self._evaluate_exp(a)
+    def _evaluate_exp(self,a):
+        """Validated compound-internal evaluator; caller owns the same Scalar."""
         magnitude=a&0x7fffffff
         # exp(-104) is strictly below half of the smallest FP32 subnormal.
         # This bounds integer conversion for arbitrarily negative finite inputs;

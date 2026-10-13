@@ -1541,7 +1541,8 @@ Qwen35_35B_exp渐进下溢候选_20261013:
 Qwen35_35B_Prep固定FP32归约接线_20261013:
   状态: ongoing
   done: [固定Torch_DEFAULT真实stride及8lane4ILP审计, 独立sum树与4寄存器映射, 显式35Bpolicy_旧默认不变, 同真实producer_M16_M128重跑, Q_K_V_beta_bitexact, g原误差不改, 真实DDR读写无新增]
-  ongoing: [小批发布及精确CI工件]
+  ongoing: [g双节点显式精度候选]
+  发布闭环: 0f5f540b750f5f455f59c0ea13d38b23da08488c；GDN38411675016_goal38411675229_payload38411676061全success；526项47套147源与原工件逐SHA闭环
   冷门: 526项47套147源零skip_前后不变；指定计划清单pytest91项
   todo: [g_Softplus精度收敛, 生产Chisel归约绑定, 32头chunk及cumsum, 完整block_RTL_完整周期占空比]
   资源: 128word_head_cache不增；四FP32相位值复用旧寄存器；Matrix4096_Vector16_Scalar1
@@ -1550,3 +1551,16 @@ Qwen35_35B_Prep固定FP32归约接线_20261013:
   边界: 72执行源码10native前后不变；七真实终态；history未发布；生产Chisel未绑定
   报告: doc/QWEN35_35B_PREP_SUM_ORDER_20261013_CN.md
   证据: reports/execution/QWEN35_35B_PREP_SUM_ORDER_20261013.json
+
+Qwen35_35B_Prep双exp实际接线_20261013:
+  状态: ongoing
+  done: [四消融及尾部双舍入归因, 同Scalar显式GateScalar双节点, 旧op7与默认不变, 同真实producer_M16_M128重跑, Q_K_V_beta不变bitexact, g最大33_35降至4ULP, 无新增DDR缓存服务]
+  ongoing: [小批发布及精确CI工件]
+  冷门: 534项49套150源零skip_前后不变；指定计划清单pytest91项
+  todo: [g剩余4ULP舍入收敛, 生产Chisel新compound绑定, 32头chunk_cumsum, 完整block_RTL_完整周期占空比]
+  数值边界: 4ULP仅诊断_不新设门；原上游strict通过；history仍未发布
+  计数: 外exp_新softplus_旧betaexp各M乘32公共请求；内exp另记M乘32内部；Probe缓存32计数不继承
+  资源: Matrix4096_Vector16_Scalar1；DDR及transport_ticks同旧；hardware_cycle_duty未知
+  源: 74执行源10native前后不变；七真实终态
+  报告: doc/QWEN35_35B_PREP_DUAL_EXP_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_PREP_DUAL_EXP_20261013.json

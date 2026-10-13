@@ -1583,7 +1583,8 @@ Qwen35_35B_Chunk32头布局事务_20261013:
 Qwen35_35B_有界cumsum策略_20261013:
   状态: ongoing
   done: [固定CPU_FP64_running源码审计, span18双TwoSum运行期guard, 原Vector13Add显式owner接线, 当前实际Prep6144词同输入重放0bitdiff, span16反例尾部Numerical不发布, 同owner_abort_reset后32头缩维小例]
-  ongoing: [小批发布CI]
+  ongoing: [后继exp及同producer完整chunk]
+  发布闭环: 7e5fb3fd492b901358e9aaba070b5323a0405923；GDN38424192788_goal38424192824_payload38424192593全success；543项51套155源及原工件逐SHA闭环
   冷门: 543项51套155源零skip_前后不变；完整计划列表338项；最终清单91项
   todo: [生产Chisel寄存器及握手映射, 同producer真实32头完整维度chunk, 新exp实际接线, warm_joint_fence, 完整block_RTL及完整周期占空比]
   支持域: 每chunk最多64项_非正normal或正负零_emax120_span18；第二TwoSum残差非零拒绝；不是通用官方cumsum替代
@@ -1592,3 +1593,15 @@ Qwen35_35B_有界cumsum策略_20261013:
   边界: 同输入组件重放非新producer；M2_dk16_dv32合成owner非真实35B完整chunk；旧exp未改；无新增数值门
   报告: doc/QWEN35_35B_CUMSUM_GUARD_20261013_CN.md
   证据: reports/execution/QWEN35_35B_CUMSUM_GUARD_20261013.json
+
+Qwen35_35B_Chunk显式exp接线_20261013:
+  状态: ongoing
+  done: [Job_Owner_Driver显式exp身份, 同enabledScalar及IEEEVector, 当前guarded_cumsum轨迹212064项新旧对照, 原误归零193_918全部消除, 同owner32头缩维subnormal真实保留, 旧默认不变]
+  ongoing: [小批发布CI]
+  冷门: 547项52套158源零skip_前后不变；计划清单91项
+  todo: [同producer完整32头chunk_M16_M128, 分配清楚的原fullchain门, warm_joint_fence, MoE完整block, 生产Chisel_RTL和完整周期占空比]
+  数值边界: 新结果M16_779与M128_4476项差1ULP其余bitexact；1ULP仅观察不新设门；未重跑producer
+  计数: 新旧exp对照各212064次；VectorAdd285696次用于cumsum及差值；组件MAC0；实际缩维owner另计14630912个分开舍入Mul_Add对
+  资源: 同Scalar_Vector16无新增；生产新opcode及IEEE异常控制未绑定；generator完整驻留上界仍open
+  报告: doc/QWEN35_35B_CHUNK_EXP_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_CHUNK_EXP_20261013.json

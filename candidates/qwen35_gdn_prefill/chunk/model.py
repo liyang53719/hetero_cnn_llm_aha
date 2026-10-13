@@ -18,10 +18,11 @@ from ..typed_dense import TypedMemory, FULL_MASK
 from ...qwen2_resident_matrix.transposed_down.model import WriteCommand, WriteAck
 from .vector import Vector16
 from .cumsum import LEGACY_CUMSUM, GUARDED_CUMSUM, GuardedCumsum
+from . import exp_policy as ep
 
 
 CHUNK = 64
-IMPLEMENTATION_SOURCES = ('model.py', 'vector.py', 'vector16.cpp', 'cumsum.py')
+IMPLEMENTATION_SOURCES = ('model.py', 'vector.py', 'vector16.cpp', 'cumsum.py', 'exp_policy.py')
 SOURCE_HASHES = {
     SCALAR_SOURCE: SCALAR_SHA,
     'integration/gemmini/EmitHeteroFP32Alu.scala': '83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1',
@@ -37,7 +38,7 @@ def require(ok, why):
         raise ValueError('typed GDN chunk: ' + why)
 
 
-def source_identity(vector_policy='legacy_vector_fatal_underflow',layout=EQUAL_HEADS,cumsum_policy=LEGACY_CUMSUM):
+def source_identity(vector_policy='legacy_vector_fatal_underflow',layout=EQUAL_HEADS,cumsum_policy=LEGACY_CUMSUM,exp_policy=ep.LEGACY_EXP):
     for name, digest in SOURCE_HASHES.items():
         require(sha((ROOT / name).read_bytes()) == digest, 'source drift: ' + name)
     return dict(cumsum_policy=cumsum_policy,cumsum_chisel_bound=False,
@@ -51,7 +52,7 @@ def source_identity(vector_policy='legacy_vector_fatal_underflow',layout=EQUAL_H
                 vector_underflow_policy=vector_policy,
                 vector_exception_control_chisel_bound=(vector_policy == 'legacy_vector_fatal_underflow'),
                 ieee_mode_integration_gap='ElementwiseMemoryEngine.scala binary fatal mask is still flags[4:1]; explicit per-job policy selection and physical shared Vector routing remain required',
-                exp_policy='existing_ExpNegative_including_abs_ge_80_zero_saturation',
+                exp_policy=exp_policy, exp_identity=ep.identity(exp_policy),
                 mapping='one_retained_16_lane_Add_Mul_resource_candidate',
                 matrix_used=False, new_array=False, rtl_executed=False, native_acceptance=False,
                 throughput_80_percent_achieved=False)
@@ -94,6 +95,7 @@ class ChunkJob:
     value_dim: int = 128
     layout: PrepLayout = EQUAL_HEADS
     cumsum_policy: str = LEGACY_CUMSUM
+    exp_policy: str = ep.LEGACY_EXP
 
     @property
     def chunks(self): return (self.tokens + 63) // 64
@@ -110,7 +112,9 @@ class ChunkJob:
         return self.heads * (self.key_dim * self.value_dim * 4 +
                 self.chunks * sum(r * c * 4 for _, r, c in _shapes(self.key_dim, self.value_dim)))
 
-    def validate(self, geometry=None,layout=EQUAL_HEADS,cumsum_policy=LEGACY_CUMSUM):
+    def validate(self, geometry=None,layout=EQUAL_HEADS,cumsum_policy=LEGACY_CUMSUM,exp_policy=ep.LEGACY_EXP):
+        require(self.exp_policy==exp_policy,"explicit chunk exp policy identity")
+        ep.validate_policy(exp_policy,layout)
         require(self.cumsum_policy==cumsum_policy and cumsum_policy in (LEGACY_CUMSUM,GUARDED_CUMSUM), "explicit cumsum policy identity")
         require(cumsum_policy==LEGACY_CUMSUM or layout==GROUPED_35B,"bounded cumsum only explicit35B")
         require(type(self.layout) is PrepLayout and self.layout==layout, "explicit input layout identity")
@@ -175,13 +179,16 @@ class ChunkResult:
 
 
 class ChunkOwner:
-    def __init__(self, scalar, vector, *, heads=16, key_dim=128, value_dim=128, host_batch=False,layout=EQUAL_HEADS,cumsum_policy=LEGACY_CUMSUM):
+    def __init__(self, scalar, vector, *, heads=16, key_dim=128, value_dim=128, host_batch=False,layout=EQUAL_HEADS,cumsum_policy=LEGACY_CUMSUM,exp_policy=ep.LEGACY_EXP):
         require(isinstance(scalar, PrepScalar) and type(vector) is Vector16, 'caller-owned shared PrepScalar/Vector16')
         require(type(host_batch) is bool, 'host_batch must be an explicit bool')
         require(type(layout) is PrepLayout,"explicit layout profile")
         require(cumsum_policy in (LEGACY_CUMSUM,GUARDED_CUMSUM) and (cumsum_policy==LEGACY_CUMSUM or layout==GROUPED_35B),"supported cumsum layout policy")
         self.layout=layout
         self.cumsum_policy=cumsum_policy
+        ep.validate_policy(exp_policy,layout,scalar,vector)
+        self.exp_policy=exp_policy
+        self.decay_baseline,self.decay_counts=Counter(),Counter()
         self.scalar, self.vector = scalar, vector
         self.host_batch = host_batch
         self.geometry = (heads, key_dim, value_dim)
@@ -209,7 +216,7 @@ class ChunkOwner:
         require(self.state in ('idle', 'locked') and self.request is None and
                 self.scalar.client is not self and self.vector.client is not self, 'reset requires drain and retired terminal')
         self.__init__(self.scalar, self.vector, heads=self.geometry[0], key_dim=self.geometry[1],
-                      value_dim=self.geometry[2], host_batch=self.host_batch,layout=self.layout,cumsum_policy=self.cumsum_policy)
+                      value_dim=self.geometry[2], host_batch=self.host_batch,layout=self.layout,cumsum_policy=self.cumsum_policy,exp_policy=self.exp_policy)
 
     def _phase(self, phase):
         self.context['phase'], self.position = phase, {}
@@ -231,17 +238,21 @@ class ChunkOwner:
     def _exp(self, raw):
         if not finite(raw) or (not raw >> 31 and raw & 0x7fffffff):
             error = ArithmeticFault('chunk exponential requires finite nonpositive input')
-            self._remember_failure(error, dict(resource='PrepScalar', operation='exp_negative',
+            self._remember_failure(error, dict(resource='PrepScalar', operation=ep.operation(self.exp_policy),
                 a_words=[raw], b_words=[0], result_words=None, exception_flags=None))
             raise error
         magnitude = raw & 0x7fffffff
         self.exp_stats['calls'] += 1
-        self.exp_stats['saturated_abs_ge_80'] += magnitude >= 0x42a00000
+        self.exp_stats['inputs_abs_ge_80'] += magnitude >= 0x42a00000
+        self.exp_stats['saturated_abs_ge_80'] += self.exp_policy==ep.LEGACY_EXP and magnitude >= 0x42a00000
         self.exp_stats['max_abs_input_word'] = max(self.exp_stats['max_abs_input_word'], magnitude)
         try:
-            return self.scalar.op(self, 'exp_negative', raw)
+            result = self.scalar.op(self, ep.operation(self.exp_policy), raw)
+            self.exp_stats['subnormal_outputs'] += 0 < (result & 0x7fffffff) < 0x00800000
+            self.exp_stats['zero_outputs'] += not result & 0x7fffffff
+            return result
         except ArithmeticFault as error:
-            self._remember_failure(error, dict(resource='PrepScalar', operation='exp_negative',
+            self._remember_failure(error, dict(resource='PrepScalar', operation=ep.operation(self.exp_policy),
                 a_words=[raw], b_words=[0], result_words=None, exception_flags=None))
             raise
 
@@ -446,6 +457,7 @@ class ChunkOwner:
         self.status, self.poison = status, self.poison or status is not None
         if self.scalar.client is self:
             self.scalar_counts = self.scalar.calls - self.scalar_baseline
+            self.decay_counts = getattr(self.scalar,'decay_internal_calls',Counter()) - self.decay_baseline
             self.scalar.release(self)
         if self.vector.client is self:
             self.vector_counts = self.vector.calls - self.vector_baseline
@@ -495,13 +507,16 @@ class ChunkOwner:
             elif self.state == 'idle': self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
             require(type(job) is ChunkJob, 'immutable ChunkJob')
-            job.validate(self.geometry,self.layout,self.cumsum_policy)
-            self.identity = source_identity(self.vector.exception_policy,self.layout,self.cumsum_policy)
+            job.validate(self.geometry,self.layout,self.cumsum_policy,self.exp_policy)
+            ep.validate_policy(self.exp_policy,self.layout,self.scalar,self.vector)
+            self.identity = source_identity(self.vector.exception_policy,self.layout,self.cumsum_policy,self.exp_policy)
             require(self.scalar.acquire(self) and self.vector.acquire(self), 'shared leases')
             self.job, self.start, self.status, self.numerical_detail = job, self.ticks, None, None
             self.context, self.position, self.first_numerical_failure = dict(phase='admitted', head=None, chunk=None), {}, None
             self.sequence, self.ack_bytes, self.counts, self.exp_stats = 0, 0, Counter(), Counter()
             self.scalar_baseline = self.scalar.calls.copy()
+            self.decay_baseline = getattr(self.scalar,'decay_internal_calls',Counter()).copy()
+            self.decay_counts = Counter()
             self.vector_baseline, self.lane_baseline = self.vector.calls.copy(), self.vector.lane_ops.copy()
             self.host_baseline, self.host_counts = self.vector.host_calls.copy(), Counter()
             self.flag_baseline, self.flag_counts = self.vector.flags.copy(), Counter()
@@ -561,6 +576,8 @@ class ChunkOwner:
                     scratch_ddr_bytes=None if self.job is None else self.job.scratch_bytes,
                     production_geometry=self.geometry == (self.layout.value_heads,128,128),
                     cumsum_policy=self.cumsum_policy,
+                    chunk_exp_policy=self.exp_policy,
+                    decay_internal_calls=dict(getattr(self.scalar,'decay_internal_calls',Counter())-self.decay_baseline if active else self.decay_counts),
                     cumsum_hardware_binding=False,
                     input_core_row_bytes=self.layout.core_row_bytes,
                     input_role_elements=self.layout.vector_elements,
@@ -581,7 +598,8 @@ class TypedChunkDriver:
     """
     def __init__(self, owner, memory, job, *, current_generation=0, published_state_base=None):
         require(type(owner) is ChunkOwner and type(memory) is TypedMemory and type(job) is ChunkJob, 'typed resources')
-        job.validate(owner.geometry,owner.layout,owner.cumsum_policy)
+        job.validate(owner.geometry,owner.layout,owner.cumsum_policy,owner.exp_policy)
+        ep.validate_policy(owner.exp_policy,owner.layout,owner.scalar,owner.vector)
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained unleased resources')
         require(type(current_generation) is int and current_generation == job.expected_generation, 'generation dependency')
         require((job.cold and current_generation == 0 and published_state_base is None) or
@@ -596,7 +614,7 @@ class TypedChunkDriver:
         self.scratch = memory.exact(job.scratch, job.scratch_bytes, readable=False)
         self.owner, self.memory, self.job = owner, memory, job
         self.resource_identity = (id(owner), id(memory), id(owner.scalar), id(owner.vector),
-                                  owner.vector.resource_address, owner.host_batch, owner.vector.exception_policy, owner.vector.fatal_mask,owner.layout,owner.cumsum_policy)
+                                  owner.vector.resource_address, owner.host_batch, owner.vector.exception_policy, owner.vector.fatal_mask,owner.layout,owner.cumsum_policy,owner.exp_policy,getattr(owner.scalar,'enable_ieee_exp',False))
         self.source_hashes = tuple(sha(r.raw()) for r in self.sources)
         self.pending, self.response, self.aborted, self.counts = None, None, False, Counter()
         self.pending_request, self.pending_write = None, None
@@ -607,7 +625,7 @@ class TypedChunkDriver:
              read_tag=None, read_nbytes=None, ack_tag=None, ack_nbytes=None):
         require(self.response is None, 'already retired')
         require(self.resource_identity == (id(self.owner), id(self.memory), id(self.owner.scalar),
-                id(self.owner.vector), self.owner.vector.resource_address, self.owner.host_batch, self.owner.vector.exception_policy, self.owner.vector.fatal_mask,self.owner.layout,self.owner.cumsum_policy), 'resources replaced')
+                id(self.owner.vector), self.owner.vector.resource_address, self.owner.host_batch, self.owner.vector.exception_policy, self.owner.vector.fatal_mask,self.owner.layout,self.owner.cumsum_policy,self.owner.exp_policy,getattr(self.owner.scalar,'enable_ieee_exp',False)), 'resources replaced')
         p = self.owner.ports()
         pending = self.pending if memory_response_ready else None
         if pending is not None:
@@ -679,7 +697,7 @@ class TypedChunkDriver:
             require(self.source_hashes == tuple(sha(r.raw()) for r in self.sources), 'published source changed')
             self.response = e['response']
             if self.response.status is None:
-                require(self.owner.identity == source_identity(self.owner.vector.exception_policy,self.owner.layout,self.owner.cumsum_policy), 'source changed during execution')
+                require(self.owner.identity == source_identity(self.owner.vector.exception_policy,self.owner.layout,self.owner.cumsum_policy,self.owner.exp_policy), 'source changed during execution')
                 require(self.response.staging_complete and self.response.write_bytes == self.job.write_bytes, 'complete double-span receipt')
                 for r in (self.output, self.state_out, self.scratch):
                     require(not r.published and r.written == r.acknowledged == set(range(0, r.extent, 64)), 'full staging ACK coverage')

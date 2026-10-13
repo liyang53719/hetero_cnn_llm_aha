@@ -90,6 +90,7 @@ def main(argv=None):
     parser.add_argument('--reduction-policy',choices=(p.prep.ASCENDING,p.prep.CPU_DEFAULT_35B),default=p.prep.ASCENDING)
     parser.add_argument('--tokens', type=int, choices=(16, 128), default=16)
     parser.add_argument('--full-qkv', action='store_true')
+    parser.add_argument('--chunk', action='store_true', help='same-invocation full32 cold chunk staging')
     parser.add_argument('--conv-payload', type=Path)
     parser.add_argument('--conv-manifest-sha256')
     parser.add_argument('--wall-seconds', type=int, default=180)
@@ -98,6 +99,8 @@ def main(argv=None):
     parser.add_argument('--ab-reference-report',type=Path,required=True)
     parser.add_argument('--ab-reference-report-sha256',required=True)
     args = parser.parse_args(argv)
+    if args.chunk:
+        from . import chunk_reference
     p.require(not args.output.exists() and not args.output.is_symlink() and
               args.output.resolve().is_relative_to(ROOT / 'work'), 'fresh ignored work output required')
     p.require(30 <= args.wall_seconds <= 1800, 'bounded explicit software budget 30..1800 seconds')
@@ -131,6 +134,10 @@ def main(argv=None):
         torch.set_num_threads(1)
         torch.set_num_interop_threads(1)
         rms_reference.runtime_identity()
+        if args.chunk:
+            prep_reference._runtime(torch)
+            chunk_reference._runtime(torch)
+            chunk_reference.source_identity()
     p.require(p.sha(qkv) == reference['weight']['sha256'] and
               len(qkv) == reference['weight']['bytes'], 'same native NK weight identity')
     rms_identity = rms_reference.source_identity()
@@ -160,7 +167,7 @@ def main(argv=None):
         conv_seen.add((token,channel)); conv_preact[token,channel] = bits
     args.output.mkdir(parents=True)
     started = time.monotonic()
-    report = dict(status='RUNNING', gate_policy=args.gate_policy, reduction_policy=args.reduction_policy, tokens=args.tokens, windows=[vars(w) for w in windows],
+    report = dict(status='RUNNING', gate_policy=args.gate_policy, reduction_policy=args.reduction_policy, chunk_requested=args.chunk, tokens=args.tokens, windows=[vars(w) for w in windows],
                   full_qkv=args.full_qkv, conv_requested=conv_weight is not None, full_block=False, rtl_executed=False,
                   conv_manifest_sha256=args.conv_manifest_sha256,
                   reference=reference_record, manifest_sha256=args.manifest_sha256,
@@ -179,12 +186,17 @@ def main(argv=None):
         (args.output / 'summary.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
 
     def observe(stage, details, raw):
-        path = args.output / (stage + ('.actual.fp32le' if stage=='prep' else '.actual.bf16le'))
+        path = args.output / (stage + ('.actual.fp32le' if stage in ('prep','chunk_state_staging','chunk_scratch_staging') else '.actual.bf16le'))
         path.write_bytes(raw)
         report['observations'].append(dict(stage=stage, output=record(path), owner=details))
         save()
         print(json.dumps(dict(stage=stage, host_seconds=time.monotonic()-started,
                               output_sha256=p.sha(raw))), flush=True)
+
+    def chunk_progress(item):
+        report['chunk_progress']=item
+        save()
+        print(json.dumps(dict(stage='chunk_progress',**item)),flush=True)
 
     def timeout(*_):
         raise TimeoutError('bounded typed prefix software budget')
@@ -196,9 +208,9 @@ def main(argv=None):
         execution, _ = p.execute_prep_prefix(hidden, norm_weight, qkv, tokens=args.tokens, windows=windows,
             profile=profile, matrix=matrix, vector=vector, deadline=started+args.wall_seconds, observe=observe,
             conv_weights=conv_weight, conv_observe=conv_observe,ab_weights=ab_weights,ab_profiles=ab_profiles,
-            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy)
+            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy,run_chunk=args.chunk,chunk_progress=chunk_progress,on_chunk_interrupt=lambda:signal.alarm(0))
         report['execution'] = execution
-        p.require(execution['status'] == 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', 'actual typed prefix failed')
+        p.require(execution['status'] == ('PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if args.chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY'), 'actual typed prefix failed')
         p.require(execution['actual_rms_output_sha256'] == reference['input']['sha256'], 'actual RMS differs from reference input')
         native = checked_record(reference['official_output'])
         fixed = checked_record(reference['results']['pair_hi_first_two_k1024']['output'])
@@ -206,8 +218,9 @@ def main(argv=None):
         if conv_weight is not None:
             expected_stages += ['conv4_silu', 'conv_history_staging']
         expected_stages += ['a','b','ab_pack','prep']
+        if args.chunk:expected_stages += ['chunk','chunk_state_staging','chunk_scratch_staging']
         p.require([o['stage'] for o in report['observations']] == expected_stages, 'exact observation inventory')
-        p.require(len(execution['terminals']) == len(windows)+1+(conv_weight is not None)+4, 'exact owner terminal count')
+        p.require(len(execution['terminals']) == len(windows)+1+(conv_weight is not None)+4+int(args.chunk), 'exact owner terminal count')
         for window, observation in zip(windows, report['observations'][1:1+len(windows)], strict=True):
             actual = checked_record(observation['output'])
             numeric = dict(native=compare_window(actual, native, args.tokens, window),
@@ -255,14 +268,26 @@ def main(argv=None):
         report['prep_reference']=record(prep_path)
         report['prep_diagnostics']=prep_reference.diagnose(prep_actual,prep_expected,args.tokens,identity=prep_identity)
         report['prep_native_acceptance']=False
+        if args.chunk:
+            from . import chunk_reference
+            expected, identity=chunk_reference.native_chunk(prep_actual,args.tokens)
+            report['chunk_reference_records']={}
+            for name,raw in expected.items():
+                path=args.output/('chunk.'+name+'.reference.'+('bf16le' if name=='output' else 'fp32le'))
+                path.write_bytes(raw);report['chunk_reference_records'][name]=record(path)
+            report['chunk_reference_identity']=identity
+            report['chunk_diagnostics']=chunk_reference.diagnose(
+                {'output':checked_record(observations['chunk']['output']),'state':checked_record(observations['chunk_state_staging']['output'])},expected)
         report['source_sha256_after'] = source_closure()
         report['sources_unchanged'] = report['source_sha256'] == report['source_sha256_after']
         p.require(report['sources_unchanged'], 'execution source drift')
         for item in report['native_artifact_records']:
             checked_record(item)
         report['native_artifacts_unchanged'] = True
-        report['status'] = 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY'
+        report['status'] = 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_DIAGNOSTICS_ONLY' if args.chunk else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY'
     except BaseException as error:
+        report['source_sha256_after']=source_closure()
+        report['sources_unchanged']=report['source_sha256']==report['source_sha256_after']
         report.update(status='FAILED', error=dict(type=type(error).__name__, message=str(error)))
         if isinstance(error, p.PrefixExecutionError):
             report['execution'] = error.execution_report
@@ -274,6 +299,13 @@ def main(argv=None):
                 history_path = args.output / 'interrupted_owner.history.bf16le'
                 history_path.write_bytes(error.partial_history)
                 report['interrupted_history'] = record(history_path)
+        if isinstance(error,p.chunk_stage.ChunkInterrupted):
+            report['execution']=error.execution_report
+            report['interrupted_owner']=error.snapshot
+            report['interrupted_chunk_records']={}
+            for name,raw in error.raw.items():
+                path=args.output/('interrupted_chunk.'+name+'.raw');path.write_bytes(raw)
+                report['interrupted_chunk_records'][name]=record(path)
         save()
         raise
     finally:

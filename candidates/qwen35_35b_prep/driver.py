@@ -22,6 +22,7 @@ from ..qwen35_gdn_prefill.prep import model as prep
 from ..qwen35_gdn_prefill.prep.scalar import PrepScalar
 from ..qwen35_35b_payload.packer import raw_nk_to_kn
 from .pack import TypedABPackDriver
+from . import chunk_stage
 
 WIDTH, OUTPUTS = 2048, 8192
 
@@ -68,7 +69,7 @@ def pack_window(raw_nk, window):
 
 def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                    matrix, vector, deadline, memory=None, controls=None, observe=None,
-                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B):
+                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -113,6 +114,8 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         require(type(policy) is ReductionProfile and policy.ranges==((0,1024),(1024,2048)) and policy.pair_reverse, 'N32 pair policy')
         policy.validate(WIDTH)
     require(type(a_log) is bytes and len(a_log)==128 and type(dt_bias) is bytes and len(dt_bias)==64, 'original parameter extents')
+    require(type(run_chunk) is bool and (not run_chunk or gate_policy==prep.DUAL_EXP_GATE_35B), 'chunk requires explicit shared IEEE GateScalar')
+    require(chunk_progress is None or callable(chunk_progress), 'optional progress observer')
     scalar = prep.GateScalar(enable_softplus=True,enable_ieee_exp=True,enable_gate_softplus=True) if gate_policy==prep.DUAL_EXP_GATE_35B else PrepScalar(enable_softplus=True)
     rms_owner = rms.RmsOwner(scalar)
     # This K2048 job uses resident partials. The legacy prefix spill condition
@@ -266,12 +269,32 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         actual_packed_ab_producer_consumed=True,history_published=False,prep_native_acceptance=False,
         ab_profiles={k:vars(v) for k,v in ab_profiles.items()},
         added_parameter_sha256={k:sha(v) for k,v in dict(ab_weights,a_log=a_log,dt_bias=dt_bias).items()})
+    if run_chunk:
+        try:
+            chunk_driver, chunk_details = chunk_stage.execute_chunk(memory,scalar,vector,prep_driver.output,region,
+                tokens=tokens,deadline=deadline,controls=controls,progress=chunk_progress,on_interrupt=on_chunk_interrupt)
+        except chunk_stage.ChunkInterrupted as error:
+            report.update(status='INTERRUPTED',active_stage='chunk')
+            error.execution_report=report
+            raise
+        report['stages'].append(dict(stage='chunk',host_seconds=chunk_details['host_seconds'],report=chunk_details))
+        report['terminals'].append(dict(stage='chunk',status=chunk_driver.response.status))
+        report['chunk_staging']=chunk_details
+        require(all(part.published and sha(part.raw())==digest for part,digest in published), 'chunk changed prior public output')
+        require(not conv_driver.history_out.published and conv_driver.response.generation==0,'chunk committed history')
+        if observe is not None:
+            observe('chunk',chunk_details,chunk_driver.output.raw())
+            observe('chunk_state_staging',dict(published=False,generation_advanced=False),chunk_driver.state_out.raw())
+            observe('chunk_scratch_staging',dict(published=False,base=chunk_driver.job.scratch,bytes=chunk_driver.job.scratch_bytes),chunk_driver.scratch.raw())
+        if chunk_driver.response.status is not None:
+            report.update(status='FAILED',failed_stage='chunk')
+            return report,memory
     require(resources == (id(memory), id(scalar), id(rms_owner), id(projection_owner),
                  id(projection_owner.a_banks), id(projection_owner.b_banks),
                  matrix.resource_address, vector.resource_address), 'execution resource replaced')
     require(matrix.owner is None and vector.client is None and scalar.client is None and
             memory.pending is None and not projection_owner.tiles.leased, 'prefix resource not retired')
-    report.update(status='PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
+    report.update(status='PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
                   actual_rms_region_consumed=True, all_old_outputs_unchanged=True,
                   matrix_service=matrix.report(), scalar_operations=dict(scalar.calls),
                   hardware_utilization=None, busy_duty=None, active_lane_duty=None,

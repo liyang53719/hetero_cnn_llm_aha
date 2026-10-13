@@ -1,0 +1,29 @@
+{
+  "status": "PASS_REVIEW_GATE_FIX_AND_HASH_BOUND_READ_ONLY_RECOMPARISON",
+  "changes": [
+    "Require overall and independent Q/K/V max_abs/mean_abs gates",
+    "Persist numerical FAIL and exit 1",
+    "Pin execution reports, rehash current BF16/FP32 output bytes and recompute comparison metrics"
+  ],
+  "projection_rerun": false,
+  "c_reference_unchanged_sha256": "a254c457c4931a4a329cdd8f7d8d32c1c2d3293adf469e9e2417c6c2786addcb",
+  "changed_runner_functions": [
+    "compare",
+    "main"
+  ],
+  "added_runner_functions": [
+    "finish_report"
+  ],
+  "tests": {
+    "count": 7,
+    "log": "work/qwen35_35b_projection_reference_20261013T0535/review_tests.log",
+    "sha256": "ca2b0836d2aeb0037e98c5de8c76021b8567c2f0e605241996f98119a558e19e"
+  },
+  "offline_recomparison": {
+    "log": "work/qwen35_35b_projection_reference_20261013T0535/review_recompare.log",
+    "sha256": "5fc295a61eceb49206e80d6596892864d595afc79eea6a96525f0c9382eaebdb"
+  },
+  "evidence_sha256": "ba9da50263b357690da5f5861dc207714dbae0ecf682eceec92b23c8921ef52c",
+  "all_pair_qkv_gates_pass": true,
+  "main_arithmetic_and_preflight_prefix_ast_unchanged": true
+}

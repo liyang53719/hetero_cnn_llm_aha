@@ -1,6 +1,7 @@
 """Cold NumPy-only source/shape/order/rounding gates; no Torch or work cache."""
 from pathlib import Path
 import ast
+import json
 import tempfile
 import unittest
 
@@ -12,6 +13,31 @@ from .formula import NumericDomainError, bf16, decode, formula
 
 
 class ReferenceTests(unittest.TestCase):
+    def test_recovery_profile_preserves_binary_authority(self):
+        profile, directory, pins = r.runtime_selection("historical_20261012")
+        self.assertEqual(pins, r.RUNTIME_PINS)
+        self.assertEqual(directory, r.RUNTIME)
+        with self.assertRaisesRegex(ValueError, "unknown runtime profile"):
+            r.runtime_selection("unreviewed")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "candidates/qwen35_35b_rms/runtime_recovery_20261013.json"
+            path.parent.mkdir(parents=True)
+            pins = dict(r.RUNTIME_PINS)
+            pins["python.sh"] = "1" * 64
+            pins["runtime_receipt.json"] = "2" * 64
+            path.write_text(json.dumps({"sha256": pins}))
+            self.assertEqual(r.runtime_selection("recovery_20261013", root)[2], pins)
+            key = next(n for n in pins if n.startswith("site-packages/"))
+            pins[key] = "3" * 64
+            path.write_text(json.dumps({"sha256": pins}))
+            with self.assertRaisesRegex(ValueError, "arithmetic binary drift"):
+                r.runtime_selection("recovery_20261013", root)
+            del pins[key]
+            path.write_text(json.dumps({"sha256": pins}))
+            with self.assertRaisesRegex(ValueError, "pin set changed"):
+                r.runtime_selection("recovery_20261013", root)
+
     def test_source_class_is_complete_and_preserves_original_code_location(self):
         identity = r.source_identity()
         self.assertEqual(identity["class_sha256"], r.CLASS_SHA)

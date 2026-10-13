@@ -19,6 +19,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--payload', type=Path, required=True)
     parser.add_argument('--manifest-sha256', required=True)
+    parser.add_argument('--include-qkv', action='store_true', help='Verify the explicitly acquired three-tensor payload')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--wall-seconds', type=int, default=120)
     args = parser.parse_args(argv)
@@ -70,7 +71,7 @@ def main(argv=None):
         for number, tokens in enumerate((16, 128)):
             events.clear()
             report['active_case'] = dict(tokens=tokens, status='RUNNING')
-            hidden, weight, provenance = r.payload_case(args.payload, args.manifest_sha256, list(range(tokens)))
+            hidden, weight, provenance = r.payload_case(args.payload, args.manifest_sha256, list(range(tokens)), include_qkv=args.include_qkv)
             base = 0x100000 + number * 0x400000
             memory.add_readonly(base, hidden)
             memory.add_readonly(base + 0x100000, weight)

@@ -167,3 +167,18 @@ it is not accepted from a rewritten payload manifest itself. Raw tensor evidence
 from this command stays under ignored work/. Software model ticks and host runtime
 are not hardware cycles; Matrix utilization, busy/duty, stalls and overlap remain
 unknown until the physical schedule and timeline are measured.
+
+### Explicit recovered runtime / three-tensor payload
+
+The historical runtime profile remains unchanged. Set
+`HETERO_35B_RUNTIME_PROFILE=recovery_20261013` to use `work/runtime_recovery`
+with the independently recorded `runtime_recovery_20261013.json` wrapper and
+receipt pins. The three arithmetic binary hashes must still equal the original
+profile. An unknown profile, changed pin set or binary mismatch is rejected.
+This does not inherit any prior model result.
+
+For the explicitly acquired embedding+norm+QKV manifest, pass `--include-qkv`
+to `run_owner`; the loader still validates the complete chosen manifest,
+original headers, range receipts and bytes. The default two-tensor selection
+stays strict. A mismatched selection is an admission failure, not a numerical
+failure and not permission to skip the loader.

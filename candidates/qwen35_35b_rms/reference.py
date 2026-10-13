@@ -87,11 +87,31 @@ def source_class(root=ROOT):
     return namespace[node.name], identity
 
 
-def runtime_identity(runtime=RUNTIME):
+def runtime_selection(profile=None, root=ROOT):
+    # Explicit recovery profiles preserve historical wrapper/receipt identity.
+    # Binary authority and all actual runtime checks remain mandatory.
+    pins = RUNTIME_PINS
+    profile = (os.environ.get("HETERO_35B_RUNTIME_PROFILE", "historical_20261012")
+               if profile is None else profile)
+    require(profile in ("historical_20261012", "recovery_20261013"), "unknown runtime profile")
+    if profile == "recovery_20261013":
+        lock = json.loads((Path(root) / "candidates/qwen35_35b_rms/runtime_recovery_20261013.json").read_bytes())
+        pins = lock["sha256"]
+        require(set(pins) == set(RUNTIME_PINS), "runtime pin set changed")
+        require(all(pins[n] == RUNTIME_PINS[n] for n in pins if n.startswith("site-packages/")),
+                "recovery arithmetic binary drift")
+        selected_runtime = Path(root) / "work/runtime_recovery"
+    else:
+        selected_runtime = RUNTIME
+    return profile, selected_runtime, pins
+
+
+def runtime_identity(runtime=None):
     """Verify relevant binaries and runtime receipt; record actual dispatch."""
     import numpy as np
     import torch
-    runtime = Path(runtime).resolve()
+    profile, selected_runtime, pins = runtime_selection()
+    runtime = Path(selected_runtime if runtime is None else runtime).resolve()
     require(sys.byteorder == "little", "little-endian host required")
     require(torch.__version__ == "2.10.0+cpu" and np.__version__ == "2.3.5", "runtime version drift")
     require(torch.version.git_version == "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0", "Torch commit drift")
@@ -102,13 +122,13 @@ def runtime_identity(runtime=RUNTIME):
     for module in (torch, np):
         require(Path(module.__file__).resolve().is_relative_to(runtime / "site-packages"), "module outside isolated runtime")
     observed = {}
-    for name, digest in RUNTIME_PINS.items():
+    for name, digest in pins.items():
         observed[name] = file_sha(runtime / name)
         require(observed[name] == digest, "runtime artifact drift: " + name)
     receipt = json.loads((runtime / "runtime_receipt.json").read_bytes())
     require(receipt["status"] == "PASS_ISOLATED_PINNED_RUNTIME_READY" and all(receipt["checks"].values()),
             "runtime receipt not ready")
-    return dict(torch_version=torch.__version__, torch_git_revision=torch.version.git_version,
+    return dict(runtime_profile=profile, runtime_root=str(runtime), torch_version=torch.__version__, torch_git_revision=torch.version.git_version,
                 numpy_version=np.__version__, python_version=sys.version,
                 cpu_capability=torch.backends.cpu.get_cpu_capability(),
                 intraop_threads=torch.get_num_threads(), interop_threads=torch.get_num_interop_threads(),
@@ -171,7 +191,7 @@ def component(hidden, weight, tokens, *, root=ROOT):
                 input_sha256=sha(hidden), weight_sha256=sha(weight), output_sha256=sha(output))
 
 
-def payload_case(directory, manifest_sha256, token_ids, *, root=ROOT):
+def payload_case(directory, manifest_sha256, token_ids, *, root=ROOT, include_qkv=False):
     """Local verified payload only; no acquisition and no tokenizer/remapping.
 
     Caller supplies the independently retained acquisition-manifest digest.
@@ -180,7 +200,7 @@ def payload_case(directory, manifest_sha256, token_ids, *, root=ROOT):
     from candidates.qwen35_35b_payload.packer import load_payload
     require(isinstance(token_ids, (list, tuple)) and 1 <= len(token_ids) <= 128 and
             all(type(i) is int and 0 <= i < 256 for i in token_ids), "original embedding IDs 0..255 required")
-    manifest, values = load_payload(Path(root), Path(directory), manifest_sha256=manifest_sha256)
+    manifest, values = load_payload(Path(root), Path(directory), manifest_sha256=manifest_sha256, include_qkv=include_qkv)
     embedding = values["embed_tokens.rows_0_255"]
     hidden = b"".join(embedding[i * WIDTH * 2:(i + 1) * WIDTH * 2] for i in token_ids)
     weight = values["layers.0.input_layernorm.weight"]

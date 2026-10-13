@@ -1425,7 +1425,7 @@ Qwen35_35B_K2048双partial子门_20261013:
   固定资源: 16x1376x256_A_SRAM；每bank_A0到1024_lhs1024到1184_rhs1184到1344_余32words；Matrix4096_五context_Vector16不增
   精度边界: 合成独立fmaf_Add_BF16RNE检查；官方35B全形状归约profile和权重尚未验；不继承0p8数值PASS
   生命周期: lhs_rhs响应实际消费后覆盖；RMW保留其他lane；真实末ACK后发布；abort先排空接受写再poison；协调reset先drain
-  进度: 冷GDN387项27套及Attention247项23套全过；独立review十源码hash一致；精确远端CI待本批发布
+  进度: 冷GDN387项27套及Attention247项23套全过；独立review十源码hash一致；f8a46ff四CI和工件已核闭环
   证据: reports/execution/QWEN35_35B_K2048_LEASE_20261013.json
   计数边界: 每合成数值case保存Matrix_FMA_Vector_Add_真实ACK及软件tick；完整硬件cycle_busy_lane占空比_stall_overlap均unknown
   后继: 最小35B固定源payload与官方profile；真实L0_GDN_MoE及L3_Attention_MoE_M128；生产Chisel_Host与RTL
@@ -1440,5 +1440,28 @@ Qwen35_35B_H2048RMS子门_20261013:
   性能: M128_Scalar1332736_读1572864B_写ACK524288B；Matrix_MAC0；hardware_cycles_busy_duty未知
   报告: doc/QWEN35_35B_H2048_RMS_20261013_CN.md
   证据: reports/execution/QWEN35_35B_H2048_RMS_20261013.json
-  门禁: 实际组件和owner及独立审查通过；冷GDN447_L3247通过；新提交CI待收口
+  门禁: 实际组件和owner及独立审查通过；a5f49a1四CI成功；GDN447_L3247和三工件源码日志哈希闭环
   后继: 官方全形状K2048_QKV_profile及实际RMS写回消费者；GDN_MoE_Attention_MoE完整block；生产Chisel_Command128_RTL
+
+Qwen35_35B_RMS到全QKV子门_20261013:
+  状态: ongoing
+  父项: [Q35C, Q35D, U00.2, U01]
+  范围: M16_M128原embedding经实际H2048_RMS写ACK再给全N8192_QKV；同内存同Matrix_Vector_bank
+  数值: 独立配方bitexact；官方Q_K_V各自原门通过；M16_1019和M128_7904个tiny位差保留
+  终态: 每case52窗104partial；末N32；M128投影2097152B全部ACK后发布
+  资源: Matrix4096_5context_Vector16_Scalar1；A_SRAM704512B；RMS三bank6144B不扩
+  性能: M128_useful与executed均2147483648_VectorAdd65536_Scalar1332736；全cycle_duty未知；不可称MAC利用率100
+  报告: doc/QWEN35_35B_RMS_QKV_PREFIX_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_RMS_QKV_PREFIX_20261013.json
+  门禁: 实际小窗和完整M16_M128与独立复核通过；冷GDN465_L3247完整workflow通过；新CI待发布
+  未完成: [Conv_Prep_chunk_state, gated_norm_O_residual_MoE, 35B完整L0_L3, 公共Command128_生产Chisel_RTL, 完整周期利用率80]
+Qwen35_35B_QKV恢复重验_20261013:
+  状态: ongoing
+  来源: a5f49a1基线及96a065ce7a3fb2e573ab8656f2996fe60e945d29未发布候选树_19blob逐SHA恢复
+  done: [官方固定payload重获取, 官方runtime真实重建及二进制同SHA, 真实RMS_M16_M128, 新完整N8192官方reference, 真实完整QKV_M16_M128及逐段原门, 新冷GDN467项33套, Attention247项23套, 独立raw与源码复核]
+  ongoing: [小批发布及精确提交CI工件核验]
+  todo: [35B完整L0_L3_M128, 生产Chisel_Command128_RTL, 固定资源完整周期MAC利用率及占空比]
+  未继承旧PASS: true
+  性能范围: M16useful268435456_executed2147483648；M128useful2147483648_executed2147483648；硬件cycle_busy_duty_stall_overlap未知
+  报告: reports/execution/QWEN35_35B_PREFIX_RECOVERY_20261013.json
+  边界: 只有RMS到QKV前缀；无carried状态或MoE完整block；80及90目标未达到

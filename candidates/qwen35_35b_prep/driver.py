@@ -25,6 +25,8 @@ from .pack import TypedABPackDriver
 from . import chunk_stage
 from ..qwen35_gdn_prefill.gated_norm import model as gated_norm
 from ..qwen35_35b_gated_norm.core_publication import publish_core_intermediate
+from ..qwen35_35b_output import stage as output_stage
+from ..qwen35_35b_output.driver import TypedStreamingUpstreamDriver
 
 WIDTH, OUTPUTS = 2048, 8192
 
@@ -71,7 +73,7 @@ def pack_window(raw_nk, window):
 
 def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                    matrix, vector, deadline, memory=None, controls=None, observe=None,
-                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None):
+                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None, o_weight=None, o_profile=None):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -121,6 +123,9 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
     run_norm = z_weight is not None or gated_weight is not None or z_profile is not None
     require(not run_norm or (run_chunk and type(z_weight) is bytes and len(z_weight)==4096*2048*2 and
         type(gated_weight) is bytes and len(gated_weight)==512 and type(z_profile) is ReductionProfile), 'complete Z/norm inputs and chunk required')
+    run_o=o_weight is not None or o_profile is not None
+    require(not run_o or (run_norm and type(o_weight) is bytes and len(o_weight)==2048*4096*2 and type(o_profile) is output_stage.FourProfile), 'O requires complete weight/profile and actual norm stage')
+    if run_o:o_profile.validate(4096)
     if run_norm:
         require(z_profile.ranges==((0,1024),(1024,2048)) and z_profile.pair_reverse, 'explicit independently calibrated N4096 profile')
         z_profile.validate(WIDTH)
@@ -128,7 +133,8 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
     rms_owner = rms.RmsOwner(scalar)
     # This K2048 job uses resident partials. The legacy prefix spill condition
     # must not advertise split_k=128 and accidentally require N-dependent DDR.
-    projection_owner = LargeKProjectionOwner(PrefixWorkspace(0x100000000, 16384, 1, split_k=2048))
+    projection_owner = (output_stage.StreamingProjectionOwner(output_stage.NoPrefixWorkspace(0x100000000,16384,1)) if run_o else LargeKProjectionOwner(PrefixWorkspace(0x100000000,16384,1,split_k=2048)))
+    projection_driver_type=TypedStreamingUpstreamDriver if run_o else TypedLargeKProjectionDriver
     resources = (id(memory), id(scalar), id(rms_owner), id(projection_owner),
                  id(projection_owner.a_banks), id(projection_owner.b_banks),
                  matrix.resource_address, vector.resource_address)
@@ -221,7 +227,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         job = dense.down.Job(m=tokens, k=WIDTH, n=window.columns, tag=35002 + index,
                              a=rms_base, b=b_base, dst=d_base, activation_bf16=True,
                              weight_bf16=True, output_bf16=True, write_bytes=tokens * window.columns * 2)
-        driver = TypedLargeKProjectionDriver(projection_owner, matrix, memory, job,
+        driver = projection_driver_type(projection_owner, matrix, memory, job,
                     vector=vector, profile=profile, sum_identity=36002 + index)
         if not run('qkv_columns_' + str(window.start), driver):
             return report, memory
@@ -256,7 +262,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         require(memory.exact(rms_base,len(hidden),readable=True) is initial.output, 'A/B actual RMS identity')
         job=dense.down.Job(m=tokens,k=WIDTH,n=32,tag=35102+i,a=rms_base,b=b_base,dst=d_base,
             activation_bf16=True,weight_bf16=True,output_bf16=True,write_bytes=tokens*64)
-        ab_driver=TypedLargeKProjectionDriver(projection_owner,matrix,memory,job,vector=vector,
+        ab_driver=projection_driver_type(projection_owner,matrix,memory,job,vector=vector,
             profile=ab_profiles[name],sum_identity=36102+i)
         if not run(name,ab_driver):return report,memory
         ab_producers[name]=ab_driver.output
@@ -282,7 +288,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         require(memory.exact(rms_base,len(hidden),readable=True) is initial.output, 'Z actual RMS identity')
         z_job=dense.down.Job(m=tokens,k=WIDTH,n=4096,tag=35251,a=rms_base,b=z_b,dst=z_d,
             activation_bf16=True,weight_bf16=True,output_bf16=True,write_bytes=tokens*4096*2)
-        z_driver=TypedLargeKProjectionDriver(projection_owner,matrix,memory,z_job,vector=vector,
+        z_driver=projection_driver_type(projection_owner,matrix,memory,z_job,vector=vector,
             profile=z_profile,sum_identity=36251)
         if not run('z',z_driver):return report,memory
         report['z_profile']=vars(z_profile)
@@ -327,12 +333,27 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
                 'norm changed or committed block state/history')
         if not completed:return report,memory
         report['gated_weight_sha256']=sha(gated_weight)
+    if run_o:
+        o_b=region(raw_nk_to_kn(o_weight,2048,4096));o_out=region(size=tokens*2048*2)
+        o_driver=output_stage.prepare_output_projection(norm_driver,projection_owner,matrix,memory,
+            weight_base=o_b,output_base=o_out,tokens=tokens,scalar=scalar,vector=vector,profile=o_profile)
+        try:
+            completed=run('output_projection',o_driver)
+        finally:
+            require(sha(chunk_driver.state_out.raw())==state_digest and not chunk_driver.state_out.published and
+                sha(conv_driver.history_out.raw())==publication['history_sha256'] and not conv_driver.history_out.published and
+                not chunk_driver.scratch.published and conv_driver.response.generation==0,
+                'O changed or committed block state/history')
+        if not completed:return report,memory
+        report['o_weight_sha256']=sha(o_weight)
+        report['o_profile']=vars(o_profile)
+        report['actual_norm_region_consumed']=True
     require(resources == (id(memory), id(scalar), id(rms_owner), id(projection_owner),
                  id(projection_owner.a_banks), id(projection_owner.b_banks),
                  matrix.resource_address, vector.resource_address), 'execution resource replaced')
     require(matrix.owner is None and vector.client is None and scalar.client is None and
             memory.pending is None and not projection_owner.tiles.leased, 'prefix resource not retired')
-    report.update(status='PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if run_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
+    report.update(status='PASS_TYPED_OUTPUT_PREFIX_EXECUTION_ONLY' if run_o else 'PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if run_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
                   actual_rms_region_consumed=True, all_old_outputs_unchanged=True,
                   matrix_service=matrix.report(), scalar_operations=dict(scalar.calls),
                   hardware_utilization=None, busy_duty=None, active_lane_duty=None,

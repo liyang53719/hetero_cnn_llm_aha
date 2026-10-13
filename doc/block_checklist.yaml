@@ -1624,12 +1624,13 @@ Qwen35_35B_同producer完整维度chunk_20261013:
 Qwen35_35B_Z及32头gatednorm_20261013:
   状态: ongoing
   done: [Z_N4096官方原AST及独立C两档校准, norm32头布局及原16头回归, core_only完整receipt_ACK及失败隔离, 官方原forward12节点观察, 同次真实M16_M128十终态, 上游含chunk_state_scratch逐SHA保持, Z实际两档bitexact]
-  ongoing: [小批发布和精确CI]
+  ongoing: [后继O四段匹配路径]
+  发布闭环: 91f41da51c81af242d76168ffd46fe0ed6137cab；九条原CI全success及八个原ZIP逐head_digest_CRC复核；GDN583项59套176源逐SHA；source_native_BF16仍BLOCKED_BF16_PRODUCER_GATE；RoPE仅既有局部RTL_pair
   冷门: 583项59套176源零skip_前后不变；官方smoke3项；计划清单91项
   数值诊断: norm_M16_1和M128_15处bit差均1ULP；maxabs_1p52587890625e_5_3p0517578125e_5；无新增门
   MAC: Matrix总执行两档3238002688；有效404750336_3238002688；有效除执行12p5pct_100pct仅工作比非周期利用率
   范围: 85执行源12native记录前后不变；完整block_生产Chisel_RTL继续open
-  todo: [诊断摘要及小批发布CI, O_K4096另批, MoE完整block和联合状态提交]
+  todo: [O_K4096另批, MoE完整block和联合状态提交]
   参数: 仅Z_BF16_4096乘2048和gamma_F32_128共16777728B；Git无权重或raw
   Z校准: pair两档0bitdiff；sequential_M16_13_M128_77bitdiff_max4ULP；不继承N8192_N32
   参考: 固定官方norm和SiLUActivation_AST；真实12节点；gamma保留F32；无新增standalone误差门
@@ -1637,3 +1638,19 @@ Qwen35_35B_Z及32头gatednorm_20261013:
   资源: Matrix4096_Vector16_Scalar1；norm缓存128F32和gamma128F32；完整硬件周期_MAC利用率_duty未知
   报告: doc/QWEN35_35B_Z_GATED_NORM_20261013_CN.md
   证据: reports/execution/QWEN35_35B_Z_GATED_NORM_20261013.json
+
+Qwen35_35B_O四段streaming_20261013:
+  状态: ongoing
+  done: [官方K4096_N2048五配方独立校准, 四段真实A装载及两槽左折, 同次真实M16_M128十一终态, O两档官方及独立C逐bit一致, 原十三输出含state_scratch逐SHA保持]
+  ongoing: [发布CI闭环]
+  冷门: 643项67套195源零skip_前后不变；固定producer参考smoke两档；计划清单338项
+  独审: 两档94源13native_raw及计数逐SHA复核无阻断
+  todo: [O后BF16残差_postnorm_MoE, warm联合状态提交, 生产Chisel_RTL_完整周期MAC占空比]
+  资源: Matrix4096_Vector16_Scalar1保持；两partial槽原位三次左折；无新增tensorSRAM或DDRpartial；每N窗口四次真实A装载
+  MAC: Matrix全链两档执行4311744512_UInt64；有效538968064_4311744512；12p5pct_100pct仅工作量比
+  O计数: 两档52partial_39sum_13drain_52A_fence；VectorAdd6144_49152；A读1703936_13631488B；B读16777216B；ACK65536_524288B
+  范围: 94执行源13native前后不变；O同输入精确观察无新增阈值；完整block和生产绑定仍open
+  事务: 上游core_only中间发布保持；state_history_scratch未发布_generation不增
+  参数: O_BF16_2048乘4096仅16777216B；权重和raw不入Git
+  报告: doc/QWEN35_35B_OUTPUT_PROJECTION_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_OUTPUT_PROJECTION_20261013.json

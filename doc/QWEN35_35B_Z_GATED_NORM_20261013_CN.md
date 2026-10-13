@@ -30,7 +30,7 @@
 - done：payload范围/身份校验；独立N4096两档校准；32头norm布局和原16头回归；原官方12节点参考。
 - done：core-only发布后read/末ACK故障保护；同次真实M16、M128的Z与norm接线运行。
 - done：两档冻结源/raw独审与中文摘要。
-- ongoing：小批发布与精确CI闭环。
+- done：91f41da51c81af242d76168ffd46fe0ed6137cab 发布；九条原CI成功及八个原ZIP按精确head/digest/CRC核验。GDN 583项/59套/176源逐hash一致。额外 source-native BF16 工件仍为 BLOCKED_BF16_PRODUCER_GATE，RoPE仅原既有局部RTL pair，不新增block通过。
 - todo：O的K4096独立校准及后继完整block。
 
 ## M16实际完成

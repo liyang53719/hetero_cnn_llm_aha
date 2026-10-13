@@ -1486,7 +1486,8 @@ Qwen35_35B_Prep分组头布局执行_20261013:
   状态: ongoing
   父项: [Q35C, U00.2, U01]
   done: [官方repeat_interleave和精度顺序审计, 显式key16_value32地址执行, 参数16头分组复用, 合成M1_M128逐bit固定配方, 第二组读错和末ACK背压错误drain]
-  ongoing: [小批发布及精确CI工件]
+  ongoing: []
+  发布闭环: 80c270e877b08a64878ac58ef5b1ccdd4a105e3b；GDN38394387163_goal38394387150_payload38394387156全success；481项37套124源及工件日志逐SHA闭环
   冷门: GDN481项37套124源及原0p8门全PASS；计划清单91项
   todo: [实际RMS到A_B投影接线, 262336B最小原权重参数获取, Prep逐角色官方数值诊断, 32头chunk及状态生命周期, 完整L0_L3及RTL]
   官方映射: value_head_h读取QK_head_floor_h_div2；V不复制；不是h_mod16
@@ -1494,3 +1495,16 @@ Qwen35_35B_Prep分组头布局执行_20261013:
   层级: 仅合成实际typed控制算术；无checkpoint_AB；无独立native容差授予；无RTL
   报告: doc/QWEN35_35B_PREP_GROUPED_HEADS_20261013_CN.md
   性能: 每case计数保存；QK重复归一化计入executed；硬件cycle_duty_stall_overlap未知
+
+Qwen35_35B_RMS到AB独立N32_20261013:
+  状态: ongoing
+  父项: [Q35C, U00.2, U01]
+  done: [四原张量262336B获取, 官方A_B分别N32形状独立校准, 真实同RMS写回接A_B, M16_M128各三成功终态, A末ACK错阻止B及B中断保留pending, 冷GDN491项40套132源, 独立原始输出与源复核]
+  ongoing: [小批发布及精确CI工件]
+  todo: [实际AB逐token打包接Prep, Prep逐角色官方数值诊断, 32头chunk及状态生命周期, 完整L0_L3及RTL]
+  原门: A_B分别max0p03125_mean0p005；本批实际均官方和独立配方bitexact；未继承N8192归约验收
+  资源: Matrix4096_5contexts_Vector16_Scalar1；N32不能降低固定资源分母
+  性能: 每档执行16777216FMA；M16有效2097152_M128有效16777216；硬件cycle_duty未知
+  边界: AB尚未打包给Prep；log_bias获取但未执行；完整block与RTL未通过
+  报告: doc/QWEN35_35B_RMS_AB_N32_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_RMS_AB_N32_20261013.json

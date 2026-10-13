@@ -1430,3 +1430,15 @@ Qwen35_35B_K2048双partial子门_20261013:
   计数边界: 每合成数值case保存Matrix_FMA_Vector_Add_真实ACK及软件tick；完整硬件cycle_busy_lane占空比_stall_overlap均unknown
   后继: 最小35B固定源payload与官方profile；真实L0_GDN_MoE及L3_Attention_MoE_M128；生产Chisel_Host与RTL
   保留状态: Q35C_Q35D_U01_to_do；U00.2_ongoing；五block联合门不关闭
+
+Qwen35_35B_H2048RMS子门_20261013:
+  状态: ongoing
+  父项: [Q35C, Q35D, U00.2, U01]
+  范围: 原始embedding及BF16权重经真实typed_memory_shared_Scalar_RMS完成M16和M128
+  数值: 官方原RMS组件和实际owner所有对应FP32节点及BF16输出逐bit一致；原max0p03125_mean0p005不变
+  存储: 原三块1024BF16共6144B；32FP32_partial覆盖output前128B；input二次读取
+  性能: M128_Scalar1332736_读1572864B_写ACK524288B；Matrix_MAC0；hardware_cycles_busy_duty未知
+  报告: doc/QWEN35_35B_H2048_RMS_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_H2048_RMS_20261013.json
+  门禁: 实际组件和owner及独立审查通过；冷GDN447_L3247通过；新提交CI待收口
+  后继: 官方全形状K2048_QKV_profile及实际RMS写回消费者；GDN_MoE_Attention_MoE完整block；生产Chisel_Command128_RTL

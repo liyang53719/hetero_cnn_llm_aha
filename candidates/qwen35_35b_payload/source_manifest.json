@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "model_key": "qwen3_5_35b_a3b",
+  "model_id": "Qwen/Qwen3.5-35B-A3B",
+  "revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+  "forward_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+  "bundle": {
+    "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/manifest.json",
+    "bytes": 23226,
+    "sha256": "ca44aa87cfedd5d302b62c02d77ce64624009998edb78fe0bd025c42beaa4c8e"
+  },
+  "config": {
+    "bytes": 3544,
+    "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json",
+    "sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+    "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/config.json"
+  },
+  "forward": {
+    "bytes": 103891,
+    "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+    "sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+    "url": "https://raw.githubusercontent.com/huggingface/transformers/42ca97014c85d71a88ad60d55f08cb9fb4d26e2c/src/transformers/models/qwen3_5_moe/modeling_qwen3_5_moe.py"
+  },
+  "index": {
+    "bytes": 187463,
+    "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors.index.json",
+    "sha256": "d8d0b7ca4e61ae107e3e87a3ff21136b3ac7c789e64bb24267227ca804e04205",
+    "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors.index.json"
+  },
+  "profile": {
+    "bytes": 2247,
+    "path": "config/model_profiles/qwen3_5_35b_a3b.json",
+    "sha256": "5aec6e83ca8f29d1a4a905790a196c7f003bf74faabbe0d6d2aae15141b2ef04"
+  },
+  "tensors": [
+    {
+      "name": "model.language_model.embed_tokens.weight",
+      "local_name": "embed_tokens.rows_0_255",
+      "file": "embed_tokens.rows_0_255.bin",
+      "dtype": "BF16",
+      "shape": [
+        256,
+        2048
+      ],
+      "source_shape": [
+        248320,
+        2048
+      ],
+      "source_rows": [
+        0,
+        256
+      ],
+      "source_data_offsets": [
+        1017118720,
+        2034237440
+      ],
+      "source_tensor_start": 1017119744,
+      "source_tensor_end": 2034238463,
+      "source_tensor_bytes": 1017118720,
+      "start": 1017119744,
+      "end": 1018168319,
+      "bytes": 1048576,
+      "shard": "model.safetensors-00009-of-00014.safetensors",
+      "header_bytes": 1024,
+      "header_sha256": "0dcc9ac625c835a163f22100d3634400703465e662a72ef6dfff8861445b276e",
+      "transform": "none; original little-endian BF16 bits in C order"
+    },
+    {
+      "name": "model.language_model.layers.0.input_layernorm.weight",
+      "local_name": "layers.0.input_layernorm.weight",
+      "file": "layers.0.input_layernorm.weight.bin",
+      "dtype": "BF16",
+      "shape": [
+        2048
+      ],
+      "source_shape": [
+        2048
+      ],
+      "source_rows": null,
+      "source_data_offsets": [
+        19200,
+        23296
+      ],
+      "source_tensor_start": 208280,
+      "source_tensor_end": 212375,
+      "source_tensor_bytes": 4096,
+      "start": 208280,
+      "end": 212375,
+      "bytes": 4096,
+      "shard": "model.safetensors-00014-of-00014.safetensors",
+      "header_bytes": 189080,
+      "header_sha256": "d6d6f3155bd210da84591c715306d39d0ba4c1a7878db8bdcc65dc52054e85d2",
+      "transform": "none; original little-endian BF16 bits in C order"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "local_name": "layers.0.linear_attn.in_proj_qkv.weight",
+      "file": "layers.0.linear_attn.in_proj_qkv.weight.bin",
+      "dtype": "BF16",
+      "shape": [
+        8192,
+        2048
+      ],
+      "source_shape": [
+        8192,
+        2048
+      ],
+      "source_rows": null,
+      "source_data_offsets": [
+        0,
+        33554432
+      ],
+      "source_tensor_start": 23352,
+      "source_tensor_end": 33577783,
+      "source_tensor_bytes": 33554432,
+      "start": 23352,
+      "end": 33577783,
+      "bytes": 33554432,
+      "shard": "model.safetensors-00013-of-00014.safetensors",
+      "header_bytes": 23352,
+      "header_sha256": "3141fc97fe31229a9e6680d12ca8c9dbca665f3cd9b70bfd1c82b836a8ff7c81",
+      "transform": "none; original little-endian BF16 bits in C order"
+    }
+  ],
+  "payload_bytes": {
+    "initial_inputs": 1052672,
+    "with_qkv": 34607104
+  },
+  "semantics": {
+    "embedding": "Original rows 0..255 inclusive, original row IDs, no remap. BF16[256,2048].",
+    "rms_weight": "Original BF16[2048] weight bytes. No +1 or RMS computation applied.",
+    "qkv": "Original BF16[N=8192,K=2048] C-order tensor. Optional raw_nk_to_kn preserves each 16-bit word: KN[k,n]=NK[n,k], little-endian BF16 bits; no rounding, dequantization, scaling or row reordering.",
+    "qkv_segments": [
+      {
+        "name": "q",
+        "rows": [
+          0,
+          2048
+        ]
+      },
+      {
+        "name": "k",
+        "rows": [
+          2048,
+          4096
+        ]
+      },
+      {
+        "name": "v",
+        "rows": [
+          4096,
+          8192
+        ]
+      }
+    ]
+  },
+  "claim_boundary": {
+    "payload_hashes": "Unknown until acquisition; first-acquisition hashes are observed, not independent upstream authentication.",
+    "full_checkpoint_sha256_verified": false,
+    "official_forward_executed": false,
+    "complete_native_runtime_source_closure": "not pinned",
+    "inherited_0p8b_framework_revision": false
+  }
+}

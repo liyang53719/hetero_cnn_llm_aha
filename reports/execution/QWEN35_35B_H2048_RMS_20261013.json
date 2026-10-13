@@ -1,0 +1,2926 @@
+{
+  "cold_validation": {
+    "attention_source_files": 118,
+    "attention_suites": 23,
+    "attention_summary_sha256": "2b35222d2c754a5b598efbfdb7c6259f578a131464597d1b1bac145e06f0c6bb",
+    "attention_tests": 247,
+    "gdn_source_files": 104,
+    "gdn_suites": 30,
+    "gdn_summary_sha256": "2ad94bc50dd967abe6243e313596d0be170cac083eebb2f8101d4e1ffebcde95",
+    "gdn_tests": 447,
+    "goal_normal_tests": 338,
+    "goal_optimized_tests": 191,
+    "source_sha256": {
+      ".github/workflows/qwen35-gdn-prefill-model.yml": "ab072e334c5d4bb01d71a48e159cd9d758f963e1207fadeedc67a99086fff2ce",
+      "candidates/qwen35_35b_payload/__init__.py": "1aa7a9f8752b61eff2288b0732a056525adbdeee2f74ee054f3ef32fbd2c8434",
+      "candidates/qwen35_35b_payload/packer.py": "4f1ad35eb9054f69b4252fe5d0f290a87f26abb2bca2ac7bf18b2c99173ba47e",
+      "candidates/qwen35_35b_payload/source_manifest.json": "5e0845ecf47833d325de89208352cde5960059a35ccc0c634f85d46553e1c1a5",
+      "candidates/qwen35_35b_payload/tests/test_packer.py": "d1941d3f98c4c79bfc561b154c62ce07e9d64d1aec2fd8b44c7600a2620a72e0",
+      "candidates/qwen35_35b_rms/README.md": "2782ae9f40fe0b2b077b1b598f755fc7330b119243738b595612b1aa5b098f11",
+      "candidates/qwen35_35b_rms/__init__.py": "60f72d6b1dee8a03768c23fcae4feec2f7522101516e1c69ee9220ba5b6f399f",
+      "candidates/qwen35_35b_rms/diagnose.py": "30a5bcf76b2afc29b8c0d2c4d6468d373608326b563b70d5f98ab1b55d0dcc73",
+      "candidates/qwen35_35b_rms/formula.py": "504c01f83e053fe573e2496c547bcc35d3ef54fab0fcb095d6eba02574caa1c7",
+      "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+      "candidates/qwen35_35b_rms/reference.py": "1e41f3883c219ef91a4dd1fad745e285d463858f9876eec87a113758199b5127",
+      "candidates/qwen35_35b_rms/run_owner.py": "9ccf59b2ef8e2920b04b3266fb48a43783261364a503d59fa310960f8c168f20",
+      "candidates/qwen35_35b_rms/test_owner.py": "beaa3d367223d5608983773730a56a85f7b63003be2c74f26d0c07e4c1856e0f",
+      "candidates/qwen35_35b_rms/test_reference.py": "8f9013ff2c4b993ad641ee4dc3cba31dc5f7b7e4bedf30800e7f07c2e5c2efc0",
+      "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+      "candidates/qwen35_gdn_prefill/run_tests.py": "a72b9d3a486412d72f5e482bf3c8fbf9fac85ecb7d5ed68e9c23823a2f4b895d"
+    },
+    "status": "PASS_COLD_SOURCE_SYNTHETIC_SOFTWARE_ONLY",
+    "steps": [
+      {
+        "argv": [
+          "taskset",
+          "--cpu-list",
+          "0",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "-B",
+          "-S",
+          "scripts/build_shared_matrix_recipe.py",
+          "--repo",
+          ".",
+          "--out",
+          "work/library"
+        ],
+        "log_sha256": "e9b03047597f59409596e222607edb3f643271e906ea68db1d3e1d14691114f2",
+        "name": "matrix_build",
+        "returncode": 0,
+        "seconds": 0.5687605169950984
+      },
+      {
+        "argv": [
+          "taskset",
+          "--cpu-list",
+          "0",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "-B",
+          "-S",
+          "-c",
+          "from candidates.qwen35_gdn_prefill.chunk.vector import build_library; print(build_library('work/vector'))"
+        ],
+        "log_sha256": "1d926e558449d5793c79b062e1dd0c5345afade785fe9f5118de205d132479ed",
+        "name": "vector_build",
+        "returncode": 0,
+        "seconds": 0.3149891280045267
+      },
+      {
+        "argv": [
+          "taskset",
+          "--cpu-list",
+          "0",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "-B",
+          "-S",
+          "-m",
+          "candidates.qwen35_gdn_prefill.run_tests",
+          "--out",
+          "work/gdn_tests"
+        ],
+        "log_sha256": "da3fcc149e38234db64d067cc6786d8a007aa2e476ad10a5b586e06631a7276d",
+        "name": "gdn_synthetic",
+        "returncode": 0,
+        "seconds": 99.0803835350016
+      },
+      {
+        "argv": [
+          "taskset",
+          "--cpu-list",
+          "0",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "-B",
+          "-S",
+          "-m",
+          "candidates.qwen35_attention_prefill.run_tests",
+          "--out",
+          "work/attention_tests"
+        ],
+        "log_sha256": "bc748ebad5606960e5b1fc95e4cdbf2ed678f7fa3df71228aa43fef818f56fa4",
+        "name": "attention_synthetic",
+        "returncode": 0,
+        "seconds": 126.22418533899327
+      }
+    ],
+    "summary_sha256": "e00e3275d2ce14f977c00baea5d61059b9cf114dbc10b689ed84c7ca8d3628e7"
+  },
+  "independent_review": {
+    "actual_execution_evidence_inspected_not_rerun": {
+      "cases": [
+        {
+          "acknowledged_write_bytes": 65536,
+          "actual_output_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+          "final_bf16_bit_mismatches": 0,
+          "official_compared_fp32_stages_bit_exact": true,
+          "read_bytes": 196608,
+          "tokens": 16,
+          "write_bytes": 65536
+        },
+        {
+          "acknowledged_write_bytes": 524288,
+          "actual_output_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+          "final_bf16_bit_mismatches": 0,
+          "official_compared_fp32_stages_bit_exact": true,
+          "read_bytes": 1572864,
+          "tokens": 128,
+          "write_bytes": 524288
+        }
+      ],
+      "path": "work/qwen35_35b_rms_owner_actual_20261013T0514/summary.json",
+      "sha256": "d49d6fed6dcf4312bbaa1c4a7ce66c7194bf83c05317701cc9bb1bd6aee9cd44",
+      "status": "PASS_H2048_TYPED_RMS_COMPONENT_M16_M128"
+    },
+    "final_cold_gate": {
+      "must_not_inherit_prior_failed_gate": true,
+      "status": "PENDING_PARENT_RUN_AFTER_FINAL_RUNNER_FIXES"
+    },
+    "head": "f8a46fffe03ea3e93e1445cf3913fe83acc40c2e",
+    "independent_verification": [
+      {
+        "command": "PYTHONPATH=src:. python -m unittest candidates.qwen35_35b_rms.test_owner -v",
+        "result": "PASS",
+        "tests": 12,
+        "unittest_seconds": 0.928
+      },
+      {
+        "command": "PYTHONPATH=src:. python -m unittest candidates.qwen35_gdn_prefill.test_rms_owner.RmsTests.test_explicit_mul_ieee_rne_and_legacy_exception_policies candidates.qwen35_gdn_prefill.test_rms_owner.RmsTests.test_final_ack_and_held_terminal_require_publication_fence candidates.qwen35_gdn_prefill.test_rms_owner.RmsTests.test_same_memory_and_scalar_reused_for_next_real_producer -v",
+        "result": "PASS",
+        "tests": 3,
+        "unittest_seconds": 0.097
+      },
+      {
+        "check": "SharedScalar, _tiny_inexact, base RmsJob, MemoryRequest, MemoryResponse, RmsResult AST equality to HEAD",
+        "result": "PASS"
+      },
+      {
+        "check": "All actual-run bound source hashes and runner hash match current files; retained input, norm weight, actual output and official output hash-match M16/M128 summary",
+        "result": "PASS"
+      },
+      {
+        "check": "git diff --check",
+        "result": "PASS"
+      }
+    ],
+    "limits": {
+      "actual_m16_m128_rerun_by_reviewer": false,
+      "command128_executed": false,
+      "complete_runtime_source_closure_proven": false,
+      "full_native_forward": false,
+      "hardware_cycle_or_utilization_claim": false,
+      "packer_36_tests_rerun_by_reviewer": false,
+      "packer_implementation_reviewed_separately": true,
+      "physical_bank_allocation_or_ports_proven": false,
+      "production_chisel_modified": false,
+      "rtl_executed": false,
+      "source_edits_by_reviewer": false,
+      "staged_or_pushed": false,
+      "torch_download": false
+    },
+    "open_code_blockers": [],
+    "resolved_findings": [
+      {
+        "finding": "Workflow lacked src import path for new packer dependency; clean import raised ModuleNotFoundError: heteronpu.",
+        "fix": "Workflow job sets PYTHONPATH=${{ github.workspace }}/src; inherited child suites.",
+        "verification": "Workflow-equivalent PYTHONPATH=src source_files import passed; all 15 observed src imports were hashed, all 14 headers present; 104 files."
+      },
+      {
+        "finding": "Payload pytest fixture/function suite was routed through unittest and pytest was absent from fixed CI dependencies.",
+        "fix": "Pin pytest==8.4.2; route only payload/tests through pytest; record framework and require a positive passed count, zero exit, no skips/xfail/xpass/deselection.",
+        "verification": "Final source review. First cold gate retained as FAILED, with 411 actual passing tests plus one unittest import-failure placeholder, not 412 passing tests."
+      },
+      {
+        "finding": "Repository addopts=-q plus runner -q suppresses pytest passed-count summary.",
+        "fix": "Runner explicitly supplies -o addopts=.",
+        "verification": "One temporary trivial pytest test reproduced suppressed summary and restored 1 passed summary with override. Payload test suite was not rerun by reviewer."
+      }
+    ],
+    "review_conclusions": [
+      "Three retained bytearrays are 2048 bytes each. Thirty-two FP32 residue sums occupy bytes 0..127 of the output bank and are dead before BF16 output stores; no additional arithmetic H2048 input/weight/output bank.",
+      "Observer snapshots and per-row scalar diagnostics are explicitly host-only; callbacks receive immutable tuples and their return values never feed arithmetic.",
+      "Independent residue execution is interleaved but each block has sixteen ascending FP32 terms, each residue adds blocks 0,1,2,3, then ordered residue/lane reduction. Existing scalar operation/fault policy and final BF16 RNE remain intact.",
+      "Canonical schedule reads input twice and weight once per token: 12288 read bytes, 4096 write bytes, 192 read and 64 write requests of 64 bytes.",
+      "Inherited admission, exclusive scalar ownership, single outstanding request, accepted-response drain, abort/reset poison, held completion, final ACK and publication fence remain in use. Bounded M1 tests cover normal/fault paths and resource reuse.",
+      "Official reference executes the whole unchanged pinned Qwen3_5MoeRMSNorm class AST. Owner completes and publishes before official component/formula evaluation; neither reference supplies future inputs to owner arithmetic.",
+      "Original model and Transformers revision, current software-source identity and historical legacy/candidate associations are kept distinct; no inherited historical acceptance.",
+      "Original final materialized BF16 thresholds remain max_abs 0.03125 and mean_abs 0.005. FP32 internal official-stage comparisons are diagnostics; observed M16/M128 values are bit-exact. Native sqrt is absent and auxiliary native sum is labeled."
+    ],
+    "reviewed_at_utc": "2026-10-13T05:22:36+00:00",
+    "schema_version": 1,
+    "scope": "H2048 RMS owner/reference/formula/diagnostic/runner, shared RMS hooks, synthetic-runner and workflow integration",
+    "source_sha256": {
+      ".github/workflows/qwen35-gdn-prefill-model.yml": "ab072e334c5d4bb01d71a48e159cd9d758f963e1207fadeedc67a99086fff2ce",
+      "candidates/qwen35_35b_rms/README.md": "2782ae9f40fe0b2b077b1b598f755fc7330b119243738b595612b1aa5b098f11",
+      "candidates/qwen35_35b_rms/__init__.py": "60f72d6b1dee8a03768c23fcae4feec2f7522101516e1c69ee9220ba5b6f399f",
+      "candidates/qwen35_35b_rms/diagnose.py": "30a5bcf76b2afc29b8c0d2c4d6468d373608326b563b70d5f98ab1b55d0dcc73",
+      "candidates/qwen35_35b_rms/formula.py": "504c01f83e053fe573e2496c547bcc35d3ef54fab0fcb095d6eba02574caa1c7",
+      "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+      "candidates/qwen35_35b_rms/reference.py": "1e41f3883c219ef91a4dd1fad745e285d463858f9876eec87a113758199b5127",
+      "candidates/qwen35_35b_rms/run_owner.py": "9ccf59b2ef8e2920b04b3266fb48a43783261364a503d59fa310960f8c168f20",
+      "candidates/qwen35_35b_rms/test_owner.py": "beaa3d367223d5608983773730a56a85f7b63003be2c74f26d0c07e4c1856e0f",
+      "candidates/qwen35_35b_rms/test_reference.py": "8f9013ff2c4b993ad641ee4dc3cba31dc5f7b7e4bedf30800e7f07c2e5c2efc0",
+      "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+      "candidates/qwen35_gdn_prefill/run_tests.py": "a72b9d3a486412d72f5e482bf3c8fbf9fac85ecb7d5ed68e9c23823a2f4b895d"
+    },
+    "status": "PASS_INDEPENDENT_SCOPED_SOURCE_REVIEW_FINAL_COLD_GATE_PENDING"
+  },
+  "independent_review_sha256": "a7c18397ca51f7c7f0b0ce455800849e0534ebc8a7b1297843b1e2e6189eb929",
+  "official_component": {
+    "cases": [
+      {
+        "actual_operations": [
+          "aten.to.dtype",
+          "aten.pow.Tensor_Scalar",
+          "aten.mean.dim",
+          "aten.add.Tensor",
+          "aten.rsqrt.default",
+          "aten.mul.Tensor",
+          "aten.to.dtype",
+          "aten.add.Tensor",
+          "aten.mul.Tensor",
+          "aten.type_as.default"
+        ],
+        "exact_output": true,
+        "first_fp32_divergence": null,
+        "input_sha256": "a3f78fbd3ce590617bb311bbf483e0eddffbcb5589a03f812213396c48449881",
+        "isolated_stages": {
+          "materialize_native_weighted": {
+            "actual_sha256": "57f629127fae2109fc9cdfab61ca04b3ae9ce9613b7aa41afabbb762ffaddf6e",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 32768,
+            "expected_sha256": "57f629127fae2109fc9cdfab61ca04b3ae9ce9613b7aa41afabbb762ffaddf6e",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "native_mean_vs_auxiliary_sum_times_reciprocal": {
+            "actual_sha256": "3546e9f737748fcd2647f22bde69124ac2af0ce371c59e0617e7cb3a29cd7616",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "3546e9f737748fcd2647f22bde69124ac2af0ce371c59e0617e7cb3a29cd7616",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled_from_native_input_inverse": {
+            "actual_sha256": "6c6b718db40942e9a9d1b46a2752a3bf5a06ffc71e94b6d33b48f492a951d0a2",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "6c6b718db40942e9a9d1b46a2752a3bf5a06ffc71e94b6d33b48f492a951d0a2",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sqrt_div_vs_native_rsqrt_same_variance": {
+            "actual_sha256": "756dcb14a9abc9883550ba803b817de868569d4c4ec2f47c92f232e87333cc12",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "756dcb14a9abc9883550ba803b817de868569d4c4ec2f47c92f232e87333cc12",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted_from_native_scaled_gamma": {
+            "actual_sha256": "cfffd1222ba1b83839cfaf5bdbda42a3642422c8ec6ca753ecd35fbe64ba1778",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "cfffd1222ba1b83839cfaf5bdbda42a3642422c8ec6ca753ecd35fbe64ba1778",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "legacy_control": {
+          "output": {
+            "actual_sha256": "47bfafe939c111198d7d3f2effb602260643842dd2effc2ba37fd793c71af567",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 18,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 32768,
+            "expected_sha256": "57f629127fae2109fc9cdfab61ca04b3ae9ce9613b7aa41afabbb762ffaddf6e",
+            "first_bit_mismatch": 131,
+            "max_abs": 0.015625,
+            "max_bf16_ulp": 1,
+            "mean_abs": 2.913177013397217e-06,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 18,
+            "signed_zero_only_mismatches": 0
+          },
+          "sum": {
+            "actual_sha256": "458c2ea42ed0c210d1e3ad6b7437c730fd880b2d4af9ae5ac28d52e1d6ec3bd2",
+            "bit_mismatches": 16,
+            "elements": 16,
+            "expected_sha256": "c3586ab1cda9994dd929f45390613a5dfe059afeebb87780884bd94a477b772b",
+            "first_flat_mismatch": 0,
+            "max_abs": 0.010009765625,
+            "mean_abs": 0.00853729248046875
+          }
+        },
+        "name": "synthetic_random_m16",
+        "official_component": {
+          "class_lines": [
+            878,
+            895
+          ],
+          "class_name": "Qwen3_5MoeRMSNorm",
+          "class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+          "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+          "external_namespace": [
+            "torch",
+            "torch.nn"
+          ],
+          "extraction": "complete unmodified class AST; original filename and line numbers",
+          "full_native_forward": false,
+          "installed_moe_module_imported": false,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "rtl_executed": false,
+          "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+          "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+        },
+        "output": {
+          "actual_sha256": "57f629127fae2109fc9cdfab61ca04b3ae9ce9613b7aa41afabbb762ffaddf6e",
+          "actual_subnormal_count": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "expected_sha256": "57f629127fae2109fc9cdfab61ca04b3ae9ce9613b7aa41afabbb762ffaddf6e",
+          "first_bit_mismatch": null,
+          "gate": "ORIGINAL_NATIVE_PER_NODE",
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 0,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "provenance": {
+          "kind": "synthetic",
+          "seed": 352048
+        },
+        "shape": [
+          1,
+          16,
+          2048
+        ],
+        "stages": {
+          "gamma": {
+            "actual_sha256": "400f60f816fa8e0cd7970c81880638f3b5f03d0f30b589521e5436d9273de138",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "400f60f816fa8e0cd7970c81880638f3b5f03d0f30b589521e5436d9273de138",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_fp32": {
+            "actual_sha256": "ac5a5b0f82ffab6fffa96da7e8513a5107d76fe0de818b5e4a00c78f183d509a",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "ac5a5b0f82ffab6fffa96da7e8513a5107d76fe0de818b5e4a00c78f183d509a",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "inverse": {
+            "actual_sha256": "756dcb14a9abc9883550ba803b817de868569d4c4ec2f47c92f232e87333cc12",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "756dcb14a9abc9883550ba803b817de868569d4c4ec2f47c92f232e87333cc12",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean": {
+            "actual_sha256": "3546e9f737748fcd2647f22bde69124ac2af0ce371c59e0617e7cb3a29cd7616",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "3546e9f737748fcd2647f22bde69124ac2af0ce371c59e0617e7cb3a29cd7616",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean_eps": {
+            "actual_sha256": "00fc1d8a988a41bd78c1da6894d02a34e25985e19e6249e380c50b8c10f8358e",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "00fc1d8a988a41bd78c1da6894d02a34e25985e19e6249e380c50b8c10f8358e",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled": {
+            "actual_sha256": "6c6b718db40942e9a9d1b46a2752a3bf5a06ffc71e94b6d33b48f492a951d0a2",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "6c6b718db40942e9a9d1b46a2752a3bf5a06ffc71e94b6d33b48f492a951d0a2",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "squares": {
+            "actual_sha256": "fffddb05cf4ca8a85664ae4868dc5989740e998b6c03d3e3b412628469cc847e",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "fffddb05cf4ca8a85664ae4868dc5989740e998b6c03d3e3b412628469cc847e",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sum": {
+            "actual_sha256": "c3586ab1cda9994dd929f45390613a5dfe059afeebb87780884bd94a477b772b",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "c3586ab1cda9994dd929f45390613a5dfe059afeebb87780884bd94a477b772b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weight_fp32": {
+            "actual_sha256": "b133763199325b122e6edd1278b81ff433b8188b4bc7e7fbecfce02b5d8db8c8",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "b133763199325b122e6edd1278b81ff433b8188b4bc7e7fbecfce02b5d8db8c8",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted": {
+            "actual_sha256": "cfffd1222ba1b83839cfaf5bdbda42a3642422c8ec6ca753ecd35fbe64ba1778",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "cfffd1222ba1b83839cfaf5bdbda42a3642422c8ec6ca753ecd35fbe64ba1778",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "weight_sha256": "a2d3a0e3308f1d310fa96bd7287553c4ba7813a4c1d96aa0ec4436a0d8a4b16b"
+      },
+      {
+        "actual_operations": [
+          "aten.to.dtype",
+          "aten.pow.Tensor_Scalar",
+          "aten.mean.dim",
+          "aten.add.Tensor",
+          "aten.rsqrt.default",
+          "aten.mul.Tensor",
+          "aten.to.dtype",
+          "aten.add.Tensor",
+          "aten.mul.Tensor",
+          "aten.type_as.default"
+        ],
+        "exact_output": true,
+        "first_fp32_divergence": null,
+        "input_sha256": "38d2ab7847ec7b94c73cab4c1ea0327c9ccd3993cf809d95e88716337800af8a",
+        "isolated_stages": {
+          "materialize_native_weighted": {
+            "actual_sha256": "e8212fb75f1f33778e2c8f67a751ccafbfa444117428a7295266fab705432572",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 262144,
+            "expected_sha256": "e8212fb75f1f33778e2c8f67a751ccafbfa444117428a7295266fab705432572",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "native_mean_vs_auxiliary_sum_times_reciprocal": {
+            "actual_sha256": "856f48497e41b84d56b439563b473c992fa400ff2afee5d40730c8ba5aa9df90",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "856f48497e41b84d56b439563b473c992fa400ff2afee5d40730c8ba5aa9df90",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled_from_native_input_inverse": {
+            "actual_sha256": "5c1252206c107126548b801ac99d15d19527553d2a07345f8e425ed0f953ec1b",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "5c1252206c107126548b801ac99d15d19527553d2a07345f8e425ed0f953ec1b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sqrt_div_vs_native_rsqrt_same_variance": {
+            "actual_sha256": "6112a077bbf1f27819683ad0fb3ba6fd5f3356090f6256077f0998c14efe7479",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "6112a077bbf1f27819683ad0fb3ba6fd5f3356090f6256077f0998c14efe7479",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted_from_native_scaled_gamma": {
+            "actual_sha256": "d0db829050ce0c055ce7bb63bb2198a845e3969c652566c526617ce50a78a784",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "d0db829050ce0c055ce7bb63bb2198a845e3969c652566c526617ce50a78a784",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "legacy_control": {
+          "output": {
+            "actual_sha256": "7865e8645b1841a940582df85c93d10939f681f5c97f403a2c701fb055a9e714",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 85,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 262144,
+            "expected_sha256": "e8212fb75f1f33778e2c8f67a751ccafbfa444117428a7295266fab705432572",
+            "first_bit_mismatch": 3516,
+            "max_abs": 0.03125,
+            "max_bf16_ulp": 1,
+            "mean_abs": 1.5348232409451157e-06,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 85,
+            "signed_zero_only_mismatches": 0
+          },
+          "sum": {
+            "actual_sha256": "e102c14f31560af739dde1bdb2641324c5c3e5f9f8fc70073c4971daf24efdfb",
+            "bit_mismatches": 128,
+            "elements": 128,
+            "expected_sha256": "d89cf8222dbf253969f3a24314a5c19c903b26c7d892134784f68b72970841ab",
+            "first_flat_mismatch": 0,
+            "max_abs": 0.012451171875,
+            "mean_abs": 0.008048057556152344
+          }
+        },
+        "name": "synthetic_random_m128",
+        "official_component": {
+          "class_lines": [
+            878,
+            895
+          ],
+          "class_name": "Qwen3_5MoeRMSNorm",
+          "class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+          "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+          "external_namespace": [
+            "torch",
+            "torch.nn"
+          ],
+          "extraction": "complete unmodified class AST; original filename and line numbers",
+          "full_native_forward": false,
+          "installed_moe_module_imported": false,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "rtl_executed": false,
+          "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+          "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+        },
+        "output": {
+          "actual_sha256": "e8212fb75f1f33778e2c8f67a751ccafbfa444117428a7295266fab705432572",
+          "actual_subnormal_count": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 262144,
+          "expected_sha256": "e8212fb75f1f33778e2c8f67a751ccafbfa444117428a7295266fab705432572",
+          "first_bit_mismatch": null,
+          "gate": "ORIGINAL_NATIVE_PER_NODE",
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 0,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "provenance": {
+          "kind": "synthetic",
+          "seed": 352048
+        },
+        "shape": [
+          1,
+          128,
+          2048
+        ],
+        "stages": {
+          "gamma": {
+            "actual_sha256": "400f60f816fa8e0cd7970c81880638f3b5f03d0f30b589521e5436d9273de138",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "400f60f816fa8e0cd7970c81880638f3b5f03d0f30b589521e5436d9273de138",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_fp32": {
+            "actual_sha256": "ec17d5f502b25a891e6c9217a4e1105d5244bf2f38669b2a5ee40b9b618644d6",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "ec17d5f502b25a891e6c9217a4e1105d5244bf2f38669b2a5ee40b9b618644d6",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "inverse": {
+            "actual_sha256": "6112a077bbf1f27819683ad0fb3ba6fd5f3356090f6256077f0998c14efe7479",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "6112a077bbf1f27819683ad0fb3ba6fd5f3356090f6256077f0998c14efe7479",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean": {
+            "actual_sha256": "856f48497e41b84d56b439563b473c992fa400ff2afee5d40730c8ba5aa9df90",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "856f48497e41b84d56b439563b473c992fa400ff2afee5d40730c8ba5aa9df90",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean_eps": {
+            "actual_sha256": "940b03fd292834aa34b54a0904996599ce1823327943c15ff13bd6b8561feb45",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "940b03fd292834aa34b54a0904996599ce1823327943c15ff13bd6b8561feb45",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled": {
+            "actual_sha256": "5c1252206c107126548b801ac99d15d19527553d2a07345f8e425ed0f953ec1b",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "5c1252206c107126548b801ac99d15d19527553d2a07345f8e425ed0f953ec1b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "squares": {
+            "actual_sha256": "0d5f8941b7fc9e3b85ed7c85cc773a0ffdb39978d327fa53959c523d25538f44",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "0d5f8941b7fc9e3b85ed7c85cc773a0ffdb39978d327fa53959c523d25538f44",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sum": {
+            "actual_sha256": "d89cf8222dbf253969f3a24314a5c19c903b26c7d892134784f68b72970841ab",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "d89cf8222dbf253969f3a24314a5c19c903b26c7d892134784f68b72970841ab",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weight_fp32": {
+            "actual_sha256": "b133763199325b122e6edd1278b81ff433b8188b4bc7e7fbecfce02b5d8db8c8",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "b133763199325b122e6edd1278b81ff433b8188b4bc7e7fbecfce02b5d8db8c8",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted": {
+            "actual_sha256": "d0db829050ce0c055ce7bb63bb2198a845e3969c652566c526617ce50a78a784",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "d0db829050ce0c055ce7bb63bb2198a845e3969c652566c526617ce50a78a784",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "weight_sha256": "a2d3a0e3308f1d310fa96bd7287553c4ba7813a4c1d96aa0ec4436a0d8a4b16b"
+      },
+      {
+        "actual_operations": [
+          "aten.to.dtype",
+          "aten.pow.Tensor_Scalar",
+          "aten.mean.dim",
+          "aten.add.Tensor",
+          "aten.rsqrt.default",
+          "aten.mul.Tensor",
+          "aten.to.dtype",
+          "aten.add.Tensor",
+          "aten.mul.Tensor",
+          "aten.type_as.default"
+        ],
+        "exact_output": true,
+        "first_fp32_divergence": null,
+        "input_sha256": "2bcb5a66326c6676e3bb5823c8f59c46ed9952b4b11af55f294fff5d412d7971",
+        "isolated_stages": {
+          "materialize_native_weighted": {
+            "actual_sha256": "194aacbd621dd3e7a24853f53c2806140a965c8466e35f1e47d80b232f435e8f",
+            "actual_subnormal_count": 512,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 32768,
+            "expected_sha256": "194aacbd621dd3e7a24853f53c2806140a965c8466e35f1e47d80b232f435e8f",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 512,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "native_mean_vs_auxiliary_sum_times_reciprocal": {
+            "actual_sha256": "2287db4bf99e026f67434550be0077c8684cdca73e7e4c88a36574c34b9e4b86",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "2287db4bf99e026f67434550be0077c8684cdca73e7e4c88a36574c34b9e4b86",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled_from_native_input_inverse": {
+            "actual_sha256": "4f503b93beb17d9e9f2f57d208f215d0b03e4bfd8d408df08962785d3b1e058f",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "4f503b93beb17d9e9f2f57d208f215d0b03e4bfd8d408df08962785d3b1e058f",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sqrt_div_vs_native_rsqrt_same_variance": {
+            "actual_sha256": "52c44859751c45780eb709942bb19e1c2e4696df605b8a8eafedf57a1088f72b",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "52c44859751c45780eb709942bb19e1c2e4696df605b8a8eafedf57a1088f72b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted_from_native_scaled_gamma": {
+            "actual_sha256": "e029850b49b1f6f661284fac514f945e0a0b52daeb0285e1e14c44bd5808c392",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "e029850b49b1f6f661284fac514f945e0a0b52daeb0285e1e14c44bd5808c392",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "legacy_control": {
+          "output": {
+            "actual_sha256": "194aacbd621dd3e7a24853f53c2806140a965c8466e35f1e47d80b232f435e8f",
+            "actual_subnormal_count": 512,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 32768,
+            "expected_sha256": "194aacbd621dd3e7a24853f53c2806140a965c8466e35f1e47d80b232f435e8f",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 512,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "sum": {
+            "actual_sha256": "e4855f81ea62887fb28a0238a2c0a5114421eaba38106a832a257c44ab250800",
+            "bit_mismatches": 6,
+            "elements": 16,
+            "expected_sha256": "ef2fb0f479914c6a317f65c9e6b0fdd4aae45fd1123266f838b2c03523cecf71",
+            "first_flat_mismatch": 3,
+            "max_abs": 58720256.0,
+            "mean_abs": 3670016.2971191634
+          }
+        },
+        "name": "synthetic_edges_m16",
+        "official_component": {
+          "class_lines": [
+            878,
+            895
+          ],
+          "class_name": "Qwen3_5MoeRMSNorm",
+          "class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+          "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+          "external_namespace": [
+            "torch",
+            "torch.nn"
+          ],
+          "extraction": "complete unmodified class AST; original filename and line numbers",
+          "full_native_forward": false,
+          "installed_moe_module_imported": false,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "rtl_executed": false,
+          "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+          "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+        },
+        "output": {
+          "actual_sha256": "194aacbd621dd3e7a24853f53c2806140a965c8466e35f1e47d80b232f435e8f",
+          "actual_subnormal_count": 512,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "expected_sha256": "194aacbd621dd3e7a24853f53c2806140a965c8466e35f1e47d80b232f435e8f",
+          "first_bit_mismatch": null,
+          "gate": "ORIGINAL_NATIVE_PER_NODE",
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 512,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "provenance": {
+          "kind": "synthetic",
+          "rows": [
+            "signed_zero",
+            "unit",
+            "negative_unit",
+            "epsilon_scale",
+            "one_hot",
+            "BF16_min_subnormal",
+            "FP32_square_underflow",
+            "large_safe_square_sum",
+            "mixed_powers",
+            "wide_exponent",
+            "ramp",
+            "small_random",
+            "FP32_min_normal_square",
+            "boundary_hot",
+            "BF16_neighbor",
+            "large_random"
+          ],
+          "weights": "-1 cancellation, adjacent BF16 gamma, signed zero, small and positive"
+        },
+        "shape": [
+          1,
+          16,
+          2048
+        ],
+        "stages": {
+          "gamma": {
+            "actual_sha256": "f0221f643aad032119652d532f72903c3ac310205fc95d23418d8fd15afb9e1d",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "f0221f643aad032119652d532f72903c3ac310205fc95d23418d8fd15afb9e1d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_fp32": {
+            "actual_sha256": "ce00d22bc099e2fdc6049412f46b04f804e3006a3badecd092b9da4c9170c4b0",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "ce00d22bc099e2fdc6049412f46b04f804e3006a3badecd092b9da4c9170c4b0",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "inverse": {
+            "actual_sha256": "52c44859751c45780eb709942bb19e1c2e4696df605b8a8eafedf57a1088f72b",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "52c44859751c45780eb709942bb19e1c2e4696df605b8a8eafedf57a1088f72b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean": {
+            "actual_sha256": "2287db4bf99e026f67434550be0077c8684cdca73e7e4c88a36574c34b9e4b86",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "2287db4bf99e026f67434550be0077c8684cdca73e7e4c88a36574c34b9e4b86",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean_eps": {
+            "actual_sha256": "caa2d4207cc9597ee8324cf7621e92bd0e986254d4ce6401802d0bd465239e64",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "caa2d4207cc9597ee8324cf7621e92bd0e986254d4ce6401802d0bd465239e64",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled": {
+            "actual_sha256": "4f503b93beb17d9e9f2f57d208f215d0b03e4bfd8d408df08962785d3b1e058f",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "4f503b93beb17d9e9f2f57d208f215d0b03e4bfd8d408df08962785d3b1e058f",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "squares": {
+            "actual_sha256": "aa089d150579a32c3f144bef3937201bbdc196631424ed4330f13006aa34f2e8",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "aa089d150579a32c3f144bef3937201bbdc196631424ed4330f13006aa34f2e8",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sum": {
+            "actual_sha256": "ef2fb0f479914c6a317f65c9e6b0fdd4aae45fd1123266f838b2c03523cecf71",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "ef2fb0f479914c6a317f65c9e6b0fdd4aae45fd1123266f838b2c03523cecf71",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weight_fp32": {
+            "actual_sha256": "9bb0b88d7bbf223a89105a40ae433fffdb6ee3152b99ad15dd1b9bcd8ca1173d",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "9bb0b88d7bbf223a89105a40ae433fffdb6ee3152b99ad15dd1b9bcd8ca1173d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted": {
+            "actual_sha256": "e029850b49b1f6f661284fac514f945e0a0b52daeb0285e1e14c44bd5808c392",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "e029850b49b1f6f661284fac514f945e0a0b52daeb0285e1e14c44bd5808c392",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "weight_sha256": "145863d668ce80d60743af72facc9850699ddbe906e9cf848ee25ce6ce39770c"
+      },
+      {
+        "actual_operations": [
+          "aten.to.dtype",
+          "aten.pow.Tensor_Scalar",
+          "aten.mean.dim",
+          "aten.add.Tensor",
+          "aten.rsqrt.default",
+          "aten.mul.Tensor",
+          "aten.to.dtype",
+          "aten.add.Tensor",
+          "aten.mul.Tensor",
+          "aten.type_as.default"
+        ],
+        "exact_output": true,
+        "first_fp32_divergence": null,
+        "input_sha256": "66abf10ea153ba631c0116830e9da971263a9db558b3cc3b330a1d1d6b1db43b",
+        "isolated_stages": {
+          "materialize_native_weighted": {
+            "actual_sha256": "a048b43596689966501534e7126e3660d77279dd0c3fa471655e73111746d230",
+            "actual_subnormal_count": 4096,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 262144,
+            "expected_sha256": "a048b43596689966501534e7126e3660d77279dd0c3fa471655e73111746d230",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 4096,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "native_mean_vs_auxiliary_sum_times_reciprocal": {
+            "actual_sha256": "2ddaff057fe2039db3c4c00b9438334bcb844e0a359826f7a2706448c4ca4759",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "2ddaff057fe2039db3c4c00b9438334bcb844e0a359826f7a2706448c4ca4759",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled_from_native_input_inverse": {
+            "actual_sha256": "881a4b2f217159c08280a565f61282cde6ef2caf81c4b39737396083a7814de2",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "881a4b2f217159c08280a565f61282cde6ef2caf81c4b39737396083a7814de2",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sqrt_div_vs_native_rsqrt_same_variance": {
+            "actual_sha256": "610e8f2572ae635d783937cede252f570a92497e0cc721c8c819d455e1557866",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "610e8f2572ae635d783937cede252f570a92497e0cc721c8c819d455e1557866",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted_from_native_scaled_gamma": {
+            "actual_sha256": "6ffd12f354df2204d2ff1527ce5653b4a991563ef5eb6838c32c1c4acfc3301d",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "6ffd12f354df2204d2ff1527ce5653b4a991563ef5eb6838c32c1c4acfc3301d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "legacy_control": {
+          "output": {
+            "actual_sha256": "a048b43596689966501534e7126e3660d77279dd0c3fa471655e73111746d230",
+            "actual_subnormal_count": 4096,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 262144,
+            "expected_sha256": "a048b43596689966501534e7126e3660d77279dd0c3fa471655e73111746d230",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 4096,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "sum": {
+            "actual_sha256": "b6d5532838cb401193b698e4bc08d2472e0c3221f47692eac1dbabf3ddfca539",
+            "bit_mismatches": 48,
+            "elements": 128,
+            "expected_sha256": "6874cf1be77a0483b7570d4456a095628144710c12ddb6151318125c82def765",
+            "first_flat_mismatch": 3,
+            "max_abs": 58720256.0,
+            "mean_abs": 3670016.2971191634
+          }
+        },
+        "name": "synthetic_edges_m128",
+        "official_component": {
+          "class_lines": [
+            878,
+            895
+          ],
+          "class_name": "Qwen3_5MoeRMSNorm",
+          "class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+          "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+          "external_namespace": [
+            "torch",
+            "torch.nn"
+          ],
+          "extraction": "complete unmodified class AST; original filename and line numbers",
+          "full_native_forward": false,
+          "installed_moe_module_imported": false,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "rtl_executed": false,
+          "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+          "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+        },
+        "output": {
+          "actual_sha256": "a048b43596689966501534e7126e3660d77279dd0c3fa471655e73111746d230",
+          "actual_subnormal_count": 4096,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 262144,
+          "expected_sha256": "a048b43596689966501534e7126e3660d77279dd0c3fa471655e73111746d230",
+          "first_bit_mismatch": null,
+          "gate": "ORIGINAL_NATIVE_PER_NODE",
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 4096,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "provenance": {
+          "kind": "synthetic",
+          "rows": "eight repeats of edge M16"
+        },
+        "shape": [
+          1,
+          128,
+          2048
+        ],
+        "stages": {
+          "gamma": {
+            "actual_sha256": "f0221f643aad032119652d532f72903c3ac310205fc95d23418d8fd15afb9e1d",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "f0221f643aad032119652d532f72903c3ac310205fc95d23418d8fd15afb9e1d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_fp32": {
+            "actual_sha256": "12b7fb53d68078a19941d6e44d0327233825f661b1206068aa87c02690d82816",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "12b7fb53d68078a19941d6e44d0327233825f661b1206068aa87c02690d82816",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "inverse": {
+            "actual_sha256": "610e8f2572ae635d783937cede252f570a92497e0cc721c8c819d455e1557866",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "610e8f2572ae635d783937cede252f570a92497e0cc721c8c819d455e1557866",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean": {
+            "actual_sha256": "2ddaff057fe2039db3c4c00b9438334bcb844e0a359826f7a2706448c4ca4759",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "2ddaff057fe2039db3c4c00b9438334bcb844e0a359826f7a2706448c4ca4759",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean_eps": {
+            "actual_sha256": "0c3b65c208327df6920abd81ab6868cf19a59f93584e9ddd18638a0c48d9eb42",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "0c3b65c208327df6920abd81ab6868cf19a59f93584e9ddd18638a0c48d9eb42",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled": {
+            "actual_sha256": "881a4b2f217159c08280a565f61282cde6ef2caf81c4b39737396083a7814de2",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "881a4b2f217159c08280a565f61282cde6ef2caf81c4b39737396083a7814de2",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "squares": {
+            "actual_sha256": "99320cd69d2dd38d275258043144f35b6359be63dbc153d799eeb16a1bd83c77",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "99320cd69d2dd38d275258043144f35b6359be63dbc153d799eeb16a1bd83c77",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sum": {
+            "actual_sha256": "6874cf1be77a0483b7570d4456a095628144710c12ddb6151318125c82def765",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "6874cf1be77a0483b7570d4456a095628144710c12ddb6151318125c82def765",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weight_fp32": {
+            "actual_sha256": "9bb0b88d7bbf223a89105a40ae433fffdb6ee3152b99ad15dd1b9bcd8ca1173d",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "9bb0b88d7bbf223a89105a40ae433fffdb6ee3152b99ad15dd1b9bcd8ca1173d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted": {
+            "actual_sha256": "6ffd12f354df2204d2ff1527ce5653b4a991563ef5eb6838c32c1c4acfc3301d",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "6ffd12f354df2204d2ff1527ce5653b4a991563ef5eb6838c32c1c4acfc3301d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "weight_sha256": "145863d668ce80d60743af72facc9850699ddbe906e9cf848ee25ce6ce39770c"
+      },
+      {
+        "actual_operations": [
+          "aten.to.dtype",
+          "aten.pow.Tensor_Scalar",
+          "aten.mean.dim",
+          "aten.add.Tensor",
+          "aten.rsqrt.default",
+          "aten.mul.Tensor",
+          "aten.to.dtype",
+          "aten.add.Tensor",
+          "aten.mul.Tensor",
+          "aten.type_as.default"
+        ],
+        "exact_output": true,
+        "first_fp32_divergence": null,
+        "input_sha256": "43c2d85ac87a85a84883b88d8e03fb27d8afdab702e96f7af0e5951f77d0a04c",
+        "isolated_stages": {
+          "materialize_native_weighted": {
+            "actual_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 32768,
+            "expected_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "native_mean_vs_auxiliary_sum_times_reciprocal": {
+            "actual_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled_from_native_input_inverse": {
+            "actual_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sqrt_div_vs_native_rsqrt_same_variance": {
+            "actual_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted_from_native_scaled_gamma": {
+            "actual_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "legacy_control": {
+          "output": {
+            "actual_sha256": "0a4a717657d11ccb8b9f4769823fcccfd764718df64043c367528fb2b5a35e5b",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 1,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 32768,
+            "expected_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+            "first_bit_mismatch": 6467,
+            "max_abs": 3.0517578125e-05,
+            "max_bf16_ulp": 1,
+            "mean_abs": 9.313225746154785e-10,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 1,
+            "signed_zero_only_mismatches": 0
+          },
+          "sum": {
+            "actual_sha256": "e038bdca1c20dccb840f2b41f4795ab169b2581174372fdf3225825a64805703",
+            "bit_mismatches": 15,
+            "elements": 16,
+            "expected_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+            "first_flat_mismatch": 0,
+            "max_abs": 4.023313522338867e-07,
+            "mean_abs": 1.6065314412117004e-07
+          }
+        },
+        "name": "actual_embedding_rows_0_15",
+        "official_component": {
+          "class_lines": [
+            878,
+            895
+          ],
+          "class_name": "Qwen3_5MoeRMSNorm",
+          "class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+          "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+          "external_namespace": [
+            "torch",
+            "torch.nn"
+          ],
+          "extraction": "complete unmodified class AST; original filename and line numbers",
+          "full_native_forward": false,
+          "installed_moe_module_imported": false,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "rtl_executed": false,
+          "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+          "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+        },
+        "output": {
+          "actual_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+          "actual_subnormal_count": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "expected_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+          "first_bit_mismatch": null,
+          "gate": "ORIGINAL_NATIVE_PER_NODE",
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 0,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "provenance": {
+          "embedding_rows_sha256": "6507c0639b0f34351a2d6e577eeda47fee2d0fa8812d4620b7905da8cef84f49",
+          "full_checkpoint_sha256_verified": false,
+          "input_sha256": "43c2d85ac87a85a84883b88d8e03fb27d8afdab702e96f7af0e5951f77d0a04c",
+          "kind": "actual_pinned_embedding_and_input_norm",
+          "manifest_sha256": "e115c3e0475d2a0ee64a749005c3b48f9ee6d8cb8530a0aea52cf1b1d4417cb4",
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "payload_hashes_are_first_acquisition_observations": true,
+          "token_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "weight_sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+        },
+        "shape": [
+          1,
+          16,
+          2048
+        ],
+        "stages": {
+          "gamma": {
+            "actual_sha256": "cb13806ab0bd5e1030f9968001c55f5dc978e9659d1acc1207a4944347d86ddf",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "cb13806ab0bd5e1030f9968001c55f5dc978e9659d1acc1207a4944347d86ddf",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_fp32": {
+            "actual_sha256": "563f68b30d5ba43bcd39bbc50d206b7e9fdfb039988e06419aa561a934d9ccc1",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "563f68b30d5ba43bcd39bbc50d206b7e9fdfb039988e06419aa561a934d9ccc1",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "inverse": {
+            "actual_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean": {
+            "actual_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean_eps": {
+            "actual_sha256": "8b69aaeb2884f21c12785422ce6acab7fc1c98d747da8f713f7addc4d12afa92",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "8b69aaeb2884f21c12785422ce6acab7fc1c98d747da8f713f7addc4d12afa92",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled": {
+            "actual_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "squares": {
+            "actual_sha256": "bef65f3aefc16bd25ac92777bd675fa6c62a75017b3158d28e49898077e6fa97",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "bef65f3aefc16bd25ac92777bd675fa6c62a75017b3158d28e49898077e6fa97",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sum": {
+            "actual_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+            "bit_mismatches": 0,
+            "elements": 16,
+            "expected_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weight_fp32": {
+            "actual_sha256": "79d61b50c817161afef4f827311fdf0147bcafd63664272d24cb0f4f0bf9541d",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "79d61b50c817161afef4f827311fdf0147bcafd63664272d24cb0f4f0bf9541d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted": {
+            "actual_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+            "bit_mismatches": 0,
+            "elements": 32768,
+            "expected_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "weight_sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+      },
+      {
+        "actual_operations": [
+          "aten.to.dtype",
+          "aten.pow.Tensor_Scalar",
+          "aten.mean.dim",
+          "aten.add.Tensor",
+          "aten.rsqrt.default",
+          "aten.mul.Tensor",
+          "aten.to.dtype",
+          "aten.add.Tensor",
+          "aten.mul.Tensor",
+          "aten.type_as.default"
+        ],
+        "exact_output": true,
+        "first_fp32_divergence": null,
+        "input_sha256": "26401a9f20dbafc14cfd85db960b3034a47f88ae871b1a575730c936e0ea9797",
+        "isolated_stages": {
+          "materialize_native_weighted": {
+            "actual_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 0,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 262144,
+            "expected_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+            "first_bit_mismatch": null,
+            "max_abs": 0.0,
+            "max_bf16_ulp": 0,
+            "mean_abs": 0.0,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 0,
+            "signed_zero_only_mismatches": 0
+          },
+          "native_mean_vs_auxiliary_sum_times_reciprocal": {
+            "actual_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled_from_native_input_inverse": {
+            "actual_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sqrt_div_vs_native_rsqrt_same_variance": {
+            "actual_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted_from_native_scaled_gamma": {
+            "actual_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "legacy_control": {
+          "output": {
+            "actual_sha256": "a93e998bfd598e0730ded9c3701172377df7f151fd002fab895253d15c458000",
+            "actual_subnormal_count": 0,
+            "bit_mismatches": 46,
+            "comparison_domain": "finite_bf16_materialized_prefill_v1",
+            "elements": 262144,
+            "expected_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+            "first_bit_mismatch": 6467,
+            "max_abs": 0.03125,
+            "max_bf16_ulp": 1,
+            "mean_abs": 7.582129910588264e-07,
+            "native_subnormal_count": 0,
+            "numerical_mismatches": 46,
+            "signed_zero_only_mismatches": 0
+          },
+          "sum": {
+            "actual_sha256": "5c887653a29af03919e0e2ee68d0b6194e231b13fce1da628be18094ec8b8126",
+            "bit_mismatches": 125,
+            "elements": 128,
+            "expected_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+            "first_flat_mismatch": 0,
+            "max_abs": 1.7881393432617188e-06,
+            "mean_abs": 2.8940849006175995e-07
+          }
+        },
+        "name": "actual_embedding_rows_0_127",
+        "official_component": {
+          "class_lines": [
+            878,
+            895
+          ],
+          "class_name": "Qwen3_5MoeRMSNorm",
+          "class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+          "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+          "external_namespace": [
+            "torch",
+            "torch.nn"
+          ],
+          "extraction": "complete unmodified class AST; original filename and line numbers",
+          "full_native_forward": false,
+          "installed_moe_module_imported": false,
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "rtl_executed": false,
+          "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+          "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+          "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+        },
+        "output": {
+          "actual_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+          "actual_subnormal_count": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 262144,
+          "expected_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+          "first_bit_mismatch": null,
+          "gate": "ORIGINAL_NATIVE_PER_NODE",
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 0,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "provenance": {
+          "embedding_rows_sha256": "6507c0639b0f34351a2d6e577eeda47fee2d0fa8812d4620b7905da8cef84f49",
+          "full_checkpoint_sha256_verified": false,
+          "input_sha256": "26401a9f20dbafc14cfd85db960b3034a47f88ae871b1a575730c936e0ea9797",
+          "kind": "actual_pinned_embedding_and_input_norm",
+          "manifest_sha256": "e115c3e0475d2a0ee64a749005c3b48f9ee6d8cb8530a0aea52cf1b1d4417cb4",
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "payload_hashes_are_first_acquisition_observations": true,
+          "token_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127
+          ],
+          "weight_sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+        },
+        "shape": [
+          1,
+          128,
+          2048
+        ],
+        "stages": {
+          "gamma": {
+            "actual_sha256": "cb13806ab0bd5e1030f9968001c55f5dc978e9659d1acc1207a4944347d86ddf",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "cb13806ab0bd5e1030f9968001c55f5dc978e9659d1acc1207a4944347d86ddf",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "input_fp32": {
+            "actual_sha256": "9e00b1074418ef98075e2677912290d3fa14806c92076811811ec94ba79496af",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "9e00b1074418ef98075e2677912290d3fa14806c92076811811ec94ba79496af",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "inverse": {
+            "actual_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean": {
+            "actual_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "mean_eps": {
+            "actual_sha256": "310c2534f09b34911b1524f58e92286c9d96030045b463803bc42b6166737eb3",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "310c2534f09b34911b1524f58e92286c9d96030045b463803bc42b6166737eb3",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "scaled": {
+            "actual_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "squares": {
+            "actual_sha256": "48ac95875c150d23d29213b8fac19e97c0b22e0a21a9df2feac47a104ce27b8b",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "48ac95875c150d23d29213b8fac19e97c0b22e0a21a9df2feac47a104ce27b8b",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "sum": {
+            "actual_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+            "bit_mismatches": 0,
+            "elements": 128,
+            "expected_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weight_fp32": {
+            "actual_sha256": "79d61b50c817161afef4f827311fdf0147bcafd63664272d24cb0f4f0bf9541d",
+            "bit_mismatches": 0,
+            "elements": 2048,
+            "expected_sha256": "79d61b50c817161afef4f827311fdf0147bcafd63664272d24cb0f4f0bf9541d",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "weighted": {
+            "actual_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+            "bit_mismatches": 0,
+            "elements": 262144,
+            "expected_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+            "first_flat_mismatch": null,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "weight_sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+      }
+    ],
+    "claim_boundary": {
+      "actual_payload_executed": true,
+      "chisel_executed": false,
+      "full_checkpoint_loaded": false,
+      "full_native_forward": false,
+      "hardware_storage_or_latency_proven": false,
+      "model_weights_downloaded_by_diagnostic": false,
+      "official_component_executed": true,
+      "rtl_executed": false,
+      "scalar_exception_policy_executed": false
+    },
+    "cpu_seconds": 2.61800064,
+    "elapsed_seconds": 2.6195314430005965,
+    "formula": "8 lanes x 4 residues x 4 blocks x 16 ascending terms; residue then lane reduction",
+    "implementation_sha256": {
+      "diagnose.py": "30a5bcf76b2afc29b8c0d2c4d6468d373608326b563b70d5f98ab1b55d0dcc73",
+      "formula.py": "504c01f83e053fe573e2496c547bcc35d3ef54fab0fcb095d6eba02574caa1c7",
+      "reference.py": "1e41f3883c219ef91a4dd1fad745e285d463858f9876eec87a113758199b5127"
+    },
+    "imported_repository_sources_sha256": {
+      "candidates/qwen35_35b_payload/__init__.py": "1aa7a9f8752b61eff2288b0732a056525adbdeee2f74ee054f3ef32fbd2c8434",
+      "candidates/qwen35_35b_payload/packer.py": "4f1ad35eb9054f69b4252fe5d0f290a87f26abb2bca2ac7bf18b2c99173ba47e",
+      "candidates/qwen35_35b_rms/__init__.py": "60f72d6b1dee8a03768c23fcae4feec2f7522101516e1c69ee9220ba5b6f399f",
+      "candidates/qwen35_35b_rms/diagnose.py": "30a5bcf76b2afc29b8c0d2c4d6468d373608326b563b70d5f98ab1b55d0dcc73",
+      "candidates/qwen35_35b_rms/formula.py": "504c01f83e053fe573e2496c547bcc35d3ef54fab0fcb095d6eba02574caa1c7",
+      "candidates/qwen35_35b_rms/reference.py": "1e41f3883c219ef91a4dd1fad745e285d463858f9876eec87a113758199b5127",
+      "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+      "src/heteronpu/__init__.py": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be",
+      "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+      "src/heteronpu/cgra_sfu.py": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854",
+      "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+      "src/heteronpu/config.py": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4",
+      "src/heteronpu/dtypes.py": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34",
+      "src/heteronpu/kv_engine.py": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a",
+      "src/heteronpu/matrix_engine.py": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8",
+      "src/heteronpu/matrix_norm_rope_candidate.py": "41a4a25575de2f1b7323582b1b79553417ce99f90a38b2ee5a54948da111e764",
+      "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+      "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+      "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+      "src/heteronpu/qk_norm256_candidate.py": "1307cfd77b105fea758e0e434caab35db908739cc8bdfa0c3857306820532f06",
+      "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+      "src/heteronpu/qwen_family_contracts.py": "7cddcac095535e706ac31161303c94a8ad0a0ad6c4ece775f279190c5f283ab0",
+      "src/heteronpu/rope_bf16_candidate.py": "fa647411e2c9f33c58c0b8c62d14063ebe249b199a8fcbc2c0d2cc645ff10bfd",
+      "src/heteronpu/scheduler.py": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55",
+      "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8"
+    },
+    "limits": {
+      "cpu_seconds": 55,
+      "wall_seconds": 55
+    },
+    "runtime": {
+      "affinity": [
+        0
+      ],
+      "build_config_sha256": "4357da55584ba812c9f81a8baf65bb935a0345c1ef83e5e39e76803c1899ce8b",
+      "complete_runtime_dependency_source_closure": false,
+      "cpu_capability": "DEFAULT",
+      "installed_transformers_is_not_35b_source_authority": true,
+      "interop_threads": 1,
+      "intraop_threads": 1,
+      "numpy_version": "2.3.5",
+      "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "sha256": {
+        "python.sh": "989e013c0407c5a964386b30129998c74b864b2186cb6741ecb51053c4fad247",
+        "runtime_receipt.json": "06be2d4f193b19c4f8509159ca8ef7ef0b26c5d733debf6147ecfc6e9b4e4cc2",
+        "site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+        "site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+        "site-packages/torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+      },
+      "torch_git_revision": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+      "torch_version": "2.10.0+cpu"
+    },
+    "status": "PASS_COMPONENT_COMPARISON"
+  },
+  "parent_commit": "f8a46fffe03ea3e93e1445cf3913fe83acc40c2e",
+  "payload": {
+    "forward_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+    "full_checkpoint_sha256_verified": false,
+    "header_preflight_bytes": 190104,
+    "manifest_sha256": "e115c3e0475d2a0ee64a749005c3b48f9ee6d8cb8530a0aea52cf1b1d4417cb4",
+    "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+    "payload_bytes": 1052672,
+    "source_manifest_sha256": "5e0845ecf47833d325de89208352cde5960059a35ccc0c634f85d46553e1c1a5",
+    "status": "ACQUIRED_OBSERVED_SELECTIVE_PAYLOAD_ONLY",
+    "tensors": [
+      {
+        "bytes": 1048576,
+        "dtype": "BF16",
+        "end": 1018168319,
+        "name": "model.language_model.embed_tokens.weight",
+        "sha256": "6507c0639b0f34351a2d6e577eeda47fee2d0fa8812d4620b7905da8cef84f49",
+        "shape": [
+          256,
+          2048
+        ],
+        "shard": "model.safetensors-00009-of-00014.safetensors",
+        "start": 1017119744
+      },
+      {
+        "bytes": 4096,
+        "dtype": "BF16",
+        "end": 212375,
+        "name": "model.language_model.layers.0.input_layernorm.weight",
+        "sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281",
+        "shape": [
+          2048
+        ],
+        "shard": "model.safetensors-00014-of-00014.safetensors",
+        "start": 208280
+      }
+    ]
+  },
+  "preserved_integration_failures": [
+    {
+      "path": "work/qwen35_35b_rms_owner_gate_20261013/cold_final",
+      "reason": "pytest dependency absent and pytest function suite invoked via unittest; 1 FailedTest placeholder is not an executed test",
+      "sha256": "e771c786cd7abbc052f8967cd7ba4eaa562a1d0822cf59e35a460ac695f5ca93"
+    },
+    {
+      "path": "work/qwen35_35b_rms_owner_gate_20261013/cold_fixed",
+      "reason": "repository addopts -q stacked with CLI -q; pytest passed but mandatory positive test-count summary absent; fixed explicit addopts override",
+      "sha256": "721da2441ea154fe316637c7a5af8baaa27b040643c300810ada0da9414110b8"
+    }
+  ],
+  "prior_batch": {
+    "all_four_light_ci_and_artifacts_verified": true,
+    "attention_tests": 247,
+    "commit": "f8a46fffe03ea3e93e1445cf3913fe83acc40c2e",
+    "gdn_tests": 387,
+    "runs": [
+      38348427926,
+      38348427878,
+      38348427846,
+      38348427950
+    ]
+  },
+  "raw_evidence_sha256": {
+    "component_report": "dea744b670958536b048263eba6b5188bd7f02f3e43b0d774bc02075603f54e3",
+    "typed_owner_report": "d49d6fed6dcf4312bbaa1c4a7ce66c7194bf83c05317701cc9bb1bd6aee9cd44"
+  },
+  "raw_tensor_git_payload": false,
+  "resources": {
+    "functional_bank_bytes": 6144,
+    "matrix_mac_capacity": 4096,
+    "new_scalar_unit": false,
+    "new_tensor_array": false,
+    "owner_mapping_to_production_chisel_complete": false,
+    "partial_fp32_words": 32,
+    "partial_overlay_output_bytes": 128,
+    "physical_allocation_or_control_qor_proven": false,
+    "retained_bf16_banks": [
+      1024,
+      1024,
+      1024
+    ],
+    "shared_scalar_units": 1,
+    "vector_lanes": 16
+  },
+  "schema_version": 1,
+  "scope": "35B_H2048_RMS_COMPONENT_AND_TYPED_MEMORY_OWNER_ONLY",
+  "scope_gaps": [
+    "35B QKV official full-shape reduction policy",
+    "complete GDN/MoE and Attention/MoE",
+    "public Command128 and production Chisel implementation",
+    "RTL and complete hardware cycles/busy/duty/overlap"
+  ],
+  "status": "LOCAL_NUMERICAL_REVIEW_COLD_PASS_REMOTE_CI_PENDING",
+  "typed_owner": {
+    "active_case": null,
+    "cases": [
+      {
+        "earlier_outputs_unchanged": true,
+        "name": "actual_embedding_rms_m16",
+        "official_output": {
+          "actual_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+          "actual_subnormal_count": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "expected_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 0,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "owner": {
+          "complete": true,
+          "counts": {
+            "read_bytes": 196608,
+            "ticks": 12289,
+            "write_bytes": 65536
+          },
+          "input_sha256": [
+            "43c2d85ac87a85a84883b88d8e03fb27d8afdab702e96f7af0e5951f77d0a04c",
+            "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+          ],
+          "output_published": true,
+          "output_sha256": "f1f818f452b945cf01a59f6c30250f23596559f82882fb58adc803c747919619",
+          "owner": {
+            "accepted": {
+              "memory_responses": 4096,
+              "owner_results": 1,
+              "read_requests": 3072,
+              "write_acks": 1024,
+              "write_requests": 1024
+            },
+            "acknowledged_write_bytes": 65536,
+            "added_physical_array": false,
+            "additional_memory_ports": 0,
+            "control_overhead_proven": false,
+            "expected_read_bytes_per_token": 12288,
+            "full_native_forward": false,
+            "hardware_cycles": null,
+            "identity": {
+              "candidate_mapping_verified": false,
+              "full_native_forward": false,
+              "historical_m1_pass_inherited": false,
+              "implementation_sha256": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+              "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+              "native_acceptance": false,
+              "official_class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+              "official_component_executed": false,
+              "policy": "torch210_cpu_default2048",
+              "rtl_executed": false,
+              "source_sha256": {
+                "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+                "candidates/qwen35_35b_rms/formula.py": "504c01f83e053fe573e2496c547bcc35d3ef54fab0fcb095d6eba02574caa1c7",
+                "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+                "candidates/qwen35_35b_rms/reference.py": "1e41f3883c219ef91a4dd1fad745e285d463858f9876eec87a113758199b5127",
+                "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+                "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+                "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+                "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+                "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+              },
+              "torch_policy_model_only": true,
+              "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+            },
+            "input_passes_per_token": 2,
+            "native_acceptance": false,
+            "observer_snapshots_host_only": true,
+            "physical_bank_allocation_proven": false,
+            "residue_overlay_bank": "output",
+            "residue_overlay_bf16_entries": 64,
+            "residue_partial_bits": 32,
+            "residue_partial_count": 32,
+            "retained_bf16_output_capacity": 1024,
+            "retained_bf16_row_capacity": 1024,
+            "retained_bf16_weight_capacity": 1024,
+            "retained_physical_bank_bytes": 6144,
+            "row_scalars_host_only": true,
+            "row_scalars_host_receipt": {
+              "raw_values_retained_in_ignored_work_only": true,
+              "rows": 16,
+              "sha256": "f242cfabe09893157849295c2b27b76c20a2640c52038425d81f2f1101b0b1eb"
+            },
+            "rtl_executed": false,
+            "scalar_calls": {
+              "add": 68240,
+              "div": 16,
+              "mul_ieee_rne": 98320,
+              "sqrt": 16
+            },
+            "scope": "PACKED_BF16_H2048_RMS_SOFTWARE_OWNER",
+            "scratch_phase": "retired",
+            "shared_scalar_service_count": 1,
+            "status": null
+          },
+          "status": null
+        },
+        "owner_host_seconds": 0.8455137870041654,
+        "performance": {
+          "active_lane_duty": null,
+          "busy_duty": null,
+          "executed_matrix_macs": 0,
+          "hardware_cycles": null,
+          "matrix_mac_capacity": 4096,
+          "matrix_utilization": null,
+          "missing": "Cycle/port model and actual RTL timeline; software ticks and host seconds are not cycles",
+          "overlap": null,
+          "scalar_requests": 166592,
+          "scalar_requests_by_operation": {
+            "add": 68240,
+            "div": 16,
+            "mul_ieee_rne": 98320,
+            "sqrt": 16
+          },
+          "scope": "RMS_COMPONENT_TYPED_SOFTWARE_REQUESTS_ONLY",
+          "shared_scalar_units": 1,
+          "software_model_ticks": 12289,
+          "stalls": null,
+          "useful_matrix_macs": 0,
+          "vector_lane_capacity": 16
+        },
+        "provenance": {
+          "embedding_rows_sha256": "6507c0639b0f34351a2d6e577eeda47fee2d0fa8812d4620b7905da8cef84f49",
+          "full_checkpoint_sha256_verified": false,
+          "input_sha256": "43c2d85ac87a85a84883b88d8e03fb27d8afdab702e96f7af0e5951f77d0a04c",
+          "kind": "actual_pinned_embedding_and_input_norm",
+          "manifest_sha256": "e115c3e0475d2a0ee64a749005c3b48f9ee6d8cb8530a0aea52cf1b1d4417cb4",
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "payload_hashes_are_first_acquisition_observations": true,
+          "token_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "weight_sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+        },
+        "shared_resources_reused": true,
+        "stages": {
+          "gamma": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "bda3ebc16ad45f961a84eaf5bce1f5352467d82c403128445b878c1ac9abb361",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "bda3ebc16ad45f961a84eaf5bce1f5352467d82c403128445b878c1ac9abb361",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "bda3ebc16ad45f961a84eaf5bce1f5352467d82c403128445b878c1ac9abb361",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "bda3ebc16ad45f961a84eaf5bce1f5352467d82c403128445b878c1ac9abb361",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "inverse": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "4b0034ea86786ee1d84a21c9030f89ad527c119c11230f3fae6eeeb6d71be2fa",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "mean": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "946153a841e8689efb34b6da29fdf85b00a249e7671af5243f5697d2cbf7e7e8",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "mean_eps": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "8b69aaeb2884f21c12785422ce6acab7fc1c98d747da8f713f7addc4d12afa92",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "8b69aaeb2884f21c12785422ce6acab7fc1c98d747da8f713f7addc4d12afa92",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "8b69aaeb2884f21c12785422ce6acab7fc1c98d747da8f713f7addc4d12afa92",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "8b69aaeb2884f21c12785422ce6acab7fc1c98d747da8f713f7addc4d12afa92",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "output": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "07dffb764dc4bda522bdf07ddc6f8e21dce73fdde00d643abbd07c854363966b",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "07dffb764dc4bda522bdf07ddc6f8e21dce73fdde00d643abbd07c854363966b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "07dffb764dc4bda522bdf07ddc6f8e21dce73fdde00d643abbd07c854363966b",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "07dffb764dc4bda522bdf07ddc6f8e21dce73fdde00d643abbd07c854363966b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "root": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "8b9dc029b3459407e4620210cbf38a8d1c110efbef6dcd92433c677854eb4633",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "8b9dc029b3459407e4620210cbf38a8d1c110efbef6dcd92433c677854eb4633",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": null,
+            "official_root_not_materialized": true
+          },
+          "scaled": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "dd76b7ac0260aab6e60a3b71bed586363ac22bb61cb0be972f9fd4f03889feaa",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "squares": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "bef65f3aefc16bd25ac92777bd675fa6c62a75017b3158d28e49898077e6fa97",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "bef65f3aefc16bd25ac92777bd675fa6c62a75017b3158d28e49898077e6fa97",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "bef65f3aefc16bd25ac92777bd675fa6c62a75017b3158d28e49898077e6fa97",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "bef65f3aefc16bd25ac92777bd675fa6c62a75017b3158d28e49898077e6fa97",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "sum": {
+            "auxiliary_native_sum": true,
+            "fixed": {
+              "actual_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+              "bit_mismatches": 0,
+              "elements": 16,
+              "expected_sha256": "14e34a3e9556f6f71096e89c79a71a36e1a07409a640247d95c949185e3bed8a",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "weighted": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+              "bit_mismatches": 0,
+              "elements": 32768,
+              "expected_sha256": "47ce4a315cfbb29b2644fb8ce96b2b8a4408558007bc9ee1a22e82806edc9e0f",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          }
+        },
+        "tokens": 16
+      },
+      {
+        "earlier_outputs_unchanged": true,
+        "name": "actual_embedding_rms_m128",
+        "official_output": {
+          "actual_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+          "actual_subnormal_count": 0,
+          "bit_mismatches": 0,
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 262144,
+          "expected_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+          "first_bit_mismatch": null,
+          "max_abs": 0.0,
+          "max_bf16_ulp": 0,
+          "mean_abs": 0.0,
+          "native_subnormal_count": 0,
+          "numerical_mismatches": 0,
+          "passed": true,
+          "signed_zero_only_mismatches": 0,
+          "thresholds": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          }
+        },
+        "owner": {
+          "complete": true,
+          "counts": {
+            "read_bytes": 1572864,
+            "ticks": 98305,
+            "write_bytes": 524288
+          },
+          "input_sha256": [
+            "26401a9f20dbafc14cfd85db960b3034a47f88ae871b1a575730c936e0ea9797",
+            "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+          ],
+          "output_published": true,
+          "output_sha256": "36985e9c0fbe3ba24563d550ab2801c82a0393b4e80b46895408ac10cc1a2ff4",
+          "owner": {
+            "accepted": {
+              "memory_responses": 32768,
+              "owner_results": 1,
+              "read_requests": 24576,
+              "write_acks": 8192,
+              "write_requests": 8192
+            },
+            "acknowledged_write_bytes": 524288,
+            "added_physical_array": false,
+            "additional_memory_ports": 0,
+            "control_overhead_proven": false,
+            "expected_read_bytes_per_token": 12288,
+            "full_native_forward": false,
+            "hardware_cycles": null,
+            "identity": {
+              "candidate_mapping_verified": false,
+              "full_native_forward": false,
+              "historical_m1_pass_inherited": false,
+              "implementation_sha256": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+              "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+              "native_acceptance": false,
+              "official_class_sha256": "106cb15a68082e904cf98595202659710df28f2c059ace123246369914436073",
+              "official_component_executed": false,
+              "policy": "torch210_cpu_default2048",
+              "rtl_executed": false,
+              "source_sha256": {
+                "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+                "candidates/qwen35_35b_rms/formula.py": "504c01f83e053fe573e2496c547bcc35d3ef54fab0fcb095d6eba02574caa1c7",
+                "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+                "candidates/qwen35_35b_rms/reference.py": "1e41f3883c219ef91a4dd1fad745e285d463858f9876eec87a113758199b5127",
+                "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+                "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+                "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+                "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+                "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+              },
+              "torch_policy_model_only": true,
+              "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c"
+            },
+            "input_passes_per_token": 2,
+            "native_acceptance": false,
+            "observer_snapshots_host_only": true,
+            "physical_bank_allocation_proven": false,
+            "residue_overlay_bank": "output",
+            "residue_overlay_bf16_entries": 64,
+            "residue_partial_bits": 32,
+            "residue_partial_count": 32,
+            "retained_bf16_output_capacity": 1024,
+            "retained_bf16_row_capacity": 1024,
+            "retained_bf16_weight_capacity": 1024,
+            "retained_physical_bank_bytes": 6144,
+            "row_scalars_host_only": true,
+            "row_scalars_host_receipt": {
+              "raw_values_retained_in_ignored_work_only": true,
+              "rows": 128,
+              "sha256": "cc314543e6352bf999d365e8c3536b0dd123e42c8bc5670e25a205cb16f5c5f4"
+            },
+            "rtl_executed": false,
+            "scalar_calls": {
+              "add": 545920,
+              "div": 128,
+              "mul_ieee_rne": 786560,
+              "sqrt": 128
+            },
+            "scope": "PACKED_BF16_H2048_RMS_SOFTWARE_OWNER",
+            "scratch_phase": "retired",
+            "shared_scalar_service_count": 1,
+            "status": null
+          },
+          "status": null
+        },
+        "owner_host_seconds": 6.2902512139989994,
+        "performance": {
+          "active_lane_duty": null,
+          "busy_duty": null,
+          "executed_matrix_macs": 0,
+          "hardware_cycles": null,
+          "matrix_mac_capacity": 4096,
+          "matrix_utilization": null,
+          "missing": "Cycle/port model and actual RTL timeline; software ticks and host seconds are not cycles",
+          "overlap": null,
+          "scalar_requests": 1332736,
+          "scalar_requests_by_operation": {
+            "add": 545920,
+            "div": 128,
+            "mul_ieee_rne": 786560,
+            "sqrt": 128
+          },
+          "scope": "RMS_COMPONENT_TYPED_SOFTWARE_REQUESTS_ONLY",
+          "shared_scalar_units": 1,
+          "software_model_ticks": 98305,
+          "stalls": null,
+          "useful_matrix_macs": 0,
+          "vector_lane_capacity": 16
+        },
+        "provenance": {
+          "embedding_rows_sha256": "6507c0639b0f34351a2d6e577eeda47fee2d0fa8812d4620b7905da8cef84f49",
+          "full_checkpoint_sha256_verified": false,
+          "input_sha256": "26401a9f20dbafc14cfd85db960b3034a47f88ae871b1a575730c936e0ea9797",
+          "kind": "actual_pinned_embedding_and_input_norm",
+          "manifest_sha256": "e115c3e0475d2a0ee64a749005c3b48f9ee6d8cb8530a0aea52cf1b1d4417cb4",
+          "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+          "payload_hashes_are_first_acquisition_observations": true,
+          "token_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127
+          ],
+          "weight_sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281"
+        },
+        "shared_resources_reused": true,
+        "stages": {
+          "gamma": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "75ea37bd37c2bd7d393f212d1ee7c0ad3786e4a73082782ec868efd718665f44",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "75ea37bd37c2bd7d393f212d1ee7c0ad3786e4a73082782ec868efd718665f44",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "75ea37bd37c2bd7d393f212d1ee7c0ad3786e4a73082782ec868efd718665f44",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "75ea37bd37c2bd7d393f212d1ee7c0ad3786e4a73082782ec868efd718665f44",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "inverse": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "1a809168c9fabc1c9f109228770f9d502eb8861a9b97532a7f7ad5aff0f50c0b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "mean": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "e23a4500d45e2ebe65fee4251a670389a3c99e9280a5aba2ce4aaef158a0c7f3",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "mean_eps": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "310c2534f09b34911b1524f58e92286c9d96030045b463803bc42b6166737eb3",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "310c2534f09b34911b1524f58e92286c9d96030045b463803bc42b6166737eb3",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "310c2534f09b34911b1524f58e92286c9d96030045b463803bc42b6166737eb3",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "310c2534f09b34911b1524f58e92286c9d96030045b463803bc42b6166737eb3",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "output": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "aabf8e23e41999ead26798de1d7fad4d8c03cef5d894b454dc72280de0f33f0b",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "aabf8e23e41999ead26798de1d7fad4d8c03cef5d894b454dc72280de0f33f0b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "aabf8e23e41999ead26798de1d7fad4d8c03cef5d894b454dc72280de0f33f0b",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "aabf8e23e41999ead26798de1d7fad4d8c03cef5d894b454dc72280de0f33f0b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "root": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "a69d4b3a4827733dcc5a29ba2d36bdc511e580524c92165a3329c91525714e6e",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "a69d4b3a4827733dcc5a29ba2d36bdc511e580524c92165a3329c91525714e6e",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": null,
+            "official_root_not_materialized": true
+          },
+          "scaled": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "0059f010fae1fcee363ff55f3665408ffd4fe00928ee36484032b7b2053420e4",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "squares": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "48ac95875c150d23d29213b8fac19e97c0b22e0a21a9df2feac47a104ce27b8b",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "48ac95875c150d23d29213b8fac19e97c0b22e0a21a9df2feac47a104ce27b8b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "48ac95875c150d23d29213b8fac19e97c0b22e0a21a9df2feac47a104ce27b8b",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "48ac95875c150d23d29213b8fac19e97c0b22e0a21a9df2feac47a104ce27b8b",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "sum": {
+            "auxiliary_native_sum": true,
+            "fixed": {
+              "actual_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+              "bit_mismatches": 0,
+              "elements": 128,
+              "expected_sha256": "c386f1e9fc7ec1043df31f938370943b39b5dca89b9ababe365d2a79b201916c",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          },
+          "weighted": {
+            "auxiliary_native_sum": false,
+            "fixed": {
+              "actual_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official": {
+              "actual_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+              "bit_mismatches": 0,
+              "elements": 262144,
+              "expected_sha256": "515cbeaf8728c110969b7c5739c2e39e0878a7972d91bb701d1bba2b646d3561",
+              "first_flat_mismatch": null,
+              "max_abs": 0.0,
+              "mean_abs": 0.0
+            },
+            "official_root_not_materialized": false
+          }
+        },
+        "tokens": 128
+      }
+    ],
+    "claim_boundary": {
+      "chisel_executed": false,
+      "command128_executed": false,
+      "full_block_executed": false,
+      "hardware_cycles": null,
+      "official_rms_component_executed": true,
+      "rtl_executed": false,
+      "typed_memory_owner_executed": true
+    },
+    "elapsed_seconds": 9.538419826996687,
+    "runner_sha256": "9ccf59b2ef8e2920b04b3266fb48a43783261364a503d59fa310960f8c168f20",
+    "runtime": {
+      "affinity": [
+        0
+      ],
+      "build_config_sha256": "4357da55584ba812c9f81a8baf65bb935a0345c1ef83e5e39e76803c1899ce8b",
+      "complete_runtime_dependency_source_closure": false,
+      "cpu_capability": "DEFAULT",
+      "installed_transformers_is_not_35b_source_authority": true,
+      "interop_threads": 1,
+      "intraop_threads": 1,
+      "numpy_version": "2.3.5",
+      "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "sha256": {
+        "python.sh": "989e013c0407c5a964386b30129998c74b864b2186cb6741ecb51053c4fad247",
+        "runtime_receipt.json": "06be2d4f193b19c4f8509159ca8ef7ef0b26c5d733debf6147ecfc6e9b4e4cc2",
+        "site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+        "site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+        "site-packages/torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+      },
+      "torch_git_revision": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+      "torch_version": "2.10.0+cpu"
+    },
+    "status": "PASS_H2048_TYPED_RMS_COMPONENT_M16_M128"
+  }
+}

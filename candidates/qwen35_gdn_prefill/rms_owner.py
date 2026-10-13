@@ -224,6 +224,9 @@ class RmsOwner:
     This is not a general callback sandbox or an asynchronous transport drain;
     callbacks must not mutate owner, scalar or memory through outside references.
     """
+    JOB_TYPE = RmsJob
+    source_identity = staticmethod(source_identity)
+
     def __init__(self, scalar=None, observer=None):
         self.scalar = SharedScalar() if scalar is None else scalar
         require(isinstance(self.scalar, SharedScalar), 'explicit shared scalar service required')
@@ -382,9 +385,9 @@ class RmsOwner:
             elif self.state == 'idle':
                 self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
-            require(type(job) is RmsJob, 'typed immutable RMS job required')
+            require(type(job) is self.JOB_TYPE, 'typed immutable RMS job required')
             job.validate()
-            identity = source_identity(job.policy)
+            identity = self.source_identity(job.policy)
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
             self.job, self.start, self.identity = job, self.ticks, identity
@@ -441,13 +444,17 @@ class RmsOwner:
 
 class TypedRmsDriver:
     """Service only actual RMS requests from the shared TypedMemory byte map."""
+    OWNER_TYPE = RmsOwner
+    JOB_TYPE = RmsJob
+    WEIGHT_BYTES = ROW_BYTES
+
     def __init__(self, owner, memory, job):
-        require(type(owner) is RmsOwner and type(memory) is TypedMemory and type(job) is RmsJob,
+        require(type(owner) is self.OWNER_TYPE and type(memory) is TypedMemory and type(job) is self.JOB_TYPE,
                 'RMS owner, shared typed memory and immutable job required')
         job.validate()
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained resources required')
         self.input = memory.exact(job.input, job.write_bytes, readable=True)
-        self.weight = memory.exact(job.weight, ROW_BYTES, readable=True)
+        self.weight = memory.exact(job.weight, self.WEIGHT_BYTES, readable=True)
         self.output = memory.exact(job.output, job.write_bytes, readable=False)
         self.owner, self.memory, self.job = owner, memory, job
         self.source_hashes = tuple(sha(r.raw()) for r in (self.input, self.weight))
@@ -493,7 +500,7 @@ class TypedRmsDriver:
                     'actual input/weight changed')
             self.response = e['response']
             if self.response.status is None:
-                require(self.owner.identity == source_identity(self.job.policy), 'RMS source changed during execution')
+                require(self.owner.identity == self.owner.source_identity(self.job.policy), 'RMS source changed during execution')
                 self.memory.publish(self.job.output, (self.response.tag, None, self.response.write_bytes))
         return e
 

@@ -7,6 +7,25 @@ on:
       - '.github/workflows/qwen35-gdn-prefill-model.yml'
       - 'candidates/qwen35_gdn_prefill/**'
       - 'candidates/qwen35_35b_prefill/**'
+      - 'candidates/qwen35_35b_payload/**'
+      - 'candidates/qwen35_35b_rms/**'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/**'
+      - 'config/model_profiles/qwen3_5_35b_a3b.json'
+      - 'src/heteronpu/__init__.py'
+      - 'src/heteronpu/config.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/weight_header_contract.py'
+      - 'src/heteronpu/qwen35_dense_contract.py'
+      - 'src/heteronpu/pinned_block_payload.py'
+      - 'src/heteronpu/pinned_gdn_payload.py'
+      - 'src/heteronpu/qwen_family_contracts.py'
+      - 'src/heteronpu/abi_validation.py'
+      - 'src/heteronpu/cgra_sfu.py'
+      - 'src/heteronpu/command.py'
+      - 'src/heteronpu/dtypes.py'
+      - 'src/heteronpu/kv_engine.py'
+      - 'src/heteronpu/matrix_engine.py'
+      - 'src/heteronpu/scheduler.py'
       - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
       - 'candidates/qwen2_resident_matrix/dense_block_reduce/**'
       - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'
@@ -41,6 +60,8 @@ jobs:
   synthetic-model:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PYTHONPATH: ${{ github.workspace }}/src
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}'}
@@ -49,7 +70,8 @@ jobs:
       - name: Install fixed software arithmetic dependency
         # The pinned payload facade imports heteronpu.config, which requires
         # PyYAML even though this gate only loads JSON tensor metadata.
-        run: python -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3
+        # The source-only bounded-range acquisition tests use pytest fixtures.
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5 PyYAML==6.0.3 pytest==8.4.2
       - name: Build original shared Matrix recipe once
         run: python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen35_gdn_model/library
       - name: Build shared Vector16 host adapter once

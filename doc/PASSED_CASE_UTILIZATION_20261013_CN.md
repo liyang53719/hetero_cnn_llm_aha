@@ -1,10 +1,10 @@
 # 已过样本的 MAC 与占空比证据
 
-2026-10-13。首批盘点15个已有数值结果的窗口，覆盖Qwen2完整cold M128、0.8B L0完整M16/M128、L3完整M16与M128前缀，以及三个历史RTL revision的M1窗口（L0两个、L3一个）。重复实现/窗口分别记账，不把它们算成15种完整block。历史部分只有固定算术门通过的样本单列，不能升级官方模型验收。
+2026-10-13。原15个窗口加本次完整L3双M128，共17条已有数值结果记录，覆盖Qwen2完整cold M128、0.8B L0完整M16/M128、L3完整M16/M128及M128前缀，以及三个历史RTL revision的M1窗口（L0两个、L3一个）。重复实现/窗口分别记账，不把它们算成17种完整block。历史部分只有固定算术门通过的样本单列，不能升级官方模型验收。
 
-[机器可读逐case记录](../reports/execution/PASSED_CASE_UTILIZATION_20261013.json)绑定各原始报告hash、执行身份、数值范围、资源与已有计数。它是现成证据后处理，不触发模型重放或RTL生成。当前正在执行的L3完整双M128不预填成功或性能数据。
+[机器可读逐case记录](../reports/execution/PASSED_CASE_UTILIZATION_20261013.json)绑定各原始报告hash、执行身份、数值范围、资源与已有计数。它是现成证据后处理，不触发模型重放或RTL生成。本次L3完整双M128已在原7200秒任务终态后追加；原15条历史记录不重绑定。
 
-本轮逐字节核验引用的12份receipt/source记录；L3完整M16的91源另逐项等于git43fc70f和当前文件。历史Qwen2/L0原commit对象不全在现环境，当前源已合法后继变更，因此其他旧结果沿用原封存receipt/hash和既有验收，不声称本轮重新核完其旧源码闭包，也没有为统计重抓取/重跑。
+原清单逐字节核验引用的12份receipt/source记录；L3完整M16和新增M128的91源各自核对git43fc70f、快照与当前文件，M128另核42实际输出和102观察。历史Qwen2/L0原commit对象不全在现环境，当前源已合法后继变更，因此其他旧结果沿用原封存receipt/hash和既有验收，不声称本轮重新核完其旧源码闭包，也没有为统计重抓取/重跑。
 
 ## 统一口径
 
@@ -23,6 +23,7 @@
 | Qwen2-1.5B L0 cold M128，38b943c，公开21命令软件模型，27已分配官方门过 | 软件终态useful 6,014,828,544；executed 6,801,063,936；shared Add16,384请求 | unknown，17,361,158是软件tick | busy/active lane/stall时间线unknown |
 | 0.8B L0 cold/carried M16、M128，原完整typed软件已分配门过 | 原封存报告没有完整实际MAC计数；源码Dense逻辑MAC每窗M16为344,457,216，M128为2,755,657,728 | unknown；源码推导不能补作实测 | unknown；54,840,934仅M128双窗软件tick |
 | 0.8B L3 cold/carried M16，43fc70f，56已物化producer及最终output/KV/行和过 | C++ FMA调用2,350,383,104／2,350,907,392，含填充；basic Scalar772,864／779,008 | 硬件unknown；单Scalar条件上界≤3.102574%／≤3.089058% | 真实busy/active lane时间线unknown |
+| 0.8B L3完整cold/carried M128，同91源，56已物化producer及最终output/KV/行和过 | C++ FMA调用2,415,919,104／2,483,027,968；basic Scalar6,412,288／6,805,504 | 硬件unknown；单Scalar条件上界≤3.066113%／≤2.969205% | 真实busy/active lane时间线unknown |
 | 0.8B L3 cold/carried M128，C2八阶段前缀 | 每窗671,088,640软件FMA，1,210,434软件tick；22/57加4个前缀输出门过 | unknown；不是完整block | unknown |
 | 0.8B L0双M1，d7ce9bd与79bbe75两历史RTL实现，原native门过 | 每窗DUT useful Dense核对21,528,576，缺executed/周期端点 | unknown | unknown |
 | 0.8B L3双M1，98c7d80历史RTL，仅frozen-recipe过、native仍open | cold useful18,354,176／executed294,682,624／3,106,174拍；carry18,358,272／294,715,392／3,109,624拍 | 实测0.1442611%／0.1441332% | accepted-wide-issue率2.3738528%／2.3714764%；pipeline busy仍unknown |
@@ -39,10 +40,12 @@ L3 M16条件界严格使用3N−1：假设每笔记录的基本Scalar请求一�
 2. 单Scalar逐请求握手让Matrix在RMS/Norm/softmax等长阶段空闲。仅加队列不能降低现有II；独立head/row调度、复用既有Vector lane或流水化单元均须保持FP32归约次序/舍入、端口与异常策略，显式预算pipeline寄存器和控制。L0现有Vector-only chunk映射即使每拍一个issue，其M128条件上界仍约3.16764%；单靠调度流水不能消除此资源工作量。
 3. 原Dense已有K16双权重缓冲，不能把既有重叠重复当改进。下一次需先量化供数、结果credit/反馈与写回等待，再在现有五个累加上下文和共享bank容量中验证burst/预取/排空重叠。M1几何填充上限单列，固定4096分母不变。
 
-这三项是有明确资源前提的整改方向，尚非已实现性能提升。本轮优先完成冻结L3 M128数值；不在该运行中改源或插入新观测。
+这三项是有明确资源前提的整改方向，尚非已实现性能提升。本轮冻结L3 M128数值已完成，整个运行未改源或插入新观测。
 
 ## 后续每case必须补齐的观测
 
 下一次与实际数值运行绑定的计数器小增量，应逐样本封存：完整launch/首次terminal端点、useful/executed MAC差值、Matrix wide/slice issue及busy并集、Vector/Scalar opcode接受/返回/活跃lane周期、真实DMA读/写ACK、供数/依赖/写回/调度等待、跨tile/引擎重叠与每类计数的重置/饱和语义。先小例证明计数器无扰输出、握手、故障/复位和终态发布，再合并完整模型/RTL验真；不能仅为补丢失历史统计重跑昂贵旧case。
 
-todo：Qwen2新共享Add/bank开销的完整cycle模型校准、L0实际MAC全量计数、L3新完整M128终态统计、所有当前软件映射的硬件busy/完整周期。U01和五block数值/性能联合总门继续open，未承诺80%或90%。
+本次M128终态实际读55,481,344／64,132,096B、写/ACK9,306,112／9,568,256B，每窗含一次Down私有prefix读写各524,288B；公共ACK另为8,781,824／9,043,968B。Matrix/Scalar全局计数取前后delta，嵌套owner不再加一次。Vector各40,960个请求、655,360个lane计算只是次数，不能称占空比。3N−1条件下界19,236,863／20,416,511拍，矩形MAC分子包含因果零项；只计因果有效MAC时上界≤3.023861%／≤2.929394%。6658.907秒是软件宿主耗时，硬件完整分母仍未知。
+
+todo：Qwen2新共享Add/bank开销的完整cycle模型校准、L0实际MAC全量计数、所有当前软件映射的硬件busy/完整周期及供数/依赖/写回/调度/重叠时间线。U01和五block数值/性能联合总门继续open，未承诺80%或90%。

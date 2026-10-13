@@ -1,4 +1,4 @@
-"""Memory-fed GDN gated RMSNorm software owner, BF16 [M,16,128], M1..128.
+"""Memory-fed GDN gated RMSNorm software owner, BF16 [M,H,128], H16 default or explicit H32, M1..128.
 
 The pinned Chisel owner already defaults to maxTokens=128. This is a candidate
 software owner, not a production Host command or RTL/native numerical pass.
@@ -22,6 +22,7 @@ from ..rms_owner import (ROOT, SCALAR_SOURCE, SCALAR_SHA, ArithmeticFault,
                          MemoryRequest, MemoryResponse, finite, sha, word)
 from ..conv.scalar import ConvScalar, OPCODES
 from ..typed_dense import TypedMemory, FULL_MASK
+from ..prep.layout import PrepLayout, EQUAL_HEADS, GROUPED_35B, grouped_source_identity
 from ...qwen2_resident_matrix.transposed_down.model import WriteCommand, WriteAck
 
 
@@ -40,7 +41,8 @@ def require(ok, why):
         raise ValueError('typed GatedNorm: ' + why)
 
 
-def source_identity(root=ROOT):
+def source_identity(root=ROOT,layout=EQUAL_HEADS):
+    require(type(layout) is PrepLayout and layout in (EQUAL_HEADS,GROUPED_35B), "explicit norm layout")
     root = Path(root)
     source = subprocess.run(['git', 'show', 'HEAD:' + OWNER_SOURCE], cwd=root,
                             check=True, capture_output=True, timeout=10).stdout
@@ -53,8 +55,12 @@ def source_identity(root=ROOT):
               'candidates/qwen35_gdn_prefill/conv/scalar.py',
               'candidates/qwen35_gdn_prefill/prep/scalar.py',
               'candidates/qwen35_gdn_prefill/rms_owner.py',
-              'candidates/qwen35_gdn_prefill/typed_dense.py')
-    return dict(source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, **sources},
+              'candidates/qwen35_gdn_prefill/typed_dense.py',
+              'candidates/qwen35_gdn_prefill/prep/layout.py')
+    return dict(layout=dict(value_heads=layout.value_heads,width=layout.width,row_bytes=layout.vector_elements*2),
+                grouped_source=grouped_source_identity(root) if layout==GROUPED_35B else None,
+                grouped_layout_chisel_bound=False,
+                source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, **sources},
                 implementation_sha256={p: sha((root / p).read_bytes()) for p in models},
                 opcodes=dict(OPCODES), source_default_max_tokens=128,
                 candidate_tokens='M1..128', production_host_command=False,
@@ -73,13 +79,16 @@ class GatedNormJob:
     output: int
     tokens: int
     heads: int = HEADS
+    layout: PrepLayout = EQUAL_HEADS
 
     @property
     def write_bytes(self):
-        return self.tokens * ROW_BYTES
+        return self.tokens * self.layout.vector_elements * 2
 
-    def validate(self, heads=HEADS):
-        require(type(heads) is int and 1 <= heads <= HEADS and
+    def validate(self, heads=HEADS,layout=EQUAL_HEADS):
+        require(type(self.layout) is PrepLayout and self.layout==layout and layout in (EQUAL_HEADS,GROUPED_35B), "explicit job/owner layout identity")
+        require(layout==EQUAL_HEADS or heads==32, "35B requires all32 heads")
+        require(type(heads) is int and 1 <= heads <= layout.value_heads and
                 type(self.heads) is int and self.heads == heads and
                 type(self.tokens) is int and 1 <= self.tokens <= 128, 'heads/M1..128 domain')
         require(type(self.tag) is int and 0 <= self.tag < 1 << 32, 'job tag domain')
@@ -112,9 +121,11 @@ class GatedNormOwner:
     A successful held terminal linearizes only when its consumer accepts it.
     Abort/reset suppress same-tick acceptance and preserve an earlier failure.
     """
-    def __init__(self, scalar, *, heads=HEADS):
+    def __init__(self, scalar, *, heads=HEADS,layout=EQUAL_HEADS):
         require(isinstance(scalar, ConvScalar), 'explicit caller-owned ConvScalar or PrepScalar required')
-        require(type(heads) is int and 1 <= heads <= HEADS, 'head count 1..16')
+        require(type(layout) is PrepLayout and layout in (EQUAL_HEADS,GROUPED_35B), 'explicit norm layout')
+        require(type(heads) is int and 1 <= heads <= layout.value_heads and (layout==EQUAL_HEADS or heads==32), 'supported full head geometry')
+        self.layout=layout
         self.scalar, self.heads = scalar, heads
         self.state, self.job, self.request, self.result = 'idle', None, None, None
         self.program, self.poison, self.status = None, False, None
@@ -133,7 +144,7 @@ class GatedNormOwner:
     def reset(self):
         require(self.state in ('idle', 'locked') and self.request is None and self.scalar.client is not self,
                 'reset requires drained transport and retired held completion')
-        self.__init__(self.scalar, heads=self.heads)
+        self.__init__(self.scalar, heads=self.heads,layout=self.layout)
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
@@ -152,7 +163,7 @@ class GatedNormOwner:
         cache = [0] * HEAD_WIDTH
         for token in range(j.tokens):
             for head in range(j.heads):
-                offset = token * ROW_BYTES + head * HEAD_BYTES
+                offset = token * j.layout.vector_elements * 2 + head * HEAD_BYTES
                 for beat in range(4):
                     packet = struct.unpack('<32H', (yield (j.core + offset + beat * 64, None)))
                     for lane, raw in enumerate(packet):
@@ -179,8 +190,8 @@ class GatedNormOwner:
                         cache[index] = self._bf16(self._op('mul_ieee_rne', weighted, activated))
                     yield (j.output + offset + beat * 64,
                            struct.pack('<32H', *(x >> 16 for x in cache[beat * 32:beat * 32 + 32])))
-            for offset in range(j.heads * HEAD_BYTES, ROW_BYTES, 64):
-                yield (j.output + token * ROW_BYTES + offset, bytes(64))
+            for offset in range(j.heads * HEAD_BYTES, j.layout.vector_elements * 2, 64):
+                yield (j.output + token * j.layout.vector_elements * 2 + offset, bytes(64))
 
     def _finish(self, status=None):
         self.status = status
@@ -228,8 +239,8 @@ class GatedNormOwner:
                 self.state = 'locked'
         if not fault and job is not None and p['job_ready']:
             require(type(job) is GatedNormJob, 'typed immutable GatedNormJob required')
-            job.validate(self.heads)
-            identity = source_identity()
+            job.validate(self.heads,self.layout)
+            identity = source_identity(layout=self.layout)
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
             self.job, self.start, self.identity = job, self.ticks, identity
@@ -278,11 +289,11 @@ class GatedNormOwner:
                     accepted=dict(self.counts), acknowledged_write_bytes=self.ack_bytes,
                     scalar_calls=dict(self.scalar.calls - self.scalar_baseline if active else self.scalar_counts),
                     exp_internal_calls=dict(self.scalar.internal_calls - self.exp_baseline if active else self.exp_counts),
-                    active_heads=self.heads, production_geometry=self.heads == HEADS,
-                    test_only_zero_filled_heads=HEADS - self.heads,
+                    active_heads=self.heads, production_geometry=self.heads == self.layout.value_heads,
+                    test_only_zero_filled_heads=self.layout.value_heads - self.heads,
                     retained_fp32_head_capacity=HEAD_WIDTH, retained_weight_fp32_elements=HEAD_WIDTH,
                     retained_gate_packet_bytes=64, retained_output_packet_bytes=64,
-                    tensor_buffered=False, row_bytes=ROW_BYTES, weight_bytes=WEIGHT_BYTES,
+                    tensor_buffered=False, row_bytes=self.layout.vector_elements*2, weight_bytes=WEIGHT_BYTES,
                     state_committed=False, history_committed=False, generation_advanced=False,
                     hardware_cycles=None, rtl_executed=False, native_acceptance=False,
                     native_numeric_diagnostics_executed=False)
@@ -299,7 +310,7 @@ class TypedGatedNormDriver:
     def __init__(self, owner, memory, job):
         require(type(owner) is GatedNormOwner and type(memory) is TypedMemory and type(job) is GatedNormJob,
                 'gated norm owner, shared TypedMemory and immutable job required')
-        job.validate(owner.heads)
+        job.validate(owner.heads,owner.layout)
         require(owner.ports()['job_ready'] and memory.pending is None, 'drained resources required')
         self.core = memory.exact(job.core, job.write_bytes, readable=True)
         self.gate = memory.exact(job.gate, job.write_bytes, readable=True)
@@ -312,7 +323,7 @@ class TypedGatedNormDriver:
         self.owner, self.memory, self.job = owner, memory, job
         self.sources = (self.core, self.gate, self.weight)
         self.scalar_resource = owner.scalar
-        self.resource_identity = (id(owner), id(memory), id(owner.scalar))
+        self.resource_identity = (id(owner), id(memory), id(owner.scalar),owner.layout)
         self.source_hashes = tuple(sha(r.raw()) for r in self.sources)
         self.pending, self.response, self.aborted = None, None, False
         self.pending_request, self.pending_write = None, None
@@ -323,7 +334,7 @@ class TypedGatedNormDriver:
              abort=False, reset=False, read_error=False, ack_error=False,
              read_tag=None, read_nbytes=None, ack_tag=None, ack_nbytes=None):
         require(self.response is None, 'gated norm invocation already retired')
-        require(self.resource_identity == (id(self.owner), id(self.memory), id(self.owner.scalar)) and
+        require(self.resource_identity == (id(self.owner), id(self.memory), id(self.owner.scalar),self.owner.layout) and
                 self.owner.scalar is self.scalar_resource, 'owner/memory/shared scalar resource replaced')
         pending = self.pending if memory_response_ready else None
         if pending is not None:
@@ -385,7 +396,7 @@ class TypedGatedNormDriver:
             require(self.source_hashes == tuple(sha(r.raw()) for r in self.sources), 'producer/parameter bytes changed')
             self.response = e['response']
             if self.response.status is None:
-                require(self.owner.identity == source_identity(), 'gated norm source changed during execution')
+                require(self.owner.identity == source_identity(layout=self.owner.layout), 'gated norm source changed during execution')
                 require(self.response.staging_complete and self.response.write_bytes == self.job.write_bytes and
                         not any((self.response.state_committed, self.response.history_committed,
                                  self.response.generation_advanced)), 'complete stateless staging receipt required')

@@ -23,6 +23,8 @@ from ..qwen35_gdn_prefill.prep.scalar import PrepScalar
 from ..qwen35_35b_payload.packer import raw_nk_to_kn
 from .pack import TypedABPackDriver
 from . import chunk_stage
+from ..qwen35_gdn_prefill.gated_norm import model as gated_norm
+from ..qwen35_35b_gated_norm.core_publication import publish_core_intermediate
 
 WIDTH, OUTPUTS = 2048, 8192
 
@@ -69,7 +71,7 @@ def pack_window(raw_nk, window):
 
 def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                    matrix, vector, deadline, memory=None, controls=None, observe=None,
-                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None):
+                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -116,6 +118,12 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
     require(type(a_log) is bytes and len(a_log)==128 and type(dt_bias) is bytes and len(dt_bias)==64, 'original parameter extents')
     require(type(run_chunk) is bool and (not run_chunk or gate_policy==prep.DUAL_EXP_GATE_35B), 'chunk requires explicit shared IEEE GateScalar')
     require(chunk_progress is None or callable(chunk_progress), 'optional progress observer')
+    run_norm = z_weight is not None or gated_weight is not None or z_profile is not None
+    require(not run_norm or (run_chunk and type(z_weight) is bytes and len(z_weight)==4096*2048*2 and
+        type(gated_weight) is bytes and len(gated_weight)==512 and type(z_profile) is ReductionProfile), 'complete Z/norm inputs and chunk required')
+    if run_norm:
+        require(z_profile.ranges==((0,1024),(1024,2048)) and z_profile.pair_reverse, 'explicit independently calibrated N4096 profile')
+        z_profile.validate(WIDTH)
     scalar = prep.GateScalar(enable_softplus=True,enable_ieee_exp=True,enable_gate_softplus=True) if gate_policy==prep.DUAL_EXP_GATE_35B else PrepScalar(enable_softplus=True)
     rms_owner = rms.RmsOwner(scalar)
     # This K2048 job uses resident partials. The legacy prefix spill condition
@@ -180,7 +188,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
             report.update(status='INTERRUPTED', active_stage=stage)
             raise PrefixExecutionError(error, report, snapshot, raw,
                 driver.history_out.raw() if hasattr(driver, 'history_out') else None) from error
-        status = driver.response.status if stage in ('input_norm', 'conv4_silu', 'ab_pack', 'prep') else driver.response[1]
+        status = driver.response.status if stage in ('input_norm', 'conv4_silu', 'ab_pack', 'prep','gated_norm') else driver.response[1]
         details = driver.report()
         report['stages'].append(dict(stage=stage, host_seconds=time.monotonic() - started, report=details))
         report['terminals'].append(dict(stage=stage, status=status))
@@ -190,12 +198,12 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         if status is not None:
             require(not driver.output.published, 'failed owner published output')
             report.update(status='FAILED', failed_stage=stage)
-            if stage == 'conv4_silu':
-                error = RuntimeError('Conv owner returned '+str(status))
+            if stage in ('conv4_silu','gated_norm'):
+                error = RuntimeError(stage+' owner returned '+str(status))
                 raise PrefixExecutionError(error, report, dict(stage=stage, owner_report=details,
                     terminal_accepted=True, output_published=False, history_published=False,
                     automatically_drained=False, resumable_checkpoint=False),
-                    driver.output.raw(), driver.history_out.raw())
+                    driver.output.raw(), driver.history_out.raw() if hasattr(driver,'history_out') else None)
             return False
         require(driver.output.published, 'successful terminal without actual output publication')
         published.append((driver.output, sha(driver.output.raw())))
@@ -269,6 +277,16 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         actual_packed_ab_producer_consumed=True,history_published=False,prep_native_acceptance=False,
         ab_profiles={k:vars(v) for k,v in ab_profiles.items()},
         added_parameter_sha256={k:sha(v) for k,v in dict(ab_weights,a_log=a_log,dt_bias=dt_bias).items()})
+    if run_norm:
+        z_b=region(raw_nk_to_kn(z_weight,4096,WIDTH));z_d=region(size=tokens*4096*2)
+        require(memory.exact(rms_base,len(hidden),readable=True) is initial.output, 'Z actual RMS identity')
+        z_job=dense.down.Job(m=tokens,k=WIDTH,n=4096,tag=35251,a=rms_base,b=z_b,dst=z_d,
+            activation_bf16=True,weight_bf16=True,output_bf16=True,write_bytes=tokens*4096*2)
+        z_driver=TypedLargeKProjectionDriver(projection_owner,matrix,memory,z_job,vector=vector,
+            profile=z_profile,sum_identity=36251)
+        if not run('z',z_driver):return report,memory
+        report['z_profile']=vars(z_profile)
+        report['z_weight_sha256']=sha(z_weight)
     if run_chunk:
         try:
             chunk_driver, chunk_details = chunk_stage.execute_chunk(memory,scalar,vector,prep_driver.output,region,
@@ -289,12 +307,32 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         if chunk_driver.response.status is not None:
             report.update(status='FAILED',failed_stage='chunk')
             return report,memory
+    if run_norm:
+        publication=publish_core_intermediate(chunk_driver,conv_driver.history_out,scalar,vector,tokens=tokens)
+        core_digest=publication['core_sha256'];state_digest=publication['state_sha256']
+        published.append((chunk_driver.output,core_digest))
+        gamma=region(gated_weight);norm_out=region(size=tokens*8192)
+        norm_owner=gated_norm.GatedNormOwner(scalar,heads=32,layout=prep.GROUPED_35B)
+        norm_job=gated_norm.GatedNormJob(35401,chunk_driver.job.output,z_d,gamma,norm_out,tokens,32,prep.GROUPED_35B)
+        norm_driver=gated_norm.TypedGatedNormDriver(norm_owner,memory,norm_job)
+        require(norm_driver.core is chunk_driver.output and norm_driver.gate is z_driver.output and
+            norm_owner.scalar is rms_owner.scalar,'norm actual core/Z and shared Scalar')
+        report['core_intermediate_publication']=publication
+        try:
+            completed=run('gated_norm',norm_driver)
+        finally:
+            require(sha(chunk_driver.state_out.raw())==state_digest and not chunk_driver.state_out.published and
+                sha(conv_driver.history_out.raw())==publication['history_sha256'] and not conv_driver.history_out.published and
+                not chunk_driver.scratch.published and conv_driver.response.generation==0,
+                'norm changed or committed block state/history')
+        if not completed:return report,memory
+        report['gated_weight_sha256']=sha(gated_weight)
     require(resources == (id(memory), id(scalar), id(rms_owner), id(projection_owner),
                  id(projection_owner.a_banks), id(projection_owner.b_banks),
                  matrix.resource_address, vector.resource_address), 'execution resource replaced')
     require(matrix.owner is None and vector.client is None and scalar.client is None and
             memory.pending is None and not projection_owner.tiles.leased, 'prefix resource not retired')
-    report.update(status='PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
+    report.update(status='PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if run_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
                   actual_rms_region_consumed=True, all_old_outputs_unchanged=True,
                   matrix_service=matrix.report(), scalar_operations=dict(scalar.calls),
                   hardware_utilization=None, busy_duty=None, active_lane_duty=None,

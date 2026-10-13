@@ -98,9 +98,39 @@ def main(argv=None):
     parser.add_argument('--ab-manifest-sha256',required=True)
     parser.add_argument('--ab-reference-report',type=Path,required=True)
     parser.add_argument('--ab-reference-report-sha256',required=True)
+    parser.add_argument('--gated-norm',action='store_true')
+    parser.add_argument('--z-norm-payload',type=Path)
+    parser.add_argument('--z-norm-manifest-sha256')
+    parser.add_argument('--z-reference-report',type=Path)
+    parser.add_argument('--z-reference-report-sha256')
     args = parser.parse_args(argv)
     if args.chunk:
         from . import chunk_reference
+    z_weight=gated_weight=z_profile=z_ref=None
+    if args.gated_norm:
+        from ..qwen35_35b_gated_norm import payload as z_payload, z_reference, norm_reference
+        p.require(args.chunk and args.z_norm_payload is not None and args.z_reference_report is not None,
+                  'norm requires actual chunk and independent full N4096 reference')
+        z_record=record(args.z_reference_report)
+        p.require(z_record['sha256']==args.z_reference_report_sha256,'N4096 independent report pin')
+        z_ref=json.loads(checked_record(z_record))
+        p.require(z_ref['status']=='COMPLETE_Z_N4096_DIAGNOSTICS_NO_ADMISSION' and
+                  (z_ref['m'],z_ref['n'],z_ref['k'])==(args.tokens,4096,2048) and z_ref['sources_unchanged'],
+                  'separate complete N4096 diagnostics')
+        for path,digest in z_ref['source_frozen'].items():
+            p.require(p.sha(Path(path).read_bytes())==digest,'N4096 reference source drift')
+        checked_record(z_ref['input']);checked_record(z_ref['official'])
+        checked_record(z_ref['results']['pair_hi_first_two_k1024']['output'])
+        _,z_values=z_payload.load(args.z_norm_payload,args.z_norm_manifest_sha256)
+        z_weight=z_values['layers.0.linear_attn.in_proj_z.weight']
+        gated_weight=z_values['layers.0.linear_attn.norm.weight']
+        p.require(p.sha(z_weight)==z_ref['weight']['sha256'],'same complete N4096 weight')
+        z_c=Path(z_reference.__file__).with_name('reference.c')
+        z_profile=ReductionProfile('diagnostic_35b_z_n4096_pair_high',((0,1024),(1024,2048)),True,p.sha(z_c.read_bytes()))
+        norm_reference.source_identity()
+    else:
+        p.require(all(x is None for x in (args.z_norm_payload,args.z_norm_manifest_sha256,args.z_reference_report,args.z_reference_report_sha256)),
+                  'Z/norm arguments require explicit stage')
     p.require(not args.output.exists() and not args.output.is_symlink() and
               args.output.resolve().is_relative_to(ROOT / 'work'), 'fresh ignored work output required')
     p.require(30 <= args.wall_seconds <= 1800, 'bounded explicit software budget 30..1800 seconds')
@@ -159,6 +189,7 @@ def main(argv=None):
                     vector.library.with_suffix('.json'),
                     ROOT / 'candidates/qwen35_gdn_prefill/chunk/vector16.cpp']
     native_paths += [ab_c]
+    if args.gated_norm:native_paths += [z_c,ROOT/norm_reference.ACTIVATIONS]
     native_paths += [ROOT / name for name in json.loads(compile_receipt.read_bytes())['sources_before']]
     conv_preact = np.zeros((args.tokens,8192), dtype='<u2') if conv_weight is not None else None
     conv_seen = set()
@@ -179,7 +210,9 @@ def main(argv=None):
                       str(pair_source.relative_to(ROOT)): p.sha(pair_source.read_bytes())},
                   native_artifact_records=[record(path) for path in native_paths],
                   ab_reference=record(args.ab_reference_report),ab_manifest_sha256=args.ab_manifest_sha256,
-                  prep_native_acceptance=False,observations=[], comparisons={})
+                  prep_native_acceptance=False,gated_norm_requested=args.gated_norm,norm_native_acceptance=False,
+                  z_reference=record(args.z_reference_report) if args.gated_norm else None,
+                  z_norm_manifest_sha256=args.z_norm_manifest_sha256,observations=[], comparisons={})
 
     def save():
         report['host_seconds'] = time.monotonic() - started
@@ -208,9 +241,10 @@ def main(argv=None):
         execution, _ = p.execute_prep_prefix(hidden, norm_weight, qkv, tokens=args.tokens, windows=windows,
             profile=profile, matrix=matrix, vector=vector, deadline=started+args.wall_seconds, observe=observe,
             conv_weights=conv_weight, conv_observe=conv_observe,ab_weights=ab_weights,ab_profiles=ab_profiles,
-            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy,run_chunk=args.chunk,chunk_progress=chunk_progress,on_chunk_interrupt=lambda:signal.alarm(0))
+            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy,run_chunk=args.chunk,chunk_progress=chunk_progress,on_chunk_interrupt=lambda:signal.alarm(0),
+            z_weight=z_weight,z_profile=z_profile,gated_weight=gated_weight)
         report['execution'] = execution
-        p.require(execution['status'] == ('PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if args.chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY'), 'actual typed prefix failed')
+        p.require(execution['status'] == ('PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if args.gated_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if args.chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY'), 'actual typed prefix failed')
         p.require(execution['actual_rms_output_sha256'] == reference['input']['sha256'], 'actual RMS differs from reference input')
         native = checked_record(reference['official_output'])
         fixed = checked_record(reference['results']['pair_hi_first_two_k1024']['output'])
@@ -218,9 +252,11 @@ def main(argv=None):
         if conv_weight is not None:
             expected_stages += ['conv4_silu', 'conv_history_staging']
         expected_stages += ['a','b','ab_pack','prep']
+        if args.gated_norm:expected_stages += ['z']
         if args.chunk:expected_stages += ['chunk','chunk_state_staging','chunk_scratch_staging']
+        if args.gated_norm:expected_stages += ['gated_norm']
         p.require([o['stage'] for o in report['observations']] == expected_stages, 'exact observation inventory')
-        p.require(len(execution['terminals']) == len(windows)+1+(conv_weight is not None)+4+int(args.chunk), 'exact owner terminal count')
+        p.require(len(execution['terminals']) == len(windows)+1+(conv_weight is not None)+4+int(args.chunk)+2*int(args.gated_norm), 'exact owner terminal count')
         for window, observation in zip(windows, report['observations'][1:1+len(windows)], strict=True):
             actual = checked_record(observation['output'])
             numeric = dict(native=compare_window(actual, native, args.tokens, window),
@@ -278,13 +314,32 @@ def main(argv=None):
             report['chunk_reference_identity']=identity
             report['chunk_diagnostics']=chunk_reference.diagnose(
                 {'output':checked_record(observations['chunk']['output']),'state':checked_record(observations['chunk_state_staging']['output'])},expected)
+        if args.gated_norm:
+            p.require(execution['actual_rms_output_sha256']==z_ref['input']['sha256'],'same N4096 actual RMS producer')
+            z_actual=checked_record(observations['z']['output'])
+            z_fixed=checked_record(z_ref['results']['pair_hi_first_two_k1024']['output'])
+            p.require(z_actual==z_fixed,'Z Matrix fixed arithmetic identity')
+            report['z_diagnostics']=z_reference.diagnostics(z_actual,checked_record(z_ref['official']),args.tokens)
+            norm_actual=checked_record(observations['gated_norm']['output'])
+            norm_expected,norm_identity,intermediates=norm_reference.native_norm(
+                checked_record(observations['chunk']['output']),z_actual,gated_weight,args.tokens)
+            norm_path=args.output/'gated_norm.same_input.reference.bf16le';norm_path.write_bytes(norm_expected)
+            report['gated_norm_reference']=record(norm_path)
+            report['gated_norm_reference_identity']=norm_identity
+            report['gated_norm_diagnostics']=dict(compare_finite_bf16(norm_actual,norm_expected),
+                passed=None,thresholds=None,native_acceptance=False)
+            report['gated_norm_intermediates']={}
+            for name,item in intermediates.items():
+                item=dict(item);raw=item.pop('raw')
+                path=args.output/('gated_norm.reference.'+name+'.raw');path.write_bytes(raw)
+                report['gated_norm_intermediates'][name]=dict(item,record=record(path))
         report['source_sha256_after'] = source_closure()
         report['sources_unchanged'] = report['source_sha256'] == report['source_sha256_after']
         p.require(report['sources_unchanged'], 'execution source drift')
         for item in report['native_artifact_records']:
             checked_record(item)
         report['native_artifacts_unchanged'] = True
-        report['status'] = 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_DIAGNOSTICS_ONLY' if args.chunk else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY'
+        report['status'] = 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_NORM_DIAGNOSTICS_ONLY' if args.gated_norm else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_DIAGNOSTICS_ONLY' if args.chunk else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY'
     except BaseException as error:
         report['source_sha256_after']=source_closure()
         report['sources_unchanged']=report['source_sha256']==report['source_sha256_after']

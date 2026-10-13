@@ -28,7 +28,7 @@
 - done：整数 transport 公式与缩维真实读写计数交叉验证；全维首ACK错误drain、带物理pending写超时保留、producer拒绝等12项运行前小测。
 - done：固定官方 suffix 纯函数；同次真实 M16、M128；80源/10native及全部raw独审。
 - done：最终冷回归557项/54套/164源，零skip且前后不变；官方固定runtime smoke3项。
-- ongoing：小批发布、精确CI及原始工件核验。
+- done：fb377c5b小批发布、三条原CI及原始工件独立核验。
 - todo：Z投影校准、32头gatednorm、O投影及MoE完整block接线。
 
 ## M16 已完成的实际证据

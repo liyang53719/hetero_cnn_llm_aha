@@ -1610,7 +1610,8 @@ Qwen35_35B_Chunk显式exp接线_20261013:
 Qwen35_35B_同producer完整维度chunk_20261013:
   状态: ongoing
   done: [真实RMS_QKV_Conv_AB_pack_Prep同次接线, 同MemoryRegion_Scalar_Vector, M16_M128全32头128维chunk执行, 80执行源10native前后不变, 官方same_input_suffix逐输出及完整state诊断, 实际读写ACK与闭式预算匹配, 成功失败scratch保留]
-  ongoing: [小批发布CI]
+  ongoing: [后继Z及gatednorm]
+  发布闭环: fb377c5bea264ed3e82a7e9cdc3b39b2674bcf86；GDN38434805600_goal38434805641_payload38434805539全success；557项54套164源及原ZIP逐SHA闭环
   冷门: 557项54套164源零skip_前后不变；官方固定runtime_smoke3项；计划清单91项
   todo: [Z_N4096独立归约校准, 32头gatednorm及core_staging消费接缝, O_K4096_N2048归约校准, MoE完整block及warm_joint_fence, 生产Chisel_RTL及完整周期MAC占空比]
   数值边界: 上游原门通过；Prep与same_input_chunk未批准独立阈值；output_M16_7bitdiff_max2ULP_M128_73bitdiff_max48ULP；state完整524288元素差异保留；非完整blockPASS
@@ -1619,3 +1620,20 @@ Qwen35_35B_同producer完整维度chunk_20261013:
   资源: Matrix4096_Vector16_Scalar1身份不变；DDRstate每副本2MiB；scratch27918336_53739520B；完整硬件寄存器驻留上界和周期_duty仍未知
   报告: doc/QWEN35_35B_CHUNK_ACTUAL_20261013_CN.md
   证据: reports/execution/QWEN35_35B_CHUNK_ACTUAL_20261013.json
+
+Qwen35_35B_Z及32头gatednorm_20261013:
+  状态: ongoing
+  done: [Z_N4096官方原AST及独立C两档校准, norm32头布局及原16头回归, core_only完整receipt_ACK及失败隔离, 官方原forward12节点观察, 同次真实M16_M128十终态, 上游含chunk_state_scratch逐SHA保持, Z实际两档bitexact]
+  ongoing: [小批发布和精确CI]
+  冷门: 583项59套176源零skip_前后不变；官方smoke3项；计划清单91项
+  数值诊断: norm_M16_1和M128_15处bit差均1ULP；maxabs_1p52587890625e_5_3p0517578125e_5；无新增门
+  MAC: Matrix总执行两档3238002688；有效404750336_3238002688；有效除执行12p5pct_100pct仅工作比非周期利用率
+  范围: 85执行源12native记录前后不变；完整block_生产Chisel_RTL继续open
+  todo: [诊断摘要及小批发布CI, O_K4096另批, MoE完整block和联合状态提交]
+  参数: 仅Z_BF16_4096乘2048和gamma_F32_128共16777728B；Git无权重或raw
+  Z校准: pair两档0bitdiff；sequential_M16_13_M128_77bitdiff_max4ULP；不继承N8192_N32
+  参考: 固定官方norm和SiLUActivation_AST；真实12节点；gamma保留F32；无新增standalone误差门
+  事务: 仅成功退休core可中间publish；state_scratch_history保持private且generation不增
+  资源: Matrix4096_Vector16_Scalar1；norm缓存128F32和gamma128F32；完整硬件周期_MAC利用率_duty未知
+  报告: doc/QWEN35_35B_Z_GATED_NORM_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_Z_GATED_NORM_20261013.json

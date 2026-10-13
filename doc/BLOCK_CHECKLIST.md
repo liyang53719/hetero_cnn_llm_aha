@@ -142,3 +142,4 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 
 - 2026-10-13 01:45 UTC：43fc70f三CI及596测试/两份紧凑工件已核闭环。0.8B L3完整cold16→实际carried16 typed软件链从raw重新运行正常结束，38终态、双root generation2/32tokens、每窗56已物化原producer及最终output/KV/行和全过；91源/42输出/102观察/实际cache依赖独立核验。原1200秒FAIL不覆盖，57中未物化mask-add保留；公共Command128/Chisel/RTL和完整双M128仍open。[完整范围与计数](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。后续单次7200秒M128预算依据1364秒完整M16和33秒guard计时，非数值门限。
 - 用户要求所有已过case补MAC/占空比账：本双M16已有物理流量、Matrix FMA、Scalar/Vector逻辑次数；硬件全周期/busy/stall/overlap仍unknown。条件单Scalar映射Matrix上界3.1026%／3.0891%独立列示，不当实测。Qwen2 M128、L0 M16/M128与L3子链现有证据清单继续补齐；后续流水整改必须计bank端口/lease/排空和完整周期，不关闭U01或承诺80%。
+- 2026-10-13 已完成首批15个已有结果窗口的[MAC/占空比证据清单](PASSED_CASE_UTILIZATION_20261013_CN.md)：逐case区分软件调用/源界/RTL实测及数值通过范围，缺完整周期或busy timeline明确unknown。98c7历史L3双M1有实测0.14426%／0.14413%和发射占空比2.37385%／2.37148%，保留压力DDR和native未验范围；其余软件case不由宿主秒数计算利用率。流水机会与bank/lease/credit/异常排空代价已列，完整计数器无扰接入和当前五block联合验收仍todo。

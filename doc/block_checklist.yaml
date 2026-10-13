@@ -1555,7 +1555,8 @@ Qwen35_35B_Prep固定FP32归约接线_20261013:
 Qwen35_35B_Prep双exp实际接线_20261013:
   状态: ongoing
   done: [四消融及尾部双舍入归因, 同Scalar显式GateScalar双节点, 旧op7与默认不变, 同真实producer_M16_M128重跑, Q_K_V_beta不变bitexact, g最大33_35降至4ULP, 无新增DDR缓存服务]
-  ongoing: [小批发布及精确CI工件]
+  ongoing: [32头chunk真实布局与后继算术policy]
+  发布闭环: 693b45e2dab4aa5369d2ad3cec56a6d1e4937cc1；GDN38415662963_goal38415663170_payload38415663196全success；534项49套150源与原工件逐SHA闭环
   冷门: 534项49套150源零skip_前后不变；指定计划清单pytest91项
   todo: [g剩余4ULP舍入收敛, 生产Chisel新compound绑定, 32头chunk_cumsum, 完整block_RTL_完整周期占空比]
   数值边界: 4ULP仅诊断_不新设门；原上游strict通过；history仍未发布
@@ -1564,3 +1565,16 @@ Qwen35_35B_Prep双exp实际接线_20261013:
   源: 74执行源10native前后不变；七真实终态
   报告: doc/QWEN35_35B_PREP_DUAL_EXP_20261013_CN.md
   证据: reports/execution/QWEN35_35B_PREP_DUAL_EXP_20261013.json
+
+Qwen35_35B_Chunk32头布局事务_20261013:
+  状态: ongoing
+  done: [Job_Owner_Driver显式layout身份, 真实51200stride_4096role_12288gate, 全32头M2缩维实际读写ACK和输出state, 完整容量尾state_ACK错误transport测试, 旧默认保持]
+  ongoing: [小批发布CI]
+  冷门: 538项50套151源零skip_前后不变；指定计划清单pytest91项
+  todo: [32头dk128_dv128真实checkpoint_M16_M128, 显式chunk_exp策略, 有证明边界cumsum策略, 同producer_staging交接, warm_joint_fence, RTL和完整周期利用率]
+  边界: M2_dk16_dv32仅合成布局事务；不得当M128或完整35B数值通过；原exp与cumsum未改
+  DDR: full_state每副本2097152B；full_M16_scratch27918336B；full_M128_scratch53739520B
+  硬件证据缺口: generator跨yield局部list及adapter全部活跃寄存器上界未证；1KB仅转置tile；不得称固定硬件资源完整模型通过
+  原门: BF16node_0p03125_0p005；FP32state逐元素1e_4加1e_4乘abs参考；Prep和same_input_chunk独立门未分配
+  报告: doc/QWEN35_35B_CHUNK_LAYOUT_20261013_CN.md
+  证据: reports/execution/QWEN35_35B_CHUNK_LAYOUT_20261013.json

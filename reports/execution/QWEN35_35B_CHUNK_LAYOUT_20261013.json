@@ -1,0 +1,973 @@
+{
+  "status": "PASS_SYNTHETIC_REDUCED_DIMENSION_LAYOUT_TRANSPORT_ONLY",
+  "checkpoint_payload_used": false,
+  "native_acceptance": false,
+  "full35b_chunk_executed": false,
+  "full_block": false,
+  "rtl_executed": false,
+  "case": {
+    "checkpoint_payload_used": false,
+    "heads": 32,
+    "key_dim": 16,
+    "native_acceptance": false,
+    "output_sha256": "6dc6c18ee75079d188164db933c05e17e2acd98db8ff0bab0905f777623aa312",
+    "report": {
+      "complete": true,
+      "counts": {
+        "read_bytes": 70324224,
+        "scratch_read_bytes": 70303744,
+        "source_read_bytes": 20480,
+        "ticks": 2363649,
+        "write_bytes": 5312512
+      },
+      "generation_advanced": false,
+      "history_committed": false,
+      "input_sha256": [
+        "d55730e1f4be34fd509368b1c6c30516715f909598442bf038755c148844af7b"
+      ],
+      "output_published": false,
+      "output_sha256": "6dc6c18ee75079d188164db933c05e17e2acd98db8ff0bab0905f777623aa312",
+      "owner": {
+        "accepted": {
+          "chunks_completed": 32,
+          "chunks_started": 32,
+          "memory_responses": 1181824,
+          "owner_results": 1,
+          "read_requests": 1098816,
+          "scratch_ack_bytes": 5242880,
+          "upper_triangle_masked": 64512,
+          "write_acks": 83008,
+          "write_requests": 83008
+        },
+        "arithmetic": "FP32_each_Mul_Add_RNE_ascending_K_no_FMA",
+        "exp": {
+          "calls": 70688,
+          "max_abs_input_word": 0,
+          "saturated_abs_ge_80": 0
+        },
+        "first_numerical_failure": null,
+        "generation_advanced": false,
+        "hardware_cycles": null,
+        "hardware_register_allocation_established": false,
+        "history_committed": false,
+        "host_batch": true,
+        "host_call_counts": {
+          "mul_add": 914432,
+          "single": 115712
+        },
+        "identity": {
+          "exp_policy": "existing_ExpNegative_including_abs_ge_80_zero_saturation",
+          "grouped_source": {
+            "key_heads": 16,
+            "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+            "native_acceptance": false,
+            "official_forward_executed": false,
+            "production_chisel_supports_grouped_heads": false,
+            "repeat_ast_sha256": "967f6ef189bffa9a7ab5606d1ef36cac1065e70532355b5d36055414caf0f085",
+            "source_head": "value_head//2",
+            "source_sha256": {
+              "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+              "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+            },
+            "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+            "value_heads": 32
+          },
+          "ieee_mode_integration_gap": "ElementwiseMemoryEngine.scala binary fatal mask is still flags[4:1]; explicit per-job policy selection and physical shared Vector routing remain required",
+          "implementation_sha256": {
+            "model.py": "aa3cadb2ced00111ac5152e413739a54359145039cf3f3b6473fda0f9bd22627",
+            "vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+            "vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+          },
+          "layout": {
+            "core_row_bytes": 51200,
+            "key_heads": 16,
+            "value_heads": 32,
+            "width": 128
+          },
+          "layout_source_sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+          "mapping": "one_retained_16_lane_Add_Mul_resource_candidate",
+          "matrix_used": false,
+          "native_acceptance": false,
+          "new_array": false,
+          "rtl_executed": false,
+          "source_sha256": {
+            "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+            "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+            "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+            "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+          },
+          "throughput_80_percent_achieved": false,
+          "vector_exception_control_chisel_bound": true,
+          "vector_underflow_policy": "legacy_vector_fatal_underflow"
+        },
+        "input_core_row_bytes": 51200,
+        "input_role_elements": 4096,
+        "native_acceptance": false,
+        "numerical_detail": null,
+        "physical_vector_lanes": 16,
+        "production_geometry": false,
+        "python_diagnostic_storage": {
+          "adapter_fp32_buffer_words": 64,
+          "adapter_issue_flag_words": 2,
+          "adapter_lane_flag_words": 16,
+          "peak_live_python_storage_bytes": null,
+          "suspended_generator_locals": "Retained across yield: at least nine FP32 lists in _compute, plus nested helper locals and adapter buffers; no proven register or live-list bound.",
+          "vector_failure_capture_max_words": 64
+        },
+        "rtl_executed": false,
+        "scalar_calls": {
+          "exp_negative": 70688
+        },
+        "scalar_instances_created": 0,
+        "scope": "TRUE_CHUNK64_GDN_SOFTWARE_MAPPING",
+        "scratch_ddr_bytes": 5242880,
+        "state_committed": false,
+        "state_fp32_bytes": 65536,
+        "status": null,
+        "synthetic_reduced_dimensions": true,
+        "throughput_80_percent_achieved": false,
+        "transpose_tile_fp32_payload_bytes": 1024,
+        "vector_exception_flag_counts": {
+          "0": 1944576
+        },
+        "vector_instances": 1,
+        "vector_issue_counts": {
+          "add": 1000448,
+          "mul": 944128
+        },
+        "vector_lane_operations": {
+          "add": 14947328,
+          "mul": 15106048
+        }
+      },
+      "staging_complete": true,
+      "state_committed": false,
+      "state_published": false,
+      "state_sha256": "48f1f8eefdf1f4ddeae465b22b55372b176b4e46380fc5ac6375b1fdd9e55f5e",
+      "status": null
+    },
+    "rtl_executed": false,
+    "state_sha256": "48f1f8eefdf1f4ddeae465b22b55372b176b4e46380fc5ac6375b1fdd9e55f5e",
+    "synthetic_reduced_dimensions": true,
+    "tokens": 2,
+    "value_dim": 32
+  },
+  "case_log": {
+    "path": "work/chunk_grouped_cold_tests/chunk__test_grouped_layout.log",
+    "bytes": 5906,
+    "sha256": "66cc03e767c27e5dc009c1da22495e84363d37da8d78ec4c52fe26d26f2d57ed"
+  },
+  "tail_state_ack_test": {
+    "path": "work/chunk_grouped_tail_test_v2.log",
+    "bytes": 290,
+    "sha256": "1ab18daabe8a98ddb92fd3ddb4b429c55e3ba14d6a08cf74e087a458a3d0568e"
+  },
+  "tail_test_scope": "transport-only two-write script at full-capacity scratch/state last beats; no arithmetic or complete-state PASS",
+  "capacity_audit": {
+    "capacities": [
+      {
+        "chunks": 1,
+        "heads": 16,
+        "input_bytes": 25600,
+        "minimum_cold_boundary_regions_bytes": 15037440,
+        "nominal_all_five_spans_bytes": 16086016,
+        "output_bytes": 4096,
+        "output_state_write_beats": 16448,
+        "scratch_MiB": 13.3125,
+        "scratch_bytes": 13959168,
+        "scratch_write_beats": 218112,
+        "state_bytes": 1048576,
+        "terminal_write_bytes": 1052672,
+        "tokens": 1
+      },
+      {
+        "chunks": 1,
+        "heads": 16,
+        "input_bytes": 409600,
+        "minimum_cold_boundary_regions_bytes": 15482880,
+        "nominal_all_five_spans_bytes": 16531456,
+        "output_bytes": 65536,
+        "output_state_write_beats": 17408,
+        "scratch_MiB": 13.3125,
+        "scratch_bytes": 13959168,
+        "scratch_write_beats": 218112,
+        "state_bytes": 1048576,
+        "terminal_write_bytes": 1114112,
+        "tokens": 16
+      },
+      {
+        "chunks": 1,
+        "heads": 16,
+        "input_bytes": 1638400,
+        "minimum_cold_boundary_regions_bytes": 16908288,
+        "nominal_all_five_spans_bytes": 17956864,
+        "output_bytes": 262144,
+        "output_state_write_beats": 20480,
+        "scratch_MiB": 13.3125,
+        "scratch_bytes": 13959168,
+        "scratch_write_beats": 218112,
+        "state_bytes": 1048576,
+        "terminal_write_bytes": 1310720,
+        "tokens": 64
+      },
+      {
+        "chunks": 2,
+        "heads": 16,
+        "input_bytes": 1664000,
+        "minimum_cold_boundary_regions_bytes": 29848576,
+        "nominal_all_five_spans_bytes": 30897152,
+        "output_bytes": 266240,
+        "output_state_write_beats": 20544,
+        "scratch_MiB": 25.625,
+        "scratch_bytes": 26869760,
+        "scratch_write_beats": 419840,
+        "state_bytes": 1048576,
+        "terminal_write_bytes": 1314816,
+        "tokens": 65
+      },
+      {
+        "chunks": 2,
+        "heads": 16,
+        "input_bytes": 3276800,
+        "minimum_cold_boundary_regions_bytes": 31719424,
+        "nominal_all_five_spans_bytes": 32768000,
+        "output_bytes": 524288,
+        "output_state_write_beats": 24576,
+        "scratch_MiB": 25.625,
+        "scratch_bytes": 26869760,
+        "scratch_write_beats": 419840,
+        "state_bytes": 1048576,
+        "terminal_write_bytes": 1572864,
+        "tokens": 128
+      },
+      {
+        "chunks": 1,
+        "heads": 32,
+        "input_bytes": 51200,
+        "minimum_cold_boundary_regions_bytes": 30074880,
+        "nominal_all_five_spans_bytes": 32172032,
+        "output_bytes": 8192,
+        "output_state_write_beats": 32896,
+        "scratch_MiB": 26.625,
+        "scratch_bytes": 27918336,
+        "scratch_write_beats": 436224,
+        "state_bytes": 2097152,
+        "terminal_write_bytes": 2105344,
+        "tokens": 1
+      },
+      {
+        "chunks": 1,
+        "heads": 32,
+        "input_bytes": 819200,
+        "minimum_cold_boundary_regions_bytes": 30965760,
+        "nominal_all_five_spans_bytes": 33062912,
+        "output_bytes": 131072,
+        "output_state_write_beats": 34816,
+        "scratch_MiB": 26.625,
+        "scratch_bytes": 27918336,
+        "scratch_write_beats": 436224,
+        "state_bytes": 2097152,
+        "terminal_write_bytes": 2228224,
+        "tokens": 16
+      },
+      {
+        "chunks": 1,
+        "heads": 32,
+        "input_bytes": 3276800,
+        "minimum_cold_boundary_regions_bytes": 33816576,
+        "nominal_all_five_spans_bytes": 35913728,
+        "output_bytes": 524288,
+        "output_state_write_beats": 40960,
+        "scratch_MiB": 26.625,
+        "scratch_bytes": 27918336,
+        "scratch_write_beats": 436224,
+        "state_bytes": 2097152,
+        "terminal_write_bytes": 2621440,
+        "tokens": 64
+      },
+      {
+        "chunks": 2,
+        "heads": 32,
+        "input_bytes": 3328000,
+        "minimum_cold_boundary_regions_bytes": 59697152,
+        "nominal_all_five_spans_bytes": 61794304,
+        "output_bytes": 532480,
+        "output_state_write_beats": 41088,
+        "scratch_MiB": 51.25,
+        "scratch_bytes": 53739520,
+        "scratch_write_beats": 839680,
+        "state_bytes": 2097152,
+        "terminal_write_bytes": 2629632,
+        "tokens": 65
+      },
+      {
+        "chunks": 2,
+        "heads": 32,
+        "input_bytes": 6553600,
+        "minimum_cold_boundary_regions_bytes": 63438848,
+        "nominal_all_five_spans_bytes": 65536000,
+        "output_bytes": 1048576,
+        "output_state_write_beats": 49152,
+        "scratch_MiB": 51.25,
+        "scratch_bytes": 53739520,
+        "scratch_write_beats": 839680,
+        "state_bytes": 2097152,
+        "terminal_write_bytes": 3145728,
+        "tokens": 128
+      }
+    ],
+    "chunk_executed": false,
+    "ci_started": false,
+    "commit": "693b45e2dab4aa5369d2ad3cec56a6d1e4937cc1",
+    "numerical_acceptance": false,
+    "official_ast": {
+      "35b": {
+        "decorators": [
+          "use_kernel_func_from_hub_with_fallback('chunk_gated_delta_rule', 'fla')"
+        ],
+        "entry_after_scaling_line": 306,
+        "function_ast_sha256": "1d166d0ba9b6fc0de8f88d8ee5f9dc01cb072e4a469fbb4027a538cc02ccb300",
+        "function_lines": [
+          259,
+          392
+        ],
+        "source": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+        "source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+        "suffix_ast_sha256": "427c9083192058cce00dafb890878159e34585ed5163b2758c6e2efd2983d9c9"
+      },
+      "complete_function_ast_equal": true,
+      "complete_suffix_ast_equal": true,
+      "old": {
+        "decorators": [
+          "use_kernel_func_from_hub_with_fallback('chunk_gated_delta_rule', 'fla')"
+        ],
+        "entry_after_scaling_line": 338,
+        "function_ast_sha256": "1d166d0ba9b6fc0de8f88d8ee5f9dc01cb072e4a469fbb4027a538cc02ccb300",
+        "function_lines": [
+          291,
+          424
+        ],
+        "source": "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py",
+        "source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+        "suffix_ast_sha256": "427c9083192058cce00dafb890878159e34585ed5163b2758c6e2efd2983d9c9"
+      }
+    },
+    "per_head_chunk_scratch_bytes": 806912,
+    "prep_raw": [
+      {
+        "actual_bytes": 819200,
+        "actual_hash_matches_summary": true,
+        "actual_sha256": "9ded712e5645c2c25ad2b25f34b60bf8c5fbedb528c0696dfe5b2a36f50537ef",
+        "beta_all_bf16_widened": true,
+        "existing_prep_diagnostics": {
+          "passed": null,
+          "roles": {
+            "beta": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "fc8c9bb8ff7ce00e8628a1e294dfa235263c1ffd1c6a93d9412844060d09d203",
+              "bit_mismatches": 0,
+              "elements": 512,
+              "expected_nonfinite": 0,
+              "expected_sha256": "fc8c9bb8ff7ce00e8628a1e294dfa235263c1ffd1c6a93d9412844060d09d203",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 512,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                16,
+                32
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "g": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "97135395e402265af4e609d3bfb5da8bd44d4247ffd14a8591927d692359d0e9",
+              "bit_mismatches": 264,
+              "elements": 512,
+              "expected_nonfinite": 0,
+              "expected_sha256": "7f9020890aea49f44695b83df2273f7fcb41d2064fa055209f21721f4969b558",
+              "first_bit_mismatch": 1,
+              "first_bit_mismatch_coordinates": [
+                0,
+                1
+              ],
+              "max_abs": 7.62939453125e-06,
+              "max_fp32_ulp": 4,
+              "max_relative": 3.25784074713365e-07,
+              "max_relative_reference_nonzero": 3.25784074713365e-07,
+              "mean_abs": 3.556378202485e-07,
+              "mean_relative": 5.668917946347147e-08,
+              "mean_relative_reference_nonzero": 5.668917946347147e-08,
+              "nonfinite": false,
+              "numerical_mismatches": 264,
+              "reference_nonzero_elements": 512,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                16,
+                32
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "gate_padding": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "18619b678a5c207a971a0aa931604f48162e307c57ecdec450d5f095fe9f32c7",
+              "bit_mismatches": 0,
+              "elements": 7168,
+              "expected_nonfinite": 0,
+              "expected_sha256": "18619b678a5c207a971a0aa931604f48162e307c57ecdec450d5f095fe9f32c7",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": null,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": null,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 0,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                16,
+                32,
+                14
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "key": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "e4ab84d73fcdfc72ef912f2eb5cd411075545024d28a7bb5240b933be6f070f1",
+              "bit_mismatches": 0,
+              "elements": 65536,
+              "expected_nonfinite": 0,
+              "expected_sha256": "e4ab84d73fcdfc72ef912f2eb5cd411075545024d28a7bb5240b933be6f070f1",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 63744,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                16,
+                32,
+                128
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "query": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "112bffa4eecba19844dfbae3a1ed155a631c44b811ead149598286f14709c706",
+              "bit_mismatches": 0,
+              "elements": 65536,
+              "expected_nonfinite": 0,
+              "expected_sha256": "112bffa4eecba19844dfbae3a1ed155a631c44b811ead149598286f14709c706",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 63744,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                16,
+                32,
+                128
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "value": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "0b716013e02083fdb2d8550dd310bcec916a35e0e92a67363d66f9dfe46f79fa",
+              "bit_mismatches": 0,
+              "elements": 65536,
+              "expected_nonfinite": 0,
+              "expected_sha256": "0b716013e02083fdb2d8550dd310bcec916a35e0e92a67363d66f9dfe46f79fa",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 65536,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                16,
+                32,
+                128
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            }
+          },
+          "status": "DIAGNOSTIC_ONLY_NO_APPROVED_35B_INPUT_PREP_THRESHOLD",
+          "thresholds": null
+        },
+        "g_abs_ge_80": 16,
+        "g_finite_nonpositive": true,
+        "g_max": -3.6326520103102666e-07,
+        "g_min": -91.57697296142578,
+        "gate_padding_all_positive_zero": true,
+        "history_published": false,
+        "k_adjacent_repeated_head_pair_mismatches": 0,
+        "layout": "FP32[M,12800]: Q4096,K4096,V4096,gates32x16",
+        "q_adjacent_repeated_head_pair_mismatches": 0,
+        "reference_hash_matches_summary": true,
+        "reference_sha256": "1b8d796066db211289745a382fb5f9e09dc83df06b7a352c84d761542f364dc7",
+        "source_manifest_matches_current": true,
+        "summary_sha256": "5453d659ba52dbff7cff0d780033750b29d776aa087c7190b56305b47465eac7",
+        "summary_status": "UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY",
+        "tokens": 16
+      },
+      {
+        "actual_bytes": 6553600,
+        "actual_hash_matches_summary": true,
+        "actual_sha256": "ead2462aaaebb607114df42d1d282ad7962d3b7c785fa1e9f0c7f7ccb5190d32",
+        "beta_all_bf16_widened": true,
+        "existing_prep_diagnostics": {
+          "passed": null,
+          "roles": {
+            "beta": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "08c336e644e94937706533b5ad2763d4a44c9fbd51e980b7d65cdaa5dff44019",
+              "bit_mismatches": 0,
+              "elements": 4096,
+              "expected_nonfinite": 0,
+              "expected_sha256": "08c336e644e94937706533b5ad2763d4a44c9fbd51e980b7d65cdaa5dff44019",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 4096,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                128,
+                32
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "g": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "8193605721f0eaa95bb00e789b5a735b556bab7ff26f3ffc1787f8113d715224",
+              "bit_mismatches": 2019,
+              "elements": 4096,
+              "expected_nonfinite": 0,
+              "expected_sha256": "830971b20e858c4d3234c4220aac0c33daec4adb6284a3fae4f72d0d50518d0a",
+              "first_bit_mismatch": 1,
+              "first_bit_mismatch_coordinates": [
+                0,
+                1
+              ],
+              "max_abs": 1.52587890625e-05,
+              "max_fp32_ulp": 4,
+              "max_relative": 3.25784074713365e-07,
+              "max_relative_reference_nonzero": 3.25784074713365e-07,
+              "mean_abs": 2.397551777874596e-07,
+              "mean_relative": 5.3827303062385125e-08,
+              "mean_relative_reference_nonzero": 5.3827303062385125e-08,
+              "nonfinite": false,
+              "numerical_mismatches": 2019,
+              "reference_nonzero_elements": 4096,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                128,
+                32
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "gate_padding": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "d2a23a7de3af6bf70d164a0ce45201371aca7624e30079d30cccab1cb6cf52e3",
+              "bit_mismatches": 0,
+              "elements": 57344,
+              "expected_nonfinite": 0,
+              "expected_sha256": "d2a23a7de3af6bf70d164a0ce45201371aca7624e30079d30cccab1cb6cf52e3",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": null,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": null,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 0,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                128,
+                32,
+                14
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "key": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "239d6d9a77a86294adc2a2de1d635103f7ae6fb8d445575ad5e97054c85a4582",
+              "bit_mismatches": 0,
+              "elements": 524288,
+              "expected_nonfinite": 0,
+              "expected_sha256": "239d6d9a77a86294adc2a2de1d635103f7ae6fb8d445575ad5e97054c85a4582",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 509952,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                128,
+                32,
+                128
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "query": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "490f3466e62c8efdeb3304ddc683a340b20511bb755c907e30e397b601182720",
+              "bit_mismatches": 0,
+              "elements": 524288,
+              "expected_nonfinite": 0,
+              "expected_sha256": "490f3466e62c8efdeb3304ddc683a340b20511bb755c907e30e397b601182720",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 509950,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                128,
+                32,
+                128
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            },
+            "value": {
+              "actual_nonfinite": 0,
+              "actual_sha256": "8eb86220bcdb3fce242276691878b29a5dddbe2715b226415176d73ce69e2121",
+              "bit_mismatches": 0,
+              "elements": 524288,
+              "expected_nonfinite": 0,
+              "expected_sha256": "8eb86220bcdb3fce242276691878b29a5dddbe2715b226415176d73ce69e2121",
+              "first_bit_mismatch": null,
+              "first_bit_mismatch_coordinates": null,
+              "max_abs": 0.0,
+              "max_fp32_ulp": 0,
+              "max_relative": 0.0,
+              "max_relative_reference_nonzero": 0.0,
+              "mean_abs": 0.0,
+              "mean_relative": 0.0,
+              "mean_relative_reference_nonzero": 0.0,
+              "nonfinite": false,
+              "numerical_mismatches": 0,
+              "reference_nonzero_elements": 524287,
+              "relative_definition": "abs(actual-reference)/abs(reference); 0/0=0; nonzero/0 makes aggregate null",
+              "relative_reference_nonzero_scope": "finite actual/reference pairs with nonzero reference",
+              "shape": [
+                128,
+                32,
+                128
+              ],
+              "signed_zero_only_mismatches": 0,
+              "zero_reference_nonzero_actual": 0
+            }
+          },
+          "status": "DIAGNOSTIC_ONLY_NO_APPROVED_35B_INPUT_PREP_THRESHOLD",
+          "thresholds": null
+        },
+        "g_abs_ge_80": 128,
+        "g_finite_nonpositive": true,
+        "g_max": -2.1355330659389438e-07,
+        "g_min": -91.57722473144531,
+        "gate_padding_all_positive_zero": true,
+        "history_published": false,
+        "k_adjacent_repeated_head_pair_mismatches": 0,
+        "layout": "FP32[M,12800]: Q4096,K4096,V4096,gates32x16",
+        "q_adjacent_repeated_head_pair_mismatches": 0,
+        "reference_hash_matches_summary": true,
+        "reference_sha256": "4042e1e24ccb1b7e6f317aa76b098608dfa56c4ddd4d929e62ea70ff0c2084cd",
+        "source_manifest_matches_current": true,
+        "summary_sha256": "49a356f23374c38d72c6a2f6d08e89f3d203a7f3b45ed121c8b8c431dff7c522",
+        "summary_status": "UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY",
+        "tokens": 128
+      }
+    ],
+    "scope": "READ_ONLY_STATIC_AND_EXISTING_RAW_AUDIT_NO_CHUNK_EXECUTION",
+    "scratch_shapes": [
+      {
+        "bytes": 4096,
+        "cols": 16,
+        "name": "gates",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "q",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "k",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "v",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "kb",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "vb",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "kbg",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "qg",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "ke",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 64,
+        "name": "kt",
+        "rows": 128
+      },
+      {
+        "bytes": 32768,
+        "cols": 64,
+        "name": "ket",
+        "rows": 128
+      },
+      {
+        "bytes": 16384,
+        "cols": 64,
+        "name": "pair",
+        "rows": 64
+      },
+      {
+        "bytes": 16384,
+        "cols": 64,
+        "name": "ut",
+        "rows": 64
+      },
+      {
+        "bytes": 16384,
+        "cols": 64,
+        "name": "intra",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "solvek",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "solvev",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "pred",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "vnew",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "inter",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "local",
+        "rows": 64
+      },
+      {
+        "bytes": 32768,
+        "cols": 128,
+        "name": "out",
+        "rows": 64
+      },
+      {
+        "bytes": 65536,
+        "cols": 128,
+        "name": "state_update",
+        "rows": 128
+      },
+      {
+        "bytes": 65536,
+        "cols": 128,
+        "name": "decay_state",
+        "rows": 128
+      },
+      {
+        "bytes": 65536,
+        "cols": 128,
+        "name": "next_state",
+        "rows": 128
+      }
+    ],
+    "snapshot_note": "Read-time baseline was clean 693b45e2. Later concurrent implementation edits were observed; this report does not certify their final identity.",
+    "source_changed_by_this_audit": false,
+    "source_sha256": {
+      "candidates/qwen35_gdn_prefill/chunk/model.py": "0c790204954d6ed5342ca95725aab9fc556f91471f0e2ae26f2c0580ef97cf2f",
+      "candidates/qwen35_gdn_prefill/chunk/reference.py": "2fa75494a96e10e6ed4e20c3ffc0030ce6566fbed37d02091e17eda1e083a995",
+      "candidates/qwen35_gdn_prefill/full_compare.py": "4faec1bf97918483c182da5aba5cc7ce0dd5b0affd922a5fb3341f632cdc74f5",
+      "candidates/qwen35_gdn_prefill/full_driver.py": "4e8fcca0133541539c1d2a4e0019436a3eac2d0a2694372202ab9bad8202bbb6",
+      "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+      "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+    },
+    "tracked_status": ""
+  },
+  "audit_source": {
+    "path": "work/chunk35_layout_audit/REPORT.md",
+    "bytes": 17241,
+    "sha256": "5e46dc2304fca2bc9b10c4cf996b987d6f56550233cb7433b81e963967bf39ce"
+  },
+  "implementation_source_sha256": {
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "aa3cadb2ced00111ac5152e413739a54359145039cf3f3b6473fda0f9bd22627",
+    "candidates/qwen35_gdn_prefill/chunk/test_grouped_layout.py": "46a52c6f3b64cd5060a4ba80974d9985a94973c01cfa16469fe7567c52be45ec",
+    "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29"
+  },
+  "resource_boundary": {
+    "matrix_useful_mac": 0,
+    "matrix_executed_mac": 0,
+    "executed_vector_mul_add_pairs": 14630912,
+    "vector_pair_definition": "16 separately rounded Mul then Add per host mul_add; no FMA",
+    "useful_vector_mac": null,
+    "hardware_cycles": null,
+    "duty": null,
+    "utilization": null,
+    "hardware_live_register_bound_established": false,
+    "full35b_state_bytes": 2097152,
+    "full35b_scratch_m16": 27918336,
+    "full35b_scratch_m128": 53739520
+  },
+  "arithmetic_dependencies": {
+    "exp": "legacy abs>=80 saturation unchanged",
+    "cumsum": "legacy ascendingFP32 unchanged; fixed official CPU uses FP64 running, new policy not yet integrated",
+    "same_input_chunk_threshold": null
+  },
+  "cold_regression": {
+    "summary": {
+      "path": "work/chunk_grouped_cold_tests/summary.json",
+      "bytes": 50613,
+      "sha256": "4e2ba3e2774d1acda696005a2f9684fecd118823b581424999b9e1fe8fd7810c"
+    },
+    "test_count": 538,
+    "suite_count": 50,
+    "source_count": 151,
+    "sources_unchanged": true,
+    "zero_skip": true,
+    "scope": "SYNTHETIC_SOFTWARE_ONLY"
+  },
+  "plan_regression": {
+    "log": {
+      "path": "work/chunk_grouped_plan_tests.log",
+      "bytes": 160,
+      "sha256": "d5909c51985bd5db202843a4382250d792189dd73767b52e1fa90d69193bf46c"
+    },
+    "passed": 91
+  }
+}

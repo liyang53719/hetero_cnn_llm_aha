@@ -46,7 +46,9 @@ def publish_core_intermediate(driver, history, scalar, vector, *, tokens):
              job.cumsum_policy == owner.cumsum_policy == chunk.GUARDED_CUMSUM and
              job.exp_policy == owner.exp_policy == chunk.ep.IEEE_EXP,
              'cold full32 M16/M128 chunk profile')
-    job.validate(owner.geometry, owner.layout, owner.cumsum_policy, owner.exp_policy)
+    job.validate(owner.geometry, owner.layout, owner.cumsum_policy, owner.exp_policy, owner.matmul_policy)
+    owner.ports()  # Recheck immutable shared scratch object/storage and policy.
+    _require(owner.shared_scratch is None or owner.shared_scratch.client is None, "shared tile drained")
     _require(isinstance(scalar, PrepScalar) and type(vector) is Vector16 and
              owner.scalar is scalar and owner.vector is vector and
              vector.exception_policy == IEEE_POLICY,
@@ -55,7 +57,8 @@ def publish_core_intermediate(driver, history, scalar, vector, *, tokens):
     _require(driver.resource_identity == (
         id(owner), id(memory), id(scalar), id(vector), vector.resource_address,
         owner.host_batch, vector.exception_policy, vector.fatal_mask, owner.layout,
-        owner.cumsum_policy, owner.exp_policy, getattr(scalar, 'enable_ieee_exp', False)),
+        owner.cumsum_policy, owner.exp_policy, getattr(scalar, 'enable_ieee_exp', False),
+        owner.matmul_policy, owner._scratch_identity),
         'original driver resource identity')
     _require(type(receipt) is chunk.ChunkResult and receipt.status is None and
              receipt.staging_complete is True and
@@ -90,7 +93,7 @@ def publish_core_intermediate(driver, history, scalar, vector, *, tokens):
              driver.source_hashes == (chunk.sha(driver.input.raw()),),
              'unchanged actual published Prep input')
     _require(owner.identity == chunk.source_identity(
-        vector.exception_policy, owner.layout, owner.cumsum_policy, owner.exp_policy),
+        vector.exception_policy, owner.layout, owner.cumsum_policy, owner.exp_policy, owner.matmul_policy),
         'chunk source identity changed after admission')
     for name, extent in (('output', job.output_bytes), ('state_out', job.state_bytes),
                          ('scratch', job.scratch_bytes)):

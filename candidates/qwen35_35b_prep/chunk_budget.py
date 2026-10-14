@@ -1,13 +1,15 @@
 """Integer transport/operation prediction, not hardware cycle evidence."""
 from collections import Counter
 
-def closed_counts(tokens, key_dim, value_dim, heads=32, guarded=True, cold=True):
+def closed_counts(tokens, key_dim, value_dim, heads=32, guarded=True, cold=True, matmul_policy="row1_streaming"):
     if not (type(tokens) is int and 1 <= tokens <= 128 and
             type(key_dim) is int and key_dim in range(16,129,16) and
             type(value_dim) is int and value_dim in range(32,129,32) and
             type(heads) is int and 1 <= heads <= 32 and
             type(guarded) is bool and type(cold) is bool):
         raise ValueError("bounded chunk transport geometry")
+    if matmul_policy not in ("row1_streaming", "row4_shared_1kib"):
+        raise ValueError("bounded chunk matmul policy")
     b, d = key_dim // 16, value_dim // 16
     chunks = (tokens + 63) // 64
     s = key_dim * d
@@ -40,6 +42,11 @@ def closed_counts(tokens, key_dim, value_dim, heads=32, guarded=True, cold=True)
         chunks_started=hc,
         chunks_completed=hc,
     )
+    if matmul_policy == "row4_shared_1kib":
+        # Six matmuls: only B loads change; all output rows are multiples of four.
+        b_reads = 512*key_dim + 128*d*key_dim + 4096*d + 64*s
+        assert b_reads % 4 == 0
+        out["scratch_read_requests"] -= hc * (3*b_reads//4)
     return finish(out)
 
 

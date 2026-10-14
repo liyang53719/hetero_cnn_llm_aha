@@ -74,7 +74,7 @@ def pack_window(raw_nk, window):
 
 def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                    matrix, vector, deadline, memory=None, controls=None, observe=None,
-                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None, o_weight=None, o_profile=None, postnorm_weight=None, postnorm_observe=None):
+                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None, o_weight=None, o_profile=None, postnorm_weight=None, postnorm_observe=None, chunk_matmul_policy=chunk_stage.c.LEGACY_MATMUL):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -120,6 +120,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         policy.validate(WIDTH)
     require(type(a_log) is bytes and len(a_log)==128 and type(dt_bias) is bytes and len(dt_bias)==64, 'original parameter extents')
     require(type(run_chunk) is bool and (not run_chunk or gate_policy==prep.DUAL_EXP_GATE_35B), 'chunk requires explicit shared IEEE GateScalar')
+    require(chunk_matmul_policy in chunk_stage.c.MATMUL_POLICIES and (run_chunk or chunk_matmul_policy==chunk_stage.c.LEGACY_MATMUL), 'explicit chunk matmul policy')
     require(chunk_progress is None or callable(chunk_progress), 'optional progress observer')
     run_norm = z_weight is not None or gated_weight is not None or z_profile is not None
     require(not run_norm or (run_chunk and type(z_weight) is bytes and len(z_weight)==4096*2048*2 and
@@ -303,7 +304,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
     if run_chunk:
         try:
             chunk_driver, chunk_details = chunk_stage.execute_chunk(memory,scalar,vector,prep_driver.output,region,
-                tokens=tokens,deadline=deadline,controls=controls,progress=chunk_progress,on_interrupt=on_chunk_interrupt)
+                tokens=tokens,deadline=deadline,controls=controls,progress=chunk_progress,on_interrupt=on_chunk_interrupt,matmul_policy=chunk_matmul_policy)
         except chunk_stage.ChunkInterrupted as error:
             report.update(status='INTERRUPTED',active_stage='chunk')
             error.execution_report=report

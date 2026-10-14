@@ -26,6 +26,15 @@ class ChunkStageTests(unittest.TestCase):
   for m,r,w,t in [(16,11552256,471040,24046593),(128,23173120,888832,48123905)]:
    c=closed_counts(m,128,128);self.assertEqual((c['read_requests'],c['write_requests'],c['driver_ticks_no_stall']),(r,w,t))
    self.assertEqual(c['state_bytes'],2097152)
+ def test_row4_fullshape_prediction_and_unknown_policy(self):
+  for tokens in (16,128):
+   old=closed_counts(tokens,128,128);new=closed_counts(tokens,128,128,matmul_policy=s.c.ROW4_MATMUL)
+   saved=452984832*((tokens+63)//64)
+   self.assertEqual(old["read_bytes"]-new["read_bytes"],saved)
+   self.assertEqual(old["driver_ticks_no_stall"]-new["driver_ticks_no_stall"],2*saved//64)
+   for key in ("write_bytes","source_read_bytes","vector_add_issues","vector_mul_issues","scratch_ddr_bytes"):
+    self.assertEqual(old[key],new[key],key)
+  with self.assertRaises(ValueError):closed_counts(128,128,128,matmul_policy="unknown")
  def test_actual_first_ack_error_drains_and_stages(self):
   args=self.resources();d,r=s.execute_chunk(*args,tokens=16,deadline=time.monotonic()+20,
     controls=lambda stage,tick,d:{'ack_error':True})

@@ -14,7 +14,7 @@ class ChunkInterrupted(RuntimeError):
 
 
 def execute_chunk(memory, scalar, vector, producer, allocate, *, tokens, deadline,
-                  controls=None, progress=None, stall_budget=1024, on_interrupt=None):
+                  controls=None, progress=None, stall_budget=1024, on_interrupt=None, matmul_policy=c.LEGACY_MATMUL):
     c.require(type(tokens) is int and tokens in (16,128), 'full35 M16/M128')
     c.require(type(deadline) in (int,float) and deadline>time.monotonic(),'future wall deadline')
     c.require(controls is None or callable(controls),'optional controls')
@@ -23,16 +23,16 @@ def execute_chunk(memory, scalar, vector, producer, allocate, *, tokens, deadlin
     c.require(type(stall_budget) is int and 0 <= stall_budget <= 1000000, 'finite stall budget')
     c.require(memory.exact(producer.base,tokens*c.GROUPED_35B.core_row_bytes,readable=True) is producer,
               'actual Prep MemoryRegion identity')
-    expected = closed_counts(tokens,128,128)
+    expected = closed_counts(tokens,128,128,matmul_policy=matmul_policy)
     state_bytes=32*128*128*4
     state_in=allocate(size=state_bytes)
     state_out=allocate(size=state_bytes)
     output=allocate(size=tokens*32*128*2)
     scratch=allocate(size=expected['scratch_ddr_bytes'])
     owner=c.ChunkOwner(scalar,vector,heads=32,key_dim=128,value_dim=128,host_batch=True,
-        layout=c.GROUPED_35B,cumsum_policy=c.GUARDED_CUMSUM,exp_policy=c.ep.IEEE_EXP)
+        layout=c.GROUPED_35B,cumsum_policy=c.GUARDED_CUMSUM,exp_policy=c.ep.IEEE_EXP,matmul_policy=matmul_policy)
     job=c.ChunkJob(35301,producer.base,state_in,state_out,output,scratch,tokens,
-        heads=32,layout=c.GROUPED_35B,cumsum_policy=c.GUARDED_CUMSUM,exp_policy=c.ep.IEEE_EXP)
+        heads=32,layout=c.GROUPED_35B,cumsum_policy=c.GUARDED_CUMSUM,exp_policy=c.ep.IEEE_EXP,matmul_policy=matmul_policy)
     driver=c.TypedChunkDriver(owner,memory,job)
     c.require(driver.input is producer and owner.scalar is scalar and owner.vector is vector,'shared producer/resources')
     limit=expected['driver_ticks_no_stall']+stall_budget

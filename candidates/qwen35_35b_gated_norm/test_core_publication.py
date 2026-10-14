@@ -57,7 +57,7 @@ class CorePublicationTests(unittest.TestCase):
             self.memory.publish(region.base, (tag, None, len(raw)))
         return region
 
-    def fixture(self):
+    def fixture(self, policy=c.LEGACY_MATMUL):
         library = os.environ.get('GDN_VECTOR16_LIBRARY')
         if library is None:
             library = build_library(Path('work/core_norm_test_vector'))
@@ -71,14 +71,14 @@ class CorePublicationTests(unittest.TestCase):
                                      publish=False, tag=71)
         shape = c.ChunkJob(72, 0, 0, 0, 0, 0, self.tokens, heads=32,
                            layout=c.GROUPED_35B, cumsum_policy=c.GUARDED_CUMSUM,
-                           exp_policy=c.ep.IEEE_EXP)
+                           exp_policy=c.ep.IEEE_EXP,matmul_policy=policy)
         state_in, state_out = self.allocate(shape.state_bytes), self.allocate(shape.state_bytes)
         output, scratch = self.allocate(shape.output_bytes), self.allocate(shape.scratch_bytes)
         job = replace(shape, input=prep.base, state_in=state_in.base, state_out=state_out.base,
                       output=output.base, scratch=scratch.base)
         owner = c.ChunkOwner(self.scalar, self.vector, heads=32, key_dim=128, value_dim=128,
                              host_batch=True, layout=c.GROUPED_35B,
-                             cumsum_policy=c.GUARDED_CUMSUM, exp_policy=c.ep.IEEE_EXP)
+                             cumsum_policy=c.GUARDED_CUMSUM, exp_policy=c.ep.IEEE_EXP,matmul_policy=policy)
 
         def transport_only_script(j):
             yield (j.input, None)
@@ -199,9 +199,15 @@ class CorePublicationTests(unittest.TestCase):
                     actual_gated_norm_arithmetic=True, write_bytes=held.write_bytes,
                     output_published=False, private_spans_unchanged=True)
 
+    def test_row4_staging_publication_and_downstream_failure_isolation(self):
+        self._fullshape_publication(c.ROW4_MATMUL)
+
     def test_fullshape_staging_publication_and_downstream_failure_isolation(self):
+        self._fullshape_publication(c.LEGACY_MATMUL)
+
+    def _fullshape_publication(self, policy):
         started = time.monotonic()
-        d = self.fixture()
+        d = self.fixture(policy)
         # An admitted driver and an in-flight actual read grant no publication.
         self.reject_unchanged()
         d.tick()

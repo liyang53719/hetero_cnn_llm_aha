@@ -46,7 +46,7 @@ def checked_record(item):
 
 
 def source_closure():
-    paths = {Path(__file__).resolve()}
+    paths = {Path(__file__).resolve(), ROOT / "candidates/qwen35_gdn_prefill/chunk/matmul_reuse.py"}
     for module in tuple(sys.modules.values()):
         name = getattr(module, '__file__', None)
         # Torch's synthetic torch.classes advertises relative '_classes.py';
@@ -90,6 +90,7 @@ def main(argv=None):
     parser.add_argument('--reduction-policy',choices=(p.prep.ASCENDING,p.prep.CPU_DEFAULT_35B),default=p.prep.ASCENDING)
     parser.add_argument('--tokens', type=int, choices=(16, 128), default=16)
     parser.add_argument('--full-qkv', action='store_true')
+    parser.add_argument('--chunk-matmul-policy', choices=p.chunk_stage.c.MATMUL_POLICIES, default=p.chunk_stage.c.LEGACY_MATMUL)
     parser.add_argument('--chunk', action='store_true', help='same-invocation full32 cold chunk staging')
     parser.add_argument('--conv-payload', type=Path)
     parser.add_argument('--conv-manifest-sha256')
@@ -243,7 +244,7 @@ def main(argv=None):
         node[token]=np.asarray(words,dtype="<u4").tobytes()
     args.output.mkdir(parents=True)
     started = time.monotonic()
-    report = dict(status='RUNNING', gate_policy=args.gate_policy, reduction_policy=args.reduction_policy, chunk_requested=args.chunk, tokens=args.tokens, windows=[vars(w) for w in windows],
+    report = dict(status='RUNNING', gate_policy=args.gate_policy, reduction_policy=args.reduction_policy, chunk_requested=args.chunk, chunk_matmul_policy=args.chunk_matmul_policy, tokens=args.tokens, windows=[vars(w) for w in windows],
                   full_qkv=args.full_qkv, conv_requested=conv_weight is not None, full_block=False, rtl_executed=False,
                   conv_manifest_sha256=args.conv_manifest_sha256,
                   reference=reference_record, manifest_sha256=args.manifest_sha256,
@@ -290,7 +291,7 @@ def main(argv=None):
         execution, _ = p.execute_prep_prefix(hidden, norm_weight, qkv, tokens=args.tokens, windows=windows,
             profile=profile, matrix=matrix, vector=vector, deadline=started+args.wall_seconds, observe=observe,
             conv_weights=conv_weight, conv_observe=conv_observe,ab_weights=ab_weights,ab_profiles=ab_profiles,
-            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy,run_chunk=args.chunk,chunk_progress=chunk_progress,on_chunk_interrupt=lambda:signal.alarm(0),
+            a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy,run_chunk=args.chunk,chunk_matmul_policy=args.chunk_matmul_policy,chunk_progress=chunk_progress,on_chunk_interrupt=lambda:signal.alarm(0),
             z_weight=z_weight,z_profile=z_profile,gated_weight=gated_weight,o_weight=o_weight,o_profile=o_profile,postnorm_weight=postnorm_weight,
             postnorm_observe=postnorm_observe if args.postnorm else None)
         report['execution'] = execution

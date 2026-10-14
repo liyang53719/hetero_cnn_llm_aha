@@ -1,7 +1,8 @@
 """Local 4-row matmul candidate: 1KiB explicit scratch, unchanged per-output K order.
 
 This generator needs the existing read/write ACK transport and Vector16 loan.
-It is not selected by ChunkOwner yet, and is not a hardware throughput result.
+ChunkOwner selects it only through an explicit opt-in policy.
+This is not a hardware throughput result.
 """
 from array import array
 from .model import require

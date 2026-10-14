@@ -22,6 +22,7 @@ export PYTHONDONTWRITEBYTECODE=1
   --ab-manifest-sha256 33bedd6de939a892678e5ba9335c4655d2b2c18690ed1418d96e9455af4db9b5 \
   --ab-reference-report "$4" --ab-reference-report-sha256 "$5" \
   --tokens "$1" --full-qkv --chunk \
+  --chunk-matmul-policy "${HETERO_CHUNK_MATMUL_POLICY:-row1_streaming}" \
   --reduction-policy torch_2_10_cpu_default_f32_8lane_4ilp_128 \
   --gate-policy 35b_finite_nonpositive_fp32_dual_p7_exp \
   --gated-norm \

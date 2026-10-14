@@ -136,7 +136,7 @@ class IdentityTests(unittest.TestCase):
                 (copied / name).write_bytes((sources / name).read_bytes())
             with patch.object(m, '__file__', str(copied / 'model.py')):
                 before = m.source_identity()
-                self.assertEqual(set(before['implementation_sha256']), {'model.py', 'vector.py', 'vector16.cpp', 'cumsum.py', 'exp_policy.py'})
+                self.assertEqual(set(before['implementation_sha256']), {'model.py', 'vector.py', 'vector16.cpp', 'cumsum.py', 'exp_policy.py', 'matmul_reuse.py'})
                 for name in ('reference.py', 'test_reference.py', 'test_model.py', 'README.md'):
                     (copied / name).write_text('unrelated initial contents\n')
                     self.assertEqual(before, m.source_identity())

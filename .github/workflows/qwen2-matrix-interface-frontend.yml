@@ -78,6 +78,8 @@ jobs:
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_window -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_drain -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_group -p 'test_*.py' -v
+          python -m unittest discover -s candidates/qwen2_resident_matrix/public_dispatch -p 'test_*.py' -v
+          python -O -m unittest discover -s candidates/qwen2_resident_matrix/public_dispatch -p 'test_*.py' -v
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_fullgroup -p 'test_*.py' -v
           python scripts/run_isolated_public_tests.py --out work/matrix-interface-tests/public-tests
           python -m unittest discover -s candidates/qwen2_resident_matrix/ffn_attention -p 'test_*.py' -v

@@ -1,0 +1,1142 @@
+{
+  "boundaries": {
+    "att_output": {
+      "ack_bytes": 786432,
+      "bytes": 786432,
+      "published": false,
+      "sha256": "d8e888f201396a6125a93c0602aaf3e53bf4700d4298db0795aa8a1355149287",
+      "terminal": true,
+      "written_bytes": 786432
+    },
+    "att_published": false,
+    "attention_final_ack_fence": {
+      "final_ack_tick": 9096281,
+      "held_ticks": 5,
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 9096283
+    },
+    "backend_debts": {
+      "a_lease": false,
+      "accepted_write": false,
+      "attention_abort_pending": false,
+      "attention_client_live": false,
+      "attention_matrix_request": false,
+      "attention_memory_pending": false,
+      "attention_not_idle": false,
+      "dma_pending": false,
+      "matrix_c_state": 0,
+      "matrix_owned": false,
+      "owner_a_hold": false,
+      "owner_a_rmw": false,
+      "owner_fifo": 0,
+      "owner_pending": false,
+      "owner_read": false,
+      "prefix_not_idle": false,
+      "reduction_active": false,
+      "reset_required": false,
+      "scalar_owned": false,
+      "tile_busy": false,
+      "tile_lease": false
+    },
+    "backend_debts_all_zero": true,
+    "eda_executed": false,
+    "finalfence": false,
+    "full_29_node_acceptance": false,
+    "fullblock_pass": false,
+    "hardware_busy_fraction": null,
+    "hardware_cycles": null,
+    "kv_live_exact_copy": true,
+    "model_ticks_are_hardware_cycles": false,
+    "owner_requests": 11,
+    "owner_results": 11,
+    "pc": 12,
+    "pc12_completion_held": true,
+    "public_completions": 12,
+    "pv_to_token_exact": true,
+    "rtl_executed": false,
+    "unexecuted_outputs": {
+      "act": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "down": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "gate": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "n1": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "o": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "probabilities": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "r": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "scores": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "up": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      },
+      "y": {
+        "ack_bytes": 0,
+        "published": false,
+        "status": "NOT_EXECUTED",
+        "written_bytes": 0
+      }
+    },
+    "whole_block_terminal": false
+  },
+  "comparison": {
+    "additional_bit_exact_nodes": [
+      "kv",
+      "scores",
+      "logits"
+    ],
+    "causal_semantics": {
+      "actual_causal_positions_per_field": 99072,
+      "actual_pv_context_elements": 196608,
+      "dut_explicit_mask_tensor_observed": false,
+      "dut_future_positions_observed": false,
+      "full_matrix_positions_per_field": 196608,
+      "implicit_mask": "unchanged owner loops key in range(token+1); future descriptor/physical work skipped",
+      "mask_allowed_word": "0x00000000",
+      "mask_future_word": "0xff7f0000",
+      "reference_mask_exact": true,
+      "reference_mask_is_explicit_wrapper_parameter": true
+    },
+    "official_observed_node_pass": true,
+    "official_observed_nodes_bit_exact": false,
+    "per_node": {
+      "att": {
+        "actual_f32_sha256": "d8e888f201396a6125a93c0602aaf3e53bf4700d4298db0795aa8a1355149287",
+        "bit_exact": false,
+        "coverage": "complete",
+        "different_elements": 3,
+        "elements": 196608,
+        "finite": true,
+        "max_abs": 0.0009765625,
+        "mean_abs": 8.071462313334147e-09,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "k": {
+        "actual_f32_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 32768,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "kr": {
+        "actual_f32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 32768,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "kraw": {
+        "official_numeric_pass": null,
+        "status": "NO_OFFICIAL_RAW_REFERENCE"
+      },
+      "kv": {
+        "actual_f32_sha256": "96582171b7fd790f56131cf60189a7df0b503bf3b182e4c806012c5a87405e02",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 65536,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "96582171b7fd790f56131cf60189a7df0b503bf3b182e4c806012c5a87405e02",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "logits": {
+        "actual_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "bit_exact": true,
+        "coverage": "actual_causal_positions_only",
+        "different_elements": 0,
+        "elements": 99072,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "n0": {
+        "actual_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "prob": {
+        "actual_f32_sha256": "e053132ca3786412548c929460884eb77091a4c221997d4a0186618c1ff9b6ad",
+        "bit_exact": false,
+        "coverage": "actual_causal_positions_only",
+        "different_elements": 1736,
+        "elements": 99072,
+        "finite": true,
+        "max_abs": 2.2737367544323206e-13,
+        "mean_abs": 1.3770208057366282e-17,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "52fd419462986d14fa9268791ffdeeecb3a54beebc5685af14be00186bc9af15",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "pv": {
+        "actual_f32_sha256": "73972a9589d73b492eb727b401607df43b317595f9b54e3e41857a31323fb98d",
+        "bit_exact": false,
+        "coverage": "complete",
+        "different_elements": 3,
+        "elements": 196608,
+        "finite": true,
+        "max_abs": 0.0009765625,
+        "mean_abs": 8.071462313334147e-09,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "q": {
+        "actual_f32_sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "qr": {
+        "actual_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 196608,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "qraw": {
+        "official_numeric_pass": null,
+        "status": "NO_OFFICIAL_RAW_REFERENCE"
+      },
+      "scores": {
+        "actual_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "bit_exact": true,
+        "coverage": "actual_causal_positions_only",
+        "different_elements": 0,
+        "elements": 99072,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "7966c6ccc874e3b3d8651bfad2ac372f704729e17da1722edb0bcfddb18bff18",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "softmax_fp32": {
+        "actual_f32_sha256": "ae236b4284128299efab41c1f184d3d97d3c41cd30d7bf9f4812786d667bda2a",
+        "bit_exact": false,
+        "coverage": "actual_causal_positions_only",
+        "different_elements": 88026,
+        "elements": 99072,
+        "finite": true,
+        "max_abs": 2.384185791015625e-07,
+        "mean_abs": 2.1041845042373674e-09,
+        "official_numeric_pass": null,
+        "reference_f32_sha256": "1905d73dc6a487cbf09779b8a8d0c01b0c0fcf90961cfe896b2cd4f271784637",
+        "verdict": {
+          "contract": null,
+          "passed": null,
+          "status": "DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE"
+        }
+      },
+      "v": {
+        "actual_f32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+        "bit_exact": true,
+        "coverage": "complete",
+        "different_elements": 0,
+        "elements": 32768,
+        "finite": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "official_numeric_pass": true,
+        "reference_f32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+        "verdict": {
+          "contract": "spec/numerical_contract.md:operator",
+          "limits": {
+            "max_abs": 0.03125,
+            "mean_abs": 0.005
+          },
+          "passed": true
+        }
+      },
+      "vraw": {
+        "official_numeric_pass": null,
+        "status": "NO_OFFICIAL_RAW_REFERENCE"
+      }
+    },
+    "policy": {
+      "block": {
+        "max_abs": 0.05,
+        "mean_abs": 0.01
+      },
+      "operator": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "scope": "Existing BF16 v0 operator/block budget; not an FP32, logits, or model-quality contract",
+      "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5",
+      "source": "spec/numerical_contract.md"
+    },
+    "prefix_bit_exact_nodes": [
+      "n0",
+      "qr",
+      "q",
+      "kr",
+      "k",
+      "v"
+    ],
+    "raw_nodes_without_official_reference": [
+      "qraw",
+      "kraw",
+      "vraw"
+    ],
+    "reference_only_nodes": [
+      "x",
+      "cos",
+      "sin",
+      "repeat_k",
+      "repeat_v",
+      "mask"
+    ],
+    "softmax_probability_sum": {
+      "contract": "spec/numerical_contract.md:Softmax",
+      "limit": 2e-05,
+      "max_abs": 7.248891051858664e-07,
+      "passed": true,
+      "reduction": "float64 audit sum of actual FP32 probabilities; absent future positions excluded",
+      "rows": 1536
+    },
+    "typed_attention_bit_exact_executed": false
+  },
+  "evidence_integrity": {
+    "all_inputs_tools_native_artifacts_unchanged": true,
+    "all_original_77_files_unchanged": true,
+    "all_sources_unchanged": true,
+    "independent_final_review": {
+      "bytes": 7758,
+      "path": "work/qwen2_live_attention_numeric_m128_bounded_review_20261014/POSTHOC_RESULT_INDEPENDENT_REVIEW.json",
+      "sha256": "cb6ca18d9497e645a0e62cf4aa43e5155bff4bff050178eae00856a6d1b120b0"
+    },
+    "independent_review_status": "ACCEPT_POSTHOC_RESULT_WITH_ORIGINAL_RUN_FAILED",
+    "independent_seal_review": {
+      "bytes": 56099,
+      "path": "work/qwen2_live_attention_numeric_m128_bounded_review_20261014/V2_ACTUAL_SEAL_REVIEW.json",
+      "sha256": "19a4cb31a09a7ccdc9d1f12d9afa26357e94c1e28c09faedaa24c2d8d5bba85e"
+    },
+    "input_evidence_files": 3,
+    "input_roles": 9,
+    "metric_input_byte_hashes_verified": true,
+    "native_artifacts": 2,
+    "observer_files_verified": 30,
+    "oracle_audit": {
+      "order": "18 frozen tensors, mask BF16 export, then final rehash of the same 18 tensors",
+      "reads": 37,
+      "runtime_identity_reads": 23,
+      "runtime_unique_files": 6,
+      "seal_and_identity_checks_before_open": true,
+      "source_order_verified": true,
+      "unique_paths": 19
+    },
+    "original_inventory_canonical_sha256": "85b1679a3bc7066cdf69ca7e6bc28ecda6aad97484b91e71138f8f9fa18965ed",
+    "original_run_files_unchanged": 77,
+    "original_tools": 6,
+    "posthoc_hash_timing": "All final/current identities below are appended posthoc checks, not original in-run final hashes",
+    "posthoc_source_review": {
+      "bytes": 29573,
+      "path": "work/qwen2_live_attention_numeric_m128_bounded_review_20261014/POSTHOC_FINAL_REVIEW.json",
+      "sha256": "908cf2be2ae0ff9e99c312f14a1ea69926d0ab8e25f89a02f29e48790977b552"
+    },
+    "producer_outputs_verified": 11,
+    "raw_input_tensors": 8,
+    "reference_runtime_files": 6,
+    "reference_tensor_nodes": 18,
+    "review_numerical_metrics_recomputed": false,
+    "sealed_artifacts_verified": 41,
+    "sealed_output_identities": {
+      "att.f32le": {
+        "bytes": 786432,
+        "sha256": "d8e888f201396a6125a93c0602aaf3e53bf4700d4298db0795aa8a1355149287"
+      },
+      "k.f32le": {
+        "bytes": 131072,
+        "sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb"
+      },
+      "kr.f32le": {
+        "bytes": 131072,
+        "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      "kraw.f32le": {
+        "bytes": 131072,
+        "sha256": "e908c9e5c92101085c3e3e27b7c4ecb3d48e2cead730de5be697f51432206b36"
+      },
+      "kv.f32le": {
+        "bytes": 262144,
+        "sha256": "96582171b7fd790f56131cf60189a7df0b503bf3b182e4c806012c5a87405e02"
+      },
+      "n0.f32le": {
+        "bytes": 786432,
+        "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+      },
+      "q.f32le": {
+        "bytes": 786432,
+        "sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88"
+      },
+      "qr.f32le": {
+        "bytes": 786432,
+        "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      "qraw.f32le": {
+        "bytes": 786432,
+        "sha256": "346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1"
+      },
+      "v.f32le": {
+        "bytes": 131072,
+        "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      },
+      "vraw.f32le": {
+        "bytes": 131072,
+        "sha256": "2f95ae68de8c3615ed678a2c67130c07a464c4f3b05e43a799f9de412d3ff4f8"
+      }
+    }
+  },
+  "execution_invariants": {
+    "compile_executed": false,
+    "dense_idle_v1_used": false,
+    "fresh_process_and_physical_memory": true,
+    "input_roles": [
+      "bk",
+      "bq",
+      "bv",
+      "gamma0",
+      "rope",
+      "wk",
+      "wq",
+      "wv",
+      "x"
+    ],
+    "native_artifact_identities": {
+      "library": {
+        "bytes": 27352,
+        "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1/build/official_bf16_matrix_silu.so",
+        "sha256": "a44f4cd7861d1207698bb3dfc89820ded30a44db1cf1c8b9f951019d1edce1fa"
+      },
+      "receipt": {
+        "bytes": 2052,
+        "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1/build/official_bf16_compile.json",
+        "sha256": "2d3415f027e7703c5e353de3db5c77f8cad0fe3ebbd598d5b5812343d0c10d62"
+      }
+    },
+    "native_code_reused_after_identity_verification": true,
+    "original_arithmetic_and_observer_changed": false,
+    "posthoc_comparison_numpy_runtime_imported": true,
+    "posthoc_dut_native_library_loaded": false,
+    "posthoc_inputs_read_for_identity_only": true,
+    "posthoc_original_policy_and_compare_unmodified": true,
+    "posthoc_torch_imported": false,
+    "preloaded_intermediates": [],
+    "same_execution_matrix_scalar_memory": true,
+    "scalar_environment_check": "Original ScalarService constructor, source-bound current-process fegetround and five fixed NumPy environment probes; no arithmetic replacement."
+  },
+  "history": [
+    {
+      "actual_outputs_sealed": false,
+      "attempt": "original_m128_570s",
+      "attention_step_fraction": 0.7752215560400517,
+      "attention_steps_completed": 921633,
+      "attention_steps_required": 1188864,
+      "error": "ValueError('public FFN host budget exceeded')",
+      "host_wall_seconds": 570.0906500809942,
+      "inner_budget_seconds": 570,
+      "result": {
+        "bytes": 183936,
+        "path": "work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1/RESULT.json",
+        "sha256": "137ce24887985b32e829eab72ce5014ced852b365e47412eb68255142af83787"
+      },
+      "resumed_or_reused_state": false,
+      "source_count": 169,
+      "source_manifest_sha256": "52d0d8f4802c06738a1678145b02d26e1c29663ffd7761590b27da297a650fb3",
+      "status": "FAILED"
+    },
+    {
+      "actual_outputs_sealed": false,
+      "attempt": "bounded_v1",
+      "cause": "Admission omission: original ScalarService environment check ctypes.CDLL(None) rejected before producers.",
+      "error": "unapproved native dlopen handle",
+      "exit_code": 1,
+      "failure_stage": "tool_hashes_and_fresh_setup",
+      "host_wall_seconds": 1.6015850289986702,
+      "parent_launch": {
+        "bytes": 1204,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/PARENT_M128_LAUNCH_V1.json",
+        "sha256": "f675fd98da9d2746a35d4cfc82647a23f39b01af1a354adbcea8699081421f2e"
+      },
+      "parent_wall_seconds": 1.8499426639900776,
+      "producer_executed": false,
+      "result": {
+        "bytes": 65807,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/m128_pv32_bounded_actual_v1/RESULT.json",
+        "sha256": "8bdb6039cebecc05bc1c5c04053cbcc29fdc720bce56d1edc4846f1e2201defa"
+      },
+      "status": "FAILED"
+    },
+    {
+      "acceptance_sealed": false,
+      "actual_outputs_sealed": true,
+      "attempt": "bounded_v2",
+      "cause": "Admission omission after complete sealed DUT chain: exact frozen reference runtime libc10.so hash-read rejected; official comparison did not run in this process.",
+      "error": "unapproved prior-run artifact read",
+      "exit_code": 1,
+      "failure_stage": "post_seal_official_comparison",
+      "host_wall_seconds": 753.2974485870072,
+      "oracle_tensor_reads": 0,
+      "parent_launch": {
+        "bytes": 1317,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/PARENT_M128_LAUNCH_V2.json",
+        "sha256": "f5312dbe226491e28c990181e2ad9c8070f4b7a013aa9ae3e293631e2ef6f670"
+      },
+      "parent_wall_seconds": 755.2107393219922,
+      "result": {
+        "bytes": 321758,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/m128_pv32_bounded_actual_v2/RESULT.json",
+        "sha256": "38b59e30edcf655300ce3b7c5342809641589edc327482e4ae781e959c04947e"
+      },
+      "status": "FAILED",
+      "supervisor": {
+        "bytes": 1292,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/m128_pv32_bounded_actual_v2.LAUNCH.json",
+        "sha256": "e83b89339a807cd04f09b43f6d9063311645f7c66318c9c3dfd082f9fbcebe2a"
+      }
+    },
+    {
+      "attempt": "posthoc_v2_compare_v1",
+      "comparison_completed": true,
+      "dut_reexecuted": false,
+      "exit_code": 0,
+      "inner_seconds": 4.561150790992542,
+      "original_receipt_unchanged": true,
+      "parent_launch": {
+        "bytes": 1533,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/PARENT_POSTHOC_LAUNCH_V1.json",
+        "sha256": "6703e432b8ac3f1f423644f000ecb3ee857c8cb8dcca44a30d7ea1544f3cd48d"
+      },
+      "parent_seconds": 4.616425806001644,
+      "result": {
+        "bytes": 100987,
+        "path": "work/qwen2_live_attention_numeric_m128_bounded_20261014/posthoc_v2_compare_v1/RESULT.json",
+        "sha256": "ab71f006a03cafea1fda7db66b7be6b437517b25ac24c4c20777e08556a19e44"
+      },
+      "status": "POSTHOC_OFFICIAL_COMPARISON_PASS_PC12_HELD"
+    }
+  ],
+  "matrix_actual_counters": {
+    "attention_accepted": {
+      "final_ack_stall": 5,
+      "matrix_requests": 1188864,
+      "matrix_results": 1188864,
+      "read_requests": 1597440,
+      "requests": 1609728,
+      "responses": 1609728,
+      "ticks": 9096282,
+      "write_acks": 12288,
+      "write_requests": 12288
+    },
+    "attention_accepted_backend": {
+      "exp_negative_requests": 99072,
+      "job_fire": 1,
+      "matrix_requests": 1188864,
+      "matrix_results": 1188864,
+      "memory_responses": 1609728,
+      "owner_results": 1,
+      "pv32_borrow_retired": 6144,
+      "pv32_output_half_ack": 12288,
+      "pv32_reply_borrows": 6144,
+      "pv32_selected_lane_results": 12681216,
+      "read_requests": 1597440,
+      "read_responses": 1597440,
+      "write_acks": 12288,
+      "write_requests": 12288
+    },
+    "attention_physical_delta": {
+      "read_bytes": 102236160,
+      "write_ack_bytes": 786432,
+      "write_acks": 12288,
+      "write_commands": 12288,
+      "write_data_bytes": 786432
+    },
+    "attention_scalar_calls": {
+      "add": 2543264,
+      "bf": 44779008,
+      "div": 1536,
+      "mul": 1354400
+    },
+    "attention_software_state_ticks": {
+      "legacy:begin": 105216,
+      "legacy:idle": 5089585,
+      "legacy:issue": 1188864,
+      "legacy:reply": 1334324,
+      "legacy:wait_done": 111431,
+      "legacy:wait_result": 1266862,
+      "matrix_not_owned": 1,
+      "matrix_owned": 9096282,
+      "matrix_request_backpressure": 383016,
+      "memory_request_backpressure": 325573,
+      "owner:finish": 1,
+      "owner:idle": 1,
+      "owner:issue": 1935301,
+      "owner:matrix_issue": 1571880,
+      "owner:matrix_wait": 3979367,
+      "owner:wait": 1609733,
+      "pv32_borrowed_reply_held": 34081,
+      "read_response_wait": 1597440,
+      "scalar_not_owned": 2,
+      "scalar_owned": 9096281,
+      "write_ack_wait": 12293
+    },
+    "counters": {
+      "dense_done": 28,
+      "dense_groups": 28,
+      "dense_results": 128,
+      "dense_steps": 98304,
+      "legacy_model_ticks": 9096282,
+      "legacy_replies": 1188864,
+      "normal_done": 105216,
+      "normal_groups": 105216,
+      "normal_results": 1188864,
+      "normal_steps": 1188864,
+      "owner_acquires": 29,
+      "owner_releases": 29,
+      "owner_responses": 29
+    },
+    "fixed_4096_denominators": {
+      "attention_normal": {
+        "accepted_steps": 1188864,
+        "actual_executed_fma": 608698368,
+        "actual_useful_fma": 25362432,
+        "executed_over_full_4096": 0.125,
+        "fixed_full_capacity_fma_per_step": 4096,
+        "full_4096_opportunities": 4869586944,
+        "hardware_busy_fraction": null,
+        "useful_over_executed": 0.041666666666666664,
+        "useful_over_full_4096": 0.005208333333333333
+      },
+      "combined_matrix": {
+        "accepted_steps": 1287168,
+        "actual_executed_fma": 1011351552,
+        "actual_useful_fma": 428015616,
+        "executed_over_full_4096": 0.19182577565632458,
+        "fixed_full_capacity_fma_per_step": 4096,
+        "full_4096_opportunities": 5272240128,
+        "hardware_busy_fraction": null,
+        "useful_over_executed": 0.42321150855365475,
+        "useful_over_full_4096": 0.08118287589498807
+      },
+      "qkv_dense": {
+        "accepted_steps": 98304,
+        "actual_executed_fma": 402653184,
+        "actual_useful_fma": 402653184,
+        "executed_over_full_4096": 1.0,
+        "fixed_full_capacity_fma_per_step": 4096,
+        "full_4096_opportunities": 402653184,
+        "hardware_busy_fraction": null,
+        "useful_over_executed": 1.0,
+        "useful_over_full_4096": 1.0
+      }
+    },
+    "host_model_ticks": 10150604,
+    "observed_qkv_totals": {
+      "actual_c_fma_calls": 402653184,
+      "drains": 14,
+      "executed_macs": 402653184,
+      "partials": 28,
+      "raw_qkv_ack_bytes": 1048576,
+      "useful_macs": 402653184,
+      "vector_add_requests": 16384,
+      "wide_matrix_steps": 98304
+    },
+    "observed_totals": {
+      "dense_fma_calls": 402653184,
+      "executed_macs": 1011351552,
+      "normal_fma_calls": 608698368,
+      "useful_macs": 428015616
+    },
+    "physical_total": {
+      "read_bytes": 116676544,
+      "write_ack_bytes": 4849664,
+      "write_acks": 62208,
+      "write_commands": 62208,
+      "write_data_bytes": 4849664
+    },
+    "provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+    "ratio_scope": "Arithmetic opportunity ratios per accepted software Matrix step, never a hardware busy/utilization measure. Full denominator stays 4096 for normal as well as dense steps."
+  },
+  "outcomes": {
+    "actual_outputs_sealed": true,
+    "dut_reexecuted_for_posthoc": false,
+    "official_observed_nodes_bit_exact": false,
+    "original_acceptance_sealed": false,
+    "original_execution_status": "FAILED",
+    "posthoc_numeric_pass": true,
+    "posthoc_status": "POSTHOC_OFFICIAL_COMPARISON_PASS_PC12_HELD"
+  },
+  "publication": {
+    "frozen_source_and_freeze_files": [
+      {
+        "bytes": 28254,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/FREEZE.json",
+        "sha256": "433cea342f59914fb1ee981c341b0971866eb0a13bc0411251a08eed6cd60acd"
+      },
+      {
+        "bytes": 9044,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/README.md",
+        "sha256": "cc598c72fd131338b24cd04d5c9eb8d0468eed944b62d56f8491d93e950f6e87"
+      },
+      {
+        "bytes": 5742,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/attention_driver.py",
+        "sha256": "c47542628d4dd776f1a1247e9d9060064c82fd180c262bcd188622c6180633de"
+      },
+      {
+        "bytes": 4843,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/gates.py",
+        "sha256": "0456498536d3984a4f55fdc0f75d978ff2bca707a3428fcdf2d2c5a7324fda4f"
+      },
+      {
+        "bytes": 7137,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/launch.py",
+        "sha256": "0fbe5e33a6fc797bb48c19207342da060a4ab5252a6e4fe69a0c9c316f04f04b"
+      },
+      {
+        "bytes": 1482,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/native_artifact.py",
+        "sha256": "535a82467bb5b1c2d65c9f170183ddb8aa476adda0c84361ed712997c5015563"
+      },
+      {
+        "bytes": 23948,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/pins.json",
+        "sha256": "26f2436a4432b09ab87103dc41ef58d6d58adb21e9a28e416b26ac78b5801b60"
+      },
+      {
+        "bytes": 29141,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/FREEZE.json",
+        "sha256": "0373395faae8f35ad28e85397e48703254ccbe3cd271b1d45b8bef4685482092"
+      },
+      {
+        "bytes": 5939,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/README.md",
+        "sha256": "3e2bd3926bcbf5195e4e9e70140bb03169675ee2c3a40a320c57d966a8ac5b14"
+      },
+      {
+        "bytes": 4207,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/audit.py",
+        "sha256": "afe3b65718d2258a8f35394fc28b7c6c216d3c9c5111c36de0c260c55371cb87"
+      },
+      {
+        "bytes": 27754,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/pins.json",
+        "sha256": "7e37708aeef3836c62c9ed3d32484b0fab3a2ec4da8eac0ae83198ae365bd16e"
+      },
+      {
+        "bytes": 10241,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/runner.py",
+        "sha256": "a48af3092fc73c4640106aad2e5539b976006f6c5653b0fa81c58a0fb0233aff"
+      },
+      {
+        "bytes": 6802,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/test_cold.py",
+        "sha256": "94a6695adc414fb9cc5e6ee39fc97d8e381a6529d1f82c01928289bd21429f63"
+      },
+      {
+        "bytes": 9323,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/validation.py",
+        "sha256": "39385b8c2a4a342bb589ddbb7d68b09203f0af5e96096a72e69c337d4724764e"
+      },
+      {
+        "bytes": 23000,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/runner.py",
+        "sha256": "4e6a5fdb656c48a8e4df85cf4186ac65f8cd326021ffbcab53666f7e90ef29e2"
+      },
+      {
+        "bytes": 7290,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/telemetry.py",
+        "sha256": "ef7e271e814cb24e6e7eb50cce1eeeb930a18b28dc74f07abd50ee8d75ce52d9"
+      },
+      {
+        "bytes": 14274,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/test_cold.py",
+        "sha256": "2d3aaae686b660fc73bdea3c449eed292676bf9eef71e1f217a3864c28664a2b"
+      },
+      {
+        "bytes": 29381,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/FREEZE.json",
+        "sha256": "bc47ab7d9efdd36767dda6721ae82e4767feacc96dd8ac282702c348fdf1083b"
+      },
+      {
+        "bytes": 4190,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/README.md",
+        "sha256": "be6cd0a92ebcc9562f2e2d907305c7ca3fda54d10fba14e3e8acec8926d8e5d2"
+      },
+      {
+        "bytes": 3771,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/environment_probe.py",
+        "sha256": "80bca69894c182945ee2fba43b560c7707ba4c5d4907998c746e3eedad84a1f9"
+      },
+      {
+        "bytes": 6343,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/gates.py",
+        "sha256": "f191d791e699e63bb33657509a2548dd79882ed48719234d201f35733479fa94"
+      },
+      {
+        "bytes": 7140,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/launch.py",
+        "sha256": "9f3caa07808748300f794f9191c0b812db468aa7ac8e45c1be9b3a692b3a09a8"
+      },
+      {
+        "bytes": 24927,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/pins.json",
+        "sha256": "fd641f15d1e779c95e9f948117547374b1547f74b0908a0f454cb74300dc4840"
+      },
+      {
+        "bytes": 23288,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/runner.py",
+        "sha256": "8f2b7c3f9c41774715a39c27d2420ca27adb0bd094a7c9ca642dce909df26407"
+      },
+      {
+        "bytes": 2297,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/test_cold.py",
+        "sha256": "25471cdb2b5b9ebea619fbef881f3c7d4d7c10e5aa4ae896967fb62febbf5425"
+      }
+    ],
+    "included_unfrozen_housekeeping": [
+      {
+        "bytes": 19,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/.gitignore",
+        "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+      }
+    ],
+    "payload_policy": "Existing raw/log/RESULT evidence stays under ignored work; paths and SHA-256 identify local immutable evidence. No large raw/log artifacts in this publication.",
+    "result_metadata_paths": [
+      "candidates/qwen2_live_attention_model_m128_bounded_results/SUMMARY.json",
+      "candidates/qwen2_live_attention_model_m128_bounded_results/RESULT_REPORT.md"
+    ],
+    "scope": "22 newly added frozen v1/v2/posthoc source files + 3 FREEZE receipts + one 19-byte local .gitignore + these 2 result metadata files; no work payload/log/raw and no original dependency rewrite",
+    "status": "NOT_PUBLISHED_AT_PREPARATION"
+  },
+  "schema": 1,
+  "scope": "M128 fresh same-live pc0..12 software model; Attention output sealed; pc12 completion held",
+  "source_closures": {
+    "posthoc": {
+      "freeze": {
+        "bytes": 29141,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/posthoc/FREEZE.json",
+        "sha256": "0373395faae8f35ad28e85397e48703254ccbe3cd271b1d45b8bef4685482092"
+      },
+      "source_count": 191,
+      "source_identity_reverified": true,
+      "source_manifest_sha256": "0cc87973938e2475f670d1bee33464025872ca5ce952e968ccec2bee96a77375"
+    },
+    "v1": {
+      "freeze": {
+        "bytes": 28254,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/FREEZE.json",
+        "sha256": "433cea342f59914fb1ee981c341b0971866eb0a13bc0411251a08eed6cd60acd"
+      },
+      "source_count": 178,
+      "source_identity_reverified": true,
+      "source_manifest_sha256": "18075282b8093ad33a85f20c736d134a4d36276930a0e4f1712c5251901fe08b"
+    },
+    "v2": {
+      "freeze": {
+        "bytes": 29381,
+        "path": "candidates/qwen2_live_attention_model_m128_bounded/v2/FREEZE.json",
+        "sha256": "bc47ab7d9efdd36767dda6721ae82e4767feacc96dd8ac282702c348fdf1083b"
+      },
+      "source_count": 185,
+      "source_identity_reverified": true,
+      "source_manifest_sha256": "65b8414e4240593b6554f08e182099d211aaa023581ecb20d135d41843163fdc"
+    }
+  },
+  "status": "POSTHOC_NUMERIC_PASS_WITH_ORIGINAL_EXECUTION_FAILED",
+  "timing": {
+    "inner_budget_seconds": 900,
+    "native_rebuild_executed": false,
+    "native_rebuild_seconds": 0.0,
+    "outer_total_budget_seconds": 930,
+    "parent_wall_seconds": 755.2107393219922,
+    "phase_note": "Intervals are exact differences of recorded stage entry timestamps. Final post-seal interval ends at failure snapshot, excluding later failure serialization and parent teardown. Attention driver interval includes final owner write ACKs; next stage exports/validates output and holds pc12. No hardware busy timing measured.",
+    "posthoc_inner_seconds": 4.561150790992542,
+    "posthoc_parent_seconds": 4.616425806001644,
+    "posthoc_peak_rss_kib": 542780,
+    "runner_failure_snapshot_cpu_seconds": 753.1981985780001,
+    "runner_failure_snapshot_wall_seconds": 753.2974485870072,
+    "runner_peak_rss_kib": 515788,
+    "stage_intervals": [
+      {
+        "duration_seconds": 0.029249526996864006,
+        "end_seconds": 0.029249526996864006,
+        "stage": "entry_until_first_stage",
+        "start_seconds": 0.0
+      },
+      {
+        "duration_seconds": 0.4323551200068323,
+        "end_seconds": 0.4616046470036963,
+        "stage": "dependency_setup",
+        "start_seconds": 0.029249526996864006
+      },
+      {
+        "duration_seconds": 1.1637861799972598,
+        "end_seconds": 1.625390827000956,
+        "stage": "source_and_input_hashes",
+        "start_seconds": 0.4616046470036963
+      },
+      {
+        "duration_seconds": 0.005695009007467888,
+        "end_seconds": 1.631085836008424,
+        "stage": "native_artifact_validation",
+        "start_seconds": 1.625390827000956
+      },
+      {
+        "duration_seconds": 0.09602776799874846,
+        "end_seconds": 1.7271136040071724,
+        "stage": "tool_hashes_and_fresh_setup",
+        "start_seconds": 1.631085836008424
+      },
+      {
+        "duration_seconds": 7.6289498709957115,
+        "end_seconds": 9.356063475002884,
+        "stage": "prefix_pc0_n0",
+        "start_seconds": 1.7271136040071724
+      },
+      {
+        "duration_seconds": 39.713894903994515,
+        "end_seconds": 49.0699583789974,
+        "stage": "prefix_pc1_qraw",
+        "start_seconds": 9.356063475002884
+      },
+      {
+        "duration_seconds": 4.907591961004073,
+        "end_seconds": 53.97755034000147,
+        "stage": "prefix_pc2_qr",
+        "start_seconds": 49.0699583789974
+      },
+      {
+        "duration_seconds": 6.606315659999382,
+        "end_seconds": 60.58386600000085,
+        "stage": "prefix_pc3_q",
+        "start_seconds": 53.97755034000147
+      },
+      {
+        "duration_seconds": 8.807611336000264,
+        "end_seconds": 69.39147733600112,
+        "stage": "prefix_pc4_kraw",
+        "start_seconds": 60.58386600000085
+      },
+      {
+        "duration_seconds": 0.8262197279982502,
+        "end_seconds": 70.21769706399937,
+        "stage": "prefix_pc5_kr",
+        "start_seconds": 69.39147733600112
+      },
+      {
+        "duration_seconds": 1.1703097410063492,
+        "end_seconds": 71.38800680500572,
+        "stage": "prefix_pc6_k",
+        "start_seconds": 70.21769706399937
+      },
+      {
+        "duration_seconds": 8.835568069989677,
+        "end_seconds": 80.22357487499539,
+        "stage": "prefix_pc7_vraw",
+        "start_seconds": 71.38800680500572
+      },
+      {
+        "duration_seconds": 0.825355966007919,
+        "end_seconds": 81.04893084100331,
+        "stage": "prefix_pc8_v",
+        "start_seconds": 80.22357487499539
+      },
+      {
+        "duration_seconds": 1.0567888179939473,
+        "end_seconds": 82.10571965899726,
+        "stage": "pc8_hold_and_kv_append",
+        "start_seconds": 81.04893084100331
+      },
+      {
+        "duration_seconds": 0.12613065900222864,
+        "end_seconds": 82.23185031799949,
+        "stage": "attention_observer_setup",
+        "start_seconds": 82.10571965899726
+      },
+      {
+        "duration_seconds": 669.2882150310033,
+        "end_seconds": 751.5200653490028,
+        "stage": "attention",
+        "start_seconds": 82.23185031799949
+      },
+      {
+        "duration_seconds": 1.5560283270024229,
+        "end_seconds": 753.0760936760053,
+        "stage": "attention_writeback_and_pc12_hold",
+        "start_seconds": 751.5200653490028
+      },
+      {
+        "duration_seconds": 0.005725793991587125,
+        "end_seconds": 753.0818194699968,
+        "stage": "pc12_seal",
+        "start_seconds": 753.0760936760053
+      },
+      {
+        "duration_seconds": 0.2156291170103941,
+        "end_seconds": 753.2974485870072,
+        "stage": "post_seal_official_comparison",
+        "start_seconds": 753.0818194699968
+      }
+    ],
+    "supervisor_wall_seconds": 755.145528056004,
+    "timing_kind": "host wall/CPU seconds and software stage boundaries; not hardware cycles or throughput"
+  }
+}

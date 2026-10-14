@@ -53,8 +53,11 @@ class ColdTests(unittest.TestCase):
         self.assertEqual(len(self.pins['prior18_expectations']),18)
 
     def test_04_no_fake_freeze(self):
-        with self.assertRaises(R.Rejected):
-            R.require_frozen_references(self.pins)
+        if R.FROZEN_CONTRACT_SHA256 is None:
+            with self.assertRaises(R.Rejected):
+                R.require_frozen_references(self.pins)
+        else:
+            self.assertEqual(R.require_frozen_references(self.pins)['status'],'FROZEN_FROM_INDEPENDENT_REVIEW')
         self.mutation(lambda p:p['reference_freeze'].update(status='FROZEN_FROM_INDEPENDENT_REVIEW'))
 
     def test_05_wrong_hidden_activation(self):
@@ -153,10 +156,11 @@ class ColdTests(unittest.TestCase):
         self.assertFalse(value['torch_imported'])
         self.assertFalse(value['output_files_written'])
 
-    def test_26_capture_imports_are_below_unconditional_raise(self):
+    def test_26_capture_imports_are_below_capability_gate(self):
         tree = ast.parse((HERE/'capture.py').read_text())
         capture = next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name == 'capture')
-        self.assertIsInstance(capture.body[0],ast.Raise)
+        self.assertIsInstance(capture.body[0],ast.If)
+        self.assertIsInstance(capture.body[0].body[0],ast.Raise)
         top_imports = [n for n in tree.body if isinstance(n,(ast.Import,ast.ImportFrom))]
         names = [a.name for n in top_imports for a in n.names]
         self.assertFalse(set(('torch','numpy','transformers')) & set(names))

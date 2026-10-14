@@ -1,0 +1,679 @@
+{
+  "bootstrap_manifest": {
+    "bytes": 26353,
+    "path": "work/qwen2_fullblock_reference_capture_20261014/fullblock_pair_v2/bootstrap/BOOTSTRAP_REFERENCE.json",
+    "sha256": "9eae09cebcfcd7698dd620cf128c7ef28433a70fe4e674781e0b53e179cd493d"
+  },
+  "bootstrap_seal": {
+    "bytes": 7539,
+    "path": "work/qwen2_fullblock_reference_capture_20261014/fullblock_pair_v2/bootstrap/SEAL.json",
+    "sha256": "085b0f17dbd39beb1eaf9824cbcd88de22f978ff445aace196b596d5c805e0e0"
+  },
+  "outputs": {
+    "act": {
+      "bytes": 4587520,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "act.f32le",
+      "is_contiguous": true,
+      "native_bytes": 2293760,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "948a5cf6179529ae95fbb01c2c475c82c6a95f990d1a277f55cdfa10560ce7f6",
+      "native_stride": [
+        1146880,
+        8960,
+        1
+      ],
+      "sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60",
+      "shape": [
+        1,
+        128,
+        8960
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60"
+    },
+    "att": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "att.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "de0f8a7dd441065c5ad87fd0345e9b96eed999374aebdbde329b5c24a0ab3bb5",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969"
+    },
+    "cache_k": {
+      "bytes": 131072,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "cache_k.f32le",
+      "is_contiguous": false,
+      "native_bytes": 65536,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6",
+      "native_stride": [
+        32768,
+        128,
+        256,
+        1
+      ],
+      "sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb"
+    },
+    "cache_v": {
+      "bytes": 131072,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "cache_v.f32le",
+      "is_contiguous": false,
+      "native_bytes": 65536,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "131c2ecc2366ccf26766df71cbd168e70954f182e2a570c1f329515c820a65a1",
+      "native_stride": [
+        32768,
+        128,
+        256,
+        1
+      ],
+      "sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+    },
+    "cos": {
+      "bytes": 65536,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "cos.f32le",
+      "is_contiguous": true,
+      "native_bytes": 32768,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "415e4f5c48f9ce716ee49c7532c44d38ce7615cd5785890021fcb1c4f9db6249",
+      "native_stride": [
+        128,
+        1
+      ],
+      "sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+      "shape": [
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547"
+    },
+    "down": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "down.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "f313c49ed557052ab1c2f614a44d80da2d3eaa30971db076b01fe00cbe7d337c",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1"
+    },
+    "gate": {
+      "bytes": 4587520,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "gate.f32le",
+      "is_contiguous": true,
+      "native_bytes": 2293760,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "208918e1f4f079fdfe67de9cf79510c3576c101e3216a5dd1e6d87fc1feb0eed",
+      "native_stride": [
+        1146880,
+        8960,
+        1
+      ],
+      "sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c",
+      "shape": [
+        1,
+        128,
+        8960
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c"
+    },
+    "k": {
+      "bytes": 131072,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "k.f32le",
+      "is_contiguous": false,
+      "native_bytes": 65536,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6",
+      "native_stride": [
+        32768,
+        128,
+        256,
+        1
+      ],
+      "sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb"
+    },
+    "kr": {
+      "bytes": 131072,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "kr.f32le",
+      "is_contiguous": true,
+      "native_bytes": 65536,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "72337ba037e58649dd6a426c35d86de1d618a6aebed35cf1228f1b0cc6c0ce15",
+      "native_stride": [
+        32768,
+        256,
+        1
+      ],
+      "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+      "shape": [
+        1,
+        128,
+        256
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+    },
+    "logits": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "logits.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "37671b73501c878f4b2f6f379ca1368e21c2db3069226d9dc40bd72ea2027f7e",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5"
+    },
+    "mask": {
+      "bytes": 65536,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "mask.f32le",
+      "is_contiguous": true,
+      "native_bytes": 32768,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "e867bc6f62d8ec12f687265532d551c7fe92cc53360a2196ebefbcff74901cdd",
+      "native_stride": [
+        16384,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "a9f72e2719df06a4bc7cb364c8a61dcb0fd33750eaa6a242922b001b7471ec9c",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "a9f72e2719df06a4bc7cb364c8a61dcb0fd33750eaa6a242922b001b7471ec9c"
+    },
+    "n0": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "n0.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+    },
+    "n1": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "n1.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "5bb6ff866beb0e47e86d5cec61ecc767172e8fbf8f4cf5ed0ad5bb1f76753cda",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55"
+    },
+    "o": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "o.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "3b8cb543c2a8ee66b3716cf7f06f53174c8eabae5d7bf0a6f3f942bdac1fd8d7",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550"
+    },
+    "prob": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "prob.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "d9c02d605505ee1f3a78ad719f70a03227f7ee66f54f6f39be0fe63ee14612ca",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "d9c02d605505ee1f3a78ad719f70a03227f7ee66f54f6f39be0fe63ee14612ca"
+    },
+    "pv": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "pv.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "f5d250263553a063e753e4f7dd76d1755df87e5dfab75cda82029708981b0556",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969"
+    },
+    "q": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "q.f32le",
+      "is_contiguous": false,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "e58005e1119948b53bcec128e5e99f09e51441c3a9c59e7441731a60d7e1aa62",
+      "native_stride": [
+        196608,
+        128,
+        1536,
+        1
+      ],
+      "sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88"
+    },
+    "qr": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "qr.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "5e2d4a612d2179cbe25c09de4d15204b5ec0f6f9ac2a7a5f79cdb006efd08184",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+    },
+    "r": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "r.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "8c8d34497ac6c84b1f78aca09b9f317380d496c569e89baf754e5b381683dc3d",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f"
+    },
+    "repeat_k": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "repeat_k.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "5391703c16f9aa95a213ca5042499e8ebccc209e54fb0747bfe5ecdca9246961",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "aae09ae293d5a2cba076f1e20a1670a5b3b47ad41125a6002a30420af6745669"
+    },
+    "repeat_v": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "repeat_v.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "d6edded23a0459a2cbf44f694841633851c95e185ff88ec352ec6118319c2ecf",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "6d400342ad410df3590609d2e9ff0390de384360c4cecd4736387aaea6575740"
+    },
+    "scores": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "scores.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "b20e22725941e00f5702d73bdf2c9f723cad55eed37e3eca263861257eb6c110",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350"
+    },
+    "silu": {
+      "bytes": 4587520,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "silu.f32le",
+      "is_contiguous": true,
+      "native_bytes": 2293760,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "2ddd98c82aaa3caea6aa196817b4f90075a89ceabe8f7054d082e7ceb9bdca09",
+      "native_stride": [
+        1146880,
+        8960,
+        1
+      ],
+      "sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db",
+      "shape": [
+        1,
+        128,
+        8960
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db"
+    },
+    "sin": {
+      "bytes": 65536,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "sin.f32le",
+      "is_contiguous": true,
+      "native_bytes": 32768,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "a84e52cca7fcaeb1f20a5238aee97f37a1a005828af43f85472a8ceecfa102dc",
+      "native_stride": [
+        128,
+        1
+      ],
+      "sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+      "shape": [
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e"
+    },
+    "softmax_fp32": {
+      "bytes": 786432,
+      "export_dtype": "FP32 unchanged",
+      "file": "softmax_fp32.f32le",
+      "is_contiguous": true,
+      "native_bytes": 786432,
+      "native_dtype": "torch.float32",
+      "native_sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8",
+      "native_stride": [
+        196608,
+        16384,
+        128,
+        1
+      ],
+      "sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8"
+    },
+    "up": {
+      "bytes": 4587520,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "up.f32le",
+      "is_contiguous": true,
+      "native_bytes": 2293760,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "a5d105e355584f68de938ffafc89eac986d439c3edddffc96e63853c913cd805",
+      "native_stride": [
+        1146880,
+        8960,
+        1
+      ],
+      "sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95",
+      "shape": [
+        1,
+        128,
+        8960
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95"
+    },
+    "v": {
+      "bytes": 131072,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "v.f32le",
+      "is_contiguous": true,
+      "native_bytes": 65536,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "9ab1b2551af4fcb7ca5e6eb7ccca6168269f0b78ac6308961b72abee3d61af2d",
+      "native_stride": [
+        32768,
+        256,
+        1
+      ],
+      "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+      "shape": [
+        1,
+        128,
+        256
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+    },
+    "x": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "x.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "aef53bb116207509ae8c98f9fafea7ab296a0d917835810b39d7b2290863b85c",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    },
+    "y": {
+      "bytes": 786432,
+      "export_dtype": "FP32 exact BF16 widening",
+      "file": "y.f32le",
+      "is_contiguous": true,
+      "native_bytes": 393216,
+      "native_dtype": "torch.bfloat16",
+      "native_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa",
+      "native_stride": [
+        196608,
+        1536,
+        1
+      ],
+      "sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+      "shape": [
+        1,
+        128,
+        1536
+      ],
+      "storage_offset": 0,
+      "token_major_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef"
+    }
+  },
+  "review": {
+    "bytes": 2506,
+    "path": "work/qwen2_fullblock_reference_capture_review_20261014/bootstrap_v2_review/BOOTSTRAP_REVIEW.json",
+    "sha256": "b5baa8bdeaa2a4b1faff81fc01a454588164a8ffbc9a2c07057360d80a2f7ddb"
+  },
+  "schema": 1,
+  "status": "FROZEN_FROM_INDEPENDENT_REVIEW"
+}

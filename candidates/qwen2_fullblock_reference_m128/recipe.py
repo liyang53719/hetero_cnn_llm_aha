@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Qwen2 M128 full-block source candidate. Only stdlib metadata checks are enabled."""
+"""Qwen2 M128 full-block: default source-only; guarded, reviewed captures are separate."""
 from __future__ import annotations
 
 import argparse
@@ -16,7 +16,7 @@ sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 PACKAGE = 'candidates/qwen2_fullblock_reference_m128'
-PINS_SHA256 = '65a98bd5cbe299b5c3d06f925dc74c9724bf5e2a75d3c22146ddbd1d8fcfd08e'
+PINS_SHA256 = '48e20d380cfc6ac0ab5b9e1690bb507e37cf99468b0df8e79a1d37da0f16110f'
 MODEL_SOURCE = 'config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py'
 ACTIVATION_SOURCE = PACKAGE + '/official/activations.py'
 NAMES = frozenset(('x','n0','qr','q','kr','k','v','cos','sin','repeat_k','repeat_v',
@@ -28,9 +28,12 @@ TAIL_NAMES = ('self_attn.o_proj.weight','post_attention_layernorm.weight',
 LAYOUT_RULE = ('q/k/repeat_k/repeat_v/pv/cache_k/cache_v: fixed B,H,T,D to B,T,H*D; '
               'scores/logits/prob/softmax_fp32 remain B,H,Q,K; PV to att is original310/311; '
               'cache_k/cache_v are cold semantic aliases, DynamicCache not executed; never selected by error')
+# A reviewed freeze must be pinned by a separate source change. No CLI hash accepted.
+FROZEN_CONTRACT_SHA256 = '64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f'
+FROZEN_CONTRACT_FILE = PACKAGE + '/FROZEN_CONTRACT.json'
 DISABLED_REASON = ('SOURCE_ONLY: numerical capture, payload audit, actual, RTL, download, '
-                   'compile and CI are not authorized or enabled; independent review and '
-                   'a separately authorized, freshly sealed execution contract are required')
+                   'compile and CI are unavailable through recipe.py; use the reviewed guard and '
+                   'an explicit one-use go bound to the exact source-review seal')
 
 
 class Rejected(ValueError):
@@ -128,21 +131,65 @@ def deny_execution(*args, **kwargs):
     raise Rejected(DISABLED_REASON)
 
 
-def require_frozen_references(pins):
-    need(pins['reference_freeze']['status'] == 'FROZEN_FROM_INDEPENDENT_REVIEW',
-         '29-node reference is NOT_CAPTURED; a source plan is not a frozen oracle')
-    for name,spec in pins['references'].items():
+def require_frozen_references(pins, root=ROOT):
+    """Load only the code-pinned reviewed metadata; never bootstrap payloads."""
+    need(same(pins,load_pins(root)), 'frozen validation requires immutable source/geometry pins')
+    need(type(FROZEN_CONTRACT_SHA256) is str and re.fullmatch('[0-9a-f]{64}',FROZEN_CONTRACT_SHA256)
+         and FROZEN_CONTRACT_SHA256 != '0'*64, 'FROZEN_CONTRACT is not independently reviewed/pinned')
+    raw = safe_path(root,FROZEN_CONTRACT_FILE).read_bytes()
+    need(sha(raw) == FROZEN_CONTRACT_SHA256, 'code-pinned frozen contract drift')
+    frozen = parse(raw)
+    exact_keys(frozen, ('schema','status','bootstrap_manifest','bootstrap_seal','review','outputs'), 'frozen contract')
+    fields(frozen, {'schema':1,'status':'FROZEN_FROM_INDEPENDENT_REVIEW'}, 'frozen contract')
+    for key in ('bootstrap_manifest','bootstrap_seal','review'):
+        spec = frozen[key]
+        exact_keys(spec, ('path','bytes','sha256'), 'frozen '+key)
+        need(type(spec['bytes']) is int and 0 < spec['bytes'] <= 262144, 'bounded frozen evidence')
+        need(type(spec['sha256']) is str and re.fullmatch('[0-9a-f]{64}',spec['sha256'])
+             and spec['sha256'] != '0'*64, 'reviewed evidence hash required')
+    review = parse(checked(root,frozen['review']['path'],frozen['review']))
+    fields(review, {'status':'APPROVED_FOR_FREEZE','bootstrap_manifest':frozen['bootstrap_manifest'],
+                   'bootstrap_seal':frozen['bootstrap_seal'],'outputs_sha256':sha(encoded(frozen['outputs']))}, 'independent bootstrap review')
+    need(type(review.get('reviewer')) is str and review['reviewer'].strip(), 'independent reviewer required')
+    # Manifest metadata is provenance only. No value from it drives new arithmetic.
+    bootstrap = parse(checked(root,frozen['bootstrap_manifest']['path'],frozen['bootstrap_manifest']))
+    fields(bootstrap, {'status':'BOOTSTRAP_UNACCEPTED_NO_NUMERICAL_VERDICT'}, 'bootstrap provenance')
+    seal = parse(checked(root,frozen['bootstrap_seal']['path'],frozen['bootstrap_seal']))
+    fields(seal, {'schema':1,'status':'SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED','mode':'bootstrap',
+        'numerical_acceptance_claimed':False,'dut_executed':False,'retries':0}, 'sealed bootstrap provenance')
+    need(Path(frozen['bootstrap_seal']['path']).parent == Path(frozen['bootstrap_manifest']['path']).parent,
+         'bootstrap seal/manifest namespace')
+    need(seal['manifest'] == Path(frozen['bootstrap_manifest']['path']).name and
+         same(seal['files'][seal['manifest']],{k:frozen['bootstrap_manifest'][k] for k in ('bytes','sha256')}),
+         'bootstrap seal must bind exact reviewed manifest')
+    validate_observations(frozen['outputs'],pins)
+    need(same(frozen['outputs'],bootstrap['outputs']), 'reviewed freeze must match sealed bootstrap observations')
+    return frozen
+
+
+def validate_observations(outputs,pins):
+    exact_keys(outputs,NAMES,'exact29 observations')
+    for name,spec in outputs.items():
+        geometry = pins['references'][name]
+        exact_keys(spec, ('shape','bytes','native_bytes','native_dtype','export_dtype','sha256',
+            'native_sha256','token_major_sha256','native_stride','storage_offset','is_contiguous','file'), name)
+        fields(spec, {k:geometry[k] for k in ('shape','bytes','native_bytes','native_dtype','export_dtype')},name)
+        need(spec['file'] == name+'.f32le', 'fixed export name')
         for key in ('sha256','native_sha256','token_major_sha256'):
-            need(type(spec[key]) is str and re.fullmatch('[0-9a-f]{64}',spec[key]) and
-                 spec[key] != '0'*64, name+' requires captured reviewed '+key)
+            need(type(spec[key]) is str and re.fullmatch('[0-9a-f]{64}',spec[key])
+                 and spec[key] != '0'*64, name+' non-placeholder observed hash')
         need(type(spec['native_stride']) is list and len(spec['native_stride']) == len(spec['shape'])
-             and all(type(n) is int and n > 0 for n in spec['native_stride']), 'captured strides required')
-        need(type(spec['storage_offset']) is int and spec['storage_offset'] >= 0 and
-             type(spec['is_contiguous']) is bool, 'captured storage metadata required')
-    for key in ('bootstrap_manifest_sha256','independent_review_sha256'):
-        value = pins['reference_freeze'][key]
-        need(type(value) is str and re.fullmatch('[0-9a-f]{64}',value) and value != '0'*64,
-             'reviewed freeze evidence required')
+             and all(type(n) is int and n > 0 for n in spec['native_stride']), name+' observed stride')
+        need(type(spec['storage_offset']) is int and spec['storage_offset'] >= 0
+             and type(spec['is_contiguous']) is bool, name+' observed storage')
+        if name in pins['prior18_expectations']:
+            need(same({k:v for k,v in spec.items() if k != 'file'},pins['prior18_expectations'][name]),
+                 name+' fresh prior18 reproduction')
+    need(outputs['cache_k']['sha256'] == outputs['k']['sha256'], 'cold K equality')
+    need(outputs['cache_v']['token_major_sha256'] == outputs['v']['sha256'], 'cold V fixed layout')
+    need(outputs['pv']['token_major_sha256'] == outputs['att']['sha256'], 'PV fixed layout')
+    need(outputs['mask']['sha256'] == pins['mask_contract']['export_sha256'] and
+         outputs['mask']['native_sha256'] == pins['mask_contract']['native_sha256'], 'exact mask hashes')
 
 
 def check_contract(pins):
@@ -196,6 +243,9 @@ def check_contract(pins):
         'native_dumps_retained':False,'peak_rss_estimate':None,
         'wall_seconds_estimate':None}, 'planned disk budget')
     need(pins['budget']['total_cap_bytes'] == 69*(1 << 20), '69 MiB total cap required')
+    fields(pins['capture_limits'], {'wall_seconds':120,'rss_bytes':1610612736,
+        'rss_is_os_hard_cap':False,'poll_seconds':0.02,'per_stream_retained_bytes':65536,
+        'total_emitted_log_limit_bytes':16777216,'automatic_retry':False}, 'fixed capture guard limits')
     need(len(pins['raw_tensors']) == 13 and len({s['local_name'] for s in pins['raw_tensors']}) == 13,
          'thirteen unique raw tensors required')
     need(sum(s['bytes'] for s in pins['raw_tensors']) == 94382080, 'raw13 byte sum')
@@ -281,6 +331,7 @@ def metadata_check(root,pins):
 
 def source_check(root,pins):
     require_supported_python()
+    source_manifest(root)
     need(root == ROOT and root.resolve() == ROOT and (root/'.git').exists(), 'exact checkout root required')
     check_contract(pins)
     for path,spec in pins['sources'].items():
@@ -324,11 +375,29 @@ def source_check(root,pins):
             'preserved_m128_sources':169,'preserved_m16_sources':188,'native_runtime_rehashed':False}
 
 
+def source_manifest(root=ROOT):
+    manifest_path = safe_path(root,PACKAGE+'/SOURCE_MANIFEST.json')
+    manifest = parse(manifest_path.read_bytes())
+    present = {str(p.relative_to(root/PACKAGE)) for p in (root/PACKAGE).rglob('*') if p.is_file()}
+    need(present == set(manifest['files']) | {'SOURCE_MANIFEST.json'}, 'exact package inventory drift')
+    for name,spec in manifest['files'].items():
+        checked(root,PACKAGE+'/'+name,spec)
+    return {'bytes':manifest_path.stat().st_size,'sha256':sha(manifest_path.read_bytes())}
+
+
 def plan(pins):
-    return {'status':'NOT_EXECUTED_SOURCE_ONLY','reference_freeze':pins['reference_freeze'],
+    freeze = pins['reference_freeze']
+    if FROZEN_CONTRACT_SHA256 is not None:
+        frozen = require_frozen_references(pins)
+        freeze = {'status':'FROZEN_REVIEWED_REFERENCE_METADATA','contract_sha256':FROZEN_CONTRACT_SHA256,
+            'bootstrap_manifest_sha256':frozen['bootstrap_manifest']['sha256'],
+            'independent_review_sha256':frozen['review']['sha256'],
+            'numeric_acceptance_claimed':False,'fresh_reproduction_needs_separate_go':True}
+    return {'status':'NOT_EXECUTED_SOURCE_ONLY','reference_freeze':freeze,
         'planned_model_ast_nodes':38,'planned_activation_ast_nodes':14,
         'planned_reference_nodes':29,'budget':pins['budget'],
-        'capture_enabled':False,'actual_enabled':False,'next_gate':'INDEPENDENT_SOURCE_REVIEW',
+        'capture_enabled':False,'guarded_modes':['bootstrap','frozen'],'actual_enabled':False,
+        'next_gate':'INDEPENDENT_SOURCE_REVIEW_AND_EXPLICIT_SINGLE_GO',
         'later_steps':['explicit capture authorization and fresh execution seal',
             'one bootstrap from raw, no verdict','independent bootstrap review',
             'separate immutable freeze with observed29 hashes',

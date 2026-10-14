@@ -1,16 +1,32 @@
 {
   "files": {
     "ADMISSION.json": {
-      "bytes": 4886,
-      "sha256": "ebae4139581e7a179980367814a21755696a935004cdd6e934d58be4c6edc97a"
+      "bytes": 6529,
+      "sha256": "4c07786ae46fdb750d0278b3684081b34f18b050c7923c85db2a447bb76008d4"
+    },
+    "BUDGET.json": {
+      "bytes": 2926,
+      "sha256": "6ba5e0e3a6c84e0bf9900f94fe088a9185af7dcacec3eb7ef5bc2304154026c7"
+    },
+    "FROZEN_CONTRACT.json": {
+      "bytes": 19978,
+      "sha256": "64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f"
     },
     "README.md": {
-      "bytes": 8367,
-      "sha256": "415487470f43877f80dcd4ec4a49b1630795364a6f2ed31aa118fc9ef05cf63a"
+      "bytes": 14225,
+      "sha256": "6cc1eb2c60c9e0f35bd760d0e9a9ca4b5d22ea45e62e62b77b86654e95a93d57"
     },
     "capture.py": {
-      "bytes": 18978,
-      "sha256": "44794a7400828f3130a05e083f5ed108dcaba4420d84a6d3b718315cf26b725c"
+      "bytes": 20084,
+      "sha256": "7bbee0a7edc6d36fb4996657ecea75c5181d292c9761bbb18ca4b12fc2486a86"
+    },
+    "guard.py": {
+      "bytes": 22011,
+      "sha256": "daa782b1000accc29315ac4bd014d61cebc7862eaa0d02e117288aba035a43ac"
+    },
+    "lifecycle.py": {
+      "bytes": 9323,
+      "sha256": "8933982f3a553df78ba379cd80e8533ef58893596c96e8765131b2812911f64e"
     },
     "official/SOURCE_RECEIPT.json": {
       "bytes": 671,
@@ -21,20 +37,24 @@
       "sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee"
     },
     "pins.json": {
-      "bytes": 152501,
-      "sha256": "65a98bd5cbe299b5c3d06f925dc74c9724bf5e2a75d3c22146ddbd1d8fcfd08e"
+      "bytes": 154690,
+      "sha256": "48e20d380cfc6ac0ab5b9e1690bb507e37cf99468b0df8e79a1d37da0f16110f"
     },
     "recipe.py": {
-      "bytes": 21160,
-      "sha256": "20c662e2a3f153507e920ab5d6fd789cbf2611edc2160d9f7ced5f0f91445bad"
+      "bytes": 26321,
+      "sha256": "2548e4b447ac58580c0e941bdc5287f2fcbc9dea861bb2d0c601884e5dd2ff36"
     },
     "test_cold.py": {
-      "bytes": 8495,
-      "sha256": "34bad0717b753baa7c7d93d4434f65bb9186eb60e29661cd0f27d65714732b1b"
+      "bytes": 8732,
+      "sha256": "db17095a14898dee4df3f45a077a3975fc3f214a77b33df51eae2ea258414c6d"
+    },
+    "test_lifecycle.py": {
+      "bytes": 26134,
+      "sha256": "3251e3f8032fc046f262e2ef2eb09d80e87de0d9abc1021787aa02e344e5ad6d"
     }
   },
-  "manifest_self_hash": "provided by external source-review seal; not circularly self-pinned",
+  "manifest_self_hash": "provided by independent review seal, never self-pinned",
   "schema": 1,
-  "scope": "new candidate files only; dependencies and preserved closures are pinned in pins.json",
-  "status": "SOURCE_ONLY_NOT_EXECUTED"
+  "scope": "exact package inventory; dependencies and preserved closures pinned in pins.json",
+  "status": "GUARDED_SOURCE_ONLY_NOT_NUMERICALLY_EXECUTED"
 }

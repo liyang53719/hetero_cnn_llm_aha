@@ -1,0 +1,60 @@
+{
+  "conservative_additive_accounting": {
+    "bytes": 1205602304,
+    "double_counts_some_transients": true,
+    "formula": "prior M16 measured RSS + tail raw + tail BF16 parameters + full initial FP32 MLP + all output native bytes + hook copies + full exported payload + stream buffer",
+    "is_measured_peak": false,
+    "remaining_to_guard_bytes": 405010432,
+    "unmodeled_allocator_or_kernel_workspace_requires_guard": true
+  },
+  "dut_budget_used": false,
+  "limits": {
+    "independent_wall_watchdog_seconds": 122,
+    "pair_disk_bytes": 72351744,
+    "per_capture_disk_bytes": 35651584,
+    "per_stream_retained_bytes": 65536,
+    "rss_is_os_hard_cap": false,
+    "rss_poll_seconds": 0.02,
+    "sampled_process_tree_rss_bytes": 1610612736,
+    "total_emitted_log_limit_bytes": 16777216,
+    "wall_seconds": 120
+  },
+  "numeric_executed_for_this_budget": false,
+  "prior_reference_evidence": [
+    {
+      "elapsed_seconds": 5.977963744997396,
+      "identity": {
+        "bytes": 1224,
+        "sha256": "d60c08c623efe755efdef5d1302fb4c0f3677fa49795555921a73e97d2ae024c"
+      },
+      "path": "work/qwen2_live_attention_reference_m128/control/frozen01/CAPTURE_EXECUTION.json",
+      "rss_bytes": null,
+      "scope": "M128 official attention reference; no fullblock runtime extrapolation claimed"
+    },
+    {
+      "elapsed_seconds": 6.00112988500041,
+      "identity": {
+        "bytes": 493,
+        "sha256": "fc2f3569a0a82e8aac1f48fb2c3ce74525b0c04e37339bb9cc394ba1657144b2"
+      },
+      "path": "work/qwen2_live_attention_reference_m16_20261014/bootstrap01/control/RESULT.json",
+      "peak_rss_bytes": 805957632,
+      "scope": "M16 official attention reference; includes old native-file read allocation"
+    }
+  ],
+  "rationale": "120s is conservative admission versus approximately 6s prior official-reference runs, with added tail arithmetic, source hashing and publication. It is not an execution-time estimate and is not copied from a failed DUT run. Process-tree RSS is sampled and kill-enforced, not an OS memory cap. Disk is statically admitted and sampled, not a filesystem quota. Production worker prohibits Python-level process creation; wrapper cleans its group and discovered/adopted descendants. A malicious native double-fork between samples is outside this trusted worker contract.",
+  "schema": 1,
+  "static_sizes": {
+    "all29_logical_native_output_bytes": 16678912,
+    "export_plus_mask_payload_bytes_per_run": 32604160,
+    "largest_former_whole_native_read_bytes_avoided": 443509856,
+    "mlp_hook_observer_copy_bytes": 9568256,
+    "mlp_initial_fp32_parameters_bytes": 165150720,
+    "raw13_bytes": 94382080,
+    "stream_hash_buffer_bytes": 1048576,
+    "tail_bf16_parameter_increment_bytes": 87297024,
+    "tail_raw5_increment_bytes": 87297024,
+    "two_capture_payload_bytes": 65208320
+  },
+  "status": "STATIC_ADMISSION_WITH_PRIOR_REFERENCE_MEASUREMENTS_NOT_NEW_RUN_PREDICTION"
+}

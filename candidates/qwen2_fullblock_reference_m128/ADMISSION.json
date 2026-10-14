@@ -10,26 +10,59 @@
   },
   "actual_permission": false,
   "authorization_inherited_from_old_runs": false,
+  "bootstrap_observations": {
+    "manifest": {
+      "bytes": 26353,
+      "path": "work/qwen2_fullblock_reference_capture_20261014/fullblock_pair_v2/bootstrap/BOOTSTRAP_REFERENCE.json",
+      "sha256": "9eae09cebcfcd7698dd620cf128c7ef28433a70fe4e674781e0b53e179cd493d"
+    },
+    "review": {
+      "bytes": 2506,
+      "path": "work/qwen2_fullblock_reference_capture_review_20261014/bootstrap_v2_review/BOOTSTRAP_REVIEW.json",
+      "sha256": "b5baa8bdeaa2a4b1faff81fc01a454588164a8ffbc9a2c07057360d80a2f7ddb"
+    },
+    "seal": {
+      "bytes": 7539,
+      "path": "work/qwen2_fullblock_reference_capture_20261014/fullblock_pair_v2/bootstrap/SEAL.json",
+      "sha256": "085b0f17dbd39beb1eaf9824cbcd88de22f978ff445aace196b596d5c805e0e0"
+    },
+    "status": "INDEPENDENTLY_REVIEWED_OBSERVATIONS_ONLY"
+  },
   "budget": {
+    "budget_evidence": "BUDGET.json",
+    "external_watchdog_seconds": 122,
     "per_capture_cap_bytes": 35651584,
     "per_capture_payload_bytes": 32604160,
     "rss_estimate": null,
+    "rss_is_os_hard_cap": false,
     "runtime_or_input_copies_included": false,
+    "sampled_worker_tree_rss_bytes": 1610612736,
     "spare_total_metadata_bytes": 7143424,
     "total_cap_bytes": 72351744,
     "two_capture_payload_bytes": 65208320,
+    "wall_seconds": 120,
     "whole_block_actual_included": false
   },
   "capture_permission": false,
-  "execution_latch": "unconditional code-level rejection; no flags/receipts can enable",
+  "execution_latch": "recipe source-only; guard requires source-bound independent review and one-use explicit go; capture requires inherited live-wrapper capability",
   "failure_contract": {
-    "completion_manifest_on_failure": false,
-    "diagnostics": "retain bounded failure receipt and partial files under fresh run identity",
-    "failure_wrapper_implemented_in_source_revision": false,
+    "completion_manifest_on_failure": "SEAL.json never written on failure; prior partial manifests are not completion",
+    "diagnostics": "bounded real stage/error, partial identities, sampled resources, full observed log hashes and prefix truncation",
+    "failure_wrapper_implemented_in_source_revision": true,
     "overwrite_failed_run": false,
     "repin_to_observed_error": false
   },
   "independent_review": null,
+  "reference_freeze": {
+    "contract": {
+      "bytes": 19978,
+      "path": "candidates/qwen2_fullblock_reference_m128/FROZEN_CONTRACT.json",
+      "sha256": "64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f"
+    },
+    "dut_acceptance": false,
+    "fresh_reproduction_executed_by_this_source_revision": false,
+    "status": "FROZEN_FROM_INDEPENDENT_REVIEW"
+  },
   "schema": 1,
   "stages": [
     {
@@ -45,22 +78,21 @@
         "preserved M128169/M16188 hashes",
         "runtime source/native pins and CPython3.12",
         "default CLI no numeric import or payload opens",
-        "all execution/actual options hard refused",
+        "recipe/direct capture refused without bounded wrapper capability; actual always absent",
         "34MiB/69MiB budget"
       ],
       "scope": "source, AST, stdlib metadata/refusal tests only"
     },
     {
       "allowed_now": false,
-      "name": "enable-capture-contract",
+      "name": "guarded-capture-admission",
       "requires": [
-        "explicit user capture authorization",
-        "all other numerical jobs terminal and reviewer-confirmed idle",
-        "independent source review acceptance",
-        "new reviewed source revision; source-only latch cannot be toggled by data",
-        "reviewed bootstrap/frozen schema validators replacing source-only validation",
-        "bounded timeout/RSS/process/log/failure receipt wrapper",
-        "new exact source/runtime/input seal"
+        "explicit parent single go, bound to exact source manifest and mode",
+        "all other numerical jobs terminal; exclusive_numeric_slot attestation",
+        "independent source review with exact CPython/tool/source identity",
+        "120s absolute overall deadline plus 2s independent cleanup watchdog",
+        "sampled1.5GiB worker tree RSS, bounded logs/disk, complete failure receipt",
+        "fresh output identity; never overwrite or retry"
       ]
     },
     {
@@ -130,5 +162,5 @@
       ]
     }
   ],
-  "status": "SOURCE_ONLY_REQUIRES_INDEPENDENT_REVIEW"
+  "status": "FROZEN_REFERENCE_METADATA_REQUIRES_FRESH_REPRODUCTION_REVIEW_AND_GO"
 }

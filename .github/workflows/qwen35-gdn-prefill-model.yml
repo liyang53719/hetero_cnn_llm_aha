@@ -16,6 +16,7 @@ on:
       - 'candidates/qwen35_35b_gated_norm/**'
       - 'candidates/qwen35_35b_output/**'
       - 'candidates/qwen35_35b_postnorm/**'
+      - 'candidates/shared_resource_timing/**'
       - 'candidates/qwen35_35b_projection_reference/**'
       - 'config/upstream/weight_headers/qwen3_5_35b_a3b/**'
       - 'config/model_profiles/qwen3_5_35b_a3b.json'

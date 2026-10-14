@@ -1,0 +1,13 @@
+{
+  "status": "BLOCKED_PENDING_REPRESENTATIVE_TIMING",
+  "inner_wall_seconds": null,
+  "outer_wall_seconds": null,
+  "rss_bytes": null,
+  "output_bytes": null,
+  "log_bytes": null,
+  "file_bytes": null,
+  "poll_seconds": 0.1,
+  "progress_loop_interval": 131072,
+  "automatic_retry": false,
+  "reason": "The prior 900/930-second cap covered pc0..12 only. The unchanged tail adds 1363968 accepted Dense steps and 5586812928 C FMAs; a reviewed whole-scope fixed budget is required."
+}

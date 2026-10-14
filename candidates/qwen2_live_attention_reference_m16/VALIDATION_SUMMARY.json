@@ -1,0 +1,137 @@
+{
+  "actual_or_typed_output_read": false,
+  "bootstrap_manifest": {
+    "bytes": 32542,
+    "path": "work/qwen2_live_attention_reference_m16_20261014/bootstrap01/reference/BOOTSTRAP_REFERENCE.json",
+    "sha256": "2c2050bb6b29f32a22a613883ea2976a5c7b320ccb268a4e3b3d5bb84417d5eb"
+  },
+  "causal_qk_elements": 1632,
+  "cold_modes": [
+    "normal",
+    "-O"
+  ],
+  "cold_summary": {
+    "bytes": 2166,
+    "path": "candidates/qwen2_live_attention_reference_m16/COLD_TEST_SUMMARY.json",
+    "sha256": "8e24466d48784b7fe42f1aeed5e0a026591fbb981f9c584563c0c8da4318541b"
+  },
+  "cold_tests_per_mode": 22,
+  "fixed_pv_to_att_bytes_equal": true,
+  "frozen_capture_guard": {
+    "actual_model_executed": false,
+    "limit_reason": null,
+    "manifest": "work/qwen2_live_attention_reference_m16_20261014/frozen01/reference/REFERENCE.json",
+    "manifest_identity": {
+      "bytes": 38865,
+      "sha256": "e518c8a506014904fd6a30b2ef8bdde6ea8cfdc3b54995a8bb87869b1b6bc952"
+    },
+    "numerical_acceptance_claimed": false,
+    "peak_rss_bytes": 805773312,
+    "returncode": 0,
+    "source_unchanged": true,
+    "status": "CAPTURE_COMPLETED",
+    "wall_seconds": 5.638226958006271
+  },
+  "full_qk_elements": 3072,
+  "head_dim": 128,
+  "heads": 12,
+  "independent_bootstrap_review": {
+    "bytes": 14405,
+    "path": "work/qwen2_m16_attention_reference_review_20261014/BOOTSTRAP_REVIEW.json",
+    "sha256": "1c2a83503dc6e3ae0b8212498fe21750d18310c46ec4720b0b616e88a3a0124d"
+  },
+  "independent_frozen_review": {
+    "bytes": 4976,
+    "path": "work/qwen2_m16_attention_reference_review_20261014/FROZEN_REPRODUCTION_REVIEW.json",
+    "sha256": "c4bff7386afdce731626120317d6fcc8971b2d5fb9e23549f6aa752fe039eb08"
+  },
+  "installs_or_downloads": false,
+  "kv_heads": 2,
+  "m128_payload_read_or_sliced": false,
+  "mask_exact_all_positions_checked": true,
+  "mask_shape": [
+    1,
+    1,
+    16,
+    16
+  ],
+  "materialized_input_roles": 9,
+  "metadata_mutations_rejected": 12,
+  "metadata_only_consumer_preflight_independently_verified": true,
+  "model_execution_or_numerical_acceptance_claimed": false,
+  "native_bf16_nodes": 17,
+  "native_fp32_softmax_nodes": 1,
+  "official_ast_nodes": 27,
+  "old_pass_inherited": false,
+  "past_tokens": 0,
+  "positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "postrun_only_reference_payload_api": true,
+  "prefix_nodes_fresh_reproduced": 9,
+  "pv_att_elements": 24576,
+  "query_rows": 16,
+  "raw_tensor_bytes": 7085056,
+  "raw_tensor_count": 8,
+  "reference_export_bytes": 902144,
+  "reference_manifest": {
+    "bytes": 38865,
+    "path": "work/qwen2_live_attention_reference_m16_20261014/frozen01/reference/REFERENCE.json",
+    "sha256": "e518c8a506014904fd6a30b2ef8bdde6ea8cfdc3b54995a8bb87869b1b6bc952"
+  },
+  "reference_nodes": 18,
+  "reference_root": "work/qwen2_live_attention_reference_m16_20261014/frozen01/reference",
+  "rtl_executed": false,
+  "saved_prefix_payload_read": false,
+  "scope": "Raw-driven independent official AST reference only; no DUT or RTL numerical acceptance.",
+  "source_identity": {
+    "capture.py": {
+      "bytes": 10723,
+      "sha256": "5079c39a6e4f0d600599519a730253e4a73e91ed99f4135688f224d5a74d02d4"
+    },
+    "pins.json": {
+      "bytes": 41319,
+      "sha256": "fabdd6e8aa252f55516ef9c83ecbed39a0ea26f6e0e1f2e6eff1e6bd2d109192"
+    },
+    "recipe.py": {
+      "bytes": 25502,
+      "sha256": "e4eadf7618b31cbfde3b86ca929b4371c8dc07ee5e71cab7b1c6f28114a6df02"
+    }
+  },
+  "source_package": "candidates/qwen2_live_attention_reference_m16",
+  "source_unchanged_during_captures": true,
+  "status": "FRESH_M16_INDEPENDENT_ATTENTION_REFERENCE_REPRODUCED_AND_REVIEWED",
+  "tokens": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ]
+}

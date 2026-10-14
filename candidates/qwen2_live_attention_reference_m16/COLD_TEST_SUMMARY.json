@@ -1,0 +1,56 @@
+{
+  "freeze_record": {
+    "bytes": 664,
+    "path": "work/qwen2_live_attention_reference_m16_20261014/control/FREEZE.json",
+    "sha256": "774ea8b5cb0d1938596e5b3cfef4fc7049b3ab44df9a11439000fbbd969899a2"
+  },
+  "logs": {
+    "work/qwen2_live_attention_reference_m16_20261014/control/frozen_cold.stderr.log": {
+      "bytes": 2103,
+      "sha256": "0dbf7504f6c0ea0109393541e6ade045ef2be395026d3dc44ea908e8f6015740"
+    },
+    "work/qwen2_live_attention_reference_m16_20261014/control/frozen_cold.stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "work/qwen2_live_attention_reference_m16_20261014/control/frozen_cold_optimized.stderr.log": {
+      "bytes": 2103,
+      "sha256": "be4700a0b78e6acee393a1649a9d5db7ad46f31521f73190a77eed09ad01c8ef"
+    },
+    "work/qwen2_live_attention_reference_m16_20261014/control/frozen_cold_optimized.stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "model_executed": false,
+  "modes": [
+    "normal",
+    "-O"
+  ],
+  "numerical_runtime_imported": false,
+  "raw_payload_read": false,
+  "source_files": {
+    "candidates/qwen2_live_attention_reference_m16/README.md": {
+      "bytes": 3664,
+      "sha256": "94c0a6757de455e9fbf2bd30fdd62fbdc43ecf6f6546b1f8d8effdf0c8d250df"
+    },
+    "candidates/qwen2_live_attention_reference_m16/capture.py": {
+      "bytes": 10723,
+      "sha256": "5079c39a6e4f0d600599519a730253e4a73e91ed99f4135688f224d5a74d02d4"
+    },
+    "candidates/qwen2_live_attention_reference_m16/pins.json": {
+      "bytes": 41319,
+      "sha256": "fabdd6e8aa252f55516ef9c83ecbed39a0ea26f6e0e1f2e6eff1e6bd2d109192"
+    },
+    "candidates/qwen2_live_attention_reference_m16/recipe.py": {
+      "bytes": 25502,
+      "sha256": "e4eadf7618b31cbfde3b86ca929b4371c8dc07ee5e71cab7b1c6f28114a6df02"
+    },
+    "candidates/qwen2_live_attention_reference_m16/tests/test_recipe.py": {
+      "bytes": 14697,
+      "sha256": "492175b49c4b030b86a0a7beb11dd4f3810769c7b3821be811a81f30cc3ac613"
+    }
+  },
+  "status": "FROZEN_SOURCE_ONLY_COLD_PASS",
+  "tests_per_mode": 22
+}

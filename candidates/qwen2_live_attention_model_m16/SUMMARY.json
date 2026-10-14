@@ -1,0 +1,370 @@
+{
+  "attention_functional_ticks": 158161,
+  "attention_physical_transactions": {
+    "read_bytes": 1769472,
+    "write_ack_bytes": 98304,
+    "write_acks": 1536,
+    "write_commands": 1536,
+    "write_data_bytes": 98304
+  },
+  "attention_scalar_calls": {
+    "add": 42176,
+    "bf": 758976,
+    "div": 192,
+    "mul": 22592
+  },
+  "attention_schedule": {
+    "actual_matrix_requests": 19584,
+    "actual_normal_fma": 10027008,
+    "actual_useful_fma": 417792,
+    "counter_kind": "software functional events and actual C FMA, not hardware cycles/utilization",
+    "full_4096_opportunity_count": 80216064,
+    "hardware_busy_fraction": null,
+    "legacy_pv_steps_prediction": 13056,
+    "legacy_qk_steps_prediction": 13056,
+    "pv32_pv_steps_prediction": 6528,
+    "pv32_qk_steps_prediction": 13056,
+    "pv32_total_step_prediction": 19584,
+    "software_state_ticks": {
+      "legacy:begin": 2400,
+      "legacy:idle": 86861,
+      "legacy:issue": 19584,
+      "legacy:reply": 25792,
+      "legacy:wait_done": 2556,
+      "legacy:wait_result": 20968,
+      "matrix_not_owned": 1,
+      "matrix_owned": 158161,
+      "matrix_request_backpressure": 6166,
+      "memory_request_backpressure": 6177,
+      "owner:finish": 1,
+      "owner:idle": 1,
+      "owner:issue": 35361,
+      "owner:matrix_issue": 25750,
+      "owner:matrix_wait": 67860,
+      "owner:wait": 29189,
+      "pv32_borrowed_reply_held": 4293,
+      "read_response_wait": 27648,
+      "scalar_not_owned": 2,
+      "scalar_owned": 158160,
+      "write_ack_wait": 1541
+    },
+    "state_counter_scope": "Owner-state and ownership partitions overlap wait counters. Owner-state total158162 includes admission; driver158161 excludes admission.",
+    "useful_over_executed": 0.041666666666666664,
+    "useful_over_full_array_opportunities": 0.005208333333333333
+  },
+  "backend_debts": {
+    "a_lease": false,
+    "accepted_write": false,
+    "attention_abort_pending": false,
+    "attention_client_live": false,
+    "attention_matrix_request": false,
+    "attention_memory_pending": false,
+    "attention_not_idle": false,
+    "dma_pending": false,
+    "matrix_c_state": 0,
+    "matrix_owned": false,
+    "owner_a_hold": false,
+    "owner_a_rmw": false,
+    "owner_fifo": 0,
+    "owner_pending": false,
+    "owner_read": false,
+    "prefix_not_idle": false,
+    "reduction_active": false,
+    "reset_required": false,
+    "scalar_owned": false,
+    "tile_busy": false,
+    "tile_lease": false
+  },
+  "boundary": {
+    "completed": 12,
+    "completion": {
+      "engine": 2,
+      "pc": 12,
+      "signal": 13,
+      "status": null
+    },
+    "finalfence": false,
+    "jobs": 11,
+    "launch_result": null,
+    "output_published": false,
+    "owner_terminals": 11,
+    "pc": 12,
+    "public_completions": 12,
+    "stability_ticks": 5
+  },
+  "budget_only": {
+    "actual_m16_input": false,
+    "cost_v1_preserved": true,
+    "cost_v1_status": "FAILED_OBSERVER_TIMER_FRAME_WRAPPER",
+    "cost_v2_status": "PASS_SYNTHETIC_PUBLIC3_FACTORIAL_ONLY",
+    "eight_condition_functional_identity": true,
+    "hardware_or_architecture_speedup_claimed": false,
+    "public_program_commands": 3,
+    "synthetic_rows": 8
+  },
+  "causal_semantics": {
+    "actual_causal_positions_per_field": 1632,
+    "actual_pv_context_elements": 24576,
+    "dut_explicit_mask_tensor_observed": false,
+    "dut_future_positions_observed": false,
+    "full_matrix_positions_per_field": 3072,
+    "implicit_mask": "unchanged owner loops key in range(token+1); future descriptor/physical work skipped",
+    "mask_allowed_word": "0x00000000",
+    "mask_future_word": "0xff7f0000",
+    "reference_mask_exact": true,
+    "reference_mask_is_explicit_wrapper_parameter": true
+  },
+  "cold": {
+    "default": "NOT_EXECUTED",
+    "normal_tests": 20,
+    "optimized_tests": 20,
+    "source_only_no_input_work_required": true
+  },
+  "evidence": {
+    "actual_independent_review": {
+      "bytes": 6725,
+      "path": "work/qwen2_m16_attention_model_review_20261014/ACTUAL_RESULT_REVIEW.json",
+      "sha256": "a8ffe206508171120d642b226dc44d661f66d3cc58284aef8e6882752352390d"
+    },
+    "actual_result": {
+      "bytes": 249082,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/m16_pv32_actual_v1/RESULT.json",
+      "sha256": "96c7dca690e2ed6bebad5b9fed4219f029b90b1e6b493ac389542aa349929e98"
+    },
+    "authorization_delta": {
+      "bytes": 514,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/m16_pv32_actual_v1_source_freeze/AUTHORIZATION_DELTA.json",
+      "sha256": "c5176dbb5a48e046ff699994aba4b38fd0b703222e675de6401243e4b3226417"
+    },
+    "cost_comparison": {
+      "bytes": 7321,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/BUDGET_COMPARISON.json",
+      "sha256": "9127594cc5b2e6bdacb22376c5390c53b15190bb74dd6aa4e5f9b44baa124d4e"
+    },
+    "cost_v1_failure": {
+      "bytes": 128140,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/budget_v1/RESULT.json",
+      "sha256": "072d3182f4eab54a370b22985e8614395e2b98f1ea4a6eb0a057679442ee26e1"
+    },
+    "cost_v2": {
+      "bytes": 236958,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/budget_v2/RESULT.json",
+      "sha256": "4dd75e9b1c3e94b9e82e9fb8f0acddf32d70895066e9c6529f4e42d02a2a4030"
+    },
+    "launcher_review": {
+      "bytes": 2687,
+      "path": "work/qwen2_m16_attention_model_review_20261014/FINAL_LAUNCH_REVIEW.json",
+      "sha256": "11464be82666023f3ac118ad3b8c81505f46332bbfcfade9ffdcc7b4d4f243d2"
+    },
+    "numerical_localization": {
+      "bytes": 7664,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/NUMERIC_DIAGNOSIS.json",
+      "sha256": "748431ff7e50d35e9948d23c4dd12b44c4f42f5e6452f8913055bc8c6e5e4e70"
+    },
+    "preflight": {
+      "bytes": 69443,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/preflight_v1/RESULT.json",
+      "sha256": "560b8d1517434cd0b2b5e8bd39b9bee4ae1a20e0e32c741aa088690d38a06769"
+    },
+    "reference_final_review": {
+      "bytes": 4976,
+      "path": "work/qwen2_m16_attention_reference_review_20261014/FROZEN_REPRODUCTION_REVIEW.json",
+      "sha256": "c4bff7386afdce731626120317d6fcc8971b2d5fb9e23549f6aa752fe039eb08"
+    },
+    "reference_manifest": {
+      "bytes": 38865,
+      "path": "work/qwen2_live_attention_reference_m16_20261014/frozen01/reference/REFERENCE.json",
+      "sha256": "e518c8a506014904fd6a30b2ef8bdde6ea8cfdc3b54995a8bb87869b1b6bc952"
+    },
+    "source_snapshot": {
+      "bytes": 29531,
+      "path": "work/qwen2_live_attention_numeric_m16_20261014/m16_pv32_actual_v1_source_freeze/SOURCE_SNAPSHOT.json",
+      "sha256": "5234bd82d6eec997ecc6db230fc5049beca513d37146e8a337ad9c0a4bcb8adc"
+    }
+  },
+  "exclusions": {
+    "att_published": false,
+    "eda_executed": false,
+    "full_29_node_acceptance": false,
+    "fullblock_pass": false,
+    "m128_budget_failure_unchanged": true,
+    "m128_pass_claimed": false,
+    "pc13_or_suffix_executed": false,
+    "rtl_executed": false
+  },
+  "execution": {
+    "address_space_bytes": 2147483648,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "attempts": 1,
+    "exitcode": 0,
+    "host_cpu_seconds": 43.625040868999996,
+    "host_wall_seconds": 44.20456375599315,
+    "initial_and_final_same_live_identity": true,
+    "inner_budget_seconds": 105,
+    "outer_budget_seconds": 120,
+    "peak_rss_kib": 525084,
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    }
+  },
+  "kv_append": {
+    "bytes": 32768,
+    "coverage_64b_beats": 512,
+    "exact_copy": true,
+    "write_ack_events": 512,
+    "write_command_events": 512
+  },
+  "numerical": {
+    "all_observed_nodes_bit_exact": false,
+    "attention": {
+      "att": {
+        "bit_exact": false,
+        "different_elements": 1,
+        "max_abs": 0.00048828125,
+        "mean_abs": 1.9868214925130207e-08,
+        "observed_elements": 24576,
+        "official_numeric_pass": true
+      },
+      "logits": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "observed_elements": 1632,
+        "official_numeric_pass": true
+      },
+      "prob": {
+        "bit_exact": false,
+        "different_elements": 23,
+        "max_abs": 1.8055593228630336e-35,
+        "mean_abs": 2.1022090435965816e-37,
+        "observed_elements": 1632,
+        "official_numeric_pass": true
+      },
+      "pv": {
+        "bit_exact": false,
+        "different_elements": 1,
+        "max_abs": 0.00048828125,
+        "mean_abs": 1.9868214925130207e-08,
+        "observed_elements": 24576,
+        "official_numeric_pass": true
+      },
+      "scores": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "observed_elements": 1632,
+        "official_numeric_pass": true
+      },
+      "softmax_fp32": {
+        "bit_exact": false,
+        "different_elements": 1291,
+        "max_abs": 2.086162567138672e-07,
+        "mean_abs": 1.2745276636157562e-08,
+        "observed_elements": 1632,
+        "official_numeric_pass": null
+      }
+    },
+    "frozen_operator_policy": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005,
+      "path": "spec/numerical_contract.md",
+      "pre_run_source_snapshot_contains_same_sha256": true,
+      "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+    },
+    "kv_official_bit_exact": true,
+    "missing_official_raw_nodes": [
+      "qraw",
+      "kraw",
+      "vraw"
+    ],
+    "new_typed_raw_comparison_executed": false,
+    "original_frozen_bf16_operator_gates_pass": true,
+    "prefix_six_official_bit_exact": true,
+    "raw_producer_scope": "Actually produced and sealed; NO_OFFICIAL_RAW_REFERENCE; no prior typed PASS inherited.",
+    "softmax_fp32_element_verdict": null,
+    "softmax_probability_sum": {
+      "contract": "spec/numerical_contract.md:Softmax",
+      "limit": 2e-05,
+      "max_abs": 1.7881393432617188e-07,
+      "passed": true,
+      "reduction": "float64 audit sum of actual FP32 probabilities; absent future positions excluded",
+      "rows": 192
+    },
+    "thresholds_frozen_before_actual": true,
+    "typed_attention_bit_exact_executed": false,
+    "typed_raw_verifier_executed": false
+  },
+  "observed_matrix_totals": {
+    "dense_fma_calls": 402653184,
+    "executed_macs": 412680192,
+    "normal_fma_calls": 10027008,
+    "useful_macs": 50749440
+  },
+  "observed_qkv_totals": {
+    "actual_c_fma_calls": 402653184,
+    "drains": 14,
+    "executed_macs": 402653184,
+    "partials": 28,
+    "raw_qkv_ack_bytes": 131072,
+    "useful_macs": 50331648,
+    "vector_add_requests": 2048,
+    "wide_matrix_steps": 98304
+  },
+  "oracle": {
+    "isolation_scope": "Reviewed Python read-path gate; not an OS/native-syscall sandbox.",
+    "payload_reads_before_seal": 0,
+    "post_seal_distinct_files": 19,
+    "post_seal_read_events": 37
+  },
+  "physical_transactions": {
+    "read_bytes": 9099200,
+    "write_ack_bytes": 606208,
+    "write_acks": 7776,
+    "write_commands": 7776,
+    "write_data_bytes": 606208
+  },
+  "resource": {
+    "accumulator_bytes": 81920,
+    "accumulator_shape": [
+      5,
+      16,
+      256
+    ],
+    "full_array_mac_opportunity_per_step": 4096,
+    "hardware_cycles": null,
+    "hardware_utilization": null,
+    "normal_profile0_executed_fma_per_step": 512
+  },
+  "scalar_calls": {
+    "add": 130384,
+    "bf": 955584,
+    "div": 224,
+    "mul": 153664,
+    "sqrt": 16
+  },
+  "schema": 1,
+  "scope": "fresh same-live M16 public21 pc0..12, completion12 held; software numeric gate only",
+  "software_full_prefix_ticks": 524228,
+  "source": {
+    "before_equals_after": true,
+    "entries": 188,
+    "model_pins_sha256": "d0c6e57a31b71a01dab8aa2fdc402b3cefbe51ce0562edb28cef9cd3d2afb9f9",
+    "original_m128_169_unchanged": true,
+    "reference_pins_sha256": "fabdd6e8aa252f55516ef9c83ecbed39a0ea26f6e0e1f2e6eff1e6bd2d109192"
+  },
+  "status": "PASS_M16_OFFICIAL_OBSERVED_ATTENTION_PC12_HELD"
+}

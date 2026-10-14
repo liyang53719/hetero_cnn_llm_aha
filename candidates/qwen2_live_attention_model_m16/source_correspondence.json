@@ -1,0 +1,17 @@
+{
+  "attention_predictions": {
+    "actual_c_fma": 10027008,
+    "steps": 19584,
+    "useful_fma": 417792
+  },
+  "causal_elements": 1632,
+  "full_pv_context_elements": 24576,
+  "full_scores_elements": 3072,
+  "owner_dependency": "frozen M128 PV32 owner unchanged, supports original M16 geometry",
+  "reference": "fresh M16 27 AST /18 outputs pending freeze; never slice M128",
+  "rows": 16,
+  "same_live_boundary": "fresh pc0..12,11 owner terminals/12 public completions,att unpublished",
+  "schema": 1,
+  "status": "M16_PREPARING_NOT_EXECUTED",
+  "typed_attention_reference_executed": false
+}

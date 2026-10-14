@@ -1,0 +1,57 @@
+{
+  "boundaries": {
+    "attention_executed": false,
+    "finalfence": false,
+    "fullblock": false,
+    "hardware_utilization": null,
+    "held_pc": 8,
+    "official_producer_nodes": 6,
+    "owner_terminals": 9,
+    "public_retirements": 8,
+    "rtl": false,
+    "typed_raw_producer_nodes": 3,
+    "v_published": false
+  },
+  "check_count": 104,
+  "current_revalidation": {
+    "all_current_hashes_match": true,
+    "artifact_records_rehashed": 39,
+    "at_utc": "2026-10-14T12:27:30.515451+00:00",
+    "numerical_rerun": false,
+    "source_files_rehashed": 145
+  },
+  "failed": [],
+  "findings": [],
+  "issued_utc": "2026-10-14T12:27:30.515451+00:00",
+  "original_summary": {
+    "commit": "8dd24d4f270484ad5cee0f41375bd4900f8e0ee0",
+    "path": "candidates/qwen2_live_qkv_model_m128/SUMMARY.json",
+    "sha256": "3e1d5131a0d6e18be02f1c2afaaa0a689bb9c472e62bc1f4b8ee93132d9efe08",
+    "status": "M128_NARROW_SOFTWARE_GATE_PASSED_PENDING_INDEPENDENT_MODEL_REVIEW",
+    "unchanged": true
+  },
+  "relation_to_later_attention_failure": {
+    "commit": "7975f2ee5655b8420c8ce0a4f0eaa00863e72fd9",
+    "status": "FAILED_BUDGET_INCOMPLETE",
+    "summary_path": "candidates/qwen2_live_attention_model_m128/SUMMARY.json",
+    "this_historical_review_does_not_transfer_pass": true
+  },
+  "resolved_review_status": "PASS_INDEPENDENT_M128_MODEL_AND_SOURCE_ONLY_PACKAGE_REVIEW",
+  "review_receipt": {
+    "bytes": 17639,
+    "mtime_is_not_an_authenticated_review_timestamp": true,
+    "observed_file_mtime_utc": "2026-10-14T10:59:06.164352+00:00",
+    "path": "work/qwen2_m128_model_independent_review_20261014/FINAL_REVIEW.json",
+    "record_has_explicit_completion_utc": false,
+    "sha256": "51f84066a5cc75ae24dbbada415df9fe575a96dde934616230c9359010b8467d",
+    "uploaded_to_git": false
+  },
+  "schema": "qwen2_m128_qkv_review_addendum_v1",
+  "scope": "Append-only review-status correction; no model, numeric, RTL, or CI rerun. Original execution summary bytes are preserved.",
+  "separate_conclusions": {
+    "functional": "Six official producer tensors fully byte exact for actual M128 inputs; raw Q/K/V fully byte exact to limited typed-recipe verifier.",
+    "physical_implementation": "Not established; fixed 81,920-byte host accumulator is source/runtime bookkeeping, not synthesis evidence.",
+    "protocol": "For this existing host execution: 9 owner terminals/8 public retirements; pc8 held, V unpublic, no finalfence, pristine suffix and zero backend debt.",
+    "qor": "Not established; ticks, wall time, counts and bytes are software observations only."
+  }
+}

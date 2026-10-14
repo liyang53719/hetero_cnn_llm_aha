@@ -1,0 +1,43 @@
+name: Elementwise register loan local RTL
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/elementwise-register-loan.yml'
+      - 'scripts/*rms_epilogue_loan*'
+      - 'scripts/*elementwise_register_loan*'
+      - 'scripts/setup_hetero_chisel_loan_toolchain.sh'
+      - 'chisel/continuous_prefill/**'
+      - 'chisel/p0_safety/src/main/scala/**'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-rtl:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Provision pinned isolated tools
+        run: bash scripts/setup_hetero_chisel_loan_toolchain.sh
+      - name: Run synthetic local RTL boundary and resource gates
+        shell: bash
+        run: |
+          source work/chisel_toolchain/env.sh
+          python3 scripts/run_elementwise_register_loan_tests.py --out work/loan_ci
+      - name: Upload bounded evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementwise-register-loan-local-rtl
+          path: |
+            work/loan_ci/
+            work/elementwise_register_loan_rtl/
+            work/chisel_toolchain/logs/
+          if-no-files-found: error

@@ -1,0 +1,312 @@
+{
+  "scope": "LOCAL_PRODUCTION_ELEMENTWISE_EPILOGUE_RTL_WITH_FROZEN_ACTUAL_INPUTS",
+  "full_block": false,
+  "top_bound": false,
+  "h2048_bank_owner_bound": false,
+  "gate_summary": {
+    "path": "work/rms_loan_release_gate/summary.json",
+    "sha256": "fa520efc8145300ede792c9b9d4d5a6353b995b8478db79efc4cf5fca3ca3e1a",
+    "bytes": 68806
+  },
+  "sources_unchanged": true,
+  "compile_sources": 135,
+  "test_count": 3,
+  "zero_skips": true,
+  "log": {
+    "path": "work/rms_loan_release_gate/test.log",
+    "sha256": "6733beb562328cc8d3a661251efdb5ed375c35a9387b5410b315a8f5320bf57f",
+    "bytes": 2184
+  },
+  "actual_replay": [
+    {
+      "tokens": 16,
+      "transactions": 2048,
+      "fp32_values": 32768,
+      "bf16_values": 32768,
+      "vector_primitive_issues": 6144,
+      "clock_edges": 10240,
+      "request_interval": 5,
+      "manifest_sha256": "f0f581e47fb2816345308d6a55507607c58ca47b169dbd0d6f6ae136b4c14b15",
+      "rtl_executed": true,
+      "full_block": false,
+      "local_ideal_supply_only": true
+    },
+    {
+      "tokens": 128,
+      "transactions": 16384,
+      "fp32_values": 262144,
+      "bf16_values": 262144,
+      "vector_primitive_issues": 49152,
+      "clock_edges": 81920,
+      "request_interval": 5,
+      "manifest_sha256": "73063b2905fa2c2f3caf275c373d244fbd661db8366d933c7410f501de4b2566",
+      "rtl_executed": true,
+      "full_block": false,
+      "local_ideal_supply_only": true
+    }
+  ],
+  "markers": [
+    "ELEMENTWISE_REGISTER_LOAN_RTL_PASS checked_lanes=352 primitive_earliest_retirement_edges=2 rms_earliest_retirement_edges=4 rms_II=5 clocks=152 local_scope_only=true",
+    "ELEMENTWISE_REGISTER_LOAN_RESOURCE_PASS alus=16 baseline_wide_regs=7 loan_wide_regs=7 generated_rtl=true",
+    "RMS_EPILOGUE_ACTUAL_RTL_REPLAY_PASS {\"tokens\":16,\"transactions\":2048,\"fp32_values\":32768,\"bf16_values\":32768,\"vector_primitive_issues\":6144,\"clock_edges\":10240,\"request_interval\":5,\"manifest_sha256\":\"f0f581e47fb2816345308d6a55507607c58ca47b169dbd0d6f6ae136b4c14b15\",\"rtl_executed\":true,\"full_block\":false,\"local_ideal_supply_only\":true}",
+    "RMS_EPILOGUE_ACTUAL_RTL_REPLAY_PASS {\"tokens\":128,\"transactions\":16384,\"fp32_values\":262144,\"bf16_values\":262144,\"vector_primitive_issues\":49152,\"clock_edges\":81920,\"request_interval\":5,\"manifest_sha256\":\"73063b2905fa2c2f3caf275c373d244fbd661db8366d933c7410f501de4b2566\",\"rtl_executed\":true,\"full_block\":false,\"local_ideal_supply_only\":true}"
+  ],
+  "generated_records": [
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/chisel/continuous_prefill/test_run_dir/ElementwiseRegisterLoan_should_replay_frozen_actual_M16_and_M128_postnorm_observations_bit_exactly/ElementwiseLoanReplayTop.lo.fir",
+      "bytes": 1332430,
+      "sha256": "1379453b3189ea891da83446871f990af317c9db40d71ec231130eea719a7642"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/chisel/continuous_prefill/test_run_dir/ElementwiseRegisterLoan_should_replay_frozen_actual_M16_and_M128_postnorm_observations_bit_exactly/ElementwiseLoanReplayTop.sv",
+      "bytes": 1246107,
+      "sha256": "dc9a9ea09d89e0f4d0e9ae532dbfaa748ac422eed31b90abd9bda6ee7c3308be"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/chisel/continuous_prefill/test_run_dir/ElementwiseRegisterLoan_should_use_the_existing_sixteen_ALUs_with_RNE_exclusive_leases_stable_retirement_and_measured_edges/ElementwiseRegisterLoan.lo.fir",
+      "bytes": 1303725,
+      "sha256": "42affd1604c104302dbe8fc7bd2b74ce37d31e287ac016f832551ebbeb54f5c4"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/chisel/continuous_prefill/test_run_dir/ElementwiseRegisterLoan_should_use_the_existing_sixteen_ALUs_with_RNE_exclusive_leases_stable_retirement_and_measured_edges/ElementwiseRegisterLoan.sv",
+      "bytes": 1230130,
+      "sha256": "98b40eef0e00da9f2990042299cf8d141363cfad6d1ed5b3089fdfda3cdaf647"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/elementwise_register_loan_rtl/ElementwiseRegisterLoan.sv",
+      "bytes": 297944,
+      "sha256": "cdd7a9cf8ee60040348af7b5102b956637906ec7374ae7a72aed196ceedbb791"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/elementwise_register_loan_rtl/baseline.fir",
+      "bytes": 5865387,
+      "sha256": "5e716074cb40569c26879f328073cebb7680e32dee299de6b261a8558cfde19b"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/elementwise_register_loan_rtl/loan.fir",
+      "bytes": 5908698,
+      "sha256": "3a97abd0c1ae8ecb0dea7383ce69952bf0b1a59c82c3ed98dc3366f9beb19a04"
+    }
+  ],
+  "source_sha256": {
+    "chisel/continuous_prefill/build.sbt": "af785664a10cf0a0abdd5feea333824bba00c3887fb0d91609e29e25ea994c67",
+    "chisel/continuous_prefill/project/build.properties": "97e9b0adc044c92dbf8dc1e671a268242449320b6911d1623cc93427f0bb1b61",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseTileCursor.scala": "dbcbd0187801b134f68ae2c18328bedd28790118bddf2e635c829faa906ceb9d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala": "17c369a7392b814a00cd2482b876fdbc60e955cfdc477b4bbd771b2419ec6ddb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitContinuous.scala": "a6455cef5248584db72c0775e4d7d11753b1e1d560d1e7b10145ca3b7cd330c7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitProductionGate.scala": "a2836bb63f8f62398f72548703faedba1e81dba36857c583ba42959bb52c6a32",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala": "28550bdc66e46d7c11468593227c684fc7af1bfd9d1c43517e8ba419c758b37e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenStack.scala": "e79f272374a809ceef56497848ca74a53c67635c0cf591940912626ea8fa4582",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitRecord128Reader.scala": "5819004d106352f1d0ee7d03b52b93ef7b97a51798647669ac39c74006ed923e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitSharedProductionGate.scala": "da73407e6f9a5b16f55834c0e53c836d989a5b5752cc731d324135ce99970bc0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnGatedNormOwner.scala": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/LayerChain.scala": "86cb6ed7309504fde0300b144fa304a8a7c161310aaa874082762bb73cfc41b9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MemoryToAxi.scala": "4449366177ddd07fb793b9b8204f5be06214574ab708ab7ed47537ccbc52e374",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2LayerStack.scala": "c8a9ba1839ca928ba536b3c72f0181cfd4cd5af9a8f1c23993a0935a38938ff9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala": "6814e2f80890dbd5f5e8711eade58857deb690ab3c4c0fe9d5ea4ee8291ed6c6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedProductionTop.scala": "f2acf62311b02a8a09ebf67b6d84a9f2c4887abce027db203ca8df7fc2c904bf",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/WideMatrix.scala": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/AttentionSigmoidOwnerSpec.scala": "adbfba2e0246bdcce53012c0735950a29a54585e546b3e1d182c9d45c10c1efd",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Bf16CausalGqaOwnerSpec.scala": "d76e675cae8bc82018b06eab0eb19706bbb5d1d99291cc42522f08d3f85332bf",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Bf16KvAppendOwnerSpec.scala": "b86af55db49b58c5f848d7d7f3a451419d72c0caccfd4a88512505cc1dbc660b",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/BlockAxiAdapterSpec.scala": "56e557deb5d36e4babe75ba82ad3360d8bb7a08475c7ea1041eb9fd1ba672484",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/BlockScalarFloatSpec.scala": "16382fd64f37ef8d818a60cb6cec52784d41f88cd63c3d81f1451e991291f822",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/BlockWritebackFenceSpec.scala": "0dd13cf1538e1aa1fc4b4cbb041770f25322c476b1451f3dd5b578ff27874de4",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/DenseReadPlannerSpec.scala": "b67f3b293adc32537c7e1dc16927fd9daac9450b607d59ec3bc9b2ff2a2d0542",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/DenseTileCursorSpec.scala": "2267b40f5282ff4eaade248ea1a827b0b71338e22b9452a33f8ee42f00b2fd03",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/ElementwiseRegisterLoanReplaySpec.scala": "57f2fadf306c12c4c0458b5be3da35a2684ccf84a7e9f6192ef55b3ca18cdc38",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/ElementwiseRegisterLoanSpec.scala": "406b29268562b969ab78c6eed2db1fc67fc797b1ade8a369d6dd5904bd231735",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnConv4OwnerSpec.scala": "0463165da45256bbe1b62be53f3bbf7bf6e3f27b93640b39ea49f781ee7d59c2",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnElementwiseOwnerSpec.scala": "7d1d398d65aa3ebc1f7e2246e08672a39d423a7b0b66d23817b2f78acd4ca247",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnGatedNormOwnerSpec.scala": "eb8b3444bc6eca2207549adcb53b5c837e91a0a5b87fb2faf445321e286321a3",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnInputPrepOwnerSpec.scala": "3bbe26bf8fa05d4386cdc41d242063c3a268d7e03f731ef4b882417973fe5415",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnRecurrentOwnerSpec.scala": "03856a0ee174ebb114ed4f6d6448e978d4e9816c557aaea54ec52b2fd5520ce9",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnRmsNormOwnerSpec.scala": "11f3252aa5c9466dc817cca56cd254e0cffecc869800722db2bde66a3f6ffcd9",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GdnSoftplusSpec.scala": "02f4b6c1ed310756d71baab7b31d8ce301f4f2df7a6d7bcaf6924075f52070ae",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/GqaMatrixResultSelectSpec.scala": "91448d1935bb57b917e7065bf23c91f35ac3b33dc2066d5b2b8e311993833a13",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostAttentionBlockCommandsSpec.scala": "8a3f92ac3ebf76cc4c09d7d8c0e5973e0b5efaf7edb00aec431bbf120a36db66",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostAttentionCoreCommandsSpec.scala": "0c493f949b20d04e81f86aa3c57f74e9b3742810dc2de1160a1e2db6602ee0a9",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsBf16QkvSpec.scala": "89ac69972f8976db76e811be1a9102f727fd75776f890d85b7174115d13b6ad2",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsBf16VSpec.scala": "688a0dae052f5c3f8f4f5248fd3af33f6c8d8d14b361c93fe724312e771b0160",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsGdnBlockSpec.scala": "5297a70148cc7469cabbd8f1aadef15d9dfafdae4e259f717749e07ab5172a38",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsGdnCoreSpec.scala": "157b21c07d3b6fcd92b15585c923f1555bddc0458381a484598d3e5acec5f226",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsGdnSpec.scala": "6becd345ef63c78809a20fc3942b5cbe4f6f2305f6dd69f37b6d3f30e05f81ac",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsNativeWeightsSpec.scala": "bed1fbe9cec0d4a4b924a65b7407fa5119a3fdc6bf849903d9ae15b178386da5",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsRealLayersSpec.scala": "897c4d9b23a2b2195c82d0ed12b04075e30ac6aeda81337dcdff9bbce64704b8",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostBlockCommandsSpec.scala": "ca7fde1aeaf9c034bf97c4640bd4082541cb2750219200287957d33936eb5822",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostQkNormRopeCommandsSpec.scala": "1487d04195bdc3f0e6ec7a1bcbfbfecd1c43912f50c63b02ed124b915617109f",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/HostResidualCommandsSpec.scala": "3388e4aec5809b7d5e31af59e2bcf9ab0795aa95d67920ceb0bb5ec87bd7ffc2",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/IdmaBurstWriteProbe.scala": "011d916464f7a19daa90fa688256fc04fc17f0cf2f242f95ee191a2b20f28eba",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/IdmaCommitTailProbe.scala": "97f06ff764a7f099b937f31519e6a75f11771ca09dbeb97fde48dfcd90299404",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/IdmaStreamReturnProbe.scala": "2e5302748ed9a670c49b87976479e5a871231e0a27535369162f1170bb95c987",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/IdmaWeightBurstProbe.scala": "5b45c8fc2c70f27a6387d2f4fb5673a4a366c81184671368470354ebe44f8999",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/LayerChainSpec.scala": "8a0e02ea232431a847e8435a11b6c7a7f93ac8a5c7e0121fd646604c3ed9cb98",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/LayerStackGateSpec.scala": "39c5c6be13a908559a4a4ec84c99a289a69771dbd38ccf1e1d9ab41db8774bc9",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Matrix4096ArithmeticProbe.scala": "d9cc8d91e9924539d40c1bfbfe4238b4fb90755626d3269f34b9fdab5f56dc1b",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/MatrixPipelineProbe.scala": "72322e8801da8a7ceee5dcbcec2c0098344da67438072c61a6494bb4224c6e40",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/MatrixSliceJoinSpec.scala": "b7b0879d5a994a48c92387f72edf8fa2c82983f6dfaa7096ac2d12a7f5124fb4",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/NativeBf16StorageProbe.scala": "ab181ce453139cd8c836d9e2f3604dd7cc74c6541f49baedf51277966d402473",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/PartialRope64OwnerSpec.scala": "4e22821008dd3124b714ca1730f418581075d0e94d730915ad9a28d9cc2574fe",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/QkNorm256OwnerSpec.scala": "b35776bad002dfecfc48c0fd196c9028f02b00f291fa77e6d444887ca0aa77c2",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/QwenBlockLayoutSpec.scala": "6656354aa700cf3600c54827e3d02237091109f8694b2c41c8ad8e38e1fa3ffb",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/QwenBlockLayoutVectorsSpec.scala": "e9545fe9f29e4ba666a79d52c7ed682956800a8f53209a1368b3b9c93cff2f7e",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/Record128ReaderSpec.scala": "02806a58c178444f4dbf792bbc6daa9dce5d2aa1831adcd2225f67fdcb06a06e",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/ScheduledSiluOwnerSpec.scala": "ba4c09d2fcc1e3be2161d3cf2d349950b856d9d97541357d97de643dc0149942",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/SharedIdmaWeightBurstProbe.scala": "41cc71b9b7e3902219b2fe99b23396a1e85567cbca0ebf449f1bc68cf701619c",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/SharedMemoryArbiterSpec.scala": "2670806d63d9c55785f4c65bc4c8ec0685e6ad8381a173fc57996992de450903",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/StreamingDenseProbe.scala": "ce50d8846ca29b7615b7930d0fd832c8de07999b2ab45df478c0a85bf005b180",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/TensorProgramSpec.scala": "fde227bedfe03933fa9cb23eff5238d849be28ab12dd51db1fb25dca7e77172b",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/TypedTensorReaderSpec.scala": "3f87b199134cfeec0367bb44ebc1e6ce932c1f6abe7d76419161c508bb933ea8",
+    "chisel/continuous_prefill/src/test/scala/heteronpu/continuous/VectorSiluSpec.scala": "6d273450ce0d3e369d16f291a6c26912e78473b6d3e85b65995e2fc07c3f804f",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/AbiWrappers.scala": "d0ee8b92d8d7c98c58ccb5f58e95176cc8bd9015951eee983a4441ba0858f835",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/EmitP0Safety.scala": "07b6a35ba42d8902adf6624224bd398129e10f9ff1c3085ebe1c7d340ba7179c",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Integration.scala": "89924aef165b5206d86c6fec5171d03e16f0719d7fcf7b00e00f8eb16ad7cdf0",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Scheduler.scala": "dd2387d41c8585a7c86759187fb1f0471ce0a43b15283e3c056e2aa2979751f3",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/MatrixTilePayload.scala": "511f6c1ec603b2c87721803f7f2cc941022a8073f7d619979450232b571717ba",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/NormTileLoader.scala": "3d0a14a87fe8715da55b002537dee1a5e2204aaaa534abecf28a14cca4010035",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/TileTranspose.scala": "e8a0c965dfadfa833bcca892a4ab56c9323397475e5c28e531257691e3393b95",
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "scripts/prepare_rms_epilogue_loan_replay.py": "bf91fa85e48633cbae2a7975cbe351d49ef8b48d45bcd042fa1e298f72dc8cc6",
+    "scripts/run_elementwise_register_loan_tests.py": "4cd3a0996e0997bbdc51d4bda7032f40b8218125b90e305c41885013bfcc29a4",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/AddRecFN.scala": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/CompareRecFN.scala": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecF64.scala": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecF64_mulAddZ31.scala": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecFN_small.scala": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/INToRecFN.scala": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/MulAddRecFN.scala": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/MulRecFN.scala": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/RecFNToIN.scala": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/RecFNToRecFN.scala": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/classifyRecFN.scala": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/common.scala": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/fNFromRecFN.scala": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/primitives.scala": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/rawFloatFromFN.scala": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/rawFloatFromIN.scala": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/rawFloatFromRecFN.scala": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/recFNFromFN.scala": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+    "work/chisel_toolchain/deps/berkeley-hardfloat-c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/resizeRawFloat.scala": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561"
+  },
+  "fixtures": [
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m16/x.fp32le",
+      "bytes": 131072,
+      "sha256": "11009b43d6e5300eb6a1e34f8081825dadc43f1987225781cee331c102d34878"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m16/weights.fp32le",
+      "bytes": 8192,
+      "sha256": "a1cff05cac8417941139136904515266be5524f00d61f9f1d7e717bcbaac6b3b"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m16/inverse.fp32le",
+      "bytes": 64,
+      "sha256": "34b0934624132dfb5c7d77e9ff5ff16ea9d21f1dec5aad401b5959da31c4d027"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m16/expected.fp32le",
+      "bytes": 131072,
+      "sha256": "dcb421432fb9dbec4c5386dde4bc91569d0e3a76890b26039607492917ffd50e"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m16/expected.bf16le",
+      "bytes": 65536,
+      "sha256": "56503fe5be27c505efb209c0c23c172a2c760f290f9a9327ca922fbd893507ff"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m16/manifest.json",
+      "bytes": 1301,
+      "sha256": "f0f581e47fb2816345308d6a55507607c58ca47b169dbd0d6f6ae136b4c14b15"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m128/x.fp32le",
+      "bytes": 1048576,
+      "sha256": "832088e3711467760febde8c485eb81b4cddb26fa83480f924640ee99e917afe"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m128/weights.fp32le",
+      "bytes": 8192,
+      "sha256": "a1cff05cac8417941139136904515266be5524f00d61f9f1d7e717bcbaac6b3b"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m128/inverse.fp32le",
+      "bytes": 512,
+      "sha256": "c8efc05c8da4eaf278c61d0e70cb8e6887f06fbf24071da2c8ae4b66d0369aa5"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m128/expected.fp32le",
+      "bytes": 1048576,
+      "sha256": "3a3f23636129a7fde63bff3871abf7be8f72f9c5522f4a0075235a5c30e65039"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m128/expected.bf16le",
+      "bytes": 524288,
+      "sha256": "b524371f72e29cd0f98411effd0d1fbe73d29b9bcc0af4010170478b1bb1f174"
+    },
+    {
+      "path": "/workspace/scratch/f28987e955ed/hetero_recovery_20261013T1036/work/rms_loan_fixture_m128/manifest.json",
+      "bytes": 1308,
+      "sha256": "73063b2905fa2c2f3caf275c373d244fbd661db8366d933c7410f501de4b2566"
+    }
+  ],
+  "resources": {
+    "alus_before": 16,
+    "alus_after": 16,
+    "wide512_regs_before": 7,
+    "wide512_regs_after": 7,
+    "sram_declarations_before": 16,
+    "sram_declarations_after": 16,
+    "new_control_bits": 4
+  },
+  "hardware_fullblock_cycles": null,
+  "matrix_mac_utilization": null,
+  "matrix_busy_duty": null,
+  "local_rms_II": 5,
+  "local_rms_compute_stage_fraction": "3/5; ideal register supply only",
+  "limitations": [
+    "Whole top and H2048 banks not integrated",
+    "No new complete block numerical acceptance",
+    "CI synthetic only",
+    "No per-lane exceptionFlags telemetry",
+    "Generated inventory may include prior same-name elaboration artifacts; actual two suites executed here"
+  ],
+  "ci_scope": "2 synthetic local RTL tests; no checkpoint payload"
+}

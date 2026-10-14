@@ -1,0 +1,408 @@
+{
+  "backend_debts": {
+    "a_lease": false,
+    "accepted_write": false,
+    "dma_pending": false,
+    "matrix_owned": false,
+    "owner_a_hold": false,
+    "owner_a_rmw": false,
+    "owner_fifo": 0,
+    "owner_pending": false,
+    "owner_read": false,
+    "reduction_active": false,
+    "reset_required": false,
+    "scalar_owned": false,
+    "tile_busy": false,
+    "tile_lease": false
+  },
+  "base_commit": "a6d0eb9c4468a26015225757deda857acb56b844",
+  "candidate_commit": null,
+  "cold": {
+    "default": "NOT_EXECUTED",
+    "model_input_loading": false,
+    "normal_tests": 25,
+    "optimized_tests": 25,
+    "python": "3.12",
+    "stdlib_only": true
+  },
+  "default_status": "NOT_EXECUTED",
+  "eda_executed": false,
+  "execution": {
+    "address_space_bytes": 2147483648,
+    "host_model_ticks": 1033749,
+    "host_wall_seconds": 78.54352224399918,
+    "observed_counts": {
+      "actual_c_fma_calls": 402653184,
+      "drains": 14,
+      "executed_macs": 402653184,
+      "partials": 28,
+      "raw_qkv_ack_bytes": 1048576,
+      "useful_macs": 402653184,
+      "vector_add_requests": 16384,
+      "wide_matrix_steps": 98304
+    },
+    "outer_guard_seconds": 600,
+    "peak_rss_kib": 608576,
+    "per_producer": [
+      {
+        "ack_bytes": 786432,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 0,
+        "model_driver_ticks": 92166,
+        "name": "n0",
+        "owner_terminal": true,
+        "pc": 0,
+        "public_completion_retired": true,
+        "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+      },
+      {
+        "ack_bytes": 786432,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 18440,
+        "model_driver_ticks": 480978,
+        "name": "qraw",
+        "owner_terminal": true,
+        "pc": 1,
+        "public_completion_retired": true,
+        "sha256": "346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1"
+      },
+      {
+        "ack_bytes": 786432,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 0,
+        "model_driver_ticks": 92166,
+        "name": "qr",
+        "owner_terminal": true,
+        "pc": 2,
+        "public_completion_retired": true,
+        "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      {
+        "ack_bytes": 786432,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 0,
+        "model_driver_ticks": 92166,
+        "name": "q",
+        "owner_terminal": true,
+        "pc": 3,
+        "public_completion_retired": true,
+        "sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88"
+      },
+      {
+        "ack_bytes": 131072,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 2049,
+        "model_driver_ticks": 115046,
+        "name": "kraw",
+        "owner_terminal": true,
+        "pc": 4,
+        "public_completion_retired": true,
+        "sha256": "e908c9e5c92101085c3e3e27b7c4ecb3d48e2cead730de5be697f51432206b36"
+      },
+      {
+        "ack_bytes": 131072,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 0,
+        "model_driver_ticks": 15366,
+        "name": "kr",
+        "owner_terminal": true,
+        "pc": 5,
+        "public_completion_retired": true,
+        "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      {
+        "ack_bytes": 131072,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 0,
+        "model_driver_ticks": 15366,
+        "name": "k",
+        "owner_terminal": true,
+        "pc": 6,
+        "public_completion_retired": true,
+        "sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb"
+      },
+      {
+        "ack_bytes": 131072,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 2049,
+        "model_driver_ticks": 115077,
+        "name": "vraw",
+        "owner_terminal": true,
+        "pc": 7,
+        "public_completion_retired": true,
+        "sha256": "2f95ae68de8c3615ed678a2c67130c07a464c4f3b05e43a799f9de412d3ff4f8"
+      },
+      {
+        "ack_bytes": 131072,
+        "final_ack_hold_ticks": 5,
+        "matrix_result_capacity_stall_ticks": 0,
+        "model_driver_ticks": 15366,
+        "name": "v",
+        "owner_terminal": true,
+        "pc": 8,
+        "public_completion_retired": false,
+        "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      }
+    ],
+    "physical_accepted": {
+      "read_bytes": 14162304,
+      "write_ack_bytes": 3801088,
+      "write_acks": 45824,
+      "write_commands": 45824,
+      "write_data_bytes": 3801088
+    },
+    "result": "work/qwen2_live_qkv_numeric_m128_20261014/package_m128_v1/RESULT.json",
+    "result_sha256": "054d3caa9a19ba21ee42913471b386a9f0af59e58dcab6a0442a19ab6e86c56c",
+    "scalar_calls": {
+      "add": 705664,
+      "bf": 1572864,
+      "div": 256,
+      "mul": 1048576,
+      "sqrt": 128
+    },
+    "source_before_after_current_equal": true,
+    "source_dependency_entries": 139,
+    "source_entries": 145,
+    "source_manifest_sha256": "adf97fdd3fefbab23018ab1da5e015da59de831d350f38bc12447093f532958b",
+    "threads": 1
+  },
+  "failure_diagnostics": {
+    "actual_model_failures": 0,
+    "prior_import_only_preflights": [
+      "runtime_import_preflight.log",
+      "runtime_import_preflight_v2.log"
+    ],
+    "resolution": "reader validates pinned capture environment; model uses separately identified system NumPy/PyYAML; original source guards unchanged"
+  },
+  "finalfence": false,
+  "fullblock_pass": false,
+  "held_boundary": {
+    "completed": 8,
+    "completion": {
+      "engine": 3,
+      "pc": 8,
+      "signal": 9,
+      "status": null
+    },
+    "finalfence": false,
+    "launch_result": null,
+    "pc": 8,
+    "v_published": false
+  },
+  "input_recipe": {
+    "directory": "candidates/qwen2_live_qkv_inputs_m128",
+    "input_bytes": 7616512,
+    "input_roles": 9,
+    "pins_sha256": "503b452bb030050f0a570cde89448a4f5bd4c8b95b86e1d1cdb81a362729618d",
+    "raw_tensors": 8,
+    "reference_bytes": 3670016,
+    "reference_nodes": 9,
+    "run": "work/qwen2_live_qkv_inputs_m128/frozen01"
+  },
+  "measurement_boundaries": {
+    "ddr_bandwidth": null,
+    "ddr_latency": null,
+    "fixed_final_ack_hold_ticks_per_owner": 5,
+    "hardware_cycles": null,
+    "hardware_utilization": null,
+    "legacy_prefix_result_cycles_field": "software owner event count only",
+    "matrix_result_capacity_stall_ticks_total": 22538,
+    "scalar_hardware_latency": null,
+    "slice_equivalent_from_observed_fma": 786432,
+    "slice_handshake_independently_clocked": false,
+    "software_ticks_are_hardware_cycles": false
+  },
+  "numeric": {
+    "official_compared_elements": 688128,
+    "official_nodes": {
+      "k": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 32768,
+        "max_abs": 0.0,
+        "token_major_sha256": "7639544de30271caf5a6e5b6f3da92fe059608c52a2cc6b7c1c60610b32669eb"
+      },
+      "kr": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 32768,
+        "max_abs": 0.0,
+        "token_major_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      "n0": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 196608,
+        "max_abs": 0.0,
+        "token_major_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+      },
+      "q": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 196608,
+        "max_abs": 0.0,
+        "token_major_sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88"
+      },
+      "qr": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 196608,
+        "max_abs": 0.0,
+        "token_major_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      "v": {
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 32768,
+        "max_abs": 0.0,
+        "token_major_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      }
+    },
+    "official_raw_reference_available": false,
+    "official_six_all_bit_exact": true,
+    "official_six_all_element_contract_pass": true,
+    "reference_nonproducer_nodes": {
+      "cos": "RoPE provenance/reference only; not a separate executed owner",
+      "sin": "RoPE provenance/reference only; not a separate executed owner",
+      "x": "read-only input identity verified"
+    }
+  },
+  "old_pass_inherited": false,
+  "reference_capture_runtime_is_separate": true,
+  "resources": {
+    "hardware_resource_denominator": null,
+    "matrix_accumulator_bytes": 81920,
+    "scalar_service": "serialized software primitive calls; no clock latency model",
+    "shape": [
+      5,
+      16,
+      256
+    ],
+    "shared_matrix_instances_in_model": 1,
+    "vector_add_lanes": 16,
+    "word_bytes": 4
+  },
+  "rtl_executed": false,
+  "schema": 1,
+  "scope": "public21 software pc0..8 held completion on real 128 rows",
+  "status": "M128_NARROW_SOFTWARE_GATE_PASSED_PENDING_INDEPENDENT_MODEL_REVIEW",
+  "typed_raw": {
+    "host_wall_seconds": 2.827158824991784,
+    "independence": {
+      "actual_cpp": [
+        "ffn_attention/matrix_numeric.cpp",
+        "transposed_down/numeric_smoke.cpp"
+      ],
+      "claim": "independent input/loop/layout/reduction organization check; not independent low-level FPU implementation or official raw reference",
+      "rms": "separate vector-lane numpy_norm; both use NumPy FP32 primitive implementation",
+      "shared": [
+        "FP32 fused-multiply-add implementation/libm",
+        "BF16 RNE mathematical rule",
+        "explicit K split/pair-order formula"
+      ],
+      "typed_cpp": "dense_block_reduce/reference/dot16.inc; not included by actual Matrix C++ closure"
+    },
+    "independent_rms_bit_exact": true,
+    "nodes": {
+      "kraw": {
+        "actual_sha256": "e908c9e5c92101085c3e3e27b7c4ecb3d48e2cead730de5be697f51432206b36",
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 32768,
+        "max_abs": 0.0
+      },
+      "qraw": {
+        "actual_sha256": "346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1",
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 196608,
+        "max_abs": 0.0
+      },
+      "vraw": {
+        "actual_sha256": "2f95ae68de8c3615ed678a2c67130c07a464c4f3b05e43a799f9de412d3ff4f8",
+        "bit_exact": true,
+        "different_elements": 0,
+        "elements": 32768,
+        "max_abs": 0.0
+      }
+    },
+    "peak_rss_kib": 509344,
+    "result": "work/qwen2_live_qkv_numeric_m128_20261014/package_raw_v1/RESULT.json",
+    "result_sha256": "89899808f0360650492e1229b790f1e91053f1231f5409c7737e06b5301bba7e",
+    "status": "PASS_TYPED_RECIPE_RAW_BIT_EXACT"
+  },
+  "unexecuted_outputs": {
+    "act": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "att": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "down": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "gate": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "kv": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "n1": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "o": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "probabilities": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "r": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "scores": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "up": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    },
+    "y": {
+      "ack_bytes": 0,
+      "published": false,
+      "status": "NOT_EXECUTED",
+      "written_bytes": 0
+    }
+  }
+}

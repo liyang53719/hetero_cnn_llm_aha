@@ -1,0 +1,47 @@
+{
+  "awaiting": [
+    "independent model evidence review"
+  ],
+  "base_commit": "a6d0eb9c4468a26015225757deda857acb56b844",
+  "exact_semantic_changes": [
+    {
+      "file": "runner.py",
+      "new": "M128 typed fixture; actual/reference reshapes128; source-predicted useful402653184; vector16384; rawACK1048576",
+      "old": "M16 typed fixture; actual/reference reshapes16; useful50331648; vector2048; rawACK131072",
+      "unchanged": "28partial/14drain, K1024+512 pair order, tileN160, one Matrix, executed402653184; all counts verified by accepted runtime events"
+    },
+    {
+      "file": "gates.py",
+      "new": "separate M128 namespace/schema; unfinalized recipe rejects actual; final M128 reference metadata helper verifies pinned capture environment separately from model runtime",
+      "old": "M16 namespace/schema/pinned reference identities",
+      "unchanged": "9physical inputs only; exact six official plus three raw producer statuses; seal gate; no OS isolation claim"
+    },
+    {
+      "file": "raw_reference.py",
+      "new": "rowloop128 and n0/actualreshape128",
+      "old": "row loop 16, n0 and actual reshape 16",
+      "unchanged": "sixteen-wide dot16 helper, scalar primitive formulas, explicit two Kblocks, fixed BF16widening; actual outputs comparison only"
+    },
+    {
+      "file": "source_correspondence.json",
+      "new": "M128 legal typed shape within same selected-v5 source map",
+      "old": "M16 selected-v5 source map",
+      "unchanged": "v5source-only mapping separate from activecore guard; no RTL proof"
+    }
+  ],
+  "execution_result_sha256": "054d3caa9a19ba21ee42913471b386a9f0af59e58dcab6a0442a19ab6e86c56c",
+  "immutable_services": [
+    "OfficialPrefixOwner",
+    "DenseReductionOwner",
+    "ReductionDriver",
+    "ProfiledMatrixService",
+    "ScalarService",
+    "public21 typed parser",
+    "fixed Matrix accum[5][16][256]"
+  ],
+  "input_recipe_pins_sha256": "503b452bb030050f0a570cde89448a4f5bd4c8b95b86e1d1cdb81a362729618d",
+  "model_runtime_executed": true,
+  "no_m16_pass_inherited": true,
+  "rtl_executed": false,
+  "status": "SOURCE_DELTA_FINAL_FIRST_M128_EXECUTION_PASSED"
+}

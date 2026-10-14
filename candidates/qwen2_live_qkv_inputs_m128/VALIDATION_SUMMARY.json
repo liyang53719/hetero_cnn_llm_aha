@@ -1,0 +1,98 @@
+{
+  "actual_byte_negative_guards": {
+    "all_rejected": true,
+    "count": 22,
+    "receipt_sha256": "2a06e711391814f9a9850923b58e730d234a599695a30bcc5e85f823b5ec7889",
+    "source_and_final_payload_unchanged": true
+  },
+  "actual_stages": [
+    {
+      "after_sha256": "144e8191ac6a687c492309760d35fdd1b9fa59286113fdb6982552b3a1ef445c",
+      "before_sha256": "144e8191ac6a687c492309760d35fdd1b9fa59286113fdb6982552b3a1ef445c",
+      "elapsed_seconds": 6.285994138001115,
+      "exit_code": 0,
+      "source_input_tool_unchanged": true,
+      "stage": "runtime_preflight",
+      "timed_out": false,
+      "timeout_seconds": 60
+    },
+    {
+      "after_sha256": "ebc4b743d219e54f07130c76ae07ea4677fa0c73bf610af4148457b386c3cda5",
+      "before_sha256": "ebc4b743d219e54f07130c76ae07ea4677fa0c73bf610af4148457b386c3cda5",
+      "elapsed_seconds": 0.800742634004564,
+      "exit_code": 0,
+      "source_input_tool_unchanged": true,
+      "stage": "acquire",
+      "timed_out": false,
+      "timeout_seconds": 60
+    },
+    {
+      "after_sha256": "9f52ccb0561eaeb0b22e208425f6130525d582ff1634f2cf021fd672abbc0464",
+      "before_sha256": "9f52ccb0561eaeb0b22e208425f6130525d582ff1634f2cf021fd672abbc0464",
+      "elapsed_seconds": 1.7862097429897403,
+      "exit_code": 0,
+      "source_input_tool_unchanged": true,
+      "stage": "materialize",
+      "timed_out": false,
+      "timeout_seconds": 60
+    },
+    {
+      "after_sha256": "5d69717e5351f24fb78e0312102abed47969990beac406d78ed2956f5ca85176",
+      "before_sha256": "5d69717e5351f24fb78e0312102abed47969990beac406d78ed2956f5ca85176",
+      "elapsed_seconds": 6.188167113999953,
+      "exit_code": 0,
+      "source_input_tool_unchanged": true,
+      "stage": "capture",
+      "timed_out": false,
+      "timeout_seconds": 60
+    },
+    {
+      "after_sha256": "5c2405cb87a0dd93a0c2cb4a15b2a758fdaaf678a3ab4b94365bda3ac06b3f9f",
+      "before_sha256": "5c2405cb87a0dd93a0c2cb4a15b2a758fdaaf678a3ab4b94365bda3ac06b3f9f",
+      "elapsed_seconds": 3.3492968470091,
+      "exit_code": 0,
+      "source_input_tool_unchanged": true,
+      "stage": "audit",
+      "timed_out": false,
+      "timeout_seconds": 60
+    }
+  ],
+  "bootstrap_unaccepted_manifest_sha256": "22e1dbee33018d965b790b863db7bb4e64974b41eae311642597294fa07218a3",
+  "downloaded_bytes": 0,
+  "final_artifact_manifest_sha256": "03c530ce21cf656914db728e2c4d7773588ff2efe43cd789509f95de6c140188",
+  "independent_bootstrap_review_sha256": "a96520bedbc983342bfb350dc34b1b66cb028336ca8c2a277d45c74d0056f720",
+  "independent_final_review_sha256": "9bc327944509c2099819809ec2a25d5cc4adf4978608159894afdb785abafc36",
+  "input_bytes": 7616512,
+  "input_roles": 9,
+  "input_run": "work/qwen2_live_qkv_inputs_m128/frozen01",
+  "numeric_nodes": [
+    "n0",
+    "qr",
+    "q",
+    "kr",
+    "k",
+    "v"
+  ],
+  "numeric_reference_bytes": 2752512,
+  "numerical_acceptance_claimed": false,
+  "official_ast_nodes": 15,
+  "old_pass_inherited": false,
+  "publication": "Source-only evidence; payload/build/log bodies remain ignored. No staging or push by this worker.",
+  "raw_bytes": 7085056,
+  "raw_tensors": 8,
+  "recipe": {
+    "capture.py": "7393857f674545e22de86d5685372b6801f422f06ad757c6565f1e82a23834a4",
+    "pins.json": "503b452bb030050f0a570cde89448a4f5bd4c8b95b86e1d1cdb81a362729618d",
+    "recipe.py": "15ff7d73838e2d049d3930abd0c05b17c3927bc7fd336aef0d5ddc93b98ba489"
+  },
+  "recorded_utc": "2026-10-14T10:53:15.861655+00:00",
+  "reference_audit_sha256": "0087cf4b4913757d711fe4791e00f71320fc421273d72fe52c1fe4d2d41b899b",
+  "reference_bytes": 3670016,
+  "reference_manifest_sha256": "ac416f15b5b33678e7d223560668261a7567bc2caf2824a5b8f1875a306397af",
+  "reference_nodes": 9,
+  "rtl_executed": false,
+  "schema": 1,
+  "source_base_commit": "a6d0eb9c4468a26015225757deda857acb56b844",
+  "source_tool_unchanged": true,
+  "status": "FROZEN_M128_INPUT_AND_REFERENCE_REPRODUCED_NO_NUMERICAL_ACCEPTANCE"
+}

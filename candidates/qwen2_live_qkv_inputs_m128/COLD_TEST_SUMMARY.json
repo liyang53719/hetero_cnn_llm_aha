@@ -1,0 +1,140 @@
+{
+  "default_audit_hook_prohibits": [
+    "network",
+    "subprocess/compilation",
+    "writes",
+    "ignored-work/raw reads",
+    "Torch/NumPy/Transformers/ctypes/urllib imports"
+  ],
+  "default_checks": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "candidates/qwen2_live_qkv_inputs_m128/recipe.py"
+      ],
+      "exit_code": 0,
+      "recipe": {
+        "capture.py": "7393857f674545e22de86d5685372b6801f422f06ad757c6565f1e82a23834a4",
+        "pins.json": "503b452bb030050f0a570cde89448a4f5bd4c8b95b86e1d1cdb81a362729618d",
+        "recipe.py": "15ff7d73838e2d049d3930abd0c05b17c3927bc7fd336aef0d5ddc93b98ba489"
+      },
+      "result": {
+        "cold_check": "PASS",
+        "input_roles": 9,
+        "model_executed": false,
+        "network_used": false,
+        "numpy_imported": false,
+        "official_ast_nodes": 15,
+        "outputs_written": false,
+        "payload_bytes": 7085056,
+        "pinned_source_files": 18,
+        "raw_payload_read": false,
+        "raw_tensors": 8,
+        "reference_nodes": 9,
+        "rtl_executed": false,
+        "status": "NOT_EXECUTED",
+        "torch_imported": false
+      },
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "-O",
+        "candidates/qwen2_live_qkv_inputs_m128/recipe.py"
+      ],
+      "exit_code": 0,
+      "recipe": {
+        "capture.py": "7393857f674545e22de86d5685372b6801f422f06ad757c6565f1e82a23834a4",
+        "pins.json": "503b452bb030050f0a570cde89448a4f5bd4c8b95b86e1d1cdb81a362729618d",
+        "recipe.py": "15ff7d73838e2d049d3930abd0c05b17c3927bc7fd336aef0d5ddc93b98ba489"
+      },
+      "result": {
+        "cold_check": "PASS",
+        "input_roles": 9,
+        "model_executed": false,
+        "network_used": false,
+        "numpy_imported": false,
+        "official_ast_nodes": 15,
+        "outputs_written": false,
+        "payload_bytes": 7085056,
+        "pinned_source_files": 18,
+        "raw_payload_read": false,
+        "raw_tensors": 8,
+        "reference_nodes": 9,
+        "rtl_executed": false,
+        "status": "NOT_EXECUTED",
+        "torch_imported": false
+      },
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "m16_preservation": {
+    "package_changed": false,
+    "reason": "Parent directed retention of existing M16 47+47 cold and a6d0 CI evidence because the entire tracked M16 package is unchanged. No old PASS is claimed as M128 acceptance.",
+    "tests_rerun_in_this_extension": false
+  },
+  "model_executed": false,
+  "recipe": {
+    "capture.py": "7393857f674545e22de86d5685372b6801f422f06ad757c6565f1e82a23834a4",
+    "pins.json": "503b452bb030050f0a570cde89448a4f5bd4c8b95b86e1d1cdb81a362729618d",
+    "recipe.py": "15ff7d73838e2d049d3930abd0c05b17c3927bc7fd336aef0d5ddc93b98ba489"
+  },
+  "recorded_utc": "2026-10-14T10:53:15.860927+00:00",
+  "rtl_executed": false,
+  "schema": 1,
+  "status": "STDLIB_COLD_GATES_VERIFIED_NOT_NUMERICAL_ACCEPTANCE",
+  "suite_execution_receipt_path": "work/qwen2_live_qkv_inputs_m128/cold_verified/RESULT.json",
+  "suite_execution_receipt_sha256": "d1f2bded9c86cd203e0c172896715f70196c2fad252e25c4004659a5bca55124",
+  "suite_fixtures": "Temporary synthetic address words and metadata only; no checkpoint payloads. Default command itself is read-only.",
+  "suite_runs": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "candidates/qwen2_live_qkv_inputs_m128/tests",
+        "-v"
+      ],
+      "elapsed_seconds": 17.62302851676941,
+      "exit_code": 0,
+      "metadata_mutation_verdict_blocks": 477,
+      "source_tests_unchanged": true,
+      "started_unix": 1791975114.3018878,
+      "stderr_sha256": "987a942247a4423fd162bffda8e48d68360f2be24e52973c664e4012c43bbe4f",
+      "stdout_sha256": "e50e4421640d48561410c9f201b10a566ab7cf19031ca685342255d63f8ae673",
+      "tests": 55
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-S",
+        "-O",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "candidates/qwen2_live_qkv_inputs_m128/tests",
+        "-v"
+      ],
+      "elapsed_seconds": 17.743658542633057,
+      "exit_code": 0,
+      "metadata_mutation_verdict_blocks": 477,
+      "source_tests_unchanged": true,
+      "started_unix": 1791975114.3019547,
+      "stderr_sha256": "da8a3a2cd2203906374e6fc1956daae4aeaccbe571d8b693112c5c3713f02cd2",
+      "stdout_sha256": "e50e4421640d48561410c9f201b10a566ab7cf19031ca685342255d63f8ae673",
+      "tests": 55
+    }
+  ],
+  "tests_sha256": "17c7fb8398e5807be28aad8b3bc7bcaf3403a506d44c3653c3f6f3ba579fc6fd"
+}

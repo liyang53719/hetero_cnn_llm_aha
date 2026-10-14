@@ -1,0 +1,134 @@
+{
+  "acceptance": {
+    "all29_dut_observed": false,
+    "dynamic_cache_executed": false,
+    "fp32_tolerance_created": false,
+    "full_official_forward_executed": false,
+    "hardware_cycles": null,
+    "qor": null,
+    "reference_generation_is_dut_acceptance": false
+  },
+  "actual_permission": false,
+  "authorization_inherited_from_old_runs": false,
+  "budget": {
+    "per_capture_cap_bytes": 35651584,
+    "per_capture_payload_bytes": 32604160,
+    "rss_estimate": null,
+    "runtime_or_input_copies_included": false,
+    "spare_total_metadata_bytes": 7143424,
+    "total_cap_bytes": 72351744,
+    "two_capture_payload_bytes": 65208320,
+    "whole_block_actual_included": false
+  },
+  "capture_permission": false,
+  "execution_latch": "unconditional code-level rejection; no flags/receipts can enable",
+  "failure_contract": {
+    "completion_manifest_on_failure": false,
+    "diagnostics": "retain bounded failure receipt and partial files under fresh run identity",
+    "failure_wrapper_implemented_in_source_revision": false,
+    "overwrite_failed_run": false,
+    "repin_to_observed_error": false
+  },
+  "independent_review": null,
+  "schema": 1,
+  "stages": [
+    {
+      "allowed_now": true,
+      "name": "source-review",
+      "required_checks": [
+        "exact official38 + activation14 lineage",
+        "13 raw /14 producer metadata join",
+        "raw-only future arithmetic inputs",
+        "FP32/BF16 contracts and hook counts/order",
+        "29 named shape/layout inventory",
+        "explicit not-captured output identities",
+        "preserved M128169/M16188 hashes",
+        "runtime source/native pins and CPython3.12",
+        "default CLI no numeric import or payload opens",
+        "all execution/actual options hard refused",
+        "34MiB/69MiB budget"
+      ],
+      "scope": "source, AST, stdlib metadata/refusal tests only"
+    },
+    {
+      "allowed_now": false,
+      "name": "enable-capture-contract",
+      "requires": [
+        "explicit user capture authorization",
+        "all other numerical jobs terminal and reviewer-confirmed idle",
+        "independent source review acceptance",
+        "new reviewed source revision; source-only latch cannot be toggled by data",
+        "reviewed bootstrap/frozen schema validators replacing source-only validation",
+        "bounded timeout/RSS/process/log/failure receipt wrapper",
+        "new exact source/runtime/input seal"
+      ]
+    },
+    {
+      "allowed_now": false,
+      "input": "fixed original raw13 only",
+      "maximum_invocations": 1,
+      "name": "bootstrap",
+      "output_status": "BOOTSTRAP_UNACCEPTED_NO_NUMERICAL_VERDICT",
+      "required": [
+        "fresh process and distinct fresh output identity",
+        "raw/source/native before-after identities",
+        "prior18 freshly reproduced",
+        "29 output shape/dtype/hash/stride observations",
+        "single-call original MLP hooks",
+        "exact cold-cache and PV layout checks",
+        "no saved producer/reference inputs"
+      ]
+    },
+    {
+      "allowed_now": false,
+      "name": "independent-bootstrap-review",
+      "requires": [
+        "sealed bootstrap observations and files",
+        "finite exact BF16 widening",
+        "original native softmax and SiLU lineage",
+        "fresh prior18 equality",
+        "no synthesized future DUT observations",
+        "bounded raw/source/runtime provenance"
+      ]
+    },
+    {
+      "allowed_now": false,
+      "learn_and_accept_allowed": false,
+      "name": "freeze",
+      "requires": [
+        "explicit reviewed immutable29 hash/shape/dtype/stride contract",
+        "bootstrap manifest SHA256",
+        "independent review SHA256",
+        "new recipe/source hashes"
+      ]
+    },
+    {
+      "allowed_now": false,
+      "input": "same raw13, independent fresh namespace/process; no bootstrap payload loads",
+      "maximum_invocations": 1,
+      "name": "frozen-reproduction",
+      "output_status": "FRESH_OFFICIAL_AST_FULLBLOCK_CAPTURE_ONLY",
+      "requires": [
+        "distinct fresh output",
+        "exact29 frozen metadata/hash equality",
+        "exact18 prior expectation equality",
+        "unchanged before-after source/raw/native seal",
+        "complete exact inventory within disk cap"
+      ]
+    },
+    {
+      "allowed_now": false,
+      "name": "whole-block-actual",
+      "provided_by_this_package": false,
+      "requires": [
+        "separate reviewed raw-only single-launch full-block contract and authorization",
+        "FullGraphMemory/SharedWorkspace and complete actual observation closure",
+        "original physical/owner/service completion and ACK checks",
+        "actual terminal sealed before opening any oracle",
+        "fresh typed oracle if bit-exact acceptance required",
+        "preserve missing/partial29 coverage truthfully"
+      ]
+    }
+  ],
+  "status": "SOURCE_ONLY_REQUIRES_INDEPENDENT_REVIEW"
+}

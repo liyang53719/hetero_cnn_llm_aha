@@ -1,0 +1,40 @@
+{
+  "files": {
+    "ADMISSION.json": {
+      "bytes": 4886,
+      "sha256": "ebae4139581e7a179980367814a21755696a935004cdd6e934d58be4c6edc97a"
+    },
+    "README.md": {
+      "bytes": 8367,
+      "sha256": "415487470f43877f80dcd4ec4a49b1630795364a6f2ed31aa118fc9ef05cf63a"
+    },
+    "capture.py": {
+      "bytes": 18978,
+      "sha256": "44794a7400828f3130a05e083f5ed108dcaba4420d84a6d3b718315cf26b725c"
+    },
+    "official/SOURCE_RECEIPT.json": {
+      "bytes": 671,
+      "sha256": "98b966c2321f6276f0aec69e5cb15fae61b14d5ba35e4f893e6d79c817521aff"
+    },
+    "official/activations.py": {
+      "bytes": 8177,
+      "sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee"
+    },
+    "pins.json": {
+      "bytes": 152501,
+      "sha256": "65a98bd5cbe299b5c3d06f925dc74c9724bf5e2a75d3c22146ddbd1d8fcfd08e"
+    },
+    "recipe.py": {
+      "bytes": 21160,
+      "sha256": "20c662e2a3f153507e920ab5d6fd789cbf2611edc2160d9f7ced5f0f91445bad"
+    },
+    "test_cold.py": {
+      "bytes": 8495,
+      "sha256": "34bad0717b753baa7c7d93d4434f65bb9186eb60e29661cd0f27d65714732b1b"
+    }
+  },
+  "manifest_self_hash": "provided by external source-review seal; not circularly self-pinned",
+  "schema": 1,
+  "scope": "new candidate files only; dependencies and preserved closures are pinned in pins.json",
+  "status": "SOURCE_ONLY_NOT_EXECUTED"
+}

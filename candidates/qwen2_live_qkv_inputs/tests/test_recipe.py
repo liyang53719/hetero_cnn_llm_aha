@@ -649,6 +649,34 @@ runpy.run_path(sys.argv[0], run_name='__main__')
             with self.subTest(owner=owner, path=path):
                 self.run_metadata_audit(fixture, material, reference)
 
+    def test_torch_version_str_subclass_is_canonicalized_only_by_producer(self):
+        # TorchVersion is a str subclass; reproduce that exact strict-type edge
+        # without importing Torch or depending on an ignored runtime directory.
+        class TorchVersionEquivalent(str):
+            pass
+        class TorchMetadata:
+            pass
+        expected = self.pins['runtime_requirements']['torch']
+        torch_metadata = TorchMetadata()
+        torch_metadata.__version__ = TorchVersionEquivalent(expected)
+        self.assertEqual(torch_metadata.__version__, expected)
+        self.assertIsNot(type(torch_metadata.__version__), str)
+        self.reject(R.fields, {'torch': torch_metadata.__version__}, {'torch': expected}, 'strict reader')
+        tree = ast.parse((PACKAGE / 'capture.py').read_text())
+        capture_function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'capture')
+        runtime = next(node.value for node in ast.walk(capture_function) if isinstance(node, ast.Assign) and
+                       any(isinstance(target, ast.Name) and target.id == 'runtime' for target in node.targets))
+        expression = next(value for key, value in zip(runtime.keys, runtime.values)
+                          if isinstance(key, ast.Constant) and key.value == 'torch')
+        self.assertEqual(ast.unparse(expression), 'str(torch.__version__)')
+        compiled = compile(ast.Expression(expression), '<actual capture producer field>', 'eval')
+        value = eval(compiled, {'torch': torch_metadata})
+        self.assertIs(type(value), str)
+        R.fields({'torch': value}, {'torch': expected}, 'canonical producer / strict reader')
+        for wrong in (TorchVersionEquivalent('2.10.1+cpu'), TorchVersionEquivalent('2.10.0+cu128'), None, 2):
+            torch_metadata.__version__ = wrong
+            self.reject(R.fields, {'torch': eval(compiled, {'torch': torch_metadata})}, {'torch': expected}, 'strict value pin')
+
     def test_no_runtime_guard_uses_assert(self):
         for name in ('recipe.py', 'capture.py'):
             tree = ast.parse((PACKAGE / name).read_text())

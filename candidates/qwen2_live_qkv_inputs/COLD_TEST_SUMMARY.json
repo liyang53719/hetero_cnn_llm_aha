@@ -1,6 +1,150 @@
 {
+  "actual_validation": {
+    "HTTP_downloaded_bytes": 0,
+    "all_six_processes_exit_zero": true,
+    "all_stage_timeouts_false": true,
+    "artifact_evidence": {
+      "acquire": {
+        "bytes": 9957,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/raw/subset_manifest.json",
+        "sha256": "97103f8067b06fdd3b72a5a2ee88d009511d2ea06c09a210e0e4a775c78cf1d8",
+        "status": "RECOVERED_PINNED_QWEN2_PREFIX_SUBSET_ONLY"
+      },
+      "after": {
+        "bytes": 32743,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/AFTER.json",
+        "sha256": "73f10f1f4adfd6897da7864df9a0dfa6c8eefd860c49826fbfaae180e42b1b22",
+        "status": "IDENTITY_SNAPSHOT"
+      },
+      "audit": {
+        "bytes": 5149,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/audit/AUDIT.json",
+        "sha256": "b8abff22d6042935111d32e8ce7a4090dcedf1b8dc3934635b7379076d433060",
+        "status": "VERIFIED_PREFIX_ARTIFACTS_ONLY"
+      },
+      "before": {
+        "bytes": 32743,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/BEFORE.json",
+        "sha256": "73f10f1f4adfd6897da7864df9a0dfa6c8eefd860c49826fbfaae180e42b1b22",
+        "status": "IDENTITY_SNAPSHOT"
+      },
+      "capture": {
+        "bytes": 18306,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/reference/REFERENCE.json",
+        "sha256": "aaa5f64eab0a495e90e04ec277ba038b5910ced9331420f8b97ba9cc4ff5b914",
+        "status": "FRESH_OFFICIAL_AST_PREFIX_CAPTURE_ONLY"
+      },
+      "guard_result": {
+        "bytes": 23088,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/RESULT.json",
+        "sha256": "1c8ca1fb5bc5f7500ffb2fdfe634114adb9f484b1900ab9e57bbbebd5c1ef503",
+        "status": "UNPUBLISHED_CANDIDATE_ACTUAL_PREFIX_RECONSTRUCTION_VERIFIED"
+      },
+      "independent_postcheck": {
+        "bytes": 2582,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/POST_VERIFICATION.json",
+        "sha256": "6dc6815921ec1227b908b06d85ec70cadf66336cd54c2de6a2da0bcea30d14fb",
+        "status": "INDEPENDENT_POSTCHECK_UNPUBLISHED_CANDIDATE_PREFIX_REBUILD_VERIFIED"
+      },
+      "materialize": {
+        "bytes": 6147,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/inputs/INPUTS_READY.json",
+        "sha256": "800c16fdc64715c6f5cbd19a32557e87e660cb20aec7023071cfb7b1267b50fa",
+        "status": "PINNED_PREFIX_INPUTS_READY_NO_MODEL_EXECUTION"
+      },
+      "prior_frozen_facts": {
+        "bytes": 7129,
+        "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/frozen_audit/AUDIT.json",
+        "sha256": "3800e3c9e602ea387708720fa48adccd0277bd0d7122e31eed9025a87879ce6a",
+        "status": "VERIFIED_FROZEN_PREFIX_ARTIFACTS_ONLY"
+      }
+    },
+    "base_published_commit": "7b31b7f2650e1da3492d400633cac95ee2ba0ecc",
+    "candidate_commit": null,
+    "execution_recipe_identity": {
+      "candidates/qwen2_live_qkv_inputs/capture.py": {
+        "bytes": 7098,
+        "sha256": "e3ecb9802e81eee646165615a6c3df551789a36cdb085ecee90b4876b4f1e961"
+      },
+      "candidates/qwen2_live_qkv_inputs/pins.json": {
+        "bytes": 24042,
+        "sha256": "268a848f3be9468dbfddc3faf8c9a1f93ffc73e4d30d516257a731e5afe94a61"
+      },
+      "candidates/qwen2_live_qkv_inputs/recipe.py": {
+        "bytes": 36075,
+        "sha256": "89aba5a7ac13b0fd91129d0be5d6eb89373b099a4886991e1cd3492267450523"
+      }
+    },
+    "fresh_reference_bytes": 458752,
+    "fresh_reference_outputs": 9,
+    "guard_reported_elapsed_seconds": 7.60646948601061,
+    "historical_raw_archive_read": false,
+    "materialized_bytes": 6928384,
+    "materialized_roles": 9,
+    "new_official_AST_capture_executed": true,
+    "not_claimed": [
+      "published commit7b31 numerical execution PASS",
+      "complete historical runtime equivalence",
+      "full-layer manifest recovery",
+      "owner/host-driver or RTL execution",
+      "QK/attention/MLP/M128/full-block acceptance"
+    ],
+    "not_executed": [
+      "HTTP download",
+      "owner/host driver",
+      "RTL",
+      "QK product",
+      "attention",
+      "softmax",
+      "MLP",
+      "M128",
+      "full block/model",
+      "Git staging/push"
+    ],
+    "official_AST_nodes": 15,
+    "old_capture_reused_as_new": false,
+    "old_pass_inherited": false,
+    "original_BF16_bytes_copied": 7085056,
+    "original_frozen_files_exact_inventory_and_bytes_unchanged": 51,
+    "overall_guard_seconds": 600,
+    "per_stage_guard_seconds": 120,
+    "raw_tensors": 8,
+    "reference_scope": "M16 tokens/positions0..15 direct-gamma RMS/QKV/RoPE posthoc oracle only",
+    "run_directory": "work/qwen2_live_qkv_inputs/published7b31_fix_v3",
+    "source_files_equal_in_before_after_snapshots": 25,
+    "status": "UNPUBLISHED_CANDIDATE_ACTUAL_PREFIX_RECONSTRUCTION_VERIFIED",
+    "tool_files_equal_in_before_after_snapshots": 12
+  },
   "all_18_source_dependencies_tracked": true,
   "base_commit": "ae7607104b3f7bdcec5800e07ad9948502eb2718",
+  "base_published_commit": "7b31b7f2650e1da3492d400633cac95ee2ba0ecc",
+  "candidate_commit": null,
+  "candidate_identity_kind": "uncommitted working-tree source; exact file hashes below",
+  "candidate_source_unpublished": true,
+  "cold_validation": {
+    "metadata_mutation_verdict_blocks_per_mode": 472,
+    "modes": [
+      "normal",
+      "-O"
+    ],
+    "not_executed_by_cold_tests": [
+      "HTTP acquisition",
+      "payload copy or materialization",
+      "C compilation or RoPE generation",
+      "Torch/NumPy import or oracle capture",
+      "full byte-reading artifact audit",
+      "owner/host driver",
+      "RTL",
+      "QK/attention/MLP/M128/full block",
+      "full repository CI",
+      "compiler invocation, including gcc --version (mocked in cold tests)"
+    ],
+    "snapshot_archive_manifest_sha256": "6dead161bbdbddd4209ab6f12e9d9396a51dea4b69aef2652484cbc98d152529",
+    "snapshot_path": "work/qwen2_input_recipe_package_20261014/history_torchversion_fix_47_before_actual_summary_20261014T1001/recipe/COLD_TEST_SUMMARY.json",
+    "snapshot_sha256": "fb73021dbc2dabbc8b9ef54314cf4392b5684d4b7e17e194048818f91a9ed738",
+    "synthetic_metadata_baselines_per_mode": 1,
+    "tests_per_mode": 47
+  },
   "default_check": {
     "cold_check": "PASS",
     "input_roles": 9,
@@ -44,13 +188,13 @@
     "summary_sha256": "8192187dbd94f946b2f087749565c4370385ccc15b6654c38ba78bbef597b62c"
   },
   "limits": [
-    "The single positive synthetic metadata baseline and 472 verdict-blocking mutations per mode mock payload reads, historical-array recomputation and compiler identity; no real-data audit or execution verdict is established.",
-    "Default cold-check subprocess audit hook blocks optional numeric imports, networking, child processes, writes and ignored-work reads.",
-    "Exact Torch build-text hash is a configuration-text constraint, not complete historical runtime equivalence.",
-    "New receipts are audited in the same local Python/compiler/import-environment/CPU-affinity context; reconstruction in another context needs a fresh identity.",
-    "All 16 original frozen metadata hashes and all preserved initial33 history files were rechecked unchanged.",
-    "Raw inputs, compiled binaries, logs, and generated manifests remain outside Git.",
-    "Fresh reconstruction and runtime gates have not been executed or numerically accepted in this packaging task."
+    "Cold47 results and the fresh working-tree candidate actual chain have independent evidence and scopes.",
+    "The cold synthetic positive baseline and472 verdict-blocking mutations mock raw payloads and compiler identity; the later actual chain separately executes the real copied inputs, C materializer, new Torch AST oracle and stdlib audit.",
+    "Only the version-string producer is changed; exact reader types/values, all pins and numerical source remain unchanged from7b31.",
+    "Exact Torch build-text and recorded key-library identities do not establish complete historical runtime equivalence.",
+    "This summary is metadata finalized after execution; BEFORE/AFTER bind the preserved cold-only summary bytes. Runtime scripts, pins and tests retain their exact tested identities.",
+    "No full-layer manifest recovery, owner/host-driver, QK product, attention, MLP, M128, full-block/model or RTL acceptance is claimed.",
+    "No raw/arrays, ELF/shared objects, log bodies or generated receipts are copied into Git; artifact evidence here contains only path, size, SHA and status."
   ],
   "metadata_hardening": [
     "Complete exact required field schemas for acquisition, materialization and reference reports",
@@ -60,18 +204,14 @@
     "Complete runtime schema, fixed thread/dispatch environment, current Python/import environment/affinity, precise identity scope, exact Torch build-text SHA and key-library receipt schemas",
     "Every mutation test rebinds dependent manifest hashes where appropriate and must fail before output creation or VERIFIED verdict"
   ],
-  "not_executed": [
-    "HTTP acquisition",
-    "payload copy or materialization",
-    "C compilation or RoPE generation",
-    "Torch/NumPy import or oracle capture",
-    "full byte-reading artifact audit",
-    "owner/host driver",
-    "RTL",
-    "QK/attention/MLP/M128/full block",
-    "full repository CI",
-    "compiler invocation, including gcc --version (mocked in cold tests)"
-  ],
+  "metadata_only_finalization": {
+    "after_actual_execution": true,
+    "only_this_summary_changed_after_guard_postcheck": true,
+    "review_correction": "The execution base is 7b31 with three tracked candidate changes; initial ee6d packaging fields moved to published_7b31_history. No execution record or source pin changed.",
+    "tested_scripts_pins_tests_and_other_source_files_unchanged": true,
+    "tested_summary_sha256": "fb73021dbc2dabbc8b9ef54314cf4392b5684d4b7e17e194048818f91a9ed738",
+    "this_summary_self_hash": "reported separately to avoid self-reference"
+  },
   "optimized_default_check": {
     "cold_check": "PASS",
     "input_roles": 9,
@@ -90,9 +230,24 @@
     "torch_imported": false
   },
   "publication": {
-    "existing_tracked_files_changed_by_this_recipe_task": false,
+    "changed_tracked_files": [
+      "candidates/qwen2_live_qkv_inputs/COLD_TEST_SUMMARY.json",
+      "candidates/qwen2_live_qkv_inputs/capture.py",
+      "candidates/qwen2_live_qkv_inputs/tests/test_recipe.py"
+    ],
+    "existing_tracked_files_changed_by_this_recipe_task": true,
     "pushed": false,
     "staged": false
+  },
+  "published_7b31_history": {
+    "actual_preflight_status": "REJECTED_TORCHVERSION_STR_SUBCLASS_BY_EXACT_READER",
+    "archive_manifest_sha256": "c73c1d79399eed472c246d2f47783036d5e0a5210706ea9e7b4651076615b9d1",
+    "failure_receipt_sha256": "50a6fc92a331d3955d0f7131f49ef82aad3bb21c28355197d94c192a8f7ee34a",
+    "initial_packaging_existing_tracked_files_changed": false,
+    "old_pass_inherited": false,
+    "original_tested_checkout_commit": "ee6d0532eec49ae29626c639a34e7c6303c67d4b",
+    "summary_sha256": "740222c312ed023476f4b2e38785a054054b41b4faf09c508d38a6012ddf86b6",
+    "tests_per_mode": 46
   },
   "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
   "recipe_files": {
@@ -105,8 +260,8 @@
       "sha256": "6327a3415d029aff63549bfd33549834871dd344d88d20e6b7e36bf5b2685b35"
     },
     "capture.py": {
-      "bytes": 7093,
-      "sha256": "ce7b93094bf119342dd3881c4f263ebdba295e1aba1f6dc304be8461819c8103"
+      "bytes": 7098,
+      "sha256": "e3ecb9802e81eee646165615a6c3df551789a36cdb085ecee90b4876b4f1e961"
     },
     "pins.json": {
       "bytes": 24042,
@@ -117,31 +272,40 @@
       "sha256": "89aba5a7ac13b0fd91129d0be5d6eb89373b099a4886991e1cd3492267450523"
     },
     "tests/test_recipe.py": {
-      "bytes": 37843,
-      "sha256": "876333084a9425662b8dec77f8ba4ee2a9ce4da3063b36ba0ad64ec04bb31a03"
+      "bytes": 39827,
+      "sha256": "ff4d2f02719eac8a575603c13a390c97e8d07a568028de65a09750cb47152e27"
     }
   },
-  "recorded_utc": "2026-10-14T09:40:00.477465+00:00",
+  "record_scope": "Working-tree candidate based on published7b31; cold47 validation and later fresh bounded actual reconstruction are separate. No published7b31 execution PASS is inherited.",
+  "recorded_utc": "2026-10-14T10:02:22.394447+00:00",
   "repository": "liyang53719/hetero_cnn_llm_aha",
   "schema": 1,
-  "status": "HARDENED_METADATA_COLD_CHECKS_PASS_RUNTIME_NOT_EXECUTED",
-  "tested_checkout_commit": "ee6d0532eec49ae29626c639a34e7c6303c67d4b",
+  "status": "WORKING_TREE_CANDIDATE_COLD_AND_BOUNDED_ACTUAL_VALIDATED_PENDING_REVIEW",
+  "tested_checkout_commit": "7b31b7f2650e1da3492d400633cac95ee2ba0ecc",
   "tests": [
     {
       "command": "python -B -S -m unittest discover -s candidates/qwen2_live_qkv_inputs/tests -v",
-      "log_sha256": "88a7335fadc34b42fc3844fc9852becf6f73587309176718d77ca3ce6eac202b",
+      "log_sha256": "85dd60559e4f01230858f5b7ae109bc1ac33366ed2b041b07fe9ad6eb152d188",
       "metadata_mutation_verdict_blocks": 472,
       "result": "PASS",
       "synthetic_metadata_baselines": 1,
-      "tests_run": 46
+      "tests_run": 47
     },
     {
       "command": "python -B -S -O -m unittest discover -s candidates/qwen2_live_qkv_inputs/tests -v",
-      "log_sha256": "5cb48cb273e8747ed3451c802128b0be1c7dd320be9b39411a68d0e275b1587c",
+      "log_sha256": "4b53f3a1f3024054567c6b6f9e022be582dddb09e5683d1936cc903103c6ef0e",
       "metadata_mutation_verdict_blocks": 472,
       "result": "PASS",
       "synthetic_metadata_baselines": 1,
-      "tests_run": 46
+      "tests_run": 47
     }
-  ]
+  ],
+  "torchversion_fix": {
+    "new_dependencies": false,
+    "numerical_code_changed": false,
+    "pins_changed": false,
+    "producer_only": "torch version metadata now uses str(torch.__version__)",
+    "regression": "Extract actual producer AST expression and exercise genuine str-subclass type semantics; raw subclass rejected, canonical expected value accepted, wrong version values rejected.",
+    "strict_reader_changed": false
+  }
 }

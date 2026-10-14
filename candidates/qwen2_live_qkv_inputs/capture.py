@@ -87,7 +87,7 @@ def capture(root, pins, subset, inputs, out):
         records[name] = {**spec, 'file': name + '.f32le'}
     comparison = R.compare_historical(raw_outputs, pins)
     runtime = {'python_major_minor': list(sys.version_info[:2]), 'python': sys.version,
-               'numpy': np.__version__, 'torch': torch.__version__, 'torch_commit': torch.version.git_version,
+               'numpy': np.__version__, 'torch': str(torch.__version__), 'torch_commit': torch.version.git_version,
                'capability': torch.backends.cpu.get_cpu_capability(), 'threads': torch.get_num_threads(),
                'interop_threads': torch.get_num_interop_threads(),
                'deterministic_algorithms': torch.are_deterministic_algorithms_enabled(),

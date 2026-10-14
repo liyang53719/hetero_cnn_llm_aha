@@ -1,0 +1,11 @@
+# Publish only the reviewed recipe, metadata pins, summary and cold tests.
+*
+!.gitignore
+!README.md
+!recipe.py
+!capture.py
+!pins.json
+!COLD_TEST_SUMMARY.json
+!tests/
+tests/*
+!tests/test_recipe.py

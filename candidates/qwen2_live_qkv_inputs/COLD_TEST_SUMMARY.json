@@ -1,0 +1,147 @@
+{
+  "all_18_source_dependencies_tracked": true,
+  "base_commit": "ae7607104b3f7bdcec5800e07ad9948502eb2718",
+  "default_check": {
+    "cold_check": "PASS",
+    "input_roles": 9,
+    "model_executed": false,
+    "network_used": false,
+    "numpy_imported": false,
+    "official_ast_nodes": 15,
+    "outputs_written": false,
+    "payload_bytes": 7085056,
+    "pinned_source_files": 18,
+    "raw_payload_read": false,
+    "raw_tensors": 8,
+    "reference_nodes": 9,
+    "rtl_executed": false,
+    "status": "NOT_EXECUTED",
+    "torch_imported": false
+  },
+  "frozen_metadata_hashes_rechecked_unchanged": {
+    "INPUTS_READY.json": "8ab8f1890112da98a699a597a619e19a0cef0cb19314e59ef318acfffb8107bf",
+    "RECOVERY_AUDIT.json": "635b81cb4bd29e3937703c45f433d9cd0934e531c0d9b044ebe86f14cad56491",
+    "audit_recovery.py": "05a193dc018ae48d99eb65ad7c8894f0893c5e5fb482c2e9365be519db41ff5c",
+    "capture_official_prefix.py": "cd03e2db0702243d674c9574124c066981efa1a185c1ff8eb06a361421d2cdf4",
+    "embed_tokens.rows_0_255.receipt.json": "1744d47d624d2eaee62f527837b5cbd36ca6df51e06578928ab4e71ca65c3f74",
+    "input_layernorm.weight.receipt.json": "6dc7c63457897963f44d13b599b25738b6b744262180bb9f61b80bfceb83aa6a",
+    "materialize_inputs.py": "b8439a611fb272dfc33073b83b83fd1fd2f48ae28b12c0ff28ca74bc99a8d325",
+    "official_ast_m16/REFERENCE.json": "4dcd4ff8a1a6aaa560fb8e8d5e2d6926fa0f9592185461859cd28a2b724ad860",
+    "recover_subset.py": "68f43d26635bed3d6accec072e04f615702ddc3d3f423b9e38de71011e1ae816",
+    "self_attn.k_proj.bias.receipt.json": "a49cd0941bd76a90e0fe87fc9dc1f8ec75be205621c1ce363dec3a6dde4aece9",
+    "self_attn.k_proj.weight.receipt.json": "c744ea6a61c883a97ecdcebd8985afb5ac1362db60a84148c28ee962e4130273",
+    "self_attn.q_proj.bias.receipt.json": "a19dfa00e45a75a7caadc50b27cfa4cde54b7627d57d69e2ce081437477246c8",
+    "self_attn.q_proj.weight.receipt.json": "8e4ff681f7770188d8eb3bac3a4721ea3a0a78edf6a27814d48eddf9a60035f3",
+    "self_attn.v_proj.bias.receipt.json": "0b00d96b9305564b4c0e3de9367ced1ec0f07e81e95f9095e009b57ca8fb4506",
+    "self_attn.v_proj.weight.receipt.json": "ce17e9b728e32fb13a03c3323d8faf3801d625c700f2e9470736df601919907c",
+    "subset_manifest.json": "9e942ffee63d45b98710cf3ac5194e77a76f0b087ca3826d5f90f0fd3ad5839c"
+  },
+  "initial_33_test_history": {
+    "archive_manifest_sha256": "1b93ec753d3b40797772ea6f196f49a685dbbe77d07d956330c7b8193914c969",
+    "file_count": 11,
+    "original_tests_per_mode": 33,
+    "status": "PRESERVED_INITIAL_TESTS_REVIEW_IDENTIFIED_METADATA_GAPS",
+    "summary_sha256": "8192187dbd94f946b2f087749565c4370385ccc15b6654c38ba78bbef597b62c"
+  },
+  "limits": [
+    "The single positive synthetic metadata baseline and 472 verdict-blocking mutations per mode mock payload reads, historical-array recomputation and compiler identity; no real-data audit or execution verdict is established.",
+    "Default cold-check subprocess audit hook blocks optional numeric imports, networking, child processes, writes and ignored-work reads.",
+    "Exact Torch build-text hash is a configuration-text constraint, not complete historical runtime equivalence.",
+    "New receipts are audited in the same local Python/compiler/import-environment/CPU-affinity context; reconstruction in another context needs a fresh identity.",
+    "All 16 original frozen metadata hashes and all preserved initial33 history files were rechecked unchanged.",
+    "Raw inputs, compiled binaries, logs, and generated manifests remain outside Git.",
+    "Fresh reconstruction and runtime gates have not been executed or numerically accepted in this packaging task."
+  ],
+  "metadata_hardening": [
+    "Complete exact required field schemas for acquisition, materialization and reference reports",
+    "RoPE generated source equals fixed source hash; generated binary equals recorded hash; exact compile command and flags; fixed current compiler hash/version",
+    "Materializing Python version and interpreter path/size/hash required and checked",
+    "All reference historical comparison prose and nine comparison entries match fixed pins and independently recomputed results",
+    "Complete runtime schema, fixed thread/dispatch environment, current Python/import environment/affinity, precise identity scope, exact Torch build-text SHA and key-library receipt schemas",
+    "Every mutation test rebinds dependent manifest hashes where appropriate and must fail before output creation or VERIFIED verdict"
+  ],
+  "not_executed": [
+    "HTTP acquisition",
+    "payload copy or materialization",
+    "C compilation or RoPE generation",
+    "Torch/NumPy import or oracle capture",
+    "full byte-reading artifact audit",
+    "owner/host driver",
+    "RTL",
+    "QK/attention/MLP/M128/full block",
+    "full repository CI",
+    "compiler invocation, including gcc --version (mocked in cold tests)"
+  ],
+  "optimized_default_check": {
+    "cold_check": "PASS",
+    "input_roles": 9,
+    "model_executed": false,
+    "network_used": false,
+    "numpy_imported": false,
+    "official_ast_nodes": 15,
+    "outputs_written": false,
+    "payload_bytes": 7085056,
+    "pinned_source_files": 18,
+    "raw_payload_read": false,
+    "raw_tensors": 8,
+    "reference_nodes": 9,
+    "rtl_executed": false,
+    "status": "NOT_EXECUTED",
+    "torch_imported": false
+  },
+  "publication": {
+    "existing_tracked_files_changed_by_this_recipe_task": false,
+    "pushed": false,
+    "staged": false
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "recipe_files": {
+    ".gitignore": {
+      "bytes": 196,
+      "sha256": "14731e7f452abaa22826d8d25e88b7f7653ba731fd69f657779204a5a8aa1992"
+    },
+    "README.md": {
+      "bytes": 12422,
+      "sha256": "6327a3415d029aff63549bfd33549834871dd344d88d20e6b7e36bf5b2685b35"
+    },
+    "capture.py": {
+      "bytes": 7093,
+      "sha256": "ce7b93094bf119342dd3881c4f263ebdba295e1aba1f6dc304be8461819c8103"
+    },
+    "pins.json": {
+      "bytes": 24042,
+      "sha256": "268a848f3be9468dbfddc3faf8c9a1f93ffc73e4d30d516257a731e5afe94a61"
+    },
+    "recipe.py": {
+      "bytes": 36075,
+      "sha256": "89aba5a7ac13b0fd91129d0be5d6eb89373b099a4886991e1cd3492267450523"
+    },
+    "tests/test_recipe.py": {
+      "bytes": 37843,
+      "sha256": "876333084a9425662b8dec77f8ba4ee2a9ce4da3063b36ba0ad64ec04bb31a03"
+    }
+  },
+  "recorded_utc": "2026-10-14T09:40:00.477465+00:00",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "schema": 1,
+  "status": "HARDENED_METADATA_COLD_CHECKS_PASS_RUNTIME_NOT_EXECUTED",
+  "tested_checkout_commit": "ee6d0532eec49ae29626c639a34e7c6303c67d4b",
+  "tests": [
+    {
+      "command": "python -B -S -m unittest discover -s candidates/qwen2_live_qkv_inputs/tests -v",
+      "log_sha256": "88a7335fadc34b42fc3844fc9852becf6f73587309176718d77ca3ce6eac202b",
+      "metadata_mutation_verdict_blocks": 472,
+      "result": "PASS",
+      "synthetic_metadata_baselines": 1,
+      "tests_run": 46
+    },
+    {
+      "command": "python -B -S -O -m unittest discover -s candidates/qwen2_live_qkv_inputs/tests -v",
+      "log_sha256": "5cb48cb273e8747ed3451c802128b0be1c7dd320be9b39411a68d0e275b1587c",
+      "metadata_mutation_verdict_blocks": 472,
+      "result": "PASS",
+      "synthetic_metadata_baselines": 1,
+      "tests_run": 46
+    }
+  ]
+}

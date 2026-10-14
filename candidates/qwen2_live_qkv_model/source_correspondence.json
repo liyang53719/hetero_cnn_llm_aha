@@ -1,0 +1,86 @@
+{
+  "boundaries": [
+    "Active default-off Matrix/Scalar source guards remain unchanged; selected postimage identities are separately reviewed source correspondence.",
+    "Python ticks, local lists, host wall time and bytes do not establish hardware cycles, synthesis resources or utilization.",
+    "M16 only; maxTokens1024 describes address layout, not 1024-token execution.",
+    "Stop pc8 public completion held: 9 owner terminals, 8 public retirements; V not published; no final fence or full block."
+  ],
+  "correspondence": [
+    {
+      "contract": "Original 21 public commands; only pc0..8 executed; Dense pc1/4/7 with H1536,N1536/256,M16,weightBF16=true,activation/outputBF16=false,c=0,writeBytes=M*N*4.",
+      "model": "ffn_public/fixture.py + model.py; official_bf16/execution.py validate_job",
+      "postimage": "HostBlockTop.scala:50; HostBlockCommands.scala; QwenOwnerProtocol.scala:172-177",
+      "role": "public21 parser and typed dispatch"
+    },
+    {
+      "contract": "N tile160 with tail96; K[0,1024),[1024,1536); adjacent pair high-before-low; slot0/slot1; each partial unmaterialized FP32; one serialized Matrix; A retained within a job, invalidated at terminal.",
+      "model": "dense_block_reduce/public_coordinator.py:130-184 + k_window_model.py + matrix_binding.py",
+      "postimage": "DenseBlockReductionCoordinator.scala:77-102,147-158; QwenOwnerProtocol.scala reduction binding",
+      "role": "Dense partial windows and owner lease"
+    },
+    {
+      "contract": "Read lhs slot0 then rhs slot1; one Add16 request/result per logical beat; output slot2; inputs released only after sealed output; shared port arbitrated and loan drained. Source reference computes current+previous; finite FP32 sum value matches lhs+rhs; no universal NaN-payload equivalence.",
+      "model": "dense_block_reduce/sum_tiles.py + vector_add_model.py",
+      "postimage": "DenseTileSumBridge.scala:51-64,83-104; DenseBlockReductionCoordinator.scala:103-108",
+      "role": "Vector16 sum and slot2"
+    },
+    {
+      "contract": "Only drain returns credit DDR bytes; final ACK must retire before Dense terminal and lease invalidation. Model synthetic ready/response stalls differ from actual iDMA latency. Physical output must be completely ACKed before public publication.",
+      "model": "dense_drain.py + ReductionDriver + prefix_execution.PhysicalMemory",
+      "postimage": "DenseBlockReductionCoordinator.scala:169-186; HostBlockTop.scala DMA handoff; owner fence",
+      "role": "final drain and ACK"
+    },
+    {
+      "contract": "V8/ILP4/3 blocks: 16 terms,3 blocks,4 residues,8 lanes; FP32 mean+epsilon1e-6+sqrt+reciprocal; direct gamma; BF16 after scale and gamma. Square/vector final products permit finite UF; ordinary scalar Add/Div/Sqrt reject inexact UF, accept NX.",
+      "model": "official_bf16/owners.py:24-59",
+      "postimage": "Qwen2Block.scala:319-377; BlockFloat.scala:79-86",
+      "role": "RMS pc0"
+    },
+    {
+      "contract": "Bias FP32 raw+bias then BF16; split-half RoPE with BF16 table/products/sums and nonfused Add/Mul. Vector raw flags unreported; finite UF/NX accepted; nonfinite final stores rejected. No full invalid-domain error-timing equivalence claimed.",
+      "model": "official_bf16/owners.py:62-93; prefix_arithmetic.py vector policy",
+      "postimage": "Qwen2Block.scala:500-510,561-564; write finite gate:250-255",
+      "role": "Bias pc2/5/8 and RoPE pc3/6"
+    }
+  ],
+  "postimage_manifest_sha256": "f360ca85a99eb232c25e39b6426a599d69b4a8a6b87ad523f5344c6e0f5a72f0",
+  "raw_reference_independence": {
+    "actual_cpp": [
+      "ffn_attention/matrix_numeric.cpp",
+      "transposed_down/numeric_smoke.cpp"
+    ],
+    "claim": "independent input/loop/layout/reduction organization check; not independent low-level FPU implementation or official raw reference",
+    "rms": "separate vector-lane numpy_norm; both use NumPy FP32 primitive implementation",
+    "shared": [
+      "FP32 fused-multiply-add implementation/libm",
+      "BF16 RNE mathematical rule",
+      "explicit K split/pair-order formula"
+    ],
+    "typed_cpp": "dense_block_reduce/reference/dot16.inc; not included by actual Matrix C++ closure"
+  },
+  "resource_scope": {
+    "hardware_resource_denominator": null,
+    "matrix_accumulator_bytes": 81920,
+    "scalar_service": "serialized software primitive calls; no clock latency model",
+    "shape": [
+      5,
+      16,
+      256
+    ],
+    "shared_matrix_instances_in_model": 1,
+    "vector_add_lanes": 16,
+    "word_bytes": 4
+  },
+  "schema": 1,
+  "selected_postimage_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "5709381b3261aaa8f6e1f322b661ab27203861543f370ccff2f798b5a56feabf",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "ac5c5506de3bd6b00ee778619ebea8711544cb7ae36ad58a9a9906e438f76005",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "07d728d510ffd8b4f02c1b02476c2236fe594a18f70248c5a2f2c4ecbc361ae8"
+  },
+  "status": "SOURCE_CORRESPONDENCE_ONLY_NOT_RTL_EQUIVALENCE"
+}

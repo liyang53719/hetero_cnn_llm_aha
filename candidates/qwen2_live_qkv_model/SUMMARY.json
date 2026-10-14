@@ -1,0 +1,263 @@
+{
+  "actual": {
+    "actual_producer_hashes": {
+      "k": "e71f02e124302e9c4725f8af6438eb9894f8c1d37e8a5a3462203c8ad8f12bf0",
+      "kr": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087",
+      "kraw": "706ff30804b0f977fe0cef5fa34ad74968f3f1da22a595e772fa05e808422435",
+      "n0": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce",
+      "q": "861dfe5deb8ccddd7d27e2c5e7c75323f9fd608fd1ebfef5072cc9650bd4848e",
+      "qr": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977",
+      "qraw": "5c18a60bded3060eea729e30988111eb8dfb80238ad4300a4873cb5edebcc397",
+      "v": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10",
+      "vraw": "74115da974a847c14223b088ce6093402633190f141489df5209db9c2a5cc580"
+    },
+    "backend_debts": {
+      "a_lease": false,
+      "accepted_write": false,
+      "dma_pending": false,
+      "matrix_owned": false,
+      "owner_a_hold": false,
+      "owner_a_rmw": false,
+      "owner_fifo": 0,
+      "owner_pending": false,
+      "owner_read": false,
+      "reduction_active": false,
+      "reset_required": false,
+      "scalar_owned": false,
+      "tile_busy": false,
+      "tile_lease": false
+    },
+    "complete_source_entries": 142,
+    "held_boundary": {
+      "completed": 8,
+      "completion": {
+        "engine": 3,
+        "pc": 8,
+        "signal": 9,
+        "status": null
+      },
+      "finalfence": false,
+      "launch_result": null,
+      "pc": 8,
+      "v_published": false
+    },
+    "host_wall_seconds": 30.75889814599941,
+    "observed_totals": {
+      "actual_c_fma_calls": 402653184,
+      "drains": 14,
+      "executed_macs": 402653184,
+      "partials": 28,
+      "raw_qkv_ack_bytes": 131072,
+      "useful_macs": 50331648,
+      "vector_add_requests": 2048,
+      "wide_matrix_steps": 98304
+    },
+    "official_nodes": {
+      "k": {
+        "bit_exact": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0
+      },
+      "kr": {
+        "bit_exact": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0
+      },
+      "n0": {
+        "bit_exact": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0
+      },
+      "q": {
+        "bit_exact": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0
+      },
+      "qr": {
+        "bit_exact": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0
+      },
+      "v": {
+        "bit_exact": true,
+        "max_abs": 0.0,
+        "mean_abs": 0.0
+      }
+    },
+    "path": "work/qwen2_live_qkv_numeric_20261014/package_m16_v4/RESULT.json",
+    "peak_rss_kib": 73852,
+    "sha256": "bf2155c9e2cfc071b6b446bd64bf192fc10785bc78554909da203114e1c0d6e8",
+    "status": "PASS_M16_OFFICIAL_OBSERVED_PRODUCERS_PC8_HELD"
+  },
+  "base_commit": "c87cdaf7dde34dbdf785dcb089b7d1d99757e035",
+  "candidate_commit": null,
+  "cold": {
+    "default_not_executed": true,
+    "logs": {
+      "work/qwen2_live_qkv_numeric_20261014/ci-cold/default.json": "0746ca57493e83f4ea0a324a3d85e2386f24d112febef3c01afe9cbfb2aa1063",
+      "work/qwen2_live_qkv_numeric_20261014/ci-cold/normal.log": "a34792dca3fa63179328813bfac9291c009d0e837f84d5e8ca645a6857bb7a03",
+      "work/qwen2_live_qkv_numeric_20261014/ci-cold/optimized.log": "959bc5a9c1f7d393c2a6680c24c2d3dd499cad1626b20bd5da672e67f76d2be1"
+    },
+    "normal_tests": 20,
+    "optimized_tests": 20,
+    "python": "3.12; -B -S, standard library only"
+  },
+  "default_status": "NOT_EXECUTED",
+  "dependency_pin_count": 136,
+  "dependency_pins_verified_against_base_commit": true,
+  "inherited_services_fresh_regression": {
+    "arithmetic_elf_bit_identical_to_package_v4": true,
+    "arithmetic_elf_sha256": "a44f4cd7861d1207698bb3dfc89820ded30a44db1cf1c8b9f951019d1edce1fa",
+    "overlapping_dependencies_all_identical": true,
+    "receipt_sha256": "964bda6543f7b6bcb76c68a55703fa96d36bbe705c8ddd136107f098231a230c",
+    "scope": "original immutable services; exact same four arithmetic sources and dependency hashes; not a substitute for packaged fresh actual run",
+    "status": "PASS",
+    "tests": 87
+  },
+  "limitations": [
+    "Software/transaction model only; v5 source mapping is separate from active default-off core source guard.",
+    "No official raw Q/K/V pre-bias reference; typed route shares FP32 primitive implementation.",
+    "pc8 completion remains held; no final fence, full block, RTL, synthesis, QoR or utilization acceptance.",
+    "M128 not executed/admitted; no zeros-extension or multiplication by 8.",
+    "No stage, commit, push or remote CI performed by this worker."
+  ],
+  "model_timing": {
+    "ddr_pipeline_wait_cycles": null,
+    "hardware_cycles": null,
+    "hardware_utilization": null,
+    "per_producer": [
+      {
+        "backend_cycle_field": 11525,
+        "driver_ticks": 11526,
+        "pc": 0,
+        "producer": "n0"
+      },
+      {
+        "backend_cycle_field": null,
+        "driver_ticks": 234853,
+        "pc": 1,
+        "producer": "qraw"
+      },
+      {
+        "backend_cycle_field": 11525,
+        "driver_ticks": 11526,
+        "pc": 2,
+        "producer": "qr"
+      },
+      {
+        "backend_cycle_field": 11525,
+        "driver_ticks": 11526,
+        "pc": 3,
+        "producer": "q"
+      },
+      {
+        "backend_cycle_field": null,
+        "driver_ticks": 44074,
+        "pc": 4,
+        "producer": "kraw"
+      },
+      {
+        "backend_cycle_field": 1925,
+        "driver_ticks": 1926,
+        "pc": 5,
+        "producer": "kr"
+      },
+      {
+        "backend_cycle_field": 1925,
+        "driver_ticks": 1926,
+        "pc": 6,
+        "producer": "k"
+      },
+      {
+        "backend_cycle_field": null,
+        "driver_ticks": 44079,
+        "pc": 7,
+        "producer": "vraw"
+      },
+      {
+        "backend_cycle_field": 1925,
+        "driver_ticks": 1926,
+        "pc": 8,
+        "producer": "v"
+      }
+    ],
+    "resource_denominator": null,
+    "scalar_calls": {
+      "add": 88208,
+      "bf": 196608,
+      "div": 32,
+      "mul": 131072,
+      "sqrt": 16
+    },
+    "scalar_sfu_pipeline_wait_cycles": null,
+    "total_host_model_ticks": 363414
+  },
+  "original_working_run_independent_review_sha256": "925a696e79fb70b9847ae206365c6255826e0003c7d0ae6310380cc1c375e36d",
+  "prior_attempts": [
+    {
+      "id": "m16_v1",
+      "reason": "/usr/bin/time unavailable",
+      "status": "ENVIRONMENT_LAUNCH_FAILURE_NO_MODEL"
+    },
+    {
+      "id": "m16_v2",
+      "package_pass_inherited": false,
+      "receipt_sha256": "7fffed1fcf9a9477a4ce74b6a51340670ace985b05a98c629f98cf8fad54d499",
+      "status": "FROZEN_WORKING_RUN_SCOPED_PASS"
+    },
+    {
+      "id": "package_m16_v1",
+      "reason": "strict input gate rejected metadata temporary /tmp binary before producers; moved metadata temp inside fresh run",
+      "status": "FAIL_RETAINED"
+    },
+    {
+      "id": "package_m16_v2",
+      "reason": "strict input gate rejected pinned safetensors header after output seal; exact pinned source header exception added, no tensor directory opened",
+      "status": "FAIL_RETAINED"
+    },
+    {
+      "frozen_package": "work/qwen2_live_qkv_numeric_20261014/package_m16_v3/frozen_package",
+      "id": "package_m16_v3/package_raw_v3",
+      "reason": "independent review found raw CLI rejected-output handler could write into an existing directory; removed handler, added negative test and reran full M16/raw as v4",
+      "status": "FROZEN_NUMERICAL_PASS_NONFINAL_PACKAGE"
+    }
+  ],
+  "schema": 1,
+  "status": "SOURCE_ONLY_M16_PACKAGE_FRESH_LOCAL_GATES_PASS_PENDING_REVIEW",
+  "typed_raw_reference": {
+    "all_three_bit_exact": true,
+    "complete_source_entries": 143,
+    "independence": {
+      "actual_cpp": [
+        "ffn_attention/matrix_numeric.cpp",
+        "transposed_down/numeric_smoke.cpp"
+      ],
+      "claim": "independent input/loop/layout/reduction organization check; not independent low-level FPU implementation or official raw reference",
+      "rms": "separate vector-lane numpy_norm; both use NumPy FP32 primitive implementation",
+      "shared": [
+        "FP32 fused-multiply-add implementation/libm",
+        "BF16 RNE mathematical rule",
+        "explicit K split/pair-order formula"
+      ],
+      "typed_cpp": "dense_block_reduce/reference/dot16.inc; not included by actual Matrix C++ closure"
+    },
+    "official_raw_acceptance": false,
+    "path": "work/qwen2_live_qkv_numeric_20261014/package_raw_v4/RESULT.json",
+    "sha256": "1029fb33e70889e20450b95c0e9636fd68f5706cdd4c345b9ed009ca7207de40",
+    "status": "PASS_TYPED_RECIPE_RAW_BIT_EXACT"
+  },
+  "workflow": {
+    "artifact_allowlist": [
+      "work/qwen2_live_qkv_numeric_20261014/ci-cold/default.json",
+      "work/qwen2_live_qkv_numeric_20261014/ci-cold/normal.log",
+      "work/qwen2_live_qkv_numeric_20261014/ci-cold/optimized.log"
+    ],
+    "concurrency": "per github.sha; cancellation disabled",
+    "exact_filtered_paths": 138,
+    "local_exact_job_commands": "PASS",
+    "local_receipt_sha256": "8c96e48253eed7126fc769292b968ef1cff249993780fa52afcd4b9b1ee27ef5",
+    "path": ".github/workflows/qwen2-live-qkv-model-cold.yml",
+    "remote_ci": "NOT_RUN",
+    "sha256": "d17cb74301ebd1a40cf64221d207a9c715b2c31bdac1cbf8dfc9b6102a8c22ac"
+  }
+}

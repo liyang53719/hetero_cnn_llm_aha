@@ -40,6 +40,8 @@ object GdnRmsNormFixedBankOwner {
   val WriteAcksPerToken = 64
   val LoanRequestsPerToken = 128
   val ScalarRequestsPerToken = 4268
+  val VectorReductionScalarRequestsPerToken = 44
+  val VectorReductionLoanRequestsPerToken = 136
   val ScalarMulRequestsPerToken = 2049
   val ScalarAddRequestsPerToken = 2217
   // New same-bank H2048 ablation, not the historical H1024 owner baseline.
@@ -58,7 +60,12 @@ object GdnRmsNormFixedBankOwner {
   * vector BF16 half-beat, or one 16-bit Scalar BF16 lane. The whole chunk is
   * filled before its first DDR write.
   *
-  * Arithmetic: external shared Scalar for the pinned two-chunk reduction;
+  * Optional useVectorReduction borrows the original elementwise ALUs for each
+  * separate square/add and residue merge. During reduction the unused first
+  * 128B of the weight bank holds 32 block partials; output retains its original
+  * 128B residue layout. No SRAM, arithmetic or wide register is added here.
+  * This default-false candidate leaves final ordered fold and SFU on Scalar.
+  * Arithmetic: external shared Scalar for the default pinned two-chunk reduction;
   * external original ElementwiseRegisterLoan for the default 16-lane epilogue.
   * Compile-time useVectorEpilogue=false runs those three per-lane operations
   * on the same external Scalar with the same banks and two-pass DDR schedule.
@@ -89,9 +96,12 @@ object GdnRmsNormFixedBankOwner {
   * synthesis, physical timing, or PPA result is claimed here.
   */
 class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
-                               useVectorEpilogue: Boolean = true) extends Module {
+                               useVectorEpilogue: Boolean = true,
+                               useVectorReduction: Boolean = false) extends Module {
   import GdnRmsNormFixedBankOwner._
   require(maxTokens >= 1 && maxTokens <= 128)
+  require(!useVectorReduction || useVectorEpilogue,
+    "the first vector-reduction candidate retains the original vector epilogue")
   val io = IO(new GdnRmsNormFixedBankOwnerPort)
 
   val idle :: readInput :: waitInput :: readWeight :: waitWeight :: scalarIssue :: scalarWait :: loanIssue :: loanWait :: loanAbort :: loanDrain :: writeOutput :: waitOutput :: finish :: locked :: recoverPulse :: recoverWait :: Nil = Enum(17)
@@ -107,6 +117,7 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
   val token = RegInit(0.U(16.W))
   val beat = RegInit(0.U(5.W))
   // Reduction C: [9:7] lane8, [6:5] residue, [4] block, [3:0] term.
+  // Vector reduction C: [5] block, [4] group of four lanes, [3:0] term.
   // Fold: p=0..31. Epilogue: chunk-local column advances by 16 (loan) or 1 (Scalar).
   val lane = RegInit(0.U(10.W))
   val chunk = RegInit(false.B)
@@ -157,14 +168,19 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
 
   val reduceIndex = Cat(lane(4), lane(3, 0), lane(6, 5), lane(9, 7))
   val inputIndex = Mux(emitPass, lane, reduceIndex)
-  val inputWords = input(inputIndex(9, 5)).asTypeOf(Vec(32, UInt(16.W)))
+  val reductionLoan = (if (useVectorReduction) !emitPass && loanDebt else false.B)
+  val reductionGroup = lane(4).asUInt
+  // One physical bank beat contains all eight lanes x four residues for a term.
+  // The 4-lane x 4-residue permutation never asks for a second input-bank read.
+  val inputReadIndex = Mux(reductionLoan, Cat(lane(5), lane(3, 0)), inputIndex(9, 5))
+  val inputWords = input(inputReadIndex).asTypeOf(Vec(32, UInt(16.W)))
   val partialIndex = Mux(operation === foldResidue, lane(4, 0), Cat(lane(9, 7), lane(6, 5)))
   val partialBeat = Cat(0.U(4.W), partialIndex(4))
   // Share the output-bank read mux between DDR, scalar scratch, and epilogue.
   val readPartial = (state === scalarIssue || state === scalarWait) &&
     (if (useVectorEpilogue) true.B else !emitPass)
   val outputReadIndex = Mux(memoryOffer || memoryDebt, beat,
-    Mux(readPartial, partialBeat, lane(9, 5)))
+    Mux(reductionLoan, reductionGroup, Mux(readPartial, partialBeat, lane(9, 5))))
   val currentOutputBeat = output(outputReadIndex)
   val partialWords = currentOutputBeat.asTypeOf(Vec(16, UInt(32.W)))
   val previousPartial = partialWords(partialIndex(3, 0))
@@ -198,7 +214,11 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
     epsilon -> F32.lit(1e-6), root -> 0.U))
   io.scalar.result.ready := state === scalarWait
 
-  val weightWords = weights(lane(9, 5)).asTypeOf(Vec(32, UInt(16.W)))
+  // Before emitPass no model weight is resident or live. Lease only the first
+  // two beats for 32 block partials; DDR weights replace them after inverse.
+  val weightReadIndex = Mux(reductionLoan, reductionGroup, lane(9, 5))
+  val currentWeightBeat = weights(weightReadIndex)
+  val weightWords = currentWeightBeat.asTypeOf(Vec(32, UInt(16.W)))
   if (!useVectorEpilogue) {
     // Separate FP32 rounding boundaries, using the original external Scalar.
     // normalized holds x * inverse while value is overwritten by 1 + weight.
@@ -218,7 +238,7 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
       io.scalar.request.bits.b := value
     }
   }
-  io.loan.request.valid := (if (useVectorEpilogue) state === loanIssue else false.B)
+  io.loan.request.valid := (if (useVectorEpilogue || useVectorReduction) state === loanIssue else false.B)
   io.loan.request.bits.tag := sequence
   io.loan.request.bits.op := ElementwiseLoanOp.RmsEpilogue.U
   io.loan.request.bits.a := VecInit((0 until 16).map { i =>
@@ -228,6 +248,22 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
     Cat(weightWords(Cat(lane(4), i.U(4.W))), 0.U(16.W))
   }).asUInt
   io.loan.request.bits.inverse := invRms
+  if (useVectorReduction) {
+    when(reductionLoan) {
+      io.loan.request.bits.inverse := 0.U
+      io.loan.request.bits.op := Mux(operation === residue,
+        ElementwiseLoanOp.Add.U, ElementwiseLoanOp.SquareAccumulate.U)
+      io.loan.request.bits.a := Mux(operation === residue,
+        Mux(!chunk && !lane(5), 0.U(512.W), currentOutputBeat),
+        VecInit((0 until 16).map { i =>
+          val scalarLane = Cat(lane(4), (i / 4).U(2.W))
+          val element = Cat((i % 4).U(2.W), scalarLane)
+          Cat(inputWords(element), 0.U(16.W))
+        }).asUInt)
+      io.loan.request.bits.b := Mux(operation === residue || lane(3, 0) =/= 0.U,
+        currentWeightBeat, 0.U(512.W))
+    }
+  }
   // Never pulse abort/reset while an unaccepted loan offer is being held:
   // the existing service gates request.ready with those inputs.
   io.loan.abort := state === loanAbort
@@ -237,7 +273,10 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
   val loanFloats = io.loan.result.bits.value.asTypeOf(Vec(16, UInt(32.W)))
   val loanRounded = VecInit((0 until 16).map(i => TensorMath.bf16Rne(loanFloats(i))))
   val loanNonfinite = VecInit((0 until 16).map(i => !TensorMath.finite(loanFloats(i)))).asUInt.orR
-  val bf16Overflow = VecInit((0 until 16).map(i => loanRounded(i)(14, 7) === 255.U)).asUInt.orR
+  // Reduction results stay FP32 and must not be rejected by the epilogue's
+  // BF16 conversion rule. The actual loan still enforces per-stage FP32 flags.
+  val bf16Overflow = emitPass &&
+    VecInit((0 until 16).map(i => loanRounded(i)(14, 7) === 255.U)).asUInt.orR
   val scalarRounded = TensorMath.bf16Rne(io.scalar.result.bits)
   val scalarBf16Overflow = if (useVectorEpilogue) false.B else
     operation === weighted && scalarRounded(14, 7) === 255.U
@@ -247,6 +286,10 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
   val outputWrite = WireDefault(false.B)
   val outputWriteIndex = WireDefault(0.U(5.W))
   val outputWriteData = WireDefault(0.U(512.W))
+  // One logical weight-bank write port: DDR fill or reduction block partial.
+  val weightWrite = WireDefault(false.B)
+  val weightWriteIndex = WireDefault(0.U(5.W))
+  val weightWriteData = WireDefault(0.U(512.W))
   val updatedPartialWords = Wire(Vec(16, UInt(32.W)))
   updatedPartialWords := partialWords
   updatedPartialWords(partialIndex(3, 0)) := io.scalar.result.bits
@@ -319,7 +362,9 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
             }.reduce(_ || _)
             when(nonfinite) { fail(Status.Numerical.U) }
               .otherwise {
-                when(state === waitWeight) { weights(beat) := r.data }
+                when(state === waitWeight) {
+                  weightWrite := true.B; weightWriteIndex := beat; weightWriteData := r.data
+                }
                   .otherwise { input(beat) := r.data }
                 when(beat === (BankBeats - 1).U) {
                   beat := 0.U; lane := 0.U
@@ -329,7 +374,8 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
                   }
                     .elsewhen(emitPass) { state := readWeight }
                     .otherwise {
-                      accumulator := 0.U; operation := square; state := scalarIssue
+                      accumulator := 0.U; operation := square
+                      state := (if (useVectorReduction) loanIssue else scalarIssue)
                     }
                 }.otherwise {
                   beat := beat + 1.U
@@ -427,8 +473,9 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
 
   when(io.loan.request.fire) {
     assert(io.loan.request.bits.tag === sequence, "loan request must carry the retained transaction tag")
-    assert(io.loan.request.bits.op === ElementwiseLoanOp.RmsEpilogue.U,
-      "the fixed-bank RMS owner borrows only the RMS epilogue")
+    assert(Mux(emitPass, io.loan.request.bits.op === ElementwiseLoanOp.RmsEpilogue.U,
+      (if (useVectorReduction) operation === square || operation === residue else false.B)),
+      "fixed-bank RMS loan must belong to its current arithmetic phase")
     state := Mux(status =/= Status.Ok.U || cancel, loanAbort, loanWait)
   }
   when(state === loanWait && cancel) {
@@ -458,15 +505,57 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
       }.elsewhen(loanNonfinite || bf16Overflow) { fail(Status.Numerical.U) }
       .otherwise {
         sequence := sequence + 1.U
-        outputWrite := true.B
-        outputWriteIndex := lane(9, 5)
-        outputWriteData := updatedOutputBeat
-        when(lane === (BankWidth - 16).U) {
-          beat := 0.U; state := writeOutput
-        }.otherwise { lane := lane + 16.U; state := loanIssue }
+        if (useVectorReduction) {
+          when(!emitPass) {
+            // A loan's complete flags/finite checks passed before either bank
+            // is updated. No lane or intermediate failed result is committed.
+            when(operation === square) {
+              weightWrite := true.B; weightWriteIndex := reductionGroup
+              weightWriteData := r.value
+              when(lane(3, 0) === 15.U) { operation := residue }
+                .otherwise { lane := lane + 1.U }
+              state := loanIssue
+            }.otherwise {
+              outputWrite := true.B; outputWriteIndex := reductionGroup
+              outputWriteData := r.value
+              when(lane === 63.U) {
+                lane := 0.U
+                when(!chunk) {
+                  chunk := true.B; beat := 0.U; operation := square; state := readInput
+                }.otherwise {
+                  accumulator := 0.U; normalized := 0.U
+                  operation := foldResidue; state := scalarIssue
+                }
+              }.otherwise { lane := lane + 1.U; operation := square; state := loanIssue }
+            }
+          }.otherwise {
+            outputWrite := true.B; outputWriteIndex := lane(9, 5)
+            outputWriteData := updatedOutputBeat
+            when(lane === (BankWidth - 16).U) { beat := 0.U; state := writeOutput }
+              .otherwise { lane := lane + 16.U; state := loanIssue }
+          }
+        } else {
+          outputWrite := true.B; outputWriteIndex := lane(9, 5)
+          outputWriteData := updatedOutputBeat
+          when(lane === (BankWidth - 16).U) { beat := 0.U; state := writeOutput }
+            .otherwise { lane := lane + 16.U; state := loanIssue }
+        }
       }
   }
   when(outputWrite) { output(outputWriteIndex) := outputWriteData }
+  when(weightWrite) { weights(weightWriteIndex) := weightWriteData }
+  if (useVectorReduction) {
+    when(reductionLoan) {
+      assert(!emitPass && !io.memory.valid && !io.scalar.request.valid,
+        "reduction scratch lease must exclude model weights and other service offers")
+      assert(operation === square || operation === residue)
+    }
+    when(weightWrite && state =/= waitWeight) {
+      assert(!emitPass && state === loanWait && io.loan.result.fire &&
+        io.loan.result.bits.status === Status.Ok.U && status === Status.Ok.U && !cancel,
+        "only a successful reduction loan may update the leased weight scratch")
+    }
+  }
 
   when(io.done.fire) { state := Mux(status === Status.Ok.U, idle, locked) }
   // clear cannot erase a held terminal, an offered request, or accepted debt.
@@ -490,7 +579,19 @@ class GdnRmsNormFixedBankOwner(maxTokens: Int = 128,
     assert(!io.loan.request.valid, "same-bank Scalar epilogue must issue zero loans")
   }
   when(io.loan.request.valid) {
-    assert(emitPass && lane(3, 0) === 0.U, "loan must consume an aligned output half-beat")
+    if (useVectorReduction) {
+      when(emitPass) {
+        assert(lane(3, 0) === 0.U, "epilogue loan must consume an aligned output half-beat")
+      }.otherwise {
+        assert(lane <= 63.U && (operation === square || operation === residue),
+          "reduction loan must own a valid block/group/term")
+        when(operation === residue) {
+          assert(lane(3, 0) === 15.U, "residue merge must follow exactly sixteen terms")
+        }
+      }
+    } else {
+      assert(emitPass && lane(3, 0) === 0.U, "loan must consume an aligned output half-beat")
+    }
     assert(!io.loan.abort && !io.loan.resetLoan, "held loan offers must remain acceptable")
   }
   when(outputWrite) {

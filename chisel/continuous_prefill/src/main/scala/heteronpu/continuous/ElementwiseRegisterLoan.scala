@@ -7,7 +7,7 @@ import heteronpu.p0.LocalSramConfig
 
 /** Internal register transaction; never a public Command128 encoding. */
 object ElementwiseLoanOp {
-  val Add = 1; val Mul = 2; val MulIeeeRne = 6; val RmsEpilogue = 7
+  val Add = 1; val Mul = 2; val SquareAccumulate = 3; val MulIeeeRne = 6; val RmsEpilogue = 7
   val Aborted = 10
 }
 class ElementwiseLoanRequest extends Bundle {
@@ -31,6 +31,8 @@ class ElementwiseLoanPort extends Bundle {
   * A register transaction is admitted only while the DDR engine is idle/drained;
   * an offered DDR job wins arbitration. An RMS epilogue retains the loan across
   * all three FP32 operations. Its final BF16 conversion belongs to its caller.
+  * SquareAccumulate keeps the loan for separately rounded x*x and partial+square;
+  * it never fuses them. The idle DDR base register records the loan opcode.
   * Global module reset still requires coordinated external DDR drain.
   * resetLoan cannot erase a held terminal or unlock a DDR-originated error.
   */
@@ -69,18 +71,30 @@ class ElementwiseRegisterLoan(c: ChainConfig = ChainConfig(),
     val r = loan.request.bits
     job.tag := r.tag; job.op := Mux(r.op === ElementwiseLoanOp.Add.U, ElemOp.Add.U, ElemOp.Mul.U)
     a := r.a
-    b := Mux(r.op === ElementwiseLoanOp.RmsEpilogue.U, Fill(16, r.inverse), r.b)
-    raw := r.b // RMS weight survives normalize in the parent's existing raw register.
+    b := Mux(r.op === ElementwiseLoanOp.RmsEpilogue.U, Fill(16, r.inverse),
+      Mux(r.op === ElementwiseLoanOp.SquareAccumulate.U, r.a, r.b))
+    raw := r.b // Preserve RMS weight or square-accumulate partial in existing storage.
+    // A loan owns idle/drained DDR registers exclusively. Initialize on EVERY
+    // loan, and the parent resets base on EVERY DDR admission before using it.
+    base := r.op
     tile := 16.U; calcIndex := 0.U; status := Status.Ok.U
     cycles := 0.U; reads := 0.U; writes := 0.U; elementCount := 0.U
     when(r.op === ElementwiseLoanOp.RmsEpilogue.U) { loanState := lNormalize }
-      .elsewhen(r.op === ElementwiseLoanOp.MulIeeeRne.U) { loanState := lIeee }
+      .elsewhen(r.op === ElementwiseLoanOp.MulIeeeRne.U ||
+        r.op === ElementwiseLoanOp.SquareAccumulate.U) { loanState := lIeee }
       .elsewhen(r.op === ElementwiseLoanOp.Add.U || r.op === ElementwiseLoanOp.Mul.U) { loanState := lPrimitive }
       .otherwise { loanFail(Status.Unsupported.U) }
   }
   when(active) { cycles := cycles + 1.U }
   when(loanState === lPrimitive || loanState === lIeee) {
     when(Mux(loanState === lIeee, ieeeBad, strictBad)) { loanFail(Status.Numerical.U) }
+      .elsewhen(loanState === lIeee && base === ElementwiseLoanOp.SquareAccumulate.U) {
+        // First RNE is MulIeeeRne (finite UF/NX accepted). Register that exact
+        // FP32 square, then use the legacy strict Add for the second RNE.
+        // No intermediate result is published, and either stage fails all lanes.
+        a := raw; b := aluResults.asUInt; job.op := ElemOp.Add.U
+        loanState := lPrimitive
+      }
       .otherwise { value := aluResults.asUInt; elementCount := 16.U; loanState := lReply }
   }
   when(loanState === lNormalize) {

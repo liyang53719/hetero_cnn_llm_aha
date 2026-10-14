@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Bounded production-service RMS borrower RTL tests with immutable receipts.
 
-Synthetic control tests run by default. Frozen real inputs require explicit
-manifest pins. A successful run is a local RMS operator result, not a block pass.
+Historical synthetic control tests run by default. New vector-reduction and
+ideal-supply modes require frozen real inputs and explicit manifest pins.
+Ideal supply is a calibration experiment; target DDR timing is unspecified.
+A successful run is a local RMS operator result, not a block pass.
 """
 import argparse, hashlib, json, os, re, shutil, signal, subprocess, time
 from pathlib import Path
@@ -12,6 +14,10 @@ PROJECT = ROOT/'chisel/continuous_prefill'
 
 def require(ok, why):
     if not ok: raise ValueError(why)
+def env_boolean(name, default):
+    value=os.environ.get(name, 'true' if default else 'false')
+    require(value in ('true','false'), f'invalid boolean {name}={value!r}; expected true or false')
+    return value=='true'
 def record(p):
     p=Path(p).resolve(); raw=p.read_bytes()
     return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
@@ -27,20 +33,35 @@ def main():
     p.add_argument('--actual-fixture-root',type=Path)
     p.add_argument('--tokens',default='1,16,128')
     p.add_argument('--scalar-epilogue',action='store_true',
-        help='new same-bank H2048 Scalar ablation; production core.elem remains configured but idle')
+        default=not env_boolean('HETERO_H2048_USE_VECTOR_EPILOGUE', True),
+        help='same-bank H2048 Scalar epilogue ablation')
+    p.add_argument('--vector-reduction',action='store_true',
+        default=env_boolean('HETERO_H2048_USE_VECTOR_REDUCTION', False),
+        help='use 128 two-round SquareAccumulate and 8 Add loans per token; actual fixtures required')
+    p.add_argument('--ideal-supply',action='store_true',
+        default=env_boolean('HETERO_H2048_IDEAL_SUPPLY', False),
+        help='ideal supply experiment, with no artificial service or DDR delays; actual fixtures required')
     for m in (1,16,128):p.add_argument(f'--m{m}-manifest-sha256')
     a=p.parse_args();require(not a.out.exists(),'fresh evidence directory required')
+    require(a.actual_fixture_root is not None or not (a.vector_reduction or a.ideal_supply),
+        'vector-reduction and ideal-supply gates require external actual fixtures and manifest pins')
     wrapper=shutil.which('sbt-chiseltest');require(wrapper is not None,'source pinned toolchain env.sh')
     env=os.environ.copy();fixtures=[];tokens=[]
     env['HETERO_H2048_USE_VECTOR_EPILOGUE']='false' if a.scalar_epilogue else 'true'
+    env['HETERO_H2048_USE_VECTOR_REDUCTION']='true' if a.vector_reduction else 'false'
+    env['HETERO_H2048_IDEAL_SUPPLY']='true' if a.ideal_supply else 'false'
     epilogue='scalar' if a.scalar_epilogue else 'vector'
+    reduction='vector' if a.vector_reduction else 'scalar'
+    timing='ideal_supply_experiment' if a.ideal_supply else 'artificial_backpressure'
+    profile=f'h2048_{reduction}_reduction_{epilogue}_epilogue_{timing}'
     tests=['heteronpu.continuous.GdnRmsNormFixedBankOwnerSpec',
            'heteronpu.continuous.GdnRmsNormFixedBankCoreSpec','heteronpu.continuous.GdnRmsNormOwnerSpec']
     if a.scalar_epilogue:
         tests=['heteronpu.continuous.GdnRmsNormFixedBankScalarBaselineSpec']
     if a.actual_fixture_root is not None:
         tokens=[int(x) for x in a.tokens.split(',')]
-        require(tokens and len(set(tokens))==len(tokens) and all(x in (1,16,128) for x in tokens),'supported distinct token cases')
+        require(tokens and len(set(tokens))==len(tokens) and tokens==sorted(tokens) and
+            all(x in (1,16,128) for x in tokens),'supported distinct token cases, in M1/M16/M128 order')
         tests=['heteronpu.continuous.GdnRmsNormFixedBankReplaySpec']
         env['HETERO_H2048_FIXTURE_ROOT']=str(a.actual_fixture_root.resolve())
         env['HETERO_H2048_REPLAY_TOKENS']=','.join(map(str,tokens))
@@ -66,11 +87,21 @@ def main():
     before=sources();summary=dict(status='RUNNING',scope='LOCAL_CORE_SERVICE_RMS_ACTUAL_RTL' if fixtures else 'LOCAL_RMS_SYNTHETIC_RTL',
         tests=tests,tokens=tokens,source_before=before,wrapper=record(wrapper),fixtures=fixtures,
         arithmetic_inverse_from_dut=True,full_block=False,kernel_end_to_end=False,physical_ppa=False,
-        epilogue=epilogue,borrower_bank_bytes=6144,
+        epilogue=epilogue,reduction=reduction,timing=timing,profile=profile,borrower_bank_bytes=6144,
+        target_ddr_timing='UNSPECIFIED',ideal_supply_experiment=a.ideal_supply,
+        artificial_service_stalls=not a.ideal_supply,
+        artificial_ddr_request_delay='0' if a.ideal_supply else '2 + issued % 5',
+        artificial_ddr_response_wait='0' if a.ideal_supply else 'request delay, or 37 for last ACK',
+        minimum_ddr_transaction_charged_cycles=2,terminal_hold_cycles=13,
+        expected_scalar_requests_per_token=(44 if a.vector_reduction else 4268)+(6144 if a.scalar_epilogue else 0),
+        expected_loan_requests_per_token=(136 if a.vector_reduction else 0)+(0 if a.scalar_epilogue else 128),
+        numerical_trace_assertions=True,transaction_assertions=True,
+        artificial_stall_coverage_assertions=not a.ideal_supply,
         generated_records_scope='CACHED_DIRECTORY_INVENTORY_ONLY',
         generated_records_current_run_causality_verified=False,
         generated_records_epilogue_identity_verified=False,
-        baseline_identity='H2048_SAME_BANK_SCALAR_ABLATION' if a.scalar_epilogue else 'H2048_VECTOR_BORROWER')
+        baseline_identity='H2048_VECTOR_REDUCTION_BORROWER' if a.vector_reduction else
+            'H2048_SAME_BANK_SCALAR_ABLATION' if a.scalar_epilogue else 'H2048_VECTOR_BORROWER')
     dest=a.out/'summary.json';dest.write_text(json.dumps(summary,indent=2)+'\n')
     started=time.monotonic()
     with (a.out/'test.log').open('w') as output:
@@ -96,7 +127,8 @@ def main():
     expected=1 if fixtures or a.scalar_epilogue else 3
     good=code==0 and unchanged and fixture_unchanged and count==expected and bool(re.search(r'canceled 0, ignored 0, pending 0',log)) and 'All tests passed.' in log
     if fixtures:good=good and actual_tokens==tokens
-    good=good and bool(markers) and all(f'epilogue={epilogue}' in line for line in markers)
+    good=good and bool(markers) and all(all(f'{key}={value}' in line
+        for key,value in (('epilogue',epilogue),('reduction',reduction),('timing',timing))) for line in markers)
     summary.update(status='PASS_LOCAL_RMS_RTL_ONLY' if good else 'FAILED',returncode=code,host_seconds=time.monotonic()-started,
         source_after=after,sources_unchanged=unchanged,fixtures_unchanged=fixture_unchanged,test_count=count,
         markers=markers,observation_markers=observation_markers,log=record(a.out/'test.log'),generated_records=[record(x) for x in sorted(generated)])

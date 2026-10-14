@@ -27,14 +27,21 @@ class GdnRmsNormFixedBankReplaySpec extends AnyFlatSpec with ChiselScalatestTest
   "GdnRmsNormFixedBankOwner" should "compute frozen actual M1 M16 and M128 with the production core services" in {
     val root=Paths.get(sys.env("HETERO_H2048_FIXTURE_ROOT"))
     val selected=sys.env("HETERO_H2048_REPLAY_TOKENS").split(",").map(_.toInt).toSeq
-    require(selected.nonEmpty && selected.distinct==selected && selected.forall(Set(1,16,128)))
-    val useVectorEpilogue = sys.env.getOrElse("HETERO_H2048_USE_VECTOR_EPILOGUE", "true") match {
-      case "true" => true
-      case "false" => false
-      case other => throw new IllegalArgumentException("invalid epilogue selector: " + other)
-    }
+    require(selected.nonEmpty && selected.distinct==selected && selected==selected.sorted &&
+      selected.forall(Set(1,16,128)), "replay M1 before M16 before M128 when selected")
+    def envBoolean(name: String, default: Boolean): Boolean =
+      sys.env.getOrElse(name, default.toString) match {
+        case "true" => true
+        case "false" => false
+        case other => throw new IllegalArgumentException(s"invalid boolean $name=$other")
+      }
+    val useVectorEpilogue = envBoolean("HETERO_H2048_USE_VECTOR_EPILOGUE", true)
+    val useVectorReduction = envBoolean("HETERO_H2048_USE_VECTOR_REDUCTION", false)
+    val idealSupply = envBoolean("HETERO_H2048_IDEAL_SUPPLY", false)
+    val reduction = if (useVectorReduction) "vector" else "scalar"
+    val timing = if (idealSupply) "ideal_supply_experiment" else "artificial_backpressure"
     test(new GdnRmsNormFixedBankArithmeticHarness(productionCore=true,
-      useVectorEpilogue=useVectorEpilogue))
+      useVectorEpilogue=useVectorEpilogue, useVectorReduction=useVectorReduction))
       .withAnnotations(Seq(VerilatorBackendAnnotation)){d=>
       init(d)
       for(m<-selected){
@@ -64,13 +71,25 @@ class GdnRmsNormFixedBankReplaySpec extends AnyFlatSpec with ChiselScalatestTest
             assert(loan.result==pack(expectedWords.slice(index*16,index*16+16),32),s"frozen actual weighted token=$token group=$index")
           }
           assert(recipe.output==actualBf.slice(token*Width,(token+1)*Width),s"frozen actual BF16 token=$token")
+          // Retain the independently ordered old Scalar recipe above for the
+          // frozen node indices; the new DUT trace has only the final 44 nodes.
+          // M1 happens to hide some wrong trees, so it cannot close M16/M128.
+          val selectedRecipe=GdnRmsNormFixedBankReference(row,weight,
+            useVectorEpilogue,useVectorReduction)
+          val reductionScalarCount=if(useVectorReduction)44 else 4268
+          val removedScalarNodes=if(useVectorReduction)4224 else 0
+          assert(selectedRecipe.scalar.take(reductionScalarCount)==recipe.scalar.drop(removedScalarNodes),
+            s"selected reduction trace differs from old-order Scalar fold/tail token=$token")
+          assert(selectedRecipe.output==recipe.output,s"selected trace BF16 token=$token")
         }
         // Only input and weight are supplied to the memory responder in run().
         // The actual core Scalar produces inverse; expected inverse is never poked.
         val epilogue = if (useVectorEpilogue) "vector" else "scalar"
-        val report=run(d,input,weight,s"frozen-actual-production-core-M$m-H2048-$epilogue-epilogue")
+        val report=run(d,input,weight,
+          s"frozen-actual-production-core-M$m-H2048-$reduction-reduction-$epilogue-epilogue-$timing",
+          idealSupply=idealSupply)
         report.output shouldBe actualBf
-        println(s"H2048_FIXED_BANK_ACTUAL_RTL_PASS tokens=$m cycles=${report.cycles} scalar_requests=${report.scalarRequests} loans=${report.loans} reads=${report.reads} write_acks=${report.writeAcks} manifest_sha256=${sha(manifest)} core_bound=true full_block=false epilogue=$epilogue borrower_bank_bytes=6144 launch_to_done_fire_cycles=${report.launchToDoneFireCycles} sampled_cycles=${report.sampledCycles} elem_alu_execution_busy=${report.arithmeticCycles.getOrElse("elem_alu_execution_busy", 0L)} elem_alu_effective_lane=${report.arithmeticCycles.getOrElse("elem_alu_effective_lane", 0L)}")
+        println(s"H2048_FIXED_BANK_ACTUAL_RTL_PASS tokens=$m cycles=${report.cycles} scalar_requests=${report.scalarRequests} loans=${report.loans} reads=${report.reads} write_acks=${report.writeAcks} manifest_sha256=${sha(manifest)} core_bound=true full_block=false timing=$timing reduction=$reduction epilogue=$epilogue borrower_bank_bytes=6144 launch_to_done_fire_cycles=${report.launchToDoneFireCycles} sampled_cycles=${report.sampledCycles} elem_alu_execution_busy=${report.arithmeticCycles.getOrElse("elem_alu_execution_busy", 0L)} elem_alu_effective_lane=${report.arithmeticCycles.getOrElse("elem_alu_effective_lane", 0L)}")
       }
     }
   }

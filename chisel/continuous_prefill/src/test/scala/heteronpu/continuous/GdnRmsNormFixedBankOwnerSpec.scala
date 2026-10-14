@@ -13,7 +13,8 @@ import org.scalatest.matchers.should.Matchers
 /** Both arithmetic services are production RTL. The test can delay handshakes,
   * but cannot supply a Scalar or register-loan arithmetic result. */
 class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false,
-                                           val useVectorEpilogue: Boolean = true) extends Module {
+                                           val useVectorEpilogue: Boolean = true,
+                                           val useVectorReduction: Boolean = false) extends Module {
   val io = IO(new Bundle {
     val job = Flipped(Decoupled(new GdnRmsNormJob))
     val done = Decoupled(new GdnRmsNormResult)
@@ -61,7 +62,8 @@ class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false,
     val scalarAluExecute = Output(Bool())
     val scalarDividerPending = Output(Bool())
   })
-  val owner = Module(new GdnRmsNormFixedBankOwner(useVectorEpilogue = useVectorEpilogue))
+  val owner = Module(new GdnRmsNormFixedBankOwner(useVectorEpilogue = useVectorEpilogue,
+    useVectorReduction = useVectorReduction))
   val arithmetic = Wire(new GdnScalarClient)
   val loanService = Wire(Flipped(new ElementwiseLoanPort))
   val vectorUnavailable = Wire(Bool())
@@ -216,28 +218,60 @@ object GdnRmsNormFixedBankReference {
     case (acc, (value, index)) => acc | (value << (width * index))
   }
   case class ScalarStep(op: Int, a: BigInt, b: BigInt, result: BigInt)
-  case class LoanStep(a: BigInt, b: BigInt, inverse: BigInt, result: BigInt)
+  case class LoanStep(a: BigInt, b: BigInt, inverse: BigInt, result: BigInt,
+                      op: Int = ElementwiseLoanOp.RmsEpilogue, phase: String = "epilogue")
   case class Recipe(output: Seq[Int], scalar: Seq[ScalarStep], loan: Seq[LoanStep])
 
-  def apply(hidden: Seq[Int], weight: Seq[Int], useVectorEpilogue: Boolean = true): Recipe = {
+  def apply(hidden: Seq[Int], weight: Seq[Int], useVectorEpilogue: Boolean = true,
+            useVectorReduction: Boolean = false): Recipe = {
     require(hidden.size == Width && weight.size == Width, "this fixture is M1/H2048")
     val scalar = scala.collection.mutable.ArrayBuffer.empty[ScalarStep]
+    val reductionLoan = scala.collection.mutable.ArrayBuffer.empty[LoanStep]
     def record(op: Int, a: Float, b: Float, result: Float): Float = {
       scalar += ScalarStep(op, bits(a), bits(b), bits(result)); result
     }
     def mul(a: Float, b: Float): Float = record(ScalarOp.MulIeeeRne, a, b, (a * b).toFloat)
     def add(a: Float, b: Float): Float = record(ScalarOp.Add, a, b, (a + b).toFloat)
     val partials = Array.fill[Float](8, 4)(0f)
-    // owner.py: lane8/residue4/block4/term16. Every term and every merge
-    // has an explicit FP32 rounding boundary, including the initial +0.
-    for (chunk <- 0 until 2; lane <- 0 until 8; residue <- 0 until 4; block <- 0 until 2) {
-      var partial = 0f
-      for (term <- 0 until 16) {
-        val index = chunk * 1024 + block * 512 + term * 32 + residue * 8 + lane
-        val x = fp(hidden(index))
-        partial = add(partial, mul(x, x))
+    if (useVectorReduction) {
+      // Schedule only independent nodes together. Preserve each term and block
+      // dependency and both FP32 rounding boundaries; this is NOT an FMA.
+      // Hardware slot i maps to p=4*lane+residue in the original output layout.
+      for (chunk <- 0 until 2; block <- 0 until 2; group <- 0 until 2) {
+        var blockPartial = Vector.fill[Float](16)(0f)
+        for (term <- 0 until 16) {
+          val xs = Vector.tabulate(16) { i =>
+            val lane = 4 * group + (i >> 2); val residue = i & 3
+            fp(hidden(chunk * 1024 + block * 512 + term * 32 + residue * 8 + lane))
+          }
+          val next = xs.zip(blockPartial).map { case (x, partial) =>
+            val square = (x * x).toFloat
+            (partial + square).toFloat
+          }
+          reductionLoan += LoanStep(pack(xs.map(bits), 32), pack(blockPartial.map(bits), 32),
+            BigInt(0), pack(next.map(bits), 32), ElementwiseLoanOp.SquareAccumulate, "reduction")
+          blockPartial = next
+        }
+        val previous = Vector.tabulate(16) { i =>
+          // Global block zero must execute the explicit +0 merge too.
+          if (chunk == 0 && block == 0) 0f else partials(4 * group + (i >> 2))(i & 3)
+        }
+        val merged = previous.zip(blockPartial).map { case (a, b) => (a + b).toFloat }
+        reductionLoan += LoanStep(pack(previous.map(bits), 32), pack(blockPartial.map(bits), 32),
+          BigInt(0), pack(merged.map(bits), 32), ElementwiseLoanOp.Add, "reduction")
+        for (i <- 0 until 16) partials(4 * group + (i >> 2))(i & 3) = merged(i)
       }
-      partials(lane)(residue) = add(partials(lane)(residue), partial)
+    } else {
+      // owner.py: lane8/residue4/block4/term16, including every initial +0.
+      for (chunk <- 0 until 2; lane <- 0 until 8; residue <- 0 until 4; block <- 0 until 2) {
+        var partial = 0f
+        for (term <- 0 until 16) {
+          val index = chunk * 1024 + block * 512 + term * 32 + residue * 8 + lane
+          val x = fp(hidden(index))
+          partial = add(partial, mul(x, x))
+        }
+        partials(lane)(residue) = add(partials(lane)(residue), partial)
+      }
     }
     var total = 0f
     for (lane <- 0 until 8) {
@@ -267,9 +301,12 @@ object GdnRmsNormFixedBankReference {
         pack(weight.slice(first, first + 16).map(x => bits(fp(x))), 32), bits(inverse),
         pack(weighted.slice(first, first + 16).map(bits), 32))
     }
-    require(scalar.size == (if (useVectorEpilogue) 4268 else 10412) && loan.size == 128)
+    val expectedScalar = (if (useVectorReduction) 44 else 4268) +
+      (if (useVectorEpilogue) 0 else 6144)
+    require(scalar.size == expectedScalar && loan.size == 128)
+    require(reductionLoan.size == (if (useVectorReduction) 136 else 0))
     Recipe(weighted.map(bf).toVector, scalar.toVector,
-      if (useVectorEpilogue) loan.toVector else Vector.empty)
+      reductionLoan.toVector ++ (if (useVectorEpilogue) loan.toVector else Vector.empty))
   }
 
   def synthetic: (Seq[Int], Seq[Int]) = {
@@ -319,14 +356,22 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
   /** Fault modes operate on actual accepted DDR requests. An abort never
     * fabricates an ACK or erases the responder's pending accepted request. */
   def run(d: GdnRmsNormFixedBankArithmeticHarness, hidden: Seq[Int], weight: Seq[Int],
-          label: String, fault: String = "none", extraFirstLoanHold: Int = 0): RunReport = {
-    require(extraFirstLoanHold >= 0 && (d.useVectorEpilogue || extraFirstLoanHold == 0))
+          label: String, fault: String = "none", extraFirstLoanHold: Int = 0,
+          idealSupply: Boolean = false): RunReport = {
+    val hasLoan = d.useVectorEpilogue || d.useVectorReduction
+    val scalarReductionPerToken = if (d.useVectorReduction) 44 else 4268
+    val scalarPerToken = scalarReductionPerToken + (if (d.useVectorEpilogue) 0 else 6144)
+    val loansPerToken = (if (d.useVectorReduction) 136 else 0) + (if (d.useVectorEpilogue) 128 else 0)
+    val timing = if (idealSupply) "ideal_supply_experiment" else "artificial_backpressure"
+    val reduction = if (d.useVectorReduction) "vector" else "scalar"
+    require(extraFirstLoanHold >= 0 && (hasLoan || extraFirstLoanHold == 0))
+    require(!idealSupply || extraFirstLoanHold == 0, "ideal supply cannot add an artificial loan hold")
     require(Set("none", "read", "write", "abort-write", "wrong-tag-read", "wrong-tag-loan").contains(fault))
-    require(d.useVectorEpilogue || fault != "wrong-tag-loan", "Scalar ablation has no loan to corrupt")
+    require(hasLoan || fault != "wrong-tag-loan", "all-Scalar ablation has no loan to corrupt")
     require(hidden.nonEmpty && hidden.size % Width == 0 && hidden.size / Width <= 128)
     val tokens = hidden.size / Width
     val rows = hidden.grouped(Width).map(row =>
-      GdnRmsNormFixedBankReference(row, weight, d.useVectorEpilogue)).toVector
+      GdnRmsNormFixedBankReference(row, weight, d.useVectorEpilogue, d.useVectorReduction)).toVector
     val recipe = Recipe(rows.flatMap(_.output), rows.flatMap(_.scalar), rows.flatMap(_.loan))
     require(recipe.scalar.isInstanceOf[scala.collection.IndexedSeq[_]] &&
       recipe.loan.isInstanceOf[scala.collection.IndexedSeq[_]], "large replay traces require indexed lookup")
@@ -373,9 +418,12 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       d.io.loanResult.status.peek().litValue, d.io.loanResult.value.peek().litValue)
     def step(n: Int = 1): Unit = for (_ <- 0 until n) {
       assert(elapsed < tokens * 250000, s"$label timed out")
-      d.io.scalarHold.poke((elapsed % 23 < 5 || (scalarRequests == 0 && scalarStalls < 3)).B)
-      d.io.loanRequestHold.poke((elapsed % 17 < 4 || (loans == 0 && loanRequestStalls < 3)).B)
-      d.io.loanResultHold.poke((elapsed % 19 < 6 || (loanResults == 0 && loanResultStalls < 3 + extraFirstLoanHold)).B)
+      d.io.scalarHold.poke((!idealSupply &&
+        (elapsed % 23 < 5 || (scalarRequests == 0 && scalarStalls < 3))).B)
+      d.io.loanRequestHold.poke((!idealSupply &&
+        (elapsed % 17 < 4 || (loans == 0 && loanRequestStalls < 3))).B)
+      d.io.loanResultHold.poke((!idealSupply &&
+        (elapsed % 19 < 6 || (loanResults == 0 && loanResultStalls < 3 + extraFirstLoanHold))).B)
       d.io.loanInjectStrayTag.poke(false.B)
       if (fault == "wrong-tag-loan" && !injected && bool(d.io.loanResultValid)) {
         assert(pendingLoan.nonEmpty, "stray injection requires an actual held production terminal")
@@ -394,9 +442,9 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       val launchFire = bool(d.io.job.valid) && bool(d.io.job.ready)
       if (launchFire) { assert(launchEdge.isEmpty); launchEdge = Some(elapsed) }
       if (launchEdge.nonEmpty && doneFireEdge.isEmpty) {
-        val scalarPerToken = if (d.useVectorEpilogue) 4268 else 10412
         def scalarPhase(index: Int): String =
-          if (index % scalarPerToken < 4268) "reduction" else "epilogue"
+          if (index % scalarPerToken < scalarReductionPerToken) "reduction" else "epilogue"
+        def loanPhase(index: Int): String = recipe.loan(index).phase
         def memoryPhase(index: Int): String = if (index % 256 < 64) "reduction" else "epilogue"
         def responsePhase(valid: Boolean, ready: Boolean): String =
           if (!valid) "response_wait" else if (ready) "response_fire" else "response_held"
@@ -423,7 +471,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
                 responsePhase(valid = true, ready = bool(d.io.loanResultReady))
               else if (bool(d.io.elemAluExecute)) "alu_execute"
               else "response_wait"
-            s"epilogue_loan_$response"
+            s"${loanPhase(pendingLoan.get._1)}_loan_$response"
           } else if (bool(d.io.memory.valid)) {
             val operation = if (bool(d.io.memory.bits.write)) "write" else "read"
             val offer = if (bool(d.io.memory.ready)) "request_fire" else "request_stalled"
@@ -433,7 +481,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
             s"${scalarPhase(scalarRequests)}_scalar_$offer"
           } else if (bool(d.io.loanRequestValid)) {
             val offer = if (bool(d.io.loanRequestReady)) "request_fire" else "request_stalled"
-            s"epilogue_loan_$offer"
+            s"${loanPhase(loans)}_loan_$offer"
           } else "owner_control_or_drain"
         // Wall intervals are (launch.fire, done.fire], so launch itself is
         // observed but not charged. These bins sum the edge-to-edge wall count.
@@ -492,7 +540,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       heldLoanResult = if (bool(d.io.loanResultValid) && !bool(d.io.loanResultReady)) {
         loanResultStalls += 1; Some(loanResult)
       } else None
-      if (!d.useVectorEpilogue) {
+      if (!hasLoan) {
         d.io.loanRequestValid.expect(false.B); d.io.loanBusy.expect(false.B)
         d.io.loanResultValid.expect(false.B)
       }
@@ -519,7 +567,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
         assert(pendingLoan.isEmpty && loans < recipe.loan.size, "loan ownership/count")
         val expected = recipe.loan(loans)
         d.io.loanRequest.tag.expect((issued + loanResults).U)
-        d.io.loanRequest.op.expect(ElementwiseLoanOp.RmsEpilogue.U)
+        d.io.loanRequest.op.expect(expected.op.U)
         d.io.loanRequest.a.expect(expected.a.U); d.io.loanRequest.b.expect(expected.b.U)
         d.io.loanRequest.inverse.expect(expected.inverse.U)
         pendingLoan = Some((loans, d.io.loanRequest.tag.peek().litValue)); loans += 1
@@ -586,7 +634,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       if (!bool(d.io.memory.valid)) step()
       else {
         val request = memoryBeat(d)
-        val delay = 2 + issued % 5
+        val delay = if (idealSupply) 0 else 2 + issued % 5
         for (_ <- 0 until delay) {
           d.io.memory.valid.expect(true.B)
           assert(memoryBeat(d) == request, "DDR request changed under backpressure")
@@ -595,8 +643,10 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
         d.io.memory.ready.poke(true.B); step(); d.io.memory.ready.poke(false.B)
         assert(pendingMemory.contains(request), "accepted request must create DDR debt")
         val last = request.write && request.address == OutputBase + tokens * 4096 - 64
-        // No response is valid during this interval, including the delayed last ACK.
-        step(if (last) 37 else delay)
+        // Ideal supply has request.fire then response.fire on consecutive
+        // sampled edges: two charged transaction cycles, no response_wait.
+        // The historical 37-cycle last-ACK hold remains in the default profile.
+        if (!idealSupply) step(if (last) 37 else delay)
         val hit = !injected && (fault match {
           case "read" | "wrong-tag-read" => !request.write
           case "write" | "abort-write" => request.write
@@ -635,15 +685,17 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
     d.io.memory.valid.expect(false.B)
     if (fault == "none") {
       assert(reads == tokens * 192 && writes == tokens * 64 && writeAcks == tokens * 64, "H2048 DDR accounting")
-      val scalarPerToken = if (d.useVectorEpilogue) 4268 else 10412
-      val loansPerToken = if (d.useVectorEpilogue) 128 else 0
       assert(scalarRequests == tokens * scalarPerToken && scalarResults == tokens * scalarPerToken, "exact Scalar accounting")
       assert(loans == tokens * loansPerToken && loanResults == tokens * loansPerToken, "exact register-loan accounting")
       assert(committed.toMap == expectedWrites, "all BF16 output beats must be ACKed")
-      assert(scalarStalls > 0, "Scalar request stalls were not exercised")
-      if (d.useVectorEpilogue) {
-        assert(loanRequestStalls > 0 && loanResultStalls > 0,
-          s"loan stall controls were not exercised: request=$loanRequestStalls result=$loanResultStalls")
+      // Only artificial-stall coverage is inapplicable to ideal supply. All
+      // numeric, request/result, drain, tag, ACK and completion checks remain.
+      if (!idealSupply) {
+        assert(scalarStalls > 0, "Scalar request stalls were not exercised")
+        if (hasLoan) {
+          assert(loanRequestStalls > 0 && loanResultStalls > 0,
+            s"loan stall controls were not exercised: request=$loanRequestStalls result=$loanResultStalls")
+        }
       }
     } else {
       assert(injected, s"$label fault was not exercised")
@@ -679,24 +731,27 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       assert(BigInt(measuredOwnerCycles) == held(3), "observed active phases must reconcile owner cycles")
       // Expected counts are CROSS-CHECKS of per-cycle internal taps; none of
       // these measurements is calculated by multiplying the loan count.
-      val expectedVectorCycles = if (d.useVectorEpilogue) tokens.toLong * 384 else 0L
-      val expectedVectorMulLanes = if (d.useVectorEpilogue) tokens.toLong * 4096 else 0L
-      val expectedVectorAddLanes = if (d.useVectorEpilogue) tokens.toLong * 2048 else 0L
+      val expectedVectorCycles = tokens.toLong *
+        ((if (d.useVectorEpilogue) 384 else 0) + (if (d.useVectorReduction) 264 else 0))
+      val expectedVectorMulLanes = tokens.toLong *
+        ((if (d.useVectorEpilogue) 4096 else 0) + (if (d.useVectorReduction) 2048 else 0))
+      val expectedVectorAddLanes = tokens.toLong *
+        ((if (d.useVectorEpilogue) 2048 else 0) + (if (d.useVectorReduction) 2176 else 0))
       assert(arithmeticCycles("elem_alu_execution_busy") == expectedVectorCycles)
       assert(arithmeticCycles("elem_mul_effective_lane") == expectedVectorMulLanes)
       assert(arithmeticCycles("elem_add_effective_lane") == expectedVectorAddLanes)
       assert(arithmeticCycles("elem_alu_attempt_lane") == arithmeticCycles("elem_alu_effective_lane"))
       assert(arithmeticCycles("elem_service_busy") ==
         arithmeticCycles("elem_alu_execution_busy") + arithmeticCycles("elem_reply_resident"))
-      val expectedScalarAluCycles = tokens.toLong * (if (d.useVectorEpilogue) 4266 else 10410)
+      val expectedScalarAluCycles = tokens.toLong * (scalarPerToken - 2)
       assert(arithmeticCycles("scalar_alu_execution_busy") == expectedScalarAluCycles)
     }
-    println(s"H2048_ARITHMETIC_CYCLES label=$label observation=internal_state_taps " +
+    println(s"H2048_ARITHMETIC_CYCLES label=$label timing=$timing reduction=$reduction observation=internal_state_taps " +
       arithmeticCycles.toSeq.sortBy(_._1).map { case (metric, count) => s"$metric=$count" }.mkString(" "))
-    println(s"H2048_PHASE_CYCLES label=$label wall_cycles=$launchToDoneFireCycles " + phaseCycles.toSeq.sortBy(_._1).map {
+    println(s"H2048_PHASE_CYCLES label=$label timing=$timing reduction=$reduction wall_cycles=$launchToDoneFireCycles " + phaseCycles.toSeq.sortBy(_._1).map {
       case (phase, count) => s"$phase=$count"
     }.mkString(" "))
-    println(s"GDN_RMSNORM_FIXED_BANK_RTL label=$label status=$expectedStatus reads=$reads writes=$writes write_acks=$writeAcks scalar_requests=$scalarRequests scalar_results=$scalarResults loans=$loans loan_results=$loanResults cycles=${held(3)} actual_scalar=true actual_loan=${d.useVectorEpilogue} epilogue=${if (d.useVectorEpilogue) "vector" else "scalar"} borrower_bank_bytes=6144 launch_to_done_fire_cycles=$launchToDoneFireCycles sampled_cycles=$sampledCycles terminal_held_cycles=${phaseCycles("terminal_held")}")
+    println(s"GDN_RMSNORM_FIXED_BANK_RTL label=$label status=$expectedStatus reads=$reads writes=$writes write_acks=$writeAcks scalar_requests=$scalarRequests scalar_results=$scalarResults loans=$loans loan_results=$loanResults cycles=${held(3)} actual_scalar=true actual_loan=$hasLoan timing=$timing reduction=$reduction epilogue=${if (d.useVectorEpilogue) "vector" else "scalar"} borrower_bank_bytes=6144 launch_to_done_fire_cycles=$launchToDoneFireCycles sampled_cycles=$sampledCycles terminal_held_cycles=${phaseCycles("terminal_held")}")
     RunReport(output, reads, writes, writeAcks, scalarRequests, scalarResults, loans, loanResults, held(3),
       launchToDoneFireCycles, sampledCycles, phaseCycles.toMap, arithmeticCycles.toMap)
   }

@@ -6,6 +6,8 @@ on:
       - '.github/workflows/elementwise-register-loan.yml'
       - 'scripts/*rms_epilogue_loan*'
       - 'scripts/*elementwise_register_loan*'
+      - 'scripts/check_h2048_reduction_order_model.py'
+      - 'tests/test_h2048_reduction_order_model.py'
       - 'scripts/setup_hetero_chisel_loan_toolchain.sh'
       - 'chisel/continuous_prefill/**'
       - 'chisel/p0_safety/src/main/scala/**'
@@ -24,6 +26,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - name: Cold frozen-source guards (no actual fixture arithmetic)
+        shell: bash
+        run: |
+          git fetch --no-tags --depth=1 origin 027d343c5671ecdcf126b1ec68318728d1c4549a
+          python3 -B -m unittest discover -s tests -p test_h2048_reduction_order_model.py -v
+          python3 -O -B -m unittest discover -s tests -p test_h2048_reduction_order_model.py -v
+          python3 -B scripts/check_h2048_reduction_order_model.py --root "$PWD" --out work/reduction_model_cold
       - name: Provision pinned isolated tools
         run: bash scripts/setup_hetero_chisel_loan_toolchain.sh
       - name: Run synthetic local RTL boundary and resource gates
@@ -38,6 +47,7 @@ jobs:
           name: elementwise-register-loan-local-rtl
           path: |
             work/loan_ci/
+            work/reduction_model_cold/
             work/elementwise_register_loan_rtl/
             work/chisel_toolchain/logs/
           if-no-files-found: error

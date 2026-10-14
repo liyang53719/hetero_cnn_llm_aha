@@ -1,0 +1,209 @@
+{
+  "actual_counts": {
+    "C_fma_calls": 301989888,
+    "accepted_steps": 73728,
+    "executed_fma": 301989888,
+    "full_4096_step_opportunities": 301989888,
+    "groups": 10,
+    "input_read_descriptors": 86016,
+    "matrix_acquires": 1,
+    "matrix_owner_responses": 1,
+    "matrix_releases": 1,
+    "model_ticks": 223461,
+    "model_ticks_are_hardware_cycles": false,
+    "prefix_seed_records": 0,
+    "result_packets": 48,
+    "silu_vector_calls": 0,
+    "useful_fma": 301989888,
+    "write_ACK_bytes": 786432,
+    "write_ACK_transactions": 6912,
+    "write_commands": 6912,
+    "write_data_64B_beats": 12288
+  },
+  "actual_disk": {
+    "worker_directory_bytes": 96936,
+    "worker_logs_bytes": 131
+  },
+  "automatic_retry": false,
+  "base_commit": "0f7dea983077192994ab3c7e29bdf4f2145a5a67",
+  "budget_scope_correction": {
+    "OS_per_file_limit_scope": "worker only",
+    "address_space_OS_limit_bytes": 2147483648,
+    "all_artifact_total_is_not_2MiB": true,
+    "combined_logs_bytes": 262144,
+    "launcher_receipt_limit_enforcement": "save serialization length check",
+    "per_file_OS_limit_bytes": 1048576,
+    "process_group_RSS_sampled_limit_bytes": 2147483648,
+    "sampled_limits_can_overshoot": true,
+    "sampling_seconds": 0.1,
+    "separate_launcher_receipt_bytes": 1048576,
+    "worker_directory_bytes": 2097152
+  },
+  "cold": {
+    "initialized_FMA": 0,
+    "initialized_negative_controls": 12,
+    "initialized_owner_ticks": 0,
+    "normal": 34,
+    "optimized": 34
+  },
+  "completion": {
+    "actual_O_owner_terminal_observed": true,
+    "final_ACK_fence": {
+      "final_ack_tick": 223460,
+      "held_ticks": 5,
+      "terminal_strictly_after_final_ack": true,
+      "terminal_tick": 223461
+    },
+    "launcher_cleanup_incomplete": false,
+    "physical_att_ACK_bytes": 0,
+    "physical_att_published": false,
+    "physical_att_written_bytes": 0,
+    "public21_executed": false,
+    "remaining_debts": {
+      "bridge_results": 0,
+      "dense_bridge": false,
+      "matrix_c_state": 0,
+      "matrix_done": false,
+      "matrix_group": false,
+      "matrix_owned": false,
+      "matrix_result": false,
+      "owner_a_hold": false,
+      "owner_a_rmw": false,
+      "owner_fifo": 0,
+      "owner_lease": false,
+      "owner_pending": false,
+      "owner_read": false,
+      "owner_seed": false,
+      "owner_state_not_idle": false,
+      "owner_write_state": false,
+      "physical_pending": false,
+      "tile_busy": false,
+      "tile_leased": false
+    }
+  },
+  "evidence": [
+    {
+      "bytes": 43382,
+      "path": "candidates/qwen2_dense_o_cost_m128/FREEZE.json",
+      "sha256": "73a17a3d61dda6a51a225e713a872fdd20b9e6fc5f07e108a6515f7179bd2e35",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 9705,
+      "path": "work/qwen2_dense_o_cost_source_20261014/review_v1/INDEPENDENT_REVIEW.json",
+      "sha256": "73fb466628d6999f7712e1ad821f4ae0e48b2cc237b5ec4560f0d24e1986f9f4",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 94000,
+      "path": "work/qwen2_dense_o_cost_m128_20261014/o_cost_parent_reviewed_v1/RESULT.json",
+      "sha256": "3f6a2adccd458aeeec8878bc989085c455b81e403a9c34c95ad9d09bbfc23944",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 1626,
+      "path": "work/qwen2_dense_o_cost_m128_20261014/o_cost_parent_reviewed_v1.LAUNCH.json",
+      "sha256": "67852e382e7ae31673dbaa107ae9ca2c205d4a8402e1f3e7b35bbc380ae96122",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 860,
+      "path": "work/qwen2_dense_o_cost_m128_20261014/PARENT_O_COST_LAUNCH_V1.json",
+      "sha256": "dc11d2099acb9877dfb723b1671817badf8580dceec1c31f4eb8477d18d22488",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 1494,
+      "path": "work/qwen2_dense_o_cost_m128_20261014/PARENT_O_COST_LAUNCH_V1.log",
+      "sha256": "89d9345e219aa6e595d17f527e18e61144d7826b679418b87b6018818d72e66e",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 6750,
+      "path": "work/qwen2_dense_o_cost_source_20261014/review_v1/INDEPENDENT_RESULT_REVIEW.json",
+      "sha256": "a2665462001276c2ac7f128719f125bd58244400bb1dfe476da275335b597055",
+      "uploaded_to_git": false
+    }
+  ],
+  "evidence_record_phase": "PRE_PUBLICATION_SNAPSHOT",
+  "fixed_limits": {
+    "automatic_retry": false,
+    "file_bytes": 1048576,
+    "log_bytes": 262144,
+    "outer_wall_seconds": 70,
+    "output_bytes": 2097152,
+    "poll_seconds": 0.1,
+    "rss_bytes": 2147483648,
+    "threads": 1,
+    "work_wall_seconds": 60
+  },
+  "fullblock_executed": false,
+  "fullblock_runtime_bound_established": false,
+  "hardware_busy_duty": null,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "independent_result_review": "VERIFIED_COST_ONLY_O_COMPLETE",
+  "input_hashes": {
+    "att": {
+      "bytes": 786432,
+      "sha256": "d8e888f201396a6125a93c0602aaf3e53bf4700d4298db0795aa8a1355149287"
+    },
+    "wo": {
+      "bytes": 4718592,
+      "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c"
+    }
+  },
+  "input_unchanged": true,
+  "memory": {
+    "supervisor_sampled_process_group_peak_bytes": 87322624,
+    "worker_peak_rss_kib": 86144
+  },
+  "numerical_acceptance": false,
+  "original_execution": {
+    "compile_executed": false,
+    "cost_input_mode": "Saved sealed actual att plus original wo; isolated readonly replay; physical att not published",
+    "exit_code": 0,
+    "finished_utc": "2026-10-14T15:24:47.086400+00:00",
+    "fresh_matrix_process": true,
+    "native_artifact_reuse_only": true,
+    "old_numeric_state_reused": false,
+    "oracle_access_evidence": {
+      "closed_source_gate_denies_oracle_payloads": true,
+      "recorded_oracle_read_counter": false,
+      "zero_read_inference_not_counter": true
+    },
+    "oracle_reference_reads": null,
+    "session": 96713,
+    "started_utc": "2026-10-14T15:24:31.026854+00:00",
+    "torch_imported": false
+  },
+  "output_disposal": "Only original final file write was sent to source-bound /dev/null; accepted physical O output and ACK coverage were checked before disposal",
+  "physical_O_output_sha256": "2382ddd71a0b78bee980a84f834b4344b5766c0dc85ac016670204ef26504cc5",
+  "resource_denominator": {
+    "accumulator_bytes": 81920,
+    "accumulator_contexts": 5,
+    "contexts_are_storage_not_independent_execution_engines": true,
+    "issued_cells": 4096,
+    "resident_slots": 3,
+    "same_A_B_banks": true
+  },
+  "rtl_executed": false,
+  "same_chain_acceptance": false,
+  "schema": 1,
+  "scope": "ISOLATED_COST_REPLAY_NOT_SAME_CHAIN",
+  "source_files": 275,
+  "source_manifest_sha256": "0dca8de8e128e6713040bc460aef2cb9e22bf6e94206c6fe0beba1b9093aefdd",
+  "source_unchanged": true,
+  "status": "COST_ONLY_O_COMPLETE",
+  "target_ddr_timing": null,
+  "tensor_payload_retained": false,
+  "timing_seconds": {
+    "O_stage_cpu": 14.961518041000001,
+    "O_stage_wall": 14.970418600991252,
+    "original_driver_wall": 14.96485457799281,
+    "parent_end_to_end": 16.059408704008092,
+    "supervisor_end_to_end": 16.009165798997856,
+    "worker_end_to_end_cpu": 15.782677163999999,
+    "worker_end_to_end_wall": 15.796599202003563
+  }
+}

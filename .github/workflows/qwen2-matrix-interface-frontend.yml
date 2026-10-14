@@ -51,6 +51,8 @@ jobs:
           git cat-file -e df18ba25a439fd90c846b22b9aafe992a2a6ae79:candidates/qwen2_resident_matrix/ffn_public/prefix_numerical_receipt.json
           git fetch --no-tags --depth=1 origin 37b7de74431ed79b7e9f3d52d308ed7f46727b7a
           git cat-file -e 37b7de74431ed79b7e9f3d52d308ed7f46727b7a:candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_receipt.json
+          git fetch --no-tags --depth=1 origin c554e502dfe462d5a0acb7030eff4bb51570bdf2
+          git cat-file -e c554e502dfe462d5a0acb7030eff4bb51570bdf2:candidates/qwen2_resident_matrix/ffn_public/delivery_manifest.json
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '21'}
       - uses: actions/setup-python@v5

@@ -68,7 +68,10 @@ permissions:
 jobs:
   synthetic-model:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # The unchanged 76-suite/728-test source set exceeded 10 minutes
+    # on a slower hosted runner (run 38519139708). Include setup headroom
+    # while retaining the runner's 120-second per-suite watchdog.
+    timeout-minutes: 15
     env:
       PYTHONPATH: ${{ github.workspace }}/src
     steps:

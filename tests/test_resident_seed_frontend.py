@@ -29,8 +29,13 @@ class ResidentFrontendGuards(unittest.TestCase):
                     runner.validate_manifest(changed)
 
     def test_owner_abi_boundary_is_exact_and_fail_closed(self):
-        source = (ROOT/runner.PREFIX/"QwenOwnerProtocol.scala").read_text()
+        # Exercise the same immutable ABI input as run_gate, never live borrower additions.
+        manifest = json.loads((ROOT/runner.CANDIDATE/"resident_manifest.json").read_text())
+        runner.validate_manifest(manifest)
+        source = runner.frozen_source(ROOT, runner.PREFIX+"QwenOwnerProtocol.scala",
+                                      manifest["original_sources"]["QwenOwnerProtocol.scala"]).decode()
         abi = runner.owner_abi(source)
+        self.assertEqual(runner.digest(abi.encode()), manifest["owner_abi_sha256"])
         self.assertIn("object QwenOwnerKind", abi)
         self.assertIn("class QwenOwnerJob", abi)
         self.assertIn("class QwenOwnerResult", abi)
@@ -41,6 +46,21 @@ class ResidentFrontendGuards(unittest.TestCase):
                     source.replace("class QwenOwnerResult", "class Unreviewed {}\nclass QwenOwnerResult")]:
             with self.assertRaises(ValueError):
                 runner.owner_abi(bad)
+
+    def test_frozen_owner_source_and_abi_hashes_fail_closed(self):
+        manifest = json.loads((ROOT/runner.CANDIDATE/"resident_manifest.json").read_text())
+        path = runner.PREFIX+"QwenOwnerProtocol.scala"
+        expected = manifest["original_sources"]["QwenOwnerProtocol.scala"]
+        source = runner.frozen_source(ROOT, path, expected)
+        for bad in (source+b"\n", bytes([source[0] ^ 1])+source[1:]):
+            with self.assertRaisesRegex(ValueError, "identity drift"):
+                runner.checked(bad, expected, path)
+        with self.assertRaisesRegex(ValueError, "identity drift"):
+            runner.frozen_source(ROOT, path, "0"*64)
+        abi = runner.owner_abi(source.decode()).encode()
+        for bad in (abi+b"\n", bytes([abi[0] ^ 1])+abi[1:]):
+            with self.assertRaisesRegex(ValueError, "identity drift"):
+                runner.checked(bad, manifest["owner_abi_sha256"], "exact owner ABI")
 
     def test_module_boundaries_do_not_hide_neighbor_resources(self):
         text = "circuit Test :\n  module One :\n    reg x : UInt<5>, clock\n  extmodule Other :\n    output a : UInt<32>\n  module Last :\n    reg y : UInt<8>, clock\n"

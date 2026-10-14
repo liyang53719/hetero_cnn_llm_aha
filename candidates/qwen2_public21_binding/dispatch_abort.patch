@@ -1,0 +1,15 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
+@@ -1115,6 +1115,12 @@
+     workspace.generation:=cfg.epoch.pad(32)+1.U(32.W)
+     workspace.splitK:=2560.U(12.W)
+   }
++  // Under the explicitly enabled official binding, an external fault fences
++  // all new owner accepts. Metadata already in flight still retires naturally;
++  // reaching issue with no accepted owner debt must terminate, not hang.
++  if(enableResidentFfn && officialBf16){
++    when(state===issue && io.resident.get.resetRequired){fail(Status.Protocol.U)}
++  }
+   when(io.job.fire){jobs:=jobs+1.U;state:=waitDone}
+   if(enableResidentFfn){when(io.resident.get.request.fire){jobs:=jobs+1.U;state:=waitDone}}
+   if(enableResidentFfn){

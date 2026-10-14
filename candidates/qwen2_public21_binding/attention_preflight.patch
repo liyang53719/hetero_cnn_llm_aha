@@ -1,0 +1,52 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
+@@ -55,6 +55,10 @@
+     val scanPc=Reg(UInt(16.W));val scanCmd=Reg(UInt(128.W));val scanSlot=Reg(UInt(2.W))
+   }
+   val resident=if(enableResidentFfn)Some(new ResidentHostState)else None
++  // Match the explicit software public21 hardening before any Attention issue.
++  // Reuse the FFN typed-root scanner and its existing metadata ports/state.
++  val scanAttention=if(enableResidentFfn && officialBf16)Some(RegInit(false.B))else None
++  val attentionScan=scanAttention.getOrElse(false.B)
+   val state=RegInit(idle);val cfg=Reg(new HostCommandLaunch);val cmd=RegInit(0.U(128.W))
+   val pc=RegInit(0.U(16.W));val completed=RegInit(0.U(16.W));val status=RegInit(0.U(8.W));val poison=RegInit(false.B)
+   val events=RegInit(VecInit(Seq.fill(eventSlots)(false.B)))
+@@ -1077,7 +1081,12 @@
+       when(append){bound.n:=s.kv.U}
+       when(pv){bound.a:=q.address;bound.b:=k.address;bound.c:=b.address;bound.m:=q.dims(0);bound.n:=s.hidden.U;bound.k:=s.headDim.U}
+       state:=issue
+-      if(enableResidentFfn){when(residentAct){resident.get.pending:=true.B;resident.get.scanPc:=0.U;state:=scanFetch}}
++      if(enableResidentFfn){
++        when(residentAct){resident.get.pending:=true.B;resident.get.scanPc:=0.U;state:=scanFetch;scanAttention.foreach(_:=false.B)}
++        if(officialBf16){when(pv){
++          resident.get.pending:=false.B;resident.get.scanPc:=0.U;scanAttention.get:=true.B;state:=scanFetch
++        }}
++      }
+     }
+     if(enableTransposedDown){
+       // Validate the actual owner job dimensions before its DMA can start.
+@@ -1313,8 +1322,10 @@
+       val response=tensor.io.result.bits;val t=response.tensor
+       val hitsGate=overlap(t.address,t.paddedEnd,score.address,score.paddedEnd)
+       val hitsUp=overlap(t.address,t.paddedEnd,probability.address,probability.paddedEnd)
+-      val gateUse=(r.scanPc===pc-2.U && r.scanSlot===2.U) || (r.scanPc===pc && r.scanSlot===0.U)
+-      val upUse=(r.scanPc===pc-1.U && r.scanSlot===2.U) || (r.scanPc===pc && r.scanSlot===1.U)
++      val gateUse=(r.scanPc===pc-2.U && r.scanSlot===2.U) ||
++        Mux(attentionScan,r.scanPc===pc-1.U && r.scanSlot===0.U,r.scanPc===pc && r.scanSlot===0.U)
++      val upUse=(r.scanPc===pc-1.U && r.scanSlot===2.U) ||
++        (r.scanPc===pc && Mux(attentionScan,r.scanSlot===0.U,r.scanSlot===1.U))
+       val exactGate=gateUse && sameAllocation(t,score)
+       val exactUp=upUse && sameAllocation(t,probability)
+       when(response.status=/=0.U){fail(response.status)}
+@@ -1324,7 +1335,10 @@
+           when(r.scanPc+1.U===cfg.commands){
+             // Capacity is widened; reserve both internal-only FULL allocations
+             // atomically only after every public root has passed the preflight.
+-            when(virtualCount+&2.U>maxCommands.U){fail(Status.Permission.U)}.otherwise{
++            // QK/Softmax already reserved these two spans sequentially.
++            // FFN reserves its new pair only after this complete typed scan.
++            when(attentionScan){state:=issue}
++            .elsewhen(virtualCount+&2.U>maxCommands.U){fail(Status.Permission.U)}.otherwise{
+               val first=virtualCount(log2Ceil(maxCommands)-1,0)
+               val second=(virtualCount+1.U)(log2Ceil(maxCommands)-1,0)
+               vStarts(first):=score.address;vEnds(first):=score.paddedEnd

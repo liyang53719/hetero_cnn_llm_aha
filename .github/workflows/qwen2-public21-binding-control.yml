@@ -1,0 +1,202 @@
+name: Qwen2 public21 parser reduction control RTL
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-public21-binding-control.yml'
+      - 'candidates/qwen2_public21_binding/**'
+      - 'candidates/qwen2_resident_matrix/MatrixAccumulatorSeedController.scala'
+      - 'candidates/qwen2_resident_matrix/MatrixAccumulatorSeedProtocol.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/check_dense_drain_frontend.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/check_public_reduction_frontend.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/check_vector_add.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/drain.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_group/FfnResidentCoordinator.scala'
+      - 'candidates/qwen2_resident_matrix/ffn_group/FfnResidentProfile.scala'
+      - 'candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala'
+      - 'candidates/qwen2_resident_matrix/ffn_group/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/group.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_group/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fixture.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_window/FfnWindowElaboration.scala'
+      - 'candidates/qwen2_resident_matrix/ffn_window/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_window/window.patch'
+      - 'candidates/qwen2_resident_matrix/official_bf16/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch'
+      - 'candidates/qwen2_resident_matrix/official_bf16/chisel_policy.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/execution.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/frontend_receipt.json'
+      - 'candidates/qwen2_resident_matrix/public_dispatch/Qwen2Public21DispatchControlSpec.scala'
+      - 'candidates/qwen2_resident_matrix/public_dispatch/generate_contract.py'
+      - 'candidates/qwen2_resident_matrix/public_dispatch/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/transposed_down/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/owner_down.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_down/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/transposed_host/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_host/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala'
+      - 'candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala'
+      - 'candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala'
+      - 'candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_route/combined_service.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/check_frontend.py'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/leaf/source_manifest.json'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/source_pins.json'
+      - 'chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_block_fixture.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseTileCursor.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitContinuous.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitProductionGate.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenStack.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitRecord128Reader.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitSharedProductionGate.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnGatedNormOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormFixedBankOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/LayerChain.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MemoryToAxi.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2LayerStack.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedProductionTop.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/WideMatrix.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/AbiWrappers.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/EmitP0Safety.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Integration.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Scheduler.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/MatrixTilePayload.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/NormTileLoader.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala'
+      - 'chisel/p0_safety/src/main/scala/heteronpu/p0/TileTranspose.scala'
+      - 'integration/gemmini/EmitHeteroBF16Fma.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
+      - 'rtl/integration/qwen2_matrix_command_endpoint.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv'
+      - 'scripts/setup_hetero_chisel_loan_toolchain.sh'
+      - 'src/heteronpu/__init__.py'
+      - 'src/heteronpu/abi_validation.py'
+      - 'src/heteronpu/cgra_sfu.py'
+      - 'src/heteronpu/command.py'
+      - 'src/heteronpu/config.py'
+      - 'src/heteronpu/descriptor_chain.py'
+      - 'src/heteronpu/dtypes.py'
+      - 'src/heteronpu/gemmini_descriptor_v2.py'
+      - 'src/heteronpu/gemmini_rocc_lowering.py'
+      - 'src/heteronpu/kv_engine.py'
+      - 'src/heteronpu/l9_transport_contract.py'
+      - 'src/heteronpu/matrix_engine.py'
+      - 'src/heteronpu/scheduler.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-public21-binding-control-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  control-rtl:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Fetch immutable source identities and metadata dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin 8e0b2bbd35b3fee5ba2ca3e1f37e9274266b7689
+          git fetch --no-tags --depth=1 origin 36dd2c473815a931e1f74463e9d43e538c11f2f6
+          git cat-file -e 8e0b2bbd35b3fee5ba2ca3e1f37e9274266b7689:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala
+          git cat-file -e 36dd2c473815a931e1f74463e9d43e538c11f2f6:candidates/qwen2_resident_matrix/public_dispatch/source_pins.json
+          python -m pip install --index-url https://pypi.org/simple 'numpy==2.3.5' 'PyYAML==6.0.3'
+      - name: Cold source and rejection gates in both Python modes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/public21-binding-cold
+          python -m unittest discover -s candidates/qwen2_public21_binding -p 'test_*.py' -v 2>&1 | tee work/public21-binding-cold/normal.log
+          python -O -m unittest discover -s candidates/qwen2_public21_binding -p 'test_*.py' -v 2>&1 | tee work/public21-binding-cold/optimized.log
+          python -S candidates/qwen2_public21_binding/run_control.py > work/public21-binding-cold/default.json
+      - name: Provision fixed isolated Chisel tools
+        run: bash scripts/setup_hetero_chisel_loan_toolchain.sh
+      - name: Fresh parser and reduction-coordinator control RTL
+        shell: bash
+        run: |
+          set -euo pipefail
+          source work/chisel_toolchain/env.sh
+          python candidates/qwen2_public21_binding/run_control.py --run-rtl --out "$PWD/work/public21-binding-control" --toolchain-root "$PWD/work/chisel_toolchain" --hardfloat-source "$HARDFLOAT_SOURCE"
+      - name: Preserve bounded control evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-public21-binding-control-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/public21-binding-cold/*.log
+            work/public21-binding-cold/default.json
+            work/public21-binding-control/summary.json
+            work/public21-binding-control/fixture_generation.log
+            work/public21-binding-control/test.log
+            work/public21-binding-control/sources/source_receipt.json
+            work/public21-binding-control/rtl/
+            work/chisel_toolchain/logs/

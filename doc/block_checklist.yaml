@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: c6ff562e9189997fba011b6e1461da924e13f232ef1b264d374632285db935f8
+计划SHA256: 0d34b17b4de9039e5fbb5f57d35ad91a7c0e687e118f95f8da2e9567382ad688
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1670,3 +1670,11 @@ Qwen35_35B_残差及postnorm_20261013:
   计数预测: 每token_Add读8192B写4096B_2048ScalarAdd；postnorm读12288B写4096B；仍待实际核对
   边界: 官方参考smoke不等于新producer执行；未新增容差；硬件cycle_MAC_duty未知
   报告: doc/QWEN35_35B_RESIDUAL_POSTNORM_20261013_CN.md
+
+Qwen2_public21归约控制绑定_20261014:
+  状态: ongoing
+  done: [固定当前消费源与历史patch显式组合, 默认19owner控制保护, 显式17owner公共parser到真实归约coordinator_bridge, Attention全程序typed_root预检, metadata及owner债务取消围栏, 同拍stray与resident返回所有权]
+  ongoing: [本批独立CI闭环]
+  todo: [生产kernel真实共享owner与bank租约, QKV最小真实算术子链, 21命令完整M128数值及资源周期]
+  范围: metadata加mock_backend控制RTL；2tests22markers；完整block_算术_性能不验收；U00_2ongoing_U01todo
+  报告: doc/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014_CN.md

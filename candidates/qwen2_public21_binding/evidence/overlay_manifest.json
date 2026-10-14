@@ -1,0 +1,690 @@
+{
+  "schema": "current-public21-source-overlay-v1",
+  "base_commit": "8e0b2bbd35b3fee5ba2ca3e1f37e9274266b7689",
+  "historical_composer_declared_commit": "c761ec824ce2c027a66c22feb4a2154829f9d545",
+  "historical_scala_baseline": "825caff3a6c618419c49c7da452e009ce86ae8b5",
+  "before_sha256": {
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedController.scala": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3",
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedProtocol.scala": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentCoordinator.scala": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentProfile.scala": "1ff2df076371ad9947f9018c02f1e8d00f888613b5d7ca6411954617ef1ea2a6",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala": "bb9869995a5b3c22fd5cf4bf23cd98f8af6df3faeafe9a4d6953c11771dbe7e1",
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala": "901579a5c302c09dd1020592b186a83a1a167701d80b09596bc5e819e5915a6d",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "860db7712f315bebffe6ccb40600f02f8504b5eddb3a509f3263eb5492d9bdae",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "d06b43ca48d60285ee12a780cb1c27258c008b5e4255dde8da46b550b5639389",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseTileCursor.scala": "dbcbd0187801b134f68ae2c18328bedd28790118bddf2e635c829faa906ceb9d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitContinuous.scala": "a6455cef5248584db72c0775e4d7d11753b1e1d560d1e7b10145ca3b7cd330c7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitProductionGate.scala": "a2836bb63f8f62398f72548703faedba1e81dba36857c583ba42959bb52c6a32",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala": "28550bdc66e46d7c11468593227c684fc7af1bfd9d1c43517e8ba419c758b37e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenStack.scala": "e79f272374a809ceef56497848ca74a53c67635c0cf591940912626ea8fa4582",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitRecord128Reader.scala": "5819004d106352f1d0ee7d03b52b93ef7b97a51798647669ac39c74006ed923e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitSharedProductionGate.scala": "da73407e6f9a5b16f55834c0e53c836d989a5b5752cc731d324135ce99970bc0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnGatedNormOwner.scala": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormFixedBankOwner.scala": "46d7622f7c20416bc86cd7786cfd27ab8fe809911aeda1b3f097fb4c9a8ac915",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/LayerChain.scala": "86cb6ed7309504fde0300b144fa304a8a7c161310aaa874082762bb73cfc41b9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MemoryToAxi.scala": "4449366177ddd07fb793b9b8204f5be06214574ab708ab7ed47537ccbc52e374",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2LayerStack.scala": "c8a9ba1839ca928ba536b3c72f0181cfd4cd5af9a8f1c23993a0935a38938ff9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala": "6814e2f80890dbd5f5e8711eade58857deb690ab3c4c0fe9d5ea4ee8291ed6c6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedProductionTop.scala": "f2acf62311b02a8a09ebf67b6d84a9f2c4887abce027db203ca8df7fc2c904bf",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/WideMatrix.scala": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/AbiWrappers.scala": "d0ee8b92d8d7c98c58ccb5f58e95176cc8bd9015951eee983a4441ba0858f835",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/EmitP0Safety.scala": "07b6a35ba42d8902adf6624224bd398129e10f9ff1c3085ebe1c7d340ba7179c",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Integration.scala": "89924aef165b5206d86c6fec5171d03e16f0719d7fcf7b00e00f8eb16ad7cdf0",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Scheduler.scala": "dd2387d41c8585a7c86759187fb1f0471ce0a43b15283e3c056e2aa2979751f3",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/MatrixTilePayload.scala": "511f6c1ec603b2c87721803f7f2cc941022a8073f7d619979450232b571717ba",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/NormTileLoader.scala": "3d0a14a87fe8715da55b002537dee1a5e2204aaaa534abecf28a14cca4010035",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/TileTranspose.scala": "e8a0c965dfadfa833bcca892a4ab56c9323397475e5c28e531257691e3393b95",
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59"
+  },
+  "post_sha256": {
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedController.scala": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3",
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedProtocol.scala": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentCoordinator.scala": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentProfile.scala": "1ff2df076371ad9947f9018c02f1e8d00f888613b5d7ca6411954617ef1ea2a6",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala": "bb9869995a5b3c22fd5cf4bf23cd98f8af6df3faeafe9a4d6953c11771dbe7e1",
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala": "d806eb973206b9901fffb65d0cab4a9e7a215bac73920737ac3cfe6d9eecf2d1",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "f402c19b32fb9619b549bdbe4c65c3237d49fcde01210701ed048c24540f9ac6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseTileCursor.scala": "dbcbd0187801b134f68ae2c18328bedd28790118bddf2e635c829faa906ceb9d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "5e5b32a95ba59947330d7e0469a3643925f0f7bd3bd44c101ae3730c9ac51773",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitContinuous.scala": "a6455cef5248584db72c0775e4d7d11753b1e1d560d1e7b10145ca3b7cd330c7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitProductionGate.scala": "a2836bb63f8f62398f72548703faedba1e81dba36857c583ba42959bb52c6a32",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala": "28550bdc66e46d7c11468593227c684fc7af1bfd9d1c43517e8ba419c758b37e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenStack.scala": "e79f272374a809ceef56497848ca74a53c67635c0cf591940912626ea8fa4582",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitRecord128Reader.scala": "5819004d106352f1d0ee7d03b52b93ef7b97a51798647669ac39c74006ed923e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitSharedProductionGate.scala": "da73407e6f9a5b16f55834c0e53c836d989a5b5752cc731d324135ce99970bc0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnGatedNormOwner.scala": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormFixedBankOwner.scala": "46d7622f7c20416bc86cd7786cfd27ab8fe809911aeda1b3f097fb4c9a8ac915",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "4bf07891c805913b8c25512c216d6601e1ba6e375bbb98aead7e7a88fb5e5a51",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "9c539cb641a8e1dc004dadf021a53ebc644de23a54c2e6babaa82628a5ed892d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/LayerChain.scala": "86cb6ed7309504fde0300b144fa304a8a7c161310aaa874082762bb73cfc41b9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MemoryToAxi.scala": "4449366177ddd07fb793b9b8204f5be06214574ab708ab7ed47537ccbc52e374",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": "c86a25fe60123d578dbbd76744fd9a7806636b362ca885526a471d2125da39c7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2LayerStack.scala": "c8a9ba1839ca928ba536b3c72f0181cfd4cd5af9a8f1c23993a0935a38938ff9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "b6655f604500f9292d50a32b095cb6f201fe88f647afb229ae71fd8f8b16af08",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala": "6814e2f80890dbd5f5e8711eade58857deb690ab3c4c0fe9d5ea4ee8291ed6c6",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedProductionTop.scala": "f2acf62311b02a8a09ebf67b6d84a9f2c4887abce027db203ca8df7fc2c904bf",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "010fbea5d12e952e2083fa1f3f57cb1219f9756946b79dc01482e924c0c21bc5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "07d728d510ffd8b4f02c1b02476c2236fe594a18f70248c5a2f2c4ecbc361ae8",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/WideMatrix.scala": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/AbiWrappers.scala": "d0ee8b92d8d7c98c58ccb5f58e95176cc8bd9015951eee983a4441ba0858f835",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/EmitP0Safety.scala": "07b6a35ba42d8902adf6624224bd398129e10f9ff1c3085ebe1c7d340ba7179c",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Integration.scala": "89924aef165b5206d86c6fec5171d03e16f0719d7fcf7b00e00f8eb16ad7cdf0",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Scheduler.scala": "dd2387d41c8585a7c86759187fb1f0471ce0a43b15283e3c056e2aa2979751f3",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/MatrixTilePayload.scala": "511f6c1ec603b2c87721803f7f2cc941022a8073f7d619979450232b571717ba",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/NormTileLoader.scala": "3d0a14a87fe8715da55b002537dee1a5e2204aaaa534abecf28a14cca4010035",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/TileTranspose.scala": "e8a0c965dfadfa833bcca892a4ab56c9323397475e5c28e531257691e3393b95",
+    "integration/gemmini/EmitHeteroBF16Fma.scala": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27"
+  },
+  "effective_patch": {
+    "file": "current_overlay.patch",
+    "sha256": "2774aacc19b2877dc77dae5d145b628aee2e4eb2589c98f917904669b56715ad"
+  },
+  "original_patch_order": [
+    "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch",
+    "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch",
+    "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch",
+    "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch",
+    "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch",
+    "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch",
+    "candidates/qwen2_resident_matrix/ffn_drain/drain.patch",
+    "candidates/qwen2_resident_matrix/ffn_group/group.patch",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.patch",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch"
+  ],
+  "original_patch_sha256": {
+    "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "3d47386e31409bb310cea9a1132ae0ed777c76d697d2b45a9da90a0e3a1108a6",
+    "candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch": "eac9bf90e7c482e879f97d06683d72a6ac699ebc633afe3ee9bfec8c2cfbcac2",
+    "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "358969c654a998dd8fb93f3e504f4bdc377e3fc266e4a094a7ce5131604c63c1",
+    "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "b91814f8bfe8a247d4ee9a8508e97acbd30ab5c174ba495383b70521968fd8e1",
+    "candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch": "9d88bfc1e3f071a7fd0027865bd30726bf9f3b5cc2b589cc38f4cebb78366b98",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+    "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+    "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e",
+    "candidates/qwen2_resident_matrix/ffn_group/group.patch": "32551bb06885785fcbc55b7c9c3b7ff04c4f2ab76bb93f2c2c41ff41f312e674",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "37a22c30dde207a38e77151a63e66abaeeb2e3261a082f5ef4d4a4c169d981eb",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch": "a3b39198b3b3e36e3d1c33c98d3d9ea1d11f9f131f72ad676613d63ff256df30",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.patch": "6da8a24639456ca182408e8bc2fb2a24019fc3a9d9421119813139c94efdf076",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch": "a4bcb681f961e0015ad09e06ceb52f7faa0c4c0a6b1ce22d43ff81e0fa0b9b2f"
+  },
+  "composition_helper_sha256": {
+    "candidates/qwen2_resident_matrix/ffn_drain/check_frontend.py": "32485afa5540afb581b4cfc9a1809f55a96cfea2ded8f924548daf1a4977aa60",
+    "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "e2d9297d307e8027c77a813375298e57f98662edce91b36fa4e353525a141e9e",
+    "candidates/qwen2_resident_matrix/ffn_drain/source_pins.json": "aa8fe7a227fbdc3f76eae0a35d7edc4efd679325c2fdb18d925b0c7357b0cb23",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_frontend.py": "fcc4490b2bcfc8c911022701b9b62901b9b21b4dbc80cc7529315d101037c62e",
+    "candidates/qwen2_resident_matrix/ffn_tiles/source_pins.json": "7d82254bfc7319c786674e7fa760d51bad7d92cc235a2e22a677ca45483a7a85",
+    "candidates/qwen2_resident_matrix/ffn_window/FfnWindowElaboration.scala": "16808e4a488b052853e2989227c2c3903d06b273d74bf0a0b73ff4d6e4198e07",
+    "candidates/qwen2_resident_matrix/ffn_window/check_frontend.py": "fda0b36d725447dd994372f98c7cf7a1c58aa9fe6504d0391aa10678057aeccd",
+    "candidates/qwen2_resident_matrix/ffn_window/source_pins.json": "deb702022313db76b07f9e90969f6cfece70470d7a8d1581db2a3c964c936fca",
+    "candidates/qwen2_resident_matrix/transposed_down/check_frontend.py": "5e18e3b188b0bb52ea32e2f5c41389ee18db70cc60b3fadf2b1453cb8b325465",
+    "candidates/qwen2_resident_matrix/transposed_down/source_pins.json": "215ee112815b0970d55dbdfb9e1f89632cdb02eb2853b68e42177ea7f3e23ce0",
+    "candidates/qwen2_resident_matrix/transposed_host/check_frontend.py": "67c6157f56c0b2efdcc21e5351742f7c95bc5acb98f007212768aecbff07c25e",
+    "candidates/qwen2_resident_matrix/transposed_host/source_pins.json": "69f272ab7acdd69ba3a8eff8473e340e6d4e9b5f5cd5fdca09c55356c31b97a3",
+    "candidates/qwen2_resident_matrix/transposed_seed/check_frontend.py": "6e012e5ec21c52825ab27a53ff518c15bd69309c3d752f13116891ce55bd5919",
+    "candidates/qwen2_resident_matrix/transposed_seed/source_pins.json": "7402214dc2c1d3fdf67cb7e964dc9dde9336b3da88685471cf4b729e6c706c3f",
+    "candidates/qwen2_resident_matrix/ffn_group/check_frontend.py": "16aa6c7f9d4b609275d5e1d946b78897bcc5d5de32508c4677e57d0cfe3db361",
+    "candidates/qwen2_resident_matrix/ffn_group/source_pins.json": "bf8b3f7619abc3513edc12cd465fd54ee760860760975502a6e9dfc0c56b6f67",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.py": "fe6810c22bb82a8836bb989c9996131aecb9eef6fd3e64e27b67b5ce54f8dc0d",
+    "candidates/qwen2_resident_matrix/official_bf16/check_frontend.py": "e98b5acd29e593443b7757a5dfee841d21f63aedda5027d1f61cb8346912e8b0",
+    "candidates/qwen2_resident_matrix/official_bf16/frontend_receipt.json": "6c48669cef66fe23468d10764e8e6457de3d90dd5b00684fb165af6ec575294f",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_reduction_frontend.py": "d9b5d3c0d6856187592704b3bd64e0ee01c5115e0aed9f8790c8ce6d820731c4",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/check_dense_drain_frontend.py": "c95a5e9ac727bfed33b3b7d6ca5948761f698a4d8c83173f251bfb332289a73b",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/check_vector_add.py": "e57165d9fb9124b4e5a92cefd6fa6239ea308d69dab9c8a908bb8e1ec222f87f",
+    "candidates/qwen2_resident_matrix/transposed_seed/leaf/source_manifest.json": "1750861f6291bd2a9859f61ed251281124f6b3539819931109e8ffa8dbb6faea"
+  },
+  "documented_resolutions_sha256": "0ad8bf705943ece142d4ef54d8f2c172f9716aad2a489203649a96a721cb8b20",
+  "source_count": 76,
+  "scala_source_count": 70,
+  "preserved_sv_sources": [
+    "rtl/integration/qwen2_matrix_command_endpoint.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv"
+  ],
+  "current_candidate_dependency_copies": [
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedController.scala",
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedProtocol.scala",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentCoordinator.scala",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentProfile.scala",
+    "candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala",
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala"
+  ],
+  "changed_sources": [
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv"
+  ],
+  "source_deltas": [
+    {
+      "path": "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala",
+      "lines": {
+        "added": 59,
+        "removed": 2
+      },
+      "normalized_tokens": {
+        "added": 786,
+        "removed": 0
+      },
+      "normalized_before_sha256": "30ad73d0bf0a41c3c669cf5b5211211f2e29d821d5abefc18d235def35b09a58",
+      "normalized_post_sha256": "7b6382d0972f184b41cd843cb607ddc3a128953db76e4cf3d5f478fadbcd2ca4"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala",
+      "lines": {
+        "added": 258,
+        "removed": 0
+      },
+      "normalized_tokens": {
+        "added": 4278,
+        "removed": 0
+      },
+      "normalized_before_sha256": "1df9a74e0aaeffc191692c779d6033aae4aeef37c7d962a7009d355802dcba82",
+      "normalized_post_sha256": "8c3cff7e46794443d00ebff420f7f142bcbf8fdb9404c81d8fdf9ddc8070e4cc"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala",
+      "lines": {
+        "added": 1224,
+        "removed": 0
+      },
+      "normalized_tokens": {
+        "added": 26206,
+        "removed": 0
+      },
+      "normalized_before_sha256": "fa9ace2831029463be3ca5c3926f8e71f4bd5d1c593d27d7982854ed739a2abc",
+      "normalized_post_sha256": "b45b6fd4c47efd80d7e78bd633456cf1b968eead3503f4164a0603723995ad3c"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala",
+      "lines": {
+        "added": 25,
+        "removed": 7
+      },
+      "normalized_tokens": {
+        "added": 196,
+        "removed": 0
+      },
+      "normalized_before_sha256": "08a6e861b0d9b5c48e33494e9fbff957c046d379dbbc56f5e39d937486a60079",
+      "normalized_post_sha256": "918720d18f83a0b5b6cc4371c5d7c9d319d72b45f2f830106e17dc308c097a08"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala",
+      "lines": {
+        "added": 4,
+        "removed": 2
+      },
+      "normalized_tokens": {
+        "added": 58,
+        "removed": 5
+      },
+      "normalized_before_sha256": "e9662d12532537fa2e3b8a9ada54c0041fc099c26d5a06b3004e04f8e6bc7e6b",
+      "normalized_post_sha256": "594f3bd99d7b53b14d708384796853e76dfc5f09074a99d28751be2ba1047767"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala",
+      "lines": {
+        "added": 258,
+        "removed": 19
+      },
+      "normalized_tokens": {
+        "added": 4881,
+        "removed": 11
+      },
+      "normalized_before_sha256": "7639ee77f72ad5d4145780a8608316223c5e175b1e75c26a818d767ed18f39da",
+      "normalized_post_sha256": "75c49f4f71d4f61df8b1cb402e3a002d097f3dfb4700b18ae7859f3d02d4ffb4"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+      "lines": {
+        "added": 35,
+        "removed": 5
+      },
+      "normalized_tokens": {
+        "added": 585,
+        "removed": 1
+      },
+      "normalized_before_sha256": "2359f8b3ab4ef3454f08ae15f5b97ac65f560a46860a67f0155509bb70618d57",
+      "normalized_post_sha256": "86bfcce6b069dc224bca3d493e2b87469a466e85702943171745b05d5cdf6c86"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "lines": {
+        "added": 85,
+        "removed": 17
+      },
+      "normalized_tokens": {
+        "added": 1524,
+        "removed": 0
+      },
+      "normalized_before_sha256": "79e3d375e1f295cd7e3e2f3cfe252dc2893a86a71dfc16507767207ccb6ccfa6",
+      "normalized_post_sha256": "3bd1dd56e6b10c9d3304e87c5ec52a18a233a4633f62ef2059c46feeac74be38"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala",
+      "lines": {
+        "added": 9,
+        "removed": 7
+      },
+      "normalized_tokens": {
+        "added": 74,
+        "removed": 0
+      },
+      "normalized_before_sha256": "6c72940f359dabbf38f81167b242835fb1a597541315b93cad72f166e1ce9d89",
+      "normalized_post_sha256": "e70226b21a442d39043aae22b206cb10c6d7930d843752cd21ca78961178ee89"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "lines": {
+        "added": 69,
+        "removed": 20
+      },
+      "normalized_tokens": {
+        "added": 892,
+        "removed": 5
+      },
+      "normalized_before_sha256": "3b4edd90e8735eec84d96d7c53446c19bd6fbd16073e768c48e53dbb8b7c96f4",
+      "normalized_post_sha256": "fa5c2b493d0343ec38f222d04e5da60b9d0343fdc678cab4810b57c69a791222"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "lines": {
+        "added": 161,
+        "removed": 42
+      },
+      "normalized_tokens": {
+        "added": 2413,
+        "removed": 64
+      },
+      "normalized_before_sha256": "cda2a3d50bc813d273591509096944dc9082ef5e77d6c4dac6817f5f194394ec",
+      "normalized_post_sha256": "8ec62306059954bb057ef342b656866f192dc6080d3f4183835330dae0c3eadf"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala",
+      "lines": {
+        "added": 28,
+        "removed": 1
+      },
+      "normalized_tokens": {
+        "added": 489,
+        "removed": 0
+      },
+      "normalized_before_sha256": "665125e1ffa346bf7af6c9fa4451d457f6eac63c976c413829a3571d563ee72a",
+      "normalized_post_sha256": "cbb6ca319c61c25fbb815d00ad15aac81ea9b8378af9c8d137be1e53cd0adb7b"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala",
+      "lines": {
+        "added": 11,
+        "removed": 11
+      },
+      "normalized_tokens": {
+        "added": 1,
+        "removed": 175
+      },
+      "normalized_before_sha256": "f880709d2527d18063b8c88f1a065e0fb28d00591b6d022715fe6343adb73ab3",
+      "normalized_post_sha256": "1815bf8311372385d7c1805968c8f501d88bbb1560a97d7a08c279b55f2457b3"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+      "lines": {
+        "added": 73,
+        "removed": 11
+      },
+      "normalized_tokens": {
+        "added": 893,
+        "removed": 0
+      },
+      "normalized_before_sha256": "2fa2cee4f3ae57d5c3700f8ae75ab8eb697e448fd6976c40f1cecf4a198b26da",
+      "normalized_post_sha256": "0afd26be87bf89413efbe20cb7a2c0c753f711066d825dd25612e0e409dadb4e"
+    },
+    {
+      "path": "rtl/integration/qwen2_matrix_command_endpoint.sv",
+      "lines": {
+        "added": 36,
+        "removed": 3
+      },
+      "normalized_tokens": {
+        "added": 289,
+        "removed": 0
+      },
+      "normalized_before_sha256": "da98f344d340c054811b46701199b6f155d6827823168dac1af64840fa472478",
+      "normalized_post_sha256": "4153c4c1131bb2c89eeb3f713056a6e29d34c66df7138fccfd5304bdcbd811a7"
+    },
+    {
+      "path": "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "lines": {
+        "added": 24,
+        "removed": 2
+      },
+      "normalized_tokens": {
+        "added": 184,
+        "removed": 8
+      },
+      "normalized_before_sha256": "bc158fadc5a5665b7600ca06d070a6c151456ec3d01b62ea094d8b373d833c8a",
+      "normalized_post_sha256": "45ea47d976a87c9cba3fb858435a6669af8c49ca50496edc0b8b29afb37e215f"
+    },
+    {
+      "path": "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "lines": {
+        "added": 113,
+        "removed": 3
+      },
+      "normalized_tokens": {
+        "added": 999,
+        "removed": 0
+      },
+      "normalized_before_sha256": "5a887ca3ead3f10d8a7a04f708d598387e30ddb507b50253d3dcb047c761207e",
+      "normalized_post_sha256": "129a8230284ff6a3a059e204186e668df31a39ef8960154f1781fcbb66c27138"
+    },
+    {
+      "path": "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "lines": {
+        "added": 12,
+        "removed": 3
+      },
+      "normalized_tokens": {
+        "added": 108,
+        "removed": 0
+      },
+      "normalized_before_sha256": "fc7618fb9bf57c7464b00efa7d688c7b9aed59b132e32efcb134a08fa1d63838",
+      "normalized_post_sha256": "2245f933f0a3a0ee0f8be229094f8a03d4806ebf2099366a6ffa269b45f1d55d"
+    },
+    {
+      "path": "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "lines": {
+        "added": 11,
+        "removed": 3
+      },
+      "normalized_tokens": {
+        "added": 96,
+        "removed": 0
+      },
+      "normalized_before_sha256": "43e72a84e9c9df7be2a0a331cc9efc2f15304c44f025fa9db21a7e5fb7399117",
+      "normalized_post_sha256": "880a9e6468058be8ce2f4e7e647c40d57f3d5af4477595f8fc4e6220cba45188"
+    },
+    {
+      "path": "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "lines": {
+        "added": 73,
+        "removed": 4
+      },
+      "normalized_tokens": {
+        "added": 607,
+        "removed": 0
+      },
+      "normalized_before_sha256": "edb7eaf8babcf47c1ad5c14c054c5f846a9351e2b733fb820a4e1d8177d5b4f7",
+      "normalized_post_sha256": "8cbf7ba4e1bf37b251bc2ed4a8ab61b416b1065835fbb86d62b74d08b65c275c"
+    }
+  ],
+  "current_feature_preservation": [
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "current_added_lines": 64,
+      "current_added_line_inventory": [
+        "/** Internal cancellation/recovery only. clear attests external memory/Scalar",
+        "  * recovery and stale-response exclusion; drained alone is not that attestation.",
+        "  */",
+        "class QwenRmsBorrowerControl extends Bundle {",
+        "  val abort=Input(Bool());val clear=Input(Bool())",
+        "  val drained=Output(Bool());val locked=Output(Bool())",
+        "}",
+        "class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false) extends Module {",
+        "  require(!enableH2048RmsBorrower || (pipelined && (bf16GdnBlock || bf16AttentionBlock) && s.maxTokens<=128),",
+        "    \"H2048 RMS borrower requires a pipelined BF16 block profile with at most 128 tokens\")",
+        "    val rmsBorrowerControl=if(enableH2048RmsBorrower)Some(new QwenRmsBorrowerControl)else None",
+        "    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower))",
+        "    // Elaboration selects one bank owner, never parallel H1024/H2048 banks.",
+        "    val rmsBorrower=if(enableH2048RmsBorrower)Some(Module(new GdnRmsNormFixedBankOwner(s.maxTokens)))else None",
+        "    val rmsNorm:Seq[GdnRmsNormOwnerPort]=if(enableH2048RmsBorrower)rmsBorrower.toSeq.map(_.io)",
+        "      else if(bf16GdnBlock||bf16AttentionBlock)Seq(Module(new GdnRmsNormOwner(width=1024,maxTokens=1)).io)",
+        "      else Seq.empty",
+        "    val rmsTyped=io.job.bits.activationBf16 && io.job.bits.weightBf16 && io.job.bits.outputBf16 &&",
+        "      io.job.bits.n===2048.U && io.job.bits.k===2048.U &&",
+        "      io.job.bits.writeBytes===(io.job.bits.m.pad(64)<<12)(63,0)",
+        "    val rmsMode=if(enableH2048RmsBorrower)Mux(rmsTyped,8.U,7.U)else 8.U",
+        "    val chooseBase=Mux((bf16GdnBlock||bf16AttentionBlock).B && io.job.bits.kind===QwenOwnerKind.GdnRmsNorm.U,rmsMode,",
+        "    val gdnPoison=(gdn.toSeq.map(_.io.resetRequired)++prep.toSeq.map(_.io.resetRequired)++recurrent.toSeq.map(_.io.resetRequired)++gatedNorm.toSeq.map(_.io.resetRequired)++rmsNorm.map(_.resetRequired)++elementwise.toSeq.map(_.io.resetRequired)++qkNorm.toSeq.map(_.io.resetRequired)++partialRope.toSeq.map(_.io.resetRequired)++kvAppend.toSeq.map(_.io.resetRequired)++gqa.toSeq.map(_.io.resetRequired)).foldLeft(false.B)(_||_)",
+        "    val rmsBorrowerUnavailable=WireDefault(false.B)",
+        "    rmsBorrower.foreach{n=>",
+        "      val control=io.rmsBorrowerControl.get",
+        "      val selected= !active || mode===8.U",
+        "      n.io.abort:=selected && control.abort;n.io.clear:=selected && control.clear",
+        "      control.drained:=selected && n.io.drained;control.locked:=n.io.locked",
+        "      val loan=core.io.elementwiseLoan.get",
+        "      loan.request.valid:=active && mode===8.U && n.io.loan.request.valid",
+        "      loan.request.bits:=n.io.loan.request.bits",
+        "      n.io.loan.request.ready:=active && mode===8.U && loan.request.ready",
+        "      // Terminal drain and recovery remain connected after owner done retires.",
+        "      n.io.loan.result.valid:=loan.result.valid;n.io.loan.result.bits:=loan.result.bits",
+        "      loan.result.ready:=n.io.loan.result.ready",
+        "      loan.abort:=n.io.loan.abort;loan.resetLoan:=n.io.loan.resetLoan",
+        "      n.io.loan.busy:=loan.busy;n.io.loan.resetRequired:=loan.resetRequired",
+        "      n.io.vectorUnavailable:=core.io.elementwiseResetRequired.get",
+        "      rmsBorrowerUnavailable:=control.abort || control.clear || n.io.locked ||",
+        "        n.io.loan.request.valid || loan.busy || loan.result.valid || core.io.elementwiseResetRequired.get ||",
+        "        (!active && (io.response.valid || core.io.scalarService.get.result.valid))",
+        "    }",
+        "    val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope).B && sharedPoison) && !rmsBorrowerUnavailable",
+        "      4.U->prep.map(_.io.job.ready).getOrElse(false.B),5.U->recurrent.map(_.io.job.ready).getOrElse(false.B),6.U->gatedNorm.map(_.io.job.ready).getOrElse(false.B),7.U->true.B,8.U->rmsNorm.headOption.map(_.job.ready).getOrElse(false.B),9.U->elementwise.map(_.io.job.ready).getOrElse(false.B),10.U->qkNorm.map(_.io.job.ready).getOrElse(false.B),11.U->partialRope.map(_.io.job.ready).getOrElse(false.B),12.U->kvAppend.map(_.io.job.ready).getOrElse(false.B),13.U->gqa.map(_.io.job.ready).getOrElse(false.B)))",
+        "      n.job.valid:=io.job.valid && canStart && choose===8.U",
+        "      n.job.bits.tokens:=io.job.bits.m;n.job.bits.hiddenWidth:=io.job.bits.n",
+        "      n.job.bits.input:=io.job.bits.a;n.job.bits.weight:=io.job.bits.b;n.job.bits.output:=io.job.bits.dst;n.job.bits.tag:=io.job.bits.tag",
+        "      rmsValid:=n.done.valid;rmsDone.tag:=n.done.bits.tag",
+        "      val invalidCommit=n.done.bits.status===0.U && !n.done.bits.outputCommitted",
+        "      rmsDone.status:=Mux(invalidCommit,Status.Protocol.U,n.done.bits.status)",
+        "      rmsDone.writeBytes:=n.done.bits.writeBytes;rmsDone.cycles:=n.done.bits.cycles",
+        "      n.done.ready:=active && mode===8.U && io.done.ready",
+        "      when(n.done.fire && invalidCommit){rejected:=true.B}",
+        "      val clients=gdn.toSeq.map(x=>3->x.io.scalar)++prep.toSeq.map(x=>4->x.io.scalar)++recurrent.toSeq.map(x=>5->x.io.scalar)++gatedNorm.toSeq.map(x=>6->x.io.scalar)++rmsNorm.map(x=>8->x.scalar)++elementwise.toSeq.map(x=>9->x.io.scalar)++qkNorm.toSeq.map(x=>10->x.io.scalar)++partialRope.toSeq.map(x=>11->x.io.scalar)++gqa.toSeq.map(x=>13->x.io.scalar)",
+        "        // The borrower must see stray idle replies when deciding if clear is safe.",
+        "        val responseSelected=if(enableH2048RmsBorrower && i==8)(!active || mode===8.U)else(active && mode===i.U)",
+        "        c.result.valid:=responseSelected && service.result.valid",
+        "    val memories=Seq(0->core.io.memory,1->dense.io.memory)++silu.toSeq.map(x=>2->x.io.memory)++gdn.toSeq.map(x=>3->x.io.memory)++prep.toSeq.map(x=>4->x.io.memory)++recurrent.toSeq.map(x=>5->x.io.memory)++gatedNorm.toSeq.map(x=>6->x.io.memory)++rmsNorm.map(x=>8->x.memory)++elementwise.toSeq.map(x=>9->x.io.memory)++qkNorm.toSeq.map(x=>10->x.io.memory)++partialRope.toSeq.map(x=>11->x.io.memory)++kvAppend.toSeq.map(x=>12->x.io.memory)++gqa.toSeq.map(x=>13->x.io.memory)",
+        "    val responses=Seq(0->core.io.response,1->dense.io.response)++silu.toSeq.map(x=>2->x.io.response)++gdn.toSeq.map(x=>3->x.io.response)++prep.toSeq.map(x=>4->x.io.response)++recurrent.toSeq.map(x=>5->x.io.response)++gatedNorm.toSeq.map(x=>6->x.io.response)++rmsNorm.map(x=>8->x.response)++elementwise.toSeq.map(x=>9->x.io.response)++qkNorm.toSeq.map(x=>10->x.io.response)++partialRope.toSeq.map(x=>11->x.io.response)++kvAppend.toSeq.map(x=>12->x.io.response)++gqa.toSeq.map(x=>13->x.io.response)",
+        "    for((i,p)<-responses){",
+        "      val selected=if(enableH2048RmsBorrower && i==8)(!active || mode===8.U)else(active && mode===i.U)",
+        "      p.valid:=selected&&io.response.valid;p.bits:=io.response.bits",
+        "    }"
+      ],
+      "literal_preserved_lines": 58,
+      "explicit_line_adaptations": [
+        {
+          "current": "class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false) extends Module {",
+          "postimage": "class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {"
+        },
+        {
+          "current": "    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower))",
+          "postimage": "    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy))"
+        },
+        {
+          "current": "    val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope).B && sharedPoison) && !rmsBorrowerUnavailable",
+          "postimage": "    val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope||enableTransposedDense).B && sharedPoison) && !rmsBorrowerUnavailable"
+        },
+        {
+          "current": "      n.job.valid:=io.job.valid && canStart && choose===8.U",
+          "postimage": "      n.job.valid:=io.job.valid && canStartWithTiles && choose===8.U"
+        },
+        {
+          "current": "    val memories=Seq(0->core.io.memory,1->dense.io.memory)++silu.toSeq.map(x=>2->x.io.memory)++gdn.toSeq.map(x=>3->x.io.memory)++prep.toSeq.map(x=>4->x.io.memory)++recurrent.toSeq.map(x=>5->x.io.memory)++gatedNorm.toSeq.map(x=>6->x.io.memory)++rmsNorm.map(x=>8->x.memory)++elementwise.toSeq.map(x=>9->x.io.memory)++qkNorm.toSeq.map(x=>10->x.io.memory)++partialRope.toSeq.map(x=>11->x.io.memory)++kvAppend.toSeq.map(x=>12->x.io.memory)++gqa.toSeq.map(x=>13->x.io.memory)",
+          "postimage": "    val memories=Seq(0->core.io.memory,1->dense.memory)++silu.toSeq.map(x=>2->x.io.memory)++gdn.toSeq.map(x=>3->x.io.memory)++prep.toSeq.map(x=>4->x.io.memory)++recurrent.toSeq.map(x=>5->x.io.memory)++gatedNorm.toSeq.map(x=>6->x.io.memory)++rmsNorm.map(x=>8->x.memory)++elementwise.toSeq.map(x=>9->x.io.memory)++qkNorm.toSeq.map(x=>10->x.io.memory)++partialRope.toSeq.map(x=>11->x.io.memory)++kvAppend.toSeq.map(x=>12->x.io.memory)++gqa.toSeq.map(x=>13->x.io.memory)"
+        },
+        {
+          "current": "    val responses=Seq(0->core.io.response,1->dense.io.response)++silu.toSeq.map(x=>2->x.io.response)++gdn.toSeq.map(x=>3->x.io.response)++prep.toSeq.map(x=>4->x.io.response)++recurrent.toSeq.map(x=>5->x.io.response)++gatedNorm.toSeq.map(x=>6->x.io.response)++rmsNorm.map(x=>8->x.response)++elementwise.toSeq.map(x=>9->x.io.response)++qkNorm.toSeq.map(x=>10->x.io.response)++partialRope.toSeq.map(x=>11->x.io.response)++kvAppend.toSeq.map(x=>12->x.io.response)++gqa.toSeq.map(x=>13->x.io.response)",
+          "postimage": "    val responses=Seq(0->core.io.response,1->dense.response)++silu.toSeq.map(x=>2->x.io.response)++gdn.toSeq.map(x=>3->x.io.response)++prep.toSeq.map(x=>4->x.io.response)++recurrent.toSeq.map(x=>5->x.io.response)++gatedNorm.toSeq.map(x=>6->x.io.response)++rmsNorm.map(x=>8->x.response)++elementwise.toSeq.map(x=>9->x.io.response)++qkNorm.toSeq.map(x=>10->x.io.response)++partialRope.toSeq.map(x=>11->x.io.response)++kvAppend.toSeq.map(x=>12->x.io.response)++gqa.toSeq.map(x=>13->x.io.response)"
+        }
+      ]
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "current_added_lines": 28,
+      "current_added_line_inventory": [
+        "class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false) extends Module {",
+        "  require(!externalElementwiseLoan || (ownerDriven && externalScalar), \"elementwise loan requires owner serialization and the shared Scalar\")",
+        "    val elementwiseLoan=if(externalElementwiseLoan)Some(new ElementwiseLoanPort)else None",
+        "    val elementwiseResetRequired=if(externalElementwiseLoan)Some(Output(Bool()))else None",
+        "  val elemCfg=ChainConfig()",
+        "  val elemSram=LocalSramConfig(rowsPerBank=elemCfg.localBytes/256)",
+        "  // Static replacement at the original instance: never a second Vector engine.",
+        "  val lender=if(externalElementwiseLoan)Some(Module(new ElementwiseRegisterLoan(elemCfg,elemSram)))else None",
+        "  val elem:ElementwiseMemoryEngine=lender match {",
+        "    case Some(e)=>e",
+        "    case None=>Module(new ElementwiseMemoryEngine(elemCfg,elemSram))",
+        "  }",
+        "  val elementwiseExternalExclusive=WireDefault(false.B)",
+        "  lender.foreach{e=>",
+        "    val port=io.elementwiseLoan.get",
+        "    val available=state===st(\"idle\") && !poisoned",
+        "    e.loan.request.valid:=port.request.valid && available",
+        "    e.loan.request.bits:=port.request.bits",
+        "    port.request.ready:=e.loan.request.ready && available",
+        "    port.result.valid:=e.loan.result.valid;port.result.bits:=e.loan.result.bits",
+        "    e.loan.result.ready:=port.result.ready",
+        "    e.loan.abort:=port.abort;e.loan.resetLoan:=port.resetLoan",
+        "    port.busy:=e.loan.busy;port.resetRequired:=e.loan.resetRequired",
+        "    io.elementwiseResetRequired.get:=e.io.resetRequired",
+        "    elementwiseExternalExclusive:=port.request.valid || e.loan.busy ||",
+        "      e.loan.result.valid || e.io.resetRequired || port.abort || port.resetLoan",
+        "  }",
+        "  if(ownerDriven){io.ownerJob.get.ready:=state===st(\"idle\")&& !poisoned && !scalarExternalExclusive && !elementwiseExternalExclusive}"
+      ],
+      "literal_preserved_lines": 26,
+      "explicit_line_adaptations": [
+        {
+          "current": "class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false) extends Module {",
+          "postimage": "class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {"
+        },
+        {
+          "current": "    case None=>Module(new ElementwiseMemoryEngine(elemCfg,elemSram))",
+          "postimage": "    case None=>Module(new ElementwiseMemoryEngine(elemCfg,elemSram,numericPolicy=numericPolicy))"
+        }
+      ]
+    }
+  ],
+  "unchanged_current_new_sources": [
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormFixedBankOwner.scala"
+  ],
+  "scope": {
+    "source_only": true,
+    "compiled": false,
+    "elaborated": false,
+    "rtl": false,
+    "numerical_acceptance": false,
+    "full_host_dispatch_connected": false,
+    "dense_reduction_in_kernel": false
+  },
+  "normalization": "Remove whitespace/comments outside quoted strings, preserve string literals and all code tokens; this is source diff accounting, not IR or semantic equivalence."
+}

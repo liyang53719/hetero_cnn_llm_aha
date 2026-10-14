@@ -40,7 +40,7 @@
     三十五B剩余: [router, routed_shared_MoE, expert_merge, final_residual, final_ACK_fence, L3完整链]
     近期局部RTL: ElementwiseRegisterLoan真实M16_M128_epilogue逐bit通过；H2048固定6144B银行borrower真实M1_M16_M128整条RMS经生产core的Scalar与elem逐bit通过，M128_owner2540814拍_launch到done_fire2540828拍；相同6144B银行Scalar对照M128为5442701拍，局部人工背压周期比2.142097x；原16lane_elem执行49152拍_有效lane_cycle786432_占该elem容量1.9344875%，归约占wall82.673365%；尚未接入完整block，kernel分支验证按独立回执更新。
     归约向量借用局部RTL: 新候选默认关闭，保留官方8lane乘4ILP顺序及两次独立FP32舍入；同155源_同实际M1_M16_M128_同理想供数配对全过，M128完整RMS1792902到239494拍_7.486208x；三bank6144B_33个FP32ALU不增，全33配置Add_Mul执行容量2.252113%到16.859788%，elem16子池34.633018%；人工背压候选另过568566拍，不混算ideal收益；目标DDR未知_未启用kernel归约_完整block仍open。
-    Qwen2公开入口控制: current_main实际Chisel_RTL_Verilator_M16_M128_重定位M16的21命令逐字段控制门通过，各19owner_21completion_236metadata_reads；六类拒绝通过。下游owner返回是mock，不算算术或完整block；对应已过软件模型的resident17与Dense归约调度仍待接线。
+    Qwen2公开入口控制: current_main默认19owner_21completion_236metadata_reads与六类拒绝保留；固定当前消费字节的独立official_resident候选已接真实parser到Dense归约控制器与bridge，M16_M128_重定位M16各17owner_21completion_650metadata_reads，14类候选拒绝含whole_program_Attention_alias和取消退债；所有算术服务返回仍mock，实际共享bank_owner_算术及完整block待接，详见doc/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014_CN.md。
     不可继承: 局部epilogue或RMS的RTL_PASS不能升级完整prefix_MoE_block或MAC利用率；历史RTL_M1不能绑定为当前M128源码实测。
     资料: [doc/PASSED_CASE_UTILIZATION_20261013_CN.md, doc/QWEN35_35B_RESIDUAL_POSTNORM_20261013_CN.md, doc/H2048_FIXED_BANK_RMS_BORROWER_20261014_CN.md, doc/H2048_RMS_SAME_BANK_PERFORMANCE_20261014_CN.md, doc/H2048_RMS_VECTOR_REDUCTION_20261014_CN.md]
     状态: U00.2 ongoing；U01 to do；五block完整实际RTL数值及90%联合门仍open。

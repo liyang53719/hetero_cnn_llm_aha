@@ -1,0 +1,157 @@
+{
+  "status": "PASS_PUBLIC21_BINDING_CONTROL_ONLY",
+  "scope": "ACTUAL_PUBLIC21_PARSER_REDUCTION_CONTROL_ONLY",
+  "source_base_commit": "8e0b2bbd35b3fee5ba2ca3e1f37e9274266b7689",
+  "execution_head": "700d756e13f25ee506a21616f617202543fe2b52",
+  "source_manifest_sha256": "75caad6c8db95ba5470a5d97b6d691f96af17e0bfe58f2ca207693c92097864c",
+  "tb_inputs": "COMMAND_AND_DESCRIPTOR_METADATA_ONLY; BACKEND_ARITHMETIC_RETURNS_MOCK_ZERO",
+  "actual_modules": [
+    "HostBlockCommands",
+    "DenseBlockReductionCoordinator",
+    "DenseTileSumBridge"
+  ],
+  "watchdog_seconds": 600,
+  "test_count": 2,
+  "zero_skips": true,
+  "markers": [
+    "PUBLIC21_CURRENT_PARSER_CONTROL_PASS rows=16 epoch=7 command_base=4294967296 jobs=19 completions=21 metadata_reads=236 controlled_cycles=2769 arithmetic=false owner_completion_mock=true",
+    "PUBLIC21_CURRENT_PARSER_CONTROL_PASS rows=128 epoch=8 command_base=4294967296 jobs=19 completions=21 metadata_reads=236 controlled_cycles=2769 arithmetic=false owner_completion_mock=true",
+    "PUBLIC21_CURRENT_PARSER_CONTROL_PASS rows=16 epoch=9 command_base=4503603922337792 jobs=19 completions=21 metadata_reads=236 controlled_cycles=2769 arithmetic=false owner_completion_mock=true",
+    "PUBLIC21_CURRENT_PARSER_CONTROL_PASS rows=16 epoch=7 command_base=4294967296 jobs=19 completions=21 metadata_reads=236 controlled_cycles=2769 arithmetic=false owner_completion_mock=true",
+    "PUBLIC21_CURRENT_PARSER_REJECTION_PASS cases=short,tag,owner,metadata,unknown_opcode,stale_producer arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_CONTROL_PASS rows=16 epoch=7 jobs=17 ordinary=13 resident=1 reductions=3 windows=28 drains=14 vector_mock_returns=2048 completions=21 metadata_reads=650 controlled_cycles=15755 arithmetic=false backend_responses_mock=true",
+    "PUBLIC21_REDUCTION_DISPATCH_CONTROL_PASS rows=128 epoch=8 jobs=17 ordinary=13 resident=1 reductions=3 windows=28 drains=14 vector_mock_returns=16384 completions=21 metadata_reads=650 controlled_cycles=87435 arithmetic=false backend_responses_mock=true",
+    "PUBLIC21_REDUCTION_DISPATCH_CONTROL_PASS rows=16 epoch=9 jobs=17 ordinary=13 resident=1 reductions=3 windows=28 drains=14 vector_mock_returns=2048 completions=21 metadata_reads=650 controlled_cycles=15755 arithmetic=false backend_responses_mock=true",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=window_tag jobs=2 completions=1 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=drain_short jobs=2 completions=1 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=held_reset jobs=2 completions=1 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=abort_pending jobs=2 completions=1 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=future_score jobs=10 completions=10 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=future_probability jobs=10 completions=10 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=abort_fetch jobs=0 completions=0 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=abort_typed jobs=0 completions=0 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=abort_scan jobs=10 completions=10 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=abort_ordinary_issue jobs=0 completions=0 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=abort_resident_issue jobs=14 completions=16 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=stray_resident_during_reduction jobs=2 completions=1 outstanding_debt_retired=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=idle_ordinary_stray no_launch_accepted=true arithmetic=false",
+    "PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=idle_resident_stray no_launch_accepted=true arithmetic=false"
+  ],
+  "sources_unchanged": true,
+  "metadata_unchanged": true,
+  "toolchain_unchanged": true,
+  "host_seconds": 83.30810648000624,
+  "arithmetic_executed": false,
+  "owner_completion_mock": true,
+  "backend_responses_mock": true,
+  "full_block_rtl": false,
+  "full_block_numerical_acceptance": false,
+  "hardware_performance_measured": false,
+  "rtl_execution_attempted": true,
+  "rtl_executed": true,
+  "rtl_simulated": true,
+  "control_acceptance_passed": true,
+  "commit": null,
+  "compile_source_count": 91,
+  "test_source_count": 2,
+  "consumed_repo_source_count": 136,
+  "metadata_file_count": 10,
+  "toolchain_file_count": 276,
+  "source_and_evidence_records": [
+    {
+      "path": "work/public21_binding_portable_final_20261014/summary.json",
+      "bytes": 290573,
+      "sha256": "31fa799cc5db81db435db361b33385bb39e6b303c9dbc9cf4cf7eda1ea8c8be5",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/test.log",
+      "bytes": 7181,
+      "sha256": "fe5dbc0bfdfaa7a8bca24c00f4f83c1d9def235adae330fd7115fdf992219d2e",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/sources/source_receipt.json",
+      "bytes": 52360,
+      "sha256": "d227b96380681aee7fce9ba00ec9ca909752d28c9e3de0bf771190a0f3ccd9d4",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/fixtures/gate.json",
+      "bytes": 4021,
+      "sha256": "81b25f22af6eeee64ae3720ee381da5a72e7d585630c8f50db3dab4f2190f38c",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/rtl/HostBlockCommands/HostBlockCommands.sv",
+      "bytes": 2039182,
+      "sha256": "2bff913adee91dd1a1d584b14445f7967532b83f9a8bfe4297c7758add5dc37a",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/rtl/HostBlockCommands/HostBlockCommands.lo.fir",
+      "bytes": 6793732,
+      "sha256": "1d9ec1c88efcc9c6db80cf809aa42978bc06a2b43d65a6d6923310f220c7d9e0",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/rtl/Public21DispatchHarness/Public21DispatchHarness.sv",
+      "bytes": 2283328,
+      "sha256": "cf8e71060aba676ec15e8912b22504850d9fcc1ec8b76c3f44e0bab8329f108c",
+      "uploaded_to_git": false
+    },
+    {
+      "path": "work/public21_binding_portable_final_20261014/rtl/Public21DispatchHarness/Public21DispatchHarness.lo.fir",
+      "bytes": 5897543,
+      "sha256": "5f811885b32625d68fb37a92b21754a91411f4a8512bdff0dc028b5b19b8dc6e",
+      "uploaded_to_git": false
+    }
+  ],
+  "runtime_flags": "CONTROL_ONLY; no numerical payload/weight/ELF persisted in Git",
+  "cold_tests": {
+    "normal": 31,
+    "optimized": 31,
+    "clean_venv_packages": [
+      "numpy==2.3.5",
+      "PyYAML==6.0.3"
+    ],
+    "default_actual_status": "NOT_EXECUTED",
+    "consistency_normal": "PASS",
+    "consistency_optimized": "PASS"
+  },
+  "elaborated_control_inventory": {
+    "modules": [
+      "Record128Reader",
+      "TypedTensorReader",
+      "HostBlockCommands",
+      "DenseTileSumBridge",
+      "DenseBlockReductionCoordinator",
+      "Public21DispatchHarness"
+    ],
+    "arithmetic_fpu_modules": 0,
+    "matrix_modules": 0,
+    "sram_memories": 0,
+    "bridge_lhs_register_bits": 512,
+    "inventory_scope": "control harness only; production resources not instantiated",
+    "performance_denominator": null
+  },
+  "prior_runs": [
+    {
+      "path": "work/public21_current_overlay_20261014/dispatch_control_first",
+      "status": "FAILED",
+      "reason": "443 metadata reads versus 650 control-model expectation"
+    },
+    {
+      "path": "work/public21_current_overlay_20261014/dispatch_control_hardened",
+      "status": "PASS_CONTROL_ONLY",
+      "host_seconds": 77.06375608699454,
+      "source_bytes_frozen": true
+    },
+    {
+      "path": "work/public21_binding_portable_control_20261014",
+      "status": "PASS_CONTROL_ONLY",
+      "host_seconds": 79.92328086600173,
+      "runner_followup_required": "watchdog child-group cleanup and failed receipt flags; final run above is independent"
+    }
+  ]
+}

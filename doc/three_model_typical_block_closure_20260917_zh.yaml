@@ -29,21 +29,38 @@
   最新进度20261014:
     优先级: 本节取代下方历史日期段落中的当前进度描述，保留历史失败、门限和原源码身份。
     主workload: batch1_prefill128
-    当前发布基线: ab15242a7e7d346f5eff51eaffffb1688df9f454；父提交7b31b7f2650e1da3492d400633cac95ee2ba0ecc。
-    当前主线: 用本次已恢复官方M16输入先执行与真实服务调度对应的数值模型，当前执行中；固定新源码与同次producer及原门，不继承历史软件PASS；构建条件满足后再做同刺激RTL，不继续反复分层大Top构建。
-    typed证据边界: 下列前三个typed软件已分配门为历史范围证据；与当前真实服务模型及完整实际RTL分列，不因输入恢复或控制CI通过而升级。
-    Qwen2_M16输入就绪:
-      发布: ab15242三文件仅正规化TorchVersion元数据producer为str，严格reader与pins不变；7b31及ab唯一payload_CI38544941392_38547506389各精确head_guard及38加38成功，仅payload合同CI。
-      新执行: 47加47冷门各472项判决拒绝；另六进程7.606469486秒fresh链通过，仅M16输入恢复_C_RoPE_15节点官方AST参考_audit。
-      独审库存: 8raw_7085056B；9inputs_6928384B；9reference_458752B；原始数据保留ignored，不进入Git。
-      身份: candidates/qwen2_live_qkv_inputs/COLD_TEST_SUMMARY.json保存执行时base7b31及candidate_commit_null，不将发布后的ab回写为旧执行source；无Host或RTL验收。
-    Qwen2_live_QKV候选就绪:
-      状态: work-only_v5_default_off评论外严格代码相等；完整lint以signal9终止且原因未知；完整Host_M16数值_完整库存_global环未通过。
+    当前发布基线: 217d067b74a66d2046f382faf1b0ebe04f520745；父提交8dd24d4f270484ad5cee0f41375bd4900f8e0ee0；M16发布a6d0eb9c4468a26015225757deda857acb56b844。
+    当前主线: 当前真实服务模型M16及M128的pc0至8窄QKV软件门已独审；下一步先取Attention代表trace并设计宽QK与PV tile的依赖及舍入顺序，不将逐token循环冒称真正prefill；正式fresh_Attention链尚未执行。构建条件满足后再做同刺激RTL，不继续反复分层大Top构建。
+    typed证据边界: 下列前三个完整typed软件已分配门为历史范围证据；当前新QKV只到pc8被hold边界，不能升级为当前完整block或实际RTL；所有执行保留原source身份及数值门。
+    Qwen2_M16已发布窄门:
+      发布: a6d0固定M16_public21_pc0至8软件模型；六个官方producer及三个typed_raw均逐bit一致；远端cold20加20成功，只覆盖冷合同检查，非远端数值或RTL执行。
+      输入历史: ab15242仅正规化TorchVersion_producer为str；保留47加47各472拒绝及fresh六进程输入_C_RoPE_15AST参考_audit历史。旧COLD_TEST_SUMMARY保留base7b31与candidate_commit_null，不回写发布后source。
+      边界: 与M128独立记账，不以M16通过或历史输入回执替代M128新执行；真实Host_M16算术RTL仍blocked。
+    Qwen2_M128输入及QKV软件窄门:
+      输入: 8dd24d4发布独立M128 recipe；真实128行与位置0至127，fresh五阶段及55加55冷门_每轮477元数据拒绝_22实际字节负门已独审；8raw_7085056B_9inputs_7616512B_9reference_3670016B，payload保持ignored。
+      实际数值: 首次actual耗时78.543522秒_峰值608576KiB；六个官方producer_n0_qr_q_kr_k_v全688128元素与三个typed_raw逐bit一致；145源码前后固定，独审104项全过；raw不是官方prebias验收。
+      计数: 28partial_14drain_98304wide_steps_402653184实际C_FMA等于useful_16384Add16请求_raw写ACK1048576B；功能ticks1033749_读14162304B_总写ACK3801088B；45824为burst写命令及ACK数，不能当作64B拍数。
+      协议边界: pc8_completion_held；9owner_terminal_8public_retired；V未publish，无launch_result或finalfence，suffix未执行，fullblock未完成；所有ticks及运行时间均非硬件周期或利用率。
+      执行身份: SUMMARY保留base_a6d0与candidate_commit_null及当时pending_review状态；后续104项独审另列原回执，不重写旧source或旧结果。
+      冷CI: 8dd原38553697859因GitHub祖先目录work被误拒而失败，原日志保留；217d只窄修test路径合同，本地57加57_每轮477拒绝_32探针各双mode成功；217d原38555039212_job115821966812已成功闭环，input57加57_model25加25_两mode各477拒绝_两defaults_NOT_EXECUTED，payload38555039290成功；均不执行数值或RTL。
+      资料: [candidates/qwen2_live_qkv_inputs_m128/VALIDATION_SUMMARY.json, candidates/qwen2_live_qkv_inputs_m128/COLD_TEST_SUMMARY.json, candidates/qwen2_live_qkv_model_m128/SUMMARY.json]
+    Qwen2_Attention当前缺口:
+      状态: 正式fresh_M128链未执行，无DUT数值PASS；官方27AST参考已独审冻结并fresh重现18节点10027008B，原bootstrap02未验收身份保留；参考包尚未发布。
+      校准: 有界synthetic_profile0仅3.258412秒，确认每step实际512个C_FMA；原M128方案预测1585152请求_811597824执行FMA_25362432useful，活动slice内3.125%，独立全4096乘step机会口径0.390625%。
+      口径: 以上为工作量与机会比，不是完整wall利用率；固定4096资源不因只启用slice0缩小分母；约451秒仅粗略主机模型运行时间预测，不是硬件cycle或实测M128。
+      后继: [代表trace及因果依赖核验, 真正宽QK_PV_tile与逐producer舍入顺序设计, 已冻结参考包独审发布, 同次producer数值与协议门, 完整block和固定资源完整周期验收]
+    Qwen2_尾部权重:
+      状态: 五个原始BF16 tensor共87297024B_14segment及五tensor_SHA已下载并离线审完，均ignored且未转换；不等于尾部数值执行或完整权重manifest恢复。
+      资料: [work/qwen2_tail_ranges_20261014/SUMMARY.json, work/qwen2_tail_ranges_20261014/tail_manifest.json, work/qwen2_tail_ranges_20261014/SOURCE_ONLY_FILES.json]
+    Qwen2_live_QKV_RTL候选:
+      状态: work-only_v5_default_off评论外严格代码相等；完整lint以signal9终止且原因未知；真实Host_M16_M128算术RTL_完整库存_global环仍blocked，无新PASS。
       XML有界尝试: 独立完整XML预算300秒_2GiB；15.660秒采样2159071232B后主动TERM返回负15，无XML；不判定OOM，不继承完整Top验收。
       静态资源: generatedSV仅部分库存49FP32ALU等于1Scalar加16vout加16elem加16SiLU；17DivSqrt等于1加16；Vector16只是子集。七类SRAM_queue数量尺寸同baseline，新增SumBridge512bit_lhs及控制FF；外部4096MAC源码展开尚非完整XML库存验收。
-      性能边界: M16_source预测useful除executed为12.5%，只是工作量比；完整launch到terminal周期与固定全部资源分母利用率未测。
-      后继: [真实服务调度对应M16数值模型, global依赖环与真实adapter集成, 完整资源库存, 条件满足后的同刺激RTL, M128完整block]
-      报告: doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md
+      性能边界: M16_source预测useful除executed为12.5%，M128_QKV实际工作量比为100%，二者均不是固定资源完整launch到terminal周期MAC利用率。
+      后继: [global依赖环与真实adapter集成, 完整资源库存, 条件满足后的同刺激RTL, M128完整block]
+      历史报告: doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md
+      当前报告: doc/QWEN2_M128_QKV_ATTENTION_STATUS_20261014_CN.md
+      证据索引: reports/execution/QWEN2_M128_QKV_ATTENTION_STATUS_20261014.json
     目标block: [Qwen2_1p5B完整block, Qwen35_0p8B_L0, Qwen35_0p8B_L3, Qwen35_35B_L0, Qwen35_35B_L3]
     指定typed软件门:
       Qwen2_1p5B: cold_M128完整block的已分配原官方门已过；完整实际RTL与性能未闭环。

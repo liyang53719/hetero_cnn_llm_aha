@@ -1,0 +1,315 @@
+{
+  "status": "SOURCE_ONLY_STATUS_SYNC_PENDING_PARENT_REVIEW_NOT_HARDWARE_ACCEPTANCE",
+  "summary": {
+    "recorded_base_commit": "217d067b74a66d2046f382faf1b0ebe04f520745",
+    "m16_published_commit": "a6d0eb9c4468a26015225757deda857acb56b844",
+    "m128_published_commit": "8dd24d4f270484ad5cee0f41375bd4900f8e0ee0",
+    "m128_actual_host_seconds": 78.54352224399918,
+    "m128_actual_peak_rss_kib": 608576,
+    "m128_official_nodes": 6,
+    "m128_official_elements": 688128,
+    "m128_official_bit_exact": true,
+    "m128_typed_raw_nodes": 3,
+    "m128_typed_raw_bit_exact": true,
+    "official_raw_reference_available": false,
+    "m128_execution_sources": 145,
+    "m128_independent_review_checks": 104,
+    "m128_partials": 28,
+    "m128_drains": 14,
+    "m128_wide_matrix_steps": 98304,
+    "m128_actual_c_fma_calls": 402653184,
+    "m128_useful_macs": 402653184,
+    "m128_add16_requests": 16384,
+    "m128_raw_qkv_ack_bytes": 1048576,
+    "m128_software_ticks": 1033749,
+    "m128_read_bytes": 14162304,
+    "m128_total_write_ack_bytes": 3801088,
+    "m128_write_burst_commands": 45824,
+    "m128_write_ack_commands": 45824,
+    "m128_owner_terminals": 9,
+    "m128_public_retirements": 8,
+    "held_pc": 8,
+    "v_published": false,
+    "finalfence": false,
+    "fullblock_pass": false,
+    "m128_input_historical_cold_normal_tests": 55,
+    "m128_input_historical_cold_optimized_tests": 55,
+    "m128_input_actual_byte_negative_guards": 22,
+    "path_fix_normal_tests": 57,
+    "path_fix_optimized_tests": 57,
+    "path_fix_metadata_rejections_per_mode": 477,
+    "path_fix_probes_per_mode": 32,
+    "original_8dd_cold_ci_run": 38553697859,
+    "original_8dd_cold_ci_status": "FAIL_PRESERVED",
+    "current_217d_cold_ci_run": 38555039212,
+    "current_217d_cold_ci_status": "SUCCESS_EXACT_HEAD_AND_ORIGINAL_ARTIFACT_PARENT_VERIFIED",
+    "current_217d_cold_ci_job": 115821966812,
+    "current_217d_model_normal_tests": 25,
+    "current_217d_model_optimized_tests": 25,
+    "current_217d_payload_ci_run": 38555039290,
+    "current_217d_payload_ci_status": "SUCCESS_PARENT_VERIFIED",
+    "attention_fresh_chain_executed": false,
+    "attention_dut_numerical_pass": false,
+    "attention_reference_status": "FRESH_FROZEN_REFERENCE_INDEPENDENTLY_REVIEWED_PACKAGE_UNPUBLISHED",
+    "attention_reference_output_nodes": 18,
+    "attention_reference_output_bytes": 10027008,
+    "attention_official_ast_nodes": 27,
+    "attention_calibration_host_seconds": 3.258411758011789,
+    "attention_profile0_actual_c_fma_per_step": 512,
+    "attention_predicted_m128_matrix_requests": 1585152,
+    "attention_predicted_m128_executed_fma": 811597824,
+    "attention_predicted_m128_useful_fma": 25362432,
+    "attention_active_slice_work_ratio": 0.03125,
+    "attention_fixed4096_step_opportunity_ratio": 0.00390625,
+    "attention_plus_separate_qkv_rough_host_seconds": 450.7362440573731,
+    "matrix_fixed_configured_macs_per_cycle": 4096,
+    "hardware_cycles": null,
+    "hardware_utilization": null,
+    "tail_raw_tensors": 5,
+    "tail_raw_bytes": 87297024,
+    "tail_segments": 14,
+    "tail_materialized": false,
+    "stage_minimum_predicted_mac_utilization": 0.8,
+    "stage_target_predicted_mac_utilization": 0.9,
+    "final_actual_complete_rtl_mac_utilization_required": 0.9,
+    "final_blocks": 5,
+    "u00_2_status": "ongoing",
+    "u01_status": "to do",
+    "parent_tasks": 46,
+    "plan_checklist_normal_tests": 91,
+    "plan_checklist_optimized_tests": 91,
+    "generated_source_preflight_normal_checks": 14,
+    "generated_source_preflight_optimized_checks": 14,
+    "this_update_executed_numeric_model": false,
+    "this_update_executed_rtl": false,
+    "historical_readiness_bytes_preserved": true,
+    "historical_three_full_typed_gates_preserved": true,
+    "tasks_unchanged": true,
+    "staged": false,
+    "pushed": false
+  },
+  "files": [
+    {
+      "path": "doc/three_model_typical_block_closure_20260917_zh.yaml",
+      "size": 102062,
+      "sha256": "255dbc1127c0570eac4132d759b6c037216776b4244c217286e27e1e8066c4a1",
+      "status": "CURRENT_STATUS_ONLY_NO_FULLBLOCK_OR_HARDWARE_ACCEPTANCE"
+    },
+    {
+      "path": "doc/block_checklist.yaml",
+      "size": 142375,
+      "sha256": "aa76702dc438d82e5c1595906dda304af054fff58b198fc9287ed26a77f59833",
+      "status": "CURRENT_STATUS_ONLY_NO_FULLBLOCK_OR_HARDWARE_ACCEPTANCE"
+    },
+    {
+      "path": "doc/QWEN2_M128_QKV_ATTENTION_STATUS_20261014_CN.md",
+      "size": 8986,
+      "sha256": "b018011eef1792db1818495718abd74f4ba241329585e702a54c674868596c6b",
+      "status": "CURRENT_STATUS_ONLY_NO_FULLBLOCK_OR_HARDWARE_ACCEPTANCE"
+    },
+    {
+      "path": "doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md",
+      "size": 5414,
+      "sha256": "d17df5d9aca20687339b8368a016f72c6bc3434a0dba753377860110bac1de01",
+      "status": "HISTORICAL_READINESS_BYTES_PRESERVED"
+    },
+    {
+      "path": "reports/execution/QWEN2_LIVE_QKV_READINESS_20261014.json",
+      "size": 5910,
+      "sha256": "c5985d632ea4156a06438f014575bf3a6cc756f8e44920931eed661345eadeb7",
+      "status": "HISTORICAL_READINESS_BYTES_PRESERVED"
+    },
+    {
+      "path": "candidates/qwen2_live_qkv_model/SUMMARY.json",
+      "size": 9136,
+      "sha256": "3ed0eb3fb461ccfa2b425c04cfdd647d9df23130cb09515604905c48bb45944e",
+      "status": "HISTORICAL_M16_NARROW_SOFTWARE_EVIDENCE_ORIGINAL_SOURCE_IDENTITY"
+    },
+    {
+      "path": "work/qwen2_live_qkv_numeric_20261014/independent_review/PACKAGE_V4_REVIEW.json",
+      "size": 25856,
+      "sha256": "a5ce53d3d170055a13873bc60e13b88c0d78210207325e3de2c4be61aab2d633",
+      "status": "M16_SOURCE_PACKAGE_AND_NARROW_SOFTWARE_REVIEW_ACCEPTED"
+    },
+    {
+      "path": "candidates/qwen2_live_qkv_inputs_m128/README.md",
+      "size": 7961,
+      "sha256": "e3c262ef060b071887405c222b037e9157ea6ea063843a56fc3c7c17b2d85c6c",
+      "status": "PUBLISHED_SOURCE_ONLY_SCOPE_AND_BOUNDARIES"
+    },
+    {
+      "path": "candidates/qwen2_live_qkv_model_m128/README.md",
+      "size": 6054,
+      "sha256": "a87e2a190f9b1fd9291064380854df51dfa5ba295f24702018a0a166510ccc5b",
+      "status": "PUBLISHED_SOURCE_ONLY_SCOPE_AND_BOUNDARIES"
+    },
+    {
+      "path": "candidates/qwen2_live_qkv_inputs_m128/COLD_TEST_SUMMARY.json",
+      "size": 5032,
+      "sha256": "417b23f9cc0a79d967942bbb4dcd851a88b8197cb33629468f2b04b0df30f154",
+      "status": "HISTORICAL_55_PLUS_55_COLD_GATES_UNCHANGED"
+    },
+    {
+      "path": "candidates/qwen2_live_qkv_inputs_m128/VALIDATION_SUMMARY.json",
+      "size": 3914,
+      "sha256": "fba71dea56946a42dc682c6e288347d392abbd24f664f8b888c6ccdc1cc9e2a0",
+      "status": "FRESH_FIVE_STAGE_INPUT_REFERENCE_REPRODUCED_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_input_independent_review_20261014/FINAL_REVIEW.json",
+      "size": 5021,
+      "sha256": "9bc327944509c2099819809ec2a25d5cc4adf4978608159894afdb785abafc36",
+      "status": "INPUT_AND_REFERENCE_REPRODUCTION_INDEPENDENTLY_REVIEWED"
+    },
+    {
+      "path": "candidates/qwen2_live_qkv_model_m128/SUMMARY.json",
+      "size": 12487,
+      "sha256": "3e1d5131a0d6e18be02f1c2afaaa0a689bb9c472e62bc1f4b8ee93132d9efe08",
+      "status": "ORIGINAL_M128_SOFTWARE_SUMMARY_BASE_A6D0_CANDIDATE_NULL_PRESERVED"
+    },
+    {
+      "path": "work/qwen2_m128_model_independent_review_20261014/FINAL_REVIEW.json",
+      "size": 17639,
+      "sha256": "51f84066a5cc75ae24dbbada415df9fe575a96dde934616230c9359010b8467d",
+      "status": "PASS_104_INDEPENDENT_CHECKS_NARROW_QKV_SOFTWARE_ONLY"
+    },
+    {
+      "path": "work/qwen2_live_qkv_numeric_m128_20261014/package_m128_v1/RESULT.json",
+      "size": 179311,
+      "sha256": "054d3caa9a19ba21ee42913471b386a9f0af59e58dcab6a0442a19ab6e86c56c",
+      "status": "SIX_OFFICIAL_PRODUCERS_BIT_EXACT_PC8_HELD_NO_FULLBLOCK"
+    },
+    {
+      "path": "work/qwen2_live_qkv_numeric_m128_20261014/package_raw_v1/RESULT.json",
+      "size": 52792,
+      "sha256": "89899808f0360650492e1229b790f1e91053f1231f5409c7737e06b5301bba7e",
+      "status": "THREE_TYPED_RAW_BIT_EXACT_NOT_OFFICIAL_RAW_ACCEPTANCE"
+    },
+    {
+      "path": "work/qwen2_m128_cold_path_fix_20261014/RESULT.json",
+      "size": 5015,
+      "sha256": "d1620f5dfd287af4e542112a5b26fdf688348196fecd031478c11c6e1ca8c0f9",
+      "status": "TEST_ONLY_PATH_FIX_57_PLUS_57_COLD_GATES"
+    },
+    {
+      "path": "work/qwen2_m128_cold_path_fix_20261014/production_identity_and_original_ci.json",
+      "size": 1760,
+      "sha256": "fe1468d82a00283ff8d8919b5f08e6931c07152db38199f2039b694716c709f0",
+      "status": "ORIGINAL_8DD_CI_FAILURE_PRESERVED_AND_PRODUCTION_IDENTITY_UNCHANGED"
+    },
+    {
+      "path": "work/ci_original_archives/11887846785.zip",
+      "size": 2882,
+      "sha256": "a1926e3edb8288a9a99a93aef32b647e7dc53803e73f1718e59c9633354ff3ff",
+      "status": "ORIGINAL_8DD_FAILED_CI_ARCHIVE_IDENTITY_ONLY"
+    },
+    {
+      "path": "work/ci_original_archives/11890460311.zip",
+      "size": 5842,
+      "sha256": "fe2186d2c93692d8060368378a08a9e72604fa730e1ba56bfcd5ef977207f49c",
+      "status": "217D_ORIGINAL_SUCCESS_COLD_CI_ARCHIVE_PARENT_VERIFIED"
+    },
+    {
+      "path": "work/qwen2_attention_reference_independent_review_20261014/FINAL_REVIEW.json",
+      "size": 3777,
+      "sha256": "dba8197361bd29ab72cf26e60cfa67f206afc25bd342c3c308714bfb11b39970",
+      "status": "PASS_FRESH_FROZEN_OFFICIAL_REFERENCE_ONLY_NOT_DUT"
+    },
+    {
+      "path": "work/qwen2_live_attention_reference_m128/frozen01/reference/REFERENCE.json",
+      "size": 41266,
+      "sha256": "f4e58ae7220dee97d3ebe1bf2c995ca5043a76548db2705a9fc90e5d748a6fbc",
+      "status": "FRESH_18_NODE_REFERENCE_REPRODUCED_NOT_DUT_NUMERICAL_ACCEPTANCE"
+    },
+    {
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/calibration_v1/RESULT.json",
+      "size": 96253,
+      "sha256": "d39dceb52df9a97a2a1a65df2113f277d62a8aeabe4f8ac515d6d2787f6f4b6d",
+      "status": "SYNTHETIC_PROFILE0_CALIBRATION_ONLY_NOT_FRESH_M128_OR_HARDWARE"
+    },
+    {
+      "path": "work/qwen2_live_attention_reference_m128/bootstrap02/reference/BOOTSTRAP_REFERENCE.json",
+      "size": 34943,
+      "sha256": "84e58981289be875ec2403f29bed005fdad18430a5192925a5b589f285e16f17",
+      "status": "BOOTSTRAP_UNACCEPTED_NO_NUMERICAL_VERDICT"
+    },
+    {
+      "path": "work/qwen2_tail_ranges_20261014/SUMMARY.json",
+      "size": 2903,
+      "sha256": "734702736f33c0a98341fd3f3665271dbc6b7beda3d9d30cecee39a0c16f677c",
+      "status": "TAIL_RAW_RANGE_ACQUISITION_AND_OFFLINE_REVIEW_ONLY_NOT_MATERIALIZED"
+    },
+    {
+      "path": "work/qwen2_tail_ranges_20261014/tail_manifest.json",
+      "size": 10530,
+      "sha256": "fda2f4525ee51be58bd532fe8700b4a34842349ab1ffc039c11616d8da5e02f6",
+      "status": "TAIL_RAW_RANGE_ACQUISITION_AND_OFFLINE_REVIEW_ONLY_NOT_MATERIALIZED"
+    },
+    {
+      "path": "work/qwen2_tail_ranges_20261014/SOURCE_ONLY_FILES.json",
+      "size": 1872,
+      "sha256": "481623e1c1b2ee60cd466e48a8fb8156bafedb861177582c98b04211d1f9d9c8",
+      "status": "TAIL_RAW_RANGE_ACQUISITION_AND_OFFLINE_REVIEW_ONLY_NOT_MATERIALIZED"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/plan_validate_normal.log",
+      "size": 1015,
+      "sha256": "eca4cbe6664010303313807704ebc2e6b3f3f41544ec3aafca3c8b9d1fdd6dc1",
+      "status": "PASS_PLAN_OR_CHECKLIST_VALIDATOR_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/plan_validate_optimized.log",
+      "size": 1015,
+      "sha256": "eca4cbe6664010303313807704ebc2e6b3f3f41544ec3aafca3c8b9d1fdd6dc1",
+      "status": "PASS_PLAN_OR_CHECKLIST_VALIDATOR_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/checklist_validate_normal.log",
+      "size": 310,
+      "sha256": "3ac51f6939978dd394f89576487b7686babcf49ac121506e0551ee493acec158",
+      "status": "PASS_PLAN_OR_CHECKLIST_VALIDATOR_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/checklist_validate_optimized.log",
+      "size": 310,
+      "sha256": "3ac51f6939978dd394f89576487b7686babcf49ac121506e0551ee493acec158",
+      "status": "PASS_PLAN_OR_CHECKLIST_VALIDATOR_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/plan_checklist_normal.log",
+      "size": 180,
+      "sha256": "886036664b05a9ea0a1c869daf4282bf7a0c614beddfb7d37220a176de8efba5",
+      "status": "PASS_91_PLAN_CHECKLIST_TESTS_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/plan_checklist_optimized.log",
+      "size": 780,
+      "sha256": "f64c7ba334099b0c045b6583773c4f8f5f92edd53c0e25ca342f916454442cdd",
+      "status": "PASS_91_PLAN_CHECKLIST_TESTS_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/preflight_normal.json",
+      "size": 53479,
+      "sha256": "4839a5149563282681b2558c8da52bceba89f0d7996522a9230b08c32566ec9d",
+      "status": "PASS_14_READ_ONLY_GENERATED_SOURCE_CHECKS_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/preflight_optimized.json",
+      "size": 53478,
+      "sha256": "856df8cfde5391bbac3416af8360adc8cb8441da3e381393f20f71d3a64143c3",
+      "status": "PASS_14_READ_ONLY_GENERATED_SOURCE_CHECKS_ONLY"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/VALIDATION_RESULT.json",
+      "size": 3587,
+      "sha256": "5321d5e6374a5d6588a470facd89f30eeb8d588b8a3baab7203710fccb33cdeb",
+      "status": "PASS_DOCUMENT_VALIDATION_NO_MODEL_OR_RTL_EXECUTION"
+    },
+    {
+      "path": "work/qwen2_m128_status_plan_sync_20261014/final_v2/INVARIANTS.json",
+      "size": 567,
+      "sha256": "5beaf8295d343aef07171b5478b82278f8a13c0a3d279278609f981fd574d930",
+      "status": "PASS_PRESERVED_TASKS_GATES_THRESHOLDS_AND_HISTORICAL_BYTES"
+    }
+  ]
+}

@@ -24,7 +24,7 @@ from .kv_cache.test_kv_cache import producer
 from ..qwen35_gdn_prefill.projection_owner import PrefixWorkspace
 from ..qwen35_gdn_prefill.chunk.vector import IEEE_POLICY
 from ..qwen35_gdn_prefill.elementwise.model import (
-    ElementwiseOwner, ElementwiseOp, ElementwiseJob, TypedElementwiseDriver)
+    ElementwiseOwner, ElementwiseOp, ElementwiseJob, TypedElementwiseDriver, LEGACY_PROFILE, RESIDUAL_35B_PROFILE)
 from ..qwen2_resident_matrix.ffn_attention.matrix_service import configure_library
 
 
@@ -111,6 +111,19 @@ def make_coordinator(fixture, *, prefix=None, plan=None):
 class FullBlockAdmissionTests(unittest.TestCase):
     def setUp(self):
         self.x = make_fixture(LIB, VECTOR_PATH)
+
+    def test_legacy_profile_admitted_and_35b_profile_rejected(self):
+        x = self.x
+        self.assertEqual(x.elementwise._parameters(), (1024, 3584, False, 2048, True, LEGACY_PROFILE))
+        self.assertEqual(len(make_coordinator(x).jobs), 19)
+        x.elementwise.profile = RESIDUAL_35B_PROFILE
+        with self.assertRaisesRegex(ValueError, 'production elementwise geometry'):
+            make_coordinator(x)
+        x.elementwise = ElementwiseOwner(x.scalar, hidden_width=2048, profile=RESIDUAL_35B_PROFILE)
+        with self.assertRaisesRegex(ValueError, 'production elementwise geometry'):
+            make_coordinator(x)
+        self.assertEqual(x.matrix.counts['owner_acquires'], 0)
+        self.assertEqual(sum(x.scalar.calls.values()), 0)
 
     def test_full_19_jobs_original_resources_and_no_dma_at_construction(self):
         x = self.x

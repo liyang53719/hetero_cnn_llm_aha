@@ -138,8 +138,9 @@ def guarded_import(name, *args, **kwargs):
     return original_import(name, *args, **kwargs)
 builtins.__import__ = guarded_import
 original_read = Path.read_bytes
+repository_root = Path.cwd().resolve()
 def guarded_read(self, *args, **kwargs):
-    if 'work' in self.parts:
+    if self.resolve().is_relative_to(repository_root / 'work'):
         raise AssertionError('cold path read work artifact')
     return original_read(self, *args, **kwargs)
 Path.read_bytes = guarded_read
@@ -148,6 +149,30 @@ r.source_identity()
 r.source_functions()
 r.validate_raw(bytes(4096), bytes(4096), bytes(4096), 1)
 r.runtime_selection('recovery_20261013')
+# A CI checkout may itself have an ancestor named work. Only its own
+# artifact directory is forbidden, including a symlink into that directory.
+import tempfile
+with tempfile.TemporaryDirectory() as tmp:
+    saved_root = repository_root
+    repository_root = Path(tmp) / 'work' / 'checkout'
+    repository_root.mkdir(parents=True)
+    source = repository_root / 'config' / 'source'
+    source.parent.mkdir()
+    source.write_bytes(b'official source')
+    assert source.read_bytes() == b'official source'
+    artifact = repository_root / 'work' / 'raw'
+    artifact.parent.mkdir()
+    artifact.write_bytes(b'artifact')
+    alias = repository_root / 'alias'
+    alias.symlink_to(artifact)
+    for path in (artifact, alias):
+        try:
+            path.read_bytes()
+        except AssertionError as error:
+            assert str(error) == 'cold path read work artifact'
+        else:
+            raise AssertionError('artifact read guard failed')
+    repository_root = saved_root
 print('PASS cold stdlib path')
 '''
         result = subprocess.run([sys.executable, "-S", "-c", script], cwd=r.ROOT,

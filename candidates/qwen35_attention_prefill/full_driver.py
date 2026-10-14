@@ -20,7 +20,7 @@ from .gqa.owner import Bf16CausalGqaJob, Bf16CausalGqaOwner, QkOrder
 from .gqa.driver import TypedBf16CausalGqaDriver
 from ..qwen35_gdn_prefill import typed_dense as d, rms_owner as rms
 from ..qwen35_gdn_prefill.dense_prefix import TypedSeededDenseDriver
-from ..qwen35_gdn_prefill.elementwise.model import ElementwiseJob, ElementwiseOp, ElementwiseOwner, TypedElementwiseDriver
+from ..qwen35_gdn_prefill.elementwise.model import ElementwiseJob, ElementwiseOp, ElementwiseOwner, TypedElementwiseDriver, LEGACY_PROFILE
 
 
 ORDER = (*PREFIX_ORDER, 'kv_append', 'gqa', 'sigmoid_mul', 'o', 'attention_residual',
@@ -130,7 +130,7 @@ class L3FullBlockCoordinator:
                 gqa_owner.scalar is elementwise_owner.scalar is prefix.scalar,
                 'same caller Matrix, scalar and physical memory required')
         require(elementwise_owner.enable_attention_sigmoid_mul is True and
-                elementwise_owner._parameters() == (1024, 3584, False, 2048, True),
+                elementwise_owner._parameters() == (1024, 3584, False, 2048, True, LEGACY_PROFILE),
                 'production elementwise geometry with explicit attention SigmoidMul opt-in required')
         require(plan.expected_generation == fence.state.generation,
                 'plan does not match current committed fence generation')

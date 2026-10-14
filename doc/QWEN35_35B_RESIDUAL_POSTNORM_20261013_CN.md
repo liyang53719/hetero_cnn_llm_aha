@@ -54,3 +54,14 @@
 - 残差读1048576B、写/ACK524288B、49153软件ticks、262144 Scalar Add。postnorm读1572864B、写/ACK524288B、65537软件ticks；Scalar add545920、mul_ieee_rne786560、sqrt128、div128，均与闭式预测一致。
 - Matrix总执行和有效均4311744512，Vector计数保持旧O批；100%仍只是工作量比。postnorm数学平方归约有效2048×128个独立Mul/Add对，不能算新增Matrix FMA或硬件利用率。残差MAC为0。
 - 同RMS三bank及Scalar复用；state/history/scratch保持private/gen0。完整block仍缺router/MoE/最终残差与联合状态提交，生产Chisel/RTL/完整周期及duty继续open。
+
+
+## 2026-10-14 发布后 CI 回归与修复
+
+实际发布 e3b3817074113984127aeaf6b1a1a0e104d58251 后，原四条 CI 中 goal/payload 成功，attention 38488916069 和 GDN 38488916031 失败。原失败工件保留，不重触发覆盖。
+
+- Attention：L3 coordinator 仍检查 elementwise 五字段旧身份，而新增显式 profile 后 owner 返回六字段。修复为完整六字段加 LEGACY_PROFILE 严格准入；覆盖合法默认、仅 profile 漂移及真实 35B Add-only owner 拒绝，保持零 DMA/算术的准入检查。
+- GDN：冷参考测试把任意祖先目录名 work 都当成产物目录，误拒 GitHub 的 /home/runner/work/... 官方源码。修复只禁止仓库根目录下 work 子树，resolve 后的 symlink 别名同样拒绝；测试覆盖含 work 的 checkout 祖先路径和真实产物拒绝。Torch/NumPy 禁止导入的冷门不变。
+- 两处都是接口/测试路径回归，未修改实际 35B 算术源和任何数值阈值。M16/M128 原真实证据保持原冻结身份，不冒称用修复测试重跑了数值链。
+- Attention 初轮 248 项单套均通过，但补测期间源码变化，整体 FAILED/source_unchanged=false 已保留；最终冻结重跑 248 项、23 套、118 源全部通过且 source_unchanged=true。
+- 修复 GDN 完整冷门 678 项、72 套、205 源全部通过，source_unchanged=true；新提交原 CI 待闭环。完整 block、Chisel/RTL 数值与硬件周期利用率仍未验收。

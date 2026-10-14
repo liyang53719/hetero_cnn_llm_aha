@@ -23,6 +23,64 @@ import recipe as R
 SCRATCH = ROOT / 'work/qwen2_live_qkv_inputs_m128/cold'
 
 
+# Keep source admission separate from payload and side-effect rejection. The
+# header exception names one pinned metadata file, never every *.header.bin.
+COLD_PROGRAM = r'''
+import builtins, importlib.abc, json, os, pathlib, runpy, sys
+recipe = pathlib.Path(sys.argv[1]).resolve()
+root = recipe.parents[2]
+sources = {root / name for name in json.loads(sys.argv[2])}
+stdlib = pathlib.Path(os.__file__).resolve().parent
+payload_roots = tuple(root / name for name in ('work', 'raw', 'oracle', 'oracles'))
+header = root / 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+payload_suffixes = {'.bin', '.safetensors', '.bf16', '.bf16le', '.f16', '.f16le',
+                    '.f32', '.f32le', '.npy', '.npz', '.pt', '.pth', '.pkl', '.pickle'}
+forbidden = {'torch', 'numpy', 'transformers', 'ctypes', 'urllib'}
+original_import = builtins.__import__
+def guarded_import(name, *args, **kwargs):
+    if name.split('.')[0] in forbidden:
+        raise RuntimeError('forbidden cold dependency: ' + name)
+    return original_import(name, *args, **kwargs)
+builtins.__import__ = guarded_import
+class Block(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split('.')[0] in forbidden:
+            raise RuntimeError('forbidden cold dependency: ' + fullname)
+sys.meta_path.insert(0, Block())
+def audit(event, args):
+    if event.startswith(('socket.', 'subprocess.', 'os.exec', 'os.spawn', 'os.posix_spawn')) or event in (
+            'os.system', 'os.fork', 'os.forkpty', 'os.startfile', 'os.mkdir', 'os.remove',
+            'os.rmdir', 'os.rename', 'os.link', 'os.symlink', 'os.chmod', 'os.chown',
+            'os.truncate', 'os.utime'):
+        raise RuntimeError('forbidden cold event: ' + event)
+    if event == 'open':
+        name, mode, flags = args
+        if ((isinstance(mode, str) and any(c in mode for c in 'wax+')) or
+                (flags & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC | os.O_APPEND))):
+            raise RuntimeError('forbidden cold write: ' + str(name))
+        if not isinstance(name, (str, bytes)):
+            raise RuntimeError('forbidden cold file descriptor: ' + str(name))
+        path = pathlib.Path(os.path.abspath(os.fsdecode(name)))
+        resolved = path.resolve()
+        if any(path.is_relative_to(base) or resolved.is_relative_to(base) for base in payload_roots):
+            raise RuntimeError('forbidden cold payload root: ' + str(path))
+        if (path.suffix.lower() in payload_suffixes or resolved.suffix.lower() in payload_suffixes) and not (
+                path == resolved == header):
+            raise RuntimeError('forbidden cold payload suffix: ' + str(path))
+        source = path == resolved and path in sources
+        stdlib_import = resolved.is_relative_to(stdlib) and resolved.suffix in ('.py', '.pyc')
+        if not (source or stdlib_import):
+            raise RuntimeError('forbidden cold file access: ' + str(path))
+sys.addaudithook(audit)
+if len(sys.argv) > 3:
+    exec(sys.argv[3])
+else:
+    sys.argv = [str(recipe)]
+    runpy.run_path(sys.argv[0], run_name='__main__')
+'''
+
+
+
 class RecipeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -47,38 +105,91 @@ class RecipeTests(unittest.TestCase):
         with self.assertRaises((R.Rejected, FileExistsError)):
             function(*args, **kwargs)
 
-    def test_default_cold_is_stdlib_and_no_side_effects(self):
-        # -S removes site-package startup; the audit hook catches writes, work/
-        # payload access, child processes and networking, not merely printed flags.
-        program = r'''
-import importlib.abc, json, os, pathlib, runpy, sys
-class Block(importlib.abc.MetaPathFinder):
-    def find_spec(self, fullname, path=None, target=None):
-        if fullname.split('.')[0] in ('torch', 'numpy', 'transformers', 'ctypes', 'urllib'):
-            raise RuntimeError('forbidden cold dependency: ' + fullname)
-sys.meta_path.insert(0, Block())
-def audit(event, args):
-    if event.startswith(('socket.', 'subprocess.')):
-        raise RuntimeError('forbidden cold event: ' + event)
-    if event == 'open' and isinstance(args[0], (str, bytes)):
-        name = os.fsdecode(args[0])
-        mode, flags = args[1], args[2]
-        if '/work/' in name or (isinstance(mode, str) and any(c in mode for c in 'wax+')) or (flags & (os.O_WRONLY | os.O_RDWR | os.O_CREAT)):
-            raise RuntimeError('forbidden cold file access: ' + name)
-sys.addaudithook(audit)
-sys.argv = [sys.argv[1]]
-runpy.run_path(sys.argv[0], run_name='__main__')
-'''
+    def cold_run(self, root, optimize, probe=None):
+        # The audited child may read only fixed checkout sources/metadata and
+        # stdlib import files. A runner ancestor named "work" is not a payload.
+        sources = [*self.pins['sources'],
+                   'candidates/qwen2_live_qkv_inputs_m128/recipe.py',
+                   'candidates/qwen2_live_qkv_inputs_m128/pins.json']
+        argv = [sys.executable, '-B', '-S', *optimize, '-c', COLD_PROGRAM,
+                str(root / 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'),
+                json.dumps(sources)]
+        if probe is not None:
+            argv.append(probe)
+        return subprocess.run(argv, cwd=root, capture_output=True, text=True)
+
+    def assert_cold(self, root):
         for optimize in ([], ['-O']):
-            run = subprocess.run([sys.executable, '-B', '-S', *optimize, '-c', program,
-                                  str(PACKAGE / 'recipe.py')], capture_output=True, text=True)
-            self.assertEqual(run.returncode, 0, run.stderr)
-            result = json.loads(run.stdout)
-            self.assertEqual(result['status'], 'NOT_EXECUTED')
-            self.assertEqual(result['cold_check'], 'PASS')
-            for key in ('torch_imported', 'numpy_imported', 'network_used', 'raw_payload_read',
-                        'model_executed', 'rtl_executed', 'outputs_written'):
-                self.assertIs(result[key], False)
+            with self.subTest(root=str(root), optimize=optimize):
+                run = self.cold_run(root, optimize)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                self.assertEqual(result['status'], 'NOT_EXECUTED')
+                self.assertEqual(result['cold_check'], 'PASS')
+                for key in ('torch_imported', 'numpy_imported', 'network_used', 'raw_payload_read',
+                            'model_executed', 'rtl_executed', 'outputs_written'):
+                    self.assertIs(result[key], False)
+
+    def github_checkout(self):
+        root = self.root / 'home/runner/work/repo/repo'
+        (root / '.git').mkdir(parents=True)
+        for name in (*self.pins['sources'],
+                     'candidates/qwen2_live_qkv_inputs_m128/recipe.py',
+                     'candidates/qwen2_live_qkv_inputs_m128/pins.json'):
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((ROOT / name).read_bytes())
+        return root
+
+    def test_default_cold_is_stdlib_and_no_side_effects(self):
+        self.assert_cold(ROOT)
+
+    def test_default_cold_accepts_github_workspace_ancestor(self):
+        # Run the real pinned recipe, including the exact header.bin source.
+        self.assert_cold(self.github_checkout())
+
+    def test_cold_audit_rejects_payload_aliases_and_side_effects(self):
+        root = self.github_checkout()
+        for name in ('work/payload.json', 'raw/payload.json', 'oracle/payload.json',
+                     'oracles/payload.json', 'payload.bin', 'payload.f32le',
+                     'payload.safetensors', 'model.safetensors.header.bin'):
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text('synthetic forbidden payload')
+        (root / 'linked-work').symlink_to(root / 'work', target_is_directory=True)
+        (root / 'linked.json').symlink_to(root / 'work/payload.json')
+        external = self.root / 'external-oracle.json'
+        external.write_text('synthetic external oracle')
+        (root / 'external.json').symlink_to(external)
+        # Even an explicitly admitted source must not alias into ignored work.
+        header = root / 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+        header.unlink()
+        header.symlink_to(root / 'work/payload.json')
+        reads = ['work/payload.json', './work/payload.json', 'config/../work/payload.json',
+                 'raw/payload.json', 'oracle/payload.json', 'oracles/payload.json',
+                 'payload.bin', 'payload.f32le', 'payload.safetensors',
+                 'model.safetensors.header.bin', 'linked-work/payload.json',
+                 'linked.json', 'external.json', str(external),
+                 str(root / 'work/payload.json'), str(header)]
+        probes = ["open(%r, 'rb').read()" % name for name in reads]
+        probes += ["open(os.fsencode('work/payload.json'), 'rb').read()",
+                   "os.open('work/payload.json', os.O_RDONLY)",
+                   "open('new.txt', 'w')", "open('new.txt', 'a')",
+                   "open('candidates/qwen2_live_qkv_inputs_m128/recipe.py', 'r+')",
+                   "os.open('new.txt', os.O_WRONLY | os.O_CREAT)",
+                   "os.mkdir('new-directory')", "os.remove('payload.bin')",
+                   "os.system('exit 0')", "import subprocess; subprocess.run(['true'])",
+                   "import socket; socket.socket()"]
+        probes += ['import ' + name for name in ('torch', 'numpy', 'transformers', 'ctypes', 'urllib')]
+        for optimize in ([], ['-O']):
+            for probe in probes:
+                with self.subTest(optimize=optimize, probe=probe):
+                    run = self.cold_run(root, optimize, probe)
+                    self.assertNotEqual(run.returncode, 0, run.stdout)
+                    self.assertIn('forbidden cold', run.stderr)
+        self.assertFalse((root / 'new.txt').exists())
+        self.assertFalse((root / 'new-directory').exists())
+        self.assertTrue((root / 'payload.bin').exists())
 
     def test_exact_pinned_coverage(self):
         self.assertEqual(R.source_check(ROOT, self.pins), {

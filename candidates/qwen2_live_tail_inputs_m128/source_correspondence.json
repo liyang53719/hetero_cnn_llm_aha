@@ -1,0 +1,436 @@
+{
+  "boundaries": {
+    "full_checkpoint_sha256_verified": false,
+    "historical_pass_inherited": false,
+    "intermediate_preloads": 0,
+    "network_used": false,
+    "numerical_model_executed": false,
+    "official_forward_executed": false,
+    "old_full_manifest_recreated": false,
+    "rtl_executed": false
+  },
+  "conversion": {
+    "functions": {
+      "transpose_words": {
+        "ast_sha256": "19384485bb24ac22951a68f03ede93c63f6f59d2ea366e8d6ecd7d3cb945f6ba",
+        "line_end": 346,
+        "line_start": 338
+      },
+      "widen_bf16": {
+        "ast_sha256": "24cf4845687f8bb47f90c99a6920ec7807cf6a0024f95863490d2e758a233226",
+        "line_end": 335,
+        "line_start": 332
+      }
+    },
+    "gamma1_transform": "output_u32[k] = source_u16[k] << 16, direct gamma",
+    "matrix_transform": "output[k*N+n] = source[n*K+k], unchanged uint16 words",
+    "source": "candidates/qwen2_live_qkv_inputs_m128/recipe.py",
+    "whole_module_imported": false
+  },
+  "existing_tail_loader_read_only_check": {
+    "agreement": "wo/wg/wu/wd transpose raw BF16; gamma1 exact FP32 widening",
+    "historical_full_manifest_or_receipts_read": false,
+    "loader_imported": false,
+    "source": "candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py:EXTRA_TENSORS and load_inputs"
+  },
+  "independent_audit": "All-word input-major array slices and direct gamma uint32 shifts, separate from byte producer and byte-lane verifier; no numeric model.",
+  "physical_metadata": {
+    "allocation_source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+    "ast": {
+      "align": {
+        "ast_sha256": "f240af0b6584ccf8b4d0c01fc0c1aa2115d49d75ad7c21783e6cd19d1a99ef38",
+        "line_end": 19,
+        "line_start": 19
+      },
+      "chain_stride_nodes": [
+        {
+          "ast_sha256": "571a98fd762b198147d0386b11711a092c328d0d1046ed9d5439300c4b58600a",
+          "line_end": 47,
+          "line_start": 47
+        },
+        {
+          "ast_sha256": "ed7dd3647b2968371f22cce1591a8caad40d8211188edc497a8229ac7514d5ab",
+          "line_end": 47,
+          "line_start": 47
+        },
+        {
+          "ast_sha256": "0de6757c1ea7e38544eed66cbaafb84bea32508bed02945496612b19bf02a171",
+          "line_end": 48,
+          "line_start": 48
+        }
+      ],
+      "prefix_end_before": "records=[]",
+      "prefix_nodes": [
+        {
+          "ast_sha256": "1aa23acbc87854b87dd023d21a69a4fcbe0ba7ee3a6495d8cce5c2e91e0d461c",
+          "line_end": 22,
+          "line_start": 22
+        },
+        {
+          "ast_sha256": "dfbd4b253a45fcb493c665cccbcbedbdc499e2a5e93248f78ad8034f4de9f2fb",
+          "line_end": 24,
+          "line_start": 24
+        },
+        {
+          "ast_sha256": "0f00b46a2960271065bf27bb539262b2a0a65e8917773aa26c43c62d24881d8e",
+          "line_end": 24,
+          "line_start": 24
+        },
+        {
+          "ast_sha256": "850082e5fcb74f742438d12d7242d766a6134ded7ef1a7a94e2f5d76cfc43c60",
+          "line_end": 25,
+          "line_start": 25
+        },
+        {
+          "ast_sha256": "45bd4808776d509d8026f682c1d939edfdea63efcb06909c0ba6b38fc8aaba2c",
+          "line_end": 25,
+          "line_start": 25
+        },
+        {
+          "ast_sha256": "a3233c89fedf6891edb492cada817f6e9a3e91fc81c290767a060517d14813d3",
+          "line_end": 25,
+          "line_start": 25
+        },
+        {
+          "ast_sha256": "326e98d1c542590fd93831b8e46d8c5bbf5988ac5c3bf2cbfa800c565a8f0326",
+          "line_end": 26,
+          "line_start": 26
+        },
+        {
+          "ast_sha256": "6a7d4b3f859c06a68cf743a0854cfb44278b039ea0549bf4979f1d40f9f07e19",
+          "line_end": 26,
+          "line_start": 26
+        },
+        {
+          "ast_sha256": "6e06d431f298533a07385a9fc4c8c885cbc25dcc5c5c9ee7585bcc4097138c53",
+          "line_end": 33,
+          "line_start": 27
+        },
+        {
+          "ast_sha256": "daf81cd67644e3a8878c1d2439781987376f0bacaa143514a11587c1be89c96e",
+          "line_end": 34,
+          "line_start": 34
+        },
+        {
+          "ast_sha256": "b73b24c3c0662578983e0e48adc338b7801a6c8a7c9468a50160572a652a655c",
+          "line_end": 35,
+          "line_start": 35
+        },
+        {
+          "ast_sha256": "7e9418978e317993a40477595a354f879e9f7b20c0bdb3658a39cf0f3310708b",
+          "line_end": 36,
+          "line_start": 36
+        },
+        {
+          "ast_sha256": "be5b43e3625da2ccc7e0ea96fc63ca8872693fb635f649505382facfbf117555",
+          "line_end": 36,
+          "line_start": 36
+        },
+        {
+          "ast_sha256": "fc06bb46e74474562b10c8f2e0c9a5fe61e80efdd06e65b1ff41590368d4a7b9",
+          "line_end": 37,
+          "line_start": 37
+        },
+        {
+          "ast_sha256": "3137e87090fb48121fc70d80306efdbd3f570906119eccf3b87551666a3b7440",
+          "line_end": 37,
+          "line_start": 37
+        },
+        {
+          "ast_sha256": "104cc2bffb041a317394fa82b1845b13d8673bbbfdde0cf141390d6c645746c5",
+          "line_end": 38,
+          "line_start": 38
+        },
+        {
+          "ast_sha256": "e9d90116e1b424186a4a86b0bb96db5aaf7189814cd34a881f9829c4f8326fd8",
+          "line_end": 39,
+          "line_start": 39
+        },
+        {
+          "ast_sha256": "33109058dfc361ac8b359688c9447544e6a1cb44335d16cbfca3d04cbc506949",
+          "line_end": 40,
+          "line_start": 40
+        },
+        {
+          "ast_sha256": "39e1cf580e31f3b78b8426e01f2de8ab53af0e736d1a9ba7dddaa146899423c0",
+          "line_end": 41,
+          "line_start": 41
+        },
+        {
+          "ast_sha256": "5e59172a4e76200d79384207cf9418a3aa3bad3227dbd34aa9363b73c7d4f227",
+          "line_end": 42,
+          "line_start": 42
+        },
+        {
+          "ast_sha256": "f2fcae9d457401539c29acbfc277f8ecda201a8b3938270d2548e711cb59d7c3",
+          "line_end": 42,
+          "line_start": 42
+        },
+        {
+          "ast_sha256": "15312d084ca7f8169367af8109965309cdd5891f886c7219a0f577bb68ce5080",
+          "line_end": 43,
+          "line_start": 43
+        },
+        {
+          "ast_sha256": "bdf735019cecb57f83fd4389dc8bcb904cbf464873026e79d12430c282cb0b67",
+          "line_end": 44,
+          "line_start": 44
+        }
+      ]
+    },
+    "descriptor_storage_source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py:convert",
+    "dtype_change": "only Matrix B descriptor dtype7 -> dtype5, addresses/reservations/shape/strides unchanged",
+    "excluded_nodes": [
+      "out.exists() guard",
+      "all nodes from records=[] through metadata writer"
+    ],
+    "fixture_source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py:make_qwen2_21_fixture",
+    "roles": {
+      "gamma1": {
+        "address": 4482210368,
+        "byte_strides": [
+          6144,
+          4
+        ],
+        "bytes": 6144,
+        "descriptor_dtype": 7,
+        "descriptor_shape4": [
+          1,
+          1536,
+          1,
+          1
+        ],
+        "descriptor_stride3": [
+          1536,
+          1,
+          1
+        ],
+        "dtype": "float32",
+        "element_strides": [
+          1536,
+          1
+        ],
+        "file": "gamma1.bin",
+        "readonly": true,
+        "reserved_bytes": 6144,
+        "shape": [
+          1,
+          1536
+        ],
+        "source_local_name": "post_attention_layernorm.weight",
+        "source_shape": [
+          1536
+        ],
+        "storage_encoding": "IEEE754_FP32_LE",
+        "transposed": false,
+        "unused_guard_bytes": 0,
+        "virtual": false,
+        "widened": true
+      },
+      "wd": {
+        "address": 4427153856,
+        "byte_strides": [
+          3072,
+          2
+        ],
+        "bytes": 27525120,
+        "descriptor_dtype": 5,
+        "descriptor_shape4": [
+          8960,
+          1536,
+          1,
+          1
+        ],
+        "descriptor_stride3": [
+          1536,
+          1,
+          1
+        ],
+        "dtype": "uint16",
+        "element_strides": [
+          1536,
+          1
+        ],
+        "file": "wd.bin",
+        "readonly": true,
+        "reserved_bytes": 55050240,
+        "shape": [
+          8960,
+          1536
+        ],
+        "source_local_name": "mlp.down_proj.weight",
+        "source_shape": [
+          1536,
+          8960
+        ],
+        "storage_encoding": "BF16_LE",
+        "transposed": true,
+        "unused_guard_bytes": 27525120,
+        "virtual": false,
+        "widened": false
+      },
+      "wg": {
+        "address": 4317053248,
+        "byte_strides": [
+          17920,
+          2
+        ],
+        "bytes": 27525120,
+        "descriptor_dtype": 5,
+        "descriptor_shape4": [
+          1536,
+          8960,
+          1,
+          1
+        ],
+        "descriptor_stride3": [
+          8960,
+          1,
+          1
+        ],
+        "dtype": "uint16",
+        "element_strides": [
+          8960,
+          1
+        ],
+        "file": "wg.bin",
+        "readonly": true,
+        "reserved_bytes": 55050240,
+        "shape": [
+          1536,
+          8960
+        ],
+        "source_local_name": "mlp.gate_proj.weight",
+        "source_shape": [
+          8960,
+          1536
+        ],
+        "storage_encoding": "BF16_LE",
+        "transposed": true,
+        "unused_guard_bytes": 27525120,
+        "virtual": false,
+        "widened": false
+      },
+      "wo": {
+        "address": 4307616000,
+        "byte_strides": [
+          3072,
+          2
+        ],
+        "bytes": 4718592,
+        "descriptor_dtype": 5,
+        "descriptor_shape4": [
+          1536,
+          1536,
+          1,
+          1
+        ],
+        "descriptor_stride3": [
+          1536,
+          1,
+          1
+        ],
+        "dtype": "uint16",
+        "element_strides": [
+          1536,
+          1
+        ],
+        "file": "wo.bin",
+        "readonly": true,
+        "reserved_bytes": 9437184,
+        "shape": [
+          1536,
+          1536
+        ],
+        "source_local_name": "self_attn.o_proj.weight",
+        "source_shape": [
+          1536,
+          1536
+        ],
+        "storage_encoding": "BF16_LE",
+        "transposed": true,
+        "unused_guard_bytes": 4718592,
+        "virtual": false,
+        "widened": false
+      },
+      "wu": {
+        "address": 4372103552,
+        "byte_strides": [
+          17920,
+          2
+        ],
+        "bytes": 27525120,
+        "descriptor_dtype": 5,
+        "descriptor_shape4": [
+          1536,
+          8960,
+          1,
+          1
+        ],
+        "descriptor_stride3": [
+          8960,
+          1,
+          1
+        ],
+        "dtype": "uint16",
+        "element_strides": [
+          8960,
+          1
+        ],
+        "file": "wu.bin",
+        "readonly": true,
+        "reserved_bytes": 55050240,
+        "shape": [
+          1536,
+          8960
+        ],
+        "source_local_name": "mlp.up_proj.weight",
+        "source_shape": [
+          8960,
+          1536
+        ],
+        "storage_encoding": "BF16_LE",
+        "transposed": true,
+        "unused_guard_bytes": 27525120,
+        "virtual": false,
+        "widened": false
+      }
+    }
+  },
+  "schema": 1,
+  "sources": {
+    "candidates/qwen2_live_qkv_inputs_m128/recipe.py": {
+      "bytes": 39884,
+      "sha256": "15ff7d73838e2d049d3930abd0c05b17c3927bc7fd336aef0d5ddc93b98ba489"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py": {
+      "bytes": 22992,
+      "sha256": "198e2b7b87c6fbf7a317174d7653ea2d4da912c7eabda09b8addfd9bc2752992"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/fixture.py": {
+      "bytes": 15492,
+      "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": {
+      "bytes": 5759,
+      "sha256": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py": {
+      "bytes": 8316,
+      "sha256": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154"
+    },
+    "config/payload_pins/qwen2_layer0.json": {
+      "bytes": 11221,
+      "sha256": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/manifest.json": {
+      "bytes": 5109,
+      "sha256": "46818a6fde79b4bff4615abc38cca7d8cb9386cdd0298bc07c403cb3d2ceab25"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin": {
+      "bytes": 38536,
+      "sha256": "124516afba769374e2b948e185dd3e9203e2412daaef3f2ccf7bdbaca0f88987"
+    }
+  },
+  "status": "SOURCE_AND_STORAGE_CORRESPONDENCE_ONLY"
+}

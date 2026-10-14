@@ -1,0 +1,135 @@
+name: qwen2-live-tail-inputs-cold
+
+# Source-only stdlib gates. No acquisition, materialization, numeric or Host job.
+# The eight exact dependencies below are the tail recipe pins' source closure.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-live-tail-inputs-cold.yml'
+      - 'candidates/qwen2_live_tail_inputs_m128/**'
+      - 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fixture.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_block_fixture.py'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/manifest.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+  pull_request:
+    paths:
+      - '.github/workflows/qwen2-live-tail-inputs-cold.yml'
+      - 'candidates/qwen2_live_tail_inputs_m128/**'
+      - 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fixture.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_block_fixture.py'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/manifest.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-live-tail-inputs-cold-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  cold:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          # Exact AST fields require CPython 3.12, not a numeric-runtime claim.
+          python-version: '3.12'
+      - name: Standard-library default and 26 cold gates in both modes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/qwen2_tail_input_ci_20261014
+          mkdir work/qwen2_tail_input_ci_20261014/ci-cold
+          git rev-parse HEAD | tee work/qwen2_tail_input_ci_20261014/ci-cold/head.txt
+          test "$(cat work/qwen2_tail_input_ci_20261014/ci-cold/head.txt)" = "$GITHUB_SHA"
+          python -B -S - <<'PY' | tee work/qwen2_tail_input_ci_20261014/ci-cold/tool.json
+          import json
+          import sys
+
+          print(json.dumps({
+              'implementation': sys.implementation.name,
+              'version': sys.version,
+              'version_info': list(sys.version_info),
+              'executable': sys.executable,
+              'dont_write_bytecode': sys.flags.dont_write_bytecode,
+              'no_site': sys.flags.no_site,
+              'optimize': sys.flags.optimize,
+          }, sort_keys=True))
+          if sys.implementation.name != 'cpython' or sys.version_info[:2] != (3, 12):
+              raise SystemExit('REJECTED: exact pinned AST fields require CPython 3.12; got ' + sys.version)
+          PY
+          python -B -S candidates/qwen2_live_tail_inputs_m128/recipe.py 2>&1 | tee work/qwen2_tail_input_ci_20261014/ci-cold/default.json
+          python -B -S -m unittest discover -s candidates/qwen2_live_tail_inputs_m128/tests -v 2>&1 | tee work/qwen2_tail_input_ci_20261014/ci-cold/normal.log
+          python -B -S -O -m unittest discover -s candidates/qwen2_live_tail_inputs_m128/tests -v 2>&1 | tee work/qwen2_tail_input_ci_20261014/ci-cold/optimized.log
+          python -B -S - <<'PY'
+          import ast
+          import json
+          from pathlib import Path
+          import re
+
+          evidence = Path('work/qwen2_tail_input_ci_20261014/ci-cold')
+          tool = json.loads((evidence / 'tool.json').read_text())
+          if (tool.get('implementation') != 'cpython' or tool.get('version_info', [])[:2] != [3, 12]
+                  or not tool.get('version') or not tool.get('executable')
+                  or any(tool.get(k) != v for k, v in
+                         (('dont_write_bytecode', 1), ('no_site', 1), ('optimize', 0)))):
+              raise SystemExit('missing or unsupported actual cold interpreter identity')
+          result = json.loads((evidence / 'default.json').read_text())
+          if result.get('status') != 'NOT_EXECUTED' or result.get('cold_check') != 'PASS':
+              raise SystemExit('default must remain a passing NOT_EXECUTED check')
+          for flag in ('torch_imported', 'numpy_imported', 'network_used', 'raw_payload_read',
+                       'model_executed', 'rtl_executed', 'outputs_written'):
+              if result.get(flag) is not False:
+                  raise SystemExit('unsafe or missing default flag: ' + flag)
+          summary = result.get('source_check', {})
+          for key, value in (('pinned_sources', 8), ('byte_transform_functions', 2), ('roles', 5),
+                             ('raw_bytes', 87297024), ('output_bytes', 87300096)):
+              if type(summary.get(key)) is not int or summary[key] != value:
+                  raise SystemExit('unexpected cold source closure: ' + key)
+          tree = ast.parse(Path('candidates/qwen2_live_tail_inputs_m128/tests/test_recipe.py').read_text())
+          declared = [node.name for cls in tree.body if isinstance(cls, ast.ClassDef) and cls.name == 'Tests'
+                      for node in cls.body if isinstance(node, ast.FunctionDef) and node.name.startswith('test_')]
+          if len(declared) != 26 or len(set(declared)) != 26:
+              raise SystemExit('expected exactly 26 distinct declared cold tests')
+          for name in ('normal.log', 'optimized.log'):
+              lines = (evidence / name).read_text().splitlines()
+              if (len(lines) != 31 or lines[-5] != '' or lines[-4] != '-' * 70
+                      or not re.fullmatch(r'Ran 26 tests in [0-9.]+s', lines[-3])
+                      or lines[-2:] != ['', 'OK']):
+                  raise SystemExit('expected exactly 26 passing, unskipped cold tests: ' + name)
+              seen = []
+              for line in lines[:-5]:
+                  match = re.fullmatch(r'(test_[A-Za-z0-9_]+) \(test_recipe\.Tests\.\1\) \.\.\. ok', line)
+                  if match is None:
+                      raise SystemExit('non-passing or unexpected cold test record: ' + name)
+                  seen.append(match.group(1))
+              if len(set(seen)) != 26 or set(seen) != set(declared):
+                  raise SystemExit('missing, duplicate, or unexpected cold tests: ' + name)
+          print('PASS: NOT_EXECUTED default and exactly 26 + 26 stdlib cold tests; no skips')
+          PY
+      - name: Preserve only exact-head cold evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-live-tail-inputs-cold-${{ github.sha }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          path: |
+            work/qwen2_tail_input_ci_20261014/ci-cold/head.txt
+            work/qwen2_tail_input_ci_20261014/ci-cold/tool.json
+            work/qwen2_tail_input_ci_20261014/ci-cold/default.json
+            work/qwen2_tail_input_ci_20261014/ci-cold/normal.log
+            work/qwen2_tail_input_ci_20261014/ci-cold/optimized.log

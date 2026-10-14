@@ -1,0 +1,361 @@
+{
+  "actual_negative_checks": {
+    "count": 21,
+    "mutation_scope": "private copied output files or in-memory raw copies",
+    "original_and_sealed_before_after_equal": true,
+    "reconstruction_executed": false
+  },
+  "boundaries": {
+    "full_checkpoint_sha256_verified": false,
+    "historical_pass_inherited": false,
+    "intermediate_preloads": 0,
+    "network_used": false,
+    "numerical_model_executed": false,
+    "official_forward_executed": false,
+    "old_full_manifest_recreated": false,
+    "rtl_executed": false
+  },
+  "detailed_receipts": [
+    {
+      "bytes": 20749,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/inputs/INPUTS_READY.json",
+      "sha256": "ea053569909898924bd1460efed8ed18da0346f4270973a5cd16bc96870083f8"
+    },
+    {
+      "bytes": 22103,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/audit/AUDIT.json",
+      "sha256": "2d401b7bbe2edfbee01497143a35929ba1c2638cf78fafbd33e96c79c0c380d5"
+    },
+    {
+      "bytes": 577,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/RESOURCE_RECEIPT.json",
+      "sha256": "95e4283a8c9a32f96ed8d654b2f09fc831bbbb1baad175638032e59cbfd296d0"
+    },
+    {
+      "bytes": 588,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/AUDIT_RESOURCE_RECEIPT.json",
+      "sha256": "f5834bd6fe7ce645cbf5bf2ec6198b2cb7559894b02e5620575c342d966ffe8a"
+    },
+    {
+      "bytes": 10158,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/INDEPENDENT_AUDIT.json",
+      "sha256": "e4b4fefc70a5e7081d1cb191da04d08ff82c0fb9934e34d00f5a7e99e39a2884"
+    },
+    {
+      "bytes": 20076,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/ACTUAL_NEGATIVE_TESTS.json",
+      "sha256": "cd94c5caeba729c049ec19dddbe1bb108e51c587d826e79b09ba8d62d7bd4a4d"
+    },
+    {
+      "bytes": 385,
+      "path": "work/qwen2_live_tail_inputs_m128/reconstruct01/PYTHON313_REJECTION.json",
+      "sha256": "52a784737360fb04ed5e529ce8a22ed86c52dd3ddcae767d865f0bbc4381ac1e"
+    }
+  ],
+  "independent_storage_audit": {
+    "elements_checked": 43648512,
+    "producer_imported": false,
+    "status": "VERIFIED_EVERY_WORD_INDEPENDENT_STORAGE_AUDIT_ONLY"
+  },
+  "materialization": {
+    "address_space_limit_bytes": 536870912,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-B",
+      "-S",
+      "candidates/qwen2_live_tail_inputs_m128/recipe.py",
+      "--action",
+      "materialize",
+      "--execute",
+      "--out",
+      "work/qwen2_live_tail_inputs_m128/reconstruct01/inputs"
+    ],
+    "maximum_child_rss_kib": 217948,
+    "network_used": false,
+    "numeric_model_executed": false,
+    "retry_count": 0,
+    "returncode": 0,
+    "schema": 1,
+    "timed_out": false,
+    "timeout_seconds": 60,
+    "wall_seconds": 12.103617378990748
+  },
+  "materialized_bytes": 87300096,
+  "matrix_fp32_arrays_materialized": false,
+  "model_id": "Qwen/Qwen2-1.5B-Instruct",
+  "numpy_imported": false,
+  "pins": {
+    "bytes": 17671,
+    "path": "candidates/qwen2_live_tail_inputs_m128/pins.json",
+    "sha256": "b521249da785c6a221a03a1dac9b2eda385ecac45dc945b3814716422c6fa3a0"
+  },
+  "raw_bytes": 87297024,
+  "raw_original_http_timestamps_preserved": true,
+  "recipe_id": "qwen2-live-tail-inputs-m128-v1",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "roles": {
+    "gamma1": {
+      "address": 4482210368,
+      "byte_strides": [
+        6144,
+        4
+      ],
+      "bytes": 6144,
+      "descriptor_dtype": 7,
+      "descriptor_shape4": [
+        1,
+        1536,
+        1,
+        1
+      ],
+      "descriptor_stride3": [
+        1536,
+        1,
+        1
+      ],
+      "dtype": "float32",
+      "element_strides": [
+        1536,
+        1
+      ],
+      "file": "gamma1.bin",
+      "readonly": true,
+      "reserved_bytes": 6144,
+      "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+      "shape": [
+        1,
+        1536
+      ],
+      "source_local_name": "post_attention_layernorm.weight",
+      "source_shape": [
+        1536
+      ],
+      "storage_encoding": "IEEE754_FP32_LE",
+      "transposed": false,
+      "unused_guard_bytes": 0,
+      "virtual": false,
+      "widened": true
+    },
+    "wd": {
+      "address": 4427153856,
+      "byte_strides": [
+        3072,
+        2
+      ],
+      "bytes": 27525120,
+      "descriptor_dtype": 5,
+      "descriptor_shape4": [
+        8960,
+        1536,
+        1,
+        1
+      ],
+      "descriptor_stride3": [
+        1536,
+        1,
+        1
+      ],
+      "dtype": "uint16",
+      "element_strides": [
+        1536,
+        1
+      ],
+      "file": "wd.bin",
+      "readonly": true,
+      "reserved_bytes": 55050240,
+      "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec",
+      "shape": [
+        8960,
+        1536
+      ],
+      "source_local_name": "mlp.down_proj.weight",
+      "source_shape": [
+        1536,
+        8960
+      ],
+      "storage_encoding": "BF16_LE",
+      "transposed": true,
+      "unused_guard_bytes": 27525120,
+      "virtual": false,
+      "widened": false
+    },
+    "wg": {
+      "address": 4317053248,
+      "byte_strides": [
+        17920,
+        2
+      ],
+      "bytes": 27525120,
+      "descriptor_dtype": 5,
+      "descriptor_shape4": [
+        1536,
+        8960,
+        1,
+        1
+      ],
+      "descriptor_stride3": [
+        8960,
+        1,
+        1
+      ],
+      "dtype": "uint16",
+      "element_strides": [
+        8960,
+        1
+      ],
+      "file": "wg.bin",
+      "readonly": true,
+      "reserved_bytes": 55050240,
+      "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f",
+      "shape": [
+        1536,
+        8960
+      ],
+      "source_local_name": "mlp.gate_proj.weight",
+      "source_shape": [
+        8960,
+        1536
+      ],
+      "storage_encoding": "BF16_LE",
+      "transposed": true,
+      "unused_guard_bytes": 27525120,
+      "virtual": false,
+      "widened": false
+    },
+    "wo": {
+      "address": 4307616000,
+      "byte_strides": [
+        3072,
+        2
+      ],
+      "bytes": 4718592,
+      "descriptor_dtype": 5,
+      "descriptor_shape4": [
+        1536,
+        1536,
+        1,
+        1
+      ],
+      "descriptor_stride3": [
+        1536,
+        1,
+        1
+      ],
+      "dtype": "uint16",
+      "element_strides": [
+        1536,
+        1
+      ],
+      "file": "wo.bin",
+      "readonly": true,
+      "reserved_bytes": 9437184,
+      "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c",
+      "shape": [
+        1536,
+        1536
+      ],
+      "source_local_name": "self_attn.o_proj.weight",
+      "source_shape": [
+        1536,
+        1536
+      ],
+      "storage_encoding": "BF16_LE",
+      "transposed": true,
+      "unused_guard_bytes": 4718592,
+      "virtual": false,
+      "widened": false
+    },
+    "wu": {
+      "address": 4372103552,
+      "byte_strides": [
+        17920,
+        2
+      ],
+      "bytes": 27525120,
+      "descriptor_dtype": 5,
+      "descriptor_shape4": [
+        1536,
+        8960,
+        1,
+        1
+      ],
+      "descriptor_stride3": [
+        8960,
+        1,
+        1
+      ],
+      "dtype": "uint16",
+      "element_strides": [
+        8960,
+        1
+      ],
+      "file": "wu.bin",
+      "readonly": true,
+      "reserved_bytes": 55050240,
+      "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040",
+      "shape": [
+        1536,
+        8960
+      ],
+      "source_local_name": "mlp.up_proj.weight",
+      "source_shape": [
+        8960,
+        1536
+      ],
+      "storage_encoding": "BF16_LE",
+      "transposed": true,
+      "unused_guard_bytes": 27525120,
+      "virtual": false,
+      "widened": false
+    }
+  },
+  "schema": 1,
+  "separate_recipe_audit": {
+    "address_space_limit_bytes": 536870912,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-B",
+      "-S",
+      "candidates/qwen2_live_tail_inputs_m128/recipe.py",
+      "--action",
+      "audit",
+      "--execute",
+      "--inputs",
+      "work/qwen2_live_tail_inputs_m128/reconstruct01/inputs",
+      "--out",
+      "work/qwen2_live_tail_inputs_m128/reconstruct01/audit"
+    ],
+    "maximum_child_rss_kib": 159580,
+    "no_conversion_or_model_execution": true,
+    "returncode": 0,
+    "schema": 1,
+    "timeout_seconds": 60,
+    "wall_seconds": 0.967767359004938
+  },
+  "source_input_layout_before_after_equal": true,
+  "source_recipe": {
+    "bytes": 22419,
+    "path": "candidates/qwen2_live_tail_inputs_m128/recipe.py",
+    "sha256": "cf1a4ff9b12f9047f034a12f3660b3fa6b6af8c071e50f925c75c3f01ad7296b"
+  },
+  "stage_commit_push": false,
+  "status": "VERIFIED_FIVE_TAIL_INPUTS_ONLY_NO_NUMERICAL_VERDICT",
+  "torch_imported": false,
+  "verification_script_identities": [
+    {
+      "bytes": 1390,
+      "path": "work/qwen2_live_tail_inputs_m128/run_bounded.py",
+      "sha256": "b9b58c1cebe4b27290b4e88a07a3712903fd8385440b252af65f83105232da78"
+    },
+    {
+      "bytes": 3446,
+      "path": "work/qwen2_live_tail_inputs_m128/audit_independent.py",
+      "sha256": "211a3b99a1b8aceb5f9cd168b5cef49671a96fde3e776aa152174ba20b29c6a7"
+    },
+    {
+      "bytes": 3327,
+      "path": "work/qwen2_live_tail_inputs_m128/test_actual_mutations.py",
+      "sha256": "5b178a4f0d9a1876c29f07b99fcf550cb2bbe1205a467bb0436184d6ea7599c2"
+    }
+  ]
+}

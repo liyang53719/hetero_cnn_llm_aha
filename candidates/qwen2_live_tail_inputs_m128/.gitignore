@@ -1,0 +1,12 @@
+# Only reviewed source/metadata. Payloads and detailed receipts stay under work/.
+*
+!.gitignore
+!README.md
+!recipe.py
+!pins.json
+!source_correspondence.json
+!COLD_TEST_SUMMARY.json
+!VALIDATION_SUMMARY.json
+!tests/
+tests/*
+!tests/test_recipe.py

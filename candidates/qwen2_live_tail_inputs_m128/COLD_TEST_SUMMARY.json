@@ -1,0 +1,80 @@
+{
+  "audited_default_no_payload_read_write_numeric_import_network_subprocess": true,
+  "default_statuses": [
+    "NOT_EXECUTED",
+    "NOT_EXECUTED"
+  ],
+  "logs": [
+    {
+      "bytes": 2973,
+      "path": "work/qwen2_live_tail_inputs_m128/cold_normal.log",
+      "sha256": "6ebe0d562b5d9414983cd988db80b08c11214f140a76c7a62578c62316801b1e"
+    },
+    {
+      "bytes": 2973,
+      "path": "work/qwen2_live_tail_inputs_m128/cold_optimized.log",
+      "sha256": "1de28c2a32355958e78807203955d2d0ec29ed60fecadd61e66e0658be877c0a"
+    },
+    {
+      "bytes": 455,
+      "path": "work/qwen2_live_tail_inputs_m128/default_normal.json",
+      "sha256": "6b42430d1010150d960834f47436c6b5db9ae9481f8e698315096532a1051dc2"
+    },
+    {
+      "bytes": 455,
+      "path": "work/qwen2_live_tail_inputs_m128/default_optimized.json",
+      "sha256": "6b42430d1010150d960834f47436c6b5db9ae9481f8e698315096532a1051dc2"
+    }
+  ],
+  "mock_version_negative": {
+    "native_3_11_executed": false,
+    "version_info": [
+      3,
+      11,
+      99
+    ]
+  },
+  "native_version_negative": {
+    "argv": [
+      "/usr/bin/python3.13",
+      "-B",
+      "-S",
+      "candidates/qwen2_live_tail_inputs_m128/recipe.py"
+    ],
+    "model_or_raw_data_execution": false,
+    "native_interpreter": true,
+    "returncode": 1,
+    "runtime": "Python 3.13.5",
+    "stderr": "TAIL_INPUTS_REJECTED: Python 3.12 CPython required for exact pinned AST fields; no cross-version normalization\n",
+    "stdout": ""
+  },
+  "normal_tests": 26,
+  "numerical_model_executed": false,
+  "optimized_tests": 26,
+  "physical_metadata_mutation_rejections_per_run": 95,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "python_major_minor": [
+    3,
+    12
+  ],
+  "schema": 1,
+  "source_only_checkout_without_work_test": true,
+  "source_test_identity": [
+    {
+      "bytes": 22419,
+      "path": "candidates/qwen2_live_tail_inputs_m128/recipe.py",
+      "sha256": "cf1a4ff9b12f9047f034a12f3660b3fa6b6af8c071e50f925c75c3f01ad7296b"
+    },
+    {
+      "bytes": 17671,
+      "path": "candidates/qwen2_live_tail_inputs_m128/pins.json",
+      "sha256": "b521249da785c6a221a03a1dac9b2eda385ecac45dc945b3814716422c6fa3a0"
+    },
+    {
+      "bytes": 14885,
+      "path": "candidates/qwen2_live_tail_inputs_m128/tests/test_recipe.py",
+      "sha256": "b35d0770b1de8f8625aeeb7319904822966e3663a003dbfc772da7ae49b1b180"
+    }
+  ],
+  "status": "PASS_BOUNDED_STDLIB_COLD_GATES_ONLY"
+}

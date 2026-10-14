@@ -1,0 +1,180 @@
+{
+  "base_commit": "f16df50adfb0f1f4bc668c517a2e29accffe6753",
+  "current_commit": null,
+  "scope": "Source review of current software drivers on default-disabled borrower/loan profile; not full hardware compatibility",
+  "files": {
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+      "unchanged_function_and_method_count": 49,
+      "unchanged_functions_and_methods": [
+        "DenseLibraryAdapter.__getattr__",
+        "DenseLibraryAdapter.__init__",
+        "DenseLibraryAdapter._check",
+        "DenseLibraryAdapter.retire_done",
+        "DenseLibraryAdapter.retire_result",
+        "DenseLibraryAdapter.retire_seed_ack",
+        "DenseLibraryAdapter.td_group",
+        "DenseLibraryAdapter.td_seed_beat",
+        "DenseLibraryAdapter.td_seed_begin",
+        "DenseLibraryAdapter.td_seed_commit",
+        "DenseLibraryAdapter.td_step",
+        "DenseLibraryAdapter.ticket",
+        "LegacyMatrixClient.__init__",
+        "LegacyMatrixClient._abort_edge",
+        "LegacyMatrixClient.drained",
+        "LegacyMatrixClient.ports",
+        "LegacyMatrixClient.tick",
+        "MatrixService.__init__",
+        "MatrixService._check_event",
+        "MatrixService._check_owner",
+        "MatrixService.abort",
+        "MatrixService.accept_group",
+        "MatrixService.accept_step",
+        "MatrixService.acquire",
+        "MatrixService.dense_library",
+        "MatrixService.done",
+        "MatrixService.ports",
+        "MatrixService.release",
+        "MatrixService.report",
+        "MatrixService.reset",
+        "MatrixService.reset_required",
+        "MatrixService.retire_done",
+        "MatrixService.retire_legacy_reply",
+        "MatrixService.retire_owner_response",
+        "MatrixService.retire_result",
+        "MatrixService.ticket",
+        "MatrixValue.__bytes__",
+        "MatrixValue.__eq__",
+        "MatrixValue.__getitem__",
+        "MatrixValue.__iter__",
+        "MatrixValue.__len__",
+        "MatrixValue.__post_init__",
+        "MatrixValue.sha256",
+        "_MatrixRow.__eq__",
+        "_MatrixRow.__getitem__",
+        "_MatrixRow.__iter__",
+        "_MatrixRow.__len__",
+        "configure_library",
+        "require"
+      ],
+      "changed": [
+        "source_identity"
+      ],
+      "report_changes_only_identity_metadata": [],
+      "old_sha256": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+      "new_sha256": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+      "unchanged_function_and_method_count": 10,
+      "unchanged_functions_and_methods": [
+        "ScalarService.__init__",
+        "ScalarService._check_environment",
+        "ScalarService.acquire",
+        "ScalarService.op",
+        "ScalarService.release",
+        "bf",
+        "finite",
+        "tiny_inexact",
+        "value",
+        "word"
+      ],
+      "changed": [
+        "source_identity"
+      ],
+      "report_changes_only_identity_metadata": [],
+      "old_sha256": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+      "new_sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+    },
+    "scripts/observe_qwen2_attention_model.py": {
+      "unchanged_function_and_method_count": 17,
+      "unchanged_functions_and_methods": [
+        "AttentionObservation.__enter__",
+        "AttentionObservation.__exit__",
+        "AttentionObservation.__init__",
+        "AttentionObservation._bytes",
+        "AttentionObservation._coverage",
+        "AttentionObservation._line",
+        "AttentionObservation._put",
+        "AttentionObservation._start",
+        "AttentionObservation._trace",
+        "AttentionObservation.save",
+        "_code",
+        "_same_code",
+        "execute_public_attention_observed",
+        "require",
+        "sha",
+        "verify_loaded_dependencies",
+        "verify_sources"
+      ],
+      "changed": [
+        "AttentionObservation.report",
+        "verify_execution_sources"
+      ],
+      "report_changes_only_identity_metadata": [
+        "AttentionObservation.report"
+      ],
+      "old_sha256": "d3113892044eea7681869b2fc20eb4dfdb8085ae4c24e75c749b8e778ff16bab",
+      "new_sha256": "c061da563c079cd3866c661382df5600980ae11e659909a7f0520ce41878ba9f"
+    },
+    "candidates/qwen2_resident_matrix/official_bf16/observation.py": {
+      "unchanged_function_and_method_count": 12,
+      "unchanged_functions_and_methods": [
+        "OfficialAttentionObservation.__enter__",
+        "OfficialAttentionObservation.__exit__",
+        "OfficialAttentionObservation.__init__",
+        "OfficialAttentionObservation._coverage",
+        "OfficialAttentionObservation._line",
+        "OfficialAttentionObservation._start",
+        "_code",
+        "_literal",
+        "_same_code",
+        "_verify_module",
+        "require",
+        "verify_loaded_dependencies"
+      ],
+      "changed": [
+        "OfficialAttentionObservation.report",
+        "verify_source_snapshot"
+      ],
+      "report_changes_only_identity_metadata": [
+        "OfficialAttentionObservation.report",
+        "verify_source_snapshot"
+      ],
+      "old_sha256": "c34907c33daac71c058e328db436faa88b88a6214b11a15625c6ba6c5a429273",
+      "new_sha256": "bd671f58c73d4a2ab808968c40589f395dc17d25a00b0aa71eb236f5419fb744"
+    },
+    "candidates/qwen2_resident_matrix/dense_block_reduce/observation.py": {
+      "unchanged_function_and_method_count": 6,
+      "unchanged_functions_and_methods": [
+        "ProfiledAttentionMonitoringObservation.__enter__",
+        "ProfiledAttentionMonitoringObservation.__exit__",
+        "ProfiledAttentionMonitoringObservation.__init__",
+        "ProfiledAttentionMonitoringObservation.report",
+        "verify_constructor_delta",
+        "verify_profiled_dependencies"
+      ],
+      "changed": [],
+      "report_changes_only_identity_metadata": [],
+      "old_sha256": "bba49c6c98e2a7c2f547fce501e79f455d910216de65d6ae0b5243d27fe078fd",
+      "new_sha256": "90c129e9bf57a234927822439705090d68be2c23b86fd8db61a1ba3a6bafeede"
+    }
+  },
+  "changed_tracked_files": [
+    "candidates/qwen2_resident_matrix/dense_block_reduce/observation.py",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py",
+    "candidates/qwen2_resident_matrix/official_bf16/observation.py",
+    "candidates/qwen2_resident_matrix/official_bf16/test_observation.py",
+    "scripts/observe_qwen2_attention_model.py",
+    "scripts/qwen2_dense_residency_numeric.py",
+    "scripts/qwen2_prefill_resource_schedule.py",
+    "scripts/qwen2_prefill_traffic_bound.py",
+    "scripts/qwen2_rectangular_attention_model.py",
+    "scripts/qwen2_shared_sfu_schedule.py",
+    "tests/test_qwen2_attention_observation.py",
+    "tests/test_qwen2_prefill_resource_schedule.py",
+    "tests/test_qwen2_public_attention_observation.py"
+  ],
+  "all_historical_json_and_elf_unchanged": true,
+  "historical_json_elf_count": 1260,
+  "unmodified_tracked_files": 13189
+}

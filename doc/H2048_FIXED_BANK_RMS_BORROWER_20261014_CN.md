@@ -1,5 +1,7 @@
 # H2048 固定三 bank RMS：生产 core 服务借用
 
+后续更新：本文保留首批未加内部计数的回放边界。2026-10-14 已完成同 bank Scalar/Vector M1/M16/M128 A/B、真实执行拍及互斥周期分解，见 [同资源性能回执](H2048_RMS_SAME_BANK_PERFORMANCE_20261014_CN.md)；首批日志不回填新测量结果。
+
 ## 当前阶段与边界
 
 本批承接 main `3cd847d32008eac4916c2691fbe0265df8859481`。该基线修复真实 fixture suite 的显式分类；未把缺失外部输入的测试记作 PASS。本文仅记录 H2048 RMS 子链，不升级完整 35B L0/L3、完整 block 或 MAC 利用率结论。

@@ -133,8 +133,11 @@ class OfficialObservationTests(unittest.TestCase):
                 report = capture.report()
                 self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
                 self.assertEqual(report['schema'], o.SOURCE_VERSION)
-                self.assertEqual(report['source_version'], 'qwen2-official-bf16-attention-observation-v2')
+                self.assertEqual(report['source_version'], 'qwen2-official-bf16-attention-observation-v3')
                 self.assertEqual(report['helper_source_version'], o.base.SOURCE_VERSION)
+                self.assertIsNone(report['execution_source_commit'])
+                self.assertEqual(report['execution_source_base_commit'], o.base.SOURCE_BASE_COMMIT)
+                self.assertIn('borrower=false', report['execution_source_profile'])
                 self.assertEqual(report['helper_source_sha256'], {o.HELPER: o.HELPER_SHA256})
                 self.assertFalse(report['prior_observation_results_inherited'])
                 self.assertEqual(report['historical_fullgraph'], dict(commit=o.base.RECEIPT_COMMIT,
@@ -244,7 +247,7 @@ class OfficialObservationTests(unittest.TestCase):
                 self.assertTrue(capture.disarmed)
                 self.assertIsNone(sys.gettrace())
 
-    def test_snapshot_requires_exact_v2_inventory_and_all_extra_dependencies(self):
+    def test_snapshot_requires_exact_v3_inventory_and_all_extra_dependencies(self):
         h, _, _ = self.make()
         original = snapshot()
         frozen_raw = (o.ROOT / o.base.RECEIPT).read_bytes()
@@ -254,7 +257,7 @@ class OfficialObservationTests(unittest.TestCase):
         self.assertEqual(set(execution), set(frozen))
         self.assertEqual({name for name in execution if execution[name] != frozen[name]},
                          set(o.base.EXECUTION_SOURCE_REPLACEMENTS))
-        self.assertEqual(len(o.base.EXECUTION_SOURCE_REPLACEMENTS), 2)
+        self.assertEqual(len(o.base.EXECUTION_SOURCE_REPLACEMENTS), 5)
         self.assertEqual(hashlib.sha256(frozen_raw).hexdigest(), o.base.RECEIPT_SHA)
         self.assertEqual(set(original) - set(execution), set(o.REQUIRED_SOURCES))
         for name in (*execution, *o.REQUIRED_SOURCES):
@@ -270,7 +273,7 @@ class OfficialObservationTests(unittest.TestCase):
         for name in o.base.EXECUTION_SOURCE_REPLACEMENTS:
             changed = dict(original)
             changed[name] = frozen[name]
-            with self.subTest(historical=name), self.assertRaisesRegex(ValueError, 'exact v2 75-source'):
+            with self.subTest(historical=name), self.assertRaisesRegex(ValueError, 'exact v3 75-source'):
                 o.OfficialAttentionObservation(h.owner, source_sha256=changed)
         # Runner-specific supersets are allowed only with every extra identity
         # checked. They do not add entries to the exact 75-source inventory.
@@ -319,7 +322,7 @@ class OfficialObservationTests(unittest.TestCase):
         )
         for target, name, replacement in replacements:
             with self.subTest(name=name), patch.object(target, name, replacement):
-                with self.assertRaisesRegex(ValueError, 'changed|patched|source drift|exact v2 75-source'):
+                with self.assertRaisesRegex(ValueError, 'changed|patched|source drift|exact v3 75-source'):
                     o.OfficialAttentionObservation(h.owner, source_sha256=snapshot())
         with patch.object(owners.OfficialAttentionOwner, '_advance', lambda *args: None, create=True):
             with self.assertRaisesRegex(ValueError, 'inventory changed'):

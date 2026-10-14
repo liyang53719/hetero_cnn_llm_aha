@@ -168,7 +168,29 @@ class Qwen2BlockCiTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         plan = json.loads((out / 'control/suite_plan.json').read_text())
         invocations = [c for c in calls if c['tool'] == 'sbt' and c['args'][1].startswith('testOnly ')]
-        self.assertEqual([c['args'][1].split()[1:] for c in invocations], list(plan.values()))
+        run_groups = ('general', 'tiny', 'real', 'native')
+        external_suites = {
+            'frozen_actual_rms_epilogue': 'heteronpu.continuous.ElementwiseRegisterLoanReplaySpec',
+            'frozen_actual_h2048_rms': 'heteronpu.continuous.GdnRmsNormFixedBankReplaySpec',
+        }
+        self.assertEqual(set(plan), set(run_groups) | set(external_suites))
+        self.assertEqual([c['args'][1].split()[1:] for c in invocations],
+                         [plan[group] for group in run_groups])
+        control = json.loads((out / 'control/RESULT.json').read_text())
+        self.assertEqual(set(control['groups']), set(run_groups))
+        self.assertEqual(set(control['external_fixture_suites']), set(external_suites))
+        for group, suite in external_suites.items():
+            self.assertEqual(plan[group], [suite])
+            self.assertFalse(any(suite in plan[g] for g in run_groups))
+            external = control['external_fixture_suites'][group]
+            self.assertEqual(external['suites'], [suite])
+            self.assertEqual(external['status'], 'NOT_EXECUTED_REQUIRES_FROZEN_ACTUAL_FIXTURE')
+            self.assertIs(external['counted_as_pass'], False)
+            self.assertTrue(external['runner'])
+            self.assertIs(control['scope'][group + '_executed'], False)
+        self.assertEqual(control['total_tests'], sum(x['tests'] for x in control['groups'].values()))
+        self.assertEqual(len([s for suites in plan.values() for s in suites]),
+                         len({s for suites in plan.values() for s in suites}))
         expected = sorted('heteronpu.continuous.' + p.stem for p in
                           (ROOT / PROJECT / 'src/test/scala/heteronpu/continuous').glob('*Spec.scala'))
         self.assertEqual(sorted(s for suites in plan.values() for s in suites), expected)
@@ -183,6 +205,19 @@ class Qwen2BlockCiTest(unittest.TestCase):
         self.assertTrue(all(run['phases'] == list(range(15)) for run in report['runs'].values()))
         self.assertIn(str(RUNNER), (out / 'sources.sha256').read_text())
         self.assertIn('SOURCE_IMMUTABILITY_PASS', (out / 'control/source_verify.log').read_text())
+
+    def test_missing_external_fixture_suite_stops_before_block(self):
+        suite = self.root / PROJECT / 'src/test/scala/heteronpu/continuous/GdnRmsNormFixedBankReplaySpec.scala'
+        suite.unlink()
+        result, out, calls = self.run_gate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assert_no_block(out, calls)
+        # The planner's own cold tests reject the missing external suite first.
+        # Their detailed failure is retained in its dedicated log, not stdout.
+        self.assertIn('MISSING_FIXTURE_SUITE',
+                      (out / 'control/suite_classification_tests.log').read_text())
+        self.assertNotEqual((out / 'control/gate.exit').read_text().strip(), '0')
+        self.assertFalse((out / 'control/RESULT.json').exists())
 
     def test_real_keeps_original_sixteen_token_numerical_run(self):
         result, out, calls = self.run_gate('real')

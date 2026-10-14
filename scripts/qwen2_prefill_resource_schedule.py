@@ -28,9 +28,9 @@ ATT = _module('qwen2_rectangular_attention_model')
 BOUND = _module('qwen2_prefill_traffic_bound')
 SFU = _module('qwen2_shared_sfu_schedule')
 EXTRA_PINS = {
-    'scripts/qwen2_shared_sfu_schedule.py': '8d8ca983d7d8dceaa10282774c6c881ef25d57a49e74a6ad521d61c72f7198d5',
-    'scripts/qwen2_rectangular_attention_model.py': 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8',
-    'scripts/qwen2_prefill_traffic_bound.py': '3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697',
+    'scripts/qwen2_shared_sfu_schedule.py': '724e3a4894a42d40972c215c2984fb12da34baf59140baa173451f1a28335dab',
+    'scripts/qwen2_rectangular_attention_model.py': '8fdcffce9908d1a273bb5bc2011d62f952b20eb5c83fb2258dc06f0f04208f29',
+    'scripts/qwen2_prefill_traffic_bound.py': '6b16326c9218039e154b5ed7e979194258d89ff1c6b702309481384d8334b2c1',
     'scripts/import_llama_qwen2_graph.py': '07a7edfa3f0c08876fddd47c909b2a340fb6fd175ec46f99c2754f748bb2ea6e',
     'chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala': '6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464',
     'chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala': '10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5',
@@ -72,6 +72,33 @@ TIMING_KEYS = (
 )
 V0_SILU_AUDIT = 'reports/execution/QWEN2_SFU_TIMING_20261011/V0_SAVED_GATE_AUDIT.json'
 V0_SILU_AUDIT_SHA256 = '14b65f7fe70416739ca2b5cebffdd5a4bb388077708c579b30aa1f40df247ebf'
+
+# Exact compatibility review for the original Qwen2 Host only. At f16df50,
+# HostBlockTop omits enableH2048RmsBorrower; its false default keeps the
+# original ElementwiseMemoryEngine and leaves both new exclusivity wires false.
+# Dense geometry, core arithmetic/ACK paths, and ScheduledSiluOwner are unchanged.
+# The frozen census and producer identities below are NOT rewritten or rerun.
+V0_HOST_SOURCE_REVIEW = {
+    ATT.BASE+'Qwen2Block.scala': {
+        'historical_sha256': '1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43',
+        'current_sha256': '9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4'},
+    ATT.BASE+'QwenOwnerProtocol.scala': {
+        'historical_sha256': 'c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542',
+        'current_sha256': '7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d'},
+}
+
+
+def _current_v0_hardware_pins(root, historical_pins):
+    current = {}
+    for path, historical in historical_pins.items():
+        review = V0_HOST_SOURCE_REVIEW.get(path)
+        if review is not None and historical != review['historical_sha256']:
+            raise ValueError('saved branch audit reviewed historical source changed: '+path)
+        expected = review['current_sha256'] if review is not None else historical
+        if hashlib.sha256((Path(root)/path).read_bytes()).hexdigest() != expected:
+            raise ValueError('saved branch audit hardware source changed: '+path)
+        current[path] = expected
+    return current
 
 
 def timing_profile(synthetic=False):
@@ -946,13 +973,16 @@ def report(root,tokens=128,contexts=1,profile=None,dense_mapping='current'):
                 ])
 
 
-def observed_silu_host_bound(root=ROOT):
+def observed_silu_host_bound(root=ROOT, *, enable_h2048_rms_borrower=False,
+                             external_elementwise_loan=False):
     """Refine the ORIGINAL Host bound with one frozen software-input census.
 
     This is deliberately separate from the rectangular candidate calendar.
     The gate audit remains historical evidence at its exact hash; it is not
     rebound to a later Python model implementation or claimed as RTL input.
     """
+    if enable_h2048_rms_borrower is not False or external_elementwise_loan is not False:
+        raise ValueError('saved v0 review requires the original default-disabled borrower/loan profile')
     root=Path(root)
     audit_path=root/V0_SILU_AUDIT
     raw=audit_path.read_bytes()
@@ -966,9 +996,8 @@ def observed_silu_host_bound(root=ROOT):
     hardware_pins={k:v for k,v in audit['source_sha256'].items()
                    if not k.startswith('scripts/')}
     hardware_pins.update(audit['receipt']['source_identity']['source_sha256'])
-    for path,expected in hardware_pins.items():
-        if hashlib.sha256((root/path).read_bytes()).hexdigest()!=expected:
-            raise ValueError('saved branch audit hardware source changed: '+path)
+    historical_hardware_pins = dict(hardware_pins)
+    hardware_pins = _current_v0_hardware_pins(root, historical_hardware_pins)
     historical_upstream=audit['source_timing_binding']['upstream']
     current_upstream=binding['upstream']
     if (historical_upstream['commit']!=current_upstream['commit'] or
@@ -991,7 +1020,14 @@ def observed_silu_host_bound(root=ROOT):
         source_sha256={**host['source_sha256'],**hardware_pins},
         evidence=dict(path=V0_SILU_AUDIT,sha256=V0_SILU_AUDIT_SHA256,
                       original_source_model_sha256=audit['source_sha256']['scripts/qwen2_shared_sfu_schedule.py'],
-                      gate=audit['gate'],producer_status=audit['receipt']['status']),
+                      gate=audit['gate'],producer_status=audit['receipt']['status'],
+                      source_review=dict(commit='f16df50adfb0f1f4bc668c517a2e29accffe6753',
+                          profile='original Qwen2 Host; enableH2048RmsBorrower=false; externalElementwiseLoan=false',
+                          h2048_borrower_included=False, current_host_reexecuted=False,
+                          current_rtl_measured=False, proof='scoped source review, not a new execution',
+                          historical_hardware_sha256=historical_hardware_pins,
+                          current_hardware_sha256=hardware_pins,
+                          reviewed_identity_pairs=V0_HOST_SOURCE_REVIEW)),
         workload=host['workload'],fixed_matrix_macs_per_cycle=4096,useful_macs=macs,
         formula_version='host_bound_v2_replace_only_silu_issue_floor',
         previous=dict(formula_version='host_bound_v1_one_cycle_per_nonoverlapping_request',

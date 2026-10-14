@@ -7,6 +7,16 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/qwen2-prefill-model-contract.yml'
+      - 'scripts/check_generated_source_consistency.py'
+      - 'tests/test_generated_source_consistency.py'
+      - 'scripts/generate_shape_layout_vectors.py'
+      - 'tests/fixtures/block_contracts/shape_layout_vectors.json'
+      - 'doc/three_model_typical_block_closure_20260917_zh.yaml'
+      - 'doc/block_checklist.yaml'
+      - 'scripts/block_checklist.py'
+      - 'chisel/continuous_prefill/scripts/plan_continuous_suites.py'
+      - 'chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh'
+      - 'chisel/continuous_prefill/src/test/scala/**'
       - 'scripts/qwen2_layer0_payload.py'
       - 'scripts/collect_qwen2_layer0_payload.py'
       - 'scripts/qwen2_layer0_model_gate.py'
@@ -123,6 +133,13 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
           python -m pip install --disable-pip-version-check numpy==2.3.5 pytest==8.4.2 transformers==4.40.1
+      - name: Cold generated, plan and source identity preflight
+        shell: bash
+        run: |
+          mkdir -p work/qwen2_model_contract
+          PYTHONDONTWRITEBYTECODE=1 python -B scripts/check_generated_source_consistency.py --root "$PWD" --receipt work/qwen2_model_contract/source-consistency.json
+          PYTHONDONTWRITEBYTECODE=1 python -B -m pytest -o addopts='' -p no:cacheprovider -q tests/test_generated_source_consistency.py
+          PYTHONDONTWRITEBYTECODE=1 python -B -O -m pytest -o addopts='' -p no:cacheprovider -q tests/test_generated_source_consistency.py
       - name: Check model contracts and scalar software recipe without RTL
         shell: bash
         run: |

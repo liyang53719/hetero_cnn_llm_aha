@@ -20,8 +20,10 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_SHA256 = '2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6'
-SCHEDULE_SHA256 = '47e8f3acd6b7dafe4e6fe731cae20205ab93c6208af12b48eb01373edcaa2175'
-ATTENTION_EVENT_SHA256 = 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8'
+# Active generator pins only: f16 default-off source review; formulas unchanged.
+# Historical generated candidate identities/receipts remain immutable.
+SCHEDULE_SHA256 = 'c43d6c4be775c4c02f7c64524a1a6bc11ff6f254f64270bfd02319f4418b949f'
+ATTENTION_EVENT_SHA256 = '8fdcffce9908d1a273bb5bc2011d62f952b20eb5c83fb2258dc06f0f04208f29'
 SOURCE_PASS_COMMIT = '299949a03876fb561010afb6e1d83097db0ca593'
 STATUS = 'DIAGNOSTIC_NOT_ACCEPTED'
 MAPPING = 'resident_m128_nc3'

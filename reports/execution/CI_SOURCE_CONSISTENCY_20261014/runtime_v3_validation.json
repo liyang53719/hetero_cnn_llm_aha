@@ -1,0 +1,573 @@
+{
+  "original_attempts": [
+    {
+      "index": 0,
+      "command": "python -m py_compile scripts/qwen2_carried_qlinear_rms_diagnostic.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.215,
+      "log": "logs-v3/workflow-00.log"
+    },
+    {
+      "index": 1,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_dense_residency_numeric.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 15.478,
+      "log": "logs-v3/workflow-01.log"
+    },
+    {
+      "index": 2,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_transposed_dense.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 5.481,
+      "log": "logs-v3/workflow-02.log"
+    },
+    {
+      "index": 3,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_fullgraph_dataflow.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 5.278,
+      "log": "logs-v3/workflow-03.log"
+    },
+    {
+      "index": 4,
+      "command": "python candidates/qwen2_transposed_dense/fullgraph_dataflow.py summary --out work/qwen2_model_contract/fullgraph_dataflow",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.766,
+      "log": "logs-v3/workflow-04.log"
+    },
+    {
+      "index": 5,
+      "command": "python candidates/qwen2_transposed_dense/compare.py --analytic-only --out work/qwen2_model_contract/transposed_analytic",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 1.971,
+      "log": "logs-v3/workflow-05.log"
+    },
+    {
+      "index": 6,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py tests/test_qwen2_rectangular_attention_model.py tests/test_qwen2_carried_prefill_candidate.py tests/test_qwen2_prefill_resource_schedule.py tests/test_qwen2_shared_sfu_schedule.py tests/test_qwen2_rms_rope_policy_diagnostic.py tests/test_qwen2_rms_rope_prefill_candidate.py tests/test_qwen2_rms_backend_evidence.py",
+      "state": "FAIL",
+      "returncode": 1,
+      "seconds": 25.482,
+      "log": "logs-v3/workflow-06.log"
+    },
+    {
+      "index": 7,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-07.log"
+    },
+    {
+      "index": 8,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-08.log"
+    },
+    {
+      "index": 9,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --host-schedule --out work/qwen2_model_contract/m128_host_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-09.log"
+    },
+    {
+      "index": 10,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --host-schedule --out work/qwen2_model_contract/m1024_host_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-10.log"
+    },
+    {
+      "index": 11,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 128 --contexts 1 --out work/qwen2_model_contract/m128_context1_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-11.log"
+    },
+    {
+      "index": 12,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 128 --contexts 5 --out work/qwen2_model_contract/m128_context5_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-12.log"
+    },
+    {
+      "index": 13,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 1024 --contexts 1 --out work/qwen2_model_contract/m1024_context1_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-13.log"
+    },
+    {
+      "index": 14,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 1024 --contexts 5 --out work/qwen2_model_contract/m1024_context5_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-14.log"
+    },
+    {
+      "index": 15,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --out work/qwen2_model_contract/m128_resource_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.616,
+      "log": "logs-v3/workflow-15.log"
+    },
+    {
+      "index": 16,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 1024 --out work/qwen2_model_contract/m1024_resource_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 6.993,
+      "log": "logs-v3/workflow-16.log"
+    },
+    {
+      "index": 17,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --synthetic-profile --out work/qwen2_model_contract/m128_resource_synthetic.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.817,
+      "log": "logs-v3/workflow-17.log"
+    },
+    {
+      "index": 18,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --out work/qwen2_model_contract/sfu_context2_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.367,
+      "log": "logs-v3/workflow-18.log"
+    },
+    {
+      "index": 19,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 1 --divider-latency 12 --divider-ii 13 --out work/qwen2_model_contract/sfu_context1_synthetic.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.368,
+      "log": "logs-v3/workflow-19.log"
+    },
+    {
+      "index": 20,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --divider-latency 12 --divider-ii 13 --out work/qwen2_model_contract/sfu_context2_synthetic.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.366,
+      "log": "logs-v3/workflow-20.log"
+    },
+    {
+      "index": 21,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 1 --source-divider-timing --out work/qwen2_model_contract/sfu_context1_source_timing.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.415,
+      "log": "logs-v3/workflow-21.log"
+    },
+    {
+      "index": 22,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --out work/qwen2_model_contract/sfu_context2_source_timing.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.366,
+      "log": "logs-v3/workflow-22.log"
+    },
+    {
+      "index": 23,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --out work/qwen2_model_contract/sfu_source_timing_binding.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-23.log"
+    },
+    {
+      "index": 24,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --source-divider-options 16 --out work/qwen2_model_contract/sfu_context2_d14_candidate.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-24.log"
+    },
+    {
+      "index": 25,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --source-divider-options 16 --out work/qwen2_model_contract/sfu_d14_candidate_binding.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-25.log"
+    },
+    {
+      "index": 26,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --observed-silu-host-bound --out work/qwen2_model_contract/m128_observed_silu_host_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-26.log"
+    },
+    {
+      "index": 27,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --contexts 5 --dense-mapping resident_m128_nc3 --out work/qwen2_model_contract/m128_resident_nc3_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.967,
+      "log": "logs-v3/workflow-27.log"
+    },
+    {
+      "index": 28,
+      "command": "python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen2_model_contract/attention-library",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 1.118,
+      "log": "logs-v3/workflow-28.log"
+    },
+    {
+      "index": 29,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" QWEN2_ATTENTION_OBSERVATION_OUT=\"$PWD/work/qwen2_model_contract/attention-observation\" python -m unittest discover -s tests -p test_qwen2_attention_observation.py -v",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 6.632,
+      "log": "logs-v3/workflow-29.log"
+    },
+    {
+      "index": 30,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" QWEN2_PUBLIC_ATTENTION_OBSERVATION_OUT=\"$PWD/work/qwen2_model_contract/public-attention-observation\" python -m unittest discover -s tests -p test_qwen2_public_attention_observation.py -v",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 2.725,
+      "log": "logs-v3/workflow-30.log"
+    },
+    {
+      "index": 31,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" python -m unittest candidates.qwen2_resident_matrix.official_bf16.test_owners candidates.qwen2_resident_matrix.official_bf16.test_dense_silu candidates.qwen2_resident_matrix.official_bf16.test_execution candidates.qwen2_resident_matrix.official_bf16.test_observation candidates.qwen2_resident_matrix.official_bf16.test_observation_monitoring candidates.qwen2_resident_matrix.official_bf16.test_numeric_guards candidates.qwen2_resident_matrix.official_bf16.test_reference_layout -v 2>&1 | tee work/qwen2_model_contract/official-bf16-tests.log",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 19.67,
+      "log": "logs-v3/workflow-31.log"
+    },
+    {
+      "index": 32,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" python candidates/qwen2_resident_matrix/dense_block_reduce/run_tests.py --out work/qwen2_model_contract/dense-block-reduce-tests",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 60.983,
+      "log": "logs-v3/workflow-32.log"
+    },
+    {
+      "index": 33,
+      "command": "python scripts/check_git_payloads.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.315,
+      "log": "logs-v3/workflow-33.log"
+    }
+  ],
+  "final_command_results": [
+    {
+      "index": 0,
+      "command": "python -m py_compile scripts/qwen2_carried_qlinear_rms_diagnostic.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.215,
+      "log": "logs-v3/workflow-00.log"
+    },
+    {
+      "index": 1,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_dense_residency_numeric.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 15.478,
+      "log": "logs-v3/workflow-01.log"
+    },
+    {
+      "index": 2,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_transposed_dense.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 5.481,
+      "log": "logs-v3/workflow-02.log"
+    },
+    {
+      "index": 3,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_fullgraph_dataflow.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 5.278,
+      "log": "logs-v3/workflow-03.log"
+    },
+    {
+      "index": 4,
+      "command": "python candidates/qwen2_transposed_dense/fullgraph_dataflow.py summary --out work/qwen2_model_contract/fullgraph_dataflow",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.766,
+      "log": "logs-v3/workflow-04.log"
+    },
+    {
+      "index": 5,
+      "command": "python candidates/qwen2_transposed_dense/compare.py --analytic-only --out work/qwen2_model_contract/transposed_analytic",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 1.971,
+      "log": "logs-v3/workflow-05.log"
+    },
+    {
+      "index": 6,
+      "command": "python -m pytest -o addopts='' -q tests/test_qwen2_layer0_payload.py tests/test_qwen2_layer0_model_gate.py tests/test_qwen2_block_recipe_model.py tests/test_qwen2_prefill_traffic_bound.py tests/test_qwen2_bf16_materialization_candidate.py tests/test_qwen2_rectangular_attention_model.py tests/test_qwen2_carried_prefill_candidate.py tests/test_qwen2_prefill_resource_schedule.py tests/test_qwen2_shared_sfu_schedule.py tests/test_qwen2_rms_rope_policy_diagnostic.py tests/test_qwen2_rms_rope_prefill_candidate.py tests/test_qwen2_rms_backend_evidence.py",
+      "state": "PASS_WITH_TWO_NOT_EXECUTED",
+      "returncode": 0,
+      "seconds": 25.482,
+      "log": "logs-v3/workflow-06-resource-recheck.log",
+      "original_failed_attempt": "logs-v3/workflow-06.log"
+    },
+    {
+      "index": 7,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --out work/qwen2_model_contract/m128_bf16_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-07.log"
+    },
+    {
+      "index": 8,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --out work/qwen2_model_contract/m1024_bf16_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-08.log"
+    },
+    {
+      "index": 9,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 128 --host-schedule --out work/qwen2_model_contract/m128_host_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-09.log"
+    },
+    {
+      "index": 10,
+      "command": "python scripts/qwen2_prefill_traffic_bound.py --tokens 1024 --host-schedule --out work/qwen2_model_contract/m1024_host_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.165,
+      "log": "logs-v3/workflow-10.log"
+    },
+    {
+      "index": 11,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 128 --contexts 1 --out work/qwen2_model_contract/m128_context1_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-11.log"
+    },
+    {
+      "index": 12,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 128 --contexts 5 --out work/qwen2_model_contract/m128_context5_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-12.log"
+    },
+    {
+      "index": 13,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 1024 --contexts 1 --out work/qwen2_model_contract/m1024_context1_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-13.log"
+    },
+    {
+      "index": 14,
+      "command": "python scripts/qwen2_rectangular_attention_model.py --tokens 1024 --contexts 5 --out work/qwen2_model_contract/m1024_context5_schedule.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.164,
+      "log": "logs-v3/workflow-14.log"
+    },
+    {
+      "index": 15,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --out work/qwen2_model_contract/m128_resource_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.616,
+      "log": "logs-v3/workflow-15.log"
+    },
+    {
+      "index": 16,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 1024 --out work/qwen2_model_contract/m1024_resource_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 6.993,
+      "log": "logs-v3/workflow-16.log"
+    },
+    {
+      "index": 17,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --synthetic-profile --out work/qwen2_model_contract/m128_resource_synthetic.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.817,
+      "log": "logs-v3/workflow-17.log"
+    },
+    {
+      "index": 18,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --out work/qwen2_model_contract/sfu_context2_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.367,
+      "log": "logs-v3/workflow-18.log"
+    },
+    {
+      "index": 19,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 1 --divider-latency 12 --divider-ii 13 --out work/qwen2_model_contract/sfu_context1_synthetic.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.368,
+      "log": "logs-v3/workflow-19.log"
+    },
+    {
+      "index": 20,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --divider-latency 12 --divider-ii 13 --out work/qwen2_model_contract/sfu_context2_synthetic.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.366,
+      "log": "logs-v3/workflow-20.log"
+    },
+    {
+      "index": 21,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 1 --source-divider-timing --out work/qwen2_model_contract/sfu_context1_source_timing.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.415,
+      "log": "logs-v3/workflow-21.log"
+    },
+    {
+      "index": 22,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --out work/qwen2_model_contract/sfu_context2_source_timing.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.366,
+      "log": "logs-v3/workflow-22.log"
+    },
+    {
+      "index": 23,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --out work/qwen2_model_contract/sfu_source_timing_binding.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-23.log"
+    },
+    {
+      "index": 24,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --contexts 2 --source-divider-timing --source-divider-options 16 --out work/qwen2_model_contract/sfu_context2_d14_candidate.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-24.log"
+    },
+    {
+      "index": 25,
+      "command": "python scripts/qwen2_shared_sfu_schedule.py --source-timing-audit --source-divider-options 16 --out work/qwen2_model_contract/sfu_d14_candidate_binding.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-25.log"
+    },
+    {
+      "index": 26,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --observed-silu-host-bound --out work/qwen2_model_contract/m128_observed_silu_host_bound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.365,
+      "log": "logs-v3/workflow-26.log"
+    },
+    {
+      "index": 27,
+      "command": "python scripts/qwen2_prefill_resource_schedule.py --tokens 128 --contexts 5 --dense-mapping resident_m128_nc3 --out work/qwen2_model_contract/m128_resident_nc3_unbound.json",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.967,
+      "log": "logs-v3/workflow-27.log"
+    },
+    {
+      "index": 28,
+      "command": "python scripts/build_shared_matrix_recipe.py --repo . --out work/qwen2_model_contract/attention-library",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 1.118,
+      "log": "logs-v3/workflow-28.log"
+    },
+    {
+      "index": 29,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" QWEN2_ATTENTION_OBSERVATION_OUT=\"$PWD/work/qwen2_model_contract/attention-observation\" python -m unittest discover -s tests -p test_qwen2_attention_observation.py -v",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 6.632,
+      "log": "logs-v3/workflow-29-final.log"
+    },
+    {
+      "index": 30,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" QWEN2_PUBLIC_ATTENTION_OBSERVATION_OUT=\"$PWD/work/qwen2_model_contract/public-attention-observation\" python -m unittest discover -s tests -p test_qwen2_public_attention_observation.py -v",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 2.725,
+      "log": "logs-v3/workflow-30-final.log"
+    },
+    {
+      "index": 31,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" python -m unittest candidates.qwen2_resident_matrix.official_bf16.test_owners candidates.qwen2_resident_matrix.official_bf16.test_dense_silu candidates.qwen2_resident_matrix.official_bf16.test_execution candidates.qwen2_resident_matrix.official_bf16.test_observation candidates.qwen2_resident_matrix.official_bf16.test_observation_monitoring candidates.qwen2_resident_matrix.official_bf16.test_numeric_guards candidates.qwen2_resident_matrix.official_bf16.test_reference_layout -v 2>&1 | tee work/qwen2_model_contract/official-bf16-tests.log",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 19.67,
+      "log": "logs-v3/workflow-31-final.log"
+    },
+    {
+      "index": 32,
+      "command": "MATRIX_SERVICE_LIBRARY=\"$PWD/work/qwen2_model_contract/attention-library/matrix_silu_numeric.so\" MATRIX_SERVICE_COMPILE_RECEIPT=\"$PWD/work/qwen2_model_contract/attention-library/compile.json\" python candidates/qwen2_resident_matrix/dense_block_reduce/run_tests.py --out work/qwen2_model_contract/dense-block-reduce-tests",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 60.983,
+      "log": "logs-v3/workflow-32.log"
+    },
+    {
+      "index": 33,
+      "command": "python scripts/check_git_payloads.py",
+      "state": "PASS",
+      "returncode": 0,
+      "seconds": 0.315,
+      "log": "logs-v3/workflow-33.log"
+    }
+  ],
+  "not_executed": [
+    {
+      "test": "test_complete_frozen_official_layer_observation_and_independent_carried_cache[bf16]",
+      "reason": "Transformers4.40.1 unavailable"
+    },
+    {
+      "test": "test_complete_frozen_official_layer_observation_and_independent_carried_cache[fp32]",
+      "reason": "Transformers4.40.1 unavailable"
+    }
+  ],
+  "summary": {
+    "successful_final_command_executions": 34,
+    "hosted_github_ci_executed": false,
+    "rtl_or_native_weight_execution": false,
+    "prefix_tests_pass": 107,
+    "main_tests_pass": 254,
+    "main_tests_not_executed": 2,
+    "attention_observation_pass": 20,
+    "public_observation_pass": 5,
+    "official_bf16_pass": 71,
+    "dense_block_reduce_pass": 118
+  }
+}

@@ -25,13 +25,16 @@ import struct
 
 
 ROOT = Path(__file__).resolve().parents[3]
+# V3 active runtime guard: reviewed f16 default-disabled borrower/loan path.
+# Physical Matrix, arithmetic, and modeled protocol are unchanged.
+# Historical source_pins/receipts remain frozen; no old result is inherited.
 SOURCE_HASHES = {
     'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp':
         'bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1',
     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala':
         'dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d',
     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala':
-        '1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43',
+        '9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4',
     'rtl/integration/qwen2_matrix_command_endpoint.sv':
         '057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a',
     'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv':
@@ -52,11 +55,18 @@ def require(condition, message):
         raise MatrixProtocolError(message)
 
 
-def source_identity(root=ROOT):
+def source_identity(root=ROOT, *, enable_h2048_rms_borrower=False,
+                    external_elementwise_loan=False):
+    if enable_h2048_rms_borrower is not False or external_elementwise_loan is not False:
+        raise ValueError('source review requires the original default-disabled borrower/loan profile')
     for name, digest in SOURCE_HASHES.items():
         require(hashlib.sha256((Path(root) / name).read_bytes()).hexdigest() == digest,
                 'Matrix source changed: ' + name)
-    return dict(source_sha256=dict(SOURCE_HASHES), hardware_simulation=False,
+    return dict(source_sha256=dict(SOURCE_HASHES),
+                source_version='qwen2-matrix-source-guard-v3',
+                source_base_commit='f16df50adfb0f1f4bc668c517a2e29accffe6753',
+                source_commit=None, historical_results_inherited=False,
+                borrower_enabled=False, elementwise_loan_enabled=False, hardware_simulation=False,
                 model_ticks_are_hardware_cycles=False, accumulator_banks=5,
                 accumulator_rows=16, accumulator_columns=256)
 

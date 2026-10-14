@@ -375,3 +375,54 @@ def test_resident_prefix_lifetime_missing_store_ack_and_wrong_k_are_rejected():
         before=next(i for i,e in enumerate(bad) if e.get('label')=='resident_Dense_increasing_K_prefix')
         bad[before:before]=moved
         with pytest.raises(m.ReservationError,match='before .*captured context'):run(bad)
+
+
+def test_saved_v0_review_keeps_historical_and_current_identities_separate():
+    r = m.observed_silu_host_bound(ROOT)
+    review = r['evidence']['source_review']
+    assert review['commit'] == 'f16df50adfb0f1f4bc668c517a2e29accffe6753'
+    assert not review['h2048_borrower_included']
+    for path, pair in m.V0_HOST_SOURCE_REVIEW.items():
+        assert review['historical_hardware_sha256'][path] == pair['historical_sha256']
+        assert review['current_hardware_sha256'][path] == pair['current_sha256']
+        assert r['source_sha256'][path] == pair['current_sha256']
+        assert pair['historical_sha256'] != pair['current_sha256']
+    raw = (ROOT/m.V0_SILU_AUDIT).read_bytes()
+    assert m.hashlib.sha256(raw).hexdigest() == m.V0_SILU_AUDIT_SHA256
+
+
+@pytest.mark.parametrize('name', ['Qwen2Block.scala', 'QwenOwnerProtocol.scala'])
+def test_saved_v0_review_rejects_other_old_or_current_sources(tmp_path, name):
+    path = m.ATT.BASE+name
+    pair = m.V0_HOST_SOURCE_REVIEW[path]
+    target = tmp_path/path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes((ROOT/path).read_bytes())
+    assert m._current_v0_hardware_pins(tmp_path, {path: pair['historical_sha256']}) == {
+        path: pair['current_sha256']}
+    with pytest.raises(ValueError, match='reviewed historical source changed'):
+        m._current_v0_hardware_pins(tmp_path, {path: '0'*64})
+    target.write_text('// changed current default or control\n')
+    with pytest.raises(ValueError, match='hardware source changed'):
+        m._current_v0_hardware_pins(tmp_path, {path: pair['historical_sha256']})
+
+
+def test_saved_v0_review_does_not_relax_unreviewed_source_pins(tmp_path):
+    path = m.ATT.BASE+'VectorSilu.scala'
+    target = tmp_path/path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes((ROOT/path).read_bytes())
+    expected = m.SFU.SOURCE_PINS[path]
+    assert m._current_v0_hardware_pins(tmp_path, {path: expected}) == {path: expected}
+    target.write_text('// altered SiLU arithmetic\n')
+    with pytest.raises(ValueError, match='hardware source changed'):
+        m._current_v0_hardware_pins(tmp_path, {path: expected})
+
+
+@pytest.mark.parametrize('kwargs', [
+    {'enable_h2048_rms_borrower': True}, {'external_elementwise_loan': True},
+    {'enable_h2048_rms_borrower': 0}, {'external_elementwise_loan': None},
+])
+def test_saved_v0_review_rejects_nondefault_or_malformed_profile(kwargs):
+    with pytest.raises(ValueError, match='default-disabled borrower/loan profile'):
+        m.observed_silu_host_bound(ROOT, **kwargs)

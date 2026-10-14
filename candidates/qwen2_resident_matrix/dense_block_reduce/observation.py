@@ -31,9 +31,9 @@ ADAPTER = 'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py'
 BINDING = 'candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py'
 PROFILE = 'candidates/qwen2_resident_matrix/dense_block_reduce/profile.py'
 EXTRA_SOURCES = (ADAPTER, BINDING, PROFILE)
-SOURCE_VERSION = 'qwen2-profiled-attention-observation-v2'
-CAPTURE_SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v2'
-CAPTURE_SHA256 = 'c34907c33daac71c058e328db436faa88b88a6214b11a15625c6ba6c5a429273'
+SOURCE_VERSION = 'qwen2-profiled-attention-observation-v3'
+CAPTURE_SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v3'
+CAPTURE_SHA256 = 'bd671f58c73d4a2ab808968c40589f395dc17d25a00b0aa71eb236f5419fb744'
 MONITORING_SHA256 = '3c27ce71bd93937707c909ccd7507baff6a401c49b50e6a9753ab224a9d2a3c5'
 
 

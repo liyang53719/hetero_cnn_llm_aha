@@ -1,0 +1,72 @@
+[
+  {
+    "path": "candidates/qwen2_resident_matrix/dense_block_reduce/observation.py",
+    "before_sha256": "bba49c6c98e2a7c2f547fce501e79f455d910216de65d6ae0b5243d27fe078fd",
+    "after_sha256": "90c129e9bf57a234927822439705090d68be2c23b86fd8db61a1ba3a6bafeede"
+  },
+  {
+    "path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "before_sha256": "286a6855fae91e7a89520259df4c3e435f9704ac0214450094026825cf64c1b4",
+    "after_sha256": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27"
+  },
+  {
+    "path": "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py",
+    "before_sha256": "3a57df5e1ea438663dcd9fb490366317356662994c77cb567d62b94876854369",
+    "after_sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+  },
+  {
+    "path": "candidates/qwen2_resident_matrix/official_bf16/observation.py",
+    "before_sha256": "c34907c33daac71c058e328db436faa88b88a6214b11a15625c6ba6c5a429273",
+    "after_sha256": "bd671f58c73d4a2ab808968c40589f395dc17d25a00b0aa71eb236f5419fb744"
+  },
+  {
+    "path": "candidates/qwen2_resident_matrix/official_bf16/test_observation.py",
+    "before_sha256": "e4859d438dcf6d68eeca6d56b14ee339d25ddb0c660bb1b3019c750b602c79f4",
+    "after_sha256": "06ef2b83bfde890b7ad325b1b270daa41076203c81fb584c00ae03edbec72e9e"
+  },
+  {
+    "path": "scripts/observe_qwen2_attention_model.py",
+    "before_sha256": "d3113892044eea7681869b2fc20eb4dfdb8085ae4c24e75c749b8e778ff16bab",
+    "after_sha256": "c061da563c079cd3866c661382df5600980ae11e659909a7f0520ce41878ba9f"
+  },
+  {
+    "path": "scripts/qwen2_dense_residency_numeric.py",
+    "before_sha256": "ed027ecee56b9bb14c13f190ad4e47433df82a11e26d9157f5e22912a078a114",
+    "after_sha256": "f7a199f7dc501257ba93663fbb9d7495509255b2e924df9161ad25e2da352160"
+  },
+  {
+    "path": "scripts/qwen2_prefill_resource_schedule.py",
+    "before_sha256": "47e8f3acd6b7dafe4e6fe731cae20205ab93c6208af12b48eb01373edcaa2175",
+    "after_sha256": "c43d6c4be775c4c02f7c64524a1a6bc11ff6f254f64270bfd02319f4418b949f"
+  },
+  {
+    "path": "scripts/qwen2_prefill_traffic_bound.py",
+    "before_sha256": "3bc67eddf12d5214061c53ace74db996641b49e789b26abbd11ff392f48b0697",
+    "after_sha256": "6b16326c9218039e154b5ed7e979194258d89ff1c6b702309481384d8334b2c1"
+  },
+  {
+    "path": "scripts/qwen2_rectangular_attention_model.py",
+    "before_sha256": "fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8",
+    "after_sha256": "8fdcffce9908d1a273bb5bc2011d62f952b20eb5c83fb2258dc06f0f04208f29"
+  },
+  {
+    "path": "scripts/qwen2_shared_sfu_schedule.py",
+    "before_sha256": "8d8ca983d7d8dceaa10282774c6c881ef25d57a49e74a6ad521d61c72f7198d5",
+    "after_sha256": "724e3a4894a42d40972c215c2984fb12da34baf59140baa173451f1a28335dab"
+  },
+  {
+    "path": "tests/test_qwen2_attention_observation.py",
+    "before_sha256": "1f4d866d10d14cebae7c7377f6fb0c5cf77103189f518df9683ebca86bfc3bc8",
+    "after_sha256": "7a8efb69855818ba0e4f91ea4e1ac5c7a3310e379a32b31917aaa49627883a1b"
+  },
+  {
+    "path": "tests/test_qwen2_prefill_resource_schedule.py",
+    "before_sha256": "10936e4a7506d867ceadfb46be5172e16f539bc11bb80e53bdd58592d14a6a82",
+    "after_sha256": "481a966562b81af9a299539faad5c64ebc8b34f764acf2d9095a179c11e88041"
+  },
+  {
+    "path": "tests/test_qwen2_public_attention_observation.py",
+    "before_sha256": "c285567a8418d90cb76de85dad36a6c4e025c5e7c59be4229ce4b3b918e1d1ea",
+    "after_sha256": "0cc4cef654fd1146d9fdead3c12836869b31258a69f0bb46f0c433dcc94ac2ff"
+  }
+]

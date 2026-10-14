@@ -6,10 +6,10 @@ scheduling decision or public completion/publication edge is changed. Missing
 future-key entries remain missing. Raw PV and BF16 store words are distinct;
 only an accepted successful owner terminal seals the latter as acknowledged.
 
-The caller supplies a frozen source_sha256 mapping containing the exact v2
+The caller supplies a frozen source_sha256 mapping containing the exact v3
 75-source execution inventory and all four observer/helper modules below.
-V2 retains the historical inventory's names and 73 unchanged identities; only
-the helper's two explicit Matrix replacements are admitted. Historical receipts
+V3 retains the historical inventory's names and 70 unchanged identities; only
+the helper's five explicit default-profile replacements are admitted. Historical receipts
 remain unchanged and confer no acceptance on this version. Loaded bytecode is
 also checked. This is software evidence, not native or RTL acceptance.
 """
@@ -28,9 +28,9 @@ from scripts import observe_qwen2_attention_model as base
 
 ROOT = Path(__file__).resolve().parents[3]
 HELPER = 'scripts/observe_qwen2_attention_model.py'
-SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v2'
-HELPER_SOURCE_VERSION = 'qwen2-existing-attention-observation-v2'
-HELPER_SHA256 = 'd3113892044eea7681869b2fc20eb4dfdb8085ae4c24e75c749b8e778ff16bab'
+SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v3'
+HELPER_SOURCE_VERSION = 'qwen2-existing-attention-observation-v3'
+HELPER_SHA256 = 'c061da563c079cd3866c661382df5600980ae11e659909a7f0520ce41878ba9f'
 OWNER = 'candidates/qwen2_resident_matrix/official_bf16/owners.py'
 SERVICE = 'candidates/qwen2_resident_matrix/official_bf16/dense_silu.py'
 OBSERVER = 'candidates/qwen2_resident_matrix/official_bf16/observation.py'
@@ -165,7 +165,7 @@ def _verify_module(module, relative):
 
 
 def verify_source_snapshot(source_sha256):
-    """Verify exact v2 execution identities and every caller-frozen extra source."""
+    """Verify exact v3 execution identities and every caller-frozen extra source."""
     require(isinstance(source_sha256, dict), 'frozen source_sha256 mapping required')
     require(base.sha((ROOT / HELPER).read_bytes()) == HELPER_SHA256,
             'read-only observer helper source drift')
@@ -174,7 +174,7 @@ def verify_source_snapshot(source_sha256):
     execution = base.verify_execution_sources()
     require(len(execution) == 75 and
             all(source_sha256.get(name) == digest for name, digest in execution.items()),
-            'snapshot must retain the exact v2 75-source execution inventory')
+            'snapshot must retain the exact v3 75-source execution inventory')
     require(all(name in source_sha256 for name in REQUIRED_SOURCES),
             'snapshot must include all official-BF16 observer dependencies')
     for relative, digest in source_sha256.items():
@@ -374,6 +374,8 @@ class OfficialAttentionObservation(base.AttentionObservation):
             source_sha256=self.sources, execution_source_sha256=self.execution_sources,
             helper_source_sha256={HELPER: HELPER_SHA256}, instrumentation_sha256=self.instrumentation_sha256,
             helper_source_version=HELPER_SOURCE_VERSION, prior_observation_results_inherited=False,
+            execution_source_commit=base.SOURCE_COMMIT, execution_source_base_commit=base.SOURCE_BASE_COMMIT,
+            execution_source_profile='original Qwen2; borrower=false; elementwise loan=false',
             historical_fullgraph=dict(commit=base.RECEIPT_COMMIT, path=base.RECEIPT,
                 sha256=base.RECEIPT_SHA, results_inherited=False),
             python=sys.version, loaded_python_functions_checked=self.loaded_functions_checked,

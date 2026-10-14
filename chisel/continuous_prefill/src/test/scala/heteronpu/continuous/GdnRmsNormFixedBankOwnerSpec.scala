@@ -4,6 +4,7 @@ package heteronpu.continuous
 import chisel3._
 import chisel3.util._
 import chiseltest._
+import chiseltest.experimental.expose
 import chiseltest.simulator.VerilatorBackendAnnotation
 import heteronpu.p0.LocalSramConfig
 import org.scalatest.flatspec.AnyFlatSpec
@@ -11,7 +12,8 @@ import org.scalatest.matchers.should.Matchers
 
 /** Both arithmetic services are production RTL. The test can delay handshakes,
   * but cannot supply a Scalar or register-loan arithmetic result. */
-class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false) extends Module {
+class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false,
+                                           val useVectorEpilogue: Boolean = true) extends Module {
   val io = IO(new Bundle {
     val job = Flipped(Decoupled(new GdnRmsNormJob))
     val done = Decoupled(new GdnRmsNormResult)
@@ -48,11 +50,60 @@ class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false) exte
     val loanResultAccepted = Output(Bool())
     val loanBusy = Output(Bool())
     val loanResetRequired = Output(Bool())
+    // Test-only combinational observations of the ORIGINAL service instances.
+    // No new production register or replacement arithmetic is introduced.
+    val elemAluExecute = Output(Bool())
+    val elemAluMul = Output(Bool())
+    val elemAluAttemptMask = Output(UInt(16.W))
+    val elemAluEffectiveMask = Output(UInt(16.W))
+    val elemLoanReply = Output(Bool())
+    val elemDdrActive = Output(Bool())
+    val scalarAluExecute = Output(Bool())
+    val scalarDividerPending = Output(Bool())
   })
-  val owner = Module(new GdnRmsNormFixedBankOwner())
+  val owner = Module(new GdnRmsNormFixedBankOwner(useVectorEpilogue = useVectorEpilogue))
   val arithmetic = Wire(new GdnScalarClient)
   val loanService = Wire(Flipped(new ElementwiseLoanPort))
   val vectorUnavailable = Wire(Bool())
+  def observeOriginalScalar(s: BlockScalarFloat): Unit = {
+    val scalarStateTap = expose(s.state)
+    io.scalarAluExecute := scalarStateTap === s.normal.litValue.U
+    io.scalarDividerPending := scalarStateTap === s.divWait.litValue.U
+  }
+  def observeOriginalElementwise(e: ElementwiseRegisterLoan): Unit = {
+    // Expose existing signals first; decode in this test harness rather than
+    // constructing an expression with illegal cross-module signal references.
+    val loanStateTap = expose(e.loanState)
+    val ddrStateTap = expose(e.state)
+    val opTap = expose(e.job.op)
+    val tileTap = expose(e.tile)
+    val calcIndexTap = expose(e.calcIndex)
+    val ieeeBadTap = expose(e.ieeeBad)
+    val strictBadTap = expose(e.strictBad)
+    val addressErrorTap = expose(e.f.address_error_o)
+    val abortTap = expose(e.loan.abort)
+    val resetLoanTap = expose(e.loan.resetLoan)
+    val primitive = loanStateTap === e.lPrimitive.litValue.U
+    val ieee = loanStateTap === e.lIeee.litValue.U
+    val normalize = loanStateTap === e.lNormalize.litValue.U
+    val gamma = loanStateTap === e.lGamma.litValue.U
+    val weighted = loanStateTap === e.lWeighted.litValue.U
+    val loanExecute = primitive || ieee || normalize || gamma || weighted
+    val ddrExecute = ddrStateTap === e.calculate.litValue.U && opTap =/= ElemOp.Copy.U
+    val activeMask = VecInit((0 until 16).map(i => calcIndexTap + i.U < tileTap)).asUInt
+    // Logical stage validity after numerical/cancel qualification. This is
+    // NOT a physical register write-enable: e.g. lGamma can still update b
+    // on an abort edge while loanFail replaces value/status/state.
+    val loanEffective = loanExecute && !abortTap && !resetLoanTap &&
+      !Mux(primitive || gamma, strictBadTap, ieeeBadTap)
+    val ddrEffective = ddrExecute && !strictBadTap && !addressErrorTap.orR
+    io.elemAluExecute := loanExecute || ddrExecute
+    io.elemAluMul := opTap === ElemOp.Mul.U
+    io.elemAluAttemptMask := Mux(loanExecute || ddrExecute, activeMask, 0.U)
+    io.elemAluEffectiveMask := Mux(loanEffective || ddrEffective, activeMask, 0.U)
+    io.elemLoanReply := loanStateTap === e.lReply.litValue.U
+    io.elemDdrActive := ddrStateTap =/= e.idle.litValue.U
+  }
   if (productionCore) {
     // The original core's exact default elementwise bank configuration is kept.
     // This small legacy shape bounds unrelated core logic; no full-block claim.
@@ -67,6 +118,8 @@ class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false) exte
     core.io.scalarService.get <> arithmetic
     core.io.elementwiseLoan.get <> loanService
     vectorUnavailable := core.io.elementwiseResetRequired.get
+    observeOriginalScalar(core.scalar)
+    observeOriginalElementwise(core.lender.get)
     assert(!core.io.memory.valid && !core.io.response.ready && !core.io.result.valid,
       "RMS borrower must not activate the legacy core DDR path")
     when(loanService.request.valid || loanService.busy || loanService.result.valid ||
@@ -81,6 +134,8 @@ class GdnRmsNormFixedBankArithmeticHarness(productionCore: Boolean = false) exte
       ChainConfig(tileElements = 32), LocalSramConfig(rowsPerBank = 2, addressBits = 3)))
     lender.loan <> loanService
     vectorUnavailable := lender.io.resetRequired
+    observeOriginalScalar(scalar)
+    observeOriginalElementwise(lender)
     lender.io.job.valid := false.B
     lender.io.job.bits := 0.U.asTypeOf(lender.io.job.bits)
     lender.io.done.ready := false.B; lender.io.memory.ready := false.B
@@ -164,7 +219,7 @@ object GdnRmsNormFixedBankReference {
   case class LoanStep(a: BigInt, b: BigInt, inverse: BigInt, result: BigInt)
   case class Recipe(output: Seq[Int], scalar: Seq[ScalarStep], loan: Seq[LoanStep])
 
-  def apply(hidden: Seq[Int], weight: Seq[Int]): Recipe = {
+  def apply(hidden: Seq[Int], weight: Seq[Int], useVectorEpilogue: Boolean = true): Recipe = {
     require(hidden.size == Width && weight.size == Width, "this fixture is M1/H2048")
     val scalar = scala.collection.mutable.ArrayBuffer.empty[ScalarStep]
     def record(op: Int, a: Float, b: Float, result: Float): Float = {
@@ -194,19 +249,27 @@ object GdnRmsNormFixedBankReference {
     val variance = add(mean, 1e-6f)
     val root = record(ScalarOp.Sqrt, variance, 0f, java.lang.StrictMath.sqrt(variance.toDouble).toFloat)
     val inverse = record(ScalarOp.Div, 1f, root, (1f / root).toFloat)
-    // The following three FP32 operations per element execute in the real loan.
+    // Same three rounding boundaries in either service. Scalar epilogue
+    // records the actual lane-major normalize/gamma/weighted request order.
     val weighted = hidden.zip(weight).map { case (x, w) =>
-      val normalized = (fp(x) * inverse).toFloat
-      val gamma = (1f + fp(w)).toFloat
-      (normalized * gamma).toFloat
+      if (useVectorEpilogue) {
+        val normalized = (fp(x) * inverse).toFloat
+        val gamma = (1f + fp(w)).toFloat
+        (normalized * gamma).toFloat
+      } else {
+        val normalized = mul(fp(x), inverse)
+        val gamma = add(1f, fp(w))
+        mul(normalized, gamma)
+      }
     }
     val loan = (0 until Width by 16).map { first =>
       LoanStep(pack(hidden.slice(first, first + 16).map(x => bits(fp(x))), 32),
         pack(weight.slice(first, first + 16).map(x => bits(fp(x))), 32), bits(inverse),
         pack(weighted.slice(first, first + 16).map(bits), 32))
     }
-    require(scalar.size == 4268 && loan.size == 128)
-    Recipe(weighted.map(bf).toVector, scalar.toVector, loan.toVector)
+    require(scalar.size == (if (useVectorEpilogue) 4268 else 10412) && loan.size == 128)
+    Recipe(weighted.map(bf).toVector, scalar.toVector,
+      if (useVectorEpilogue) loan.toVector else Vector.empty)
   }
 
   def synthetic: (Seq[Int], Seq[Int]) = {
@@ -223,9 +286,11 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
   case class MemoryBeat(write: Boolean, address: BigInt, data: BigInt, mask: BigInt, tag: BigInt)
   case class RunReport(output: Seq[Int], reads: Int, writes: Int, writeAcks: Int,
                        scalarRequests: Int, scalarResults: Int, loans: Int, loanResults: Int,
-                       cycles: BigInt)
+                       cycles: BigInt, launchToDoneFireCycles: Long = -1L, sampledCycles: Long = -1L,
+                       phaseCycles: Map[String, Long] = Map.empty,
+                       arithmeticCycles: Map[String, Long] = Map.empty)
   def init(d: GdnRmsNormFixedBankArithmeticHarness): Unit = {
-    d.clock.setTimeout(5000000)
+    d.clock.setTimeout(if (d.useVectorEpilogue) 5000000 else 32001000)
     d.io.job.valid.poke(false.B); d.io.done.ready.poke(false.B)
     d.io.memory.ready.poke(false.B); d.io.response.valid.poke(false.B)
     d.io.response.bits.data.poke(0.U); d.io.response.bits.tag.poke(0.U); d.io.response.bits.error.poke(false.B)
@@ -254,11 +319,14 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
   /** Fault modes operate on actual accepted DDR requests. An abort never
     * fabricates an ACK or erases the responder's pending accepted request. */
   def run(d: GdnRmsNormFixedBankArithmeticHarness, hidden: Seq[Int], weight: Seq[Int],
-          label: String, fault: String = "none"): RunReport = {
+          label: String, fault: String = "none", extraFirstLoanHold: Int = 0): RunReport = {
+    require(extraFirstLoanHold >= 0 && (d.useVectorEpilogue || extraFirstLoanHold == 0))
     require(Set("none", "read", "write", "abort-write", "wrong-tag-read", "wrong-tag-loan").contains(fault))
+    require(d.useVectorEpilogue || fault != "wrong-tag-loan", "Scalar ablation has no loan to corrupt")
     require(hidden.nonEmpty && hidden.size % Width == 0 && hidden.size / Width <= 128)
     val tokens = hidden.size / Width
-    val rows = hidden.grouped(Width).map(row => GdnRmsNormFixedBankReference(row, weight)).toVector
+    val rows = hidden.grouped(Width).map(row =>
+      GdnRmsNormFixedBankReference(row, weight, d.useVectorEpilogue)).toVector
     val recipe = Recipe(rows.flatMap(_.output), rows.flatMap(_.scalar), rows.flatMap(_.loan))
     require(recipe.scalar.isInstanceOf[scala.collection.IndexedSeq[_]] &&
       recipe.loan.isInstanceOf[scala.collection.IndexedSeq[_]], "large replay traces require indexed lookup")
@@ -278,6 +346,10 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
         }
     }
     var elapsed = 0
+    var launchEdge = Option.empty[Int]
+    var doneFireEdge = Option.empty[Int]
+    val phaseCycles = scala.collection.mutable.Map.empty[String, Long].withDefaultValue(0L)
+    val arithmeticCycles = scala.collection.mutable.Map.empty[String, Long].withDefaultValue(0L)
     var issued = 0; var reads = 0; var writes = 0; var writeAcks = 0
     var scalarRequests = 0; var scalarResults = 0; var loans = 0; var loanResults = 0
     var pendingMemory = Option.empty[MemoryBeat]
@@ -303,7 +375,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       assert(elapsed < tokens * 250000, s"$label timed out")
       d.io.scalarHold.poke((elapsed % 23 < 5 || (scalarRequests == 0 && scalarStalls < 3)).B)
       d.io.loanRequestHold.poke((elapsed % 17 < 4 || (loans == 0 && loanRequestStalls < 3)).B)
-      d.io.loanResultHold.poke((elapsed % 19 < 6 || (loanResults == 0 && loanResultStalls < 3)).B)
+      d.io.loanResultHold.poke((elapsed % 19 < 6 || (loanResults == 0 && loanResultStalls < 3 + extraFirstLoanHold)).B)
       d.io.loanInjectStrayTag.poke(false.B)
       if (fault == "wrong-tag-loan" && !injected && bool(d.io.loanResultValid)) {
         assert(pendingLoan.nonEmpty, "stray injection requires an actual held production terminal")
@@ -316,6 +388,86 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
         d.io.job.ready.expect(false.B); d.io.loanBusy.expect(true.B)
         assert(pendingLoan.nonEmpty, "stray loan terminal discharged matching-result debt")
         strayLoanHoldCycles -= 1
+      }
+      // Pure host observation: sample BEFORE pending-debt bookkeeping changes.
+      // Every sampled edge from job.fire through done.fire has exactly one bin.
+      val launchFire = bool(d.io.job.valid) && bool(d.io.job.ready)
+      if (launchFire) { assert(launchEdge.isEmpty); launchEdge = Some(elapsed) }
+      if (launchEdge.nonEmpty && doneFireEdge.isEmpty) {
+        val scalarPerToken = if (d.useVectorEpilogue) 4268 else 10412
+        def scalarPhase(index: Int): String =
+          if (index % scalarPerToken < 4268) "reduction" else "epilogue"
+        def memoryPhase(index: Int): String = if (index % 256 < 64) "reduction" else "epilogue"
+        def responsePhase(valid: Boolean, ready: Boolean): String =
+          if (!valid) "response_wait" else if (ready) "response_fire" else "response_held"
+        val category = if (launchFire) "launch_fire"
+          else if (bool(d.io.done.valid)) {
+            if (bool(d.io.done.ready)) "terminal_fire" else "terminal_held"
+          } else if (pendingMemory.nonEmpty) {
+            val request = pendingMemory.get
+            val operation = if (request.write) "write" else "read"
+            val response = if (bool(d.io.response.valid) && bool(d.io.response.ready) &&
+              d.io.response.bits.tag.peek().litValue != request.tag) "stray_response_fire"
+              else responsePhase(bool(d.io.response.valid), bool(d.io.response.ready))
+            s"${memoryPhase(issued - 1)}_ddr_${operation}_$response"
+          } else if (pendingScalar.nonEmpty) {
+            val response = if (bool(d.io.scalarResultValid))
+              responsePhase(valid = true, ready = bool(d.io.scalarResultReady))
+              else if (bool(d.io.scalarAluExecute)) "alu_execute"
+              else if (bool(d.io.scalarDividerPending)) "divider_pending"
+              else "response_wait"
+            s"${scalarPhase(pendingScalar.get)}_scalar_$response"
+          } else if (pendingLoan.nonEmpty) {
+            val response = if (bool(d.io.loanStrayAccepted)) "stray_response_fire"
+              else if (bool(d.io.loanResultValid))
+                responsePhase(valid = true, ready = bool(d.io.loanResultReady))
+              else if (bool(d.io.elemAluExecute)) "alu_execute"
+              else "response_wait"
+            s"epilogue_loan_$response"
+          } else if (bool(d.io.memory.valid)) {
+            val operation = if (bool(d.io.memory.bits.write)) "write" else "read"
+            val offer = if (bool(d.io.memory.ready)) "request_fire" else "request_stalled"
+            s"${memoryPhase(issued)}_ddr_${operation}_$offer"
+          } else if (bool(d.io.scalarRequestValid)) {
+            val offer = if (bool(d.io.scalarRequestReady)) "request_fire" else "request_stalled"
+            s"${scalarPhase(scalarRequests)}_scalar_$offer"
+          } else if (bool(d.io.loanRequestValid)) {
+            val offer = if (bool(d.io.loanRequestReady)) "request_fire" else "request_stalled"
+            s"epilogue_loan_$offer"
+          } else "owner_control_or_drain"
+        // Wall intervals are (launch.fire, done.fire], so launch itself is
+        // observed but not charged. These bins sum the edge-to-edge wall count.
+        if (!launchFire) {
+          phaseCycles(category) += 1L
+          d.io.elemDdrActive.expect(false.B)
+          val elemExecute = bool(d.io.elemAluExecute)
+          val attemptMask = d.io.elemAluAttemptMask.peek().litValue
+          val effectiveMask = d.io.elemAluEffectiveMask.peek().litValue
+          val attemptLanes = attemptMask.bitCount.toLong
+          val effectiveLanes = effectiveMask.bitCount.toLong
+          assert((effectiveMask & ~attemptMask) == 0, "logically effective lanes must be executed lanes")
+          assert(elemExecute == (attemptLanes > 0), "RMS ALU execution/mask mismatch")
+          if (bool(d.io.loanBusy)) arithmeticCycles("elem_service_busy") += 1L
+          if (bool(d.io.elemLoanReply)) arithmeticCycles("elem_reply_resident") += 1L
+          if (bool(d.io.loanResultValid) && !bool(d.io.loanResultReady))
+            arithmeticCycles("elem_result_held") += 1L
+          if (elemExecute) {
+            assert(pendingLoan.nonEmpty, "original core.elem executed without a live RMS loan")
+            arithmeticCycles("elem_alu_execution_busy") += 1L
+            arithmeticCycles("elem_alu_attempt_lane") += attemptLanes
+            arithmeticCycles("elem_alu_effective_lane") += effectiveLanes
+            val operation = if (bool(d.io.elemAluMul)) "mul" else "add"
+            arithmeticCycles(s"elem_${operation}_execution") += 1L
+            arithmeticCycles(s"elem_${operation}_attempt_lane") += attemptLanes
+            arithmeticCycles(s"elem_${operation}_effective_lane") += effectiveLanes
+          }
+          if (bool(d.io.scalarAluExecute)) {
+            assert(pendingScalar.nonEmpty, "original Scalar ALU executed without an accepted request")
+            arithmeticCycles("scalar_alu_execution_busy") += 1L
+          }
+          if (bool(d.io.scalarDividerPending)) arithmeticCycles("scalar_divider_pending") += 1L
+        }
+        if (bool(d.io.done.valid) && bool(d.io.done.ready)) doneFireEdge = Some(elapsed)
       }
       heldScalarRequest.foreach { old =>
         assert(bool(d.io.scalarRequestValid) && scalarRequest == old, "Scalar request changed while stalled")
@@ -340,6 +492,10 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
       heldLoanResult = if (bool(d.io.loanResultValid) && !bool(d.io.loanResultReady)) {
         loanResultStalls += 1; Some(loanResult)
       } else None
+      if (!d.useVectorEpilogue) {
+        d.io.loanRequestValid.expect(false.B); d.io.loanBusy.expect(false.B)
+        d.io.loanResultValid.expect(false.B)
+      }
       val memoryAccept = bool(d.io.memory.valid) && bool(d.io.memory.ready)
       val anyServiceAccept = memoryAccept || bool(d.io.scalarRequestAccepted) || bool(d.io.loanRequestAccepted)
       assert(Seq(memoryAccept, bool(d.io.scalarRequestAccepted), bool(d.io.loanRequestAccepted)).count(x => x) <= 1,
@@ -350,7 +506,7 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
         assert(pendingScalar.isEmpty && scalarRequests < recipe.scalar.size, "Scalar ownership/count")
         val expected = recipe.scalar(scalarRequests)
         assert(scalarRequest == Seq(BigInt(expected.op), expected.a, expected.b),
-          s"$label Scalar request $scalarRequests differs from independent reduction recipe")
+          s"$label Scalar request $scalarRequests differs from independent arithmetic recipe")
         pendingScalar = Some(scalarRequests); scalarRequests += 1
       }
       if (bool(d.io.scalarResultAccepted)) {
@@ -479,10 +635,16 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
     d.io.memory.valid.expect(false.B)
     if (fault == "none") {
       assert(reads == tokens * 192 && writes == tokens * 64 && writeAcks == tokens * 64, "H2048 DDR accounting")
-      assert(scalarRequests == tokens * 4268 && scalarResults == tokens * 4268, "exact Scalar accounting")
-      assert(loans == tokens * 128 && loanResults == tokens * 128, "exact register-loan accounting")
+      val scalarPerToken = if (d.useVectorEpilogue) 4268 else 10412
+      val loansPerToken = if (d.useVectorEpilogue) 128 else 0
+      assert(scalarRequests == tokens * scalarPerToken && scalarResults == tokens * scalarPerToken, "exact Scalar accounting")
+      assert(loans == tokens * loansPerToken && loanResults == tokens * loansPerToken, "exact register-loan accounting")
       assert(committed.toMap == expectedWrites, "all BF16 output beats must be ACKed")
-      assert(scalarStalls > 0 && loanRequestStalls > 0 && loanResultStalls > 0, s"stall controls were not exercised: scalar=$scalarStalls loan_request=$loanRequestStalls loan_result=$loanResultStalls")
+      assert(scalarStalls > 0, "Scalar request stalls were not exercised")
+      if (d.useVectorEpilogue) {
+        assert(loanRequestStalls > 0 && loanResultStalls > 0,
+          s"loan stall controls were not exercised: request=$loanRequestStalls result=$loanResultStalls")
+      }
     } else {
       assert(injected, s"$label fault was not exercised")
       if (fault == "abort-write") assert(writes == 1 && writeAcks == 1, "accepted write must be ACKed after abort")
@@ -505,8 +667,38 @@ trait GdnRmsNormFixedBankTestSupport { self: ChiselScalatestTester with Matchers
     val output = committed.toSeq.sortBy(_._1).flatMap { case (_, beat) =>
       (0 until 32).map(lane => ((beat >> (lane * 16)) & 65535).toInt)
     }
-    println(s"GDN_RMSNORM_FIXED_BANK_RTL label=$label status=$expectedStatus reads=$reads writes=$writes write_acks=$writeAcks scalar_requests=$scalarRequests scalar_results=$scalarResults loans=$loans loan_results=$loanResults cycles=${held(3)} launch_to_done_fire_cycles=${elapsed - 1} sampled_cycles=$elapsed terminal_held_cycles=13 actual_scalar=true actual_loan=true")
-    RunReport(output, reads, writes, writeAcks, scalarRequests, scalarResults, loans, loanResults, held(3))
+    val launchToDoneFireCycles = (doneFireEdge.get - launchEdge.get).toLong
+    val sampledCycles = launchToDoneFireCycles + 1L
+    assert(phaseCycles.values.sum == launchToDoneFireCycles, "phase bins must sum edge-to-edge wall cycles")
+    assert(sampledCycles == elapsed.toLong && launchToDoneFireCycles == (elapsed - 1).toLong,
+      "preserve existing launch-to-done.fire and inclusive timing output")
+    assert(phaseCycles("terminal_fire") == 1L)
+    if (fault == "none") {
+      val measuredOwnerCycles = launchToDoneFireCycles -
+        phaseCycles("terminal_held") - phaseCycles("terminal_fire")
+      assert(BigInt(measuredOwnerCycles) == held(3), "observed active phases must reconcile owner cycles")
+      // Expected counts are CROSS-CHECKS of per-cycle internal taps; none of
+      // these measurements is calculated by multiplying the loan count.
+      val expectedVectorCycles = if (d.useVectorEpilogue) tokens.toLong * 384 else 0L
+      val expectedVectorMulLanes = if (d.useVectorEpilogue) tokens.toLong * 4096 else 0L
+      val expectedVectorAddLanes = if (d.useVectorEpilogue) tokens.toLong * 2048 else 0L
+      assert(arithmeticCycles("elem_alu_execution_busy") == expectedVectorCycles)
+      assert(arithmeticCycles("elem_mul_effective_lane") == expectedVectorMulLanes)
+      assert(arithmeticCycles("elem_add_effective_lane") == expectedVectorAddLanes)
+      assert(arithmeticCycles("elem_alu_attempt_lane") == arithmeticCycles("elem_alu_effective_lane"))
+      assert(arithmeticCycles("elem_service_busy") ==
+        arithmeticCycles("elem_alu_execution_busy") + arithmeticCycles("elem_reply_resident"))
+      val expectedScalarAluCycles = tokens.toLong * (if (d.useVectorEpilogue) 4266 else 10410)
+      assert(arithmeticCycles("scalar_alu_execution_busy") == expectedScalarAluCycles)
+    }
+    println(s"H2048_ARITHMETIC_CYCLES label=$label observation=internal_state_taps " +
+      arithmeticCycles.toSeq.sortBy(_._1).map { case (metric, count) => s"$metric=$count" }.mkString(" "))
+    println(s"H2048_PHASE_CYCLES label=$label wall_cycles=$launchToDoneFireCycles " + phaseCycles.toSeq.sortBy(_._1).map {
+      case (phase, count) => s"$phase=$count"
+    }.mkString(" "))
+    println(s"GDN_RMSNORM_FIXED_BANK_RTL label=$label status=$expectedStatus reads=$reads writes=$writes write_acks=$writeAcks scalar_requests=$scalarRequests scalar_results=$scalarResults loans=$loans loan_results=$loanResults cycles=${held(3)} actual_scalar=true actual_loan=${d.useVectorEpilogue} epilogue=${if (d.useVectorEpilogue) "vector" else "scalar"} borrower_bank_bytes=6144 launch_to_done_fire_cycles=$launchToDoneFireCycles sampled_cycles=$sampledCycles terminal_held_cycles=${phaseCycles("terminal_held")}")
+    RunReport(output, reads, writes, writeAcks, scalarRequests, scalarResults, loans, loanResults, held(3),
+      launchToDoneFireCycles, sampledCycles, phaseCycles.toMap, arithmeticCycles.toMap)
   }
 
   def rejectBounds(d: GdnRmsNormFixedBankArithmeticHarness, which: Int): Unit = {

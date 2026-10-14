@@ -15,13 +15,16 @@ import json
 from pathlib import Path
 
 BASE = 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/'
+# Reviewed 3cd847d -> f16df50: the Qwen2 Host keeps both H2048 borrower
+# switches false. Existing geometry, arithmetic and owner serialization
+# are unchanged; these models do not cover the enabled borrower path.
 SOURCE_PINS = {
     BASE + 'Protocol.scala': '5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783',
     BASE + 'BlockFloat.scala': '9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5',
-    BASE + 'Qwen2Block.scala': '1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43',
+    BASE + 'Qwen2Block.scala': '9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4',
     BASE + 'MatrixPipeline.scala': 'dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d',
     BASE + 'RetainedMatrix.scala': '80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb',
-    BASE + 'QwenOwnerProtocol.scala': 'c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542',
+    BASE + 'QwenOwnerProtocol.scala': '7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d',
     BASE + 'DenseReadPlanner.scala': '0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886',
     BASE + 'StreamingDense.scala': '18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789',
     BASE + 'BurstProtocol.scala': '0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac',

@@ -97,9 +97,12 @@ class ObservationTests(unittest.TestCase):
         self.assertEqual(h.bus.raw(job.dst), struct.pack('<3072I', *a.reference_attention(2,*inputs)))
         report = capture.report()
         self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
-        self.assertEqual(report['schema'], 'qwen2-existing-attention-observation-v2')
+        self.assertEqual(report['schema'], 'qwen2-existing-attention-observation-v3')
         self.assertEqual(report['source_version'], o.SOURCE_VERSION)
         self.assertEqual(report['execution_source_commit'], o.SOURCE_COMMIT)
+        self.assertIsNone(report['execution_source_commit'])
+        self.assertEqual(report['execution_source_base_commit'], o.SOURCE_BASE_COMMIT)
+        self.assertIn('borrower=false', report['execution_source_profile'])
         self.assertFalse(report['prior_observation_results_inherited'])
         self.assertEqual(report['historical_fullgraph'], dict(commit=o.RECEIPT_COMMIT,
             path=o.RECEIPT, sha256=o.RECEIPT_SHA, results_inherited=False))
@@ -309,14 +312,14 @@ class ObservationTests(unittest.TestCase):
             sys.settrace(None)
         self.assertEqual(h.owner.state,'idle')
 
-    def test_v2_execution_inventory_replaces_only_two_exact_historical_sources(self):
+    def test_v3_execution_inventory_replaces_only_five_exact_historical_sources(self):
         frozen = json.loads((ROOT / o.RECEIPT).read_bytes())['source_sha256']
         current = o.verify_execution_sources()
         self.assertEqual(set(current), set(frozen))
         self.assertEqual(len(current), 75)
         changed = {name for name in current if current[name] != frozen[name]}
         self.assertEqual(changed, set(o.EXECUTION_SOURCE_REPLACEMENTS))
-        self.assertEqual(len(changed), 2)
+        self.assertEqual(len(changed), 5)
         for name, (previous, successor) in o.EXECUTION_SOURCE_REPLACEMENTS.items():
             self.assertEqual(frozen[name], previous)
             self.assertEqual(current[name], successor)
@@ -350,7 +353,7 @@ class ObservationTests(unittest.TestCase):
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 dst.write_bytes((ROOT / name).read_bytes())
             self.assertEqual(o.verify_execution_sources(root), o.verify_execution_sources())
-            # A source outside the two reviewed replacements remains guarded.
+            # A source outside the five reviewed replacements remains guarded.
             name = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
             original = (root / name).read_bytes()
             (root / name).write_bytes(original + b'\n# unreviewed drift\n')
@@ -428,6 +431,60 @@ class ObservationTests(unittest.TestCase):
         with o.AttentionObservation(h.owner) as capture:
             sys.settrace(None)
         self.assertIn('replaced',capture.report()['observer_error'])
+
+
+
+
+class CurrentRuntimeInventoryReviewTests(unittest.TestCase):
+    def test_source_review_is_default_disabled_only_and_has_no_fake_commit(self):
+        from candidates.qwen2_resident_matrix.ffn_attention import matrix_service
+        from candidates.qwen2_resident_matrix.ffn_public import prefix_arithmetic
+        self.assertIsNone(o.SOURCE_COMMIT)
+        self.assertEqual(o.SOURCE_BASE_COMMIT, 'f16df50adfb0f1f4bc668c517a2e29accffe6753')
+        for function in (matrix_service.source_identity, prefix_arithmetic.source_identity,
+                         o.verify_execution_sources):
+            for kwargs in ({'enable_h2048_rms_borrower': True},
+                           {'external_elementwise_loan': True},
+                           {'enable_h2048_rms_borrower': 0},
+                           {'external_elementwise_loan': None}):
+                with self.subTest(function=function.__name__, kwargs=kwargs):
+                    with self.assertRaisesRegex(ValueError, 'default-disabled borrower/loan profile'):
+                        function(**kwargs)
+        for identity in (matrix_service.source_identity(), prefix_arithmetic.source_identity()):
+            self.assertIsNone(identity['source_commit'])
+            self.assertEqual(identity['source_base_commit'], o.SOURCE_BASE_COMMIT)
+            self.assertFalse(identity['historical_results_inherited'])
+            self.assertFalse(identity['borrower_enabled'] or identity['elementwise_loan_enabled'])
+
+    def test_every_current_runtime_replacement_rejects_unknown_old_and_new_hash(self):
+        good = o.EXECUTION_SOURCE_REPLACEMENTS
+        for name, (previous, current) in good.items():
+            with self.subTest(path=name, drift='historical'):
+                with patch.object(o, 'EXECUTION_SOURCE_REPLACEMENTS',
+                                  {**good, name: ('0'*64, current)}):
+                    with self.assertRaisesRegex(ValueError, 'replacement origin'):
+                        o.verify_execution_sources()
+            with self.subTest(path=name, drift='current'):
+                with patch.object(o, 'EXECUTION_SOURCE_REPLACEMENTS',
+                                  {**good, name: (previous, '0'*64)}):
+                    with self.assertRaisesRegex(ValueError, 'identity mismatch|execution source drift'):
+                        o.verify_execution_sources()
+
+    def test_current_review_does_not_rewrite_or_inherit_historical_receipt(self):
+        raw = (ROOT/o.RECEIPT).read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), o.RECEIPT_SHA)
+        frozen = json.loads(raw)['source_sha256']
+        current = o.verify_execution_sources()
+        self.assertEqual(len(current), 75)
+        self.assertEqual(sum(current[p] == frozen[p] for p in current), 70)
+        self.assertEqual(set(current), set(frozen))
+        self.assertEqual(set(o.EXECUTION_SOURCE_REPLACEMENTS), {
+            'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
+            'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp',
+            'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py',
+            'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala',
+            'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala',
+        })
 
 
 if __name__ == '__main__':

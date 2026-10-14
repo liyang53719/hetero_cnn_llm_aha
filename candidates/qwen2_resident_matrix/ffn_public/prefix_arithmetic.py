@@ -16,9 +16,12 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
 SCALA_DIR = 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/'
+# V3 active runtime guard: reviewed f16 default-disabled borrower/loan path.
+# Physical Matrix, arithmetic, and modeled protocol are unchanged.
+# Historical source_pins/receipts remain frozen; no old result is inherited.
 SOURCE_HASHES = {
-    'Qwen2Block.scala': '1152cb11e145c27f271b0170913194bd66ce2930008a75e3a580d5660e410a43',
-    'QwenOwnerProtocol.scala': 'c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542',
+    'Qwen2Block.scala': '9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4',
+    'QwenOwnerProtocol.scala': '7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d',
     'HostBlockCommands.scala': '68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757',
     'ElementwiseMemoryEngine.scala': 'cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845',
     'Protocol.scala': '5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783',
@@ -30,8 +33,11 @@ ALU_SHA256 = '83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1'
 NATIVE_ACCEPTANCE = 'UNCHANGED_FAIL_POLICY_PENDING'
 
 
-def source_identity(root=ROOT):
+def source_identity(root=ROOT, *, enable_h2048_rms_borrower=False,
+                    external_elementwise_loan=False):
     """Use the existing extraction guard; refuse drift in either arithmetic or IO."""
+    if enable_h2048_rms_borrower is not False or external_elementwise_loan is not False:
+        raise ValueError('source review requires the original default-disabled borrower/loan profile')
     from scripts.qwen2_block_recipe_model import extract_sources
     root = Path(root)
     _, _, recipe = extract_sources(root)
@@ -47,6 +53,10 @@ def source_identity(root=ROOT):
         raise ValueError('prefix ALU source changed; explicit review required')
     found[ALU_SOURCE] = actual
     return dict(recipe=recipe, control_source_sha256=found,
+                source_version='qwen2-prefix-source-guard-v3',
+                source_base_commit='f16df50adfb0f1f4bc668c517a2e29accffe6753',
+                source_commit=None, historical_results_inherited=False,
+                borrower_enabled=False, elementwise_loan_enabled=False,
                 numerical_policy='default-v0-original-ordered-recipe',
                 native_acceptance=NATIVE_ACCEPTANCE,
                 hardware_simulation=False, model_ticks_are_hardware_cycles=False)

@@ -31,8 +31,10 @@ git -C "$ROOT" status --porcelain > "$OUT/worktree_before.txt"
 (cd "$ROOT"; git ls-files -z .github/scripts/run_qwen2_block_ci.sh .github/workflows/chisel-qwen2-continuous-block.yml chisel/continuous_prefill chisel/p0_safety/src/main/scala integration/gemmini/EmitHeteroBF16Fma.scala integration/gemmini/EmitHeteroFP32Alu.scala src/heteronpu scripts/qk_norm256_reference.c scripts/rope_bf16_candidate_reference.c config configs rtl/matrix rtl/integration | xargs -0 sha256sum) > "$OUT/sources.sha256"
 verilator --version > "$OUT/verilator.txt"
 java -version 2> "$OUT/java.txt"
-# Run every discovered *Spec exactly once with its required tiny, real-layer,
-# or native-BF16 fixture, plus the shared elementwise payload/fault regression.
+# Run each control *Spec exactly once with its tiny, real-layer, or native-BF16
+# fixture. External frozen-actual replay suites stay explicitly NOT_EXECUTED and
+# never count as PASS. The complete suite partition is still checked, alongside
+# the shared elementwise payload/fault regression.
 # Keep detailed logs as artifacts and bound failure output in the job console.
 if bash "$PROJECT/scripts/run_continuous_ci_gate.sh" "$OUT/control" > "$OUT/chisel_tests.log" 2>&1; then
   cat "$OUT/control/RESULT.json"

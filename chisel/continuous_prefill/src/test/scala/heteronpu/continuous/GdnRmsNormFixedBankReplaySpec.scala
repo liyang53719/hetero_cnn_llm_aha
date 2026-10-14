@@ -28,7 +28,13 @@ class GdnRmsNormFixedBankReplaySpec extends AnyFlatSpec with ChiselScalatestTest
     val root=Paths.get(sys.env("HETERO_H2048_FIXTURE_ROOT"))
     val selected=sys.env("HETERO_H2048_REPLAY_TOKENS").split(",").map(_.toInt).toSeq
     require(selected.nonEmpty && selected.distinct==selected && selected.forall(Set(1,16,128)))
-    test(new GdnRmsNormFixedBankArithmeticHarness(productionCore=true))
+    val useVectorEpilogue = sys.env.getOrElse("HETERO_H2048_USE_VECTOR_EPILOGUE", "true") match {
+      case "true" => true
+      case "false" => false
+      case other => throw new IllegalArgumentException("invalid epilogue selector: " + other)
+    }
+    test(new GdnRmsNormFixedBankArithmeticHarness(productionCore=true,
+      useVectorEpilogue=useVectorEpilogue))
       .withAnnotations(Seq(VerilatorBackendAnnotation)){d=>
       init(d)
       for(m<-selected){
@@ -61,9 +67,10 @@ class GdnRmsNormFixedBankReplaySpec extends AnyFlatSpec with ChiselScalatestTest
         }
         // Only input and weight are supplied to the memory responder in run().
         // The actual core Scalar produces inverse; expected inverse is never poked.
-        val report=run(d,input,weight,s"frozen-actual-production-core-M$m-H2048")
+        val epilogue = if (useVectorEpilogue) "vector" else "scalar"
+        val report=run(d,input,weight,s"frozen-actual-production-core-M$m-H2048-$epilogue-epilogue")
         report.output shouldBe actualBf
-        println(s"H2048_FIXED_BANK_ACTUAL_RTL_PASS tokens=$m cycles=${report.cycles} scalar_requests=${report.scalarRequests} loans=${report.loans} reads=${report.reads} write_acks=${report.writeAcks} manifest_sha256=${sha(manifest)} core_bound=true full_block=false")
+        println(s"H2048_FIXED_BANK_ACTUAL_RTL_PASS tokens=$m cycles=${report.cycles} scalar_requests=${report.scalarRequests} loans=${report.loans} reads=${report.reads} write_acks=${report.writeAcks} manifest_sha256=${sha(manifest)} core_bound=true full_block=false epilogue=$epilogue borrower_bank_bytes=6144 launch_to_done_fire_cycles=${report.launchToDoneFireCycles} sampled_cycles=${report.sampledCycles} elem_alu_execution_busy=${report.arithmeticCycles.getOrElse("elem_alu_execution_busy", 0L)} elem_alu_effective_lane=${report.arithmeticCycles.getOrElse("elem_alu_effective_lane", 0L)}")
       }
     }
   }

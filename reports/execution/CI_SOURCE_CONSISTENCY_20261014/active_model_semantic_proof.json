@@ -1,0 +1,485 @@
+{
+  "base_commit": "f16df50adfb0f1f4bc668c517a2e29accffe6753",
+  "review_parent_commit": "3cd847d32008eac4916c2691fbe0265df8859481",
+  "function_equivalence": {
+    "qwen2_prefill_traffic_bound": {
+      "unchanged_functions": [
+        "calculate",
+        "host_schedule_report",
+        "main",
+        "report",
+        "verify_sources"
+      ],
+      "changed_only": [],
+      "new_only": []
+    },
+    "qwen2_rectangular_attention_model": {
+      "unchanged_functions": [
+        "_finite_parts",
+        "_round_fp32",
+        "_round_shift",
+        "_tokens",
+        "bf16_rne_bits",
+        "calculate",
+        "fp16_to_fp32_bits",
+        "fp32_add_bits",
+        "fp32_fma_bits",
+        "iter_events",
+        "kv_head",
+        "legacy_qk_bits",
+        "main",
+        "pv_tiles",
+        "qk_tiles",
+        "rectangular_pv_bits",
+        "rectangular_qk_bits",
+        "report",
+        "returned_values_finite",
+        "scratch_address",
+        "scratch_layout"
+      ],
+      "changed_only": [],
+      "new_only": []
+    },
+    "qwen2_shared_sfu_schedule": {
+      "unchanged_functions": [
+        "_div",
+        "_divider_options",
+        "_evaluate",
+        "_groups",
+        "_load",
+        "_mul",
+        "_normal_operand",
+        "_operand",
+        "_write",
+        "f32_bits",
+        "f32_value",
+        "main",
+        "ordered_reference",
+        "program",
+        "resource_budget",
+        "saved_gate_timing",
+        "schedule_silu",
+        "source_divider_timing",
+        "source_division_model",
+        "summarize_work",
+        "timing_binding",
+        "verify_sources"
+      ],
+      "changed_only": [],
+      "new_only": []
+    },
+    "qwen2_prefill_resource_schedule": {
+      "unchanged_functions": [
+        "_module",
+        "acquire",
+        "attention_events",
+        "bias_events",
+        "dense_events",
+        "dense_groups",
+        "elementwise_events",
+        "iter_events",
+        "kv_append_events",
+        "main",
+        "mapping_capacities",
+        "norm_events",
+        "op",
+        "read_span",
+        "release",
+        "repeat",
+        "report",
+        "resident_dense_events",
+        "resident_dense_plan",
+        "resident_dense_tiles",
+        "resource_issue_floors",
+        "rope_events",
+        "scalar",
+        "silu_events",
+        "stages",
+        "timing_profile",
+        "vector",
+        "write_span"
+      ],
+      "changed_only": [
+        "observed_silu_host_bound"
+      ],
+      "new_only": [
+        "_current_v0_hardware_pins"
+      ]
+    },
+    "qwen2_dense_residency_numeric": {
+      "unchanged_functions": [
+        "_module",
+        "_verify_m16",
+        "execute",
+        "expected_attention",
+        "expected_dense",
+        "frozen_sources",
+        "generate_and_compile",
+        "main",
+        "parse_attention_log",
+        "parse_dense_log",
+        "resident_source",
+        "validate_generated"
+      ],
+      "changed_only": [],
+      "new_only": []
+    }
+  },
+  "source_sections": {
+    "Qwen2 geometry/layout": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "parent_line": 13,
+      "f16_line": 13,
+      "bytes": 3415,
+      "sha256": "adac1c5202c5863b091d942305e2c59c048c78aa1b54ddcb1710ac414faa4057",
+      "byte_equal": true
+    },
+    "Qwen2 arithmetic/state declarations": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "parent_line": 80,
+      "f16_line": 83,
+      "bytes": 8084,
+      "sha256": "6d669423538af9bb23a36dca21c3c5b4b5849194a0862b469dfd7f19773f5ae8",
+      "byte_equal": true
+    },
+    "Qwen2 residual memory/ACK mux": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "parent_line": 181,
+      "f16_line": 206,
+      "bytes": 1366,
+      "sha256": "2027288fdaf998654ac7e6d79cb5a269193c019587eb53f31e81b43bea00fe24",
+      "byte_equal": true
+    },
+    "Qwen2 all arithmetic/control FSM and ACK accounting": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "parent_line": 200,
+      "f16_line": 225,
+      "bytes": 23862,
+      "sha256": "8c1466ef64f6c35b6c166de5e7b6f3cbe375e72a327c1eca3b43b3b820eecd55",
+      "byte_equal": true
+    },
+    "Owner physical Dense/SiLU/Matrix allocation": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "parent_line": 67,
+      "f16_line": 77,
+      "bytes": 1019,
+      "sha256": "d2ba82cfd9263bc14b5404a47418c3bb184bca31d11472d047ffcac39f1764a8",
+      "byte_equal": true
+    },
+    "Owner dispatch choice for existing kinds": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "parent_line": 90,
+      "f16_line": 104,
+      "bytes": 562,
+      "sha256": "17451863fff3611b7c729a53736cbcb5a9901194ac3d7833dfae2493a0757ee0",
+      "byte_equal": true
+    },
+    "Owner result serialization": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "parent_line": 284,
+      "f16_line": 324,
+      "bytes": 1315,
+      "sha256": "96d605ea41e68a79770b7eafd5e2cefc78703313a6e9aebb36e3c5de72026676",
+      "byte_equal": true
+    },
+    "Owner Matrix arbitration": {
+      "file": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "parent_line": 323,
+      "f16_line": 366,
+      "bytes": 1473,
+      "sha256": "2b1f918f308f54ad9ad2262dcc01ebb2917bee3b1b9ed31b10c4c887bd1d1ffa",
+      "byte_equal": true
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb"
+    },
+    "integration/gemmini/EmitHeteroFP32Alu.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    "integration/gemmini/EmitHeteroBF16Fma.scala": {
+      "whole_file_byte_equal": true,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    }
+  },
+  "output_equivalence": [
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "report",
+      "args": [
+        128,
+        "BF16"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "7f3a3915a25509bda2e16dc28170ffa1295c2746fce944586fc9561d4425fe70"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "host_schedule_report",
+      "args": [
+        128,
+        "BF16"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "81f1b81eab45420f79a6cdb10a9c124467d9ea990a3e8356684f7a2d82cc6a9c"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "report",
+      "args": [
+        128,
+        "FP32"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "a3426f87a0ee96fec6b494baeadc721536349b26d830af5b1429a8d6b0d6d298"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "host_schedule_report",
+      "args": [
+        128,
+        "FP32"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "004eb1a4db61f796016486ce2b67f0390720516517635795639e4660a921e2da"
+    },
+    {
+      "script": "qwen2_rectangular_attention_model",
+      "function": "report",
+      "args": [
+        128,
+        1
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "7fe00452ad0e8bef0faddbcdc9aae9b8ff30a2675e3928a563fab10eca1bd7ae"
+    },
+    {
+      "script": "qwen2_rectangular_attention_model",
+      "function": "report",
+      "args": [
+        128,
+        5
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "9ce628b883cde3c166ff3e59a2e5f2e4971b18c67ac26f7b73991241b5e2d230"
+    },
+    {
+      "script": "qwen2_prefill_resource_schedule",
+      "function": "report",
+      "args": [
+        128,
+        1
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "ab5700717c54186149773e2657b9ee6cce43fe1c3e91c4bec42f8714404bcd57"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "report",
+      "args": [
+        1024,
+        "BF16"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "d8cdcec4da725431646512bd81f1a150389b4ddbf39037727aa440c3a68026c9"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "host_schedule_report",
+      "args": [
+        1024,
+        "BF16"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "5758d9312d2a28d21aaf4278deeaaecb570badd6e1d8b70792576f84d756bb2c"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "report",
+      "args": [
+        1024,
+        "FP32"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "437525ab2d85d54e99debca0ba5f0b6b3502a0535600f70bcddfefbf13d78f6c"
+    },
+    {
+      "script": "qwen2_prefill_traffic_bound",
+      "function": "host_schedule_report",
+      "args": [
+        1024,
+        "FP32"
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "67fc3a82011ae521f97183c7d131159a2e468dcd9bf5b15f445682dceee2bb93"
+    },
+    {
+      "script": "qwen2_rectangular_attention_model",
+      "function": "report",
+      "args": [
+        1024,
+        1
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "96099096aee3c58a04446631f1a0eb3df07333021329aa84d62ff4af67f61441"
+    },
+    {
+      "script": "qwen2_rectangular_attention_model",
+      "function": "report",
+      "args": [
+        1024,
+        5
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "90c1fdaf3593f1553d438a3cf8e73ea86341b3ad6e36d2d3357d81d1367174b6"
+    },
+    {
+      "script": "qwen2_prefill_resource_schedule",
+      "function": "report",
+      "args": [
+        1024,
+        1
+      ],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "b8647aa2f88b85c7301006f67e92886c7ace030dbc9f6a318cf7f53ce3f5febb"
+    },
+    {
+      "script": "qwen2_prefill_resource_schedule",
+      "function": "report",
+      "args": [
+        128,
+        5
+      ],
+      "kwargs": {
+        "dense_mapping": "resident_m128_nc3"
+      },
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "9503d1e770c7ca8549e60804a8b5483913c02dbcfe4ea1b272bae715ed4e98d5"
+    },
+    {
+      "script": "qwen2_prefill_resource_schedule",
+      "function": "report",
+      "args": [
+        128,
+        1
+      ],
+      "synthetic": true,
+      "equal_except_source_identity_metadata": true
+    },
+    {
+      "script": "qwen2_prefill_resource_schedule",
+      "function": "observed_silu_host_bound",
+      "args": [],
+      "kwargs": {},
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "d2feb475b233b21142bba2ef962f085bd543a2afc295eedca476646526297269"
+    },
+    {
+      "script": "qwen2_shared_sfu_schedule",
+      "function": "timing_binding",
+      "args": [],
+      "kwargs": {
+        "options": 0
+      },
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "37fc96eb098969aecc22f9e6e884ad311509d4e24d53b195601852aedf931dc0"
+    },
+    {
+      "script": "qwen2_shared_sfu_schedule",
+      "function": "timing_binding",
+      "args": [],
+      "kwargs": {
+        "options": 16
+      },
+      "equal_except_source_identity_metadata": true,
+      "normalized_sha256": "d9bbb77ad41236f31c18d20900951c036cb3f956018bdeee96147286ed07846d"
+    },
+    {
+      "script": "qwen2_dense_residency_numeric",
+      "function": "resident_source",
+      "rectangular_attention": false,
+      "generated_cpp_byte_equal": true,
+      "sha256": "c0868782212d1616dc24554fac988753236fde531dc1f42611cf6fd4542f3e43"
+    },
+    {
+      "script": "qwen2_dense_residency_numeric",
+      "function": "resident_source",
+      "rectangular_attention": true,
+      "generated_cpp_byte_equal": true,
+      "sha256": "70c43c700ac87f3d693dee19940547614b5a7996c412ccb4e624efcf1b5b8cb5"
+    }
+  ],
+  "changed_tracked_files": [
+    "scripts/qwen2_dense_residency_numeric.py",
+    "scripts/qwen2_prefill_resource_schedule.py",
+    "scripts/qwen2_prefill_traffic_bound.py",
+    "scripts/qwen2_rectangular_attention_model.py",
+    "scripts/qwen2_shared_sfu_schedule.py",
+    "tests/test_qwen2_prefill_resource_schedule.py"
+  ],
+  "unchanged_tracked_file_count": 13197,
+  "historical_candidates_and_reports_unchanged": true,
+  "scope": {
+    "source_level_equivalence": true,
+    "rtl_elaboration": false,
+    "formal_equivalence": false,
+    "actual_weights_or_native_reference_rerun": false,
+    "h2048_borrower_covered": false,
+    "current_host_reexecution": false
+  }
+}

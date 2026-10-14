@@ -34,13 +34,16 @@ HARDFLOAT_SOURCE_PINS = {
     'hardfloat/src/main/scala/MulRecFN.scala': 'cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d',
     'hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala': '31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d',
 }
+# Reviewed 3cd847d -> f16df50: the Qwen2 Host keeps both H2048 borrower
+# switches false. Existing geometry, arithmetic and owner serialization
+# are unchanged; these models do not cover the enabled borrower path.
 SOURCE_PINS = {
-    'scripts/qwen2_rectangular_attention_model.py': 'fbf1c610be695256f487e1df971c266575dc8d722195cd919f06f1209034fbe8',
+    'scripts/qwen2_rectangular_attention_model.py': '8fdcffce9908d1a273bb5bc2011d62f952b20eb5c83fb2258dc06f0f04208f29',
     'scripts/qwen2_block_recipe_model.py': '2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6',
     BASE+'BlockFloat.scala': '9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5',
     BASE+'VectorSilu.scala': '758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9',
     BASE+'OverlappedSilu.scala': 'd15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea',
-    BASE+'QwenOwnerProtocol.scala': 'c8d6cfd95901bc9f2cae3f248d542cb532b1b66aec1be98942a9a7533d3ca542',
+    BASE+'QwenOwnerProtocol.scala': '7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d',
     'integration/gemmini/EmitHeteroFP32Alu.scala': '83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1',
     'chisel/continuous_prefill/tests/qwen2_block.cpp': 'd757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5',
     'chisel/continuous_prefill/scripts/prepare_hardfloat.sh': '218ffbf5e7f96a03187938772b655c43c7589e526553d596aca1a46eab694c68',

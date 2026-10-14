@@ -121,7 +121,7 @@ class PublicObservationTests(unittest.TestCase):
         if capture:
             r = capture.report()
             self.assertEqual(r['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
-            self.assertEqual(r['source_version'], 'qwen2-existing-attention-observation-v2')
+            self.assertEqual(r['source_version'], 'qwen2-existing-attention-observation-v3')
             self.assertFalse(r['historical_fullgraph']['results_inherited'] or
                              r['prior_observation_results_inherited'])
             self.assertEqual(r['execution_source_sha256'], observation.verify_execution_sources())
@@ -145,6 +145,8 @@ class PublicObservationTests(unittest.TestCase):
             evidence = dict(schema=1, status='PASS_SYNTHETIC_PUBLIC3_OBSERVATION',
                 source_version=observation.SOURCE_VERSION,
                 execution_source_commit=observation.SOURCE_COMMIT,
+                execution_source_base_commit=observation.SOURCE_BASE_COMMIT,
+                execution_source_sha256=capture.report()['execution_source_sha256'],
                 historical_results_inherited=False,
                 stimulus='existing M1 public QK/Softmax/PV fixture, synthetic readonly Q/K/V',
                 source_sha256={str(p.relative_to(ROOT)): build.sha(p) for p in

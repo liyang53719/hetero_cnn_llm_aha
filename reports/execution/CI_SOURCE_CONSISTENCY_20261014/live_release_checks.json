@@ -1,0 +1,220 @@
+{
+  "schema": "ci-source-consistency-live-release-v1",
+  "base_commit": "f16df50adfb0f1f4bc668c517a2e29accffe6753",
+  "remote_ci_reexecution": false,
+  "current_full_block_rtl_acceptance": false,
+  "preflight": {
+    "normal": {
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "shape_vectors",
+          "status": "PASS"
+        },
+        {
+          "check": "block_checklist",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_prefill_traffic_bound",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_rectangular_attention_model",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_prefill_resource_schedule",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_shared_sfu_schedule",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_dense_residency_source_identity",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_saved_v0_source_review",
+          "status": "PASS"
+        },
+        {
+          "check": "continuous_suite_partition",
+          "status": "PASS"
+        },
+        {
+          "check": "continuous_external_contract",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_current_matrix_source_identity",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_current_prefix_source_identity",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_current_attention_execution_inventory",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_observation_helper_source_identity",
+          "status": "PASS"
+        }
+      ],
+      "source_receipt": {
+        "path": "work/qwen2_preflight_final_live/normal_receipt.json",
+        "bytes": 53199,
+        "sha256": "5fa6aa26dbab84129cb5fb363f03478ef355e616bb2130c9d0c20ed54378afcb"
+      },
+      "scope": "READ_ONLY_IDENTITY_AND_CONTRACTS_NO_NUMERICAL_RTL"
+    },
+    "optimized": {
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "shape_vectors",
+          "status": "PASS"
+        },
+        {
+          "check": "block_checklist",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_prefill_traffic_bound",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_rectangular_attention_model",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_prefill_resource_schedule",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_shared_sfu_schedule",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_dense_residency_source_identity",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_saved_v0_source_review",
+          "status": "PASS"
+        },
+        {
+          "check": "continuous_suite_partition",
+          "status": "PASS"
+        },
+        {
+          "check": "continuous_external_contract",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_current_matrix_source_identity",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_current_prefix_source_identity",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_current_attention_execution_inventory",
+          "status": "PASS"
+        },
+        {
+          "check": "qwen2_observation_helper_source_identity",
+          "status": "PASS"
+        }
+      ],
+      "source_receipt": {
+        "path": "work/qwen2_preflight_final_live/optimized_receipt.json",
+        "bytes": 53199,
+        "sha256": "2f84efacc57caebbf2da9fdea1c894a4e202e23ddb249df488f5d9a1f8ea0c34"
+      },
+      "scope": "READ_ONLY_IDENTITY_AND_CONTRACTS_NO_NUMERICAL_RTL"
+    }
+  },
+  "cold_tests": {
+    "preflight_normal": {
+      "status": "PASS",
+      "test_count": 79,
+      "scope": "READ_ONLY_PREFLIGHT_NEGATIVE_TESTS_ACTUAL_OPTIMIZATION_FLAG_PROPAGATED",
+      "log": {
+        "path": "work/qwen2_preflight_final_live/normal_tests.log",
+        "bytes": 180,
+        "sha256": "63dd22518e6b257de97b5939f4fb9449331b56e74b9f85d360b51c9de54dd391"
+      },
+      "exit_code": 0
+    },
+    "orchestration_normal": {
+      "status": "PASS",
+      "test_count": 10,
+      "scope": "BUILD_TOOLS_MOCKED_REAL_FIXTURE_PACKING_AND_SOURCE_CHECKS_NO_RTL",
+      "log": {
+        "path": "work/qwen2_orchestration_live_repair/normal.log",
+        "bytes": 1442,
+        "sha256": "fc98dcf6ad4370279b24a987bc06b3d55b3a57819c32f8281c601e690a0db44e"
+      },
+      "exit_code": 0
+    },
+    "preflight_optimized": {
+      "status": "PASS",
+      "test_count": 79,
+      "scope": "READ_ONLY_PREFLIGHT_NEGATIVE_TESTS_ACTUAL_OPTIMIZATION_FLAG_PROPAGATED",
+      "log": {
+        "path": "work/qwen2_preflight_final_live/optimized_tests.log",
+        "bytes": 780,
+        "sha256": "46987fbac54944f7359ec5e6179c950fb3c3f2bf4c1a33e066f829fb412d661b"
+      },
+      "exit_code": 0
+    },
+    "orchestration_optimized": {
+      "status": "PASS",
+      "test_count": 10,
+      "scope": "BUILD_TOOLS_MOCKED_REAL_FIXTURE_PACKING_AND_SOURCE_CHECKS_NO_RTL",
+      "log": {
+        "path": "work/qwen2_orchestration_live_repair/optimized.log",
+        "bytes": 1442,
+        "sha256": "151d05fa9e07c4493dac3291e822e0f554c1e3e7e4ad68be7c6640df3fac00cd"
+      },
+      "exit_code": 0
+    },
+    "direct_observation": {
+      "status": "PASS",
+      "test_count": 20,
+      "scope": "CURRENT_SOFTWARE_OWNER_ARITHMETIC_AND_SOURCE_GUARDS_NOT_NATIVE_WEIGHTS_OR_RTL",
+      "log": {
+        "path": "work/qwen2_runtime_v3_live/direct_observation.log",
+        "bytes": 3407,
+        "sha256": "080eb4483421bdd4695f95853c515d1ced2cc93b549076805501b8c8585023f2"
+      },
+      "exit_code": 0
+    }
+  },
+  "post_review_test_only_change": {
+    "reason": "Move unittest.main after newly added class so direct execution includes all 20 tests. No test assertion or production source change.",
+    "changes": [
+      {
+        "path": "tests/test_qwen2_attention_observation.py",
+        "proposal_sha256": "7a8efb69855818ba0e4f91ea4e1ac5c7a3310e379a32b31917aaa49627883a1b",
+        "final_sha256": "3c98761eab59c2a594dd118e4241e62d409d26df311daf8fcb868249532ada9a"
+      }
+    ]
+  },
+  "historical_receipt": {
+    "path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_receipt.json",
+    "sha256": "3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e",
+    "modified": false,
+    "results_inherited": false
+  },
+  "main_model_runtime_dependency_gaps": {
+    "tests_not_executed": 2,
+    "reason": "Transformers 4.40.1 absent locally; not counted as PASS; hosted fixed-dependency CI remains required"
+  },
+  "workflow_original_model_body_unchanged": true
+}

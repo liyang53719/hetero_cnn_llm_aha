@@ -119,6 +119,7 @@ on:
       - 'chisel/p0_safety/src/main/scala/heteronpu/p0/NormTileLoader.scala'
       - 'chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala'
       - 'chisel/p0_safety/src/main/scala/heteronpu/p0/TileTranspose.scala'
+      - 'chisel/rope_hardware_oracle/maven-lock.json'
       - 'integration/gemmini/EmitHeteroBF16Fma.scala'
       - 'integration/gemmini/EmitHeteroFP32Alu.scala'
       - 'reports/execution/QWEN2_REAL16_B91BBE3/hardfloat.sha256.json'
@@ -178,6 +179,16 @@ jobs:
           python -S candidates/qwen2_public21_binding/run_control.py > work/public21-binding-cold/default.json
       - name: Provision fixed isolated Chisel tools
         run: bash scripts/setup_hetero_chisel_loan_toolchain.sh
+      - name: Prefetch fixed Scala compiler bridge before offline snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          source work/chisel_toolchain/env.sh
+          cd "$CHISEL_TOOLCHAIN/bootstrap_project"
+          sbt 'show scalaCompilerBridgeBinaryJar' 2>&1 | tee "$CHISEL_TOOLCHAIN/logs/scala_compiler_bridge.log"
+          # Existing production maven-lock.json pins; update alone does not fetch this bridge.
+          bridge="$COURSIER_CACHE/https/repo.maven.apache.org/maven2/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16"
+          printf '776ef74d8bc1222f4b6e7b5dc5dd1f0abfc97ab853cb4932292dee0b32111906  %s.jar\n1e514ddba6da57565a96ca770678f2831f649ad94d499d185c2d2c638a68e2a2  %s.pom\n' "$bridge" "$bridge" | sha256sum --check | tee -a "$CHISEL_TOOLCHAIN/logs/scala_compiler_bridge.log"
       - name: Fresh parser and reduction-coordinator control RTL
         shell: bash
         run: |

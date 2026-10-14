@@ -1,0 +1,553 @@
+name: qwen2-live-attention-model-m128-cold
+
+# Frozen FAILED_BUDGET source snapshot: cold admission/source gates only.
+# No pip, payload acquisition, numeric execution, compilation, RTL, or Host job.
+# The 154 exact dependency paths are derived from this snapshot's pins.json.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-live-attention-model-m128-cold.yml'
+      - 'candidates/qwen2_live_attention_model_m128/**'
+      - 'candidates/qwen2_live_attention_reference_m128/COLD_TEST_SUMMARY.json'
+      - 'candidates/qwen2_live_attention_reference_m128/README.md'
+      - 'candidates/qwen2_live_attention_reference_m128/VALIDATION_SUMMARY.json'
+      - 'candidates/qwen2_live_attention_reference_m128/capture.py'
+      - 'candidates/qwen2_live_attention_reference_m128/pins.json'
+      - 'candidates/qwen2_live_attention_reference_m128/recipe.py'
+      - 'candidates/qwen2_live_qkv_inputs/capture.py'
+      - 'candidates/qwen2_live_qkv_inputs/pins.json'
+      - 'candidates/qwen2_live_qkv_inputs/recipe.py'
+      - 'candidates/qwen2_live_qkv_inputs_m128/capture.py'
+      - 'candidates/qwen2_live_qkv_inputs_m128/pins.json'
+      - 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'
+      - 'candidates/qwen2_live_qkv_model_m128/README.md'
+      - 'candidates/qwen2_live_qkv_model_m128/SOURCE_DELTA.json'
+      - 'candidates/qwen2_live_qkv_model_m128/SUMMARY.json'
+      - 'candidates/qwen2_live_qkv_model_m128/gates.py'
+      - 'candidates/qwen2_live_qkv_model_m128/pins.json'
+      - 'candidates/qwen2_live_qkv_model_m128/raw_reference.py'
+      - 'candidates/qwen2_live_qkv_model_m128/runner.py'
+      - 'candidates/qwen2_live_qkv_model_m128/source_correspondence.json'
+      - 'candidates/qwen2_live_qkv_model_m128/test_gate.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/profile.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/public_execution.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/COLD_CHECK.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/builder.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/cold_check.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/completed.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/dot16.inc'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/FROZEN.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/PREPARED.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/RESULT.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/SOURCES.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/dot16.inc'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/profile.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/run_reference.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/test_builder.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/test_workload.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/workload.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/test_scalar_recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/drain.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_group/group.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_group/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fixture.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_window/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/numeric_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_window/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_window/window.patch'
+      - 'candidates/qwen2_resident_matrix/official_bf16/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/dense_silu.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/execution.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/observation.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/owners.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/reference_layout.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/official_bf16/test_owners.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp'
+      - 'candidates/qwen2_resident_matrix/transposed_down/owner_down.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_route/combined_service.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch'
+      - 'chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_block_fixture.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala'
+      - 'chisel/continuous_prefill/tests/qwen2_block.cpp'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/qwen2_1p5b_target_shape.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/config.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/configuration_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/manifest.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model_api.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_annotated_tag.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_tag.json'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m16_initial_cold_RESULT.json'
+      - 'rtl/integration/qwen2_matrix_command_endpoint.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv'
+      - 'scripts/observe_qwen2_attention_model.py'
+      - 'scripts/qwen2_block_recipe_model.py'
+      - 'scripts/qwen2_layer0_model_gate.py'
+      - 'scripts/qwen2_rms_rope_policy_diagnostic.py'
+      - 'scripts/qwen2_rms_rope_prefill_candidate.py'
+      - 'spec/numerical_contract.md'
+      - 'src/heteronpu/__init__.py'
+      - 'src/heteronpu/abi_validation.py'
+      - 'src/heteronpu/cgra_sfu.py'
+      - 'src/heteronpu/command.py'
+      - 'src/heteronpu/config.py'
+      - 'src/heteronpu/descriptor_chain.py'
+      - 'src/heteronpu/dtypes.py'
+      - 'src/heteronpu/gemmini_descriptor_v2.py'
+      - 'src/heteronpu/gemmini_rocc_lowering.py'
+      - 'src/heteronpu/kv_engine.py'
+      - 'src/heteronpu/l9_transport_contract.py'
+      - 'src/heteronpu/matrix_engine.py'
+      - 'src/heteronpu/scheduler.py'
+  pull_request:
+    paths:
+      - '.github/workflows/qwen2-live-attention-model-m128-cold.yml'
+      - 'candidates/qwen2_live_attention_model_m128/**'
+      - 'candidates/qwen2_live_attention_reference_m128/COLD_TEST_SUMMARY.json'
+      - 'candidates/qwen2_live_attention_reference_m128/README.md'
+      - 'candidates/qwen2_live_attention_reference_m128/VALIDATION_SUMMARY.json'
+      - 'candidates/qwen2_live_attention_reference_m128/capture.py'
+      - 'candidates/qwen2_live_attention_reference_m128/pins.json'
+      - 'candidates/qwen2_live_attention_reference_m128/recipe.py'
+      - 'candidates/qwen2_live_qkv_inputs/capture.py'
+      - 'candidates/qwen2_live_qkv_inputs/pins.json'
+      - 'candidates/qwen2_live_qkv_inputs/recipe.py'
+      - 'candidates/qwen2_live_qkv_inputs_m128/capture.py'
+      - 'candidates/qwen2_live_qkv_inputs_m128/pins.json'
+      - 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'
+      - 'candidates/qwen2_live_qkv_model_m128/README.md'
+      - 'candidates/qwen2_live_qkv_model_m128/SOURCE_DELTA.json'
+      - 'candidates/qwen2_live_qkv_model_m128/SUMMARY.json'
+      - 'candidates/qwen2_live_qkv_model_m128/gates.py'
+      - 'candidates/qwen2_live_qkv_model_m128/pins.json'
+      - 'candidates/qwen2_live_qkv_model_m128/raw_reference.py'
+      - 'candidates/qwen2_live_qkv_model_m128/runner.py'
+      - 'candidates/qwen2_live_qkv_model_m128/source_correspondence.json'
+      - 'candidates/qwen2_live_qkv_model_m128/test_gate.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/profile.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/public_execution.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/COLD_CHECK.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/builder.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/cold_check.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/completed.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/dot16.inc'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/FROZEN.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/PREPARED.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/RESULT.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/SOURCES.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/executed_m16_v1/dot16.inc'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/profile.json'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/run_reference.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/test_builder.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/test_workload.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/reference/workload.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/test_scalar_recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/drain.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_group/group.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_group/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/source_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fixture.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch'
+      - 'candidates/qwen2_resident_matrix/ffn_window/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/numeric_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_window/precision_pins.json'
+      - 'candidates/qwen2_resident_matrix/ffn_window/window.patch'
+      - 'candidates/qwen2_resident_matrix/official_bf16/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/dense_silu.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/execution.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/observation.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/owners.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/reference_layout.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/official_bf16/test_owners.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp'
+      - 'candidates/qwen2_resident_matrix/transposed_down/owner_down.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_owner/owner_selection.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_route/combined_service.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/leaf/retained_accumulator_seed.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch'
+      - 'candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch'
+      - 'chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py'
+      - 'chisel/continuous_prefill/scripts/pack_owner_block_fixture.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala'
+      - 'chisel/continuous_prefill/tests/qwen2_block.cpp'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/qwen2_1p5b_target_shape.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/config.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/configuration_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/manifest.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model_api.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_annotated_tag.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_tag.json'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+      - 'reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m16_initial_cold_RESULT.json'
+      - 'rtl/integration/qwen2_matrix_command_endpoint.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv'
+      - 'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv'
+      - 'scripts/observe_qwen2_attention_model.py'
+      - 'scripts/qwen2_block_recipe_model.py'
+      - 'scripts/qwen2_layer0_model_gate.py'
+      - 'scripts/qwen2_rms_rope_policy_diagnostic.py'
+      - 'scripts/qwen2_rms_rope_prefill_candidate.py'
+      - 'spec/numerical_contract.md'
+      - 'src/heteronpu/__init__.py'
+      - 'src/heteronpu/abi_validation.py'
+      - 'src/heteronpu/cgra_sfu.py'
+      - 'src/heteronpu/command.py'
+      - 'src/heteronpu/config.py'
+      - 'src/heteronpu/descriptor_chain.py'
+      - 'src/heteronpu/dtypes.py'
+      - 'src/heteronpu/gemmini_descriptor_v2.py'
+      - 'src/heteronpu/gemmini_rocc_lowering.py'
+      - 'src/heteronpu/kv_engine.py'
+      - 'src/heteronpu/l9_transport_contract.py'
+      - 'src/heteronpu/matrix_engine.py'
+      - 'src/heteronpu/scheduler.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-live-attention-model-m128-cold-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  cold:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Frozen failed snapshot and exactly 21 cold gates in both modes
+        shell: bash
+        run: |
+          set -euo pipefail
+          # A checkout contains source only: no prior work, raw payloads, or execution output.
+          test ! -e work
+          mkdir -p work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold
+          evidence=work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold
+          git rev-parse HEAD | tee "$evidence/head.txt"
+          test "$(cat "$evidence/head.txt")" = "$GITHUB_SHA"
+          python -B -S - <<'PY_TOOL' | tee "$evidence/tool.json"
+          import json
+          import sys
+
+          if (sys.implementation.name != 'cpython' or sys.version_info[:2] != (3, 12)
+                  or sys.flags.dont_write_bytecode != 1 or sys.flags.no_site != 1
+                  or sys.flags.optimize != 0):
+              raise SystemExit('REJECTED: expected CPython 3.12 -B -S')
+          print(json.dumps({
+              'implementation': sys.implementation.name,
+              'version': sys.version,
+              'version_info': list(sys.version_info),
+              'executable': sys.executable,
+              'dont_write_bytecode': sys.flags.dont_write_bytecode,
+              'no_site': sys.flags.no_site,
+              'optimize': sys.flags.optimize,
+          }, sort_keys=True))
+          PY_TOOL
+          cat > "$evidence/check_cold.py" <<'PY_COLD'
+          import contextlib
+          import hashlib
+          import io
+          import json
+          from pathlib import Path
+          import sys
+          import unittest
+
+          ROOT = Path.cwd().resolve()
+          HERE = ROOT / 'candidates/qwen2_live_attention_model_m128'
+          EVIDENCE = ROOT / 'work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold'
+          MODE = sys.argv[1]
+          EXPECTED_OPTIMIZE = {'default': 0, 'normal': 0, 'optimized': 1}[MODE]
+          SOURCE_DIGEST = '52d0d8f4802c06738a1678145b02d26e1c29663ffd7761590b27da297a650fb3'
+
+
+          def require(condition, message):
+              # Explicit branches keep all workflow guards active under -O.
+              if not condition:
+                  raise SystemExit(message)
+
+
+          def source_check():
+              pins = json.loads((HERE / 'pins.json').read_text())
+              expected = pins['dependency_sha256']
+              require(len(expected) == 154, 'expected exactly 154 pinned dependencies')
+              actual = {}
+              for name, digest in expected.items():
+                  path = ROOT / name
+                  require(path.is_file() and not path.is_symlink()
+                          and path.resolve().is_relative_to(ROOT), 'invalid source path: ' + name)
+                  actual[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+                  require(actual[name] == digest, 'dependency drift: ' + name)
+              for path in HERE.iterdir():
+                  if path.is_file() and (path.suffix == '.py'
+                                        or path.name in ('pins.json', 'source_correspondence.json')):
+                      require(not path.is_symlink(), 'aliased source file: ' + path.name)
+                      actual[str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()
+              require(len(actual) == 169, 'expected exactly 169 executed-source identities')
+              digest = hashlib.sha256(json.dumps(actual, sort_keys=True).encode()).hexdigest()
+              require(digest == SOURCE_DIGEST, 'FAILED_BUDGET source snapshot drift')
+              # This immutable true bit is historical authorization consumed by the failed run.
+              # Neither the bit nor green cold CI authorizes a retry or asserts a numeric PASS.
+              require(pins.get('actual_execution_authorized') is True,
+                      'historical consumed authorization bit changed')
+              summary = json.loads((HERE / 'SUMMARY.json').read_text())
+              require(summary.get('schema') == 'qwen2_m128_attention_failed_snapshot_v1'
+                      and summary.get('status') == 'FAILED_BUDGET_INCOMPLETE'
+                      and summary.get('default_status') == 'NOT_EXECUTED'
+                      and type(summary.get('rows')) is int and summary['rows'] == 128,
+                      'failed-baseline metadata changed')
+              for flag in ('fullblock_pass', 'rtl_executed', 'finalfence', 'old_pass_inherited'):
+                  require(summary.get(flag) is False, 'unsafe failed-baseline flag: ' + flag)
+              for field in ('hardware_cycles', 'hardware_utilization'):
+                  require(field in summary and summary[field] is None, 'invented hardware metric: ' + field)
+              for flag in ('backend_drained', 'pc12_held', 'official_comparison_executed'):
+                  require(summary.get('actual', {}).get(flag) is False, 'unsafe actual flag: ' + flag)
+              require(summary.get('narrow_evidence', {}).get('official_m128_attention_pass') is False,
+                      'cold or narrow evidence must not imply complete official Attention PASS')
+              authorization = summary.get('authorization', {})
+              require(authorization.get('persisted_bit') is True
+                      and authorization.get('retry_authorized_by_this_snapshot') is False,
+                      'failed snapshot cannot authorize another actual run')
+              integrity = summary.get('source_integrity', {})
+              require(type(integrity.get('unique_executed_files')) is int
+                      and integrity['unique_executed_files'] == 169
+                      and integrity.get('source_manifest_sha256') == SOURCE_DIGEST,
+                      'published source identity differs')
+
+
+          def cold_audit(event, args):
+              if event == 'import' and args[0].split('.')[0] in ('numpy', 'torch', 'yaml'):
+                  raise RuntimeError('numeric runtime import forbidden in cold CI')
+              if event.startswith(('subprocess.', 'socket.', 'os.exec', 'os.spawn')) or event in (
+                      'os.system', 'os.fork', 'os.forkpty', 'os.posix_spawn'):
+                  raise RuntimeError('process or network operation forbidden in cold CI')
+              if event == 'ctypes.dlopen' and args[0] is not None:
+                  raise RuntimeError('native library loading forbidden in cold CI')
+              if event == 'open':
+                  name, mode, flags = args
+                  if ((isinstance(mode, str) and any(c in mode for c in 'wax+'))
+                          or flags & (1 | 2 | 64 | 512 | 1024)):
+                      raise RuntimeError('writes forbidden within cold runner/tests')
+                  if isinstance(name, (str, bytes)):
+                      path = Path(name.decode() if isinstance(name, bytes) else name).resolve()
+                      if path.suffix in ('.bin', '.f32le', '.bf16le', '.npy', '.npz', '.safetensors'):
+                          require(path == ROOT / 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin',
+                                  'payload access forbidden in cold CI: ' + str(path))
+
+
+          require(sys.implementation.name == 'cpython' and sys.version_info[:2] == (3, 12)
+                  and sys.flags.dont_write_bytecode == 1 and sys.flags.no_site == 1
+                  and sys.flags.optimize == EXPECTED_OPTIMIZE,
+                  'unsupported actual cold interpreter identity/mode')
+          tool = json.loads((EVIDENCE / 'tool.json').read_text())
+          require(tool.get('implementation') == sys.implementation.name
+                  and tool.get('version') == sys.version and tool.get('executable') == sys.executable
+                  and tool.get('version_info') == list(sys.version_info)
+                  and tool.get('dont_write_bytecode') == 1 and tool.get('no_site') == 1
+                  and tool.get('optimize') == 0, 'tool receipt does not match the actual interpreter')
+          sys.path.insert(0, str(ROOT))
+          sys.addaudithook(cold_audit)
+          source_check()
+          if MODE == 'default':
+              from candidates.qwen2_live_attention_model_m128 import runner
+              captured = io.StringIO()
+              with contextlib.redirect_stdout(captured):
+                  code = runner.main([])
+              require(code == 0, 'default runner failed')
+              result = json.loads(captured.getvalue())
+              require(result.get('status') == 'NOT_EXECUTED'
+                      and type(result.get('rows')) is int and result['rows'] == 128,
+                      'default must remain NOT_EXECUTED for M128')
+              for flag in ('input_loading', 'build', 'rtl', 'fullblock'):
+                  require(result.get(flag) is False, 'unsafe or missing default flag: ' + flag)
+              require(result.get('actual_execution_authorized') is True,
+                      'default must preserve the historical consumed authorization identity')
+              source_check()
+              print(captured.getvalue(), end='')
+          else:
+              EXPECTED = {
+                  'test_gate.ColdGateTests.test_default_not_executed_without_numeric_imports',
+                  'test_gate.ColdGateTests.test_dependency_drift_rejected',
+                  'test_gate.ColdGateTests.test_eighteen_oracles_blocked_before_seal',
+                  'test_gate.ColdGateTests.test_exact_scope_rows',
+                  'test_gate.ColdGateTests.test_fresh_output_metadata_only_within_run',
+                  'test_gate.ColdGateTests.test_old_m128_package_unchanged',
+                  'test_gate.ColdGateTests.test_only_new_frozen_namespace_after_seal',
+                  'test_gate.ColdGateTests.test_only_nine_executable_inputs',
+                  'test_gate.ColdGateTests.test_partial_actual_arguments_rejected',
+                  'test_gate.ColdGateTests.test_paths_are_narrow',
+                  'test_gate.ColdGateTests.test_prior_actual_and_arbitrary_binary_rejected',
+                  'test_gate.ColdGateTests.test_reference_freeze_requires_valid_sha',
+                  'test_gate.ColdGateTests.test_source_bounds_distinguish_actual_slice',
+                  'test_gate.ColdGateTests.test_unfrozen_attention_rejected_before_paths',
+                  'test_pv32_owner_cold.ColdOwner.test_one_base_tick_call',
+                  'test_pv32_owner_cold.ColdOwner.test_qk_softmax_ast_exact',
+                  'test_pv32_owner_cold.ColdOwner.test_two_ack_marker_and_single_16_hold',
+                  'test_pv32_trace.ColdPV32.test_default',
+                  'test_pv32_trace.ColdPV32.test_optin_paths',
+                  'test_pv32_trace.ColdPV32.test_tail',
+                  'test_pv32_trace.ColdPV32.test_width',
+              }
+              prefix = 'candidates.qwen2_live_attention_model_m128.'
+              modules = [prefix + name for name in ('test_gate', 'test_pv32_trace', 'test_pv32_owner_cold')]
+              suite = unittest.defaultTestLoader.loadTestsFromNames(modules)
+
+              def test_ids(node):
+                  if isinstance(node, unittest.TestSuite):
+                      return [test_id for child in node for test_id in test_ids(child)]
+                  return [node.id().removeprefix(prefix)]
+
+              ids = test_ids(suite)
+              require(len(ids) == 21 and len(set(ids)) == 21 and set(ids) == EXPECTED,
+                      'missing, duplicate, or unexpected cold tests: ' + repr(ids))
+              result = unittest.TextTestRunner(verbosity=2).run(suite)
+              require(result.testsRun == 21 and result.wasSuccessful()
+                      and not result.skipped and not result.expectedFailures
+                      and not result.unexpectedSuccesses,
+                      'expected exactly 21 passing cold tests, zero skips/expected failures')
+              source_check()
+              require(not any(name.split('.')[0] in ('numpy', 'torch', 'yaml') for name in sys.modules),
+                      'numeric runtime leaked into cold test process')
+              print('PASS: exactly 21 cold tests, zero skips; mode=' + MODE
+                    + '; CPython=' + sys.version.split()[0]
+                    + '; -B=1; -S=1; optimize=' + str(sys.flags.optimize))
+          PY_COLD
+          python -B -S "$evidence/check_cold.py" default 2>&1 | tee "$evidence/default.json"
+          python -B -S "$evidence/check_cold.py" normal 2>&1 | tee "$evidence/normal.log"
+          python -B -S -O "$evidence/check_cold.py" optimized 2>&1 | tee "$evidence/optimized.log"
+      - name: Preserve only exact-head cold evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-live-attention-model-m128-cold-${{ github.sha }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          path: |
+            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/head.txt
+            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/tool.json
+            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/default.json
+            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/normal.log
+            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/optimized.log

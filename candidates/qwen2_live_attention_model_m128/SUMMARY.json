@@ -1,0 +1,238 @@
+{
+  "actual": {
+    "accepted": {
+      "completion_backpressure_edges": 30,
+      "completion_fire": 10,
+      "host_model_ticks": 8113758,
+      "idle_owner_edges": 118,
+      "owner_result_fire": 10,
+      "request_fire": 11,
+      "result_fire": 0
+    },
+    "actual_stage": "Attention",
+    "attempts": 1,
+    "backend_drained": false,
+    "exit_code": 1,
+    "full_owner_state_ticks": null,
+    "host_wall_seconds": 570.0906500809942,
+    "inner_budget_seconds": 570,
+    "last_complete_pv_head": 6,
+    "last_complete_pv_token": 112,
+    "last_observed_probability_key_count": 5,
+    "last_observed_qk_head": 7,
+    "last_observed_qk_key_count": 113,
+    "last_observed_qk_token": 112,
+    "matrix": {
+      "legacy_replies": 921633,
+      "normal_done": 82244,
+      "normal_groups": 82245,
+      "normal_results": 921633,
+      "normal_steps": 921633,
+      "owner_acquires": 29,
+      "owner_releases": 28,
+      "owner_responses": 28
+    },
+    "normal_c_fma": 471876096,
+    "observed_control_boundary": "events present0..10; completion PCs0..9 retired; Attention remains in flight",
+    "official_comparison_executed": false,
+    "oracle_open_reached_by_source_control_flow": false,
+    "original_error": "ValueError('public FFN host budget exceeded')",
+    "outer_watchdog_fired": false,
+    "outer_watchdog_seconds": 600,
+    "partial_observation": {
+      "dot_bf16": {
+        "observed_words": 76840,
+        "writes": 76840
+      },
+      "dot_parts": {
+        "observed_words": 1229440,
+        "writes": 1229440
+      },
+      "normalizer": {
+        "observed_words": 4056,
+        "writes": 920739
+      },
+      "prob_bf16": {
+        "observed_words": 76732,
+        "writes": 306913
+      },
+      "pv_bf16": {
+        "observed_words": 172928,
+        "writes": 172928
+      },
+      "pv_raw": {
+        "observed_words": 172928,
+        "writes": 172928
+      },
+      "scores_bf16": {
+        "observed_words": 76840,
+        "writes": 76840
+      },
+      "softmax_exp": {
+        "observed_words": 76840,
+        "writes": 76840
+      },
+      "softmax_fp32": {
+        "observed_words": 76732,
+        "writes": 306913
+      },
+      "unrounded_dot_sum": {
+        "observed_words": 76840,
+        "writes": 76840
+      }
+    },
+    "pc12_held": false,
+    "peak_rss_kib": null,
+    "physical_attention": {
+      "ack_bytes": 691712,
+      "bytes": 786432,
+      "published": false,
+      "sha256": "20998f8e3e8a85913d9c9206f7bf5dbaa64f549bc52247646d01aca220d6262d",
+      "terminal": false,
+      "written_bytes": 691712
+    },
+    "qkv_counters": {
+      "drains": 14,
+      "fma": 402653184,
+      "partials": 28,
+      "steps": 98304
+    },
+    "saved_runtime_oracle_read_list": null
+  },
+  "authorization": {
+    "meaning": "Historical authorization for exactly one now-consumed run; not permission for another attempt",
+    "persisted_bit": true,
+    "retry_authorized_by_this_snapshot": false
+  },
+  "baseline_parent_commit": "74ed5c155beb6316ef7dc497aee45ad1c0bd661b",
+  "default_status": "NOT_EXECUTED",
+  "evidence_records": [
+    {
+      "bytes": 183936,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1/RESULT.json",
+      "sha256": "137ce24887985b32e829eab72ce5014ced852b365e47412eb68255142af83787",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 38586,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1/POST_FAILURE_AUDIT.json",
+      "sha256": "1f3026dcce91f22963e18013567ada1c65056a0ec0d731b558237311ae89cf5b",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 6858,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/M128_PV32_ACTUAL_REPORT.md",
+      "sha256": "76fff2fba4349de1ff0c0720aaeb14b9e9dfe06e484d6822d89c57fcbc03b8c6",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 4741,
+      "path": "work/qwen2_pv32_owner_independent_review_20261014/ACTUAL_FAILURE_REVIEW.json",
+      "sha256": "ed85ff1a024b376f04e1f16adb2a46a9580314f886df9084adf187aa64aaa526",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 67239,
+      "path": "work/qwen2_pv32_owner_independent_review_20261014/VERDICT.json",
+      "sha256": "6778b4df4b8af7e4d01c24bd09e43951e3c3da0b6f8bee073dab6d059714154f",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 27201,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1_source_freeze/SOURCE_SNAPSHOT.json",
+      "sha256": "bff383f16a92f8835b0ac119563f76ae2e841aa160c5c93fc9c7af0a4b2636ca",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 498,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1_source_freeze/COUNT_ERRATUM.json",
+      "sha256": "80581447c2f3b5afeb6845c24a24321f9bfeb8ae01e9b933324def53bf5a5dc1",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 541,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/m128_pv32_actual_v1_source_freeze/AUTHORIZATION_DELTA.json",
+      "sha256": "1d9a1ae90689ef7c2cc1d18fb42a4b6c56533c9690a27cacc767545e1594fed6",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 96253,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/calibration_v1/RESULT.json",
+      "sha256": "d39dceb52df9a97a2a1a65df2113f277d62a8aeabe4f8ac515d6d2787f6f4b6d",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 75749,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/pv32_trace_v2/RESULT.json",
+      "sha256": "cb81ea26b64e9b12461584a4b93f25964df3be87092a8359fbbe9f7843f65887",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 365946,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/pv32_small_owner_v3/RESULT.json",
+      "sha256": "62d43ac1aad17e7e325b277ed77fb177864a5cff9a9f347205d038d2ecd70be8",
+      "uploaded_to_git": false
+    },
+    {
+      "bytes": 65186,
+      "path": "work/qwen2_live_attention_numeric_m128_20261014/preflight_v5/RESULT.json",
+      "sha256": "c96cf1369ebff7e40dcda041ccefff7b08533efb91b2c646fb72dac8c3f578e5",
+      "uploaded_to_git": false
+    }
+  ],
+  "finalfence": false,
+  "full_schedule_predictions_not_completed": {
+    "original_c_fma": 811597824,
+    "original_steps": 1585152,
+    "pv32_c_fma": 608698368,
+    "pv32_full_array_opportunities": 4869586944,
+    "pv32_steps": 1188864,
+    "useful_fma": 25362432,
+    "useful_over_executed_ratio": 0.041666666666666664,
+    "useful_over_full_array_opportunities": 0.005208333333333333
+  },
+  "fullblock_pass": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "narrow_evidence": {
+    "cold_tests": {
+      "normal": 21,
+      "optimized": 21,
+      "scope": "stdlib admission/isolation/source only"
+    },
+    "native_trace": "10 synthetic cases, 30 groups, 63 steps; original two16 vs PV32 bit equality; not official complete Attention",
+    "official_m128_attention_pass": false,
+    "public_fence": "three actual API rejection probes; two use isolated replayed failed owner metadata, not same-chain fault runs",
+    "small_owner": "26 cases including19 candidate negatives, M1/M2 original/PV32 and observer off/on; successful-domain equivalence only"
+  },
+  "numeric_mismatch_proven": false,
+  "old_pass_inherited": false,
+  "payload_policy": {
+    "evidence_records_are_paths_sizes_sha256_only": true,
+    "raw_weights_elf_logs_or_arrays_committed": false
+  },
+  "publication_scope": "Frozen software model source, narrow passing gates, and exact full-run budget failure. No numeric payload or complete-run acceptance.",
+  "resources": {
+    "added_accumulator_or_matrix_kernel": false,
+    "columns_per_context": 256,
+    "contexts": 5,
+    "fp32_bytes": 4,
+    "full_array_fma_opportunities_per_step": 4096,
+    "matrix_accumulator_bytes": 81920,
+    "profile0_executed_fma_per_step": 512,
+    "rows_per_context": 16
+  },
+  "review_status": "INDEPENDENT_FAILURE_SCOPE_REVIEW_PASSED; remote cold CI not yet executed",
+  "rows": 128,
+  "rtl_executed": false,
+  "schema": "qwen2_m128_attention_failed_snapshot_v1",
+  "source_integrity": {
+    "after_check_provenance": "Independent POST_FAILURE_AUDIT and reviewer rehash; original FAILED RESULT never reached its successful-run source-after gate.",
+    "before_after_current_equal": true,
+    "snapshot_list_count_erratum": "Auxiliary harness appears twice in list; dictionary and frozen files contain169 unique paths. Original snapshot unchanged.",
+    "source_manifest_sha256": "52d0d8f4802c06738a1678145b02d26e1c29663ffd7761590b27da297a650fb3",
+    "tools_inputs_metadata_before_after_equal": true,
+    "unique_executed_files": 169
+  },
+  "status": "FAILED_BUDGET_INCOMPLETE"
+}

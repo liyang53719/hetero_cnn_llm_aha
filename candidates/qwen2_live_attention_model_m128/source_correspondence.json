@@ -1,0 +1,34 @@
+{
+  "attention_owner": "additive OfficialPV32AttentionOwner, original QK/softmax AST unchanged",
+  "attention_profile": 0,
+  "boundary": "fresh pc0..12 same-live-chain; pc12 held;11owner/12completion",
+  "calibration_only": "work/qwen2_live_attention_numeric_m128_20261014/calibration_v1/RESULT.json",
+  "existing_arithmetic_unmodified": true,
+  "fault_prefix_contract": "final selected32 finite check before either write; high-half fault may reject earlier than original two groups",
+  "fullblock_pass": false,
+  "legacy_baseline_step_prediction": 1585152,
+  "matrix_accumulator_bytes": 81920,
+  "matrix_accumulators": [
+    5,
+    16,
+    256
+  ],
+  "matrix_flags": "not architecturally connected; selected finite checks only; native fenv diagnostic in directed ABI trace",
+  "matrix_profile_changed": false,
+  "official_mapping": {
+    "att": "physical ACKed token-major pv transpose",
+    "logits": "scores_bf16 causal; implicit zero allowed mask",
+    "prob": "prob_bf16 causal",
+    "pv": "pv_bf16 all",
+    "scores": "scores_bf16 causal",
+    "softmax_fp32": "softmax_fp32 causal diagnostic; per-row sum gate"
+  },
+  "public_binding": "candidate constructor type guard only; all execution methods inherited",
+  "pv32_fma_prediction": 608698368,
+  "pv32_step_prediction": 1188864,
+  "pv_schedule": "original profile0 one query x32, four probability repeats; existing Legacy reply held through two BF16 write ACKs",
+  "schema": 1,
+  "status": "SOURCE_FROZEN_PENDING_FULL_M128",
+  "typed_attention_bit_exact_executed": false,
+  "useful_fma_prediction": 25362432
+}

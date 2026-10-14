@@ -72,7 +72,8 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          # AST pins require 3.12; the patch version is not a capture-runtime claim.
+          python-version: '3.12'
       - name: Standard-library defaults and 20 cold gates in both modes
         shell: bash
         run: |
@@ -81,6 +82,12 @@ jobs:
           mkdir work/qwen2_attention_reference_ci_20261014/ci-cold
           git rev-parse HEAD | tee work/qwen2_attention_reference_ci_20261014/ci-cold/head.txt
           test "$(cat work/qwen2_attention_reference_ci_20261014/ci-cold/head.txt)" = "$GITHUB_SHA"
+          python -B -S - <<'PY'
+          import sys
+          if sys.version_info[:2] != (3, 12):
+              raise SystemExit('REJECTED: pinned official AST requires Python 3.12; got ' + sys.version)
+          print('Cold AST interpreter: ' + sys.version + '; executable=' + sys.executable)
+          PY
           python -B -S candidates/qwen2_live_attention_reference_m128/recipe.py 2>&1 | tee work/qwen2_attention_reference_ci_20261014/ci-cold/default.json
           python -B -S -m unittest discover -s candidates/qwen2_live_attention_reference_m128/tests -v 2>&1 | tee work/qwen2_attention_reference_ci_20261014/ci-cold/normal.log
           python -B -S -O -m unittest discover -s candidates/qwen2_live_attention_reference_m128/tests -v 2>&1 | tee work/qwen2_attention_reference_ci_20261014/ci-cold/optimized.log

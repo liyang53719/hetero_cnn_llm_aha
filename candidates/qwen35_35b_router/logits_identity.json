@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "base_commit": "8e0b2bbd35b3fee5ba2ca3e1f37e9274266b7689",
+  "scope": "SAVED_POSTNORM_LOGITS_REPLAY_ONLY",
+  "original_evidence": {
+    "path": "work/router_precision_20261014T0702Z/SUMMARY.json",
+    "sha256": "319e232b758aed39bc4dfe5f3bd4a5c0f4f88293ad6a51e60a75b2d2c16a6826"
+  },
+  "base_sources": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27",
+    "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "c17be9ad7648b0c5ad1802034b47e686abb62ac08ce79d7489491052e300bdfe",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "e4e2c3f7928da3e2c72f03e04e0e9f0a7753a85e19df36b91468da5d3491b802",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen35_35b_conv/payload.py": "2d23660b650879230c24037474d7f35de60610df12b58494ce0fba1e485201b4",
+    "candidates/qwen35_35b_conv/reference.py": "9a75df30a0763c248097fbae99e8d3f730dd641b89761698f94b75ab3b9adb7d",
+    "candidates/qwen35_35b_conv/verify.py": "0e04e5241bd854f1e490ca3a95d7fd7107d22c212293dae476c32b2fc69a73f3",
+    "candidates/qwen35_35b_payload/__init__.py": "1aa7a9f8752b61eff2288b0732a056525adbdeee2f74ee054f3ef32fbd2c8434",
+    "candidates/qwen35_35b_payload/packer.py": "e11d8d2a7499629d57f4341e440c4c1f06c080368b8d2cdd190af5ad5197ccc9",
+    "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+    "candidates/qwen35_35b_prefill/prefix_driver.py": "fc911dc5e387dd470df9fedf99d930158a95a46188d0706ef2f183879e5300e8",
+    "candidates/qwen35_35b_prefill/projection_driver.py": "76e4dc2f6f19fc529feecdc066489f1a1aaa9dfd9f51445c279c8eb23ad92c7b",
+    "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+    "candidates/qwen35_35b_prefill/run_prefix.py": "82b8e8dc886b931218902b3869325b93eb1ca3a4302aaabcee2f4ce88841f602",
+    "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+    "candidates/qwen35_35b_projection_reference/run_reference.py": "97bd314c65049a9f78a44c25b76724499624c050db42a6b1573e6709120cf1af",
+    "candidates/qwen35_35b_rms/__init__.py": "60f72d6b1dee8a03768c23fcae4feec2f7522101516e1c69ee9220ba5b6f399f",
+    "candidates/qwen35_35b_rms/owner.py": "14f8f9bb0ee5845dea3a2e3ff203128563e7b1fda11b64c354c26cfdc2cbedc1",
+    "candidates/qwen35_35b_rms/reference.py": "b7a59beb38817ce10d0416de575983762c296a87eef9d57ea87b28158b091230",
+    "candidates/qwen35_35b_rms/runtime_recovery_20261013.json": "9e088926a8f5fd2490ce687f07947d8d1f07304ff9d980702070c3dda00d367d",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919",
+    "candidates/qwen35_gdn_prefill/conv/model.py": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486",
+    "candidates/qwen35_gdn_prefill/conv/reference.py": "6b4c756229b4dc80c511d2a5b5ffbe35bddd744f0d5985baec87439ba2c1f806",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/prefill_bf16_compare.py": "964416ed0a267a4c98bc9cb8fd3c7cfbab12ef8cd58092cadeaaa4c6f803c01b",
+    "candidates/qwen35_gdn_prefill/projection_driver.py": "2ef090d3cc4abdb7cc88a479933166378f570b6ae8eb3960fa18f841a9eaf05f",
+    "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/activations.py": "5b20c0a3625edc0001a98f09ce3c6b5baa1100e1d7ad8dee649e4d45c8468665",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/manifest.json": "ca44aa87cfedd5d302b62c02d77ce64624009998edb78fe0bd025c42beaa4c8e",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00001-of-00014.safetensors.header.bin": "7258e5607c88f9c2a57442daa6b35fd03b67748b35dc675d80abcca8306f7b79",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00001-of-00014.safetensors.http_receipt.json": "c5a4b3ea10d3c55d592fe98626b7b101886b15262a3d2152b390a382a85123fd",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00002-of-00014.safetensors.header.bin": "da86c779827f550e37108c71f49389af9e4748e91f5e2fcafd909f9bfbae224f",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00002-of-00014.safetensors.http_receipt.json": "c55e788f42b1716003c0a685ad719829073df9ac7840ac0297a0941ffe9b8699",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00003-of-00014.safetensors.header.bin": "c76ecbb8846a36822ff25a2c9c1d0c4ff88d0457b6eec1e2c49691831710d19c",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00003-of-00014.safetensors.http_receipt.json": "cd56908b258171f93adb0b000bab0e1d0e1e1815b172dcce6e6cfa1a224befc7",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00004-of-00014.safetensors.header.bin": "96164d84e600787afa3382f0504814826c30cc01a588ae36ed7d6f762ddcf103",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00004-of-00014.safetensors.http_receipt.json": "31dcc1f8397e5d2732cabc9ba5bcfce5f00de8025e02c9089990f8fe79aa262c",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00005-of-00014.safetensors.header.bin": "6fe09c76fda2966a878cf8022df68219304b383332816298be251bf469522de0",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00005-of-00014.safetensors.http_receipt.json": "3a80efc7c62cde17467dc3ab67024dcae3f33f463d7773444e490d9674b9e308",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00006-of-00014.safetensors.header.bin": "d046e1c1f93c5b860bf19fe945348d47d37db065374e602b8edade922ac55251",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00006-of-00014.safetensors.http_receipt.json": "347d338d445ba7e7174b2b0defded1c1d899e62079569ba437c8ef480a938cb3",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00007-of-00014.safetensors.header.bin": "fa9f8f3a6ae48afa0282407bccb0aa76fff8895edcc881d83b4051fff74076da",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00007-of-00014.safetensors.http_receipt.json": "e60418c1ae63344deee38b313ee610a5b322a4f946d1bd6191b46f7dc11ff67f",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00008-of-00014.safetensors.header.bin": "8cdb975ddd7c96811076c7d890c191ab8e7586b404ed4c591b70559285703a12",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00008-of-00014.safetensors.http_receipt.json": "f2107cc7a68562bacdeca88eb7aba84fd3be7f49d4fa6fddaa9442e028afc427",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00009-of-00014.safetensors.header.bin": "0dcc9ac625c835a163f22100d3634400703465e662a72ef6dfff8861445b276e",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00009-of-00014.safetensors.http_receipt.json": "0194865144c69879ed30f06e4296f45cf55394ea09eb93e0898dc635398a77cd",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00010-of-00014.safetensors.header.bin": "a804819b40437e86d369aded578d0391c280cf5303375b3ea704f911c364ed45",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00010-of-00014.safetensors.http_receipt.json": "6c1ade5aaab6bfa1ea10589bfd30d1005186661f65f3eddc5854359ff3bcae9b",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00011-of-00014.safetensors.header.bin": "cf48dc99f81ccef189f530e158589a2448e9a0ea24684049b7ba31a665bb8524",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00011-of-00014.safetensors.http_receipt.json": "47bca0e53febef7aa854d5b317bcdac656439fe7a35475ddc60c636fc6915216",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00012-of-00014.safetensors.header.bin": "1dc1ac0e6cbbf753f4b239475460e305ada18a244c06198962c87383b9c26883",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00012-of-00014.safetensors.http_receipt.json": "689958d537dbe689029c0e9672cdaf7a6bb3457c5e0d5c1b1d8f02f91efa08b0",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00013-of-00014.safetensors.header.bin": "3141fc97fe31229a9e6680d12ca8c9dbca665f3cd9b70bfd1c82b836a8ff7c81",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00013-of-00014.safetensors.http_receipt.json": "7fb7abf1c65e266d2cbe6f759f2e39c9ee3c9da140cd990f19761eb7de17e3ba",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00014-of-00014.safetensors.header.bin": "d6d6f3155bd210da84591c715306d39d0ba4c1a7878db8bdcc65dc52054e85d2",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00014-of-00014.safetensors.http_receipt.json": "ed82d6f205df8b1ca91f70ac28a2debe2066582ed310008c97b357a605fdc0fb",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors.index.json": "d8d0b7ca4e61ae107e3e87a3ff21136b3ac7c789e64bb24267227ca804e04205",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/model_api.json": "66c94cbcaeeee131aa3bae1c6f76edcf554eb6e72ded1cac3aced9ef15016bca",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/modular_qwen3_5_moe.py": "8869d02c757f9deeac9ea94ecd5ddd083e3001ca6f8b978cc002a51beee46371",
+    "scripts/build_shared_matrix_recipe.py": "2bcb269f959c04af287d2c0de9cbaf63169081d897b26ee25a96392e20a9f271",
+    "src/heteronpu/__init__.py": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be",
+    "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+    "src/heteronpu/cgra_sfu.py": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854",
+    "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+    "src/heteronpu/config.py": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4",
+    "src/heteronpu/dtypes.py": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34",
+    "src/heteronpu/kv_engine.py": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a",
+    "src/heteronpu/matrix_engine.py": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8",
+    "src/heteronpu/model_geometry.py": "04984111accff6b83bd1ab162d68dd44b0abb7c36de26631f764f774a2d25dee",
+    "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+    "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+    "src/heteronpu/qwen35_dense_contract.py": "28e57e3da8dde828ebd30c063cfa1295ac2099346b36eccfad2e4e5a1a2c5dfa",
+    "src/heteronpu/qwen_family_contracts.py": "7cddcac095535e706ac31161303c94a8ad0a0ad6c4ece775f279190c5f283ab0",
+    "src/heteronpu/scheduler.py": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55",
+    "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8"
+  },
+  "candidate_sources": {
+    "candidates/qwen35_35b_router/payload.py": "f5d3363404b80b5fdf6a98c43ca99b0a55094bfa100dcdde6e8db1d1e1de46ab",
+    "candidates/qwen35_35b_router/pinned_reference_smoke.py": "292a220743c8b041efdc538a57f0f195576f65e508f677201964866e9d1fbfc4",
+    "candidates/qwen35_35b_router/reference.c": "06570d3bee507fb7b355f9718129b352564cbfc67a4112ffa74d2983a84bd773",
+    "candidates/qwen35_35b_router/reference.py": "142926b7604a37c6e099d612413dfdb3754f414645587f19c0741816a2df51f9",
+    "candidates/qwen35_35b_router/run_logits.py": "db7a74e6f42378698aab8b71ecc4662f3dc113520dbdbb47c5a6e3d5934a307f",
+    "candidates/qwen35_35b_router/test_logits.py": "22bd73e30a0eee5e729ab710edb320c6e10fb97abda39df8438954945ed91c0a",
+    "candidates/qwen35_35b_router/test_payload.py": "7d3c667f8747cf49d20fa7a07061cf2ffcbb2cb52c389e1cc2a961c4821a9697",
+    "candidates/qwen35_35b_router/test_reference.py": "dd249bc618f22dc29379ef155afbb1ef9bd863e388ae8fab0759c55157484a64"
+  },
+  "runtime": {
+    "runtime_profile": "recovery_20261013",
+    "torch_version": "2.10.0+cpu",
+    "torch_git_revision": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "numpy_version": "2.3.5",
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "cpu_capability": "DEFAULT",
+    "intraop_threads": 1,
+    "interop_threads": 1,
+    "sha256": {
+      "python.sh": "96b219bd3d5c5aaeaf47685dfa9e12c2012f1e4a799d74e844e9005f494e26c2",
+      "runtime_receipt.json": "19bbdd8c3cc8b182c6b85db0a163a825a236d88718c2598926a7a2d4b4fff854",
+      "site-packages/torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f",
+      "site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+      "site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+    },
+    "build_config_sha256": "4357da55584ba812c9f81a8baf65bb935a0345c1ef83e5e39e76803c1899ce8b",
+    "complete_runtime_dependency_source_closure": false,
+    "installed_transformers_is_not_35b_source_authority": true
+  },
+  "fixtures": {
+    "cases": {
+      "16": {
+        "producer_summary": {
+          "bytes": 603234,
+          "sha256": "368aa8ec2a5b5ac98a79bb24ca5fe718b4a7ab0cf90e9268c261851e2a98501d"
+        },
+        "input": {
+          "bytes": 65536,
+          "sha256": "56503fe5be27c505efb209c0c23c172a2c760f290f9a9327ca922fbd893507ff"
+        },
+        "official_logits_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460",
+        "sequential_bit_mismatches": 1
+      },
+      "128": {
+        "producer_summary": {
+          "bytes": 712185,
+          "sha256": "acd9b3e99654c72a1d868dd9eb079ac255ecb0be76bfebbe21a3e491a4556f07"
+        },
+        "input": {
+          "bytes": 524288,
+          "sha256": "b524371f72e29cd0f98411effd0d1fbe73d29b9bcc0af4010170478b1bb1f174"
+        },
+        "official_logits_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c",
+        "sequential_bit_mismatches": 4
+      }
+    },
+    "payload_manifest": {
+      "bytes": 6007,
+      "sha256": "1d472ba347d552b9226496c237090b504f9f6158758ba347ade7187c6d7f5df2"
+    },
+    "weight": {
+      "bytes": 1048576,
+      "sha256": "d55bd73f2cfdb0bd87a2228e6b1894757b9ca3a6fdd6ecac7418cb2a829fbac3"
+    },
+    "matrix_library": {
+      "bytes": 27032,
+      "sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc"
+    },
+    "vector_library": {
+      "bytes": 15880,
+      "sha256": "71275803ea5ab05fd5ef991c133f0a87a9217e062fd012b416dd627aafd12e8d"
+    },
+    "reference_compiler": {
+      "bytes": 1162264,
+      "sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f"
+    },
+    "reference_libm": {
+      "bytes": 977112,
+      "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+    }
+  },
+  "router_class_sha256": "b2ac8438aa26449aeafbb7a80b1af9f2b4fa85a6b96aec3229377976c2d73be1"
+}

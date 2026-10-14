@@ -1,0 +1,153 @@
+name: qwen35-router-logits-cold
+
+# Source/rejection gates only. External frozen-fixture arithmetic is not run.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen35-router-logits-cold.yml'
+      - 'candidates/qwen35_35b_router/**'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/profile.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py'
+      - 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_drain/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py'
+      - 'candidates/qwen2_resident_matrix/ffn_group/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/model.py'
+      - 'candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp'
+      - 'candidates/qwen2_resident_matrix/ffn_window/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/ffn_window/model.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/model.py'
+      - 'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp'
+      - 'candidates/qwen35_35b_conv/payload.py'
+      - 'candidates/qwen35_35b_conv/reference.py'
+      - 'candidates/qwen35_35b_conv/verify.py'
+      - 'candidates/qwen35_35b_payload/__init__.py'
+      - 'candidates/qwen35_35b_payload/packer.py'
+      - 'candidates/qwen35_35b_prefill/partial_tiles.py'
+      - 'candidates/qwen35_35b_prefill/prefix_driver.py'
+      - 'candidates/qwen35_35b_prefill/projection_driver.py'
+      - 'candidates/qwen35_35b_prefill/projection_owner.py'
+      - 'candidates/qwen35_35b_prefill/run_prefix.py'
+      - 'candidates/qwen35_35b_prefill/sum_tiles.py'
+      - 'candidates/qwen35_35b_projection_reference/run_reference.py'
+      - 'candidates/qwen35_35b_rms/__init__.py'
+      - 'candidates/qwen35_35b_rms/owner.py'
+      - 'candidates/qwen35_35b_rms/reference.py'
+      - 'candidates/qwen35_35b_rms/runtime_recovery_20261013.json'
+      - 'candidates/qwen35_gdn_prefill/chunk/vector.py'
+      - 'candidates/qwen35_gdn_prefill/chunk/vector16.cpp'
+      - 'candidates/qwen35_gdn_prefill/conv/model.py'
+      - 'candidates/qwen35_gdn_prefill/conv/reference.py'
+      - 'candidates/qwen35_gdn_prefill/conv/scalar.py'
+      - 'candidates/qwen35_gdn_prefill/prefill_bf16_compare.py'
+      - 'candidates/qwen35_gdn_prefill/projection_driver.py'
+      - 'candidates/qwen35_gdn_prefill/projection_owner.py'
+      - 'candidates/qwen35_gdn_prefill/rms_owner.py'
+      - 'candidates/qwen35_gdn_prefill/typed_dense.py'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/activations.py'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/config.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/manifest.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00001-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00001-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00002-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00002-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00003-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00003-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00004-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00004-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00005-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00005-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00006-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00006-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00007-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00007-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00008-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00008-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00009-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00009-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00010-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00010-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00011-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00011-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00012-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00012-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00013-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00013-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00014-of-00014.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors-00014-of-00014.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model.safetensors.index.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/model_api.json'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py'
+      - 'config/upstream/weight_headers/qwen3_5_35b_a3b/modular_qwen3_5_moe.py'
+      - 'scripts/build_shared_matrix_recipe.py'
+      - 'src/heteronpu/__init__.py'
+      - 'src/heteronpu/abi_validation.py'
+      - 'src/heteronpu/cgra_sfu.py'
+      - 'src/heteronpu/command.py'
+      - 'src/heteronpu/config.py'
+      - 'src/heteronpu/dtypes.py'
+      - 'src/heteronpu/kv_engine.py'
+      - 'src/heteronpu/matrix_engine.py'
+      - 'src/heteronpu/model_geometry.py'
+      - 'src/heteronpu/pinned_block_payload.py'
+      - 'src/heteronpu/pinned_gdn_payload.py'
+      - 'src/heteronpu/qwen35_dense_contract.py'
+      - 'src/heteronpu/qwen_family_contracts.py'
+      - 'src/heteronpu/scheduler.py'
+      - 'src/heteronpu/weight_header_contract.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen35-router-logits-cold-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  cold:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install metadata packer import dependency
+        run: python -m pip install --index-url https://pypi.org/simple 'numpy==2.3.5'
+      - name: Cold contracts and explicit external-fixture boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/router-logits-cold
+          PYTHONPATH=src python -m unittest candidates.qwen35_35b_router.test_payload candidates.qwen35_35b_router.test_reference candidates.qwen35_35b_router.test_logits -v 2>&1 | tee work/router-logits-cold/normal.log
+          PYTHONPATH=src python -O -m unittest candidates.qwen35_35b_router.test_payload candidates.qwen35_35b_router.test_reference candidates.qwen35_35b_router.test_logits -v 2>&1 | tee work/router-logits-cold/optimized.log
+          python -S -m candidates.qwen35_35b_router.run_logits --out work/router-logits-cold/normal
+          python -O -S -m candidates.qwen35_35b_router.run_logits --out work/router-logits-cold/optimized
+          python -S - <<'PY'
+          import json
+          from pathlib import Path
+          for name in ('normal', 'optimized'):
+              report = json.loads(Path('work/router-logits-cold', name, 'report.json').read_bytes())
+              if report['actual_status'] != 'NOT_EXECUTED' or report['actual_matrix_owner_executed'] is not False:
+                  raise SystemExit('cold workflow cannot claim external arithmetic')
+          PY
+      - name: Preserve cold evidence without model payloads
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen35-router-logits-cold-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/router-logits-cold/*.log
+            work/router-logits-cold/*/report.json

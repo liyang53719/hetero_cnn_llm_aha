@@ -1,0 +1,405 @@
+{
+  "schema": 1,
+  "scope": "PINNED_SAVED_POSTNORM_ACTUAL_TYPED_ROUTER_LOGITS_ONLY",
+  "status": "PASS_SAVED_POSTNORM_ACTUAL_TYPED_LOGITS_ONLY",
+  "generated_at": "2026-10-14T07:35:31.430016+00:00",
+  "base_source_commit": "8e0b2bbd35b3fee5ba2ca3e1f37e9274266b7689",
+  "execution_commit": "36dd2c473815a931e1f74463e9d43e538c11f2f6",
+  "execution_commit_after": "36dd2c473815a931e1f74463e9d43e538c11f2f6",
+  "actual_matrix_owner_executed": true,
+  "actual_status": "PASS",
+  "live_postnorm_producer_handoff": false,
+  "actual_router_tail_executed": false,
+  "complete_router_owner": false,
+  "full_block": false,
+  "command128_executed": false,
+  "rtl_executed": false,
+  "official_model_profile_admitted": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "identity": {
+    "path": "candidates/qwen35_35b_router/logits_identity.json",
+    "bytes": 18481,
+    "sha256": "bd2be32639995ec7b4c3f1c8248f4eb667b7d6046e444a8d6fd819c40c0da7b2"
+  },
+  "identity_unchanged": true,
+  "sources_unchanged": true,
+  "native_artifacts_unchanged": true,
+  "source_identity_counts": {
+    "base": 100,
+    "candidate": 8
+  },
+  "tests": {
+    "normal": {
+      "count": 15,
+      "status": "PASS",
+      "receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/cold_normal.log",
+        "bytes": 2383,
+        "sha256": "62bf032816131d45be98aa195e05bf3b2a3fd1b18ce7775dd58b71e8bc29fc1a"
+      }
+    },
+    "optimized": {
+      "count": 15,
+      "status": "PASS",
+      "receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/cold_optimized.log",
+        "bytes": 2383,
+        "sha256": "1f71de43560176cb41befe5e51ed324534f054a2e742578076b3c68c3fdd4ba5"
+      }
+    },
+    "cold_cli": {
+      "actual_status": "NOT_EXECUTED",
+      "receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/cold_cli.json",
+        "bytes": 869,
+        "sha256": "028dd917a0e7b79013f5868b3a2a06f55863c641ed4a8c5ac109916e6c80cf04"
+      }
+    },
+    "cold_optimized_cli": {
+      "actual_status": "NOT_EXECUTED",
+      "receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/cold_optimized_cli.json",
+        "bytes": 869,
+        "sha256": "028dd917a0e7b79013f5868b3a2a06f55863c641ed4a8c5ac109916e6c80cf04"
+      }
+    },
+    "synthetic_all_tie_smoke": {
+      "scope": "OFFICIAL_SYNTHETIC_ALL_ZERO_ROUTER_TIE_SMOKE_ONLY",
+      "actual_payload": false,
+      "candidate_owner": false,
+      "receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/synthetic_tie_smoke.json",
+        "bytes": 2178,
+        "sha256": "04e440fba0cb604e483ec3b4b79e4d15b66820479e1f4c734f6a25eb774236aa"
+      }
+    }
+  },
+  "fresh_execution_receipt": {
+    "path": "work/router_logits_package_final_20261014T0734Z/actual/report.json",
+    "bytes": 19611,
+    "sha256": "b50faa2962f8ee51fc2122e65dfa06251316689218e6a7330704db6f655d7d4c"
+  },
+  "raw_manifest": {
+    "path": "work/router_logits_package_final_20261014T0734Z/RAW_MANIFEST.json",
+    "bytes": 7895,
+    "sha256": "fda93e9fb2fb78dfe2fb24b1b1ddd04624ca04e17921500268cc0146aafec20c"
+  },
+  "runtime": {
+    "runtime_profile": "recovery_20261013",
+    "torch_version": "2.10.0+cpu",
+    "torch_git_revision": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "numpy_version": "2.3.5",
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "cpu_capability": "DEFAULT",
+    "intraop_threads": 1,
+    "interop_threads": 1,
+    "sha256": {
+      "python.sh": "96b219bd3d5c5aaeaf47685dfa9e12c2012f1e4a799d74e844e9005f494e26c2",
+      "runtime_receipt.json": "19bbdd8c3cc8b182c6b85db0a163a825a236d88718c2598926a7a2d4b4fff854",
+      "site-packages/torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f",
+      "site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+      "site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+    },
+    "build_config_sha256": "4357da55584ba812c9f81a8baf65bb935a0345c1ef83e5e39e76803c1899ce8b",
+    "complete_runtime_dependency_source_closure": false,
+    "installed_transformers_is_not_35b_source_authority": true
+  },
+  "native_artifacts": [
+    {
+      "path": "work/recovery_matrix_library/matrix_silu_numeric.so",
+      "bytes": 27032,
+      "sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc"
+    },
+    {
+      "path": "work/recovery_matrix_library/compile.json",
+      "bytes": 2010,
+      "sha256": "e98d941492b418e28b534c86c6dbd145f162e66ba940e40096117b5ec45fd58d"
+    },
+    {
+      "path": "work/recovery_vector/gdn_vector16.so",
+      "bytes": 15880,
+      "sha256": "71275803ea5ab05fd5ef991c133f0a87a9217e062fd012b416dd627aafd12e8d"
+    },
+    {
+      "path": "work/recovery_vector/gdn_vector16.json",
+      "bytes": 759,
+      "sha256": "97f8f921b82a6ae90964d156fdd4963ca864fb5133da57516ac86d6f7e1051da"
+    }
+  ],
+  "cases": [
+    {
+      "m": 16,
+      "elements": 4096,
+      "output": {
+        "path": "work/router_logits_package_final_20261014T0734Z/actual/m16/actual.logits.bf16le",
+        "bytes": 8192,
+        "sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460"
+      },
+      "owner_receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/actual/m16/owner.json",
+        "bytes": 4768,
+        "sha256": "02036a56c4e611e936f89290d8946d6753fa71196fee8e0998bc21a3ae7d1e0e"
+      },
+      "counts": {
+        "ticks": 45047,
+        "read_command_fire": 17408,
+        "read_fire": 17408,
+        "step_fire": 16384,
+        "result_fire": 16,
+        "matrix_done_fire": 4,
+        "write_command_fire": 32,
+        "write_data_fire": 128,
+        "write_ack_fire": 32,
+        "a_read_beats": 1024,
+        "b_read_beats": 16384,
+        "write_data_bytes": 8192,
+        "ack_bytes": 8192
+      },
+      "resources_drained": true,
+      "resources_retained": true,
+      "output_published": true,
+      "input_readonly": true,
+      "host_seconds": 2.953883780995966,
+      "official": {
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 4096,
+        "bit_mismatches": 0,
+        "numerical_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "signed_zero_only_mismatches": 0,
+        "first_bit_mismatch": null,
+        "actual_subnormal_count": 0,
+        "native_subnormal_count": 0,
+        "actual_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460",
+        "expected_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460"
+      },
+      "independent_c_pair": {
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 4096,
+        "bit_mismatches": 0,
+        "numerical_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "signed_zero_only_mismatches": 0,
+        "first_bit_mismatch": null,
+        "actual_subnormal_count": 0,
+        "native_subnormal_count": 0,
+        "actual_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460",
+        "expected_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460"
+      },
+      "producer": {
+        "summary": {
+          "path": "work/reuse_owner_actual_m16/summary.json",
+          "bytes": 603234,
+          "sha256": "368aa8ec2a5b5ac98a79bb24ca5fe718b4a7ab0cf90e9268c261851e2a98501d"
+        },
+        "input": {
+          "path": "work/reuse_owner_actual_m16/post_attention_norm.actual.bf16le",
+          "bytes": 65536,
+          "sha256": "56503fe5be27c505efb209c0c23c172a2c760f290f9a9327ca922fbd893507ff"
+        }
+      },
+      "reference_receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/actual/m16/reference/report.json",
+        "bytes": 10712,
+        "sha256": "6895559c6a965a94a4c43a9751ba861507f608c4260b192bc72b4022c597d438"
+      },
+      "reference_recipes": {
+        "sequential_k2048": {
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 4096,
+          "bit_mismatches": 1,
+          "numerical_mismatches": 1,
+          "max_bf16_ulp": 1,
+          "max_abs": 0.03125,
+          "mean_abs": 7.62939453125e-06,
+          "signed_zero_only_mismatches": 0,
+          "first_bit_mismatch": 741,
+          "actual_subnormal_count": 0,
+          "native_subnormal_count": 0,
+          "actual_sha256": "4e03be9b3ccc65bee1818cd962a4c33f086e4f544998bf6098bbbb007ed71ca7",
+          "expected_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460"
+        },
+        "pair_hi_first_two_k1024": {
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 4096,
+          "bit_mismatches": 0,
+          "numerical_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "signed_zero_only_mismatches": 0,
+          "first_bit_mismatch": null,
+          "actual_subnormal_count": 0,
+          "native_subnormal_count": 0,
+          "actual_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460",
+          "expected_sha256": "bfb15f320d50d6079792d14a2873636198781bc39faaa23564674e900d795460"
+        }
+      },
+      "sequential_recipe_status": "FAIL_BITEXACT_DIAGNOSTIC_ONLY",
+      "total_host_seconds": 5.912551697008894
+    },
+    {
+      "m": 128,
+      "elements": 32768,
+      "output": {
+        "path": "work/router_logits_package_final_20261014T0734Z/actual/m128/actual.logits.bf16le",
+        "bytes": 65536,
+        "sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c"
+      },
+      "owner_receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/actual/m128/owner.json",
+        "bytes": 4801,
+        "sha256": "72ee4d3a7652c8d201508ee848231e9326980d2e0adafb3201c891275407c557"
+      },
+      "counts": {
+        "ticks": 109111,
+        "read_command_fire": 24576,
+        "read_fire": 24576,
+        "step_fire": 16384,
+        "result_fire": 16,
+        "matrix_done_fire": 4,
+        "write_command_fire": 256,
+        "write_data_fire": 1024,
+        "write_ack_fire": 256,
+        "a_read_beats": 8192,
+        "b_read_beats": 16384,
+        "write_data_bytes": 65536,
+        "ack_bytes": 65536
+      },
+      "resources_drained": true,
+      "resources_retained": true,
+      "output_published": true,
+      "input_readonly": true,
+      "host_seconds": 5.575856506999116,
+      "official": {
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 32768,
+        "bit_mismatches": 0,
+        "numerical_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "signed_zero_only_mismatches": 0,
+        "first_bit_mismatch": null,
+        "actual_subnormal_count": 0,
+        "native_subnormal_count": 0,
+        "actual_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c",
+        "expected_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c"
+      },
+      "independent_c_pair": {
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 32768,
+        "bit_mismatches": 0,
+        "numerical_mismatches": 0,
+        "max_bf16_ulp": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "signed_zero_only_mismatches": 0,
+        "first_bit_mismatch": null,
+        "actual_subnormal_count": 0,
+        "native_subnormal_count": 0,
+        "actual_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c",
+        "expected_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c"
+      },
+      "producer": {
+        "summary": {
+          "path": "work/reuse_owner_actual_m128/summary.json",
+          "bytes": 712185,
+          "sha256": "acd9b3e99654c72a1d868dd9eb079ac255ecb0be76bfebbe21a3e491a4556f07"
+        },
+        "input": {
+          "path": "work/reuse_owner_actual_m128/post_attention_norm.actual.bf16le",
+          "bytes": 524288,
+          "sha256": "b524371f72e29cd0f98411effd0d1fbe73d29b9bcc0af4010170478b1bb1f174"
+        }
+      },
+      "reference_receipt": {
+        "path": "work/router_logits_package_final_20261014T0734Z/actual/m128/reference/report.json",
+        "bytes": 10768,
+        "sha256": "78ff6b857f2e94df4cbfa6cac7dc7bd2f0ae5f854088fc292c241c991eabf222"
+      },
+      "reference_recipes": {
+        "sequential_k2048": {
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "bit_mismatches": 4,
+          "numerical_mismatches": 4,
+          "max_bf16_ulp": 1,
+          "max_abs": 0.03125,
+          "mean_abs": 3.814697265625e-06,
+          "signed_zero_only_mismatches": 0,
+          "first_bit_mismatch": 741,
+          "actual_subnormal_count": 0,
+          "native_subnormal_count": 0,
+          "actual_sha256": "620966ebd930a422d95eae82a638a3111d7dbd08f11e4f9e7f7902e396387e69",
+          "expected_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c"
+        },
+        "pair_hi_first_two_k1024": {
+          "comparison_domain": "finite_bf16_materialized_prefill_v1",
+          "elements": 32768,
+          "bit_mismatches": 0,
+          "numerical_mismatches": 0,
+          "max_bf16_ulp": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "signed_zero_only_mismatches": 0,
+          "first_bit_mismatch": null,
+          "actual_subnormal_count": 0,
+          "native_subnormal_count": 0,
+          "actual_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c",
+          "expected_sha256": "fea8305bff7f3c85f8f3b1cd5d919d960cf2930e73c4c2954644e61922953e4c"
+        }
+      },
+      "sequential_recipe_status": "FAIL_BITEXACT_DIAGNOSTIC_ONLY",
+      "total_host_seconds": 8.821540375996847
+    }
+  ],
+  "historical_evidence": {
+    "summary": {
+      "path": "work/router_precision_20261014T0702Z/SUMMARY.json",
+      "bytes": 14948,
+      "sha256": "319e232b758aed39bc4dfe5f3bd4a5c0f4f88293ad6a51e60a75b2d2c16a6826"
+    },
+    "top8_diagnostics_receipt": {
+      "path": "work/router_precision_20261014T0702Z/top8_diagnostics.json",
+      "bytes": 37128,
+      "sha256": "cf65314193d0d55a50bbb724778729d19f130839ee097212c6566adb1b2e151c"
+    },
+    "top8_reexecuted_by_this_cli": false,
+    "boundary_tie_row_counts": {
+      "16": 0,
+      "128": 41
+    },
+    "internal_tie_row_counts": {
+      "16": 9,
+      "128": 84
+    },
+    "payload_arrays_copied_to_git": false
+  },
+  "remaining_gates": [
+    "Same-invocation live published postnorm producer handoff into TypedMemory.",
+    "Source/runtime-bound full FP32 softmax and top-8 tie/order semantics.",
+    "Bounded score/index state and atomic publication through actual shared resources.",
+    "Complete router/block, public command and RTL acceptance remain unexecuted."
+  ],
+  "document": {
+    "path": "doc/QWEN35_35B_ROUTER_LOGITS_20261014_CN.md",
+    "bytes": 6389,
+    "sha256": "15bf6c642c3acb6ee9f9419c14e7fe9070215ba4780066554d56500fc3ce5f4f"
+  },
+  "package_sources": {
+    "candidates/qwen35_35b_router/payload.py": "f5d3363404b80b5fdf6a98c43ca99b0a55094bfa100dcdde6e8db1d1e1de46ab",
+    "candidates/qwen35_35b_router/pinned_reference_smoke.py": "292a220743c8b041efdc538a57f0f195576f65e508f677201964866e9d1fbfc4",
+    "candidates/qwen35_35b_router/reference.c": "06570d3bee507fb7b355f9718129b352564cbfc67a4112ffa74d2983a84bd773",
+    "candidates/qwen35_35b_router/reference.py": "142926b7604a37c6e099d612413dfdb3754f414645587f19c0741816a2df51f9",
+    "candidates/qwen35_35b_router/run_logits.py": "db7a74e6f42378698aab8b71ecc4662f3dc113520dbdbb47c5a6e3d5934a307f",
+    "candidates/qwen35_35b_router/test_logits.py": "22bd73e30a0eee5e729ab710edb320c6e10fb97abda39df8438954945ed91c0a",
+    "candidates/qwen35_35b_router/test_payload.py": "7d3c667f8747cf49d20fa7a07061cf2ffcbb2cb52c389e1cc2a961c4821a9697",
+    "candidates/qwen35_35b_router/test_reference.py": "dd249bc618f22dc29379ef155afbb1ef9bd863e388ae8fab0759c55157484a64"
+  }
+}

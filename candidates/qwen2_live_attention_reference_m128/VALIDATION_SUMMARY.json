@@ -1,0 +1,67 @@
+{
+  "actual_or_typed_outputs_used_as_input": false,
+  "actual_stage_evidence": [
+    {
+      "elapsed_seconds": 5.977963744997396,
+      "exit_code": 0,
+      "source_unchanged": true,
+      "stage": "capture",
+      "timed_out": false
+    },
+    {
+      "elapsed_seconds": 3.766207762004342,
+      "exit_code": 0,
+      "source_unchanged": true,
+      "stage": "audit",
+      "timed_out": false
+    }
+  ],
+  "audit_manifest_sha256": "d5c3a63311a9f9bb5ceb2eb9a3dbb72a354bcdb24520af0a73091a9cf2717684",
+  "base_commit": "8dd24d4f270484ad5cee0f41375bd4900f8e0ee0",
+  "bootstrap01_superseded_reason": "Verified-source-only loader hardening; bootstrap02 records equal all18; neither bootstrap is an accepted consumer manifest",
+  "cache_implementation_executed": false,
+  "cold_summary_sha256": "cad55e22ab90eed041aa5927c6919c0a85d38b9af36c2af287382adf969aa328",
+  "dut_executed": false,
+  "fixed_pv_to_att_byte_identity": true,
+  "fresh_reproduction_all18_matches_reviewed_bootstrap": true,
+  "full_transformers_forward": false,
+  "hardware_cycles": null,
+  "independent_bootstrap_review_sha256": "6481ed75460058d032b1c9134a4c7257622e2998d73de6eef0e761d3e863bfef",
+  "input_payload_bytes": 7085056,
+  "input_raw_ranges": 8,
+  "limitations": [
+    "Full reference matrix does not establish DUT future-position observations.",
+    "Mask/repeat helpers remain reference-only and are not DUT-observed arithmetic evidence.",
+    "Current key native libraries/interpreter identity only; no full historical runtime equivalence.",
+    "No M16/M128 execution source, original numerical policy, workflow, plan or index changes by this worker."
+  ],
+  "mask_all16384_positions_byte_verified": true,
+  "native_mask_bytes": 32768,
+  "new_attention_ast_nodes": 12,
+  "new_checkpoint_bytes_downloaded": 0,
+  "new_software_installed": false,
+  "numerical_acceptance_claimed": false,
+  "official_ast_nodes": 27,
+  "old_pass_inherited": false,
+  "prefix9_freshly_recomputed_all_match_prior_m128": true,
+  "qor": null,
+  "recipe": {
+    "capture.py": "cceb6b06bab76dbb9c38945c4a7677fd28914a13a86ca8d8d9f720133be6f84e",
+    "pins.json": "6f56216cdad7b5f72e11ddc304510a4a1094fd7cb49e2bda85328fb042642f2f",
+    "recipe.py": "39c021489ef25df22392f2d8e05f9b4699898954c6b16cbeb5a6983e4f22d169"
+  },
+  "reference_bytes": 10027008,
+  "reference_manifest_sha256": "f4e58ae7220dee97d3ebe1bf2c995ca5043a76548db2705a9fc90e5d748a6fbc",
+  "reference_nodes": 18,
+  "reference_run": "work/qwen2_live_attention_reference_m128/frozen01/reference",
+  "reviewed_bootstrap_manifest_sha256": "84e58981289be875ec2403f29bed005fdad18430a5192925a5b589f285e16f17",
+  "rtl_executed": false,
+  "saved_prefix_reference_used_as_input": false,
+  "schema": 1,
+  "scope": "Independent official AST M128 raw->Norm/QKV/RoPE->Attention pre-o_proj; no DUT numerical verdict",
+  "source_input_native_tool_before_after_unchanged": true,
+  "source_pins_sha256": "6f56216cdad7b5f72e11ddc304510a4a1094fd7cb49e2bda85328fb042642f2f",
+  "status": "FRESH_FROZEN_ATTENTION_REFERENCE_REPRODUCED_ONLY",
+  "stdlib_audit_without_capture_environment_succeeded": true,
+  "transformers_imported": false
+}

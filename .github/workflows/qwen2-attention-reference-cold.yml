@@ -1,0 +1,118 @@
+name: qwen2-attention-reference-cold
+
+# Source-only stdlib gates. No acquisition, capture, numerical runtime or Host job.
+# The 21 exact dependencies below are the reference pins' source closure.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-attention-reference-cold.yml'
+      - 'candidates/qwen2_live_attention_reference_m128/**'
+      - 'candidates/qwen2_live_qkv_inputs_m128/capture.py'
+      - 'candidates/qwen2_live_qkv_inputs_m128/pins.json'
+      - 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/reference_layout.py'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/qwen2_1p5b_target_shape.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/config.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/configuration_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/manifest.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model_api.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_annotated_tag.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_tag.json'
+      - 'reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m16_initial_cold_RESULT.json'
+      - 'scripts/qwen2_layer0_model_gate.py'
+      - 'scripts/qwen2_rms_rope_policy_diagnostic.py'
+      - 'scripts/qwen2_rms_rope_prefill_candidate.py'
+  pull_request:
+    paths:
+      - '.github/workflows/qwen2-attention-reference-cold.yml'
+      - 'candidates/qwen2_live_attention_reference_m128/**'
+      - 'candidates/qwen2_live_qkv_inputs_m128/capture.py'
+      - 'candidates/qwen2_live_qkv_inputs_m128/pins.json'
+      - 'candidates/qwen2_live_qkv_inputs_m128/recipe.py'
+      - 'candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/check_numeric.py'
+      - 'candidates/qwen2_resident_matrix/official_bf16/reference_layout.py'
+      - 'config/payload_pins/qwen2_layer0.json'
+      - 'config/qwen2_1p5b_target_shape.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/config.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/configuration_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/manifest.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.http_receipt.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/model_api.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_annotated_tag.json'
+      - 'config/upstream/weight_headers/qwen2_1p5b/transformers_v4.40.1_tag.json'
+      - 'reports/execution/QWEN2_RMS_ROPE_PREFILL_20261011/m16_initial_cold_RESULT.json'
+      - 'scripts/qwen2_layer0_model_gate.py'
+      - 'scripts/qwen2_rms_rope_policy_diagnostic.py'
+      - 'scripts/qwen2_rms_rope_prefill_candidate.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-attention-reference-cold-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  cold:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Standard-library defaults and 20 cold gates in both modes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/qwen2_attention_reference_ci_20261014
+          mkdir work/qwen2_attention_reference_ci_20261014/ci-cold
+          git rev-parse HEAD | tee work/qwen2_attention_reference_ci_20261014/ci-cold/head.txt
+          test "$(cat work/qwen2_attention_reference_ci_20261014/ci-cold/head.txt)" = "$GITHUB_SHA"
+          python -B -S candidates/qwen2_live_attention_reference_m128/recipe.py 2>&1 | tee work/qwen2_attention_reference_ci_20261014/ci-cold/default.json
+          python -B -S -m unittest discover -s candidates/qwen2_live_attention_reference_m128/tests -v 2>&1 | tee work/qwen2_attention_reference_ci_20261014/ci-cold/normal.log
+          python -B -S -O -m unittest discover -s candidates/qwen2_live_attention_reference_m128/tests -v 2>&1 | tee work/qwen2_attention_reference_ci_20261014/ci-cold/optimized.log
+          python -B -S - <<'PY'
+          import json
+          from pathlib import Path
+          import re
+
+          evidence = Path('work/qwen2_attention_reference_ci_20261014/ci-cold')
+          result = json.loads((evidence / 'default.json').read_text())
+          if result.get('status') != 'NOT_EXECUTED' or result.get('cold_check') != 'PASS':
+              raise SystemExit('default must remain a passing NOT_EXECUTED check')
+          for flag in ('torch_imported', 'numpy_imported', 'network_used', 'raw_payload_read',
+                       'model_executed', 'rtl_executed', 'outputs_written'):
+              if result.get(flag) is not False:
+                  raise SystemExit('unsafe default flag: ' + flag)
+          for name in ('normal.log', 'optimized.log'):
+              log = (evidence / name).read_text()
+              if not re.search(r'^Ran 20 tests in [0-9.]+s$', log, re.MULTILINE):
+                  raise SystemExit('expected exactly 20 cold tests: ' + name)
+              if not log.rstrip().endswith('\nOK'):
+                  raise SystemExit('cold tests did not all pass: ' + name)
+          print('PASS: NOT_EXECUTED default and 20 + 20 stdlib cold tests')
+          PY
+      - name: Preserve only exact-head cold evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-attention-reference-cold-${{ github.sha }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          path: |
+            work/qwen2_attention_reference_ci_20261014/ci-cold/head.txt
+            work/qwen2_attention_reference_ci_20261014/ci-cold/default.json
+            work/qwen2_attention_reference_ci_20261014/ci-cold/normal.log
+            work/qwen2_attention_reference_ci_20261014/ci-cold/optimized.log

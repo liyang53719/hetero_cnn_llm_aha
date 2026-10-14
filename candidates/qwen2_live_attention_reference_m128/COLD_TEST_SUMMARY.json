@@ -1,0 +1,27 @@
+{
+  "default_status": "NOT_EXECUTED",
+  "github_work_ancestor_regression": true,
+  "model_executed": false,
+  "normal": {
+    "log_sha256": "aa03e5cf08c46cc787ab4829f4b3dc6bd475ff91e55cc3d6dc016b76f18588c4",
+    "tests": 20
+  },
+  "optimized": {
+    "log_sha256": "44a91f04bf48b0bb27593b404ab48f96ce1d633fbcbaa1b1a13010d1dacfe294",
+    "tests": 20
+  },
+  "rtl_executed": false,
+  "runtime_payload_network_writes_blocked_in_default": true,
+  "status": "COLD_STDLIB_GUARDS_PASSED",
+  "supplementary_synthetic_metadata_mutations": {
+    "all_rejected": true,
+    "baselines": 1,
+    "mutations": 288,
+    "numerical_acceptance_claimed": false,
+    "result_sha256": "cab433bacc7b310e1c75bc8f588937cc8ad6ff7e49ffdd2804c572cf899ca6b1",
+    "runtime_validation_mocked": true,
+    "source_sha256": "603b30f59dfafc2170aeb37926fa50349882a5f23d7709dd6e1892f760c4ecac"
+  },
+  "test_source_sha256": "f44e437e2edd262db8a397e369590c6c49b22e8be9b63bc3e3ba8c08d378668f",
+  "unsafe_read_write_import_probes_per_suite": 26
+}

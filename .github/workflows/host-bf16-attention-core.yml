@@ -8,7 +8,14 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/host-bf16-attention-core.yml'
+      - '.github/scripts/host_attention_block_ci_scope.py'
+      - '.github/scripts/tests/test_host_attention_block_ci_scope.py'
       - 'chisel/continuous_prefill/**'
+      # Continuous-only orchestration is covered by chisel-continuous-prefill.
+      # Keep all Scala, resources, Host runners and unknown project paths.
+      - '!chisel/continuous_prefill/scripts/plan_continuous_suites.py'
+      - '!chisel/continuous_prefill/scripts/test_plan_continuous_suites.py'
+      - '!chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh'
       - 'chisel/p0_safety/src/main/**'
       - 'integration/gemmini/EmitHeteroBF16Fma.scala'
       - 'integration/gemmini/EmitHeteroFP32Alu.scala'
@@ -22,6 +29,8 @@ on:
       - 'scripts/*reference.c'
       - 'scripts/check_git_payloads.py'
       - 'pyproject.toml'
+      - 'tests/test_host_bf16_attention_core_descriptor.py'
+      - 'tests/test_qwen35_gqa_fixed_reference.py'
   workflow_dispatch:
 permissions:
   contents: read

@@ -19,6 +19,28 @@
   验收证据: actual_generated_rtl_replay
   每模型数值通过: true
   最低MAC利用率: 0.9
+  阶段优化目标20261014:
+    最低预测MAC利用率: 0.8
+    争取预测MAC利用率: 0.9
+    最终实际完整RTL目标: 0.9
+    边界: 阶段模型预测与局部RTL单独记账；不得以80%阶段目标放宽最终同源完整RTL的90%联合验收。
+    固定资源: Matrix4096、各实现实际Vector与Scalar实例库存；不得缩小闲置分母。
+    完整周期: launch接受到最终terminal，包含DDR、依赖、供数、writeACK及阶段间隙；互斥等待分类和重叠单报。
+  最新进度20261014:
+    优先级: 本节取代下方历史日期段落中的当前进度描述，保留历史失败、门限和原源码身份。
+    主workload: batch1_prefill128
+    目标block: [Qwen2_1p5B完整block, Qwen35_0p8B_L0, Qwen35_0p8B_L3, Qwen35_35B_L0, Qwen35_35B_L3]
+    指定typed软件门:
+      Qwen2_1p5B: cold_M128完整block的已分配原官方门已过；完整实际RTL与性能未闭环。
+      Qwen35_0p8B_L0: cold_carried_M16_M128完整typed软件的已分配门已过；当前M128完整实际RTL与性能未闭环。
+      Qwen35_0p8B_L3: cold_carried_M16_M128完整typed软件56个物化producer及最终output_KV_行和门已过；当前M128完整实际RTL与性能未闭环。
+      Qwen35_35B_L0: 固定真实输入M16_M128的typed软件prefix已到output_projection_attention_residual_postnorm；完整block未过。
+      Qwen35_35B_L3: 未完成。
+    三十五B剩余: [router, routed_shared_MoE, expert_merge, final_residual, final_ACK_fence, L3完整链]
+    近期局部RTL: ElementwiseRegisterLoan真实M16_M128_epilogue逐bit通过；H2048固定6144B银行borrower真实M1_M16_M128整条RMS经生产core的Scalar与elem逐bit通过，M128_owner2540814拍_launch到done_fire2540828拍；尚未接入完整block，ALU忙拍及同资源baseline待测，kernel分支验证按独立回执更新。
+    不可继承: 局部epilogue或RMS的RTL_PASS不能升级完整prefix_MoE_block或MAC利用率；历史RTL_M1不能绑定为当前M128源码实测。
+    资料: [doc/PASSED_CASE_UTILIZATION_20261013_CN.md, doc/QWEN35_35B_RESIDUAL_POSTNORM_20261013_CN.md, doc/H2048_FIXED_BANK_RMS_BORROWER_20261014_CN.md]
+    状态: U00.2 ongoing；U01 to do；五block完整实际RTL数值及90%联合门仍open。
   性能主口径: matrix_useful_macs/(configured_matrix_macs_per_cycle*block_wall_cycles)
   固定配置资源分母: true
   包含block内停顿与阶段间隙: true

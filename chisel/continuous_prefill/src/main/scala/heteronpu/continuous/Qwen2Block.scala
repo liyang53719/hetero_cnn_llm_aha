@@ -51,7 +51,8 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
   * Each successor starts only after the previous stage's final write ACK.
   */
-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false) extends Module {
+class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false) extends Module {
+  require(!externalElementwiseLoan || (ownerDriven && externalScalar), "elementwise loan requires owner serialization and the shared Scalar")
   require(!enableGdnSoftplus || (externalScalar && s.qwen35GdnOnly), "Softplus requires the explicit GDN scalar service")
   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
   require(!s.nativeProfile || ownerDriven, "Qwen3.5 native subchains have no autonomous block route")
@@ -69,6 +70,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     val matrixAcceptedSteps=if(externalMatrix)Some(Input(UInt(64.W)))else None
     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
     val scalarService=if(externalScalar)Some(Flipped(new GdnScalarClient))else None
+    val elementwiseLoan=if(externalElementwiseLoan)Some(new ElementwiseLoanPort)else None
+    val elementwiseResetRequired=if(externalElementwiseLoan)Some(Output(Bool()))else None
     val scalarPrimitiveFlags=if(externalScalar)Some(Output(UInt(5.W)))else None
     val scalarPrimitiveFlagsValid=if(externalScalar)Some(Output(Bool()))else None
     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
@@ -177,7 +180,29 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   }else{
     fmOut:=VecInit((0 until 16).map{i=>val a=Module(new HeteroBF16FmaLane);a.io.a:=TensorMath.bf16Rne(fmA(i));a.io.b:=TensorMath.bf16Rne(fmB(i));a.io.c:=fmC(i);a.io.out})
   }
-  val elemCfg=ChainConfig();val elem=Module(new ElementwiseMemoryEngine(elemCfg,LocalSramConfig(rowsPerBank=elemCfg.localBytes/256)))
+  val elemCfg=ChainConfig()
+  val elemSram=LocalSramConfig(rowsPerBank=elemCfg.localBytes/256)
+  // Static replacement at the original instance: never a second Vector engine.
+  val lender=if(externalElementwiseLoan)Some(Module(new ElementwiseRegisterLoan(elemCfg,elemSram)))else None
+  val elem:ElementwiseMemoryEngine=lender match {
+    case Some(e)=>e
+    case None=>Module(new ElementwiseMemoryEngine(elemCfg,elemSram))
+  }
+  val elementwiseExternalExclusive=WireDefault(false.B)
+  lender.foreach{e=>
+    val port=io.elementwiseLoan.get
+    val available=state===st("idle") && !poisoned
+    e.loan.request.valid:=port.request.valid && available
+    e.loan.request.bits:=port.request.bits
+    port.request.ready:=e.loan.request.ready && available
+    port.result.valid:=e.loan.result.valid;port.result.bits:=e.loan.result.bits
+    e.loan.result.ready:=port.result.ready
+    e.loan.abort:=port.abort;e.loan.resetLoan:=port.resetLoan
+    port.busy:=e.loan.busy;port.resetRequired:=e.loan.resetRequired
+    io.elementwiseResetRequired.get:=e.io.resetRequired
+    elementwiseExternalExclusive:=port.request.valid || e.loan.busy ||
+      e.loan.result.valid || e.io.resetRequired || port.abort || port.resetLoan
+  }
   val resActive=state===st("resIssue")||state===st("resWait")
   elem.io.job.valid:=state===st("resIssue");elem.io.job.bits:=0.U.asTypeOf(new BoundJob)
   elem.io.job.bits.op:=ElemOp.Add.U;elem.io.job.bits.a:=base+Mux(phase===8.U,layout("x").U,layout("r").U)
@@ -196,7 +221,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   io.memory.valid:=Mux(resActive,elem.io.memory.valid,state===st("memReq"));io.memory.bits:=Mux(resActive,elem.io.memory.bits,request)
   io.response.ready:=Mux(resActive,elem.io.response.ready,state===st("memRsp"))
   io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned)
-  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !scalarExternalExclusive}
+  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !scalarExternalExclusive && !elementwiseExternalExclusive}
   io.result.valid:=state===st("finish");io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired;io.readBytes:=reads;io.writeBytes:=writes
   // Count memory visibility acknowledgements, not issued stores. The fence

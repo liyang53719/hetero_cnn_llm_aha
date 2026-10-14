@@ -4,7 +4,14 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/host-bf16-v.yml'
+      - '.github/scripts/host_attention_block_ci_scope.py'
+      - '.github/scripts/tests/test_host_attention_block_ci_scope.py'
       - 'chisel/continuous_prefill/**'
+      # Continuous-only orchestration is covered by chisel-continuous-prefill.
+      # Keep all Scala, resources, Host runners and unknown project paths.
+      - '!chisel/continuous_prefill/scripts/plan_continuous_suites.py'
+      - '!chisel/continuous_prefill/scripts/test_plan_continuous_suites.py'
+      - '!chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh'
       - 'chisel/p0_safety/src/main/**'
       - 'integration/gemmini/EmitHeteroBF16Fma.scala'
       - 'integration/gemmini/EmitHeteroFP32Alu.scala'
@@ -26,6 +33,8 @@ on:
       - 'scripts/matrix_norm_rope_reference.c'
       - 'scripts/check_git_payloads.py'
       - 'pyproject.toml'
+      - 'tests/test_descriptor_chain.py'
+      - 'tests/test_gemmini_descriptor_v2.py'
       - 'config/upstream/qwen3_5_0p8b/**'
       - 'scripts/collect_qwen35*payload.py'
       - 'scripts/run_qwen35_bf16_audit.py'

@@ -7,7 +7,14 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/host-bf16-gdn-block.yml'
+      - '.github/scripts/host_attention_block_ci_scope.py'
+      - '.github/scripts/tests/test_host_attention_block_ci_scope.py'
       - 'chisel/continuous_prefill/**'
+      # Continuous-only orchestration is covered by chisel-continuous-prefill.
+      # Keep all Scala, resources, Host runners and unknown project paths.
+      - '!chisel/continuous_prefill/scripts/plan_continuous_suites.py'
+      - '!chisel/continuous_prefill/scripts/test_plan_continuous_suites.py'
+      - '!chisel/continuous_prefill/scripts/run_continuous_ci_gate.sh'
       - 'chisel/p0_safety/src/main/**'
       - 'integration/gemmini/EmitHeteroBF16Fma.scala'
       - 'integration/gemmini/EmitHeteroFP32Alu.scala'

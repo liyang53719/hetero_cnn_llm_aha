@@ -31,7 +31,7 @@ class FixtureClassificationTest(unittest.TestCase):
             self.assertIn('heteronpu.continuous.NewControlSpec',plan(root)['general'])
     def test_actual_repository_external_has_explicit_runner(self):
         root=Path(__file__).resolve().parents[1];result=plan(root)
-        self.assertEqual(result['frozen_actual_rms_epilogue'],list(EXTERNAL_FIXTURE_SUITES.values()))
+        self.assertEqual(result['frozen_actual_rms_epilogue'],[EXTERNAL_FIXTURE_SUITES['frozen_actual_rms_epilogue']])
         repo=root.parents[1]
         runner=(repo/'scripts/run_elementwise_register_loan_tests.py').read_text()
         self.assertIn('ElementwiseRegisterLoanReplaySpec',runner)
@@ -40,5 +40,10 @@ class FixtureClassificationTest(unittest.TestCase):
         self.assertIn('sys.env("HETERO_RMS_LOAN_FIXTURE_ROOT")',source)
         self.assertNotIn('assume(',source)
         self.assertNotIn('cancel(',source)
+        h2048=(root/'src/test/scala/heteronpu/continuous/GdnRmsNormFixedBankReplaySpec.scala').read_text()
+        self.assertIn('sys.env("HETERO_H2048_FIXTURE_ROOT")',h2048)
+        self.assertNotIn('assume(',h2048)
+        self.assertNotIn('cancel(',h2048)
+        self.assertIn('GdnRmsNormFixedBankReplaySpec',(repo/'scripts/run_h2048_rms_borrower_tests.py').read_text())
 
 if __name__=='__main__':unittest.main()

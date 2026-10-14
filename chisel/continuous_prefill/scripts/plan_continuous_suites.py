@@ -16,6 +16,7 @@ FIXTURE_SUITES = {
 # real producer manifests; absent manifests remain a hard error there.
 EXTERNAL_FIXTURE_SUITES = {
     "frozen_actual_rms_epilogue": "heteronpu.continuous.ElementwiseRegisterLoanReplaySpec",
+    "frozen_actual_h2048_rms": "heteronpu.continuous.GdnRmsNormFixedBankReplaySpec",
 }
 
 RUN_GROUPS = ("general", "tiny", "real", "native")

@@ -69,8 +69,11 @@ import hashlib,json,re,sys
 from pathlib import Path
 out=Path(sys.argv[1]);plan=json.loads((out/'suite_plan.json').read_text());groups={}
 run_groups=('general','tiny','real','native')
-external={name:{'status':'NOT_EXECUTED_REQUIRES_FROZEN_ACTUAL_FIXTURE','suites':suites,'counted_as_pass':False,'runner':'scripts/run_elementwise_register_loan_tests.py --actual-fixture-root ... --m16-manifest-sha256 ... --m128-manifest-sha256 ...'} for name,suites in plan.items() if name not in run_groups}
-if set(external)!={'frozen_actual_rms_epilogue'}:raise SystemExit('EXTERNAL_FIXTURE_CLASSIFICATION_DRIFT')
+external_runners={
+ 'frozen_actual_rms_epilogue':'scripts/run_elementwise_register_loan_tests.py --actual-fixture-root ... --m16-manifest-sha256 ... --m128-manifest-sha256 ...',
+ 'frozen_actual_h2048_rms':'scripts/run_h2048_rms_borrower_tests.py --actual-fixture-root ... --tokens 1,16,128 --m1-manifest-sha256 ... --m16-manifest-sha256 ... --m128-manifest-sha256 ...'}
+external={name:{'status':'NOT_EXECUTED_REQUIRES_FROZEN_ACTUAL_FIXTURE','suites':suites,'counted_as_pass':False,'runner':external_runners.get(name)} for name,suites in plan.items() if name not in run_groups}
+if set(external)!=set(external_runners):raise SystemExit('EXTERNAL_FIXTURE_CLASSIFICATION_DRIFT')
 for name in run_groups:
  suites=plan[name]
  text=re.sub(r'\x1b\[[0-9;]*m','',(out/name/'chisel_tests.log').read_text())
@@ -82,7 +85,7 @@ if groups['tiny']['tests']!=8 or groups['real']['tests']!=10 or groups['native']
 if 'SOURCE_IMMUTABILITY_PASS' not in (out/'source_verify.log').read_text():raise SystemExit('SOURCE_DRIFT')
 report={'status':'PASS_CONTINUOUS_CONTROL_AND_ELEMENTWISE_REGRESSION','groups':groups,
  'total_tests':sum(x['tests'] for x in groups.values()),'elementwise_sizes':[1,17,33,1025,32768,1572864,2097152,2621440],
- 'scope':{'matrix4096_full_numerical':False,'official_model':False,'frozen_actual_rms_epilogue_executed':False,'dc':False},
+ 'scope':{'matrix4096_full_numerical':False,'official_model':False,'frozen_actual_rms_epilogue_executed':False,'frozen_actual_h2048_rms_executed':False,'dc':False},
  'external_fixture_suites':external,
  'logs_sha256':{str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(out.rglob('*.log'))}}
 with (out/'RESULT.json').open('x') as f:json.dump(report,f,indent=2);f.write('\n')

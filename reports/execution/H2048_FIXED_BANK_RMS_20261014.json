@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "base_commit": "3cd847d32008eac4916c2691fbe0265df8859481",
+  "status": "PASS_LOCAL_CORE_SERVICE_RMS_RTL",
+  "scope": {
+    "full_block": false,
+    "kernel_end_to_end": false,
+    "kernel_elaboration": true,
+    "physical_ppa": false,
+    "actual_alu_busy_cycles_measured": false,
+    "same_resource_scalar_baseline": "ONGOING"
+  },
+  "resources": {
+    "borrower_banks": 3,
+    "borrower_bytes_per_bank": 2048,
+    "borrower_total_bytes": 6144,
+    "partial_overlay_output_bytes": 128,
+    "borrower_fp32_scalar_registers": 4,
+    "borrower_new_arithmetic_modules": 0,
+    "borrowed_elementwise_fp32_alus": 16,
+    "borrowed_elementwise_existing_512_bit_registers": 7,
+    "original_core_elementwise_sram_bytes": 12288,
+    "preserved_legacy_vout_fp32_alus": 16,
+    "preserved_scalar_service_instances": 1,
+    "kernel_hierarchical_fp32_alu_instances_default_and_enabled": 33,
+    "kernel_smem_declarations_default_and_enabled": 66,
+    "same_capacity_proves_same_physical_banking": false
+  },
+  "actual_cases": [
+    {
+      "tokens": 1,
+      "provenance": "original M16 row zero",
+      "owner_cycles": 19893,
+      "scalar_requests": 4268,
+      "loan_requests": 128,
+      "read64B_requests": 192,
+      "write64B_acks": 64,
+      "case_pass": true,
+      "run_overall_status": "INTERRUPTED_TB_QUADRATIC_LOOKUP"
+    },
+    {
+      "tokens": 16,
+      "owner_cycles": 317642,
+      "scalar_requests": 68288,
+      "loan_requests": 2048,
+      "read64B_requests": 3072,
+      "write64B_acks": 1024,
+      "case_pass": true,
+      "run_overall_status": "INTERRUPTED_TB_QUADRATIC_LOOKUP"
+    },
+    {
+      "tokens": 128,
+      "owner_cycles": 2540814,
+      "launch_accept_to_done_fire_edge_interval": 2540828,
+      "inclusive_sampled_cycles": 2540829,
+      "held_done_cycles": 13,
+      "scalar_requests": 546304,
+      "loan_requests": 16384,
+      "read64B_requests": 24576,
+      "write64B_acks": 8192,
+      "case_pass": true,
+      "run_overall_status": "PASS_LOCAL_RMS_RTL_ONLY",
+      "artificial_backpressure": true,
+      "manifest_sha256": "799a8e3bc67c1dd32a77cc4766268a4d5c570639cf1fb7a18f87153fe008fde7"
+    }
+  ],
+  "protocol_derived_m128_vector_operations": {
+    "mul_lane_operations": 524288,
+    "add_lane_operations": 262144,
+    "total_lane_operations": 786432,
+    "primitive_issues": 49152,
+    "mac_operations": 0,
+    "independent_busy_measurement": false
+  },
+  "gates": {
+    "actual_m128": {
+      "tests": 1,
+      "sources_unchanged": true,
+      "fixtures_unchanged": true,
+      "summary": {
+        "path": "work/h2048_actual_m128_indexed_gate/summary.json",
+        "bytes": 72198,
+        "sha256": "718e9781e571eca4e4d081ce15c0910eb636d89616248cbfefff8bde8fc6f397"
+      },
+      "log": {
+        "path": "work/h2048_actual_m128_indexed_gate/test.log",
+        "bytes": 2101,
+        "sha256": "6b688eadb87554c2e34c206bb5fa7da84426982ba184aae7fa95493138bda97b"
+      }
+    },
+    "release_first": {
+      "status": "FAILED_STRUCTURE_TEST_PARSER",
+      "tests": 5,
+      "passed": 4,
+      "failed": 1,
+      "sources_unchanged_at_run_end": true,
+      "passed_suites": [
+        "GdnRmsNormFixedBankCancellationSpec",
+        "GdnRmsNormFixedBankCoreCancellationSpec",
+        "GdnRmsCoreLoanAdmissionSpec",
+        "GdnRmsNormLegacy1024Spec"
+      ],
+      "failed_suites": [
+        "GdnRmsNormFixedBankStructureSpec"
+      ],
+      "failure_reason": "TB exact module-name match omitted generated numeric suffix; actual CHIRRTL includes all 16 legacy vout ALU instances",
+      "hardware_changed_for_fix": false,
+      "full_block": false,
+      "kernel_elaboration_only": true,
+      "log_sha256": "e77b3879d81476a0062d59c27d47e2adae9a5030481a3a346eb879e7f85c4ef0",
+      "source_snapshot_sha256": "272669e7494005cde9955ebaff7e63f54454026a1397d75fd8737a5e53bfb012"
+    },
+    "structure_parser_fixed": {
+      "tests": 1,
+      "pass": true,
+      "log": {
+        "path": "work/h2048_structure_indexed_names_gate/gate.log",
+        "bytes": 1337,
+        "sha256": "e2a3f2619a1cd3ca3b115e68a40ee02f78d086631740517c40c6c238f24d4fea"
+      },
+      "source_hash_checks": {
+        "path": "work/h2048_structure_indexed_names_gate/sources.check.log",
+        "bytes": 10127,
+        "sha256": "5cb67b4f8a67cc29be1e87d5790d10cf407b539beb286bf2559bc4ac51b942c2"
+      }
+    },
+    "fixture_preparation_cold_tests": 30,
+    "planner_cold_tests_new": 4,
+    "planner_cold_tests_legacy": 5
+  },
+  "production_sources": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormFixedBankOwner.scala": "4bf37437d50a288723ac2d6dbe3a37e219eab732b777a0960faff7548d6853c2",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+  },
+  "failure_history": [
+    "Scala enum multiline parse",
+    "Bool padding elaboration",
+    "TB periodic backpressure missed loan request",
+    "TB immutable List quadratic lookup: M1/M16 case pass, M128 interrupted",
+    "TB structure parser omitted numeric module-name suffix"
+  ],
+  "claim_limits": [
+    "Qwen3.5 zero-centered gamma=FP32(1+weight), not Qwen2 direct gamma",
+    "Actual core-services RTL only; entire kernel/Host numerical command path not executed",
+    "No measured ALU utilization or speedup yet; same-resource Scalar ablation pending",
+    "Optimization removes only approximately 7.04 percent of prior measured 35B prefix Scalar work",
+    "Original H1024 default path preserved and synthetic H1024 tested; physical area and SRAM mapping unverified"
+  ]
+}

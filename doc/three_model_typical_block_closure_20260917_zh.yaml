@@ -29,29 +29,49 @@
   最新进度20261014:
     优先级: 本节取代下方历史日期段落中的当前进度描述，保留历史失败、门限和原源码身份。
     主workload: batch1_prefill128
-    当前发布基线: 217d067b74a66d2046f382faf1b0ebe04f520745；父提交8dd24d4f270484ad5cee0f41375bd4900f8e0ee0；M16发布a6d0eb9c4468a26015225757deda857acb56b844。
-    当前主线: 当前真实服务模型M16及M128的pc0至8窄QKV软件门已独审；下一步先取Attention代表trace并设计宽QK与PV tile的依赖及舍入顺序，不将逐token循环冒称真正prefill；正式fresh_Attention链尚未执行。构建条件满足后再做同刺激RTL，不继续反复分层大Top构建。
-    typed证据边界: 下列前三个完整typed软件已分配门为历史范围证据；当前新QKV只到pc8被hold边界，不能升级为当前完整block或实际RTL；所有执行保留原source身份及数值门。
+    当前发布基线: 59ca08b5e74e94f2d5f2860f8d60ab3ca0f44354；父提交7975f2ee5655b8420c8ce0a4f0eaa00863e72fd9；前次计划同步2ba660885e69d40cba166749db4bfebdcee337d0。
+    当前主线: 59ca的fresh_M16同链pc0至12已通过原限定BF16数值门但非全bitexact；7975的fresh_M128同链Attention在570秒内预算失败，仍无M128_Attention数值PASS。下一主线先做真实public路径CPU成本审计及等价性验证，再按冻结合同推进fresh_M128模型数值；不将M16、synthetic成本或冷CI升级为M128通过。构建条件满足后再做同刺激RTL，不继续反复分层大Top构建。
+    typed证据边界: 下列前三个完整typed软件已分配门为历史范围证据；旧窄QKV的pc8与新M16_Attention的pc12_held分别记账，失败M128无终态；均不能升级当前完整block或实际RTL。新M16未执行typed_raw及typed_Attention比较，不继承旧typed_PASS；所有执行保留原source身份及数值门。
     Qwen2_M16已发布窄门:
       发布: a6d0固定M16_public21_pc0至8软件模型；六个官方producer及三个typed_raw均逐bit一致；远端cold20加20成功，只覆盖冷合同检查，非远端数值或RTL执行。
       输入历史: ab15242仅正规化TorchVersion_producer为str；保留47加47各472拒绝及fresh六进程输入_C_RoPE_15AST参考_audit历史。旧COLD_TEST_SUMMARY保留base7b31与candidate_commit_null，不回写发布后source。
       边界: 与M128独立记账，不以M16通过或历史输入回执替代M128新执行；真实Host_M16算术RTL仍blocked。
+    Qwen2_M16_Attention已发布限定门:
+      发布: 59ca08b5e74e94f2d5f2860f8d60ab3ca0f44354；独立reference包7文件与model包13文件及cold_workflow已发布；188执行源前后不变，旧M128的169执行源不变。
+      参考: fresh_M16原官方27AST及18导出节点902144B已冻结独审；从九个readonly原始输入新产QKV，不切片M128参考、不注入saved_QKV；oracle在pc12输出及观察seal后才读取。
+      实际: 单次fresh_m16_pv32_actual_v1耗时44.204564秒_峰值525084KiB，独立保存字节审查通过；沿同public21_execution_physical_memory_Matrix_Scalar由pc0至12。
+      数值: 原BF16_operator门max_abs_0.03125及mean_abs_0.005执行前已冻结且未放宽；六官方prefix_KV_copy_scores_logits逐bit一致；prob有23处极小差异_max_abs_1.8055593228630336e-35，PV及att各1处差异_max_abs_0.00048828125；适用原BF16门均过，非全bitexact。
+      Softmax: softmax_fp32仅诊断，官方逐元素verdict为null；原独立概率行和门192行_max_abs_1.7881393432617188e-7小于等于2e-5通过。typed_raw及typed_Attention_bitexact未执行，raw无官方参考；不继承旧typed结果。
+      观察范围: scores_logits_prob各1632个因果位置全部观察，1440个future位置无DUT观察且由原causal描述符跳过；PV及att各24576元素全观察。唯一PV中点舍入符合RNE，但缺官方pre_round_FP32，根因未证实。
+      协议边界: pc12_completion_held；11owner_terminal_12public_completion；att写ACK98304B且未publish，无finalfence或pc13_suffix；所有backend债务已归零；不是完整block或完整29节点验收。
+      功能计数: Attention19584Matrix_steps_10027008实际C_FMA_417792useful_FMA，原QK预测13056加PV32预测6528与fresh观测相符；Attention功能ticks158161，全pc0至12功能ticks524228；未重跑旧PV路径完整基线。
+      资源边界: 固定五个16x256_FP32_accumulator共81920B；useful除executed为4.1667%，除全4096机会为0.5208333%，均非硬件busy或MAC利用率；hardware_cycles及utilization仍null。
+      成本小实验: synthetic_M8_public3的v1_timer错误保留；v2只修timer后八种Harness或public_physical乘observer开关乘timer开关结果字节_ACK_计数_ticks一致；非真实M16输入，单次固定顺序时间含测量开销，不证明架构加速。
+      冷CI: 本地reference22加22_model20加20；59ca原远端cold38567007051与payload38567007338均success，原artifact11896491541经CRC_exact_head_8files核验；CPython3.12.15同22加22及20加20零skip，两default_NOT_EXECUTED，actual_input_reads为0_numeric_execution为false；非Hosted实际算术或RTL。
+      冷CI工件: 4872B_SHA256_90ed69a55f1b69e727c01107bb4874255d1ff8382d64a12e78ad8cd7040d1496；190冷门源清单digest_83d8f94d115d220b2225adaa411bed8a60fc15867b7741da7d3dfff95e0e5473；190冷门源与188执行源不可混同。
+      资料: [candidates/qwen2_live_attention_model_m16/README.md, candidates/qwen2_live_attention_model_m16/SUMMARY.json, candidates/qwen2_live_attention_reference_m16/VALIDATION_SUMMARY.json, candidates/qwen2_live_attention_reference_m16/COLD_TEST_SUMMARY.json]
     Qwen2_M128输入及QKV软件窄门:
       输入: 8dd24d4发布独立M128 recipe；真实128行与位置0至127，fresh五阶段及55加55冷门_每轮477元数据拒绝_22实际字节负门已独审；8raw_7085056B_9inputs_7616512B_9reference_3670016B，payload保持ignored。
       实际数值: 首次actual耗时78.543522秒_峰值608576KiB；六个官方producer_n0_qr_q_kr_k_v全688128元素与三个typed_raw逐bit一致；145源码前后固定，独审104项全过；raw不是官方prebias验收。
       计数: 28partial_14drain_98304wide_steps_402653184实际C_FMA等于useful_16384Add16请求_raw写ACK1048576B；功能ticks1033749_读14162304B_总写ACK3801088B；45824为burst写命令及ACK数，不能当作64B拍数。
       协议边界: pc8_completion_held；9owner_terminal_8public_retired；V未publish，无launch_result或finalfence，suffix未执行，fullblock未完成；所有ticks及运行时间均非硬件周期或利用率。
-      执行身份: SUMMARY保留base_a6d0与candidate_commit_null及当时pending_review状态；后续104项独审另列原回执，不重写旧source或旧结果。
+      执行身份: SUMMARY保留base_a6d0与candidate_commit_null及当时pending_review状态；59ca追加勘误明确104项独审已通过，并于2026-10-14T12:27:30.515451+00:00重新核验145源及39产物哈希不变；原文件mtime不当认证审核时刻。只追加状态回执，不重跑数值、不覆盖原摘要、不向后来M128_Attention失败转移PASS。
       冷CI: 8dd原38553697859因GitHub祖先目录work被误拒而失败，原日志保留；217d只窄修test路径合同，本地57加57_每轮477拒绝_32探针各双mode成功；217d原38555039212_job115821966812已成功闭环，input57加57_model25加25_两mode各477拒绝_两defaults_NOT_EXECUTED，payload38555039290成功；均不执行数值或RTL。
-      资料: [candidates/qwen2_live_qkv_inputs_m128/VALIDATION_SUMMARY.json, candidates/qwen2_live_qkv_inputs_m128/COLD_TEST_SUMMARY.json, candidates/qwen2_live_qkv_model_m128/SUMMARY.json]
+      资料: [candidates/qwen2_live_qkv_inputs_m128/VALIDATION_SUMMARY.json, candidates/qwen2_live_qkv_inputs_m128/COLD_TEST_SUMMARY.json, candidates/qwen2_live_qkv_model_m128/SUMMARY.json, doc/QWEN2_M128_QKV_REVIEW_ADDENDUM_20261014_CN.md, reports/execution/QWEN2_M128_QKV_REVIEW_ADDENDUM_20261014.json]
     Qwen2_Attention当前缺口:
-      状态: 正式fresh_M128链未执行，无DUT数值PASS；官方27AST参考已独审冻结并fresh重现18节点10027008B，原bootstrap02未验收身份保留；参考包尚未发布。
-      校准: 有界synthetic_profile0仅3.258412秒，确认每step实际512个C_FMA；原M128方案预测1585152请求_811597824执行FMA_25362432useful，活动slice内3.125%，独立全4096乘step机会口径0.390625%。
-      口径: 以上为工作量与机会比，不是完整wall利用率；固定4096资源不因只启用slice0缩小分母；约451秒仅粗略主机模型运行时间预测，不是硬件cycle或实测M128。
-      后继: [代表trace及因果依赖核验, 真正宽QK_PV_tile与逐producer舍入顺序设计, 已冻结参考包独审发布, 同次producer数值与协议门, 完整block和固定资源完整周期验收]
+      参考发布: e5a2f8ad8ebf3f12a97a6acb65f9c5c0f593db8b发布M128原27AST独立参考，fresh重现18节点10027008B；bb3fd9010faa598fdb967138bff3e45773757192只对齐冻结CPython3.12冷合同；原bootstrap02未验收身份保留。参考通过不是DUT通过。
+      M128失败: 7975f2ee5655b8420c8ce0a4f0eaa00863e72fd9保留唯一fresh_M128_PV32实际链；pc0至8约76.890706秒完成，pc9_KV在77.861710秒完成262144B精确copy与4096写ACK，后在Attention触发原570秒内预算异常，实测570.090650秒；非外600秒watchdog杀死。
+      失败边界: 921633个normal_Matrix_steps_471876096实际C_FMA，att仅691712B写ACK；10owner_terminal_10public_completion，pc12未held且backend债务未清，att未publish，无finalfence_fullblock。未到oracle开启及官方比较，无M128_Attention数值PASS，也未证实numerical_mismatch。
+      失败遥测: 原失败记录缺最终owner状态分项_峰值RSS及runtime_oracle_read_list，保留null或missing；未读oracle为source控制路径证据，不能冒称保存的逐读审计。新M16失败遥测补齐不回写旧169源和失败RESULT；原单次授权已消耗，不由持久bit授权重跑。
+      历史校准: 原synthetic_profile0_3.258412秒及约451秒完整链粗估仅历史预测，未覆盖真实public_Host_Dense_idle_PhysicalMemory开销，不能替代570秒实际失败。PV32_M128完整预测1188864steps_608698368执行FMA_25362432useful，尚未经完整fresh_M128核验。
+      下一阶段: 先在真实public路径用相同实际输入做有界CPU成本与功能等价审计，分别核对native_C_Python_owner_service_Dense_idle_PhysicalMemory_observer_timer；新Dense_idle等价快速路径仅计划，原observer的DISABLE机制已存在，不计作本次新增优化。保持原算术_资源_数值门及失败基线，再冻结新尝试预算与授权；不靠延长旧预算或恢复saved_QKV续跑。
+      后继: [真实public_CPU成本和失败遥测审计, 新Dense_idle等价快速路径设计验证, fresh_M128同次producer数值与协议门, 真正宽QK_PV_tile依赖及舍入顺序, 完整block和固定资源完整周期验收]
+      资料: [candidates/qwen2_live_attention_model_m128/README.md, candidates/qwen2_live_attention_model_m128/SUMMARY.json, candidates/qwen2_live_attention_model_m128/FAILURE.md, candidates/qwen2_live_attention_reference_m128/VALIDATION_SUMMARY.json]
     Qwen2_尾部权重:
-      状态: 五个原始BF16 tensor共87297024B_14segment及五tensor_SHA已下载并离线审完，均ignored且未转换；不等于尾部数值执行或完整权重manifest恢复。
-      资料: [work/qwen2_tail_ranges_20261014/SUMMARY.json, work/qwen2_tail_ranges_20261014/tail_manifest.json, work/qwen2_tail_ranges_20261014/SOURCE_ONLY_FILES.json]
+      状态: 74ed5c155beb6316ef7dc497aee45ad1c0bd661b已发布五尾部输入recipe；原BF16_raw87297024B_14segment与五tensor_SHA保留，本地五readonly角色wo_gamma1_wg_wu_wd已物化共87300096B并独立逐字核验43648512源词，21实际字节负门通过；payload保持ignored。
+      边界: 四矩阵仅BF16字转置，gamma1精确扩为FP32，原地址及guard容量不变；未执行尾部DUT或official_forward，未恢复旧完整manifest或验证完整checkpoint_SHA；输入准备完成不等于尾部或完整block数值通过。
+      全参考依赖: 全block官方参考扩展仅静态映射完成，拟保留27原AST加11原Qwen2节点及14节点activation定义映射以产生29命名边界；新reference包_冻结捕获_独立重现_全block实际执行仍open，不能把当前pc12保存输出改标完整链。
+      资料: [candidates/qwen2_live_tail_inputs_m128/VALIDATION_SUMMARY.json, candidates/qwen2_live_tail_inputs_m128/COLD_TEST_SUMMARY.json, work/qwen2_fullblock_reference_map_20261014/REPORT.md, work/qwen2_fullblock_reference_map_20261014/AUDIT.json]
     Qwen2_live_QKV_RTL候选:
       状态: work-only_v5_default_off评论外严格代码相等；完整lint以signal9终止且原因未知；真实Host_M16_M128算术RTL_完整库存_global环仍blocked，无新PASS。
       XML有界尝试: 独立完整XML预算300秒_2GiB；15.660秒采样2159071232B后主动TERM返回负15，无XML；不判定OOM，不继承完整Top验收。
@@ -59,8 +79,8 @@
       性能边界: M16_source预测useful除executed为12.5%，M128_QKV实际工作量比为100%，二者均不是固定资源完整launch到terminal周期MAC利用率。
       后继: [global依赖环与真实adapter集成, 完整资源库存, 条件满足后的同刺激RTL, M128完整block]
       历史报告: doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md
-      当前报告: doc/QWEN2_M128_QKV_ATTENTION_STATUS_20261014_CN.md
-      证据索引: reports/execution/QWEN2_M128_QKV_ATTENTION_STATUS_20261014.json
+      前次状态报告: doc/QWEN2_M128_QKV_ATTENTION_STATUS_20261014_CN.md
+      前次状态索引: reports/execution/QWEN2_M128_QKV_ATTENTION_STATUS_20261014.json
     目标block: [Qwen2_1p5B完整block, Qwen35_0p8B_L0, Qwen35_0p8B_L3, Qwen35_35B_L0, Qwen35_35B_L3]
     指定typed软件门:
       Qwen2_1p5B: cold_M128完整block的已分配原官方门已过；完整实际RTL与性能未闭环。

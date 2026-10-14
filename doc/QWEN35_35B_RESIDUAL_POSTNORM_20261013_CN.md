@@ -65,3 +65,5 @@
 - 两处都是接口/测试路径回归，未修改实际 35B 算术源和任何数值阈值。M16/M128 原真实证据保持原冻结身份，不冒称用修复测试重跑了数值链。
 - Attention 初轮 248 项单套均通过，但补测期间源码变化，整体 FAILED/source_unchanged=false 已保留；最终冻结重跑 248 项、23 套、118 源全部通过且 source_unchanged=true。
 - 修复 GDN 完整冷门 678 项、72 套、205 源全部通过，source_unchanged=true；新提交原 CI 待闭环。完整 block、Chisel/RTL 数值与硬件周期利用率仍未验收。
+
+- 修复提交 b2bd38a1 实际仅触发 attention/payload，发现 GDN push.paths 遗漏 gated_norm/output/postnorm 三个已纳入冷套的目录。补齐这三个路径，让后续修改正常自动跑 GDN；本次以该后继提交的真实新 GDN run 收口，不冒称 b2bd38a1 有 GDN 结果。

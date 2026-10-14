@@ -1642,7 +1642,8 @@ Qwen35_35B_Z及32头gatednorm_20261013:
 Qwen35_35B_O四段streaming_20261013:
   状态: ongoing
   done: [官方K4096_N2048五配方独立校准, 四段真实A装载及两槽左折, 同次真实M16_M128十一终态, O两档官方及独立C逐bit一致, 原十三输出含state_scratch逐SHA保持]
-  ongoing: [发布CI闭环]
+  ongoing: [后继原输入残差_postnorm]
+  发布闭环: 3bf80c19afe4a31dbda2abbd6238703d894a0302；GDN38457859238_goal38457859263_payload38457859258全success；643项67套195源及原ZIP逐SHA闭环
   冷门: 643项67套195源零skip_前后不变；固定producer参考smoke两档；计划清单338项
   独审: 两档94源13native_raw及计数逐SHA复核无阻断
   todo: [O后BF16残差_postnorm_MoE, warm联合状态提交, 生产Chisel_RTL_完整周期MAC占空比]
@@ -1654,3 +1655,18 @@ Qwen35_35B_O四段streaming_20261013:
   参数: O_BF16_2048乘4096仅16777216B；权重和raw不入Git
   报告: doc/QWEN35_35B_OUTPUT_PROJECTION_20261013_CN.md
   证据: reports/execution/QWEN35_35B_OUTPUT_PROJECTION_20261013.json
+
+Qwen35_35B_残差及postnorm_20261013:
+  状态: ongoing
+  done: [原943_BF16_Add及947_RMS_AST参考, 4KiB独立postnorm权重固定range_hash, H2048显式Add_only_旧默认保持, StrictRMS原终态_写hash_Region及三bank绑定, 局部57项通过_官方smoke六例]
+  ongoing: [发布CI闭环]
+  独审: 两档源_native_raw_节点及计数均无阻断；最终计划清单91项通过
+  实际M128: fresh_attempt3_exit0_100源13native_13终态；残差和postnorm各262144词及七FP32节点官方bitexact；14旧输出SHA保持
+  中断保留: 原attempt无O终态_原因和退出码未知；后台空启动无summary；新attempt从头重跑无数值源修改
+  冷门: 678项72套205源零skip_源前后不变
+  实际M16: 100源13native_13终态_14旧输出SHA保持；残差及postnorm各32768词官方bitexact；RMS七类可比FP32节点bitexact；Matrix_Vector不增加
+  todo: [独审_小批发布及CI, router原full256_softmax及top8, MoE与最终残差完整block, warm联合提交, Chisel_RTL_完整周期占空比]
+  资源: 同RMS_owner及三块2KiB_bank_同Scalar；Matrix_Vector不新增调用；Add三beat缓存；新增外部DDR两H_tensor及4KiB权重
+  计数预测: 每token_Add读8192B写4096B_2048ScalarAdd；postnorm读12288B写4096B；仍待实际核对
+  边界: 官方参考smoke不等于新producer执行；未新增容差；硬件cycle_MAC_duty未知
+  报告: doc/QWEN35_35B_RESIDUAL_POSTNORM_20261013_CN.md

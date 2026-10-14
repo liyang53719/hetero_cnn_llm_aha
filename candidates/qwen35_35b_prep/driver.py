@@ -27,6 +27,7 @@ from ..qwen35_gdn_prefill.gated_norm import model as gated_norm
 from ..qwen35_35b_gated_norm.core_publication import publish_core_intermediate
 from ..qwen35_35b_output import stage as output_stage
 from ..qwen35_35b_output.driver import TypedStreamingUpstreamDriver
+from ..qwen35_35b_postnorm import stage as postnorm_stage
 
 WIDTH, OUTPUTS = 2048, 8192
 
@@ -73,7 +74,7 @@ def pack_window(raw_nk, window):
 
 def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile,
                    matrix, vector, deadline, memory=None, controls=None, observe=None,
-                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None, o_weight=None, o_profile=None):
+                   conv_weights=None, conv_observe=None, ab_weights=None, ab_profiles=None, a_log=None, dt_bias=None, reduction_policy=prep.ASCENDING,gate_policy=prep.FINITE_GATE_35B, run_chunk=False, chunk_progress=None, on_chunk_interrupt=None, z_weight=None, z_profile=None, gated_weight=None, o_weight=None, o_profile=None, postnorm_weight=None, postnorm_observe=None):
     """Run original owners to terminal; callback observes only real publication.
 
     controls(stage,index,driver) may provide existing driver handshake/fault
@@ -130,7 +131,11 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         require(z_profile.ranges==((0,1024),(1024,2048)) and z_profile.pair_reverse, 'explicit independently calibrated N4096 profile')
         z_profile.validate(WIDTH)
     scalar = prep.GateScalar(enable_softplus=True,enable_ieee_exp=True,enable_gate_softplus=True) if gate_policy==prep.DUAL_EXP_GATE_35B else PrepScalar(enable_softplus=True)
-    rms_owner = rms.RmsOwner(scalar)
+    require(postnorm_observe is None or callable(postnorm_observe), "postnorm observer callback")
+    def rms_observe(stage,token,words):
+        if rms_owner.job.tag==35602:
+            postnorm_observe(stage,token,words)
+    rms_owner = rms.RmsOwner(scalar, rms_observe if postnorm_observe is not None else None)
     # This K2048 job uses resident partials. The legacy prefix spill condition
     # must not advertise split_k=128 and accidentally require N-dependent DDR.
     projection_owner = (output_stage.StreamingProjectionOwner(output_stage.NoPrefixWorkspace(0x100000000,16384,1)) if run_o else LargeKProjectionOwner(PrefixWorkspace(0x100000000,16384,1,split_k=2048)))
@@ -156,6 +161,8 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
     rms_base = region(size=len(hidden))
     packed = [(window, region(pack_window(qkv_nk, window)), region(size=tokens * window.columns * 2))
               for window in windows]
+    require(postnorm_weight is None or (run_o and type(postnorm_weight) is bytes and len(postnorm_weight)==4096),
+            'postnorm requires full O chain and original H2048 weight')
     report = dict(scope='ACTUAL_TYPED_RMS_QKV_CONV_AB_PACK_PREP_SOFTWARE', status='RUNNING',
                   tokens=tokens, conv4_requested=conv_weights is not None, full_qkv=windows == (ColumnWindow(0, OUTPUTS),),
                   full_block=False, official_model_profile_admitted=False,
@@ -194,7 +201,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
             report.update(status='INTERRUPTED', active_stage=stage)
             raise PrefixExecutionError(error, report, snapshot, raw,
                 driver.history_out.raw() if hasattr(driver, 'history_out') else None) from error
-        status = driver.response.status if stage in ('input_norm', 'conv4_silu', 'ab_pack', 'prep','gated_norm') else driver.response[1]
+        status = driver.response.status if stage in ('input_norm', 'conv4_silu', 'ab_pack', 'prep','gated_norm','attention_residual','post_attention_norm') else driver.response[1]
         details = driver.report()
         report['stages'].append(dict(stage=stage, host_seconds=time.monotonic() - started, report=details))
         report['terminals'].append(dict(stage=stage, status=status))
@@ -204,7 +211,7 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         if status is not None:
             require(not driver.output.published, 'failed owner published output')
             report.update(status='FAILED', failed_stage=stage)
-            if stage in ('conv4_silu','gated_norm'):
+            if stage in ('conv4_silu','gated_norm','attention_residual','post_attention_norm'):
                 error = RuntimeError(stage+' owner returned '+str(status))
                 raise PrefixExecutionError(error, report, dict(stage=stage, owner_report=details,
                     terminal_accepted=True, output_published=False, history_published=False,
@@ -348,12 +355,37 @@ def execute_prep_prefix(hidden, norm_weight, qkv_nk, *, tokens, windows, profile
         report['o_weight_sha256']=sha(o_weight)
         report['o_profile']=vars(o_profile)
         report['actual_norm_region_consumed']=True
+    if postnorm_weight is not None:
+        post_weight_base=region(postnorm_weight)
+        residual_out=region(size=len(hidden));postnorm_out=region(size=len(hidden))
+        preserved_banks=(id(rms_owner.row_bank),id(rms_owner.weight_bank),id(rms_owner.output_bank))
+        matrix_before=matrix.report();vector_before=(dict(vector.calls),dict(vector.lane_ops))
+        try:
+            residual_driver=postnorm_stage.prepare_residual(o_driver,initial,memory,scalar,residual_out)
+            require(residual_driver.a is memory.regions[input_base] and sha(residual_driver.a.raw())==sha(hidden),
+                    'residual must consume unchanged original input before input RMS')
+            if not run('attention_residual',residual_driver):return report,memory
+            post_driver=postnorm_stage.prepare_postnorm(residual_driver,rms_owner,memory,scalar,
+                post_weight_base,postnorm_out)
+            if not run('post_attention_norm',post_driver):return report,memory
+        finally:
+            require(preserved_banks==(id(rms_owner.row_bank),id(rms_owner.weight_bank),id(rms_owner.output_bank)) and
+                matrix.report()==matrix_before and (dict(vector.calls),dict(vector.lane_ops))==vector_before,
+                'residual/postnorm changed RMS banks or used extra Matrix/Vector work')
+            require(sha(chunk_driver.state_out.raw())==state_digest and not chunk_driver.state_out.published and
+                sha(conv_driver.history_out.raw())==publication['history_sha256'] and not conv_driver.history_out.published and
+                not chunk_driver.scratch.published and conv_driver.response.generation==0,
+                'residual/postnorm changed or committed block state/history')
+        report['postnorm_weight_sha256']=sha(postnorm_weight)
+        report['same_rms_owner_and_banks_reused']=True
+        report['residual_original_input_sha256']=sha(hidden)
+        report['postnorm_matrix_vector_unchanged']=True
     require(resources == (id(memory), id(scalar), id(rms_owner), id(projection_owner),
                  id(projection_owner.a_banks), id(projection_owner.b_banks),
                  matrix.resource_address, vector.resource_address), 'execution resource replaced')
     require(matrix.owner is None and vector.client is None and scalar.client is None and
             memory.pending is None and not projection_owner.tiles.leased, 'prefix resource not retired')
-    report.update(status='PASS_TYPED_OUTPUT_PREFIX_EXECUTION_ONLY' if run_o else 'PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if run_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
+    report.update(status='PASS_TYPED_POSTNORM_PREFIX_EXECUTION_ONLY' if postnorm_weight is not None else 'PASS_TYPED_OUTPUT_PREFIX_EXECUTION_ONLY' if run_o else 'PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if run_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if run_chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY', shared_resources_unchanged=True,
                   actual_rms_region_consumed=True, all_old_outputs_unchanged=True,
                   matrix_service=matrix.report(), scalar_operations=dict(scalar.calls),
                   hardware_utilization=None, busy_duty=None, active_lane_duty=None,

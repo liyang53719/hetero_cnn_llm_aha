@@ -24,7 +24,7 @@
 - done：原源码/shape/seeded接口/资源审计；O-only payload普通3项及优化3项小门；下载16MiB并校验固定manifest；完整两档官方/C五配方校准，13项参考小门。
 - done：四段streaming A地址与sum租约、coordinator合成实际控制小门；上游同owner资源回归；同次M16/M128实际链终态及独审。
 - done：最新源码643项/67套/195源零skip冷门，源前后不变；计划清单338项通过。
-- ongoing：小批发布及精确提交原CI闭环。
+- done：3bf80c19afe4a31dbda2abbd6238703d894a0302已发布；原GDN38457859238、goal38457859263、payload38457859258全success；643项67套195源及原ZIP逐head/digest/CRC/source/log核验。
 - todo：O后残差/postnorm/MoE及完整block联合提交；此批不混入。
 
 ## 新控制小门记录
@@ -56,7 +56,7 @@
 ## 入口错误与冷门边界
 
 - 第一整轮冷门642项/66套通过且源前后相同。之后CLI在实际执行前发现参考报告input字段位于input_provenance.input，旧顶层读取产生KeyError；未建立实际执行summary，也未消费Matrix。
-- 保留preflight失败日志，修正严格nested schema并新增1项防回退测试通过。上面M16完成记录来自修后实际执行。修后最终最新源码冷门643项/67套/195源全部通过且零skip，前后源未变；计划清单338项通过。642项只保留为先前结果。精确提交CI待收口。
+- 保留preflight失败日志，修正严格nested schema并新增1项防回退测试通过。上面M16完成记录来自修后实际执行。修后最终最新源码冷门643项/67套/195源全部通过且零skip，前后源未变；计划清单338项通过。642项只保留为先前结果。精确提交原CI已闭环，见上方done。
 
 输入来源说明：O owner报告中的role='synthetic'沿用未授予production数值profile的内部准入标签，不表示这两档实际case使用合成输入。实际case使用固定官方checkpoint权重和同次真实typed norm输出；与小门的合成稀疏BF16 fixture分别记录。native_acceptance仍false，逐bit观察不改完整block边界。
 

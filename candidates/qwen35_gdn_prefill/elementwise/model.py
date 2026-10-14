@@ -5,7 +5,8 @@ Add/Div retain legacy fault flags; only source opcode 6 accepts tiny inexact
 multiplication. Negative activation gates <= -80 remain Unsupported. The
 official SiLU or sigmoid BF16 boundary occurs BEFORE the final BF16 product.
 
-Production widths are H1024, FFN3584 and attention2048. SigmoidMul is disabled
+Default widths are H1024, FFN3584 and attention2048. An explicit35B
+profile adds H2048 residual Add only, with unchanged three beat buffers. SigmoidMul is disabled
 by default, exactly as in the committed owner. Explicit reduced test widths are
 multiples of 32: this candidate makes no claim for arbitrary partial tails.
 Three 32-element input/output beat buffers are retained, never a tensor.
@@ -33,6 +34,8 @@ OFFICIAL_SOURCE = 'config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py'
 OFFICIAL_SHA = 'aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18'
 HIDDEN_WIDTH, FFN_WIDTH, ATTENTION_WIDTH = 1024, 3584, 2048
 BEAT_ELEMENTS, BEAT_BYTES = 32, 64
+LEGACY_PROFILE = "qwen35_0p8b_elementwise"
+RESIDUAL_35B_PROFILE = "qwen35_35b_h2048_residual_add"
 
 
 def require(ok, why):
@@ -56,7 +59,15 @@ class ElementwiseOp(IntEnum):
     SigmoidMul = 2
 
 
-def _geometry(hidden_width, ffn_width, test_geometry, attention_width=ATTENTION_WIDTH):
+def _geometry(hidden_width, ffn_width, test_geometry, attention_width=ATTENTION_WIDTH,
+              profile=LEGACY_PROFILE):
+    require(type(profile) is str and profile in (LEGACY_PROFILE, RESIDUAL_35B_PROFILE), "explicit elementwise profile required")
+    if profile == RESIDUAL_35B_PROFILE:
+        require(type(test_geometry) is bool and not test_geometry and
+                all(type(v) is int for v in (hidden_width, ffn_width, attention_width)) and
+                (hidden_width, ffn_width, attention_width) == (2048, FFN_WIDTH, ATTENTION_WIDTH),
+                "35B residual profile requires exact H2048 geometry")
+        return
     require(type(test_geometry) is bool and all(type(n) is int and n > 0 and n % 32 == 0
             for n in (hidden_width, ffn_width, attention_width)), 'full 32-element beat geometry required')
     require((hidden_width, ffn_width, attention_width) == (HIDDEN_WIDTH, FFN_WIDTH, ATTENTION_WIDTH) or
@@ -65,7 +76,8 @@ def _geometry(hidden_width, ffn_width, test_geometry, attention_width=ATTENTION_
             'production H1024/FFN3584/attention2048 or explicit reduced test geometry required')
 
 
-def source_identity(root=ROOT):
+def source_identity(root=ROOT, *, profile=LEGACY_PROFILE):
+    require(type(profile) is str and profile in (LEGACY_PROFILE, RESIDUAL_35B_PROFILE), "source profile")
     root = Path(root)
     source = subprocess.run(['git', 'show', 'HEAD:' + OWNER_SOURCE], cwd=root,
                             check=True, capture_output=True, timeout=10).stdout
@@ -73,13 +85,19 @@ def source_identity(root=ROOT):
     sources = {SCALAR_SOURCE: SCALAR_SHA, OFFICIAL_SOURCE: OFFICIAL_SHA}
     for name, digest in sources.items():
         require(sha((root / name).read_bytes()) == digest, 'source drift: ' + name)
+    if profile == RESIDUAL_35B_PROFILE:
+        from ...qwen35_35b_rms import reference as native35
+        sources.update({native35.SOURCE: native35.SOURCE_SHA, native35.CONFIG: native35.CONFIG_SHA})
+        for name, digest in sources.items():
+            require(sha((root / name).read_bytes()) == digest, '35B source drift: ' + name)
     # Explicit execution closure: adding reference/test files cannot change it.
     models = ('candidates/qwen35_gdn_prefill/elementwise/model.py',
               'candidates/qwen35_gdn_prefill/conv/scalar.py',
               'candidates/qwen35_gdn_prefill/prep/scalar.py',
               'candidates/qwen35_gdn_prefill/rms_owner.py',
               'candidates/qwen35_gdn_prefill/typed_dense.py')
-    return dict(source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, **sources},
+    return dict(profile=profile, production_chisel_binding=False,
+                source_sha256={'HEAD:' + OWNER_SOURCE: OWNER_SHA, **sources},
                 implementation_sha256={p: sha((root / p).read_bytes()) for p in models},
                 opcodes=dict(OPCODES), source_default_max_tokens=128,
                 candidate_tokens='M1..128', production_host_command=False,
@@ -102,14 +120,18 @@ class ElementwiseJob:
     tokens: int
     op: ElementwiseOp = ElementwiseOp.Add
     row_width: int = HIDDEN_WIDTH
+    profile: str = LEGACY_PROFILE
 
     @property
     def write_bytes(self):
         return self.tokens * self.row_width * 2
 
     def validate(self, hidden_width=HIDDEN_WIDTH, ffn_width=FFN_WIDTH, test_geometry=False,
-                 *, attention_width=ATTENTION_WIDTH, enable_attention_sigmoid_mul=False):
-        _geometry(hidden_width, ffn_width, test_geometry, attention_width)
+                 *, attention_width=ATTENTION_WIDTH, enable_attention_sigmoid_mul=False, profile=LEGACY_PROFILE):
+        require(type(self.profile) is str and self.profile == profile, "job/owner profile mismatch")
+        _geometry(hidden_width, ffn_width, test_geometry, attention_width, profile)
+        require(profile != RESIDUAL_35B_PROFILE or (self.op == ElementwiseOp.Add and not enable_attention_sigmoid_mul),
+                "35B residual profile enables Add only")
         require(type(enable_attention_sigmoid_mul) is bool, 'explicit attention SigmoidMul enable flag')
         require(type(self.op) in (int, ElementwiseOp) and self.op in tuple(ElementwiseOp),
                 'only existing Add=0, SiluMul=1 and opt-in SigmoidMul=2 operations supported')
@@ -160,9 +182,12 @@ class ElementwiseOwner:
     """
     def __init__(self, scalar, *, hidden_width=HIDDEN_WIDTH, ffn_width=FFN_WIDTH,
                  test_geometry=False, attention_width=ATTENTION_WIDTH,
-                 enable_attention_sigmoid_mul=False, sigmoid_observer=None, silu_observer=None):
+                 enable_attention_sigmoid_mul=False, sigmoid_observer=None, silu_observer=None,
+                 profile=LEGACY_PROFILE):
         require(isinstance(scalar, ConvScalar), 'explicit caller-owned ConvScalar or PrepScalar required')
-        _geometry(hidden_width, ffn_width, test_geometry, attention_width)
+        _geometry(hidden_width, ffn_width, test_geometry, attention_width, profile)
+        require(profile != RESIDUAL_35B_PROFILE or not enable_attention_sigmoid_mul, "35B Add-only profile")
+        self.profile = profile
         require(type(enable_attention_sigmoid_mul) is bool, 'explicit attention SigmoidMul enable flag')
         require(sigmoid_observer is None or callable(sigmoid_observer), 'callable sigmoid observer required')
         require(silu_observer is None or callable(silu_observer), 'callable silu observer required')
@@ -184,7 +209,7 @@ class ElementwiseOwner:
 
     def _parameters(self):
         return (self.hidden_width, self.ffn_width, self.test_geometry,
-                self.attention_width, self.enable_attention_sigmoid_mul)
+                self.attention_width, self.enable_attention_sigmoid_mul, self.profile)
 
     def _check_parameters(self):
         actual = self._parameters()
@@ -197,7 +222,10 @@ class ElementwiseOwner:
         self._check_parameters()
         job.validate(self.hidden_width, self.ffn_width, self.test_geometry,
                      attention_width=self.attention_width,
-                     enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul)
+                     enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul, profile=self.profile)
+
+    def source_identity(self):
+        return source_identity(profile=self.profile)
 
     def ports(self):
         self._check_parameters()
@@ -214,7 +242,7 @@ class ElementwiseOwner:
         self.__init__(self.scalar, hidden_width=self.hidden_width, ffn_width=self.ffn_width,
                       test_geometry=self.test_geometry, attention_width=self.attention_width,
                       enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul,
-                      sigmoid_observer=self.sigmoid_observer, silu_observer=self.silu_observer)
+                      sigmoid_observer=self.sigmoid_observer, silu_observer=self.silu_observer, profile=self.profile)
 
     def _op(self, operation, a, b=0):
         return self.scalar.op(self, operation, a, b)
@@ -311,7 +339,7 @@ class ElementwiseOwner:
         if not fault and job is not None and p['job_ready']:
             require(type(job) is ElementwiseJob, 'typed immutable ElementwiseJob required')
             self._validate_job(job)
-            identity = source_identity()
+            identity = self.source_identity()
             require(self.scalar.acquire(self), 'shared scalar acquisition')
             p['job_fire'] = True
             self.job, self.start, self.identity = job, self.ticks, identity
@@ -360,6 +388,7 @@ class ElementwiseOwner:
                     scalar_calls=dict(self.scalar.calls - self.scalar_baseline if active else self.scalar_counts),
                     exp_internal_calls=dict(self.scalar.internal_calls - self.exp_baseline if active else self.exp_counts),
                     operation=None if self.job is None else ElementwiseOp(self.job.op).name,
+                    profile=self.profile, production_chisel_binding=False,
                     hidden_width=self.hidden_width, ffn_width=self.ffn_width,
                     attention_width=self.attention_width,
                     enable_attention_sigmoid_mul=self.enable_attention_sigmoid_mul,
@@ -486,7 +515,7 @@ class TypedElementwiseDriver:
             require(hashlib.sha256(raw).digest() == self._output_hash.digest() and
                     all(finite(bits << 16) for (bits,) in struct.iter_unpack('<H', raw)),
                     'output differs from actual finite write data')
-            require(self.owner.identity == self._source_identity == source_identity(),
+            require(self.owner.identity == self._source_identity == self.owner.source_identity(),
                     'elementwise source changed during execution')
         else:
             require(not result.staging_complete and self.owner.poison,

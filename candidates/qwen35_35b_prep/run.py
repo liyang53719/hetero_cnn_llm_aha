@@ -108,7 +108,17 @@ def main(argv=None):
     parser.add_argument('--o-manifest-sha256')
     parser.add_argument('--o-reference-report',type=Path)
     parser.add_argument('--o-reference-report-sha256')
+    parser.add_argument('--postnorm',action='store_true')
+    parser.add_argument('--postnorm-payload',type=Path)
+    parser.add_argument('--postnorm-manifest-sha256')
     args = parser.parse_args(argv)
+    postnorm_weight=None
+    if args.postnorm:
+        from ..qwen35_35b_postnorm import payload as post_payload, reference as post_reference
+        from ..qwen35_35b_rms import formula as post_formula
+        p.require(args.output_projection and args.postnorm_payload is not None, 'postnorm requires actual O and payload')
+        _,post_values=post_payload.load(args.postnorm_payload,args.postnorm_manifest_sha256)
+        postnorm_weight=post_values['layers.0.post_attention_layernorm.weight']
     if args.chunk:
         from . import chunk_reference
     z_weight=gated_weight=z_profile=z_ref=None
@@ -226,6 +236,11 @@ def main(argv=None):
     def conv_observe(tag, token, channel, bits):
         p.require((token,channel) not in conv_seen, 'duplicate Conv preactivation observation')
         conv_seen.add((token,channel)); conv_preact[token,channel] = bits
+    postnorm_nodes={}
+    def postnorm_observe(name,token,words):
+        node=postnorm_nodes.setdefault(name,{})
+        p.require(token not in node, "duplicate postnorm actual node")
+        node[token]=np.asarray(words,dtype="<u4").tobytes()
     args.output.mkdir(parents=True)
     started = time.monotonic()
     report = dict(status='RUNNING', gate_policy=args.gate_policy, reduction_policy=args.reduction_policy, chunk_requested=args.chunk, tokens=args.tokens, windows=[vars(w) for w in windows],
@@ -241,6 +256,7 @@ def main(argv=None):
                   native_artifact_records=[record(path) for path in native_paths],
                   ab_reference=record(args.ab_reference_report),ab_manifest_sha256=args.ab_manifest_sha256,
                   prep_native_acceptance=False,gated_norm_requested=args.gated_norm,norm_native_acceptance=False,
+                  postnorm_requested=args.postnorm,postnorm_manifest_sha256=args.postnorm_manifest_sha256,
                   output_projection_requested=args.output_projection,o_native_acceptance=False,
                   o_reference=record(args.o_reference_report) if args.output_projection else None,
                   o_manifest_sha256=args.o_manifest_sha256,
@@ -275,9 +291,10 @@ def main(argv=None):
             profile=profile, matrix=matrix, vector=vector, deadline=started+args.wall_seconds, observe=observe,
             conv_weights=conv_weight, conv_observe=conv_observe,ab_weights=ab_weights,ab_profiles=ab_profiles,
             a_log=ab_values['layers.0.linear_attn.A_log'],dt_bias=ab_values['layers.0.linear_attn.dt_bias'],reduction_policy=args.reduction_policy,gate_policy=args.gate_policy,run_chunk=args.chunk,chunk_progress=chunk_progress,on_chunk_interrupt=lambda:signal.alarm(0),
-            z_weight=z_weight,z_profile=z_profile,gated_weight=gated_weight,o_weight=o_weight,o_profile=o_profile)
+            z_weight=z_weight,z_profile=z_profile,gated_weight=gated_weight,o_weight=o_weight,o_profile=o_profile,postnorm_weight=postnorm_weight,
+            postnorm_observe=postnorm_observe if args.postnorm else None)
         report['execution'] = execution
-        p.require(execution['status'] == ('PASS_TYPED_OUTPUT_PREFIX_EXECUTION_ONLY' if args.output_projection else 'PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if args.gated_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if args.chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY'), 'actual typed prefix failed')
+        p.require(execution['status'] == ('PASS_TYPED_POSTNORM_PREFIX_EXECUTION_ONLY' if args.postnorm else 'PASS_TYPED_OUTPUT_PREFIX_EXECUTION_ONLY' if args.output_projection else 'PASS_TYPED_GATED_NORM_PREFIX_EXECUTION_ONLY' if args.gated_norm else 'PASS_TYPED_CHUNK_STAGING_EXECUTION_ONLY' if args.chunk else 'PASS_TYPED_PREP_PREFIX_EXECUTION_ONLY'), 'actual typed prefix failed')
         p.require(execution['actual_rms_output_sha256'] == reference['input']['sha256'], 'actual RMS differs from reference input')
         native = checked_record(reference['official_output'])
         fixed = checked_record(reference['results']['pair_hi_first_two_k1024']['output'])
@@ -289,8 +306,9 @@ def main(argv=None):
         if args.chunk:expected_stages += ['chunk','chunk_state_staging','chunk_scratch_staging']
         if args.gated_norm:expected_stages += ['gated_norm']
         if args.output_projection:expected_stages += ['output_projection']
+        if args.postnorm:expected_stages += ['attention_residual','post_attention_norm']
         p.require([o['stage'] for o in report['observations']] == expected_stages, 'exact observation inventory')
-        p.require(len(execution['terminals']) == len(windows)+1+(conv_weight is not None)+4+int(args.chunk)+2*int(args.gated_norm)+int(args.output_projection), 'exact owner terminal count')
+        p.require(len(execution['terminals']) == len(windows)+1+(conv_weight is not None)+4+int(args.chunk)+2*int(args.gated_norm)+int(args.output_projection)+2*int(args.postnorm), 'exact owner terminal count')
         for window, observation in zip(windows, report['observations'][1:1+len(windows)], strict=True):
             actual = checked_record(observation['output'])
             numeric = dict(native=compare_window(actual, native, args.tokens, window),
@@ -375,13 +393,50 @@ def main(argv=None):
                       'actual four-part O differs from independent complete FP32 left-fold recipe')
             report['o_fixed_recipe_bitexact']=True
             report['o_diagnostics']=o_reference.diagnostics(o_actual,checked_record(o_ref['official']),args.tokens)
+        if args.postnorm:
+            actual_residual=checked_record(observations['attention_residual']['output'])
+            actual_postnorm=checked_record(observations['post_attention_norm']['output'])
+            native_post=post_reference.component(hidden,o_actual,postnorm_weight,args.tokens)
+            # Formula is an independent diagnostic only. No reference bytes
+            # enter the typed producer memory map or its arithmetic.
+            fixed_post=post_formula.formula(actual_residual,postnorm_weight,args.tokens)
+            p.require(actual_postnorm==fixed_post['output'],'postnorm differs from independent FP32 recipe')
+            report['postnorm_fixed_recipe_bitexact']=True
+            report['postnorm_source']=native_post['source']
+            report['postnorm_dispatch']=native_post['dispatch']
+            report['postnorm_runtime']=native_post['runtime']
+            report['residual_diagnostics']=dict(compare_finite_bf16(actual_residual,native_post['residual']),
+                passed=None,thresholds=None,native_acceptance=False)
+            report['postnorm_diagnostics']=dict(compare_finite_bf16(actual_postnorm,native_post['output']),
+                passed=None,thresholds=None,native_acceptance=False)
+            report['postnorm_reference_records']={}
+            for name,raw in dict(residual=native_post['residual'],output=native_post['output'],
+                                 fixed_output=fixed_post['output'],**native_post['trace_raw']).items():
+                path=args.output/('postnorm.reference.'+name+'.raw');path.write_bytes(raw)
+                report['postnorm_reference_records'][name]=record(path)
+            report['postnorm_actual_nodes']={}
+            for name,rows in postnorm_nodes.items():
+                p.require(set(rows)==set(range(args.tokens)),'complete actual postnorm node rows')
+                raw=b''.join(rows[i] for i in range(args.tokens))
+                path=args.output/('postnorm.actual.'+name+'.fp32le');path.write_bytes(raw)
+                item=dict(actual=record(path),actual_observed=True)
+                if name in native_post['trace_raw']:
+                    a=np.frombuffer(raw,'<f4');b=np.frombuffer(native_post['trace_raw'][name],'<f4')
+                    if name=='gamma':b=np.tile(b,args.tokens)
+                    p.require(a.shape==b.shape and np.isfinite(a).all() and np.isfinite(b).all(),'postnorm diagnostic shape/finite')
+                    delta=np.abs(a.astype('float64')-b.astype('float64'))
+                    item.update(bit_mismatches=int(np.count_nonzero(a.view('<u4')!=b.view('<u4'))),
+                        max_abs=float(delta.max()),mean_abs=float(delta.mean()),passed=None,thresholds=None)
+                elif name=='sum':item['reference_role']='auxiliary sum only; original op is mean'
+                elif name=='root':item['reference_role']='candidate sqrt node only; official op is rsqrt'
+                report['postnorm_actual_nodes'][name]=item
         report['source_sha256_after'] = source_closure()
         report['sources_unchanged'] = report['source_sha256'] == report['source_sha256_after']
         p.require(report['sources_unchanged'], 'execution source drift')
         for item in report['native_artifact_records']:
             checked_record(item)
         report['native_artifacts_unchanged'] = True
-        report['status'] = 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_NORM_O_DIAGNOSTICS_ONLY' if args.output_projection else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_NORM_DIAGNOSTICS_ONLY' if args.gated_norm else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_DIAGNOSTICS_ONLY' if args.chunk else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY'
+        report['status'] = 'UPSTREAM_ORIGINAL_GATES_PASS_POSTNORM_DIAGNOSTICS_ONLY' if args.postnorm else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_NORM_O_DIAGNOSTICS_ONLY' if args.output_projection else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_NORM_DIAGNOSTICS_ONLY' if args.gated_norm else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_CHUNK_DIAGNOSTICS_ONLY' if args.chunk else 'UPSTREAM_ORIGINAL_GATES_PASS_PREP_DIAGNOSTICS_ONLY'
     except BaseException as error:
         report['source_sha256_after']=source_closure()
         report['sources_unchanged']=report['source_sha256']==report['source_sha256_after']

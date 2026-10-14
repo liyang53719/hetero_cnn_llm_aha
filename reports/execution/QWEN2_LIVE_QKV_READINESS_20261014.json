@@ -1,0 +1,140 @@
+[
+  {
+    "path": "doc/three_model_typical_block_closure_20260917_zh.yaml",
+    "size": 98927,
+    "sha256": "971071300faa8d038961f2620d28dc97a41fbcade88a55f160c3c073d697e32a",
+    "status": "CURRENT_PLAN_STATUS_ONLY_NO_HARDWARE_ACCEPTANCE"
+  },
+  {
+    "path": "doc/block_checklist.yaml",
+    "size": 140418,
+    "sha256": "42b7d8cfffaad7379154858cb9a52537d54f7241c0555fd4b947bdd9507e00fc",
+    "status": "CURRENT_PLAN_STATUS_ONLY_NO_HARDWARE_ACCEPTANCE"
+  },
+  {
+    "path": "doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md",
+    "size": 5414,
+    "sha256": "d17df5d9aca20687339b8368a016f72c6bc3434a0dba753377860110bac1de01",
+    "status": "CURRENT_PLAN_STATUS_ONLY_NO_HARDWARE_ACCEPTANCE"
+  },
+  {
+    "path": "candidates/qwen2_live_qkv_inputs/COLD_TEST_SUMMARY.json",
+    "size": 15161,
+    "sha256": "021331b472f283d7c506b57c725f5f9e02da5f5a80a0ab91c39d5d69d7e0f607",
+    "status": "PRESERVED_EXECUTION_BASE_7B31_CANDIDATE_NULL_METADATA"
+  },
+  {
+    "path": "work/qwen2_live_qkv_binding_20261014/FINAL_DELIVERY.json",
+    "size": 6686,
+    "sha256": "28eaa991c563d2281702932d646c2498c16a5c163521a02c47ad9fde9cd98da6",
+    "status": "PARTIAL_VALIDATION_FULL_TOP_BLOCKED"
+  },
+  {
+    "path": "reports/execution/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014.json",
+    "size": 8369,
+    "sha256": "1dfe41d993977c1f7319e5c1b926ca310a91621ba77032110a6c16071c1b296b",
+    "status": "CONTROL_ONLY_MOCK_BACKEND_HISTORICAL_RECEIPT"
+  },
+  {
+    "path": "work/ci_original_archives/11883625641.zip",
+    "size": 730908,
+    "sha256": "f3d38aa6415056c42a05875453cc9d207d93a83f738e324e1215a3085518d312",
+    "status": "ARTIFACT_IDENTITY_ONLY_NOT_A_STANDALONE_CI_REVIEW_RECEIPT"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/raw/subset_manifest.json",
+    "size": 9957,
+    "sha256": "97103f8067b06fdd3b72a5a2ee88d009511d2ea06c09a210e0e4a775c78cf1d8",
+    "status": "IDENTITY_VERIFIED_RECORDED_RECOVERED_PINNED_QWEN2_PREFIX_SUBSET_ONLY"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/AFTER.json",
+    "size": 32743,
+    "sha256": "73f10f1f4adfd6897da7864df9a0dfa6c8eefd860c49826fbfaae180e42b1b22",
+    "status": "IDENTITY_VERIFIED_RECORDED_IDENTITY_SNAPSHOT"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/audit/AUDIT.json",
+    "size": 5149,
+    "sha256": "b8abff22d6042935111d32e8ce7a4090dcedf1b8dc3934635b7379076d433060",
+    "status": "IDENTITY_VERIFIED_RECORDED_VERIFIED_PREFIX_ARTIFACTS_ONLY"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/BEFORE.json",
+    "size": 32743,
+    "sha256": "73f10f1f4adfd6897da7864df9a0dfa6c8eefd860c49826fbfaae180e42b1b22",
+    "status": "IDENTITY_VERIFIED_RECORDED_IDENTITY_SNAPSHOT"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/reference/REFERENCE.json",
+    "size": 18306,
+    "sha256": "aaa5f64eab0a495e90e04ec277ba038b5910ced9331420f8b97ba9cc4ff5b914",
+    "status": "IDENTITY_VERIFIED_RECORDED_FRESH_OFFICIAL_AST_PREFIX_CAPTURE_ONLY"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/RESULT.json",
+    "size": 23088,
+    "sha256": "1c8ca1fb5bc5f7500ffb2fdfe634114adb9f484b1900ab9e57bbbebd5c1ef503",
+    "status": "IDENTITY_VERIFIED_RECORDED_UNPUBLISHED_CANDIDATE_ACTUAL_PREFIX_RECONSTRUCTION_VERIFIED"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/control/POST_VERIFICATION.json",
+    "size": 2582,
+    "sha256": "6dc6815921ec1227b908b06d85ec70cadf66336cd54c2de6a2da0bcea30d14fb",
+    "status": "IDENTITY_VERIFIED_RECORDED_INDEPENDENT_POSTCHECK_UNPUBLISHED_CANDIDATE_PREFIX_REBUILD_VERIFIED"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/inputs/INPUTS_READY.json",
+    "size": 6147,
+    "sha256": "800c16fdc64715c6f5cbd19a32557e87e660cb20aec7023071cfb7b1267b50fa",
+    "status": "IDENTITY_VERIFIED_RECORDED_PINNED_PREFIX_INPUTS_READY_NO_MODEL_EXECUTION"
+  },
+  {
+    "path": "work/qwen2_live_qkv_inputs/published7b31_fix_v3/frozen_audit/AUDIT.json",
+    "size": 7129,
+    "sha256": "3800e3c9e602ea387708720fa48adccd0277bd0d7122e31eed9025a87879ce6a",
+    "status": "IDENTITY_VERIFIED_RECORDED_VERIFIED_FROZEN_PREFIX_ARTIFACTS_ONLY"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/plan_checklist_normal.log",
+    "size": 160,
+    "sha256": "d5909c51985bd5db202843a4382250d792189dd73767b52e1fa90d69193bf46c",
+    "status": "PASS_91_PLAN_CHECKLIST_TESTS_ONLY"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/plan_checklist_optimized.log",
+    "size": 749,
+    "sha256": "a6ba65065434f80afabfdb779a8f728cd185a43d859f4a84cf376650258452ed",
+    "status": "PASS_91_PLAN_CHECKLIST_TESTS_ONLY"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/preflight_normal.json",
+    "size": 53475,
+    "sha256": "8632e6814abfe6ae810a0df3eca1bfaa20b0a6d495e98d39a5ecabc53ee2f850",
+    "status": "PASS_14_READ_ONLY_CONSISTENCY_CHECKS_ONLY"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/preflight_optimized.json",
+    "size": 53478,
+    "sha256": "b526e1d9593af1468a9be448d8085de7c66f52468c8a8973f2cbcfdc5a17865c",
+    "status": "PASS_14_READ_ONLY_CONSISTENCY_CHECKS_ONLY"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/checklist_validate.json",
+    "size": 310,
+    "sha256": "18ffc40803213c801c719ffda54247da0f260174dffc8fe99a82f587dfb194f8",
+    "status": "PASS_CHECKLIST_VALIDATE_ONLY"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/initial_missing_pytest.log",
+    "size": 97,
+    "sha256": "51f5550d86043279227c92b72199d4ee1f66d30623405f70c98442058ffe76c7",
+    "status": "PRESERVED_INITIAL_DEPENDENCY_FAILURE_RESOLVED_WITH_EXISTING_PACKAGES"
+  },
+  {
+    "path": "work/qwen2_readiness_plan_sync_20261014/validation_result.json",
+    "size": 1843,
+    "sha256": "6ed1b8af2c6be95ca9dda0422e3df485234215607e3ce24f951c97fc9c8f69ae",
+    "status": "PASS_LIMITED_PLAN_CHECKLIST_AND_READ_ONLY_PREFLIGHT"
+  }
+]

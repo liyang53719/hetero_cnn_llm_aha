@@ -29,6 +29,21 @@
   最新进度20261014:
     优先级: 本节取代下方历史日期段落中的当前进度描述，保留历史失败、门限和原源码身份。
     主workload: batch1_prefill128
+    当前发布基线: ab15242a7e7d346f5eff51eaffffb1688df9f454；父提交7b31b7f2650e1da3492d400633cac95ee2ba0ecc。
+    当前主线: 用本次已恢复官方M16输入先执行与真实服务调度对应的数值模型，当前执行中；固定新源码与同次producer及原门，不继承历史软件PASS；构建条件满足后再做同刺激RTL，不继续反复分层大Top构建。
+    typed证据边界: 下列前三个typed软件已分配门为历史范围证据；与当前真实服务模型及完整实际RTL分列，不因输入恢复或控制CI通过而升级。
+    Qwen2_M16输入就绪:
+      发布: ab15242三文件仅正规化TorchVersion元数据producer为str，严格reader与pins不变；7b31及ab唯一payload_CI38544941392_38547506389各精确head_guard及38加38成功，仅payload合同CI。
+      新执行: 47加47冷门各472项判决拒绝；另六进程7.606469486秒fresh链通过，仅M16输入恢复_C_RoPE_15节点官方AST参考_audit。
+      独审库存: 8raw_7085056B；9inputs_6928384B；9reference_458752B；原始数据保留ignored，不进入Git。
+      身份: candidates/qwen2_live_qkv_inputs/COLD_TEST_SUMMARY.json保存执行时base7b31及candidate_commit_null，不将发布后的ab回写为旧执行source；无Host或RTL验收。
+    Qwen2_live_QKV候选就绪:
+      状态: work-only_v5_default_off评论外严格代码相等；完整lint以signal9终止且原因未知；完整Host_M16数值_完整库存_global环未通过。
+      XML有界尝试: 独立完整XML预算300秒_2GiB；15.660秒采样2159071232B后主动TERM返回负15，无XML；不判定OOM，不继承完整Top验收。
+      静态资源: generatedSV仅部分库存49FP32ALU等于1Scalar加16vout加16elem加16SiLU；17DivSqrt等于1加16；Vector16只是子集。七类SRAM_queue数量尺寸同baseline，新增SumBridge512bit_lhs及控制FF；外部4096MAC源码展开尚非完整XML库存验收。
+      性能边界: M16_source预测useful除executed为12.5%，只是工作量比；完整launch到terminal周期与固定全部资源分母利用率未测。
+      后继: [真实服务调度对应M16数值模型, global依赖环与真实adapter集成, 完整资源库存, 条件满足后的同刺激RTL, M128完整block]
+      报告: doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md
     目标block: [Qwen2_1p5B完整block, Qwen35_0p8B_L0, Qwen35_0p8B_L3, Qwen35_35B_L0, Qwen35_35B_L3]
     指定typed软件门:
       Qwen2_1p5B: cold_M128完整block的已分配原官方门已过；完整实际RTL与性能未闭环。
@@ -40,7 +55,7 @@
     三十五B剩余: [router, routed_shared_MoE, expert_merge, final_residual, final_ACK_fence, L3完整链]
     近期局部RTL: ElementwiseRegisterLoan真实M16_M128_epilogue逐bit通过；H2048固定6144B银行borrower真实M1_M16_M128整条RMS经生产core的Scalar与elem逐bit通过，M128_owner2540814拍_launch到done_fire2540828拍；相同6144B银行Scalar对照M128为5442701拍，局部人工背压周期比2.142097x；原16lane_elem执行49152拍_有效lane_cycle786432_占该elem容量1.9344875%，归约占wall82.673365%；尚未接入完整block，kernel分支验证按独立回执更新。
     归约向量借用局部RTL: 新候选默认关闭，保留官方8lane乘4ILP顺序及两次独立FP32舍入；同155源_同实际M1_M16_M128_同理想供数配对全过，M128完整RMS1792902到239494拍_7.486208x；三bank6144B_33个FP32ALU不增，全33配置Add_Mul执行容量2.252113%到16.859788%，elem16子池34.633018%；人工背压候选另过568566拍，不混算ideal收益；目标DDR未知_未启用kernel归约_完整block仍open。
-    Qwen2公开入口控制: current_main默认19owner_21completion_236metadata_reads与六类拒绝保留；固定当前消费字节的独立official_resident候选已接真实parser到Dense归约控制器与bridge，M16_M128_重定位M16各17owner_21completion_650metadata_reads，14类候选拒绝含whole_program_Attention_alias和取消退债；所有算术服务返回仍mock，实际共享bank_owner_算术及完整block待接，详见doc/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014_CN.md。
+    Qwen2公开入口控制: current_main默认19owner_21completion_236metadata_reads与六类拒绝保留；固定当前消费字节的独立official_resident候选已接真实parser到Dense归约控制器与bridge，M16_M128_重定位M16各17owner_21completion_650metadata_reads，14类候选拒绝含whole_program_Attention_alias和取消退债；ee6d0532eec49ae29626c639a34e7c6303c67d4b桥修的原CI38543196905已闭环，实际2个控制RTL测试_22markers及33加33冷门通过；所有算术服务返回仍mock，实际共享bank_owner_算术及完整block待接，详见doc/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014_CN.md。
     不可继承: 局部epilogue或RMS的RTL_PASS不能升级完整prefix_MoE_block或MAC利用率；历史RTL_M1不能绑定为当前M128源码实测。
     资料: [doc/PASSED_CASE_UTILIZATION_20261013_CN.md, doc/QWEN35_35B_RESIDUAL_POSTNORM_20261013_CN.md, doc/H2048_FIXED_BANK_RMS_BORROWER_20261014_CN.md, doc/H2048_RMS_SAME_BANK_PERFORMANCE_20261014_CN.md, doc/H2048_RMS_VECTOR_REDUCTION_20261014_CN.md]
     状态: U00.2 ongoing；U01 to do；五block完整实际RTL数值及90%联合门仍open。

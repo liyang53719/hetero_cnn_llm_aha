@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 0d34b17b4de9039e5fbb5f57d35ad91a7c0e687e118f95f8da2e9567382ad688
+计划SHA256: 971071300faa8d038961f2620d28dc97a41fbcade88a55f160c3c073d697e32a
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1673,8 +1673,28 @@ Qwen35_35B_残差及postnorm_20261013:
 
 Qwen2_public21归约控制绑定_20261014:
   状态: ongoing
-  done: [固定当前消费源与历史patch显式组合, 默认19owner控制保护, 显式17owner公共parser到真实归约coordinator_bridge, Attention全程序typed_root预检, metadata及owner债务取消围栏, 同拍stray与resident返回所有权]
-  ongoing: [本批独立CI闭环]
+  done: [固定当前消费源与历史patch显式组合, 默认19owner控制保护, 显式17owner公共parser到真实归约coordinator_bridge, Attention全程序typed_root预检, metadata及owner债务取消围栏, 同拍stray与resident返回所有权, 本批限定控制范围CI闭环]
+  ongoing: []
+  发布闭环: ee6d0532eec49ae29626c639a34e7c6303c67d4b桥修；原CI38543196905实际2控制RTL测试_22markers及33加33冷门通过。
   todo: [生产kernel真实共享owner与bank租约, QKV最小真实算术子链, 21命令完整M128数值及资源周期]
-  范围: metadata加mock_backend控制RTL；2tests22markers；完整block_算术_性能不验收；U00_2ongoing_U01todo
+  范围: 仅真实parser_coordinator_bridge加mock_backend返回的控制RTL；完整block_实际算术_性能不验收；U00.2 ongoing与U01 to do保持。
   报告: doc/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014_CN.md
+
+Qwen2_live_QKV输入及主线就绪_20261014:
+  状态: ongoing
+  父项: [U00.2, U01]
+  当前发布基线: ab15242a7e7d346f5eff51eaffffb1688df9f454；parent7b31b7f2650e1da3492d400633cac95ee2ba0ecc。
+  done: [三文件TorchVersion_producer_str正规化且reader_pins不变, 47加47冷门各472拒绝, 六进程fresh_M16输入_C_RoPE_15AST参考_audit, 独审8raw_7085056B_9inputs_6928384B_9reference_458752B, 7b31与ab唯一payload_CI精确head_guard及各38加38]
+  ongoing: [用当前恢复官方M16输入执行真实服务调度对应数值模型]
+  输入CI: 38544941392对应7b31；38547506389对应ab；payload合同成功不算新增数值CI。
+  执行身份: COLD_TEST_SUMMARY仍保存base7b31及candidate_commit_null；发布不回写旧source，不继承旧软件PASS；原数据ignored。
+  live候选: 仅work_v5默认关闭，评论外严格代码相等；完整lint_signal9原因未知；实际全Host_M16算术_完整库存_global环均未通过。
+  XML: 300秒_2GiB预算下15.660秒采样2159071232B主动TERM返回负15，无XML；不冒称OOM或完整Top验收。
+  资源: 静态generatedSV_49FP32ALU等于1Scalar加16vout加16elem加16SiLU；17DivSqrt等于1加16；Vector16为子集。七类SRAM_queue同baseline；SumBridge新增512bit_lhs加控制FF；4096MAC源码展开尚非完整XML库存。
+  性能: M16_source_useful除executed预测12.5%是工作量比；完整周期利用率未测；阶段预测至少80%争取90%，最终实际完整RTL90%不变。
+  todo: [当前真实服务模型新执行及独审, global依赖环和真实adapter集成, 完整资源库存, 构建条件满足后同刺激RTL, 五block完整M128联合门]
+  执行顺序: 模型主线优先；不继续反复分层大Top构建，不升级局部seed或iDMA门为完整验收。
+  历史边界: 前三typed软件已分配门与当前实际RTL分列；35B仅prefix至postnorm及saved_router_logits，top8_MoE_final_residual_L3未完成。
+  报告: doc/QWEN2_LIVE_QKV_READINESS_20261014_CN.md
+  证据索引: reports/execution/QWEN2_LIVE_QKV_READINESS_20261014.json
+  保留状态: U00.2 ongoing；U01 to do；五block实际完整RTL与90%联合门open。

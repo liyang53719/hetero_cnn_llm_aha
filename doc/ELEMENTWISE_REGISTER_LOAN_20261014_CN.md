@@ -42,3 +42,11 @@ DDR job 与 loan 同拍由 DDR 优先；DDR request/response 未排空不接受 
 原失败记录保留：首次 Verilator PCH 与 Chiseltest forced include 冲突，采用官方 make 选项 VM_PARALLEL_BUILDS=0；随后测试 helper 的 step(0) 拒绝已修复。未修改 vendor/DUT 以绕过数值测试。最终 gate 对全部 135 编译/运行源前后冻结；runner watchdog 限 600 秒并终止进程组。
 
 新 CI 只运行 synthetic 边界和库存局部 RTL，上传 summary/log/生成 RTL 与工具日志；不下载 checkpoint，不上传实际刺激。真实两档回放证据独立保留，不能由 CI synthetic 成功替代。
+
+## CI 分类回归及修复（03:34 UTC）
+
+bab427c 新 loan 专门 CI 38504536502 已通过 2 个 synthetic RTL 测试，payload 门也通过；continuous 原 run 38504536496 在 general 组 149 项中 148 通过、1 失败。唯一失败是自动发现把 ElementwiseRegisterLoanReplaySpec 当无外部 fixture 的 general suite，缺 HETERO_RMS_LOAN_FIXTURE_ROOT。它按设计硬失败，没有数值不匹配证据。
+
+修复明确把该 suite 分到 frozen_actual_rms_epilogue 外部 fixture 组。所有发现的 suite 仍恰好分类一次；原 general/tiny/real/native 四组逐项验证日志并计数，结果单列外部组 NOT_EXECUTED_REQUIRES_FROZEN_ACTUAL_FIXTURE、counted_as_pass=false。它不计入 continuous 的 PASS 或测试总数，也不被 silent skip。
+
+专门 scripts/run_elementwise_register_loan_tests.py 的显式真实回放入口不变，缺 manifest/env 继续硬失败。本地已冻结的 3 项真实回放证据独立有效；不因分类修复重跑完整模型。新增 4 项冷测试验证完整分类、外部 suite 缺失拒绝、新普通 suite 继续发现，以及原真实 runner/硬失败入口保留。原失败记录保留，修复是否闭环须看后继精确 CI，不能覆盖为 bab427c 全部成功。

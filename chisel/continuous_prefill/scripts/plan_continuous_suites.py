@@ -11,14 +11,25 @@ FIXTURE_SUITES = {
     "native": "heteronpu.continuous.HostBlockCommandsNativeWeightsSpec",
 }
 
+# Explicit external-data suite: never construct it with the tiny synthetic
+# OWNER_FIXTURE. The dedicated register-loan runner selects it only with pinned
+# real producer manifests; absent manifests remain a hard error there.
+EXTERNAL_FIXTURE_SUITES = {
+    "frozen_actual_rms_epilogue": "heteronpu.continuous.ElementwiseRegisterLoanReplaySpec",
+}
+
+RUN_GROUPS = ("general", "tiny", "real", "native")
+
 def plan(project: Path) -> dict[str, list[str]]:
     directory = project / "src/test/scala/heteronpu/continuous"
     names = sorted("heteronpu.continuous." + path.stem for path in directory.glob("*Spec.scala"))
-    missing = set(FIXTURE_SUITES.values()) - set(names)
+    classified = set(FIXTURE_SUITES.values()) | set(EXTERNAL_FIXTURE_SUITES.values())
+    missing = classified - set(names)
     if missing:
         raise ValueError("MISSING_FIXTURE_SUITE:" + ",".join(sorted(missing)))
-    result = {"general": [name for name in names if name not in FIXTURE_SUITES.values()]}
+    result = {"general": [name for name in names if name not in classified]}
     result.update({group: [name] for group, name in FIXTURE_SUITES.items()})
+    result.update({group: [name] for group, name in EXTERNAL_FIXTURE_SUITES.items()})
     flat = [name for group in result.values() for name in group]
     if sorted(flat) != names or len(flat) != len(set(flat)):
         raise ValueError("SUITE_COVERAGE_MISMATCH")

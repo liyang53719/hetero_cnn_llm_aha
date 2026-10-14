@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# All control suites get their required fixture; actual elementwise DUT follows.
+# Control suites get their own fixtures; external real-payload replay is
+# explicitly classified and never counted as executed by this synthetic gate.
 # This is a regression entrypoint, NOT a Matrix4096 full-model result.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../../.." && pwd);P="$ROOT/chisel/continuous_prefill"
@@ -21,6 +22,7 @@ python3 "$P/scripts/pack_owner_multilayer_fixture.py" "$OUT/real_shape.h" "$OUT/
 # Native-weight suites need their own converted real-size metadata. They must
 # never be constructed in the general group with the tiny FP32 manifest.
 python3 "$P/scripts/pack_owner_bf16_weights.py" "$OUT/real_fixture" "$OUT/native_fixture" >"$OUT/native_packing.log"
+python3 "$P/scripts/test_plan_continuous_suites.py" >"$OUT/suite_classification_tests.log" 2>&1
 python3 "$P/scripts/plan_continuous_suites.py" "$P" "$OUT/suite_plan.json"
 if [[ -n ${OFFLINE_TOOLS:-} ]];then
  export CHISEL_FIRTOOL_PATH="$OFFLINE_TOOLS/bin"
@@ -66,7 +68,11 @@ python3 - "$OUT" <<'PY'
 import hashlib,json,re,sys
 from pathlib import Path
 out=Path(sys.argv[1]);plan=json.loads((out/'suite_plan.json').read_text());groups={}
-for name,suites in plan.items():
+run_groups=('general','tiny','real','native')
+external={name:{'status':'NOT_EXECUTED_REQUIRES_FROZEN_ACTUAL_FIXTURE','suites':suites,'counted_as_pass':False,'runner':'scripts/run_elementwise_register_loan_tests.py --actual-fixture-root ... --m16-manifest-sha256 ... --m128-manifest-sha256 ...'} for name,suites in plan.items() if name not in run_groups}
+if set(external)!={'frozen_actual_rms_epilogue'}:raise SystemExit('EXTERNAL_FIXTURE_CLASSIFICATION_DRIFT')
+for name in run_groups:
+ suites=plan[name]
  text=re.sub(r'\x1b\[[0-9;]*m','',(out/name/'chisel_tests.log').read_text())
  counts=re.findall(r'Tests: succeeded (\d+), failed 0, canceled 0, ignored 0, pending 0',text)
  if len(counts)!=1 or 'All tests passed.' not in text or '***' in text:raise SystemExit('INCOMPLETE_CONTROL_SUITE:'+name)
@@ -76,7 +82,8 @@ if groups['tiny']['tests']!=8 or groups['real']['tests']!=10 or groups['native']
 if 'SOURCE_IMMUTABILITY_PASS' not in (out/'source_verify.log').read_text():raise SystemExit('SOURCE_DRIFT')
 report={'status':'PASS_CONTINUOUS_CONTROL_AND_ELEMENTWISE_REGRESSION','groups':groups,
  'total_tests':sum(x['tests'] for x in groups.values()),'elementwise_sizes':[1,17,33,1025,32768,1572864,2097152,2621440],
- 'scope':{'matrix4096_full_numerical':False,'official_model':False,'dc':False},
+ 'scope':{'matrix4096_full_numerical':False,'official_model':False,'frozen_actual_rms_epilogue_executed':False,'dc':False},
+ 'external_fixture_suites':external,
  'logs_sha256':{str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(out.rglob('*.log'))}}
 with (out/'RESULT.json').open('x') as f:json.dump(report,f,indent=2);f.write('\n')
 print(json.dumps(report,indent=2))

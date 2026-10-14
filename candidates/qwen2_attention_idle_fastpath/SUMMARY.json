@@ -1,0 +1,257 @@
+{
+  "status": "REJECTED_FOR_PROMOTION_PERFORMANCE_REGRESSION",
+  "functional_status": "PASS_M2_PER_EDGE_M8_FINAL_STATE_ABBA_ONLY",
+  "artifacts": [
+    {
+      "actual_matrix_resource_address": 140205611196800,
+      "directory": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/arm_00_old_observed_recorded",
+      "functional_sha256": "7eb720756cb6196b2ec7fc6c799c08363589826b21ca5053ada38dc31ef20dc3",
+      "mode": "old",
+      "output_sha256": "ccf1982e754edaaefd375f9937fba2edc667f249e51f6817f7e64c02667b40c7",
+      "result_sha256": "d37216c9f8565373f8fa6d3f574d0e351a4a2b4a1b6ab51ddf1a56b40a4a0e3f",
+      "rows": 2
+    },
+    {
+      "actual_matrix_resource_address": 140623823135104,
+      "directory": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/arm_01_new_observed_recorded",
+      "functional_sha256": "7eb720756cb6196b2ec7fc6c799c08363589826b21ca5053ada38dc31ef20dc3",
+      "mode": "new",
+      "output_sha256": "ccf1982e754edaaefd375f9937fba2edc667f249e51f6817f7e64c02667b40c7",
+      "result_sha256": "2521bffea78fe338643f1565710dcabbedddc7535a020922fcba67d48e5f3b1f",
+      "rows": 2
+    },
+    {
+      "actual_matrix_resource_address": 140227112034688,
+      "directory": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/arm_02_old_observed_timed",
+      "functional_sha256": "b03f87016b3eafa972ebb9f927df7436316d8fde508ff0cc8024243227a47e25",
+      "mode": "old",
+      "output_sha256": "14d11684736bb3eec1532a53841e1a2a1622597867458247174fb8d81cdc3153",
+      "result_sha256": "87bab77cd83c0092e7d60a27fef76cce74d45793ce30ea4eb722cd762303b5ce",
+      "rows": 8
+    },
+    {
+      "actual_matrix_resource_address": 140443891077504,
+      "directory": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/arm_03_new_observed_timed",
+      "functional_sha256": "b03f87016b3eafa972ebb9f927df7436316d8fde508ff0cc8024243227a47e25",
+      "mode": "new",
+      "output_sha256": "14d11684736bb3eec1532a53841e1a2a1622597867458247174fb8d81cdc3153",
+      "result_sha256": "c351c3ee7e8980ef8e01eee99942fde050dc76234907fe947787e3c2d2e3a295",
+      "rows": 8
+    },
+    {
+      "actual_matrix_resource_address": 140422968902016,
+      "directory": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/arm_04_new_observed_timed",
+      "functional_sha256": "b03f87016b3eafa972ebb9f927df7436316d8fde508ff0cc8024243227a47e25",
+      "mode": "new",
+      "output_sha256": "14d11684736bb3eec1532a53841e1a2a1622597867458247174fb8d81cdc3153",
+      "result_sha256": "b71162c8a0130586219d46ac18bd1a95a5f79b2545604c5dbd294f3dd82682ab",
+      "rows": 8
+    },
+    {
+      "actual_matrix_resource_address": 140001696305536,
+      "directory": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/arm_05_old_observed_timed",
+      "functional_sha256": "b03f87016b3eafa972ebb9f927df7436316d8fde508ff0cc8024243227a47e25",
+      "mode": "old",
+      "output_sha256": "14d11684736bb3eec1532a53841e1a2a1622597867458247174fb8d81cdc3153",
+      "result_sha256": "1d4cf2a975f203a5d672a8a7be0da1dc3b639b090c09ef48bec38d084ac1293d",
+      "rows": 8
+    }
+  ],
+  "cold": {
+    "actual_post_drain_fast_hits": 2,
+    "conservative_forecast_seconds": 37.570899521457704,
+    "matched_exceptions": 14,
+    "new_code_identity_checks": 16,
+    "new_descriptor_checks": 38,
+    "new_idle_calls": {
+      "ports": 1,
+      "tile": 1,
+      "wrapper": 0
+    },
+    "old_idle_calls": {
+      "ports": 2,
+      "tile": 1,
+      "wrapper": 1
+    },
+    "owner_complete_edge_comparisons": 1193,
+    "owner_fallback_edges": 1134,
+    "owner_fast_edges": 59,
+    "owner_tests": 7,
+    "probe_tests": 16,
+    "source_bound_recorder_cost_receipt": "work/qwen2_attention_idle_fastpath_20261014/recorder_cold_v1/FROZEN_COLD_RECEIPT.json"
+  },
+  "decision": "Keep the original default. Do not promote V1, relax guards, retry the numeric run, start Host-tail arms, or launch M128 on this evidence.",
+  "execution": {
+    "compiler_invoked": false,
+    "exit_code": 0,
+    "launch": "Parent executed PROPOSED_SINGLE_RUN exact GNU timeout argv. GNU 45-second watchdog covers the supervisor group, not independently created worker sessions. The reviewed probe has a 44.5-second alarm, worker deadline at supervisor start+43 seconds, and killpg/reap cleanup for active worker groups.",
+    "official_numeric": false,
+    "outer_limit_seconds": 45,
+    "outer_wall_seconds": 29.850833935008268,
+    "result": "work/qwen2_attention_idle_fastpath_20261014/m2_recorded_m8_abba_v1/RESULT.json",
+    "result_sha256": "919941dc290317a5566c3275bbdc6d41706aed1e7479972a196a470e41be803a",
+    "run_count": 1,
+    "status": "PASS_M2_PER_EDGE_M8_FINAL_STATE_ABBA_ONLY",
+    "synthetic_numeric": true,
+    "unused_alternative": "work/qwen2_attention_idle_fastpath_20261014/launch_once.py was prepared but never executed with --go; its process-tree watchdog is not the actual launch mechanism."
+  },
+  "execution_receipt_rewritten": false,
+  "limits": {
+    "architecture_speedup_claim": false,
+    "att_publication": "All arms terminate at the original held public completion boundary with att terminal and fully ACKed but unpublished.",
+    "cause": "The guard/dispatch tradeoff is a plausible explanation, not an isolated component attribution. No guard-cost causal claim follows from the end-to-end timings.",
+    "full_public21_budget_established": false,
+    "hardware_cycles": null,
+    "hardware_utilization": null,
+    "host_tail_executed": false,
+    "m128_ready": false,
+    "m128_retried": false,
+    "observer_off_executed": false
+  },
+  "m2_equivalence": {
+    "actual": {
+      "acks": 192,
+      "c_fmas": 221184,
+      "dense_edges": 4446,
+      "driver_ticks": 4445,
+      "host_edges": 4446,
+      "normal_steps": 432,
+      "reads": 768,
+      "tile_edges": 4446
+    },
+    "causal": true,
+    "complete": true,
+    "exact_decompressed_stream_bytes": 67671680,
+    "exact_decompressed_stream_sha256": "4d29df33156cde0a4daeb6b8de7a4a48c4931408009c2e5b83a718033ca52c57",
+    "exact_recorded_edges": 4446,
+    "head_dim": 128,
+    "heads": 12,
+    "host_trace_sha256": "ab1738db8715e9baca75d47f0bf03c9533e503e21d5b0301de2dd238c7ebdeab",
+    "kv_heads": 2,
+    "new_fallback_hits": 0,
+    "new_fast_hits": 4446,
+    "output_sha256": "ccf1982e754edaaefd375f9937fba2edc667f249e51f6817f7e64c02667b40c7",
+    "per_edge": "Actual Dense/Attention/Host returns, all relevant Dense/Tile/public control fields, ordered counters and aliases; selected live backend summary.",
+    "rows": 2,
+    "sram": "Complete initial/final bank words equal; per-edge source-bound idle/debt-free, empty access events and stable bank/word/row identities establish unchanged contents. Baseline references are not newly observed per-edge hashes."
+  },
+  "m8_performance": {
+    "actual_each_arm": {
+      "acks": 768,
+      "c_fmas": 2654208,
+      "dense_edges": 44037,
+      "driver_ticks": 44036,
+      "host_edges": 44037,
+      "normal_steps": 5184,
+      "reads": 7680,
+      "tile_edges": 44037
+    },
+    "all_ten_observation_buffers_equal": true,
+    "both_pairs_slower_wall_and_cpu": true,
+    "causal": true,
+    "component_timers": false,
+    "final_full_state_observer_raw_trace_equal": true,
+    "head_dim": 128,
+    "heads": 12,
+    "host_trace_sha256": "19ece9be288175fc04dfd22c4b55fcc690e9ab0d09be1250d65434f2c482b2c6",
+    "kv_heads": 2,
+    "median_cpu_slowdown_percent": 18.663243010025752,
+    "median_wall_slowdown_percent": 18.666231245246266,
+    "medians": {
+      "new": {
+        "cpu": 3.5940025569999996,
+        "wall": 3.59456478550419
+      },
+      "old": {
+        "cpu": 3.0287412225,
+        "wall": 3.02913874299702
+      }
+    },
+    "new_fallback_hits_each_arm": 0,
+    "new_fast_hits_each_arm": 44037,
+    "order": [
+      "old",
+      "new",
+      "new",
+      "old"
+    ],
+    "output_sha256": "14d11684736bb3eec1532a53841e1a2a1622597867458247174fb8d81cdc3153",
+    "pairs": [
+      {
+        "cpu_slowdown_percent": 17.116601374995845,
+        "new_cpu": 3.632378859,
+        "new_wall": 3.6328803329961374,
+        "old_cpu": 3.101506376,
+        "old_wall": 3.10194570600288,
+        "order": "AB",
+        "wall_slowdown_percent": 17.116180530361767
+      },
+      {
+        "cpu_slowdown_percent": 20.28602979194143,
+        "new_cpu": 3.5556262549999995,
+        "new_wall": 3.556249238012242,
+        "old_cpu": 2.955976069,
+        "old_wall": 2.95633177999116,
+        "order": "BA",
+        "wall_slowdown_percent": 20.29262960542526
+      }
+    ],
+    "per_edge_equality_claim": false,
+    "recorded": false,
+    "repeatable_improvement": false,
+    "rows": 8
+  },
+  "provenance": {
+    "cpu_affinity": [
+      0
+    ],
+    "current_source_drift": [],
+    "execution_readme_sha256": "abcf804b370e9c6baf27b769994e65e3660953f8b8371fec337397baf91ac8a9",
+    "library_sha256": "a44f4cd7861d1207698bb3dfc89820ded30a44db1cf1c8b9f951019d1edce1fa",
+    "original_m128_169_unchanged": true,
+    "original_m16_188_unchanged": true,
+    "resource_correspondence": "Only verified functional.owner.matrix_resource_address and functional.detail.backend.matrix_resource_address normalize the same-ELF Matrix root across ASLR. Raw actual addresses remain in each arm RESULT.",
+    "review_manifest": "work/qwen2_attention_idle_fastpath_review_20261014/REVIEWED_SOURCE_MANIFEST.json",
+    "review_manifest_sha256": "4dfe2fbb01091ab3612d4ae47c843fe36ec62e8de3f1ab25014f4b4352349b82",
+    "source_before_after_equal": true,
+    "source_count": 194,
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    },
+    "tools_before_after_equal": true
+  },
+  "publication_metadata_only": true,
+  "schema": "dense-idle-v1-negative-result-publication-v1",
+  "diagnostic_limitation": {
+    "found_by": "independent post-run read-only review",
+    "detail": "snapshot_load on an actual recorded frame raises AttributeError because a bound method is reconstructed from a persistent anchor represented as a tuple. Raw frames compare equal, so the equality result does not depend on the decoder. Detailed first-divergence decoding is not reliable for this saved frame shape.",
+    "executed_source_fixed": false,
+    "numeric_rerun": false,
+    "mismatch_remains_fail_closed": true,
+    "failure_behavior": "A frame mismatch still propagates an exception and fails the run; only the intended detailed divergence record can be absent."
+  },
+  "independent_actual_review": {
+    "path": "work/qwen2_attention_idle_fastpath_review_20261014/ACTUAL_V1_REVIEW.json",
+    "sha256": "7978ffddcb6fca77d03d28cb833383621a0e4772492e2f36efc0323574ea49b5",
+    "status": "PASS_READ_ONLY_V1_REAUDIT_REJECT_M128_PROMOTION",
+    "read_only": true,
+    "numeric_rerun": false,
+    "source_changed": false,
+    "scope": "194-source/tool/fixture/ASLR provenance checks; all six final state/output/trace/ten-observer-buffer records; 4446 M2 frames byte equality and read-only symbolic-root decoding with reconstructed accepted event counts; M8 balanced wall/CPU regression. No M8 per-edge or M128 budget claim.",
+    "m2_reconstructed_counts": {
+      "acks": 192,
+      "host_request": 1,
+      "host_result": 1,
+      "job_fire": 1,
+      "matrix_requests": 432,
+      "matrix_results": 432,
+      "reads": 768,
+      "response_fire": 1,
+      "writes": 192
+    },
+    "actual_parent_launch_wall_seconds": 29.963775260010152,
+    "diagnostic_limitation_confirmed": true
+  }
+}

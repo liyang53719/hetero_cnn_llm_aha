@@ -100,7 +100,7 @@ def child():
 
 def configure():
     from . import job,recipe
-    if job.AUTH!='candidates/qwen2_official_platform_fullblock_authorization_v2' or recipe.AUTH!=job.AUTH:
+    if job.AUTH!='candidates/qwen2_official_platform_fullblock_authorization_v3' or recipe.AUTH!=job.AUTH:
         raise ValueError('unexpected authorization namespace')
     job.AUTH=recipe.AUTH=AUTH
     job.POLICY={**job.POLICY,'job_total_minutes':15,'diagnostic_only':True,'dut_invocations':0,

@@ -109,3 +109,5 @@ PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -B -m unittest $(find ca
 完整软件链已完成 21 个公开 completion、17 个 owner job、1 次 launch result，随后验收 FAILED。旧摘要不足以区分数值 verdict 失败与其它验收谓词失败；历史记录保持 FAILED，不能重构缺失的私有结果或称某节点已经失败。
 
 新 acceptance_diagnostics 只读取已有 RESULT/LAUNCH：120 个固定 bool/null 验收门、12 个失败分组、24 个固定阶段的原 pass/max_abs/mean_abs。Softmax sum 原无 mean，因此始终 null。缺项或非法类型保留 null 并明确失败分组；不输出私有路径、输出 hash、shape、stride 或异常文本，不重新计算算子/误差。原总 PASS 表达式 AST 锁定不变；这些诊断不能提升旧 FAILED 或替代原数值门。
+
+下一次单用 fullblock_authorization_v3 仅将已算验收诊断接入相同完整链，预算仍 75 分钟、DUT 3300/3330 秒；原算法和验收判据不变，不追认此前 FAILED。

@@ -11,7 +11,7 @@ from candidates.qwen2_fullblock_ci_execution import inputs
 from candidates.qwen2_official_cpu_platform_reference import pair, validator, policy
 from . import closure
 ROOT=Path(__file__).resolve().parents[2]
-AUTH='candidates/qwen2_official_platform_fullblock_authorization_v2'
+AUTH='candidates/qwen2_official_platform_fullblock_authorization_v3'
 LOGS='work/official_platform_fullblock_internal_logs'
 OUT='work/qwen2_official_platform_fullblock_numeric/ci01'
 PACKAGE='candidates/qwen2_official_platform_fullblock'
